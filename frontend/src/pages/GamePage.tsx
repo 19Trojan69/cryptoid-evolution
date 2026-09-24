@@ -8,6 +8,7 @@ const WAVE_DURATION_MS = 60_000;
 const INITIAL_SPAWN_INTERVAL_MS = 2_500;
 const MIN_SPAWN_INTERVAL_MS = 1_800;
 const ENTRY_DURATION_MS = 7_000;
+const ATTACK_DURATION_MS = 5_000;
 
 type AsteroidSize = "small" | "medium" | "large";
 type GameStatus = "playing" | "paused" | "game-over";
@@ -31,6 +32,7 @@ type Asteroid = {
   formationSlotCount: number;
   formationElapsed: number;
   formationDuration: number;
+  attackElapsed: number;
 };
 
 type Shot = { id: number; x: number; y: number; targetX: number; targetY: number; progress: number };
@@ -75,18 +77,26 @@ const spawnAsteroid = (id: number, wave: number, width: number, height: number, 
   const availableWidth = Math.max(1, width - data.radius * 2);
   const entryStartX = entrySide === 1 ? data.radius + availableWidth * 0.08 : width - data.radius - availableWidth * 0.08;
   const target = formationTarget(formationIndex, width, height, data.radius, spawnInterval);
-  return { id, x: entryStartX, y: -data.radius, size, health: data.health, maxHealth: data.health, speed: 0.035 + wave * 0.004 + Math.random() * 0.018, rotation: Math.random() * 360, rotationSpeed: (Math.random() - 0.5) * 0.08, entryElapsed: 0, entryStartX, entryTargetX: target.x, entryTargetY: target.y, entrySide, formationSlot: target.slot, formationSlotCount: target.slotCount, formationElapsed: 0, formationDuration: target.duration };
+  return { id, x: entryStartX, y: -data.radius, size, health: data.health, maxHealth: data.health, speed: 0.035 + wave * 0.004 + Math.random() * 0.018, rotation: Math.random() * 360, rotationSpeed: (Math.random() - 0.5) * 0.08, entryElapsed: 0, entryStartX, entryTargetX: target.x, entryTargetY: target.y, entrySide, formationSlot: target.slot, formationSlotCount: target.slotCount, formationElapsed: 0, formationDuration: target.duration, attackElapsed: 0 };
 };
 
-const moveAsteroid = (asteroid: Asteroid, delta: number, width: number): Asteroid => {
+const moveAsteroid = (asteroid: Asteroid, delta: number, width: number, height: number, canLaunch: boolean): Asteroid => {
   const rotation = asteroid.rotation + asteroid.rotationSpeed * delta;
   const radius = sizeData[asteroid.size].radius;
   const keepInField = (x: number) => Math.max(radius, Math.min(width - radius, x));
   if (asteroid.entryElapsed >= ENTRY_DURATION_MS && asteroid.formationElapsed < asteroid.formationDuration) {
     const elapsed = asteroid.formationElapsed + delta;
-    return { ...asteroid, x: keepInField(asteroid.entryTargetX), y: asteroid.entryTargetY + asteroid.speed * Math.max(0, elapsed - asteroid.formationDuration), formationElapsed: Math.min(asteroid.formationDuration, elapsed), rotation };
+    return { ...asteroid, x: keepInField(asteroid.entryTargetX), y: asteroid.entryTargetY, formationElapsed: Math.min(asteroid.formationDuration, elapsed), rotation };
   }
   if (asteroid.entryElapsed >= ENTRY_DURATION_MS) {
+    if (asteroid.attackElapsed < ATTACK_DURATION_MS) {
+      if (asteroid.attackElapsed === 0 && !canLaunch) return { ...asteroid, rotation };
+      const elapsed = Math.min(ATTACK_DURATION_MS, asteroid.attackElapsed + delta);
+      const progress = elapsed / ATTACK_DURATION_MS;
+      const diveX = asteroid.entryTargetX + (width / 2 - asteroid.entryTargetX) * 0.45 * progress + asteroid.entrySide * Math.min(width * 0.12, 110) * Math.sin(Math.PI * progress);
+      const diveY = asteroid.entryTargetY + (height - 160 - asteroid.entryTargetY) * progress;
+      return { ...asteroid, x: keepInField(diveX), y: diveY + asteroid.speed * Math.max(0, asteroid.attackElapsed + delta - ATTACK_DURATION_MS), attackElapsed: elapsed, rotation };
+    }
     return { ...asteroid, x: keepInField(asteroid.x), y: asteroid.y + asteroid.speed * delta, rotation };
   }
   const entryDelta = Math.min(delta, ENTRY_DURATION_MS - asteroid.entryElapsed);
@@ -136,15 +146,17 @@ const GamePage = () => {
         spawnTimerRef.current = Math.min(spawnInterval, spawnTimerRef.current + delta);
         const slotCount = width < 620 ? 3 : 5;
         const nextSlot = formationIndexRef.current % slotCount;
-        const slotOccupied = state.asteroids.some(asteroid => asteroid.formationSlotCount === slotCount && asteroid.formationSlot === nextSlot && (asteroid.entryElapsed < ENTRY_DURATION_MS || asteroid.formationElapsed < asteroid.formationDuration));
+        const slotOccupied = state.asteroids.some(asteroid => asteroid.formationSlotCount === slotCount && asteroid.formationSlot === nextSlot && asteroid.attackElapsed === 0);
         if (spawnTimerRef.current >= spawnInterval && !slotOccupied) {
           spawnTimerRef.current = 0;
           state.asteroids = [...state.asteroids, spawnAsteroid(nextIdRef.current++, state.wave, width, height, formationIndexRef.current++, spawnInterval)];
         }
         const nextAsteroids: Asteroid[] = [];
         let heartsLost = 0;
+        let attackInProgress = state.asteroids.some(asteroid => asteroid.attackElapsed > 0 && asteroid.attackElapsed < ATTACK_DURATION_MS);
         state.asteroids.forEach(asteroid => {
-          const next = moveAsteroid(asteroid, delta, width);
+          const next = moveAsteroid(asteroid, delta, width, height, !attackInProgress);
+          if (next.attackElapsed > 0 && next.attackElapsed < ATTACK_DURATION_MS) attackInProgress = true;
           if (next.y - sizeData[next.size].radius > height - 92) heartsLost += 1;
           else nextAsteroids.push(next);
         });
