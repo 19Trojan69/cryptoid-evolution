@@ -7,6 +7,7 @@ import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerU
 import { advanceShot, contactWithEnemy, FIRE_INTERVAL_MS, MAX_PLAYER_SHOTS, movePlayer, placePlayer, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
 import { advanceEnemyShot, createEnemyShot, enemyShotHitsPlayer, enemyShotLimit, type EnemyShot } from "./enemyFire";
 import SectorBackdrop from "./SectorBackdrop";
+import Starfield from "./Starfield";
 import { BONUS_ENTRY_GAP_MS, BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusPosition, bonusReward, isBonusSection, type BonusTarget } from "./bonusChallenge";
 import { bossFireInterval, bossVulnerable, createSectorBoss, moveSectorBoss, nextAfterClear, type SectorBoss } from "./sectorBoss";
 import { enemySprite, selectedShip, shardBalance, SHARD_BALANCE_KEY, spriteStyle } from "./shipFleet";
@@ -441,7 +442,7 @@ const GamePage = () => {
   return (
     <main className="game-shell">
       <div ref={fieldRef} className="game-field" onPointerDown={startDrag} onPointerMove={event => { if (pointerRef.current === event.pointerId) positionFromPointer(event); }} onPointerUp={event => { if (pointerRef.current === event.pointerId) pointerRef.current = null; }} onPointerCancel={event => { if (pointerRef.current === event.pointerId) pointerRef.current = null; }}>
-        <div className="star-layer star-layer-one" /><div className="star-layer star-layer-two" />
+        <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} />
         <SectorBackdrop sector={game.sector} player={game.player} />
         <header className="game-hud">
           <button className="game-control home-control" type="button" onClick={() => setHomePrompt(true)} aria-label="Go home">⌂ <span>Home</span></button>

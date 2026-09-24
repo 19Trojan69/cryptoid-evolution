@@ -103,9 +103,19 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 
 .game-shell { width: 100%; height: 100dvh; overflow: hidden; background: #030e1b; color: #f0f7f5; user-select: none; touch-action: none; }
 .game-field { position: relative; width: 100%; height: 100%; overflow: clip; isolation: isolate; touch-action: none; background: radial-gradient(circle at 50% 78%, rgba(18, 87, 91, .24), transparent 24%), linear-gradient(180deg, #020b19 0%, #061d32 60%, #082c3a 100%); }
-.game-field::before { position: absolute; inset: 0; z-index: -1; background-image: linear-gradient(rgba(79, 228, 239, .025) 1px, transparent 1px), linear-gradient(90deg, rgba(79, 228, 239, .025) 1px, transparent 1px); background-size: 52px 52px; content: ''; mask-image: linear-gradient(to bottom, black, transparent 85%); }
-.star-layer { position: absolute; inset: 0; z-index: -1; opacity: .65; background-image: radial-gradient(circle, #b9f8ee 0 1px, transparent 1.5px), radial-gradient(circle, #4fe4ef 0 1px, transparent 1.5px); background-size: 83px 97px, 137px 151px; background-position: 12px 28px, 61px 73px; }
-.star-layer-two { opacity: .34; transform: rotate(17deg) scale(1.2); }
+.starfield { position: absolute; inset: -3%; z-index: 0; overflow: hidden; pointer-events: none; transform: translate3d(var(--star-parallax-x), var(--star-parallax-y), 0); }
+.milky-band { position: absolute; inset: -40%; background: radial-gradient(ellipse 18% 48% at 50% 50%, #98b6d624, #8c91c112 48%, transparent 100%), radial-gradient(ellipse 38% 43% at 49% 49%, #b7bbeb14, transparent 85%); filter: blur(13px); transform: rotate(-31deg); opacity: .62; }
+.starfield-sector-2 .milky-band, .starfield-sector-5 .milky-band { opacity: .88; }
+.starfield-stars { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.starfield-distant { animation: star-sway-far 42s ease-in-out infinite alternate; }
+.starfield-nearby { animation: star-sway-near 26s ease-in-out infinite alternate; }
+@keyframes star-sway-far { to { transform: translate3d(7px, -5px, 0); } }
+@keyframes star-sway-near { to { transform: translate3d(-11px, 8px, 0); } }
+.shooting-star { position: absolute; top: 16%; left: -16%; width: 95px; height: 2px; border-radius: 50%; background: linear-gradient(90deg, transparent, #bce1ffad 70%, #fff); box-shadow: 0 0 5px #d8edff88; opacity: 0; animation: meteor-cross 18s linear infinite; }
+.shooting-star-two { top: 39%; left: -22%; width: 70px; animation-duration: 29s; animation-delay: -12s; }
+@keyframes meteor-cross { 0%, 28% { opacity: 0; transform: translate3d(0, 0, 0) rotate(-18deg); } 30% { opacity: .75; } 40% { opacity: .75; } 43%, 100% { opacity: 0; transform: translate3d(125vw, 28vh, 0) rotate(-18deg); } }
+.starfield-paused .starfield-stars, .starfield-paused .shooting-star { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .starfield-stars { animation: none; } .shooting-star { display: none; } }
 
 /* Four fixed planets per sector. Parallax is capped to a few pixels and never blocks gameplay. */
 .space-scene { position: absolute; z-index: 0; inset: 0; overflow: clip; pointer-events: none; --haze: #256a83; --planet-lit: #bb9973; --planet-mid: #556578; --planet-dark: #182b44; --rim: #9db9df; --moon-lit: #cbb8a4; --moon-dark: #35455f; --main-x: 75%; --main-y: 64%; }
