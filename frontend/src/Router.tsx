@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import Shop from "./pages/Shop";
-import EngagementTasksPage from "./pages/EngagementTasksPage.tsx";
+import GamePage from "./pages/GamePage.tsx";
 
 export const router = createBrowserRouter([
   {
@@ -8,8 +8,8 @@ export const router = createBrowserRouter([
     element: <Shop />,
   },
   {
-    path: "/engagement-tasks",
-    element: <EngagementTasksPage />,
+    path: "/game",
+    element: <GamePage />,
   },
 ]);
 
