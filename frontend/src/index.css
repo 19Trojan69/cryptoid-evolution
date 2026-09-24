@@ -214,6 +214,8 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .coin-stat strong { color: var(--gold); }
 .hearts { color: var(--gold) !important; letter-spacing: 4px; font-size: 16px !important; }
 .hearts i { color: #345463; font-style: normal; }
+.hearts-stat-hit { border-radius: 5px; animation: hearts-impact .23s ease-out; }
+@keyframes hearts-impact { from { background: #df526d99; } to { background: transparent; } }
 .game-control { border: 1px solid rgba(79, 228, 239, .35); background: transparent; color: var(--cyan); cursor: pointer; }
 .home-control { justify-self: start; padding: 9px 12px; font-size: 15px; }
 .home-control span { margin-left: 5px; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; }

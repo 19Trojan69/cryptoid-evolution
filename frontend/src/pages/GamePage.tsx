@@ -667,7 +667,7 @@ const GamePage = () => {
           </div>
           <div className="hud-stat"><span>{t('Score')}</span><strong>{game.score}</strong></div>
           <div className="hud-stat coin-stat"><span>{t('Coins')}</span><strong>● {game.coins}</strong></div>
-          <div className="hud-stat"><span>{t('Hearts')}</span><strong className="hearts">{"♥".repeat(game.hearts)}<i>{"♥".repeat(3 - game.hearts)}</i></strong></div>
+          <div className={`hud-stat hearts-stat${game.effects.some(effect => effect.target === "player" && effect.kind === "hit") ? " hearts-stat-hit" : ""}`}><span>{t('Hearts')}</span><strong className="hearts" aria-live="polite" aria-label={`${game.hearts} ${t('Hearts')}`}>{"♥".repeat(game.hearts)}<i>{"♥".repeat(3 - game.hearts)}</i></strong></div>
           <div className="hud-stat"><span>{t('Weapon')}</span><strong>LV {game.weaponLevel}</strong></div>
           <div className="hud-stat"><span>{t('Sector')}</span><strong>{String(game.sector).padStart(2, "0")}</strong></div>
           <div className="hud-stat chain-hud"><span>{t('Section')}</span><strong>{game.encounter === "normal" ? `${sectionInSector(game.section)} / 3` : "BOSS"}</strong><div className="chain-blocks" role="img" aria-label={`${t("Network chain")}: ${game.chainBlocks}/${BLOCKS_PER_CHAIN} ${t("blocks linked")}`}>{Array.from({ length: BLOCKS_PER_CHAIN }, (_, index) => <i key={index} className={index < game.chainBlocks ? "linked" : ""} />)}</div></div>
