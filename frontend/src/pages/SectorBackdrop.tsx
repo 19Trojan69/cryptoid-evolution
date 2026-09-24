@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { memo, type CSSProperties } from "react";
 import type { PlayerPosition } from "./playerCombat";
 
 const SectorBackdrop = ({ sector, player }: { sector: number; player: PlayerPosition }) => {
@@ -25,4 +25,4 @@ const SectorBackdrop = ({ sector, player }: { sector: number; player: PlayerPosi
   );
 };
 
-export default SectorBackdrop;
+export default memo(SectorBackdrop);

@@ -137,6 +137,7 @@ const GamePage = () => {
   const sectionSlotsRef = useRef<ReturnType<typeof formationLayout> | null>(null);
   const animationRef = useRef<number | null>(null);
   const lastFrameRef = useRef(0);
+  const lastPaintRef = useRef(0);
   const spawnTimerRef = useRef(0);
   const sectionElapsedRef = useRef(0);
   const clearTimerRef = useRef(0);
@@ -384,7 +385,11 @@ const GamePage = () => {
             recordsSavedRef.current = true;
           }
         }
-        setGame({ ...state, boss: state.boss ? { ...state.boss } : null, asteroids: [...state.asteroids], bonusTargets: [...state.bonusTargets], shots: [...state.shots], enemyShots: [...state.enemyShots], effects: [...state.effects], powerUps: [...state.powerUps] });
+        // The simulation remains on requestAnimationFrame; cap expensive React/SVG paints.
+        if (time - lastPaintRef.current >= 32 || state.phase !== previousPhase || state.status !== "playing") {
+          lastPaintRef.current = time;
+          setGame({ ...state, boss: state.boss ? { ...state.boss } : null, asteroids: [...state.asteroids], bonusTargets: [...state.bonusTargets], shots: [...state.shots], enemyShots: [...state.enemyShots], effects: [...state.effects], powerUps: [...state.powerUps] });
+        }
       }
       animationRef.current = window.requestAnimationFrame(loop);
     };
@@ -428,6 +433,7 @@ const GamePage = () => {
     fireTimerRef.current = 0;
     pointerRef.current = null;
     lastFrameRef.current = 0;
+    lastPaintRef.current = 0;
     setGame(stateRef.current);
   };
 
@@ -457,9 +463,9 @@ const GamePage = () => {
         {game.encounter === "normal" && isBonusSection(game.section) && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">BONUS TARGETS {game.bonusHits} / {BONUS_TARGET_COUNT} · NO ENEMY FIRE</div>}
         {(game.shieldCharges > 0 || game.overdriveMs > 0) && <div className="power-status" aria-live="polite">{game.shieldCharges > 0 && <span>◇ SHIELD {game.shieldCharges}</span>}{game.overdriveMs > 0 && <span>ϟ OVERDRIVE {Math.ceil(game.overdriveMs / 1_000)}s</span>}</div>}
         {game.status === "playing" && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className="sector-banner" aria-live="polite"><span>{game.encounter !== "normal" ? game.phase === "SECTOR_CLEAR" ? "SECTOR CLEAR" : "WARNING · SECTOR BOSS" : game.phase === "SECTOR_CLEAR" ? isBonusSection(game.section) ? "BONUS COMPLETE" : "SECTION CLEAR" : isBonusSection(game.section) ? "BONUS CHALLENGE" : `SECTOR ${String(game.sector).padStart(2, "0")}`}</span><strong>{game.encounter !== "normal" ? game.phase === "SECTOR_CLEAR" ? "CORE WARDEN DEFEATED" : "CORE WARDEN INCOMING" : game.phase === "SECTOR_CLEAR" ? isBonusSection(game.section) ? `${game.bonusResult} · ${game.bonusHits}/${BONUS_TARGET_COUNT}` : `SECTION ${sectionInSector(game.section)} COMPLETE` : isBonusSection(game.section) ? "HIT THE FLYING TARGETS" : sectorName(game.sector)}</strong></div>}
-        {game.boss && game.encounter === "boss-fight" && <div className={`asteroid cryptoid cryptoid-heavy cryptoid-bitrock sector-boss${game.boss.fireElapsed >= bossFireInterval(game.boss) - 550 ? " boss-warning" : ""}${game.boss.health <= game.boss.maxHealth / 2 ? " boss-enraged" : ""}`} style={{ left: game.boss.x, top: game.boss.y, transform: "translate(-50%, -50%)", "--health": `${game.boss.health / game.boss.maxHealth * 100}%` } as CSSProperties} title="Core Warden · sector boss"><div className="fleet-sprite" style={spriteStyle(19)} /><span className="cryptoid-core"><b>Q7</b></span></div>}
+        {game.boss && game.encounter === "boss-fight" && <div className={`asteroid cryptoid cryptoid-heavy cryptoid-bitrock sector-boss${game.boss.fireElapsed >= bossFireInterval(game.boss) - 550 ? " boss-warning" : ""}${game.boss.health <= game.boss.maxHealth / 2 ? " boss-enraged" : ""}`} style={{ left: game.boss.x, top: game.boss.y, transform: "translate(-50%, -50%)" }} title="Core Warden · sector boss"><div className="fleet-sprite" style={spriteStyle(19)} /><span className="cryptoid-core"><b>Q7</b></span><span className="health-bar"><b style={{ width: `${game.boss.health / game.boss.maxHealth * 100}%` }} /></span></div>}
         {game.bonusTargets.map(target => <div key={target.id} className="asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light bonus-ship" style={{ left: target.x, top: target.y, transform: "translate(-50%, -50%)" }}><div className="fleet-sprite" style={spriteStyle(enemySprite("light", target.index))} /><span className="cryptoid-core"><b>{["X", "Z", "R"][target.index % 3]}</b></span></div>)}
-        {game.asteroids.map(asteroid => <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ left: asteroid.x, top: asteroid.y, transform: `translate(-50%, -50%) rotate(${asteroid.rotation}deg)`, "--health": `${(asteroid.health / asteroid.maxHealth) * 100}%` } as CSSProperties}><div className="fleet-sprite" style={spriteStyle(enemySprite(asteroid.shipClass, asteroid.formationSlot))} /><span className="cryptoid-core"><b>{asteroid.faction}</b></span></div>)}
+        {game.asteroids.map(asteroid => <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ left: asteroid.x, top: asteroid.y, transform: `translate(-50%, -50%) rotate(${asteroid.rotation}deg)` }}><div className="fleet-sprite" style={spriteStyle(enemySprite(asteroid.shipClass, asteroid.formationSlot))} /><span className="cryptoid-core"><b>{asteroid.faction}</b></span><span className="health-bar"><b style={{ width: `${asteroid.health / asteroid.maxHealth * 100}%` }} /></span></div>)}
         {game.powerUps.map(pickup => <div key={pickup.id} className={`power-up power-up-${pickup.type}`} title={powerUpNames[pickup.type]} style={{ left: pickup.x, top: pickup.y }}><span>{powerUpSymbols[pickup.type]}</span></div>)}
         {game.shots.map(shot => <div key={shot.id} className={`player-laser${shot.empowered ? " player-laser-overdrive" : ""}`} style={{ left: shot.x, top: shot.y }} />)}
         {game.enemyShots.map(shot => <div key={shot.id} className="enemy-laser" style={{ left: shot.x, top: shot.y }} />)}

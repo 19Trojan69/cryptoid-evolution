@@ -22,6 +22,16 @@ test("formation slots are unique and occupy ordered rows in the upper field", ()
   }
 });
 
+test("neighbouring ships have room for their complete silhouettes", () => {
+  for (const [width, height] of [[390, 700], [720, 800], [800, 700], [1200, 800]]) {
+    const slots = formationLayout(1, width, height);
+    for (const slot of slots) for (const other of slots) {
+      if (slot.index === other.index) continue;
+      assert.ok(Math.hypot(slot.x - other.x, slot.y - other.y) >= 100, `${width}x${height}: slots ${slot.index} and ${other.index} overlap`);
+    }
+  }
+});
+
 test("three sections share a named sector and sector names repeat indefinitely", () => {
   assert.deepEqual([1, 2, 3, 4, 18, 19].map(sectorForSection), [1, 1, 1, 2, 6, 7]);
   assert.deepEqual([1, 2, 3, 4].map(sectionInSector), [1, 2, 3, 1]);

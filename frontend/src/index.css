@@ -113,7 +113,7 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 @keyframes star-sway-near { to { transform: translate3d(-11px, 8px, 0); } }
 .shooting-star { position: absolute; top: 16%; left: -16%; width: 95px; height: 2px; border-radius: 50%; background: linear-gradient(90deg, transparent, #bce1ffad 70%, #fff); box-shadow: 0 0 5px #d8edff88; opacity: 0; animation: meteor-cross 18s linear infinite; }
 .shooting-star-two { top: 39%; left: -22%; width: 70px; animation-duration: 29s; animation-delay: -12s; }
-@keyframes meteor-cross { 0%, 28% { opacity: 0; transform: translate3d(0, 0, 0) rotate(-18deg); } 30% { opacity: .75; } 40% { opacity: .75; } 43%, 100% { opacity: 0; transform: translate3d(125vw, 28vh, 0) rotate(-18deg); } }
+@keyframes meteor-cross { 0%, 28% { opacity: 0; transform: translate3d(0, 0, 0); } 30% { opacity: .75; } 40% { opacity: .75; } 43%, 100% { opacity: 0; transform: translate3d(125vw, 0, 0); } }
 .starfield-paused .starfield-stars, .starfield-paused .shooting-star { animation-play-state: paused; }
 @media (prefers-reduced-motion: reduce) { .starfield-stars { animation: none; } .shooting-star { display: none; } }
 
@@ -192,9 +192,9 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .cryptoid-ghostCoin .asteroid-shape { clip-path: polygon(50% 0, 82% 20%, 91% 69%, 72% 83%, 50% 70%, 28% 83%, 9% 69%, 18% 20%); }
 .cryptoid-cloaked { opacity: .33; pointer-events: none; }
 .cryptoid-cloaked::before { position: absolute; z-index: 2; top: -15px; left: 50%; transform: translateX(-50%); color: #e8c0ff; content: 'PHASED'; font: 8px 'DM Mono', monospace; letter-spacing: .1em; }
-.asteroid-preparing::after { border: 2px solid #f5c86d; background: rgba(245, 200, 109, .18); animation: attack-warning .32s ease-in-out infinite alternate; }
+.asteroid-preparing::after { border: 2px solid #f5c86d; background: rgba(245, 200, 109, .18); }
 @keyframes attack-warning { from { opacity: .35; } to { opacity: 1; } }
-.health-bar { position: absolute; z-index: 2; bottom: -12px; left: 16%; width: 68%; height: 3px; background: #18343f; }
+.health-bar { position: absolute; z-index: 2; top: -5px; left: 25%; width: 50%; height: 2px; border-radius: 2px; background: #263946; pointer-events: none; }
 .health-bar b { display: block; height: 100%; background: var(--gold); transition: width .15s ease; }
 .player-laser { position: absolute; z-index: 3; width: 5px; height: 19px; transform: translate(-50%, -50%); border-radius: 4px; background: linear-gradient(#fff, #d9b9ff, #8847df); box-shadow: 0 0 9px #e2adff, 0 0 18px #9162f1; pointer-events: none; }
 .player-laser-overdrive { width: 8px; height: 24px; background: linear-gradient(#fff, #ffd368, #bd62ff); box-shadow: 0 0 13px #ffdb7c, 0 0 26px #bd62ff; }
@@ -203,7 +203,7 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .player-wing { position: absolute; inset: 5px 0 12px; clip-path: polygon(50% 0, 64% 29%, 92% 46%, 100% 75%, 72% 71%, 61% 100%, 39% 100%, 28% 71%, 0 75%, 8% 46%, 36% 29%); background: linear-gradient(115deg, #f5c965 1%, #32165f 15%, #8533d6 36%, #b886ff 50%, #6d2fb5 65%, #34176a 85%, #f5c965 99%); border-bottom: 2px solid #f6d17b; }
 .player-hull { position: absolute; top: 5px; left: 27px; width: 18px; height: 38px; clip-path: polygon(50% 0, 100% 43%, 76% 100%, 24% 100%, 0 43%); background: linear-gradient(90deg, #f6d47e, #eee6ff 42%, #7141cb 70%, #f6d47e); }
 .player-core { position: absolute; top: 20px; left: 27px; display: grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: #311b64; border: 1px solid #f6d47e; color: #ffd972; font: 700 16px Georgia, serif; text-shadow: 0 0 6px #f6d47e; }
-.player-engine { position: absolute; bottom: 0; width: 8px; height: 17px; border-radius: 0 0 50% 50%; background: linear-gradient(#f9fbff, #ab67ff, transparent); box-shadow: 0 4px 12px #ba79ff; animation: engine-pulse .28s ease-in-out infinite alternate; }
+.player-engine { position: absolute; bottom: 0; width: 8px; height: 17px; border-radius: 0 0 50% 50%; background: linear-gradient(#f9fbff, #ab67ff, transparent); box-shadow: 0 4px 12px #ba79ff; }
 .player-engine-left { left: 20px; }.player-engine-right { right: 20px; }
 .player-ship-hurt { opacity: .62; filter: drop-shadow(0 0 14px #fff); }
 
@@ -225,8 +225,8 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .cryptoid-elite .cryptoid-core { box-shadow: 0 2px 0 #10202c, 0 0 15px var(--ship-edge), 0 0 0 3px #d9b5ed55, inset 0 0 0 2px var(--coin-dark); }
 .asteroid.sector-boss { width: 124px; height: 104px; z-index: 2; filter: drop-shadow(0 0 17px #ff9c67); }
 .sector-boss .cryptoid-core { font-size: 17px; }
-.sector-boss .health-bar { bottom: -16px; height: 6px; border: 1px solid #f7bd8e; }
-.sector-boss.boss-warning::after { border: 3px solid #ffd67d; background: rgba(255, 124, 75, .15); animation: attack-warning .32s ease-in-out infinite alternate; }
+.sector-boss .health-bar { top: -7px; height: 3px; }
+.sector-boss.boss-warning::after { border: 3px solid #ffd67d; background: rgba(255, 124, 75, .15); }
 .sector-boss.boss-enraged { filter: drop-shadow(0 0 20px #ff6779); }
 .cryptoid-solflare .asteroid-shape { clip-path: polygon(43% 0, 50% 19%, 57% 0, 72% 34%, 100% 50%, 72% 68%, 56% 77%, 50% 100%, 44% 77%, 28% 68%, 0 50%, 28% 34%); }
 .cryptoid-etherCrystal .asteroid-shape { clip-path: polygon(32% 5%, 50% 17%, 68% 5%, 76% 30%, 100% 39%, 83% 78%, 64% 66%, 50% 100%, 36% 66%, 17% 78%, 0 39%, 24% 30%); background: linear-gradient(90deg, #214569, #69c7e9 25%, #bedaff 50%, #796dc9 75%, #214569); }
@@ -239,13 +239,12 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .player-ship .player-core::after { position: absolute; inset: 3px; border: 1px solid #82532b99; border-radius: 50%; content: ''; }
 /* Transparent reference fleet: body, emblem, and hit area remain independent. */
 .cryptoid::after { display: none; }
-.fleet-sprite { position: absolute; inset: 0; background-size: 400% 500%; background-repeat: no-repeat; clip-path: inset(8%); pointer-events: none; }
-.cryptoid .fleet-sprite { filter: drop-shadow(0 0 6px var(--ship-edge)); }
-.cryptoid .cryptoid-core { top: 53%; width: 30%; border-width: 1px; font-size: clamp(7px, 1vw, 11px); }
-.cryptoid-heavy .cryptoid-core, .cryptoid-elite .cryptoid-core { width: 28%; font-size: 13px; }
-.cryptoid .cryptoid-core::before { position: absolute; inset: -4px; border-radius: 50%; background: conic-gradient(var(--coin-light) var(--health, 100%), #29313f 0); content: ''; z-index: -1; }
+.fleet-sprite { position: absolute; inset: 0; background-size: 400% 500%; background-repeat: no-repeat; pointer-events: none; }
+.cryptoid .fleet-sprite { transform: rotate(180deg); filter: drop-shadow(0 0 3px var(--ship-edge)); }
+.cryptoid .cryptoid-core { top: 50%; width: 24%; border-width: 1px; font-size: clamp(7px, .85vw, 10px); }
+.cryptoid-heavy .cryptoid-core, .cryptoid-elite .cryptoid-core { width: 23%; font-size: 10px; }
 .cryptoid .cryptoid-core::after { inset: 11%; }
-.sector-boss .cryptoid-core { font-size: 14px; }
+.sector-boss .cryptoid-core { font-size: 11px; }
 .player-ship { width: 76px; height: 76px; }
 .player-ship .fleet-sprite { filter: sepia(1) saturate(4.5) hue-rotate(calc(225deg + var(--ship-hue))) drop-shadow(0 0 7px var(--ship-glow)); }
 .player-ship .player-core { top: 30px; left: 27px; width: 22px; height: 22px; font-size: 17px; }
@@ -268,7 +267,7 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .ship-choice small { color: var(--gold); font: 9px 'DM Mono', monospace; }
 .ship-choice[aria-pressed="true"], .color-choice[aria-pressed="true"] { border-color: #f2c968; box-shadow: 0 0 12px #f2c96866; }
 .ship-preview { position: relative; display: block; width: 72px; height: 72px; }
-.ship-preview i { position: absolute; inset: 0; background-size: 400% 500%; clip-path: inset(8%); filter: sepia(1) saturate(4.5) hue-rotate(calc(225deg + var(--ship-hue))) drop-shadow(0 0 5px var(--ship-glow)); }
+.ship-preview i { position: absolute; inset: 0; background-size: 400% 500%; filter: sepia(1) saturate(4.5) hue-rotate(calc(225deg + var(--ship-hue))) drop-shadow(0 0 5px var(--ship-glow)); }
 .ship-preview-starter i { filter: grayscale(1) brightness(1.12) drop-shadow(0 0 5px #aeb7c4); }
 .ship-preview b { position: absolute; top: 42%; left: 35%; display: grid; place-items: center; width: 22px; height: 22px; border: 1px solid #f6d47e; border-radius: 50%; background: #eebd5a; color: #3f2058; font: 700 17px Georgia, serif; }
 .hangar-selection strong { color: #fff; }

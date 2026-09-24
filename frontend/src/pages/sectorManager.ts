@@ -17,15 +17,15 @@ export const sectorForSection = (section: number) => Math.floor((Math.max(1, sec
 export const sectionInSector = (section: number) => (Math.max(1, section) - 1) % SECTIONS_PER_SECTOR + 1;
 
 export const formationLayout = (section: number, width: number, height: number) => {
-  const columns = width < 620 ? 3 : 5;
-  const rows = width < 620 ? 2 : 3;
+  const columns = width < 760 ? 3 : 5;
+  const rows = width < 760 ? 2 : 3;
   return Array.from({ length: columns * rows }, (_, index) => {
     const row = Math.floor(index / columns);
     const column = index % columns;
     // Alternate arrival order within each row; the final positions remain a stable grid.
     const arrivalColumn = row % 2 ? columns - 1 - column : column;
     const x = width * (columns === 3 ? .17 + arrivalColumn * .33 : .15 + arrivalColumn * .175);
-    const y = height * (rows === 2 ? .21 + row * .18 : .19 + row * .11);
+    const y = height * (rows === 2 ? .21 + row * .18 : .16) + (rows === 3 ? row * Math.max(100, height * .12) : 0);
     return { index, x, y, row, column: arrivalColumn, entrySide: (row + column + section) % 2 === 0 ? 1 : -1 };
   });
 };

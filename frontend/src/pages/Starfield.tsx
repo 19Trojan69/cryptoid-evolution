@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { memo, type CSSProperties } from "react";
 import type { PlayerPosition } from "./playerCombat";
 
 type Star = { x: number; y: number; radius: number; color: string; opacity: number };
@@ -39,4 +39,4 @@ const Starfield = ({ sector, player, paused }: { sector: number; player: PlayerP
   </div>;
 };
 
-export default Starfield;
+export default memo(Starfield);
