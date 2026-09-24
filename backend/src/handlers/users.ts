@@ -13,11 +13,13 @@ export default function mountUserEndpoints(router: Router) {
     }
 
     let verifiedUid: string;
+    let verifiedUsername: string;
     try {
       // Verify the user's access token with the /me endpoint:
       const me = await platformAPIClient.get(`/v2/me`, { headers: { Authorization: `Bearer ${auth.accessToken}` } });
       verifiedUid = me.data.uid;
       if (!verifiedUid || verifiedUid !== auth.user.uid) return res.status(401).json({ error: "invalid_token" });
+      verifiedUsername = me.data.username;
     } catch (err) {
       console.error("Error verifying access token:", err);
       return res.status(401).json({ error: "invalid_token", message: "Invalid access token" });
@@ -34,13 +36,13 @@ export default function mountUserEndpoints(router: Router) {
           {
             $set: {
               accessToken: auth.accessToken,
-              username: me.data.username,
+              username: verifiedUsername,
             },
           },
         );
       } else {
         const insertResult = await userCollection.insertOne({
-          username: me.data.username,
+          username: verifiedUsername,
           uid: verifiedUid,
           roles: auth.user.roles,
           accessToken: auth.accessToken,
