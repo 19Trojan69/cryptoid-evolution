@@ -106,7 +106,7 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .game-field::before { position: absolute; inset: 0; z-index: -1; background-image: linear-gradient(rgba(79, 228, 239, .025) 1px, transparent 1px), linear-gradient(90deg, rgba(79, 228, 239, .025) 1px, transparent 1px); background-size: 52px 52px; content: ''; mask-image: linear-gradient(to bottom, black, transparent 85%); }
 .star-layer { position: absolute; inset: 0; z-index: -1; opacity: .65; background-image: radial-gradient(circle, #b9f8ee 0 1px, transparent 1.5px), radial-gradient(circle, #4fe4ef 0 1px, transparent 1.5px); background-size: 83px 97px, 137px 151px; background-position: 12px 28px, 61px 73px; }
 .star-layer-two { opacity: .34; transform: rotate(17deg) scale(1.2); }
-.game-hud { position: absolute; z-index: 3; top: 0; left: 0; right: 0; display: grid; grid-template-columns: minmax(75px, 1fr) repeat(4, minmax(70px, 100px)) minmax(44px, 1fr); align-items: center; gap: 14px; padding: 16px clamp(14px, 4vw, 54px); border-bottom: 1px solid rgba(123, 205, 199, .17); background: rgba(3, 14, 27, .66); backdrop-filter: blur(8px); }
+.game-hud { position: absolute; z-index: 3; top: 0; left: 0; right: 0; display: grid; grid-template-columns: minmax(75px, 1fr) repeat(5, minmax(65px, 100px)) minmax(44px, 1fr); align-items: center; gap: 12px; padding: 16px clamp(14px, 4vw, 54px); border-bottom: 1px solid rgba(123, 205, 199, .17); background: rgba(3, 14, 27, .66); backdrop-filter: blur(8px); }
 .hud-stat { display: flex; flex-direction: column; gap: 5px; text-align: center; }
 .hud-stat span { color: #71969b; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .13em; text-transform: uppercase; }
 .hud-stat strong { color: #eff8f3; font-size: 18px; font-weight: 500; }
@@ -218,7 +218,7 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 }
 
 @media (max-width: 560px) {
-  .game-hud { grid-template-columns: 38px repeat(4, 1fr) 38px; gap: 5px; padding: 11px 9px; }
+  .game-hud { grid-template-columns: 38px repeat(5, 1fr) 38px; gap: 3px; padding: 11px 7px; }
   .home-control { width: 36px; height: 36px; padding: 0; font-size: 14px; }
   .home-control span { display: none; }
   .pause-control { width: 36px; height: 36px; }

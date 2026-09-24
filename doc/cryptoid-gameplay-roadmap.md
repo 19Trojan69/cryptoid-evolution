@@ -6,13 +6,13 @@ This tracks implementation against the owner's current **Galaga-inspired CRYPTOI
 
 | Slice | Acceptance target | Status |
 | --- | --- | --- |
-| A | Violet/gold π ship moves horizontally and within lower vertical band; auto-fires finite projectile pool; projectile hits require contact, enemy collisions require contact; drops are picked up by ship | Implemented in current change; browser acceptance pending |
-| B | Replace timed spawning/V with bounded entry groups and stable rows/columns; section clears only when every enemy is defeated | Pending |
+| A | Violet/gold π ship moves horizontally and within lower vertical band; auto-fires finite projectile pool; projectile hits require contact, enemy collisions require contact; drops are picked up by ship | Implemented; build, lint, logic and desktop drag/playback verified |
+| B | Replace timed spawning/V with bounded entry groups and stable rows/columns; section clears only when every enemy is defeated | Implemented in current change; browser acceptance pending |
 | C | Dive/curve/group runs return to their own slot; add legible enemy fire, budgets and dodge play-testing | Pending |
 | D | Each sector contains several sections, every third a non-attacking shooting bonus; 4–6 minute sector pacing and end boss | Pending |
 | E | Five weapon levels, drop duration HUD, companion ship/tractor rescue, combos, shards and permanent progression | Pending |
 
-The initial ship slice preserves the old timed sectors and attack paths temporarily; do not label these compliant with kill-to-clear, ordered rows, enemy fire, bonus challenge or boss mechanics yet. The new ship has no real-world crypto logo and ammunition does not spend the legacy Coins counter.
+Normal sections now spawn a finite grid: six ships on narrow screens, fifteen on wider screens. New sections begin after every planned enemy has entered and all survivors have been shot down. Three sections currently share a named sector; the third is temporarily normal until the separate bonus challenge is built. The 4–6 minute target is a tuning goal, not a forced timer. Enemy fire and bosses remain separate work. The ship has no real-world crypto logo and ammunition does not spend the legacy Coins counter.
 
 ## Required development order
 
@@ -20,11 +20,11 @@ The initial ship slice preserves the old timed sectors and attack paths temporar
 | --- | --- | --- |
 | 1 | Slow wave timing | Done |
 | 2 | Visible entry flights | Done |
-| 3 | Stable formation slots | Done: initial V formation |
+| 3 | Stable formation slots | Done: ordered rows with unique slots |
 | 4 | First single attack run | Done |
 | 5 | Return to original slot | Done |
 | 6 | Attack patterns: Dive, Curve, S-Curve, Loop, Side, Double, V | Implemented; full dodging and long-run group play-testing remain open |
-| 7 | Visible sectors and internal attack cycles | Implemented: five-minute named sectors, intro, entry, formation, attack/reform, final attack and clear; long-run play-testing remains open |
+| 7 | Visible sectors and internal attack cycles | Implemented: finite kill-to-clear sections inside named sectors; long-run pacing and transitions still need play-testing |
 | 8 | Cryptoid classes, types and fictional markings | Implemented: six distinct silhouettes, four classes, fictional codes, durability and attack pacing; subtype powers still open |
 | 9 | Power-ups | First playable stage: safe falling Shield, Repair Core and Overdrive pickups; weapon and shard upgrades pending player ship / weapon and shard systems |
 | 10 | Combos and score bonuses | Pending |
@@ -50,15 +50,15 @@ The older implementation used tap-to-fire targets and an Earth defense area. The
 
 The step 8 roster gives SolFlare a quicker entry/attack, BitRock heavier armor, Ether Crystal a distinct shatter effect, and Ghost Coin a formation-only cloak that stops before any attack. Stable Core's protective field, Ether Crystal's dangerous split fragments, and full multi-enemy Meme Swarm behavior are not yet active and require separate gameplay and fairness tests before being claimed as complete.
 
-Step 9 initially offers tap-to-collect pickups because the current prototype has no movable player ship. Shield absorbs one impact per charge, Repair Core restores one heart up to three, and Overdrive doubles damage per tap for 12 seconds. Drops are rare except for a first safe pickup after three kills; they only appear near a defeated enemy when the position and immediate path are clear. Rapid Fire, Twin Shot, Triple Shot and Crypto Magnet require the later player weapon and Crypto Shard systems. Pickup collision and weapon behavior must be reviewed again after the ship is added.
+Step 9 pickups are now collected by the player's ship. Shield absorbs one impact per charge, Repair Core restores one heart up to three, and Overdrive doubles shot damage for 12 seconds. Drops are rare except for a first safe pickup after three kills; they only appear near a defeated enemy when the position and immediate path are clear. Rapid Fire, Twin Shot, Triple Shot and Crypto Magnet require later weapon and Crypto Shard systems.
 
 The Double and V attack paths unlock only after five minutes. Their selection and on-screen geometry are tested; a full long-run play-test with a moving ship is still required.
 
 ## Master design reference for later steps
 
-- A normal sector lasts about 4–6 minutes. The intended phase order is INTRO → ENTRY → FORMATION → ATTACK_CYCLE → REFORM → repeated attacks → FINAL_ATTACK → CLEAR → optional special event → next sector. Internal attack cycles must not be shown as Waves.
+- A normal sector targets about 4–6 minutes across multiple kill-to-clear sections. The current phase order is INTRO → ENTRY → FORMATION → ATTACK_CYCLE → REFORM → repeated attacks → CLEAR → next section. Internal attack cycles must not be shown as Waves.
 - The first named sectors are Genesis Belt, Crystal Chain, Meme Nebula, Dark Ledger, Mainnet Core and Quantum Vault. Further sectors recombine existing backgrounds, enemies, formations and patterns indefinitely.
-- Entry flights take roughly 5–15 seconds. Formations use the upper 35–45% of the playfield, remain shootable and may drift, pulse, expand, rotate or reform. The planned library includes V, Diamond, Double Line, X, Ring, Split Group, Wave, Spiral, Rotating Core and Shield Wall.
+- Entry flights take roughly 5–15 seconds. Default formations use ordered rows and columns in the upper 35–45% of the field. Future variety comes from occupancy, entry paths and enemy mix; unusual formations may occur only as special events.
 - Attack patterns expand from Dive, Curve, S-Curve, Loop and Side to Double and V. Later patterns include Cross, Tracking Dive, Fake Attack, Rear Return, Spiral and Double Strike. Tracking must lock a direction after a brief correction rather than follow the player perfectly.
 - The player ship is a distinctive flat violet and gold craft with two engines and a gold mathematical π at its center. Its collision box should be about 60–75% of its visible size. Keep it original and clearly separate from enemy colors.
 - Enemies combine class (Light, Medium, Heavy, Elite), type (BitRock, Ether Crystal, SolFlare, Stable Core, Meme Swarm, Ghost Coin), and fictional faction marking (such as X, Z, R, K, V, Q, XR, VX, ZX or Q7). No real coin branding, official symbols or copied ships.

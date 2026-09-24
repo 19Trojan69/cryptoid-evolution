@@ -1,10 +1,11 @@
-export const SECTOR_DURATION_MS = 300_000;
-export const SECTOR_INTRO_MS = 5_000;
-export const SECTOR_CLEAR_MS = 10_000;
+export const SECTIONS_PER_SECTOR = 3;
+export const SECTION_INTRO_MS = 2_200;
+export const SECTION_CLEAR_MS = 2_400;
+export const ENTRY_GAP_MS = 520;
 
 const sectorNames = ["GENESIS BELT", "CRYSTAL CHAIN", "MEME NEBULA", "DARK LEDGER", "MAINNET CORE", "QUANTUM VAULT"] as const;
 
-export type SectorPhase = "SECTOR_INTRO" | "ENTRY" | "FORMATION" | "ATTACK_CYCLE" | "REFORM" | "FINAL_ATTACK" | "SECTOR_CLEAR";
+export type SectorPhase = "SECTOR_INTRO" | "ENTRY" | "FORMATION" | "ATTACK_CYCLE" | "REFORM" | "SECTOR_CLEAR";
 
 export const sectorName = (number: number) => {
   const index = Math.max(0, number - 1);
@@ -12,16 +13,29 @@ export const sectorName = (number: number) => {
   return `${sectorNames[index % sectorNames.length]}${pass > 0 ? ` ${pass + 1}` : ""}`;
 };
 
-export const sectorAt = (elapsedMs: number, returning = false) => {
-  const elapsed = Math.max(0, elapsedMs);
-  const number = Math.floor(elapsed / SECTOR_DURATION_MS) + 1;
-  const sectorElapsed = elapsed % SECTOR_DURATION_MS;
-  let phase: SectorPhase;
-  if (sectorElapsed < SECTOR_INTRO_MS) phase = "SECTOR_INTRO";
-  else if (sectorElapsed < 20_000) phase = "ENTRY";
-  else if (sectorElapsed < 30_000) phase = "FORMATION";
-  else if (sectorElapsed >= SECTOR_DURATION_MS - SECTOR_CLEAR_MS) phase = "SECTOR_CLEAR";
-  else if (sectorElapsed >= 260_000) phase = "FINAL_ATTACK";
-  else phase = returning ? "REFORM" : "ATTACK_CYCLE";
-  return { number, name: sectorName(number), phase };
+export const sectorForSection = (section: number) => Math.floor((Math.max(1, section) - 1) / SECTIONS_PER_SECTOR) + 1;
+export const sectionInSector = (section: number) => (Math.max(1, section) - 1) % SECTIONS_PER_SECTOR + 1;
+
+export const formationLayout = (section: number, width: number, height: number) => {
+  const columns = width < 620 ? 3 : 5;
+  const rows = width < 620 ? 2 : 3;
+  return Array.from({ length: columns * rows }, (_, index) => {
+    const row = Math.floor(index / columns);
+    const column = index % columns;
+    // Alternate arrival order within each row; the final positions remain a stable grid.
+    const arrivalColumn = row % 2 ? columns - 1 - column : column;
+    const x = width * (columns === 3 ? .17 + arrivalColumn * .33 : .15 + arrivalColumn * .175);
+    const y = height * (rows === 2 ? .21 + row * .18 : .19 + row * .11);
+    return { index, x, y, row, column: arrivalColumn, entrySide: (row + column + section) % 2 === 0 ? 1 : -1 };
+  });
+};
+
+export const sectionPhase = ({ introMs, spawned, total, alive, ready, returning, attacking }: {
+  introMs: number; spawned: number; total: number; alive: number; ready: number; returning: boolean; attacking: boolean;
+}): SectorPhase => {
+  if (introMs < SECTION_INTRO_MS) return "SECTOR_INTRO";
+  if (spawned === total && alive === 0) return "SECTOR_CLEAR";
+  if (spawned < total || ready < alive) return "ENTRY";
+  if (returning) return "REFORM";
+  return attacking ? "ATTACK_CYCLE" : "FORMATION";
 };
