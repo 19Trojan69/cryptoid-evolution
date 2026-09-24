@@ -34,12 +34,13 @@ export default function mountUserEndpoints(router: Router) {
           {
             $set: {
               accessToken: auth.accessToken,
+              username: me.data.username,
             },
           },
         );
       } else {
         const insertResult = await userCollection.insertOne({
-          username: auth.user.username,
+          username: me.data.username,
           uid: verifiedUid,
           roles: auth.user.roles,
           accessToken: auth.accessToken,

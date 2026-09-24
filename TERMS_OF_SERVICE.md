@@ -1,6 +1,6 @@
 # Cryptoid Evolution – Terms of Service / Nutzungsbedingungen
 
-Version 0.9 · Entwurf vom 24. September 2026
+Version 0.10 · Entwurf vom 24. September 2026
 
 **ENTWURF – vor verbindlicher Veröffentlichung rechtlich zu prüfen.** Bis zur Freigabe dienen diese Angaben der transparenten Beschreibung der aktuellen Spielfunktionen. Eine rechtliche Prüfung und ausdrückliche Freigabe des Betreibers stehen aus.
 
@@ -19,6 +19,8 @@ Cryptoid Evolution ist keine offizielle Anwendung von Pi Network. Es besteht kei
 Shards sind ausschließlich im Spiel verdiente Ressourcen ohne zugesagten Geldwert. Damit angebotene Raumschiffe werden im aktuellen Spielstand des verwendeten Browsers gespeichert. Jedes erworbene Exemplar wird getrennt nach Schiffstyp und Farbvariante gezählt; mehrfache Käufe desselben Typs und derselben Farbe erhöhen die Stückzahl. Die Anzeige „Im Besitz / Owned“ mit Stückzahl beschreibt diesen gespeicherten Spielbestand, kein Eigentum an einer Datei, Marke oder einem physischen Gegenstand.
 
 Eine ausgewählte Farbe gehört zur jeweiligen Schiffsvariante. Ein Grey Scout ist als Startschiff kostenlos verfügbar; seine Lackierung kann ohne Shard-Kauf gewechselt werden, wobei das vorhandene Exemplar umlackiert und kein zusätzliches Schiff erzeugt wird. Weitere Grey Scouts kosten 20 Shards je Exemplar. Andere Schiffe kosten den vor dem Erwerb angezeigten Betrag in Shards. Wird der lokale Browserspeicher gelöscht, das Gerät gewechselt oder ein privates Fenster geschlossen, können ausschließlich lokal gespeicherte Schiffsbestände und Shards verloren gehen. Eine geräteübergreifende Wiederherstellung ist derzeit nicht zugesagt.
+
+Bei angemeldeten Pi-Spielern speichert das Spiel den höchsten gemeldeten Punktestand pro Konto. Die öffentliche Bestenliste zeigt bis zu 100 Pi-Benutzernamen mit ihrem jeweiligen Bestwert. Neue Runden beginnen mit null Punkten; Gast-Rekorde werden nur im verwendeten Browser gespeichert. Die im Spiel angezeigten Netzwerkblöcke und dafür vergebenen Shards sind fiktive Spielmechaniken und keine Blockchain-Einträge oder realen Krypto-Assets. Spielergebnisse werden derzeit vom Browser gemeldet und serverseitig nur auf offensichtliche Ungültigkeit geprüft; eine vollständig manipulationssichere Rangliste wird nicht zugesagt.
 
 ## 4. Waffen und Power-ups
 

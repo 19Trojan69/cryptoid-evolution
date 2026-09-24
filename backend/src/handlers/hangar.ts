@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { randomUUID } from "node:crypto";
 import { findOffer, hangarCatalog } from "../hangarCatalog";
 import "../types/session";
 
@@ -47,7 +48,9 @@ export default function mountHangarEndpoints(router: Router) {
       const unlockedWeaponLevels = [1, ...hangarCatalog.filter(item => item.kind === "weapon" && paidWeapons.some((order: any) => order.product_id === item.id)).map(item => item.kind === "weapon" ? item.level : 1)];
       const selected = findOffer(user?.loadout?.power);
       const consumed = selected?.kind === "power" ? await orders.findOneAndUpdate({ user: uid, product_id: selected.id, paid: true, consumed_at: { $exists: false } }, { $set: { consumed_at: new Date() } }, { returnDocument: "before" }) : null;
-      return res.json({ weaponLevel: owned && weapon?.kind === "weapon" ? weapon.level : 1, unlockedWeaponLevels, powerUp: consumed && selected?.kind === "power" ? selected.powerUp : null });
+      const scoreRun = { id: randomUUID(), startedAt: Date.now() };
+      req.session.scoreRun = scoreRun;
+      return res.json({ weaponLevel: owned && weapon?.kind === "weapon" ? weapon.level : 1, unlockedWeaponLevels, powerUp: consumed && selected?.kind === "power" ? selected.powerUp : null, scoreRunId: scoreRun.id });
     } catch (error) { return res.status(503).json({ error: "Could not start mission" }); }
   });
 }

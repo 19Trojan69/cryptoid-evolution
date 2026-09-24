@@ -1,6 +1,6 @@
 # Cryptoid Evolution
 
-Eigene [Nutzungsbedingungen / Terms of Service (Entwurf)](./TERMS_OF_SERVICE.md) – Version 0.9, rechtliche Prüfung vor Veröffentlichung ausstehend. Die bestehende [Softwarelizenz](./LICENSE.md) bleibt davon getrennt.
+Eigene [Nutzungsbedingungen / Terms of Service (Entwurf)](./TERMS_OF_SERVICE.md) – Version 0.10, rechtliche Prüfung vor Veröffentlichung ausstehend. Die bestehende [Softwarelizenz](./LICENSE.md) bleibt davon getrennt.
 
 ## Grundlage
 

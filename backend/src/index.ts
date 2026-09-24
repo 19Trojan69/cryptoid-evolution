@@ -11,6 +11,7 @@ import env from "./environments";
 import mountPaymentsEndpoints from "./handlers/payments";
 import mountUserEndpoints from "./handlers/users";
 import mountHangarEndpoints from "./handlers/hangar";
+import mountLeaderboardEndpoints from "./handlers/leaderboard";
 
 // We must import typedefs for ts-node-dev to pick them up when they change (even though tsc would supposedly
 // have no problem here)
@@ -84,6 +85,9 @@ app.use("/payments", paymentsRouter);
 const hangarRouter = express.Router();
 mountHangarEndpoints(hangarRouter);
 app.use("/hangar", hangarRouter);
+const leaderboardRouter = express.Router();
+mountLeaderboardEndpoints(leaderboardRouter);
+app.use("/leaderboard", leaderboardRouter);
 
 // User endpoints (e.g signin, signout) under /user:
 const userRouter = express.Router();
@@ -109,6 +113,7 @@ const start = async () => {
     app.locals.orderCollection = db.collection("orders");
     app.locals.userCollection = db.collection("users");
     await app.locals.orderCollection.createIndex({ pi_payment_id: 1 }, { unique: true });
+    await app.locals.userCollection.createIndex({ bestScore: -1, uid: 1 });
     console.log("Connected to MongoDB on: ", mongoUri);
 
     app.listen(env.port, () => {

@@ -4,5 +4,6 @@ import { UserData } from "./user";
 declare module 'express-session' {
   export interface SessionData {
     currentUser: UserData | null,
+    scoreRun?: { id: string; startedAt: number } | null,
   }
 }

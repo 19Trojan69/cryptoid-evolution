@@ -20,13 +20,28 @@ import { requestGameFullscreen } from "./gameFullscreen";
 
 type Offer = { id: string; kind: "weapon" | "power"; name: string; description: string; pricePi: number };
 type Inventory = { ownedWeapons: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
+type Leader = { rank: number; username: string; score: number };
 
 const Shop = () => {
   const navigate = useNavigate();
   const { locale, choose, t } = useLocale();
   const [activePanel, setActivePanel] = useState<"how" | "progress" | null>(null);
-  const [shopView, setShopView] = useState<"ships" | "weapons" | "powers" | "progress" | null>(null);
+  const [shopView, setShopView] = useState<"ships" | "weapons" | "powers" | "progress" | "leaders" | null>(null);
   const [termsOpen, setTermsOpen] = useState(false);
+  const [leaders, setLeaders] = useState<Leader[]>([]);
+  const [leadersStatus, setLeadersStatus] = useState<"loading" | "ready" | "error">("loading");
+  const [personalBest, setPersonalBest] = useState<number | null>(null);
+  useEffect(() => {
+    if (shopView !== "leaders" && shopView !== "progress") return;
+    let current = true;
+    if (shopView === "leaders") {
+      axiosClient.get<{ leaders: Leader[] }>("/leaderboard/top").then(({ data }) => {
+        if (current) { setLeaders(data.leaders); setLeadersStatus("ready"); }
+      }).catch(() => { if (current) setLeadersStatus("error"); });
+    }
+    axiosClient.get<{ bestScore: number }>("/leaderboard/me").then(({ data }) => { if (current) setPersonalBest(data.bestScore); }).catch(() => { if (current) setPersonalBest(null); });
+    return () => { current = false; };
+  }, [shopView]);
   useEffect(() => {
     if (!shopView) return;
     const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setShopView(null); };
@@ -150,6 +165,7 @@ const Shop = () => {
           <div className="hero-actions">
             <button className="button button-primary" type="button" onClick={enterGame}>{t("Play")} <span>↗</span></button>
             <button className="button button-secondary" type="button" onClick={() => setShopView("ships")}>{t('Shop / Hangar')}</button>
+            <button className="button button-secondary" type="button" onClick={() => { setLeadersStatus("loading"); setShopView("leaders"); }}>{t('Top 100')}</button>
             <button className="button button-secondary" type="button" onClick={() => setActivePanel("how")}>{t('How to Play')}</button>
           </div>
           <div className="home-touch-setup" role="group" aria-label={t('Joystick placement')}>
@@ -175,14 +191,14 @@ const Shop = () => {
         <div className="shop-modal">
           <div className="shop-modal-header"><strong>{t("Shop / Hangar")}</strong><button className="close-button" type="button" onClick={() => setShopView(null)} aria-label={t('Close shop')}>×</button></div>
           <nav className="shop-tabs" aria-label={t('Shop sections')}>
-            {([ ["ships", "Ships"], ["weapons", "Weapons"], ["powers", "Power-ups"], ["progress", "Progress"] ] as const).map(([view, label]) => <button key={view} type="button" aria-pressed={shopView === view} onClick={() => setShopView(view)}>{t(label)}</button>)}
+            {([ ["ships", "Ships"], ["weapons", "Weapons"], ["powers", "Power-ups"], ["progress", "Progress"], ["leaders", "Top 100"] ] as const).map(([view, label]) => <button key={view} type="button" aria-pressed={shopView === view} onClick={() => { if (view === "leaders") setLeadersStatus("loading"); setShopView(view); }}>{t(label)}</button>)}
           </nav>
           <div className="shop-modal-body">
       {shopView === "progress" && <section className="dashboard-grid" aria-label={t('Player overview')}>
         <article className="status-card progress-card">
           <div className="card-heading"><span>{t('YOUR PROGRESS')}</span><span className="card-icon">↗</span></div>
-          <div className="progress-row"><strong>{t("Best")} {records.bestScore}</strong><span>{t("Sector")} {String(records.highestSector).padStart(2, "0")}</span></div>
-          <div className="progress-track"><span style={{ width: `${Math.min(100, records.bestScore / 10)}%` }} /></div>
+          <div className="progress-row"><strong>{t("Best")} {personalBest ?? records.bestScore}</strong><span>{t("Sector")} {String(records.highestSector).padStart(2, "0")}</span></div>
+          <div className="progress-track"><span style={{ width: `${Math.min(100, (personalBest ?? records.bestScore) / 10)}%` }} /></div>
           <button className="text-button" type="button" onClick={() => setActivePanel("progress")}>{t("My Progress")} <span>→</span></button>
         </article>
         <article className="status-card streak-card">
@@ -190,6 +206,16 @@ const Shop = () => {
           <strong className="streak-number">{records.totalDestroyed} <small>{t("asteroids")}</small></strong>
           <p>{t('Total destroyed across all missions.')}</p>
         </article>
+      </section>}
+
+      {shopView === "leaders" && <section className="leaderboard-section" aria-labelledby="leaders-heading">
+        <p className="eyebrow">{t("GLOBAL RECORDS")}</p>
+        <h2 id="leaders-heading">{t("Top 100")}</h2>
+        <p>{t("Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.")}</p>
+        {personalBest !== null && <p className="leaderboard-personal">{t("Your personal best")}: <strong>{personalBest}</strong></p>}
+        {leadersStatus === "loading" && <p role="status">{t("Loading scores…")}</p>}
+        {leadersStatus === "error" && <p role="status">{t("Leaderboard unavailable. Try again later.")}</p>}
+        {leadersStatus === "ready" && (leaders.length ? <div className="leaderboard-scroll"><table><thead><tr><th>#</th><th>{t("Player")}</th><th>{t("Best score")}</th></tr></thead><tbody>{leaders.map(entry => <tr key={entry.rank}><td>{entry.rank}</td><td>{entry.username}</td><td>{entry.score.toLocaleString(locale)}</td></tr>)}</tbody></table></div> : <p>{t("No records yet. Complete a mission to be first.")}</p>)}
       </section>}
 
       {shopView === "ships" && <section className="ship-selector" aria-labelledby="hangar-heading">
@@ -246,7 +272,8 @@ const Shop = () => {
           <button className="close-button" type="button" onClick={() => setActivePanel(null)} aria-label={t('Close')}>×</button>
           <p className="eyebrow">{activePanel === "how" ? "FIELD GUIDE" : "MISSION LOG"}</p>
           <h2 id="info-title">{activePanel === "how" ? t("How to Play") : t("Your Progress")}</h2>
-          <p>{activePanel === "how" ? t("Move your ship with the arrow keys or WASD; on touchscreens, drag it in the lower playfield. Your laser fires automatically. Dodge diving Cryptoids, line up shots, and fly into glowing pickups: Shield absorbs a hit, Repair restores a heart, and Overdrive briefly strengthens your shots. You have three hearts; the round ends when they run out.") : t("Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.").replace("{score}", String(records.bestScore)).replace("{sector}", String(records.highestSector)).replace("{destroyed}", String(records.totalDestroyed))}</p>
+          <p>{activePanel === "how" ? t("Move your ship with the arrow keys or WASD; on touchscreens, drag it in the lower playfield. Your laser fires automatically. Dodge diving Cryptoids, line up shots, and fly into glowing pickups: Shield absorbs a hit, Repair restores a heart, and Overdrive briefly strengthens your shots. You have three hearts; the round ends when they run out.") : t("Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.").replace("{score}", String(personalBest ?? records.bestScore)).replace("{sector}", String(records.highestSector)).replace("{destroyed}", String(records.totalDestroyed))}</p>
+          {activePanel === "how" && <p>{t("Each completed section links one fictional block; three blocks award Shards. Strong bonus rounds increase the chain reward.")}</p>}
           <button className="button button-primary" type="button" onClick={() => { setActivePanel(null); if (activePanel === "how") enterGame(); }}>{t("Enter mission")} <span>↗</span></button>
         </div>
       </div>}
