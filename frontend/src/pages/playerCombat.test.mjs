@@ -43,13 +43,14 @@ test("shots travel upward, collide only with visible enemies; player hitbox rema
   assert.equal(shipHitsEnemy({ x: .5, y: .85 }, 800, 600, { x: 460, y: 510, radius: 25 }), false);
 });
 
-test("an attacker can make contact only once per run, even across invulnerability", () => {
+test("visible ships collide in every phase; cooldown and dive state prevent repeated damage", () => {
   const player = { x: .5, y: .85 };
   const touching = { x: 400, y: 510, radius: 25 };
   assert.deepEqual(contactWithEnemy(player, 800, 600, touching, false, false, 0), { connected: false, damage: 0 });
   assert.deepEqual(contactWithEnemy(player, 800, 600, { ...touching, x: 460 }, true, false, 0), { connected: false, damage: 0 });
   assert.deepEqual(contactWithEnemy(player, 800, 600, touching, true, false, 600), { connected: true, damage: 0 });
   assert.deepEqual(contactWithEnemy(player, 800, 600, touching, true, true, 0), { connected: false, damage: 0 });
+  assert.deepEqual(contactWithEnemy(player, 800, 600, touching, true, false, 0), { connected: true, damage: 1 }); // formation or return
   const first = contactWithEnemy(player, 800, 600, touching, true, false, 0);
   assert.deepEqual(first, { connected: true, damage: 1 });
   assert.deepEqual(receiveImpacts({ hearts: 3, shieldCharges: 1, overdriveMs: 0 }, first.damage), { hearts: 3, shieldCharges: 0, overdriveMs: 0 });

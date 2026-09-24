@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { buySkin, ownedSkins, playerSkins, selectedShip, shardBalance, SHIP_COLOR_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY } from "./shipFleet.ts";
+import { buySkin, colorForSkin, ownedSkins, playerColors, playerSkins, savedShipColors, selectedShip, shardBalance, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY } from "./shipFleet.ts";
 
 test("only the grey starter is free and the full reference fleet is purchasable", () => {
   assert.equal(playerSkins.length, 20);
@@ -27,4 +27,17 @@ test("saved selection cannot equip a locked hull or invent Shards", () => {
   assert.equal(selectedShip().skin.id, "pi-vanguard");
   assert.equal(shardBalance("Infinity"), 0);
   assert.equal(shardBalance("-10"), 0);
+});
+
+test("every hull starts grey and keeps its own freely chosen paint", () => {
+  assert.ok(playerColors.length >= 20);
+  assert.equal(colorForSkin("nova-wing", {}, "violet", "grey-scout").id, "grey");
+  const colors = savedShipColors('{"nova-wing":"coral","grey-scout":"cobalt","fake":"ruby"}');
+  assert.equal(colorForSkin("nova-wing", colors).id, "coral");
+  assert.equal(colorForSkin("grey-scout", colors).id, "cobalt");
+  assert.equal(colorForSkin("dark-delta", colors).id, "grey");
+  assert.deepEqual(savedShipColors('{"nova-wing":"unknown"}'), {});
+  const values = new Map([[SHIP_SKIN_KEY, "nova-wing"], [SHIP_OWNED_KEY, '["nova-wing"]'], [SHIP_COLOR_KEY, "violet"], [SHIP_COLORS_KEY, JSON.stringify(colors)]]);
+  globalThis.localStorage = { getItem: key => values.get(key) ?? null };
+  assert.equal(selectedShip().color.id, "coral");
 });

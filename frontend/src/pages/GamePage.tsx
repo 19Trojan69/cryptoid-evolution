@@ -362,10 +362,11 @@ const GamePage = () => {
               next = { ...next, firedThisAttack: true };
             }
           }
-          const contact = contactWithEnemy(state.player, width, height, next, next.attackPattern !== null && next.attackDelay === 0 && !next.cloaked, next.collidedThisAttack, impactCooldownRef.current);
+          const activeAttack = next.attackPattern !== null && next.attackDelay === 0;
+          const contact = contactWithEnemy(state.player, width, height, next, !next.cloaked && next.x >= 0 && next.x <= width && next.y >= 0 && next.y <= height, activeAttack && next.collidedThisAttack, impactCooldownRef.current);
           if (contact.connected) {
-            next = { ...next, collidedThisAttack: true };
             if (contact.damage) {
+              if (activeAttack) next = { ...next, collidedThisAttack: true };
               heartsLost += contact.damage;
               impactCooldownRef.current = IMPACT_COOLDOWN_MS;
             }
@@ -379,6 +380,11 @@ const GamePage = () => {
         }).filter(target => target.elapsed < BONUS_FLIGHT_MS);
         if (state.encounter === "boss-fight" && state.boss) {
           state.boss = moveSectorBoss(state.boss, delta, width, height);
+          const bossContact = contactWithEnemy(state.player, width, height, state.boss, true, false, impactCooldownRef.current);
+          if (bossContact.damage) {
+            heartsLost += bossContact.damage;
+            impactCooldownRef.current = IMPACT_COOLDOWN_MS;
+          }
           if (bossVulnerable(state.boss) && state.boss.fireElapsed >= bossFireInterval(state.boss) && state.enemyShots.length < enemyShotLimit(width, elapsedRef.current)) {
             const bullet = createEnemyShot(nextIdRef.current, state.boss.x, state.boss.y + state.boss.radius * .4, state.player, width, height);
             if (bullet) {
@@ -624,7 +630,7 @@ const GamePage = () => {
         {game.shots.map(shot => <div key={shot.id} className={`player-laser${shot.empowered ? " player-laser-overdrive" : ""}`} style={{ left: shot.x, top: shot.y }} />)}
         {game.enemyShots.map(shot => <div key={shot.id} className="enemy-laser" style={{ left: shot.x, top: shot.y }} />)}
         {game.effects.map(effect => <div key={effect.id} className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y }}><span /></div>)}
-        <div ref={playerShipRef} className={`player-ship${shipSelection.skin.price === 0 ? " player-ship-starter" : ""}${game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0 ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "hit") ? " player-ship-hurt" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-hue": shipSelection.color.hue, "--ship-glow": shipSelection.color.glow, "--flame-length": `${9 + game.thrust * 7}%`, ...shipNozzleStyle(shipSelection.skin.sprite) } as CSSProperties} aria-label="Your Cryptoid ship"><div className="fleet-sprite" style={spriteStyle(shipSelection.skin.sprite)} /><div className="player-engine player-engine-left" /><div className="player-engine player-engine-right" /></div>
+        <div ref={playerShipRef} className={`player-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0 ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "hit") ? " player-ship-hurt" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-hue": shipSelection.color.hue, "--ship-glow": shipSelection.color.glow, "--flame-length": `${9 + game.thrust * 7}%`, ...shipNozzleStyle(shipSelection.skin.sprite) } as CSSProperties} aria-label="Your Cryptoid ship"><div className="fleet-sprite" style={spriteStyle(shipSelection.skin.sprite)} /><div className="player-engine player-engine-left" /><div className="player-engine player-engine-right" /></div>
         <div className="game-tip">← → ↑ ↓ / {touchMode === "drag" ? "drag" : "thumb joystick"} · Auto fire</div>
         <div className={`touch-controls touch-controls-${touchMode}`}>
           {touchMode !== "drag" && <div className="virtual-stick" role="group" aria-label="Movement joystick" onPointerDown={event => { if (game.status !== "playing") return; stickPointerRef.current = event.pointerId; event.currentTarget.setPointerCapture(event.pointerId); moveStick(event); }} onPointerMove={event => { if (stickPointerRef.current === event.pointerId) moveStick(event); }} onPointerUp={stopStick} onPointerCancel={stopStick} onLostPointerCapture={stopStick}>

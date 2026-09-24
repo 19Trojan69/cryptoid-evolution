@@ -4,6 +4,7 @@ import type { CryptoidClass } from "./cryptoidRoster";
 export const FLEET_IMAGE = "/ships/cryptoid-fleet.png";
 export const SHIP_SKIN_KEY = "cryptoid_player_ship_skin";
 export const SHIP_COLOR_KEY = "cryptoid_player_ship_color";
+export const SHIP_COLORS_KEY = "cryptoid_player_ship_colors";
 export const SHIP_OWNED_KEY = "cryptoid_owned_ship_skins";
 export const SHARD_BALANCE_KEY = "cryptoid_shard_balance";
 
@@ -31,14 +32,47 @@ export const playerSkins = [
 ] as const;
 
 export const playerColors = [
+  { id: "grey", name: "Graphite Grey", hue: "0deg", glow: "#a8b3c2" },
   { id: "violet", name: "Violet", hue: "0deg", glow: "#a56fe2" },
   { id: "cyan", name: "Cyan", hue: "-100deg", glow: "#61d6e9" },
   { id: "rose", name: "Rose", hue: "75deg", glow: "#e477ab" },
   { id: "amber", name: "Amber", hue: "-225deg", glow: "#e5b75e" },
+  { id: "ruby", name: "Ruby Red", hue: "125deg", glow: "#dc5267" },
+  { id: "scarlet", name: "Scarlet", hue: "150deg", glow: "#f64d48" },
+  { id: "coral", name: "Coral", hue: "184deg", glow: "#fa8370" },
+  { id: "orange", name: "Solar Orange", hue: "215deg", glow: "#f59942" },
+  { id: "gold", name: "Gold", hue: "242deg", glow: "#e9ca64" },
+  { id: "lemon", name: "Lemon", hue: "260deg", glow: "#e7e666" },
+  { id: "lime", name: "Neon Lime", hue: "290deg", glow: "#a6dd56" },
+  { id: "emerald", name: "Emerald", hue: "310deg", glow: "#51c780" },
+  { id: "mint", name: "Mint", hue: "325deg", glow: "#79e6b4" },
+  { id: "teal", name: "Teal", hue: "-64deg", glow: "#4bd2bc" },
+  { id: "ice", name: "Ice Blue", hue: "-82deg", glow: "#a9e9f2" },
+  { id: "azure", name: "Azure", hue: "-115deg", glow: "#5ba9ea" },
+  { id: "cobalt", name: "Cobalt", hue: "-145deg", glow: "#5d82e5" },
+  { id: "indigo", name: "Indigo", hue: "-25deg", glow: "#7062d3" },
+  { id: "magenta", name: "Magenta", hue: "43deg", glow: "#d15ed6" },
+  { id: "pink", name: "Hot Pink", hue: "90deg", glow: "#f16fbb" },
+  { id: "white", name: "Pearl White", hue: "0deg", glow: "#e9edf5" },
 ] as const;
 
 export type PlayerSkinId = (typeof playerSkins)[number]["id"];
 export type PlayerColorId = (typeof playerColors)[number]["id"];
+
+export const savedShipColors = (raw: string | null): Partial<Record<PlayerSkinId, PlayerColorId>> => {
+  try {
+    const saved: unknown = JSON.parse(raw || "{}");
+    if (!saved || typeof saved !== "object" || Array.isArray(saved)) return {};
+    return Object.fromEntries(playerSkins.flatMap(skin => {
+      const color = playerColors.find(item => item.id === (saved as Record<string, unknown>)[skin.id]);
+      return color ? [[skin.id, color.id]] : [];
+    })) as Partial<Record<PlayerSkinId, PlayerColorId>>;
+  } catch { return {}; }
+};
+
+export const colorForSkin = (skinId: PlayerSkinId, saved: Partial<Record<PlayerSkinId, PlayerColorId>>, legacyColor?: string | null, selectedId?: PlayerSkinId) =>
+  playerColors.find(item => item.id === saved[skinId]) ??
+  (skinId === selectedId ? playerColors.find(item => item.id === legacyColor) : undefined) ?? playerColors[0];
 
 export const ownedSkins = (raw: string | null): PlayerSkinId[] => {
   try {
@@ -61,7 +95,7 @@ export const buySkin = (id: PlayerSkinId, owned: readonly PlayerSkinId[], balanc
 export const selectedShip = () => {
   const stored = playerSkins.find(item => item.id === localStorage.getItem(SHIP_SKIN_KEY));
   const skin = stored && (stored.price === 0 || ownedSkins(localStorage.getItem(SHIP_OWNED_KEY)).includes(stored.id)) ? stored : playerSkins[0];
-  const color = playerColors.find(item => item.id === localStorage.getItem(SHIP_COLOR_KEY)) ?? playerColors[0];
+  const color = colorForSkin(skin.id, savedShipColors(localStorage.getItem(SHIP_COLORS_KEY)), localStorage.getItem(SHIP_COLOR_KEY), skin.id);
   return { skin, color };
 };
 
