@@ -14,7 +14,6 @@ import { appendSectionBlock, BLOCKS_PER_CHAIN } from "./networkChain";
 import { bossFireInterval, bossVulnerable, createSectorBoss, moveSectorBoss, nextAfterClear, type SectorBoss } from "./sectorBoss";
 import { enemySprite, selectedShip, shardBalance, SHARD_BALANCE_KEY, shipNozzleStyle, spriteStyle } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
-import TermsDialog from "../components/TermsDialog";
 import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio";
 import { axiosClient } from "../lib/axiosClient";
 import { fireInterval, makeVolley } from "./playerCombat";
@@ -167,8 +166,6 @@ const GamePage = () => {
   const lastPlayerRef = useRef<PlayerPosition>({ x: .5, y: .86 });
   const [game, setGame] = useState<GameState>(createInitialState);
   const [homePrompt, setHomePrompt] = useState(false);
-  const [termsOpen, setTermsOpen] = useState(false);
-  const termsReturnStatus = useRef<GameStatus | null>(null);
   const [shipSelection] = useState(selectedShip);
   const recordsSavedRef = useRef(false);
   const scoreRunRef = useRef<string | null>(null);
@@ -663,7 +660,6 @@ const GamePage = () => {
         <header className="game-hud">
           <div className="hud-actions">
             <button className="game-control home-control" type="button" onClick={() => setHomePrompt(true)} aria-label={t('Go home')}>⌂ <span>{t('Home')}</span></button>
-            <button className="game-control terms-control" type="button" aria-label="Nutzungsbedingungen / Terms of Service" title="Nutzungsbedingungen / Terms of Service" onClick={() => { termsReturnStatus.current = stateRef.current.status; if (stateRef.current.status === "playing") { stateRef.current.status = "paused"; setGame({ ...stateRef.current }); } setTermsOpen(true); }}>§</button>
           </div>
           <div className="hud-stat"><span>{t('Score')}</span><strong>{game.score}</strong></div>
           <div className="hud-stat coin-stat"><span>{t('Coins')}</span><strong>● {game.coins}</strong></div>
@@ -706,7 +702,6 @@ const GamePage = () => {
         {game.status === "paused" && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('MISSION PAUSED')}</p><h1>{t('Hold the line.')}</h1><p>{t('The asteroids are waiting.')}</p><button className="button button-primary" type="button" onClick={() => { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); }}>Resume mission <span>▶</span></button></div></div>}
         {game.status === "game-over" && <div className="game-overlay"><div className="game-modal game-over-modal"><p className="eyebrow">{t('MISSION COMPLETE')}</p><h1>{t('Game Over')}</h1><p className="game-over-hearts">{t('Hearts')}: {game.hearts}/3</p><div className="game-over-stats"><span><b>{game.score}</b>{t('Score')}</span><span><b>{game.destroyed}</b>{t('Destroyed')}</span><span><b>{game.sector}</b>{t('Sector')}</span></div>{scoreSync !== "idle" && <p role="status">{t(scoreSync === "saving" ? "Saving personal best…" : scoreSync === "saved" ? "Personal best saved." : "Could not sync personal best. Local best is saved.")}</p>}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span>↗</span></button><button className="button button-secondary" type="button" onClick={goHome}>{t('Home')}</button></div></div></div>}
         {homePrompt && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2>{t('Return to base?')}</h2><p>{t('Your current round will end. Your records will be saved locally.')}</p><div className="modal-actions"><button className="button button-primary" type="button" onClick={goHome}>{t('Leave game')}</button><button className="button button-secondary" type="button" onClick={() => setHomePrompt(false)}>{t('Keep playing')}</button></div></div></div>}
-        {termsOpen && <TermsDialog onClose={() => { setTermsOpen(false); if (termsReturnStatus.current === "playing") { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); } termsReturnStatus.current = null; }} />}
       </div>
     </main>
   );

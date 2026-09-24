@@ -22,7 +22,11 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 
 .app-shell { min-height: 100vh; overflow: hidden; background: radial-gradient(circle at 76% 12%, rgba(49, 173, 159, .15), transparent 30%), linear-gradient(145deg, #071b2b 0%, #092637 55%, #071b2b 100%); }
 .landing-shell { height: 100dvh; min-height: 0; }
-.landing-shell .hero-section { height: calc(100dvh - 76px); min-height: 0; padding-top: clamp(20px, 5vh, 65px); padding-bottom: clamp(20px, 5vh, 65px); }
+.landing-shell .hero-section { width: 100%; max-width: none; height: calc(100dvh - 76px); min-height: 0; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); padding: clamp(20px, 4vh, 52px) clamp(20px, 5vw, 100px) clamp(58px, 8vh, 90px); }
+.landing-shell .hero-copy { max-width: 600px; }
+.landing-shell .planet-stage { width: min(44vw, 72dvh, 760px); }
+.home-footer { position: absolute; z-index: 4; left: clamp(20px, 5vw, 100px); right: clamp(20px, 5vw, 100px); bottom: max(17px, env(safe-area-inset-bottom)); padding-top: 12px; border-top: 1px solid var(--line); }
+.home-footer .terms-entry { margin: 0; padding: 5px 0; }
 .landing-shell .hero-section .starfield { z-index: 0; opacity: .75; }
 .home-touch-setup { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 26px; padding: 14px; border: 1px solid rgba(157, 129, 240, .42); background: rgba(8, 22, 42, .75); }
 .home-touch-setup > span { flex-basis: 100%; color: #b6ddeb; font: 10px 'DM Mono', monospace; letter-spacing: .13em; }
@@ -370,11 +374,12 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
   .dashboard-grid, .product-grid { grid-template-columns: 1fr; }
   .upgrade-section { padding-top: 66px; }
   .section-line { display: none; }
-  .landing-shell .hero-section { position: relative; display: flex; align-items: center; height: calc(100dvh - 65px); padding: 16px 20px; }
+  .landing-shell .hero-section { position: relative; display: flex; align-items: center; height: calc(100dvh - 65px); padding: 12px 20px 60px; }
   .landing-shell .hero-copy { width: 100%; }
   .landing-shell .hero-tagline { margin: 15px 0 10px; }
   .landing-shell .hero-actions { margin-top: 18px; }
-  .landing-shell .planet-stage { position: absolute; right: -30%; top: 31%; width: min(92vw, 380px); margin: 0; opacity: .7; pointer-events: none; }
+  .landing-shell .planet-stage { position: absolute; right: -25%; top: 18%; width: min(96vw, 430px); margin: 0; opacity: .7; pointer-events: none; }
+  .home-footer { left: 20px; right: 20px; bottom: max(10px, env(safe-area-inset-bottom)); }
   .landing-shell .hero-section::before { position: absolute; z-index: 2; inset: 0 25% 0 0; background: linear-gradient(90deg, #081e31ec, #081e31a8 58%, transparent); content: ''; pointer-events: none; }
   .shop-modal-body { padding: 10px; }
   .shop-modal .ship-selector { padding: 14px; }
@@ -393,7 +398,7 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
   .planet-stage { width: min(38vw, 350px); }
   .hero-tagline { margin-top: 18px; }
   .hero-actions { margin-top: 20px; }
-  .landing-shell .hero-section { height: calc(100dvh - 58px); padding-top: 10px; padding-bottom: 10px; }
+  .landing-shell .hero-section { height: calc(100dvh - 58px); padding-top: 10px; padding-bottom: 48px; }
 }
 
 @media (max-width: 560px) {
@@ -458,7 +463,7 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .earth-globe-canvas { display: block; width: 100%; height: 100%; border-radius: 50%; }
 @media (max-width: 600px) { .language-picker { top: 64px; right: 14px; font-size: 11px; } }
 @media (min-width: 601px) { .landing-shell .planet-stage { align-self: center; transform: translateY(-8%); } }
-@media (max-width: 600px) { .landing-shell .planet-stage { top: 12%; right: -18%; width: min(73vw, 320px); opacity: .83; } }
+@media (max-width: 600px) { .landing-shell .planet-stage { top: 10%; right: -23%; width: min(96vw, 430px); opacity: .78; } }
 /* Inventory status is separate from the selected paint. */
 .ship-unowned .ship-preview { filter: grayscale(1); opacity: .55; }
 .ship-unowned { background: #273039; }

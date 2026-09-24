@@ -173,7 +173,6 @@ const Shop = () => {
             <span>{t('THUMB CONTROLS')}</span>
             {([ ["left", "Joystick left"], ["right", "Joystick right"], ["drag", "Classic drag"] ] as const).map(([mode, label]) => <button className="button button-secondary" key={mode} type="button" aria-pressed={touchMode === mode} onClick={() => { localStorage.setItem(TOUCH_MODE_KEY, mode); setTouchMode(mode); }}>{t(label)}</button>)}
           </div>
-          <button type="button" className="text-button terms-entry" onClick={() => setTermsOpen(true)}>Nutzungsbedingungen / Terms of Service</button>
         </div>
         <div className="planet-stage" aria-label="Cryptoid Evolution planet status">
           <div className="orbit orbit-one"><span className="satellite-motion"><i className="satellite-body" /></span></div>
@@ -186,6 +185,7 @@ const Shop = () => {
           <span className="orbit-status">{t('ORBITAL DEFENSE ACTIVE')}</span>
           <div className="stage-label"><span className="stage-label-value">01</span><span>{t('Genesis sector')}</span></div>
         </div>
+        <footer className="home-footer"><button type="button" className="text-button terms-entry" onClick={() => setTermsOpen(true)}>Nutzungsbedingungen / Terms of Service</button></footer>
       </section>
 
       {shopView && <div className="shop-overlay" role="dialog" aria-modal="true" aria-label={t('Shop and hangar')}>
