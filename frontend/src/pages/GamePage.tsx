@@ -11,7 +11,7 @@ import Starfield from "./Starfield";
 import { BONUS_ENTRY_GAP_MS, BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusPosition, bonusReward, isBonusSection, type BonusTarget } from "./bonusChallenge";
 import { bossFireInterval, bossVulnerable, createSectorBoss, moveSectorBoss, nextAfterClear, type SectorBoss } from "./sectorBoss";
 import { enemySprite, selectedShip, shardBalance, SHARD_BALANCE_KEY, shipNozzleStyle, spriteStyle } from "./shipFleet";
-import { GameAudio } from "./gameAudio";
+import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio";
 import { axiosClient } from "../lib/axiosClient";
 import { fireInterval, makeVolley } from "./playerCombat";
 import { joystickVector, readTouchMode } from "./touchControls";
@@ -196,28 +196,31 @@ const GamePage = () => {
 
   const startEffects = () => {
     if (!audioStartRef.current) {
-      const audio = new GameAudio();
-      audio.setMusicEnabled(false);
-      audioStartRef.current = audio.start().then(started => {
-        if (!started) {
-          audio.close();
+      const primed = takePrimedGameAudio();
+      const audio = primed ? null : new GameAudio();
+      audio?.setMusicEnabled(false);
+      audioStartRef.current = (primed ?? audio!.start().then(started => started ? audio : null)).then(ready => {
+        if (!ready) {
+          audio?.close();
           audioStartRef.current = null;
           return null;
         }
-        audio.setSector(stateRef.current.sector);
-        audio.setPaused(stateRef.current.status !== "playing");
-        soundRef.current = audio;
-        return audio;
+        ready.setSector(stateRef.current.sector);
+        ready.setPaused(stateRef.current.status !== "playing");
+        soundRef.current = ready;
+        return ready;
       });
     }
     return audioStartRef.current;
   };
+  useEffect(() => { if (hasPrimedGameAudio()) void startEffects(); }, []);
 
   const toggleMusic = async () => {
     const audio = await startEffects();
     if (!audio) return;
     audio.setMusicEnabled(!musicEnabled);
     setMusicEnabled(!musicEnabled);
+    if (musicEnabled) audio.play("pickup");
   };
 
   useEffect(() => {
@@ -513,7 +516,7 @@ const GamePage = () => {
     if (stateRef.current.status !== "playing" || (event.target as HTMLElement).closest("button, .game-hud, .game-overlay, .touch-controls")) return;
     if (event.pointerType === "touch" && touchMode !== "drag") return;
     const bounds = event.currentTarget.getBoundingClientRect();
-    if (event.clientY - bounds.top < bounds.height * .6) return;
+    if (event.clientY - bounds.top < bounds.height * .5) return;
     pointerRef.current = event.pointerId;
     event.currentTarget.setPointerCapture(event.pointerId);
     positionFromPointer(event);

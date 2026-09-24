@@ -20,7 +20,7 @@ export const activeWeaponLevel = (paidLevel: number, paidMs: number, pickupLevel
 
 export const placePlayer = (x: number, y: number, width: number, height: number): PlayerPosition => ({
   x: clamp(x / width, 30 / width, 1 - 30 / width),
-  y: clamp(y / height, 0.7, Math.min(0.91, 1 - 36 / height)),
+  y: clamp(y / height, 0.5, Math.min(0.91, 1 - 36 / height)),
 });
 
 export const movePlayer = (position: PlayerPosition, horizontal: number, vertical: number, delta: number, width: number, height: number) => {

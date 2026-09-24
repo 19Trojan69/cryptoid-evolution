@@ -10,6 +10,7 @@ import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "./GameP
 import { buySkin, ownedSkins, playerColors, playerSkins, selectedShip, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, spriteStyle } from "./shipFleet";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
 import { readTouchMode, TOUCH_MODE_KEY, type TouchMode } from "./touchControls";
+import { primeGameAudio } from "./gameAudio";
 
 type Offer = { id: string; kind: "weapon" | "power"; name: string; description: string; pricePi: number };
 type Inventory = { ownedWeapons: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
@@ -17,6 +18,13 @@ type Inventory = { ownedWeapons: string[]; consumables: { id: string; count: num
 const Shop = () => {
   const navigate = useNavigate();
   const [activePanel, setActivePanel] = useState<"how" | "progress" | null>(null);
+  const [shopView, setShopView] = useState<"ships" | "weapons" | "powers" | "progress" | null>(null);
+  useEffect(() => {
+    if (!shopView) return;
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setShopView(null); };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [shopView]);
   const [records] = useState(() => ({ bestScore: Number(localStorage.getItem(BEST_SCORE_KEY) || 0), highestSector: Number(localStorage.getItem(HIGHEST_SECTOR_KEY) || 0), totalDestroyed: Number(localStorage.getItem(TOTAL_DESTROYED_KEY) || 0) }));
   const [selected, setSelected] = useState(selectedShip);
   const [previewSkin, setPreviewSkin] = useState(() => selectedShip().skin);
@@ -104,7 +112,7 @@ const Shop = () => {
   };
 
   return (
-    <main className="app-shell">
+    <main className="app-shell landing-shell">
       <Header
         user={user}
         onSignIn={signIn}
@@ -120,8 +128,13 @@ const Shop = () => {
           <p className="hero-tagline">Defend Earth.<br />Evolve your power.</p>
           <p className="hero-description">Build your streak, master the grid, and become the force Earth needs.</p>
           <div className="hero-actions">
-            <button className="button button-primary" type="button" onClick={() => navigate("/game")}>Play <span>↗</span></button>
+            <button className="button button-primary" type="button" onClick={() => { primeGameAudio(); navigate("/game"); }}>Play <span>↗</span></button>
+            <button className="button button-secondary" type="button" onClick={() => setShopView("ships")}>Shop / Hangar</button>
             <button className="button button-secondary" type="button" onClick={() => setActivePanel("how")}>How to Play</button>
+          </div>
+          <div className="home-touch-setup" role="group" aria-label="Joystick placement">
+            <span>THUMB CONTROLS</span>
+            {([ ["left", "Joystick left"], ["right", "Joystick right"], ["drag", "Classic drag"] ] as const).map(([mode, label]) => <button className="button button-secondary" key={mode} type="button" aria-pressed={touchMode === mode} onClick={() => { localStorage.setItem(TOUCH_MODE_KEY, mode); setTouchMode(mode); }}>{label}</button>)}
           </div>
         </div>
         <div className="planet-stage" aria-label="Cryptoid Evolution planet status">
@@ -132,7 +145,14 @@ const Shop = () => {
         </div>
       </section>
 
-      <section className="dashboard-grid" aria-label="Player overview">
+      {shopView && <div className="shop-overlay" role="dialog" aria-modal="true" aria-label="Shop and hangar">
+        <div className="shop-modal">
+          <div className="shop-modal-header"><strong>SHOP / HANGAR</strong><button className="close-button" type="button" onClick={() => setShopView(null)} aria-label="Close shop">×</button></div>
+          <nav className="shop-tabs" aria-label="Shop sections">
+            {([ ["ships", "Ships"], ["weapons", "Weapons"], ["powers", "Power-ups"], ["progress", "Progress"] ] as const).map(([view, label]) => <button key={view} type="button" aria-pressed={shopView === view} onClick={() => setShopView(view)}>{label}</button>)}
+          </nav>
+          <div className="shop-modal-body">
+      {shopView === "progress" && <section className="dashboard-grid" aria-label="Player overview">
         <article className="status-card progress-card">
           <div className="card-heading"><span>YOUR PROGRESS</span><span className="card-icon">↗</span></div>
           <div className="progress-row"><strong>Best {records.bestScore}</strong><span>Sector {String(records.highestSector).padStart(2, "0")}</span></div>
@@ -144,9 +164,9 @@ const Shop = () => {
           <strong className="streak-number">{records.totalDestroyed} <small>asteroids</small></strong>
           <p>Total destroyed across all missions.</p>
         </article>
-      </section>
+      </section>}
 
-      <section className="ship-selector" aria-labelledby="hangar-heading">
+      {shopView === "ships" && <section className="ship-selector" aria-labelledby="hangar-heading">
         <p className="eyebrow">YOUR HANGAR</p>
         <h2 id="hangar-heading">Choose your ship</h2>
         <p>Grey Scout is your free starter ship. Preview any other hull and its color before buying with game-only Shards. Paint changes are always free.</p>
@@ -163,21 +183,12 @@ const Shop = () => {
         <button className="button button-primary hangar-action" type="button" onClick={equipPreview} disabled={!previewOwned && shards < previewSkin.price}>{previewSkin.price === 0 ? "Fly Grey Scout" : previewOwned ? "Equip ship · free paint" : `Buy for ◆ ${previewSkin.price}`}</button>
         {!previewOwned && shards < previewSkin.price && <span className="shard-help">◆ {previewSkin.price - shards} more Shards needed</span>}
         {hangarMessage && <p className="hangar-message" role="status">{hangarMessage}</p>}
-      </section>
+      </section>}
 
-      <section className="touch-setup" aria-labelledby="touch-setup-heading">
-        <p className="eyebrow">MOBILE CONTROLS</p>
-        <h2 id="touch-setup-heading">Choose your thumb controls</h2>
-        <p>The joystick keeps your thumb away from the ship. Quick select appears on the opposite side and shows only equipment available in your current mission. Keyboard and mouse controls remain available.</p>
-        <div className="touch-setup-options" role="group" aria-label="Joystick placement">
-          {([ ["left", "Joystick left"], ["right", "Joystick right"], ["drag", "Classic drag"] ] as const).map(([mode, label]) => <button className="button button-secondary" key={mode} type="button" aria-pressed={touchMode === mode} onClick={() => { localStorage.setItem(TOUCH_MODE_KEY, mode); setTouchMode(mode); }}>{label}</button>)}
-        </div>
-      </section>
-
-      <section className="upgrade-section" aria-labelledby="upgrade-heading">
+      {(shopView === "weapons" || shopView === "powers") && <section className="upgrade-section" aria-labelledby="upgrade-heading">
         <div className="section-heading"><div><p className="eyebrow">POWER LAB</p><h2 id="upgrade-heading">Weapons and start power-ups</h2></div><span className="section-line" /></div>
         <p>Standard laser is always free. Bought shots unlock permanently, but run for up to 5 minutes per mission. Purchased start power-ups are consumed once a mission begins and wait in the in-game action button until you activate them. Bought power-ups last up to 60 seconds; collected shots and power-ups last up to 20 seconds. A shield also ends when its charge is spent. Pi prices are independent of the Shards used for ship skins.</p>
-        {(["weapon", "power"] as const).map(kind => <div key={kind} className="hangar-offers"><h3>{kind === "weapon" ? "Permanent weapons" : "One-mission start bonuses"}</h3><div className="hangar-offer-grid">
+        {([shopView === "weapons" ? "weapon" : "power"] as const).map(kind => <div key={kind} className="hangar-offers"><h3>{kind === "weapon" ? "Permanent weapons" : "One-mission start bonuses"}</h3><div className="hangar-offer-grid">
           {offers.filter(offer => offer.kind === kind).map(offer => {
             const count = inventory?.consumables.find(item => item.id === offer.id)?.count ?? 0;
             const owned = kind === "weapon" ? inventory?.ownedWeapons.includes(offer.id) : count > 0;
@@ -191,7 +202,10 @@ const Shop = () => {
         {inventory?.equippedWeapon && <button className="text-button" type="button" onClick={() => equip(null, inventory.selectedPower)}>Use free standard laser</button>}
         {inventory?.selectedPower && <button className="text-button" type="button" onClick={() => equip(inventory.equippedWeapon, null)}>Save bonus for a later mission</button>}
         {loadoutMessage && <p role="status">{loadoutMessage}</p>}
-      </section>
+      </section>}
+          </div>
+        </div>
+      </div>}
 
       {activePanel && <div className="info-panel" role="dialog" aria-modal="true" aria-labelledby="info-title">
         <div className="info-panel-content">
@@ -199,7 +213,7 @@ const Shop = () => {
           <p className="eyebrow">{activePanel === "how" ? "FIELD GUIDE" : "MISSION LOG"}</p>
           <h2 id="info-title">{activePanel === "how" ? "How to Play" : "Your Progress"}</h2>
           <p>{activePanel === "how" ? "Move your ship with the arrow keys or WASD; on touchscreens, drag it in the lower playfield. Your laser fires automatically. Dodge diving Cryptoids, line up shots, and fly into glowing pickups: Shield absorbs a hit, Repair restores a heart, and Overdrive briefly strengthens your shots. You have three hearts; the round ends when they run out." : `Your best score is ${records.bestScore}, your highest sector is ${records.highestSector}, and you have destroyed ${records.totalDestroyed} Cryptoids.`}</p>
-          <button className="button button-primary" type="button" onClick={() => { setActivePanel(null); if (activePanel === "how") navigate("/game"); }}>Enter mission <span>↗</span></button>
+          <button className="button button-primary" type="button" onClick={() => { setActivePanel(null); if (activePanel === "how") { primeGameAudio(); navigate("/game"); } }}>Enter mission <span>↗</span></button>
         </div>
       </div>}
 

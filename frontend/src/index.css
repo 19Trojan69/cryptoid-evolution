@@ -21,6 +21,22 @@ button { font: inherit; }
 button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 
 .app-shell { min-height: 100vh; overflow: hidden; background: radial-gradient(circle at 76% 12%, rgba(49, 173, 159, .15), transparent 30%), linear-gradient(145deg, #071b2b 0%, #092637 55%, #071b2b 100%); }
+.landing-shell { height: 100dvh; min-height: 0; }
+.landing-shell .hero-section { height: calc(100dvh - 76px); min-height: 0; padding-top: clamp(20px, 5vh, 65px); padding-bottom: clamp(20px, 5vh, 65px); }
+.home-touch-setup { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 26px; padding: 14px; border: 1px solid rgba(157, 129, 240, .42); background: rgba(8, 22, 42, .75); }
+.home-touch-setup > span { flex-basis: 100%; color: #b6ddeb; font: 10px 'DM Mono', monospace; letter-spacing: .13em; }
+.home-touch-setup .button { min-height: 36px; padding: 0 10px; font-size: 10px; }
+.home-touch-setup [aria-pressed="true"] { border-color: var(--gold); color: var(--gold); background: rgba(245, 200, 109, .12); }
+.shop-overlay { position: fixed; z-index: 8; inset: 0; display: grid; place-items: center; padding: clamp(8px, 3vw, 25px); background: rgba(1, 9, 19, .88); backdrop-filter: blur(9px); }
+.shop-modal { display: flex; flex-direction: column; width: min(100%, 1120px); max-height: min(900px, calc(100dvh - 16px)); overflow: hidden; border: 1px solid rgba(133, 217, 224, .45); background: #081b2c; box-shadow: 0 20px 80px #0009; }
+.shop-modal-header { position: relative; display: flex; align-items: center; min-height: 50px; padding: 0 55px 0 20px; border-bottom: 1px solid var(--line); color: var(--gold); font: 12px 'DM Mono', monospace; letter-spacing: .13em; }
+.shop-tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-bottom: 1px solid var(--line); }
+.shop-tabs button { min-height: 46px; border: 0; border-right: 1px solid var(--line); background: transparent; color: #b2cbd3; cursor: pointer; font-size: 12px; }
+.shop-tabs button[aria-pressed="true"] { background: rgba(55, 200, 192, .15); box-shadow: inset 0 -3px var(--cyan); color: white; }
+.shop-modal-body { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 18px; }
+.shop-modal .ship-selector { margin: 0; }
+.shop-modal .upgrade-section { max-width: none; margin: 0; padding: 4px 8px 24px; }
+.shop-modal .dashboard-grid { max-width: none; padding: 0; }
 .site-header { height: 76px; padding: 0 clamp(20px, 5vw, 76px); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
 .brand-mark { display: flex; align-items: center; gap: 11px; color: #eff9f4; text-decoration: none; font-size: 12px; font-weight: 600; letter-spacing: .14em; }
 .brand-mark b { color: var(--emerald); font-weight: 600; }
@@ -316,6 +332,20 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
   .dashboard-grid, .product-grid { grid-template-columns: 1fr; }
   .upgrade-section { padding-top: 66px; }
   .section-line { display: none; }
+  .landing-shell .hero-section { position: relative; display: flex; align-items: center; height: calc(100dvh - 65px); padding: 16px 20px; }
+  .landing-shell .hero-copy { width: 100%; }
+  .landing-shell .hero-tagline { margin: 15px 0 10px; }
+  .landing-shell .hero-actions { margin-top: 18px; }
+  .landing-shell .planet-stage { position: absolute; right: -12%; top: 10%; width: min(67vw, 300px); margin: 0; opacity: .23; pointer-events: none; }
+  .shop-modal-body { padding: 10px; }
+  .shop-modal .ship-selector { padding: 14px; }
+  .shop-tabs button { font-size: 10px; }
+}
+
+@media (max-height: 670px) {
+  .landing-shell .hero-description { display: none; }
+  .landing-shell .hero-tagline { margin-top: 12px; }
+  .landing-shell .home-touch-setup { margin-top: 14px; padding: 9px; }
 }
 
 @media (orientation: landscape) and (max-height: 600px) {
@@ -324,6 +354,7 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
   .planet-stage { width: min(31vw, 290px); }
   .hero-tagline { margin-top: 18px; }
   .hero-actions { margin-top: 20px; }
+  .landing-shell .hero-section { height: calc(100dvh - 58px); padding-top: 10px; padding-bottom: 10px; }
 }
 
 @media (max-width: 560px) {

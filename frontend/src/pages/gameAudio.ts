@@ -3,6 +3,8 @@ export type GameSound = "laser" | "enemyHit" | "explosion" | "collision" | "shie
 // Original, synthesized arcade sounds: no third-party recordings or music assets.
 export class GameAudio {
   private context: AudioContext | null = null;
+  private effectsBus: GainNode | null = null;
+  private musicBus: GainNode | null = null;
   private musicTimer: number | null = null;
   private beat = 0;
   private paused = false;
@@ -11,14 +13,21 @@ export class GameAudio {
 
   async start() {
     if (typeof AudioContext === "undefined") return false;
-    if (!this.context) this.context = new AudioContext();
+    if (!this.context) {
+      this.context = new AudioContext();
+      this.effectsBus = this.context.createGain();
+      this.musicBus = this.context.createGain();
+      this.effectsBus.connect(this.context.destination);
+      this.musicBus.connect(this.context.destination);
+      this.musicBus.gain.value = this.musicEnabled ? 1 : 0;
+    }
     try { await this.context.resume(); } catch { return false; }
     this.paused = false;
     this.startMusic();
     return this.context.state === "running";
   }
 
-  private tone(frequency: number, end: number, duration: number, gain: number, type: OscillatorType = "sine", delay = 0) {
+  private tone(frequency: number, end: number, duration: number, gain: number, type: OscillatorType = "sine", delay = 0, music = false) {
     const context = this.context;
     if (!context || context.state !== "running" || this.paused) return;
     const at = context.currentTime + delay;
@@ -30,7 +39,7 @@ export class GameAudio {
     envelope.gain.setValueAtTime(.0001, at);
     envelope.gain.exponentialRampToValueAtTime(gain, at + .008);
     envelope.gain.exponentialRampToValueAtTime(.0001, at + duration);
-    oscillator.connect(envelope).connect(context.destination);
+    oscillator.connect(envelope).connect(music ? this.musicBus! : this.effectsBus!);
     oscillator.start(at);
     oscillator.stop(at + duration + .01);
   }
@@ -51,6 +60,7 @@ export class GameAudio {
 
   setMusicEnabled(enabled: boolean) {
     this.musicEnabled = enabled;
+    if (this.context && this.musicBus) this.musicBus.gain.setValueAtTime(enabled ? 1 : 0, this.context.currentTime);
     if (!enabled && this.musicTimer !== null) {
       window.clearInterval(this.musicTimer);
       this.musicTimer = null;
@@ -73,8 +83,8 @@ export class GameAudio {
       const step = this.beat++ % phrase.length;
       const root = 110 * Math.pow(2, ((this.sector - 1) % 6) / 12);
       const note = root * Math.pow(2, phrase[step] / 12);
-      this.tone(note * 2, note * 2, .22, .012, "triangle");
-      if (step % 4 === 0) this.tone(root, root, .42, .018, "sine");
+      this.tone(note * 2, note * 2, .22, .012, "triangle", 0, true);
+      if (step % 4 === 0) this.tone(root, root, .42, .018, "sine", 0, true);
     }, 260);
   }
 
@@ -82,5 +92,26 @@ export class GameAudio {
     this.setPaused(true);
     void this.context?.close();
     this.context = null;
+    this.effectsBus = null;
+    this.musicBus = null;
   }
 }
+
+let primedAudio: Promise<GameAudio | null> | null = null;
+export const primeGameAudio = () => {
+  if (!primedAudio) {
+    const audio = new GameAudio();
+    audio.setMusicEnabled(false);
+    primedAudio = audio.start().then(started => {
+      if (started) return audio;
+      audio.close();
+      return null;
+    });
+  }
+};
+export const takePrimedGameAudio = () => {
+  const audio = primedAudio;
+  primedAudio = null;
+  return audio;
+};
+export const hasPrimedGameAudio = () => primedAudio !== null;

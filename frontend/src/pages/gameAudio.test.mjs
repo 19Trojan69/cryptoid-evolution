@@ -7,6 +7,7 @@ test("music toggle stops the beat without silencing game effects", async () => {
   let nextTimer = 0;
   const intervals = new Set();
   let playedTones = 0;
+  const buses = [];
   globalThis.window = {
     setInterval: () => { intervals.add(++nextTimer); return nextTimer; },
     clearInterval: timer => intervals.delete(timer),
@@ -22,7 +23,9 @@ test("music toggle stops the beat without silencing game effects", async () => {
       return { frequency: { setValueAtTime() {}, exponentialRampToValueAtTime() {} }, connect: output => output, start() {}, stop() {} };
     }
     createGain() {
-      return { gain: { setValueAtTime() {}, exponentialRampToValueAtTime() {} }, connect: output => output };
+      const bus = { gain: { value: 1, setValueAtTime(value) { this.value = value; }, exponentialRampToValueAtTime() {} }, connect: output => output };
+      buses.push(bus);
+      return bus;
     }
   };
   const audio = new GameAudio();
@@ -31,6 +34,8 @@ test("music toggle stops the beat without silencing game effects", async () => {
     assert.equal(intervals.size, 1);
     audio.setMusicEnabled(false);
     assert.equal(intervals.size, 0);
+    assert.equal(buses[0].gain.value, 1);
+    assert.equal(buses[1].gain.value, 0);
     audio.play("laser");
     audio.play("collision");
     assert.equal(playedTones, 2);

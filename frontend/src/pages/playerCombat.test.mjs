@@ -17,7 +17,7 @@ import { receiveImpacts } from "./powerUps.ts";
 test("ship moves left, right and a limited distance upward without leaving the field", () => {
   assert.ok(movePlayer({ x: .5, y: .86 }, -1, 0, 100, 800, 600).x < .5);
   assert.ok(movePlayer({ x: .5, y: .86 }, 1, 0, 100, 800, 600).x > .5);
-  assert.equal(movePlayer({ x: .5, y: .86 }, 0, -1, 1000, 800, 600).y, .7);
+  assert.equal(movePlayer({ x: .5, y: .86 }, 0, -1, 1000, 800, 600).y, .5);
   assert.equal(movePlayer({ x: .5, y: .86 }, 0, 1, 1000, 800, 600).y, .91);
   assert.ok(placePlayer(-100, 0, 320, 600).x >= 30 / 320);
   assert.equal(MAX_PLAYER_SHOTS, 28);
