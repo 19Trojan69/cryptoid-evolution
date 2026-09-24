@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="Saturn with ring system">
+<defs>
+  <radialGradient id="sphere" cx="33%" cy="26%" r="75%"><stop stop-color="#f4dfb4"/><stop offset=".46" stop-color="#cbb397"/><stop offset=".77" stop-color="#a58c7d"/><stop offset="1" stop-color="#49495b"/></radialGradient>
+  <radialGradient id="terminator" cx="30%" cy="23%" r="82%"><stop offset=".4" stop-color="#fff" stop-opacity=".05"/><stop offset=".72" stop-color="#212332" stop-opacity=".18"/><stop offset="1" stop-color="#0b1025" stop-opacity=".68"/></radialGradient>
+  <linearGradient id="ring" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#f3e2c1" stop-opacity=".38"/><stop offset=".48" stop-color="#d8be9d" stop-opacity=".82"/><stop offset="1" stop-color="#9c887c" stop-opacity=".64"/></linearGradient>
+  <clipPath id="sphereClip"><circle cx="300" cy="200" r="100"/></clipPath>
+  <clipPath id="nearRing"><rect x="0" y="200" width="600" height="200"/></clipPath>
+</defs>
+<!-- Each concentric ring has the same plane. The sphere hides its far side. -->
+<g transform="rotate(-14 300 200)" fill="none" stroke="url(#ring)">
+  <ellipse cx="300" cy="200" rx="249" ry="70" stroke-width="12" opacity=".37"/>
+  <ellipse cx="300" cy="200" rx="229" ry="64" stroke-width="20" opacity=".62"/>
+  <ellipse cx="300" cy="200" rx="205" ry="57" stroke-width="7" opacity=".75"/>
+  <ellipse cx="300" cy="200" rx="191" ry="53" stroke-width="13" opacity=".54"/>
+  <ellipse cx="300" cy="200" rx="162" ry="45" stroke-width="6" opacity=".60"/>
+  <ellipse cx="300" cy="200" rx="146" ry="40" stroke-width="4" opacity=".33"/>
+</g>
+<g clip-path="url(#sphereClip)">
+  <circle cx="300" cy="200" r="100" fill="url(#sphere)"/>
+  <g fill="none" stroke-linecap="round" opacity=".48">
+    <path d="M193 129 Q295 137 406 125" stroke="#f5dfb4" stroke-width="6"/>
+    <path d="M193 137 Q295 146 406 134" stroke="#745f64" stroke-width="4"/>
+    <path d="M193 152 Q290 157 406 146" stroke="#e8d4b2" stroke-width="9"/>
+    <path d="M193 167 Q305 170 406 159" stroke="#928477" stroke-width="7"/>
+    <path d="M193 179 Q295 186 406 172" stroke="#e2c5a2" stroke-width="5"/>
+    <path d="M193 194 Q315 199 406 187" stroke="#6d6469" stroke-width="10"/>
+    <path d="M193 208 Q305 216 406 201" stroke="#f4ddba" stroke-width="7"/>
+    <path d="M193 222 Q295 228 406 216" stroke="#bfa481" stroke-width="12"/>
+    <path d="M193 238 Q305 241 406 229" stroke="#756d73" stroke-width="6"/>
+    <path d="M193 250 Q295 255 406 245" stroke="#e1caad" stroke-width="9"/>
+    <path d="M193 266 Q305 270 406 259" stroke="#a3867b" stroke-width="7"/>
+  </g>
+  <ellipse cx="323" cy="221" rx="27" ry="6" fill="#8c6975" opacity=".27"/>
+  <circle cx="300" cy="200" r="100" fill="url(#terminator)"/>
+</g>
+<!-- The close half of the ring masks the planet's equatorial foreground. -->
+<g transform="rotate(-14 300 200)" clip-path="url(#nearRing)" fill="none" stroke="url(#ring)">
+  <ellipse cx="300" cy="200" rx="249" ry="70" stroke-width="12" opacity=".37"/>
+  <ellipse cx="300" cy="200" rx="229" ry="64" stroke-width="20" opacity=".62"/>
+  <ellipse cx="300" cy="200" rx="205" ry="57" stroke-width="7" opacity=".75"/>
+  <ellipse cx="300" cy="200" rx="191" ry="53" stroke-width="13" opacity=".54"/>
+  <ellipse cx="300" cy="200" rx="162" ry="45" stroke-width="6" opacity=".60"/>
+  <ellipse cx="300" cy="200" rx="146" ry="40" stroke-width="4" opacity=".33"/>
+</g>
+</svg>

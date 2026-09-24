@@ -5,7 +5,7 @@ export const SIDEREAL_DAY_MS = 86_164_090;
 export const earthTurn = (timestamp: number) => ((timestamp % SIDEREAL_DAY_MS) + SIDEREAL_DAY_MS) % SIDEREAL_DAY_MS / SIDEREAL_DAY_MS;
 
 const SIZE = 320;
-const EarthGlobe = () => {
+const EarthGlobe = ({ paused = false }: { paused?: boolean }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -49,11 +49,11 @@ const EarthGlobe = () => {
         context.putImageData(image, 0, 0);
       };
       draw();
-      timer = window.setInterval(draw, 10_000);
+      if (!paused) timer = window.setInterval(draw, 10_000);
     };
     map.src = "/planets/earth-map.jpg";
     return () => { disposed = true; if (timer !== undefined) window.clearInterval(timer); map.onload = null; };
-  }, []);
+  }, [paused]);
   return <canvas ref={canvasRef} width={SIZE} height={SIZE} className="earth-globe-canvas" role="img" aria-label="Slowly rotating Earth" />;
 };
 

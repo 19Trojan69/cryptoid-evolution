@@ -1,5 +1,6 @@
 import { memo, type CSSProperties } from "react";
 import type { PlayerPosition } from "./playerCombat";
+import EarthGlobe from "./EarthGlobe";
 
 const SectorBackdrop = ({ sector, player, paused }: { sector: number; player: PlayerPosition; paused: boolean }) => {
   const palette = ((sector - 1) % 6) + 1;
@@ -23,9 +24,9 @@ const SectorBackdrop = ({ sector, player, paused }: { sector: number; player: Pl
   return (
     <div className={`space-scene space-scene-${palette}${paused ? " space-scene-paused" : ""}`} style={parallax} aria-hidden="true">
       <div className="space-haze" />
-      <div className="space-orbit space-orbit-one" />
-      <div className="space-orbit space-orbit-two" />
-      {planetTypes.map((planet, index) => <div key={index} className={`space-world ${["space-world-distant", "space-world-secondary", "space-world-primary", "space-world-near"][index]} planet-${planet}`}><span className="space-world-surface" />{planet === "gas" && <span className="saturn-ring-front" />}</div>)}
+      {planetTypes.map((planet, index) => <div key={index} className={`space-world ${["space-world-distant", "space-world-secondary", "space-world-primary", "space-world-near"][index]} planet-${planet}`}>
+        {planet === "earth" ? <EarthGlobe paused={paused} /> : planet === "gas" ? <span className="saturn-illustration" /> : <span className="space-world-surface" />}
+      </div>)}
     </div>
   );
 };
