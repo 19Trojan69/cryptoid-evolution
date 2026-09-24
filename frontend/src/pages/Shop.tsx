@@ -7,7 +7,9 @@ import { useAuth } from "../hooks/useAuth";
 import { usePayments } from "../hooks/usePayments";
 import { axiosClient } from "../lib/axiosClient.ts";
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "./GamePage.tsx";
-import { buySkin, colorForSkin, ownedSkins, playerColors, playerSkins, savedShipColors, selectedShip, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, spriteStyle, type PlayerColorId, type PlayerSkinId } from "./shipFleet";
+import { allPlayerColors, buyShipVariant, EXTRA_STARTER_PRICE, fleetCount, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, spriteStyle, type PlayerColorId } from "./shipFleet";
+import PaintedShip from "./PaintedShip";
+import TermsDialog from "../components/TermsDialog";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
 import { readTouchMode, TOUCH_MODE_KEY, type TouchMode } from "./touchControls";
 import { primeGameAudio } from "./gameAudio";
@@ -24,6 +26,7 @@ const Shop = () => {
   const { locale, choose, t } = useLocale();
   const [activePanel, setActivePanel] = useState<"how" | "progress" | null>(null);
   const [shopView, setShopView] = useState<"ships" | "weapons" | "powers" | "progress" | null>(null);
+  const [termsOpen, setTermsOpen] = useState(false);
   useEffect(() => {
     if (!shopView) return;
     const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setShopView(null); };
@@ -32,10 +35,9 @@ const Shop = () => {
   }, [shopView]);
   const [records] = useState(() => ({ bestScore: Number(localStorage.getItem(BEST_SCORE_KEY) || 0), highestSector: Number(localStorage.getItem(HIGHEST_SECTOR_KEY) || 0), totalDestroyed: Number(localStorage.getItem(TOTAL_DESTROYED_KEY) || 0) }));
   const [selected, setSelected] = useState(selectedShip);
-  const [shipColors, setShipColors] = useState(() => savedShipColors(localStorage.getItem(SHIP_COLORS_KEY)));
   const [previewSkin, setPreviewSkin] = useState(() => selectedShip().skin);
   const [previewColor, setPreviewColor] = useState(() => selectedShip().color);
-  const [owned, setOwned] = useState(() => ownedSkins(localStorage.getItem(SHIP_OWNED_KEY)));
+  const [fleet, setFleet] = useState(() => readShipFleet(localStorage.getItem(SHIP_FLEET_KEY), localStorage.getItem(SHIP_OWNED_KEY), localStorage.getItem(SHIP_COLORS_KEY)));
   const [shards, setShards] = useState(() => shardBalance(localStorage.getItem(SHARD_BALANCE_KEY)));
   const [hangarMessage, setHangarMessage] = useState("");
   const [touchMode, setTouchMode] = useState<TouchMode>(readTouchMode);
@@ -43,26 +45,32 @@ const Shop = () => {
   const [catalogReady, setCatalogReady] = useState(false);
   const [inventory, setInventory] = useState<Inventory | null>(null);
   const [loadoutMessage, setLoadoutMessage] = useState("");
-  const previewOwned = previewSkin.price === 0 || owned.includes(previewSkin.id);
+  const previewCount = fleetCount(fleet, previewSkin.id, previewColor.id);
   const enterGame = () => { primeGameAudio(); requestGameFullscreen(); navigate("/game"); };
 
-  const equipPreview = () => {
-    const currentOwned = ownedSkins(localStorage.getItem(SHIP_OWNED_KEY));
+  const purchasePreview = () => {
+    const currentFleet = readShipFleet(localStorage.getItem(SHIP_FLEET_KEY), localStorage.getItem(SHIP_OWNED_KEY), localStorage.getItem(SHIP_COLORS_KEY));
     const currentBalance = shardBalance(localStorage.getItem(SHARD_BALANCE_KEY));
-    setOwned(currentOwned);
     setShards(currentBalance);
-    if (previewSkin.price > 0 && !currentOwned.includes(previewSkin.id)) {
-      const purchase = buySkin(previewSkin.id, currentOwned, currentBalance);
-      if (!purchase) { setHangarMessage(t("Not enough Shards yet. Earn them by defeating Cryptoids.")); return; }
-      localStorage.setItem(SHIP_OWNED_KEY, JSON.stringify(purchase.owned));
-      localStorage.setItem(SHARD_BALANCE_KEY, String(purchase.balance));
-      setOwned(purchase.owned);
-      setShards(purchase.balance);
+    const purchase = buyShipVariant(previewSkin.id, previewColor.id, currentFleet, currentBalance);
+    if (!purchase) { setHangarMessage(t("Not enough Shards yet. Earn them by defeating Cryptoids.")); return; }
+    localStorage.setItem(SHIP_FLEET_KEY, JSON.stringify(purchase.fleet));
+    localStorage.setItem(SHARD_BALANCE_KEY, String(purchase.balance));
+    setFleet(purchase.fleet);
+    setShards(purchase.balance);
+    setHangarMessage(`${previewSkin.name} · ${previewColor.name} · ${t("Owned")} ×${fleetCount(purchase.fleet, previewSkin.id, previewColor.id)}`);
+  };
+  const equipPreview = () => {
+    if (!fleetCount(fleet, previewSkin.id, previewColor.id)) {
+      if (previewSkin.price !== 0) return;
+      // The issued starter can be painted for free without spending Shards.
+      const repainted = repaintStarter(fleet, previewColor.id);
+      setFleet(repainted);
+      localStorage.setItem(SHIP_FLEET_KEY, JSON.stringify(repainted));
     }
     localStorage.setItem(SHIP_SKIN_KEY, previewSkin.id);
     localStorage.setItem(SHIP_COLOR_KEY, previewColor.id);
-    const nextColors = { ...shipColors, [previewSkin.id]: previewColor.id };
-    setShipColors(nextColors);
+    const nextColors = { ...savedShipColors(localStorage.getItem(SHIP_COLORS_KEY)), [previewSkin.id]: previewColor.id };
     localStorage.setItem(SHIP_COLORS_KEY, JSON.stringify(nextColors));
     setSelected({ skin: previewSkin, color: previewColor });
     setHangarMessage(`${previewSkin.name} ${t("ready for your next mission.")}`);
@@ -148,13 +156,14 @@ const Shop = () => {
             <span>{t('THUMB CONTROLS')}</span>
             {([ ["left", "Joystick left"], ["right", "Joystick right"], ["drag", "Classic drag"] ] as const).map(([mode, label]) => <button className="button button-secondary" key={mode} type="button" aria-pressed={touchMode === mode} onClick={() => { localStorage.setItem(TOUCH_MODE_KEY, mode); setTouchMode(mode); }}>{t(label)}</button>)}
           </div>
+          <button type="button" className="text-button terms-entry" onClick={() => setTermsOpen(true)}>Nutzungsbedingungen / Terms of Service</button>
         </div>
         <div className="planet-stage" aria-label="Cryptoid Evolution planet status">
           <div className="orbit orbit-one"><span className="satellite-motion"><i className="satellite-body" /></span></div>
           <div className="orbit orbit-two"><span className="satellite-motion"><i className="satellite-body" /></span></div>
           <div className="orbit orbit-three"><span className="satellite-motion"><i className="satellite-body" /></span></div>
           <div className="planet"><EarthGlobe /></div>
-          <div className={`home-defense-ship${selected.color.id === "grey" ? " home-defense-grey" : ""}`} style={{ "--ship-hue": selected.color.hue } as CSSProperties}><i style={spriteStyle(selected.skin.sprite)} /></div>
+          <div className={`home-defense-ship${selected.color.id === "grey" ? " home-defense-grey" : ""}`} ><PaintedShip sprite={selected.skin.sprite} color={selected.color.id} /></div>
           <div className="home-enemy-ship"><i style={spriteStyle(3)} /></div>
           <div className="home-defense-laser" />
           <span className="orbit-status">{t('ORBITAL DEFENSE ACTIVE')}</span>
@@ -184,42 +193,43 @@ const Shop = () => {
       </section>}
 
       {shopView === "ships" && <section className="ship-selector" aria-labelledby="hangar-heading">
-        <p className="eyebrow">{t('YOUR HANGAR')}</p>
-        <h2 id="hangar-heading">{t('Choose your ship')}</h2>
-        <p>{t('Every hull starts grey. Choose a hull, then pick its own paint before buying. Grey Scout is free; other hulls cost game-only Shards. Paint changes are always free.')}</p>
-        <strong className="shard-balance">◆ {shards} {t("Shards")}</strong><span className="shard-help">{t('Earn 1 Shard per defeated Cryptoid; your Shards are saved at the end of each mission.')}</span>
-        <div className="ship-picker" role="group" aria-label={t('Ship hull')}>
-          {playerSkins.map(skin => { const paint = colorForSkin(skin.id, shipColors, localStorage.getItem(SHIP_COLOR_KEY), selected.skin.id); return <button key={skin.id} className="ship-choice" type="button" aria-pressed={previewSkin.id === skin.id} onClick={() => { setPreviewSkin(skin); setPreviewColor(paint); setHangarMessage(""); }}>
-            <span className={`ship-preview${paint.id === "grey" || paint.id === "white" ? ` ship-preview-${paint.id}` : ""}`}><i style={{ ...spriteStyle(skin.sprite), "--ship-hue": paint.hue, "--ship-glow": paint.glow } as CSSProperties} /></span><span>{skin.name}</span><small>{skin.price === 0 ? t("ISSUED") : owned.includes(skin.id) ? t("OWNED") : `◆ ${skin.price}`}</small>
+        <p className="eyebrow">{t("YOUR HANGAR")}</p>
+        <h2 id="hangar-heading">{t("Your fleet")}</h2>
+        <p>{t("Choose a ship type, then a color variant. Each purchase adds one ship to your fleet. Grey Scout is issued free; paint choices are made before purchase.")}</p>
+        <strong className="shard-balance">◆ {shards} {t("Shards")}</strong><span className="shard-help">{t("Earn 1 Shard per defeated Cryptoid; your Shards are saved at the end of each mission.")}</span>
+        <div className="ship-picker" role="group" aria-label={t("Ship hull")}>
+          {playerSkins.map(skin => { const total = fleetCount(fleet, skin.id); const shown = skin.id === selected.skin.id ? selected.color : allPlayerColors.find(color => fleetCount(fleet, skin.id, color.id)) ?? playerColors[0]; return <button key={skin.id} className={`ship-choice${total === 0 ? " ship-unowned" : ""}`} type="button" aria-pressed={previewSkin.id === skin.id} onClick={() => { setPreviewSkin(skin); setPreviewColor(shown); setHangarMessage(""); }}>
+            <span className="ship-preview"><PaintedShip sprite={skin.sprite} color={shown.id} /></span><span>{skin.name}</span><small>{total ? `${t("Owned")} ×${total}` : t("Not owned")}</small>
           </button>; })}
         </div>
-        <p className="hangar-selection">{t("Preview:")} <strong>{previewSkin.name}</strong> · {previewSkin.price === 0 ? t("Grey starter") : previewOwned ? t("Owned") : `◆ ${previewSkin.price} ${t("Shards")}`} {selected.skin.id === previewSkin.id && <span>· {t("EQUIPPED")}</span>}</p>
-        <div className="ship-picker" role="group" aria-label={t('Ship paint')}>
-          {playerColors.map(color => <button key={color.id} className="color-choice" type="button" aria-label={color.name} aria-pressed={previewColor.id === color.id} title={color.name} style={{ backgroundColor: color.glow }} onClick={() => {
-            const nextColors: Partial<Record<PlayerSkinId, PlayerColorId>> = { ...shipColors, [previewSkin.id]: color.id };
-            setShipColors(nextColors);
-            localStorage.setItem(SHIP_COLORS_KEY, JSON.stringify(nextColors));
-            if (selected.skin.id === previewSkin.id) { localStorage.setItem(SHIP_COLOR_KEY, color.id); setSelected({ skin: selected.skin, color }); }
-            setPreviewColor(color);
-            setHangarMessage("");
-          }} />)}
+        <h3 className="hangar-variant-title">{previewSkin.name} · {t("Color variants")}</h3>
+        <div className="ship-picker ship-variants" role="group" aria-label={t("Ship paint")}>
+          {allPlayerColors.filter(color => playerColors.some(current => current.id === color.id) || fleetCount(fleet, previewSkin.id, color.id) > 0).map(color => { const count = fleetCount(fleet, previewSkin.id, color.id); return <button key={color.id} className={`ship-choice variant-choice${count ? "" : " ship-unowned"}`} type="button" aria-pressed={previewColor.id === color.id} onClick={() => { setPreviewColor(color); setHangarMessage(""); }}>
+            <span className="ship-preview"><PaintedShip sprite={previewSkin.sprite} color={color.id} /></span>
+            <span className="metal-swatch" style={{ "--paint": color.glow } as CSSProperties} />
+            <span>{t(color.name)}</span><small>{count ? `${t("Owned")} ×${count}` : t("Not owned")}</small>
+          </button>; })}
         </div>
-        <button className="button button-primary hangar-action" type="button" onClick={equipPreview} disabled={!previewOwned && shards < previewSkin.price}>{previewSkin.price === 0 ? t("Fly Grey Scout") : previewOwned ? t("Equip ship · free paint") : `${t("Buy for")} ◆ ${previewSkin.price}`}</button>
-        {!previewOwned && shards < previewSkin.price && <span className="shard-help">◆ {previewSkin.price - shards} {t("more Shards needed")}</span>}
+        <p className="hangar-selection">{t("Preview:")} <strong>{previewSkin.name} · {t(previewColor.name)}</strong> · {previewCount ? `${t("Owned")} ×${previewCount}` : t("Not owned")}{selected.skin.id === previewSkin.id && selected.color.id === previewColor.id && <span> · {t("EQUIPPED")}</span>}</p>
+        <div className="hangar-actions">
+          <button className="button button-primary hangar-action" type="button" onClick={purchasePreview} disabled={shards < (previewSkin.price || EXTRA_STARTER_PRICE)}>{t("Buy another for")} ◆ {previewSkin.price || EXTRA_STARTER_PRICE}</button>
+          <button className="button button-secondary hangar-action" type="button" onClick={equipPreview} disabled={!previewCount && previewSkin.price > 0}>{t("Equip selected variant")}</button>
+        </div>
+        {shards < (previewSkin.price || EXTRA_STARTER_PRICE) && <span className="shard-help">◆ {(previewSkin.price || EXTRA_STARTER_PRICE) - shards} {t("more Shards needed")}</span>}
         {hangarMessage && <p className="hangar-message" role="status">{hangarMessage}</p>}
       </section>}
 
       {(shopView === "weapons" || shopView === "powers") && <section className="upgrade-section" aria-labelledby="upgrade-heading">
         <div className="section-heading"><div><p className="eyebrow">{t('POWER LAB')}</p><h2 id="upgrade-heading">{t('Weapons and start power-ups')}</h2></div><span className="section-line" /></div>
-        <p>{t('Standard laser is always free. Bought shots unlock permanently, but run for up to 5 minutes per mission. Purchased start power-ups are consumed once a mission begins and wait at the edge of the game screen until you activate them. Bought power-ups last up to 60 seconds; collected shots and power-ups last up to 20 seconds. A shield also ends when its charge is spent. Pi prices are independent of the Shards used for ship skins.')}</p>
-        {([shopView === "weapons" ? "weapon" : "power"] as const).map(kind => <div key={kind} className="hangar-offers"><h3>{t(kind === "weapon" ? "Permanent weapons" : "One-mission start bonuses")}</h3><div className="hangar-offer-grid">
+        <p>{t('Standard laser is always free. Bought weapons remain owned, but work for 5 minutes from the start of each mission. Purchased start power-ups are consumed once a mission begins and wait at the edge of the game screen until you activate them. Bought power-ups last up to 60 seconds; collected shots and power-ups last up to 20 seconds. A shield also ends when its charge is spent. Pi prices are independent of the Shards used for ship skins.')}</p>
+        {([shopView === "weapons" ? "weapon" : "power"] as const).map(kind => <div key={kind} className="hangar-offers"><h3>{t(kind === "weapon" ? "Time-limited weapons" : "One-mission start bonuses")}</h3><div className="hangar-offer-grid">
           {offers.filter(offer => offer.kind === kind).map(offer => {
             const count = inventory?.consumables.find(item => item.id === offer.id)?.count ?? 0;
             const owned = kind === "weapon" ? inventory?.ownedWeapons.includes(offer.id) : count > 0;
             const selected = kind === "weapon" ? inventory?.equippedWeapon === offer.id : inventory?.selectedPower === offer.id;
-            return <article key={offer.id} className="hangar-offer"><h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span>{t(kind === "weapon" ? "Permanent unlock" : "Consumed at mission start")} · {offer.pricePi} π</span><strong>{selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : t("OWNED") : t("NOT OWNED")}</strong><div>
+            return <article key={offer.id} className="hangar-offer"><h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span>{t(kind === "weapon" ? "5 minutes per mission · starts at mission start" : "Consumed at mission start")} · {offer.pricePi} π</span><strong>{selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : t("OWNED") : t("NOT OWNED")}</strong><div>
               {owned ? <button className="button button-secondary" type="button" disabled={Boolean(selected)} onClick={() => equip(kind === "weapon" ? offer.id : inventory?.equippedWeapon ?? null, kind === "power" ? offer.id : inventory?.selectedPower ?? null)}>{t(selected ? "Selected" : "Equip for next mission")}</button> : null}
-              {(kind === "power" || !owned) && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady} onClick={() => orderProduct(`Cryptoid ${offer.name}`, offer.pricePi, { productId: offer.id }, () => { setLoadoutMessage(`${offer.name} ${t("purchase confirmed.")}`); void refreshInventory(); })}>{t("Buy with π")}</button>}
+              {(kind === "power" || !owned) && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady} onClick={() => orderProduct(`Cryptoid ${offer.name} · ${kind === "weapon" ? "5 minutes per mission" : "60 seconds when activated"}`, offer.pricePi, { productId: offer.id }, () => { setLoadoutMessage(`${offer.name} ${t("purchase confirmed.")}`); void refreshInventory(); })}>{t("Buy with π")}</button>}
             </div></article>;
           })}
         </div></div>)}
@@ -242,6 +252,7 @@ const Shop = () => {
       </div>}
 
       {showSignIn && <SignIn onSignIn={signIn} onModalClose={closeSignIn} disabled={isAuthLoading} />}
+      {termsOpen && <TermsDialog onClose={() => setTermsOpen(false)} />}
     </main>
   );
 };

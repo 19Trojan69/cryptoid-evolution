@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { buySkin, colorForSkin, ownedSkins, playerColors, playerSkins, savedShipColors, selectedShip, shardBalance, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY } from "./shipFleet.ts";
+import { allPlayerColors, buySkin, buyShipVariant, colorForSkin, fleetCount, ownedSkins, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY } from "./shipFleet.ts";
 
 test("only the grey starter is free and the full reference fleet is purchasable", () => {
   assert.equal(playerSkins.length, 20);
@@ -29,8 +29,10 @@ test("saved selection cannot equip a locked hull or invent Shards", () => {
   assert.equal(shardBalance("-10"), 0);
 });
 
-test("every hull starts grey and keeps its own freely chosen paint", () => {
-  assert.ok(playerColors.length >= 20);
+test("the nine metallic paints retain stable IDs and existing legacy paint IDs", () => {
+  assert.equal(playerColors.length, 9);
+  assert.ok(allPlayerColors.some(color => color.id === "coral"));
+  assert.ok(playerColors.some(color => color.id === "bronze"));
   assert.equal(colorForSkin("nova-wing", {}, "violet", "grey-scout").id, "grey");
   const colors = savedShipColors('{"nova-wing":"coral","grey-scout":"cobalt","fake":"ruby"}');
   assert.equal(colorForSkin("nova-wing", colors).id, "coral");
@@ -40,4 +42,33 @@ test("every hull starts grey and keeps its own freely chosen paint", () => {
   const values = new Map([[SHIP_SKIN_KEY, "nova-wing"], [SHIP_OWNED_KEY, '["nova-wing"]'], [SHIP_COLOR_KEY, "violet"], [SHIP_COLORS_KEY, JSON.stringify(colors)]]);
   globalThis.localStorage = { getItem: key => values.get(key) ?? null };
   assert.equal(selectedShip().color.id, "coral");
+});
+
+test("legacy ships migrate into counts and repeat purchases add the chosen variant", () => {
+  const fleet = readShipFleet(null, '["nova-wing"]', '{"nova-wing":"coral"}');
+  assert.equal(fleetCount(fleet, "grey-scout", "grey"), 1);
+  assert.equal(fleetCount(fleet, "nova-wing", "coral"), 1);
+  assert.equal(buyShipVariant("nova-wing", "bronze", fleet, 24), null);
+  const first = buyShipVariant("nova-wing", "bronze", fleet, 100);
+  const second = buyShipVariant("nova-wing", "bronze", first.fleet, first.balance);
+  assert.equal(second.balance, 50);
+  assert.equal(fleetCount(second.fleet, "nova-wing"), 3);
+  assert.equal(fleetCount(second.fleet, "nova-wing", "bronze"), 2);
+  assert.equal(fleetCount(second.fleet, "nova-wing", "coral"), 1);
+  assert.deepEqual(readShipFleet(JSON.stringify(second.fleet), null, null), second.fleet);
+  const values = new Map([[SHIP_SKIN_KEY, "nova-wing"], [SHIP_COLOR_KEY, "bronze"], [SHIP_FLEET_KEY, JSON.stringify(second.fleet)], [SHIP_COLORS_KEY, '{"nova-wing":"bronze"}']]);
+  globalThis.localStorage = { getItem: key => values.get(key) ?? null };
+  assert.equal(selectedShip().color.id, "bronze");
+});
+
+test("free starter repaint preserves total and additional copies cost Shards", () => {
+  const issued = readShipFleet(null, null, null);
+  const painted = repaintStarter(issued, "metallic-blue");
+  assert.equal(fleetCount(painted, "grey-scout"), 1);
+  assert.equal(fleetCount(painted, "grey-scout", "grey"), 0);
+  assert.equal(fleetCount(painted, "grey-scout", "metallic-blue"), 1);
+  assert.equal(buyShipVariant("grey-scout", "silver", painted, 19), null);
+  const second = buyShipVariant("grey-scout", "silver", painted, 20);
+  assert.equal(fleetCount(second.fleet, "grey-scout"), 2);
+  assert.equal(second.balance, 0);
 });

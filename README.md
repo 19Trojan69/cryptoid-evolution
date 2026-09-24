@@ -1,4 +1,9 @@
-# Pi Demo App
+# Cryptoid Evolution
+
+Eigene [Nutzungsbedingungen / Terms of Service (Entwurf)](./TERMS_OF_SERVICE.md) – Version 0.9, rechtliche Prüfung vor Veröffentlichung ausstehend. Die bestehende [Softwarelizenz](./LICENSE.md) bleibt davon getrennt.
+
+## Grundlage
+
 
 Pi Demo App is an example of how you can implement the various required flows in your app's code.
 It aims to show you how to use Pi Platform API on the backend side and Pi SDK on the frontend side of your app.

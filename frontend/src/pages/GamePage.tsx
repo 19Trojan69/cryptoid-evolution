@@ -12,6 +12,8 @@ import Starfield from "./Starfield";
 import { BONUS_ENTRY_GAP_MS, BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusPosition, bonusReward, isBonusSection, type BonusTarget } from "./bonusChallenge";
 import { bossFireInterval, bossVulnerable, createSectorBoss, moveSectorBoss, nextAfterClear, type SectorBoss } from "./sectorBoss";
 import { enemySprite, selectedShip, shardBalance, SHARD_BALANCE_KEY, shipNozzleStyle, spriteStyle } from "./shipFleet";
+import PaintedShip from "./PaintedShip";
+import TermsDialog from "../components/TermsDialog";
 import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio";
 import { axiosClient } from "../lib/axiosClient";
 import { fireInterval, makeVolley } from "./playerCombat";
@@ -164,6 +166,8 @@ const GamePage = () => {
   const lastPlayerRef = useRef<PlayerPosition>({ x: .5, y: .86 });
   const [game, setGame] = useState<GameState>(createInitialState);
   const [homePrompt, setHomePrompt] = useState(false);
+  const [termsOpen, setTermsOpen] = useState(false);
+  const termsReturnStatus = useRef<GameStatus | null>(null);
   const [shipSelection] = useState(selectedShip);
   const recordsSavedRef = useRef(false);
   const soundRef = useRef<GameAudio | null>(null);
@@ -618,6 +622,7 @@ const GamePage = () => {
         <header className="game-hud">
           <div className="hud-actions">
             <button className="game-control home-control" type="button" onClick={() => setHomePrompt(true)} aria-label={t('Go home')}>⌂ <span>{t('Home')}</span></button>
+            <button className="game-control terms-control" type="button" aria-label="Nutzungsbedingungen / Terms of Service" title="Nutzungsbedingungen / Terms of Service" onClick={() => { termsReturnStatus.current = stateRef.current.status; if (stateRef.current.status === "playing") { stateRef.current.status = "paused"; setGame({ ...stateRef.current }); } setTermsOpen(true); }}>§</button>
             <button className="game-control sound-control" type="button" onClick={() => { void toggleMusic(); }} aria-label={musicEnabled ? "Musik ausschalten" : "Musik einschalten"} title={musicEnabled ? "Nur Musik ausschalten – Spieleffekte bleiben hörbar" : "Musik einschalten – Spieleffekte bleiben hörbar"} aria-pressed={musicEnabled}>{musicEnabled ? "♫" : "♫̸"}</button>
           </div>
           <div className="hud-stat"><span>{t('Score')}</span><strong>{game.score}</strong></div>
@@ -640,7 +645,7 @@ const GamePage = () => {
         {game.shots.map(shot => <div key={shot.id} className={`player-laser${shot.empowered ? " player-laser-overdrive" : ""}`} style={{ left: shot.x, top: shot.y }} />)}
         {game.enemyShots.map(shot => <div key={shot.id} className="enemy-laser" style={{ left: shot.x, top: shot.y }} />)}
         {game.effects.map(effect => <div key={effect.id} className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y }}><span /><span /><span /></div>)}
-        <div ref={playerShipRef} className={`player-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0 ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "hit") ? " player-ship-hurt" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-hue": shipSelection.color.hue, "--ship-glow": shipSelection.color.glow, "--flame-length": `${9 + game.thrust * 7}%`, ...shipNozzleStyle(shipSelection.skin.sprite) } as CSSProperties} aria-label={t('Your Cryptoid ship')}><div className="fleet-sprite" style={spriteStyle(shipSelection.skin.sprite)} /><div className="player-engine player-engine-left" /><div className="player-engine player-engine-right" /></div>
+        <div ref={playerShipRef} className={`player-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0 ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "hit") ? " player-ship-hurt" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${9 + game.thrust * 7}%`, ...shipNozzleStyle(shipSelection.skin.sprite) } as CSSProperties} aria-label={t('Your Cryptoid ship')}><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} /><div className="player-engine player-engine-left" /><div className="player-engine player-engine-right" /></div>
         <div className="game-tip">← → ↑ ↓ / {touchMode === "drag" ? t("drag") : t("thumb joystick")} · {t("Auto fire")}</div>
         <div className={`touch-controls touch-controls-${touchMode}`}>
           {touchMode !== "drag" && <div className="virtual-stick" role="group" aria-label={t('Movement joystick')} onPointerDown={event => { if (game.status !== "playing") return; stickPointerRef.current = event.pointerId; event.currentTarget.setPointerCapture(event.pointerId); moveStick(event); }} onPointerMove={event => { if (stickPointerRef.current === event.pointerId) moveStick(event); }} onPointerUp={stopStick} onPointerCancel={stopStick} onLostPointerCapture={stopStick}>
@@ -661,6 +666,7 @@ const GamePage = () => {
         {game.status === "paused" && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('MISSION PAUSED')}</p><h1>{t('Hold the line.')}</h1><p>{t('The asteroids are waiting.')}</p><button className="button button-primary" type="button" onClick={() => { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); }}>Resume mission <span>▶</span></button></div></div>}
         {game.status === "game-over" && <div className="game-overlay"><div className="game-modal game-over-modal"><p className="eyebrow">{t('MISSION COMPLETE')}</p><h1>{t('Game Over')}</h1><div className="game-over-stats"><span><b>{game.score}</b>{t('Score')}</span><span><b>{game.destroyed}</b>{t('Destroyed')}</span><span><b>{game.sector}</b>{t('Sector')}</span></div><div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>Play Again <span>↗</span></button><button className="button button-secondary" type="button" onClick={goHome}>{t('Home')}</button></div></div></div>}
         {homePrompt && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2>{t('Return to base?')}</h2><p>{t('Your current round will end. Your records will be saved locally.')}</p><div className="modal-actions"><button className="button button-primary" type="button" onClick={goHome}>{t('Leave game')}</button><button className="button button-secondary" type="button" onClick={() => setHomePrompt(false)}>{t('Keep playing')}</button></div></div></div>}
+        {termsOpen && <TermsDialog onClose={() => { setTermsOpen(false); if (termsReturnStatus.current === "playing") { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); } termsReturnStatus.current = null; }} />}
       </div>
     </main>
   );
