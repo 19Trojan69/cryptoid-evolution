@@ -128,6 +128,8 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .asteroid-medium .asteroid-shape { background: linear-gradient(135deg, #a78f76, #4a5154 65%, #1d303b); }
 .asteroid-large .asteroid-shape { background: linear-gradient(135deg, #c18c62, #695650 65%, #233340); box-shadow: 0 0 25px rgba(245, 200, 109, .26), inset 10px -12px 16px rgba(0, 0, 0, .5); }
 .asteroid::after { position: absolute; inset: -6px; border: 1px solid rgba(245, 200, 109, .3); clip-path: polygon(38% 0, 79% 12%, 100% 48%, 82% 88%, 42% 100%, 5% 76%, 0 34%); content: ''; }
+.asteroid-preparing::after { border: 2px solid #f5c86d; background: rgba(245, 200, 109, .18); animation: attack-warning .32s ease-in-out infinite alternate; }
+@keyframes attack-warning { from { opacity: .35; } to { opacity: 1; } }
 .health-bar { position: absolute; z-index: 2; bottom: -12px; left: 16%; width: 68%; height: 3px; background: #18343f; }
 .health-bar b { display: block; height: 100%; background: var(--gold); transition: width .15s ease; }
 .coin-shot { position: absolute; z-index: 2; width: 21px; height: 21px; margin: -10px 0 0 -10px; border: 2px solid var(--gold); border-radius: 50%; color: #fff5c9; background: #d3a743; box-shadow: 0 0 8px var(--gold), 0 0 22px rgba(245, 200, 109, .65); font-size: 10px; line-height: 17px; text-align: center; pointer-events: none; }
