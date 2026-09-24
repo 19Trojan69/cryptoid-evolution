@@ -127,9 +127,13 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .starfield-nearby { animation: star-sway-near 26s ease-in-out infinite alternate; }
 @keyframes star-sway-far { to { transform: translate3d(7px, -5px, 0); } }
 @keyframes star-sway-near { to { transform: translate3d(-11px, 8px, 0); } }
-.shooting-star { position: absolute; top: 16%; left: -16%; width: 95px; height: 2px; border-radius: 50%; background: linear-gradient(90deg, transparent, #bce1ffad 70%, #fff); box-shadow: 0 0 5px #d8edff88; opacity: 0; animation: meteor-cross 18s linear infinite; }
-.shooting-star-two { top: 39%; left: -22%; width: 70px; animation-duration: 29s; animation-delay: -12s; }
-@keyframes meteor-cross { 0%, 28% { opacity: 0; transform: translate3d(0, 0, 0); } 30% { opacity: .75; } 40% { opacity: .75; } 43%, 100% { opacity: 0; transform: translate3d(125vw, 0, 0); } }
+.shooting-star { position: absolute; top: 16%; left: -110px; width: 95px; height: 5px; opacity: 0; --travel-x: calc(100vw + 220px); --travel-y: 0px; animation: meteor-cross 18s linear infinite; }
+.shooting-star span { position: absolute; inset: 1px 0; border-radius: 50%; background: linear-gradient(90deg, transparent, #bce1ffb8 75%, #fff); transform: rotate(var(--meteor-angle, 0deg)); box-shadow: 0 0 5px #d8edff88; }
+.shooting-star span::after { position: absolute; right: 0; top: -2px; width: 6px; height: 6px; border-radius: 50%; background: #fff; box-shadow: 0 0 8px #bce1ff; content: ''; }
+.shooting-star-two { top: 38%; left: calc(100% + 10px); width: 70px; --meteor-angle: 180deg; --travel-x: calc(-100vw - 200px); animation-duration: 29s; animation-delay: -12s; }
+.shooting-star-three { top: 77%; left: -110px; width: 83px; --meteor-angle: -35deg; --travel-x: calc(100vw + 220px); --travel-y: calc(-70vw - 154px); animation-duration: 27s; animation-delay: -19s; }
+.shooting-star-four { top: 86%; left: calc(100% + 10px); width: 77px; --meteor-angle: -145deg; --travel-x: calc(-100vw - 200px); --travel-y: calc(-70vw - 140px); animation-duration: 34s; animation-delay: -5s; }
+@keyframes meteor-cross { 0%, 28% { opacity: 0; transform: translate3d(0, 0, 0); } 30% { opacity: .82; } 40% { opacity: .82; } 43%, 100% { opacity: 0; transform: translate3d(var(--travel-x), var(--travel-y), 0); } }
 .starfield-paused .starfield-stars, .starfield-paused .shooting-star { animation-play-state: paused; }
 @media (prefers-reduced-motion: reduce) { .starfield-stars { animation: none; } .shooting-star { display: none; } }
 
@@ -295,6 +299,17 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .impact-effect span::before { transform: translate(-50%, -50%) rotate(90deg); }
 .impact-effect span::after { transform: translate(-50%, -50%) rotate(45deg); }
 .explosion span, .explosion span::before, .explosion span::after { background: var(--gold); }
+.impact-effect.explosion, .impact-effect.boss-explosion { border: 0; background: radial-gradient(circle, #fff9d4 0 6%, #ffcc67dd 8% 14%, #ff693c77 18% 27%, #47e4f044 39%, transparent 65%); box-shadow: none; animation: destroy-burst .52s ease-out both; }
+.impact-effect.boss-explosion { width: 140px; height: 140px; margin: -70px 0 0 -70px; animation-duration: .75s; }
+.impact-effect.explosion::before, .impact-effect.boss-explosion::before { position: absolute; inset: 17%; border: 3px solid #fff4be; border-radius: 50%; box-shadow: 0 0 9px #ffb155; content: ''; animation: burst-ring .52s ease-out both; }
+.impact-effect.explosion::after, .impact-effect.boss-explosion::after { position: absolute; inset: 3%; border: 2px solid #67dfe8aa; border-radius: 50%; content: ''; animation: burst-ring .52s .08s ease-out both; }
+.impact-effect.explosion span, .impact-effect.boss-explosion span { top: 50%; left: 50%; width: 54%; height: 48%; background: conic-gradient(from 14deg, transparent 0 11%, #ffd18a 12% 14%, transparent 16% 36%, #f78854 37% 40%, transparent 42% 63%, #e7f8ed 64% 67%, transparent 69% 100%); clip-path: polygon(50% 0, 100% 30%, 75% 100%, 18% 85%, 0 35%); transform: translate(-50%, -50%); animation: burst-fragments .52s ease-out both; }
+.impact-effect.explosion span::before, .impact-effect.explosion span::after, .impact-effect.boss-explosion span::before, .impact-effect.boss-explosion span::after { display: none; }
+.impact-effect.explosion span:nth-child(2), .impact-effect.boss-explosion span:nth-child(2) { rotate: 75deg; animation-delay: .02s; }
+.impact-effect.explosion span:nth-child(3), .impact-effect.boss-explosion span:nth-child(3) { rotate: 150deg; animation-delay: .04s; }
+@keyframes destroy-burst { 0% { opacity: 1; scale: .52; } 45% { opacity: .9; scale: 1; } 100% { opacity: 0; scale: 1.17; } }
+@keyframes burst-ring { 0% { opacity: 1; scale: .4; } 100% { opacity: 0; scale: 1.5; } }
+@keyframes burst-fragments { 0% { opacity: .9; scale: .2; } 100% { opacity: 0; scale: 1.6; } }
 @keyframes hit-flash { from { opacity: 1; transform: scale(.5); } to { opacity: 0; transform: scale(1.7); } }
 @keyframes explode { from { opacity: 1; transform: scale(.35); } to { opacity: 0; transform: scale(1.25); } }
 .earth { position: absolute; z-index: 0; bottom: -16vw; left: 50%; width: min(110vw, 930px); aspect-ratio: 1; transform: translateX(-50%); text-align: center; }

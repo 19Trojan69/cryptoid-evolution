@@ -61,7 +61,7 @@ type Asteroid = {
   collidedThisAttack: boolean;
 };
 
-type Effect = { id: number; x: number; y: number; kind: "hit" | "shield" | "explosion" | "shatter"; startedAt: number; target?: "player" };
+type Effect = { id: number; x: number; y: number; kind: "hit" | "shield" | "explosion" | "boss-explosion" | "shatter"; startedAt: number; target?: "player" };
 type GameState = { asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; score: number; coins: number; hearts: number; shieldCharges: number; shieldMs: number; shieldActive: boolean; overdriveMs: number; rapidFireMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | null; weaponLevel: number; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
 
 const createInitialState = (): GameState => ({ asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: .86 }, thrust: 0, effects: [], powerUps: [], score: 0, coins: 30, hearts: 3, shieldCharges: 0, shieldMs: 0, shieldActive: true, overdriveMs: 0, rapidFireMs: 0, pendingStartPower: null, weaponLevel: 1, weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") ? "loading" : "playing" });
@@ -422,7 +422,7 @@ const GamePage = () => {
           Object.assign(state, applyPowerUp(state, pickup.type));
           if (pickup.type === "weapon") { state.pickupWeaponLevel = state.weaponLevel; state.pickupWeaponMs = PICKUP_WEAPON_DURATION_MS; state.weaponCap = Math.max(state.weaponCap, state.weaponLevel); }
           if (pickup.type === "shield") state.shieldActive = true;
-          soundRef.current?.play("pickup");
+          soundRef.current?.play(pickup.type === "overdrive" ? "boost" : "pickup");
           return false;
         });
         fireTimerRef.current += delta;
@@ -432,7 +432,7 @@ const GamePage = () => {
           if (state.shots.length < MAX_PLAYER_SHOTS) {
             const volley = makeVolley(state.weaponLevel, state.player.x * width, state.player.y * height - 23, state.overdriveMs > 0, () => nextIdRef.current++);
             state.shots.push(...volley.slice(0, MAX_PLAYER_SHOTS - state.shots.length));
-            soundRef.current?.play("laser");
+            soundRef.current?.play("laser", state.weaponLevel);
           }
         }
         const remainingShots: PlayerShot[] = [];
@@ -450,8 +450,8 @@ const GamePage = () => {
           }
           if (state.encounter === "boss-fight" && state.boss && bossVulnerable(state.boss) && shotHitsEnemy(shot, { ...state.boss, cloaked: false })) {
             state.boss.health = Math.max(0, state.boss.health - shot.damage);
-            state.effects.push({ id: nextIdRef.current++, x: shot.x, y: shot.y, kind: state.boss.health > 0 ? "hit" : "explosion", startedAt: time });
-            soundRef.current?.play(state.boss.health > 0 ? "enemyHit" : "explosion");
+            state.effects.push({ id: nextIdRef.current++, x: state.boss.health > 0 ? shot.x : state.boss.x, y: state.boss.health > 0 ? shot.y : state.boss.y, kind: state.boss.health > 0 ? "hit" : "boss-explosion", startedAt: time });
+            soundRef.current?.play(state.boss.health > 0 ? "enemyHit" : "bossDestroy");
             if (state.boss.health === 0) {
               state.score += 2_000 + state.sector * 100;
               state.destroyed += 1;
@@ -495,7 +495,7 @@ const GamePage = () => {
           state.score += reward.points;
         }
         if (state.phase === "SECTOR_CLEAR") state.enemyShots = [];
-        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "hit" ? 230 : 430));
+        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "hit" ? 230 : effect.kind === "boss-explosion" ? 750 : 520));
         if (state.hearts === 0) {
           state.status = "game-over";
           if (!recordsSavedRef.current) {
@@ -561,7 +561,7 @@ const GamePage = () => {
     Object.assign(state, applyPowerUp(state, power, PURCHASED_POWER_UP_DURATION_MS));
     if (power === "shield") state.shieldActive = true;
     state.pendingStartPower = null;
-    soundRef.current?.play("pickup");
+    soundRef.current?.play(power === "overdrive" ? "boost" : "pickup");
     setGame({ ...state });
   };
 
@@ -629,7 +629,7 @@ const GamePage = () => {
         {game.powerUps.map(pickup => <div key={pickup.id} className={`power-up power-up-${pickup.type}`} title={powerUpNames[pickup.type]} style={{ left: pickup.x, top: pickup.y }}><span>{powerUpSymbols[pickup.type]}</span></div>)}
         {game.shots.map(shot => <div key={shot.id} className={`player-laser${shot.empowered ? " player-laser-overdrive" : ""}`} style={{ left: shot.x, top: shot.y }} />)}
         {game.enemyShots.map(shot => <div key={shot.id} className="enemy-laser" style={{ left: shot.x, top: shot.y }} />)}
-        {game.effects.map(effect => <div key={effect.id} className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y }}><span /></div>)}
+        {game.effects.map(effect => <div key={effect.id} className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y }}><span /><span /><span /></div>)}
         <div ref={playerShipRef} className={`player-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0 ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "hit") ? " player-ship-hurt" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-hue": shipSelection.color.hue, "--ship-glow": shipSelection.color.glow, "--flame-length": `${9 + game.thrust * 7}%`, ...shipNozzleStyle(shipSelection.skin.sprite) } as CSSProperties} aria-label="Your Cryptoid ship"><div className="fleet-sprite" style={spriteStyle(shipSelection.skin.sprite)} /><div className="player-engine player-engine-left" /><div className="player-engine player-engine-right" /></div>
         <div className="game-tip">← → ↑ ↓ / {touchMode === "drag" ? "drag" : "thumb joystick"} · Auto fire</div>
         <div className={`touch-controls touch-controls-${touchMode}`}>

@@ -1,4 +1,7 @@
-export type GameSound = "laser" | "enemyHit" | "explosion" | "collision" | "shield" | "pickup" | "boss";
+export type GameSound = "laser" | "enemyHit" | "explosion" | "collision" | "shield" | "pickup" | "boost" | "boss" | "bossDestroy";
+
+const sampleNames = ["shot-single", "shot-twin", "shot-rapid", "shot-triple", "shot-plasma", "enemy-hit", "enemy-destroy", "enemy-destroy-alt", "player-collision", "shield", "boost", "boss-destroy"] as const;
+type SampleName = typeof sampleNames[number];
 
 // Original, synthesized arcade sounds: no third-party recordings or music assets.
 export class GameAudio {
@@ -10,6 +13,10 @@ export class GameAudio {
   private paused = false;
   private musicEnabled = true;
   private sector = 1;
+  private samples = new Map<SampleName, AudioBuffer>();
+  private sampleRequest: Promise<void> | null = null;
+  private lastShotAt = 0;
+  private destroyCount = 0;
 
   async start() {
     if (typeof AudioContext === "undefined") return false;
@@ -23,8 +30,35 @@ export class GameAudio {
     }
     try { await this.context.resume(); } catch { return false; }
     this.paused = false;
+    if (!this.sampleRequest && typeof this.context.decodeAudioData === "function") this.sampleRequest = this.loadSamples(this.context);
     this.startMusic();
     return this.context.state === "running";
+  }
+
+  private async loadSamples(context: AudioContext) {
+    await Promise.all(sampleNames.map(async name => {
+      try {
+        const response = await fetch(`/audio/${name}.mp3`);
+        if (!response.ok) return;
+        const sound = await context.decodeAudioData(await response.arrayBuffer());
+        if (this.context === context) this.samples.set(name, sound);
+      } catch { /* Keep synthesized fallback if audio cannot load or decode. */ }
+    }));
+  }
+
+  private sample(name: SampleName, volume: number, rate = 1) {
+    const context = this.context;
+    const buffer = this.samples.get(name);
+    if (!context || context.state !== "running" || this.paused || !buffer || !this.effectsBus || typeof context.createBufferSource !== "function") return false;
+    const source = context.createBufferSource();
+    const gain = context.createGain();
+    source.buffer = buffer;
+    source.playbackRate.value = rate;
+    gain.gain.value = volume;
+    source.connect(gain).connect(this.effectsBus);
+    source.start();
+    source.onended = () => { source.disconnect(); gain.disconnect(); };
+    return true;
   }
 
   private tone(frequency: number, end: number, duration: number, gain: number, type: OscillatorType = "sine", delay = 0, music = false) {
@@ -44,7 +78,21 @@ export class GameAudio {
     oscillator.stop(at + duration + .01);
   }
 
-  play(sound: GameSound) {
+  play(sound: GameSound, weaponLevel = 1) {
+    if (sound === "laser") {
+      const now = Date.now();
+      if (now - this.lastShotAt < 90) return;
+      this.lastShotAt = now;
+      const name = sampleNames[Math.max(0, Math.min(4, weaponLevel - 1))];
+      if (this.sample(name, weaponLevel >= 4 ? .17 : .13)) return;
+    } else {
+      const name: Partial<Record<Exclude<GameSound, "laser">, SampleName>> = {
+        enemyHit: "enemy-hit", explosion: this.destroyCount++ % 2 ? "enemy-destroy-alt" : "enemy-destroy",
+        collision: "player-collision", shield: "shield", boost: "boost", bossDestroy: "boss-destroy",
+      };
+      const chosen = name[sound];
+      if (chosen && this.sample(chosen, sound === "boss" ? .45 : sound === "explosion" ? .38 : .26)) return;
+    }
     switch (sound) {
       case "laser": this.tone(920, 330, .085, .025, "sawtooth"); break;
       case "enemyHit": this.tone(440, 170, .11, .06, "triangle"); break;
@@ -52,7 +100,9 @@ export class GameAudio {
       case "collision": this.tone(180, 45, .38, .13, "sawtooth"); break;
       case "shield": this.tone(420, 1050, .28, .08, "sine"); break;
       case "pickup": [620, 830, 1240].forEach((note, step) => this.tone(note, note * 1.07, .14, .065, "sine", step * .085)); break;
+      case "boost": this.tone(270, 860, .42, .08, "sawtooth"); break;
       case "boss": [150, 130, 110].forEach((note, step) => this.tone(note, note * .75, .3, .085, "triangle", step * .22)); break;
+      case "bossDestroy": this.tone(150, 35, .7, .11, "sawtooth"); break;
     }
   }
 
@@ -94,6 +144,7 @@ export class GameAudio {
     this.context = null;
     this.effectsBus = null;
     this.musicBus = null;
+    this.samples.clear();
   }
 }
 

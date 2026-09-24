@@ -35,7 +35,10 @@ const Starfield = ({ sector, player, paused }: { sector: number; player: PlayerP
     <svg className="starfield-stars starfield-nearby" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice">
       {nearby.map((star, index) => <circle key={index} cx={star.x} cy={star.y} r={star.radius} fill={star.color} opacity={star.opacity} />)}
     </svg>
-    <i className="shooting-star shooting-star-one" /><i className="shooting-star shooting-star-two" />
+    <i className="shooting-star shooting-star-one"><span /></i>
+    <i className="shooting-star shooting-star-two"><span /></i>
+    <i className="shooting-star shooting-star-three"><span /></i>
+    <i className="shooting-star shooting-star-four"><span /></i>
   </div>;
 };
 
