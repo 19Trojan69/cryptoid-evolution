@@ -43,9 +43,11 @@ export default function mountHangarEndpoints(router: Router) {
       const user = await users.findOneAndUpdate({ uid }, { $set: { "loadout.power": null } }, { returnDocument: "before" });
       const weapon = findOffer(user?.loadout?.weapon);
       const owned = weapon?.kind === "weapon" && await orders.findOne({ user: uid, product_id: weapon.id, paid: true });
+      const paidWeapons = await orders.find({ user: uid, paid: true, product_id: { $in: hangarCatalog.filter(item => item.kind === "weapon").map(item => item.id) } }).project({ product_id: 1 }).toArray();
+      const unlockedWeaponLevels = [1, ...hangarCatalog.filter(item => item.kind === "weapon" && paidWeapons.some((order: any) => order.product_id === item.id)).map(item => item.kind === "weapon" ? item.level : 1)];
       const selected = findOffer(user?.loadout?.power);
       const consumed = selected?.kind === "power" ? await orders.findOneAndUpdate({ user: uid, product_id: selected.id, paid: true, consumed_at: { $exists: false } }, { $set: { consumed_at: new Date() } }, { returnDocument: "before" }) : null;
-      return res.json({ weaponLevel: owned && weapon?.kind === "weapon" ? weapon.level : 1, powerUp: consumed && selected?.kind === "power" ? selected.powerUp : null });
+      return res.json({ weaponLevel: owned && weapon?.kind === "weapon" ? weapon.level : 1, unlockedWeaponLevels, powerUp: consumed && selected?.kind === "power" ? selected.powerUp : null });
     } catch (error) { return res.status(503).json({ error: "Could not start mission" }); }
   });
 }

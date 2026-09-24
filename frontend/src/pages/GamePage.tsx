@@ -14,6 +14,7 @@ import { enemySprite, selectedShip, shardBalance, SHARD_BALANCE_KEY, shipNozzleS
 import { GameAudio } from "./gameAudio";
 import { axiosClient } from "../lib/axiosClient";
 import { fireInterval, makeVolley } from "./playerCombat";
+import { joystickVector, readTouchMode } from "./touchControls";
 
 const BEST_SCORE_KEY = "cryptoid_best_score";
 const HIGHEST_SECTOR_KEY = "cryptoid_highest_sector";
@@ -61,9 +62,9 @@ type Asteroid = {
 };
 
 type Effect = { id: number; x: number; y: number; kind: "hit" | "shield" | "explosion" | "shatter"; startedAt: number; target?: "player" };
-type GameState = { asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; score: number; coins: number; hearts: number; shieldCharges: number; overdriveMs: number; rapidFireMs: number; weaponLevel: number; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
+type GameState = { asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; score: number; coins: number; hearts: number; shieldCharges: number; shieldActive: boolean; overdriveMs: number; rapidFireMs: number; weaponLevel: number; weaponCap: number; unlockedWeapons: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
 
-const createInitialState = (): GameState => ({ asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: .86 }, thrust: 0, effects: [], powerUps: [], score: 0, coins: 30, hearts: 3, shieldCharges: 0, overdriveMs: 0, rapidFireMs: 0, weaponLevel: 1, destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") ? "loading" : "playing" });
+const createInitialState = (): GameState => ({ asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: .86 }, thrust: 0, effects: [], powerUps: [], score: 0, coins: 30, hearts: 3, shieldCharges: 0, shieldActive: true, overdriveMs: 0, rapidFireMs: 0, weaponLevel: 1, weaponCap: 1, unlockedWeapons: [1], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") ? "loading" : "playing" });
 
 const readRecord = (key: string) => Number(window.localStorage.getItem(key) || 0);
 
@@ -152,6 +153,11 @@ const GamePage = () => {
   const fireTimerRef = useRef(0);
   const keysRef = useRef(new Set<string>());
   const pointerRef = useRef<number | null>(null);
+  const stickPointerRef = useRef<number | null>(null);
+  const stickAxisRef = useRef({ x: 0, y: 0 });
+  const [stickAxis, setStickAxis] = useState({ x: 0, y: 0 });
+  const [touchMode] = useState(readTouchMode);
+  const [quickOpen, setQuickOpen] = useState(false);
   const lastPlayerRef = useRef<PlayerPosition>({ x: .5, y: .86 });
   const [game, setGame] = useState<GameState>(createInitialState);
   const [homePrompt, setHomePrompt] = useState(false);
@@ -165,8 +171,10 @@ const GamePage = () => {
     if (startRequestRef.current || stateRef.current.status !== "loading") return;
     startRequestRef.current = true;
     try {
-      const { data } = await axiosClient.post<{ weaponLevel: number; powerUp: "shield" | "overdrive" | "rapid" | null }>("/hangar/start");
+      const { data } = await axiosClient.post<{ weaponLevel: number; unlockedWeaponLevels: number[]; powerUp: "shield" | "overdrive" | "rapid" | null }>("/hangar/start");
       stateRef.current.weaponLevel = Math.max(1, Math.min(5, data.weaponLevel));
+      stateRef.current.unlockedWeapons = Array.isArray(data.unlockedWeaponLevels) ? [...new Set([1, ...data.unlockedWeaponLevels.filter(level => Number.isInteger(level) && level >= 1 && level <= 5)])] : [1];
+      stateRef.current.weaponCap = Math.max(stateRef.current.weaponLevel, ...stateRef.current.unlockedWeapons);
       if (data.powerUp) Object.assign(stateRef.current, applyPowerUp(stateRef.current, data.powerUp));
     } catch (error) {
       console.error("Could not load paid loadout; starting with standard equipment", error);
@@ -224,8 +232,8 @@ const GamePage = () => {
         const width = field?.clientWidth || 800;
         const height = field?.clientHeight || 600;
         const keys = keysRef.current;
-        const horizontal = Number(keys.has("ArrowRight") || keys.has("KeyD")) - Number(keys.has("ArrowLeft") || keys.has("KeyA"));
-        const vertical = Number(keys.has("ArrowDown") || keys.has("KeyS")) - Number(keys.has("ArrowUp") || keys.has("KeyW"));
+        const horizontal = Number(keys.has("ArrowRight") || keys.has("KeyD")) - Number(keys.has("ArrowLeft") || keys.has("KeyA")) + stickAxisRef.current.x;
+        const vertical = Number(keys.has("ArrowDown") || keys.has("KeyS")) - Number(keys.has("ArrowUp") || keys.has("KeyW")) + stickAxisRef.current.y;
         if (horizontal || vertical) state.player = movePlayer(state.player, horizontal, vertical, delta, width, height);
         const distance = Math.hypot((state.player.x - lastPlayerRef.current.x) * width, (state.player.y - lastPlayerRef.current.y) * height);
         const acceleration = distance > 1 ? 1 : 0;
@@ -356,16 +364,19 @@ const GamePage = () => {
         }
         state.enemyShots = incomingShots;
         if (heartsLost > 0) {
-          const absorbed = state.shieldCharges > 0;
-          Object.assign(state, receiveImpacts(state, heartsLost));
+          const absorbed = state.shieldActive && state.shieldCharges > 0;
+          if (state.shieldActive) Object.assign(state, receiveImpacts(state, heartsLost));
+          else { const impacted = receiveImpacts({ ...state, shieldCharges: 0 }, heartsLost); state.hearts = impacted.hearts; }
           state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: absorbed ? "shield" : "hit", startedAt: time, target: "player" });
           if (absorbed) soundRef.current?.play("shield");
-          else { soundRef.current?.play("collision"); state.weaponLevel = Math.max(1, state.weaponLevel - 1); }
+          else { soundRef.current?.play("collision"); state.weaponCap = Math.max(1, state.weaponCap - 1); state.weaponLevel = Math.min(state.weaponLevel, state.weaponCap); }
         }
         state.powerUps = movePowerUps(state.powerUps, delta, height);
         state.powerUps = state.powerUps.filter(pickup => {
           if (Math.hypot(pickup.x - state.player.x * width, pickup.y - state.player.y * height) > 34) return true;
           Object.assign(state, applyPowerUp(state, pickup.type));
+          if (pickup.type === "weapon") state.weaponCap = Math.max(state.weaponCap, state.weaponLevel);
+          if (pickup.type === "shield") state.shieldActive = true;
           soundRef.current?.play("pickup");
           return false;
         });
@@ -471,12 +482,32 @@ const GamePage = () => {
   };
 
   const startDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (stateRef.current.status !== "playing" || (event.target as HTMLElement).closest("button, .game-hud, .game-overlay")) return;
+    if (stateRef.current.status !== "playing" || (event.target as HTMLElement).closest("button, .game-hud, .game-overlay, .touch-controls")) return;
+    if (event.pointerType === "touch" && touchMode !== "drag") return;
     const bounds = event.currentTarget.getBoundingClientRect();
     if (event.clientY - bounds.top < bounds.height * .6) return;
     pointerRef.current = event.pointerId;
     event.currentTarget.setPointerCapture(event.pointerId);
     positionFromPointer(event);
+  };
+
+  const moveStick = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const box = event.currentTarget.getBoundingClientRect();
+    const axis = joystickVector(event.clientX, event.clientY, box.left + box.width / 2, box.top + box.height / 2, box.width * .34);
+    stickAxisRef.current = axis;
+    setStickAxis(axis);
+  };
+  const stopStick = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (stickPointerRef.current !== event.pointerId) return;
+    stickPointerRef.current = null;
+    stickAxisRef.current = { x: 0, y: 0 };
+    setStickAxis({ x: 0, y: 0 });
+  };
+  const selectWeapon = (level: number) => {
+    if (stateRef.current.status !== "playing" || level > stateRef.current.weaponCap) return;
+    stateRef.current.weaponLevel = level;
+    setGame({ ...stateRef.current });
+    setQuickOpen(false);
   };
 
   const restart = () => {
@@ -496,6 +527,10 @@ const GamePage = () => {
     fireTimerRef.current = 0;
     startRequestRef.current = false;
     pointerRef.current = null;
+    stickPointerRef.current = null;
+    stickAxisRef.current = { x: 0, y: 0 };
+    setStickAxis({ x: 0, y: 0 });
+    setQuickOpen(false);
     lastPlayerRef.current = stateRef.current.player;
     lastFrameRef.current = 0;
     lastPaintRef.current = 0;
@@ -529,7 +564,7 @@ const GamePage = () => {
         </header>
         <div className="game-label">SECTOR {String(game.sector).padStart(2, "0")} <span>· {sectorName(game.sector)} · {game.encounter !== "normal" ? "CORE WARDEN" : isBonusSection(game.section) ? "BONUS CHALLENGE" : `SECTION ${sectionInSector(game.section)}`}</span></div>
         {game.encounter === "normal" && isBonusSection(game.section) && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">BONUS TARGETS {game.bonusHits} / {BONUS_TARGET_COUNT} · NO ENEMY FIRE</div>}
-        {(game.shieldCharges > 0 || game.overdriveMs > 0 || game.rapidFireMs > 0) && <div className="power-status" aria-live="polite">{game.shieldCharges > 0 && <span>◇ SHIELD {game.shieldCharges}</span>}{game.overdriveMs > 0 && <span>ϟ OVERDRIVE {Math.ceil(game.overdriveMs / 1_000)}s</span>}{game.rapidFireMs > 0 && <span>» RAPID {Math.ceil(game.rapidFireMs / 1_000)}s</span>}</div>}
+        {(game.shieldCharges > 0 || game.overdriveMs > 0 || game.rapidFireMs > 0) && <div className="power-status" aria-live="polite">{game.shieldCharges > 0 && <span>◇ SHIELD {game.shieldActive ? "ON" : "OFF"} · {game.shieldCharges}</span>}{game.overdriveMs > 0 && <span>ϟ OVERDRIVE {Math.ceil(game.overdriveMs / 1_000)}s</span>}{game.rapidFireMs > 0 && <span>» RAPID {Math.ceil(game.rapidFireMs / 1_000)}s</span>}</div>}
         {game.status === "loading" && <div className="game-overlay"><div className="game-modal"><h1>Preparing mission</h1><p>Checking your saved hangar loadout.</p></div></div>}
         {game.status === "playing" && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className="sector-banner" aria-live="polite"><span>{game.encounter !== "normal" ? game.phase === "SECTOR_CLEAR" ? "SECTOR CLEAR" : "WARNING · SECTOR BOSS" : game.phase === "SECTOR_CLEAR" ? isBonusSection(game.section) ? "BONUS COMPLETE" : "SECTION CLEAR" : isBonusSection(game.section) ? "BONUS CHALLENGE" : `SECTOR ${String(game.sector).padStart(2, "0")}`}</span><strong>{game.encounter !== "normal" ? game.phase === "SECTOR_CLEAR" ? "CORE WARDEN DEFEATED" : "CORE WARDEN INCOMING" : game.phase === "SECTOR_CLEAR" ? isBonusSection(game.section) ? `${game.bonusResult} · ${game.bonusHits}/${BONUS_TARGET_COUNT}` : `SECTION ${sectionInSector(game.section)} COMPLETE` : isBonusSection(game.section) ? "HIT THE FLYING TARGETS" : sectorName(game.sector)}</strong></div>}
         {game.boss && game.encounter === "boss-fight" && <div className={`asteroid cryptoid cryptoid-heavy cryptoid-bitrock sector-boss${game.boss.fireElapsed >= bossFireInterval(game.boss) - 550 ? " boss-warning" : ""}${game.boss.health <= game.boss.maxHealth / 2 ? " boss-enraged cryptoid-boost" : ""}`} style={{ left: game.boss.x, top: game.boss.y, transform: "translate(-50%, -50%)", ...shipNozzleStyle(19, true) }} title="Core Warden · sector boss"><div className="fleet-sprite" style={spriteStyle(19)} /><span className="exhaust exhaust-left" /><span className="exhaust exhaust-right" /><span className="health-bar"><b style={{ width: `${game.boss.health / game.boss.maxHealth * 100}%` }} /></span></div>}
@@ -540,7 +575,20 @@ const GamePage = () => {
         {game.enemyShots.map(shot => <div key={shot.id} className="enemy-laser" style={{ left: shot.x, top: shot.y }} />)}
         {game.effects.map(effect => <div key={effect.id} className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y }}><span /></div>)}
         <div className={`player-ship${shipSelection.skin.price === 0 ? " player-ship-starter" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "hit") ? " player-ship-hurt" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-hue": shipSelection.color.hue, "--ship-glow": shipSelection.color.glow, "--flame-length": `${9 + game.thrust * 7}%`, ...shipNozzleStyle(shipSelection.skin.sprite) } as CSSProperties} aria-label="Your Cryptoid ship"><div className="fleet-sprite" style={spriteStyle(shipSelection.skin.sprite)} /><div className="player-engine player-engine-left" /><div className="player-engine player-engine-right" /></div>
-        <div className="game-tip">← → ↑ ↓ / drag to move · Auto fire</div>
+        <div className="game-tip">← → ↑ ↓ / {touchMode === "drag" ? "drag" : "thumb joystick"} · Auto fire</div>
+        {touchMode !== "drag" && <div className={`touch-controls touch-controls-${touchMode}`}>
+          <div className="virtual-stick" role="group" aria-label="Movement joystick" onPointerDown={event => { if (game.status !== "playing") return; stickPointerRef.current = event.pointerId; event.currentTarget.setPointerCapture(event.pointerId); moveStick(event); }} onPointerMove={event => { if (stickPointerRef.current === event.pointerId) moveStick(event); }} onPointerUp={stopStick} onPointerCancel={stopStick} onLostPointerCapture={stopStick}>
+            <span className="virtual-stick-knob" style={{ transform: `translate(${stickAxis.x * 27}px, ${stickAxis.y * 27}px)` }} />
+          </div>
+          <div className="quick-slot">
+            <button type="button" className="quick-toggle" aria-expanded={quickOpen} aria-label="Open weapon and shield quick select" onClick={() => setQuickOpen(value => !value)}>◇ <span>LOADOUT</span></button>
+            {quickOpen && <div className="quick-panel" role="group" aria-label="Quick select">
+              {[...new Set([...game.unlockedWeapons, game.weaponLevel])].sort((a, b) => a - b).map(level => <button type="button" key={level} disabled={game.status !== "playing" || level > game.weaponCap} aria-pressed={game.weaponLevel === level} onClick={() => selectWeapon(level)}>{level === 1 ? "Single" : level === 2 ? "Twin" : level === 3 ? "Rapid Twin" : level === 4 ? "Triple" : "Plasma"}</button>)}
+              {game.shieldCharges > 0 && <button type="button" aria-pressed={game.shieldActive} onClick={() => { stateRef.current.shieldActive = !stateRef.current.shieldActive; setGame({ ...stateRef.current }); setQuickOpen(false); }}>Shield {game.shieldActive ? "ON" : "OFF"} · {game.shieldCharges}</button>}
+              {game.shieldCharges === 0 && <small>Shield: none available</small>}
+            </div>}
+          </div>
+        </div>}
         {game.status === "paused" && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">MISSION PAUSED</p><h1>Hold the line.</h1><p>The asteroids are waiting.</p><button className="button button-primary" type="button" onClick={() => { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); }}>Resume mission <span>▶</span></button></div></div>}
         {game.status === "game-over" && <div className="game-overlay"><div className="game-modal game-over-modal"><p className="eyebrow">MISSION COMPLETE</p><h1>Game Over</h1><div className="game-over-stats"><span><b>{game.score}</b>Score</span><span><b>{game.destroyed}</b>Destroyed</span><span><b>{game.sector}</b>Sector</span></div><div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>Play Again <span>↗</span></button><button className="button button-secondary" type="button" onClick={goHome}>Home</button></div></div></div>}
         {homePrompt && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">LEAVE MISSION?</p><h2>Return to base?</h2><p>Your current round will end. Your records will be saved locally.</p><div className="modal-actions"><button className="button button-primary" type="button" onClick={goHome}>Leave game</button><button className="button button-secondary" type="button" onClick={() => setHomePrompt(false)}>Keep playing</button></div></div></div>}

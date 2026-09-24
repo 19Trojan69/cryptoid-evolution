@@ -9,6 +9,7 @@ import { axiosClient } from "../lib/axiosClient.ts";
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "./GamePage.tsx";
 import { buySkin, ownedSkins, playerColors, playerSkins, selectedShip, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, spriteStyle } from "./shipFleet";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
+import { readTouchMode, TOUCH_MODE_KEY, type TouchMode } from "./touchControls";
 
 type Offer = { id: string; kind: "weapon" | "power"; name: string; description: string; pricePi: number };
 type Inventory = { ownedWeapons: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
@@ -23,6 +24,7 @@ const Shop = () => {
   const [owned, setOwned] = useState(() => ownedSkins(localStorage.getItem(SHIP_OWNED_KEY)));
   const [shards, setShards] = useState(() => shardBalance(localStorage.getItem(SHARD_BALANCE_KEY)));
   const [hangarMessage, setHangarMessage] = useState("");
+  const [touchMode, setTouchMode] = useState<TouchMode>(readTouchMode);
   const [offers, setOffers] = useState<Offer[]>(() => [...hangarCatalog]);
   const [catalogReady, setCatalogReady] = useState(false);
   const [inventory, setInventory] = useState<Inventory | null>(null);
@@ -161,6 +163,15 @@ const Shop = () => {
         <button className="button button-primary hangar-action" type="button" onClick={equipPreview} disabled={!previewOwned && shards < previewSkin.price}>{previewSkin.price === 0 ? "Fly Grey Scout" : previewOwned ? "Equip ship · free paint" : `Buy for ◆ ${previewSkin.price}`}</button>
         {!previewOwned && shards < previewSkin.price && <span className="shard-help">◆ {previewSkin.price - shards} more Shards needed</span>}
         {hangarMessage && <p className="hangar-message" role="status">{hangarMessage}</p>}
+      </section>
+
+      <section className="touch-setup" aria-labelledby="touch-setup-heading">
+        <p className="eyebrow">MOBILE CONTROLS</p>
+        <h2 id="touch-setup-heading">Choose your thumb controls</h2>
+        <p>The joystick keeps your thumb away from the ship. Quick select appears on the opposite side and shows only equipment available in your current mission. Keyboard and mouse controls remain available.</p>
+        <div className="touch-setup-options" role="group" aria-label="Joystick placement">
+          {([ ["left", "Joystick left"], ["right", "Joystick right"], ["drag", "Classic drag"] ] as const).map(([mode, label]) => <button className="button button-secondary" key={mode} type="button" aria-pressed={touchMode === mode} onClick={() => { localStorage.setItem(TOUCH_MODE_KEY, mode); setTouchMode(mode); }}>{label}</button>)}
+        </div>
       </section>
 
       <section className="upgrade-section" aria-labelledby="upgrade-heading">
