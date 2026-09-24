@@ -165,6 +165,7 @@ const GamePage = () => {
   const recordsSavedRef = useRef(false);
   const soundRef = useRef<GameAudio | null>(null);
   const audioStartRef = useRef<Promise<GameAudio | null> | null>(null);
+  const audioCleanupRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const startRequestRef = useRef(false);
   const [musicEnabled, setMusicEnabled] = useState(false);
 
@@ -187,7 +188,15 @@ const GamePage = () => {
   };
   useEffect(() => { if (stateRef.current.status === "loading") void activateLoadout(); }, []);
 
-  useEffect(() => () => soundRef.current?.close(), []);
+  useEffect(() => {
+    if (audioCleanupRef.current !== null) window.clearTimeout(audioCleanupRef.current);
+    return () => {
+      // StrictMode immediately remounts in development; preserve the primed audio across that cycle.
+      audioCleanupRef.current = window.setTimeout(() => {
+        void audioStartRef.current?.then(audio => audio?.close());
+      }, 0);
+    };
+  }, []);
   useEffect(() => {
     soundRef.current?.setSector(game.sector);
     soundRef.current?.setPaused(game.status !== "playing");
