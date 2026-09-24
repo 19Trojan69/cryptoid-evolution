@@ -12,6 +12,8 @@ import { hangarCatalog } from "../../../backend/src/hangarCatalog";
 import { readTouchMode, TOUCH_MODE_KEY, type TouchMode } from "./touchControls";
 import { primeGameAudio } from "./gameAudio";
 import Starfield from "./Starfield";
+import { languages, useLocale, type Locale } from "../i18n";
+import EarthGlobe from "./EarthGlobe";
 import { requestGameFullscreen } from "./gameFullscreen";
 
 type Offer = { id: string; kind: "weapon" | "power"; name: string; description: string; pricePi: number };
@@ -19,6 +21,7 @@ type Inventory = { ownedWeapons: string[]; consumables: { id: string; count: num
 
 const Shop = () => {
   const navigate = useNavigate();
+  const { locale, choose, t } = useLocale();
   const [activePanel, setActivePanel] = useState<"how" | "progress" | null>(null);
   const [shopView, setShopView] = useState<"ships" | "weapons" | "powers" | "progress" | null>(null);
   useEffect(() => {
@@ -50,7 +53,7 @@ const Shop = () => {
     setShards(currentBalance);
     if (previewSkin.price > 0 && !currentOwned.includes(previewSkin.id)) {
       const purchase = buySkin(previewSkin.id, currentOwned, currentBalance);
-      if (!purchase) { setHangarMessage("Not enough Shards yet. Earn them by defeating Cryptoids."); return; }
+      if (!purchase) { setHangarMessage(t("Not enough Shards yet. Earn them by defeating Cryptoids.")); return; }
       localStorage.setItem(SHIP_OWNED_KEY, JSON.stringify(purchase.owned));
       localStorage.setItem(SHARD_BALANCE_KEY, String(purchase.balance));
       setOwned(purchase.owned);
@@ -62,7 +65,7 @@ const Shop = () => {
     setShipColors(nextColors);
     localStorage.setItem(SHIP_COLORS_KEY, JSON.stringify(nextColors));
     setSelected({ skin: previewSkin, color: previewColor });
-    setHangarMessage(`${previewSkin.name} ready for your next mission.`);
+    setHangarMessage(`${previewSkin.name} ${t("ready for your next mission.")}`);
   };
   const {
     user,
@@ -85,27 +88,27 @@ const Shop = () => {
       if (!Array.isArray(data.ownedWeapons) || !Array.isArray(data.consumables)) throw new Error("Invalid inventory");
       setInventory(data);
     }
-    catch { setLoadoutMessage("Connect your Pi account to see your saved loadout."); }
+    catch { setLoadoutMessage(t('Connect your Pi account to see your saved loadout.')); }
   };
   useEffect(() => { axiosClient.get<{ offers: Offer[] }>("/hangar/catalog").then(({ data }) => {
     if (!Array.isArray(data.offers)) throw new Error("Invalid catalog");
     setOffers(data.offers);
     setCatalogReady(true);
-  }).catch(() => setLoadoutMessage("Hangar catalog unavailable. Try again when the server is online.")); }, []);
+  }).catch(() => setLoadoutMessage(t('Hangar catalog unavailable. Try again when the server is online.'))); }, []);
   useEffect(() => {
     if (!isAuthenticated) return;
     axiosClient.get<Inventory>("/hangar/inventory").then(({ data }) => {
       if (!Array.isArray(data.ownedWeapons) || !Array.isArray(data.consumables)) throw new Error("Invalid inventory");
       setInventory(data);
-    }).catch(() => setLoadoutMessage("Connect your Pi account to see your saved loadout."));
+    }).catch(() => setLoadoutMessage(t('Connect your Pi account to see your saved loadout.')));
   }, [isAuthenticated]);
   const equip = async (weapon: string | null, power: string | null) => {
     if (!isAuthenticated) { requireAuth(); return; }
     try {
       await axiosClient.post("/hangar/equip", { weapon, power });
       await refreshInventory();
-      setLoadoutMessage("Loadout saved for the next mission.");
-    } catch { setLoadoutMessage("Could not save loadout. Please retry."); }
+      setLoadoutMessage(t('Loadout saved for the next mission.'));
+    } catch { setLoadoutMessage(t('Could not save loadout. Please retry.')); }
   };
 
   const onSendTestNotification = () => {
@@ -128,69 +131,70 @@ const Shop = () => {
         isLoading={isAuthLoading}
       />
 
+      <div className="language-picker"><label htmlFor="language-select">{t("Language")}</label><select id="language-select" aria-label={t("Language")} value={locale} onChange={event => choose(event.target.value as Locale)}>{Object.entries(languages).map(([code, label]) => <option key={code} value={code}>{label}</option>)}</select></div>
       <section className="hero-section">
         <Starfield sector={1} player={{ x: .5, y: .8 }} paused={false} />
         <div className="hero-copy">
-          <p className="eyebrow"><span className="signal-dot" /> Mission control online</p>
+          <p className="eyebrow"><span className="signal-dot" /> {t("Mission control online")}</p>
           <h1>Cryptoid <span>Evolution</span></h1>
           <p className="hero-tagline">Defend Earth.<br />Evolve your power.</p>
-          <p className="hero-description">Build your streak, master the grid, and become the force Earth needs.</p>
+          <p className="hero-description">{t('Build your streak, master the grid, and become the force Earth needs.')}</p>
           <div className="hero-actions">
-            <button className="button button-primary" type="button" onClick={enterGame}>Play <span>↗</span></button>
-            <button className="button button-secondary" type="button" onClick={() => setShopView("ships")}>Shop / Hangar</button>
-            <button className="button button-secondary" type="button" onClick={() => setActivePanel("how")}>How to Play</button>
+            <button className="button button-primary" type="button" onClick={enterGame}>{t("Play")} <span>↗</span></button>
+            <button className="button button-secondary" type="button" onClick={() => setShopView("ships")}>{t('Shop / Hangar')}</button>
+            <button className="button button-secondary" type="button" onClick={() => setActivePanel("how")}>{t('How to Play')}</button>
           </div>
-          <div className="home-touch-setup" role="group" aria-label="Joystick placement">
-            <span>THUMB CONTROLS</span>
-            {([ ["left", "Joystick left"], ["right", "Joystick right"], ["drag", "Classic drag"] ] as const).map(([mode, label]) => <button className="button button-secondary" key={mode} type="button" aria-pressed={touchMode === mode} onClick={() => { localStorage.setItem(TOUCH_MODE_KEY, mode); setTouchMode(mode); }}>{label}</button>)}
+          <div className="home-touch-setup" role="group" aria-label={t('Joystick placement')}>
+            <span>{t('THUMB CONTROLS')}</span>
+            {([ ["left", "Joystick left"], ["right", "Joystick right"], ["drag", "Classic drag"] ] as const).map(([mode, label]) => <button className="button button-secondary" key={mode} type="button" aria-pressed={touchMode === mode} onClick={() => { localStorage.setItem(TOUCH_MODE_KEY, mode); setTouchMode(mode); }}>{t(label)}</button>)}
           </div>
         </div>
         <div className="planet-stage" aria-label="Cryptoid Evolution planet status">
           <div className="orbit orbit-one"><span className="satellite-motion"><i className="satellite-body" /></span></div>
           <div className="orbit orbit-two"><span className="satellite-motion"><i className="satellite-body" /></span></div>
           <div className="orbit orbit-three"><span className="satellite-motion"><i className="satellite-body" /></span></div>
-          <div className="planet" />
+          <div className="planet"><EarthGlobe /></div>
           <div className={`home-defense-ship${selected.color.id === "grey" ? " home-defense-grey" : ""}`} style={{ "--ship-hue": selected.color.hue } as CSSProperties}><i style={spriteStyle(selected.skin.sprite)} /></div>
           <div className="home-enemy-ship"><i style={spriteStyle(3)} /></div>
           <div className="home-defense-laser" />
-          <span className="orbit-status">ORBITAL DEFENSE ACTIVE</span>
-          <div className="stage-label"><span className="stage-label-value">01</span><span>Genesis sector</span></div>
+          <span className="orbit-status">{t('ORBITAL DEFENSE ACTIVE')}</span>
+          <div className="stage-label"><span className="stage-label-value">01</span><span>{t('Genesis sector')}</span></div>
         </div>
       </section>
 
-      {shopView && <div className="shop-overlay" role="dialog" aria-modal="true" aria-label="Shop and hangar">
+      {shopView && <div className="shop-overlay" role="dialog" aria-modal="true" aria-label={t('Shop and hangar')}>
         <div className="shop-modal">
-          <div className="shop-modal-header"><strong>SHOP / HANGAR</strong><button className="close-button" type="button" onClick={() => setShopView(null)} aria-label="Close shop">×</button></div>
-          <nav className="shop-tabs" aria-label="Shop sections">
-            {([ ["ships", "Ships"], ["weapons", "Weapons"], ["powers", "Power-ups"], ["progress", "Progress"] ] as const).map(([view, label]) => <button key={view} type="button" aria-pressed={shopView === view} onClick={() => setShopView(view)}>{label}</button>)}
+          <div className="shop-modal-header"><strong>{t("Shop / Hangar")}</strong><button className="close-button" type="button" onClick={() => setShopView(null)} aria-label={t('Close shop')}>×</button></div>
+          <nav className="shop-tabs" aria-label={t('Shop sections')}>
+            {([ ["ships", "Ships"], ["weapons", "Weapons"], ["powers", "Power-ups"], ["progress", "Progress"] ] as const).map(([view, label]) => <button key={view} type="button" aria-pressed={shopView === view} onClick={() => setShopView(view)}>{t(label)}</button>)}
           </nav>
           <div className="shop-modal-body">
-      {shopView === "progress" && <section className="dashboard-grid" aria-label="Player overview">
+      {shopView === "progress" && <section className="dashboard-grid" aria-label={t('Player overview')}>
         <article className="status-card progress-card">
-          <div className="card-heading"><span>YOUR PROGRESS</span><span className="card-icon">↗</span></div>
-          <div className="progress-row"><strong>Best {records.bestScore}</strong><span>Sector {String(records.highestSector).padStart(2, "0")}</span></div>
+          <div className="card-heading"><span>{t('YOUR PROGRESS')}</span><span className="card-icon">↗</span></div>
+          <div className="progress-row"><strong>{t("Best")} {records.bestScore}</strong><span>{t("Sector")} {String(records.highestSector).padStart(2, "0")}</span></div>
           <div className="progress-track"><span style={{ width: `${Math.min(100, records.bestScore / 10)}%` }} /></div>
-          <button className="text-button" type="button" onClick={() => setActivePanel("progress")}>My Progress <span>→</span></button>
+          <button className="text-button" type="button" onClick={() => setActivePanel("progress")}>{t("My Progress")} <span>→</span></button>
         </article>
         <article className="status-card streak-card">
-          <div className="card-heading"><span>ACTIVE STREAK</span><span className="flame">✦</span></div>
-          <strong className="streak-number">{records.totalDestroyed} <small>asteroids</small></strong>
-          <p>Total destroyed across all missions.</p>
+          <div className="card-heading"><span>{t('ACTIVE STREAK')}</span><span className="flame">✦</span></div>
+          <strong className="streak-number">{records.totalDestroyed} <small>{t("asteroids")}</small></strong>
+          <p>{t('Total destroyed across all missions.')}</p>
         </article>
       </section>}
 
       {shopView === "ships" && <section className="ship-selector" aria-labelledby="hangar-heading">
-        <p className="eyebrow">YOUR HANGAR</p>
-        <h2 id="hangar-heading">Choose your ship</h2>
-        <p>Every hull starts grey. Choose a hull, then pick its own paint before buying. Grey Scout is free; other hulls cost game-only Shards. Paint changes are always free.</p>
-        <strong className="shard-balance">◆ {shards} Shards</strong><span className="shard-help">Earn 1 Shard per defeated Cryptoid; your Shards are saved at the end of each mission.</span>
-        <div className="ship-picker" role="group" aria-label="Ship hull">
+        <p className="eyebrow">{t('YOUR HANGAR')}</p>
+        <h2 id="hangar-heading">{t('Choose your ship')}</h2>
+        <p>{t('Every hull starts grey. Choose a hull, then pick its own paint before buying. Grey Scout is free; other hulls cost game-only Shards. Paint changes are always free.')}</p>
+        <strong className="shard-balance">◆ {shards} {t("Shards")}</strong><span className="shard-help">{t('Earn 1 Shard per defeated Cryptoid; your Shards are saved at the end of each mission.')}</span>
+        <div className="ship-picker" role="group" aria-label={t('Ship hull')}>
           {playerSkins.map(skin => { const paint = colorForSkin(skin.id, shipColors, localStorage.getItem(SHIP_COLOR_KEY), selected.skin.id); return <button key={skin.id} className="ship-choice" type="button" aria-pressed={previewSkin.id === skin.id} onClick={() => { setPreviewSkin(skin); setPreviewColor(paint); setHangarMessage(""); }}>
-            <span className={`ship-preview${paint.id === "grey" || paint.id === "white" ? ` ship-preview-${paint.id}` : ""}`}><i style={{ ...spriteStyle(skin.sprite), "--ship-hue": paint.hue, "--ship-glow": paint.glow } as CSSProperties} /></span><span>{skin.name}</span><small>{skin.price === 0 ? "ISSUED" : owned.includes(skin.id) ? "OWNED" : `◆ ${skin.price}`}</small>
+            <span className={`ship-preview${paint.id === "grey" || paint.id === "white" ? ` ship-preview-${paint.id}` : ""}`}><i style={{ ...spriteStyle(skin.sprite), "--ship-hue": paint.hue, "--ship-glow": paint.glow } as CSSProperties} /></span><span>{skin.name}</span><small>{skin.price === 0 ? t("ISSUED") : owned.includes(skin.id) ? t("OWNED") : `◆ ${skin.price}`}</small>
           </button>; })}
         </div>
-        <p className="hangar-selection">Preview: <strong>{previewSkin.name}</strong> · {previewSkin.price === 0 ? "Grey starter" : previewOwned ? "Owned" : `◆ ${previewSkin.price} Shards`} {selected.skin.id === previewSkin.id && <span>· EQUIPPED</span>}</p>
-        <div className="ship-picker" role="group" aria-label="Ship paint">
+        <p className="hangar-selection">{t("Preview:")} <strong>{previewSkin.name}</strong> · {previewSkin.price === 0 ? t("Grey starter") : previewOwned ? t("Owned") : `◆ ${previewSkin.price} ${t("Shards")}`} {selected.skin.id === previewSkin.id && <span>· {t("EQUIPPED")}</span>}</p>
+        <div className="ship-picker" role="group" aria-label={t('Ship paint')}>
           {playerColors.map(color => <button key={color.id} className="color-choice" type="button" aria-label={color.name} aria-pressed={previewColor.id === color.id} title={color.name} style={{ backgroundColor: color.glow }} onClick={() => {
             const nextColors: Partial<Record<PlayerSkinId, PlayerColorId>> = { ...shipColors, [previewSkin.id]: color.id };
             setShipColors(nextColors);
@@ -200,27 +204,27 @@ const Shop = () => {
             setHangarMessage("");
           }} />)}
         </div>
-        <button className="button button-primary hangar-action" type="button" onClick={equipPreview} disabled={!previewOwned && shards < previewSkin.price}>{previewSkin.price === 0 ? "Fly Grey Scout" : previewOwned ? "Equip ship · free paint" : `Buy for ◆ ${previewSkin.price}`}</button>
-        {!previewOwned && shards < previewSkin.price && <span className="shard-help">◆ {previewSkin.price - shards} more Shards needed</span>}
+        <button className="button button-primary hangar-action" type="button" onClick={equipPreview} disabled={!previewOwned && shards < previewSkin.price}>{previewSkin.price === 0 ? t("Fly Grey Scout") : previewOwned ? t("Equip ship · free paint") : `${t("Buy for")} ◆ ${previewSkin.price}`}</button>
+        {!previewOwned && shards < previewSkin.price && <span className="shard-help">◆ {previewSkin.price - shards} {t("more Shards needed")}</span>}
         {hangarMessage && <p className="hangar-message" role="status">{hangarMessage}</p>}
       </section>}
 
       {(shopView === "weapons" || shopView === "powers") && <section className="upgrade-section" aria-labelledby="upgrade-heading">
-        <div className="section-heading"><div><p className="eyebrow">POWER LAB</p><h2 id="upgrade-heading">Weapons and start power-ups</h2></div><span className="section-line" /></div>
-        <p>Standard laser is always free. Bought shots unlock permanently, but run for up to 5 minutes per mission. Purchased start power-ups are consumed once a mission begins and wait at the edge of the game screen until you activate them. Bought power-ups last up to 60 seconds; collected shots and power-ups last up to 20 seconds. A shield also ends when its charge is spent. Pi prices are independent of the Shards used for ship skins.</p>
-        {([shopView === "weapons" ? "weapon" : "power"] as const).map(kind => <div key={kind} className="hangar-offers"><h3>{kind === "weapon" ? "Permanent weapons" : "One-mission start bonuses"}</h3><div className="hangar-offer-grid">
+        <div className="section-heading"><div><p className="eyebrow">{t('POWER LAB')}</p><h2 id="upgrade-heading">{t('Weapons and start power-ups')}</h2></div><span className="section-line" /></div>
+        <p>{t('Standard laser is always free. Bought shots unlock permanently, but run for up to 5 minutes per mission. Purchased start power-ups are consumed once a mission begins and wait at the edge of the game screen until you activate them. Bought power-ups last up to 60 seconds; collected shots and power-ups last up to 20 seconds. A shield also ends when its charge is spent. Pi prices are independent of the Shards used for ship skins.')}</p>
+        {([shopView === "weapons" ? "weapon" : "power"] as const).map(kind => <div key={kind} className="hangar-offers"><h3>{t(kind === "weapon" ? "Permanent weapons" : "One-mission start bonuses")}</h3><div className="hangar-offer-grid">
           {offers.filter(offer => offer.kind === kind).map(offer => {
             const count = inventory?.consumables.find(item => item.id === offer.id)?.count ?? 0;
             const owned = kind === "weapon" ? inventory?.ownedWeapons.includes(offer.id) : count > 0;
             const selected = kind === "weapon" ? inventory?.equippedWeapon === offer.id : inventory?.selectedPower === offer.id;
-            return <article key={offer.id} className="hangar-offer"><h4>{offer.name}</h4><p>{offer.description}</p><span>{kind === "weapon" ? "Permanent unlock" : "Consumed at mission start"} · {offer.pricePi} π</span><strong>{selected ? "EQUIPPED" : owned ? kind === "power" ? `${count} AVAILABLE` : "OWNED" : "NOT OWNED"}</strong><div>
-              {owned ? <button className="button button-secondary" type="button" disabled={Boolean(selected)} onClick={() => equip(kind === "weapon" ? offer.id : inventory?.equippedWeapon ?? null, kind === "power" ? offer.id : inventory?.selectedPower ?? null)}>{selected ? "Selected" : "Equip for next mission"}</button> : null}
-              {(kind === "power" || !owned) && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady} onClick={() => orderProduct(`Cryptoid ${offer.name}`, offer.pricePi, { productId: offer.id }, () => { setLoadoutMessage(`${offer.name} purchase confirmed.`); void refreshInventory(); })}>Buy with π</button>}
+            return <article key={offer.id} className="hangar-offer"><h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span>{t(kind === "weapon" ? "Permanent unlock" : "Consumed at mission start")} · {offer.pricePi} π</span><strong>{selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : t("OWNED") : t("NOT OWNED")}</strong><div>
+              {owned ? <button className="button button-secondary" type="button" disabled={Boolean(selected)} onClick={() => equip(kind === "weapon" ? offer.id : inventory?.equippedWeapon ?? null, kind === "power" ? offer.id : inventory?.selectedPower ?? null)}>{t(selected ? "Selected" : "Equip for next mission")}</button> : null}
+              {(kind === "power" || !owned) && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady} onClick={() => orderProduct(`Cryptoid ${offer.name}`, offer.pricePi, { productId: offer.id }, () => { setLoadoutMessage(`${offer.name} ${t("purchase confirmed.")}`); void refreshInventory(); })}>{t("Buy with π")}</button>}
             </div></article>;
           })}
         </div></div>)}
-        {inventory?.equippedWeapon && <button className="text-button" type="button" onClick={() => equip(null, inventory.selectedPower)}>Use free standard laser</button>}
-        {inventory?.selectedPower && <button className="text-button" type="button" onClick={() => equip(inventory.equippedWeapon, null)}>Save bonus for a later mission</button>}
+        {inventory?.equippedWeapon && <button className="text-button" type="button" onClick={() => equip(null, inventory.selectedPower)}>{t('Use free standard laser')}</button>}
+        {inventory?.selectedPower && <button className="text-button" type="button" onClick={() => equip(inventory.equippedWeapon, null)}>{t('Save bonus for a later mission')}</button>}
         {loadoutMessage && <p role="status">{loadoutMessage}</p>}
       </section>}
           </div>
@@ -229,11 +233,11 @@ const Shop = () => {
 
       {activePanel && <div className="info-panel" role="dialog" aria-modal="true" aria-labelledby="info-title">
         <div className="info-panel-content">
-          <button className="close-button" type="button" onClick={() => setActivePanel(null)} aria-label="Close">×</button>
+          <button className="close-button" type="button" onClick={() => setActivePanel(null)} aria-label={t('Close')}>×</button>
           <p className="eyebrow">{activePanel === "how" ? "FIELD GUIDE" : "MISSION LOG"}</p>
-          <h2 id="info-title">{activePanel === "how" ? "How to Play" : "Your Progress"}</h2>
-          <p>{activePanel === "how" ? "Move your ship with the arrow keys or WASD; on touchscreens, drag it in the lower playfield. Your laser fires automatically. Dodge diving Cryptoids, line up shots, and fly into glowing pickups: Shield absorbs a hit, Repair restores a heart, and Overdrive briefly strengthens your shots. You have three hearts; the round ends when they run out." : `Your best score is ${records.bestScore}, your highest sector is ${records.highestSector}, and you have destroyed ${records.totalDestroyed} Cryptoids.`}</p>
-          <button className="button button-primary" type="button" onClick={() => { setActivePanel(null); if (activePanel === "how") enterGame(); }}>Enter mission <span>↗</span></button>
+          <h2 id="info-title">{activePanel === "how" ? t("How to Play") : t("Your Progress")}</h2>
+          <p>{activePanel === "how" ? t("Move your ship with the arrow keys or WASD; on touchscreens, drag it in the lower playfield. Your laser fires automatically. Dodge diving Cryptoids, line up shots, and fly into glowing pickups: Shield absorbs a hit, Repair restores a heart, and Overdrive briefly strengthens your shots. You have three hearts; the round ends when they run out.") : t("Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.").replace("{score}", String(records.bestScore)).replace("{sector}", String(records.highestSector)).replace("{destroyed}", String(records.totalDestroyed))}</p>
+          <button className="button button-primary" type="button" onClick={() => { setActivePanel(null); if (activePanel === "how") enterGame(); }}>{t("Enter mission")} <span>↗</span></button>
         </div>
       </div>}
 
