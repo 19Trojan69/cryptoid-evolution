@@ -229,7 +229,7 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .player-ship .player-core::after { position: absolute; inset: 3px; border: 1px solid #82532b99; border-radius: 50%; content: ''; }
 /* Transparent reference fleet: body, emblem, and hit area remain independent. */
 .cryptoid::after { display: none; }
-.fleet-sprite { position: absolute; inset: 0; background-size: 400% 500%; background-repeat: no-repeat; pointer-events: none; }
+.fleet-sprite { position: absolute; inset: 0; background-size: 400% 500%; background-repeat: no-repeat; clip-path: inset(8%); pointer-events: none; }
 .cryptoid .fleet-sprite { filter: drop-shadow(0 0 6px var(--ship-edge)); }
 .cryptoid .cryptoid-core { top: 53%; width: 30%; border-width: 1px; font-size: clamp(7px, 1vw, 11px); }
 .cryptoid-heavy .cryptoid-core, .cryptoid-elite .cryptoid-core { width: 28%; font-size: 13px; }
@@ -250,7 +250,7 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .ship-choice { display: grid; justify-items: center; gap: 8px; min-width: 102px; padding: 9px; border: 1px solid #59717d; border-radius: 8px; background: #112234; color: #eaf0f7; cursor: pointer; }
 .ship-choice[aria-pressed="true"], .color-choice[aria-pressed="true"] { border-color: #f2c968; box-shadow: 0 0 12px #f2c96866; }
 .ship-preview { position: relative; display: block; width: 72px; height: 72px; }
-.ship-preview i { position: absolute; inset: 0; background-size: 400% 500%; filter: sepia(1) saturate(4.5) hue-rotate(calc(225deg + var(--ship-hue))) drop-shadow(0 0 5px var(--ship-glow)); }
+.ship-preview i { position: absolute; inset: 0; background-size: 400% 500%; clip-path: inset(8%); filter: sepia(1) saturate(4.5) hue-rotate(calc(225deg + var(--ship-hue))) drop-shadow(0 0 5px var(--ship-glow)); }
 .ship-preview b { position: absolute; top: 42%; left: 35%; display: grid; place-items: center; width: 22px; height: 22px; border: 1px solid #f6d47e; border-radius: 50%; background: #eebd5a; color: #3f2058; font: 700 17px Georgia, serif; }
 .color-choice { width: 34px; height: 34px; border: 2px solid transparent; border-radius: 50%; cursor: pointer; }
 @keyframes engine-pulse { to { height: 22px; opacity: .7; } }
