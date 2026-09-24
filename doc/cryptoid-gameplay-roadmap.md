@@ -11,10 +11,10 @@ This tracks implementation against the owner's current **Galaga-inspired CRYPTOI
 | C | Dive/curve/group runs return to their own slot; add legible enemy fire, budgets and dodge play-testing | Existing return/attack paths retained; bounded, telegraphed aimed shots and actual player impact added in current change; long-run dodge test pending |
 | Visual identity | Distinct ship silhouettes by strength, fictional letter coins mounted on enemy hulls, gold mathematical π coin on player ship | Implemented; initial browser visual review complete |
 | Sector depth | Distinct dominant planet per named sector, realistic Earth cutout in Genesis Belt, three smaller planets and restrained parallax behind gameplay | Implemented in current change; browser/mobile visual review pending |
-| D | Each sector contains several sections, every third a non-attacking shooting bonus; 4–6 minute sector pacing and end boss | Pending |
+| D | Each sector contains several sections, every third a non-attacking shooting bonus; 4–6 minute sector pacing and end boss | Every-third-section bonus implemented with timed fly-through targets and tiered score; browser play-test, pacing and end boss pending |
 | E | Five weapon levels, drop duration HUD, companion ship/tractor rescue, combos, shards and permanent progression | Pending |
 
-Normal sections now spawn a finite grid: six ships on narrow screens, fifteen on wider screens. New sections begin after every planned enemy has entered and all survivors have been shot down. Three sections currently share a named sector; the third is temporarily normal until the separate bonus challenge is built. The 4–6 minute target is a tuning goal, not a forced timer. Enemy fire is limited and aimed only once per attack with locked trajectory; bosses remain separate work. The ship has no real-world crypto logo and ammunition does not spend the legacy Coins counter.
+Normal sections now spawn a finite grid: six ships on narrow screens, fifteen on wider screens. New sections begin after every planned enemy has entered and all survivors have been shot down. Three sections share a named sector; the third is a bonus challenge with twelve crossing targets, no enemy fire or collision damage, and a tiered score reward. Missed targets exit the field so the challenge always ends. The 4–6 minute target is a tuning goal, not a forced timer. Enemy fire is limited and aimed only once per attack with locked trajectory; bosses remain separate work. The ship has no real-world crypto logo and ammunition does not spend the legacy Coins counter.
 
 Visual backgrounds are decorative only. They never consume enemy slots or affect hit detection, and their contrast must be checked against laser and pickup colors. The Earth in Genesis Belt uses an original generated texture in `frontend/public/planets/earth.png`; other worlds use palette-specific CSS surfaces. Four fixed planets per sector prevent accumulation during long runs.
 
@@ -34,7 +34,7 @@ Visual backgrounds are decorative only. They never consume enemy slots or affect
 | 10 | Combos and score bonuses | Pending |
 | 11 | Legendary Cryptoids | Pending |
 | 12 | Mini-bosses | Pending |
-| 13 | Bonus phases | Pending |
+| 13 | Bonus phases | Implemented first version: every third section, fly-through targets, no enemy attacks, scoring; browser play-test pending |
 | 14 | Boss sectors | Pending |
 | 15 | Crypto Shards and long-term progression | Pending |
 

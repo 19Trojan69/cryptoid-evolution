@@ -7,6 +7,7 @@ import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerU
 import { advanceShot, FIRE_INTERVAL_MS, MAX_PLAYER_SHOTS, movePlayer, placePlayer, shipHitsEnemy, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
 import { advanceEnemyShot, createEnemyShot, enemyShotHitsPlayer, enemyShotLimit, type EnemyShot } from "./enemyFire";
 import SectorBackdrop from "./SectorBackdrop";
+import { BONUS_ENTRY_GAP_MS, BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusPosition, bonusReward, isBonusSection, type BonusTarget } from "./bonusChallenge";
 
 const BEST_SCORE_KEY = "cryptoid_best_score";
 const HIGHEST_SECTOR_KEY = "cryptoid_highest_sector";
@@ -53,9 +54,9 @@ type Asteroid = {
 };
 
 type Effect = { id: number; x: number; y: number; kind: "hit" | "explosion" | "shatter"; startedAt: number };
-type GameState = { asteroids: Asteroid[]; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; effects: Effect[]; powerUps: PowerUp[]; score: number; coins: number; hearts: number; shieldCharges: number; overdriveMs: number; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
+type GameState = { asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; effects: Effect[]; powerUps: PowerUp[]; score: number; coins: number; hearts: number; shieldCharges: number; overdriveMs: number; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
 
-const createInitialState = (): GameState => ({ asteroids: [], shots: [], enemyShots: [], player: { x: .5, y: .86 }, effects: [], powerUps: [], score: 0, coins: 30, hearts: 3, shieldCharges: 0, overdriveMs: 0, destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: "playing" });
+const createInitialState = (): GameState => ({ asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", shots: [], enemyShots: [], player: { x: .5, y: .86 }, effects: [], powerUps: [], score: 0, coins: 30, hearts: 3, shieldCharges: 0, overdriveMs: 0, destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: "playing" });
 
 const readRecord = (key: string) => Number(window.localStorage.getItem(key) || 0);
 
@@ -126,6 +127,7 @@ const GamePage = () => {
   const stateRef = useRef<GameState>(createInitialState());
   const nextIdRef = useRef(1);
   const formationIndexRef = useRef(0);
+  const bonusIndexRef = useRef(0);
   const sectionSlotsRef = useRef<ReturnType<typeof formationLayout> | null>(null);
   const animationRef = useRef<number | null>(null);
   const lastFrameRef = useRef(0);
@@ -185,10 +187,14 @@ const GamePage = () => {
             state.sector = sectorForSection(state.section);
             state.phase = "SECTOR_INTRO";
             state.asteroids = [];
+            state.bonusTargets = [];
+            state.bonusHits = 0;
+            state.bonusResult = "";
             state.shots = [];
             state.enemyShots = [];
             state.effects = [];
             formationIndexRef.current = 0;
+            bonusIndexRef.current = 0;
             sectionSlotsRef.current = formationLayout(state.section, width, height);
             spawnTimerRef.current = 0;
             sectionElapsedRef.current = 0;
@@ -196,7 +202,16 @@ const GamePage = () => {
             attackCooldownRef.current = 0;
           }
         }
-        if (sectionElapsedRef.current >= SECTION_INTRO_MS && state.phase !== "SECTOR_CLEAR" && formationIndexRef.current < slots.length) {
+        const bonus = isBonusSection(state.section);
+        if (bonus && sectionElapsedRef.current >= SECTION_INTRO_MS && state.phase !== "SECTOR_CLEAR" && bonusIndexRef.current < BONUS_TARGET_COUNT) {
+          spawnTimerRef.current += delta;
+          if (spawnTimerRef.current >= BONUS_ENTRY_GAP_MS) {
+            spawnTimerRef.current -= BONUS_ENTRY_GAP_MS;
+            const index = bonusIndexRef.current++;
+            state.bonusTargets.push({ id: nextIdRef.current++, index, elapsed: 0, ...bonusPosition(index, 0, width, height), radius: 22 });
+          }
+        }
+        if (!bonus && sectionElapsedRef.current >= SECTION_INTRO_MS && state.phase !== "SECTOR_CLEAR" && formationIndexRef.current < slots.length) {
           spawnTimerRef.current += delta;
           if (spawnTimerRef.current >= ENTRY_GAP_MS) {
             spawnTimerRef.current -= ENTRY_GAP_MS;
@@ -204,7 +219,7 @@ const GamePage = () => {
           }
         }
         attackCooldownRef.current += delta;
-        if (formationIndexRef.current === slots.length && state.asteroids.length > 0 && !state.asteroids.some(asteroid => asteroid.attackPattern !== null) && attackCooldownRef.current >= 1_350) {
+        if (!bonus && formationIndexRef.current === slots.length && state.asteroids.length > 0 && !state.asteroids.some(asteroid => asteroid.attackPattern !== null) && attackCooldownRef.current >= 1_350) {
           const ready = state.asteroids.filter(asteroid => asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration);
           if (ready.length === state.asteroids.length) {
             let pattern = chooseAttackPattern(attackNumberRef.current++, elapsedRef.current);
@@ -241,6 +256,10 @@ const GamePage = () => {
           if (next.y >= -next.radius) nextAsteroids.push({ ...next, cloaked: isGhostCloaked(next.type, next.attackPattern === null && next.entryElapsed >= next.entryDuration && next.formationElapsed >= next.formationDuration, elapsedRef.current) });
         });
         state.asteroids = nextAsteroids;
+        state.bonusTargets = state.bonusTargets.map(target => {
+          const elapsed = target.elapsed + delta;
+          return { ...target, elapsed, ...bonusPosition(target.index, elapsed, width, height) };
+        }).filter(target => target.elapsed < BONUS_FLIGHT_MS);
         const incomingShots: EnemyShot[] = [];
         for (const shot of state.enemyShots) {
           const moved = advanceEnemyShot(shot, delta);
@@ -272,6 +291,14 @@ const GamePage = () => {
         for (const previous of state.shots) {
           const shot = advanceShot(previous, delta);
           if (shot.y < -10) continue;
+          const bonusTarget = state.bonusTargets.find(target => shotHitsEnemy(shot, { ...target, cloaked: false }));
+          if (bonusTarget) {
+            state.bonusTargets = state.bonusTargets.filter(target => target.id !== bonusTarget.id);
+            state.bonusHits += 1;
+            state.score += 150;
+            state.effects.push({ id: nextIdRef.current++, x: bonusTarget.x, y: bonusTarget.y, kind: "explosion", startedAt: time });
+            continue;
+          }
           const enemy = state.asteroids.find(item => shotHitsEnemy(shot, item));
           if (!enemy) { remainingShots.push(shot); continue; }
           enemy.health = Math.max(0, enemy.health - shot.damage);
@@ -286,7 +313,15 @@ const GamePage = () => {
           if (drop) { nextIdRef.current += 1; dropsCreatedRef.current += 1; state.powerUps.push(drop); }
         }
         state.shots = remainingShots;
-        state.phase = sectionPhase({ introMs: sectionElapsedRef.current, spawned: formationIndexRef.current, total: (sectionSlotsRef.current ?? slots).length, alive: state.asteroids.length, ready: state.asteroids.filter(asteroid => asteroid.entryElapsed >= asteroid.entryDuration && (asteroid.formationElapsed >= asteroid.formationDuration || asteroid.attackPattern !== null)).length, returning: state.asteroids.some(asteroid => asteroid.attackPattern !== null && asteroid.attackElapsed >= attackTime(asteroid)), attacking: state.asteroids.some(asteroid => asteroid.attackPattern !== null) });
+        const previousPhase = state.phase;
+        state.phase = bonus
+          ? sectionPhase({ introMs: sectionElapsedRef.current, spawned: bonusIndexRef.current, total: BONUS_TARGET_COUNT, alive: state.bonusTargets.length, ready: state.bonusTargets.length, returning: false, attacking: false })
+          : sectionPhase({ introMs: sectionElapsedRef.current, spawned: formationIndexRef.current, total: (sectionSlotsRef.current ?? slots).length, alive: state.asteroids.length, ready: state.asteroids.filter(asteroid => asteroid.entryElapsed >= asteroid.entryDuration && (asteroid.formationElapsed >= asteroid.formationDuration || asteroid.attackPattern !== null)).length, returning: state.asteroids.some(asteroid => asteroid.attackPattern !== null && asteroid.attackElapsed >= attackTime(asteroid)), attacking: state.asteroids.some(asteroid => asteroid.attackPattern !== null) });
+        if (bonus && state.phase === "SECTOR_CLEAR" && previousPhase !== "SECTOR_CLEAR") {
+          const reward = bonusReward(state.bonusHits);
+          state.bonusResult = reward.label;
+          state.score += reward.points;
+        }
         if (state.phase === "SECTOR_CLEAR") state.enemyShots = [];
         state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "hit" ? 230 : 430));
         if (state.hearts === 0) {
@@ -296,7 +331,7 @@ const GamePage = () => {
             recordsSavedRef.current = true;
           }
         }
-        setGame({ ...state, asteroids: [...state.asteroids], shots: [...state.shots], enemyShots: [...state.enemyShots], effects: [...state.effects], powerUps: [...state.powerUps] });
+        setGame({ ...state, asteroids: [...state.asteroids], bonusTargets: [...state.bonusTargets], shots: [...state.shots], enemyShots: [...state.enemyShots], effects: [...state.effects], powerUps: [...state.powerUps] });
       }
       animationRef.current = window.requestAnimationFrame(loop);
     };
@@ -327,6 +362,7 @@ const GamePage = () => {
     stateRef.current = createInitialState();
     recordsSavedRef.current = false;
     formationIndexRef.current = 0;
+    bonusIndexRef.current = 0;
     sectionSlotsRef.current = null;
     spawnTimerRef.current = 0;
     sectionElapsedRef.current = 0;
@@ -364,9 +400,11 @@ const GamePage = () => {
           <div className="hud-stat"><span>Section</span><strong>{sectionInSector(game.section)} / 3</strong></div>
           <button className="game-control pause-control" type="button" onClick={() => { stateRef.current.status = game.status === "paused" ? "playing" : "paused"; setGame({ ...stateRef.current }); }} aria-label={game.status === "paused" ? "Resume" : "Pause"}>{game.status === "paused" ? "▶" : "Ⅱ"}</button>
         </header>
-        <div className="game-label">SECTOR {String(game.sector).padStart(2, "0")} <span>· {sectorName(game.sector)} · SECTION {sectionInSector(game.section)}</span></div>
+        <div className="game-label">SECTOR {String(game.sector).padStart(2, "0")} <span>· {sectorName(game.sector)} · {isBonusSection(game.section) ? "BONUS CHALLENGE" : `SECTION ${sectionInSector(game.section)}`}</span></div>
+        {isBonusSection(game.section) && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">BONUS TARGETS {game.bonusHits} / {BONUS_TARGET_COUNT} · NO ENEMY FIRE</div>}
         {(game.shieldCharges > 0 || game.overdriveMs > 0) && <div className="power-status" aria-live="polite">{game.shieldCharges > 0 && <span>◇ SHIELD {game.shieldCharges}</span>}{game.overdriveMs > 0 && <span>ϟ OVERDRIVE {Math.ceil(game.overdriveMs / 1_000)}s</span>}</div>}
-        {game.status === "playing" && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className="sector-banner" aria-live="polite"><span>{game.phase === "SECTOR_CLEAR" ? "SECTION CLEAR" : `SECTOR ${String(game.sector).padStart(2, "0")}`}</span><strong>{game.phase === "SECTOR_CLEAR" ? `SECTION ${sectionInSector(game.section)} COMPLETE` : sectorName(game.sector)}</strong></div>}
+        {game.status === "playing" && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className="sector-banner" aria-live="polite"><span>{game.phase === "SECTOR_CLEAR" ? isBonusSection(game.section) ? "BONUS COMPLETE" : "SECTION CLEAR" : isBonusSection(game.section) ? "BONUS CHALLENGE" : `SECTOR ${String(game.sector).padStart(2, "0")}`}</span><strong>{game.phase === "SECTOR_CLEAR" ? isBonusSection(game.section) ? `${game.bonusResult} · ${game.bonusHits}/${BONUS_TARGET_COUNT}` : `SECTION ${sectionInSector(game.section)} COMPLETE` : isBonusSection(game.section) ? "HIT THE FLYING TARGETS" : sectorName(game.sector)}</strong></div>}
+        {game.bonusTargets.map(target => <div key={target.id} className="asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light bonus-ship" style={{ left: target.x, top: target.y, transform: "translate(-50%, -50%)" }}><i className="ship-engine ship-engine-left" /><i className="ship-engine ship-engine-right" /><div className="asteroid-shape" /><i className="ship-cockpit" /><span className="cryptoid-core"><b>{["X", "Z", "R"][target.index % 3]}</b></span></div>)}
         {game.asteroids.map(asteroid => <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ left: asteroid.x, top: asteroid.y, transform: `translate(-50%, -50%) rotate(${asteroid.rotation}deg)` }}><i className="ship-engine ship-engine-left" /><i className="ship-engine ship-engine-right" /><div className="asteroid-shape" /><i className="ship-cockpit" /><span className="cryptoid-core"><b>{asteroid.faction}</b></span><span className="health-bar"><b style={{ width: `${(asteroid.health / asteroid.maxHealth) * 100}%` }} /></span></div>)}
         {game.powerUps.map(pickup => <div key={pickup.id} className={`power-up power-up-${pickup.type}`} title={powerUpNames[pickup.type]} style={{ left: pickup.x, top: pickup.y }}><span>{powerUpSymbols[pickup.type]}</span></div>)}
         {game.shots.map(shot => <div key={shot.id} className={`player-laser${shot.empowered ? " player-laser-overdrive" : ""}`} style={{ left: shot.x, top: shot.y }} />)}
