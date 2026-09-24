@@ -26,3 +26,10 @@ export const shotHitsEnemy = (shot: PlayerShot, enemy: { x: number; y: number; r
 
 export const shipHitsEnemy = (player: PlayerPosition, width: number, height: number, enemy: { x: number; y: number; radius: number }) =>
   Math.hypot(player.x * width - enemy.x, player.y * height - enemy.y) < PLAYER_RADIUS + enemy.radius * 0.65;
+
+// A ship's attack can make physical contact only once, including a contact
+// absorbed during the player's brief post-hit invulnerability window.
+export const contactWithEnemy = (player: PlayerPosition, width: number, height: number, enemy: { x: number; y: number; radius: number }, attacking: boolean, collidedThisAttack: boolean, cooldownMs: number) => {
+  const connected = attacking && !collidedThisAttack && shipHitsEnemy(player, width, height, enemy);
+  return { connected, damage: connected && cooldownMs <= 0 ? 1 : 0 };
+};

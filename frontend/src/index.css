@@ -246,6 +246,8 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .player-ship-starter { filter: drop-shadow(0 0 9px #aeb7c4); }
 .player-ship-starter .fleet-sprite { filter: grayscale(1) brightness(1.12) drop-shadow(0 0 6px #aeb7c4); }
 .player-ship-starter .player-engine { background: linear-gradient(#fff, #9eafc5, transparent); box-shadow: 0 4px 12px #9eafc5; }
+.player-ship.player-ship-hurt { opacity: .68; filter: drop-shadow(0 0 17px #ff7083); }
+.player-ship.player-ship-shielded { filter: drop-shadow(0 0 16px #8feeff); }
 .ship-selector { margin: 18px clamp(18px, 5vw, 72px) 58px; padding: 22px; border: 1px solid rgba(157, 129, 240, .33); background: rgba(12, 24, 44, .72); }
 .ship-selector h2 { margin: 0 0 8px; }
 .ship-selector p { color: #aabac7; }
@@ -272,6 +274,7 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .impact-effect { position: absolute; z-index: 2; width: 35px; height: 35px; margin: -17px 0 0 -17px; border: 2px solid var(--cyan); border-radius: 50%; animation: hit-flash .23s ease-out both; pointer-events: none; }
 .impact-effect.explosion { width: 85px; height: 85px; margin: -42px 0 0 -42px; border-color: var(--gold); background: radial-gradient(circle, rgba(245, 200, 109, .75) 0 9%, rgba(79, 228, 239, .22) 20%, transparent 64%); animation: explode .43s ease-out both; }
 .impact-effect.shatter { width: 72px; height: 72px; margin: -36px 0 0 -36px; border-color: #9b9fff; background: conic-gradient(from 30deg, transparent 0 12%, rgba(109, 227, 244, .65) 12% 16%, transparent 16% 46%, rgba(164, 142, 255, .7) 46% 53%, transparent 53% 79%, rgba(109, 227, 244, .65) 79% 85%, transparent 85%); animation: explode .43s ease-out both; }
+.impact-effect.shield { width: 54px; height: 54px; margin: -27px 0 0 -27px; border-color: #8feeff; background: radial-gradient(circle, #8feeff44, transparent 70%); box-shadow: 0 0 17px #8feeff; animation: explode .43s ease-out both; }
 .impact-effect span, .impact-effect span::before, .impact-effect span::after { position: absolute; top: 50%; left: 50%; width: 55%; height: 2px; background: var(--cyan); content: ''; }
 .impact-effect span { transform: translate(-50%, -50%) rotate(45deg); }
 .impact-effect span::before { transform: translate(-50%, -50%) rotate(90deg); }

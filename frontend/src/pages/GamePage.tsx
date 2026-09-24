@@ -4,7 +4,7 @@ import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, t
 import { ENTRY_GAP_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, formationLayout, sectionInSector, sectionPhase, sectorForSection, sectorName, type SectorPhase } from "./sectorManager";
 import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpNames, powerUpSymbols, receiveImpacts, type PowerUp } from "./powerUps";
-import { advanceShot, FIRE_INTERVAL_MS, MAX_PLAYER_SHOTS, movePlayer, placePlayer, shipHitsEnemy, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
+import { advanceShot, contactWithEnemy, FIRE_INTERVAL_MS, MAX_PLAYER_SHOTS, movePlayer, placePlayer, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
 import { advanceEnemyShot, createEnemyShot, enemyShotHitsPlayer, enemyShotLimit, type EnemyShot } from "./enemyFire";
 import SectorBackdrop from "./SectorBackdrop";
 import { BONUS_ENTRY_GAP_MS, BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusPosition, bonusReward, isBonusSection, type BonusTarget } from "./bonusChallenge";
@@ -53,9 +53,10 @@ type Asteroid = {
   attackElapsed: number;
   returnElapsed: number;
   firedThisAttack: boolean;
+  collidedThisAttack: boolean;
 };
 
-type Effect = { id: number; x: number; y: number; kind: "hit" | "explosion" | "shatter"; startedAt: number };
+type Effect = { id: number; x: number; y: number; kind: "hit" | "shield" | "explosion" | "shatter"; startedAt: number; target?: "player" };
 type GameState = { asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; effects: Effect[]; powerUps: PowerUp[]; score: number; coins: number; hearts: number; shieldCharges: number; overdriveMs: number; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
 
 const createInitialState = (): GameState => ({ asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: .86 }, effects: [], powerUps: [], score: 0, coins: 30, hearts: 3, shieldCharges: 0, overdriveMs: 0, destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: "playing" });
@@ -77,7 +78,7 @@ const spawnAsteroid = (id: number, width: number, formationIndex: number, sector
   const entrySide = target.entrySide;
   const availableWidth = Math.max(1, width - profile.radius * 2);
   const entryStartX = entrySide === 1 ? profile.radius + availableWidth * 0.08 : width - profile.radius - availableWidth * 0.08;
-  return { id, x: entryStartX, y: -profile.radius, size, ...profile, health: profile.health, maxHealth: profile.health, cloaked: false, rotation: 0, rotationSpeed: 0, entryElapsed: 0, entryStartX, entryTargetX: target.x, entryTargetY: target.y, entrySide, formationSlot: target.index, formationSlotCount: slots.length, formationElapsed: 0, formationDuration: 1_200, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false };
+  return { id, x: entryStartX, y: -profile.radius, size, ...profile, health: profile.health, maxHealth: profile.health, cloaked: false, rotation: 0, rotationSpeed: 0, entryElapsed: 0, entryStartX, entryTargetX: target.x, entryTargetY: target.y, entrySide, formationSlot: target.index, formationSlotCount: slots.length, formationElapsed: 0, formationDuration: 1_200, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, collidedThisAttack: false };
 };
 
 const attackTime = (asteroid: Asteroid) => asteroid.attackPattern === null ? 0 : attackDuration(asteroid.attackPattern) * asteroid.attackPace;
@@ -104,7 +105,7 @@ const moveAsteroid = (asteroid: Asteroid, delta: number, width: number, height: 
     const elapsed = Math.min(RETURN_DURATION_MS, asteroid.returnElapsed + delta);
     const progress = elapsed / RETURN_DURATION_MS;
     if (elapsed === RETURN_DURATION_MS) {
-      return { ...asteroid, x: keepInField(asteroid.entryTargetX), y: asteroid.entryTargetY, formationElapsed: 0, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, rotation };
+      return { ...asteroid, x: keepInField(asteroid.entryTargetX), y: asteroid.entryTargetY, formationElapsed: 0, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, collidedThisAttack: false, rotation };
     }
     const returnX = diveEndX + (asteroid.entryTargetX - diveEndX) * progress - asteroid.entrySide * Math.min(width * 0.09, 85) * Math.sin(Math.PI * progress);
     const returnY = diveEndY + (asteroid.entryTargetY - diveEndY) * progress;
@@ -243,7 +244,7 @@ const GamePage = () => {
               const index = selectedIds.indexOf(asteroid.id);
               if (index < 0) return asteroid;
               const groupDelay = pattern === "double" ? index * 350 : pattern === "vDive" ? index * 180 : 0;
-              return { ...asteroid, attackPattern: pattern, attackDelay: 650 + groupDelay, attackLane: index - (groupSize - 1) / 2, firedThisAttack: false };
+              return { ...asteroid, attackPattern: pattern, attackDelay: 650 + groupDelay, attackLane: index - (groupSize - 1) / 2, firedThisAttack: false, collidedThisAttack: false };
             });
             attackCooldownRef.current = 0;
           }
@@ -261,10 +262,13 @@ const GamePage = () => {
               next = { ...next, firedThisAttack: true };
             }
           }
-          if (next.attackPattern !== null && next.attackDelay === 0 && !next.cloaked && shipHitsEnemy(state.player, width, height, next) && impactCooldownRef.current === 0) {
-            heartsLost += 1;
-            impactCooldownRef.current = IMPACT_COOLDOWN_MS;
-            state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: "hit", startedAt: time });
+          const contact = contactWithEnemy(state.player, width, height, next, next.attackPattern !== null && next.attackDelay === 0 && !next.cloaked, next.collidedThisAttack, impactCooldownRef.current);
+          if (contact.connected) {
+            next = { ...next, collidedThisAttack: true };
+            if (contact.damage) {
+              heartsLost += contact.damage;
+              impactCooldownRef.current = IMPACT_COOLDOWN_MS;
+            }
           }
           if (next.y >= -next.radius) nextAsteroids.push({ ...next, cloaked: isGhostCloaked(next.type, next.attackPattern === null && next.entryElapsed >= next.entryDuration && next.formationElapsed >= next.formationDuration, elapsedRef.current) });
         });
@@ -292,14 +296,17 @@ const GamePage = () => {
             if (impactCooldownRef.current === 0) {
               heartsLost += 1;
               impactCooldownRef.current = IMPACT_COOLDOWN_MS;
-              state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: "hit", startedAt: time });
             }
             continue;
           }
           incomingShots.push(moved);
         }
         state.enemyShots = incomingShots;
-        Object.assign(state, receiveImpacts(state, heartsLost));
+        if (heartsLost > 0) {
+          const absorbed = state.shieldCharges > 0;
+          Object.assign(state, receiveImpacts(state, heartsLost));
+          state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: absorbed ? "shield" : "hit", startedAt: time, target: "player" });
+        }
         state.powerUps = movePowerUps(state.powerUps, delta, height);
         state.powerUps = state.powerUps.filter(pickup => {
           if (Math.hypot(pickup.x - state.player.x * width, pickup.y - state.player.y * height) > 34) return true;
@@ -456,7 +463,7 @@ const GamePage = () => {
         {game.shots.map(shot => <div key={shot.id} className={`player-laser${shot.empowered ? " player-laser-overdrive" : ""}`} style={{ left: shot.x, top: shot.y }} />)}
         {game.enemyShots.map(shot => <div key={shot.id} className="enemy-laser" style={{ left: shot.x, top: shot.y }} />)}
         {game.effects.map(effect => <div key={effect.id} className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y }}><span /></div>)}
-        <div className={`player-ship${shipSelection.skin.price === 0 ? " player-ship-starter" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-hue": shipSelection.color.hue, "--ship-glow": shipSelection.color.glow } as CSSProperties} aria-label="Your Cryptoid ship"><div className="fleet-sprite" style={spriteStyle(shipSelection.skin.sprite)} /><div className="player-core">π</div><div className="player-engine player-engine-left" /><div className="player-engine player-engine-right" /></div>
+        <div className={`player-ship${shipSelection.skin.price === 0 ? " player-ship-starter" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "hit") ? " player-ship-hurt" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-hue": shipSelection.color.hue, "--ship-glow": shipSelection.color.glow } as CSSProperties} aria-label="Your Cryptoid ship"><div className="fleet-sprite" style={spriteStyle(shipSelection.skin.sprite)} /><div className="player-core">π</div><div className="player-engine player-engine-left" /><div className="player-engine player-engine-right" /></div>
         <div className="game-tip">← → ↑ ↓ / drag to move · Auto fire</div>
         {game.status === "paused" && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">MISSION PAUSED</p><h1>Hold the line.</h1><p>The asteroids are waiting.</p><button className="button button-primary" type="button" onClick={() => { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); }}>Resume mission <span>▶</span></button></div></div>}
         {game.status === "game-over" && <div className="game-overlay"><div className="game-modal game-over-modal"><p className="eyebrow">MISSION COMPLETE</p><h1>Game Over</h1><div className="game-over-stats"><span><b>{game.score}</b>Score</span><span><b>{game.destroyed}</b>Destroyed</span><span><b>{game.sector}</b>Sector</span></div><div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>Play Again <span>↗</span></button><button className="button button-secondary" type="button" onClick={goHome}>Home</button></div></div></div>}
