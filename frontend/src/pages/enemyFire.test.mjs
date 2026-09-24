@@ -22,3 +22,13 @@ test("enemy shot locks its direction so the player can dodge", () => {
   assert.equal(enemyShotHitsPlayer({ ...shot, x: 400, y: 680 }, { x: .5, y: .85 }, 800, 800), true);
   assert.equal(enemyShotHitsPlayer({ ...shot, x: 460, y: 680 }, { x: .5, y: .85 }, 800, 800), false);
 });
+
+test("a stationary player is on the flight path even from the far side", () => {
+  const player = { x: .8, y: .85 };
+  const shot = createEnemyShot(3, 45, 170, player, 375, 800);
+  assert.ok(shot);
+  const timeToPlayer = (player.y * 800 - shot.y) / shot.vy;
+  const arrival = advanceEnemyShot(shot, timeToPlayer);
+  assert.ok(Math.abs(arrival.x - player.x * 375) < .001);
+  assert.ok(shot.vx > 0);
+});

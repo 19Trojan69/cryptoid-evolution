@@ -31,6 +31,10 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 .shop-overlay { position: fixed; z-index: 8; inset: 0; display: grid; place-items: center; padding: clamp(8px, 3vw, 25px); background: rgba(1, 9, 19, .88); backdrop-filter: blur(9px); }
 .shop-modal { display: flex; flex-direction: column; width: min(100%, 1120px); max-height: min(900px, calc(100dvh - 16px)); overflow: hidden; border: 1px solid rgba(133, 217, 224, .45); background: #081b2c; box-shadow: 0 20px 80px #0009; }
 .shop-modal-header { position: relative; display: flex; align-items: center; min-height: 50px; padding: 0 55px 0 20px; border-bottom: 1px solid var(--line); color: var(--gold); font: 12px 'DM Mono', monospace; letter-spacing: .13em; }
+.shop-modal-header strong { min-width: 0; }
+.shop-language-picker { display: flex; align-items: center; gap: 6px; margin-left: auto; letter-spacing: 0; }
+.shop-language-picker select { max-width: 116px; padding: 5px; border: 1px solid #82bdd775; border-radius: 7px; background: #111e30; color: #e9f4ff; }
+@media (max-width: 600px) { .shop-modal-header { padding-left: 12px; } .shop-language-picker label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); } }
 .shop-tabs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-bottom: 1px solid var(--line); }
 .shop-tabs button { min-height: 46px; border: 0; border-right: 1px solid var(--line); background: transparent; color: #b2cbd3; cursor: pointer; font-size: 12px; }
 .shop-tabs button[aria-pressed="true"] { background: rgba(55, 200, 192, .15); box-shadow: inset 0 -3px var(--cyan); color: white; }
@@ -168,15 +172,17 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .space-orbit { position: absolute; width: min(57vw, 650px); aspect-ratio: 2.6; left: var(--main-x); top: var(--main-y); border: 1px solid var(--rim); border-radius: 50%; opacity: .13; transform: translate(-50%, -50%) rotate(-24deg); }
 .space-orbit-two { width: min(48vw, 520px); aspect-ratio: 1.7; transform: translate(-50%, -50%) rotate(30deg); opacity: .09; }
 .space-world { position: absolute; aspect-ratio: 1; border-radius: 50%; box-shadow: 0 0 14px #84a5ca38; }
-.space-world-surface { position: absolute; z-index: 1; inset: 0; border-radius: 50%; background-position: center; background-size: cover; background-repeat: no-repeat; animation: world-turn 270s linear infinite; }
+.space-world-surface { position: absolute; z-index: 1; inset: 0; border-radius: 50%; background-color: #293850; background-position: center; background-size: cover; background-repeat: no-repeat; animation: world-turn 270s linear infinite; }
 .space-world-surface::after { position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(circle at 29% 25%, #fff2, transparent 47%, #03091b77 94%); content: ''; }
 .space-world-secondary .space-world-surface { animation-duration: 330s; animation-direction: reverse; }
 .space-world-near .space-world-surface { animation-duration: 240s; }
 .space-world-distant .space-world-surface { animation-duration: 360s; animation-direction: reverse; }
 @keyframes world-turn { to { transform: rotate(360deg); } }
-.space-world.planet-gas::before { position: absolute; z-index: 0; left: -27%; top: 34%; width: 154%; height: 32%; box-sizing: border-box; border: 4px solid #d9b99fbd; border-top-color: #f1d4addd; border-right-color: #aa8ea8a8; border-radius: 50%; transform: rotate(-24deg); animation: saturn-ring-turn 110s linear infinite; content: ''; }
-@keyframes saturn-ring-turn { to { transform: rotate(336deg); } }
-.space-scene-paused .space-world-surface, .space-scene-paused .space-world.planet-gas::before { animation-play-state: paused; }
+.space-world.planet-gas::before, .space-world.planet-gas .saturn-ring-front { position: absolute; left: -28%; top: 33%; width: 156%; height: 34%; box-sizing: border-box; border: 4px solid #b6a9a2ba; border-top-color: #e4d4bbdf; border-bottom-color: #857e8ba8; border-radius: 50%; transform: rotate(-22deg); animation: saturn-ring-turn 24s ease-in-out infinite; }
+.space-world.planet-gas::before { z-index: 0; content: ''; }
+.space-world.planet-gas .saturn-ring-front { z-index: 2; clip-path: inset(50% -2px -2px -2px); border-bottom-color: #e7d2b8e6; }
+@keyframes saturn-ring-turn { 50% { transform: rotate(-12deg); } }
+.space-scene-paused .space-world-surface, .space-scene-paused .space-world.planet-gas::before, .space-scene-paused .saturn-ring-front { animation-play-state: paused; }
 .space-world-primary { width: clamp(185px, 29vw, 390px); left: var(--main-x); top: var(--main-y); opacity: .58; transform: translate3d(-50%, -50%, 0) translate3d(var(--parallax-x), var(--parallax-y), 0); }
 .space-scene-1 .space-world-primary { opacity: .65; }
 .space-world-secondary { width: clamp(80px, 12vw, 150px); left: 13%; top: 25%; opacity: .7; transform: translate3d(-50%, -50%, 0) translate3d(var(--parallax-far-x), var(--parallax-far-y), 0); }
@@ -195,7 +201,7 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .space-world.planet-ocean .space-world-surface { background-image: url('/planets/ocean.svg'); }
 @media (max-width: 560px) { .space-world-primary { width: clamp(155px, 46vw, 245px); opacity: .45; } .space-scene-1 .space-world-primary { opacity: .5; } .space-world-secondary { width: 75px; top: 31%; } .space-world-near { width: 53px; top: 23%; } .space-world-distant { width: 30px; } .space-orbit { width: 85vw; } }
 @media (max-width: 700px) { .starfield { transform: none; } .space-scene { --parallax-x: 0px !important; --parallax-y: 0px !important; --parallax-far-x: 0px !important; --parallax-far-y: 0px !important; --parallax-near-x: 0px !important; --parallax-near-y: 0px !important; } .space-haze { filter: none; opacity: .2; } .game-hud { backdrop-filter: none; } }
-@media (prefers-reduced-motion: reduce) { .space-world-surface, .space-world.planet-gas::before { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .space-world-surface, .space-world.planet-gas::before, .space-world.planet-gas .saturn-ring-front { animation: none; } }
 .game-hud { position: absolute; z-index: 3; top: 0; left: 0; right: 0; display: grid; grid-template-columns: minmax(120px, 1fr) repeat(6, minmax(65px, 100px)) 38px; align-items: center; gap: 12px; padding: max(16px, env(safe-area-inset-top)) clamp(14px, 4vw, 54px); border-bottom: 1px solid rgba(123, 205, 199, .17); background: rgba(3, 14, 27, .66); backdrop-filter: blur(8px); }
 .hud-actions { display: flex; align-items: center; gap: 4px; }
 .hud-stat { display: flex; flex-direction: column; gap: 5px; text-align: center; }

@@ -60,3 +60,11 @@ test("visible ships collide in every phase; cooldown and dive state prevent repe
   assert.deepEqual(resolvePlayerDamage({ hearts: 3, shieldCharges: 1, overdriveMs: 0 }, first.damage, true), { hearts: 3, shieldCharges: 0, overdriveMs: 0 });
   assert.deepEqual(resolvePlayerDamage({ hearts: 3, shieldCharges: 1, overdriveMs: 0 }, first.damage, false), { hearts: 2, shieldCharges: 1, overdriveMs: 0 });
 });
+
+test("a ship crossing the player between two frames causes one impact", () => {
+  const player = { x: .5, y: .85 };
+  const before = { x: 400, y: 400 };
+  const after = { x: 400, y: 620, radius: 25 };
+  assert.deepEqual(contactWithEnemy(player, 800, 600, after, true, false, 0, before), { connected: true, damage: 1 });
+  assert.deepEqual(contactWithEnemy(player, 800, 600, after, true, true, 0, before), { connected: false, damage: 0 });
+});

@@ -25,7 +25,7 @@ const SectorBackdrop = ({ sector, player, paused }: { sector: number; player: Pl
       <div className="space-haze" />
       <div className="space-orbit space-orbit-one" />
       <div className="space-orbit space-orbit-two" />
-      {planetTypes.map((planet, index) => <div key={index} className={`space-world ${["space-world-distant", "space-world-secondary", "space-world-primary", "space-world-near"][index]} planet-${planet}`}><span className="space-world-surface" /></div>)}
+      {planetTypes.map((planet, index) => <div key={index} className={`space-world ${["space-world-distant", "space-world-secondary", "space-world-primary", "space-world-near"][index]} planet-${planet}`}><span className="space-world-surface" />{planet === "gas" && <span className="saturn-ring-front" />}</div>)}
     </div>
   );
 };

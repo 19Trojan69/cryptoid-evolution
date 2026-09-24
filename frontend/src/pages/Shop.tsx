@@ -36,6 +36,7 @@ const Shop = () => {
     let current = true;
     if (shopView === "leaders") {
       axiosClient.get<{ leaders: Leader[] }>("/leaderboard/top").then(({ data }) => {
+        if (!Array.isArray(data?.leaders)) throw new Error("Invalid leaderboard response");
         if (current) { setLeaders(data.leaders); setLeadersStatus("ready"); }
       }).catch(() => { if (current) setLeadersStatus("error"); });
     }
@@ -154,7 +155,7 @@ const Shop = () => {
         isLoading={isAuthLoading}
       />
 
-      <div className="language-picker"><label htmlFor="language-select">{t("Language")}</label><select id="language-select" aria-label={t("Language")} value={locale} onChange={event => choose(event.target.value as Locale)}>{Object.entries(languages).map(([code, label]) => <option key={code} value={code}>{label}</option>)}</select></div>
+      {!shopView && <div className="language-picker"><label htmlFor="language-select">{t("Language")}</label><select id="language-select" aria-label={t("Language")} value={locale} onChange={event => choose(event.target.value as Locale)}>{Object.entries(languages).map(([code, label]) => <option key={code} value={code}>{label}</option>)}</select></div>}
       <section className="hero-section">
         <Starfield sector={1} player={{ x: .5, y: .8 }} paused={false} />
         <div className="hero-copy">
@@ -189,7 +190,7 @@ const Shop = () => {
 
       {shopView && <div className="shop-overlay" role="dialog" aria-modal="true" aria-label={t('Shop and hangar')}>
         <div className="shop-modal">
-          <div className="shop-modal-header"><strong>{t("Shop / Hangar")}</strong><button className="close-button" type="button" onClick={() => setShopView(null)} aria-label={t('Close shop')}>×</button></div>
+        <div className="shop-modal-header"><strong>{t("Shop / Hangar")}</strong><div className="shop-language-picker"><label htmlFor="shop-language-select">{t("Language")}</label><select id="shop-language-select" aria-label={t("Language")} value={locale} onChange={event => choose(event.target.value as Locale)}>{Object.entries(languages).map(([code, label]) => <option key={code} value={code}>{label}</option>)}</select></div><button className="close-button" type="button" onClick={() => setShopView(null)} aria-label={t('Close shop')}>×</button></div>
           <nav className="shop-tabs" aria-label={t('Shop sections')}>
             {([ ["ships", "Ships"], ["weapons", "Weapons"], ["powers", "Power-ups"], ["progress", "Progress"], ["leaders", "Top 100"] ] as const).map(([view, label]) => <button key={view} type="button" aria-pressed={shopView === view} onClick={() => { if (view === "leaders") setLeadersStatus("loading"); setShopView(view); }}>{t(label)}</button>)}
           </nav>

@@ -38,9 +38,17 @@ export const shotHitsEnemy = (shot: PlayerShot, enemy: { x: number; y: number; r
 export const shipHitsEnemy = (player: PlayerPosition, width: number, height: number, enemy: { x: number; y: number; radius: number }) =>
   Math.hypot(player.x * width - enemy.x, player.y * height - enemy.y) < PLAYER_CONTACT_RADIUS + enemy.radius;
 
+export const shipCrossesPlayer = (player: PlayerPosition, width: number, height: number, from: { x: number; y: number }, to: { x: number; y: number; radius: number }) => {
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const travel = dx * dx + dy * dy;
+  const progress = travel ? Math.max(0, Math.min(1, ((player.x * width - from.x) * dx + (player.y * height - from.y) * dy) / travel)) : 1;
+  return Math.hypot(player.x * width - (from.x + dx * progress), player.y * height - (from.y + dy * progress)) < PLAYER_CONTACT_RADIUS + to.radius;
+};
+
 // Visible ships collide in entry, formation, attack and return. The game passes
 // collidedThisAttack only during a dive so one run cannot deal repeated damage.
-export const contactWithEnemy = (player: PlayerPosition, width: number, height: number, enemy: { x: number; y: number; radius: number }, visible: boolean, collidedThisAttack: boolean, cooldownMs: number) => {
-  const connected = visible && !collidedThisAttack && shipHitsEnemy(player, width, height, enemy);
+export const contactWithEnemy = (player: PlayerPosition, width: number, height: number, enemy: { x: number; y: number; radius: number }, visible: boolean, collidedThisAttack: boolean, cooldownMs: number, previous?: { x: number; y: number }) => {
+  const connected = visible && !collidedThisAttack && (previous ? shipCrossesPlayer(player, width, height, previous, enemy) : shipHitsEnemy(player, width, height, enemy));
   return { connected, damage: connected && cooldownMs <= 0 ? 1 : 0 };
 };

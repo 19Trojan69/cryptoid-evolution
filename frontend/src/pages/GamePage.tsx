@@ -371,6 +371,7 @@ const GamePage = () => {
         }
         const nextAsteroids: Asteroid[] = [];
         let heartsLost = 0;
+        let damageTaken = false;
         state.asteroids.forEach(asteroid => {
           let next = moveAsteroid(asteroid, delta, width, height);
           if (asteroid.attackPattern !== null && next.attackPattern === null) attackCooldownRef.current = 0;
@@ -383,7 +384,7 @@ const GamePage = () => {
             }
           }
           const activeAttack = next.attackPattern !== null && next.attackDelay === 0;
-          const contact = contactWithEnemy(state.player, width, height, next, !next.cloaked && next.x >= 0 && next.x <= width && next.y >= 0 && next.y <= height, activeAttack && next.collidedThisAttack, impactCooldownRef.current);
+          const contact = contactWithEnemy(state.player, width, height, next, !next.cloaked && next.x >= 0 && next.x <= width && next.y >= 0 && next.y <= height, activeAttack && next.collidedThisAttack, impactCooldownRef.current, asteroid);
           if (contact.connected) {
             if (contact.damage) {
               if (activeAttack) next = { ...next, collidedThisAttack: true };
@@ -399,8 +400,9 @@ const GamePage = () => {
           return { ...target, elapsed, ...bonusPosition(target.index, elapsed, width, height) };
         }).filter(target => target.elapsed < BONUS_FLIGHT_MS);
         if (state.encounter === "boss-fight" && state.boss) {
+          const previousBoss = state.boss;
           state.boss = moveSectorBoss(state.boss, delta, width, height);
-          const bossContact = contactWithEnemy(state.player, width, height, state.boss, true, false, impactCooldownRef.current);
+          const bossContact = contactWithEnemy(state.player, width, height, state.boss, true, false, impactCooldownRef.current, previousBoss);
           if (bossContact.damage) {
             heartsLost += bossContact.damage;
             impactCooldownRef.current = IMPACT_COOLDOWN_MS;
@@ -432,6 +434,7 @@ const GamePage = () => {
           const previousHearts = state.hearts;
           Object.assign(state, resolvePlayerDamage(state, heartsLost, state.shieldActive));
           const damaged = state.hearts < previousHearts;
+          damageTaken = damaged;
           state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: damaged ? "hit" : "shield", startedAt: time, target: "player" });
           if (damaged) { soundRef.current?.play("collision"); state.weaponCap = Math.max(1, state.weaponCap - 1); state.paidWeaponLevel = Math.min(state.paidWeaponLevel, state.weaponCap); state.pickupWeaponLevel = Math.min(state.pickupWeaponLevel, state.weaponCap); state.weaponLevel = Math.min(state.weaponLevel, state.weaponCap); }
           else soundRef.current?.play("shield");
@@ -551,7 +554,7 @@ const GamePage = () => {
         }
         // Desktop/tablet motion stays at display cadence; compact phones limit paints.
         const paintInterval = width > 700 ? 16 : 32;
-        if (time - lastPaintRef.current >= paintInterval || state.phase !== previousPhase || state.status !== "playing") {
+        if (damageTaken || time - lastPaintRef.current >= paintInterval || state.phase !== previousPhase || state.status !== "playing") {
           lastPaintRef.current = time;
           setGame({ ...state, boss: state.boss ? { ...state.boss } : null, asteroids: [...state.asteroids], bonusTargets: [...state.bonusTargets], shots: [...state.shots], enemyShots: [...state.enemyShots], effects: [...state.effects], powerUps: [...state.powerUps] });
         }
