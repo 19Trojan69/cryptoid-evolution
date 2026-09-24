@@ -131,6 +131,22 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .asteroid-medium .asteroid-shape { background: linear-gradient(135deg, #a78f76, #4a5154 65%, #1d303b); }
 .asteroid-large .asteroid-shape { background: linear-gradient(135deg, #c18c62, #695650 65%, #233340); box-shadow: 0 0 25px rgba(245, 200, 109, .26), inset 10px -12px 16px rgba(0, 0, 0, .5); }
 .asteroid::after { position: absolute; inset: -6px; border: 1px solid rgba(245, 200, 109, .3); clip-path: polygon(38% 0, 79% 12%, 100% 48%, 82% 88%, 42% 100%, 5% 76%, 0 34%); content: ''; }
+.cryptoid { --ship-edge: #54d9bf; --ship-top: #227f79; --ship-bottom: #142d43; --symbol: #75f3da; }
+.cryptoid-medium { --ship-edge: #81b8f8; --ship-top: #376696; --ship-bottom: #1c3455; --symbol: #9bd4ff; }
+.cryptoid-heavy { --ship-edge: #f59b63; --ship-top: #a5513d; --ship-bottom: #423046; --symbol: #ffb483; }
+.cryptoid-elite { --ship-edge: #db90fa; --ship-top: #733daa; --ship-bottom: #33244f; --symbol: #efc6ff; }
+.cryptoid .asteroid-shape { inset: 7%; border: 2px solid var(--ship-edge); background: linear-gradient(140deg, var(--ship-top), var(--ship-bottom) 72%); clip-path: polygon(50% 0, 70% 27%, 100% 44%, 91% 72%, 64% 66%, 50% 92%, 36% 66%, 9% 72%, 0 44%, 30% 27%); box-shadow: 0 0 18px var(--ship-edge), inset 0 -10px 12px rgba(0, 0, 0, .55); }
+.cryptoid::after { clip-path: polygon(50% 0, 72% 24%, 100% 44%, 90% 74%, 64% 66%, 50% 94%, 36% 66%, 10% 74%, 0 44%, 28% 24%); border-color: var(--ship-edge); opacity: .6; pointer-events: none; }
+.cryptoid-core { position: absolute; z-index: 1; top: 50%; left: 50%; display: grid; place-items: center; width: 36%; height: 31%; transform: translate(-50%, -36%); border: 1px solid var(--symbol); border-radius: 30%; background: #0b2033; box-shadow: 0 0 12px var(--ship-edge); color: var(--symbol); font: 700 clamp(8px, 1vw, 13px) 'DM Mono', monospace; letter-spacing: -.06em; pointer-events: none; }
+.cryptoid-solflare .asteroid-shape { clip-path: polygon(50% 0, 65% 38%, 100% 52%, 72% 67%, 50% 100%, 28% 67%, 0 52%, 35% 38%); }
+.cryptoid-etherCrystal .asteroid-shape { clip-path: polygon(50% 0, 93% 37%, 79% 100%, 50% 77%, 21% 100%, 7% 37%); background: linear-gradient(135deg, #54e4ef, #5755af 60%, #1e3762); }
+.cryptoid-bitrock .asteroid-shape { clip-path: polygon(32% 0, 68% 0, 82% 20%, 100% 39%, 89% 83%, 60% 90%, 50% 100%, 40% 90%, 11% 83%, 0 39%, 18% 20%); }
+.cryptoid-stableCore .asteroid-shape { clip-path: polygon(29% 0, 71% 0, 100% 34%, 100% 65%, 72% 95%, 28% 95%, 0 65%, 0 34%); }
+.cryptoid-stableCore .cryptoid-core { border-radius: 50%; box-shadow: 0 0 0 4px rgba(129, 184, 248, .28), 0 0 17px var(--ship-edge); }
+.cryptoid-memeSwarm .asteroid-shape { clip-path: polygon(50% 0, 66% 20%, 95% 20%, 80% 50%, 100% 80%, 65% 73%, 50% 100%, 35% 73%, 0 80%, 20% 50%, 5% 20%, 34% 20%); }
+.cryptoid-ghostCoin .asteroid-shape { clip-path: polygon(50% 0, 82% 20%, 91% 69%, 72% 83%, 50% 70%, 28% 83%, 9% 69%, 18% 20%); }
+.cryptoid-cloaked { opacity: .33; pointer-events: none; }
+.cryptoid-cloaked::before { position: absolute; z-index: 2; top: -15px; left: 50%; transform: translateX(-50%); color: #e8c0ff; content: 'PHASED'; font: 8px 'DM Mono', monospace; letter-spacing: .1em; }
 .asteroid-preparing::after { border: 2px solid #f5c86d; background: rgba(245, 200, 109, .18); animation: attack-warning .32s ease-in-out infinite alternate; }
 @keyframes attack-warning { from { opacity: .35; } to { opacity: 1; } }
 .health-bar { position: absolute; z-index: 2; bottom: -12px; left: 16%; width: 68%; height: 3px; background: #18343f; }
@@ -138,6 +154,7 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .coin-shot { position: absolute; z-index: 2; width: 21px; height: 21px; margin: -10px 0 0 -10px; border: 2px solid var(--gold); border-radius: 50%; color: #fff5c9; background: #d3a743; box-shadow: 0 0 8px var(--gold), 0 0 22px rgba(245, 200, 109, .65); font-size: 10px; line-height: 17px; text-align: center; pointer-events: none; }
 .impact-effect { position: absolute; z-index: 2; width: 35px; height: 35px; margin: -17px 0 0 -17px; border: 2px solid var(--cyan); border-radius: 50%; animation: hit-flash .23s ease-out both; pointer-events: none; }
 .impact-effect.explosion { width: 85px; height: 85px; margin: -42px 0 0 -42px; border-color: var(--gold); background: radial-gradient(circle, rgba(245, 200, 109, .75) 0 9%, rgba(79, 228, 239, .22) 20%, transparent 64%); animation: explode .43s ease-out both; }
+.impact-effect.shatter { width: 72px; height: 72px; margin: -36px 0 0 -36px; border-color: #9b9fff; background: conic-gradient(from 30deg, transparent 0 12%, rgba(109, 227, 244, .65) 12% 16%, transparent 16% 46%, rgba(164, 142, 255, .7) 46% 53%, transparent 53% 79%, rgba(109, 227, 244, .65) 79% 85%, transparent 85%); animation: explode .43s ease-out both; }
 .impact-effect span, .impact-effect span::before, .impact-effect span::after { position: absolute; top: 50%; left: 50%; width: 55%; height: 2px; background: var(--cyan); content: ''; }
 .impact-effect span { transform: translate(-50%, -50%) rotate(45deg); }
 .impact-effect span::before { transform: translate(-50%, -50%) rotate(90deg); }

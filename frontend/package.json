@@ -11,7 +11,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test:patterns": "node --experimental-strip-types --test src/pages/attackPatterns.test.mjs",
-    "test:sectors": "node --experimental-strip-types --test src/pages/sectorManager.test.mjs"
+    "test:sectors": "node --experimental-strip-types --test src/pages/sectorManager.test.mjs",
+    "test:cryptoids": "node --experimental-strip-types --test src/pages/cryptoidRoster.test.mjs"
   },
   "dependencies": {
     "@mui/icons-material": "^7.3.8",

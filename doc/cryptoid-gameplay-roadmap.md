@@ -13,7 +13,7 @@ This tracks implementation against the CRYPTOID Master Game Design supplied by t
 | 5 | Return to original slot | Done |
 | 6 | Attack patterns: Dive, Curve, S-Curve, Loop, Side, Double, V | Implemented; full dodging and long-run group play-testing remain open |
 | 7 | Visible sectors and internal attack cycles | Implemented: five-minute named sectors, intro, entry, formation, attack/reform, final attack and clear; long-run play-testing remains open |
-| 8 | Cryptoid classes, types and fictional markings | Pending |
+| 8 | Cryptoid classes, types and fictional markings | Implemented: six distinct silhouettes, four classes, fictional codes, durability and attack pacing; subtype powers still open |
 | 9 | Power-ups | Pending |
 | 10 | Combos and score bonuses | Pending |
 | 11 | Legendary Cryptoids | Pending |
@@ -34,7 +34,9 @@ This tracks implementation against the CRYPTOID Master Game Design supplied by t
 
 ## Known gap in the current prototype
 
-The current browser game uses tap-to-fire asteroids and an Earth defense area; it does not yet have a steerable player ship. Movement, dodging and ship hitbox criteria cannot be marked as passed until that feature exists. Sector visuals and special events remain for later steps; the first sector transition needs a full five-minute survival play-test.
+The current browser game uses tap-to-fire Cryptoid targets and an Earth defense area; it does not yet have a steerable player ship. Movement, dodging and ship hitbox criteria cannot be marked as passed until that feature exists. Sector visuals and special events remain for later steps; the first sector transition needs a full five-minute survival play-test.
+
+The step 8 roster gives SolFlare a quicker entry/attack, BitRock heavier armor, Ether Crystal a distinct shatter effect, and Ghost Coin a formation-only cloak that stops before any attack. Stable Core's protective field, Ether Crystal's dangerous split fragments, and full multi-enemy Meme Swarm behavior are not yet active and require separate gameplay and fairness tests before being claimed as complete.
 
 The Double and V attack paths unlock only after five minutes. Their selection and on-screen geometry are tested; a full long-run play-test with a moving ship is still required.
 

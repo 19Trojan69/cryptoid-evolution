@@ -2,13 +2,13 @@ import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } f
 import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
 import { sectorAt, sectorName, type SectorPhase } from "./sectorManager";
+import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
 
 const BEST_SCORE_KEY = "cryptoid_best_score";
 const HIGHEST_SECTOR_KEY = "cryptoid_highest_sector";
 const TOTAL_DESTROYED_KEY = "cryptoid_total_destroyed";
 const INITIAL_SPAWN_INTERVAL_MS = 2_500;
 const MIN_SPAWN_INTERVAL_MS = 1_800;
-const ENTRY_DURATION_MS = 7_000;
 const RETURN_DURATION_MS = 3_500;
 const IMPACT_COOLDOWN_MS = 1_200;
 
@@ -20,6 +20,15 @@ type Asteroid = {
   x: number;
   y: number;
   size: AsteroidSize;
+  type: CryptoidType;
+  shipClass: CryptoidClass;
+  faction: FactionCode;
+  radius: number;
+  reward: number;
+  points: number;
+  entryDuration: number;
+  attackPace: number;
+  cloaked: boolean;
   health: number;
   maxHealth: number;
   rotation: number;
@@ -41,14 +50,8 @@ type Asteroid = {
 };
 
 type Shot = { id: number; x: number; y: number; targetX: number; targetY: number; progress: number };
-type Effect = { id: number; x: number; y: number; kind: "hit" | "explosion"; startedAt: number };
+type Effect = { id: number; x: number; y: number; kind: "hit" | "explosion" | "shatter"; startedAt: number };
 type GameState = { asteroids: Asteroid[]; shots: Shot[]; effects: Effect[]; score: number; coins: number; hearts: number; destroyed: number; sector: number; phase: SectorPhase; status: GameStatus };
-
-const sizeData: Record<AsteroidSize, { health: number; reward: number; points: number; radius: number }> = {
-  small: { health: 1, reward: 2, points: 10, radius: 25 },
-  medium: { health: 2, reward: 4, points: 25, radius: 36 },
-  large: { health: 3, reward: 7, points: 50, radius: 50 },
-};
 
 const createInitialState = (): GameState => ({ asteroids: [], shots: [], effects: [], score: 0, coins: 30, hearts: 3, destroyed: 0, sector: 1, phase: "SECTOR_INTRO", status: "playing" });
 
@@ -74,31 +77,32 @@ const formationTarget = (index: number, width: number, height: number, radius: n
   };
 };
 
-const spawnAsteroid = (id: number, width: number, height: number, formationIndex: number, spawnInterval: number): Asteroid => {
-  const roll = Math.random();
-  const size: AsteroidSize = roll < 0.56 ? "small" : roll < 0.86 ? "medium" : "large";
-  const data = sizeData[size];
+const spawnAsteroid = (id: number, width: number, height: number, formationIndex: number, spawnInterval: number, sector: number): Asteroid => {
+  const profile = chooseCryptoid(sector, formationIndex);
+  const size: AsteroidSize = profile.radius === 25 ? "small" : profile.radius === 36 ? "medium" : "large";
   const entrySide = id % 2 === 0 ? 1 : -1;
-  const availableWidth = Math.max(1, width - data.radius * 2);
-  const entryStartX = entrySide === 1 ? data.radius + availableWidth * 0.08 : width - data.radius - availableWidth * 0.08;
-  const target = formationTarget(formationIndex, width, height, data.radius, spawnInterval);
-  return { id, x: entryStartX, y: -data.radius, size, health: data.health, maxHealth: data.health, rotation: Math.random() * 360, rotationSpeed: (Math.random() - 0.5) * 0.08, entryElapsed: 0, entryStartX, entryTargetX: target.x, entryTargetY: target.y, entrySide, formationSlot: target.slot, formationSlotCount: target.slotCount, formationElapsed: 0, formationDuration: target.duration, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0 };
+  const availableWidth = Math.max(1, width - profile.radius * 2);
+  const entryStartX = entrySide === 1 ? profile.radius + availableWidth * 0.08 : width - profile.radius - availableWidth * 0.08;
+  const target = formationTarget(formationIndex, width, height, profile.radius, spawnInterval);
+  return { id, x: entryStartX, y: -profile.radius, size, ...profile, health: profile.health, maxHealth: profile.health, cloaked: false, rotation: Math.random() * 360, rotationSpeed: (Math.random() - 0.5) * 0.08, entryElapsed: 0, entryStartX, entryTargetX: target.x, entryTargetY: target.y, entrySide, formationSlot: target.slot, formationSlotCount: target.slotCount, formationElapsed: 0, formationDuration: target.duration, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0 };
 };
+
+const attackTime = (asteroid: Asteroid) => asteroid.attackPattern === null ? 0 : attackDuration(asteroid.attackPattern) * asteroid.attackPace;
 
 const moveAsteroid = (asteroid: Asteroid, delta: number, width: number, height: number): Asteroid => {
   const rotation = asteroid.rotation + asteroid.rotationSpeed * delta;
-  const radius = sizeData[asteroid.size].radius;
+  const radius = asteroid.radius;
   const keepInField = (x: number) => Math.max(radius, Math.min(width - radius, x));
   const diveEndX = asteroid.entryTargetX + (width / 2 - asteroid.entryTargetX) * 0.45;
   const diveEndY = height - 75 + radius;
-  if (asteroid.entryElapsed >= ENTRY_DURATION_MS && asteroid.formationElapsed < asteroid.formationDuration) {
+  if (asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed < asteroid.formationDuration) {
     const elapsed = asteroid.formationElapsed + delta;
     return { ...asteroid, x: keepInField(asteroid.entryTargetX), y: asteroid.entryTargetY, formationElapsed: Math.min(asteroid.formationDuration, elapsed), rotation };
   }
-  if (asteroid.entryElapsed >= ENTRY_DURATION_MS) {
+  if (asteroid.entryElapsed >= asteroid.entryDuration) {
     if (asteroid.attackPattern === null) return { ...asteroid, rotation };
     if (asteroid.attackDelay > 0) return { ...asteroid, attackDelay: Math.max(0, asteroid.attackDelay - delta), rotation };
-    const duration = attackDuration(asteroid.attackPattern);
+    const duration = attackTime(asteroid);
     if (asteroid.attackElapsed < duration) {
       const elapsed = Math.min(duration, asteroid.attackElapsed + delta);
       const point = attackPosition({ pattern: asteroid.attackPattern, progress: elapsed / duration, startX: asteroid.entryTargetX, startY: asteroid.entryTargetY, width, height, radius, side: asteroid.entrySide, lane: asteroid.attackLane });
@@ -113,9 +117,9 @@ const moveAsteroid = (asteroid: Asteroid, delta: number, width: number, height: 
     const returnY = diveEndY + (asteroid.entryTargetY - diveEndY) * progress;
     return { ...asteroid, x: keepInField(returnX), y: returnY, returnElapsed: elapsed, rotation };
   }
-  const entryDelta = Math.min(delta, ENTRY_DURATION_MS - asteroid.entryElapsed);
-  const elapsed = Math.min(ENTRY_DURATION_MS, asteroid.entryElapsed + delta);
-  const progress = elapsed / ENTRY_DURATION_MS;
+  const entryDelta = Math.min(delta, asteroid.entryDuration - asteroid.entryElapsed);
+  const elapsed = Math.min(asteroid.entryDuration, asteroid.entryElapsed + delta);
+  const progress = elapsed / asteroid.entryDuration;
   const curve = asteroid.id % 4 < 2 ? Math.sin(Math.PI * progress) * 0.1 : Math.sin(2 * Math.PI * progress) * 0.07;
   const x = asteroid.entryStartX + (asteroid.entryTargetX - asteroid.entryStartX) * progress + asteroid.entrySide * width * curve;
   return {
@@ -155,7 +159,7 @@ const GamePage = () => {
         const height = field?.clientHeight || 600;
         elapsedRef.current += delta;
         impactCooldownRef.current = Math.max(0, impactCooldownRef.current - delta);
-        const sector = sectorAt(elapsedRef.current, state.asteroids.some(asteroid => asteroid.attackPattern !== null && asteroid.attackElapsed >= attackDuration(asteroid.attackPattern)));
+        const sector = sectorAt(elapsedRef.current, state.asteroids.some(asteroid => asteroid.attackPattern !== null && asteroid.attackElapsed >= attackTime(asteroid)));
         if (sector.number !== state.sector) {
           state.sector = sector.number;
           state.asteroids = [];
@@ -172,10 +176,10 @@ const GamePage = () => {
         const slotOccupied = state.asteroids.some(asteroid => asteroid.formationSlotCount === slotCount && asteroid.formationSlot === nextSlot);
         if (state.phase !== "SECTOR_INTRO" && state.phase !== "SECTOR_CLEAR" && spawnTimerRef.current >= spawnInterval && !slotOccupied) {
           spawnTimerRef.current = 0;
-          state.asteroids = [...state.asteroids, spawnAsteroid(nextIdRef.current++, width, height, formationIndexRef.current++, spawnInterval)];
+          state.asteroids = [...state.asteroids, spawnAsteroid(nextIdRef.current++, width, height, formationIndexRef.current++, spawnInterval, state.sector)];
         }
         if ((state.phase === "ATTACK_CYCLE" || state.phase === "FINAL_ATTACK") && !state.asteroids.some(asteroid => asteroid.attackPattern !== null)) {
-          const ready = state.asteroids.filter(asteroid => asteroid.entryElapsed >= ENTRY_DURATION_MS && asteroid.formationElapsed >= asteroid.formationDuration);
+          const ready = state.asteroids.filter(asteroid => asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration);
           if (ready.length > 0) {
             let pattern = chooseAttackPattern(attackNumberRef.current++, elapsedRef.current);
             if (ready.length < attackGroupSize(pattern)) pattern = "curve";
@@ -193,16 +197,16 @@ const GamePage = () => {
         let heartsLost = 0;
         state.asteroids.forEach(asteroid => {
           const next = state.phase === "SECTOR_CLEAR" ? { ...asteroid, y: asteroid.y - delta * 0.25, rotation: asteroid.rotation + asteroid.rotationSpeed * delta } : moveAsteroid(asteroid, delta, width, height);
-          if (state.phase !== "SECTOR_CLEAR" && asteroid.attackPattern !== null && asteroid.attackElapsed < attackDuration(asteroid.attackPattern) && next.attackElapsed === attackDuration(asteroid.attackPattern) && impactCooldownRef.current === 0) {
+          if (state.phase !== "SECTOR_CLEAR" && asteroid.attackPattern !== null && asteroid.attackElapsed < attackTime(asteroid) && next.attackElapsed === attackTime(asteroid) && impactCooldownRef.current === 0) {
             heartsLost += 1;
             impactCooldownRef.current = IMPACT_COOLDOWN_MS;
           }
-          if (next.y >= -sizeData[next.size].radius) nextAsteroids.push(next);
+          if (next.y >= -next.radius) nextAsteroids.push({ ...next, cloaked: isGhostCloaked(next.type, next.attackPattern === null && next.entryElapsed >= next.entryDuration && next.formationElapsed >= next.formationDuration, elapsedRef.current) });
         });
         state.asteroids = nextAsteroids;
         state.hearts = Math.max(0, state.hearts - heartsLost);
         state.shots = state.shots.map(shot => ({ ...shot, progress: Math.min(1, shot.progress + delta / 260) })).filter(shot => shot.progress < 1);
-        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "explosion" ? 430 : 230));
+        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "hit" ? 230 : 430));
         if (state.hearts === 0 || state.coins === 0) {
           state.status = "game-over";
           if (!recordsSavedRef.current) {
@@ -230,18 +234,17 @@ const GamePage = () => {
     const x = event.clientX - bounds.left;
     const y = event.clientY - bounds.top;
     const asteroid = [...stateRef.current.asteroids].reverse().find(item => {
-      const radius = sizeData[item.size].radius;
-      return Math.hypot(item.x - x, item.y - y) <= radius + 9;
+      return !item.cloaked && Math.hypot(item.x - x, item.y - y) <= item.radius + 9;
     });
     if (!asteroid) return;
     const state = stateRef.current;
     state.coins -= 1;
     asteroid.health -= 1;
     state.shots.push({ id: nextIdRef.current++, x: bounds.width / 2, y: bounds.height - 55, targetX: asteroid.x, targetY: asteroid.y, progress: 0 });
-    state.effects.push({ id: nextIdRef.current++, x: asteroid.x, y: asteroid.y, kind: asteroid.health <= 0 ? "explosion" : "hit", startedAt: performance.now() });
+    state.effects.push({ id: nextIdRef.current++, x: asteroid.x, y: asteroid.y, kind: asteroid.health <= 0 ? (asteroid.type === "etherCrystal" ? "shatter" : "explosion") : "hit", startedAt: performance.now() });
     if (asteroid.health <= 0) {
-      state.score += sizeData[asteroid.size].points;
-      state.coins += sizeData[asteroid.size].reward;
+      state.score += asteroid.points;
+      state.coins += asteroid.reward;
       state.destroyed += 1;
       state.asteroids = state.asteroids.filter(item => item.id !== asteroid.id);
     }
@@ -282,7 +285,7 @@ const GamePage = () => {
         </header>
         <div className="game-label">SECTOR {String(game.sector).padStart(2, "0")} <span>· {sectorName(game.sector)}</span></div>
         {game.status === "playing" && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className="sector-banner" aria-live="polite"><span>{game.phase === "SECTOR_CLEAR" ? "SECTOR CLEAR" : `SECTOR ${String(game.sector).padStart(2, "0")}`}</span><strong>{sectorName(game.sector)}</strong></div>}
-        {game.asteroids.map(asteroid => <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}`} style={{ left: asteroid.x, top: asteroid.y, transform: `translate(-50%, -50%) rotate(${asteroid.rotation}deg)` }}><div className="asteroid-shape" /><span className="health-bar"><b style={{ width: `${(asteroid.health / asteroid.maxHealth) * 100}%` }} /></span></div>)}
+        {game.asteroids.map(asteroid => <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ left: asteroid.x, top: asteroid.y, transform: `translate(-50%, -50%) rotate(${asteroid.rotation}deg)` }}><div className="asteroid-shape" /><span className="cryptoid-core"><b>{asteroid.faction}</b></span><span className="health-bar"><b style={{ width: `${(asteroid.health / asteroid.maxHealth) * 100}%` }} /></span></div>)}
         {game.shots.map(shot => <div key={shot.id} className="coin-shot" style={{ left: shot.x + (shot.targetX - shot.x) * shot.progress, top: shot.y + (shot.targetY - shot.y) * shot.progress }}>●</div>)}
         {game.effects.map(effect => <div key={effect.id} className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y }}><span /></div>)}
         <div className="earth"><div className="earth-glow" /><div className="earth-body"><span /><span /><span /></div><p>EARTH // PROTECTED</p></div>
