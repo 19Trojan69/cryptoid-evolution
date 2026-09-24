@@ -62,7 +62,7 @@ const saveRecords = (state: GameState) => {
   window.localStorage.setItem(TOTAL_DESTROYED_KEY, String(readRecord(TOTAL_DESTROYED_KEY) + state.destroyed));
 };
 
-const spawnAsteroid = (id: number, width: number, height: number, formationIndex: number, sector: number, slots: ReturnType<typeof formationLayout>): Asteroid => {
+const spawnAsteroid = (id: number, width: number, formationIndex: number, sector: number, slots: ReturnType<typeof formationLayout>): Asteroid => {
   const profile = chooseCryptoid(sector, formationIndex);
   const size: AsteroidSize = profile.radius === 25 ? "small" : profile.radius === 36 ? "medium" : "large";
   const target = slots[formationIndex];
@@ -196,7 +196,7 @@ const GamePage = () => {
           spawnTimerRef.current += delta;
           if (spawnTimerRef.current >= ENTRY_GAP_MS) {
             spawnTimerRef.current -= ENTRY_GAP_MS;
-            state.asteroids.push(spawnAsteroid(nextIdRef.current++, width, height, formationIndexRef.current++, state.sector, slots));
+            state.asteroids.push(spawnAsteroid(nextIdRef.current++, width, formationIndexRef.current++, state.sector, slots));
           }
         }
         attackCooldownRef.current += delta;
