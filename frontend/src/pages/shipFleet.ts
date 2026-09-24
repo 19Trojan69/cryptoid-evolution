@@ -83,3 +83,23 @@ export const spriteStyle = (index: number): CSSProperties => ({
   backgroundImage: `url(${FLEET_IMAGE})`,
   backgroundPosition: `${(index % 4) * 100 / 3}% ${Math.floor(index / 4) * 25}%`,
 });
+
+// The source fleet's hulls sit at different positions inside the atlas cells.
+// Anchors keep embossed coins and exhaust attached to the actual ship, not the cell.
+const hullAnchors = [
+  [55, 61, 15], [53, 58, 17], [42, 61, 12], [43, 60, 12],
+  [54, 53, 19], [53, 53, 19], [43, 51, 22], [43, 52, 21],
+  [54, 44, 30], [54, 42, 32], [43, 44, 30], [44, 44, 29],
+  [55, 52, 8], [53, 53, 8], [43, 52, 9], [44, 53, 8],
+  [55, 30, 40], [53, 32, 36], [42, 33, 34], [43, 32, 37],
+] as const;
+
+export const emblemStyle = (index: number, facesPlayer = false): CSSProperties => {
+  const [x, y] = hullAnchors[index] ?? hullAnchors[0];
+  return { left: `${facesPlayer ? 100 - x : x}%`, top: `${facesPlayer ? 100 - y : y}%` };
+};
+
+export const enemyExhaustStyle = (index: number): CSSProperties => {
+  const [x, , top] = hullAnchors[index] ?? hullAnchors[0];
+  return { "--exhaust-x": `${100 - x}%`, "--exhaust-top": `${top}%` } as CSSProperties;
+};

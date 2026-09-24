@@ -8,7 +8,7 @@ import { useAuth } from "../hooks/useAuth";
 import { IRRA_TOKEN_CANONICAL, usePayments } from "../hooks/usePayments";
 import { axiosClient } from "../lib/axiosClient.ts";
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "./GamePage.tsx";
-import { buySkin, ownedSkins, playerColors, playerSkins, selectedShip, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, spriteStyle } from "./shipFleet";
+import { buySkin, emblemStyle, ownedSkins, playerColors, playerSkins, selectedShip, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, spriteStyle } from "./shipFleet";
 
 const Shop = () => {
   const navigate = useNavigate();
@@ -116,7 +116,7 @@ const Shop = () => {
         <strong className="shard-balance">◆ {shards} Shards</strong><span className="shard-help">Earn 1 Shard per defeated Cryptoid; your Shards are saved at the end of each mission.</span>
         <div className="ship-picker" role="group" aria-label="Ship hull">
           {playerSkins.map(skin => <button key={skin.id} className="ship-choice" type="button" aria-pressed={previewSkin.id === skin.id} onClick={() => { setPreviewSkin(skin); setHangarMessage(""); }}>
-            <span className={`ship-preview${skin.price === 0 ? " ship-preview-starter" : ""}`}><i style={{ ...spriteStyle(skin.sprite), "--ship-hue": previewColor.hue, "--ship-glow": previewColor.glow } as CSSProperties} /><b>π</b></span><span>{skin.name}</span><small>{skin.price === 0 ? "ISSUED" : owned.includes(skin.id) ? "OWNED" : `◆ ${skin.price}`}</small>
+            <span className={`ship-preview${skin.price === 0 ? " ship-preview-starter" : ""}`}><i style={{ ...spriteStyle(skin.sprite), "--ship-hue": previewColor.hue, "--ship-glow": previewColor.glow } as CSSProperties} /><b style={emblemStyle(skin.sprite)}>π</b></span><span>{skin.name}</span><small>{skin.price === 0 ? "ISSUED" : owned.includes(skin.id) ? "OWNED" : `◆ ${skin.price}`}</small>
           </button>)}
         </div>
         <p className="hangar-selection">Preview: <strong>{previewSkin.name}</strong> · {previewSkin.price === 0 ? "Grey starter" : previewOwned ? "Owned" : `◆ ${previewSkin.price} Shards`} {selected.skin.id === previewSkin.id && <span>· EQUIPPED</span>}</p>
