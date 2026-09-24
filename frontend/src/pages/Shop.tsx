@@ -65,7 +65,7 @@ const Shop = () => {
     catch { setLoadoutMessage("Connect your Pi account to see your saved loadout."); }
   };
   useEffect(() => { axiosClient.get<{ offers: Offer[] }>("/hangar/catalog").then(({ data }) => setOffers(data.offers)).catch(() => setLoadoutMessage("Hangar catalog unavailable. Try again when the server is online.")); }, []);
-  useEffect(() => { if (isAuthenticated) void refreshInventory(); else setInventory(null); }, [isAuthenticated]);
+  useEffect(() => { if (isAuthenticated) void refreshInventory(); }, [isAuthenticated]);
   const equip = async (weapon: string | null, power: string | null) => {
     if (!isAuthenticated) { requireAuth(); return; }
     try {
