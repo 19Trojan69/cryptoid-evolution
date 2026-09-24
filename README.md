@@ -26,6 +26,8 @@ Read [`doc/development.md`](./doc/development.md) to get started and learn how t
 
 Read [`doc/deployment.md`](./doc/deployment.md) to learn how to deploy this app on a server using Docker and docker-compose.
 
+Für die Spieloberfläche auf Vercel siehe [`doc/vercel.md`](./doc/vercel.md). Die Express-API mit MongoDB wird dadurch noch nicht bereitgestellt.
+
 ## Flows
 
 To dive into the implementation of the flows that support the demo app features, please refer to
