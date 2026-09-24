@@ -165,7 +165,7 @@ const GamePage = () => {
     if (startRequestRef.current || stateRef.current.status !== "loading") return;
     startRequestRef.current = true;
     try {
-      const { data } = await axiosClient.post<{ weaponLevel: number; powerUp: "shield" | "overdrive" | null }>("/hangar/start");
+      const { data } = await axiosClient.post<{ weaponLevel: number; powerUp: "shield" | "overdrive" | "rapid" | null }>("/hangar/start");
       stateRef.current.weaponLevel = Math.max(1, Math.min(5, data.weaponLevel));
       if (data.powerUp) Object.assign(stateRef.current, applyPowerUp(stateRef.current, data.powerUp));
     } catch (error) {

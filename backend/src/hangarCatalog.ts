@@ -4,6 +4,7 @@ export const hangarCatalog = [
   { id: "weapon_triple", kind: "weapon", name: "Triple Laser", description: "Three spreading shots per volley.", pricePi: 0.22, level: 4 },
   { id: "weapon_plasma", kind: "weapon", name: "Plasma", description: "Three stronger plasma bolts per volley.", pricePi: 0.3, level: 5 },
   { id: "start_shield", kind: "power", name: "Start Shield", description: "Begin one mission with one shield charge.", pricePi: 0.08, powerUp: "shield" },
+  { id: "start_rapid", kind: "power", name: "Start Rapid Fire", description: "Begin one mission with 15 seconds of rapid fire.", pricePi: 0.09, powerUp: "rapid" },
   { id: "start_overdrive", kind: "power", name: "Start Overdrive", description: "Begin one mission with 12 seconds of Overdrive.", pricePi: 0.12, powerUp: "overdrive" },
 ] as const;
 

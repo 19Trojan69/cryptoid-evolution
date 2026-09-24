@@ -8,6 +8,7 @@ import { usePayments } from "../hooks/usePayments";
 import { axiosClient } from "../lib/axiosClient.ts";
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "./GamePage.tsx";
 import { buySkin, ownedSkins, playerColors, playerSkins, selectedShip, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, spriteStyle } from "./shipFleet";
+import { hangarCatalog } from "../../../backend/src/hangarCatalog";
 
 type Offer = { id: string; kind: "weapon" | "power"; name: string; description: string; pricePi: number };
 type Inventory = { ownedWeapons: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
@@ -22,7 +23,8 @@ const Shop = () => {
   const [owned, setOwned] = useState(() => ownedSkins(localStorage.getItem(SHIP_OWNED_KEY)));
   const [shards, setShards] = useState(() => shardBalance(localStorage.getItem(SHARD_BALANCE_KEY)));
   const [hangarMessage, setHangarMessage] = useState("");
-  const [offers, setOffers] = useState<Offer[]>([]);
+  const [offers, setOffers] = useState<Offer[]>(() => [...hangarCatalog]);
+  const [catalogReady, setCatalogReady] = useState(false);
   const [inventory, setInventory] = useState<Inventory | null>(null);
   const [loadoutMessage, setLoadoutMessage] = useState("");
   const previewOwned = previewSkin.price === 0 || owned.includes(previewSkin.id);
@@ -61,11 +63,25 @@ const Shop = () => {
     onRequireAuth: requireAuth,
   });
   const refreshInventory = async () => {
-    try { setInventory((await axiosClient.get<Inventory>("/hangar/inventory")).data); }
+    try {
+      const { data } = await axiosClient.get<Inventory>("/hangar/inventory");
+      if (!Array.isArray(data.ownedWeapons) || !Array.isArray(data.consumables)) throw new Error("Invalid inventory");
+      setInventory(data);
+    }
     catch { setLoadoutMessage("Connect your Pi account to see your saved loadout."); }
   };
-  useEffect(() => { axiosClient.get<{ offers: Offer[] }>("/hangar/catalog").then(({ data }) => setOffers(data.offers)).catch(() => setLoadoutMessage("Hangar catalog unavailable. Try again when the server is online.")); }, []);
-  useEffect(() => { if (isAuthenticated) void refreshInventory(); }, [isAuthenticated]);
+  useEffect(() => { axiosClient.get<{ offers: Offer[] }>("/hangar/catalog").then(({ data }) => {
+    if (!Array.isArray(data.offers)) throw new Error("Invalid catalog");
+    setOffers(data.offers);
+    setCatalogReady(true);
+  }).catch(() => setLoadoutMessage("Hangar catalog unavailable. Try again when the server is online.")); }, []);
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    axiosClient.get<Inventory>("/hangar/inventory").then(({ data }) => {
+      if (!Array.isArray(data.ownedWeapons) || !Array.isArray(data.consumables)) throw new Error("Invalid inventory");
+      setInventory(data);
+    }).catch(() => setLoadoutMessage("Connect your Pi account to see your saved loadout."));
+  }, [isAuthenticated]);
   const equip = async (weapon: string | null, power: string | null) => {
     if (!isAuthenticated) { requireAuth(); return; }
     try {
@@ -90,7 +106,7 @@ const Shop = () => {
       <Header
         user={user}
         onSignIn={signIn}
-        onSignOut={signOut}
+        onSignOut={() => { setInventory(null); void signOut(); }}
         onSendTestNotification={onSendTestNotification}
         isLoading={isAuthLoading}
       />
@@ -157,7 +173,7 @@ const Shop = () => {
             const selected = kind === "weapon" ? inventory?.equippedWeapon === offer.id : inventory?.selectedPower === offer.id;
             return <article key={offer.id} className="hangar-offer"><h4>{offer.name}</h4><p>{offer.description}</p><span>{kind === "weapon" ? "Permanent unlock" : "Consumed at mission start"} · {offer.pricePi} π</span><strong>{selected ? "EQUIPPED" : owned ? kind === "power" ? `${count} AVAILABLE` : "OWNED" : "NOT OWNED"}</strong><div>
               {owned ? <button className="button button-secondary" type="button" disabled={Boolean(selected)} onClick={() => equip(kind === "weapon" ? offer.id : inventory?.equippedWeapon ?? null, kind === "power" ? offer.id : inventory?.selectedPower ?? null)}>{selected ? "Selected" : "Equip for next mission"}</button> : null}
-              {(kind === "power" || !owned) && <button className="button button-primary" type="button" disabled={isLoading} onClick={() => orderProduct(`Cryptoid ${offer.name}`, offer.pricePi, { productId: offer.id }, () => { setLoadoutMessage(`${offer.name} purchase confirmed.`); void refreshInventory(); })}>Buy with π</button>}
+              {(kind === "power" || !owned) && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady} onClick={() => orderProduct(`Cryptoid ${offer.name}`, offer.pricePi, { productId: offer.id }, () => { setLoadoutMessage(`${offer.name} purchase confirmed.`); void refreshInventory(); })}>Buy with π</button>}
             </div></article>;
           })}
         </div></div>)}
