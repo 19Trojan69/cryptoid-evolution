@@ -421,8 +421,9 @@ const GamePage = () => {
             recordsSavedRef.current = true;
           }
         }
-        // The simulation remains on requestAnimationFrame; cap expensive React/SVG paints.
-        if (time - lastPaintRef.current >= 32 || state.phase !== previousPhase || state.status !== "playing") {
+        // Desktop/tablet motion stays at display cadence; compact phones limit paints.
+        const paintInterval = width > 700 ? 16 : 32;
+        if (time - lastPaintRef.current >= paintInterval || state.phase !== previousPhase || state.status !== "playing") {
           lastPaintRef.current = time;
           setGame({ ...state, boss: state.boss ? { ...state.boss } : null, asteroids: [...state.asteroids], bonusTargets: [...state.bonusTargets], shots: [...state.shots], enemyShots: [...state.enemyShots], effects: [...state.effects], powerUps: [...state.powerUps] });
         }
