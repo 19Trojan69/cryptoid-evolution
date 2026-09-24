@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
+import { sectorAt, sectorName, type SectorPhase } from "./sectorManager";
 
 const BEST_SCORE_KEY = "cryptoid_best_score";
-const HIGHEST_WAVE_KEY = "cryptoid_highest_wave";
+const HIGHEST_SECTOR_KEY = "cryptoid_highest_sector";
 const TOTAL_DESTROYED_KEY = "cryptoid_total_destroyed";
-const WAVE_DURATION_MS = 60_000;
 const INITIAL_SPAWN_INTERVAL_MS = 2_500;
 const MIN_SPAWN_INTERVAL_MS = 1_800;
 const ENTRY_DURATION_MS = 7_000;
@@ -42,7 +42,7 @@ type Asteroid = {
 
 type Shot = { id: number; x: number; y: number; targetX: number; targetY: number; progress: number };
 type Effect = { id: number; x: number; y: number; kind: "hit" | "explosion"; startedAt: number };
-type GameState = { asteroids: Asteroid[]; shots: Shot[]; effects: Effect[]; score: number; coins: number; hearts: number; destroyed: number; wave: number; status: GameStatus };
+type GameState = { asteroids: Asteroid[]; shots: Shot[]; effects: Effect[]; score: number; coins: number; hearts: number; destroyed: number; sector: number; phase: SectorPhase; status: GameStatus };
 
 const sizeData: Record<AsteroidSize, { health: number; reward: number; points: number; radius: number }> = {
   small: { health: 1, reward: 2, points: 10, radius: 25 },
@@ -50,13 +50,13 @@ const sizeData: Record<AsteroidSize, { health: number; reward: number; points: n
   large: { health: 3, reward: 7, points: 50, radius: 50 },
 };
 
-const createInitialState = (): GameState => ({ asteroids: [], shots: [], effects: [], score: 0, coins: 30, hearts: 3, destroyed: 0, wave: 1, status: "playing" });
+const createInitialState = (): GameState => ({ asteroids: [], shots: [], effects: [], score: 0, coins: 30, hearts: 3, destroyed: 0, sector: 1, phase: "SECTOR_INTRO", status: "playing" });
 
 const readRecord = (key: string) => Number(window.localStorage.getItem(key) || 0);
 
 const saveRecords = (state: GameState) => {
   window.localStorage.setItem(BEST_SCORE_KEY, String(Math.max(readRecord(BEST_SCORE_KEY), state.score)));
-  window.localStorage.setItem(HIGHEST_WAVE_KEY, String(Math.max(readRecord(HIGHEST_WAVE_KEY), state.wave)));
+  window.localStorage.setItem(HIGHEST_SECTOR_KEY, String(Math.max(readRecord(HIGHEST_SECTOR_KEY), state.sector)));
   window.localStorage.setItem(TOTAL_DESTROYED_KEY, String(readRecord(TOTAL_DESTROYED_KEY) + state.destroyed));
 };
 
@@ -137,7 +137,6 @@ const GamePage = () => {
   const animationRef = useRef<number | null>(null);
   const lastFrameRef = useRef(0);
   const spawnTimerRef = useRef(0);
-  const waveTimerRef = useRef(0);
   const elapsedRef = useRef(0);
   const attackNumberRef = useRef(0);
   const impactCooldownRef = useRef(0);
@@ -156,21 +155,26 @@ const GamePage = () => {
         const height = field?.clientHeight || 600;
         elapsedRef.current += delta;
         impactCooldownRef.current = Math.max(0, impactCooldownRef.current - delta);
-        waveTimerRef.current += delta;
-        if (waveTimerRef.current >= WAVE_DURATION_MS) {
-          waveTimerRef.current -= WAVE_DURATION_MS;
-          state.wave += 1;
+        const sector = sectorAt(elapsedRef.current, state.asteroids.some(asteroid => asteroid.attackPattern !== null && asteroid.attackElapsed >= attackDuration(asteroid.attackPattern)));
+        if (sector.number !== state.sector) {
+          state.sector = sector.number;
+          state.asteroids = [];
+          state.shots = [];
+          state.effects = [];
+          formationIndexRef.current = 0;
+          spawnTimerRef.current = 0;
         }
-        const spawnInterval = Math.max(MIN_SPAWN_INTERVAL_MS, INITIAL_SPAWN_INTERVAL_MS - (state.wave - 1) * 80);
-        spawnTimerRef.current = Math.min(spawnInterval, spawnTimerRef.current + delta);
+        state.phase = sector.phase;
+        const spawnInterval = Math.max(MIN_SPAWN_INTERVAL_MS, INITIAL_SPAWN_INTERVAL_MS - (state.sector - 1) * 80);
+        if (state.phase !== "SECTOR_INTRO" && state.phase !== "SECTOR_CLEAR") spawnTimerRef.current = Math.min(spawnInterval, spawnTimerRef.current + delta);
         const slotCount = width < 620 ? 3 : 5;
         const nextSlot = formationIndexRef.current % slotCount;
         const slotOccupied = state.asteroids.some(asteroid => asteroid.formationSlotCount === slotCount && asteroid.formationSlot === nextSlot);
-        if (spawnTimerRef.current >= spawnInterval && !slotOccupied) {
+        if (state.phase !== "SECTOR_INTRO" && state.phase !== "SECTOR_CLEAR" && spawnTimerRef.current >= spawnInterval && !slotOccupied) {
           spawnTimerRef.current = 0;
           state.asteroids = [...state.asteroids, spawnAsteroid(nextIdRef.current++, width, height, formationIndexRef.current++, spawnInterval)];
         }
-        if (!state.asteroids.some(asteroid => asteroid.attackPattern !== null)) {
+        if ((state.phase === "ATTACK_CYCLE" || state.phase === "FINAL_ATTACK") && !state.asteroids.some(asteroid => asteroid.attackPattern !== null)) {
           const ready = state.asteroids.filter(asteroid => asteroid.entryElapsed >= ENTRY_DURATION_MS && asteroid.formationElapsed >= asteroid.formationDuration);
           if (ready.length > 0) {
             let pattern = chooseAttackPattern(attackNumberRef.current++, elapsedRef.current);
@@ -188,12 +192,12 @@ const GamePage = () => {
         const nextAsteroids: Asteroid[] = [];
         let heartsLost = 0;
         state.asteroids.forEach(asteroid => {
-          const next = moveAsteroid(asteroid, delta, width, height);
-          if (asteroid.attackPattern !== null && asteroid.attackElapsed < attackDuration(asteroid.attackPattern) && next.attackElapsed === attackDuration(asteroid.attackPattern) && impactCooldownRef.current === 0) {
+          const next = state.phase === "SECTOR_CLEAR" ? { ...asteroid, y: asteroid.y - delta * 0.25, rotation: asteroid.rotation + asteroid.rotationSpeed * delta } : moveAsteroid(asteroid, delta, width, height);
+          if (state.phase !== "SECTOR_CLEAR" && asteroid.attackPattern !== null && asteroid.attackElapsed < attackDuration(asteroid.attackPattern) && next.attackElapsed === attackDuration(asteroid.attackPattern) && impactCooldownRef.current === 0) {
             heartsLost += 1;
             impactCooldownRef.current = IMPACT_COOLDOWN_MS;
           }
-          nextAsteroids.push(next);
+          if (next.y >= -sizeData[next.size].radius) nextAsteroids.push(next);
         });
         state.asteroids = nextAsteroids;
         state.hearts = Math.max(0, state.hearts - heartsLost);
@@ -249,7 +253,6 @@ const GamePage = () => {
     recordsSavedRef.current = false;
     formationIndexRef.current = 0;
     spawnTimerRef.current = 0;
-    waveTimerRef.current = 0;
     elapsedRef.current = 0;
     attackNumberRef.current = 0;
     impactCooldownRef.current = 0;
@@ -274,22 +277,23 @@ const GamePage = () => {
           <div className="hud-stat"><span>Score</span><strong>{game.score}</strong></div>
           <div className="hud-stat coin-stat"><span>Coins</span><strong>● {game.coins}</strong></div>
           <div className="hud-stat"><span>Hearts</span><strong className="hearts">{"♥".repeat(game.hearts)}<i>{"♥".repeat(3 - game.hearts)}</i></strong></div>
-          <div className="hud-stat"><span>Wave</span><strong>{String(game.wave).padStart(2, "0")}</strong></div>
+          <div className="hud-stat"><span>Sector</span><strong>{String(game.sector).padStart(2, "0")}</strong></div>
           <button className="game-control pause-control" type="button" onClick={() => { stateRef.current.status = game.status === "paused" ? "playing" : "paused"; setGame({ ...stateRef.current }); }} aria-label={game.status === "paused" ? "Resume" : "Pause"}>{game.status === "paused" ? "▶" : "Ⅱ"}</button>
         </header>
-        <div className="game-label">DEFEND EARTH <span>· SECTOR 01</span></div>
+        <div className="game-label">SECTOR {String(game.sector).padStart(2, "0")} <span>· {sectorName(game.sector)}</span></div>
+        {game.status === "playing" && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className="sector-banner" aria-live="polite"><span>{game.phase === "SECTOR_CLEAR" ? "SECTOR CLEAR" : `SECTOR ${String(game.sector).padStart(2, "0")}`}</span><strong>{sectorName(game.sector)}</strong></div>}
         {game.asteroids.map(asteroid => <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}`} style={{ left: asteroid.x, top: asteroid.y, transform: `translate(-50%, -50%) rotate(${asteroid.rotation}deg)` }}><div className="asteroid-shape" /><span className="health-bar"><b style={{ width: `${(asteroid.health / asteroid.maxHealth) * 100}%` }} /></span></div>)}
         {game.shots.map(shot => <div key={shot.id} className="coin-shot" style={{ left: shot.x + (shot.targetX - shot.x) * shot.progress, top: shot.y + (shot.targetY - shot.y) * shot.progress }}>●</div>)}
         {game.effects.map(effect => <div key={effect.id} className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y }}><span /></div>)}
         <div className="earth"><div className="earth-glow" /><div className="earth-body"><span /><span /><span /></div><p>EARTH // PROTECTED</p></div>
         <div className="game-tip">Tap an asteroid to fire a coin</div>
         {game.status === "paused" && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">MISSION PAUSED</p><h1>Hold the line.</h1><p>The asteroids are waiting.</p><button className="button button-primary" type="button" onClick={() => { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); }}>Resume mission <span>▶</span></button></div></div>}
-        {game.status === "game-over" && <div className="game-overlay"><div className="game-modal game-over-modal"><p className="eyebrow">MISSION COMPLETE</p><h1>Game Over</h1><div className="game-over-stats"><span><b>{game.score}</b>Score</span><span><b>{game.destroyed}</b>Destroyed</span><span><b>{game.wave}</b>Wave</span></div><div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>Play Again <span>↗</span></button><button className="button button-secondary" type="button" onClick={goHome}>Home</button></div></div></div>}
+        {game.status === "game-over" && <div className="game-overlay"><div className="game-modal game-over-modal"><p className="eyebrow">MISSION COMPLETE</p><h1>Game Over</h1><div className="game-over-stats"><span><b>{game.score}</b>Score</span><span><b>{game.destroyed}</b>Destroyed</span><span><b>{game.sector}</b>Sector</span></div><div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>Play Again <span>↗</span></button><button className="button button-secondary" type="button" onClick={goHome}>Home</button></div></div></div>}
         {homePrompt && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">LEAVE MISSION?</p><h2>Return to base?</h2><p>Your current round will end. Your records will be saved locally.</p><div className="modal-actions"><button className="button button-primary" type="button" onClick={goHome}>Leave game</button><button className="button button-secondary" type="button" onClick={() => setHomePrompt(false)}>Keep playing</button></div></div></div>}
       </div>
     </main>
   );
 };
 
-export { BEST_SCORE_KEY, HIGHEST_WAVE_KEY, TOTAL_DESTROYED_KEY };
+export { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY };
 export default GamePage;

@@ -12,7 +12,7 @@ This tracks implementation against the CRYPTOID Master Game Design supplied by t
 | 4 | First single attack run | Done |
 | 5 | Return to original slot | Done |
 | 6 | Attack patterns: Dive, Curve, S-Curve, Loop, Side, Double, V | Implemented; full dodging and long-run group play-testing remain open |
-| 7 | Visible sectors and internal attack cycles | Pending |
+| 7 | Visible sectors and internal attack cycles | Implemented: five-minute named sectors, intro, entry, formation, attack/reform, final attack and clear; long-run play-testing remains open |
 | 8 | Cryptoid classes, types and fictional markings | Pending |
 | 9 | Power-ups | Pending |
 | 10 | Combos and score bonuses | Pending |
@@ -34,7 +34,7 @@ This tracks implementation against the CRYPTOID Master Game Design supplied by t
 
 ## Known gap in the current prototype
 
-The current browser game uses tap-to-fire asteroids and an Earth defense area; it does not yet have a steerable player ship. Movement, dodging and ship hitbox criteria cannot be marked as passed until that feature exists. The visible Wave counter remains until step 7.
+The current browser game uses tap-to-fire asteroids and an Earth defense area; it does not yet have a steerable player ship. Movement, dodging and ship hitbox criteria cannot be marked as passed until that feature exists. Sector visuals and special events remain for later steps; the first sector transition needs a full five-minute survival play-test.
 
 The Double and V attack paths unlock only after five minutes. Their selection and on-screen geometry are tested; a full long-run play-test with a moving ship is still required.
 

@@ -7,12 +7,12 @@ import SignIn from "../components/SignIn";
 import { useAuth } from "../hooks/useAuth";
 import { IRRA_TOKEN_CANONICAL, usePayments } from "../hooks/usePayments";
 import { axiosClient } from "../lib/axiosClient.ts";
-import { BEST_SCORE_KEY, HIGHEST_WAVE_KEY, TOTAL_DESTROYED_KEY } from "./GamePage.tsx";
+import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "./GamePage.tsx";
 
 const Shop = () => {
   const navigate = useNavigate();
   const [activePanel, setActivePanel] = useState<"how" | "progress" | null>(null);
-  const [records] = useState(() => ({ bestScore: Number(localStorage.getItem(BEST_SCORE_KEY) || 0), highestWave: Number(localStorage.getItem(HIGHEST_WAVE_KEY) || 0), totalDestroyed: Number(localStorage.getItem(TOTAL_DESTROYED_KEY) || 0) }));
+  const [records] = useState(() => ({ bestScore: Number(localStorage.getItem(BEST_SCORE_KEY) || 0), highestSector: Number(localStorage.getItem(HIGHEST_SECTOR_KEY) || 0), totalDestroyed: Number(localStorage.getItem(TOTAL_DESTROYED_KEY) || 0) }));
   const {
     user,
     isAuthenticated,
@@ -71,7 +71,7 @@ const Shop = () => {
       <section className="dashboard-grid" aria-label="Player overview">
         <article className="status-card progress-card">
           <div className="card-heading"><span>YOUR PROGRESS</span><span className="card-icon">↗</span></div>
-          <div className="progress-row"><strong>Best {records.bestScore}</strong><span>Wave {String(records.highestWave).padStart(2, "0")}</span></div>
+          <div className="progress-row"><strong>Best {records.bestScore}</strong><span>Sector {String(records.highestSector).padStart(2, "0")}</span></div>
           <div className="progress-track"><span style={{ width: `${Math.min(100, records.bestScore / 10)}%` }} /></div>
           <button className="text-button" type="button" onClick={() => setActivePanel("progress")}>My Progress <span>→</span></button>
         </article>
@@ -95,7 +95,7 @@ const Shop = () => {
           <button className="close-button" type="button" onClick={() => setActivePanel(null)} aria-label="Close">×</button>
           <p className="eyebrow">{activePanel === "how" ? "FIELD GUIDE" : "MISSION LOG"}</p>
           <h2 id="info-title">{activePanel === "how" ? "How to Play" : "Your Progress"}</h2>
-          <p>{activePanel === "how" ? "Tap or click an asteroid to fire one virtual coin. Small asteroids take 1 hit and reward 2 coins and 10 points. Medium asteroids take 2 hits and reward 4 coins and 25 points. Large asteroids take 3 hits and reward 7 coins and 50 points. You start with 30 coins and 3 hearts. Lose a heart when an asteroid reaches Earth. The round ends at 0 hearts or 0 coins." : `Your best score is ${records.bestScore}, your highest wave is ${records.highestWave}, and you have destroyed ${records.totalDestroyed} asteroids.`}</p>
+          <p>{activePanel === "how" ? "Tap or click an asteroid to fire one virtual coin. Small asteroids take 1 hit and reward 2 coins and 10 points. Medium asteroids take 2 hits and reward 4 coins and 25 points. Large asteroids take 3 hits and reward 7 coins and 50 points. You start with 30 coins and 3 hearts. Lose a heart when an asteroid reaches Earth. The round ends at 0 hearts or 0 coins." : `Your best score is ${records.bestScore}, your highest sector is ${records.highestSector}, and you have destroyed ${records.totalDestroyed} asteroids.`}</p>
           <button className="button button-primary" type="button" onClick={() => { setActivePanel(null); if (activePanel === "how") navigate("/game"); }}>Enter mission <span>↗</span></button>
         </div>
       </div>}
