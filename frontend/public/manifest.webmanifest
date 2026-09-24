@@ -1,0 +1,11 @@
+{
+  "name": "Cryptoid Evolution",
+  "short_name": "Cryptoid",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["fullscreen", "standalone"],
+  "background_color": "#071b2b",
+  "theme_color": "#071b2b",
+  "icons": [{ "src": "/cryptoid-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}

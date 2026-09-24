@@ -12,7 +12,7 @@ test("weapon tiers fire multi-shot volleys and apply plasma damage", () => {
   assert.equal(fireInterval(3, 0), 220);
   assert.equal(fireInterval(1, 15000), 220);
 });
-import { receiveImpacts } from "./powerUps.ts";
+import { receiveImpacts, resolvePlayerDamage } from "./powerUps.ts";
 
 test("ship moves left, right and a limited distance upward without leaving the field", () => {
   assert.ok(movePlayer({ x: .5, y: .86 }, -1, 0, 100, 800, 600).x < .5);
@@ -40,6 +40,7 @@ test("shots travel upward, collide only with visible enemies; player hitbox rema
   assert.equal(shotHitsEnemy(shot, { x: 400, y: 435, radius: 25, cloaked: false }), true);
   assert.equal(shotHitsEnemy(shot, { x: 400, y: 435, radius: 25, cloaked: true }), false);
   assert.equal(shipHitsEnemy({ x: .5, y: .85 }, 800, 600, { x: 400, y: 510, radius: 25 }), true);
+  assert.equal(shipHitsEnemy({ x: .5, y: .85 }, 800, 600, { x: 450, y: 510, radius: 25 }), true); // visible hulls overlap
   assert.equal(shipHitsEnemy({ x: .5, y: .85 }, 800, 600, { x: 460, y: 510, radius: 25 }), false);
 });
 
@@ -55,4 +56,7 @@ test("visible ships collide in every phase; cooldown and dive state prevent repe
   assert.deepEqual(first, { connected: true, damage: 1 });
   assert.deepEqual(receiveImpacts({ hearts: 3, shieldCharges: 1, overdriveMs: 0 }, first.damage), { hearts: 3, shieldCharges: 0, overdriveMs: 0 });
   assert.equal(receiveImpacts({ hearts: 3, shieldCharges: 0, overdriveMs: 0 }, first.damage).hearts, 2);
+  assert.deepEqual(resolvePlayerDamage({ hearts: 3, shieldCharges: 0, overdriveMs: 0 }, first.damage, true), { hearts: 2, shieldCharges: 0, overdriveMs: 0 });
+  assert.deepEqual(resolvePlayerDamage({ hearts: 3, shieldCharges: 1, overdriveMs: 0 }, first.damage, true), { hearts: 3, shieldCharges: 0, overdriveMs: 0 });
+  assert.deepEqual(resolvePlayerDamage({ hearts: 3, shieldCharges: 1, overdriveMs: 0 }, first.damage, false), { hearts: 2, shieldCharges: 1, overdriveMs: 0 });
 });

@@ -5,6 +5,8 @@ export const PLAYER_SPEED_PX_MS = 0.68;
 export const PURCHASED_WEAPON_DURATION_MS = 5 * 60_000;
 export const PICKUP_WEAPON_DURATION_MS = 20_000;
 export const PLAYER_RADIUS = 19;
+// Ship-to-ship contact follows the visible hull; projectile hits keep the smaller player hitbox.
+export const PLAYER_CONTACT_RADIUS = 27;
 export const SHOT_SPEED_PX_MS = 0.64;
 export const FIRE_INTERVAL_MS = 320;
 export const MAX_PLAYER_SHOTS = 28;
@@ -34,7 +36,7 @@ export const shotHitsEnemy = (shot: PlayerShot, enemy: { x: number; y: number; r
   !enemy.cloaked && Math.hypot(shot.x - enemy.x, shot.y - enemy.y) < enemy.radius * 0.7 + 5;
 
 export const shipHitsEnemy = (player: PlayerPosition, width: number, height: number, enemy: { x: number; y: number; radius: number }) =>
-  Math.hypot(player.x * width - enemy.x, player.y * height - enemy.y) < PLAYER_RADIUS + enemy.radius * 0.65;
+  Math.hypot(player.x * width - enemy.x, player.y * height - enemy.y) < PLAYER_CONTACT_RADIUS + enemy.radius;
 
 // Visible ships collide in entry, formation, attack and return. The game passes
 // collidedThisAttack only during a dive so one run cannot deal repeated damage.

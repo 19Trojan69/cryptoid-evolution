@@ -11,6 +11,8 @@ import { buySkin, colorForSkin, ownedSkins, playerColors, playerSkins, savedShip
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
 import { readTouchMode, TOUCH_MODE_KEY, type TouchMode } from "./touchControls";
 import { primeGameAudio } from "./gameAudio";
+import Starfield from "./Starfield";
+import { requestGameFullscreen } from "./gameFullscreen";
 
 type Offer = { id: string; kind: "weapon" | "power"; name: string; description: string; pricePi: number };
 type Inventory = { ownedWeapons: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
@@ -39,6 +41,7 @@ const Shop = () => {
   const [inventory, setInventory] = useState<Inventory | null>(null);
   const [loadoutMessage, setLoadoutMessage] = useState("");
   const previewOwned = previewSkin.price === 0 || owned.includes(previewSkin.id);
+  const enterGame = () => { primeGameAudio(); requestGameFullscreen(); navigate("/game"); };
 
   const equipPreview = () => {
     const currentOwned = ownedSkins(localStorage.getItem(SHIP_OWNED_KEY));
@@ -126,13 +129,14 @@ const Shop = () => {
       />
 
       <section className="hero-section">
+        <Starfield sector={1} player={{ x: .5, y: .8 }} paused={false} />
         <div className="hero-copy">
           <p className="eyebrow"><span className="signal-dot" /> Mission control online</p>
           <h1>Cryptoid <span>Evolution</span></h1>
           <p className="hero-tagline">Defend Earth.<br />Evolve your power.</p>
           <p className="hero-description">Build your streak, master the grid, and become the force Earth needs.</p>
           <div className="hero-actions">
-            <button className="button button-primary" type="button" onClick={() => { primeGameAudio(); navigate("/game"); }}>Play <span>↗</span></button>
+            <button className="button button-primary" type="button" onClick={enterGame}>Play <span>↗</span></button>
             <button className="button button-secondary" type="button" onClick={() => setShopView("ships")}>Shop / Hangar</button>
             <button className="button button-secondary" type="button" onClick={() => setActivePanel("how")}>How to Play</button>
           </div>
@@ -142,9 +146,14 @@ const Shop = () => {
           </div>
         </div>
         <div className="planet-stage" aria-label="Cryptoid Evolution planet status">
-          <div className="orbit orbit-one" />
-          <div className="orbit orbit-two" />
-          <div className="planet"><div className="planet-core" /><div className="planet-ring" /></div>
+          <div className="orbit orbit-one"><span className="satellite-motion"><i className="satellite-body" /></span></div>
+          <div className="orbit orbit-two"><span className="satellite-motion"><i className="satellite-body" /></span></div>
+          <div className="orbit orbit-three"><span className="satellite-motion"><i className="satellite-body" /></span></div>
+          <div className="planet" />
+          <div className={`home-defense-ship${selected.color.id === "grey" ? " home-defense-grey" : ""}`} style={{ "--ship-hue": selected.color.hue } as CSSProperties}><i style={spriteStyle(selected.skin.sprite)} /></div>
+          <div className="home-enemy-ship"><i style={spriteStyle(3)} /></div>
+          <div className="home-defense-laser" />
+          <span className="orbit-status">ORBITAL DEFENSE ACTIVE</span>
           <div className="stage-label"><span className="stage-label-value">01</span><span>Genesis sector</span></div>
         </div>
       </section>
@@ -224,7 +233,7 @@ const Shop = () => {
           <p className="eyebrow">{activePanel === "how" ? "FIELD GUIDE" : "MISSION LOG"}</p>
           <h2 id="info-title">{activePanel === "how" ? "How to Play" : "Your Progress"}</h2>
           <p>{activePanel === "how" ? "Move your ship with the arrow keys or WASD; on touchscreens, drag it in the lower playfield. Your laser fires automatically. Dodge diving Cryptoids, line up shots, and fly into glowing pickups: Shield absorbs a hit, Repair restores a heart, and Overdrive briefly strengthens your shots. You have three hearts; the round ends when they run out." : `Your best score is ${records.bestScore}, your highest sector is ${records.highestSector}, and you have destroyed ${records.totalDestroyed} Cryptoids.`}</p>
-          <button className="button button-primary" type="button" onClick={() => { setActivePanel(null); if (activePanel === "how") { primeGameAudio(); navigate("/game"); } }}>Enter mission <span>↗</span></button>
+          <button className="button button-primary" type="button" onClick={() => { setActivePanel(null); if (activePanel === "how") enterGame(); }}>Enter mission <span>↗</span></button>
         </div>
       </div>}
 

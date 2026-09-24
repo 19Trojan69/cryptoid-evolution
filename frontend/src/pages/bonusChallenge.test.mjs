@@ -23,5 +23,9 @@ test("bonus ships enter from opposite sides, remain above player space, and leav
 
 test("bonus tiers include a perfect reward without requiring perfect hits for progression", () => {
   assert.deepEqual([0, 5, 9, 12].map(hits => bonusReward(hits).points), [0, 500, 1_000, 2_000]);
+  assert.deepEqual([0, 1, 5, 9, 12].map(hits => bonusReward(hits).shards), [0, 2, 4, 7, 12]);
+  assert.deepEqual(bonusReward(5).powerUps, ["shield"]);
+  assert.deepEqual(bonusReward(9).powerUps, ["repair"]);
+  assert.deepEqual(bonusReward(12).powerUps, ["repair", "shield"]);
   assert.equal(bonusReward(12).label, "PERFECT CRYPTO HUNT");
 });

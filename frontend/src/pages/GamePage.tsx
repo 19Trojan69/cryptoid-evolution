@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
 import { ENTRY_GAP_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, formationLayout, sectionInSector, sectionPhase, sectorForSection, sectorName, type SectorPhase } from "./sectorManager";
 import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
-import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpNames, powerUpSymbols, PURCHASED_POWER_UP_DURATION_MS, receiveImpacts, type PowerUp } from "./powerUps";
+import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpNames, powerUpSymbols, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp } from "./powerUps";
 import { activeWeaponLevel, advanceShot, contactWithEnemy, MAX_PLAYER_SHOTS, movePlayer, PICKUP_WEAPON_DURATION_MS, placePlayer, PURCHASED_WEAPON_DURATION_MS, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
 import { advanceEnemyShot, createEnemyShot, enemyShotHitsPlayer, enemyShotLimit, type EnemyShot } from "./enemyFire";
 import SectorBackdrop from "./SectorBackdrop";
@@ -15,6 +15,7 @@ import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio"
 import { axiosClient } from "../lib/axiosClient";
 import { fireInterval, makeVolley } from "./playerCombat";
 import { joystickVector, readTouchMode } from "./touchControls";
+import { leaveGameFullscreen, requestGameFullscreen } from "./gameFullscreen";
 
 const BEST_SCORE_KEY = "cryptoid_best_score";
 const HIGHEST_SECTOR_KEY = "cryptoid_highest_sector";
@@ -62,9 +63,9 @@ type Asteroid = {
 };
 
 type Effect = { id: number; x: number; y: number; kind: "hit" | "shield" | "explosion" | "boss-explosion" | "shatter"; startedAt: number; target?: "player" };
-type GameState = { asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; score: number; coins: number; hearts: number; shieldCharges: number; shieldMs: number; shieldActive: boolean; overdriveMs: number; rapidFireMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | null; weaponLevel: number; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
+type GameState = { asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; bonusShards: number; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; score: number; coins: number; hearts: number; shieldCharges: number; shieldMs: number; shieldActive: boolean; overdriveMs: number; rapidFireMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | null; weaponLevel: number; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
 
-const createInitialState = (): GameState => ({ asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: .86 }, thrust: 0, effects: [], powerUps: [], score: 0, coins: 30, hearts: 3, shieldCharges: 0, shieldMs: 0, shieldActive: true, overdriveMs: 0, rapidFireMs: 0, pendingStartPower: null, weaponLevel: 1, weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") ? "loading" : "playing" });
+const createInitialState = (): GameState => ({ asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", bonusShards: 0, boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: .86 }, thrust: 0, effects: [], powerUps: [], score: 0, coins: 30, hearts: 3, shieldCharges: 0, shieldMs: 0, shieldActive: true, overdriveMs: 0, rapidFireMs: 0, pendingStartPower: null, weaponLevel: 1, weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") ? "loading" : "playing" });
 
 const readRecord = (key: string) => Number(window.localStorage.getItem(key) || 0);
 
@@ -73,7 +74,7 @@ const saveRecords = (state: GameState) => {
   window.localStorage.setItem(HIGHEST_SECTOR_KEY, String(Math.max(readRecord(HIGHEST_SECTOR_KEY), state.sector)));
   window.localStorage.setItem(TOTAL_DESTROYED_KEY, String(readRecord(TOTAL_DESTROYED_KEY) + state.destroyed));
   // Earned Shards persist between runs; the 30 starting Coins never count.
-  window.localStorage.setItem(SHARD_BALANCE_KEY, String(shardBalance(window.localStorage.getItem(SHARD_BALANCE_KEY)) + state.destroyed));
+  window.localStorage.setItem(SHARD_BALANCE_KEY, String(shardBalance(window.localStorage.getItem(SHARD_BALANCE_KEY)) + state.destroyed + state.bonusShards));
 };
 
 const spawnAsteroid = (id: number, width: number, formationIndex: number, sector: number, slots: ReturnType<typeof formationLayout>): Asteroid => {
@@ -409,12 +410,12 @@ const GamePage = () => {
         }
         state.enemyShots = incomingShots;
         if (heartsLost > 0) {
-          const absorbed = state.shieldActive && state.shieldCharges > 0;
-          if (state.shieldActive) Object.assign(state, receiveImpacts(state, heartsLost));
-          else { const impacted = receiveImpacts({ ...state, shieldCharges: 0 }, heartsLost); state.hearts = impacted.hearts; }
-          state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: absorbed ? "shield" : "hit", startedAt: time, target: "player" });
-          if (absorbed) soundRef.current?.play("shield");
-          else { soundRef.current?.play("collision"); state.weaponCap = Math.max(1, state.weaponCap - 1); state.paidWeaponLevel = Math.min(state.paidWeaponLevel, state.weaponCap); state.pickupWeaponLevel = Math.min(state.pickupWeaponLevel, state.weaponCap); state.weaponLevel = Math.min(state.weaponLevel, state.weaponCap); }
+          const previousHearts = state.hearts;
+          Object.assign(state, resolvePlayerDamage(state, heartsLost, state.shieldActive));
+          const damaged = state.hearts < previousHearts;
+          state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: damaged ? "hit" : "shield", startedAt: time, target: "player" });
+          if (damaged) { soundRef.current?.play("collision"); state.weaponCap = Math.max(1, state.weaponCap - 1); state.paidWeaponLevel = Math.min(state.paidWeaponLevel, state.weaponCap); state.pickupWeaponLevel = Math.min(state.pickupWeaponLevel, state.weaponCap); state.weaponLevel = Math.min(state.weaponLevel, state.weaponCap); }
+          else soundRef.current?.play("shield");
         }
         state.powerUps = movePowerUps(state.powerUps, delta, height);
         state.powerUps = state.powerUps.filter(pickup => {
@@ -491,8 +492,12 @@ const GamePage = () => {
         }
         if (bonus && state.phase === "SECTOR_CLEAR" && previousPhase !== "SECTOR_CLEAR") {
           const reward = bonusReward(state.bonusHits);
-          state.bonusResult = reward.label;
+          state.bonusResult = `${reward.label} · +${reward.shards} SHARDS${reward.powerUps.length ? ` · ${reward.powerUps.map(power => power === "repair" ? "+1 HEART" : "SHIELD").join(" + ")}` : ""}`;
           state.score += reward.points;
+          state.bonusShards += reward.shards;
+          for (const power of reward.powerUps) Object.assign(state, applyPowerUp(state, power));
+          if (reward.powerUps.includes("shield")) state.shieldActive = true;
+          if (reward.powerUps.length) soundRef.current?.play("pickup");
         }
         if (state.phase === "SECTOR_CLEAR") state.enemyShots = [];
         state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "hit" ? 230 : effect.kind === "boss-explosion" ? 750 : 520));
@@ -597,11 +602,12 @@ const GamePage = () => {
       saveRecords(stateRef.current);
       recordsSavedRef.current = true;
     }
+    leaveGameFullscreen();
     navigate("/");
   };
 
   return (
-    <main className="game-shell" onPointerDownCapture={() => { void startEffects(); }}>
+    <main className="game-shell" onPointerDownCapture={() => { void startEffects(); requestGameFullscreen(); }}>
       <div ref={fieldRef} className="game-field" onPointerDown={startDrag} onPointerMove={event => { if (pointerRef.current === event.pointerId) positionFromPointer(event); }} onPointerUp={event => { if (pointerRef.current === event.pointerId) pointerRef.current = null; }} onPointerCancel={event => { if (pointerRef.current === event.pointerId) pointerRef.current = null; }}>
         <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} />
         <SectorBackdrop sector={game.sector} player={game.player} />

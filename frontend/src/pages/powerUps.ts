@@ -43,3 +43,9 @@ export const receiveImpacts = (status: PowerStatus, impacts: number): PowerStatu
   const absorbed = Math.min(status.shieldCharges, Math.max(0, impacts));
   return { ...status, shieldCharges: status.shieldCharges - absorbed, hearts: Math.max(0, status.hearts - (impacts - absorbed)) };
 };
+
+export const resolvePlayerDamage = <T extends PowerStatus>(status: T, impacts: number, shieldActive: boolean): T => {
+  if (shieldActive) return receiveImpacts(status, impacts) as T;
+  // An inactive shield stays in the inventory; it must never absorb an impact.
+  return { ...receiveImpacts({ ...status, shieldCharges: 0 }, impacts), shieldCharges: status.shieldCharges } as T;
+};
