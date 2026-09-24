@@ -90,7 +90,7 @@ const Shop = () => {
         <p>Choose a hull and paint for your next mission. Your golden π coin stays on every ship. Cosmetic unlocks with game Shards are planned for a later update.</p>
         <div className="ship-picker" role="group" aria-label="Ship hull">
           {playerSkins.map(skin => <button key={skin.id} className="ship-choice" type="button" aria-pressed={selected.skin.id === skin.id} onClick={() => { localStorage.setItem(SHIP_SKIN_KEY, skin.id); setSelected(current => ({ ...current, skin })); }}>
-            <span className="ship-preview"><i style={{ ...spriteStyle(skin.sprite), "--ship-hue": selected.color.hue } as CSSProperties} /><b>π</b></span><span>{skin.name}</span>
+            <span className="ship-preview"><i style={{ ...spriteStyle(skin.sprite), "--ship-hue": selected.color.hue, "--ship-glow": selected.color.glow } as CSSProperties} /><b>π</b></span><span>{skin.name}</span>
           </button>)}
         </div>
         <div className="ship-picker" role="group" aria-label="Ship paint">

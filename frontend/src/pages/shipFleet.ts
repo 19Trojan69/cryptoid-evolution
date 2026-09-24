@@ -13,10 +13,10 @@ export const playerSkins = [
 ] as const;
 
 export const playerColors = [
-  { id: "violet", name: "Violet", hue: "0deg" },
-  { id: "cyan", name: "Cyan", hue: "65deg" },
-  { id: "rose", name: "Rose", hue: "-65deg" },
-  { id: "amber", name: "Amber", hue: "145deg" },
+  { id: "violet", name: "Violet", hue: "0deg", glow: "#a56fe2" },
+  { id: "cyan", name: "Cyan", hue: "-100deg", glow: "#61d6e9" },
+  { id: "rose", name: "Rose", hue: "75deg", glow: "#e477ab" },
+  { id: "amber", name: "Amber", hue: "-225deg", glow: "#e5b75e" },
 ] as const;
 
 export type PlayerSkinId = (typeof playerSkins)[number]["id"];
