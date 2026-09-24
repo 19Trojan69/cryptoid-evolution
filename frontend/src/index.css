@@ -158,6 +158,11 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .bonus-counter { position: absolute; z-index: 2; top: 139px; left: 50%; transform: translateX(-50%); padding: 6px 10px; border: 1px solid rgba(127, 235, 241, .4); background: rgba(3, 14, 27, .73); color: #bbf9f5; font: 10px 'DM Mono', monospace; letter-spacing: .1em; white-space: nowrap; pointer-events: none; }
 .bonus-ship { filter: drop-shadow(0 0 10px #85f6ed); }
 .bonus-ship .cryptoid-core { background: radial-gradient(circle at 30% 25%, #fff, #bff2ee 25%, #528ab2 85%); }
+.sector-boss { width: 124px; height: 104px; z-index: 2; filter: drop-shadow(0 0 17px #ff9c67); }
+.sector-boss .cryptoid-core { font-size: 17px; }
+.sector-boss .health-bar { bottom: -16px; height: 6px; border: 1px solid #f7bd8e; }
+.sector-boss.boss-warning::after { border: 3px solid #ffd67d; background: rgba(255, 124, 75, .15); animation: attack-warning .32s ease-in-out infinite alternate; }
+.sector-boss.boss-enraged { filter: drop-shadow(0 0 20px #ff6779); }
 .asteroid { position: absolute; z-index: 1; width: 100px; height: 100px; cursor: crosshair; }
 .asteroid-small { width: 50px; height: 50px; }
 .asteroid-medium { width: 72px; height: 72px; }

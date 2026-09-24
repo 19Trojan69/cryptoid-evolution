@@ -11,7 +11,7 @@ This tracks implementation against the owner's current **Galaga-inspired CRYPTOI
 | C | Dive/curve/group runs return to their own slot; add legible enemy fire, budgets and dodge play-testing | Existing return/attack paths retained; bounded, telegraphed aimed shots and actual player impact added in current change; long-run dodge test pending |
 | Visual identity | Distinct ship silhouettes by strength, fictional letter coins mounted on enemy hulls, gold mathematical π coin on player ship | Implemented; initial browser visual review complete |
 | Sector depth | Distinct dominant planet per named sector, realistic Earth cutout in Genesis Belt, three smaller planets and restrained parallax behind gameplay | Implemented in current change; browser/mobile visual review pending |
-| D | Each sector contains several sections, every third a non-attacking shooting bonus; 4–6 minute sector pacing and end boss | Every-third-section bonus implemented with timed fly-through targets and tiered score; browser play-test, pacing and end boss pending |
+| D | Each sector contains several sections, every third a non-attacking shooting bonus; 4–6 minute sector pacing and end boss | Bonus and first Core Warden boss implemented; complete browser run, pacing, distinct bosses and advanced boss phases pending |
 | E | Five weapon levels, drop duration HUD, companion ship/tractor rescue, combos, shards and permanent progression | Pending |
 
 Normal sections now spawn a finite grid: six ships on narrow screens, fifteen on wider screens. New sections begin after every planned enemy has entered and all survivors have been shot down. Three sections share a named sector; the third is a bonus challenge with twelve crossing targets, no enemy fire or collision damage, and a tiered score reward. Missed targets exit the field so the challenge always ends. The 4–6 minute target is a tuning goal, not a forced timer. Enemy fire is limited and aimed only once per attack with locked trajectory; bosses remain separate work. The ship has no real-world crypto logo and ammunition does not spend the legacy Coins counter.
@@ -35,7 +35,7 @@ Visual backgrounds are decorative only. They never consume enemy slots or affect
 | 11 | Legendary Cryptoids | Pending |
 | 12 | Mini-bosses | Pending |
 | 13 | Bonus phases | Implemented first version: every third section, fly-through targets, no enemy attacks, scoring; browser play-test pending |
-| 14 | Boss sectors | Pending |
+| 14 | Boss sectors | First end-of-sector boss implemented after bonus: visible entry, aimed capped shots, stronger half-health phase, health bar and kill-to-clear; full play-test and later unique bosses pending |
 | 15 | Crypto Shards and long-term progression | Pending |
 
 ## Design rules to preserve
@@ -57,6 +57,15 @@ The step 8 roster gives SolFlare a quicker entry/attack, BitRock heavier armor, 
 Step 9 pickups are now collected by the player's ship. Shield absorbs one impact per charge, Repair Core restores one heart up to three, and Overdrive doubles shot damage for 12 seconds. Drops are rare except for a first safe pickup after three kills; they only appear near a defeated enemy when the position and immediate path are clear. Rapid Fire, Twin Shot, Triple Shot and Crypto Magnet require later weapon and Crypto Shard systems.
 
 The Double and V attack paths unlock only after five minutes. Their selection and on-screen geometry are tested; a full long-run play-test with a moving ship is still required.
+
+The first Core Warden appears after each third-section bonus. It enters from above, moves horizontally in the upper field, fires single locked shots under the existing projectile budget and fires somewhat more frequently below half health. It has capped health, gives a score reward and must be defeated before the next sector starts. No tractor beam, multi-part boss, dedicated boss art, or 1–3 minute balance tuning is claimed yet.
+
+## Planned Network Chain ecosystem layer
+
+- Defeated Cryptoids may drop fictional data fragments. Collecting fragments and sustaining a kill combo fills an in-game Chain Meter.
+- A full meter builds a block and offers one short-run choice: shield charge, weapon energy, or shard magnet. Three blocks form a Network Link for a sector score reward; this never gates the kill-to-clear section flow.
+- Fictional letter coins on the enemy hulls signal fragment families. Later Crypto Shards pay for permanent unlocks outside runs.
+- Keep this gameplay system separate from the existing Pi wallet/payment interface. Fragments, blocks and shards have no real-world monetary value or transferable token functionality. Implement after weapon levels, combo and the basic shard inventory are stable.
 
 ## Master design reference for later steps
 
