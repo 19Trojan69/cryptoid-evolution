@@ -1,7 +1,7 @@
 import { memo, type CSSProperties } from "react";
 import type { PlayerPosition } from "./playerCombat";
 
-const SectorBackdrop = ({ sector, player }: { sector: number; player: PlayerPosition }) => {
+const SectorBackdrop = ({ sector, player, paused }: { sector: number; player: PlayerPosition; paused: boolean }) => {
   const palette = ((sector - 1) % 6) + 1;
   const planetTypes = [
     ["ice", "desert", "earth", "gas"],
@@ -21,14 +21,11 @@ const SectorBackdrop = ({ sector, player }: { sector: number; player: PlayerPosi
   } as CSSProperties;
 
   return (
-    <div className={`space-scene space-scene-${palette}`} style={parallax} aria-hidden="true">
+    <div className={`space-scene space-scene-${palette}${paused ? " space-scene-paused" : ""}`} style={parallax} aria-hidden="true">
       <div className="space-haze" />
       <div className="space-orbit space-orbit-one" />
       <div className="space-orbit space-orbit-two" />
-      <div className={`space-world space-world-distant planet-${planetTypes[0]}`} />
-      <div className={`space-world space-world-secondary planet-${planetTypes[1]}`} />
-      <div className={`space-world space-world-primary planet-${planetTypes[2]}`} />
-      <div className={`space-world space-world-near planet-${planetTypes[3]}`} />
+      {planetTypes.map((planet, index) => <div key={index} className={`space-world ${["space-world-distant", "space-world-secondary", "space-world-primary", "space-world-near"][index]} planet-${planet}`}><span className="space-world-surface" /></div>)}
     </div>
   );
 };

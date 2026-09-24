@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { GameAudio } from "./gameAudio.ts";
 
-test("music toggle stops the beat without silencing game effects", async () => {
+test("game audio plays effects without scheduling background music", async () => {
   const previous = { AudioContext: globalThis.AudioContext, window: globalThis.window };
   let nextTimer = 0;
   const intervals = new Set();
@@ -31,16 +31,13 @@ test("music toggle stops the beat without silencing game effects", async () => {
   const audio = new GameAudio();
   try {
     assert.equal(await audio.start(), true);
-    assert.equal(intervals.size, 1);
-    audio.setMusicEnabled(false);
     assert.equal(intervals.size, 0);
+    assert.equal(buses.length, 1);
     assert.equal(buses[0].gain.value, 1);
-    assert.equal(buses[1].gain.value, 0);
     audio.play("laser");
     audio.play("collision");
     assert.equal(playedTones, 2);
-    audio.setMusicEnabled(true);
-    assert.equal(intervals.size, 1);
+    assert.equal(intervals.size, 0);
   } finally {
     audio.close();
     globalThis.AudioContext = previous.AudioContext;

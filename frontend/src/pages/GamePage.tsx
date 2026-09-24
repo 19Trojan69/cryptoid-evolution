@@ -181,7 +181,6 @@ const GamePage = () => {
   const audioStartRef = useRef<Promise<GameAudio | null> | null>(null);
   const audioCleanupRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const startRequestRef = useRef(false);
-  const [musicEnabled, setMusicEnabled] = useState(false);
 
   const activateLoadout = async () => {
     if (startRequestRef.current || stateRef.current.status !== "loading") return;
@@ -234,7 +233,6 @@ const GamePage = () => {
     if (!audioStartRef.current) {
       const primed = takePrimedGameAudio();
       const audio = primed ? null : new GameAudio();
-      audio?.setMusicEnabled(false);
       audioStartRef.current = (primed ?? audio!.start().then(started => started ? audio : null)).then(ready => {
         if (!ready) {
           audio?.close();
@@ -250,14 +248,6 @@ const GamePage = () => {
     return audioStartRef.current;
   };
   useEffect(() => { if (hasPrimedGameAudio()) void startEffects(); }, []);
-
-  const toggleMusic = async () => {
-    const audio = await startEffects();
-    if (!audio) return;
-    audio.setMusicEnabled(!musicEnabled);
-    setMusicEnabled(!musicEnabled);
-    if (musicEnabled) audio.play("pickup");
-  };
 
   useEffect(() => {
     const controls = new Set(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "KeyA", "KeyD", "KeyW", "KeyS"]);
@@ -550,7 +540,7 @@ const GamePage = () => {
           });
         }
         if (state.phase === "SECTOR_CLEAR") state.enemyShots = [];
-        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "hit" ? 230 : effect.kind === "boss-explosion" ? 750 : 520));
+        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "hit" ? 230 : effect.kind === "boss-explosion" ? 600 : 390));
         if (state.hearts === 0) {
           state.status = "game-over";
           if (!recordsSavedRef.current) {
@@ -666,12 +656,11 @@ const GamePage = () => {
     <main className="game-shell" onPointerDownCapture={() => { void startEffects(); requestGameFullscreen(); }}>
       <div ref={fieldRef} className="game-field" onPointerDown={startDrag} onPointerMove={event => { if (pointerRef.current === event.pointerId) positionFromPointer(event); }} onPointerUp={event => { if (pointerRef.current === event.pointerId) pointerRef.current = null; }} onPointerCancel={event => { if (pointerRef.current === event.pointerId) pointerRef.current = null; }}>
         <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} />
-        <SectorBackdrop sector={game.sector} player={game.player} />
+        <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
         <header className="game-hud">
           <div className="hud-actions">
             <button className="game-control home-control" type="button" onClick={() => setHomePrompt(true)} aria-label={t('Go home')}>⌂ <span>{t('Home')}</span></button>
             <button className="game-control terms-control" type="button" aria-label="Nutzungsbedingungen / Terms of Service" title="Nutzungsbedingungen / Terms of Service" onClick={() => { termsReturnStatus.current = stateRef.current.status; if (stateRef.current.status === "playing") { stateRef.current.status = "paused"; setGame({ ...stateRef.current }); } setTermsOpen(true); }}>§</button>
-            <button className="game-control sound-control" type="button" onClick={() => { void toggleMusic(); }} aria-label={musicEnabled ? "Musik ausschalten" : "Musik einschalten"} title={musicEnabled ? "Nur Musik ausschalten – Spieleffekte bleiben hörbar" : "Musik einschalten – Spieleffekte bleiben hörbar"} aria-pressed={musicEnabled}>{musicEnabled ? "♫" : "♫̸"}</button>
           </div>
           <div className="hud-stat"><span>{t('Score')}</span><strong>{game.score}</strong></div>
           <div className="hud-stat coin-stat"><span>{t('Coins')}</span><strong>● {game.coins}</strong></div>
@@ -692,7 +681,7 @@ const GamePage = () => {
         {game.powerUps.map(pickup => <div key={pickup.id} className={`power-up power-up-${pickup.type}`} title={t(powerUpNames[pickup.type])} style={{ left: pickup.x, top: pickup.y }}><span>{powerUpSymbols[pickup.type]}</span></div>)}
         {game.shots.map(shot => <div key={shot.id} className={`player-laser${shot.empowered ? " player-laser-overdrive" : ""}`} style={{ left: shot.x, top: shot.y }} />)}
         {game.enemyShots.map(shot => <div key={shot.id} className="enemy-laser" style={{ left: shot.x, top: shot.y }} />)}
-        {game.effects.map(effect => <div key={effect.id} className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y }}><span /><span /><span /></div>)}
+        {game.effects.map(effect => <div key={effect.id} className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y }}><span /></div>)}
         <div ref={playerShipRef} className={`player-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0 ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "hit") ? " player-ship-hurt" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${9 + game.thrust * 7}%`, ...shipNozzleStyle(shipSelection.skin.sprite) } as CSSProperties} aria-label={t('Your Cryptoid ship')}><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} /><div className="player-engine player-engine-left" /><div className="player-engine player-engine-right" /></div>
         <div className="game-tip">← → ↑ ↓ / {touchMode === "drag" ? t("drag") : t("thumb joystick")} · {t("Auto fire")}</div>
         <div className={`touch-controls touch-controls-${touchMode}`}>
