@@ -1,0 +1,31 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { collectPowerUp, createPowerUpDrop, movePowerUps, receiveImpacts } from "./powerUps.ts";
+
+const safe = { id: 1, x: 400, y: 220, width: 800, height: 600, hearts: 2, threats: [], activeCount: 0, chanceRoll: 0.04, kindRoll: 0.1, destroyed: 1, dropsCreated: 0 };
+
+test("drops stay rare, but the first safe pickup appears after three kills", () => {
+  assert.deepEqual(createPowerUpDrop(safe), { id: 1, x: 400, y: 220, type: "shield" });
+  assert.equal(createPowerUpDrop({ ...safe, chanceRoll: 0.8 }), null);
+  assert.equal(createPowerUpDrop({ ...safe, chanceRoll: 0.8, destroyed: 3 })?.type, "shield");
+  assert.equal(createPowerUpDrop({ ...safe, chanceRoll: 0.8, destroyed: 3, dropsCreated: 1 }), null);
+  assert.equal(createPowerUpDrop({ ...safe, kindRoll: 0.7 })?.type, "overdrive");
+  assert.equal(createPowerUpDrop({ ...safe, kindRoll: 0.99 })?.type, "repair");
+  assert.equal(createPowerUpDrop({ ...safe, kindRoll: 0.99, hearts: 3 })?.type, "shield");
+});
+
+test("drops avoid occupied paths and the lower danger area", () => {
+  assert.equal(createPowerUpDrop({ ...safe, y: 500 }), null);
+  assert.equal(createPowerUpDrop({ ...safe, threats: [{ x: 410, y: 270, radius: 25 }] }), null);
+  assert.equal(createPowerUpDrop({ ...safe, activeCount: 3 }), null);
+  assert.equal(movePowerUps([{ id: 1, type: "shield", x: 400, y: 500 }], 2_000, 600).length, 0);
+});
+
+test("shield absorbs impacts, repair caps at three hearts, overdrive refreshes", () => {
+  let status = { hearts: 2, shieldCharges: 0, overdriveMs: 0 };
+  status = collectPowerUp(status, "shield");
+  assert.deepEqual(receiveImpacts(status, 1), { hearts: 2, shieldCharges: 0, overdriveMs: 0 });
+  assert.equal(receiveImpacts(status, 2).hearts, 1);
+  assert.equal(collectPowerUp(collectPowerUp(status, "repair"), "repair").hearts, 3);
+  assert.equal(collectPowerUp(status, "overdrive").overdriveMs, 12_000);
+});

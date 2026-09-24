@@ -14,7 +14,7 @@ This tracks implementation against the CRYPTOID Master Game Design supplied by t
 | 6 | Attack patterns: Dive, Curve, S-Curve, Loop, Side, Double, V | Implemented; full dodging and long-run group play-testing remain open |
 | 7 | Visible sectors and internal attack cycles | Implemented: five-minute named sectors, intro, entry, formation, attack/reform, final attack and clear; long-run play-testing remains open |
 | 8 | Cryptoid classes, types and fictional markings | Implemented: six distinct silhouettes, four classes, fictional codes, durability and attack pacing; subtype powers still open |
-| 9 | Power-ups | Pending |
+| 9 | Power-ups | First playable stage: safe falling Shield, Repair Core and Overdrive pickups; weapon and shard upgrades pending player ship / weapon and shard systems |
 | 10 | Combos and score bonuses | Pending |
 | 11 | Legendary Cryptoids | Pending |
 | 12 | Mini-bosses | Pending |
@@ -37,6 +37,8 @@ This tracks implementation against the CRYPTOID Master Game Design supplied by t
 The current browser game uses tap-to-fire Cryptoid targets and an Earth defense area; it does not yet have a steerable player ship. Movement, dodging and ship hitbox criteria cannot be marked as passed until that feature exists. Sector visuals and special events remain for later steps; the first sector transition needs a full five-minute survival play-test.
 
 The step 8 roster gives SolFlare a quicker entry/attack, BitRock heavier armor, Ether Crystal a distinct shatter effect, and Ghost Coin a formation-only cloak that stops before any attack. Stable Core's protective field, Ether Crystal's dangerous split fragments, and full multi-enemy Meme Swarm behavior are not yet active and require separate gameplay and fairness tests before being claimed as complete.
+
+Step 9 initially offers tap-to-collect pickups because the current prototype has no movable player ship. Shield absorbs one impact per charge, Repair Core restores one heart up to three, and Overdrive doubles damage per tap for 12 seconds. Drops are rare except for a first safe pickup after three kills; they only appear near a defeated enemy when the position and immediate path are clear. Rapid Fire, Twin Shot, Triple Shot and Crypto Magnet require the later player weapon and Crypto Shard systems. Pickup collision and weapon behavior must be reviewed again after the ship is added.
 
 The Double and V attack paths unlock only after five minutes. Their selection and on-screen geometry are tested; a full long-run play-test with a moving ship is still required.
 

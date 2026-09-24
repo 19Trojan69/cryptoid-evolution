@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
 import { sectorAt, sectorName, type SectorPhase } from "./sectorManager";
 import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
+import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpNames, powerUpSymbols, receiveImpacts, type PowerUp } from "./powerUps";
 
 const BEST_SCORE_KEY = "cryptoid_best_score";
 const HIGHEST_SECTOR_KEY = "cryptoid_highest_sector";
@@ -49,11 +50,11 @@ type Asteroid = {
   returnElapsed: number;
 };
 
-type Shot = { id: number; x: number; y: number; targetX: number; targetY: number; progress: number };
+type Shot = { id: number; x: number; y: number; targetX: number; targetY: number; progress: number; empowered: boolean };
 type Effect = { id: number; x: number; y: number; kind: "hit" | "explosion" | "shatter"; startedAt: number };
-type GameState = { asteroids: Asteroid[]; shots: Shot[]; effects: Effect[]; score: number; coins: number; hearts: number; destroyed: number; sector: number; phase: SectorPhase; status: GameStatus };
+type GameState = { asteroids: Asteroid[]; shots: Shot[]; effects: Effect[]; powerUps: PowerUp[]; score: number; coins: number; hearts: number; shieldCharges: number; overdriveMs: number; destroyed: number; sector: number; phase: SectorPhase; status: GameStatus };
 
-const createInitialState = (): GameState => ({ asteroids: [], shots: [], effects: [], score: 0, coins: 30, hearts: 3, destroyed: 0, sector: 1, phase: "SECTOR_INTRO", status: "playing" });
+const createInitialState = (): GameState => ({ asteroids: [], shots: [], effects: [], powerUps: [], score: 0, coins: 30, hearts: 3, shieldCharges: 0, overdriveMs: 0, destroyed: 0, sector: 1, phase: "SECTOR_INTRO", status: "playing" });
 
 const readRecord = (key: string) => Number(window.localStorage.getItem(key) || 0);
 
@@ -143,6 +144,7 @@ const GamePage = () => {
   const spawnTimerRef = useRef(0);
   const elapsedRef = useRef(0);
   const attackNumberRef = useRef(0);
+  const dropsCreatedRef = useRef(0);
   const impactCooldownRef = useRef(0);
   const [game, setGame] = useState<GameState>(createInitialState);
   const [homePrompt, setHomePrompt] = useState(false);
@@ -159,12 +161,14 @@ const GamePage = () => {
         const height = field?.clientHeight || 600;
         elapsedRef.current += delta;
         impactCooldownRef.current = Math.max(0, impactCooldownRef.current - delta);
+        state.overdriveMs = Math.max(0, state.overdriveMs - delta);
         const sector = sectorAt(elapsedRef.current, state.asteroids.some(asteroid => asteroid.attackPattern !== null && asteroid.attackElapsed >= attackTime(asteroid)));
         if (sector.number !== state.sector) {
           state.sector = sector.number;
           state.asteroids = [];
           state.shots = [];
           state.effects = [];
+          state.powerUps = [];
           formationIndexRef.current = 0;
           spawnTimerRef.current = 0;
         }
@@ -204,7 +208,8 @@ const GamePage = () => {
           if (next.y >= -next.radius) nextAsteroids.push({ ...next, cloaked: isGhostCloaked(next.type, next.attackPattern === null && next.entryElapsed >= next.entryDuration && next.formationElapsed >= next.formationDuration, elapsedRef.current) });
         });
         state.asteroids = nextAsteroids;
-        state.hearts = Math.max(0, state.hearts - heartsLost);
+        Object.assign(state, receiveImpacts(state, heartsLost));
+        state.powerUps = movePowerUps(state.powerUps, delta, height);
         state.shots = state.shots.map(shot => ({ ...shot, progress: Math.min(1, shot.progress + delta / 260) })).filter(shot => shot.progress < 1);
         state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "hit" ? 230 : 430));
         if (state.hearts === 0 || state.coins === 0) {
@@ -214,7 +219,7 @@ const GamePage = () => {
             recordsSavedRef.current = true;
           }
         }
-        setGame({ ...state, asteroids: [...state.asteroids], shots: [...state.shots], effects: [...state.effects] });
+        setGame({ ...state, asteroids: [...state.asteroids], shots: [...state.shots], effects: [...state.effects], powerUps: [...state.powerUps] });
       }
       animationRef.current = window.requestAnimationFrame(loop);
     };
@@ -227,6 +232,7 @@ const GamePage = () => {
 
   const fireAt = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (stateRef.current.status !== "playing" || stateRef.current.coins <= 0) return;
+    if ((event.target as HTMLElement).closest(".power-up")) return;
     if (!(event.target as HTMLElement).closest(".asteroid")) return;
     const field = fieldRef.current;
     if (!field) return;
@@ -239,16 +245,33 @@ const GamePage = () => {
     if (!asteroid) return;
     const state = stateRef.current;
     state.coins -= 1;
-    asteroid.health -= 1;
-    state.shots.push({ id: nextIdRef.current++, x: bounds.width / 2, y: bounds.height - 55, targetX: asteroid.x, targetY: asteroid.y, progress: 0 });
+    const empowered = state.overdriveMs > 0;
+    asteroid.health = Math.max(0, asteroid.health - (empowered ? 2 : 1));
+    state.shots.push({ id: nextIdRef.current++, x: bounds.width / 2, y: bounds.height - 55, targetX: asteroid.x, targetY: asteroid.y, progress: 0, empowered });
     state.effects.push({ id: nextIdRef.current++, x: asteroid.x, y: asteroid.y, kind: asteroid.health <= 0 ? (asteroid.type === "etherCrystal" ? "shatter" : "explosion") : "hit", startedAt: performance.now() });
     if (asteroid.health <= 0) {
       state.score += asteroid.points;
       state.coins += asteroid.reward;
       state.destroyed += 1;
       state.asteroids = state.asteroids.filter(item => item.id !== asteroid.id);
+      const drop = createPowerUpDrop({ id: nextIdRef.current, x: asteroid.x, y: asteroid.y, width: bounds.width, height: bounds.height, hearts: state.hearts, threats: state.asteroids, activeCount: state.powerUps.length, chanceRoll: Math.random(), kindRoll: Math.random(), destroyed: state.destroyed, dropsCreated: dropsCreatedRef.current });
+      if (drop) {
+        nextIdRef.current += 1;
+        dropsCreatedRef.current += 1;
+        state.powerUps.push(drop);
+      }
     }
-    setGame({ ...state, asteroids: [...state.asteroids], shots: [...state.shots], effects: [...state.effects] });
+    setGame({ ...state, asteroids: [...state.asteroids], shots: [...state.shots], effects: [...state.effects], powerUps: [...state.powerUps] });
+  };
+
+  const pickUp = (id: number) => {
+    const state = stateRef.current;
+    if (state.status !== "playing") return;
+    const pickup = state.powerUps.find(item => item.id === id);
+    if (!pickup) return;
+    Object.assign(state, applyPowerUp(state, pickup.type));
+    state.powerUps = state.powerUps.filter(item => item.id !== id);
+    setGame({ ...state, powerUps: [...state.powerUps] });
   };
 
   const restart = () => {
@@ -258,6 +281,7 @@ const GamePage = () => {
     spawnTimerRef.current = 0;
     elapsedRef.current = 0;
     attackNumberRef.current = 0;
+    dropsCreatedRef.current = 0;
     impactCooldownRef.current = 0;
     lastFrameRef.current = 0;
     setGame(stateRef.current);
@@ -284,12 +308,14 @@ const GamePage = () => {
           <button className="game-control pause-control" type="button" onClick={() => { stateRef.current.status = game.status === "paused" ? "playing" : "paused"; setGame({ ...stateRef.current }); }} aria-label={game.status === "paused" ? "Resume" : "Pause"}>{game.status === "paused" ? "▶" : "Ⅱ"}</button>
         </header>
         <div className="game-label">SECTOR {String(game.sector).padStart(2, "0")} <span>· {sectorName(game.sector)}</span></div>
+        {(game.shieldCharges > 0 || game.overdriveMs > 0) && <div className="power-status" aria-live="polite">{game.shieldCharges > 0 && <span>◇ SHIELD {game.shieldCharges}</span>}{game.overdriveMs > 0 && <span>ϟ OVERDRIVE {Math.ceil(game.overdriveMs / 1_000)}s</span>}</div>}
         {game.status === "playing" && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className="sector-banner" aria-live="polite"><span>{game.phase === "SECTOR_CLEAR" ? "SECTOR CLEAR" : `SECTOR ${String(game.sector).padStart(2, "0")}`}</span><strong>{sectorName(game.sector)}</strong></div>}
         {game.asteroids.map(asteroid => <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ left: asteroid.x, top: asteroid.y, transform: `translate(-50%, -50%) rotate(${asteroid.rotation}deg)` }}><div className="asteroid-shape" /><span className="cryptoid-core"><b>{asteroid.faction}</b></span><span className="health-bar"><b style={{ width: `${(asteroid.health / asteroid.maxHealth) * 100}%` }} /></span></div>)}
-        {game.shots.map(shot => <div key={shot.id} className="coin-shot" style={{ left: shot.x + (shot.targetX - shot.x) * shot.progress, top: shot.y + (shot.targetY - shot.y) * shot.progress }}>●</div>)}
+        {game.powerUps.map(pickup => <button key={pickup.id} type="button" className={`power-up power-up-${pickup.type}`} aria-label={`Collect ${powerUpNames[pickup.type]} power-up`} title={powerUpNames[pickup.type]} style={{ left: pickup.x, top: pickup.y }} onClick={() => pickUp(pickup.id)}><span>{powerUpSymbols[pickup.type]}</span></button>)}
+        {game.shots.map(shot => <div key={shot.id} className={`coin-shot${shot.empowered ? " coin-shot-overdrive" : ""}`} style={{ left: shot.x + (shot.targetX - shot.x) * shot.progress, top: shot.y + (shot.targetY - shot.y) * shot.progress }}>●</div>)}
         {game.effects.map(effect => <div key={effect.id} className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y }}><span /></div>)}
         <div className="earth"><div className="earth-glow" /><div className="earth-body"><span /><span /><span /></div><p>EARTH // PROTECTED</p></div>
-        <div className="game-tip">Tap an asteroid to fire a coin</div>
+        <div className="game-tip">Tap enemies · collect glowing cores</div>
         {game.status === "paused" && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">MISSION PAUSED</p><h1>Hold the line.</h1><p>The asteroids are waiting.</p><button className="button button-primary" type="button" onClick={() => { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); }}>Resume mission <span>▶</span></button></div></div>}
         {game.status === "game-over" && <div className="game-overlay"><div className="game-modal game-over-modal"><p className="eyebrow">MISSION COMPLETE</p><h1>Game Over</h1><div className="game-over-stats"><span><b>{game.score}</b>Score</span><span><b>{game.destroyed}</b>Destroyed</span><span><b>{game.sector}</b>Sector</span></div><div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>Play Again <span>↗</span></button><button className="button button-secondary" type="button" onClick={goHome}>Home</button></div></div></div>}
         {homePrompt && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">LEAVE MISSION?</p><h2>Return to base?</h2><p>Your current round will end. Your records will be saved locally.</p><div className="modal-actions"><button className="button button-primary" type="button" onClick={goHome}>Leave game</button><button className="button button-secondary" type="button" onClick={() => setHomePrompt(false)}>Keep playing</button></div></div></div>}
