@@ -6,6 +6,7 @@ import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpNames, powerUpSymbols, receiveImpacts, type PowerUp } from "./powerUps";
 import { advanceShot, FIRE_INTERVAL_MS, MAX_PLAYER_SHOTS, movePlayer, placePlayer, shipHitsEnemy, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
 import { advanceEnemyShot, createEnemyShot, enemyShotHitsPlayer, enemyShotLimit, type EnemyShot } from "./enemyFire";
+import SectorBackdrop from "./SectorBackdrop";
 
 const BEST_SCORE_KEY = "cryptoid_best_score";
 const HIGHEST_SECTOR_KEY = "cryptoid_highest_sector";
@@ -353,6 +354,7 @@ const GamePage = () => {
     <main className="game-shell">
       <div ref={fieldRef} className="game-field" onPointerDown={startDrag} onPointerMove={event => { if (pointerRef.current === event.pointerId) positionFromPointer(event); }} onPointerUp={event => { if (pointerRef.current === event.pointerId) pointerRef.current = null; }} onPointerCancel={event => { if (pointerRef.current === event.pointerId) pointerRef.current = null; }}>
         <div className="star-layer star-layer-one" /><div className="star-layer star-layer-two" />
+        <SectorBackdrop sector={game.sector} player={game.player} />
         <header className="game-hud">
           <button className="game-control home-control" type="button" onClick={() => setHomePrompt(true)} aria-label="Go home">⌂ <span>Home</span></button>
           <div className="hud-stat"><span>Score</span><strong>{game.score}</strong></div>
