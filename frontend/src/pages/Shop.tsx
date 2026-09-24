@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import ProductCard from "../components/ProductCard";
@@ -8,11 +8,13 @@ import { useAuth } from "../hooks/useAuth";
 import { IRRA_TOKEN_CANONICAL, usePayments } from "../hooks/usePayments";
 import { axiosClient } from "../lib/axiosClient.ts";
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "./GamePage.tsx";
+import { playerColors, playerSkins, selectedShip, SHIP_COLOR_KEY, SHIP_SKIN_KEY, spriteStyle } from "./shipFleet";
 
 const Shop = () => {
   const navigate = useNavigate();
   const [activePanel, setActivePanel] = useState<"how" | "progress" | null>(null);
   const [records] = useState(() => ({ bestScore: Number(localStorage.getItem(BEST_SCORE_KEY) || 0), highestSector: Number(localStorage.getItem(HIGHEST_SECTOR_KEY) || 0), totalDestroyed: Number(localStorage.getItem(TOTAL_DESTROYED_KEY) || 0) }));
+  const [selected, setSelected] = useState(selectedShip);
   const {
     user,
     isAuthenticated,
@@ -80,6 +82,20 @@ const Shop = () => {
           <strong className="streak-number">{records.totalDestroyed} <small>asteroids</small></strong>
           <p>Total destroyed across all missions.</p>
         </article>
+      </section>
+
+      <section className="ship-selector" aria-labelledby="hangar-heading">
+        <p className="eyebrow">YOUR HANGAR</p>
+        <h2 id="hangar-heading">Choose your ship</h2>
+        <p>Choose a hull and paint for your next mission. Your golden π coin stays on every ship. Cosmetic unlocks with game Shards are planned for a later update.</p>
+        <div className="ship-picker" role="group" aria-label="Ship hull">
+          {playerSkins.map(skin => <button key={skin.id} className="ship-choice" type="button" aria-pressed={selected.skin.id === skin.id} onClick={() => { localStorage.setItem(SHIP_SKIN_KEY, skin.id); setSelected(current => ({ ...current, skin })); }}>
+            <span className="ship-preview"><i style={{ ...spriteStyle(skin.sprite), "--ship-hue": selected.color.hue } as CSSProperties} /><b>π</b></span><span>{skin.name}</span>
+          </button>)}
+        </div>
+        <div className="ship-picker" role="group" aria-label="Ship paint">
+          {playerColors.map(color => <button key={color.id} className="color-choice" type="button" aria-label={color.name} aria-pressed={selected.color.id === color.id} title={color.name} style={{ backgroundColor: { violet: "#a56fe2", cyan: "#61d6e9", rose: "#e477ab", amber: "#e5b75e" }[color.id] }} onClick={() => { localStorage.setItem(SHIP_COLOR_KEY, color.id); setSelected(current => ({ ...current, color })); }} />)}
+        </div>
       </section>
 
       <section className="upgrade-section" aria-labelledby="upgrade-heading">
