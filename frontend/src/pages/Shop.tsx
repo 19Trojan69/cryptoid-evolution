@@ -7,7 +7,7 @@ import { useAuth } from "../hooks/useAuth";
 import { usePayments } from "../hooks/usePayments";
 import { axiosClient } from "../lib/axiosClient.ts";
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "./GamePage.tsx";
-import { allPlayerColors, buyShipVariant, EXTRA_STARTER_PRICE, fleetCount, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, spriteStyle, type PlayerColorId } from "./shipFleet";
+import { allPlayerColors, buyShipVariant, EXTRA_STARTER_PRICE, fleetCount, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, spriteStyle } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
 import TermsDialog from "../components/TermsDialog";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
