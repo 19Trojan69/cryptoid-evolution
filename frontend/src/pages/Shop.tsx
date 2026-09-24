@@ -95,7 +95,7 @@ const Shop = () => {
           <button className="close-button" type="button" onClick={() => setActivePanel(null)} aria-label="Close">×</button>
           <p className="eyebrow">{activePanel === "how" ? "FIELD GUIDE" : "MISSION LOG"}</p>
           <h2 id="info-title">{activePanel === "how" ? "How to Play" : "Your Progress"}</h2>
-          <p>{activePanel === "how" ? "Tap or click a Cryptoid to fire one virtual coin. Some enemies need several hits; defeating them restores coins and scores points. Tap a falling glowing core to collect it: Shield absorbs a hit, Repair restores one heart, and Overdrive boosts your damage briefly. You start with 30 coins and 3 hearts. The round ends when you have no hearts or coins left." : `Your best score is ${records.bestScore}, your highest sector is ${records.highestSector}, and you have destroyed ${records.totalDestroyed} asteroids.`}</p>
+          <p>{activePanel === "how" ? "Move your ship with the arrow keys or WASD; on touchscreens, drag it in the lower playfield. Your laser fires automatically. Dodge diving Cryptoids, line up shots, and fly into glowing pickups: Shield absorbs a hit, Repair restores a heart, and Overdrive briefly strengthens your shots. You have three hearts; the round ends when they run out." : `Your best score is ${records.bestScore}, your highest sector is ${records.highestSector}, and you have destroyed ${records.totalDestroyed} Cryptoids.`}</p>
           <button className="button button-primary" type="button" onClick={() => { setActivePanel(null); if (activePanel === "how") navigate("/game"); }}>Enter mission <span>↗</span></button>
         </div>
       </div>}

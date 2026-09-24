@@ -1,6 +1,18 @@
 # CRYPTOID gameplay roadmap
 
-This tracks implementation against the CRYPTOID Master Game Design supplied by the project owner. The full design remains the reference for mechanics, visual identity, fairness, difficulty and acceptance criteria.
+This tracks implementation against the owner's current **Galaga-inspired CRYPTOID upgrade**. Its ordered rows, finite kill-to-clear sections, auto-firing movable ship, every-third-section bonus and sector-ending boss **supersede conflicting rules below** from the earlier master design. Keep original CRYPTOID art and progression; make and test one contained gameplay change at a time.
+
+## Galaga-inspired upgrade — active sequence
+
+| Slice | Acceptance target | Status |
+| --- | --- | --- |
+| A | Violet/gold π ship moves horizontally and within lower vertical band; auto-fires finite projectile pool; projectile hits require contact, enemy collisions require contact; drops are picked up by ship | Implemented in current change; browser acceptance pending |
+| B | Replace timed spawning/V with bounded entry groups and stable rows/columns; section clears only when every enemy is defeated | Pending |
+| C | Dive/curve/group runs return to their own slot; add legible enemy fire, budgets and dodge play-testing | Pending |
+| D | Each sector contains several sections, every third a non-attacking shooting bonus; 4–6 minute sector pacing and end boss | Pending |
+| E | Five weapon levels, drop duration HUD, companion ship/tractor rescue, combos, shards and permanent progression | Pending |
+
+The initial ship slice preserves the old timed sectors and attack paths temporarily; do not label these compliant with kill-to-clear, ordered rows, enemy fire, bonus challenge or boss mechanics yet. The new ship has no real-world crypto logo and ammunition does not spend the legacy Coins counter.
 
 ## Required development order
 
@@ -34,7 +46,7 @@ This tracks implementation against the CRYPTOID Master Game Design supplied by t
 
 ## Known gap in the current prototype
 
-The current browser game uses tap-to-fire Cryptoid targets and an Earth defense area; it does not yet have a steerable player ship. Movement, dodging and ship hitbox criteria cannot be marked as passed until that feature exists. Sector visuals and special events remain for later steps; the first sector transition needs a full five-minute survival play-test.
+The older implementation used tap-to-fire targets and an Earth defense area. The current slice replaces these with a steerable ship, auto-fire, a compact collision radius and proximity pickups. Full keyboard/touch and survival acceptance must be checked in-browser. Sector visuals and special events remain for later steps.
 
 The step 8 roster gives SolFlare a quicker entry/attack, BitRock heavier armor, Ether Crystal a distinct shatter effect, and Ghost Coin a formation-only cloak that stops before any attack. Stable Core's protective field, Ether Crystal's dangerous split fragments, and full multi-enemy Meme Swarm behavior are not yet active and require separate gameplay and fairness tests before being claimed as complete.
 
