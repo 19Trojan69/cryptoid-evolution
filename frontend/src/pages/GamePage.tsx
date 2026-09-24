@@ -495,8 +495,10 @@ const GamePage = () => {
           state.bonusResult = `${reward.label} · +${reward.shards} SHARDS${reward.powerUps.length ? ` · ${reward.powerUps.map(power => power === "repair" ? "+1 HEART" : "SHIELD").join(" + ")}` : ""}`;
           state.score += reward.points;
           state.bonusShards += reward.shards;
-          for (const power of reward.powerUps) Object.assign(state, applyPowerUp(state, power));
-          if (reward.powerUps.includes("shield")) state.shieldActive = true;
+          for (const power of reward.powerUps) {
+            Object.assign(state, applyPowerUp(state, power));
+            if (power === "shield") state.shieldActive = true;
+          }
           if (reward.powerUps.length) soundRef.current?.play("pickup");
         }
         if (state.phase === "SECTOR_CLEAR") state.enemyShots = [];
