@@ -30,4 +30,4 @@ const SectorBackdrop = ({ sector, player, paused }: { sector: number; player: Pl
   );
 };
 
-export default memo(SectorBackdrop);
+export default memo(SectorBackdrop, (previous, next) => previous.sector === next.sector && previous.paused === next.paused && (typeof window !== "undefined" && window.matchMedia("(max-width: 700px)").matches || previous.player === next.player));
