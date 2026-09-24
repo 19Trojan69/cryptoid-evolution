@@ -1,10 +1,12 @@
 export type PowerUpType = "shield" | "repair" | "overdrive" | "weapon" | "rapid";
 export type PowerUp = { id: number; type: PowerUpType; x: number; y: number };
-export type PowerStatus = { hearts: number; shieldCharges: number; overdriveMs: number; weaponLevel?: number; rapidFireMs?: number };
+export type PowerStatus = { hearts: number; shieldCharges: number; shieldMs?: number; overdriveMs: number; weaponLevel?: number; rapidFireMs?: number };
 export type Threat = { x: number; y: number; radius: number };
 
-export const OVERDRIVE_DURATION_MS = 12_000;
-export const RAPID_DURATION_MS = 15_000;
+export const POWER_UP_DURATION_MS = 20_000;
+export const PURCHASED_POWER_UP_DURATION_MS = 60_000;
+export const OVERDRIVE_DURATION_MS = POWER_UP_DURATION_MS;
+export const RAPID_DURATION_MS = POWER_UP_DURATION_MS;
 export const MAX_ACTIVE_POWER_UPS = 3;
 
 export const powerUpNames: Record<PowerUpType, string> = {
@@ -29,12 +31,12 @@ export const createPowerUpDrop = ({ id, x, y, width, height, hearts, threats, ac
 export const movePowerUps = (drops: PowerUp[], delta: number, height: number) =>
   drops.map(drop => ({ ...drop, y: drop.y + delta * 0.052 })).filter(drop => drop.y < height - 36);
 
-export const collectPowerUp = (status: PowerStatus, type: PowerUpType): PowerStatus => {
-  if (type === "shield") return { ...status, shieldCharges: Math.min(2, status.shieldCharges + 1) };
+export const collectPowerUp = (status: PowerStatus, type: PowerUpType, durationMs = POWER_UP_DURATION_MS): PowerStatus => {
+  if (type === "shield") return { ...status, shieldCharges: Math.min(2, status.shieldCharges + 1), shieldMs: durationMs };
   if (type === "repair") return { ...status, hearts: Math.min(3, status.hearts + 1) };
   if (type === "weapon") return { ...status, weaponLevel: Math.min(5, (status.weaponLevel ?? 1) + 1) };
-  if (type === "rapid") return { ...status, rapidFireMs: RAPID_DURATION_MS };
-  return { ...status, overdriveMs: OVERDRIVE_DURATION_MS };
+  if (type === "rapid") return { ...status, rapidFireMs: durationMs };
+  return { ...status, overdriveMs: durationMs };
 };
 
 export const receiveImpacts = (status: PowerStatus, impacts: number): PowerStatus => {

@@ -26,10 +26,13 @@ test("drops avoid occupied paths and the lower danger area", () => {
 test("shield absorbs impacts, repair caps at three hearts, overdrive refreshes", () => {
   let status = { hearts: 2, shieldCharges: 0, overdriveMs: 0 };
   status = collectPowerUp(status, "shield");
-  assert.deepEqual(receiveImpacts(status, 1), { hearts: 2, shieldCharges: 0, overdriveMs: 0 });
+  assert.deepEqual(receiveImpacts(status, 1), { hearts: 2, shieldCharges: 0, shieldMs: 20_000, overdriveMs: 0 });
   assert.equal(receiveImpacts(status, 2).hearts, 1);
   assert.equal(collectPowerUp(collectPowerUp(status, "repair"), "repair").hearts, 3);
-  assert.equal(collectPowerUp(status, "overdrive").overdriveMs, 12_000);
+  assert.equal(collectPowerUp(status, "overdrive").overdriveMs, 20_000);
   assert.equal(collectPowerUp({ ...status, weaponLevel: 5 }, "weapon").weaponLevel, 5);
-  assert.equal(collectPowerUp(status, "rapid").rapidFireMs, 15_000);
+  assert.equal(collectPowerUp(status, "rapid").rapidFireMs, 20_000);
+  assert.equal(collectPowerUp(status, "shield", 60_000).shieldMs, 60_000);
+  assert.equal(collectPowerUp(status, "rapid", 60_000).rapidFireMs, 60_000);
+  assert.equal(collectPowerUp(status, "overdrive", 60_000).overdriveMs, 60_000);
 });

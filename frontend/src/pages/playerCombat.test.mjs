@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { advanceShot, contactWithEnemy, movePlayer, placePlayer, shipHitsEnemy, shotHitsEnemy, MAX_PLAYER_SHOTS, fireInterval, makeVolley } from "./playerCombat.ts";
+import { activeWeaponLevel, advanceShot, contactWithEnemy, movePlayer, placePlayer, shipHitsEnemy, shotHitsEnemy, MAX_PLAYER_SHOTS, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, fireInterval, makeVolley } from "./playerCombat.ts";
 
 test("weapon tiers fire multi-shot volleys and apply plasma damage", () => {
   let next = 0;
@@ -21,6 +21,17 @@ test("ship moves left, right and a limited distance upward without leaving the f
   assert.equal(movePlayer({ x: .5, y: .86 }, 0, 1, 1000, 800, 600).y, .91);
   assert.ok(placePlayer(-100, 0, 320, 600).x >= 30 / 320);
   assert.equal(MAX_PLAYER_SHOTS, 28);
+  assert.ok(movePlayer({ x: .5, y: .86 }, 1, 0, 16, 800, 600).x > .512);
+});
+
+test("bought shots last five minutes while pickups last twenty seconds", () => {
+  assert.equal(PURCHASED_WEAPON_DURATION_MS, 300_000);
+  assert.equal(PICKUP_WEAPON_DURATION_MS, 20_000);
+  assert.equal(activeWeaponLevel(3, 300_000, 4, 20_000, 5), 4);
+  assert.equal(activeWeaponLevel(3, 300_000, 4, 0, 5), 3);
+  assert.equal(activeWeaponLevel(3, 0, 4, 20_000, 5), 4);
+  assert.equal(activeWeaponLevel(3, 0, 4, 0, 5), 1);
+  assert.equal(activeWeaponLevel(5, 300_000, 1, 0, 3), 3);
 });
 
 test("shots travel upward, collide only with visible enemies; player hitbox remains compact", () => {
