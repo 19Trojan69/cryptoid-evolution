@@ -158,7 +158,6 @@ const GamePage = () => {
   const stickAxisRef = useRef({ x: 0, y: 0 });
   const stickKnobRef = useRef<HTMLSpanElement>(null);
   const [touchMode] = useState(readTouchMode);
-  const [quickOpen, setQuickOpen] = useState(false);
   const lastPlayerRef = useRef<PlayerPosition>({ x: .5, y: .86 });
   const [game, setGame] = useState<GameState>(createInitialState);
   const [homePrompt, setHomePrompt] = useState(false);
@@ -539,7 +538,6 @@ const GamePage = () => {
     stateRef.current.paidWeaponLevel = level;
     stateRef.current.weaponLevel = activeWeaponLevel(level, stateRef.current.paidWeaponMs, stateRef.current.pickupWeaponLevel, stateRef.current.pickupWeaponMs, stateRef.current.weaponCap);
     setGame({ ...stateRef.current });
-    setQuickOpen(false);
   };
   const activateStartPower = () => {
     const state = stateRef.current;
@@ -550,7 +548,6 @@ const GamePage = () => {
     state.pendingStartPower = null;
     soundRef.current?.play("pickup");
     setGame({ ...state });
-    setQuickOpen(false);
   };
 
   const restart = () => {
@@ -573,7 +570,6 @@ const GamePage = () => {
     stickPointerRef.current = null;
     stickAxisRef.current = { x: 0, y: 0 };
     if (stickKnobRef.current) stickKnobRef.current.style.transform = "translate(0, 0)";
-    setQuickOpen(false);
     lastPlayerRef.current = stateRef.current.player;
     lastFrameRef.current = 0;
     lastPaintRef.current = 0;
@@ -625,14 +621,16 @@ const GamePage = () => {
           {touchMode !== "drag" && <div className="virtual-stick" role="group" aria-label="Movement joystick" onPointerDown={event => { if (game.status !== "playing") return; stickPointerRef.current = event.pointerId; event.currentTarget.setPointerCapture(event.pointerId); moveStick(event); }} onPointerMove={event => { if (stickPointerRef.current === event.pointerId) moveStick(event); }} onPointerUp={stopStick} onPointerCancel={stopStick} onLostPointerCapture={stopStick}>
             <span ref={stickKnobRef} className="virtual-stick-knob" />
           </div>}
-          <div className="quick-slot">
-            <button type="button" className="quick-toggle" aria-expanded={quickOpen} aria-label="Open weapon and power-up quick select" onClick={() => setQuickOpen(value => !value)}>{game.pendingStartPower ? "✦" : "◇"} <span>ACTION</span></button>
-            {quickOpen && <div className="quick-panel" role="group" aria-label="Quick select">
-              {game.pendingStartPower && <button type="button" className="quick-power" disabled={game.status !== "playing"} onClick={activateStartPower}>Activate {powerUpNames[game.pendingStartPower]} · 60s</button>}
-              {[...new Set([...game.unlockedWeapons, game.weaponLevel])].sort((a, b) => a - b).map(level => <button type="button" key={level} disabled={game.status !== "playing" || level > game.weaponCap || (level > 1 && (game.paidWeaponMs === 0 || !game.unlockedWeapons.includes(level)))} aria-pressed={game.weaponLevel === level} onClick={() => selectWeapon(level)}>{level === 1 ? "Single" : level === 2 ? "Twin" : level === 3 ? "Rapid Twin" : level === 4 ? "Triple" : "Plasma"}</button>)}
-              {game.shieldCharges > 0 && <button type="button" aria-pressed={game.shieldActive} onClick={() => { stateRef.current.shieldActive = !stateRef.current.shieldActive; setGame({ ...stateRef.current }); setQuickOpen(false); }}>Shield {game.shieldActive ? "ON" : "OFF"} · {game.shieldCharges}</button>}
-              {game.shieldCharges === 0 && <small>Shield: none available</small>}
-            </div>}
+          <div className="edge-actions" role="group" aria-label="Available equipment">
+            {game.pendingStartPower && <button type="button" className={`edge-action edge-action-${game.pendingStartPower}`} disabled={game.status !== "playing"} title={`Activate ${powerUpNames[game.pendingStartPower]} · 60s`} aria-label={`Activate ${powerUpNames[game.pendingStartPower]} for 60 seconds`} onClick={activateStartPower}>{powerUpSymbols[game.pendingStartPower]}<small>60s</small></button>}
+            {game.paidWeaponMs > 0 && <>
+              <button type="button" className="edge-action edge-action-weapon" title="Single laser" aria-label="Select single laser" aria-pressed={game.paidWeaponLevel === 1} onClick={() => selectWeapon(1)}>Ⅰ</button>
+              {game.unlockedWeapons.filter(level => level > 1 && level <= game.weaponCap).sort((a, b) => a - b).map(level => <button type="button" key={level} className="edge-action edge-action-weapon" title={`${level === 2 ? "Twin" : level === 3 ? "Rapid Twin" : level === 4 ? "Triple" : "Plasma"} · ${Math.ceil(game.paidWeaponMs / 1_000)}s`} aria-label={`Select ${level === 2 ? "Twin" : level === 3 ? "Rapid Twin" : level === 4 ? "Triple" : "Plasma"}`} aria-pressed={game.paidWeaponLevel === level} onClick={() => selectWeapon(level)}>{["", "", "Ⅱ", "Ⅲ", "Ⅳ", "Ⅴ"][level]}</button>)}
+            </>}
+            {game.pickupWeaponMs > 0 && <span className="edge-action edge-action-pickup" title={`Collected shots · ${Math.ceil(game.pickupWeaponMs / 1_000)}s`} aria-label={`Collected shots ${Math.ceil(game.pickupWeaponMs / 1_000)} seconds remaining`}>↑<small>{Math.ceil(game.pickupWeaponMs / 1_000)}s</small></span>}
+            {game.shieldCharges > 0 && <button type="button" className="edge-action edge-action-shield" aria-pressed={game.shieldActive} aria-label={`${game.shieldActive ? "Disable" : "Enable"} shield · ${game.shieldCharges} charge`} title={`Shield · ${game.shieldCharges} charge · ${Math.ceil(game.shieldMs / 1_000)}s`} onClick={() => { stateRef.current.shieldActive = !stateRef.current.shieldActive; setGame({ ...stateRef.current }); }}>◇<small>{Math.ceil(game.shieldMs / 1_000)}s</small></button>}
+            {game.rapidFireMs > 0 && <span className="edge-action edge-action-rapid" aria-label={`Rapid Fire ${Math.ceil(game.rapidFireMs / 1_000)} seconds remaining`}>»<small>{Math.ceil(game.rapidFireMs / 1_000)}s</small></span>}
+            {game.overdriveMs > 0 && <span className="edge-action edge-action-overdrive" aria-label={`Overdrive ${Math.ceil(game.overdriveMs / 1_000)} seconds remaining`}>ϟ<small>{Math.ceil(game.overdriveMs / 1_000)}s</small></span>}
           </div>
         </div>
         {game.status === "paused" && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">MISSION PAUSED</p><h1>Hold the line.</h1><p>The asteroids are waiting.</p><button className="button button-primary" type="button" onClick={() => { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); }}>Resume mission <span>▶</span></button></div></div>}

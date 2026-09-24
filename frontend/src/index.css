@@ -393,22 +393,22 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .touch-setup-options [aria-pressed="true"] { border-color: #f2c968; color: #f2c968; }
 .touch-controls { position: absolute; z-index: 5; right: 16px; bottom: max(19px, env(safe-area-inset-bottom)); display: flex; align-items: flex-end; pointer-events: none; }
 .virtual-stick { display: none; }
-.quick-slot { position: relative; pointer-events: auto; }
-.quick-toggle { display: grid; justify-items: center; gap: 2px; min-width: 78px; min-height: 72px; padding: 10px; border: 1px solid #bcb0e09c; border-radius: 12px; background: #0c2343d9; color: #e8d5ff; font-size: 25px; touch-action: manipulation; }
-.quick-toggle span { font: 9px 'DM Mono', monospace; }
-.quick-panel { position: absolute; right: 0; bottom: calc(100% + 10px); display: flex; flex-direction: column; gap: 5px; min-width: 138px; max-height: 45dvh; overflow-y: auto; padding: 8px; border: 1px solid #a4bfd390; border-radius: 10px; background: #091d34f5; }
-.quick-panel button { padding: 10px 12px; border: 1px solid #648da3; border-radius: 6px; background: #153048; color: #e8f6ff; text-align: left; white-space: nowrap; }
-.quick-panel button.quick-power { border-color: #d7b566; color: #ffe3a4; }
-.quick-panel button[aria-pressed="true"] { border-color: #e9c978; color: #ffe3a4; }
-.quick-panel button:disabled { opacity: .4; }
-.quick-panel small { color: #aac3ce; }
+.edge-actions { display: flex; flex-direction: column-reverse; gap: 4px; max-height: min(64dvh, 390px); overflow-y: auto; overscroll-behavior: contain; pointer-events: auto; }
+.edge-actions:empty { display: none; }
+.edge-action { display: flex; flex: none; flex-direction: column; align-items: center; justify-content: center; width: 40px; height: 40px; padding: 1px; border: 1px solid #74a8bb8a; border-radius: 8px; background: #0a2239e8; color: #bce9f8; font: 20px 'Space Grotesk', sans-serif; line-height: 1; cursor: pointer; touch-action: manipulation; }
+.edge-action small { margin-top: 2px; color: inherit; font: 8px 'DM Mono', monospace; }
+.edge-action[aria-pressed="true"] { border-color: currentColor; background: #173951ed; }
+.edge-action:disabled { opacity: .5; }
+.edge-action-weapon { color: #f5d889; }
+.edge-action-pickup, .edge-action-rapid { color: #7be6c4; }
+.edge-action-shield { color: #8feeff; }
+.edge-action-overdrive { color: #d7a6ff; }
 @media (pointer: coarse) {
-  .touch-controls { left: 16px; justify-content: space-between; }
+  .touch-controls { left: 8px; right: 8px; justify-content: space-between; }
   .touch-controls-right { flex-direction: row-reverse; }
   .touch-controls-drag { justify-content: flex-end; }
   .virtual-stick { position: relative; display: block; width: clamp(94px, 23vw, 122px); height: clamp(94px, 23vw, 122px); flex: none; border: 2px solid #a2c4da89; border-radius: 50%; background: #071b2dcc; box-shadow: inset 0 0 19px #55bbde22; touch-action: none; pointer-events: auto; }
   .virtual-stick-knob { position: absolute; top: 50%; left: 50%; width: 42%; height: 42%; margin: -21% 0 0 -21%; border: 2px solid #a7ecf6; border-radius: 50%; background: radial-gradient(circle, #91c7db, #28516c); box-shadow: 0 0 10px #65cce366; pointer-events: none; }
-  .touch-controls-right .quick-panel { right: auto; left: 0; }
   .game-tip { bottom: 5px; }
 }
 .power-up-weapon { border-color: #ffd368; background: radial-gradient(circle, #946b36, #3c2b47 75%); }
