@@ -65,8 +65,7 @@ export const selectedShip = () => {
   return { skin, color };
 };
 
-// The 20 cells retain the reference sheet's row-major order. Enemy and
-// player graphics share silhouettes, but only the player carries a π coin.
+// The 20 cells retain the reference sheet's row-major order.
 const enemySprites: Record<CryptoidClass, readonly number[]> = {
   light: [0, 2, 4, 6, 9, 13, 16],
   medium: [1, 5, 7, 8, 12, 14, 17],
@@ -84,8 +83,8 @@ export const spriteStyle = (index: number): CSSProperties => ({
   backgroundPosition: `${(index % 4) * 100 / 3}% ${Math.floor(index / 4) * 25}%`,
 });
 
-// The source fleet's hulls sit at different positions inside the atlas cells.
-// Anchors keep embossed coins and exhaust attached to the actual ship, not the cell.
+// Coordinates refer to visible nozzle exits within each atlas cell, not the
+// transparent cell edges. Parent transforms carry the exhaust during attacks.
 const hullAnchors = [
   [55, 61, 15], [53, 58, 17], [42, 61, 12], [43, 60, 12],
   [54, 53, 19], [53, 53, 19], [43, 51, 22], [43, 52, 21],
@@ -94,12 +93,21 @@ const hullAnchors = [
   [55, 30, 40], [53, 32, 36], [42, 33, 34], [43, 32, 37],
 ] as const;
 
-export const emblemStyle = (index: number, facesPlayer = false): CSSProperties => {
-  const [x, y] = hullAnchors[index] ?? hullAnchors[0];
-  return { left: `${facesPlayer ? 100 - x : x}%`, top: `${facesPlayer ? 100 - y : y}%` };
-};
+const nozzlePairs = [
+  [48, 62], [46, 60], [36, 52], [36, 51],
+  [47, 61], [46, 60], [36, 51], [35, 51],
+  [45, 63], [46, 62], [31, 56], [38, 49],
+  [47, 62], [46, 60], [32, 55], [37, 51],
+  [47, 63], [45, 60], [34, 51], [32, 54],
+] as const;
 
-export const enemyExhaustStyle = (index: number): CSSProperties => {
-  const [x, , top] = hullAnchors[index] ?? hullAnchors[0];
-  return { "--exhaust-x": `${100 - x}%`, "--exhaust-top": `${top}%` } as CSSProperties;
+export const shipNozzleStyle = (index: number, facesPlayer = false): CSSProperties => {
+  const [center, , top] = hullAnchors[index] ?? hullAnchors[0];
+  const [left, right] = nozzlePairs[index] ?? nozzlePairs[0];
+  return {
+    "--nozzle-left": `${facesPlayer ? 100 - right : left}%`,
+    "--nozzle-right": `${facesPlayer ? 100 - left : right}%`,
+    "--nozzle-y": `${facesPlayer ? top : 100 - top}%`,
+    "--hull-x": `${facesPlayer ? 100 - center : center}%`,
+  } as CSSProperties;
 };

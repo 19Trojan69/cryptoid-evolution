@@ -12,17 +12,19 @@ export default function mountUserEndpoints(router: Router) {
       return res.status(503).json({ error: "service_unavailable", message: "Database not ready" });
     }
 
+    let verifiedUid: string;
     try {
       // Verify the user's access token with the /me endpoint:
       const me = await platformAPIClient.get(`/v2/me`, { headers: { Authorization: `Bearer ${auth.accessToken}` } });
-      console.log(me);
+      verifiedUid = me.data.uid;
+      if (!verifiedUid || verifiedUid !== auth.user.uid) return res.status(401).json({ error: "invalid_token" });
     } catch (err) {
       console.error("Error verifying access token:", err);
       return res.status(401).json({ error: "invalid_token", message: "Invalid access token" });
     }
 
     try {
-      let currentUser = await userCollection.findOne({ uid: auth.user.uid });
+      let currentUser = await userCollection.findOne({ uid: verifiedUid });
 
       if (currentUser) {
         await userCollection.updateOne(
@@ -38,7 +40,7 @@ export default function mountUserEndpoints(router: Router) {
       } else {
         const insertResult = await userCollection.insertOne({
           username: auth.user.username,
-          uid: auth.user.uid,
+          uid: verifiedUid,
           roles: auth.user.roles,
           accessToken: auth.accessToken,
         });

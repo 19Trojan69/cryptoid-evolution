@@ -1,14 +1,16 @@
-import { useState, type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-import ProductCard from "../components/ProductCard";
 import SignIn from "../components/SignIn";
 
 import { useAuth } from "../hooks/useAuth";
-import { IRRA_TOKEN_CANONICAL, usePayments } from "../hooks/usePayments";
+import { usePayments } from "../hooks/usePayments";
 import { axiosClient } from "../lib/axiosClient.ts";
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "./GamePage.tsx";
-import { buySkin, emblemStyle, ownedSkins, playerColors, playerSkins, selectedShip, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, spriteStyle } from "./shipFleet";
+import { buySkin, ownedSkins, playerColors, playerSkins, selectedShip, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, spriteStyle } from "./shipFleet";
+
+type Offer = { id: string; kind: "weapon" | "power"; name: string; description: string; pricePi: number };
+type Inventory = { ownedWeapons: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
 
 const Shop = () => {
   const navigate = useNavigate();
@@ -20,6 +22,9 @@ const Shop = () => {
   const [owned, setOwned] = useState(() => ownedSkins(localStorage.getItem(SHIP_OWNED_KEY)));
   const [shards, setShards] = useState(() => shardBalance(localStorage.getItem(SHARD_BALANCE_KEY)));
   const [hangarMessage, setHangarMessage] = useState("");
+  const [offers, setOffers] = useState<Offer[]>([]);
+  const [inventory, setInventory] = useState<Inventory | null>(null);
+  const [loadoutMessage, setLoadoutMessage] = useState("");
   const previewOwned = previewSkin.price === 0 || owned.includes(previewSkin.id);
 
   const equipPreview = () => {
@@ -55,6 +60,20 @@ const Shop = () => {
     isAuthenticated,
     onRequireAuth: requireAuth,
   });
+  const refreshInventory = async () => {
+    try { setInventory((await axiosClient.get<Inventory>("/hangar/inventory")).data); }
+    catch { setLoadoutMessage("Connect your Pi account to see your saved loadout."); }
+  };
+  useEffect(() => { axiosClient.get<{ offers: Offer[] }>("/hangar/catalog").then(({ data }) => setOffers(data.offers)).catch(() => setLoadoutMessage("Hangar catalog unavailable. Try again when the server is online.")); }, []);
+  useEffect(() => { if (isAuthenticated) void refreshInventory(); else setInventory(null); }, [isAuthenticated]);
+  const equip = async (weapon: string | null, power: string | null) => {
+    if (!isAuthenticated) { requireAuth(); return; }
+    try {
+      await axiosClient.post("/hangar/equip", { weapon, power });
+      await refreshInventory();
+      setLoadoutMessage("Loadout saved for the next mission.");
+    } catch { setLoadoutMessage("Could not save loadout. Please retry."); }
+  };
 
   const onSendTestNotification = () => {
     const notification = {
@@ -112,11 +131,11 @@ const Shop = () => {
       <section className="ship-selector" aria-labelledby="hangar-heading">
         <p className="eyebrow">YOUR HANGAR</p>
         <h2 id="hangar-heading">Choose your ship</h2>
-        <p>Grey Scout is your free starter ship. Preview any other hull and its color before buying with game-only Shards. Paint changes are always free. Every ship carries your golden π coin.</p>
+        <p>Grey Scout is your free starter ship. Preview any other hull and its color before buying with game-only Shards. Paint changes are always free.</p>
         <strong className="shard-balance">◆ {shards} Shards</strong><span className="shard-help">Earn 1 Shard per defeated Cryptoid; your Shards are saved at the end of each mission.</span>
         <div className="ship-picker" role="group" aria-label="Ship hull">
           {playerSkins.map(skin => <button key={skin.id} className="ship-choice" type="button" aria-pressed={previewSkin.id === skin.id} onClick={() => { setPreviewSkin(skin); setHangarMessage(""); }}>
-            <span className={`ship-preview${skin.price === 0 ? " ship-preview-starter" : ""}`}><i style={{ ...spriteStyle(skin.sprite), "--ship-hue": previewColor.hue, "--ship-glow": previewColor.glow } as CSSProperties} /><b style={emblemStyle(skin.sprite)}>π</b></span><span>{skin.name}</span><small>{skin.price === 0 ? "ISSUED" : owned.includes(skin.id) ? "OWNED" : `◆ ${skin.price}`}</small>
+            <span className={`ship-preview${skin.price === 0 ? " ship-preview-starter" : ""}`}><i style={{ ...spriteStyle(skin.sprite), "--ship-hue": previewColor.hue, "--ship-glow": previewColor.glow } as CSSProperties} /></span><span>{skin.name}</span><small>{skin.price === 0 ? "ISSUED" : owned.includes(skin.id) ? "OWNED" : `◆ ${skin.price}`}</small>
           </button>)}
         </div>
         <p className="hangar-selection">Preview: <strong>{previewSkin.name}</strong> · {previewSkin.price === 0 ? "Grey starter" : previewOwned ? "Owned" : `◆ ${previewSkin.price} Shards`} {selected.skin.id === previewSkin.id && <span>· EQUIPPED</span>}</p>
@@ -129,11 +148,22 @@ const Shop = () => {
       </section>
 
       <section className="upgrade-section" aria-labelledby="upgrade-heading">
-        <div className="section-heading"><div><p className="eyebrow">POWER LAB</p><h2 id="upgrade-heading">Upgrade your loadout</h2></div><span className="section-line" /></div>
-        <div className="product-grid">
-          <ProductCard name="Solar Core" description="Charge your next evolution." price={0.1} pictureURL="https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=900&q=80" onClickBuyWithPi={() => orderProduct("Order Solar Core", 0.1, { productId: "solar_core_1" })} onClickBuyWithIrra={() => orderProduct("Order Solar Core", 0.1, { productId: "solar_core_1" }, IRRA_TOKEN_CANONICAL)} disabled={isLoading} />
-          <ProductCard name="Cyan Shield" description="Hold the line for Earth." price={0.2} pictureURL="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=900&q=80" onClickBuyWithPi={() => orderProduct("Order Cyan Shield", 0.2, { productId: "cyan_shield_1" })} onClickBuyWithIrra={() => orderProduct("Order Cyan Shield", 0.2, { productId: "cyan_shield_1" }, IRRA_TOKEN_CANONICAL)} disabled={isLoading} />
-        </div>
+        <div className="section-heading"><div><p className="eyebrow">POWER LAB</p><h2 id="upgrade-heading">Weapons and start power-ups</h2></div><span className="section-line" /></div>
+        <p>Standard laser is always free. Weapons are permanent unlocks; start bonuses are consumed once when a mission begins. All upgrades can also drop during play. Pi prices are independent of the Shards used for ship skins.</p>
+        {(["weapon", "power"] as const).map(kind => <div key={kind} className="hangar-offers"><h3>{kind === "weapon" ? "Permanent weapons" : "One-mission start bonuses"}</h3><div className="hangar-offer-grid">
+          {offers.filter(offer => offer.kind === kind).map(offer => {
+            const count = inventory?.consumables.find(item => item.id === offer.id)?.count ?? 0;
+            const owned = kind === "weapon" ? inventory?.ownedWeapons.includes(offer.id) : count > 0;
+            const selected = kind === "weapon" ? inventory?.equippedWeapon === offer.id : inventory?.selectedPower === offer.id;
+            return <article key={offer.id} className="hangar-offer"><h4>{offer.name}</h4><p>{offer.description}</p><span>{kind === "weapon" ? "Permanent unlock" : "Consumed at mission start"} · {offer.pricePi} π</span><strong>{selected ? "EQUIPPED" : owned ? kind === "power" ? `${count} AVAILABLE` : "OWNED" : "NOT OWNED"}</strong><div>
+              {owned ? <button className="button button-secondary" type="button" disabled={Boolean(selected)} onClick={() => equip(kind === "weapon" ? offer.id : inventory?.equippedWeapon ?? null, kind === "power" ? offer.id : inventory?.selectedPower ?? null)}>{selected ? "Selected" : "Equip for next mission"}</button> : null}
+              {(kind === "power" || !owned) && <button className="button button-primary" type="button" disabled={isLoading} onClick={() => orderProduct(`Cryptoid ${offer.name}`, offer.pricePi, { productId: offer.id }, () => { setLoadoutMessage(`${offer.name} purchase confirmed.`); void refreshInventory(); })}>Buy with π</button>}
+            </div></article>;
+          })}
+        </div></div>)}
+        {inventory?.equippedWeapon && <button className="text-button" type="button" onClick={() => equip(null, inventory.selectedPower)}>Use free standard laser</button>}
+        {inventory?.selectedPower && <button className="text-button" type="button" onClick={() => equip(inventory.equippedWeapon, null)}>Save bonus for a later mission</button>}
+        {loadoutMessage && <p role="status">{loadoutMessage}</p>}
       </section>
 
       {activePanel && <div className="info-panel" role="dialog" aria-modal="true" aria-labelledby="info-title">

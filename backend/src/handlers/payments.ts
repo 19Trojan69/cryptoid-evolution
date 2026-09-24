@@ -1,120 +1,79 @@
-import axios from "axios";
 import { Router } from "express";
 import platformAPIClient from "../services/platformAPIClient";
+import { findOffer } from "../hangarCatalog";
 import "../types/session";
 
+const identifier = (value: unknown) => typeof value === "string" && /^[a-zA-Z0-9_-]{1,100}$/.test(value) ? value : null;
+const fetchPayment = async (id: string) => (await platformAPIClient.get(`/v2/payments/${id}`)).data;
+
 export default function mountPaymentsEndpoints(router: Router) {
-  // handle the incomplete payment
-  router.post("/incomplete", async (req, res) => {
-    try {
-      const payment = req.body.payment;
-      const paymentId = payment.identifier;
-      const txid = payment.transaction && payment.transaction.txid;
-      const txURL = payment.transaction && payment.transaction._link;
-
-      /* 
-        Implement your logic here
-        e.g. verifying the payment, delivering the item to the user, etc...
-      */
-
-      const app = req.app;
-      const orderCollection = app.locals.orderCollection;
-      const order = await orderCollection.findOne({ pi_payment_id: paymentId });
-
-      if (!order) {
-        return res.status(400).json({ error: "not_found", message: "Order not found" });
-      }
-
-      const horizonResponse = await axios.create({ timeout: 20000 }).get(txURL);
-      const paymentIdOnBlock = horizonResponse.data.memo;
-
-      if (paymentIdOnBlock !== order.pi_payment_id) {
-        return res.status(400).json({ error: "mismatch", message: "Payment id doesn't match" });
-      }
-
-      await orderCollection.updateOne({ pi_payment_id: paymentId }, { $set: { txid, paid: true } });
-      await platformAPIClient.post(`/v2/payments/${paymentId}/complete`, { txid });
-      return res.status(200).json({ message: `Handled the incomplete payment ${paymentId}` });
-    } catch (err) {
-      console.error("Error handling incomplete payment:", err);
-      return res.status(500).json({ error: "internal_error", message: "Failed to handle incomplete payment" });
-    }
-  });
-
-  // approve the current payment
   router.post("/approve", async (req, res) => {
+    const uid = req.session.currentUser?.uid;
+    const id = identifier(req.body?.paymentId);
+    if (!uid) return res.status(401).json({ error: "Sign in first" });
+    if (!id) return res.status(400).json({ error: "Invalid payment" });
     try {
-      if (!req.session.currentUser) {
-        return res.status(401).json({ error: "unauthorized", message: "User needs to sign in first" });
+      const payment = await fetchPayment(id);
+      const offer = findOffer(payment.metadata?.productId);
+      if (!offer || payment.identifier !== id || payment.user_uid !== uid || payment.direction !== "user_to_app" || payment.amount !== offer.pricePi || payment.status?.cancelled || payment.status?.user_cancelled) {
+        return res.status(400).json({ error: "Payment does not match the signed-in user and catalog price" });
       }
-
-      const app = req.app;
-      const paymentId = req.body.paymentId;
-      const currentPayment = await platformAPIClient.get(`/v2/payments/${paymentId}`);
-      const orderCollection = app.locals.orderCollection;
-
-      /* 
-        Implement your logic here 
-        e.g. creating an order record, reserve an item if the quantity is limited, etc...
-      */
-
-      await orderCollection.insertOne({
-        pi_payment_id: paymentId,
-        product_id: currentPayment.data.metadata.productId,
-        user: req.session.currentUser.uid,
-        txid: null,
-        paid: false,
-        cancelled: false,
-        created_at: new Date(),
-      });
-
-      await platformAPIClient.post(`/v2/payments/${paymentId}/approve`);
-      return res.status(200).json({ message: `Approved the payment ${paymentId}` });
-    } catch (err) {
-      console.error("Error approving payment:", err);
-      return res.status(500).json({ error: "internal_error", message: "Failed to approve payment" });
+      const orders = req.app.locals.orderCollection;
+      const existing = await orders.findOne({ pi_payment_id: id });
+      if (existing && (existing.user !== uid || existing.product_id !== offer.id || existing.cancelled)) return res.status(409).json({ error: "Payment already assigned or cancelled" });
+      if (!existing) await orders.updateOne({ pi_payment_id: id }, { $setOnInsert: { pi_payment_id: id, product_id: offer.id, user: uid, paid: false, created_at: new Date() } }, { upsert: true });
+      if (!payment.status?.developer_approved) await platformAPIClient.post(`/v2/payments/${id}/approve`);
+      return res.json({ approved: true });
+    } catch (error) {
+      console.error("Payment approval failed", error);
+      return res.status(502).json({ error: "Payment could not be approved" });
     }
   });
 
-  // complete the current payment
-  router.post("/complete", async (req, res) => {
+  const complete = async (req: any, res: any, id: string, suppliedTxid?: string) => {
+    const uid = req.session.currentUser?.uid;
+    if (!uid) return res.status(401).json({ error: "Sign in first" });
     try {
-      const app = req.app;
-      const paymentId = req.body.paymentId;
-      const txid = req.body.txid;
-      const orderCollection = app.locals.orderCollection;
-
-      /* 
-        Implement your logic here
-        e.g. verify the transaction, deliver the item to the user, etc...
-      */
-
-      await orderCollection.updateOne({ pi_payment_id: paymentId }, { $set: { txid: txid, paid: true } });
-      await platformAPIClient.post(`/v2/payments/${paymentId}/complete`, { txid });
-      return res.status(200).json({ message: `Completed the payment ${paymentId}` });
-    } catch (err) {
-      console.error("Error completing payment:", err);
-      return res.status(500).json({ error: "internal_error", message: "Failed to complete payment" });
+      const orders = req.app.locals.orderCollection;
+      const order = await orders.findOne({ pi_payment_id: id, user: uid });
+      if (!order || order.cancelled) return res.status(404).json({ error: "Approved order not found" });
+      if (order.paid) return res.json({ completed: true });
+      const payment = await fetchPayment(id);
+      const offer = findOffer(order.product_id);
+      const txid = payment.transaction?.txid;
+      if (!offer || payment.identifier !== id || payment.user_uid !== uid || payment.metadata?.productId !== offer.id || payment.direction !== "user_to_app" || payment.amount !== offer.pricePi || !payment.status?.developer_approved || payment.status?.cancelled || payment.status?.user_cancelled || !payment.status?.transaction_verified || !txid || (suppliedTxid && suppliedTxid !== txid)) {
+        return res.status(400).json({ error: "Payment not verified" });
+      }
+      if (!payment.status?.developer_completed) await platformAPIClient.post(`/v2/payments/${id}/complete`, { txid });
+      // Credit only after Pi has confirmed /complete (or reported already completed).
+      await orders.updateOne({ pi_payment_id: id, user: uid, paid: false, cancelled: { $ne: true } }, { $set: { paid: true, txid, completed_at: new Date() } });
+      return res.json({ completed: true });
+    } catch (error) {
+      console.error("Payment completion failed", error);
+      return res.status(502).json({ error: "Payment could not be confirmed" });
     }
-  });
+  };
 
-  // handle the cancelled payment
+  router.post("/complete", (req, res) => {
+    const id = identifier(req.body?.paymentId);
+    if (!id || typeof req.body?.txid !== "string") return res.status(400).json({ error: "Invalid payment" });
+    return complete(req, res, id, req.body.txid);
+  });
+  router.post("/incomplete", (req, res) => {
+    const id = identifier(req.body?.payment?.identifier);
+    if (!id) return res.status(400).json({ error: "Invalid payment" });
+    return complete(req, res, id);
+  });
   router.post("/cancelled_payment", async (req, res) => {
+    const uid = req.session.currentUser?.uid;
+    const id = identifier(req.body?.paymentId);
+    if (!uid) return res.status(401).json({ error: "Sign in first" });
+    if (!id) return res.status(400).json({ error: "Invalid payment" });
     try {
-      const app = req.app;
-      const paymentId = req.body.paymentId;
-      const orderCollection = app.locals.orderCollection;
-
-      /*
-        Implement your logic here
-        e.g. mark the order record to cancelled, etc...
-      */
-
-      await orderCollection.updateOne({ pi_payment_id: paymentId }, { $set: { cancelled: true } });
-      return res.status(200).json({ message: `Cancelled the payment ${paymentId}` });
-    } catch (err) {
-      console.error("Error cancelling payment:", err);
-      return res.status(500).json({ error: "internal_error", message: "Failed to cancel payment" });
-    }
+      const payment = await fetchPayment(id);
+      if (payment.user_uid !== uid || !payment.status?.user_cancelled && !payment.status?.cancelled) return res.status(400).json({ error: "Payment is not cancelled" });
+      await req.app.locals.orderCollection.updateOne({ pi_payment_id: id, user: uid, paid: false }, { $set: { cancelled: true } });
+      return res.json({ cancelled: true });
+    } catch (error) { return res.status(502).json({ error: "Could not verify cancellation" }); }
   });
 }

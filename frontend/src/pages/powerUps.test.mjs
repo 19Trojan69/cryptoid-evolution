@@ -9,7 +9,9 @@ test("drops stay rare, but the first safe pickup appears after three kills", () 
   assert.equal(createPowerUpDrop({ ...safe, chanceRoll: 0.8 }), null);
   assert.equal(createPowerUpDrop({ ...safe, chanceRoll: 0.8, destroyed: 3 })?.type, "shield");
   assert.equal(createPowerUpDrop({ ...safe, chanceRoll: 0.8, destroyed: 3, dropsCreated: 1 }), null);
-  assert.equal(createPowerUpDrop({ ...safe, kindRoll: 0.7 })?.type, "overdrive");
+  assert.equal(createPowerUpDrop({ ...safe, kindRoll: 0.4 })?.type, "overdrive");
+  assert.equal(createPowerUpDrop({ ...safe, kindRoll: 0.7 })?.type, "weapon");
+  assert.equal(createPowerUpDrop({ ...safe, kindRoll: 0.8 })?.type, "rapid");
   assert.equal(createPowerUpDrop({ ...safe, kindRoll: 0.99 })?.type, "repair");
   assert.equal(createPowerUpDrop({ ...safe, kindRoll: 0.99, hearts: 3 })?.type, "shield");
 });
@@ -28,4 +30,6 @@ test("shield absorbs impacts, repair caps at three hearts, overdrive refreshes",
   assert.equal(receiveImpacts(status, 2).hearts, 1);
   assert.equal(collectPowerUp(collectPowerUp(status, "repair"), "repair").hearts, 3);
   assert.equal(collectPowerUp(status, "overdrive").overdriveMs, 12_000);
+  assert.equal(collectPowerUp({ ...status, weaponLevel: 5 }, "weapon").weaponLevel, 5);
+  assert.equal(collectPowerUp(status, "rapid").rapidFireMs, 15_000);
 });

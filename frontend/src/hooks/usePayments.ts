@@ -18,22 +18,11 @@ export const usePayments = ({ isAuthenticated, onRequireAuth }: UsePaymentsArgs)
   const [isLoading, setIsLoading] = useState(false);
 
   const onReadyForServerApproval = useCallback(async (paymentId: string) => {
-    try {
-      await axiosClient.post("/payments/approve", { paymentId });
-    } catch (err) {
-      console.error("Error approving payment:", err);
-    }
-  }, []);
-
-  const onReadyForServerCompletion = useCallback(async (paymentId: string, txid: string) => {
-    try {
-      await axiosClient.post("/payments/complete", { paymentId, txid });
-    } catch (err) {
-      console.error("Error completing payment:", err);
-    }
+    await axiosClient.post("/payments/approve", { paymentId });
   }, []);
 
   const onCancel = useCallback(async (paymentId: string) => {
+    setIsLoading(false);
     try {
       await axiosClient.post("/payments/cancelled_payment", { paymentId });
     } catch (err) {
@@ -47,7 +36,7 @@ export const usePayments = ({ isAuthenticated, onRequireAuth }: UsePaymentsArgs)
   }, []);
 
   const orderProduct = useCallback(
-    async (memo: string, amount: number, metadata: PaymentMetadata, tokenCanonical?: string) => {
+    async (memo: string, amount: number, metadata: PaymentMetadata, onConfirmed?: () => void) => {
       if (!isAuthenticated) {
         onRequireAuth();
         return;
@@ -60,11 +49,17 @@ export const usePayments = ({ isAuthenticated, onRequireAuth }: UsePaymentsArgs)
             amount,
             memo,
             metadata,
-            ...(tokenCanonical ? { tokenCanonical } : {}),
           },
           {
             onReadyForServerApproval,
-            onReadyForServerCompletion,
+            onReadyForServerCompletion: async (paymentId: string, txid: string) => {
+              try {
+                await axiosClient.post("/payments/complete", { paymentId, txid });
+                onConfirmed?.();
+              } catch (error) {
+                console.error("Payment verification failed", error);
+              } finally { setIsLoading(false); }
+            },
             onCancel,
             onError,
           }
@@ -75,7 +70,7 @@ export const usePayments = ({ isAuthenticated, onRequireAuth }: UsePaymentsArgs)
         setIsLoading(false);
       }
     },
-    [isAuthenticated, onRequireAuth, onReadyForServerApproval, onReadyForServerCompletion, onCancel, onError]
+    [isAuthenticated, onRequireAuth, onReadyForServerApproval, onCancel, onError]
   );
 
   return {

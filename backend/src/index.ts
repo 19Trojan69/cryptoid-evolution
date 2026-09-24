@@ -10,6 +10,7 @@ import { MongoClient } from "mongodb";
 import env from "./environments";
 import mountPaymentsEndpoints from "./handlers/payments";
 import mountUserEndpoints from "./handlers/users";
+import mountHangarEndpoints from "./handlers/hangar";
 
 // We must import typedefs for ts-node-dev to pick them up when they change (even though tsc would supposedly
 // have no problem here)
@@ -80,6 +81,9 @@ app.use(
 const paymentsRouter = express.Router();
 mountPaymentsEndpoints(paymentsRouter);
 app.use("/payments", paymentsRouter);
+const hangarRouter = express.Router();
+mountHangarEndpoints(hangarRouter);
+app.use("/hangar", hangarRouter);
 
 // User endpoints (e.g signin, signout) under /user:
 const userRouter = express.Router();
@@ -104,6 +108,7 @@ const start = async () => {
     const db = client.db(dbName);
     app.locals.orderCollection = db.collection("orders");
     app.locals.userCollection = db.collection("users");
+    await app.locals.orderCollection.createIndex({ pi_payment_id: 1 }, { unique: true });
     console.log("Connected to MongoDB on: ", mongoUri);
 
     app.listen(env.port, () => {

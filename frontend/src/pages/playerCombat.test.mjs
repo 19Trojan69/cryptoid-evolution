@@ -1,6 +1,17 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { advanceShot, contactWithEnemy, movePlayer, placePlayer, shipHitsEnemy, shotHitsEnemy, MAX_PLAYER_SHOTS } from "./playerCombat.ts";
+import { advanceShot, contactWithEnemy, movePlayer, placePlayer, shipHitsEnemy, shotHitsEnemy, MAX_PLAYER_SHOTS, fireInterval, makeVolley } from "./playerCombat.ts";
+
+test("weapon tiers fire multi-shot volleys and apply plasma damage", () => {
+  let next = 0;
+  assert.equal(makeVolley(1, 200, 500, false, () => ++next).length, 1);
+  assert.deepEqual(makeVolley(2, 200, 500, false, () => ++next).map(shot => shot.x), [192, 208]);
+  const plasma = makeVolley(5, 200, 500, false, () => ++next);
+  assert.deepEqual(plasma.map(shot => shot.x), [187, 200, 213]);
+  assert.ok(plasma.every(shot => shot.damage === 2));
+  assert.equal(fireInterval(3, 0), 220);
+  assert.equal(fireInterval(1, 15000), 220);
+});
 import { receiveImpacts } from "./powerUps.ts";
 
 test("ship moves left, right and a limited distance upward without leaving the field", () => {
