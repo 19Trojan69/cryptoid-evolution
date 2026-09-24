@@ -164,8 +164,9 @@ const GamePage = () => {
   const [shipSelection] = useState(selectedShip);
   const recordsSavedRef = useRef(false);
   const soundRef = useRef<GameAudio | null>(null);
+  const audioStartRef = useRef<Promise<GameAudio | null> | null>(null);
   const startRequestRef = useRef(false);
-  const [soundEnabled, setSoundEnabled] = useState(false);
+  const [musicEnabled, setMusicEnabled] = useState(false);
 
   const activateLoadout = async () => {
     if (startRequestRef.current || stateRef.current.status !== "loading") return;
@@ -190,21 +191,30 @@ const GamePage = () => {
     soundRef.current?.setPaused(game.status !== "playing");
   }, [game.sector, game.status]);
 
-  const toggleSound = async () => {
-    if (soundEnabled) {
-      soundRef.current?.close();
-      soundRef.current = null;
-      setSoundEnabled(false);
-      return;
+  const startEffects = () => {
+    if (!audioStartRef.current) {
+      const audio = new GameAudio();
+      audio.setMusicEnabled(false);
+      audioStartRef.current = audio.start().then(started => {
+        if (!started) {
+          audio.close();
+          audioStartRef.current = null;
+          return null;
+        }
+        audio.setSector(stateRef.current.sector);
+        audio.setPaused(stateRef.current.status !== "playing");
+        soundRef.current = audio;
+        return audio;
+      });
     }
-    const audio = new GameAudio();
-    if (await audio.start()) {
-      audio.setSector(stateRef.current.sector);
-      audio.setPaused(stateRef.current.status !== "playing");
-      soundRef.current = audio;
-      setSoundEnabled(true);
-      audio.play("pickup");
-    } else audio.close();
+    return audioStartRef.current;
+  };
+
+  const toggleMusic = async () => {
+    const audio = await startEffects();
+    if (!audio) return;
+    audio.setMusicEnabled(!musicEnabled);
+    setMusicEnabled(!musicEnabled);
   };
 
   useEffect(() => {
@@ -212,6 +222,7 @@ const GamePage = () => {
     const keyDown = (event: KeyboardEvent) => {
       if (!controls.has(event.code) || (event.target as HTMLElement)?.closest("input, textarea, select")) return;
       event.preventDefault();
+      void startEffects();
       keysRef.current.add(event.code);
     };
     const keyUp = (event: KeyboardEvent) => keysRef.current.delete(event.code);
@@ -547,12 +558,15 @@ const GamePage = () => {
   };
 
   return (
-    <main className="game-shell">
+    <main className="game-shell" onPointerDownCapture={() => { void startEffects(); }}>
       <div ref={fieldRef} className="game-field" onPointerDown={startDrag} onPointerMove={event => { if (pointerRef.current === event.pointerId) positionFromPointer(event); }} onPointerUp={event => { if (pointerRef.current === event.pointerId) pointerRef.current = null; }} onPointerCancel={event => { if (pointerRef.current === event.pointerId) pointerRef.current = null; }}>
         <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} />
         <SectorBackdrop sector={game.sector} player={game.player} />
         <header className="game-hud">
-          <button className="game-control home-control" type="button" onClick={() => setHomePrompt(true)} aria-label="Go home">⌂ <span>Home</span></button>
+          <div className="hud-actions">
+            <button className="game-control home-control" type="button" onClick={() => setHomePrompt(true)} aria-label="Go home">⌂ <span>Home</span></button>
+            <button className="game-control sound-control" type="button" onClick={() => { void toggleMusic(); }} aria-label={musicEnabled ? "Musik ausschalten" : "Musik einschalten"} title={musicEnabled ? "Nur Musik ausschalten – Spieleffekte bleiben hörbar" : "Musik einschalten – Spieleffekte bleiben hörbar"} aria-pressed={musicEnabled}>{musicEnabled ? "♫" : "♫̸"}</button>
+          </div>
           <div className="hud-stat"><span>Score</span><strong>{game.score}</strong></div>
           <div className="hud-stat coin-stat"><span>Coins</span><strong>● {game.coins}</strong></div>
           <div className="hud-stat"><span>Hearts</span><strong className="hearts">{"♥".repeat(game.hearts)}<i>{"♥".repeat(3 - game.hearts)}</i></strong></div>
@@ -560,7 +574,6 @@ const GamePage = () => {
           <div className="hud-stat"><span>Sector</span><strong>{String(game.sector).padStart(2, "0")}</strong></div>
           <div className="hud-stat"><span>Section</span><strong>{game.encounter === "normal" ? `${sectionInSector(game.section)} / 3` : "BOSS"}</strong></div>
           <button className="game-control pause-control" type="button" disabled={game.status === "loading"} onClick={() => { stateRef.current.status = game.status === "paused" ? "playing" : "paused"; setGame({ ...stateRef.current }); }} aria-label={game.status === "paused" ? "Resume" : "Pause"}>{game.status === "paused" ? "▶" : "Ⅱ"}</button>
-          <button className="game-control sound-control" type="button" onClick={() => { void toggleSound(); }} aria-label={soundEnabled ? "Ton ausschalten" : "Ton einschalten"} title={soundEnabled ? "Ton ausschalten" : "Ton einschalten"}>{soundEnabled ? "🔊" : "🔇"}</button>
         </header>
         <div className="game-label">SECTOR {String(game.sector).padStart(2, "0")} <span>· {sectorName(game.sector)} · {game.encounter !== "normal" ? "CORE WARDEN" : isBonusSection(game.section) ? "BONUS CHALLENGE" : `SECTION ${sectionInSector(game.section)}`}</span></div>
         {game.encounter === "normal" && isBonusSection(game.section) && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">BONUS TARGETS {game.bonusHits} / {BONUS_TARGET_COUNT} · NO ENEMY FIRE</div>}

@@ -155,7 +155,8 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .space-world.planet-rock::before, .space-world.planet-desert::before, .space-world.planet-ice::before, .space-world.planet-crystal::before, .space-world.planet-gas::before, .space-world.planet-volcanic::before, .space-world.planet-ocean::before { inset: 5%; background: radial-gradient(ellipse at 28% 30%, #ffffff4d 0 6%, transparent 18%), radial-gradient(ellipse at 62% 68%, #080f2b77 0 12%, transparent 27%); opacity: .55; }
 @media (max-width: 560px) { .space-world-primary { width: clamp(155px, 46vw, 245px); opacity: .45; } .space-scene-1 .space-world-primary { opacity: .5; } .space-world-secondary { width: 75px; top: 31%; } .space-world-near { width: 53px; top: 23%; } .space-world-distant { width: 30px; } .space-orbit { width: 85vw; } }
 @media (prefers-reduced-motion: reduce) { .space-world, .space-haze { will-change: auto; } }
-.game-hud { position: absolute; z-index: 3; top: 0; left: 0; right: 0; display: grid; grid-template-columns: minmax(75px, 1fr) repeat(6, minmax(65px, 100px)) repeat(2, 38px); align-items: center; gap: 12px; padding: 16px clamp(14px, 4vw, 54px); border-bottom: 1px solid rgba(123, 205, 199, .17); background: rgba(3, 14, 27, .66); backdrop-filter: blur(8px); }
+.game-hud { position: absolute; z-index: 3; top: 0; left: 0; right: 0; display: grid; grid-template-columns: minmax(120px, 1fr) repeat(6, minmax(65px, 100px)) 38px; align-items: center; gap: 12px; padding: 16px clamp(14px, 4vw, 54px); border-bottom: 1px solid rgba(123, 205, 199, .17); background: rgba(3, 14, 27, .66); backdrop-filter: blur(8px); }
+.hud-actions { display: flex; align-items: center; gap: 4px; }
 .hud-stat { display: flex; flex-direction: column; gap: 5px; text-align: center; }
 .hud-stat span { color: #71969b; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .13em; text-transform: uppercase; }
 .hud-stat strong { color: #eff8f3; font-size: 18px; font-weight: 500; }
@@ -166,7 +167,7 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .home-control { justify-self: start; padding: 9px 12px; font-size: 15px; }
 .home-control span { margin-left: 5px; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; }
 .pause-control { justify-self: end; width: 38px; height: 38px; padding: 0; font-size: 15px; }
-.sound-control { justify-self: end; width: 38px; height: 38px; padding: 0; font-size: 19px; }
+.sound-control { width: 38px; height: 38px; padding: 0; font-size: 20px; }
 .game-control:hover { border-color: var(--gold); color: var(--gold); }
 .game-label { position: absolute; z-index: 1; top: 91px; left: 50%; transform: translateX(-50%); color: rgba(171, 228, 218, .46); font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .2em; white-space: nowrap; }
 .game-label span { color: var(--gold); }
@@ -325,7 +326,7 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 }
 
 @media (max-width: 560px) {
-  .game-hud { grid-template-columns: 38px repeat(6, minmax(0, 1fr)) 34px 34px; gap: 3px; padding: 11px 7px; }
+  .game-hud { grid-template-columns: 74px repeat(6, minmax(0, 1fr)) 34px; gap: 3px; padding: 11px 7px; }
   .home-control { width: 36px; height: 36px; padding: 0; font-size: 14px; }
   .home-control span { display: none; }
   .pause-control { width: 36px; height: 36px; }

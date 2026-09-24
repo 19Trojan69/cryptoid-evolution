@@ -6,6 +6,7 @@ export class GameAudio {
   private musicTimer: number | null = null;
   private beat = 0;
   private paused = false;
+  private musicEnabled = true;
   private sector = 1;
 
   async start() {
@@ -48,6 +49,14 @@ export class GameAudio {
 
   setSector(sector: number) { this.sector = sector; }
 
+  setMusicEnabled(enabled: boolean) {
+    this.musicEnabled = enabled;
+    if (!enabled && this.musicTimer !== null) {
+      window.clearInterval(this.musicTimer);
+      this.musicTimer = null;
+    } else if (enabled) this.startMusic();
+  }
+
   setPaused(paused: boolean) {
     this.paused = paused;
     if (paused && this.musicTimer !== null) {
@@ -57,7 +66,7 @@ export class GameAudio {
   }
 
   private startMusic() {
-    if (this.musicTimer !== null || this.paused) return;
+    if (this.musicTimer !== null || this.paused || !this.musicEnabled) return;
     const phrase = [0, 7, 3, 10, 0, 7, 5, 3, 0, 10, 7, 3, 5, 7, 3, 10];
     this.musicTimer = window.setInterval(() => {
       if (document.hidden) return;
