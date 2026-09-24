@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 const BEST_SCORE_KEY = "cryptoid_best_score";
 const HIGHEST_WAVE_KEY = "cryptoid_highest_wave";
 const TOTAL_DESTROYED_KEY = "cryptoid_total_destroyed";
+const WAVE_DURATION_MS = 60_000;
+const INITIAL_SPAWN_INTERVAL_MS = 2_500;
+const MIN_SPAWN_INTERVAL_MS = 1_800;
 
 type AsteroidSize = "small" | "medium" | "large";
 type GameStatus = "playing" | "paused" | "game-over";
@@ -55,6 +58,7 @@ const GamePage = () => {
   const animationRef = useRef<number | null>(null);
   const lastFrameRef = useRef(0);
   const spawnTimerRef = useRef(0);
+  const waveTimerRef = useRef(0);
   const [game, setGame] = useState<GameState>(createInitialState);
   const [homePrompt, setHomePrompt] = useState(false);
   const recordsSavedRef = useRef(false);
@@ -68,10 +72,15 @@ const GamePage = () => {
         const field = fieldRef.current;
         const width = field?.clientWidth || 800;
         const height = field?.clientHeight || 600;
-        const spawnInterval = Math.max(430, 1250 - (state.wave - 1) * 105);
+        waveTimerRef.current += delta;
+        if (waveTimerRef.current >= WAVE_DURATION_MS) {
+          waveTimerRef.current -= WAVE_DURATION_MS;
+          state.wave += 1;
+        }
+        const spawnInterval = Math.max(MIN_SPAWN_INTERVAL_MS, INITIAL_SPAWN_INTERVAL_MS - (state.wave - 1) * 80);
         spawnTimerRef.current += delta;
         if (spawnTimerRef.current >= spawnInterval) {
-          spawnTimerRef.current = 0;
+          spawnTimerRef.current -= spawnInterval;
           state.asteroids = [...state.asteroids, spawnAsteroid(nextIdRef.current++, state.wave, width)];
         }
         const nextAsteroids: Asteroid[] = [];
@@ -92,8 +101,6 @@ const GamePage = () => {
             recordsSavedRef.current = true;
           }
         }
-        const nextWave = Math.max(1, Math.floor(state.destroyed / 5) + 1);
-        if (nextWave !== state.wave) state.wave = nextWave;
         setGame({ ...state, asteroids: [...state.asteroids], shots: [...state.shots], effects: [...state.effects] });
       }
       animationRef.current = window.requestAnimationFrame(loop);
@@ -136,6 +143,7 @@ const GamePage = () => {
     stateRef.current = createInitialState();
     recordsSavedRef.current = false;
     spawnTimerRef.current = 0;
+    waveTimerRef.current = 0;
     lastFrameRef.current = 0;
     setGame(stateRef.current);
   };
