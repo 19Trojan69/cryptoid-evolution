@@ -29,13 +29,16 @@ test("formation slots are unique and occupy ordered rows in the upper field", ()
   }
 });
 
-test("neighbouring ships have room for their complete silhouettes", () => {
+test("the compact grid remains close without overlapping arranged hulls", () => {
   for (const [width, height] of [[390, 700], [720, 800], [800, 700], [1200, 800]]) {
     const slots = formationLayout(1, width, height);
-    for (const slot of slots) for (const other of slots) {
-      if (slot.index === other.index) continue;
-      assert.ok(Math.hypot(slot.x - other.x, slot.y - other.y) >= 100, `${width}x${height}: slots ${slot.index} and ${other.index} overlap`);
+    const radii = Array.from({ length: slots.length }, (_, index) => [25, 36, 25, 50, 36, 25][index % 6]);
+    const arranged = arrangeFormationBySize(slots, radii);
+    for (let index = 0; index < arranged.length; index += 1) for (let other = index + 1; other < arranged.length; other += 1) {
+      const clearance = Math.hypot(arranged[index].x - arranged[other].x, arranged[index].y - arranged[other].y) - radii[index] - radii[other];
+      assert.ok(clearance >= 4, `${width}x${height}: ships ${index} and ${other} overlap`);
     }
+    assert.ok(Math.max(...slots.map(slot => slot.x)) - Math.min(...slots.map(slot => slot.x)) <= (slots.length === 6 ? 216 : 448));
   }
 });
 

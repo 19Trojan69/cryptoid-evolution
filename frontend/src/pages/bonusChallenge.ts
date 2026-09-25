@@ -1,8 +1,10 @@
+import { playerColors, type PlayerColorId } from "./shipFleet.ts";
+
 export const BONUS_TARGET_COUNT = 12;
 export const BONUS_ENTRY_GAP_MS = 950;
 export const BONUS_FLIGHT_MS = 3_600;
 
-export type BonusTarget = { id: number; index: number; elapsed: number; x: number; y: number; radius: number };
+export type BonusTarget = { id: number; index: number; elapsed: number; x: number; y: number; radius: number; sprite: number; color: PlayerColorId };
 
 export const isBonusSection = (section: number) => section > 0 && section % 3 === 0;
 
@@ -13,6 +15,14 @@ export const bonusPosition = (index: number, elapsed: number, width: number, hei
   const y = height * (.24 + (index % 3) * .065 + .12 * Math.sin(Math.PI * progress));
   return { x, y };
 };
+
+// Every bonus round showcases twelve different purchasable hulls. The
+// nineteen non-boss sprites rotate between sectors, while metallic paints
+// vary independently so the flight doubles as a shop preview.
+export const bonusShowcaseShip = (index: number, sector: number) => ({
+  sprite: ((Math.max(1, sector) - 1) * 5 + index * 7) % 19,
+  color: playerColors[(index + (Math.max(1, sector) - 1) * 3) % playerColors.length].id,
+});
 
 export const bonusReward = (hits: number) => {
   if (hits === BONUS_TARGET_COUNT) return { label: "PERFECT CRYPTO HUNT", points: 2_000, shards: 12, powerUps: ["shield"] as const };

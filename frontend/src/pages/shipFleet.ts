@@ -204,31 +204,25 @@ export const spriteVisualOffset = (index: number, renderedSize: number, facesPla
   return { x: xPercent / 100 * renderedSize * direction, y: yPercent / 100 * renderedSize * direction };
 };
 
-// Coordinates refer to visible nozzle exits within each atlas cell, not the
-// transparent cell edges. Parent transforms carry the exhaust during attacks.
-const hullAnchors = [
-  [55, 61, 15], [53, 58, 17], [42, 61, 12], [43, 60, 12],
-  [54, 53, 19], [53, 53, 19], [43, 51, 22], [43, 52, 21],
-  [54, 44, 30], [54, 42, 32], [43, 44, 30], [44, 44, 29],
-  [55, 52, 8], [53, 53, 8], [43, 52, 9], [44, 53, 8],
-  [55, 30, 40], [53, 32, 36], [42, 33, 34], [43, 32, 37],
-] as const;
-
-const nozzlePairs = [
-  [48, 62], [46, 60], [36, 52], [36, 51],
-  [47, 61], [46, 60], [36, 51], [35, 51],
-  [45, 63], [46, 62], [31, 56], [38, 49],
-  [47, 62], [46, 60], [32, 55], [37, 51],
-  [47, 63], [45, 60], [34, 51], [32, 54],
+// Coordinates refer to the two visible engine exits in the original,
+// nose-up atlas cells. Each sprite needs its own Y anchor: mirroring the
+// hull's transparent bounding box made several flames float behind the ship.
+const hullCenters = [55, 53, 42, 43, 54, 53, 43, 43, 54, 54, 43, 44, 55, 53, 43, 44, 55, 53, 42, 43] as const;
+const nozzleAnchors = [
+  [48, 62, 82], [46, 60, 81], [36, 52, 84], [43, 57, 81],
+  [34, 72, 75], [46, 60, 82], [47, 55, 84], [31, 75, 73],
+  [45, 55, 77], [45, 58, 77], [46, 56, 79], [51, 57, 78],
+  [45, 59, 80], [45, 59, 78], [48, 56, 86], [46, 58, 79],
+  [38, 69, 84], [34, 70, 75], [37, 65, 76], [31, 72, 76],
 ] as const;
 
 export const shipNozzleStyle = (index: number, facesPlayer = false): CSSProperties => {
-  const [center, , top] = hullAnchors[index] ?? hullAnchors[0];
-  const [left, right] = nozzlePairs[index] ?? nozzlePairs[0];
+  const center = hullCenters[index] ?? hullCenters[0];
+  const [left, right, nozzleY] = nozzleAnchors[index] ?? nozzleAnchors[0];
   return {
     "--nozzle-left": `${facesPlayer ? 100 - right : left}%`,
     "--nozzle-right": `${facesPlayer ? 100 - left : right}%`,
-    "--nozzle-y": `${facesPlayer ? top : 100 - top}%`,
+    "--nozzle-y": `${facesPlayer ? 100 - nozzleY : nozzleY}%`,
     "--hull-x": `${facesPlayer ? 100 - center : center}%`,
   } as CSSProperties;
 };

@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusHeartReward, bonusPosition, bonusReward, isBonusSection } from "./bonusChallenge.ts";
+import { BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusHeartReward, bonusPosition, bonusReward, bonusShowcaseShip, isBonusSection } from "./bonusChallenge.ts";
 
 test("every third section is a bonus and later sectors repeat the pattern", () => {
   assert.deepEqual([1, 2, 3, 4, 5, 6, 18, 19].map(isBonusSection), [false, false, true, false, false, true, true, false]);
@@ -18,6 +18,15 @@ test("bonus ships enter from opposite sides, remain above player space, and leav
       assert.ok(middle.y < height * .65);
       assert.ok(Math.sign(start.x - width / 2) !== Math.sign(end.x - width / 2));
     }
+  }
+});
+
+test("each bonus round previews twelve distinct non-boss hulls in varied paints", () => {
+  for (const sector of [1, 5, 20]) {
+    const ships = Array.from({ length: BONUS_TARGET_COUNT }, (_, index) => bonusShowcaseShip(index, sector));
+    assert.equal(new Set(ships.map(ship => ship.sprite)).size, BONUS_TARGET_COUNT);
+    assert.ok(ships.every(ship => ship.sprite >= 0 && ship.sprite < 19));
+    assert.ok(new Set(ships.map(ship => ship.color)).size >= 9);
   }
 });
 

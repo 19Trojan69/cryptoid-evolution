@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { allPlayerColors, buySkin, buyShipVariant, colorForSkin, fleetCount, ownedSkins, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, spriteVisualOffset } from "./shipFleet.ts";
+import { allPlayerColors, buySkin, buyShipVariant, colorForSkin, fleetCount, ownedSkins, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyle, spriteVisualOffset } from "./shipFleet.ts";
 
 test("only the grey starter is free and the full reference fleet is purchasable", () => {
   assert.equal(playerSkins.length, 20);
@@ -49,6 +49,19 @@ test("formation guides compensate for visible sprite centers and rotation", () =
   const rotated = spriteVisualOffset(2, 100, true);
   assert.deepEqual(rotated, { x: -normal.x, y: -normal.y });
   assert.ok(Math.abs(rotated.y) > 10);
+});
+
+test("every ship has mirrored exhaust anchors directly at its visible nozzles", () => {
+  for (const skin of playerSkins) {
+    const player = shipNozzleStyle(skin.sprite);
+    const enemy = shipNozzleStyle(skin.sprite, true);
+    const playerY = Number.parseFloat(player["--nozzle-y"]);
+    const enemyY = Number.parseFloat(enemy["--nozzle-y"]);
+    assert.ok(playerY >= 70 && playerY <= 90);
+    assert.equal(Math.round((playerY + enemyY) * 10) / 10, 100);
+    assert.equal(enemy["--nozzle-left"], `${100 - Number.parseFloat(player["--nozzle-right"])}%`);
+    assert.equal(enemy["--nozzle-right"], `${100 - Number.parseFloat(player["--nozzle-left"])}%`);
+  }
 });
 
 test("legacy ships migrate into counts and repeat purchases add the chosen variant", () => {
