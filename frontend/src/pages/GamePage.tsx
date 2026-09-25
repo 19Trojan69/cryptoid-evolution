@@ -5,7 +5,7 @@ import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, t
 import { ENTRY_GAP_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, formationLayout, sectionInSector, sectionPhase, sectorForSection, sectorName, type SectorPhase } from "./sectorManager";
 import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpNames, powerUpSymbols, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp } from "./powerUps";
-import { activeWeaponLevel, advanceShot, contactWithEnemy, MAX_PLAYER_SHOTS, movePlayer, PICKUP_WEAPON_DURATION_MS, placePlayer, PURCHASED_WEAPON_DURATION_MS, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
+import { activeWeaponLevel, advanceShot, contactWithEnemy, MAX_PLAYER_SHOTS, movePlayer, PICKUP_WEAPON_DURATION_MS, placePlayerFromPointer, PURCHASED_WEAPON_DURATION_MS, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
 import { advanceEnemyShot, createEnemyShot, enemyShotHitsPlayer, enemyShotLimit, type EnemyShot } from "./enemyFire";
 import SectorBackdrop from "./SectorBackdrop";
 import Starfield from "./Starfield";
@@ -17,7 +17,6 @@ import PaintedShip from "./PaintedShip";
 import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio";
 import { axiosClient } from "../lib/axiosClient";
 import { fireInterval, makeVolley } from "./playerCombat";
-import { joystickVector, readTouchMode } from "./touchControls";
 import { leaveGameFullscreen, requestGameFullscreen } from "./gameFullscreen";
 
 const BEST_SCORE_KEY = "cryptoid_best_score";
@@ -25,6 +24,7 @@ const HIGHEST_SECTOR_KEY = "cryptoid_highest_sector";
 const TOTAL_DESTROYED_KEY = "cryptoid_total_destroyed";
 const RETURN_DURATION_MS = 3_500;
 const IMPACT_COOLDOWN_MS = 1_500;
+const ENTRY_HUD_GAP_PX = 8;
 
 type AsteroidSize = "small" | "medium" | "large";
 type GameStatus = "loading" | "playing" | "paused" | "game-over";
@@ -49,6 +49,7 @@ type Asteroid = {
   rotationSpeed: number;
   entryElapsed: number;
   entryStartX: number;
+  entryStartY: number;
   entryTargetX: number;
   entryTargetY: number;
   entrySide: number;
@@ -80,14 +81,15 @@ const saveRecords = (state: GameState) => {
   window.localStorage.setItem(SHARD_BALANCE_KEY, String(shardBalance(window.localStorage.getItem(SHARD_BALANCE_KEY)) + state.destroyed + state.bonusShards));
 };
 
-const spawnAsteroid = (id: number, width: number, formationIndex: number, sector: number, slots: ReturnType<typeof formationLayout>): Asteroid => {
+const spawnAsteroid = (id: number, width: number, visibleTop: number, formationIndex: number, sector: number, slots: ReturnType<typeof formationLayout>): Asteroid => {
   const profile = chooseCryptoid(sector, formationIndex);
   const size: AsteroidSize = profile.radius === 25 ? "small" : profile.radius === 36 ? "medium" : "large";
   const target = slots[formationIndex];
   const entrySide = target.entrySide;
   const availableWidth = Math.max(1, width - profile.radius * 2);
   const entryStartX = entrySide === 1 ? profile.radius + availableWidth * 0.08 : width - profile.radius - availableWidth * 0.08;
-  return { id, x: entryStartX, y: -profile.radius, size, ...profile, health: profile.health, maxHealth: profile.health, cloaked: false, rotation: 0, rotationSpeed: 0, entryElapsed: 0, entryStartX, entryTargetX: target.x, entryTargetY: target.y, entrySide, formationSlot: target.index, formationSlotCount: slots.length, formationElapsed: 0, formationDuration: 1_200, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, collidedThisAttack: false };
+  const entryStartY = visibleTop + profile.radius + ENTRY_HUD_GAP_PX;
+  return { id, x: entryStartX, y: entryStartY, size, ...profile, health: profile.health, maxHealth: profile.health, cloaked: false, rotation: 0, rotationSpeed: 0, entryElapsed: 0, entryStartX, entryStartY, entryTargetX: target.x, entryTargetY: target.y, entrySide, formationSlot: target.index, formationSlotCount: slots.length, formationElapsed: 0, formationDuration: 1_200, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, collidedThisAttack: false };
 };
 
 const attackTime = (asteroid: Asteroid) => asteroid.attackPattern === null ? 0 : attackDuration(asteroid.attackPattern) * asteroid.attackPace;
@@ -128,7 +130,7 @@ const moveAsteroid = (asteroid: Asteroid, delta: number, width: number, height: 
   return {
     ...asteroid,
     x: keepInField(x),
-    y: -radius + (asteroid.entryTargetY + radius) * progress,
+    y: asteroid.entryStartY + (asteroid.entryTargetY - asteroid.entryStartY) * progress,
     entryElapsed: elapsed,
     formationElapsed: delta - entryDelta,
     rotation,
@@ -139,6 +141,8 @@ const GamePage = () => {
   const { t } = useLocale();
   const navigate = useNavigate();
   const fieldRef = useRef<HTMLDivElement>(null);
+  const hudRef = useRef<HTMLElement>(null);
+  const visibleTopRef = useRef(96);
   const playerShipRef = useRef<HTMLDivElement>(null);
   const stateRef = useRef<GameState>(createInitialState());
   const nextIdRef = useRef(1);
@@ -159,10 +163,6 @@ const GamePage = () => {
   const fireTimerRef = useRef(0);
   const keysRef = useRef(new Set<string>());
   const pointerRef = useRef<number | null>(null);
-  const stickPointerRef = useRef<number | null>(null);
-  const stickAxisRef = useRef({ x: 0, y: 0 });
-  const stickKnobRef = useRef<HTMLSpanElement>(null);
-  const [touchMode] = useState(readTouchMode);
   const lastPlayerRef = useRef<PlayerPosition>({ x: .5, y: .86 });
   const [game, setGame] = useState<GameState>(createInitialState);
   const [homePrompt, setHomePrompt] = useState(false);
@@ -201,6 +201,21 @@ const GamePage = () => {
     setGame({ ...stateRef.current });
   };
   useEffect(() => { if (stateRef.current.status === "loading") void activateLoadout(); }, []);
+
+  useEffect(() => {
+    const field = fieldRef.current;
+    const hud = hudRef.current;
+    if (!field || !hud) return;
+    const measureVisibleTop = () => {
+      const fieldBounds = field.getBoundingClientRect();
+      visibleTopRef.current = Math.max(0, hud.getBoundingClientRect().bottom - fieldBounds.top);
+    };
+    measureVisibleTop();
+    const observer = new ResizeObserver(measureVisibleTop);
+    observer.observe(field);
+    observer.observe(hud);
+    return () => observer.disconnect();
+  }, []);
 
   const submitScore = (state: GameState) => {
     const runId = scoreRunRef.current;
@@ -271,9 +286,10 @@ const GamePage = () => {
         const field = fieldRef.current;
         const width = field?.clientWidth || 800;
         const height = field?.clientHeight || 600;
+        const visibleTop = visibleTopRef.current;
         const keys = keysRef.current;
-        const horizontal = Number(keys.has("ArrowRight") || keys.has("KeyD")) - Number(keys.has("ArrowLeft") || keys.has("KeyA")) + stickAxisRef.current.x;
-        const vertical = Number(keys.has("ArrowDown") || keys.has("KeyS")) - Number(keys.has("ArrowUp") || keys.has("KeyW")) + stickAxisRef.current.y;
+        const horizontal = Number(keys.has("ArrowRight") || keys.has("KeyD")) - Number(keys.has("ArrowLeft") || keys.has("KeyA"));
+        const vertical = Number(keys.has("ArrowDown") || keys.has("KeyS")) - Number(keys.has("ArrowUp") || keys.has("KeyW"));
         if (horizontal || vertical) {
           state.player = movePlayer(state.player, horizontal, vertical, delta, width, height);
           // Keep the ship at display cadence without re-rendering every projectile on mobile.
@@ -305,7 +321,7 @@ const GamePage = () => {
           if (clearTimerRef.current >= SECTION_CLEAR_MS) {
             if (nextAfterClear(isBonusSection(state.section), state.encounter !== "normal") === "boss") {
               state.encounter = "boss-intro";
-              state.boss = createSectorBoss(state.sector, width);
+              state.boss = createSectorBoss(state.sector, width, visibleTop);
               soundRef.current?.play("boss");
             } else {
               state.section += 1;
@@ -346,7 +362,7 @@ const GamePage = () => {
           spawnTimerRef.current += delta;
           if (spawnTimerRef.current >= ENTRY_GAP_MS) {
             spawnTimerRef.current -= ENTRY_GAP_MS;
-            state.asteroids.push(spawnAsteroid(nextIdRef.current++, width, formationIndexRef.current++, state.sector, slots));
+            state.asteroids.push(spawnAsteroid(nextIdRef.current++, width, visibleTop, formationIndexRef.current++, state.sector, slots));
           }
         }
         attackCooldownRef.current += delta;
@@ -569,12 +585,16 @@ const GamePage = () => {
     const field = fieldRef.current;
     if (!field) return;
     const bounds = field.getBoundingClientRect();
-    stateRef.current.player = placePlayer(event.clientX - bounds.left, event.clientY - bounds.top, bounds.width, bounds.height);
+    const player = placePlayerFromPointer(event.clientX - bounds.left, event.clientY - bounds.top, bounds.width, bounds.height, event.pointerType === "touch");
+    stateRef.current.player = player;
+    if (playerShipRef.current) {
+      playerShipRef.current.style.left = `${player.x * 100}%`;
+      playerShipRef.current.style.top = `${player.y * 100}%`;
+    }
   };
 
   const startDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (stateRef.current.status !== "playing" || (event.target as HTMLElement).closest("button, .game-hud, .game-overlay, .touch-controls")) return;
-    if (event.pointerType === "touch" && touchMode !== "drag") return;
     const bounds = event.currentTarget.getBoundingClientRect();
     if (event.clientY - bounds.top < bounds.height * .5) return;
     pointerRef.current = event.pointerId;
@@ -582,18 +602,6 @@ const GamePage = () => {
     positionFromPointer(event);
   };
 
-  const moveStick = (event: ReactPointerEvent<HTMLDivElement>) => {
-    const box = event.currentTarget.getBoundingClientRect();
-    const axis = joystickVector(event.clientX, event.clientY, box.left + box.width / 2, box.top + box.height / 2, box.width * .34);
-    stickAxisRef.current = axis;
-    if (stickKnobRef.current) stickKnobRef.current.style.transform = `translate(${axis.x * 27}px, ${axis.y * 27}px)`;
-  };
-  const stopStick = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (stickPointerRef.current !== event.pointerId) return;
-    stickPointerRef.current = null;
-    stickAxisRef.current = { x: 0, y: 0 };
-    if (stickKnobRef.current) stickKnobRef.current.style.transform = "translate(0, 0)";
-  };
   const selectWeapon = (level: number) => {
     if (stateRef.current.status !== "playing" || level > stateRef.current.weaponCap || (level > 1 && (stateRef.current.paidWeaponMs === 0 || !stateRef.current.unlockedWeapons.includes(level)))) return;
     stateRef.current.paidWeaponLevel = level;
@@ -632,9 +640,6 @@ const GamePage = () => {
     fireTimerRef.current = 0;
     startRequestRef.current = false;
     pointerRef.current = null;
-    stickPointerRef.current = null;
-    stickAxisRef.current = { x: 0, y: 0 };
-    if (stickKnobRef.current) stickKnobRef.current.style.transform = "translate(0, 0)";
     lastPlayerRef.current = stateRef.current.player;
     lastFrameRef.current = 0;
     lastPaintRef.current = 0;
@@ -657,7 +662,7 @@ const GamePage = () => {
       <div ref={fieldRef} className="game-field" onPointerDown={startDrag} onPointerMove={event => { if (pointerRef.current === event.pointerId) positionFromPointer(event); }} onPointerUp={event => { if (pointerRef.current === event.pointerId) pointerRef.current = null; }} onPointerCancel={event => { if (pointerRef.current === event.pointerId) pointerRef.current = null; }}>
         <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} />
         <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
-        <header className="game-hud">
+        <header ref={hudRef} className="game-hud">
           <div className="hud-actions">
             <button className="game-control home-control" type="button" onClick={() => setHomePrompt(true)} aria-label={t('Go home')}>⌂ <span>{t('Home')}</span></button>
           </div>
@@ -682,11 +687,8 @@ const GamePage = () => {
         {game.enemyShots.map(shot => <div key={shot.id} className="enemy-laser" style={{ left: shot.x, top: shot.y }} />)}
         {game.effects.map(effect => <div key={effect.id} className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y }}><span /></div>)}
         <div ref={playerShipRef} className={`player-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0 ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "hit") ? " player-ship-hurt" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${9 + game.thrust * 7}%`, ...shipNozzleStyle(shipSelection.skin.sprite) } as CSSProperties} aria-label={t('Your Cryptoid ship')}><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} /><div className="player-engine player-engine-left" /><div className="player-engine player-engine-right" /></div>
-        <div className="game-tip">← → ↑ ↓ / {touchMode === "drag" ? t("drag") : t("thumb joystick")} · {t("Auto fire")}</div>
-        <div className={`touch-controls touch-controls-${touchMode}`}>
-          {touchMode !== "drag" && <div className="virtual-stick" role="group" aria-label={t('Movement joystick')} onPointerDown={event => { if (game.status !== "playing") return; stickPointerRef.current = event.pointerId; event.currentTarget.setPointerCapture(event.pointerId); moveStick(event); }} onPointerMove={event => { if (stickPointerRef.current === event.pointerId) moveStick(event); }} onPointerUp={stopStick} onPointerCancel={stopStick} onLostPointerCapture={stopStick}>
-            <span ref={stickKnobRef} className="virtual-stick-knob" />
-          </div>}
+        <div className="game-tip">← → ↑ ↓ / {t("THUMB CONTROLS")} · {t("Auto fire")}</div>
+        <div className="touch-controls">
           <div className="edge-actions" role="group" aria-label={t('Available equipment')}>
             {game.pendingStartPower && <button type="button" className={`edge-action edge-action-${game.pendingStartPower}`} disabled={game.status !== "playing"} title={`Activate ${t(powerUpNames[game.pendingStartPower])} · 60s`} aria-label={`Activate ${t(powerUpNames[game.pendingStartPower])} for 60 seconds`} onClick={activateStartPower}>{powerUpSymbols[game.pendingStartPower]}<small>60s</small></button>}
             {game.paidWeaponMs > 0 && <>

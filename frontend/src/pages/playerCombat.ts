@@ -7,6 +7,8 @@ export const PICKUP_WEAPON_DURATION_MS = 20_000;
 export const PLAYER_RADIUS = 19;
 // Ship-to-ship contact follows the visible hull; projectile hits keep the smaller player hitbox.
 export const PLAYER_CONTACT_RADIUS = 27;
+// 30 px hull half-height + ~38 px (about one centimetre) clear of the thumb.
+export const TOUCH_SHIP_OFFSET_PX = 68;
 export const SHOT_SPEED_PX_MS = 0.64;
 export const FIRE_INTERVAL_MS = 320;
 export const MAX_PLAYER_SHOTS = 28;
@@ -24,6 +26,9 @@ export const placePlayer = (x: number, y: number, width: number, height: number)
   x: clamp(x / width, 30 / width, 1 - 30 / width),
   y: clamp(y / height, 0.5, Math.min(0.91, 1 - 36 / height)),
 });
+
+export const placePlayerFromPointer = (x: number, y: number, width: number, height: number, isTouch: boolean) =>
+  placePlayer(x, y - (isTouch ? TOUCH_SHIP_OFFSET_PX : 0), width, height);
 
 export const movePlayer = (position: PlayerPosition, horizontal: number, vertical: number, delta: number, width: number, height: number) => {
   const magnitude = Math.max(1, Math.hypot(horizontal, vertical));

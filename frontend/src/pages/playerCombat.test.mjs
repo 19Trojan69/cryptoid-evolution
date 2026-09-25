@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { activeWeaponLevel, advanceShot, contactWithEnemy, movePlayer, placePlayer, shipHitsEnemy, shotHitsEnemy, MAX_PLAYER_SHOTS, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, fireInterval, makeVolley } from "./playerCombat.ts";
+import { activeWeaponLevel, advanceShot, contactWithEnemy, movePlayer, placePlayer, placePlayerFromPointer, shipHitsEnemy, shotHitsEnemy, MAX_PLAYER_SHOTS, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, TOUCH_SHIP_OFFSET_PX, fireInterval, makeVolley } from "./playerCombat.ts";
 
 test("weapon tiers fire multi-shot volleys and apply plasma damage", () => {
   let next = 0;
@@ -22,6 +22,13 @@ test("ship moves left, right and a limited distance upward without leaving the f
   assert.ok(placePlayer(-100, 0, 320, 600).x >= 30 / 320);
   assert.equal(MAX_PLAYER_SHOTS, 28);
   assert.ok(movePlayer({ x: .5, y: .86 }, 1, 0, 16, 800, 600).x > .512);
+});
+
+test("touch control keeps the ship visibly above the thumb without delaying its position", () => {
+  const mouse = placePlayerFromPointer(200, 500, 400, 800, false);
+  const touch = placePlayerFromPointer(200, 500, 400, 800, true);
+  assert.equal(mouse.x, touch.x);
+  assert.equal(mouse.y * 800 - touch.y * 800, TOUCH_SHIP_OFFSET_PX);
 });
 
 test("bought shots last five minutes while pickups last twenty seconds", () => {

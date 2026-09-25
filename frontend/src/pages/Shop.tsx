@@ -11,7 +11,6 @@ import { allPlayerColors, buyShipVariant, EXTRA_STARTER_PRICE, fleetCount, playe
 import PaintedShip from "./PaintedShip";
 import TermsDialog from "../components/TermsDialog";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
-import { readTouchMode, TOUCH_MODE_KEY, type TouchMode } from "./touchControls";
 import { primeGameAudio } from "./gameAudio";
 import Starfield from "./Starfield";
 import { languages, useLocale, type Locale } from "../i18n";
@@ -56,7 +55,6 @@ const Shop = () => {
   const [fleet, setFleet] = useState(() => readShipFleet(localStorage.getItem(SHIP_FLEET_KEY), localStorage.getItem(SHIP_OWNED_KEY), localStorage.getItem(SHIP_COLORS_KEY)));
   const [shards, setShards] = useState(() => shardBalance(localStorage.getItem(SHARD_BALANCE_KEY)));
   const [hangarMessage, setHangarMessage] = useState("");
-  const [touchMode, setTouchMode] = useState<TouchMode>(readTouchMode);
   const [offers, setOffers] = useState<Offer[]>(() => [...hangarCatalog]);
   const [catalogReady, setCatalogReady] = useState(false);
   const [inventory, setInventory] = useState<Inventory | null>(null);
@@ -168,10 +166,6 @@ const Shop = () => {
             <button className="button button-secondary" type="button" onClick={() => setShopView("ships")}>{t('Shop / Hangar')}</button>
             <button className="button button-secondary" type="button" onClick={() => { setLeadersStatus("loading"); setShopView("leaders"); }}>{t('Top 100')}</button>
             <button className="button button-secondary" type="button" onClick={() => setActivePanel("how")}>{t('How to Play')}</button>
-          </div>
-          <div className="home-touch-setup" role="group" aria-label={t('Joystick placement')}>
-            <span>{t('THUMB CONTROLS')}</span>
-            {([ ["left", "Joystick left"], ["right", "Joystick right"], ["drag", "Classic drag"] ] as const).map(([mode, label]) => <button className="button button-secondary" key={mode} type="button" aria-pressed={touchMode === mode} onClick={() => { localStorage.setItem(TOUCH_MODE_KEY, mode); setTouchMode(mode); }}>{t(label)}</button>)}
           </div>
         </div>
         <div className="planet-stage" aria-label="Cryptoid Evolution planet status">

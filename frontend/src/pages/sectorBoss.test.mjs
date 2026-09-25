@@ -30,3 +30,9 @@ test("health grows within a cap and a damaged boss fires with a bounded interval
   assert.equal(createSectorBoss(999, 375).maxHealth, 36);
   assert.equal(bossVulnerable(moveSectorBoss(boss, BOSS_ENTRY_MS, 375, 700)), true);
 });
+
+test("boss entry can begin below the measured HUD instead of behind it", () => {
+  const visibleTop = 104;
+  const boss = createSectorBoss(1, 390, visibleTop);
+  assert.ok(boss.y >= visibleTop + boss.radius);
+});
