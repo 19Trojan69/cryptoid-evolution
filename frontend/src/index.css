@@ -68,7 +68,7 @@ h1 span { display: block; color: var(--emerald); }
 .button-secondary { border: 1px solid rgba(240, 247, 245, .35); background: transparent; color: #f0f7f5; }
 .button-secondary:hover { border-color: var(--cyan); color: var(--cyan); }
 .planet-stage { position: relative; z-index: 1; width: min(45vw, 520px); aspect-ratio: 1; justify-self: end; pointer-events: none; }
-.planet { position: absolute; z-index: 1; inset: 13%; border-radius: 50%; background: url('/planets/earth.png') center / cover no-repeat; box-shadow: 0 0 66px rgba(50, 165, 221, .4), 0 0 15px #6ebbe7ba; filter: brightness(1.1) saturate(1.12); animation: hover 7s ease-in-out infinite; }
+.planet { position: absolute; z-index: 1; inset: 13%; border-radius: 50%; background: url('/planets/earth.png') center / cover no-repeat; box-shadow: 0 0 72px rgba(50, 165, 221, .43), 0 0 17px #6ebbe7c4; filter: brightness(1.14) saturate(1.13); animation: hover 7s ease-in-out infinite; }
 .orbit { position: absolute; z-index: 2; inset: 4%; border: 1px solid rgba(90, 222, 246, .48); border-radius: 50%; transform: rotate(26deg) scaleY(.48); box-shadow: 0 0 13px #39c5ec22; }
 .orbit-two { inset: -1%; transform: rotate(-33deg) scaleY(.43); border-color: rgba(245, 200, 109, .42); }
 .orbit-three { inset: 9%; transform: rotate(83deg) scaleY(.51); border-color: rgba(191, 143, 255, .46); }
@@ -80,7 +80,7 @@ h1 span { display: block; color: var(--emerald); }
 .satellite-body::before { right: 12px; }.satellite-body::after { left: 12px; }
 @keyframes satellite-lap { to { transform: rotate(360deg); } }
 .home-defense-ship, .home-enemy-ship { position: absolute; z-index: 3; width: 46px; height: 46px; filter: drop-shadow(0 0 9px #6ee9ff); animation: home-patrol 4s ease-in-out infinite alternate; }
-.home-defense-ship { bottom: 5%; left: 5%; width: 68px; height: 68px; filter: drop-shadow(0 0 13px var(--ship-glow)) drop-shadow(0 8px 18px rgba(73, 213, 255, .55)); animation: home-full-thrust 1.25s ease-in-out infinite alternate; }
+.home-defense-ship { bottom: 18%; left: 5%; width: 70px; height: 70px; filter: drop-shadow(0 0 14px var(--ship-glow)) drop-shadow(0 8px 19px rgba(73, 213, 255, .62)); animation: home-full-thrust 1.25s ease-in-out infinite alternate; }
 .home-enemy-ship { top: 9%; right: 5%; filter: drop-shadow(0 0 8px #ef8b73); animation-delay: -1.8s; }
 .home-defense-ship i, .home-enemy-ship i { position: relative; z-index: 1; display: block; width: 100%; height: 100%; background-image: url('/ships/cryptoid-fleet.png'); background-size: 400% 500%; background-repeat: no-repeat; }
 .home-defense-ship i { filter: sepia(1) saturate(4.5) hue-rotate(calc(225deg + var(--ship-hue))); }
@@ -101,6 +101,18 @@ h1 span { display: block; color: var(--emerald); }
 @keyframes home-engine-aura { to { opacity: .48; transform: translateX(-50%) scaleX(1.22); } }
 @keyframes home-shot { 0%, 38% { opacity: 0; scale: .3; } 44% { opacity: .9; scale: 1; } 64%, 100% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .satellite-motion, .home-defense-ship, .home-enemy-ship, .home-defense-laser, .home-thrust, .home-defense-ship::after, .planet { animation: none; } }
+
+.landing-shell .hero-actions .button { position: relative; isolation: isolate; overflow: hidden; display: flex; align-items: center; justify-content: center; gap: 13px; border-radius: 0; clip-path: polygon(0 10px, 10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px)); transition: transform .16s ease, filter .16s ease, box-shadow .16s ease; }
+.landing-shell .hero-actions .button::before { position: absolute; z-index: -1; top: -70%; bottom: -70%; left: -42%; width: 28%; transform: rotate(18deg); background: linear-gradient(90deg, transparent, rgba(255,255,255,.36), transparent); content: ''; animation: home-button-scan 3.3s ease-in-out infinite; pointer-events: none; }
+.landing-shell .hero-actions .button::after { position: absolute; top: 0; left: 12%; right: 12%; height: 1px; background: linear-gradient(90deg, transparent, rgba(213, 253, 255, .95), transparent); content: ''; pointer-events: none; }
+.landing-shell .hero-actions .button-primary { border-color: #67f0c6; background: linear-gradient(125deg, #2fd094 0%, #2bcda8 50%, #23b7da 100%); box-shadow: inset 0 0 18px rgba(229,255,249,.23), 0 0 18px rgba(47,208,159,.3); color: #031d24; text-shadow: 0 1px rgba(255,255,255,.28); }
+.landing-shell .hero-actions .button-secondary { border-color: rgba(102, 220, 239, .56); background: linear-gradient(135deg, rgba(7,31,50,.94), rgba(12,54,72,.9)); box-shadow: inset 0 0 18px rgba(76,217,234,.08), 0 0 14px rgba(27,159,186,.11); color: #f2fbff; }
+.landing-shell .hero-actions .button-secondary:nth-child(3) { border-color: rgba(187, 142, 250, .54); background: linear-gradient(135deg, rgba(17,29,54,.95), rgba(47,35,79,.88)); box-shadow: inset 0 0 18px rgba(187,142,250,.1), 0 0 14px rgba(139,83,213,.12); }
+.landing-shell .hero-actions .button-secondary:nth-child(4) { border-color: rgba(245, 200, 109, .52); background: linear-gradient(135deg, rgba(27,36,49,.96), rgba(66,52,39,.86)); box-shadow: inset 0 0 18px rgba(245,200,109,.08), 0 0 14px rgba(224,164,61,.1); }
+.landing-shell .hero-actions .button-glyph { display: grid; place-items: center; width: 27px; height: 27px; margin: 0; border: 1px solid currentColor; background: rgba(255,255,255,.08); font: 600 16px/1 'DM Mono', monospace; box-shadow: inset 0 0 8px rgba(255,255,255,.12); }
+.landing-shell .hero-actions .button:hover { transform: translateY(-2px); filter: brightness(1.1); }
+.landing-shell .hero-actions .button:active { transform: translateY(1px) scale(.985); }
+@keyframes home-button-scan { 0%, 32% { transform: translateX(0) rotate(18deg); opacity: 0; } 42% { opacity: .8; } 62%, 100% { transform: translateX(610%) rotate(18deg); opacity: 0; } }
 
 .dashboard-grid, .upgrade-section { max-width: 1115px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); }
 .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
@@ -406,8 +418,11 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
   .upgrade-section { padding-top: 66px; }
   .section-line { display: none; }
   .landing-shell .hero-section { position: relative; display: flex; align-items: stretch; height: calc(100dvh - 65px); padding: 0 20px 60px; }
-  .landing-shell .hero-copy { display: flex; flex-direction: column; align-self: stretch; width: 100%; min-height: 0; padding-top: clamp(82px, 11vh, 118px); }
-  .landing-shell .hero-tagline { margin: 15px 0 10px; }
+  .landing-shell .hero-copy { display: flex; flex-direction: column; align-self: stretch; width: 100%; min-height: 0; padding-top: clamp(54px, 7.5vh, 82px); }
+  .landing-shell .hero-copy h1 { font-size: clamp(52px, 15vw, 61px); line-height: .93; text-shadow: 0 3px 22px rgba(1, 12, 24, .84); }
+  .landing-shell .eyebrow { margin-bottom: 14px; font-size: 11px; }
+  .landing-shell .hero-tagline { margin: 17px 0 11px; font-size: clamp(23px, 6.3vw, 27px); }
+  .landing-shell .hero-description { max-width: 330px; font-size: 15px; line-height: 1.65; }
   .landing-shell .hero-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 10px; width: 100%; margin-top: auto; margin-bottom: 18px; }
   .landing-shell .hero-actions .button { width: 100%; min-width: 0; min-height: 55px; padding: 0 10px; text-align: center; }
   .landing-shell .hero-actions .button span { margin-left: 8px; }

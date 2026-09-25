@@ -170,10 +170,10 @@ const Shop = () => {
           <p className="hero-tagline">Defend Earth.<br />Evolve your power.</p>
           <p className="hero-description">{t('Build your streak, master the grid, and become the force Earth needs.')}</p>
           <div className="hero-actions">
-            <button className="button button-primary" type="button" onClick={enterGame}>{t("Play")} <span>↗</span></button>
-            <button className="button button-secondary" type="button" onClick={() => setShopView("ships")}>{t('Shop / Hangar')}</button>
-            <button className="button button-secondary" type="button" onClick={() => { setLeadersStatus("loading"); setShopView("leaders"); }}>{t('Top 100')}</button>
-            <button className="button button-secondary" type="button" onClick={() => setActivePanel("how")}>{t('How to Play')}</button>
+            <button className="button button-primary" type="button" onClick={enterGame}>{t("Play")} <span className="button-glyph" aria-hidden="true">→</span></button>
+            <button className="button button-secondary" type="button" onClick={() => setShopView("ships")}>{t('Shop / Hangar')} <span className="button-glyph" aria-hidden="true">◇</span></button>
+            <button className="button button-secondary" type="button" onClick={() => { setLeadersStatus("loading"); setShopView("leaders"); }}>{t('Top 100')} <span className="button-glyph" aria-hidden="true">⌁</span></button>
+            <button className="button button-secondary" type="button" onClick={() => setActivePanel("how")}>{t('How to Play')} <span className="button-glyph" aria-hidden="true">?</span></button>
           </div>
         </div>
         <div className="planet-stage" aria-label="Cryptoid Evolution planet status">
