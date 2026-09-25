@@ -80,11 +80,11 @@ h1 span { display: block; color: var(--emerald); }
 .satellite-body::before { right: 12px; }.satellite-body::after { left: 12px; }
 @keyframes satellite-lap { to { transform: rotate(360deg); } }
 .home-defense-ship, .home-enemy-ship { position: absolute; z-index: 3; width: 46px; height: 46px; filter: drop-shadow(0 0 9px #6ee9ff); animation: home-patrol 4s ease-in-out infinite alternate; }
-.home-defense-ship { bottom: 18%; left: 5%; width: 70px; height: 70px; filter: drop-shadow(0 0 14px var(--ship-glow)) drop-shadow(0 8px 19px rgba(73, 213, 255, .62)); animation: home-full-thrust 1.25s ease-in-out infinite alternate; }
+.home-defense-ship { z-index: 5; bottom: 29%; left: 5%; width: 84px; height: 84px; filter: drop-shadow(0 0 18px var(--ship-glow)) drop-shadow(0 10px 23px rgba(73, 213, 255, .72)); animation: home-full-thrust 1.25s ease-in-out infinite alternate; }
 .home-enemy-ship { top: 9%; right: 5%; filter: drop-shadow(0 0 8px #ef8b73); animation-delay: -1.8s; }
 .home-defense-ship i, .home-enemy-ship i { position: relative; z-index: 1; display: block; width: 100%; height: 100%; background-image: url('/ships/cryptoid-fleet.png'); background-size: 400% 500%; background-repeat: no-repeat; }
-.home-defense-ship i { filter: sepia(1) saturate(4.5) hue-rotate(calc(225deg + var(--ship-hue))); }
-.home-defense-grey i { filter: grayscale(1) brightness(1.12); }
+.home-defense-ship i { filter: brightness(1.42) contrast(1.08) saturate(1.16) !important; }
+.home-defense-grey i { filter: grayscale(.82) brightness(1.62) contrast(1.08) !important; }
 .home-enemy-ship i { transform: rotate(180deg); filter: grayscale(1) sepia(1) saturate(1.6) hue-rotate(105deg); }
 .home-thrust { position: absolute; z-index: 0; top: var(--nozzle-y); width: 7%; height: 42%; min-width: 4px; transform: translateX(-50%); transform-origin: 50% 0; border-radius: 0 0 50% 50%; background: linear-gradient(180deg, #fff 0%, #bdf5ff 12%, var(--ship-glow) 45%, #6079ff 68%, transparent 100%); filter: drop-shadow(0 0 4px var(--ship-glow)) drop-shadow(0 6px 8px #6e7cff); clip-path: polygon(18% 0, 82% 0, 100% 24%, 63% 100%, 50% 86%, 37% 100%, 0 24%); animation: home-thrust-pulse .24s ease-in-out infinite alternate; }
 .home-thrust-left { left: var(--nozzle-left); }
@@ -427,6 +427,7 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
   .landing-shell .hero-actions .button { width: 100%; min-width: 0; min-height: 55px; padding: 0 10px; text-align: center; }
   .landing-shell .hero-actions .button span { margin-left: 8px; }
   .landing-shell .planet-stage { position: absolute; right: -25%; top: 18%; width: min(96vw, 430px); margin: 0; opacity: .7; pointer-events: none; }
+  .landing-shell .orbit-status { left: 31%; bottom: 15%; padding: 4px 7px; border-left: 2px solid rgba(102, 239, 217, .8); background: linear-gradient(90deg, rgba(4, 28, 43, .78), transparent); color: #a5f7e7; font-size: 9px; white-space: nowrap; }
   .home-footer { left: 20px; right: 20px; bottom: max(10px, env(safe-area-inset-bottom)); }
   .landing-shell .hero-section::before { position: absolute; z-index: 2; inset: 0 25% 0 0; background: linear-gradient(90deg, #081e31ec, #081e31a8 58%, transparent); content: ''; pointer-events: none; }
   .shop-modal-body { padding: 10px; }
