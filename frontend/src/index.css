@@ -371,11 +371,86 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .hangar-message { color: #9ee8bc !important; }
 .color-choice { width: 34px; height: 34px; border: 2px solid transparent; border-radius: 50%; cursor: pointer; }
 @keyframes engine-pulse { to { height: 22px; opacity: .7; } }
-.power-up { position: absolute; z-index: 4; display: grid; place-items: center; width: 42px; height: 42px; padding: 0; transform: translate(-50%, -50%); border: 2px solid #8dedff; border-radius: 10px; background: radial-gradient(circle, #27849f, #123e63 75%); box-shadow: 0 0 12px #56daf8, 0 0 25px rgba(111, 223, 255, .45); color: #fff; font: 700 26px 'Space Grotesk', sans-serif; pointer-events: none; animation: pickup-pulse 1.1s ease-in-out infinite alternate; }
-.power-up span { pointer-events: none; }
-.power-up-repair { border-color: #8dffc5; background: radial-gradient(circle, #248c6b, #145345 75%); box-shadow: 0 0 12px #6efcaa, 0 0 25px rgba(95, 242, 164, .45); }
-.power-up-overdrive { border-color: #e8b2ff; background: radial-gradient(circle, #8d49c0, #442368 75%); box-shadow: 0 0 12px #d999ff, 0 0 25px rgba(192, 127, 255, .45); }
-@keyframes pickup-pulse { from { scale: .92; } to { scale: 1.06; } }
+.power-up {
+  --coin-light: #d7faff;
+  --coin-mid: #43ccef;
+  --coin-dark: #0a3d68;
+  --coin-glow: rgba(67, 204, 239, .82);
+  position: absolute;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  overflow: hidden;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--coin-light);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 31% 24%, rgba(255, 255, 255, .98) 0 3px, transparent 4px),
+    radial-gradient(circle at 50% 48%, var(--coin-mid) 0 30%, var(--coin-dark) 68%, #06111f 100%);
+  box-shadow:
+    inset 0 0 0 3px rgba(255, 255, 255, .16),
+    inset 0 -7px 12px rgba(0, 0, 0, .42),
+    inset 0 6px 10px rgba(255, 255, 255, .18),
+    0 0 12px var(--coin-glow),
+    0 0 29px var(--coin-glow);
+  color: #fff;
+  font: 800 25px/1 'Space Grotesk', sans-serif;
+  filter: saturate(1.18);
+  pointer-events: none;
+  isolation: isolate;
+  animation: power-up-float 1.35s ease-in-out infinite;
+}
+.power-up::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 4px;
+  border: 1px solid rgba(255, 255, 255, .58);
+  border-radius: inherit;
+  background: conic-gradient(from 25deg, transparent 0 16%, rgba(255, 255, 255, .7) 22%, transparent 30% 66%, rgba(255, 255, 255, .34) 73%, transparent 81%);
+  box-shadow: inset 0 0 8px rgba(255, 255, 255, .32);
+  animation: power-up-ring 3s linear infinite;
+}
+.power-up::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: -22%;
+  left: -48%;
+  width: 30%;
+  height: 145%;
+  transform: rotate(18deg);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .92), transparent);
+  filter: blur(.35px);
+  animation: power-up-shimmer 1.9s ease-in-out infinite;
+}
+.power-up span {
+  position: relative;
+  z-index: 3;
+  pointer-events: none;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .48), 0 0 6px #fff, 0 0 13px var(--coin-light);
+}
+.power-up-shield { --coin-light: #d7faff; --coin-mid: #43ccef; --coin-dark: #0a3d68; --coin-glow: rgba(67, 204, 239, .82); }
+.power-up-overdrive { --coin-light: #ffe2ff; --coin-mid: #dc5cff; --coin-dark: #51136f; --coin-glow: rgba(220, 92, 255, .82); }
+.power-up-weapon { --coin-light: #fff2a8; --coin-mid: #ffc846; --coin-dark: #70400d; --coin-glow: rgba(255, 190, 58, .84); }
+.power-up-rapid { --coin-light: #dcfff1; --coin-mid: #43edb4; --coin-dark: #0a5c4f; --coin-glow: rgba(67, 237, 180, .82); }
+.power-up-repair { --coin-light: #e2ffe9; --coin-mid: #6efcaa; --coin-dark: #145345; --coin-glow: rgba(95, 242, 164, .8); }
+@keyframes power-up-float {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0) scale(.96); }
+  50% { transform: translate(-50%, -50%) translateY(-4px) scale(1.06); }
+}
+@keyframes power-up-ring { to { transform: rotate(360deg); } }
+@keyframes power-up-shimmer {
+  0%, 30% { transform: translateX(0) rotate(18deg); opacity: 0; }
+  44% { opacity: .96; }
+  72%, 100% { transform: translateX(520%) rotate(18deg); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .power-up, .power-up::before, .power-up::after { animation: none; }
+}
 .impact-effect { position: absolute; z-index: 2; width: 35px; height: 35px; margin: -17px 0 0 -17px; border: 2px solid var(--cyan); border-radius: 50%; animation: hit-flash .23s ease-out both; pointer-events: none; }
 .impact-effect.explosion { width: 85px; height: 85px; margin: -42px 0 0 -42px; border-color: var(--gold); background: radial-gradient(circle, rgba(245, 200, 109, .75) 0 9%, rgba(79, 228, 239, .22) 20%, transparent 64%); animation: explode .43s ease-out both; }
 .impact-effect.shatter { width: 72px; height: 72px; margin: -36px 0 0 -36px; border-color: #9b9fff; background: conic-gradient(from 30deg, transparent 0 12%, rgba(109, 227, 244, .65) 12% 16%, transparent 16% 46%, rgba(164, 142, 255, .7) 46% 53%, transparent 53% 79%, rgba(109, 227, 244, .65) 79% 85%, transparent 85%); animation: explode .43s ease-out both; }
@@ -501,8 +576,6 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
   .touch-controls { right: 8px; }
   .game-tip { bottom: 5px; }
 }
-.power-up-weapon { border-color: #ffd368; background: radial-gradient(circle, #946b36, #3c2b47 75%); }
-.power-up-rapid { border-color: #78f6d0; background: radial-gradient(circle, #317c74, #1b3955 75%); }
 /* Home language control and surface-projected Earth; the game backdrop keeps its own planets. */
 .language-picker { position: absolute; z-index: 12; top: 77px; right: clamp(18px, 4vw, 64px); display: flex; align-items: center; gap: 8px; color: #d8e8f2; font-size: 12px; }
 .language-picker select { color: #e9f4ff; background: #111e30e8; border: 1px solid #82bdd775; border-radius: 7px; padding: 5px 7px; cursor: pointer; }

@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { collectPowerUp, createPowerUpDrop, movePowerUps, receiveImpacts, resolvePlayerDamage } from "./powerUps.ts";
+import { collectPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, receiveImpacts, resolvePlayerDamage } from "./powerUps.ts";
 
 const safe = { id: 1, x: 400, y: 220, width: 800, height: 600, hearts: 2, threats: [], activeCount: 0, chanceRoll: 0.04, kindRoll: 0.1, destroyed: 1, dropsCreated: 0 };
 
@@ -40,4 +40,14 @@ test("the first unshielded hit always removes one heart", () => {
   const status = { hearts: 3, shieldCharges: 0, shieldMs: 0, overdriveMs: 0 };
   assert.equal(resolvePlayerDamage(status, 1, true).hearts, 2);
   assert.equal(resolvePlayerDamage(status, 1, false).hearts, 2);
+});
+
+
+test("every power-up has a unique coin symbol and a field-guide description", () => {
+  const types = ["shield", "overdrive", "weapon", "rapid"];
+  assert.equal(new Set(types.map(type => powerUpSymbols[type])).size, types.length);
+  for (const type of types) {
+    assert.ok(powerUpNames[type].length > 0);
+    assert.ok(powerUpDescriptions[type].length > 20);
+  }
 });

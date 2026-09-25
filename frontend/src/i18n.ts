@@ -41,7 +41,27 @@ const networkTranslations: Partial<Record<Locale, Record<string, string>>> = {
   es: { "Network chain":"Cadena de red", "blocks linked":"bloques enlazados", "CHAIN COMPLETE":"CADENA COMPLETA", "BLOCK LINKED":"BLOQUE ENLAZADO", "GLOBAL RECORDS":"RÉCORDS GLOBALES", "Top 100":"Top 100", "Your personal best":"Tu récord personal", "Player":"Jugador", "Best score":"Mejor puntuación", "Loading scores…":"Cargando puntuaciones…", "Leaderboard unavailable. Try again later.":"Clasificación no disponible. Inténtalo más tarde.", "Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.":"Cada jugador de Pi aparece una vez con su mejor partida. Los invitados guardan su récord en este dispositivo.", "No records yet. Complete a mission to be first.":"Todavía no hay récords. Completa una misión para ser el primero.", "Saving personal best…":"Guardando el récord personal…", "Personal best saved.":"Récord personal guardado.", "Could not sync personal best. Local best is saved.":"No se pudo sincronizar el récord. El récord local se ha guardado.", "Each completed section links one fictional block; three blocks award Shards. Strong bonus rounds increase the chain reward.":"Cada sección completada enlaza un bloque ficticio. Tres bloques otorgan fragmentos; las rondas de bonificación mejoran la recompensa." },
   fr: { "Network chain":"Chaîne du réseau", "blocks linked":"blocs reliés", "CHAIN COMPLETE":"CHAÎNE TERMINÉE", "BLOCK LINKED":"BLOC RELIÉ", "GLOBAL RECORDS":"RECORDS MONDIAUX", "Top 100":"Top 100", "Your personal best":"Votre meilleur score", "Player":"Joueur", "Best score":"Meilleur score", "Loading scores…":"Chargement des scores…", "Leaderboard unavailable. Try again later.":"Classement indisponible. Réessayez plus tard.", "Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.":"Chaque joueur Pi apparaît une fois avec son meilleur score. Les invités conservent leur record sur cet appareil.", "No records yet. Complete a mission to be first.":"Aucun record. Terminez une mission pour être le premier.", "Saving personal best…":"Enregistrement du record…", "Personal best saved.":"Record personnel enregistré.", "Could not sync personal best. Local best is saved.":"Synchronisation impossible. Le record local est enregistré.", "Each completed section links one fictional block; three blocks award Shards. Strong bonus rounds increase the chain reward.":"Chaque section terminée relie un bloc fictif. Trois blocs donnent des fragments ; les manches bonus renforcent la récompense." }
 };
-export const translate = (locale: Locale, source: string) => locale === "en" ? source : networkTranslations[locale]?.[source] ?? newerTranslations[locale]?.[source] ?? translations[locale][source] ?? source;
+const powerUpTranslations: Partial<Record<Locale, Record<string, string>>> = {
+  de: {
+    "Absorbs the next hit for up to 20 seconds.":"Absorbiert den nächsten Treffer und bleibt bis zu 20 Sekunden aktiv.",
+    "Powers each shot up to deal two damage for 20 seconds.":"Verstärkt deine Schüsse 20 Sekunden lang auf zwei Schadenspunkte.",
+    "Raises your weapon by one level for 20 seconds, up to level 5.":"Erhöht deine Waffe 20 Sekunden lang um eine Stufe, maximal bis Stufe 5.",
+    "Sets automatic fire to its fast cadence for 20 seconds.":"Schaltet das automatische Feuer 20 Sekunden lang auf die schnelle Feuerrate."
+  },
+  es: {
+    "Absorbs the next hit for up to 20 seconds.":"Absorbe el siguiente impacto y permanece activo hasta 20 segundos.",
+    "Powers each shot up to deal two damage for 20 seconds.":"Potencia los disparos a dos puntos de daño durante 20 segundos.",
+    "Raises your weapon by one level for 20 seconds, up to level 5.":"Aumenta el arma un nivel durante 20 segundos, hasta el nivel 5.",
+    "Sets automatic fire to its fast cadence for 20 seconds.":"Activa la cadencia rápida del fuego automático durante 20 segundos."
+  },
+  fr: {
+    "Absorbs the next hit for up to 20 seconds.":"Absorbe le prochain impact et reste actif jusqu’à 20 secondes.",
+    "Powers each shot up to deal two damage for 20 seconds.":"Renforce les tirs à deux points de dégâts pendant 20 secondes.",
+    "Raises your weapon by one level for 20 seconds, up to level 5.":"Augmente l’arme d’un niveau pendant 20 secondes, jusqu’au niveau 5.",
+    "Sets automatic fire to its fast cadence for 20 seconds.":"Active la cadence rapide du tir automatique pendant 20 secondes."
+  }
+};
+export const translate = (locale: Locale, source: string) => locale === "en" ? source : powerUpTranslations[locale]?.[source] ?? networkTranslations[locale]?.[source] ?? newerTranslations[locale]?.[source] ?? translations[locale][source] ?? source;
 export const useLocale = () => {
   const [locale, setLocale] = useState<Locale>(() => resolveLocale(navigator.languages?.length ? navigator.languages : [navigator.language], localStorage.getItem(STORAGE_KEY)));
   useEffect(() => { document.documentElement.lang = locale; }, [locale]);
