@@ -1,7 +1,9 @@
 export const SECTIONS_PER_SECTOR = 3;
 export const SECTION_INTRO_MS = 2_200;
 export const SECTION_CLEAR_MS = 2_400;
-export const ENTRY_GAP_MS = 520;
+export const ENTRY_GAP_MS = 220;
+export const FORMATION_SETTLE_MS = 450;
+export const FIRST_ATTACK_DELAY_MS = 750;
 
 const sectorNames = ["GENESIS BELT", "CRYSTAL CHAIN", "MEME NEBULA", "DARK LEDGER", "MAINNET CORE", "QUANTUM VAULT"] as const;
 
@@ -15,6 +17,10 @@ export const sectorName = (number: number) => {
 
 export const sectorForSection = (section: number) => Math.floor((Math.max(1, section) - 1) / SECTIONS_PER_SECTOR) + 1;
 export const sectionInSector = (section: number) => (Math.max(1, section) - 1) % SECTIONS_PER_SECTOR + 1;
+
+export const formationReady = ({ spawned, total, alive, ready }: {
+  spawned: number; total: number; alive: number; ready: number;
+}) => spawned === total && alive > 0 && ready === alive;
 
 export const formationLayout = (section: number, width: number, height: number) => {
   const columns = width < 760 ? 3 : 5;

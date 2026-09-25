@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { formationLayout, SECTION_INTRO_MS, sectionPhase, sectorForSection, sectionInSector, sectorName } from "./sectorManager.ts";
+import { formationLayout, formationReady, SECTION_INTRO_MS, sectionPhase, sectorForSection, sectionInSector, sectorName } from "./sectorManager.ts";
 
 test("all planned enemies must spawn and die before an endless section advances", () => {
   const stage = { introMs: SECTION_INTRO_MS, spawned: 5, total: 6, alive: 0, ready: 0, returning: false, attacking: false };
@@ -10,6 +10,13 @@ test("all planned enemies must spawn and die before an endless section advances"
   assert.equal(sectionPhase({ ...stage, spawned: 6, alive: 1, ready: 1, returning: true }), "REFORM");
   assert.equal(sectionPhase({ ...stage, spawned: 6 }), "SECTOR_CLEAR");
   assert.equal(sectionPhase({ ...stage, spawned: 6, introMs: 0 }), "SECTOR_INTRO");
+});
+
+test("combat waits until every surviving enemy occupies its formation slot", () => {
+  assert.equal(formationReady({ spawned: 5, total: 6, alive: 5, ready: 5 }), false);
+  assert.equal(formationReady({ spawned: 6, total: 6, alive: 6, ready: 5 }), false);
+  assert.equal(formationReady({ spawned: 6, total: 6, alive: 6, ready: 6 }), true);
+  assert.equal(formationReady({ spawned: 6, total: 6, alive: 0, ready: 0 }), false);
 });
 
 test("formation slots are unique and occupy ordered rows in the upper field", () => {

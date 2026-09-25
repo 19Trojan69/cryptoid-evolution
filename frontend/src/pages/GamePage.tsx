@@ -2,7 +2,7 @@ import { useLocale } from "../i18n";
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
-import { ENTRY_GAP_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, formationLayout, sectionInSector, sectionPhase, sectorForSection, sectorName, type SectorPhase } from "./sectorManager";
+import { ENTRY_GAP_MS, FIRST_ATTACK_DELAY_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, formationLayout, formationReady, sectionInSector, sectionPhase, sectorForSection, sectorName, type SectorPhase } from "./sectorManager";
 import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpNames, powerUpSymbols, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp } from "./powerUps";
 import { activeWeaponLevel, advanceShot, contactWithEnemy, MAX_PLAYER_SHOTS, movePlayer, PICKUP_WEAPON_DURATION_MS, placePlayerFromPointer, PURCHASED_WEAPON_DURATION_MS, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
@@ -89,7 +89,7 @@ const spawnAsteroid = (id: number, width: number, visibleTop: number, formationI
   const availableWidth = Math.max(1, width - profile.radius * 2);
   const entryStartX = entrySide === 1 ? profile.radius + availableWidth * 0.08 : width - profile.radius - availableWidth * 0.08;
   const entryStartY = visibleTop + profile.radius + ENTRY_HUD_GAP_PX;
-  return { id, x: entryStartX, y: entryStartY, size, ...profile, health: profile.health, maxHealth: profile.health, cloaked: false, rotation: 0, rotationSpeed: 0, entryElapsed: 0, entryStartX, entryStartY, entryTargetX: target.x, entryTargetY: target.y, entrySide, formationSlot: target.index, formationSlotCount: slots.length, formationElapsed: 0, formationDuration: 1_200, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, collidedThisAttack: false };
+  return { id, x: entryStartX, y: entryStartY, size, ...profile, entryDuration: Math.max(2_500, Math.round(profile.entryDuration * .5)), health: profile.health, maxHealth: profile.health, cloaked: false, rotation: 0, rotationSpeed: 0, entryElapsed: 0, entryStartX, entryStartY, entryTargetX: target.x, entryTargetY: target.y, entrySide, formationSlot: target.index, formationSlotCount: slots.length, formationElapsed: 0, formationDuration: FORMATION_SETTLE_MS, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, collidedThisAttack: false };
 };
 
 const attackTime = (asteroid: Asteroid) => asteroid.attackPattern === null ? 0 : attackDuration(asteroid.attackPattern) * asteroid.attackPace;
@@ -154,6 +154,7 @@ const GamePage = () => {
   const stateRef = useRef<GameState>(createInitialState());
   const nextIdRef = useRef(1);
   const formationIndexRef = useRef(0);
+  const formationStartedRef = useRef(false);
   const bonusIndexRef = useRef(0);
   const sectionSlotsRef = useRef<ReturnType<typeof formationLayout> | null>(null);
   const animationRef = useRef<number | null>(null);
@@ -290,11 +291,18 @@ const GamePage = () => {
       const delta = Math.min(34, time - (lastFrameRef.current || time));
       lastFrameRef.current = time;
       if (state.status === "playing") {
-        const transitionPaused = state.phase === "SECTOR_INTRO" || state.phase === "SECTOR_CLEAR";
         const field = fieldRef.current;
         const width = field?.clientWidth || 800;
         const height = field?.clientHeight || 600;
         const visibleTop = visibleTopRef.current;
+        const slots = sectionSlotsRef.current ?? formationLayout(state.section, width, height);
+        sectionSlotsRef.current = slots;
+        const bonus = state.encounter === "normal" && isBonusSection(state.section);
+        const normal = state.encounter === "normal" && !bonus;
+        const readyCount = state.asteroids.filter(asteroid => asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration).length;
+        const formationIsReady = normal && formationReady({ spawned: formationIndexRef.current, total: slots.length, alive: state.asteroids.length, ready: readyCount });
+        if (formationIsReady) formationStartedRef.current = true;
+        const transitionPaused = state.phase === "SECTOR_INTRO" || state.phase === "SECTOR_CLEAR" || (normal && !formationStartedRef.current);
         const keys = keysRef.current;
         const horizontal = Number(keys.has("ArrowRight") || keys.has("KeyD")) - Number(keys.has("ArrowLeft") || keys.has("KeyA"));
         const vertical = Number(keys.has("ArrowDown") || keys.has("KeyS")) - Number(keys.has("ArrowUp") || keys.has("KeyW"));
@@ -322,8 +330,6 @@ const GamePage = () => {
         if (state.pickupWeaponMs === 0) state.pickupWeaponLevel = 1;
         state.weaponLevel = activeWeaponLevel(state.paidWeaponLevel, state.paidWeaponMs, state.pickupWeaponLevel, state.pickupWeaponMs, state.weaponCap);
         sectionElapsedRef.current += delta;
-        const slots = sectionSlotsRef.current ?? formationLayout(state.section, width, height);
-        sectionSlotsRef.current = slots;
         if (state.phase === "SECTOR_CLEAR") {
           clearTimerRef.current += delta;
           if (clearTimerRef.current >= SECTION_CLEAR_MS) {
@@ -348,6 +354,7 @@ const GamePage = () => {
             state.enemyShots = [];
             state.effects = [];
             formationIndexRef.current = 0;
+            formationStartedRef.current = false;
             bonusIndexRef.current = 0;
             sectionSlotsRef.current = formationLayout(state.section, width, height);
             spawnTimerRef.current = 0;
@@ -356,8 +363,6 @@ const GamePage = () => {
             attackCooldownRef.current = 0;
           }
         }
-        const bonus = state.encounter === "normal" && isBonusSection(state.section);
-        const normal = state.encounter === "normal" && !bonus;
         if (bonus && sectionElapsedRef.current >= SECTION_INTRO_MS && state.phase !== "SECTOR_CLEAR" && bonusIndexRef.current < BONUS_TARGET_COUNT) {
           spawnTimerRef.current += delta;
           if (spawnTimerRef.current >= BONUS_ENTRY_GAP_MS) {
@@ -373,10 +378,11 @@ const GamePage = () => {
             state.asteroids.push(spawnAsteroid(nextIdRef.current++, width, visibleTop, formationIndexRef.current++, state.sector, slots));
           }
         }
-        attackCooldownRef.current += delta;
-        if (normal && formationIndexRef.current === slots.length && state.asteroids.length > 0 && !state.asteroids.some(asteroid => asteroid.attackPattern !== null) && attackCooldownRef.current >= 1_350) {
-          const ready = state.asteroids.filter(asteroid => asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration);
-          if (ready.length === state.asteroids.length) {
+        const ready = state.asteroids.filter(asteroid => asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration);
+        const formationComplete = normal && formationReady({ spawned: formationIndexRef.current, total: slots.length, alive: state.asteroids.length, ready: ready.length });
+        if (formationComplete && !state.asteroids.some(asteroid => asteroid.attackPattern !== null)) attackCooldownRef.current += delta;
+        else if (!state.asteroids.some(asteroid => asteroid.attackPattern !== null)) attackCooldownRef.current = 0;
+        if (formationComplete && !state.asteroids.some(asteroid => asteroid.attackPattern !== null) && attackCooldownRef.current >= FIRST_ATTACK_DELAY_MS) {
             let pattern = chooseAttackPattern(attackNumberRef.current++, elapsedRef.current);
             if (ready.length < attackGroupSize(pattern)) pattern = "curve";
             const groupSize = attackGroupSize(pattern);
@@ -388,7 +394,6 @@ const GamePage = () => {
               return { ...asteroid, attackPattern: pattern, attackDelay: 650 + groupDelay, attackLane: index - (groupSize - 1) / 2, firedThisAttack: false, collidedThisAttack: false };
             });
             attackCooldownRef.current = 0;
-          }
         }
         const nextAsteroids: Asteroid[] = [];
         let heartsLost = 0;
@@ -636,6 +641,7 @@ const GamePage = () => {
     checkpointAtRef.current = 0;
     checkpointScoreRef.current = 0;
     formationIndexRef.current = 0;
+    formationStartedRef.current = false;
     bonusIndexRef.current = 0;
     sectionSlotsRef.current = null;
     spawnTimerRef.current = 0;
