@@ -43,7 +43,7 @@ const env: Environment = {
   port: parseInt(process.env.PORT || "8000"),
   session_secret: process.env.SESSION_SECRET || "This is my session secret",
   pi_api_key: process.env.PI_API_KEY || "",
-  platform_api_url: process.env.PLATFORM_API_URL || "",
+  platform_api_url: process.env.PLATFORM_API_URL || "https://api.minepi.com",
   mongo_host: process.env.MONGO_HOST || "localhost:27017",
   mongo_uri: normalizeMongoUri(process.env.MONGODB_URI),
   mongo_db_name: process.env.MONGODB_DATABASE_NAME || "demo-app",

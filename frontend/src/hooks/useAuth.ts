@@ -1,12 +1,24 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { axiosClient } from "../lib/axiosClient";
 import type { AuthResult, PaymentDTO, User } from "../types/pi";
+import { createPiOAuthState, PI_OAUTH_CLIENT_ID, PI_OAUTH_ORIGIN, PI_OAUTH_REDIRECT_URI, PI_OAUTH_STATE_KEY } from "../config/piOAuth";
 
 export const useAuth = () => {
   const pendingPayments = useRef<PaymentDTO[]>([]);
   const [user, setUser] = useState<User | null>(null);
   const [showSignIn, setShowSignIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!localStorage.getItem("cryptoid_pi_session")) return;
+
+    let active = true;
+    axiosClient.get<{ user: User }>("/user/me")
+      .then(({ data }) => { if (active) setUser(data.user); })
+      .catch(() => localStorage.removeItem("cryptoid_pi_session"));
+
+    return () => { active = false; };
+  }, []);
 
   const onIncompletePaymentFound = useCallback(async (payment: PaymentDTO) => {
     pendingPayments.current.push(payment);
@@ -30,8 +42,25 @@ export const useAuth = () => {
   const signIn = useCallback(async () => {
     setIsLoading(true);
     try {
-      const scopes = ["username", "payments", "roles", "in_app_notifications"];
-      const authResult = await window.Pi.authenticate(scopes, onIncompletePaymentFound);
+      if (window.location.origin !== PI_OAUTH_ORIGIN && !["localhost", "127.0.0.1"].includes(window.location.hostname)) {
+        window.location.assign(`${PI_OAUTH_ORIGIN}/?pi_signin=1`);
+        return;
+      }
+
+      if (typeof window.Pi.signIn === "function") {
+        const state = createPiOAuthState();
+        sessionStorage.setItem(PI_OAUTH_STATE_KEY, state);
+        window.Pi.signIn({
+          clientId: PI_OAUTH_CLIENT_ID,
+          redirectUri: PI_OAUTH_REDIRECT_URI,
+          scopes: ["username", "wallet_address"],
+          state,
+        });
+        return;
+      }
+
+      // Compatibility fallback for older Pi Browser SDK builds.
+      const authResult = await window.Pi.authenticate(["username", "payments", "wallet_address"], onIncompletePaymentFound);
       await signInUser(authResult);
     } catch (err) {
       console.error("Error authenticating:", err);

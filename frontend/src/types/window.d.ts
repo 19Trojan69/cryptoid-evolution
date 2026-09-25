@@ -8,6 +8,13 @@ declare global {
     Pi: {
       init(options: { version: string }): Promise<void>;
 
+      signIn?(options: {
+        clientId: string;
+        redirectUri: string;
+        scopes?: string[];
+        state?: string;
+      }): void;
+
       authenticate(scopes: string[], onIncompletePaymentFound: (payment: PaymentDTO) => void): Promise<AuthResult>;
 
       createPayment(

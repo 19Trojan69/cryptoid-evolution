@@ -100,6 +100,14 @@ const Shop = () => {
     isLoading: isAuthLoading,
   } = useAuth();
 
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("pi_signin") !== "1") return;
+    url.searchParams.delete("pi_signin");
+    history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
+    void signIn();
+  }, [signIn]);
+
   const { orderProduct, isLoading } = usePayments({
     isAuthenticated,
     onRequireAuth: requireAuth,
