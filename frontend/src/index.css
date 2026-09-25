@@ -83,12 +83,15 @@ h1 span { display: block; color: var(--emerald); }
 .home-defense-ship { z-index: 5; bottom: 29%; left: 5%; width: 84px; height: 84px; filter: drop-shadow(0 0 18px var(--ship-glow)) drop-shadow(0 10px 23px rgba(73, 213, 255, .72)); animation: home-full-thrust 1.25s ease-in-out infinite alternate; }
 .home-enemy-ship { top: 9%; right: 5%; filter: drop-shadow(0 0 8px #ef8b73); animation-delay: -1.8s; }
 .home-defense-ship i, .home-enemy-ship i { position: relative; z-index: 1; display: block; width: 100%; height: 100%; background-image: url('/ships/cryptoid-fleet.png'); background-size: 400% 500%; background-repeat: no-repeat; }
-.home-defense-ship i { filter: brightness(1.42) contrast(1.08) saturate(1.16) !important; }
-.home-defense-grey i { filter: grayscale(.82) brightness(1.62) contrast(1.08) !important; }
+.home-defense-ship i { filter: brightness(1.92) contrast(1.13) saturate(1.2) !important; }
+.home-defense-grey i { filter: grayscale(.72) brightness(2.18) contrast(1.1) !important; }
 .home-enemy-ship i { transform: rotate(180deg); filter: grayscale(1) sepia(1) saturate(1.6) hue-rotate(105deg); }
 .home-thrust { position: absolute; z-index: 0; top: var(--nozzle-y); width: 7%; height: 42%; min-width: 4px; transform: translateX(-50%); transform-origin: 50% 0; border-radius: 0 0 50% 50%; background: linear-gradient(180deg, #fff 0%, #bdf5ff 12%, var(--ship-glow) 45%, #6079ff 68%, transparent 100%); filter: drop-shadow(0 0 4px var(--ship-glow)) drop-shadow(0 6px 8px #6e7cff); clip-path: polygon(18% 0, 82% 0, 100% 24%, 63% 100%, 50% 86%, 37% 100%, 0 24%); animation: home-thrust-pulse .24s ease-in-out infinite alternate; }
 .home-thrust-left { left: var(--nozzle-left); }
 .home-thrust-right { left: var(--nozzle-right); }
+.home-enemy-thrust { position: absolute; z-index: 0; top: calc(var(--nozzle-y) - 34%); width: 7%; height: 34%; min-width: 3px; transform: translateX(-50%); transform-origin: 50% 100%; background: linear-gradient(180deg, transparent 0%, #ef8f2f 38%, #ffd36b 72%, #fff8d0 100%); filter: drop-shadow(0 -3px 5px #ffbb42); clip-path: polygon(50% 0, 63% 14%, 100% 76%, 82% 100%, 18% 100%, 0 76%, 37% 14%); animation: enemy-thrust-pulse .2s ease-in-out infinite alternate; }
+.home-enemy-thrust-left { left: var(--nozzle-left); }
+.home-enemy-thrust-right { left: var(--nozzle-right); }
 .home-defense-ship::after { position: absolute; z-index: 0; top: 83%; left: 50%; width: 84%; height: 48%; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(ellipse, color-mix(in srgb, var(--ship-glow) 45%, transparent), transparent 68%); filter: blur(7px); content: ''; animation: home-engine-aura .55s ease-in-out infinite alternate; }
 .home-defense-laser { position: absolute; z-index: 3; left: 19%; bottom: 30%; width: 2px; height: 37%; transform: rotate(37deg); transform-origin: bottom; background: linear-gradient(transparent 0 30%, #e9ffff 80%, #81dfff 100%); box-shadow: 0 0 9px #8edfff; animation: home-shot 3s ease-out infinite; }
 .orbit-status { position: absolute; z-index: 4; left: 3%; bottom: 0; color: #85eddb; font: 9px 'DM Mono', monospace; letter-spacing: .16em; text-shadow: 0 0 8px #76e2c6; }
@@ -98,9 +101,10 @@ h1 span { display: block; color: var(--emerald); }
 @keyframes home-patrol { to { transform: translate(7px, -9px); } }
 @keyframes home-full-thrust { from { transform: translateY(2px) scale(.98); } to { transform: translateY(-5px) scale(1.03); } }
 @keyframes home-thrust-pulse { from { height: 32%; opacity: .76; } to { height: 48%; opacity: 1; } }
+@keyframes enemy-thrust-pulse { from { opacity: .76; filter: drop-shadow(0 -2px 3px #ff9b32) brightness(.92); } to { opacity: 1; filter: drop-shadow(0 -4px 6px #ffd36b) brightness(1.22); } }
 @keyframes home-engine-aura { to { opacity: .48; transform: translateX(-50%) scaleX(1.22); } }
 @keyframes home-shot { 0%, 38% { opacity: 0; scale: .3; } 44% { opacity: .9; scale: 1; } 64%, 100% { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .satellite-motion, .home-defense-ship, .home-enemy-ship, .home-defense-laser, .home-thrust, .home-defense-ship::after, .planet { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .satellite-motion, .home-defense-ship, .home-enemy-ship, .home-defense-laser, .home-thrust, .home-enemy-thrust, .cryptoid .exhaust, .player-engine, .home-defense-ship::after, .planet { animation: none; } }
 
 .landing-shell .hero-actions .button { position: relative; isolation: isolate; overflow: hidden; display: flex; align-items: center; justify-content: center; gap: 13px; border-radius: 0; clip-path: polygon(0 10px, 10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px)); transition: transform .16s ease, filter .16s ease, box-shadow .16s ease; }
 .landing-shell .hero-actions .button::before { position: absolute; z-index: -1; top: -70%; bottom: -70%; left: -42%; width: 28%; transform: rotate(18deg); background: linear-gradient(90deg, transparent, rgba(255,255,255,.36), transparent); content: ''; animation: home-button-scan 3.3s ease-in-out infinite; pointer-events: none; }
@@ -332,19 +336,20 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .cryptoid-launch { --flame-length: 20%; }
 .cryptoid-boost { --flame-length: 18%; }
 .cryptoid-reverse { --flame-length: 5.5%; }
-.cryptoid .exhaust { position: absolute; z-index: 0; top: calc(var(--nozzle-y) - var(--flame-length)); width: 5%; height: var(--flame-length); min-width: 2px; transform: translateX(-50%); transform-origin: 50% 100%; background: linear-gradient(to top, #fff9ce 0%, #ffad44 37%, #f46436 65%, transparent 100%); filter: drop-shadow(0 0 2px #ff8b3d); clip-path: polygon(50% 0, 100% 30%, 70% 100%, 30% 100%, 0 30%); transition: top .16s ease-out, height .16s ease-out; pointer-events: none; }
+.cryptoid .exhaust { position: absolute; z-index: 0; top: calc(var(--nozzle-y) - var(--flame-length)); width: 6%; height: var(--flame-length); min-width: 3px; transform: translateX(-50%); transform-origin: 50% 100%; background: linear-gradient(to top, #fff9ce 0%, #ffd36b 24%, #ef8f2f 62%, transparent 100%); filter: drop-shadow(0 -3px 4px #ffb13b); clip-path: polygon(50% 0, 63% 14%, 100% 76%, 82% 100%, 18% 100%, 0 76%, 37% 14%); animation: enemy-thrust-pulse .18s ease-in-out infinite alternate; transition: top .16s ease-out, height .16s ease-out; pointer-events: none; }
 .cryptoid .exhaust::after { position: absolute; left: 50%; bottom: -1px; width: 120%; height: 2px; transform: translateX(-50%); border-radius: 50%; background: #fff2b3; content: ''; }
 .cryptoid .exhaust-left { left: var(--nozzle-left); }
 .cryptoid .exhaust-right { left: var(--nozzle-right); }
 .player-ship { width: 76px; height: 76px; }
 .player-ship { filter: none; }
 .player-ship .fleet-sprite { z-index: 1; filter: sepia(1) saturate(4.5) hue-rotate(calc(225deg + var(--ship-hue))); }
-.player-ship .player-engine { z-index: 0; top: var(--nozzle-y); bottom: auto; width: 5%; height: var(--flame-length); min-width: 3px; transform: translateX(-50%); background: linear-gradient(#fff, var(--ship-glow) 45%, transparent); box-shadow: none; transition: height .14s ease-out; }
+.player-ship .player-engine { z-index: 0; top: var(--nozzle-y); bottom: auto; width: 6%; height: var(--flame-length); min-width: 3px; transform: translateX(-50%); transform-origin: 50% 0; background: linear-gradient(180deg, #fff 0%, #bdf5ff 12%, var(--ship-glow) 45%, #6079ff 68%, transparent 100%); filter: drop-shadow(0 3px 4px var(--ship-glow)); clip-path: polygon(18% 0, 82% 0, 100% 24%, 63% 100%, 50% 86%, 37% 100%, 0 24%); animation: player-thrust-pulse .2s ease-in-out infinite alternate; transition: height .14s ease-out; }
 .player-ship .player-engine-left { left: var(--nozzle-left); }
 .player-ship .player-engine-right { left: var(--nozzle-right); right: auto; }
 .player-ship-grey .fleet-sprite { filter: grayscale(1) brightness(1.12); }
 .player-ship-white .fleet-sprite { filter: grayscale(1) brightness(1.55); }
 .player-ship-grey .player-engine, .player-ship-white .player-engine { background: linear-gradient(#fff, #9eafc5 45%, transparent); }
+@keyframes player-thrust-pulse { from { opacity: .78; filter: drop-shadow(0 2px 3px var(--ship-glow)) brightness(.96); } to { opacity: 1; filter: drop-shadow(0 4px 6px var(--ship-glow)) brightness(1.22); } }
 .player-ship.player-ship-hurt { opacity: .68; filter: drop-shadow(0 0 17px #ff7083); }
 .player-ship.player-ship-shielded { filter: drop-shadow(0 0 16px #8feeff); }
 .player-ship-shield-active::after { content: ""; position: absolute; z-index: 3; inset: -6px; border: 2px solid rgba(142, 238, 255, .88); border-radius: 50%; background: radial-gradient(ellipse, transparent 54%, rgba(91, 207, 246, .14) 72%, transparent 86%); box-shadow: inset 0 0 9px rgba(142, 238, 255, .28), 0 0 7px rgba(142, 238, 255, .4); pointer-events: none; }

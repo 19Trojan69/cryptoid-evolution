@@ -182,7 +182,7 @@ const Shop = () => {
           <div className="orbit orbit-three"><span className="satellite-motion"><i className="satellite-body" /></span></div>
           <div className="planet"><EarthGlobe /></div>
           <div className={`home-defense-ship${selected.color.id === "grey" ? " home-defense-grey" : ""}`} style={{ "--ship-glow": selected.color.glow, ...shipNozzleStyle(selected.skin.sprite) } as CSSProperties}><PaintedShip sprite={selected.skin.sprite} color={selected.color.id} /><span className="home-thrust home-thrust-left" /><span className="home-thrust home-thrust-right" /></div>
-          <div className="home-enemy-ship"><i style={spriteStyle(3)} /></div>
+          <div className="home-enemy-ship" style={{ "--ship-glow": "#ffd36b", ...shipNozzleStyle(3, true) } as CSSProperties}><i style={spriteStyle(3)} /><span className="home-enemy-thrust home-enemy-thrust-left" /><span className="home-enemy-thrust home-enemy-thrust-right" /></div>
           <div className="home-defense-laser" />
           <span className="orbit-status">{t('ORBITAL DEFENSE ACTIVE')}</span>
           <div className="stage-label"><span className="stage-label-value">01</span><span>{t('Genesis sector')}</span></div>
