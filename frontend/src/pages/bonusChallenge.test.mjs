@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusPosition, bonusReward, isBonusSection } from "./bonusChallenge.ts";
+import { BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusHeartReward, bonusPosition, bonusReward, isBonusSection } from "./bonusChallenge.ts";
 
 test("every third section is a bonus and later sectors repeat the pattern", () => {
   assert.deepEqual([1, 2, 3, 4, 5, 6, 18, 19].map(isBonusSection), [false, false, true, false, false, true, true, false]);
@@ -25,7 +25,14 @@ test("bonus tiers include a perfect reward without requiring perfect hits for pr
   assert.deepEqual([0, 5, 9, 12].map(hits => bonusReward(hits).points), [0, 500, 1_000, 2_000]);
   assert.deepEqual([0, 1, 5, 9, 12].map(hits => bonusReward(hits).shards), [0, 2, 4, 7, 12]);
   assert.deepEqual(bonusReward(5).powerUps, ["shield"]);
-  assert.deepEqual(bonusReward(9).powerUps, ["repair"]);
-  assert.deepEqual(bonusReward(12).powerUps, ["repair", "shield"]);
+  assert.deepEqual(bonusReward(9).powerUps, []);
+  assert.deepEqual(bonusReward(12).powerUps, ["shield"]);
   assert.equal(bonusReward(12).label, "PERFECT CRYPTO HUNT");
+});
+
+test("only a perfect bonus restores one previously lost heart", () => {
+  assert.equal(bonusHeartReward(11, 2), 0);
+  assert.equal(bonusHeartReward(12, 3), 0);
+  assert.equal(bonusHeartReward(12, 2), 1);
+  assert.equal(bonusHeartReward(12, 1), 1);
 });

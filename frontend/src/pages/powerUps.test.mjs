@@ -12,8 +12,7 @@ test("drops stay rare, but the first safe pickup appears after three kills", () 
   assert.equal(createPowerUpDrop({ ...safe, kindRoll: 0.4 })?.type, "overdrive");
   assert.equal(createPowerUpDrop({ ...safe, kindRoll: 0.7 })?.type, "weapon");
   assert.equal(createPowerUpDrop({ ...safe, kindRoll: 0.8 })?.type, "rapid");
-  assert.equal(createPowerUpDrop({ ...safe, kindRoll: 0.99 })?.type, "repair");
-  assert.equal(createPowerUpDrop({ ...safe, kindRoll: 0.99, hearts: 3 })?.type, "shield");
+  assert.equal(createPowerUpDrop({ ...safe, kindRoll: 0.99 })?.type, "rapid");
 });
 
 test("drops avoid occupied paths and the lower danger area", () => {
@@ -23,13 +22,13 @@ test("drops avoid occupied paths and the lower danger area", () => {
   assert.equal(movePowerUps([{ id: 1, type: "shield", x: 400, y: 500 }], 2_000, 600).length, 0);
 });
 
-test("shield absorbs impacts, repair caps at three hearts, overdrive refreshes", () => {
+test("shield absorbs impacts and combat power-ups never restore hearts", () => {
   let status = { hearts: 2, shieldCharges: 0, overdriveMs: 0 };
   status = collectPowerUp(status, "shield");
   assert.deepEqual(receiveImpacts(status, 1), { hearts: 2, shieldCharges: 0, shieldMs: 20_000, overdriveMs: 0 });
   assert.equal(receiveImpacts(status, 2).hearts, 1);
-  assert.equal(collectPowerUp(collectPowerUp(status, "repair"), "repair").hearts, 3);
   assert.equal(collectPowerUp(status, "overdrive").overdriveMs, 20_000);
+  assert.equal(collectPowerUp(status, "rapid").hearts, 2);
   assert.equal(collectPowerUp({ ...status, weaponLevel: 5 }, "weapon").weaponLevel, 5);
   assert.equal(collectPowerUp(status, "rapid").rapidFireMs, 20_000);
   assert.equal(collectPowerUp(status, "shield", 60_000).shieldMs, 60_000);

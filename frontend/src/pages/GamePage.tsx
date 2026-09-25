@@ -9,7 +9,7 @@ import { activeWeaponLevel, advanceShot, contactWithEnemy, MAX_PLAYER_SHOTS, mov
 import { advanceEnemyShot, createEnemyShot, enemyShotHitsPlayer, enemyShotLimit, type EnemyShot } from "./enemyFire";
 import SectorBackdrop from "./SectorBackdrop";
 import Starfield from "./Starfield";
-import { BONUS_ENTRY_GAP_MS, BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusPosition, bonusReward, isBonusSection, type BonusTarget } from "./bonusChallenge";
+import { BONUS_ENTRY_GAP_MS, BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusHeartReward, bonusPosition, bonusReward, isBonusSection, type BonusTarget } from "./bonusChallenge";
 import { appendSectionBlock, BLOCKS_PER_CHAIN } from "./networkChain";
 import { bossFireInterval, bossVulnerable, createSectorBoss, moveSectorBoss, nextAfterClear, type SectorBoss } from "./sectorBoss";
 import { enemySprite, selectedShip, shardBalance, SHARD_BALANCE_KEY, shipNozzleStyle, spriteStyle, spriteVisualOffset } from "./shipFleet";
@@ -534,7 +534,7 @@ const GamePage = () => {
           state.destroyed += 1;
           state.asteroids = state.asteroids.filter(item => item.id !== enemy.id);
           if (enemy.attackPattern !== null) attackCooldownRef.current = 0;
-          const drop = createPowerUpDrop({ id: nextIdRef.current, x: enemy.x, y: enemy.y, width, height, hearts: state.hearts, threats: state.asteroids, activeCount: state.powerUps.length, chanceRoll: Math.random(), kindRoll: Math.random(), destroyed: state.destroyed, dropsCreated: dropsCreatedRef.current });
+          const drop = createPowerUpDrop({ id: nextIdRef.current, x: enemy.x, y: enemy.y, width, height, threats: state.asteroids, activeCount: state.powerUps.length, chanceRoll: Math.random(), kindRoll: Math.random(), destroyed: state.destroyed, dropsCreated: dropsCreatedRef.current });
           if (drop) { nextIdRef.current += 1; dropsCreatedRef.current += 1; state.powerUps.push(drop); }
         }
         state.shots = remainingShots;
@@ -559,14 +559,16 @@ const GamePage = () => {
         }
         if (bonus && state.phase === "SECTOR_CLEAR" && previousPhase !== "SECTOR_CLEAR") {
           const reward = bonusReward(state.bonusHits);
-          state.bonusResult = `${reward.label} · +${reward.shards} SHARDS${reward.powerUps.length ? ` · ${reward.powerUps.map(power => power === "repair" ? "+1 HEART" : "SHIELD").join(" + ")}` : ""}`;
+          const recoveredHeart = bonusHeartReward(state.bonusHits, state.hearts);
+          state.bonusResult = `${reward.label} · +${reward.shards} SHARDS${recoveredHeart ? " · +1 HEART" : ""}${reward.powerUps.length ? ` · ${reward.powerUps.map(() => "SHIELD").join(" + ")}` : ""}`;
           state.score += reward.points;
           state.bonusShards += reward.shards;
+          state.hearts = Math.min(3, state.hearts + recoveredHeart);
           for (const power of reward.powerUps) {
             Object.assign(state, applyPowerUp(state, power));
             if (power === "shield") state.shieldActive = true;
           }
-          if (reward.powerUps.length) soundRef.current?.play("pickup");
+          if (reward.powerUps.length || recoveredHeart) soundRef.current?.play("pickup");
         }
         if (state.score > bestThisDeviceRef.current) {
           bestThisDeviceRef.current = state.score;

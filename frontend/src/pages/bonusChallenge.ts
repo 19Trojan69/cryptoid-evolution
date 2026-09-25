@@ -15,8 +15,11 @@ export const bonusPosition = (index: number, elapsed: number, width: number, hei
 };
 
 export const bonusReward = (hits: number) => {
-  if (hits === BONUS_TARGET_COUNT) return { label: "PERFECT CRYPTO HUNT", points: 2_000, shards: 12, powerUps: ["repair", "shield"] as const };
-  if (hits >= 9) return { label: "GOLD NETWORK", points: 1_000, shards: 7, powerUps: ["repair"] as const };
+  if (hits === BONUS_TARGET_COUNT) return { label: "PERFECT CRYPTO HUNT", points: 2_000, shards: 12, powerUps: ["shield"] as const };
+  if (hits >= 9) return { label: "GOLD NETWORK", points: 1_000, shards: 7, powerUps: [] as const };
   if (hits >= 5) return { label: "NETWORK LINK", points: 500, shards: 4, powerUps: ["shield"] as const };
   return { label: "CHALLENGE COMPLETE", points: 0, shards: hits > 0 ? 2 : 0, powerUps: [] as const };
 };
+
+export const bonusHeartReward = (hits: number, hearts: number) =>
+  hits === BONUS_TARGET_COUNT && hearts < 3 ? 1 : 0;
