@@ -33,7 +33,7 @@ const EarthGlobe = ({ paused = false }: { paused?: boolean }) => {
         const depth = Math.sqrt(1 - radiusSq);
         const longitude = Math.atan2(dx, depth) / (Math.PI * 2);
         const sourceY = Math.min(map.height - 1, Math.max(0, Math.floor((.5 + Math.asin(dy) / Math.PI) * map.height)));
-        const shade = Math.max(.2, Math.min(1, .34 + .66 * Math.max(0, depth * .83 - dx * .48 - dy * .12)));
+        const shade = Math.max(.27, Math.min(1, .41 + .68 * Math.max(0, depth * .83 - dx * .48 - dy * .12)));
         coordinates.push({ index: (y * SIZE + x) * 4, longitude, sourceY, shade });
       }
       const draw = () => {
