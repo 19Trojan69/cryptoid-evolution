@@ -211,8 +211,8 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .hearts-stat-hit { border-radius: 5px; animation: hearts-impact .23s ease-out; }
 @keyframes hearts-impact { from { background: #df526d99; } to { background: transparent; } }
 .game-control { border: 1px solid rgba(79, 228, 239, .35); background: transparent; color: var(--cyan); cursor: pointer; }
-.home-control { justify-self: start; padding: 9px 12px; font-size: 15px; }
-.home-control span { margin-left: 5px; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; }
+.home-control { justify-self: start; min-width: 54px; min-height: 44px; padding: 0 15px; border-radius: 5px; font-size: 20px; }
+.home-control span { margin-left: 7px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
 .pause-control { justify-self: end; width: 38px; height: 38px; padding: 0; font-size: 15px; }
 .game-control:hover { border-color: var(--gold); color: var(--gold); }
 .game-label { position: absolute; z-index: 1; top: 91px; left: 50%; transform: translateX(-50%); color: rgba(171, 228, 218, .46); font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .2em; white-space: nowrap; }
@@ -289,9 +289,12 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .cryptoid-medium .fleet-sprite { filter: grayscale(1) sepia(1) saturate(1.6) hue-rotate(165deg); }
 .cryptoid-heavy .fleet-sprite { filter: grayscale(1) sepia(1) saturate(1.6) hue-rotate(335deg); }
 .cryptoid-elite .fleet-sprite { filter: grayscale(1) sepia(1) saturate(1.6) hue-rotate(245deg); }
-.cryptoid { --flame-length: 10%; }
-.cryptoid-boost { --flame-length: 17%; }
-.cryptoid .exhaust { position: absolute; z-index: 0; top: calc(var(--nozzle-y) - var(--flame-length)); width: 5%; height: var(--flame-length); min-width: 2px; transform: translateX(-50%); background: linear-gradient(to top, #fff9ce 0%, #ffad44 37%, #f46436 65%, transparent 100%); clip-path: polygon(50% 0, 100% 30%, 70% 100%, 30% 100%, 0 30%); transition: top .18s ease-out, height .18s ease-out; pointer-events: none; }
+.cryptoid { --flame-length: 9%; }
+.cryptoid-launch { --flame-length: 20%; }
+.cryptoid-boost { --flame-length: 18%; }
+.cryptoid-reverse { --flame-length: 5.5%; }
+.cryptoid .exhaust { position: absolute; z-index: 0; top: calc(var(--nozzle-y) - var(--flame-length)); width: 5%; height: var(--flame-length); min-width: 2px; transform: translateX(-50%); transform-origin: 50% 100%; background: linear-gradient(to top, #fff9ce 0%, #ffad44 37%, #f46436 65%, transparent 100%); filter: drop-shadow(0 0 2px #ff8b3d); clip-path: polygon(50% 0, 100% 30%, 70% 100%, 30% 100%, 0 30%); transition: top .16s ease-out, height .16s ease-out; pointer-events: none; }
+.cryptoid .exhaust::after { position: absolute; left: 50%; bottom: -1px; width: 120%; height: 2px; transform: translateX(-50%); border-radius: 50%; background: #fff2b3; content: ''; }
 .cryptoid .exhaust-left { left: var(--nozzle-left); }
 .cryptoid .exhaust-right { left: var(--nozzle-right); }
 .player-ship { width: 76px; height: 76px; }
@@ -375,10 +378,12 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
   .dashboard-grid, .product-grid { grid-template-columns: 1fr; }
   .upgrade-section { padding-top: 66px; }
   .section-line { display: none; }
-  .landing-shell .hero-section { position: relative; display: flex; align-items: center; height: calc(100dvh - 65px); padding: 12px 20px 60px; }
-  .landing-shell .hero-copy { width: 100%; }
+  .landing-shell .hero-section { position: relative; display: flex; align-items: stretch; height: calc(100dvh - 65px); padding: 0 20px 60px; }
+  .landing-shell .hero-copy { display: flex; flex-direction: column; align-self: stretch; width: 100%; min-height: 0; padding-top: clamp(118px, 16vh, 170px); }
   .landing-shell .hero-tagline { margin: 15px 0 10px; }
-  .landing-shell .hero-actions { margin-top: 18px; }
+  .landing-shell .hero-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; width: 100%; margin-top: auto; margin-bottom: 54px; }
+  .landing-shell .hero-actions .button { width: 100%; min-width: 0; min-height: 52px; padding: 0 10px; text-align: center; }
+  .landing-shell .hero-actions .button span { margin-left: 8px; }
   .landing-shell .planet-stage { position: absolute; right: -25%; top: 18%; width: min(96vw, 430px); margin: 0; opacity: .7; pointer-events: none; }
   .home-footer { left: 20px; right: 20px; bottom: max(10px, env(safe-area-inset-bottom)); }
   .landing-shell .hero-section::before { position: absolute; z-index: 2; inset: 0 25% 0 0; background: linear-gradient(90deg, #081e31ec, #081e31a8 58%, transparent); content: ''; pointer-events: none; }
@@ -399,11 +404,13 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
   .hero-tagline { margin-top: 18px; }
   .hero-actions { margin-top: 20px; }
   .landing-shell .hero-section { height: calc(100dvh - 58px); padding-top: 10px; padding-bottom: 48px; }
+  .landing-shell .hero-copy { padding-top: 10px; }
+  .landing-shell .hero-actions { margin-top: 20px; margin-bottom: 0; }
 }
 
 @media (max-width: 560px) {
-  .game-hud { grid-template-columns: 74px repeat(6, minmax(0, 1fr)) 34px; gap: 3px; padding: max(11px, env(safe-area-inset-top)) max(7px, env(safe-area-inset-right)) 11px max(7px, env(safe-area-inset-left)); }
-  .home-control { width: 36px; height: 36px; padding: 0; font-size: 14px; }
+  .game-hud { grid-template-columns: 82px repeat(6, minmax(0, 1fr)) 34px; gap: 3px; padding: max(11px, env(safe-area-inset-top)) max(7px, env(safe-area-inset-right)) 11px max(7px, env(safe-area-inset-left)); }
+  .home-control { width: 50px; height: 44px; padding: 0; font-size: 20px; }
   .home-control span { display: none; }
   .pause-control { width: 36px; height: 36px; }
   .hud-stat span { font-size: 7px; letter-spacing: .07em; }
