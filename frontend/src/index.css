@@ -427,7 +427,8 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
   .landing-shell .hero-actions .button { width: 100%; min-width: 0; min-height: 55px; padding: 0 10px; text-align: center; }
   .landing-shell .hero-actions .button span { margin-left: 8px; }
   .landing-shell .planet-stage { position: absolute; right: -25%; top: 18%; width: min(96vw, 430px); margin: 0; opacity: .7; pointer-events: none; }
-  .landing-shell .orbit-status { left: 31%; bottom: 15%; padding: 4px 7px; border-left: 2px solid rgba(102, 239, 217, .8); background: linear-gradient(90deg, rgba(4, 28, 43, .78), transparent); color: #a5f7e7; font-size: 9px; white-space: nowrap; }
+  .landing-shell .home-defense-ship { left: -2%; bottom: 20%; }
+  .landing-shell .orbit-status { left: 43%; bottom: 19%; padding: 4px 7px; border-left: 2px solid rgba(102, 239, 217, .8); background: linear-gradient(90deg, rgba(4, 28, 43, .78), transparent); color: #a5f7e7; font-size: 9px; white-space: nowrap; }
   .home-footer { left: 20px; right: 20px; bottom: max(10px, env(safe-area-inset-bottom)); }
   .landing-shell .hero-section::before { position: absolute; z-index: 2; inset: 0 25% 0 0; background: linear-gradient(90deg, #081e31ec, #081e31a8 58%, transparent); content: ''; pointer-events: none; }
   .shop-modal-body { padding: 10px; }
