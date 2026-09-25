@@ -217,9 +217,14 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .game-control:hover { border-color: var(--gold); color: var(--gold); }
 .game-label { position: absolute; z-index: 1; top: 91px; left: 50%; transform: translateX(-50%); color: rgba(171, 228, 218, .46); font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .2em; white-space: nowrap; }
 .game-label span { color: var(--gold); }
-.sector-banner { position: absolute; z-index: 2; top: 19%; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 7px; width: max-content; max-width: 90%; padding: 15px 25px; background: rgba(3, 14, 27, .76); border: 1px solid rgba(239, 196, 103, .3); color: var(--gold); text-align: center; pointer-events: none; }
+.sector-banner { position: absolute; z-index: 2; top: 21%; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 7px; width: max-content; max-width: 90%; padding: 4px; color: var(--gold); text-align: center; text-shadow: 0 2px 9px #020912, 0 0 18px rgba(237, 195, 105, .34); pointer-events: none; }
 .sector-banner span { font: 10px 'DM Mono', monospace; letter-spacing: .24em; }
-.sector-banner strong { font: 500 clamp(15px, 3vw, 25px) 'Space Grotesk', sans-serif; letter-spacing: .1em; }
+.sector-banner strong { font: 600 clamp(18px, 4vw, 34px) 'Space Grotesk', sans-serif; letter-spacing: .12em; }
+.sector-banner small { color: #b9eee6; font: 10px 'DM Mono', monospace; letter-spacing: .13em; }
+.sector-transition { animation: sector-transition 2.2s ease-in-out both; }
+.sector-clear-message { animation: sector-clear-message .35s ease-out both; }
+@keyframes sector-transition { 0% { opacity: 0; transform: translate(-50%, 10px) scale(.96); } 18%, 72% { opacity: 1; transform: translate(-50%, 0) scale(1); } 100% { opacity: 0; transform: translate(-50%, -7px) scale(1.02); } }
+@keyframes sector-clear-message { from { opacity: 0; transform: translate(-50%, 8px); } to { opacity: 1; transform: translate(-50%, 0); } }
 .sector-banner .chain-result { font: 11px 'DM Mono', monospace; letter-spacing: .07em; color: #a7eee2; }
 .power-status { position: absolute; z-index: 3; top: 111px; right: clamp(14px, 4vw, 54px); display: flex; gap: 8px; color: #d3c1ff; font: 10px 'DM Mono', monospace; letter-spacing: .08em; pointer-events: none; }
 .power-status span { padding: 6px 9px; border: 1px solid rgba(187, 142, 250, .4); background: rgba(9, 20, 43, .85); }

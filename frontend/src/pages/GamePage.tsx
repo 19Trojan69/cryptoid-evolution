@@ -283,6 +283,7 @@ const GamePage = () => {
       const delta = Math.min(34, time - (lastFrameRef.current || time));
       lastFrameRef.current = time;
       if (state.status === "playing") {
+        const transitionPaused = state.phase === "SECTOR_INTRO" || state.phase === "SECTOR_CLEAR";
         const field = fieldRef.current;
         const width = field?.clientWidth || 800;
         const height = field?.clientHeight || 600;
@@ -302,14 +303,14 @@ const GamePage = () => {
         const acceleration = distance > 1 ? 1 : 0;
         state.thrust += (acceleration - state.thrust) * Math.min(1, delta / 150);
         lastPlayerRef.current = state.player;
-        elapsedRef.current += delta;
+        if (!transitionPaused) elapsedRef.current += delta;
         impactCooldownRef.current = Math.max(0, impactCooldownRef.current - delta);
-        state.overdriveMs = Math.max(0, state.overdriveMs - delta);
-        state.rapidFireMs = Math.max(0, state.rapidFireMs - delta);
-        state.shieldMs = Math.max(0, state.shieldMs - delta);
+        state.overdriveMs = Math.max(0, state.overdriveMs - (transitionPaused ? 0 : delta));
+        state.rapidFireMs = Math.max(0, state.rapidFireMs - (transitionPaused ? 0 : delta));
+        state.shieldMs = Math.max(0, state.shieldMs - (transitionPaused ? 0 : delta));
         if (state.shieldMs === 0) state.shieldCharges = 0;
-        state.paidWeaponMs = Math.max(0, state.paidWeaponMs - delta);
-        state.pickupWeaponMs = Math.max(0, state.pickupWeaponMs - delta);
+        state.paidWeaponMs = Math.max(0, state.paidWeaponMs - (transitionPaused ? 0 : delta));
+        state.pickupWeaponMs = Math.max(0, state.pickupWeaponMs - (transitionPaused ? 0 : delta));
         if (state.paidWeaponMs === 0) state.paidWeaponLevel = 1;
         if (state.pickupWeaponMs === 0) state.pickupWeaponLevel = 1;
         state.weaponLevel = activeWeaponLevel(state.paidWeaponLevel, state.paidWeaponMs, state.pickupWeaponLevel, state.pickupWeaponMs, state.weaponCap);
@@ -461,9 +462,10 @@ const GamePage = () => {
           soundRef.current?.play(pickup.type === "overdrive" ? "boost" : "pickup");
           return false;
         });
-        fireTimerRef.current += delta;
+        if (transitionPaused) fireTimerRef.current = 0;
+        else fireTimerRef.current += delta;
         const interval = fireInterval(state.weaponLevel, state.rapidFireMs);
-        if (fireTimerRef.current >= interval) {
+        if (!transitionPaused && fireTimerRef.current >= interval) {
           fireTimerRef.current %= interval;
           if (state.shots.length < MAX_PLAYER_SHOTS) {
             const volley = makeVolley(state.weaponLevel, state.player.x * width, state.player.y * height - 23, state.overdriveMs > 0, () => nextIdRef.current++);
@@ -678,7 +680,7 @@ const GamePage = () => {
         {game.encounter === "normal" && isBonusSection(game.section) && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">{t("BONUS TARGETS")} {game.bonusHits} / {BONUS_TARGET_COUNT} · {t("NO ENEMY FIRE")}</div>}
         {(game.shieldCharges > 0 || game.overdriveMs > 0 || game.rapidFireMs > 0 || game.paidWeaponMs > 0 || game.pickupWeaponMs > 0) && <div className="power-status" aria-live="polite">{game.shieldCharges > 0 && <span>◇ {t("SHIELD")} {t(game.shieldActive ? "ON" : "OFF")} · {game.shieldCharges} · {Math.ceil(game.shieldMs / 1_000)}s</span>}{game.overdriveMs > 0 && <span>ϟ OVERDRIVE {Math.ceil(game.overdriveMs / 1_000)}s</span>}{game.rapidFireMs > 0 && <span>» {t("RAPID")} {Math.ceil(game.rapidFireMs / 1_000)}s</span>}{game.paidWeaponMs > 0 && <span>◆ {t("BOUGHT SHOTS")} {Math.ceil(game.paidWeaponMs / 1_000)}s</span>}{game.pickupWeaponMs > 0 && <span>↑ {t("PICKUP SHOTS")} {Math.ceil(game.pickupWeaponMs / 1_000)}s</span>}</div>}
         {game.status === "loading" && <div className="game-overlay"><div className="game-modal"><h1>{t('Preparing mission')}</h1><p>{t('Checking your saved hangar loadout.')}</p></div></div>}
-        {game.status === "playing" && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className="sector-banner" aria-live="polite"><span>{game.encounter !== "normal" ? game.phase === "SECTOR_CLEAR" ? t("SECTOR CLEAR") : t("WARNING · SECTOR BOSS") : game.phase === "SECTOR_CLEAR" ? isBonusSection(game.section) ? t("BONUS COMPLETE") : t("SECTION CLEAR") : isBonusSection(game.section) ? t("BONUS CHALLENGE") : `${t("SECTOR")} ${String(game.sector).padStart(2, "0")}`}</span><strong>{game.encounter !== "normal" ? game.phase === "SECTOR_CLEAR" ? t("CORE WARDEN DEFEATED") : t("CORE WARDEN INCOMING") : game.phase === "SECTOR_CLEAR" ? isBonusSection(game.section) ? `${game.bonusResult.split(" · ").map((part, index) => index === 0 ? t(part) : part).join(" · ")} · ${game.bonusHits}/${BONUS_TARGET_COUNT}` : `${t("SECTION")} ${sectionInSector(game.section)} ${t("COMPLETE")}` : isBonusSection(game.section) ? t("HIT THE FLYING TARGETS") : sectorName(game.sector)}</strong>{game.phase === "SECTOR_CLEAR" && game.encounter === "normal" && <small className="chain-result">{game.chainResult}</small>}</div>}
+        {game.status === "playing" && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}`} aria-live="polite"><span>{game.encounter !== "normal" ? game.phase === "SECTOR_CLEAR" ? t("SECTOR CLEAR") : `${t("SECTOR")} ${String(game.sector).padStart(2, "0")} · ${sectorName(game.sector)}` : game.phase === "SECTOR_CLEAR" ? isBonusSection(game.section) ? t("BONUS COMPLETE") : t("SECTION CLEAR") : `${t("SECTOR")} ${String(game.sector).padStart(2, "0")} · ${sectorName(game.sector)}`}</span><strong>{game.encounter !== "normal" ? game.phase === "SECTOR_CLEAR" ? t("CORE WARDEN DEFEATED") : t("WARNING · SECTOR BOSS") : game.phase === "SECTOR_CLEAR" ? isBonusSection(game.section) ? `${game.bonusResult.split(" · ").map((part, index) => index === 0 ? t(part) : part).join(" · ")} · ${game.bonusHits}/${BONUS_TARGET_COUNT}` : `${t("SECTION")} ${sectionInSector(game.section)} ${t("COMPLETE")}` : isBonusSection(game.section) ? t("BONUS CHALLENGE") : `${t("SECTION")} ${sectionInSector(game.section)} / 3`}</strong>{game.phase === "SECTOR_INTRO" && game.encounter === "normal" && isBonusSection(game.section) && <small>{t("HIT THE FLYING TARGETS")}</small>}{game.phase === "SECTOR_CLEAR" && game.encounter === "normal" && <small className="chain-result">{game.chainResult}</small>}</div>}
         {game.boss && game.encounter === "boss-fight" && <div className={`asteroid cryptoid cryptoid-heavy cryptoid-bitrock sector-boss${game.boss.fireElapsed >= bossFireInterval(game.boss) - 550 ? " boss-warning" : ""}${game.boss.health <= game.boss.maxHealth / 2 ? " boss-enraged cryptoid-boost" : ""}`} style={{ left: game.boss.x, top: game.boss.y, transform: "translate(-50%, -50%)", ...shipNozzleStyle(19, true) }} title={`${t("CORE WARDEN")} · ${t("Sector")} boss`}><div className="fleet-sprite" style={spriteStyle(19)} /><span className="exhaust exhaust-left" /><span className="exhaust exhaust-right" /><span className="health-bar"><b style={{ width: `${game.boss.health / game.boss.maxHealth * 100}%` }} /></span></div>}
         {game.bonusTargets.map(target => { const sprite = enemySprite("light", target.index); return <div key={target.id} className="asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light bonus-ship cryptoid-boost" style={{ left: target.x, top: target.y, transform: "translate(-50%, -50%)", ...shipNozzleStyle(sprite, true) }}><div className="fleet-sprite" style={spriteStyle(sprite)} /><span className="exhaust exhaust-left" /><span className="exhaust exhaust-right" /></div>; })}
         {game.asteroids.map(asteroid => { const sprite = enemySprite(asteroid.shipClass, asteroid.formationSlot); const boosting = asteroid.attackPattern !== null && asteroid.attackDelay <= 0 && asteroid.returnElapsed === 0; return <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}${boosting ? " cryptoid-boost" : ""}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ left: asteroid.x, top: asteroid.y, transform: `translate(-50%, -50%) rotate(${asteroid.rotation}deg)`, ...shipNozzleStyle(sprite, true) }}><div className="fleet-sprite" style={spriteStyle(sprite)} /><span className="exhaust exhaust-left" /><span className="exhaust exhaust-right" /><span className="health-bar"><b style={{ width: `${asteroid.health / asteroid.maxHealth * 100}%` }} /></span></div>; })}
