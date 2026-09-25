@@ -27,13 +27,25 @@ interface Environment {
   frontend_url: string;
 }
 
+const normalizeMongoUri = (value: string | undefined): string => {
+  const trimmed = (value || "").trim();
+  const withoutAssignment = trimmed.replace(/^MONGODB_URI\s*=\s*/i, "").trim();
+  const quote = withoutAssignment[0];
+
+  if ((quote === '"' || quote === "'") && withoutAssignment.endsWith(quote)) {
+    return withoutAssignment.slice(1, -1).trim();
+  }
+
+  return withoutAssignment;
+};
+
 const env: Environment = {
   port: parseInt(process.env.PORT || "8000"),
   session_secret: process.env.SESSION_SECRET || "This is my session secret",
   pi_api_key: process.env.PI_API_KEY || "",
   platform_api_url: process.env.PLATFORM_API_URL || "",
   mongo_host: process.env.MONGO_HOST || "localhost:27017",
-  mongo_uri: process.env.MONGODB_URI || "",
+  mongo_uri: normalizeMongoUri(process.env.MONGODB_URI),
   mongo_db_name: process.env.MONGODB_DATABASE_NAME || "demo-app",
   mongo_user: process.env.MONGODB_USERNAME || "",
   mongo_password: process.env.MONGODB_PASSWORD || "",
