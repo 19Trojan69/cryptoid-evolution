@@ -20,14 +20,16 @@ import "./types/session";
 import mountNotificationEndpoints from "./handlers/notifications";
 
 const dbName = env.mongo_db_name;
-const mongoUri = `mongodb://${env.mongo_host}/${dbName}`;
-const mongoClientOptions = {
-  authSource: "admin",
-  auth: {
-    username: env.mongo_user,
-    password: env.mongo_password,
-  },
-};
+const mongoUri = env.mongo_uri || `mongodb://${env.mongo_host}/${dbName}`;
+const mongoClientOptions = env.mongo_uri
+  ? {}
+    : {
+          authSource: "admin",
+                auth: {
+                        username: env.mongo_user,
+                                password: env.mongo_password,
+                                      },
+                                          };
 
 //
 // I. Initialize and set up the express app and various middlewares and packages:
@@ -114,8 +116,7 @@ const start = async () => {
     app.locals.userCollection = db.collection("users");
     await app.locals.orderCollection.createIndex({ pi_payment_id: 1 }, { unique: true });
     await app.locals.userCollection.createIndex({ bestScore: -1, uid: 1 });
-    console.log("Connected to MongoDB on: ", mongoUri);
-
+console.log("Connected to MONGODB");
     app.listen(env.port, () => {
       console.log(`App platform demo app - Backend listening on port ${env.port}!`);
       console.log(`CORS config: configured to respond to a frontend hosted on ${env.frontend_url}`);
