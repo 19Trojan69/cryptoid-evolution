@@ -36,6 +36,21 @@ export const formationLayout = (section: number, width: number, height: number) 
   });
 };
 
+export const arrangeFormationBySize = <T extends { index: number; x: number; y: number }>(slots: T[], sizes: number[]) => {
+  if (slots.length !== sizes.length) return slots;
+  const centerX = slots.reduce((sum, slot) => sum + slot.x, 0) / Math.max(1, slots.length);
+  const centerY = slots.reduce((sum, slot) => sum + slot.y, 0) / Math.max(1, slots.length);
+  const centralSlots = [...slots].sort((a, b) =>
+    Math.abs(a.x - centerX) - Math.abs(b.x - centerX)
+    || Math.abs(a.y - centerY) - Math.abs(b.y - centerY)
+    || a.index - b.index);
+  const enemiesBySize = sizes.map((size, index) => ({ size, index }))
+    .sort((a, b) => b.size - a.size || a.index - b.index);
+  const arranged = Array<T>(slots.length);
+  enemiesBySize.forEach((enemy, rank) => { arranged[enemy.index] = centralSlots[rank]; });
+  return arranged;
+};
+
 export const sectionPhase = ({ introMs, spawned, total, alive, ready, returning, attacking }: {
   introMs: number; spawned: number; total: number; alive: number; ready: number; returning: boolean; attacking: boolean;
 }): SectorPhase => {

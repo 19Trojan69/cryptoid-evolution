@@ -2,7 +2,7 @@ import { useLocale } from "../i18n";
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
-import { ENTRY_GAP_MS, FIRST_ATTACK_DELAY_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, formationLayout, formationReady, sectionInSector, sectionPhase, sectorForSection, sectorName, type SectorPhase } from "./sectorManager";
+import { ENTRY_GAP_MS, FIRST_ATTACK_DELAY_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, arrangeFormationBySize, formationLayout, formationReady, sectionInSector, sectionPhase, sectorForSection, sectorName, type SectorPhase } from "./sectorManager";
 import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpNames, powerUpSymbols, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp } from "./powerUps";
 import { activeWeaponLevel, advanceShot, contactWithEnemy, MAX_PLAYER_SHOTS, movePlayer, PICKUP_WEAPON_DURATION_MS, placePlayerFromPointer, PURCHASED_WEAPON_DURATION_MS, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
@@ -25,6 +25,13 @@ const TOTAL_DESTROYED_KEY = "cryptoid_total_destroyed";
 const RETURN_DURATION_MS = 3_500;
 const IMPACT_COOLDOWN_MS = 1_500;
 const ENTRY_HUD_GAP_PX = 8;
+const FORMATION_DATA_ROWS = [
+  "10110100 01101001 11000101 00110110 10101100",
+  "00101101 11010010 01001111 10110001 01100110",
+  "11100010 01011011 10010100 01101101 11001010",
+  "01010111 10100011 00111010 11010100 01101001",
+  "10011001 01110100 11001011 00100110 10110101",
+] as const;
 
 type AsteroidSize = "small" | "medium" | "large";
 type GameStatus = "loading" | "playing" | "paused" | "game-over";
@@ -79,6 +86,11 @@ const saveRecords = (state: GameState) => {
   window.localStorage.setItem(TOTAL_DESTROYED_KEY, String(readRecord(TOTAL_DESTROYED_KEY) + state.destroyed));
   // Earned Shards persist between runs; the current run starts at zero.
   window.localStorage.setItem(SHARD_BALANCE_KEY, String(shardBalance(window.localStorage.getItem(SHARD_BALANCE_KEY)) + state.destroyed + state.bonusShards));
+};
+
+const createFormationSlots = (section: number, sector: number, width: number, height: number) => {
+  const slots = formationLayout(section, width, height);
+  return arrangeFormationBySize(slots, slots.map((_, index) => chooseCryptoid(sector, index).radius));
 };
 
 const spawnAsteroid = (id: number, width: number, visibleTop: number, formationIndex: number, sector: number, slots: ReturnType<typeof formationLayout>): Asteroid => {
@@ -295,7 +307,7 @@ const GamePage = () => {
         const width = field?.clientWidth || 800;
         const height = field?.clientHeight || 600;
         const visibleTop = visibleTopRef.current;
-        const slots = sectionSlotsRef.current ?? formationLayout(state.section, width, height);
+        const slots = sectionSlotsRef.current ?? createFormationSlots(state.section, state.sector, width, height);
         sectionSlotsRef.current = slots;
         const bonus = state.encounter === "normal" && isBonusSection(state.section);
         const normal = state.encounter === "normal" && !bonus;
@@ -356,7 +368,7 @@ const GamePage = () => {
             formationIndexRef.current = 0;
             formationStartedRef.current = false;
             bonusIndexRef.current = 0;
-            sectionSlotsRef.current = formationLayout(state.section, width, height);
+            sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height);
             spawnTimerRef.current = 0;
             sectionElapsedRef.current = 0;
             clearTimerRef.current = 0;
@@ -694,6 +706,8 @@ const GamePage = () => {
         {(game.shieldCharges > 0 || game.overdriveMs > 0 || game.rapidFireMs > 0 || game.paidWeaponMs > 0 || game.pickupWeaponMs > 0) && <div className="power-status" aria-live="polite">{game.shieldCharges > 0 && <span>◇ {t("SHIELD")} {t(game.shieldActive ? "ON" : "OFF")} · {game.shieldCharges} · {Math.ceil(game.shieldMs / 1_000)}s</span>}{game.overdriveMs > 0 && <span>ϟ OVERDRIVE {Math.ceil(game.overdriveMs / 1_000)}s</span>}{game.rapidFireMs > 0 && <span>» {t("RAPID")} {Math.ceil(game.rapidFireMs / 1_000)}s</span>}{game.paidWeaponMs > 0 && <span>◆ {t("BOUGHT SHOTS")} {Math.ceil(game.paidWeaponMs / 1_000)}s</span>}{game.pickupWeaponMs > 0 && <span>↑ {t("PICKUP SHOTS")} {Math.ceil(game.pickupWeaponMs / 1_000)}s</span>}</div>}
         {game.status === "loading" && <div className="game-overlay"><div className="game-modal"><h1>{t('Preparing mission')}</h1><p>{t('Checking your saved hangar loadout.')}</p></div></div>}
         {game.status === "playing" && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}`} aria-live="polite"><span>{game.encounter !== "normal" ? game.phase === "SECTOR_CLEAR" ? t("SECTOR CLEAR") : `${t("SECTOR")} ${String(game.sector).padStart(2, "0")} · ${sectorName(game.sector)}` : game.phase === "SECTOR_CLEAR" ? isBonusSection(game.section) ? t("BONUS COMPLETE") : t("SECTION CLEAR") : `${t("SECTOR")} ${String(game.sector).padStart(2, "0")} · ${sectorName(game.sector)}`}</span><strong>{game.encounter !== "normal" ? game.phase === "SECTOR_CLEAR" ? t("CORE WARDEN DEFEATED") : t("WARNING · SECTOR BOSS") : game.phase === "SECTOR_CLEAR" ? isBonusSection(game.section) ? `${game.bonusResult.split(" · ").map((part, index) => index === 0 ? t(part) : part).join(" · ")} · ${game.bonusHits}/${BONUS_TARGET_COUNT}` : `${t("SECTION")} ${sectionInSector(game.section)} ${t("COMPLETE")}` : isBonusSection(game.section) ? t("BONUS CHALLENGE") : `${t("SECTION")} ${sectionInSector(game.section)} / 3`}</strong>{game.phase === "SECTOR_INTRO" && game.encounter === "normal" && isBonusSection(game.section) && <small>{t("HIT THE FLYING TARGETS")}</small>}{game.phase === "SECTOR_CLEAR" && game.encounter === "normal" && <small className="chain-result">{game.chainResult}</small>}</div>}
+        {game.status === "playing" && game.encounter === "normal" && !isBonusSection(game.section) && !formationStartedRef.current && (game.phase === "ENTRY" || game.phase === "FORMATION") && <div className="formation-data-stream" aria-hidden="true">{FORMATION_DATA_ROWS.map((row, index) => <span key={index}>{row}</span>)}</div>}
+        {game.encounter === "normal" && !isBonusSection(game.section) && (game.phase === "ENTRY" || game.phase === "FORMATION" || game.phase === "REFORM") && game.asteroids.map(asteroid => { const locked = asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration; return <div key={`formation-${asteroid.id}`} className={`formation-target${locked ? " formation-target-locked" : ""}`} style={{ left: asteroid.entryTargetX, top: asteroid.entryTargetY, width: asteroid.radius * 1.65, height: asteroid.radius * 1.65 }} aria-hidden="true"><span /></div>; })}
         {game.boss && game.encounter === "boss-fight" && <div className={`asteroid cryptoid cryptoid-heavy cryptoid-bitrock sector-boss${game.boss.fireElapsed >= bossFireInterval(game.boss) - 550 ? " boss-warning" : ""}${game.boss.health <= game.boss.maxHealth / 2 ? " boss-enraged cryptoid-boost" : ""}`} style={{ left: game.boss.x, top: game.boss.y, transform: "translate(-50%, -50%)", ...shipNozzleStyle(19, true) }} title={`${t("CORE WARDEN")} · ${t("Sector")} boss`}><div className="fleet-sprite" style={spriteStyle(19)} /><span className="exhaust exhaust-left" /><span className="exhaust exhaust-right" /><span className="health-bar"><b style={{ width: `${game.boss.health / game.boss.maxHealth * 100}%` }} /></span></div>}
         {game.bonusTargets.map(target => { const sprite = enemySprite("light", target.index); return <div key={target.id} className="asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light bonus-ship cryptoid-boost" style={{ left: target.x, top: target.y, transform: "translate(-50%, -50%)", ...shipNozzleStyle(sprite, true) }}><div className="fleet-sprite" style={spriteStyle(sprite)} /><span className="exhaust exhaust-left" /><span className="exhaust exhaust-right" /></div>; })}
         {game.asteroids.map(asteroid => { const sprite = enemySprite(asteroid.shipClass, asteroid.formationSlot); return <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}${cryptoidMotionClass(asteroid)}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ left: asteroid.x, top: asteroid.y, transform: `translate(-50%, -50%) rotate(${asteroid.rotation}deg)`, ...shipNozzleStyle(sprite, true) }}><div className="fleet-sprite" style={spriteStyle(sprite)} /><span className="exhaust exhaust-left" /><span className="exhaust exhaust-right" /><span className="health-bar"><b style={{ width: `${asteroid.health / asteroid.maxHealth * 100}%` }} /></span></div>; })}

@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { formationLayout, formationReady, SECTION_INTRO_MS, sectionPhase, sectorForSection, sectionInSector, sectorName } from "./sectorManager.ts";
+import { arrangeFormationBySize, formationLayout, formationReady, SECTION_INTRO_MS, sectionPhase, sectorForSection, sectionInSector, sectorName } from "./sectorManager.ts";
 
 test("all planned enemies must spawn and die before an endless section advances", () => {
   const stage = { introMs: SECTION_INTRO_MS, spawned: 5, total: 6, alive: 0, ready: 0, returning: false, attacking: false };
@@ -37,6 +37,16 @@ test("neighbouring ships have room for their complete silhouettes", () => {
       assert.ok(Math.hypot(slot.x - other.x, slot.y - other.y) >= 100, `${width}x${height}: slots ${slot.index} and ${other.index} overlap`);
     }
   }
+});
+
+test("large enemies receive central slots while smaller enemies move to the sides", () => {
+  const slots = formationLayout(1, 390, 700);
+  const sizes = [25, 36, 25, 50, 36, 25];
+  const arranged = arrangeFormationBySize(slots, sizes);
+  const centerX = slots.reduce((sum, slot) => sum + slot.x, 0) / slots.length;
+  const order = sizes.map((size, index) => ({ size, distance: Math.abs(arranged[index].x - centerX) }))
+    .sort((a, b) => b.size - a.size);
+  for (let index = 1; index < order.length; index += 1) assert.ok(order[index - 1].distance <= order[index].distance);
 });
 
 test("three sections share a named sector and sector names repeat indefinitely", () => {
