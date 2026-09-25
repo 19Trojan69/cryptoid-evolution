@@ -23,27 +23,31 @@ const dbName = env.mongo_db_name;
 const mongoUri = env.mongo_uri || `mongodb://${env.mongo_host}/${dbName}`;
 const mongoClientOptions = env.mongo_uri
   ? {}
-    : {
-          authSource: "admin",
-                auth: {
-                        username: env.mongo_user,
-                                password: env.mongo_password,
-                                      },
-                                          };
+  : {
+      authSource: "admin",
+      auth: {
+        username: env.mongo_user,
+        password: env.mongo_password,
+      },
+    };
 
 //
 // I. Initialize and set up the express app and various middlewares and packages:
 //
 
-const app: express.Application = express();
+export const app: express.Application = express();
 
 // Log requests to the console in a compact format:
 app.use(logger("dev"));
 
-// Full log of all requests to /log/access.log:
+// Vercel Functions have a read-only filesystem outside /tmp, so log to stdout there.
+const accessLogStream = process.env.VERCEL
+  ? process.stdout
+  : fs.createWriteStream(path.join(__dirname, "..", "log", "access.log"), { flags: "a" });
+
 app.use(
   logger("common", {
-    stream: fs.createWriteStream(path.join(__dirname, "..", "log", "access.log"), { flags: "a" }),
+    stream: accessLogStream,
   }),
 );
 
@@ -70,7 +74,7 @@ app.use(
     store: MongoStore.create({
       mongoUrl: mongoUri,
       mongoOptions: mongoClientOptions,
-      dbName: dbName,
+      dbName,
       collectionName: "user_sessions",
     }),
   }) as unknown as express.RequestHandler,
@@ -84,9 +88,11 @@ app.use(
 const paymentsRouter = express.Router();
 mountPaymentsEndpoints(paymentsRouter);
 app.use("/payments", paymentsRouter);
+
 const hangarRouter = express.Router();
 mountHangarEndpoints(hangarRouter);
 app.use("/hangar", hangarRouter);
+
 const leaderboardRouter = express.Router();
 mountLeaderboardEndpoints(leaderboardRouter);
 app.use("/leaderboard", leaderboardRouter);
@@ -106,9 +112,8 @@ app.get("/", async (_, res) => {
   res.status(200).send({ message: "Hello, World!" });
 });
 
-// III. Boot up the app:
-
-const start = async () => {
+// III. Connect to MongoDB and optionally start the local HTTP server:
+export const start = async (listen = true): Promise<void> => {
   try {
     const client = await MongoClient.connect(mongoUri, mongoClientOptions);
     const db = client.db(dbName);
@@ -116,15 +121,19 @@ const start = async () => {
     app.locals.userCollection = db.collection("users");
     await app.locals.orderCollection.createIndex({ pi_payment_id: 1 }, { unique: true });
     await app.locals.userCollection.createIndex({ bestScore: -1, uid: 1 });
-console.log("Connected to MONGODB");
-    app.listen(env.port, () => {
-      console.log(`App platform demo app - Backend listening on port ${env.port}!`);
-      console.log(`CORS config: configured to respond to a frontend hosted on ${env.frontend_url}`);
-    });
+    console.log("Connected to MongoDB");
+
+    if (listen) {
+      app.listen(env.port, () => {
+        console.log(`App platform demo app - Backend listening on port ${env.port}!`);
+        console.log(`CORS config: configured to respond to a frontend hosted on ${env.frontend_url}`);
+      });
+    }
   } catch (err) {
     console.error("Connection to MongoDB failed: ", err);
+    if (process.env.VERCEL) throw err;
     process.exit(1);
   }
 };
 
-start();
+if (!process.env.VERCEL) void start();
