@@ -94,3 +94,30 @@ Order: finish full playable bonus-to-boss test → collision fairness and coin d
 - Later scoring adds combos x2/x3/x5/x10 and formation, group and bonus-phase rewards. Legendary targets become possible around 8–15 minutes with chance and cooldown; mini-bosses around 5–8 minutes where they fit; the first multi-phase boss around 15–20 minutes. The game continues after every boss.
 - A future Difficulty Director uses elapsed play, sector, active enemies, attackers, projectiles and boss cooldowns. Attack and projectile budgets prevent simultaneous unfair patterns. Add complexity through combinations, cap raw speed, and preserve a visible escape route.
 - Spawns never surprise the player in the bottom 20–25% safety zone. Attacks need a brief warning; drops must avoid unavoidable hazards. Limit active enemies, projectiles, particles and effects for long smartphone sessions.
+
+## Next session — 500+ level progression and save architecture (agreed 25 September 2026)
+
+**Status:** Approved design note only. Do not change gameplay or payments in the current session. Continue here in the next development session.
+
+### Slow and fair progression
+
+- Cryptoid Evolution must support at least 500 globally numbered levels and remain technically capable of continuing beyond level 500.
+- Difficulty increases only slightly after each block of 20 levels. This creates 25 gentle difficulty stages through level 500 instead of a noticeable jump after every level.
+- Each stage changes only a small part of the challenge at a time: formation occupancy, attack-group chance, projectile budget, enemy mixture, elite chance, durability, or a tightly capped speed increase.
+- Begin with small formations. Add enemies gradually until the formation occupies roughly the upper 35–45% of the field and approaches, but does not crowd past, the screen midpoint. Use separate safe population caps for phones and larger screens.
+- After the formation population reaches its display cap, later difficulty comes primarily from new paths, coordinated groups, enemy combinations, support behavior, elite encounters and projectile patterns—not from filling the whole screen.
+- Simultaneous attackers unlock over long intervals: one attacker early, two later, occasional groups of three much later, and groups of four only in advanced levels with an attack budget and a visible escape route.
+- Raw enemy and projectile speed receives a modest fixed ceiling. Avoid sudden speed doubling, unavoidable crossings, surprise spawns in the lower safety zone and excessive projectile density.
+- Normal combat levels, bonus levels and bosses remain grouped into named sectors while the visible global level number continues upward. Level 500 is a milestone, not a forced ending.
+- Before balancing numbers, introduce one central Difficulty Director keyed primarily to global level, with viewport, living enemies, active attackers, projectiles, elites and boss state as fairness inputs.
+
+### Saving and resuming
+
+- Core ownership must always persist without an additional payment: owned ships, colors, weapons, purchased Pi products, Shards, settings, records and the highest unlocked level.
+- Guests may continue to play without Pi login. Provide safe same-device local saving and never overwrite or reset an older valid save during account detection or migration.
+- Save completed-level progress locally after each level. Keep a normal recovery checkpoint at least every 10 levels.
+- A later optional higher-priced Pi product may provide continuous server-side checkpoint saving tied to the player's verified Pi UID, including restoration on another device. The exact product model and Pi price remain undecided until Testnet testing.
+- Closing the browser or changing devices must be distinguished from continuing after defeat. A normal signed resume should not punish the player. A paid continue after mission failure is a gameplay advantage and must be marked for the leaderboard or placed in a separate continued-run category.
+- Cloud snapshots must be versioned and validated server-side. Pi payments must be approved and completed by the backend; the Pi API key must never enter frontend code or the repository.
+- Decide the exact level snapshot fields, anti-rollback rules, checkpoint price and leaderboard treatment only after the 500-level Difficulty Director and level transitions are stable.
+
