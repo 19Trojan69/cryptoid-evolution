@@ -4,7 +4,7 @@ export type PlayerShot = { id: number; x: number; y: number; speedX: number; dam
 export const PLAYER_SPEED_PX_MS = 0.68;
 export const PURCHASED_WEAPON_DURATION_MS = 5 * 60_000;
 export const PICKUP_WEAPON_DURATION_MS = 20_000;
-export const PLAYER_RADIUS = 19;
+export const PLAYER_RADIUS = 23;
 // Ship-to-ship contact follows the visible hull; projectile hits keep the smaller player hitbox.
 export const PLAYER_CONTACT_RADIUS = 27;
 // 30 px hull half-height + ~38 px (about one centimetre) clear of the thumb.

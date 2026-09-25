@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { collectPowerUp, createPowerUpDrop, movePowerUps, receiveImpacts } from "./powerUps.ts";
+import { collectPowerUp, createPowerUpDrop, movePowerUps, receiveImpacts, resolvePlayerDamage } from "./powerUps.ts";
 
 const safe = { id: 1, x: 400, y: 220, width: 800, height: 600, hearts: 2, threats: [], activeCount: 0, chanceRoll: 0.04, kindRoll: 0.1, destroyed: 1, dropsCreated: 0 };
 
@@ -35,4 +35,10 @@ test("shield absorbs impacts, repair caps at three hearts, overdrive refreshes",
   assert.equal(collectPowerUp(status, "shield", 60_000).shieldMs, 60_000);
   assert.equal(collectPowerUp(status, "rapid", 60_000).rapidFireMs, 60_000);
   assert.equal(collectPowerUp(status, "overdrive", 60_000).overdriveMs, 60_000);
+});
+
+test("the first unshielded hit always removes one heart", () => {
+  const status = { hearts: 3, shieldCharges: 0, shieldMs: 0, overdriveMs: 0 };
+  assert.equal(resolvePlayerDamage(status, 1, true).hearts, 2);
+  assert.equal(resolvePlayerDamage(status, 1, false).hearts, 2);
 });

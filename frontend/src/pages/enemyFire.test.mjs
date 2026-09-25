@@ -20,6 +20,7 @@ test("enemy shot locks its direction so the player can dodge", () => {
   assert.equal(later.vy, shot.vy);
   assert.ok(later.y > shot.y);
   assert.equal(enemyShotHitsPlayer({ ...shot, x: 400, y: 680 }, { x: .5, y: .85 }, 800, 800), true);
+  assert.equal(enemyShotHitsPlayer({ ...shot, x: 426, y: 680 }, { x: .5, y: .85 }, 800, 800), true);
   assert.equal(enemyShotHitsPlayer({ ...shot, x: 460, y: 680 }, { x: .5, y: .85 }, 800, 800), false);
 });
 

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { allPlayerColors, buySkin, buyShipVariant, colorForSkin, fleetCount, ownedSkins, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY } from "./shipFleet.ts";
+import { allPlayerColors, buySkin, buyShipVariant, colorForSkin, fleetCount, ownedSkins, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, spriteVisualOffset } from "./shipFleet.ts";
 
 test("only the grey starter is free and the full reference fleet is purchasable", () => {
   assert.equal(playerSkins.length, 20);
@@ -42,6 +42,13 @@ test("the nine metallic paints retain stable IDs and existing legacy paint IDs",
   const values = new Map([[SHIP_SKIN_KEY, "nova-wing"], [SHIP_OWNED_KEY, '["nova-wing"]'], [SHIP_COLOR_KEY, "violet"], [SHIP_COLORS_KEY, JSON.stringify(colors)]]);
   globalThis.localStorage = { getItem: key => values.get(key) ?? null };
   assert.equal(selectedShip().color.id, "coral");
+});
+
+test("formation guides compensate for visible sprite centers and rotation", () => {
+  const normal = spriteVisualOffset(2, 100, false);
+  const rotated = spriteVisualOffset(2, 100, true);
+  assert.deepEqual(rotated, { x: -normal.x, y: -normal.y });
+  assert.ok(Math.abs(rotated.y) > 10);
 });
 
 test("legacy ships migrate into counts and repeat purchases add the chosen variant", () => {
