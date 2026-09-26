@@ -73,7 +73,18 @@ type Asteroid = {
   collidedThisAttack: boolean;
 };
 
-type Effect = { id: number; x: number; y: number; kind: "hit" | "shield" | "explosion" | "boss-explosion" | "shatter"; startedAt: number; target?: "player" };
+type Effect = {
+  id: number;
+  x: number;
+  y: number;
+  kind: "hit" | "shield" | "explosion" | "boss-explosion" | "shatter";
+  startedAt: number;
+  target?: "player";
+  sprite?: number;
+  debrisSize?: number;
+  debrisRotation?: number;
+  shipClass?: CryptoidClass;
+};
 type GameState = { asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; bonusShards: number; chainBlocks: number; chainResult: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; score: number; coins: number; hearts: number; shieldCharges: number; shieldMs: number; shieldActive: boolean; overdriveMs: number; rapidFireMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | null; weaponLevel: number; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
 
 const createInitialState = (): GameState => ({ asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", bonusShards: 0, chainBlocks: 0, chainResult: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: .86 }, thrust: 0, effects: [], powerUps: [], score: 0, coins: 0, hearts: 3, shieldCharges: 0, shieldMs: 0, shieldActive: true, overdriveMs: 0, rapidFireMs: 0, pendingStartPower: null, weaponLevel: 1, weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") ? "loading" : "playing" });
@@ -166,6 +177,17 @@ const engineTrails = (sprite: number, className: "exhaust" | "player-engine") =>
 
 const bossEngineTrails = () =>
   bossNozzleStyles().map((style, index) => <span key={`boss-exhaust-${index}`} className={`exhaust ${index === 1 ? "exhaust-main" : "exhaust-wing"}`} style={style} />);
+
+const shipDebris = (effect: Effect) => {
+  if (effect.sprite === undefined) return null;
+  const style = {
+    "--debris-size": `${effect.debrisSize ?? 58}px`,
+    "--debris-rotation": `${180 + (effect.debrisRotation ?? 0)}deg`,
+  } as CSSProperties;
+  return <div className={`ship-debris${effect.shipClass ? ` ship-debris-${effect.shipClass}` : ""}`} style={style} aria-hidden="true">
+    {[0, 1, 2, 3].map(index => <i className={`ship-debris-piece ship-debris-piece-${index + 1}`} key={index}><b style={spriteStyle(effect.sprite)} /></i>)}
+  </div>;
+};
 
 const GamePage = () => {
   const { t } = useLocale();
@@ -517,13 +539,13 @@ const GamePage = () => {
             state.bonusTargets = state.bonusTargets.filter(target => target.id !== bonusTarget.id);
             state.bonusHits += 1;
             state.score += 150;
-            state.effects.push({ id: nextIdRef.current++, x: bonusTarget.x, y: bonusTarget.y, kind: "explosion", startedAt: time });
+            state.effects.push({ id: nextIdRef.current++, x: bonusTarget.x, y: bonusTarget.y, kind: "explosion", startedAt: time, sprite: bonusTarget.sprite, debrisSize: 50 });
             soundRef.current?.play("explosion");
             continue;
           }
           if (state.encounter === "boss-fight" && state.boss && bossVulnerable(state.boss) && shotHitsEnemy(shot, { ...state.boss, cloaked: false })) {
             state.boss.health = Math.max(0, state.boss.health - shot.damage);
-            state.effects.push({ id: nextIdRef.current++, x: state.boss.health > 0 ? shot.x : state.boss.x, y: state.boss.health > 0 ? shot.y : state.boss.y, kind: state.boss.health > 0 ? "hit" : "boss-explosion", startedAt: time });
+            state.effects.push({ id: nextIdRef.current++, x: state.boss.health > 0 ? shot.x : state.boss.x, y: state.boss.health > 0 ? shot.y : state.boss.y, kind: state.boss.health > 0 ? "hit" : "boss-explosion", startedAt: time, sprite: state.boss.health > 0 ? undefined : 19, debrisSize: state.boss.health > 0 ? undefined : 124, shipClass: state.boss.health > 0 ? undefined : "heavy" });
             soundRef.current?.play(state.boss.health > 0 ? "enemyHit" : "bossDestroy");
             if (state.boss.health === 0) {
               state.score += 2_000 + state.sector * 100;
@@ -537,7 +559,8 @@ const GamePage = () => {
           const enemy = state.asteroids.find(item => shotHitsEnemy(shot, item));
           if (!enemy) { remainingShots.push(shot); continue; }
           enemy.health = Math.max(0, enemy.health - shot.damage);
-          state.effects.push({ id: nextIdRef.current++, x: enemy.x, y: enemy.y, kind: enemy.health > 0 ? "hit" : enemy.type === "etherCrystal" ? "shatter" : "explosion", startedAt: time });
+          const destroyedSprite = enemySprite(enemy.shipClass, enemy.formationSlot);
+          state.effects.push({ id: nextIdRef.current++, x: enemy.x, y: enemy.y, kind: enemy.health > 0 ? "hit" : enemy.type === "etherCrystal" ? "shatter" : "explosion", startedAt: time, sprite: enemy.health > 0 ? undefined : destroyedSprite, debrisSize: enemy.health > 0 ? undefined : enemy.radius * 2, debrisRotation: enemy.health > 0 ? undefined : enemy.rotation, shipClass: enemy.health > 0 ? undefined : enemy.shipClass });
           soundRef.current?.play(enemy.health > 0 ? "enemyHit" : "explosion");
           if (enemy.health > 0) continue;
           state.score += enemy.points * (enemy.attackPattern !== null && enemy.attackDelay === 0 ? 2 : 1);
@@ -595,7 +618,7 @@ const GamePage = () => {
           });
         }
         if (state.phase === "SECTOR_CLEAR") state.enemyShots = [];
-        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "hit" ? 230 : effect.kind === "boss-explosion" ? 600 : 390));
+        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "hit" ? 230 : effect.kind === "boss-explosion" ? 820 : effect.kind === "explosion" || effect.kind === "shatter" ? 560 : 390));
         if (state.hearts === 0) {
           state.status = "game-over";
           if (!recordsSavedRef.current) {
@@ -730,7 +753,7 @@ const GamePage = () => {
         })}
         {game.shots.map(shot => <div key={shot.id} className={`player-laser${shot.empowered ? " player-laser-overdrive" : ""}`} style={{ left: shot.x, top: shot.y }} />)}
         {game.enemyShots.map(shot => <div key={shot.id} className="enemy-laser" style={{ left: shot.x, top: shot.y }} />)}
-        {game.effects.map(effect => <div key={effect.id} className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y }}><span /></div>)}
+        {game.effects.map(effect => <div key={effect.id} className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y }}><span />{shipDebris(effect)}</div>)}
         <div ref={playerShipRef} className={`player-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0 ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "hit") ? " player-ship-hurt" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${5 + game.thrust * 13}%` } as CSSProperties} aria-label={t('Your Cryptoid ship')}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} />{engineTrails(shipSelection.skin.sprite, "player-engine")}</div></div>
         <div className="game-tip">← → ↑ ↓ / {t("THUMB CONTROLS")} · {t("Auto fire")}</div>
         <div className="touch-controls">

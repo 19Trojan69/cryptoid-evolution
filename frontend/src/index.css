@@ -456,19 +456,39 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 }
 .impact-effect { position: absolute; z-index: 2; width: 35px; height: 35px; margin: -17px 0 0 -17px; border: 2px solid var(--cyan); border-radius: 50%; animation: hit-flash .23s ease-out both; pointer-events: none; }
 .impact-effect.explosion { width: 85px; height: 85px; margin: -42px 0 0 -42px; border-color: var(--gold); background: radial-gradient(circle, rgba(245, 200, 109, .75) 0 9%, rgba(79, 228, 239, .22) 20%, transparent 64%); animation: explode .43s ease-out both; }
-.impact-effect.shatter { width: 72px; height: 72px; margin: -36px 0 0 -36px; border-color: #9b9fff; background: conic-gradient(from 30deg, transparent 0 12%, rgba(109, 227, 244, .65) 12% 16%, transparent 16% 46%, rgba(164, 142, 255, .7) 46% 53%, transparent 53% 79%, rgba(109, 227, 244, .65) 79% 85%, transparent 85%); animation: explode .43s ease-out both; }
+.impact-effect.shatter { width: 72px; height: 72px; margin: -36px 0 0 -36px; border-color: #9b9fff; background: conic-gradient(from 30deg, transparent 0 12%, rgba(109, 227, 244, .65) 12% 16%, transparent 16% 46%, rgba(164, 142, 255, .7) 46% 53%, transparent 53% 79%, rgba(109, 227, 244, .65) 79% 85%, transparent 85%); animation: explode .56s ease-out both; }
 .impact-effect.shield { width: 54px; height: 54px; margin: -27px 0 0 -27px; border-color: #8feeff; background: radial-gradient(circle, #8feeff44, transparent 70%); box-shadow: 0 0 17px #8feeff; animation: explode .43s ease-out both; }
 .impact-effect span, .impact-effect span::before, .impact-effect span::after { position: absolute; top: 50%; left: 50%; width: 55%; height: 2px; background: var(--cyan); content: ''; }
 .impact-effect span { transform: translate(-50%, -50%) rotate(45deg); }
 .impact-effect span::before { transform: translate(-50%, -50%) rotate(90deg); }
 .impact-effect span::after { transform: translate(-50%, -50%) rotate(45deg); }
 .explosion span, .explosion span::before, .explosion span::after { background: var(--gold); }
-.impact-effect.explosion, .impact-effect.boss-explosion { width: 58px; height: 58px; margin: -29px 0 0 -29px; border: 0; background: radial-gradient(circle, #ffeab28f 0 14%, #eabc7e66 22%, transparent 65%); box-shadow: none; animation: destroy-burst .39s ease-out both; }
-.impact-effect.boss-explosion { width: 96px; height: 96px; margin: -48px 0 0 -48px; animation-duration: .6s; }
-.impact-effect.explosion::before, .impact-effect.boss-explosion::before { position: absolute; inset: 19%; border: 1px solid #f9d8a688; border-radius: 50%; content: ''; animation: burst-ring .39s ease-out both; }
+.impact-effect.explosion, .impact-effect.boss-explosion { width: 58px; height: 58px; margin: -29px 0 0 -29px; border: 0; background: radial-gradient(circle, #ffeab27a 0 12%, #eabc7e4f 22%, transparent 62%); box-shadow: none; animation: destroy-burst .56s ease-out both; }
+.impact-effect.boss-explosion { width: 96px; height: 96px; margin: -48px 0 0 -48px; animation-duration: .82s; }
+.impact-effect.explosion::before, .impact-effect.boss-explosion::before { position: absolute; inset: 19%; border: 1px solid #f9d8a677; border-radius: 50%; content: ''; animation: burst-ring .5s ease-out both; }
 .impact-effect.explosion::after, .impact-effect.boss-explosion::after, .impact-effect.explosion span, .impact-effect.boss-explosion span { display: none; }
+.ship-debris { position: absolute; z-index: 1; top: 50%; left: 50%; width: var(--debris-size); height: var(--debris-size); transform: translate(-50%, -50%) rotate(var(--debris-rotation)); pointer-events: none; }
+.ship-debris-piece { position: absolute; width: 50%; height: 50%; overflow: hidden; filter: drop-shadow(0 1px 1px rgba(255, 190, 112, .35)); }
+.ship-debris-piece b { position: absolute; display: block; width: 200%; height: 200%; background-repeat: no-repeat; background-size: 400% 500%; }
+.ship-debris-piece-1 { top: 0; left: 0; animation: debris-north-west .56s ease-out both; }
+.ship-debris-piece-1 b { top: 0; left: 0; }
+.ship-debris-piece-2 { top: 0; right: 0; animation: debris-north-east .56s ease-out both; }
+.ship-debris-piece-2 b { top: 0; right: 0; }
+.ship-debris-piece-3 { bottom: 0; left: 0; animation: debris-south-west .56s ease-out both; }
+.ship-debris-piece-3 b { bottom: 0; left: 0; }
+.ship-debris-piece-4 { right: 0; bottom: 0; animation: debris-south-east .56s ease-out both; }
+.ship-debris-piece-4 b { right: 0; bottom: 0; }
+.boss-explosion .ship-debris-piece { animation-duration: .82s; }
+.ship-debris-light b { filter: grayscale(1) sepia(1) saturate(1.6) hue-rotate(105deg); }
+.ship-debris-medium b { filter: grayscale(1) sepia(1) saturate(1.6) hue-rotate(165deg); }
+.ship-debris-heavy b { filter: grayscale(1) sepia(1) saturate(1.6) hue-rotate(335deg); }
+.ship-debris-elite b { filter: grayscale(1) sepia(1) saturate(1.6) hue-rotate(245deg); }
 @keyframes destroy-burst { 0% { opacity: .65; scale: .65; } 100% { opacity: 0; scale: 1.1; } }
 @keyframes burst-ring { 0% { opacity: .55; scale: .65; } 100% { opacity: 0; scale: 1.2; } }
+@keyframes debris-north-west { 0% { opacity: .95; transform: translate(0, 0) rotate(0); } 100% { opacity: 0; transform: translate(-18px, -15px) rotate(-52deg); } }
+@keyframes debris-north-east { 0% { opacity: .95; transform: translate(0, 0) rotate(0); } 100% { opacity: 0; transform: translate(18px, -14px) rotate(58deg); } }
+@keyframes debris-south-west { 0% { opacity: .95; transform: translate(0, 0) rotate(0); } 100% { opacity: 0; transform: translate(-20px, 17px) rotate(43deg); } }
+@keyframes debris-south-east { 0% { opacity: .95; transform: translate(0, 0) rotate(0); } 100% { opacity: 0; transform: translate(20px, 18px) rotate(-47deg); } }
 @keyframes hit-flash { from { opacity: 1; transform: scale(.5); } to { opacity: 0; transform: scale(1.7); } }
 @keyframes explode { from { opacity: 1; transform: scale(.35); } to { opacity: 0; transform: scale(1.25); } }
 .earth { position: absolute; z-index: 0; bottom: -16vw; left: 50%; width: min(110vw, 930px); aspect-ratio: 1; transform: translateX(-50%); text-align: center; }
