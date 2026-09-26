@@ -847,3 +847,44 @@ html[data-motion="reduced"] .shooting-star { display: none; }
 .leaderboard-scroll th, .leaderboard-scroll td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #365456; }
 .leaderboard-scroll th { position: sticky; top: 0; z-index: 1; background: #112f37; color: var(--gold); }
 .leaderboard-scroll td:last-child, .leaderboard-scroll th:last-child { text-align: right; }
+
+/* First mission feedback, precise touch controls, and a legible two-row phone HUD. */
+.control-choice-group { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+.control-choice-group > strong { grid-column: 1 / -1; margin-top: 7px; color: #f5c86d; font: 600 11px 'DM Mono', monospace; letter-spacing: .08em; text-transform: uppercase; }
+.control-choice-group .system-setting { justify-content: center; min-height: 44px; padding: 7px 4px; text-align: center; }
+.control-choice-group .system-setting b { font-size: 11px; }
+.game-coach { position: absolute; z-index: 7; bottom: max(19px, env(safe-area-inset-bottom)); left: 50%; width: min(320px, calc(100% - 28px)); padding: 9px 12px; transform: translateX(-50%); border: 1px solid rgba(102, 228, 208, .76); background: linear-gradient(135deg, rgba(5, 33, 47, .96), rgba(17, 39, 61, .94)); color: #e6f9f4; box-shadow: 0 0 22px rgba(59, 216, 192, .18), inset 0 -2px rgba(102, 228, 208, .48); clip-path: polygon(0 8px, 8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px)); text-align: center; pointer-events: none; }
+.game-coach small { color: #71e8d7; font: 600 9px 'DM Mono', monospace; letter-spacing: .15em; }
+.game-coach p { margin: 4px 0; font: 600 12px/1.35 'Space Grotesk', sans-serif; }
+.game-coach button { min-height: 30px; padding: 3px 11px; border: 1px solid rgba(115, 233, 215, .5); background: rgba(5, 32, 45, .86); color: #c2f6eb; font: 10px 'DM Mono', monospace; cursor: pointer; pointer-events: auto; }
+.game-coach button:hover { background: rgba(21, 87, 80, .95); }
+.cryptoid-hit .fleet-sprite { filter: brightness(2.2) drop-shadow(0 0 9px #a8faff); }
+.impact-effect.hit { width: 46px; height: 46px; margin: -23px 0 0 -23px; border: 0; background: radial-gradient(circle, #fff 0 8%, #a5faff 15%, #47e4f799 35%, transparent 68%); box-shadow: 0 0 15px #73ecff88; animation: enemy-hit-pulse .34s ease-out both; }
+.impact-effect.hit > span { width: 75%; height: 2px; background: #dcffff; box-shadow: 0 0 5px #a5faff; }
+.impact-effect.hit i { position: absolute; top: 50%; left: 50%; width: 4px; height: 11px; border-radius: 2px; background: #fff5b8; box-shadow: 0 0 7px #a4f7ff; animation: enemy-hit-spark .34s ease-out both; }
+.impact-effect.hit i:nth-of-type(1) { --spark-angle: -65deg; --spark-distance: -28px; }
+.impact-effect.hit i:nth-of-type(2) { --spark-angle: 48deg; --spark-distance: -22px; }
+.impact-effect.hit i:nth-of-type(3) { --spark-angle: 165deg; --spark-distance: -27px; }
+@keyframes enemy-hit-pulse { from { transform: scale(.38); opacity: 1; } to { transform: scale(1.45); opacity: 0; } }
+@keyframes enemy-hit-spark { from { transform: translate(-50%, -50%) rotate(var(--spark-angle)); opacity: 1; } to { transform: translate(-50%, var(--spark-distance)) rotate(var(--spark-angle)); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .impact-effect.hit, .impact-effect.hit i { animation: none; opacity: .75; } }
+@media (max-width: 560px) {
+  .game-hud { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-areas: "home score hearts pause" "coins weapon level round"; gap: 3px; padding: max(8px, env(safe-area-inset-top)) max(7px, env(safe-area-inset-right)) 7px max(7px, env(safe-area-inset-left)); }
+  .hud-actions { grid-area: home; }
+  .score-hud { grid-area: score; }
+  .hearts-stat { grid-area: hearts; }
+  .pause-control { grid-area: pause; justify-self: stretch; width: 100%; height: 43px; }
+  .coin-stat { grid-area: coins; }
+  .weapon-hud { grid-area: weapon; }
+  .game-level-hud { grid-area: level; }
+  .round-hud { grid-area: round; }
+  .home-control { width: 100%; height: 43px; }
+  .hud-stat { min-height: 43px; gap: 3px; }
+  .hud-stat span { font-size: 8px; letter-spacing: .04em; }
+  .hud-stat strong { font-size: 17px; }
+  .hud-stat strong small { font-size: 10px; }
+  .game-label { top: calc(max(8px, env(safe-area-inset-top)) + 104px); }
+  .power-status { top: calc(max(8px, env(safe-area-inset-top)) + 121px); }
+  .bonus-counter { top: calc(max(8px, env(safe-area-inset-top)) + 146px); }
+  .game-coach { width: min(290px, calc(100% - 24px)); }
+}
