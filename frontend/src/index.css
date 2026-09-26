@@ -679,11 +679,38 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
   .touch-controls { right: 8px; }
   .game-tip { bottom: 5px; }
 }
-/* Home language control and surface-projected Earth; the game backdrop keeps its own planets. */
-.language-picker { position: absolute; z-index: 12; top: 77px; right: clamp(18px, 4vw, 64px); display: flex; align-items: center; gap: 8px; color: #d8e8f2; font-size: 12px; }
-.language-picker select { color: #e9f4ff; background: #111e30e8; border: 1px solid #82bdd775; border-radius: 7px; padding: 5px 7px; cursor: pointer; }
+/* Home system menu and surface-projected Earth; the game backdrop keeps its own planets. */
+.system-menu-overlay { position: fixed; z-index: 40; inset: 0; display: grid; place-items: center; padding: 12px; background: rgba(1, 9, 19, .88); backdrop-filter: blur(9px); }
+.system-menu-panel { position: relative; width: min(820px, 100%); max-height: calc(100dvh - 24px); overflow-y: auto; padding: clamp(22px, 4vw, 38px); border: 1px solid rgba(91, 224, 236, .68); background: radial-gradient(circle at 90% 0, rgba(144, 92, 220, .18), transparent 35%), linear-gradient(145deg, rgba(7, 30, 48, .99), rgba(7, 20, 38, .99)); box-shadow: inset 0 0 35px rgba(59, 199, 220, .08), 0 24px 90px #000b, 0 0 24px rgba(68, 218, 235, .13); color: #effaff; clip-path: polygon(0 14px, 14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px)); }
+.system-menu-panel h2 { margin-bottom: 22px; color: #f5fbff; text-shadow: 0 0 15px rgba(100, 233, 247, .35); }
+.system-menu-section { padding: 18px 0; border-top: 1px solid rgba(108, 203, 220, .24); }
+.system-menu-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.system-menu-heading strong { color: var(--gold); font: 600 12px 'DM Mono', monospace; letter-spacing: .1em; text-transform: uppercase; }
+.system-menu-heading small { color: #8fb0bc; font-size: 11px; }
+.language-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; }
+.language-option, .system-setting { position: relative; min-height: 52px; border: 1px solid rgba(102, 194, 211, .32); background: linear-gradient(135deg, rgba(11, 43, 64, .95), rgba(18, 33, 57, .92)); color: #deedf3; cursor: pointer; clip-path: polygon(0 7px, 7px 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 0 100%); transition: border-color .16s ease, filter .16s ease, transform .16s ease;
+}
+.language-option { display: grid; grid-template-columns: 31px 1fr; align-items: center; gap: 8px; padding: 7px 10px; text-align: left; }
+.language-option span, .system-setting span { display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid currentColor; color: #6fdbea; font: 600 9px 'DM Mono', monospace; box-shadow: inset 0 0 9px rgba(88, 215, 231, .1), 0 0 8px rgba(88, 215, 231, .1); }
+.language-option b, .system-setting b { overflow-wrap: anywhere; font-size: 11px; font-weight: 600; line-height: 1.3; }
+.language-option-auto { grid-column: 1 / -1; border-color: rgba(241, 197, 105, .45); }
+.language-option-auto span { color: var(--gold); }
+.language-option[aria-pressed="true"], .system-setting[aria-pressed="true"] { border-color: #65e4d0; background: linear-gradient(135deg, rgba(18, 88, 90, .95), rgba(20, 49, 72, .96)); box-shadow: inset 0 -2px #65e4d0, 0 0 14px rgba(67, 221, 203, .18); color: white; }
+.language-option:hover, .system-setting:hover { transform: translateY(-1px); border-color: #75dce9; filter: brightness(1.09); }
+.system-quick-settings { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.system-quick-settings .system-menu-heading { grid-column: 1 / -1; margin-bottom: 2px; }
+.system-setting { display: flex; align-items: center; justify-content: flex-start; gap: 10px; padding: 9px 12px; text-align: left; }
+html[lang="th"] .language-option b, html[lang="th"] .system-setting b { line-height: 1.55; }
 .earth-globe-canvas { display: block; width: 100%; height: 100%; border-radius: 50%; }
-@media (max-width: 600px) { .language-picker { top: 64px; right: 14px; font-size: 11px; } }
+html[data-motion="reduced"] .satellite-motion, html[data-motion="reduced"] .home-defense-ship, html[data-motion="reduced"] .home-enemy-ship, html[data-motion="reduced"] .home-defense-laser, html[data-motion="reduced"] .home-thrust, html[data-motion="reduced"] .home-enemy-thrust, html[data-motion="reduced"] .cryptoid .exhaust, html[data-motion="reduced"] .player-engine, html[data-motion="reduced"] .home-defense-ship::after, html[data-motion="reduced"] .player-ship-shield-active::before, html[data-motion="reduced"] .player-ship-shield-active::after, html[data-motion="reduced"] .planet, html[data-motion="reduced"] .starfield-stars, html[data-motion="reduced"] .ship-choice::before, html[data-motion="reduced"] .offer-preview::after, html[data-motion="reduced"] .preview-volley i, html[data-motion="reduced"] .power-preview-orbit, html[data-motion="reduced"] .power-preview-orbit::before, html[data-motion="reduced"] .power-preview-orbit::after, html[data-motion="reduced"] .power-preview-wave { animation: none !important; }
+html[data-motion="reduced"] .shooting-star { display: none; }
+@media (max-width: 680px) {
+  .system-menu-panel { padding: 22px 14px 18px; }
+  .language-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .system-quick-settings { grid-template-columns: 1fr; }
+  .system-quick-settings .system-menu-heading { grid-column: 1; }
+  .language-option { min-height: 48px; padding: 6px 8px; }
+}
 @media (min-width: 601px) { .landing-shell .planet-stage { align-self: center; transform: translateY(-8%); } }
 @media (max-width: 600px) { .landing-shell .planet-stage { top: 10%; right: -23%; width: min(96vw, 430px); opacity: .9; } }
 /* Inventory status is separate from the selected paint. */

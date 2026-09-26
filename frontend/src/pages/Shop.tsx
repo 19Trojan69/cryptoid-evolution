@@ -32,6 +32,7 @@ const shopTabs = [
 ] as const;
 
 const powerTypeForOffer = (offerId: string): PowerUpType => offerId.includes("shield") ? "shield" : offerId.includes("rapid") ? "rapid" : "overdrive";
+const MOTION_STORAGE_KEY = "cryptoid_reduced_effects";
 
 const WeaponPreview = ({ offerId, sprite, color }: { offerId: string; sprite: number; color: PlayerColorId }) => {
   const shotCount = offerId.includes("triple") || offerId.includes("plasma") ? 3 : 2;
@@ -55,8 +56,10 @@ const PowerPreview = ({ offerId }: { offerId: string }) => {
 
 const Shop = () => {
   const navigate = useNavigate();
-  const { locale, choose, t } = useLocale();
+  const { locale, automatic, choose, t } = useLocale();
   const [activePanel, setActivePanel] = useState<"how" | "progress" | null>(null);
+  const [systemMenuOpen, setSystemMenuOpen] = useState(false);
+  const [reducedEffects, setReducedEffects] = useState(() => localStorage.getItem(MOTION_STORAGE_KEY) === "1");
   const [shopView, setShopView] = useState<"hangar" | "shop" | "weapons" | "powers" | "progress" | "leaders" | null>(null);
   const [termsOpen, setTermsOpen] = useState(false);
   const [leaders, setLeaders] = useState<Leader[]>([]);
@@ -74,6 +77,16 @@ const Shop = () => {
     axiosClient.get<{ bestScore: number }>("/leaderboard/me").then(({ data }) => { if (current) setPersonalBest(data.bestScore); }).catch(() => { if (current) setPersonalBest(null); });
     return () => { current = false; };
   }, [shopView]);
+  useEffect(() => {
+    document.documentElement.dataset.motion = reducedEffects ? "reduced" : "standard";
+    localStorage.setItem(MOTION_STORAGE_KEY, reducedEffects ? "1" : "0");
+  }, [reducedEffects]);
+  useEffect(() => {
+    if (!systemMenuOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setSystemMenuOpen(false); };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [systemMenuOpen]);
   useEffect(() => {
     if (!shopView) return;
     const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setShopView(null); };
@@ -193,7 +206,6 @@ const Shop = () => {
         isLoading={isAuthLoading}
       />
 
-      {!shopView && <div className="language-picker"><label htmlFor="language-select">{t("Language")}</label><select id="language-select" aria-label={t("Language")} value={locale} onChange={event => choose(event.target.value as Locale)}>{Object.entries(languages).map(([code, label]) => <option key={code} value={code}>{label}</option>)}</select></div>}
       <section className="hero-section">
         <Starfield sector={1} player={{ x: .5, y: .8 }} paused={false} />
         <div className="hero-copy">
@@ -205,7 +217,7 @@ const Shop = () => {
             <button className="button button-primary" type="button" onClick={enterGame}>{t("Play")} <span className="button-glyph" aria-hidden="true">→</span></button>
             <button className="button button-secondary" type="button" onClick={() => { setPreviewSkin(selected.skin); setPreviewColor(selected.color); setShopView("hangar"); }}>{t('Shop / Hangar')} <span className="button-glyph" aria-hidden="true">◇</span></button>
             <button className="button button-secondary" type="button" onClick={() => { setLeadersStatus("loading"); setShopView("leaders"); }}>{t('Top 100')} <span className="button-glyph" aria-hidden="true">⌁</span></button>
-            <button className="button button-secondary" type="button" onClick={() => setActivePanel("how")}>{t('How to Play')} <span className="button-glyph" aria-hidden="true">?</span></button>
+            <button className="button button-secondary" type="button" onClick={() => setSystemMenuOpen(true)}>{t('System menu')} <span className="button-glyph" aria-hidden="true">⚙</span></button>
           </div>
         </div>
         <div className="planet-stage" aria-label="Cryptoid Evolution planet status">
@@ -222,9 +234,30 @@ const Shop = () => {
         <footer className="home-footer"><button type="button" className="text-button terms-entry" onClick={() => setTermsOpen(true)}>Nutzungsbedingungen / Terms of Service</button></footer>
       </section>
 
+      {systemMenuOpen && <div className="system-menu-overlay" role="dialog" aria-modal="true" aria-labelledby="system-menu-title">
+        <section className="system-menu-panel">
+          <button className="close-button" type="button" onClick={() => setSystemMenuOpen(false)} aria-label={t('Close menu')}>×</button>
+          <p className="eyebrow">{t('SYSTEM / SETTINGS')}</p>
+          <h2 id="system-menu-title">{t('System menu')}</h2>
+          <div className="system-menu-section">
+            <div className="system-menu-heading"><strong>{t('Language')}</strong><small>{t('Current language')}: {languages[locale]}</small></div>
+            <div className="language-grid" role="group" aria-label={t('Language')}>
+              <button type="button" className="language-option language-option-auto" aria-pressed={automatic} onClick={() => choose(null)}><span aria-hidden="true">◎</span><b>{t('Automatic (device language)')}</b></button>
+              {Object.entries(languages).map(([code, label]) => <button type="button" className="language-option" key={code} aria-pressed={!automatic && locale === code} onClick={() => choose(code as Locale)}><span aria-hidden="true">{code.toUpperCase()}</span><b>{label}</b></button>)}
+            </div>
+          </div>
+          <div className="system-menu-section system-quick-settings">
+            <div className="system-menu-heading"><strong>{t('Display')}</strong></div>
+            <button className="system-setting" type="button" onClick={() => requestGameFullscreen()}><span aria-hidden="true">⛶</span><b>{t('Full screen')}</b></button>
+            <button className="system-setting" type="button" aria-pressed={reducedEffects} onClick={() => setReducedEffects(value => !value)}><span aria-hidden="true">◌</span><b>{t(reducedEffects ? 'Reduced effects' : 'Standard effects')}</b></button>
+            <button className="system-setting" type="button" onClick={() => { setSystemMenuOpen(false); setActivePanel('how'); }}><span aria-hidden="true">?</span><b>{t('Open game guide')}</b></button>
+          </div>
+        </section>
+      </div>}
+
       {shopView && <div className="shop-overlay" role="dialog" aria-modal="true" aria-label={t('Shop and hangar')}>
         <div className="shop-modal">
-        <div className="shop-modal-header"><strong>{t("Shop / Hangar")}</strong><div className="shop-language-picker"><label htmlFor="shop-language-select">{t("Language")}</label><select id="shop-language-select" aria-label={t("Language")} value={locale} onChange={event => choose(event.target.value as Locale)}>{Object.entries(languages).map(([code, label]) => <option key={code} value={code}>{label}</option>)}</select></div><button className="close-button" type="button" onClick={() => setShopView(null)} aria-label={t('Close shop')}>×</button></div>
+        <div className="shop-modal-header"><strong>{t("Shop / Hangar")}</strong><button className="close-button" type="button" onClick={() => setShopView(null)} aria-label={t('Close shop')}>×</button></div>
           <nav className="shop-tabs" aria-label={t('Shop sections')}>
             {shopTabs.map(([view, label, glyph]) => <button className={`shop-tab shop-tab-${view}`} key={view} type="button" aria-pressed={shopView === view} onClick={() => { if (view === "leaders") setLeadersStatus("loading"); if (view === "hangar") { setPreviewSkin(selected.skin); setPreviewColor(selected.color); } setShopView(view); }}><span aria-hidden="true">{glyph}</span><b>{t(label)}</b></button>)}
           </nav>
