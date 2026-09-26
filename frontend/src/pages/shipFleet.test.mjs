@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { allPlayerColors, buySkin, buyShipVariant, colorForSkin, fleetCount, ownedSkins, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyles, spriteVisualOffset } from "./shipFleet.ts";
+import { allPlayerColors, bossNozzleStyles, buySkin, buyShipVariant, colorForSkin, fleetCount, ownedSkins, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyles, spriteVisualOffset } from "./shipFleet.ts";
 
 test("only the grey starter is free and the full reference fleet is purchasable", () => {
   assert.equal(playerSkins.length, 20);
@@ -51,12 +51,11 @@ test("formation guides compensate for visible sprite centers and rotation", () =
   assert.ok(Math.abs(rotated.y) > 10);
 });
 
-test("every ship has model-specific mirrored exhaust anchors", () => {
-  const nozzleCounts = new Set();
+test("every normal ship has exactly two model-specific exhaust anchors", () => {
   for (const skin of playerSkins) {
     const player = shipNozzleStyles(skin.sprite);
     const enemy = shipNozzleStyles(skin.sprite, true);
-    nozzleCounts.add(player.length);
+    assert.equal(player.length, 2);
     assert.equal(enemy.length, player.length);
     player.forEach((nozzle, index) => {
       const mirrored = enemy[index];
@@ -68,7 +67,6 @@ test("every ship has model-specific mirrored exhaust anchors", () => {
       assert.equal(Number.parseFloat(mirrored["--nozzle-y"]), 100 - playerY);
     });
   }
-  assert.deepEqual([...nozzleCounts].sort(), [1, 2, 3, 4]);
 });
 
 test("bonus and boss exhausts use their visible engine exits", () => {
@@ -76,11 +74,10 @@ test("bonus and boss exhausts use their visible engine exits", () => {
     { "--nozzle-x": "28%", "--nozzle-y": "75%" },
     { "--nozzle-x": "74%", "--nozzle-y": "75%" },
   ]);
-  assert.deepEqual(shipNozzleStyles(19, true), [
-    { "--nozzle-x": "73%", "--nozzle-y": "48%" },
-    { "--nozzle-x": "55%", "--nozzle-y": "38%" },
-    { "--nozzle-x": "44%", "--nozzle-y": "38%" },
-    { "--nozzle-x": "28%", "--nozzle-y": "48%" },
+  assert.deepEqual(bossNozzleStyles(), [
+    { "--nozzle-x": "27%", "--nozzle-y": "52%" },
+    { "--nozzle-x": "50%", "--nozzle-y": "63%" },
+    { "--nozzle-x": "72%", "--nozzle-y": "52%" },
   ]);
 });
 

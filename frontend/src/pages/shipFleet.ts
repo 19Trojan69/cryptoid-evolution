@@ -204,32 +204,34 @@ export const spriteVisualOffset = (index: number, renderedSize: number, facesPla
   return { x: xPercent / 100 * renderedSize * direction, y: yPercent / 100 * renderedSize * direction };
 };
 
-// Coordinates refer to the visible engine exits in the original nose-up
-// atlas cells. Profiles deliberately contain one to four nozzles because a
-// generic left/right pair floated beside the engines on several hulls.
+// Coordinates refer to the two primary visible engine exits in each original
+// nose-up atlas cell. Gameplay deliberately renders exactly these two engines.
 const hullCenters = [55, 53, 42, 43, 54, 53, 43, 43, 54, 54, 43, 44, 55, 53, 43, 44, 55, 53, 42, 43] as const;
 const nozzleProfiles: readonly (readonly (readonly [number, number])[])[] = [
   [[49, 80], [60, 80]],
-  [[43, 76], [49, 82], [61, 82], [67, 76]],
+  [[49, 82], [61, 82]],
   [[35, 87], [52, 87]],
   [[34, 85], [56, 85]],
   [[28, 75], [74, 75]],
-  [[43, 80], [50, 78], [56, 78], [62, 80]],
-  [[28, 75], [50, 79], [72, 75]],
-  [[22, 75], [50, 82], [78, 75]],
+  [[43, 80], [62, 80]],
+  [[28, 75], [72, 75]],
+  [[22, 75], [78, 75]],
   [[46, 68], [62, 68]],
   [[46, 68], [60, 68]],
   [[37, 68], [54, 68]],
-  [[44, 70]],
-  [[45, 58], [54, 60], [63, 58]],
+  [[41, 70], [47, 70]],
+  [[45, 58], [63, 58]],
   [[46, 58], [60, 58]],
-  [[35, 55], [50, 62], [64, 55]],
+  [[35, 55], [64, 55]],
   [[43, 58], [54, 58]],
-  [[35, 58], [52, 54], [69, 58]],
-  [[29, 53], [49, 63], [58, 63], [75, 53]],
-  [[43, 60], [50, 66], [57, 60]],
-  [[27, 52], [45, 62], [56, 62], [72, 52]],
+  [[35, 58], [69, 58]],
+  [[29, 53], [75, 53]],
+  [[43, 60], [57, 60]],
+  [[45, 62], [56, 62]],
 ] as const;
+
+// The Core Warden has two wing engines plus one larger axial main engine.
+const bossNozzleProfile = [[27, 52], [50, 63], [72, 52]] as const;
 
 export const shipNozzleStyles = (index: number, facesPlayer = false): CSSProperties[] =>
   (nozzleProfiles[index] ?? nozzleProfiles[0]).map(([x, y]) => ({
@@ -237,13 +239,18 @@ export const shipNozzleStyles = (index: number, facesPlayer = false): CSSPropert
     "--nozzle-y": `${facesPlayer ? 100 - y : y}%`,
   } as CSSProperties));
 
+export const bossNozzleStyles = (): CSSProperties[] =>
+  bossNozzleProfile.map(([x, y]) => ({
+    "--nozzle-x": `${x}%`,
+    "--nozzle-y": `${y}%`,
+  } as CSSProperties));
+
 export const shipHullStyle = (index: number, facesPlayer = false): CSSProperties => {
   const center = hullCenters[index] ?? hullCenters[0];
   return { "--hull-x": `${facesPlayer ? 100 - center : center}%` } as CSSProperties;
 };
 
-// Kept for the compact home-screen preview, which intentionally uses the two
-// outermost exhausts. Gameplay renders every nozzle from shipNozzleStyles.
+// Kept for the compact home-screen preview and its fixed pair of engines.
 export const shipNozzleStyle = (index: number, facesPlayer = false): CSSProperties => {
   const nozzles = nozzleProfiles[index] ?? nozzleProfiles[0];
   const [left, leftY] = nozzles[0];

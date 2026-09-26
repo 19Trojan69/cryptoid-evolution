@@ -342,7 +342,8 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .cryptoid-return { --flame-length: 13%; }
 .cryptoid .exhaust { position: absolute; z-index: 0; top: calc(var(--nozzle-y) - 2px); left: var(--nozzle-x); width: 5%; height: calc(var(--flame-length) + 2px); min-width: 2px; transform: translateX(-50%); transform-origin: 50% 0; background: linear-gradient(180deg, #fffbe0 0%, #ffd36b 20%, #ef8f2f 56%, transparent 100%); filter: drop-shadow(0 3px 4px #ff9c31); clip-path: polygon(18% 0, 82% 0, 100% 22%, 64% 100%, 50% 86%, 36% 100%, 0 22%); animation: game-enemy-thrust-pulse .18s ease-in-out infinite alternate; transition: height .16s ease-out; pointer-events: none; }
 .cryptoid .exhaust::after { position: absolute; top: 0; left: 50%; width: 112%; height: 2px; transform: translateX(-50%); border-radius: 50%; background: #fff2b3; content: ''; }
-.sector-boss .exhaust { width: 3.8%; }
+.sector-boss .exhaust-wing { width: 3.8%; }
+.sector-boss .exhaust-main { width: 6.4%; height: calc(var(--flame-length) + 6px); }
 @keyframes game-enemy-thrust-pulse { from { opacity: .78; filter: drop-shadow(0 2px 3px #ff9b32) brightness(.94); } to { opacity: 1; filter: drop-shadow(0 4px 6px #ffd36b) brightness(1.18); } }
 .player-ship { width: 76px; height: 76px; }
 .player-ship { filter: none; }
