@@ -75,9 +75,9 @@ test("bonus and boss exhausts use their visible engine exits", () => {
     { "--nozzle-x": "74%", "--nozzle-y": "75%" },
   ]);
   assert.deepEqual(bossNozzleStyles(), [
-    { "--nozzle-x": "27%", "--nozzle-y": "52%" },
-    { "--nozzle-x": "50%", "--nozzle-y": "63%" },
-    { "--nozzle-x": "72%", "--nozzle-y": "52%" },
+    { "--nozzle-x": "19%", "--nozzle-y": "50%" },
+    { "--nozzle-x": "50%", "--nozzle-y": "62%" },
+    { "--nozzle-x": "81%", "--nozzle-y": "50%" },
   ]);
 });
 

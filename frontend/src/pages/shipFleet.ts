@@ -231,7 +231,7 @@ const nozzleProfiles: readonly (readonly (readonly [number, number])[])[] = [
 ] as const;
 
 // The Core Warden has two wing engines plus one larger axial main engine.
-const bossNozzleProfile = [[27, 52], [50, 63], [72, 52]] as const;
+const bossNozzleProfile = [[19, 50], [50, 62], [81, 50]] as const;
 
 export const shipNozzleStyles = (index: number, facesPlayer = false): CSSProperties[] =>
   (nozzleProfiles[index] ?? nozzleProfiles[0]).map(([x, y]) => ({
