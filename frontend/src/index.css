@@ -94,7 +94,16 @@ h1 span { display: block; color: var(--emerald); }
 .satellite-motion { position: absolute; inset: 0; animation: satellite-lap 13s linear infinite; }
 .orbit-two .satellite-motion { animation-duration: 19s; animation-direction: reverse; }
 .orbit-three .satellite-motion { animation-duration: 24s; animation-delay: -9s; }
-.satellite-body { position: absolute; top: -33px; left: calc(50% - 55px); display: block; width: 110px; height: 59px; background: url('/satellite.svg') center / contain no-repeat; filter: drop-shadow(0 3px 3px rgba(0, 9, 23, .85)) drop-shadow(0 0 5px rgba(245, 185, 112, .34)); transform: rotate(-8deg) scaleY(1.85); transform-origin: center; }
+.satellite-body { position: absolute; top: -17px; left: calc(50% - 28px); display: block; width: 56px; height: 30px; background: url('/satellite.svg') center / contain no-repeat; filter: drop-shadow(0 2px 2px rgba(0, 9, 23, .9)) drop-shadow(0 0 3px rgba(245, 185, 112, .32)); transform: scaleY(1.85) perspective(100px) rotateY(-28deg) rotateX(12deg); transform-origin: center; animation: satellite-attitude 13s linear infinite; }
+.orbit-two .satellite-body { animation-duration: 19s; animation-direction: reverse; }
+.orbit-three .satellite-body { animation-duration: 24s; animation-delay: -9s; }
+@keyframes satellite-attitude {
+  0% { transform: rotate(0deg) scaleY(1.85) perspective(100px) rotateY(-44deg) rotateX(13deg); }
+  25% { transform: rotate(-90deg) scaleY(1.85) perspective(100px) rotateY(-8deg) rotateX(-12deg); }
+  50% { transform: rotate(-180deg) scaleY(1.85) perspective(100px) rotateY(43deg) rotateX(14deg); }
+  75% { transform: rotate(-270deg) scaleY(1.85) perspective(100px) rotateY(8deg) rotateX(-10deg); }
+  100% { transform: rotate(-360deg) scaleY(1.85) perspective(100px) rotateY(-44deg) rotateX(13deg); }
+}
 @keyframes satellite-lap { to { transform: rotate(360deg); } }
 .home-defense-ship, .home-enemy-ship { position: absolute; z-index: 3; width: 46px; height: 46px; filter: drop-shadow(0 0 9px #6ee9ff); animation: home-patrol 4s ease-in-out infinite alternate; }
 .home-defense-ship { z-index: 5; bottom: 29%; left: 5%; width: 84px; height: 84px; filter: drop-shadow(0 0 18px var(--ship-glow)) drop-shadow(0 10px 23px rgba(73, 213, 255, .72)); animation: home-full-thrust 1.25s ease-in-out infinite alternate; }
@@ -121,7 +130,7 @@ h1 span { display: block; color: var(--emerald); }
 @keyframes enemy-thrust-pulse { from { opacity: .76; filter: drop-shadow(0 -2px 3px #ff9b32) brightness(.92); } to { opacity: 1; filter: drop-shadow(0 -4px 6px #ffd36b) brightness(1.22); } }
 @keyframes home-engine-aura { to { opacity: .48; transform: translateX(-50%) scaleX(1.22); } }
 @keyframes home-shot { 0%, 38% { opacity: 0; scale: .3; } 44% { opacity: .9; scale: 1; } 64%, 100% { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .satellite-motion, .home-defense-ship, .home-enemy-ship, .home-defense-laser, .home-thrust, .home-enemy-thrust, .cryptoid .exhaust, .player-engine, .home-defense-ship::after, .player-ship-shield-active::before, .player-ship-shield-active::after, .planet { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .satellite-motion, .satellite-body, .home-defense-ship, .home-enemy-ship, .home-defense-laser, .home-thrust, .home-enemy-thrust, .cryptoid .exhaust, .player-engine, .home-defense-ship::after, .player-ship-shield-active::before, .player-ship-shield-active::after, .planet { animation: none; } }
 
 .landing-shell .hero-actions .button { position: relative; isolation: isolate; overflow: hidden; display: flex; align-items: center; justify-content: center; gap: 13px; border-radius: 0; clip-path: polygon(0 10px, 10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px)); transition: transform .16s ease, filter .16s ease, box-shadow .16s ease; }
 .landing-shell .hero-actions .button::before { position: absolute; z-index: -1; top: -70%; bottom: -70%; left: -42%; width: 28%; transform: rotate(18deg); background: linear-gradient(90deg, transparent, rgba(255,255,255,.36), transparent); content: ''; animation: home-button-scan 3.3s ease-in-out infinite; pointer-events: none; }
@@ -782,7 +791,7 @@ html[data-motion="reduced"] .boss-debris-piece:nth-child(n+5) { display: none; }
 .system-setting { display: flex; align-items: center; justify-content: flex-start; gap: 10px; padding: 9px 12px; text-align: left; }
 html[lang="th"] .language-option b, html[lang="th"] .system-setting b { line-height: 1.55; }
 .earth-globe-canvas { display: block; width: 100%; height: 100%; border-radius: 50%; }
-html[data-motion="reduced"] .satellite-motion, html[data-motion="reduced"] .home-defense-ship, html[data-motion="reduced"] .home-enemy-ship, html[data-motion="reduced"] .home-defense-laser, html[data-motion="reduced"] .home-thrust, html[data-motion="reduced"] .home-enemy-thrust, html[data-motion="reduced"] .cryptoid .exhaust, html[data-motion="reduced"] .player-engine, html[data-motion="reduced"] .home-defense-ship::after, html[data-motion="reduced"] .player-ship-shield-active::before, html[data-motion="reduced"] .player-ship-shield-active::after, html[data-motion="reduced"] .planet, html[data-motion="reduced"] .starfield-stars, html[data-motion="reduced"] .ship-choice::before, html[data-motion="reduced"] .offer-preview::after, html[data-motion="reduced"] .preview-volley i, html[data-motion="reduced"] .power-preview-orbit, html[data-motion="reduced"] .power-preview-orbit::before, html[data-motion="reduced"] .power-preview-orbit::after, html[data-motion="reduced"] .power-preview-wave, html[data-motion="reduced"] .button::before { animation: none !important; }
+html[data-motion="reduced"] .satellite-motion, html[data-motion="reduced"] .satellite-body, html[data-motion="reduced"] .home-defense-ship, html[data-motion="reduced"] .home-enemy-ship, html[data-motion="reduced"] .home-defense-laser, html[data-motion="reduced"] .home-thrust, html[data-motion="reduced"] .home-enemy-thrust, html[data-motion="reduced"] .cryptoid .exhaust, html[data-motion="reduced"] .player-engine, html[data-motion="reduced"] .home-defense-ship::after, html[data-motion="reduced"] .player-ship-shield-active::before, html[data-motion="reduced"] .player-ship-shield-active::after, html[data-motion="reduced"] .planet, html[data-motion="reduced"] .starfield-stars, html[data-motion="reduced"] .ship-choice::before, html[data-motion="reduced"] .offer-preview::after, html[data-motion="reduced"] .preview-volley i, html[data-motion="reduced"] .power-preview-orbit, html[data-motion="reduced"] .power-preview-orbit::before, html[data-motion="reduced"] .power-preview-orbit::after, html[data-motion="reduced"] .power-preview-wave, html[data-motion="reduced"] .button::before { animation: none !important; }
 html[data-motion="reduced"] .shooting-star { display: none; }
 @media (max-width: 680px) {
   .system-menu-panel { padding: 22px 14px 18px; }
