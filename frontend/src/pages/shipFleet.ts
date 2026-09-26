@@ -228,7 +228,7 @@ const nozzleProfiles: readonly (readonly (readonly [number, number])[])[] = [
   [[35, 58], [52, 54], [69, 58]],
   [[29, 53], [49, 63], [58, 63], [75, 53]],
   [[43, 60], [50, 66], [57, 60]],
-  [[27, 52], [44, 59], [49, 63], [55, 63], [60, 59], [72, 52]],
+  [[27, 52], [45, 62], [56, 62], [72, 52]],
 ] as const;
 
 export const shipNozzleStyles = (index: number, facesPlayer = false): CSSProperties[] =>
