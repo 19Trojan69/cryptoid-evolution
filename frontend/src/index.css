@@ -940,3 +940,25 @@ html[data-motion="reduced"] .shooting-star { display: none; }
   .bonus-counter { top: calc(max(4px, env(safe-area-inset-top)) + 88px); }
 }
 @media (prefers-reduced-motion: reduce) { .impact-effect.bomb-wave, .impact-effect.emp-wave { animation-duration: .15s; } }
+
+/* Visible hull integrity, even on large sprites and the sector boss. */
+.asteroid .health-bar { z-index: 8; top: -9px; left: 50%; width: 68%; height: 6px; transform: translateX(-50%); border: 1px solid #b7e6ec; border-radius: 4px; background: #071826; box-shadow: 0 0 10px #59dcf588; }
+.asteroid .health-bar b { border-radius: 3px; background: linear-gradient(90deg, #27dfa4, #e3f68c); box-shadow: 0 0 8px #8deec0; }
+.asteroid.cryptoid-heavy .health-bar, .asteroid.cryptoid-elite .health-bar, .asteroid-large .health-bar { top: -12px; width: 78%; height: 8px; }
+.asteroid .health-bar[data-critical="true"] b { background: linear-gradient(90deg, #e82f56, #ff9677); box-shadow: 0 0 10px #ff5573; }
+.asteroid.sector-boss .health-bar { top: -18px; width: 96%; height: 12px; border: 2px solid #defaf4; border-radius: 6px; background: #081521; box-shadow: 0 0 12px #7de6f8; }
+.boss-health-readout { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); color: #fff8dc; font: 700 11px 'DM Mono', monospace; text-shadow: 0 1px 4px #000, 0 0 8px #ffdc87; white-space: nowrap; }
+.game-control-icon { display: block; width: 21px; height: 21px; filter: drop-shadow(0 0 5px currentColor); }
+.hud-actions .home-control, .pause-control { display: grid; place-items: center; min-width: 40px; width: 40px; min-height: 40px; height: 40px; padding: 0; }
+.resume-icon { display: inline-grid; place-items: center; margin-left: 8px; }
+.resume-icon .game-control-icon { width: 17px; height: 17px; }
+.edge-action-purchased { min-height: 74px; }
+.edge-action-purchased em { margin-top: 4px; font: 700 9px 'DM Mono', monospace; font-style: normal; text-transform: uppercase; }
+.edge-action-purchased::after { position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; transform: scaleX(0); transform-origin: left; background: #7cffe2; box-shadow: 0 0 9px #7cffe2; content: ''; pointer-events: none; }
+.edge-action-purchased[data-holding="true"]::after { animation: power-hold-fill .65s linear forwards; }
+@keyframes power-hold-fill { to { transform: scaleX(1); } }
+@media (min-width: 561px) and (max-width: 700px) { .game-hud { grid-template-columns: 40px repeat(6, minmax(0, 1fr)) 40px; } }
+@media (max-width: 560px) {
+  .game-hud { grid-template-columns: 40px repeat(5, minmax(0, 1fr)) 40px; }
+  .hud-actions .home-control, .pause-control { min-width: 40px; width: 40px; min-height: 40px; height: 40px; }
+}
