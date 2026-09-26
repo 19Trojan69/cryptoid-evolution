@@ -619,7 +619,7 @@ const GamePage = () => {
           });
         }
         if (state.phase === "SECTOR_CLEAR") state.enemyShots = [];
-        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "hit" ? 230 : effect.kind === "boss-explosion" ? 820 : effect.kind === "explosion" || effect.kind === "shatter" ? 560 : 390));
+        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "hit" ? 230 : effect.kind === "boss-explosion" ? 1_800 : effect.kind === "explosion" || effect.kind === "shatter" ? 1_350 : 390));
         if (state.hearts === 0) {
           state.status = "game-over";
           if (!recordsSavedRef.current) {
