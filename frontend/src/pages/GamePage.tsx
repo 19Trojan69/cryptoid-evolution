@@ -179,13 +179,14 @@ const bossEngineTrails = () =>
   bossNozzleStyles().map((style, index) => <span key={`boss-exhaust-${index}`} className={`exhaust ${index === 1 ? "exhaust-main" : "exhaust-wing"}`} style={style} />);
 
 const shipDebris = (effect: Effect) => {
-  if (effect.sprite === undefined) return null;
+  const sprite = effect.sprite;
+  if (sprite === undefined) return null;
   const style = {
     "--debris-size": `${effect.debrisSize ?? 58}px`,
     "--debris-rotation": `${180 + (effect.debrisRotation ?? 0)}deg`,
   } as CSSProperties;
   return <div className={`ship-debris${effect.shipClass ? ` ship-debris-${effect.shipClass}` : ""}`} style={style} aria-hidden="true">
-    {[0, 1, 2, 3].map(index => <i className={`ship-debris-piece ship-debris-piece-${index + 1}`} key={index}><b style={spriteStyle(effect.sprite)} /></i>)}
+    {[0, 1, 2, 3].map(index => <i className={`ship-debris-piece ship-debris-piece-${index + 1}`} key={index}><b style={spriteStyle(sprite)} /></i>)}
   </div>;
 };
 
