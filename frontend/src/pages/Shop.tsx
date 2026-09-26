@@ -35,7 +35,7 @@ const shopTabs = [
   ["leaders", "Top 100", "#"],
 ] as const;
 
-const powerTypeForOffer = (offerId: string): PowerUpType => offerId.includes("shield") ? "shield" : offerId.includes("rapid") ? "rapid" : "overdrive";
+const powerTypeForOffer = (offerId: string): PowerUpType => offerId.includes("shield") ? "shield" : offerId.includes("rapid") ? "rapid" : offerId.includes("bomb") ? "bomb" : offerId.includes("emp") ? "emp" : "overdrive";
 const MOTION_STORAGE_KEY = "cryptoid_reduced_effects";
 
 const WeaponPreview = ({ offerId, sprite, color }: { offerId: string; sprite: number; color: PlayerColorId }) => {
@@ -407,7 +407,7 @@ const Shop = () => {
 
       {(shopView === "weapons" || shopView === "powers") && <section className="upgrade-section" aria-labelledby="upgrade-heading">
         <div className="section-heading"><div><p className="eyebrow">{t('POWER LAB')}</p><h2 id="upgrade-heading">{t('Weapons and start power-ups')}</h2></div><span className="section-line" /></div>
-        <p>{t('Standard laser is always free. Bought weapons remain owned, but work for 5 minutes from the start of each mission. Purchased start power-ups are consumed once a mission begins and wait at the edge of the game screen until you activate them. Bought power-ups last up to 60 seconds; collected shots and power-ups last up to 20 seconds. A shield also ends when its charge is spent. Pi prices are independent of the Shards used for ship skins.')}</p>
+        <p>{t('Standard laser is free. Bought weapons remain owned and start automatically for 5 minutes per mission. Bought start extras are consumed when the mission begins; tap the labeled button with your other thumb to activate them. Nova Bomb clears visible enemies and deals 18 boss damage; EMP freezes enemies for 7 seconds. Collected shields and weapon upgrades activate immediately. Pi prices are separate from ship Shards.')}</p>
         {([shopView === "weapons" ? "weapon" : "power"] as const).map(kind => <div key={kind} className="hangar-offers"><h3>{t(kind === "weapon" ? "Time-limited weapons" : "One-mission start bonuses")}</h3><div className="hangar-offer-grid">
           {offers.filter(offer => offer.kind === kind).map(offer => {
             const count = inventory?.consumables.find(item => item.id === offer.id)?.count ?? 0;
@@ -415,7 +415,7 @@ const Shop = () => {
             const selected = kind === "weapon" ? inventory?.equippedWeapon === offer.id : inventory?.selectedPower === offer.id;
             return <article key={offer.id} className={`hangar-offer hangar-offer-${kind}${selected ? " hangar-offer-selected" : ""}`}>{kind === "weapon" ? <WeaponPreview offerId={offer.id} sprite={selectedShip().skin.sprite} color={selectedShip().color.id} /> : <PowerPreview offerId={offer.id} />}<h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span>{t(kind === "weapon" ? "5 minutes per mission · starts at mission start" : "Consumed at mission start")} · {offer.pricePi} π</span><strong>{selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : t("OWNED") : t("NOT OWNED")}</strong><div>
               {owned ? <button className="button button-secondary" type="button" disabled={Boolean(selected)} onClick={() => equip(kind === "weapon" ? offer.id : inventory?.equippedWeapon ?? null, kind === "power" ? offer.id : inventory?.selectedPower ?? null)}>{t(selected ? "Selected" : "Equip for next mission")}</button> : null}
-              {(kind === "power" || !owned) && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady} onClick={() => orderProduct(`Cryptoid ${offer.name} · ${kind === "weapon" ? "5 minutes per mission" : "60 seconds when activated"}`, offer.pricePi, { productId: offer.id }, () => { setLoadoutMessage(`${offer.name} ${t("purchase confirmed.")}`); void refreshInventory(); })}>{t("Buy with π")}</button>}
+              {(kind === "power" || !owned) && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady} onClick={() => orderProduct(`Cryptoid ${offer.name} · ${kind === "weapon" ? "5 minutes per mission" : offer.id === "start_bomb" || offer.id === "start_emp" ? "one use per mission" : "60 seconds when activated"}`, offer.pricePi, { productId: offer.id }, () => { setLoadoutMessage(`${offer.name} ${t("purchase confirmed.")}`); void refreshInventory(); })}>{t("Buy with π")}</button>}
             </div></article>;
           })}
         </div></div>)}

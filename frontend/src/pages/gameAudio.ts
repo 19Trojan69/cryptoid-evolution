@@ -1,6 +1,6 @@
 import { readEffectsVolume } from "./musicPreferences.ts";
 
-export type GameSound = "laser" | "enemyHit" | "explosion" | "collision" | "shield" | "pickup" | "boost" | "boss" | "bossDestroy";
+export type GameSound = "laser" | "enemyHit" | "explosion" | "collision" | "shield" | "pickup" | "boost" | "boss" | "bossDestroy" | "nova" | "emp";
 
 const sampleNames = ["shot-single", "shot-twin", "shot-rapid", "shot-triple", "shot-plasma", "enemy-hit", "enemy-destroy", "enemy-destroy-alt", "player-collision", "shield", "boost", "boss-destroy"] as const;
 type SampleName = typeof sampleNames[number];
@@ -98,6 +98,8 @@ export class GameAudio {
       case "boost": this.tone(270, 860, .42, .08, "sawtooth"); break;
       case "boss": [150, 130, 110].forEach((note, step) => this.tone(note, note * .75, .3, .085, "triangle", step * .22)); break;
       case "bossDestroy": this.tone(150, 60, .48, .055, "triangle"); break;
+      case "nova": [440, 220, 90].forEach((note, step) => this.tone(note, 55, .56, .09, "sawtooth", step * .05)); break;
+      case "emp": [980, 730, 490].forEach((note, step) => this.tone(note, 150, .32, .045, "sine", step * .09)); break;
     }
   }
 

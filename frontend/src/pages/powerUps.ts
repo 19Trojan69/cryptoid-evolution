@@ -1,4 +1,4 @@
-export type PowerUpType = "shield" | "overdrive" | "weapon" | "rapid";
+export type PowerUpType = "shield" | "overdrive" | "weapon" | "rapid" | "bomb" | "emp";
 export type PowerUp = { id: number; type: PowerUpType; x: number; y: number };
 export type PowerStatus = { hearts: number; shieldCharges: number; shieldMs?: number; overdriveMs: number; weaponLevel?: number; rapidFireMs?: number };
 export type Threat = { x: number; y: number; radius: number };
@@ -10,16 +10,18 @@ export const RAPID_DURATION_MS = POWER_UP_DURATION_MS;
 export const MAX_ACTIVE_POWER_UPS = 3;
 
 export const powerUpNames: Record<PowerUpType, string> = {
-  shield: "Shield", overdrive: "Overdrive", weapon: "Weapon Upgrade", rapid: "Rapid Fire",
+  shield: "Shield", overdrive: "Overdrive", weapon: "Weapon Upgrade", rapid: "Rapid Fire", bomb: "Nova Bomb", emp: "EMP Pulse",
 };
 export const powerUpSymbols: Record<PowerUpType, string> = {
-  shield: "⬡", overdrive: "ϟ", weapon: "⇧", rapid: "»",
+  shield: "⬡", overdrive: "ϟ", weapon: "⇧", rapid: "»", bomb: "✹", emp: "◈",
 };
 export const powerUpDescriptions: Record<PowerUpType, string> = {
   shield: "Absorbs the next hit for up to 20 seconds.",
   overdrive: "Powers each shot up to deal two damage for 20 seconds.",
   weapon: "Raises your weapon by one level for 20 seconds, up to level 5.",
   rapid: "Sets automatic fire to its fast cadence for 20 seconds.",
+  bomb: "Clears visible enemies and hostile shots; damages the boss.",
+  emp: "Freezes enemy attacks and movement for 7 seconds.",
 };
 
 export const createPowerUpDrop = ({ id, x, y, width, height, threats, activeCount, chanceRoll, kindRoll, destroyed, dropsCreated }: {
@@ -41,7 +43,8 @@ export const collectPowerUp = (status: PowerStatus, type: PowerUpType, durationM
   if (type === "shield") return { ...status, shieldCharges: Math.min(2, status.shieldCharges + 1), shieldMs: durationMs };
   if (type === "weapon") return { ...status, weaponLevel: Math.min(5, (status.weaponLevel ?? 1) + 1) };
   if (type === "rapid") return { ...status, rapidFireMs: durationMs };
-  return { ...status, overdriveMs: durationMs };
+  if (type === "overdrive") return { ...status, overdriveMs: durationMs };
+  return status;
 };
 
 export const receiveImpacts = (status: PowerStatus, impacts: number): PowerStatus => {

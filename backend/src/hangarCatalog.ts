@@ -6,6 +6,8 @@ export const hangarCatalog = [
   { id: "start_shield", kind: "power", name: "Start Shield", description: "Activate one shield charge from the screen-edge icon. Lasts up to 60 seconds or until hit.", pricePi: 0.08, powerUp: "shield" },
   { id: "start_rapid", kind: "power", name: "Start Rapid Fire", description: "Activate faster automatic fire from the screen-edge icon for 60 seconds.", pricePi: 0.09, powerUp: "rapid" },
   { id: "start_overdrive", kind: "power", name: "Start Overdrive", description: "Activate stronger shots from the screen-edge icon for 60 seconds.", pricePi: 0.12, powerUp: "overdrive" },
+  { id: "start_bomb", kind: "power", name: "Nova Bomb", description: "One use per mission. Clears visible enemies and hostile shots; deals 18 damage to a boss.", pricePi: 0.18, powerUp: "bomb" },
+  { id: "start_emp", kind: "power", name: "EMP Pulse", description: "One use per mission. Freezes enemies and their shots for 7 seconds; clears shots already on screen.", pricePi: 0.14, powerUp: "emp" },
   { id: "armor_hull_mk1", kind: "armor", name: "Reinforced Hull", description: "Permanent armor: +1 heart at the start of every mission. No shield needed.", pricePi: 0.6, bonusHearts: 1 },
   { id: "armor_hull_mk2", kind: "armor", name: "Titanium Plating", description: "Permanent armor: +2 more hearts at the start of every mission. Stacks with Reinforced Hull.", pricePi: 1.2, bonusHearts: 2 },
 ] as const;

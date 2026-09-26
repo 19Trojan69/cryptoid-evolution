@@ -907,3 +907,36 @@ html[data-motion="reduced"] .shooting-star { display: none; }
   .bonus-counter { top: calc(max(8px, env(safe-area-inset-top)) + 146px); }
   .game-coach { width: min(290px, calc(100% - 24px)); }
 }
+
+/* Compact mobile cockpit: one narrow status row keeps the upper playfield visible. */
+.hud-coin-inline { display: none; }
+.edge-action-purchased { width: 76px; min-height: 62px; height: auto; padding: 6px 3px; font-size: 24px; border-color: #e2c377; background: linear-gradient(145deg, #263348ee, #1d3344f5); color: #ffe2a3; box-shadow: 0 0 16px #e2c37744, inset 0 0 18px #ffd7931b; }
+.edge-action-purchased small { max-width: 72px; font: 600 10px/1.1 'Space Grotesk', sans-serif; text-align: center; overflow-wrap: anywhere; }
+.edge-action-purchased:disabled { color: #ffb4be; }
+.edge-action-bomb { color: #ffbe73; }
+.edge-action-emp { color: #83e9ff; }
+.power-preview-bomb { --offer-color: #ffae64; }
+.power-preview-emp { --offer-color: #80deff; }
+.cryptoid-emp .fleet-sprite { filter: saturate(.45) drop-shadow(0 0 10px #81eeff); }
+.impact-effect.bomb-wave, .impact-effect.emp-wave { width: 64px; height: 64px; margin: -32px 0 0 -32px; border: 3px solid #ffb260; border-radius: 50%; background: radial-gradient(circle, #fff5b6 0%, #ff9d477a 25%, transparent 70%); box-shadow: 0 0 32px #ff983aaa; animation: special-blast .85s ease-out both; }
+.impact-effect.emp-wave { border-color: #7feaff; background: radial-gradient(circle, #c6ffff 0%, #68e8ff74 28%, transparent 70%); box-shadow: 0 0 32px #62e5ffbb; }
+@keyframes special-blast { from { transform: scale(.25); opacity: 1; } to { transform: scale(13); opacity: 0; } }
+@media (max-width: 560px) {
+  .game-hud { grid-template-columns: 66px repeat(5, minmax(0, 1fr)) 34px; grid-template-areas: "home score hearts weapon level round pause"; align-items: stretch; gap: 2px; padding: max(4px, env(safe-area-inset-top)) 5px 4px; }
+  .coin-stat { display: none; }
+  .hud-actions { gap: 2px; min-width: 0; }
+  .hud-actions .home-control, .game-music-toggle { width: 31px; min-width: 0; height: 40px; min-height: 40px; padding: 0; font-size: 16px; }
+  .hud-stat { min-width: 0; min-height: 40px; gap: 2px; padding: 2px 0; }
+  .hud-stat span { font-size: 7px; letter-spacing: 0; }
+  .hud-stat strong { font-size: 13px; }
+  .score-hud .hud-coin-inline { display: block; color: var(--gold); font: 9px 'DM Mono', monospace; line-height: 1; }
+  .hearts-stat .heart-icons { display: none; }
+  .hearts-stat .hearts small { font-size: 13px; color: #ff8da2; }
+  .chain-blocks { gap: 1px; height: 3px; }
+  .chain-blocks i { width: 5px; height: 3px; }
+  .pause-control { height: 40px; }
+  .game-label { top: calc(max(4px, env(safe-area-inset-top)) + 48px); font-size: 7px; }
+  .power-status { top: calc(max(4px, env(safe-area-inset-top)) + 63px); }
+  .bonus-counter { top: calc(max(4px, env(safe-area-inset-top)) + 88px); }
+}
+@media (prefers-reduced-motion: reduce) { .impact-effect.bomb-wave, .impact-effect.emp-wave { animation-duration: .15s; } }
