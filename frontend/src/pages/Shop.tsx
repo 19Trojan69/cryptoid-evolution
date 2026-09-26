@@ -12,7 +12,9 @@ import PaintedShip from "./PaintedShip";
 import TermsDialog from "../components/TermsDialog";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
 import { primeGameAudio } from "./gameAudio";
-import { MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, musicGain, readMusicVolume, type MusicVolume } from "./musicPreferences";
+import { MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readMusicVolume } from "./musicPreferences";
+import { MusicPlayer } from "./musicPlayback";
+import MusicVolumeSlider from "./MusicVolumeSlider";
 import Starfield from "./Starfield";
 import { languages, useLocale, type Locale } from "../i18n";
 import EarthGlobe from "./EarthGlobe";
@@ -73,8 +75,8 @@ const Shop = () => {
   const [leadersStatus, setLeadersStatus] = useState<"loading" | "ready" | "error">("loading");
   const [personalBest, setPersonalBest] = useState<number | null>(null);
   const [musicEnabled, setMusicEnabled] = useState(() => localStorage.getItem(MUSIC_STORAGE_KEY) !== "off");
-  const [musicVolume, setMusicVolume] = useState<MusicVolume>(readMusicVolume);
-  const homeMusicRef = useRef<HTMLAudioElement | null>(null);
+  const [musicVolume, setMusicVolume] = useState(readMusicVolume);
+  const homeMusicRef = useRef<MusicPlayer | null>(null);
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [musicBlocked, setMusicBlocked] = useState(false);
   const startMusicRef = useRef<(() => void) | null>(null);
@@ -84,18 +86,12 @@ const Shop = () => {
       setMusicBlocked(false);
       return;
     }
-    const audio = new Audio("/audio/home-galactic-chain.mp3");
-    audio.loop = true;
-    audio.volume = musicGain(readMusicVolume());
-    homeMusicRef.current = audio;
-    audio.preload = "auto";
+    const music = new MusicPlayer("/audio/home-galactic-chain.mp3", readMusicVolume());
+    homeMusicRef.current = music;
     let active = true;
     const start = () => {
-      if (!audio.paused) return;
-      void audio.play().then(() => {
-        if (active) { setMusicPlaying(true); setMusicBlocked(false); }
-      }).catch(() => {
-        if (active) { setMusicPlaying(false); setMusicBlocked(true); }
+      void music.play().then(playing => {
+        if (active) { setMusicPlaying(playing); setMusicBlocked(!playing); }
       });
     };
     startMusicRef.current = start;
@@ -111,13 +107,12 @@ const Shop = () => {
       document.removeEventListener("pointerdown", resumeOnGesture, true);
       document.removeEventListener("keydown", resumeOnGesture, true);
       startMusicRef.current = null;
-      audio.pause();
-      audio.src = "";
-      if (homeMusicRef.current === audio) homeMusicRef.current = null;
+      music.close();
+      if (homeMusicRef.current === music) homeMusicRef.current = null;
     };
   }, [musicEnabled]);
-  useEffect(() => { if (homeMusicRef.current) homeMusicRef.current.volume = musicGain(musicVolume); }, [musicVolume]);
-  const changeMusicVolume = (value: MusicVolume) => {
+  useEffect(() => { if (homeMusicRef.current) homeMusicRef.current.setVolume(musicVolume); }, [musicVolume]);
+  const changeMusicVolume = (value: number) => {
     localStorage.setItem(MUSIC_VOLUME_KEY, String(value));
     setMusicVolume(value);
   };
@@ -338,9 +333,7 @@ const Shop = () => {
           </div>
           <div className="system-menu-section system-quick-settings">
             <div className="system-menu-heading"><strong>{t('Music volume')}</strong></div>
-            <div className="control-choice-group music-volume-group" role="group" aria-label={t('Music volume')}>
-              {([25, 50, 75, 100] as const).map(level => <button key={level} className="system-setting" type="button" aria-pressed={musicVolume === level} onClick={() => changeMusicVolume(level)}><b>{level}%</b></button>)}
-            </div>
+            <MusicVolumeSlider id="home-music-volume" label={t('Music volume')} value={musicVolume} onChange={changeMusicVolume} />
           </div>
           <div className="system-menu-section system-quick-settings">
             <div className="system-menu-heading"><strong>{t('Display')}</strong></div>

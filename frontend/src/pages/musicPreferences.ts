@@ -1,10 +1,11 @@
 export const MUSIC_STORAGE_KEY = "cryptoid_home_music";
 export const MUSIC_VOLUME_KEY = "cryptoid_music_volume";
-export type MusicVolume = 25 | 50 | 75 | 100;
-// Percentages scale a calibrated music ceiling so effects remain clearly audible.
+// Volume is a percentage of the game's calibrated music mix, not the device's master volume.
 const MUSIC_MAX_GAIN = .08;
-export const musicGain = (level: MusicVolume) => MUSIC_MAX_GAIN * level / 100;
-export const readMusicVolume = (): MusicVolume => {
-  const saved = Number(localStorage.getItem(MUSIC_VOLUME_KEY));
-  return saved === 50 || saved === 75 || saved === 100 ? saved : 25;
+export const musicGain = (percent: number) => MUSIC_MAX_GAIN * Math.max(0, Math.min(100, percent)) / 100;
+export const readMusicVolume = (): number => {
+  const saved = localStorage.getItem(MUSIC_VOLUME_KEY);
+  if (saved === null) return 25;
+  const value = Number(saved);
+  return Number.isFinite(value) && value >= 0 && value <= 100 ? value : 25;
 };
