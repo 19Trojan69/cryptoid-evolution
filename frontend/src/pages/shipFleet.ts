@@ -204,46 +204,66 @@ export const spriteVisualOffset = (index: number, renderedSize: number, facesPla
   return { x: xPercent / 100 * renderedSize * direction, y: yPercent / 100 * renderedSize * direction };
 };
 
-// Coordinates refer to the two primary visible engine exits in each original
-// nose-up atlas cell. Gameplay deliberately renders exactly these two engines.
+// Every entry is calibrated against its original 4 x 5 hangar-atlas cell:
+// x/y are the visible nozzle exit, width is the painted nozzle diameter and
+// tone distinguishes central plasma drives from external combustion drives.
 const hullCenters = [55, 53, 42, 43, 54, 53, 43, 43, 54, 54, 43, 44, 55, 53, 43, 44, 55, 53, 42, 43] as const;
-const nozzleProfiles: readonly (readonly (readonly [number, number])[])[] = [
-  [[49, 80], [60, 80]],
-  [[49, 82], [61, 82]],
-  [[35, 87], [52, 87]],
-  [[34, 85], [56, 85]],
-  [[28, 75], [74, 75]],
-  [[43, 80], [62, 80]],
-  [[28, 75], [72, 75]],
-  [[22, 75], [78, 75]],
-  [[46, 68], [62, 68]],
-  [[46, 68], [60, 68]],
-  [[37, 68], [54, 68]],
-  [[41, 70], [47, 70]],
-  [[45, 58], [63, 58]],
-  [[46, 58], [60, 58]],
-  [[35, 55], [64, 55]],
-  [[43, 58], [54, 58]],
-  [[35, 58], [69, 58]],
-  [[29, 53], [75, 53]],
-  [[43, 60], [57, 60]],
-  [[45, 62], [56, 62]],
+type ExhaustTone = "plasma" | "fire";
+type NozzleProfile = readonly [x: number, y: number, width: number, tone: ExhaustTone];
+
+const nozzleProfiles: readonly (readonly NozzleProfile[])[] = [
+  [[50, 80, 4.2, "plasma"], [61, 80, 4.2, "plasma"]],
+  [[47, 82, 5.8, "plasma"], [59, 82, 5.8, "plasma"]],
+  [[34, 86, 7.5, "plasma"], [49, 86, 7.5, "plasma"]],
+  [[32, 84, 3, "fire"], [56, 84, 3, "fire"]],
+  [[37, 74, 5.5, "fire"], [71, 74, 5.5, "fire"]],
+  [[45, 79, 7, "plasma"], [61, 79, 7, "plasma"]],
+  [[20, 76, 5, "fire"], [66, 76, 5, "fire"]],
+  [[22, 71, 6, "fire"], [65, 71, 6, "fire"]],
+  [[46, 67, 7.5, "plasma"], [63, 67, 7.5, "plasma"]],
+  [[47, 67, 5.5, "plasma"], [60, 67, 5.5, "plasma"]],
+  [[35, 68, 7, "plasma"], [51, 68, 7, "plasma"]],
+  [[42.5, 68, 2.6, "plasma"], [45.5, 68, 2.6, "plasma"]],
+  [[45, 57, 6, "plasma"], [63, 57, 6, "plasma"]],
+  [[46, 57, 6, "plasma"], [60, 57, 6, "plasma"]],
+  [[25, 52, 7, "fire"], [61, 52, 7, "fire"]],
+  [[36, 57, 6, "plasma"], [52, 57, 6, "plasma"]],
+  [[38, 57, 6, "fire"], [70, 57, 6, "fire"]],
+  [[46, 61, 6, "plasma"], [58, 61, 6, "plasma"]],
+  [[23, 50, 5, "fire"], [63, 50, 5, "fire"]],
+  [[38, 61, 7, "plasma"], [51, 61, 7, "plasma"]],
 ] as const;
 
 // The Core Warden has two wing engines plus one larger axial main engine.
-const bossNozzleProfile = [[19, 50], [50, 62], [81, 50]] as const;
+const bossNozzleProfile: readonly NozzleProfile[] = [
+  [19, 49, 7, "fire"],
+  [44.5, 61, 11, "plasma"],
+  [68, 49, 7, "fire"],
+];
 
-export const shipNozzleStyles = (index: number, facesPlayer = false): CSSProperties[] =>
-  (nozzleProfiles[index] ?? nozzleProfiles[0]).map(([x, y]) => ({
+const exhaustColors = {
+  plasma: { core: "#f8ffff", mid: "#8fefff", tail: "#527cff", glow: "rgba(82, 164, 255, .68)" },
+  fire: { core: "#fff8d7", mid: "#ffc65d", tail: "#ed7028", glow: "rgba(255, 132, 39, .66)" },
+} as const;
+
+const nozzleStyle = ([x, y, width, tone]: NozzleProfile, facesPlayer = false): CSSProperties => {
+  const colors = exhaustColors[tone];
+  return {
     "--nozzle-x": `${facesPlayer ? 100 - x : x}%`,
     "--nozzle-y": `${facesPlayer ? 100 - y : y}%`,
-  } as CSSProperties));
+    "--nozzle-width": `${width}%`,
+    "--flame-core": colors.core,
+    "--flame-mid": colors.mid,
+    "--flame-tail": colors.tail,
+    "--flame-glow": colors.glow,
+  } as CSSProperties;
+};
+
+export const shipNozzleStyles = (index: number, facesPlayer = false): CSSProperties[] =>
+  (nozzleProfiles[index] ?? nozzleProfiles[0]).map(nozzle => nozzleStyle(nozzle, facesPlayer));
 
 export const bossNozzleStyles = (): CSSProperties[] =>
-  bossNozzleProfile.map(([x, y]) => ({
-    "--nozzle-x": `${x}%`,
-    "--nozzle-y": `${y}%`,
-  } as CSSProperties));
+  bossNozzleProfile.map(nozzle => nozzleStyle(nozzle));
 
 export const shipHullStyle = (index: number, facesPlayer = false): CSSProperties => {
   const center = hullCenters[index] ?? hullCenters[0];
