@@ -463,26 +463,28 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .impact-effect span::before { transform: translate(-50%, -50%) rotate(90deg); }
 .impact-effect span::after { transform: translate(-50%, -50%) rotate(45deg); }
 .explosion span, .explosion span::before, .explosion span::after { background: var(--gold); }
-.impact-effect.explosion, .impact-effect.boss-explosion, .impact-effect.shatter { width: 72px; height: 72px; margin: -36px 0 0 -36px; border: 0; background: transparent; box-shadow: none; animation: none; }
+.impact-effect.explosion, .impact-effect.boss-explosion, .impact-effect.player-explosion, .impact-effect.shatter { width: 72px; height: 72px; margin: -36px 0 0 -36px; border: 0; background: transparent; box-shadow: none; animation: none; }
 .impact-effect.boss-explosion { width: 116px; height: 116px; margin: -58px 0 0 -58px; }
-.impact-effect.explosion::before, .impact-effect.boss-explosion::before, .impact-effect.shatter::before { position: absolute; z-index: 0; inset: 6%; border: 0; border-radius: 48% 52% 46% 54%; background: radial-gradient(circle at 43% 39%, #fff 0 5%, #fff7c7 8% 16%, #ffd04f 24%, #ff8a25 38%, #e83c1d 52%, rgba(132, 18, 12, .62) 63%, transparent 74%); filter: drop-shadow(0 0 7px rgba(255, 145, 45, .9)) drop-shadow(0 0 13px rgba(232, 61, 25, .55)); content: ''; animation: destruction-fire .88s cubic-bezier(.14, .72, .22, 1) both; }
-.impact-effect.explosion::after, .impact-effect.boss-explosion::after, .impact-effect.shatter::after { position: absolute; z-index: 0; inset: -3%; border-radius: 50%; background: conic-gradient(from 12deg, transparent 0 7%, #ffcc55 9% 13%, transparent 16% 28%, #ff6b25 31% 36%, transparent 39% 51%, #ffd66d 54% 58%, transparent 62% 75%, #f04720 78% 84%, transparent 88% 100%); clip-path: polygon(50% 0, 60% 27%, 79% 8%, 75% 35%, 100% 31%, 74% 51%, 94% 70%, 67% 66%, 70% 100%, 50% 73%, 29% 100%, 33% 66%, 5% 72%, 27% 51%, 0 31%, 26% 35%, 21% 8%, 40% 27%); content: ''; animation: destruction-flare .98s ease-out both; }
+.impact-effect.player-explosion { width: 96px; height: 96px; margin: -48px 0 0 -48px; }
+.impact-effect.explosion::before, .impact-effect.boss-explosion::before, .impact-effect.player-explosion::before, .impact-effect.shatter::before { position: absolute; z-index: 0; inset: 6%; border: 0; border-radius: 48% 52% 46% 54%; background: radial-gradient(circle at 43% 39%, #fff 0 5%, #fff7c7 8% 16%, #ffd04f 24%, #ff8a25 38%, #e83c1d 52%, rgba(132, 18, 12, .62) 63%, transparent 74%); filter: drop-shadow(0 0 7px rgba(255, 145, 45, .9)) drop-shadow(0 0 13px rgba(232, 61, 25, .55)); content: ''; animation: destruction-fire .88s cubic-bezier(.14, .72, .22, 1) both; }
+.impact-effect.explosion::after, .impact-effect.boss-explosion::after, .impact-effect.player-explosion::after, .impact-effect.shatter::after { position: absolute; z-index: 0; inset: -3%; border-radius: 50%; background: conic-gradient(from 12deg, transparent 0 7%, #ffcc55 9% 13%, transparent 16% 28%, #ff6b25 31% 36%, transparent 39% 51%, #ffd66d 54% 58%, transparent 62% 75%, #f04720 78% 84%, transparent 88% 100%); clip-path: polygon(50% 0, 60% 27%, 79% 8%, 75% 35%, 100% 31%, 74% 51%, 94% 70%, 67% 66%, 70% 100%, 50% 73%, 29% 100%, 33% 66%, 5% 72%, 27% 51%, 0 31%, 26% 35%, 21% 8%, 40% 27%); content: ''; animation: destruction-flare .98s ease-out both; }
 .impact-effect.shatter::after { background: conic-gradient(from 12deg, transparent 0 7%, #d9ffff 9% 13%, transparent 16% 28%, #54dfff 31% 36%, transparent 39% 51%, #ffce5e 54% 58%, transparent 62% 75%, #8c72ff 78% 84%, transparent 88% 100%); }
-.impact-effect.explosion > span, .impact-effect.boss-explosion > span, .impact-effect.shatter > span { display: block; z-index: 0; inset: 4%; width: auto; height: auto; transform: none; border: 2px solid rgba(255, 190, 82, .72); border-radius: 50%; background: transparent; animation: burst-ring .96s ease-out both; }
+.impact-effect.explosion > span, .impact-effect.boss-explosion > span, .impact-effect.player-explosion > span, .impact-effect.shatter > span { display: block; z-index: 0; inset: 4%; width: auto; height: auto; transform: none; border: 2px solid rgba(255, 190, 82, .72); border-radius: 50%; background: transparent; animation: burst-ring .96s ease-out both; }
 .impact-effect.shatter > span { border-color: rgba(126, 230, 255, .72); }
-.impact-effect.explosion > span::before, .impact-effect.explosion > span::after, .impact-effect.boss-explosion > span::before, .impact-effect.boss-explosion > span::after, .impact-effect.shatter > span::before, .impact-effect.shatter > span::after { display: none; }
+.impact-effect.explosion > span::before, .impact-effect.explosion > span::after, .impact-effect.boss-explosion > span::before, .impact-effect.boss-explosion > span::after, .impact-effect.player-explosion > span::before, .impact-effect.player-explosion > span::after, .impact-effect.shatter > span::before, .impact-effect.shatter > span::after { display: none; }
 .ship-debris { position: absolute; z-index: 1; top: 50%; left: 50%; width: var(--debris-size); height: var(--debris-size); transform: translate(-50%, -50%) rotate(var(--debris-rotation)); pointer-events: none; }
 .ship-debris-piece { position: absolute; width: 50%; height: 50%; overflow: hidden; filter: drop-shadow(0 1px 2px rgba(255, 140, 48, .58)); }
-.ship-debris-piece b { position: absolute; display: block; width: 200%; height: 200%; background-repeat: no-repeat; background-size: 400% 500%; }
+.ship-debris-piece b, .ship-debris-piece > .ship-debris-sprite { position: absolute; display: block; width: 200%; height: 200%; background-repeat: no-repeat; background-size: 400% 500%; }
 .ship-debris-piece-1 { top: 0; left: 0; animation: debris-north-west 1.35s cubic-bezier(.16, .64, .24, 1) both; }
-.ship-debris-piece-1 b { top: 0; left: 0; }
+.ship-debris-piece-1 b, .ship-debris-piece-1 > .ship-debris-sprite { top: 0; left: 0; }
 .ship-debris-piece-2 { top: 0; right: 0; animation: debris-north-east 1.35s cubic-bezier(.16, .64, .24, 1) both; }
-.ship-debris-piece-2 b { top: 0; right: 0; }
+.ship-debris-piece-2 b, .ship-debris-piece-2 > .ship-debris-sprite { top: 0; right: 0; }
 .ship-debris-piece-3 { bottom: 0; left: 0; animation: debris-south-west 1.35s cubic-bezier(.16, .64, .24, 1) both; }
-.ship-debris-piece-3 b { bottom: 0; left: 0; }
+.ship-debris-piece-3 b, .ship-debris-piece-3 > .ship-debris-sprite { bottom: 0; left: 0; }
 .ship-debris-piece-4 { right: 0; bottom: 0; animation: debris-south-east 1.35s cubic-bezier(.16, .64, .24, 1) both; }
-.ship-debris-piece-4 b { right: 0; bottom: 0; }
+.ship-debris-piece-4 b, .ship-debris-piece-4 > .ship-debris-sprite { right: 0; bottom: 0; }
 .boss-explosion .ship-debris-piece { animation-duration: 1.8s; }
+.player-explosion .ship-debris-piece { animation-duration: 1.65s; }
 .ship-debris-light b { filter: grayscale(1) sepia(1) saturate(1.6) hue-rotate(105deg); }
 .ship-debris-medium b { filter: grayscale(1) sepia(1) saturate(1.6) hue-rotate(165deg); }
 .ship-debris-heavy b { filter: grayscale(1) sepia(1) saturate(1.6) hue-rotate(335deg); }
@@ -510,6 +512,13 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .game-modal h1 { margin-bottom: 15px; font-size: clamp(38px, 7vw, 58px); }
 .game-modal h2 { margin-bottom: 12px; }
 .game-modal > p:not(.eyebrow) { margin-bottom: 25px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+.game-over-overlay { background: radial-gradient(circle at 50% 47%, rgba(70, 16, 91, .28), rgba(1, 7, 16, .9) 68%); backdrop-filter: blur(4px); }
+.game-over-modal { width: min(94vw, 760px); padding: 28px; border: 0; background: transparent; box-shadow: none; text-align: center; }
+.game-over-modal h1 { margin: 0; color: #fff4cf; font-size: clamp(64px, 14vw, 132px); font-weight: 700; line-height: .9; letter-spacing: .08em; text-transform: uppercase; text-shadow: 0 0 7px #fff, 0 0 18px #ffbd42, 0 0 34px #ec562b, 0 0 58px rgba(160, 56, 255, .82); animation: game-over-title 1.05s ease-out both; }
+.game-over-details { opacity: 0; animation: game-over-details .48s ease-out .9s forwards; }
+.game-over-details .eyebrow { margin: 20px 0 8px; color: #f5c86d; }
+@keyframes game-over-title { 0% { opacity: 0; transform: scale(.7); filter: blur(8px); } 55% { opacity: 1; transform: scale(1.06); filter: blur(0); } 100% { opacity: 1; transform: scale(1); filter: blur(0); } }
+@keyframes game-over-details { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 .game-over-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 25px 0; }
 .game-over-stats span { display: flex; flex-direction: column; gap: 5px; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 9px; text-transform: uppercase; }
 .game-over-stats b { color: var(--gold); font-family: 'Space Grotesk', sans-serif; font-size: 25px; font-weight: 500; }
