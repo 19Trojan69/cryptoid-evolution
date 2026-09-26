@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusHeartReward, bonusPosition, bonusReward, bonusShowcaseShip, isBonusSection } from "./bonusChallenge.ts";
+import { BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusEntryGap, bonusHeartReward, bonusPosition, bonusReward, bonusShowcaseShip, isBonusSection } from "./bonusChallenge.ts";
 
 test("every third section is a bonus and later sectors repeat the pattern", () => {
   assert.deepEqual([1, 2, 3, 4, 5, 6, 18, 19].map(isBonusSection), [false, false, true, false, false, true, true, false]);
@@ -19,6 +19,18 @@ test("bonus ships enter from opposite sides, remain above player space, and leav
       assert.ok(Math.sign(start.x - width / 2) !== Math.sign(end.x - width / 2));
     }
   }
+});
+
+test("bonus entries vary their timing and cross through distinct loops and spirals", () => {
+  assert.ok(new Set(Array.from({ length: BONUS_TARGET_COUNT }, (_, index) => bonusEntryGap(index))).size >= 5);
+  const width = 390;
+  const height = 760;
+  const samples = Array.from({ length: 5 }, (_, pattern) =>
+    Array.from({ length: 9 }, (_, step) => bonusPosition(pattern * 2, BONUS_FLIGHT_MS * step / 8, width, height)));
+  assert.equal(new Set(samples.map(path => path.map(point => Math.round(point.y)).join(","))).size, 5);
+  const crossingPair = [bonusPosition(2, BONUS_FLIGHT_MS / 2, width, height), bonusPosition(3, BONUS_FLIGHT_MS / 2, width, height)];
+  assert.ok(Math.abs(crossingPair[0].x - crossingPair[1].x) < 1);
+  assert.ok(Math.abs(crossingPair[0].y - crossingPair[1].y) < 1);
 });
 
 test("each bonus round previews twelve distinct non-boss hulls in varied paints", () => {

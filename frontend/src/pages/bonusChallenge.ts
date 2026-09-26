@@ -1,8 +1,10 @@
 import { playerColors, type PlayerColorId } from "./shipFleet.ts";
 
 export const BONUS_TARGET_COUNT = 12;
-export const BONUS_ENTRY_GAP_MS = 950;
 export const BONUS_FLIGHT_MS = 3_600;
+const bonusEntryGaps = [720, 1_120, 640, 1_340, 860, 980] as const;
+
+export const bonusEntryGap = (index: number) => bonusEntryGaps[Math.max(0, index) % bonusEntryGaps.length];
 
 export type BonusTarget = { id: number; index: number; elapsed: number; x: number; y: number; radius: number; sprite: number; color: PlayerColorId };
 
@@ -11,8 +13,32 @@ export const isBonusSection = (section: number) => section > 0 && section % 3 ==
 export const bonusPosition = (index: number, elapsed: number, width: number, height: number) => {
   const progress = Math.min(1, elapsed / BONUS_FLIGHT_MS);
   const direction = index % 2 === 0 ? 1 : -1;
-  const x = direction === 1 ? -25 + (width + 50) * progress : width + 25 - (width + 50) * progress;
-  const y = height * (.24 + (index % 3) * .065 + .12 * Math.sin(Math.PI * progress));
+  const lane = Math.floor(index / 2) % 3;
+  const pattern = Math.floor(index / 2) % 5;
+  const envelope = Math.sin(Math.PI * progress);
+  const baseX = direction === 1 ? -25 + (width + 50) * progress : width + 25 - (width + 50) * progress;
+  const baseY = height * (.22 + lane * .065);
+  let x = baseX;
+  let y = baseY;
+
+  if (pattern === 0) {
+    y += height * .13 * envelope;
+  } else if (pattern === 1) {
+    // A horizontal figure eight. Opposing pairs cross at its centre.
+    x += direction * width * .055 * Math.sin(4 * Math.PI * progress) * envelope;
+    y += height * .105 * Math.sin(2 * Math.PI * progress) * envelope;
+  } else if (pattern === 2) {
+    // A broad loop that remains inside the readable upper playfield.
+    x += direction * width * .09 * Math.sin(2 * Math.PI * progress) * envelope;
+    y += height * .065 * (1 - Math.cos(2 * Math.PI * progress));
+  } else if (pattern === 3) {
+    // Two compact spiral turns while the group travels across the screen.
+    x += direction * width * .075 * Math.cos(4 * Math.PI * progress) * envelope;
+    y += height * .095 * Math.sin(4 * Math.PI * progress) * envelope;
+  } else {
+    x += direction * width * .05 * Math.sin(3 * Math.PI * progress) * envelope;
+    y += height * .085 * Math.sin(3 * Math.PI * progress) * envelope;
+  }
   return { x, y };
 };
 

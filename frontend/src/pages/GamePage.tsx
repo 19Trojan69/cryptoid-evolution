@@ -5,11 +5,11 @@ import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, t
 import { ENTRY_GAP_MS, FIRST_ATTACK_DELAY_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, arrangeFormationBySize, formationLayout, formationReady, sectionInSector, sectionPhase, sectorForSection, sectorName, type SectorPhase } from "./sectorManager";
 import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp } from "./powerUps";
-import { activeWeaponLevel, advanceShot, contactWithEnemy, MAX_PLAYER_SHOTS, movePlayer, PICKUP_WEAPON_DURATION_MS, placePlayerFromPointer, PURCHASED_WEAPON_DURATION_MS, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
+import { activeWeaponLevel, advanceShot, contactWithEnemy, MAX_PLAYER_SHOTS, movePlayer, PICKUP_WEAPON_DURATION_MS, placePlayerFromPointer, PURCHASED_WEAPON_DURATION_MS, shipCollisionOutcome, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
 import { advanceEnemyShot, createEnemyShot, enemyShotHitsPlayer, enemyShotLimit, type EnemyShot } from "./enemyFire";
 import SectorBackdrop from "./SectorBackdrop";
 import Starfield from "./Starfield";
-import { BONUS_ENTRY_GAP_MS, BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusHeartReward, bonusPosition, bonusReward, bonusShowcaseShip, isBonusSection, type BonusTarget } from "./bonusChallenge";
+import { BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusEntryGap, bonusHeartReward, bonusPosition, bonusReward, bonusShowcaseShip, isBonusSection, type BonusTarget } from "./bonusChallenge";
 import { appendSectionBlock, BLOCKS_PER_CHAIN } from "./networkChain";
 import { bossFireInterval, bossVulnerable, createSectorBoss, moveSectorBoss, nextAfterClear, type SectorBoss } from "./sectorBoss";
 import { bossNozzleStyles, enemySprite, selectedShip, shardBalance, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
@@ -78,7 +78,7 @@ type Effect = {
   id: number;
   x: number;
   y: number;
-  kind: "hit" | "shield" | "explosion" | "boss-explosion" | "player-explosion" | "shatter";
+  kind: "hit" | "shield" | "explosion" | "boss-explosion" | "player-crash" | "player-explosion" | "shatter";
   startedAt: number;
   target?: "player";
   sprite?: number;
@@ -414,8 +414,9 @@ const GamePage = () => {
         }
         if (bonus && sectionElapsedRef.current >= SECTION_INTRO_MS && state.phase !== "SECTOR_CLEAR" && bonusIndexRef.current < BONUS_TARGET_COUNT) {
           spawnTimerRef.current += delta;
-          if (spawnTimerRef.current >= BONUS_ENTRY_GAP_MS) {
-            spawnTimerRef.current -= BONUS_ENTRY_GAP_MS;
+          const entryGap = bonusEntryGap(bonusIndexRef.current);
+          if (spawnTimerRef.current >= entryGap) {
+            spawnTimerRef.current -= entryGap;
             const index = bonusIndexRef.current++;
             state.bonusTargets.push({ id: nextIdRef.current++, index, elapsed: 0, ...bonusPosition(index, 0, width, height), radius: 22, ...bonusShowcaseShip(index, state.sector) });
           }
@@ -447,6 +448,8 @@ const GamePage = () => {
         const nextAsteroids: Asteroid[] = [];
         let heartsLost = 0;
         let damageTaken = false;
+        let unshieldedCollision = false;
+        let shieldImpactsRemaining = state.shieldActive && state.shieldMs > 0 ? state.shieldCharges : 0;
         state.asteroids.forEach(asteroid => {
           let next = moveAsteroid(asteroid, delta, width, height);
           if (asteroid.attackPattern !== null && next.attackPattern === null) attackCooldownRef.current = 0;
@@ -465,6 +468,20 @@ const GamePage = () => {
               if (activeAttack) next = { ...next, collidedThisAttack: true };
               heartsLost += contact.damage;
               impactCooldownRef.current = IMPACT_COOLDOWN_MS;
+              const collision = shipCollisionOutcome(state.shieldActive, shieldImpactsRemaining, state.shieldMs);
+              if (collision.absorbedByShield) {
+                shieldImpactsRemaining -= 1;
+              } else {
+                unshieldedCollision = collision.destroysPlayerLife;
+                const sprite = enemySprite(next.shipClass, next.formationSlot);
+                state.effects.push({ id: nextIdRef.current++, x: next.x, y: next.y, kind: next.type === "etherCrystal" ? "shatter" : "explosion", startedAt: time, sprite, debrisSize: next.radius * 2, debrisRotation: next.rotation, shipClass: next.shipClass });
+                state.score += next.points;
+                state.coins += next.reward;
+                state.destroyed += 1;
+                soundRef.current?.play("explosion");
+                if (next.attackPattern !== null) attackCooldownRef.current = 0;
+                if (collision.destroysEnemy) return;
+              }
             }
           }
           if (next.y >= -next.radius) nextAsteroids.push({ ...next, cloaked: isGhostCloaked(next.type, next.attackPattern === null && next.entryElapsed >= next.entryDuration && next.formationElapsed >= next.formationDuration, elapsedRef.current) });
@@ -511,7 +528,8 @@ const GamePage = () => {
           const damaged = state.hearts < previousHearts;
           damageTaken = damaged;
           const destroyed = damaged && state.hearts === 0;
-          state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: destroyed ? "player-explosion" : damaged ? "hit" : "shield", startedAt: time, target: "player", sprite: destroyed ? shipSelection.skin.sprite : undefined, debrisSize: destroyed ? 86 : undefined, debrisColor: destroyed ? shipSelection.color.id : undefined });
+          const collisionExplosion = damaged && unshieldedCollision;
+          state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: destroyed ? "player-explosion" : collisionExplosion ? "player-crash" : damaged ? "hit" : "shield", startedAt: time, target: "player", sprite: destroyed || collisionExplosion ? shipSelection.skin.sprite : undefined, debrisSize: destroyed || collisionExplosion ? 86 : undefined, debrisColor: destroyed || collisionExplosion ? shipSelection.color.id : undefined });
           if (damaged) { soundRef.current?.play(destroyed ? "bossDestroy" : "collision"); state.weaponCap = Math.max(1, state.weaponCap - 1); state.paidWeaponLevel = Math.min(state.paidWeaponLevel, state.weaponCap); state.pickupWeaponLevel = Math.min(state.pickupWeaponLevel, state.weaponCap); state.weaponLevel = Math.min(state.weaponLevel, state.weaponCap); }
           else soundRef.current?.play("shield");
         }
@@ -623,7 +641,7 @@ const GamePage = () => {
           });
         }
         if (state.phase === "SECTOR_CLEAR") state.enemyShots = [];
-        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "hit" ? 230 : effect.kind === "boss-explosion" || effect.kind === "player-explosion" ? 1_800 : effect.kind === "explosion" || effect.kind === "shatter" ? 1_350 : 390));
+        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "hit" ? 230 : effect.kind === "boss-explosion" || effect.kind === "player-explosion" ? 1_800 : effect.kind === "player-crash" || effect.kind === "explosion" || effect.kind === "shatter" ? 1_350 : 390));
         if (state.hearts === 0) {
           state.status = "destroying";
           state.enemyShots = [];
@@ -764,7 +782,7 @@ const GamePage = () => {
         {(game.shieldCharges > 0 || game.overdriveMs > 0 || game.rapidFireMs > 0 || game.paidWeaponMs > 0 || game.pickupWeaponMs > 0) && <div className="power-status" aria-live="polite">{game.shieldCharges > 0 && <span>{powerUpSymbols.shield} {t("SHIELD")} {t(game.shieldActive ? "ON" : "OFF")} · {game.shieldCharges} · {Math.ceil(game.shieldMs / 1_000)}s</span>}{game.overdriveMs > 0 && <span>{powerUpSymbols.overdrive} OVERDRIVE {Math.ceil(game.overdriveMs / 1_000)}s</span>}{game.rapidFireMs > 0 && <span>{powerUpSymbols.rapid} {t("RAPID")} {Math.ceil(game.rapidFireMs / 1_000)}s</span>}{game.paidWeaponMs > 0 && <span>◆ {t("BOUGHT SHOTS")} {Math.ceil(game.paidWeaponMs / 1_000)}s</span>}{game.pickupWeaponMs > 0 && <span>{powerUpSymbols.weapon} {t("PICKUP SHOTS")} {Math.ceil(game.pickupWeaponMs / 1_000)}s</span>}</div>}
         {game.status === "loading" && <div className="game-overlay"><div className="game-modal"><h1>{t('Preparing mission')}</h1><p>{t('Checking your saved hangar loadout.')}</p></div></div>}
         {game.status === "playing" && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite"><span>{levelComplete || levelIntro ? sectorName(game.sector) : game.encounter !== "normal" ? `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.phase === "SECTOR_CLEAR" ? isBonusSection(game.section) ? t("BONUS COMPLETE") : t("ROUND COMPLETE") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}`}</span><strong>{levelComplete ? `${t("LEVEL")} ${levelLabel} ${t("COMPLETE")}` : levelIntro ? `${t("LEVEL")} ${levelLabel}` : game.encounter !== "normal" ? t("WARNING · SECTOR BOSS") : game.phase === "SECTOR_CLEAR" ? isBonusSection(game.section) ? `${game.bonusResult.split(" · ").map((part, index) => index === 0 ? t(part) : part).join(" · ")} · ${game.bonusHits}/${BONUS_TARGET_COUNT}` : `${t("ROUND")} ${round} ${t("COMPLETE")}` : isBonusSection(game.section) ? t("BONUS CHALLENGE") : `${t("ROUND")} ${round} / 3`}</strong>{game.phase === "SECTOR_INTRO" && game.encounter === "normal" && isBonusSection(game.section) && <small>{t("HIT THE FLYING TARGETS")}</small>}{game.phase === "SECTOR_CLEAR" && game.encounter === "normal" && <small className="chain-result">{game.chainResult}</small>}</div>}
-        {game.status === "playing" && game.encounter === "normal" && !isBonusSection(game.section) && !formationStartedRef.current && (game.phase === "ENTRY" || game.phase === "FORMATION") && <div className="formation-data-stream" aria-hidden="true">{FORMATION_DATA_ROWS.map((row, index) => <div className="formation-data-row" key={index}><span>{row.repeat(4)}</span><span>{row.repeat(4)}</span></div>)}</div>}
+        {game.status === "playing" && game.encounter === "normal" && !isBonusSection(game.section) && !formationStartedRef.current && (game.phase === "SECTOR_INTRO" || game.phase === "ENTRY" || game.phase === "FORMATION") && <div className="formation-data-stream" aria-hidden="true">{FORMATION_DATA_ROWS.map((row, index) => <div className="formation-data-row" key={index}><span>{row.repeat(4)}</span><span>{row.repeat(4)}</span></div>)}</div>}
         {game.encounter === "normal" && !isBonusSection(game.section) && (game.phase === "ENTRY" || game.phase === "FORMATION" || game.phase === "REFORM") && game.asteroids.map(asteroid => { const locked = asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration; return <div key={`formation-${asteroid.id}`} className={`formation-target${locked ? " formation-target-locked" : ""}`} style={{ left: asteroid.entryTargetX, top: asteroid.entryTargetY, width: asteroid.radius * 1.65, height: asteroid.radius * 1.65 }} aria-hidden="true"><span /></div>; })}
         {game.boss && game.encounter === "boss-fight" && <div className={`asteroid cryptoid cryptoid-heavy cryptoid-bitrock sector-boss cryptoid-cruise${game.boss.fireElapsed >= bossFireInterval(game.boss) - 550 ? " boss-warning" : ""}${game.boss.health <= game.boss.maxHealth / 2 ? " boss-enraged cryptoid-boost" : ""}`} style={{ left: game.boss.x, top: game.boss.y, transform: "translate(-50%, -50%)", ...shipHullStyle(19, true) }} title={`${t("CORE WARDEN")} · ${t("Sector")} boss`}><div className="ship-visual"><div className="fleet-sprite" style={spriteStyle(19)} />{bossEngineTrails()}</div><span className="health-bar"><b style={{ width: `${game.boss.health / game.boss.maxHealth * 100}%` }} /></span></div>}
         {game.bonusTargets.map(target => <div key={target.id} className="asteroid asteroid-small cryptoid bonus-ship cryptoid-boost" style={{ ...alignedSpritePosition(target.x, target.y, target.sprite, 50), transform: "translate(-50%, -50%)" }}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={target.sprite} color={target.color} />{engineTrails(target.sprite, "exhaust")}</div></div>)}
@@ -776,7 +794,7 @@ const GamePage = () => {
         {game.shots.map(shot => <div key={shot.id} className={`player-laser${shot.empowered ? " player-laser-overdrive" : ""}`} style={{ left: shot.x, top: shot.y }} />)}
         {game.enemyShots.map(shot => <div key={shot.id} className="enemy-laser" style={{ left: shot.x, top: shot.y }} />)}
         {game.effects.map(effect => <div key={effect.id} className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y }}><span />{shipDebris(effect)}</div>)}
-        {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0 ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "hit") ? " player-ship-hurt" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${5 + game.thrust * 13}%` } as CSSProperties} aria-label={t('Your Cryptoid ship')}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} />{engineTrails(shipSelection.skin.sprite, "player-engine")}</div></div>}
+        {game.hearts > 0 && !game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") && <div ref={playerShipRef} className={`player-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0 ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "hit") ? " player-ship-hurt" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${5 + game.thrust * 13}%` } as CSSProperties} aria-label={t('Your Cryptoid ship')}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} />{engineTrails(shipSelection.skin.sprite, "player-engine")}</div></div>}
         <div className="game-tip">← → ↑ ↓ / {t("THUMB CONTROLS")} · {t("Auto fire")}</div>
         <div className="touch-controls">
           <div className="edge-actions" role="group" aria-label={t('Available equipment')}>

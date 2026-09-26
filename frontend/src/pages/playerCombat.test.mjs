@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { activeWeaponLevel, advanceShot, contactWithEnemy, movePlayer, placePlayer, placePlayerFromPointer, shipHitsEnemy, shotHitsEnemy, MAX_PLAYER_SHOTS, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, TOUCH_SHIP_OFFSET_PX, fireInterval, makeVolley } from "./playerCombat.ts";
+import { activeWeaponLevel, advanceShot, contactWithEnemy, movePlayer, placePlayer, placePlayerFromPointer, shipCollisionOutcome, shipHitsEnemy, shotHitsEnemy, MAX_PLAYER_SHOTS, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, TOUCH_SHIP_OFFSET_PX, fireInterval, makeVolley } from "./playerCombat.ts";
 
 test("weapon tiers fire multi-shot volleys and apply plasma damage", () => {
   let next = 0;
@@ -74,4 +74,11 @@ test("a ship crossing the player between two frames causes one impact", () => {
   const after = { x: 400, y: 620, radius: 25 };
   assert.deepEqual(contactWithEnemy(player, 800, 600, after, true, false, 0, before), { connected: true, damage: 1 });
   assert.deepEqual(contactWithEnemy(player, 800, 600, after, true, true, 0, before), { connected: false, damage: 0 });
+});
+
+test("shielded collisions consume protection while unshielded collisions destroy both ships", () => {
+  assert.deepEqual(shipCollisionOutcome(true, 1, 20_000), { absorbedByShield: true, destroysEnemy: false, destroysPlayerLife: false });
+  assert.deepEqual(shipCollisionOutcome(false, 1, 20_000), { absorbedByShield: false, destroysEnemy: true, destroysPlayerLife: true });
+  assert.deepEqual(shipCollisionOutcome(true, 0, 20_000), { absorbedByShield: false, destroysEnemy: true, destroysPlayerLife: true });
+  assert.deepEqual(shipCollisionOutcome(true, 1, 0), { absorbedByShield: false, destroysEnemy: true, destroysPlayerLife: true });
 });

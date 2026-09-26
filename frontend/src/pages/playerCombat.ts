@@ -57,3 +57,8 @@ export const contactWithEnemy = (player: PlayerPosition, width: number, height: 
   const connected = visible && !collidedThisAttack && (previous ? shipCrossesPlayer(player, width, height, previous, enemy) : shipHitsEnemy(player, width, height, enemy));
   return { connected, damage: connected && cooldownMs <= 0 ? 1 : 0 };
 };
+
+export const shipCollisionOutcome = (shieldActive: boolean, shieldCharges: number, shieldMs: number) => {
+  const absorbedByShield = shieldActive && shieldCharges > 0 && shieldMs > 0;
+  return { absorbedByShield, destroysEnemy: !absorbedByShield, destroysPlayerLife: !absorbedByShield };
+};
