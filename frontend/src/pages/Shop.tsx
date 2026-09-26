@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import SignIn from "../components/SignIn";
@@ -34,6 +34,7 @@ const shopTabs = [
 
 const powerTypeForOffer = (offerId: string): PowerUpType => offerId.includes("shield") ? "shield" : offerId.includes("rapid") ? "rapid" : "overdrive";
 const MOTION_STORAGE_KEY = "cryptoid_reduced_effects";
+const HOME_MUSIC_STORAGE_KEY = "cryptoid_home_music";
 
 const WeaponPreview = ({ offerId, sprite, color }: { offerId: string; sprite: number; color: PlayerColorId }) => {
   const shotCount = offerId.includes("triple") || offerId.includes("plasma") ? 3 : 2;
@@ -68,6 +69,53 @@ const Shop = () => {
   const [leaders, setLeaders] = useState<Leader[]>([]);
   const [leadersStatus, setLeadersStatus] = useState<"loading" | "ready" | "error">("loading");
   const [personalBest, setPersonalBest] = useState<number | null>(null);
+  const [musicEnabled, setMusicEnabled] = useState(() => localStorage.getItem(HOME_MUSIC_STORAGE_KEY) !== "off");
+  const [musicPlaying, setMusicPlaying] = useState(false);
+  const [musicBlocked, setMusicBlocked] = useState(false);
+  const startMusicRef = useRef<(() => void) | null>(null);
+  useEffect(() => {
+    if (!musicEnabled) {
+      setMusicPlaying(false);
+      setMusicBlocked(false);
+      return;
+    }
+    const audio = new Audio("/audio/home-galactic-chain.mp3");
+    audio.loop = true;
+    audio.volume = .42;
+    audio.preload = "auto";
+    let active = true;
+    const start = () => {
+      if (!audio.paused) return;
+      void audio.play().then(() => {
+        if (active) { setMusicPlaying(true); setMusicBlocked(false); }
+      }).catch(() => {
+        if (active) { setMusicPlaying(false); setMusicBlocked(true); }
+      });
+    };
+    startMusicRef.current = start;
+    const resumeOnGesture = (event: Event) => {
+      if (event.target instanceof Element && event.target.closest(".home-music-toggle")) return;
+      start();
+    };
+    document.addEventListener("pointerdown", resumeOnGesture, true);
+    document.addEventListener("keydown", resumeOnGesture, true);
+    start();
+    return () => {
+      active = false;
+      document.removeEventListener("pointerdown", resumeOnGesture, true);
+      document.removeEventListener("keydown", resumeOnGesture, true);
+      startMusicRef.current = null;
+      audio.pause();
+      audio.src = "";
+    };
+  }, [musicEnabled]);
+  const toggleHomeMusic = () => {
+    if (musicEnabled && musicBlocked) { startMusicRef.current?.(); return; }
+    const next = !musicEnabled;
+    localStorage.setItem(HOME_MUSIC_STORAGE_KEY, next ? "on" : "off");
+    setMusicEnabled(next);
+  };
+  const musicLabel = t(musicBlocked ? "Tap for music" : musicEnabled ? "Music on" : "Music off");
   useEffect(() => {
     if (shopView !== "leaders" && shopView !== "progress") return;
     let current = true;
@@ -212,6 +260,7 @@ const Shop = () => {
       />
 
       <section className="hero-section">
+        <button className="home-music-toggle" type="button" data-state={musicBlocked ? "blocked" : musicPlaying ? "playing" : "off"} aria-pressed={musicPlaying} aria-label={musicLabel} onClick={toggleHomeMusic}><span aria-hidden="true">{musicPlaying ? "♫" : musicBlocked ? "▶" : "♪"}</span><b>{musicLabel}</b></button>
         <Starfield sector={1} player={{ x: .5, y: .8 }} paused={false} />
         <div className="hero-copy">
           <p className="eyebrow"><span className="signal-dot" /> {t("Mission control online")}</p>
