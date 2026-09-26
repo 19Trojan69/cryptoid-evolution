@@ -22,6 +22,7 @@ import { fireInterval, makeVolley } from "./playerCombat";
 import { leaveGameFullscreen, requestGameFullscreen } from "./gameFullscreen";
 import { levelDifficulty } from "./levelDifficulty";
 
+const MUSIC_STORAGE_KEY = "cryptoid_home_music";
 const BEST_SCORE_KEY = "cryptoid_best_score";
 const HIGHEST_SECTOR_KEY = "cryptoid_highest_sector";
 const TOTAL_DESTROYED_KEY = "cryptoid_total_destroyed";
@@ -247,6 +248,8 @@ const GamePage = () => {
   const checkpointAtRef = useRef(0);
   const checkpointScoreRef = useRef(0);
   const [scoreSync, setScoreSync] = useState<"idle" | "saving" | "saved" | "failed">("idle");
+  const [musicEnabled, setMusicEnabled] = useState(() => localStorage.getItem(MUSIC_STORAGE_KEY) !== "off");
+  const musicRef = useRef<HTMLAudioElement | null>(null);
   const soundRef = useRef<GameAudio | null>(null);
   const audioStartRef = useRef<Promise<GameAudio | null> | null>(null);
   const audioCleanupRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -299,6 +302,40 @@ const GamePage = () => {
     pendingScoreRef.current = axiosClient.post("/leaderboard/score", { runId, score: state.score })
       .then(() => setScoreSync("saved"))
       .catch(() => setScoreSync("failed"));
+  };
+
+  useEffect(() => {
+    if (!musicEnabled) return;
+    const track = new Audio("/audio/battle-orbit.mp3");
+    track.loop = true;
+    track.volume = .32;
+    track.preload = "auto";
+    musicRef.current = track;
+    const resume = () => {
+      if (stateRef.current.status === "playing" && track.paused) void track.play().catch(() => {});
+    };
+    document.addEventListener("pointerdown", resume, true);
+    document.addEventListener("keydown", resume, true);
+    resume();
+    return () => {
+      document.removeEventListener("pointerdown", resume, true);
+      document.removeEventListener("keydown", resume, true);
+      track.pause();
+      track.removeAttribute("src");
+      track.load();
+      if (musicRef.current === track) musicRef.current = null;
+    };
+  }, [musicEnabled]);
+  useEffect(() => {
+    const track = musicRef.current;
+    if (!track) return;
+    if (game.status === "playing") void track.play().catch(() => {});
+    else track.pause();
+  }, [game.status, musicEnabled]);
+  const toggleGameMusic = () => {
+    const next = !musicEnabled;
+    localStorage.setItem(MUSIC_STORAGE_KEY, next ? "on" : "off");
+    setMusicEnabled(next);
   };
 
   useEffect(() => {
@@ -834,6 +871,7 @@ const GamePage = () => {
         <header ref={hudRef} className="game-hud">
           <div className="hud-actions">
             <button className="game-control home-control" type="button" disabled={game.status === "loading" || game.status === "destroying"} onClick={() => setHomePrompt(true)} aria-label={t('Go home')}>⌂ <span>{t('Home')}</span></button>
+            <button className="game-control game-music-toggle" type="button" data-state={musicEnabled ? "on" : "off"} aria-pressed={musicEnabled} aria-label={t(musicEnabled ? "Music on" : "Music off")} title={t(musicEnabled ? "Music on" : "Music off")} onClick={toggleGameMusic}>♫</button>
           </div>
           <div className="hud-stat score-hud"><span>{t('Score')}</span><strong>{game.score}</strong></div>
           <div className="hud-stat coin-stat"><span>{t('Coins')}</span><strong>● {game.coins}</strong></div>
