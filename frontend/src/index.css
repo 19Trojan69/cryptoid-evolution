@@ -333,20 +333,17 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .cryptoid-medium .fleet-sprite { filter: grayscale(1) sepia(1) saturate(1.6) hue-rotate(165deg); }
 .cryptoid-heavy .fleet-sprite { filter: grayscale(1) sepia(1) saturate(1.6) hue-rotate(335deg); }
 .cryptoid-elite .fleet-sprite { filter: grayscale(1) sepia(1) saturate(1.6) hue-rotate(245deg); }
-.cryptoid { --flame-length: 9%; }
-.cryptoid-launch { --flame-length: 20%; }
-.cryptoid-boost { --flame-length: 18%; }
-.cryptoid-reverse { --flame-length: 5.5%; }
-.cryptoid .exhaust { position: absolute; z-index: 0; top: calc(var(--nozzle-y) - var(--flame-length)); width: 6%; height: calc(var(--flame-length) + 3%); min-width: 3px; transform: translateX(-50%); transform-origin: 50% 100%; background: linear-gradient(to top, #fff9ce 0%, #ffd36b 24%, #ef8f2f 62%, transparent 100%); filter: drop-shadow(0 -3px 4px #ffb13b); clip-path: polygon(50% 0, 63% 14%, 100% 76%, 82% 100%, 18% 100%, 0 76%, 37% 14%); animation: enemy-thrust-pulse .18s ease-in-out infinite alternate; transition: top .16s ease-out, height .16s ease-out; pointer-events: none; }
+.cryptoid { --flame-length: 5%; }
+.cryptoid-cruise { --flame-length: 9%; }
+.cryptoid-launch { --flame-length: 15%; }
+.cryptoid-boost { --flame-length: 19%; }
+.cryptoid-return { --flame-length: 13%; }
+.cryptoid .exhaust { position: absolute; z-index: 0; top: calc(var(--nozzle-y) - var(--flame-length)); left: var(--nozzle-x); width: 5.5%; height: var(--flame-length); min-width: 2px; transform: translateX(-50%); transform-origin: 50% 100%; background: linear-gradient(to top, #fff9ce 0%, #ffd36b 24%, #ef8f2f 62%, transparent 100%); filter: drop-shadow(0 -3px 4px #ffb13b); clip-path: polygon(50% 0, 63% 14%, 100% 76%, 82% 100%, 18% 100%, 0 76%, 37% 14%); animation: enemy-thrust-pulse .18s ease-in-out infinite alternate; transition: top .16s ease-out, height .16s ease-out; pointer-events: none; }
 .cryptoid .exhaust::after { position: absolute; left: 50%; bottom: -1px; width: 120%; height: 2px; transform: translateX(-50%); border-radius: 50%; background: #fff2b3; content: ''; }
-.cryptoid .exhaust-left { left: var(--nozzle-left); }
-.cryptoid .exhaust-right { left: var(--nozzle-right); }
 .player-ship { width: 76px; height: 76px; }
 .player-ship { filter: none; }
 .player-ship .fleet-sprite { z-index: 1; filter: sepia(1) saturate(4.5) hue-rotate(calc(225deg + var(--ship-hue))); }
-.player-ship .player-engine { z-index: 0; top: var(--nozzle-y); bottom: auto; width: 6%; height: var(--flame-length); min-width: 3px; transform: translateX(-50%); transform-origin: 50% 0; background: linear-gradient(180deg, #fff 0%, #bdf5ff 12%, var(--ship-glow) 45%, #6079ff 68%, transparent 100%); filter: drop-shadow(0 3px 4px var(--ship-glow)); clip-path: polygon(18% 0, 82% 0, 100% 24%, 63% 100%, 50% 86%, 37% 100%, 0 24%); animation: player-thrust-pulse .2s ease-in-out infinite alternate; transition: height .14s ease-out; }
-.player-ship .player-engine-left { left: var(--nozzle-left); }
-.player-ship .player-engine-right { left: var(--nozzle-right); right: auto; }
+.player-ship .player-engine { position: absolute; z-index: 0; top: var(--nozzle-y); left: var(--nozzle-x); bottom: auto; width: 5.5%; height: var(--flame-length); min-width: 2px; transform: translateX(-50%); transform-origin: 50% 0; background: linear-gradient(180deg, #fff 0%, #bdf5ff 12%, var(--ship-glow) 45%, #6079ff 68%, transparent 100%); filter: drop-shadow(0 3px 4px var(--ship-glow)); clip-path: polygon(18% 0, 82% 0, 100% 24%, 63% 100%, 50% 86%, 37% 100%, 0 24%); animation: player-thrust-pulse .2s ease-in-out infinite alternate; transition: height .14s ease-out; }
 .player-ship-grey .fleet-sprite { filter: grayscale(1) brightness(1.12); }
 .player-ship-white .fleet-sprite { filter: grayscale(1) brightness(1.55); }
 .player-ship-grey .player-engine, .player-ship-white .player-engine { background: linear-gradient(#fff, #9eafc5 45%, transparent); }

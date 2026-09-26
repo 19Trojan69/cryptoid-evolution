@@ -204,25 +204,55 @@ export const spriteVisualOffset = (index: number, renderedSize: number, facesPla
   return { x: xPercent / 100 * renderedSize * direction, y: yPercent / 100 * renderedSize * direction };
 };
 
-// Coordinates refer to the two visible engine exits in the original,
-// nose-up atlas cells. Each sprite needs its own Y anchor: mirroring the
-// hull's transparent bounding box made several flames float behind the ship.
+// Coordinates refer to the visible engine exits in the original nose-up
+// atlas cells. Profiles deliberately contain one to four nozzles because a
+// generic left/right pair floated beside the engines on several hulls.
 const hullCenters = [55, 53, 42, 43, 54, 53, 43, 43, 54, 54, 43, 44, 55, 53, 43, 44, 55, 53, 42, 43] as const;
-const nozzleAnchors = [
-  [48, 62, 82], [46, 60, 81], [36, 52, 84], [43, 57, 81],
-  [34, 72, 75], [46, 60, 82], [47, 55, 84], [31, 75, 73],
-  [45, 55, 77], [45, 58, 77], [46, 56, 79], [51, 57, 78],
-  [45, 59, 80], [45, 59, 78], [48, 56, 86], [46, 58, 79],
-  [38, 69, 84], [34, 70, 75], [37, 65, 76], [31, 72, 76],
+const nozzleProfiles: readonly (readonly (readonly [number, number])[])[] = [
+  [[48, 82], [62, 82]],
+  [[46, 81], [60, 81]],
+  [[36, 88], [52, 88]],
+  [[43, 81], [57, 81]],
+  [[20, 82], [50, 87], [80, 82]],
+  [[42, 82], [50, 84], [60, 82]],
+  [[29, 84], [50, 88], [71, 84]],
+  [[22, 79], [50, 91], [78, 79]],
+  [[42, 83], [51, 86], [61, 83]],
+  [[45, 87], [58, 87]],
+  [[43, 86], [58, 86]],
+  [[54, 87]],
+  [[40, 88], [51, 91], [63, 88]],
+  [[45, 88], [59, 88]],
+  [[41, 91], [49, 93], [57, 93], [65, 91]],
+  [[47, 89], [56, 89]],
+  [[22, 70], [50, 73], [78, 70]],
+  [[21, 80], [45, 91], [55, 91], [79, 80]],
+  [[28, 78], [50, 88], [72, 78]],
+  [[31, 86], [43, 91], [60, 91], [72, 86]],
 ] as const;
 
-export const shipNozzleStyle = (index: number, facesPlayer = false): CSSProperties => {
+export const shipNozzleStyles = (index: number, facesPlayer = false): CSSProperties[] =>
+  (nozzleProfiles[index] ?? nozzleProfiles[0]).map(([x, y]) => ({
+    "--nozzle-x": `${facesPlayer ? 100 - x : x}%`,
+    "--nozzle-y": `${facesPlayer ? 100 - y : y}%`,
+  } as CSSProperties));
+
+export const shipHullStyle = (index: number, facesPlayer = false): CSSProperties => {
   const center = hullCenters[index] ?? hullCenters[0];
-  const [left, right, nozzleY] = nozzleAnchors[index] ?? nozzleAnchors[0];
+  return { "--hull-x": `${facesPlayer ? 100 - center : center}%` } as CSSProperties;
+};
+
+// Kept for the compact home-screen preview, which intentionally uses the two
+// outermost exhausts. Gameplay renders every nozzle from shipNozzleStyles.
+export const shipNozzleStyle = (index: number, facesPlayer = false): CSSProperties => {
+  const nozzles = nozzleProfiles[index] ?? nozzleProfiles[0];
+  const [left, leftY] = nozzles[0];
+  const [right, rightY] = nozzles[nozzles.length - 1];
+  const nozzleY = (leftY + rightY) / 2;
   return {
     "--nozzle-left": `${facesPlayer ? 100 - right : left}%`,
     "--nozzle-right": `${facesPlayer ? 100 - left : right}%`,
     "--nozzle-y": `${facesPlayer ? 100 - nozzleY : nozzleY}%`,
-    "--hull-x": `${facesPlayer ? 100 - center : center}%`,
+    ...shipHullStyle(index, facesPlayer),
   } as CSSProperties;
 };

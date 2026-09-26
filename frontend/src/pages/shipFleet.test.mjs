@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { allPlayerColors, buySkin, buyShipVariant, colorForSkin, fleetCount, ownedSkins, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyle, spriteVisualOffset } from "./shipFleet.ts";
+import { allPlayerColors, buySkin, buyShipVariant, colorForSkin, fleetCount, ownedSkins, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyles, spriteVisualOffset } from "./shipFleet.ts";
 
 test("only the grey starter is free and the full reference fleet is purchasable", () => {
   assert.equal(playerSkins.length, 20);
@@ -51,17 +51,24 @@ test("formation guides compensate for visible sprite centers and rotation", () =
   assert.ok(Math.abs(rotated.y) > 10);
 });
 
-test("every ship has mirrored exhaust anchors directly at its visible nozzles", () => {
+test("every ship has model-specific mirrored exhaust anchors", () => {
+  const nozzleCounts = new Set();
   for (const skin of playerSkins) {
-    const player = shipNozzleStyle(skin.sprite);
-    const enemy = shipNozzleStyle(skin.sprite, true);
-    const playerY = Number.parseFloat(player["--nozzle-y"]);
-    const enemyY = Number.parseFloat(enemy["--nozzle-y"]);
-    assert.ok(playerY >= 70 && playerY <= 90);
-    assert.equal(Math.round((playerY + enemyY) * 10) / 10, 100);
-    assert.equal(enemy["--nozzle-left"], `${100 - Number.parseFloat(player["--nozzle-right"])}%`);
-    assert.equal(enemy["--nozzle-right"], `${100 - Number.parseFloat(player["--nozzle-left"])}%`);
+    const player = shipNozzleStyles(skin.sprite);
+    const enemy = shipNozzleStyles(skin.sprite, true);
+    nozzleCounts.add(player.length);
+    assert.equal(enemy.length, player.length);
+    player.forEach((nozzle, index) => {
+      const mirrored = enemy[index];
+      const playerX = Number.parseFloat(nozzle["--nozzle-x"]);
+      const playerY = Number.parseFloat(nozzle["--nozzle-y"]);
+      assert.ok(playerX >= 15 && playerX <= 85);
+      assert.ok(playerY >= 68 && playerY <= 94);
+      assert.equal(Number.parseFloat(mirrored["--nozzle-x"]), 100 - playerX);
+      assert.equal(Number.parseFloat(mirrored["--nozzle-y"]), 100 - playerY);
+    });
   }
+  assert.deepEqual([...nozzleCounts].sort(), [1, 2, 3, 4]);
 });
 
 test("legacy ships migrate into counts and repeat purchases add the chosen variant", () => {
