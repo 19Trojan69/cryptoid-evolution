@@ -12,6 +12,7 @@ import PaintedShip from "./PaintedShip";
 import TermsDialog from "../components/TermsDialog";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
 import { primeGameAudio } from "./gameAudio";
+import { MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, musicLevels, readMusicVolume, type MusicVolume } from "./musicPreferences";
 import Starfield from "./Starfield";
 import { languages, useLocale, type Locale } from "../i18n";
 import EarthGlobe from "./EarthGlobe";
@@ -34,7 +35,6 @@ const shopTabs = [
 
 const powerTypeForOffer = (offerId: string): PowerUpType => offerId.includes("shield") ? "shield" : offerId.includes("rapid") ? "rapid" : "overdrive";
 const MOTION_STORAGE_KEY = "cryptoid_reduced_effects";
-const HOME_MUSIC_STORAGE_KEY = "cryptoid_home_music";
 
 const WeaponPreview = ({ offerId, sprite, color }: { offerId: string; sprite: number; color: PlayerColorId }) => {
   const shotCount = offerId.includes("triple") || offerId.includes("plasma") ? 3 : 2;
@@ -72,7 +72,9 @@ const Shop = () => {
   const [leaders, setLeaders] = useState<Leader[]>([]);
   const [leadersStatus, setLeadersStatus] = useState<"loading" | "ready" | "error">("loading");
   const [personalBest, setPersonalBest] = useState<number | null>(null);
-  const [musicEnabled, setMusicEnabled] = useState(() => localStorage.getItem(HOME_MUSIC_STORAGE_KEY) !== "off");
+  const [musicEnabled, setMusicEnabled] = useState(() => localStorage.getItem(MUSIC_STORAGE_KEY) !== "off");
+  const [musicVolume, setMusicVolume] = useState<MusicVolume>(readMusicVolume);
+  const homeMusicRef = useRef<HTMLAudioElement | null>(null);
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [musicBlocked, setMusicBlocked] = useState(false);
   const startMusicRef = useRef<(() => void) | null>(null);
@@ -84,7 +86,8 @@ const Shop = () => {
     }
     const audio = new Audio("/audio/home-galactic-chain.mp3");
     audio.loop = true;
-    audio.volume = .42;
+    audio.volume = musicLevels[readMusicVolume()];
+    homeMusicRef.current = audio;
     audio.preload = "auto";
     let active = true;
     const start = () => {
@@ -110,12 +113,18 @@ const Shop = () => {
       startMusicRef.current = null;
       audio.pause();
       audio.src = "";
+      if (homeMusicRef.current === audio) homeMusicRef.current = null;
     };
   }, [musicEnabled]);
+  useEffect(() => { if (homeMusicRef.current) homeMusicRef.current.volume = musicLevels[musicVolume]; }, [musicVolume]);
+  const changeMusicVolume = (value: MusicVolume) => {
+    localStorage.setItem(MUSIC_VOLUME_KEY, value);
+    setMusicVolume(value);
+  };
   const toggleHomeMusic = () => {
     if (musicEnabled && musicBlocked) { startMusicRef.current?.(); return; }
     const next = !musicEnabled;
-    localStorage.setItem(HOME_MUSIC_STORAGE_KEY, next ? "on" : "off");
+    localStorage.setItem(MUSIC_STORAGE_KEY, next ? "on" : "off");
     setMusicEnabled(next);
   };
   const musicLabel = t(musicBlocked ? "Tap for music" : musicEnabled ? "Music on" : "Music off");
@@ -325,6 +334,12 @@ const Shop = () => {
             <div className="control-choice-group" role="group" aria-label={t('Ship start position')}>
               <strong>{t('Ship start position')}</strong>
               {(["higher", "normal", "lower"] as const).map(value => <button key={value} className="system-setting" type="button" aria-pressed={shipStart === value} onClick={() => setShipStart(value)}><b>{t(value === "higher" ? "Higher" : value === "normal" ? "Normal" : "Lower")}</b></button>)}
+            </div>
+          </div>
+          <div className="system-menu-section system-quick-settings">
+            <div className="system-menu-heading"><strong>{t('Music volume')}</strong></div>
+            <div className="control-choice-group" role="group" aria-label={t('Music volume')}>
+              {(["quiet", "balanced", "loud"] as const).map(level => <button key={level} className="system-setting" type="button" aria-pressed={musicVolume === level} onClick={() => changeMusicVolume(level)}><b>{t(level === "quiet" ? "Quiet" : level === "balanced" ? "Balanced" : "Loud")}</b></button>)}
             </div>
           </div>
           <div className="system-menu-section system-quick-settings">

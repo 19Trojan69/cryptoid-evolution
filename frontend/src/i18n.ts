@@ -166,7 +166,25 @@ const gameplayPolishTranslations: Partial<Record<Locale, Record<string, string>>
   uk: { "Touch sensitivity":"Чутливість дотику", "Control area":"Зона керування", "Ship start position":"Початкова позиція корабля", "Gentle":"Плавно", "Normal":"Звичайно", "Fast":"Швидко", "Compact":"Вузька", "Wide":"Широка", "Higher":"Вище", "Lower":"Нижче", "QUICK GUIDE":"КОРОТКИЙ ПОСІБНИК", "Skip guide":"Пропустити", "Move with your thumb or arrow keys. Your ship fires automatically.":"Рухайте корабель пальцем або стрілками. Він стріляє автоматично.", "Dodge diving ships and enemy shots.":"Ухиляйтеся від атакувальних кораблів і пострілів.", "Fly through power-ups to collect them.":"Пролітайте крізь підсилення, щоб їх зібрати.", "Weapon, level and round are shown separately above.":"Зброя, рівень і раунд показані зверху окремо." },
   th: { "Touch sensitivity":"ความไวในการสัมผัส", "Control area":"พื้นที่ควบคุม", "Ship start position":"ตำแหน่งเริ่มต้นของยาน", "Gentle":"ช้า", "Normal":"ปกติ", "Fast":"เร็ว", "Compact":"แคบ", "Wide":"กว้าง", "Higher":"สูงขึ้น", "Lower":"ต่ำลง", "QUICK GUIDE":"คู่มือสั้น", "Skip guide":"ข้ามคำแนะนำ", "Move with your thumb or arrow keys. Your ship fires automatically.":"ขยับยานด้วยนิ้วโป้งหรือปุ่มลูกศร ยานยิงอัตโนมัติ", "Dodge diving ships and enemy shots.":"หลบยานที่โจมตีและกระสุนศัตรู", "Fly through power-ups to collect them.":"บินผ่านไอเทมเสริมพลังเพื่อเก็บ", "Weapon, level and round are shown separately above.":"อาวุธ เลเวล และรอบแสดงแยกกันด้านบน" },
 };
-export const translate = (locale: Locale, source: string) => locale === "en" ? source : gameplayPolishTranslations[locale]?.[source] ?? homeMusicTranslations[locale]?.[source] ?? controlTranslations[locale]?.[source] ?? hudTranslations[locale]?.[source] ?? systemMenuTranslations[locale]?.[source] ?? extendedTranslations[locale]?.[source] ?? powerUpTranslations[locale]?.[source] ?? levelTranslations[locale]?.[source] ?? networkTranslations[locale]?.[source] ?? newerTranslations[locale]?.[source] ?? translations[locale]?.[source] ?? source;
+const audioSettingsTranslations: Partial<Record<Locale, Record<string, string>>> = {
+  de: { "Music volume": "Musiklautstärke", "Quiet": "Leise", "Balanced": "Ausgewogen", "Loud": "Laut" },
+  es: { "Music volume": "Volumen de música", "Quiet": "Bajo", "Balanced": "Equilibrado", "Loud": "Alto" },
+  fr: { "Music volume": "Volume de la musique", "Quiet": "Faible", "Balanced": "Équilibré", "Loud": "Fort" },
+  pt: { "Music volume": "Volume da música", "Quiet": "Baixo", "Balanced": "Equilibrado", "Loud": "Alto" },
+  it: { "Music volume": "Volume musica", "Quiet": "Basso", "Balanced": "Bilanciato", "Loud": "Alto" },
+  pl: { "Music volume": "Głośność muzyki", "Quiet": "Cicho", "Balanced": "Zrównoważenie", "Loud": "Głośno" },
+  tr: { "Music volume": "Müzik sesi", "Quiet": "Kısık", "Balanced": "Dengeli", "Loud": "Yüksek" },
+  ru: { "Music volume": "Громкость музыки", "Quiet": "Тихо", "Balanced": "Сбалансированно", "Loud": "Громко" },
+  hr: { "Music volume": "Glasnoća glazbe", "Quiet": "Tiho", "Balanced": "Uravnoteženo", "Loud": "Glasno" },
+  cs: { "Music volume": "Hlasitost hudby", "Quiet": "Tiše", "Balanced": "Vyváženě", "Loud": "Hlasitě" },
+  sk: { "Music volume": "Hlasitosť hudby", "Quiet": "Ticho", "Balanced": "Vyvážene", "Loud": "Hlasno" },
+  hu: { "Music volume": "Zene hangereje", "Quiet": "Halk", "Balanced": "Kiegyensúlyozott", "Loud": "Hangos" },
+  ro: { "Music volume": "Volumul muzicii", "Quiet": "Încet", "Balanced": "Echilibrat", "Loud": "Tare" },
+  sr: { "Music volume": "Јачина музике", "Quiet": "Тихо", "Balanced": "Уравнотежено", "Loud": "Гласно" },
+  uk: { "Music volume": "Гучність музики", "Quiet": "Тихо", "Balanced": "Збалансовано", "Loud": "Голосно" },
+  th: { "Music volume": "ระดับเสียงเพลง", "Quiet": "เบา", "Balanced": "สมดุล", "Loud": "ดัง" },
+};
+export const translate = (locale: Locale, source: string) => locale === "en" ? source : audioSettingsTranslations[locale]?.[source] ?? gameplayPolishTranslations[locale]?.[source] ?? homeMusicTranslations[locale]?.[source] ?? controlTranslations[locale]?.[source] ?? hudTranslations[locale]?.[source] ?? systemMenuTranslations[locale]?.[source] ?? extendedTranslations[locale]?.[source] ?? powerUpTranslations[locale]?.[source] ?? levelTranslations[locale]?.[source] ?? networkTranslations[locale]?.[source] ?? newerTranslations[locale]?.[source] ?? translations[locale]?.[source] ?? source;
 export const useLocale = () => {
   const [locale, setLocale] = useState<Locale>(() => resolveLocale(navigator.languages?.length ? navigator.languages : [navigator.language], localStorage.getItem(STORAGE_KEY)));
   const [automatic, setAutomatic] = useState(() => !localStorage.getItem(STORAGE_KEY));

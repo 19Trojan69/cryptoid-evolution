@@ -1,4 +1,5 @@
 export const CONTROL_HAND_KEY = "cryptoid_control_hand";
+const LEFT_HAND_DEFAULT_KEY = "cryptoid_left_hand_default_v1";
 export type ControlHand = "right" | "left";
 export const CONTROL_SENSITIVITY_KEY = "cryptoid_control_sensitivity";
 export type ControlSensitivity = "gentle" | "normal" | "fast";
@@ -7,8 +8,13 @@ export type ControlZone = "compact" | "normal" | "wide";
 export const SHIP_START_KEY = "cryptoid_ship_start";
 export type ShipStart = "higher" | "normal" | "lower";
 
-export const readControlHand = (): ControlHand =>
-  localStorage.getItem(CONTROL_HAND_KEY) === "left" ? "left" : "right";
+export const readControlHand = (): ControlHand => {
+  if (localStorage.getItem(LEFT_HAND_DEFAULT_KEY) !== "1") {
+    localStorage.setItem(LEFT_HAND_DEFAULT_KEY, "1");
+    localStorage.setItem(CONTROL_HAND_KEY, "left");
+  }
+  return localStorage.getItem(CONTROL_HAND_KEY) === "right" ? "right" : "left";
+};
 export const readControlSensitivity = (): ControlSensitivity => {
   const value = localStorage.getItem(CONTROL_SENSITIVITY_KEY);
   return value === "gentle" || value === "fast" ? value : "normal";

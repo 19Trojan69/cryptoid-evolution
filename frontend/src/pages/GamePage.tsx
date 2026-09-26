@@ -17,12 +17,12 @@ import { bossFireInterval, bossVulnerable, createSectorBoss, moveSectorBoss, nex
 import { bossNozzleStyles, enemySprite, selectedShip, shardBalance, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
 import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio";
+import { MUSIC_STORAGE_KEY, musicLevels, readMusicVolume } from "./musicPreferences";
 import { axiosClient } from "../lib/axiosClient";
 import { fireInterval, makeVolley } from "./playerCombat";
 import { leaveGameFullscreen, requestGameFullscreen } from "./gameFullscreen";
 import { levelDifficulty } from "./levelDifficulty";
 
-const MUSIC_STORAGE_KEY = "cryptoid_home_music";
 const BEST_SCORE_KEY = "cryptoid_best_score";
 const HIGHEST_SECTOR_KEY = "cryptoid_highest_sector";
 const TOTAL_DESTROYED_KEY = "cryptoid_total_destroyed";
@@ -308,7 +308,7 @@ const GamePage = () => {
     if (!musicEnabled) return;
     const track = new Audio("/audio/battle-orbit.mp3");
     track.loop = true;
-    track.volume = .32;
+    track.volume = musicLevels[readMusicVolume()];
     track.preload = "auto";
     musicRef.current = track;
     const resume = () => {
