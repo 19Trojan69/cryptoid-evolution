@@ -255,15 +255,15 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .bonus-ship { filter: none; }
 .bonus-ship .fleet-sprite { filter: none; }
 .formation-data-stream { position: absolute; z-index: 0; top: 43%; left: 0; width: 100%; height: 118px; overflow: hidden; opacity: .58; mask-image: linear-gradient(90deg, transparent 2%, #000 18%, #000 82%, transparent 98%); pointer-events: none; }
-.formation-data-row { position: absolute; left: 0; display: flex; width: max-content; transform: translateX(-50%); animation: formation-data-flow 3.2s linear infinite; }
+.formation-data-row { position: absolute; left: 0; display: flex; width: max-content; transform: translateX(-50%); animation: formation-data-flow 6.4s linear infinite; }
 .formation-data-row span { flex: none; width: max-content; color: #78f4e0; font: 600 11px/1 'DM Mono', monospace; letter-spacing: .18em; text-shadow: 0 0 5px #42dcc8, 0 0 11px rgba(119, 95, 255, .72); }
-.formation-data-row:nth-child(1) { top: 4px; animation-duration: 3.4s; }
-.formation-data-row:nth-child(2) { top: 27px; animation-delay: -.8s; animation-duration: 2.8s; }
+.formation-data-row:nth-child(1) { top: 4px; animation-duration: 6.8s; }
+.formation-data-row:nth-child(2) { top: 27px; animation-delay: -1.6s; animation-duration: 5.6s; }
 .formation-data-row:nth-child(2) span { color: #a88cff; }
-.formation-data-row:nth-child(3) { top: 50px; animation-delay: -1.7s; animation-duration: 3.7s; }
-.formation-data-row:nth-child(4) { top: 73px; animation-delay: -.35s; animation-duration: 3s; }
+.formation-data-row:nth-child(3) { top: 50px; animation-delay: -3.4s; animation-duration: 7.4s; }
+.formation-data-row:nth-child(4) { top: 73px; animation-delay: -.7s; animation-duration: 6s; }
 .formation-data-row:nth-child(4) span { color: #e6c568; }
-.formation-data-row:nth-child(5) { top: 96px; animation-delay: -2.25s; animation-duration: 3.9s; }
+.formation-data-row:nth-child(5) { top: 96px; animation-delay: -4.5s; animation-duration: 7.8s; }
 @keyframes formation-data-flow { from { transform: translateX(-50%); } to { transform: translateX(0); } }
 .formation-target { position: absolute; z-index: 0; transform: translate(-50%, -50%); border: 1px solid rgba(109, 228, 255, .7); border-radius: 50%; background: radial-gradient(circle, rgba(126, 244, 255, .16) 0 10%, transparent 12% 48%, rgba(92, 186, 255, .1) 50% 57%, transparent 59%); box-shadow: 0 0 10px rgba(97, 222, 255, .45), inset 0 0 12px rgba(139, 102, 255, .28); opacity: .78; pointer-events: none; animation: formation-target-pulse .72s ease-in-out infinite alternate; }
 .formation-target::before { position: absolute; inset: 12%; border: 1px dashed rgba(187, 142, 250, .72); border-radius: 50%; content: ''; animation: formation-target-spin 2.4s linear infinite; }
