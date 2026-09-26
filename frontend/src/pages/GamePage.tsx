@@ -17,7 +17,7 @@ import { bossFireInterval, bossVulnerable, createSectorBoss, moveSectorBoss, nex
 import { bossNozzleStyles, enemySprite, selectedShip, shardBalance, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
 import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio";
-import { MUSIC_STORAGE_KEY, musicLevels, readMusicVolume } from "./musicPreferences";
+import { MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, musicGain, readMusicVolume } from "./musicPreferences";
 import { axiosClient } from "../lib/axiosClient";
 import { fireInterval, makeVolley } from "./playerCombat";
 import { leaveGameFullscreen, requestGameFullscreen } from "./gameFullscreen";
@@ -249,6 +249,7 @@ const GamePage = () => {
   const checkpointScoreRef = useRef(0);
   const [scoreSync, setScoreSync] = useState<"idle" | "saving" | "saved" | "failed">("idle");
   const [musicEnabled, setMusicEnabled] = useState(() => localStorage.getItem(MUSIC_STORAGE_KEY) !== "off");
+  const [musicVolume, setMusicVolume] = useState(readMusicVolume);
   const musicRef = useRef<HTMLAudioElement | null>(null);
   const soundRef = useRef<GameAudio | null>(null);
   const audioStartRef = useRef<Promise<GameAudio | null> | null>(null);
@@ -308,7 +309,7 @@ const GamePage = () => {
     if (!musicEnabled) return;
     const track = new Audio("/audio/battle-orbit.mp3");
     track.loop = true;
-    track.volume = musicLevels[readMusicVolume()];
+    track.volume = musicGain(readMusicVolume());
     track.preload = "auto";
     musicRef.current = track;
     const resume = () => {
@@ -332,6 +333,11 @@ const GamePage = () => {
     if (game.status === "playing") void track.play().catch(() => {});
     else track.pause();
   }, [game.status, musicEnabled]);
+  useEffect(() => { if (musicRef.current) musicRef.current.volume = musicGain(musicVolume); }, [musicVolume]);
+  const changeMusicVolume = (value: typeof musicVolume) => {
+    localStorage.setItem(MUSIC_VOLUME_KEY, String(value));
+    setMusicVolume(value);
+  };
   const toggleGameMusic = () => {
     const next = !musicEnabled;
     localStorage.setItem(MUSIC_STORAGE_KEY, next ? "on" : "off");
@@ -757,9 +763,9 @@ const GamePage = () => {
     const moveFraction = zoneFraction[readControlZone()];
     if (event.pointerType === "touch" && (readControlHand() === "right" ? event.clientX - bounds.left < bounds.width * (1 - moveFraction) : event.clientX - bounds.left > bounds.width * moveFraction)) return;
     pointerRef.current = event.pointerId;
-    touchOriginRef.current = event.pointerType === "touch" ? { x: event.clientX, y: event.clientY, player: { ...stateRef.current.player } } : null;
+    touchOriginRef.current = event.pointerType === "touch" ? { x: event.clientX, y: event.clientY, player: placePlayerFromPointer(event.clientX - bounds.left, event.clientY - bounds.top, bounds.width, bounds.height, true) } : null;
     event.currentTarget.setPointerCapture(event.pointerId);
-    if (event.pointerType !== "touch") positionFromPointer(event);
+    positionFromPointer(event);
   };
 
   const selectWeapon = (level: number) => {
@@ -915,7 +921,7 @@ const GamePage = () => {
             {game.overdriveMs > 0 && <span className="edge-action edge-action-overdrive" aria-label={`Overdrive ${Math.ceil(game.overdriveMs / 1_000)} ${t("seconds remaining")}`}>{powerUpSymbols.overdrive}<small>{Math.ceil(game.overdriveMs / 1_000)}s</small></span>}
           </div>
         </div>
-        {game.status === "paused" && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('MISSION PAUSED')}</p><h1>{t('Hold the line.')}</h1><p>{t('The asteroids are waiting.')}</p><button className="button button-primary" type="button" onClick={() => { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); }}>Resume mission <span>▶</span></button></div></div>}
+        {game.status === "paused" && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('MISSION PAUSED')}</p><h1>{t('Hold the line.')}</h1><p>{t('The asteroids are waiting.')}</p><div className="pause-music-settings" role="group" aria-label={t('Music volume')}><strong>{t('Music volume')}</strong>{([25, 50, 75, 100] as const).map(level => <button key={level} className="system-setting" type="button" aria-pressed={musicVolume === level} onClick={() => changeMusicVolume(level)}>{level}%</button>)}</div><button className="button button-primary" type="button" onClick={() => { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); }}>Resume mission <span>▶</span></button></div></div>}
         {game.status === "game-over" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><h1>GAME OVER</h1><div className="game-over-details"><p className="eyebrow">{t('MISSION COMPLETE')}</p><p className="game-over-hearts">{t('Hearts')}: {game.hearts}/3</p><div className="game-over-stats"><span><b>{game.score}</b>{t('Score')}</span><span><b>{game.destroyed}</b>{t('Destroyed')}</span><span><b>{game.sector}</b>{t('Sector')}</span></div>{scoreSync !== "idle" && <p role="status">{t(scoreSync === "saving" ? "Saving personal best…" : scoreSync === "saved" ? "Personal best saved." : "Could not sync personal best. Local best is saved.")}</p>}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span>↗</span></button><button className="button button-secondary" type="button" onClick={goHome}>{t('Home')}</button></div></div></div></div>}
         {homePrompt && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2>{t('Return to base?')}</h2><p>{t('Your current round will end. Your records will be saved locally.')}</p><div className="modal-actions"><button className="button button-primary" type="button" onClick={goHome}>{t('Leave game')}</button><button className="button button-secondary" type="button" onClick={() => setHomePrompt(false)}>{t('Keep playing')}</button></div></div></div>}
       </div>

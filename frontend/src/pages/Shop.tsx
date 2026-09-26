@@ -12,7 +12,7 @@ import PaintedShip from "./PaintedShip";
 import TermsDialog from "../components/TermsDialog";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
 import { primeGameAudio } from "./gameAudio";
-import { MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, musicLevels, readMusicVolume, type MusicVolume } from "./musicPreferences";
+import { MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, musicGain, readMusicVolume, type MusicVolume } from "./musicPreferences";
 import Starfield from "./Starfield";
 import { languages, useLocale, type Locale } from "../i18n";
 import EarthGlobe from "./EarthGlobe";
@@ -86,7 +86,7 @@ const Shop = () => {
     }
     const audio = new Audio("/audio/home-galactic-chain.mp3");
     audio.loop = true;
-    audio.volume = musicLevels[readMusicVolume()];
+    audio.volume = musicGain(readMusicVolume());
     homeMusicRef.current = audio;
     audio.preload = "auto";
     let active = true;
@@ -116,9 +116,9 @@ const Shop = () => {
       if (homeMusicRef.current === audio) homeMusicRef.current = null;
     };
   }, [musicEnabled]);
-  useEffect(() => { if (homeMusicRef.current) homeMusicRef.current.volume = musicLevels[musicVolume]; }, [musicVolume]);
+  useEffect(() => { if (homeMusicRef.current) homeMusicRef.current.volume = musicGain(musicVolume); }, [musicVolume]);
   const changeMusicVolume = (value: MusicVolume) => {
-    localStorage.setItem(MUSIC_VOLUME_KEY, value);
+    localStorage.setItem(MUSIC_VOLUME_KEY, String(value));
     setMusicVolume(value);
   };
   const toggleHomeMusic = () => {
@@ -338,8 +338,8 @@ const Shop = () => {
           </div>
           <div className="system-menu-section system-quick-settings">
             <div className="system-menu-heading"><strong>{t('Music volume')}</strong></div>
-            <div className="control-choice-group" role="group" aria-label={t('Music volume')}>
-              {(["quiet", "balanced", "loud"] as const).map(level => <button key={level} className="system-setting" type="button" aria-pressed={musicVolume === level} onClick={() => changeMusicVolume(level)}><b>{t(level === "quiet" ? "Quiet" : level === "balanced" ? "Balanced" : "Loud")}</b></button>)}
+            <div className="control-choice-group music-volume-group" role="group" aria-label={t('Music volume')}>
+              {([25, 50, 75, 100] as const).map(level => <button key={level} className="system-setting" type="button" aria-pressed={musicVolume === level} onClick={() => changeMusicVolume(level)}><b>{level}%</b></button>)}
             </div>
           </div>
           <div className="system-menu-section system-quick-settings">

@@ -7,8 +7,8 @@ export const PICKUP_WEAPON_DURATION_MS = 20_000;
 export const PLAYER_RADIUS = 23;
 // Ship-to-ship contact follows the visible hull; projectile hits keep the smaller player hitbox.
 export const PLAYER_CONTACT_RADIUS = 27;
-// 30 px hull half-height + ~38 px (about one centimetre) clear of the thumb.
-export const TOUCH_SHIP_OFFSET_PX = 68;
+// 38 px hull half-height + 38 px (about one centimetre) clear of the thumb.
+export const TOUCH_SHIP_OFFSET_PX = 76;
 export const SHOT_SPEED_PX_MS = 0.64;
 export const FIRE_INTERVAL_MS = 320;
 export const MAX_PLAYER_SHOTS = 28;

@@ -854,6 +854,10 @@ html[data-motion="reduced"] .shooting-star { display: none; }
 
 /* First mission feedback, precise touch controls, and a legible two-row phone HUD. */
 .control-choice-group { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+.music-volume-group { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.pause-music-settings { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin: 14px 0; }
+.pause-music-settings strong { grid-column: 1 / -1; color: var(--gold); font: 600 11px 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .1em; }
+.pause-music-settings .system-setting { justify-content: center; min-height: 40px; padding: 6px; }
 .control-choice-group > strong { grid-column: 1 / -1; margin-top: 7px; color: #f5c86d; font: 600 11px 'DM Mono', monospace; letter-spacing: .08em; text-transform: uppercase; }
 .control-choice-group .system-setting { justify-content: center; min-height: 44px; padding: 7px 4px; text-align: center; }
 .control-choice-group .system-setting b { font-size: 11px; }
