@@ -249,10 +249,12 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 @keyframes sector-transition { 0% { opacity: 0; transform: translate(-50%, 10px) scale(.96); } 18%, 72% { opacity: 1; transform: translate(-50%, 0) scale(1); } 100% { opacity: 0; transform: translate(-50%, -7px) scale(1.02); } }
 @keyframes sector-clear-message { from { opacity: 0; transform: translate(-50%, 8px); } to { opacity: 1; transform: translate(-50%, 0); } }
 .sector-banner .chain-result { font: 11px 'DM Mono', monospace; letter-spacing: .07em; color: #a7eee2; }
-.level-intro-banner, .level-complete-banner { z-index: 5; top: 50%; gap: 14px; transform: translate(-50%, -50%); }
+.level-intro-banner, .level-complete-banner { z-index: 5; top: 50%; gap: 14px; width: min(94vw, 920px); transform: translate(-50%, -50%); }
 .level-intro-banner::before, .level-complete-banner::before { content: ""; position: absolute; z-index: -1; width: min(92vw, 820px); height: clamp(170px, 32vw, 310px); background: radial-gradient(ellipse, rgba(255, 188, 62, .18), rgba(144, 64, 255, .12) 34%, transparent 72%); filter: blur(9px); animation: level-glow 1.5s ease-out both; }
 .level-intro-banner strong, .level-complete-banner strong { color: #fff7d7; font-size: clamp(56px, 13vw, 132px); font-weight: 700; line-height: .9; letter-spacing: .055em; white-space: nowrap; text-transform: uppercase; text-shadow: 0 0 5px #fff, 0 0 13px #ffd35b, 0 0 28px #ff8b24, 0 0 48px rgba(176, 64, 255, .92), 0 0 82px rgba(63, 211, 255, .42); animation: level-title-reveal 2.2s ease-in-out both; }
-.level-complete-banner strong { font-size: clamp(42px, 9.5vw, 102px); animation-duration: 2.4s; }
+.level-complete-banner strong { display: flex; flex-direction: column; align-items: center; max-width: 94vw; font-size: clamp(42px, 9.5vw, 102px); white-space: normal; animation-duration: 2.4s; }
+.level-complete-banner strong b, .level-complete-banner strong i { display: block; font: inherit; font-style: normal; }
+.level-complete-banner strong i { max-width: 92vw; margin-top: .12em; font-size: clamp(24px, 6.8vw, 72px); letter-spacing: .045em; overflow-wrap: anywhere; }
 .level-intro-banner span, .level-complete-banner span { color: #ffe8a3; font-size: clamp(10px, 2.2vw, 15px); font-weight: 600; letter-spacing: .38em; text-shadow: 0 0 12px rgba(255, 190, 70, .9); }
 .level-intro-banner.sector-transition { animation: level-banner-reveal 2.2s ease-in-out both; }
 .level-complete-banner.sector-clear-message { animation: level-banner-reveal 2.4s ease-in-out both; }
@@ -361,6 +363,8 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .player-ship-grey .player-engine, .player-ship-white .player-engine { background: linear-gradient(#fff, #9eafc5 45%, transparent); }
 .player-ship.player-ship-hurt { opacity: .68; filter: drop-shadow(0 0 17px #ff7083); }
 .player-ship.player-ship-shielded { filter: drop-shadow(0 0 16px #8feeff); }
+.player-ship-respawn { animation: player-respawn 1.35s ease-out both; }
+@keyframes player-respawn { 0%, 16% { opacity: .28; filter: brightness(2.1) drop-shadow(0 0 20px #8feeff); } 28% { opacity: 1; } 42% { opacity: .42; } 56%, 100% { opacity: 1; filter: brightness(1) drop-shadow(0 0 8px rgba(143, 238, 255, .42)); } }
 .player-ship-shield-active::before, .player-ship-shield-active::after { content: ""; position: absolute; z-index: 3; border-radius: 50%; pointer-events: none; }
 .player-ship-shield-active::before { inset: -13px -16px; border: 1px solid rgba(174, 247, 255, .72); background: radial-gradient(ellipse at 50% 46%, transparent 0 48%, rgba(81, 203, 239, .06) 57%, rgba(120, 229, 255, .18) 72%, rgba(205, 250, 255, .06) 80%, transparent 86%); box-shadow: inset 0 0 18px rgba(91, 207, 246, .2), inset 0 -8px 17px rgba(101, 129, 255, .11), 0 0 10px rgba(111, 228, 255, .34); animation: shield-field-pulse 1.35s ease-in-out infinite; }
 .player-ship-shield-active::after { inset: -9px -12px; border: 2px solid rgba(142, 238, 255, .68); border-top-color: rgba(225, 253, 255, .95); border-right-color: rgba(108, 173, 255, .34); border-bottom-color: rgba(124, 101, 255, .42); background: radial-gradient(ellipse at 32% 25%, rgba(227, 254, 255, .16) 0 2%, transparent 18%), radial-gradient(ellipse, transparent 0 57%, rgba(97, 215, 249, .09) 68%, transparent 79%); box-shadow: inset 0 0 8px rgba(177, 245, 255, .2), 0 0 6px rgba(142, 238, 255, .42); animation: shield-shell-breathe 1.35s ease-in-out infinite reverse; }
