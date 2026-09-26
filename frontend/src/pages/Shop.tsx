@@ -60,6 +60,7 @@ const Shop = () => {
   const { locale, automatic, choose, t } = useLocale();
   const [activePanel, setActivePanel] = useState<"how" | "progress" | null>(null);
   const [systemMenuOpen, setSystemMenuOpen] = useState(false);
+  const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
   const [reducedEffects, setReducedEffects] = useState(() => localStorage.getItem(MOTION_STORAGE_KEY) === "1");
   const [controlHand, setControlHand] = useState<ControlHand>(readControlHand);
   const [shopView, setShopView] = useState<"hangar" | "shop" | "weapons" | "powers" | "progress" | "leaders" | null>(null);
@@ -84,6 +85,7 @@ const Shop = () => {
     localStorage.setItem(MOTION_STORAGE_KEY, reducedEffects ? "1" : "0");
   }, [reducedEffects]);
   useEffect(() => { localStorage.setItem(CONTROL_HAND_KEY, controlHand); }, [controlHand]);
+  useEffect(() => { if (!systemMenuOpen) setLanguageMenuOpen(false); }, [systemMenuOpen]);
   useEffect(() => {
     if (!systemMenuOpen) return;
     const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setSystemMenuOpen(false); };
@@ -244,9 +246,16 @@ const Shop = () => {
           <h2 id="system-menu-title">{t('System menu')}</h2>
           <div className="system-menu-section">
             <div className="system-menu-heading"><strong>{t('Language')}</strong><small>{t('Current language')}: {languages[locale]}</small></div>
-            <div className="language-grid" role="group" aria-label={t('Language')}>
-              <button type="button" className="language-option language-option-auto" aria-pressed={automatic} onClick={() => choose(null)}><span aria-hidden="true">◎</span><b>{t('Automatic (device language)')}</b></button>
-              {Object.entries(languages).map(([code, label]) => <button type="button" className="language-option" key={code} aria-pressed={!automatic && locale === code} onClick={() => choose(code as Locale)}><span aria-hidden="true">{code.toUpperCase()}</span><b>{label}</b></button>)}
+            <div className="language-dropdown" data-open={languageMenuOpen ? "true" : "false"}>
+              <button type="button" className="language-trigger" aria-expanded={languageMenuOpen} onClick={() => setLanguageMenuOpen(open => !open)}>
+                <span aria-hidden="true">{automatic ? "◎" : locale.toUpperCase()}</span>
+                <b>{automatic ? t('Automatic (device language)') : languages[locale]}</b>
+                <i aria-hidden="true">⌄</i>
+              </button>
+              {languageMenuOpen && <div className="language-menu" role="group" aria-label={t('Language')}>
+                <button type="button" className="language-option language-option-auto" aria-pressed={automatic} onClick={() => { choose(null); setLanguageMenuOpen(false); }}><span aria-hidden="true">◎</span><b>{t('Automatic (device language)')}</b></button>
+                {Object.entries(languages).map(([code, label]) => <button type="button" className="language-option" key={code} aria-pressed={!automatic && locale === code} onClick={() => { choose(code as Locale); setLanguageMenuOpen(false); }}><span aria-hidden="true">{code.toUpperCase()}</span><b>{label}</b></button>)}
+              </div>}
             </div>
           </div>
           <div className="system-menu-section system-quick-settings">
