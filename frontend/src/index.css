@@ -25,13 +25,17 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 .landing-shell .hero-section { width: 100%; max-width: none; height: calc(100dvh - 76px); min-height: 0; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); padding: clamp(20px, 4vh, 52px) clamp(20px, 5vw, 100px) clamp(58px, 8vh, 90px); }
 .landing-shell .hero-copy { max-width: 600px; }
 .landing-shell .planet-stage { width: min(44vw, 72dvh, 760px); }
-.home-music-toggle { position: absolute; z-index: 7; top: 18px; right: clamp(20px, 5vw, 100px); display: flex; align-items: center; gap: 8px; max-width: min(48vw, 210px); min-height: 36px; padding: 4px 11px; border: 1px solid rgba(255, 115, 133, .55); background: rgba(34, 15, 29, .82); color: #ffbdc5; cursor: pointer; box-shadow: inset 0 0 12px rgba(255, 115, 133, .06), 0 0 15px rgba(0, 0, 0, .22); backdrop-filter: blur(6px); transition: transform .16s ease, border-color .16s ease, background .16s ease; }
-.home-music-toggle span { display: grid; place-items: center; width: 23px; height: 23px; flex: none; border: 1px solid currentColor; border-radius: 50%; font: 16px/1 'Space Grotesk', sans-serif; }
-.home-music-toggle b { overflow: hidden; font: 600 10px/1.25 'Space Grotesk', sans-serif; letter-spacing: .045em; text-overflow: ellipsis; white-space: nowrap; }
-.home-music-toggle[data-state="playing"] { border-color: rgba(102, 237, 179, .75); background: rgba(8, 52, 43, .87); color: #84f5bb; box-shadow: inset 0 0 13px rgba(74, 235, 163, .1), 0 0 13px rgba(61, 211, 154, .24); }
-.home-music-toggle[data-state="blocked"] { border-color: rgba(245, 200, 109, .73); background: rgba(52, 40, 25, .87); color: #ffe0a0; }
-.home-music-toggle:hover { transform: translateY(-1px); filter: brightness(1.12); }
-.home-music-toggle:active { transform: translateY(1px); }
+.home-music-toggle { position: absolute; isolation: isolate; overflow: hidden; z-index: 7; top: 18px; right: clamp(20px, 5vw, 100px); display: flex; align-items: center; gap: 9px; max-width: min(50vw, 210px); min-height: 40px; padding: 5px 12px; border: 1px solid rgba(255, 115, 133, .65); border-radius: 0; background: linear-gradient(135deg, rgba(71, 20, 34, .94), rgba(37, 16, 27, .9)); color: #ffbdc5; cursor: pointer; box-shadow: inset 0 0 14px rgba(255, 115, 133, .08), 0 0 14px rgba(255, 115, 133, .12); backdrop-filter: blur(6px); clip-path: polygon(0 8px, 8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px)); transition: transform .16s ease, filter .16s ease, box-shadow .16s ease; }
+.home-music-toggle::before { position: absolute; z-index: -1; top: -70%; bottom: -70%; left: -42%; width: 28%; transform: rotate(18deg); background: linear-gradient(90deg, transparent, rgba(255,255,255,.36), transparent); content: ''; animation: home-button-scan 3.3s ease-in-out infinite; pointer-events: none; }
+.home-music-toggle::after { position: absolute; top: 0; left: 12%; right: 12%; height: 1px; background: linear-gradient(90deg, transparent, rgba(213, 253, 255, .9), transparent); content: ''; pointer-events: none; }
+.home-music-glyph { display: grid; place-items: center; width: 28px; height: 28px; flex: none; border: 1px solid currentColor; background: rgba(255,255,255,.08); box-shadow: inset 0 0 8px rgba(255,255,255,.12); transition: transform .16s ease, box-shadow .16s ease, background .16s ease; }
+.home-music-glyph svg { display: block; width: 19px; height: 19px; }
+.home-music-toggle b { overflow: hidden; font: 600 11px/1.25 'Space Grotesk', sans-serif; letter-spacing: .045em; text-overflow: ellipsis; white-space: nowrap; }
+.home-music-toggle[data-state="playing"] { border-color: rgba(102, 237, 179, .75); background: linear-gradient(135deg, rgba(18, 88, 90, .95), rgba(20, 49, 72, .96)); color: #a8f9cf; box-shadow: inset 0 -2px #65e4d0, 0 0 14px rgba(67, 221, 203, .2); }
+.home-music-toggle[data-state="blocked"] { border-color: rgba(245, 200, 109, .73); background: linear-gradient(135deg, rgba(27, 36, 49, .96), rgba(66, 52, 39, .86)); color: #ffe0a0; box-shadow: inset 0 0 18px rgba(245,200,109,.08), 0 0 14px rgba(224,164,61,.1); }
+.home-music-toggle:hover { transform: translateY(-2px); filter: brightness(1.1); }
+.home-music-toggle:hover .home-music-glyph { transform: scale(1.08); box-shadow: inset 0 0 11px rgba(255,255,255,.16), 0 0 12px currentColor; background: rgba(255,255,255,.1); }
+.home-music-toggle:active { transform: translateY(1px) scale(.985); filter: brightness(1.18); }
 .home-footer { position: absolute; z-index: 4; left: clamp(20px, 5vw, 100px); right: clamp(20px, 5vw, 100px); bottom: max(17px, env(safe-area-inset-bottom)); padding-top: 12px; border-top: 1px solid var(--line); }
 .home-footer .terms-entry { margin: 0; padding: 5px 0; }
 .landing-shell .hero-section .starfield { z-index: 0; opacity: .75; }
