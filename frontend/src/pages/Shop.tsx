@@ -88,10 +88,10 @@ const Shop = () => {
   useEffect(() => { if (!systemMenuOpen) setLanguageMenuOpen(false); }, [systemMenuOpen]);
   useEffect(() => {
     if (!systemMenuOpen) return;
-    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setSystemMenuOpen(false); };
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") { if (languageMenuOpen) setLanguageMenuOpen(false); else setSystemMenuOpen(false); } };
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
-  }, [systemMenuOpen]);
+  }, [systemMenuOpen, languageMenuOpen]);
   useEffect(() => {
     if (!shopView) return;
     const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setShopView(null); };
@@ -247,13 +247,15 @@ const Shop = () => {
           <div className="system-menu-section">
             <div className="system-menu-heading"><strong>{t('Language')}</strong><small>{t('Current language')}: {languages[locale]}</small></div>
             <div className="language-dropdown" data-open={languageMenuOpen ? "true" : "false"}>
-              <button type="button" className="language-trigger" aria-expanded={languageMenuOpen} onClick={() => setLanguageMenuOpen(open => !open)}>
-                <span aria-hidden="true">{automatic ? "◎" : locale.toUpperCase()}</span>
-                <b>{automatic ? t('Automatic (device language)') : languages[locale]}</b>
-                <i aria-hidden="true">⌄</i>
-              </button>
-              {languageMenuOpen && <div className="language-menu" role="group" aria-label={t('Language')}>
-                <button type="button" className="language-option language-option-auto" aria-pressed={automatic} onClick={() => { choose(null); setLanguageMenuOpen(false); }}><span aria-hidden="true">◎</span><b>{t('Automatic (device language)')}</b></button>
+              <div className="language-actions">
+                <button type="button" className="language-trigger language-auto" aria-pressed={automatic} aria-expanded={languageMenuOpen} aria-controls="language-options" onClick={() => { choose(null); setLanguageMenuOpen(true); }}>
+                  <span aria-hidden="true">◎</span><b>{t('Automatic (device language)')}</b><i aria-hidden="true">⌄</i>
+                </button>
+                <button type="button" className="language-trigger language-change" aria-pressed={!automatic} aria-expanded={languageMenuOpen} aria-controls="language-options" onClick={() => setLanguageMenuOpen(open => !open)}>
+                  <span aria-hidden="true">{locale.toUpperCase()}</span><b>{t('Change')}</b><i aria-hidden="true">⌄</i>
+                </button>
+              </div>
+              {languageMenuOpen && <div id="language-options" className="language-menu" role="group" aria-label={t('Language')}>
                 {Object.entries(languages).map(([code, label]) => <button type="button" className="language-option" key={code} aria-pressed={!automatic && locale === code} onClick={() => { choose(code as Locale); setLanguageMenuOpen(false); }}><span aria-hidden="true">{code.toUpperCase()}</span><b>{label}</b></button>)}
               </div>}
             </div>
