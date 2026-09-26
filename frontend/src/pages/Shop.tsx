@@ -16,16 +16,48 @@ import Starfield from "./Starfield";
 import { languages, useLocale, type Locale } from "../i18n";
 import EarthGlobe from "./EarthGlobe";
 import { requestGameFullscreen } from "./gameFullscreen";
+import { powerUpSymbols, type PowerUpType } from "./powerUps";
 
 type Offer = { id: string; kind: "weapon" | "power"; name: string; description: string; pricePi: number };
 type Inventory = { ownedWeapons: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
 type Leader = { rank: number; username: string; score: number };
 
+const shopTabs = [
+  ["hangar", "Hangar", "◇"],
+  ["shop", "Shop", "▱"],
+  ["weapons", "Weapons", "⌁"],
+  ["powers", "Power-ups", "✦"],
+  ["progress", "Progress", "↗"],
+  ["leaders", "Top 100", "#"],
+] as const;
+
+const powerTypeForOffer = (offerId: string): PowerUpType => offerId.includes("shield") ? "shield" : offerId.includes("rapid") ? "rapid" : "overdrive";
+
+const WeaponPreview = ({ offerId, sprite, color }: { offerId: string; sprite: number; color: string }) => {
+  const shotCount = offerId.includes("triple") || offerId.includes("plasma") ? 3 : 2;
+  return <div className={`offer-preview weapon-preview${offerId.includes("rapid") ? " weapon-preview-rapid" : ""}${offerId.includes("plasma") ? " weapon-preview-plasma" : ""}`} aria-hidden="true">
+    <span className="preview-grid" />
+    <span className="preview-ship"><PaintedShip sprite={sprite} color={color} /></span>
+    <span className="preview-volley">{Array.from({ length: shotCount }, (_, index) => <i key={index} style={{ "--shot-offset": `${(index - (shotCount - 1) / 2) * 19}px`, "--shot-delay": `${index * -.12}s` } as CSSProperties} />)}</span>
+    <small>LIVE FIRE TEST</small>
+  </div>;
+};
+
+const PowerPreview = ({ offerId }: { offerId: string }) => {
+  const type = powerTypeForOffer(offerId);
+  return <div className={`offer-preview power-preview power-preview-${type}`} aria-hidden="true">
+    <span className="preview-grid" />
+    <span className="power-preview-orbit"><i>{powerUpSymbols[type]}</i></span>
+    <span className="power-preview-wave" />
+    <small>ENERGY CORE</small>
+  </div>;
+};
+
 const Shop = () => {
   const navigate = useNavigate();
   const { locale, choose, t } = useLocale();
   const [activePanel, setActivePanel] = useState<"how" | "progress" | null>(null);
-  const [shopView, setShopView] = useState<"ships" | "weapons" | "powers" | "progress" | "leaders" | null>(null);
+  const [shopView, setShopView] = useState<"hangar" | "shop" | "weapons" | "powers" | "progress" | "leaders" | null>(null);
   const [termsOpen, setTermsOpen] = useState(false);
   const [leaders, setLeaders] = useState<Leader[]>([]);
   const [leadersStatus, setLeadersStatus] = useState<"loading" | "ready" | "error">("loading");
@@ -171,7 +203,7 @@ const Shop = () => {
           <p className="hero-description">{t('Build your streak, master the grid, and become the force Earth needs.')}</p>
           <div className="hero-actions">
             <button className="button button-primary" type="button" onClick={enterGame}>{t("Play")} <span className="button-glyph" aria-hidden="true">→</span></button>
-            <button className="button button-secondary" type="button" onClick={() => setShopView("ships")}>{t('Shop / Hangar')} <span className="button-glyph" aria-hidden="true">◇</span></button>
+            <button className="button button-secondary" type="button" onClick={() => { setPreviewSkin(selected.skin); setPreviewColor(selected.color); setShopView("hangar"); }}>{t('Shop / Hangar')} <span className="button-glyph" aria-hidden="true">◇</span></button>
             <button className="button button-secondary" type="button" onClick={() => { setLeadersStatus("loading"); setShopView("leaders"); }}>{t('Top 100')} <span className="button-glyph" aria-hidden="true">⌁</span></button>
             <button className="button button-secondary" type="button" onClick={() => setActivePanel("how")}>{t('How to Play')} <span className="button-glyph" aria-hidden="true">?</span></button>
           </div>
@@ -194,7 +226,7 @@ const Shop = () => {
         <div className="shop-modal">
         <div className="shop-modal-header"><strong>{t("Shop / Hangar")}</strong><div className="shop-language-picker"><label htmlFor="shop-language-select">{t("Language")}</label><select id="shop-language-select" aria-label={t("Language")} value={locale} onChange={event => choose(event.target.value as Locale)}>{Object.entries(languages).map(([code, label]) => <option key={code} value={code}>{label}</option>)}</select></div><button className="close-button" type="button" onClick={() => setShopView(null)} aria-label={t('Close shop')}>×</button></div>
           <nav className="shop-tabs" aria-label={t('Shop sections')}>
-            {([ ["ships", "Ships"], ["weapons", "Weapons"], ["powers", "Power-ups"], ["progress", "Progress"], ["leaders", "Top 100"] ] as const).map(([view, label]) => <button key={view} type="button" aria-pressed={shopView === view} onClick={() => { if (view === "leaders") setLeadersStatus("loading"); setShopView(view); }}>{t(label)}</button>)}
+            {shopTabs.map(([view, label, glyph]) => <button className={`shop-tab shop-tab-${view}`} key={view} type="button" aria-pressed={shopView === view} onClick={() => { if (view === "leaders") setLeadersStatus("loading"); if (view === "hangar") { setPreviewSkin(selected.skin); setPreviewColor(selected.color); } setShopView(view); }}><span aria-hidden="true">{glyph}</span><b>{t(label)}</b></button>)}
           </nav>
           <div className="shop-modal-body">
       {shopView === "progress" && <section className="dashboard-grid" aria-label={t('Player overview')}>
@@ -221,19 +253,19 @@ const Shop = () => {
         {leadersStatus === "ready" && (leaders.length ? <div className="leaderboard-scroll"><table><thead><tr><th>#</th><th>{t("Player")}</th><th>{t("Best score")}</th></tr></thead><tbody>{leaders.map(entry => <tr key={entry.rank}><td>{entry.rank}</td><td>{entry.username}</td><td>{entry.score.toLocaleString(locale)}</td></tr>)}</tbody></table></div> : <p>{t("No records yet. Complete a mission to be first.")}</p>)}
       </section>}
 
-      {shopView === "ships" && <section className="ship-selector" aria-labelledby="hangar-heading">
-        <p className="eyebrow">{t("YOUR HANGAR")}</p>
-        <h2 id="hangar-heading">{t("Your fleet")}</h2>
-        <p>{t("Choose a ship type, then a color variant. Each purchase adds one ship to your fleet. Grey Scout is issued free; paint choices are made before purchase.")}</p>
+      {(shopView === "hangar" || shopView === "shop") && <section className={`ship-selector ship-selector-${shopView}`} aria-labelledby="hangar-heading">
+        <p className="eyebrow">{t(shopView === "hangar" ? "YOUR HANGAR" : "SHIP SHOP")}</p>
+        <h2 id="hangar-heading">{t(shopView === "hangar" ? "Your fleet" : "Available ships")}</h2>
+        <p>{t(shopView === "hangar" ? "Only ships in your fleet are shown here. Choose an owned type and color variant for your next mission." : "Choose a ship type and preview its paint variants. Each purchase adds one ship to your fleet.")}</p>
         <strong className="shard-balance">◆ {shards} {t("Shards")}</strong><span className="shard-help">{t("Earn 1 Shard per defeated Cryptoid; your Shards are saved at the end of each mission.")}</span>
         <div className="ship-picker" role="group" aria-label={t("Ship hull")}>
-          {playerSkins.map(skin => { const total = fleetCount(fleet, skin.id); const shown = skin.id === selected.skin.id ? selected.color : allPlayerColors.find(color => fleetCount(fleet, skin.id, color.id)) ?? playerColors[0]; return <button key={skin.id} className={`ship-choice${total === 0 ? " ship-unowned" : ""}`} type="button" aria-pressed={previewSkin.id === skin.id} onClick={() => { setPreviewSkin(skin); setPreviewColor(shown); setHangarMessage(""); }}>
+          {playerSkins.filter(skin => shopView === "shop" || fleetCount(fleet, skin.id) > 0).map(skin => { const total = fleetCount(fleet, skin.id); const shown = skin.id === selected.skin.id ? selected.color : allPlayerColors.find(color => fleetCount(fleet, skin.id, color.id)) ?? playerColors[0]; return <button key={skin.id} className={`ship-choice${total === 0 ? " ship-unowned" : ""}`} type="button" aria-pressed={previewSkin.id === skin.id} onClick={() => { setPreviewSkin(skin); setPreviewColor(shown); setHangarMessage(""); }}>
             <span className="ship-preview"><PaintedShip sprite={skin.sprite} color={shown.id} /></span><span>{skin.name}</span><small>{total ? `${t("Owned")} ×${total}` : t("Not owned")}</small>
           </button>; })}
         </div>
         <h3 className="hangar-variant-title">{previewSkin.name} · {t("Color variants")}</h3>
         <div className="ship-picker ship-variants" role="group" aria-label={t("Ship paint")}>
-          {allPlayerColors.filter(color => playerColors.some(current => current.id === color.id) || fleetCount(fleet, previewSkin.id, color.id) > 0).map(color => { const count = fleetCount(fleet, previewSkin.id, color.id); return <button key={color.id} className={`ship-choice variant-choice${count ? "" : " ship-unowned"}`} type="button" aria-pressed={previewColor.id === color.id} onClick={() => { setPreviewColor(color); setHangarMessage(""); }}>
+          {allPlayerColors.filter(color => (shopView === "shop" && playerColors.some(current => current.id === color.id)) || fleetCount(fleet, previewSkin.id, color.id) > 0).map(color => { const count = fleetCount(fleet, previewSkin.id, color.id); return <button key={color.id} className={`ship-choice variant-choice${count ? "" : " ship-unowned"}`} type="button" aria-pressed={previewColor.id === color.id} onClick={() => { setPreviewColor(color); setHangarMessage(""); }}>
             <span className="ship-preview"><PaintedShip sprite={previewSkin.sprite} color={color.id} /></span>
             <span className="metal-swatch" style={{ "--paint": color.glow } as CSSProperties} />
             <span>{t(color.name)}</span><small>{count ? `${t("Owned")} ×${count}` : t("Not owned")}</small>
@@ -241,10 +273,10 @@ const Shop = () => {
         </div>
         <p className="hangar-selection">{t("Preview:")} <strong>{previewSkin.name} · {t(previewColor.name)}</strong> · {previewCount ? `${t("Owned")} ×${previewCount}` : t("Not owned")}{selected.skin.id === previewSkin.id && selected.color.id === previewColor.id && <span> · {t("EQUIPPED")}</span>}</p>
         <div className="hangar-actions">
-          <button className="button button-primary hangar-action" type="button" onClick={purchasePreview} disabled={shards < (previewSkin.price || EXTRA_STARTER_PRICE)}>{t("Buy another for")} ◆ {previewSkin.price || EXTRA_STARTER_PRICE}</button>
-          <button className="button button-secondary hangar-action" type="button" onClick={equipPreview} disabled={!previewCount && previewSkin.price > 0}>{t("Equip selected variant")}</button>
+          {shopView === "shop" && <button className="button button-primary hangar-action" type="button" onClick={purchasePreview} disabled={shards < (previewSkin.price || EXTRA_STARTER_PRICE)}>{t("Buy another for")} ◆ {previewSkin.price || EXTRA_STARTER_PRICE}</button>}
+          {shopView === "hangar" && <button className="button button-secondary hangar-action" type="button" onClick={equipPreview} disabled={!previewCount}>{t("Equip selected variant")}</button>}
         </div>
-        {shards < (previewSkin.price || EXTRA_STARTER_PRICE) && <span className="shard-help">◆ {(previewSkin.price || EXTRA_STARTER_PRICE) - shards} {t("more Shards needed")}</span>}
+        {shopView === "shop" && shards < (previewSkin.price || EXTRA_STARTER_PRICE) && <span className="shard-help">◆ {(previewSkin.price || EXTRA_STARTER_PRICE) - shards} {t("more Shards needed")}</span>}
         {hangarMessage && <p className="hangar-message" role="status">{hangarMessage}</p>}
       </section>}
 
@@ -256,7 +288,7 @@ const Shop = () => {
             const count = inventory?.consumables.find(item => item.id === offer.id)?.count ?? 0;
             const owned = kind === "weapon" ? inventory?.ownedWeapons.includes(offer.id) : count > 0;
             const selected = kind === "weapon" ? inventory?.equippedWeapon === offer.id : inventory?.selectedPower === offer.id;
-            return <article key={offer.id} className="hangar-offer"><h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span>{t(kind === "weapon" ? "5 minutes per mission · starts at mission start" : "Consumed at mission start")} · {offer.pricePi} π</span><strong>{selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : t("OWNED") : t("NOT OWNED")}</strong><div>
+            return <article key={offer.id} className={`hangar-offer hangar-offer-${kind}${selected ? " hangar-offer-selected" : ""}`}>{kind === "weapon" ? <WeaponPreview offerId={offer.id} sprite={selectedShip().skin.sprite} color={selectedShip().color.id} /> : <PowerPreview offerId={offer.id} />}<h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span>{t(kind === "weapon" ? "5 minutes per mission · starts at mission start" : "Consumed at mission start")} · {offer.pricePi} π</span><strong>{selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : t("OWNED") : t("NOT OWNED")}</strong><div>
               {owned ? <button className="button button-secondary" type="button" disabled={Boolean(selected)} onClick={() => equip(kind === "weapon" ? offer.id : inventory?.equippedWeapon ?? null, kind === "power" ? offer.id : inventory?.selectedPower ?? null)}>{t(selected ? "Selected" : "Equip for next mission")}</button> : null}
               {(kind === "power" || !owned) && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady} onClick={() => orderProduct(`Cryptoid ${offer.name} · ${kind === "weapon" ? "5 minutes per mission" : "60 seconds when activated"}`, offer.pricePi, { productId: offer.id }, () => { setLoadoutMessage(`${offer.name} ${t("purchase confirmed.")}`); void refreshInventory(); })}>{t("Buy with π")}</button>}
             </div></article>;
