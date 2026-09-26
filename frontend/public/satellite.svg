@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 64" fill="none">
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f3bc75"/><stop offset=".25" stop-color="#a95730"/><stop offset=".58" stop-color="#874226"/><stop offset="1" stop-color="#391e25"/></linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2=".4" y2="1"><stop stop-color="#ffe4aa"/><stop offset=".22" stop-color="#cc7945"/><stop offset=".7" stop-color="#8a3c2c"/><stop offset="1" stop-color="#432c36"/></linearGradient>
+    <linearGradient id="hull" x1="44" y1="17" x2="72" y2="50" gradientUnits="userSpaceOnUse"><stop stop-color="#f7efd2"/><stop offset=".21" stop-color="#d3b883"/><stop offset=".51" stop-color="#7e8792"/><stop offset=".72" stop-color="#344b61"/><stop offset="1" stop-color="#172c43"/></linearGradient>
+    <linearGradient id="face" x1="49" y1="26" x2="69" y2="46" gradientUnits="userSpaceOnUse"><stop stop-color="#fff1be"/><stop offset=".26" stop-color="#b8bec0"/><stop offset=".65" stop-color="#62798b"/><stop offset="1" stop-color="#28384b"/></linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#eab579"/><stop offset="1" stop-color="#613936"/></linearGradient>
+    <pattern id="cells" width="9" height="10" patternUnits="userSpaceOnUse"><path d="M0 0H9M0 0V10" stroke="#f2c890" stroke-width="1.15" opacity=".75"/><path d="M1.7 2H7.4M1.7 3.7H6.7" stroke="#ffdb9e" stroke-width=".5" opacity=".45"/></pattern>
+  </defs>
+  <g stroke-linejoin="round">
+    <path d="M3 26 44 20 44 46 3 52Z" fill="#3c3040" stroke="#b98661" stroke-width="1.4"/>
+    <path d="M3 26 44 20 44 43 3 49Z" fill="url(#panel)"/>
+    <path d="M3 26 44 20 44 43 3 49Z" fill="url(#glass)" opacity=".72"/>
+    <path d="M3 26 44 20 44 43 3 49Z" fill="url(#cells)"/>
+    <path d="M3 49 44 43 44 46 3 52Z" fill="url(#edge)" stroke="#d2a27b" stroke-width=".7"/>
+    <path d="M75 20 117 26 117 52 75 46Z" fill="#3c3040" stroke="#b98661" stroke-width="1.4"/>
+    <path d="M75 20 117 26 117 49 75 43Z" fill="url(#panel)"/>
+    <path d="M75 20 117 26 117 49 75 43Z" fill="url(#glass)" opacity=".72"/>
+    <path d="M75 20 117 26 117 49 75 43Z" fill="url(#cells)"/>
+    <path d="M75 43 117 49 117 52 75 46Z" fill="url(#edge)" stroke="#d2a27b" stroke-width=".7"/>
+    <path d="M7 29 40 24M78 24 113 29" stroke="#ffe5b0" stroke-width="1.3" opacity=".72"/>
+    <path d="M23 23 24 47M36 21 37 45M88 22 87 45M103 24 102 48" stroke="#412834" stroke-width="1.3" opacity=".8"/>
+    <path d="M44 29 49 30V39L44 40M75 29 70 30V39L75 40" fill="#8c9ba3" stroke="#d3c49f" stroke-width="1.3"/>
+    <path d="M45 30 47 23 58 17 70 23 73 31 71 46 59 51 47 46Z" fill="url(#hull)" stroke="#ffdeb0" stroke-width="1.6"/>
+    <path d="M47 23 58 17 70 23 66 28 53 28Z" fill="#e4d9b4" stroke="#f8efce" stroke-width=".7"/>
+    <path d="M47 23 53 28 51 45 47 46 45 30Z" fill="#59687a" stroke="#b1b8ad" stroke-width=".8"/>
+    <path d="M70 23 66 28 68 45 71 46 73 31Z" fill="#29394d" stroke="#99aab0" stroke-width=".8"/>
+    <path d="M53 28 66 28 68 45 59 49 51 45Z" fill="url(#face)" stroke="#e9dcbb" stroke-width="1"/>
+    <path d="M55 32 64 32 65 42 59 45 54 42Z" fill="#263d56" stroke="#efdeb0" stroke-width=".8"/>
+    <path d="M56 34 63 34M56 36 63 36M56 38 63 38M56 40 63 40" stroke="#adbbba" stroke-width=".65" opacity=".75"/>
+    <path d="M51 45 59 49 68 45M46 30 51 31M68 31 72 30" stroke="#fff1c9" stroke-width=".7" opacity=".7"/>
+    <path d="M59 17V11" stroke="#dee0c7" stroke-width="1.7"/>
+    <ellipse cx="59" cy="9.5" rx="8" ry="3.5" fill="#727c87" stroke="#f2e7c1" stroke-width="1.2"/>
+    <ellipse cx="59" cy="9" rx="5.5" ry="1.9" fill="#20354b" stroke="#e4dfbd" stroke-width=".7"/>
+    <path d="M59 8V5" stroke="#f5d8a8" stroke-width="1"/>
+    <circle cx="59" cy="4.6" r="1.3" fill="#baf4ff"/>
+  </g>
+</svg>
