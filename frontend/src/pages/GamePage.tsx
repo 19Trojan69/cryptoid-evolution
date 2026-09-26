@@ -2,7 +2,7 @@ import { useLocale } from "../i18n";
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
-import { ENTRY_GAP_MS, FIRST_ATTACK_DELAY_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, arrangeFormationBySize, formationLayout, formationReady, sectionInSector, sectionPhase, sectorForSection, sectorName, type SectorPhase } from "./sectorManager";
+import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, arrangeFormationBySize, formationLayout, formationReady, sectionInSector, sectionPhase, sectorForSection, sectorName, type SectorPhase } from "./sectorManager";
 import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp } from "./powerUps";
 import { activeWeaponLevel, advanceShot, contactWithEnemy, MAX_PLAYER_SHOTS, movePlayer, PICKUP_WEAPON_DURATION_MS, placePlayerFromPointer, PURCHASED_WEAPON_DURATION_MS, shipCollisionOutcome, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
@@ -18,6 +18,7 @@ import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio"
 import { axiosClient } from "../lib/axiosClient";
 import { fireInterval, makeVolley } from "./playerCombat";
 import { leaveGameFullscreen, requestGameFullscreen } from "./gameFullscreen";
+import { levelDifficulty } from "./levelDifficulty";
 
 const BEST_SCORE_KEY = "cryptoid_best_score";
 const HIGHEST_SECTOR_KEY = "cryptoid_highest_sector";
@@ -432,8 +433,8 @@ const GamePage = () => {
         const formationComplete = normal && formationReady({ spawned: formationIndexRef.current, total: slots.length, alive: state.asteroids.length, ready: ready.length });
         if (formationComplete && !state.asteroids.some(asteroid => asteroid.attackPattern !== null)) attackCooldownRef.current += delta;
         else if (!state.asteroids.some(asteroid => asteroid.attackPattern !== null)) attackCooldownRef.current = 0;
-        if (formationComplete && !state.asteroids.some(asteroid => asteroid.attackPattern !== null) && attackCooldownRef.current >= FIRST_ATTACK_DELAY_MS) {
-            let pattern = chooseAttackPattern(attackNumberRef.current++, elapsedRef.current);
+        if (formationComplete && !state.asteroids.some(asteroid => asteroid.attackPattern !== null) && attackCooldownRef.current >= levelDifficulty(state.sector).attackCooldownMs) {
+            let pattern = chooseAttackPattern(attackNumberRef.current++, elapsedRef.current, state.sector);
             if (ready.length < attackGroupSize(pattern)) pattern = "curve";
             const groupSize = attackGroupSize(pattern);
             const selectedIds = ready.slice(0, groupSize).map(asteroid => asteroid.id);
@@ -452,7 +453,7 @@ const GamePage = () => {
         state.asteroids.forEach(asteroid => {
           let next = moveAsteroid(asteroid, delta, width, height);
           if (asteroid.attackPattern !== null && next.attackPattern === null) attackCooldownRef.current = 0;
-          if (next.attackPattern !== null && next.attackDelay === 0 && !next.firedThisAttack && next.attackElapsed < attackTime(next) && next.attackElapsed >= attackTime(next) * .28 && state.enemyShots.length < enemyShotLimit(width, elapsedRef.current)) {
+          if (next.attackPattern !== null && next.attackDelay === 0 && !next.firedThisAttack && next.attackElapsed < attackTime(next) && next.attackElapsed >= attackTime(next) * .28 && state.enemyShots.length < enemyShotLimit(width, elapsedRef.current, state.sector)) {
             const bullet = createEnemyShot(nextIdRef.current, next.x, next.y + next.radius * .4, state.player, width, height);
             if (bullet) {
               nextIdRef.current += 1;
@@ -497,7 +498,7 @@ const GamePage = () => {
             heartsLost += bossContact.damage;
             impactCooldownRef.current = IMPACT_COOLDOWN_MS;
           }
-          if (bossVulnerable(state.boss) && state.boss.fireElapsed >= bossFireInterval(state.boss) && state.enemyShots.length < enemyShotLimit(width, elapsedRef.current)) {
+          if (bossVulnerable(state.boss) && state.boss.fireElapsed >= bossFireInterval(state.boss, state.sector) && state.enemyShots.length < enemyShotLimit(width, elapsedRef.current, state.sector)) {
             const bullet = createEnemyShot(nextIdRef.current, state.boss.x, state.boss.y + state.boss.radius * .4, state.player, width, height);
             if (bullet) {
               nextIdRef.current += 1;
@@ -792,7 +793,7 @@ const GamePage = () => {
         {game.status === "playing" && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite"><span>{levelComplete || levelIntro ? sectorName(game.sector) : game.encounter !== "normal" ? `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.phase === "SECTOR_CLEAR" ? isBonusSection(game.section) ? t("BONUS COMPLETE") : t("ROUND COMPLETE") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}`}</span><strong>{transitionHeadline}</strong>{game.phase === "SECTOR_INTRO" && game.encounter === "normal" && isBonusSection(game.section) && <small>{t("HIT THE FLYING TARGETS")}</small>}{game.phase === "SECTOR_CLEAR" && game.encounter === "normal" && <small className="chain-result">{game.chainResult}</small>}</div>}
         {game.status === "playing" && game.encounter === "normal" && !isBonusSection(game.section) && !formationStartedRef.current && (game.phase === "SECTOR_INTRO" || game.phase === "ENTRY" || game.phase === "FORMATION") && <div className="formation-data-stream" aria-hidden="true">{FORMATION_DATA_ROWS.map((row, index) => <div className="formation-data-row" key={index}><span>{row.repeat(4)}</span><span>{row.repeat(4)}</span></div>)}</div>}
         {game.encounter === "normal" && !isBonusSection(game.section) && (game.phase === "ENTRY" || game.phase === "FORMATION" || game.phase === "REFORM") && game.asteroids.map(asteroid => { const locked = asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration; return <div key={`formation-${asteroid.id}`} className={`formation-target${locked ? " formation-target-locked" : ""}`} style={{ left: asteroid.entryTargetX, top: asteroid.entryTargetY, width: asteroid.radius * 1.65, height: asteroid.radius * 1.65 }} aria-hidden="true"><span /></div>; })}
-        {game.boss && game.encounter === "boss-fight" && <div className={`asteroid cryptoid cryptoid-heavy cryptoid-bitrock sector-boss cryptoid-cruise${game.boss.fireElapsed >= bossFireInterval(game.boss) - 550 ? " boss-warning" : ""}${game.boss.health <= game.boss.maxHealth / 2 ? " boss-enraged cryptoid-boost" : ""}`} style={{ left: game.boss.x, top: game.boss.y, transform: "translate(-50%, -50%)", ...shipHullStyle(19, true) }} title={`${t("CORE WARDEN")} · ${t("Sector")} boss`}><div className="ship-visual"><div className="fleet-sprite" style={spriteStyle(19)} />{bossEngineTrails()}</div><span className="health-bar"><b style={{ width: `${game.boss.health / game.boss.maxHealth * 100}%` }} /></span></div>}
+        {game.boss && game.encounter === "boss-fight" && <div className={`asteroid cryptoid cryptoid-heavy cryptoid-bitrock sector-boss cryptoid-cruise${game.boss.fireElapsed >= bossFireInterval(game.boss, game.sector) - 550 ? " boss-warning" : ""}${game.boss.health <= game.boss.maxHealth / 2 ? " boss-enraged cryptoid-boost" : ""}`} style={{ left: game.boss.x, top: game.boss.y, transform: "translate(-50%, -50%)", ...shipHullStyle(19, true) }} title={`${t("CORE WARDEN")} · ${t("Sector")} boss`}><div className="ship-visual"><div className="fleet-sprite" style={spriteStyle(19)} />{bossEngineTrails()}</div><span className="health-bar"><b style={{ width: `${game.boss.health / game.boss.maxHealth * 100}%` }} /></span></div>}
         {game.bonusTargets.map(target => <div key={target.id} className="asteroid asteroid-small cryptoid bonus-ship cryptoid-boost" style={{ ...alignedSpritePosition(target.x, target.y, target.sprite, 50), transform: "translate(-50%, -50%)" }}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={target.sprite} color={target.color} />{engineTrails(target.sprite, "exhaust")}</div></div>)}
         {game.asteroids.map(asteroid => { const sprite = enemySprite(asteroid.shipClass, asteroid.formationSlot); return <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}${cryptoidMotionClass(asteroid)}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ ...alignedSpritePosition(asteroid.x, asteroid.y, sprite, asteroid.radius * 2), transform: `translate(-50%, -50%) rotate(${asteroid.rotation}deg)`, ...shipHullStyle(sprite, true) }}><div className="ship-visual"><div className="fleet-sprite" style={spriteStyle(sprite)} />{engineTrails(sprite, "exhaust")}</div><span className="health-bar"><b style={{ width: `${asteroid.health / asteroid.maxHealth * 100}%` }} /></span></div>; })}
         {game.powerUps.map(pickup => {

@@ -1,3 +1,5 @@
+import { enemyHealthBonus, levelDifficulty } from "./levelDifficulty.ts";
+
 export type CryptoidClass = "light" | "medium" | "heavy" | "elite";
 export type CryptoidType = "solflare" | "etherCrystal" | "bitrock" | "stableCore" | "memeSwarm" | "ghostCoin";
 export type FactionCode = "X" | "Z" | "R" | "K" | "V" | "Q" | "XR" | "VX" | "ZX" | "Q7";
@@ -37,7 +39,16 @@ export const chooseCryptoid = (sector: number, index: number): CryptoidProfile =
       : ["solflare", "memeSwarm", "etherCrystal", "stableCore", "bitrock", "memeSwarm"];
   // Ghost Coin is uncommon even in sectors where it has been introduced.
   const type = sector >= 3 && index % 13 === 12 ? "ghostCoin" : roster[index % roster.length];
-  return { type, ...types[type], faction: factionCodes[(index + Math.max(0, sector - 1)) % factionCodes.length] };
+  const base = types[type];
+  const difficulty = levelDifficulty(sector);
+  return {
+    type,
+    ...base,
+    health: base.health + enemyHealthBonus(sector, index),
+    entryDuration: base.entryDuration * difficulty.entryPaceScale,
+    attackPace: base.attackPace * difficulty.attackPaceScale,
+    faction: factionCodes[(index + Math.max(0, sector - 1)) % factionCodes.length],
+  };
 };
 
 // Ghosts can phase out only while resting in formation. Every attack is fully visible.

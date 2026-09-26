@@ -1,12 +1,18 @@
+import { levelDifficulty } from "./levelDifficulty.ts";
+
 export type AttackPattern = "dive" | "curve" | "sCurve" | "loop" | "side" | "double" | "vDive";
 
 const soloPatterns: AttackPattern[] = ["curve", "dive", "sCurve", "loop", "side"];
 const groupPatterns: AttackPattern[] = ["double", "vDive"];
 
-export const chooseAttackPattern = (attackNumber: number, elapsedMs: number): AttackPattern => {
-  if (elapsedMs < 5 * 60_000) return soloPatterns[attackNumber % soloPatterns.length];
-  const patterns = [...soloPatterns, ...groupPatterns];
-  return patterns[attackNumber % patterns.length];
+export const chooseAttackPattern = (attackNumber: number, elapsedMs: number, level = 1): AttackPattern => {
+  if (level <= 1 && elapsedMs < 5 * 60_000) return soloPatterns[attackNumber % soloPatterns.length];
+  const groupInterval = levelDifficulty(level).groupAttackInterval;
+  if (attackNumber > 0 && attackNumber % groupInterval === 0) {
+    return groupPatterns[(Math.floor(attackNumber / groupInterval) - 1) % groupPatterns.length];
+  }
+  if (elapsedMs >= 5 * 60_000 && attackNumber % 7 >= 5) return groupPatterns[attackNumber % groupPatterns.length];
+  return soloPatterns[attackNumber % soloPatterns.length];
 };
 
 export const attackGroupSize = (pattern: AttackPattern) => pattern === "vDive" ? 3 : pattern === "double" ? 2 : 1;

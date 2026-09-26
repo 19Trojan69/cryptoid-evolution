@@ -10,6 +10,8 @@ test("fire begins visibly above the ship, with a limited projectile budget", () 
   assert.equal(enemyShotLimit(375, 0), 3);
   assert.equal(enemyShotLimit(800, 0), 4);
   assert.equal(enemyShotLimit(800, 400_000), 6);
+  assert.equal(enemyShotLimit(375, 0, 500), 5);
+  assert.equal(enemyShotLimit(800, 0, 500), 6);
 });
 
 test("enemy shot locks its direction so the player can dodge", () => {

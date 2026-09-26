@@ -27,7 +27,10 @@ test("health grows within a cap and a damaged boss fires with a bounded interval
   const boss = createSectorBoss(1, 375);
   assert.equal(bossFireInterval(boss), 2_500);
   assert.equal(bossFireInterval({ ...boss, health: 7 }), 1_900);
-  assert.equal(createSectorBoss(999, 375).maxHealth, 36);
+  assert.equal(createSectorBoss(1, 375).maxHealth, 15);
+  assert.equal(createSectorBoss(500, 375).maxHealth, 75);
+  assert.equal(createSectorBoss(999, 375).maxHealth, 75);
+  assert.ok(bossFireInterval(createSectorBoss(500, 375), 500) >= 2_280);
   assert.equal(bossVulnerable(moveSectorBoss(boss, BOSS_ENTRY_MS, 375, 700)), true);
 });
 
