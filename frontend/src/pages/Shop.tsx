@@ -17,7 +17,7 @@ import { languages, useLocale, type Locale } from "../i18n";
 import EarthGlobe from "./EarthGlobe";
 import { requestGameFullscreen } from "./gameFullscreen";
 import { powerUpSymbols, type PowerUpType } from "./powerUps";
-import { CONTROL_HAND_KEY, readControlHand, type ControlHand } from "./controlPreferences";
+import { CONTROL_HAND_KEY, CONTROL_SENSITIVITY_KEY, CONTROL_ZONE_KEY, SHIP_START_KEY, readControlHand, readControlSensitivity, readControlZone, readShipStart, type ControlHand, type ControlSensitivity, type ControlZone, type ShipStart } from "./controlPreferences";
 
 type Offer = { id: string; kind: "weapon" | "power"; name: string; description: string; pricePi: number };
 type Inventory = { ownedWeapons: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
@@ -64,6 +64,9 @@ const Shop = () => {
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
   const [reducedEffects, setReducedEffects] = useState(() => localStorage.getItem(MOTION_STORAGE_KEY) === "1");
   const [controlHand, setControlHand] = useState<ControlHand>(readControlHand);
+  const [controlSensitivity, setControlSensitivity] = useState<ControlSensitivity>(readControlSensitivity);
+  const [controlZone, setControlZone] = useState<ControlZone>(readControlZone);
+  const [shipStart, setShipStart] = useState<ShipStart>(readShipStart);
   const [shopView, setShopView] = useState<"hangar" | "shop" | "weapons" | "powers" | "progress" | "leaders" | null>(null);
   const [termsOpen, setTermsOpen] = useState(false);
   const [leaders, setLeaders] = useState<Leader[]>([]);
@@ -133,6 +136,9 @@ const Shop = () => {
     localStorage.setItem(MOTION_STORAGE_KEY, reducedEffects ? "1" : "0");
   }, [reducedEffects]);
   useEffect(() => { localStorage.setItem(CONTROL_HAND_KEY, controlHand); }, [controlHand]);
+  useEffect(() => { localStorage.setItem(CONTROL_SENSITIVITY_KEY, controlSensitivity); }, [controlSensitivity]);
+  useEffect(() => { localStorage.setItem(CONTROL_ZONE_KEY, controlZone); }, [controlZone]);
+  useEffect(() => { localStorage.setItem(SHIP_START_KEY, shipStart); }, [shipStart]);
   useEffect(() => { if (!systemMenuOpen) setLanguageMenuOpen(false); }, [systemMenuOpen]);
   useEffect(() => {
     if (!systemMenuOpen) return;
@@ -308,6 +314,18 @@ const Shop = () => {
             <div className="system-menu-heading"><strong>{t('Controls')}</strong><small>{t('Move with one thumb; activate power-ups with the other.')}</small></div>
             <button className="system-setting" type="button" aria-pressed={controlHand === "right"} onClick={() => setControlHand("right")}><span aria-hidden="true">◁</span><b>{t('Right-handed controls')}</b></button>
             <button className="system-setting" type="button" aria-pressed={controlHand === "left"} onClick={() => setControlHand("left")}><span aria-hidden="true">▷</span><b>{t('Left-handed controls')}</b></button>
+            <div className="control-choice-group" role="group" aria-label={t('Touch sensitivity')}>
+              <strong>{t('Touch sensitivity')}</strong>
+              {(["gentle", "normal", "fast"] as const).map(value => <button key={value} className="system-setting" type="button" aria-pressed={controlSensitivity === value} onClick={() => setControlSensitivity(value)}><b>{t(value === "gentle" ? "Gentle" : value === "normal" ? "Normal" : "Fast")}</b></button>)}
+            </div>
+            <div className="control-choice-group" role="group" aria-label={t('Control area')}>
+              <strong>{t('Control area')}</strong>
+              {(["compact", "normal", "wide"] as const).map(value => <button key={value} className="system-setting" type="button" aria-pressed={controlZone === value} onClick={() => setControlZone(value)}><b>{t(value === "compact" ? "Compact" : value === "normal" ? "Normal" : "Wide")}</b></button>)}
+            </div>
+            <div className="control-choice-group" role="group" aria-label={t('Ship start position')}>
+              <strong>{t('Ship start position')}</strong>
+              {(["higher", "normal", "lower"] as const).map(value => <button key={value} className="system-setting" type="button" aria-pressed={shipStart === value} onClick={() => setShipStart(value)}><b>{t(value === "higher" ? "Higher" : value === "normal" ? "Normal" : "Lower")}</b></button>)}
+            </div>
           </div>
           <div className="system-menu-section system-quick-settings">
             <div className="system-menu-heading"><strong>{t('Display')}</strong></div>
