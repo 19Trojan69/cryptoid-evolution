@@ -12,7 +12,7 @@ import PaintedShip from "./PaintedShip";
 import TermsDialog from "../components/TermsDialog";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
 import { primeGameAudio } from "./gameAudio";
-import { MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readMusicVolume } from "./musicPreferences";
+import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, readMusicVolume } from "./musicPreferences";
 import { MusicPlayer } from "./musicPlayback";
 import MusicVolumeSlider from "./MusicVolumeSlider";
 import Starfield from "./Starfield";
@@ -22,8 +22,8 @@ import { requestGameFullscreen } from "./gameFullscreen";
 import { powerUpSymbols, type PowerUpType } from "./powerUps";
 import { CONTROL_HAND_KEY, CONTROL_SENSITIVITY_KEY, CONTROL_ZONE_KEY, SHIP_START_KEY, readControlHand, readControlSensitivity, readControlZone, readShipStart, type ControlHand, type ControlSensitivity, type ControlZone, type ShipStart } from "./controlPreferences";
 
-type Offer = { id: string; kind: "weapon" | "power"; name: string; description: string; pricePi: number };
-type Inventory = { ownedWeapons: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
+type Offer = { id: string; kind: "weapon" | "power" | "armor"; name: string; description: string; pricePi: number };
+type Inventory = { ownedWeapons: string[]; ownedArmor: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
 type Leader = { rank: number; username: string; score: number };
 
 const shopTabs = [
@@ -76,6 +76,7 @@ const Shop = () => {
   const [personalBest, setPersonalBest] = useState<number | null>(null);
   const [musicEnabled, setMusicEnabled] = useState(() => localStorage.getItem(MUSIC_STORAGE_KEY) !== "off");
   const [musicVolume, setMusicVolume] = useState(readMusicVolume);
+  const [effectsVolume, setEffectsVolume] = useState(readEffectsVolume);
   const homeMusicRef = useRef<MusicPlayer | null>(null);
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [musicBlocked, setMusicBlocked] = useState(false);
@@ -112,6 +113,10 @@ const Shop = () => {
     };
   }, [musicEnabled]);
   useEffect(() => { if (homeMusicRef.current) homeMusicRef.current.setVolume(musicVolume); }, [musicVolume]);
+  const changeEffectsVolume = (value: number) => {
+    localStorage.setItem(EFFECTS_VOLUME_KEY, String(value));
+    setEffectsVolume(value);
+  };
   const changeMusicVolume = (value: number) => {
     localStorage.setItem(MUSIC_VOLUME_KEY, String(value));
     setMusicVolume(value);
@@ -218,7 +223,7 @@ const Shop = () => {
   const refreshInventory = async () => {
     try {
       const { data } = await axiosClient.get<Inventory>("/hangar/inventory");
-      if (!Array.isArray(data.ownedWeapons) || !Array.isArray(data.consumables)) throw new Error("Invalid inventory");
+      if (!Array.isArray(data.ownedWeapons) || !Array.isArray(data.ownedArmor) || !Array.isArray(data.consumables)) throw new Error("Invalid inventory");
       setInventory(data);
     }
     catch { setLoadoutMessage(t('Connect your Pi account to see your saved loadout.')); }
@@ -231,7 +236,7 @@ const Shop = () => {
   useEffect(() => {
     if (!isAuthenticated) return;
     axiosClient.get<Inventory>("/hangar/inventory").then(({ data }) => {
-      if (!Array.isArray(data.ownedWeapons) || !Array.isArray(data.consumables)) throw new Error("Invalid inventory");
+      if (!Array.isArray(data.ownedWeapons) || !Array.isArray(data.ownedArmor) || !Array.isArray(data.consumables)) throw new Error("Invalid inventory");
       setInventory(data);
     }).catch(() => setLoadoutMessage(t('Connect your Pi account to see your saved loadout.')));
   }, [isAuthenticated]);
@@ -334,6 +339,7 @@ const Shop = () => {
           <div className="system-menu-section system-quick-settings">
             <div className="system-menu-heading"><strong>{t('Music volume')}</strong></div>
             <MusicVolumeSlider id="home-music-volume" label={t('Music volume')} value={musicVolume} onChange={changeMusicVolume} />
+            <MusicVolumeSlider id="home-effects-volume" label={t('Effects volume')} value={effectsVolume} onChange={changeEffectsVolume} />
           </div>
           <div className="system-menu-section system-quick-settings">
             <div className="system-menu-heading"><strong>{t('Display')}</strong></div>
@@ -413,6 +419,9 @@ const Shop = () => {
             </div></article>;
           })}
         </div></div>)}
+        {shopView === "weapons" && <div className="hangar-offers"><h3>{t("Permanent armor")}</h3><p>{t("Armor is always active from mission start, needs no shield and remains yours across all future missions. Each upgrade adds to your maximum hearts.")}</p><div className="hangar-offer-grid">
+          {offers.filter(offer => offer.kind === "armor").map(offer => { const owned = inventory?.ownedArmor.includes(offer.id); return <article key={offer.id} className={`hangar-offer hangar-offer-armor${owned ? " hangar-offer-selected" : ""}`}><div className="offer-preview power-preview power-preview-shield" aria-hidden="true"><span className="preview-grid" /><span className="power-preview-orbit"><i>♥</i></span><small>PERMANENT HULL</small></div><h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span>{t("Permanent · every mission")} · {offer.pricePi} π</span><strong>{owned ? t("OWNED") : t("NOT OWNED")}</strong><div>{!owned && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady || !inventory} onClick={() => orderProduct(`Cryptoid ${offer.name} · permanent armor`, offer.pricePi, { productId: offer.id }, () => { setLoadoutMessage(`${offer.name} ${t("purchase confirmed.")}`); void refreshInventory(); })}>{t("Buy with π")}</button>}</div></article>; })}
+        </div></div>}
         {inventory?.equippedWeapon && <button className="text-button" type="button" onClick={() => equip(null, inventory.selectedPower)}>{t('Use free standard laser')}</button>}
         {inventory?.selectedPower && <button className="text-button" type="button" onClick={() => equip(inventory.equippedWeapon, null)}>{t('Save bonus for a later mission')}</button>}
         {loadoutMessage && <p role="status">{loadoutMessage}</p>}

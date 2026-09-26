@@ -1,3 +1,5 @@
+import { readEffectsVolume } from "./musicPreferences.ts";
+
 export type GameSound = "laser" | "enemyHit" | "explosion" | "collision" | "shield" | "pickup" | "boost" | "boss" | "bossDestroy";
 
 const sampleNames = ["shot-single", "shot-twin", "shot-rapid", "shot-triple", "shot-plasma", "enemy-hit", "enemy-destroy", "enemy-destroy-alt", "player-collision", "shield", "boost", "boss-destroy"] as const;
@@ -8,6 +10,7 @@ export class GameAudio {
   private context: AudioContext | null = null;
   private effectsBus: GainNode | null = null;
   private paused = false;
+  private effectsVolume = readEffectsVolume();
   private samples = new Map<SampleName, AudioBuffer>();
   private sampleRequest: Promise<void> | null = null;
   private lastShotAt = 0;
@@ -18,6 +21,7 @@ export class GameAudio {
     if (!this.context) {
       this.context = new AudioContext();
       this.effectsBus = this.context.createGain();
+      this.effectsBus.gain.value = this.effectsVolume / 100;
       this.effectsBus.connect(this.context.destination);
     }
     try { await this.context.resume(); } catch { return false; }
@@ -95,6 +99,11 @@ export class GameAudio {
       case "boss": [150, 130, 110].forEach((note, step) => this.tone(note, note * .75, .3, .085, "triangle", step * .22)); break;
       case "bossDestroy": this.tone(150, 60, .48, .055, "triangle"); break;
     }
+  }
+
+  setEffectsVolume(percent: number) {
+    this.effectsVolume = Math.max(0, Math.min(100, Number.isFinite(percent) ? percent : 100));
+    if (this.effectsBus) this.effectsBus.gain.value = this.effectsVolume / 100;
   }
 
   setSector(_sector: number) { /* Reserved for future sector-specific effects. */ }

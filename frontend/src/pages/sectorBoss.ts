@@ -3,13 +3,13 @@ import { levelDifficulty } from "./levelDifficulty.ts";
 export const BOSS_ENTRY_MS = 1_800;
 export const BOSS_FIRE_INTERVAL_MS = 2_500;
 
-export type SectorBoss = { x: number; y: number; startY: number; radius: number; health: number; maxHealth: number; elapsed: number; fireElapsed: number };
+export type SectorBoss = { x: number; y: number; startY: number; radius: number; health: number; maxHealth: number; elapsed: number; fireElapsed: number; lastDamageAt: number };
 
 export const createSectorBoss = (sector: number, width: number, visibleTop = 0): SectorBoss => {
   const health = levelDifficulty(sector).bossHealth;
   const radius = 50;
   const startY = visibleTop ? visibleTop + radius + 8 : -60;
-  return { x: width / 2, y: startY, startY, radius, health, maxHealth: health, elapsed: 0, fireElapsed: 0 };
+  return { x: width / 2, y: startY, startY, radius, health, maxHealth: health, elapsed: 0, fireElapsed: 0, lastDamageAt: -Infinity };
 };
 
 export const moveSectorBoss = (boss: SectorBoss, delta: number, width: number, height: number): SectorBoss => {
@@ -29,6 +29,13 @@ export const moveSectorBoss = (boss: SectorBoss, delta: number, width: number, h
 export const bossFireInterval = (boss: SectorBoss, level = 1) => {
   const levelReduction = levelDifficulty(level).progress * 220;
   return (boss.health <= boss.maxHealth / 2 ? 1_900 : BOSS_FIRE_INTERVAL_MS) - levelReduction;
+};
+
+export const damageSectorBoss = (boss: SectorBoss, damage: number, time: number) => {
+  if (time - boss.lastDamageAt < 180) return false;
+  boss.lastDamageAt = time;
+  boss.health = Math.max(0, boss.health - damage);
+  return true;
 };
 
 export const bossVulnerable = (boss: SectorBoss) => boss.elapsed >= BOSS_ENTRY_MS;

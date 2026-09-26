@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { randomUUID } from "node:crypto";
-import { findOffer, hangarCatalog } from "../hangarCatalog";
+import { armorBonusFromPaid, findOffer, hangarCatalog } from "../hangarCatalog";
 import "../types/session";
 
 export default function mountHangarEndpoints(router: Router) {
@@ -14,9 +14,10 @@ export default function mountHangarEndpoints(router: Router) {
       const users = req.app.locals.userCollection;
       const paid = await orders.find({ user: uid, paid: true }).project({ product_id: 1, consumed_at: 1 }).toArray();
       const ownedWeapons = hangarCatalog.filter(item => item.kind === "weapon" && paid.some((order: any) => order.product_id === item.id)).map(item => item.id);
-      const consumables = hangarCatalog.filter(item => item.kind === "power").map(item => ({ id: item.id, count: paid.filter((order: any) => order.product_id === item.id && !order.consumed_at).length }));
+      const ownedArmor = hangarCatalog.filter(item => item.kind === "armor" && paid.some((order: any) => order.product_id === item.id)).map(item => item.id);
+       const consumables = hangarCatalog.filter(item => item.kind === "power").map(item => ({ id: item.id, count: paid.filter((order: any) => order.product_id === item.id && !order.consumed_at).length }));
       const user = await users.findOne({ uid });
-      return res.json({ ownedWeapons, consumables, equippedWeapon: ownedWeapons.includes(user?.loadout?.weapon) ? user.loadout.weapon : null, selectedPower: consumables.some(item => item.id === user?.loadout?.power && item.count > 0) ? user.loadout.power : null });
+      return res.json({ ownedWeapons, ownedArmor, consumables, equippedWeapon: ownedWeapons.includes(user?.loadout?.weapon) ? user.loadout.weapon : null, selectedPower: consumables.some(item => item.id === user?.loadout?.power && item.count > 0) ? user.loadout.power : null });
     } catch (error) { return res.status(503).json({ error: "Inventory unavailable" }); }
   });
 
@@ -45,12 +46,14 @@ export default function mountHangarEndpoints(router: Router) {
       const weapon = findOffer(user?.loadout?.weapon);
       const owned = weapon?.kind === "weapon" && await orders.findOne({ user: uid, product_id: weapon.id, paid: true });
       const paidWeapons = await orders.find({ user: uid, paid: true, product_id: { $in: hangarCatalog.filter(item => item.kind === "weapon").map(item => item.id) } }).project({ product_id: 1 }).toArray();
-      const unlockedWeaponLevels = [1, ...hangarCatalog.filter(item => item.kind === "weapon" && paidWeapons.some((order: any) => order.product_id === item.id)).map(item => item.kind === "weapon" ? item.level : 1)];
+      const paidArmor = await orders.find({ user: uid, paid: true, product_id: { $in: hangarCatalog.filter(item => item.kind === "armor").map(item => item.id) } }).project({ product_id: 1 }).toArray();
+       const armorBonus = armorBonusFromPaid(paidArmor.map((order: any) => order.product_id));
+       const unlockedWeaponLevels = [1, ...hangarCatalog.filter(item => item.kind === "weapon" && paidWeapons.some((order: any) => order.product_id === item.id)).map(item => item.kind === "weapon" ? item.level : 1)];
       const selected = findOffer(user?.loadout?.power);
       const consumed = selected?.kind === "power" ? await orders.findOneAndUpdate({ user: uid, product_id: selected.id, paid: true, consumed_at: { $exists: false } }, { $set: { consumed_at: new Date() } }, { returnDocument: "before" }) : null;
       const scoreRun = { id: randomUUID(), startedAt: Date.now() };
       req.session.scoreRun = scoreRun;
-      return res.json({ weaponLevel: owned && weapon?.kind === "weapon" ? weapon.level : 1, unlockedWeaponLevels, powerUp: consumed && selected?.kind === "power" ? selected.powerUp : null, scoreRunId: scoreRun.id });
+      return res.json({ armorBonus, weaponLevel: owned && weapon?.kind === "weapon" ? weapon.level : 1, unlockedWeaponLevels, powerUp: consumed && selected?.kind === "power" ? selected.powerUp : null, scoreRunId: scoreRun.id });
     } catch (error) { return res.status(503).json({ error: "Could not start mission" }); }
   });
 }

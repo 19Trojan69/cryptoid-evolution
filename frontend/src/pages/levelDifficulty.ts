@@ -26,7 +26,7 @@ export const levelDifficulty = (level: number): LevelDifficulty => {
     entryPaceScale: 1 - progress * .08,
     groupAttackInterval: Math.max(4, 12 - Math.floor(progress * 9)),
     projectileBonus: Math.min(2, Math.floor(progress * 3)),
-    bossHealth: 15 + progress * 60,
+    bossHealth: 120 + progress * 180,
   };
 };
 

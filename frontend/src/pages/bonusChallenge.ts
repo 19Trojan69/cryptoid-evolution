@@ -57,5 +57,5 @@ export const bonusReward = (hits: number) => {
   return { label: "CHALLENGE COMPLETE", points: 0, shards: hits > 0 ? 2 : 0, powerUps: [] as const };
 };
 
-export const bonusHeartReward = (hits: number, hearts: number) =>
-  hits === BONUS_TARGET_COUNT && hearts < 3 ? 1 : 0;
+export const bonusHeartReward = (hits: number, hearts: number, maxHearts = 3) =>
+  hits === BONUS_TARGET_COUNT && hearts < maxHearts ? 1 : 0;

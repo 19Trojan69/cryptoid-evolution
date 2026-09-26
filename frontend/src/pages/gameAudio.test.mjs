@@ -34,6 +34,12 @@ test("game audio plays effects without scheduling background music", async () =>
     assert.equal(intervals.size, 0);
     assert.equal(buses.length, 1);
     assert.equal(buses[0].gain.value, 1);
+    audio.setEffectsVolume(25);
+    assert.equal(buses[0].gain.value, .25);
+    audio.setEffectsVolume(0);
+    assert.equal(buses[0].gain.value, 0);
+    audio.setEffectsVolume(100);
+    assert.equal(buses[0].gain.value, 1);
     audio.play("laser");
     audio.play("collision");
     assert.equal(playedTones, 2);

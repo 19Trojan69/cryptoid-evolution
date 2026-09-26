@@ -21,7 +21,8 @@ export default function mountPaymentsEndpoints(router: Router) {
       const orders = req.app.locals.orderCollection;
       const existing = await orders.findOne({ pi_payment_id: id });
       if (existing && (existing.user !== uid || existing.product_id !== offer.id || existing.cancelled)) return res.status(409).json({ error: "Payment already assigned or cancelled" });
-      if (!existing) await orders.updateOne({ pi_payment_id: id }, { $setOnInsert: { pi_payment_id: id, product_id: offer.id, user: uid, paid: false, created_at: new Date() } }, { upsert: true });
+      if (!existing && offer.kind === "armor" && await orders.findOne({ user: uid, product_id: offer.id, paid: true })) return res.status(409).json({ error: "Permanent armor already owned" });
+       if (!existing) await orders.updateOne({ pi_payment_id: id }, { $setOnInsert: { pi_payment_id: id, product_id: offer.id, user: uid, paid: false, created_at: new Date() } }, { upsert: true });
       if (!payment.status?.developer_approved) await platformAPIClient.post(`/v2/payments/${id}/approve`);
       return res.json({ approved: true });
     } catch (error) {
