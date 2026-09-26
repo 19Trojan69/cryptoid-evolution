@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
 import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, arrangeFormationBySize, formationLayout, formationReady, sectionInSector, sectionPhase, sectorForSection, sectorName, type SectorPhase } from "./sectorManager";
 import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
-import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp } from "./powerUps";
+import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, POWER_UP_DURATION_MS, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp, type PowerUpType } from "./powerUps";
+import { readControlHand } from "./controlPreferences";
+import { canActivatePower, spendPower, storePower, type PowerInventory } from "./powerInventory";
 import { activeWeaponLevel, advanceShot, contactWithEnemy, MAX_PLAYER_SHOTS, movePlayer, PICKUP_WEAPON_DURATION_MS, placePlayerFromPointer, PURCHASED_WEAPON_DURATION_MS, shipCollisionOutcome, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
 import { advanceEnemyShot, createEnemyShot, enemyShotHitsPlayer, enemyShotLimit, type EnemyShot } from "./enemyFire";
 import SectorBackdrop from "./SectorBackdrop";
@@ -88,9 +90,9 @@ type Effect = {
   shipClass?: CryptoidClass;
   debrisColor?: PlayerColorId;
 };
-type GameState = { asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; bonusShards: number; chainBlocks: number; chainResult: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; score: number; coins: number; hearts: number; shieldCharges: number; shieldMs: number; shieldActive: boolean; overdriveMs: number; rapidFireMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | null; weaponLevel: number; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
+type GameState = { asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; bonusShards: number; chainBlocks: number; chainResult: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; powerInventory: PowerInventory; score: number; coins: number; hearts: number; shieldCharges: number; shieldMs: number; shieldActive: boolean; overdriveMs: number; rapidFireMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | null; weaponLevel: number; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
 
-const createInitialState = (): GameState => ({ asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", bonusShards: 0, chainBlocks: 0, chainResult: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: .86 }, thrust: 0, effects: [], powerUps: [], score: 0, coins: 0, hearts: 3, shieldCharges: 0, shieldMs: 0, shieldActive: true, overdriveMs: 0, rapidFireMs: 0, pendingStartPower: null, weaponLevel: 1, weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") ? "loading" : "playing" });
+const createInitialState = (): GameState => ({ asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", bonusShards: 0, chainBlocks: 0, chainResult: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: .86 }, thrust: 0, effects: [], powerUps: [], powerInventory: { shield: 0, overdrive: 0, weapon: 0, rapid: 0 }, score: 0, coins: 0, hearts: 3, shieldCharges: 0, shieldMs: 0, shieldActive: true, overdriveMs: 0, rapidFireMs: 0, pendingStartPower: null, weaponLevel: 1, weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") ? "loading" : "playing" });
 
 const readRecord = (key: string) => Number(window.localStorage.getItem(key) || 0);
 
@@ -541,10 +543,8 @@ const GamePage = () => {
         state.powerUps = movePowerUps(state.powerUps, delta, height);
         state.powerUps = state.powerUps.filter(pickup => {
           if (Math.hypot(pickup.x - state.player.x * width, pickup.y - state.player.y * height) > 34) return true;
-          Object.assign(state, applyPowerUp(state, pickup.type));
-          if (pickup.type === "weapon") { state.pickupWeaponLevel = state.weaponLevel; state.pickupWeaponMs = PICKUP_WEAPON_DURATION_MS; state.weaponCap = Math.max(state.weaponCap, state.weaponLevel); }
-          if (pickup.type === "shield") state.shieldActive = true;
-          soundRef.current?.play(pickup.type === "overdrive" ? "boost" : "pickup");
+          state.powerInventory = storePower(state.powerInventory, pickup.type);
+          soundRef.current?.play("pickup");
           return false;
         });
         if (transitionPaused) fireTimerRef.current = 0;
@@ -627,8 +627,7 @@ const GamePage = () => {
           state.bonusShards += reward.shards;
           state.hearts = Math.min(3, state.hearts + recoveredHeart);
           for (const power of reward.powerUps) {
-            Object.assign(state, applyPowerUp(state, power));
-            if (power === "shield") state.shieldActive = true;
+            state.powerInventory = storePower(state.powerInventory, power);
           }
           if (reward.powerUps.length || recoveredHeart) soundRef.current?.play("pickup");
         }
@@ -695,8 +694,10 @@ const GamePage = () => {
 
   const startDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (stateRef.current.status !== "playing" || (event.target as HTMLElement).closest("button, .game-hud, .game-overlay, .touch-controls")) return;
+    if (pointerRef.current !== null) return;
     const bounds = event.currentTarget.getBoundingClientRect();
     if (event.clientY - bounds.top < bounds.height * .5) return;
+    if (event.pointerType === "touch" && (readControlHand() === "right" ? event.clientX - bounds.left < bounds.width * .35 : event.clientX - bounds.left > bounds.width * .65)) return;
     pointerRef.current = event.pointerId;
     event.currentTarget.setPointerCapture(event.pointerId);
     positionFromPointer(event);
@@ -712,11 +713,30 @@ const GamePage = () => {
     const state = stateRef.current;
     if (state.status !== "playing" || !state.pendingStartPower) return;
     const power = state.pendingStartPower;
+    if ((power === "shield" && state.shieldCharges > 0 && state.shieldMs > 0) || (power === "rapid" && state.rapidFireMs > 0) || (power === "overdrive" && state.overdriveMs > 0)) return;
     Object.assign(state, applyPowerUp(state, power, PURCHASED_POWER_UP_DURATION_MS));
     if (power === "shield") state.shieldActive = true;
     state.pendingStartPower = null;
     soundRef.current?.play(power === "overdrive" ? "boost" : "pickup");
     setGame({ ...state });
+  };
+  const activateStoredPower = (power: PowerUpType) => {
+    const state = stateRef.current;
+    const activeMs = power === "shield" ? (state.shieldCharges > 0 ? state.shieldMs : 0) : power === "rapid" ? state.rapidFireMs : power === "overdrive" ? state.overdriveMs : state.pickupWeaponMs;
+    if (state.status !== "playing" || !canActivatePower(state.powerInventory, power, activeMs)) return;
+    // A fresh charge waits until the current effect ends, preserving each pickup.
+    state.powerInventory = spendPower(state.powerInventory, power);
+    if (power === "weapon") {
+      state.pickupWeaponLevel = Math.min(5, state.weaponLevel + 1);
+      state.pickupWeaponMs = PICKUP_WEAPON_DURATION_MS;
+      state.weaponCap = Math.max(state.weaponCap, state.pickupWeaponLevel);
+      state.weaponLevel = activeWeaponLevel(state.paidWeaponLevel, state.paidWeaponMs, state.pickupWeaponLevel, state.pickupWeaponMs, state.weaponCap);
+    } else {
+      Object.assign(state, applyPowerUp(state, power, POWER_UP_DURATION_MS));
+      if (power === "shield") state.shieldActive = true;
+    }
+    soundRef.current?.play(power === "overdrive" ? "boost" : "pickup");
+    setGame({ ...state, powerInventory: { ...state.powerInventory } });
   };
 
   const restart = () => {
@@ -777,7 +797,7 @@ const GamePage = () => {
           : isBonusSection(game.section) ? t("BONUS CHALLENGE") : `${t("ROUND")} ${round} / 3`;
 
   return (
-    <main className="game-shell" onPointerDownCapture={() => { void startEffects(); requestGameFullscreen(); }}>
+    <main className="game-shell" onPointerDownCapture={() => { void startEffects(); if (pointerRef.current === null && !document.fullscreenElement) requestGameFullscreen(); }}>
       <div ref={fieldRef} className="game-field" onPointerDown={startDrag} onPointerMove={event => { if (pointerRef.current === event.pointerId) positionFromPointer(event); }} onPointerUp={event => { if (pointerRef.current === event.pointerId) pointerRef.current = null; }} onPointerCancel={event => { if (pointerRef.current === event.pointerId) pointerRef.current = null; }}>
         <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} />
         <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
@@ -812,15 +832,16 @@ const GamePage = () => {
         {game.effects.map(effect => <div key={effect.id} className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y }}><span />{bossFireBursts(effect)}{shipDebris(effect)}</div>)}
         {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0 ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${5 + game.thrust * 13}%` } as CSSProperties} aria-label={t('Your Cryptoid ship')}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} />{engineTrails(shipSelection.skin.sprite, "player-engine")}</div></div>}
         <div className="game-tip">← → ↑ ↓ / {t("THUMB CONTROLS")} · {t("Auto fire")}</div>
-        <div className="touch-controls">
+        <div className={`touch-controls touch-controls-${readControlHand()}`}>
           <div className="edge-actions" role="group" aria-label={t('Available equipment')}>
-            {game.pendingStartPower && <button type="button" className={`edge-action edge-action-${game.pendingStartPower}`} disabled={game.status !== "playing"} title={`Activate ${t(powerUpNames[game.pendingStartPower])} · 60s`} aria-label={`Activate ${t(powerUpNames[game.pendingStartPower])} for 60 seconds`} onClick={activateStartPower}>{powerUpSymbols[game.pendingStartPower]}<small>60s</small></button>}
+            {(["shield", "overdrive", "rapid", "weapon"] as const).map(power => game.powerInventory[power] > 0 && <button key={power} type="button" className={`edge-action edge-action-${power}`} disabled={game.status !== "playing" || (power === "shield" && game.shieldCharges > 0 && game.shieldMs > 0) || (power === "overdrive" && game.overdriveMs > 0) || (power === "rapid" && game.rapidFireMs > 0) || (power === "weapon" && game.pickupWeaponMs > 0)} aria-label={`${t('Activate')} ${t(powerUpNames[power])} · ${game.powerInventory[power]}`} title={`${t(powerUpNames[power])} · ${game.powerInventory[power]}`} onClick={() => activateStoredPower(power)}>{powerUpSymbols[power]}<small>×{game.powerInventory[power]}</small></button>)}
+            {game.pendingStartPower && <button type="button" className={`edge-action edge-action-${game.pendingStartPower}`} disabled={game.status !== "playing" || (game.pendingStartPower === "shield" && game.shieldCharges > 0 && game.shieldMs > 0) || (game.pendingStartPower === "rapid" && game.rapidFireMs > 0) || (game.pendingStartPower === "overdrive" && game.overdriveMs > 0)} title={`Activate ${t(powerUpNames[game.pendingStartPower])} · 60s`} aria-label={`Activate ${t(powerUpNames[game.pendingStartPower])} for 60 seconds`} onClick={activateStartPower}>{powerUpSymbols[game.pendingStartPower]}<small>60s</small></button>}
             {game.paidWeaponMs > 0 && <>
               <button type="button" className="edge-action edge-action-weapon" title={t("Single laser")} aria-label={t("Select single laser")} aria-pressed={game.paidWeaponLevel === 1} onClick={() => selectWeapon(1)}>Ⅰ</button>
               {game.unlockedWeapons.filter(level => level > 1 && level <= game.weaponCap).sort((a, b) => a - b).map(level => <button type="button" key={level} className="edge-action edge-action-weapon" title={`${level === 2 ? "Twin" : level === 3 ? "Rapid Twin" : level === 4 ? "Triple" : "Plasma"} · ${Math.ceil(game.paidWeaponMs / 1_000)}s`} aria-label={`Select ${level === 2 ? "Twin" : level === 3 ? "Rapid Twin" : level === 4 ? "Triple" : "Plasma"}`} aria-pressed={game.paidWeaponLevel === level} onClick={() => selectWeapon(level)}>{["", "", "Ⅱ", "Ⅲ", "Ⅳ", "Ⅴ"][level]}</button>)}
             </>}
             {game.pickupWeaponMs > 0 && <span className="edge-action edge-action-pickup" title={`${t("Collected shots")} · ${Math.ceil(game.pickupWeaponMs / 1_000)}s`} aria-label={`${t("Collected shots")} ${Math.ceil(game.pickupWeaponMs / 1_000)} ${t("seconds remaining")}`}>{powerUpSymbols.weapon}<small>{Math.ceil(game.pickupWeaponMs / 1_000)}s</small></span>}
-            {game.shieldCharges > 0 && <button type="button" className="edge-action edge-action-shield" aria-pressed={game.shieldActive} aria-label={`${t(game.shieldActive ? "Disable" : "Enable")} ${t("shield")} · ${game.shieldCharges} ${t("charge")}`} title={`${t("Shield")} · ${game.shieldCharges} ${t("charge")} · ${Math.ceil(game.shieldMs / 1_000)}s`} onClick={() => { stateRef.current.shieldActive = !stateRef.current.shieldActive; setGame({ ...stateRef.current }); }}>{powerUpSymbols.shield}<small>{Math.ceil(game.shieldMs / 1_000)}s</small></button>}
+            {game.shieldCharges > 0 && <span className="edge-action edge-action-shield" aria-label={`${t("Shield")} · ${Math.ceil(game.shieldMs / 1_000)} ${t("seconds remaining")}`}>{powerUpSymbols.shield}<small>{Math.ceil(game.shieldMs / 1_000)}s</small></span>}
             {game.rapidFireMs > 0 && <span className="edge-action edge-action-rapid" aria-label={`Rapid Fire ${Math.ceil(game.rapidFireMs / 1_000)} ${t("seconds remaining")}`}>{powerUpSymbols.rapid}<small>{Math.ceil(game.rapidFireMs / 1_000)}s</small></span>}
             {game.overdriveMs > 0 && <span className="edge-action edge-action-overdrive" aria-label={`Overdrive ${Math.ceil(game.overdriveMs / 1_000)} ${t("seconds remaining")}`}>{powerUpSymbols.overdrive}<small>{Math.ceil(game.overdriveMs / 1_000)}s</small></span>}
           </div>

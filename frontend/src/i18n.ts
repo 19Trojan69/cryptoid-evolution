@@ -116,6 +116,12 @@ const systemMenuTranslations: Partial<Record<Locale, Record<string, string>>> = 
   es: { "System menu":"Sistema", "SYSTEM / SETTINGS":"SISTEMA / AJUSTES", "Automatic (device language)":"Automático (idioma del dispositivo)", "Current language":"Idioma actual", "Display":"Pantalla", "Full screen":"Pantalla completa", "Reduced effects":"Efectos reducidos", "Standard effects":"Efectos normales", "Game guide":"Guía de juego", "Open game guide":"Abrir guía", "Close menu":"Cerrar menú" },
   fr: { "System menu":"Système", "SYSTEM / SETTINGS":"SYSTÈME / RÉGLAGES", "Automatic (device language)":"Automatique (langue de l’appareil)", "Current language":"Langue actuelle", "Display":"Affichage", "Full screen":"Plein écran", "Reduced effects":"Effets réduits", "Standard effects":"Effets normaux", "Game guide":"Guide du jeu", "Open game guide":"Ouvrir le guide", "Close menu":"Fermer le menu" },
 };
+const controlTranslations: Partial<Record<Locale, Record<string, string>>> = {
+  de: { "Controls":"Steuerung", "Right-handed controls":"Rechtshänder-Steuerung", "Left-handed controls":"Linkshänder-Steuerung", "Move with one thumb; activate power-ups with the other.":"Mit einem Daumen steuern, mit dem anderen Power-ups aktivieren." },
+  es: { "Controls":"Controles", "Right-handed controls":"Control para diestros", "Left-handed controls":"Control para zurdos", "Move with one thumb; activate power-ups with the other.":"Mueve la nave con un pulgar y activa mejoras con el otro." },
+  fr: { "Controls":"Commandes", "Right-handed controls":"Commandes pour droitiers", "Left-handed controls":"Commandes pour gauchers", "Move with one thumb; activate power-ups with the other.":"Pilotez avec un pouce et activez les bonus avec l’autre." },
+  th: { "Controls":"การควบคุม", "Right-handed controls":"ควบคุมสำหรับคนถนัดขวา", "Left-handed controls":"ควบคุมสำหรับคนถนัดซ้าย", "Move with one thumb; activate power-ups with the other.":"ใช้นิ้วโป้งข้างหนึ่งบังคับยาน และอีกข้างเปิดใช้พลังเสริม" },
+};
 const hudTranslations: Partial<Record<Locale, Record<string, string>>> = {
   de: { "Weapon level":"Waffenstufe", "Game level":"Spiellevel" }, es: { "Weapon level":"Nivel de arma", "Game level":"Nivel de juego" }, fr: { "Weapon level":"Niveau d’arme", "Game level":"Niveau de jeu" },
   pt: { "Weapon level":"Nível da arma", "Game level":"Nível do jogo" }, it: { "Weapon level":"Livello arma", "Game level":"Livello gioco" }, pl: { "Weapon level":"Poziom broni", "Game level":"Poziom gry" },
@@ -124,7 +130,7 @@ const hudTranslations: Partial<Record<Locale, Record<string, string>>> = {
   ro: { "Weapon level":"Nivelul armei", "Game level":"Nivelul jocului" }, sr: { "Weapon level":"Ниво оружја", "Game level":"Ниво игре" }, uk: { "Weapon level":"Рівень зброї", "Game level":"Рівень гри" },
   th: { "Weapon level":"ระดับอาวุธ", "Game level":"เลเวลเกม" },
 };
-export const translate = (locale: Locale, source: string) => locale === "en" ? source : hudTranslations[locale]?.[source] ?? systemMenuTranslations[locale]?.[source] ?? extendedTranslations[locale]?.[source] ?? powerUpTranslations[locale]?.[source] ?? levelTranslations[locale]?.[source] ?? networkTranslations[locale]?.[source] ?? newerTranslations[locale]?.[source] ?? translations[locale]?.[source] ?? source;
+export const translate = (locale: Locale, source: string) => locale === "en" ? source : controlTranslations[locale]?.[source] ?? hudTranslations[locale]?.[source] ?? systemMenuTranslations[locale]?.[source] ?? extendedTranslations[locale]?.[source] ?? powerUpTranslations[locale]?.[source] ?? levelTranslations[locale]?.[source] ?? networkTranslations[locale]?.[source] ?? newerTranslations[locale]?.[source] ?? translations[locale]?.[source] ?? source;
 export const useLocale = () => {
   const [locale, setLocale] = useState<Locale>(() => resolveLocale(navigator.languages?.length ? navigator.languages : [navigator.language], localStorage.getItem(STORAGE_KEY)));
   const [automatic, setAutomatic] = useState(() => !localStorage.getItem(STORAGE_KEY));

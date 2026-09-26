@@ -704,6 +704,7 @@ html[data-motion="reduced"] .boss-debris-piece:nth-child(n+5) { display: none; }
   .offer-preview { height: 104px; }
 }
 .touch-controls { position: absolute; z-index: 5; right: 16px; bottom: max(19px, env(safe-area-inset-bottom)); display: flex; align-items: flex-end; pointer-events: none; }
+.touch-controls-right { right: auto; left: 16px; }
 .edge-actions { display: flex; flex-direction: column-reverse; gap: 4px; max-height: min(64dvh, 390px); overflow-y: auto; overscroll-behavior: contain; pointer-events: auto; }
 .edge-actions:empty { display: none; }
 .edge-action { display: flex; flex: none; flex-direction: column; align-items: center; justify-content: center; width: 40px; height: 40px; padding: 1px; border: 1px solid #74a8bb8a; border-radius: 8px; background: #0a2239e8; color: #bce9f8; font: 20px 'Space Grotesk', sans-serif; line-height: 1; cursor: pointer; touch-action: manipulation; }
@@ -711,11 +712,13 @@ html[data-motion="reduced"] .boss-debris-piece:nth-child(n+5) { display: none; }
 .edge-action[aria-pressed="true"] { border-color: currentColor; background: #173951ed; }
 .edge-action:disabled { opacity: .5; }
 .edge-action-weapon { color: #f5d889; }
+.edge-action[disabled] { cursor: default; }
 .edge-action-pickup, .edge-action-rapid { color: #7be6c4; }
 .edge-action-shield { color: #8feeff; }
 .edge-action-overdrive { color: #d7a6ff; }
 @media (pointer: coarse) {
   .touch-controls { right: 8px; }
+  .touch-controls-right { right: auto; left: 8px; }
   .game-tip { bottom: 5px; }
 }
 /* Home system menu and surface-projected Earth; the game backdrop keeps its own planets. */
