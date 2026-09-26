@@ -225,11 +225,21 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .space-world.planet-ocean .space-world-surface { background-image: url('/planets/ocean.svg'); }
 @media (max-width: 560px) { .space-world-primary { width: clamp(155px, 46vw, 245px); opacity: .45; } .space-scene-1 .space-world-primary { opacity: .5; } .space-world-secondary { width: 75px; top: 31%; } .space-world-near { width: 53px; top: 23%; } .space-world-distant { width: 30px; } .space-orbit { width: 85vw; } }
 @media (max-width: 700px) { .starfield { transform: none; } .space-scene { --parallax-x: 0px !important; --parallax-y: 0px !important; --parallax-far-x: 0px !important; --parallax-far-y: 0px !important; --parallax-near-x: 0px !important; --parallax-near-y: 0px !important; } .space-haze { filter: none; opacity: .2; } .game-hud { backdrop-filter: none; } }
-.game-hud { position: absolute; z-index: 3; top: 0; left: 0; right: 0; display: grid; grid-template-columns: minmax(120px, 1fr) repeat(6, minmax(65px, 100px)) 38px; align-items: center; gap: 12px; padding: max(16px, env(safe-area-inset-top)) clamp(14px, 4vw, 54px); border-bottom: 1px solid rgba(123, 205, 199, .17); background: rgba(3, 14, 27, .66); backdrop-filter: blur(8px); }
+.game-hud { position: absolute; z-index: 10; top: 0; left: 0; right: 0; isolation: isolate; display: grid; grid-template-columns: minmax(120px, 1fr) repeat(6, minmax(65px, 100px)) 38px; align-items: center; gap: 10px; padding: max(13px, env(safe-area-inset-top)) clamp(14px, 4vw, 54px) 13px; border-bottom: 1px solid rgba(92, 220, 232, .44); background: linear-gradient(180deg, rgba(3, 14, 29, .98), rgba(4, 19, 35, .94)); box-shadow: 0 8px 24px rgba(0, 5, 15, .42), inset 0 -1px rgba(93, 225, 235, .12); backdrop-filter: blur(10px); }
+.game-hud::after { position: absolute; z-index: -1; right: 8%; bottom: -1px; left: 8%; height: 1px; background: linear-gradient(90deg, transparent, rgba(94, 224, 234, .78), rgba(186, 133, 255, .62), transparent); content: ''; }
 .hud-actions { display: flex; align-items: center; gap: 4px; }
-.hud-stat { display: flex; flex-direction: column; gap: 5px; text-align: center; }
-.hud-stat span { color: #71969b; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .13em; text-transform: uppercase; }
-.hud-stat strong { color: #eff8f3; font-size: 18px; font-weight: 500; }
+.hud-stat { --hud-accent: #78a7ae; position: relative; display: flex; flex-direction: column; justify-content: center; gap: 4px; min-height: 48px; padding: 4px 3px; border: 1px solid color-mix(in srgb, var(--hud-accent) 24%, transparent); background: linear-gradient(180deg, color-mix(in srgb, var(--hud-accent) 8%, transparent), rgba(5, 21, 37, .3)); text-align: center; clip-path: polygon(0 5px, 5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%); }
+.hud-stat span { color: color-mix(in srgb, var(--hud-accent) 72%, #a5bac1); font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: .11em; text-transform: uppercase; }
+.hud-stat strong { color: #f2f9fb; font-size: 19px; font-weight: 600; line-height: 1; text-shadow: 0 0 10px color-mix(in srgb, var(--hud-accent) 50%, transparent); }
+.hud-stat strong small { margin-left: 3px; color: color-mix(in srgb, var(--hud-accent) 75%, #fff); font: 600 10px 'DM Mono', monospace; letter-spacing: 0; }
+.score-hud { --hud-accent: #69dfba; }
+.coin-stat, .round-hud { --hud-accent: #f0c66d; }
+.hearts-stat { --hud-accent: #ef7183; }
+.weapon-hud { --hud-accent: #bd8dff; }
+.game-level-hud { --hud-accent: #68ddec; }
+.weapon-hud strong { color: #e3ccff; }
+.game-level-hud strong { color: #a9f7ff; }
+.round-hud strong { color: #ffe19c; }
 .chain-hud { gap: 3px; }
 .chain-blocks { display: flex; justify-content: center; gap: 3px; height: 5px; }
 .chain-blocks i { width: 9px; height: 5px; border: 1px solid #537477; border-radius: 1px; background: #243740; }
@@ -247,7 +257,7 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .home-control span { margin-left: 7px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
 .pause-control { justify-self: end; width: 38px; height: 38px; padding: 0; font-size: 15px; }
 .game-control:hover { border-color: var(--gold); color: var(--gold); }
-.game-label { position: absolute; z-index: 1; top: 91px; left: 50%; transform: translateX(-50%); color: rgba(171, 228, 218, .46); font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .2em; white-space: nowrap; }
+.game-label { position: absolute; z-index: 6; top: 91px; left: 50%; transform: translateX(-50%); color: rgba(171, 228, 218, .62); font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .2em; white-space: nowrap; text-shadow: 0 1px 5px #020b16; }
 .game-label span { color: var(--gold); }
 .sector-banner { position: absolute; z-index: 2; top: 21%; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 7px; width: max-content; max-width: 90%; padding: 4px; color: var(--gold); text-align: center; text-shadow: 0 2px 9px #020912, 0 0 18px rgba(237, 195, 105, .34); pointer-events: none; }
 .sector-banner span { font: 10px 'DM Mono', monospace; letter-spacing: .24em; }
@@ -623,12 +633,14 @@ html[data-motion="reduced"] .boss-debris-piece:nth-child(n+5) { display: none; }
 }
 
 @media (max-width: 560px) {
-  .game-hud { grid-template-columns: 82px repeat(6, minmax(0, 1fr)) 34px; gap: 3px; padding: max(11px, env(safe-area-inset-top)) max(7px, env(safe-area-inset-right)) 11px max(7px, env(safe-area-inset-left)); }
+  .game-hud { grid-template-columns: 82px repeat(6, minmax(0, 1fr)) 34px; gap: 2px; padding: max(8px, env(safe-area-inset-top)) max(5px, env(safe-area-inset-right)) 8px max(5px, env(safe-area-inset-left)); }
   .home-control { width: 50px; height: 44px; padding: 0; font-size: 20px; }
   .home-control span { display: none; }
   .pause-control { width: 36px; height: 36px; }
-  .hud-stat span { font-size: 7px; letter-spacing: .07em; }
-  .hud-stat strong { font-size: 14px; }
+  .hud-stat { min-height: 43px; padding: 2px 1px; border-color: color-mix(in srgb, var(--hud-accent) 20%, transparent); }
+  .hud-stat span { font-size: 6px; letter-spacing: .03em; }
+  .hud-stat strong { font-size: 15px; }
+  .hud-stat strong small { margin-left: 1px; font-size: 7px; }
   .heart-icons { font-size: 13px !important; }
   .hearts small { font-size: 9px; }
   .game-label { top: 76px; font-size: 7px; }

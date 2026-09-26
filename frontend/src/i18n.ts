@@ -116,7 +116,15 @@ const systemMenuTranslations: Partial<Record<Locale, Record<string, string>>> = 
   es: { "System menu":"Sistema", "SYSTEM / SETTINGS":"SISTEMA / AJUSTES", "Automatic (device language)":"Automático (idioma del dispositivo)", "Current language":"Idioma actual", "Display":"Pantalla", "Full screen":"Pantalla completa", "Reduced effects":"Efectos reducidos", "Standard effects":"Efectos normales", "Game guide":"Guía de juego", "Open game guide":"Abrir guía", "Close menu":"Cerrar menú" },
   fr: { "System menu":"Système", "SYSTEM / SETTINGS":"SYSTÈME / RÉGLAGES", "Automatic (device language)":"Automatique (langue de l’appareil)", "Current language":"Langue actuelle", "Display":"Affichage", "Full screen":"Plein écran", "Reduced effects":"Effets réduits", "Standard effects":"Effets normaux", "Game guide":"Guide du jeu", "Open game guide":"Ouvrir le guide", "Close menu":"Fermer le menu" },
 };
-export const translate = (locale: Locale, source: string) => locale === "en" ? source : systemMenuTranslations[locale]?.[source] ?? extendedTranslations[locale]?.[source] ?? powerUpTranslations[locale]?.[source] ?? levelTranslations[locale]?.[source] ?? networkTranslations[locale]?.[source] ?? newerTranslations[locale]?.[source] ?? translations[locale]?.[source] ?? source;
+const hudTranslations: Partial<Record<Locale, Record<string, string>>> = {
+  de: { "Weapon level":"Waffenstufe", "Game level":"Spiellevel" }, es: { "Weapon level":"Nivel de arma", "Game level":"Nivel de juego" }, fr: { "Weapon level":"Niveau d’arme", "Game level":"Niveau de jeu" },
+  pt: { "Weapon level":"Nível da arma", "Game level":"Nível do jogo" }, it: { "Weapon level":"Livello arma", "Game level":"Livello gioco" }, pl: { "Weapon level":"Poziom broni", "Game level":"Poziom gry" },
+  tr: { "Weapon level":"Silah seviyesi", "Game level":"Oyun seviyesi" }, ru: { "Weapon level":"Уровень оружия", "Game level":"Уровень игры" }, hr: { "Weapon level":"Razina oružja", "Game level":"Razina igre" },
+  cs: { "Weapon level":"Úroveň zbraně", "Game level":"Úroveň hry" }, sk: { "Weapon level":"Úroveň zbrane", "Game level":"Úroveň hry" }, hu: { "Weapon level":"Fegyverszint", "Game level":"Játékszint" },
+  ro: { "Weapon level":"Nivelul armei", "Game level":"Nivelul jocului" }, sr: { "Weapon level":"Ниво оружја", "Game level":"Ниво игре" }, uk: { "Weapon level":"Рівень зброї", "Game level":"Рівень гри" },
+  th: { "Weapon level":"ระดับอาวุธ", "Game level":"เลเวลเกม" },
+};
+export const translate = (locale: Locale, source: string) => locale === "en" ? source : hudTranslations[locale]?.[source] ?? systemMenuTranslations[locale]?.[source] ?? extendedTranslations[locale]?.[source] ?? powerUpTranslations[locale]?.[source] ?? levelTranslations[locale]?.[source] ?? networkTranslations[locale]?.[source] ?? newerTranslations[locale]?.[source] ?? translations[locale]?.[source] ?? source;
 export const useLocale = () => {
   const [locale, setLocale] = useState<Locale>(() => resolveLocale(navigator.languages?.length ? navigator.languages : [navigator.language], localStorage.getItem(STORAGE_KEY)));
   const [automatic, setAutomatic] = useState(() => !localStorage.getItem(STORAGE_KEY));

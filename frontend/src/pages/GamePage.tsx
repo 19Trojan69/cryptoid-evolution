@@ -785,12 +785,12 @@ const GamePage = () => {
           <div className="hud-actions">
             <button className="game-control home-control" type="button" disabled={game.status === "loading" || game.status === "destroying"} onClick={() => setHomePrompt(true)} aria-label={t('Go home')}>⌂ <span>{t('Home')}</span></button>
           </div>
-          <div className="hud-stat"><span>{t('Score')}</span><strong>{game.score}</strong></div>
+          <div className="hud-stat score-hud"><span>{t('Score')}</span><strong>{game.score}</strong></div>
           <div className="hud-stat coin-stat"><span>{t('Coins')}</span><strong>● {game.coins}</strong></div>
           <div className={`hud-stat hearts-stat${game.effects.some(effect => effect.target === "player" && effect.kind === "hit") ? " hearts-stat-hit" : ""}`}><span>{t('Hearts')}</span><strong className="hearts" role="status" aria-live="polite" aria-label={`${game.hearts} / 3 ${t('Hearts')}`}><span className="heart-icons" aria-hidden="true">{"♥".repeat(game.hearts)}<i>{"♡".repeat(3 - game.hearts)}</i></span><small>{game.hearts}/3</small></strong></div>
-          <div className="hud-stat"><span>{t('Weapon')}</span><strong>LV {game.weaponLevel}</strong></div>
-          <div className="hud-stat"><span>{t('Level')}</span><strong>{levelLabel}</strong></div>
-          <div className="hud-stat chain-hud"><span>{t('Round')}</span><strong>{game.encounter === "normal" ? `${round} / 3` : "BOSS"}</strong><div className="chain-blocks" role="img" aria-label={`${t("Network chain")}: ${game.chainBlocks}/${BLOCKS_PER_CHAIN} ${t("blocks linked")}`}>{Array.from({ length: BLOCKS_PER_CHAIN }, (_, index) => <i key={index} className={index < game.chainBlocks ? "linked" : ""} />)}</div></div>
+          <div className="hud-stat weapon-hud"><span>{t('Weapon level')}</span><strong>{game.weaponLevel}<small>/5</small></strong></div>
+          <div className="hud-stat game-level-hud"><span>{t('Game level')}</span><strong>{levelLabel}</strong></div>
+          <div className="hud-stat round-hud chain-hud"><span>{t('Round')}</span><strong>{game.encounter === "normal" ? <>{round}<small>/3</small></> : "BOSS"}</strong><div className="chain-blocks" role="img" aria-label={`${t("Network chain")}: ${game.chainBlocks}/${BLOCKS_PER_CHAIN} ${t("blocks linked")}`}>{Array.from({ length: BLOCKS_PER_CHAIN }, (_, index) => <i key={index} className={index < game.chainBlocks ? "linked" : ""} />)}</div></div>
           <button className="game-control pause-control" type="button" disabled={game.status === "loading" || game.status === "destroying" || game.status === "game-over"} onClick={() => { stateRef.current.status = game.status === "paused" ? "playing" : "paused"; setGame({ ...stateRef.current }); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}>{game.status === "paused" ? "▶" : "Ⅱ"}</button>
         </header>
         <div className="game-label">{t("LEVEL")} {levelLabel} <span>· {sectorName(game.sector)} · {game.encounter !== "normal" ? t("CORE WARDEN") : isBonusSection(game.section) ? t("BONUS CHALLENGE") : `${t("ROUND")} ${round}`}</span></div>
