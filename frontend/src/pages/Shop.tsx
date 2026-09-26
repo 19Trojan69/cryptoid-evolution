@@ -265,7 +265,7 @@ const Shop = () => {
       />
 
       <section className="hero-section">
-        <button className="home-music-toggle" type="button" data-state={musicBlocked ? "blocked" : musicPlaying ? "playing" : "off"} aria-pressed={musicPlaying} aria-label={musicLabel} onClick={toggleHomeMusic}><span className="home-music-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M8 18V6l12-2v12M8 9l12-2" /><circle cx="5" cy="18" r="3" /><circle cx="17" cy="16" r="3" /></svg></span><b>{musicLabel}</b></button>
+        <button className="home-music-toggle" type="button" data-state={musicPlaying ? "playing" : "off"} aria-pressed={musicPlaying} aria-label={musicLabel} title={musicLabel} onClick={toggleHomeMusic}><span className="home-music-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" />{musicPlaying ? <><path d="M16 9a4 4 0 0 1 0 6" /><path d="M19 6a8 8 0 0 1 0 12" /></> : <path d="m17 9 5 6m0-6-5 6" />}</svg></span></button>
         <Starfield sector={1} player={{ x: .5, y: .8 }} paused={false} />
         <div className="hero-copy">
           <p className="eyebrow"><span className="signal-dot" /> {t("Mission control online")}</p>
