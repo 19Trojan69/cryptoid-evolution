@@ -7,7 +7,7 @@ import { useAuth } from "../hooks/useAuth";
 import { usePayments } from "../hooks/usePayments";
 import { axiosClient } from "../lib/axiosClient.ts";
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "./GamePage.tsx";
-import { allPlayerColors, buyShipVariant, EXTRA_STARTER_PRICE, fleetCount, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyle, spriteStyle } from "./shipFleet";
+import { allPlayerColors, buyShipVariant, EXTRA_STARTER_PRICE, fleetCount, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyle, spriteStyle, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
 import TermsDialog from "../components/TermsDialog";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
@@ -33,7 +33,7 @@ const shopTabs = [
 
 const powerTypeForOffer = (offerId: string): PowerUpType => offerId.includes("shield") ? "shield" : offerId.includes("rapid") ? "rapid" : "overdrive";
 
-const WeaponPreview = ({ offerId, sprite, color }: { offerId: string; sprite: number; color: string }) => {
+const WeaponPreview = ({ offerId, sprite, color }: { offerId: string; sprite: number; color: PlayerColorId }) => {
   const shotCount = offerId.includes("triple") || offerId.includes("plasma") ? 3 : 2;
   return <div className={`offer-preview weapon-preview${offerId.includes("rapid") ? " weapon-preview-rapid" : ""}${offerId.includes("plasma") ? " weapon-preview-plasma" : ""}`} aria-hidden="true">
     <span className="preview-grid" />
