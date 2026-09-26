@@ -63,12 +63,27 @@ test("every ship has model-specific mirrored exhaust anchors", () => {
       const playerX = Number.parseFloat(nozzle["--nozzle-x"]);
       const playerY = Number.parseFloat(nozzle["--nozzle-y"]);
       assert.ok(playerX >= 15 && playerX <= 85);
-      assert.ok(playerY >= 68 && playerY <= 94);
+      assert.ok(playerY >= 50 && playerY <= 90);
       assert.equal(Number.parseFloat(mirrored["--nozzle-x"]), 100 - playerX);
       assert.equal(Number.parseFloat(mirrored["--nozzle-y"]), 100 - playerY);
     });
   }
-  assert.deepEqual([...nozzleCounts].sort(), [1, 2, 3, 4]);
+  assert.deepEqual([...nozzleCounts].sort(), [1, 2, 3, 4, 6]);
+});
+
+test("bonus and boss exhausts use their visible engine exits", () => {
+  assert.deepEqual(shipNozzleStyles(4), [
+    { "--nozzle-x": "28%", "--nozzle-y": "75%" },
+    { "--nozzle-x": "74%", "--nozzle-y": "75%" },
+  ]);
+  assert.deepEqual(shipNozzleStyles(19, true), [
+    { "--nozzle-x": "73%", "--nozzle-y": "48%" },
+    { "--nozzle-x": "56%", "--nozzle-y": "41%" },
+    { "--nozzle-x": "51%", "--nozzle-y": "37%" },
+    { "--nozzle-x": "45%", "--nozzle-y": "37%" },
+    { "--nozzle-x": "40%", "--nozzle-y": "41%" },
+    { "--nozzle-x": "28%", "--nozzle-y": "48%" },
+  ]);
 });
 
 test("legacy ships migrate into counts and repeat purchases add the chosen variant", () => {
