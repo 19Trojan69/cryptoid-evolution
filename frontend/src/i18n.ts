@@ -122,6 +122,24 @@ const controlTranslations: Partial<Record<Locale, Record<string, string>>> = {
   fr: { "Controls":"Commandes", "Right-handed controls":"Commandes pour droitiers", "Left-handed controls":"Commandes pour gauchers", "Move with one thumb; activate power-ups with the other.":"Pilotez avec un pouce et activez les bonus avec l’autre." },
   th: { "Controls":"การควบคุม", "Right-handed controls":"ควบคุมสำหรับคนถนัดขวา", "Left-handed controls":"ควบคุมสำหรับคนถนัดซ้าย", "Move with one thumb; activate power-ups with the other.":"ใช้นิ้วโป้งข้างหนึ่งบังคับยาน และอีกข้างเปิดใช้พลังเสริม" },
 };
+const homeMusicTranslations: Partial<Record<Locale, Record<string, string>>> = {
+  de: { "Music on":"Musik an", "Music off":"Musik aus", "Tap for music":"Für Musik tippen" },
+  es: { "Music on":"Música activada", "Music off":"Música desactivada", "Tap for music":"Toca para escuchar" },
+  fr: { "Music on":"Musique activée", "Music off":"Musique désactivée", "Tap for music":"Touchez pour écouter" },
+  pt: { "Music on":"Música ligada", "Music off":"Música desligada", "Tap for music":"Toque para ouvir" },
+  it: { "Music on":"Musica attiva", "Music off":"Musica disattiva", "Tap for music":"Tocca per ascoltare" },
+  pl: { "Music on":"Muzyka włączona", "Music off":"Muzyka wyłączona", "Tap for music":"Dotknij, aby odtworzyć" },
+  tr: { "Music on":"Müzik açık", "Music off":"Müzik kapalı", "Tap for music":"Müzik için dokun" },
+  ru: { "Music on":"Музыка включена", "Music off":"Музыка выключена", "Tap for music":"Нажмите для музыки" },
+  hr: { "Music on":"Glazba uključena", "Music off":"Glazba isključena", "Tap for music":"Dodirni za glazbu" },
+  cs: { "Music on":"Hudba zapnuta", "Music off":"Hudba vypnuta", "Tap for music":"Klepněte pro hudbu" },
+  sk: { "Music on":"Hudba zapnutá", "Music off":"Hudba vypnutá", "Tap for music":"Ťuknite pre hudbu" },
+  hu: { "Music on":"Zene bekapcsolva", "Music off":"Zene kikapcsolva", "Tap for music":"Koppints a zenéhez" },
+  ro: { "Music on":"Muzică pornită", "Music off":"Muzică oprită", "Tap for music":"Atinge pentru muzică" },
+  sr: { "Music on":"Музика укључена", "Music off":"Музика искључена", "Tap for music":"Додирни за музику" },
+  uk: { "Music on":"Музику ввімкнено", "Music off":"Музику вимкнено", "Tap for music":"Торкніться для музики" },
+  th: { "Music on":"เปิดเพลง", "Music off":"ปิดเพลง", "Tap for music":"แตะเพื่อฟังเพลง" },
+};
 const hudTranslations: Partial<Record<Locale, Record<string, string>>> = {
   de: { "Weapon level":"Waffenstufe", "Game level":"Spiellevel" }, es: { "Weapon level":"Nivel de arma", "Game level":"Nivel de juego" }, fr: { "Weapon level":"Niveau d’arme", "Game level":"Niveau de jeu" },
   pt: { "Weapon level":"Nível da arma", "Game level":"Nível do jogo" }, it: { "Weapon level":"Livello arma", "Game level":"Livello gioco" }, pl: { "Weapon level":"Poziom broni", "Game level":"Poziom gry" },
@@ -130,7 +148,7 @@ const hudTranslations: Partial<Record<Locale, Record<string, string>>> = {
   ro: { "Weapon level":"Nivelul armei", "Game level":"Nivelul jocului" }, sr: { "Weapon level":"Ниво оружја", "Game level":"Ниво игре" }, uk: { "Weapon level":"Рівень зброї", "Game level":"Рівень гри" },
   th: { "Weapon level":"ระดับอาวุธ", "Game level":"เลเวลเกม" },
 };
-export const translate = (locale: Locale, source: string) => locale === "en" ? source : controlTranslations[locale]?.[source] ?? hudTranslations[locale]?.[source] ?? systemMenuTranslations[locale]?.[source] ?? extendedTranslations[locale]?.[source] ?? powerUpTranslations[locale]?.[source] ?? levelTranslations[locale]?.[source] ?? networkTranslations[locale]?.[source] ?? newerTranslations[locale]?.[source] ?? translations[locale]?.[source] ?? source;
+export const translate = (locale: Locale, source: string) => locale === "en" ? source : homeMusicTranslations[locale]?.[source] ?? controlTranslations[locale]?.[source] ?? hudTranslations[locale]?.[source] ?? systemMenuTranslations[locale]?.[source] ?? extendedTranslations[locale]?.[source] ?? powerUpTranslations[locale]?.[source] ?? levelTranslations[locale]?.[source] ?? networkTranslations[locale]?.[source] ?? newerTranslations[locale]?.[source] ?? translations[locale]?.[source] ?? source;
 export const useLocale = () => {
   const [locale, setLocale] = useState<Locale>(() => resolveLocale(navigator.languages?.length ? navigator.languages : [navigator.language], localStorage.getItem(STORAGE_KEY)));
   const [automatic, setAutomatic] = useState(() => !localStorage.getItem(STORAGE_KEY));
