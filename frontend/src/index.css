@@ -509,6 +509,23 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .ship-debris-piece-4 { right: 0; bottom: 0; animation: debris-south-east 1.35s cubic-bezier(.16, .64, .24, 1) both; }
 .ship-debris-piece-4 b, .ship-debris-piece-4 > .ship-debris-sprite { right: 0; bottom: 0; }
 .boss-explosion .ship-debris-piece { animation-duration: 1.8s; }
+.boss-explosion::before { animation-duration: 1.28s !important; }
+.boss-explosion::after, .boss-explosion > span { animation-duration: 1.42s !important; }
+.boss-fire-sequence { position: absolute; z-index: 2; inset: 5%; pointer-events: none; }
+.boss-fire-sequence i { position: absolute; width: 43%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 42% 38%, #fff 0 6%, #fff4af 10% 18%, #ffbd3d 28%, #f05b20 48%, rgba(144, 24, 12, .54) 62%, transparent 75%); filter: drop-shadow(0 0 7px #ffb238) drop-shadow(0 0 13px rgba(235, 64, 25, .62)); opacity: 0; animation: boss-fire-burst 1.22s cubic-bezier(.14, .68, .2, 1) both; }
+.boss-fire-sequence i:nth-child(1) { top: 4%; left: 3%; animation-delay: .08s; }
+.boss-fire-sequence i:nth-child(2) { top: 19%; right: 0; width: 49%; animation-delay: .33s; }
+.boss-fire-sequence i:nth-child(3) { bottom: 0; left: 29%; width: 46%; animation-delay: .58s; }
+.boss-debris-field { z-index: 1; }
+.boss-debris-piece { --boss-dx: 0px; --boss-dy: 0px; --boss-spin: 0deg; position: absolute; inset: 0; overflow: hidden; opacity: 0; filter: drop-shadow(0 2px 3px rgba(255, 126, 35, .72)); animation: boss-debris-drift 2.2s cubic-bezier(.12, .58, .16, 1) both; }
+.boss-debris-piece b { position: absolute; inset: 0; display: block; width: 100%; height: 100%; background-repeat: no-repeat; background-size: 400% 500%; }
+.boss-debris-piece-1 { --boss-dx: -8px; --boss-dy: -63px; --boss-spin: -48deg; clip-path: polygon(40% 0, 61% 0, 68% 39%, 51% 55%, 34% 38%); }
+.boss-debris-piece-2 { --boss-dx: -72px; --boss-dy: -28px; --boss-spin: -126deg; clip-path: polygon(0 11%, 37% 25%, 42% 55%, 8% 61%); animation-delay: .04s; }
+.boss-debris-piece-3 { --boss-dx: 73px; --boss-dy: -25px; --boss-spin: 119deg; clip-path: polygon(63% 24%, 100% 11%, 92% 62%, 58% 55%); animation-delay: .06s; }
+.boss-debris-piece-4 { --boss-dx: -63px; --boss-dy: 41px; --boss-spin: 94deg; clip-path: polygon(5% 58%, 43% 48%, 48% 77%, 16% 100%); animation-delay: .12s; }
+.boss-debris-piece-5 { --boss-dx: 66px; --boss-dy: 43px; --boss-spin: -103deg; clip-path: polygon(57% 48%, 95% 59%, 84% 100%, 52% 77%); animation-delay: .14s; }
+.boss-debris-piece-6 { --boss-dx: -17px; --boss-dy: 72px; --boss-spin: 58deg; clip-path: polygon(35% 52%, 51% 41%, 62% 55%, 68% 100%, 31% 100%); animation-delay: .18s; }
+.boss-debris-piece-7 { --boss-dx: 22px; --boss-dy: 62px; --boss-spin: -68deg; clip-path: polygon(43% 42%, 63% 40%, 72% 74%, 51% 91%, 35% 72%); animation-delay: .22s; }
 .player-explosion .ship-debris-piece { animation-duration: 1.65s; }
 .player-crash .ship-debris-piece { animation-duration: 1.25s; }
 .ship-debris-light b { filter: grayscale(1) sepia(1) saturate(1.6) hue-rotate(105deg); }
@@ -518,12 +535,22 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 @keyframes destruction-fire { 0% { opacity: 0; transform: scale(.22) rotate(-8deg); } 16% { opacity: 1; transform: scale(.78) rotate(3deg); } 42% { opacity: .98; transform: scale(1.12) rotate(-2deg); } 100% { opacity: 0; transform: scale(1.38) rotate(8deg); } }
 @keyframes destruction-flare { 0% { opacity: 0; transform: scale(.28) rotate(-12deg); } 22% { opacity: .95; } 100% { opacity: 0; transform: scale(1.32) rotate(24deg); } }
 @keyframes burst-ring { 0% { opacity: .7; transform: scale(.45); } 36% { opacity: .9; } 100% { opacity: 0; transform: scale(1.42); } }
+@keyframes boss-fire-burst { 0% { opacity: 0; transform: scale(.18) rotate(-12deg); } 14% { opacity: 1; } 47% { opacity: .94; transform: scale(1.08) rotate(5deg); } 100% { opacity: 0; transform: scale(1.5) rotate(19deg); } }
+@keyframes boss-debris-drift { 0% { opacity: 0; transform: translate(0, 0) rotate(0) scale(1); } 8%, 76% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--boss-dx), var(--boss-dy)) rotate(var(--boss-spin)) scale(.86); } }
 @keyframes debris-north-west { 0% { opacity: 0; transform: translate(0, 0) rotate(0); } 12%, 68% { opacity: .95; } 100% { opacity: 0; transform: translate(-33px, -27px) rotate(-112deg); } }
 @keyframes debris-north-east { 0% { opacity: 0; transform: translate(0, 0) rotate(0); } 12%, 68% { opacity: .95; } 100% { opacity: 0; transform: translate(34px, -25px) rotate(124deg); } }
 @keyframes debris-south-west { 0% { opacity: 0; transform: translate(0, 0) rotate(0); } 12%, 68% { opacity: .95; } 100% { opacity: 0; transform: translate(-36px, 31px) rotate(97deg); } }
 @keyframes debris-south-east { 0% { opacity: 0; transform: translate(0, 0) rotate(0); } 12%, 68% { opacity: .95; } 100% { opacity: 0; transform: translate(36px, 33px) rotate(-106deg); } }
 @keyframes hit-flash { from { opacity: 1; transform: scale(.5); } to { opacity: 0; transform: scale(1.7); } }
 @keyframes explode { from { opacity: 1; transform: scale(.35); } to { opacity: 0; transform: scale(1.25); } }
+@media (prefers-reduced-motion: reduce) {
+  .boss-fire-sequence i { animation-duration: .55s; animation-delay: 0s; }
+  .boss-debris-piece { animation-duration: .8s; animation-delay: 0s; }
+  .boss-debris-piece:nth-child(n+5) { display: none; }
+}
+html[data-motion="reduced"] .boss-fire-sequence i { animation-duration: .55s; animation-delay: 0s; }
+html[data-motion="reduced"] .boss-debris-piece { animation-duration: .8s; animation-delay: 0s; }
+html[data-motion="reduced"] .boss-debris-piece:nth-child(n+5) { display: none; }
 .earth { position: absolute; z-index: 0; bottom: -16vw; left: 50%; width: min(110vw, 930px); aspect-ratio: 1; transform: translateX(-50%); text-align: center; }
 .earth-glow { position: absolute; inset: -7%; border-radius: 50%; background: radial-gradient(circle, rgba(53, 209, 154, .28), transparent 60%); filter: blur(12px); }
 .earth-body { position: absolute; inset: 0; overflow: hidden; border: 2px solid rgba(79, 228, 239, .9); border-radius: 50% 50% 0 0; background: radial-gradient(circle at 50% 0%, #267c89, #0a405d 46%, #061b35 76%); box-shadow: inset 0 20px 40px rgba(101, 245, 219, .3), 0 -4px 28px rgba(79, 228, 239, .35); }
