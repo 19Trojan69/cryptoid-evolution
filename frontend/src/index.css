@@ -94,9 +94,10 @@ h1 span { display: block; color: var(--emerald); }
 .satellite-motion { position: absolute; inset: 0; animation: satellite-lap 13s linear infinite; }
 .orbit-two .satellite-motion { animation-duration: 19s; animation-direction: reverse; }
 .orbit-three .satellite-motion { animation-duration: 24s; animation-delay: -9s; }
-.satellite-body { position: absolute; top: -7px; left: calc(50% - 6px); width: 12px; height: 14px; border: 2px solid #f8e5b8; border-radius: 3px; background: #5c759b; box-shadow: 0 0 10px #f5c86d; }
-.satellite-body::before, .satellite-body::after { position: absolute; top: 2px; width: 12px; height: 7px; border: 1px solid #92e8ff; background: repeating-linear-gradient(90deg, #2d638c 0 3px, #8dc9df 3px 4px); content: ''; }
-.satellite-body::before { right: 12px; }.satellite-body::after { left: 12px; }
+.satellite-body { position: absolute; top: -10px; left: calc(50% - 7px); width: 14px; height: 17px; border: 1px solid #f8e5b8; border-radius: 4px; background: linear-gradient(135deg, #eef6ff 0 12%, #7fa3c7 13% 38%, #335276 39% 76%, #17263d 100%); box-shadow: inset -3px -4px 5px rgba(4, 12, 24, .6), inset 3px 2px 4px rgba(255,255,255,.42), 0 0 10px #f5c86d, 0 6px 13px rgba(0,0,0,.46); transform: rotate(-12deg) perspective(36px) rotateY(-18deg); transform-style: preserve-3d; }
+.satellite-body::before, .satellite-body::after { position: absolute; top: 4px; width: 17px; height: 8px; border: 1px solid #9feaff; background: linear-gradient(145deg, rgba(232, 253, 255, .95), rgba(91, 187, 218, .8) 28%, rgba(31, 91, 137, .95) 29% 67%, rgba(12, 36, 71, .96)); box-shadow: inset 0 0 0 1px rgba(255,255,255,.16), 0 0 8px rgba(101, 224, 241, .38), 0 4px 6px rgba(0,0,0,.38); content: ''; }
+.satellite-body::before { right: 13px; transform: skewY(-15deg) rotateY(24deg); transform-origin: 100% 50%; clip-path: polygon(0 14%, 88% 0, 100% 100%, 7% 86%); }
+.satellite-body::after { left: 13px; transform: skewY(15deg) rotateY(-24deg); transform-origin: 0 50%; clip-path: polygon(12% 0, 100% 14%, 93% 86%, 0 100%); }
 @keyframes satellite-lap { to { transform: rotate(360deg); } }
 .home-defense-ship, .home-enemy-ship { position: absolute; z-index: 3; width: 46px; height: 46px; filter: drop-shadow(0 0 9px #6ee9ff); animation: home-patrol 4s ease-in-out infinite alternate; }
 .home-defense-ship { z-index: 5; bottom: 29%; left: 5%; width: 84px; height: 84px; filter: drop-shadow(0 0 18px var(--ship-glow)) drop-shadow(0 10px 23px rgba(73, 213, 255, .72)); animation: home-full-thrust 1.25s ease-in-out infinite alternate; }
