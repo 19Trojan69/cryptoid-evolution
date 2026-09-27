@@ -6,7 +6,7 @@ import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, 
 import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp } from "./powerUps";
 import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, zoneFraction, shipStartHeight } from "./controlPreferences";
-import { activeWeaponLevel, advanceShot, contactWithEnemy, MAX_PLAYER_SHOTS, movePlayer, placePlayer, placePlayerFromPointer, PURCHASED_WEAPON_DURATION_MS, shipCollisionOutcome, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
+import { activeWeaponLevel, advanceShot, contactWithEnemy, directCollisionImpacts, MAX_PLAYER_SHOTS, movePlayer, placePlayer, placePlayerFromPointer, PURCHASED_WEAPON_DURATION_MS, shipCollisionOutcome, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
 import { advanceEnemyShot, createEnemyShot, enemyShotHitsPlayer, enemyShotLimit, type EnemyShot } from "./enemyFire";
 import SectorBackdrop from "./SectorBackdrop";
 import Starfield from "./Starfield";
@@ -15,6 +15,7 @@ import { appendSectionBlock, BLOCKS_PER_CHAIN } from "./networkChain";
 import { damageSectorBoss, bossFireInterval, bossVulnerable, createSectorBoss, moveSectorBoss, nextAfterClear, type SectorBoss } from "./sectorBoss";
 import { enemySprite, selectedShip, shardBalance, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
+import { ownedShipStage, type ShipStage } from "./shipEvolution";
 import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio";
 import { DEFAULT_EFFECTS_VOLUME, DEFAULT_MUSIC_VOLUME, EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, resetAudioVolumeDefaults } from "./musicPreferences";
 import { MusicPlayer } from "./musicPlayback";
@@ -95,6 +96,7 @@ type Effect = {
   debrisRotation?: number;
   shipClass?: CryptoidClass;
   debrisColor?: PlayerColorId;
+  shipStage?: ShipStage;
 };
 type GameState = { asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; bonusShards: number; chainBlocks: number; chainResult: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; score: number; coins: number; hearts: number; maxHearts: number; shieldCharges: number; shieldMs: number; shieldActive: boolean; overdriveMs: number; rapidFireMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
 
@@ -223,7 +225,7 @@ const scatteredPieces = (effect: Effect, count: number, sprite: number) => {
       "--fragment-delay": `${Math.floor(random() * 180)}ms`,
     } as CSSProperties;
     return <em key={index} className="scattered-debris-piece" style={pieceStyle}>
-      {effect.debrisColor ? <PaintedShip className="scattered-debris-sprite" sprite={sprite} color={effect.debrisColor} /> : <b style={spriteStyle(sprite)} />}
+      {effect.debrisColor ? <PaintedShip className="scattered-debris-sprite" sprite={sprite} color={effect.debrisColor} stage={effect.shipStage} /> : <b style={spriteStyle(sprite)} />}
     </em>;
   });
 };
@@ -238,7 +240,7 @@ const shipDebris = (effect: Effect) => {
   // A collision can damage the player without destroying the ship.
   if (effect.kind === "player-crash") {
     return <div className="ship-debris player-crash-debris" style={style} aria-hidden="true">
-      {[0, 1, 2, 3].map(index => <em className={`ship-debris-piece ship-debris-piece-${index + 1}`} key={index}>{effect.debrisColor ? <PaintedShip className="ship-debris-sprite" sprite={sprite} color={effect.debrisColor} /> : <b style={spriteStyle(sprite)} />}</em>)}
+      {[0, 1, 2, 3].map(index => <em className={`ship-debris-piece ship-debris-piece-${index + 1}`} key={index}>{effect.debrisColor ? <PaintedShip className="ship-debris-sprite" sprite={sprite} color={effect.debrisColor} stage={effect.shipStage} /> : <b style={spriteStyle(sprite)} />}</em>)}
     </div>;
   }
   const boss = effect.kind === "boss-explosion";
@@ -287,6 +289,8 @@ const GamePage = () => {
   const [game, setGame] = useState<GameState>(createInitialState);
   const [homePrompt, setHomePrompt] = useState(false);
   const [shipSelection] = useState(selectedShip);
+  const [shipStage, setShipStage] = useState<ShipStage>(1);
+  const shipStageRef = useRef<ShipStage>(1);
   const recordsSavedRef = useRef(false);
   const scoreRunRef = useRef<string | null>(null);
   const pendingScoreRef = useRef<Promise<unknown> | null>(null);
@@ -311,8 +315,10 @@ const GamePage = () => {
     startRequestRef.current = true;
     try {
       if (pendingScoreRef.current) await pendingScoreRef.current;
-      const { data } = await axiosClient.post<{ weaponLevel: number; unlockedWeaponLevels: number[]; powerUp: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; armorBonus: number; scoreRunId: string }>("/hangar/start");
+      const { data } = await axiosClient.post<{ weaponLevel: number; unlockedWeaponLevels: number[]; ownedShipUpgrades: string[]; powerUp: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; armorBonus: number; scoreRunId: string }>("/hangar/start");
       scoreRunRef.current = data.scoreRunId;
+      shipStageRef.current = ownedShipStage(shipSelection.skin.sprite, data.ownedShipUpgrades);
+      setShipStage(shipStageRef.current);
       const armorBonus = Number.isInteger(data.armorBonus) ? Math.max(0, Math.min(3, data.armorBonus)) : 0;
       stateRef.current.maxHearts = 3 + armorBonus;
       stateRef.current.hearts = stateRef.current.maxHearts;
@@ -595,9 +601,9 @@ const GamePage = () => {
           if (contact.connected) {
             if (contact.damage) {
               if (activeAttack) next = { ...next, collidedThisAttack: true };
-              heartsLost += contact.damage;
-              impactCooldownRef.current = IMPACT_COOLDOWN_MS;
               const collision = shipCollisionOutcome(state.shieldActive, shieldImpactsRemaining, state.shieldMs);
+              heartsLost = Math.max(heartsLost, directCollisionImpacts(state.hearts, state.shieldCharges, collision.absorbedByShield));
+              impactCooldownRef.current = IMPACT_COOLDOWN_MS;
               if (collision.absorbedByShield) {
                 shieldImpactsRemaining -= 1;
               } else {
@@ -624,7 +630,8 @@ const GamePage = () => {
           state.boss = moveSectorBoss(state.boss, state.empMs > 0 ? 0 : delta, width, height);
           const bossContact = contactWithEnemy(state.player, width, height, state.boss, true, false, impactCooldownRef.current, previousBoss);
           if (bossContact.damage) {
-            heartsLost += bossContact.damage;
+            const collision = shipCollisionOutcome(state.shieldActive, shieldImpactsRemaining, state.shieldMs);
+            heartsLost = Math.max(heartsLost, directCollisionImpacts(state.hearts, state.shieldCharges, collision.absorbedByShield));
             impactCooldownRef.current = IMPACT_COOLDOWN_MS;
           }
           if (state.empMs === 0 && bossVulnerable(state.boss) && state.boss.fireElapsed >= bossFireInterval(state.boss, state.sector) && state.enemyShots.length < enemyShotLimit(width, elapsedRef.current, state.sector)) {
@@ -656,7 +663,7 @@ const GamePage = () => {
           const damaged = state.hearts < previousHearts;
           damageTaken = damaged;
           const destroyed = damaged && state.hearts === 0;
-          state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: destroyed ? "player-explosion" : damaged ? "player-crash" : "shield", startedAt: time, target: "player", sprite: damaged ? shipSelection.skin.sprite : undefined, debrisSize: damaged ? 86 : undefined, debrisColor: damaged ? shipSelection.color.id : undefined });
+          state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: destroyed ? "player-explosion" : damaged ? "player-crash" : "shield", startedAt: time, target: "player", sprite: damaged ? shipSelection.skin.sprite : undefined, debrisSize: damaged ? 86 : undefined, debrisColor: damaged ? shipSelection.color.id : undefined, shipStage: shipStageRef.current });
           if (damaged) { soundRef.current?.play(destroyed ? "bossDestroy" : "collision"); state.weaponCap = Math.max(1, state.weaponCap - 1); state.paidWeaponLevel = Math.min(state.paidWeaponLevel, state.weaponCap); state.pickupWeaponLevel = Math.min(state.pickupWeaponLevel, state.weaponCap); state.weaponLevel = Math.min(state.weaponLevel, state.weaponCap); }
           else soundRef.current?.play("shield");
         }
@@ -1000,7 +1007,7 @@ const GamePage = () => {
         {game.shots.map(shot => <div key={shot.id} className={`player-laser${shot.empowered ? " player-laser-overdrive" : ""}`} style={{ left: shot.x, top: shot.y }} />)}
         {game.enemyShots.map(shot => <div key={shot.id} className="enemy-laser" style={{ left: shot.x, top: shot.y }} />)}
         {game.effects.map(effect => <div key={effect.id} className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y }} aria-hidden="true"><span />{effect.kind === "hit" && <><i /><i /><i /></>}{bossFireBursts(effect)}{shipDebris(effect)}</div>)}
-        {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0 ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${5 + game.thrust * 13}%` } as CSSProperties} aria-label={t('Your Cryptoid ship')}><div className="ship-visual"><i className="fleet-sprite" style={{ ...spriteStyle(shipSelection.skin.sprite), filter: "none" }} aria-hidden="true" /><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} />{engineTrails(shipSelection.skin.sprite, "player-engine")}</div></div>}
+        {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0 ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${5 + game.thrust * 13}%` } as CSSProperties} aria-label={t('Your Cryptoid ship')}><div className="ship-visual"><i className="fleet-sprite" style={{ ...spriteStyle(shipSelection.skin.sprite), filter: "none", opacity: shipStage === 1 ? 1 : 0 }} aria-hidden="true" /><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} />{engineTrails(shipSelection.skin.sprite, "player-engine")}</div></div>}
         {guideStep >= 0 && game.status === "playing" && <aside className="game-coach" role="status" aria-live="polite"><small>{t("QUICK GUIDE")} · {guideStep + 1}/4</small><p>{guideHints[guideStep]}</p><button type="button" onClick={dismissGuide}>{t("Skip guide")}</button></aside>}
         {guideStep < 0 && <div className="game-tip">← → ↑ ↓ / {t("THUMB CONTROLS")} · {t("Auto fire")}</div>}
         <div className={`touch-controls touch-controls-${readControlHand()}`}>

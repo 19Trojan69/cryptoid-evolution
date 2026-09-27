@@ -9,6 +9,7 @@ import { axiosClient } from "../lib/axiosClient.ts";
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "./GamePage.tsx";
 import { allPlayerColors, buyShipVariant, EXTRA_STARTER_PRICE, fleetCount, playerColors, playerSkins, readShipFleet, savedShipColors, selectedShip, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyle, spriteStyle, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
+import { ownedShipStage } from "./shipEvolution";
 import TermsDialog from "../components/TermsDialog";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
 import { primeGameAudio } from "./gameAudio";
@@ -165,6 +166,8 @@ const Shop = () => {
   const [offers, setOffers] = useState<Offer[]>(() => [...hangarCatalog]);
   const [catalogReady, setCatalogReady] = useState(false);
   const [inventory, setInventory] = useState<Inventory | null>(null);
+  const selectedStage = ownedShipStage(selected.skin.sprite, inventory?.ownedShipUpgrades);
+  const previewStage = ownedShipStage(previewSkin.sprite, inventory?.ownedShipUpgrades);
   const [loadoutMessage, setLoadoutMessage] = useState("");
   const previewCount = fleetCount(fleet, previewSkin.id, previewColor.id);
   const enterGame = () => { primeGameAudio(); requestGameFullscreen(); navigate("/game"); };
@@ -272,7 +275,7 @@ const Shop = () => {
           <h1><span className="home-title-word">Cryptoid</span><span className="home-title-evolution">Evolution</span></h1>
           <p className="hero-tagline">Defend Earth. <span>Evolve your power.</span></p>
           <p className="hero-description">{t('Build your streak, master the grid, and become the force Earth needs.')}</p>
-          <div className="home-mission-brief" aria-label={t("Your Progress")}><span className="home-mission-marker" aria-hidden="true">◆</span><span><small>{t("Genesis sector")} · {t("EQUIPPED")}</small><strong>{selected.skin.name} <em>· {t(selected.color.name)}</em></strong></span>{records.bestScore > 0 && <span className="home-mission-best"><small>{t("Best score")}</small><strong>{records.bestScore.toLocaleString()}</strong></span>}</div>
+          <div className="home-mission-brief" aria-label={t("Your Progress")}><span className="home-mission-marker" aria-hidden="true">◆</span><span><small>{t("Genesis sector")} · {t("EQUIPPED")}</small><strong>{selected.skin.name} <em>· {t(selected.color.name)} · {selectedStage === 1 ? "STANDARD" : selectedStage === 2 ? "ADVANCED" : "ELITE"}</em></strong></span>{records.bestScore > 0 && <span className="home-mission-best"><small>{t("Best score")}</small><strong>{records.bestScore.toLocaleString()}</strong></span>}</div>
           <div className="hero-actions">
             <div className="home-launch">
               <div className="home-launch-bay" role="img" aria-label={`${selected.skin.name} · ${t(selected.color.name)}`}>
@@ -280,7 +283,7 @@ const Shop = () => {
                 <span className="home-launch-target home-launch-target-right" aria-hidden="true" />
                 <span className="home-launch-shot home-launch-shot-left" aria-hidden="true" />
                 <span className="home-launch-shot home-launch-shot-right" aria-hidden="true" />
-                <div className={`home-defense-ship${selected.color.id === "grey" ? " home-defense-grey" : ""}`} style={{ "--ship-glow": selected.color.glow, ...shipNozzleStyle(selected.skin.sprite) } as CSSProperties}><i style={spriteStyle(selected.skin.sprite)} /><PaintedShip sprite={selected.skin.sprite} color={selected.color.id} /><span className="home-thrust home-thrust-left" /><span className="home-thrust home-thrust-right" /></div>
+                <div className={`home-defense-ship${selected.color.id === "grey" ? " home-defense-grey" : ""}`} style={{ "--ship-glow": selected.color.glow, ...shipNozzleStyle(selected.skin.sprite) } as CSSProperties}><i style={{ ...spriteStyle(selected.skin.sprite), opacity: selectedStage === 1 ? 1 : 0 }} /><PaintedShip sprite={selected.skin.sprite} color={selected.color.id} stage={selectedStage} /><span className="home-thrust home-thrust-left" /><span className="home-thrust home-thrust-right" /></div>
               </div>
               <button className="button button-primary home-play-button" type="button" onClick={enterGame}>{t("Play")} <span className="button-glyph" aria-hidden="true">→</span></button>
             </div>
@@ -397,18 +400,18 @@ const Shop = () => {
         <strong className="shard-balance">◆ {shards} {t("Shards")}</strong><span className="shard-help">{t("Earn 1 Shard per defeated Cryptoid; your Shards are saved at the end of each mission.")}</span>
         <div className="ship-picker" role="group" aria-label={t("Ship hull")}>
           {playerSkins.filter(skin => shopView === "shop" || fleetCount(fleet, skin.id) > 0).map(skin => { const total = fleetCount(fleet, skin.id); const shown = skin.id === selected.skin.id ? selected.color : allPlayerColors.find(color => fleetCount(fleet, skin.id, color.id)) ?? playerColors[0]; return <button key={skin.id} className={`ship-choice${total === 0 ? " ship-unowned" : ""}`} type="button" aria-pressed={previewSkin.id === skin.id} onClick={() => { setPreviewSkin(skin); setPreviewColor(shown); if (shopView === "hangar") equipShip(skin, shown); else setHangarMessage(""); }}>
-            <span className="ship-preview"><PaintedShip sprite={skin.sprite} color={shown.id} /></span><span>{skin.name}</span><small>{total ? `${t("Owned")} ×${total}` : t("Not owned")}</small>
+            <span className="ship-preview"><PaintedShip sprite={skin.sprite} color={shown.id} stage={ownedShipStage(skin.sprite, inventory?.ownedShipUpgrades)} /></span><span>{skin.name}</span><small>{total ? `${t("Owned")} ×${total}` : t("Not owned")}</small>
           </button>; })}
         </div>
         <h3 className="hangar-variant-title">{previewSkin.name} · {t("Color variants")}</h3>
         <div className="ship-picker ship-variants" role="group" aria-label={t("Ship paint")}>
           {allPlayerColors.filter(color => (shopView === "shop" && playerColors.some(current => current.id === color.id)) || fleetCount(fleet, previewSkin.id, color.id) > 0).map(color => { const count = fleetCount(fleet, previewSkin.id, color.id); return <button key={color.id} className={`ship-choice variant-choice${count ? "" : " ship-unowned"}`} type="button" aria-pressed={previewColor.id === color.id} onClick={() => { setPreviewColor(color); if (shopView === "hangar") equipShip(previewSkin, color); else setHangarMessage(""); }}>
-            <span className="ship-preview"><PaintedShip sprite={previewSkin.sprite} color={color.id} /></span>
+            <span className="ship-preview"><PaintedShip sprite={previewSkin.sprite} color={color.id} stage={previewStage} /></span>
             <span className="metal-swatch" style={{ "--paint": color.glow } as CSSProperties} />
             <span>{t(color.name)}</span><small>{count ? `${t("Owned")} ×${count}` : t("Not owned")}</small>
           </button>; })}
         </div>
-        <p className="hangar-selection">{shopView === "hangar" ? t("EQUIPPED") : t("Preview:")} <strong>{previewSkin.name} · {t(previewColor.name)}</strong> · {previewCount ? `${t("Owned")} ×${previewCount}` : t("Not owned")}{shopView === "shop" && selected.skin.id === previewSkin.id && selected.color.id === previewColor.id && <span> · {t("EQUIPPED")}</span>}</p>
+        <p className="hangar-selection">{shopView === "hangar" ? t("EQUIPPED") : t("Preview:")} <strong>{previewSkin.name} · {t(previewColor.name)}</strong> · {previewStage === 1 ? "STANDARD" : previewStage === 2 ? "ADVANCED" : "ELITE"} · {previewCount ? `${t("Owned")} ×${previewCount}` : t("Not owned")}{shopView === "shop" && selected.skin.id === previewSkin.id && selected.color.id === previewColor.id && <span> · {t("EQUIPPED")}</span>}</p>
         {shopView === "shop" && <div className="hangar-actions"><button className="button button-primary hangar-action" type="button" onClick={purchasePreview} disabled={shards < (previewSkin.price || EXTRA_STARTER_PRICE)}>{t("Buy another for")} ◆ {previewSkin.price || EXTRA_STARTER_PRICE}</button></div>}
         {shopView === "shop" && shards < (previewSkin.price || EXTRA_STARTER_PRICE) && <span className="shard-help">◆ {(previewSkin.price || EXTRA_STARTER_PRICE) - shards} {t("more Shards needed")}</span>}
         {shopView === "shop" && <div className="hangar-offers ship-evolution-offers">
@@ -418,11 +421,12 @@ const Shop = () => {
             {offers.filter(offer => offer.kind === "ship_upgrade" && offer.shipIndex === previewSkin.sprite).map(offer => {
               const owned = inventory?.ownedShipUpgrades?.includes(offer.id) ?? false;
               const prerequisite = offer.stage !== 3 || (inventory?.ownedShipUpgrades?.includes(`ship_${String((offer.shipIndex ?? 0) + 1).padStart(2, "0")}_stage_2`) ?? false);
+              const hasHull = fleetCount(fleet, previewSkin.id) > 0;
               return <article key={offer.id} className={`hangar-offer hangar-offer-ship${owned ? " hangar-offer-selected" : ""}`}>
-                <div className="offer-preview weapon-preview" aria-hidden="true"><span className="preview-grid" /><span className="preview-ship"><PaintedShip sprite={previewSkin.sprite} color="silver" /></span><small>{offer.stage === 2 ? "ADVANCED" : "ELITE"}</small></div>
+                <div className="offer-preview weapon-preview" aria-hidden="true"><span className="preview-grid" /><span className="preview-ship"><PaintedShip sprite={previewSkin.sprite} color="silver" stage={offer.stage ?? 1} /></span><small>{offer.stage === 2 ? "ADVANCED" : "ELITE"}</small></div>
                 <h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span>{offer.pricePi} π · {t("Permanent unlock")}</span>
-                <strong>{owned ? t("OWNED") : prerequisite ? t("NOT OWNED") : t("Requires Stage 2")}</strong>
-                {!owned && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady || !inventory || !prerequisite} onClick={() => orderProduct(`Cryptoid ${offer.name} · permanent ship evolution`, offer.pricePi, { productId: offer.id }, () => { setHangarMessage(`${offer.name} ${t("purchase confirmed.")}`); void refreshInventory(); })}>{t("Buy with π")}</button>}
+                <strong>{owned ? t("OWNED") : !hasHull ? t("Buy hull with Shards first") : prerequisite ? t("NOT OWNED") : t("Requires Stage 2")}</strong>
+                {!owned && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady || !inventory || !hasHull || !prerequisite} onClick={() => orderProduct(`Cryptoid ${offer.name} · permanent ship evolution`, offer.pricePi, { productId: offer.id }, () => { setHangarMessage(`${offer.name} ${t("purchase confirmed.")}`); void refreshInventory(); })}>{t("Buy with π")}</button>}
               </article>;
             })}
           </div>

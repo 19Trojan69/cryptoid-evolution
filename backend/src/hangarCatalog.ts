@@ -10,7 +10,6 @@ export const hangarCatalog = [
   { id: "start_emp", kind: "power", name: "EMP Pulse", description: "One use per mission. Freezes enemies and their shots for 7 seconds; clears shots already on screen.", pricePi: 0.14, powerUp: "emp" },
   { id: "armor_hull_mk1", kind: "armor", name: "Reinforced Hull", description: "Permanent armor: +1 heart at the start of every mission. No shield needed.", pricePi: 0.6, bonusHearts: 1 },
   { id: "armor_hull_mk2", kind: "armor", name: "Titanium Plating", description: "Permanent armor: +2 more hearts at the start of every mission. Stacks with Reinforced Hull.", pricePi: 1.2, bonusHearts: 2 },
-,
 
   // Ship evolution upgrades are Pi purchases. Stage 1 hulls remain Shard purchases.
   { id: "ship_01_stage_2", kind: "ship_upgrade", name: "Ship 01 · Advanced", description: "Unlocks Stage 2 for this hull. Visual/combat behavior is applied separately.", pricePi: 0.18, shipIndex: 0, stage: 2 },
@@ -60,3 +59,8 @@ export const armorBonusFromPaid = (productIds: readonly string[]) => hangarCatal
   .reduce((bonus, item) => bonus + (item.kind === "armor" ? item.bonusHearts : 0), 0);
 
 export const findOffer = (id: unknown) => hangarCatalog.find(item => item.id === id);
+
+export const shipUpgradePrerequisite = (offer: typeof hangarCatalog[number]) =>
+  offer.kind === "ship_upgrade" && offer.stage === 3
+    ? `ship_${String(offer.shipIndex + 1).padStart(2, "0")}_stage_2`
+    : null;

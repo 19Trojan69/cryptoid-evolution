@@ -1,6 +1,6 @@
 import { Router } from "express";
 import platformAPIClient from "../services/platformAPIClient";
-import { findOffer } from "../hangarCatalog";
+import { findOffer, shipUpgradePrerequisite } from "../hangarCatalog";
 import "../types/session";
 
 const identifier = (value: unknown) => typeof value === "string" && /^[a-zA-Z0-9_-]{1,100}$/.test(value) ? value : null;
@@ -21,7 +21,9 @@ export default function mountPaymentsEndpoints(router: Router) {
       const orders = req.app.locals.orderCollection;
       const existing = await orders.findOne({ pi_payment_id: id });
       if (existing && (existing.user !== uid || existing.product_id !== offer.id || existing.cancelled)) return res.status(409).json({ error: "Payment already assigned or cancelled" });
-      if (!existing && offer.kind === "armor" && await orders.findOne({ user: uid, product_id: offer.id, paid: true })) return res.status(409).json({ error: "Permanent armor already owned" });
+      if (!existing && (offer.kind === "armor" || offer.kind === "ship_upgrade") && await orders.findOne({ user: uid, product_id: offer.id, paid: true })) return res.status(409).json({ error: "Permanent upgrade already owned" });
+      const prerequisite = shipUpgradePrerequisite(offer);
+      if (prerequisite && !await orders.findOne({ user: uid, product_id: prerequisite, paid: true })) return res.status(403).json({ error: "Advanced stage required before Elite" });
        if (!existing) await orders.updateOne({ pi_payment_id: id }, { $setOnInsert: { pi_payment_id: id, product_id: offer.id, user: uid, paid: false, created_at: new Date() } }, { upsert: true });
       if (!payment.status?.developer_approved) await platformAPIClient.post(`/v2/payments/${id}/approve`);
       return res.json({ approved: true });
@@ -45,6 +47,8 @@ export default function mountPaymentsEndpoints(router: Router) {
       if (!offer || payment.identifier !== id || payment.user_uid !== uid || payment.metadata?.productId !== offer.id || payment.direction !== "user_to_app" || payment.amount !== offer.pricePi || !payment.status?.developer_approved || payment.status?.cancelled || payment.status?.user_cancelled || !payment.status?.transaction_verified || !txid || (suppliedTxid && suppliedTxid !== txid)) {
         return res.status(400).json({ error: "Payment not verified" });
       }
+      const prerequisite = shipUpgradePrerequisite(offer);
+      if (prerequisite && !await orders.findOne({ user: uid, product_id: prerequisite, paid: true })) return res.status(403).json({ error: "Advanced stage required before Elite" });
       if (!payment.status?.developer_completed) await platformAPIClient.post(`/v2/payments/${id}/complete`, { txid });
       // Credit only after Pi has confirmed /complete (or reported already completed).
       await orders.updateOne({ pi_payment_id: id, user: uid, paid: false, cancelled: { $ne: true } }, { $set: { paid: true, txid, completed_at: new Date() } });

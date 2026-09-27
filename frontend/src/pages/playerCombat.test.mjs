@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { activeWeaponLevel, advanceShot, contactWithEnemy, movePlayer, placePlayer, placePlayerFromPointer, shipCollisionOutcome, shipHitsEnemy, shotHitsEnemy, MAX_PLAYER_SHOTS, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, TOUCH_SHIP_OFFSET_PX, fireInterval, makeVolley } from "./playerCombat.ts";
+import { activeWeaponLevel, advanceShot, contactWithEnemy, directCollisionImpacts, movePlayer, placePlayer, placePlayerFromPointer, shipCollisionOutcome, shipHitsEnemy, shotHitsEnemy, MAX_PLAYER_SHOTS, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, TOUCH_SHIP_OFFSET_PX, fireInterval, makeVolley } from "./playerCombat.ts";
 
 test("weapon tiers fire multi-shot volleys and apply plasma damage", () => {
   let next = 0;
@@ -81,4 +81,11 @@ test("shielded collisions consume protection while unshielded collisions destroy
   assert.deepEqual(shipCollisionOutcome(false, 1, 20_000), { absorbedByShield: false, destroysEnemy: true, destroysPlayerLife: true });
   assert.deepEqual(shipCollisionOutcome(true, 0, 20_000), { absorbedByShield: false, destroysEnemy: true, destroysPlayerLife: true });
   assert.deepEqual(shipCollisionOutcome(true, 1, 0), { absorbedByShield: false, destroysEnemy: true, destroysPlayerLife: true });
+});
+
+test("direct contact destroys all hearts even after buying extra armor, unless a shield absorbs it", () => {
+  assert.equal(directCollisionImpacts(3, 0, false), 3);
+  assert.equal(directCollisionImpacts(6, 0, false), 6);
+  assert.equal(directCollisionImpacts(6, 1, false), 7);
+  assert.equal(directCollisionImpacts(6, 1, true), 1);
 });
