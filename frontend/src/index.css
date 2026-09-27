@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Oxanium:wght@500;600;700;800&family=Rajdhani:wght@500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 :root {
   color: #f0f7f5;
@@ -1141,3 +1141,57 @@ html[data-motion="reduced"] .home-crossfire-shot, html[data-motion="reduced"] .h
 }
 html[data-motion="reduced"] .home-earth-network, html[data-motion="reduced"] .home-network-pulse, html[data-motion="reduced"] .home-network-nodes circle, html[data-motion="reduced"] .home-raid-ship, html[data-motion="reduced"] .landing-shell .home-crossfire-shot-a, html[data-motion="reduced"] .landing-shell .home-crossfire-shot-b, html[data-motion="reduced"] .landing-shell .home-crossfire-impact, html[data-motion="reduced"] .home-intercept-bolt, html[data-motion="reduced"] .home-intercept-flash { animation: none; }
 html[data-motion="reduced"] .home-raid-ship { opacity: .8; transform: rotate(180deg); }
+
+/* Action identity: condensed cockpit typography, hot launch controls, cold network UI. */
+.landing-shell { color: #f8fbff; font-family: 'Rajdhani', 'Space Grotesk', sans-serif; background: radial-gradient(circle at 85% 37%, #5736667d, transparent 39%), radial-gradient(circle at 77% 66%, #173377b0, transparent 36%), radial-gradient(circle at 9% 72%, #00648167, transparent 38%), #050d1f; }
+.landing-shell .hero-section { background: radial-gradient(circle at 75% 42%, #b156552c, transparent 33%); }
+.landing-shell .hero-section::after { position: absolute; z-index: 0; inset: 0; background: repeating-linear-gradient(126deg, transparent 0 82px, #94b3fd09 83px 84px, transparent 85px 165px); pointer-events: none; content: ''; }
+.landing-shell .site-header { position: relative; z-index: 6; border-bottom: 1px solid #46d9ef73; background: linear-gradient(90deg, #071627f5, #101b3af0 64%, #0b2440f2); box-shadow: 0 5px 28px #0209175e; }
+.landing-shell .brand-mark { font: 700 14px 'Oxanium', 'Rajdhani', sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+.landing-shell .brand-mark b { color: #57efde; }
+.landing-shell .brand-symbol { width: 34px; height: 34px; border: 1px solid #63eafa; border-radius: 0; background: #214d6659; color: #ebffff; clip-path: polygon(20% 0, 80% 0, 100% 25%, 100% 75%, 80% 100%, 20% 100%, 0 75%, 0 25%); text-shadow: 0 0 11px #4addff; }
+.landing-shell .header-signin { border-color: #ffb76b; background: #3a2a3685; color: #ffe0ab; font-family: 'Oxanium', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+.landing-shell .hero-copy .eyebrow { color: #7bf1ee; font-size: 11px; font-weight: 700; letter-spacing: .19em; text-shadow: 0 0 9px #45e0eb75; }
+.landing-shell .hero-copy h1 { position: relative; width: max-content; max-width: 100%; color: #f7faff; font: 800 clamp(54px, 6.3vw, 96px)/.95 'Oxanium', 'Rajdhani', sans-serif; letter-spacing: -.045em; text-transform: uppercase; text-shadow: 0 3px 0 #31507b, 0 10px 27px #020914, 0 0 30px #638aff40; }
+.landing-shell .hero-copy h1 span { display: block; color: #50e9df; background: linear-gradient(105deg, #48f3c1 4%, #50e8fa 60%, #ad8fff); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 3px 2px #0b2557) drop-shadow(0 0 15px #29c6e055); text-shadow: none; }
+.landing-shell .hero-copy h1::after { display: block; width: 92px; height: 3px; margin-top: 12px; background: linear-gradient(90deg, #ffcb77, #ff674d 55%, transparent); box-shadow: 0 0 15px #ff8f6e; content: ''; }
+.landing-shell .hero-tagline { margin-top: 17px; color: #ffd591; font: 700 clamp(23px, 2.7vw, 37px)/1.03 'Rajdhani', sans-serif; letter-spacing: .035em; text-transform: uppercase; text-shadow: 0 2px 12px #051025; }
+.landing-shell .hero-tagline span { color: #f7ecdf; }
+.landing-shell .hero-description { color: #bbd4dc; font-size: 17px; font-weight: 600; line-height: 1.45; }
+.landing-shell .home-mission-brief { border: 1px solid #64dbe064; border-left: 3px solid #ffab6c; background: linear-gradient(105deg, #152a47ed, #201c45e0 82%, #161f41aa); box-shadow: inset 0 0 20px #4ac6e90c, 0 0 18px #131c395c; text-shadow: none; }
+.landing-shell .home-mission-brief small { color: #b9d5e8; font-size: 9px; letter-spacing: .11em; }
+.landing-shell .home-mission-marker { color: #ffbd75; text-shadow: 0 0 13px #f89059; }
+.landing-shell .home-mission-brief strong { color: #fcffff; font: 700 16px/1.18 'Oxanium', sans-serif; text-transform: uppercase; letter-spacing: -.01em; }
+.landing-shell .home-mission-brief em { color: #a9c7d4; font: 600 12px 'Rajdhani', sans-serif; }
+.landing-shell .hero-actions .button { position: relative; isolation: isolate; min-height: 62px; border-width: 1px; clip-path: polygon(0 14px, 14px 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 15px)); font: 700 clamp(12px, 1.25vw, 16px) 'Oxanium', 'Rajdhani', sans-serif; letter-spacing: .035em; text-transform: uppercase; text-shadow: none; box-shadow: inset 0 0 17px #5cbcd821; }
+.landing-shell .hero-actions .button::after { left: 13px; right: 13px; height: 2px; background: linear-gradient(90deg, transparent, currentColor, transparent); opacity: .65; }
+.landing-shell .hero-actions .button-glyph { flex: none; width: 31px; height: 31px; border: 1px solid currentColor; border-radius: 0; font: 800 17px/1 'Oxanium', sans-serif; }
+.landing-shell .hero-actions .home-play-button { min-height: 73px; border: 2px solid #ffe0a0; background: linear-gradient(112deg, #ffcf75 0%, #ff9457 51%, #ff5562 100%); color: #171526; font-size: clamp(16px, 1.5vw, 19px); box-shadow: inset 0 1px #fff4d2, inset 0 -4px #d73b5499, 0 0 26px #ff876467, 0 11px 30px #a7366a33; animation: home-launch-glow 3.2s ease-in-out infinite; }
+.landing-shell .hero-actions .home-play-button .button-glyph { width: 34px; height: 34px; border: 2px solid #301b30; background: #ffe6a66e; }
+.landing-shell .hero-actions .home-play-button:hover { background: linear-gradient(112deg, #ffe49b, #ffaa6b 52%, #ff6b78); }
+@keyframes home-launch-glow { 0%, 100% { box-shadow: inset 0 1px #fff4d2, inset 0 -4px #d73b5499, 0 0 20px #ff876459, 0 10px 26px #a7366a2b; } 50% { box-shadow: inset 0 1px #fff4d2, inset 0 -4px #e33758a8, 0 0 37px #ff9a79c4, 0 12px 32px #a7366a55; } }
+.landing-shell .hero-actions .button-secondary:nth-child(2) { border-color: #71e6ee; background: linear-gradient(132deg, #15475bbc, #09243cf2); color: #d5fbff; box-shadow: inset 0 -3px #24abca, 0 0 17px #53dbf643; }
+.landing-shell .hero-actions .button-secondary:nth-child(3) { border-color: #b798ff; background: linear-gradient(132deg, #383168e3, #171b3bf2); color: #f2e6ff; box-shadow: inset 0 -3px #9269ef, 0 0 16px #9c70f351; }
+.landing-shell .hero-actions .button-secondary:nth-child(4) { border-color: #f5c88b; background: linear-gradient(132deg, #463847dc, #1c2940f2); color: #ffebcf; box-shadow: inset 0 -3px #ce8d61, 0 0 16px #e39b5b3d; }
+.landing-shell .hero-actions .button-secondary:hover { filter: brightness(1.22); box-shadow: inset 0 -3px currentColor, 0 0 22px currentColor; }
+.landing-shell .home-launch-bay::after { background: linear-gradient(90deg, transparent, #ffb576 35%, #5de9ee 65%, transparent); box-shadow: 0 0 18px #63f4fa, 0 0 17px #ff8262; }
+.landing-shell .home-footer { border-top-color: #56d7ea42; font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 600; }
+@media (max-width: 700px) {
+  .landing-shell .brand-mark { font-size: 11px; letter-spacing: .075em; }
+  .landing-shell .brand-symbol { width: 29px; height: 29px; }
+  .landing-shell .hero-copy h1 { font-size: clamp(43px, 14.4vw, 57px); }
+  .landing-shell .hero-tagline { margin-top: 12px; font-size: clamp(22px, 6vw, 27px); }
+  .landing-shell .home-mission-brief strong { font-size: 13px; }
+  .landing-shell .hero-actions .button { min-height: 56px; font-size: clamp(11px, 3vw, 14px); }
+  .landing-shell .hero-actions .home-play-button { min-height: 68px; font-size: 18px; }
+  .landing-shell .hero-actions .button-glyph { width: 26px; height: 26px; }
+  .landing-shell .hero-actions .home-play-button .button-glyph { width: 30px; height: 30px; }
+}
+@media (max-height: 680px) and (max-width: 700px) {
+  .landing-shell .hero-copy h1 { font-size: clamp(39px, 12.5vw, 50px); }
+  .landing-shell .hero-copy h1::after { margin-top: 7px; }
+  .landing-shell .hero-actions .button { min-height: 46px; }
+  .landing-shell .hero-actions .home-play-button { min-height: 54px; }
+}
+@media (prefers-reduced-motion: reduce) { .landing-shell .hero-actions .home-play-button { animation: none; } }
+html[data-motion="reduced"] .landing-shell .hero-actions .home-play-button { animation: none; }
