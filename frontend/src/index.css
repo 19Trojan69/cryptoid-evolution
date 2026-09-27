@@ -1489,3 +1489,42 @@ html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-
   .game-field .sector-banner { width: calc(100% - 20px); max-width: calc(100% - 20px); padding: 10px 11px; }
   .game-field .sector-banner .chain-result { font-size: clamp(13px, 3.8vw, 17px); }
 }
+
+/* Keep the evolution path visible immediately after choosing a hull. */
+.landing-shell .evolution-jump { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-height: 46px; margin-top: 14px; padding: 9px 15px; border: 1px solid #e9b87a; border-radius: 11px; background: linear-gradient(110deg, #4e3445, #283956); color: #fff0d7; font: 800 13px 'Oxanium', sans-serif; cursor: pointer; }
+.landing-shell .evolution-jump:hover { filter: brightness(1.12); }
+.landing-shell .ship-evolution-offers { margin: 14px 0 23px; padding: 16px; border: 1px solid #64c9df73; border-radius: 16px; background: linear-gradient(145deg, #142d48, #0a1e36); }
+.landing-shell .ship-evolution-offers h3 { margin: 0 0 6px; color: #effaff; }
+.landing-shell .ship-evolution-offers > p { margin: 0 0 13px; color: #c1d8e5; }
+.evolution-route { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; margin-bottom: 13px; }
+.evolution-route > span { display: flex; align-items: center; gap: 6px; min-width: 0; padding: 9px 7px; border: 1px solid #6682a178; border-radius: 9px; background: #0a1a30; color: #d7e7f0; font: 700 11px 'Oxanium', sans-serif; }
+.evolution-route b { color: #7ee1e4; }
+.evolution-route small { margin-left: auto; color: #ffd898; }
+.evolution-route .stage-owned { border-color: #75edbd; background: #123d3f; }
+@media (max-width: 600px) {
+  .landing-shell .shop-overlay { padding: 8px; backdrop-filter: none; }
+  .landing-shell .shop-modal { width: 100%; max-height: calc(100dvh - 16px); border-radius: 18px; clip-path: none; }
+  .landing-shell .shop-tabs { display: flex; gap: 7px; padding: 9px 12px 11px; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; scroll-snap-type: x proximity; }
+  .landing-shell .shop-tabs::-webkit-scrollbar { display: none; }
+  .landing-shell .shop-tabs button { flex: 0 0 auto; min-width: 92px; min-height: 46px; padding: 7px 10px; border-radius: 11px; clip-path: none; scroll-snap-align: start; }
+  .landing-shell .shop-tabs button > b { white-space: nowrap; }
+  .landing-shell .ship-selector-shop > .ship-picker:not(.ship-variants) { display: flex; flex-wrap: nowrap; gap: 9px; margin: 13px 0; padding: 2px 2px 11px; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; scroll-snap-type: x proximity; }
+  .landing-shell .ship-selector-shop > .ship-picker:not(.ship-variants) .ship-choice { flex: 0 0 116px; min-width: 116px; max-width: 116px; min-height: 116px; padding: 8px 5px; border-radius: 12px; clip-path: none; scroll-snap-align: start; }
+  .landing-shell .ship-selector-shop > .ship-picker:not(.ship-variants) .ship-preview { width: 56px; height: 56px; }
+  .landing-shell .ship-selector-shop > .ship-picker:not(.ship-variants) .ship-choice > span:not(.ship-preview, .metal-swatch) { font-size: 13px; }
+  .landing-shell .ship-evolution-offers { margin: 9px 0 22px; padding: 12px 9px; }
+  .landing-shell .ship-evolution-offers h3 { font-size: 18px; }
+  .landing-shell .ship-evolution-offers > p { font-size: 12px; line-height: 1.35; }
+  .evolution-route > span { display: grid; gap: 2px; padding: 7px 5px; font-size: 10px; }
+  .evolution-route small { margin-left: 0; }
+  .landing-shell .ship-evolution-offers .hangar-offer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .landing-shell .ship-evolution-offers .hangar-offer { min-width: 0; gap: 7px; padding: 7px 7px 10px; border-radius: 12px; clip-path: none; }
+  .landing-shell .ship-evolution-offers .offer-preview { height: 132px; margin: 0; }
+  .landing-shell .ship-evolution-offers .preview-ship { width: min(96%, 145px); }
+  .landing-shell .ship-evolution-offers .hangar-offer h4 { font-size: 14px; line-height: 1.2; overflow-wrap: anywhere; }
+  .landing-shell .ship-evolution-offers .hangar-offer p { display: -webkit-box; min-height: 0; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; font-size: 11px; line-height: 1.3; }
+  .landing-shell .ship-evolution-offers .hangar-offer > span, .landing-shell .ship-evolution-offers .hangar-offer > strong { font-size: 10px; overflow-wrap: anywhere; }
+  .landing-shell .ship-evolution-offers .hangar-offer button { min-width: 0; min-height: 46px; padding: 5px; border-radius: 10px; clip-path: none; font-size: 11px; }
+  .landing-shell .ship-variants .ship-choice { border-radius: 12px; clip-path: none; }
+  .landing-shell .ship-selector-shop .hangar-actions .button { border-radius: 11px; clip-path: none; }
+}

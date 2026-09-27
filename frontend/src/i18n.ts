@@ -194,8 +194,33 @@ const failedMissionTranslations: Record<Locale, string> = {
   hu: "KÜLDETÉS SIKERTELEN", ro: "MISIUNE EȘUATĂ", sr: "МИСИЈА НИЈЕ УСПЕЛА",
   uk: "МІСІЮ ПРОВАЛЕНО", th: "ภารกิจล้มเหลว",
 };
+const evolutionShopTranslations: Partial<Record<Locale, Record<string, string>>> = {
+  de: {
+    "Choose a ship type to compare its stages. Advanced and Elite are permanent Pi upgrades; colors stay separate.": "Wähle ein Schiff und vergleiche seine Stufen. Advanced und Elite sind dauerhafte Pi-Upgrades; Farben bleiben separat.",
+    "Discover Advanced & Elite for Pi": "Advanced & Elite mit Pi entdecken",
+    "Ship evolution": "Schiffsentwicklung",
+    "Standard uses Shards. Advanced and Elite unlock permanently with Pi; Elite requires Advanced.": "Standard kostet Shards. Advanced und Elite werden dauerhaft mit Pi freigeschaltet; Elite setzt Advanced voraus.",
+    "Three ship stages": "Drei Schiffsstufen",
+    "Requires Stage 2": "Benötigt Stufe 2",
+    "Buy hull with Shards first": "Zuerst das Schiff mit Shards kaufen"
+  },
+  es: {
+    "Choose a ship type to compare its stages. Advanced and Elite are permanent Pi upgrades; colors stay separate.": "Elige una nave y compara sus etapas. Advanced y Elite son mejoras permanentes con Pi; los colores van aparte.",
+    "Discover Advanced & Elite for Pi": "Descubre Advanced y Elite con Pi",
+    "Ship evolution": "Evolución de naves",
+    "Standard uses Shards. Advanced and Elite unlock permanently with Pi; Elite requires Advanced.": "Standard cuesta Shards. Advanced y Elite se desbloquean de forma permanente con Pi; Elite requiere Advanced.",
+    "Three ship stages": "Tres etapas de nave"
+  },
+  fr: {
+    "Choose a ship type to compare its stages. Advanced and Elite are permanent Pi upgrades; colors stay separate.": "Choisissez un vaisseau et comparez ses niveaux. Advanced et Elite sont des améliorations permanentes en Pi ; les couleurs restent séparées.",
+    "Discover Advanced & Elite for Pi": "Découvrir Advanced et Elite avec Pi",
+    "Ship evolution": "Évolution du vaisseau",
+    "Standard uses Shards. Advanced and Elite unlock permanently with Pi; Elite requires Advanced.": "Standard coûte des Shards. Advanced et Elite se débloquent définitivement avec Pi ; Elite nécessite Advanced.",
+    "Three ship stages": "Trois niveaux de vaisseau"
+  }
+};
 const englishGameTerms = new Set(["Network chain", "blocks linked", "CHAIN COMPLETE", "BLOCK LINKED", "Shards", "Shard", "PERFECT CRYPTO HUNT", "GOLD NETWORK", "NETWORK LINK"]);
-export const translate = (locale: Locale, source: string) => englishGameTerms.has(source) ? source : source === "MISSION FAILED" ? failedMissionTranslations[locale] : locale === "en" ? source : audioSettingsTranslations[locale]?.[source] ?? gameplayPolishTranslations[locale]?.[source] ?? homeMusicTranslations[locale]?.[source] ?? controlTranslations[locale]?.[source] ?? hudTranslations[locale]?.[source] ?? systemMenuTranslations[locale]?.[source] ?? extendedTranslations[locale]?.[source] ?? powerUpTranslations[locale]?.[source] ?? levelTranslations[locale]?.[source] ?? networkTranslations[locale]?.[source] ?? newerTranslations[locale]?.[source] ?? translations[locale]?.[source] ?? source;
+export const translate = (locale: Locale, source: string) => englishGameTerms.has(source) ? source : source === "MISSION FAILED" ? failedMissionTranslations[locale] : locale === "en" ? source : evolutionShopTranslations[locale]?.[source] ?? audioSettingsTranslations[locale]?.[source] ?? gameplayPolishTranslations[locale]?.[source] ?? homeMusicTranslations[locale]?.[source] ?? controlTranslations[locale]?.[source] ?? hudTranslations[locale]?.[source] ?? systemMenuTranslations[locale]?.[source] ?? extendedTranslations[locale]?.[source] ?? powerUpTranslations[locale]?.[source] ?? levelTranslations[locale]?.[source] ?? networkTranslations[locale]?.[source] ?? newerTranslations[locale]?.[source] ?? translations[locale]?.[source] ?? source;
 export const useLocale = () => {
   const [locale, setLocale] = useState<Locale>(() => resolveLocale(navigator.languages?.length ? navigator.languages : [navigator.language], localStorage.getItem(STORAGE_KEY)));
   const [automatic, setAutomatic] = useState(() => !localStorage.getItem(STORAGE_KEY));
