@@ -295,13 +295,10 @@ const Shop = () => {
           </div>
         </div>
         <div className="planet-stage" aria-label="Cryptoid Evolution planet status">
-          <div className="orbit orbit-one"><span className="satellite-motion"><i className="satellite-body" /></span></div>
-          <div className="orbit orbit-two"><span className="satellite-motion"><i className="satellite-body" /></span></div>
-          <div className="orbit orbit-three"><span className="satellite-motion"><i className="satellite-body" /></span></div>
-          <div className="planet"><EarthGlobe /></div>
+          <div className="planet"><EarthGlobe /><svg className="home-earth-network" viewBox="0 0 320 320" aria-hidden="true"><path className="home-network-grid" d="M160 5 C82 65 82 255 160 315 M160 5 C238 65 238 255 160 315 M160 5 V315 M17 102 Q160 139 303 102 M5 158 Q160 198 315 158 M17 214 Q160 252 303 214" /><path className="home-network-links" d="M65 111 L160 93 L255 113 L178 169 L234 215 L157 256 L83 198 L65 111 M160 93 L178 169 L83 198 M255 113 L234 215" /><path className="home-network-pulse" d="M65 111 L160 93 L255 113 L178 169 L234 215 L157 256 L83 198 L65 111" /><g className="home-network-nodes">{[[65, 111], [160, 93], [255, 113], [178, 169], [234, 215], [157, 256], [83, 198]].map(([cx, cy], index) => <circle key={index} cx={cx} cy={cy} r="3.5" />)}</g></svg></div>
           <div className="home-crossfire" aria-hidden="true"><i className="home-crossfire-shot home-crossfire-shot-a" /><i className="home-crossfire-shot home-crossfire-shot-b" /><i className="home-crossfire-impact" /></div>
-          <div className="home-formation" aria-hidden="true">{[2, 3, 0].map((sprite, index) => <i key={index} style={spriteStyle(sprite)} />)}</div>
-          <div className="home-enemy-ship" style={{ "--ship-glow": "#ffd36b", ...shipNozzleStyle(3, true) } as CSSProperties}><i style={spriteStyle(3)} /><span className="home-enemy-thrust home-enemy-thrust-left" /><span className="home-enemy-thrust home-enemy-thrust-right" /></div>
+          <div className="home-intercept" aria-hidden="true"><i className="home-intercept-bolt home-intercept-bolt-a" /><i className="home-intercept-bolt home-intercept-bolt-b" /><i className="home-intercept-flash" /></div>
+          <div className="home-raid" aria-hidden="true">{[2, 3, 0].map((sprite, index) => <i className={`home-raid-ship home-raid-ship-${index + 1}`} key={sprite} style={spriteStyle(sprite)} />)}</div>
           <span className="orbit-status">{t('ORBITAL DEFENSE ACTIVE')}</span>
           <div className="stage-label"><span className="stage-label-value">01</span><span>{t('Genesis sector')}</span></div>
         </div>

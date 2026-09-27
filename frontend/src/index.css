@@ -1056,3 +1056,88 @@ html[data-motion="reduced"] .landing-shell .home-launch .home-defense-ship, html
 @media (max-width: 700px) { .home-crossfire-shot { height: 19px; } .home-crossfire-impact { width: 25px; height: 25px; } }
 @media (prefers-reduced-motion: reduce) { .home-crossfire-shot, .home-crossfire-impact, .landing-shell .home-formation, .landing-shell .home-formation i:nth-child(2), .landing-shell .home-enemy-ship, .home-launch-shot, .landing-shell .hero-actions .home-play-button { animation: none; } }
 html[data-motion="reduced"] .home-crossfire-shot, html[data-motion="reduced"] .home-crossfire-impact, html[data-motion="reduced"] .landing-shell .home-formation, html[data-motion="reduced"] .landing-shell .home-formation i:nth-child(2), html[data-motion="reduced"] .landing-shell .home-enemy-ship, html[data-motion="reduced"] .home-launch-shot, html[data-motion="reduced"] .landing-shell .hero-actions .home-play-button { animation: none; }
+
+/* The opening scene follows a combat loop: entry, dive, interception, retreat. */
+.landing-shell { background: radial-gradient(circle at 77% 41%, rgba(104, 50, 151, .42), transparent 45%), radial-gradient(circle at 20% 76%, rgba(9, 119, 143, .26), transparent 42%), #061728; }
+.landing-shell .hero-section { background: radial-gradient(circle at 78% 49%, rgba(202, 89, 76, .14), transparent 31%); }
+.landing-shell .hero-tagline { color: #ffcf81; text-shadow: 0 0 23px rgba(246, 158, 79, .24); }
+.landing-shell .hero-tagline span { color: #f6d6a3; }
+.landing-shell .hero-copy h1 span { color: #44e0bc; text-shadow: 0 0 26px rgba(29, 204, 180, .32), 0 4px 21px #021528; }
+.landing-shell .planet-stage { --raid-span: clamp(100px, 27vw, 190px); opacity: .98; }
+.landing-shell .planet { overflow: hidden; background-color: #082a48; box-shadow: 0 0 62px rgba(43, 160, 230, .52), 0 0 110px rgba(107, 67, 211, .26), inset -17px -12px 35px rgba(0, 11, 37, .7); }
+.home-earth-network { position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; border-radius: 50%; pointer-events: none; mix-blend-mode: screen; opacity: .78; filter: drop-shadow(0 0 3px #38ecf9); animation: home-network-breathe 4.2s ease-in-out infinite; }
+.home-network-grid { fill: none; stroke: rgba(104, 222, 243, .5); stroke-width: .9; }
+.home-network-links { fill: none; stroke: rgba(131, 242, 220, .7); stroke-width: 1.4; }
+.home-network-pulse { fill: none; stroke: #e6ffe8; stroke-width: 2.4; stroke-linecap: round; stroke-dasharray: 10 540; animation: home-network-travel 5.8s linear infinite; }
+.home-network-nodes circle { fill: #effff3; stroke: #29f6d7; stroke-width: 1.5; animation: home-network-node 3.1s ease-in-out infinite alternate; }
+.home-network-nodes circle:nth-child(2n) { animation-delay: -.9s; }
+.home-network-nodes circle:nth-child(3n) { animation-delay: -1.8s; fill: #ffe09b; stroke: #ffad66; }
+@keyframes home-network-breathe { 0%, 100% { opacity: .57; } 50% { opacity: .93; } }
+@keyframes home-network-travel { to { stroke-dashoffset: -550; } }
+@keyframes home-network-node { 0% { opacity: .53; stroke-width: 1; } 100% { opacity: 1; stroke-width: 3; } }
+.home-raid { position: absolute; z-index: 5; inset: 0; pointer-events: none; }
+.home-raid-ship { position: absolute; display: block; width: clamp(40px, 11%, 72px); aspect-ratio: 1; background-image: url('/ships/cryptoid-fleet.png'); background-size: 400% 500%; background-repeat: no-repeat; opacity: 0; will-change: transform, opacity; }
+.home-raid-ship-1 { left: 31%; top: 8%; filter: sepia(.9) saturate(2.9) hue-rotate(313deg) brightness(1.28) drop-shadow(0 0 9px #ff945d); animation: home-raid-alpha 11s linear infinite; }
+.home-raid-ship-2 { left: 59%; top: 11%; filter: sepia(.9) saturate(2.6) hue-rotate(182deg) brightness(1.32) drop-shadow(0 0 9px #bc80ff); animation: home-raid-beta 11s linear infinite; }
+.home-raid-ship-3 { left: 77%; top: 15%; filter: sepia(.8) saturate(2.8) hue-rotate(84deg) brightness(1.3) drop-shadow(0 0 9px #64e9eb); animation: home-raid-gamma 11s linear infinite; }
+@keyframes home-raid-alpha {
+  0% { opacity: 0; transform: translate(var(--raid-span), -90px) rotate(160deg) scale(.65); }
+  9% { opacity: 1; transform: translate(calc(var(--raid-span) * .62), -38px) rotate(178deg); }
+  23% { opacity: 1; transform: translate(0, 0) rotate(185deg); }
+  39% { opacity: 1; transform: translate(calc(var(--raid-span) * -.7), 104px) rotate(215deg); }
+  53% { opacity: 1; transform: translate(calc(var(--raid-span) * -.9), 190px) rotate(265deg); }
+  68% { opacity: 1; transform: translate(11px, 218px) rotate(326deg); }
+  84% { opacity: 1; transform: translate(calc(var(--raid-span) * .86), 43px) rotate(413deg); }
+  100% { opacity: 0; transform: translate(var(--raid-span), -90px) rotate(520deg) scale(.7); }
+}
+@keyframes home-raid-beta {
+  0% { opacity: 0; transform: translate(calc(var(--raid-span) * -1.2), -75px) rotate(200deg) scale(.7); }
+  11% { opacity: 1; transform: translate(calc(var(--raid-span) * -.5), -25px) rotate(183deg); }
+  28% { opacity: 1; transform: translate(0, 14px) rotate(170deg); }
+  46% { opacity: 1; transform: translate(calc(var(--raid-span) * .4), 160px) rotate(130deg); }
+  62% { opacity: 1; transform: translate(calc(var(--raid-span) * -.3), 218px) rotate(65deg); }
+  82% { opacity: 1; transform: translate(calc(var(--raid-span) * -.85), 50px) rotate(-35deg); }
+  100% { opacity: 0; transform: translate(calc(var(--raid-span) * -1.2), -75px) rotate(-155deg) scale(.7); }
+}
+@keyframes home-raid-gamma {
+  0% { opacity: 0; transform: translate(var(--raid-span), -45px) rotate(160deg) scale(.6); }
+  17% { opacity: .9; transform: translate(calc(var(--raid-span) * .25), 0) rotate(183deg); }
+  34% { opacity: 1; transform: translate(calc(var(--raid-span) * -.26), 65px) rotate(202deg); }
+  50% { opacity: 1; transform: translate(calc(var(--raid-span) * -.62), 151px) rotate(241deg); }
+  65% { opacity: 1; transform: translate(calc(var(--raid-span) * .02), 204px) rotate(331deg); }
+  81% { opacity: 1; transform: translate(calc(var(--raid-span) * .72), 89px) rotate(420deg); }
+  100% { opacity: 0; transform: translate(var(--raid-span), -45px) rotate(530deg) scale(.7); }
+}
+.landing-shell .home-crossfire { z-index: 3; overflow: visible; border-radius: 0; }
+.landing-shell .home-crossfire-shot-a { left: 29%; top: 20%; animation: home-raid-bolt-a 11s linear infinite; }
+.landing-shell .home-crossfire-shot-b { left: 72%; top: 21%; animation: home-raid-bolt-b 11s linear infinite; }
+.landing-shell .home-crossfire-impact { left: 50%; top: 50%; animation: home-raid-impact 11s ease-out infinite; }
+@keyframes home-raid-bolt-a { 0%, 30% { opacity: 0; transform: translate(0, 0) rotate(-37deg); } 35% { opacity: 1; } 53% { opacity: 1; transform: translate(78px, 127px) rotate(-37deg); } 57%, 100% { opacity: 0; transform: translate(94px, 150px) rotate(-37deg); } }
+@keyframes home-raid-bolt-b { 0%, 51% { opacity: 0; transform: translate(0, 0) rotate(29deg); } 55% { opacity: 1; } 72% { opacity: 1; transform: translate(-58px, 122px) rotate(29deg); } 77%, 100% { opacity: 0; transform: translate(-68px, 144px) rotate(29deg); } }
+@keyframes home-raid-impact { 0%, 52% { opacity: 0; transform: scale(.2); } 56% { opacity: .9; transform: scale(.8); } 64% { opacity: 0; transform: scale(2.1); } 72% { opacity: 0; transform: scale(.2); } 76% { opacity: .85; transform: scale(.8); } 85%, 100% { opacity: 0; transform: scale(2.3); } }
+.home-intercept { position: absolute; z-index: 6; inset: 0; pointer-events: none; }
+.home-intercept-bolt { position: absolute; display: block; width: 4px; height: 33px; border-radius: 3px; background: linear-gradient(#fff, #7ceff7 40%, #695fff, transparent); box-shadow: 0 0 9px #76faff, 0 0 23px #7568ff; opacity: 0; will-change: transform, opacity; }
+.home-intercept-bolt-a { left: 22%; top: 79%; animation: home-intercept-a 11s linear infinite; }
+.home-intercept-bolt-b { left: 67%; top: 85%; animation: home-intercept-b 11s linear infinite; }
+.home-intercept-flash { position: absolute; left: 44%; top: 44%; display: block; width: 52px; height: 52px; border: 2px solid #91fff5; border-radius: 50%; background: radial-gradient(circle, #fff 0 7%, #73f3fe 12%, #8e65f9aa 33%, transparent 65%); box-shadow: 0 0 25px #7bf2fb, 0 0 45px #9985fb; opacity: 0; animation: home-intercept-hit 11s ease-out infinite; }
+@keyframes home-intercept-a { 0%, 39% { opacity: 0; transform: translate(0, 0) rotate(37deg) scaleY(.5); } 43% { opacity: 1; } 57% { opacity: 1; transform: translate(91px, -121px) rotate(37deg); } 61%, 100% { opacity: 0; transform: translate(110px, -145px) rotate(37deg); } }
+@keyframes home-intercept-b { 0%, 63% { opacity: 0; transform: translate(0, 0) rotate(-35deg) scaleY(.5); } 67% { opacity: 1; } 82% { opacity: 1; transform: translate(-75px, -133px) rotate(-35deg); } 86%, 100% { opacity: 0; transform: translate(-97px, -151px) rotate(-35deg); } }
+@keyframes home-intercept-hit { 0%, 54% { opacity: 0; transform: scale(.2); } 59% { opacity: .95; transform: scale(.8); } 68%, 100% { opacity: 0; transform: scale(2.8); } }
+.landing-shell .home-launch-bay { background: radial-gradient(ellipse at 50% 72%, rgba(125, 95, 233, .34), transparent 64%), radial-gradient(ellipse at 50% 100%, rgba(38, 234, 225, .19), transparent 70%); }
+.landing-shell .hero-actions .home-play-button { border-color: #c2ffdc; background: linear-gradient(112deg, #69f4c1, #40dfe7 65%, #5b9dff); color: #041d29; }
+.landing-shell .hero-actions .button-secondary:nth-child(2) { border-color: #e7b576; background: linear-gradient(135deg, #402c3bd9, #112f47ee); box-shadow: inset 0 -2px #ca855f, 0 0 16px #d47e5a30; }
+.landing-shell .hero-actions .button-secondary:nth-child(3) { border-color: #b786ff; background: linear-gradient(135deg, #33275bdf, #181e3bee); box-shadow: inset 0 -2px #9361e1, 0 0 16px #9d71ef3a; }
+.landing-shell .hero-actions .button-secondary:nth-child(4) { border-color: #81d2ea; background: linear-gradient(135deg, #173f52e8, #122e41ee); box-shadow: inset 0 -2px #69c9d6, 0 0 16px #63c8db2b; }
+.landing-shell .home-mission-brief { border-color: rgba(120, 232, 231, .38); border-left-color: #ffbf7b; background: linear-gradient(90deg, rgba(44, 44, 76, .9), rgba(8, 40, 60, .68)); }
+@media (max-width: 700px) {
+  .landing-shell .planet-stage { top: 23%; right: -18%; width: min(100vw, 430px); opacity: .9; }
+  .landing-shell .hero-section::before { background: linear-gradient(90deg, #081b2de8 0%, #081b2d9e 44%, #081b2d26 100%); }
+  .home-raid-ship { width: 48px; }
+  .home-intercept-flash { width: 35px; height: 35px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-earth-network, .home-network-pulse, .home-network-nodes circle, .home-raid-ship, .landing-shell .home-crossfire-shot-a, .landing-shell .home-crossfire-shot-b, .landing-shell .home-crossfire-impact, .home-intercept-bolt, .home-intercept-flash { animation: none; }
+  .home-raid-ship-1, .home-raid-ship-2, .home-raid-ship-3 { opacity: .8; transform: rotate(180deg); }
+}
+html[data-motion="reduced"] .home-earth-network, html[data-motion="reduced"] .home-network-pulse, html[data-motion="reduced"] .home-network-nodes circle, html[data-motion="reduced"] .home-raid-ship, html[data-motion="reduced"] .landing-shell .home-crossfire-shot-a, html[data-motion="reduced"] .landing-shell .home-crossfire-shot-b, html[data-motion="reduced"] .landing-shell .home-crossfire-impact, html[data-motion="reduced"] .home-intercept-bolt, html[data-motion="reduced"] .home-intercept-flash { animation: none; }
+html[data-motion="reduced"] .home-raid-ship { opacity: .8; transform: rotate(180deg); }
