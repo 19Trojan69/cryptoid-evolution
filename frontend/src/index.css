@@ -1065,16 +1065,16 @@ html[data-motion="reduced"] .home-crossfire-shot, html[data-motion="reduced"] .h
 .landing-shell .hero-copy h1 span { color: #44e0bc; text-shadow: 0 0 26px rgba(29, 204, 180, .32), 0 4px 21px #021528; }
 .landing-shell .planet-stage { --raid-span: clamp(100px, 27vw, 190px); opacity: .98; }
 .landing-shell .planet { overflow: hidden; background-color: #082a48; box-shadow: 0 0 62px rgba(43, 160, 230, .52), 0 0 110px rgba(107, 67, 211, .26), inset -17px -12px 35px rgba(0, 11, 37, .7); }
-.home-earth-network { position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; border-radius: 50%; pointer-events: none; mix-blend-mode: screen; opacity: .78; filter: drop-shadow(0 0 3px #38ecf9); animation: home-network-breathe 4.2s ease-in-out infinite; }
-.home-network-grid { fill: none; stroke: rgba(104, 222, 243, .5); stroke-width: .9; }
-.home-network-links { fill: none; stroke: rgba(131, 242, 220, .7); stroke-width: 1.4; }
-.home-network-pulse { fill: none; stroke: #e6ffe8; stroke-width: 2.4; stroke-linecap: round; stroke-dasharray: 10 540; animation: home-network-travel 5.8s linear infinite; }
-.home-network-nodes circle { fill: #effff3; stroke: #29f6d7; stroke-width: 1.5; animation: home-network-node 3.1s ease-in-out infinite alternate; }
-.home-network-nodes circle:nth-child(2n) { animation-delay: -.9s; }
-.home-network-nodes circle:nth-child(3n) { animation-delay: -1.8s; fill: #ffe09b; stroke: #ffad66; }
-@keyframes home-network-breathe { 0%, 100% { opacity: .57; } 50% { opacity: .93; } }
-@keyframes home-network-travel { to { stroke-dashoffset: -550; } }
-@keyframes home-network-node { 0% { opacity: .53; stroke-width: 1; } 100% { opacity: 1; stroke-width: 3; } }
+.home-earth-network { position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; border-radius: 50%; pointer-events: none; mix-blend-mode: screen; opacity: .88; filter: drop-shadow(0 0 2px rgba(255, 191, 79, .8)); animation: home-network-breathe 5.4s ease-in-out infinite; }
+.home-network-grid { fill: none; stroke: rgba(255, 205, 112, .66); stroke-width: 1.08; }
+.home-network-parallels { stroke: rgba(255, 219, 151, .62); stroke-width: .95; }
+.home-network-links { fill: none; stroke: rgba(255, 183, 74, .8); stroke-width: 1.45; stroke-linejoin: round; }
+.home-network-pulse { fill: none; stroke: #fff2b8; stroke-width: 2.7; stroke-linecap: round; stroke-dasharray: 3 97; filter: drop-shadow(0 0 4px #ffb32e); animation: home-network-travel 4.7s linear infinite; }
+.home-network-pulse-alt { stroke: #ffc257; stroke-width: 2.25; animation-duration: 6.2s; animation-delay: -2.1s; }
+.home-network-nodes circle { fill: #fff4c8; stroke: #ffad37; stroke-width: 1.5; filter: drop-shadow(0 0 3px #ffb742); animation: home-network-node 3.7s ease-in-out infinite; }
+@keyframes home-network-breathe { 0%, 100% { opacity: .7; } 50% { opacity: .98; } }
+@keyframes home-network-travel { to { stroke-dashoffset: -100; } }
+@keyframes home-network-node { 0%, 100% { opacity: .55; stroke-width: 1; } 37%, 43% { opacity: 1; stroke-width: 3.4; } 68% { opacity: .8; stroke-width: 2; } }
 .home-raid { position: absolute; z-index: 5; inset: 0; pointer-events: none; }
 .home-raid-ship { position: absolute; display: block; width: clamp(40px, 11%, 72px); aspect-ratio: 1; background-image: url('/ships/cryptoid-fleet.png'); background-size: 400% 500%; background-repeat: no-repeat; opacity: 0; will-change: transform, opacity; }
 .home-raid-ship-1 { left: 31%; top: 8%; filter: sepia(.9) saturate(2.9) hue-rotate(313deg) brightness(1.28) drop-shadow(0 0 9px #ff945d); animation: home-raid-alpha 11s linear infinite; }
