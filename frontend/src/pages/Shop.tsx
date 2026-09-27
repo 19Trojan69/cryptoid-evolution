@@ -18,6 +18,7 @@ import MusicVolumeSlider from "./MusicVolumeSlider";
 import Starfield from "./Starfield";
 import { languages, useLocale, type Locale } from "../i18n";
 import EarthGlobe from "./EarthGlobe";
+import { earthNetwork } from "./earthNetwork";
 import { requestGameFullscreen } from "./gameFullscreen";
 import { powerUpSymbols, type PowerUpType } from "./powerUps";
 import { CONTROL_HAND_KEY, CONTROL_SENSITIVITY_KEY, CONTROL_ZONE_KEY, SHIP_START_KEY, readControlHand, readControlSensitivity, readControlZone, readShipStart, type ControlHand, type ControlSensitivity, type ControlZone, type ShipStart } from "./controlPreferences";
@@ -37,28 +38,6 @@ const shopTabs = [
 
 const powerTypeForOffer = (offerId: string): PowerUpType => offerId.includes("shield") ? "shield" : offerId.includes("rapid") ? "rapid" : offerId.includes("bomb") ? "bomb" : offerId.includes("emp") ? "emp" : "overdrive";
 const MOTION_STORAGE_KEY = "cryptoid_reduced_effects";
-
-const NETWORK_RADIUS = 158.5;
-const networkPoint = (latitude: number, longitude: number) => {
-  const lat = latitude * Math.PI / 180;
-  const lon = longitude * Math.PI / 180;
-  return [160 + NETWORK_RADIUS * Math.cos(lat) * Math.sin(lon), 160 - NETWORK_RADIUS * Math.sin(lat)] as const;
-};
-const networkPath = (points: ReadonlyArray<readonly [number, number]>) =>
-  points.map(([x, y], index) => `${index ? "L" : "M"}${x.toFixed(1)} ${y.toFixed(1)}`).join(" ");
-const networkMeridians = Array.from({ length: 11 }, (_, column) => -90 + column * 18).map(lon =>
-  networkPath(Array.from({ length: 37 }, (_, index) => networkPoint(-90 + index * 5, lon)))).join(" ");
-const networkParallels = Array.from({ length: 9 }, (_, row) => -72 + row * 18).map(lat =>
-  networkPath(Array.from({ length: 37 }, (_, index) => networkPoint(lat, -90 + index * 5)))).join(" ");
-const networkLinks = Array.from({ length: 10 }, (_, row) => Array.from({ length: 10 }, (_, column) => {
-  const lat = -90 + row * 18;
-  const lon = -90 + column * 18;
-  return (row + column) % 2 === 0
-    ? networkPath([networkPoint(lat, lon), networkPoint(lat + 9, lon + 9), networkPoint(lat + 18, lon + 18)])
-    : networkPath([networkPoint(lat + 18, lon), networkPoint(lat + 9, lon + 9), networkPoint(lat, lon + 18)]);
-})).flat().join(" ");
-const networkNodes = [-72, -36, 0, 36, 72].flatMap((lat, row) =>
-  [-72, -36, 0, 36, 72].flatMap((lon, column) => (row + column) % 2 === 0 ? [networkPoint(lat, lon)] : []));
 
 const WeaponPreview = ({ offerId, sprite, color }: { offerId: string; sprite: number; color: PlayerColorId }) => {
   const shotCount = offerId.includes("triple") || offerId.includes("plasma") ? 3 : 2;
@@ -313,13 +292,10 @@ const Shop = () => {
         </div>
         <div className="planet-stage" aria-label="Cryptoid Evolution planet status">
           <div className="planet"><EarthGlobe /><svg className="home-earth-network" viewBox="0 0 320 320" aria-hidden="true">
-              <circle className="home-network-rim" cx="160" cy="160" r={NETWORK_RADIUS} />
-              <path className="home-network-grid" d={networkMeridians} />
-              <path className="home-network-grid home-network-parallels" d={networkParallels} />
-              <path className="home-network-links" d={networkLinks} />
-              <path className="home-network-pulse" pathLength="100" d={networkPath(Array.from({ length: 37 }, (_, index) => networkPoint(-90 + index * 5, 25)))} />
-              <path className="home-network-pulse home-network-pulse-alt" pathLength="100" d={networkPath(Array.from({ length: 37 }, (_, index) => networkPoint(0, -90 + index * 5)))} />
-              <g className="home-network-nodes">{networkNodes.map(([cx, cy], index) => <circle key={index} cx={cx} cy={cy} r={index % 3 === 0 ? 2.6 : 1.7} style={{ animationDelay: `${index * -.33}s` }} />)}</g>
+              <circle className="home-network-rim" cx="160" cy="160" r="158" />
+              <path className="home-network-grid" d={earthNetwork.path} />
+              <path className="home-network-highlight" d={earthNetwork.highlights} />
+              <g className="home-network-nodes">{earthNetwork.nodes.map(([cx, cy], index) => <circle key={index} cx={cx} cy={cy} r={index % 3 === 0 ? 2.5 : 1.6} style={{ animationDelay: `${index * -.37}s` }} />)}</g>
             </svg></div>
           <div className="home-crossfire" aria-hidden="true"><i className="home-crossfire-shot home-crossfire-shot-a" /><i className="home-crossfire-shot home-crossfire-shot-b" /><i className="home-crossfire-impact" /></div>
           <div className="home-intercept" aria-hidden="true"><i className="home-intercept-bolt home-intercept-bolt-a" /><i className="home-intercept-bolt home-intercept-bolt-b" /><i className="home-intercept-flash" /></div>
