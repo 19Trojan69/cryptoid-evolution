@@ -38,6 +38,27 @@ const shopTabs = [
 const powerTypeForOffer = (offerId: string): PowerUpType => offerId.includes("shield") ? "shield" : offerId.includes("rapid") ? "rapid" : offerId.includes("bomb") ? "bomb" : offerId.includes("emp") ? "emp" : "overdrive";
 const MOTION_STORAGE_KEY = "cryptoid_reduced_effects";
 
+const NETWORK_RADIUS = 154;
+const networkPoint = (latitude: number, longitude: number) => {
+  const lat = latitude * Math.PI / 180;
+  const lon = longitude * Math.PI / 180;
+  return [160 + NETWORK_RADIUS * Math.cos(lat) * Math.sin(lon), 160 - NETWORK_RADIUS * Math.sin(lat)] as const;
+};
+const networkPath = (points: ReadonlyArray<readonly [number, number]>) =>
+  points.map(([x, y], index) => `${index ? "L" : "M"}${x.toFixed(1)} ${y.toFixed(1)}`).join(" ");
+const networkMeridians = [-75, -50, -25, 0, 25, 50, 75].map(lon =>
+  networkPath(Array.from({ length: 37 }, (_, index) => networkPoint(-90 + index * 5, lon)))).join(" ");
+const networkParallels = [-75, -50, -25, 0, 25, 50, 75].map(lat =>
+  networkPath(Array.from({ length: 37 }, (_, index) => networkPoint(lat, -90 + index * 5)))).join(" ");
+const networkLinks = Array.from({ length: 6 }, (_, row) => Array.from({ length: 6 }, (_, column) => {
+  const lat = -75 + row * 25;
+  const lon = -75 + column * 25;
+  return networkPath([networkPoint(lat, lon), networkPoint(lat + 12.5, lon + 12.5), networkPoint(lat + 25, lon + 25)]);
+})).flat().join(" ");
+const networkNodes = [-50, -25, 0, 25, 50].flatMap((lat, row) =>
+  [-50, -25, 0, 25, 50].flatMap((lon, column) => (row + column) % 2 === 0 ? [networkPoint(lat, lon)] : []));
+
+
 const WeaponPreview = ({ offerId, sprite, color }: { offerId: string; sprite: number; color: PlayerColorId }) => {
   const shotCount = offerId.includes("triple") || offerId.includes("plasma") ? 3 : 2;
   return <div className={`offer-preview weapon-preview${offerId.includes("rapid") ? " weapon-preview-rapid" : ""}${offerId.includes("plasma") ? " weapon-preview-plasma" : ""}`} aria-hidden="true">
@@ -291,12 +312,13 @@ const Shop = () => {
         </div>
         <div className="planet-stage" aria-label="Cryptoid Evolution planet status">
           <div className="planet"><EarthGlobe /><svg className="home-earth-network" viewBox="0 0 320 320" aria-hidden="true">
-              <path className="home-network-grid" d={[-148, -116, -82, -46, 0, 46, 82, 116, 148].map(bend => `M160 5 C${160 + bend} 62 ${160 + bend} 258 160 315`).join(" ")} />
-              <path className="home-network-grid home-network-parallels" d={[[45, 98, 18], [75, 124, 26], [108, 145, 31], [142, 153, 25], [178, 153, 19], [212, 145, 14], [245, 122, 10], [277, 94, 7]].map(([y, half, dip]) => `M${160 - half} ${y} Q160 ${y + dip} ${160 + half} ${y}`).join(" ")} />
-              <path className="home-network-links" d="M160 45 L95 78 L42 135 L102 132 L160 80 L218 132 L278 135 L225 78 L160 45 M95 78 L160 80 L225 78 M42 135 L102 187 L160 135 L218 187 L278 135 M102 132 L160 135 L218 132 M42 190 L102 132 L160 190 L218 132 L278 190 M42 190 L102 187 L160 190 L218 187 L278 190 M102 187 L96 244 L160 190 L224 244 L218 187 M96 244 L160 245 L224 244 L160 285 L96 244 M160 190 L160 245 L160 285" />
-              <path className="home-network-pulse" pathLength="100" d="M160 45 L95 78 L42 135 L102 187 L96 244 L160 285 L224 244 L278 190 L218 132 L225 78 L160 45" />
-              <path className="home-network-pulse home-network-pulse-alt" pathLength="100" d="M42 190 L102 132 L160 80 L225 78 L278 135 L218 187 L160 245 L96 244 L42 190" />
-              <g className="home-network-nodes">{[[160, 45], [95, 78], [160, 80], [225, 78], [42, 135], [102, 132], [160, 135], [218, 132], [278, 135], [42, 190], [102, 187], [160, 190], [218, 187], [278, 190], [96, 244], [160, 245], [224, 244], [160, 285]].map(([cx, cy], index) => <circle key={index} cx={cx} cy={cy} r={index % 4 === 0 ? 3 : 2.2} style={{ animationDelay: `${index * -.33}s` }} />)}</g>
+              <circle className="home-network-rim" cx="160" cy="160" r={NETWORK_RADIUS} />
+              <path className="home-network-grid" d={networkMeridians} />
+              <path className="home-network-grid home-network-parallels" d={networkParallels} />
+              <path className="home-network-links" d={networkLinks} />
+              <path className="home-network-pulse" pathLength="100" d={networkPath(Array.from({ length: 37 }, (_, index) => networkPoint(-90 + index * 5, 25)))} />
+              <path className="home-network-pulse home-network-pulse-alt" pathLength="100" d={networkPath(Array.from({ length: 37 }, (_, index) => networkPoint(0, -90 + index * 5)))} />
+              <g className="home-network-nodes">{networkNodes.map(([cx, cy], index) => <circle key={index} cx={cx} cy={cy} r={index % 3 === 0 ? 2.6 : 1.7} style={{ animationDelay: `${index * -.33}s` }} />)}</g>
             </svg></div>
           <div className="home-crossfire" aria-hidden="true"><i className="home-crossfire-shot home-crossfire-shot-a" /><i className="home-crossfire-shot home-crossfire-shot-b" /><i className="home-crossfire-impact" /></div>
           <div className="home-intercept" aria-hidden="true"><i className="home-intercept-bolt home-intercept-bolt-a" /><i className="home-intercept-bolt home-intercept-bolt-b" /><i className="home-intercept-flash" /></div>
