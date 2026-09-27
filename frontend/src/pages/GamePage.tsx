@@ -280,8 +280,6 @@ const GamePage = () => {
   const fireTimerRef = useRef(0);
   const keysRef = useRef(new Set<string>());
   const pointerRef = useRef<number | null>(null);
-  const powerPressRef = useRef<{ id: number; x: number; y: number; timer: ReturnType<typeof setTimeout> } | null>(null);
-  const [powerHolding, setPowerHolding] = useState(false);
   const touchOriginRef = useRef<{ x: number; y: number; player: PlayerPosition } | null>(null);
   const [guideStep, setGuideStep] = useState(() => localStorage.getItem(FIRST_MISSION_GUIDE_KEY) === "1" ? -1 : 0);
   const guideStepRef = useRef(guideStep);
@@ -836,34 +834,6 @@ const GamePage = () => {
     positionFromPointer(event);
   };
 
-  const cancelPowerPress = () => {
-    if (powerPressRef.current) window.clearTimeout(powerPressRef.current.timer);
-    powerPressRef.current = null;
-    setPowerHolding(false);
-  };
-  useEffect(() => () => {
-    if (powerPressRef.current) window.clearTimeout(powerPressRef.current.timer);
-  }, []);
-  const beginPowerPress = (event: ReactPointerEvent<HTMLButtonElement>) => {
-    event.stopPropagation();
-    if (powerPressRef.current || stateRef.current.status !== "playing") return;
-    const id = event.pointerId;
-    powerPressRef.current = { id, x: event.clientX, y: event.clientY, timer: window.setTimeout(() => {
-      if (powerPressRef.current?.id !== id) return;
-      powerPressRef.current = null;
-      setPowerHolding(false);
-      activateStartPower();
-    }, 650) };
-    event.currentTarget.setPointerCapture(id);
-    setPowerHolding(true);
-  };
-  const movePowerPress = (event: ReactPointerEvent<HTMLButtonElement>) => {
-    const press = powerPressRef.current;
-    if (press?.id === event.pointerId && Math.hypot(event.clientX - press.x, event.clientY - press.y) > 12) cancelPowerPress();
-  };
-  const endPowerPress = (event: ReactPointerEvent<HTMLButtonElement>) => {
-    if (powerPressRef.current?.id === event.pointerId) cancelPowerPress();
-  };
   const activateStartPower = () => {
     const state = stateRef.current;
     if (state.status !== "playing" || !state.pendingStartPower) return;
@@ -973,19 +943,19 @@ const GamePage = () => {
 
   return (
     <main className="game-shell" onPointerDownCapture={event => { void startEffects(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
-      <div ref={fieldRef} className="game-field" onPointerDown={startDrag} onPointerMove={event => { if (pointerRef.current === event.pointerId) positionFromPointer(event); }} onPointerUp={event => { if (pointerRef.current === event.pointerId) { pointerRef.current = null; touchOriginRef.current = null; } }} onPointerCancel={event => { if (pointerRef.current === event.pointerId) { pointerRef.current = null; touchOriginRef.current = null; } }}>
+      <div ref={fieldRef} className="game-field" onContextMenu={event => event.preventDefault()} onDragStart={event => event.preventDefault()} onPointerDown={startDrag} onPointerMove={event => { if (pointerRef.current === event.pointerId) positionFromPointer(event); }} onPointerUp={event => { if (pointerRef.current === event.pointerId) { pointerRef.current = null; touchOriginRef.current = null; } }} onPointerCancel={event => { if (pointerRef.current === event.pointerId) { pointerRef.current = null; touchOriginRef.current = null; } }}>
         <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} showNebula={game.encounter === "boss-fight"} showTwinkles={game.encounter === "normal"} />
         <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
         <header ref={hudRef} className="game-hud">
           <div className="hud-actions"><button className="game-control home-control" type="button" disabled={game.status === "loading" || game.status === "destroying"} onClick={() => setHomePrompt(true)} aria-label={t("Go home")}><CockpitIcon kind="home" /></button></div>
           <div className="hud-stat score-hud"><span>{t('Score')}</span><strong>{game.score}</strong><small className="hud-coin-inline" aria-label={`${game.shards} Shards`}>◆ {game.shards}</small></div>
-          <div className="hud-stat coin-stat"><span>{t('Shards')}</span><strong>◆ {game.shards}</strong></div>
+          <div className="hud-stat coin-stat"><span>{t('Shards')}</span><strong>{game.shards}</strong></div>
           <div className={`hud-stat hearts-stat${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " hearts-stat-hit" : ""}`}><span className="hud-heart-label" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.2 3.4 13.1C-1.1 8.8 5.3 1.7 10.2 5.9L12 7.5l1.8-1.6c4.9-4.2 11.3 2.9 6.8 7.2L12 21.2Z" /></svg></span><strong className="hearts" role="status" aria-live="polite" aria-label={`${game.hearts} / ${game.maxHearts} ${t('Hearts')}`}>{game.hearts}/{game.maxHearts}</strong></div>
-          <div className="hud-stat weapon-hud" aria-label={`${t("Weapon level")} ${game.weaponLevel} / 5`}><span>{t("Weapon")}</span><strong>{game.weaponLevel}<small>/5</small></strong></div>
           <div className="hud-stat game-level-hud" aria-label={`${t("Game level")} ${levelLabel}`}><span>{t("Level")}</span><strong>{levelLabel}</strong></div>
           <div className="hud-stat round-hud chain-hud" aria-label={`${t("Round")} ${game.encounter === "normal" ? `${round} / 3` : "BOSS"}`}><span>{t("Round")}</span><strong>{game.encounter === "normal" ? <>{round}<small>/3</small></> : "BOSS"}</strong><div className="chain-blocks" role="img" aria-label={`${t("Network chain")}: ${game.chainBlocks}/${BLOCKS_PER_CHAIN} ${t("blocks linked")}`}>{Array.from({ length: BLOCKS_PER_CHAIN }, (_, index) => <i key={index} className={index < game.chainBlocks ? "linked" : ""} />)}</div></div>
           <button className="game-control pause-control" type="button" disabled={game.status === "loading" || game.status === "destroying" || game.status === "game-over"} onClick={() => { stateRef.current.status = game.status === "paused" ? "playing" : "paused"; setGame({ ...stateRef.current }); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
         </header>
+        <div className={`weapon-side weapon-side-${readControlHand()}`} role="status" aria-label={`${t("Weapon level")} ${game.weaponLevel} / 5`}><span>{t("Weapon level")}</span><strong>{game.weaponLevel}<small>/5</small></strong><div className="weapon-side-steps" aria-hidden="true">{Array.from({ length: 5 }, (_, index) => <i key={index} className={index < game.weaponLevel ? "active" : ""} />)}</div></div>
         <div className="game-label">{t("LEVEL")} {levelLabel} <span>· {sectorName(game.sector)} · {game.encounter !== "normal" ? t("CORE WARDEN") : isBonusSection(game.section) ? t("BONUS CHALLENGE") : `${t("ROUND")} ${round}`}</span></div>
         {game.encounter === "normal" && isBonusSection(game.section) && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">{t("BONUS TARGETS")} {game.bonusHits} / {BONUS_TARGET_COUNT} · {t("NO ENEMY FIRE")}</div>}
         {(game.shieldCharges > 0 || game.overdriveMs > 0 || game.rapidFireMs > 0 || game.empMs > 0 || game.paidWeaponMs > 0 || game.pickupWeaponMs > 0) && <div className="power-status" aria-live="polite">{game.shieldCharges > 0 && <span>{powerUpSymbols.shield} {t("SHIELD")} {t(game.shieldActive ? "ON" : "OFF")} · {game.shieldCharges} · {Math.ceil(game.shieldMs / 1_000)}s</span>}{game.overdriveMs > 0 && <span>{powerUpSymbols.overdrive} OVERDRIVE {Math.ceil(game.overdriveMs / 1_000)}s</span>}{game.rapidFireMs > 0 && <span>{powerUpSymbols.rapid} {t("RAPID")} {Math.ceil(game.rapidFireMs / 1_000)}s</span>}{game.empMs > 0 && <span>{powerUpSymbols.emp} EMP {Math.ceil(game.empMs / 1_000)}s</span>}{game.paidWeaponMs > 0 && <span>◆ {t("BOUGHT SHOTS")} {Math.ceil(game.paidWeaponMs / 1_000)}s</span>}{game.pickupWeaponMs > 0 && <span>{powerUpSymbols.weapon} {t("PICKUP SHOTS")} {Math.ceil(game.pickupWeaponMs / 1_000)}s</span>}</div>}
@@ -1008,10 +978,9 @@ const GamePage = () => {
         {game.effects.map(effect => <div key={effect.id} className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y }} aria-hidden="true"><span />{effect.kind === "hit" && <><i /><i /><i /></>}{bossFireBursts(effect)}{shipDebris(effect)}</div>)}
         {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0 ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${5 + game.thrust * 13}%` } as CSSProperties} aria-label={t('Your Cryptoid ship')}><div className="ship-visual"><i className="fleet-sprite" style={{ ...spriteStyle(shipSelection.skin.sprite), filter: "none", opacity: shipStage === 1 ? 1 : 0 }} aria-hidden="true" /><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} />{engineTrails(shipSelection.skin.sprite, "player-engine")}</div></div>}
         {guideStep >= 0 && game.status === "playing" && <aside className="game-coach" role="status" aria-live="polite"><small>{t("QUICK GUIDE")} · {guideStep + 1}/4</small><p>{guideHints[guideStep]}</p><button type="button" onClick={dismissGuide}>{t("Skip guide")}</button></aside>}
-        {guideStep < 0 && <div className="game-tip">← → ↑ ↓ / {t("THUMB CONTROLS")} · {t("Auto fire")}</div>}
         <div className={`touch-controls touch-controls-${readControlHand()}`}>
           <div className="edge-actions" role="group" aria-label={t('Available equipment')}>
-            {game.pendingStartPower && <button type="button" className={`edge-action edge-action-${game.pendingStartPower} edge-action-purchased`} disabled={game.status !== "playing" || (game.pendingStartPower === "shield" && game.shieldCharges > 0 && game.shieldMs > 0) || (game.pendingStartPower === "rapid" && game.rapidFireMs > 0) || (game.pendingStartPower === "overdrive" && game.overdriveMs > 0) || (game.pendingStartPower === "emp" && game.empMs > 0)} aria-label={`${t("Hold to activate")} ${t(powerUpNames[game.pendingStartPower])}`} data-holding={powerHolding} onPointerDown={beginPowerPress} onPointerMove={movePowerPress} onPointerUp={endPowerPress} onPointerCancel={endPowerPress} onPointerLeave={event => { if (event.pointerType === "mouse") endPowerPress(event); }} onClick={event => { if (event.detail === 0) activateStartPower(); }}><span aria-hidden="true">{powerUpSymbols[game.pendingStartPower]}</span><small>{t(powerUpNames[game.pendingStartPower])}</small><em>{t("Hold to activate")}</em></button>}
+            {game.pendingStartPower && <button type="button" className={`edge-action edge-action-${game.pendingStartPower} edge-action-purchased`} disabled={game.status !== "playing" || (game.pendingStartPower === "shield" && game.shieldCharges > 0 && game.shieldMs > 0) || (game.pendingStartPower === "rapid" && game.rapidFireMs > 0) || (game.pendingStartPower === "overdrive" && game.overdriveMs > 0) || (game.pendingStartPower === "emp" && game.empMs > 0)} aria-label={`${t("Tap to activate")} ${t(powerUpNames[game.pendingStartPower])}`} onClick={activateStartPower}><span aria-hidden="true">{powerUpSymbols[game.pendingStartPower]}</span><small>{t(powerUpNames[game.pendingStartPower])}</small><em>{t("Tap to activate")}</em></button>}
           </div>
         </div>
         {game.status === "paused" && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('MISSION PAUSED')}</p><h1>{t('Hold the line.')}</h1><p>{t('The asteroids are waiting.')}</p><MusicVolumeSlider id="pause-music-volume" label={t('Music volume')} value={musicVolume} onChange={changeMusicVolume} /><MusicVolumeSlider id="pause-effects-volume" label={t('Effects volume')} value={effectsVolume} onChange={changeEffectsVolume} /><button className="button button-primary" type="button" onClick={() => { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); }}>Resume mission <span className="resume-icon"><CockpitIcon kind="play" /></span></button></div></div>}

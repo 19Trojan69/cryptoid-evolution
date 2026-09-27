@@ -211,8 +211,8 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .close-button:active { transform: rotate(0deg) scale(.94); }
 .modal-actions { display: flex; align-items: center; gap: 18px; margin-top: 26px; }
 
-.game-shell { width: 100%; height: 100dvh; overflow: hidden; background: #030e1b; color: #f0f7f5; user-select: none; touch-action: none; }
-.game-field { position: relative; width: 100%; height: 100%; overflow: clip; isolation: isolate; touch-action: none; background: radial-gradient(circle at 50% 78%, rgba(18, 87, 91, .24), transparent 24%), linear-gradient(180deg, #020b19 0%, #061d32 60%, #082c3a 100%); }
+.game-shell { width: 100%; height: 100dvh; overflow: hidden; background: #030e1b; color: #f0f7f5; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: none; overscroll-behavior: none; }
+.game-field { position: relative; width: 100%; height: 100%; overflow: clip; isolation: isolate; touch-action: none; -webkit-touch-callout: none; background: radial-gradient(circle at 50% 78%, rgba(18, 87, 91, .24), transparent 24%), linear-gradient(180deg, #020b19 0%, #061d32 60%, #082c3a 100%); }
 .starfield { position: absolute; inset: -3%; z-index: 0; overflow: hidden; pointer-events: none; transform: translate3d(var(--star-parallax-x), var(--star-parallax-y), 0); }
 /* Single compact boss cloud, kept between the boss and the player. */
 .nebula-field { position: absolute; inset: 0; overflow: hidden; pointer-events: none; contain: paint; }
@@ -283,7 +283,7 @@ html[data-motion="reduced"] .level-twinkles i { animation: none; opacity: .42; }
 .space-world.planet-ocean .space-world-surface { background-image: url('/planets/ocean.svg'); }
 @media (max-width: 560px) { .space-world-primary { width: clamp(155px, 46vw, 245px); opacity: .45; } .space-scene-1 .space-world-primary { opacity: .5; } .space-world-secondary { width: 75px; top: 31%; } .space-world-near { width: 53px; top: 23%; } .space-world-distant { width: 30px; } .space-orbit { width: 85vw; } }
 @media (max-width: 700px) { .starfield { transform: none; } .space-scene { --parallax-x: 0px !important; --parallax-y: 0px !important; --parallax-far-x: 0px !important; --parallax-far-y: 0px !important; --parallax-near-x: 0px !important; --parallax-near-y: 0px !important; } .space-haze { filter: none; opacity: .2; } .game-hud { backdrop-filter: none; } }
-.game-hud { position: absolute; z-index: 10; top: 0; left: 0; right: 0; isolation: isolate; display: grid; grid-template-columns: minmax(120px, 1fr) repeat(6, minmax(65px, 100px)) 38px; align-items: center; gap: 10px; padding: max(13px, env(safe-area-inset-top)) clamp(14px, 4vw, 54px) 13px; border-bottom: 1px solid rgba(92, 220, 232, .44); background: linear-gradient(180deg, rgba(3, 14, 29, .98), rgba(4, 19, 35, .94)); box-shadow: 0 8px 24px rgba(0, 5, 15, .42), inset 0 -1px rgba(93, 225, 235, .12); backdrop-filter: blur(10px); }
+.game-hud { position: absolute; z-index: 10; top: 0; left: 0; right: 0; isolation: isolate; display: grid; grid-template-columns: minmax(120px, 1fr) repeat(5, minmax(65px, 100px)) 38px; align-items: center; gap: 10px; padding: max(13px, env(safe-area-inset-top)) clamp(14px, 4vw, 54px) 13px; border-bottom: 1px solid rgba(92, 220, 232, .44); background: linear-gradient(180deg, rgba(3, 14, 29, .98), rgba(4, 19, 35, .94)); box-shadow: 0 8px 24px rgba(0, 5, 15, .42), inset 0 -1px rgba(93, 225, 235, .12); backdrop-filter: blur(10px); }
 .game-hud::after { position: absolute; z-index: -1; right: 8%; bottom: -1px; left: 8%; height: 1px; background: linear-gradient(90deg, transparent, rgba(94, 224, 234, .78), rgba(186, 133, 255, .62), transparent); content: ''; }
 .hud-actions { display: flex; align-items: center; gap: 4px; }
 .hud-actions .home-control { flex: 1; min-width: 0; }
@@ -651,7 +651,6 @@ html[data-motion="reduced"] .boss-debris-piece:nth-child(n+5) { display: none; }
 .earth-body span:nth-child(2) { width: 30%; height: 18%; top: 34%; right: 10%; transform: rotate(-20deg); }
 .earth-body span:nth-child(3) { width: 18%; height: 25%; top: 48%; left: 35%; transform: rotate(32deg); }
 .earth p { position: absolute; z-index: 1; top: 11%; left: 0; right: 0; color: rgba(183, 246, 226, .64); font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .18em; }
-.game-tip { position: absolute; z-index: 2; bottom: 23px; left: 50%; padding: 8px 12px; transform: translateX(-50%); color: rgba(203, 238, 229, .58); border: 1px solid rgba(123, 205, 199, .17); background: rgba(3, 14, 27, .52); font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .08em; white-space: nowrap; pointer-events: none; }
 .game-overlay { position: absolute; z-index: 6; inset: 0; display: grid; place-items: center; padding: 20px; background: rgba(2, 10, 20, .76); backdrop-filter: blur(7px); }
 .game-modal { width: min(100%, 410px); padding: 36px; border: 1px solid rgba(79, 228, 239, .36); background: #092536; box-shadow: 0 20px 90px rgba(0, 0, 0, .5); }
 .game-modal h1 { margin-bottom: 15px; font-size: clamp(38px, 7vw, 58px); }
@@ -715,7 +714,7 @@ html[data-motion="reduced"] .boss-debris-piece:nth-child(n+5) { display: none; }
 }
 
 @media (max-width: 560px) {
-  .game-hud { grid-template-columns: 82px repeat(6, minmax(0, 1fr)) 34px; gap: 2px; padding: max(8px, env(safe-area-inset-top)) max(5px, env(safe-area-inset-right)) 8px max(5px, env(safe-area-inset-left)); }
+  .game-hud { grid-template-columns: 82px repeat(5, minmax(0, 1fr)) 34px; gap: 2px; padding: max(8px, env(safe-area-inset-top)) max(5px, env(safe-area-inset-right)) 8px max(5px, env(safe-area-inset-left)); }
   .home-control { width: 50px; height: 44px; padding: 0; font-size: 20px; }
   .home-control span { display: none; }
   .pause-control { width: 36px; height: 36px; }
@@ -728,7 +727,6 @@ html[data-motion="reduced"] .boss-debris-piece:nth-child(n+5) { display: none; }
   .game-label { top: 76px; font-size: 7px; }
   .power-status { top: 92px; right: 10px; flex-direction: column; align-items: flex-end; font-size: 8px; }
   .bonus-counter { top: 115px; font-size: 8px; letter-spacing: .03em; }
-  .game-tip { bottom: 13px; font-size: 8px; }
   .earth { bottom: -35vw; width: 145vw; }
   .game-modal { padding: 28px 23px; }
   .game-modal .modal-actions { flex-direction: column; align-items: stretch; }
@@ -808,7 +806,6 @@ html[data-motion="reduced"] .boss-debris-piece:nth-child(n+5) { display: none; }
 @media (pointer: coarse) {
   .touch-controls { right: 8px; }
   .touch-controls-right { right: auto; left: 8px; }
-  .game-tip { bottom: 5px; }
 }
 /* Home system menu and surface-projected Earth; the game backdrop keeps its own planets. */
 .system-menu-overlay { position: fixed; z-index: 40; inset: 0; display: grid; place-items: center; padding: 12px; background: rgba(1, 9, 19, .88); backdrop-filter: blur(9px); }
@@ -926,13 +923,12 @@ html[data-motion="reduced"] .shooting-star { display: none; }
 @keyframes enemy-hit-spark { from { transform: translate(-50%, -50%) rotate(var(--spark-angle)); opacity: 1; } to { transform: translate(-50%, var(--spark-distance)) rotate(var(--spark-angle)); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .impact-effect.hit, .impact-effect.hit i { animation: none; opacity: .75; } }
 @media (max-width: 560px) {
-  .game-hud { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-areas: "home score hearts pause" "coins weapon level round"; gap: 3px; padding: max(8px, env(safe-area-inset-top)) max(7px, env(safe-area-inset-right)) 7px max(7px, env(safe-area-inset-left)); }
+  .game-hud { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-areas: "home score coins pause" "hearts hearts level round"; gap: 3px; padding: max(8px, env(safe-area-inset-top)) max(7px, env(safe-area-inset-right)) 7px max(7px, env(safe-area-inset-left)); }
   .hud-actions { grid-area: home; }
   .score-hud { grid-area: score; }
   .hearts-stat { grid-area: hearts; }
   .pause-control { grid-area: pause; justify-self: stretch; width: 100%; height: 43px; }
   .coin-stat { grid-area: coins; }
-  .weapon-hud { grid-area: weapon; }
   .game-level-hud { grid-area: level; }
   .round-hud { grid-area: round; }
   .home-control { width: 100%; height: 43px; }
@@ -962,14 +958,14 @@ html[data-motion="reduced"] .shooting-star { display: none; }
 .impact-effect.emp-wave { border-color: #7feaff; background: radial-gradient(circle, #c6ffff 0%, #68e8ff74 28%, transparent 70%); box-shadow: 0 0 32px #62e5ffbb; }
 @keyframes special-blast { from { transform: scale(.25); opacity: 1; } to { transform: scale(13); opacity: 0; } }
 @media (max-width: 560px) {
-  .game-hud { grid-template-columns: 66px repeat(5, minmax(0, 1fr)) 34px; grid-template-areas: "home score hearts weapon level round pause"; align-items: stretch; gap: 2px; padding: max(4px, env(safe-area-inset-top)) 5px 4px; }
-  .coin-stat { display: none; }
+  .game-hud { grid-template-columns: 66px repeat(5, minmax(0, 1fr)) 34px; grid-template-areas: "home hearts score coins level round pause"; align-items: stretch; gap: 2px; padding: max(4px, env(safe-area-inset-top)) 5px 4px; }
+  .coin-stat { display: flex; }
   .hud-actions { gap: 2px; min-width: 0; }
   .hud-actions .home-control, .game-music-toggle { width: 31px; min-width: 0; height: 40px; min-height: 40px; padding: 0; font-size: 16px; }
   .hud-stat { min-width: 0; min-height: 40px; gap: 2px; padding: 2px 0; }
   .hud-stat span { font-size: 7px; letter-spacing: 0; }
   .hud-stat strong { font-size: 13px; }
-  .score-hud .hud-coin-inline { display: block; color: var(--gold); font: 9px 'DM Mono', monospace; line-height: 1; }
+  .score-hud .hud-coin-inline { display: none; }
   .hearts-stat .heart-icons { display: none; }
   .hearts-stat .hearts small { font-size: 13px; color: #ff8da2; }
   .chain-blocks { gap: 1px; height: 3px; }
@@ -995,9 +991,7 @@ html[data-motion="reduced"] .shooting-star { display: none; }
 .edge-action-purchased { min-height: 74px; }
 .edge-action-purchased em { margin-top: 4px; font: 700 9px 'DM Mono', monospace; font-style: normal; text-transform: uppercase; }
 .edge-action-purchased::after { position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; transform: scaleX(0); transform-origin: left; background: #7cffe2; box-shadow: 0 0 9px #7cffe2; content: ''; pointer-events: none; }
-.edge-action-purchased[data-holding="true"]::after { animation: power-hold-fill .65s linear forwards; }
-@keyframes power-hold-fill { to { transform: scaleX(1); } }
-@media (min-width: 561px) and (max-width: 700px) { .game-hud { grid-template-columns: 40px repeat(6, minmax(0, 1fr)) 40px; } }
+@media (min-width: 561px) and (max-width: 700px) { .game-hud { grid-template-columns: 40px repeat(5, minmax(0, 1fr)) 40px; } }
 @media (max-width: 560px) {
   .game-hud { grid-template-columns: 40px repeat(5, minmax(0, 1fr)) 40px; }
   .hud-actions .home-control, .pause-control { min-width: 40px; width: 40px; min-height: 40px; height: 40px; }
@@ -1373,11 +1367,11 @@ html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-
 .game-hud .hud-heart-label svg { display: block; width: 13px; height: 13px; filter: drop-shadow(0 0 4px rgba(255, 107, 148, .55)); }
 .game-hud .hearts-stat .hearts { display: block; color: #ff9aaf !important; font: 700 20px/1 'Oxanium', 'DM Mono', monospace; font-variant-numeric: tabular-nums; letter-spacing: 0; white-space: nowrap; }
 @media (max-width: 560px) {
-  .game-hud { grid-template-columns: 40px minmax(0, 1.27fr) minmax(0, 1.16fr) repeat(3, minmax(0, 1fr)) 40px; gap: 3px; }
+  .game-hud { grid-template-columns: 40px minmax(39px, .74fr) minmax(67px, 1.42fr) minmax(62px, 1.22fr) minmax(38px, .7fr) minmax(38px, .7fr) 40px; gap: 3px; }
   .game-hud .hud-stat { min-height: 40px; gap: 1px; padding: 2px 1px; }
   .game-hud .hud-stat > span { font-size: clamp(8px, 2.3vw, 9px); letter-spacing: .02em; }
   .game-hud .hud-stat strong:not(.hearts) { font-size: clamp(14px, 4vw, 17px); line-height: 1; }
-  .game-hud .hud-stat.score-hud strong { font-size: clamp(12px, 3.8vw, 16px); }
+  .game-hud .hud-stat.score-hud strong, .game-hud .hud-stat.coin-stat strong { font-size: clamp(16px, 4.8vw, 20px); }
   .game-hud .hud-stat strong small { font-size: clamp(10px, 3.1vw, 13px); }
   .game-hud .score-hud .hud-coin-inline { font-size: 9px; }
   .game-hud .hud-heart-label svg { width: 13px; height: 13px; }
@@ -1385,6 +1379,23 @@ html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-
   .game-hud .chain-blocks { gap: 2px; height: 4px; }
   .game-hud .chain-blocks i { width: 7px; height: 4px; }
   .game-hud .hud-actions .home-control, .game-hud .pause-control { width: 40px; min-width: 40px; height: 40px; min-height: 40px; }
+}
+
+/* The weapon count is a status indicator, not a selector. Keep the middle HUD for points and Shards. */
+.weapon-side { position: absolute; z-index: 6; right: max(8px, env(safe-area-inset-right)); top: 47%; display: flex; flex-direction: column; align-items: center; gap: 3px; width: 58px; padding: 7px 3px; border: 1px solid rgba(189, 141, 255, .55); border-radius: 8px; background: rgba(8, 22, 42, .84); color: #e3ccff; text-align: center; pointer-events: none; }
+.weapon-side-right { right: auto; left: max(8px, env(safe-area-inset-left)); }
+.weapon-side > span { font: 600 8px/1.1 'Space Grotesk', sans-serif; }
+.weapon-side strong { font: 700 20px/1 'Oxanium', sans-serif; }
+.weapon-side strong small { font-size: 11px; opacity: .75; }
+.weapon-side-steps { display: flex; gap: 2px; }
+.weapon-side-steps i { width: 8px; height: 3px; border-radius: 2px; background: #566073; }
+.weapon-side-steps i.active { background: #d5adff; }
+@media (max-width: 375px) {
+  .game-hud { grid-template-columns: 40px minmax(0, 1fr) minmax(0, 1fr) 40px; grid-template-areas: "home score coins pause" "hearts hearts level round"; }
+  .game-hud .hud-stat.score-hud strong, .game-hud .hud-stat.coin-stat strong { font-size: 19px; }
+  .game-label { top: calc(max(4px, env(safe-area-inset-top)) + 95px); }
+  .power-status { top: calc(max(4px, env(safe-area-inset-top)) + 110px); }
+  .bonus-counter { top: calc(max(4px, env(safe-area-inset-top)) + 135px); }
 }
 
 
