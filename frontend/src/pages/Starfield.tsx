@@ -21,14 +21,14 @@ const makeStars = (count: number, seed: number, nearby: boolean): Star[] => {
 const distant = makeStars(150, 0x5f1e2d, false);
 const nearby = makeStars(65, 0xc291a7, true);
 
-const Starfield = ({ sector, player, paused }: { sector: number; player: PlayerPosition; paused: boolean }) => {
+const Starfield = ({ sector, player, paused, showNebula = false }: { sector: number; player: PlayerPosition; paused: boolean; showNebula?: boolean }) => {
   const style = {
     "--star-parallax-x": `${(player.x - .5) * -14}px`,
     "--star-parallax-y": `${(player.y - .8) * -10}px`,
   } as CSSProperties;
   const palette = ((sector - 1) % 6) + 1;
   return <div className={`starfield starfield-sector-${palette}${paused ? " starfield-paused" : ""}`} style={style} aria-hidden="true">
-    <div className="nebula-field"><span className="nebula-cloud nebula-cloud-rose" /><span className="nebula-cloud nebula-cloud-lilac" /></div>
+    {showNebula && <div className="nebula-field"><span className="nebula-cloud nebula-cloud-rose" /><span className="nebula-cloud nebula-cloud-lilac" /></div>}
     <div className="milky-band" />
     <svg className="starfield-stars starfield-distant" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice">
       {distant.map((star, index) => <circle key={index} cx={star.x} cy={star.y} r={star.radius} fill={star.color} opacity={star.opacity} />)}
@@ -43,4 +43,4 @@ const Starfield = ({ sector, player, paused }: { sector: number; player: PlayerP
   </div>;
 };
 
-export default memo(Starfield, (previous, next) => previous.sector === next.sector && previous.paused === next.paused && (typeof window !== "undefined" && window.matchMedia("(max-width: 700px)").matches || previous.player === next.player));
+export default memo(Starfield, (previous, next) => previous.sector === next.sector && previous.paused === next.paused && previous.showNebula === next.showNebula && (typeof window !== "undefined" && window.matchMedia("(max-width: 700px)").matches || previous.player === next.player));
