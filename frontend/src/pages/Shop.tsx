@@ -422,11 +422,12 @@ const Shop = () => {
               const owned = inventory?.ownedShipUpgrades?.includes(offer.id) ?? false;
               const prerequisite = offer.stage !== 3 || (inventory?.ownedShipUpgrades?.includes(`ship_${String((offer.shipIndex ?? 0) + 1).padStart(2, "0")}_stage_2`) ?? false);
               const hasHull = fleetCount(fleet, previewSkin.id) > 0;
+              const upgradeName = `${previewSkin.name} · ${offer.stage === 2 ? "Advanced" : "Elite"}`;
               return <article key={offer.id} className={`hangar-offer hangar-offer-ship${owned ? " hangar-offer-selected" : ""}`}>
                 <div className="offer-preview weapon-preview" aria-hidden="true"><span className="preview-grid" /><span className="preview-ship"><PaintedShip sprite={previewSkin.sprite} color="silver" stage={offer.stage ?? 1} /></span><small>{offer.stage === 2 ? "ADVANCED" : "ELITE"}</small></div>
-                <h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span>{offer.pricePi} π · {t("Permanent unlock")}</span>
+                <h4>{upgradeName}</h4><p>{t(offer.description)}</p><span>{offer.pricePi} π · {t("Permanent unlock")}</span>
                 <strong>{owned ? t("OWNED") : !hasHull ? t("Buy hull with Shards first") : prerequisite ? t("NOT OWNED") : t("Requires Stage 2")}</strong>
-                {!owned && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady || !inventory || !hasHull || !prerequisite} onClick={() => orderProduct(`Cryptoid ${offer.name} · permanent ship evolution`, offer.pricePi, { productId: offer.id }, () => { setHangarMessage(`${offer.name} ${t("purchase confirmed.")}`); void refreshInventory(); })}>{t("Buy with π")}</button>}
+                {!owned && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady || !inventory || !hasHull || !prerequisite} onClick={() => orderProduct(`Cryptoid ${upgradeName} · permanent ship evolution`, offer.pricePi, { productId: offer.id }, () => { setHangarMessage(`${upgradeName} ${t("purchase confirmed.")}`); void refreshInventory(); })}>{t("Buy with π")}</button>}
               </article>;
             })}
           </div>
