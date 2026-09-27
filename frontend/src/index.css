@@ -1515,3 +1515,39 @@ html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-
   background: rgba(255, 86, 68, .14);
   box-shadow: 0 0 12px #ff674b;
 }
+
+/* Phone hangar: quiet material surfaces and a compact, swipeable navigation rail. */
+.ship-service-badge, .variant-service-badge { color: #9ef2ce; font: 700 10px 'DM Mono', monospace; letter-spacing: .08em; }
+.ship-service-badge { position: absolute; z-index: 1; top: 10px; right: 10px; padding: 5px 7px; border: 1px solid rgba(111, 235, 188, .48); background: rgba(5, 35, 36, .86); }
+.variant-service-badge { margin-top: 3px; }
+@media (max-width: 600px) {
+  .shop-overlay { padding: 8px; backdrop-filter: none; }
+  .shop-modal { width: 100%; max-height: calc(100dvh - 16px); border: 1px solid rgba(192, 208, 214, .27); border-radius: 18px; clip-path: none; box-shadow: 0 22px 64px rgba(0, 0, 0, .55); }
+  .shop-modal-header { min-height: 58px; padding-left: 16px; background: rgba(18, 35, 53, .87); font: 700 16px 'Space Grotesk', sans-serif; letter-spacing: .035em; }
+  .shop-tabs { display: flex; gap: 6px; padding: 9px 12px 11px; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; scroll-snap-type: x proximity; background: rgba(4, 17, 31, .92); }
+  .shop-tabs::-webkit-scrollbar { display: none; }
+  .shop-tabs button { flex: 0 0 auto; flex-direction: row; gap: 7px; min-width: 91px; min-height: 43px; padding: 8px 11px; border: 1px solid rgba(144, 173, 191, .24); border-radius: 11px; clip-path: none; background: rgba(18, 38, 56, .85); box-shadow: none; scroll-snap-align: start; }
+  .shop-tabs button::before { display: none; }
+  .shop-tabs button > span { width: auto; height: auto; border: 0; background: none; box-shadow: none; font: 700 17px 'Space Grotesk', sans-serif; }
+  .shop-tabs button > b { max-width: none; font: 700 11px 'Space Grotesk', sans-serif; letter-spacing: .015em; }
+  .shop-tabs button[aria-pressed="true"] { border-color: rgba(112, 236, 192, .74); border-radius: 11px; background: linear-gradient(135deg, #173c43, #183143); box-shadow: inset 0 -2px #69edbe; color: #f1fff9; }
+  .shop-tabs button:hover, .shop-tabs button:active { transform: none; }
+  .shop-modal-body { padding: 12px; }
+  .shop-modal .ship-selector { padding: 16px 12px; border: 1px solid rgba(148, 187, 203, .2); border-radius: 14px; background: #102039; }
+  .ship-selector h2 { font-size: 23px; }
+  .ship-selector p { line-height: 1.45; }
+  .ship-picker { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  .ship-choice { min-width: 0; min-height: 136px; padding: 13px 8px 12px; border: 1px solid rgba(145, 183, 203, .26); border-radius: 14px; clip-path: none; background: linear-gradient(155deg, #172e45, #10263c); box-shadow: none; font: 700 14px 'Space Grotesk', sans-serif; }
+  .ship-choice::before { display: none; }
+  .ship-choice:hover, .ship-choice:active { transform: none; }
+  .ship-choice .ship-preview { width: 67px; height: 67px; }
+  .ship-choice small { font-size: 10px; }
+  .ship-choice[aria-pressed="true"], .ship-choice.ship-choice-active { border-color: rgba(116, 236, 194, .78); border-radius: 14px; background: linear-gradient(150deg, #174245, #173048); box-shadow: inset 0 0 0 1px rgba(110, 237, 193, .18); }
+  .ship-service-badge { position: static; justify-self: end; padding: 3px 5px; border-radius: 5px; font-size: 8px; }
+  .ship-variants .ship-choice { min-height: 158px; }
+  .hangar-selection { padding: 10px 12px; border-left: 3px solid #73e7bb; border-radius: 0 9px 9px 0; background: rgba(73, 194, 156, .08); font-size: 12px; line-height: 1.5; }
+  .hangar-offer { border: 1px solid rgba(155, 176, 212, .32); border-radius: 16px; clip-path: none; background: linear-gradient(150deg, #152640, #112238); box-shadow: none; }
+  .hangar-offer button, .shop-modal .hangar-actions .button { min-height: 46px; border-radius: 11px; clip-path: none; box-shadow: none; font-size: 12px; }
+  .hangar-offer .button-primary, .shop-modal .hangar-actions .button-primary { background: linear-gradient(115deg, #e7c587, #c5a6e4); color: #172033; }
+  .shop-modal .upgrade-section { padding: 3px 1px 20px; }
+}
