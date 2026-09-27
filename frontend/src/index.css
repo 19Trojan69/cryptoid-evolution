@@ -1485,3 +1485,33 @@ html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-
   .game-field .sector-banner { width: calc(100% - 20px); max-width: calc(100% - 20px); padding: 10px 11px; }
   .game-field .sector-banner .chain-result { font-size: clamp(13px, 3.8vw, 17px); }
 }
+
+/* Smartphone-only special opponents: a one-hit shield and warned twin cannon. */
+.asteroid.cryptoid-special-shield::before {
+  position: absolute;
+  z-index: 2;
+  inset: 6%;
+  border: 2px solid #8eefff;
+  border-radius: 48%;
+  box-shadow: 0 0 7px #66eaff, inset 0 0 7px #66eaff77;
+  content: '';
+  pointer-events: none;
+}
+.asteroid.cryptoid-special-armed::before {
+  position: absolute;
+  z-index: 2;
+  top: 15%;
+  left: 42%;
+  width: 16%;
+  height: 12%;
+  border-radius: 50%;
+  background: #ff9c7e;
+  box-shadow: 0 0 7px #ff654a;
+  content: '';
+  pointer-events: none;
+}
+.asteroid.cryptoid-special-armed.asteroid-preparing::after {
+  border: 3px solid #ff8d69;
+  background: rgba(255, 86, 68, .14);
+  box-shadow: 0 0 12px #ff674b;
+}

@@ -115,7 +115,7 @@ Order: finish full playable bonus-to-boss test → collision fairness and coin d
 
 ### Smartphone enemy progression — approved 27 September 2026
 
-**Status:** Roadmap requirement for Testnet first. This note does not change live gameplay. Promote to production only after the Testnet build limit has cleared and the phone layout, performance and fairness have been checked. This subsection supersedes earlier phone-specific statements allowing four simultaneous attackers; PC and laptop progression are outside this change.
+**Status:** Smartphone implementation prepared on the isolated Testnet preview branch. Automated layout/progression checks pass; phone touch play and Vercel preview checks remain before promotion. Keep production unchanged until Testnet is verified, or use production only if the Testnet build is unavailable as explicitly authorized by the owner. This subsection supersedes earlier phone-specific statements allowing four simultaneous attackers; PC and laptop progression are outside this change.
 
 - On smartphones, begin with **six simultaneously visible enemies**. Increase formation occupancy gently with global level progression to **nine**, then to an absolute maximum of **twelve**; do not jump straight from six to twelve or add one enemy on every level.
 - Adjust spacing and ship display sizes for the smaller playfield. Keep silhouettes and health indicators legible and prevent overlap. The formation must extend **no farther than the vertical midpoint** of the playable field, leaving the lower half usable for steering and dodging.
