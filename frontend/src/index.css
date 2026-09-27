@@ -962,3 +962,72 @@ html[data-motion="reduced"] .shooting-star { display: none; }
   .game-hud { grid-template-columns: 40px repeat(5, minmax(0, 1fr)) 40px; }
   .hud-actions .home-control, .pause-control { min-width: 40px; width: 40px; min-height: 40px; height: 40px; }
 }
+
+/* Homescreen: the equipped ship and launch button share one fixed visual axis. */
+.landing-shell .hero-copy { z-index: 3; }
+.landing-shell .hero-copy h1 { text-shadow: 0 5px 26px #020e1cf0, 0 0 42px #061f33; }
+.landing-shell .hero-tagline { margin: 22px 0 10px; font-size: clamp(21px, 2vw, 29px); line-height: 1.15; }
+.landing-shell .hero-tagline span { display: block; }
+.landing-shell .hero-description { max-width: 360px; font-size: 13px; }
+.home-mission-brief { display: flex; align-items: center; gap: 11px; width: min(100%, 520px); margin-top: 19px; padding: 10px 13px; border: 1px solid rgba(91, 218, 221, .28); border-left: 2px solid #52dec5; background: linear-gradient(95deg, rgba(8, 49, 65, .92), rgba(7, 29, 47, .4)); box-shadow: inset 0 0 20px rgba(58, 231, 211, .05); }
+.home-mission-marker { color: #63eed1; font-size: 17px; text-shadow: 0 0 14px #40d8c6; }
+.home-mission-brief small { display: block; color: #94d8d8; font: 9px/1.3 'DM Mono', monospace; letter-spacing: .1em; text-transform: uppercase; }
+.home-mission-brief strong { display: block; color: #f1fbf8; font-size: 13px; font-weight: 600; white-space: nowrap; }
+.home-mission-brief em { color: #afcad0; font-size: 11px; font-style: normal; font-weight: 400; }
+.home-mission-best { margin-left: auto; padding-left: 10px; border-left: 1px solid rgba(91, 218, 221, .25); text-align: right; }
+.landing-shell .hero-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: end; gap: 10px; width: min(100%, 520px); margin-top: clamp(14px, 3vh, 30px); }
+.home-launch { display: flex; flex-direction: column; min-width: 0; }
+.home-launch-bay { position: relative; isolation: isolate; height: clamp(100px, 17vh, 150px); overflow: visible; background: radial-gradient(ellipse at 50% 80%, rgba(66, 211, 227, .14), transparent 68%); }
+.home-launch-bay::before { position: absolute; inset: 14px 13% 2px; border: 1px solid rgba(91, 222, 238, .22); border-radius: 50%; transform: perspective(180px) rotateX(66deg); box-shadow: 0 0 18px rgba(65, 213, 238, .2), inset 0 0 15px rgba(65, 213, 238, .12); content: ''; }
+.home-launch-bay::after { position: absolute; right: 10%; bottom: 0; left: 10%; height: 2px; background: linear-gradient(90deg, transparent, #76e7f6, transparent); box-shadow: 0 0 13px #56dcdf; content: ''; }
+.home-launch-target { position: absolute; top: 36%; width: 13%; height: 20%; border: 1px solid rgba(115, 218, 231, .35); opacity: .7; }
+.home-launch-target-left { left: 7%; border-right: 0; border-bottom: 0; }
+.home-launch-target-right { right: 7%; border-left: 0; border-bottom: 0; }
+.landing-shell .home-launch .home-defense-ship { top: 0; bottom: auto; left: 50%; width: clamp(100px, 11vw, 140px); height: clamp(100px, 11vw, 140px); transform: translateX(-50%); animation: home-launch-hover 2.6s ease-in-out infinite alternate; }
+.landing-shell .home-launch .home-defense-ship i { position: absolute; inset: 0; filter: none !important; }
+.landing-shell .home-launch .home-defense-ship i:first-child { opacity: .92; }
+.landing-shell .home-launch .home-defense-ship::after { top: 76%; }
+@keyframes home-launch-hover { from { transform: translate(-50%, 2px) scale(.96); } to { transform: translate(-50%, -6px) scale(1.035); } }
+.landing-shell .hero-actions .button { width: 100%; min-width: 0; min-height: 58px; padding: 0 10px; }
+.landing-shell .hero-actions .home-play-button { min-height: 64px; border-color: #a4ffe4; background: linear-gradient(115deg, #57edaf 0%, #2bd6bb 58%, #39d1f2 100%); box-shadow: inset 0 0 24px rgba(255,255,255,.24), 0 0 25px rgba(40, 226, 194, .35), 0 9px 30px rgba(14, 140, 152, .21); color: #031d25; font-size: 17px; letter-spacing: .035em; }
+.landing-shell .hero-actions .home-play-button .button-glyph { width: 31px; height: 31px; font-size: 18px; }
+.landing-shell .hero-actions .home-play-button::before { animation-duration: 2.8s; }
+.landing-shell .planet-stage { opacity: .78; }
+.home-formation { position: absolute; z-index: 4; top: 15%; left: 5%; display: flex; gap: 6px; transform: rotate(-12deg); animation: home-formation-fly 5s ease-in-out infinite alternate; }
+.home-formation i { display: block; width: 34px; height: 34px; background-image: url('/ships/cryptoid-fleet.png'); background-size: 400% 500%; background-repeat: no-repeat; filter: grayscale(.5) sepia(.8) hue-rotate(140deg) drop-shadow(0 0 6px #7ae9e2); transform: rotate(180deg); }
+.home-formation i:nth-child(2) { margin-top: 16px; }
+@keyframes home-formation-fly { from { translate: -9px 5px; } to { translate: 12px -7px; } }
+@media (max-width: 700px) {
+  .landing-shell .hero-copy { padding-top: clamp(56px, 8vh, 85px); }
+  .landing-shell .hero-copy h1 { font-size: clamp(48px, 14vw, 60px); }
+  .landing-shell .hero-tagline { margin: 16px 0 0; font-size: clamp(19px, 5.7vw, 25px); }
+  .landing-shell .hero-description { display: none; }
+  .home-mission-brief { width: min(100%, 360px); margin-top: 14px; padding: 8px 10px; }
+  .landing-shell .hero-actions { width: 100%; margin-top: auto; margin-bottom: 18px; }
+  .home-launch-bay { height: clamp(88px, 15dvh, 132px); }
+  .landing-shell .home-launch .home-defense-ship { top: 0; bottom: auto; left: 50%; width: clamp(94px, 28vw, 125px); height: clamp(94px, 28vw, 125px); }
+  .landing-shell .planet-stage { top: 20%; right: -28%; width: min(100vw, 430px); opacity: .6; }
+  .landing-shell .hero-section::before { z-index: 2; inset: 0 0 0 0; background: linear-gradient(90deg, #081e31ed 0%, #081e31ac 44%, #081e3133 100%); }
+  .landing-shell .orbit-status { display: none; }
+  .home-formation { left: 26%; top: 5%; }
+}
+@media (max-height: 680px) and (max-width: 700px) {
+  .landing-shell .hero-copy { padding-top: 48px; }
+  .landing-shell .hero-tagline { margin-top: 10px; }
+  .home-mission-brief { margin-top: 9px; }
+  .home-launch-bay { height: 83px; }
+  .landing-shell .home-launch .home-defense-ship { width: 94px; height: 94px; }
+  .landing-shell .hero-actions { gap: 7px; margin-bottom: 7px; }
+  .landing-shell .hero-actions .button { min-height: 48px; }
+  .landing-shell .hero-actions .home-play-button { min-height: 54px; }
+}
+@media (orientation: landscape) and (max-height: 600px) {
+  .landing-shell .hero-copy { padding-top: 6px; }
+  .home-mission-brief { margin-top: 7px; }
+  .home-launch-bay { height: 67px; }
+  .landing-shell .home-launch .home-defense-ship { width: 82px; height: 82px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .landing-shell .home-launch .home-defense-ship, .home-formation { animation: none; }
+}
+html[data-motion="reduced"] .landing-shell .home-launch .home-defense-ship, html[data-motion="reduced"] .home-formation { animation: none; }

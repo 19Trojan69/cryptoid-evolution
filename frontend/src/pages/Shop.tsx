@@ -275,10 +275,18 @@ const Shop = () => {
         <div className="hero-copy">
           <p className="eyebrow"><span className="signal-dot" /> {t("Mission control online")}</p>
           <h1>Cryptoid <span>Evolution</span></h1>
-          <p className="hero-tagline">Defend Earth.<br />Evolve your power.</p>
+          <p className="hero-tagline">Defend Earth. <span>Evolve your power.</span></p>
           <p className="hero-description">{t('Build your streak, master the grid, and become the force Earth needs.')}</p>
+          <div className="home-mission-brief" aria-label={t("Your Progress")}><span className="home-mission-marker" aria-hidden="true">◆</span><span><small>{t("Genesis sector")} · {t("EQUIPPED")}</small><strong>{selected.skin.name} <em>· {t(selected.color.name)}</em></strong></span>{records.bestScore > 0 && <span className="home-mission-best"><small>{t("Best score")}</small><strong>{records.bestScore.toLocaleString()}</strong></span>}</div>
           <div className="hero-actions">
-            <button className="button button-primary" type="button" onClick={enterGame}>{t("Play")} <span className="button-glyph" aria-hidden="true">→</span></button>
+            <div className="home-launch">
+              <div className="home-launch-bay" role="img" aria-label={`${selected.skin.name} · ${t(selected.color.name)}`}>
+                <span className="home-launch-target home-launch-target-left" aria-hidden="true" />
+                <span className="home-launch-target home-launch-target-right" aria-hidden="true" />
+                <div className={`home-defense-ship${selected.color.id === "grey" ? " home-defense-grey" : ""}`} style={{ "--ship-glow": selected.color.glow, ...shipNozzleStyle(selected.skin.sprite) } as CSSProperties}><i style={spriteStyle(selected.skin.sprite)} /><PaintedShip sprite={selected.skin.sprite} color={selected.color.id} /><span className="home-thrust home-thrust-left" /><span className="home-thrust home-thrust-right" /></div>
+              </div>
+              <button className="button button-primary home-play-button" type="button" onClick={enterGame}>{t("Play")} <span className="button-glyph" aria-hidden="true">→</span></button>
+            </div>
             <button className="button button-secondary" type="button" onClick={() => { setPreviewSkin(selected.skin); setPreviewColor(selected.color); setShopView("hangar"); }}>{t('Shop / Hangar')} <span className="button-glyph" aria-hidden="true">◇</span></button>
             <button className="button button-secondary" type="button" onClick={() => { setLeadersStatus("loading"); setShopView("leaders"); }}>{t('Top 100')} <span className="button-glyph" aria-hidden="true">⌁</span></button>
             <button className="button button-secondary" type="button" onClick={() => setSystemMenuOpen(true)}>{t('System menu')} <span className="button-glyph" aria-hidden="true">⚙</span></button>
@@ -289,9 +297,8 @@ const Shop = () => {
           <div className="orbit orbit-two"><span className="satellite-motion"><i className="satellite-body" /></span></div>
           <div className="orbit orbit-three"><span className="satellite-motion"><i className="satellite-body" /></span></div>
           <div className="planet"><EarthGlobe /></div>
-          <div className={`home-defense-ship${selected.color.id === "grey" ? " home-defense-grey" : ""}`} style={{ "--ship-glow": selected.color.glow, ...shipNozzleStyle(selected.skin.sprite) } as CSSProperties}><PaintedShip sprite={selected.skin.sprite} color={selected.color.id} /><span className="home-thrust home-thrust-left" /><span className="home-thrust home-thrust-right" /></div>
+          <div className="home-formation" aria-hidden="true">{[2, 3, 0].map((sprite, index) => <i key={index} style={spriteStyle(sprite)} />)}</div>
           <div className="home-enemy-ship" style={{ "--ship-glow": "#ffd36b", ...shipNozzleStyle(3, true) } as CSSProperties}><i style={spriteStyle(3)} /><span className="home-enemy-thrust home-enemy-thrust-left" /><span className="home-enemy-thrust home-enemy-thrust-right" /></div>
-          <div className="home-defense-laser" />
           <span className="orbit-status">{t('ORBITAL DEFENSE ACTIVE')}</span>
           <div className="stage-label"><span className="stage-label-value">01</span><span>{t('Genesis sector')}</span></div>
         </div>
