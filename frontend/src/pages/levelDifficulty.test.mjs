@@ -17,7 +17,9 @@ test("every level up to 500 raises pressure gently and within fixed limits", () 
   assert.ok(previous.entryPaceScale >= .92);
   assert.ok(previous.groupAttackInterval >= 4);
   assert.ok(previous.projectileBonus <= 2);
-  assert.ok(previous.bossHealth <= 300);
+  assert.equal(levelDifficulty(1).bossHealth, 28);
+  assert.ok(levelDifficulty(100).bossHealth < 40);
+  assert.equal(previous.bossHealth, 80);
 });
 
 test("enemy durability never decreases and the endless curve stops escalating after level 500", () => {

@@ -26,12 +26,20 @@ test("the boss enters visibly, stays in the upper field and remains reachable on
 test("health grows within a cap and a damaged boss fires with a bounded interval", () => {
   const boss = createSectorBoss(1, 375);
   assert.equal(bossFireInterval(boss), 2_500);
-  assert.equal(bossFireInterval({ ...boss, health: 60 }), 1_900);
-  assert.equal(createSectorBoss(1, 375).maxHealth, 120);
-  assert.equal(createSectorBoss(500, 375).maxHealth, 300);
-  assert.equal(createSectorBoss(999, 375).maxHealth, 300);
+  assert.equal(bossFireInterval({ ...boss, health: 14 }), 1_900);
+  assert.equal(createSectorBoss(1, 375).maxHealth, 28);
+  assert.equal(createSectorBoss(500, 375).maxHealth, 80);
+  assert.equal(createSectorBoss(999, 375).maxHealth, 80);
   assert.ok(bossFireInterval(createSectorBoss(500, 375), 500) >= 2_280);
   assert.equal(bossVulnerable(moveSectorBoss(boss, BOSS_ENTRY_MS, 375, 700)), true);
+});
+
+test("the opening boss remains tougher than regular ships but falls in a short fight", () => {
+  const boss = createSectorBoss(1, 375);
+  for (let hit = 0; hit < 28; hit++) {
+    assert.equal(damageSectorBoss(boss, 1, hit * 320), true);
+  }
+  assert.equal(boss.health, 0);
 });
 
 test("boss entry can begin below the measured HUD instead of behind it", () => {
@@ -45,7 +53,7 @@ test("a boss takes one hit per volley and survives opening fire without a shield
   assert.equal(damageSectorBoss(boss, 2, 1000), true);
   assert.equal(damageSectorBoss(boss, 2, 1000), false);
   assert.equal(damageSectorBoss(boss, 2, 1100), false);
-  assert.equal(boss.health, 118);
+  assert.equal(boss.health, 26);
   assert.equal(damageSectorBoss(boss, 2, 1200), true);
-  assert.equal(boss.health, 116);
+  assert.equal(boss.health, 24);
 });

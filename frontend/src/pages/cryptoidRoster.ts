@@ -18,12 +18,12 @@ export type CryptoidProfile = {
 
 const factionCodes: FactionCode[] = ["X", "Z", "R", "K", "V", "Q", "XR", "VX", "ZX", "Q7"];
 const types: Record<CryptoidType, Omit<CryptoidProfile, "type" | "faction">> = {
-  solflare: { shipClass: "light", health: 1, reward: 2, points: 10, radius: 25, entryDuration: 5_500, attackPace: 0.9 },
-  etherCrystal: { shipClass: "medium", health: 2, reward: 4, points: 25, radius: 36, entryDuration: 7_000, attackPace: 1 },
-  bitrock: { shipClass: "heavy", health: 4, reward: 8, points: 60, radius: 50, entryDuration: 9_000, attackPace: 1.18 },
-  stableCore: { shipClass: "medium", health: 3, reward: 5, points: 35, radius: 36, entryDuration: 8_000, attackPace: 1.1 },
-  memeSwarm: { shipClass: "light", health: 1, reward: 2, points: 12, radius: 25, entryDuration: 6_000, attackPace: 0.94 },
-  ghostCoin: { shipClass: "elite", health: 2, reward: 6, points: 70, radius: 36, entryDuration: 7_000, attackPace: 1 },
+  solflare: { shipClass: "light", health: 2, reward: 2, points: 10, radius: 25, entryDuration: 5_500, attackPace: 0.9 },
+  etherCrystal: { shipClass: "medium", health: 4, reward: 4, points: 25, radius: 36, entryDuration: 7_000, attackPace: 1 },
+  bitrock: { shipClass: "heavy", health: 6, reward: 8, points: 60, radius: 50, entryDuration: 9_000, attackPace: 1.18 },
+  stableCore: { shipClass: "medium", health: 4, reward: 5, points: 35, radius: 36, entryDuration: 8_000, attackPace: 1.1 },
+  memeSwarm: { shipClass: "light", health: 2, reward: 2, points: 12, radius: 25, entryDuration: 6_000, attackPace: 0.94 },
+  ghostCoin: { shipClass: "elite", health: 5, reward: 6, points: 70, radius: 36, entryDuration: 7_000, attackPace: 1 },
 };
 
 export const cryptoidDisplayName: Record<CryptoidType, string> = {
