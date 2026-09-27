@@ -1379,3 +1379,108 @@ html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-
   .game-hud .chain-blocks i { width: 7px; height: 4px; }
   .game-hud .hud-actions .home-control, .game-hud .pause-control { width: 40px; min-width: 40px; height: 40px; min-height: 40px; }
 }
+
+/* Sector wardens: layered hull details and readable combat states. */
+.sector-boss {
+  --boss-accent: #84e8ff;
+  --boss-armor-edge: #9fbcd1;
+}
+.sector-boss.boss-variant-2 { --boss-accent: #ffc676; --boss-armor-edge: #d3a279; }
+.sector-boss.boss-variant-3 { --boss-accent: #ca9dff; --boss-armor-edge: #b6a0d3; }
+.sector-boss.boss-variant-4 { --boss-accent: #7ff3bd; --boss-armor-edge: #83bbaa; }
+.sector-boss.boss-variant-5 { --boss-accent: #ff8eae; --boss-armor-edge: #d09aad; }
+.sector-boss.boss-variant-6 { --boss-accent: #f4dd8a; --boss-armor-edge: #c7bd9a; }
+.sector-boss .boss-aura {
+  position: absolute;
+  z-index: 0;
+  inset: 9%;
+  border: 1px solid color-mix(in srgb, var(--boss-accent) 52%, transparent);
+  border-radius: 50%;
+  background: radial-gradient(circle, transparent 38%, color-mix(in srgb, var(--boss-accent) 12%, transparent) 67%, transparent 73%);
+  box-shadow: 0 0 15px color-mix(in srgb, var(--boss-accent) 40%, transparent);
+  pointer-events: none;
+  animation: boss-aura-breathe 4.8s ease-in-out infinite;
+}
+.sector-boss .boss-ornament {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+}
+.sector-boss .boss-armor {
+  position: absolute;
+  top: 36%;
+  width: 28%;
+  height: 36%;
+  background: linear-gradient(130deg, #ecf2f1 2%, var(--boss-armor-edge) 17%, #23364d 47%, #101b30 68%, var(--boss-accent) 100%);
+  clip-path: polygon(36% 0, 88% 13%, 100% 63%, 67% 100%, 0 76%, 18% 24%);
+  filter: drop-shadow(0 2px 2px #030b1a);
+}
+.sector-boss .boss-armor-left { left: 5%; transform: rotate(-12deg); }
+.sector-boss .boss-armor-right { right: 5%; transform: scaleX(-1) rotate(-12deg); }
+.sector-boss .boss-armor::after {
+  position: absolute;
+  inset: 17% 25% 25% 42%;
+  background: linear-gradient(#efffff, var(--boss-accent) 36%, transparent);
+  clip-path: polygon(40% 0, 100% 15%, 65% 100%, 0 76%);
+  content: '';
+}
+.sector-boss .boss-turret {
+  position: absolute;
+  top: 30%;
+  width: 9%;
+  height: 29%;
+  border: 1px solid var(--boss-armor-edge);
+  border-radius: 4px 4px 2px 2px;
+  background: linear-gradient(90deg, #152137, #cedbd6 45%, #1b2637 85%);
+  box-shadow: 0 -3px 5px color-mix(in srgb, var(--boss-accent) 55%, transparent);
+}
+.sector-boss .boss-turret-left { left: 18%; transform: rotate(-9deg); }
+.sector-boss .boss-turret-right { right: 18%; transform: rotate(9deg); }
+.sector-boss .boss-turret::before {
+  position: absolute;
+  top: -12%;
+  left: 12%;
+  width: 76%;
+  height: 23%;
+  border-radius: 50%;
+  background: var(--boss-accent);
+  box-shadow: 0 0 6px var(--boss-accent);
+  content: '';
+}
+.sector-boss .boss-reactor {
+  position: absolute;
+  top: 40%;
+  left: 40%;
+  width: 20%;
+  height: 20%;
+  border: 3px solid #9babb8;
+  border-radius: 32% 32% 46% 46%;
+  background: radial-gradient(circle at 48% 38%, #fff 0 14%, var(--boss-accent) 28%, #25405d 70%);
+  box-shadow: inset 0 0 3px #fff, 0 0 8px var(--boss-accent), 0 3px 2px #071322;
+  animation: boss-reactor-pulse 3s ease-in-out infinite;
+}
+.sector-boss.boss-warning .boss-turret::before {
+  background: #fff4a3;
+  box-shadow: 0 0 10px 3px #ff9a51;
+}
+.sector-boss.boss-enraged {
+  --boss-accent: #ff786a;
+}
+.sector-boss.boss-enraged .boss-reactor { animation-duration: 1.2s; }
+.sector-boss.boss-hit .boss-armor,
+.sector-boss.boss-hit .boss-reactor {
+  filter: brightness(1.8);
+  box-shadow: 0 0 12px #fff;
+}
+@keyframes boss-aura-breathe {
+  50% { opacity: .55; transform: scale(.94); }
+}
+@keyframes boss-reactor-pulse {
+  50% { opacity: .76; transform: scale(.87); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sector-boss .boss-aura, .sector-boss .boss-reactor { animation: none; }
+}
+html[data-motion="reduced"] .sector-boss .boss-aura,
+html[data-motion="reduced"] .sector-boss .boss-reactor { animation: none; }
