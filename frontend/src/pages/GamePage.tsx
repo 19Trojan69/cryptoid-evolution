@@ -258,6 +258,8 @@ const GamePage = () => {
   const [musicVolume, setMusicVolume] = useState(readMusicVolume);
   const [effectsVolume, setEffectsVolume] = useState(readEffectsVolume);
   const musicRef = useRef<MusicPlayer | null>(null);
+  const bossMusicRef = useRef<MusicPlayer | null>(null);
+  const bossMusicActiveRef = useRef(false);
   const soundRef = useRef<GameAudio | null>(null);
   const audioStartRef = useRef<Promise<GameAudio | null> | null>(null);
   const audioCleanupRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -318,9 +320,16 @@ const GamePage = () => {
   useEffect(() => {
     if (!musicEnabled) return;
     const track = new MusicPlayer("/audio/battle-orbit.mp3", readMusicVolume());
+    const bossTrack = new MusicPlayer("/audio/dreadnought-duel.mp3", readMusicVolume());
     musicRef.current = track;
+    bossMusicRef.current = bossTrack;
     const resume = () => {
-      if (stateRef.current.status === "playing") void track.play();
+      const state = stateRef.current;
+      if (state.status !== "playing") return;
+      const bossActive = state.encounter === "boss-intro" || state.encounter === "boss-fight";
+      const active = bossActive ? bossTrack : track;
+      (bossActive ? track : bossTrack).pause();
+      void active.play();
     };
     document.addEventListener("pointerdown", resume, true);
     document.addEventListener("keydown", resume, true);
@@ -329,16 +338,31 @@ const GamePage = () => {
       document.removeEventListener("pointerdown", resume, true);
       document.removeEventListener("keydown", resume, true);
       track.close();
+      bossTrack.close();
       if (musicRef.current === track) musicRef.current = null;
+      if (bossMusicRef.current === bossTrack) bossMusicRef.current = null;
     };
   }, [musicEnabled]);
   useEffect(() => {
     const track = musicRef.current;
-    if (!track) return;
-    if (game.status === "playing") void track.play();
-    else track.pause();
-  }, [game.status, musicEnabled]);
-  useEffect(() => { if (musicRef.current) musicRef.current.setVolume(musicVolume); }, [musicVolume]);
+    const bossTrack = bossMusicRef.current;
+    if (!track || !bossTrack) return;
+    if (game.status !== "playing") {
+      track.pause();
+      bossTrack.pause();
+      return;
+    }
+    const bossActive = game.encounter === "boss-intro" || game.encounter === "boss-fight";
+    if (bossActive && !bossMusicActiveRef.current) bossTrack.audio.currentTime = 0;
+    bossMusicActiveRef.current = bossActive;
+    const active = bossActive ? bossTrack : track;
+    (bossActive ? track : bossTrack).pause();
+    void active.play();
+  }, [game.status, game.encounter, musicEnabled]);
+  useEffect(() => {
+    musicRef.current?.setVolume(musicVolume);
+    bossMusicRef.current?.setVolume(musicVolume);
+  }, [musicVolume]);
   const changeEffectsVolume = (value: number) => {
     localStorage.setItem(EFFECTS_VOLUME_KEY, String(value));
     setEffectsVolume(value);
