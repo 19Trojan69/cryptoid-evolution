@@ -37,8 +37,9 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 .home-music-toggle:hover .home-music-glyph { transform: scale(1.08); box-shadow: inset 0 0 11px rgba(255,255,255,.16), 0 0 12px currentColor; background: rgba(255,255,255,.1); }
 .home-music-toggle:active { transform: translateY(1px) scale(.985); filter: brightness(1.18); }
 .home-music-toggle:focus-visible { outline: 2px solid #b5ffe3; outline-offset: 3px; }
-.home-footer { position: absolute; z-index: 4; left: clamp(20px, 5vw, 100px); right: clamp(20px, 5vw, 100px); bottom: max(17px, env(safe-area-inset-bottom)); padding-top: 12px; border-top: 1px solid var(--line); }
+.home-footer { position: absolute; z-index: 4; left: clamp(20px, 5vw, 100px); right: clamp(20px, 5vw, 100px); bottom: max(17px, env(safe-area-inset-bottom)); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2px 16px; padding-top: 12px; border-top: 1px solid var(--line); }
 .home-footer .terms-entry { margin: 0; padding: 5px 0; }
+.home-developer-credit { color: #b9d7e1; font-size: 12px; letter-spacing: .04em; }
 .landing-shell .hero-section .starfield { z-index: 0; opacity: .75; }
 .shop-overlay { position: fixed; z-index: 8; inset: 0; display: grid; place-items: center; padding: clamp(8px, 3vw, 25px); background: rgba(1, 9, 19, .88); backdrop-filter: blur(9px); }
 .shop-modal { display: flex; flex-direction: column; width: min(100%, 1120px); max-height: min(900px, calc(100dvh - 16px)); overflow: hidden; border: 1px solid rgba(102, 224, 241, .55); background: radial-gradient(circle at 75% 0, rgba(114, 75, 202, .15), transparent 34%), linear-gradient(145deg, #061727, #0a2135 58%, #071725); box-shadow: inset 0 0 35px rgba(56, 204, 227, .05), 0 0 32px rgba(50, 195, 221, .14), 0 24px 90px #000b; clip-path: polygon(0 13px, 13px 0, calc(100% - 13px) 0, 100% 13px, 100% calc(100% - 13px), calc(100% - 13px) 100%, 13px 100%, 0 calc(100% - 13px)); }
