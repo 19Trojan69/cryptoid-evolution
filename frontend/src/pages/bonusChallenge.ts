@@ -1,4 +1,5 @@
 import { playerColors, type PlayerColorId } from "./shipFleet.ts";
+import { scaledShardReward } from "./shardEarnings.ts";
 
 export const BONUS_TARGET_COUNT = 12;
 export const BONUS_FLIGHT_MS = 3_600;
@@ -50,11 +51,15 @@ export const bonusShowcaseShip = (index: number, sector: number) => ({
   color: playerColors[(index + (Math.max(1, sector) - 1) * 3) % playerColors.length].id,
 });
 
-export const bonusReward = (hits: number) => {
-  if (hits === BONUS_TARGET_COUNT) return { label: "PERFECT CRYPTO HUNT", points: 2_000, shards: 12, powerUps: ["shield"] as const };
-  if (hits >= 9) return { label: "GOLD NETWORK", points: 1_000, shards: 7, powerUps: [] as const };
-  if (hits >= 5) return { label: "NETWORK LINK", points: 500, shards: 4, powerUps: ["shield"] as const };
-  return { label: "CHALLENGE COMPLETE", points: 0, shards: hits > 0 ? 2 : 0, powerUps: [] as const };
+export const bonusReward = (hits: number, level = 1) => {
+  const base = hits === BONUS_TARGET_COUNT
+    ? { label: "PERFECT CRYPTO HUNT", points: 2_000, shards: 12, powerUps: ["shield"] as const }
+    : hits >= 9
+      ? { label: "GOLD NETWORK", points: 1_000, shards: 7, powerUps: [] as const }
+      : hits >= 5
+        ? { label: "NETWORK LINK", points: 500, shards: 4, powerUps: ["shield"] as const }
+        : { label: "CHALLENGE COMPLETE", points: 0, shards: hits > 0 ? 2 : 0, powerUps: [] as const };
+  return { ...base, shards: scaledShardReward(base.shards, level) };
 };
 
 export const bonusHeartReward = (hits: number, hearts: number, maxHearts = 3) =>

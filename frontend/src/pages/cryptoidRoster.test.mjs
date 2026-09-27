@@ -24,3 +24,13 @@ test("rare Ghost Coin phases only while safe in formation", () => {
   assert.equal(isGhostCloaked("ghostCoin", true, 0), false);
   assert.equal(isGhostCloaked("solflare", true, 1_800), false);
 });
+
+test("the same enemy earns more Shards and points as its health and level rise", () => {
+  const first = chooseCryptoid(1, 28);
+  const later = chooseCryptoid(500, 28);
+  assert.equal(first.reward, 8);
+  assert.equal(later.reward, 12);
+  assert.ok(later.health > first.health);
+  assert.ok(later.points > first.points);
+  assert.equal(chooseCryptoid(1000, 28).reward, later.reward);
+});

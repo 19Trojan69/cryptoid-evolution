@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { balanceAfterMission, BONUS_TARGET_SHARD_REWARD, BOSS_SHARD_REWARD, creditDefeat, creditReward } from "./shardEarnings.ts";
+import { balanceAfterMission, BONUS_TARGET_SHARD_REWARD, BOSS_SHARD_REWARD, bossPoints, bossShardReward, creditDefeat, creditReward, scaledEnemyPoints, scaledShardReward } from "./shardEarnings.ts";
 import { chooseCryptoid } from "./cryptoidRoster.ts";
 
 test("the first six mixed-size Cryptoids pay 22 Shards, not six", () => {
@@ -26,4 +26,14 @@ test("completion rewards are added once and mission saving matches the HUD", () 
   assert.equal(run.shards, 65);
   assert.equal(balanceAfterMission(175, run), 240);
   assert.equal(run.destroyed, 23);
+});
+
+test("higher levels reward difficulty while capping the economy at the difficulty ceiling", () => {
+  assert.deepEqual([1, 250, 500, 1000].map(level => scaledShardReward(8, level)), [8, 10, 12, 12]);
+  assert.deepEqual([1, 500].map(bossShardReward), [BOSS_SHARD_REWARD, 24]);
+  assert.deepEqual([1, 500, 1000].map(bossPoints), [2_100, 3_675, 3_675]);
+  assert.ok(scaledEnemyPoints(60, 500, 2) > scaledEnemyPoints(10, 500, 2));
+  assert.ok(scaledEnemyPoints(60, 500, 2) > scaledEnemyPoints(60, 500, 0));
+  assert.equal(scaledEnemyPoints(60, 1, 0), 60);
+  assert.equal(BONUS_TARGET_SHARD_REWARD, 1);
 });

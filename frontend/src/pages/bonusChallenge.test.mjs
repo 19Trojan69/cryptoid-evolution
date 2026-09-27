@@ -51,6 +51,11 @@ test("bonus tiers include a perfect reward without requiring perfect hits for pr
   assert.equal(bonusReward(12).label, "PERFECT CRYPTO HUNT");
 });
 
+test("late-level bonus completion awards more Shards while each target still pays one", () => {
+  assert.equal(bonusReward(12, 500).shards, 18);
+  assert.equal(bonusReward(12, 500).points, bonusReward(12, 1).points);
+});
+
 test("only a perfect bonus restores one previously lost heart", () => {
   assert.equal(bonusHeartReward(11, 2), 0);
   assert.equal(bonusHeartReward(12, 3), 0);

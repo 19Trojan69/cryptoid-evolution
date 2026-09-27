@@ -1,4 +1,5 @@
 import { enemyHealthBonus, levelDifficulty } from "./levelDifficulty.ts";
+import { scaledEnemyPoints, scaledShardReward } from "./shardEarnings.ts";
 
 export type CryptoidClass = "light" | "medium" | "heavy" | "elite";
 export type CryptoidType = "solflare" | "etherCrystal" | "bitrock" | "stableCore" | "memeSwarm" | "ghostCoin";
@@ -41,10 +42,13 @@ export const chooseCryptoid = (sector: number, index: number): CryptoidProfile =
   const type = sector >= 3 && index % 13 === 12 ? "ghostCoin" : roster[index % roster.length];
   const base = types[type];
   const difficulty = levelDifficulty(sector);
+  const extraHealth = enemyHealthBonus(sector, index);
   return {
     type,
     ...base,
-    health: base.health + enemyHealthBonus(sector, index),
+    health: base.health + extraHealth,
+    reward: scaledShardReward(base.reward, sector),
+    points: scaledEnemyPoints(base.points, sector, extraHealth),
     entryDuration: base.entryDuration * difficulty.entryPaceScale,
     attackPace: base.attackPace * difficulty.attackPaceScale,
     faction: factionCodes[(index + Math.max(0, sector - 1)) % factionCodes.length],

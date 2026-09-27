@@ -16,3 +16,8 @@ test("excellent bonus hits strengthen the link without changing existing bonus r
   assert.equal(appendSectionBlock(2, 8).shards, 3);
   assert.equal(appendSectionBlock(0, 12).shards, 0);
 });
+
+test("the chain reward grows with level and is paid only once", () => {
+  assert.equal(appendSectionBlock(2, 9, 500).shards, 8);
+  assert.equal(appendSectionBlock(3, 9, 500).shards, 0);
+});

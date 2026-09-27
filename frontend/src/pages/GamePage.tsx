@@ -25,7 +25,7 @@ import { fireInterval, makeVolley } from "./playerCombat";
 import { activateCollectedPower } from "./collectedPower";
 import { leaveGameFullscreen, requestGameFullscreen } from "./gameFullscreen";
 import { levelDifficulty } from "./levelDifficulty";
-import { balanceAfterMission, BONUS_TARGET_SHARD_REWARD, BOSS_SHARD_REWARD, creditDefeat, creditReward } from "./shardEarnings";
+import { balanceAfterMission, BONUS_TARGET_SHARD_REWARD, bossPoints, bossShardReward, creditDefeat, creditReward } from "./shardEarnings";
 
 const BEST_SCORE_KEY = "cryptoid_best_score";
 const HIGHEST_SECTOR_KEY = "cryptoid_highest_sector";
@@ -704,8 +704,8 @@ const GamePage = () => {
             state.effects.push({ id: nextIdRef.current++, x: state.boss.health > 0 ? shot.x : state.boss.x, y: state.boss.health > 0 ? shot.y : state.boss.y, kind: state.boss.health > 0 ? "hit" : "boss-explosion", startedAt: time, sprite: state.boss.health > 0 ? undefined : 19, debrisSize: state.boss.health > 0 ? undefined : 124, shipClass: state.boss.health > 0 ? undefined : "heavy" });
             soundRef.current?.play(state.boss.health > 0 ? "enemyHit" : "bossDestroy");
             if (state.boss.health === 0) {
-              state.score += 2_000 + state.sector * 100;
-              creditDefeat(state, BOSS_SHARD_REWARD);
+              state.score += bossPoints(state.sector);
+              creditDefeat(state, bossShardReward(state.sector));
               state.encounter = "boss-clear";
               state.enemyShots = [];
               state.boss = null;
@@ -742,13 +742,13 @@ const GamePage = () => {
             : sectionPhase({ introMs: sectionElapsedRef.current, spawned: formationIndexRef.current, total: (sectionSlotsRef.current ?? slots).length, alive: state.asteroids.length, ready: state.asteroids.filter(asteroid => asteroid.entryElapsed >= asteroid.entryDuration && (asteroid.formationElapsed >= asteroid.formationDuration || asteroid.attackPattern !== null)).length, returning: state.asteroids.some(asteroid => asteroid.attackPattern !== null && asteroid.attackElapsed >= attackTime(asteroid)), attacking: state.asteroids.some(asteroid => asteroid.attackPattern !== null) });
         }
         if (state.encounter === "normal" && state.phase === "SECTOR_CLEAR" && previousPhase !== "SECTOR_CLEAR") {
-          const link = appendSectionBlock(state.chainBlocks, bonus ? state.bonusHits : 0);
+          const link = appendSectionBlock(state.chainBlocks, bonus ? state.bonusHits : 0, state.sector);
           state.chainBlocks = link.blocks;
           creditReward(state, link.shards);
           state.chainResult = link.linked ? `CHAIN COMPLETE · +${link.shards} Shards` : `BLOCK LINKED · ${link.blocks}/${BLOCKS_PER_CHAIN}`;
         }
         if (bonus && state.phase === "SECTOR_CLEAR" && previousPhase !== "SECTOR_CLEAR") {
-          const reward = bonusReward(state.bonusHits);
+          const reward = bonusReward(state.bonusHits, state.sector);
           const recoveredHeart = bonusHeartReward(state.bonusHits, state.hearts, state.maxHearts);
           state.bonusResult = `${reward.label} · +${reward.shards} BONUS SHARDS${recoveredHeart ? " · +1 HEART" : ""}${reward.powerUps.length ? ` · ${reward.powerUps.map(() => "SHIELD").join(" + ")}` : ""}`;
           state.score += reward.points;
@@ -890,8 +890,8 @@ const GamePage = () => {
           state.boss.health = Math.max(0, state.boss.health - 18);
           if (state.boss.health === 0) {
             state.effects.push({ id: nextIdRef.current++, x: state.boss.x, y: state.boss.y, kind: "boss-explosion", startedAt: now, sprite: 19, debrisSize: 124, shipClass: "heavy" });
-            state.score += 2_000 + state.sector * 100;
-            creditDefeat(state, BOSS_SHARD_REWARD);
+            state.score += bossPoints(state.sector);
+            creditDefeat(state, bossShardReward(state.sector));
             state.encounter = "boss-clear";
             state.boss = null;
           }
