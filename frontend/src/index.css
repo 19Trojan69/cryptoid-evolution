@@ -234,6 +234,25 @@ html[data-motion="reduced"] .nebula-cloud { animation: none !important; will-cha
 .milky-band { position: absolute; inset: -40%; background: radial-gradient(ellipse 18% 48% at 50% 50%, #98b6d624, #8c91c112 48%, transparent 100%), radial-gradient(ellipse 38% 43% at 49% 49%, #b7bbeb14, transparent 85%); filter: blur(13px); transform: rotate(-31deg); opacity: .62; }
 .starfield-sector-2 .milky-band, .starfield-sector-5 .milky-band { opacity: .88; }
 .starfield-stars { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+
+.level-twinkles { position: absolute; inset: 0; pointer-events: none; }
+.level-twinkles i { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: currentColor; box-shadow: 0 0 5px currentColor; opacity: .14; animation: level-star-twinkle 9s ease-in-out infinite; }
+.level-twinkles i:nth-child(1) { left: 12%; top: 19%; width: 1.4px; height: 1.4px; color: #9cecff; animation-duration: 9s; animation-delay: -2s; }
+.level-twinkles i:nth-child(2) { left: 73%; top: 14%; width: 2.5px; height: 2.5px; color: #ffd496; animation-duration: 12s; animation-delay: -8s; }
+.level-twinkles i:nth-child(3) { left: 37%; top: 34%; width: 1.6px; height: 1.6px; color: #c8b0ff; animation-duration: 11s; animation-delay: -4s; }
+.level-twinkles i:nth-child(4) { left: 86%; top: 43%; width: 3px; height: 3px; color: #ffaabb; animation-duration: 13s; animation-delay: -11s; }
+.level-twinkles i:nth-child(5) { left: 23%; top: 59%; width: 1.3px; height: 1.3px; color: #9cf4d1; animation-duration: 10s; animation-delay: -7s; }
+.level-twinkles i:nth-child(6) { left: 63%; top: 74%; width: 2.3px; height: 2.3px; color: #a9caff; animation-duration: 14s; animation-delay: -1s; }
+.level-twinkles i:nth-child(7) { left: 43%; top: 88%; width: 1.7px; height: 1.7px; color: #ffe8b3; animation-duration: 8s; animation-delay: -5s; }
+@keyframes level-star-twinkle {
+  0%, 70%, 100% { opacity: .14; transform: scale(1); }
+  78% { opacity: .9; transform: scale(1.45); }
+  85% { opacity: .32; transform: scale(1.1); }
+}
+.starfield-paused .level-twinkles i { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .level-twinkles i { animation: none; opacity: .42; } }
+html[data-motion="reduced"] .level-twinkles i { animation: none; opacity: .42; }
+
 .starfield-distant { animation: star-sway-far 42s ease-in-out infinite alternate; }
 .starfield-nearby { animation: star-sway-near 26s ease-in-out infinite alternate; }
 @keyframes star-sway-far { to { transform: translate3d(7px, -5px, 0); } }
