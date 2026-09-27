@@ -38,7 +38,7 @@ const shopTabs = [
 const powerTypeForOffer = (offerId: string): PowerUpType => offerId.includes("shield") ? "shield" : offerId.includes("rapid") ? "rapid" : offerId.includes("bomb") ? "bomb" : offerId.includes("emp") ? "emp" : "overdrive";
 const MOTION_STORAGE_KEY = "cryptoid_reduced_effects";
 
-const NETWORK_RADIUS = 154;
+const NETWORK_RADIUS = 158.5;
 const networkPoint = (latitude: number, longitude: number) => {
   const lat = latitude * Math.PI / 180;
   const lon = longitude * Math.PI / 180;
@@ -46,18 +46,19 @@ const networkPoint = (latitude: number, longitude: number) => {
 };
 const networkPath = (points: ReadonlyArray<readonly [number, number]>) =>
   points.map(([x, y], index) => `${index ? "L" : "M"}${x.toFixed(1)} ${y.toFixed(1)}`).join(" ");
-const networkMeridians = [-75, -50, -25, 0, 25, 50, 75].map(lon =>
+const networkMeridians = Array.from({ length: 11 }, (_, column) => -90 + column * 18).map(lon =>
   networkPath(Array.from({ length: 37 }, (_, index) => networkPoint(-90 + index * 5, lon)))).join(" ");
-const networkParallels = [-75, -50, -25, 0, 25, 50, 75].map(lat =>
+const networkParallels = Array.from({ length: 9 }, (_, row) => -72 + row * 18).map(lat =>
   networkPath(Array.from({ length: 37 }, (_, index) => networkPoint(lat, -90 + index * 5)))).join(" ");
-const networkLinks = Array.from({ length: 6 }, (_, row) => Array.from({ length: 6 }, (_, column) => {
-  const lat = -75 + row * 25;
-  const lon = -75 + column * 25;
-  return networkPath([networkPoint(lat, lon), networkPoint(lat + 12.5, lon + 12.5), networkPoint(lat + 25, lon + 25)]);
+const networkLinks = Array.from({ length: 10 }, (_, row) => Array.from({ length: 10 }, (_, column) => {
+  const lat = -90 + row * 18;
+  const lon = -90 + column * 18;
+  return (row + column) % 2 === 0
+    ? networkPath([networkPoint(lat, lon), networkPoint(lat + 9, lon + 9), networkPoint(lat + 18, lon + 18)])
+    : networkPath([networkPoint(lat + 18, lon), networkPoint(lat + 9, lon + 9), networkPoint(lat, lon + 18)]);
 })).flat().join(" ");
-const networkNodes = [-50, -25, 0, 25, 50].flatMap((lat, row) =>
-  [-50, -25, 0, 25, 50].flatMap((lon, column) => (row + column) % 2 === 0 ? [networkPoint(lat, lon)] : []));
-
+const networkNodes = [-72, -36, 0, 36, 72].flatMap((lat, row) =>
+  [-72, -36, 0, 36, 72].flatMap((lon, column) => (row + column) % 2 === 0 ? [networkPoint(lat, lon)] : []));
 
 const WeaponPreview = ({ offerId, sprite, color }: { offerId: string; sprite: number; color: PlayerColorId }) => {
   const shotCount = offerId.includes("triple") || offerId.includes("plasma") ? 3 : 2;
