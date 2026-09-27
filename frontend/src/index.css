@@ -1278,3 +1278,50 @@ html[data-motion="reduced"] .landing-shell .hero-actions .home-play-button { ani
   .landing-shell .hangar-offer { padding: 13px; }
 }
 html[lang="th"] .landing-shell :is(.language-option, .system-setting) b { line-height: 1.55; }
+
+/* Layered distance, a compact accretion disc, and electric title accents. */
+.home-deep-space { position: absolute; z-index: 1; inset: 0; overflow: hidden; pointer-events: none; }
+.home-far-planet { position: absolute; display: block; background-position: center; background-repeat: no-repeat; background-size: contain; pointer-events: none; will-change: transform; }
+.home-far-planet-gas { top: 11%; right: 28%; width: clamp(56px, 8vw, 110px); aspect-ratio: 1; background-image: url('/planets/gas.svg'); opacity: .8; filter: saturate(1.25) drop-shadow(0 0 17px #ffb97c66); animation: home-distant-drift 15s ease-in-out infinite alternate; }
+.home-far-planet-saturn { top: 57%; right: 4%; width: clamp(108px, 17vw, 210px); aspect-ratio: 3 / 2; background-image: url('/planets/saturn.svg'); opacity: .72; filter: saturate(1.23) drop-shadow(0 0 19px #d2af9f65); animation: home-distant-drift 19s ease-in-out infinite alternate-reverse; }
+.home-far-moon { top: 44%; left: 39%; width: clamp(28px, 3.8vw, 48px); aspect-ratio: 1; background-image: url('/planets/ice.svg'); opacity: .86; filter: drop-shadow(0 0 10px #97dff978); animation: home-moon-drift 12s ease-in-out infinite alternate; }
+@keyframes home-distant-drift { from { transform: translate3d(-7px, 4px, 0) rotate(-4deg); } to { transform: translate3d(11px, -12px, 0) rotate(5deg); } }
+@keyframes home-moon-drift { from { transform: translate3d(-5px, 9px, 0); } to { transform: translate3d(16px, -17px, 0); } }
+.home-black-hole { position: absolute; top: 13%; left: 44%; display: block; width: clamp(115px, 17vw, 220px); aspect-ratio: 1; border-radius: 50%; background: conic-gradient(from 26deg, transparent 0 8%, #9360e28c 13%, #ffe1b09c 20%, transparent 28% 39%, #967bf5bd 47%, #f79e73ba 55%, transparent 65% 75%, #60ecf489 84%, transparent 94%); filter: drop-shadow(0 0 16px #a367db9c); opacity: .84; animation: home-hole-orbit 16s linear infinite; }
+.home-black-hole::before { position: absolute; z-index: 1; inset: 5%; border-radius: 50%; background: radial-gradient(ellipse at 50% 50%, transparent 0 29%, #ffd8a9bf 35%, #965ae5a8 42%, transparent 60%), conic-gradient(from 58deg, transparent 0 16%, #ffb47599 24%, transparent 37% 64%, #c6a5ff8c 78%, transparent 92%); box-shadow: 0 0 23px #ae70eb78; transform: rotate(-24deg) scaleY(.62); content: ''; }
+.home-black-hole i { position: absolute; z-index: 2; inset: 17%; display: block; border: 2px solid #d9beff9c; border-radius: 50%; box-shadow: inset 0 0 15px #bc8aff77, 0 0 15px #ffa9778c; transform: perspective(150px) rotateX(61deg) rotate(-25deg); animation: home-hole-disk 9s linear infinite; }
+.home-black-hole::after { position: absolute; z-index: 3; inset: 32%; border: 1px solid #b494e38f; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #101126, #01010a 72%); box-shadow: 0 0 14px #020411, 0 0 19px #d7a3ff9c; content: ''; }
+@keyframes home-hole-orbit { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+@keyframes home-hole-disk { from { transform: perspective(150px) rotateX(61deg) rotate(-25deg); } to { transform: perspective(150px) rotateX(61deg) rotate(335deg); } }
+.landing-shell .hero-copy h1 span { background-size: 240% 100%; animation: home-title-current 7s ease-in-out infinite; }
+.home-title-electric { position: absolute; z-index: 2; top: -9%; left: -17%; width: 39px; height: 105%; overflow: visible; opacity: 0; pointer-events: none; filter: drop-shadow(0 0 4px #f5ffff) drop-shadow(0 0 11px #4ddaff); animation: home-title-strike 7s ease-in-out infinite; }
+.home-title-electric path { fill: none; stroke: #d8ffff; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: bevel; }
+@keyframes home-title-strike { 0%, 10% { left: -17%; opacity: 0; } 13% { left: -8%; opacity: 1; } 22% { opacity: .42; } 30% { opacity: 1; } 39% { left: 105%; opacity: 1; } 44%, 100% { left: 110%; opacity: 0; } }
+@keyframes home-title-current { 0%, 9%, 100% { background-position: 0% 50%; } 30% { background-position: 100% 50%; } 42% { background-position: 0% 50%; } }
+.landing-shell .home-launch .home-defense-ship { transform-style: preserve-3d; }
+.landing-shell .home-launch .home-defense-ship i { transform: perspective(180px) rotateX(19deg) rotateY(-10deg) scale(1.02); backface-visibility: hidden; }
+.landing-shell .home-launch .home-defense-ship::before { position: absolute; z-index: 0; inset: 22% 13% 8%; border-radius: 50%; background: radial-gradient(ellipse, #164173a8, transparent 74%); filter: blur(9px); transform: translateY(15px) scaleX(.95); content: ''; }
+.landing-shell .home-raid-ship { background-image: none; transform-style: preserve-3d; }
+.landing-shell .home-raid-ship > i { position: absolute; z-index: 2; inset: 0; display: block; background-image: url('/ships/cryptoid-fleet.png'); background-size: 400% 500%; background-repeat: no-repeat; backface-visibility: hidden; transform: perspective(140px) rotateX(23deg) rotateY(-17deg) rotate(180deg) scale(1.1); filter: brightness(1.18) contrast(1.12) drop-shadow(0 2px 3px #030819); }
+.landing-shell .home-raid-ship > b { position: absolute; z-index: 1; top: -9%; left: 43%; width: 14%; height: 37%; background: linear-gradient(transparent, #e1c4ff87 24%, #ffb774 74%, #fff3d9); clip-path: polygon(50% 0, 78% 40%, 100% 100%, 0 100%, 22% 40%); filter: drop-shadow(0 0 6px #f5a873); animation: home-raid-engine .42s ease-in-out infinite alternate; }
+.landing-shell .home-raid-ship::before { position: absolute; z-index: 0; inset: 15% 9% 7%; border-radius: 50%; background: radial-gradient(ellipse, #091326dd, transparent 73%); filter: blur(5px); transform: translate(7px, 10px); content: ''; }
+.landing-shell .home-raid-ship::after { position: absolute; z-index: 3; top: 22%; left: 21%; width: 37%; height: 14%; border-radius: 50%; background: radial-gradient(ellipse, #ffffff8a, transparent 75%); filter: blur(2px); transform: rotate(-29deg); pointer-events: none; content: ''; }
+@keyframes home-raid-engine { from { opacity: .63; transform: scaleY(.68); } to { opacity: 1; transform: scaleY(1.15); } }
+@media (max-width: 700px) {
+  .home-far-planet-gas { top: 15%; right: 16%; width: 57px; opacity: .64; }
+  .home-far-planet-saturn { top: 49%; right: -27px; width: 124px; opacity: .69; }
+  .home-far-moon { top: 40%; right: 4%; left: auto; width: 27px; }
+  .home-black-hole { top: 42%; left: -44px; width: 126px; opacity: .69; }
+  .home-title-electric { width: 29px; }
+  .landing-shell .home-raid-ship > b { height: 30%; }
+}
+@media (max-height: 670px) and (max-width: 700px) {
+  .home-black-hole { top: 37%; left: -47px; width: 110px; }
+  .home-far-planet-saturn { top: 40%; width: 101px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-far-planet, .home-black-hole, .home-black-hole i, .home-title-electric, .landing-shell .hero-copy h1 span, .landing-shell .home-raid-ship > b { animation: none; }
+  .home-title-electric { display: none; }
+}
+html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-black-hole, html[data-motion="reduced"] .home-black-hole i, html[data-motion="reduced"] .home-title-electric, html[data-motion="reduced"] .landing-shell .hero-copy h1 span, html[data-motion="reduced"] .landing-shell .home-raid-ship > b { animation: none; }
+html[data-motion="reduced"] .home-title-electric { display: none; }
