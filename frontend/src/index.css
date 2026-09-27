@@ -601,6 +601,22 @@ html[data-motion="reduced"] .level-twinkles i { animation: none; opacity: .42; }
 .boss-debris-piece-5 { --boss-dx: 66px; --boss-dy: 43px; --boss-spin: -103deg; clip-path: polygon(57% 48%, 95% 59%, 84% 100%, 52% 77%); animation-delay: .14s; }
 .boss-debris-piece-6 { --boss-dx: -17px; --boss-dy: 72px; --boss-spin: 58deg; clip-path: polygon(35% 52%, 51% 41%, 62% 55%, 68% 100%, 31% 100%); animation-delay: .18s; }
 .boss-debris-piece-7 { --boss-dx: 22px; --boss-dy: 62px; --boss-spin: -68deg; clip-path: polygon(43% 42%, 63% 40%, 72% 74%, 51% 91%, 35% 72%); animation-delay: .22s; }
+
+/* Actual ship destruction scatters clipped hull pieces into screen-wide cells. */
+.scattered-debris { transform: translate(-50%, -50%); }
+.scattered-debris-piece { position: absolute; inset: 0; display: block; pointer-events: none; opacity: 0; animation: scatter-ship-piece 2.12s cubic-bezier(.1, .49, .23, 1) var(--fragment-delay) both; }
+.scattered-debris-piece b, .scattered-debris-piece > .scattered-debris-sprite { position: absolute; inset: 0; display: block; width: 100%; height: 100%; background-repeat: no-repeat; background-size: 400% 500%; transform: rotate(var(--debris-rotation)); }
+.boss-explosion .scattered-debris-piece { animation-duration: 2.85s; }
+.player-explosion .scattered-debris-piece { animation-duration: 2.08s; }
+@keyframes scatter-ship-piece {
+  0% { opacity: 0; transform: translate3d(0, 0, 0) rotate(0) scale(1); }
+  9% { opacity: 1; }
+  72% { opacity: .95; }
+  100% { opacity: 0; transform: translate3d(var(--fragment-x), var(--fragment-y), 0) rotate(var(--fragment-spin)) scale(.55); }
+}
+@media (prefers-reduced-motion: reduce) { .scattered-debris-piece { animation-duration: .65s !important; animation-delay: 0s; } }
+html[data-motion="reduced"] .scattered-debris-piece { animation-duration: .65s !important; animation-delay: 0s; }
+
 .player-explosion .ship-debris-piece { animation-duration: 1.65s; }
 .player-crash .ship-debris-piece { animation-duration: 1.25s; }
 .ship-debris-light b { filter: grayscale(1) sepia(1) saturate(1.6) hue-rotate(105deg); }

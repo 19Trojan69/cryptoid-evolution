@@ -191,6 +191,46 @@ const engineTrails = (sprite: number, className: "exhaust" | "player-engine") =>
 const bossEngineTrails = () =>
   bossNozzleStyles().map((style, index) => <span key={`boss-exhaust-${index}`} className={`exhaust ${index === 1 ? "exhaust-main" : "exhaust-wing"}`} style={style} />);
 
+const scatteredPieces = (effect: Effect, count: number, sprite: number) => {
+  const columns = count === 14 ? 4 : count === 8 ? 4 : 2;
+  const rows = count === 14 ? 4 : 2;
+  const targetColumns = count === 14 ? 7 : columns;
+  const targetRows = 2;
+  let seed = Math.imul(effect.id, 0x9e3779b1) >>> 0;
+  const random = () => {
+    seed = (Math.imul(1664525, seed) + 1013904223) >>> 0;
+    return seed / 4294967296;
+  };
+  const targets = Array.from({ length: count }, (_, index) => index);
+  for (let index = count - 1; index > 0; index--) {
+    const swap = Math.floor(random() * (index + 1));
+    [targets[index], targets[swap]] = [targets[swap], targets[index]];
+  }
+  return targets.map((target, index) => {
+    const x = index % columns;
+    const y = Math.floor(index / columns);
+    const left = x * 100 / columns;
+    const top = y * 100 / rows;
+    const right = (x + 1) * 100 / columns;
+    const bottom = (y + 1) * 100 / rows;
+    const jag = Math.min(7, 18 / columns);
+    const shape = `polygon(${left + random() * jag}% ${top}%, ${right - random() * jag}% ${top}%, ${right}% ${top + random() * jag}%, ${right}% ${bottom - random() * jag}%, ${right - random() * jag}% ${bottom}%, ${left + random() * jag}% ${bottom}%, ${left}% ${bottom - random() * jag}%, ${left}% ${top + random() * jag}%)`;
+    const destinationX = ((target % targetColumns) + .2 + random() * .6) * 100 / targetColumns;
+    const destinationY = (Math.floor(target / targetColumns) + .18 + random() * .64) * 100 / targetRows;
+    const spin = (random() > .5 ? 1 : -1) * (180 + Math.floor(random() * 440));
+    const pieceStyle = {
+      clipPath: shape,
+      "--fragment-x": `calc(${destinationX.toFixed(2)}vw - ${effect.x}px)`,
+      "--fragment-y": `calc(${destinationY.toFixed(2)}dvh - ${effect.y}px)`,
+      "--fragment-spin": `${spin}deg`,
+      "--fragment-delay": `${Math.floor(random() * 180)}ms`,
+    } as CSSProperties;
+    return <em key={index} className="scattered-debris-piece" style={pieceStyle}>
+      {effect.debrisColor ? <PaintedShip className="scattered-debris-sprite" sprite={sprite} color={effect.debrisColor} /> : <b style={spriteStyle(sprite)} />}
+    </em>;
+  });
+};
+
 const shipDebris = (effect: Effect) => {
   const sprite = effect.sprite;
   if (sprite === undefined) return null;
@@ -198,13 +238,16 @@ const shipDebris = (effect: Effect) => {
     "--debris-size": `${effect.debrisSize ?? 58}px`,
     "--debris-rotation": `${180 + (effect.debrisRotation ?? 0)}deg`,
   } as CSSProperties;
-  if (effect.kind === "boss-explosion") {
-    return <div className="ship-debris boss-debris-field ship-debris-heavy" style={style} aria-hidden="true">
-      {[0, 1, 2, 3, 4, 5, 6].map(index => <em className={`boss-debris-piece boss-debris-piece-${index + 1}`} key={index}><b style={spriteStyle(sprite)} /></em>)}
+  // A collision can damage the player without destroying the ship.
+  if (effect.kind === "player-crash") {
+    return <div className="ship-debris player-crash-debris" style={style} aria-hidden="true">
+      {[0, 1, 2, 3].map(index => <em className={`ship-debris-piece ship-debris-piece-${index + 1}`} key={index}>{effect.debrisColor ? <PaintedShip className="ship-debris-sprite" sprite={sprite} color={effect.debrisColor} /> : <b style={spriteStyle(sprite)} />}</em>)}
     </div>;
   }
-  return <div className={`ship-debris${effect.shipClass ? ` ship-debris-${effect.shipClass}` : ""}`} style={style} aria-hidden="true">
-    {[0, 1, 2, 3].map(index => <em className={`ship-debris-piece ship-debris-piece-${index + 1}`} key={index}>{effect.debrisColor ? <PaintedShip className="ship-debris-sprite" sprite={sprite} color={effect.debrisColor} /> : <b style={spriteStyle(sprite)} />}</em>)}
+  const boss = effect.kind === "boss-explosion";
+  const count = boss ? 14 : effect.shipClass === "heavy" || (effect.debrisSize ?? 0) >= 86 ? 8 : 4;
+  return <div className={`ship-debris scattered-debris${boss ? " boss-debris-field" : ""}${effect.shipClass ? ` ship-debris-${effect.shipClass}` : ""}`} style={style} aria-hidden="true">
+    {scatteredPieces(effect, count, sprite)}
   </div>;
 };
 
@@ -726,7 +769,7 @@ const GamePage = () => {
           });
         }
         if (state.phase === "SECTOR_CLEAR") state.enemyShots = [];
-        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "hit" ? 340 : effect.kind === "boss-explosion" ? 2_350 : effect.kind === "player-explosion" ? 1_800 : effect.kind === "player-crash" || effect.kind === "explosion" || effect.kind === "shatter" ? 1_350 : 390));
+        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "hit" ? 340 : effect.kind === "boss-explosion" ? 3_050 : effect.kind === "player-explosion" ? 2_250 : effect.kind === "player-crash" ? 1_350 : effect.kind === "explosion" || effect.kind === "shatter" ? 2_250 : 390));
         if (state.hearts === 0) {
           state.status = "destroying";
           state.enemyShots = [];
