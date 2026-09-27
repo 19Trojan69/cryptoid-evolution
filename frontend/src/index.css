@@ -1504,12 +1504,14 @@ html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-
 .evolution-route small { margin-left: auto; color: #ffd898; }
 .evolution-route .stage-owned { border-color: #75edbd; background: #123d3f; }
 @media (max-width: 600px) {
-  .landing-shell .shop-overlay { padding: 8px; backdrop-filter: none; }
-  .landing-shell .shop-modal { width: 100%; max-height: calc(100dvh - 16px); border-radius: 18px; clip-path: none; }
-  .landing-shell .shop-tabs { display: flex; gap: 7px; padding: 9px 12px 11px; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; scroll-snap-type: x proximity; }
+  .landing-shell .shop-overlay { display: flex; align-items: center; justify-content: center; padding: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); backdrop-filter: none; }
+  .landing-shell .shop-modal { flex: 0 1 auto; width: 100%; height: 100%; max-height: 900px; border-radius: 18px; clip-path: none; }
+  .landing-shell .shop-modal-header { flex: 0 0 auto; }
+  .landing-shell .shop-tabs { display: flex; flex: 0 0 auto; align-items: center; gap: 7px; min-height: 68px; padding: 9px 12px 11px; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scrollbar-width: none; scroll-snap-type: x proximity; }
   .landing-shell .shop-tabs::-webkit-scrollbar { display: none; }
   .landing-shell .shop-tabs button { flex: 0 0 auto; min-width: 92px; min-height: 46px; padding: 7px 10px; border-radius: 11px; clip-path: none; scroll-snap-align: start; }
   .landing-shell .shop-tabs button > b { white-space: nowrap; }
+  .landing-shell .shop-modal-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
   .landing-shell .ship-selector-shop > .ship-picker:not(.ship-variants) { display: flex; flex-wrap: nowrap; gap: 9px; margin: 13px 0; padding: 2px 2px 11px; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; scroll-snap-type: x proximity; }
   .landing-shell .ship-selector-shop > .ship-picker:not(.ship-variants) .ship-choice { flex: 0 0 116px; min-width: 116px; max-width: 116px; min-height: 116px; padding: 8px 5px; border-radius: 12px; clip-path: none; scroll-snap-align: start; }
   .landing-shell .ship-selector-shop > .ship-picker:not(.ship-variants) .ship-preview { width: 56px; height: 56px; }
