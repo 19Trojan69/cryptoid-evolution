@@ -14,10 +14,10 @@ export default function mountHangarEndpoints(router: Router) {
       const users = req.app.locals.userCollection;
       const paid = await orders.find({ user: uid, paid: true }).project({ product_id: 1, consumed_at: 1 }).toArray();
       const ownedWeapons = hangarCatalog.filter(item => item.kind === "weapon" && paid.some((order: any) => order.product_id === item.id)).map(item => item.id);
-      const ownedArmor = hangarCatalog.filter(item => item.kind === "armor" && paid.some((order: any) => order.product_id === item.id)).map(item => item.id);
+      const ownedArmor = hangarCatalog.filter(item => item.kind === "armor" && paid.some((order: any) => order.product_id === item.id)).map(item => item.id);\n      const ownedShipUpgrades = hangarCatalog.filter(item => item.kind === "ship_upgrade" && paid.some((order: any) => order.product_id === item.id)).map(item => item.id);
        const consumables = hangarCatalog.filter(item => item.kind === "power").map(item => ({ id: item.id, count: paid.filter((order: any) => order.product_id === item.id && !order.consumed_at).length }));
       const user = await users.findOne({ uid });
-      return res.json({ ownedWeapons, ownedArmor, consumables, equippedWeapon: ownedWeapons.includes(user?.loadout?.weapon) ? user.loadout.weapon : null, selectedPower: consumables.some(item => item.id === user?.loadout?.power && item.count > 0) ? user.loadout.power : null });
+      return res.json({ ownedWeapons, ownedArmor, ownedShipUpgrades, consumables, equippedWeapon: ownedWeapons.includes(user?.loadout?.weapon) ? user.loadout.weapon : null, selectedPower: consumables.some(item => item.id === user?.loadout?.power && item.count > 0) ? user.loadout.power : null });
     } catch (error) { return res.status(503).json({ error: "Inventory unavailable" }); }
   });
 
