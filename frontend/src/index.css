@@ -1105,6 +1105,8 @@ html[data-motion="reduced"] .home-crossfire-shot, html[data-motion="reduced"] .h
 .landing-shell .planet-stage { --raid-span: clamp(100px, 27vw, 190px); opacity: .98; }
 .landing-shell .planet { overflow: hidden; background-color: #082a48; box-shadow: 0 0 62px rgba(43, 160, 230, .52), 0 0 110px rgba(107, 67, 211, .26), inset -17px -12px 35px rgba(0, 11, 37, .7); }
 .home-earth-network { position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; border-radius: 50%; pointer-events: none; mix-blend-mode: screen; opacity: .88; filter: drop-shadow(0 0 2px rgba(255, 191, 79, .8)); animation: home-network-breathe 5.4s ease-in-out infinite; }
+.home-network-rim { fill: none; stroke: rgba(255, 188, 82, .38); stroke-width: 1.4; filter: drop-shadow(0 0 5px rgba(255, 170, 54, .65)); }
+.home-network-surface { filter: drop-shadow(0 0 1px rgba(255, 192, 78, .7)); }
 .home-network-grid { fill: none; stroke: rgba(255, 205, 112, .66); stroke-width: 1.08; }
 .home-network-parallels { stroke: rgba(255, 219, 151, .62); stroke-width: .95; }
 .home-network-links { fill: none; stroke: rgba(255, 183, 74, .8); stroke-width: 1.45; stroke-linejoin: round; }

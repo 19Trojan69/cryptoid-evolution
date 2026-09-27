@@ -19,6 +19,7 @@ import MusicVolumeSlider from "./MusicVolumeSlider";
 import Starfield from "./Starfield";
 import { languages, useLocale, type Locale } from "../i18n";
 import EarthGlobe from "./EarthGlobe";
+import EarthNetwork from "./EarthNetwork";
 import { requestGameFullscreen } from "./gameFullscreen";
 import { powerUpSymbols, type PowerUpType } from "./powerUps";
 import { CONTROL_HAND_KEY, CONTROL_SENSITIVITY_KEY, CONTROL_ZONE_KEY, SHIP_START_KEY, readControlHand, readControlSensitivity, readControlZone, readShipStart, type ControlHand, type ControlSensitivity, type ControlZone, type ShipStart } from "./controlPreferences";
@@ -293,14 +294,7 @@ const Shop = () => {
           </div>
         </div>
         <div className="planet-stage" aria-label="Cryptoid Evolution planet status">
-          <div className="planet"><EarthGlobe /><svg className="home-earth-network" viewBox="0 0 320 320" aria-hidden="true">
-              <path className="home-network-grid" d={[-148, -116, -82, -46, 0, 46, 82, 116, 148].map(bend => `M160 5 C${160 + bend} 62 ${160 + bend} 258 160 315`).join(" ")} />
-              <path className="home-network-grid home-network-parallels" d={[[45, 98, 18], [75, 124, 26], [108, 145, 31], [142, 153, 25], [178, 153, 19], [212, 145, 14], [245, 122, 10], [277, 94, 7]].map(([y, half, dip]) => `M${160 - half} ${y} Q160 ${y + dip} ${160 + half} ${y}`).join(" ")} />
-              <path className="home-network-links" d="M160 45 L95 78 L42 135 L102 132 L160 80 L218 132 L278 135 L225 78 L160 45 M95 78 L160 80 L225 78 M42 135 L102 187 L160 135 L218 187 L278 135 M102 132 L160 135 L218 132 M42 190 L102 132 L160 190 L218 132 L278 190 M42 190 L102 187 L160 190 L218 187 L278 190 M102 187 L96 244 L160 190 L224 244 L218 187 M96 244 L160 245 L224 244 L160 285 L96 244 M160 190 L160 245 L160 285" />
-              <path className="home-network-pulse" pathLength="100" d="M160 45 L95 78 L42 135 L102 187 L96 244 L160 285 L224 244 L278 190 L218 132 L225 78 L160 45" />
-              <path className="home-network-pulse home-network-pulse-alt" pathLength="100" d="M42 190 L102 132 L160 80 L225 78 L278 135 L218 187 L160 245 L96 244 L42 190" />
-              <g className="home-network-nodes">{[[160, 45], [95, 78], [160, 80], [225, 78], [42, 135], [102, 132], [160, 135], [218, 132], [278, 135], [42, 190], [102, 187], [160, 190], [218, 187], [278, 190], [96, 244], [160, 245], [224, 244], [160, 285]].map(([cx, cy], index) => <circle key={index} cx={cx} cy={cy} r={index % 4 === 0 ? 3 : 2.2} style={{ animationDelay: `${index * -.33}s` }} />)}</g>
-            </svg></div>
+          <div className="planet"><EarthGlobe /><EarthNetwork /></div>
           <div className="home-crossfire" aria-hidden="true"><i className="home-crossfire-shot home-crossfire-shot-a" /><i className="home-crossfire-shot home-crossfire-shot-b" /><i className="home-crossfire-impact" /></div>
           <div className="home-intercept" aria-hidden="true"><i className="home-intercept-bolt home-intercept-bolt-a" /><i className="home-intercept-bolt home-intercept-bolt-b" /><i className="home-intercept-flash" /></div>
           <div className="home-raid" aria-hidden="true">{[2, 3, 0].map((sprite, index) => <span className={`home-raid-ship home-raid-ship-${index + 1}`} key={sprite}><b /><i style={spriteStyle(sprite)} /></span>)}</div>
