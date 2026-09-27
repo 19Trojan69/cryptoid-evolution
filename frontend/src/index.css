@@ -1362,23 +1362,20 @@ html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-
 /* Readable, compact HUD with a numeric heart count. */
 .game-hud .hud-stat { border-color: color-mix(in srgb, var(--hud-accent) 42%, transparent); box-shadow: inset 0 -2px color-mix(in srgb, var(--hud-accent) 34%, transparent); }
 .game-hud .hud-stat strong { font-variant-numeric: tabular-nums; }
-.game-hud .hud-heart-label { display: grid; place-items: center; height: 16px; color: #ff91a6; line-height: 1; }
-.game-hud .hud-heart-label svg { display: block; width: 15px; height: 15px; filter: drop-shadow(0 0 4px rgba(255, 107, 148, .55)); }
+.game-hud .hud-heart-label { display: grid; place-items: center; height: 13px; color: #ff91a6; line-height: 1; }
+.game-hud .hud-heart-label svg { display: block; width: 13px; height: 13px; filter: drop-shadow(0 0 4px rgba(255, 107, 148, .55)); }
 .game-hud .hearts-stat .hearts { display: block; color: #ff9aaf !important; font: 700 20px/1 'Oxanium', 'DM Mono', monospace; font-variant-numeric: tabular-nums; letter-spacing: 0; white-space: nowrap; }
 @media (max-width: 560px) {
   .game-hud { grid-template-columns: 40px minmax(0, 1.27fr) minmax(0, 1.16fr) repeat(3, minmax(0, 1fr)) 40px; gap: 3px; }
-  .game-hud .hud-stat { min-height: 49px; gap: 3px; padding: 3px 1px; }
+  .game-hud .hud-stat { min-height: 40px; gap: 1px; padding: 2px 1px; }
   .game-hud .hud-stat > span { font-size: clamp(8px, 2.3vw, 9px); letter-spacing: .02em; }
-  .game-hud .hud-stat strong:not(.hearts) { font-size: clamp(14px, 4.4vw, 19px); line-height: 1.05; }
-  .game-hud .hud-stat.score-hud strong { font-size: clamp(12px, 4vw, 18px); }
+  .game-hud .hud-stat strong:not(.hearts) { font-size: clamp(14px, 4vw, 17px); line-height: 1; }
+  .game-hud .hud-stat.score-hud strong { font-size: clamp(12px, 3.8vw, 16px); }
   .game-hud .hud-stat strong small { font-size: clamp(10px, 3.1vw, 13px); }
-  .game-hud .score-hud .hud-coin-inline { font-size: 10px; }
-  .game-hud .hud-heart-label svg { width: 17px; height: 17px; }
-  .game-hud .hearts-stat .hearts { font-size: clamp(16px, 4.4vw, 20px); }
+  .game-hud .score-hud .hud-coin-inline { font-size: 9px; }
+  .game-hud .hud-heart-label svg { width: 13px; height: 13px; }
+  .game-hud .hearts-stat .hearts { font-size: clamp(14px, 4vw, 17px); }
   .game-hud .chain-blocks { gap: 2px; height: 4px; }
   .game-hud .chain-blocks i { width: 7px; height: 4px; }
-  .game-hud .hud-actions .home-control, .game-hud .pause-control { width: 40px; min-width: 40px; height: 49px; min-height: 49px; }
-  .game-label { top: calc(max(4px, env(safe-area-inset-top)) + 58px); }
-  .power-status { top: calc(max(4px, env(safe-area-inset-top)) + 73px); }
-  .bonus-counter { top: calc(max(4px, env(safe-area-inset-top)) + 98px); }
+  .game-hud .hud-actions .home-control, .game-hud .pause-control { width: 40px; min-width: 40px; height: 40px; min-height: 40px; }
 }
