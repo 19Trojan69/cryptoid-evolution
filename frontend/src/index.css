@@ -213,26 +213,24 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .game-shell { width: 100%; height: 100dvh; overflow: hidden; background: #030e1b; color: #f0f7f5; user-select: none; touch-action: none; }
 .game-field { position: relative; width: 100%; height: 100%; overflow: clip; isolation: isolate; touch-action: none; background: radial-gradient(circle at 50% 78%, rgba(18, 87, 91, .24), transparent 24%), linear-gradient(180deg, #020b19 0%, #061d32 60%, #082c3a 100%); }
 .starfield { position: absolute; inset: -3%; z-index: 0; overflow: hidden; pointer-events: none; transform: translate3d(var(--star-parallax-x), var(--star-parallax-y), 0); }
-/* Soft gas clouds drift behind the stars across every sector. Gradients keep edges feathered without a large blur layer. */
-.nebula-field { position: absolute; inset: -8%; overflow: hidden; pointer-events: none; isolation: isolate; }
-.nebula-cloud { position: absolute; display: block; mix-blend-mode: screen; transform-origin: 50% 50%; will-change: transform, opacity; }
-.nebula-cloud-rose { left: -24%; top: -10%; width: 98%; height: 78%; background: radial-gradient(ellipse 57% 49% at 39% 47%, rgba(255, 171, 178, .35), rgba(236, 153, 197, .15) 48%, transparent 73%), radial-gradient(ellipse 39% 55% at 74% 65%, rgba(255, 198, 160, .22), transparent 75%); animation: nebula-drift-rose 153s ease-in-out infinite alternate, nebula-tint-rose 191s ease-in-out infinite alternate; }
-.nebula-cloud-lilac { right: -27%; top: 7%; width: 105%; height: 88%; background: radial-gradient(ellipse 55% 58% at 58% 43%, rgba(193, 174, 255, .3), rgba(160, 199, 255, .16) 50%, transparent 73%), radial-gradient(ellipse 43% 46% at 29% 70%, rgba(221, 172, 249, .17), transparent 75%); animation: nebula-drift-lilac 179s ease-in-out infinite alternate, nebula-tint-lilac 223s ease-in-out infinite alternate; }
-.nebula-cloud-mint { left: -12%; bottom: -34%; width: 125%; height: 79%; background: radial-gradient(ellipse 58% 47% at 38% 55%, rgba(161, 238, 221, .25), rgba(150, 213, 234, .12) 53%, transparent 75%), radial-gradient(ellipse 38% 50% at 79% 37%, rgba(246, 190, 227, .19), transparent 75%); animation: nebula-drift-mint 201s ease-in-out infinite alternate, nebula-tint-mint 247s ease-in-out infinite alternate; }
-.nebula-cloud::after { content: ''; position: absolute; inset: 11%; background-image: radial-gradient(circle, rgba(255, 247, 235, .87) 0 1px, transparent 1.7px), radial-gradient(circle, rgba(223, 231, 255, .65) 0 .8px, transparent 1.6px); background-size: 83px 91px, 127px 109px; background-position: 8px 12px, 33px 51px; opacity: .36; -webkit-mask-image: radial-gradient(ellipse, #000 8%, transparent 72%); mask-image: radial-gradient(ellipse, #000 8%, transparent 72%); animation: nebula-glitter 15s ease-in-out infinite alternate; }
-.nebula-cloud-lilac::after { animation-delay: -5s; }
-.nebula-cloud-mint::after { animation-delay: -10s; }
-@keyframes nebula-drift-rose { from { transform: translate3d(-3%, 0, 0) rotate(-9deg) scale(1); } to { transform: translate3d(12%, 7%, 0) rotate(8deg) scale(1.13); } }
-@keyframes nebula-drift-lilac { from { transform: translate3d(4%, -5%, 0) rotate(7deg) scale(1.05); } to { transform: translate3d(-11%, 8%, 0) rotate(-6deg) scale(.96); } }
-@keyframes nebula-drift-mint { from { transform: translate3d(-5%, 4%, 0) rotate(-4deg) scale(1); } to { transform: translate3d(8%, -10%, 0) rotate(6deg) scale(1.08); } }
-@keyframes nebula-tint-rose { from { opacity: .37; } to { opacity: .77; } }
-@keyframes nebula-tint-lilac { from { opacity: .72; } to { opacity: .35; } }
-@keyframes nebula-tint-mint { from { opacity: .3; } to { opacity: .68; } }
-@keyframes nebula-glitter { from { opacity: .21; } to { opacity: .49; } }
-.starfield-paused .nebula-cloud, .starfield-paused .nebula-cloud::after { animation-play-state: paused; }
-@media (prefers-reduced-motion: reduce) { .nebula-cloud, .nebula-cloud::after { animation: none !important; } }
-html[data-motion="reduced"] .nebula-cloud, html[data-motion="reduced"] .nebula-cloud::after { animation: none !important; }
-.landing-shell .nebula-field { opacity: .7; }
+/* Pastel nebula: a fixed mist layer and two small composited clouds, with no blur, masks or blend mode. */
+.nebula-field { position: absolute; inset: 0; overflow: hidden; pointer-events: none; contain: paint; background: radial-gradient(ellipse 43% 30% at 77% 78%, rgba(151, 239, 213, .24), transparent 88%), radial-gradient(ellipse 33% 27% at 54% 28%, rgba(199, 179, 255, .15), transparent 86%); }
+.nebula-cloud { position: absolute; display: block; pointer-events: none; will-change: transform, opacity; }
+.nebula-cloud-rose { left: -10%; top: 1%; width: 78%; height: 59%; background: radial-gradient(ellipse 55% 52% at 42% 50%, rgba(255, 162, 198, .52), rgba(247, 177, 213, .21) 46%, transparent 76%), radial-gradient(ellipse 34% 40% at 75% 62%, rgba(255, 208, 170, .3), transparent 78%); animation: nebula-drift-rose 176s ease-in-out infinite alternate, nebula-tint-rose 203s ease-in-out infinite alternate; }
+.nebula-cloud-lilac { right: -12%; top: 22%; width: 82%; height: 65%; background: radial-gradient(ellipse 54% 52% at 57% 46%, rgba(190, 166, 255, .5), rgba(166, 197, 255, .2) 44%, transparent 77%), radial-gradient(ellipse 35% 40% at 22% 70%, rgba(240, 172, 237, .29), transparent 78%); animation: nebula-drift-lilac 211s ease-in-out infinite alternate, nebula-tint-lilac 239s ease-in-out infinite alternate; }
+@keyframes nebula-drift-rose { from { transform: translate3d(-2%, -1%, 0); } to { transform: translate3d(7%, 5%, 0); } }
+@keyframes nebula-drift-lilac { from { transform: translate3d(3%, -3%, 0); } to { transform: translate3d(-6%, 5%, 0); } }
+@keyframes nebula-tint-rose { from { opacity: .64; } to { opacity: .91; } }
+@keyframes nebula-tint-lilac { from { opacity: .88; } to { opacity: .57; } }
+.starfield-paused .nebula-cloud { animation-play-state: paused; }
+@media (max-width: 700px) {
+  .nebula-cloud { will-change: opacity; }
+  .nebula-cloud-rose { animation: nebula-tint-rose 203s ease-in-out infinite alternate; }
+  .nebula-cloud-lilac { animation: nebula-tint-lilac 239s ease-in-out infinite alternate; }
+}
+@media (prefers-reduced-motion: reduce) { .nebula-cloud { animation: none !important; will-change: auto; } }
+html[data-motion="reduced"] .nebula-cloud { animation: none !important; will-change: auto; }
+.landing-shell .nebula-field { opacity: .78; }
 .milky-band { position: absolute; inset: -40%; background: radial-gradient(ellipse 18% 48% at 50% 50%, #98b6d624, #8c91c112 48%, transparent 100%), radial-gradient(ellipse 38% 43% at 49% 49%, #b7bbeb14, transparent 85%); filter: blur(13px); transform: rotate(-31deg); opacity: .62; }
 .starfield-sector-2 .milky-band, .starfield-sector-5 .milky-band { opacity: .88; }
 .starfield-stars { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }

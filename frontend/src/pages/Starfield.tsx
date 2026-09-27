@@ -28,7 +28,7 @@ const Starfield = ({ sector, player, paused }: { sector: number; player: PlayerP
   } as CSSProperties;
   const palette = ((sector - 1) % 6) + 1;
   return <div className={`starfield starfield-sector-${palette}${paused ? " starfield-paused" : ""}`} style={style} aria-hidden="true">
-    <div className="nebula-field"><span className="nebula-cloud nebula-cloud-rose" /><span className="nebula-cloud nebula-cloud-lilac" /><span className="nebula-cloud nebula-cloud-mint" /></div>
+    <div className="nebula-field"><span className="nebula-cloud nebula-cloud-rose" /><span className="nebula-cloud nebula-cloud-lilac" /></div>
     <div className="milky-band" />
     <svg className="starfield-stars starfield-distant" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice">
       {distant.map((star, index) => <circle key={index} cx={star.x} cy={star.y} r={star.radius} fill={star.color} opacity={star.opacity} />)}
