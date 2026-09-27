@@ -13,7 +13,7 @@ import Starfield from "./Starfield";
 import { BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusEntryGap, bonusHeartReward, bonusPosition, bonusReward, bonusShowcaseShip, isBonusSection, type BonusTarget } from "./bonusChallenge";
 import { appendSectionBlock, BLOCKS_PER_CHAIN } from "./networkChain";
 import { damageSectorBoss, bossFireInterval, bossVulnerable, createSectorBoss, moveSectorBoss, nextAfterClear, type SectorBoss } from "./sectorBoss";
-import { bossNozzleStyles, enemySprite, selectedShip, shardBalance, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
+import { enemySprite, selectedShip, shardBalance, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
 import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio";
 import { DEFAULT_EFFECTS_VOLUME, DEFAULT_MUSIC_VOLUME, EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, resetAudioVolumeDefaults } from "./musicPreferences";
@@ -187,9 +187,6 @@ const cryptoidMotionClass = (asteroid: Asteroid) => {
 
 const engineTrails = (sprite: number, className: "exhaust" | "player-engine") =>
   shipNozzleStyles(sprite).map((style, index) => <span key={`${className}-${index}`} className={className} style={style} />);
-
-const bossEngineTrails = () =>
-  bossNozzleStyles().map((style, index) => <span key={`boss-exhaust-${index}`} className={`exhaust ${index === 1 ? "exhaust-main" : "exhaust-wing"}`} style={style} />);
 
 const scatteredPieces = (effect: Effect, count: number, sprite: number) => {
   const columns = count === 14 ? 4 : count === 8 ? 4 : 2;
@@ -990,14 +987,8 @@ const GamePage = () => {
         {game.status === "playing" && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite"><span>{levelComplete || levelIntro ? sectorName(game.sector) : game.encounter !== "normal" ? `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.phase === "SECTOR_CLEAR" ? isBonusSection(game.section) ? t("BONUS COMPLETE") : t("ROUND COMPLETE") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}`}</span><strong>{transitionHeadline}</strong>{game.phase === "SECTOR_INTRO" && game.encounter === "normal" && isBonusSection(game.section) && <small>{t("HIT THE FLYING TARGETS")}</small>}{game.phase === "SECTOR_CLEAR" && game.encounter === "normal" && <small className="chain-result">{game.chainResult}</small>}</div>}
         {game.status === "playing" && game.encounter === "normal" && !isBonusSection(game.section) && !formationStartedRef.current && (game.phase === "SECTOR_INTRO" || game.phase === "ENTRY" || game.phase === "FORMATION") && <div className="formation-data-stream" aria-hidden="true">{FORMATION_DATA_ROWS.map((row, index) => <div className="formation-data-row" key={index}><span>{row.repeat(4)}</span><span>{row.repeat(4)}</span></div>)}</div>}
         {game.encounter === "normal" && !isBonusSection(game.section) && (game.phase === "ENTRY" || game.phase === "FORMATION" || game.phase === "REFORM") && game.asteroids.map(asteroid => { const locked = asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration; return <div key={`formation-${asteroid.id}`} className={`formation-target${locked ? " formation-target-locked" : ""}`} style={{ left: asteroid.entryTargetX, top: asteroid.entryTargetY, width: asteroid.radius * 1.65, height: asteroid.radius * 1.65 }} aria-hidden="true"><span /></div>; })}
-        {game.boss && game.encounter === "boss-fight" && <div className={`asteroid cryptoid cryptoid-heavy cryptoid-bitrock sector-boss boss-variant-${((game.sector - 1) % 6) + 1} cryptoid-cruise${game.boss.fireElapsed >= bossFireInterval(game.boss, game.sector) - 550 ? " boss-warning" : ""}${game.boss.health <= game.boss.maxHealth / 2 ? " boss-enraged cryptoid-boost" : ""}${performance.now() - game.boss.lastDamageAt < 240 ? " boss-hit" : ""}`} style={{ left: game.boss.x, top: game.boss.y, transform: "translate(-50%, -50%)", ...shipHullStyle(19, true) }} title={`${t("CORE WARDEN")} · ${t("Sector")} boss`}>
-          <div className="boss-aura" aria-hidden="true" />
-          <div className="ship-visual"><div className="fleet-sprite" style={spriteStyle(19)} />{bossEngineTrails()}</div>
-          <div className="boss-ornament" aria-hidden="true">
-            <i className="boss-armor boss-armor-left" /><i className="boss-armor boss-armor-right" />
-            <i className="boss-turret boss-turret-left" /><i className="boss-turret boss-turret-right" />
-            <i className="boss-reactor" />
-          </div>
+        {game.boss && game.encounter === "boss-fight" && <div className={`asteroid sector-boss boss-variant-${((game.sector - 1) % 6) + 1}${game.boss.fireElapsed >= bossFireInterval(game.boss, game.sector) - 550 ? " boss-warning" : ""}${game.boss.health <= game.boss.maxHealth / 2 ? " boss-enraged" : ""}${performance.now() - game.boss.lastDamageAt < 240 ? " boss-hit" : ""}`} style={{ left: game.boss.x, top: game.boss.y, transform: "translate(-50%, -50%)" }} title={`${t("CORE WARDEN")} · ${t("Sector")} boss`}>
+          <span className="boss-hull" aria-hidden="true" />
           <span className="health-bar" data-critical={game.boss.health / game.boss.maxHealth <= .3} role="progressbar" aria-label={t("Boss hull")} aria-valuenow={Math.ceil(game.boss.health / game.boss.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${game.boss.health / game.boss.maxHealth * 100}%` }} /><small className="boss-health-readout">{Math.ceil(game.boss.health / game.boss.maxHealth * 100)}%</small></span>
         </div>}
         {game.bonusTargets.map(target => <div key={target.id} className="asteroid asteroid-small cryptoid bonus-ship cryptoid-boost" style={{ ...alignedSpritePosition(target.x, target.y, target.sprite, 50), transform: "translate(-50%, -50%)" }}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={target.sprite} color={target.color} />{engineTrails(target.sprite, "exhaust")}</div></div>)}
