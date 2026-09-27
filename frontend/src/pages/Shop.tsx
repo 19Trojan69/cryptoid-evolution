@@ -22,8 +22,8 @@ import { requestGameFullscreen } from "./gameFullscreen";
 import { powerUpSymbols, type PowerUpType } from "./powerUps";
 import { CONTROL_HAND_KEY, CONTROL_SENSITIVITY_KEY, CONTROL_ZONE_KEY, SHIP_START_KEY, readControlHand, readControlSensitivity, readControlZone, readShipStart, type ControlHand, type ControlSensitivity, type ControlZone, type ShipStart } from "./controlPreferences";
 
-type Offer = { id: string; kind: "weapon" | "power" | "armor"; name: string; description: string; pricePi: number };
-type Inventory = { ownedWeapons: string[]; ownedArmor: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
+type Offer = { id: string; kind: "weapon" | "power" | "armor" | "ship_upgrade"; name: string; description: string; pricePi: number; shipIndex?: number; stage?: 2 | 3 };
+type Inventory = { ownedWeapons: string[]; ownedArmor: string[]; ownedShipUpgrades?: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
 type Leader = { rank: number; username: string; score: number };
 
 const shopTabs = [
@@ -411,6 +411,22 @@ const Shop = () => {
         <p className="hangar-selection">{shopView === "hangar" ? t("EQUIPPED") : t("Preview:")} <strong>{previewSkin.name} · {t(previewColor.name)}</strong> · {previewCount ? `${t("Owned")} ×${previewCount}` : t("Not owned")}{shopView === "shop" && selected.skin.id === previewSkin.id && selected.color.id === previewColor.id && <span> · {t("EQUIPPED")}</span>}</p>
         {shopView === "shop" && <div className="hangar-actions"><button className="button button-primary hangar-action" type="button" onClick={purchasePreview} disabled={shards < (previewSkin.price || EXTRA_STARTER_PRICE)}>{t("Buy another for")} ◆ {previewSkin.price || EXTRA_STARTER_PRICE}</button></div>}
         {shopView === "shop" && shards < (previewSkin.price || EXTRA_STARTER_PRICE) && <span className="shard-help">◆ {(previewSkin.price || EXTRA_STARTER_PRICE) - shards} {t("more Shards needed")}</span>}
+        {shopView === "shop" && <div className="hangar-offers ship-evolution-offers">
+          <h3>{t("Ship evolution")}</h3>
+          <p>{t("Stage 1 hulls use Shards. Advanced and Elite evolution stages are permanent Pi unlocks. Colors remain separate skins.")}</p>
+          <div className="hangar-offer-grid">
+            {offers.filter(offer => offer.kind === "ship_upgrade" && offer.shipIndex === previewSkin.sprite).map(offer => {
+              const owned = inventory?.ownedShipUpgrades?.includes(offer.id) ?? false;
+              const prerequisite = offer.stage !== 3 || (inventory?.ownedShipUpgrades?.includes(`ship_${String((offer.shipIndex ?? 0) + 1).padStart(2, "0")}_stage_2`) ?? false);
+              return <article key={offer.id} className={`hangar-offer hangar-offer-ship${owned ? " hangar-offer-selected" : ""}`}>
+                <div className="offer-preview weapon-preview" aria-hidden="true"><span className="preview-grid" /><span className="preview-ship"><PaintedShip sprite={previewSkin.sprite} color="silver" /></span><small>{offer.stage === 2 ? "ADVANCED" : "ELITE"}</small></div>
+                <h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span>{offer.pricePi} π · {t("Permanent unlock")}</span>
+                <strong>{owned ? t("OWNED") : prerequisite ? t("NOT OWNED") : t("Requires Stage 2")}</strong>
+                {!owned && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady || !inventory || !prerequisite} onClick={() => orderProduct(`Cryptoid ${offer.name} · permanent ship evolution`, offer.pricePi, { productId: offer.id }, () => { setHangarMessage(`${offer.name} ${t("purchase confirmed.")}`); void refreshInventory(); })}>{t("Buy with π")}</button>}
+              </article>;
+            })}
+          </div>
+        </div>}
         {hangarMessage && <p className="hangar-message" role="status">{hangarMessage}</p>}
       </section>}
 
