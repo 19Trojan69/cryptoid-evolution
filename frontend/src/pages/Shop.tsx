@@ -283,6 +283,8 @@ const Shop = () => {
               <div className="home-launch-bay" role="img" aria-label={`${selected.skin.name} · ${t(selected.color.name)}`}>
                 <span className="home-launch-target home-launch-target-left" aria-hidden="true" />
                 <span className="home-launch-target home-launch-target-right" aria-hidden="true" />
+                <span className="home-launch-shot home-launch-shot-left" aria-hidden="true" />
+                <span className="home-launch-shot home-launch-shot-right" aria-hidden="true" />
                 <div className={`home-defense-ship${selected.color.id === "grey" ? " home-defense-grey" : ""}`} style={{ "--ship-glow": selected.color.glow, ...shipNozzleStyle(selected.skin.sprite) } as CSSProperties}><i style={spriteStyle(selected.skin.sprite)} /><PaintedShip sprite={selected.skin.sprite} color={selected.color.id} /><span className="home-thrust home-thrust-left" /><span className="home-thrust home-thrust-right" /></div>
               </div>
               <button className="button button-primary home-play-button" type="button" onClick={enterGame}>{t("Play")} <span className="button-glyph" aria-hidden="true">→</span></button>
@@ -297,6 +299,7 @@ const Shop = () => {
           <div className="orbit orbit-two"><span className="satellite-motion"><i className="satellite-body" /></span></div>
           <div className="orbit orbit-three"><span className="satellite-motion"><i className="satellite-body" /></span></div>
           <div className="planet"><EarthGlobe /></div>
+          <div className="home-crossfire" aria-hidden="true"><i className="home-crossfire-shot home-crossfire-shot-a" /><i className="home-crossfire-shot home-crossfire-shot-b" /><i className="home-crossfire-impact" /></div>
           <div className="home-formation" aria-hidden="true">{[2, 3, 0].map((sprite, index) => <i key={index} style={spriteStyle(sprite)} />)}</div>
           <div className="home-enemy-ship" style={{ "--ship-glow": "#ffd36b", ...shipNozzleStyle(3, true) } as CSSProperties}><i style={spriteStyle(3)} /><span className="home-enemy-thrust home-enemy-thrust-left" /><span className="home-enemy-thrust home-enemy-thrust-right" /></div>
           <span className="orbit-status">{t('ORBITAL DEFENSE ACTIVE')}</span>

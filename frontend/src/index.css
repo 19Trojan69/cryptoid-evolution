@@ -1031,3 +1031,28 @@ html[data-motion="reduced"] .shooting-star { display: none; }
   .landing-shell .home-launch .home-defense-ship, .home-formation { animation: none; }
 }
 html[data-motion="reduced"] .landing-shell .home-launch .home-defense-ship, html[data-motion="reduced"] .home-formation { animation: none; }
+
+/* Lightweight combat beats keep the Earth scene alive without obstructing controls. */
+.home-crossfire { position: absolute; z-index: 3; inset: 0; overflow: hidden; border-radius: 50%; pointer-events: none; }
+.home-crossfire-shot { position: absolute; display: block; width: 3px; height: 24px; border-radius: 3px; background: linear-gradient(#fff6ce, #ff8a4b 38%, #e73c50 75%, transparent); box-shadow: 0 0 8px #ff764e, 0 0 16px #ff484e; opacity: 0; will-change: transform, opacity; }
+.home-crossfire-shot-a { left: 27%; top: 18%; animation: home-hostile-shot-a 5s linear infinite; }
+.home-crossfire-shot-b { left: 73%; top: 16%; animation: home-hostile-shot-b 5s linear infinite 2.4s; }
+.home-crossfire-impact { position: absolute; left: 52%; top: 53%; display: block; width: 36px; height: 36px; border: 2px solid #ffd081; border-radius: 50%; background: radial-gradient(circle, #fff9d1 0 8%, #ff9a4f 19%, transparent 65%); box-shadow: 0 0 18px #ffb464, 0 0 30px #ff68477a; opacity: 0; animation: home-impact-flash 5s ease-out infinite; }
+@keyframes home-hostile-shot-a { 0%, 18% { opacity: 0; transform: translate(0, 0) rotate(-35deg) scaleY(.5); } 21% { opacity: 1; } 46% { opacity: 1; transform: translate(94px, 128px) rotate(-35deg); } 52%, 100% { opacity: 0; transform: translate(111px, 150px) rotate(-35deg) scaleY(.5); } }
+@keyframes home-hostile-shot-b { 0%, 16% { opacity: 0; transform: translate(0, 0) rotate(22deg) scaleY(.5); } 20% { opacity: 1; } 44% { opacity: 1; transform: translate(-43px, 119px) rotate(22deg); } 51%, 100% { opacity: 0; transform: translate(-55px, 148px) rotate(22deg) scaleY(.5); } }
+@keyframes home-impact-flash { 0%, 42% { opacity: 0; transform: scale(.2); } 47% { opacity: .9; transform: scale(.7); } 56%, 100% { opacity: 0; transform: scale(2); } }
+.landing-shell .home-formation { animation: home-formation-attack 7s ease-in-out infinite; }
+.landing-shell .home-formation i:nth-child(2) { animation: home-wingman-dive 7s ease-in-out infinite; }
+.landing-shell .home-enemy-ship { animation: home-hostile-sweep 5.6s ease-in-out infinite; }
+@keyframes home-formation-attack { 0%, 100% { transform: translate(-8px, 4px) rotate(-12deg); } 40% { transform: translate(34px, 20px) rotate(5deg); } 68% { transform: translate(58px, 55px) rotate(24deg); } }
+@keyframes home-wingman-dive { 0%, 32%, 100% { transform: rotate(180deg) translateY(0); } 57% { transform: rotate(167deg) translateY(-13px); } 77% { transform: rotate(180deg) translateY(0); } }
+@keyframes home-hostile-sweep { 0%, 100% { transform: translate(0, 0) rotate(0); } 55% { transform: translate(-24px, 27px) rotate(-12deg); } }
+.home-launch-shot { position: absolute; z-index: 4; top: 25%; width: 3px; height: 17px; border-radius: 3px; background: linear-gradient(#fff, #72e9fa, #3a9ee9, transparent); box-shadow: 0 0 9px #76f2ff, 0 0 17px #47bbff; opacity: 0; pointer-events: none; animation: home-launch-fire 2.7s ease-out infinite; }
+.home-launch-shot-left { left: calc(50% - 7px); }
+.home-launch-shot-right { left: calc(50% + 7px); animation-delay: .14s; }
+@keyframes home-launch-fire { 0%, 34% { opacity: 0; transform: translateY(14px) scaleY(.4); } 42% { opacity: .95; transform: translateY(0) scaleY(1); } 67%, 100% { opacity: 0; transform: translateY(-37px) scaleY(.7); } }
+.landing-shell .hero-actions .home-play-button { animation: home-play-charge 3.2s ease-in-out infinite; }
+@keyframes home-play-charge { 0%, 100% { box-shadow: inset 0 0 24px rgba(255,255,255,.24), 0 0 19px rgba(40,226,194,.3), 0 8px 26px rgba(14,140,152,.18); } 50% { box-shadow: inset 0 0 26px rgba(255,255,255,.4), 0 0 36px rgba(52,246,216,.63), 0 10px 33px rgba(14,140,152,.3); } }
+@media (max-width: 700px) { .home-crossfire-shot { height: 19px; } .home-crossfire-impact { width: 25px; height: 25px; } }
+@media (prefers-reduced-motion: reduce) { .home-crossfire-shot, .home-crossfire-impact, .landing-shell .home-formation, .landing-shell .home-formation i:nth-child(2), .landing-shell .home-enemy-ship, .home-launch-shot, .landing-shell .hero-actions .home-play-button { animation: none; } }
+html[data-motion="reduced"] .home-crossfire-shot, html[data-motion="reduced"] .home-crossfire-impact, html[data-motion="reduced"] .landing-shell .home-formation, html[data-motion="reduced"] .landing-shell .home-formation i:nth-child(2), html[data-motion="reduced"] .landing-shell .home-enemy-ship, html[data-motion="reduced"] .home-launch-shot, html[data-motion="reduced"] .landing-shell .hero-actions .home-play-button { animation: none; }
