@@ -8,6 +8,10 @@ export const PURCHASED_POWER_UP_DURATION_MS = 60_000;
 export const OVERDRIVE_DURATION_MS = POWER_UP_DURATION_MS;
 export const RAPID_DURATION_MS = POWER_UP_DURATION_MS;
 export const MAX_ACTIVE_POWER_UPS = 3;
+export const MAX_SHIELD_CHARGES = 5;
+export const MAX_STACKED_POWER_MS = 120_000;
+
+const extendPower = (remaining: number | undefined, added: number) => Math.min(MAX_STACKED_POWER_MS, Math.max(0, remaining ?? 0) + added);
 
 export const powerUpNames: Record<PowerUpType, string> = {
   shield: "Shield", overdrive: "Overdrive", weapon: "Weapon Upgrade", rapid: "Rapid Fire", bomb: "Nova Bomb", emp: "EMP Pulse",
@@ -16,10 +20,10 @@ export const powerUpSymbols: Record<PowerUpType, string> = {
   shield: "⬡", overdrive: "ϟ", weapon: "⇧", rapid: "»", bomb: "✹", emp: "◈",
 };
 export const powerUpDescriptions: Record<PowerUpType, string> = {
-  shield: "Absorbs the next hit for up to 20 seconds.",
-  overdrive: "Powers each shot up to deal two damage for 20 seconds.",
-  weapon: "Raises your weapon by one level for 20 seconds, up to level 5.",
-  rapid: "Sets automatic fire to its fast cadence for 20 seconds.",
+  shield: "Absorbs up to five hits; another pickup adds one charge and 20 seconds, up to two minutes.",
+  overdrive: "Powers shots to deal two damage; repeat pickups add 20 seconds, up to two minutes.",
+  weapon: "Raises your weapon up to level 5; repeat pickups add 20 seconds, up to two minutes.",
+  rapid: "Speeds up automatic fire; repeat pickups add 20 seconds, up to two minutes.",
   bomb: "Clears visible enemies and hostile shots; damages the boss.",
   emp: "Freezes enemy attacks and movement for 7 seconds.",
 };
@@ -40,10 +44,10 @@ export const movePowerUps = (drops: PowerUp[], delta: number, height: number) =>
   drops.map(drop => ({ ...drop, y: drop.y + delta * 0.052 })).filter(drop => drop.y < height - 36);
 
 export const collectPowerUp = (status: PowerStatus, type: PowerUpType, durationMs = POWER_UP_DURATION_MS): PowerStatus => {
-  if (type === "shield") return { ...status, shieldCharges: Math.min(2, status.shieldCharges + 1), shieldMs: durationMs };
+  if (type === "shield") return { ...status, shieldCharges: Math.min(MAX_SHIELD_CHARGES, status.shieldCharges + 1), shieldMs: extendPower(status.shieldMs, durationMs) };
   if (type === "weapon") return { ...status, weaponLevel: Math.min(5, (status.weaponLevel ?? 1) + 1) };
-  if (type === "rapid") return { ...status, rapidFireMs: durationMs };
-  if (type === "overdrive") return { ...status, overdriveMs: durationMs };
+  if (type === "rapid") return { ...status, rapidFireMs: extendPower(status.rapidFireMs, durationMs) };
+  if (type === "overdrive") return { ...status, overdriveMs: extendPower(status.overdriveMs, durationMs) };
   return status;
 };
 
