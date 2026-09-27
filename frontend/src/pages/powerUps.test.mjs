@@ -31,7 +31,7 @@ test("shield absorbs impacts and combat power-ups never restore hearts", () => {
   assert.equal(collectPowerUp(status, "rapid").hearts, 2);
   assert.equal(collectPowerUp({ ...status, weaponLevel: 5 }, "weapon").weaponLevel, 5);
   assert.equal(collectPowerUp(status, "rapid").rapidFireMs, 20_000);
-  assert.equal(collectPowerUp(status, "shield", 60_000).shieldMs, 60_000);
+  assert.equal(collectPowerUp(status, "shield", 60_000).shieldMs, 80_000);
   assert.equal(collectPowerUp(status, "rapid", 60_000).rapidFireMs, 60_000);
   assert.equal(collectPowerUp(status, "overdrive", 60_000).overdriveMs, 60_000);
 });
@@ -50,4 +50,22 @@ test("every power-up has a unique coin symbol and a field-guide description", ()
     assert.ok(powerUpNames[type].length > 0);
     assert.ok(powerUpDescriptions[type].length > 20);
   }
+});
+
+test("duplicate drops add remaining protection and time within limits", () => {
+  let state = { hearts: 3, shieldCharges: 0, shieldMs: 0, rapidFireMs: 0, overdriveMs: 0 };
+  for (let i = 0; i < 8; i++) state = collectPowerUp(state, "shield");
+  assert.equal(state.shieldCharges, 5);
+  assert.equal(state.shieldMs, 120_000);
+  state = receiveImpacts(state, 2);
+  assert.equal(state.shieldCharges, 3);
+  assert.equal(state.hearts, 3);
+  state = collectPowerUp(state, "shield");
+  assert.equal(state.shieldCharges, 4);
+  for (let i = 0; i < 8; i++) state = collectPowerUp(state, "rapid");
+  assert.equal(state.rapidFireMs, 120_000);
+  state = collectPowerUp({ ...state, rapidFireMs: 12_000 }, "rapid");
+  assert.equal(state.rapidFireMs, 32_000);
+  for (let i = 0; i < 8; i++) state = collectPowerUp(state, "overdrive");
+  assert.equal(state.overdriveMs, 120_000);
 });
