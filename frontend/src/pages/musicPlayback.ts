@@ -6,10 +6,12 @@ export class MusicPlayer {
   private context: AudioContext | null = null;
   private gain: GainNode | null = null;
   private volume: number;
+  private source: string;
   private closed = false;
 
   constructor(src: string, volume: number) {
     this.audio = new Audio(src);
+    this.source = src;
     this.audio.loop = true;
     this.audio.preload = "auto";
     this.volume = volume;
@@ -29,6 +31,23 @@ export class MusicPlayer {
       this.gain = gain;
     } catch {
       void context.close();
+    }
+  }
+
+  get currentSource() { return this.source; }
+
+  // Switching sources on the unlocked media element retains its iOS playback permission
+  // and the existing AudioContext/GainNode. A new Audio() here would need a fresh gesture.
+  setSource(src: string, resumeAt = 0) {
+    if (this.closed || this.source === src) return;
+    this.audio.pause();
+    this.source = src;
+    this.audio.src = src;
+    this.audio.load();
+    if (resumeAt > 0) {
+      this.audio.addEventListener("loadedmetadata", () => {
+        if (this.source === src) this.audio.currentTime = Math.min(resumeAt, this.audio.duration || resumeAt);
+      }, { once: true });
     }
   }
 
