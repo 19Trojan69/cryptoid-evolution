@@ -1399,3 +1399,89 @@ html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-
 .sector-boss.boss-warning .boss-hull { filter: hue-rotate(var(--boss-hue)) brightness(1.12) drop-shadow(0 0 9px #ff9b7e); }
 .sector-boss.boss-enraged .boss-hull { filter: hue-rotate(var(--boss-hue)) saturate(1.2) drop-shadow(0 0 9px #ff685e); }
 .sector-boss.boss-hit .boss-hull { filter: brightness(1.65) drop-shadow(0 0 11px #dffbff); }
+
+/* Longer, screen-bound notices for Crypto, Network Chain and sector information. */
+.game-field .sector-banner {
+  z-index: 6;
+  box-sizing: border-box;
+  left: 50%;
+  width: min(460px, calc(100% - 24px));
+  max-width: calc(100% - 24px);
+  padding: 12px 16px;
+  border: 1px solid rgba(113, 225, 226, .42);
+  background: linear-gradient(135deg, rgba(5, 20, 38, .94), rgba(12, 34, 52, .91));
+  box-shadow: 0 10px 26px rgba(0, 7, 20, .55), inset 0 0 20px rgba(38, 181, 171, .1);
+  gap: 8px;
+  text-wrap: balance;
+}
+.game-field .sector-banner:not(.level-intro-banner):not(.level-complete-banner) { top: 24%; }
+.game-field .sector-banner span {
+  max-width: 100%;
+  font-size: clamp(11px, 3vw, 14px);
+  letter-spacing: .12em;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.game-field .sector-banner strong {
+  max-width: 100%;
+  font-size: clamp(21px, 5.9vw, 33px);
+  line-height: 1.15;
+  letter-spacing: .04em;
+  overflow-wrap: anywhere;
+}
+.game-field .sector-banner small {
+  max-width: 100%;
+  font-size: clamp(12px, 3.25vw, 15px);
+  line-height: 1.4;
+  letter-spacing: .025em;
+  overflow-wrap: anywhere;
+}
+.game-field .sector-banner .chain-result {
+  color: #f9db8e;
+  font-weight: 700;
+  font-size: clamp(14px, 4vw, 19px);
+}
+.game-field .sector-banner .crypto-explainer {
+  color: #b8e8e1;
+  font-size: clamp(11px, 3vw, 14px);
+}
+.game-field .level-intro-banner, .game-field .level-complete-banner {
+  top: 50%;
+  width: min(480px, calc(100% - 24px));
+  max-height: calc(100% - 32px);
+  padding: 16px 12px;
+}
+.game-field .level-intro-banner strong, .game-field .level-complete-banner strong {
+  font-size: clamp(33px, 9vw, 74px);
+  line-height: 1;
+  letter-spacing: .02em;
+  white-space: normal;
+}
+.game-field .sector-transition { animation-duration: 3.2s; }
+.game-field .level-intro-banner.sector-transition { animation-duration: 3.2s; }
+.game-field .level-complete-banner.sector-clear-message { animation-duration: 3.8s; }
+@keyframes sector-transition {
+  0% { opacity: 0; transform: translate(-50%, 10px) scale(.96); }
+  12%, 85% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -7px) scale(1.02); }
+}
+@keyframes level-banner-reveal {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.86); }
+  12%, 86% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.04); }
+}
+
+.game-field .level-intro-banner strong, .game-field .level-complete-banner strong {
+  font-size: clamp(42px, 12vw, 76px);
+  animation-duration: 3.2s;
+}
+.game-field .level-complete-banner strong { animation-duration: 3.8s; }
+.game-field .level-complete-banner strong i { font-size: clamp(24px, 7vw, 55px); }
+.game-field .level-intro-banner span, .game-field .level-complete-banner span {
+  font-size: clamp(12px, 3.5vw, 17px);
+  letter-spacing: .12em;
+}
+@media (max-width: 560px) {
+  .game-field .sector-banner { width: calc(100% - 20px); max-width: calc(100% - 20px); padding: 10px 11px; }
+  .game-field .sector-banner .chain-result { font-size: clamp(13px, 3.8vw, 17px); }
+}
