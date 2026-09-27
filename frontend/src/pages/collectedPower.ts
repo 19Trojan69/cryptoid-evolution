@@ -1,5 +1,5 @@
 import { activeWeaponLevel, PICKUP_WEAPON_DURATION_MS } from "./playerCombat.ts";
-import { collectPowerUp, type PowerUpType } from "./powerUps.ts";
+import { collectPowerUp, MAX_STACKED_POWER_MS, type PowerUpType } from "./powerUps.ts";
 
 type PickupLoadout = {
   shieldCharges: number; shieldMs: number; shieldActive: boolean;
@@ -12,8 +12,9 @@ export const activateCollectedPower = <T extends PickupLoadout>(state: T, type: 
   if (type === "weapon") {
     const pickupWeaponLevel = Math.min(5, state.weaponLevel + 1);
     const weaponCap = Math.max(state.weaponCap, pickupWeaponLevel);
-    return { ...state, pickupWeaponLevel, pickupWeaponMs: PICKUP_WEAPON_DURATION_MS, weaponCap,
-      weaponLevel: activeWeaponLevel(state.paidWeaponLevel, state.paidWeaponMs, pickupWeaponLevel, PICKUP_WEAPON_DURATION_MS, weaponCap) };
+    const pickupWeaponMs = Math.min(MAX_STACKED_POWER_MS, state.pickupWeaponMs + PICKUP_WEAPON_DURATION_MS);
+    return { ...state, pickupWeaponLevel, pickupWeaponMs, weaponCap,
+      weaponLevel: activeWeaponLevel(state.paidWeaponLevel, state.paidWeaponMs, pickupWeaponLevel, pickupWeaponMs, weaponCap) };
   }
   if (type === "shield") return { ...collectPowerUp(state, type), shieldActive: true } as T;
   return collectPowerUp(state, type) as T;
