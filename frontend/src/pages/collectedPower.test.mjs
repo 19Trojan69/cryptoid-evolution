@@ -25,3 +25,12 @@ test("collected weapon stacks within the five level limit", () => {
   assert.equal(state.weaponLevel, 5);
   assert.equal(state.weaponCap, 5);
 });
+
+test("repeat weapon pickups extend the duration at maximum level", () => {
+  let state = player();
+  for (let i = 0; i < 8; i++) state = activateCollectedPower(state, "weapon");
+  assert.equal(state.weaponLevel, 5);
+  assert.equal(state.pickupWeaponMs, 120_000);
+  state = activateCollectedPower({ ...state, pickupWeaponMs: 5_000 }, "weapon");
+  assert.equal(state.pickupWeaponMs, 25_000);
+});
