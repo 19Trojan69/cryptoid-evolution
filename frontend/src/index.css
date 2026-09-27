@@ -1101,14 +1101,11 @@ html[data-motion="reduced"] .home-crossfire-shot, html[data-motion="reduced"] .h
 .landing-shell .planet-stage { --raid-span: clamp(100px, 27vw, 190px); opacity: .98; }
 .landing-shell .planet { overflow: hidden; background-color: #082a48; box-shadow: 0 0 62px rgba(43, 160, 230, .52), 0 0 110px rgba(107, 67, 211, .26), inset -17px -12px 35px rgba(0, 11, 37, .7); }
 .home-earth-network { position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; border-radius: 50%; pointer-events: none; mix-blend-mode: screen; opacity: .88; filter: drop-shadow(0 0 2px rgba(255, 191, 79, .8)); animation: home-network-breathe 5.4s ease-in-out infinite; }
-.home-network-grid { fill: none; stroke: rgba(255, 205, 112, .66); stroke-width: 1.08; }
-.home-network-parallels { stroke: rgba(255, 219, 151, .62); stroke-width: .95; }
-.home-network-links { fill: none; stroke: rgba(255, 183, 74, .8); stroke-width: 1.45; stroke-linejoin: round; }
-.home-network-pulse { fill: none; stroke: #fff2b8; stroke-width: 2.7; stroke-linecap: round; stroke-dasharray: 3 97; filter: drop-shadow(0 0 4px #ffb32e); animation: home-network-travel 4.7s linear infinite; }
-.home-network-pulse-alt { stroke: #ffc257; stroke-width: 2.25; animation-duration: 6.2s; animation-delay: -2.1s; }
+.home-network-rim { fill: none; stroke: rgba(255, 202, 102, .44); stroke-width: 1; }
+.home-network-grid { fill: none; stroke: rgba(255, 207, 120, .7); stroke-width: .92; stroke-linecap: round; stroke-linejoin: round; }
+.home-network-highlight { fill: none; stroke: rgba(255, 237, 178, .85); stroke-width: 1.3; stroke-linejoin: round; }
 .home-network-nodes circle { fill: #fff4c8; stroke: #ffad37; stroke-width: 1.5; filter: drop-shadow(0 0 3px #ffb742); animation: home-network-node 3.7s ease-in-out infinite; }
 @keyframes home-network-breathe { 0%, 100% { opacity: .7; } 50% { opacity: .98; } }
-@keyframes home-network-travel { to { stroke-dashoffset: -100; } }
 @keyframes home-network-node { 0%, 100% { opacity: .55; stroke-width: 1; } 37%, 43% { opacity: 1; stroke-width: 3.4; } 68% { opacity: .8; stroke-width: 2; } }
 .home-raid { position: absolute; z-index: 5; inset: 0; pointer-events: none; }
 .home-raid-ship { position: absolute; display: block; width: clamp(40px, 11%, 72px); aspect-ratio: 1; background-image: url('/ships/cryptoid-fleet.png'); background-size: 400% 500%; background-repeat: no-repeat; opacity: 0; will-change: transform, opacity; }
@@ -1484,4 +1481,70 @@ html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-
 @media (max-width: 560px) {
   .game-field .sector-banner { width: calc(100% - 20px); max-width: calc(100% - 20px); padding: 10px 11px; }
   .game-field .sector-banner .chain-result { font-size: clamp(13px, 3.8vw, 17px); }
+}
+
+/* Smartphone-only special opponents: a one-hit shield and warned twin cannon. */
+.asteroid.cryptoid-special-shield::before {
+  position: absolute;
+  z-index: 2;
+  inset: 6%;
+  border: 2px solid #8eefff;
+  border-radius: 48%;
+  box-shadow: 0 0 7px #66eaff, inset 0 0 7px #66eaff77;
+  content: '';
+  pointer-events: none;
+}
+.asteroid.cryptoid-special-armed::before {
+  position: absolute;
+  z-index: 2;
+  top: 15%;
+  left: 42%;
+  width: 16%;
+  height: 12%;
+  border-radius: 50%;
+  background: #ff9c7e;
+  box-shadow: 0 0 7px #ff654a;
+  content: '';
+  pointer-events: none;
+}
+.asteroid.cryptoid-special-armed.asteroid-preparing::after {
+  border: 3px solid #ff8d69;
+  background: rgba(255, 86, 68, .14);
+  box-shadow: 0 0 12px #ff674b;
+}
+
+/* Phone hangar: quiet material surfaces and a compact, swipeable navigation rail. */
+.ship-service-badge, .variant-service-badge { color: #9ef2ce; font: 700 10px 'DM Mono', monospace; letter-spacing: .08em; }
+.ship-service-badge { position: absolute; z-index: 1; top: 10px; right: 10px; padding: 5px 7px; border: 1px solid rgba(111, 235, 188, .48); background: rgba(5, 35, 36, .86); }
+.variant-service-badge { margin-top: 3px; }
+@media (max-width: 600px) {
+  .shop-overlay { padding: 8px; backdrop-filter: none; }
+  .shop-modal { width: 100%; max-height: calc(100dvh - 16px); border: 1px solid rgba(192, 208, 214, .27); border-radius: 18px; clip-path: none; box-shadow: 0 22px 64px rgba(0, 0, 0, .55); }
+  .shop-modal-header { min-height: 58px; padding-left: 16px; background: rgba(18, 35, 53, .87); font: 700 16px 'Space Grotesk', sans-serif; letter-spacing: .035em; }
+  .shop-tabs { display: flex; gap: 6px; padding: 9px 12px 11px; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; scroll-snap-type: x proximity; background: rgba(4, 17, 31, .92); }
+  .shop-tabs::-webkit-scrollbar { display: none; }
+  .shop-tabs button { flex: 0 0 auto; flex-direction: row; gap: 7px; min-width: 91px; min-height: 43px; padding: 8px 11px; border: 1px solid rgba(144, 173, 191, .24); border-radius: 11px; clip-path: none; background: rgba(18, 38, 56, .85); box-shadow: none; scroll-snap-align: start; }
+  .shop-tabs button::before { display: none; }
+  .shop-tabs button > span { width: auto; height: auto; border: 0; background: none; box-shadow: none; font: 700 17px 'Space Grotesk', sans-serif; }
+  .shop-tabs button > b { max-width: none; font: 700 11px 'Space Grotesk', sans-serif; letter-spacing: .015em; }
+  .shop-tabs button[aria-pressed="true"] { border-color: rgba(112, 236, 192, .74); border-radius: 11px; background: linear-gradient(135deg, #173c43, #183143); box-shadow: inset 0 -2px #69edbe; color: #f1fff9; }
+  .shop-tabs button:hover, .shop-tabs button:active { transform: none; }
+  .shop-modal-body { padding: 12px; }
+  .shop-modal .ship-selector { padding: 16px 12px; border: 1px solid rgba(148, 187, 203, .2); border-radius: 14px; background: #102039; }
+  .ship-selector h2 { font-size: 23px; }
+  .ship-selector p { line-height: 1.45; }
+  .ship-picker { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  .ship-choice { min-width: 0; min-height: 136px; padding: 13px 8px 12px; border: 1px solid rgba(145, 183, 203, .26); border-radius: 14px; clip-path: none; background: linear-gradient(155deg, #172e45, #10263c); box-shadow: none; font: 700 14px 'Space Grotesk', sans-serif; }
+  .ship-choice::before { display: none; }
+  .ship-choice:hover, .ship-choice:active { transform: none; }
+  .ship-choice .ship-preview { width: 67px; height: 67px; }
+  .ship-choice small { font-size: 10px; }
+  .ship-choice[aria-pressed="true"], .ship-choice.ship-choice-active { border-color: rgba(116, 236, 194, .78); border-radius: 14px; background: linear-gradient(150deg, #174245, #173048); box-shadow: inset 0 0 0 1px rgba(110, 237, 193, .18); }
+  .ship-service-badge { position: static; justify-self: end; padding: 3px 5px; border-radius: 5px; font-size: 8px; }
+  .ship-variants .ship-choice { min-height: 158px; }
+  .hangar-selection { padding: 10px 12px; border-left: 3px solid #73e7bb; border-radius: 0 9px 9px 0; background: rgba(73, 194, 156, .08); font-size: 12px; line-height: 1.5; }
+  .hangar-offer { border: 1px solid rgba(155, 176, 212, .32); border-radius: 16px; clip-path: none; background: linear-gradient(150deg, #152640, #112238); box-shadow: none; }
+  .hangar-offer button, .shop-modal .hangar-actions .button { min-height: 46px; border-radius: 11px; clip-path: none; box-shadow: none; font-size: 12px; }
+  .hangar-offer .button-primary, .shop-modal .hangar-actions .button-primary { background: linear-gradient(115deg, #e7c587, #c5a6e4); color: #172033; }
+  .shop-modal .upgrade-section { padding: 3px 1px 20px; }
 }

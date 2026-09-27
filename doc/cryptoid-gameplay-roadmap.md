@@ -113,6 +113,18 @@ Order: finish full playable bonus-to-boss test → collision fairness and coin d
 - Normal combat levels, bonus levels and bosses remain grouped into named sectors while the visible global level number continues upward. Level 500 is a milestone, not a forced ending.
 - Before balancing numbers, introduce one central Difficulty Director keyed primarily to global level, with viewport, living enemies, active attackers, projectiles, elites and boss state as fairness inputs.
 
+### Smartphone enemy progression — approved 27 September 2026
+
+**Status:** Smartphone implementation prepared on the isolated Testnet preview branch. Automated layout/progression checks pass; phone touch play and Vercel preview checks remain before promotion. Keep production unchanged until Testnet is verified, or use production only if the Testnet build is unavailable as explicitly authorized by the owner. This subsection supersedes earlier phone-specific statements allowing four simultaneous attackers; PC and laptop progression are outside this change.
+
+- On smartphones, begin with **six simultaneously visible enemies**. Increase formation occupancy gently with global level progression to **nine**, then to an absolute maximum of **twelve**; do not jump straight from six to twelve or add one enemy on every level.
+- Adjust spacing and ship display sizes for the smaller playfield. Keep silhouettes and health indicators legible and prevent overlap. The formation must extend **no farther than the vertical midpoint** of the playable field, leaving the lower half usable for steering and dodging.
+- Start with **one attacking enemy** at a time. Unlock **two parallel attackers** later and allow **three only occasionally** at advanced levels, subject to projectile and collision budgets. Never use a fourth simultaneous attacker on smartphones.
+- Once twelve visible enemies are reached, increase challenge through more varied but readable flight paths, mixtures of existing enemy types and occasional special enemies. Introduce shields or stronger weapons for individual special enemies gradually, with distinct visuals.
+- Announce stronger attacks clearly before they happen. Bound projectile density and preserve an escape route so new patterns are avoidable by touch control.
+- Apply these limits to **smartphones only**. Do not infer a phone solely from a narrow browser window; leave PC, laptop and other device balancing unchanged.
+- Stage implementation on Testnet, verify actual iPhone touch play, enemy count, formation midpoint, hitbox spacing, warning lead time and frame rate at six/nine/twelve enemies, then approve release to production after the deployment limit has expired.
+
 ### Saving and resuming
 
 - Core ownership must always persist without an additional payment: owned ships, colors, weapons, purchased Pi products, Shards, settings, records and the highest unlocked level.

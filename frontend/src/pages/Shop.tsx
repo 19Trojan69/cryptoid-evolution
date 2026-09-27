@@ -18,6 +18,7 @@ import MusicVolumeSlider from "./MusicVolumeSlider";
 import Starfield from "./Starfield";
 import { languages, useLocale, type Locale } from "../i18n";
 import EarthGlobe from "./EarthGlobe";
+import { earthNetwork } from "./earthNetwork";
 import { requestGameFullscreen } from "./gameFullscreen";
 import { powerUpSymbols, type PowerUpType } from "./powerUps";
 import { CONTROL_HAND_KEY, CONTROL_SENSITIVITY_KEY, CONTROL_ZONE_KEY, SHIP_START_KEY, readControlHand, readControlSensitivity, readControlZone, readShipStart, type ControlHand, type ControlSensitivity, type ControlZone, type ShipStart } from "./controlPreferences";
@@ -291,12 +292,10 @@ const Shop = () => {
         </div>
         <div className="planet-stage" aria-label="Cryptoid Evolution planet status">
           <div className="planet"><EarthGlobe /><svg className="home-earth-network" viewBox="0 0 320 320" aria-hidden="true">
-              <path className="home-network-grid" d={[-148, -116, -82, -46, 0, 46, 82, 116, 148].map(bend => `M160 5 C${160 + bend} 62 ${160 + bend} 258 160 315`).join(" ")} />
-              <path className="home-network-grid home-network-parallels" d={[[45, 98, 18], [75, 124, 26], [108, 145, 31], [142, 153, 25], [178, 153, 19], [212, 145, 14], [245, 122, 10], [277, 94, 7]].map(([y, half, dip]) => `M${160 - half} ${y} Q160 ${y + dip} ${160 + half} ${y}`).join(" ")} />
-              <path className="home-network-links" d="M160 45 L95 78 L42 135 L102 132 L160 80 L218 132 L278 135 L225 78 L160 45 M95 78 L160 80 L225 78 M42 135 L102 187 L160 135 L218 187 L278 135 M102 132 L160 135 L218 132 M42 190 L102 132 L160 190 L218 132 L278 190 M42 190 L102 187 L160 190 L218 187 L278 190 M102 187 L96 244 L160 190 L224 244 L218 187 M96 244 L160 245 L224 244 L160 285 L96 244 M160 190 L160 245 L160 285" />
-              <path className="home-network-pulse" pathLength="100" d="M160 45 L95 78 L42 135 L102 187 L96 244 L160 285 L224 244 L278 190 L218 132 L225 78 L160 45" />
-              <path className="home-network-pulse home-network-pulse-alt" pathLength="100" d="M42 190 L102 132 L160 80 L225 78 L278 135 L218 187 L160 245 L96 244 L42 190" />
-              <g className="home-network-nodes">{[[160, 45], [95, 78], [160, 80], [225, 78], [42, 135], [102, 132], [160, 135], [218, 132], [278, 135], [42, 190], [102, 187], [160, 190], [218, 187], [278, 190], [96, 244], [160, 245], [224, 244], [160, 285]].map(([cx, cy], index) => <circle key={index} cx={cx} cy={cy} r={index % 4 === 0 ? 3 : 2.2} style={{ animationDelay: `${index * -.33}s` }} />)}</g>
+              <circle className="home-network-rim" cx="160" cy="160" r="158" />
+              <path className="home-network-grid" d={earthNetwork.path} />
+              <path className="home-network-highlight" d={earthNetwork.highlights} />
+              <g className="home-network-nodes">{earthNetwork.nodes.map(([cx, cy], index) => <circle key={index} cx={cx} cy={cy} r={index % 3 === 0 ? 2.5 : 1.6} style={{ animationDelay: `${index * -.37}s` }} />)}</g>
             </svg></div>
           <div className="home-crossfire" aria-hidden="true"><i className="home-crossfire-shot home-crossfire-shot-a" /><i className="home-crossfire-shot home-crossfire-shot-b" /><i className="home-crossfire-impact" /></div>
           <div className="home-intercept" aria-hidden="true"><i className="home-intercept-bolt home-intercept-bolt-a" /><i className="home-intercept-bolt home-intercept-bolt-b" /><i className="home-intercept-flash" /></div>
@@ -396,8 +395,8 @@ const Shop = () => {
         <p>{t(shopView === "hangar" ? "Only ships in your fleet are shown here. Choose an owned type and color variant for your next mission." : "Choose a ship type and preview its paint variants. Each purchase adds one ship to your fleet.")}</p>
         <strong className="shard-balance">◆ {shards} {t("Shards")}</strong><span className="shard-help">{t("Earn 1 Shard per defeated Cryptoid; your Shards are saved at the end of each mission.")}</span>
         <div className="ship-picker" role="group" aria-label={t("Ship hull")}>
-          {playerSkins.filter(skin => shopView === "shop" || fleetCount(fleet, skin.id) > 0).map(skin => { const total = fleetCount(fleet, skin.id); const shown = skin.id === selected.skin.id ? selected.color : allPlayerColors.find(color => fleetCount(fleet, skin.id, color.id)) ?? playerColors[0]; return <button key={skin.id} className={`ship-choice${total === 0 ? " ship-unowned" : ""}`} type="button" aria-pressed={previewSkin.id === skin.id} onClick={() => { setPreviewSkin(skin); setPreviewColor(shown); if (shopView === "hangar") equipShip(skin, shown); else setHangarMessage(""); }}>
-            <span className="ship-preview"><PaintedShip sprite={skin.sprite} color={shown.id} /></span><span>{skin.name}</span><small>{total ? `${t("Owned")} ×${total}` : t("Not owned")}</small>
+          {playerSkins.filter(skin => shopView === "shop" || fleetCount(fleet, skin.id) > 0).sort((a, b) => shopView === "hangar" ? Number(b.id === selected.skin.id) - Number(a.id === selected.skin.id) : 0).map(skin => { const total = fleetCount(fleet, skin.id); const inService = selected.skin.id === skin.id; const shown = inService ? selected.color : allPlayerColors.find(color => fleetCount(fleet, skin.id, color.id)) ?? playerColors[0]; return <button key={skin.id} className={`ship-choice${total === 0 ? " ship-unowned" : ""}${inService ? " ship-choice-active" : ""}`} type="button" aria-pressed={previewSkin.id === skin.id} onClick={() => { setPreviewSkin(skin); setPreviewColor(shown); if (shopView === "hangar") equipShip(skin, shown); else setHangarMessage(""); }}>
+            {inService && <span className="ship-service-badge">{t("IN SERVICE")}</span>}<span className="ship-preview"><PaintedShip sprite={skin.sprite} color={shown.id} /></span><span>{skin.name}</span><small>{total ? `${t("Owned")} ×${total}` : t("Not owned")}</small>
           </button>; })}
         </div>
         <h3 className="hangar-variant-title">{previewSkin.name} · {t("Color variants")}</h3>
@@ -405,10 +404,10 @@ const Shop = () => {
           {allPlayerColors.filter(color => (shopView === "shop" && playerColors.some(current => current.id === color.id)) || fleetCount(fleet, previewSkin.id, color.id) > 0).map(color => { const count = fleetCount(fleet, previewSkin.id, color.id); return <button key={color.id} className={`ship-choice variant-choice${count ? "" : " ship-unowned"}`} type="button" aria-pressed={previewColor.id === color.id} onClick={() => { setPreviewColor(color); if (shopView === "hangar") equipShip(previewSkin, color); else setHangarMessage(""); }}>
             <span className="ship-preview"><PaintedShip sprite={previewSkin.sprite} color={color.id} /></span>
             <span className="metal-swatch" style={{ "--paint": color.glow } as CSSProperties} />
-            <span>{t(color.name)}</span><small>{count ? `${t("Owned")} ×${count}` : t("Not owned")}</small>
+            <span>{t(color.name)}</span><small>{count ? `${t("Owned")} ×${count}` : t("Not owned")}</small>{selected.skin.id === previewSkin.id && selected.color.id === color.id && <span className="variant-service-badge">{t("IN SERVICE")}</span>}
           </button>; })}
         </div>
-        <p className="hangar-selection">{shopView === "hangar" ? t("EQUIPPED") : t("Preview:")} <strong>{previewSkin.name} · {t(previewColor.name)}</strong> · {previewCount ? `${t("Owned")} ×${previewCount}` : t("Not owned")}{shopView === "shop" && selected.skin.id === previewSkin.id && selected.color.id === previewColor.id && <span> · {t("EQUIPPED")}</span>}</p>
+        <p className="hangar-selection">{shopView === "hangar" ? t("IN SERVICE") : t("Preview:")} <strong>{shopView === "hangar" ? selected.skin.name : previewSkin.name} · {t(shopView === "hangar" ? selected.color.name : previewColor.name)}</strong> · {shopView === "hangar" ? `${t("Owned")} ×${fleetCount(fleet, selected.skin.id, selected.color.id)}` : previewCount ? `${t("Owned")} ×${previewCount}` : t("Not owned")}{shopView === "shop" && selected.skin.id === previewSkin.id && selected.color.id === previewColor.id && <span> · {t("IN SERVICE")}</span>}</p>
         {shopView === "shop" && <div className="hangar-actions"><button className="button button-primary hangar-action" type="button" onClick={purchasePreview} disabled={shards < (previewSkin.price || EXTRA_STARTER_PRICE)}>{t("Buy another for")} ◆ {previewSkin.price || EXTRA_STARTER_PRICE}</button></div>}
         {shopView === "shop" && shards < (previewSkin.price || EXTRA_STARTER_PRICE) && <span className="shard-help">◆ {(previewSkin.price || EXTRA_STARTER_PRICE) - shards} {t("more Shards needed")}</span>}
         {hangarMessage && <p className="hangar-message" role="status">{hangarMessage}</p>}

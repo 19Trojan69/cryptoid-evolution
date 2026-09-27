@@ -24,6 +24,7 @@ import { fireInterval, makeVolley } from "./playerCombat";
 import { activateCollectedPower } from "./collectedPower";
 import { leaveGameFullscreen, requestGameFullscreen } from "./gameFullscreen";
 import { levelDifficulty } from "./levelDifficulty";
+import { isSmartphonePlayfield, smartphoneAttackLimit, smartphoneEnemyCount, smartphoneShipScale, smartphoneSpecialty } from "./mobileProgression";
 
 const BEST_SCORE_KEY = "cryptoid_best_score";
 const HIGHEST_SECTOR_KEY = "cryptoid_highest_sector";
@@ -81,6 +82,8 @@ type Asteroid = {
   returnElapsed: number;
   firedThisAttack: boolean;
   collidedThisAttack: boolean;
+  specialShield: number;
+  specialArmed: boolean;
 };
 
 type Effect = {
@@ -112,9 +115,13 @@ const saveRecords = (state: GameState) => {
   window.localStorage.setItem(SHARD_BALANCE_KEY, String(shardBalance(window.localStorage.getItem(SHARD_BALANCE_KEY)) + state.destroyed + state.bonusShards));
 };
 
-const createFormationSlots = (section: number, sector: number, width: number, height: number) => {
-  const slots = formationLayout(section, width, height);
-  return arrangeFormationBySize(slots, slots.map((_, index) => chooseCryptoid(sector, index).radius));
+const createFormationSlots = (section: number, sector: number, width: number, height: number, visibleTop: number, smartphone: boolean) => {
+  const enemyCount = smartphoneEnemyCount(sector);
+  const scale = smartphone ? smartphoneShipScale(enemyCount) : 1;
+  const slots = formationLayout(section, width, height, smartphone
+    ? { enemyCount, visibleTop, maxRadius: 50 * scale }
+    : undefined);
+  return arrangeFormationBySize(slots, slots.map((_, index) => chooseCryptoid(sector, index).radius * scale));
 };
 
 const alignedSpritePosition = (x: number, y: number, sprite: number, renderedSize: number) => {
@@ -122,15 +129,17 @@ const alignedSpritePosition = (x: number, y: number, sprite: number, renderedSiz
   return { left: x - offset.x, top: y - offset.y };
 };
 
-const spawnAsteroid = (id: number, width: number, visibleTop: number, formationIndex: number, sector: number, slots: ReturnType<typeof formationLayout>): Asteroid => {
+const spawnAsteroid = (id: number, width: number, visibleTop: number, formationIndex: number, sector: number, slots: ReturnType<typeof formationLayout>, smartphone: boolean): Asteroid => {
   const profile = chooseCryptoid(sector, formationIndex);
   const size: AsteroidSize = profile.radius === 25 ? "small" : profile.radius === 36 ? "medium" : "large";
+  const radius = profile.radius * (smartphone ? smartphoneShipScale(slots.length) : 1);
+  const special = smartphone ? smartphoneSpecialty(sector, formationIndex) : { shield: false, armed: false };
   const target = slots[formationIndex];
   const entrySide = target.entrySide;
-  const availableWidth = Math.max(1, width - profile.radius * 2);
-  const entryStartX = entrySide === 1 ? profile.radius + availableWidth * 0.08 : width - profile.radius - availableWidth * 0.08;
-  const entryStartY = visibleTop + profile.radius + ENTRY_HUD_GAP_PX;
-  return { id, x: entryStartX, y: entryStartY, size, ...profile, entryDuration: Math.max(2_500, Math.round(profile.entryDuration * .5)), health: profile.health, maxHealth: profile.health, cloaked: false, rotation: 0, rotationSpeed: 0, entryElapsed: 0, entryStartX, entryStartY, entryTargetX: target.x, entryTargetY: target.y, entrySide, formationSlot: target.index, formationSlotCount: slots.length, formationElapsed: 0, formationDuration: FORMATION_SETTLE_MS, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, collidedThisAttack: false };
+  const availableWidth = Math.max(1, width - radius * 2);
+  const entryStartX = entrySide === 1 ? radius + availableWidth * 0.08 : width - radius - availableWidth * 0.08;
+  const entryStartY = visibleTop + radius + ENTRY_HUD_GAP_PX;
+  return { id, x: entryStartX, y: entryStartY, size, ...profile, radius, specialShield: special.shield ? 1 : 0, specialArmed: special.armed, entryDuration: Math.max(2_500, Math.round(profile.entryDuration * .5)), health: profile.health, maxHealth: profile.health, cloaked: false, rotation: 0, rotationSpeed: 0, entryElapsed: 0, entryStartX, entryStartY, entryTargetX: target.x, entryTargetY: target.y, entrySide, formationSlot: target.index, formationSlotCount: slots.length, formationElapsed: 0, formationDuration: FORMATION_SETTLE_MS, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, collidedThisAttack: false };
 };
 
 const attackTime = (asteroid: Asteroid) => asteroid.attackPattern === null ? 0 : attackDuration(asteroid.attackPattern) * asteroid.attackPace;
@@ -473,7 +482,8 @@ const GamePage = () => {
         const width = field?.clientWidth || 800;
         const height = field?.clientHeight || 600;
         const visibleTop = visibleTopRef.current;
-        const slots = sectionSlotsRef.current ?? createFormationSlots(state.section, state.sector, width, height);
+        const smartphoneField = isSmartphonePlayfield(width, window.screen.width, window.matchMedia("(pointer: coarse)").matches);
+        const slots = sectionSlotsRef.current ?? createFormationSlots(state.section, state.sector, width, height, visibleTop, smartphoneField);
         sectionSlotsRef.current = slots;
         const bonus = state.encounter === "normal" && isBonusSection(state.section);
         const normal = state.encounter === "normal" && !bonus;
@@ -535,7 +545,7 @@ const GamePage = () => {
             formationIndexRef.current = 0;
             formationStartedRef.current = false;
             bonusIndexRef.current = 0;
-            sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height);
+            sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height, visibleTop, smartphoneField);
             spawnTimerRef.current = 0;
             sectionElapsedRef.current = 0;
             clearTimerRef.current = 0;
@@ -555,7 +565,7 @@ const GamePage = () => {
           spawnTimerRef.current += delta;
           if (spawnTimerRef.current >= ENTRY_GAP_MS) {
             spawnTimerRef.current -= ENTRY_GAP_MS;
-            state.asteroids.push(spawnAsteroid(nextIdRef.current++, width, visibleTop, formationIndexRef.current++, state.sector, slots));
+            state.asteroids.push(spawnAsteroid(nextIdRef.current++, width, visibleTop, formationIndexRef.current++, state.sector, slots, smartphoneField));
           }
         }
         const ready = state.asteroids.filter(asteroid => asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration);
@@ -563,7 +573,14 @@ const GamePage = () => {
         if (formationComplete && !state.asteroids.some(asteroid => asteroid.attackPattern !== null)) attackCooldownRef.current += delta;
         else if (!state.asteroids.some(asteroid => asteroid.attackPattern !== null)) attackCooldownRef.current = 0;
         if (state.empMs === 0 && formationComplete && !state.asteroids.some(asteroid => asteroid.attackPattern !== null) && attackCooldownRef.current >= levelDifficulty(state.sector).attackCooldownMs) {
-            let pattern = chooseAttackPattern(attackNumberRef.current++, elapsedRef.current, state.sector);
+            const attackNumber = attackNumberRef.current++;
+            let pattern = chooseAttackPattern(attackNumber, elapsedRef.current, state.sector);
+            if (smartphoneField) {
+              const limit = smartphoneAttackLimit(state.sector, attackNumber);
+              if (limit === 1 && attackGroupSize(pattern) > 1) pattern = "curve";
+              else if (limit === 2 && pattern === "vDive") pattern = "double";
+              else if (limit === 3 && ready.length >= 3 && attackNumber % 9 === 0) pattern = "vDive";
+            }
             if (ready.length < attackGroupSize(pattern)) pattern = "curve";
             const groupSize = attackGroupSize(pattern);
             const selectedIds = ready.slice(0, groupSize).map(asteroid => asteroid.id);
@@ -586,7 +603,14 @@ const GamePage = () => {
             const bullet = createEnemyShot(nextIdRef.current, next.x, next.y + next.radius * .4, state.player, width, height);
             if (bullet) {
               nextIdRef.current += 1;
-              state.enemyShots.push(bullet);
+              if (next.specialArmed && state.enemyShots.length + 2 <= enemyShotLimit(width, elapsedRef.current, state.sector)) {
+                const leftVx = Math.max(-.17, bullet.vx - .034);
+                const rightVx = Math.min(.17, bullet.vx + .034);
+                state.enemyShots.push(
+                  { ...bullet, vx: leftVx, vy: Math.sqrt(.19 ** 2 - leftVx ** 2) },
+                  { ...bullet, id: nextIdRef.current++, vx: rightVx, vy: Math.sqrt(.19 ** 2 - rightVx ** 2) },
+                );
+              } else state.enemyShots.push(bullet);
               next = { ...next, firedThisAttack: true };
             }
           }
@@ -706,8 +730,15 @@ const GamePage = () => {
           }
           const enemy = state.asteroids.find(item => shotHitsEnemy(shot, item));
           if (!enemy) { remainingShots.push(shot); continue; }
+          if (enemy.specialShield > 0) {
+            enemy.specialShield -= 1;
+            enemy.hitUntil = time + 190;
+            state.effects.push({ id: nextIdRef.current++, x: enemy.x, y: enemy.y, kind: "shield", startedAt: time });
+            soundRef.current?.play("shield");
+            continue;
+          }
           enemy.health = Math.max(0, enemy.health - shot.damage);
-           enemy.hitUntil = time + 190;
+          enemy.hitUntil = time + 190;
           const destroyedSprite = enemySprite(enemy.shipClass, enemy.formationSlot);
           state.effects.push({ id: nextIdRef.current++, x: enemy.health > 0 ? shot.x : enemy.x, y: enemy.health > 0 ? shot.y : enemy.y, kind: enemy.health > 0 ? "hit" : enemy.type === "etherCrystal" ? "shatter" : "explosion", startedAt: time, sprite: enemy.health > 0 ? undefined : destroyedSprite, debrisSize: enemy.health > 0 ? undefined : enemy.radius * 2, debrisRotation: enemy.health > 0 ? undefined : enemy.rotation, shipClass: enemy.health > 0 ? undefined : enemy.shipClass });
           soundRef.current?.play(enemy.health > 0 ? "enemyHit" : "explosion");
@@ -992,7 +1023,7 @@ const GamePage = () => {
           <span className="health-bar" data-critical={game.boss.health / game.boss.maxHealth <= .3} role="progressbar" aria-label={t("Boss hull")} aria-valuenow={Math.ceil(game.boss.health / game.boss.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${game.boss.health / game.boss.maxHealth * 100}%` }} /><small className="boss-health-readout">{Math.ceil(game.boss.health / game.boss.maxHealth * 100)}%</small></span>
         </div>}
         {game.bonusTargets.map(target => <div key={target.id} className="asteroid asteroid-small cryptoid bonus-ship cryptoid-boost" style={{ ...alignedSpritePosition(target.x, target.y, target.sprite, 50), transform: "translate(-50%, -50%)" }}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={target.sprite} color={target.color} />{engineTrails(target.sprite, "exhaust")}</div></div>)}
-        {game.asteroids.map(asteroid => { const sprite = enemySprite(asteroid.shipClass, asteroid.formationSlot); return <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid${game.empMs > 0 ? " cryptoid-emp" : ""} cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.hitUntil && asteroid.hitUntil > performance.now() ? " cryptoid-hit" : ""}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}${cryptoidMotionClass(asteroid)}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ ...alignedSpritePosition(asteroid.x, asteroid.y, sprite, asteroid.radius * 2), transform: `translate(-50%, -50%) rotate(${asteroid.rotation}deg)`, ...shipHullStyle(sprite, true) }}><div className="ship-visual"><div className="fleet-sprite" style={spriteStyle(sprite)} />{engineTrails(sprite, "exhaust")}</div><span className="health-bar" data-critical={asteroid.health / asteroid.maxHealth <= .3} role="progressbar" aria-label={t("Enemy hull")} aria-valuenow={Math.ceil(asteroid.health / asteroid.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${asteroid.health / asteroid.maxHealth * 100}%` }} /></span></div>; })}
+        {game.asteroids.map(asteroid => { const sprite = enemySprite(asteroid.shipClass, asteroid.formationSlot); return <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid${game.empMs > 0 ? " cryptoid-emp" : ""} cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.specialShield > 0 ? " cryptoid-special-shield" : ""}${asteroid.specialArmed ? " cryptoid-special-armed" : ""}${asteroid.hitUntil && asteroid.hitUntil > performance.now() ? " cryptoid-hit" : ""}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}${cryptoidMotionClass(asteroid)}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}${asteroid.specialShield > 0 ? " · Shield" : ""}${asteroid.specialArmed ? " · Twin cannons" : ""}`} style={{ ...alignedSpritePosition(asteroid.x, asteroid.y, sprite, asteroid.radius * 2), width: asteroid.radius * 2, height: asteroid.radius * 2, transform: `translate(-50%, -50%) rotate(${asteroid.rotation}deg)`, ...shipHullStyle(sprite, true) }}><div className="ship-visual"><div className="fleet-sprite" style={spriteStyle(sprite)} />{engineTrails(sprite, "exhaust")}</div><span className="health-bar" data-critical={asteroid.health / asteroid.maxHealth <= .3} role="progressbar" aria-label={t("Enemy hull")} aria-valuenow={Math.ceil(asteroid.health / asteroid.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${asteroid.health / asteroid.maxHealth * 100}%` }} /></span></div>; })}
         {game.powerUps.map(pickup => {
           const pickupLabel = `${t(powerUpNames[pickup.type])} · ${t(powerUpDescriptions[pickup.type])}`;
           return <div key={pickup.id} className={`power-up power-up-${pickup.type}`} role="img" aria-label={pickupLabel} title={pickupLabel} style={{ left: pickup.x, top: pickup.y }}><span aria-hidden="true">{powerUpSymbols[pickup.type]}</span></div>;

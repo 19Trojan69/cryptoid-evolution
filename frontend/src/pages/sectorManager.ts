@@ -22,21 +22,23 @@ export const formationReady = ({ spawned, total, alive, ready }: {
   spawned: number; total: number; alive: number; ready: number;
 }) => spawned === total && alive > 0 && ready === alive;
 
-export const formationLayout = (section: number, width: number, height: number) => {
-  const columns = width < 760 ? 3 : 5;
-  const rows = width < 760 ? 2 : 3;
-  // Keep every formation on a compact, invisible grid. The gaps are wide
-  // enough for the actual hull radii, but no longer spread the fleet over
-  // the full playfield width.
+export const formationLayout = (section: number, width: number, height: number, phone?: { enemyCount: number; visibleTop: number; maxRadius: number }) => {
+  const columns = phone || width < 760 ? 3 : 5;
+  const rows = phone ? Math.ceil(phone.enemyCount / columns) : width < 760 ? 2 : 3;
+  const total = phone ? phone.enemyCount : columns * rows;
+  // Smartphone rows fit entirely above mid-screen, including the outer hull.
   const columnGap = columns === 3
-    ? Math.min(108, Math.max(96, width * .26))
+    ? Math.min(108, Math.max(phone ? 92 : 96, width * .26))
     : Math.min(112, Math.max(102, width * .095));
-  const rowGap = Math.min(112, Math.max(106, height * .135));
-  const firstRowY = height * (rows === 2 ? .205 : .15);
-  return Array.from({ length: columns * rows }, (_, index) => {
+  const firstRowY = phone && rows > 2
+    ? Math.max(height * .12, phone.visibleTop + phone.maxRadius + 8)
+    : height * (rows === 2 ? .205 : .15);
+  const rowGap = phone && rows > 2
+    ? Math.min(100, Math.max(0, (height * .5 - phone.maxRadius - 5 - firstRowY) / (rows - 1)))
+    : Math.min(112, Math.max(106, height * .135));
+  return Array.from({ length: total }, (_, index) => {
     const row = Math.floor(index / columns);
     const column = index % columns;
-    // Alternate arrival order within each row; the final positions remain a stable grid.
     const arrivalColumn = row % 2 ? columns - 1 - column : column;
     const x = width / 2 + (arrivalColumn - (columns - 1) / 2) * columnGap;
     const y = firstRowY + row * rowGap;
