@@ -1195,3 +1195,86 @@ html[data-motion="reduced"] .home-raid-ship { opacity: .8; transform: rotate(180
 }
 @media (prefers-reduced-motion: reduce) { .landing-shell .hero-actions .home-play-button { animation: none; } }
 html[data-motion="reduced"] .landing-shell .hero-actions .home-play-button { animation: none; }
+
+/* Unified mission-control style for all home-linked panels. Gameplay classes stay outside .landing-shell. */
+.landing-shell :is(.shop-overlay, .system-menu-overlay, .signin-overlay, .info-panel, .terms-overlay) { background: radial-gradient(circle at 77% 25%, #5033733d, transparent 43%), #030916e8; }
+.landing-shell :is(.shop-modal, .system-menu-panel, .signin-modal, .info-panel-content, .terms-dialog) { border: 1px solid #6ad8e9a1; background: radial-gradient(circle at 83% 0, #563a7c45, transparent 42%), linear-gradient(146deg, #0c1832 0%, #09182c 60%, #091d31 100%); box-shadow: inset 0 2px #73e7f48a, inset 0 0 34px #4ce4e80f, 0 24px 88px #000b, 0 0 32px #4262a43d; color: #eff8fe; }
+.landing-shell :is(.shop-modal-header, .terms-dialog header) { min-height: 63px; border-bottom: 1px solid #69d6e665; background: linear-gradient(90deg, #14304bf0, #23204788 68%, transparent); }
+.landing-shell .shop-modal-header strong, .landing-shell .terms-dialog header strong { color: #ffce86; font: 800 clamp(18px, 3vw, 26px)/1.1 'Oxanium', 'Rajdhani', sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+.landing-shell :is(.shop-modal, .system-menu-panel, .signin-modal, .info-panel-content) h2 { color: #f8fcff; font: 800 clamp(22px, 3vw, 35px)/1.07 'Oxanium', 'Rajdhani', sans-serif; letter-spacing: -.025em; text-transform: uppercase; text-shadow: 0 0 20px #48bce466; }
+.landing-shell :is(.shop-modal, .system-menu-panel, .signin-modal, .info-panel-content) h3 { color: #e0faff; font: 700 clamp(18px, 2vw, 24px)/1.16 'Rajdhani', sans-serif; letter-spacing: .025em; text-transform: uppercase; }
+.landing-shell :is(.shop-modal, .system-menu-panel, .signin-modal, .info-panel-content) .eyebrow { color: #6beced; font-size: 11px; font-weight: 700; letter-spacing: .17em; }
+.landing-shell .shop-modal-body { background: radial-gradient(circle at 3% 70%, #26375d4a, transparent 52%); scrollbar-color: #5fc5d69c #07172a; }
+.landing-shell .shop-tabs { gap: 7px; padding: 9px; border-bottom: 1px solid #63d6e258; background: #060e22dd; }
+.landing-shell .shop-tabs button { min-height: 56px; border: 1px solid color-mix(in srgb, var(--tab-color) 68%, #152f51); background: linear-gradient(150deg, #172642ee, #0a1831f5); color: #e6f1fb; font: 700 13px/1.08 'Rajdhani', 'Space Grotesk', sans-serif; letter-spacing: .025em; clip-path: polygon(0 10px, 10px 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px)); box-shadow: inset 0 -2px color-mix(in srgb, var(--tab-color) 65%, transparent); }
+.landing-shell .shop-tabs button > span { width: 29px; height: 29px; color: var(--tab-color); font: 800 16px 'Oxanium', sans-serif; }
+.landing-shell .shop-tabs button > b { font-size: 13px; font-weight: 700; text-transform: uppercase; }
+.landing-shell .shop-tabs button[aria-pressed="true"] { border-color: #69f3cc; background: linear-gradient(125deg, #155d64e8, #173d55ed); box-shadow: inset 0 -3px #59edc2, 0 0 20px #33e7c158; color: #effff7; }
+.landing-shell .shop-tabs button[aria-pressed="true"] > span { color: #b4ffe2; border-color: #9efddd; }
+.landing-shell :is(.ship-selector, .status-card, .leaderboard-section) { border: 1px solid #6dbbdb76; background: linear-gradient(140deg, #122743df, #0b1d36e8 66%, #1b2442df); box-shadow: inset 0 2px #68d9e35e, 0 0 28px #16366357; }
+.landing-shell .ship-selector { padding: clamp(16px, 3vw, 30px); }
+.landing-shell .ship-selector > p:not(.eyebrow), .landing-shell .upgrade-section > p, .landing-shell .leaderboard-section > p:not(.eyebrow) { color: #c7d8e5; font-size: 16px; line-height: 1.45; }
+.landing-shell .shard-balance { margin-top: 6px; color: #ffce7b; font: 800 24px 'Oxanium', sans-serif; text-shadow: 0 0 13px #e6985b6b; }
+.landing-shell .shard-help { color: #b5c9d5; font-size: 11px; }
+.landing-shell .ship-choice { flex: 1 1 128px; max-width: 188px; min-width: 112px; border: 1px solid #6ba3c1; background: linear-gradient(150deg, #173755, #121f3a); color: #f1faff; box-shadow: inset 0 -3px #43c6db4a, 0 0 12px #1b88be20; }
+.landing-shell .ship-choice > span:not(.ship-preview, .metal-swatch) { font: 700 16px/1.12 'Rajdhani', sans-serif; letter-spacing: .015em; }
+.landing-shell .ship-choice small { color: #ffd696; font-size: 10px; }
+.landing-shell .ship-choice[aria-pressed="true"] { border-color: #75f9cb; background: linear-gradient(145deg, #14545be8, #173253); box-shadow: inset 0 -4px #54eabe, inset 0 0 20px #58e5c123, 0 0 16px #49f2bd58; }
+.landing-shell .ship-unowned:not([aria-pressed="true"]) { border-color: #53627b; background: linear-gradient(#253049, #1c273b); color: #bbc5d2; box-shadow: none; }
+.landing-shell .hangar-variant-title { color: #e9f5ff; font: 700 19px 'Oxanium', sans-serif; text-transform: uppercase; }
+.landing-shell .hangar-selection { padding: 10px 12px; border-left: 3px solid #6ce3cb; background: #122d46c7; color: #d3e8ed !important; font-size: 15px; }
+.landing-shell .hangar-selection strong { color: #a0ffdb; font-family: 'Oxanium', sans-serif; }
+.landing-shell .hangar-offer-grid { gap: 16px; }
+.landing-shell .hangar-offer { border-color: color-mix(in srgb, var(--offer-color) 70%, #273657); background: linear-gradient(145deg, color-mix(in srgb, var(--offer-color) 12%, #15213e), #0a1831 74%); box-shadow: inset 0 2px color-mix(in srgb, var(--offer-color) 45%, transparent), 0 12px 28px #02091c73; }
+.landing-shell .hangar-offer-selected { border-color: #62f5c4; box-shadow: inset 0 -3px #62f5c4, 0 0 19px #56e7bc53; }
+.landing-shell .hangar-offer h4 { color: #f6fbff; font: 800 21px 'Oxanium', sans-serif; text-transform: uppercase; }
+.landing-shell .hangar-offer p { color: #c0d3e2; font-size: 14px; }
+.landing-shell .hangar-offer > span { color: #ffce7e; font-size: 12px; }
+.landing-shell .hangar-offer > strong { color: #9ef9d6; font-size: 12px; }
+.landing-shell :is(.shop-modal, .info-panel-content, .signin-modal) .button { min-height: 49px; font: 800 13px/1.1 'Oxanium', sans-serif; letter-spacing: .025em; text-transform: uppercase; clip-path: polygon(0 10px, 10px 0, calc(100% - 11px) 0, 100% 11px, 100% 100%, 11px 100%, 0 calc(100% - 11px)); }
+.landing-shell :is(.shop-modal, .info-panel-content, .signin-modal) .button-primary { border-color: #ffdc9d; background: linear-gradient(110deg, #ffd27b, #ffad63 53%, #ff7970); color: #211b27; box-shadow: inset 0 1px #fff2cf, 0 0 16px #ff9b625e; }
+.landing-shell :is(.shop-modal, .info-panel-content, .signin-modal) .button-secondary { border-color: #75dff1; background: linear-gradient(120deg, #194056, #1c294c); color: #e7fbff; }
+.landing-shell :is(.shop-modal, .info-panel-content, .signin-modal) .button:disabled { border-color: #ad737c; background: linear-gradient(#482a3d, #2b2338); color: #f0b5b8; box-shadow: none; }
+.landing-shell .hangar-offer button { min-height: 49px; }
+.landing-shell .upgrade-section .section-heading { border-bottom: 1px solid #76cfe04f; padding-bottom: 12px; }
+.landing-shell .upgrade-section .section-line { background: linear-gradient(90deg, #ffad7b, transparent); }
+.landing-shell .progress-card .progress-row strong, .landing-shell .streak-number { color: #ffe0a3; font: 800 clamp(22px, 4vw, 40px) 'Oxanium', sans-serif; }
+.landing-shell .progress-track { height: 7px; background: #18314c; }
+.landing-shell .progress-track span { background: linear-gradient(90deg, #42e5c7, #f1b97b); box-shadow: 0 0 11px #55dfcb; }
+.landing-shell .leaderboard-section { padding: clamp(16px, 4vw, 36px); }
+.landing-shell .leaderboard-scroll { border-color: #64c8e18c; background: #07182cbd; }
+.landing-shell .leaderboard-scroll th { background: #172c49; color: #ffce91; font: 700 12px 'Oxanium', sans-serif; text-transform: uppercase; }
+.landing-shell .leaderboard-scroll td { border-bottom-color: #71a9ca39; color: #e6f4fa; }
+.landing-shell .leaderboard-scroll tbody tr:nth-child(odd) { background: #5383b00f; }
+.landing-shell .leaderboard-scroll tbody tr:first-child td { color: #ffe5ac; }
+.landing-shell .system-menu-panel h2 { margin-bottom: 17px; }
+.landing-shell .system-menu-section { border-top-color: #76cce056; }
+.landing-shell .system-menu-heading strong, .landing-shell .control-choice-group > strong { color: #ffd18b; font: 700 13px 'Oxanium', sans-serif; letter-spacing: .06em; }
+.landing-shell .system-menu-heading small { color: #bbd2e1; font-size: 13px; }
+.landing-shell :is(.language-trigger, .language-option, .system-setting) { border-color: #72b4d37a; background: linear-gradient(135deg, #163750eb, #152340ed); color: #f2faff; }
+.landing-shell :is(.language-trigger, .language-option, .system-setting) b { font: 700 14px/1.25 'Rajdhani', 'Space Grotesk', sans-serif; letter-spacing: .025em; }
+.landing-shell :is(.language-trigger, .language-option, .system-setting)[aria-pressed="true"] { border-color: #62f0c0; background: linear-gradient(135deg, #11605eeb, #1b4355ed); box-shadow: inset 0 -3px #63e7b8, 0 0 16px #48edc04a; }
+.landing-shell .language-menu { border-color: #67bad289; background: linear-gradient(145deg, #081c32, #142540); }
+.landing-shell .music-volume-slider { border-color: #66cadc83; background: linear-gradient(135deg, #102d45, #151e3d); }
+.landing-shell .music-volume-slider label { color: #ffd190; font: 700 13px 'Oxanium', sans-serif; }
+.landing-shell .music-volume-slider output { color: #8cffe1; }
+.landing-shell .close-button { width: 37px; height: 37px; border: 1px solid #d6a491ab; border-radius: 0; background: #3b2b3b8a; color: #ffd6af; clip-path: polygon(0 8px, 8px 0, 100% 0, 100% 100%, 8px 100%, 0 calc(100% - 8px)); }
+.landing-shell .close-button:hover { border-color: #ffb5a2; background: #803c50ad; color: #fff2e7; box-shadow: 0 0 15px #ff8b775e; }
+.landing-shell :is(.info-panel-content, .signin-modal) > p:not(.eyebrow) { color: #cfdeea; font-size: 16px; line-height: 1.45; }
+.landing-shell .terms-dialog pre { color: #e4eef4; }
+.legal-page { background: radial-gradient(circle at 79% 8%, #42317371, transparent 38%), #070f21; }
+.legal-page-header, .legal-document { border-color: #75d1e27a; background-color: #101d36ef; }
+.legal-page-header strong { font: 800 clamp(15px, 2.6vw, 22px) 'Oxanium', sans-serif; color: #ffd496; }
+.legal-back { color: #74eff1; font: 700 14px 'Oxanium', sans-serif; text-transform: uppercase; }
+@media (max-width: 600px) {
+  .landing-shell .shop-tabs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding: 7px; }
+  .landing-shell .shop-tabs button { min-height: 48px; flex-direction: row; gap: 5px; padding: 5px; }
+  .landing-shell .shop-tabs button > span { width: 22px; height: 22px; font-size: 12px; }
+  .landing-shell .shop-tabs button > b { font-size: clamp(10px, 2.6vw, 12px); white-space: normal; line-height: 1.08; }
+  .landing-shell .shop-modal-header strong { font-size: 17px; }
+  .landing-shell .shop-modal-body { padding: 12px; }
+  .landing-shell .ship-choice { flex-basis: calc(50% - 7px); max-width: none; min-width: 0; }
+  .landing-shell .ship-preview { width: 66px; height: 66px; }
+  .landing-shell .hangar-offer { padding: 13px; }
+}
+html[lang="th"] .landing-shell :is(.language-option, .system-setting) b { line-height: 1.55; }
