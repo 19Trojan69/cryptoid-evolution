@@ -16,7 +16,7 @@ import { damageSectorBoss, bossFireInterval, bossVulnerable, createSectorBoss, m
 import { bossNozzleStyles, enemySprite, selectedShip, shardBalance, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
 import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio";
-import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, readMusicVolume } from "./musicPreferences";
+import { DEFAULT_EFFECTS_VOLUME, DEFAULT_MUSIC_VOLUME, EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, resetAudioVolumeDefaults } from "./musicPreferences";
 import { MusicPlayer } from "./musicPlayback";
 import MusicVolumeSlider from "./MusicVolumeSlider";
 import { axiosClient } from "../lib/axiosClient";
@@ -255,8 +255,9 @@ const GamePage = () => {
   const checkpointScoreRef = useRef(0);
   const [scoreSync, setScoreSync] = useState<"idle" | "saving" | "saved" | "failed">("idle");
   const [musicEnabled] = useState(() => localStorage.getItem(MUSIC_STORAGE_KEY) !== "off");
-  const [musicVolume, setMusicVolume] = useState(readMusicVolume);
-  const [effectsVolume, setEffectsVolume] = useState(readEffectsVolume);
+  const [musicVolume, setMusicVolume] = useState(DEFAULT_MUSIC_VOLUME);
+  const [effectsVolume, setEffectsVolume] = useState(DEFAULT_EFFECTS_VOLUME);
+  useEffect(() => { resetAudioVolumeDefaults(); }, []);
   const musicRef = useRef<MusicPlayer | null>(null);
   const regularMusicPositionRef = useRef(0);
   const soundRef = useRef<GameAudio | null>(null);
@@ -318,7 +319,7 @@ const GamePage = () => {
 
   useEffect(() => {
     if (!musicEnabled) return;
-    const track = new MusicPlayer("/audio/battle-orbit.mp3", readMusicVolume());
+    const track = new MusicPlayer("/audio/battle-orbit.mp3", DEFAULT_MUSIC_VOLUME);
     musicRef.current = track;
     const resume = () => {
       if (stateRef.current.status === "playing") void track.play();

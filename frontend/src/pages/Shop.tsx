@@ -12,7 +12,7 @@ import PaintedShip from "./PaintedShip";
 import TermsDialog from "../components/TermsDialog";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
 import { primeGameAudio } from "./gameAudio";
-import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, readMusicVolume } from "./musicPreferences";
+import { DEFAULT_EFFECTS_VOLUME, DEFAULT_MUSIC_VOLUME, EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, resetAudioVolumeDefaults } from "./musicPreferences";
 import { MusicPlayer } from "./musicPlayback";
 import MusicVolumeSlider from "./MusicVolumeSlider";
 import Starfield from "./Starfield";
@@ -78,11 +78,12 @@ const Shop = () => {
   const musicEnabledRef = useRef(true);
   // Entering the homescreen starts a fresh session with music enabled.
   useEffect(() => { localStorage.setItem(MUSIC_STORAGE_KEY, "on"); }, []);
-  const [musicVolume, setMusicVolume] = useState(readMusicVolume);
-  const [effectsVolume, setEffectsVolume] = useState(readEffectsVolume);
+  const [musicVolume, setMusicVolume] = useState(DEFAULT_MUSIC_VOLUME);
+  const [effectsVolume, setEffectsVolume] = useState(DEFAULT_EFFECTS_VOLUME);
+  useEffect(() => { resetAudioVolumeDefaults(); }, []);
   const homeMusicRef = useRef<MusicPlayer | null>(null);
   useEffect(() => {
-    const music = new MusicPlayer("/audio/home-galactic-chain.mp3", readMusicVolume());
+    const music = new MusicPlayer("/audio/home-galactic-chain.mp3", DEFAULT_MUSIC_VOLUME);
     homeMusicRef.current = music;
     const start = () => { if (musicEnabledRef.current) void music.play(); };
     const resumeOnGesture = (event: Event) => {
