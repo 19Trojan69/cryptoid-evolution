@@ -187,7 +187,14 @@ const audioSettingsTranslations: Partial<Record<Locale, Record<string, string>>>
   uk: { "Music volume": "Гучність музики", "Quiet": "Тихо", "Balanced": "Збалансовано", "Loud": "Голосно" },
   th: { "Music volume": "ระดับเสียงเพลง", "Quiet": "เบา", "Balanced": "สมดุล", "Loud": "ดัง" },
 };
-export const translate = (locale: Locale, source: string) => locale === "en" ? source : audioSettingsTranslations[locale]?.[source] ?? gameplayPolishTranslations[locale]?.[source] ?? homeMusicTranslations[locale]?.[source] ?? controlTranslations[locale]?.[source] ?? hudTranslations[locale]?.[source] ?? systemMenuTranslations[locale]?.[source] ?? extendedTranslations[locale]?.[source] ?? powerUpTranslations[locale]?.[source] ?? levelTranslations[locale]?.[source] ?? networkTranslations[locale]?.[source] ?? newerTranslations[locale]?.[source] ?? translations[locale]?.[source] ?? source;
+const failedMissionTranslations: Record<Locale, string> = {
+  en: "MISSION FAILED", de: "MISSION GESCHEITERT", es: "MISIÓN FALLIDA", fr: "MISSION ÉCHOUÉE",
+  pt: "MISSÃO FALHOU", it: "MISSIONE FALLITA", pl: "MISJA NIEUDANA", tr: "GÖREV BAŞARISIZ",
+  ru: "МИССИЯ ПРОВАЛЕНА", hr: "MISIJA NIJE USPJELA", cs: "MISE SELHALA", sk: "MISIA ZLYHALA",
+  hu: "KÜLDETÉS SIKERTELEN", ro: "MISIUNE EȘUATĂ", sr: "МИСИЈА НИЈЕ УСПЕЛА",
+  uk: "МІСІЮ ПРОВАЛЕНО", th: "ภารกิจล้มเหลว",
+};
+export const translate = (locale: Locale, source: string) => source === "MISSION FAILED" ? failedMissionTranslations[locale] : locale === "en" ? source : audioSettingsTranslations[locale]?.[source] ?? gameplayPolishTranslations[locale]?.[source] ?? homeMusicTranslations[locale]?.[source] ?? controlTranslations[locale]?.[source] ?? hudTranslations[locale]?.[source] ?? systemMenuTranslations[locale]?.[source] ?? extendedTranslations[locale]?.[source] ?? powerUpTranslations[locale]?.[source] ?? levelTranslations[locale]?.[source] ?? networkTranslations[locale]?.[source] ?? newerTranslations[locale]?.[source] ?? translations[locale]?.[source] ?? source;
 export const useLocale = () => {
   const [locale, setLocale] = useState<Locale>(() => resolveLocale(navigator.languages?.length ? navigator.languages : [navigator.language], localStorage.getItem(STORAGE_KEY)));
   const [automatic, setAutomatic] = useState(() => !localStorage.getItem(STORAGE_KEY));
