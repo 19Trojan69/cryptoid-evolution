@@ -275,7 +275,7 @@ const Shop = () => {
         <div className="home-deep-space" aria-hidden="true"><span className="home-far-planet home-far-planet-gas" /><span className="home-far-planet home-far-planet-saturn" /><span className="home-far-planet home-far-moon" /><span className="home-black-hole"><i /></span></div>
         <div className="hero-copy">
           <p className="eyebrow"><span className="signal-dot" /> {t("Mission control online")}</p>
-          <h1>Cryptoid <span>Evolution</span><svg className="home-title-electric" viewBox="0 0 48 170" aria-hidden="true"><path d="M29 1 16 28 34 43 9 71 29 88 14 111 38 133 18 169" /></svg></h1>
+          <h1><span className="home-title-word">Cryptoid</span><span className="home-title-evolution">Evolution</span></h1>
           <p className="hero-tagline">Defend Earth. <span>Evolve your power.</span></p>
           <p className="hero-description">{t('Build your streak, master the grid, and become the force Earth needs.')}</p>
           <div className="home-mission-brief" aria-label={t("Your Progress")}><span className="home-mission-marker" aria-hidden="true">◆</span><span><small>{t("Genesis sector")} · {t("EQUIPPED")}</small><strong>{selected.skin.name} <em>· {t(selected.color.name)}</em></strong></span>{records.bestScore > 0 && <span className="home-mission-best"><small>{t("Best score")}</small><strong>{records.bestScore.toLocaleString()}</strong></span>}</div>
