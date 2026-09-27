@@ -74,44 +74,35 @@ const Shop = () => {
   const [leaders, setLeaders] = useState<Leader[]>([]);
   const [leadersStatus, setLeadersStatus] = useState<"loading" | "ready" | "error">("loading");
   const [personalBest, setPersonalBest] = useState<number | null>(null);
-  const [musicEnabled, setMusicEnabled] = useState(() => localStorage.getItem(MUSIC_STORAGE_KEY) !== "off");
+  const [musicEnabled, setMusicEnabled] = useState(true);
+  const musicEnabledRef = useRef(true);
+  // Entering the homescreen starts a fresh session with music enabled.
+  useEffect(() => { localStorage.setItem(MUSIC_STORAGE_KEY, "on"); }, []);
   const [musicVolume, setMusicVolume] = useState(readMusicVolume);
   const [effectsVolume, setEffectsVolume] = useState(readEffectsVolume);
   const homeMusicRef = useRef<MusicPlayer | null>(null);
-  const [musicPlaying, setMusicPlaying] = useState(false);
-  const [musicBlocked, setMusicBlocked] = useState(false);
-  const startMusicRef = useRef<(() => void) | null>(null);
   useEffect(() => {
-    if (!musicEnabled) {
-      setMusicPlaying(false);
-      setMusicBlocked(false);
-      return;
-    }
     const music = new MusicPlayer("/audio/home-galactic-chain.mp3", readMusicVolume());
     homeMusicRef.current = music;
-    let active = true;
-    const start = () => {
-      void music.play().then(playing => {
-        if (active) { setMusicPlaying(playing); setMusicBlocked(!playing); }
-      });
-    };
-    startMusicRef.current = start;
+    const start = () => { if (musicEnabledRef.current) void music.play(); };
     const resumeOnGesture = (event: Event) => {
       if (event.target instanceof Element && event.target.closest(".home-music-toggle")) return;
       start();
     };
     document.addEventListener("pointerdown", resumeOnGesture, true);
+    document.addEventListener("pointerup", resumeOnGesture, true);
+    document.addEventListener("touchend", resumeOnGesture, true);
     document.addEventListener("keydown", resumeOnGesture, true);
     start();
     return () => {
-      active = false;
       document.removeEventListener("pointerdown", resumeOnGesture, true);
+      document.removeEventListener("pointerup", resumeOnGesture, true);
+      document.removeEventListener("touchend", resumeOnGesture, true);
       document.removeEventListener("keydown", resumeOnGesture, true);
-      startMusicRef.current = null;
       music.close();
       if (homeMusicRef.current === music) homeMusicRef.current = null;
     };
-  }, [musicEnabled]);
+  }, []);
   useEffect(() => { if (homeMusicRef.current) homeMusicRef.current.setVolume(musicVolume); }, [musicVolume]);
   const changeEffectsVolume = (value: number) => {
     localStorage.setItem(EFFECTS_VOLUME_KEY, String(value));
@@ -122,12 +113,14 @@ const Shop = () => {
     setMusicVolume(value);
   };
   const toggleHomeMusic = () => {
-    if (musicEnabled && musicBlocked) { startMusicRef.current?.(); return; }
-    const next = !musicEnabled;
+    const next = !musicEnabledRef.current;
+    musicEnabledRef.current = next;
     localStorage.setItem(MUSIC_STORAGE_KEY, next ? "on" : "off");
     setMusicEnabled(next);
+    if (next) void homeMusicRef.current?.play();
+    else homeMusicRef.current?.pause();
   };
-  const musicLabel = t(musicBlocked ? "Tap for music" : musicEnabled ? "Music on" : "Music off");
+  const musicLabel = t(musicEnabled ? "Music on" : "Music off");
   useEffect(() => {
     if (shopView !== "leaders" && shopView !== "progress") return;
     let current = true;
@@ -270,7 +263,7 @@ const Shop = () => {
       />
 
       <section className="hero-section">
-        <button className="home-music-toggle" type="button" data-state={musicPlaying ? "playing" : "off"} aria-pressed={musicPlaying} aria-label={musicLabel} title={musicLabel} onClick={toggleHomeMusic}><span className="home-music-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" />{musicPlaying ? <><path d="M16 9a4 4 0 0 1 0 6" /><path d="M19 6a8 8 0 0 1 0 12" /></> : <path d="m17 9 5 6m0-6-5 6" />}</svg></span></button>
+        <button className="home-music-toggle" type="button" data-state={musicEnabled ? "playing" : "off"} aria-pressed={musicEnabled} aria-label={musicLabel} title={musicLabel} onClick={toggleHomeMusic}><span className="home-music-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" />{musicEnabled ? <><path d="M16 9a4 4 0 0 1 0 6" /><path d="M19 6a8 8 0 0 1 0 12" /></> : <path d="m17 9 5 6m0-6-5 6" />}</svg></span></button>
         <Starfield sector={1} player={{ x: .5, y: .8 }} paused={false} />
         <div className="home-deep-space" aria-hidden="true"><span className="home-far-planet home-far-planet-gas" /><span className="home-far-planet home-far-planet-saturn" /><span className="home-far-planet home-far-moon" /><span className="home-black-hole"><i /></span></div>
         <div className="hero-copy">
