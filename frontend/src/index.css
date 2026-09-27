@@ -1381,24 +1381,6 @@ html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-
   .game-hud .hud-actions .home-control, .game-hud .pause-control { width: 40px; min-width: 40px; height: 40px; min-height: 40px; }
 }
 
-/* The weapon count is a status indicator, not a selector. Keep the middle HUD for points and Shards. */
-.weapon-side { position: absolute; z-index: 6; right: max(8px, env(safe-area-inset-right)); top: 47%; display: flex; flex-direction: column; align-items: center; gap: 3px; width: 58px; padding: 7px 3px; border: 1px solid rgba(189, 141, 255, .55); border-radius: 8px; background: rgba(8, 22, 42, .84); color: #e3ccff; text-align: center; pointer-events: none; }
-.weapon-side-right { right: auto; left: max(8px, env(safe-area-inset-left)); }
-.weapon-side > span { font: 600 8px/1.1 'Space Grotesk', sans-serif; }
-.weapon-side strong { font: 700 20px/1 'Oxanium', sans-serif; }
-.weapon-side strong small { font-size: 11px; opacity: .75; }
-.weapon-side-steps { display: flex; gap: 2px; }
-.weapon-side-steps i { width: 8px; height: 3px; border-radius: 2px; background: #566073; }
-.weapon-side-steps i.active { background: #d5adff; }
-@media (max-width: 375px) {
-  .game-hud { grid-template-columns: 40px minmax(0, 1fr) minmax(0, 1fr) 40px; grid-template-areas: "home score coins pause" "hearts hearts level round"; }
-  .game-hud .hud-stat.score-hud strong, .game-hud .hud-stat.coin-stat strong { font-size: 19px; }
-  .game-label { top: calc(max(4px, env(safe-area-inset-top)) + 95px); }
-  .power-status { top: calc(max(4px, env(safe-area-inset-top)) + 110px); }
-  .bonus-counter { top: calc(max(4px, env(safe-area-inset-top)) + 135px); }
-}
-
-
 /* The boss uses one integrated transparent ship sprite, sized for the phone. */
 .asteroid.sector-boss::after { display: none; }
 .sector-boss { --boss-hue: 0deg; --boss-glow: #72dcff75; }
@@ -1543,4 +1525,41 @@ html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-
   .landing-shell .ship-evolution-offers .hangar-offer button { min-width: 0; min-height: 46px; padding: 5px; border-radius: 10px; clip-path: none; font-size: 11px; }
   .landing-shell .ship-variants .ship-choice { border-radius: 12px; clip-path: none; }
   .landing-shell .ship-selector-shop .hangar-actions .button { border-radius: 11px; clip-path: none; }
+}
+
+
+/* Shallow cockpit canopy: Shards above Score in the center, status around it. */
+.game-hud { grid-template-columns: minmax(42px, .8fr) minmax(58px, 1fr) minmax(58px, 1fr) minmax(134px, 1.8fr) minmax(58px, 1fr) minmax(58px, 1fr) minmax(42px, .8fr); padding-bottom: 12px; border-radius: 0 0 42% 42% / 0 0 14px 14px; background: radial-gradient(ellipse 34% 75% at 50% 2%, rgba(43, 112, 140, .22), transparent), linear-gradient(180deg, rgba(3, 14, 29, .99), rgba(6, 28, 46, .97)); }
+.game-hud::after { left: 17%; right: 17%; background: linear-gradient(90deg, transparent, rgba(91, 220, 231, .55), rgba(194, 139, 250, .65), rgba(91, 220, 231, .55), transparent); }
+.game-hud .score-hud { min-width: 0; min-height: 54px; gap: 0; padding: 2px 4px; border-color: rgba(125, 228, 211, .67); background: linear-gradient(180deg, rgba(13, 55, 69, .8), rgba(10, 36, 56, .64)); }
+.game-hud .score-hud .shard-line, .game-hud .score-hud .score-line { display: flex; align-items: center; justify-content: center; gap: 5px; min-width: 0; height: 24px; white-space: nowrap; font-family: 'DM Mono', monospace; letter-spacing: 0; }
+.game-hud .score-hud .shard-line { color: #ffda88; border-bottom: 1px solid rgba(154, 209, 225, .25); }
+.game-hud .score-hud .score-line { color: #a3f1d6; }
+.game-hud .score-hud b { font: 700 19px/1 'Oxanium', sans-serif; font-variant-numeric: tabular-nums; }
+.game-hud .score-hud small { font: 600 8px/1 'DM Mono', monospace; }
+@media (max-width: 560px) {
+  .game-hud { grid-template-columns: 36px minmax(34px, .62fr) minmax(36px, .68fr) minmax(92px, 1.82fr) minmax(37px, .68fr) minmax(34px, .62fr) 36px; grid-template-areas: "home hearts level score weapon round pause"; gap: 2px; padding: max(4px, env(safe-area-inset-top)) 4px 10px; }
+  .hud-actions { grid-area: home; }
+  .hearts-stat { grid-area: hearts; }
+  .game-level-hud { grid-area: level; }
+  .score-hud { grid-area: score; }
+  .weapon-hud { grid-area: weapon; }
+  .round-hud { grid-area: round; }
+  .pause-control { grid-area: pause; }
+  .game-hud .hud-actions .home-control, .game-hud .pause-control { width: 36px; min-width: 36px; height: 44px; min-height: 44px; }
+  .game-hud .score-hud { min-height: 54px; padding: 2px; }
+  .game-hud .score-hud .shard-line, .game-hud .score-hud .score-line { height: 24px; gap: 3px; }
+  .game-hud .score-hud b { font-size: clamp(14px, 4.6vw, 19px); }
+  .game-hud .score-hud small { font-size: 7px; }
+  .game-hud .hud-stat.weapon-hud strong { font-size: 15px; }
+  .game-hud .weapon-hud > span { font-size: 7px; }
+  .game-label { top: calc(max(4px, env(safe-area-inset-top)) + 75px); }
+  .power-status { top: calc(max(4px, env(safe-area-inset-top)) + 90px); }
+  .bonus-counter { top: calc(max(4px, env(safe-area-inset-top)) + 115px); }
+}
+@media (max-width: 375px) {
+  .game-hud { grid-template-columns: 30px minmax(31px, .55fr) minmax(34px, .6fr) minmax(80px, 1.65fr) minmax(35px, .6fr) minmax(31px, .55fr) 30px; gap: 2px; padding-right: 3px; padding-left: 3px; }
+  .game-hud .hud-actions .home-control, .game-hud .pause-control { width: 30px; min-width: 30px; }
+  .game-hud .score-hud b { font-size: 14px; }
+  .game-hud .score-hud small { font-size: 6px; }
 }
