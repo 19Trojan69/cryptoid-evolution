@@ -1104,7 +1104,7 @@ html[data-motion="reduced"] .home-crossfire-shot, html[data-motion="reduced"] .h
 .home-network-rim { fill: none; stroke: rgba(255, 202, 102, .44); stroke-width: 1; }
 .home-network-grid { fill: none; stroke: rgba(255, 205, 112, .73); stroke-width: 1.03; stroke-linecap: round; }
 .home-network-parallels { stroke: rgba(255, 219, 151, .68); stroke-width: .98; }
-.home-network-links { fill: none; stroke: rgba(255, 183, 74, .43); stroke-width: .72; stroke-linejoin: round; }
+.home-network-links { fill: none; stroke: rgba(255, 183, 74, .56); stroke-width: .78; stroke-linejoin: round; }
 .home-network-pulse { fill: none; stroke: #fff2b8; stroke-width: 2.7; stroke-linecap: round; stroke-dasharray: 3 97; filter: drop-shadow(0 0 4px #ffb32e); animation: home-network-travel 4.7s linear infinite; }
 .home-network-pulse-alt { stroke: #ffc257; stroke-width: 2.25; animation-duration: 6.2s; animation-delay: -2.1s; }
 .home-network-nodes circle { fill: #fff4c8; stroke: #ffad37; stroke-width: 1.5; filter: drop-shadow(0 0 3px #ffb742); animation: home-network-node 3.7s ease-in-out infinite; }
