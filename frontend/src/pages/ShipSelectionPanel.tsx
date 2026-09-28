@@ -22,6 +22,7 @@ type Props = {
   message: string;
   selectedSkinId: string;
   selectedColorId: string;
+  locale: string;
   t: (source: string) => string;
   onStageChange: (stage: ShipStage) => void;
   onColorChange: (color: Color) => void;
@@ -34,7 +35,7 @@ const stageLabel = (stage: ShipStage) => stage === 1 ? "STANDARD" : stage === 2 
 
 export default function ShipSelectionPanel({
   view, skin, color, focusStage, ownedStage, fleet, shards, offers, catalogReady,
-  isLoading, message, selectedSkinId, selectedColorId, t, onStageChange, onColorChange,
+  isLoading, message, selectedSkinId, selectedColorId, locale, t, onStageChange, onColorChange,
   onBuyStandard, onBuyUpgrade, onOpenShop,
 }: Props) {
   const hullCount = fleetCount(fleet, skin.id);
@@ -48,6 +49,7 @@ export default function ShipSelectionPanel({
   const piOffer = offerFor(piStage);
   const piOwned = ownedStage >= piStage;
   const piReady = hullCount > 0 && (piStage === 2 || ownedStage >= 2);
+  const formatPi = (value: number) => value.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const colors = allPlayerColors.filter(item => view === "shop"
     ? playerColors.some(available => available.id === item.id) || fleetCount(fleet, skin.id, item.id) > 0
     : fleetCount(fleet, skin.id, item.id) > 0);
@@ -65,7 +67,7 @@ export default function ShipSelectionPanel({
         const offer = level === 1 ? undefined : offerFor(level);
         return <button key={level} type="button" aria-pressed={stage === level} onClick={() => onStageChange(level)}>
           <span>0{level} · {t(stageLabel(level))}</span>
-          <small>{stageOwned ? t("OWNED") : level === 1 ? "◆ " + price : offer ? offer.pricePi + " π" : "π"}</small>
+          <small>{stageOwned ? t("OWNED") : level === 1 ? "◆ " + price : offer ? formatPi(offer.pricePi) + " π" : "π"}</small>
         </button>;
       })}
     </div>}
@@ -98,7 +100,7 @@ export default function ShipSelectionPanel({
           <button className="button button-secondary ship-shard-button" type="button" onClick={onBuyStandard} disabled={shards < price}>{t(hullCount ? "Buy another for" : "Buy for")} ◆ {price}</button>
           <button className="button button-primary ship-pi-button" type="button" disabled={!piOffer || piOwned || isLoading || !catalogReady || !piReady}
             title={!piReady ? t(hullCount ? "Requires Stage 2" : "Buy hull with Shards first") : undefined}
-            onClick={() => { if (piOffer) onBuyUpgrade(piOffer); }}>{piOwned ? t("OWNED") : t("Buy with π")} · {t(stageLabel(piStage))} {piOffer?.pricePi ?? "–"} π</button>
+            onClick={() => { if (piOffer) onBuyUpgrade(piOffer); }}>{piOwned ? t("OWNED") : t("Buy with π")} · {t(stageLabel(piStage))} {piOffer ? formatPi(piOffer.pricePi) : "–"} π</button>
         </>}
     </div>
     {view === "shop" && shards < price && <small className="ship-shortfall">◆ {price - shards} {t("more Shards needed")}</small>}
