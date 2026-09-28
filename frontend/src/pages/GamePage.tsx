@@ -15,6 +15,7 @@ import { appendSectionBlock, BLOCKS_PER_CHAIN } from "./networkChain";
 import { damageSectorBoss, bossFireInterval, bossVulnerable, createSectorBoss, moveSectorBoss, nextAfterClear, type SectorBoss } from "./sectorBoss";
 import { enemySprite, selectedShip, shardBalance, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
+import { useShipVisualOffset } from "./paintedShip";
 import { ownedShipStage, projectileGuardForStage, projectileImpact, stageWeaponLevel, type ShipStage } from "./shipEvolution";
 import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio";
 import { DEFAULT_EFFECTS_VOLUME, DEFAULT_MUSIC_VOLUME, EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, resetAudioVolumeDefaults } from "./musicPreferences";
@@ -289,6 +290,7 @@ const GamePage = () => {
   const [homePrompt, setHomePrompt] = useState(false);
   const [shipSelection] = useState(selectedShip);
   const [shipStage, setShipStage] = useState<ShipStage>(1);
+  const shipVisualOffset = useShipVisualOffset(shipSelection.skin.sprite, shipStage);
   const shipStageRef = useRef<ShipStage>(1);
   const recordsSavedRef = useRef(false);
   const scoreRunRef = useRef<string | null>(null);
@@ -986,7 +988,7 @@ const GamePage = () => {
         {game.shots.map(shot => <div key={shot.id} className={`player-laser${shot.empowered ? " player-laser-overdrive" : ""}`} style={{ left: shot.x, top: shot.y }} />)}
         {game.enemyShots.map(shot => <div key={shot.id} className="enemy-laser" style={{ left: shot.x, top: shot.y }} />)}
         {game.effects.map(effect => <div key={effect.id} className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y }} aria-hidden="true"><span />{effect.kind === "hit" && <><i /><i /><i /></>}{bossFireBursts(effect)}{shipDebris(effect)}</div>)}
-        {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0 ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${5 + game.thrust * 13}%` } as CSSProperties} aria-label={t('Your Cryptoid ship')}><div className="ship-visual"><i className="fleet-sprite" style={{ ...spriteStyle(shipSelection.skin.sprite), filter: "none", opacity: shipStage === 1 ? 1 : 0 }} aria-hidden="true" /><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} />{engineTrails(shipSelection.skin.sprite, "player-engine")}</div></div>}
+        {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship shielded-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0 ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${5 + game.thrust * 13}%`, ...shipVisualOffset } as CSSProperties} aria-label={t('Your Cryptoid ship')}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} />{engineTrails(shipSelection.skin.sprite, "player-engine")}</div></div>}
         {guideStep >= 0 && game.status === "playing" && <aside className="game-coach" role="status" aria-live="polite"><small>{t("QUICK GUIDE")} · {guideStep + 1}/4</small><p>{guideHints[guideStep]}</p><button type="button" onClick={dismissGuide}>{t("Skip guide")}</button></aside>}
         <div className={`touch-controls touch-controls-${readControlHand()}`}>
           <div className="edge-actions" role="group" aria-label={t('Available equipment')}>

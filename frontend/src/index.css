@@ -424,6 +424,7 @@ html[data-motion="reduced"] .level-twinkles i { animation: none; opacity: .42; }
 .cryptoid-ghostCoin .asteroid-shape { clip-path: polygon(50% 0, 71% 24%, 96% 26%, 82% 65%, 100% 85%, 68% 74%, 50% 100%, 32% 74%, 0 85%, 18% 65%, 4% 26%, 29% 24%); }
 .cryptoid::after { display: none; }
 .ship-visual { position: absolute; inset: 0; transform-origin: 50% 50%; pointer-events: none; }
+.shielded-ship .ship-visual { transform: translate(var(--ship-visual-offset-x, 0%), var(--ship-visual-offset-y, 0%)); }
 .fleet-sprite { position: absolute; inset: 0; background-size: 400% 500%; background-repeat: no-repeat; pointer-events: none; }
 .cryptoid .ship-visual { transform: rotate(180deg); }
 .cryptoid .fleet-sprite { z-index: 1; }

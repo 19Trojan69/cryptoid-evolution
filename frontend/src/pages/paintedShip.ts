@@ -1,26 +1,57 @@
 import { useEffect, useState, type CSSProperties } from "react";
 import { allPlayerColors, type PlayerColorId } from "./shipFleet";
 import { shipEvolutionAsset, type ShipStage } from "./shipEvolution";
+import { shipVisualCenter } from "./shipVisualCenter";
 
 const cache = new Map<string, string>();
 const sourceImages = new Map<string, Promise<HTMLImageElement>>();
-const shipImage = (url: string) => sourceImages.get(url) ?? new Promise<HTMLImageElement>((resolve, reject) => {
-  const image = new Image();
-  image.onload = () => resolve(image);
-  image.onerror = reject;
-  image.src = url;
-});
+const visualCenters = new Map<string, { x: number; y: number }>();
+const shipImage = (url: string) => {
+  let pending = sourceImages.get(url);
+  if (!pending) {
+    pending = new Promise<HTMLImageElement>((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = canvas.height = 240;
+        const context = canvas.getContext("2d", { willReadFrequently: true });
+        if (context) {
+          context.drawImage(image, 0, 0, 240, 240);
+          visualCenters.set(url, shipVisualCenter(context.getImageData(0, 0, 240, 240).data, 240, 240));
+        }
+        resolve(image);
+      };
+      image.onerror = reject;
+      image.src = url;
+    });
+    sourceImages.set(url, pending);
+  }
+  return pending;
+};
+
+// Apply this to the owner of a .ship-visual, including any future shielded ship.
+// The whole visual moves together, so the engine exhaust stays on its nozzles.
+export const useShipVisualOffset = (index: number, stage: ShipStage): CSSProperties => {
+  const url = shipEvolutionAsset(index, stage);
+  const [readyUrl, setReadyUrl] = useState<string | null>(null);
+  useEffect(() => {
+    let active = true;
+    void shipImage(url).then(() => { if (active) setReadyUrl(url); }).catch(() => {});
+    return () => { active = false; };
+  }, [url]);
+  const center = visualCenters.get(url);
+  const ready = readyUrl === url || center !== undefined;
+  return {
+    "--ship-visual-offset-x": `${ready ? center?.x ?? 0 : 0}%`,
+    "--ship-visual-offset-y": `${ready ? center?.y ?? 0 : 0}%`,
+  } as CSSProperties;
+};
 
 const createPaintedSprite = async (index: number, colorId: PlayerColorId, stage: ShipStage) => {
   const key = `${index}:${stage}:${colorId}`;
   if (cache.has(key)) return cache.get(key)!;
   const url = shipEvolutionAsset(index, stage);
-  let pending = sourceImages.get(url);
-  if (!pending) {
-    pending = shipImage(url);
-    sourceImages.set(url, pending);
-  }
-  const image = await pending;
+  const image = await shipImage(url);
   const canvas = document.createElement("canvas");
   canvas.width = canvas.height = 240;
   const context = canvas.getContext("2d", { willReadFrequently: true });
