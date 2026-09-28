@@ -29,4 +29,4 @@ export const readShipStart = (): ShipStart => {
 };
 export const sensitivityMultiplier: Record<ControlSensitivity, number> = { gentle: .75, normal: 1, fast: 1.3 };
 export const zoneFraction: Record<ControlZone, number> = { compact: .5, normal: .65, wide: .8 };
-export const shipStartHeight: Record<ShipStart, number> = { higher: .78, normal: .86, lower: .9 };
+export const shipStartHeight: Record<ShipStart, number> = { higher: .83, normal: .89, lower: .91 };
