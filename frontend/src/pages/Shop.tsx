@@ -178,12 +178,13 @@ const Shop = () => {
   const [loadoutMessage, setLoadoutMessage] = useState("");
   const shipSearchOptions = playerSkins.flatMap(skin => {
     if (shopView !== "shop" && !fleetCount(fleet, skin.id)) return [];
-    const stages: ShipStage[] = shopView === "shop" && fleetCount(fleet, skin.id) ? [1, 2, 3] : [1];
+    const stages: ShipStage[] = shopView === "shop" ? [1, 2, 3] : [1];
     return stages.map(stage => ({ skin, stage }));
   });
   const matchingShipOptions = shipSearchOptions.filter(({ skin, stage }) =>
     `${skin.name} ${t(stage === 1 ? "STANDARD" : stage === 2 ? "ADVANCED" : "ELITE")}`
       .toLocaleLowerCase(locale).includes(shipQuery.trim().toLocaleLowerCase(locale)));
+  const shipResultsVisible = shopView === "shop" || shipSearchOpen;
   useEffect(() => { setShipQuery(""); setShipSearchOpen(false); }, [shopView]);
   useEffect(() => {
     if (!shipSearchOpen) return;
@@ -436,16 +437,17 @@ const Shop = () => {
         <label className="ship-search-label" htmlFor="ship-search">{t("Find a ship")} <small>{matchingShipOptions.length}/{shipSearchOptions.length}</small></label>
         <div className="ship-search-wrap" ref={shipSearchRef}>
           <div className="ship-search-control">
-            <input id="ship-search" className="ship-search" type="search" value={shipQuery} onFocus={() => setShipSearchOpen(true)} onChange={event => { setShipQuery(event.target.value); setShipSearchOpen(true); }} onKeyDown={event => { if (event.key === "Escape") { setShipSearchOpen(false); event.currentTarget.blur(); } else if (event.key === "ArrowDown" && shipSearchOpen) { event.preventDefault(); shipSearchRef.current?.querySelector<HTMLButtonElement>(".ship-search-result")?.focus(); } }} placeholder={t("Search ship name")} aria-expanded={shipSearchOpen} aria-controls="ship-search-results" autoComplete="off" />
-            <button className="ship-search-toggle" type="button" aria-label={t("Show ships")} aria-expanded={shipSearchOpen} aria-controls="ship-search-results" onClick={() => setShipSearchOpen(open => !open)}><span aria-hidden="true">⌄</span></button>
+            <input id="ship-search" className="ship-search" type="search" value={shipQuery} onFocus={() => setShipSearchOpen(true)} onChange={event => { setShipQuery(event.target.value); setShipSearchOpen(true); }} onKeyDown={event => { if (event.key === "Escape") { setShipSearchOpen(false); event.currentTarget.blur(); } else if (event.key === "Enter") { event.currentTarget.blur(); } else if (event.key === "ArrowDown" && shipResultsVisible) { event.preventDefault(); shipSearchRef.current?.querySelector<HTMLButtonElement>(".ship-search-result")?.focus(); } }} placeholder={t("Search ship name")} aria-expanded={shipResultsVisible} aria-controls="ship-search-results" autoComplete="off" />
+            {shopView === "hangar" && <button className="ship-search-toggle" type="button" aria-label={t("Show ships")} aria-expanded={shipSearchOpen} aria-controls="ship-search-results" onClick={() => setShipSearchOpen(open => !open)}><span aria-hidden="true">⌄</span></button>}
           </div>
-          {shipSearchOpen && <div className="ship-search-results" id="ship-search-results" role="group" aria-label={t("Available ship stages")}>
+          {shipResultsVisible && <div className="ship-search-results" id="ship-search-results" role="group" aria-label={t("Available ship stages")}>
             {matchingShipOptions.map(({ skin, stage }) => {
               const total = fleetCount(fleet, skin.id);
               const ownedStage = ownedShipStage(skin.sprite, inventory?.ownedShipUpgrades);
               const offer = offers.find(item => item.kind === "ship_upgrade" && item.shipIndex === skin.sprite && item.stage === stage);
               const label = t(stage === 1 ? "STANDARD" : stage === 2 ? "ADVANCED" : "ELITE");
-              const status = stage === 1 ? total ? `${t("Owned")} ×${total}` : `◆ ${skin.price || EXTRA_STARTER_PRICE} ${t("Shards")}` : ownedStage >= stage ? t("OWNED") : stage === 3 && ownedStage < 2 ? t("Requires Stage 2") : `${offer?.pricePi ?? "–"} π`;
+              const price = offer ? `${offer.pricePi.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} π` : "–";
+              const status = stage === 1 ? total ? `${t("Owned")} ×${total}` : `◆ ${skin.price || EXTRA_STARTER_PRICE} ${t("Shards")}` : ownedStage >= stage ? t("OWNED") : stage === 3 && ownedStage < 2 ? `${price} · ${t("Requires Stage 2")}` : price;
               return <button className={`ship-search-result${stage === 3 && ownedStage < 2 ? " ship-search-locked" : ""}`} key={`${skin.id}-${stage}`} type="button" onClick={() => chooseSearchResult(skin, stage)}>
                 <span className="ship-search-thumb" aria-hidden="true"><img src={shipEvolutionAsset(skin.sprite, stage)} alt="" loading="lazy" decoding="async" style={shipPreviewPlacement(skin.sprite, stage)} /></span>
                 <span className="ship-search-result-name"><strong>{skin.name}</strong><small>{label} · {status}</small></span><span className="ship-search-arrow" aria-hidden="true">›</span>
@@ -456,7 +458,7 @@ const Shop = () => {
         </div>
         <ShipSelectionPanel view={shopView} skin={previewSkin} color={previewColor} focusStage={previewFocusStage} ownedStage={previewStage} fleet={fleet} shards={shards}
           offers={offers.filter(offer => offer.kind === "ship_upgrade")} catalogReady={catalogReady} isLoading={isLoading}
-          selectedSkinId={selected.skin.id} selectedColorId={selected.color.id} message={hangarMessage} t={t}
+          selectedSkinId={selected.skin.id} selectedColorId={selected.color.id} message={hangarMessage} locale={locale} t={t}
           onStageChange={stage => { setPreviewFocusStage(stage); setHangarMessage(""); }}
           onColorChange={color => { setPreviewColor(color); if (shopView === "hangar") equipShip(previewSkin, color); else setHangarMessage(""); }}
           onBuyStandard={purchasePreview}

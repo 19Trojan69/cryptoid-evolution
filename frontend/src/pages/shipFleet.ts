@@ -8,29 +8,29 @@ export const SHIP_COLORS_KEY = "cryptoid_player_ship_colors";
 export const SHIP_OWNED_KEY = "cryptoid_owned_ship_skins";
 export const SHIP_FLEET_KEY = "cryptoid_ship_fleet_v2";
 export const SHARD_BALANCE_KEY = "cryptoid_shard_balance";
-export const EXTRA_STARTER_PRICE = 20;
+export const EXTRA_STARTER_PRICE = 150;
 
 export const playerSkins = [
   { id: "grey-scout", name: "Grey Scout", sprite: 1, price: 0 },
-  { id: "nova-wing", name: "Nova Wing", sprite: 0, price: 25 },
-  { id: "solar-lance", name: "Solar Lance", sprite: 2, price: 35 },
-  { id: "dark-delta", name: "Dark Delta", sprite: 3, price: 45 },
-  { id: "gold-streak", name: "Gold Streak", sprite: 4, price: 55 },
-  { id: "iron-guard", name: "Iron Guard", sprite: 5, price: 55 },
-  { id: "vector", name: "Vector", sprite: 6, price: 60 },
-  { id: "verdant", name: "Verdant", sprite: 7, price: 65 },
-  { id: "storm-wing", name: "Storm Wing", sprite: 8, price: 70 },
-  { id: "red-comet", name: "Red Comet", sprite: 9, price: 70 },
-  { id: "twin-core", name: "Twin Core", sprite: 10, price: 75 },
-  { id: "orbit-arc", name: "Orbit Arc", sprite: 11, price: 85 },
-  { id: "night-guard", name: "Night Guard", sprite: 12, price: 85 },
-  { id: "striker", name: "Striker", sprite: 13, price: 90 },
-  { id: "cargo-hawk", name: "Cargo Hawk", sprite: 14, price: 95 },
-  { id: "ring-flare", name: "Ring Flare", sprite: 15, price: 105 },
-  { id: "sky-breaker", name: "Sky Breaker", sprite: 16, price: 110 },
-  { id: "olive-fortress", name: "Olive Fortress", sprite: 17, price: 115 },
-  { id: "pi-vanguard", name: "Pi Vanguard", sprite: 18, price: 125 },
-  { id: "core-carrier", name: "Core Carrier", sprite: 19, price: 140 },
+  { id: "nova-wing", name: "Nova Wing", sprite: 0, price: 150 },
+  { id: "solar-lance", name: "Solar Lance", sprite: 2, price: 400 },
+  { id: "dark-delta", name: "Dark Delta", sprite: 3, price: 650 },
+  { id: "gold-streak", name: "Gold Streak", sprite: 4, price: 900 },
+  { id: "iron-guard", name: "Iron Guard", sprite: 5, price: 1150 },
+  { id: "vector", name: "Vector", sprite: 6, price: 1400 },
+  { id: "verdant", name: "Verdant", sprite: 7, price: 1650 },
+  { id: "storm-wing", name: "Storm Wing", sprite: 8, price: 1900 },
+  { id: "red-comet", name: "Red Comet", sprite: 9, price: 2150 },
+  { id: "twin-core", name: "Twin Core", sprite: 10, price: 2400 },
+  { id: "orbit-arc", name: "Orbit Arc", sprite: 11, price: 2650 },
+  { id: "night-guard", name: "Night Guard", sprite: 12, price: 2900 },
+  { id: "striker", name: "Striker", sprite: 13, price: 3150 },
+  { id: "cargo-hawk", name: "Cargo Hawk", sprite: 14, price: 3400 },
+  { id: "ring-flare", name: "Ring Flare", sprite: 15, price: 3650 },
+  { id: "sky-breaker", name: "Sky Breaker", sprite: 16, price: 3900 },
+  { id: "olive-fortress", name: "Olive Fortress", sprite: 17, price: 4150 },
+  { id: "pi-vanguard", name: "Pi Vanguard", sprite: 18, price: 4400 },
+  { id: "core-carrier", name: "Core Carrier", sprite: 19, price: 4650 },
 ] as const;
 
 const legacyColors = [

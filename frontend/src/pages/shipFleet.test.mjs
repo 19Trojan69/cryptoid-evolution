@@ -1,18 +1,20 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { allPlayerColors, bossNozzleStyles, buySkin, buyShipVariant, colorForSkin, fleetCount, ownedSkins, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyles, spriteVisualOffset } from "./shipFleet.ts";
+import { allPlayerColors, bossNozzleStyles, buySkin, buyShipVariant, colorForSkin, EXTRA_STARTER_PRICE, fleetCount, ownedSkins, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyles, spriteVisualOffset } from "./shipFleet.ts";
 
 test("only the grey starter is free and the full reference fleet is purchasable", () => {
   assert.equal(playerSkins.length, 20);
   assert.equal(playerSkins[0].id, "grey-scout");
   assert.equal(playerSkins.filter(skin => skin.price === 0).length, 1);
   assert.equal(new Set(playerSkins.map(skin => skin.sprite)).size, 20);
+  assert.equal(EXTRA_STARTER_PRICE, 150);
+  playerSkins.slice(1).forEach((skin, index) => assert.equal(skin.price, 150 + index * 250, skin.id));
 });
 
 test("a skin purchase spends once and never grants an unaffordable or duplicate hull", () => {
-  assert.equal(buySkin("nova-wing", [], 24), null);
-  assert.deepEqual(buySkin("nova-wing", [], 25), { owned: ["nova-wing"], balance: 0 });
-  assert.equal(buySkin("nova-wing", ["nova-wing"], 50), null);
+  assert.equal(buySkin("nova-wing", [], 149), null);
+  assert.deepEqual(buySkin("nova-wing", [], 150), { owned: ["nova-wing"], balance: 0 });
+  assert.equal(buySkin("nova-wing", ["nova-wing"], 300), null);
   assert.equal(buySkin("grey-scout", [], 50), null);
   assert.equal(buySkin("nova-wing", [], Number.NaN), null);
 });
@@ -119,10 +121,10 @@ test("legacy ships migrate into counts and repeat purchases add the chosen varia
   const fleet = readShipFleet(null, '["nova-wing"]', '{"nova-wing":"coral"}');
   assert.equal(fleetCount(fleet, "grey-scout", "grey"), 1);
   assert.equal(fleetCount(fleet, "nova-wing", "coral"), 1);
-  assert.equal(buyShipVariant("nova-wing", "bronze", fleet, 24), null);
-  const first = buyShipVariant("nova-wing", "bronze", fleet, 100);
+  assert.equal(buyShipVariant("nova-wing", "bronze", fleet, 149), null);
+  const first = buyShipVariant("nova-wing", "bronze", fleet, 300);
   const second = buyShipVariant("nova-wing", "bronze", first.fleet, first.balance);
-  assert.equal(second.balance, 50);
+  assert.equal(second.balance, 0);
   assert.equal(fleetCount(second.fleet, "nova-wing"), 3);
   assert.equal(fleetCount(second.fleet, "nova-wing", "bronze"), 2);
   assert.equal(fleetCount(second.fleet, "nova-wing", "coral"), 1);
@@ -138,8 +140,8 @@ test("free starter repaint preserves total and additional copies cost Shards", (
   assert.equal(fleetCount(painted, "grey-scout"), 1);
   assert.equal(fleetCount(painted, "grey-scout", "grey"), 0);
   assert.equal(fleetCount(painted, "grey-scout", "metallic-blue"), 1);
-  assert.equal(buyShipVariant("grey-scout", "silver", painted, 19), null);
-  const second = buyShipVariant("grey-scout", "silver", painted, 20);
+  assert.equal(buyShipVariant("grey-scout", "silver", painted, 149), null);
+  const second = buyShipVariant("grey-scout", "silver", painted, 150);
   assert.equal(fleetCount(second.fleet, "grey-scout"), 2);
   assert.equal(second.balance, 0);
 });
