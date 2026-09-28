@@ -1,6 +1,6 @@
 import { readEffectsVolume } from "./musicPreferences.ts";
 
-export type GameSound = "laser" | "enemyHit" | "explosion" | "collision" | "shield" | "pickup" | "boost" | "boss" | "bossDestroy" | "nova" | "emp";
+export type GameSound = "laser" | "enemyHit" | "explosion" | "collision" | "playerDestroy" | "shield" | "pickup" | "boost" | "boss" | "bossDestroy" | "nova" | "emp";
 
 const sampleNames = ["shot-single", "shot-twin", "shot-rapid", "shot-triple", "shot-plasma", "enemy-hit", "enemy-destroy", "enemy-destroy-alt", "player-collision", "shield", "boost", "boss-warning-siren", "boss-destroy"] as const;
 type SampleName = typeof sampleNames[number];
@@ -20,7 +20,7 @@ const sampleGains: Record<SampleName, number> = {
   "shield": .071,
   "boost": .174,
   "boss-warning-siren": .72,
-  "boss-destroy": .107,
+  "boss-destroy": .18,
 };
 
 // Game effects only; audio starts after a player gesture on browsers that require one.
@@ -60,7 +60,7 @@ export class GameAudio {
     }));
   }
 
-  private sample(name: SampleName, rate = 1) {
+  private sample(name: SampleName, rate = 1, gainOverride?: number) {
     const context = this.context;
     const buffer = this.samples.get(name);
     if (!context || context.state !== "running" || this.paused || !buffer || !this.effectsBus || typeof context.createBufferSource !== "function") return false;
@@ -68,7 +68,7 @@ export class GameAudio {
     const gain = context.createGain();
     source.buffer = buffer;
     source.playbackRate.value = rate;
-    gain.gain.value = sampleGains[name];
+    gain.gain.value = gainOverride ?? sampleGains[name];
     source.connect(gain).connect(this.effectsBus);
     source.start();
     source.onended = () => { source.disconnect(); gain.disconnect(); };
@@ -102,10 +102,10 @@ export class GameAudio {
     } else {
       const name: Partial<Record<Exclude<GameSound, "laser">, SampleName>> = {
         enemyHit: "enemy-hit", explosion: this.destroyCount++ % 2 ? "enemy-destroy-alt" : "enemy-destroy",
-        collision: "player-collision", shield: "shield", boost: "boost", boss: "boss-warning-siren", bossDestroy: "boss-destroy",
+        collision: "player-collision", playerDestroy: "boss-destroy", shield: "shield", boost: "boost", boss: "boss-warning-siren", bossDestroy: "boss-destroy",
       };
       const chosen = name[sound];
-      if (chosen && this.sample(chosen)) return;
+      if (chosen && this.sample(chosen, 1, sound === "playerDestroy" ? .107 : undefined)) return;
     }
     switch (sound) {
       case "laser": this.tone(920, 330, .085, .025, "sawtooth"); break;
@@ -117,7 +117,8 @@ export class GameAudio {
       case "boost": this.tone(270, 860, .42, .08, "sawtooth"); break;
       // The boss uses only its dedicated recording; do not replay the old dull tones.
       case "boss": break;
-      case "bossDestroy": this.tone(150, 60, .48, .055, "triangle"); break;
+      case "playerDestroy": this.tone(150, 60, .48, .055, "triangle"); break;
+      case "bossDestroy": this.tone(150, 60, .48, .09, "triangle"); break;
       case "nova": [440, 220, 90].forEach((note, step) => this.tone(note, 55, .56, .09, "sawtooth", step * .05)); break;
       case "emp": [980, 730, 490].forEach((note, step) => this.tone(note, 150, .32, .045, "sine", step * .09)); break;
     }

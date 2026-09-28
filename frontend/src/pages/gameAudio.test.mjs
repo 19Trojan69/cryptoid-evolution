@@ -87,6 +87,42 @@ test("boss warning uses only the recorded alarm, without the old synthesized ton
   }
 });
 
+test("boss explosion is louder than player destruction while both obey the effects slider", async () => {
+  const previous = { AudioContext: globalThis.AudioContext, fetch: globalThis.fetch };
+  const gains = [];
+  globalThis.fetch = async () => ({ ok: true, arrayBuffer: async () => new ArrayBuffer(0) });
+  globalThis.AudioContext = class {
+    state = "running";
+    destination = {};
+    async resume() {}
+    async close() {}
+    async decodeAudioData() { return { duration: 1 }; }
+    createGain() {
+      const node = { gain: { value: 1 }, connect: output => output, disconnect() {} };
+      gains.push(node);
+      return node;
+    }
+    createBufferSource() { return { playbackRate: { value: 1 }, connect: output => output, start() {}, disconnect() {} }; }
+  };
+  const audio = new GameAudio();
+  try {
+    assert.equal(await audio.start(), true);
+    await new Promise(resolve => setImmediate(resolve));
+    audio.setEffectsVolume(35);
+    audio.play("playerDestroy");
+    audio.play("bossDestroy");
+    assert.equal(gains[0].gain.value, .35);
+    assert.equal(gains[1].gain.value, .107);
+    assert.equal(gains[2].gain.value, .18);
+    audio.setEffectsVolume(0);
+    assert.equal(gains[0].gain.value, 0);
+  } finally {
+    audio.close();
+    globalThis.AudioContext = previous.AudioContext;
+    globalThis.fetch = previous.fetch;
+  }
+});
+
 test("effects remain recoverable when the initial fullscreen audio resume never settles", async () => {
   const previous = globalThis.AudioContext;
   let starts = 0;

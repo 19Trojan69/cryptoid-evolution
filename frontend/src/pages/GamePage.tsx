@@ -698,7 +698,7 @@ const GamePage = () => {
           damageTaken = damaged;
           const destroyed = damaged && state.hearts === 0;
           state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: destroyed ? "player-explosion" : damaged ? "player-crash" : "shield", startedAt: time, target: "player", sprite: damaged ? shipSelection.skin.sprite : undefined, debrisSize: damaged ? 86 : undefined, debrisColor: damaged ? shipSelection.color.id : undefined, shipStage: shipStageRef.current });
-          if (damaged) { soundRef.current?.play(destroyed ? "bossDestroy" : "collision"); state.projectileGuard = destroyed ? 0 : projectileGuardForStage(shipStageRef.current); state.weaponCap = Math.max(1, state.weaponCap - 1); state.paidWeaponLevel = Math.min(state.paidWeaponLevel, state.weaponCap); state.pickupWeaponLevel = Math.min(state.pickupWeaponLevel, state.weaponCap); state.weaponLevel = Math.min(state.weaponLevel, state.weaponCap); }
+          if (damaged) { soundRef.current?.play(destroyed ? "playerDestroy" : "collision"); state.projectileGuard = destroyed ? 0 : projectileGuardForStage(shipStageRef.current); state.weaponCap = Math.max(1, state.weaponCap - 1); state.paidWeaponLevel = Math.min(state.paidWeaponLevel, state.weaponCap); state.pickupWeaponLevel = Math.min(state.pickupWeaponLevel, state.weaponCap); state.weaponLevel = Math.min(state.weaponLevel, state.weaponCap); }
           else soundRef.current?.play("shield");
         }
         state.powerUps = movePowerUps(state.powerUps, delta, height);
