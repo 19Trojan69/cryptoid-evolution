@@ -21,6 +21,8 @@ test("all twenty Elite purchases require the matching paid Advanced stage", () =
     const elite = upgrades.find(offer => offer.id === `${prefix}3`);
     assert.ok(advanced);
     assert.ok(elite);
+    assert.equal(advanced.pricePi, 9.9);
+    assert.equal(elite.pricePi, 19.9);
     assert.equal(shipUpgradePrerequisite(advanced), null);
     assert.equal(shipUpgradePrerequisite(elite), advanced.id);
   }

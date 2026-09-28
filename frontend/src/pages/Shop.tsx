@@ -445,7 +445,7 @@ const Shop = () => {
               const ownedStage = ownedShipStage(skin.sprite, inventory?.ownedShipUpgrades);
               const offer = offers.find(item => item.kind === "ship_upgrade" && item.shipIndex === skin.sprite && item.stage === stage);
               const label = t(stage === 1 ? "STANDARD" : stage === 2 ? "ADVANCED" : "ELITE");
-              const status = stage === 1 ? total ? `${t("Owned")} ×${total}` : `◆ ${skin.price || EXTRA_STARTER_PRICE} ${t("Shards")}` : ownedStage >= stage ? t("OWNED") : stage === 3 && ownedStage < 2 ? t("Requires Stage 2") : `${offer?.pricePi ?? "–"} π`;
+              const status = stage === 1 ? total ? `${t("Owned")} ×${total}` : `◆ ${skin.price || EXTRA_STARTER_PRICE} ${t("Shards")}` : ownedStage >= stage ? t("OWNED") : stage === 3 && ownedStage < 2 ? t("Requires Stage 2") : `${offer ? offer.pricePi.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "–"} π`;
               return <button className={`ship-search-result${stage === 3 && ownedStage < 2 ? " ship-search-locked" : ""}`} key={`${skin.id}-${stage}`} type="button" onClick={() => chooseSearchResult(skin, stage)}>
                 <span className="ship-search-thumb" aria-hidden="true"><img src={shipEvolutionAsset(skin.sprite, stage)} alt="" loading="lazy" decoding="async" style={shipPreviewPlacement(skin.sprite, stage)} /></span>
                 <span className="ship-search-result-name"><strong>{skin.name}</strong><small>{label} · {status}</small></span><span className="ship-search-arrow" aria-hidden="true">›</span>
@@ -456,7 +456,7 @@ const Shop = () => {
         </div>
         <ShipSelectionPanel view={shopView} skin={previewSkin} color={previewColor} focusStage={previewFocusStage} ownedStage={previewStage} fleet={fleet} shards={shards}
           offers={offers.filter(offer => offer.kind === "ship_upgrade")} catalogReady={catalogReady} isLoading={isLoading}
-          selectedSkinId={selected.skin.id} selectedColorId={selected.color.id} message={hangarMessage} t={t}
+          selectedSkinId={selected.skin.id} selectedColorId={selected.color.id} message={hangarMessage} locale={locale} t={t}
           onStageChange={stage => { setPreviewFocusStage(stage); setHangarMessage(""); }}
           onColorChange={color => { setPreviewColor(color); if (shopView === "hangar") equipShip(previewSkin, color); else setHangarMessage(""); }}
           onBuyStandard={purchasePreview}
