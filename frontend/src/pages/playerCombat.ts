@@ -15,8 +15,8 @@ export const MAX_PLAYER_SHOTS = 28;
 export const MAX_WEAPON_LEVEL = 5;
 export const fireInterval = (level: number, rapidFireMs: number) => (level >= 3 || rapidFireMs > 0 ? 220 : FIRE_INTERVAL_MS);
 export const volleyOffsets = (level: number) => level >= 4 ? [-13, 0, 13] : level >= 2 ? [-8, 8] : [0];
-export const makeVolley = (level: number, x: number, y: number, overdrive: boolean, nextId: () => number): PlayerShot[] =>
-  volleyOffsets(level).map((offset, index, offsets) => ({ id: nextId(), x: x + offset, y, speedX: offsets.length === 3 ? (index - 1) * 0.1 : 0, damage: level >= 5 || overdrive ? 2 : 1, empowered: level >= 5 || overdrive }));
+export const makeVolley = (level: number, x: number, y: number, overdrive: boolean, nextId: () => number, laserHull = false): PlayerShot[] =>
+  volleyOffsets(level).map((offset, index, offsets) => ({ id: nextId(), x: x + offset, y, speedX: offsets.length === 3 ? (index - 1) * 0.1 : 0, damage: level >= 5 || overdrive || laserHull ? 2 : 1, empowered: level >= 5 || overdrive || laserHull }));
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 export const activeWeaponLevel = (paidLevel: number, paidMs: number, pickupLevel: number, pickupMs: number, cap: number) =>
@@ -58,13 +58,11 @@ export const contactWithEnemy = (player: PlayerPosition, width: number, height: 
   return { connected, damage: connected && cooldownMs <= 0 ? 1 : 0 };
 };
 
-export const shipCollisionOutcome = (shieldActive: boolean, shieldCharges: number, shieldMs: number) => {
-  const absorbedByShield = shieldActive && shieldCharges > 0 && shieldMs > 0;
-  return { absorbedByShield, destroysEnemy: !absorbedByShield, destroysPlayerLife: !absorbedByShield };
-};
+export const shipCollisionOutcome = (_shieldActive: boolean, _shieldCharges: number, _shieldMs: number) =>
+  ({ absorbedByShield: false, destroysEnemy: true, destroysPlayerLife: true });
 
 // A direct unshielded ship collision destroys the whole player hull regardless
 // of purchased evolution stage or extra hearts. Account for still queued shield
 // charges because receiveImpacts processes the whole frame together.
-export const directCollisionImpacts = (hearts: number, shieldCharges: number, absorbedByShield: boolean) =>
-  absorbedByShield ? 1 : hearts + shieldCharges;
+export const directCollisionImpacts = (hearts: number, shieldCharges: number, _absorbedByShield: boolean) =>
+  hearts + shieldCharges;

@@ -1428,6 +1428,18 @@ html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-
 .evolution-route b { color: #7ee1e4; }
 .evolution-route small { margin-left: auto; color: #ffd898; }
 .evolution-route .stage-owned { border-color: #75edbd; background: #123d3f; }
+.landing-shell .ship-search-label { display: flex; justify-content: space-between; max-width: 470px; margin-top: 16px; color: #e5f8fb; font: 700 13px 'Oxanium', sans-serif; }
+.landing-shell .ship-search-label small { color: #7de6cb; }
+.landing-shell .ship-search { display: block; width: min(100%, 470px); min-height: 44px; margin-top: 7px; padding: 9px 13px; border: 1px solid #649bb6; border-radius: 9px; outline-offset: 2px; background: #081d31; color: white; font: 15px 'Rajdhani', sans-serif; }
+.landing-shell .ship-search:focus { border-color: #75edbd; outline: 1px solid #75edbd; }
+.game-hud .weapon-hud .hull-hits { color: #78e6d1; font: 700 9px/1.1 'Rajdhani', sans-serif; white-space: nowrap; }
+@media (max-width: 600px) { .game-hud .weapon-hud .hull-hits { font-size: 7px; } }
+@media (max-width: 600px) {
+  .landing-shell .ship-evolution-offers .hangar-offer-grid { grid-template-columns: minmax(0, 1fr); }
+  .landing-shell .ship-evolution-offers .hangar-offer p { display: block; overflow: visible; -webkit-line-clamp: unset; font-size: 13px; line-height: 1.42; }
+  .landing-shell .ship-evolution-offers .hangar-offer { padding: 12px; gap: 9px; }
+  .landing-shell .ship-evolution-offers .offer-preview { height: 120px; }
+}
 @media (max-width: 600px) {
   .landing-shell .shop-overlay { display: flex; align-items: center; justify-content: center; padding: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); backdrop-filter: none; }
   .landing-shell .shop-modal { flex: 0 1 auto; width: 100%; height: 100%; max-height: 900px; border-radius: 18px; clip-path: none; }

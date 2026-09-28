@@ -11,6 +11,9 @@ test("weapon tiers fire multi-shot volleys and apply plasma damage", () => {
   assert.ok(plasma.every(shot => shot.damage === 2));
   assert.equal(fireInterval(3, 0), 220);
   assert.equal(fireInterval(1, 15000), 220);
+  const elite = makeVolley(2, 200, 500, false, () => ++next, true);
+  assert.deepEqual(elite.map(shot => shot.x), [192, 208]);
+  assert.ok(elite.every(shot => shot.damage === 2 && shot.empowered));
 });
 import { receiveImpacts, resolvePlayerDamage } from "./powerUps.ts";
 
@@ -76,16 +79,16 @@ test("a ship crossing the player between two frames causes one impact", () => {
   assert.deepEqual(contactWithEnemy(player, 800, 600, after, true, true, 0, before), { connected: false, damage: 0 });
 });
 
-test("shielded collisions consume protection while unshielded collisions destroy both ships", () => {
-  assert.deepEqual(shipCollisionOutcome(true, 1, 20_000), { absorbedByShield: true, destroysEnemy: false, destroysPlayerLife: false });
+test("collisions destroy the ship at all stages, even with an active shield", () => {
+  assert.deepEqual(shipCollisionOutcome(true, 1, 20_000), { absorbedByShield: false, destroysEnemy: true, destroysPlayerLife: true });
   assert.deepEqual(shipCollisionOutcome(false, 1, 20_000), { absorbedByShield: false, destroysEnemy: true, destroysPlayerLife: true });
   assert.deepEqual(shipCollisionOutcome(true, 0, 20_000), { absorbedByShield: false, destroysEnemy: true, destroysPlayerLife: true });
   assert.deepEqual(shipCollisionOutcome(true, 1, 0), { absorbedByShield: false, destroysEnemy: true, destroysPlayerLife: true });
 });
 
-test("direct contact destroys all hearts even after buying extra armor, unless a shield absorbs it", () => {
+test("direct contact destroys all hearts even after buying armor or activating a shield", () => {
   assert.equal(directCollisionImpacts(3, 0, false), 3);
   assert.equal(directCollisionImpacts(6, 0, false), 6);
   assert.equal(directCollisionImpacts(6, 1, false), 7);
-  assert.equal(directCollisionImpacts(6, 1, true), 1);
+  assert.equal(directCollisionImpacts(6, 1, true), 7);
 });

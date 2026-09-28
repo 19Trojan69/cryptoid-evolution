@@ -15,7 +15,7 @@ import { appendSectionBlock, BLOCKS_PER_CHAIN } from "./networkChain";
 import { damageSectorBoss, bossFireInterval, bossVulnerable, createSectorBoss, moveSectorBoss, nextAfterClear, type SectorBoss } from "./sectorBoss";
 import { enemySprite, selectedShip, shardBalance, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
-import { ownedShipStage, type ShipStage } from "./shipEvolution";
+import { ownedShipStage, projectileGuardForStage, projectileImpact, stageWeaponLevel, type ShipStage } from "./shipEvolution";
 import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio";
 import { DEFAULT_EFFECTS_VOLUME, DEFAULT_MUSIC_VOLUME, EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, resetAudioVolumeDefaults } from "./musicPreferences";
 import { MusicPlayer } from "./musicPlayback";
@@ -99,11 +99,11 @@ type Effect = {
   debrisColor?: PlayerColorId;
   shipStage?: ShipStage;
 };
-type GameState = { asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; score: number; shards: number; hearts: number; maxHearts: number; shieldCharges: number; shieldMs: number; shieldActive: boolean; overdriveMs: number; rapidFireMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
+type GameState = { asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; score: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; shieldActive: boolean; overdriveMs: number; rapidFireMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
 
 const CockpitIcon = ({ kind }: { kind: "home" | "play" | "pause" }) => <svg className="game-control-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{kind === "home" ? <><path d="m3 11 9-7 9 7" /><path d="M5 10v10h14V10M10 20v-6h4v6" /></> : kind === "play" ? <path d="M8 5 19 12 8 19Z" fill="currentColor" stroke="none" /> : <><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor" stroke="none" /><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor" stroke="none" /></>}</svg>;
 
-const createInitialState = (): GameState => ({ asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", chainBlocks: 0, chainResult: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: shipStartHeight[readShipStart()] }, thrust: 0, effects: [], powerUps: [], score: 0, shards: 0, hearts: 3, maxHearts: 3, shieldCharges: 0, shieldMs: 0, shieldActive: true, overdriveMs: 0, rapidFireMs: 0, empMs: 0, pendingStartPower: null, weaponLevel: 1, weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") ? "loading" : "playing" });
+const createInitialState = (): GameState => ({ asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", chainBlocks: 0, chainResult: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: shipStartHeight[readShipStart()] }, thrust: 0, effects: [], powerUps: [], score: 0, shards: 0, hearts: 3, maxHearts: 3, projectileGuard: 0, shieldCharges: 0, shieldMs: 0, shieldActive: true, overdriveMs: 0, rapidFireMs: 0, empMs: 0, pendingStartPower: null, weaponLevel: 1, weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") ? "loading" : "playing" });
 
 const readRecord = (key: string) => Number(window.localStorage.getItem(key) || 0);
 
@@ -318,6 +318,7 @@ const GamePage = () => {
       scoreRunRef.current = data.scoreRunId;
       shipStageRef.current = ownedShipStage(shipSelection.skin.sprite, data.ownedShipUpgrades);
       setShipStage(shipStageRef.current);
+      stateRef.current.projectileGuard = projectileGuardForStage(shipStageRef.current);
       const armorBonus = Number.isInteger(data.armorBonus) ? Math.max(0, Math.min(3, data.armorBonus)) : 0;
       stateRef.current.maxHearts = 3 + armorBonus;
       stateRef.current.hearts = stateRef.current.maxHearts;
@@ -647,7 +648,14 @@ const GamePage = () => {
           if (moved.y > height + 12 || moved.x < -12 || moved.x > width + 12) continue;
           if (enemyShotHitsPlayer(moved, state.player, width, height)) {
             if (impactCooldownRef.current === 0) {
-              heartsLost += 1;
+              const shielded = state.shieldActive && state.shieldCharges > 0 && state.shieldMs > 0;
+              const impact = projectileImpact(state.projectileGuard, shielded);
+              state.projectileGuard = impact.guard;
+              heartsLost += impact.damage;
+              if (impact.blockedByHull) {
+                state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: "shield", startedAt: time, target: "player" });
+                soundRef.current?.play("shield");
+              }
               impactCooldownRef.current = IMPACT_COOLDOWN_MS;
             }
             continue;
@@ -657,12 +665,12 @@ const GamePage = () => {
         state.enemyShots = incomingShots;
         if (heartsLost > 0) {
           const previousHearts = state.hearts;
-          Object.assign(state, resolvePlayerDamage(state, heartsLost, state.shieldActive));
+          Object.assign(state, resolvePlayerDamage(state, heartsLost, state.shieldActive && state.shieldMs > 0));
           const damaged = state.hearts < previousHearts;
           damageTaken = damaged;
           const destroyed = damaged && state.hearts === 0;
           state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: destroyed ? "player-explosion" : damaged ? "player-crash" : "shield", startedAt: time, target: "player", sprite: damaged ? shipSelection.skin.sprite : undefined, debrisSize: damaged ? 86 : undefined, debrisColor: damaged ? shipSelection.color.id : undefined, shipStage: shipStageRef.current });
-          if (damaged) { soundRef.current?.play(destroyed ? "bossDestroy" : "collision"); state.weaponCap = Math.max(1, state.weaponCap - 1); state.paidWeaponLevel = Math.min(state.paidWeaponLevel, state.weaponCap); state.pickupWeaponLevel = Math.min(state.pickupWeaponLevel, state.weaponCap); state.weaponLevel = Math.min(state.weaponLevel, state.weaponCap); }
+          if (damaged) { soundRef.current?.play(destroyed ? "bossDestroy" : "collision"); state.projectileGuard = destroyed ? 0 : projectileGuardForStage(shipStageRef.current); state.weaponCap = Math.max(1, state.weaponCap - 1); state.paidWeaponLevel = Math.min(state.paidWeaponLevel, state.weaponCap); state.pickupWeaponLevel = Math.min(state.pickupWeaponLevel, state.weaponCap); state.weaponLevel = Math.min(state.weaponLevel, state.weaponCap); }
           else soundRef.current?.play("shield");
         }
         state.powerUps = movePowerUps(state.powerUps, delta, height);
@@ -674,13 +682,14 @@ const GamePage = () => {
         });
         if (transitionPaused) fireTimerRef.current = 0;
         else fireTimerRef.current += delta;
-        const interval = fireInterval(state.weaponLevel, state.rapidFireMs);
+        const effectiveWeapon = stageWeaponLevel(shipStageRef.current, state.weaponLevel);
+        const interval = fireInterval(effectiveWeapon, state.rapidFireMs);
         if (!transitionPaused && fireTimerRef.current >= interval) {
           fireTimerRef.current %= interval;
           if (state.shots.length < MAX_PLAYER_SHOTS) {
-            const volley = makeVolley(state.weaponLevel, state.player.x * width, state.player.y * height - 23, state.overdriveMs > 0, () => nextIdRef.current++);
+            const volley = makeVolley(effectiveWeapon, state.player.x * width, state.player.y * height - 23, state.overdriveMs > 0, () => nextIdRef.current++, shipStageRef.current === 3);
             state.shots.push(...volley.slice(0, MAX_PLAYER_SHOTS - state.shots.length));
-            soundRef.current?.play("laser", state.weaponLevel);
+            soundRef.current?.play("laser", effectiveWeapon);
           }
         }
         const remainingShots: PlayerShot[] = [];
@@ -880,6 +889,8 @@ const GamePage = () => {
     if (gameOverTimerRef.current !== null) window.clearTimeout(gameOverTimerRef.current);
     gameOverTimerRef.current = null;
     stateRef.current = createInitialState();
+    shipStageRef.current = 1;
+    setShipStage(1);
     recordsSavedRef.current = false;
     scoreRunRef.current = null;
     setScoreSync("idle");
@@ -951,7 +962,7 @@ const GamePage = () => {
           <div className={`hud-stat hearts-stat${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " hearts-stat-hit" : ""}`}><span className="hud-heart-label" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.2 3.4 13.1C-1.1 8.8 5.3 1.7 10.2 5.9L12 7.5l1.8-1.6c4.9-4.2 11.3 2.9 6.8 7.2L12 21.2Z" /></svg></span><strong className="hearts" role="status" aria-live="polite" aria-label={`${game.hearts} / ${game.maxHearts} ${t('Hearts')}`}>{game.hearts}/{game.maxHearts}</strong></div>
           <div className="hud-stat game-level-hud" aria-label={`${t("Game level")} ${levelLabel}`}><span>{t("Level")}</span><strong>{levelLabel}</strong></div>
           <div className="hud-stat score-hud" aria-label={`${t("Shards")} ${game.shards}, ${t("Score")} ${game.score}`}><span className="shard-line"><b>◆ {game.shards}</b><small>{t("Shards")}</small></span><span className="score-line"><b>{game.score}</b><small>{t("Score")}</small></span></div>
-          <div className="hud-stat weapon-hud" aria-label={`${t("Weapon level")} ${game.weaponLevel} / 5`}><span>{t("Weapon")}</span><strong>{game.weaponLevel}<small>/5</small></strong></div>
+          <div className="hud-stat weapon-hud" aria-label={`${t("Weapon level")} ${stageWeaponLevel(shipStage, game.weaponLevel)} / 5; ${t("Projectile hits left")}: ${game.projectileGuard}`}><span>{t("Weapon")}</span><strong>{stageWeaponLevel(shipStage, game.weaponLevel)}<small>/5</small></strong>{shipStage > 1 && <small className="hull-hits">✦ {game.projectileGuard}/{projectileGuardForStage(shipStage)}</small>}</div>
           <div className="hud-stat round-hud chain-hud" aria-label={`${t("Round")} ${game.encounter === "normal" ? `${round} / 3` : "BOSS"}`}><span>{t("Round")}</span><strong>{game.encounter === "normal" ? <>{round}<small>/3</small></> : "BOSS"}</strong><div className="chain-blocks" role="img" aria-label={`${t("Network chain")}: ${game.chainBlocks}/${BLOCKS_PER_CHAIN} ${t("blocks linked")}`}>{Array.from({ length: BLOCKS_PER_CHAIN }, (_, index) => <i key={index} className={index < game.chainBlocks ? "linked" : ""} />)}</div></div>
           <button className="game-control pause-control" type="button" disabled={game.status === "loading" || game.status === "destroying" || game.status === "game-over"} onClick={() => { stateRef.current.status = game.status === "paused" ? "playing" : "paused"; setGame({ ...stateRef.current }); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
         </header>
