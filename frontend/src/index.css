@@ -968,15 +968,21 @@ html[data-motion="reduced"] .shooting-star { display: none; }
 .game-coach button { min-height: 30px; padding: 3px 11px; border: 1px solid rgba(115, 233, 215, .5); background: rgba(5, 32, 45, .86); color: #c2f6eb; font: 10px 'DM Mono', monospace; cursor: pointer; pointer-events: auto; }
 .game-coach button:hover { background: rgba(21, 87, 80, .95); }
 .cryptoid-hit .fleet-sprite { filter: brightness(2.2) drop-shadow(0 0 9px #a8faff); }
-.impact-effect.hit { width: 46px; height: 46px; margin: -23px 0 0 -23px; border: 0; background: radial-gradient(circle, #fff 0 8%, #a5faff 15%, #47e4f799 35%, transparent 68%); box-shadow: 0 0 15px #73ecff88; animation: enemy-hit-pulse .34s ease-out both; }
-.impact-effect.hit > span { width: 75%; height: 2px; background: #dcffff; box-shadow: 0 0 5px #a5faff; }
-.impact-effect.hit i { position: absolute; top: 50%; left: 50%; width: 4px; height: 11px; border-radius: 2px; background: #fff5b8; box-shadow: 0 0 7px #a4f7ff; animation: enemy-hit-spark .34s ease-out both; }
-.impact-effect.hit i:nth-of-type(1) { --spark-angle: -65deg; --spark-distance: -28px; }
-.impact-effect.hit i:nth-of-type(2) { --spark-angle: 48deg; --spark-distance: -22px; }
-.impact-effect.hit i:nth-of-type(3) { --spark-angle: 165deg; --spark-distance: -27px; }
-@keyframes enemy-hit-pulse { from { transform: scale(.38); opacity: 1; } to { transform: scale(1.45); opacity: 0; } }
+.impact-effect.hit { z-index: 3; width: 26px; height: 26px; margin: -13px 0 0 -13px; border: 0; background: radial-gradient(circle, #fff 0 9%, #ffe9ab 17%, #ff9e52bb 31%, #53dff899 48%, transparent 70%); box-shadow: 0 0 7px #ffb86b88; animation: enemy-hit-pulse .28s ease-out both; }
+.impact-effect.hit::after { position: absolute; inset: 3px; border: 1px solid #ffdb93aa; border-radius: 50%; content: ''; }
+.impact-effect.hit > span { width: 72%; height: 1px; background: #fff0c9; box-shadow: 0 0 4px #ffe6a5; }
+.impact-effect.hit i { position: absolute; top: 50%; left: 50%; width: 2px; height: 6px; border-radius: 2px; background: #fff5b8; box-shadow: 0 0 4px #ffb777; animation: enemy-hit-spark .28s ease-out both; }
+.impact-effect.hit i:nth-of-type(1) { --spark-angle: -65deg; --spark-distance: -15px; }
+.impact-effect.hit i:nth-of-type(2) { --spark-angle: 48deg; --spark-distance: -12px; }
+.impact-effect.hit i:nth-of-type(3) { --spark-angle: 165deg; --spark-distance: -14px; }
+.scorch-mark { position: absolute; z-index: 3; width: 12px; height: 10px; transform: translate(-50%, -50%) rotate(-16deg); border-radius: 48% 52% 46% 54%; background: radial-gradient(ellipse, #080c15 0 33%, #3d2522 48%, #bd643acc 63%, transparent 75%); opacity: .83; pointer-events: none; animation: scorch-settle .32s ease-out both; }
+.asteroid-small .scorch-mark { width: 9px; height: 8px; }
+.sector-boss .scorch-mark { width: 17px; height: 15px; }
+@keyframes scorch-settle { from { opacity: 0; scale: .6; } to { opacity: .83; scale: 1; } }
+@keyframes enemy-hit-pulse { from { transform: scale(.4); opacity: 1; } to { transform: scale(1.15); opacity: 0; } }
 @keyframes enemy-hit-spark { from { transform: translate(-50%, -50%) rotate(var(--spark-angle)); opacity: 1; } to { transform: translate(-50%, var(--spark-distance)) rotate(var(--spark-angle)); opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .impact-effect.hit, .impact-effect.hit i { animation: none; opacity: .75; } }
+@media (prefers-reduced-motion: reduce) { .impact-effect.hit, .impact-effect.hit i, .scorch-mark { animation: none; opacity: .75; } }
+html[data-motion="reduced"] .impact-effect.hit, html[data-motion="reduced"] .impact-effect.hit i, html[data-motion="reduced"] .scorch-mark { animation: none; opacity: .75; }
 @media (max-width: 560px) {
   .game-hud { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-areas: "home score coins pause" "hearts hearts level round"; gap: 3px; padding: max(8px, env(safe-area-inset-top)) max(7px, env(safe-area-inset-right)) 7px max(7px, env(safe-area-inset-left)); }
   .hud-actions { grid-area: home; }
