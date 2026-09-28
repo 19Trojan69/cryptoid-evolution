@@ -968,21 +968,20 @@ html[data-motion="reduced"] .shooting-star { display: none; }
 .game-coach button { min-height: 30px; padding: 3px 11px; border: 1px solid rgba(115, 233, 215, .5); background: rgba(5, 32, 45, .86); color: #c2f6eb; font: 10px 'DM Mono', monospace; cursor: pointer; pointer-events: auto; }
 .game-coach button:hover { background: rgba(21, 87, 80, .95); }
 .cryptoid-hit .fleet-sprite { filter: brightness(2.2) drop-shadow(0 0 9px #a8faff); }
-.impact-effect.hit { z-index: 3; width: 26px; height: 26px; margin: -13px 0 0 -13px; border: 0; background: radial-gradient(circle, #fff 0 9%, #ffe9ab 17%, #ff9e52bb 31%, #53dff899 48%, transparent 70%); box-shadow: 0 0 7px #ffb86b88; animation: enemy-hit-pulse .28s ease-out both; }
-.impact-effect.hit::after { position: absolute; inset: 3px; border: 1px solid #ffdb93aa; border-radius: 50%; content: ''; }
-.impact-effect.hit > span { width: 72%; height: 1px; background: #fff0c9; box-shadow: 0 0 4px #ffe6a5; }
-.impact-effect.hit i { position: absolute; top: 50%; left: 50%; width: 2px; height: 6px; border-radius: 2px; background: #fff5b8; box-shadow: 0 0 4px #ffb777; animation: enemy-hit-spark .28s ease-out both; }
-.impact-effect.hit i:nth-of-type(1) { --spark-angle: -65deg; --spark-distance: -15px; }
-.impact-effect.hit i:nth-of-type(2) { --spark-angle: 48deg; --spark-distance: -12px; }
-.impact-effect.hit i:nth-of-type(3) { --spark-angle: 165deg; --spark-distance: -14px; }
-.scorch-mark { position: absolute; z-index: 3; width: 12px; height: 10px; transform: translate(-50%, -50%) rotate(-16deg); border-radius: 48% 52% 46% 54%; background: radial-gradient(ellipse, #080c15 0 33%, #3d2522 48%, #bd643acc 63%, transparent 75%); opacity: .83; pointer-events: none; animation: scorch-settle .32s ease-out both; }
-.asteroid-small .scorch-mark { width: 9px; height: 8px; }
-.sector-boss .scorch-mark { width: 17px; height: 15px; }
-@keyframes scorch-settle { from { opacity: 0; scale: .6; } to { opacity: .83; scale: 1; } }
-@keyframes enemy-hit-pulse { from { transform: scale(.4); opacity: 1; } to { transform: scale(1.15); opacity: 0; } }
-@keyframes enemy-hit-spark { from { transform: translate(-50%, -50%) rotate(var(--spark-angle)); opacity: 1; } to { transform: translate(-50%, var(--spark-distance)) rotate(var(--spark-angle)); opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .impact-effect.hit, .impact-effect.hit i, .scorch-mark { animation: none; opacity: .75; } }
-html[data-motion="reduced"] .impact-effect.hit, html[data-motion="reduced"] .impact-effect.hit i, html[data-motion="reduced"] .scorch-mark { animation: none; opacity: .75; }
+/* Flame layers use the same alpha mask and alignment as the actual ship art.
+   Their glow and tongues cannot paint outside the visible hull. */
+.hull-fire-layer { position: absolute; z-index: 3; inset: 0; pointer-events: none; mask-mode: alpha; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
+.cryptoid .hull-fire-layer { -webkit-mask-image: url('/ships/cryptoid-fleet.png'); mask-image: url('/ships/cryptoid-fleet.png'); -webkit-mask-size: 400% 500%; mask-size: 400% 500%; }
+.sector-boss .hull-fire-layer { inset: -14px 0; -webkit-mask-image: url('/ships/boss-dreadnought.webp'); mask-image: url('/ships/boss-dreadnought.webp'); -webkit-mask-size: contain; mask-size: contain; -webkit-mask-position: center; mask-position: center; }
+.hull-fire { position: absolute; display: block; width: 12px; height: 17px; transform: translate(-50%, -62%); transform-origin: 50% 80%; background: radial-gradient(ellipse at 50% 78%, #fff4b3 0 13%, #ff9e21dc 24%, #f34d2066 48%, transparent 68%); animation: hull-flame-flicker .48s ease-in-out infinite alternate; }
+.hull-fire::before, .hull-fire::after { position: absolute; content: ''; }
+.hull-fire::before { inset: 0 1px 1px; background: linear-gradient(#ff7135, #ff8920 48%, #ffd44d 78%, #fff5ba); clip-path: polygon(50% 0, 65% 30%, 76% 12%, 78% 48%, 96% 62%, 76% 88%, 50% 100%, 22% 87%, 4% 63%, 25% 31%, 37% 47%); }
+.hull-fire::after { inset: 29% 33% 8%; background: linear-gradient(#ffd453, #fff9d0); clip-path: polygon(50% 0, 90% 62%, 60% 100%, 28% 100%, 10% 60%); }
+.asteroid-small .hull-fire { width: 9px; height: 13px; }
+.sector-boss .hull-fire { width: 15px; height: 21px; }
+@keyframes hull-flame-flicker { from { transform: translate(-50%, -62%) rotate(-7deg) scale(.85, .95); opacity: .86; } to { transform: translate(-50%, -62%) rotate(6deg) scale(1.12, 1.07); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .hull-fire { animation: none; } }
+html[data-motion="reduced"] .hull-fire { animation: none; }
 @media (max-width: 560px) {
   .game-hud { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-areas: "home score coins pause" "hearts hearts level round"; gap: 3px; padding: max(8px, env(safe-area-inset-top)) max(7px, env(safe-area-inset-right)) 7px max(7px, env(safe-area-inset-left)); }
   .hud-actions { grid-area: home; }

@@ -6,7 +6,7 @@ export const BOSS_ENTRY_MS = 1_800;
 export const BOSS_WARNING_MS = 4_900;
 export const BOSS_FIRE_INTERVAL_MS = 2_500;
 
-export type SectorBoss = { x: number; y: number; startY: number; radius: number; health: number; maxHealth: number; elapsed: number; fireElapsed: number; lastDamageAt: number; scorchMarks?: { id: number; x: number; y: number }[] };
+export type SectorBoss = { x: number; y: number; startY: number; radius: number; health: number; maxHealth: number; elapsed: number; fireElapsed: number; lastDamageAt: number; hullFires?: { id: number; x: number; y: number }[] };
 
 export const createSectorBoss = (sector: number, width: number, visibleTop = 0): SectorBoss => {
   const health = levelDifficulty(sector).bossHealth;
