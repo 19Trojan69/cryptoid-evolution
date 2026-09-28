@@ -51,3 +51,37 @@ test("game audio plays effects without scheduling background music", async () =>
     globalThis.window = previous.window;
   }
 });
+
+test("boss warning rises in three pulses and finishes before the boss enters", async () => {
+  const previous = globalThis.AudioContext;
+  const pulses = [];
+  globalThis.AudioContext = class {
+    state = "running";
+    currentTime = 0;
+    destination = {};
+    async resume() {}
+    async close() {}
+    createGain() { return { gain: { value: 1, setValueAtTime() {}, exponentialRampToValueAtTime() {} }, connect: output => output }; }
+    createOscillator() {
+      const pulse = { frequency: 0, at: 0, end: 0 };
+      pulses.push(pulse);
+      return {
+        frequency: { setValueAtTime: value => { pulse.frequency = value; }, exponentialRampToValueAtTime: (_value, at) => { pulse.end = at; } },
+        connect: output => output,
+        start: at => { pulse.at = at; }, stop() {},
+      };
+    }
+  };
+  const audio = new GameAudio();
+  try {
+    assert.equal(await audio.start(), true);
+    audio.play("boss");
+    assert.equal(pulses.length, 3);
+    assert.deepEqual(pulses.map(pulse => pulse.frequency), [420, 490, 560]);
+    assert.ok(pulses[0].at < pulses[1].at && pulses[1].at < pulses[2].at);
+    assert.ok(pulses[2].end < 3.2);
+  } finally {
+    audio.close();
+    globalThis.AudioContext = previous;
+  }
+});
