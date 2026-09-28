@@ -6,7 +6,7 @@ import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, 
 import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp } from "./powerUps";
 import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, zoneFraction, shipStartHeight } from "./controlPreferences";
-import { activeWeaponLevel, advanceShot, contactWithEnemy, directCollisionImpacts, MAX_PLAYER_SHOTS, movePlayer, placePlayer, placePlayerFromPointer, PURCHASED_WEAPON_DURATION_MS, shipCollisionOutcome, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
+import { activeWeaponLevel, advanceShot, contactWithEnemy, MAX_PLAYER_SHOTS, movePlayer, placePlayer, placePlayerFromPointer, PURCHASED_WEAPON_DURATION_MS, shipCollisionOutcome, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
 import { advanceEnemyShot, createEnemyShot, enemyShotHitsPlayer, enemyShotLimit, type EnemyShot } from "./enemyFire";
 import SectorBackdrop from "./SectorBackdrop";
 import Starfield from "./Starfield";
@@ -630,7 +630,8 @@ const GamePage = () => {
             if (contact.damage) {
               if (activeAttack) next = { ...next, collidedThisAttack: true };
               const collision = shipCollisionOutcome(state.shieldActive, shieldImpactsRemaining, state.shieldMs);
-              heartsLost = Math.max(heartsLost, directCollisionImpacts(state.hearts, state.shieldCharges, collision.absorbedByShield));
+              // A contact is one impact: the shield absorbs it, otherwise one heart is lost.
+              heartsLost = Math.max(heartsLost, 1);
               impactCooldownRef.current = IMPACT_COOLDOWN_MS;
               if (collision.absorbedByShield) {
                 shieldImpactsRemaining -= 1;
@@ -657,8 +658,7 @@ const GamePage = () => {
           state.boss = moveSectorBoss(state.boss, state.empMs > 0 ? 0 : delta, width, height);
           const bossContact = contactWithEnemy(state.player, width, height, state.boss, true, false, impactCooldownRef.current, previousBoss);
           if (bossContact.damage) {
-            const collision = shipCollisionOutcome(state.shieldActive, shieldImpactsRemaining, state.shieldMs);
-            heartsLost = Math.max(heartsLost, directCollisionImpacts(state.hearts, state.shieldCharges, collision.absorbedByShield));
+            heartsLost = Math.max(heartsLost, 1);
             impactCooldownRef.current = IMPACT_COOLDOWN_MS;
           }
           if (state.empMs === 0 && bossVulnerable(state.boss) && state.boss.fireElapsed >= bossFireInterval(state.boss, state.sector) && state.enemyShots.length < enemyShotLimit(width, elapsedRef.current, state.sector)) {

@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { activeWeaponLevel, advanceShot, contactWithEnemy, directCollisionImpacts, movePlayer, placePlayer, placePlayerFromPointer, shipCollisionOutcome, shipHitsEnemy, shotHitsEnemy, MAX_PLAYER_SHOTS, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, TOUCH_SHIP_OFFSET_PX, fireInterval, makeVolley } from "./playerCombat.ts";
+import { activeWeaponLevel, advanceShot, contactWithEnemy, movePlayer, placePlayer, placePlayerFromPointer, shipCollisionOutcome, shipHitsEnemy, shotHitsEnemy, MAX_PLAYER_SHOTS, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, TOUCH_SHIP_OFFSET_PX, fireInterval, makeVolley } from "./playerCombat.ts";
 
 test("weapon tiers fire multi-shot volleys and apply plasma damage", () => {
   let next = 0;
@@ -86,12 +86,11 @@ test("an active shield absorbs a ship collision; an inactive or expired shield d
   assert.deepEqual(shipCollisionOutcome(true, 1, 0), { absorbedByShield: false, destroysEnemy: true, destroysPlayerLife: true });
 });
 
-test("unshielded contact destroys the whole ship; a shield consumes one charge", () => {
-  assert.equal(directCollisionImpacts(3, 0, false), 3);
-  assert.equal(directCollisionImpacts(6, 0, false), 6);
-  assert.equal(directCollisionImpacts(6, 1, false), 7);
-  assert.equal(directCollisionImpacts(6, 1, true), 1);
-  const outcome = shipCollisionOutcome(true, 1, 20_000);
-  const impact = directCollisionImpacts(6, 1, outcome.absorbedByShield);
-  assert.equal(resolvePlayerDamage({ hearts: 6, shieldCharges: 1, overdriveMs: 0 }, impact, true).hearts, 6);
+test("one collision costs one heart, while an active shield absorbs it", () => {
+  const contact = contactWithEnemy({ x: .5, y: .85 }, 800, 600, { x: 400, y: 510, radius: 25 }, true, false, 0);
+  assert.equal(contact.damage, 1);
+  assert.equal(resolvePlayerDamage({ hearts: 6, shieldCharges: 0, overdriveMs: 0 }, contact.damage, true).hearts, 5);
+  assert.deepEqual(resolvePlayerDamage({ hearts: 6, shieldCharges: 1, overdriveMs: 0 }, contact.damage, true), { hearts: 6, shieldCharges: 0, overdriveMs: 0 });
+  assert.deepEqual(resolvePlayerDamage({ hearts: 6, shieldCharges: 1, overdriveMs: 0 }, contact.damage, false), { hearts: 5, shieldCharges: 1, overdriveMs: 0 });
+  assert.equal(contactWithEnemy({ x: .5, y: .85 }, 800, 600, { x: 400, y: 510, radius: 25 }, true, false, 1_500).damage, 0);
 });

@@ -62,9 +62,3 @@ export const shipCollisionOutcome = (shieldActive: boolean, shieldCharges: numbe
   const absorbedByShield = shieldActive && shieldCharges > 0 && shieldMs > 0;
   return { absorbedByShield, destroysEnemy: !absorbedByShield, destroysPlayerLife: !absorbedByShield };
 };
-
-// A direct unshielded ship collision destroys the whole player hull regardless
-// of purchased evolution stage or extra hearts. Account for still queued shield
-// charges because receiveImpacts processes the whole frame together.
-export const directCollisionImpacts = (hearts: number, shieldCharges: number, absorbedByShield: boolean) =>
-  absorbedByShield ? 1 : hearts + shieldCharges;
