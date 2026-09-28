@@ -10,7 +10,7 @@ import { activeWeaponLevel, advanceShot, contactWithEnemy, directCollisionImpact
 import { advanceEnemyShot, createEnemyShot, enemyShotHitsPlayer, enemyShotLimit, type EnemyShot } from "./enemyFire";
 import SectorBackdrop from "./SectorBackdrop";
 import Starfield from "./Starfield";
-import { BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusEntryGap, bonusHeartReward, bonusPosition, bonusReward, bonusShowcaseShip, isBonusSection, type BonusTarget } from "./bonusChallenge";
+import { BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusEntryGap, bonusHeartReward, bonusPosition, bonusReward, bonusShowcaseShip, type BonusTarget } from "./bonusChallenge";
 import { appendSectionBlock, BLOCKS_PER_CHAIN } from "./networkChain";
 import { damageSectorBoss, bossFireInterval, bossVulnerable, createSectorBoss, moveSectorBoss, nextAfterClear, type SectorBoss } from "./sectorBoss";
 import { enemySprite, selectedShip, shardBalance, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
@@ -99,9 +99,28 @@ type Effect = {
   debrisColor?: PlayerColorId;
   shipStage?: ShipStage;
 };
-type GameState = { asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; score: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; shieldActive: boolean; overdriveMs: number; rapidFireMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
+type GameState = { asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; score: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; shieldActive: boolean; overdriveMs: number; rapidFireMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
 
 const CockpitIcon = ({ kind }: { kind: "home" | "play" | "pause" }) => <svg className="game-control-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{kind === "home" ? <><path d="m3 11 9-7 9 7" /><path d="M5 10v10h14V10M10 20v-6h4v6" /></> : kind === "play" ? <path d="M8 5 19 12 8 19Z" fill="currentColor" stroke="none" /> : <><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor" stroke="none" /><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor" stroke="none" /></>}</svg>;
+
+const CHAIN_BINARY = FORMATION_DATA_ROWS[0].repeat(4);
+
+const BlockchainProgress = ({ blocks, saved = false }: { blocks: number; saved?: boolean }) => (
+  <div className={`blockchain-progress${saved ? " blockchain-progress-saved" : ""}`} role="img" aria-label={`${blocks} of ${BLOCKS_PER_CHAIN} network blocks linked`}>
+    <div className="blockchain-halo" aria-hidden="true" />
+    <div className="blockchain-block-row" aria-hidden="true">
+      {Array.from({ length: BLOCKS_PER_CHAIN }, (_, index) => {
+        const active = index < blocks;
+        const linked = index < blocks - 1;
+        return <div className="blockchain-step" key={index}>
+          <i className={`blockchain-node${active ? " active" : ""}${active && index === blocks - 1 ? " newest" : ""}`}><b /><em /></i>
+          {index < BLOCKS_PER_CHAIN - 1 && <span className={`blockchain-link${linked ? " active" : ""}`}><i /></span>}
+        </div>;
+      })}
+    </div>
+    <div className="blockchain-binary" aria-hidden="true"><div className="blockchain-binary-track"><span>{CHAIN_BINARY}</span><span>{CHAIN_BINARY}</span></div></div>
+  </div>
+);
 
 const createInitialState = (): GameState => ({ asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", chainBlocks: 0, chainResult: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: shipStartHeight[readShipStart()] }, thrust: 0, effects: [], powerUps: [], score: 0, shards: 0, hearts: 3, maxHearts: 3, projectileGuard: 0, shieldCharges: 0, shieldMs: 0, shieldActive: true, overdriveMs: 0, rapidFireMs: 0, empMs: 0, pendingStartPower: null, weaponLevel: 1, weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") ? "loading" : "playing" });
 
@@ -149,7 +168,7 @@ const moveAsteroid = (asteroid: Asteroid, delta: number, width: number, height: 
     return { ...asteroid, x: keepInField(asteroid.entryTargetX), y: asteroid.entryTargetY, formationElapsed: Math.min(asteroid.formationDuration, elapsed), rotation };
   }
   if (asteroid.entryElapsed >= asteroid.entryDuration) {
-    if (asteroid.attackPattern === null) return { ...asteroid, rotation };
+    if (asteroid.attackPattern === null) return { ...asteroid, x: keepInField(asteroid.entryTargetX), y: asteroid.entryTargetY, rotation };
     if (asteroid.attackDelay > 0) return { ...asteroid, attackDelay: Math.max(0, asteroid.attackDelay - delta), rotation };
     const duration = attackTime(asteroid);
     if (asteroid.attackElapsed < duration) {
@@ -479,8 +498,8 @@ const GamePage = () => {
         const visibleTop = visibleTopRef.current;
         const slots = sectionSlotsRef.current ?? createFormationSlots(state.section, state.sector, width, height);
         sectionSlotsRef.current = slots;
-        const bonus = state.encounter === "normal" && isBonusSection(state.section);
-        const normal = state.encounter === "normal" && !bonus;
+        const bonus = state.encounter === "bonus";
+        const normal = state.encounter === "normal";
         const readyCount = state.asteroids.filter(asteroid => asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration).length;
         const formationIsReady = normal && formationReady({ spawned: formationIndexRef.current, total: slots.length, alive: state.asteroids.length, ready: readyCount });
         if (formationIsReady) formationStartedRef.current = true;
@@ -516,10 +535,15 @@ const GamePage = () => {
         if (state.phase === "SECTOR_CLEAR") {
           clearTimerRef.current += delta;
           if (clearTimerRef.current >= SECTION_CLEAR_MS) {
-            if (nextAfterClear(isBonusSection(state.section), state.encounter !== "normal") === "boss") {
+            const clearEncounter = state.encounter === "boss-clear" ? "boss-clear" : state.encounter === "bonus" ? "bonus" : "normal";
+            const next = nextAfterClear(sectionInSector(state.section), clearEncounter);
+            if (next === "boss") {
               state.encounter = "boss-intro";
               state.boss = createSectorBoss(state.sector, width, visibleTop);
               soundRef.current?.play("boss");
+            } else if (next === "bonus") {
+              state.encounter = "bonus";
+              state.boss = null;
             } else {
               state.section += 1;
               state.sector = sectorForSection(state.section);
@@ -750,7 +774,7 @@ const GamePage = () => {
           const link = appendSectionBlock(state.chainBlocks, bonus ? state.bonusHits : 0, state.sector);
           state.chainBlocks = link.blocks;
           creditReward(state, link.shards);
-          state.chainResult = link.linked ? `CHAIN COMPLETE · +${link.shards} Shards` : `BLOCK LINKED · ${link.blocks}/${BLOCKS_PER_CHAIN}`;
+          state.chainResult = link.linked ? `CHAIN COMPLETED • ${link.blocks}/${BLOCKS_PER_CHAIN}` : `BLOCK LINKED • ${link.blocks}/${BLOCKS_PER_CHAIN}`;
         }
         if (bonus && state.phase === "SECTOR_CLEAR" && previousPhase !== "SECTOR_CLEAR") {
           const reward = bonusReward(state.bonusHits, state.sector);
@@ -935,13 +959,14 @@ const GamePage = () => {
     ? <><b>{t("LEVEL")} {levelLabel}</b><i>{t("COMPLETE")}</i></>
     : levelIntro
       ? `${t("LEVEL")} ${levelLabel}`
-      : game.encounter !== "normal"
-        ? t("WARNING · SECTOR BOSS")
-        : game.phase === "SECTOR_CLEAR"
-          ? isBonusSection(game.section)
-            ? game.bonusResult.split(" · ")[0]
-            : `${t("ROUND")} ${round} ${t("COMPLETE")}`
-          : isBonusSection(game.section) ? t("BONUS CHALLENGE") : `${t("ROUND")} ${round} / 3`;
+      : game.encounter === "bonus"
+        ? game.phase === "SECTOR_CLEAR" ? game.bonusResult.split(" · ")[0] : t("BONUS CHALLENGE")
+        : game.encounter !== "normal"
+          ? t("WARNING · SECTOR BOSS")
+          : game.phase === "SECTOR_CLEAR"
+            ? `${t("ROUND")} ${round} ${t("COMPLETE")}`
+            : `${t("ROUND")} ${round} / 3`;
+  const roundHudLabel = game.encounter === "normal" ? `${round} / 3` : game.encounter === "bonus" ? "BONUS" : "BOSS";
 
   return (
     <main className="game-shell" onPointerDownCapture={event => { void startEffects(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
@@ -954,16 +979,23 @@ const GamePage = () => {
           <div className="hud-stat game-level-hud" aria-label={`${t("Game level")} ${levelLabel}`}><span>{t("Level")}</span><strong>{levelLabel}</strong></div>
           <div className="hud-stat score-hud" aria-label={`${t("Shards")} ${game.shards}, ${t("Score")} ${game.score}`}><span className="shard-line"><b>◆ {game.shards}</b><small>{t("Shards")}</small></span><span className="score-line"><b>{game.score}</b><small>{t("Score")}</small></span></div>
           <div className="hud-stat weapon-hud" aria-label={`${t("Weapon level")} ${stageWeaponLevel(shipStage, game.weaponLevel)} / 5; ${t("Projectile hits left")}: ${game.projectileGuard}`}><span>{t("Weapon")}</span><strong>{stageWeaponLevel(shipStage, game.weaponLevel)}<small>/5</small></strong>{shipStage > 1 && <small className="hull-hits">✦ {game.projectileGuard}/{projectileGuardForStage(shipStage)}</small>}</div>
-          <div className="hud-stat round-hud chain-hud" aria-label={`${t("Round")} ${game.encounter === "normal" ? `${round} / 3` : "BOSS"}`}><span>{t("Round")}</span><strong>{game.encounter === "normal" ? <>{round}<small>/3</small></> : "BOSS"}</strong><div className="chain-blocks" role="img" aria-label={`${t("Network chain")}: ${game.chainBlocks}/${BLOCKS_PER_CHAIN} ${t("blocks linked")}`}>{Array.from({ length: BLOCKS_PER_CHAIN }, (_, index) => <i key={index} className={index < game.chainBlocks ? "linked" : ""} />)}</div></div>
+          <div className="hud-stat round-hud chain-hud" aria-label={`${t("Round")} ${roundHudLabel}`}><span>{t("Round")}</span><strong className={game.encounter === "bonus" ? "bonus-hud-label" : ""}>{game.encounter === "normal" ? <>{round}<small>/3</small></> : game.encounter === "bonus" ? "BONUS" : "BOSS"}</strong><div className="chain-blocks" role="img" aria-label={`${t("Network chain")}: ${game.chainBlocks}/${BLOCKS_PER_CHAIN} ${t("blocks linked")}`}>{Array.from({ length: BLOCKS_PER_CHAIN }, (_, index) => <i key={index} className={index < game.chainBlocks ? "linked" : ""} />)}</div></div>
           <button className="game-control pause-control" type="button" disabled={game.status === "loading" || game.status === "destroying" || game.status === "game-over"} onClick={() => { stateRef.current.status = game.status === "paused" ? "playing" : "paused"; setGame({ ...stateRef.current }); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
         </header>
-        <div className="game-label">{t("LEVEL")} {levelLabel} <span>· {sectorName(game.sector)} · {game.encounter !== "normal" ? t("CORE WARDEN") : isBonusSection(game.section) ? t("BONUS CHALLENGE") : `${t("ROUND")} ${round}`}</span></div>
-        {game.encounter === "normal" && isBonusSection(game.section) && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">{t("BONUS TARGETS")} {game.bonusHits} / {BONUS_TARGET_COUNT} · {t("NO ENEMY FIRE")}</div>}
+        <div className="game-label">{t("LEVEL")} {levelLabel} <span>· {sectorName(game.sector)} · {game.encounter === "bonus" ? t("BONUS CHALLENGE") : game.encounter !== "normal" ? t("CORE WARDEN") : `${t("ROUND")} ${round}`}</span></div>
+        {game.encounter === "bonus" && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">{t("BONUS TARGETS")} {game.bonusHits} / {BONUS_TARGET_COUNT} · {t("NO ENEMY FIRE")}</div>}
         {(game.shieldCharges > 0 || game.overdriveMs > 0 || game.rapidFireMs > 0 || game.empMs > 0 || game.paidWeaponMs > 0 || game.pickupWeaponMs > 0) && <div className="power-status" aria-live="polite">{game.shieldCharges > 0 && <span>{powerUpSymbols.shield} {t("SHIELD")} {t(game.shieldActive ? "ON" : "OFF")} · {game.shieldCharges} · {Math.ceil(game.shieldMs / 1_000)}s</span>}{game.overdriveMs > 0 && <span>{powerUpSymbols.overdrive} OVERDRIVE {Math.ceil(game.overdriveMs / 1_000)}s</span>}{game.rapidFireMs > 0 && <span>{powerUpSymbols.rapid} {t("RAPID")} {Math.ceil(game.rapidFireMs / 1_000)}s</span>}{game.empMs > 0 && <span>{powerUpSymbols.emp} EMP {Math.ceil(game.empMs / 1_000)}s</span>}{game.paidWeaponMs > 0 && <span>◆ {t("BOUGHT SHOTS")} {Math.ceil(game.paidWeaponMs / 1_000)}s</span>}{game.pickupWeaponMs > 0 && <span>{powerUpSymbols.weapon} {t("PICKUP SHOTS")} {Math.ceil(game.pickupWeaponMs / 1_000)}s</span>}</div>}
         {game.status === "loading" && <div className="game-overlay"><div className="game-modal"><h1>{t('Preparing mission')}</h1><p>{t('Checking your saved hangar loadout.')}</p></div></div>}
-        {game.status === "playing" && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite"><span>{levelComplete || levelIntro ? sectorName(game.sector) : game.encounter !== "normal" ? `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.phase === "SECTOR_CLEAR" ? isBonusSection(game.section) ? t("BONUS COMPLETE") : t("ROUND COMPLETE") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}`}</span><strong>{transitionHeadline}</strong>{game.phase === "SECTOR_INTRO" && game.encounter === "normal" && isBonusSection(game.section) && <small>{t("HIT THE FLYING TARGETS")}</small>}{game.phase === "SECTOR_CLEAR" && game.encounter === "normal" && <><small className="chain-result">{isBonusSection(game.section) ? `${game.bonusHits}/${BONUS_TARGET_COUNT} TARGETS · ${game.bonusResult.split(" · ").slice(1).join(" · ")}` : game.chainResult}</small><small className="crypto-explainer">{isBonusSection(game.section) ? "1 Shard per target · completion bonus added immediately." : "3 Blocks → 1 Network Chain → Shards"}</small></>}</div>}
-        {game.status === "playing" && game.encounter === "normal" && !isBonusSection(game.section) && !formationStartedRef.current && (game.phase === "SECTOR_INTRO" || game.phase === "ENTRY" || game.phase === "FORMATION") && <div className="formation-data-stream" aria-hidden="true">{FORMATION_DATA_ROWS.map((row, index) => <div className="formation-data-row" key={index}><span>{row.repeat(4)}</span><span>{row.repeat(4)}</span></div>)}</div>}
-        {game.encounter === "normal" && !isBonusSection(game.section) && (game.phase === "ENTRY" || game.phase === "FORMATION" || game.phase === "REFORM") && game.asteroids.map(asteroid => { const locked = asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration; return <div key={`formation-${asteroid.id}`} className={`formation-target${locked ? " formation-target-locked" : ""}`} style={{ left: asteroid.entryTargetX, top: asteroid.entryTargetY, width: asteroid.radius * 1.65, height: asteroid.radius * 1.65 }} aria-hidden="true"><span /></div>; })}
+        {game.status === "playing" && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite">
+          <span>{levelComplete || levelIntro ? sectorName(game.sector) : game.encounter === "bonus" ? game.phase === "SECTOR_CLEAR" ? t("BONUS COMPLETE") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.encounter !== "normal" ? `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.phase === "SECTOR_CLEAR" ? t("ROUND COMPLETE") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}`}</span>
+          <strong>{transitionHeadline}</strong>
+          {game.phase === "SECTOR_INTRO" && game.encounter === "bonus" && <small>{t("HIT THE FLYING TARGETS")}</small>}
+          {game.phase === "SECTOR_CLEAR" && game.encounter === "normal" && <><small className="chain-result">{game.chainResult}</small><BlockchainProgress blocks={game.chainBlocks} /></>}
+          {levelComplete && <><small className="chain-saved-label">CHAIN SAVED</small><BlockchainProgress blocks={BLOCKS_PER_CHAIN} saved /></>}
+          {game.phase === "SECTOR_CLEAR" && game.encounter === "bonus" && <><small className="chain-result">{`${game.bonusHits}/${BONUS_TARGET_COUNT} TARGETS · ${game.bonusResult.split(" · ").slice(1).join(" · ")}`}</small><small className="crypto-explainer">1 Shard per target · completion bonus added immediately.</small></>}
+        </div>}
+        {game.status === "playing" && game.encounter === "normal" && !formationStartedRef.current && (game.phase === "SECTOR_INTRO" || game.phase === "ENTRY" || game.phase === "FORMATION") && <div className="formation-data-stream" aria-hidden="true">{FORMATION_DATA_ROWS.map((row, index) => <div className="formation-data-row" key={index}><span>{row.repeat(4)}</span><span>{row.repeat(4)}</span></div>)}</div>}
+        {game.encounter === "normal" && (game.phase === "ENTRY" || game.phase === "FORMATION" || game.phase === "REFORM") && game.asteroids.map(asteroid => { const locked = asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration; const sprite = enemySprite(asteroid.shipClass, asteroid.formationSlot); const target = alignedSpritePosition(asteroid.entryTargetX, asteroid.entryTargetY, sprite, asteroid.radius * 2); return <div key={`formation-${asteroid.id}`} className={`formation-target${locked ? " formation-target-locked" : ""}`} style={{ left: target.left, top: target.top, width: asteroid.radius * 1.65, height: asteroid.radius * 1.65 }} aria-hidden="true"><span /></div>; })}
         {game.boss && game.encounter === "boss-fight" && <div className={`asteroid sector-boss boss-variant-${((game.sector - 1) % 6) + 1}${game.boss.fireElapsed >= bossFireInterval(game.boss, game.sector) - 550 ? " boss-warning" : ""}${game.boss.health <= game.boss.maxHealth / 2 ? " boss-enraged" : ""}${performance.now() - game.boss.lastDamageAt < 240 ? " boss-hit" : ""}`} style={{ left: game.boss.x, top: game.boss.y, transform: "translate(-50%, -50%)" }} title={`${t("CORE WARDEN")} · ${t("Sector")} boss`}>
           <span className="boss-hull" aria-hidden="true" />
           <span className="health-bar" data-critical={game.boss.health / game.boss.maxHealth <= .3} role="progressbar" aria-label={t("Boss hull")} aria-valuenow={Math.ceil(game.boss.health / game.boss.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${game.boss.health / game.boss.maxHealth * 100}%` }} /><small className="boss-health-readout">{Math.ceil(game.boss.health / game.boss.maxHealth * 100)}%</small></span>
