@@ -5,6 +5,23 @@ export type GameSound = "laser" | "enemyHit" | "explosion" | "collision" | "shie
 const sampleNames = ["shot-single", "shot-twin", "shot-rapid", "shot-triple", "shot-plasma", "enemy-hit", "enemy-destroy", "enemy-destroy-alt", "player-collision", "shield", "boost", "boss-destroy"] as const;
 type SampleName = typeof sampleNames[number];
 
+// Calibrated from the source files' average levels: one-off effects share a
+// common level, while frequently repeated shots sit slightly lower.
+const sampleGains: Record<SampleName, number> = {
+  "shot-single": .114,
+  "shot-twin": .032,
+  "shot-rapid": .064,
+  "shot-triple": .070,
+  "shot-plasma": .080,
+  "enemy-hit": .240,
+  "enemy-destroy": .092,
+  "enemy-destroy-alt": .124,
+  "player-collision": .226,
+  "shield": .071,
+  "boost": .174,
+  "boss-destroy": .107,
+};
+
 // Game effects only; audio starts after a player gesture on browsers that require one.
 export class GameAudio {
   private context: AudioContext | null = null;
@@ -41,7 +58,7 @@ export class GameAudio {
     }));
   }
 
-  private sample(name: SampleName, volume: number, rate = 1) {
+  private sample(name: SampleName, rate = 1) {
     const context = this.context;
     const buffer = this.samples.get(name);
     if (!context || context.state !== "running" || this.paused || !buffer || !this.effectsBus || typeof context.createBufferSource !== "function") return false;
@@ -49,7 +66,7 @@ export class GameAudio {
     const gain = context.createGain();
     source.buffer = buffer;
     source.playbackRate.value = rate;
-    gain.gain.value = volume;
+    gain.gain.value = sampleGains[name];
     source.connect(gain).connect(this.effectsBus);
     source.start();
     source.onended = () => { source.disconnect(); gain.disconnect(); };
@@ -79,14 +96,14 @@ export class GameAudio {
       if (now - this.lastShotAt < 90) return;
       this.lastShotAt = now;
       const name = sampleNames[Math.max(0, Math.min(4, weaponLevel - 1))];
-      if (this.sample(name, weaponLevel >= 4 ? .17 : .13)) return;
+      if (this.sample(name)) return;
     } else {
       const name: Partial<Record<Exclude<GameSound, "laser">, SampleName>> = {
         enemyHit: "enemy-hit", explosion: this.destroyCount++ % 2 ? "enemy-destroy-alt" : "enemy-destroy",
         collision: "player-collision", shield: "shield", boost: "boost", bossDestroy: "boss-destroy",
       };
       const chosen = name[sound];
-      if (chosen && this.sample(chosen, sound === "explosion" ? .15 : sound === "bossDestroy" ? .17 : sound === "collision" ? .2 : .26)) return;
+      if (chosen && this.sample(chosen)) return;
     }
     switch (sound) {
       case "laser": this.tone(920, 330, .085, .025, "sawtooth"); break;
