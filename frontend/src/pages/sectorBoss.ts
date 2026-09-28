@@ -19,11 +19,16 @@ export const moveSectorBoss = (boss: SectorBoss, delta: number, width: number, h
   const elapsed = boss.elapsed + delta;
   const entry = Math.min(1, elapsed / BOSS_ENTRY_MS);
   const targetX = width * (.5 + .2 * Math.sin(Math.max(0, elapsed - BOSS_ENTRY_MS) * .00075));
-  const targetY = Math.max(height * .24, boss.startY);
+  const restingY = Math.max(height * .24, boss.startY);
+  const critical = Math.max(0, Math.min(1, (0.2 - boss.health / boss.maxHealth) / 0.2));
+  const descent = critical * critical * (3 - 2 * critical);
+  const targetY = restingY + Math.min(height * .1, 80) * descent;
   return {
     ...boss,
     x: Math.max(boss.radius, Math.min(width - boss.radius, targetX)),
-    y: boss.startY + (targetY - boss.startY) * (entry * entry * (3 - 2 * entry)),
+    y: entry < 1
+      ? boss.startY + (restingY - boss.startY) * (entry * entry * (3 - 2 * entry))
+      : boss.y + (targetY - boss.y) * (1 - Math.exp(-delta / 900)),
     elapsed,
     fireElapsed: entry === 1 ? boss.fireElapsed + delta : 0,
   };

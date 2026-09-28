@@ -253,27 +253,27 @@ const scatteredPieces = (effect: Effect, count: number, sprite: number) => {
       "--fragment-delay": `${Math.floor(random() * 180)}ms`,
     } as CSSProperties;
     return <em key={index} className="scattered-debris-piece" style={pieceStyle}>
-      {effect.debrisColor ? <PaintedShip className="scattered-debris-sprite" sprite={sprite} color={effect.debrisColor} stage={effect.shipStage} /> : <b style={spriteStyle(sprite)} />}
+      {effect.kind === "boss-explosion" ? <b className="boss-fragment-hull" /> : effect.debrisColor ? <PaintedShip className="scattered-debris-sprite" sprite={sprite} color={effect.debrisColor} stage={effect.shipStage} /> : <b style={spriteStyle(sprite)} />}
     </em>;
   });
 };
 
 const shipDebris = (effect: Effect) => {
   const sprite = effect.sprite;
-  if (sprite === undefined) return null;
   const style = {
     "--debris-size": `${effect.debrisSize ?? 58}px`,
     "--debris-rotation": `${180 + (effect.debrisRotation ?? 0)}deg`,
   } as CSSProperties;
+  if (effect.kind === "boss-explosion") return <div className="ship-debris scattered-debris boss-debris-field" style={style} aria-hidden="true">{scatteredPieces(effect, 14, 0)}</div>;
+  if (sprite === undefined) return null;
   // A collision can damage the player without destroying the ship.
   if (effect.kind === "player-crash") {
     return <div className="ship-debris player-crash-debris" style={style} aria-hidden="true">
       {[0, 1, 2, 3].map(index => <em className={`ship-debris-piece ship-debris-piece-${index + 1}`} key={index}>{effect.debrisColor ? <PaintedShip className="ship-debris-sprite" sprite={sprite} color={effect.debrisColor} stage={effect.shipStage} /> : <b style={spriteStyle(sprite)} />}</em>)}
     </div>;
   }
-  const boss = effect.kind === "boss-explosion";
-  const count = boss ? 14 : effect.shipClass === "heavy" || (effect.debrisSize ?? 0) >= 86 ? 8 : 4;
-  return <div className={`ship-debris scattered-debris${boss ? " boss-debris-field" : ""}${effect.shipClass ? ` ship-debris-${effect.shipClass}` : ""}`} style={style} aria-hidden="true">
+  const count = effect.shipClass === "heavy" || (effect.debrisSize ?? 0) >= 86 ? 8 : 4;
+  return <div className={`ship-debris scattered-debris${effect.shipClass ? ` ship-debris-${effect.shipClass}` : ""}`} style={style} aria-hidden="true">
     {scatteredPieces(effect, count, sprite)}
   </div>;
 };
@@ -744,9 +744,9 @@ const GamePage = () => {
             continue;
           }
           if (state.encounter === "boss-fight" && state.boss && bossVulnerable(state.boss) && shotHitsEnemy(shot, { ...state.boss, cloaked: false })) {
-            state.boss.hullFires = [...(state.boss.hullFires ?? []).slice(-4), hullFireAtImpact(shot, state.boss, 124, bossFireSites, state.boss.hullFires)];
             if (!damageSectorBoss(state.boss, shot.damage, time)) continue;
-            if (state.boss.health === 0) state.effects.push({ id: nextIdRef.current++, x: state.boss.x, y: state.boss.y, kind: "boss-explosion", startedAt: time, sprite: 19, debrisSize: 124, shipClass: "heavy" });
+            if (state.boss.health > 0) state.boss.hullFires = [...(state.boss.hullFires ?? []).slice(-6), hullFireAtImpact(shot, state.boss, 124, bossFireSites, state.boss.hullFires)];
+            else state.effects.push({ id: nextIdRef.current++, x: state.boss.x, y: state.boss.y, kind: "boss-explosion", startedAt: time, debrisSize: 124, shipClass: "heavy" });
             soundRef.current?.play(state.boss.health > 0 ? "enemyHit" : "bossDestroy");
             if (state.boss.health === 0) {
               startBossVictory();
@@ -764,7 +764,7 @@ const GamePage = () => {
           enemy.hitUntil = time + 190;
           if (enemy.health > 0) {
             const sprite = enemySprite(enemy.shipClass, enemy.formationSlot);
-            enemy.hullFires = [...(enemy.hullFires ?? []).slice(-2), hullFireAtImpact(shot, enemy, enemy.radius * 2, spriteFireSites[sprite], enemy.hullFires, enemy.rotation, spriteVisualOffset(sprite, enemy.radius * 2, true))];
+            enemy.hullFires = [...(enemy.hullFires ?? []).slice(-3), hullFireAtImpact(shot, enemy, enemy.radius * 2, spriteFireSites[sprite], enemy.hullFires, enemy.rotation, spriteVisualOffset(sprite, enemy.radius * 2, true))];
           }
           if (enemy.health === 0) state.effects.push({ id: nextIdRef.current++, x: enemy.x, y: enemy.y, kind: enemy.type === "etherCrystal" ? "shatter" : "explosion", startedAt: time, sprite: enemySprite(enemy.shipClass, enemy.formationSlot), debrisSize: enemy.radius * 2, debrisRotation: enemy.rotation, shipClass: enemy.shipClass });
           soundRef.current?.play(enemy.health > 0 ? "enemyHit" : "explosion");
@@ -913,7 +913,7 @@ const GamePage = () => {
           if (state.boss.health === 0) {
             soundRef.current?.play("bossDestroy");
             startBossVictory();
-            state.effects.push({ id: nextIdRef.current++, x: state.boss.x, y: state.boss.y, kind: "boss-explosion", startedAt: now, sprite: 19, debrisSize: 124, shipClass: "heavy" });
+            state.effects.push({ id: nextIdRef.current++, x: state.boss.x, y: state.boss.y, kind: "boss-explosion", startedAt: now, debrisSize: 124, shipClass: "heavy" });
             state.score += bossPoints(state.sector);
             creditDefeat(state, bossShardReward(state.sector));
             state.encounter = "boss-clear";

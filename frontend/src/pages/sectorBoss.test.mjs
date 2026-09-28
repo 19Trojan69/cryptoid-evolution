@@ -63,6 +63,22 @@ test("health grows within a cap and a damaged boss fires with a bounded interval
   assert.equal(bossVulnerable(moveSectorBoss(boss, BOSS_ENTRY_MS, 375, 700)), true);
 });
 
+test("the boss descends smoothly only during its final 20 percent of health", () => {
+  const width = 375;
+  const height = 700;
+  let boss = moveSectorBoss(createSectorBoss(1, width), BOSS_ENTRY_MS, width, height);
+  for (let i = 0; i < 220; i++) boss = moveSectorBoss(boss, 16, width, height);
+  const restingY = boss.y;
+  boss = moveSectorBoss({ ...boss, health: boss.maxHealth * .21 }, 1_000, width, height);
+  assert.ok(Math.abs(boss.y - restingY) < 1);
+  const firstStep = moveSectorBoss({ ...boss, health: boss.maxHealth * .1 }, 16, width, height);
+  assert.ok(firstStep.y > restingY && firstStep.y < restingY + 3);
+  boss = firstStep;
+  for (let i = 0; i < 220; i++) boss = moveSectorBoss({ ...boss, health: boss.maxHealth * .1 }, 16, width, height);
+  assert.ok(boss.y > restingY + 30);
+  assert.ok(boss.y < height * .35);
+});
+
 test("the opening boss remains tougher than regular ships but falls in a short fight", () => {
   const boss = createSectorBoss(1, 375);
   for (let hit = 0; hit < 28; hit++) {
