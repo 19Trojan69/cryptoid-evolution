@@ -189,7 +189,7 @@ export const spriteStyle = (index: number): CSSProperties => ({
 });
 
 // Visible hulls are not perfectly centered inside every transparent atlas cell.
-// These offsets align formation guides with the actual painted hull centers.
+// These offsets place the actual painted hull centers on the formation guides.
 const spriteCenterOffsets = [
   [5.4, -2.7], [5.4, .5], [-4.3, 15.4], [-1.8, 4.1],
   [3.2, -.5], [.4, -5.5], [0, .9], [.4, 5.2],

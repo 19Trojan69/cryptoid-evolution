@@ -1,4 +1,5 @@
 import { levelDifficulty } from "./levelDifficulty.ts";
+import { sectionInSector, sectorForSection } from "./sectorManager.ts";
 
 export const BOSS_ENTRY_MS = 1_800;
 export const BOSS_FIRE_INTERVAL_MS = 2_500;
@@ -48,3 +49,17 @@ export const nextAfterClear = (round: number, encounter: ClearEncounter) => {
   if (encounter === "boss-clear") return "bonus";
   return "section";
 };
+
+export const advanceAfterClear = (section: number, encounter: ClearEncounter) => {
+  const next = nextAfterClear(sectionInSector(section), encounter);
+  const nextSection = next === "round" || next === "section" ? section + 1 : section;
+  return {
+    encounter: next === "boss" ? "boss-intro" : next === "bonus" ? "bonus" : "normal",
+    section: nextSection,
+    sector: sectorForSection(nextSection),
+    resetChain: next === "section",
+  } as const;
+};
+
+export const encounterHudLabel = (round: number, encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus") =>
+  encounter === "normal" ? `${round}/3` : encounter === "bonus" ? "BONUS" : "BOSS";
