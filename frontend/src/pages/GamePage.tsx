@@ -390,9 +390,12 @@ const GamePage = () => {
     const track = musicRef.current;
     if (!track) return;
     const normalSource = "/audio/battle-orbit.mp3";
-    const desiredSource = game.encounter === "boss-intro" || game.encounter === "boss-fight"
-      ? "/audio/dreadnought-duel.mp3"
-      : normalSource;
+    const desiredSource = game.encounter === "boss-clear"
+      ? "/audio/boss-victory.mp3"
+      : game.encounter === "boss-intro" || game.encounter === "boss-fight"
+        ? "/audio/dreadnought-duel.mp3"
+        : normalSource;
+    track.audio.loop = game.encounter !== "boss-clear";
     if (track.currentSource !== desiredSource) {
       if (track.currentSource === normalSource) regularMusicPositionRef.current = track.audio.currentTime || 0;
       track.setSource(desiredSource, desiredSource === normalSource ? regularMusicPositionRef.current : 0);
