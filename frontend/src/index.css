@@ -413,6 +413,7 @@ html[data-motion="reduced"] .level-twinkles i { animation: none; opacity: .42; }
 .formation-target span { position: absolute; top: 50%; left: 50%; width: 1px; height: 132%; transform: translate(-50%, -50%); background: linear-gradient(transparent, rgba(111, 234, 255, .72), transparent); }
 .formation-target-locked { border-color: rgba(247, 207, 104, .95); box-shadow: 0 0 16px rgba(247, 207, 104, .72), inset 0 0 15px rgba(247, 207, 104, .22); animation: formation-target-lock .48s ease-out both; }
 .formation-target-locked::before { border-color: rgba(247, 207, 104, .82); }
+.formation-target-locked::before { animation: none; }
 @keyframes formation-target-pulse { to { opacity: .38; transform: translate(-50%, -50%) scale(.88); } }
 @keyframes formation-target-spin { to { transform: rotate(360deg); } }
 @keyframes formation-target-lock { 0% { opacity: .35; transform: translate(-50%, -50%) scale(1.35); } 45% { opacity: 1; } 100% { opacity: .82; transform: translate(-50%, -50%) scale(1); } }
@@ -1437,7 +1438,12 @@ html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-
 }
 .game-field .sector-transition { animation-duration: 3.2s; }
 .game-field .level-intro-banner.sector-transition { animation-duration: 3.2s; }
-.game-field .level-complete-banner.sector-clear-message { animation-duration: 3.8s; }
+.game-field .level-complete-banner.sector-clear-message { animation: boss-victory-reveal 3.8s ease-in-out both; }
+@keyframes boss-victory-reveal {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.92); }
+  8%, 86% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.04); }
+}
 @keyframes sector-transition {
   0% { opacity: 0; transform: translate(-50%, 10px) scale(.96); }
   12%, 85% { opacity: 1; transform: translate(-50%, 0) scale(1); }
