@@ -1641,3 +1641,70 @@ html[data-motion="reduced"] .home-battle-bolt, html[data-motion="reduced"] .home
   html[data-motion="reduced"] .landing-shell .home-battle .home-raid-ship-2 { left: 47%; top: 52%; }
   html[data-motion="reduced"] .landing-shell .home-battle .home-raid-ship-3 { left: 72%; top: 55%; }
 }
+
+/* One selected ship, one preview, and its color and purchase controls. */
+.landing-shell .ship-selector:is(.ship-selector-shop, .ship-selector-hangar) { display: flex; flex-direction: column; gap: 8px; width: 100%; min-height: 100%; margin: 0; padding: 14px; }
+.ship-panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.ship-panel-heading .eyebrow { margin: 0 0 3px; }
+.ship-panel-heading h2 { margin: 0; }
+.landing-shell .ship-panel-heading .shard-balance { flex: 0 0 auto; margin: 0; font-size: 19px; white-space: nowrap; }
+.ship-panel-heading .shard-balance small { display: block; color: #ffe0a7; font: 700 9px 'DM Mono', monospace; text-align: right; }
+.ship-earnings summary, .ship-rules summary { width: fit-content; color: #93d8da; font: 600 11px 'Rajdhani', sans-serif; cursor: pointer; }
+.ship-earnings p, .ship-rules p { margin: 5px 0; color: #c6dae5; font-size: 12px; line-height: 1.3; }
+.landing-shell .ship-selector .ship-search-label { width: 100%; max-width: none; margin-top: 0; }
+.landing-shell .ship-selector .ship-search-wrap { position: relative; z-index: 10; width: 100%; max-width: none; }
+.landing-shell .ship-selector .ship-search-results { position: absolute; top: 100%; left: 0; z-index: 15; width: 100%; max-height: min(45dvh, 390px); }
+.landing-shell .ship-search-thumb { overflow: hidden; }
+.ship-one-screen { display: flex; flex: 1 1 auto; flex-direction: column; gap: 10px; min-height: 0; }
+.ship-stage-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.ship-stage-strip button { display: grid; align-content: center; gap: 4px; min-width: 0; min-height: 56px; padding: 6px; border: 1px solid #536c8a; border-radius: 9px; background: linear-gradient(145deg, #102741, #132036); color: #daeaf0; text-align: left; cursor: pointer; }
+.ship-stage-strip button[aria-pressed="true"] { border-color: #81e8cc; background: linear-gradient(140deg, #15565b, #183652); box-shadow: inset 0 -3px #54e7c4, 0 0 12px #50e5c637; color: white; }
+.ship-stage-strip button span { font: 800 11px/1.1 'Oxanium', sans-serif; overflow-wrap: anywhere; }
+.ship-stage-strip button small { color: #ffdc98; font: 700 11px 'DM Mono', monospace; }
+.ship-one-hero { display: grid; grid-template-columns: minmax(135px, 42%) minmax(0, 1fr); gap: 14px; min-height: 210px; padding: 8px; border: 1px solid #66b9cf8c; border-radius: 13px; background: radial-gradient(circle at 25% 48%, #27779a3b, transparent 42%), linear-gradient(140deg, #0d2b46, #0c1d35); }
+.ship-one-art-wrap { position: relative; overflow: hidden; min-width: 0; min-height: 100%; border: 1px solid #4b82936b; border-radius: 9px; background: radial-gradient(circle at 50% 53%, #4b94b048, #081c31 70%); }
+.ship-one-art-frame { position: absolute; top: 50%; left: 50%; height: min(100%, 185px); width: auto; aspect-ratio: 1; transform: translate(-50%, -50%); }
+.ship-one-art { position: absolute; inset: 0; transform-origin: 50% 50%; filter: drop-shadow(0 0 11px #9ee7f55c); }
+.ship-one-art > i { position: absolute; inset: 0; background-size: 100% 100%; }
+.ship-one-info { display: flex; flex-direction: column; justify-content: center; gap: 8px; min-width: 0; }
+.landing-shell .ship-one-info h3 { margin: 0; color: #f3fbff; font: 800 clamp(16px, 2.3vw, 23px)/1.1 'Oxanium', sans-serif; }
+.ship-one-info h3 small { display: block; margin-top: 4px; color: #a1ece1; font-size: 11px; }
+.landing-shell .ship-one-info p { margin: 0; color: #cbdeea; font: 500 13px/1.35 'Rajdhani', sans-serif; }
+.ship-one-info strong { color: #a4f8d7; font: 700 11px 'DM Mono', monospace; }
+.ship-one-colors { display: grid; gap: 7px; padding: 10px 12px; border: 1px solid #56869b70; border-radius: 10px; background: #0d2741bb; }
+.ship-one-colors-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 7px; }
+.ship-one-colors h4 { margin: 0; color: #eaf8fb; font: 800 12px 'Oxanium', sans-serif; text-transform: uppercase; }
+.ship-one-colors-heading span { overflow: hidden; color: #b9d9e3; font: 600 11px 'Rajdhani', sans-serif; text-overflow: ellipsis; white-space: nowrap; }
+.ship-color-dots { display: flex; flex-wrap: wrap; gap: 7px; }
+.ship-color-dots button { flex: 0 0 35px; width: 35px; height: 35px; padding: 0; border: 2px solid #a4b6c7; border-radius: 50%; background: radial-gradient(circle at 31% 24%, white, var(--paint) 32%, color-mix(in srgb, var(--paint) 55%, #07182b)); box-shadow: inset 0 -3px 5px #04101a70, 0 1px 5px #000a; cursor: pointer; }
+.ship-color-dots button[aria-pressed="true"] { border: 3px solid #8cf8d7; outline: 2px solid #215e6b; box-shadow: 0 0 11px #54edc6; }
+.ship-color-dots button:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+.ship-one-checkout { display: flex; align-items: center; gap: 12px; min-height: 49px; }
+.ship-one-checkout .button { flex: 1 1 0; min-width: 0; min-height: 52px; padding: 5px 7px; border-radius: 10px; clip-path: none; font-size: 11px; line-height: 1.2; }
+.ship-one-checkout .button:disabled { opacity: .53; cursor: not-allowed; }
+.ship-one-checkout > strong, .ship-one-checkout > span { color: #b5f4ce; font: 800 12px 'Oxanium', sans-serif; }
+.ship-shortfall { color: #f2c996; font: 11px 'DM Mono', monospace; }
+.ship-one-screen .hangar-message { margin: 0; font-size: 12px; }
+.ship-rules { margin-top: auto; }
+@media (max-width: 600px) {
+  .landing-shell .ship-selector:is(.ship-selector-shop, .ship-selector-hangar) { gap: 6px; padding: 10px; }
+  .landing-shell .ship-panel-heading h2 { font-size: 20px; }
+  .landing-shell .ship-panel-heading .shard-balance { font-size: 16px; }
+  .landing-shell .ship-selector .ship-search { min-height: 42px; margin-top: 4px; }
+  .ship-one-screen { gap: 7px; }
+  .ship-stage-strip button { min-height: 51px; }
+  .ship-stage-strip button span { font-size: 9px; }
+  .ship-stage-strip button small { font-size: 10px; }
+  .ship-one-hero { grid-template-columns: minmax(106px, 42%) minmax(0, 1fr); gap: 8px; min-height: clamp(142px, 22dvh, 185px); padding: 6px; }
+  .landing-shell .ship-one-info h3 { font-size: 15px; }
+  .landing-shell .ship-one-info p { font-size: 12px; line-height: 1.25; }
+  .ship-one-info { gap: 5px; }
+  .ship-one-colors { padding: 7px 8px; gap: 5px; }
+  .ship-color-dots { gap: 6px; }
+  .ship-color-dots button { flex-basis: 34px; width: 34px; height: 34px; }
+  .ship-one-checkout { position: sticky; bottom: 0; z-index: 5; padding: 3px; border-radius: 10px; background: #0b2139; box-shadow: 0 -6px 18px #081628b8; }
+}
+@media (max-height: 670px) and (max-width: 600px) {
+  .ship-one-hero { min-height: 118px; }
+  .ship-color-dots button { flex-basis: 30px; width: 30px; height: 30px; }
+}

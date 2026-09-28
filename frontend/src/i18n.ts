@@ -16,7 +16,7 @@ export const resolveLocale = (preferred: readonly string[], override?: string | 
 };
 const translations: Partial<Record<Exclude<Locale, "en">, Record<string, string>>> = {
   de: {
-    "Find a ship":"Raumschiff finden", "Search ship name":"Nach Raumschiff suchen", "Show ships":"Raumschiffliste öffnen", "Available ship stages":"Verfügbare Raumschiffe und Stufen", "Requires Stage 2":"Stufe 2 erforderlich", "No matching ships.":"Keine passenden Raumschiffe.", "Choose color & buy":"Farbe wählen & kaufen",
+    "Find a ship":"Raumschiff finden", "Search ship name":"Nach Raumschiff suchen", "Show ships":"Raumschiffliste öffnen", "Available ship stages":"Verfügbare Raumschiffe und Stufen", "Requires Stage 2":"Stufe 2 erforderlich", "How to earn Shards":"So verdienst du Shards", "Shield & protection":"Schild und Schutz", "No matching ships.":"Keine passenden Raumschiffe.", "Choose color & buy":"Farbe wählen & kaufen",
     "STANDARD":"STANDARD", "ADVANCED":"FORTGESCHRITTEN", "ELITE":"ELITE", "Choose a color below":"Unten Farbe wählen",
     "Choose any ship to see all three stages, firepower and protection. Standard costs Shards; upgrades cost Pi.":"Wähle eines der 20 Raumschiffe. Du siehst sofort alle drei Stufen mit Feuerkraft und Schutz. Die Standardversion kostet Shards, die Upgrades Pi.",
     "Upgrades apply to this ship type in every color. Each new life restores its projectile protection. An active shield absorbs shots and ship collisions; unshielded ship collisions destroy the hull immediately.":"Die Upgrades gelten für diesen Schiffstyp in allen Farben. Mit jedem neuen Leben wird der Schutz gegen Geschosse erneuert. Ein aktiver Schild fängt Geschosse und Schiffskollisionen ab; ohne Schild zerstört eine Schiffskollision das Raumschiff sofort.",

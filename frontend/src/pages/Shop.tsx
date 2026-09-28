@@ -10,6 +10,8 @@ import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "./GameP
 import { allPlayerColors, buyShipVariant, enemySprite, EXTRA_STARTER_PRICE, fleetCount, playerColors, playerSkins, readShipFleet, savedShipColors, selectedShip, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyle, spriteStyle, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
 import { ownedShipStage, shipEvolutionAsset, type ShipStage } from "./shipEvolution";
+import { shipPreviewPlacement } from "./shipPreviewPlacement";
+import ShipSelectionPanel from "./ShipSelectionPanel";
 import TermsDialog from "../components/TermsDialog";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
 import { primeGameAudio } from "./gameAudio";
@@ -161,6 +163,7 @@ const Shop = () => {
   const [selected, setSelected] = useState(selectedShip);
   const [previewSkin, setPreviewSkin] = useState(() => selectedShip().skin);
   const [previewColor, setPreviewColor] = useState(() => selectedShip().color);
+  const [previewFocusStage, setPreviewFocusStage] = useState<ShipStage>(1);
   const [shipQuery, setShipQuery] = useState("");
   const [shipSearchOpen, setShipSearchOpen] = useState(false);
   const shipSearchRef = useRef<HTMLDivElement>(null);
@@ -173,11 +176,6 @@ const Shop = () => {
   const selectedStage = ownedShipStage(selected.skin.sprite, inventory?.ownedShipUpgrades);
   const previewStage = ownedShipStage(previewSkin.sprite, inventory?.ownedShipUpgrades);
   const [loadoutMessage, setLoadoutMessage] = useState("");
-  const previewCount = fleetCount(fleet, previewSkin.id, previewColor.id);
-  const visibleSkins = playerSkins.filter(skin =>
-    (shopView === "shop" || fleetCount(fleet, skin.id) > 0) &&
-    `${skin.name} ${t("STANDARD")} ${shopView === "shop" && fleetCount(fleet, skin.id) ? `${t("ADVANCED")} ${t("ELITE")}` : ""}`
-      .toLocaleLowerCase(locale).includes(shipQuery.trim().toLocaleLowerCase(locale)));
   const shipSearchOptions = playerSkins.flatMap(skin => {
     if (shopView !== "shop" && !fleetCount(fleet, skin.id)) return [];
     const stages: ShipStage[] = shopView === "shop" && fleetCount(fleet, skin.id) ? [1, 2, 3] : [1];
@@ -199,14 +197,12 @@ const Shop = () => {
     const color = skin.id === selected.skin.id ? selected.color : allPlayerColors.find(item => fleetCount(fleet, skin.id, item.id)) ?? playerColors[0];
     setPreviewSkin(skin);
     setPreviewColor(color);
+    setPreviewFocusStage(stage);
     setShipQuery("");
     setShipSearchOpen(false);
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     if (shopView === "hangar") equipShip(skin, color);
-    else {
-      setHangarMessage("");
-      window.setTimeout(() => document.getElementById(stage === 1 ? "ship-evolution-heading" : `ship-stage-${stage}`)?.scrollIntoView({ behavior: "smooth", block: "start" }), 160);
-    }
+    else setHangarMessage("");
   };
   const enterGame = () => { primeGameAudio(); requestGameFullscreen(); navigate("/game"); };
 
@@ -435,10 +431,8 @@ const Shop = () => {
       </section>}
 
       {(shopView === "hangar" || shopView === "shop") && <section className={`ship-selector ship-selector-${shopView}`} aria-labelledby="hangar-heading">
-        <p className="eyebrow">{t(shopView === "hangar" ? "YOUR HANGAR" : "SHIP SHOP")}</p>
-        <h2 id="hangar-heading">{t(shopView === "hangar" ? "Your fleet" : "Available ships")}</h2>
-        <p>{t(shopView === "hangar" ? "Only ships in your fleet are shown here. Choose an owned type and color variant for your next mission." : "Choose any ship to see all three stages, firepower and protection. Standard costs Shards; upgrades cost Pi.")}</p>
-        <strong className="shard-balance">◆ {shards} {t("Shards")}</strong><span className="shard-help">{t("At level 1, defeats earn Shards by enemy class: light 2, medium 4–5, elite 6, heavy 8, boss 16. Rewards grow with level. Bonus targets earn 1 each, plus a completion reward that grows with level. Your Shards are saved at mission end.")}</span>
+        <div className="ship-panel-heading"><div><p className="eyebrow">{t(shopView === "hangar" ? "YOUR HANGAR" : "SHIP SHOP")}</p><h2 id="hangar-heading">{t(shopView === "hangar" ? "Your fleet" : "Available ships")}</h2></div><strong className="shard-balance">◆ {shards} <small>{t("Shards")}</small></strong></div>
+        <details className="ship-earnings"><summary>{t("How to earn Shards")}</summary><p>{t("At level 1, defeats earn Shards by enemy class: light 2, medium 4–5, elite 6, heavy 8, boss 16. Rewards grow with level. Bonus targets earn 1 each, plus a completion reward that grows with level. Your Shards are saved at mission end.")}</p></details>
         <label className="ship-search-label" htmlFor="ship-search">{t("Find a ship")} <small>{matchingShipOptions.length}/{shipSearchOptions.length}</small></label>
         <div className="ship-search-wrap" ref={shipSearchRef}>
           <div className="ship-search-control">
@@ -453,61 +447,21 @@ const Shop = () => {
               const label = t(stage === 1 ? "STANDARD" : stage === 2 ? "ADVANCED" : "ELITE");
               const status = stage === 1 ? total ? `${t("Owned")} ×${total}` : `◆ ${skin.price || EXTRA_STARTER_PRICE} ${t("Shards")}` : ownedStage >= stage ? t("OWNED") : stage === 3 && ownedStage < 2 ? t("Requires Stage 2") : `${offer?.pricePi ?? "–"} π`;
               return <button className={`ship-search-result${stage === 3 && ownedStage < 2 ? " ship-search-locked" : ""}`} key={`${skin.id}-${stage}`} type="button" onClick={() => chooseSearchResult(skin, stage)}>
-                <span className="ship-search-thumb" aria-hidden="true"><img src={shipEvolutionAsset(skin.sprite, stage)} alt="" loading="lazy" decoding="async" /></span>
+                <span className="ship-search-thumb" aria-hidden="true"><img src={shipEvolutionAsset(skin.sprite, stage)} alt="" loading="lazy" decoding="async" style={shipPreviewPlacement(skin.sprite, stage)} /></span>
                 <span className="ship-search-result-name"><strong>{skin.name}</strong><small>{label} · {status}</small></span><span className="ship-search-arrow" aria-hidden="true">›</span>
               </button>;
             })}
             {matchingShipOptions.length === 0 && <p className="ship-search-empty">{t("No matching ships.")}</p>}
           </div>}
         </div>
-        <div className="ship-picker" role="group" aria-label={t("Ship hull")}>
-          {visibleSkins.map(skin => { const total = fleetCount(fleet, skin.id); const shown = skin.id === selected.skin.id ? selected.color : allPlayerColors.find(color => fleetCount(fleet, skin.id, color.id)) ?? playerColors[0]; return <button key={skin.id} className={`ship-choice${total === 0 ? " ship-unowned" : ""}`} type="button" aria-pressed={previewSkin.id === skin.id} onClick={() => { setPreviewSkin(skin); setPreviewColor(shown); if (shopView === "hangar") equipShip(skin, shown); else { setHangarMessage(""); requestAnimationFrame(() => document.getElementById("ship-evolution-heading")?.scrollIntoView({ behavior: "smooth", block: "start" })); } }}>
-            <span className="ship-preview"><PaintedShip sprite={skin.sprite} color={shown.id} stage={ownedShipStage(skin.sprite, inventory?.ownedShipUpgrades)} /></span><span>{skin.name}</span><small>{total ? `${t("Owned")} ×${total}` : t("Not owned")}</small>
-          </button>; })}
-        </div>
-        {visibleSkins.length === 0 && <p role="status">{t("No matching ships.")}</p>}
-        {shopView === "shop" && <div className="hangar-offers ship-evolution-offers">
-          <h3 id="ship-evolution-heading">{previewSkin.name} · {t("Ship evolution")}</h3>
-          <p>{t("Upgrades apply to this ship type in every color. Each new life restores its projectile protection. An active shield absorbs shots and ship collisions; unshielded ship collisions destroy the hull immediately.")}</p>
-          <div className="evolution-route" aria-label={t("Three ship stages")}>
-            <span className={fleetCount(fleet, previewSkin.id) ? "stage-owned" : ""}><b>01</b> {t("STANDARD")} <small>◆ {previewSkin.price || EXTRA_STARTER_PRICE}</small></span>
-            <span className={previewStage >= 2 ? "stage-owned" : ""}><b>02</b> {t("ADVANCED")} <small>π</small></span>
-            <span className={previewStage >= 3 ? "stage-owned" : ""}><b>03</b> {t("ELITE")} <small>π</small></span>
-          </div>
-          <div className="hangar-offer-grid">
-            <article className={`hangar-offer hangar-offer-ship${fleetCount(fleet, previewSkin.id) ? " hangar-offer-selected" : ""}`}>
-              <div className="offer-preview weapon-preview" aria-hidden="true"><span className="preview-grid" /><span className="preview-ship"><PaintedShip sprite={previewSkin.sprite} color={previewColor.id} stage={1} /></span><small>STANDARD</small></div>
-              <h4>{previewSkin.name} · {t("STANDARD")}</h4><p>{t("Single fire. No free enemy projectile hits. An active shield protects against shots and ship collisions.")}</p>
-              <span>◆ {previewSkin.price || EXTRA_STARTER_PRICE} {t("Shards")} · {t("Choose a color below")}</span>
-              <strong>{fleetCount(fleet, previewSkin.id) ? `${t("Owned")} ×${fleetCount(fleet, previewSkin.id)}` : t("Not owned")}</strong>
-              <div><button className="button button-secondary" type="button" onClick={() => document.querySelector(".ship-selector-shop .hangar-variant-title")?.scrollIntoView({ behavior: "smooth", block: "start" })}>{t("Choose color & buy")}</button></div>
-            </article>
-            {offers.filter(offer => offer.kind === "ship_upgrade" && offer.shipIndex === previewSkin.sprite).map(offer => {
-              const owned = inventory?.ownedShipUpgrades?.includes(offer.id) ?? false;
-              const prerequisite = offer.stage !== 3 || (inventory?.ownedShipUpgrades?.includes(`ship_${String((offer.shipIndex ?? 0) + 1).padStart(2, "0")}_stage_2`) ?? false);
-              const hasHull = fleetCount(fleet, previewSkin.id) > 0;
-              const upgradeName = `${previewSkin.name} · ${offer.stage === 2 ? "Advanced" : "Elite"}`;
-              return <article id={`ship-stage-${offer.stage}`} key={offer.id} className={`hangar-offer hangar-offer-ship${owned ? " hangar-offer-selected" : ""}`}>
-                <div className="offer-preview weapon-preview" aria-hidden="true"><span className="preview-grid" /><span className="preview-ship"><PaintedShip sprite={previewSkin.sprite} color={previewColor.id} stage={offer.stage ?? 1} /></span><small>{offer.stage === 2 ? "ADVANCED" : "ELITE"}</small></div>
-                <h4>{upgradeName}</h4><p>{t(offer.description)}</p><span>{offer.pricePi} π · {t("Permanent unlock")}</span>
-                <strong>{owned ? t("OWNED") : !hasHull ? t("Buy hull with Shards first") : prerequisite ? t("NOT OWNED") : t("Requires Stage 2")}</strong>
-                {!owned && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady || !inventory || !hasHull || !prerequisite} onClick={() => orderProduct(`Cryptoid ${upgradeName} · permanent ship evolution`, offer.pricePi, { productId: offer.id }, () => { setHangarMessage(`${upgradeName} ${t("purchase confirmed.")}`); void refreshInventory(); })}>{t("Buy with π")}</button>}
-              </article>;
-            })}
-          </div>
-        </div>}
-        <h3 className="hangar-variant-title">{previewSkin.name} · {t("Color variants")}</h3>
-        <div className="ship-picker ship-variants" role="group" aria-label={t("Ship paint")}>
-          {allPlayerColors.filter(color => (shopView === "shop" && playerColors.some(current => current.id === color.id)) || fleetCount(fleet, previewSkin.id, color.id) > 0).map(color => { const count = fleetCount(fleet, previewSkin.id, color.id); return <button key={color.id} className={`ship-choice variant-choice${count ? "" : " ship-unowned"}`} type="button" aria-pressed={previewColor.id === color.id} onClick={() => { setPreviewColor(color); if (shopView === "hangar") equipShip(previewSkin, color); else setHangarMessage(""); }}>
-            <span className="ship-preview"><PaintedShip sprite={previewSkin.sprite} color={color.id} stage={previewStage} /></span>
-            <span className="metal-swatch" style={{ "--paint": color.glow } as CSSProperties} />
-            <span>{t(color.name)}</span><small>{count ? `${t("Owned")} ×${count}` : t("Not owned")}</small>
-          </button>; })}
-        </div>
-        <p className="hangar-selection">{shopView === "hangar" ? t("EQUIPPED") : t("Preview:")} <strong>{previewSkin.name} · {t(previewColor.name)}</strong> · {previewStage === 1 ? "STANDARD" : previewStage === 2 ? "ADVANCED" : "ELITE"} · {previewCount ? `${t("Owned")} ×${previewCount}` : t("Not owned")}{shopView === "shop" && selected.skin.id === previewSkin.id && selected.color.id === previewColor.id && <span> · {t("EQUIPPED")}</span>}</p>
-        {shopView === "shop" && <div className="hangar-actions"><button className="button button-primary hangar-action" type="button" onClick={purchasePreview} disabled={shards < (previewSkin.price || EXTRA_STARTER_PRICE)}>{t("Buy another for")} ◆ {previewSkin.price || EXTRA_STARTER_PRICE}</button></div>}
-        {shopView === "shop" && shards < (previewSkin.price || EXTRA_STARTER_PRICE) && <span className="shard-help">◆ {(previewSkin.price || EXTRA_STARTER_PRICE) - shards} {t("more Shards needed")}</span>}
-        {hangarMessage && <p className="hangar-message" role="status">{hangarMessage}</p>}
+        <ShipSelectionPanel view={shopView} skin={previewSkin} color={previewColor} focusStage={previewFocusStage} ownedStage={previewStage} fleet={fleet} shards={shards}
+          offers={offers.filter(offer => offer.kind === "ship_upgrade")} catalogReady={catalogReady} isLoading={isLoading}
+          selectedSkinId={selected.skin.id} selectedColorId={selected.color.id} message={hangarMessage} t={t}
+          onStageChange={stage => { setPreviewFocusStage(stage); setHangarMessage(""); }}
+          onColorChange={color => { setPreviewColor(color); if (shopView === "hangar") equipShip(previewSkin, color); else setHangarMessage(""); }}
+          onBuyStandard={purchasePreview}
+          onBuyUpgrade={offer => { const name = previewSkin.name + " · " + (offer.stage === 2 ? "Advanced" : "Elite"); void orderProduct("Cryptoid " + name + " · permanent ship evolution", offer.pricePi, { productId: offer.id }, () => { setHangarMessage(name + " " + t("purchase confirmed.")); void refreshInventory(); }); }}
+          onOpenShop={() => { setPreviewFocusStage(previewStage); setShopView("shop"); }} />
       </section>}
 
       {(shopView === "weapons" || shopView === "powers") && <section className="upgrade-section" aria-labelledby="upgrade-heading">
