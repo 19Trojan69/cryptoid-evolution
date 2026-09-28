@@ -96,13 +96,13 @@ export default function ShipSelectionPanel({
       {view === "hangar"
         ? <><span>{selectedSkinId === skin.id && selectedColorId === color.id ? t("EQUIPPED") : t("Owned")}</span><button className="button button-secondary" type="button" onClick={onOpenShop}>{t("Shop")} ›</button></>
         : <>
-          <button className="button button-secondary ship-shard-button" type="button" onClick={onBuyStandard} disabled={shards < price}>{t(hullCount ? "Buy another for" : "Buy for")} ◆ {price}</button>
+          {stage === 1 && <button className="button button-secondary ship-shard-button" type="button" onClick={onBuyStandard} disabled={shards < price}>{t(hullCount ? "Buy another for" : "Buy for")} ◆ {price}</button>}
           <button className="button button-primary ship-pi-button" type="button" disabled={!piOffer || piOwned || isLoading || !catalogReady || !piReady}
             title={!piReady ? t(hullCount ? "Requires Stage 2" : "Buy hull with Shards first") : undefined}
             onClick={() => { if (piOffer) onBuyUpgrade(piOffer); }}>{piOwned ? t("OWNED") : t("Buy with π")} · {t(stageLabel(piStage))} {piOffer ? formatPi(piOffer.pricePi) : "–"} π</button>
         </>}
     </div>
-    {view === "shop" && shards < price && <small className="ship-shortfall">◆ {price - shards} {t("more Shards needed")}</small>}
+    {view === "shop" && stage === 1 && shards < price && <small className="ship-shortfall">◆ {price - shards} {t("more Shards needed")}</small>}
     {message && <p className="hangar-message" role="status">{message}</p>}
     <details className="ship-rules"><summary>{t("Shield & protection")}</summary><p>{t("Upgrades apply to this ship type in every color. Each new life restores its projectile protection. An active shield absorbs shots and ship collisions; unshielded ship collisions destroy the hull immediately.")}</p></details>
   </div>;
