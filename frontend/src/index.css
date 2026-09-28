@@ -974,7 +974,7 @@ html[data-motion="reduced"] .shooting-star { display: none; }
 .hull-fire-layer { position: absolute; z-index: 3; inset: 0; pointer-events: none; mask-mode: alpha; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
 .cryptoid .hull-fire-layer { -webkit-mask-image: url('/ships/cryptoid-fleet.png'); mask-image: url('/ships/cryptoid-fleet.png'); -webkit-mask-size: 400% 500%; mask-size: 400% 500%; }
 .sector-boss .hull-fire-layer { inset: -14px 0; -webkit-mask-image: url('/ships/boss-dreadnought.webp'); mask-image: url('/ships/boss-dreadnought.webp'); -webkit-mask-size: contain; mask-size: contain; -webkit-mask-position: center; mask-position: center; }
-.hull-fire { position: absolute; display: block; width: 15px; height: 23px; transform: translate(-50%, -64%); transform-origin: 50% 85%; background: url('/effects/hull-flame.svg') center / contain no-repeat; filter: drop-shadow(0 0 3px rgba(255, 116, 31, .9)); animation: hull-flame-flicker .62s ease-in-out infinite alternate; }
+.hull-fire { position: absolute; display: block; width: 15px; height: 23px; transform: translate(-50%, -64%); transform-origin: 50% 85%; background: url('/effects/hull-flame.webp') center / contain no-repeat; animation: hull-flame-flicker .62s ease-in-out infinite alternate; }
 .asteroid-small .hull-fire { width: 12px; height: 18px; }
 .sector-boss .hull-fire { width: 21px; height: 30px; }
 @keyframes hull-flame-flicker { from { transform: translate(-50%, -64%) rotate(-8deg) scale(.86, .92); opacity: .8; } to { transform: translate(-50%, -64%) rotate(7deg) scale(1.12, 1.06); opacity: 1; } }
