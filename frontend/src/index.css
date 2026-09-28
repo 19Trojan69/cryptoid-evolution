@@ -1433,6 +1433,22 @@ html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-
 .landing-shell .ship-search-label small { color: #7de6cb; }
 .landing-shell .ship-search { display: block; width: min(100%, 470px); min-height: 44px; margin-top: 7px; padding: 9px 13px; border: 1px solid #649bb6; border-radius: 9px; outline-offset: 2px; background: #081d31; color: white; font: 15px 'Rajdhani', sans-serif; }
 .landing-shell .ship-search:focus { border-color: #75edbd; outline: 1px solid #75edbd; }
+.landing-shell .ship-search-wrap { width: min(100%, 470px); }
+.landing-shell .ship-search-control { position: relative; }
+.landing-shell .ship-search-control .ship-search { width: 100%; padding-right: 48px; }
+.landing-shell .ship-search-toggle { position: absolute; top: 7px; right: 7px; bottom: 7px; display: grid; place-items: center; width: 36px; padding: 0; border: 1px solid #518fa6; border-radius: 7px; background: #13334b; color: #b8f5e8; font-size: 25px; cursor: pointer; }
+.landing-shell .ship-search-toggle[aria-expanded="true"] span { transform: rotate(180deg); }
+.landing-shell .ship-search-results { display: grid; gap: 4px; max-height: clamp(170px, 38dvh, 340px); margin-top: 6px; padding: 6px; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: #65d9d0 #0b2437; border: 1px solid #5dc9c0; border-radius: 12px; background: linear-gradient(#0e2a42, #0a1c31); box-shadow: inset 0 1px #bbfff445, 0 10px 20px #020e1d66; }
+.landing-shell .ship-search-result { display: flex; align-items: center; gap: 10px; min-height: 67px; width: 100%; padding: 4px 9px; border: 1px solid #4b7088; border-radius: 8px; background: #152d47; color: #f0f8ff; text-align: left; cursor: pointer; }
+.landing-shell .ship-search-result:hover, .landing-shell .ship-search-result:focus-visible { border-color: #73efcf; background: #194b58; outline: 1px solid #73efcf; }
+.landing-shell .ship-search-thumb { position: relative; flex: 0 0 56px; width: 56px; height: 56px; border-radius: 7px; background: radial-gradient(circle, #43798e55, #081b30 72%); }
+.landing-shell .ship-search-thumb img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.landing-shell .ship-search-result-name { display: grid; gap: 3px; min-width: 0; }
+.landing-shell .ship-search-result-name strong { overflow: hidden; font: 700 15px/1.15 'Rajdhani', sans-serif; text-overflow: ellipsis; white-space: nowrap; }
+.landing-shell .ship-search-result-name small { color: #91d9d2; font: 600 11px/1.25 'DM Mono', monospace; }
+.landing-shell .ship-search-locked .ship-search-result-name small { color: #f2c98a; }
+.landing-shell .ship-search-arrow { margin-left: auto; color: #87dace; font-size: 24px; }
+.landing-shell .ship-search-empty { margin: 10px; color: #dcecf3; }
 .game-hud .weapon-hud .hull-hits { color: #78e6d1; font: 700 9px/1.1 'Rajdhani', sans-serif; white-space: nowrap; }
 @media (max-width: 600px) { .game-hud .weapon-hud .hull-hits { font-size: 7px; } }
 @media (max-width: 600px) {
