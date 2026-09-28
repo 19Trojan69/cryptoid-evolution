@@ -203,6 +203,7 @@ const Shop = () => {
   const enterGame = () => { primeGameAudio(); requestGameFullscreen(); navigate("/game"); };
 
   const purchasePreview = () => {
+    if (previewFocusStage !== 1) return;
     const currentFleet = readShipFleet(localStorage.getItem(SHIP_FLEET_KEY), localStorage.getItem(SHIP_OWNED_KEY), localStorage.getItem(SHIP_COLORS_KEY));
     const currentBalance = shardBalance(localStorage.getItem(SHARD_BALANCE_KEY));
     setShards(currentBalance);
