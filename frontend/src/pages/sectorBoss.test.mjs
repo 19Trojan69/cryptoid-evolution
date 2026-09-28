@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { BOSS_ENTRY_MS, BOSS_FIRE_INTERVAL_MS, bossFireInterval, bossVulnerable, damageSectorBoss, createSectorBoss, moveSectorBoss, nextAfterClear } from "./sectorBoss.ts";
+import { BOSS_ENTRY_MS, BOSS_FIRE_INTERVAL_MS, advanceAfterClear, bossFireInterval, bossVulnerable, damageSectorBoss, createSectorBoss, encounterHudLabel, moveSectorBoss, nextAfterClear } from "./sectorBoss.ts";
 
 test("three combat rounds lead to the boss, then bonus, then the next sector", () => {
   assert.equal(nextAfterClear(1, "normal"), "round");
@@ -8,6 +8,29 @@ test("three combat rounds lead to the boss, then bonus, then the next sector", (
   assert.equal(nextAfterClear(3, "normal"), "boss");
   assert.equal(nextAfterClear(3, "boss-clear"), "bonus");
   assert.equal(nextAfterClear(3, "bonus"), "section");
+});
+
+test("actual section transitions retain level and chain through boss and bonus", () => {
+  let section = 1;
+  for (const [current, expected] of [
+    ["normal", { encounter: "normal", section: 2, sector: 1, resetChain: false }],
+    ["normal", { encounter: "normal", section: 3, sector: 1, resetChain: false }],
+    ["normal", { encounter: "boss-intro", section: 3, sector: 1, resetChain: false }],
+    ["boss-clear", { encounter: "bonus", section: 3, sector: 1, resetChain: false }],
+    ["bonus", { encounter: "normal", section: 4, sector: 2, resetChain: true }],
+  ]) {
+    const next = advanceAfterClear(section, current);
+    assert.deepEqual(next, expected);
+    section = next.section;
+  }
+  assert.deepEqual(advanceAfterClear(6, "bonus"), { encounter: "normal", section: 7, sector: 3, resetChain: true });
+});
+
+test("HUD shows round fractions, then BOSS and BONUS instead of a fourth round", () => {
+  assert.deepEqual([1, 2, 3].map(round => encounterHudLabel(round, "normal")), ["1/3", "2/3", "3/3"]);
+  for (const encounter of ["boss-intro", "boss-fight", "boss-clear"]) assert.equal(encounterHudLabel(3, encounter), "BOSS");
+  assert.equal(encounterHudLabel(3, "bonus"), "BONUS");
+  assert.equal(encounterHudLabel(1, "normal"), "1/3");
 });
 
 test("the boss enters visibly, stays in the upper field and remains reachable on phone and desktop", () => {

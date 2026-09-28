@@ -1,10 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusEntryGap, bonusHeartReward, bonusPosition, bonusReward, bonusShowcaseShip, isBonusSection } from "./bonusChallenge.ts";
-
-test("every third section is a bonus and later sectors repeat the pattern", () => {
-  assert.deepEqual([1, 2, 3, 4, 5, 6, 18, 19].map(isBonusSection), [false, false, true, false, false, true, true, false]);
-});
+import { BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusEntryGap, bonusHeartReward, bonusPosition, bonusReward, bonusShowcaseShip } from "./bonusChallenge.ts";
 
 test("bonus ships enter from opposite sides, remain above player space, and leave the opposite edge", () => {
   for (const [width, height] of [[375, 700], [1200, 800]]) {

@@ -9,8 +9,6 @@ export const bonusEntryGap = (index: number) => bonusEntryGaps[Math.max(0, index
 
 export type BonusTarget = { id: number; index: number; elapsed: number; x: number; y: number; radius: number; sprite: number; color: PlayerColorId };
 
-export const isBonusSection = (section: number) => section > 0 && section % 3 === 0;
-
 export const bonusPosition = (index: number, elapsed: number, width: number, height: number) => {
   const progress = Math.min(1, elapsed / BONUS_FLIGHT_MS);
   const direction = index % 2 === 0 ? 1 : -1;
