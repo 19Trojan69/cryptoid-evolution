@@ -1,6 +1,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { BOSS_ENTRY_MS, BOSS_FIRE_INTERVAL_MS, advanceAfterClear, bossFireInterval, bossVulnerable, damageSectorBoss, createSectorBoss, encounterHudLabel, moveSectorBoss, nextAfterClear } from "./sectorBoss.ts";
+import { BOSS_ENTRY_MS, BOSS_FIRE_INTERVAL_MS, BOSS_WARNING_MS, advanceAfterClear, bossFireInterval, bossVulnerable, damageSectorBoss, createSectorBoss, encounterHudLabel, moveSectorBoss, nextAfterClear } from "./sectorBoss.ts";
+
+test("the boss appears after the complete recorded three-signal warning", () => {
+  assert.ok(BOSS_WARNING_MS > 4_833 && BOSS_WARNING_MS < 5_100);
+});
 
 test("three combat rounds lead to the boss, then bonus, then the next sector", () => {
   assert.equal(nextAfterClear(1, "normal"), "round");

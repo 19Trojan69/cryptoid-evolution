@@ -1437,6 +1437,7 @@ html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-
   white-space: normal;
 }
 .game-field .sector-transition { animation-duration: 3.2s; }
+.game-field .boss-intro-banner.sector-transition { animation-duration: 4.9s; }
 .game-field .level-intro-banner.sector-transition { animation-duration: 3.2s; }
 .game-field .level-complete-banner.sector-clear-message { animation: boss-victory-reveal 3.8s ease-in-out both; }
 @keyframes boss-victory-reveal {

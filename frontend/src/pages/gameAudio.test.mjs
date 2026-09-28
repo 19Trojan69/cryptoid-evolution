@@ -51,3 +51,38 @@ test("game audio plays effects without scheduling background music", async () =>
     globalThis.window = previous.window;
   }
 });
+
+test("boss warning uses only the recorded alarm, without the old synthesized tones", async () => {
+  const previous = { AudioContext: globalThis.AudioContext, fetch: globalThis.fetch };
+  const samples = [];
+  let oscillators = 0;
+  globalThis.fetch = async () => ({ ok: true, arrayBuffer: async () => new ArrayBuffer(0) });
+  globalThis.AudioContext = class {
+    state = "running";
+    currentTime = 0;
+    destination = {};
+    async resume() {}
+    async close() {}
+    async decodeAudioData() { return { duration: 4.83 }; }
+    createGain() { return { gain: { value: 1, setValueAtTime() {}, exponentialRampToValueAtTime() {} }, connect: output => output }; }
+    createOscillator() {
+      oscillators++;
+      return { connect: output => output, start() {}, stop() {} };
+    }
+    createBufferSource() { return { playbackRate: { value: 1 }, connect: output => output, start: () => samples.push(true) }; }
+  };
+  const audio = new GameAudio();
+  try {
+    assert.equal(await audio.start(), true);
+    audio.play("boss");
+    assert.equal(oscillators, 0);
+    await new Promise(resolve => setImmediate(resolve));
+    audio.play("boss");
+    assert.equal(samples.length, 1);
+    assert.equal(oscillators, 0);
+  } finally {
+    audio.close();
+    globalThis.AudioContext = previous.AudioContext;
+    globalThis.fetch = previous.fetch;
+  }
+});
