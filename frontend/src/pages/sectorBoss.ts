@@ -40,5 +40,11 @@ export const damageSectorBoss = (boss: SectorBoss, damage: number, time: number)
 
 export const bossVulnerable = (boss: SectorBoss) => boss.elapsed >= BOSS_ENTRY_MS;
 
-// The bonus is followed by a boss; the boss clear advances to the next sector.
-export const nextAfterClear = (isBonus: boolean, bossActive: boolean) => isBonus && !bossActive ? "boss" : "section";
+export type ClearEncounter = "normal" | "boss-clear" | "bonus";
+
+// Each sector is three combat rounds, then the boss, then the bonus challenge.
+export const nextAfterClear = (round: number, encounter: ClearEncounter) => {
+  if (encounter === "normal") return round >= 3 ? "boss" : "round";
+  if (encounter === "boss-clear") return "bonus";
+  return "section";
+};
