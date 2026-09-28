@@ -376,6 +376,8 @@ html[data-motion="reduced"] .level-twinkles i { animation: none; opacity: .42; }
 @keyframes blockchain-halo { 0%, 100% { opacity: .55; transform: translateX(-50%) scale(.9); } 50% { opacity: 1; transform: translateX(-50%) scale(1.08); } }
 @keyframes blockchain-energy { to { background-position: -220% 0; } }
 @keyframes blockchain-binary-flow { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .cube-spark, .blockchain-link.active, .blockchain-link.active i { animation: none; } .cube-spark { opacity: .35; } }
+html[data-motion="reduced"] .cube-spark, html[data-motion="reduced"] .blockchain-link.active, html[data-motion="reduced"] .blockchain-link.active i { animation: none; }
 @keyframes chain-panel-reveal { from { opacity: 0; transform: translate(-50%, -50%) scale(.88); filter: blur(5px); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); filter: blur(0); } }
 @media (max-width: 600px) {
   .sector-clear-message:not(.level-complete-banner) { top: 30%; padding: 15px 10px 11px; gap: 6px; }
