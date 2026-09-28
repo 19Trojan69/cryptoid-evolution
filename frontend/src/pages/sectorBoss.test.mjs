@@ -2,10 +2,12 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { BOSS_ENTRY_MS, BOSS_FIRE_INTERVAL_MS, bossFireInterval, bossVulnerable, damageSectorBoss, createSectorBoss, moveSectorBoss, nextAfterClear } from "./sectorBoss.ts";
 
-test("a bonus clear begins a boss, while a boss clear moves to the next sector", () => {
-  assert.equal(nextAfterClear(true, false), "boss");
-  assert.equal(nextAfterClear(true, true), "section");
-  assert.equal(nextAfterClear(false, false), "section");
+test("three combat rounds lead to the boss, then bonus, then the next sector", () => {
+  assert.equal(nextAfterClear(1, "normal"), "round");
+  assert.equal(nextAfterClear(2, "normal"), "round");
+  assert.equal(nextAfterClear(3, "normal"), "boss");
+  assert.equal(nextAfterClear(3, "boss-clear"), "bonus");
+  assert.equal(nextAfterClear(3, "bonus"), "section");
 });
 
 test("the boss enters visibly, stays in the upper field and remains reachable on phone and desktop", () => {
