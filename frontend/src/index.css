@@ -1497,7 +1497,7 @@ html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-
 
 /* One twelve-second encounter: squadron arrival, dive, crossfire, interception and regroup. */
 .home-battle { position: absolute; z-index: 5; inset: 0; pointer-events: none; }
-.landing-shell .home-battle .home-raid-ship { width: clamp(38px, 10%, 66px); background: none; filter: drop-shadow(0 2px 3px #03091c) drop-shadow(0 0 6px #f28f74a6); animation-duration: 12s; animation-delay: -2.4s; animation-timing-function: cubic-bezier(.4, 0, .25, 1); animation-iteration-count: infinite; }
+.landing-shell .home-battle .home-raid-ship { position: absolute; display: block; width: clamp(38px, 10%, 66px); aspect-ratio: 1; background: none; filter: drop-shadow(0 2px 3px #03091c) drop-shadow(0 0 6px #f28f74a6); animation-duration: 12s; animation-delay: -2.4s; animation-timing-function: cubic-bezier(.4, 0, .25, 1); animation-iteration-count: infinite; }
 .landing-shell .home-battle .home-raid-ship-1 { animation-name: home-squad-left; }
 .landing-shell .home-battle .home-raid-ship-2 { animation-name: home-squad-lead; }
 .landing-shell .home-battle .home-raid-ship-3 { animation-name: home-squad-right; }
