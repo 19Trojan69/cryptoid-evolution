@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { GameAudio } from "./gameAudio.ts";
+import { GameAudio, hasPrimedGameAudio, primeGameAudio, takePrimedGameAudio } from "./gameAudio.ts";
 import { DEFAULT_EFFECTS_VOLUME } from "./musicPreferences.ts";
 
 test("game audio plays effects without scheduling background music", async () => {
@@ -84,5 +84,41 @@ test("boss warning uses only the recorded alarm, without the old synthesized ton
     audio.close();
     globalThis.AudioContext = previous.AudioContext;
     globalThis.fetch = previous.fetch;
+  }
+});
+
+test("effects remain recoverable when the initial fullscreen audio resume never settles", async () => {
+  const previous = globalThis.AudioContext;
+  let starts = 0;
+  let tones = 0;
+  globalThis.AudioContext = class {
+    state = "suspended";
+    currentTime = 0;
+    destination = {};
+    resume() {
+      starts++;
+      if (starts === 1) return new Promise(() => {});
+      this.state = "running";
+      return Promise.resolve();
+    }
+    async close() {}
+    createGain() { return { gain: { value: 1, setValueAtTime() {}, exponentialRampToValueAtTime() {} }, connect: output => output }; }
+    createOscillator() {
+      tones++;
+      return { frequency: { setValueAtTime() {}, exponentialRampToValueAtTime() {} }, connect: output => output, start() {}, stop() {} };
+    }
+  };
+  try {
+    primeGameAudio();
+    assert.equal(hasPrimedGameAudio(), true);
+    const audio = takePrimedGameAudio();
+    assert.ok(audio instanceof GameAudio);
+    assert.equal(hasPrimedGameAudio(), false);
+    assert.equal(await audio.start(), true);
+    audio.play("laser");
+    assert.equal(tones, 1);
+    audio.close();
+  } finally {
+    globalThis.AudioContext = previous;
   }
 });

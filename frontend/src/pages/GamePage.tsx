@@ -333,7 +333,6 @@ const GamePage = () => {
   const musicRef = useRef<MusicPlayer | null>(null);
   const regularMusicPositionRef = useRef(0);
   const soundRef = useRef<GameAudio | null>(null);
-  const audioStartRef = useRef<Promise<GameAudio | null> | null>(null);
   const audioCleanupRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const gameOverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const startRequestRef = useRef(false);
@@ -459,7 +458,7 @@ const GamePage = () => {
     return () => {
       // StrictMode immediately remounts in development; preserve the primed audio across that cycle.
       audioCleanupRef.current = window.setTimeout(() => {
-        void audioStartRef.current?.then(audio => audio?.close());
+        soundRef.current?.close();
       }, 0);
     };
   }, []);
@@ -469,23 +468,15 @@ const GamePage = () => {
   }, [game.sector, game.status]);
 
   const startEffects = () => {
-    if (!audioStartRef.current) {
-      const primed = takePrimedGameAudio();
-      const audio = primed ? null : new GameAudio();
-      audioStartRef.current = (primed ?? audio!.start().then(started => started ? audio : null)).then(ready => {
-        if (!ready) {
-          audio?.close();
-          audioStartRef.current = null;
-          return null;
-        }
-        ready.setEffectsVolume(readEffectsVolume());
-        ready.setSector(stateRef.current.sector);
-        ready.setPaused(stateRef.current.status !== "playing");
-        soundRef.current = ready;
-        return ready;
-      });
+    if (!soundRef.current) {
+      const audio = takePrimedGameAudio() ?? new GameAudio();
+      audio.setEffectsVolume(readEffectsVolume());
+      audio.setSector(stateRef.current.sector);
+      audio.setPaused(stateRef.current.status !== "playing");
+      soundRef.current = audio;
     }
-    return audioStartRef.current;
+    // Retry inside each gesture: Safari can interrupt Web Audio after fullscreen.
+    void soundRef.current.start();
   };
   useEffect(() => { if (hasPrimedGameAudio()) void startEffects(); }, []);
 

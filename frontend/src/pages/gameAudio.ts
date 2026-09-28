@@ -42,10 +42,11 @@ export class GameAudio {
       this.effectsBus.gain.value = this.effectsVolume / 100;
       this.effectsBus.connect(this.context.destination);
     }
-    try { await this.context.resume(); } catch { return false; }
-    this.paused = false;
-    if (!this.sampleRequest && typeof this.context.decodeAudioData === "function") this.sampleRequest = this.loadSamples(this.context);
-    return this.context.state === "running";
+    const context = this.context;
+    try { await context.resume(); } catch { return false; }
+    if (this.context !== context) return false;
+    if (!this.sampleRequest && typeof context.decodeAudioData === "function") this.sampleRequest = this.loadSamples(context);
+    return context.state === "running";
   }
 
   private async loadSamples(context: AudioContext) {
@@ -142,15 +143,13 @@ export class GameAudio {
   }
 }
 
-let primedAudio: Promise<GameAudio | null> | null = null;
+// Keep the instance available immediately. On iOS, resume() can remain pending
+// through a fullscreen/navigation transition until another user gesture.
+let primedAudio: GameAudio | null = null;
 export const primeGameAudio = () => {
   if (!primedAudio) {
-    const audio = new GameAudio();
-    primedAudio = audio.start().then(started => {
-      if (started) return audio;
-      audio.close();
-      return null;
-    });
+    primedAudio = new GameAudio();
+    void primedAudio.start();
   }
 };
 export const takePrimedGameAudio = () => {
