@@ -189,13 +189,14 @@ export const spriteStyle = (index: number): CSSProperties => ({
 });
 
 // Visible hulls are not perfectly centered inside every transparent atlas cell.
-// These offsets place the actual painted hull centers on the formation guides.
+// Alpha-weighted centers measured from all 20 atlas cells (alpha above 60).
+// The enemy visual rotates 180 degrees, so its correction uses the opposite sign.
 const spriteCenterOffsets = [
-  [5.4, -2.7], [5.4, .5], [-4.3, 15.4], [-1.8, 4.1],
-  [3.2, -.5], [.4, -5.5], [0, .9], [.4, 5.2],
-  [4.8, -1.6], [-4.1, 7], [-1.1, 4.8], [-6.6, -.4],
-  [8.9, 2], [-1.4, .2], [-8.8, 0], [-10.2, .4],
-  [5, -15.5], [-5.4, -2.5], [2.3, -3.9], [-5, -3.9],
+  [5.0, 12.8], [3.1, 14.0], [-8.4, 14.5], [-7.2, 13.5],
+  [4.2, 6.8], [3.1, 6.1], [-7.2, 7.0], [-7.1, 4.6],
+  [4.1, -1.9], [3.4, -1.9], [-7.4, -3.5], [-6.7, -6.9],
+  [4.4, -11.9], [2.5, -10.3], [-7.6, -14.1], [-6.6, -12.2],
+  [4.4, -18.7], [2.9, -17.2], [-8.2, -18.1], [-7.0, -17.2],
 ] as const;
 
 export const spriteVisualOffset = (index: number, renderedSize: number, facesPlayer = false) => {

@@ -1,5 +1,5 @@
 import { useLocale } from "../i18n";
-import { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
+import { memo, useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
 import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, arrangeFormationBySize, formationLayout, formationReady, sectionInSector, sectionPhase, sectorName, type SectorPhase } from "./sectorManager";
@@ -270,6 +270,10 @@ const shipDebris = (effect: Effect) => {
 
 const bossFireBursts = (effect: Effect) => effect.kind === "boss-explosion" ? <div className="boss-fire-sequence" aria-hidden="true"><i /><i /><i /></div> : null;
 
+// Effects keep their object identity until they expire. Keep the fragments and
+// their animations mounted instead of rebuilding the entire debris tree on every paint.
+const ImpactEffectView = memo(({ effect }: { effect: Effect }) => <div className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y }} aria-hidden="true"><span />{effect.kind === "hit" && <><i /><i /><i /></>}{bossFireBursts(effect)}{shipDebris(effect)}</div>);
+
 const GamePage = () => {
   const { t } = useLocale();
   const navigate = useNavigate();
@@ -423,6 +427,13 @@ const GamePage = () => {
       : musicVolume;
     musicRef.current?.setVolume(volume);
   }, [musicVolume, game.encounter]);
+  const startBossVictory = () => {
+    const track = musicRef.current;
+    if (!track) return;
+    track.audio.loop = false;
+    track.setSource("/audio/boss-victory-v2.mp3");
+    void track.play();
+  };
   const changeEffectsVolume = (value: number) => {
     localStorage.setItem(EFFECTS_VOLUME_KEY, String(value));
     setEffectsVolume(value);
@@ -727,6 +738,7 @@ const GamePage = () => {
             state.effects.push({ id: nextIdRef.current++, x: state.boss.health > 0 ? shot.x : state.boss.x, y: state.boss.health > 0 ? shot.y : state.boss.y, kind: state.boss.health > 0 ? "hit" : "boss-explosion", startedAt: time, sprite: state.boss.health > 0 ? undefined : 19, debrisSize: state.boss.health > 0 ? undefined : 124, shipClass: state.boss.health > 0 ? undefined : "heavy" });
             soundRef.current?.play(state.boss.health > 0 ? "enemyHit" : "bossDestroy");
             if (state.boss.health === 0) {
+              startBossVictory();
               state.score += bossPoints(state.sector);
               creditDefeat(state, bossShardReward(state.sector));
               state.encounter = "boss-clear";
@@ -885,6 +897,8 @@ const GamePage = () => {
         if (state.boss && state.encounter === "boss-fight") {
           state.boss.health = Math.max(0, state.boss.health - 18);
           if (state.boss.health === 0) {
+            soundRef.current?.play("bossDestroy");
+            startBossVictory();
             state.effects.push({ id: nextIdRef.current++, x: state.boss.x, y: state.boss.y, kind: "boss-explosion", startedAt: now, sprite: 19, debrisSize: 124, shipClass: "heavy" });
             state.score += bossPoints(state.sector);
             creditDefeat(state, bossShardReward(state.sector));
@@ -1003,7 +1017,7 @@ const GamePage = () => {
         })}
         {game.shots.map(shot => <div key={shot.id} className={`player-laser${shot.empowered ? " player-laser-overdrive" : ""}`} style={{ left: shot.x, top: shot.y }} />)}
         {game.enemyShots.map(shot => <div key={shot.id} className="enemy-laser" style={{ left: shot.x, top: shot.y }} />)}
-        {game.effects.map(effect => <div key={effect.id} className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y }} aria-hidden="true"><span />{effect.kind === "hit" && <><i /><i /><i /></>}{bossFireBursts(effect)}{shipDebris(effect)}</div>)}
+        {game.effects.map(effect => <ImpactEffectView key={effect.id} effect={effect} />)}
         {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship shielded-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0 ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${5 + game.thrust * 13}%`, ...shipVisualOffset } as CSSProperties} aria-label={t('Your Cryptoid ship')}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} />{engineTrails(shipSelection.skin.sprite, "player-engine")}</div></div>}
         <div className={`touch-controls touch-controls-${readControlHand()}`}>
           <div className="edge-actions" role="group" aria-label={t('Available equipment')}>
