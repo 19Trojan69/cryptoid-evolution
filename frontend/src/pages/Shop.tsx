@@ -176,16 +176,11 @@ const Shop = () => {
   const selectedStage = ownedShipStage(selected.skin.sprite, inventory?.ownedShipUpgrades);
   const previewStage = ownedShipStage(previewSkin.sprite, inventory?.ownedShipUpgrades);
   const [loadoutMessage, setLoadoutMessage] = useState("");
-  const shipSearchOptions = playerSkins.flatMap(skin => {
-    if (shopView !== "shop" && !fleetCount(fleet, skin.id)) return [];
-    const stages: ShipStage[] = shopView === "shop" ? [1, 2, 3] : [1];
-    return stages.map(stage => ({ skin, stage }));
-  });
-  const matchingShipOptions = shipSearchOptions.filter(({ skin, stage }) =>
-    `${skin.name} ${t(stage === 1 ? "STANDARD" : stage === 2 ? "ADVANCED" : "ELITE")}`
-      .toLocaleLowerCase(locale).includes(shipQuery.trim().toLocaleLowerCase(locale)));
-  const shipResultsVisible = shopView === "shop" || shipSearchOpen;
-  useEffect(() => { setShipQuery(""); setShipSearchOpen(false); }, [shopView]);
+  const shipSearchOptions = playerSkins.filter(skin => shopView === "shop" || fleetCount(fleet, skin.id) > 0);
+  const matchingShipOptions = shipSearchOptions.filter(skin =>
+    skin.name.toLocaleLowerCase(locale).includes(shipQuery.trim().toLocaleLowerCase(locale)));
+  const shipResultsVisible = shipSearchOpen;
+  useEffect(() => { setShipQuery(""); setShipSearchOpen(shopView === "shop"); if (shopView === "shop") setPreviewFocusStage(1); }, [shopView]);
   useEffect(() => {
     if (!shipSearchOpen) return;
     const closeOutside = (event: PointerEvent) => {
@@ -194,11 +189,11 @@ const Shop = () => {
     document.addEventListener("pointerdown", closeOutside);
     return () => document.removeEventListener("pointerdown", closeOutside);
   }, [shipSearchOpen]);
-  const chooseSearchResult = (skin: typeof playerSkins[number], stage: ShipStage) => {
+  const chooseSearchResult = (skin: typeof playerSkins[number]) => {
     const color = skin.id === selected.skin.id ? selected.color : allPlayerColors.find(item => fleetCount(fleet, skin.id, item.id)) ?? playerColors[0];
     setPreviewSkin(skin);
     setPreviewColor(color);
-    setPreviewFocusStage(stage);
+    setPreviewFocusStage(1);
     setShipQuery("");
     setShipSearchOpen(false);
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
@@ -438,19 +433,15 @@ const Shop = () => {
         <div className="ship-search-wrap" ref={shipSearchRef}>
           <div className="ship-search-control">
             <input id="ship-search" className="ship-search" type="search" value={shipQuery} onFocus={() => setShipSearchOpen(true)} onChange={event => { setShipQuery(event.target.value); setShipSearchOpen(true); }} onKeyDown={event => { if (event.key === "Escape") { setShipSearchOpen(false); event.currentTarget.blur(); } else if (event.key === "Enter") { event.currentTarget.blur(); } else if (event.key === "ArrowDown" && shipResultsVisible) { event.preventDefault(); shipSearchRef.current?.querySelector<HTMLButtonElement>(".ship-search-result")?.focus(); } }} placeholder={t("Search ship name")} aria-expanded={shipResultsVisible} aria-controls="ship-search-results" autoComplete="off" />
-            {shopView === "hangar" && <button className="ship-search-toggle" type="button" aria-label={t("Show ships")} aria-expanded={shipSearchOpen} aria-controls="ship-search-results" onClick={() => setShipSearchOpen(open => !open)}><span aria-hidden="true">⌄</span></button>}
+            <button className="ship-search-toggle" type="button" aria-label={t("Show ships")} aria-expanded={shipSearchOpen} aria-controls="ship-search-results" onClick={() => setShipSearchOpen(open => !open)}><span aria-hidden="true">⌄</span></button>
           </div>
-          {shipResultsVisible && <div className="ship-search-results" id="ship-search-results" role="group" aria-label={t("Available ship stages")}>
-            {matchingShipOptions.map(({ skin, stage }) => {
+          {shipResultsVisible && <div className="ship-search-results" id="ship-search-results" role="group" aria-label={t("Available ships")}>
+            {matchingShipOptions.map(skin => {
               const total = fleetCount(fleet, skin.id);
-              const ownedStage = ownedShipStage(skin.sprite, inventory?.ownedShipUpgrades);
-              const offer = offers.find(item => item.kind === "ship_upgrade" && item.shipIndex === skin.sprite && item.stage === stage);
-              const label = t(stage === 1 ? "STANDARD" : stage === 2 ? "ADVANCED" : "ELITE");
-              const price = offer ? `${offer.pricePi.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} π` : "–";
-              const status = stage === 1 ? total ? `${t("Owned")} ×${total}` : `◆ ${skin.price || EXTRA_STARTER_PRICE} ${t("Shards")}` : ownedStage >= stage ? t("OWNED") : stage === 3 && ownedStage < 2 ? `${price} · ${t("Requires Stage 2")}` : price;
-              return <button className={`ship-search-result${stage === 3 && ownedStage < 2 ? " ship-search-locked" : ""}`} key={`${skin.id}-${stage}`} type="button" onClick={() => chooseSearchResult(skin, stage)}>
-                <span className="ship-search-thumb" aria-hidden="true"><img src={shipEvolutionAsset(skin.sprite, stage)} alt="" loading="lazy" decoding="async" style={shipPreviewPlacement(skin.sprite, stage)} /></span>
-                <span className="ship-search-result-name"><strong>{skin.name}</strong><small>{label} · {status}</small></span><span className="ship-search-arrow" aria-hidden="true">›</span>
+              const status = total ? `${t("Owned")} ×${total}` : `◆ ${skin.price || EXTRA_STARTER_PRICE} ${t("Shards")}`;
+              return <button className={`ship-search-result${previewSkin.id === skin.id ? " ship-search-selected" : ""}`} key={skin.id} type="button" onClick={() => chooseSearchResult(skin)}>
+                <span className="ship-search-thumb" aria-hidden="true"><img src={shipEvolutionAsset(skin.sprite, 1)} alt="" loading="lazy" decoding="async" style={shipPreviewPlacement(skin.sprite, 1)} /></span>
+                <span className="ship-search-result-name"><strong>{skin.name}</strong><small>{t("STANDARD")} · {status}</small><small>{t("Open for variants and levels")}</small></span><span className="ship-search-arrow" aria-hidden="true">›</span>
               </button>;
             })}
             {matchingShipOptions.length === 0 && <p className="ship-search-empty">{t("No matching ships.")}</p>}
@@ -463,7 +454,7 @@ const Shop = () => {
           onColorChange={color => { setPreviewColor(color); if (shopView === "hangar") equipShip(previewSkin, color); else setHangarMessage(""); }}
           onBuyStandard={purchasePreview}
           onBuyUpgrade={offer => { const name = previewSkin.name + " · " + (offer.stage === 2 ? "Advanced" : "Elite"); void orderProduct("Cryptoid " + name + " · permanent ship evolution", offer.pricePi, { productId: offer.id }, () => { setHangarMessage(name + " " + t("purchase confirmed.")); void refreshInventory(); }); }}
-          onOpenShop={() => { setPreviewFocusStage(previewStage); setShopView("shop"); }} />
+          onOpenShop={() => { setPreviewFocusStage(1); setShopView("shop"); }} />
       </section>}
 
       {(shopView === "weapons" || shopView === "powers") && <section className="upgrade-section" aria-labelledby="upgrade-heading">

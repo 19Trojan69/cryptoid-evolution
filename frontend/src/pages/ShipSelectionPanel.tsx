@@ -42,10 +42,7 @@ export default function ShipSelectionPanel({
   const stage = view === "shop" ? focusStage : ownedStage;
   const price = skin.price || EXTRA_STARTER_PRICE;
   const offerFor = (level: ShipStage) => offers.find(offer => offer.shipIndex === skin.sprite && offer.stage === level);
-  const currentOffer = stage === 1 ? undefined : offerFor(stage);
-  const owned = stage === 1 ? hullCount > 0 : ownedStage >= stage;
-  const ready = hullCount > 0 && (stage !== 3 || ownedStage >= 2);
-  const piStage = stage === 3 || ownedStage >= 2 ? 3 : 2;
+  const piStage = stage === 1 ? ownedStage >= 2 ? 3 : 2 : stage;
   const piOffer = offerFor(piStage);
   const piOwned = ownedStage >= piStage;
   const piReady = hullCount > 0 && (piStage === 2 || ownedStage >= 2);
@@ -53,24 +50,12 @@ export default function ShipSelectionPanel({
   const colors = allPlayerColors.filter(item => view === "shop"
     ? playerColors.some(available => available.id === item.id) || fleetCount(fleet, skin.id, item.id) > 0
     : fleetCount(fleet, skin.id, item.id) > 0);
-  const description = stage === 1
-    ? t("Single fire. No free enemy projectile hits. An active shield protects against shots and ship collisions.")
-    : t(currentOffer?.description ?? "");
+  const description = stage === 1 ? t("Single fire. No free enemy projectile hits. An active shield protects against shots and ship collisions.") : t(offerFor(stage)?.description ?? "");
   const status = stage === 1
-    ? hullCount ? t("Owned") + " ×" + hullCount : t("Not owned")
-    : owned ? t("OWNED") : !hullCount ? t("Buy hull with Shards first") : !ready ? t("Requires Stage 2") : t("NOT OWNED");
+    ? hullCount ? t("Owned") + " ×" + hullCount : t("Not owned") + " · ◆ " + price + " " + t("Shards")
+    : ownedStage >= stage ? t("OWNED") : !hullCount ? t("Buy hull with Shards first") : stage === 3 && ownedStage < 2 ? t("Requires Stage 2") : t("NOT OWNED");
 
   return <div className="ship-one-screen">
-    {view === "shop" && <div className="ship-stage-strip" role="group" aria-label={t("Three ship stages")}>
-      {([1, 2, 3] as const).map(level => {
-        const stageOwned = level === 1 ? hullCount > 0 : ownedStage >= level;
-        const offer = level === 1 ? undefined : offerFor(level);
-        return <button key={level} type="button" aria-pressed={stage === level} onClick={() => onStageChange(level)}>
-          <span>0{level} · {t(stageLabel(level))}</span>
-          <small>{stageOwned ? t("OWNED") : level === 1 ? "◆ " + price : offer ? formatPi(offer.pricePi) + " π" : "π"}</small>
-        </button>;
-      })}
-    </div>}
     <div className="ship-one-hero">
       <div className="ship-one-art-wrap" role="img" aria-label={skin.name + " · " + t(color.name) + " · " + t(stageLabel(stage))}>
         <span className="ship-one-art-frame">
@@ -83,8 +68,22 @@ export default function ShipSelectionPanel({
         <h3>{skin.name} <small>· {t(stageLabel(stage))}</small></h3>
         <p>{description}</p>
         <strong>{status}</strong>
+        {view === "shop" && stage !== 1 && <button className="ship-standard-return" type="button" onClick={() => onStageChange(1)}>‹ {t("Show standard ship")}</button>}
       </div>
     </div>
+    {view === "shop" && <div className="ship-evolution-stages" role="group" aria-label={t("Three ship stages")}>
+      {([2, 3] as const).map(level => {
+        const offer = offerFor(level);
+        const stageOwned = ownedStage >= level;
+        const unlocked = hullCount > 0 && (level === 2 || ownedStage >= 2);
+        const requirement = !hullCount ? t("Buy hull with Shards first") : t("Requires Stage 2");
+        return <button key={level} className={`ship-evolution-stage${!unlocked && !stageOwned ? " ship-evolution-stage-locked" : ""}`} type="button"
+          aria-pressed={focusStage === level} onClick={() => onStageChange(level)}>
+          <span className="ship-evolution-stage-art" aria-hidden="true"><img src={`/ships/evolution/ship_${String(skin.sprite + 1).padStart(2, "0")}_stage_${level}.png`} alt="" loading="lazy" decoding="async" style={shipPreviewPlacement(skin.sprite, level)} /></span>
+          <span className="ship-evolution-stage-info"><strong>0{level} · {t(stageLabel(level))}</strong><small>{offer ? formatPi(offer.pricePi) + " π" : "π"}</small><span className="ship-evolution-stage-description">{t(offer?.description ?? "")}</span><em>{stageOwned ? t("OWNED") : unlocked ? t("NOT OWNED") : requirement}</em></span>
+        </button>;
+      })}
+    </div>}
     <div className="ship-one-colors">
       <div className="ship-one-colors-heading"><h4>{t("Color variants")}</h4><span>{t(color.name)}{fleetCount(fleet, skin.id, color.id) ? " · " + t("Owned") + " ×" + fleetCount(fleet, skin.id, color.id) : ""}</span></div>
       <div className="ship-color-dots" role="group" aria-label={t("Ship paint")}>

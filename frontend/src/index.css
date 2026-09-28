@@ -1719,6 +1719,8 @@ html[data-motion="reduced"] .home-battle-bolt, html[data-motion="reduced"] .home
 .landing-shell .ship-selector .ship-search-label { width: 100%; max-width: none; margin-top: 0; }
 .landing-shell .ship-selector .ship-search-wrap { position: relative; z-index: 10; width: 100%; max-width: none; }
 .landing-shell .ship-selector .ship-search-results { position: absolute; top: 100%; left: 0; z-index: 15; width: 100%; max-height: min(45dvh, 390px); }
+.landing-shell .ship-selector-shop .ship-search-results { position: static; max-height: min(34dvh, 280px); }
+.landing-shell .ship-selector-shop .ship-search-selected { border-color: #76edc9; background: #194b58; }
 .landing-shell .ship-search-thumb { overflow: hidden; }
 .ship-one-screen { display: flex; flex: 1 1 auto; flex-direction: column; gap: 10px; min-height: 0; }
 .ship-stage-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
@@ -1729,6 +1731,23 @@ html[data-motion="reduced"] .home-battle-bolt, html[data-motion="reduced"] .home
 .ship-one-hero { display: grid; grid-template-columns: minmax(135px, 42%) minmax(0, 1fr); gap: 14px; min-height: 210px; padding: 8px; border: 1px solid #66b9cf8c; border-radius: 13px; background: radial-gradient(circle at 25% 48%, #27779a3b, transparent 42%), linear-gradient(140deg, #0d2b46, #0c1d35); }
 .ship-one-art-wrap { position: relative; overflow: hidden; min-width: 0; min-height: 100%; border: 1px solid #4b82936b; border-radius: 9px; background: radial-gradient(circle at 50% 53%, #4b94b048, #081c31 70%); }
 .ship-one-art-frame { position: absolute; top: 50%; left: 50%; height: min(100%, 185px); width: auto; aspect-ratio: 1; transform: translate(-50%, -50%); }
+.ship-selector-shop .ship-one-hero { grid-template-columns: 1fr; }
+.ship-selector-shop .ship-one-art-wrap { min-height: 205px; }
+.ship-selector-shop .ship-one-art-frame { height: min(100%, 230px); }
+.ship-selector-shop .ship-one-info { padding: 4px 8px 8px; }
+.ship-evolution-stages { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.ship-evolution-stage { display: flex; align-items: center; gap: 9px; min-width: 0; min-height: 112px; padding: 8px; border: 1px solid #5c9aaa; border-radius: 11px; background: linear-gradient(140deg, #12344c, #0b1d35); color: #eefaff; text-align: left; cursor: pointer; }
+.ship-evolution-stage[aria-pressed="true"] { border-color: #8ae5ca; box-shadow: inset 0 0 0 1px #8ae5ca66; }
+.ship-evolution-stage-locked { border-color: #586b81; background: #17263c; }
+.ship-evolution-stage-art { display: block; flex: 0 0 92px; height: 92px; overflow: hidden; border-radius: 8px; background: radial-gradient(circle, #3481a046, #061b30 73%); }
+.ship-evolution-stage-art img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.ship-evolution-stage-info { display: grid; gap: 4px; min-width: 0; }
+.ship-evolution-stage-info strong { font: 800 12px/1.2 'Oxanium', sans-serif; }
+.ship-evolution-stage-info small { color: #ffda97; font: 700 12px 'DM Mono', monospace; }
+.ship-evolution-stage-description { color: #c6e1ea; font: 500 12px/1.3 'Rajdhani', sans-serif; }
+.ship-evolution-stage-info em { color: #9eedd8; font: 600 11px/1.25 'Rajdhani', sans-serif; font-style: normal; }
+.ship-standard-return { align-self: flex-start; padding: 4px 0; border: 0; background: transparent; color: #8de8da; font: 700 12px 'Rajdhani', sans-serif; cursor: pointer; }
+.ship-evolution-stage-locked .ship-evolution-stage-info em { color: #ffc996; }
 .ship-one-art { position: absolute; inset: 0; transform-origin: 50% 50%; filter: drop-shadow(0 0 11px #9ee7f55c); }
 .ship-one-art > i { position: absolute; inset: 0; background-size: 100% 100%; }
 .ship-one-info { display: flex; flex-direction: column; justify-content: center; gap: 8px; min-width: 0; }
@@ -1761,6 +1780,12 @@ html[data-motion="reduced"] .home-battle-bolt, html[data-motion="reduced"] .home
   .ship-stage-strip button span { font-size: 9px; }
   .ship-stage-strip button small { font-size: 10px; }
   .ship-one-hero { grid-template-columns: minmax(106px, 42%) minmax(0, 1fr); gap: 8px; min-height: clamp(142px, 22dvh, 185px); padding: 6px; }
+  .ship-selector-shop .ship-one-art-wrap { min-height: 180px; }
+  .ship-selector-shop .ship-one-art-frame { height: min(100%, 205px); }
+  .ship-evolution-stages { gap: 6px; }
+  .ship-evolution-stage { flex-direction: column; align-items: stretch; gap: 4px; padding: 6px; }
+  .ship-evolution-stage-art { flex: 0 0 auto; width: min(100%, 112px); height: 112px; margin: auto; }
+  .ship-evolution-stage-info { gap: 3px; }
   .landing-shell .ship-one-info h3 { font-size: 15px; }
   .landing-shell .ship-one-info p { font-size: 12px; line-height: 1.25; }
   .ship-one-info { gap: 5px; }
