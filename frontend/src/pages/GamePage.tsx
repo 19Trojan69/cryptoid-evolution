@@ -111,7 +111,15 @@ const BlockchainProgress = ({ blocks, saved = false }: { blocks: number; saved?:
     <div className="blockchain-block-row" aria-hidden="true">
       {Array.from({ length: Math.min(BLOCKS_PER_CHAIN, blocks) }, (_, index) => {
         return <div className="blockchain-step" key={index}>
-          <i className={`blockchain-node active${index === blocks - 1 ? " newest" : ""}`}><b /><em /></i>
+          <i className={`blockchain-node active${index === blocks - 1 ? " newest" : ""}`}>
+            <svg className="blockchain-cube" viewBox="0 0 64 70.4" aria-hidden="true">
+              <polygon className="cube-top" points="32,4 59,19.6 32,35.2 5,19.6" />
+              <polygon className="cube-left" points="5,19.6 32,35.2 32,66.4 5,50.8" />
+              <polygon className="cube-right" points="32,35.2 59,19.6 59,50.8 32,66.4" />
+              <path className="cube-spark cube-spark-first" d="M14 25v8m-4-4h8" />
+              <path className="cube-spark cube-spark-second" d="M49 34v6m-3-3h6" />
+            </svg>
+          </i>
           {index < blocks - 1 && <span className="blockchain-link active"><i /></span>}
         </div>;
       })}
