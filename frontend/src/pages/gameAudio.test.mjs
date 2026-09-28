@@ -52,36 +52,37 @@ test("game audio plays effects without scheduling background music", async () =>
   }
 });
 
-test("boss warning rises in three pulses and finishes before the boss enters", async () => {
-  const previous = globalThis.AudioContext;
-  const pulses = [];
+test("boss warning uses only the recorded alarm, without the old synthesized tones", async () => {
+  const previous = { AudioContext: globalThis.AudioContext, fetch: globalThis.fetch };
+  const samples = [];
+  let oscillators = 0;
+  globalThis.fetch = async () => ({ ok: true, arrayBuffer: async () => new ArrayBuffer(0) });
   globalThis.AudioContext = class {
     state = "running";
     currentTime = 0;
     destination = {};
     async resume() {}
     async close() {}
+    async decodeAudioData() { return { duration: 4.83 }; }
     createGain() { return { gain: { value: 1, setValueAtTime() {}, exponentialRampToValueAtTime() {} }, connect: output => output }; }
     createOscillator() {
-      const pulse = { frequency: 0, at: 0, end: 0 };
-      pulses.push(pulse);
-      return {
-        frequency: { setValueAtTime: value => { pulse.frequency = value; }, exponentialRampToValueAtTime: (_value, at) => { pulse.end = at; } },
-        connect: output => output,
-        start: at => { pulse.at = at; }, stop() {},
-      };
+      oscillators++;
+      return { connect: output => output, start() {}, stop() {} };
     }
+    createBufferSource() { return { playbackRate: { value: 1 }, connect: output => output, start: () => samples.push(true) }; }
   };
   const audio = new GameAudio();
   try {
     assert.equal(await audio.start(), true);
     audio.play("boss");
-    assert.equal(pulses.length, 3);
-    assert.deepEqual(pulses.map(pulse => pulse.frequency), [420, 490, 560]);
-    assert.ok(pulses[0].at < pulses[1].at && pulses[1].at < pulses[2].at);
-    assert.ok(pulses[2].end < 3.2);
+    assert.equal(oscillators, 0);
+    await new Promise(resolve => setImmediate(resolve));
+    audio.play("boss");
+    assert.equal(samples.length, 1);
+    assert.equal(oscillators, 0);
   } finally {
     audio.close();
-    globalThis.AudioContext = previous;
+    globalThis.AudioContext = previous.AudioContext;
+    globalThis.fetch = previous.fetch;
   }
 });

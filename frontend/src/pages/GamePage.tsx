@@ -12,7 +12,7 @@ import SectorBackdrop from "./SectorBackdrop";
 import Starfield from "./Starfield";
 import { BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusEntryGap, bonusHeartReward, bonusPosition, bonusReward, bonusShowcaseShip, type BonusTarget } from "./bonusChallenge";
 import { appendSectionBlock, bonusChainReward, BLOCKS_PER_CHAIN } from "./networkChain";
-import { advanceAfterClear, damageSectorBoss, bossFireInterval, bossVulnerable, createSectorBoss, encounterHudLabel, moveSectorBoss, type SectorBoss } from "./sectorBoss";
+import { advanceAfterClear, BOSS_WARNING_MS, damageSectorBoss, bossFireInterval, bossVulnerable, createSectorBoss, encounterHudLabel, moveSectorBoss, type SectorBoss } from "./sectorBoss";
 import { enemySprite, selectedShip, shardBalance, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
 import { useShipVisualOffset } from "./paintedShip";
@@ -765,7 +765,7 @@ const GamePage = () => {
         state.shots = remainingShots;
         const previousPhase = state.phase;
         if (state.encounter === "boss-intro") {
-          if (sectionElapsedRef.current >= SECTION_INTRO_MS) state.encounter = "boss-fight";
+          if (sectionElapsedRef.current >= BOSS_WARNING_MS) state.encounter = "boss-fight";
           state.phase = state.encounter === "boss-fight" ? "ATTACK_CYCLE" : "SECTOR_INTRO";
         } else if (state.encounter === "boss-fight") {
           state.phase = "ATTACK_CYCLE";
@@ -995,7 +995,7 @@ const GamePage = () => {
         {game.encounter === "bonus" && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">{t("BONUS TARGETS")} {game.bonusHits} / {BONUS_TARGET_COUNT} · {t("NO ENEMY FIRE")}</div>}
         {(game.shieldCharges > 0 || game.overdriveMs > 0 || game.rapidFireMs > 0 || game.empMs > 0 || game.paidWeaponMs > 0 || game.pickupWeaponMs > 0) && <div className="power-status" aria-live="polite">{game.shieldCharges > 0 && <span>{powerUpSymbols.shield} {t("SHIELD")} {t(game.shieldActive ? "ON" : "OFF")} · {game.shieldCharges} · {Math.ceil(game.shieldMs / 1_000)}s</span>}{game.overdriveMs > 0 && <span>{powerUpSymbols.overdrive} OVERDRIVE {Math.ceil(game.overdriveMs / 1_000)}s</span>}{game.rapidFireMs > 0 && <span>{powerUpSymbols.rapid} {t("RAPID")} {Math.ceil(game.rapidFireMs / 1_000)}s</span>}{game.empMs > 0 && <span>{powerUpSymbols.emp} EMP {Math.ceil(game.empMs / 1_000)}s</span>}{game.paidWeaponMs > 0 && <span>◆ {t("BOUGHT SHOTS")} {Math.ceil(game.paidWeaponMs / 1_000)}s</span>}{game.pickupWeaponMs > 0 && <span>{powerUpSymbols.weapon} {t("PICKUP SHOTS")} {Math.ceil(game.pickupWeaponMs / 1_000)}s</span>}</div>}
         {game.status === "loading" && <div className="game-overlay"><div className="game-modal"><h1>{t('Preparing mission')}</h1><p>{t('Checking your saved hangar loadout.')}</p></div></div>}
-        {game.status === "playing" && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite">
+        {game.status === "playing" && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${game.encounter === "boss-intro" ? " boss-intro-banner" : ""}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite">
           <span>{levelComplete || levelIntro ? sectorName(game.sector) : game.encounter === "bonus" ? game.phase === "SECTOR_CLEAR" ? t("BONUS COMPLETE") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.encounter !== "normal" ? `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.phase === "SECTOR_CLEAR" ? t("ROUND COMPLETE") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}`}</span>
           <strong>{transitionHeadline}</strong>
           {game.phase === "SECTOR_INTRO" && game.encounter === "bonus" && <small>{t("HIT THE FLYING TARGETS")}</small>}

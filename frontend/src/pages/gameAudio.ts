@@ -19,7 +19,7 @@ const sampleGains: Record<SampleName, number> = {
   "player-collision": .226,
   "shield": .071,
   "boost": .174,
-  "boss-warning-siren": .18,
+  "boss-warning-siren": .72,
   "boss-destroy": .107,
 };
 
@@ -114,8 +114,8 @@ export class GameAudio {
       case "shield": this.tone(420, 1050, .28, .08, "sine"); break;
       case "pickup": [620, 830, 1240].forEach((note, step) => this.tone(note, note * 1.07, .14, .065, "sine", step * .085)); break;
       case "boost": this.tone(270, 860, .42, .08, "sawtooth"); break;
-      // Same three rising sweeps as the sampled siren if the file has not loaded yet.
-      case "boss": [420, 490, 560].forEach((note, step) => this.tone(note, note * 1.92, .72, .085, "triangle", .18 + step * .85)); break;
+      // The boss uses only its dedicated recording; do not replay the old dull tones.
+      case "boss": break;
       case "bossDestroy": this.tone(150, 60, .48, .055, "triangle"); break;
       case "nova": [440, 220, 90].forEach((note, step) => this.tone(note, 55, .56, .09, "sawtooth", step * .05)); break;
       case "emp": [980, 730, 490].forEach((note, step) => this.tone(note, 150, .32, .045, "sine", step * .09)); break;
