@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { GameAudio } from "./gameAudio.ts";
+import { DEFAULT_EFFECTS_VOLUME } from "./musicPreferences.ts";
 
 test("game audio plays effects without scheduling background music", async () => {
   const previous = { AudioContext: globalThis.AudioContext, window: globalThis.window };
@@ -33,7 +34,7 @@ test("game audio plays effects without scheduling background music", async () =>
     assert.equal(await audio.start(), true);
     assert.equal(intervals.size, 0);
     assert.equal(buses.length, 1);
-    assert.equal(buses[0].gain.value, 1);
+    assert.equal(buses[0].gain.value, DEFAULT_EFFECTS_VOLUME / 100);
     audio.setEffectsVolume(25);
     assert.equal(buses[0].gain.value, .25);
     audio.setEffectsVolume(0);
