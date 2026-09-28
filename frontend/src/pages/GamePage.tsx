@@ -362,7 +362,7 @@ const GamePage = () => {
 
   useEffect(() => {
     if (!musicEnabled) return;
-    void fetch("/audio/boss-victory.mp3").catch(() => {});
+    void fetch("/audio/boss-victory-v2.mp3").catch(() => {});
     const track = new MusicPlayer("/audio/battle-orbit.mp3", DEFAULT_MUSIC_VOLUME);
     musicRef.current = track;
     const resume = () => {
@@ -387,7 +387,7 @@ const GamePage = () => {
     if (!track) return;
     const normalSource = "/audio/battle-orbit.mp3";
     const desiredSource = game.encounter === "boss-clear"
-      ? "/audio/boss-victory.mp3"
+      ? "/audio/boss-victory-v2.mp3"
       : game.encounter === "boss-intro" || game.encounter === "boss-fight"
         ? "/audio/dreadnought-duel.mp3"
         : normalSource;
