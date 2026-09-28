@@ -1552,7 +1552,42 @@ html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-
 .landing-shell .home-launch-shot-right { animation-delay: -1.96s; }
 @keyframes home-launch-volley { 0%, 40% { opacity: 0; transform: translateY(14px) scaleY(.4); } 44% { opacity: .95; transform: translateY(0) scaleY(1); } 55%, 100% { opacity: 0; transform: translateY(-42px) scaleY(.7); } }
 @keyframes home-battle-impact { 0%, 53% { opacity: 0; transform: scale(.2); } 55% { opacity: .85; transform: scale(.75); } 61%, 100% { opacity: 0; transform: scale(1.85); } }
-@media (max-width: 700px) { .landing-shell .home-battle .home-raid-ship { width: 42px; } .home-battle-hit { width: 16px; height: 16px; margin: -8px; } .home-battle-hit::before, .home-battle-hit::after { inset: -3px 6px; } }
+@media (max-width: 700px) {
+  /* The title and mission card occupy the upper half of a phone screen. */
+  .landing-shell .home-battle .home-raid-ship { width: 50px; }
+  .home-battle-hit { width: 16px; height: 16px; margin: -8px; }
+  .home-battle-hit::before, .home-battle-hit::after { inset: -3px 6px; }
+  .home-battle-bolt-hostile-a { --start-x: 54%; --start-y: 68%; --end-x: 50%; --end-y: 74%; }
+  .home-battle-bolt-hostile-b { --start-x: 69%; --start-y: 65%; --end-x: 64%; --end-y: 73%; }
+  .home-battle-bolt-defense-a { --start-x: 13%; --start-y: 71%; --end-x: 41%; --end-y: 69%; --shot-angle: 80deg; }
+  .home-battle-bolt-defense-b { --start-x: 65%; --start-y: 74%; --end-x: 74%; --end-y: 60%; --shot-angle: 26deg; }
+  .home-battle-hit-shield { left: 50%; top: 74%; }
+  .home-battle-hit-enemy-a { left: 42%; top: 69%; }
+  .home-battle-hit-enemy-b { left: 74%; top: 60%; }
+  @keyframes home-squad-left {
+    0% { left: 11%; top: 40%; opacity: 0; transform: rotate(-20deg) scale(.72); }
+    15%, 28% { left: 18%; top: 55%; opacity: .95; transform: rotate(0) scale(.9); }
+    45% { left: 33%; top: 61%; opacity: 1; transform: rotate(-17deg) scale(1.05); }
+    55% { left: 37%; top: 64%; opacity: 1; transform: rotate(-17deg) scale(1.05); }
+    60%, 100% { left: 37%; top: 64%; opacity: 0; transform: rotate(-17deg) scale(.35); }
+  }
+  @keyframes home-squad-lead {
+    0% { left: 47%; top: 39%; opacity: 0; transform: scale(.68); }
+    18%, 28% { left: 47%; top: 52%; opacity: 1; transform: scale(.98); }
+    48% { left: 50%; top: 64%; opacity: 1; transform: rotate(6deg) scale(1.16); }
+    65% { left: 63%; top: 61%; opacity: 1; transform: rotate(42deg) scale(1.05); }
+    84%, 94% { left: 47%; top: 52%; opacity: 1; transform: rotate(0) scale(.98); }
+    100% { left: 47%; top: 52%; opacity: 0; transform: scale(.98); }
+  }
+  @keyframes home-squad-right {
+    0% { left: 82%; top: 42%; opacity: 0; transform: rotate(22deg) scale(.72); }
+    17%, 29% { left: 72%; top: 55%; opacity: .95; transform: rotate(0) scale(.9); }
+    49% { left: 64%; top: 62%; opacity: 1; transform: rotate(17deg) scale(1.02); }
+    67% { left: 68%; top: 55%; opacity: 1; transform: rotate(-34deg) scale(.98); }
+    85%, 94% { left: 72%; top: 55%; opacity: .95; transform: rotate(0) scale(.9); }
+    100% { left: 72%; top: 55%; opacity: 0; transform: scale(.9); }
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .landing-shell .home-battle .home-raid-ship { animation: none; opacity: .86; transform: none; }
   .landing-shell .home-battle .home-raid-ship-1 { left: 32%; top: 23%; }
@@ -1567,3 +1602,13 @@ html[data-motion="reduced"] .landing-shell .home-battle .home-raid-ship-2 { left
 html[data-motion="reduced"] .landing-shell .home-battle .home-raid-ship-3 { left: 74%; top: 23%; }
 html[data-motion="reduced"] .landing-shell .home-launch-shot { animation: none; opacity: 0; }
 html[data-motion="reduced"] .home-battle-bolt, html[data-motion="reduced"] .home-battle-hit { display: none; animation: none; }
+@media (max-width: 700px) and (prefers-reduced-motion: reduce) {
+  .landing-shell .home-battle .home-raid-ship-1 { left: 18%; top: 55%; }
+  .landing-shell .home-battle .home-raid-ship-2 { left: 47%; top: 52%; }
+  .landing-shell .home-battle .home-raid-ship-3 { left: 72%; top: 55%; }
+}
+@media (max-width: 700px) {
+  html[data-motion="reduced"] .landing-shell .home-battle .home-raid-ship-1 { left: 18%; top: 55%; }
+  html[data-motion="reduced"] .landing-shell .home-battle .home-raid-ship-2 { left: 47%; top: 52%; }
+  html[data-motion="reduced"] .landing-shell .home-battle .home-raid-ship-3 { left: 72%; top: 55%; }
+}
