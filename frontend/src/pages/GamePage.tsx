@@ -35,8 +35,6 @@ const RETURN_DURATION_MS = 3_500;
 const IMPACT_COOLDOWN_MS = 1_500;
 const GAME_OVER_REVEAL_MS = 1_750;
 const ENTRY_HUD_GAP_PX = 8;
-const FIRST_MISSION_GUIDE_KEY = "cryptoid_first_mission_guide";
-const GUIDE_STEP_MS = 7_500;
 const FORMATION_DATA_ROWS = [
   "1011010001101001110001010011011010101100",
   "0010110111010010010011111011000101100110",
@@ -282,9 +280,6 @@ const GamePage = () => {
   const keysRef = useRef(new Set<string>());
   const pointerRef = useRef<number | null>(null);
   const touchOriginRef = useRef<{ x: number; y: number; player: PlayerPosition } | null>(null);
-  const [guideStep, setGuideStep] = useState(() => localStorage.getItem(FIRST_MISSION_GUIDE_KEY) === "1" ? -1 : 0);
-  const guideStepRef = useRef(guideStep);
-  const guideTimeRef = useRef(0);
   const lastPlayerRef = useRef<PlayerPosition>({ x: .5, y: .86 });
   const [game, setGame] = useState<GameState>(createInitialState);
   const [homePrompt, setHomePrompt] = useState(false);
@@ -367,6 +362,7 @@ const GamePage = () => {
 
   useEffect(() => {
     if (!musicEnabled) return;
+    void fetch("/audio/boss-victory.mp3").catch(() => {});
     const track = new MusicPlayer("/audio/battle-orbit.mp3", DEFAULT_MUSIC_VOLUME);
     musicRef.current = track;
     const resume = () => {
@@ -471,15 +467,6 @@ const GamePage = () => {
       const delta = Math.min(34, time - (lastFrameRef.current || time));
       lastFrameRef.current = time;
       if (state.status === "playing") {
-        if (guideStepRef.current >= 0) {
-          guideTimeRef.current += delta;
-          const nextStep = Math.floor(guideTimeRef.current / GUIDE_STEP_MS);
-          if (nextStep !== guideStepRef.current) {
-            guideStepRef.current = nextStep < 4 ? nextStep : -1;
-            setGuideStep(guideStepRef.current);
-            if (nextStep >= 4) localStorage.setItem(FIRST_MISSION_GUIDE_KEY, "1");
-          }
-        }
         const field = fieldRef.current;
         const width = field?.clientWidth || 800;
         const height = field?.clientHeight || 600;
@@ -934,13 +921,6 @@ const GamePage = () => {
     navigate("/");
   };
 
-  const guideHints = [
-    t("Move with your thumb or arrow keys. Your ship fires automatically."),
-    t("Dodge diving ships and enemy shots."),
-    t("Collect shields and shot upgrades to activate them immediately."),
-    t("Weapon, level and round are shown separately above."),
-  ];
-  const dismissGuide = () => { guideStepRef.current = -1; setGuideStep(-1); localStorage.setItem(FIRST_MISSION_GUIDE_KEY, "1"); };
   const levelLabel = String(game.sector);
   const round = sectionInSector(game.section);
   const levelComplete = game.encounter === "boss-clear" && game.phase === "SECTOR_CLEAR";
@@ -992,7 +972,6 @@ const GamePage = () => {
         {game.enemyShots.map(shot => <div key={shot.id} className="enemy-laser" style={{ left: shot.x, top: shot.y }} />)}
         {game.effects.map(effect => <div key={effect.id} className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y }} aria-hidden="true"><span />{effect.kind === "hit" && <><i /><i /><i /></>}{bossFireBursts(effect)}{shipDebris(effect)}</div>)}
         {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship shielded-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0 ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${5 + game.thrust * 13}%`, ...shipVisualOffset } as CSSProperties} aria-label={t('Your Cryptoid ship')}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} />{engineTrails(shipSelection.skin.sprite, "player-engine")}</div></div>}
-        {guideStep >= 0 && game.status === "playing" && <aside className="game-coach" role="status" aria-live="polite"><small>{t("QUICK GUIDE")} · {guideStep + 1}/4</small><p>{guideHints[guideStep]}</p><button type="button" onClick={dismissGuide}>{t("Skip guide")}</button></aside>}
         <div className={`touch-controls touch-controls-${readControlHand()}`}>
           <div className="edge-actions" role="group" aria-label={t('Available equipment')}>
             {game.pendingStartPower && <button type="button" className={`edge-action edge-action-${game.pendingStartPower} edge-action-purchased`} disabled={game.status !== "playing" || (game.pendingStartPower === "shield" && game.shieldCharges > 0 && game.shieldMs > 0) || (game.pendingStartPower === "rapid" && game.rapidFireMs > 0) || (game.pendingStartPower === "overdrive" && game.overdriveMs > 0) || (game.pendingStartPower === "emp" && game.empMs > 0)} aria-label={`${t("Tap to activate")} ${t(powerUpNames[game.pendingStartPower])}`} onClick={activateStartPower}><span aria-hidden="true">{powerUpSymbols[game.pendingStartPower]}</span><small>{t(powerUpNames[game.pendingStartPower])}</small><em>{t("Tap to activate")}</em></button>}
