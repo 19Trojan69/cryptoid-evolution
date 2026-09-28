@@ -79,16 +79,19 @@ test("a ship crossing the player between two frames causes one impact", () => {
   assert.deepEqual(contactWithEnemy(player, 800, 600, after, true, true, 0, before), { connected: false, damage: 0 });
 });
 
-test("collisions destroy the ship at all stages, even with an active shield", () => {
-  assert.deepEqual(shipCollisionOutcome(true, 1, 20_000), { absorbedByShield: false, destroysEnemy: true, destroysPlayerLife: true });
+test("an active shield absorbs a ship collision; an inactive or expired shield does not", () => {
+  assert.deepEqual(shipCollisionOutcome(true, 1, 20_000), { absorbedByShield: true, destroysEnemy: false, destroysPlayerLife: false });
   assert.deepEqual(shipCollisionOutcome(false, 1, 20_000), { absorbedByShield: false, destroysEnemy: true, destroysPlayerLife: true });
   assert.deepEqual(shipCollisionOutcome(true, 0, 20_000), { absorbedByShield: false, destroysEnemy: true, destroysPlayerLife: true });
   assert.deepEqual(shipCollisionOutcome(true, 1, 0), { absorbedByShield: false, destroysEnemy: true, destroysPlayerLife: true });
 });
 
-test("direct contact destroys all hearts even after buying armor or activating a shield", () => {
+test("unshielded contact destroys the whole ship; a shield consumes one charge", () => {
   assert.equal(directCollisionImpacts(3, 0, false), 3);
   assert.equal(directCollisionImpacts(6, 0, false), 6);
   assert.equal(directCollisionImpacts(6, 1, false), 7);
-  assert.equal(directCollisionImpacts(6, 1, true), 7);
+  assert.equal(directCollisionImpacts(6, 1, true), 1);
+  const outcome = shipCollisionOutcome(true, 1, 20_000);
+  const impact = directCollisionImpacts(6, 1, outcome.absorbedByShield);
+  assert.equal(resolvePlayerDamage({ hearts: 6, shieldCharges: 1, overdriveMs: 0 }, impact, true).hearts, 6);
 });

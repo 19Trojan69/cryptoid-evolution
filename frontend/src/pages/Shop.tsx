@@ -416,7 +416,7 @@ const Shop = () => {
         {visibleSkins.length === 0 && <p role="status">{t("No matching ships.")}</p>}
         {shopView === "shop" && <div className="hangar-offers ship-evolution-offers">
           <h3 id="ship-evolution-heading">{previewSkin.name} · {t("Ship evolution")}</h3>
-          <p>{t("All upgrades belong to this ship type, across its colors. Each new life restores its projectile protection. A direct ship collision is always fatal.")}</p>
+          <p>{t("Upgrades apply to this ship type in every color. Each new life restores its projectile protection. An active shield absorbs shots and ship collisions; unshielded ship collisions destroy the hull immediately.")}</p>
           <div className="evolution-route" aria-label={t("Three ship stages")}>
             <span className={fleetCount(fleet, previewSkin.id) ? "stage-owned" : ""}><b>01</b> {t("STANDARD")} <small>◆ {previewSkin.price || EXTRA_STARTER_PRICE}</small></span>
             <span className={previewStage >= 2 ? "stage-owned" : ""}><b>02</b> {t("ADVANCED")} <small>π</small></span>
@@ -425,7 +425,7 @@ const Shop = () => {
           <div className="hangar-offer-grid">
             <article className={`hangar-offer hangar-offer-ship${fleetCount(fleet, previewSkin.id) ? " hangar-offer-selected" : ""}`}>
               <div className="offer-preview weapon-preview" aria-hidden="true"><span className="preview-grid" /><span className="preview-ship"><PaintedShip sprite={previewSkin.sprite} color={previewColor.id} stage={1} /></span><small>STANDARD</small></div>
-              <h4>{previewSkin.name} · {t("STANDARD")}</h4><p>{t("Single fire. No free enemy projectile hits. A direct ship collision is fatal.")}</p>
+              <h4>{previewSkin.name} · {t("STANDARD")}</h4><p>{t("Single fire. No free enemy projectile hits. An active shield protects against shots and ship collisions.")}</p>
               <span>◆ {previewSkin.price || EXTRA_STARTER_PRICE} {t("Shards")} · {t("Choose a color below")}</span>
               <strong>{fleetCount(fleet, previewSkin.id) ? `${t("Owned")} ×${fleetCount(fleet, previewSkin.id)}` : t("Not owned")}</strong>
               <div><button className="button button-secondary" type="button" onClick={() => document.querySelector(".ship-selector-shop .hangar-variant-title")?.scrollIntoView({ behavior: "smooth", block: "start" })}>{t("Choose color & buy")}</button></div>

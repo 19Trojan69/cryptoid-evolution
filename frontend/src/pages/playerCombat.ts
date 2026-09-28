@@ -58,11 +58,13 @@ export const contactWithEnemy = (player: PlayerPosition, width: number, height: 
   return { connected, damage: connected && cooldownMs <= 0 ? 1 : 0 };
 };
 
-export const shipCollisionOutcome = (_shieldActive: boolean, _shieldCharges: number, _shieldMs: number) =>
-  ({ absorbedByShield: false, destroysEnemy: true, destroysPlayerLife: true });
+export const shipCollisionOutcome = (shieldActive: boolean, shieldCharges: number, shieldMs: number) => {
+  const absorbedByShield = shieldActive && shieldCharges > 0 && shieldMs > 0;
+  return { absorbedByShield, destroysEnemy: !absorbedByShield, destroysPlayerLife: !absorbedByShield };
+};
 
 // A direct unshielded ship collision destroys the whole player hull regardless
 // of purchased evolution stage or extra hearts. Account for still queued shield
 // charges because receiveImpacts processes the whole frame together.
-export const directCollisionImpacts = (hearts: number, shieldCharges: number, _absorbedByShield: boolean) =>
-  hearts + shieldCharges;
+export const directCollisionImpacts = (hearts: number, shieldCharges: number, absorbedByShield: boolean) =>
+  absorbedByShield ? 1 : hearts + shieldCharges;
