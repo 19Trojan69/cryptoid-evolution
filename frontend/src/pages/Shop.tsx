@@ -7,7 +7,7 @@ import { useAuth } from "../hooks/useAuth";
 import { usePayments } from "../hooks/usePayments";
 import { axiosClient } from "../lib/axiosClient.ts";
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "./GamePage.tsx";
-import { allPlayerColors, buyShipVariant, EXTRA_STARTER_PRICE, fleetCount, playerColors, playerSkins, readShipFleet, savedShipColors, selectedShip, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyle, spriteStyle, type PlayerColorId } from "./shipFleet";
+import { allPlayerColors, buyShipVariant, enemySprite, EXTRA_STARTER_PRICE, fleetCount, playerColors, playerSkins, readShipFleet, savedShipColors, selectedShip, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyle, spriteStyle, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
 import { ownedShipStage } from "./shipEvolution";
 import TermsDialog from "../components/TermsDialog";
@@ -295,9 +295,16 @@ const Shop = () => {
         </div>
         <div className="planet-stage" aria-label="Cryptoid Evolution planet status">
           <div className="planet"><EarthGlobe /><EarthNetwork /></div>
-          <div className="home-crossfire" aria-hidden="true"><i className="home-crossfire-shot home-crossfire-shot-a" /><i className="home-crossfire-shot home-crossfire-shot-b" /><i className="home-crossfire-impact" /></div>
-          <div className="home-intercept" aria-hidden="true"><i className="home-intercept-bolt home-intercept-bolt-a" /><i className="home-intercept-bolt home-intercept-bolt-b" /><i className="home-intercept-flash" /></div>
-          <div className="home-raid" aria-hidden="true">{[2, 3, 0].map((sprite, index) => <span className={`home-raid-ship home-raid-ship-${index + 1}`} key={sprite}><b /><i style={spriteStyle(sprite)} /></span>)}</div>
+          <div className="home-battle" aria-hidden="true">
+            {[0, 2, 4].map((slot, index) => <span className={`home-raid-ship home-raid-ship-${index + 1}`} key={slot}><b /><i style={spriteStyle(enemySprite("light", slot))} /></span>)}
+            <i className="home-battle-bolt home-battle-bolt-hostile home-battle-bolt-hostile-a" />
+            <i className="home-battle-bolt home-battle-bolt-hostile home-battle-bolt-hostile-b" />
+            <i className="home-battle-bolt home-battle-bolt-defense home-battle-bolt-defense-a" />
+            <i className="home-battle-bolt home-battle-bolt-defense home-battle-bolt-defense-b" />
+            <i className="home-battle-hit home-battle-hit-shield" />
+            <i className="home-battle-hit home-battle-hit-enemy-a" />
+            <i className="home-battle-hit home-battle-hit-enemy-b" />
+          </div>
           <span className="orbit-status">{t('ORBITAL DEFENSE ACTIVE')}</span>
           <div className="stage-label"><span className="stage-label-value">01</span><span>{t('Genesis sector')}</span></div>
         </div>
