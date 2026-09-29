@@ -37,6 +37,13 @@ export const playerSkins = [
   { id: "pi-vanguard", name: "Pi Vanguard", sprite: 18, price: 4400 },
   { id: "core-carrier", name: "Core Carrier", sprite: 19, price: 4650 },
 ] as const;
+// Ten standard hulls are released for Testnet, including the free Grey Scout.
+// Later hulls stay visible, and prior ownership is preserved.
+export const TESTNET_STANDARD_HULL_COUNT = 10;
+export const testnetStandardHullAvailable = (skinId: PlayerSkinId) => {
+  const index = playerSkins.findIndex(skin => skin.id === skinId);
+  return index >= 0 && index < TESTNET_STANDARD_HULL_COUNT;
+};
 
 const legacyColors = [
   { id: "grey", name: "Graphite Grey", hue: "0deg", glow: "#a8b3c2" },
@@ -127,7 +134,7 @@ export const readShipFleet = (raw: string | null, oldOwned: string | null, oldCo
 export const buyShipVariant = (skinId: PlayerSkinId, colorId: PlayerColorId, fleet: ShipFleet, balance: number) => {
   const skin = playerSkins.find(item => item.id === skinId);
   const price = skin?.price === 0 ? EXTRA_STARTER_PRICE : skin?.price;
-  if (!skin || price === undefined || !allPlayerColors.some(color => color.id === colorId) || !Number.isSafeInteger(balance) || balance < price) return null;
+  if (!skin || !testnetStandardHullAvailable(skinId) || price === undefined || !allPlayerColors.some(color => color.id === colorId) || !Number.isSafeInteger(balance) || balance < price) return null;
   const count = fleetCount(fleet, skinId, colorId);
   if (!Number.isSafeInteger(count) || count >= Number.MAX_SAFE_INTEGER) return null;
   return { fleet: { ...fleet, [skinId]: { ...fleet[skinId], [colorId]: count + 1 } }, balance: balance - price };
@@ -162,7 +169,7 @@ export const shardBalance = (raw: string | null) => {
 
 export const buySkin = (id: PlayerSkinId, owned: readonly PlayerSkinId[], balance: number) => {
   const skin = playerSkins.find(item => item.id === id);
-  if (!skin || skin.price === 0 || owned.includes(id) || !Number.isSafeInteger(balance) || balance < skin.price) return null;
+  if (!skin || !testnetStandardHullAvailable(id) || skin.price === 0 || owned.includes(id) || !Number.isSafeInteger(balance) || balance < skin.price) return null;
   return { owned: [...owned, id], balance: balance - skin.price };
 };
 
