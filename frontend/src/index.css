@@ -1822,3 +1822,11 @@ html[data-motion="reduced"] .home-battle-bolt, html[data-motion="reduced"] .home
   color: #fff;
   background: #13243b;
 }
+
+/* Boss-only neon arsenal: visually distinct from normal enemy fire. */
+.enemy-laser.boss-projectile { background: linear-gradient(#efffe9, #72ff45 32%, #16e83b 72%, transparent); box-shadow: 0 0 7px #9dff6f, 0 0 15px #24ff50, 0 0 26px #00c83c; }
+.enemy-laser.boss-projectile-orb { width: 13px; height: 13px; margin: -6px; border-radius: 50%; background: radial-gradient(circle, #fff 0 16%, #aaff76 24%, #22f04a 55%, #08a92f 72%, transparent 76%); box-shadow: 0 0 10px #b9ff83, 0 0 22px #20ff51, 0 0 38px #00d13f; }
+.enemy-laser.boss-projectile-lance { width: 4px; height: 34px; border-radius: 50% 50% 35% 35%; filter: brightness(1.2); }
+.enemy-laser.boss-projectile-split { width: 11px; height: 20px; clip-path: polygon(0 0, 42% 18%, 50% 100%, 58% 18%, 100% 0, 70% 55%, 50% 100%, 30% 55%); }
+.enemy-laser.boss-projectile-pulse { width: 15px; height: 15px; margin: -7px; border: 2px solid #aaff82; border-radius: 50%; background: #25ef4b66; box-shadow: inset 0 0 7px #fff, 0 0 12px #54ff67, 0 0 28px #00d83f; animation: boss-projectile-pulse .42s ease-in-out infinite alternate; }
+@keyframes boss-projectile-pulse { to { transform: scale(1.35); filter: brightness(1.35); } }
