@@ -31,69 +31,23 @@ type EntryPosition = {
   index: number;
 };
 
-export const entryPosition = ({ pattern, progress, startX, startY, targetX, targetY, width, height, radius, side, index }: EntryPosition) => {
+export const entryPosition = ({ progress, startX, startY, targetX, targetY, width, radius, side, index }: EntryPosition) => {
   const p = Math.max(0, Math.min(1, progress));
   if (p === 0) return { x: startX, y: startY };
   if (p === 1) return { x: targetX, y: targetY };
 
-  const eased = p * p * (3 - 2 * p);
-  // The flourish disappears smoothly at both ends, so every flight docks exactly.
-  const flourish = Math.sin(Math.PI * p) ** 2;
-  const baseX = startX + (targetX - startX) * eased;
-  const baseY = startY + (targetY - startY) * eased;
-  const phase = index % 2 ? Math.PI : 0;
-  let dx = 0;
-  let dy = 0;
-
-  switch (pattern) {
-    case "zigzag":
-      // Two broad S-bends, without the triangular wave's sharp reversals.
-      dx = side * width * .27 * flourish * Math.sin(3 * Math.PI * p);
-      dy = height * .11 * flourish;
-      break;
-    case "figureEight":
-      dx = side * width * .29 * flourish * Math.sin(2 * Math.PI * p);
-      dy = height * .17 * flourish * Math.sin(4 * Math.PI * p);
-      break;
-    case "cross":
-      // Opposing wings exchange sides, then return to their assigned slots.
-      dx = side * width * .48 * flourish;
-      dy = height * .13 * flourish;
-      break;
-    case "spiral":
-      dx = width * .27 * flourish * Math.cos(4 * Math.PI * p + phase);
-      dy = height * .16 * flourish * Math.sin(4 * Math.PI * p + phase);
-      break;
-    case "pincer":
-      dx = (width / 2 - baseX) * .94 * flourish;
-      dy = height * .19 * flourish * Math.sin(Math.PI * p);
-      break;
-    case "sweep":
-      dx = width * .25 * flourish * Math.sin(Math.PI * p);
-      dy = height * .17 * flourish * Math.sin(2 * Math.PI * p);
-      break;
-    case "cascade":
-      dx = width * .19 * flourish * Math.sin(3 * Math.PI * p + index * .65);
-      dy = height * .15 * flourish * Math.sin(2 * Math.PI * p + index * .7);
-      break;
-    case "diamond":
-      dx = side * width * .3 * flourish * Math.sin(2 * Math.PI * p);
-      dy = height * .09 * flourish * (1 - Math.cos(4 * Math.PI * p));
-      break;
-    case "doubleLoop":
-      dx = side * width * .25 * flourish * Math.sin(4 * Math.PI * p);
-      dy = height * .14 * flourish * (1 - Math.cos(4 * Math.PI * p));
-      break;
-  }
-
-  // Soft saturation keeps wide arcs on screen without the visible corners
-  // caused by clipping positions against the playfield every frame.
-  const contain = (base: number, offset: number, min: number, max: number) => {
-    const room = offset >= 0 ? max - base : base - min;
-    return room > 0 ? base + room * Math.tanh(offset / room) : base;
-  };
-  return {
-    x: contain(baseX, dx, radius, width - radius),
-    y: contain(baseY, dy, radius, height * .62),
-  };
+  // A single cubic arc, with no oscillation or reversal. The changing
+  // formation is visible after docking; arrival only carries each hull there.
+  const curve = side * Math.min(width * .09, 34);
+  const bias = (index % 3 - 1) * 5;
+  const controlX1 = Math.max(radius, Math.min(width - radius, startX + curve + bias));
+  const controlX2 = Math.max(radius, Math.min(width - radius, targetX - curve * .55));
+  const controlY1 = startY + (targetY - startY) * .32;
+  const controlY2 = startY + (targetY - startY) * .72;
+  const inverse = 1 - p;
+  const x = inverse ** 3 * startX + 3 * inverse ** 2 * p * controlX1
+    + 3 * inverse * p ** 2 * controlX2 + p ** 3 * targetX;
+  const y = inverse ** 3 * startY + 3 * inverse ** 2 * p * controlY1
+    + 3 * inverse * p ** 2 * controlY2 + p ** 3 * targetY;
+  return { x, y };
 };

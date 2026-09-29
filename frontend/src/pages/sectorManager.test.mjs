@@ -19,26 +19,22 @@ test("combat waits until every surviving enemy occupies its formation slot", () 
   assert.equal(formationReady({ spawned: 6, total: 6, alive: 0, ready: 0 }), false);
 });
 
-test("formation slots are unique and occupy ordered rows in the upper field", () => {
-  for (const [width, height, expected] of [[375, 700, 6], [1200, 800, 15]]) {
-    const slots = formationLayout(1, width, height);
-    assert.equal(slots.length, expected);
-    assert.equal(new Set(slots.map(slot => `${slot.x}:${slot.y}`)).size, expected);
-    assert.ok(slots.every(slot => slot.y < height * .45 && slot.x > 40 && slot.x < width - 40));
-    assert.equal(new Set(slots.map(slot => slot.row)).size, expected === 6 ? 2 : 3);
-  }
-});
-
-test("the compact grid remains close without overlapping arranged hulls", () => {
-  for (const [width, height] of [[390, 700], [720, 800], [800, 700], [1200, 800]]) {
-    const slots = formationLayout(1, width, height);
-    const radii = Array.from({ length: slots.length }, (_, index) => [25, 36, 25, 50, 36, 25][index % 6]);
-    const arranged = arrangeFormationBySize(slots, radii);
-    for (let index = 0; index < arranged.length; index += 1) for (let other = index + 1; other < arranged.length; other += 1) {
-      const clearance = Math.hypot(arranged[index].x - arranged[other].x, arranged[index].y - arranged[other].y) - radii[index] - radii[other];
-      assert.ok(clearance >= 4, `${width}x${height}: ships ${index} and ${other} overlap`);
+test("nine normal blocks have nine distinct fixed formations, repeated next level", () => {
+  for (const width of [375, 390, 800, 1200]) {
+    const formations = Array.from({ length: 9 }, (_, block) => formationLayout(1, width, 700, block + 1));
+    const signatures = formations.map(slots => slots.map(slot => `${Math.round(slot.x)}:${Math.round(slot.y)}`).join(";"));
+    assert.equal(new Set(signatures).size, 9, `${width}px must show nine formations`);
+    assert.deepEqual(formationLayout(31, width, 700, 11).map(({ x, y }) => [x, y]), formations[0].map(({ x, y }) => [x, y]));
+    for (const [block, slots] of formations.entries()) {
+      assert.equal(slots.length, width < 760 ? 6 : 15);
+      assert.ok(slots.every(slot => slot.y > 65 && slot.y < 700 * (width < 760 ? .45 : .5) && slot.x >= 50 && slot.x <= width - 50), `block ${block + 1}: safe playfield`);
+      const radii = slots.map((_, index) => [25, 36, 25, 50, 36, 25][index % 6]);
+      const arranged = arrangeFormationBySize(slots, radii);
+      for (let index = 0; index < arranged.length; index++) for (let other = index + 1; other < arranged.length; other++) {
+        const clearance = Math.hypot(arranged[index].x - arranged[other].x, arranged[index].y - arranged[other].y) - radii[index] - radii[other];
+        assert.ok(clearance >= 4, `${width}px block ${block + 1}: hulls ${index} and ${other} overlap by ${-clearance}`);
+      }
     }
-    assert.ok(Math.max(...slots.map(slot => slot.x)) - Math.min(...slots.map(slot => slot.x)) <= (slots.length === 6 ? 216 : 448));
   }
 });
 

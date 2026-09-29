@@ -120,10 +120,12 @@ const CHAIN_BINARY = FORMATION_DATA_ROWS[0].repeat(4);
 const BlockchainProgress = ({ blocks, saved = false }: { blocks: number; saved?: boolean }) => (
   <div className={`blockchain-progress${saved ? " blockchain-progress-saved" : ""}`} role="img" aria-label={`${blocks} of ${BLOCKS_PER_CHAIN} network blocks linked`}>
     <div className="blockchain-halo" aria-hidden="true" />
-    <div className="blockchain-block-row" aria-hidden="true">
-      {Array.from({ length: Math.min(BLOCKS_PER_CHAIN, blocks) }, (_, index) => {
-        return <div className="blockchain-step" key={index}>
-          <i className={`blockchain-node active${index === blocks - 1 ? " newest" : ""}`}>
+    <div className="blockchain-route" aria-hidden="true">
+      {[0, 1].map(row => <div className={`blockchain-block-row blockchain-row-${row ? "bottom" : "top"}`} key={row}>
+        {Array.from({ length: row ? 4 : 5 }, (_, offset) => {
+          const index = offset + (row ? 5 : 0);
+          return <div className="blockchain-step" key={index}>
+            <i className={`blockchain-node${index < blocks ? " active" : ""}${index === blocks - 1 ? " newest" : ""}`}>
             <svg className="blockchain-cube" viewBox="0 0 64 70.4" aria-hidden="true">
               <polygon className="cube-top" points="32,4 59,19.6 32,35.2 5,19.6" />
               <polygon className="cube-left" points="5,19.6 32,35.2 32,66.4 5,50.8" />
@@ -131,10 +133,12 @@ const BlockchainProgress = ({ blocks, saved = false }: { blocks: number; saved?:
               <path className="cube-spark cube-spark-first" d="M14 25v8m-4-4h8" />
               <path className="cube-spark cube-spark-second" d="M49 34v6m-3-3h6" />
             </svg>
-          </i>
-          {index < blocks - 1 && <span className="blockchain-link active"><i /></span>}
-        </div>;
-      })}
+            </i>
+            {offset < (row ? 3 : 4) && <span className={`blockchain-link${index + 1 < blocks ? " active" : ""}`}><i /></span>}
+          </div>;
+        })}
+      </div>)}
+      <span className={`blockchain-vertical-link${blocks > 5 ? " active" : ""}`} />
     </div>
     <div className="blockchain-binary" aria-hidden="true"><div className="blockchain-binary-track"><span>{CHAIN_BINARY}</span><span>{CHAIN_BINARY}</span></div></div>
   </div>
@@ -153,7 +157,7 @@ const saveRecords = (state: GameState) => {
 };
 
 const createFormationSlots = (section: number, sector: number, width: number, height: number) => {
-  const slots = formationLayout(section, width, height);
+  const slots = formationLayout(section, width, height, sector);
   return arrangeFormationBySize(slots, slots.map((_, index) => chooseCryptoid(sector, index).radius));
 };
 
@@ -209,7 +213,7 @@ const moveAsteroid = (asteroid: Asteroid, delta: number, width: number, height: 
   const point = entryPosition({ pattern: asteroid.entryPattern, progress, startX: asteroid.entryStartX, startY: asteroid.entryStartY, targetX: asteroid.entryTargetX, targetY: asteroid.entryTargetY, width, height, radius, side: asteroid.entrySide, index: asteroid.entryIndex });
   const ahead = entryPosition({ pattern: asteroid.entryPattern, progress: Math.min(1, progress + .01), startX: asteroid.entryStartX, startY: asteroid.entryStartY, targetX: asteroid.entryTargetX, targetY: asteroid.entryTargetY, width, height, radius, side: asteroid.entrySide, index: asteroid.entryIndex });
   const behind = entryPosition({ pattern: asteroid.entryPattern, progress: Math.max(0, progress - .01), startX: asteroid.entryStartX, startY: asteroid.entryStartY, targetX: asteroid.entryTargetX, targetY: asteroid.entryTargetY, width, height, radius, side: asteroid.entrySide, index: asteroid.entryIndex });
-  const bank = 18 * Math.tanh((ahead.x - behind.x) / (width * .025)) * Math.sin(Math.PI * progress);
+  const bank = 7 * Math.tanh((ahead.x - behind.x) / (width * .04)) * Math.sin(Math.PI * progress);
   return {
     ...asteroid,
     ...point,
