@@ -1,5 +1,5 @@
 import { levelDifficulty } from "./levelDifficulty.ts";
-import { sectionInSector, sectorForSection } from "./sectorManager.ts";
+import { sectionInSector, sectorForSection, sectorInChapter } from "./sectorManager.ts";
 import { bossForLevel, type BossConfig } from "./bossManifest.ts";
 
 export const BOSS_ENTRY_MS = 1_800;
@@ -76,5 +76,5 @@ export const advanceAfterClear = (section: number, encounter: ClearEncounter) =>
   } as const;
 };
 
-export const encounterHudLabel = (round: number, encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus") =>
-  encounter === "normal" ? `${round}/3` : encounter === "bonus" ? "BONUS" : "BOSS";
+export const encounterHudLabel = (sector: number, encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus") =>
+  encounter === "normal" ? `${sectorInChapter(sector)}/10` : encounter === "bonus" ? "BONUS" : "BOSS";

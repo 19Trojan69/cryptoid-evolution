@@ -43,11 +43,12 @@ test("a complete campaign level has nine ordinary sectors, one boss and one bonu
   assert.deepEqual(advanceAfterClear(section, "bonus"), { encounter: "normal", section: 31, sector: 11, resetChain: true });
 });
 
-test("HUD shows round fractions, then BOSS and BONUS instead of a fourth round", () => {
-  assert.deepEqual([1, 2, 3].map(round => encounterHudLabel(round, "normal")), ["1/3", "2/3", "3/3"]);
-  for (const encounter of ["boss-intro", "boss-fight", "boss-clear"]) assert.equal(encounterHudLabel(3, encounter), "BOSS");
-  assert.equal(encounterHudLabel(3, "bonus"), "BONUS");
-  assert.equal(encounterHudLabel(1, "normal"), "1/3");
+test("HUD shows nine sectors, the tenth boss and then bonus before restarting at sector one", () => {
+  assert.deepEqual(Array.from({ length: 9 }, (_, index) => encounterHudLabel(index + 1, "normal")), ["1/10", "2/10", "3/10", "4/10", "5/10", "6/10", "7/10", "8/10", "9/10"]);
+  for (const encounter of ["boss-intro", "boss-fight", "boss-clear"]) assert.equal(encounterHudLabel(10, encounter), "BOSS");
+  assert.equal(encounterHudLabel(10, "bonus"), "BONUS");
+  assert.equal(encounterHudLabel(11, "normal"), "1/10");
+  assert.equal(encounterHudLabel(19, "normal"), "9/10");
 });
 
 test("the boss enters visibly, stays in the upper field and remains reachable on phone and desktop", () => {
