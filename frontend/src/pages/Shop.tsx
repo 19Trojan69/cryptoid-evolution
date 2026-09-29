@@ -371,7 +371,6 @@ const Shop = () => {
         </div>
         <footer className="home-footer">
           <button type="button" className="text-button terms-entry" onClick={() => setTermsOpen(true)}>Nutzungsbedingungen / Terms of Service</button>
-          <img className="home-developer-logo" src="/trojan-wolf-games.webp" alt="Trojan Wolf Games" width="160" height="80" />
         </footer>
       </section>
 
