@@ -48,9 +48,9 @@ test("large enemies receive central slots while smaller enemies move to the side
   for (let index = 1; index < order.length; index += 1) assert.ok(order[index - 1].distance <= order[index].distance);
 });
 
-test("three rounds form a level and ten levels share one named region", () => {
-  assert.deepEqual([1, 2, 3, 4, 18, 19].map(sectorForSection), [1, 1, 1, 2, 6, 7]);
-  assert.deepEqual([1, 2, 3, 4].map(sectionInSector), [1, 2, 3, 1]);
+test("each section is one block and ten slots share one named level", () => {
+  assert.deepEqual([1, 2, 3, 4, 18, 19].map(sectorForSection), [1, 2, 3, 4, 18, 19]);
+  assert.deepEqual([1, 2, 3, 4].map(sectionInSector), [1, 1, 1, 1]);
   assert.equal(sectorName(10), "GENESIS BELT");
   assert.equal(sectorName(11), "CRYSTAL CHAIN");
   assert.equal(sectorName(51), "QUANTUM VAULT");
@@ -58,5 +58,5 @@ test("three rounds form a level and ten levels share one named region", () => {
   assert.equal(sectorChapter(500), 49);
   assert.deepEqual([1, 9, 10, 11, 20].map(campaignLevel), [1, 1, 1, 2, 2]);
   assert.deepEqual([1, 9, 10, 11, 20].map(sectorInChapter), [1, 9, 10, 1, 10]);
-  assert.equal(sectorForSection(901), 301);
+  assert.equal(sectorForSection(901), 901);
 });

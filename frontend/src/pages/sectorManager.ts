@@ -1,4 +1,5 @@
-export const SECTIONS_PER_SECTOR = 3;
+// One encounter per visible block. The tenth slot is the boss and bonus.
+export const SECTIONS_PER_SECTOR = 1;
 export const SECTION_INTRO_MS = 3_200;
 export const SECTION_CLEAR_MS = 5_800;
 export const ENTRY_GAP_MS = 220;

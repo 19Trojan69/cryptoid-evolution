@@ -6,41 +6,39 @@ test("the boss appears after the complete recorded three-signal warning", () => 
   assert.ok(BOSS_WARNING_MS > 4_833 && BOSS_WARNING_MS < 5_100);
 });
 
-test("three combat rounds lead to a boss only on every tenth level", () => {
-  assert.equal(nextAfterClear(1, "normal"), "round");
-  assert.equal(nextAfterClear(2, "normal"), "round");
-  assert.equal(nextAfterClear(3, "normal"), "section");
-  assert.equal(nextAfterClear(3, "normal", 9), "boss");
-  assert.equal(nextAfterClear(3, "normal", 499), "boss");
-  assert.equal(nextAfterClear(3, "normal", 501), "section");
-  assert.equal(nextAfterClear(3, "boss-clear"), "bonus");
-  assert.equal(nextAfterClear(3, "bonus"), "section");
+test("one combat encounter links a block, with the boss after block nine", () => {
+  assert.equal(nextAfterClear(1, "normal"), "section");
+  assert.equal(nextAfterClear(1, "normal", 9), "boss");
+  assert.equal(nextAfterClear(1, "normal", 499), "boss");
+  assert.equal(nextAfterClear(1, "normal", 501), "section");
+  assert.equal(nextAfterClear(1, "boss-clear"), "bonus");
+  assert.equal(nextAfterClear(1, "bonus"), "section");
 });
 
 test("level ten retains its level through boss and bonus", () => {
-  assert.deepEqual(advanceAfterClear(3, "normal"), { encounter: "normal", section: 4, sector: 2, resetChain: false });
-  assert.deepEqual(advanceAfterClear(27, "normal"), { encounter: "boss-intro", section: 30, sector: 10, resetChain: false });
-  assert.deepEqual(advanceAfterClear(30, "boss-clear"), { encounter: "bonus", section: 30, sector: 10, resetChain: false });
-  assert.deepEqual(advanceAfterClear(30, "bonus"), { encounter: "normal", section: 31, sector: 11, resetChain: true });
+  assert.deepEqual(advanceAfterClear(1, "normal"), { encounter: "normal", section: 2, sector: 2, resetChain: false });
+  assert.deepEqual(advanceAfterClear(9, "normal"), { encounter: "boss-intro", section: 10, sector: 10, resetChain: false });
+  assert.deepEqual(advanceAfterClear(10, "boss-clear"), { encounter: "bonus", section: 10, sector: 10, resetChain: false });
+  assert.deepEqual(advanceAfterClear(10, "bonus"), { encounter: "normal", section: 11, sector: 11, resetChain: true });
   for (let boss = 1; boss <= 50; boss++) {
-    assert.equal(advanceAfterClear(boss * 30 - 3, "normal").sector, boss * 10);
-    assert.equal(advanceAfterClear(boss * 30 - 3, "normal").encounter, "boss-intro");
+    assert.equal(advanceAfterClear(boss * 10 - 1, "normal").sector, boss * 10);
+    assert.equal(advanceAfterClear(boss * 10 - 1, "normal").encounter, "boss-intro");
   }
 });
 
-test("a complete campaign level has nine ordinary sectors, one boss and one bonus", () => {
+test("a complete campaign level has nine blocks, one boss and one bonus", () => {
   let section = 1;
   const ordinary = new Set();
-  for (let round = 0; round < 27; round++) {
-    ordinary.add(Math.ceil(section / 3));
+  for (let round = 0; round < 9; round++) {
+    ordinary.add(section);
     const next = advanceAfterClear(section, "normal");
     section = next.section;
-    if (round < 26) assert.equal(next.encounter, "normal");
-    else assert.deepEqual(next, { encounter: "boss-intro", section: 30, sector: 10, resetChain: false });
+    if (round < 8) assert.equal(next.encounter, "normal");
+    else assert.deepEqual(next, { encounter: "boss-intro", section: 10, sector: 10, resetChain: false });
   }
   assert.deepEqual([...ordinary], [1, 2, 3, 4, 5, 6, 7, 8, 9]);
   assert.equal(advanceAfterClear(section, "boss-clear").encounter, "bonus");
-  assert.deepEqual(advanceAfterClear(section, "bonus"), { encounter: "normal", section: 31, sector: 11, resetChain: true });
+  assert.deepEqual(advanceAfterClear(section, "bonus"), { encounter: "normal", section: 11, sector: 11, resetChain: true });
 });
 
 test("the boss enters visibly, stays in the upper field and remains reachable on phone and desktop", () => {

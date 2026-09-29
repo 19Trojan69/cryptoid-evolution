@@ -226,6 +226,7 @@ const Shop = () => {
     else setHangarMessage("");
   };
   const enterGame = () => {
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     if (adminMode) sessionStorage.setItem(ADMIN_START_SECTOR_KEY, String(Number.isInteger(startSector) ? Math.min(MAX_DIFFICULTY_LEVEL, Math.max(1, startSector)) : 1));
     else sessionStorage.removeItem(ADMIN_START_SECTOR_KEY);
     primeGameAudio(); requestGameFullscreen(); navigate("/game");
@@ -345,7 +346,7 @@ const Shop = () => {
           <p className="hero-tagline">Defend Earth. <span>Evolve your power.</span></p>
           <p className="hero-description">{t('Build your streak, master the grid, and become the force Earth needs.')}</p>
           <div className="home-mission-brief" aria-label={t("Your Progress")}><span className="home-mission-marker" aria-hidden="true">◆</span><span><small>{t("Genesis sector")} · {t("EQUIPPED")}</small><strong>{selected.skin.name} <em>· {t(selected.color.name)} · {selectedStage === 1 ? "STANDARD" : selectedStage === 2 ? "ADVANCED" : "ELITE"}</em></strong></span>{records.bestScore > 0 && <span className="home-mission-best"><small>{t("Best score")}</small><strong>{records.bestScore.toLocaleString()}</strong></span>}</div>
-          {adminMode && <label className="admin-level-picker">Testlevel (1–{MAX_DIFFICULTY_LEVEL}) <input type="number" min="1" max={MAX_DIFFICULTY_LEVEL} value={startSector} onChange={event => setStartSector(Number(event.target.value))} onBlur={() => setStartSector(value => Number.isInteger(value) ? Math.min(MAX_DIFFICULTY_LEVEL, Math.max(1, value)) : 1)} /></label>}
+          {adminMode && <div className="admin-level-picker" aria-label="Admin-Teststart"><label>Level <select value={Math.floor((startSector - 1) / 10) + 1} onChange={event => setStartSector((Number(event.target.value) - 1) * 10 + (startSector - 1) % 10 + 1)}>{Array.from({ length: MAX_DIFFICULTY_LEVEL / 10 }, (_, index) => <option key={index} value={index + 1}>{index + 1}</option>)}</select></label><label>Start bei <select value={(startSector - 1) % 10 + 1} onChange={event => setStartSector((Math.floor((startSector - 1) / 10) * 10) + Number(event.target.value))}>{Array.from({ length: 9 }, (_, index) => <option key={index} value={index + 1}>Block {index + 1}</option>)}<option value="10">Boss</option></select></label></div>}
           <div className="hero-actions">
             <div className="home-launch">
               <div className="home-launch-bay" role="img" aria-label={`${selected.skin.name} · ${t(selected.color.name)}`}>
