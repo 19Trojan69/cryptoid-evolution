@@ -980,6 +980,7 @@ html[data-motion="reduced"] .shooting-star { display: none; }
 .game-coach button { min-height: 30px; padding: 3px 11px; border: 1px solid rgba(115, 233, 215, .5); background: rgba(5, 32, 45, .86); color: #c2f6eb; font: 10px 'DM Mono', monospace; cursor: pointer; pointer-events: auto; }
 .game-coach button:hover { background: rgba(21, 87, 80, .95); }
 .cryptoid-hit .fleet-sprite { filter: brightness(2.2) drop-shadow(0 0 9px #a8faff); }
+.cryptoid-hit .ship-visual { filter: brightness(2.2) drop-shadow(0 0 9px #a8faff); }
 /* Flame layers use the same alpha mask and alignment as the actual ship art.
    Their glow and tongues cannot paint outside the visible hull. */
 .hull-fire-layer { position: absolute; z-index: 3; inset: 0; pointer-events: none; mask-mode: alpha; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }

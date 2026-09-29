@@ -193,6 +193,19 @@ export const enemySprite = (shipClass: CryptoidClass, formationSlot: number, sec
   return choices[Math.abs(formationSlot) % unlocked];
 };
 
+// A block draws from the full shop fleet. The strides visit every hull before
+// repeating and give even the late six-ship reinforcement distinct models.
+// Nine current shop paints plus three legacy paints cover all twelve ships in
+// a late block without repeating a colour across its two flights.
+const enemyColors: readonly PlayerColorId[] = [
+  ...playerColors.map(color => color.id), "violet", "cyan", "orange",
+];
+
+export const enemyAppearance = (sector: number, index: number) => ({
+  sprite: playerSkins[(((Math.max(1, sector) - 1) * 6 + index) * 7) % playerSkins.length].sprite,
+  color: enemyColors[((Math.max(1, sector) - 1) * 5 + index * 7) % enemyColors.length],
+});
+
 export const spriteStyle = (index: number): CSSProperties => ({
   backgroundImage: `url(${FLEET_IMAGE})`,
   backgroundPosition: `${(index % 4) * 100 / 3}% ${Math.floor(index / 4) * 25}%`,
