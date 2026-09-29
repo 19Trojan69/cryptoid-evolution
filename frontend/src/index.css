@@ -303,9 +303,11 @@ html[data-motion="reduced"] .level-twinkles i { animation: none; opacity: .42; }
 .game-level-hud strong { color: #a9f7ff; }
 .round-hud strong { color: #ffe19c; }
 .chain-hud { gap: 3px; }
-.chain-blocks { display: flex; justify-content: center; gap: 3px; height: 5px; }
-.chain-blocks i { width: 9px; height: 5px; border: 1px solid #537477; border-radius: 1px; background: #243740; }
+.chain-blocks { display: flex; align-items: center; justify-content: center; gap: 0; height: 6px; }
+.chain-blocks i { flex: 0 0 auto; width: 5px; height: 6px; border: 1px solid #537477; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); background: #243740; }
 .chain-blocks i.linked { border-color: #edc369; background: #edc369; box-shadow: 0 0 5px #edc36988; }
+.chain-blocks b { flex: 0 0 auto; width: 4px; height: 3px; border: 1px solid #537477; border-radius: 50%; }
+.chain-blocks b.linked { border-color: #86eeff; background: #318bff; box-shadow: 0 0 5px #67e9ff; }
 .coin-stat strong { color: var(--gold); }
 .hearts { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; color: #ed6976 !important; white-space: nowrap; }
 .heart-icons { color: inherit !important; font-size: 16px !important; letter-spacing: 1px !important; text-transform: none !important; }
@@ -1034,8 +1036,9 @@ html[data-motion="reduced"] .hull-fire { animation: none; }
   .score-hud .hud-coin-inline { display: none; }
   .hearts-stat .heart-icons { display: none; }
   .hearts-stat .hearts small { font-size: 13px; color: #ff8da2; }
-  .chain-blocks { gap: 1px; height: 3px; }
-  .chain-blocks i { width: 5px; height: 3px; }
+  .chain-blocks { gap: 0; height: 4px; }
+  .chain-blocks i { width: 2.5px; height: 4px; }
+  .chain-blocks b { width: 1.5px; height: 2px; }
   .pause-control { height: 40px; }
   .game-label { top: calc(max(4px, env(safe-area-inset-top)) + 48px); font-size: 7px; }
   .power-status { top: calc(max(4px, env(safe-area-inset-top)) + 63px); }
@@ -1373,10 +1376,9 @@ html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-
   .game-hud .score-hud .hud-coin-inline { font-size: 9px; }
   .game-hud .hud-heart-label svg { width: 13px; height: 13px; }
   .game-hud .hearts-stat .hearts { font-size: clamp(14px, 4vw, 17px); }
-  .game-hud .chain-blocks { gap: 2px; height: 4px; }
-.game-hud .chain-blocks i { width: 7px; height: 4px; }
-.game-hud .chain-blocks { gap: 1px; }
-.game-hud .chain-blocks i { width: 3px; }
+  .game-hud .chain-blocks { gap: 0; height: 4px; }
+  .game-hud .chain-blocks i { width: 2.5px; height: 4px; }
+  .game-hud .chain-blocks b { width: 1.5px; height: 2px; }
   .game-hud .hud-actions .home-control, .game-hud .pause-control { width: 40px; min-width: 40px; height: 40px; min-height: 40px; }
 }
 
