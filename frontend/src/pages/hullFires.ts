@@ -1,6 +1,11 @@
 export type HullFire = { id: number; x: number; y: number };
 type FireSite = readonly [number, number];
 
+// Keep each established flame mounted and burning until its ship is destroyed.
+// Further impacts may add sites as damage rises, but never replace old flames.
+export const addPersistentHullFire = (fires: readonly HullFire[] = [], next: HullFire, maxFires = 4): HullFire[] =>
+  fires.length < maxFires ? [...fires, next] : [...fires];
+
 // Opaque pixels sampled across each ship's nose, wings, engines and center in
 // the 4-by-5 atlas. The enemies rotate 180 degrees when rendered.
 const atlasSites: readonly (readonly FireSite[])[] = [

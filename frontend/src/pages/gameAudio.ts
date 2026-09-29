@@ -36,6 +36,8 @@ export class GameAudio {
   private lastShotAt = 0;
   private destroyCount = 0;
 
+  get running() { return this.context?.state === "running"; }
+
   async start() {
     if (typeof AudioContext === "undefined") return false;
     if (!this.context) {

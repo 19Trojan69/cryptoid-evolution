@@ -3,6 +3,7 @@ import platformAPIClient from "../services/platformAPIClient";
 import { findOffer, shipUpgradePrerequisite } from "../hangarCatalog";
 import "../types/session";
 import { isAdminMode } from "../adminAccess";
+import { testPiPurchaseAllowed } from "../paymentPolicy";
 
 const identifier = (value: unknown) => typeof value === "string" && /^[a-zA-Z0-9_-]{1,100}$/.test(value) ? value : null;
 const fetchPayment = async (id: string) => (await platformAPIClient.get(`/v2/payments/${id}`)).data;
@@ -20,6 +21,7 @@ export default function mountPaymentsEndpoints(router: Router) {
       if (!offer || payment.identifier !== id || payment.user_uid !== uid || payment.direction !== "user_to_app" || payment.amount !== offer.pricePi || payment.status?.cancelled || payment.status?.user_cancelled) {
         return res.status(400).json({ error: "Payment does not match the signed-in user and catalog price" });
       }
+      if (!testPiPurchaseAllowed(offer, payment.network)) return res.status(403).json({ error: "Only weapon shots may be purchased with Test-Pi during Testnet testing" });
       const orders = req.app.locals.orderCollection;
       const existing = await orders.findOne({ pi_payment_id: id });
       if (existing && (existing.user !== uid || existing.product_id !== offer.id || existing.cancelled)) return res.status(409).json({ error: "Payment already assigned or cancelled" });
@@ -46,6 +48,7 @@ export default function mountPaymentsEndpoints(router: Router) {
       const payment = await fetchPayment(id);
       const offer = findOffer(order.product_id);
       const txid = payment.transaction?.txid;
+      if (!testPiPurchaseAllowed(offer, payment.network)) return res.status(403).json({ error: "Only Test-Pi weapon payments are enabled" });
       if (!offer || payment.identifier !== id || payment.user_uid !== uid || payment.metadata?.productId !== offer.id || payment.direction !== "user_to_app" || payment.amount !== offer.pricePi || !payment.status?.developer_approved || payment.status?.cancelled || payment.status?.user_cancelled || !payment.status?.transaction_verified || !txid || (suppliedTxid && suppliedTxid !== txid)) {
         return res.status(400).json({ error: "Payment not verified" });
       }

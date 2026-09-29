@@ -213,6 +213,7 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 
 .game-shell { width: 100%; height: 100dvh; overflow: hidden; background: #030e1b; color: #f0f7f5; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: none; overscroll-behavior: none; }
 .game-field { position: relative; width: 100%; height: 100%; overflow: clip; isolation: isolate; touch-action: none; -webkit-touch-callout: none; background: radial-gradient(circle at 50% 78%, rgba(18, 87, 91, .24), transparent 24%), linear-gradient(180deg, #020b19 0%, #061d32 60%, #082c3a 100%); }
+.audio-retry { position: absolute; z-index: 12; top: max(118px, calc(env(safe-area-inset-top) + 88px)); left: 50%; transform: translateX(-50%); min-height: 44px; padding: 7px 18px; border: 1px solid #79dcd8; border-radius: 22px; background: #08263dec; box-shadow: 0 0 12px #67d9e478; color: #f1ffff; font: 700 14px 'Oxanium', sans-serif; white-space: nowrap; cursor: pointer; }
 .starfield { position: absolute; inset: -3%; z-index: 0; overflow: hidden; pointer-events: none; transform: translate3d(var(--star-parallax-x), var(--star-parallax-y), 0); }
 /* Single compact boss cloud, kept between the boss and the player. */
 .nebula-field { position: absolute; inset: 0; overflow: hidden; pointer-events: none; contain: paint; }
@@ -424,8 +425,8 @@ html[data-motion="reduced"] .cube-spark, html[data-motion="reduced"] .blockchain
 @keyframes formation-data-flow { from { transform: translateX(-50%); } to { transform: translateX(0); } }
 .formation-target { position: absolute; z-index: 0; transform: translate(-50%, -50%); border: 1px solid rgba(109, 228, 255, .7); border-radius: 50%; background: radial-gradient(circle, rgba(126, 244, 255, .16) 0 10%, transparent 12% 48%, rgba(92, 186, 255, .1) 50% 57%, transparent 59%); box-shadow: 0 0 10px rgba(97, 222, 255, .45), inset 0 0 12px rgba(139, 102, 255, .28); opacity: .78; pointer-events: none; animation: formation-target-pulse .72s ease-in-out infinite alternate; }
 .formation-target::before { position: absolute; inset: 12%; border: 1px dashed rgba(187, 142, 250, .72); border-radius: 50%; content: ''; animation: formation-target-spin 2.4s linear infinite; }
-.formation-target::after { position: absolute; top: 50%; left: 50%; width: 132%; height: 1px; transform: translate(-50%, -50%); background: linear-gradient(90deg, transparent, rgba(111, 234, 255, .72), transparent); content: ''; }
-.formation-target span { position: absolute; top: 50%; left: 50%; width: 1px; height: 132%; transform: translate(-50%, -50%); background: linear-gradient(transparent, rgba(111, 234, 255, .72), transparent); }
+.formation-target::after { position: absolute; top: 50%; left: 50%; width: 108%; height: 1px; transform: translate(-50%, -50%); background: linear-gradient(90deg, transparent, rgba(111, 234, 255, .72), transparent); content: ''; }
+.formation-target span { position: absolute; top: 50%; left: 50%; width: 1px; height: 108%; transform: translate(-50%, -50%); background: linear-gradient(transparent, rgba(111, 234, 255, .72), transparent); }
 .formation-target-locked { border-color: rgba(247, 207, 104, .95); box-shadow: 0 0 16px rgba(247, 207, 104, .72), inset 0 0 15px rgba(247, 207, 104, .22); animation: formation-target-lock .48s ease-out both; }
 .formation-target-locked::before { border-color: rgba(247, 207, 104, .82); }
 .formation-target-locked::before { animation: none; }
@@ -979,6 +980,7 @@ html[data-motion="reduced"] .shooting-star { display: none; }
 .game-coach button { min-height: 30px; padding: 3px 11px; border: 1px solid rgba(115, 233, 215, .5); background: rgba(5, 32, 45, .86); color: #c2f6eb; font: 10px 'DM Mono', monospace; cursor: pointer; pointer-events: auto; }
 .game-coach button:hover { background: rgba(21, 87, 80, .95); }
 .cryptoid-hit .fleet-sprite { filter: brightness(2.2) drop-shadow(0 0 9px #a8faff); }
+.cryptoid-hit .ship-visual { filter: brightness(2.2) drop-shadow(0 0 9px #a8faff); }
 /* Flame layers use the same alpha mask and alignment as the actual ship art.
    Their glow and tongues cannot paint outside the visible hull. */
 .hull-fire-layer { position: absolute; z-index: 3; inset: 0; pointer-events: none; mask-mode: alpha; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
@@ -1275,6 +1277,22 @@ html[data-motion="reduced"] .landing-shell .hero-actions .home-play-button { ani
 .landing-shell .upgrade-section .section-heading { border-bottom: 1px solid #76cfe04f; padding-bottom: 12px; }
 .landing-shell .upgrade-section .section-line { background: linear-gradient(90deg, #ffad7b, transparent); }
 .landing-shell .progress-card .progress-row strong, .landing-shell .streak-number { color: #ffe0a3; font: 800 clamp(22px, 4vw, 40px) 'Oxanium', sans-serif; }
+.testnet-shop-notice, .ship-lock-notice { display: block; margin: 10px 0; padding: 8px 11px; border: 1px solid #e7b9698c; border-radius: 7px; background: #49341d6b; color: #ffe1a2; font: 700 13px/1.4 'Rajdhani', sans-serif; }
+.reward-collection { grid-column: 1 / -1; }
+.reward-collection h3 { margin: 8px 0; color: #ffd48e; font: 800 29px 'Oxanium', sans-serif; }
+.reward-collection h4 { margin: 20px 0 10px; color: #e5f9ff; font: 700 16px 'Oxanium', sans-serif; }
+.reward-collection p, .reward-collection > small { color: #bcd6e5; }
+.reward-milestones { display: flex; flex-wrap: wrap; gap: 8px; }
+.reward-milestones span { padding: 6px 11px; border: 1px solid #596c84; border-radius: 20px; color: #8899aa; }
+.reward-milestones .earned { border-color: #f6c882; color: #ffe4a5; background: #8b602a45; }
+.boss-sticker-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(82px, 1fr)); gap: 9px; }
+.boss-sticker { position: relative; display: grid; align-content: center; justify-items: center; min-height: 93px; padding: 7px; border: 1px solid #52677b; border-radius: 9px; background: #102239; color: #8ca6b8; }
+.boss-sticker-earned { border-color: #d1ad6c; background: radial-gradient(circle at 50% 35%, #304c69, #111d34); color: #ffe6b4; }
+.boss-sticker img { width: 100%; height: 55px; object-fit: contain; }
+.boss-sticker > span { font: 800 30px 'Oxanium', sans-serif; opacity: .45; }
+.boss-sticker small { font: 700 11px 'Oxanium', sans-serif; }
+.boss-sticker b { font-size: 10px; letter-spacing: 1px; }
+.reward-unlock { display: block; margin: 8px auto 0; padding: 5px 10px; color: #ffe3a1; border: 1px solid #ddb86d; border-radius: 8px; background: #172d46d9; text-shadow: 0 0 12px #f9c46c; }
 .landing-shell .progress-track { height: 7px; background: #18314c; }
 .landing-shell .progress-track span { background: linear-gradient(90deg, #42e5c7, #f1b97b); box-shadow: 0 0 11px #55dfcb; }
 .landing-shell .leaderboard-section { padding: clamp(16px, 4vw, 36px); }
@@ -1299,7 +1317,7 @@ html[data-motion="reduced"] .landing-shell .hero-actions .home-play-button { ani
 .landing-shell :is(.info-panel-content, .signin-modal) > p:not(.eyebrow) { color: #cfdeea; font-size: 16px; line-height: 1.45; }
 .landing-shell .guide-panel-content { width: min(100%, 720px); max-height: calc(100dvh - 32px); display: flex; flex-direction: column; padding: clamp(20px, 4vw, 34px); }
 .guide-panel-content .guide-lead { margin: 0 44px 16px 0; }
-.guide-topics { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 7px; margin-bottom: 16px; }
+.guide-topics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; margin-bottom: 16px; flex-shrink: 0; }
 .guide-topic { min-height: 45px; padding: 7px 9px; border: 1px solid #5b8ea6; background: #102942; color: #d1e6f3; font: 700 12px/1.2 'Rajdhani', sans-serif; letter-spacing: .035em; cursor: pointer; }
 .guide-topic:hover, .guide-topic:focus-visible { border-color: #73e8ec; color: #fff; }
 .guide-topic.is-active { border-color: #84eff2; background: linear-gradient(140deg, #1b6074, #194461); color: #fff; box-shadow: inset 0 2px #8bf7ef, 0 0 15px #3cc9e843; }
@@ -1309,12 +1327,12 @@ html[data-motion="reduced"] .landing-shell .hero-actions .home-play-button { ani
 .guide-detail ul { display: grid; gap: 10px; margin: 0; padding-left: 20px; line-height: 1.48; }
 .guide-detail li::marker { color: #70e5de; }
 .guide-panel-content .guide-start { align-self: flex-start; display: inline-flex; align-items: center; justify-content: center; gap: 16px; margin-top: 20px; flex-shrink: 0; }
-.guide-start svg { width: 20px; height: 20px; }
+.guide-start-icon { display: inline-grid; place-items: center; width: 32px; height: 32px; color: #24334a; }
+.guide-start-icon svg { width: 32px; height: 32px; }
 @media (max-width: 560px) {
   .info-panel { padding: 12px; }
   .landing-shell .guide-panel-content { max-height: calc(100dvh - 24px); }
   .guide-topics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-bottom: 12px; }
-  .guide-topic:last-child:nth-child(odd) { grid-column: 1 / -1; }
   .guide-panel-content .guide-start { width: 100%; margin-top: 14px; }
 }
 .landing-shell .terms-dialog pre { color: #e4eef4; }
@@ -1732,7 +1750,94 @@ html[data-motion="reduced"] .home-battle-bolt, html[data-motion="reduced"] .home
 @media (max-width: 700px) {
   html[data-motion="reduced"] .landing-shell .home-battle .home-raid-ship-1 { left: 18%; top: 55%; }
   html[data-motion="reduced"] .landing-shell .home-battle .home-raid-ship-2 { left: 47%; top: 52%; }
-  html[data-motion="reduced"] .landing-shell .home-battle .home-raid-ship-3 { left: 72%; top: 55%; }
+html[data-motion="reduced"] .landing-shell .home-battle .home-raid-ship-3 { left: 72%; top: 55%; }
+
+/* The home preview lives in its own clear strip, above the launch controls.
+   A new fleet arrives every 32 seconds instead of replaying one short shot. */
+.landing-shell .home-combat-preview { position: relative; isolation: isolate; flex: 0 1 auto; width: min(100%, 540px); height: clamp(190px, 26dvh, 270px); min-height: 160px; margin: 12px 0 0; overflow: hidden; pointer-events: none; background: radial-gradient(ellipse at 49% 44%, #1837555c, transparent 66%); }
+.home-combat-preview::before { position: absolute; inset: 5% 0; border-top: 1px solid #93d9e523; border-bottom: 1px solid #93d9e523; background: linear-gradient(90deg, transparent, #12395730 40%, transparent); content: ''; }
+.home-combat-scene { position: absolute; inset: 0; }
+.home-combat-ship { position: absolute; z-index: 2; display: block; width: clamp(62px, 16%, 88px); aspect-ratio: 1; opacity: 0; filter: drop-shadow(0 2px 4px #020917) drop-shadow(0 0 8px var(--combat-glow)); will-change: left, top, transform; }
+.home-combat-body { position: absolute; inset: 0; display: block; }
+.home-combat-enemy .home-combat-body { transform: rotate(180deg); }
+.home-combat-hull { position: absolute; z-index: 2; inset: 0; display: block; background-position: center; background-size: 100% 100%; background-repeat: no-repeat; }
+.home-combat-ship::before { position: absolute; z-index: 0; inset: 21% 11%; border-radius: 50%; background: radial-gradient(ellipse, #020e1dbb, transparent 72%); filter: blur(5px); content: ''; }
+.home-combat-engine { position: absolute; z-index: 1; top: calc(var(--nozzle-y) - 2px); left: var(--nozzle-x); width: var(--nozzle-width); min-width: 2px; height: 22%; transform: translateX(-50%); transform-origin: 50% 0; background: linear-gradient(var(--flame-core), var(--flame-mid) 28%, var(--flame-tail) 65%, transparent); filter: drop-shadow(0 2px 3px var(--flame-glow)); clip-path: polygon(12% 0, 88% 0, 82% 18%, 100% 34%, 72% 69%, 55% 100%, 48% 78%, 34% 94%, 27% 64%, 0 34%, 18% 18%); animation: home-combat-thrust .72s ease-in-out infinite alternate; }
+.home-combat-engine:nth-child(even) { animation-delay: -.26s; }
+@keyframes home-combat-thrust { from { opacity: .68; scale: 1 .76; } to { opacity: 1; scale: 1 1.12; } }
+.home-combat-enemy-1 { animation: home-combat-enemy-left 32s ease-in-out both; }
+.home-combat-enemy-2 { animation: home-combat-enemy-right 32s ease-in-out both; }
+.home-combat-ally-1 { width: clamp(72px, 19%, 104px); animation: home-combat-defender 32s ease-in-out both; }
+@keyframes home-combat-enemy-left {
+  0% { left: 22%; top: 26%; opacity: 1; transform: translate(-50%, -50%); }
+  13%, 27% { left: 22%; top: 26%; opacity: 1; transform: translate(-50%, -50%) rotate(0); }
+  40% { left: 40%; top: 61%; opacity: 1; transform: translate(-50%, -50%) rotate(-24deg) scale(1.05); }
+  55% { left: 54%; top: 42%; opacity: 1; transform: translate(-50%, -50%) rotate(42deg); }
+  76%, 88% { left: 22%; top: 24%; opacity: 1; transform: translate(-50%, -50%) rotate(0); }
+  100% { left: 22%; top: 26%; opacity: 1; transform: translate(-50%, -50%); }
+}
+@keyframes home-combat-enemy-right {
+  0% { left: 75%; top: 25%; opacity: 1; transform: translate(-50%, -50%); }
+  18%, 30% { left: 75%; top: 25%; opacity: 1; transform: translate(-50%, -50%); }
+  42% { left: 63%; top: 54%; opacity: 1; transform: translate(-50%, -50%) rotate(24deg); }
+  62% { left: 88%; top: 63%; opacity: 1; transform: translate(-50%, -50%) rotate(-33deg); }
+  80%, 89% { left: 75%; top: 25%; opacity: 1; transform: translate(-50%, -50%); }
+  100% { left: 75%; top: 25%; opacity: 1; transform: translate(-50%, -50%); }
+}
+@keyframes home-combat-defender {
+  0%, 17% { left: 39%; top: 78%; opacity: 1; transform: translate(-50%, -50%); }
+  37% { left: 30%; top: 77%; opacity: 1; transform: translate(-50%, -50%) rotate(-10deg); }
+  57% { left: 57%; top: 80%; opacity: 1; transform: translate(-50%, -50%) rotate(13deg); }
+  78% { left: 42%; top: 75%; opacity: 1; transform: translate(-50%, -50%) rotate(-8deg); }
+  100% { left: 39%; top: 78%; opacity: 1; transform: translate(-50%, -50%); }
+}
+.home-combat-weapons { position: absolute; z-index: 4; inset: 0; display: block; --cadence: 4.8s; --flight-y: -125px; }
+.home-combat-enemy .home-combat-weapons { --flight-y: 125px; }
+.home-combat-shot { position: absolute; left: var(--muzzle-x); top: 9%; display: block; width: 3px; height: 19px; border-radius: 3px; opacity: 0; background: linear-gradient(transparent, #baffff, #63d7ff); box-shadow: 0 0 6px #8df3ff, 0 0 12px #4baaff; animation: home-combat-fire var(--cadence) linear var(--shot-delay) infinite; }
+.home-combat-enemy .home-combat-shot { top: 87%; background: linear-gradient(#fff0c9, #ff9b60, transparent); box-shadow: 0 0 6px #ffab69, 0 0 13px #ed647d; }
+.home-combat-shot:nth-child(1) { --muzzle-x: 38%; --drift-x: -13px; --shot-delay: -.8s; }
+.home-combat-shot:nth-child(2) { --muzzle-x: 62%; --drift-x: 13px; --shot-delay: -.56s; }
+.home-combat-shot:nth-child(3) { --muzzle-x: 50%; --drift-x: 0px; --shot-delay: -.32s; }
+.home-combat-pattern-1 { --cadence: 3.7s; }
+.home-combat-pattern-1 .home-combat-shot:nth-child(1) { --shot-delay: -1.2s; }
+.home-combat-pattern-1 .home-combat-shot:nth-child(2) { --shot-delay: -2.45s; }
+.home-combat-pattern-1 .home-combat-shot:nth-child(3) { --shot-delay: -3.3s; }
+.home-combat-pattern-2 { --cadence: 5.6s; }
+.home-combat-pattern-2 .home-combat-shot:nth-child(1) { --shot-delay: -1.3s; --drift-x: -24px; }
+.home-combat-pattern-2 .home-combat-shot:nth-child(2) { --shot-delay: -1.36s; --drift-x: 24px; }
+.home-combat-pattern-2 .home-combat-shot:nth-child(3) { --shot-delay: -1.42s; }
+@keyframes home-combat-fire {
+  0%, 7% { opacity: 0; transform: translate(0, 0) scaleY(.5); }
+  8% { opacity: 1; transform: translate(0, 0) scaleY(1); }
+  17% { opacity: .95; transform: translate(var(--drift-x), var(--flight-y)) scaleY(1.1); }
+  19%, 100% { opacity: 0; transform: translate(var(--drift-x), var(--flight-y)) scaleY(.4); }
+}
+.home-combat-impact { position: absolute; z-index: 5; width: 35px; height: 35px; border-radius: 50%; opacity: 0; background: radial-gradient(circle, white 0 9%, #ffed9d 18%, #ff7b45 34%, #ff623b66 51%, transparent 72%); filter: drop-shadow(0 0 8px #ffa45b); animation: home-combat-impact 32s ease-out both; }
+.home-combat-impact-1 { left: 37%; top: 46%; }
+.home-combat-impact-2 { left: 67%; top: 52%; animation-delay: -8s; }
+@keyframes home-combat-impact { 0%, 39% { opacity: 0; transform: scale(.2); } 41% { opacity: 1; transform: scale(.85); } 45%, 100% { opacity: 0; transform: scale(1.8); } }
+@media (max-width: 700px) {
+  .landing-shell .home-combat-preview { width: 100%; height: clamp(160px, 23dvh, 210px); min-height: 145px; margin-top: 9px; }
+  .home-combat-ship { width: clamp(58px, 18%, 76px); }
+  .home-combat-ally-1 { width: clamp(68px, 21%, 88px); }
+  .landing-shell .hero-actions { margin-top: auto; }
+  .landing-shell .hero-actions .home-launch { justify-content: end; }
+}
+@media (max-width: 700px) and (max-height: 680px) {
+  .landing-shell .home-combat-preview { height: 140px; min-height: 125px; margin-top: 3px; }
+  .home-combat-ship { width: 55px; }
+  .home-combat-ally-1 { width: 65px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-combat-ship, .home-combat-engine, .home-combat-engine::after, .home-combat-shot, .home-combat-impact { animation: none; }
+  .home-combat-enemy-1 { left: 22%; top: 25%; opacity: 1; transform: translate(-50%, -50%); }
+  .home-combat-enemy-2 { left: 75%; top: 25%; opacity: 1; transform: translate(-50%, -50%); }
+  .home-combat-ally-1 { left: 39%; top: 78%; opacity: 1; transform: translate(-50%, -50%); }
+}
+html[data-motion="reduced"] .home-combat-ship, html[data-motion="reduced"] .home-combat-engine, html[data-motion="reduced"] .home-combat-engine::after, html[data-motion="reduced"] .home-combat-shot, html[data-motion="reduced"] .home-combat-impact { animation: none; }
+html[data-motion="reduced"] .home-combat-enemy-1 { left: 22%; top: 25%; opacity: 1; transform: translate(-50%, -50%); }
+html[data-motion="reduced"] .home-combat-enemy-2 { left: 75%; top: 25%; opacity: 1; transform: translate(-50%, -50%); }
+html[data-motion="reduced"] .home-combat-ally-1 { left: 39%; top: 78%; opacity: 1; transform: translate(-50%, -50%); }
 }
 
 /* One selected ship, one preview, and its color and purchase controls. */
@@ -1842,13 +1947,15 @@ html[data-motion="reduced"] .home-battle-bolt, html[data-motion="reduced"] .home
   color: #dceeff;
 }
 
-.admin-level-picker input {
-  width: 90px;
+.admin-level-picker label { display: flex; align-items: center; gap: 6px; }
+.admin-level-picker select {
+  min-width: 85px;
   padding: 8px;
   border: 1px solid #58b6d4;
   border-radius: 8px;
   color: #fff;
   background: #13243b;
+  font-size: 16px;
 }
 
 /* Boss-only neon arsenal: visually distinct from normal enemy fire. */

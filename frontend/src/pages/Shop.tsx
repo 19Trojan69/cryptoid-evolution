@@ -7,7 +7,7 @@ import { useAuth } from "../hooks/useAuth";
 import { usePayments } from "../hooks/usePayments";
 import { axiosClient } from "../lib/axiosClient.ts";
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "./GamePage.tsx";
-import { allPlayerColors, buyShipVariant, enemySprite, EXTRA_STARTER_PRICE, fleetCount, playerColors, playerSkins, readShipFleet, savedShipColors, selectedShip, shardBalance, ADMIN_SHIP_COLOR_KEY, ADMIN_SHIP_SKIN_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyle, spriteStyle, type PlayerColorId, type ShipFleet } from "./shipFleet";
+import { allPlayerColors, buyShipVariant, EXTRA_STARTER_PRICE, fleetCount, playerColors, playerSkins, readShipFleet, savedShipColors, selectedShip, shardBalance, testnetStandardHullAvailable, ADMIN_SHIP_COLOR_KEY, ADMIN_SHIP_SKIN_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, type PlayerColorId, type ShipFleet } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
 import { ownedShipStage, shipEvolutionAsset, type ShipStage } from "./shipEvolution";
 import { shipPreviewPlacement } from "./shipPreviewPlacement";
@@ -16,9 +16,10 @@ import TermsDialog from "../components/TermsDialog";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
 import { primeGameAudio } from "./gameAudio";
 import { DEFAULT_EFFECTS_VOLUME, DEFAULT_MUSIC_VOLUME, EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, resetAudioVolumeDefaults } from "./musicPreferences";
-import { MusicPlayer } from "./musicPlayback";
+import { handoffGameMusic, MusicPlayer } from "./musicPlayback";
 import MusicVolumeSlider from "./MusicVolumeSlider";
 import Starfield from "./Starfield";
+import HomeCombatPreview from "./HomeCombatPreview";
 import GameGuide from "./GameGuide";
 import { languages, useLocale, type Locale } from "../i18n";
 import EarthGlobe from "./EarthGlobe";
@@ -27,6 +28,7 @@ import { requestGameFullscreen } from "./gameFullscreen";
 import { MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { powerUpSymbols, type PowerUpType } from "./powerUps";
 import { CONTROL_HAND_KEY, CONTROL_SENSITIVITY_KEY, CONTROL_ZONE_KEY, SHIP_START_KEY, readControlHand, readControlSensitivity, readControlZone, readShipStart, type ControlHand, type ControlSensitivity, type ControlZone, type ShipStart } from "./controlPreferences";
+import { BOSS_STICKER_COUNT, CHAIN_MILESTONES, readRewardProgress, REWARD_PROGRESS_KEY, rewardRank } from "./rewardProgress";
 
 type Offer = { id: string; kind: "weapon" | "power" | "armor" | "ship_upgrade"; name: string; description: string; pricePi: number; shipIndex?: number; stage?: 2 | 3 };
 type Inventory = { ownedWeapons: string[]; ownedArmor: string[]; ownedShipUpgrades?: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
@@ -81,14 +83,13 @@ const Shop = () => {
   const [leaders, setLeaders] = useState<Leader[]>([]);
   const [leadersStatus, setLeadersStatus] = useState<"loading" | "ready" | "error">("loading");
   const [personalBest, setPersonalBest] = useState<number | null>(null);
-  const [musicEnabled, setMusicEnabled] = useState(true);
-  const musicEnabledRef = useRef(true);
-  // Entering the homescreen starts a fresh session with music enabled.
-  useEffect(() => { localStorage.setItem(MUSIC_STORAGE_KEY, "on"); }, []);
+  const [musicEnabled, setMusicEnabled] = useState(() => localStorage.getItem(MUSIC_STORAGE_KEY) !== "off");
+  const musicEnabledRef = useRef(musicEnabled);
   const [musicVolume, setMusicVolume] = useState(DEFAULT_MUSIC_VOLUME);
   const [effectsVolume, setEffectsVolume] = useState(DEFAULT_EFFECTS_VOLUME);
   useEffect(() => { resetAudioVolumeDefaults(); }, []);
   const homeMusicRef = useRef<MusicPlayer | null>(null);
+  const musicHandedOffRef = useRef(false);
   useEffect(() => {
     const music = new MusicPlayer("/audio/home-galactic-chain.mp3", DEFAULT_MUSIC_VOLUME);
     homeMusicRef.current = music;
@@ -107,7 +108,7 @@ const Shop = () => {
       document.removeEventListener("pointerup", resumeOnGesture, true);
       document.removeEventListener("touchend", resumeOnGesture, true);
       document.removeEventListener("keydown", resumeOnGesture, true);
-      music.close();
+      if (!musicHandedOffRef.current) music.close();
       if (homeMusicRef.current === music) homeMusicRef.current = null;
     };
   }, []);
@@ -163,6 +164,7 @@ const Shop = () => {
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [shopView]);
   const [records] = useState(() => ({ bestScore: Number(localStorage.getItem(BEST_SCORE_KEY) || 0), highestSector: Number(localStorage.getItem(HIGHEST_SECTOR_KEY) || 0), totalDestroyed: Number(localStorage.getItem(TOTAL_DESTROYED_KEY) || 0) }));
+  const [rewardProgress] = useState(() => readRewardProgress(localStorage.getItem(REWARD_PROGRESS_KEY)));
   const {
     user, canAdmin, adminMode, setAdminPreview, isAuthenticated, showSignIn, signIn, signOut,
     closeSignIn, requireAuth, isLoading: isAuthLoading,
@@ -227,14 +229,20 @@ const Shop = () => {
     else setHangarMessage("");
   };
   const enterGame = () => {
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     if (adminMode) sessionStorage.setItem(ADMIN_START_SECTOR_KEY, String(Number.isInteger(startSector) ? Math.min(MAX_DIFFICULTY_LEVEL, Math.max(1, startSector)) : 1));
     else sessionStorage.removeItem(ADMIN_START_SECTOR_KEY);
+    if (musicEnabledRef.current && homeMusicRef.current) {
+      handoffGameMusic(homeMusicRef.current);
+      musicHandedOffRef.current = true;
+    }
     primeGameAudio(); requestGameFullscreen(); navigate("/game");
   };
 
   const purchasePreview = () => {
     if (adminMode) return;
     if (previewFocusStage !== 1) return;
+    if (!testnetStandardHullAvailable(previewSkin.id)) { setHangarMessage("MAINNET READY"); return; }
     const currentFleet = readShipFleet(localStorage.getItem(SHIP_FLEET_KEY), localStorage.getItem(SHIP_OWNED_KEY), localStorage.getItem(SHIP_COLORS_KEY));
     const currentBalance = shardBalance(localStorage.getItem(SHARD_BALANCE_KEY));
     setShards(currentBalance);
@@ -345,17 +353,10 @@ const Shop = () => {
           <h1><span className="home-title-word">Cryptoid</span><span className="home-title-evolution">Evolution</span></h1>
           <p className="hero-tagline">Defend Earth. <span>Evolve your power.</span></p>
           <p className="hero-description">{t('Build your streak, master the grid, and become the force Earth needs.')}</p>
-          <div className="home-mission-brief" aria-label={t("Your Progress")}><span className="home-mission-marker" aria-hidden="true">◆</span><span><small>{t("Genesis sector")} · {t("EQUIPPED")}</small><strong>{selected.skin.name} <em>· {t(selected.color.name)} · {selectedStage === 1 ? "STANDARD" : selectedStage === 2 ? "ADVANCED" : "ELITE"}</em></strong></span>{records.bestScore > 0 && <span className="home-mission-best"><small>{t("Best score")}</small><strong>{records.bestScore.toLocaleString()}</strong></span>}</div>
-          {adminMode && <label className="admin-level-picker">Testlevel (1–{MAX_DIFFICULTY_LEVEL}) <input type="number" min="1" max={MAX_DIFFICULTY_LEVEL} value={startSector} onChange={event => setStartSector(Number(event.target.value))} onBlur={() => setStartSector(value => Number.isInteger(value) ? Math.min(MAX_DIFFICULTY_LEVEL, Math.max(1, value)) : 1)} /></label>}
+          {adminMode && <div className="admin-level-picker" aria-label="Admin-Teststart"><label>Level <select value={Math.floor((startSector - 1) / 10) + 1} onChange={event => setStartSector((Number(event.target.value) - 1) * 10 + (startSector - 1) % 10 + 1)}>{Array.from({ length: MAX_DIFFICULTY_LEVEL / 10 }, (_, index) => <option key={index} value={index + 1}>{index + 1}</option>)}</select></label><label>Start bei <select value={(startSector - 1) % 10 + 1} onChange={event => setStartSector((Math.floor((startSector - 1) / 10) * 10) + Number(event.target.value))}>{Array.from({ length: 9 }, (_, index) => <option key={index} value={index + 1}>Block {index + 1}</option>)}<option value="10">Boss</option></select></label></div>}
+          <HomeCombatPreview defender={{ sprite: selected.skin.sprite, color: selected.color.id, stage: selectedStage }} />
           <div className="hero-actions">
             <div className="home-launch">
-              <div className="home-launch-bay" role="img" aria-label={`${selected.skin.name} · ${t(selected.color.name)}`}>
-                <span className="home-launch-target home-launch-target-left" aria-hidden="true" />
-                <span className="home-launch-target home-launch-target-right" aria-hidden="true" />
-                <span className="home-launch-shot home-launch-shot-left" aria-hidden="true" />
-                <span className="home-launch-shot home-launch-shot-right" aria-hidden="true" />
-                <div className={`home-defense-ship${selected.color.id === "grey" ? " home-defense-grey" : ""}`} style={{ "--ship-glow": selected.color.glow, ...shipNozzleStyle(selected.skin.sprite) } as CSSProperties}><i style={{ ...spriteStyle(selected.skin.sprite), opacity: selectedStage === 1 ? 1 : 0 }} /><PaintedShip sprite={selected.skin.sprite} color={selected.color.id} stage={selectedStage} /><span className="home-thrust home-thrust-left" /><span className="home-thrust home-thrust-right" /></div>
-              </div>
               <button className="button button-primary home-play-button" type="button" onClick={enterGame}>{t("Play")} <span className="button-glyph" aria-hidden="true">→</span></button>
             </div>
             <button className="button button-secondary" type="button" onClick={() => { setPreviewSkin(selected.skin); setPreviewColor(selected.color); setShopView("hangar"); }}>{t('Shop / Hangar')} <span className="button-glyph" aria-hidden="true">◇</span></button>
@@ -365,16 +366,6 @@ const Shop = () => {
         </div>
         <div className="planet-stage" aria-label="Cryptoid Evolution planet status">
           <div className="planet"><EarthGlobe /><EarthNetwork /></div>
-          <div className="home-battle" aria-hidden="true">
-            {[0, 2, 4].map((slot, index) => <span className={`home-raid-ship home-raid-ship-${index + 1}`} key={slot}><b /><i style={spriteStyle(enemySprite("light", slot))} /></span>)}
-            <i className="home-battle-bolt home-battle-bolt-hostile home-battle-bolt-hostile-a" />
-            <i className="home-battle-bolt home-battle-bolt-hostile home-battle-bolt-hostile-b" />
-            <i className="home-battle-bolt home-battle-bolt-defense home-battle-bolt-defense-a" />
-            <i className="home-battle-bolt home-battle-bolt-defense home-battle-bolt-defense-b" />
-            <i className="home-battle-hit home-battle-hit-shield" />
-            <i className="home-battle-hit home-battle-hit-enemy-a" />
-            <i className="home-battle-hit home-battle-hit-enemy-b" />
-          </div>
           <span className="orbit-status">{t('ORBITAL DEFENSE ACTIVE')}</span>
           <div className="stage-label"><span className="stage-label-value">01</span><span>{t('Genesis sector')}</span></div>
         </div>
@@ -456,6 +447,24 @@ const Shop = () => {
           <strong className="streak-number">{records.totalDestroyed} <small>{t("asteroids")}</small></strong>
           <p>{t('Total destroyed across all missions.')}</p>
         </article>
+        <article className="status-card reward-collection">
+          <div className="card-heading"><span>RANG & SAMMLUNG</span><span className="card-icon">✦</span></div>
+          <h3>{rewardRank(rewardProgress)}</h3>
+          <p>{Object.keys(rewardProgress.bossWins).length}/{BOSS_STICKER_COUNT} Boss-Sticker · {rewardProgress.completedChains.length} Chains · {rewardProgress.perfectBonuses} perfekte Bonusrunden</p>
+          <div className="reward-milestones" aria-label="Chain-Meilensteine">{CHAIN_MILESTONES.map(target => <span key={target} className={rewardProgress.completedChains.length >= target ? "earned" : ""} title={`${target} Chains`}>◆ {target}</span>)}</div>
+          <h4>Boss-Sticker</h4>
+          <div className="boss-sticker-grid">{Array.from({ length: BOSS_STICKER_COUNT }, (_, index) => {
+            const id = index + 1;
+            const stars = rewardProgress.bossWins[id] ?? 0;
+            return <div key={id} className={`boss-sticker${stars ? " boss-sticker-earned" : ""}`} title={`Boss ${id}: ${stars ? `${stars} Stern${stars > 1 ? "e" : ""}` : "noch nicht besiegt"}`} aria-label={`Boss ${id}: ${stars ? `${stars} von 3 Sternen` : "noch gesperrt"}`}>
+              {stars ? <img src={`/ships/bosses/boss_${String(id).padStart(2, "0")}.webp`} alt="" loading="lazy" /> : <span aria-hidden="true">?</span>}
+              <small>#{String(id).padStart(2, "0")}</small>{!!stars && <b>{"★".repeat(stars)}</b>}
+            </div>;
+          })}</div>
+          <h4>Bonus-Medaillen</h4>
+          <p>{Object.values(rewardProgress.bonusMedals).filter(medal => medal === "gold").length} Gold · {Object.values(rewardProgress.bonusMedals).filter(medal => medal === "silver").length} Silber · {Object.values(rewardProgress.bonusMedals).filter(medal => medal === "bronze").length} Bronze</p>
+          <small>Sticker und Abzeichen werden auf diesem Gerät gespeichert. Admin-Testläufe zählen nicht.</small>
+        </article>
       </section>}
 
       {shopView === "leaders" && <section className="leaderboard-section" aria-labelledby="leaders-heading">
@@ -470,6 +479,7 @@ const Shop = () => {
 
       {(shopView === "hangar" || shopView === "shop") && <section className={`ship-selector ship-selector-${shopView}`} aria-labelledby="hangar-heading">
         <div className="ship-panel-heading"><div><p className="eyebrow">{t(shopView === "hangar" ? "YOUR HANGAR" : "SHIP SHOP")}</p><h2 id="hangar-heading">{t(shopView === "hangar" ? "Your fleet" : "Available ships")}</h2></div><strong className="shard-balance">◆ {shards} <small>{t("Shards")}</small></strong></div>
+        <p className="testnet-shop-notice">Testnet: Grey Scout kostenlos, 9 Standardtypen für Shards. MAINNET READY = hier noch gesperrt.</p>
         <details className="ship-earnings"><summary>{t("How to earn Shards")}</summary><p>{t("At level 1, defeats earn Shards by enemy class: light 2, medium 4–5, elite 6, heavy 8, boss 16. Rewards grow with level. Bonus targets earn 1 each, plus a completion reward that grows with level. Your Shards are saved at mission end.")}</p></details>
         <label className="ship-search-label" htmlFor="ship-search">{t("Find a ship")} <small>{matchingShipOptions.length}/{shipSearchOptions.length}</small></label>
         <div className="ship-search-wrap" ref={shipSearchRef}>
@@ -480,7 +490,7 @@ const Shop = () => {
           {shipResultsVisible && <div className="ship-search-results" id="ship-search-results" role="group" aria-label={t("Available ships")}>
             {matchingShipOptions.map(skin => {
               const total = fleetCount(visibleFleet, skin.id);
-              const status = total ? `${t("Owned")} ×${total}` : `◆ ${skin.price || EXTRA_STARTER_PRICE} ${t("Shards")}`;
+              const status = total ? `${t("Owned")} ×${total}` : testnetStandardHullAvailable(skin.id) ? `◆ ${skin.price || EXTRA_STARTER_PRICE} ${t("Shards")}` : "MAINNET READY";
               return <button className={`ship-search-result${previewSkin.id === skin.id ? " ship-search-selected" : ""}`} key={skin.id} type="button" onClick={() => chooseSearchResult(skin)}>
                 <span className="ship-search-thumb" aria-hidden="true"><img src={shipEvolutionAsset(skin.sprite, 1)} alt="" loading="lazy" decoding="async" style={shipPreviewPlacement(skin.sprite, 1)} /></span>
                 <span className="ship-search-result-name"><strong>{skin.name}</strong><small>{t("STANDARD")} · {status}</small><small>{t("Open for variants and levels")}</small></span><span className="ship-search-arrow" aria-hidden="true">›</span>
@@ -490,32 +500,32 @@ const Shop = () => {
           </div>}
         </div>
         <ShipSelectionPanel view={shopView} skin={previewSkin} color={previewColor} focusStage={previewFocusStage} ownedStage={previewStage} fleet={visibleFleet} shards={shards} adminPreview={adminMode}
-          offers={offers.filter(offer => offer.kind === "ship_upgrade")} catalogReady={catalogReady} isLoading={isLoading}
-          selectedSkinId={selected.skin.id} selectedColorId={selected.color.id} message={hangarMessage} locale={locale} t={t}
+          offers={offers.filter(offer => offer.kind === "ship_upgrade")}
+          selectedSkinId={selected.skin.id} selectedColorId={selected.color.id} message={hangarMessage} t={t}
           onStageChange={stage => { setPreviewFocusStage(stage); if (adminMode) { setAdminStage(stage); sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage)); } setHangarMessage(""); }}
           onColorChange={color => { setPreviewColor(color); if (shopView === "hangar") equipShip(previewSkin, color); else setHangarMessage(""); }}
           onBuyStandard={purchasePreview}
           onEquipPreview={() => equipShip(previewSkin, previewColor)}
-          onBuyUpgrade={offer => { const name = previewSkin.name + " · " + (offer.stage === 2 ? "Advanced" : "Elite"); void orderProduct("Cryptoid " + name + " · permanent ship evolution", offer.pricePi, { productId: offer.id }, () => { setHangarMessage(name + " " + t("purchase confirmed.")); void refreshInventory(); }); }}
           onOpenShop={() => { setPreviewFocusStage(1); setShopView("shop"); }} />
       </section>}
 
       {(shopView === "weapons" || shopView === "powers") && <section className="upgrade-section" aria-labelledby="upgrade-heading">
         <div className="section-heading"><div><p className="eyebrow">{t('POWER LAB')}</p><h2 id="upgrade-heading">{t('Weapons and start power-ups')}</h2></div><span className="section-line" /></div>
-        <p>{t('Standard laser is free. Bought weapons remain owned and start automatically for 5 minutes per mission. Bought start extras are consumed when the mission begins; tap the labeled button with your other thumb to activate them. Nova Bomb clears visible enemies and deals 18 boss damage; EMP freezes enemies for 7 seconds. Collected shields and weapon upgrades activate immediately. Pi prices are separate from ship Shards.')}</p>
+        <p className="testnet-shop-notice">Schüsse: Test-Pi. MAINNET READY = hier noch gesperrt.</p>
+        <p>Der Standardlaser ist kostenlos. Mit Test-Pi gekaufte Schüsse bleiben freigeschaltet und starten für fünf Minuten je Mission. Im Spiel gesammelte Power-ups funktionieren weiterhin.</p>
         {([shopView === "weapons" ? "weapon" : "power"] as const).map(kind => <div key={kind} className="hangar-offers"><h3>{t(kind === "weapon" ? "Time-limited weapons" : "One-mission start bonuses")}</h3><div className="hangar-offer-grid">
           {offers.filter(offer => offer.kind === kind).map(offer => {
             const count = inventory?.consumables.find(item => item.id === offer.id)?.count ?? 0;
             const owned = kind === "weapon" ? inventory?.ownedWeapons.includes(offer.id) : count > 0;
             const selected = kind === "weapon" ? inventory?.equippedWeapon === offer.id : inventory?.selectedPower === offer.id;
-            return <article key={offer.id} className={`hangar-offer hangar-offer-${kind}${selected ? " hangar-offer-selected" : ""}`}>{kind === "weapon" ? <WeaponPreview offerId={offer.id} sprite={selectedShip().skin.sprite} color={selectedShip().color.id} /> : <PowerPreview offerId={offer.id} />}<h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span>{t(kind === "weapon" ? "5 minutes per mission · starts at mission start" : "Consumed at mission start")} · {offer.pricePi} π</span><strong>{selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : t("OWNED") : t("NOT OWNED")}</strong><div>
+            return <article key={offer.id} className={`hangar-offer hangar-offer-${kind}${selected ? " hangar-offer-selected" : ""}`}>{kind === "weapon" ? <WeaponPreview offerId={offer.id} sprite={selectedShip().skin.sprite} color={selectedShip().color.id} /> : <PowerPreview offerId={offer.id} />}<h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span>{kind === "weapon" ? `${t("5 minutes per mission · starts at mission start")} · ${offer.pricePi} Test-Pi` : "MAINNET READY"}</span><strong>{selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : t("OWNED") : kind === "power" ? "GESPERRT" : t("NOT OWNED")}</strong><div>
               {owned ? <button className="button button-secondary" type="button" disabled={Boolean(selected)} onClick={() => equip(kind === "weapon" ? offer.id : inventory?.equippedWeapon ?? null, kind === "power" ? offer.id : inventory?.selectedPower ?? null)}>{t(selected ? "Selected" : "Equip for next mission")}</button> : null}
-              {!adminMode && (kind === "power" || !owned) && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady} onClick={() => orderProduct(`Cryptoid ${offer.name} · ${kind === "weapon" ? "5 minutes per mission" : offer.id === "start_bomb" || offer.id === "start_emp" ? "one use per mission" : "60 seconds when activated"}`, offer.pricePi, { productId: offer.id }, () => { setLoadoutMessage(`${offer.name} ${t("purchase confirmed.")}`); void refreshInventory(); })}>{t("Buy with π")}</button>}
+              {!adminMode && kind === "weapon" && !owned && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady} onClick={() => orderProduct(`Cryptoid ${offer.name} · 5 minutes per mission · Test-Pi`, offer.pricePi, { productId: offer.id }, () => { setLoadoutMessage(`${offer.name} ${t("purchase confirmed.")}`); void refreshInventory(); })}>Mit Test-Pi kaufen</button>}
             </div></article>;
           })}
         </div></div>)}
         {shopView === "weapons" && <div className="hangar-offers"><h3>{t("Permanent armor")}</h3><p>{t("Armor is always active from mission start, needs no shield and remains yours across all future missions. Each upgrade adds to your maximum hearts.")}</p><div className="hangar-offer-grid">
-          {offers.filter(offer => offer.kind === "armor").map(offer => { const owned = inventory?.ownedArmor.includes(offer.id); return <article key={offer.id} className={`hangar-offer hangar-offer-armor${owned ? " hangar-offer-selected" : ""}`}><div className="offer-preview power-preview power-preview-shield" aria-hidden="true"><span className="preview-grid" /><span className="power-preview-orbit"><i>♥</i></span><small>PERMANENT HULL</small></div><h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span>{t("Permanent · every mission")} · {offer.pricePi} π</span><strong>{owned ? t("OWNED") : t("NOT OWNED")}</strong><div>{!owned && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady || !inventory} onClick={() => orderProduct(`Cryptoid ${offer.name} · permanent armor`, offer.pricePi, { productId: offer.id }, () => { setLoadoutMessage(`${offer.name} ${t("purchase confirmed.")}`); void refreshInventory(); })}>{t("Buy with π")}</button>}</div></article>; })}
+          {offers.filter(offer => offer.kind === "armor").map(offer => { const owned = inventory?.ownedArmor.includes(offer.id); return <article key={offer.id} className={`hangar-offer hangar-offer-armor${owned ? " hangar-offer-selected" : ""}`}><div className="offer-preview power-preview power-preview-shield" aria-hidden="true"><span className="preview-grid" /><span className="power-preview-orbit"><i>♥</i></span><small>PERMANENT HULL</small></div><h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span>{owned ? t("Permanent · every mission") : "MAINNET READY"}</span><strong>{owned ? t("OWNED") : "GESPERRT"}</strong></article>; })}
         </div></div>}
         {inventory?.equippedWeapon && <button className="text-button" type="button" onClick={() => equip(null, inventory.selectedPower)}>{t('Use free standard laser')}</button>}
         {inventory?.selectedPower && <button className="text-button" type="button" onClick={() => equip(inventory.equippedWeapon, null)}>{t('Save bonus for a later mission')}</button>}

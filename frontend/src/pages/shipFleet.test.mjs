@@ -1,14 +1,21 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { allPlayerColors, bossNozzleStyles, buySkin, buyShipVariant, colorForSkin, enemySprite, EXTRA_STARTER_PRICE, fleetCount, ownedSkins, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyles, spriteVisualOffset } from "./shipFleet.ts";
+import { allPlayerColors, bossNozzleStyles, buySkin, buyShipVariant, colorForSkin, enemyAppearance, enemySprite, EXTRA_STARTER_PRICE, fleetCount, ownedSkins, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyles, spriteVisualOffset, TESTNET_STANDARD_HULL_COUNT, testnetStandardHullAvailable } from "./shipFleet.ts";
+import { reinforcementCount } from "./sectorManager.ts";
 
-test("only the grey starter is free and the full reference fleet is purchasable", () => {
+globalThis.sessionStorage ??= { getItem: () => null };
+
+test("only the grey starter is free and the first ten standard hulls are released", () => {
   assert.equal(playerSkins.length, 20);
   assert.equal(playerSkins[0].id, "grey-scout");
   assert.equal(playerSkins.filter(skin => skin.price === 0).length, 1);
   assert.equal(new Set(playerSkins.map(skin => skin.sprite)).size, 20);
   assert.equal(EXTRA_STARTER_PRICE, 150);
   playerSkins.slice(1).forEach((skin, index) => assert.equal(skin.price, 150 + index * 250, skin.id));
+  assert.equal(TESTNET_STANDARD_HULL_COUNT, 10);
+  assert.equal(playerSkins.filter(skin => testnetStandardHullAvailable(skin.id)).length, 10);
+  assert.equal(testnetStandardHullAvailable("red-comet"), true);
+  assert.equal(testnetStandardHullAvailable("twin-core"), false);
 });
 
 test("later sectors field all 20 player hulls as enemy models", () => {
@@ -20,12 +27,30 @@ test("later sectors field all 20 player hulls as enemy models", () => {
   assert.equal(enemySprite("elite", 3, 51), 18);
 });
 
+test("each block uses distinct shop hulls and paints across both enemy flights", () => {
+  const shopHulls = new Set(playerSkins.map(skin => skin.sprite));
+  const availablePaints = new Set(allPlayerColors.map(color => color.id));
+  const openingHulls = new Set();
+  for (let sector = 1; sector <= 500; sector++) {
+    if (sector % 10 === 0) continue; // Boss has its own design.
+    const ships = Array.from({ length: 6 + reinforcementCount(sector) }, (_, index) => enemyAppearance(sector, index));
+    assert.equal(new Set(ships.map(ship => ship.sprite)).size, ships.length, `duplicate hull in block ${sector}`);
+    assert.equal(new Set(ships.map(ship => ship.color)).size, ships.length, `duplicate paint in block ${sector}`);
+    assert.ok(ships.every(ship => shopHulls.has(ship.sprite) && availablePaints.has(ship.color)));
+    if (sector <= 4) ships.forEach(ship => openingHulls.add(ship.sprite));
+  }
+  assert.deepEqual(openingHulls, shopHulls, "the entire shop fleet appears within the first four blocks");
+});
+
 test("a skin purchase spends once and never grants an unaffordable or duplicate hull", () => {
   assert.equal(buySkin("nova-wing", [], 149), null);
   assert.deepEqual(buySkin("nova-wing", [], 150), { owned: ["nova-wing"], balance: 0 });
   assert.equal(buySkin("nova-wing", ["nova-wing"], 300), null);
   assert.equal(buySkin("grey-scout", [], 50), null);
   assert.equal(buySkin("nova-wing", [], Number.NaN), null);
+  assert.equal(buySkin("twin-core", [], 50_000), null);
+  assert.equal(buyShipVariant("twin-core", "gold", { "grey-scout": { grey: 1 } }, 50_000), null);
+  assert.equal(buyShipVariant("red-comet", "gold", { "grey-scout": { grey: 1 } }, 2_150)?.balance, 0);
 });
 
 test("saved selection cannot equip a locked hull or invent Shards", () => {

@@ -35,6 +35,7 @@ export class MusicPlayer {
   }
 
   get currentSource() { return this.source; }
+  get playing() { return !this.closed && !this.audio.paused && (!this.context || this.context.state === "running"); }
 
   // Switching sources on the unlocked media element retains its iOS playback permission
   // and the existing AudioContext/GainNode. A new Audio() here would need a fresh gesture.
@@ -83,3 +84,18 @@ export class MusicPlayer {
     this.gain = null;
   }
 }
+
+// Preserve the media element and its unlocked AudioContext across the route
+// transition. Mobile Safari may reject a brand-new player's autoplay.
+let primedGameMusic: MusicPlayer | null = null;
+export const handoffGameMusic = (player: MusicPlayer) => {
+  if (primedGameMusic && primedGameMusic !== player) primedGameMusic.close();
+  primedGameMusic = player;
+  player.setSource("/audio/battle-orbit.mp3");
+  void player.play();
+};
+export const takeHandoffGameMusic = () => {
+  const player = primedGameMusic;
+  primedGameMusic = null;
+  return player;
+};
