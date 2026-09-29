@@ -15,11 +15,12 @@ import ShipSelectionPanel from "./ShipSelectionPanel";
 import TermsDialog from "../components/TermsDialog";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
 import { primeGameAudio } from "./gameAudio";
-import { DEFAULT_EFFECTS_VOLUME, DEFAULT_MUSIC_VOLUME, EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, resetAudioVolumeDefaults } from "./musicPreferences";
+import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, readMusicVolume, resetAudioVolumeDefaults } from "./musicPreferences";
 import { handoffGameMusic, MusicPlayer } from "./musicPlayback";
 import MusicVolumeSlider from "./MusicVolumeSlider";
 import Starfield from "./Starfield";
 import HomeCombatPreview from "./HomeCombatPreview";
+import GameGuide from "./GameGuide";
 import { languages, useLocale, type Locale } from "../i18n";
 import EarthGlobe from "./EarthGlobe";
 import EarthNetwork from "./EarthNetwork";
@@ -84,13 +85,13 @@ const Shop = () => {
   const [personalBest, setPersonalBest] = useState<number | null>(null);
   const [musicEnabled, setMusicEnabled] = useState(() => localStorage.getItem(MUSIC_STORAGE_KEY) !== "off");
   const musicEnabledRef = useRef(musicEnabled);
-  const [musicVolume, setMusicVolume] = useState(DEFAULT_MUSIC_VOLUME);
-  const [effectsVolume, setEffectsVolume] = useState(DEFAULT_EFFECTS_VOLUME);
+  const [musicVolume, setMusicVolume] = useState(readMusicVolume);
+  const [effectsVolume, setEffectsVolume] = useState(readEffectsVolume);
   useEffect(() => { resetAudioVolumeDefaults(); }, []);
   const homeMusicRef = useRef<MusicPlayer | null>(null);
   const musicHandedOffRef = useRef(false);
   useEffect(() => {
-    const music = new MusicPlayer("/audio/home-galactic-chain.mp3", DEFAULT_MUSIC_VOLUME);
+    const music = new MusicPlayer("/audio/home-galactic-chain.mp3", readMusicVolume());
     homeMusicRef.current = music;
     const start = () => { if (musicEnabledRef.current) void music.play(); };
     const resumeOnGesture = (event: Event) => {
@@ -370,7 +371,6 @@ const Shop = () => {
         </div>
         <footer className="home-footer">
           <button type="button" className="text-button terms-entry" onClick={() => setTermsOpen(true)}>Nutzungsbedingungen / Terms of Service</button>
-          <span className="home-developer-credit">Developed by Marc Wolf / 19Trojan69</span>
         </footer>
       </section>
 
@@ -534,14 +534,14 @@ const Shop = () => {
         </div>
       </div>}
 
-      {activePanel && <div className="info-panel" role="dialog" aria-modal="true" aria-labelledby="info-title">
+      {activePanel === "how" && <GameGuide onClose={() => setActivePanel(null)} onStart={() => { setActivePanel(null); enterGame(); }} />}
+      {activePanel === "progress" && <div className="info-panel" role="dialog" aria-modal="true" aria-labelledby="info-title">
         <div className="info-panel-content">
           <button className="close-button" type="button" onClick={() => setActivePanel(null)} aria-label={t('Close')}>×</button>
-          <p className="eyebrow">{activePanel === "how" ? "FIELD GUIDE" : "MISSION LOG"}</p>
-          <h2 id="info-title">{activePanel === "how" ? t("How to Play") : t("Your Progress")}</h2>
-          <p>{activePanel === "how" ? t("Move your ship with the arrow keys or WASD; on touchscreens, drag it in the lower playfield. Your laser fires automatically. Dodge diving Cryptoids and collect power-ups. Shield absorbs a hit and Overdrive briefly strengthens your shots. You begin with three hearts. Only a perfect bonus round with 12 hits restores one previously lost heart.") : t("Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.").replace("{score}", String(personalBest ?? records.bestScore)).replace("{sector}", String(records.highestSector)).replace("{destroyed}", String(records.totalDestroyed))}</p>
-          {activePanel === "how" && <p>{t("Each completed sector links one fictional block. Nine blocks complete the chain before the boss; strong bonus rounds after the boss add a chain reward.")}</p>}
-          <button className="button button-primary" type="button" onClick={() => { setActivePanel(null); if (activePanel === "how") enterGame(); }}>{t("Enter mission")} <span>↗</span></button>
+          <p className="eyebrow">{t("MISSION LOG")}</p>
+          <h2 id="info-title">{t("Your Progress")}</h2>
+          <p>{t("Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.").replace("{score}", String(personalBest ?? records.bestScore)).replace("{sector}", String(records.highestSector)).replace("{destroyed}", String(records.totalDestroyed))}</p>
+          <button className="button button-primary" type="button" onClick={() => setActivePanel(null)}>{t("Close")}</button>
         </div>
       </div>}
 

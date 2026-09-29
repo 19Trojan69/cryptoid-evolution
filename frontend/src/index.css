@@ -39,7 +39,6 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 .home-music-toggle:focus-visible { outline: 2px solid #b5ffe3; outline-offset: 3px; }
 .home-footer { position: absolute; z-index: 4; left: clamp(20px, 5vw, 100px); right: clamp(20px, 5vw, 100px); bottom: max(17px, env(safe-area-inset-bottom)); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2px 16px; padding-top: 12px; border-top: 1px solid var(--line); }
 .home-footer .terms-entry { margin: 0; padding: 5px 0; }
-.home-developer-credit { color: #b9d7e1; font-size: 12px; letter-spacing: .04em; }
 .landing-shell .hero-section .starfield { z-index: 0; opacity: .75; }
 .shop-overlay { position: fixed; z-index: 8; inset: 0; display: grid; place-items: center; padding: clamp(8px, 3vw, 25px); background: rgba(1, 9, 19, .88); backdrop-filter: blur(9px); }
 .shop-modal { display: flex; flex-direction: column; width: min(100%, 1120px); max-height: min(900px, calc(100dvh - 16px)); overflow: hidden; border: 1px solid rgba(102, 224, 241, .55); background: radial-gradient(circle at 75% 0, rgba(114, 75, 202, .15), transparent 34%), linear-gradient(145deg, #061727, #0a2135 58%, #071725); box-shadow: inset 0 0 35px rgba(56, 204, 227, .05), 0 0 32px rgba(50, 195, 221, .14), 0 24px 90px #000b; clip-path: polygon(0 13px, 13px 0, calc(100% - 13px) 0, 100% 13px, 100% calc(100% - 13px), calc(100% - 13px) 100%, 13px 100%, 0 calc(100% - 13px)); }
@@ -67,6 +66,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 .shop-modal .dashboard-grid { max-width: none; padding: 0; }
 .site-header { height: 76px; padding: 0 clamp(20px, 5vw, 76px); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
 .brand-mark { display: flex; align-items: center; gap: 11px; color: #eff9f4; text-decoration: none; font-size: 12px; font-weight: 600; letter-spacing: .14em; }
+.brand-wolf-logo { display: block; width: clamp(120px, 12vw, 148px); height: auto; max-height: 72px; object-fit: contain; filter: brightness(1.22) drop-shadow(0 0 7px #55d1de38); }
 .brand-mark b { color: var(--emerald); font-weight: 600; }
 .brand-symbol { display: grid; place-items: center; width: 31px; height: 31px; border: 1px solid var(--cyan); border-radius: 50%; color: var(--cyan); font-size: 16px; letter-spacing: 0; }
 .user-section { display: flex; align-items: center; gap: 10px; }
@@ -745,7 +745,7 @@ html[data-motion="reduced"] .boss-debris-piece:nth-child(n+5) { display: none; }
   .dashboard-grid, .product-grid { grid-template-columns: 1fr; }
   .upgrade-section { padding-top: 66px; }
   .section-line { display: none; }
-  .landing-shell .hero-section { position: relative; display: flex; align-items: stretch; height: calc(100dvh - 65px); padding: 0 20px 60px; }
+  .landing-shell .hero-section { position: relative; display: flex; align-items: stretch; height: calc(100dvh - 65px); padding: 0 20px 78px; }
   .landing-shell .hero-copy { display: flex; flex-direction: column; align-self: stretch; width: 100%; min-height: 0; padding-top: clamp(54px, 7.5vh, 82px); }
   .landing-shell .hero-copy h1 { font-size: clamp(52px, 15vw, 61px); line-height: .93; text-shadow: 0 3px 22px rgba(1, 12, 24, .84); }
   .landing-shell .eyebrow { margin-bottom: 14px; font-size: 11px; }
@@ -757,7 +757,9 @@ html[data-motion="reduced"] .boss-debris-piece:nth-child(n+5) { display: none; }
   .landing-shell .planet-stage { position: absolute; right: -25%; top: 18%; width: min(96vw, 430px); margin: 0; opacity: .7; pointer-events: none; }
   .landing-shell .home-defense-ship { left: -2%; bottom: 16%; }
   .landing-shell .orbit-status { left: 29%; bottom: 16%; padding: 4px 7px; border-left: 2px solid rgba(102, 239, 217, .8); background: linear-gradient(90deg, rgba(4, 28, 43, .78), transparent); color: #a5f7e7; font-size: 9px; white-space: nowrap; }
-  .home-footer { left: 20px; right: 20px; bottom: max(10px, env(safe-area-inset-bottom)); }
+  .home-footer { left: 20px; right: 20px; bottom: max(10px, env(safe-area-inset-bottom)); flex-wrap: nowrap; }
+  .home-footer .terms-entry { font-size: 11px; line-height: 1.2; text-align: left; white-space: normal; }
+  .brand-wolf-logo { width: clamp(112px, 30vw, 124px); max-height: 61px; }
   .landing-shell .hero-section::before { position: absolute; z-index: 2; inset: 0 25% 0 0; background: linear-gradient(90deg, #081e31ec, #081e31a8 58%, transparent); content: ''; pointer-events: none; }
   .shop-modal-body { padding: 10px; }
   .shop-modal .ship-selector { padding: 14px; }
@@ -1315,6 +1317,26 @@ html[data-motion="reduced"] .landing-shell .hero-actions .home-play-button { ani
 .landing-shell .close-button { width: 37px; height: 37px; border: 1px solid #d6a491ab; border-radius: 0; background: #3b2b3b8a; color: #ffd6af; clip-path: polygon(0 8px, 8px 0, 100% 0, 100% 100%, 8px 100%, 0 calc(100% - 8px)); }
 .landing-shell .close-button:hover { border-color: #ffb5a2; background: #803c50ad; color: #fff2e7; box-shadow: 0 0 15px #ff8b775e; }
 .landing-shell :is(.info-panel-content, .signin-modal) > p:not(.eyebrow) { color: #cfdeea; font-size: 16px; line-height: 1.45; }
+.landing-shell .guide-panel-content { width: min(100%, 720px); max-height: calc(100dvh - 32px); display: flex; flex-direction: column; padding: clamp(20px, 4vw, 34px); }
+.guide-panel-content .guide-lead { margin: 0 44px 16px 0; }
+.guide-topics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; margin-bottom: 16px; flex-shrink: 0; }
+.guide-topic { min-height: 45px; padding: 7px 9px; border: 1px solid #5b8ea6; background: #102942; color: #d1e6f3; font: 700 12px/1.2 'Rajdhani', sans-serif; letter-spacing: .035em; cursor: pointer; }
+.guide-topic:hover, .guide-topic:focus-visible { border-color: #73e8ec; color: #fff; }
+.guide-topic.is-active { border-color: #84eff2; background: linear-gradient(140deg, #1b6074, #194461); color: #fff; box-shadow: inset 0 2px #8bf7ef, 0 0 15px #3cc9e843; }
+.guide-detail { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 2px 12px 2px 0; color: #d5e5f1; scrollbar-color: #58899d transparent; }
+.guide-detail h3 { margin: 0 0 10px; }
+.guide-detail p { margin: 0 0 12px; line-height: 1.5; }
+.guide-detail ul { display: grid; gap: 10px; margin: 0; padding-left: 20px; line-height: 1.48; }
+.guide-detail li::marker { color: #70e5de; }
+.guide-panel-content .guide-start { align-self: flex-start; display: inline-flex; align-items: center; justify-content: center; gap: 16px; margin-top: 20px; flex-shrink: 0; }
+.guide-start-icon { display: inline-grid; place-items: center; width: 32px; height: 32px; color: #24334a; }
+.guide-start-icon svg { width: 32px; height: 32px; }
+@media (max-width: 560px) {
+  .info-panel { padding: 12px; }
+  .landing-shell .guide-panel-content { max-height: calc(100dvh - 24px); }
+  .guide-topics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-bottom: 12px; }
+  .guide-panel-content .guide-start { width: 100%; margin-top: 14px; }
+}
 .landing-shell .terms-dialog pre { color: #e4eef4; }
 .legal-page { background: radial-gradient(circle at 79% 8%, #42317371, transparent 38%), #070f21; }
 .legal-page-header, .legal-document { border-color: #75d1e27a; background-color: #101d36ef; }
@@ -1732,8 +1754,7 @@ html[data-motion="reduced"] .home-battle-bolt, html[data-motion="reduced"] .home
   html[data-motion="reduced"] .landing-shell .home-battle .home-raid-ship-2 { left: 47%; top: 52%; }
 html[data-motion="reduced"] .landing-shell .home-battle .home-raid-ship-3 { left: 72%; top: 55%; }
 
-/* The home preview lives in its own clear strip, above the launch controls.
-   A new fleet arrives every 32 seconds instead of replaying one short shot. */
+/* The home preview stays within a dedicated strip above the launch controls. */
 .landing-shell .home-combat-preview { position: relative; isolation: isolate; flex: 0 1 auto; width: min(100%, 540px); height: clamp(190px, 26dvh, 270px); min-height: 160px; margin: 12px 0 0; overflow: hidden; pointer-events: none; background: radial-gradient(ellipse at 49% 44%, #1837555c, transparent 66%); }
 .home-combat-preview::before { position: absolute; inset: 5% 0; border-top: 1px solid #93d9e523; border-bottom: 1px solid #93d9e523; background: linear-gradient(90deg, transparent, #12395730 40%, transparent); content: ''; }
 .home-combat-scene { position: absolute; inset: 0; }
@@ -1745,31 +1766,35 @@ html[data-motion="reduced"] .landing-shell .home-battle .home-raid-ship-3 { left
 .home-combat-engine { position: absolute; z-index: 1; top: calc(var(--nozzle-y) - 2px); left: var(--nozzle-x); width: var(--nozzle-width); min-width: 2px; height: 22%; transform: translateX(-50%); transform-origin: 50% 0; background: linear-gradient(var(--flame-core), var(--flame-mid) 28%, var(--flame-tail) 65%, transparent); filter: drop-shadow(0 2px 3px var(--flame-glow)); clip-path: polygon(12% 0, 88% 0, 82% 18%, 100% 34%, 72% 69%, 55% 100%, 48% 78%, 34% 94%, 27% 64%, 0 34%, 18% 18%); animation: home-combat-thrust .72s ease-in-out infinite alternate; }
 .home-combat-engine:nth-child(even) { animation-delay: -.26s; }
 @keyframes home-combat-thrust { from { opacity: .68; scale: 1 .76; } to { opacity: 1; scale: 1 1.12; } }
-.home-combat-enemy-1 { animation: home-combat-enemy-left 32s ease-in-out both; }
-.home-combat-enemy-2 { animation: home-combat-enemy-right 32s ease-in-out both; }
-.home-combat-ally-1 { width: clamp(72px, 19%, 104px); animation: home-combat-defender 32s ease-in-out both; }
+.home-combat-enemy-1 { animation: home-combat-enemy-left 20s ease-in-out both; }
+.home-combat-enemy-2 { animation: home-combat-enemy-right 20s ease-in-out both; }
+.home-combat-ally-1 { width: clamp(72px, 19%, 104px); animation: home-combat-defender 20s ease-in-out both; }
 @keyframes home-combat-enemy-left {
-  0% { left: 22%; top: 26%; opacity: 1; transform: translate(-50%, -50%); }
-  13%, 27% { left: 22%; top: 26%; opacity: 1; transform: translate(-50%, -50%) rotate(0); }
-  40% { left: 40%; top: 61%; opacity: 1; transform: translate(-50%, -50%) rotate(-24deg) scale(1.05); }
-  55% { left: 54%; top: 42%; opacity: 1; transform: translate(-50%, -50%) rotate(42deg); }
-  76%, 88% { left: 22%; top: 24%; opacity: 1; transform: translate(-50%, -50%) rotate(0); }
-  100% { left: 22%; top: 26%; opacity: 1; transform: translate(-50%, -50%); }
+  0% { left: 18%; top: 24%; opacity: 1; transform: translate(-50%, -50%) rotate(0); }
+  15% { left: 32%; top: 35%; opacity: 1; transform: translate(-50%, -50%) rotate(-15deg); }
+  30% { left: 46%; top: 55%; opacity: 1; transform: translate(-50%, -50%) rotate(-26deg) scale(1.05); }
+  45% { left: 56%; top: 38%; opacity: 1; transform: translate(-50%, -50%) rotate(30deg); }
+  62% { left: 30%; top: 28%; opacity: 1; transform: translate(-50%, -50%) rotate(-22deg); }
+  80% { left: 42%; top: 48%; opacity: 1; transform: translate(-50%, -50%) rotate(21deg); }
+  100% { left: 18%; top: 24%; opacity: 1; transform: translate(-50%, -50%) rotate(0); }
 }
 @keyframes home-combat-enemy-right {
-  0% { left: 75%; top: 25%; opacity: 1; transform: translate(-50%, -50%); }
-  18%, 30% { left: 75%; top: 25%; opacity: 1; transform: translate(-50%, -50%); }
-  42% { left: 63%; top: 54%; opacity: 1; transform: translate(-50%, -50%) rotate(24deg); }
-  62% { left: 88%; top: 63%; opacity: 1; transform: translate(-50%, -50%) rotate(-33deg); }
-  80%, 89% { left: 75%; top: 25%; opacity: 1; transform: translate(-50%, -50%); }
-  100% { left: 75%; top: 25%; opacity: 1; transform: translate(-50%, -50%); }
+  0% { left: 80%; top: 24%; opacity: 1; transform: translate(-50%, -50%) rotate(0); }
+  17% { left: 65%; top: 34%; opacity: 1; transform: translate(-50%, -50%) rotate(18deg); }
+  33% { left: 58%; top: 52%; opacity: 1; transform: translate(-50%, -50%) rotate(29deg); }
+  50% { left: 82%; top: 59%; opacity: 1; transform: translate(-50%, -50%) rotate(-27deg); }
+  67% { left: 70%; top: 30%; opacity: 1; transform: translate(-50%, -50%) rotate(17deg); }
+  84% { left: 55%; top: 44%; opacity: 1; transform: translate(-50%, -50%) rotate(25deg); }
+  100% { left: 80%; top: 24%; opacity: 1; transform: translate(-50%, -50%) rotate(0); }
 }
 @keyframes home-combat-defender {
-  0%, 17% { left: 39%; top: 78%; opacity: 1; transform: translate(-50%, -50%); }
-  37% { left: 30%; top: 77%; opacity: 1; transform: translate(-50%, -50%) rotate(-10deg); }
-  57% { left: 57%; top: 80%; opacity: 1; transform: translate(-50%, -50%) rotate(13deg); }
-  78% { left: 42%; top: 75%; opacity: 1; transform: translate(-50%, -50%) rotate(-8deg); }
-  100% { left: 39%; top: 78%; opacity: 1; transform: translate(-50%, -50%); }
+  0% { left: 39%; top: 65%; opacity: 1; transform: translate(-50%, -50%) rotate(0); }
+  16% { left: 24%; top: 58%; opacity: 1; transform: translate(-50%, -50%) rotate(-12deg); }
+  34% { left: 53%; top: 66%; opacity: 1; transform: translate(-50%, -50%) rotate(14deg); }
+  51% { left: 69%; top: 54%; opacity: 1; transform: translate(-50%, -50%) rotate(18deg); }
+  69% { left: 35%; top: 64%; opacity: 1; transform: translate(-50%, -50%) rotate(-13deg); }
+  84% { left: 58%; top: 57%; opacity: 1; transform: translate(-50%, -50%) rotate(10deg); }
+  100% { left: 39%; top: 65%; opacity: 1; transform: translate(-50%, -50%) rotate(0); }
 }
 .home-combat-weapons { position: absolute; z-index: 4; inset: 0; display: block; --cadence: 4.8s; --flight-y: -125px; }
 .home-combat-enemy .home-combat-weapons { --flight-y: 125px; }
@@ -1792,12 +1817,12 @@ html[data-motion="reduced"] .landing-shell .home-battle .home-raid-ship-3 { left
   17% { opacity: .95; transform: translate(var(--drift-x), var(--flight-y)) scaleY(1.1); }
   19%, 100% { opacity: 0; transform: translate(var(--drift-x), var(--flight-y)) scaleY(.4); }
 }
-.home-combat-impact { position: absolute; z-index: 5; width: 35px; height: 35px; border-radius: 50%; opacity: 0; background: radial-gradient(circle, white 0 9%, #ffed9d 18%, #ff7b45 34%, #ff623b66 51%, transparent 72%); filter: drop-shadow(0 0 8px #ffa45b); animation: home-combat-impact 32s ease-out both; }
+.home-combat-impact { position: absolute; z-index: 5; width: 35px; height: 35px; border-radius: 50%; opacity: 0; background: radial-gradient(circle, white 0 9%, #ffed9d 18%, #ff7b45 34%, #ff623b66 51%, transparent 72%); filter: drop-shadow(0 0 8px #ffa45b); animation: home-combat-impact 20s ease-out both; }
 .home-combat-impact-1 { left: 37%; top: 46%; }
 .home-combat-impact-2 { left: 67%; top: 52%; animation-delay: -8s; }
 @keyframes home-combat-impact { 0%, 39% { opacity: 0; transform: scale(.2); } 41% { opacity: 1; transform: scale(.85); } 45%, 100% { opacity: 0; transform: scale(1.8); } }
 @media (max-width: 700px) {
-  .landing-shell .home-combat-preview { width: 100%; height: clamp(160px, 23dvh, 210px); min-height: 145px; margin-top: 9px; }
+  .landing-shell .home-combat-preview { width: 100%; height: clamp(160px, 23dvh, 210px); min-height: 145px; margin: 9px 0 12px; }
   .home-combat-ship { width: clamp(58px, 18%, 76px); }
   .home-combat-ally-1 { width: clamp(68px, 21%, 88px); }
   .landing-shell .hero-actions { margin-top: auto; }
@@ -1812,12 +1837,12 @@ html[data-motion="reduced"] .landing-shell .home-battle .home-raid-ship-3 { left
   .home-combat-ship, .home-combat-engine, .home-combat-engine::after, .home-combat-shot, .home-combat-impact { animation: none; }
   .home-combat-enemy-1 { left: 22%; top: 25%; opacity: 1; transform: translate(-50%, -50%); }
   .home-combat-enemy-2 { left: 75%; top: 25%; opacity: 1; transform: translate(-50%, -50%); }
-  .home-combat-ally-1 { left: 39%; top: 78%; opacity: 1; transform: translate(-50%, -50%); }
+  .home-combat-ally-1 { left: 39%; top: 65%; opacity: 1; transform: translate(-50%, -50%); }
 }
 html[data-motion="reduced"] .home-combat-ship, html[data-motion="reduced"] .home-combat-engine, html[data-motion="reduced"] .home-combat-engine::after, html[data-motion="reduced"] .home-combat-shot, html[data-motion="reduced"] .home-combat-impact { animation: none; }
 html[data-motion="reduced"] .home-combat-enemy-1 { left: 22%; top: 25%; opacity: 1; transform: translate(-50%, -50%); }
 html[data-motion="reduced"] .home-combat-enemy-2 { left: 75%; top: 25%; opacity: 1; transform: translate(-50%, -50%); }
-html[data-motion="reduced"] .home-combat-ally-1 { left: 39%; top: 78%; opacity: 1; transform: translate(-50%, -50%); }
+html[data-motion="reduced"] .home-combat-ally-1 { left: 39%; top: 65%; opacity: 1; transform: translate(-50%, -50%); }
 }
 
 /* One selected ship, one preview, and its color and purchase controls. */

@@ -19,7 +19,7 @@ import PaintedShip from "./PaintedShip";
 import { useShipVisualOffset } from "./paintedShip";
 import { ownedShipStage, projectileGuardForStage, projectileImpact, shipEvolutionAsset, stageWeaponLevel, type ShipStage } from "./shipEvolution";
 import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio";
-import { DEFAULT_EFFECTS_VOLUME, DEFAULT_MUSIC_VOLUME, EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, resetAudioVolumeDefaults } from "./musicPreferences";
+import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, readMusicVolume, resetAudioVolumeDefaults } from "./musicPreferences";
 import { MusicPlayer, takeHandoffGameMusic } from "./musicPlayback";
 import MusicVolumeSlider from "./MusicVolumeSlider";
 import { axiosClient } from "../lib/axiosClient";
@@ -349,8 +349,8 @@ const GamePage = () => {
   const checkpointScoreRef = useRef(0);
   const [scoreSync, setScoreSync] = useState<"idle" | "saving" | "saved" | "failed">("idle");
   const [musicEnabled] = useState(() => localStorage.getItem(MUSIC_STORAGE_KEY) !== "off");
-  const [musicVolume, setMusicVolume] = useState(DEFAULT_MUSIC_VOLUME);
-  const [effectsVolume, setEffectsVolume] = useState(DEFAULT_EFFECTS_VOLUME);
+  const [musicVolume, setMusicVolume] = useState(readMusicVolume);
+  const [effectsVolume, setEffectsVolume] = useState(readEffectsVolume);
   useEffect(() => { resetAudioVolumeDefaults(); }, []);
   const musicRef = useRef<MusicPlayer | null>(null);
   const regularMusicPositionRef = useRef(0);
@@ -438,7 +438,7 @@ const GamePage = () => {
   useEffect(() => {
     if (!musicEnabled) return;
     void fetch("/audio/boss-victory-v2.mp3").catch(() => {});
-    const track = takeHandoffGameMusic() ?? new MusicPlayer("/audio/battle-orbit.mp3", DEFAULT_MUSIC_VOLUME);
+    const track = takeHandoffGameMusic() ?? new MusicPlayer("/audio/battle-orbit.mp3", readMusicVolume());
     musicRef.current = track;
     const resume = () => {
       if (stateRef.current.status === "playing") void track.play().then(ok => { if (ok && (readEffectsVolume() === 0 || soundRef.current?.running)) setAudioNeedsTap(false); });
