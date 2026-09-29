@@ -8,7 +8,7 @@ import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp } from "./powerUps";
 import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, zoneFraction, shipStartHeight } from "./controlPreferences";
 import { activeWeaponLevel, advanceShot, contactWithEnemy, MAX_PLAYER_SHOTS, movePlayer, placePlayer, placePlayerFromPointer, PURCHASED_WEAPON_DURATION_MS, shipCollisionOutcome, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
-import { advanceEnemyShot, createEnemyShot, enemyShotHitsPlayer, enemyShotLimit, type EnemyShot } from "./enemyFire";
+import { advanceEnemyShot, createBossShot, createEnemyShot, enemyShotHitsPlayer, enemyShotLimit, type EnemyShot } from "./enemyFire";
 import SectorBackdrop from "./SectorBackdrop";
 import Starfield from "./Starfield";
 import { BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusEntryGap, bonusHeartReward, bonusPosition, bonusReward, bonusShowcaseShip, type BonusTarget } from "./bonusChallenge";
@@ -689,7 +689,7 @@ const GamePage = () => {
             impactCooldownRef.current = IMPACT_COOLDOWN_MS;
           }
           if (state.empMs === 0 && bossVulnerable(state.boss) && state.boss.fireElapsed >= bossFireInterval(state.boss, state.sector) && state.enemyShots.length < enemyShotLimit(width, elapsedRef.current, state.sector)) {
-            const bullet = createEnemyShot(nextIdRef.current, state.boss.x, state.boss.y + state.boss.radius * .4, state.player, width, height);
+            const bullet = createBossShot(nextIdRef.current, state.boss.x, state.boss.y + state.boss.radius * .4, state.player, width, height, nextIdRef.current);
             if (bullet) {
               nextIdRef.current += 1;
               state.enemyShots.push(bullet);
@@ -1053,7 +1053,7 @@ const GamePage = () => {
           return <div key={pickup.id} className={`power-up power-up-${pickup.type}`} role="img" aria-label={pickupLabel} title={pickupLabel} style={{ left: pickup.x, top: pickup.y }}><span aria-hidden="true">{powerUpSymbols[pickup.type]}</span></div>;
         })}
         {game.shots.map(shot => <div key={shot.id} className={`player-laser${shot.empowered ? " player-laser-overdrive" : ""}`} style={{ left: shot.x, top: shot.y }} />)}
-        {game.enemyShots.map(shot => <div key={shot.id} className="enemy-laser" style={{ left: shot.x, top: shot.y }} />)}
+        {game.enemyShots.map(shot => <div key={shot.id} className={`enemy-laser${shot.bossKind ? ` boss-projectile boss-projectile-${shot.bossKind}` : ""}`} style={{ left: shot.x, top: shot.y }} />)}
         {game.effects.map(effect => <ImpactEffectView key={effect.id} effect={effect} />)}
         {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship shielded-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0 ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${5 + game.thrust * 13}%`, ...shipVisualOffset } as CSSProperties} aria-label={t('Your Cryptoid ship')}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} />{engineTrails(shipSelection.skin.sprite, "player-engine")}</div></div>}
         <div className={`touch-controls touch-controls-${readControlHand()}`}>
