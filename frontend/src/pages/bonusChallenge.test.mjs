@@ -39,8 +39,8 @@ test("each bonus round previews twelve distinct non-boss hulls in varied paints"
 });
 
 test("bonus tiers include a perfect reward without requiring perfect hits for progression", () => {
-  assert.deepEqual([0, 5, 9, 12].map(hits => bonusReward(hits).points), [0, 500, 1_000, 2_000]);
-  assert.deepEqual([0, 1, 5, 9, 12].map(hits => bonusReward(hits).shards), [0, 2, 4, 7, 12]);
+  assert.deepEqual([0, 5, 9, 12].map(hits => bonusReward(hits).points), [0, 750, 1_500, 3_000]);
+  assert.deepEqual([0, 1, 5, 9, 12].map(hits => bonusReward(hits).shards), [0, 3, 6, 11, 18]);
   assert.deepEqual(bonusReward(5).powerUps, ["shield"]);
   assert.deepEqual(bonusReward(9).powerUps, []);
   assert.deepEqual(bonusReward(12).powerUps, ["shield"]);
@@ -48,7 +48,7 @@ test("bonus tiers include a perfect reward without requiring perfect hits for pr
 });
 
 test("late-level bonus completion awards more Shards while each target still pays one", () => {
-  assert.equal(bonusReward(12, 500).shards, 18);
+  assert.equal(bonusReward(12, 500).shards, 27);
   assert.equal(bonusReward(12, 500).points, bonusReward(12, 1).points);
 });
 

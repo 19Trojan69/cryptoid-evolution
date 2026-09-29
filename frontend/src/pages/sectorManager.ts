@@ -9,8 +9,13 @@ const sectorNames = ["GENESIS BELT", "CRYSTAL CHAIN", "MEME NEBULA", "DARK LEDGE
 
 export type SectorPhase = "SECTOR_INTRO" | "ENTRY" | "FORMATION" | "ATTACK_CYCLE" | "REFORM" | "SECTOR_CLEAR";
 
+// Each named region contains ten levels and closes with its boss and bonus.
+export const sectorChapter = (level: number) => Math.floor((Math.max(1, level) - 1) / 10);
+export const campaignLevel = (sector: number) => sectorChapter(sector) + 1;
+export const sectorInChapter = (sector: number) => (Math.max(1, sector) - 1) % 10 + 1;
+
 export const sectorName = (number: number) => {
-  const index = Math.max(0, number - 1);
+  const index = sectorChapter(number);
   const pass = Math.floor(index / sectorNames.length);
   return `${sectorNames[index % sectorNames.length]}${pass > 0 ? ` ${pass + 1}` : ""}`;
 };

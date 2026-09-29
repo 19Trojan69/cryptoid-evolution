@@ -50,13 +50,14 @@ export const bonusShowcaseShip = (index: number, sector: number) => ({
 });
 
 export const bonusReward = (hits: number, level = 1) => {
+  // This challenge now occurs once per ten levels, immediately after a boss.
   const base = hits === BONUS_TARGET_COUNT
-    ? { label: "PERFECT CRYPTO HUNT", points: 2_000, shards: 12, powerUps: ["shield"] as const }
+    ? { label: "PERFECT CRYPTO HUNT", points: 3_000, shards: 18, powerUps: ["shield"] as const }
     : hits >= 9
-      ? { label: "GOLD NETWORK", points: 1_000, shards: 7, powerUps: [] as const }
+      ? { label: "GOLD NETWORK", points: 1_500, shards: 11, powerUps: [] as const }
       : hits >= 5
-        ? { label: "NETWORK LINK", points: 500, shards: 4, powerUps: ["shield"] as const }
-        : { label: "CHALLENGE COMPLETE", points: 0, shards: hits > 0 ? 2 : 0, powerUps: [] as const };
+        ? { label: "NETWORK LINK", points: 750, shards: 6, powerUps: ["shield"] as const }
+        : { label: "CHALLENGE COMPLETE", points: 0, shards: hits > 0 ? 3 : 0, powerUps: [] as const };
   return { ...base, shards: scaledShardReward(base.shards, level) };
 };
 

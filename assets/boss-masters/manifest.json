@@ -1,0 +1,806 @@
+{
+  "schema_version": 1,
+  "role": "high-resolution source masters for the individually integrated game assets",
+  "assets": [
+    {
+      "boss": 1,
+      "level": 10,
+      "file": "boss_01.png",
+      "width": 2022,
+      "height": 778,
+      "alpha_bounds": [
+        9,
+        6,
+        2013,
+        766
+      ],
+      "visible_width_to_depth": 2.637,
+      "silhouette_mirror_iou": 0.995,
+      "sha256": "4a445147ea844f4d960112be21a5303bf5e947d4ed42e0d9592b0582e50fc8e4"
+    },
+    {
+      "boss": 2,
+      "level": 20,
+      "file": "boss_02.png",
+      "width": 1859,
+      "height": 846,
+      "alpha_bounds": [
+        68,
+        12,
+        1791,
+        828
+      ],
+      "visible_width_to_depth": 2.112,
+      "silhouette_mirror_iou": 0.997,
+      "sha256": "2a844e953e367865890512a61a66fcfa33927007bbda4da6ad3e279376a39753"
+    },
+    {
+      "boss": 3,
+      "level": 30,
+      "file": "boss_03.png",
+      "width": 1862,
+      "height": 845,
+      "alpha_bounds": [
+        9,
+        13,
+        1854,
+        830
+      ],
+      "visible_width_to_depth": 2.258,
+      "silhouette_mirror_iou": 0.998,
+      "sha256": "7e945c581a9d0b857f8f8215eb92ab9b1715d9d3fa4a8a34bedceb4f75983537"
+    },
+    {
+      "boss": 4,
+      "level": 40,
+      "file": "boss_04.png",
+      "width": 1862,
+      "height": 845,
+      "alpha_bounds": [
+        7,
+        8,
+        1855,
+        837
+      ],
+      "visible_width_to_depth": 2.229,
+      "silhouette_mirror_iou": 0.999,
+      "sha256": "dee608d06ab28615609c8dfc325ec3af695319a8a0255b007af9236266f08221"
+    },
+    {
+      "boss": 5,
+      "level": 50,
+      "file": "boss_05.png",
+      "width": 1983,
+      "height": 793,
+      "alpha_bounds": [
+        14,
+        9,
+        1970,
+        771
+      ],
+      "visible_width_to_depth": 2.567,
+      "silhouette_mirror_iou": 0.998,
+      "sha256": "e9f6e2ff905827469b9990d69adb7fcc51b58994d850a3fd8a1a2991f08429bd"
+    },
+    {
+      "boss": 6,
+      "level": 60,
+      "file": "boss_06.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        16,
+        17,
+        2033,
+        663
+      ],
+      "visible_width_to_depth": 3.122,
+      "silhouette_mirror_iou": 0.997,
+      "sha256": "0d9dce14080610c4d45fc358c51e0ccf7eb783149dd12f0a66cd75c5992ebddb"
+    },
+    {
+      "boss": 7,
+      "level": 70,
+      "file": "boss_07.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        6,
+        5,
+        2042,
+        763
+      ],
+      "visible_width_to_depth": 2.686,
+      "silhouette_mirror_iou": 0.995,
+      "sha256": "2e4b38b960f26e3ccb87874d9b6c390f7516ff912e02dc22192ca263f1e6b3fb"
+    },
+    {
+      "boss": 8,
+      "level": 80,
+      "file": "boss_08.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        5,
+        2,
+        2044,
+        766
+      ],
+      "visible_width_to_depth": 2.669,
+      "silhouette_mirror_iou": 0.997,
+      "sha256": "5689e0bcc58ccddabb6f61ac635af87952456f6f0ebd84d5823f887eebc13bc2"
+    },
+    {
+      "boss": 9,
+      "level": 90,
+      "file": "boss_09.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        7,
+        4,
+        2042,
+        764
+      ],
+      "visible_width_to_depth": 2.678,
+      "silhouette_mirror_iou": 0.997,
+      "sha256": "a3fb74c18a907be129ce0f9d6d2743b95b7ffb4e6a8a01a56a945d84864aefb1"
+    },
+    {
+      "boss": 10,
+      "level": 100,
+      "file": "boss_10.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        26,
+        12,
+        2022,
+        754
+      ],
+      "visible_width_to_depth": 2.69,
+      "silhouette_mirror_iou": 0.996,
+      "sha256": "8c23e76cb099753f2138dc33c2cc87d9568acfd1e69ae2498fb3eae38f6afbab"
+    },
+    {
+      "boss": 11,
+      "level": 110,
+      "file": "boss_11.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        9,
+        8,
+        2039,
+        756
+      ],
+      "visible_width_to_depth": 2.714,
+      "silhouette_mirror_iou": 0.997,
+      "sha256": "41e99fbd6459f850f8c4c93997ef10bdb1b687ecbe7d76c120106f5b3e023842"
+    },
+    {
+      "boss": 12,
+      "level": 120,
+      "file": "boss_12.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        5,
+        7,
+        2044,
+        759
+      ],
+      "visible_width_to_depth": 2.711,
+      "silhouette_mirror_iou": 0.996,
+      "sha256": "6f8cd33298b014518193c3d712d4d310956b80ea5fbd3ab195c10f8c60f91b8f"
+    },
+    {
+      "boss": 13,
+      "level": 130,
+      "file": "boss_13.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        6,
+        3,
+        2043,
+        766
+      ],
+      "visible_width_to_depth": 2.67,
+      "silhouette_mirror_iou": 0.998,
+      "sha256": "673b1ec98cd4f3d41ddb78d1f544884c5bb37cc16fc8d71f6bf7e39b980c864a"
+    },
+    {
+      "boss": 14,
+      "level": 140,
+      "file": "boss_14.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        9,
+        10,
+        2040,
+        755
+      ],
+      "visible_width_to_depth": 2.726,
+      "silhouette_mirror_iou": 0.996,
+      "sha256": "64e9d5c08d21b39baf78fd7c18474ab0e64d70a564481a85410d9a457f525c4c"
+    },
+    {
+      "boss": 15,
+      "level": 150,
+      "file": "boss_15.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        8,
+        13,
+        2040,
+        756
+      ],
+      "visible_width_to_depth": 2.735,
+      "silhouette_mirror_iou": 0.995,
+      "sha256": "79137842a35392e342f8c19d7d9283bef54229851db988c5471a5e70a34971ff"
+    },
+    {
+      "boss": 16,
+      "level": 160,
+      "file": "boss_16.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        5,
+        6,
+        2043,
+        750
+      ],
+      "visible_width_to_depth": 2.739,
+      "silhouette_mirror_iou": 0.996,
+      "sha256": "b494b18165b7c1b30d0fca004ae105dd5d977e56336bda9d35b700a24918133e"
+    },
+    {
+      "boss": 17,
+      "level": 170,
+      "file": "boss_17.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        9,
+        2,
+        2039,
+        763
+      ],
+      "visible_width_to_depth": 2.668,
+      "silhouette_mirror_iou": 0.991,
+      "sha256": "7255d3a11a6bca6885ac5ba2b5d240a06e827a7601fb648d35f19070527eb9a7"
+    },
+    {
+      "boss": 18,
+      "level": 180,
+      "file": "boss_18.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        26,
+        1,
+        2023,
+        768
+      ],
+      "visible_width_to_depth": 2.604,
+      "silhouette_mirror_iou": 0.998,
+      "sha256": "756fd2de2a6ba6241498dd9373ff614fb28b3299c89b9668ed9bdc3ee557994a"
+    },
+    {
+      "boss": 19,
+      "level": 190,
+      "file": "boss_19.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        8,
+        6,
+        2040,
+        752
+      ],
+      "visible_width_to_depth": 2.724,
+      "silhouette_mirror_iou": 0.997,
+      "sha256": "f3a1fca31189a9aee510e6ef3683b6d1fa7b39614494c81d39978119cfca9d21"
+    },
+    {
+      "boss": 20,
+      "level": 200,
+      "file": "boss_20.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        1,
+        3,
+        2047,
+        767
+      ],
+      "visible_width_to_depth": 2.678,
+      "silhouette_mirror_iou": 0.991,
+      "sha256": "4f3522acf38f2401213cba7884adaee74d27dd3c1c93bd59010c9a96f396ce25"
+    },
+    {
+      "boss": 21,
+      "level": 210,
+      "file": "boss_21.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        36,
+        7,
+        2013,
+        753
+      ],
+      "visible_width_to_depth": 2.65,
+      "silhouette_mirror_iou": 0.997,
+      "sha256": "0907f6ff823abba70d66f40eb8cfdc73aa0768f88bc7348c0aa87edc7f9c90ba"
+    },
+    {
+      "boss": 22,
+      "level": 220,
+      "file": "boss_22.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        3,
+        2,
+        2046,
+        761
+      ],
+      "visible_width_to_depth": 2.692,
+      "silhouette_mirror_iou": 0.995,
+      "sha256": "57574eef62554dfaeee1423150ae9c17f35ddbade89622466c890519be9e76f9"
+    },
+    {
+      "boss": 23,
+      "level": 230,
+      "file": "boss_23.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        2,
+        0,
+        2047,
+        767
+      ],
+      "visible_width_to_depth": 2.666,
+      "silhouette_mirror_iou": 0.998,
+      "sha256": "e2bc3aa60ccfcc535093aac57c658f0b9481e70d42dccb2d13631305ad279e3e"
+    },
+    {
+      "boss": 24,
+      "level": 240,
+      "file": "boss_24.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        0,
+        0,
+        2048,
+        768
+      ],
+      "visible_width_to_depth": 2.667,
+      "silhouette_mirror_iou": 0.995,
+      "sha256": "3790497e466ebbf606129baed2678cdda2010bce8bb8a15350a24f4b057f8dab"
+    },
+    {
+      "boss": 25,
+      "level": 250,
+      "file": "boss_25.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        13,
+        16,
+        2035,
+        756
+      ],
+      "visible_width_to_depth": 2.732,
+      "silhouette_mirror_iou": 0.997,
+      "sha256": "6fd22886480476c26596f16deaf4ac630d49f131564d286f041f4b13e3531099"
+    },
+    {
+      "boss": 26,
+      "level": 260,
+      "file": "boss_26.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        12,
+        8,
+        2037,
+        754
+      ],
+      "visible_width_to_depth": 2.714,
+      "silhouette_mirror_iou": 0.997,
+      "sha256": "828cad582c6cd3c614de60c518f6c5458fbb9b519634ecd6ce2198a53303dc72"
+    },
+    {
+      "boss": 27,
+      "level": 270,
+      "file": "boss_27.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        3,
+        3,
+        2046,
+        766
+      ],
+      "visible_width_to_depth": 2.678,
+      "silhouette_mirror_iou": 0.996,
+      "sha256": "6acff30ebed0fea349bb0da83d493ee43288a7173e1b872f75e584b24f692d81"
+    },
+    {
+      "boss": 28,
+      "level": 280,
+      "file": "boss_28.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        17,
+        16,
+        2033,
+        745
+      ],
+      "visible_width_to_depth": 2.765,
+      "silhouette_mirror_iou": 0.997,
+      "sha256": "3a768ea3ee17a722743857cb7a73103a10540042af4be8c92d9ccfe8033f5faa"
+    },
+    {
+      "boss": 29,
+      "level": 290,
+      "file": "boss_29.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        2,
+        2,
+        2046,
+        768
+      ],
+      "visible_width_to_depth": 2.668,
+      "silhouette_mirror_iou": 0.995,
+      "sha256": "d26cf39aefb238a8a74ab533464c11213f87c7856180249f9cd552ec7925a6bc"
+    },
+    {
+      "boss": 30,
+      "level": 300,
+      "file": "boss_30.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        32,
+        3,
+        2016,
+        763
+      ],
+      "visible_width_to_depth": 2.611,
+      "silhouette_mirror_iou": 0.993,
+      "sha256": "8f4a4d62b1f4355fa8f94ab645428f27d3a5479efcafdeb29cb7180cb533f3c4"
+    },
+    {
+      "boss": 31,
+      "level": 310,
+      "file": "boss_31.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        14,
+        12,
+        2035,
+        751
+      ],
+      "visible_width_to_depth": 2.735,
+      "silhouette_mirror_iou": 0.995,
+      "sha256": "917442792e1525bd6330531cc2378f881e5eef5a20ece4c338661a2e2bfe5427"
+    },
+    {
+      "boss": 32,
+      "level": 320,
+      "file": "boss_32.png",
+      "width": 2046,
+      "height": 768,
+      "alpha_bounds": [
+        8,
+        0,
+        2039,
+        761
+      ],
+      "visible_width_to_depth": 2.669,
+      "silhouette_mirror_iou": 0.997,
+      "sha256": "818f825a6341fc05467355cee9722972280bfd101eed873f7b2268ac8e6471d2"
+    },
+    {
+      "boss": 33,
+      "level": 330,
+      "file": "boss_33.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        9,
+        1,
+        2039,
+        680
+      ],
+      "visible_width_to_depth": 2.99,
+      "silhouette_mirror_iou": 0.994,
+      "sha256": "a297e34c856dd7b2d940adb1ea5db48f7588a855547c9b16badf5396787c88e8"
+    },
+    {
+      "boss": 34,
+      "level": 340,
+      "file": "boss_34.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        11,
+        5,
+        2037,
+        760
+      ],
+      "visible_width_to_depth": 2.683,
+      "silhouette_mirror_iou": 0.996,
+      "sha256": "0c2f39a09027470d356b6a80617a60f28c63eeea029e2bde7978f57602d89357"
+    },
+    {
+      "boss": 35,
+      "level": 350,
+      "file": "boss_35.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        13,
+        63,
+        2036,
+        690
+      ],
+      "visible_width_to_depth": 3.226,
+      "silhouette_mirror_iou": 0.989,
+      "sha256": "5f6c44a14d8b8615124fae53df75181610250a3a4562f710ad014f1f57faf48c"
+    },
+    {
+      "boss": 36,
+      "level": 360,
+      "file": "boss_36.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        5,
+        10,
+        2043,
+        757
+      ],
+      "visible_width_to_depth": 2.728,
+      "silhouette_mirror_iou": 0.995,
+      "sha256": "284011ff8cce88cb084a609d7f4998b0a8d8ec1e979c3f8a210156a8c9a09c7a"
+    },
+    {
+      "boss": 37,
+      "level": 370,
+      "file": "boss_37.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        13,
+        3,
+        2036,
+        750
+      ],
+      "visible_width_to_depth": 2.708,
+      "silhouette_mirror_iou": 0.996,
+      "sha256": "2b7d2c0c4500d324aedd5c7a4205d2f39a5031df58d5870dabb7570420c4b119"
+    },
+    {
+      "boss": 38,
+      "level": 380,
+      "file": "boss_38.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        67,
+        17,
+        1982,
+        742
+      ],
+      "visible_width_to_depth": 2.641,
+      "silhouette_mirror_iou": 0.995,
+      "sha256": "4483806106765c28b74c0ac6d10ef9fb196b3eb5be574cc08518e60beec9ac01"
+    },
+    {
+      "boss": 39,
+      "level": 390,
+      "file": "boss_39.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        2,
+        0,
+        2047,
+        768
+      ],
+      "visible_width_to_depth": 2.663,
+      "silhouette_mirror_iou": 0.997,
+      "sha256": "56d80f2c009f0688757ceb022fb2d5b653944dd77ed7b4f1216746619d97a649"
+    },
+    {
+      "boss": 40,
+      "level": 400,
+      "file": "boss_40.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        4,
+        4,
+        2044,
+        751
+      ],
+      "visible_width_to_depth": 2.731,
+      "silhouette_mirror_iou": 0.99,
+      "sha256": "1a420b0bac56df082cc13e6404bd12aa88d60b0d0229853124b2caa08b641f9a"
+    },
+    {
+      "boss": 41,
+      "level": 410,
+      "file": "boss_41.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        8,
+        14,
+        2041,
+        747
+      ],
+      "visible_width_to_depth": 2.774,
+      "silhouette_mirror_iou": 0.996,
+      "sha256": "b3f367afb1c5c3b8b4b24e503f2a985d09c99365202389869ea6cbffe76d7ae1"
+    },
+    {
+      "boss": 42,
+      "level": 420,
+      "file": "boss_42.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        3,
+        6,
+        2045,
+        761
+      ],
+      "visible_width_to_depth": 2.705,
+      "silhouette_mirror_iou": 0.991,
+      "sha256": "897aa750656f893d8a4c38bfbd78192944c4ebcf4c91530bb95198eb6647fe50"
+    },
+    {
+      "boss": 43,
+      "level": 430,
+      "file": "boss_43.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        2,
+        6,
+        2047,
+        765
+      ],
+      "visible_width_to_depth": 2.694,
+      "silhouette_mirror_iou": 0.998,
+      "sha256": "0fda8c698443e8d35e2a165864781061f7af6c7e69f872bff65bf8ac51090c94"
+    },
+    {
+      "boss": 44,
+      "level": 440,
+      "file": "boss_44.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        15,
+        13,
+        2034,
+        755
+      ],
+      "visible_width_to_depth": 2.721,
+      "silhouette_mirror_iou": 0.996,
+      "sha256": "60a91b30817df1cceb3e5362c67a6097db3d06aa0f1f3db4a152793a7c39b3cc"
+    },
+    {
+      "boss": 45,
+      "level": 450,
+      "file": "boss_45.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        13,
+        11,
+        2036,
+        754
+      ],
+      "visible_width_to_depth": 2.723,
+      "silhouette_mirror_iou": 0.997,
+      "sha256": "a9f25909aea89c94e787b39b0a9eaa9c803a3fedd844ec19804358f804c3be0f"
+    },
+    {
+      "boss": 46,
+      "level": 460,
+      "file": "boss_46.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        5,
+        16,
+        2044,
+        752
+      ],
+      "visible_width_to_depth": 2.77,
+      "silhouette_mirror_iou": 0.998,
+      "sha256": "eaaec534c003aad739e624abdb9f1058c04e1c9ce1272c19afbaffa368230cbe"
+    },
+    {
+      "boss": 47,
+      "level": 470,
+      "file": "boss_47.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        11,
+        12,
+        2039,
+        752
+      ],
+      "visible_width_to_depth": 2.741,
+      "silhouette_mirror_iou": 0.994,
+      "sha256": "4e7479ac1ee8523e46848644eddc1895b2edaf3c0c3a224b04d4d64148937894"
+    },
+    {
+      "boss": 48,
+      "level": 480,
+      "file": "boss_48.png",
+      "width": 2046,
+      "height": 769,
+      "alpha_bounds": [
+        2,
+        0,
+        2046,
+        769
+      ],
+      "visible_width_to_depth": 2.658,
+      "silhouette_mirror_iou": 0.996,
+      "sha256": "ebc35ed6fb62bd4488c17b76259852069364f6492ce05083f33c90855fcaeed8"
+    },
+    {
+      "boss": 49,
+      "level": 490,
+      "file": "boss_49.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        0,
+        1,
+        2048,
+        767
+      ],
+      "visible_width_to_depth": 2.674,
+      "silhouette_mirror_iou": 0.994,
+      "sha256": "b0849da86e9e36d4053e4e1e3abf00f674793e937a9833ecaa42d93c1da5d0a5"
+    },
+    {
+      "boss": 50,
+      "level": 500,
+      "file": "boss_50.png",
+      "width": 2048,
+      "height": 768,
+      "alpha_bounds": [
+        15,
+        5,
+        2033,
+        767
+      ],
+      "visible_width_to_depth": 2.648,
+      "silhouette_mirror_iou": 0.994,
+      "sha256": "3c4d18c2a4d67ca4fc4d4603774bcf04c2bd07c9caa03d82783b65c409b4e648"
+    }
+  ]
+}
