@@ -1,6 +1,6 @@
 import { useEffect, useState, type CSSProperties } from "react";
 import PaintedShip from "./PaintedShip";
-import { playerColors, playerSkins, type PlayerColorId } from "./shipFleet";
+import { allPlayerColors, playerColors, playerSkins, shipNozzleStyles, type PlayerColorId } from "./shipFleet";
 import type { ShipStage } from "./shipEvolution";
 
 const SCENE_MS = 32_000;
@@ -13,22 +13,30 @@ const HomeCombatPreview = ({ defender }: { defender: { sprite: number; color: Pl
     return () => window.clearInterval(timer);
   }, []);
 
-  const enemies = Array.from({ length: 4 }, (_, index) => {
-    const sprite = playerSkins[(((scene * 4 + index) * 7) % playerSkins.length)].sprite;
-    const color = playerColors[(scene * 3 + index * 2) % playerColors.length];
+  const otherSkins = playerSkins.filter(skin => skin.sprite !== defender.sprite);
+  const otherColors = playerColors.filter(color => color.id !== defender.color);
+  const enemies = Array.from({ length: 2 }, (_, index) => {
+    const sprite = otherSkins[(scene * 3 + index * 7) % otherSkins.length].sprite;
+    const color = otherColors[(scene * 2 + index * 3) % otherColors.length];
     return { sprite, color: color.id, glow: color.glow, stage: stageFor(scene, index) };
   });
-  const wingman = {
-    sprite: playerSkins[(scene * 7 + 9) % playerSkins.length].sprite,
-    color: playerColors[(scene * 3 + 5) % playerColors.length].id,
-    stage: stageFor(scene, 5),
-  };
+  const defenderGlow = allPlayerColors.find(color => color.id === defender.color)?.glow ?? "#8feeff";
+  const engineTrails = (sprite: number) => shipNozzleStyles(sprite).map((style, index) =>
+    <i key={index} className="home-combat-engine" style={style} />);
+  const shots = (pattern: number) => <span className={`home-combat-weapons home-combat-pattern-${pattern}`}>
+    <i className="home-combat-shot" /><i className="home-combat-shot" /><i className="home-combat-shot" />
+  </span>;
 
-  return <div className="home-combat-preview" role="img" aria-label="Animierte Raumschiff-Kampfszene in Aufsicht">
+  return <div className="home-combat-preview" role="img" aria-label="Drei unterschiedliche Raumschiffe in einer animierten Kampfszene von oben">
     <div className="home-combat-scene" key={scene} aria-hidden="true">
-      {enemies.map((ship, index) => <span key={index} className={`home-combat-ship home-combat-enemy home-combat-enemy-${index + 1}`} style={{ "--combat-glow": ship.glow } as CSSProperties}><span className="home-combat-engine" /><PaintedShip className="home-combat-hull" sprite={ship.sprite} color={ship.color} stage={ship.stage} /></span>)}
-      {[defender, wingman].map((ship, index) => <span key={index} className={`home-combat-ship home-combat-ally home-combat-ally-${index + 1}`} style={{ "--combat-glow": playerColors.find(color => color.id === ship.color)?.glow ?? "#8feeff" } as CSSProperties}><span className="home-combat-engine" /><PaintedShip className="home-combat-hull" sprite={ship.sprite} color={ship.color} stage={ship.stage} /></span>)}
-      {Array.from({ length: 7 }, (_, index) => <i key={index} className={`home-combat-shot home-combat-shot-${index + 1}`} />)}
+      {enemies.map((ship, index) => <span key={index} className={`home-combat-ship home-combat-enemy home-combat-enemy-${index + 1}`} style={{ "--combat-glow": ship.glow } as CSSProperties}>
+        <span className="home-combat-body">{engineTrails(ship.sprite)}<PaintedShip className="home-combat-hull" sprite={ship.sprite} color={ship.color} stage={ship.stage} /></span>
+        {shots((scene + index) % 3)}
+      </span>)}
+      <span className="home-combat-ship home-combat-ally-1" style={{ "--combat-glow": defenderGlow } as CSSProperties}>
+        <span className="home-combat-body">{engineTrails(defender.sprite)}<PaintedShip className="home-combat-hull" sprite={defender.sprite} color={defender.color} stage={defender.stage} /></span>
+        {shots((scene + 2) % 3)}
+      </span>
       <i className="home-combat-impact home-combat-impact-1" /><i className="home-combat-impact home-combat-impact-2" />
     </div>
   </div>;
