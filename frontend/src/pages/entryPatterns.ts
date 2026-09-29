@@ -1,4 +1,4 @@
-// One arrival choreography per section. The nine patterns repeat in later sections.
+// One arrival choreography per normal sector; sectors 10, 20, ... are boss fights.
 export const ENTRY_PATTERNS = [
   "zigzag", "figureEight", "cross", "spiral", "pincer",
   "sweep", "cascade", "diamond", "doubleLoop",
@@ -6,8 +6,8 @@ export const ENTRY_PATTERNS = [
 
 export type EntryPattern = typeof ENTRY_PATTERNS[number];
 
-export const entryPatternForSection = (section: number): EntryPattern =>
-  ENTRY_PATTERNS[(Math.max(1, section) - 1) % ENTRY_PATTERNS.length];
+export const entryPatternForSector = (sector: number): EntryPattern =>
+  ENTRY_PATTERNS[(Math.max(1, sector) - 1) % 10 % ENTRY_PATTERNS.length];
 
 export const entryStartX = (pattern: EntryPattern, index: number, width: number, radius: number, side: number) => {
   const edge = radius + Math.max(1, width - radius * 2) * .08;
@@ -47,7 +47,8 @@ export const entryPosition = ({ pattern, progress, startX, startY, targetX, targ
 
   switch (pattern) {
     case "zigzag":
-      dx = side * width * .27 * flourish * (2 / Math.PI) * Math.asin(Math.sin(6 * Math.PI * p));
+      // Two broad S-bends, without the triangular wave's sharp reversals.
+      dx = side * width * .27 * flourish * Math.sin(3 * Math.PI * p);
       dy = height * .11 * flourish;
       break;
     case "figureEight":
@@ -77,7 +78,7 @@ export const entryPosition = ({ pattern, progress, startX, startY, targetX, targ
       break;
     case "diamond":
       dx = side * width * .3 * flourish * Math.sin(2 * Math.PI * p);
-      dy = height * .18 * flourish * Math.abs(Math.sin(2 * Math.PI * p));
+      dy = height * .09 * flourish * (1 - Math.cos(4 * Math.PI * p));
       break;
     case "doubleLoop":
       dx = side * width * .25 * flourish * Math.sin(4 * Math.PI * p);
@@ -85,8 +86,14 @@ export const entryPosition = ({ pattern, progress, startX, startY, targetX, targ
       break;
   }
 
+  // Soft saturation keeps wide arcs on screen without the visible corners
+  // caused by clipping positions against the playfield every frame.
+  const contain = (base: number, offset: number, min: number, max: number) => {
+    const room = offset >= 0 ? max - base : base - min;
+    return room > 0 ? base + room * Math.tanh(offset / room) : base;
+  };
   return {
-    x: Math.max(radius, Math.min(width - radius, baseX + dx)),
-    y: Math.max(radius, Math.min(height * .62, baseY + dy)),
+    x: contain(baseX, dx, radius, width - radius),
+    y: contain(baseY, dy, radius, height * .62),
   };
 };

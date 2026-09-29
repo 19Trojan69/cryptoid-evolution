@@ -1,9 +1,10 @@
 import { memo, type CSSProperties } from "react";
 import type { PlayerPosition } from "./playerCombat";
 import EarthGlobe from "./EarthGlobe";
+import { sectorChapter } from "./sectorManager";
 
 const SectorBackdrop = ({ sector, player, paused }: { sector: number; player: PlayerPosition; paused: boolean }) => {
-  const palette = ((sector - 1) % 6) + 1;
+  const palette = (sectorChapter(sector) % 6) + 1;
   const planetTypes = [
     ["ice", "desert", "earth", "gas"],
     ["rock", "ice", "crystal", "desert"],

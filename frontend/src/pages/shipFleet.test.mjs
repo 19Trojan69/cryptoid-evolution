@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { allPlayerColors, bossNozzleStyles, buySkin, buyShipVariant, colorForSkin, EXTRA_STARTER_PRICE, fleetCount, ownedSkins, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyles, spriteVisualOffset } from "./shipFleet.ts";
+import { allPlayerColors, bossNozzleStyles, buySkin, buyShipVariant, colorForSkin, enemySprite, EXTRA_STARTER_PRICE, fleetCount, ownedSkins, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyles, spriteVisualOffset } from "./shipFleet.ts";
 
 test("only the grey starter is free and the full reference fleet is purchasable", () => {
   assert.equal(playerSkins.length, 20);
@@ -9,6 +9,15 @@ test("only the grey starter is free and the full reference fleet is purchasable"
   assert.equal(new Set(playerSkins.map(skin => skin.sprite)).size, 20);
   assert.equal(EXTRA_STARTER_PRICE, 150);
   playerSkins.slice(1).forEach((skin, index) => assert.equal(skin.price, 150 + index * 250, skin.id));
+});
+
+test("later sectors field all 20 player hulls as enemy models", () => {
+  const classes = ["light", "medium", "heavy", "elite"];
+  const early = new Set(classes.flatMap(shipClass => Array.from({ length: 20 }, (_, slot) => enemySprite(shipClass, slot, 1))));
+  const late = new Set(classes.flatMap(shipClass => Array.from({ length: 20 }, (_, slot) => enemySprite(shipClass, slot, 51))));
+  assert.ok(early.size < late.size);
+  assert.deepEqual(late, new Set(playerSkins.map(skin => skin.sprite)));
+  assert.equal(enemySprite("elite", 3, 51), 18);
 });
 
 test("a skin purchase spends once and never grants an unaffordable or duplicate hull", () => {

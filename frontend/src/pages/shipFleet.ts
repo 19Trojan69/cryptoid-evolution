@@ -182,12 +182,15 @@ const enemySprites: Record<CryptoidClass, readonly number[]> = {
   light: [0, 2, 4, 6, 9, 13, 16],
   medium: [1, 5, 7, 8, 12, 14, 17],
   heavy: [10, 19],
-  elite: [3, 11, 15],
+  elite: [3, 11, 15, 18],
 };
 
-export const enemySprite = (shipClass: CryptoidClass, formationSlot: number) => {
+export const enemySprite = (shipClass: CryptoidClass, formationSlot: number, sector = 1) => {
   const choices = enemySprites[shipClass];
-  return choices[Math.abs(formationSlot) % choices.length];
+  // Later campaign levels field more of the same 20 hulls available to players.
+  // Combat class, health and rewards remain independent of the chosen art.
+  const unlocked = Math.min(choices.length, 2 + Math.floor((Math.max(1, sector) - 1) / 10));
+  return choices[Math.abs(formationSlot) % unlocked];
 };
 
 export const spriteStyle = (index: number): CSSProperties => ({
