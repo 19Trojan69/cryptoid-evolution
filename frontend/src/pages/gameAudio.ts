@@ -20,7 +20,8 @@ const sampleGains: Record<SampleName, number> = {
   "shield": .071,
   "boost": .174,
   "boss-warning-siren": .72,
-  "boss-destroy": .18,
+  // The boss finale is a one-time accent, intentionally above the regular effects.
+  "boss-destroy": .55,
 };
 
 // Game effects only; audio starts after a player gesture on browsers that require one.

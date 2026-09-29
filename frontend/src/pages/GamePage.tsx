@@ -37,6 +37,9 @@ const IMPACT_COOLDOWN_MS = 1_500;
 const GAME_OVER_REVEAL_MS = 1_750;
 const ENTRY_HUD_GAP_PX = 8;
 const BOSS_VICTORY_VOLUME_BOOST = 1.6;
+// The explosion is audible for ~1.1 s. Give it a lead, then overlap its tail.
+const BOSS_VICTORY_LEAD_MS = 550;
+const BOSS_CLEAR_DURATION_MS = 4_300;
 const FORMATION_DATA_ROWS = [
   "1011010001101001110001010011011010101100",
   "0010110111010010010011111011000101100110",
@@ -333,6 +336,8 @@ const GamePage = () => {
   const musicRef = useRef<MusicPlayer | null>(null);
   const regularMusicPositionRef = useRef(0);
   const soundRef = useRef<GameAudio | null>(null);
+  const bossVictoryPendingRef = useRef(false);
+  const bossVictoryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const audioCleanupRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const gameOverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const startRequestRef = useRef(false);
@@ -417,8 +422,9 @@ const GamePage = () => {
     const track = musicRef.current;
     if (!track) return;
     const normalSource = "/audio/battle-orbit.mp3";
+    const waitingForExplosion = game.encounter === "boss-clear" && bossVictoryPendingRef.current;
     const desiredSource = game.encounter === "boss-clear"
-      ? "/audio/boss-victory-v2.mp3"
+      ? waitingForExplosion ? "/audio/dreadnought-duel.mp3" : "/audio/boss-victory-v2.mp3"
       : game.encounter === "boss-intro" || game.encounter === "boss-fight"
         ? "/audio/dreadnought-duel.mp3"
         : normalSource;
@@ -427,7 +433,7 @@ const GamePage = () => {
       if (track.currentSource === normalSource) regularMusicPositionRef.current = track.audio.currentTime || 0;
       track.setSource(desiredSource, desiredSource === normalSource ? regularMusicPositionRef.current : 0);
     }
-    if (game.status === "playing") void track.play();
+    if (game.status === "playing" && !waitingForExplosion) void track.play();
     else track.pause();
   }, [game.status, game.encounter, musicEnabled]);
   useEffect(() => {
@@ -437,12 +443,23 @@ const GamePage = () => {
     musicRef.current?.setVolume(volume);
   }, [musicVolume, game.encounter]);
   const startBossVictory = () => {
-    const track = musicRef.current;
-    if (!track) return;
-    track.audio.loop = false;
-    track.setSource("/audio/boss-victory-v2.mp3");
-    void track.play();
+    if (bossVictoryTimerRef.current !== null) return;
+    bossVictoryPendingRef.current = true;
+    musicRef.current?.pause();
+    bossVictoryTimerRef.current = window.setTimeout(() => {
+      bossVictoryTimerRef.current = null;
+      bossVictoryPendingRef.current = false;
+      if (stateRef.current.encounter !== "boss-clear") return;
+      const track = musicRef.current;
+      if (!track) return;
+      track.audio.loop = false;
+      track.setSource("/audio/boss-victory-v2.mp3");
+      if (stateRef.current.status === "playing") void track.play();
+    }, BOSS_VICTORY_LEAD_MS);
   };
+  useEffect(() => () => {
+    if (bossVictoryTimerRef.current !== null) window.clearTimeout(bossVictoryTimerRef.current);
+  }, []);
   const changeEffectsVolume = (value: number) => {
     localStorage.setItem(EFFECTS_VOLUME_KEY, String(value));
     setEffectsVolume(value);
@@ -544,7 +561,7 @@ const GamePage = () => {
         sectionElapsedRef.current += delta;
         if (state.phase === "SECTOR_CLEAR") {
           clearTimerRef.current += delta;
-          if (clearTimerRef.current >= SECTION_CLEAR_MS) {
+          if (clearTimerRef.current >= (state.encounter === "boss-clear" ? BOSS_CLEAR_DURATION_MS : SECTION_CLEAR_MS)) {
             const clearEncounter = state.encounter === "boss-clear" ? "boss-clear" : state.encounter === "bonus" ? "bonus" : "normal";
             const next = advanceAfterClear(state.section, clearEncounter);
             state.section = next.section;
@@ -922,6 +939,9 @@ const GamePage = () => {
     setGame({ ...state });
   };
   const restart = () => {
+    if (bossVictoryTimerRef.current !== null) window.clearTimeout(bossVictoryTimerRef.current);
+    bossVictoryTimerRef.current = null;
+    bossVictoryPendingRef.current = false;
     if (gameOverTimerRef.current !== null) window.clearTimeout(gameOverTimerRef.current);
     gameOverTimerRef.current = null;
     stateRef.current = createInitialState();
