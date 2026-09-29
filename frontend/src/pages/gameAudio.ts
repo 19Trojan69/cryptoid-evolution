@@ -2,7 +2,7 @@ import { readEffectsVolume } from "./musicPreferences.ts";
 
 export type GameSound = "laser" | "enemyHit" | "explosion" | "collision" | "playerDestroy" | "shield" | "pickup" | "boost" | "boss" | "bossDestroy" | "nova" | "emp";
 
-const sampleNames = ["shot-single", "shot-twin", "shot-rapid", "shot-triple", "shot-plasma", "enemy-hit", "enemy-destroy", "enemy-destroy-alt", "player-collision", "shield", "boost", "boss-warning-siren", "boss-destroy", "boss-destroy-v2"] as const;
+const sampleNames = ["shot-single", "shot-twin", "shot-rapid", "shot-triple", "shot-plasma", "enemy-hit", "enemy-destroy", "enemy-destroy-alt", "player-collision", "shield", "boost", "boss-warning-siren", "boss-destroy", "boss-destroy-v3"] as const;
 type SampleName = typeof sampleNames[number];
 
 // Calibrated from the source files' average levels: one-off effects share a
@@ -21,8 +21,8 @@ const sampleGains: Record<SampleName, number> = {
   "boost": .174,
   "boss-warning-siren": .72,
   "boss-destroy": .107,
-  // Mobile-friendly explosion: presence just under the siren at the same effects setting.
-  "boss-destroy-v2": .74,
+  // Long, deeper boss impact with enough presence to carry on phone speakers.
+  "boss-destroy-v3": .9,
 };
 
 // Game effects only; audio starts after a player gesture on browsers that require one.
@@ -104,7 +104,7 @@ export class GameAudio {
     } else {
       const name: Partial<Record<Exclude<GameSound, "laser">, SampleName>> = {
         enemyHit: "enemy-hit", explosion: this.destroyCount++ % 2 ? "enemy-destroy-alt" : "enemy-destroy",
-        collision: "player-collision", playerDestroy: "boss-destroy", shield: "shield", boost: "boost", boss: "boss-warning-siren", bossDestroy: "boss-destroy-v2",
+        collision: "player-collision", playerDestroy: "boss-destroy", shield: "shield", boost: "boost", boss: "boss-warning-siren", bossDestroy: "boss-destroy-v3",
       };
       const chosen = name[sound];
       if (chosen && this.sample(chosen)) return;

@@ -37,9 +37,9 @@ const IMPACT_COOLDOWN_MS = 1_500;
 const GAME_OVER_REVEAL_MS = 1_750;
 const ENTRY_HUD_GAP_PX = 8;
 const BOSS_VICTORY_VOLUME_BOOST = 1.6;
-// The explosion is audible for ~1.1 s. Give it a lead, then overlap its tail.
-const BOSS_VICTORY_LEAD_MS = 550;
-const BOSS_CLEAR_DURATION_MS = 4_300;
+// Let the deep impact lead before its long tail overlaps the victory cue.
+const BOSS_VICTORY_LEAD_MS = 1_150;
+const BOSS_CLEAR_DURATION_MS = 5_100;
 const FORMATION_DATA_ROWS = [
   "1011010001101001110001010011011010101100",
   "0010110111010010010011111011000101100110",
