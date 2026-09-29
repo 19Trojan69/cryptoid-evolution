@@ -3,7 +3,7 @@ import { memo, useEffect, useRef, useState, type CSSProperties, type PointerEven
 import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
 import { entryPatternForSector, entryPosition, entryStartX, type EntryPattern } from "./entryPatterns";
-import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, arrangeFormationBySize, campaignLevel, formationLayout, formationReady, sectionInSector, sectionPhase, sectorInChapter, sectorName, type SectorPhase } from "./sectorManager";
+import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, arrangeFormationBySize, campaignLevel, formationLayout, formationReady, reinforcementCount, sectionInSector, sectionPhase, sectorInChapter, sectorName, type SectorPhase } from "./sectorManager";
 import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp } from "./powerUps";
 import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, zoneFraction, shipStartHeight } from "./controlPreferences";
@@ -156,9 +156,9 @@ const saveRecords = (state: GameState) => {
   window.localStorage.setItem(SHARD_BALANCE_KEY, String(balanceAfterMission(shardBalance(window.localStorage.getItem(SHARD_BALANCE_KEY)), state)));
 };
 
-const createFormationSlots = (section: number, sector: number, width: number, height: number) => {
-  const slots = formationLayout(section, width, height, sector);
-  return arrangeFormationBySize(slots, slots.map((_, index) => chooseCryptoid(sector, index).radius));
+const createFormationSlots = (section: number, sector: number, width: number, height: number, count?: number, offset = 0) => {
+  const slots = formationLayout(section, width, height, sector).slice(0, count);
+  return arrangeFormationBySize(slots, slots.map((_, index) => chooseCryptoid(sector, index + offset).radius));
 };
 
 const alignedSpritePosition = (x: number, y: number, sprite: number, renderedSize: number) => {
@@ -166,8 +166,8 @@ const alignedSpritePosition = (x: number, y: number, sprite: number, renderedSiz
   return { left: x - offset.x, top: y - offset.y };
 };
 
-const spawnAsteroid = (id: number, width: number, visibleTop: number, formationIndex: number, sector: number, slots: ReturnType<typeof formationLayout>): Asteroid => {
-  const profile = chooseCryptoid(sector, formationIndex);
+const spawnAsteroid = (id: number, width: number, visibleTop: number, formationIndex: number, sector: number, slots: ReturnType<typeof formationLayout>, offset = 0): Asteroid => {
+  const profile = chooseCryptoid(sector, formationIndex + offset);
   const size: AsteroidSize = profile.radius === 25 ? "small" : profile.radius === 36 ? "medium" : "large";
   const target = slots[formationIndex];
   const entrySide = target.entrySide;
@@ -310,6 +310,8 @@ const GamePage = () => {
   const nextIdRef = useRef(1);
   const formationIndexRef = useRef(0);
   const formationStartedRef = useRef(false);
+  const reinforcementLaunchedRef = useRef(false);
+  const formationOffsetRef = useRef(0);
   const bonusIndexRef = useRef(0);
   const sectionSlotsRef = useRef<ReturnType<typeof formationLayout> | null>(null);
   const animationRef = useRef<number | null>(null);
@@ -634,6 +636,8 @@ const GamePage = () => {
             state.effects = [];
             formationIndexRef.current = 0;
             formationStartedRef.current = false;
+            reinforcementLaunchedRef.current = false;
+            formationOffsetRef.current = 0;
             bonusIndexRef.current = 0;
             sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height);
             spawnTimerRef.current = 0;
@@ -655,7 +659,7 @@ const GamePage = () => {
           spawnTimerRef.current += delta;
           if (spawnTimerRef.current >= ENTRY_GAP_MS) {
             spawnTimerRef.current -= ENTRY_GAP_MS;
-            state.asteroids.push(spawnAsteroid(nextIdRef.current++, width, visibleTop, formationIndexRef.current++, state.sector, slots));
+            state.asteroids.push(spawnAsteroid(nextIdRef.current++, width, visibleTop, formationIndexRef.current++, state.sector, slots, formationOffsetRef.current));
           }
         }
         const ready = state.asteroids.filter(asteroid => asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration);
@@ -829,6 +833,20 @@ const GamePage = () => {
           if (drop) { nextIdRef.current += 1; dropsCreatedRef.current += 1; state.powerUps.push(drop); }
         }
         state.shots = remainingShots;
+        // The later-level escort flight arrives after the first formation is defeated.
+        if (normal && !reinforcementLaunchedRef.current && reinforcementCount(state.sector) > 0
+          && formationIndexRef.current === slots.length && state.asteroids.length === 0) {
+          reinforcementLaunchedRef.current = true;
+          formationOffsetRef.current = slots.length;
+          sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height, reinforcementCount(state.sector), formationOffsetRef.current);
+          formationIndexRef.current = 0;
+          formationStartedRef.current = false;
+          sectionElapsedRef.current = 0;
+          spawnTimerRef.current = 0;
+          attackCooldownRef.current = 0;
+          state.shots = [];
+          state.enemyShots = [];
+        }
         const previousPhase = state.phase;
         if (state.encounter === "boss-intro") {
           if (sectionElapsedRef.current >= BOSS_WARNING_MS) state.encounter = "boss-fight";
@@ -995,6 +1013,8 @@ const GamePage = () => {
     checkpointScoreRef.current = 0;
     formationIndexRef.current = 0;
     formationStartedRef.current = false;
+    reinforcementLaunchedRef.current = false;
+    formationOffsetRef.current = 0;
     bonusIndexRef.current = 0;
     sectionSlotsRef.current = null;
     spawnTimerRef.current = 0;

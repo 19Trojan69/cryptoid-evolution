@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { arrangeFormationBySize, formationLayout, formationReady, SECTION_INTRO_MS, sectionPhase, sectorForSection, sectionInSector, sectorName, sectorChapter, campaignLevel, sectorInChapter } from "./sectorManager.ts";
+import { arrangeFormationBySize, BLOCK_FORMATION_NAMES, formationLayout, formationReady, reinforcementCount, SECTION_INTRO_MS, sectionPhase, sectorForSection, sectionInSector, sectorName, sectorChapter, campaignLevel, sectorInChapter } from "./sectorManager.ts";
+import { chooseCryptoid } from "./cryptoidRoster.ts";
 
 test("all planned enemies must spawn and die before an endless section advances", () => {
   const stage = { introMs: SECTION_INTRO_MS, spawned: 5, total: 6, alive: 0, ready: 0, returning: false, attacking: false };
@@ -20,22 +21,29 @@ test("combat waits until every surviving enemy occupies its formation slot", () 
 });
 
 test("nine normal blocks have nine distinct fixed formations, repeated next level", () => {
+  assert.deepEqual(BLOCK_FORMATION_NAMES, ["Ranks", "V", "W", "Ring", "Wave", "X", "A", "Columns", "Diamond"]);
   for (const width of [375, 390, 800, 1200]) {
     const formations = Array.from({ length: 9 }, (_, block) => formationLayout(1, width, 700, block + 1));
     const signatures = formations.map(slots => slots.map(slot => `${Math.round(slot.x)}:${Math.round(slot.y)}`).join(";"));
     assert.equal(new Set(signatures).size, 9, `${width}px must show nine formations`);
     assert.deepEqual(formationLayout(31, width, 700, 11).map(({ x, y }) => [x, y]), formations[0].map(({ x, y }) => [x, y]));
     for (const [block, slots] of formations.entries()) {
-      assert.equal(slots.length, width < 760 ? 6 : 15);
+      assert.equal(slots.length, 6);
       assert.ok(slots.every(slot => slot.y > 65 && slot.y < 700 * (width < 760 ? .45 : .5) && slot.x >= 50 && slot.x <= width - 50), `block ${block + 1}: safe playfield`);
-      const radii = slots.map((_, index) => [25, 36, 25, 50, 36, 25][index % 6]);
+      const radii = slots.map((_, index) => chooseCryptoid(block + 1, index).radius);
       const arranged = arrangeFormationBySize(slots, radii);
+      const largest = radii.indexOf(Math.max(...radii));
+      assert.equal(arranged[largest].x, width / 2, `block ${block + 1}: largest ship in center`);
       for (let index = 0; index < arranged.length; index++) for (let other = index + 1; other < arranged.length; other++) {
         const clearance = Math.hypot(arranged[index].x - arranged[other].x, arranged[index].y - arranged[other].y) - radii[index] - radii[other];
         assert.ok(clearance >= 4, `${width}px block ${block + 1}: hulls ${index} and ${other} overlap by ${-clearance}`);
       }
     }
   }
+});
+
+test("late blocks gain four to six additional ships in a second flight", () => {
+  assert.deepEqual([1, 7, 9, 10, 97, 98, 99, 100, 197, 297, 497].map(reinforcementCount), [0, 0, 0, 0, 4, 4, 4, 0, 5, 6, 6]);
 });
 
 test("large enemies receive central slots while smaller enemies move to the sides", () => {
