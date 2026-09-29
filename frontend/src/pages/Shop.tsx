@@ -7,6 +7,7 @@ import { useAuth } from "../hooks/useAuth";
 import { usePayments } from "../hooks/usePayments";
 import { axiosClient } from "../lib/axiosClient.ts";
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "./GamePage.tsx";
+import { blockInLevel, campaignLevel } from "./sectorManager";
 import { allPlayerColors, buyShipVariant, enemySprite, EXTRA_STARTER_PRICE, fleetCount, playerColors, playerSkins, readShipFleet, savedShipColors, selectedShip, shardBalance, ADMIN_SHIP_COLOR_KEY, ADMIN_SHIP_SKIN_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyle, spriteStyle, type PlayerColorId, type ShipFleet } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
 import { ownedShipStage, shipEvolutionAsset, type ShipStage } from "./shipEvolution";
@@ -529,8 +530,8 @@ const Shop = () => {
           <button className="close-button" type="button" onClick={() => setActivePanel(null)} aria-label={t('Close')}>×</button>
           <p className="eyebrow">{activePanel === "how" ? "FIELD GUIDE" : "MISSION LOG"}</p>
           <h2 id="info-title">{activePanel === "how" ? t("How to Play") : t("Your Progress")}</h2>
-          <p>{activePanel === "how" ? t("Move your ship with the arrow keys or WASD; on touchscreens, drag it in the lower playfield. Your laser fires automatically. Dodge diving Cryptoids and collect power-ups. Shield absorbs a hit and Overdrive briefly strengthens your shots. You begin with three hearts. Only a perfect bonus round with 12 hits restores one previously lost heart.") : t("Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.").replace("{score}", String(personalBest ?? records.bestScore)).replace("{sector}", String(records.highestSector)).replace("{destroyed}", String(records.totalDestroyed))}</p>
-          {activePanel === "how" && <p>{t("Each completed sector links one fictional block. Nine blocks complete the chain before the boss; strong bonus rounds after the boss add a chain reward.")}</p>}
+          <p>{activePanel === "how" ? t("Move your ship with the arrow keys or WASD; on touchscreens, drag it in the lower playfield. Your laser fires automatically. Dodge diving Cryptoids and collect power-ups. Shield absorbs a hit and Overdrive briefly strengthens your shots. You begin with three hearts. Only a perfect bonus round with 12 hits restores one previously lost heart.") : t("Your best score is {score}, your highest level is {level} (block {block}/9), and you have destroyed {destroyed} Cryptoids.").replace("{score}", String(personalBest ?? records.bestScore)).replace("{level}", String(records.highestSector ? campaignLevel(records.highestSector) : 0)).replace("{block}", String(records.highestSector ? blockInLevel(records.highestSector) : 0)).replace("{destroyed}", String(records.totalDestroyed))}</p>
+          {activePanel === "how" && <p>{t("Each block has one enemy formation. Complete nine blocks, defeat the boss, then play the bonus round before the next level.")}</p>}
           <button className="button button-primary" type="button" onClick={() => { setActivePanel(null); if (activePanel === "how") enterGame(); }}>{t("Enter mission")} <span>↗</span></button>
         </div>
       </div>}

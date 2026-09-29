@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { ENTRY_PATTERNS, entryPatternForSector, entryPosition, entryStartX } from "./entryPatterns.ts";
 
-test("nine normal sectors each have a distinct formation before every boss", () => {
+test("nine normal blocks each have a distinct formation before every boss", () => {
   assert.equal(new Set(ENTRY_PATTERNS).size, 9);
   for (let chapter = 0; chapter < 50; chapter++) {
     assert.deepEqual(Array.from({ length: 9 }, (_, index) => entryPatternForSector(chapter * 10 + index + 1)), ENTRY_PATTERNS);

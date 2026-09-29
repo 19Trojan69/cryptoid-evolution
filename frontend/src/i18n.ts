@@ -229,8 +229,15 @@ const evolutionShopTranslations: Partial<Record<Locale, Record<string, string>>>
     "Three ship stages": "Trois niveaux de vaisseau"
   }
 };
-const englishGameTerms = new Set(["Network chain", "blocks linked", "CHAIN COMPLETE", "BLOCK LINKED", "Shards", "Shard", "PERFECT CRYPTO HUNT", "GOLD NETWORK", "NETWORK LINK"]);
-export const translate = (locale: Locale, source: string) => englishGameTerms.has(source) ? source : source === "MISSION FAILED" ? failedMissionTranslations[locale] : locale === "en" ? source : evolutionShopTranslations[locale]?.[source] ?? audioSettingsTranslations[locale]?.[source] ?? gameplayPolishTranslations[locale]?.[source] ?? homeMusicTranslations[locale]?.[source] ?? controlTranslations[locale]?.[source] ?? hudTranslations[locale]?.[source] ?? systemMenuTranslations[locale]?.[source] ?? extendedTranslations[locale]?.[source] ?? powerUpTranslations[locale]?.[source] ?? levelTranslations[locale]?.[source] ?? networkTranslations[locale]?.[source] ?? newerTranslations[locale]?.[source] ?? translations[locale]?.[source] ?? source;
+const blockFlowTranslations: Partial<Record<Locale, Record<string, string>>> = {
+  de: {
+    "BLOCK COMPLETE": "BLOCK GESCHAFFT", "BOSS FIGHT": "BOSSKAMPF", "Block": "Block",
+    "Each block has one enemy formation. Complete nine blocks, defeat the boss, then play the bonus round before the next level.": "Jeder Block hat genau eine Gegnerformation. Spiele neun Blöcke, besiege den Boss und absolviere danach die Bonusrunde. Erst dann beginnt das nächste Level.",
+    "Your best score is {score}, your highest level is {level} (block {block}/9), and you have destroyed {destroyed} Cryptoids.": "Dein Rekord beträgt {score}, dein höchstes Level ist {level} (Block {block}/9), und du hast {destroyed} Cryptoids zerstört.",
+  },
+};
+const englishGameTerms = new Set(["Network chain", "blocks linked", "CHAIN COMPLETE", "BLOCK LINKED", "Shards", "Shard", "Blocks", "PERFECT CRYPTO HUNT", "GOLD NETWORK", "NETWORK LINK"]);
+export const translate = (locale: Locale, source: string) => englishGameTerms.has(source) ? source : source === "MISSION FAILED" ? failedMissionTranslations[locale] : locale === "en" ? source : blockFlowTranslations[locale]?.[source] ?? evolutionShopTranslations[locale]?.[source] ?? audioSettingsTranslations[locale]?.[source] ?? gameplayPolishTranslations[locale]?.[source] ?? homeMusicTranslations[locale]?.[source] ?? controlTranslations[locale]?.[source] ?? hudTranslations[locale]?.[source] ?? systemMenuTranslations[locale]?.[source] ?? extendedTranslations[locale]?.[source] ?? powerUpTranslations[locale]?.[source] ?? levelTranslations[locale]?.[source] ?? networkTranslations[locale]?.[source] ?? newerTranslations[locale]?.[source] ?? translations[locale]?.[source] ?? source;
 export const useLocale = () => {
   const [locale, setLocale] = useState<Locale>(() => resolveLocale(navigator.languages?.length ? navigator.languages : [navigator.language], localStorage.getItem(STORAGE_KEY)));
   const [automatic, setAutomatic] = useState(() => !localStorage.getItem(STORAGE_KEY));
