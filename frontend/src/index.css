@@ -39,7 +39,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 .home-music-toggle:focus-visible { outline: 2px solid #b5ffe3; outline-offset: 3px; }
 .home-footer { position: absolute; z-index: 4; left: clamp(20px, 5vw, 100px); right: clamp(20px, 5vw, 100px); bottom: max(17px, env(safe-area-inset-bottom)); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2px 16px; padding-top: 12px; border-top: 1px solid var(--line); }
 .home-footer .terms-entry { margin: 0; padding: 5px 0; }
-.home-developer-credit { color: #b9d7e1; font-size: 12px; letter-spacing: .04em; }
+.home-developer-logo { display: block; width: clamp(120px, 12vw, 160px); height: auto; flex: none; opacity: .86; filter: brightness(1.15) drop-shadow(0 0 8px #36baca36); }
 .landing-shell .hero-section .starfield { z-index: 0; opacity: .75; }
 .shop-overlay { position: fixed; z-index: 8; inset: 0; display: grid; place-items: center; padding: clamp(8px, 3vw, 25px); background: rgba(1, 9, 19, .88); backdrop-filter: blur(9px); }
 .shop-modal { display: flex; flex-direction: column; width: min(100%, 1120px); max-height: min(900px, calc(100dvh - 16px)); overflow: hidden; border: 1px solid rgba(102, 224, 241, .55); background: radial-gradient(circle at 75% 0, rgba(114, 75, 202, .15), transparent 34%), linear-gradient(145deg, #061727, #0a2135 58%, #071725); box-shadow: inset 0 0 35px rgba(56, 204, 227, .05), 0 0 32px rgba(50, 195, 221, .14), 0 24px 90px #000b; clip-path: polygon(0 13px, 13px 0, calc(100% - 13px) 0, 100% 13px, 100% calc(100% - 13px), calc(100% - 13px) 100%, 13px 100%, 0 calc(100% - 13px)); }
@@ -745,7 +745,7 @@ html[data-motion="reduced"] .boss-debris-piece:nth-child(n+5) { display: none; }
   .dashboard-grid, .product-grid { grid-template-columns: 1fr; }
   .upgrade-section { padding-top: 66px; }
   .section-line { display: none; }
-  .landing-shell .hero-section { position: relative; display: flex; align-items: stretch; height: calc(100dvh - 65px); padding: 0 20px 60px; }
+  .landing-shell .hero-section { position: relative; display: flex; align-items: stretch; height: calc(100dvh - 65px); padding: 0 20px 78px; }
   .landing-shell .hero-copy { display: flex; flex-direction: column; align-self: stretch; width: 100%; min-height: 0; padding-top: clamp(54px, 7.5vh, 82px); }
   .landing-shell .hero-copy h1 { font-size: clamp(52px, 15vw, 61px); line-height: .93; text-shadow: 0 3px 22px rgba(1, 12, 24, .84); }
   .landing-shell .eyebrow { margin-bottom: 14px; font-size: 11px; }
@@ -757,7 +757,9 @@ html[data-motion="reduced"] .boss-debris-piece:nth-child(n+5) { display: none; }
   .landing-shell .planet-stage { position: absolute; right: -25%; top: 18%; width: min(96vw, 430px); margin: 0; opacity: .7; pointer-events: none; }
   .landing-shell .home-defense-ship { left: -2%; bottom: 16%; }
   .landing-shell .orbit-status { left: 29%; bottom: 16%; padding: 4px 7px; border-left: 2px solid rgba(102, 239, 217, .8); background: linear-gradient(90deg, rgba(4, 28, 43, .78), transparent); color: #a5f7e7; font-size: 9px; white-space: nowrap; }
-  .home-footer { left: 20px; right: 20px; bottom: max(10px, env(safe-area-inset-bottom)); }
+  .home-footer { left: 20px; right: 20px; bottom: max(10px, env(safe-area-inset-bottom)); flex-wrap: nowrap; }
+  .home-footer .terms-entry { max-width: 190px; font-size: 11px; line-height: 1.2; text-align: left; white-space: normal; }
+  .home-developer-logo { width: clamp(98px, 30vw, 126px); }
   .landing-shell .hero-section::before { position: absolute; z-index: 2; inset: 0 25% 0 0; background: linear-gradient(90deg, #081e31ec, #081e31a8 58%, transparent); content: ''; pointer-events: none; }
   .shop-modal-body { padding: 10px; }
   .shop-modal .ship-selector { padding: 14px; }
