@@ -284,8 +284,9 @@ const Shop = () => {
     void signIn();
   }, [signIn]);
 
-  const { orderProduct, isLoading } = usePayments({
+  const { orderProduct, isLoading, paymentMessage } = usePayments({
     isAuthenticated,
+    userUid: user?.uid ?? null,
     onRequireAuth: requireAuth,
   });
   const refreshInventory = async () => {
@@ -511,6 +512,7 @@ const Shop = () => {
       {(shopView === "weapons" || shopView === "powers") && <section className="upgrade-section" aria-labelledby="upgrade-heading">
         <div className="section-heading"><div><p className="eyebrow">{t('POWER LAB')}</p><h2 id="upgrade-heading">{t('Weapons and start power-ups')}</h2></div><span className="section-line" /></div>
         <p className="testnet-shop-notice">Schüsse: Test-Pi. MAINNET READY = hier noch gesperrt.</p>
+        {paymentMessage && <p role="alert">{paymentMessage}</p>}
         <p>Der Standardlaser ist kostenlos. Mit Test-Pi gekaufte Schüsse bleiben freigeschaltet und starten für fünf Minuten je Mission. Im Spiel gesammelte Power-ups funktionieren weiterhin.</p>
         {([shopView === "weapons" ? "weapon" : "power"] as const).map(kind => <div key={kind} className="hangar-offers"><h3>{t(kind === "weapon" ? "Time-limited weapons" : "One-mission start bonuses")}</h3><div className="hangar-offer-grid">
           {offers.filter(offer => offer.kind === kind).map(offer => {
