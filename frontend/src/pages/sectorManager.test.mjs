@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { arrangeFormationBySize, formationLayout, formationReady, SECTION_INTRO_MS, sectionPhase, sectorForSection, sectionInSector, sectorName, sectorChapter, campaignLevel, sectorInChapter } from "./sectorManager.ts";
+import { arrangeFormationBySize, blockInLevel, formationLayout, formationReady, SECTION_INTRO_MS, sectionPhase, sectorForSection, sectionInSector, sectorName, sectorChapter, campaignLevel, sectorInChapter } from "./sectorManager.ts";
 
 test("all planned enemies must spawn and die before an endless section advances", () => {
   const stage = { introMs: SECTION_INTRO_MS, spawned: 5, total: 6, alive: 0, ready: 0, returning: false, attacking: false };
@@ -48,9 +48,9 @@ test("large enemies receive central slots while smaller enemies move to the side
   for (let index = 1; index < order.length; index += 1) assert.ok(order[index - 1].distance <= order[index].distance);
 });
 
-test("three rounds form a level and ten levels share one named region", () => {
-  assert.deepEqual([1, 2, 3, 4, 18, 19].map(sectorForSection), [1, 1, 1, 2, 6, 7]);
-  assert.deepEqual([1, 2, 3, 4].map(sectionInSector), [1, 2, 3, 1]);
+test("one formation is one block, nine blocks then boss and bonus", () => {
+  assert.deepEqual([1, 2, 3, 4, 9, 10, 11, 20].map(sectorForSection), [1, 2, 3, 4, 9, 10, 11, 20]);
+  assert.deepEqual([1, 2, 3, 4].map(sectionInSector), [1, 1, 1, 1]);
   assert.equal(sectorName(10), "GENESIS BELT");
   assert.equal(sectorName(11), "CRYSTAL CHAIN");
   assert.equal(sectorName(51), "QUANTUM VAULT");
@@ -58,5 +58,6 @@ test("three rounds form a level and ten levels share one named region", () => {
   assert.equal(sectorChapter(500), 49);
   assert.deepEqual([1, 9, 10, 11, 20].map(campaignLevel), [1, 1, 1, 2, 2]);
   assert.deepEqual([1, 9, 10, 11, 20].map(sectorInChapter), [1, 9, 10, 1, 10]);
-  assert.equal(sectorForSection(901), 301);
+  assert.deepEqual([1, 9, 10, 11, 19, 20, 500].map(blockInLevel), [1, 9, 9, 1, 9, 9, 9]);
+  assert.equal(sectorForSection(901), 901);
 });

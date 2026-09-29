@@ -17,8 +17,8 @@ const boundedLevel = (level: number) => Math.min(MAX_DIFFICULTY_LEVEL, Math.max(
 // Later levels become harder mainly through combined attacks, sturdier formations and bosses.
 export const levelDifficulty = (level: number): LevelDifficulty => {
   const bounded = boundedLevel(level);
-  // Nine sectors gain pressure smoothly, then the next campaign level adds a
-  // small step. Every tenth sector is a boss; no regular formation spawns there.
+  // Nine blocks gain pressure smoothly, then the next campaign level adds a
+  // small step. Every tenth slot is a boss; no regular formation spawns there.
   const campaignStep = Math.floor((bounded - 1) / 10);
   const progress = .8 * (bounded - 1) / (MAX_DIFFICULTY_LEVEL - 1) + .2 * campaignStep / 49;
   return {

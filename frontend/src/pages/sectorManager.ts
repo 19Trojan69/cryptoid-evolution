@@ -1,4 +1,6 @@
-export const SECTIONS_PER_SECTOR = 3;
+// One playable formation is one chain block. Keep the internal sector index as
+// the difficulty/boss level, but never add hidden rounds inside a block.
+export const SECTIONS_PER_SECTOR = 1;
 export const SECTION_INTRO_MS = 3_200;
 export const SECTION_CLEAR_MS = 5_800;
 export const ENTRY_GAP_MS = 220;
@@ -13,6 +15,7 @@ export type SectorPhase = "SECTOR_INTRO" | "ENTRY" | "FORMATION" | "ATTACK_CYCLE
 export const sectorChapter = (level: number) => Math.floor((Math.max(1, level) - 1) / 10);
 export const campaignLevel = (sector: number) => sectorChapter(sector) + 1;
 export const sectorInChapter = (sector: number) => (Math.max(1, sector) - 1) % 10 + 1;
+export const blockInLevel = (sector: number) => Math.min(9, sectorInChapter(sector));
 
 export const sectorName = (number: number) => {
   const index = sectorChapter(number);

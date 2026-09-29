@@ -1,4 +1,4 @@
-// One arrival choreography per normal sector; sectors 10, 20, ... are boss fights.
+// One arrival choreography per normal block; slots 10, 20, ... are boss fights.
 export const ENTRY_PATTERNS = [
   "zigzag", "figureEight", "cross", "spiral", "pincer",
   "sweep", "cascade", "diamond", "doubleLoop",

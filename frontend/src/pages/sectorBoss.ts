@@ -1,5 +1,5 @@
 import { levelDifficulty } from "./levelDifficulty.ts";
-import { sectionInSector, sectorForSection } from "./sectorManager.ts";
+import { sectorForSection } from "./sectorManager.ts";
 import { bossForLevel, type BossConfig } from "./bossManifest.ts";
 
 export const BOSS_ENTRY_MS = 1_800;
@@ -56,22 +56,22 @@ export const bossVulnerable = (boss: SectorBoss) => boss.elapsed >= BOSS_ENTRY_M
 
 export type ClearEncounter = "normal" | "boss-clear" | "bonus";
 
-// Nine sectors of three rounds, then the tenth sector is the boss alone.
-export const nextAfterClear = (round: number, encounter: ClearEncounter, level = 1) => {
-  if (encounter === "normal") return round >= 3 ? bossForLevel(level + 1) ? "boss" : "section" : "round";
+// Nine playable blocks, then the tenth difficulty step is the boss alone.
+export const nextAfterClear = (encounter: ClearEncounter, level = 1) => {
+  if (encounter === "normal") return bossForLevel(level + 1) ? "boss" : "block";
   if (encounter === "boss-clear") return "bonus";
-  return "section";
+  return "block";
 };
 
 export const advanceAfterClear = (section: number, encounter: ClearEncounter) => {
-  const next = nextAfterClear(sectionInSector(section), encounter, sectorForSection(section));
-  // Skip all three normal rounds of each boss sector. Section 30 is the
-  // virtual slot for boss 10, section 60 for boss 20, and so on.
-  const nextSection = next === "boss" ? sectorForSection(section + 1) * 3 : next === "round" || next === "section" ? section + 1 : section;
+  const next = nextAfterClear(encounter, sectorForSection(section));
+  // The boss and bonus occupy the same virtual tenth slot. The following
+  // block begins at slot 11, not at a repeated hidden sector.
+  const nextSection = next === "boss" || next === "block" ? section + 1 : section;
   return {
     encounter: next === "boss" ? "boss-intro" : next === "bonus" ? "bonus" : "normal",
     section: nextSection,
     sector: sectorForSection(nextSection),
-    resetChain: next === "section" && encounter === "bonus",
+    resetChain: next === "block" && encounter === "bonus",
   } as const;
 };

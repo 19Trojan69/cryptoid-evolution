@@ -36,7 +36,7 @@ test("enemy durability never decreases and the endless curve stops escalating af
   assert.deepEqual(levelDifficulty(0), levelDifficulty(1));
 });
 
-test("the next nine-sector campaign level adds a modest pressure step", () => {
+test("the next nine-block campaign level adds a modest pressure step", () => {
   const within = levelDifficulty(9).progress - levelDifficulty(8).progress;
   const nextLevel = levelDifficulty(11).progress - levelDifficulty(10).progress;
   assert.ok(nextLevel > within && nextLevel < within * 5);

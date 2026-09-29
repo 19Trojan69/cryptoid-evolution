@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { appendSectionBlock, bonusChainReward, BLOCKS_PER_CHAIN } from "./networkChain.ts";
 
-test("one block per cleared sector completes the chain at the ninth sector", () => {
+test("one block per formation completes the chain after nine formations", () => {
   let blocks = 0;
   for (let sector = 1; sector <= 9; sector++) {
     const next = appendSectionBlock(blocks, sector);
