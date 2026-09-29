@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { MusicPlayer } from './musicPlayback.ts';
+import { handoffGameMusic, MusicPlayer, takeHandoffGameMusic } from './musicPlayback.ts';
 import { readMusicVolume } from './musicPreferences.ts';
 
 test('iOS-style fixed element volume still obeys Web Audio gain and the slider', async () => {
@@ -51,5 +51,19 @@ test('boss soundtrack switches on the same unlocked player and returns at normal
   assert.equal(await player.play(), true);
   player.pause();
   assert.equal(audio.paused, true);
+  player.close();
+});
+
+test('navigation transfers the unlocked home player into the game', async () => {
+  const player = new MusicPlayer('/audio/home-galactic-chain.mp3', 50);
+  assert.equal(await player.play(), true);
+  const unlockedElement = player.audio;
+  handoffGameMusic(player);
+  assert.equal(player.currentSource, '/audio/battle-orbit.mp3');
+  assert.strictEqual(takeHandoffGameMusic(), player);
+  assert.strictEqual(player.audio, unlockedElement);
+  assert.equal(await player.play(), true);
+  assert.equal(player.playing, true);
+  assert.equal(takeHandoffGameMusic(), null);
   player.close();
 });

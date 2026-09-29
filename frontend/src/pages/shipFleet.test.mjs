@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { allPlayerColors, bossNozzleStyles, buySkin, buyShipVariant, colorForSkin, enemySprite, EXTRA_STARTER_PRICE, fleetCount, ownedSkins, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyles, spriteVisualOffset } from "./shipFleet.ts";
+import { allPlayerColors, bossNozzleStyles, buySkin, buyShipVariant, colorForSkin, enemyAppearance, enemySprite, EXTRA_STARTER_PRICE, fleetCount, ownedSkins, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyles, spriteVisualOffset } from "./shipFleet.ts";
+import { reinforcementCount } from "./sectorManager.ts";
+
+globalThis.sessionStorage ??= { getItem: () => null };
 
 test("only the grey starter is free and the full reference fleet is purchasable", () => {
   assert.equal(playerSkins.length, 20);
@@ -18,6 +21,21 @@ test("later sectors field all 20 player hulls as enemy models", () => {
   assert.ok(early.size < late.size);
   assert.deepEqual(late, new Set(playerSkins.map(skin => skin.sprite)));
   assert.equal(enemySprite("elite", 3, 51), 18);
+});
+
+test("each block uses distinct shop hulls and paints across both enemy flights", () => {
+  const shopHulls = new Set(playerSkins.map(skin => skin.sprite));
+  const availablePaints = new Set(allPlayerColors.map(color => color.id));
+  const openingHulls = new Set();
+  for (let sector = 1; sector <= 500; sector++) {
+    if (sector % 10 === 0) continue; // Boss has its own design.
+    const ships = Array.from({ length: 6 + reinforcementCount(sector) }, (_, index) => enemyAppearance(sector, index));
+    assert.equal(new Set(ships.map(ship => ship.sprite)).size, ships.length, `duplicate hull in block ${sector}`);
+    assert.equal(new Set(ships.map(ship => ship.color)).size, ships.length, `duplicate paint in block ${sector}`);
+    assert.ok(ships.every(ship => shopHulls.has(ship.sprite) && availablePaints.has(ship.color)));
+    if (sector <= 4) ships.forEach(ship => openingHulls.add(ship.sprite));
+  }
+  assert.deepEqual(openingHulls, shopHulls, "the entire shop fleet appears within the first four blocks");
 });
 
 test("a skin purchase spends once and never grants an unaffordable or duplicate hull", () => {

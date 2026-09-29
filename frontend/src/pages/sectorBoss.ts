@@ -1,5 +1,5 @@
 import { levelDifficulty } from "./levelDifficulty.ts";
-import { sectionInSector, sectorForSection } from "./sectorManager.ts";
+import { SECTIONS_PER_SECTOR, sectionInSector, sectorForSection } from "./sectorManager.ts";
 import { bossForLevel, type BossConfig } from "./bossManifest.ts";
 
 export const BOSS_ENTRY_MS = 1_800;
@@ -56,18 +56,16 @@ export const bossVulnerable = (boss: SectorBoss) => boss.elapsed >= BOSS_ENTRY_M
 
 export type ClearEncounter = "normal" | "boss-clear" | "bonus";
 
-// Nine sectors of three rounds, then the tenth sector is the boss alone.
+// Nine blocks, then the tenth encounter is the boss and bonus.
 export const nextAfterClear = (round: number, encounter: ClearEncounter, level = 1) => {
-  if (encounter === "normal") return round >= 3 ? bossForLevel(level + 1) ? "boss" : "section" : "round";
+  if (encounter === "normal") return round >= SECTIONS_PER_SECTOR ? bossForLevel(level + 1) ? "boss" : "section" : "round";
   if (encounter === "boss-clear") return "bonus";
   return "section";
 };
 
 export const advanceAfterClear = (section: number, encounter: ClearEncounter) => {
   const next = nextAfterClear(sectionInSector(section), encounter, sectorForSection(section));
-  // Skip all three normal rounds of each boss sector. Section 30 is the
-  // virtual slot for boss 10, section 60 for boss 20, and so on.
-  const nextSection = next === "boss" ? sectorForSection(section + 1) * 3 : next === "round" || next === "section" ? section + 1 : section;
+  const nextSection = next === "boss" ? sectorForSection(section + 1) * SECTIONS_PER_SECTOR : next === "round" || next === "section" ? section + 1 : section;
   return {
     encounter: next === "boss" ? "boss-intro" : next === "bonus" ? "bonus" : "normal",
     section: nextSection,
