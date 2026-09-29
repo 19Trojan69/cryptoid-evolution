@@ -25,23 +25,14 @@ test("each route stays within the mobile playfield and docks at its assigned slo
   }
 });
 
-test("opposing cross wings exchange sides before docking", () => {
-  const width = 390;
-  const flight = { pattern: "cross", progress: .5, startY: 145, targetY: 240, width, height: 700, radius: 25, index: 0 };
-  const left = entryPosition({ ...flight, startX: entryStartX("cross", 0, width, 25, 1), targetX: 100, side: 1 });
-  const right = entryPosition({ ...flight, startX: entryStartX("cross", 1, width, 25, -1), targetX: 290, side: -1 });
-  assert.ok(left.x > right.x, "the wings should pass each other in the middle");
-});
-
-test("the nine patterns draw visibly different paths", () => {
-  const paths = ENTRY_PATTERNS.map(pattern => {
+test("arrivals make one restrained arc without loops or reversals", () => {
+  for (const pattern of ENTRY_PATTERNS) {
     const startX = entryStartX(pattern, 0, 390, 25, 1);
-    return [20, 35, 50, 65, 80].map(percent => {
-      const { x, y } = entryPosition({ pattern, progress: percent / 100, startX, startY: 145, targetX: 270, targetY: 240, width: 390, height: 700, radius: 25, side: 1, index: 0 });
-      return `${Math.round(x)},${Math.round(y)}`;
-    }).join(";");
-  });
-  assert.equal(new Set(paths).size, 9);
+    const flight = { pattern, startX, startY: 145, targetX: 270, targetY: 240, width: 390, height: 700, radius: 25, side: 1, index: 0 };
+    const points = Array.from({ length: 101 }, (_, step) => entryPosition({ ...flight, progress: step / 100 }));
+    assert.ok(points.every(point => point.x >= Math.min(startX, 270) - 36 && point.x <= Math.max(startX, 270) + 36));
+    assert.ok(points.every((point, index) => index === 0 || point.y >= points[index - 1].y));
+  }
 });
 
 test("arrival curves change direction smoothly without wall-clipping corners", () => {

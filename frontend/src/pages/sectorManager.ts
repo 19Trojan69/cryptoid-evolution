@@ -1,6 +1,6 @@
 export const SECTIONS_PER_SECTOR = 3;
 export const SECTION_INTRO_MS = 3_200;
-export const SECTION_CLEAR_MS = 3_800;
+export const SECTION_CLEAR_MS = 5_800;
 export const ENTRY_GAP_MS = 220;
 export const FORMATION_SETTLE_MS = 450;
 export const FIRST_ATTACK_DELAY_MS = 750;
@@ -27,26 +27,42 @@ export const formationReady = ({ spawned, total, alive, ready }: {
   spawned: number; total: number; alive: number; ready: number;
 }) => spawned === total && alive > 0 && ready === alive;
 
-export const formationLayout = (section: number, width: number, height: number) => {
-  const columns = width < 760 ? 3 : 5;
-  const rows = width < 760 ? 2 : 3;
-  // Keep every formation on a compact, invisible grid. The gaps are wide
-  // enough for the actual hull radii, but no longer spread the fleet over
-  // the full playfield width.
-  const columnGap = columns === 3
-    ? Math.min(108, Math.max(96, width * .26))
-    : Math.min(112, Math.max(102, width * .095));
-  const rowGap = Math.min(112, Math.max(106, height * .135));
-  const firstRowY = height * (rows === 2 ? .205 : .15);
-  return Array.from({ length: columns * rows }, (_, index) => {
-    const row = Math.floor(index / columns);
-    const column = index % columns;
-    // Alternate arrival order within each row; the final positions remain a stable grid.
-    const arrivalColumn = row % 2 ? columns - 1 - column : column;
-    const x = width / 2 + (arrivalColumn - (columns - 1) / 2) * columnGap;
-    const y = firstRowY + row * rowGap;
-    return { index, x, y, row, column: arrivalColumn, entrySide: (row + column + section) % 2 === 0 ? 1 : -1 };
+// The nine normal blocks use different *resting* layouts. Coordinates are
+// authored as shapes, not offsets applied to the old three-by-two grid.
+const mobileFormations = [
+  [[-1, -.7], [0, -.7], [1, -.7], [-1, .7], [0, .7], [1, .7]], // ranks
+  [[-1, -.9], [-.85, .42], [0, -.26], [0, 1], [.85, .42], [1, -.9]], // V
+  [[-1, -.9], [-1, .48], [0, -.42], [0, .96], [1, -.9], [1, .48]], // W
+  [[-1, 0], [-.5, -1], [.5, -1], [1, 0], [.5, 1], [-.5, 1]], // ring
+  [[-1, -1], [-1, .45], [0, -.28], [0, 1], [1, -1], [1, .45]], // figure eight
+  [[0, -1], [-1, -.72], [1, -.72], [-1, .72], [1, .72], [0, 1]], // diamond
+  [[-1, 1], [-.85, -.42], [0, .26], [0, -1], [.85, -.42], [1, 1]], // inverted V
+  [[-1, -.9], [-1, .48], [0, -.9], [0, .48], [1, -.9], [1, .48]], // paired columns
+  [[-1, -.9], [-.85, .42], [0, -1], [0, .26], [.85, .42], [1, -.9]], // crown
+] as const;
+
+export const formationLayout = (section: number, width: number, height: number, sector = sectorForSection(section)) => {
+  const variant = (sectorInChapter(sector) - 1) % 9;
+  const shape = mobileFormations[variant];
+  const mobile = width < 760;
+  const columnBends = [
+    [0, 0, 0, 0, 0], [0, 12, 24, 12, 0], [0, 22, 0, 22, 0],
+    [18, 0, -18, 0, 18], [-15, 15, 0, 15, -15], [16, -10, -22, -10, 16],
+    [24, 12, 0, 12, 24], [-18, 12, -18, 12, -18], [-20, 8, 24, 8, -20],
+  ];
+  const points: readonly (readonly [number, number])[] = mobile ? shape : Array.from({ length: 15 }, (_, index) => {
+    const row = Math.floor(index / 5);
+    const column = index % 5;
+    return [column - 2, row - 1 + columnBends[variant][column] / 112] as const;
   });
+  const xUnit = mobile ? Math.min(118, (width - 104) / 2) : Math.min(112, Math.max(102, width * .095));
+  const yUnit = mobile ? Math.min(80, height * .115) : Math.min(112, Math.max(106, height * .135));
+  const centerY = mobile ? height * .29 : height * .15 + yUnit;
+  return points.map(([px, py], index) => ({
+    index, x: width / 2 + px * xUnit, y: centerY + py * yUnit,
+    row: Math.floor(index / (mobile ? 3 : 5)), column: index % (mobile ? 3 : 5),
+    entrySide: (index + section) % 2 === 0 ? 1 : -1,
+  }));
 };
 
 export const arrangeFormationBySize = <T extends { index: number; x: number; y: number }>(slots: T[], sizes: number[]) => {
