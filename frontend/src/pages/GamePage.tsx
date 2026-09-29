@@ -283,7 +283,7 @@ const shipDebris = (effect: Effect) => {
   </div>;
 };
 
-const bossFireBursts = (effect: Effect) => effect.kind === "boss-explosion" ? <div className="boss-fire-sequence" aria-hidden="true"><i /><i /><i /></div> : null;
+const bossFireBursts = (effect: Effect) => effect.kind === "boss-explosion" ? <div className="boss-fire-sequence" aria-hidden="true"><i /><i /><i /><i /><i /></div> : null;
 
 // Effects keep their object identity until they expire. Keep the fragments and
 // their animations mounted instead of rebuilding the entire debris tree on every paint.
