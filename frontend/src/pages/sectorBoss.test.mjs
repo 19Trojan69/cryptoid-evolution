@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { BOSS_ENTRY_MS, BOSS_FIRE_INTERVAL_MS, BOSS_WARNING_MS, advanceAfterClear, bossFireInterval, bossVulnerable, damageSectorBoss, createSectorBoss, moveSectorBoss, nextAfterClear } from "./sectorBoss.ts";
+import { levelDifficulty } from "./levelDifficulty.ts";
 
 test("the boss appears after the complete recorded three-signal warning", () => {
   assert.ok(BOSS_WARNING_MS > 4_833 && BOSS_WARNING_MS < 5_100);
@@ -61,9 +62,10 @@ test("the boss enters visibly, stays in the upper field and remains reachable on
 test("health grows within a cap and a damaged boss fires with a bounded interval", () => {
   const boss = createSectorBoss(10, 375);
   assert.equal(bossFireInterval(boss), 2_500);
-  assert.equal(bossFireInterval({ ...boss, health: 14 }), 1_900);
-  assert.ok(createSectorBoss(10, 375).maxHealth > 28);
-  assert.equal(createSectorBoss(500, 375).maxHealth, 80);
+  assert.equal(bossFireInterval({ ...boss, health: boss.maxHealth / 2 }), 1_900);
+  assert.equal(boss.maxHealth, levelDifficulty(10).bossHealth);
+  assert.ok(boss.maxHealth > 84);
+  assert.equal(createSectorBoss(500, 375).maxHealth, 240);
   assert.throws(() => createSectorBoss(999, 375), /No boss/);
   assert.ok(bossFireInterval(createSectorBoss(500, 375), 500) >= 2_280);
   assert.equal(bossVulnerable(moveSectorBoss(boss, BOSS_ENTRY_MS, 375, 700)), true);
@@ -85,7 +87,7 @@ test("the boss descends smoothly only during its final 20 percent of health", ()
   assert.ok(boss.y + boss.height / 2 < height * .5);
 });
 
-test("the opening boss remains tougher than regular ships but falls in a short fight", () => {
+test("the opening boss takes three times its former number of hits", () => {
   const boss = createSectorBoss(10, 375);
   for (let hit = 0; hit < Math.ceil(boss.maxHealth); hit++) {
     assert.equal(damageSectorBoss(boss, 1, hit * 320), true);
