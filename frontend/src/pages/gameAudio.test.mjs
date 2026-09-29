@@ -113,7 +113,7 @@ test("boss explosion is louder than player destruction while both obey the effec
     audio.play("bossDestroy");
     assert.equal(gains[0].gain.value, .35);
     assert.equal(gains[1].gain.value, .107);
-    assert.equal(gains[2].gain.value, .74);
+    assert.equal(gains[2].gain.value, .9);
     assert.ok(gains[2].gain.value > gains[1].gain.value);
     audio.setEffectsVolume(0);
     assert.equal(gains[0].gain.value, 0);
