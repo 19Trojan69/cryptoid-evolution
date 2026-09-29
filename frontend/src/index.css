@@ -1752,7 +1752,8 @@ html[data-motion="reduced"] .home-battle-bolt, html[data-motion="reduced"] .home
 @media (max-width: 700px) {
   html[data-motion="reduced"] .landing-shell .home-battle .home-raid-ship-1 { left: 18%; top: 55%; }
   html[data-motion="reduced"] .landing-shell .home-battle .home-raid-ship-2 { left: 47%; top: 52%; }
-html[data-motion="reduced"] .landing-shell .home-battle .home-raid-ship-3 { left: 72%; top: 55%; }
+  html[data-motion="reduced"] .landing-shell .home-battle .home-raid-ship-3 { left: 72%; top: 55%; }
+}
 
 /* The home preview stays within a dedicated strip above the launch controls. */
 .landing-shell .home-combat-preview { position: relative; isolation: isolate; flex: 0 1 auto; width: min(100%, 540px); height: clamp(190px, 26dvh, 270px); min-height: 160px; margin: 12px 0 0; overflow: hidden; pointer-events: none; background: radial-gradient(ellipse at 49% 44%, #1837555c, transparent 66%); }
@@ -1843,7 +1844,6 @@ html[data-motion="reduced"] .home-combat-ship, html[data-motion="reduced"] .home
 html[data-motion="reduced"] .home-combat-enemy-1 { left: 22%; top: 25%; opacity: 1; transform: translate(-50%, -50%); }
 html[data-motion="reduced"] .home-combat-enemy-2 { left: 75%; top: 25%; opacity: 1; transform: translate(-50%, -50%); }
 html[data-motion="reduced"] .home-combat-ally-1 { left: 39%; top: 65%; opacity: 1; transform: translate(-50%, -50%); }
-}
 
 /* One selected ship, one preview, and its color and purchase controls. */
 .landing-shell .ship-selector:is(.ship-selector-shop, .ship-selector-hangar) { display: flex; flex-direction: column; gap: 8px; width: 100%; min-height: 100%; margin: 0; padding: 14px; }
