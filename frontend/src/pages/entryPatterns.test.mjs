@@ -1,11 +1,12 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { ENTRY_PATTERNS, entryPatternForSection, entryPosition, entryStartX } from "./entryPatterns.ts";
+import { ENTRY_PATTERNS, entryPatternForSector, entryPosition, entryStartX } from "./entryPatterns.ts";
 
-test("nine arrival choreographies cycle across consecutive sections", () => {
+test("nine normal sectors each have a distinct formation before every boss", () => {
   assert.equal(new Set(ENTRY_PATTERNS).size, 9);
-  assert.deepEqual(Array.from({ length: 9 }, (_, index) => entryPatternForSection(index + 1)), ENTRY_PATTERNS);
-  assert.equal(entryPatternForSection(10), ENTRY_PATTERNS[0]);
+  for (let chapter = 0; chapter < 50; chapter++) {
+    assert.deepEqual(Array.from({ length: 9 }, (_, index) => entryPatternForSector(chapter * 10 + index + 1)), ENTRY_PATTERNS);
+  }
 });
 
 test("each route stays within the mobile playfield and docks at its assigned slot", () => {
@@ -41,4 +42,19 @@ test("the nine patterns draw visibly different paths", () => {
     }).join(";");
   });
   assert.equal(new Set(paths).size, 9);
+});
+
+test("arrival curves change direction smoothly without wall-clipping corners", () => {
+  for (const pattern of ENTRY_PATTERNS) {
+    for (const side of [-1, 1]) {
+      const width = 375;
+      const flight = { pattern, startX: entryStartX(pattern, 3, width, 36, side), startY: 140, targetX: side === 1 ? 280 : 95, targetY: 252, width, height: 700, radius: 36, side, index: 3 };
+      const points = Array.from({ length: 1001 }, (_, index) => entryPosition({ ...flight, progress: index / 1000 }));
+      // Adjacent frame velocities cannot jump by more than a small part of the hull.
+      for (let index = 2; index < points.length; index++) {
+        const acceleration = Math.hypot(points[index].x - 2 * points[index - 1].x + points[index - 2].x, points[index].y - 2 * points[index - 1].y + points[index - 2].y);
+        assert.ok(acceleration < .12, `${pattern} side ${side} has a kink at ${index / 1000}: ${acceleration}`);
+      }
+    }
+  }
 });
