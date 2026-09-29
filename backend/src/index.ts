@@ -119,6 +119,7 @@ export const start = async (listen = true): Promise<void> => {
     const db = client.db(dbName);
     app.locals.orderCollection = db.collection("orders");
     app.locals.userCollection = db.collection("users");
+    app.locals.adminCollection = db.collection("admin_access");
     await app.locals.orderCollection.createIndex({ pi_payment_id: 1 }, { unique: true });
     await app.locals.userCollection.createIndex({ bestScore: -1, uid: 1 });
     console.log("Connected to MongoDB");

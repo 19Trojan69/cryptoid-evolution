@@ -91,6 +91,6 @@ CORS config: configured to respond to a frontend hosted on http://localhost:3314
 You've completed the backend setup. Return to the [development guide](../doc/development.md) to continue.
 # Admin-Testmodus
 
-Setze `ADMIN_PI_UID` **nur in der Backend-Umgebung** auf die Pi-Konto-ID des Besitzers (sichtbar nach der Anmeldung unter „Fortschritt“). Die Berechtigung wird mit der durch Pi `/v2/me` verifizierten UID geprüft. Nach dem Setzen die API neu bereitstellen und mit diesem Pi-Konto anmelden. Der Schalter „Admin: Aus/Ein“ erscheint in der Kopfzeile.
+Bei der nächsten Pi-Anmeldung von **@19Trojan69** wird die über Pi `/v2/me` verifizierte Konto-ID einmalig in MongoDB gebunden. Danach zählt nur diese feste UID; ein anderer Account mit demselben Nutzernamen erhält keinen Zugriff. Nach der Anmeldung erscheint der Schalter „Admin: Aus/Ein“ in der Kopfzeile. Optional kann `ADMIN_PI_UID` **nur in der Backend-Umgebung** gesetzt werden, um die Bindung ausdrücklich festzulegen oder zu ersetzen. Die ID ist nach der Anmeldung unter „Fortschritt“ sichtbar.
 
 Im Admin-Testmodus sind die Schiffshüllen und Farbvarianten, Advanced/Elite, Waffen, Panzerung und Startboni als Vorschau verfügbar; im Startbildschirm lässt sich Level 1–500 wählen. Testläufe erzeugen keine Kaufbelege, verbrauchen keine normalen Power-ups und aktualisieren weder Shards noch Rekorde. Zurück auf „Admin: Aus“ schalten, um mit dem bisherigen Besitz und Fortschritt normal zu spielen.
