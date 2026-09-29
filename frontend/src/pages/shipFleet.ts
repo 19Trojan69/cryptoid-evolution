@@ -8,6 +8,11 @@ export const SHIP_COLORS_KEY = "cryptoid_player_ship_colors";
 export const SHIP_OWNED_KEY = "cryptoid_owned_ship_skins";
 export const SHIP_FLEET_KEY = "cryptoid_ship_fleet_v2";
 export const SHARD_BALANCE_KEY = "cryptoid_shard_balance";
+export const ADMIN_MODE_KEY = "cryptoid_admin_preview";
+export const ADMIN_SHIP_SKIN_KEY = "cryptoid_admin_ship_skin";
+export const ADMIN_SHIP_COLOR_KEY = "cryptoid_admin_ship_color";
+export const ADMIN_START_SECTOR_KEY = "cryptoid_admin_start_sector";
+export const ADMIN_SHIP_STAGE_KEY = "cryptoid_admin_ship_stage";
 export const EXTRA_STARTER_PRICE = 150;
 
 export const playerSkins = [
@@ -162,7 +167,9 @@ export const buySkin = (id: PlayerSkinId, owned: readonly PlayerSkinId[], balanc
 };
 
 export const selectedShip = () => {
-  const stored = playerSkins.find(item => item.id === localStorage.getItem(SHIP_SKIN_KEY));
+  const adminPreview = sessionStorage.getItem(ADMIN_MODE_KEY) === "1";
+  const stored = playerSkins.find(item => item.id === (adminPreview ? sessionStorage.getItem(ADMIN_SHIP_SKIN_KEY) : localStorage.getItem(SHIP_SKIN_KEY)));
+  if (adminPreview) return { skin: stored ?? playerSkins[0], color: allPlayerColors.find(item => item.id === sessionStorage.getItem(ADMIN_SHIP_COLOR_KEY)) ?? playerColors[0] };
   const fleet = readShipFleet(localStorage.getItem(SHIP_FLEET_KEY), localStorage.getItem(SHIP_OWNED_KEY), localStorage.getItem(SHIP_COLORS_KEY));
   const skin = stored && fleetCount(fleet, stored.id) ? stored : playerSkins[0];
   const savedColor = colorForSkin(skin.id, savedShipColors(localStorage.getItem(SHIP_COLORS_KEY)), localStorage.getItem(SHIP_COLOR_KEY), skin.id);

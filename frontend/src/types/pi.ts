@@ -9,6 +9,8 @@ export type AuthResult = {
 
 export type User = AuthResult["user"];
 
+export type SessionUser = { user: User; canAdmin: boolean; adminMode: boolean };
+
 export type PaymentStatus = {
   developer_approved: boolean;
   transaction_verified: boolean;

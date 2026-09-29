@@ -2,6 +2,9 @@ import { Router } from "express";
 import { randomUUID } from "node:crypto";
 import { armorBonusFromPaid, findOffer, hangarCatalog } from "../hangarCatalog";
 import "../types/session";
+import { isAdminMode } from "../adminAccess";
+
+const offersOf = (kind: string) => hangarCatalog.filter(item => item.kind === kind).map(item => item.id);
 
 export default function mountHangarEndpoints(router: Router) {
   router.get("/catalog", (_req, res) => res.json({ offers: hangarCatalog }));
@@ -9,6 +12,13 @@ export default function mountHangarEndpoints(router: Router) {
   router.get("/inventory", async (req, res) => {
     const uid = req.session.currentUser?.uid;
     if (!uid) return res.status(401).json({ error: "Sign in first" });
+    if (isAdminMode(req)) return res.json({
+      ownedWeapons: offersOf("weapon"), ownedArmor: offersOf("armor"), ownedShipUpgrades: offersOf("ship_upgrade"),
+      consumables: offersOf("power").map(id => ({ id, count: 1 })),
+      equippedWeapon: req.session.adminLoadout?.weapon ?? null,
+      selectedPower: req.session.adminLoadout?.power ?? null,
+      adminPreview: true,
+    });
     try {
       const orders = req.app.locals.orderCollection;
       const users = req.app.locals.userCollection;
@@ -27,6 +37,10 @@ export default function mountHangarEndpoints(router: Router) {
     if (!uid) return res.status(401).json({ error: "Sign in first" });
     const { weapon, power } = req.body ?? {};
     if ((weapon !== null && (typeof weapon !== "string" || findOffer(weapon)?.kind !== "weapon")) || (power !== null && (typeof power !== "string" || findOffer(power)?.kind !== "power"))) return res.status(400).json({ error: "Invalid loadout" });
+    if (isAdminMode(req)) {
+      req.session.adminLoadout = { weapon, power };
+      return res.json({ equippedWeapon: weapon, selectedPower: power, adminPreview: true });
+    }
     try {
       const orders = req.app.locals.orderCollection;
       if (weapon && !await orders.findOne({ user: uid, product_id: weapon, paid: true })) return res.status(403).json({ error: "Weapon not owned" });
@@ -39,6 +53,20 @@ export default function mountHangarEndpoints(router: Router) {
   router.post("/start", async (req, res) => {
     const uid = req.session.currentUser?.uid;
     if (!uid) return res.status(401).json({ error: "Sign in first" });
+    const requestedSector = req.body?.sector ?? 1;
+    if (!Number.isInteger(requestedSector) || requestedSector < 1 || requestedSector > 500) return res.status(400).json({ error: "Invalid level" });
+    if (isAdminMode(req)) {
+      const stage = req.body?.shipStage ?? 1;
+      if (!Number.isInteger(stage) || stage < 1 || stage > 3) return res.status(400).json({ error: "Invalid ship stage" });
+      const weapon = findOffer(req.session.adminLoadout?.weapon ?? "");
+      const power = findOffer(req.session.adminLoadout?.power ?? "");
+      req.session.scoreRun = null;
+      return res.json({ armorBonus: 3, weaponLevel: weapon?.kind === "weapon" ? weapon.level : 1,
+        unlockedWeaponLevels: [1, 2, 3, 4, 5], ownedShipUpgrades: offersOf("ship_upgrade"),
+        powerUp: power?.kind === "power" ? power.powerUp : null, scoreRunId: null,
+        startSector: requestedSector, shipStage: stage, adminPreview: true });
+    }
+    if (requestedSector !== 1) return res.status(403).json({ error: "Level selection requires admin mode" });
     try {
       const users = req.app.locals.userCollection;
       const orders = req.app.locals.orderCollection;
@@ -55,7 +83,7 @@ export default function mountHangarEndpoints(router: Router) {
       const consumed = selected?.kind === "power" ? await orders.findOneAndUpdate({ user: uid, product_id: selected.id, paid: true, consumed_at: { $exists: false } }, { $set: { consumed_at: new Date() } }, { returnDocument: "before" }) : null;
       const scoreRun = { id: randomUUID(), startedAt: Date.now() };
       req.session.scoreRun = scoreRun;
-      return res.json({ armorBonus, weaponLevel: owned && weapon?.kind === "weapon" ? weapon.level : 1, unlockedWeaponLevels, ownedShipUpgrades: paidShipUpgrades.map((order: any) => order.product_id), powerUp: consumed && selected?.kind === "power" ? selected.powerUp : null, scoreRunId: scoreRun.id });
+      return res.json({ armorBonus, weaponLevel: owned && weapon?.kind === "weapon" ? weapon.level : 1, unlockedWeaponLevels, ownedShipUpgrades: paidShipUpgrades.map((order: any) => order.product_id), powerUp: consumed && selected?.kind === "power" ? selected.powerUp : null, scoreRunId: scoreRun.id, startSector: 1, adminPreview: false });
     } catch (error) { return res.status(503).json({ error: "Could not start mission" }); }
   });
 }

@@ -3,7 +3,7 @@ import { memo, useEffect, useRef, useState, type CSSProperties, type PointerEven
 import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
 import { entryPatternForSection, entryPosition, entryStartX, type EntryPattern } from "./entryPatterns";
-import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, arrangeFormationBySize, formationLayout, formationReady, sectionInSector, sectionPhase, sectorName, type SectorPhase } from "./sectorManager";
+import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, SECTIONS_PER_SECTOR, arrangeFormationBySize, formationLayout, formationReady, sectionInSector, sectionPhase, sectorName, type SectorPhase } from "./sectorManager";
 import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp } from "./powerUps";
 import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, zoneFraction, shipStartHeight } from "./controlPreferences";
@@ -14,7 +14,7 @@ import Starfield from "./Starfield";
 import { BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusEntryGap, bonusHeartReward, bonusPosition, bonusReward, bonusShowcaseShip, type BonusTarget } from "./bonusChallenge";
 import { appendSectionBlock, bonusChainReward, BLOCKS_PER_CHAIN } from "./networkChain";
 import { advanceAfterClear, BOSS_WARNING_MS, damageSectorBoss, bossFireInterval, bossVulnerable, createSectorBoss, encounterHudLabel, moveSectorBoss, type SectorBoss } from "./sectorBoss";
-import { enemySprite, selectedShip, shardBalance, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
+import { enemySprite, selectedShip, shardBalance, ADMIN_MODE_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
 import { useShipVisualOffset } from "./paintedShip";
 import { ownedShipStage, projectileGuardForStage, projectileImpact, stageWeaponLevel, type ShipStage } from "./shipEvolution";
@@ -326,6 +326,7 @@ const GamePage = () => {
   const shipStageRef = useRef<ShipStage>(1);
   const recordsSavedRef = useRef(false);
   const scoreRunRef = useRef<string | null>(null);
+  const adminRunRef = useRef(false);
   const pendingScoreRef = useRef<Promise<unknown> | null>(null);
   const bestThisDeviceRef = useRef(readRecord(BEST_SCORE_KEY));
   const checkpointAtRef = useRef(0);
@@ -349,9 +350,16 @@ const GamePage = () => {
     startRequestRef.current = true;
     try {
       if (pendingScoreRef.current) await pendingScoreRef.current;
-      const { data } = await axiosClient.post<{ weaponLevel: number; unlockedWeaponLevels: number[]; ownedShipUpgrades: string[]; powerUp: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; armorBonus: number; scoreRunId: string }>("/hangar/start");
+      const requestedSector = sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? Number(sessionStorage.getItem(ADMIN_START_SECTOR_KEY) || 1) : 1;
+      const requestedStage = sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? Number(sessionStorage.getItem(ADMIN_SHIP_STAGE_KEY) || 1) : 1;
+      const { data } = await axiosClient.post<{ weaponLevel: number; unlockedWeaponLevels: number[]; ownedShipUpgrades: string[]; powerUp: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; armorBonus: number; scoreRunId: string | null; startSector: number; shipStage?: ShipStage; adminPreview: boolean }>("/hangar/start", { sector: requestedSector, shipStage: requestedStage });
+      adminRunRef.current = data.adminPreview === true;
       scoreRunRef.current = data.scoreRunId;
-      shipStageRef.current = ownedShipStage(shipSelection.skin.sprite, data.ownedShipUpgrades);
+      if (adminRunRef.current) {
+        stateRef.current.sector = data.startSector;
+        stateRef.current.section = (data.startSector - 1) * SECTIONS_PER_SECTOR + 1;
+      }
+      shipStageRef.current = adminRunRef.current ? data.shipStage ?? 1 : ownedShipStage(shipSelection.skin.sprite, data.ownedShipUpgrades);
       setShipStage(shipStageRef.current);
       stateRef.current.projectileGuard = projectileGuardForStage(shipStageRef.current);
       const armorBonus = Number.isInteger(data.armorBonus) ? Math.max(0, Math.min(3, data.armorBonus)) : 0;
@@ -819,7 +827,7 @@ const GamePage = () => {
           }
           if (reward.powerUps.length || recoveredHeart) soundRef.current?.play("pickup");
         }
-        if (state.score > bestThisDeviceRef.current) {
+        if (!adminRunRef.current && state.score > bestThisDeviceRef.current) {
           bestThisDeviceRef.current = state.score;
           window.localStorage.setItem(BEST_SCORE_KEY, String(state.score));
         }
@@ -839,7 +847,7 @@ const GamePage = () => {
           state.enemyShots = [];
           state.shots = [];
           if (!recordsSavedRef.current) {
-            saveRecords(state);
+            if (!adminRunRef.current) saveRecords(state);
             recordsSavedRef.current = true;
             submitScore(state);
           }
@@ -951,6 +959,7 @@ const GamePage = () => {
     setShipStage(1);
     recordsSavedRef.current = false;
     scoreRunRef.current = null;
+    adminRunRef.current = false;
     setScoreSync("idle");
     checkpointAtRef.current = 0;
     checkpointScoreRef.current = 0;
@@ -979,7 +988,7 @@ const GamePage = () => {
 
   const goHome = () => {
     if (!recordsSavedRef.current) {
-      saveRecords(stateRef.current);
+      if (!adminRunRef.current) saveRecords(stateRef.current);
       recordsSavedRef.current = true;
       submitScore(stateRef.current);
     }

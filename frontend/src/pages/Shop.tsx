@@ -7,7 +7,7 @@ import { useAuth } from "../hooks/useAuth";
 import { usePayments } from "../hooks/usePayments";
 import { axiosClient } from "../lib/axiosClient.ts";
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "./GamePage.tsx";
-import { allPlayerColors, buyShipVariant, enemySprite, EXTRA_STARTER_PRICE, fleetCount, playerColors, playerSkins, readShipFleet, savedShipColors, selectedShip, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyle, spriteStyle, type PlayerColorId } from "./shipFleet";
+import { allPlayerColors, buyShipVariant, enemySprite, EXTRA_STARTER_PRICE, fleetCount, playerColors, playerSkins, readShipFleet, savedShipColors, selectedShip, shardBalance, ADMIN_SHIP_COLOR_KEY, ADMIN_SHIP_SKIN_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyle, spriteStyle, type PlayerColorId, type ShipFleet } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
 import { ownedShipStage, shipEvolutionAsset, type ShipStage } from "./shipEvolution";
 import { shipPreviewPlacement } from "./shipPreviewPlacement";
@@ -23,6 +23,7 @@ import { languages, useLocale, type Locale } from "../i18n";
 import EarthGlobe from "./EarthGlobe";
 import EarthNetwork from "./EarthNetwork";
 import { requestGameFullscreen } from "./gameFullscreen";
+import { MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { powerUpSymbols, type PowerUpType } from "./powerUps";
 import { CONTROL_HAND_KEY, CONTROL_SENSITIVITY_KEY, CONTROL_ZONE_KEY, SHIP_START_KEY, readControlHand, readControlSensitivity, readControlZone, readShipStart, type ControlHand, type ControlSensitivity, type ControlZone, type ShipStart } from "./controlPreferences";
 
@@ -41,6 +42,7 @@ const shopTabs = [
 
 const powerTypeForOffer = (offerId: string): PowerUpType => offerId.includes("shield") ? "shield" : offerId.includes("rapid") ? "rapid" : offerId.includes("bomb") ? "bomb" : offerId.includes("emp") ? "emp" : "overdrive";
 const MOTION_STORAGE_KEY = "cryptoid_reduced_effects";
+const adminFleet: ShipFleet = Object.fromEntries(playerSkins.map(skin => [skin.id, Object.fromEntries(playerColors.map(color => [color.id, 1]))])) as ShipFleet;
 
 const WeaponPreview = ({ offerId, sprite, color }: { offerId: string; sprite: number; color: PlayerColorId }) => {
   const shotCount = offerId.includes("triple") || offerId.includes("plasma") ? 3 : 2;
@@ -160,27 +162,50 @@ const Shop = () => {
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [shopView]);
   const [records] = useState(() => ({ bestScore: Number(localStorage.getItem(BEST_SCORE_KEY) || 0), highestSector: Number(localStorage.getItem(HIGHEST_SECTOR_KEY) || 0), totalDestroyed: Number(localStorage.getItem(TOTAL_DESTROYED_KEY) || 0) }));
+  const {
+    user, canAdmin, adminMode, setAdminPreview, isAuthenticated, showSignIn, signIn, signOut,
+    closeSignIn, requireAuth, isLoading: isAuthLoading,
+  } = useAuth();
+  const [adminError, setAdminError] = useState("");
+  const [startSector, setStartSector] = useState(1);
   const [selected, setSelected] = useState(selectedShip);
   const [previewSkin, setPreviewSkin] = useState(() => selectedShip().skin);
   const [previewColor, setPreviewColor] = useState(() => selectedShip().color);
   const [previewFocusStage, setPreviewFocusStage] = useState<ShipStage>(1);
+  const [adminStage, setAdminStage] = useState<ShipStage>(() => {
+    const saved = Number(sessionStorage.getItem(ADMIN_SHIP_STAGE_KEY));
+    return saved === 2 || saved === 3 ? saved : 1;
+  });
   const [shipQuery, setShipQuery] = useState("");
   const [shipSearchOpen, setShipSearchOpen] = useState(false);
   const shipSearchRef = useRef<HTMLDivElement>(null);
   const [fleet, setFleet] = useState(() => readShipFleet(localStorage.getItem(SHIP_FLEET_KEY), localStorage.getItem(SHIP_OWNED_KEY), localStorage.getItem(SHIP_COLORS_KEY)));
+  const visibleFleet = adminMode ? adminFleet : fleet;
   const [shards, setShards] = useState(() => shardBalance(localStorage.getItem(SHARD_BALANCE_KEY)));
   const [hangarMessage, setHangarMessage] = useState("");
   const [offers, setOffers] = useState<Offer[]>(() => [...hangarCatalog]);
   const [catalogReady, setCatalogReady] = useState(false);
   const [inventory, setInventory] = useState<Inventory | null>(null);
-  const selectedStage = ownedShipStage(selected.skin.sprite, inventory?.ownedShipUpgrades);
+  const selectedStage = adminMode ? adminStage : ownedShipStage(selected.skin.sprite, inventory?.ownedShipUpgrades);
   const previewStage = ownedShipStage(previewSkin.sprite, inventory?.ownedShipUpgrades);
   const [loadoutMessage, setLoadoutMessage] = useState("");
-  const shipSearchOptions = playerSkins.filter(skin => shopView === "shop" || fleetCount(fleet, skin.id) > 0);
+  const shipSearchOptions = playerSkins.filter(skin => shopView === "shop" || fleetCount(visibleFleet, skin.id) > 0);
+  useEffect(() => {
+    let active = true;
+    queueMicrotask(() => {
+      if (!active) return;
+      const current = selectedShip();
+      setSelected(current);
+      setPreviewSkin(current.skin);
+      setPreviewColor(current.color);
+      setInventory(null);
+    });
+    return () => { active = false; };
+  }, [adminMode]);
   const matchingShipOptions = shipSearchOptions.filter(skin =>
     skin.name.toLocaleLowerCase(locale).includes(shipQuery.trim().toLocaleLowerCase(locale)));
   const shipResultsVisible = shipSearchOpen;
-  useEffect(() => { setShipQuery(""); setShipSearchOpen(shopView === "shop"); if (shopView === "shop") setPreviewFocusStage(1); }, [shopView]);
+  useEffect(() => { setShipQuery(""); setShipSearchOpen(shopView === "shop"); if (shopView === "shop") setPreviewFocusStage(adminMode ? adminStage : 1); }, [shopView, adminMode, adminStage]);
   useEffect(() => {
     if (!shipSearchOpen) return;
     const closeOutside = (event: PointerEvent) => {
@@ -190,19 +215,24 @@ const Shop = () => {
     return () => document.removeEventListener("pointerdown", closeOutside);
   }, [shipSearchOpen]);
   const chooseSearchResult = (skin: typeof playerSkins[number]) => {
-    const color = skin.id === selected.skin.id ? selected.color : allPlayerColors.find(item => fleetCount(fleet, skin.id, item.id)) ?? playerColors[0];
+    const color = skin.id === selected.skin.id ? selected.color : allPlayerColors.find(item => fleetCount(visibleFleet, skin.id, item.id)) ?? playerColors[0];
     setPreviewSkin(skin);
     setPreviewColor(color);
-    setPreviewFocusStage(1);
+    setPreviewFocusStage(adminMode ? adminStage : 1);
     setShipQuery("");
     setShipSearchOpen(false);
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     if (shopView === "hangar") equipShip(skin, color);
     else setHangarMessage("");
   };
-  const enterGame = () => { primeGameAudio(); requestGameFullscreen(); navigate("/game"); };
+  const enterGame = () => {
+    if (adminMode) sessionStorage.setItem(ADMIN_START_SECTOR_KEY, String(Number.isInteger(startSector) ? Math.min(MAX_DIFFICULTY_LEVEL, Math.max(1, startSector)) : 1));
+    else sessionStorage.removeItem(ADMIN_START_SECTOR_KEY);
+    primeGameAudio(); requestGameFullscreen(); navigate("/game");
+  };
 
   const purchasePreview = () => {
+    if (adminMode) return;
     if (previewFocusStage !== 1) return;
     const currentFleet = readShipFleet(localStorage.getItem(SHIP_FLEET_KEY), localStorage.getItem(SHIP_OWNED_KEY), localStorage.getItem(SHIP_COLORS_KEY));
     const currentBalance = shardBalance(localStorage.getItem(SHARD_BALANCE_KEY));
@@ -217,7 +247,14 @@ const Shop = () => {
   };
   const equipShip = (skin: typeof playerSkins[number], color: typeof allPlayerColors[number]) => {
     // Only a variant already in the fleet can become the active ship.
-    if (!fleetCount(fleet, skin.id, color.id)) return;
+    if (!fleetCount(visibleFleet, skin.id, color.id)) return;
+    if (adminMode) {
+      sessionStorage.setItem(ADMIN_SHIP_SKIN_KEY, skin.id);
+      sessionStorage.setItem(ADMIN_SHIP_COLOR_KEY, color.id);
+      setSelected({ skin, color });
+      setHangarMessage(`${skin.name} · ${t(color.name)} · Admin-Testauswahl`);
+      return;
+    }
     localStorage.setItem(SHIP_SKIN_KEY, skin.id);
     localStorage.setItem(SHIP_COLOR_KEY, color.id);
     const nextColors = { ...savedShipColors(localStorage.getItem(SHIP_COLORS_KEY)), [skin.id]: color.id };
@@ -225,16 +262,10 @@ const Shop = () => {
     setSelected({ skin, color });
     setHangarMessage(`${skin.name} · ${t(color.name)} · ${t("EQUIPPED")}`);
   };
-  const {
-    user,
-    isAuthenticated,
-    showSignIn,
-    signIn,
-    signOut,
-    closeSignIn,
-    requireAuth,
-    isLoading: isAuthLoading,
-  } = useAuth();
+  const toggleAdmin = async () => {
+    try { await setAdminPreview(!adminMode); setAdminError(""); }
+    catch { setAdminError("Admin-Modus konnte nicht geändert werden. Bitte erneut anmelden."); }
+  };
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -263,11 +294,13 @@ const Shop = () => {
   }).catch(() => setLoadoutMessage(t('Hangar catalog unavailable. Try again when the server is online.'))); }, []);
   useEffect(() => {
     if (!isAuthenticated) return;
+    let active = true;
     axiosClient.get<Inventory>("/hangar/inventory").then(({ data }) => {
       if (!Array.isArray(data.ownedWeapons) || !Array.isArray(data.ownedArmor) || !Array.isArray(data.consumables)) throw new Error("Invalid inventory");
-      setInventory(data);
-    }).catch(() => setLoadoutMessage(t('Connect your Pi account to see your saved loadout.')));
-  }, [isAuthenticated]);
+      if (active) setInventory(data);
+    }).catch(() => { if (active) setLoadoutMessage(t('Connect your Pi account to see your saved loadout.')); });
+    return () => { active = false; };
+  }, [isAuthenticated, adminMode]);
   const equip = async (weapon: string | null, power: string | null) => {
     if (!isAuthenticated) { requireAuth(); return; }
     try {
@@ -291,11 +324,16 @@ const Shop = () => {
     <main className="app-shell landing-shell">
       <Header
         user={user}
+        canAdmin={canAdmin}
+        adminMode={adminMode}
+        onToggleAdmin={() => { void toggleAdmin(); }}
         onSignIn={signIn}
         onSignOut={() => { setInventory(null); void signOut(); }}
         onSendTestNotification={onSendTestNotification}
         isLoading={isAuthLoading}
       />
+      {adminError && <p role="alert" className="hangar-message">{adminError}</p>}
+      {adminMode && <div className="admin-preview-banner" role="status">Admin-Testmodus aktiv · Käufe und Rekorde werden nicht gespeichert.</div>}
 
       <section className="hero-section">
         <button className="home-music-toggle" type="button" data-state={musicEnabled ? "playing" : "off"} aria-pressed={musicEnabled} aria-label={musicLabel} title={musicLabel} onClick={toggleHomeMusic}><span className="home-music-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" />{musicEnabled ? <><path d="M16 9a4 4 0 0 1 0 6" /><path d="M19 6a8 8 0 0 1 0 12" /></> : <path d="m17 9 5 6m0-6-5 6" />}</svg></span></button>
@@ -307,6 +345,7 @@ const Shop = () => {
           <p className="hero-tagline">Defend Earth. <span>Evolve your power.</span></p>
           <p className="hero-description">{t('Build your streak, master the grid, and become the force Earth needs.')}</p>
           <div className="home-mission-brief" aria-label={t("Your Progress")}><span className="home-mission-marker" aria-hidden="true">◆</span><span><small>{t("Genesis sector")} · {t("EQUIPPED")}</small><strong>{selected.skin.name} <em>· {t(selected.color.name)} · {selectedStage === 1 ? "STANDARD" : selectedStage === 2 ? "ADVANCED" : "ELITE"}</em></strong></span>{records.bestScore > 0 && <span className="home-mission-best"><small>{t("Best score")}</small><strong>{records.bestScore.toLocaleString()}</strong></span>}</div>
+          {adminMode && <label className="admin-level-picker">Testlevel (1–{MAX_DIFFICULTY_LEVEL}) <input type="number" min="1" max={MAX_DIFFICULTY_LEVEL} value={startSector} onChange={event => setStartSector(Number(event.target.value))} onBlur={() => setStartSector(value => Number.isInteger(value) ? Math.min(MAX_DIFFICULTY_LEVEL, Math.max(1, value)) : 1)} /></label>}
           <div className="hero-actions">
             <div className="home-launch">
               <div className="home-launch-bay" role="img" aria-label={`${selected.skin.name} · ${t(selected.color.name)}`}>
@@ -404,6 +443,7 @@ const Shop = () => {
           </nav>
           <div className="shop-modal-body">
       {shopView === "progress" && <section className="dashboard-grid" aria-label={t('Player overview')}>
+        {user && <p className="admin-account-id">Pi-Konto-ID: <code>{user.uid}</code></p>}
         <article className="status-card progress-card">
           <div className="card-heading"><span>{t('YOUR PROGRESS')}</span><span className="card-icon">↗</span></div>
           <div className="progress-row"><strong>{t("Best")} {personalBest ?? records.bestScore}</strong><span>{t("Sector")} {String(records.highestSector).padStart(2, "0")}</span></div>
@@ -438,7 +478,7 @@ const Shop = () => {
           </div>
           {shipResultsVisible && <div className="ship-search-results" id="ship-search-results" role="group" aria-label={t("Available ships")}>
             {matchingShipOptions.map(skin => {
-              const total = fleetCount(fleet, skin.id);
+              const total = fleetCount(visibleFleet, skin.id);
               const status = total ? `${t("Owned")} ×${total}` : `◆ ${skin.price || EXTRA_STARTER_PRICE} ${t("Shards")}`;
               return <button className={`ship-search-result${previewSkin.id === skin.id ? " ship-search-selected" : ""}`} key={skin.id} type="button" onClick={() => chooseSearchResult(skin)}>
                 <span className="ship-search-thumb" aria-hidden="true"><img src={shipEvolutionAsset(skin.sprite, 1)} alt="" loading="lazy" decoding="async" style={shipPreviewPlacement(skin.sprite, 1)} /></span>
@@ -448,12 +488,13 @@ const Shop = () => {
             {matchingShipOptions.length === 0 && <p className="ship-search-empty">{t("No matching ships.")}</p>}
           </div>}
         </div>
-        <ShipSelectionPanel view={shopView} skin={previewSkin} color={previewColor} focusStage={previewFocusStage} ownedStage={previewStage} fleet={fleet} shards={shards}
+        <ShipSelectionPanel view={shopView} skin={previewSkin} color={previewColor} focusStage={previewFocusStage} ownedStage={previewStage} fleet={visibleFleet} shards={shards} adminPreview={adminMode}
           offers={offers.filter(offer => offer.kind === "ship_upgrade")} catalogReady={catalogReady} isLoading={isLoading}
           selectedSkinId={selected.skin.id} selectedColorId={selected.color.id} message={hangarMessage} locale={locale} t={t}
-          onStageChange={stage => { setPreviewFocusStage(stage); setHangarMessage(""); }}
+          onStageChange={stage => { setPreviewFocusStage(stage); if (adminMode) { setAdminStage(stage); sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage)); } setHangarMessage(""); }}
           onColorChange={color => { setPreviewColor(color); if (shopView === "hangar") equipShip(previewSkin, color); else setHangarMessage(""); }}
           onBuyStandard={purchasePreview}
+          onEquipPreview={() => equipShip(previewSkin, previewColor)}
           onBuyUpgrade={offer => { const name = previewSkin.name + " · " + (offer.stage === 2 ? "Advanced" : "Elite"); void orderProduct("Cryptoid " + name + " · permanent ship evolution", offer.pricePi, { productId: offer.id }, () => { setHangarMessage(name + " " + t("purchase confirmed.")); void refreshInventory(); }); }}
           onOpenShop={() => { setPreviewFocusStage(1); setShopView("shop"); }} />
       </section>}
@@ -468,7 +509,7 @@ const Shop = () => {
             const selected = kind === "weapon" ? inventory?.equippedWeapon === offer.id : inventory?.selectedPower === offer.id;
             return <article key={offer.id} className={`hangar-offer hangar-offer-${kind}${selected ? " hangar-offer-selected" : ""}`}>{kind === "weapon" ? <WeaponPreview offerId={offer.id} sprite={selectedShip().skin.sprite} color={selectedShip().color.id} /> : <PowerPreview offerId={offer.id} />}<h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span>{t(kind === "weapon" ? "5 minutes per mission · starts at mission start" : "Consumed at mission start")} · {offer.pricePi} π</span><strong>{selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : t("OWNED") : t("NOT OWNED")}</strong><div>
               {owned ? <button className="button button-secondary" type="button" disabled={Boolean(selected)} onClick={() => equip(kind === "weapon" ? offer.id : inventory?.equippedWeapon ?? null, kind === "power" ? offer.id : inventory?.selectedPower ?? null)}>{t(selected ? "Selected" : "Equip for next mission")}</button> : null}
-              {(kind === "power" || !owned) && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady} onClick={() => orderProduct(`Cryptoid ${offer.name} · ${kind === "weapon" ? "5 minutes per mission" : offer.id === "start_bomb" || offer.id === "start_emp" ? "one use per mission" : "60 seconds when activated"}`, offer.pricePi, { productId: offer.id }, () => { setLoadoutMessage(`${offer.name} ${t("purchase confirmed.")}`); void refreshInventory(); })}>{t("Buy with π")}</button>}
+              {!adminMode && (kind === "power" || !owned) && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady} onClick={() => orderProduct(`Cryptoid ${offer.name} · ${kind === "weapon" ? "5 minutes per mission" : offer.id === "start_bomb" || offer.id === "start_emp" ? "one use per mission" : "60 seconds when activated"}`, offer.pricePi, { productId: offer.id }, () => { setLoadoutMessage(`${offer.name} ${t("purchase confirmed.")}`); void refreshInventory(); })}>{t("Buy with π")}</button>}
             </div></article>;
           })}
         </div></div>)}
