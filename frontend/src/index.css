@@ -161,6 +161,9 @@ h1 span { display: block; color: var(--emerald); }
 
 .dashboard-grid, .upgrade-section { max-width: 1115px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); }
 .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.payment-ledger-card { grid-column: 1 / -1; }
+.payment-ledger-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.payment-ledger-card small { display: block; line-height: 1.5; opacity: .82; }
 .status-card { min-height: 170px; padding: 23px; border: 1px solid var(--line); background: rgba(10, 47, 57, .67); }
 .card-heading { display: flex; justify-content: space-between; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .13em; }
 .card-icon, .flame { color: var(--cyan); font-size: 17px; }

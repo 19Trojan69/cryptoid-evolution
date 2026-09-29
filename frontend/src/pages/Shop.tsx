@@ -167,6 +167,8 @@ const Shop = () => {
     closeSignIn, requireAuth, isLoading: isAuthLoading,
   } = useAuth();
   const [adminError, setAdminError] = useState("");
+  const [ledgerExporting, setLedgerExporting] = useState(false);
+  const [ledgerError, setLedgerError] = useState("");
   const [startSector, setStartSector] = useState(1);
   const [selected, setSelected] = useState(selectedShip);
   const [previewSkin, setPreviewSkin] = useState(() => selectedShip().skin);
@@ -265,6 +267,26 @@ const Shop = () => {
   const toggleAdmin = async () => {
     try { await setAdminPreview(!adminMode); setAdminError(""); }
     catch { setAdminError("Admin-Modus konnte nicht geändert werden. Bitte erneut anmelden."); }
+  };
+
+  const exportPayments = async (network: "mainnet" | "testnet" | "unknown") => {
+    setLedgerExporting(true);
+    setLedgerError("");
+    try {
+      const response = await axiosClient.get<Blob>("/payments/admin/export", { params: { network }, responseType: "blob", timeout: 120_000 });
+      const url = URL.createObjectURL(response.data);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `cryptoid-pi-zahlungen-${network}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    } catch {
+      setLedgerError("Export nicht verfügbar. Bitte Pi-Anmeldung und Serververbindung prüfen.");
+    } finally {
+      setLedgerExporting(false);
+    }
   };
 
   useEffect(() => {
@@ -444,6 +466,17 @@ const Shop = () => {
           <div className="shop-modal-body">
       {shopView === "progress" && <section className="dashboard-grid" aria-label={t('Player overview')}>
         {user && <p className="admin-account-id">Pi-Konto-ID: <code>{user.uid}</code></p>}
+        {canAdmin && <article className="status-card payment-ledger-card">
+          <div className="card-heading"><span>Pi-Zahlungen · Aufzeichnungen</span><span className="card-icon">↓</span></div>
+          <p>CSV-Export für die steuerliche Dokumentation. Test-Pi, echte Pi und ungeklärte ältere Datensätze bleiben getrennt. Enthält auch offene und stornierte Vorgänge mit Status.</p>
+          <div className="payment-ledger-actions">
+            <button className="button button-secondary" type="button" disabled={ledgerExporting} onClick={() => void exportPayments("mainnet")}>Echte Pi</button>
+            <button className="button button-secondary" type="button" disabled={ledgerExporting} onClick={() => void exportPayments("testnet")}>Test-Pi</button>
+            <button className="button button-secondary" type="button" disabled={ledgerExporting} onClick={() => void exportPayments("unknown")}>Ungeklärt</button>
+          </div>
+          <small>Für die Buchhaltung nur bestätigte Mainnet-Zahlungen bewerten. EUR-Wert, Kursquelle und Belegnummer im Export ergänzen; der Export ist keine Rechnung.</small>
+          {ledgerError && <p role="alert">{ledgerError}</p>}
+        </article>}
         <article className="status-card progress-card">
           <div className="card-heading"><span>{t('YOUR PROGRESS')}</span><span className="card-icon">↗</span></div>
           <div className="progress-row"><strong>{t("Best")} {personalBest ?? records.bestScore}</strong><span>{t("Sector")} {String(records.highestSector).padStart(2, "0")}</span></div>

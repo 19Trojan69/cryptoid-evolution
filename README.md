@@ -2,6 +2,8 @@
 
 Eigene [Nutzungsbedingungen / Terms of Service (Entwurf)](./TERMS_OF_SERVICE.md) – Version 0.10, rechtliche Prüfung vor Veröffentlichung ausstehend. Die bestehende [Softwarelizenz](./LICENSE.md) bleibt davon getrennt.
 
+Für den geschützten Export von Test-Pi- und echten Pi-Zahlungen siehe [Pi-Zahlungsaufzeichnungen](./doc/pi-payment-records.md).
+
 ## Grundlage
 
 
