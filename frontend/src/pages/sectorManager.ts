@@ -40,16 +40,24 @@ export const formationReady = ({ spawned, total, alive, ready }: {
 // Each block has a recognisable resting silhouette, repeated in the next level.
 export const BLOCK_FORMATION_NAMES = ["Ranks", "V", "W", "Ring", "Wave", "X", "A", "Columns", "Diamond"] as const;
 const blockFormations: readonly (readonly (readonly [number, number])[])[] = [
-  [[0, -.7], [-1, -.7], [1, -.7], [-1, .7], [0, .7], [1, .7]], // two ranks
-  [[0, .95], [-1, -.95], [1, -.95], [-.7, -.05], [.7, -.05], [0, -.95]], // V
-  [[0, .7], [-1, -.95], [-1, .9], [1, -.95], [1, .9], [0, -.8]], // W
-  [[0, -.3], [-1, 0], [-.5, 1], [.5, 1], [1, 0], [.65, -1.1]], // ring
-  [[0, .05], [-1, -.85], [-1, .65], [0, -1.05], [1, -.65], [1, .85]], // wave
-  [[0, 0], [-1, -1], [1, -1], [-1, 1], [1, 1], [0, -1.25]], // X
+  [[0, -.7], [0, .7], [-1, -.7], [1, -.7], [-1, .7], [1, .7]], // two ranks
+  [[0, .95], [0, -.95], [-1, -.95], [1, -.95], [-.7, -.05], [.7, -.05]], // V
+  [[0, .7], [0, -.8], [-1, -.95], [1, -.95], [-1, .9], [1, .9]], // W
+  [[0, -.3], [0, 1], [-1, 0], [1, 0], [-.65, -1.1], [.65, -1.1]], // ring
+  [[0, .05], [0, -1.05], [-1, -.85], [1, -.65], [-1, .65], [1, .85]], // wave
+  [[0, 0], [0, -1.25], [-1, -1], [1, -1], [-1, 1], [1, 1]], // X
   [[0, .2], [0, -1.1], [-1, -.1], [1, -.1], [-1, 1], [1, 1]], // A
-  [[0, 0], [-1, -1], [-1, 0], [-1, 1], [1, -1], [1, 1]], // side-by-side columns
+  [[0, 0], [0, 1.05], [-1, -1], [1, -1], [-1, 0], [1, 0]], // side-by-side columns
   [[0, 0], [0, -1.1], [-1, -.3], [1, -.3], [-.85, .95], [.85, .95]], // diamond
 ];
+
+// Four ships keep the central leader, an end point and a matched pair;
+// five ships keep the leader and two matched pairs. Never paint unused targets.
+export const formationSlotsForCount = <T>(slots: T[], count: number): T[] => {
+  if (count === 4) return [slots[0], slots[1], slots[2], slots[3]];
+  if (count === 5) return [slots[0], slots[2], slots[3], slots[4], slots[5]];
+  return slots.slice(0, count);
+};
 
 export const formationLayout = (section: number, width: number, height: number, sector = sectorForSection(section)) => {
   const variant = (sectorInChapter(sector) - 1) % 9;

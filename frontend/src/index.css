@@ -424,8 +424,8 @@ html[data-motion="reduced"] .cube-spark, html[data-motion="reduced"] .blockchain
 @keyframes formation-data-flow { from { transform: translateX(-50%); } to { transform: translateX(0); } }
 .formation-target { position: absolute; z-index: 0; transform: translate(-50%, -50%); border: 1px solid rgba(109, 228, 255, .7); border-radius: 50%; background: radial-gradient(circle, rgba(126, 244, 255, .16) 0 10%, transparent 12% 48%, rgba(92, 186, 255, .1) 50% 57%, transparent 59%); box-shadow: 0 0 10px rgba(97, 222, 255, .45), inset 0 0 12px rgba(139, 102, 255, .28); opacity: .78; pointer-events: none; animation: formation-target-pulse .72s ease-in-out infinite alternate; }
 .formation-target::before { position: absolute; inset: 12%; border: 1px dashed rgba(187, 142, 250, .72); border-radius: 50%; content: ''; animation: formation-target-spin 2.4s linear infinite; }
-.formation-target::after { position: absolute; top: 50%; left: 50%; width: 132%; height: 1px; transform: translate(-50%, -50%); background: linear-gradient(90deg, transparent, rgba(111, 234, 255, .72), transparent); content: ''; }
-.formation-target span { position: absolute; top: 50%; left: 50%; width: 1px; height: 132%; transform: translate(-50%, -50%); background: linear-gradient(transparent, rgba(111, 234, 255, .72), transparent); }
+.formation-target::after { position: absolute; top: 50%; left: 50%; width: 108%; height: 1px; transform: translate(-50%, -50%); background: linear-gradient(90deg, transparent, rgba(111, 234, 255, .72), transparent); content: ''; }
+.formation-target span { position: absolute; top: 50%; left: 50%; width: 1px; height: 108%; transform: translate(-50%, -50%); background: linear-gradient(transparent, rgba(111, 234, 255, .72), transparent); }
 .formation-target-locked { border-color: rgba(247, 207, 104, .95); box-shadow: 0 0 16px rgba(247, 207, 104, .72), inset 0 0 15px rgba(247, 207, 104, .22); animation: formation-target-lock .48s ease-out both; }
 .formation-target-locked::before { border-color: rgba(247, 207, 104, .82); }
 .formation-target-locked::before { animation: none; }

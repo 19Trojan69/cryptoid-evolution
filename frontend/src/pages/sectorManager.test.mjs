@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { arrangeFormationBySize, BLOCK_FORMATION_NAMES, formationLayout, formationReady, reinforcementCount, SECTION_INTRO_MS, sectionPhase, sectorForSection, sectionInSector, sectorName, sectorChapter, campaignLevel, sectorInChapter } from "./sectorManager.ts";
+import { arrangeFormationBySize, BLOCK_FORMATION_NAMES, formationLayout, formationReady, formationSlotsForCount, reinforcementCount, SECTION_INTRO_MS, sectionPhase, sectorForSection, sectionInSector, sectorName, sectorChapter, campaignLevel, sectorInChapter } from "./sectorManager.ts";
 import { chooseCryptoid } from "./cryptoidRoster.ts";
 
 test("all planned enemies must spawn and die before an endless section advances", () => {
@@ -44,6 +44,18 @@ test("nine normal blocks have nine distinct fixed formations, repeated next leve
 
 test("late blocks gain four to six additional ships in a second flight", () => {
   assert.deepEqual([1, 7, 9, 10, 97, 98, 99, 100, 197, 297, 497].map(reinforcementCount), [0, 0, 0, 0, 4, 4, 4, 0, 5, 6, 6]);
+  for (const width of [320, 375, 390, 800]) for (const sector of [97, 98, 99, 197, 198, 199, 297, 298, 299]) {
+    const count = reinforcementCount(sector);
+    const slots = formationSlotsForCount(formationLayout(sector, width, 700), count);
+    const radii = slots.map((_, index) => chooseCryptoid(sector, index + 6).radius);
+    const arranged = arrangeFormationBySize(slots, radii);
+    assert.equal(arranged.length, count, `only ${count} occupied targets in block ${sector}`);
+    assert.equal(arranged[radii.indexOf(Math.max(...radii))].x, width / 2);
+    for (let index = 0; index < arranged.length; index++) for (let other = index + 1; other < arranged.length; other++) {
+      const clearance = Math.hypot(arranged[index].x - arranged[other].x, arranged[index].y - arranged[other].y) - radii[index] - radii[other];
+      assert.ok(clearance >= 4, `${width}px block ${sector}: ships ${index} and ${other} overlap by ${-clearance}`);
+    }
+  }
 });
 
 test("large enemies receive central slots while smaller enemies move to the sides", () => {
