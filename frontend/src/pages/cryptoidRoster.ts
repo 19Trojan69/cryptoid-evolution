@@ -46,7 +46,7 @@ export const chooseCryptoid = (sector: number, index: number): CryptoidProfile =
   return {
     type,
     ...base,
-    health: base.health + extraHealth,
+    health: (base.health + extraHealth) * 2,
     reward: scaledShardReward(base.reward, sector),
     points: scaledEnemyPoints(base.points, sector, extraHealth),
     entryDuration: base.entryDuration * difficulty.entryPaceScale,

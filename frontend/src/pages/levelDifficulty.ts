@@ -29,12 +29,12 @@ export const levelDifficulty = (level: number): LevelDifficulty => {
     entryPaceScale: 1 - progress * .08,
     groupAttackInterval: Math.max(4, 12 - Math.floor(progress * 9)),
     projectileBonus: Math.min(2, Math.floor(progress * 3)),
-    bossHealth: 28 + progress * 52,
+    bossHealth: (28 + progress * 52) * 3,
   };
 };
 
-// Across the complete curve, at most two extra hits are distributed over a formation.
-// This avoids turning light ships into damage sponges while still strengthening every fleet.
+// Across the complete curve, at most two bonus hull points are distributed over a formation
+// before the roster applies its durability multiplier.
 export const enemyHealthBonus = (level: number, formationIndex: number) => {
   const progress = levelDifficulty(level).progress;
   const healthCredits = Math.floor(progress * 30);
