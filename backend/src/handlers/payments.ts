@@ -2,12 +2,14 @@ import { Router } from "express";
 import platformAPIClient from "../services/platformAPIClient";
 import { findOffer, shipUpgradePrerequisite } from "../hangarCatalog";
 import "../types/session";
+import { isAdminMode } from "../adminAccess";
 
 const identifier = (value: unknown) => typeof value === "string" && /^[a-zA-Z0-9_-]{1,100}$/.test(value) ? value : null;
 const fetchPayment = async (id: string) => (await platformAPIClient.get(`/v2/payments/${id}`)).data;
 
 export default function mountPaymentsEndpoints(router: Router) {
   router.post("/approve", async (req, res) => {
+    if (isAdminMode(req)) return res.status(403).json({ error: "Switch to normal mode for real Pi purchases" });
     const uid = req.session.currentUser?.uid;
     const id = identifier(req.body?.paymentId);
     if (!uid) return res.status(401).json({ error: "Sign in first" });

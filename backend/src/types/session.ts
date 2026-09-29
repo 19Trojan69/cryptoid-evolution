@@ -6,6 +6,7 @@ declare module 'express-session' {
     currentUser: UserData | null,
     scoreRun?: { id: string; startedAt: number } | null,
     adminMode?: boolean,
+    adminUid?: string | null,
     adminLoadout?: { weapon: string | null; power: string | null } | null,
   }
 }

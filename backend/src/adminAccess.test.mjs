@@ -4,9 +4,11 @@ import express from "express";
 import { isAdminUid } from "../build/adminAccess.js";
 import hangarHandlers from "../build/handlers/hangar.js";
 import userHandlers from "../build/handlers/users.js";
+import paymentHandlers from "../build/handlers/payments.js";
 
 const mountHangarEndpoints = hangarHandlers.default;
 const mountUserEndpoints = userHandlers.default;
+const mountPaymentsEndpoints = paymentHandlers.default;
 
 const previousUid = process.env.ADMIN_PI_UID;
 process.env.ADMIN_PI_UID = "verified-owner-uid";
@@ -18,14 +20,14 @@ const route = (mount, method, path) => {
   return router.stack.find(layer => layer.route?.path === path).route.stack.find(layer => layer.method === method).handle;
 };
 
-const invoke = async (handler, session, body = {}) => {
+const invoke = async (handler, session, body = {}, locals = {}) => {
   let status = 200;
   let result;
   const res = {
     status(code) { status = code; return this; },
     json(value) { result = value; return this; },
   };
-  await handler({ session, body, app: { locals: {} } }, res);
+  await handler({ session, body, app: { locals } }, res);
   return { status, result };
 };
 
@@ -34,6 +36,25 @@ test("only the configured verified UID is allowed", () => {
   assert.equal(isAdminUid("another-uid"), false);
   process.env.ADMIN_PI_UID = "";
   assert.equal(isAdminUid("verified-owner-uid"), false);
+  process.env.ADMIN_PI_UID = "verified-owner-uid";
+});
+
+test("first verified owner login binds the UID and rejects another account", async () => {
+  process.env.ADMIN_PI_UID = "";
+  let binding;
+  const adminCollection = {
+    async updateOne(_filter, update) { binding ??= update.$setOnInsert; },
+    async findOne() { return binding; },
+  };
+  const me = route(mountUserEndpoints, "get", "/me");
+  const owner = { currentUser: { uid: "owner-app-uid", username: "19Trojan69" } };
+  const first = await invoke(me, owner, {}, { adminCollection });
+  assert.equal(first.result.canAdmin, true);
+  assert.equal(owner.adminUid, "owner-app-uid");
+  const other = { currentUser: { uid: "different-app-uid", username: "19Trojan69" } };
+  assert.equal((await invoke(me, other, {}, { adminCollection })).result.canAdmin, false);
+  const returning = { currentUser: { uid: "owner-app-uid", username: "new-name" } };
+  assert.equal((await invoke(me, returning, {}, { adminCollection })).result.canAdmin, true);
   process.env.ADMIN_PI_UID = "verified-owner-uid";
 });
 
@@ -65,4 +86,10 @@ test("normal mode cannot jump to a level or claim admin inventory", async () => 
   const session = { currentUser: { uid: "verified-owner-uid" }, adminMode: false };
   const start = await invoke(route(mountHangarEndpoints, "post", "/start"), session, { sector: 2 });
   assert.equal(start.status, 403);
+});
+
+test("admin mode does not approve real Pi purchases", async () => {
+  const session = { currentUser: { uid: "verified-owner-uid" }, adminMode: true };
+  const approval = await invoke(route(mountPaymentsEndpoints, "post", "/approve"), session, { paymentId: "test-id" });
+  assert.equal(approval.status, 403);
 });

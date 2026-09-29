@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import platformAPIClient from "../services/platformAPIClient";
-import { isAdminMode, isAdminUid } from "../adminAccess";
+import { canAdmin, isAdminMode } from "../adminAccess";
 
 export default function mountUserEndpoints(router: Router) {
   const publicUser = (user: { uid: string; username: string; roles?: string[] }) => ({
@@ -70,9 +70,10 @@ export default function mountUserEndpoints(router: Router) {
 
       req.session.currentUser = currentUser;
       req.session.adminMode = false;
+      req.session.adminUid = null;
       req.session.adminLoadout = null;
       req.session.scoreRun = null;
-      return res.status(200).json({ message: "User signed in", user: publicUser(currentUser), canAdmin: isAdminUid(verifiedUid), adminMode: false });
+      return res.status(200).json({ message: "User signed in", user: publicUser(currentUser), canAdmin: await canAdmin(req), adminMode: false });
     } catch (err) {
       console.error("Error during signin:", err);
       return res.status(500).json({ error: "internal_error", message: "Failed to sign in" });
@@ -81,12 +82,14 @@ export default function mountUserEndpoints(router: Router) {
 
   router.get("/me", async (req, res) => {
     if (!req.session.currentUser) return res.status(401).json({ error: "not_authenticated" });
-    return res.status(200).json({ user: publicUser(req.session.currentUser), canAdmin: isAdminUid(req.session.currentUser.uid), adminMode: isAdminMode(req) });
+    const allowed = await canAdmin(req);
+    if (!allowed) req.session.adminMode = false;
+    return res.status(200).json({ user: publicUser(req.session.currentUser), canAdmin: allowed, adminMode: isAdminMode(req) });
   });
 
-  router.post("/admin-mode", (req, res) => {
+  router.post("/admin-mode", async (req, res) => {
     if (!req.session.currentUser) return res.status(401).json({ error: "not_authenticated" });
-    if (!isAdminUid(req.session.currentUser.uid)) return res.status(403).json({ error: "not_authorized" });
+    if (!await canAdmin(req)) return res.status(403).json({ error: "not_authorized" });
     if (typeof req.body?.enabled !== "boolean") return res.status(400).json({ error: "invalid_request" });
     req.session.adminMode = req.body.enabled;
     req.session.adminLoadout = null;
@@ -98,6 +101,7 @@ export default function mountUserEndpoints(router: Router) {
   router.get("/signout", async (req, res) => {
     req.session.currentUser = null;
     req.session.adminMode = false;
+    req.session.adminUid = null;
     req.session.adminLoadout = null;
     req.session.scoreRun = null;
     return res.status(200).json({ message: "User signed out" });
