@@ -27,6 +27,7 @@ import { requestGameFullscreen } from "./gameFullscreen";
 import { MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { powerUpSymbols, type PowerUpType } from "./powerUps";
 import { CONTROL_HAND_KEY, CONTROL_SENSITIVITY_KEY, CONTROL_ZONE_KEY, SHIP_START_KEY, readControlHand, readControlSensitivity, readControlZone, readShipStart, type ControlHand, type ControlSensitivity, type ControlZone, type ShipStart } from "./controlPreferences";
+import { BOSS_STICKER_COUNT, CHAIN_MILESTONES, readRewardProgress, REWARD_PROGRESS_KEY, rewardRank } from "./rewardProgress";
 
 type Offer = { id: string; kind: "weapon" | "power" | "armor" | "ship_upgrade"; name: string; description: string; pricePi: number; shipIndex?: number; stage?: 2 | 3 };
 type Inventory = { ownedWeapons: string[]; ownedArmor: string[]; ownedShipUpgrades?: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
@@ -162,6 +163,7 @@ const Shop = () => {
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [shopView]);
   const [records] = useState(() => ({ bestScore: Number(localStorage.getItem(BEST_SCORE_KEY) || 0), highestSector: Number(localStorage.getItem(HIGHEST_SECTOR_KEY) || 0), totalDestroyed: Number(localStorage.getItem(TOTAL_DESTROYED_KEY) || 0) }));
+  const [rewardProgress] = useState(() => readRewardProgress(localStorage.getItem(REWARD_PROGRESS_KEY)));
   const {
     user, canAdmin, adminMode, setAdminPreview, isAuthenticated, showSignIn, signIn, signOut,
     closeSignIn, requireAuth, isLoading: isAuthLoading,
@@ -442,6 +444,24 @@ const Shop = () => {
           <div className="card-heading"><span>{t('ACTIVE STREAK')}</span><span className="flame">✦</span></div>
           <strong className="streak-number">{records.totalDestroyed} <small>{t("asteroids")}</small></strong>
           <p>{t('Total destroyed across all missions.')}</p>
+        </article>
+        <article className="status-card reward-collection">
+          <div className="card-heading"><span>RANG & SAMMLUNG</span><span className="card-icon">✦</span></div>
+          <h3>{rewardRank(rewardProgress)}</h3>
+          <p>{Object.keys(rewardProgress.bossWins).length}/{BOSS_STICKER_COUNT} Boss-Sticker · {rewardProgress.completedChains.length} Chains · {rewardProgress.perfectBonuses} perfekte Bonusrunden</p>
+          <div className="reward-milestones" aria-label="Chain-Meilensteine">{CHAIN_MILESTONES.map(target => <span key={target} className={rewardProgress.completedChains.length >= target ? "earned" : ""} title={`${target} Chains`}>◆ {target}</span>)}</div>
+          <h4>Boss-Sticker</h4>
+          <div className="boss-sticker-grid">{Array.from({ length: BOSS_STICKER_COUNT }, (_, index) => {
+            const id = index + 1;
+            const stars = rewardProgress.bossWins[id] ?? 0;
+            return <div key={id} className={`boss-sticker${stars ? " boss-sticker-earned" : ""}`} title={`Boss ${id}: ${stars ? `${stars} Stern${stars > 1 ? "e" : ""}` : "noch nicht besiegt"}`} aria-label={`Boss ${id}: ${stars ? `${stars} von 3 Sternen` : "noch gesperrt"}`}>
+              {stars ? <img src={`/ships/bosses/boss_${String(id).padStart(2, "0")}.webp`} alt="" loading="lazy" /> : <span aria-hidden="true">?</span>}
+              <small>#{String(id).padStart(2, "0")}</small>{!!stars && <b>{"★".repeat(stars)}</b>}
+            </div>;
+          })}</div>
+          <h4>Bonus-Medaillen</h4>
+          <p>{Object.values(rewardProgress.bonusMedals).filter(medal => medal === "gold").length} Gold · {Object.values(rewardProgress.bonusMedals).filter(medal => medal === "silver").length} Silber · {Object.values(rewardProgress.bonusMedals).filter(medal => medal === "bronze").length} Bronze</p>
+          <small>Sticker und Abzeichen werden auf diesem Gerät gespeichert. Admin-Testläufe zählen nicht.</small>
         </article>
       </section>}
 
