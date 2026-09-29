@@ -213,6 +213,7 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 
 .game-shell { width: 100%; height: 100dvh; overflow: hidden; background: #030e1b; color: #f0f7f5; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: none; overscroll-behavior: none; }
 .game-field { position: relative; width: 100%; height: 100%; overflow: clip; isolation: isolate; touch-action: none; -webkit-touch-callout: none; background: radial-gradient(circle at 50% 78%, rgba(18, 87, 91, .24), transparent 24%), linear-gradient(180deg, #020b19 0%, #061d32 60%, #082c3a 100%); }
+.audio-retry { position: absolute; z-index: 12; top: max(118px, calc(env(safe-area-inset-top) + 88px)); left: 50%; transform: translateX(-50%); min-height: 44px; padding: 7px 18px; border: 1px solid #79dcd8; border-radius: 22px; background: #08263dec; box-shadow: 0 0 12px #67d9e478; color: #f1ffff; font: 700 14px 'Oxanium', sans-serif; white-space: nowrap; cursor: pointer; }
 .starfield { position: absolute; inset: -3%; z-index: 0; overflow: hidden; pointer-events: none; transform: translate3d(var(--star-parallax-x), var(--star-parallax-y), 0); }
 /* Single compact boss cloud, kept between the boss and the player. */
 .nebula-field { position: absolute; inset: 0; overflow: hidden; pointer-events: none; contain: paint; }

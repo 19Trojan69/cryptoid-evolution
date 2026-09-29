@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { bossFireSites, hullFireAtImpact, spriteFireSites } from './hullFires.ts';
+import { addPersistentHullFire, bossFireSites, hullFireAtImpact, spriteFireSites } from './hullFires.ts';
 
 test('rotating and aligned ships ignite their painted hull, not a world-space ring', () => {
   const sites = [[50, 40], [60, 50], [40, 60]];
@@ -20,4 +20,13 @@ test('repeated hits ignite distinct, bounded points of the boss', () => {
   assert.equal(spriteFireSites.length, 20);
   assert.ok(spriteFireSites.every(sites => sites.length >= 7));
   assert.ok(spriteFireSites.every(sites => Math.max(...sites.map(site => site[0])) - Math.min(...sites.map(site => site[0])) >= 30));
+});
+
+test('the first flame survives every later hit until the ship is removed', () => {
+  const first = { id: 1, x: 35, y: 42 };
+  let fires = addPersistentHullFire([], first, 2);
+  for (let id = 2; id <= 20; id++) fires = addPersistentHullFire(fires, { id, x: id, y: 50 }, id >= 10 ? 8 : 2);
+  assert.strictEqual(fires[0], first);
+  assert.equal(fires.length, 8);
+  assert.deepEqual(addPersistentHullFire([], { id: 21, x: 50, y: 50 }, 4), [{ id: 21, x: 50, y: 50 }]);
 });

@@ -20,7 +20,7 @@ import { useShipVisualOffset } from "./paintedShip";
 import { ownedShipStage, projectileGuardForStage, projectileImpact, stageWeaponLevel, type ShipStage } from "./shipEvolution";
 import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio";
 import { DEFAULT_EFFECTS_VOLUME, DEFAULT_MUSIC_VOLUME, EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, resetAudioVolumeDefaults } from "./musicPreferences";
-import { MusicPlayer } from "./musicPlayback";
+import { MusicPlayer, takeHandoffGameMusic } from "./musicPlayback";
 import MusicVolumeSlider from "./MusicVolumeSlider";
 import { axiosClient } from "../lib/axiosClient";
 import { fireInterval, makeVolley } from "./playerCombat";
@@ -28,7 +28,7 @@ import { activateCollectedPower } from "./collectedPower";
 import { leaveGameFullscreen, requestGameFullscreen } from "./gameFullscreen";
 import { levelDifficulty } from "./levelDifficulty";
 import { balanceAfterMission, BONUS_TARGET_SHARD_REWARD, bossPoints, bossShardReward, creditDefeat, creditReward } from "./shardEarnings";
-import { hullFireAtImpact, spriteFireSites, type HullFire } from "./hullFires";
+import { addPersistentHullFire, hullFireAtImpact, spriteFireSites, type HullFire } from "./hullFires";
 import { bossExplosionSize, bossFireSite, bossHullContains, bossVolley } from "./bossCombat";
 
 const BEST_SCORE_KEY = "cryptoid_best_score";
@@ -332,6 +332,7 @@ const GamePage = () => {
   const lastPlayerRef = useRef<PlayerPosition>({ x: .5, y: .86 });
   const [game, setGame] = useState<GameState>(createInitialState);
   const [startError, setStartError] = useState(false);
+  const [audioNeedsTap, setAudioNeedsTap] = useState(false);
   const [homePrompt, setHomePrompt] = useState(false);
   const [shipSelection] = useState(selectedShip);
   const [shipStage, setShipStage] = useState<ShipStage>(1);
@@ -435,21 +436,25 @@ const GamePage = () => {
   useEffect(() => {
     if (!musicEnabled) return;
     void fetch("/audio/boss-victory-v2.mp3").catch(() => {});
-    const track = new MusicPlayer("/audio/battle-orbit.mp3", DEFAULT_MUSIC_VOLUME);
+    const track = takeHandoffGameMusic() ?? new MusicPlayer("/audio/battle-orbit.mp3", DEFAULT_MUSIC_VOLUME);
     musicRef.current = track;
     const resume = () => {
-      if (stateRef.current.status === "playing") void track.play();
+      if (stateRef.current.status === "playing") void track.play().then(ok => { if (ok && (readEffectsVolume() === 0 || soundRef.current?.running)) setAudioNeedsTap(false); });
     };
     document.addEventListener("pointerdown", resume, true);
     document.addEventListener("pointerup", resume, true);
     document.addEventListener("touchend", resume, true);
     document.addEventListener("keydown", resume, true);
+    document.addEventListener("visibilitychange", resume);
+    window.addEventListener("pageshow", resume);
     resume();
     return () => {
       document.removeEventListener("pointerdown", resume, true);
       document.removeEventListener("pointerup", resume, true);
       document.removeEventListener("touchend", resume, true);
       document.removeEventListener("keydown", resume, true);
+      document.removeEventListener("visibilitychange", resume);
+      window.removeEventListener("pageshow", resume);
       track.close();
       if (musicRef.current === track) musicRef.current = null;
     };
@@ -469,8 +474,8 @@ const GamePage = () => {
       if (track.currentSource === normalSource) regularMusicPositionRef.current = track.audio.currentTime || 0;
       track.setSource(desiredSource, desiredSource === normalSource ? regularMusicPositionRef.current : 0);
     }
-    if (game.status === "playing" && !waitingForExplosion) void track.play();
-    else track.pause();
+    if (game.status === "playing" && !waitingForExplosion) void track.play().then(ok => { if (!ok) setAudioNeedsTap(true); });
+    else if (game.status !== "loading") track.pause();
   }, [game.status, game.encounter, musicEnabled]);
   useEffect(() => {
     const volume = game.encounter === "boss-clear"
@@ -544,9 +549,25 @@ const GamePage = () => {
       soundRef.current = audio;
     }
     // Retry inside each gesture: Safari can interrupt Web Audio after fullscreen.
-    void soundRef.current.start();
+    return soundRef.current.start();
   };
   useEffect(() => { if (hasPrimedGameAudio()) void startEffects(); }, []);
+
+  useEffect(() => {
+    if (game.status !== "playing") return;
+    // A suspended context can leave resume() pending on iOS. Offer a gesture
+    // instead of allowing an indefinitely silent mission.
+    const timer = window.setTimeout(() => {
+      if ((readEffectsVolume() > 0 && !soundRef.current?.running) || (musicEnabled && !musicRef.current?.playing)) setAudioNeedsTap(true);
+    }, 1_500);
+    return () => window.clearTimeout(timer);
+  }, [game.status, musicEnabled]);
+
+  const retryAudio = () => {
+    void Promise.all([startEffects(), musicEnabled && musicRef.current ? musicRef.current.play() : Promise.resolve(true)]).then(([effects, music]) => {
+      setAudioNeedsTap((readEffectsVolume() > 0 && !effects) || (musicEnabled && !music));
+    });
+  };
 
   useEffect(() => {
     const controls = new Set(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "KeyA", "KeyD", "KeyW", "KeyS"]);
@@ -559,9 +580,14 @@ const GamePage = () => {
     const keyUp = (event: KeyboardEvent) => keysRef.current.delete(event.code);
     const blur = () => keysRef.current.clear();
     window.addEventListener("keydown", keyDown);
+    const resumeEffects = () => { if (stateRef.current.status === "playing") void startEffects().then(ok => { if (ok && (!musicEnabled || musicRef.current?.playing)) setAudioNeedsTap(false); }); };
+    document.addEventListener("pointerup", resumeEffects, true);
+    document.addEventListener("touchend", resumeEffects, true);
+    document.addEventListener("visibilitychange", resumeEffects);
+    window.addEventListener("pageshow", resumeEffects);
     window.addEventListener("keyup", keyUp);
     window.addEventListener("blur", blur);
-    return () => { window.removeEventListener("keydown", keyDown); window.removeEventListener("keyup", keyUp); window.removeEventListener("blur", blur); };
+    return () => { window.removeEventListener("keydown", keyDown); window.removeEventListener("keyup", keyUp); window.removeEventListener("blur", blur); document.removeEventListener("pointerup", resumeEffects, true); document.removeEventListener("touchend", resumeEffects, true); document.removeEventListener("visibilitychange", resumeEffects); window.removeEventListener("pageshow", resumeEffects); };
   }, []);
 
   useEffect(() => {
@@ -805,11 +831,9 @@ const GamePage = () => {
             state.boss.hit = { x: (shot.x - state.boss.x) / state.boss.width * 100 + 50, y: (shot.y - state.boss.y) / state.boss.height * 100 + 50 };
             if (state.boss.health === 0) destroyBoss(state, time);
             else {
-              if (state.boss.health <= state.boss.maxHealth * .75) {
-                const location = bossFireSite(state.boss, shot.x, shot.y, state.boss.hullFires ?? []);
-                const maxFires = state.boss.health <= state.boss.maxHealth * .25 ? 8 : state.boss.health <= state.boss.maxHealth * .5 ? 5 : 2;
-                state.boss.hullFires = [...(state.boss.hullFires ?? []).slice(1 - maxFires), { id: shot.id, ...location }];
-              }
+              const location = bossFireSite(state.boss, shot.x, shot.y, state.boss.hullFires ?? []);
+              const maxFires = state.boss.health <= state.boss.maxHealth * .25 ? 8 : state.boss.health <= state.boss.maxHealth * .5 ? 5 : 2;
+              state.boss.hullFires = addPersistentHullFire(state.boss.hullFires, { id: shot.id, ...location }, maxFires);
               soundRef.current?.play("enemyHit");
             }
             continue;
@@ -820,7 +844,7 @@ const GamePage = () => {
           enemy.hitUntil = time + 190;
           if (enemy.health > 0) {
             const sprite = enemy.sprite;
-            enemy.hullFires = [...(enemy.hullFires ?? []).slice(-3), hullFireAtImpact(shot, enemy, enemy.radius * 2, spriteFireSites[sprite], enemy.hullFires, enemy.rotation, spriteVisualOffset(sprite, enemy.radius * 2, true))];
+            enemy.hullFires = addPersistentHullFire(enemy.hullFires, hullFireAtImpact(shot, enemy, enemy.radius * 2, spriteFireSites[sprite], enemy.hullFires, enemy.rotation, spriteVisualOffset(sprite, enemy.radius * 2, true)));
           }
           if (enemy.health === 0) state.effects.push({ id: nextIdRef.current++, x: enemy.x, y: enemy.y, kind: enemy.type === "etherCrystal" ? "shatter" : "explosion", startedAt: time, sprite: enemy.sprite, debrisSize: enemy.radius * 2, debrisRotation: enemy.rotation, shipClass: enemy.shipClass });
           soundRef.current?.play(enemy.health > 0 ? "enemyHit" : "explosion");
@@ -1081,6 +1105,7 @@ const GamePage = () => {
           <button className="game-control pause-control" type="button" disabled={game.status === "loading" || game.status === "destroying" || game.status === "game-over"} onClick={() => { stateRef.current.status = game.status === "paused" ? "playing" : "paused"; setGame({ ...stateRef.current }); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
         </header>
         <div className="game-label">{t("LEVEL")} {levelLabel} <span>· {sectorName(game.sector)} · {game.encounter === "normal" ? `${t("Blocks")} ${sectorLabel}/${BLOCKS_PER_CHAIN}` : game.encounter === "bonus" ? t("BONUS CHALLENGE") : t("CORE WARDEN")}</span></div>
+        {audioNeedsTap && game.status === "playing" && <button className="audio-retry" type="button" onClick={retryAudio}>Ton aktivieren</button>}
         {game.encounter === "bonus" && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">{t("BONUS TARGETS")} {game.bonusHits} / {BONUS_TARGET_COUNT} · {t("NO ENEMY FIRE")}</div>}
         {(game.shieldCharges > 0 || game.overdriveMs > 0 || game.rapidFireMs > 0 || game.empMs > 0 || game.paidWeaponMs > 0 || game.pickupWeaponMs > 0) && <div className="power-status" aria-live="polite">{game.shieldCharges > 0 && <span>{powerUpSymbols.shield} {t("SHIELD")} {t(game.shieldActive ? "ON" : "OFF")} · {game.shieldCharges} · {Math.ceil(game.shieldMs / 1_000)}s</span>}{game.overdriveMs > 0 && <span>{powerUpSymbols.overdrive} OVERDRIVE {Math.ceil(game.overdriveMs / 1_000)}s</span>}{game.rapidFireMs > 0 && <span>{powerUpSymbols.rapid} {t("RAPID")} {Math.ceil(game.rapidFireMs / 1_000)}s</span>}{game.empMs > 0 && <span>{powerUpSymbols.emp} EMP {Math.ceil(game.empMs / 1_000)}s</span>}{game.paidWeaponMs > 0 && <span>◆ {t("BOUGHT SHOTS")} {Math.ceil(game.paidWeaponMs / 1_000)}s</span>}{game.pickupWeaponMs > 0 && <span>{powerUpSymbols.weapon} {t("PICKUP SHOTS")} {Math.ceil(game.pickupWeaponMs / 1_000)}s</span>}</div>}
         {game.status === "loading" && <div className="game-overlay"><div className="game-modal"><h1>{startError ? "Admin-Test konnte nicht gestartet werden" : t('Preparing mission')}</h1><p>{startError ? "Bitte die Pi-Sitzung prüfen und erneut versuchen." : t('Checking your saved hangar loadout.')}</p>{startError && <><button type="button" onClick={() => { setStartError(false); void activateLoadout(); }}>Erneut versuchen</button><button type="button" onClick={() => navigate("/")}>Zurück</button></>}</div></div>}
