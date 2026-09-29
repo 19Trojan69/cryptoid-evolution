@@ -15,7 +15,7 @@ import ShipSelectionPanel from "./ShipSelectionPanel";
 import TermsDialog from "../components/TermsDialog";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
 import { primeGameAudio } from "./gameAudio";
-import { DEFAULT_EFFECTS_VOLUME, DEFAULT_MUSIC_VOLUME, EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, resetAudioVolumeDefaults } from "./musicPreferences";
+import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, readMusicVolume, resetAudioVolumeDefaults } from "./musicPreferences";
 import { handoffGameMusic, MusicPlayer } from "./musicPlayback";
 import MusicVolumeSlider from "./MusicVolumeSlider";
 import Starfield from "./Starfield";
@@ -85,13 +85,13 @@ const Shop = () => {
   const [personalBest, setPersonalBest] = useState<number | null>(null);
   const [musicEnabled, setMusicEnabled] = useState(() => localStorage.getItem(MUSIC_STORAGE_KEY) !== "off");
   const musicEnabledRef = useRef(musicEnabled);
-  const [musicVolume, setMusicVolume] = useState(DEFAULT_MUSIC_VOLUME);
-  const [effectsVolume, setEffectsVolume] = useState(DEFAULT_EFFECTS_VOLUME);
+  const [musicVolume, setMusicVolume] = useState(readMusicVolume);
+  const [effectsVolume, setEffectsVolume] = useState(readEffectsVolume);
   useEffect(() => { resetAudioVolumeDefaults(); }, []);
   const homeMusicRef = useRef<MusicPlayer | null>(null);
   const musicHandedOffRef = useRef(false);
   useEffect(() => {
-    const music = new MusicPlayer("/audio/home-galactic-chain.mp3", DEFAULT_MUSIC_VOLUME);
+    const music = new MusicPlayer("/audio/home-galactic-chain.mp3", readMusicVolume());
     homeMusicRef.current = music;
     const start = () => { if (musicEnabledRef.current) void music.play(); };
     const resumeOnGesture = (event: Event) => {

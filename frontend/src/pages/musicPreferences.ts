@@ -4,10 +4,10 @@ export const EFFECTS_VOLUME_KEY = "cryptoid_effects_volume";
 export const DEFAULT_MUSIC_VOLUME = 50;
 export const DEFAULT_EFFECTS_VOLUME = 35;
 
-// A new home visit or mission starts at the calibrated balance shown on the sliders.
+// Seed the calibrated defaults once, keeping volume changes the player saved.
 export const resetAudioVolumeDefaults = () => {
-  localStorage.setItem(MUSIC_VOLUME_KEY, String(DEFAULT_MUSIC_VOLUME));
-  localStorage.setItem(EFFECTS_VOLUME_KEY, String(DEFAULT_EFFECTS_VOLUME));
+  if (localStorage.getItem(MUSIC_VOLUME_KEY) === null) localStorage.setItem(MUSIC_VOLUME_KEY, String(DEFAULT_MUSIC_VOLUME));
+  if (localStorage.getItem(EFFECTS_VOLUME_KEY) === null) localStorage.setItem(EFFECTS_VOLUME_KEY, String(DEFAULT_EFFECTS_VOLUME));
 };
 export const readEffectsVolume = (): number => {
   const saved = typeof localStorage === "undefined" ? null : localStorage.getItem(EFFECTS_VOLUME_KEY);

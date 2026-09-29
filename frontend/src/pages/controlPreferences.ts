@@ -1,5 +1,4 @@
 export const CONTROL_HAND_KEY = "cryptoid_control_hand";
-const LEFT_HAND_DEFAULT_KEY = "cryptoid_left_hand_default_v1";
 export type ControlHand = "right" | "left";
 export const CONTROL_SENSITIVITY_KEY = "cryptoid_control_sensitivity";
 export type ControlSensitivity = "gentle" | "normal" | "fast";
@@ -9,11 +8,7 @@ export const SHIP_START_KEY = "cryptoid_ship_start";
 export type ShipStart = "higher" | "normal" | "lower";
 
 export const readControlHand = (): ControlHand => {
-  if (localStorage.getItem(LEFT_HAND_DEFAULT_KEY) !== "1") {
-    localStorage.setItem(LEFT_HAND_DEFAULT_KEY, "1");
-    localStorage.setItem(CONTROL_HAND_KEY, "left");
-  }
-  return localStorage.getItem(CONTROL_HAND_KEY) === "right" ? "right" : "left";
+  return localStorage.getItem(CONTROL_HAND_KEY) === "left" ? "left" : "right";
 };
 export const readControlSensitivity = (): ControlSensitivity => {
   const value = localStorage.getItem(CONTROL_SENSITIVITY_KEY);
@@ -25,8 +20,9 @@ export const readControlZone = (): ControlZone => {
 };
 export const readShipStart = (): ShipStart => {
   const value = localStorage.getItem(SHIP_START_KEY);
-  return value === "higher" || value === "lower" ? value : "normal";
+  return value === "normal" || value === "lower" ? value : "higher";
 };
 export const sensitivityMultiplier: Record<ControlSensitivity, number> = { gentle: .75, normal: 1, fast: 1.3 };
 export const zoneFraction: Record<ControlZone, number> = { compact: .5, normal: .65, wide: .8 };
-export const shipStartHeight: Record<ShipStart, number> = { higher: .83, normal: .89, lower: .91 };
+// Roughly 38 CSS pixels (about 1 cm) higher on a typical phone playfield.
+export const shipStartHeight: Record<ShipStart, number> = { higher: .78, normal: .84, lower: .86 };
