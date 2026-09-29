@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { BOSS_ENTRY_MS, BOSS_FIRE_INTERVAL_MS, BOSS_WARNING_MS, advanceAfterClear, bossFireInterval, bossVulnerable, damageSectorBoss, createSectorBoss, encounterHudLabel, moveSectorBoss, nextAfterClear } from "./sectorBoss.ts";
+import { BOSS_ENTRY_MS, BOSS_FIRE_INTERVAL_MS, BOSS_WARNING_MS, advanceAfterClear, bossFireInterval, bossVulnerable, damageSectorBoss, createSectorBoss, moveSectorBoss, nextAfterClear } from "./sectorBoss.ts";
 
 test("the boss appears after the complete recorded three-signal warning", () => {
   assert.ok(BOSS_WARNING_MS > 4_833 && BOSS_WARNING_MS < 5_100);
@@ -41,14 +41,6 @@ test("a complete campaign level has nine ordinary sectors, one boss and one bonu
   assert.deepEqual([...ordinary], [1, 2, 3, 4, 5, 6, 7, 8, 9]);
   assert.equal(advanceAfterClear(section, "boss-clear").encounter, "bonus");
   assert.deepEqual(advanceAfterClear(section, "bonus"), { encounter: "normal", section: 31, sector: 11, resetChain: true });
-});
-
-test("HUD shows nine sectors, the tenth boss and then bonus before restarting at sector one", () => {
-  assert.deepEqual(Array.from({ length: 9 }, (_, index) => encounterHudLabel(index + 1, "normal")), ["1/10", "2/10", "3/10", "4/10", "5/10", "6/10", "7/10", "8/10", "9/10"]);
-  for (const encounter of ["boss-intro", "boss-fight", "boss-clear"]) assert.equal(encounterHudLabel(10, encounter), "BOSS");
-  assert.equal(encounterHudLabel(10, "bonus"), "BONUS");
-  assert.equal(encounterHudLabel(11, "normal"), "1/10");
-  assert.equal(encounterHudLabel(19, "normal"), "9/10");
 });
 
 test("the boss enters visibly, stays in the upper field and remains reachable on phone and desktop", () => {

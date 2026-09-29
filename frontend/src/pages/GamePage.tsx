@@ -1,5 +1,5 @@
 import { useLocale } from "../i18n";
-import { Fragment, memo, useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
+import { memo, useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
 import { entryPatternForSector, entryPosition, entryStartX, type EntryPattern } from "./entryPatterns";
@@ -13,7 +13,7 @@ import SectorBackdrop from "./SectorBackdrop";
 import Starfield from "./Starfield";
 import { BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusEntryGap, bonusHeartReward, bonusPosition, bonusReward, bonusShowcaseShip, type BonusTarget } from "./bonusChallenge";
 import { appendSectionBlock, bonusChainReward, BLOCKS_PER_CHAIN } from "./networkChain";
-import { advanceAfterClear, BOSS_WARNING_MS, damageSectorBoss, bossFireInterval, bossVulnerable, createSectorBoss, encounterHudLabel, moveSectorBoss, type SectorBoss } from "./sectorBoss";
+import { advanceAfterClear, BOSS_WARNING_MS, damageSectorBoss, bossFireInterval, bossVulnerable, createSectorBoss, moveSectorBoss, type SectorBoss } from "./sectorBoss";
 import { enemySprite, selectedShip, shardBalance, ADMIN_MODE_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
 import { useShipVisualOffset } from "./paintedShip";
@@ -833,7 +833,7 @@ const GamePage = () => {
           const link = appendSectionBlock(state.chainBlocks, state.sector);
           state.chainBlocks = link.blocks;
           creditReward(state, link.shards);
-          state.chainResult = link.linked ? `CHAIN COMPLETED • ${link.blocks}/${BLOCKS_PER_CHAIN}` : `BLOCK LINKED • ${link.blocks}/${BLOCKS_PER_CHAIN}`;
+          state.chainResult = link.linked ? "CHAIN COMPLETE" : "BLOCK LINKED";
         }
         if (bonus && state.phase === "SECTOR_CLEAR" && previousPhase !== "SECTOR_CLEAR") {
           const reward = bonusReward(state.bonusHits, state.sector);
@@ -1032,7 +1032,6 @@ const GamePage = () => {
           : game.phase === "SECTOR_CLEAR"
             ? round === SECTIONS_PER_SECTOR ? `${t("Sector")} ${sectorLabel} ${t("COMPLETE")}` : t("FORMATION CLEARED")
             : `${t("Sector")} ${sectorLabel} / 10`;
-  const sectorHudLabel = encounterHudLabel(game.sector, game.encounter);
 
   return (
     <main className="game-shell" onPointerDownCapture={event => { void startEffects(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
@@ -1045,7 +1044,7 @@ const GamePage = () => {
           <div className="hud-stat game-level-hud" aria-label={`${t("Game level")} ${levelLabel}`}><span>{t("Level")}</span><strong>{levelLabel}</strong></div>
           <div className="hud-stat score-hud" aria-label={`${t("Shards")} ${game.shards}, ${t("Score")} ${game.score}`}><span className="shard-line"><b>◆ {game.shards}</b><small>{t("Shards")}</small></span><span className="score-line"><b>{game.score}</b><small>{t("Score")}</small></span></div>
           <div className="hud-stat weapon-hud" aria-label={`${t("Weapon level")} ${stageWeaponLevel(shipStage, game.weaponLevel)} / 5; ${t("Projectile hits left")}: ${game.projectileGuard}`}><span>{t("Weapon")}</span><strong>{stageWeaponLevel(shipStage, game.weaponLevel)}<small>/5</small></strong>{shipStage > 1 && <small className="hull-hits">✦ {game.projectileGuard}/{projectileGuardForStage(shipStage)}</small>}</div>
-          <div className="hud-stat round-hud chain-hud" aria-label={game.encounter === "normal" ? `${t("Sector")} ${sectorHudLabel}` : sectorHudLabel}><span>{t("Sector")}</span><strong className={game.encounter === "bonus" ? "bonus-hud-label" : ""}>{game.encounter === "normal" ? <>{sectorLabel}<small>/10</small></> : sectorHudLabel}</strong><div className="chain-blocks" role="img" aria-label={`${t("Network chain")}: ${game.chainBlocks}/${BLOCKS_PER_CHAIN} ${t("blocks linked")}`}>{Array.from({ length: BLOCKS_PER_CHAIN }, (_, index) => <Fragment key={index}><i className={index < game.chainBlocks ? "linked" : ""} />{index < BLOCKS_PER_CHAIN - 1 && <b className={index + 1 < game.chainBlocks ? "linked" : ""} />}</Fragment>)}</div></div>
+          <div className="hud-stat round-hud chain-hud" aria-label={`${t("Blocks")} ${game.chainBlocks}/${BLOCKS_PER_CHAIN}`}><span>{t("Blocks")}</span><strong>{game.chainBlocks}<small>/{BLOCKS_PER_CHAIN}</small></strong></div>
           <button className="game-control pause-control" type="button" disabled={game.status === "loading" || game.status === "destroying" || game.status === "game-over"} onClick={() => { stateRef.current.status = game.status === "paused" ? "playing" : "paused"; setGame({ ...stateRef.current }); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
         </header>
         <div className="game-label">{t("LEVEL")} {levelLabel} <span>· {sectorName(game.sector)} · {t("Sector")} {sectorLabel}/10{game.encounter === "bonus" ? ` · ${t("BONUS CHALLENGE")}` : game.encounter !== "normal" ? ` · ${t("CORE WARDEN")}` : ""}</span></div>
@@ -1056,8 +1055,8 @@ const GamePage = () => {
           <span>{levelComplete || levelIntro ? sectorName(game.sector) : game.encounter === "bonus" ? game.phase === "SECTOR_CLEAR" ? t("BONUS COMPLETE") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.encounter !== "normal" ? `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.phase === "SECTOR_CLEAR" && round === SECTIONS_PER_SECTOR ? t("SECTOR CLEAR") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}`}</span>
           <strong>{transitionHeadline}</strong>
           {game.phase === "SECTOR_INTRO" && game.encounter === "bonus" && <small>{t("HIT THE FLYING TARGETS")}</small>}
-          {game.phase === "SECTOR_CLEAR" && game.encounter === "normal" && round === 3 && <><small className="chain-result">{game.chainResult}</small><BlockchainProgress blocks={game.chainBlocks} /></>}
-          {levelComplete && <><small className="chain-saved-label">CHAIN SAVED</small><BlockchainProgress blocks={BLOCKS_PER_CHAIN} saved /></>}
+          {game.phase === "SECTOR_CLEAR" && game.encounter === "normal" && round === 3 && <><small className="chain-result">{t("Blocks")} {game.chainBlocks}/{BLOCKS_PER_CHAIN} · {t(game.chainResult)}</small><BlockchainProgress blocks={game.chainBlocks} /></>}
+          {levelComplete && <><small className="chain-result">{t("Blocks")} {BLOCKS_PER_CHAIN}/{BLOCKS_PER_CHAIN}</small><small className="chain-saved-label">CHAIN SAVED</small><BlockchainProgress blocks={BLOCKS_PER_CHAIN} saved /></>}
           {game.phase === "SECTOR_CLEAR" && game.encounter === "bonus" && <><small className="chain-result">{`${game.bonusHits}/${BONUS_TARGET_COUNT} TARGETS · ${game.bonusResult.split(" · ").slice(1).join(" · ")}`}</small><small className="crypto-explainer">1 Shard per target · completion bonus added immediately.</small></>}
         </div>}
         {game.status === "playing" && game.encounter === "normal" && !formationStartedRef.current && (game.phase === "SECTOR_INTRO" || game.phase === "ENTRY" || game.phase === "FORMATION") && <div className="formation-data-stream" aria-hidden="true">{FORMATION_DATA_ROWS.map((row, index) => <div className="formation-data-row" key={index}><span>{row.repeat(4)}</span><span>{row.repeat(4)}</span></div>)}</div>}
