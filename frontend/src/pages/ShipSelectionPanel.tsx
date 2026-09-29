@@ -19,6 +19,7 @@ type Props = {
   offers: ShipUpgradeOffer[];
   catalogReady: boolean;
   isLoading: boolean;
+  adminPreview?: boolean;
   message: string;
   selectedSkinId: string;
   selectedColorId: string;
@@ -27,6 +28,7 @@ type Props = {
   onStageChange: (stage: ShipStage) => void;
   onColorChange: (color: Color) => void;
   onBuyStandard: () => void;
+  onEquipPreview: () => void;
   onBuyUpgrade: (offer: ShipUpgradeOffer) => void;
   onOpenShop: () => void;
 };
@@ -35,11 +37,11 @@ const stageLabel = (stage: ShipStage) => stage === 1 ? "STANDARD" : stage === 2 
 
 export default function ShipSelectionPanel({
   view, skin, color, focusStage, ownedStage, fleet, shards, offers, catalogReady,
-  isLoading, message, selectedSkinId, selectedColorId, locale, t, onStageChange, onColorChange,
-  onBuyStandard, onBuyUpgrade, onOpenShop,
+  isLoading, adminPreview, message, selectedSkinId, selectedColorId, locale, t, onStageChange, onColorChange,
+  onBuyStandard, onEquipPreview, onBuyUpgrade, onOpenShop,
 }: Props) {
   const hullCount = fleetCount(fleet, skin.id);
-  const stage = view === "shop" ? focusStage : ownedStage;
+  const stage = adminPreview || view === "shop" ? focusStage : ownedStage;
   const price = skin.price || EXTRA_STARTER_PRICE;
   const offerFor = (level: ShipStage) => offers.find(offer => offer.shipIndex === skin.sprite && offer.stage === level);
   const piStage = stage === 1 ? ownedStage >= 2 ? 3 : 2 : stage;
@@ -71,7 +73,7 @@ export default function ShipSelectionPanel({
         {view === "shop" && stage !== 1 && <button className="ship-standard-return" type="button" onClick={() => onStageChange(1)}>‹ {t("Show standard ship")}</button>}
       </div>
     </div>
-    {view === "shop" && <div className="ship-evolution-stages" role="group" aria-label={t("Three ship stages")}>
+    {(view === "shop" || adminPreview) && <div className="ship-evolution-stages" role="group" aria-label={t("Three ship stages")}>
       {([2, 3] as const).map(level => {
         const offer = offerFor(level);
         const stageOwned = ownedStage >= level;
@@ -96,13 +98,14 @@ export default function ShipSelectionPanel({
       {view === "hangar"
         ? <><span>{selectedSkinId === skin.id && selectedColorId === color.id ? t("EQUIPPED") : t("Owned")}</span><button className="button button-secondary" type="button" onClick={onOpenShop}>{t("Shop")} ›</button></>
         : <>
+          {adminPreview ? <><span>Admin-Testzugang · alle Varianten freigeschaltet</span><button className="button button-secondary" type="button" onClick={onEquipPreview}>Für Testflug ausrüsten</button></> : <>
           {stage === 1 && <button className="button button-secondary ship-shard-button" type="button" onClick={onBuyStandard} disabled={shards < price}>{t(hullCount ? "Buy another for" : "Buy for")} ◆ {price}</button>}
           <button className="button button-primary ship-pi-button" type="button" disabled={!piOffer || piOwned || isLoading || !catalogReady || !piReady}
             title={!piReady ? t(hullCount ? "Requires Stage 2" : "Buy hull with Shards first") : undefined}
-            onClick={() => { if (piOffer) onBuyUpgrade(piOffer); }}>{piOwned ? t("OWNED") : t("Buy with π")} · {t(stageLabel(piStage))} {piOffer ? formatPi(piOffer.pricePi) : "–"} π</button>
+            onClick={() => { if (piOffer) onBuyUpgrade(piOffer); }}>{piOwned ? t("OWNED") : t("Buy with π")} · {t(stageLabel(piStage))} {piOffer ? formatPi(piOffer.pricePi) : "–"} π</button></>}
         </>}
     </div>
-    {view === "shop" && stage === 1 && shards < price && <small className="ship-shortfall">◆ {price - shards} {t("more Shards needed")}</small>}
+    {view === "shop" && !adminPreview && stage === 1 && shards < price && <small className="ship-shortfall">◆ {price - shards} {t("more Shards needed")}</small>}
     {message && <p className="hangar-message" role="status">{message}</p>}
     <details className="ship-rules"><summary>{t("Shield & protection")}</summary><p>{t("Upgrades apply to this ship type in every color. Each new life restores its projectile protection. An active shield absorbs shots and ship collisions; unshielded ship collisions destroy the hull immediately.")}</p></details>
   </div>;

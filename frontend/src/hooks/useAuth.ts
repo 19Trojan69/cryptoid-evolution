@@ -1,21 +1,27 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { axiosClient } from "../lib/axiosClient";
-import type { AuthResult, PaymentDTO, User } from "../types/pi";
+import type { AuthResult, PaymentDTO, SessionUser, User } from "../types/pi";
+import { ADMIN_MODE_KEY } from "../pages/shipFleet";
 import { createPiOAuthState, PI_OAUTH_CLIENT_ID, PI_OAUTH_ORIGIN, PI_OAUTH_REDIRECT_URI, PI_OAUTH_STATE_KEY } from "../config/piOAuth";
 
 export const useAuth = () => {
   const pendingPayments = useRef<PaymentDTO[]>([]);
   const [user, setUser] = useState<User | null>(null);
+  const [canAdmin, setCanAdmin] = useState(false);
+  const [adminMode, setAdminMode] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!localStorage.getItem("cryptoid_pi_session")) return;
+    if (!localStorage.getItem("cryptoid_pi_session")) {
+      sessionStorage.removeItem(ADMIN_MODE_KEY);
+      return;
+    }
 
     let active = true;
-    axiosClient.get<{ user: User }>("/user/me")
-      .then(({ data }) => { if (active) setUser(data.user); })
-      .catch(() => localStorage.removeItem("cryptoid_pi_session"));
+    axiosClient.get<SessionUser>("/user/me")
+      .then(({ data }) => { if (active) { setUser(data.user); setCanAdmin(data.canAdmin); setAdminMode(data.adminMode); sessionStorage.setItem(ADMIN_MODE_KEY, data.adminMode ? "1" : "0"); } })
+      .catch(() => { localStorage.removeItem("cryptoid_pi_session"); sessionStorage.removeItem(ADMIN_MODE_KEY); });
 
     return () => { active = false; };
   }, []);
@@ -26,9 +32,12 @@ export const useAuth = () => {
 
   const signInUser = useCallback(async (authResult: AuthResult) => {
     try {
-      await axiosClient.post("/user/signin", { authResult });
+      const { data } = await axiosClient.post<SessionUser>("/user/signin", { authResult });
       localStorage.setItem("cryptoid_pi_session", "1");
-      setUser(authResult.user);
+      setUser(data.user);
+      setCanAdmin(data.canAdmin);
+      setAdminMode(false);
+      sessionStorage.removeItem(ADMIN_MODE_KEY);
       setShowSignIn(false);
       for (const payment of pendingPayments.current.splice(0)) {
         try { await axiosClient.post("/payments/incomplete", { payment }); }
@@ -74,6 +83,9 @@ export const useAuth = () => {
     try {
       await axiosClient.get("/user/signout");
       setUser(null);
+      setCanAdmin(false);
+      setAdminMode(false);
+      sessionStorage.removeItem(ADMIN_MODE_KEY);
       localStorage.removeItem("cryptoid_pi_session");
     } catch (err) {
       console.error("Error signing out:", err);
@@ -82,12 +94,22 @@ export const useAuth = () => {
     }
   }, []);
 
+  const setAdminPreview = useCallback(async (enabled: boolean) => {
+    const { data } = await axiosClient.post<{ canAdmin: boolean; adminMode: boolean }>("/user/admin-mode", { enabled });
+    setCanAdmin(data.canAdmin);
+    setAdminMode(data.adminMode);
+    sessionStorage.setItem(ADMIN_MODE_KEY, data.adminMode ? "1" : "0");
+  }, []);
+
   const closeSignIn = useCallback(() => {
     setShowSignIn(false);
   }, []);
 
   return {
     user,
+    canAdmin,
+    adminMode,
+    setAdminPreview,
     isAuthenticated: Boolean(user),
     showSignIn,
     signIn,

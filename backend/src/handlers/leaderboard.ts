@@ -1,6 +1,7 @@
 import { Router, type Request, type Response } from "express";
 import { TOP_LIMIT, validRunScore } from "../leaderboardRules";
 import "../types/session";
+import { isAdminMode } from "../adminAccess";
 
 export default function mountLeaderboardEndpoints(router: Router) {
   router.get("/top", async (req, res) => {
@@ -22,6 +23,7 @@ export default function mountLeaderboardEndpoints(router: Router) {
   });
 
   const saveScore = async (req: Request, res: Response, final: boolean) => {
+    if (isAdminMode(req)) return res.status(403).json({ error: "Admin tests do not count toward records" });
     const uid = req.session.currentUser?.uid;
     const run = req.session.scoreRun;
     if (!uid || !run || req.body?.runId !== run.id) return res.status(403).json({ error: "No active signed-in run" });

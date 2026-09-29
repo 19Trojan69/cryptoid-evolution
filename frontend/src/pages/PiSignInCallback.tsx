@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { axiosClient } from "../lib/axiosClient";
 import { PI_OAUTH_STATE_KEY } from "../config/piOAuth";
 import type { User } from "../types/pi";
+import { ADMIN_MODE_KEY } from "./shipFleet";
 
 type CallbackStatus = "working" | "success" | "error";
 
@@ -37,6 +38,7 @@ const PiSignInCallback = () => {
 
       await axiosClient.post<{ user: User }>("/user/signin", { authResult: { accessToken } });
       localStorage.setItem("cryptoid_pi_session", "1");
+      sessionStorage.removeItem(ADMIN_MODE_KEY);
 
       if (!active) return;
       setStatus("success");

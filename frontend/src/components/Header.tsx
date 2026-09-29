@@ -5,11 +5,14 @@ interface HeaderProps {
   onSignIn: () => void;
   onSignOut: () => void;
   onSendTestNotification: () => void;
+  canAdmin?: boolean;
+  adminMode?: boolean;
+  onToggleAdmin?: () => void;
   user: User | null;
   isLoading?: boolean;
 }
 
-const Header = ({ user, onSignIn, onSignOut, onSendTestNotification, isLoading }: HeaderProps) => {
+const Header = ({ user, onSignIn, onSignOut, onSendTestNotification, canAdmin, adminMode, onToggleAdmin, isLoading }: HeaderProps) => {
   const { t } = useLocale();
   return (
     <header className="site-header">
@@ -18,6 +21,7 @@ const Header = ({ user, onSignIn, onSignOut, onSendTestNotification, isLoading }
         {user ? (
           <>
             <span className="user-name">@{user.username}</span>
+            {canAdmin && <button className="header-action" type="button" aria-pressed={adminMode} onClick={onToggleAdmin} disabled={isLoading}>{adminMode ? "Admin: Ein" : "Admin: Aus"}</button>}
             <button className="header-action" type="button" onClick={onSignOut} disabled={isLoading}>{t('Sign out')}</button>
             {user.roles.includes("core_team") && (
               <button className="header-action" onClick={onSendTestNotification}>{t('Notify')}</button>

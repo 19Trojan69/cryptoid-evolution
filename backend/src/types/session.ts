@@ -5,5 +5,7 @@ declare module 'express-session' {
   export interface SessionData {
     currentUser: UserData | null,
     scoreRun?: { id: string; startedAt: number } | null,
+    adminMode?: boolean,
+    adminLoadout?: { weapon: string | null; power: string | null } | null,
   }
 }

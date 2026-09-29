@@ -1798,3 +1798,27 @@ html[data-motion="reduced"] .home-battle-bolt, html[data-motion="reduced"] .home
   .ship-one-hero { min-height: 118px; }
   .ship-color-dots button { flex-basis: 30px; width: 30px; height: 30px; }
 }
+.admin-preview-banner {
+  padding: 10px 20px;
+  text-align: center;
+  color: #e7f9ff;
+  background: #123850;
+  font-size: 14px;
+}
+
+.admin-level-picker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0;
+  color: #dceeff;
+}
+
+.admin-level-picker input {
+  width: 90px;
+  padding: 8px;
+  border: 1px solid #58b6d4;
+  border-radius: 8px;
+  color: #fff;
+  background: #13243b;
+}
