@@ -530,7 +530,7 @@ const Shop = () => {
           <p className="eyebrow">{activePanel === "how" ? "FIELD GUIDE" : "MISSION LOG"}</p>
           <h2 id="info-title">{activePanel === "how" ? t("How to Play") : t("Your Progress")}</h2>
           <p>{activePanel === "how" ? t("Move your ship with the arrow keys or WASD; on touchscreens, drag it in the lower playfield. Your laser fires automatically. Dodge diving Cryptoids and collect power-ups. Shield absorbs a hit and Overdrive briefly strengthens your shots. You begin with three hearts. Only a perfect bonus round with 12 hits restores one previously lost heart.") : t("Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.").replace("{score}", String(personalBest ?? records.bestScore)).replace("{sector}", String(records.highestSector)).replace("{destroyed}", String(records.totalDestroyed))}</p>
-          {activePanel === "how" && <p>{t("Each completed section links one fictional block; three blocks award Shards. Strong bonus rounds increase the chain reward.")}</p>}
+          {activePanel === "how" && <p>{t("Each completed sector links one fictional block. Nine blocks complete the chain before the boss; strong bonus rounds after the boss add a chain reward.")}</p>}
           <button className="button button-primary" type="button" onClick={() => { setActivePanel(null); if (activePanel === "how") enterGame(); }}>{t("Enter mission")} <span>↗</span></button>
         </div>
       </div>}
