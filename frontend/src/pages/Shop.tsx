@@ -19,6 +19,7 @@ import { DEFAULT_EFFECTS_VOLUME, DEFAULT_MUSIC_VOLUME, EFFECTS_VOLUME_KEY, MUSIC
 import { MusicPlayer } from "./musicPlayback";
 import MusicVolumeSlider from "./MusicVolumeSlider";
 import Starfield from "./Starfield";
+import GameGuide from "./GameGuide";
 import { languages, useLocale, type Locale } from "../i18n";
 import EarthGlobe from "./EarthGlobe";
 import EarthNetwork from "./EarthNetwork";
@@ -524,14 +525,14 @@ const Shop = () => {
         </div>
       </div>}
 
-      {activePanel && <div className="info-panel" role="dialog" aria-modal="true" aria-labelledby="info-title">
+      {activePanel === "how" && <GameGuide onClose={() => setActivePanel(null)} onStart={() => { setActivePanel(null); enterGame(); }} />}
+      {activePanel === "progress" && <div className="info-panel" role="dialog" aria-modal="true" aria-labelledby="info-title">
         <div className="info-panel-content">
           <button className="close-button" type="button" onClick={() => setActivePanel(null)} aria-label={t('Close')}>×</button>
-          <p className="eyebrow">{activePanel === "how" ? "FIELD GUIDE" : "MISSION LOG"}</p>
-          <h2 id="info-title">{activePanel === "how" ? t("How to Play") : t("Your Progress")}</h2>
-          <p>{activePanel === "how" ? t("Move your ship with the arrow keys or WASD; on touchscreens, drag it in the lower playfield. Your laser fires automatically. Dodge diving Cryptoids and collect power-ups. Shield absorbs a hit and Overdrive briefly strengthens your shots. You begin with three hearts. Only a perfect bonus round with 12 hits restores one previously lost heart.") : t("Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.").replace("{score}", String(personalBest ?? records.bestScore)).replace("{sector}", String(records.highestSector)).replace("{destroyed}", String(records.totalDestroyed))}</p>
-          {activePanel === "how" && <p>{t("Each completed sector links one fictional block. Nine blocks complete the chain before the boss; strong bonus rounds after the boss add a chain reward.")}</p>}
-          <button className="button button-primary" type="button" onClick={() => { setActivePanel(null); if (activePanel === "how") enterGame(); }}>{t("Enter mission")} <span>↗</span></button>
+          <p className="eyebrow">{t("MISSION LOG")}</p>
+          <h2 id="info-title">{t("Your Progress")}</h2>
+          <p>{t("Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.").replace("{score}", String(personalBest ?? records.bestScore)).replace("{sector}", String(records.highestSector)).replace("{destroyed}", String(records.totalDestroyed))}</p>
+          <button className="button button-primary" type="button" onClick={() => setActivePanel(null)}>{t("Close")}</button>
         </div>
       </div>}
 

@@ -1297,6 +1297,26 @@ html[data-motion="reduced"] .landing-shell .hero-actions .home-play-button { ani
 .landing-shell .close-button { width: 37px; height: 37px; border: 1px solid #d6a491ab; border-radius: 0; background: #3b2b3b8a; color: #ffd6af; clip-path: polygon(0 8px, 8px 0, 100% 0, 100% 100%, 8px 100%, 0 calc(100% - 8px)); }
 .landing-shell .close-button:hover { border-color: #ffb5a2; background: #803c50ad; color: #fff2e7; box-shadow: 0 0 15px #ff8b775e; }
 .landing-shell :is(.info-panel-content, .signin-modal) > p:not(.eyebrow) { color: #cfdeea; font-size: 16px; line-height: 1.45; }
+.landing-shell .guide-panel-content { width: min(100%, 720px); max-height: calc(100dvh - 32px); display: flex; flex-direction: column; padding: clamp(20px, 4vw, 34px); }
+.guide-panel-content .guide-lead { margin: 0 44px 16px 0; }
+.guide-topics { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 7px; margin-bottom: 16px; }
+.guide-topic { min-height: 45px; padding: 7px 9px; border: 1px solid #5b8ea6; background: #102942; color: #d1e6f3; font: 700 12px/1.2 'Rajdhani', sans-serif; letter-spacing: .035em; cursor: pointer; }
+.guide-topic:hover, .guide-topic:focus-visible { border-color: #73e8ec; color: #fff; }
+.guide-topic.is-active { border-color: #84eff2; background: linear-gradient(140deg, #1b6074, #194461); color: #fff; box-shadow: inset 0 2px #8bf7ef, 0 0 15px #3cc9e843; }
+.guide-detail { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 2px 12px 2px 0; color: #d5e5f1; scrollbar-color: #58899d transparent; }
+.guide-detail h3 { margin: 0 0 10px; }
+.guide-detail p { margin: 0 0 12px; line-height: 1.5; }
+.guide-detail ul { display: grid; gap: 10px; margin: 0; padding-left: 20px; line-height: 1.48; }
+.guide-detail li::marker { color: #70e5de; }
+.guide-panel-content .guide-start { align-self: flex-start; display: inline-flex; align-items: center; justify-content: center; gap: 16px; margin-top: 20px; flex-shrink: 0; }
+.guide-start svg { width: 20px; height: 20px; }
+@media (max-width: 560px) {
+  .info-panel { padding: 12px; }
+  .landing-shell .guide-panel-content { max-height: calc(100dvh - 24px); }
+  .guide-topics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-bottom: 12px; }
+  .guide-topic:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .guide-panel-content .guide-start { width: 100%; margin-top: 14px; }
+}
 .landing-shell .terms-dialog pre { color: #e4eef4; }
 .legal-page { background: radial-gradient(circle at 79% 8%, #42317371, transparent 38%), #070f21; }
 .legal-page-header, .legal-document { border-color: #75d1e27a; background-color: #101d36ef; }
