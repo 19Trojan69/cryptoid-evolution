@@ -1787,67 +1787,104 @@ html[data-motion="reduced"] .home-battle-bolt, html[data-motion="reduced"] .home
 .home-combat-scene { position: absolute; inset: 0; }
 .home-combat-ship { position: absolute; z-index: 2; display: block; width: clamp(62px, 16%, 88px); aspect-ratio: 1; opacity: 0; filter: drop-shadow(0 2px 4px #020917) drop-shadow(0 0 8px var(--combat-glow)); will-change: left, top, transform; }
 .home-combat-body { position: absolute; inset: 0; display: block; }
-.home-combat-enemy .home-combat-body { transform: rotate(180deg); }
 .home-combat-hull { position: absolute; z-index: 2; inset: 0; display: block; background-position: center; background-size: 100% 100%; background-repeat: no-repeat; }
 .home-combat-ship::before { position: absolute; z-index: 0; inset: 21% 11%; border-radius: 50%; background: radial-gradient(ellipse, #020e1dbb, transparent 72%); filter: blur(5px); content: ''; }
 .home-combat-engine { position: absolute; z-index: 1; top: calc(var(--nozzle-y) - 2px); left: var(--nozzle-x); width: var(--nozzle-width); min-width: 2px; height: 22%; transform: translateX(-50%); transform-origin: 50% 0; background: linear-gradient(var(--flame-core), var(--flame-mid) 28%, var(--flame-tail) 65%, transparent); filter: drop-shadow(0 2px 3px var(--flame-glow)); clip-path: polygon(12% 0, 88% 0, 82% 18%, 100% 34%, 72% 69%, 55% 100%, 48% 78%, 34% 94%, 27% 64%, 0 34%, 18% 18%); animation: home-combat-thrust .72s ease-in-out infinite alternate; }
 .home-combat-engine:nth-child(even) { animation-delay: -.26s; }
 @keyframes home-combat-thrust { from { opacity: .68; scale: 1 .76; } to { opacity: 1; scale: 1 1.12; } }
-.home-combat-enemy-1 { animation: home-combat-enemy-left 20s ease-in-out both; }
-.home-combat-enemy-2 { animation: home-combat-enemy-right 20s ease-in-out both; }
-.home-combat-ally-1 { width: clamp(72px, 19%, 104px); animation: home-combat-defender 20s ease-in-out both; }
-@keyframes home-combat-enemy-left {
-  0% { left: 18%; top: 24%; opacity: 1; transform: translate(-50%, -50%) rotate(0); }
-  15% { left: 32%; top: 35%; opacity: 1; transform: translate(-50%, -50%) rotate(-15deg); }
-  30% { left: 46%; top: 55%; opacity: 1; transform: translate(-50%, -50%) rotate(-26deg) scale(1.05); }
-  45% { left: 56%; top: 38%; opacity: 1; transform: translate(-50%, -50%) rotate(30deg); }
-  62% { left: 30%; top: 28%; opacity: 1; transform: translate(-50%, -50%) rotate(-22deg); }
-  80% { left: 42%; top: 48%; opacity: 1; transform: translate(-50%, -50%) rotate(21deg); }
-  100% { left: 18%; top: 24%; opacity: 1; transform: translate(-50%, -50%) rotate(0); }
+.home-combat-scene { transform: translateY(var(--scene-drift)) scaleX(var(--scene-direction)); }
+.home-combat-lead .home-combat-body, .home-combat-ally-1 .home-combat-body { transform: rotate(55deg); }
+.home-combat-cross .home-combat-body { transform: rotate(-55deg); }
+.home-combat-lead { animation: home-combat-escape 15s linear both; }
+.home-combat-cross { animation: home-combat-crossing 15s linear both; }
+.home-combat-ally-1 { width: clamp(72px, 19%, 104px); animation: home-combat-pursuit 15s linear both; }
+@keyframes home-combat-escape {
+  0% { left: 28%; top: 36%; opacity: 0; transform: translate(-50%, -50%) scale(.85); }
+  5% { left: 32%; top: 36%; opacity: 1; transform: translate(-50%, -50%); }
+  18% { left: 40%; top: 38%; opacity: 1; transform: translate(-50%, -50%); }
+  32% { left: 49%; top: 34%; opacity: 1; transform: translate(-50%, -50%) rotate(-5deg); }
+  46% { left: 60%; top: 36%; opacity: 1; transform: translate(-50%, -50%) rotate(3deg); }
+  58% { left: 70%; top: 30%; opacity: 1; transform: translate(-50%, -50%) rotate(-6deg); }
+  64% { left: 76%; top: 29%; opacity: 1; transform: translate(-50%, -50%); }
+  69%, 100% { left: 79%; top: 26%; opacity: 0; transform: translate(-50%, -50%) rotate(35deg) scale(.28); }
 }
-@keyframes home-combat-enemy-right {
-  0% { left: 80%; top: 24%; opacity: 1; transform: translate(-50%, -50%) rotate(0); }
-  17% { left: 65%; top: 34%; opacity: 1; transform: translate(-50%, -50%) rotate(18deg); }
-  33% { left: 58%; top: 52%; opacity: 1; transform: translate(-50%, -50%) rotate(29deg); }
-  50% { left: 82%; top: 59%; opacity: 1; transform: translate(-50%, -50%) rotate(-27deg); }
-  67% { left: 70%; top: 30%; opacity: 1; transform: translate(-50%, -50%) rotate(17deg); }
-  84% { left: 55%; top: 44%; opacity: 1; transform: translate(-50%, -50%) rotate(25deg); }
-  100% { left: 80%; top: 24%; opacity: 1; transform: translate(-50%, -50%) rotate(0); }
+@keyframes home-combat-pursuit {
+  0% { left: 4%; top: 70%; opacity: 0; transform: translate(-50%, -50%) scale(.8); }
+  8% { left: 13%; top: 65%; opacity: 1; transform: translate(-50%, -50%); }
+  18% { left: 24%; top: 63%; opacity: 1; transform: translate(-50%, -50%); }
+  32% { left: 34%; top: 59%; opacity: 1; transform: translate(-50%, -50%) rotate(-4deg); }
+  46% { left: 45%; top: 60%; opacity: 1; transform: translate(-50%, -50%) rotate(4deg); }
+  58% { left: 55%; top: 55%; opacity: 1; transform: translate(-50%, -50%) rotate(-5deg); }
+  64% { left: 62%; top: 53%; opacity: 1; transform: translate(-50%, -50%); }
+  80% { left: 87%; top: 39%; opacity: 1; transform: translate(-50%, -50%); }
+  92%, 100% { left: 115%; top: 24%; opacity: 0; transform: translate(-50%, -50%) scale(.9); }
 }
-@keyframes home-combat-defender {
-  0% { left: 39%; top: 65%; opacity: 1; transform: translate(-50%, -50%) rotate(0); }
-  16% { left: 24%; top: 58%; opacity: 1; transform: translate(-50%, -50%) rotate(-12deg); }
-  34% { left: 53%; top: 66%; opacity: 1; transform: translate(-50%, -50%) rotate(14deg); }
-  51% { left: 69%; top: 54%; opacity: 1; transform: translate(-50%, -50%) rotate(18deg); }
-  69% { left: 35%; top: 64%; opacity: 1; transform: translate(-50%, -50%) rotate(-13deg); }
-  84% { left: 58%; top: 57%; opacity: 1; transform: translate(-50%, -50%) rotate(10deg); }
-  100% { left: 39%; top: 65%; opacity: 1; transform: translate(-50%, -50%) rotate(0); }
+@keyframes home-combat-crossing {
+  0%, 14% { left: 118%; top: 77%; opacity: 0; transform: translate(-50%, -50%) scale(.85); }
+  19% { left: 110%; top: 74%; opacity: 1; transform: translate(-50%, -50%); }
+  34% { left: 78%; top: 62%; opacity: 1; transform: translate(-50%, -50%); }
+  49% { left: 44%; top: 46%; opacity: 1; transform: translate(-50%, -50%) rotate(-5deg); }
+  65% { left: -12%; top: 22%; opacity: 0; transform: translate(-50%, -50%) rotate(-8deg); }
+  100% { left: -12%; top: 22%; opacity: 0; transform: translate(-50%, -50%); }
 }
-.home-combat-weapons { position: absolute; z-index: 4; inset: 0; display: block; --cadence: 4.8s; --flight-y: -125px; }
-.home-combat-enemy .home-combat-weapons { --flight-y: 125px; }
-.home-combat-shot { position: absolute; left: var(--muzzle-x); top: 9%; display: block; width: 3px; height: 19px; border-radius: 3px; opacity: 0; background: linear-gradient(transparent, #baffff, #63d7ff); box-shadow: 0 0 6px #8df3ff, 0 0 12px #4baaff; animation: home-combat-fire var(--cadence) linear var(--shot-delay) infinite; }
-.home-combat-enemy .home-combat-shot { top: 87%; background: linear-gradient(#fff0c9, #ff9b60, transparent); box-shadow: 0 0 6px #ffab69, 0 0 13px #ed647d; }
-.home-combat-shot:nth-child(1) { --muzzle-x: 38%; --drift-x: -13px; --shot-delay: -.8s; }
-.home-combat-shot:nth-child(2) { --muzzle-x: 62%; --drift-x: 13px; --shot-delay: -.56s; }
-.home-combat-shot:nth-child(3) { --muzzle-x: 50%; --drift-x: 0px; --shot-delay: -.32s; }
-.home-combat-pattern-1 { --cadence: 3.7s; }
-.home-combat-pattern-1 .home-combat-shot:nth-child(1) { --shot-delay: -1.2s; }
-.home-combat-pattern-1 .home-combat-shot:nth-child(2) { --shot-delay: -2.45s; }
-.home-combat-pattern-1 .home-combat-shot:nth-child(3) { --shot-delay: -3.3s; }
-.home-combat-pattern-2 { --cadence: 5.6s; }
-.home-combat-pattern-2 .home-combat-shot:nth-child(1) { --shot-delay: -1.3s; --drift-x: -24px; }
-.home-combat-pattern-2 .home-combat-shot:nth-child(2) { --shot-delay: -1.36s; --drift-x: 24px; }
-.home-combat-pattern-2 .home-combat-shot:nth-child(3) { --shot-delay: -1.42s; }
-@keyframes home-combat-fire {
-  0%, 7% { opacity: 0; transform: translate(0, 0) scaleY(.5); }
-  8% { opacity: 1; transform: translate(0, 0) scaleY(1); }
-  17% { opacity: .95; transform: translate(var(--drift-x), var(--flight-y)) scaleY(1.1); }
-  19%, 100% { opacity: 0; transform: translate(var(--drift-x), var(--flight-y)) scaleY(.4); }
+/* Shots travel from the pursuer to the lead ship, then the final hit becomes an explosion. */
+.home-combat-bolt { position: absolute; z-index: 4; width: 3px; height: 15px; border-radius: 3px; opacity: 0; background: #baffff; box-shadow: 0 0 7px #8df3ff, 0 0 13px #4baaff; transform: translate(-50%, -50%) rotate(35deg); }
+.home-combat-bolt-1 { animation: home-combat-bolt-one 15s linear both; }
+.home-combat-bolt-2 { animation: home-combat-bolt-two 15s linear both; }
+.home-combat-bolt-3 { animation: home-combat-bolt-three 15s linear both; }
+.home-combat-cross-bolt-1, .home-combat-cross-bolt-2 { height: 12px; background: #ffda99; box-shadow: 0 0 7px #ffab69, 0 0 13px #ed647d; transform: translate(-50%, -50%) rotate(-35deg); }
+.home-combat-cross-bolt-1 { animation: home-combat-cross-fire-one 15s linear both; }
+.home-combat-cross-bolt-2 { animation: home-combat-cross-fire-two 15s linear both; }
+@keyframes home-combat-bolt-one {
+  0%, 26.9% { left: 30%; top: 56%; opacity: 0; }
+  27% { left: 30%; top: 56%; opacity: 1; }
+  33% { left: 50%; top: 34%; opacity: 1; }
+  33.1%, 100% { left: 50%; top: 34%; opacity: 0; }
 }
-.home-combat-impact { position: absolute; z-index: 5; width: 35px; height: 35px; border-radius: 50%; opacity: 0; background: radial-gradient(circle, white 0 9%, #ffed9d 18%, #ff7b45 34%, #ff623b66 51%, transparent 72%); filter: drop-shadow(0 0 8px #ffa45b); animation: home-combat-impact 20s ease-out both; }
-.home-combat-impact-1 { left: 37%; top: 46%; }
-.home-combat-impact-2 { left: 67%; top: 52%; animation-delay: -8s; }
-@keyframes home-combat-impact { 0%, 39% { opacity: 0; transform: scale(.2); } 41% { opacity: 1; transform: scale(.85); } 45%, 100% { opacity: 0; transform: scale(1.8); } }
+@keyframes home-combat-bolt-two {
+  0%, 38.9% { left: 40%; top: 59%; opacity: 0; }
+  39% { left: 40%; top: 59%; opacity: 1; }
+  45% { left: 59%; top: 36%; opacity: 1; }
+  45.1%, 100% { left: 59%; top: 36%; opacity: 0; }
+}
+@keyframes home-combat-bolt-three {
+  0%, 53.9% { left: 53%; top: 55%; opacity: 0; }
+  54% { left: 53%; top: 55%; opacity: 1; }
+  60% { left: 72%; top: 30%; opacity: 1; }
+  60.1%, 100% { left: 72%; top: 30%; opacity: 0; }
+}
+@keyframes home-combat-cross-fire-one {
+  0%, 30.9% { left: 82%; top: 64%; opacity: 0; }
+  31% { left: 82%; top: 64%; opacity: 1; }
+  37% { left: 58%; top: 43%; opacity: 1; }
+  37.1%, 100% { left: 58%; top: 43%; opacity: 0; }
+}
+@keyframes home-combat-cross-fire-two {
+  0%, 43.9% { left: 55%; top: 51%; opacity: 0; }
+  44% { left: 55%; top: 51%; opacity: 1; }
+  50% { left: 30%; top: 28%; opacity: 1; }
+  50.1%, 100% { left: 30%; top: 28%; opacity: 0; }
+}
+.home-combat-damage { position: absolute; z-index: 4; left: 46%; top: 45%; width: 24px; height: 24px; border-radius: 50%; opacity: 0; background: radial-gradient(circle, #fff 0 10%, #ffe590 22%, #ff7045 42%, transparent 72%); filter: drop-shadow(0 0 7px #ffa45b); animation: home-combat-hits 15s linear both; }
+@keyframes home-combat-hits {
+  0%, 32% { opacity: 0; transform: scale(.2); }
+  33% { opacity: 1; transform: scale(.9); }
+  36%, 44% { opacity: 0; transform: scale(1.5); }
+  45% { opacity: 1; transform: scale(1); }
+  48%, 59% { opacity: 0; transform: scale(1.5); }
+  60% { opacity: 1; transform: scale(1.2); }
+  63%, 100% { opacity: 0; transform: scale(1.7); }
+}
+.home-combat-destruction { position: absolute; z-index: 5; left: 77%; top: 29%; width: 46px; height: 46px; border-radius: 50%; opacity: 0; background: radial-gradient(circle, #fff 0 9%, #ffdc8a 17%, #fa713e 36%, #ed647d55 56%, transparent 74%); filter: drop-shadow(0 0 10px #ff9959); animation: home-combat-burst 15s ease-out both; }
+.home-combat-destruction::before, .home-combat-destruction::after { position: absolute; inset: 0; border: 2px solid #ffca7a; border-radius: 50%; content: ''; }
+.home-combat-destruction::after { inset: 22%; border-color: #fff6d4; }
+.home-combat-destruction i { position: absolute; top: 48%; left: 48%; width: 5px; height: 12px; border-radius: 3px; background: #ffd68a; box-shadow: 0 0 6px #ff8957; animation: home-combat-debris 15s linear both; }
+.home-combat-destruction i:nth-child(1) { --debris-x: -43px; --debris-y: -24px; }
+.home-combat-destruction i:nth-child(2) { --debris-x: 44px; --debris-y: -21px; }
+.home-combat-destruction i:nth-child(3) { --debris-x: -29px; --debris-y: 40px; }
+.home-combat-destruction i:nth-child(4) { --debris-x: 35px; --debris-y: 34px; }
+@keyframes home-combat-burst { 0%, 63% { opacity: 0; transform: translate(-50%, -50%) scale(.15); } 65% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 73%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(1.9); } }
+@keyframes home-combat-debris { 0%, 63% { opacity: 0; transform: translate(0, 0) scale(.3); } 65% { opacity: 1; transform: translate(0, 0); } 75%, 100% { opacity: 0; transform: translate(var(--debris-x), var(--debris-y)) rotate(120deg); } }
 @media (max-width: 700px) {
   .landing-shell .home-combat-preview { width: 100%; height: clamp(160px, 23dvh, 210px); min-height: 145px; margin: 9px 0 12px; }
   .home-combat-ship { width: clamp(58px, 18%, 76px); }
@@ -1861,15 +1898,15 @@ html[data-motion="reduced"] .home-battle-bolt, html[data-motion="reduced"] .home
   .home-combat-ally-1 { width: 65px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .home-combat-ship, .home-combat-engine, .home-combat-engine::after, .home-combat-shot, .home-combat-impact { animation: none; }
-  .home-combat-enemy-1 { left: 22%; top: 25%; opacity: 1; transform: translate(-50%, -50%); }
-  .home-combat-enemy-2 { left: 75%; top: 25%; opacity: 1; transform: translate(-50%, -50%); }
-  .home-combat-ally-1 { left: 39%; top: 65%; opacity: 1; transform: translate(-50%, -50%); }
+  .home-combat-ship, .home-combat-engine, .home-combat-bolt, .home-combat-damage, .home-combat-destruction, .home-combat-destruction i { animation: none; }
+  .home-combat-lead { left: 55%; top: 32%; opacity: 1; transform: translate(-50%, -50%); }
+  .home-combat-cross { left: 81%; top: 65%; opacity: 1; transform: translate(-50%, -50%); }
+  .home-combat-ally-1 { left: 32%; top: 63%; opacity: 1; transform: translate(-50%, -50%); }
 }
-html[data-motion="reduced"] .home-combat-ship, html[data-motion="reduced"] .home-combat-engine, html[data-motion="reduced"] .home-combat-engine::after, html[data-motion="reduced"] .home-combat-shot, html[data-motion="reduced"] .home-combat-impact { animation: none; }
-html[data-motion="reduced"] .home-combat-enemy-1 { left: 22%; top: 25%; opacity: 1; transform: translate(-50%, -50%); }
-html[data-motion="reduced"] .home-combat-enemy-2 { left: 75%; top: 25%; opacity: 1; transform: translate(-50%, -50%); }
-html[data-motion="reduced"] .home-combat-ally-1 { left: 39%; top: 65%; opacity: 1; transform: translate(-50%, -50%); }
+html[data-motion="reduced"] .home-combat-ship, html[data-motion="reduced"] .home-combat-engine, html[data-motion="reduced"] .home-combat-bolt, html[data-motion="reduced"] .home-combat-damage, html[data-motion="reduced"] .home-combat-destruction, html[data-motion="reduced"] .home-combat-destruction i { animation: none; }
+html[data-motion="reduced"] .home-combat-lead { left: 55%; top: 32%; opacity: 1; transform: translate(-50%, -50%); }
+html[data-motion="reduced"] .home-combat-cross { left: 81%; top: 65%; opacity: 1; transform: translate(-50%, -50%); }
+html[data-motion="reduced"] .home-combat-ally-1 { left: 32%; top: 63%; opacity: 1; transform: translate(-50%, -50%); }
 
 /* One selected ship, one preview, and its color and purchase controls. */
 .landing-shell .ship-selector:is(.ship-selector-shop, .ship-selector-hangar) { display: flex; flex-direction: column; gap: 8px; width: 100%; min-height: 100%; margin: 0; padding: 14px; }
