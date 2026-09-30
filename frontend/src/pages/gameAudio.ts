@@ -77,13 +77,19 @@ export class GameAudio {
   }
 
   private async loadSamples(context: AudioContext) {
-    await Promise.all(sampleNames.map(async name => {
-      try {
-        const response = await fetch(`/audio/${name}.mp3`);
-        if (!response.ok) return;
-        const sound = await context.decodeAudioData(await response.arrayBuffer());
-        if (this.context === context) this.samples.set(name, sound);
-      } catch { /* Keep synthesized fallback if audio cannot load or decode. */ }
+    // Decode only a few samples at once. Mobile WebKit and Chromium can stall
+    // the game when every compressed effect is fetched and decoded together.
+    let next = 0;
+    await Promise.all(Array.from({ length: 3 }, async () => {
+      while (next < sampleNames.length && this.context === context) {
+        const name = sampleNames[next++];
+        try {
+          const response = await fetch(`/audio/${name}.mp3`);
+          if (!response.ok) continue;
+          const sound = await context.decodeAudioData(await response.arrayBuffer());
+          if (this.context === context) this.samples.set(name, sound);
+        } catch { /* Keep synthesized fallback if audio cannot load or decode. */ }
+      }
     }));
   }
 
