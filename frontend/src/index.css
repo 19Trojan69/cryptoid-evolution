@@ -873,19 +873,31 @@ html[data-motion="reduced"] .boss-debris-piece:nth-child(n+5) { display: none; }
 .edge-action-pickup, .edge-action-rapid { color: #7be6c4; }
 .edge-action-shield { color: #8feeff; }
 .edge-action-overdrive { color: #d7a6ff; }
-.weapon-control-wrap { position: relative; display: grid; place-items: center; width: 46px; height: 46px; pointer-events: auto; }
-.weapon-control-wrap::before { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(#f5d889 var(--weapon-progress, 0deg), rgba(245,216,137,.12) 0); content: ''; opacity: 0; -webkit-mask: radial-gradient(circle, transparent 59%, #000 61%); mask: radial-gradient(circle, transparent 59%, #000 61%); pointer-events: none; }
-.weapon-control-wrap[data-active="true"]::before { opacity: .95; }
+.weapon-control-wrap { position: relative; display: flex; flex-direction: column-reverse; align-items: center; gap: 5px; width: 52px; pointer-events: auto; }
+.weapon-slot { --slot-color: #f5d889; position: relative; display: grid; place-items: center; width: 52px; height: 52px; flex: none; }
+.weapon-slot[data-source="pickup"] { --slot-color: #80ecdf; }
+.weapon-slot::before { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(var(--slot-color) var(--weapon-progress, 0deg), color-mix(in srgb, var(--slot-color) 14%, transparent) 0); content: ''; opacity: 0; -webkit-mask: radial-gradient(circle, transparent 57%, #000 59%); mask: radial-gradient(circle, transparent 57%, #000 59%); pointer-events: none; }
+.weapon-slot[data-timed="true"]::before { opacity: 1; }
+.weapon-slot-reserve { width: 46px; height: 46px; }
+.weapon-slot-reserve .weapon-cycle { width: 39px; height: 39px; opacity: .8; }
+.weapon-slot[data-source="pickup"] .weapon-cycle { border-color: #80ecdf; color: #80ecdf; background: radial-gradient(circle at 50% 38%, #14555b, #0b1c2b 70%); }
+.weapon-hull-hits { color: #78e6d1; font: 700 9px/1 'Rajdhani', sans-serif; white-space: nowrap; }
+.pickup-notice { position: absolute; z-index: 9; display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 145px; max-width: min(220px, 65vw); padding: 6px 11px; border: 1px solid #8ce6e7b8; border-radius: 10px; background: #091e32ed; box-shadow: 0 0 18px #69d8e849; color: #e7fcff; text-align: center; pointer-events: none; transform: translate(-50%, calc(-100% - 54px)); animation: pickup-notice-in .2s ease-out; }
+.pickup-notice b { color: #a6f4ee; font: 700 12px/1.2 'Oxanium', sans-serif; }
+.pickup-notice span { font: 600 10px/1.25 'Space Grotesk', sans-serif; }
+.pickup-notice-weapon { border-color: #f5d889b8; }
+.pickup-notice-weapon b { color: #f5d889; }
+@keyframes pickup-notice-in { from { opacity: 0; transform: translate(-50%, calc(-100% - 42px)) scale(.88); } to { opacity: 1; transform: translate(-50%, calc(-100% - 54px)) scale(1); } }
 .shield-control-wrap { position: relative; display: grid; place-items: center; width: 46px; height: 46px; pointer-events: none; }
 .shield-control-wrap::before { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(#8feeff var(--shield-progress, 0deg), rgba(143,238,255,.12) 0); content: ''; opacity: .96; -webkit-mask: radial-gradient(circle, transparent 59%, #000 61%); mask: radial-gradient(circle, transparent 59%, #000 61%); pointer-events: none; }
 .shield-active-indicator { width: 42px; height: 42px; border-radius: 50%; border-color: rgba(143,238,255,.72); color: #8feeff; background: radial-gradient(circle at 50% 38%, rgba(24,72,88,.96), rgba(8,28,43,.96) 70%); box-shadow: inset 0 0 12px rgba(143,238,255,.09), 0 0 14px rgba(111,228,255,.18); pointer-events: none; }
 .shield-active-indicator small { max-width: 36px; overflow: hidden; font-size: 7px; text-overflow: ellipsis; white-space: nowrap; }
 .shield-active-indicator em { margin-top: 1px; color: #dffcff; font: 700 7px/1 'DM Mono', monospace; font-style: normal; }
-.weapon-cycle { width: 42px; height: 42px; border-radius: 50%; border-color: rgba(245,216,137,.72); color: #f5d889; background: radial-gradient(circle at 50% 38%, rgba(76,58,28,.95), rgba(11,28,43,.96) 70%); box-shadow: inset 0 0 12px rgba(245,216,137,.08), 0 0 14px rgba(245,200,109,.18); }
+.weapon-cycle { width: 44px; height: 44px; border-radius: 50%; border-color: rgba(245,216,137,.72); color: #f5d889; background: radial-gradient(circle at 50% 38%, rgba(76,58,28,.95), rgba(11,28,43,.96) 70%); box-shadow: inset 0 0 12px rgba(245,216,137,.08), 0 0 14px rgba(245,200,109,.18); }
 .weapon-cycle .weapon-cycle-glyph { font: 700 16px/1 'Oxanium', sans-serif; letter-spacing: -.04em; }
 .weapon-cycle small { max-width: 36px; overflow: hidden; font-size: 7px; text-overflow: ellipsis; white-space: nowrap; }
 .weapon-cycle em { margin-top: 1px; color: #fff1b8; font: 700 7px/1 'DM Mono', monospace; font-style: normal; letter-spacing: -.03em; }
-.weapon-wheel { position: absolute; z-index: 18; bottom: 49px; display: grid; grid-template-columns: repeat(3, 46px); gap: 6px; width: max-content; padding: 7px; border: 1px solid rgba(245,216,137,.42); background: rgba(4,16,30,.95); box-shadow: 0 12px 34px rgba(0,0,0,.52), inset 0 0 18px rgba(245,216,137,.05); backdrop-filter: blur(8px); border-radius: 12px; pointer-events: auto; animation: weapon-wheel-in .12s ease-out both; }
+.weapon-wheel { position: absolute; z-index: 18; bottom: calc(100% + 5px); display: grid; grid-template-columns: repeat(3, 46px); gap: 6px; width: max-content; padding: 7px; border: 1px solid rgba(245,216,137,.42); background: rgba(4,16,30,.95); box-shadow: 0 12px 34px rgba(0,0,0,.52), inset 0 0 18px rgba(245,216,137,.05); backdrop-filter: blur(8px); border-radius: 12px; pointer-events: auto; animation: weapon-wheel-in .12s ease-out both; }
 .touch-controls-right .weapon-wheel { left: 0; transform-origin: bottom left; }
 .touch-controls:not(.touch-controls-right) .weapon-wheel { right: 0; transform-origin: bottom right; }
 .weapon-wheel-option { position: relative; display: grid; grid-template-rows: 18px 11px 9px; place-items: center; width: 46px; height: 46px; padding: 3px; border: 1px solid rgba(111,186,204,.38); border-radius: 9px; background: linear-gradient(145deg, rgba(10,34,57,.97), rgba(16,44,69,.95)); color: #ccecf5; touch-action: manipulation; cursor: pointer; }
@@ -1628,7 +1640,7 @@ html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-
 
 
 /* Shallow cockpit canopy: Shards above Score in the center, status around it. */
-.game-hud { grid-template-columns: minmax(42px, .8fr) minmax(58px, 1fr) minmax(58px, 1fr) minmax(134px, 1.8fr) minmax(58px, 1fr) minmax(58px, 1fr) minmax(42px, .8fr); padding-bottom: 12px; border-radius: 0 0 42% 42% / 0 0 14px 14px; background: radial-gradient(ellipse 34% 75% at 50% 2%, rgba(43, 112, 140, .22), transparent), linear-gradient(180deg, rgba(3, 14, 29, .99), rgba(6, 28, 46, .97)); }
+.game-hud { grid-template-columns: minmax(42px, .8fr) minmax(58px, 1fr) minmax(58px, 1fr) minmax(134px, 1.8fr) minmax(58px, 1fr) minmax(42px, .8fr); padding-bottom: 12px; border-radius: 0 0 42% 42% / 0 0 14px 14px; background: radial-gradient(ellipse 34% 75% at 50% 2%, rgba(43, 112, 140, .22), transparent), linear-gradient(180deg, rgba(3, 14, 29, .99), rgba(6, 28, 46, .97)); }
 .game-hud::after { left: 17%; right: 17%; background: linear-gradient(90deg, transparent, rgba(91, 220, 231, .55), rgba(194, 139, 250, .65), rgba(91, 220, 231, .55), transparent); }
 .game-hud .score-hud { min-width: 0; min-height: 54px; gap: 0; padding: 2px 4px; border-color: rgba(125, 228, 211, .67); background: linear-gradient(180deg, rgba(13, 55, 69, .8), rgba(10, 36, 56, .64)); }
 .game-hud .score-hud .shard-line, .game-hud .score-hud .score-line { display: flex; align-items: center; justify-content: center; gap: 5px; min-width: 0; height: 24px; white-space: nowrap; font-family: 'DM Mono', monospace; letter-spacing: 0; }
@@ -1637,12 +1649,11 @@ html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-
 .game-hud .score-hud b { font: 700 19px/1 'Oxanium', sans-serif; font-variant-numeric: tabular-nums; }
 .game-hud .score-hud small { font: 600 8px/1 'DM Mono', monospace; }
 @media (max-width: 560px) {
-  .game-hud { grid-template-columns: 36px minmax(34px, .62fr) minmax(36px, .68fr) minmax(92px, 1.82fr) minmax(37px, .68fr) minmax(34px, .62fr) 36px; grid-template-areas: "home hearts level score weapon round pause"; gap: 2px; padding: max(4px, env(safe-area-inset-top)) 4px 10px; }
+  .game-hud { grid-template-columns: 36px minmax(34px, .62fr) minmax(36px, .68fr) minmax(92px, 1.82fr) minmax(34px, .62fr) 36px; grid-template-areas: "home hearts level score round pause"; gap: 2px; padding: max(4px, env(safe-area-inset-top)) 4px 10px; }
   .hud-actions { grid-area: home; }
   .hearts-stat { grid-area: hearts; }
   .game-level-hud { grid-area: level; }
   .score-hud { grid-area: score; }
-  .weapon-hud { grid-area: weapon; }
   .round-hud { grid-area: round; }
   .pause-control { grid-area: pause; }
   .game-hud .hud-actions .home-control, .game-hud .pause-control { width: 36px; min-width: 36px; height: 44px; min-height: 44px; }
@@ -1650,14 +1661,12 @@ html[data-motion="reduced"] .home-far-planet, html[data-motion="reduced"] .home-
   .game-hud .score-hud .shard-line, .game-hud .score-hud .score-line { height: 24px; gap: 3px; }
   .game-hud .score-hud b { font-size: clamp(14px, 4.6vw, 19px); }
   .game-hud .score-hud small { font-size: 7px; }
-  .game-hud .hud-stat.weapon-hud strong { font-size: 15px; }
-  .game-hud .weapon-hud > span { font-size: 7px; }
   .game-label { top: calc(max(4px, env(safe-area-inset-top)) + 75px); }
   .power-status { top: calc(max(4px, env(safe-area-inset-top)) + 90px); }
   .bonus-counter { top: calc(max(4px, env(safe-area-inset-top)) + 115px); }
 }
 @media (max-width: 375px) {
-  .game-hud { grid-template-columns: 30px minmax(31px, .55fr) minmax(34px, .6fr) minmax(80px, 1.65fr) minmax(35px, .6fr) minmax(31px, .55fr) 30px; gap: 2px; padding-right: 3px; padding-left: 3px; }
+  .game-hud { grid-template-columns: 30px minmax(31px, .55fr) minmax(34px, .6fr) minmax(80px, 1.65fr) minmax(31px, .55fr) 30px; gap: 2px; padding-right: 3px; padding-left: 3px; }
   .game-hud .hud-actions .home-control, .game-hud .pause-control { width: 30px; min-width: 30px; }
   .game-hud .score-hud b { font-size: 14px; }
   .game-hud .score-hud small { font-size: 6px; }
