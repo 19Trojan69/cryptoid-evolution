@@ -15,7 +15,7 @@ export const readEffectsVolume = (): number => {
   return saved !== null && Number.isFinite(value) && value >= 0 && value <= 100 ? value : DEFAULT_EFFECTS_VOLUME;
 };
 // Volume is a percentage of the game's calibrated music mix, not the device's master volume.
-const MUSIC_MAX_GAIN = .08;
+const MUSIC_MAX_GAIN = .16;
 export const musicGain = (percent: number) => MUSIC_MAX_GAIN * Math.max(0, Math.min(100, percent)) / 100;
 export const readMusicVolume = (): number => {
   const saved = localStorage.getItem(MUSIC_VOLUME_KEY);
