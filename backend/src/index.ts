@@ -12,6 +12,7 @@ import mountPaymentsEndpoints from "./handlers/payments";
 import mountUserEndpoints from "./handlers/users";
 import mountHangarEndpoints from "./handlers/hangar";
 import mountLeaderboardEndpoints from "./handlers/leaderboard";
+import platformAPIClient from "./services/platformAPIClient";
 
 // We must import typedefs for ts-node-dev to pick them up when they change (even though tsc would supposedly
 // have no problem here)
@@ -79,6 +80,60 @@ app.use(
     }),
   }) as unknown as express.RequestHandler,
 );
+
+
+// If a proxied Pi Browser request loses its session cookie, recover the
+// authenticated user from the short-lived Pi access token sent by the client.
+// The token is verified with Pi before any user is attached to the request.
+app.use(async (req, _res, next) => {
+  if (req.session.currentUser) return next();
+
+  const authorization = req.get("authorization") || "";
+  const match = authorization.match(/^Bearer\s+(.+)$/i);
+  const accessToken = match?.[1]?.trim();
+  if (!accessToken) return next();
+
+  const userCollection = req.app.locals.userCollection;
+  if (!userCollection) return next();
+
+  try {
+    const me = await platformAPIClient.get("/v2/me", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    const uid = me.data?.uid;
+    const username = me.data?.username;
+    if (!uid || typeof uid !== "string" || !username || typeof username !== "string") return next();
+
+    let currentUser = await userCollection.findOne({ uid });
+    if (currentUser) {
+      await userCollection.updateOne(
+        { _id: currentUser._id },
+        { $set: { username, accessToken } },
+      );
+      currentUser = await userCollection.findOne({ uid });
+    } else {
+      const inserted = await userCollection.insertOne({
+        uid,
+        username,
+        roles: Array.isArray(me.data?.roles) ? me.data.roles : [],
+        accessToken,
+      });
+      currentUser = await userCollection.findOne(inserted.insertedId);
+    }
+
+    if (currentUser) {
+      req.session.currentUser = currentUser;
+      req.session.adminMode = false;
+      req.session.adminUid = null;
+      req.session.adminLoadout = null;
+      req.session.scoreRun = null;
+    }
+  } catch (error) {
+    console.warn("Pi session rehydration failed", error instanceof Error ? error.message : "unknown error");
+  }
+
+  return next();
+});
 
 //
 // II. Mount app endpoints:
