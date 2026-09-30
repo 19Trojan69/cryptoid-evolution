@@ -17,7 +17,7 @@ const Header = ({ user, serviceRank, onSignIn, onSignOut, onSendTestNotification
   const { t } = useLocale();
   return (
     <header className="site-header">
-      <a className="brand-mark" href="/" aria-label="Cryptoid Evolution – Trojan Wolf Games"><img className="brand-wolf-logo" src="/trojan-wolf-games.webp" alt="Trojan Wolf Games" width="148" height="74" /></a>
+      <a className="brand-mark" href="/" aria-label="Cryptoid Evolution – Trojan Wolf Games"><img className="brand-wolf-logo" src="/trojan-wolf-games.webp" alt="Trojan Wolf Games" width="148" height="74" /><span className="brand-copyright" aria-label="Copyright">©</span></a>
       <div className="user-section">
         {user ? (
           <>
