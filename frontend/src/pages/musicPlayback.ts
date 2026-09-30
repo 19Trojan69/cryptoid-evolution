@@ -29,6 +29,9 @@ export class MusicPlayer {
       source.connect(gain).connect(context.destination);
       this.context = context;
       this.gain = gain;
+      // The media element is part of this Web Audio graph. Its own volume
+      // would otherwise attenuate the signal a second time.
+      this.audio.volume = 1;
     } catch {
       void context.close();
     }
@@ -54,8 +57,12 @@ export class MusicPlayer {
 
   setVolume(percent: number) {
     this.volume = percent;
-    this.audio.volume = musicGain(percent);
-    if (this.context && this.gain) this.gain.gain.setTargetAtTime(musicGain(percent), this.context.currentTime, .015);
+    if (this.context && this.gain) {
+      this.audio.volume = 1;
+      this.gain.gain.setTargetAtTime(musicGain(percent), this.context.currentTime, .015);
+    } else {
+      this.audio.volume = musicGain(percent);
+    }
   }
 
   async play(): Promise<boolean> {

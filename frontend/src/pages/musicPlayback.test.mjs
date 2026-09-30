@@ -29,11 +29,30 @@ test('iOS-style fixed element volume still obeys Web Audio gain and the slider',
   };
   const player = new MusicPlayer('/audio/battle-orbit.mp3', readMusicVolume());
   assert.equal(await player.play(), true);
+  assert.equal(player.audio.volume, 1);
   player.setVolume(25);
   player.setVolume(75);
   player.setVolume(0);
-  assert.deepEqual(gainCalls.map(x => +x.toFixed(3)), [.02, .06, 0]);
+  assert.deepEqual(gainCalls.map(x => +x.toFixed(3)), [.04, .12, 0]);
+  assert.equal(player.audio.volume, 1);
   player.close();
+});
+
+test('HTML audio fallback retains the same linear music slider when Web Audio is unavailable', async () => {
+  const previousContext = globalThis.AudioContext;
+  globalThis.AudioContext = undefined;
+  try {
+    const player = new MusicPlayer('/audio/light-the-void.mp3', 50);
+    assert.equal(await player.play(), true);
+    assert.equal(player.audio.volume, .08);
+    player.setVolume(100);
+    assert.equal(player.audio.volume, .16);
+    player.setVolume(0);
+    assert.equal(player.audio.volume, 0);
+    player.close();
+  } finally {
+    globalThis.AudioContext = previousContext;
+  }
 });
 
 test('boss soundtrack switches on the same unlocked player and returns at normal-track position', async () => {
