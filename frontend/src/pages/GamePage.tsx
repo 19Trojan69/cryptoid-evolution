@@ -26,7 +26,7 @@ import { axiosClient } from "../lib/axiosClient";
 import { fireInterval, makeVolley } from "./playerCombat";
 import { activateCollectedPower } from "./collectedPower";
 import { leaveGameFullscreen, requestGameFullscreen } from "./gameFullscreen";
-import { levelDifficulty } from "./levelDifficulty";
+import { levelDifficulty, MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { balanceAfterMission, BONUS_TARGET_SHARD_REWARD, bossPoints, bossShardReward, creditDefeat, creditReward } from "./shardEarnings";
 import { addPersistentHullFire, hullFireAtImpact, spriteFireSites, type HullFire } from "./hullFires";
 import { bossExplosionSize, bossFallTargetY, bossFireSite, bossHullContains, bossVolley } from "./bossCombat";
@@ -54,7 +54,7 @@ const FORMATION_DATA_ROWS = [
 ] as const;
 
 type AsteroidSize = "small" | "medium" | "large";
-type GameStatus = "loading" | "playing" | "paused" | "destroying" | "game-over";
+type GameStatus = "loading" | "playing" | "paused" | "destroying" | "game-over" | "victory";
 
 type Asteroid = {
   id: number;
@@ -498,7 +498,7 @@ const GamePage = () => {
     const track = takeHandoffGameMusic() ?? new MusicPlayer("/audio/battle-orbit.mp3", readMusicVolume());
     musicRef.current = track;
     const resume = () => {
-      if (document.visibilityState === "hidden" || stateRef.current.status !== "playing") return;
+      if (document.visibilityState === "hidden" || !["playing", "game-over", "victory"].includes(stateRef.current.status)) return;
       void track.play().then(ok => { if (ok && (readEffectsVolume() === 0 || soundRef.current?.running)) setAudioNeedsTap(false); });
     };
     document.addEventListener("pointerdown", resume, true);
@@ -526,21 +526,26 @@ const GamePage = () => {
     if (!track) return;
     const normalSource = "/audio/battle-orbit.mp3";
     const waitingForExplosion = game.encounter === "boss-clear" && bossVictoryPendingRef.current;
-    const desiredSource = game.encounter === "boss-clear"
+    const desiredSource = game.status === "game-over" ? "/audio/last-signal.mp3"
+      : game.status === "victory" ? "/audio/beyond-the-last-star.mp3"
+      : game.encounter === "boss-clear"
       ? waitingForExplosion ? "/audio/dreadnought-duel.mp3" : "/audio/boss-victory-v2.mp3"
       : game.encounter === "boss-intro" || game.encounter === "boss-fight"
         ? "/audio/dreadnought-duel.mp3"
         : normalSource;
-    track.audio.loop = game.encounter !== "boss-clear";
+    track.audio.loop = game.status === "playing" && game.encounter !== "boss-clear";
     if (track.currentSource !== desiredSource) {
       if (track.currentSource === normalSource) regularMusicPositionRef.current = track.audio.currentTime || 0;
       track.setSource(desiredSource, desiredSource === normalSource ? regularMusicPositionRef.current : 0);
     }
-    if (game.status === "playing" && !waitingForExplosion) void track.play().then(ok => { if (!ok) setAudioNeedsTap(true); });
+    if ((game.status === "playing" && !waitingForExplosion) || game.status === "game-over" || game.status === "victory") void track.play().then(ok => {
+      if (game.status === "game-over" || game.status === "victory") setAudioNeedsTap(!ok);
+      else if (!ok) setAudioNeedsTap(true);
+    });
     else if (game.status !== "loading") track.pause();
   }, [game.status, game.encounter, musicEnabled]);
   useEffect(() => {
-    const volume = game.encounter === "boss-clear"
+    const volume = game.status === "playing" && game.encounter === "boss-clear"
       ? Math.min(100, musicVolume * BOSS_VICTORY_VOLUME_BOOST)
       : musicVolume;
     musicRef.current?.setVolume(volume);
@@ -620,7 +625,7 @@ const GamePage = () => {
   }, []);
   useEffect(() => {
     soundRef.current?.setSector(game.sector);
-    soundRef.current?.setPaused(game.status === "loading" || game.status === "paused" || game.status === "game-over");
+    soundRef.current?.setPaused(game.status === "loading" || game.status === "paused" || game.status === "game-over" || game.status === "victory");
   }, [game.sector, game.status]);
 
   const startEffects = () => {
@@ -739,6 +744,19 @@ const GamePage = () => {
         if (state.phase === "SECTOR_CLEAR") {
           clearTimerRef.current += delta;
           if (clearTimerRef.current >= (state.encounter === "boss-clear" ? BOSS_CLEAR_DURATION_MS : SECTION_CLEAR_MS)) {
+            if (state.encounter === "bonus" && state.sector === MAX_DIFFICULTY_LEVEL) {
+              if (!recordsSavedRef.current) {
+                if (!adminRunRef.current) saveRecords(state);
+                recordsSavedRef.current = true;
+                submitScore(state);
+              }
+              state.status = "victory";
+              state.enemyShots = [];
+              state.shots = [];
+              setGame({ ...state });
+              animationRef.current = window.requestAnimationFrame(loop);
+              return;
+            }
             const clearEncounter = state.encounter === "boss-clear" ? "boss-clear" : state.encounter === "bonus" ? "bonus" : "normal";
             const next = advanceAfterClear(state.section, clearEncounter);
             state.section = next.section;
@@ -1300,7 +1318,7 @@ const GamePage = () => {
           <div className="hud-stat game-level-hud" aria-label={`${t("Game level")} ${levelLabel}`}><span>{t("Level")}</span><strong>{levelLabel}</strong></div>
           <div className="hud-stat score-hud" aria-label={`${t("Shards")} ${game.shards}, ${t("Score")} ${game.score}`}><span className="shard-line"><b>◆ {game.shards}</b><small>{t("Shards")}</small></span><span className="score-line"><b>{game.score}</b><small>{t("Score")}</small></span></div>
           <div className="hud-stat round-hud chain-hud" aria-label={`${t("Block")} ${game.chainBlocks}/${BLOCKS_PER_CHAIN}`}><span>{t("Block")}</span><strong>{game.chainBlocks}<small>/{BLOCKS_PER_CHAIN}</small></strong></div>
-          <button className="game-control pause-control" type="button" disabled={game.status === "loading" || game.status === "destroying" || game.status === "game-over"} onClick={() => { const resuming = game.status === "paused"; stateRef.current.status = resuming ? "playing" : "paused"; setGame({ ...stateRef.current }); if (resuming) window.setTimeout(retryAudio, 0); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
+          <button className="game-control pause-control" type="button" disabled={game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { const resuming = game.status === "paused"; stateRef.current.status = resuming ? "playing" : "paused"; setGame({ ...stateRef.current }); if (resuming) window.setTimeout(retryAudio, 0); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
         </header>
         <div className="game-label">{t("LEVEL")} {levelLabel} <span>· {sectorName(game.sector)} · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/${BLOCKS_PER_CHAIN}` : game.encounter === "bonus" ? t("BONUS CHALLENGE") : t("CORE WARDEN")}</span></div>
         {audioNeedsTap && game.status === "playing" && <button className="audio-retry" type="button" onClick={retryAudio}>Ton aktivieren</button>}
@@ -1373,6 +1391,7 @@ const GamePage = () => {
         </div>
         {game.status === "paused" && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('MISSION PAUSED')}</p><h1>{t('Hold the line.')}</h1><p>{t('The asteroids are waiting.')}</p><MusicVolumeSlider id="pause-music-volume" label={t('Music volume')} value={musicVolume} onChange={changeMusicVolume} /><MusicVolumeSlider id="pause-effects-volume" label={t('Effects volume')} value={effectsVolume} onChange={changeEffectsVolume} /><button className="button button-primary" type="button" onClick={() => { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); window.setTimeout(retryAudio, 0); }}>Resume mission <span className="resume-icon"><CockpitIcon kind="play" /></span></button></div></div>}
         {game.status === "game-over" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><h1>{t("Game Over")}</h1><div className="game-over-details"><p className="eyebrow">{t("MISSION FAILED")}</p><p className="game-over-hearts">{t('Hearts')}: {game.hearts}/{game.maxHearts}</p><div className="game-over-stats"><span><b>{game.score}</b>{t('Score')}</span><span><b>{game.destroyed}</b>{t('Destroyed')}</span><span><b>{game.sector}</b>{t('Sector')}</span></div>{scoreSync !== "idle" && <p role="status">{t(scoreSync === "saving" ? "Saving personal best…" : scoreSync === "saved" ? "Personal best saved." : "Could not sync personal best. Local best is saved.")}</p>}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t('Home')}</button></div></div></div></div>}
+        {game.status === "victory" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><p className="eyebrow">{t("CAMPAIGN COMPLETE")}</p><h1>{t("Victory")}</h1><div className="game-over-details"><p>{t("You completed the final bonus challenge.")}</p><div className="game-over-stats"><span><b>{game.score}</b>{t("Score")}</span><span><b>{game.destroyed}</b>{t("Destroyed")}</span><span><b>{game.sector}</b>{t("Sector")}</span></div>{scoreSync !== "idle" && <p role="status">{t(scoreSync === "saving" ? "Saving personal best…" : scoreSync === "saved" ? "Personal best saved." : "Could not sync personal best. Local best is saved.")}</p>}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t("Home")}</button></div></div></div></div>}
         {homePrompt && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2>{t('Return to base?')}</h2><p>{t('Your current mission will end. Your records will be saved locally.')}</p><div className="modal-actions"><button className="button button-primary" type="button" onClick={goHome}>{t('Leave game')}</button><button className="button button-secondary" type="button" onClick={() => setHomePrompt(false)}>{t('Keep playing')}</button></div></div></div>}
       </div>
     </main>
