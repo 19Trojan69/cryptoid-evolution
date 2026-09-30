@@ -903,7 +903,7 @@ const GamePage = () => {
           Object.assign(state, activateCollectedPower(state, pickup.type));
           if (pickup.type === "weapon") state.weaponSource = "pickup";
           syncSelectedWeapon(state);
-          state.pickupNotice = { id: pickup.id, type: pickup.type, remainingMs: 2_400, level: stageWeaponLevel(shipStageRef.current, state.weaponLevel) };
+          state.pickupNotice = { id: pickup.id, type: pickup.type, remainingMs: 1_550, level: stageWeaponLevel(shipStageRef.current, state.weaponLevel) };
           soundRef.current?.play(pickup.type === "shield" ? "shield" : "pickup");
           return false;
         });

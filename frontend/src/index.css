@@ -888,17 +888,24 @@ html[data-motion="reduced"] .boss-debris-piece:nth-child(n+5) { display: none; }
 .weapon-slot-reserve .weapon-cycle { width: 39px; height: 39px; opacity: .8; }
 .weapon-slot[data-source="pickup"] .weapon-cycle { border-color: #80ecdf; color: #80ecdf; background: radial-gradient(circle at 50% 38%, #14555b, #0b1c2b 70%); }
 .weapon-hull-hits { color: #78e6d1; font: 700 9px/1 'Rajdhani', sans-serif; white-space: nowrap; }
-.pickup-notice { --pickup-neon: #80f5ee; position: absolute; z-index: 9; top: calc(max(4px, env(safe-area-inset-top)) + 110px); left: 50%; display: flex; flex-direction: column; align-items: center; gap: 4px; width: min(360px, calc(100% - 32px)); color: var(--pickup-neon); text-align: center; pointer-events: none; transform-origin: center; animation: pickup-notice-reveal 2.4s ease-out both; }
-.pickup-notice b { font: 800 clamp(18px, 5vw, 27px)/1.1 'Oxanium', sans-serif; text-shadow: 0 2px 5px #020a18, 0 0 9px var(--pickup-neon), 0 0 22px var(--pickup-neon); }
-.pickup-notice span { color: var(--pickup-neon); font: 700 clamp(11px, 3vw, 14px)/1.25 'Space Grotesk', sans-serif; text-shadow: 0 2px 5px #020a18, 0 0 8px var(--pickup-neon); }
+.pickup-notice { --pickup-neon: #80f5ee; position: absolute; z-index: 9; top: calc(max(4px, env(safe-area-inset-top)) + 108px); left: 50%; display: flex; flex-direction: column; align-items: center; gap: 6px; width: 96%; color: var(--pickup-neon); text-align: center; pointer-events: none; transform: translateX(-50%); animation: pickup-notice-reveal 1.55s ease-out both; }
+.pickup-notice::before, .pickup-notice::after { position: absolute; left: 50%; top: 48%; width: 100%; height: 110px; content: ''; pointer-events: none; }
+.pickup-notice::before { z-index: -1; background: radial-gradient(ellipse at center, #fff9 0, var(--pickup-neon) 8%, color-mix(in srgb, var(--pickup-neon) 65%, transparent) 22%, transparent 69%); filter: blur(9px); animation: pickup-flash .65s ease-out both; }
+.pickup-notice::after { z-index: -1; background: repeating-conic-gradient(from 8deg, transparent 0deg 13deg, var(--pickup-neon) 15deg 17deg, transparent 19deg 32deg), radial-gradient(ellipse at center, transparent 22%, var(--pickup-neon) 25%, transparent 30%); -webkit-mask: radial-gradient(ellipse at center, transparent 0 9%, #000 16%, #000 40%, transparent 70%); mask: radial-gradient(ellipse at center, transparent 0 9%, #000 16%, #000 40%, transparent 70%); filter: drop-shadow(0 0 8px var(--pickup-neon)); animation: pickup-burst .75s ease-out both; }
+.pickup-notice b { position: relative; z-index: 1; max-width: 100%; font: 900 clamp(30px, 8vw, 58px)/1 'Oxanium', sans-serif; letter-spacing: -.035em; text-wrap: balance; text-shadow: 0 3px 6px #020a18, 0 0 9px var(--pickup-neon), 0 0 24px var(--pickup-neon), 0 0 44px var(--pickup-neon); animation: pickup-title-impact .65s cubic-bezier(.18,1.55,.35,1) both; }
+.pickup-notice span { position: relative; z-index: 1; max-width: 94%; color: var(--pickup-neon); font: 800 clamp(13px, 3.7vw, 20px)/1.2 'Space Grotesk', sans-serif; text-shadow: 0 2px 5px #020a18, 0 0 9px var(--pickup-neon), 0 0 19px var(--pickup-neon); animation: pickup-subtitle .4s .17s ease-out both; }
 .pickup-notice-shield { --pickup-neon: #83efff; }
 .pickup-notice-overdrive { --pickup-neon: #d9a0ff; }
 .pickup-notice-weapon { --pickup-neon: #ffe18c; }
 .pickup-notice-rapid { --pickup-neon: #86ffc7; }
 .pickup-notice-bomb { --pickup-neon: #ffad88; }
 .pickup-notice-emp { --pickup-neon: #8bb9ff; }
-@keyframes pickup-notice-reveal { 0% { opacity: 0; filter: blur(4px); transform: translateX(-50%) scale(.38); } 18% { opacity: 1; filter: blur(0); transform: translateX(-50%) scale(1.13); } 28%, 72% { opacity: 1; transform: translateX(-50%) scale(1); } 100% { opacity: 0; transform: translateX(-50%) scale(1.04); } }
-@media (prefers-reduced-motion: reduce) { .pickup-notice { animation: none; transform: translateX(-50%); } }
+@keyframes pickup-notice-reveal { 0% { opacity: 0; } 9%, 67% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes pickup-title-impact { 0% { opacity: 0; filter: blur(7px); transform: scale(.2); } 45% { opacity: 1; filter: blur(0); transform: scale(1.22); } 72% { transform: scale(.95); } 100% { transform: scale(1); } }
+@keyframes pickup-subtitle { 0% { opacity: 0; transform: translateY(10px) scale(.7); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes pickup-flash { 0% { opacity: 0; transform: translate(-50%, -50%) scale(.08, .2); } 18% { opacity: .95; transform: translate(-50%, -50%) scale(.7, .45); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(1.2, .8); } }
+@keyframes pickup-burst { 0% { opacity: 0; transform: translate(-50%, -50%) scale(.08); } 25% { opacity: .9; } 100% { opacity: 0; transform: translate(-50%, -50%) scale(1.3); } }
+@media (prefers-reduced-motion: reduce) { .pickup-notice, .pickup-notice b, .pickup-notice span, .pickup-notice::before, .pickup-notice::after { animation: none; } .pickup-notice::before, .pickup-notice::after { display: none; } }
 .shield-control-wrap { position: relative; display: grid; place-items: center; width: 46px; height: 46px; pointer-events: none; }
 .shield-control-wrap::before { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(#8feeff var(--shield-progress, 0deg), rgba(143,238,255,.12) 0); content: ''; opacity: .96; -webkit-mask: radial-gradient(circle, transparent 59%, #000 61%); mask: radial-gradient(circle, transparent 59%, #000 61%); pointer-events: none; }
 .shield-active-indicator { width: 42px; height: 42px; border-radius: 50%; border-color: rgba(143,238,255,.72); color: #8feeff; background: radial-gradient(circle at 50% 38%, rgba(24,72,88,.96), rgba(8,28,43,.96) 70%); box-shadow: inset 0 0 12px rgba(143,238,255,.09), 0 0 14px rgba(111,228,255,.18); pointer-events: none; }
