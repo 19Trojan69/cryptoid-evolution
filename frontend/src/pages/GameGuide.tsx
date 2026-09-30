@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocale } from "../i18n";
 
 const topics = [
@@ -8,7 +8,7 @@ const topics = [
     details: [
       "On a touchscreen, steer with your thumb in the lower playfield. The ship stays visible above your touch point.",
       "On a keyboard, use the arrow keys or WASD. Move left and right, with limited room to dodge upward.",
-      "The HUD shows hearts, level, Shards, score, weapon stage and completed Blocks. Use the button at the top to pause.",
+      "The top HUD shows hearts, level, Shards, score and completed Blocks. Your active weapon is shown at the side; use the button at the top to pause.",
     ],
   },
   {
@@ -33,9 +33,10 @@ const topics = [
     id: "boosts", label: "Weapons & boosts", title: "Use your equipment",
     intro: "Fly through glowing drops to collect boosts that activate immediately.",
     details: [
-      "Shield absorbs hits, Overdrive doubles shot damage, Rapid Fire increases the firing rate and Weapon Upgrade raises the weapon stage. Collected effects last up to 20 seconds.",
+      "Shield absorbs hits, Overdrive doubles shot damage, Rapid Fire increases the firing rate and Weapon Upgrade raises the weapon stage. A short message explains each effect when collected.",
       "Weapon stages go from the free single laser to twin, rapid twin, triple and plasma fire. Nova Bomb clears visible enemies and shots; EMP freezes enemies briefly.",
-      "Owned and equipped Test-Pi shots last five minutes from the start of each mission. Previously owned start boosts can be activated with their on-screen button for one mission.",
+      "Select owned Test-Pi weapons during the mission with the side button. Their outer ring shows the remaining time without a seconds counter; when it empties, the weapon disappears. Hold the button to see all owned weapons.",
+      "Collected weapon upgrades activate immediately. If another timed weapon is available, its own side button lets you switch between them. Previously owned start boosts have a separate activation button.",
     ],
   },
   {
@@ -76,16 +77,21 @@ const topics = [
   },
 ] as const;
 
-type GameGuideProps = { onClose: () => void; onStart: () => void };
+type GameGuideProps = { onClose: () => void };
 
-const GameGuide = ({ onClose, onStart }: GameGuideProps) => {
+const GameGuide = ({ onClose }: GameGuideProps) => {
   const { t } = useLocale();
   const [selected, setSelected] = useState<(typeof topics)[number]["id"]>("controls");
   const topic = topics.find(item => item.id === selected) ?? topics[0];
+  useEffect(() => {
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") onClose(); };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [onClose]);
 
   return <div className="info-panel" role="dialog" aria-modal="true" aria-labelledby="info-title">
     <div className="info-panel-content guide-panel-content">
-      <button className="close-button" type="button" onClick={onClose} aria-label={t("Close")}>×</button>
+      <button className="close-button" type="button" onClick={onClose} aria-label={t("Back to system")}>×</button>
       <p className="eyebrow">{t("FIELD GUIDE")}</p>
       <h2 id="info-title">{t("How to Play")}</h2>
       <p className="guide-lead">{t("Choose a topic to learn the current rules before your mission.")}</p>
@@ -97,15 +103,7 @@ const GameGuide = ({ onClose, onStart }: GameGuideProps) => {
         <p>{t(topic.intro)}</p>
         <ul>{topic.details.map(detail => <li key={detail}>{t(detail)}</li>)}</ul>
       </section>
-      <button className="button button-primary guide-start" type="button" onClick={onStart}>
-        {t("Enter mission")}
-        <span className="guide-start-icon" aria-hidden="true">
-          <svg viewBox="0 0 32 32" fill="none" focusable="false">
-            <path d="M16 2.5 29.5 16 16 29.5 2.5 16 16 2.5Z" stroke="currentColor" strokeWidth="1.5" />
-            <path d="M9 16h13m-5.5-5.5L22 16l-5.5 5.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </span>
-      </button>
+      <button className="button button-secondary guide-back" type="button" onClick={onClose}>← {t("Back to system")}</button>
     </div>
   </div>;
 };
