@@ -430,6 +430,28 @@ const GamePage = () => {
     return () => observer.disconnect();
   }, []);
 
+
+  useEffect(() => {
+    const field = fieldRef.current;
+    if (!field) return;
+    let lastTouchEnd = 0;
+    const preventGesture = (event: Event) => event.preventDefault();
+    const preventDoubleTap = (event: TouchEvent) => {
+      if (event.target instanceof Element && event.target.closest("button, .game-hud, .game-overlay, .touch-controls")) return;
+      const now = performance.now();
+      if (now - lastTouchEnd < 360) event.preventDefault();
+      lastTouchEnd = now;
+    };
+    field.addEventListener("touchend", preventDoubleTap, { passive: false });
+    field.addEventListener("gesturestart", preventGesture, { passive: false });
+    field.addEventListener("gesturechange", preventGesture, { passive: false });
+    return () => {
+      field.removeEventListener("touchend", preventDoubleTap);
+      field.removeEventListener("gesturestart", preventGesture);
+      field.removeEventListener("gesturechange", preventGesture);
+    };
+  }, []);
+
   const submitScore = (state: GameState) => {
     const runId = scoreRunRef.current;
     if (!runId) return;
