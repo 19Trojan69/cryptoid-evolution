@@ -1,25 +1,41 @@
-# Cryptoid Evolution — Pi Testnet public beta
+# Cryptoid Evolution — Checkliste für die öffentliche Testnet-Beta
 
-Pi Developer Portal → General:
+Die englischen Feldnamen und Einträge entsprechen dem Pi Developer Portal. Übernimm den Beschreibungstext unverändert, falls du ihn dort einträgst.
 
-- App Name: `Cryptoid Evolution`
-- Subtitle: `Crypto Space Arcade Shooter`
-- Description (129/140): `Pilot your ship through 9-block chains, defeat bosses, collect power-ups and earn Testnet rewards in this evolving space shooter.`
-- App Network: `Pi Testnet` (keep the existing project; this is not a Mainnet launch)
-- Testnet App Visibility: `Public` only after the checks below; then submit the change
+## Pi Developer Portal → General
 
-Pi Developer Portal → Privacy / TOS:
+- [ ] **App Name:** `Cryptoid Evolution`
+- [ ] **Subtitle:** `Crypto Space Arcade Shooter`
+- [ ] **Description (129/140 Zeichen):** `Pilot your ship through 9-block chains, defeat bosses, collect power-ups and earn Testnet rewards in this evolving space shooter.`
+- [ ] **App Network:** `Pi Testnet`. Das bestehende Testnet-Projekt beibehalten; dies ist noch kein Mainnet-Start.
+- [ ] **Testnet App Visibility:** Erst nach den Prüfungen unten auf `Public` stellen und die Änderung mit `Submit` speichern.
 
-- Privacy: `https://cryptoid-evolution-testnet.vercel.app/privacy`
-- Terms: `https://cryptoid-evolution-testnet.vercel.app/terms`
+## Pi Developer Portal → Privacy / TOS
 
-Ecosystem Listing Application:
+- [ ] **Privacy:** `https://cryptoid-evolution-testnet.vercel.app/privacy`
+- [ ] **Terms:** `https://cryptoid-evolution-testnet.vercel.app/terms`
 
-- Check the uploaded intro image and all three preview screenshots in the portal.
-- Category `Games`, developer name and contact email should match what you want players to see.
-- Keep PiOS compatibility at `No` unless the project actually meets PiOS requirements.
-- PiNet subdomain and Ecosystem listing are separate from Testnet visibility; leave PiNet blank for this beta.
+## Ecosystem Listing Application
 
-Before switching Testnet visibility to Public, test in Pi Browser with another Pi account on iPhone and Android: sign in, complete a block and boss/bonus cycle, collect a power-up, resume after app switching, check Rewards and Top 100, and make one allowed Test-Pi weapon purchase from approval through credit. Verify blocked Mainnet Ready items cannot be bought. Open Privacy and Terms through the portal links as well as inside the app. Record device, browser, time and step if the game stalls.
+- [ ] Das hochgeladene Introbild und alle drei Vorschaubilder im Portal kontrollieren.
+- [ ] Kategorie `Games`, öffentlicher Entwicklername und Kontakt-E-Mail prüfen: Diese Angaben sollen so erscheinen, wie du sie den Spielern zeigen möchtest.
+- [ ] **PiOS Compatible?** auf `No` belassen, solange die App die PiOS-Anforderungen nicht nachweislich erfüllt.
+- [ ] Das Feld **PiNet Subdomain** für diese Beta leer lassen. PiNet-Adresse und Ecosystem Listing sind unabhängig von der Sichtbarkeit der Testnet-App.
 
-The Vercel Testnet URL is reachable independently of this Pi visibility control. This Public setting does not change the app's Pi network, make Mainnet payments possible, grant a PiNet URL or approve an Ecosystem listing.
+## Vor dem Umschalten auf Public im Pi Browser testen
+
+Die folgenden Schritte mit einem zweiten Pi-Konto auf **iPhone und Android** durchführen:
+
+- [ ] Anmelden und das Spiel starten.
+- [ ] Einen Block sowie den Ablauf über Boss und Bonusrunde abschließen.
+- [ ] Ein Power-up einsammeln.
+- [ ] Die App wechseln, zurückkehren und prüfen, ob das Spiel weiterläuft.
+- [ ] Rewards und die Top 100 kontrollieren.
+- [ ] Eine freigegebene Waffe mit Test-Pi kaufen: von der Zahlungsfreigabe bis zur Gutschrift im Spiel.
+- [ ] Prüfen, dass Artikel mit `MAINNET READY` nicht gekauft werden können.
+- [ ] Datenschutzerklärung und Nutzungsbedingungen über die Portal-Links und innerhalb des Spiels öffnen.
+- [ ] Falls das Spiel hängen bleibt: Gerät, Browser, Uhrzeit und den letzten Handlungsschritt notieren.
+
+## Was die Einstellung Public bewirkt
+
+Die Vercel-Testnet-Adresse ist unabhängig von dieser Pi-Sichtbarkeitseinstellung erreichbar. `Public` ändert das Netzwerk der App nicht, aktiviert keine Mainnet-Zahlungen, vergibt keine PiNet-Adresse und genehmigt keine Aufnahme ins Ecosystem Listing.
