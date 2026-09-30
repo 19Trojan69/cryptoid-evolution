@@ -1,0 +1,13 @@
+Power-up pickup effects are adapted from Kenney's Sci-Fi Sounds (2020)
+and Digital Audio (2012) packs. Both packs are licensed Creative Commons Zero (CC0).
+https://kenney.nl/assets/sci-fi-sounds
+https://kenney.nl/assets/digital-audio
+
+pickup-shield.mp3: forceField_000.ogg (Sci-Fi Sounds)
+pickup-overdrive.mp3: phaseJump1.ogg (Digital Audio)
+pickup-weapon.mp3: powerUp1.ogg (Digital Audio)
+pickup-rapid.mp3: phaserUp1.ogg (Digital Audio)
+pickup-bomb.mp3: lowThreeTone.ogg (Digital Audio)
+pickup-emp.mp3: zapThreeToneUp.ogg (Digital Audio)
+
+The files were converted to MP3 and gain adjusted for gameplay.

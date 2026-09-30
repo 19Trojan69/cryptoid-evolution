@@ -1,9 +1,14 @@
 import { readEffectsVolume } from "./musicPreferences.ts";
+import type { PowerUpType } from "./powerUps.ts";
 
 export type GameSound = "laser" | "enemyHit" | "explosion" | "collision" | "playerDestroy" | "shield" | "pickup" | "boost" | "boss" | "bossDestroy" | "nova" | "emp";
 
-const sampleNames = ["shot-single", "shot-twin", "shot-rapid", "shot-triple", "shot-plasma", "enemy-hit", "enemy-destroy", "enemy-destroy-alt", "player-collision", "shield", "boost", "boss-warning-siren", "boss-destroy", "boss-destroy-v3"] as const;
+const sampleNames = ["shot-single", "shot-twin", "shot-rapid", "shot-triple", "shot-plasma", "enemy-hit", "enemy-destroy", "enemy-destroy-alt", "player-collision", "shield", "boost", "boss-warning-siren", "boss-destroy", "boss-destroy-v3", "pickup-shield", "pickup-overdrive", "pickup-weapon", "pickup-rapid", "pickup-bomb", "pickup-emp"] as const;
 type SampleName = typeof sampleNames[number];
+const pickupSamples: Record<PowerUpType, SampleName> = {
+  shield: "pickup-shield", overdrive: "pickup-overdrive", weapon: "pickup-weapon",
+  rapid: "pickup-rapid", bomb: "pickup-bomb", emp: "pickup-emp",
+};
 
 // Calibrated from the source files' average levels: one-off effects share a
 // common level, while frequently repeated shots sit slightly lower.
@@ -23,6 +28,12 @@ const sampleGains: Record<SampleName, number> = {
   "boss-destroy": .107,
   // Long, deeper boss impact with enough presence to carry on phone speakers.
   "boss-destroy-v3": .9,
+  "pickup-shield": .8,
+  "pickup-overdrive": .8,
+  "pickup-weapon": .8,
+  "pickup-rapid": .8,
+  "pickup-bomb": .8,
+  "pickup-emp": .8,
 };
 
 // Game effects only; audio starts after a player gesture on browsers that require one.
@@ -94,6 +105,10 @@ export class GameAudio {
     oscillator.connect(envelope).connect(this.effectsBus!);
     oscillator.start(at);
     oscillator.stop(at + duration + .01);
+  }
+
+  playPickup(type: PowerUpType) {
+    if (!this.sample(pickupSamples[type])) this.play("pickup");
   }
 
   play(sound: GameSound, weaponLevel = 1) {
