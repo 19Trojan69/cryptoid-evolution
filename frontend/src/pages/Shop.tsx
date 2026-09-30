@@ -45,6 +45,7 @@ const shopTabs = [
 
 const powerTypeForOffer = (offerId: string): PowerUpType => offerId.includes("shield") ? "shield" : offerId.includes("rapid") ? "rapid" : offerId.includes("bomb") ? "bomb" : offerId.includes("emp") ? "emp" : "overdrive";
 const MOTION_STORAGE_KEY = "cryptoid_reduced_effects";
+const TESTNET_PAID_WEAPON_IDS = new Set(["weapon_twin", "weapon_rapid_twin"]);
 const adminFleet: ShipFleet = Object.fromEntries(playerSkins.map(skin => [skin.id, Object.fromEntries(playerColors.map(color => [color.id, 1]))])) as ShipFleet;
 
 const WeaponPreview = ({ offerId, sprite, color }: { offerId: string; sprite: number; color: PlayerColorId }) => {
@@ -510,16 +511,18 @@ const Shop = () => {
 
       {(shopView === "weapons" || shopView === "powers") && <section className="upgrade-section" aria-labelledby="upgrade-heading">
         <div className="section-heading"><div><p className="eyebrow">{t('POWER LAB')}</p><h2 id="upgrade-heading">{t('Weapons and start power-ups')}</h2></div><span className="section-line" /></div>
-        <p className="testnet-shop-notice">Schüsse: Test-Pi. MAINNET READY = hier noch gesperrt.</p>
-        <p>Der Standardlaser ist kostenlos. Mit Test-Pi gekaufte Waffen bleiben freigeschaltet und werden erst während der Mission über den Waffen-Button aktiviert. Einmal aktiviert läuft die 2-Minuten-Zeit dieser Waffe. Bei Pause und während des Respawns wird sie angehalten. Im Spiel gesammelte Power-ups funktionieren weiterhin.</p>
+        <p className="testnet-shop-notice">Testnet: Doppellaser und Schneller Doppellaser mit Test-Pi. Dreifachlaser und Plasma = MAINNET READY / GESPERRT.</p>
+        <p>Der Standardlaser ist kostenlos. Gekaufte Testnet-Waffen werden erst während der Mission über den Waffen-Button aktiviert und laufen zwei Minuten. Dreifachlaser und Plasma können im Testnet nur über eingesammelte Waffen-Power-ups erreicht werden.</p>
         {([shopView === "weapons" ? "weapon" : "power"] as const).map(kind => <div key={kind} className="hangar-offers"><h3>{t(kind === "weapon" ? "Time-limited weapons" : "One-mission start bonuses")}</h3><div className="hangar-offer-grid">
           {offers.filter(offer => offer.kind === kind).map(offer => {
             const count = inventory?.consumables.find(item => item.id === offer.id)?.count ?? 0;
-            const owned = kind === "weapon" ? inventory?.ownedWeapons.includes(offer.id) : count > 0;
+            const testnetWeaponEnabled = kind !== "weapon" || TESTNET_PAID_WEAPON_IDS.has(offer.id);
+            const owned = kind === "weapon" ? testnetWeaponEnabled && inventory?.ownedWeapons.includes(offer.id) : count > 0;
             const selected = kind === "weapon" ? false : inventory?.selectedPower === offer.id;
-            return <article key={offer.id} className={`hangar-offer hangar-offer-${kind}${selected ? " hangar-offer-selected" : ""}`}>{kind === "weapon" ? <WeaponPreview offerId={offer.id} sprite={selectedShip().skin.sprite} color={selectedShip().color.id} /> : <PowerPreview offerId={offer.id} />}<h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span>{kind === "weapon" ? `${t("2 minutes after activation")} · ${offer.pricePi} Test-Pi` : "MAINNET READY"}</span><strong>{selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : "IM SPIEL VERFÜGBAR" : kind === "power" ? "GESPERRT" : t("NOT OWNED")}</strong><div>
+            const lockedWeapon = kind === "weapon" && !testnetWeaponEnabled;
+            return <article key={offer.id} className={`hangar-offer hangar-offer-${kind}${selected ? " hangar-offer-selected" : ""}`}>{kind === "weapon" ? <WeaponPreview offerId={offer.id} sprite={selectedShip().skin.sprite} color={selectedShip().color.id} /> : <PowerPreview offerId={offer.id} />}<h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span>{lockedWeapon ? "MAINNET READY" : kind === "weapon" ? `${t("2 minutes after activation")} · ${offer.pricePi} Test-Pi` : "MAINNET READY"}</span><strong>{lockedWeapon ? "GESPERRT" : selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : "IM SPIEL VERFÜGBAR" : kind === "power" ? "GESPERRT" : t("NOT OWNED")}</strong>{lockedWeapon && <p className="testnet-shop-notice">Im Testnet nur als eingesammeltes Waffen-Power-up verfügbar.</p>}<div>
               {owned && kind === "power" ? <button className="button button-secondary" type="button" disabled={Boolean(selected)} onClick={() => equip(null, offer.id)}>{t(selected ? "Selected" : "Equip for next mission")}</button> : null}
-              {!adminMode && kind === "weapon" && !owned && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady} onClick={() => orderProduct(`Cryptoid ${offer.name} · 2 minutes after activation · Test-Pi`, offer.pricePi, { productId: offer.id }, () => { setLoadoutMessage(`${offer.name} ${t("purchase confirmed.")}`); void refreshInventory(); })}>Mit Test-Pi kaufen</button>}
+              {!adminMode && kind === "weapon" && !lockedWeapon && !owned && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady} onClick={() => orderProduct(`Cryptoid ${offer.name} · 2 minutes after activation · Test-Pi`, offer.pricePi, { productId: offer.id }, () => { setLoadoutMessage(`${offer.name} ${t("purchase confirmed.")}`); void refreshInventory(); })}>Mit Test-Pi kaufen</button>}
             </div></article>;
           })}
         </div></div>)}

@@ -1,11 +1,13 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { hangarCatalog } from "./hangarCatalog.ts";
-import { testPiPurchaseAllowed } from "./paymentPolicy.ts";
+import { isTestnetWeaponPurchaseEnabled, testPiPurchaseAllowed } from "./paymentPolicy.ts";
 
-test("only weapon shots on Pi Testnet can enter approval and completion", () => {
+test("only Twin and Rapid Twin can be purchased on Pi Testnet", () => {
   for (const offer of hangarCatalog) {
-    assert.equal(testPiPurchaseAllowed(offer, "Pi Testnet"), offer.kind === "weapon", offer.id);
+    const allowed = offer.id === "weapon_twin" || offer.id === "weapon_rapid_twin";
+    assert.equal(isTestnetWeaponPurchaseEnabled(offer), allowed, offer.id);
+    assert.equal(testPiPurchaseAllowed(offer, "Pi Testnet"), allowed, offer.id);
     assert.equal(testPiPurchaseAllowed(offer, "Pi Network"), false, offer.id);
   }
   assert.equal(testPiPurchaseAllowed(undefined, "Pi Testnet"), false);
