@@ -16,6 +16,7 @@ export const resolveLocale = (preferred: readonly string[], override?: string | 
 };
 const translations: Partial<Record<Exclude<Locale, "en">, Record<string, string>>> = {
   de: {
+    "Blocks the next hit":"Blockt den nächsten Treffer", "Double shot damage":"Doppelter Schussschaden", "Faster automatic fire":"Schnelleres Dauerfeuer", "Clears enemies and shots":"Entfernt Gegner und Geschosse", "Freezes enemies for 7s":"Stoppt Gegner für 7 Sek.", "Active weapon":"Aktive Waffe", "Tap to switch weapon. Hold for weapon menu.":"Tippen: Waffe wechseln. Halten: Auswahl öffnen.", "Base":"Basis", "Locked":"Gesperrt", "Used":"Verbraucht", "Available":"Verfügbar",
     "Find a ship":"Raumschiff finden", "Search ship name":"Nach Raumschiff suchen", "Show ships":"Raumschiffliste öffnen", "Available ship stages":"Verfügbare Raumschiffe und Stufen", "Open for variants and levels":"Öffnen für weitere Varianten und Level", "Show standard ship":"Standardschiff anzeigen", "Requires Stage 2":"Stufe 2 erforderlich", "How to earn Shards":"So verdienst du Shards", "Shield & protection":"Schild und Schutz", "No matching ships.":"Keine passenden Raumschiffe.", "Choose color & buy":"Farbe wählen & kaufen",
     "STANDARD":"STANDARD", "ADVANCED":"FORTGESCHRITTEN", "ELITE":"ELITE", "Choose a color below":"Unten Farbe wählen",
     "Choose any ship to see all three stages, firepower and protection. Standard costs Shards; upgrades cost Pi.":"Wähle eines der 20 Raumschiffe. Du siehst sofort alle drei Stufen mit Feuerkraft und Schutz. Die Standardversion kostet Shards, die Upgrades Pi.",
@@ -154,7 +155,7 @@ const homeMusicTranslations: Partial<Record<Locale, Record<string, string>>> = {
   th: { "Music on":"เปิดเพลง", "Music off":"ปิดเพลง", "Tap for music":"แตะเพื่อฟังเพลง" },
 };
 const hudTranslations: Partial<Record<Locale, Record<string, string>>> = {
-  de: { "Weapon level":"Waffenstufe", "Game level":"Spiellevel", "FORMATION CLEARED":"FORMATION BESIEGT", "Your current mission will end. Your records will be saved locally.":"Die aktuelle Mission endet. Deine Rekorde werden lokal gespeichert." }, es: { "Weapon level":"Nivel de arma", "Game level":"Nivel de juego" }, fr: { "Weapon level":"Niveau d’arme", "Game level":"Niveau de jeu" },
+  de: { "Game level":"Spiellevel", "FORMATION CLEARED":"FORMATION BESIEGT", "Your current mission will end. Your records will be saved locally.":"Die aktuelle Mission endet. Deine Rekorde werden lokal gespeichert." }, es: { "Weapon level":"Nivel de arma", "Game level":"Nivel de juego" }, fr: { "Weapon level":"Niveau d’arme", "Game level":"Niveau de jeu" },
   pt: { "Weapon level":"Nível da arma", "Game level":"Nível do jogo" }, it: { "Weapon level":"Livello arma", "Game level":"Livello gioco" }, pl: { "Weapon level":"Poziom broni", "Game level":"Poziom gry" },
   tr: { "Weapon level":"Silah seviyesi", "Game level":"Oyun seviyesi" }, ru: { "Weapon level":"Уровень оружия", "Game level":"Уровень игры" }, hr: { "Weapon level":"Razina oružja", "Game level":"Razina igre" },
   cs: { "Weapon level":"Úroveň zbraně", "Game level":"Úroveň hry" }, sk: { "Weapon level":"Úroveň zbrane", "Game level":"Úroveň hry" }, hu: { "Weapon level":"Fegyverszint", "Game level":"Játékszint" },
