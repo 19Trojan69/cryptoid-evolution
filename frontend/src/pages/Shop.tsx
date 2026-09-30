@@ -284,7 +284,7 @@ const Shop = () => {
     void signIn();
   }, [signIn]);
 
-  const { orderProduct, isLoading } = usePayments({
+  const { orderProduct, isLoading, paymentDiagnostic } = usePayments({
     isAuthenticated,
     onRequireAuth: requireAuth,
   });
@@ -528,6 +528,7 @@ const Shop = () => {
         </div></div>}
         {inventory?.equippedWeapon && <button className="text-button" type="button" onClick={() => equip(null, inventory.selectedPower)}>{t('Use free standard laser')}</button>}
         {inventory?.selectedPower && <button className="text-button" type="button" onClick={() => equip(inventory.equippedWeapon, null)}>{t('Save bonus for a later mission')}</button>}
+        {paymentDiagnostic && <p className="testnet-shop-notice" role="alert"><strong>Zahlungsdiagnose:</strong> {paymentDiagnostic}</p>}
         {loadoutMessage && <p role="status">{loadoutMessage}</p>}
       </section>}
           </div>
