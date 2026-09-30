@@ -166,3 +166,40 @@ test("effects remain recoverable when the initial fullscreen audio resume never 
     globalThis.AudioContext = previous;
   }
 });
+
+test("mobile effects decode no more than three samples concurrently", async () => {
+  const previous = { AudioContext: globalThis.AudioContext, fetch: globalThis.fetch };
+  let active = 0;
+  let maximum = 0;
+  let decoded = 0;
+  const releases = [];
+  globalThis.fetch = async () => ({ ok: true, arrayBuffer: async () => new ArrayBuffer(0) });
+  globalThis.AudioContext = class {
+    state = "running";
+    destination = {};
+    async resume() {}
+    async close() {}
+    decodeAudioData() {
+      active++;
+      maximum = Math.max(maximum, active);
+      return new Promise(resolve => releases.push(() => { active--; decoded++; resolve({ duration: 1 }); }));
+    }
+    createGain() { return { gain: { value: 1 }, connect: output => output }; }
+  };
+  const audio = new GameAudio();
+  try {
+    assert.equal(await audio.start(), true);
+    assert.equal(maximum, 3);
+    while (decoded < 20) {
+      const release = releases.shift();
+      if (release) release();
+      await new Promise(resolve => setImmediate(resolve));
+    }
+    assert.equal(decoded, 20);
+    assert.equal(maximum, 3);
+  } finally {
+    audio.close();
+    globalThis.AudioContext = previous.AudioContext;
+    globalThis.fetch = previous.fetch;
+  }
+});

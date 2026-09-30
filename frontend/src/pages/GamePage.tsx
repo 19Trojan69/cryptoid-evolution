@@ -339,6 +339,8 @@ const GamePage = () => {
   const animationRef = useRef<number | null>(null);
   const lastFrameRef = useRef(0);
   const lastPaintRef = useRef(0);
+  const slowFramesRef = useRef(0);
+  const backgroundHiddenAtRef = useRef(0);
   const spawnTimerRef = useRef(0);
   const sectionElapsedRef = useRef(0);
   const clearTimerRef = useRef(0);
@@ -498,7 +500,7 @@ const GamePage = () => {
     const track = takeHandoffGameMusic() ?? new MusicPlayer("/audio/battle-orbit.mp3", readMusicVolume());
     musicRef.current = track;
     const resume = () => {
-      if (document.visibilityState === "hidden" || !["playing", "game-over", "victory"].includes(stateRef.current.status)) return;
+      if (document.visibilityState === "hidden" || (backgroundHiddenAtRef.current && Date.now() - backgroundHiddenAtRef.current > 1_000) || !["playing", "game-over", "victory"].includes(stateRef.current.status)) return;
       void track.play().then(ok => { if (ok && (readEffectsVolume() === 0 || soundRef.current?.running)) setAudioNeedsTap(false); });
     };
     document.addEventListener("pointerdown", resume, true);
@@ -667,25 +669,53 @@ const GamePage = () => {
     };
     const keyUp = (event: KeyboardEvent) => keysRef.current.delete(event.code);
     const blur = () => keysRef.current.clear();
+    const pauseAfterBackground = () => {
+      if (document.visibilityState === "hidden") {
+        if (!backgroundHiddenAtRef.current) backgroundHiddenAtRef.current = Date.now();
+        keysRef.current.clear();
+        pointerRef.current = null;
+        touchOriginRef.current = null;
+        return;
+      }
+      if (backgroundHiddenAtRef.current && Date.now() - backgroundHiddenAtRef.current > 1_000 && stateRef.current.status === "playing") {
+        stateRef.current.status = "paused";
+        soundRef.current?.setPaused(true);
+        musicRef.current?.pause();
+        setGame({ ...stateRef.current });
+      }
+      backgroundHiddenAtRef.current = 0;
+      lastFrameRef.current = 0;
+      slowFramesRef.current = 0;
+    };
+    const markPageHidden = () => {
+      if (!backgroundHiddenAtRef.current) backgroundHiddenAtRef.current = Date.now();
+      keysRef.current.clear();
+      pointerRef.current = null;
+      touchOriginRef.current = null;
+    };
     window.addEventListener("keydown", keyDown);
     const resumeAudio = () => {
-      if (document.visibilityState === "hidden" || stateRef.current.status !== "playing") return;
+      if (document.visibilityState === "hidden" || (backgroundHiddenAtRef.current && Date.now() - backgroundHiddenAtRef.current > 1_000) || stateRef.current.status !== "playing") return;
       retryAudio();
     };
     document.addEventListener("pointerup", resumeAudio, true);
     document.addEventListener("touchend", resumeAudio, true);
     document.addEventListener("visibilitychange", resumeAudio);
+    document.addEventListener("visibilitychange", pauseAfterBackground);
+    window.addEventListener("pagehide", markPageHidden);
     window.addEventListener("pageshow", resumeAudio);
+    window.addEventListener("pageshow", pauseAfterBackground);
     window.addEventListener("focus", resumeAudio);
     window.addEventListener("keyup", keyUp);
     window.addEventListener("blur", blur);
-    return () => { window.removeEventListener("keydown", keyDown); window.removeEventListener("keyup", keyUp); window.removeEventListener("blur", blur); document.removeEventListener("pointerup", resumeAudio, true); document.removeEventListener("touchend", resumeAudio, true); document.removeEventListener("visibilitychange", resumeAudio); window.removeEventListener("pageshow", resumeAudio); window.removeEventListener("focus", resumeAudio); };
+    return () => { window.removeEventListener("keydown", keyDown); window.removeEventListener("keyup", keyUp); window.removeEventListener("blur", blur); document.removeEventListener("pointerup", resumeAudio, true); document.removeEventListener("touchend", resumeAudio, true); document.removeEventListener("visibilitychange", resumeAudio); document.removeEventListener("visibilitychange", pauseAfterBackground); window.removeEventListener("pagehide", markPageHidden); window.removeEventListener("pageshow", resumeAudio); window.removeEventListener("pageshow", pauseAfterBackground); window.removeEventListener("focus", resumeAudio); };
   }, []);
 
   useEffect(() => {
     const loop = (time: number) => {
       const state = stateRef.current;
-      const delta = Math.min(34, time - (lastFrameRef.current || time));
+      const frameGap = time - (lastFrameRef.current || time);
+      const delta = Math.min(34, frameGap);
       lastFrameRef.current = time;
       if (state.status === "playing") {
         const field = fieldRef.current;
@@ -1086,7 +1116,12 @@ const GamePage = () => {
           }, GAME_OVER_REVEAL_MS);
         }
         // Desktop/tablet motion stays at display cadence; compact phones limit paints.
-        const paintInterval = width > 700 ? 16 : 32;
+        // When a compact phone is falling behind, reduce React scene paints
+        // while keeping simulation and direct ship movement at RAF cadence.
+        slowFramesRef.current = width > 700 ? 0 : frameGap > 48
+          ? Math.min(12, slowFramesRef.current + 2)
+          : Math.max(0, slowFramesRef.current - 1);
+        const paintInterval = width > 700 ? 16 : slowFramesRef.current >= 6 ? 50 : 32;
         if (damageTaken || time - lastPaintRef.current >= paintInterval || state.phase !== previousPhase || state.status !== "playing") {
           lastPaintRef.current = time;
           setGame({ ...state, boss: state.boss ? { ...state.boss } : null, asteroids: [...state.asteroids], bonusTargets: [...state.bonusTargets], shots: [...state.shots], enemyShots: [...state.enemyShots], effects: [...state.effects], powerUps: [...state.powerUps] });
@@ -1272,6 +1307,7 @@ const GamePage = () => {
     lastPlayerRef.current = stateRef.current.player;
     lastFrameRef.current = 0;
     lastPaintRef.current = 0;
+    slowFramesRef.current = 0;
     setGame(stateRef.current);
     if (stateRef.current.status === "loading") void activateLoadout();
   };
