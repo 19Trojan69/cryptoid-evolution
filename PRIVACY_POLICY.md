@@ -1,6 +1,6 @@
 # Cryptoid Evolution – Privacy Policy / Datenschutzerklärung
 
-Effective date / Stand: 25 September 2026 · Version 0.1
+Effective date / Stand: 30 September 2026 · Version 0.2
 
 ## English
 
@@ -14,7 +14,7 @@ Cryptoid Evolution is an independent application and is not an official Pi Netwo
 
 You can play as a guest. Guest progress, settings, selected ships, colours, Shards and local records are stored in your browser and remain on that device unless you delete browser data.
 
-If you sign in with Pi, the app receives and processes the Pi user identifier, username, account roles made available by Pi and the access token required to verify the session. The app stores a server-side session and a session cookie. Depending on your use, the app also stores your best score, selected loadout and purchased inventory.
+If you sign in with Pi, the app receives and processes the Pi user identifier, username, account roles made available by Pi and the access token required to verify the session. The app stores a server-side session and a session cookie. Depending on your use, the app also stores your best score, selected loadout, purchased inventory, earned rewards and service rank. Testnet rewards and Mainnet rewards are kept separately.
 
 For Pi payments, the app processes the payment identifier, Pi user identifier, product, amount, payment status, transaction identifier and relevant timestamps. Secret wallet passphrases and passwords are never requested by Cryptoid Evolution.
 
@@ -26,7 +26,7 @@ Data is processed to authenticate users, maintain sessions, provide the game and
 
 ### 4. Public leaderboard
 
-If a signed-in player submits a valid score, the Pi username and highest score may appear publicly in the Top 100 leaderboard. Do not use a Pi username that you do not want displayed in this context.
+If a signed-in player submits a valid score, the Pi username, highest score and current service rank may appear publicly in the Top 100 leaderboard. Do not use a Pi username that you do not want displayed in this context.
 
 ### 5. Recipients and international processing
 
@@ -58,7 +58,7 @@ Cryptoid Evolution ist eine unabhängige Anwendung und keine offizielle Pi-Netwo
 
 Das Spiel kann als Gast verwendet werden. Gastfortschritt, Einstellungen, ausgewählte Schiffe und Farben, Shards sowie lokale Rekorde werden im Browser gespeichert und verbleiben auf diesem Gerät, bis die Browserdaten gelöscht werden.
 
-Bei der Anmeldung mit Pi verarbeitet die App die Pi-Benutzerkennung, den Benutzernamen, von Pi bereitgestellte Kontorollen sowie das zur Sitzungsprüfung erforderliche Zugriffstoken. Zusätzlich werden eine serverseitige Sitzung und ein Sitzungscookie verwendet. Abhängig von der Nutzung speichert die App außerdem den Bestwert, die ausgewählte Ausrüstung und gekaufte Spielinhalte.
+Bei der Anmeldung mit Pi verarbeitet die App die Pi-Benutzerkennung, den Benutzernamen, von Pi bereitgestellte Kontorollen sowie das zur Sitzungsprüfung erforderliche Zugriffstoken. Zusätzlich werden eine serverseitige Sitzung und ein Sitzungscookie verwendet. Abhängig von der Nutzung speichert die App außerdem den Bestwert, die ausgewählte Ausrüstung, gekaufte Spielinhalte, erspielte Belohnungen und den Dienstgrad. Testnet- und Mainnet-Belohnungen werden getrennt geführt.
 
 Bei Pi-Zahlungen werden Zahlungskennung, Pi-Benutzerkennung, Produkt, Betrag, Zahlungsstatus, Transaktionskennung und zugehörige Zeitpunkte verarbeitet. Wallet-Passphrasen und Passwörter werden von Cryptoid Evolution niemals angefordert.
 
@@ -70,7 +70,7 @@ Die Datenverarbeitung dient der Anmeldung, Sitzungsverwaltung, Bereitstellung de
 
 ### 4. Öffentliche Bestenliste
 
-Übermittelt ein angemeldeter Spieler einen gültigen Punktestand, können sein Pi-Benutzername und sein höchster Punktestand öffentlich in der Top-100-Bestenliste erscheinen.
+Übermittelt ein angemeldeter Spieler einen gültigen Punktestand, können sein Pi-Benutzername, sein höchster Punktestand und sein aktueller Dienstgrad öffentlich in der Top-100-Bestenliste erscheinen.
 
 ### 5. Empfänger und internationale Verarbeitung
 
