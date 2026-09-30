@@ -30,10 +30,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 .home-music-toggle::after { position: absolute; top: 0; left: 12%; right: 12%; height: 1px; background: linear-gradient(90deg, transparent, rgba(213, 253, 255, .9), transparent); content: ''; pointer-events: none; }
 .home-music-glyph { display: grid; place-items: center; width: 34px; height: 34px; background: rgba(255,255,255,.06); box-shadow: inset 0 0 8px rgba(255,255,255,.12); transition: transform .16s ease, box-shadow .16s ease, background .16s ease; }
 .home-music-glyph svg { display: block; width: 23px; height: 23px; }
-.home-music-toggle b { overflow: hidden; font: 600 11px/1.25 'Space Grotesk', sans-serif; letter-spacing: .045em; text-overflow: ellipsis; white-space: nowrap; }
-.home-music-toggle[data-state="playing"] { border-color: rgba(102, 237, 179, .75); background: linear-gradient(135deg, rgba(18, 88, 90, .95), rgba(20, 49, 72, .96)); color: #a8f9cf; box-shadow: inset 0 -2px #65e4d0, 0 0 14px rgba(67, 221, 203, .2); }
-.home-music-toggle[data-state="tap"] { display: flex; gap: 5px; width: auto; max-width: min(180px, 45vw); padding: 0 8px; border-color: rgba(255, 209, 112, .9); color: #ffe6a9; }
-.home-music-hint { font: 700 11px/1.2 'Space Grotesk', sans-serif; white-space: nowrap; }
+.home-music-toggle[data-state="on"] { border-color: rgba(102, 237, 179, .75); background: linear-gradient(135deg, rgba(18, 88, 90, .95), rgba(20, 49, 72, .96)); color: #a8f9cf; box-shadow: inset 0 -2px #65e4d0, 0 0 14px rgba(67, 221, 203, .2); }
 
 .home-music-toggle:hover { transform: translateY(-2px); filter: brightness(1.1); }
 .home-music-toggle:hover .home-music-glyph { transform: scale(1.08); box-shadow: inset 0 0 11px rgba(255,255,255,.16), 0 0 12px currentColor; background: rgba(255,255,255,.1); }
