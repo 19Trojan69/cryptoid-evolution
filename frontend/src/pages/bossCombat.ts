@@ -66,3 +66,6 @@ export const bossFireSite = (boss: SectorBoss, x: number, y: number, existing: r
 };
 
 export const bossExplosionSize = (config: BossConfig, shipWidth: number) => Math.round(shipWidth * config.explosionScale);
+
+export const bossFallTargetY = (boss: Pick<SectorBoss, "y" | "height">, fieldHeight: number) =>
+  Math.min(fieldHeight * .58, Math.max(fieldHeight * .5, boss.y + boss.height * .3));

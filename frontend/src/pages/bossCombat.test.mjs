@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { bossManifest, bossForLevel } from "./bossManifest.ts";
-import { bossAnchorPosition, bossExplosionSize, bossFireSite, bossHullContains, bossVolley } from "./bossCombat.ts";
+import { bossAnchorPosition, bossExplosionSize, bossFallTargetY, bossFireSite, bossHullContains, bossVolley } from "./bossCombat.ts";
 import { createSectorBoss, moveSectorBoss, BOSS_ENTRY_MS } from "./sectorBoss.ts";
 
 test("fifty distinct art files, assigned to the fifty levels with per-hull coordinates", () => {
@@ -44,6 +44,9 @@ test("phone and desktop bosses remain inside their safe region", () => {
     assert.ok(boss.x - boss.width / 2 >= 12 && boss.x + boss.width / 2 <= width - 12);
     assert.ok(boss.y + boss.height / 2 < height * .5);
     assert.ok(bossExplosionSize(config, width) > 0);
+    assert.ok(bossFallTargetY(boss, height) >= height * .5);
+    assert.ok(bossFallTargetY(boss, height) <= height * .58);
+    assert.ok(bossFallTargetY(boss, height) > boss.y);
   }
   assert.ok(bossExplosionSize(bossManifest[49], 390) > bossExplosionSize(bossManifest[0], 390));
 });

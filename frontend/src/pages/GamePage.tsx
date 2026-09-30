@@ -29,7 +29,7 @@ import { leaveGameFullscreen, requestGameFullscreen } from "./gameFullscreen";
 import { levelDifficulty } from "./levelDifficulty";
 import { balanceAfterMission, BONUS_TARGET_SHARD_REWARD, bossPoints, bossShardReward, creditDefeat, creditReward } from "./shardEarnings";
 import { addPersistentHullFire, hullFireAtImpact, spriteFireSites, type HullFire } from "./hullFires";
-import { bossExplosionSize, bossFireSite, bossHullContains, bossVolley } from "./bossCombat";
+import { bossExplosionSize, bossFallTargetY, bossFireSite, bossHullContains, bossVolley } from "./bossCombat";
 import { awardBlock, awardBonusMedal, awardBossSticker, awardChain, emptyRewardProgress, reachLevel, rewardRank, type RewardProgress } from "./rewardProgress";
 
 const BEST_SCORE_KEY = "cryptoid_best_score";
@@ -103,12 +103,18 @@ type Effect = {
   id: number;
   x: number;
   y: number;
-  kind: "shield" | "explosion" | "boss-explosion" | "player-crash" | "player-explosion" | "shatter" | "bomb-wave" | "emp-wave";
+  kind: "shield" | "explosion" | "boss-fall" | "boss-explosion" | "player-crash" | "player-explosion" | "shatter" | "bomb-wave" | "emp-wave";
   startedAt: number;
   target?: "player";
   sprite?: number;
   debrisSize?: number;
   bossImage?: string;
+  bossHeight?: number;
+  bossShipWidth?: number;
+  fieldWidth?: number;
+  fieldHeight?: number;
+  fallDistance?: number;
+  fireSites?: readonly (readonly [number, number])[];
   explosionStages?: number;
   finalDelayMs?: number;
   debrisRotation?: number;
@@ -246,10 +252,10 @@ const engineTrails = (sprite: number, className: "exhaust" | "player-engine") =>
   shipNozzleStyles(sprite).map((style, index) => <span key={`${className}-${index}`} className={className} style={style} />);
 
 const scatteredPieces = (effect: Effect, count: number, sprite: number) => {
-  const columns = count === 14 ? 4 : count === 8 ? 4 : 2;
-  const rows = count === 14 ? 4 : 2;
-  const targetColumns = count === 14 ? 7 : columns;
-  const targetRows = 2;
+  const columns = count === 28 ? 7 : count === 8 ? 4 : 2;
+  const rows = count === 28 ? 4 : 2;
+  const targetColumns = count === 28 ? 7 : columns;
+  const targetRows = count === 28 ? 4 : 2;
   let seed = Math.imul(effect.id, 0x9e3779b1) >>> 0;
   const random = () => {
     seed = (Math.imul(1664525, seed) + 1013904223) >>> 0;
@@ -274,8 +280,8 @@ const scatteredPieces = (effect: Effect, count: number, sprite: number) => {
     const spin = (random() > .5 ? 1 : -1) * (180 + Math.floor(random() * 440));
     const pieceStyle = {
       clipPath: shape,
-      "--fragment-x": `calc(${destinationX.toFixed(2)}vw - ${effect.x}px)`,
-      "--fragment-y": `calc(${destinationY.toFixed(2)}dvh - ${effect.y}px)`,
+      "--fragment-x": effect.kind === "boss-explosion" ? `${(destinationX * (effect.fieldWidth ?? 800) / 100 - effect.x - ((x + .5) / columns - .5) * (effect.bossShipWidth ?? 240)).toFixed(1)}px` : `calc(${destinationX.toFixed(2)}vw - ${effect.x}px)`,
+      "--fragment-y": effect.kind === "boss-explosion" ? `${(destinationY * (effect.fieldHeight ?? 700) / 100 - effect.y - ((y + .5) / rows - .5) * (effect.bossHeight ?? 100)).toFixed(1)}px` : `calc(${destinationY.toFixed(2)}dvh - ${effect.y}px)`,
       "--fragment-spin": `${spin}deg`,
       "--fragment-delay": `${Math.floor(random() * 180)}ms`,
     } as CSSProperties;
@@ -288,10 +294,11 @@ const scatteredPieces = (effect: Effect, count: number, sprite: number) => {
 const shipDebris = (effect: Effect) => {
   const sprite = effect.sprite;
   const style = {
-    "--debris-size": `${effect.debrisSize ?? 58}px`,
+    "--debris-size": `${effect.kind === "boss-explosion" ? effect.bossShipWidth ?? effect.debrisSize ?? 240 : effect.debrisSize ?? 58}px`,
+    "--debris-height": `${effect.bossHeight ?? 100}px`,
     "--debris-rotation": `${180 + (effect.debrisRotation ?? 0)}deg`,
   } as CSSProperties;
-  if (effect.kind === "boss-explosion") return <div className="ship-debris scattered-debris boss-debris-field" style={style} aria-hidden="true">{scatteredPieces(effect, 14, 0)}</div>;
+  if (effect.kind === "boss-explosion") return <div className="ship-debris scattered-debris boss-debris-field" style={style} aria-hidden="true">{scatteredPieces(effect, 28, 0)}</div>;
   if (sprite === undefined) return null;
   // A collision can damage the player without destroying the ship.
   if (effect.kind === "player-crash") {
@@ -305,11 +312,14 @@ const shipDebris = (effect: Effect) => {
   </div>;
 };
 
-const bossFireBursts = (effect: Effect) => effect.kind === "boss-explosion" ? <div className="boss-fire-sequence" aria-hidden="true">{Array.from({ length: effect.explosionStages ?? 2 }, (_, index) => <i key={index} style={{ animationDelay: `${.07 + index * .37}s` }} />)}</div> : null;
+const fallingBoss = (effect: Effect) => <div className="boss-falling-hull" style={{ left: effect.x, top: effect.y, width: effect.bossShipWidth, height: effect.bossHeight, "--boss-fall-distance": `${effect.fallDistance ?? 200}px` } as CSSProperties} aria-hidden="true">
+  <img src={effect.bossImage} alt="" draggable={false} />
+  <div className="boss-fall-bursts">{effect.fireSites?.map(([x, y], index) => <i key={index} style={{ left: `${x}%`, top: `${y}%`, animationDelay: `${index * .22}s` }} />)}</div>
+</div>;
 
 // Effects keep their object identity until they expire. Keep the fragments and
 // their animations mounted instead of rebuilding the entire debris tree on every paint.
-const ImpactEffectView = memo(({ effect }: { effect: Effect }) => <div className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y, ...(effect.kind === "boss-explosion" ? { "--boss-explosion-size": `${effect.debrisSize ?? 240}px`, "--boss-image": `url('${effect.bossImage}')`, "--boss-final-delay": `${effect.finalDelayMs ?? 900}ms` } : {}) } as CSSProperties} aria-hidden="true"><span />{bossFireBursts(effect)}{shipDebris(effect)}</div>);
+const ImpactEffectView = memo(({ effect }: { effect: Effect }) => effect.kind === "boss-fall" ? fallingBoss(effect) : <div className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y, ...(effect.kind === "boss-explosion" ? { "--boss-explosion-size": `${effect.debrisSize ?? 240}px`, "--boss-image": `url('${effect.bossImage}')`, "--boss-final-delay": `${effect.finalDelayMs ?? 1_450}ms` } : {}) } as CSSProperties} aria-hidden="true"><span />{effect.kind === "boss-explosion" && <div className="boss-shockwaves"><i /><i /></div>}{shipDebris(effect)}</div>);
 
 const GamePage = () => {
   const { t } = useLocale();
@@ -561,8 +571,14 @@ const GamePage = () => {
   const destroyBoss = (state: GameState, time: number) => {
     const boss = state.boss;
     if (!boss) return;
-    const finalDelayMs = 250 + boss.config.explosionStages * 350;
-    state.effects.push({ id: nextIdRef.current++, x: boss.x, y: boss.y, kind: "boss-explosion", startedAt: time, debrisSize: bossExplosionSize(boss.config, boss.width), bossImage: boss.config.image, explosionStages: boss.config.explosionStages, finalDelayMs, shipClass: "heavy" });
+    const finalDelayMs = 1_450;
+    const fieldWidth = fieldRef.current?.clientWidth || 800;
+    const fieldHeight = fieldRef.current?.clientHeight || 700;
+    const finalY = bossFallTargetY(boss, fieldHeight);
+    const fireSites = Array.from({ length: 6 }, (_, index) => boss.config.fireSites[Math.floor(index * boss.config.fireSites.length / 6)]);
+    state.effects.push({ id: nextIdRef.current++, x: boss.x, y: boss.y, kind: "boss-fall", startedAt: time, bossShipWidth: boss.width, bossHeight: boss.height, bossImage: boss.config.image, fallDistance: finalY - boss.y, fireSites });
+    state.effects.push({ id: nextIdRef.current++, x: boss.x, y: finalY, kind: "boss-explosion", startedAt: time, debrisSize: bossExplosionSize(boss.config, boss.width), bossShipWidth: boss.width, bossHeight: boss.height, bossImage: boss.config.image, finalDelayMs, fieldWidth, fieldHeight, shipClass: "heavy" });
+    soundRef.current?.play("explosion");
     if (bossDestroyTimerRef.current !== null) window.clearTimeout(bossDestroyTimerRef.current);
     bossDestroyTimerRef.current = window.setTimeout(() => { bossDestroyTimerRef.current = null; soundRef.current?.play("bossDestroy"); }, finalDelayMs);
     startBossVictory(finalDelayMs + 850);
@@ -1034,7 +1050,7 @@ const GamePage = () => {
           });
         }
         if (state.phase === "SECTOR_CLEAR") state.enemyShots = [];
-        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "boss-explosion" ? 4_800 : effect.kind === "player-explosion" ? 2_250 : effect.kind === "player-crash" ? 1_350 : effect.kind === "explosion" || effect.kind === "shatter" ? 2_250 : 390));
+        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "boss-fall" ? 1_600 : effect.kind === "boss-explosion" ? 4_600 : effect.kind === "player-explosion" ? 2_250 : effect.kind === "player-crash" ? 1_350 : effect.kind === "explosion" || effect.kind === "shatter" ? 2_250 : 390));
         if (state.hearts === 0) {
           state.status = "destroying";
           state.enemyShots = [];
@@ -1271,6 +1287,7 @@ const GamePage = () => {
           : game.phase === "SECTOR_CLEAR"
             ? `${t("Block")} ${sectorLabel} ${t("COMPLETE")}`
             : `${t("Block")} ${sectorLabel} / ${BLOCKS_PER_CHAIN}`;
+  const bossDestructionActive = game.encounter === "boss-clear" && game.effects.some(effect => effect.kind === "boss-explosion" && performance.now() - effect.startedAt < 3_150);
 
   return (
     <main className="game-shell" onPointerDownCapture={event => { retryAudio(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
@@ -1290,7 +1307,7 @@ const GamePage = () => {
         {game.encounter === "bonus" && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">{t("BONUS TARGETS")} {game.bonusHits} / {BONUS_TARGET_COUNT} · {t("NO ENEMY FIRE")}</div>}
         
         {game.status === "loading" && <div className="game-overlay"><div className="game-modal"><h1>{startError ? "Admin-Test konnte nicht gestartet werden" : t('Preparing mission')}</h1><p>{startError ? "Bitte die Pi-Sitzung prüfen und erneut versuchen." : t('Checking your saved hangar loadout.')}</p>{startError && <><button type="button" onClick={() => { setStartError(false); void activateLoadout(); }}>Erneut versuchen</button><button type="button" onClick={() => navigate("/")}>Zurück</button></>}</div></div>}
-        {game.status === "playing" && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${game.encounter === "boss-intro" ? " boss-intro-banner" : ""}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite">
+        {game.status === "playing" && !bossDestructionActive && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${game.encounter === "boss-intro" ? " boss-intro-banner" : ""}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite">
           <span>{levelComplete || levelIntro ? sectorName(game.sector) : game.encounter === "bonus" ? game.phase === "SECTOR_CLEAR" ? t("BONUS COMPLETE") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.encounter !== "normal" ? `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.phase === "SECTOR_CLEAR" ? t("BLOCK LINKED") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}`}</span>
           <strong>{transitionHeadline}</strong>
           {game.phase === "SECTOR_INTRO" && game.encounter === "bonus" && <small>{t("HIT THE FLYING TARGETS")}</small>}
