@@ -876,6 +876,11 @@ html[data-motion="reduced"] .boss-debris-piece:nth-child(n+5) { display: none; }
 .weapon-control-wrap { position: relative; display: grid; place-items: center; width: 46px; height: 46px; pointer-events: auto; }
 .weapon-control-wrap::before { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(#f5d889 var(--weapon-progress, 0deg), rgba(245,216,137,.12) 0); content: ''; opacity: 0; -webkit-mask: radial-gradient(circle, transparent 59%, #000 61%); mask: radial-gradient(circle, transparent 59%, #000 61%); pointer-events: none; }
 .weapon-control-wrap[data-active="true"]::before { opacity: .95; }
+.shield-control-wrap { position: relative; display: grid; place-items: center; width: 46px; height: 46px; pointer-events: none; }
+.shield-control-wrap::before { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(#8feeff var(--shield-progress, 0deg), rgba(143,238,255,.12) 0); content: ''; opacity: .96; -webkit-mask: radial-gradient(circle, transparent 59%, #000 61%); mask: radial-gradient(circle, transparent 59%, #000 61%); pointer-events: none; }
+.shield-active-indicator { width: 42px; height: 42px; border-radius: 50%; border-color: rgba(143,238,255,.72); color: #8feeff; background: radial-gradient(circle at 50% 38%, rgba(24,72,88,.96), rgba(8,28,43,.96) 70%); box-shadow: inset 0 0 12px rgba(143,238,255,.09), 0 0 14px rgba(111,228,255,.18); pointer-events: none; }
+.shield-active-indicator small { max-width: 36px; overflow: hidden; font-size: 7px; text-overflow: ellipsis; white-space: nowrap; }
+.shield-active-indicator em { margin-top: 1px; color: #dffcff; font: 700 7px/1 'DM Mono', monospace; font-style: normal; }
 .weapon-cycle { width: 42px; height: 42px; border-radius: 50%; border-color: rgba(245,216,137,.72); color: #f5d889; background: radial-gradient(circle at 50% 38%, rgba(76,58,28,.95), rgba(11,28,43,.96) 70%); box-shadow: inset 0 0 12px rgba(245,216,137,.08), 0 0 14px rgba(245,200,109,.18); }
 .weapon-cycle .weapon-cycle-glyph { font: 700 16px/1 'Oxanium', sans-serif; letter-spacing: -.04em; }
 .weapon-cycle small { max-width: 36px; overflow: hidden; font-size: 7px; text-overflow: ellipsis; white-space: nowrap; }
