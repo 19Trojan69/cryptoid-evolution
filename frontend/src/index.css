@@ -67,15 +67,11 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 .shop-modal .dashboard-grid { max-width: none; padding: 0; }
 .site-header { height: 76px; padding: 0 clamp(20px, 5vw, 76px); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
 .brand-mark { position: relative; display: flex; align-items: center; gap: 11px; flex: none; color: #eff9f4; text-decoration: none; font-size: 12px; font-weight: 600; letter-spacing: .14em; }
-.brand-wolf-logo { display: block; width: clamp(120px, 12vw, 148px); height: auto; max-height: 72px; object-fit: contain; filter: brightness(1.55) contrast(1.06) saturate(1.1) drop-shadow(0 0 7px #55d1de38); animation: wolf-logo-flash 2.5s ease-out both; }
-.brand-mark::before, .brand-mark::after { position: absolute; inset: 0; pointer-events: none; content: ''; }
-.brand-mark::before { z-index: 1; background: linear-gradient(108deg, transparent 38%, #fff5d5aa 47%, #ffffffed 50%, #a8ecff99 53%, transparent 62%); -webkit-mask: url('/trojan-wolf-games.webp') center / 100% 100% no-repeat; mask: url('/trojan-wolf-games.webp') center / 100% 100% no-repeat; opacity: 0; transform: translateX(-120%); animation: wolf-logo-sweep 2.5s ease-in-out both; }
-.brand-mark::after { z-index: 2; background: radial-gradient(circle at 35.5% 40%, #fff 0, #fffbe9 1.3%, #89eaff 2.8%, #68dfff80 4.5%, transparent 9%); opacity: 0; animation: wolf-eye-glint 2.5s ease-out both; }
+.brand-wolf-logo { display: block; width: clamp(120px, 12vw, 148px); height: auto; max-height: 72px; object-fit: contain; filter: brightness(1.55) contrast(1.06) saturate(1.1) drop-shadow(0 0 7px #55d1de38); }
+.brand-mark::after { position: absolute; z-index: 2; inset: 0; pointer-events: none; content: ''; background: radial-gradient(circle at 35.5% 40%, #fff 0, #fffbe9 1.3%, #89eaff 2.8%, #68dfff80 4.5%, transparent 9%); opacity: 0; animation: wolf-eye-glint 8s ease-out infinite; }
 .brand-copyright { position: absolute; z-index: 3; right: -8px; bottom: 4px; color: #f5d99d; font: 700 10px/1 Arial, sans-serif; letter-spacing: 0; text-shadow: 0 0 4px #e6b869; }
-@keyframes wolf-logo-sweep { 0%, 5% { opacity: 0; transform: translateX(-120%); } 12% { opacity: .8; } 57% { opacity: .8; } 64%, 100% { opacity: 0; transform: translateX(120%); } }
-@keyframes wolf-logo-flash { 0%, 58%, 72%, 100% { filter: brightness(1.55) contrast(1.06) saturate(1.1) drop-shadow(0 0 7px #55d1de38); } 64% { filter: brightness(2.05) contrast(1.1) saturate(1.15) drop-shadow(0 0 12px #ffe0a2a8); } }
-@keyframes wolf-eye-glint { 0%, 70%, 100% { opacity: 0; } 78% { opacity: 1; } 88% { opacity: .2; } }
-@media (prefers-reduced-motion: reduce) { .brand-wolf-logo, .brand-mark::before, .brand-mark::after { animation: none; } }
+@keyframes wolf-eye-glint { 0%, 3%, 12%, 100% { opacity: 0; } 6% { opacity: 1; } 9% { opacity: .25; } }
+@media (prefers-reduced-motion: reduce) { .brand-mark::after { animation: none; } }
 .brand-mark b { color: var(--emerald); font-weight: 600; }
 .brand-symbol { display: grid; place-items: center; width: 31px; height: 31px; border: 1px solid var(--cyan); border-radius: 50%; color: var(--cyan); font-size: 16px; letter-spacing: 0; }
 .user-section { display: flex; align-items: center; gap: 10px; }
