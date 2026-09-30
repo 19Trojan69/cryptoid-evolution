@@ -18,6 +18,7 @@ interface Environment {
   port: number;
   session_secret: string;
   pi_api_key: string;
+  pi_testnet_api_key: string;
   platform_api_url: string;
   mongo_host: string;
   mongo_uri: string;
@@ -43,6 +44,7 @@ const env: Environment = {
   port: parseInt(process.env.PORT || "8000"),
   session_secret: process.env.SESSION_SECRET || "This is my session secret",
   pi_api_key: process.env.PI_API_KEY || "",
+  pi_testnet_api_key: process.env.PI_TESTNET_API_KEY || "",
   platform_api_url: process.env.PLATFORM_API_URL || "https://api.minepi.com",
   mongo_host: process.env.MONGO_HOST || "localhost:27017",
   mongo_uri: normalizeMongoUri(process.env.MONGODB_URI),

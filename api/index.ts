@@ -32,6 +32,8 @@ const proxyToProduction = async (req: any, res: any, path: string, requestURL: U
     }
   }
 
+  headers.set("x-cryptoid-app-network", "testnet");
+
   const upstream = await fetch(target, { method: req.method, headers, body, redirect: "manual" });
   upstream.headers.forEach((value, name) => {
     if (!["content-encoding", "content-length", "transfer-encoding", "set-cookie"].includes(name.toLowerCase())) {
