@@ -872,6 +872,26 @@ html[data-motion="reduced"] .boss-debris-piece:nth-child(n+5) { display: none; }
 .edge-action-pickup, .edge-action-rapid { color: #7be6c4; }
 .edge-action-shield { color: #8feeff; }
 .edge-action-overdrive { color: #d7a6ff; }
+.weapon-control-wrap { position: relative; display: grid; place-items: center; width: 46px; height: 46px; pointer-events: auto; }
+.weapon-control-wrap::before { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(#f5d889 var(--weapon-progress, 0deg), rgba(245,216,137,.12) 0); content: ''; opacity: 0; -webkit-mask: radial-gradient(circle, transparent 59%, #000 61%); mask: radial-gradient(circle, transparent 59%, #000 61%); pointer-events: none; }
+.weapon-control-wrap[data-active="true"]::before { opacity: .95; }
+.weapon-cycle { width: 42px; height: 42px; border-radius: 50%; border-color: rgba(245,216,137,.72); color: #f5d889; background: radial-gradient(circle at 50% 38%, rgba(76,58,28,.95), rgba(11,28,43,.96) 70%); box-shadow: inset 0 0 12px rgba(245,216,137,.08), 0 0 14px rgba(245,200,109,.18); }
+.weapon-cycle .weapon-cycle-glyph { font: 700 16px/1 'Oxanium', sans-serif; letter-spacing: -.04em; }
+.weapon-cycle small { max-width: 36px; overflow: hidden; font-size: 7px; text-overflow: ellipsis; white-space: nowrap; }
+.weapon-cycle em { margin-top: 1px; color: #fff1b8; font: 700 7px/1 'DM Mono', monospace; font-style: normal; letter-spacing: -.03em; }
+.weapon-wheel { position: absolute; z-index: 18; bottom: 49px; display: grid; grid-template-columns: repeat(3, 46px); gap: 6px; width: max-content; padding: 7px; border: 1px solid rgba(245,216,137,.42); background: rgba(4,16,30,.95); box-shadow: 0 12px 34px rgba(0,0,0,.52), inset 0 0 18px rgba(245,216,137,.05); backdrop-filter: blur(8px); border-radius: 12px; pointer-events: auto; animation: weapon-wheel-in .12s ease-out both; }
+.touch-controls-right .weapon-wheel { left: 0; transform-origin: bottom left; }
+.touch-controls:not(.touch-controls-right) .weapon-wheel { right: 0; transform-origin: bottom right; }
+.weapon-wheel-option { position: relative; display: grid; grid-template-rows: 18px 11px 9px; place-items: center; width: 46px; height: 46px; padding: 3px; border: 1px solid rgba(111,186,204,.38); border-radius: 9px; background: linear-gradient(145deg, rgba(10,34,57,.97), rgba(16,44,69,.95)); color: #ccecf5; touch-action: manipulation; cursor: pointer; }
+.weapon-wheel-option b { color: #f5d889; font: 700 15px/1 'Oxanium', sans-serif; }
+.weapon-wheel-option span { max-width: 40px; overflow: hidden; color: #eaf8fb; font: 700 6px/1 'DM Mono', monospace; text-overflow: ellipsis; white-space: nowrap; text-transform: uppercase; }
+.weapon-wheel-option small { color: #8fe0df; font: 700 7px/1 'DM Mono', monospace; }
+.weapon-wheel-option.selected { border-color: #f5d889; box-shadow: 0 0 13px rgba(245,200,109,.35), inset 0 0 10px rgba(245,200,109,.08); }
+.weapon-wheel-option.locked { filter: grayscale(1); opacity: .36; }
+.weapon-wheel-option:disabled { cursor: default; }
+.weapon-wheel-option:not(:disabled):active { transform: scale(.93); filter: brightness(1.22); }
+@keyframes weapon-wheel-in { from { opacity: 0; transform: scale(.82) translateY(6px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+
 @media (pointer: coarse) {
   .touch-controls { right: 8px; }
   .touch-controls-right { right: auto; left: 8px; }
