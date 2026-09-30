@@ -2,12 +2,25 @@ import type { CSSProperties } from "react";
 import type { CryptoidClass } from "./cryptoidRoster";
 
 export const FLEET_IMAGE = "/ships/cryptoid-fleet.png";
-export const SHIP_SKIN_KEY = "cryptoid_player_ship_skin";
-export const SHIP_COLOR_KEY = "cryptoid_player_ship_color";
-export const SHIP_COLORS_KEY = "cryptoid_player_ship_colors";
-export const SHIP_OWNED_KEY = "cryptoid_owned_ship_skins";
-export const SHIP_FLEET_KEY = "cryptoid_ship_fleet_v2";
-export const SHARD_BALANCE_KEY = "cryptoid_shard_balance";
+export type ShipSaveNetwork = "testnet" | "mainnet";
+export const shipSaveNetworkForHost = (hostname: string): ShipSaveNetwork => hostname.toLowerCase().includes("testnet") ? "testnet" : "mainnet";
+export const shipSaveKey = (legacyKey: string, network: ShipSaveNetwork) => `${legacyKey}_${network}`;
+export const shipSaveNetwork = shipSaveNetworkForHost(typeof window === "undefined" ? "" : window.location.hostname);
+const legacyShipKeys = ["cryptoid_player_ship_skin", "cryptoid_player_ship_color", "cryptoid_player_ship_colors", "cryptoid_owned_ship_skins", "cryptoid_ship_fleet_v2", "cryptoid_shard_balance"] as const;
+export const migrateLegacyTestnetShipSave = (storage: Pick<Storage, "getItem" | "setItem">) => {
+  for (const key of legacyShipKeys) {
+    const previous = storage.getItem(key);
+    const scoped = shipSaveKey(key, "testnet");
+    if (previous !== null && storage.getItem(scoped) === null) storage.setItem(scoped, previous);
+  }
+};
+if (shipSaveNetwork === "testnet" && typeof window !== "undefined") migrateLegacyTestnetShipSave(window.localStorage);
+export const SHIP_SKIN_KEY = shipSaveKey("cryptoid_player_ship_skin", shipSaveNetwork);
+export const SHIP_COLOR_KEY = shipSaveKey("cryptoid_player_ship_color", shipSaveNetwork);
+export const SHIP_COLORS_KEY = shipSaveKey("cryptoid_player_ship_colors", shipSaveNetwork);
+export const SHIP_OWNED_KEY = shipSaveKey("cryptoid_owned_ship_skins", shipSaveNetwork);
+export const SHIP_FLEET_KEY = shipSaveKey("cryptoid_ship_fleet_v2", shipSaveNetwork);
+export const SHARD_BALANCE_KEY = shipSaveKey("cryptoid_shard_balance", shipSaveNetwork);
 export const ADMIN_MODE_KEY = "cryptoid_admin_preview";
 export const ADMIN_SHIP_SKIN_KEY = "cryptoid_admin_ship_skin";
 export const ADMIN_SHIP_COLOR_KEY = "cryptoid_admin_ship_color";
