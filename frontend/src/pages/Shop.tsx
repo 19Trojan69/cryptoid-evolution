@@ -86,6 +86,7 @@ const Shop = () => {
   const [leadersStatus, setLeadersStatus] = useState<"loading" | "ready" | "error">("loading");
   const [personalBest, setPersonalBest] = useState<number | null>(null);
   const [musicEnabled, setMusicEnabled] = useState(() => localStorage.getItem(MUSIC_STORAGE_KEY) !== "off");
+  const [musicNeedsTap, setMusicNeedsTap] = useState(false);
   const musicEnabledRef = useRef(musicEnabled);
   const [musicVolume, setMusicVolume] = useState(readMusicVolume);
   const [effectsVolume, setEffectsVolume] = useState(readEffectsVolume);
@@ -95,7 +96,11 @@ const Shop = () => {
   useEffect(() => {
     const music = new MusicPlayer("/audio/light-the-void.mp3", readMusicVolume());
     homeMusicRef.current = music;
-    const start = () => { if (musicEnabledRef.current) void music.play(); };
+    let active = true;
+    const start = () => {
+      if (!musicEnabledRef.current) return;
+      void music.play().then(ok => { if (active && musicEnabledRef.current) setMusicNeedsTap(!ok); });
+    };
     const resumeOnGesture = (event: Event) => {
       if (event.target instanceof Element && event.target.closest(".home-music-toggle")) return;
       start();
@@ -106,6 +111,7 @@ const Shop = () => {
     document.addEventListener("keydown", resumeOnGesture, true);
     start();
     return () => {
+      active = false;
       document.removeEventListener("pointerdown", resumeOnGesture, true);
       document.removeEventListener("pointerup", resumeOnGesture, true);
       document.removeEventListener("touchend", resumeOnGesture, true);
@@ -124,14 +130,18 @@ const Shop = () => {
     setMusicVolume(value);
   };
   const toggleHomeMusic = () => {
+    if (musicEnabledRef.current && musicNeedsTap) {
+      void homeMusicRef.current?.play().then(ok => setMusicNeedsTap(!ok));
+      return;
+    }
     const next = !musicEnabledRef.current;
     musicEnabledRef.current = next;
     localStorage.setItem(MUSIC_STORAGE_KEY, next ? "on" : "off");
     setMusicEnabled(next);
-    if (next) void homeMusicRef.current?.play();
-    else homeMusicRef.current?.pause();
+    if (next) void homeMusicRef.current?.play().then(ok => setMusicNeedsTap(!ok));
+    else { homeMusicRef.current?.pause(); setMusicNeedsTap(false); }
   };
-  const musicLabel = t(musicEnabled ? "Music on" : "Music off");
+  const musicLabel = t(musicEnabled ? musicNeedsTap ? "Tap for music" : "Music on" : "Music off");
   useEffect(() => {
     if (shopView !== "leaders" && shopView !== "progress") return;
     let current = true;
@@ -366,7 +376,7 @@ const Shop = () => {
       {adminMode && <div className="admin-preview-banner" role="status">Admin-Testmodus aktiv · Käufe und Rekorde werden nicht gespeichert.</div>}
 
       <section className="hero-section">
-        <button className="home-music-toggle" type="button" data-state={musicEnabled ? "playing" : "off"} aria-pressed={musicEnabled} aria-label={musicLabel} title={musicLabel} onClick={toggleHomeMusic}><span className="home-music-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" />{musicEnabled ? <><path d="M16 9a4 4 0 0 1 0 6" /><path d="M19 6a8 8 0 0 1 0 12" /></> : <path d="m17 9 5 6m0-6-5 6" />}</svg></span></button>
+        <button className="home-music-toggle" type="button" data-state={musicEnabled ? musicNeedsTap ? "tap" : "playing" : "off"} aria-pressed={musicEnabled && !musicNeedsTap} aria-label={musicLabel} title={musicLabel} onClick={toggleHomeMusic}><span className="home-music-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" />{musicEnabled ? <><path d="M16 9a4 4 0 0 1 0 6" /><path d="M19 6a8 8 0 0 1 0 12" /></> : <path d="m17 9 5 6m0-6-5 6" />}</svg></span>{musicEnabled && musicNeedsTap && <span className="home-music-hint">{musicLabel}</span>}</button>
         <Starfield sector={1} player={{ x: .5, y: .8 }} paused={false} />
         <div className="home-deep-space" aria-hidden="true"><span className="home-far-planet home-far-planet-gas" /><span className="home-far-planet home-far-planet-saturn" /><span className="home-far-planet home-far-moon" /><span className="home-black-hole"><i /></span></div>
         <div className="hero-copy">

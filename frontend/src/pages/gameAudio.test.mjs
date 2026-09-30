@@ -9,6 +9,7 @@ test("game audio plays effects without scheduling background music", async () =>
   const intervals = new Set();
   let playedTones = 0;
   const buses = [];
+  let limiter;
   globalThis.window = {
     setInterval: () => { intervals.add(++nextTimer); return nextTimer; },
     clearInterval: timer => intervals.delete(timer),
@@ -28,19 +29,25 @@ test("game audio plays effects without scheduling background music", async () =>
       buses.push(bus);
       return bus;
     }
+    createDynamicsCompressor() {
+      limiter = { threshold: { value: 0 }, knee: { value: 0 }, ratio: { value: 0 }, attack: { value: 0 }, release: { value: 0 }, connect: output => output };
+      return limiter;
+    }
   };
   const audio = new GameAudio();
   try {
     assert.equal(await audio.start(), true);
     assert.equal(intervals.size, 0);
     assert.equal(buses.length, 1);
-    assert.equal(buses[0].gain.value, DEFAULT_EFFECTS_VOLUME / 100);
+    assert.equal(limiter.threshold.value, -12);
+    assert.equal(limiter.ratio.value, 8);
+    assert.equal(buses[0].gain.value, DEFAULT_EFFECTS_VOLUME / 50);
     audio.setEffectsVolume(25);
-    assert.equal(buses[0].gain.value, .25);
+    assert.equal(buses[0].gain.value, .5);
     audio.setEffectsVolume(0);
     assert.equal(buses[0].gain.value, 0);
     audio.setEffectsVolume(100);
-    assert.equal(buses[0].gain.value, 1);
+    assert.equal(buses[0].gain.value, 2);
     audio.play("laser");
     audio.play("collision");
     assert.equal(playedTones, 2);
@@ -111,8 +118,8 @@ test("boss explosion is louder than player destruction while both obey the effec
     audio.setEffectsVolume(35);
     audio.play("playerDestroy");
     audio.play("bossDestroy");
-    assert.equal(gains[0].gain.value, .35);
-    assert.equal(gains[1].gain.value, .107);
+    assert.equal(gains[0].gain.value, .7);
+    assert.equal(gains[1].gain.value, .321);
     assert.equal(gains[2].gain.value, .9);
     assert.ok(gains[2].gain.value > gains[1].gain.value);
     audio.setEffectsVolume(0);
