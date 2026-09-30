@@ -860,6 +860,7 @@ html[data-motion="reduced"] .boss-debris-piece:nth-child(n+5) { display: none; }
 .touch-controls { position: absolute; z-index: 5; right: 16px; bottom: max(19px, env(safe-area-inset-bottom)); display: flex; align-items: flex-end; pointer-events: none; }
 .touch-controls-right { right: auto; left: 16px; }
 .edge-actions { display: flex; flex-direction: column-reverse; gap: 4px; max-height: min(64dvh, 390px); overflow-y: auto; overscroll-behavior: contain; pointer-events: auto; }
+.edge-actions:has(.weapon-wheel) { overflow: visible; }
 .edge-actions:empty { display: none; }
 .edge-action { position: relative; overflow: hidden; display: flex; flex: none; flex-direction: column; align-items: center; justify-content: center; width: 40px; height: 40px; padding: 1px; border: 1px solid #74a8bb8a; border-radius: 8px; background: linear-gradient(145deg, #0a2239f2, #102c45e8); color: #bce9f8; font: 20px 'Space Grotesk', sans-serif; line-height: 1; cursor: pointer; touch-action: manipulation; box-shadow: inset 0 0 12px rgba(255,255,255,.04), 0 0 11px rgba(116, 168, 187, .11); transition: transform .14s ease, filter .14s ease, box-shadow .14s ease, border-color .14s ease; }
 .edge-action::before { position: absolute; inset: 0; background: radial-gradient(circle at 50% 105%, currentColor, transparent 64%); content: ''; opacity: .16; pointer-events: none; }
