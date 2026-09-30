@@ -93,7 +93,7 @@ const Shop = () => {
   const homeMusicRef = useRef<MusicPlayer | null>(null);
   const musicHandedOffRef = useRef(false);
   useEffect(() => {
-    const music = new MusicPlayer("/audio/home-galactic-chain.mp3", readMusicVolume());
+    const music = new MusicPlayer("/audio/light-the-void.mp3", readMusicVolume());
     homeMusicRef.current = music;
     const start = () => { if (musicEnabledRef.current) void music.play(); };
     const resumeOnGesture = (event: Event) => {
