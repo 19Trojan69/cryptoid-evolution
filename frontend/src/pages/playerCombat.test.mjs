@@ -34,14 +34,14 @@ test("touch control keeps the ship visibly above the thumb without delaying its 
   assert.equal(mouse.y * 800 - touch.y * 800, TOUCH_SHIP_OFFSET_PX);
 });
 
-test("bought shots last five minutes while pickups last twenty seconds", () => {
-  assert.equal(PURCHASED_WEAPON_DURATION_MS, 300_000);
+test("bought shots last two minutes while pickups last twenty seconds", () => {
+  assert.equal(PURCHASED_WEAPON_DURATION_MS, 120_000);
   assert.equal(PICKUP_WEAPON_DURATION_MS, 20_000);
-  assert.equal(activeWeaponLevel(3, 300_000, 4, 20_000, 5), 4);
-  assert.equal(activeWeaponLevel(3, 300_000, 4, 0, 5), 3);
+  assert.equal(activeWeaponLevel(3, 120_000, 4, 20_000, 5), 4);
+  assert.equal(activeWeaponLevel(3, 120_000, 4, 0, 5), 3);
   assert.equal(activeWeaponLevel(3, 0, 4, 20_000, 5), 4);
   assert.equal(activeWeaponLevel(3, 0, 4, 0, 5), 1);
-  assert.equal(activeWeaponLevel(5, 300_000, 1, 0, 3), 3);
+  assert.equal(activeWeaponLevel(5, 120_000, 1, 0, 3), 5);
 });
 
 test("shots travel upward, collide only with visible enemies; player hitbox remains compact", () => {
