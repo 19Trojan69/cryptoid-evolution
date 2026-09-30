@@ -4,6 +4,28 @@ import type { AuthResult, PaymentDTO, SessionUser, User } from "../types/pi";
 import { ADMIN_MODE_KEY } from "../pages/shipFleet";
 import { createPiOAuthState, PI_OAUTH_CLIENT_ID, PI_OAUTH_ORIGIN, PI_OAUTH_REDIRECT_URI, PI_OAUTH_STATE_KEY } from "../config/piOAuth";
 
+const detectPiBrowser = async () => {
+  try {
+    if (typeof window.Pi?.getPiHostAppInfo === "function") {
+      const timeout = new Promise<null>((resolve) => window.setTimeout(() => resolve(null), 1500));
+      const hostInfo = await Promise.race([window.Pi.getPiHostAppInfo(), timeout]);
+      if (hostInfo?.hostApp === "pi-browser") return true;
+    }
+  } catch (err) {
+    console.warn("Could not query Pi Browser host info", err);
+  }
+
+  const userAgent = navigator.userAgent.toLowerCase();
+  const referrer = document.referrer.toLowerCase();
+
+  return (
+    userAgent.includes("pibrowser") ||
+    userAgent.includes("pi-browser") ||
+    referrer.includes("minepi.com") ||
+    referrer.includes("pi.app")
+  );
+};
+
 export const useAuth = () => {
   const pendingPayments = useRef<PaymentDTO[]>([]);
   const [user, setUser] = useState<User | null>(null);
@@ -45,12 +67,26 @@ export const useAuth = () => {
       }
     } catch (err) {
       console.error("Error signing in:", err);
+      throw err;
     }
   }, []);
 
   const signIn = useCallback(async () => {
     setIsLoading(true);
     try {
+      const isPiBrowser = await detectPiBrowser();
+
+      // Pi Apps running inside Pi Browser must use the Browser SDK authentication
+      // flow. Pi.signIn is the separate OAuth flow intended for ordinary browsers.
+      if (isPiBrowser) {
+        const authResult = await window.Pi.authenticate(
+          ["username", "payments", "wallet_address"],
+          onIncompletePaymentFound,
+        );
+        await signInUser(authResult);
+        return;
+      }
+
       if (window.location.origin !== PI_OAUTH_ORIGIN && !["localhost", "127.0.0.1"].includes(window.location.hostname)) {
         window.location.assign(`${PI_OAUTH_ORIGIN}/?pi_signin=1`);
         return;
@@ -68,9 +104,7 @@ export const useAuth = () => {
         return;
       }
 
-      // Compatibility fallback for older Pi Browser SDK builds.
-      const authResult = await window.Pi.authenticate(["username", "payments", "wallet_address"], onIncompletePaymentFound);
-      await signInUser(authResult);
+      throw new Error("Pi sign-in is unavailable in this browser.");
     } catch (err) {
       console.error("Error authenticating:", err);
     } finally {
