@@ -438,9 +438,9 @@ const Shop = () => {
               <strong>{t('Control area')}</strong>
               {(["compact", "normal", "wide"] as const).map(value => <button key={value} className="system-setting" type="button" aria-pressed={controlZone === value} onClick={() => setControlZone(value)}><b>{t(value === "compact" ? "Compact" : value === "normal" ? "Normal" : "Wide")}</b></button>)}
             </div>
-            <div className="control-choice-group" role="group" aria-label={t('Ship start position')}>
+            <div className="control-choice-group ship-start-choice-group" role="group" aria-label={t('Ship start position')}>
               <strong>{t('Ship start position')}</strong>
-              {(["higher", "normal", "lower"] as const).map(value => <button key={value} className="system-setting" type="button" aria-pressed={shipStart === value} onClick={() => setShipStart(value)}><b>{t(value === "higher" ? "Higher" : value === "normal" ? "Normal" : "Lower")}</b></button>)}
+              {(["higher", "touch"] as const).map(value => <button key={value} className="system-setting" type="button" aria-pressed={shipStart === value} onClick={() => setShipStart(value)}><b>{t(value === "higher" ? "Current position" : "Under finger")}</b></button>)}
             </div>
           </div>
           <div className="system-menu-section system-quick-settings">
