@@ -430,6 +430,28 @@ const GamePage = () => {
     return () => observer.disconnect();
   }, []);
 
+
+  useEffect(() => {
+    const field = fieldRef.current;
+    if (!field) return;
+    let lastTouchEnd = 0;
+    const preventGesture = (event: Event) => event.preventDefault();
+    const preventDoubleTap = (event: TouchEvent) => {
+      if (event.target instanceof Element && event.target.closest("button, .game-hud, .game-overlay, .touch-controls")) return;
+      const now = performance.now();
+      if (now - lastTouchEnd < 360) event.preventDefault();
+      lastTouchEnd = now;
+    };
+    field.addEventListener("touchend", preventDoubleTap, { passive: false });
+    field.addEventListener("gesturestart", preventGesture, { passive: false });
+    field.addEventListener("gesturechange", preventGesture, { passive: false });
+    return () => {
+      field.removeEventListener("touchend", preventDoubleTap);
+      field.removeEventListener("gesturestart", preventGesture);
+      field.removeEventListener("gesturechange", preventGesture);
+    };
+  }, []);
+
   const submitScore = (state: GameState) => {
     const runId = scoreRunRef.current;
     if (!runId) return;
@@ -446,7 +468,8 @@ const GamePage = () => {
     const track = takeHandoffGameMusic() ?? new MusicPlayer("/audio/battle-orbit.mp3", readMusicVolume());
     musicRef.current = track;
     const resume = () => {
-      if (stateRef.current.status === "playing") void track.play().then(ok => { if (ok && (readEffectsVolume() === 0 || soundRef.current?.running)) setAudioNeedsTap(false); });
+      if (document.visibilityState === "hidden" || stateRef.current.status !== "playing") return;
+      void track.play().then(ok => { if (ok && (readEffectsVolume() === 0 || soundRef.current?.running)) setAudioNeedsTap(false); });
     };
     document.addEventListener("pointerdown", resume, true);
     document.addEventListener("pointerup", resume, true);
@@ -454,6 +477,7 @@ const GamePage = () => {
     document.addEventListener("keydown", resume, true);
     document.addEventListener("visibilitychange", resume);
     window.addEventListener("pageshow", resume);
+    window.addEventListener("focus", resume);
     resume();
     return () => {
       document.removeEventListener("pointerdown", resume, true);
@@ -462,6 +486,7 @@ const GamePage = () => {
       document.removeEventListener("keydown", resume, true);
       document.removeEventListener("visibilitychange", resume);
       window.removeEventListener("pageshow", resume);
+      window.removeEventListener("focus", resume);
       track.close();
       if (musicRef.current === track) musicRef.current = null;
     };
@@ -599,14 +624,18 @@ const GamePage = () => {
     const keyUp = (event: KeyboardEvent) => keysRef.current.delete(event.code);
     const blur = () => keysRef.current.clear();
     window.addEventListener("keydown", keyDown);
-    const resumeEffects = () => { if (stateRef.current.status === "playing") void startEffects().then(ok => { if (ok && (!musicEnabled || musicRef.current?.playing)) setAudioNeedsTap(false); }); };
-    document.addEventListener("pointerup", resumeEffects, true);
-    document.addEventListener("touchend", resumeEffects, true);
-    document.addEventListener("visibilitychange", resumeEffects);
-    window.addEventListener("pageshow", resumeEffects);
+    const resumeAudio = () => {
+      if (document.visibilityState === "hidden" || stateRef.current.status !== "playing") return;
+      retryAudio();
+    };
+    document.addEventListener("pointerup", resumeAudio, true);
+    document.addEventListener("touchend", resumeAudio, true);
+    document.addEventListener("visibilitychange", resumeAudio);
+    window.addEventListener("pageshow", resumeAudio);
+    window.addEventListener("focus", resumeAudio);
     window.addEventListener("keyup", keyUp);
     window.addEventListener("blur", blur);
-    return () => { window.removeEventListener("keydown", keyDown); window.removeEventListener("keyup", keyUp); window.removeEventListener("blur", blur); document.removeEventListener("pointerup", resumeEffects, true); document.removeEventListener("touchend", resumeEffects, true); document.removeEventListener("visibilitychange", resumeEffects); window.removeEventListener("pageshow", resumeEffects); };
+    return () => { window.removeEventListener("keydown", keyDown); window.removeEventListener("keyup", keyUp); window.removeEventListener("blur", blur); document.removeEventListener("pointerup", resumeAudio, true); document.removeEventListener("touchend", resumeAudio, true); document.removeEventListener("visibilitychange", resumeAudio); window.removeEventListener("pageshow", resumeAudio); window.removeEventListener("focus", resumeAudio); };
   }, []);
 
   useEffect(() => {
@@ -649,15 +678,17 @@ const GamePage = () => {
         state.empMs = Math.max(0, state.empMs - (transitionPaused ? 0 : delta));
         state.shieldMs = Math.max(0, state.shieldMs - (transitionPaused ? 0 : delta));
         if (state.shieldMs === 0) state.shieldCharges = 0;
-        const weaponDelta = transitionPaused ? 0 : delta;
-        state.weaponTimers = state.weaponTimers.map((remaining, level) => level > 1 && remaining > 0 ? Math.max(0, remaining - weaponDelta) : remaining);
+        const playerRecovering = state.effects.some(effect => effect.target === "player" && (effect.kind === "player-crash" || effect.kind === "player-explosion"));
+        const purchasedWeaponDelta = transitionPaused || playerRecovering ? 0 : delta;
+        const pickupWeaponDelta = transitionPaused ? 0 : delta;
+        state.weaponTimers = state.weaponTimers.map((remaining, level) => level > 1 && remaining > 0 ? Math.max(0, remaining - purchasedWeaponDelta) : remaining);
         if (state.paidWeaponLevel > 1) {
           state.paidWeaponMs = Math.max(0, state.weaponTimers[state.paidWeaponLevel] ?? 0);
           if (state.paidWeaponMs === 0) state.paidWeaponLevel = 1;
         } else {
           state.paidWeaponMs = 0;
         }
-        state.pickupWeaponMs = Math.max(0, state.pickupWeaponMs - weaponDelta);
+        state.pickupWeaponMs = Math.max(0, state.pickupWeaponMs - pickupWeaponDelta);
         if (state.pickupWeaponMs === 0) state.pickupWeaponLevel = 1;
         state.weaponLevel = activeWeaponLevel(state.paidWeaponLevel, state.paidWeaponMs, state.pickupWeaponLevel, state.pickupWeaponMs, state.weaponCap);
         sectionElapsedRef.current += delta;
@@ -815,7 +846,15 @@ const GamePage = () => {
           damageTaken = damaged;
           const destroyed = damaged && state.hearts === 0;
           state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: destroyed ? "player-explosion" : damaged ? "player-crash" : "shield", startedAt: time, target: "player", sprite: damaged ? shipSelection.skin.sprite : undefined, debrisSize: damaged ? 86 : undefined, debrisColor: damaged ? shipSelection.color.id : undefined, shipStage: shipStageRef.current });
-          if (damaged) { soundRef.current?.play(destroyed ? "playerDestroy" : "collision"); state.projectileGuard = destroyed ? 0 : projectileGuardForStage(shipStageRef.current); state.weaponCap = Math.max(1, state.weaponCap - 1); state.paidWeaponLevel = Math.min(state.paidWeaponLevel, state.weaponCap); state.pickupWeaponLevel = Math.min(state.pickupWeaponLevel, state.weaponCap); state.weaponLevel = Math.min(state.weaponLevel, state.weaponCap); }
+          if (damaged) {
+            soundRef.current?.play(destroyed ? "playerDestroy" : "collision");
+            state.projectileGuard = destroyed ? 0 : projectileGuardForStage(shipStageRef.current);
+            state.weaponCap = Math.max(1, state.weaponCap - 1);
+            // Paid weapon time is protected from life loss. Only collected weapon
+            // tiers are reduced; an active paid tier remains available until its timer expires.
+            state.pickupWeaponLevel = Math.min(state.pickupWeaponLevel, state.weaponCap);
+            state.weaponLevel = activeWeaponLevel(state.paidWeaponLevel, state.paidWeaponMs, state.pickupWeaponLevel, state.pickupWeaponMs, state.weaponCap);
+          }
           else soundRef.current?.play("shield");
         }
         state.powerUps = movePowerUps(state.powerUps, delta, height);
@@ -1002,6 +1041,7 @@ const GamePage = () => {
 
   const startDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (stateRef.current.status !== "playing" || (event.target as HTMLElement).closest("button, .game-hud, .game-overlay, .touch-controls")) return;
+    if (event.pointerType === "touch") event.preventDefault();
     if (pointerRef.current !== null) return;
     const bounds = event.currentTarget.getBoundingClientRect();
     if (event.clientY - bounds.top < bounds.height * .5) return;
@@ -1180,8 +1220,8 @@ const GamePage = () => {
             : `${t("Block")} ${sectorLabel} / ${BLOCKS_PER_CHAIN}`;
 
   return (
-    <main className="game-shell" onPointerDownCapture={event => { void startEffects(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
-      <div ref={fieldRef} className="game-field" onContextMenu={event => event.preventDefault()} onDragStart={event => event.preventDefault()} onPointerDown={startDrag} onPointerMove={event => { if (pointerRef.current === event.pointerId) positionFromPointer(event); }} onPointerUp={event => { if (pointerRef.current === event.pointerId) { pointerRef.current = null; touchOriginRef.current = null; } }} onPointerCancel={event => { if (pointerRef.current === event.pointerId) { pointerRef.current = null; touchOriginRef.current = null; } }}>
+    <main className="game-shell" onPointerDownCapture={event => { retryAudio(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
+      <div ref={fieldRef} className="game-field" onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()} onPointerDown={startDrag} onPointerMove={event => { if (pointerRef.current === event.pointerId) positionFromPointer(event); }} onPointerUp={event => { if (pointerRef.current === event.pointerId) { pointerRef.current = null; touchOriginRef.current = null; } }} onPointerCancel={event => { if (pointerRef.current === event.pointerId) { pointerRef.current = null; touchOriginRef.current = null; } }}>
         <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} showNebula={game.encounter === "boss-fight"} showTwinkles={game.encounter === "normal"} />
         <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
         <header ref={hudRef} className="game-hud">
@@ -1191,7 +1231,7 @@ const GamePage = () => {
           <div className="hud-stat score-hud" aria-label={`${t("Shards")} ${game.shards}, ${t("Score")} ${game.score}`}><span className="shard-line"><b>◆ {game.shards}</b><small>{t("Shards")}</small></span><span className="score-line"><b>{game.score}</b><small>{t("Score")}</small></span></div>
           <div className="hud-stat weapon-hud" aria-label={`${t("Weapon level")} ${stageWeaponLevel(shipStage, game.weaponLevel)} / 5; ${t("Projectile hits left")}: ${game.projectileGuard}`}><span>{t("Weapon")}</span><strong>{stageWeaponLevel(shipStage, game.weaponLevel)}<small>/5</small></strong>{shipStage > 1 && <small className="hull-hits">✦ {game.projectileGuard}/{projectileGuardForStage(shipStage)}</small>}</div>
           <div className="hud-stat round-hud chain-hud" aria-label={`${t("Block")} ${game.chainBlocks}/${BLOCKS_PER_CHAIN}`}><span>{t("Block")}</span><strong>{game.chainBlocks}<small>/{BLOCKS_PER_CHAIN}</small></strong></div>
-          <button className="game-control pause-control" type="button" disabled={game.status === "loading" || game.status === "destroying" || game.status === "game-over"} onClick={() => { stateRef.current.status = game.status === "paused" ? "playing" : "paused"; setGame({ ...stateRef.current }); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
+          <button className="game-control pause-control" type="button" disabled={game.status === "loading" || game.status === "destroying" || game.status === "game-over"} onClick={() => { const resuming = game.status === "paused"; stateRef.current.status = resuming ? "playing" : "paused"; setGame({ ...stateRef.current }); if (resuming) window.setTimeout(retryAudio, 0); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
         </header>
         <div className="game-label">{t("LEVEL")} {levelLabel} <span>· {sectorName(game.sector)} · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/${BLOCKS_PER_CHAIN}` : game.encounter === "bonus" ? t("BONUS CHALLENGE") : t("CORE WARDEN")}</span></div>
         {audioNeedsTap && game.status === "playing" && <button className="audio-retry" type="button" onClick={retryAudio}>Ton aktivieren</button>}
@@ -1237,7 +1277,7 @@ const GamePage = () => {
                   const remaining = game.weaponTimers[level] ?? 0;
                   const expired = level > 1 && owned && remaining === 0;
                   const selected = level === (game.paidWeaponLevel > 1 ? game.paidWeaponLevel : 1);
-                  const status = level === 1 ? "FREE" : !owned ? "LOCKED" : remaining < 0 ? "5:00" : expired ? "USED" : formatWeaponTime(remaining);
+                  const status = level === 1 ? "FREE" : !owned ? "LOCKED" : remaining < 0 ? formatWeaponTime(PURCHASED_WEAPON_DURATION_MS) : expired ? "USED" : formatWeaponTime(remaining);
                   return <button key={level} type="button" role="menuitem" className={`weapon-wheel-option weapon-wheel-option-${level}${selected ? " selected" : ""}${!owned ? " locked" : ""}`} disabled={!owned || expired} onClick={() => selectWeaponLevel(level)} aria-label={`${weaponNames[level]} · ${status}`}><b>{weaponGlyphs[level]}</b><span>{weaponNames[level]}</span><small>{status}</small></button>;
                 })}
               </div>}
@@ -1250,7 +1290,7 @@ const GamePage = () => {
             {game.pendingStartPower && <button type="button" className={`edge-action edge-action-${game.pendingStartPower} edge-action-purchased`} disabled={game.status !== "playing" || (game.pendingStartPower === "shield" && game.shieldCharges > 0 && game.shieldMs > 0) || (game.pendingStartPower === "rapid" && game.rapidFireMs > 0) || (game.pendingStartPower === "overdrive" && game.overdriveMs > 0) || (game.pendingStartPower === "emp" && game.empMs > 0)} aria-label={`${t("Tap to activate")} ${t(powerUpNames[game.pendingStartPower])}`} onClick={activateStartPower}><span aria-hidden="true">{powerUpSymbols[game.pendingStartPower]}</span><small>{t(powerUpNames[game.pendingStartPower])}</small><em>{t("Tap to activate")}</em></button>}
           </div>
         </div>
-        {game.status === "paused" && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('MISSION PAUSED')}</p><h1>{t('Hold the line.')}</h1><p>{t('The asteroids are waiting.')}</p><MusicVolumeSlider id="pause-music-volume" label={t('Music volume')} value={musicVolume} onChange={changeMusicVolume} /><MusicVolumeSlider id="pause-effects-volume" label={t('Effects volume')} value={effectsVolume} onChange={changeEffectsVolume} /><button className="button button-primary" type="button" onClick={() => { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); }}>Resume mission <span className="resume-icon"><CockpitIcon kind="play" /></span></button></div></div>}
+        {game.status === "paused" && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('MISSION PAUSED')}</p><h1>{t('Hold the line.')}</h1><p>{t('The asteroids are waiting.')}</p><MusicVolumeSlider id="pause-music-volume" label={t('Music volume')} value={musicVolume} onChange={changeMusicVolume} /><MusicVolumeSlider id="pause-effects-volume" label={t('Effects volume')} value={effectsVolume} onChange={changeEffectsVolume} /><button className="button button-primary" type="button" onClick={() => { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); window.setTimeout(retryAudio, 0); }}>Resume mission <span className="resume-icon"><CockpitIcon kind="play" /></span></button></div></div>}
         {game.status === "game-over" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><h1>{t("Game Over")}</h1><div className="game-over-details"><p className="eyebrow">{t("MISSION FAILED")}</p><p className="game-over-hearts">{t('Hearts')}: {game.hearts}/{game.maxHearts}</p><div className="game-over-stats"><span><b>{game.score}</b>{t('Score')}</span><span><b>{game.destroyed}</b>{t('Destroyed')}</span><span><b>{game.sector}</b>{t('Sector')}</span></div>{scoreSync !== "idle" && <p role="status">{t(scoreSync === "saving" ? "Saving personal best…" : scoreSync === "saved" ? "Personal best saved." : "Could not sync personal best. Local best is saved.")}</p>}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t('Home')}</button></div></div></div></div>}
         {homePrompt && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2>{t('Return to base?')}</h2><p>{t('Your current mission will end. Your records will be saved locally.')}</p><div className="modal-actions"><button className="button button-primary" type="button" onClick={goHome}>{t('Leave game')}</button><button className="button button-secondary" type="button" onClick={() => setHomePrompt(false)}>{t('Keep playing')}</button></div></div></div>}
       </div>

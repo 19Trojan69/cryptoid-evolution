@@ -2,7 +2,7 @@ export type PlayerPosition = { x: number; y: number };
 export type PlayerShot = { id: number; x: number; y: number; speedX: number; damage: number; empowered: boolean };
 
 export const PLAYER_SPEED_PX_MS = 0.68;
-export const PURCHASED_WEAPON_DURATION_MS = 5 * 60_000;
+export const PURCHASED_WEAPON_DURATION_MS = 2 * 60_000;
 export const PICKUP_WEAPON_DURATION_MS = 20_000;
 export const PLAYER_RADIUS = 23;
 // Ship-to-ship contact follows the visible hull; projectile hits keep the smaller player hitbox.
@@ -19,8 +19,11 @@ export const makeVolley = (level: number, x: number, y: number, overdrive: boole
   volleyOffsets(level).map((offset, index, offsets) => ({ id: nextId(), x: x + offset, y, speedX: offsets.length === 3 ? (index - 1) * 0.1 : 0, damage: level >= 5 || overdrive || laserHull ? 2 : 1, empowered: level >= 5 || overdrive || laserHull }));
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
-export const activeWeaponLevel = (paidLevel: number, paidMs: number, pickupLevel: number, pickupMs: number, cap: number) =>
-  Math.min(cap, Math.max(paidMs > 0 ? paidLevel : 1, pickupMs > 0 ? pickupLevel : 1));
+export const activeWeaponLevel = (paidLevel: number, paidMs: number, pickupLevel: number, pickupMs: number, cap: number) => {
+  const paid = paidMs > 0 ? paidLevel : 1;
+  const pickup = pickupMs > 0 ? Math.min(cap, pickupLevel) : 1;
+  return Math.max(paid, pickup);
+};
 
 export const placePlayer = (x: number, y: number, width: number, height: number): PlayerPosition => ({
   x: clamp(x / width, 30 / width, 1 - 30 / width),
