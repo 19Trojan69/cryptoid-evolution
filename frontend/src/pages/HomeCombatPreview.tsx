@@ -3,7 +3,7 @@ import PaintedShip from "./PaintedShip";
 import { allPlayerColors, playerColors, playerSkins, shipNozzleStyles, type PlayerColorId } from "./shipFleet";
 import type { ShipStage } from "./shipEvolution";
 
-const SCENE_MS = 15_000;
+const SCENE_MS = 12_000;
 const stageFor = (scene: number, index: number): ShipStage => ((scene + index) % 3 + 1) as ShipStage;
 
 const HomeCombatPreview = ({ defender }: { defender: { sprite: number; color: PlayerColorId; stage: ShipStage } }) => {
