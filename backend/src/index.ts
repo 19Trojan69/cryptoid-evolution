@@ -186,7 +186,7 @@ export const start = async (listen = true): Promise<void> => {
 
     if (listen) {
       app.listen(env.port, () => {
-        console.log(`App platform demo app - Backend listening on port ${env.port}!`);
+        console.log(`Cryptoid Evolution backend listening on port ${env.port}!`);
         console.log(`CORS config: configured to respond to a frontend hosted on ${env.frontend_url}`);
       });
     }
