@@ -59,6 +59,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 .shop-tab-weapons { --tab-color: #f4ca6c !important; }
 .shop-tab-powers { --tab-color: #bd8dff !important; }
 .shop-tab-progress { --tab-color: #65e6ae !important; }
+.shop-tab-rewards { --tab-color: #f1ca82 !important; }
 .shop-tab-leaders { --tab-color: #ff8d9d !important; }
 .shop-modal-body { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 18px; }
 .shop-modal .ship-selector { margin: 0; }
@@ -1320,6 +1321,28 @@ html[data-motion="reduced"] .landing-shell .hero-actions .home-play-button { ani
 .landing-shell .progress-card .progress-row strong, .landing-shell .streak-number { color: #ffe0a3; font: 800 clamp(22px, 4vw, 40px) 'Oxanium', sans-serif; }
 .testnet-shop-notice, .ship-lock-notice { display: block; margin: 10px 0; padding: 8px 11px; border: 1px solid #e7b9698c; border-radius: 7px; background: #49341d6b; color: #ffe1a2; font: 700 13px/1.4 'Rajdhani', sans-serif; }
 .reward-collection { grid-column: 1 / -1; }
+.reward-network-notice { grid-column: 1 / -1; margin: 0 0 12px; padding: 12px 15px; border: 1px solid #d3a65f; border-left: 4px solid #f4ce86; border-radius: 7px; background: #62482c70; color: #ffe8bc; font-weight: 700; line-height: 1.45; }
+.rewards-dashboard .reward-account { grid-column: 1 / -1; margin: 0 0 10px; color: #a8e8e5; font-weight: 700; }
+.reward-rank-current { display: flex; align-items: center; gap: 14px; margin: 14px 0; }
+.reward-rank-current > span { display: grid; place-items: center; width: 66px; height: 66px; flex: none; border: 2px solid #f3d18c; border-radius: 50%; background: radial-gradient(circle, #665033, #172943); color: #ffe6ab; font: 800 37px 'Oxanium', sans-serif; box-shadow: 0 0 20px #e4b16e55; }
+.reward-rank-current small { color: #b9d9e8; }
+.reward-rank-path { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; margin: 17px 0; }
+.reward-rank-path > span { display: flex; align-items: center; gap: 7px; min-width: 0; padding: 7px; border: 1px solid #4f6477; border-radius: 8px; opacity: .5; }
+.reward-rank-path > span.earned { border-color: #e6c07b; background: #6d532f4a; opacity: 1; }
+.reward-rank-path b { color: #ffe0a2; font-size: 22px; }
+.reward-rank-path small { font: 700 10px/1.25 'Rajdhani', sans-serif; }
+.reward-blocks { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 5px; margin: 8px 0 16px; }
+.reward-blocks span { display: grid; place-items: center; min-height: 28px; border: 1px solid #4e657d; color: #7c9aad; font: 700 12px 'Oxanium', sans-serif; }
+.reward-blocks span.earned { border-color: #e7be7c; background: #684e2e91; color: #ffe3a0; box-shadow: 0 0 9px #e7be7c44; }
+.reward-medal-grid { display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0; }
+.reward-medal { padding: 6px 9px; border: 1px solid #9b9fa8; border-radius: 6px; color: #dfeef7; }
+.reward-medal-gold { border-color: #efd18a; color: #ffdf90; }.reward-medal-silver { border-color: #c4dfed; }.reward-medal-bronze { border-color: #d99b75; color: #e6b595; }
+.header-service-rank { display: inline-flex; align-items: center; gap: 3px; margin-left: 7px; color: #f2cf89; font-size: 11px; }
+.header-service-rank b { font-size: 17px; }
+.leader-identity { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.leader-rank { display: inline-flex; flex-direction: column; align-items: center; min-width: 70px; color: #f1d49f; line-height: 1; }
+.leader-rank b { font-size: 22px; }.leader-rank small { margin-top: 3px; font: 700 11px 'Rajdhani', sans-serif; }
+@media (max-width: 560px) { .reward-rank-path { grid-template-columns: repeat(2, minmax(0, 1fr)); }.leader-identity { align-items: flex-start; flex-direction: column; gap: 3px; }.leader-rank { align-items: center; min-width: 0; } }
 .reward-collection h3 { margin: 8px 0; color: #ffd48e; font: 800 29px 'Oxanium', sans-serif; }
 .reward-collection h4 { margin: 20px 0 10px; color: #e5f9ff; font: 700 16px 'Oxanium', sans-serif; }
 .reward-collection p, .reward-collection > small { color: #bcd6e5; }

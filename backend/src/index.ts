@@ -12,6 +12,7 @@ import mountPaymentsEndpoints from "./handlers/payments";
 import mountUserEndpoints from "./handlers/users";
 import mountHangarEndpoints from "./handlers/hangar";
 import mountLeaderboardEndpoints from "./handlers/leaderboard";
+import mountRewardEndpoints from "./handlers/rewards";
 import platformAPIClient from "./services/platformAPIClient";
 
 // We must import typedefs for ts-node-dev to pick them up when they change (even though tsc would supposedly
@@ -151,6 +152,10 @@ app.use("/hangar", hangarRouter);
 const leaderboardRouter = express.Router();
 mountLeaderboardEndpoints(leaderboardRouter);
 app.use("/leaderboard", leaderboardRouter);
+
+const rewardsRouter = express.Router();
+mountRewardEndpoints(rewardsRouter);
+app.use("/rewards", rewardsRouter);
 
 // User endpoints (e.g signin, signout) under /user:
 const userRouter = express.Router();

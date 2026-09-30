@@ -30,7 +30,7 @@ import { levelDifficulty } from "./levelDifficulty";
 import { balanceAfterMission, BONUS_TARGET_SHARD_REWARD, bossPoints, bossShardReward, creditDefeat, creditReward } from "./shardEarnings";
 import { addPersistentHullFire, hullFireAtImpact, spriteFireSites, type HullFire } from "./hullFires";
 import { bossExplosionSize, bossFireSite, bossHullContains, bossVolley } from "./bossCombat";
-import { awardBonusMedal, awardBossSticker, awardChain, readRewardProgress, REWARD_PROGRESS_KEY, rewardRank, type RewardProgress } from "./rewardProgress";
+import { awardBlock, awardBonusMedal, awardBossSticker, awardChain, emptyRewardProgress, reachLevel, rewardRank, type RewardProgress } from "./rewardProgress";
 
 const BEST_SCORE_KEY = "cryptoid_best_score";
 const HIGHEST_SECTOR_KEY = "cryptoid_highest_sector";
@@ -352,6 +352,8 @@ const GamePage = () => {
   const shipStageRef = useRef<ShipStage>(1);
   const recordsSavedRef = useRef(false);
   const scoreRunRef = useRef<string | null>(null);
+  const rewardProgressRef = useRef<RewardProgress>(emptyRewardProgress());
+  const pendingRewardsRef = useRef<Promise<unknown>>(Promise.resolve());
   const adminRunRef = useRef(false);
   const pendingScoreRef = useRef<Promise<unknown> | null>(null);
   const bestThisDeviceRef = useRef(readRecord(BEST_SCORE_KEY));
@@ -387,6 +389,13 @@ const GamePage = () => {
       if (adminRequested && !data.adminPreview) throw new Error("Admin preview session expired");
       adminRunRef.current = data.adminPreview === true;
       scoreRunRef.current = data.scoreRunId;
+      rewardProgressRef.current = emptyRewardProgress();
+      if (!adminRunRef.current && data.scoreRunId) {
+        try {
+          const rewards = await axiosClient.get<{ progress: RewardProgress }>("/rewards/me");
+          rewardProgressRef.current = rewards.data.progress;
+        } catch (error) { console.warn("Could not load account rewards", error); }
+      }
       if (adminRunRef.current) {
         stateRef.current.sector = data.startSector;
         stateRef.current.section = data.startSector;
@@ -468,7 +477,7 @@ const GamePage = () => {
     if (!runId) return;
     scoreRunRef.current = null;
     setScoreSync("saving");
-    pendingScoreRef.current = axiosClient.post("/leaderboard/score", { runId, score: state.score })
+    pendingScoreRef.current = pendingRewardsRef.current.then(() => axiosClient.post("/leaderboard/score", { runId, score: state.score }))
       .then(() => setScoreSync("saved"))
       .catch(() => setScoreSync("failed"));
   };
@@ -541,10 +550,12 @@ const GamePage = () => {
       if (stateRef.current.status === "playing") void track.play();
     }, leadMs);
   };
-  const saveReward = (award: (progress: RewardProgress) => { progress: RewardProgress; notice: string }) => {
+  const saveReward = (award: (progress: RewardProgress) => { progress: RewardProgress; notice: string }, event: { kind: "block" | "boss" | "chain" | "bonus"; level: number; stage: number; hits?: number }) => {
     if (adminRunRef.current) return "";
-    const result = award(readRewardProgress(window.localStorage.getItem(REWARD_PROGRESS_KEY)));
-    window.localStorage.setItem(REWARD_PROGRESS_KEY, JSON.stringify(result.progress));
+    const result = award(rewardProgressRef.current);
+    rewardProgressRef.current = result.progress;
+    const runId = scoreRunRef.current;
+    if (runId) pendingRewardsRef.current = pendingRewardsRef.current.then(() => axiosClient.post("/rewards/event", { runId, ...event })).catch(error => { console.warn("Could not save account reward", error); });
     return result.notice;
   };
   const destroyBoss = (state: GameState, time: number) => {
@@ -560,9 +571,10 @@ const GamePage = () => {
     state.rewardNotice = saveReward(progress => {
       const previousRank = rewardRank(progress);
       const result = awardBossSticker(progress, boss.config.id);
-      const rank = rewardRank(result.progress);
-      return { progress: result.progress, notice: `BOSS-STICKER ${boss.config.id}/50 · ${result.stars}★${rank !== previousRank ? ` · NEUER RANG ${rank.toUpperCase()}` : ""}` };
-    });
+      const next = reachLevel(result.progress, Math.min(500, state.sector + 1));
+      const rank = rewardRank(next);
+      return { progress: next, notice: `BOSS-STICKER ${boss.config.id}/50 · ${result.stars}★${rank !== previousRank ? ` · NEUER RANG ${rank.toUpperCase()}` : ""}` };
+    }, { kind: "boss", level: boss.config.id, stage: state.sector });
     state.encounter = "boss-clear";
     state.enemyShots = [];
     state.boss = null;
@@ -985,10 +997,11 @@ const GamePage = () => {
           state.chainBlocks = link.blocks;
           creditReward(state, link.shards);
           state.chainResult = link.linked ? "CHAIN COMPLETE" : "BLOCK LINKED";
+          saveReward(progress => ({ progress: awardBlock(progress, campaignLevel(state.sector), sectorInChapter(state.sector)), notice: "" }), { kind: "block", level: campaignLevel(state.sector), stage: state.sector });
           if (link.linked) state.rewardNotice = saveReward(progress => {
             const result = awardChain(progress, campaignLevel(state.sector));
             return { progress: result.progress, notice: result.milestone ? `CHAIN-ABZEICHEN · ${result.milestone} CHAINS` : "" };
-          });
+          }, { kind: "chain", level: campaignLevel(state.sector), stage: state.sector });
         }
         if (bonus && state.phase === "SECTOR_CLEAR" && previousPhase !== "SECTOR_CLEAR") {
           const reward = bonusReward(state.bonusHits, state.sector);
@@ -1005,7 +1018,7 @@ const GamePage = () => {
           state.rewardNotice = saveReward(progress => {
             const result = awardBonusMedal(progress, campaignLevel(state.sector), state.bonusHits);
             return { progress: result.progress, notice: result.improved && result.medal ? `BONUS-MEDAILLE · ${result.medal.toUpperCase()}` : "" };
-          });
+          }, { kind: "bonus", level: campaignLevel(state.sector), stage: state.sector, hits: state.bonusHits });
         }
         if (!adminRunRef.current && state.score > bestThisDeviceRef.current) {
           bestThisDeviceRef.current = state.score;

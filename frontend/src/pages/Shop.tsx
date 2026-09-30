@@ -28,11 +28,11 @@ import { requestGameFullscreen } from "./gameFullscreen";
 import { MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { powerUpSymbols, type PowerUpType } from "./powerUps";
 import { CONTROL_HAND_KEY, CONTROL_SENSITIVITY_KEY, CONTROL_ZONE_KEY, SHIP_START_KEY, readControlHand, readControlSensitivity, readControlZone, readShipStart, type ControlHand, type ControlSensitivity, type ControlZone, type ShipStart } from "./controlPreferences";
-import { BOSS_STICKER_COUNT, CHAIN_MILESTONES, readRewardProgress, REWARD_PROGRESS_KEY, rewardRank } from "./rewardProgress";
+import { BOSS_STICKER_COUNT, CHAIN_MILESTONES, emptyRewardProgress, rankForLevel, readRewardProgress, REWARD_PROGRESS_KEY, rewardRank, type RewardProgress } from "./rewardProgress";
 
 type Offer = { id: string; kind: "weapon" | "power" | "armor" | "ship_upgrade"; name: string; description: string; pricePi: number; shipIndex?: number; stage?: 2 | 3 };
 type Inventory = { ownedWeapons: string[]; ownedArmor: string[]; ownedShipUpgrades?: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
-type Leader = { rank: number; username: string; score: number };
+type Leader = { rank: number; username: string; score: number; serviceRank: { name: string; symbol: string } };
 
 const shopTabs = [
   ["hangar", "Hangar", "◇"],
@@ -40,6 +40,7 @@ const shopTabs = [
   ["weapons", "Weapons", "⌁"],
   ["powers", "Power-ups", "✦"],
   ["progress", "Progress", "↗"],
+  ["rewards", "Rewards", "✧"],
   ["leaders", "Top 100", "#"],
 ] as const;
 
@@ -79,7 +80,7 @@ const Shop = () => {
   const [controlSensitivity, setControlSensitivity] = useState<ControlSensitivity>(readControlSensitivity);
   const [controlZone, setControlZone] = useState<ControlZone>(readControlZone);
   const [shipStart, setShipStart] = useState<ShipStart>(readShipStart);
-  const [shopView, setShopView] = useState<"hangar" | "shop" | "weapons" | "powers" | "progress" | "leaders" | null>(null);
+  const [shopView, setShopView] = useState<"hangar" | "shop" | "weapons" | "powers" | "progress" | "rewards" | "leaders" | null>(null);
   const [termsOpen, setTermsOpen] = useState(false);
   const [leaders, setLeaders] = useState<Leader[]>([]);
   const [leadersStatus, setLeadersStatus] = useState<"loading" | "ready" | "error">("loading");
@@ -165,11 +166,29 @@ const Shop = () => {
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [shopView]);
   const [records] = useState(() => ({ bestScore: Number(localStorage.getItem(BEST_SCORE_KEY) || 0), highestSector: Number(localStorage.getItem(HIGHEST_SECTOR_KEY) || 0), totalDestroyed: Number(localStorage.getItem(TOTAL_DESTROYED_KEY) || 0) }));
-  const [rewardProgress] = useState(() => readRewardProgress(localStorage.getItem(REWARD_PROGRESS_KEY)));
+  const [rewardProgress, setRewardProgress] = useState<RewardProgress>(emptyRewardProgress);
+  const [rewardStatus, setRewardStatus] = useState<"loading" | "ready" | "error">("loading");
+  const [rewardOwner, setRewardOwner] = useState<string | null>(null);
+  const [rewardNetwork, setRewardNetwork] = useState<"testnet" | "mainnet">(() => window.location.hostname.includes("testnet") ? "testnet" : "mainnet");
+  const latestRewardLevel = Math.max(1, ...Object.keys(rewardProgress.linkedBlocks ?? {}).map(Number));
   const {
     user, canAdmin, adminMode, setAdminPreview, isAuthenticated, showSignIn, signIn, signOut,
     closeSignIn, requireAuth, isLoading: isAuthLoading,
   } = useAuth();
+  useEffect(() => {
+    if (!user) {
+      setRewardProgress(readRewardProgress(localStorage.getItem(REWARD_PROGRESS_KEY)));
+      setRewardOwner(null);
+      setRewardStatus("ready");
+      return;
+    }
+    let active = true;
+    setRewardStatus("loading");
+    axiosClient.get<{ progress: RewardProgress; network: "testnet" | "mainnet" }>("/rewards/me")
+      .then(({ data }) => { if (active) { setRewardProgress(data.progress); setRewardNetwork(data.network); setRewardOwner(user.uid); setRewardStatus("ready"); } })
+      .catch(() => { if (active) setRewardStatus("error"); });
+    return () => { active = false; };
+  }, [user?.uid, shopView === "rewards"]);
   const [adminError, setAdminError] = useState("");
   const [startSector, setStartSector] = useState(1);
   const [selected, setSelected] = useState(selectedShip);
@@ -334,6 +353,7 @@ const Shop = () => {
     <main className="app-shell landing-shell">
       <Header
         user={user}
+        serviceRank={user && rewardStatus === "ready" && rewardOwner === user.uid ? rankForLevel(rewardProgress.highestLevel) : undefined}
         canAdmin={canAdmin}
         adminMode={adminMode}
         onToggleAdmin={() => { void toggleAdmin(); }}
@@ -446,10 +466,21 @@ const Shop = () => {
           <strong className="streak-number">{records.totalDestroyed} <small>{t("asteroids")}</small></strong>
           <p>{t('Total destroyed across all missions.')}</p>
         </article>
+      </section>}
+
+      {shopView === "rewards" && <section className="dashboard-grid rewards-dashboard" aria-label={t("Rewards")}>
+        <p className="reward-network-notice" role="note">{rewardNetwork === "testnet" ? t("TESTNET REWARDS: Your progress here is for testing only. It will not transfer to Mainnet. Mainnet rewards start from zero and are saved permanently to your account.") : t("MAINNET REWARDS: Your collection starts from zero here and is saved permanently to your account. Testnet progress is separate.")}</p>
+        {user ? <p className="reward-account">@{user.username} · {t("Account rewards")}</p> : <p className="reward-account">{t("Sign in to save rewards to your Pi account. Earlier local awards remain on this device.")}</p>}
+        {user && rewardStatus === "loading" && <p role="status">{t("Loading rewards…")}</p>}
+        {user && rewardStatus === "error" && <p role="alert">{t("Rewards unavailable. Open this tab again to retry.")}</p>}
+        {(!user || (rewardStatus === "ready" && rewardOwner === user.uid)) && <>
         <article className="status-card reward-collection">
-          <div className="card-heading"><span>RANG & SAMMLUNG</span><span className="card-icon">✦</span></div>
-          <h3>{rewardRank(rewardProgress)}</h3>
+          <div className="card-heading"><span>{t("RANK & COLLECTION")}</span><span className="card-icon">✦</span></div>
+          <div className="reward-rank-current"><span aria-hidden="true">{rankForLevel(rewardProgress.highestLevel).symbol}</span><div><small>{t("Current service rank")} · {t("Level")} {rewardProgress.highestLevel}/500</small><h3>{t(rewardRank(rewardProgress))}</h3></div></div>
           <p>{Object.keys(rewardProgress.bossWins).length}/{BOSS_STICKER_COUNT} Boss-Sticker · {rewardProgress.completedChains.length} Chains · {rewardProgress.perfectBonuses} perfekte Bonusrunden</p>
+          <div className="reward-rank-path" aria-label={t("Service ranks")}>{[1, 11, 51, 101, 201, 301, 401, 500].map(level => { const tier = rankForLevel(level); return <span key={level} className={rewardProgress.highestLevel >= level ? "earned" : ""}><b aria-hidden="true">{tier.symbol}</b><small>{t(tier.name)}<br />{t("Level")} {level}</small></span>; })}</div>
+          <h4>{t("Linked Blocks")} · {t("Level")} {latestRewardLevel}</h4>
+          <div className="reward-blocks" aria-label={t("Linked Blocks")}>{Array.from({ length: 9 }, (_, index) => <span key={index} className={index < (rewardProgress.linkedBlocks?.[latestRewardLevel] ?? 0) ? "earned" : ""}>{index + 1}</span>)}</div>
           <div className="reward-milestones" aria-label="Chain-Meilensteine">{CHAIN_MILESTONES.map(target => <span key={target} className={rewardProgress.completedChains.length >= target ? "earned" : ""} title={`${target} Chains`}>◆ {target}</span>)}</div>
           <h4>Boss-Sticker</h4>
           <div className="boss-sticker-grid">{Array.from({ length: BOSS_STICKER_COUNT }, (_, index) => {
@@ -462,8 +493,10 @@ const Shop = () => {
           })}</div>
           <h4>Bonus-Medaillen</h4>
           <p>{Object.values(rewardProgress.bonusMedals).filter(medal => medal === "gold").length} Gold · {Object.values(rewardProgress.bonusMedals).filter(medal => medal === "silver").length} Silber · {Object.values(rewardProgress.bonusMedals).filter(medal => medal === "bronze").length} Bronze</p>
-          <small>Sticker und Abzeichen werden auf diesem Gerät gespeichert. Admin-Testläufe zählen nicht.</small>
+          <div className="reward-medal-grid">{Object.entries(rewardProgress.bonusMedals).map(([level, medal]) => <span key={level} className={`reward-medal reward-medal-${medal}`}>✦ <b>{t("Level")} {level}</b> · {t(medal)}</span>)}</div>
+          <small>{user ? t("Awards are saved to your Pi account immediately. Admin test runs do not count.") : t("Local awards on this device. Sign in for account rewards.")}</small>
         </article>
+        </>}
       </section>}
 
       {shopView === "leaders" && <section className="leaderboard-section" aria-labelledby="leaders-heading">
@@ -473,7 +506,7 @@ const Shop = () => {
         {personalBest !== null && <p className="leaderboard-personal">{t("Your personal best")}: <strong>{personalBest}</strong></p>}
         {leadersStatus === "loading" && <p role="status">{t("Loading scores…")}</p>}
         {leadersStatus === "error" && <p role="status">{t("Leaderboard unavailable. Try again later.")}</p>}
-        {leadersStatus === "ready" && (leaders.length ? <div className="leaderboard-scroll"><table><thead><tr><th>#</th><th>{t("Player")}</th><th>{t("Best score")}</th></tr></thead><tbody>{leaders.map(entry => <tr key={entry.rank}><td>{entry.rank}</td><td>{entry.username}</td><td>{entry.score.toLocaleString(locale)}</td></tr>)}</tbody></table></div> : <p>{t("No records yet. Complete a mission to be first.")}</p>)}
+        {leadersStatus === "ready" && (leaders.length ? <div className="leaderboard-scroll"><table><thead><tr><th>#</th><th>{t("Player")} · {t("Service rank")}</th><th>{t("Best score")}</th></tr></thead><tbody>{leaders.map(entry => <tr key={entry.rank}><td>{entry.rank}</td><td><div className="leader-identity"><strong>@{entry.username}</strong><span className="leader-rank"><b aria-hidden="true">{entry.serviceRank?.symbol ?? "◇"}</b><small>{t(entry.serviceRank?.name ?? "Rookie")}</small></span></div></td><td>{entry.score.toLocaleString(locale)}</td></tr>)}</tbody></table></div> : <p>{t("No records yet. Complete a mission to be first.")}</p>)}
       </section>}
 
       {(shopView === "hangar" || shopView === "shop") && <section className={`ship-selector ship-selector-${shopView}`} aria-labelledby="hangar-heading">

@@ -4,6 +4,7 @@ import { armorBonusFromPaid, findOffer, hangarCatalog } from "../hangarCatalog";
 import "../types/session";
 import { isAdminMode } from "../adminAccess";
 import { isTestnetWeaponPurchaseEnabled } from "../paymentPolicy";
+import { rewardNetwork } from "../rewardNetwork";
 
 const offersOf = (kind: string) => hangarCatalog.filter(item => item.kind === kind).map(item => item.id);
 const isTestnetRequest = (req: any) => String(req.headers?.["x-cryptoid-app-network"] || "").toLowerCase() === "testnet";
@@ -88,6 +89,8 @@ export default function mountHangarEndpoints(router: Router) {
       const selected = findOffer(user?.loadout?.power);
       const consumed = selected?.kind === "power" ? await orders.findOneAndUpdate({ user: uid, product_id: selected.id, paid: true, consumed_at: { $exists: false } }, { $set: { consumed_at: new Date() } }, { returnDocument: "before" }) : null;
       const scoreRun = { id: randomUUID(), startedAt: Date.now() };
+      const network = rewardNetwork(req);
+      await users.updateOne({ uid }, { $set: { [`rewardRunId.${network}`]: scoreRun.id, [`rewardEventKeys.${network}`]: [] } });
       req.session.scoreRun = scoreRun;
       return res.json({ armorBonus, weaponLevel: owned && weapon?.kind === "weapon" ? weapon.level : 1, unlockedWeaponLevels, ownedShipUpgrades: paidShipUpgrades.map((order: any) => order.product_id), powerUp: consumed && selected?.kind === "power" ? selected.powerUp : null, scoreRunId: scoreRun.id, startSector: 1, adminPreview: false });
     } catch (error) { return res.status(503).json({ error: "Could not start mission" }); }

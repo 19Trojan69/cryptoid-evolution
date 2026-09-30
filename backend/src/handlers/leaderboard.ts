@@ -2,14 +2,17 @@ import { Router, type Request, type Response } from "express";
 import { TOP_LIMIT, validRunScore } from "../leaderboardRules";
 import "../types/session";
 import { isAdminMode } from "../adminAccess";
+import { rankForLevel } from "../rewardRules";
+import { rewardNetwork } from "../rewardNetwork";
 
 export default function mountLeaderboardEndpoints(router: Router) {
   router.get("/top", async (req, res) => {
+    const network = rewardNetwork(req);
     try {
       const leaders = await req.app.locals.userCollection.find({ bestScore: { $gt: 0 } })
-        .project({ _id: 0, username: 1, bestScore: 1 })
+        .project({ _id: 0, username: 1, bestScore: 1, [`rewardsByNetwork.${network}.highestLevel`]: 1 })
         .sort({ bestScore: -1, uid: 1 }).limit(TOP_LIMIT).toArray();
-      return res.json({ leaders: leaders.map((entry: { username: string; bestScore: number }, index: number) => ({ rank: index + 1, username: entry.username, score: entry.bestScore })) });
+      return res.json({ leaders: leaders.map((entry: { username: string; bestScore: number; rewardsByNetwork?: Record<string, { highestLevel?: number }> }, index: number) => ({ rank: index + 1, username: entry.username, score: entry.bestScore, serviceRank: rankForLevel(entry.rewardsByNetwork?.[network]?.highestLevel ?? 1) })) });
     } catch { return res.status(503).json({ error: "Leaderboard unavailable" }); }
   });
 
