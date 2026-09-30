@@ -155,7 +155,7 @@ const homeMusicTranslations: Partial<Record<Locale, Record<string, string>>> = {
   th: { "Music on":"เปิดเพลง", "Music off":"ปิดเพลง", "Tap for music":"แตะเพื่อฟังเพลง" },
 };
 const hudTranslations: Partial<Record<Locale, Record<string, string>>> = {
-  de: { "Game level":"Spiellevel", "FORMATION CLEARED":"FORMATION BESIEGT", "Your current mission will end. Your records will be saved locally.":"Die aktuelle Mission endet. Deine Rekorde werden lokal gespeichert." }, es: { "Weapon level":"Nivel de arma", "Game level":"Nivel de juego" }, fr: { "Weapon level":"Niveau d’arme", "Game level":"Niveau de jeu" },
+  de: { "Weapon level":"Waffenstufe", "Game level":"Spiellevel", "FORMATION CLEARED":"FORMATION BESIEGT", "Your current mission will end. Your records will be saved locally.":"Die aktuelle Mission endet. Deine Rekorde werden lokal gespeichert." }, es: { "Weapon level":"Nivel de arma", "Game level":"Nivel de juego" }, fr: { "Weapon level":"Niveau d’arme", "Game level":"Niveau de jeu" },
   pt: { "Weapon level":"Nível da arma", "Game level":"Nível do jogo" }, it: { "Weapon level":"Livello arma", "Game level":"Livello gioco" }, pl: { "Weapon level":"Poziom broni", "Game level":"Poziom gry" },
   tr: { "Weapon level":"Silah seviyesi", "Game level":"Oyun seviyesi" }, ru: { "Weapon level":"Уровень оружия", "Game level":"Уровень игры" }, hr: { "Weapon level":"Razina oružja", "Game level":"Razina igre" },
   cs: { "Weapon level":"Úroveň zbraně", "Game level":"Úroveň hry" }, sk: { "Weapon level":"Úroveň zbrane", "Game level":"Úroveň hry" }, hu: { "Weapon level":"Fegyverszint", "Game level":"Játékszint" },
