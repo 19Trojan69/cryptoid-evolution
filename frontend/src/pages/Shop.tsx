@@ -379,7 +379,7 @@ const Shop = () => {
         <section className="system-menu-panel">
           <button className="close-button" type="button" onClick={() => setSystemMenuOpen(false)} aria-label={t('Close menu')}>×</button>
           <p className="eyebrow">{t('SYSTEM / SETTINGS')}</p>
-          <h2 id="system-menu-title">{t('System menu')}</h2>
+          <div className="system-menu-title-row"><h2 id="system-menu-title">{t('System menu')}</h2><button className="system-guide-link" type="button" onClick={() => { setSystemMenuOpen(false); setActivePanel('how'); }}><span aria-hidden="true">?</span>{t('Game guide')}</button></div>
           <div className="system-menu-section">
             <div className="system-menu-heading"><strong>{t('Language')}</strong><small>{t('Current language')}: {languages[locale]}</small></div>
             <div className="language-dropdown" data-open={languageMenuOpen ? "true" : "false"}>
@@ -422,7 +422,6 @@ const Shop = () => {
             <div className="system-menu-heading"><strong>{t('Display')}</strong></div>
             <button className="system-setting" type="button" onClick={() => requestGameFullscreen()}><span aria-hidden="true">⛶</span><b>{t('Full screen')}</b></button>
             <button className="system-setting" type="button" aria-pressed={reducedEffects} onClick={() => setReducedEffects(value => !value)}><span aria-hidden="true">◌</span><b>{t(reducedEffects ? 'Reduced effects' : 'Standard effects')}</b></button>
-            <button className="system-setting" type="button" onClick={() => { setSystemMenuOpen(false); setActivePanel('how'); }}><span aria-hidden="true">?</span><b>{t('Open game guide')}</b></button>
           </div>
         </section>
       </div>}
@@ -538,7 +537,7 @@ const Shop = () => {
         </div>
       </div>}
 
-      {activePanel === "how" && <GameGuide onClose={() => setActivePanel(null)} onStart={() => { setActivePanel(null); enterGame(); }} />}
+      {activePanel === "how" && <GameGuide onClose={() => { setActivePanel(null); setSystemMenuOpen(true); }} />}
       {activePanel === "progress" && <div className="info-panel" role="dialog" aria-modal="true" aria-labelledby="info-title">
         <div className="info-panel-content">
           <button className="close-button" type="button" onClick={() => setActivePanel(null)} aria-label={t('Close')}>×</button>

@@ -1343,6 +1343,11 @@ html[data-motion="reduced"] .landing-shell .hero-actions .home-play-button { ani
 .landing-shell .leaderboard-scroll tbody tr:nth-child(odd) { background: #5383b00f; }
 .landing-shell .leaderboard-scroll tbody tr:first-child td { color: #ffe5ac; }
 .landing-shell .system-menu-panel h2 { margin-bottom: 17px; }
+.system-menu-title-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 17px; }
+.landing-shell .system-menu-title-row h2 { margin: 0; }
+.system-guide-link { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; padding: 7px 12px; border: 1px solid #78dce4a8; background: #183a54; color: #e7f9ff; font: 700 13px/1.1 'Rajdhani', sans-serif; text-transform: uppercase; cursor: pointer; white-space: nowrap; }
+.system-guide-link span { display: grid; place-items: center; width: 23px; height: 23px; border: 1px solid currentColor; color: #91eff0; }
+.system-guide-link:hover, .system-guide-link:focus-visible { border-color: #8bf3ee; background: #235975; }
 .landing-shell .system-menu-section { border-top-color: #76cce056; }
 .landing-shell .system-menu-heading strong, .landing-shell .control-choice-group > strong { color: #ffd18b; font: 700 13px 'Oxanium', sans-serif; letter-spacing: .06em; }
 .landing-shell .system-menu-heading small { color: #bbd2e1; font-size: 13px; }
@@ -1367,14 +1372,13 @@ html[data-motion="reduced"] .landing-shell .hero-actions .home-play-button { ani
 .guide-detail p { margin: 0 0 12px; line-height: 1.5; }
 .guide-detail ul { display: grid; gap: 10px; margin: 0; padding-left: 20px; line-height: 1.48; }
 .guide-detail li::marker { color: #70e5de; }
-.guide-panel-content .guide-start { align-self: flex-start; display: inline-flex; align-items: center; justify-content: center; gap: 16px; margin-top: 20px; flex-shrink: 0; }
-.guide-start-icon { display: inline-grid; place-items: center; width: 32px; height: 32px; color: #24334a; }
-.guide-start-icon svg { width: 32px; height: 32px; }
+.guide-panel-content .guide-back { align-self: flex-start; min-height: 44px; margin-top: 16px; flex-shrink: 0; }
 @media (max-width: 560px) {
   .info-panel { padding: 12px; }
   .landing-shell .guide-panel-content { max-height: calc(100dvh - 24px); }
   .guide-topics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-bottom: 12px; }
-  .guide-panel-content .guide-start { width: 100%; margin-top: 14px; }
+  .guide-panel-content .guide-back { width: 100%; margin-top: 14px; }
+  .system-guide-link { padding: 7px 8px; font-size: 11px; }
 }
 .landing-shell .terms-dialog pre { color: #e4eef4; }
 .legal-page { background: radial-gradient(circle at 79% 8%, #42317371, transparent 38%), #070f21; }
