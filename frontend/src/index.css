@@ -655,16 +655,17 @@ html[data-motion="reduced"] .cube-spark, html[data-motion="reduced"] .blockchain
 .ship-debris-piece-4 { right: 0; bottom: 0; animation: debris-south-east 1.35s cubic-bezier(.16, .64, .24, 1) both; }
 .ship-debris-piece-4 b, .ship-debris-piece-4 > .ship-debris-sprite { right: 0; bottom: 0; }
 .boss-explosion .ship-debris-piece { animation-duration: 1.8s; }
-.boss-explosion::before { animation-duration: 2.45s !important; animation-delay: var(--boss-final-delay, .9s) !important; }
-.boss-explosion::after, .boss-explosion > span { animation-duration: 2.55s !important; animation-delay: var(--boss-final-delay, .9s) !important; }
-.boss-fire-sequence { position: absolute; z-index: 2; inset: 5%; pointer-events: none; }
-.boss-fire-sequence i { position: absolute; width: 43%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 42% 38%, #fff 0 6%, #fff4af 10% 18%, #ffbd3d 28%, #f05b20 48%, rgba(144, 24, 12, .54) 62%, transparent 75%); filter: drop-shadow(0 0 7px #ffb238) drop-shadow(0 0 13px rgba(235, 64, 25, .62)); opacity: 0; animation: boss-fire-burst 1.8s cubic-bezier(.14, .68, .2, 1) both; }
-.boss-fire-sequence i:nth-child(1) { top: 4%; left: 3%; animation-delay: .08s; }
-.boss-fire-sequence i:nth-child(2) { top: 19%; right: 0; width: 49%; animation-delay: .33s; }
-.boss-fire-sequence i:nth-child(3) { bottom: 0; left: 29%; width: 46%; animation-delay: .76s; }
-.boss-fire-sequence i:nth-child(4) { top: 3%; left: 29%; width: 40%; }
-.boss-fire-sequence i:nth-child(5) { bottom: 3%; right: 4%; width: 54%; }
-.boss-debris-field { z-index: 1; height: calc(var(--debris-size) * 152 / 124); }
+.boss-falling-hull { position: absolute; z-index: 5; pointer-events: none; transform: translate(-50%, -50%); animation: boss-hull-descent 1.55s cubic-bezier(.28, .08, .3, 1) both; }
+.boss-falling-hull > img { display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 16px #ff683eaa); }
+.boss-fall-bursts { position: absolute; inset: 0; }
+.boss-fall-bursts i { position: absolute; width: 20%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, #fff 0 8%, #ffe6a4 14%, #ff992f 35%, #ee451a 56%, transparent 74%); filter: drop-shadow(0 0 7px #ff9d41); opacity: 0; animation: boss-hull-burst .62s ease-out both; }
+.boss-fall-bursts i::after { position: absolute; inset: 5%; border: 2px solid #ffd48b; border-radius: 50%; content: ''; animation: boss-hull-burst-ring .58s ease-out both; }
+.boss-explosion::before { animation-duration: 1.35s !important; animation-delay: var(--boss-final-delay, 1.45s) !important; }
+.boss-explosion::after, .boss-explosion > span { animation-duration: 1.5s !important; animation-delay: var(--boss-final-delay, 1.45s) !important; }
+.boss-shockwaves { position: absolute; z-index: 3; inset: 0; pointer-events: none; }
+.boss-shockwaves i { position: absolute; inset: 7%; border: 5px solid #fff5d6; border-radius: 50%; box-shadow: 0 0 20px 5px #ff9c44, inset 0 0 15px #ffad54; opacity: 0; animation: boss-shockwave 1.2s ease-out var(--boss-final-delay) both; }
+.boss-shockwaves i + i { border-color: #8ce9ff; box-shadow: 0 0 24px 5px #86dfff, inset 0 0 14px #74daff; animation-delay: calc(var(--boss-final-delay) + .16s); }
+.boss-debris-field { z-index: 1; height: var(--debris-height); }
 .boss-explosion .boss-fragment-hull { background: var(--boss-image) center / contain no-repeat; transform: none; }
 .boss-debris-piece { --boss-dx: 0px; --boss-dy: 0px; --boss-spin: 0deg; position: absolute; inset: 0; overflow: hidden; opacity: 0; filter: drop-shadow(0 2px 3px rgba(255, 126, 35, .72)); animation: boss-debris-drift 2.2s cubic-bezier(.12, .58, .16, 1) both; }
 .boss-debris-piece b { position: absolute; inset: 0; display: block; width: 100%; height: 100%; background-repeat: no-repeat; background-size: 400% 500%; }
@@ -680,7 +681,7 @@ html[data-motion="reduced"] .cube-spark, html[data-motion="reduced"] .blockchain
 .scattered-debris { transform: translate(-50%, -50%); }
 .scattered-debris-piece { position: absolute; inset: 0; display: block; pointer-events: none; opacity: 0; animation: scatter-ship-piece 2.12s cubic-bezier(.1, .49, .23, 1) var(--fragment-delay) both; }
 .scattered-debris-piece b, .scattered-debris-piece > .scattered-debris-sprite { position: absolute; inset: 0; display: block; width: 100%; height: 100%; background-repeat: no-repeat; background-size: 400% 500%; transform: rotate(var(--debris-rotation)); }
-.boss-explosion .scattered-debris-piece { animation-duration: 2.85s; }
+.boss-explosion .scattered-debris-piece { animation-duration: 2.55s; animation-delay: calc(var(--boss-final-delay) + var(--fragment-delay)); }
 .player-explosion .scattered-debris-piece { animation-duration: 2.08s; }
 @keyframes scatter-ship-piece {
   0% { opacity: 0; transform: translate3d(0, 0, 0) rotate(0) scale(1); }
@@ -690,6 +691,8 @@ html[data-motion="reduced"] .cube-spark, html[data-motion="reduced"] .blockchain
 }
 @media (prefers-reduced-motion: reduce) { .scattered-debris-piece { animation-duration: .65s !important; animation-delay: 0s; } }
 html[data-motion="reduced"] .scattered-debris-piece { animation-duration: .65s !important; animation-delay: 0s; }
+@media (prefers-reduced-motion: reduce) { .boss-explosion .scattered-debris-piece { animation-delay: var(--boss-final-delay) !important; } }
+html[data-motion="reduced"] .boss-explosion .scattered-debris-piece { animation-delay: var(--boss-final-delay) !important; }
 
 .player-explosion .ship-debris-piece { animation-duration: 1.65s; }
 .player-crash .ship-debris-piece { animation-duration: 1.25s; }
@@ -700,7 +703,10 @@ html[data-motion="reduced"] .scattered-debris-piece { animation-duration: .65s !
 @keyframes destruction-fire { 0% { opacity: 0; transform: scale(.22) rotate(-8deg); } 16% { opacity: 1; transform: scale(.78) rotate(3deg); } 42% { opacity: .98; transform: scale(1.12) rotate(-2deg); } 100% { opacity: 0; transform: scale(1.38) rotate(8deg); } }
 @keyframes destruction-flare { 0% { opacity: 0; transform: scale(.28) rotate(-12deg); } 22% { opacity: .95; } 100% { opacity: 0; transform: scale(1.32) rotate(24deg); } }
 @keyframes burst-ring { 0% { opacity: .7; transform: scale(.45); } 36% { opacity: .9; } 100% { opacity: 0; transform: scale(1.42); } }
-@keyframes boss-fire-burst { 0% { opacity: 0; transform: scale(.18) rotate(-12deg); } 14% { opacity: 1; } 47% { opacity: .94; transform: scale(1.08) rotate(5deg); } 100% { opacity: 0; transform: scale(1.5) rotate(19deg); } }
+@keyframes boss-hull-descent { 0%, 7% { opacity: 1; transform: translate(-50%, -50%); } 90% { opacity: 1; transform: translate(-50%, calc(-50% + var(--boss-fall-distance))); } 100% { opacity: 0; transform: translate(-50%, calc(-50% + var(--boss-fall-distance))); } }
+@keyframes boss-hull-burst { 0% { opacity: 0; transform: translate(-50%, -50%) scale(.2); } 16% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -50%) scale(1.65); } }
+@keyframes boss-hull-burst-ring { 0% { opacity: 1; transform: scale(.25); } 100% { opacity: 0; transform: scale(1.8); } }
+@keyframes boss-shockwave { 0% { opacity: .95; transform: scale(.25); } 30% { opacity: .8; } 100% { opacity: 0; transform: scale(2.8); } }
 @keyframes boss-debris-drift { 0% { opacity: 0; transform: translate(0, 0) rotate(0) scale(1); } 8%, 76% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--boss-dx), var(--boss-dy)) rotate(var(--boss-spin)) scale(.86); } }
 @keyframes debris-north-west { 0% { opacity: 0; transform: translate(0, 0) rotate(0); } 12%, 68% { opacity: .95; } 100% { opacity: 0; transform: translate(-33px, -27px) rotate(-112deg); } }
 @keyframes debris-north-east { 0% { opacity: 0; transform: translate(0, 0) rotate(0); } 12%, 68% { opacity: .95; } 100% { opacity: 0; transform: translate(34px, -25px) rotate(124deg); } }
@@ -709,11 +715,12 @@ html[data-motion="reduced"] .scattered-debris-piece { animation-duration: .65s !
 @keyframes hit-flash { from { opacity: 1; transform: scale(.5); } to { opacity: 0; transform: scale(1.7); } }
 @keyframes explode { from { opacity: 1; transform: scale(.35); } to { opacity: 0; transform: scale(1.25); } }
 @media (prefers-reduced-motion: reduce) {
-  .boss-fire-sequence i { animation-duration: .55s; animation-delay: 0s; }
+  .boss-falling-hull { animation-duration: 1.55s; }
+  .boss-fall-bursts i { animation-duration: .45s; }
   .boss-debris-piece { animation-duration: .8s; animation-delay: 0s; }
   .boss-debris-piece:nth-child(n+5) { display: none; }
 }
-html[data-motion="reduced"] .boss-fire-sequence i { animation-duration: .55s; animation-delay: 0s; }
+html[data-motion="reduced"] .boss-fall-bursts i { animation-duration: .45s; }
 html[data-motion="reduced"] .boss-debris-piece { animation-duration: .8s; animation-delay: 0s; }
 html[data-motion="reduced"] .boss-debris-piece:nth-child(n+5) { display: none; }
 .earth { position: absolute; z-index: 0; bottom: -16vw; left: 50%; width: min(110vw, 930px); aspect-ratio: 1; transform: translateX(-50%); text-align: center; }
