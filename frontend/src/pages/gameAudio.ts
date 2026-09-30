@@ -1,4 +1,4 @@
-import { readEffectsVolume } from "./musicPreferences.ts";
+import { effectsGain, readEffectsVolume } from "./musicPreferences.ts";
 import type { PowerUpType } from "./powerUps.ts";
 
 export type GameSound = "laser" | "enemyHit" | "explosion" | "collision" | "playerDestroy" | "shield" | "pickup" | "boost" | "boss" | "bossDestroy" | "nova" | "emp";
@@ -13,19 +13,19 @@ const pickupSamples: Record<PowerUpType, SampleName> = {
 // Calibrated from the source files' average levels: one-off effects share a
 // common level, while frequently repeated shots sit slightly lower.
 const sampleGains: Record<SampleName, number> = {
-  "shot-single": .114,
-  "shot-twin": .032,
-  "shot-rapid": .064,
-  "shot-triple": .070,
-  "shot-plasma": .080,
-  "enemy-hit": .240,
-  "enemy-destroy": .092,
-  "enemy-destroy-alt": .124,
-  "player-collision": .226,
-  "shield": .071,
-  "boost": .174,
+  "shot-single": .342,
+  "shot-twin": .096,
+  "shot-rapid": .192,
+  "shot-triple": .210,
+  "shot-plasma": .240,
+  "enemy-hit": .480,
+  "enemy-destroy": .276,
+  "enemy-destroy-alt": .372,
+  "player-collision": .452,
+  "shield": .213,
+  "boost": .348,
   "boss-warning-siren": .72,
-  "boss-destroy": .107,
+  "boss-destroy": .321,
   // Long, deeper boss impact with enough presence to carry on phone speakers.
   "boss-destroy-v3": .9,
   "pickup-shield": .8,
@@ -40,6 +40,7 @@ const sampleGains: Record<SampleName, number> = {
 export class GameAudio {
   private context: AudioContext | null = null;
   private effectsBus: GainNode | null = null;
+  private limiter: DynamicsCompressorNode | null = null;
   private paused = false;
   private effectsVolume = readEffectsVolume();
   private samples = new Map<SampleName, AudioBuffer>();
@@ -54,13 +55,24 @@ export class GameAudio {
     if (!this.context) {
       this.context = new AudioContext();
       this.effectsBus = this.context.createGain();
-      this.effectsBus.gain.value = this.effectsVolume / 100;
-      this.effectsBus.connect(this.context.destination);
+      this.effectsBus.gain.value = effectsGain(this.effectsVolume);
+      if (typeof this.context.createDynamicsCompressor === "function") {
+        this.limiter = this.context.createDynamicsCompressor();
+        this.limiter.threshold.value = -12;
+        this.limiter.knee.value = 12;
+        this.limiter.ratio.value = 8;
+        this.limiter.attack.value = .003;
+        this.limiter.release.value = .2;
+        this.effectsBus.connect(this.limiter).connect(this.context.destination);
+      } else {
+        this.effectsBus.connect(this.context.destination);
+      }
     }
     const context = this.context;
+    // Start decoding immediately, even if iOS delays resume() until a gesture.
+    if (!this.sampleRequest && typeof context.decodeAudioData === "function") this.sampleRequest = this.loadSamples(context);
     try { await context.resume(); } catch { return false; }
     if (this.context !== context) return false;
-    if (!this.sampleRequest && typeof context.decodeAudioData === "function") this.sampleRequest = this.loadSamples(context);
     return context.state === "running";
   }
 
@@ -100,7 +112,7 @@ export class GameAudio {
     oscillator.frequency.setValueAtTime(frequency, at);
     oscillator.frequency.exponentialRampToValueAtTime(Math.max(30, end), at + duration);
     envelope.gain.setValueAtTime(.0001, at);
-    envelope.gain.exponentialRampToValueAtTime(gain, at + .008);
+    envelope.gain.exponentialRampToValueAtTime(Math.min(.5, gain * 3), at + .008);
     envelope.gain.exponentialRampToValueAtTime(.0001, at + duration);
     oscillator.connect(envelope).connect(this.effectsBus!);
     oscillator.start(at);
@@ -145,7 +157,7 @@ export class GameAudio {
 
   setEffectsVolume(percent: number) {
     this.effectsVolume = Math.max(0, Math.min(100, Number.isFinite(percent) ? percent : 100));
-    if (this.effectsBus) this.effectsBus.gain.value = this.effectsVolume / 100;
+    if (this.effectsBus) this.effectsBus.gain.value = effectsGain(this.effectsVolume);
   }
 
   setSector(_sector: number) { /* Reserved for future sector-specific effects. */ }
@@ -159,6 +171,7 @@ export class GameAudio {
     void this.context?.close();
     this.context = null;
     this.effectsBus = null;
+    this.limiter = null;
     this.samples.clear();
   }
 }

@@ -14,9 +14,11 @@ export const readEffectsVolume = (): number => {
   const value = Number(saved);
   return saved !== null && Number.isFinite(value) && value >= 0 && value <= 100 ? value : DEFAULT_EFFECTS_VOLUME;
 };
-// Volume is a percentage of the game's calibrated music mix, not the device's master volume.
-const MUSIC_MAX_GAIN = .16;
-export const musicGain = (percent: number) => MUSIC_MAX_GAIN * Math.max(0, Math.min(100, percent)) / 100;
+// The music slider controls the actual output gain from silence to unity.
+export const musicGain = (percent: number) => Math.max(0, Math.min(100, percent)) / 100;
+// Effects have quiet source samples. Their bus has extra headroom and a peak
+// limiter downstream so existing saved slider settings remain audible.
+export const effectsGain = (percent: number) => 2 * Math.max(0, Math.min(100, percent)) / 100;
 export const readMusicVolume = (): number => {
   const saved = localStorage.getItem(MUSIC_VOLUME_KEY);
   if (saved === null) return DEFAULT_MUSIC_VOLUME;
