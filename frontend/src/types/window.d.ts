@@ -8,6 +8,10 @@ declare global {
     Pi: {
       init(options: { version: string }): Promise<void>;
 
+      getPiHostAppInfo?(): Promise<{
+        hostApp?: string;
+      }>;
+
       signIn?(options: {
         clientId: string;
         redirectUri: string;
