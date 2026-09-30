@@ -1,10 +1,10 @@
 {
-  "name": "app-platform-demo-backend",
-  "version": "1.0.0",
-  "license": "MIT",
-  "description": "A demo app to showcase usage of the Pi App Platform.",
+  "name": "cryptoid-evolution-backend",
+  "version": "0.11.0",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "description": "Pi authentication, Testnet purchases, leaderboards and rewards for Cryptoid Evolution.",
   "author": {
-    "name": "Pi Core Team"
+    "name": "Marc Wolf"
   },
   "scripts": {
     "build": "tsc",
