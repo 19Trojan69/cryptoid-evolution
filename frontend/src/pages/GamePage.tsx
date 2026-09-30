@@ -679,7 +679,8 @@ const GamePage = () => {
         state.shieldMs = Math.max(0, state.shieldMs - (transitionPaused ? 0 : delta));
         if (state.shieldMs === 0) state.shieldCharges = 0;
         const playerRecovering = state.effects.some(effect => effect.target === "player" && (effect.kind === "player-crash" || effect.kind === "player-explosion"));
-        const purchasedWeaponDelta = transitionPaused || playerRecovering ? 0 : delta;
+        const strongerPickupActive = state.pickupWeaponMs > 0 && state.pickupWeaponLevel > state.paidWeaponLevel;
+        const purchasedWeaponDelta = transitionPaused || playerRecovering || strongerPickupActive ? 0 : delta;
         const pickupWeaponDelta = transitionPaused ? 0 : delta;
         state.weaponTimers = state.weaponTimers.map((remaining, level) => level > 1 && remaining > 0 ? Math.max(0, remaining - purchasedWeaponDelta) : remaining);
         if (state.paidWeaponLevel > 1) {
@@ -918,7 +919,8 @@ const GamePage = () => {
           state.asteroids = state.asteroids.filter(item => item.id !== enemy.id);
           if (enemy.attackPattern !== null) attackCooldownRef.current = 0;
           const drop = createPowerUpDrop({ id: nextIdRef.current, x: enemy.x, y: enemy.y, width, height, threats: state.asteroids, activeCount: state.powerUps.length, chanceRoll: Math.random(), kindRoll: Math.random(), destroyed: state.destroyed, dropsCreated: dropsCreatedRef.current });
-          if (drop) { nextIdRef.current += 1; dropsCreatedRef.current += 1; state.powerUps.push(drop); }
+          const usefulDrop = drop?.type === "weapon" && state.weaponLevel >= 5 ? null : drop;
+          if (usefulDrop) { nextIdRef.current += 1; dropsCreatedRef.current += 1; state.powerUps.push(usefulDrop); }
         }
         state.shots = remainingShots;
         // The later-level escort flight arrives after the first formation is defeated.
