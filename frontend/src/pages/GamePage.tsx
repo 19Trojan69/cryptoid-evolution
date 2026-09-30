@@ -920,7 +920,7 @@ const GamePage = () => {
           if (pickup.type === "weapon") state.weaponSource = "pickup";
           syncSelectedWeapon(state);
           state.pickupNotice = { id: pickup.id, type: pickup.type, remainingMs: 1_550, level: stageWeaponLevel(shipStageRef.current, state.weaponLevel) };
-          soundRef.current?.play(pickup.type === "shield" ? "shield" : "pickup");
+          soundRef.current?.playPickup(pickup.type);
           return false;
         });
         if (transitionPaused) fireTimerRef.current = 0;
