@@ -1,12 +1,12 @@
 import { Router } from "express";
-import platformAPIClient from "../services/platformAPIClient";
+import { platformAPIClientForRequest } from "../services/platformAPIClient";
 import { findOffer, shipUpgradePrerequisite } from "../hangarCatalog";
 import "../types/session";
 import { isAdminMode } from "../adminAccess";
 import { testPiPurchaseAllowed } from "../paymentPolicy";
 
 const identifier = (value: unknown) => typeof value === "string" && /^[a-zA-Z0-9_-]{1,100}$/.test(value) ? value : null;
-const fetchPayment = async (id: string) => (await platformAPIClient.get(`/v2/payments/${id}`)).data;
+const fetchPayment = async (req: any, id: string) => (await platformAPIClientForRequest(req).get(`/v2/payments/${id}`)).data;
 
 export default function mountPaymentsEndpoints(router: Router) {
   router.post("/approve", async (req, res) => {
@@ -16,7 +16,7 @@ export default function mountPaymentsEndpoints(router: Router) {
     if (!uid) return res.status(401).json({ error: "Sign in first" });
     if (!id) return res.status(400).json({ error: "Invalid payment" });
     try {
-      const payment = await fetchPayment(id);
+      const payment = await fetchPayment(req, id);
       const offer = findOffer(payment.metadata?.productId);
       if (!offer || payment.identifier !== id || payment.user_uid !== uid || payment.direction !== "user_to_app" || payment.amount !== offer.pricePi || payment.status?.cancelled || payment.status?.user_cancelled) {
         return res.status(400).json({ error: "Payment does not match the signed-in user and catalog price" });
@@ -29,7 +29,7 @@ export default function mountPaymentsEndpoints(router: Router) {
       const prerequisite = shipUpgradePrerequisite(offer);
       if (prerequisite && !await orders.findOne({ user: uid, product_id: prerequisite, paid: true })) return res.status(403).json({ error: "Advanced stage required before Elite" });
        if (!existing) await orders.updateOne({ pi_payment_id: id }, { $setOnInsert: { pi_payment_id: id, product_id: offer.id, user: uid, paid: false, created_at: new Date() } }, { upsert: true });
-      if (!payment.status?.developer_approved) await platformAPIClient.post(`/v2/payments/${id}/approve`);
+      if (!payment.status?.developer_approved) await platformAPIClientForRequest(req).post(`/v2/payments/${id}/approve`);
       return res.json({ approved: true });
     } catch (error) {
       console.error("Payment approval failed", error);
@@ -45,7 +45,7 @@ export default function mountPaymentsEndpoints(router: Router) {
       const order = await orders.findOne({ pi_payment_id: id, user: uid });
       if (!order || order.cancelled) return res.status(404).json({ error: "Approved order not found" });
       if (order.paid) return res.json({ completed: true });
-      const payment = await fetchPayment(id);
+      const payment = await fetchPayment(req, id);
       const offer = findOffer(order.product_id);
       const txid = payment.transaction?.txid;
       if (!testPiPurchaseAllowed(offer, payment.network)) return res.status(403).json({ error: "Only Test-Pi weapon payments are enabled" });
@@ -54,7 +54,7 @@ export default function mountPaymentsEndpoints(router: Router) {
       }
       const prerequisite = shipUpgradePrerequisite(offer);
       if (prerequisite && !await orders.findOne({ user: uid, product_id: prerequisite, paid: true })) return res.status(403).json({ error: "Advanced stage required before Elite" });
-      if (!payment.status?.developer_completed) await platformAPIClient.post(`/v2/payments/${id}/complete`, { txid });
+      if (!payment.status?.developer_completed) await platformAPIClientForRequest(req).post(`/v2/payments/${id}/complete`, { txid });
       // Credit only after Pi has confirmed /complete (or reported already completed).
       await orders.updateOne({ pi_payment_id: id, user: uid, paid: false, cancelled: { $ne: true } }, { $set: { paid: true, txid, completed_at: new Date() } });
       return res.json({ completed: true });
@@ -80,7 +80,7 @@ export default function mountPaymentsEndpoints(router: Router) {
     if (!uid) return res.status(401).json({ error: "Sign in first" });
     if (!id) return res.status(400).json({ error: "Invalid payment" });
     try {
-      const payment = await fetchPayment(id);
+      const payment = await fetchPayment(req, id);
       if (payment.user_uid !== uid || !payment.status?.user_cancelled && !payment.status?.cancelled) return res.status(400).json({ error: "Payment is not cancelled" });
       await req.app.locals.orderCollection.updateOne({ pi_payment_id: id, user: uid, paid: false }, { $set: { cancelled: true } });
       return res.json({ cancelled: true });
