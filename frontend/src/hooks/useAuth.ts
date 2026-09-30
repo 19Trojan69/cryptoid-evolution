@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { axiosClient } from "../lib/axiosClient";
+import { axiosClient, PI_ACCESS_TOKEN_KEY } from "../lib/axiosClient";
 import type { AuthResult, PaymentDTO, SessionUser, User } from "../types/pi";
 import { ADMIN_MODE_KEY } from "../pages/shipFleet";
 import { createPiOAuthState, PI_OAUTH_CLIENT_ID, PI_OAUTH_ORIGIN, PI_OAUTH_REDIRECT_URI, PI_OAUTH_STATE_KEY } from "../config/piOAuth";
@@ -43,7 +43,7 @@ export const useAuth = () => {
     let active = true;
     axiosClient.get<SessionUser>("/user/me")
       .then(({ data }) => { if (active) { setUser(data.user); setCanAdmin(data.canAdmin); setAdminMode(data.adminMode); sessionStorage.setItem(ADMIN_MODE_KEY, data.adminMode ? "1" : "0"); } })
-      .catch(() => { localStorage.removeItem("cryptoid_pi_session"); sessionStorage.removeItem(ADMIN_MODE_KEY); });
+      .catch(() => { localStorage.removeItem("cryptoid_pi_session"); sessionStorage.removeItem(PI_ACCESS_TOKEN_KEY); sessionStorage.removeItem(ADMIN_MODE_KEY); });
 
     return () => { active = false; };
   }, []);
@@ -53,6 +53,7 @@ export const useAuth = () => {
   }, []);
 
   const signInUser = useCallback(async (authResult: AuthResult) => {
+    sessionStorage.setItem(PI_ACCESS_TOKEN_KEY, authResult.accessToken);
     try {
       const { data } = await axiosClient.post<SessionUser>("/user/signin", { authResult });
       localStorage.setItem("cryptoid_pi_session", "1");
@@ -66,6 +67,7 @@ export const useAuth = () => {
         catch (err) { console.error("Could not resume incomplete payment", err); }
       }
     } catch (err) {
+      sessionStorage.removeItem(PI_ACCESS_TOKEN_KEY);
       console.error("Error signing in:", err);
       throw err;
     }
@@ -120,6 +122,7 @@ export const useAuth = () => {
       setCanAdmin(false);
       setAdminMode(false);
       sessionStorage.removeItem(ADMIN_MODE_KEY);
+      sessionStorage.removeItem(PI_ACCESS_TOKEN_KEY);
       localStorage.removeItem("cryptoid_pi_session");
     } catch (err) {
       console.error("Error signing out:", err);
