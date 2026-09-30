@@ -1,9 +1,32 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { allPlayerColors, bossNozzleStyles, buySkin, buyShipVariant, colorForSkin, enemyAppearance, enemySprite, EXTRA_STARTER_PRICE, fleetCount, ownedSkins, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipNozzleStyles, spriteVisualOffset, TESTNET_STANDARD_HULL_COUNT, testnetStandardHullAvailable } from "./shipFleet.ts";
+import { allPlayerColors, bossNozzleStyles, buySkin, buyShipVariant, colorForSkin, enemyAppearance, enemySprite, EXTRA_STARTER_PRICE, fleetCount, migrateLegacyTestnetShipSave, ownedSkins, playerColors, playerSkins, readShipFleet, repaintStarter, savedShipColors, selectedShip, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, shipSaveKey, shipSaveNetworkForHost, shipNozzleStyles, spriteVisualOffset, TESTNET_STANDARD_HULL_COUNT, testnetStandardHullAvailable } from "./shipFleet.ts";
 import { reinforcementCount } from "./sectorManager.ts";
 
 globalThis.sessionStorage ??= { getItem: () => null };
+
+test("Testnet Shards and ship purchases never populate Mainnet saves", () => {
+  assert.equal(shipSaveNetworkForHost("cryptoid-evolution-testnet.vercel.app"), "testnet");
+  assert.equal(shipSaveNetworkForHost("cryptoid-evolution.vercel.app"), "mainnet");
+  const values = new Map([
+    ["cryptoid_shard_balance", "420"],
+    ["cryptoid_ship_fleet_v2", '{"grey-scout":{"grey":1},"nova-wing":{"gold":1}}'],
+    ["cryptoid_player_ship_skin", "nova-wing"],
+    ["cryptoid_player_ship_color", "gold"],
+    ["cryptoid_player_ship_colors", '{"nova-wing":"gold"}'],
+    ["cryptoid_owned_ship_skins", '["nova-wing"]'],
+  ]);
+  const storage = { getItem: key => values.get(key) ?? null, setItem: (key, value) => values.set(key, value) };
+  migrateLegacyTestnetShipSave(storage);
+  for (const [key, value] of [...values].filter(([key]) => !key.endsWith("_testnet"))) {
+    assert.equal(values.get(shipSaveKey(key, "testnet")), value);
+    assert.equal(values.get(shipSaveKey(key, "mainnet")), undefined);
+  }
+  values.set(shipSaveKey("cryptoid_shard_balance", "testnet"), "10");
+  migrateLegacyTestnetShipSave(storage);
+  assert.equal(values.get(shipSaveKey("cryptoid_shard_balance", "testnet")), "10");
+  assert.notEqual(SHARD_BALANCE_KEY, "cryptoid_shard_balance");
+});
 
 test("only the grey starter is free and the first ten standard hulls are released", () => {
   assert.equal(playerSkins.length, 20);

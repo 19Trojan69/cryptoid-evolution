@@ -56,6 +56,7 @@ const topics = [
       "Your service rank rises with completed difficulty stages up to stage 500. The newest rank replaces the previous one beside your name and appears in the Top 100.",
       "Complete chains in different levels to earn milestones at 1, 3, 10, 25 and 50 chains. The best bonus medal for each level is shown in your collection.",
       "Testnet Rewards are for testing only and will not transfer to Mainnet. Mainnet Rewards start from zero and then stay saved permanently to your account.",
+      "Testnet Shards and Standard ship purchases are also for testing and do not transfer to Mainnet. Your Mainnet balance and purchased fleet start from zero.",
     ],
   },
   {
