@@ -113,7 +113,7 @@ type Effect = {
   debrisColor?: PlayerColorId;
   shipStage?: ShipStage;
 };
-type GameState = { asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; rewardNotice: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; score: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; shieldActive: boolean; overdriveMs: number; rapidFireMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
+type GameState = { asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; rewardNotice: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; score: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; shieldActive: boolean; overdriveMs: number; rapidFireMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; weaponTimers: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
 
 const CockpitIcon = ({ kind }: { kind: "home" | "play" | "pause" }) => <svg className="game-control-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{kind === "home" ? <><path d="m3 11 9-7 9 7" /><path d="M5 10v10h14V10M10 20v-6h4v6" /></> : kind === "play" ? <path d="M8 5 19 12 8 19Z" fill="currentColor" stroke="none" /> : <><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor" stroke="none" /><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor" stroke="none" /></>}</svg>;
 
@@ -146,7 +146,7 @@ const BlockchainProgress = ({ blocks, saved = false }: { blocks: number; saved?:
   </div>
 );
 
-const createInitialState = (): GameState => ({ asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", chainBlocks: 0, chainResult: "", rewardNotice: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: shipStartHeight[readShipStart()] }, thrust: 0, effects: [], powerUps: [], score: 0, shards: 0, hearts: 3, maxHearts: 3, projectileGuard: 0, shieldCharges: 0, shieldMs: 0, shieldActive: true, overdriveMs: 0, rapidFireMs: 0, empMs: 0, pendingStartPower: null, weaponLevel: 1, weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") || sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "loading" : "playing" });
+const createInitialState = (): GameState => ({ asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", chainBlocks: 0, chainResult: "", rewardNotice: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: shipStartHeight[readShipStart()] }, thrust: 0, effects: [], powerUps: [], score: 0, shards: 0, hearts: 3, maxHearts: 3, projectileGuard: 0, shieldCharges: 0, shieldMs: 0, shieldActive: true, overdriveMs: 0, rapidFireMs: 0, empMs: 0, pendingStartPower: null, weaponLevel: 1, weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], weaponTimers: [0, 0, 0, 0, 0, 0], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") || sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "loading" : "playing" });
 
 const readRecord = (key: string) => Number(window.localStorage.getItem(key) || 0);
 
@@ -361,6 +361,9 @@ const GamePage = () => {
   const audioCleanupRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const gameOverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const startRequestRef = useRef(false);
+  const [weaponMenuOpen, setWeaponMenuOpen] = useState(false);
+  const weaponHoldTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const weaponLongPressRef = useRef(false);
 
   const activateLoadout = async () => {
     if (startRequestRef.current || stateRef.current.status !== "loading") return;
@@ -391,11 +394,13 @@ const GamePage = () => {
       stateRef.current.hearts = stateRef.current.maxHearts;
       checkpointAtRef.current = 0;
       checkpointScoreRef.current = 0;
-      stateRef.current.weaponLevel = Math.max(1, Math.min(5, data.weaponLevel));
-      stateRef.current.paidWeaponLevel = stateRef.current.weaponLevel;
-      stateRef.current.paidWeaponMs = stateRef.current.weaponLevel > 1 ? PURCHASED_WEAPON_DURATION_MS : 0;
-      stateRef.current.unlockedWeapons = Array.isArray(data.unlockedWeaponLevels) ? [...new Set([1, ...data.unlockedWeaponLevels.filter(level => Number.isInteger(level) && level >= 1 && level <= 5)])] : [1];
-      stateRef.current.weaponCap = Math.max(stateRef.current.weaponLevel, ...stateRef.current.unlockedWeapons);
+      stateRef.current.weaponLevel = 1;
+      stateRef.current.paidWeaponLevel = 1;
+      stateRef.current.paidWeaponMs = 0;
+      stateRef.current.unlockedWeapons = Array.isArray(data.unlockedWeaponLevels) ? [...new Set([1, ...data.unlockedWeaponLevels.filter(level => Number.isInteger(level) && level >= 1 && level <= 5)])].sort((a, b) => a - b) : [1];
+      stateRef.current.weaponTimers = [0, 0, 0, 0, 0, 0];
+      for (const level of stateRef.current.unlockedWeapons) if (level > 1) stateRef.current.weaponTimers[level] = -1;
+      stateRef.current.weaponCap = Math.max(...stateRef.current.unlockedWeapons);
       if (data.powerUp) stateRef.current.pendingStartPower = data.powerUp;
     } catch (error) {
       console.error("Could not load paid loadout", error);
@@ -644,9 +649,15 @@ const GamePage = () => {
         state.empMs = Math.max(0, state.empMs - (transitionPaused ? 0 : delta));
         state.shieldMs = Math.max(0, state.shieldMs - (transitionPaused ? 0 : delta));
         if (state.shieldMs === 0) state.shieldCharges = 0;
-        state.paidWeaponMs = Math.max(0, state.paidWeaponMs - (transitionPaused ? 0 : delta));
-        state.pickupWeaponMs = Math.max(0, state.pickupWeaponMs - (transitionPaused ? 0 : delta));
-        if (state.paidWeaponMs === 0) state.paidWeaponLevel = 1;
+        const weaponDelta = transitionPaused ? 0 : delta;
+        state.weaponTimers = state.weaponTimers.map((remaining, level) => level > 1 && remaining > 0 ? Math.max(0, remaining - weaponDelta) : remaining);
+        if (state.paidWeaponLevel > 1) {
+          state.paidWeaponMs = Math.max(0, state.weaponTimers[state.paidWeaponLevel] ?? 0);
+          if (state.paidWeaponMs === 0) state.paidWeaponLevel = 1;
+        } else {
+          state.paidWeaponMs = 0;
+        }
+        state.pickupWeaponMs = Math.max(0, state.pickupWeaponMs - weaponDelta);
         if (state.pickupWeaponMs === 0) state.pickupWeaponLevel = 1;
         state.weaponLevel = activeWeaponLevel(state.paidWeaponLevel, state.paidWeaponMs, state.pickupWeaponLevel, state.pickupWeaponMs, state.weaponCap);
         sectionElapsedRef.current += delta;
@@ -1040,6 +1051,61 @@ const GamePage = () => {
     soundRef.current?.play(power === "bomb" ? "nova" : power === "emp" ? "emp" : power === "overdrive" ? "boost" : "pickup");
     setGame({ ...state });
   };
+  const weaponNames = ["", "Standard", "Twin", "Rapid Twin", "Triple", "Plasma"];
+  const weaponGlyphs = ["", "I", "II", "III", "IV", "V"];
+  const formatWeaponTime = (ms: number) => {
+    const seconds = Math.max(0, Math.ceil(ms / 1_000));
+    return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+  };
+  const selectWeaponLevel = (level: number) => {
+    const state = stateRef.current;
+    if (state.status !== "playing" || !state.unlockedWeapons.includes(level)) return;
+    if (level === 1) {
+      state.paidWeaponLevel = 1;
+      state.paidWeaponMs = 0;
+    } else {
+      let remaining = state.weaponTimers[level] ?? 0;
+      if (remaining === 0) return;
+      if (remaining < 0) {
+        remaining = PURCHASED_WEAPON_DURATION_MS;
+        state.weaponTimers[level] = remaining;
+      }
+      state.paidWeaponLevel = level;
+      state.paidWeaponMs = remaining;
+    }
+    state.weaponLevel = activeWeaponLevel(state.paidWeaponLevel, state.paidWeaponMs, state.pickupWeaponLevel, state.pickupWeaponMs, state.weaponCap);
+    setWeaponMenuOpen(false);
+    setGame({ ...state, weaponTimers: [...state.weaponTimers] });
+  };
+  const cycleWeapon = () => {
+    const state = stateRef.current;
+    const available = state.unlockedWeapons
+      .filter(level => level === 1 || (state.weaponTimers[level] ?? 0) !== 0)
+      .sort((a, b) => a - b);
+    if (!available.length) return;
+    const current = state.paidWeaponLevel > 1 ? state.paidWeaponLevel : 1;
+    const index = available.indexOf(current);
+    selectWeaponLevel(available[(index + 1 + available.length) % available.length]);
+  };
+  const startWeaponHold = () => {
+    if (weaponHoldTimerRef.current !== null) window.clearTimeout(weaponHoldTimerRef.current);
+    weaponLongPressRef.current = false;
+    weaponHoldTimerRef.current = window.setTimeout(() => {
+      weaponHoldTimerRef.current = null;
+      weaponLongPressRef.current = true;
+      setWeaponMenuOpen(true);
+    }, 420);
+  };
+  const finishWeaponHold = () => {
+    if (weaponHoldTimerRef.current !== null) {
+      window.clearTimeout(weaponHoldTimerRef.current);
+      weaponHoldTimerRef.current = null;
+    }
+  };
+  useEffect(() => () => {
+    if (weaponHoldTimerRef.current !== null) window.clearTimeout(weaponHoldTimerRef.current);
+  }, []);
+
   const restart = () => {
     if (bossVictoryTimerRef.current !== null) window.clearTimeout(bossVictoryTimerRef.current);
     bossVictoryTimerRef.current = null;
@@ -1055,6 +1121,7 @@ const GamePage = () => {
     scoreRunRef.current = null;
     adminRunRef.current = false;
     setScoreSync("idle");
+    setWeaponMenuOpen(false);
     checkpointAtRef.current = 0;
     checkpointScoreRef.current = 0;
     formationIndexRef.current = 0;
@@ -1163,6 +1230,23 @@ const GamePage = () => {
         {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship shielded-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0 ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${5 + game.thrust * 13}%`, ...shipVisualOffset } as CSSProperties} aria-label={t('Your Cryptoid ship')}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} />{engineTrails(shipSelection.skin.sprite, "player-engine")}</div></div>}
         <div className={`touch-controls touch-controls-${readControlHand()}`}>
           <div className="edge-actions" role="group" aria-label={t('Available equipment')}>
+            <div className="weapon-control-wrap" data-active={game.paidWeaponLevel > 1 && game.paidWeaponMs > 0 ? "true" : "false"} style={{ "--weapon-progress": `${game.paidWeaponLevel > 1 && game.paidWeaponMs > 0 ? Math.max(0, Math.min(360, game.paidWeaponMs / PURCHASED_WEAPON_DURATION_MS * 360)) : 0}deg` } as CSSProperties}>
+              {weaponMenuOpen && <div className="weapon-wheel" role="menu" aria-label="Weapon selection">
+                {[1, 2, 3, 4, 5].map(level => {
+                  const owned = game.unlockedWeapons.includes(level);
+                  const remaining = game.weaponTimers[level] ?? 0;
+                  const expired = level > 1 && owned && remaining === 0;
+                  const selected = level === (game.paidWeaponLevel > 1 ? game.paidWeaponLevel : 1);
+                  const status = level === 1 ? "FREE" : !owned ? "LOCKED" : remaining < 0 ? "5:00" : expired ? "USED" : formatWeaponTime(remaining);
+                  return <button key={level} type="button" role="menuitem" className={`weapon-wheel-option weapon-wheel-option-${level}${selected ? " selected" : ""}${!owned ? " locked" : ""}`} disabled={!owned || expired} onClick={() => selectWeaponLevel(level)} aria-label={`${weaponNames[level]} · ${status}`}><b>{weaponGlyphs[level]}</b><span>{weaponNames[level]}</span><small>{status}</small></button>;
+                })}
+              </div>}
+              <button type="button" className="edge-action edge-action-weapon weapon-cycle" disabled={game.status !== "playing"} onPointerDown={startWeaponHold} onPointerUp={finishWeaponHold} onPointerCancel={finishWeaponHold} onPointerLeave={finishWeaponHold} onClick={() => { if (weaponLongPressRef.current) { weaponLongPressRef.current = false; return; } cycleWeapon(); }} aria-label="Tap to switch weapon. Hold for weapon menu.">
+                <span className="weapon-cycle-glyph" aria-hidden="true">{weaponGlyphs[game.paidWeaponLevel > 1 ? game.paidWeaponLevel : 1]}</span>
+                <small>{game.paidWeaponLevel > 1 ? weaponNames[game.paidWeaponLevel] : "WEAPON"}</small>
+                {game.paidWeaponLevel > 1 && game.paidWeaponMs > 0 && <em>{formatWeaponTime(game.paidWeaponMs)}</em>}
+              </button>
+            </div>
             {game.pendingStartPower && <button type="button" className={`edge-action edge-action-${game.pendingStartPower} edge-action-purchased`} disabled={game.status !== "playing" || (game.pendingStartPower === "shield" && game.shieldCharges > 0 && game.shieldMs > 0) || (game.pendingStartPower === "rapid" && game.rapidFireMs > 0) || (game.pendingStartPower === "overdrive" && game.overdriveMs > 0) || (game.pendingStartPower === "emp" && game.empMs > 0)} aria-label={`${t("Tap to activate")} ${t(powerUpNames[game.pendingStartPower])}`} onClick={activateStartPower}><span aria-hidden="true">{powerUpSymbols[game.pendingStartPower]}</span><small>{t(powerUpNames[game.pendingStartPower])}</small><em>{t("Tap to activate")}</em></button>}
           </div>
         </div>
