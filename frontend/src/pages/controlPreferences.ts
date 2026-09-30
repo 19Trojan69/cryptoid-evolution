@@ -5,7 +5,7 @@ export type ControlSensitivity = "gentle" | "normal" | "fast";
 export const CONTROL_ZONE_KEY = "cryptoid_control_zone";
 export type ControlZone = "compact" | "normal" | "wide";
 export const SHIP_START_KEY = "cryptoid_ship_start";
-export type ShipStart = "higher" | "normal" | "lower";
+export type ShipStart = "higher" | "touch";
 
 export const readControlHand = (): ControlHand => {
   return localStorage.getItem(CONTROL_HAND_KEY) === "left" ? "left" : "right";
@@ -20,9 +20,11 @@ export const readControlZone = (): ControlZone => {
 };
 export const readShipStart = (): ShipStart => {
   const value = localStorage.getItem(SHIP_START_KEY);
-  return value === "normal" || value === "lower" ? value : "higher";
+  // Preserve the closer setting for players who had chosen either lower option.
+  return value === "touch" || value === "normal" || value === "lower" ? "touch" : "higher";
 };
 export const sensitivityMultiplier: Record<ControlSensitivity, number> = { gentle: .75, normal: 1, fast: 1.3 };
 export const zoneFraction: Record<ControlZone, number> = { compact: .5, normal: .65, wide: .8 };
-// Roughly 38 CSS pixels (about 1 cm) higher on a typical phone playfield.
-export const shipStartHeight: Record<ShipStart, number> = { higher: .78, normal: .84, lower: .86 };
+// On a typical phone playfield, the touch position starts about 30 CSS pixels
+// (roughly 8 mm) below the established upper position.
+export const shipStartHeight: Record<ShipStart, number> = { higher: .78, touch: .82 };

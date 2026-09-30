@@ -288,7 +288,25 @@ const guideTranslations: Partial<Record<Locale, Record<string, string>>> = {
   },
 };
 
-export const translate = (locale: Locale, source: string) => englishGameTerms.has(source) ? source : source === "MISSION FAILED" ? failedMissionTranslations[locale] : locale === "en" ? source : guideTranslations[locale]?.[source] ?? evolutionShopTranslations[locale]?.[source] ?? audioSettingsTranslations[locale]?.[source] ?? gameplayPolishTranslations[locale]?.[source] ?? homeMusicTranslations[locale]?.[source] ?? controlTranslations[locale]?.[source] ?? hudTranslations[locale]?.[source] ?? systemMenuTranslations[locale]?.[source] ?? extendedTranslations[locale]?.[source] ?? powerUpTranslations[locale]?.[source] ?? levelTranslations[locale]?.[source] ?? networkTranslations[locale]?.[source] ?? newerTranslations[locale]?.[source] ?? translations[locale]?.[source] ?? source;
+const shipPositionTranslations: Partial<Record<Locale, Record<string, string>>> = {
+  de: { "Current position": "Bisherige Position", "Under finger": "Direkt unter dem Finger" },
+  es: { "Current position": "Posición actual", "Under finger": "Bajo el dedo" },
+  fr: { "Current position": "Position actuelle", "Under finger": "Sous le doigt" },
+  pt: { "Current position": "Posição atual", "Under finger": "Sob o dedo" },
+  it: { "Current position": "Posizione attuale", "Under finger": "Sotto il dito" },
+  pl: { "Current position": "Obecna pozycja", "Under finger": "Pod palcem" },
+  tr: { "Current position": "Mevcut konum", "Under finger": "Parmağın altında" },
+  ru: { "Current position": "Текущая позиция", "Under finger": "Под пальцем" },
+  hr: { "Current position": "Trenutačni položaj", "Under finger": "Pod prstom" },
+  cs: { "Current position": "Současná poloha", "Under finger": "Pod prstem" },
+  sk: { "Current position": "Súčasná poloha", "Under finger": "Pod prstom" },
+  hu: { "Current position": "Jelenlegi pozíció", "Under finger": "Az ujj alatt" },
+  ro: { "Current position": "Poziția actuală", "Under finger": "Sub deget" },
+  sr: { "Current position": "Тренутни положај", "Under finger": "Испод прста" },
+  uk: { "Current position": "Поточна позиція", "Under finger": "Під пальцем" },
+  th: { "Current position": "ตำแหน่งปัจจุบัน", "Under finger": "ใต้นิ้ว" },
+};
+export const translate = (locale: Locale, source: string) => englishGameTerms.has(source) ? source : source === "MISSION FAILED" ? failedMissionTranslations[locale] : locale === "en" ? source : shipPositionTranslations[locale]?.[source] ?? guideTranslations[locale]?.[source] ?? evolutionShopTranslations[locale]?.[source] ?? audioSettingsTranslations[locale]?.[source] ?? gameplayPolishTranslations[locale]?.[source] ?? homeMusicTranslations[locale]?.[source] ?? controlTranslations[locale]?.[source] ?? hudTranslations[locale]?.[source] ?? systemMenuTranslations[locale]?.[source] ?? extendedTranslations[locale]?.[source] ?? powerUpTranslations[locale]?.[source] ?? levelTranslations[locale]?.[source] ?? networkTranslations[locale]?.[source] ?? newerTranslations[locale]?.[source] ?? translations[locale]?.[source] ?? source;
 export const useLocale = () => {
   const [locale, setLocale] = useState<Locale>(() => resolveLocale(navigator.languages?.length ? navigator.languages : [navigator.language], localStorage.getItem(STORAGE_KEY)));
   const [automatic, setAutomatic] = useState(() => !localStorage.getItem(STORAGE_KEY));

@@ -1162,7 +1162,7 @@ const GamePage = () => {
     const moveFraction = zoneFraction[readControlZone()];
     if (event.pointerType === "touch" && (readControlHand() === "right" ? event.clientX - bounds.left < bounds.width * (1 - moveFraction) : event.clientX - bounds.left > bounds.width * moveFraction)) return;
     pointerRef.current = event.pointerId;
-    touchOriginRef.current = event.pointerType === "touch" ? { x: event.clientX, y: event.clientY, player: placePlayerFromPointer(event.clientX - bounds.left, event.clientY - bounds.top, bounds.width, bounds.height, true) } : null;
+    touchOriginRef.current = event.pointerType === "touch" ? { x: event.clientX, y: event.clientY, player: placePlayerFromPointer(event.clientX - bounds.left, event.clientY - bounds.top, bounds.width, bounds.height, readShipStart() !== "touch") } : null;
     if (event.pointerType !== "touch") event.currentTarget.setPointerCapture(event.pointerId);
     positionFromPointer(event);
   };
