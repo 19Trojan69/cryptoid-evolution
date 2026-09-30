@@ -50,11 +50,12 @@ const topics = [
   },
   {
     id: "collection", label: "Collection & ranks", title: "Collect bosses and milestones",
-    intro: "Open Progress to see boss stickers, stars, chain milestones and bonus medals.",
+    intro: "Open Rewards to see linked Blocks, boss stickers, stars, chain milestones, bonus medals and your current service rank.",
     details: [
       "There are 50 boss stickers. The first win against a boss unlocks its sticker; repeat wins raise it to two and then three stars.",
-      "Your rank rises with different bosses defeated: Rookie, Pilot (1), Navigator (3), Commander (10), Veteran (25) and Legend (50).",
+      "Your service rank rises with completed difficulty stages up to stage 500. The newest rank replaces the previous one beside your name and appears in the Top 100.",
       "Complete chains in different levels to earn milestones at 1, 3, 10, 25 and 50 chains. The best bonus medal for each level is shown in your collection.",
+      "Testnet Rewards are for testing only and will not transfer to Mainnet. Mainnet Rewards start from zero and then stay saved permanently to your account.",
     ],
   },
   {
@@ -68,11 +69,11 @@ const topics = [
   },
   {
     id: "features", label: "Progress & settings", title: "Find your way around",
-    intro: "The home screen opens Hangar, Shop, Weapons, Power-ups, Progress and Top 100.",
+    intro: "The home screen opens Hangar, Shop, Weapons, Power-ups, Progress, Rewards and Top 100.",
     details: [
-      "Progress shows your best score, highest stage, defeated enemies, rank and collection. Top 100 lists the online high scores.",
+      "Progress shows your best score, highest stage and defeated enemies. Rewards shows your collection and service rank; Top 100 lists online high scores with each player's rank.",
       "In System, choose language, touch-control side, sensitivity and ship start height. Music, effects volume and reduced visual effects have their own controls.",
-      "Boss stickers, chain badges and bonus medals are stored on this device. Admin test runs do not add collection progress.",
+      "Signed-in players receive completed Rewards immediately in their Pi account. Admin test runs do not add collection progress.",
     ],
   },
 ] as const;

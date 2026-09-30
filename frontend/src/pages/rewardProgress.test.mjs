@@ -1,8 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { awardBonusMedal, awardBossSticker, awardChain, emptyRewardProgress, readRewardProgress, rewardRank } from './rewardProgress.ts';
+import { awardBlock, awardBonusMedal, awardBossSticker, awardChain, emptyRewardProgress, rankForLevel, reachLevel, readRewardProgress, rewardRank } from './rewardProgress.ts';
 
-test('boss victories unlock unique stickers, improve stars, and advance ranks', () => {
+test('completed blocks accumulate in each chapter and old chains retain all nine blocks', () => {
+  let progress = emptyRewardProgress();
+  for (let block = 1; block <= 9; block++) progress = awardBlock(progress, 1, block);
+  assert.equal(progress.linkedBlocks[1], 9);
+  assert.deepEqual(awardBlock(progress, 1, 8), progress);
+  assert.equal(readRewardProgress(JSON.stringify({ completedChains: [2] })).linkedBlocks[2], 9);
+});
+
+test('boss victories unlock unique stickers and improve stars', () => {
   let progress = emptyRewardProgress();
   assert.equal(rewardRank(progress), 'Rookie');
   for (let win = 0; win < 4; win++) {
@@ -11,10 +19,20 @@ test('boss victories unlock unique stickers, improve stars, and advance ranks', 
     progress = result.progress;
   }
   assert.equal(progress.bossWins[1], 3);
-  assert.equal(rewardRank(progress), 'Pilot');
   progress = awardBossSticker(awardBossSticker(progress, 2).progress, 3).progress;
-  assert.equal(rewardRank(progress), 'Navigator');
   assert.equal(awardBossSticker(progress, 51).progress, progress);
+});
+
+test('service rank advances with reached levels and never falls back', () => {
+  let progress = emptyRewardProgress();
+  assert.equal(rankForLevel(progress.highestLevel).symbol, '◇');
+  progress = reachLevel(progress, 11);
+  assert.equal(rewardRank(progress), 'Pilot');
+  progress = reachLevel(progress, 101);
+  assert.equal(rewardRank(progress), 'Lieutenant');
+  assert.equal(rewardRank(reachLevel(progress, 30)), 'Lieutenant');
+  assert.equal(rewardRank(reachLevel(progress, 500)), 'Legend');
+  assert.equal(rewardRank(reachLevel(progress, 501)), 'Lieutenant');
 });
 
 test('chain awards are once per level, with milestones after unique completions', () => {

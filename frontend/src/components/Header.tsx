@@ -9,10 +9,11 @@ interface HeaderProps {
   adminMode?: boolean;
   onToggleAdmin?: () => void;
   user: User | null;
+  serviceRank?: { name: string; symbol: string };
   isLoading?: boolean;
 }
 
-const Header = ({ user, onSignIn, onSignOut, onSendTestNotification, canAdmin, adminMode, onToggleAdmin, isLoading }: HeaderProps) => {
+const Header = ({ user, serviceRank, onSignIn, onSignOut, onSendTestNotification, canAdmin, adminMode, onToggleAdmin, isLoading }: HeaderProps) => {
   const { t } = useLocale();
   return (
     <header className="site-header">
@@ -20,7 +21,7 @@ const Header = ({ user, onSignIn, onSignOut, onSendTestNotification, canAdmin, a
       <div className="user-section">
         {user ? (
           <>
-            <span className="user-name">@{user.username}</span>
+            <span className="user-name">@{user.username}{serviceRank && <span className="header-service-rank" title={t(serviceRank.name)}><b aria-hidden="true">{serviceRank.symbol}</b> {t(serviceRank.name)}</span>}</span>
             {canAdmin && <button className="header-action" type="button" aria-pressed={adminMode} onClick={onToggleAdmin} disabled={isLoading}>{adminMode ? "Admin: Ein" : "Admin: Aus"}</button>}
             <button className="header-action" type="button" onClick={onSignOut} disabled={isLoading}>{t('Sign out')}</button>
             {user.roles.includes("core_team") && (
