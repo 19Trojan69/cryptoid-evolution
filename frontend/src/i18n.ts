@@ -16,6 +16,8 @@ export const resolveLocale = (preferred: readonly string[], override?: string | 
 };
 const translations: Partial<Record<Exclude<Locale, "en">, Record<string, string>>> = {
   de: {
+    "Every defeat counts in only one pair. Four simultaneous defeats earn two combos; an unpaired third defeat can start the next pair. Combos also apply in boss battles and bonus rounds.": "Jeder Abschuss zählt nur für ein Paar. Vier gleichzeitige Abschüsse ergeben zwei Kombos; ein übriger dritter Abschuss kann das nächste Paar beginnen. Kombos gelten auch in Bosskämpfen und Bonusrunden.",
+    "Combo rewards are already included in your score and earned Shards. The bonus-round and mission summaries show the earned totals without crediting them again.": "Kombo-Boni sind bereits im Score und in den verdienten Shards enthalten. Die Übersicht nach der Bonusrunde und am Missionsende zeigt die erhaltenen Boni, ohne sie erneut gutzuschreiben.",
     "Two defeats within 500 ms: +50 Score and +20 Shards.": "Zwei Abschüsse innerhalb von 500 ms: +50 Score-Punkte und +20 Shards.",
     "Above finger": "Über dem Finger", "Vibration on": "Vibration an", "Vibration off": "Vibration aus", "Vibration unavailable": "Vibration nicht verfügbar",
     "DOUBLE KILL": "DOPPELABSCHUSS", "Combo bonus": "Kombo-Bonus", "Level combo bonus": "Kombo-Bonus dieses Levels",

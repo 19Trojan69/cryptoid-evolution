@@ -2204,6 +2204,4 @@ html[data-motion="reduced"] .pickup-notice::before, html[data-motion="reduced"] 
 .pause-settings-modal { width: min(100%, 680px); max-height: calc(100dvh - 110px); overflow-y: auto; overscroll-behavior: contain; padding: 20px; }
 .pause-settings-modal h1 { font-size: clamp(24px, 5vw, 36px); }
 .pause-settings-modal > .button { position: sticky; bottom: 0; width: 100%; z-index: 2; box-shadow: 0 0 18px #092536; }
-.pause-combo-info { padding: 12px; margin-bottom: 16px; border: 1px solid #ffd57970; color: #ffe4a2; font-size: 12px; line-height: 1.6; }
-.pause-combo-info p { margin: 4px 0; }
 .pause-settings-modal .language-menu { max-height: 240px; overflow-y: auto; }

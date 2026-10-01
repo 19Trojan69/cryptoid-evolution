@@ -43,6 +43,9 @@ const topics = [
     id: "earnings", label: "Rewards", title: "Shards, points and bonus targets",
     intro: "Defeated enemies earn points and in-game Shards. Shards are added to your balance at mission end.",
     details: [
+      "Two defeats within 500 ms: +50 Score and +20 Shards.",
+      "Every defeat counts in only one pair. Four simultaneous defeats earn two combos; an unpaired third defeat can start the next pair. Combos also apply in boss battles and bonus rounds.",
+      "Combo rewards are already included in your score and earned Shards. The bonus-round and mission summaries show the earned totals without crediting them again.",
       "Different enemy classes pay different amounts. Linking all nine Blocks awards a chain reward, and beating the boss awards more.",
       "The bonus round has 12 flying targets. Each hit earns a Shard; the result adds bonus Shards and points. At nine hits or more, a completed chain pays an extra Shard bonus.",
       "Five to eight hits earn a bronze medal, nine to eleven silver, and all twelve gold. A perfect round can also restore one lost heart.",
