@@ -1,3 +1,4 @@
+import { gameHaptics } from "./gameHaptics";
 import { useLocale } from "../i18n";
 import { memo, useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { useNavigate } from "react-router-dom";
@@ -28,7 +29,8 @@ import { fireInterval, makeVolley } from "./playerCombat";
 import { activateCollectedPower } from "./collectedPower";
 import { leaveGameFullscreen, requestGameFullscreen } from "./gameFullscreen";
 import { levelDifficulty, MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
-import { balanceAfterMission, BONUS_TARGET_SHARD_REWARD, bossPoints, bossShardReward, creditDefeat, creditReward } from "./shardEarnings";
+import { createDoubleKillCombo, creditComboDefeat, DOUBLE_KILL_SCORE, DOUBLE_KILL_SHARDS, type DoubleKillCombo } from "./doubleKillCombo";
+import { balanceAfterMission, BONUS_TARGET_SHARD_REWARD, bossPoints, bossShardReward, creditReward } from "./shardEarnings";
 import { addPersistentHullFire, hullFireAtImpact, spriteFireSites, type HullFire } from "./hullFires";
 import { bossExplosionSize, bossFallTargetY, bossFireSite, bossHullContains } from "./bossCombat";
 import BossWeaponsView, { preloadBossWeapons } from './BossWeaponsView';
@@ -130,7 +132,7 @@ type Effect = {
   shipStage?: ShipStage;
 };
 type WeaponSource = "standard" | "paid" | "pickup";
-type GameState = { asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; rewardNotice: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; pickupNotice: { id: number; type: PowerUpType; remainingMs: number; level: number } | null; score: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; purchasedShieldMs: number; shieldActive: boolean; overdriveMs: number; overdriveTotalMs: number; rapidFireMs: number; rapidFireTotalMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponSource: WeaponSource; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; weaponTimers: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
+type GameState = { combo: DoubleKillCombo; asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; rewardNotice: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; pickupNotice: { id: number; type: PowerUpType; remainingMs: number; level: number } | null; score: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; purchasedShieldMs: number; shieldActive: boolean; overdriveMs: number; overdriveTotalMs: number; rapidFireMs: number; rapidFireTotalMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponSource: WeaponSource; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; weaponTimers: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
 
 const syncSelectedWeapon = (state: GameState) => {
   if (state.weaponSource === "pickup" && state.pickupWeaponMs <= 0) state.weaponSource = state.paidWeaponMs > 0 ? "paid" : "standard";
@@ -175,7 +177,7 @@ const BlockchainProgress = ({ blocks, saved = false }: { blocks: number; saved?:
   </div>
 );
 
-const createInitialState = (): GameState => ({ asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", chainBlocks: 0, chainResult: "", rewardNotice: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: shipStartHeight[readShipStart()] }, thrust: 0, effects: [], powerUps: [], pickupNotice: null, score: 0, shards: 0, hearts: 3, maxHearts: 3, projectileGuard: 0, shieldCharges: 0, shieldMs: 0, purchasedShieldMs: 0, shieldActive: true, overdriveMs: 0, overdriveTotalMs: POWER_UP_DURATION_MS, rapidFireMs: 0, rapidFireTotalMs: POWER_UP_DURATION_MS, empMs: 0, pendingStartPower: null, weaponLevel: 1, weaponSource: "standard", weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], weaponTimers: [0, 0, 0, 0, 0, 0], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") || sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "loading" : "playing" });
+const createInitialState = (): GameState => ({ combo: createDoubleKillCombo(), asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", chainBlocks: 0, chainResult: "", rewardNotice: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: shipStartHeight[readShipStart()] }, thrust: 0, effects: [], powerUps: [], pickupNotice: null, score: 0, shards: 0, hearts: 3, maxHearts: 3, projectileGuard: 0, shieldCharges: 0, shieldMs: 0, purchasedShieldMs: 0, shieldActive: true, overdriveMs: 0, overdriveTotalMs: POWER_UP_DURATION_MS, rapidFireMs: 0, rapidFireTotalMs: POWER_UP_DURATION_MS, empMs: 0, pendingStartPower: null, weaponLevel: 1, weaponSource: "standard", weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], weaponTimers: [0, 0, 0, 0, 0, 0], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") || sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "loading" : "playing" });
 
 const readRecord = (key: string) => Number(window.localStorage.getItem(key) || 0);
 
@@ -503,7 +505,7 @@ const GamePage = () => {
     const observer = new ResizeObserver(measureVisibleTop);
     observer.observe(field);
     observer.observe(hud);
-    return () => observer.disconnect();
+    return () => { observer.disconnect(); gameHaptics.stop(); };
   }, []);
 
 
@@ -619,10 +621,6 @@ const GamePage = () => {
     if (runId) pendingRewardsRef.current = pendingRewardsRef.current.then(() => axiosClient.post("/rewards/event", { runId, ...event })).catch(error => { console.warn("Could not save account reward", error); });
     return result.notice;
   };
-  const vibrateBoss = (pattern: number | number[]) => {
-    if (document.hidden || document.documentElement.dataset.motion === "reduced" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    try { navigator.vibrate?.(pattern); } catch { /* Vibration is optional in the Pi Browser and on iOS. */ }
-  };
   const destroyBoss = (state: GameState, time: number) => {
     soundRef.current?.stopBossWeapons();
     const boss = state.boss;
@@ -635,17 +633,18 @@ const GamePage = () => {
     state.effects.push({ id: nextIdRef.current++, x: boss.x, y: boss.y, kind: "boss-fall", startedAt: time, bossShipWidth: boss.width, bossHeight: boss.height, bossImage: boss.config.image, bossModel:{...boss,turrets:boss.turrets.map(g=>({...g,firedBarrels:[...g.firedBarrels]}))}, fallDistance: finalY - boss.y, fireSites });
     state.effects.push({ id: nextIdRef.current++, x: boss.x, y: finalY, kind: "boss-explosion", startedAt: time, debrisSize: bossExplosionSize(boss.config, boss.width), bossShipWidth: boss.width, bossHeight: boss.height, bossImage: boss.config.wreckImage, finalDelayMs, fieldWidth, fieldHeight, shipClass: "heavy" });
     soundRef.current?.play("explosion");
-    vibrateBoss([25, 420, 30, 420, 35, 420, 40, 420, 45, 420, 50]);
+    gameHaptics.explosion();
+    gameHaptics.boss([25, 420, 30, 420, 35, 420, 40, 420, 45, 420, 50]);
     if (bossDestroyTimerRef.current !== null) window.clearTimeout(bossDestroyTimerRef.current);
     bossDestroyTimerRef.current = window.setTimeout(() => {
       bossDestroyTimerRef.current = null;
       if (stateRef.current.encounter !== "boss-clear" || stateRef.current.status !== "playing") return;
       soundRef.current?.play("bossDestroy");
-      vibrateBoss([140, 70, 230]);
+      gameHaptics.boss([140, 70, 230]);
     }, finalDelayMs);
     startBossVictory(finalDelayMs + 850);
     state.score += bossPoints(state.sector);
-    creditDefeat(state, bossShardReward(state.sector));
+    creditComboDefeat(state, bossShardReward(state.sector), elapsedRef.current);
     state.rewardNotice = saveReward(progress => {
       const previousRank = rewardRank(progress);
       const result = awardBossSticker(progress, boss.config.id);
@@ -683,6 +682,7 @@ const GamePage = () => {
   }, []);
   useEffect(() => {
     soundRef.current?.setSector(game.sector);
+    if (game.status !== "playing") { stateRef.current.combo.pendingAt = null; gameHaptics.stop(); }
     soundRef.current?.setPaused(game.status === "loading" || game.status === "paused" || game.status === "game-over" || game.status === "victory");
   }, [game.sector, game.status]);
 
@@ -822,6 +822,7 @@ const GamePage = () => {
         state.pickupWeaponMs = Math.max(0, state.pickupWeaponMs - pickupWeaponDelta);
         if (state.pickupWeaponMs === 0) state.pickupWeaponLevel = 1;
         syncSelectedWeapon(state);
+        state.combo.remainingMs = Math.max(0, state.combo.remainingMs - delta);
         if (state.pickupNotice) {
           state.pickupNotice.remainingMs -= transitionPaused ? 0 : delta;
           if (state.pickupNotice.remainingMs <= 0) state.pickupNotice = null;
@@ -854,7 +855,8 @@ const GamePage = () => {
             } else {
               state.boss = null;
             }
-            if (next.resetChain) state.chainBlocks = 0;
+            state.combo.pendingAt = null;
+            if (next.resetChain) { state.chainBlocks = 0; state.combo.level = 0; }
             state.phase = "SECTOR_INTRO";
             state.asteroids = [];
             state.bonusTargets = [];
@@ -974,8 +976,9 @@ const GamePage = () => {
                   const sprite = next.sprite;
                   state.effects.push({ id: nextIdRef.current++, x: next.x, y: next.y, kind: next.type === "etherCrystal" ? "shatter" : "explosion", startedAt: time, sprite, debrisSize: next.radius * 2, debrisRotation: next.rotation, shipClass: next.shipClass });
                   state.score += next.points;
-                  if (collision.destroysEnemy) creditDefeat(state, next.reward);
+                  if (collision.destroysEnemy) creditComboDefeat(state, next.reward, elapsedRef.current);
                   soundRef.current?.play("explosion");
+                  gameHaptics.explosion();
                   if (next.attackPattern !== null) attackCooldownRef.current = 0;
                   if (collision.destroysEnemy) return;
                 }
@@ -1038,6 +1041,7 @@ const GamePage = () => {
           state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: destroyed ? "player-explosion" : damaged ? "player-crash" : "shield", startedAt: time, target: "player", sprite: damaged ? shipSelection.skin.sprite : undefined, debrisSize: damaged ? 86 : undefined, debrisColor: damaged ? shipSelection.color.id : undefined, shipStage: shipStageRef.current });
           if (damaged) {
             soundRef.current?.play(destroyed ? "playerDestroy" : "collision");
+            gameHaptics.explosion();
             state.projectileGuard = destroyed ? 0 : projectileGuardForStage(shipStageRef.current);
             state.weaponCap = Math.max(1, state.weaponCap - 1);
             // Paid weapon time is protected from life loss. Only collected weapon
@@ -1079,10 +1083,11 @@ const GamePage = () => {
           if (bonusTarget) {
             state.bonusTargets = state.bonusTargets.filter(target => target.id !== bonusTarget.id);
             state.bonusHits += 1;
-            creditDefeat(state, BONUS_TARGET_SHARD_REWARD);
+            creditComboDefeat(state, BONUS_TARGET_SHARD_REWARD, elapsedRef.current);
             state.score += 150;
             state.effects.push({ id: nextIdRef.current++, x: bonusTarget.x, y: bonusTarget.y, kind: "explosion", startedAt: time, sprite: bonusTarget.sprite, debrisSize: 50 });
             soundRef.current?.play("explosion");
+            gameHaptics.explosion();
             continue;
           }
           if (state.encounter === "boss-fight" && state.boss && bossVulnerable(state.boss) && bossHullContains(state.boss, shot.x, shot.y)) {
@@ -1107,9 +1112,10 @@ const GamePage = () => {
           }
           if (enemy.health === 0) state.effects.push({ id: nextIdRef.current++, x: enemy.x, y: enemy.y, kind: enemy.type === "etherCrystal" ? "shatter" : "explosion", startedAt: time, sprite: enemy.sprite, debrisSize: enemy.radius * 2, debrisRotation: enemy.rotation, shipClass: enemy.shipClass });
           soundRef.current?.play(enemy.health > 0 ? "enemyHit" : "explosion");
+          if (enemy.health <= 0) gameHaptics.explosion();
           if (enemy.health > 0) continue;
           state.score += enemy.points * (enemy.attackPattern !== null && enemy.attackDelay === 0 ? 2 : 1);
-          creditDefeat(state, enemy.reward);
+          creditComboDefeat(state, enemy.reward, elapsedRef.current);
           state.asteroids = state.asteroids.filter(item => item.id !== enemy.id);
           if (enemy.attackPattern !== null) attackCooldownRef.current = 0;
           const drop = enemy.escort ? null : createPowerUpDrop({ id: nextIdRef.current, x: enemy.x, y: enemy.y, width, height, threats: state.asteroids, activeCount: state.powerUps.length, chanceRoll: Math.random(), kindRoll: Math.random(), destroyed: state.destroyed, dropsCreated: dropsCreatedRef.current, level: state.sector });
@@ -1272,9 +1278,10 @@ const GamePage = () => {
         const visible = state.asteroids.filter(enemy => enemy.x >= -enemy.radius && enemy.x <= width + enemy.radius && enemy.y >= -enemy.radius && enemy.y <= height + enemy.radius);
         for (const enemy of visible) {
           state.score += enemy.points;
-          creditDefeat(state, enemy.reward);
+          creditComboDefeat(state, enemy.reward, elapsedRef.current);
           state.effects.push({ id: nextIdRef.current++, x: enemy.x, y: enemy.y, kind: "explosion", startedAt: now, sprite: enemy.sprite, debrisSize: enemy.radius * 2, shipClass: enemy.shipClass });
         }
+        if (visible.length) gameHaptics.explosion();
         const destroyedIds = new Set(visible.map(enemy => enemy.id));
         state.asteroids = state.asteroids.filter(enemy => !destroyedIds.has(enemy.id));
         if (state.boss && state.encounter === "boss-fight") {
@@ -1463,6 +1470,7 @@ const GamePage = () => {
           {game.phase === "SECTOR_CLEAR" && game.encounter === "normal" && <><small className="chain-result">{t("Block")} {game.chainBlocks}/{BLOCKS_PER_CHAIN} · {t(game.chainResult)}</small><BlockchainProgress blocks={game.chainBlocks} /></>}
           {levelComplete && <><small className="chain-result">{t("Block")} {BLOCKS_PER_CHAIN}/{BLOCKS_PER_CHAIN}</small><small className="chain-saved-label">CHAIN SAVED</small><BlockchainProgress blocks={BLOCKS_PER_CHAIN} saved /></>}
           {game.phase === "SECTOR_CLEAR" && game.encounter === "bonus" && <><small className="chain-result">{`${game.bonusHits}/${BONUS_TARGET_COUNT} TARGETS · ${game.bonusResult.split(" · ").slice(1).join(" · ")}`}</small><small className="crypto-explainer">1 Shard per target · completion bonus added immediately.</small></>}
+          {game.phase === "SECTOR_CLEAR" && game.encounter === "bonus" && <small className="combo-summary">{t("Level combo bonus")}: {game.combo.level} × · +{game.combo.level * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.level * DOUBLE_KILL_SHARDS} {t("Shards")}</small>}
           {game.phase === "SECTOR_CLEAR" && game.rewardNotice && <small className="reward-unlock" role="status">✦ {game.rewardNotice}</small>}
         </div>}
         {game.status === "playing" && game.encounter === "normal" && !formationStartedRef.current && (game.phase === "SECTOR_INTRO" || game.phase === "ENTRY" || game.phase === "FORMATION") && <div className="formation-data-stream" aria-hidden="true">{FORMATION_DATA_ROWS.map((row, index) => <div className="formation-data-row" key={index}><span>{row.repeat(4)}</span><span>{row.repeat(4)}</span></div>)}</div>}
@@ -1486,6 +1494,7 @@ const GamePage = () => {
           const pickupLabel = `${t(powerUpNames[pickup.type])} · ${t(powerUpDescriptions[pickup.type])}`;
           return <div key={pickup.id} className={`power-up power-up-${pickup.type}`} role="img" aria-label={pickupLabel} title={pickupLabel} style={{ left: pickup.x, top: pickup.y }}><span aria-hidden="true">{powerUpSymbols[pickup.type]}</span></div>;
         })}
+        {game.combo.remainingMs > 0 && game.status === "playing" && <div key={`combo-${game.combo.total}`} className={`combo-notice${game.pickupNotice ? " combo-with-pickup" : ""}`} role="status"><b>{t("DOUBLE KILL")}</b><span>+{DOUBLE_KILL_SCORE} {t("Score")} · +{DOUBLE_KILL_SHARDS} {t("Shards")}</span></div>}
         {game.pickupNotice && game.status === "playing" && <div key={game.pickupNotice.id} className={`pickup-notice pickup-notice-${game.pickupNotice.type}`} role="status"><b>{powerUpSymbols[game.pickupNotice.type]} {t(powerUpNames[game.pickupNotice.type])}</b><span>{game.pickupNotice.type === "weapon" ? `${t(pickupEffectLabels.weapon)} ${game.pickupNotice.level} · ${weaponNames[game.pickupNotice.level]}` : t(pickupEffectLabels[game.pickupNotice.type])}</span></div>}
         {game.shots.map(shot => <div key={shot.id} className={`player-laser player-laser-tier-${shot.visualLevel ?? 1}${shot.empowered && shot.visualLevel !== 5 ? " player-laser-overdrive" : ""}`} style={{ left: shot.x, top: shot.y }} aria-hidden="true" />)}
         {game.enemyShots.map(shot => <div key={shot.id} className={`enemy-laser${shot.bossKind ? ` boss-projectile boss-projectile-${shot.bossKind}` : ""}${shot.weaponKind ? ` boss-evolved-shot boss-evolved-${shot.weaponKind}` : ""}`} style={{ left: shot.x, top: shot.y, "--shot-angle": `${-Math.atan2(shot.vx, shot.vy) * 180 / Math.PI}deg`,...(shot.weaponKind?{"--boss-shot-color":shot.weaponColor,"--boss-shot-width":`${shot.weaponWidth}px`,"--boss-shot-diameter":`${shot.radius*2}px`}:{}) } as CSSProperties} aria-hidden="true" />)}
@@ -1534,8 +1543,8 @@ const GamePage = () => {
           </div>
         </div>
         {game.status === "paused" && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('MISSION PAUSED')}</p><h1>{t('Hold the line.')}</h1><p>{t('The asteroids are waiting.')}</p><MusicVolumeSlider id="pause-music-volume" label={t('Music volume')} value={musicVolume} onChange={changeMusicVolume} /><MusicVolumeSlider id="pause-effects-volume" label={t('Effects volume')} value={effectsVolume} onChange={changeEffectsVolume} /><button className="button button-primary" type="button" onClick={() => { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); window.setTimeout(retryAudio, 0); }}>Resume mission <span className="resume-icon"><CockpitIcon kind="play" /></span></button></div></div>}
-        {game.status === "game-over" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><h1>{t("Game Over")}</h1><div className="game-over-details"><p className="eyebrow">{t("MISSION FAILED")}</p><p className="game-over-hearts">{t('Hearts')}: {game.hearts}/{game.maxHearts}</p><div className="game-over-stats"><span><b>{game.score}</b>{t('Score')}</span><span><b>{game.destroyed}</b>{t('Destroyed')}</span><span><b>{game.sector}</b>{t('Sector')}</span></div>{scoreSync !== "idle" && <p role="status">{t(scoreSync === "saving" ? "Saving personal best…" : scoreSync === "saved" ? "Personal best saved." : "Could not sync personal best. Local best is saved.")}</p>}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t('Home')}</button></div></div></div></div>}
-        {game.status === "victory" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><p className="eyebrow">{t("CAMPAIGN COMPLETE")}</p><h1>{t("Victory")}</h1><div className="game-over-details"><p>{t("You completed the final bonus challenge.")}</p><div className="game-over-stats"><span><b>{game.score}</b>{t("Score")}</span><span><b>{game.destroyed}</b>{t("Destroyed")}</span><span><b>{game.sector}</b>{t("Sector")}</span></div>{scoreSync !== "idle" && <p role="status">{t(scoreSync === "saving" ? "Saving personal best…" : scoreSync === "saved" ? "Personal best saved." : "Could not sync personal best. Local best is saved.")}</p>}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t("Home")}</button></div></div></div></div>}
+        {game.status === "game-over" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><h1>{t("Game Over")}</h1><div className="game-over-details"><p className="eyebrow">{t("MISSION FAILED")}</p><p className="game-over-hearts">{t('Hearts')}: {game.hearts}/{game.maxHearts}</p><div className="game-over-stats"><span><b>{game.score}</b>{t('Score')}</span><span><b>{game.destroyed}</b>{t('Destroyed')}</span><span><b>{game.sector}</b>{t('Sector')}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSync !== "idle" && <p role="status">{t(scoreSync === "saving" ? "Saving personal best…" : scoreSync === "saved" ? "Personal best saved." : "Could not sync personal best. Local best is saved.")}</p>}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t('Home')}</button></div></div></div></div>}
+        {game.status === "victory" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><p className="eyebrow">{t("CAMPAIGN COMPLETE")}</p><h1>{t("Victory")}</h1><div className="game-over-details"><p>{t("You completed the final bonus challenge.")}</p><div className="game-over-stats"><span><b>{game.score}</b>{t("Score")}</span><span><b>{game.destroyed}</b>{t("Destroyed")}</span><span><b>{game.sector}</b>{t("Sector")}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSync !== "idle" && <p role="status">{t(scoreSync === "saving" ? "Saving personal best…" : scoreSync === "saved" ? "Personal best saved." : "Could not sync personal best. Local best is saved.")}</p>}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t("Home")}</button></div></div></div></div>}
         {homePrompt && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2>{t('Return to base?')}</h2><p>{t('Your current mission will end. Your records will be saved locally.')}</p><div className="modal-actions"><button className="button button-primary" type="button" onClick={goHome}>{t('Leave game')}</button><button className="button button-secondary" type="button" onClick={() => setHomePrompt(false)}>{t('Keep playing')}</button></div></div></div>}
       </div>
     </main>

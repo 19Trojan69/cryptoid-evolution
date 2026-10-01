@@ -1,3 +1,4 @@
+import { VIBRATION_KEY, readVibrationEnabled, supportsVibration, gameHaptics } from "./gameHaptics";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
@@ -79,6 +80,7 @@ const Shop = () => {
   const [controlHand, setControlHand] = useState<ControlHand>(readControlHand);
   const [controlSensitivity, setControlSensitivity] = useState<ControlSensitivity>(readControlSensitivity);
   const [controlZone, setControlZone] = useState<ControlZone>(readControlZone);
+  const [vibrationEnabled, setVibrationEnabled] = useState(readVibrationEnabled);
   const [shipStart, setShipStart] = useState<ShipStart>(readShipStart);
   const [shopView, setShopView] = useState<"hangar" | "shop" | "weapons" | "powers" | "progress" | "rewards" | "leaders" | null>(null);
   const [termsOpen, setTermsOpen] = useState(false);
@@ -443,7 +445,7 @@ const Shop = () => {
             </div>
             <div className="control-choice-group ship-start-choice-group" role="group" aria-label={t('Ship start position')}>
               <strong>{t('Ship start position')}</strong>
-              {(["higher", "touch"] as const).map(value => <button key={value} className="system-setting" type="button" aria-pressed={shipStart === value} onClick={() => setShipStart(value)}><b>{t(value === "higher" ? "Current position" : "Under finger")}</b></button>)}
+              {(["higher", "touch"] as const).map(value => <button key={value} className="system-setting" type="button" aria-pressed={shipStart === value} onClick={() => setShipStart(value)}><b>{t(value === "higher" ? "Above finger" : "Under finger")}</b></button>)}
             </div>
           </div>
           <div className="system-menu-section system-quick-settings">
@@ -454,6 +456,7 @@ const Shop = () => {
           <div className="system-menu-section system-quick-settings">
             <div className="system-menu-heading"><strong>{t('Display')}</strong></div>
             <button className="system-setting" type="button" onClick={() => requestGameFullscreen()}><span aria-hidden="true">⛶</span><b>{t('Full screen')}</b></button>
+            <button className="system-setting" type="button" disabled={!supportsVibration()} aria-pressed={vibrationEnabled && supportsVibration()} onClick={() => { const enabled = !vibrationEnabled; localStorage.setItem(VIBRATION_KEY, enabled ? "on" : "off"); setVibrationEnabled(enabled); if (!enabled) gameHaptics.stop(); }}><span aria-hidden="true">≋</span><b>{t(!supportsVibration() ? "Vibration unavailable" : vibrationEnabled ? "Vibration on" : "Vibration off")}</b></button>
             <button className="system-setting" type="button" aria-pressed={reducedEffects} onClick={() => setReducedEffects(value => !value)}><span aria-hidden="true">◌</span><b>{t(reducedEffects ? 'Reduced effects' : 'Standard effects')}</b></button>
           </div>
         </section>

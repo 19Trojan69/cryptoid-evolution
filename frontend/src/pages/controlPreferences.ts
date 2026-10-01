@@ -20,8 +20,8 @@ export const readControlZone = (): ControlZone => {
 };
 export const readShipStart = (): ShipStart => {
   const value = localStorage.getItem(SHIP_START_KEY);
-  // Preserve the closer setting for players who had chosen either lower option.
-  return value === "touch" || value === "normal" || value === "lower" ? "touch" : "higher";
+  // Only an explicit under-finger choice overrides the visible default.
+  return value === "touch" ? "touch" : "higher";
 };
 export const sensitivityMultiplier: Record<ControlSensitivity, number> = { gentle: .75, normal: 1, fast: 1.3 };
 export const zoneFraction: Record<ControlZone, number> = { compact: .5, normal: .65, wide: .8 };
