@@ -9,6 +9,8 @@ test("weapon tiers fire multi-shot volleys and apply plasma damage", () => {
   const plasma = makeVolley(5, 200, 500, false, () => ++next);
   assert.deepEqual(plasma.map(shot => shot.x), [187, 200, 213]);
   assert.ok(plasma.every(shot => shot.damage === 2));
+  assert.ok(plasma.every(shot => shot.visualLevel === 5));
+  assert.ok(makeVolley(2, 200, 500, false, () => ++next).every(shot => shot.visualLevel === 2));
   assert.equal(fireInterval(3, 0), 220);
   assert.equal(fireInterval(1, 15000), 220);
   const elite = makeVolley(2, 200, 500, false, () => ++next, true);

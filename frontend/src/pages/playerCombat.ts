@@ -1,5 +1,5 @@
 export type PlayerPosition = { x: number; y: number };
-export type PlayerShot = { id: number; x: number; y: number; speedX: number; damage: number; empowered: boolean };
+export type PlayerShot = { id: number; x: number; y: number; speedX: number; damage: number; empowered: boolean; visualLevel?: number };
 
 export const PLAYER_SPEED_PX_MS = 0.68;
 export const PURCHASED_WEAPON_DURATION_MS = 2 * 60_000;
@@ -16,7 +16,7 @@ export const MAX_WEAPON_LEVEL = 5;
 export const fireInterval = (level: number, rapidFireMs: number) => (level >= 3 || rapidFireMs > 0 ? 220 : FIRE_INTERVAL_MS);
 export const volleyOffsets = (level: number) => level >= 4 ? [-13, 0, 13] : level >= 2 ? [-8, 8] : [0];
 export const makeVolley = (level: number, x: number, y: number, overdrive: boolean, nextId: () => number, laserHull = false): PlayerShot[] =>
-  volleyOffsets(level).map((offset, index, offsets) => ({ id: nextId(), x: x + offset, y, speedX: offsets.length === 3 ? (index - 1) * 0.1 : 0, damage: level >= 5 || overdrive || laserHull ? 2 : 1, empowered: level >= 5 || overdrive || laserHull }));
+  volleyOffsets(level).map((offset, index, offsets) => ({ id: nextId(), x: x + offset, y, speedX: offsets.length === 3 ? (index - 1) * 0.1 : 0, damage: level >= 5 || overdrive || laserHull ? 2 : 1, empowered: level >= 5 || overdrive || laserHull, visualLevel: level }));
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 export const activeWeaponLevel = (paidLevel: number, paidMs: number, pickupLevel: number, pickupMs: number, cap: number) => {
