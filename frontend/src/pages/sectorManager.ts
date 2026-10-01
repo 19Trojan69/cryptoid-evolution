@@ -90,6 +90,15 @@ export const arrangeFormationBySize = <T extends { index: number; x: number; y: 
   return arranged;
 };
 
+// Move the whole formation together, including its ships' actual destinations.
+// Include the target's lock pulse and a gap for the label below the cockpit HUD.
+export const formationBelowHud = <T extends { y: number }>(slots: T[], radii: number[], width: number, hudBottom: number): T[] => {
+  if (width <= 700 || slots.length === 0) return slots;
+  const top = Math.min(...slots.map((slot, index) => slot.y - ((radii[index] + 4) * 1.35 + 12)));
+  const offset = Math.max(0, hudBottom + 28 - top);
+  return offset === 0 ? slots : slots.map(slot => ({ ...slot, y: slot.y + offset }));
+};
+
 export const sectionPhase = ({ introMs, spawned, total, alive, ready, returning, attacking }: {
   introMs: number; spawned: number; total: number; alive: number; ready: number; returning: boolean; attacking: boolean;
 }): SectorPhase => {

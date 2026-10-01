@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { arrangeFormationBySize, BLOCK_FORMATION_NAMES, formationLayout, formationReady, formationSlotsForCount, reinforcementCount, SECTION_INTRO_MS, sectionPhase, sectorForSection, sectionInSector, sectorName, sectorChapter, campaignLevel, sectorInChapter } from "./sectorManager.ts";
+import { arrangeFormationBySize, BLOCK_FORMATION_NAMES, formationLayout, formationBelowHud, formationReady, formationSlotsForCount, reinforcementCount, SECTION_INTRO_MS, sectionPhase, sectorForSection, sectionInSector, sectorName, sectorChapter, campaignLevel, sectorInChapter } from "./sectorManager.ts";
 import { chooseCryptoid } from "./cryptoidRoster.ts";
 
 test("all planned enemies must spawn and die before an endless section advances", () => {
@@ -79,4 +79,37 @@ test("each section is one block and ten slots share one named level", () => {
   assert.deepEqual([1, 9, 10, 11, 20].map(campaignLevel), [1, 1, 1, 2, 2]);
   assert.deepEqual([1, 9, 10, 11, 20].map(sectorInChapter), [1, 9, 10, 1, 10]);
   assert.equal(sectorForSection(901), 901);
+});
+
+test('wide formations clear the measured HUD including target lock pulses for every block', () => {
+  for (const [width, height, hud] of [[701, 480, 80], [1280, 600, 94], [1024, 768, 100], [1363, 936, 80], [1920, 1080, 120]]) {
+    for (let sector = 1; sector <= 500; sector++) {
+      if (sector % 10 === 0) continue;
+      for (const offset of [0, 6]) {
+        const count = offset ? reinforcementCount(sector) : 6;
+        if (!count) continue;
+        const slots = formationSlotsForCount(formationLayout(sector, width, height), count);
+        const radii = slots.map((_, index) => chooseCryptoid(sector, index + offset).radius);
+        const arranged = arrangeFormationBySize(slots, radii);
+        const visible = formationBelowHud(arranged, radii, width, hud);
+        const shift = visible[0].y - arranged[0].y;
+        assert.ok(shift >= 0);
+        visible.forEach((slot, index) => {
+          assert.ok(slot.y - ((radii[index] + 4) * 1.35 + 12) >= hud + 28 - 1e-8, `${width}x${height} block ${sector} target ${index}`);
+          assert.equal(slot.x, arranged[index].x);
+          assert.ok(Math.abs(slot.y - arranged[index].y - shift) < 1e-8, 'preserve formation shape and spacing');
+        });
+      }
+    }
+  }
+});
+
+test('phone formations and already-clear wide formations retain their original positions', () => {
+  for (const width of [320, 390, 700]) {
+    const slots = formationLayout(1, width, 700);
+    assert.equal(formationBelowHud(slots, [50, 36, 25, 36, 25, 25], width, 120), slots);
+  }
+  const slots = formationLayout(1, 1363, 936);
+  assert.equal(formationBelowHud(slots, [50, 36, 25, 36, 25, 25], 1363, 80), slots);
+  assert.deepEqual(formationBelowHud([], [], 1363, 80), []);
 });

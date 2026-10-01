@@ -3,7 +3,7 @@ import { memo, useEffect, useRef, useState, type CSSProperties, type PointerEven
 import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
 import { entryPatternForSector, entryPosition, entryStartX, type EntryPattern } from "./entryPatterns";
-import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, arrangeFormationBySize, campaignLevel, formationLayout, formationReady, formationSlotsForCount, reinforcementCount, sectionInSector, sectionPhase, sectorInChapter, sectorName, type SectorPhase } from "./sectorManager";
+import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, arrangeFormationBySize, campaignLevel, formationBelowHud, formationLayout, formationReady, formationSlotsForCount, reinforcementCount, sectionInSector, sectionPhase, sectorInChapter, sectorName, type SectorPhase } from "./sectorManager";
 import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, POWER_UP_DURATION_MS, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp, type PowerUpType } from "./powerUps";
 import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, zoneFraction, shipStartHeight } from "./controlPreferences";
@@ -187,9 +187,10 @@ const saveRecords = (state: GameState) => {
   window.localStorage.setItem(SHARD_BALANCE_KEY, String(balanceAfterMission(shardBalance(window.localStorage.getItem(SHARD_BALANCE_KEY)), state)));
 };
 
-const createFormationSlots = (section: number, sector: number, width: number, height: number, count?: number, offset = 0) => {
+const createFormationSlots = (section: number, sector: number, width: number, height: number, hudBottom: number, count?: number, offset = 0) => {
   const slots = formationSlotsForCount(formationLayout(section, width, height, sector), count ?? 6);
-  return arrangeFormationBySize(slots, slots.map((_, index) => chooseCryptoid(sector, index + offset).radius));
+  const radii = slots.map((_, index) => chooseCryptoid(sector, index + offset).radius);
+  return formationBelowHud(arrangeFormationBySize(slots, radii), radii, width, hudBottom);
 };
 
 const alignedSpritePosition = (x: number, y: number, sprite: number, renderedSize: number) => {
@@ -777,7 +778,7 @@ const GamePage = () => {
         const width = field?.clientWidth || 800;
         const height = field?.clientHeight || 600;
         const visibleTop = visibleTopRef.current;
-        const slots = sectionSlotsRef.current ?? createFormationSlots(state.section, state.sector, width, height);
+        const slots = sectionSlotsRef.current ?? createFormationSlots(state.section, state.sector, width, height, visibleTop);
         sectionSlotsRef.current = slots;
         const bonus = state.encounter === "bonus";
         const normal = state.encounter === "normal";
@@ -868,7 +869,7 @@ const GamePage = () => {
             reinforcementLaunchedRef.current = false;
             formationOffsetRef.current = 0;
             bonusIndexRef.current = 0;
-            sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height);
+            sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height, visibleTop);
             bossEscortSlotsRef.current = null;
             bossEscortWaveRef.current = 0;
             bossEscortSpawnedRef.current = 0;
@@ -1121,7 +1122,7 @@ const GamePage = () => {
           && formationIndexRef.current === slots.length && state.asteroids.length === 0) {
           reinforcementLaunchedRef.current = true;
           formationOffsetRef.current = slots.length;
-          sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height, reinforcementCount(state.sector), formationOffsetRef.current);
+          sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height, visibleTop, reinforcementCount(state.sector), formationOffsetRef.current);
           formationIndexRef.current = 0;
           formationStartedRef.current = false;
           sectionElapsedRef.current = 0;
