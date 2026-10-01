@@ -1,6 +1,7 @@
 import { levelDifficulty } from "./levelDifficulty.ts";
 import { SECTIONS_PER_SECTOR, sectionInSector, sectorForSection } from "./sectorManager.ts";
 import { bossForLevel, type BossConfig } from "./bossManifest.ts";
+import { bossEscortCount } from "./bossEscorts.ts";
 
 export const BOSS_ENTRY_MS = 1_800;
 // Three recorded warning signals end before the boss becomes visible.
@@ -13,7 +14,12 @@ export const createSectorBoss = (sector: number, width: number, visibleTop = 0, 
   const config = bossForLevel(sector);
   if (!config) throw new Error(`No boss is assigned to level ${sector}`);
   const health = levelDifficulty(sector).bossHealth;
-  const shipWidth = Math.min(width * config.widthScale, width - 24, fieldHeight * .29 * config.aspectRatio);
+  // Leave a narrow but safe docking lane below later bosses, including on
+  // shorter desktop viewports with a tall HUD.
+  const escortHeightCap = bossEscortCount(sector) > 0
+    ? Math.max(fieldHeight * .14, fieldHeight * .5 - visibleTop - Math.min(fieldHeight * .04, 32) - 87)
+    : fieldHeight * .29;
+  const shipWidth = Math.min(width * config.widthScale, width - 24, fieldHeight * .29 * config.aspectRatio, escortHeightCap / config.heightScale * config.aspectRatio);
   const shipHeight = shipWidth / config.aspectRatio * config.heightScale;
   const radius = shipWidth / 2;
   const startY = visibleTop ? visibleTop + shipHeight / 2 + 12 : -shipHeight;
@@ -41,7 +47,7 @@ export const moveSectorBoss = (boss: SectorBoss, delta: number, width: number, h
 };
 
 export const bossFireInterval = (boss: SectorBoss, level = 1) => {
-  const levelReduction = levelDifficulty(level).progress * 220;
+  const levelReduction = levelDifficulty(level).progress * 420;
   return (boss.health <= boss.maxHealth / 2 ? 1_900 : BOSS_FIRE_INTERVAL_MS) - levelReduction;
 };
 

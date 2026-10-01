@@ -1,8 +1,15 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { collectPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, receiveImpacts, resolvePlayerDamage } from "./powerUps.ts";
+import { collectPowerUp, createPowerUpDrop, freeDropChance, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, receiveImpacts, resolvePlayerDamage } from "./powerUps.ts";
 
 const safe = { id: 1, x: 400, y: 220, width: 800, height: 600, hearts: 2, threats: [], activeCount: 0, chanceRoll: 0.04, kindRoll: 0.1, destroyed: 1, dropsCreated: 0 };
+
+test("free pickups taper out continuously before the final levels", () => {
+  assert.equal(freeDropChance(250), .11);
+  assert.ok(freeDropChance(350) < freeDropChance(250));
+  assert.equal(freeDropChance(450), 0);
+  assert.equal(createPowerUpDrop({ ...safe, level: 450, chanceRoll: 0, destroyed: 3 }), null);
+});
 
 test("drops stay rare, but the first safe pickup appears after three kills", () => {
   assert.deepEqual(createPowerUpDrop(safe), { id: 1, x: 400, y: 220, type: "shield" });
