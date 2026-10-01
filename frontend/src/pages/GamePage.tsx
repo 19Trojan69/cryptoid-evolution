@@ -41,7 +41,8 @@ const GAME_OVER_REVEAL_MS = 1_750;
 const ENTRY_HUD_GAP_PX = 8;
 const BOSS_VICTORY_VOLUME_BOOST = 1.6;
 // Let the deep impact lead before its long tail overlaps the victory cue.
-const BOSS_CLEAR_DURATION_MS = 5_100;
+const BOSS_FALL_DURATION_MS = 2_800;
+const BOSS_CLEAR_DURATION_MS = 6_400;
 const pickupEffectLabels: Record<PowerUpType, string> = {
   shield: "Blocks the next hit", overdrive: "Double shot damage", weapon: "Weapon level", rapid: "Faster automatic fire", bomb: "Clears enemies and shots", emp: "Freezes enemies for 7s",
 };
@@ -318,9 +319,9 @@ const shipDebris = (effect: Effect) => {
   </div>;
 };
 
-const fallingBoss = (effect: Effect) => <div className="boss-falling-hull" style={{ left: effect.x, top: effect.y, width: effect.bossShipWidth, height: effect.bossHeight, "--boss-fall-distance": `${effect.fallDistance ?? 200}px` } as CSSProperties} aria-hidden="true">
+const fallingBoss = (effect: Effect) => <div className="boss-falling-hull" style={{ left: effect.x, top: effect.y, width: effect.bossShipWidth, height: effect.bossHeight, "--boss-fall-distance": `${effect.fallDistance ?? 200}px`, "--boss-fall-quarter": `${(effect.fallDistance ?? 200) * .25}px`, "--boss-fall-half": `${(effect.fallDistance ?? 200) * .5}px`, "--boss-fall-three-quarters": `${(effect.fallDistance ?? 200) * .75}px`, "--boss-fall-duration": `${BOSS_FALL_DURATION_MS}ms` } as CSSProperties} aria-hidden="true">
   <img src={effect.bossImage} alt="" draggable={false} />
-  <div className="boss-fall-bursts">{effect.fireSites?.map(([x, y], index) => <i key={index} style={{ left: `${x}%`, top: `${y}%`, animationDelay: `${index * .22}s` }} />)}</div>
+  <div className="boss-fall-bursts">{effect.fireSites?.map(([x, y], index) => <i key={index} style={{ left: `${x}%`, top: `${y}%`, animationDelay: `${index * .3}s` }} />)}</div>
 </div>;
 
 // Effects keep their object identity until they expire. Keep the fragments and
@@ -581,19 +582,29 @@ const GamePage = () => {
     if (runId) pendingRewardsRef.current = pendingRewardsRef.current.then(() => axiosClient.post("/rewards/event", { runId, ...event })).catch(error => { console.warn("Could not save account reward", error); });
     return result.notice;
   };
+  const vibrateBoss = (pattern: number | number[]) => {
+    if (document.hidden || document.documentElement.dataset.motion === "reduced" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    try { navigator.vibrate?.(pattern); } catch { /* Vibration is optional in the Pi Browser and on iOS. */ }
+  };
   const destroyBoss = (state: GameState, time: number) => {
     const boss = state.boss;
     if (!boss) return;
-    const finalDelayMs = 1_450;
+    const finalDelayMs = BOSS_FALL_DURATION_MS;
     const fieldWidth = fieldRef.current?.clientWidth || 800;
     const fieldHeight = fieldRef.current?.clientHeight || 700;
     const finalY = bossFallTargetY(boss, fieldHeight);
-    const fireSites = Array.from({ length: 6 }, (_, index) => boss.config.fireSites[Math.floor(index * boss.config.fireSites.length / 6)]);
+    const fireSites = Array.from({ length: 8 }, (_, index) => boss.config.fireSites[Math.floor(index * boss.config.fireSites.length / 8)]);
     state.effects.push({ id: nextIdRef.current++, x: boss.x, y: boss.y, kind: "boss-fall", startedAt: time, bossShipWidth: boss.width, bossHeight: boss.height, bossImage: boss.config.image, fallDistance: finalY - boss.y, fireSites });
     state.effects.push({ id: nextIdRef.current++, x: boss.x, y: finalY, kind: "boss-explosion", startedAt: time, debrisSize: bossExplosionSize(boss.config, boss.width), bossShipWidth: boss.width, bossHeight: boss.height, bossImage: boss.config.image, finalDelayMs, fieldWidth, fieldHeight, shipClass: "heavy" });
     soundRef.current?.play("explosion");
+    vibrateBoss([25, 420, 30, 420, 35, 420, 40, 420, 45, 420, 50]);
     if (bossDestroyTimerRef.current !== null) window.clearTimeout(bossDestroyTimerRef.current);
-    bossDestroyTimerRef.current = window.setTimeout(() => { bossDestroyTimerRef.current = null; soundRef.current?.play("bossDestroy"); }, finalDelayMs);
+    bossDestroyTimerRef.current = window.setTimeout(() => {
+      bossDestroyTimerRef.current = null;
+      if (stateRef.current.encounter !== "boss-clear" || stateRef.current.status !== "playing") return;
+      soundRef.current?.play("bossDestroy");
+      vibrateBoss([140, 70, 230]);
+    }, finalDelayMs);
     startBossVictory(finalDelayMs + 850);
     state.score += bossPoints(state.sector);
     creditDefeat(state, bossShardReward(state.sector));
@@ -1106,7 +1117,7 @@ const GamePage = () => {
           });
         }
         if (state.phase === "SECTOR_CLEAR") state.enemyShots = [];
-        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "boss-fall" ? 1_600 : effect.kind === "boss-explosion" ? 4_600 : effect.kind === "player-explosion" ? 2_250 : effect.kind === "player-crash" ? 1_350 : effect.kind === "explosion" || effect.kind === "shatter" ? 2_250 : 390));
+        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "boss-fall" ? BOSS_FALL_DURATION_MS + 100 : effect.kind === "boss-explosion" ? 6_200 : effect.kind === "player-explosion" ? 2_250 : effect.kind === "player-crash" ? 1_350 : effect.kind === "explosion" || effect.kind === "shatter" ? 2_250 : 390));
         if (state.hearts === 0) {
           state.status = "destroying";
           state.enemyShots = [];
@@ -1351,7 +1362,7 @@ const GamePage = () => {
           : game.phase === "SECTOR_CLEAR"
             ? `${t("Block")} ${sectorLabel} ${t("COMPLETE")}`
             : `${t("Block")} ${sectorLabel} / ${BLOCKS_PER_CHAIN}`;
-  const bossDestructionActive = game.encounter === "boss-clear" && game.effects.some(effect => effect.kind === "boss-explosion" && performance.now() - effect.startedAt < 3_150);
+  const bossDestructionActive = game.encounter === "boss-clear" && game.effects.some(effect => effect.kind === "boss-explosion" && performance.now() - effect.startedAt < 6_000);
 
   return (
     <main className="game-shell" onPointerDownCapture={event => { retryAudio(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
