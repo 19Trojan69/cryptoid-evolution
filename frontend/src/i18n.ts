@@ -16,6 +16,7 @@ export const resolveLocale = (preferred: readonly string[], override?: string | 
 };
 const translations: Partial<Record<Exclude<Locale, "en">, Record<string, string>>> = {
   de: {
+    "Two defeats within 500 ms: +50 Score and +20 Shards.": "Zwei Abschüsse innerhalb von 500 ms: +50 Score-Punkte und +20 Shards.",
     "Above finger": "Über dem Finger", "Vibration on": "Vibration an", "Vibration off": "Vibration aus", "Vibration unavailable": "Vibration nicht verfügbar",
     "DOUBLE KILL": "DOPPELABSCHUSS", "Combo bonus": "Kombo-Bonus", "Level combo bonus": "Kombo-Bonus dieses Levels",
     "Blocks the next hit":"Blockt den nächsten Treffer", "Double shot damage":"Doppelter Schussschaden", "Faster automatic fire":"Schnelleres Dauerfeuer", "Clears enemies and shots":"Entfernt Gegner und Geschosse", "Freezes enemies for 7s":"Stoppt Gegner für 7 Sek.", "Active weapon":"Aktive Waffe", "Tap to switch weapon. Hold for weapon menu.":"Tippen: Waffe wechseln. Halten: Auswahl öffnen.", "Base":"Basis", "Locked":"Gesperrt", "Used":"Verbraucht", "Available":"Verfügbar",
