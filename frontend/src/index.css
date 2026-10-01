@@ -2146,7 +2146,7 @@ html[data-motion="reduced"] .home-combat-ally-1 { left: 27%; top: 66%; opacity: 
    Keep all existing phone rules and animation paths below 701px unchanged. */
 @media (min-width: 701px) {
   .landing-shell { height: auto; min-height: 100dvh; overflow-x: clip; overflow-y: visible; }
-  .landing-shell .hero-section { min-height: 480px; align-items: start; padding-top: clamp(18px, 3dvh, 32px); padding-bottom: 160px; }
+  .landing-shell .hero-section { min-height: 480px; overflow: hidden; align-items: start; padding-top: clamp(18px, 3dvh, 32px); padding-bottom: 160px; }
   .landing-shell .hero-copy { position: static; z-index: auto; align-self: start; max-width: min(48vw, 620px); padding-top: 0; }
   .landing-shell .hero-copy > :not(.home-combat-preview):not(.hero-actions) { position: relative; z-index: 4; }
   .landing-shell .hero-copy h1 { font-size: clamp(44px, min(6.3vw, 9dvh), 94px); }
