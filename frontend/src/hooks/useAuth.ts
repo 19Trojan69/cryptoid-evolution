@@ -3,6 +3,7 @@ import { axiosClient, PI_ACCESS_TOKEN_KEY } from "../lib/axiosClient";
 import type { AuthResult, PaymentDTO, SessionUser, User } from "../types/pi";
 import { ADMIN_MODE_KEY } from "../pages/shipFleet";
 import { createPiOAuthState, PI_OAUTH_CLIENT_ID, PI_OAUTH_ORIGIN, PI_OAUTH_REDIRECT_URI, PI_OAUTH_STATE_KEY } from "../config/piOAuth";
+import axios from "axios";
 
 const detectPiBrowser = async () => {
   try {
@@ -33,17 +34,49 @@ export const useAuth = () => {
   const [adminMode, setAdminMode] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [authReady, setAuthReady] = useState(false);
+  const [authError, setAuthError] = useState("");
+
+  const refreshSession = useCallback(async () => {
+    setAuthError("");
+    try {
+      const { data } = await axiosClient.get<SessionUser>("/user/me");
+      setUser(data.user);
+      setCanAdmin(data.canAdmin);
+      setAdminMode(data.adminMode);
+      sessionStorage.setItem(ADMIN_MODE_KEY, data.adminMode ? "1" : "0");
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        localStorage.removeItem("cryptoid_pi_session");
+        sessionStorage.removeItem(PI_ACCESS_TOKEN_KEY);
+        sessionStorage.removeItem(ADMIN_MODE_KEY);
+        setUser(null); setCanAdmin(false); setAdminMode(false);
+        setAuthError("Die Pi-Anmeldung ist abgelaufen. Bitte erneut anmelden.");
+      } else {
+        setAuthError("Die Pi-Sitzung konnte nicht geprüft werden. Bitte erneut versuchen.");
+      }
+      throw error;
+    } finally { setAuthReady(true); }
+  }, []);
 
   useEffect(() => {
-    if (!localStorage.getItem("cryptoid_pi_session")) {
+    if (!localStorage.getItem("cryptoid_pi_session") && !sessionStorage.getItem(PI_ACCESS_TOKEN_KEY)) {
       sessionStorage.removeItem(ADMIN_MODE_KEY);
+      setAuthReady(true);
       return;
     }
 
     let active = true;
     axiosClient.get<SessionUser>("/user/me")
       .then(({ data }) => { if (active) { setUser(data.user); setCanAdmin(data.canAdmin); setAdminMode(data.adminMode); sessionStorage.setItem(ADMIN_MODE_KEY, data.adminMode ? "1" : "0"); } })
-      .catch(() => { localStorage.removeItem("cryptoid_pi_session"); sessionStorage.removeItem(PI_ACCESS_TOKEN_KEY); sessionStorage.removeItem(ADMIN_MODE_KEY); });
+      .catch((error: unknown) => {
+        if (!active) return;
+        if (axios.isAxiosError(error) && error.response?.status === 401) {
+          localStorage.removeItem("cryptoid_pi_session"); sessionStorage.removeItem(PI_ACCESS_TOKEN_KEY); sessionStorage.removeItem(ADMIN_MODE_KEY);
+          setAuthError("Die Pi-Anmeldung ist abgelaufen. Bitte erneut anmelden.");
+        } else setAuthError("Die Pi-Sitzung konnte nicht geprüft werden. Bitte erneut versuchen.");
+      })
+      .finally(() => { if (active) setAuthReady(true); });
 
     return () => { active = false; };
   }, []);
@@ -62,6 +95,8 @@ export const useAuth = () => {
       setAdminMode(false);
       sessionStorage.removeItem(ADMIN_MODE_KEY);
       setShowSignIn(false);
+      setAuthError("");
+      setAuthReady(true);
       for (const payment of pendingPayments.current.splice(0)) {
         try { await axiosClient.post("/payments/incomplete", { payment }); }
         catch (err) { console.error("Could not resume incomplete payment", err); }
@@ -77,6 +112,7 @@ export const useAuth = () => {
     setIsLoading(true);
     try {
       const isPiBrowser = await detectPiBrowser();
+      if (window.location.pathname === "/admin") sessionStorage.setItem("cryptoid_pi_return_to", "/admin");
 
       // Pi Apps running inside Pi Browser must use the Browser SDK authentication
       // flow. Pi.signIn is the separate OAuth flow intended for ordinary browsers.
@@ -90,7 +126,7 @@ export const useAuth = () => {
       }
 
       if (window.location.origin !== PI_OAUTH_ORIGIN && !["localhost", "127.0.0.1"].includes(window.location.hostname)) {
-        window.location.assign(`${PI_OAUTH_ORIGIN}/?pi_signin=1`);
+        window.location.assign(`${PI_OAUTH_ORIGIN}/?pi_signin=1${window.location.pathname === "/admin" ? "&return_to=admin" : ""}`);
         return;
       }
 
@@ -109,6 +145,7 @@ export const useAuth = () => {
       throw new Error("Pi sign-in is unavailable in this browser.");
     } catch (err) {
       console.error("Error authenticating:", err);
+      setAuthError("Die Pi-Anmeldung konnte nicht abgeschlossen werden. Bitte erneut versuchen.");
     } finally {
       setIsLoading(false);
     }
@@ -154,5 +191,8 @@ export const useAuth = () => {
     closeSignIn,
     requireAuth: () => setShowSignIn(true),
     isLoading,
+    authReady,
+    authError,
+    refreshSession,
   };
 };

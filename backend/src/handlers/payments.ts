@@ -4,6 +4,8 @@ import { findOffer, shipUpgradePrerequisite } from "../hangarCatalog";
 import "../types/session";
 import { isAdminMode } from "../adminAccess";
 import { testPiPurchaseAllowed } from "../paymentPolicy";
+import { paymentSnapshot } from "../paymentRecords";
+import { readPaymentReceipt } from "../paymentReceipt";
 
 const identifier = (value: unknown) => typeof value === "string" && /^[a-zA-Z0-9_-]{1,100}$/.test(value) ? value : null;
 const fetchPayment = async (req: any, id: string) => (await platformAPIClientForRequest(req).get(`/v2/payments/${id}`)).data;
@@ -65,6 +67,7 @@ export default function mountPaymentsEndpoints(router: Router) {
       if (prerequisite && !await orders.findOne({ user: uid, product_id: prerequisite, paid: true })) return res.status(403).json({ error: "prerequisite_missing", stage: "approval", message: "Advanced stage required before Elite" });
        if (!existing) await orders.updateOne({ pi_payment_id: id }, { $setOnInsert: { pi_payment_id: id, product_id: offer.id, user: uid, paid: false, created_at: new Date() } }, { upsert: true });
       if (!payment.status?.developer_approved) await platformAPIClientForRequest(req).post(`/v2/payments/${id}/approve`);
+      await orders.updateOne({ pi_payment_id: id, user: uid, paid: false }, { $set: { ...paymentSnapshot(payment, offer.name), approved_at: new Date() } });
       return res.json({ approved: true });
     } catch (error) {
       const diagnostic = paymentFailureDiagnostic(error);
@@ -92,7 +95,8 @@ export default function mountPaymentsEndpoints(router: Router) {
       if (prerequisite && !await orders.findOne({ user: uid, product_id: prerequisite, paid: true })) return res.status(403).json({ error: "Advanced stage required before Elite" });
       if (!payment.status?.developer_completed) await platformAPIClientForRequest(req).post(`/v2/payments/${id}/complete`, { txid });
       // Credit only after Pi has confirmed /complete (or reported already completed).
-      await orders.updateOne({ pi_payment_id: id, user: uid, paid: false, cancelled: { $ne: true } }, { $set: { paid: true, txid, completed_at: new Date() } });
+      const receipt = await readPaymentReceipt(payment);
+      await orders.updateOne({ pi_payment_id: id, user: uid, paid: false, cancelled: { $ne: true } }, { $set: { paid: true, txid, completed_at: new Date(), ...paymentSnapshot(payment, offer.name), ...receipt } });
       return res.json({ completed: true });
     } catch (error) {
       console.error("Payment completion failed", error);
@@ -118,7 +122,7 @@ export default function mountPaymentsEndpoints(router: Router) {
     try {
       const payment = await fetchPayment(req, id);
       if (payment.user_uid !== uid || !payment.status?.user_cancelled && !payment.status?.cancelled) return res.status(400).json({ error: "Payment is not cancelled" });
-      await req.app.locals.orderCollection.updateOne({ pi_payment_id: id, user: uid, paid: false }, { $set: { cancelled: true } });
+      await req.app.locals.orderCollection.updateOne({ pi_payment_id: id, user: uid, paid: false }, { $set: { cancelled: true, cancelled_at: new Date() } });
       return res.json({ cancelled: true });
     } catch (error) { return res.status(502).json({ error: "Could not verify cancellation" }); }
   });

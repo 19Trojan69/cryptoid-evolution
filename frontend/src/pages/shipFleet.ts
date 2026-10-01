@@ -26,6 +26,7 @@ export const ADMIN_SHIP_SKIN_KEY = "cryptoid_admin_ship_skin";
 export const ADMIN_SHIP_COLOR_KEY = "cryptoid_admin_ship_color";
 export const ADMIN_START_SECTOR_KEY = "cryptoid_admin_start_sector";
 export const ADMIN_SHIP_STAGE_KEY = "cryptoid_admin_ship_stage";
+export const ADMIN_TEST_CONFIG_KEY = "cryptoid_admin_test_config";
 export const EXTRA_STARTER_PRICE = 150;
 
 export const playerSkins = [

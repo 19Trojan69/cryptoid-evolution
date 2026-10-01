@@ -14,6 +14,8 @@ import mountHangarEndpoints from "./handlers/hangar";
 import mountLeaderboardEndpoints from "./handlers/leaderboard";
 import mountRewardEndpoints from "./handlers/rewards";
 import platformAPIClient from "./services/platformAPIClient";
+import mountAdminEndpoints from "./handlers/admin";
+import { restoreAdminPreview } from "./adminAccess";
 
 // We must import typedefs for ts-node-dev to pick them up when they change (even though tsc would supposedly
 // have no problem here)
@@ -38,6 +40,7 @@ const mongoClientOptions = env.mongo_uri
 //
 
 export const app: express.Application = express();
+app.set("trust proxy", 1);
 
 // Log requests to the console in a compact format:
 app.use(logger("dev"));
@@ -73,6 +76,7 @@ app.use(
     secret: env.session_secret,
     resave: false,
     saveUninitialized: false,
+    cookie: { httpOnly: true, sameSite: "lax", secure: Boolean(process.env.VERCEL) },
     store: MongoStore.create({
       mongoUrl: mongoUri,
       mongoOptions: mongoClientOptions,
@@ -119,7 +123,7 @@ app.use(async (req, _res, next) => {
         roles: Array.isArray(me.data?.roles) ? me.data.roles : [],
         accessToken,
       });
-      currentUser = await userCollection.findOne(inserted.insertedId);
+      currentUser = await userCollection.findOne({ _id: inserted.insertedId });
     }
 
     if (currentUser) {
@@ -135,6 +139,12 @@ app.use(async (req, _res, next) => {
 
   return next();
 });
+
+app.use(restoreAdminPreview);
+
+const adminRouter = express.Router();
+mountAdminEndpoints(adminRouter);
+app.use("/admin", adminRouter);
 
 //
 // II. Mount app endpoints:
@@ -181,6 +191,7 @@ export const start = async (listen = true): Promise<void> => {
     app.locals.userCollection = db.collection("users");
     app.locals.adminCollection = db.collection("admin_access");
     await app.locals.orderCollection.createIndex({ pi_payment_id: 1 }, { unique: true });
+    await app.locals.orderCollection.createIndex({ payment_network: 1, created_at: -1 });
     await app.locals.userCollection.createIndex({ bestScore: -1, uid: 1 });
     console.log("Connected to MongoDB");
 

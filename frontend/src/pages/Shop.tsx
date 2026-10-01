@@ -309,7 +309,9 @@ const Shop = () => {
   useEffect(() => {
     const url = new URL(window.location.href);
     if (url.searchParams.get("pi_signin") !== "1") return;
+    if (url.searchParams.get("return_to") === "admin") sessionStorage.setItem("cryptoid_pi_return_to", "/admin");
     url.searchParams.delete("pi_signin");
+    url.searchParams.delete("return_to");
     history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
     void signIn();
   }, [signIn]);
