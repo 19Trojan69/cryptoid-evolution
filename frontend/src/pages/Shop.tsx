@@ -1,3 +1,4 @@
+import SystemSettings, { applySavedDisplaySettings } from "./SystemSettings";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
@@ -17,17 +18,15 @@ import { hangarCatalog } from "../../../backend/src/hangarCatalog";
 import { primeGameAudio } from "./gameAudio";
 import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, readMusicVolume, resetAudioVolumeDefaults } from "./musicPreferences";
 import { handoffGameMusic, MusicPlayer } from "./musicPlayback";
-import MusicVolumeSlider from "./MusicVolumeSlider";
 import Starfield from "./Starfield";
 import HomeCombatPreview from "./HomeCombatPreview";
 import GameGuide from "./GameGuide";
-import { languages, useLocale, type Locale } from "../i18n";
+import { useLocale } from "../i18n";
 import EarthGlobe from "./EarthGlobe";
 import EarthNetwork from "./EarthNetwork";
 import { requestGameFullscreen } from "./gameFullscreen";
 import { MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { powerUpSymbols, type PowerUpType } from "./powerUps";
-import { CONTROL_HAND_KEY, CONTROL_SENSITIVITY_KEY, CONTROL_ZONE_KEY, SHIP_START_KEY, readControlHand, readControlSensitivity, readControlZone, readShipStart, type ControlHand, type ControlSensitivity, type ControlZone, type ShipStart } from "./controlPreferences";
 import { BOSS_STICKER_COUNT, CHAIN_MILESTONES, emptyRewardProgress, rankForLevel, readRewardProgress, REWARD_PROGRESS_KEY, rewardRank, type RewardProgress } from "./rewardProgress";
 
 type Offer = { id: string; kind: "weapon" | "power" | "armor" | "ship_upgrade"; name: string; description: string; pricePi: number; shipIndex?: number; stage?: 2 | 3 };
@@ -45,7 +44,6 @@ const shopTabs = [
 ] as const;
 
 const powerTypeForOffer = (offerId: string): PowerUpType => offerId.includes("shield") ? "shield" : offerId.includes("rapid") ? "rapid" : offerId.includes("bomb") ? "bomb" : offerId.includes("emp") ? "emp" : "overdrive";
-const MOTION_STORAGE_KEY = "cryptoid_reduced_effects";
 const TESTNET_PAID_WEAPON_IDS = new Set(["weapon_twin", "weapon_rapid_twin"]);
 const adminFleet: ShipFleet = Object.fromEntries(playerSkins.map(skin => [skin.id, Object.fromEntries(playerColors.map(color => [color.id, 1]))])) as ShipFleet;
 
@@ -71,15 +69,9 @@ const PowerPreview = ({ offerId }: { offerId: string }) => {
 
 const Shop = () => {
   const navigate = useNavigate();
-  const { locale, automatic, choose, t } = useLocale();
+  const { locale, t } = useLocale();
   const [activePanel, setActivePanel] = useState<"how" | "progress" | null>(null);
   const [systemMenuOpen, setSystemMenuOpen] = useState(false);
-  const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
-  const [reducedEffects, setReducedEffects] = useState(() => localStorage.getItem(MOTION_STORAGE_KEY) === "1");
-  const [controlHand, setControlHand] = useState<ControlHand>(readControlHand);
-  const [controlSensitivity, setControlSensitivity] = useState<ControlSensitivity>(readControlSensitivity);
-  const [controlZone, setControlZone] = useState<ControlZone>(readControlZone);
-  const [shipStart, setShipStart] = useState<ShipStart>(readShipStart);
   const [shopView, setShopView] = useState<"hangar" | "shop" | "weapons" | "powers" | "progress" | "rewards" | "leaders" | null>(null);
   const [termsOpen, setTermsOpen] = useState(false);
   const [leaders, setLeaders] = useState<Leader[]>([]);
@@ -154,21 +146,13 @@ const Shop = () => {
     axiosClient.get<{ bestScore: number }>("/leaderboard/me").then(({ data }) => { if (current) setPersonalBest(data.bestScore); }).catch(() => { if (current) setPersonalBest(null); });
     return () => { current = false; };
   }, [shopView]);
-  useEffect(() => {
-    document.documentElement.dataset.motion = reducedEffects ? "reduced" : "standard";
-    localStorage.setItem(MOTION_STORAGE_KEY, reducedEffects ? "1" : "0");
-  }, [reducedEffects]);
-  useEffect(() => { localStorage.setItem(CONTROL_HAND_KEY, controlHand); }, [controlHand]);
-  useEffect(() => { localStorage.setItem(CONTROL_SENSITIVITY_KEY, controlSensitivity); }, [controlSensitivity]);
-  useEffect(() => { localStorage.setItem(CONTROL_ZONE_KEY, controlZone); }, [controlZone]);
-  useEffect(() => { localStorage.setItem(SHIP_START_KEY, shipStart); }, [shipStart]);
-  useEffect(() => { if (!systemMenuOpen) setLanguageMenuOpen(false); }, [systemMenuOpen]);
+  useEffect(applySavedDisplaySettings, []);
   useEffect(() => {
     if (!systemMenuOpen) return;
-    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") { if (languageMenuOpen) setLanguageMenuOpen(false); else setSystemMenuOpen(false); } };
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") { setSystemMenuOpen(false); } };
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
-  }, [systemMenuOpen, languageMenuOpen]);
+  }, [systemMenuOpen]);
   useEffect(() => {
     if (!shopView) return;
     const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setShopView(null); };
@@ -413,49 +397,7 @@ const Shop = () => {
           <button className="close-button" type="button" onClick={() => setSystemMenuOpen(false)} aria-label={t('Close menu')}>×</button>
           <p className="eyebrow">{t('SYSTEM / SETTINGS')}</p>
           <div className="system-menu-title-row"><h2 id="system-menu-title">{t('System menu')}</h2><button className="system-guide-link" type="button" onClick={() => { setSystemMenuOpen(false); setActivePanel('how'); }}><span aria-hidden="true">?</span>{t('Game guide')}</button></div>
-          <div className="system-menu-section">
-            <div className="system-menu-heading"><strong>{t('Language')}</strong><small>{t('Current language')}: {languages[locale]}</small></div>
-            <div className="language-dropdown" data-open={languageMenuOpen ? "true" : "false"}>
-              <div className="language-actions">
-                <button type="button" className="language-trigger language-auto" aria-pressed={automatic} aria-expanded={languageMenuOpen} aria-controls="language-options" onClick={() => { choose(null); setLanguageMenuOpen(true); }}>
-                  <span aria-hidden="true">◎</span><b>{t('Automatic (device language)')}</b><i aria-hidden="true">⌄</i>
-                </button>
-                <button type="button" className="language-trigger language-change" aria-pressed={!automatic} aria-expanded={languageMenuOpen} aria-controls="language-options" onClick={() => setLanguageMenuOpen(open => !open)}>
-                  <span aria-hidden="true">{locale.toUpperCase()}</span><b>{t('Change')}</b><i aria-hidden="true">⌄</i>
-                </button>
-              </div>
-              {languageMenuOpen && <div id="language-options" className="language-menu" role="group" aria-label={t('Language')}>
-                {Object.entries(languages).map(([code, label]) => <button type="button" className="language-option" key={code} aria-pressed={!automatic && locale === code} onClick={() => { choose(code as Locale); setLanguageMenuOpen(false); }}><span aria-hidden="true">{code.toUpperCase()}</span><b>{label}</b></button>)}
-              </div>}
-            </div>
-          </div>
-          <div className="system-menu-section system-quick-settings">
-            <div className="system-menu-heading"><strong>{t('Controls')}</strong><small>{t('Move with one thumb; activate power-ups with the other.')}</small></div>
-            <button className="system-setting" type="button" aria-pressed={controlHand === "right"} onClick={() => setControlHand("right")}><span aria-hidden="true">◁</span><b>{t('Right-handed controls')}</b></button>
-            <button className="system-setting" type="button" aria-pressed={controlHand === "left"} onClick={() => setControlHand("left")}><span aria-hidden="true">▷</span><b>{t('Left-handed controls')}</b></button>
-            <div className="control-choice-group" role="group" aria-label={t('Touch sensitivity')}>
-              <strong>{t('Touch sensitivity')}</strong>
-              {(["gentle", "normal", "fast"] as const).map(value => <button key={value} className="system-setting" type="button" aria-pressed={controlSensitivity === value} onClick={() => setControlSensitivity(value)}><b>{t(value === "gentle" ? "Gentle" : value === "normal" ? "Normal" : "Fast")}</b></button>)}
-            </div>
-            <div className="control-choice-group" role="group" aria-label={t('Control area')}>
-              <strong>{t('Control area')}</strong>
-              {(["compact", "normal", "wide"] as const).map(value => <button key={value} className="system-setting" type="button" aria-pressed={controlZone === value} onClick={() => setControlZone(value)}><b>{t(value === "compact" ? "Compact" : value === "normal" ? "Normal" : "Wide")}</b></button>)}
-            </div>
-            <div className="control-choice-group ship-start-choice-group" role="group" aria-label={t('Ship start position')}>
-              <strong>{t('Ship start position')}</strong>
-              {(["higher", "touch"] as const).map(value => <button key={value} className="system-setting" type="button" aria-pressed={shipStart === value} onClick={() => setShipStart(value)}><b>{t(value === "higher" ? "Current position" : "Under finger")}</b></button>)}
-            </div>
-          </div>
-          <div className="system-menu-section system-quick-settings">
-            <div className="system-menu-heading"><strong>{t('Music volume')}</strong></div>
-            <MusicVolumeSlider id="home-music-volume" label={t('Music volume')} value={musicVolume} onChange={changeMusicVolume} />
-            <MusicVolumeSlider id="home-effects-volume" label={t('Effects volume')} value={effectsVolume} onChange={changeEffectsVolume} />
-          </div>
-          <div className="system-menu-section system-quick-settings">
-            <div className="system-menu-heading"><strong>{t('Display')}</strong></div>
-            <button className="system-setting" type="button" onClick={() => requestGameFullscreen()}><span aria-hidden="true">⛶</span><b>{t('Full screen')}</b></button>
-            <button className="system-setting" type="button" aria-pressed={reducedEffects} onClick={() => setReducedEffects(value => !value)}><span aria-hidden="true">◌</span><b>{t(reducedEffects ? 'Reduced effects' : 'Standard effects')}</b></button>
-          </div>
+          <SystemSettings idPrefix="home" musicVolume={musicVolume} effectsVolume={effectsVolume} changeMusicVolume={changeMusicVolume} changeEffectsVolume={changeEffectsVolume} />
         </section>
       </div>}
 

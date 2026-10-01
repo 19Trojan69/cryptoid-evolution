@@ -2183,3 +2183,25 @@ html[data-motion="reduced"] .home-combat-ally-1 { left: 27%; top: 66%; opacity: 
 }
 :fullscreen .wide-fullscreen-control { display: none; }
 :-webkit-full-screen .wide-fullscreen-control { display: none; }
+
+/* Pickup notices approach from depth and flash once, always above the field. */
+.pickup-notice { width: calc(100% - 16px); gap: 5px; padding: 10px 12px; border: 1px solid color-mix(in srgb, var(--pickup-neon) 65%, transparent); border-radius: 8px; background: linear-gradient(90deg, #04152550, #092b40e8 25% 75%, #04152550); box-shadow: 0 0 18px color-mix(in srgb, var(--pickup-neon) 25%, transparent); animation: pickup-depth-reveal 1.55s ease-out both; }
+.pickup-notice b { width: 100%; font-size: clamp(25px, 6vw, 48px); animation: none; }
+.pickup-notice::after { height: 3px; background: linear-gradient(90deg, transparent, #fff, var(--pickup-neon), transparent); mask: none; -webkit-mask: none; filter: none; animation: pickup-flash .45s ease-out both; }
+@keyframes pickup-depth-reveal { 0% { opacity: 0; transform: translateX(-50%) perspective(800px) translateZ(-420px) scale(.3); } 15% { opacity: 1; transform: translateX(-50%) perspective(800px) translateZ(35px) scale(1.025); } 24%, 73% { opacity: 1; transform: translateX(-50%) perspective(800px) translateZ(0) scale(1); } 100% { opacity: 0; transform: translateX(-50%) scale(.98); } }
+.combo-notice { position: absolute; z-index: 9; top: calc(max(4px, env(safe-area-inset-top)) + 116px); left: 50%; transform: translateX(-50%); display: grid; gap: 3px; width: min(92%, 520px); padding: 9px 14px; border: 1px solid #ffd579b3; border-radius: 8px; background: linear-gradient(90deg, #0b1c3080, #16283bec, #0b1c3080); color: #ffe4a2; text-align: center; pointer-events: none; animation: combo-reveal 1.5s ease-out both; }
+.combo-notice b { font: 800 clamp(19px, 4.5vw, 28px) 'Oxanium', sans-serif; text-shadow: 0 0 12px #ffb95780; }
+.combo-notice span, .combo-summary { color: #ffe4a2; font: 700 clamp(11px, 2.8vw, 15px) 'Oxanium', sans-serif; }
+.combo-with-pickup { top: calc(max(4px, env(safe-area-inset-top)) + 242px); }
+@keyframes combo-reveal { 0% { opacity: 0; transform: translateX(-50%) scale(.8); } 12%, 76% { opacity: 1; transform: translateX(-50%) scale(1); } 100% { opacity: 0; transform: translateX(-50%) scale(1.03); } }
+@media (prefers-reduced-motion: reduce) { .pickup-notice, .combo-notice { animation: none; transform: translateX(-50%); } }
+html[data-motion="reduced"] .pickup-notice, html[data-motion="reduced"] .combo-notice { animation: none; transform: translateX(-50%); }
+html[data-motion="reduced"] .pickup-notice b, html[data-motion="reduced"] .pickup-notice span, html[data-motion="reduced"] .pickup-notice::before, html[data-motion="reduced"] .pickup-notice::after { animation: none; }
+html[data-motion="reduced"] .pickup-notice::before, html[data-motion="reduced"] .pickup-notice::after { display: none; }
+
+/* All System controls stay reachable in short landscape and phone viewports. */
+.pause-settings-overlay { padding: 12px; overflow: hidden; }
+.pause-settings-modal { width: min(100%, 680px); max-height: calc(100dvh - 110px); overflow-y: auto; overscroll-behavior: contain; padding: 20px; }
+.pause-settings-modal h1 { font-size: clamp(24px, 5vw, 36px); }
+.pause-settings-modal > .button { position: sticky; bottom: 0; width: 100%; z-index: 2; box-shadow: 0 0 18px #092536; }
+.pause-settings-modal .language-menu { max-height: 240px; overflow-y: auto; }

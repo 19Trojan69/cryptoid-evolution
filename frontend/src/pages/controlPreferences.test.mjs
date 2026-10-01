@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { CONTROL_HAND_KEY, readControlHand, readShipStart, SHIP_START_KEY, shipStartHeight } from "./controlPreferences.ts";
 import { placePlayerFromPointer, TOUCH_SHIP_OFFSET_PX } from "./playerCombat.ts";
 
-test("the current position remains the default and touch mode follows the finger", () => {
+test("the above-finger position remains the default and touch mode follows the finger", () => {
   const previous = globalThis.localStorage;
   let saved = null;
   globalThis.localStorage = { getItem: key => key === SHIP_START_KEY ? saved : null };
@@ -19,7 +19,7 @@ test("the current position remains the default and touch mode follows the finger
     assert.ok(Math.abs((underFinger.y - current.y) * 800 - TOUCH_SHIP_OFFSET_PX) < .0001);
     for (const oldSetting of ["normal", "lower"]) {
       saved = oldSetting;
-      assert.equal(readShipStart(), "touch");
+      assert.equal(readShipStart(), "higher");
     }
   } finally {
     globalThis.localStorage = previous;
