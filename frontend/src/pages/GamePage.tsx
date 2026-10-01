@@ -13,7 +13,7 @@ import SectorBackdrop from "./SectorBackdrop";
 import Starfield from "./Starfield";
 import { BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusEntryGap, bonusHeartReward, bonusPosition, bonusReward, bonusShowcaseShip, type BonusTarget } from "./bonusChallenge";
 import { appendSectionBlock, bonusChainReward, BLOCKS_PER_CHAIN } from "./networkChain";
-import { advanceAfterClear, BOSS_WARNING_MS, damageSectorBoss, bossFireInterval, bossVulnerable, createSectorBoss, moveSectorBoss, type SectorBoss } from "./sectorBoss";
+import { advanceAfterClear, BOSS_ENTRY_MS, BOSS_WARNING_MS, damageSectorBoss, bossFireInterval, bossVulnerable, createSectorBoss, moveSectorBoss, type SectorBoss } from "./sectorBoss";
 import { enemyAppearance, selectedShip, shardBalance, ADMIN_MODE_KEY, ADMIN_TEST_CONFIG_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
 import { useShipVisualOffset } from "./paintedShip";
@@ -31,6 +31,7 @@ import { levelDifficulty, MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { balanceAfterMission, BONUS_TARGET_SHARD_REWARD, bossPoints, bossShardReward, creditDefeat, creditReward } from "./shardEarnings";
 import { addPersistentHullFire, hullFireAtImpact, spriteFireSites, type HullFire } from "./hullFires";
 import { bossExplosionSize, bossFallTargetY, bossFireSite, bossHullContains, bossVolley } from "./bossCombat";
+import { bossEscortAttackInterval, bossEscortCount, bossEscortReinforcements, bossEscortRosterIndex, bossEscortSlots } from "./bossEscorts";
 import { awardBlock, awardBonusMedal, awardBossSticker, awardChain, emptyRewardProgress, reachLevel, rewardRank, type RewardProgress } from "./rewardProgress";
 
 const BEST_SCORE_KEY = "cryptoid_best_score";
@@ -60,6 +61,7 @@ type GameStatus = "loading" | "playing" | "paused" | "destroying" | "game-over" 
 
 type Asteroid = {
   id: number;
+  escort?: boolean;
   x: number;
   y: number;
   size: AsteroidSize;
@@ -203,6 +205,15 @@ const spawnAsteroid = (id: number, width: number, visibleTop: number, formationI
   return { id, x: startX, y: entryStartY, size, ...profile, ...enemyAppearance(sector, formationIndex + offset), entryDuration: Math.max(4_100, Math.round(profile.entryDuration * .85)), health: profile.health, maxHealth: profile.health, cloaked: false, rotation: 0, rotationSpeed: 0, entryElapsed: 0, entryStartX: startX, entryStartY, entryTargetX: target.x, entryTargetY: target.y, entrySide, entryPattern, entryIndex: formationIndex, formationSlot: target.index, formationSlotCount: slots.length, formationElapsed: 0, formationDuration: FORMATION_SETTLE_MS, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, collidedThisAttack: false };
 };
 
+const spawnBossEscort = (id: number, width: number, index: number, level: number, slots: ReturnType<typeof bossEscortSlots>, wave: number): Asteroid => {
+  const rosterIndex = bossEscortRosterIndex(index, wave);
+  const slot = slots[index];
+  const enemy = spawnAsteroid(id, width, slot.y - 8, index, level, slots, rosterIndex - index);
+  const startX = slot.entrySide === 1 ? 22 : width - 22;
+  return { ...enemy, escort: true, size: "small", radius: 18, x: startX, y: slot.y - 8,
+    entryStartX: startX, entryStartY: slot.y - 8, entryDuration: 1_850, formationDuration: 300 };
+};
+
 const attackTime = (asteroid: Asteroid) => asteroid.attackPattern === null ? 0 : attackDuration(asteroid.attackPattern) * asteroid.attackPace;
 
 const moveAsteroid = (asteroid: Asteroid, delta: number, width: number, height: number): Asteroid => {
@@ -344,6 +355,10 @@ const GamePage = () => {
   const formationOffsetRef = useRef(0);
   const bonusIndexRef = useRef(0);
   const sectionSlotsRef = useRef<ReturnType<typeof formationLayout> | null>(null);
+  const bossEscortSlotsRef = useRef<ReturnType<typeof bossEscortSlots> | null>(null);
+  const bossEscortWaveRef = useRef(0);
+  const bossEscortSpawnedRef = useRef(0);
+  const bossEscortTimerRef = useRef(0);
   const animationRef = useRef<number | null>(null);
   const lastFrameRef = useRef(0);
   const lastPaintRef = useRef(0);
@@ -632,6 +647,7 @@ const GamePage = () => {
       return { progress: next, notice: `BOSS-STICKER ${boss.config.id}/50 · ${result.stars}★${rank !== previousRank ? ` · NEUER RANG ${rank.toUpperCase()}` : ""}` };
     }, { kind: "boss", level: boss.config.id, stage: state.sector });
     state.encounter = "boss-clear";
+    state.asteroids = [];
     state.enemyShots = [];
     state.boss = null;
   };
@@ -847,6 +863,10 @@ const GamePage = () => {
             formationOffsetRef.current = 0;
             bonusIndexRef.current = 0;
             sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height);
+            bossEscortSlotsRef.current = null;
+            bossEscortWaveRef.current = 0;
+            bossEscortSpawnedRef.current = 0;
+            bossEscortTimerRef.current = 0;
             spawnTimerRef.current = 0;
             sectionElapsedRef.current = 0;
             clearTimerRef.current = 0;
@@ -869,12 +889,36 @@ const GamePage = () => {
             state.asteroids.push(spawnAsteroid(nextIdRef.current++, width, visibleTop, formationIndexRef.current++, state.sector, slots, formationOffsetRef.current));
           }
         }
+        if (state.encounter === "boss-fight" && state.boss && bossEscortCount(state.sector) > 0 && state.boss.elapsed >= BOSS_ENTRY_MS + 1_500) {
+          if (bossEscortSlotsRef.current === null) {
+            bossEscortSlotsRef.current = bossEscortSlots(state.sector, width, height, state.boss, bossEscortCount(state.sector));
+          }
+          let escortSlots = bossEscortSlotsRef.current;
+          if (bossEscortWaveRef.current === 0 && bossEscortSpawnedRef.current === escortSlots.length && state.boss.health <= state.boss.maxHealth * .55
+            && state.asteroids.length <= 1 && bossEscortReinforcements(state.sector) > 0) {
+            bossEscortWaveRef.current = 1;
+            bossEscortSpawnedRef.current = 0;
+            bossEscortTimerRef.current = 0;
+            escortSlots = bossEscortSlots(state.sector, width, height, state.boss, bossEscortReinforcements(state.sector));
+            bossEscortSlotsRef.current = escortSlots;
+          }
+          if (bossEscortSpawnedRef.current < escortSlots.length) {
+            bossEscortTimerRef.current += delta;
+            if (bossEscortTimerRef.current >= 360) {
+              bossEscortTimerRef.current -= 360;
+              state.asteroids.push(spawnBossEscort(nextIdRef.current++, width, bossEscortSpawnedRef.current++, state.sector, escortSlots, bossEscortWaveRef.current));
+            }
+          }
+        }
         const ready = state.asteroids.filter(asteroid => asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration);
         const formationComplete = normal && formationReady({ spawned: formationIndexRef.current, total: slots.length, alive: state.asteroids.length, ready: ready.length });
-        if (formationComplete && !state.asteroids.some(asteroid => asteroid.attackPattern !== null)) attackCooldownRef.current += delta;
+        const escortComplete = state.encounter === "boss-fight" && !!bossEscortSlotsRef.current && formationReady({ spawned: bossEscortSpawnedRef.current, total: bossEscortSlotsRef.current.length, alive: state.asteroids.length, ready: ready.length });
+        if ((formationComplete || escortComplete) && !state.asteroids.some(asteroid => asteroid.attackPattern !== null)) attackCooldownRef.current += delta;
         else if (!state.asteroids.some(asteroid => asteroid.attackPattern !== null)) attackCooldownRef.current = 0;
-        if (state.empMs === 0 && formationComplete && !state.asteroids.some(asteroid => asteroid.attackPattern !== null) && attackCooldownRef.current >= levelDifficulty(state.sector).attackCooldownMs) {
+        if (state.empMs === 0 && (formationComplete || escortComplete) && !state.asteroids.some(asteroid => asteroid.attackPattern !== null)
+          && attackCooldownRef.current >= (normal ? levelDifficulty(state.sector).attackCooldownMs : bossEscortAttackInterval(state.sector))) {
             let pattern = chooseAttackPattern(attackNumberRef.current++, elapsedRef.current, state.sector);
+            if (escortComplete && pattern === "vDive") pattern = "double";
             if (ready.length < attackGroupSize(pattern)) pattern = "curve";
             const groupSize = attackGroupSize(pattern);
             const selectedIds = ready.slice(0, groupSize).map(asteroid => asteroid.id);
@@ -1059,7 +1103,7 @@ const GamePage = () => {
           creditDefeat(state, enemy.reward);
           state.asteroids = state.asteroids.filter(item => item.id !== enemy.id);
           if (enemy.attackPattern !== null) attackCooldownRef.current = 0;
-          const drop = createPowerUpDrop({ id: nextIdRef.current, x: enemy.x, y: enemy.y, width, height, threats: state.asteroids, activeCount: state.powerUps.length, chanceRoll: Math.random(), kindRoll: Math.random(), destroyed: state.destroyed, dropsCreated: dropsCreatedRef.current });
+          const drop = enemy.escort ? null : createPowerUpDrop({ id: nextIdRef.current, x: enemy.x, y: enemy.y, width, height, threats: state.asteroids, activeCount: state.powerUps.length, chanceRoll: Math.random(), kindRoll: Math.random(), destroyed: state.destroyed, dropsCreated: dropsCreatedRef.current, level: state.sector });
           const usefulDrop = drop?.type === "weapon" && state.weaponLevel >= 5 ? null : drop;
           if (usefulDrop) { nextIdRef.current += 1; dropsCreatedRef.current += 1; state.powerUps.push(usefulDrop); }
         }
@@ -1329,6 +1373,10 @@ const GamePage = () => {
     formationOffsetRef.current = 0;
     bonusIndexRef.current = 0;
     sectionSlotsRef.current = null;
+    bossEscortSlotsRef.current = null;
+    bossEscortWaveRef.current = 0;
+    bossEscortSpawnedRef.current = 0;
+    bossEscortTimerRef.current = 0;
     spawnTimerRef.current = 0;
     sectionElapsedRef.current = 0;
     clearTimerRef.current = 0;

@@ -8,6 +8,7 @@ export const PURCHASED_POWER_UP_DURATION_MS = 60_000;
 export const OVERDRIVE_DURATION_MS = POWER_UP_DURATION_MS;
 export const RAPID_DURATION_MS = POWER_UP_DURATION_MS;
 export const MAX_ACTIVE_POWER_UPS = 3;
+export const freeDropChance = (level: number) => .11 * (1 - Math.max(0, Math.min(1, (level - 250) / 200)));
 
 export const powerUpNames: Record<PowerUpType, string> = {
   shield: "Shield", overdrive: "Overdrive", weapon: "Weapon Upgrade", rapid: "Rapid Fire", bomb: "Nova Bomb", emp: "EMP Pulse",
@@ -24,11 +25,12 @@ export const powerUpDescriptions: Record<PowerUpType, string> = {
   emp: "Freezes enemy attacks and movement for 7 seconds.",
 };
 
-export const createPowerUpDrop = ({ id, x, y, width, height, threats, activeCount, chanceRoll, kindRoll, destroyed, dropsCreated }: {
+export const createPowerUpDrop = ({ id, x, y, width, height, threats, activeCount, chanceRoll, kindRoll, destroyed, dropsCreated, level = 1 }: {
   id: number; x: number; y: number; width: number; height: number;
-  threats: Threat[]; activeCount: number; chanceRoll: number; kindRoll: number; destroyed: number; dropsCreated: number;
+  threats: Threat[]; activeCount: number; chanceRoll: number; kindRoll: number; destroyed: number; dropsCreated: number; level?: number;
 }): PowerUp | null => {
-  if (activeCount >= MAX_ACTIVE_POWER_UPS || (chanceRoll >= 0.11 && !(dropsCreated === 0 && destroyed >= 3))) return null;
+  const chance = freeDropChance(level);
+  if (activeCount >= MAX_ACTIVE_POWER_UPS || chance === 0 || (chanceRoll >= chance && !(dropsCreated === 0 && destroyed >= 3 && chance === .11))) return null;
   // Drops begin where the enemy was defeated. Skip any location near immediate danger.
   if (x < 35 || x > width - 35 || y < 105 || y > height * 0.62) return null;
   if (threats.some(threat => Math.abs(threat.x - x) < threat.radius + 36 && threat.y >= y - 45 && threat.y <= y + 130)) return null;
