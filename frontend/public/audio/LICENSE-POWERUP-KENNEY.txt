@@ -5,9 +5,12 @@ https://kenney.nl/assets/digital-audio
 
 pickup-shield.mp3: forceField_000.ogg (Sci-Fi Sounds)
 pickup-overdrive.mp3: phaseJump1.ogg (Digital Audio)
-pickup-weapon.mp3: powerUp1.ogg (Digital Audio)
 pickup-rapid.mp3: phaserUp1.ogg (Digital Audio)
 pickup-bomb.mp3: lowThreeTone.ogg (Digital Audio)
 pickup-emp.mp3: zapThreeToneUp.ogg (Digital Audio)
 
-The files were converted to MP3 and gain adjusted for gameplay.
+The Kenney files were converted to MP3 and gain adjusted for gameplay.
+
+pickup-weapon.mp3: "Laser Charge Up (Stronger)" by magnuswaker (CC0),
+public MP3 preview from https://freesound.org/people/magnuswaker/sounds/592573/
+This replaces the previous Kenney powerUp1.ogg weapon pickup sound.
