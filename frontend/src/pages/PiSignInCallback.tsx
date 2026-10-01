@@ -44,7 +44,9 @@ const PiSignInCallback = () => {
       if (!active) return;
       setStatus("success");
       setMessage("Anmeldung erfolgreich. Cryptoid Evolution wird geöffnet …");
-      window.setTimeout(() => window.location.replace("/"), 500);
+      const returnTo = sessionStorage.getItem("cryptoid_pi_return_to") === "/admin" ? "/admin" : "/";
+      sessionStorage.removeItem("cryptoid_pi_return_to");
+      window.setTimeout(() => window.location.replace(returnTo), 500);
     };
 
     completeSignIn().catch((error: unknown) => {

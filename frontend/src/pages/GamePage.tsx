@@ -14,7 +14,7 @@ import Starfield from "./Starfield";
 import { BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusEntryGap, bonusHeartReward, bonusPosition, bonusReward, bonusShowcaseShip, type BonusTarget } from "./bonusChallenge";
 import { appendSectionBlock, bonusChainReward, BLOCKS_PER_CHAIN } from "./networkChain";
 import { advanceAfterClear, BOSS_WARNING_MS, damageSectorBoss, bossFireInterval, bossVulnerable, createSectorBoss, moveSectorBoss, type SectorBoss } from "./sectorBoss";
-import { enemyAppearance, selectedShip, shardBalance, ADMIN_MODE_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
+import { enemyAppearance, selectedShip, shardBalance, ADMIN_MODE_KEY, ADMIN_TEST_CONFIG_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
 import { useShipVisualOffset } from "./paintedShip";
 import { ownedShipStage, projectileGuardForStage, projectileImpact, shipEvolutionAsset, stageWeaponLevel, type ShipStage } from "./shipEvolution";
@@ -23,6 +23,7 @@ import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVol
 import { MusicPlayer, takeHandoffGameMusic } from "./musicPlayback";
 import MusicVolumeSlider from "./MusicVolumeSlider";
 import { axiosClient } from "../lib/axiosClient";
+import axios from "axios";
 import { fireInterval, makeVolley } from "./playerCombat";
 import { activateCollectedPower } from "./collectedPower";
 import { leaveGameFullscreen, requestGameFullscreen } from "./gameFullscreen";
@@ -362,7 +363,7 @@ const GamePage = () => {
   const touchOriginRef = useRef<{ x: number; y: number; player: PlayerPosition } | null>(null);
   const lastPlayerRef = useRef<PlayerPosition>({ x: .5, y: .86 });
   const [game, setGame] = useState<GameState>(createInitialState);
-  const [startError, setStartError] = useState(false);
+  const [startError, setStartError] = useState("");
   const [audioNeedsTap, setAudioNeedsTap] = useState(false);
   const [homePrompt, setHomePrompt] = useState(false);
   const [shipSelection] = useState(selectedShip);
@@ -404,7 +405,8 @@ const GamePage = () => {
       const adminRequested = sessionStorage.getItem(ADMIN_MODE_KEY) === "1";
       const requestedSector = adminRequested ? Number(sessionStorage.getItem(ADMIN_START_SECTOR_KEY) || 1) : 1;
       const requestedStage = adminRequested ? Number(sessionStorage.getItem(ADMIN_SHIP_STAGE_KEY) || 1) : 1;
-      const { data } = await axiosClient.post<{ weaponLevel: number; unlockedWeaponLevels: number[]; ownedShipUpgrades: string[]; powerUp: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; armorBonus: number; scoreRunId: string | null; startSector: number; shipStage?: ShipStage; adminPreview: boolean }>("/hangar/start", { sector: requestedSector, shipStage: requestedStage });
+      const savedTest = adminRequested ? JSON.parse(sessionStorage.getItem(ADMIN_TEST_CONFIG_KEY) || "null") : null;
+      const { data } = await axiosClient.post<{ weaponLevel: number; unlockedWeaponLevels: number[]; ownedShipUpgrades: string[]; powerUp: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; armorBonus: number; scoreRunId: string | null; startSector: number; shipStage?: ShipStage; startPhase?: "normal" | "boss" | "bonus"; adminPreview: boolean }>(savedTest ? "/admin/start" : "/hangar/start", savedTest || { sector: requestedSector, shipStage: requestedStage });
       if (adminRequested && !data.adminPreview) throw new Error("Admin preview session expired");
       adminRunRef.current = data.adminPreview === true;
       scoreRunRef.current = data.scoreRunId;
@@ -419,7 +421,11 @@ const GamePage = () => {
         stateRef.current.sector = data.startSector;
         stateRef.current.section = data.startSector;
         stateRef.current.chainBlocks = (data.startSector - 1) % 10;
-        if (data.startSector % 10 === 0 && data.startSector <= 500) {
+        if (data.startPhase === "bonus") {
+          stateRef.current.encounter = "bonus";
+          stateRef.current.chainBlocks = BLOCKS_PER_CHAIN;
+          stateRef.current.boss = null;
+        } else if (data.startSector % 10 === 0 && data.startSector <= 500) {
           stateRef.current.encounter = "boss-intro";
           stateRef.current.boss = createSectorBoss(data.startSector, fieldRef.current?.clientWidth || 390, visibleTopRef.current, fieldRef.current?.clientHeight || 700);
         }
@@ -439,12 +445,22 @@ const GamePage = () => {
       stateRef.current.unlockedWeapons = Array.isArray(data.unlockedWeaponLevels) ? [...new Set([1, ...data.unlockedWeaponLevels.filter(level => Number.isInteger(level) && level >= 1 && level <= 5)])].sort((a, b) => a - b) : [1];
       stateRef.current.weaponTimers = [0, 0, 0, 0, 0, 0];
       for (const level of stateRef.current.unlockedWeapons) if (level > 1) stateRef.current.weaponTimers[level] = -1;
+      if (adminRunRef.current && data.weaponLevel > 1) {
+        stateRef.current.weaponLevel = data.weaponLevel;
+        stateRef.current.paidWeaponLevel = data.weaponLevel;
+        stateRef.current.weaponSource = "paid";
+        stateRef.current.paidWeaponMs = PURCHASED_WEAPON_DURATION_MS;
+        stateRef.current.weaponTimers[data.weaponLevel] = PURCHASED_WEAPON_DURATION_MS;
+      }
       stateRef.current.weaponCap = Math.max(...stateRef.current.unlockedWeapons);
       if (data.powerUp) stateRef.current.pendingStartPower = data.powerUp;
     } catch (error) {
       console.error("Could not load paid loadout", error);
       if (sessionStorage.getItem(ADMIN_MODE_KEY) === "1") {
-        setStartError(true);
+        const status = axios.isAxiosError(error) ? error.response?.status : undefined;
+        setStartError(status === 401 ? "Die Pi-Anmeldung ist abgelaufen. Bitte in der Admin-Zentrale erneut anmelden."
+          : status === 403 ? "Dein Pi-Konto hat für diesen Test keinen Admin-Zugriff. Bitte die Sitzung in der Admin-Zentrale prüfen."
+            : "Der Test konnte nicht geladen werden. Bitte erneut versuchen oder die Sitzung in der Admin-Zentrale prüfen.");
         startRequestRef.current = false;
         return;
       }
@@ -1340,7 +1356,7 @@ const GamePage = () => {
       submitScore(stateRef.current);
     }
     leaveGameFullscreen();
-    navigate("/");
+    navigate(adminRunRef.current ? "/admin" : "/");
   };
 
   const levelLabel = String(campaignLevel(game.sector));
@@ -1377,11 +1393,11 @@ const GamePage = () => {
           <div className="hud-stat round-hud chain-hud" aria-label={`${t("Block")} ${game.chainBlocks}/${BLOCKS_PER_CHAIN}`}><span>{t("Block")}</span><strong>{game.chainBlocks}<small>/{BLOCKS_PER_CHAIN}</small></strong></div>
           <button className="game-control pause-control" type="button" disabled={game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { const resuming = game.status === "paused"; stateRef.current.status = resuming ? "playing" : "paused"; setGame({ ...stateRef.current }); if (resuming) window.setTimeout(retryAudio, 0); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
         </header>
-        <div className="game-label">{t("LEVEL")} {levelLabel} <span>· {sectorName(game.sector)} · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/${BLOCKS_PER_CHAIN}` : game.encounter === "bonus" ? t("BONUS CHALLENGE") : t("CORE WARDEN")}</span></div>
+        <div className="game-label">{adminRunRef.current && <strong>ADMIN-TEST · </strong>}{t("LEVEL")} {levelLabel} <span>· {sectorName(game.sector)} · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/${BLOCKS_PER_CHAIN}` : game.encounter === "bonus" ? t("BONUS CHALLENGE") : t("CORE WARDEN")}</span></div>
         {audioNeedsTap && game.status === "playing" && <button className="audio-retry" type="button" onClick={retryAudio}>Ton aktivieren</button>}
         {game.encounter === "bonus" && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">{t("BONUS TARGETS")} {game.bonusHits} / {BONUS_TARGET_COUNT} · {t("NO ENEMY FIRE")}</div>}
         
-        {game.status === "loading" && <div className="game-overlay"><div className="game-modal"><h1>{startError ? "Admin-Test konnte nicht gestartet werden" : t('Preparing mission')}</h1><p>{startError ? "Bitte die Pi-Sitzung prüfen und erneut versuchen." : t('Checking your saved hangar loadout.')}</p>{startError && <><button type="button" onClick={() => { setStartError(false); void activateLoadout(); }}>Erneut versuchen</button><button type="button" onClick={() => navigate("/")}>Zurück</button></>}</div></div>}
+        {game.status === "loading" && <div className="game-overlay"><div className="game-modal"><h1>{startError ? "Admin-Test konnte nicht gestartet werden" : t('Preparing mission')}</h1><p>{startError || t('Checking your saved hangar loadout.')}</p>{startError && <div className="modal-actions"><button className="button button-primary" type="button" onClick={() => { setStartError(""); void activateLoadout(); }}>Erneut versuchen</button><button className="button button-secondary" type="button" onClick={() => { leaveGameFullscreen(); navigate("/admin"); }}>Admin-Zentrale öffnen</button></div>}</div></div>}
         {game.status === "playing" && !bossDestructionActive && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${game.encounter === "boss-intro" ? " boss-intro-banner" : ""}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite">
           <span>{levelComplete || levelIntro ? sectorName(game.sector) : game.encounter === "bonus" ? game.phase === "SECTOR_CLEAR" ? t("BONUS COMPLETE") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.encounter !== "normal" ? `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.phase === "SECTOR_CLEAR" ? t("BLOCK LINKED") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}`}</span>
           <strong>{transitionHeadline}</strong>

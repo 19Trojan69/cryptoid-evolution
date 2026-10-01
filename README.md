@@ -28,6 +28,10 @@ Read [`doc/deployment.md`](./doc/deployment.md) to learn how to deploy this app 
 
 Für die Spieloberfläche auf Vercel siehe [`doc/vercel.md`](./doc/vercel.md). Die Express-API mit MongoDB wird dadurch noch nicht bereitgestellt.
 
+## Admin-Zentrale
+
+Die Eigentümeroberfläche unter `/admin` bietet direkte Schiffs-, Level-, Boss- und Audiotests sowie geschützte Zahlungseingänge und CSV-Downloads. Details: [`doc/admin.md`](./doc/admin.md).
+
 ## Flows
 
 To dive into the implementation of the flows that support the demo app features, please refer to

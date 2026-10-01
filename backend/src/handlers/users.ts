@@ -63,7 +63,7 @@ export default function mountUserEndpoints(router: Router) {
           accessToken: auth.accessToken,
         });
 
-        currentUser = await userCollection.findOne(insertResult.insertedId);
+        currentUser = await userCollection.findOne({ _id: insertResult.insertedId });
       }
 
       if (!currentUser) return res.status(500).json({ error: "internal_error", message: "Failed to load signed-in user" });

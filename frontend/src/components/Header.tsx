@@ -1,5 +1,6 @@
 import { useLocale } from "../i18n";
 import type { User } from "../types/pi.ts";
+import { Link } from "react-router-dom";
 
 interface HeaderProps {
   onSignIn: () => void;
@@ -22,7 +23,8 @@ const Header = ({ user, serviceRank, onSignIn, onSignOut, onSendTestNotification
         {user ? (
           <>
             <span className="user-name">@{user.username}{serviceRank && <span className="header-service-rank" title={t(serviceRank.name)}><b aria-hidden="true">{serviceRank.symbol}</b> {t(serviceRank.name)}</span>}</span>
-            {canAdmin && <button className="header-action" type="button" aria-pressed={adminMode} onClick={onToggleAdmin} disabled={isLoading}>{adminMode ? "Admin: Ein" : "Admin: Aus"}</button>}
+            {canAdmin && <Link className="header-action" to="/admin">Admin-Zentrale</Link>}
+            {canAdmin && adminMode && <button className="header-action" type="button" onClick={onToggleAdmin} disabled={isLoading}>Testmodus beenden</button>}
             <button className="header-action" type="button" onClick={onSignOut} disabled={isLoading}>{t('Sign out')}</button>
             {user.roles.includes("core_team") && (
               <button className="header-action" onClick={onSendTestNotification}>{t('Notify')}</button>
