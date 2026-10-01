@@ -203,3 +203,22 @@ test("mobile effects decode no more than three samples concurrently", async () =
     globalThis.fetch = previous.fetch;
   }
 });
+
+test('boss voices reuse eighteen buffers, obey mute and pause, and stay below twenty voices',async()=>{
+ const previous=globalThis.AudioContext;let buffers=0,started=0,stopped=0;
+ globalThis.AudioContext=class{
+  state='running';currentTime=0;sampleRate=48000;destination={};
+  async resume(){} async close(){}
+  createBuffer(ch,length,rate){buffers++;return {copyToChannel(pcm){assert.equal(pcm.length,length);assert.equal(rate,48000);}};}
+  createGain(){return {gain:{value:1,setValueAtTime(){},cancelScheduledValues(){},setTargetAtTime(){}},connect(){},disconnect(){}};}
+  createBufferSource(){return {playbackRate:{value:1},connect(){},disconnect(){},start(){started++;},stop(){stopped++;}};}
+ };
+ const audio=new GameAudio();try{
+  await audio.start();assert.equal(buffers,18);await audio.start();assert.equal(buffers,18);
+  audio.setEffectsVolume(0);assert.equal(audio.playBossWeapon('laser',6),false);
+  audio.setEffectsVolume(35);for(let i=0;i<30;i++)assert.equal(audio.playBossWeapon('siege',28),true);
+  assert.equal(started,30);assert.equal(stopped,10);
+  audio.setPaused(true);assert.equal(stopped,30);assert.equal(audio.playBossWeapon('plasma',12),false);
+  audio.setPaused(false);assert.equal(audio.playBossWeapon('plasma',12),true);
+ }finally{audio.close();globalThis.AudioContext=previous;}
+});

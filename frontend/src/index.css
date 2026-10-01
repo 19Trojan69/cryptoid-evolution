@@ -2129,3 +2129,15 @@ html[data-motion="reduced"] .home-combat-ally-1 { left: 27%; top: 66%; opacity: 
 .enemy-laser.boss-projectile-double::after { position: absolute; top: 11px; left: 5px; width: 3px; height: 10px; background: linear-gradient(#fff, #70ff8a); content: ''; }
 .enemy-laser.boss-projectile-burst { width: 14px; height: 19px; border: 1px solid #9bff88; border-radius: 45% 45% 30% 30%; background: linear-gradient(90deg, #32db59, #ecffe5 50%, #32db59); box-shadow: 0 0 9px #50fa69; }
 .enemy-laser.boss-projectile-burst::before { top: -12px; right: 3px; bottom: auto; left: 3px; height: 15px; }
+
+/* Baked rounded weapon geometry; rotating barrels never overlap old fixed copies. */
+.boss-weapons-canvas { position:absolute;z-index:2;left:-22%;top:-70%;width:144%;height:240%;pointer-events:none; }
+.boss-weapons-canvas[hidden] { display:none; }
+.boss-weapons-loading { position:absolute;inset:0;z-index:2;width:100%;height:100%;object-fit:fill;pointer-events:none; }
+.enemy-laser.boss-evolved-shot { width:var(--boss-shot-diameter);height:calc(var(--boss-shot-diameter)*1.45);border:0;border-radius:50%;background:radial-gradient(ellipse,#fff5d8 0 17%,var(--boss-shot-color) 34% 72%,transparent 100%);box-shadow:0 0 5px var(--boss-shot-color); }
+.enemy-laser.boss-evolved-shot::before { top:-13px;right:25%;left:25%;bottom:auto;height:18px;border:0;border-radius:50%;background:linear-gradient(to bottom,transparent,var(--boss-shot-color));opacity:.45; }
+.enemy-laser.boss-evolved-shot::after { display:none; }
+.enemy-laser.boss-evolved-laser { width:var(--boss-shot-width);height:24px;border-radius:4px;background:linear-gradient(transparent,var(--boss-shot-color) 28%,#fff8be); }
+.enemy-laser.boss-evolved-laser::before { display:none; }
+.enemy-laser.boss-evolved-rocket { height:calc(var(--boss-shot-diameter)*1.9);background:linear-gradient(#e2c898,#fff7de 45%,#a89676); }
+.enemy-laser.boss-evolved-rocket::before { height:24px;opacity:.8;background:linear-gradient(transparent,#f69243,#ffeac0); }
