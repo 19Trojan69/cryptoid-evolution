@@ -1,3 +1,4 @@
+import { createBossTurrets, type BossTurretState } from './bossTurrets.ts';
 import { levelDifficulty } from "./levelDifficulty.ts";
 import { SECTIONS_PER_SECTOR, sectionInSector, sectorForSection } from "./sectorManager.ts";
 import { bossForLevel, type BossConfig } from "./bossManifest.ts";
@@ -8,7 +9,7 @@ export const BOSS_ENTRY_MS = 1_800;
 export const BOSS_WARNING_MS = 4_900;
 export const BOSS_FIRE_INTERVAL_MS = 2_500;
 
-export type SectorBoss = { x: number; y: number; startY: number; radius: number; width: number; height: number; config: BossConfig; volley: number; health: number; maxHealth: number; elapsed: number; fireElapsed: number; lastDamageAt: number; hit?: { x: number; y: number }; hullFires?: { id: number; x: number; y: number }[] };
+export type SectorBoss = { turrets:BossTurretState[]; weaponClock:number; turretCursor:number; x: number; y: number; startY: number; radius: number; width: number; height: number; config: BossConfig; volley: number; health: number; maxHealth: number; elapsed: number; fireElapsed: number; lastDamageAt: number; hit?: { x: number; y: number }; hullFires?: { id: number; x: number; y: number }[] };
 
 export const createSectorBoss = (sector: number, width: number, visibleTop = 0, fieldHeight = 700): SectorBoss => {
   const config = bossForLevel(sector);
@@ -23,7 +24,7 @@ export const createSectorBoss = (sector: number, width: number, visibleTop = 0, 
   const shipHeight = shipWidth / config.aspectRatio * config.heightScale;
   const radius = shipWidth / 2;
   const startY = visibleTop ? visibleTop + shipHeight / 2 + 12 : -shipHeight;
-  return { x: width / 2, y: startY, startY, radius, width: shipWidth, height: shipHeight, config, volley: 0, health, maxHealth: health, elapsed: 0, fireElapsed: 0, lastDamageAt: -Infinity };
+  return { turrets:createBossTurrets(config.id),weaponClock:0,turretCursor:0,x: width / 2, y: startY, startY, radius, width: shipWidth, height: shipHeight, config, volley: 0, health, maxHealth: health, elapsed: 0, fireElapsed: 0, lastDamageAt: -Infinity };
 };
 
 export const moveSectorBoss = (boss: SectorBoss, delta: number, width: number, height: number): SectorBoss => {

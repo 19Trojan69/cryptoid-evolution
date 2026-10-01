@@ -1,8 +1,9 @@
+import type { BossWeaponKind } from './bossWeapons.ts';
 import { PLAYER_RADIUS, type PlayerPosition } from "./playerCombat.ts";
 import { levelDifficulty } from "./levelDifficulty.ts";
 
 export type BossProjectileKind = "bolt" | "orb" | "lance" | "split" | "pulse" | "double" | "burst" | "heavy" | "rapid";
-export type EnemyShot = { id: number; x: number; y: number; vx: number; vy: number; radius: number; bossKind?: BossProjectileKind };
+export type EnemyShot = { id: number; x: number; y: number; vx: number; vy: number; radius: number; bossKind?: BossProjectileKind; weaponKind?:BossWeaponKind; weaponColor?:string; weaponWidth?:number; sourceGun?:number; caliber?:number };
 const bossKinds: readonly BossProjectileKind[] = ["bolt", "orb", "lance", "split", "pulse"];
 export const createBossShot = (id: number, x: number, y: number, player: PlayerPosition, width: number, height: number, volley: number, selectedKind?: BossProjectileKind): EnemyShot | null => {
   const shot = createEnemyShot(id, x, y, player, width, height);

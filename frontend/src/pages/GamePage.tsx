@@ -13,7 +13,7 @@ import SectorBackdrop from "./SectorBackdrop";
 import Starfield from "./Starfield";
 import { BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusEntryGap, bonusHeartReward, bonusPosition, bonusReward, bonusShowcaseShip, type BonusTarget } from "./bonusChallenge";
 import { appendSectionBlock, bonusChainReward, BLOCKS_PER_CHAIN } from "./networkChain";
-import { advanceAfterClear, BOSS_ENTRY_MS, BOSS_WARNING_MS, damageSectorBoss, bossFireInterval, bossVulnerable, createSectorBoss, moveSectorBoss, type SectorBoss } from "./sectorBoss";
+import { advanceAfterClear, BOSS_ENTRY_MS, BOSS_WARNING_MS, damageSectorBoss, bossVulnerable, createSectorBoss, moveSectorBoss, type SectorBoss } from "./sectorBoss";
 import { enemyAppearance, selectedShip, shardBalance, ADMIN_MODE_KEY, ADMIN_TEST_CONFIG_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
 import { useShipVisualOffset } from "./paintedShip";
@@ -30,7 +30,9 @@ import { leaveGameFullscreen, requestGameFullscreen } from "./gameFullscreen";
 import { levelDifficulty, MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { balanceAfterMission, BONUS_TARGET_SHARD_REWARD, bossPoints, bossShardReward, creditDefeat, creditReward } from "./shardEarnings";
 import { addPersistentHullFire, hullFireAtImpact, spriteFireSites, type HullFire } from "./hullFires";
-import { bossExplosionSize, bossFallTargetY, bossFireSite, bossHullContains, bossVolley } from "./bossCombat";
+import { bossExplosionSize, bossFallTargetY, bossFireSite, bossHullContains } from "./bossCombat";
+import BossWeaponsView, { preloadBossWeapons } from './BossWeaponsView';
+import { advanceBossTurrets } from './bossTurrets';
 import { bossEscortAttackInterval, bossEscortCount, bossEscortReinforcements, bossEscortRosterIndex, bossEscortSlots } from "./bossEscorts";
 import { awardBlock, awardBonusMedal, awardBossSticker, awardChain, emptyRewardProgress, reachLevel, rewardRank, type RewardProgress } from "./rewardProgress";
 
@@ -113,6 +115,7 @@ type Effect = {
   sprite?: number;
   debrisSize?: number;
   bossImage?: string;
+  bossModel?: SectorBoss;
   bossHeight?: number;
   bossShipWidth?: number;
   fieldWidth?: number;
@@ -333,6 +336,7 @@ const shipDebris = (effect: Effect) => {
 
 const fallingBoss = (effect: Effect) => <div className="boss-falling-hull" style={{ left: effect.x, top: effect.y, width: effect.bossShipWidth, height: effect.bossHeight, "--boss-fall-distance": `${effect.fallDistance ?? 200}px`, "--boss-fall-quarter": `${(effect.fallDistance ?? 200) * .25}px`, "--boss-fall-half": `${(effect.fallDistance ?? 200) * .5}px`, "--boss-fall-three-quarters": `${(effect.fallDistance ?? 200) * .75}px`, "--boss-fall-duration": `${BOSS_FALL_DURATION_MS}ms` } as CSSProperties} aria-hidden="true">
   <img src={effect.bossImage} alt="" draggable={false} />
+  {effect.bossModel && <BossWeaponsView boss={effect.bossModel} frozen/>}
   <div className="boss-fall-bursts">{effect.fireSites?.map(([x, y], index) => <i key={index} style={{ left: `${x}%`, top: `${y}%`, animationDelay: `${index * .3}s` }} />)}</div>
 </div>;
 
@@ -402,6 +406,7 @@ const GamePage = () => {
   const musicRef = useRef<MusicPlayer | null>(null);
   const regularMusicPositionRef = useRef(0);
   const soundRef = useRef<GameAudio | null>(null);
+  useEffect(()=>{if(game.boss)void preloadBossWeapons(game.boss.config).catch(()=>{});},[game.boss?.config]);
   const bossVictoryPendingRef = useRef(false);
   const bossVictoryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const bossDestroyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -618,6 +623,7 @@ const GamePage = () => {
     try { navigator.vibrate?.(pattern); } catch { /* Vibration is optional in the Pi Browser and on iOS. */ }
   };
   const destroyBoss = (state: GameState, time: number) => {
+    soundRef.current?.stopBossWeapons();
     const boss = state.boss;
     if (!boss) return;
     const finalDelayMs = BOSS_FALL_DURATION_MS;
@@ -625,8 +631,8 @@ const GamePage = () => {
     const fieldHeight = fieldRef.current?.clientHeight || 700;
     const finalY = bossFallTargetY(boss, fieldHeight);
     const fireSites = Array.from({ length: 8 }, (_, index) => boss.config.fireSites[Math.floor(index * boss.config.fireSites.length / 8)]);
-    state.effects.push({ id: nextIdRef.current++, x: boss.x, y: boss.y, kind: "boss-fall", startedAt: time, bossShipWidth: boss.width, bossHeight: boss.height, bossImage: boss.config.image, fallDistance: finalY - boss.y, fireSites });
-    state.effects.push({ id: nextIdRef.current++, x: boss.x, y: finalY, kind: "boss-explosion", startedAt: time, debrisSize: bossExplosionSize(boss.config, boss.width), bossShipWidth: boss.width, bossHeight: boss.height, bossImage: boss.config.image, finalDelayMs, fieldWidth, fieldHeight, shipClass: "heavy" });
+    state.effects.push({ id: nextIdRef.current++, x: boss.x, y: boss.y, kind: "boss-fall", startedAt: time, bossShipWidth: boss.width, bossHeight: boss.height, bossImage: boss.config.image, bossModel:{...boss,turrets:boss.turrets.map(g=>({...g,firedBarrels:[...g.firedBarrels]}))}, fallDistance: finalY - boss.y, fireSites });
+    state.effects.push({ id: nextIdRef.current++, x: boss.x, y: finalY, kind: "boss-explosion", startedAt: time, debrisSize: bossExplosionSize(boss.config, boss.width), bossShipWidth: boss.width, bossHeight: boss.height, bossImage: boss.config.wreckImage, finalDelayMs, fieldWidth, fieldHeight, shipClass: "heavy" });
     soundRef.current?.play("explosion");
     vibrateBoss([25, 420, 30, 420, 35, 420, 40, 420, 45, 420, 50]);
     if (bossDestroyTimerRef.current !== null) window.clearTimeout(bossDestroyTimerRef.current);
@@ -989,9 +995,10 @@ const GamePage = () => {
             heartsLost = Math.max(heartsLost, 1);
             impactCooldownRef.current = IMPACT_COOLDOWN_MS;
           }
-          if (state.empMs === 0 && bossVulnerable(state.boss) && state.boss.fireElapsed >= bossFireInterval(state.boss, state.sector) && state.enemyShots.length < enemyShotLimit(width, elapsedRef.current, state.sector)) {
-            const bullets = bossVolley(state.boss, state.player, width, height, enemyShotLimit(width, elapsedRef.current, state.sector) - state.enemyShots.length, nextIdRef.current);
-            if (bullets.length) { nextIdRef.current += bullets.length; state.enemyShots.push(...bullets); state.boss.volley += 1; state.boss.fireElapsed = 0; }
+          if (state.empMs === 0) {
+            const fired = advanceBossTurrets(state.boss, state.player, width, height, delta, enemyShotLimit(width, elapsedRef.current, state.sector) - state.enemyShots.length, nextIdRef.current);
+            nextIdRef.current += fired.shots.length;state.enemyShots.push(...fired.shots);
+            for(const event of fired.events)soundRef.current?.playBossWeapon(event.kind,event.radius,event.barrels,event.pan);
           }
         }
         const incomingShots: EnemyShot[] = [];
@@ -1457,9 +1464,10 @@ const GamePage = () => {
         </div>}
         {game.status === "playing" && game.encounter === "normal" && !formationStartedRef.current && (game.phase === "SECTOR_INTRO" || game.phase === "ENTRY" || game.phase === "FORMATION") && <div className="formation-data-stream" aria-hidden="true">{FORMATION_DATA_ROWS.map((row, index) => <div className="formation-data-row" key={index}><span>{row.repeat(4)}</span><span>{row.repeat(4)}</span></div>)}</div>}
         {game.encounter === "normal" && (game.phase === "ENTRY" || game.phase === "FORMATION" || game.phase === "REFORM") && game.asteroids.map(asteroid => { const locked = asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration; const diameter = asteroid.radius * 2 + 8; return <div key={`formation-${asteroid.id}`} className={`formation-target${locked ? " formation-target-locked" : ""}`} style={{ left: asteroid.entryTargetX, top: asteroid.entryTargetY, width: diameter, height: diameter }} aria-hidden="true"><span /></div>; })}
-        {game.boss && game.encounter === "boss-fight" && <div className={`asteroid sector-boss${game.boss.fireElapsed >= bossFireInterval(game.boss, game.sector) - 550 ? " boss-warning" : ""}${game.boss.health <= game.boss.maxHealth / 2 ? " boss-enraged" : ""}${game.boss.health <= game.boss.maxHealth * .25 ? " boss-critical" : ""}${performance.now() - game.boss.lastDamageAt < 240 ? " boss-hit" : ""}`} style={{ left: game.boss.x, top: game.boss.y, width: game.boss.width, height: game.boss.height, transform: "translate(-50%, -50%)", "--boss-image": `url('${game.boss.config.image}')`, "--boss-thrust": `${10 + Math.abs(Math.cos(game.boss.elapsed * .00075)) * 12}px` } as CSSProperties} title={`${t("CORE WARDEN")} · ${t("Sector")} boss`}>
+        {game.boss && game.encounter === "boss-fight" && <div className={`asteroid sector-boss${game.boss.health <= game.boss.maxHealth / 2 ? " boss-enraged" : ""}${game.boss.health <= game.boss.maxHealth * .25 ? " boss-critical" : ""}${performance.now() - game.boss.lastDamageAt < 240 ? " boss-hit" : ""}`} style={{ left: game.boss.x, top: game.boss.y, width: game.boss.width, height: game.boss.height, transform: "translate(-50%, -50%)", "--boss-image": `url('${game.boss.config.image}')`, "--boss-thrust": `${10 + Math.abs(Math.cos(game.boss.elapsed * .00075)) * 12}px` } as CSSProperties} title={`${t("CORE WARDEN")} · ${t("Sector")} boss`}>
           {game.boss.config.engineAnchors.map(([x, y], index) => <i key={index} className="boss-engine-flame" style={{ left: `${x * 100}%`, top: `${y * 100}%` }} aria-hidden="true" />)}
           <img className="boss-hull" src={game.boss.config.image} alt="" draggable={false} />
+          <BossWeaponsView boss={game.boss}/>
           <div className="boss-damage-layer" aria-hidden="true">
             {!!game.boss.hullFires?.length && game.boss.hullFires.map(fire => <i key={fire.id} className="hull-fire" style={{ left: `${fire.x}%`, top: `${fire.y}%`, animationDelay: `${-(fire.id % 7) * .07}s` }} />)}
             {performance.now() - game.boss.lastDamageAt < 240 && game.boss.hit && <i className="boss-impact-flash" style={{ left: `${game.boss.hit.x}%`, top: `${game.boss.hit.y}%` }} />}
@@ -1474,7 +1482,7 @@ const GamePage = () => {
         })}
         {game.pickupNotice && game.status === "playing" && <div key={game.pickupNotice.id} className={`pickup-notice pickup-notice-${game.pickupNotice.type}`} role="status"><b>{powerUpSymbols[game.pickupNotice.type]} {t(powerUpNames[game.pickupNotice.type])}</b><span>{game.pickupNotice.type === "weapon" ? `${t(pickupEffectLabels.weapon)} ${game.pickupNotice.level} · ${weaponNames[game.pickupNotice.level]}` : t(pickupEffectLabels[game.pickupNotice.type])}</span></div>}
         {game.shots.map(shot => <div key={shot.id} className={`player-laser player-laser-tier-${shot.visualLevel ?? 1}${shot.empowered && shot.visualLevel !== 5 ? " player-laser-overdrive" : ""}`} style={{ left: shot.x, top: shot.y }} aria-hidden="true" />)}
-        {game.enemyShots.map(shot => <div key={shot.id} className={`enemy-laser${shot.bossKind ? ` boss-projectile boss-projectile-${shot.bossKind}` : ""}`} style={{ left: shot.x, top: shot.y, "--shot-angle": `${-Math.atan2(shot.vx, shot.vy) * 180 / Math.PI}deg` } as CSSProperties} aria-hidden="true" />)}
+        {game.enemyShots.map(shot => <div key={shot.id} className={`enemy-laser${shot.bossKind ? ` boss-projectile boss-projectile-${shot.bossKind}` : ""}${shot.weaponKind ? ` boss-evolved-shot boss-evolved-${shot.weaponKind}` : ""}`} style={{ left: shot.x, top: shot.y, "--shot-angle": `${-Math.atan2(shot.vx, shot.vy) * 180 / Math.PI}deg`,...(shot.weaponKind?{"--boss-shot-color":shot.weaponColor,"--boss-shot-width":`${shot.weaponWidth}px`,"--boss-shot-diameter":`${shot.radius*2}px`}:{}) } as CSSProperties} aria-hidden="true" />)}
         {game.effects.map(effect => <ImpactEffectView key={effect.id} effect={effect} />)}
         {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship shielded-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.purchasedShieldMs > 0 || (game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0) ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${5 + game.thrust * 13}%`, ...shipVisualOffset } as CSSProperties} aria-label={t('Your Cryptoid ship')}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} />{engineTrails(shipSelection.skin.sprite, "player-engine")}</div></div>}
         <div className={`touch-controls touch-controls-${readControlHand()}`}>
