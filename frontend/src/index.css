@@ -2176,3 +2176,13 @@ html[data-motion="reduced"] .home-combat-ally-1 { left: 27%; top: 66%; opacity: 
 @media (min-width: 701px) and (prefers-reduced-motion: reduce) {
   .landing-shell .home-black-hole::before, .landing-shell .home-black-hole i { animation: none; transform: rotate(-25deg) scale(.86); opacity: .7; }
 }
+
+/* Tablet and desktop access; the phone layout keeps its existing controls. */
+.wide-fullscreen-control { display: none; }
+@media (min-width: 701px) {
+  .wide-fullscreen-control { position: absolute; z-index: 12; display: grid; place-items: center; width: 46px; height: 46px; padding: 0; border: 1px solid #76dce0; border-radius: 7px; background: #0b2a40e8; color: #c8fbff; font-size: 30px; cursor: pointer; }
+  .home-fullscreen-control { top: 18px; right: calc(clamp(20px, 5vw, 100px) + 58px); }
+  .game-fullscreen-control { top: max(106px, calc(env(safe-area-inset-top) + 106px)); right: max(12px, env(safe-area-inset-right)); }
+}
+:fullscreen .wide-fullscreen-control { display: none; }
+:-webkit-full-screen .wide-fullscreen-control { display: none; }
