@@ -2141,3 +2141,38 @@ html[data-motion="reduced"] .home-combat-ally-1 { left: 27%; top: 66%; opacity: 
 .enemy-laser.boss-evolved-laser::before { display:none; }
 .enemy-laser.boss-evolved-rocket { height:calc(var(--boss-shot-diameter)*1.9);background:linear-gradient(#e2c898,#fff7de 45%,#a89676); }
 .enemy-laser.boss-evolved-rocket::before { height:24px;opacity:.8;background:linear-gradient(transparent,#f69243,#ffeac0); }
+
+/* Wide home screens: free-flight scenery and an unobstructed bottom control row.
+   Keep all existing phone rules and animation paths below 701px unchanged. */
+@media (min-width: 701px) {
+  .landing-shell { height: auto; min-height: 100dvh; overflow-x: clip; overflow-y: visible; }
+  .landing-shell .hero-section { min-height: 480px; align-items: start; padding-top: clamp(18px, 3dvh, 32px); padding-bottom: 160px; }
+  .landing-shell .hero-copy { position: static; z-index: auto; align-self: start; max-width: min(48vw, 620px); padding-top: 0; }
+  .landing-shell .hero-copy > :not(.home-combat-preview):not(.hero-actions) { position: relative; z-index: 4; }
+  .landing-shell .hero-copy h1 { font-size: clamp(44px, min(6.3vw, 9dvh), 94px); }
+  .landing-shell .hero-tagline { margin-top: clamp(12px, 2dvh, 20px); font-size: clamp(22px, min(2.7vw, 4dvh), 34px); }
+  .landing-shell .hero-description { max-width: 360px; font-size: clamp(13px, 1.2vw, 16px); }
+  .landing-shell .home-combat-preview { position: absolute; z-index: 2; inset: 14% 0 21%; width: 100%; height: auto; min-height: 0; margin: 0; background: none; }
+  .landing-shell .home-combat-preview::before { display: none; }
+  .landing-shell .home-combat-ship { width: clamp(86px, 10vw, 146px); }
+  .landing-shell .home-combat-ally-1 { width: clamp(100px, 12vw, 170px); }
+  .landing-shell .hero-actions { position: absolute; z-index: 5; left: clamp(20px, 5vw, 100px); right: clamp(20px, 5vw, 100px); bottom: calc(72px + env(safe-area-inset-bottom)); grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: stretch; width: auto; margin: 0; gap: clamp(8px, 1vw, 16px); }
+  .landing-shell .hero-actions .button { height: 62px; min-height: 62px; padding: 0 10px; gap: 8px; font-size: clamp(11px, 1.15vw, 17px); }
+  .landing-shell .hero-actions .home-play-button { font-size: clamp(14px, 1.4vw, 19px); }
+  .landing-shell .hero-actions .button-glyph { width: 27px; height: 27px; }
+  .landing-shell .hero-actions .home-play-button .button-glyph { width: 30px; height: 30px; }
+  .landing-shell .planet-stage { position: absolute; top: 40%; right: clamp(24px, 4vw, 80px); width: min(44vw, 57dvh, calc(100dvh - 260px), 680px); margin: 0; transform: translateY(-50%); }
+  .landing-shell .home-footer { bottom: max(16px, env(safe-area-inset-bottom)); }
+
+  /* Soft accretion wisps contract into a recessed, stationary event horizon. */
+  .landing-shell .home-black-hole { top: 10%; left: 44%; width: clamp(138px, 18vw, 246px); background: radial-gradient(ellipse, #040611 0 19%, #171327b3 26%, #59477b63 40%, #7d69a82b 54%, transparent 73%); filter: none; opacity: .78; transform: rotate(-18deg) scaleY(.76); animation: none; }
+  .landing-shell .home-black-hole::before { inset: -8%; border: 0; background: conic-gradient(from 36deg, transparent 0 12%, #d6a6ab8c 19%, transparent 29% 43%, #a191e6a6 52%, transparent 65% 77%, #749ac587 86%, transparent 96%); box-shadow: none; mask-image: radial-gradient(circle, transparent 0 19%, #000 29% 47%, transparent 69%); filter: blur(7px); animation: home-vortex-infall 8s linear infinite; }
+  .landing-shell .home-black-hole i { inset: 0; border: 0; background: conic-gradient(from 170deg, transparent 0 18%, #e7bfab87 26%, transparent 38% 58%, #9c8ce8a3 67%, transparent 83%); box-shadow: none; mask-image: radial-gradient(circle, transparent 0 17%, #000 28% 48%, transparent 70%); filter: blur(4px); animation: home-vortex-infall 8s -4s linear infinite; }
+  .landing-shell .home-black-hole::after { inset: 34%; border: 0; background: radial-gradient(ellipse at 58% 56%, #01020a 0 45%, #040611 72%, transparent 100%); box-shadow: 0 0 10px 5px #040611cc, 0 0 19px 6px #78639436; filter: blur(1.5px); }
+  @keyframes home-vortex-infall { 0% { transform: rotate(-35deg) scale(1.16); opacity: 0; } 15% { opacity: .9; } 65% { opacity: .7; } 100% { transform: rotate(205deg) scale(.28); opacity: 0; } }
+  html[data-motion="reduced"] .landing-shell .home-black-hole::before,
+  html[data-motion="reduced"] .landing-shell .home-black-hole i { animation: none; transform: rotate(-25deg) scale(.86); opacity: .7; }
+}
+@media (min-width: 701px) and (prefers-reduced-motion: reduce) {
+  .landing-shell .home-black-hole::before, .landing-shell .home-black-hole i { animation: none; transform: rotate(-25deg) scale(.86); opacity: .7; }
+}
