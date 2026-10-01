@@ -1,4 +1,5 @@
 import { generateBossSound, bossSoundReferences } from './bossWeaponSound.ts';
+import { generateEnemyShotSound } from './enemyWeaponSound.ts';
 import type { BossWeaponKind } from './bossWeapons.ts';
 import { effectsGain, readEffectsVolume } from "./musicPreferences.ts";
 import type { PowerUpType } from "./powerUps.ts";
@@ -48,6 +49,7 @@ export class GameAudio {
   private samples = new Map<SampleName, AudioBuffer>();
   private sampleRequest: Promise<void> | null = null;
   private bossSamples = new Map<string, AudioBuffer>();
+  private enemyShotSample: AudioBuffer | null = null;
   private bossVoices:{source:AudioBufferSourceNode;gain:GainNode;pan:StereoPannerNode|null}[]=[];
   private lastShotAt = 0;
   private destroyCount = 0;
@@ -75,7 +77,7 @@ export class GameAudio {
     const context = this.context;
     // Start decoding immediately, even if iOS delays resume() until a gesture.
     if (!this.sampleRequest && typeof context.decodeAudioData === "function") this.sampleRequest = this.loadSamples(context);
-    try { const resumed=context.resume();this.prepareBossSounds(context);await resumed; } catch { return false; }
+    try { const resumed=context.resume();this.prepareBossSounds(context);this.prepareEnemySound(context);await resumed; } catch { return false; }
     if (this.context !== context) return false;
     return context.state === "running";
   }
@@ -86,6 +88,19 @@ export class GameAudio {
       const pcm=generateBossSound(kind,variant,context.sampleRate),buffer=context.createBuffer(1,pcm.length,context.sampleRate);
       buffer.copyToChannel(pcm,0);this.bossSamples.set(kind+variant,buffer);
     }
+  }
+
+  private prepareEnemySound(context: AudioContext) {
+    if (this.enemyShotSample || typeof context.createBuffer !== "function") return;
+    const pcm = generateEnemyShotSound(context.sampleRate);
+    const buffer = context.createBuffer(1, pcm.length, context.sampleRate);
+    buffer.copyToChannel(pcm, 0);
+    this.enemyShotSample = buffer;
+  }
+
+  playEnemyShot(pan = 0) {
+    if (!this.enemyShotSample) return false;
+    return this.playWeaponBuffer(this.enemyShotSample, 1, .3, pan);
   }
 
   stopBossWeapons(){
@@ -99,11 +114,18 @@ export class GameAudio {
     const context=this.context;if(!context||context.state!=="running"||this.paused||this.effectsVolume===0||!this.effectsBus)return false;
     const relative=radius/bossSoundReferences[kind],variant=relative<.9?0:relative>1.12?2:1,buffer=this.bossSamples.get(kind+variant);
     if(!buffer){this.tone(kind==='laser'?1500:kind==='siege'?85:260,kind==='laser'?430:55,.14,.025);return true;}
+    const rate=Math.max(.84,Math.min(1.16,Math.sqrt([.8,1,1.25][variant]/relative)));
+    const volume=(kind==='laser'?.34:kind==='pulse'?.42:kind==='plasma'?.52:kind==='heavy'?.65:kind==='siege'?.74:.5)*Math.min(1.15,1+(barrels-1)*.035);
+    return this.playWeaponBuffer(buffer,rate,volume,pan);
+  }
+
+  private playWeaponBuffer(buffer:AudioBuffer,rate:number,volume:number,pan:number) {
+    const context=this.context;if(!context||context.state!=="running"||this.paused||this.effectsVolume===0||!this.effectsBus)return false;
     try{
       while(this.bossVoices.length>=20)this.retireBossVoice(this.bossVoices[0]);
       const source=context.createBufferSource(),gain=context.createGain(),panner=typeof context.createStereoPanner==='function'?context.createStereoPanner():null;
-      source.buffer=buffer;source.playbackRate.value=Math.max(.84,Math.min(1.16,Math.sqrt([.8,1,1.25][variant]/relative)));
-      gain.gain.value=(kind==='laser'?.34:kind==='pulse'?.42:kind==='plasma'?.52:kind==='heavy'?.65:kind==='siege'?.74:.5)*Math.min(1.15,1+(barrels-1)*.035)/Math.sqrt(1+this.bossVoices.length*.12);
+      source.buffer=buffer;source.playbackRate.value=rate;
+      gain.gain.value=volume/Math.sqrt(1+this.bossVoices.length*.12);
       source.connect(gain);if(panner){panner.pan.value=Math.max(-.65,Math.min(.65,pan));gain.connect(panner);panner.connect(this.effectsBus);}else gain.connect(this.effectsBus);
       const voice={source,gain,pan:panner};this.bossVoices.push(voice);source.onended=()=>{const index=this.bossVoices.indexOf(voice);if(index>=0)this.bossVoices.splice(index,1);source.disconnect();gain.disconnect();panner?.disconnect();};source.start();return true;
     }catch{/* Audio failure must not stop the fight. */return false;}
@@ -214,6 +236,7 @@ export class GameAudio {
     this.limiter = null;
     this.samples.clear();
     this.bossSamples.clear();
+    this.enemyShotSample = null;
   }
 }
 
