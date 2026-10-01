@@ -204,7 +204,7 @@ test("mobile effects decode no more than three samples concurrently", async () =
   }
 });
 
-test('boss voices reuse eighteen buffers, obey mute and pause, and stay below twenty voices',async()=>{
+test('boss voices reuse eighteen boss buffers plus one enemy buffer, obey mute and pause, and stay below twenty voices',async()=>{
  const previous=globalThis.AudioContext;let buffers=0,started=0,stopped=0;
  globalThis.AudioContext=class{
   state='running';currentTime=0;sampleRate=48000;destination={};
@@ -214,11 +214,60 @@ test('boss voices reuse eighteen buffers, obey mute and pause, and stay below tw
   createBufferSource(){return {playbackRate:{value:1},connect(){},disconnect(){},start(){started++;},stop(){stopped++;}};}
  };
  const audio=new GameAudio();try{
-  await audio.start();assert.equal(buffers,18);await audio.start();assert.equal(buffers,18);
+  await audio.start();assert.equal(buffers,19);await audio.start();assert.equal(buffers,19);
   audio.setEffectsVolume(0);assert.equal(audio.playBossWeapon('laser',6),false);
   audio.setEffectsVolume(35);for(let i=0;i<30;i++)assert.equal(audio.playBossWeapon('siege',28),true);
   assert.equal(started,30);assert.equal(stopped,10);
   audio.setPaused(true);assert.equal(stopped,30);assert.equal(audio.playBossWeapon('plasma',12),false);
   audio.setPaused(false);assert.equal(audio.playBossWeapon('plasma',12),true);
  }finally{audio.close();globalThis.AudioContext=previous;}
+});
+
+test('enemy shots use their own cached buffer and share the boss voice cap, slider and pause', async () => {
+  const previous = { AudioContext: globalThis.AudioContext, fetch: globalThis.fetch };
+  const buffers = [], sources = [], gains = [], pans = [];
+  let stopped = 0;
+  globalThis.fetch = async () => ({ ok: true, arrayBuffer: async () => new ArrayBuffer(0) });
+  globalThis.AudioContext = class {
+    state = 'running'; currentTime = 0; sampleRate = 48000; destination = {};
+    async resume() {} async close() {}
+    async decodeAudioData() { return { playerRecording: true }; }
+    createBuffer(ch, length, rate) { const buffer = { copyToChannel() {}, length, rate }; buffers.push(buffer); return buffer; }
+    createGain() { const gain = { gain: { value: 1, cancelScheduledValues() {}, setTargetAtTime() {} }, connect(output) { return output; }, disconnect() {} }; gains.push(gain); return gain; }
+    createStereoPanner() { const pan = { pan: { value: 0 }, connect() {}, disconnect() {} }; pans.push(pan); return pan; }
+    createBufferSource() { const source = { playbackRate: { value: 1 }, connect(output) { return output; }, disconnect() {}, start() { sources.push(this); }, stop() { stopped++; } }; return source; }
+  };
+  const audio = new GameAudio();
+  try {
+    await audio.start();
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(buffers.length, 19);
+    audio.play('laser');
+    assert.equal(sources[0].buffer.playerRecording, true);
+    audio.playBossWeapon('laser', 6);
+    audio.playEnemyShot(-1);
+    assert.notEqual(sources[2].buffer, sources[0].buffer);
+    assert.notEqual(sources[2].buffer, sources[1].buffer);
+    assert.equal(sources[2].buffer.length, 8640);
+    assert.equal(pans.at(-1).pan.value, -.65);
+    const enemyBuffer = sources[2].buffer;
+    for (let i = 0; i < 25; i++) audio.playEnemyShot();
+    assert.equal(buffers.length, 19);
+    assert.ok(sources.slice(2).every(source => source.buffer === enemyBuffer));
+    assert.equal(stopped, 7); // 27 shared weapon voices, only 20 can remain active.
+    audio.setEffectsVolume(25);
+    assert.equal(gains[0].gain.value, .5);
+    audio.setEffectsVolume(0);
+    const count = sources.length;
+    assert.equal(audio.playEnemyShot(), false);
+    assert.equal(sources.length, count);
+    audio.setEffectsVolume(35);
+    audio.setPaused(true);
+    assert.equal(stopped, 27);
+    assert.equal(audio.playEnemyShot(), false);
+    audio.setPaused(false);
+    assert.equal(audio.playEnemyShot(), true);
+    audio.close();
+    assert.equal(audio.playEnemyShot(), false);
+  } finally { audio.close(); globalThis.AudioContext = previous.AudioContext; globalThis.fetch = previous.fetch; }
 });
