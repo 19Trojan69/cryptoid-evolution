@@ -2472,7 +2472,9 @@ html[data-motion="reduced"] .landing-shell .quick-access-trigger::before, html[d
   background: linear-gradient(145deg, #68438f, #382253 55%, #503171);
   color: #fff7dc; box-shadow: inset 0 1px 0 #fff0b870, inset 0 -2px 0 #251337, 0 0 14px #ba83ed40;
 }
-.header-account-copy { display: flex; flex-direction: column; align-items: center; gap: 7px; min-width: 0; }
+.header-account-copy { display: flex; flex-direction: column; align-items: center; gap: 5px; min-width: 0; }
+.header-pinet-link { font-size: 10px; font-weight: 600; color: #f0e5ff; letter-spacing: 0; white-space: nowrap; }
+.landing-shell .header-account { text-decoration: none; text-align: center; }
 .header-account-copy small { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: #f0e5ff; letter-spacing: 0; }
 .header-account-copy small::before { content: ""; flex: 0 0 6px; width: 6px; height: 6px; border-radius: 50%; background: #ffdc79; box-shadow: 0 0 7px #ffdc79a6; }
 .landing-shell .header-account-copy b { max-width: none; width: 100%; font: 800 17px/1.25 'Oxanium', sans-serif; color: #ffe89c; text-shadow: 0 0 8px #f5cc6540; }
@@ -2480,7 +2482,8 @@ html[data-motion="reduced"] .landing-shell .quick-access-trigger::before, html[d
 .header-auth-status { display: flex; align-items: center; justify-content: center; font-size: 12px; line-height: 1.4; text-align: center; }
 @media (max-width: 600px) {
   .landing-shell .header-account, .landing-shell .header-auth-status, .landing-shell .header-signin { min-height: 56px; padding: 8px 5px; }
-  .header-account-copy { gap: 6px; }
+  .header-account-copy { gap: 4px; }
+  .header-pinet-link { font-size: 9px; }
   .header-account-copy small { font-size: 10px; line-height: 1.2; flex-wrap: wrap; justify-content: center; }
   .landing-shell .header-account-copy b { font-size: clamp(11px, 3.2vw, 14px); }
   .header-auth-status { font-size: 11px; }
