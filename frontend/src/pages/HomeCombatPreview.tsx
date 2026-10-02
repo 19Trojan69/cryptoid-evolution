@@ -22,7 +22,8 @@ export default function HomeCombatPreview({ defender, paused = false }: { defend
   const [scene, setScene] = useState(0), [burst, setBurst] = useState<Burst | null>(null);
   const root = useRef<HTMLDivElement>(null), ships = useRef<(HTMLSpanElement | null)[]>([]), bolts = useRef<(HTMLElement | null)[]>([]);
   const pauseRef = useRef(paused);
-  useEffect(() => { pauseRef.current = paused; }, [paused]);
+  const resumeRef = useRef<(() => void) | null>(null);
+  useEffect(() => { pauseRef.current = paused; resumeRef.current?.(); }, [paused]);
   const actors = useMemo(() => {
     const skins = playerSkins.filter(skin => skin.sprite !== defender.sprite), colors = playerColors.filter(color => color.id !== defender.color);
     return [...[0, 1].map(i => ({ sprite: skins[(scene * 3 + i * 7) % skins.length].sprite, color: colors[(scene * 2 + i * 3) % colors.length].id, stage: ((scene + i) % 3 + 1) as ShipStage })), { sprite: defender.sprite, color: defender.color, stage: defender.stage }];
@@ -48,7 +49,7 @@ export default function HomeCombatPreview({ defender, paused = false }: { defend
     };
     const tick = (now: number) => {
       const dt = last ? Math.min(.1, (now - last) / 1000) : 0; last = now;
-      if (pauseRef.current || document.hidden) { frame = requestAnimationFrame(tick); return; }
+      if (pauseRef.current || document.hidden) { frame = 0; return; }
       const reduced = media.matches || document.documentElement.dataset.motion === "reduced";
       if (!reduced) clock += dt;
       const t = reduced ? 4.2 : clock;
@@ -90,8 +91,21 @@ export default function HomeCombatPreview({ defender, paused = false }: { defend
       });
       frame = requestAnimationFrame(tick);
     };
-    frame = requestAnimationFrame(tick);
-    return () => { cancelAnimationFrame(frame); observer.disconnect(); };
+    const resume = () => {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      last = 0;
+      if (!pauseRef.current && !document.hidden) frame = requestAnimationFrame(tick);
+    };
+    resumeRef.current = resume;
+    document.addEventListener("visibilitychange", resume);
+    resume();
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", resume);
+      if (resumeRef.current === resume) resumeRef.current = null;
+    };
   }, [actors, scene]);
   return <div ref={root} className="home-combat-preview home-combat-cinematic" role="img" aria-label="Raumschiffe verfolgen sich durch den Weltraum, feuern und explodieren">
     {actors.map((actor, i) => <span key={`${scene}-${i}`} ref={node => { ships.current[i] = node; }} className={`home-cinematic-ship home-cinematic-ship-${i}`} style={{ "--combat-glow": allPlayerColors.find(color => color.id === actor.color)?.glow } as CSSProperties} aria-hidden="true">

@@ -7,6 +7,8 @@ export const earthTurn = (timestamp: number) => ((timestamp % SIDEREAL_DAY_MS) +
 const SIZE = 320;
 const EarthGlobe = ({ paused = false }: { paused?: boolean }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const pauseRef = useRef(paused);
+  useEffect(() => { pauseRef.current = paused; }, [paused]);
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d", { willReadFrequently: false });
@@ -36,8 +38,8 @@ const EarthGlobe = ({ paused = false }: { paused?: boolean }) => {
         const shade = Math.max(.27, Math.min(1, .41 + .68 * Math.max(0, depth * .83 - dx * .48 - dy * .12)));
         coordinates.push({ index: (y * SIZE + x) * 4, longitude, sourceY, shade });
       }
-      const draw = () => {
-        if (disposed) return;
+      const draw = (initial = false) => {
+        if (disposed || !initial && (pauseRef.current || document.hidden)) return;
         // The texture advances eastward; only its surface moves across the sphere.
         const phase = earthTurn(Date.now());
         for (const pixel of coordinates) {
@@ -48,12 +50,12 @@ const EarthGlobe = ({ paused = false }: { paused?: boolean }) => {
         }
         context.putImageData(image, 0, 0);
       };
-      draw();
-      if (!paused) timer = window.setInterval(draw, 10_000);
+      draw(true);
+      timer = window.setInterval(draw, 10_000);
     };
     map.src = "/planets/earth-map.jpg";
     return () => { disposed = true; if (timer !== undefined) window.clearInterval(timer); map.onload = null; };
-  }, [paused]);
+  }, []);
   return <canvas ref={canvasRef} width={SIZE} height={SIZE} className="earth-globe-canvas" role="img" aria-label="Slowly rotating Earth" />;
 };
 
