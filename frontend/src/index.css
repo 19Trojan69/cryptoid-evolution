@@ -2447,3 +2447,17 @@ html[data-motion="reduced"] .quick-access-category > summary::before { animation
 .system-menu-panel > .menu-return, .info-panel-content > .menu-return, .terms-dialog > .menu-return { margin-bottom: 12px; padding-right: 42px; }
 @media (prefers-reduced-motion: reduce) { .home-cinematic-fragment { animation: none; opacity: 0; } }
 html[data-motion="reduced"] .home-cinematic-fragment { animation: none; opacity: 0; }
+
+/* Brushed copper: warm highlights, restrained reflection and cream lettering. */
+.landing-shell .quick-access-trigger { border-color: #bc8a70; background: repeating-linear-gradient(0deg, #ffffff05 0 1px, transparent 1px 3px), linear-gradient(115deg, #53372f, #754936 22%, #905d48 32%, #694333 46%, #82523d 68%, #94624c 76%, #593b31); color: #fff1df; text-shadow: 0 1px 2px #20100dd9; box-shadow: inset 0 1px #d9ad9177, inset 0 -2px #3d2722, 0 2px 8px #080e1a66; }
+.landing-shell .quick-access-trigger > span { color: #ffe3c9; }
+.landing-shell .quick-access-trigger::before { background: linear-gradient(90deg, transparent, #ffd5b333, transparent); opacity: .25; width: 18%; }
+.landing-shell .quick-access-trigger::after { background: linear-gradient(90deg, transparent, #e3b49599, transparent); }
+.landing-shell .quick-access-trigger:hover, .landing-shell .quick-access-trigger[aria-expanded="true"] { border-color: #e1b194; background: repeating-linear-gradient(0deg, #ffffff05 0 1px, transparent 1px 3px), linear-gradient(115deg, #624034, #89563e 25%, #97634b 33%, #754a37 48%, #906048 72%, #684334); color: #fff5e8; }
+.landing-shell .hero-actions .home-play-button { border-color: #d29b79; background: repeating-linear-gradient(0deg, #ffffff06 0 1px, transparent 1px 3px), linear-gradient(115deg, #684232, #8b553b 23%, #9b674c 32%, #754734 46%, #915c40 65%, #9c684d 76%, #704835); color: #fff5e8; text-shadow: 0 1px 2px #29130fd9; box-shadow: inset 0 2px #e6b49499, inset 0 -3px #482b23, 0 0 16px #b7734d2e, 0 8px 22px #080e1a70; }
+.landing-shell .hero-actions .home-play-button:hover { border-color: #ecc2a5; background: repeating-linear-gradient(0deg, #ffffff06 0 1px, transparent 1px 3px), linear-gradient(115deg, #784b37, #975f41 25%, #a36f51 33%, #835039 48%, #9c684a 72%, #7d5039); color: #fff8ef; box-shadow: inset 0 2px #ebc1a699, inset 0 -3px #482b23, 0 0 20px #c68c5b40; }
+.landing-shell .hero-actions .home-play-button::before { background: linear-gradient(90deg, transparent, #ffe0c54d, transparent); width: 20%; opacity: .45; }
+.landing-shell .hero-actions .home-play-button::after { background: linear-gradient(90deg, transparent, #f1c5a699, transparent); }
+.landing-shell .hero-actions .home-play-button .button-glyph { border-color: #e9b99499; color: #fff1df; background: linear-gradient(145deg, #d8a78126, #45271c33); box-shadow: inset 0 1px #f4d1b640; }
+@media (prefers-reduced-motion: reduce) { .landing-shell .quick-access-trigger::before, .landing-shell .hero-actions .home-play-button::before { opacity: 0; } }
+html[data-motion="reduced"] .landing-shell .quick-access-trigger::before, html[data-motion="reduced"] .landing-shell .hero-actions .home-play-button::before { opacity: 0; }
