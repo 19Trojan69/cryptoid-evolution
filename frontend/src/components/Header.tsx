@@ -25,7 +25,14 @@ const Header = ({ user, serviceRank, onSignIn, onSignOut, onSendTestNotification
       {onOpenQuickAccess && <button className="button button-secondary quick-access-trigger" type="button" onClick={onOpenQuickAccess} aria-expanded={quickAccessOpen} aria-controls="quick-access-menu" aria-haspopup="dialog"><span aria-hidden="true"><BlockchainIcon kind="network" /></span><b>{t("Quick access")}</b></button>}
       <a className="brand-mark" href="/" aria-label="Cryptoid Evolution – Trojan Wolf Games"><img className="brand-wolf-logo" src="/trojan-wolf-games.webp" alt="Trojan Wolf Games" width="148" height="74" /><span className="brand-copyright" aria-label="Copyright">©</span></a>
       <div className="user-section">
-        {user && onOpenQuickAccess ? <a className="header-action header-account" href="https://pinet.com/" target="_top" aria-label={`${t("Signed in as")} @${user.username} · ${t("Open PiNet")}`} title={t("Open PiNet")}><span className="header-account-copy"><small>{t("Signed in as")}</small><b>@{user.username}</b><span className="header-pinet-link">{t("Open PiNet")} ↗</span></span></a> : user ? (
+        {user && onOpenQuickAccess ? (
+          <div className="header-account" role="status" title={`${t("Signed in as")} @${user.username}`}>
+            <span className="header-account-copy">
+              <small>{t("Signed in as")}</small>
+              <b>@{user.username}</b>
+            </span>
+          </div>
+        ) : user ? (
           <>
             <span className="user-name">@{user.username}{serviceRank && <span className="header-service-rank" title={t(serviceRank.name)}><b aria-hidden="true">{serviceRank.symbol}</b> {t(serviceRank.name)}</span>}</span>
             {canAdmin && <Link className="header-action" to="/admin">Admin-Zentrale</Link>}
