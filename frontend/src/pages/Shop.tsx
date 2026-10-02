@@ -36,6 +36,7 @@ import { BOSS_STICKER_COUNT, CHAIN_MILESTONES, emptyRewardProgress, rankForLevel
 type Offer = { id: string; kind: "weapon" | "power" | "armor" | "ship_upgrade"; name: string; description: string; pricePi: number; shipIndex?: number; stage?: 2 | 3 };
 type Inventory = { ownedWeapons: string[]; ownedArmor: string[]; ownedShipUpgrades?: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
 type Leader = { rank: number; username: string; score: number; serviceRank: { name: string; symbol: string } };
+const HOME_STAR_POSITION = { x: .5, y: .8 };
 
 const shopTabs = [
   ["hangar", "Hangar", "◇"],
@@ -358,7 +359,7 @@ const Shop = () => {
 
   useEffect(() => {
     if (!shopView || !quickTarget) return;
-    const frame = requestAnimationFrame(() => { const target = document.querySelector<HTMLElement>(`.shop-modal ${quickTarget}`); if (target) { target.scrollIntoView({ block: "start" }); target.setAttribute("tabindex", "-1"); target.focus({ preventScroll: true }); } });
+    const frame = requestAnimationFrame(() => { const target = document.querySelector<HTMLElement>(`.shop-modal ${quickTarget}`); if (target) { target.scrollIntoView({ behavior: "instant", block: "start" }); target.setAttribute("tabindex", "-1"); target.focus({ preventScroll: true }); } });
     return () => cancelAnimationFrame(frame);
   }, [shopView, quickTarget, rewardStatus]);
 
@@ -387,8 +388,9 @@ const Shop = () => {
     else if (action === "terms") setTermsOpen(true);
   };
 
+  const homePaused = Boolean(shopView || systemMenuOpen || activePanel || termsOpen || quickGroup || showSignIn);
   return (
-    <main className="app-shell landing-shell">
+    <main className="app-shell landing-shell" data-home-paused={homePaused}>
       <Header
         user={user}
         serviceRank={user && rewardStatus === "ready" && rewardOwner === user.uid ? rankForLevel(rewardProgress.highestLevel) : undefined}
@@ -410,9 +412,9 @@ const Shop = () => {
       <section className="hero-section" onClick={event => { if (window.matchMedia("(min-width: 701px)").matches && !(event.target as HTMLElement).closest("button, a, input, select, label")) requestGameFullscreen(); }}>
         <button className="wide-fullscreen-control home-fullscreen-control" type="button" onClick={requestGameFullscreen} aria-label={t("Full screen")} title={t("Full screen")}>⛶</button>
         <button className="home-music-toggle" type="button" data-state={musicEnabled ? "on" : "off"} aria-pressed={musicEnabled} aria-label={musicLabel} title={musicLabel} onClick={toggleHomeMusic}><span className="home-music-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" />{musicEnabled ? <><path d="M16 9a4 4 0 0 1 0 6" /><path d="M19 6a8 8 0 0 1 0 12" /></> : <path d="m17 9 5 6m0-6-5 6" />}</svg></span></button>
-        <Starfield sector={1} player={{ x: .5, y: .8 }} paused={false} />
+        <Starfield sector={1} player={HOME_STAR_POSITION} paused={homePaused} />
         <div className="home-deep-space" aria-hidden="true"><span className="home-far-planet home-far-planet-gas" /><span className="home-far-planet home-far-planet-saturn" /><span className="home-far-planet home-far-moon" /><span className="home-black-hole"><i /></span></div>
-        <HomeCombatPreview defender={{ sprite: selected.skin.sprite, color: selected.color.id, stage: selectedStage }} paused={Boolean(shopView || systemMenuOpen || activePanel || termsOpen || quickGroup || showSignIn)} />
+        <HomeCombatPreview defender={{ sprite: selected.skin.sprite, color: selected.color.id, stage: selectedStage }} paused={homePaused} />
         <div className="hero-copy">
           <p className="eyebrow"><span className="signal-dot" /> {t("Mission control online")}</p>
           <h1><span className="home-title-word">Cryptoid</span><span className="home-title-evolution">Evolution</span></h1>
@@ -426,7 +428,7 @@ const Shop = () => {
           </div>
         </div>
         <div className="planet-stage" aria-label="Cryptoid Evolution planet status">
-          <div className="planet"><EarthGlobe /><EarthNetwork /></div>
+          <div className="planet"><EarthGlobe paused={homePaused} /><EarthNetwork /></div>
           <span className="orbit-status">{t('ORBITAL DEFENSE ACTIVE')}</span>
         </div>
         <div className="stage-label home-region-label"><span className="stage-label-value">01</span><span>{t('Genesis sector')}</span></div>
@@ -450,9 +452,6 @@ const Shop = () => {
       {shopView && <div className="shop-overlay" role="dialog" aria-modal="true" aria-label={t('Shop and hangar')}>
         <div className="shop-modal">
         <div className="shop-modal-header"><button className="text-button menu-return" type="button" onClick={returnToMenu}>← {t("Back to quick access")}</button><strong>{t(shopTabs.find(([view]) => view === shopView)?.[1] ?? "Shop / Hangar")}</strong><button className="close-button" type="button" onClick={() => setShopView(null)} aria-label={t('Close shop')}>×</button></div>
-          <nav className="shop-tabs" aria-label={t('Shop sections')}>
-            {shopTabs.map(([view, label, glyph]) => <button className={`shop-tab shop-tab-${view}`} key={view} type="button" aria-pressed={shopView === view} onClick={() => { setQuickTarget(null); if (view === "leaders") setLeadersStatus("loading"); if (view === "hangar") { setPreviewSkin(selected.skin); setPreviewColor(selected.color); } setShopView(view); }}><span aria-hidden="true">{glyph}</span><b>{t(label)}</b></button>)}
-          </nav>
           <div className="shop-modal-body">
       {shopView === "progress" && <section className="dashboard-grid" aria-label={t('Player overview')}>
         {user && <p className="admin-account-id">Pi-Konto-ID: <code>{user.uid}</code></p>}
