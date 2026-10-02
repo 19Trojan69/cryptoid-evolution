@@ -4,7 +4,13 @@ type FireSite = readonly [number, number];
 // Keep each established heat site mounted and glowing until its ship is destroyed.
 // Further impacts may add sites as damage rises, but never replace old sites.
 export const addPersistentHullFire = (fires: readonly HullFire[] = [], next: HullFire, maxFires = 4): HullFire[] =>
-  fires.length < maxFires ? [...fires, next] : [...fires];
+  fires.length < maxFires && !fires.some(fire => fire.id === next.id || (fire.x === next.x && fire.y === next.y)) ? [...fires, next] : [...fires];
+
+// More severe damage permits more distinct sites; rendering remains bounded.
+export const hullFireLimit = (health: number, maxHealth: number, boss = false) => {
+  const damage = Math.max(0, Math.min(1, 1 - health / Math.max(1, maxHealth)));
+  return Math.ceil(1 + damage * (boss ? 7 : 3));
+};
 
 // Opaque pixels sampled across each ship's nose, wings, engines and center in
 // the 4-by-5 atlas. The enemies rotate 180 degrees when rendered.

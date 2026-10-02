@@ -2502,8 +2502,8 @@ html[data-motion="reduced"] .landing-shell .quick-access-trigger::before, html[d
 
 /* Local embers preserve the main skin at every damage level and hull size. */
 .hull-heat-layer { position: absolute; z-index: 3; inset: 0; overflow: hidden; pointer-events: none; mask-mode: alpha; mask-size: 100% 100%; -webkit-mask-size: 100% 100%; mask-repeat: no-repeat; -webkit-mask-repeat: no-repeat; }
-.hull-hotspot { position: absolute; width: clamp(5px, 10%, 22px); aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, #ffe6a1cc 0 7%, #ffad4799 18%, #f56c2b80 35%, #bd351b55 48%, transparent 70%); animation: hull-ember-cool 1.8s ease-out both; }
-@keyframes hull-ember-cool { 0% { opacity: .95; transform: translate(-50%, -50%) scale(1.3); } 25% { opacity: .8; transform: translate(-50%, -50%) scale(1); } 100% { opacity: .38; transform: translate(-50%, -50%) scale(.8); } }
+.hull-hotspot { position: absolute; width: clamp(6px, var(--ember-width, 10%), var(--ember-max, 22px)); aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, #fff0b8 0 8%, #ffc060ee 19%, #ff762bd9 36%, #cc3a2070 51%, transparent 70%); animation: hull-ember-cool 1.8s ease-out both; }
+@keyframes hull-ember-cool { 0% { opacity: 1; transform: translate(-50%, -50%) scale(1.3); } 25% { opacity: .9; transform: translate(-50%, -50%) scale(1); } 100% { opacity: .78; transform: translate(-50%, -50%) scale(.85); } }
 .hull-mini-explosion { position: absolute; z-index: 4; display: block; width: clamp(16px, 12%, 32px); aspect-ratio: 1; pointer-events: none; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, #fffef0 0 9%, #ffe295 20%, #ffac40cc 37%, #f2582370 52%, transparent 73%); animation: hull-impact-burst .38s ease-out both; }
 .hull-mini-explosion::before { content: ''; position: absolute; inset: -20%; border: 1px solid #ffd994cc; border-radius: 50%; animation: hull-impact-ring .38s ease-out both; }
 .hull-mini-explosion span { position: absolute; left: 50%; top: 50%; width: 3px; height: 2px; border-radius: 50%; background: #fff0b5; --spark-x: -14px; --spark-y: -10px; animation: hull-impact-spark .36s ease-out both; }
@@ -2515,6 +2515,10 @@ html[data-motion="reduced"] .landing-shell .quick-access-trigger::before, html[d
 @media (prefers-reduced-motion: reduce) { .blockchain-node.active .blockchain-cube-rotor { animation: none; } }
 html[data-motion="reduced"] .blockchain-node.active .blockchain-cube-rotor { animation: none; }
 
+.home-combat-preview[data-paused="true"] .hull-hotspot,
+.home-combat-preview[data-paused="true"] .hull-mini-explosion,
+.home-combat-preview[data-paused="true"] .hull-mini-explosion::before,
+.home-combat-preview[data-paused="true"] .hull-mini-explosion span,
 .game-shell[data-effects-paused="true"] .hull-hotspot,
 .game-shell[data-effects-paused="true"] .hull-mini-explosion,
 .game-shell[data-effects-paused="true"] .hull-mini-explosion::before,

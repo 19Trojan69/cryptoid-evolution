@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import PaintedShip from "./PaintedShip";
+import HullDamage from "./HullDamage";
+import { addPersistentHullFire, hullFireAtImpact, spriteFireSites, type HullFire } from "./hullFires";
 import { allPlayerColors, playerColors, playerSkins, shipNozzleStyles, type PlayerColorId } from "./shipFleet";
-import type { ShipStage } from "./shipEvolution";
+import { shipEvolutionAsset, type ShipStage } from "./shipEvolution";
 import { explosionDiameter, fragmentFlight } from "./shipRealism";
 
 const DURATION = 14, SHOT_COUNT = 24;
@@ -20,6 +22,7 @@ type Shot = { x: number; y: number; vx: number; vy: number; age: number; lethal:
 
 export default function HomeCombatPreview({ defender, paused = false }: { defender: { sprite: number; color: PlayerColorId; stage: ShipStage }; paused?: boolean }) {
   const [scene, setScene] = useState(0), [burst, setBurst] = useState<Burst | null>(null);
+  const [combatDamage, setCombatDamage] = useState<{ scene: number; sites: HullFire[][]; hits: (HullFire | undefined)[] }>({ scene: -1, sites: [], hits: [] });
   const root = useRef<HTMLDivElement>(null), ships = useRef<(HTMLSpanElement | null)[]>([]), bolts = useRef<(HTMLElement | null)[]>([]);
   const pauseRef = useRef(paused);
   const resumeRef = useRef<(() => void) | null>(null);
@@ -34,6 +37,9 @@ export default function HomeCombatPreview({ defender, paused = false }: { defend
     let width = element.clientWidth, height = element.clientHeight, last = 0, frame = 0, clock = 0;
     let dead = false, volley = 0, enemyVolley = 0, nextSlot = 0;
     const shots: (Shot | null)[] = Array(SHOT_COUNT).fill(null), angles = [0, 0, 0], flashes = [0, 0, 0];
+    const fires: HullFire[][] = [[], [], []], hits: (HullFire | undefined)[] = [undefined, undefined, undefined];
+    const fireSites = actors.map(actor => spriteFireSites[actor.sprite].map(([x, y]) => [100 - x, 100 - y] as const));
+    let impactId = 0;
     const observer = new ResizeObserver(() => { width = element.clientWidth; height = element.clientHeight; }); observer.observe(element);
     const point = (t: number, actor: number) => { const p = flight(actor === 2 ? t - .72 : t, actor === 1); return { x: (scene % 2 ? 1 - p.x : p.x) * width, y: p.y * height }; };
     const fire = (actor: number, t: number, lethal: boolean) => {
@@ -76,13 +82,21 @@ export default function HomeCombatPreview({ defender, paused = false }: { defend
         if (!shot || reduced) { node.style.opacity = "0"; return; }
         const oldX = shot.x, oldY = shot.y;
         shot.x += shot.vx * dt; shot.y += shot.vy * dt; shot.age += dt;
-        const target = positions[0], size = ships.current[0]?.clientWidth ?? 100;
-        const oldTarget = point(t - dt, 0), rx = oldX - oldTarget.x, ry = oldY - oldTarget.y;
+        const targetIndex = shot.enemy ? 2 : 0;
+        const target = positions[targetIndex], size = ships.current[targetIndex]?.clientWidth ?? 100;
+        const oldTarget = point(t - dt, targetIndex), rx = oldX - oldTarget.x, ry = oldY - oldTarget.y;
         const dx = shot.x - target.x - rx, dy = shot.y - target.y - ry;
         const along = Math.max(0, Math.min(1, -(rx * dx + ry * dy) / (dx * dx + dy * dy || 1)));
-        if (!shot.enemy && !dead && Math.hypot(rx + along * dx, ry + along * dy) < size * .27) {
-          flashes[0] = .12;
+        if ((targetIndex !== 0 || !dead) && Math.hypot(rx + along * dx, ry + along * dy) < size * .27) {
           if (shot.lethal) { dead = true; flashes[2] = .1; setBurst({ ...target, size, angle: angles[0], id: scene }); }
+          else {
+            // Convert the swept collision into the rotating ship's local hull.
+            const impact = { id: ++impactId, x: target.x + rx + along * dx, y: target.y + ry + along * dy };
+            hits[targetIndex] = hullFireAtImpact(impact, target, size, fireSites[targetIndex], [], angles[targetIndex]);
+            fires[targetIndex] = addPersistentHullFire(fires[targetIndex], hullFireAtImpact(impact, target, size, fireSites[targetIndex], fires[targetIndex], angles[targetIndex]));
+            // Publish only on impacts, never on animation frames.
+            setCombatDamage({ scene, sites: [...fires], hits: [...hits] });
+          }
           shots[i] = null; node.style.opacity = "0"; return;
         }
         if (shot.age > 1.6 || shot.x < -60 || shot.y < -60 || shot.x > width + 60 || shot.y > height + 60) { shots[i] = null; node.style.opacity = "0"; return; }
@@ -107,11 +121,12 @@ export default function HomeCombatPreview({ defender, paused = false }: { defend
       if (resumeRef.current === resume) resumeRef.current = null;
     };
   }, [actors, scene]);
-  return <div ref={root} className="home-combat-preview home-combat-cinematic" role="img" aria-label="Raumschiffe verfolgen sich durch den Weltraum, feuern und explodieren">
+  return <div ref={root} className="home-combat-preview home-combat-cinematic" data-paused={paused} role="img" aria-label="Raumschiffe verfolgen sich durch den Weltraum, feuern und explodieren">
     {actors.map((actor, i) => <span key={`${scene}-${i}`} ref={node => { ships.current[i] = node; }} className={`home-cinematic-ship home-cinematic-ship-${i}`} style={{ "--combat-glow": allPlayerColors.find(color => color.id === actor.color)?.glow } as CSSProperties} aria-hidden="true">
       <span className="home-cinematic-body"><PaintedShip className="home-cinematic-underside" {...actor} />
         {shipNozzleStyles(actor.sprite).map((style, j) => <i key={j} className="home-combat-engine" style={style} />)}
         <PaintedShip className="home-combat-hull" {...actor} /><PaintedShip className="home-cinematic-reflection" {...actor} />
+        <HullDamage sites={combatDamage.scene === scene ? combatDamage.sites[i] : undefined} hit={combatDamage.scene === scene ? combatDamage.hits[i] : undefined} maskImage={`url('${shipEvolutionAsset(actor.sprite, actor.stage)}')`} />
       </span>
     </span>)}
     {Array.from({ length: SHOT_COUNT }, (_, i) => <i key={i} ref={node => { bolts.current[i] = node; }} className="home-cinematic-shot" aria-hidden="true" />)}
