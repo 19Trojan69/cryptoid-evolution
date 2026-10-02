@@ -103,7 +103,7 @@ const Shop = () => {
     let active = true;
     const start = () => {
       if (!musicEnabledRef.current) return;
-      void music.play().then(ok => { if (active && musicEnabledRef.current) setMusicNeedsTap(!ok); });
+      void music.play().then(ok => { if (active && musicEnabledRef.current) setMusicNeedsTap(!ok && !music.playing); });
     };
     const resumeOnGesture = (event: Event) => {
       if (event.target instanceof Element && event.target.closest(".home-music-toggle")) return;
@@ -113,6 +113,9 @@ const Shop = () => {
     document.addEventListener("pointerup", resumeOnGesture, true);
     document.addEventListener("touchend", resumeOnGesture, true);
     document.addEventListener("keydown", resumeOnGesture, true);
+    const resumeWhenVisible = () => { if (!document.hidden) start(); };
+    window.addEventListener("pageshow", resumeWhenVisible);
+    document.addEventListener("visibilitychange", resumeWhenVisible);
     start();
     return () => {
       active = false;
@@ -120,6 +123,8 @@ const Shop = () => {
       document.removeEventListener("pointerup", resumeOnGesture, true);
       document.removeEventListener("touchend", resumeOnGesture, true);
       document.removeEventListener("keydown", resumeOnGesture, true);
+      window.removeEventListener("pageshow", resumeWhenVisible);
+      document.removeEventListener("visibilitychange", resumeWhenVisible);
       if (!musicHandedOffRef.current) music.close();
       if (homeMusicRef.current === music) homeMusicRef.current = null;
     };

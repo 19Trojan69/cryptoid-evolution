@@ -1,6 +1,10 @@
 // Visual-only motion. These values never participate in steering or collisions.
 export type ShipMotion = { speed: number; bank: number; thrust: number; vx: number; vy: number };
 export const idleShipMotion = (): ShipMotion => ({ speed: 0, bank: 0, thrust: 0, vx: 0, vy: 0 });
+export const engineFlamePercent = (thrust: number, phase: "idle" | "launch" | "boost" | "return" = "idle") => {
+  const floor = { idle: 7, launch: 16, boost: 20, return: 11 }[phase];
+  return Math.max(floor, 7 + Math.max(0, Math.min(1, thrust)) * 24);
+};
 export function advanceShipMotion(previous: ShipMotion, dx: number, dy: number, delta: number): ShipMotion {
   const seconds = Math.max(1, delta) / 1000;
   const speed = Math.min(900, Math.hypot(dx, dy) / seconds);

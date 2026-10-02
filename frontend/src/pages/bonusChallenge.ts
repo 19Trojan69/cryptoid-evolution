@@ -1,5 +1,6 @@
 import { playerColors, type PlayerColorId } from "./shipFleet.ts";
 import { scaledShardReward } from "./shardEarnings.ts";
+import type { ShipMotion } from "./shipRealism.ts";
 
 export const BONUS_TARGET_COUNT = 12;
 export const BONUS_FLIGHT_MS = 3_600;
@@ -7,7 +8,7 @@ const bonusEntryGaps = [720, 1_120, 640, 1_340, 860, 980] as const;
 
 export const bonusEntryGap = (index: number) => bonusEntryGaps[Math.max(0, index) % bonusEntryGaps.length];
 
-export type BonusTarget = { id: number; index: number; elapsed: number; x: number; y: number; radius: number; sprite: number; color: PlayerColorId };
+export type BonusTarget = { visualMotion?: ShipMotion; id: number; index: number; elapsed: number; x: number; y: number; radius: number; sprite: number; color: PlayerColorId };
 
 export const bonusPosition = (index: number, elapsed: number, width: number, height: number) => {
   const progress = Math.min(1, elapsed / BONUS_FLIGHT_MS);
