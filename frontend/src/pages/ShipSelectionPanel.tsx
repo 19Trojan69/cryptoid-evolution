@@ -57,6 +57,10 @@ export default function ShipSelectionPanel({
 
   return <div className="ship-one-screen">
     <div className="ship-one-hero">
+      <div className="ship-one-info">
+        <h3>{skin.name} <small>· {t(stageLabel(stage))}</small></h3>
+        <strong>{status}</strong>
+      </div>
       <div className="ship-one-art-wrap" role="img" aria-label={skin.name + " · " + t(color.name) + " · " + t(stageLabel(stage))}>
         <span className="ship-one-art-frame">
           <span className="ship-one-art" style={shipPreviewPlacement(skin.sprite, stage)}>
@@ -64,10 +68,15 @@ export default function ShipSelectionPanel({
           </span>
         </span>
       </div>
-      <div className="ship-one-info">
-        <h3>{skin.name} <small>· {t(stageLabel(stage))}</small></h3>
-        <p>{description}</p>
-        <strong>{status}</strong>
+      <div className="ship-one-colors">
+        <div className="ship-one-colors-heading"><h4>{t("Color variants")}</h4><span>{t(color.name)}{fleetCount(fleet, skin.id, color.id) ? " · " + t("Owned") + " ×" + fleetCount(fleet, skin.id, color.id) : ""}</span></div>
+        <div className="ship-color-dots" role="group" aria-label={t("Ship paint")}>
+          {colors.map(item => <button key={item.id} type="button" aria-pressed={color.id === item.id}
+            aria-label={t(item.name) + (fleetCount(fleet, skin.id, item.id) ? " · " + t("Owned") : " · " + t("Not owned"))}
+            title={t(item.name)} style={{ "--paint": item.glow } as CSSProperties} onClick={() => onColorChange(item)} />)}
+        </div>
+      </div>
+      <div className="ship-configuration-summary">
         {view === "shop" && !adminPreview && <div className="ship-inline-purchase">
           <span className="ship-purchase-price">{stage === 1
             ? `◆ ${shardPrice} ${t("Shards")}`
@@ -85,6 +94,7 @@ export default function ShipSelectionPanel({
           </>}
         </div>}
         {view === "shop" && stage !== 1 && <button className="ship-standard-return" type="button" onClick={() => onStageChange(1)}>‹ {t("Show standard ship")}</button>}
+        <p className="ship-configuration-description">{description}</p>
       </div>
     </div>
     {(view === "shop" || adminPreview) && <div className="ship-evolution-stages" role="group" aria-label={t("Three ship stages")}>
@@ -94,18 +104,10 @@ export default function ShipSelectionPanel({
         return <button key={level} className={`ship-evolution-stage${!stageOwned ? " ship-evolution-stage-locked" : ""}`} type="button"
           aria-pressed={focusStage === level} onClick={() => onStageChange(level)}>
           <span className="ship-evolution-stage-art" aria-hidden="true"><img src={`/ships/evolution/ship_${String(skin.sprite + 1).padStart(2, "0")}_stage_${level}.png`} alt="" loading="lazy" decoding="async" style={shipPreviewPlacement(skin.sprite, level)} /></span>
-          <span className="ship-evolution-stage-info"><strong>0{level} · {t(stageLabel(level))}</strong><small>{offer ? piPrice(offer.pricePi) : t("Price unavailable")}</small><span className="ship-evolution-stage-description">{t(offer?.description ?? "")}</span><em>{stageOwned ? t("OWNED") : "MAINNET READY · " + t("Planned price")}</em></span>
+          <span className="ship-evolution-stage-info"><strong>0{level} · {t(stageLabel(level))}</strong><small>{offer ? piPrice(offer.pricePi) : t("Price unavailable")}</small><em>{stageOwned ? t("OWNED") : "MAINNET READY · " + t("Planned price")}</em></span>
         </button>;
       })}
     </div>}
-    <div className="ship-one-colors">
-      <div className="ship-one-colors-heading"><h4>{t("Color variants")}</h4><span>{t(color.name)}{fleetCount(fleet, skin.id, color.id) ? " · " + t("Owned") + " ×" + fleetCount(fleet, skin.id, color.id) : ""}</span></div>
-      <div className="ship-color-dots" role="group" aria-label={t("Ship paint")}>
-        {colors.map(item => <button key={item.id} type="button" aria-pressed={color.id === item.id}
-          aria-label={t(item.name) + (fleetCount(fleet, skin.id, item.id) ? " · " + t("Owned") : " · " + t("Not owned"))}
-          title={t(item.name)} style={{ "--paint": item.glow } as CSSProperties} onClick={() => onColorChange(item)} />)}
-      </div>
-    </div>
     {(view === "hangar" || adminPreview) && <div className="ship-one-checkout">
       {view === "hangar"
         ? <><span>{selectedSkinId === skin.id && selectedColorId === color.id ? t("EQUIPPED") : t("Owned")}</span><button className="button button-secondary" type="button" onClick={onOpenShop}>{t("Shop")} ›</button></>
