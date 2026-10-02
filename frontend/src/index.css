@@ -2461,3 +2461,7 @@ html[data-motion="reduced"] .home-cinematic-fragment { animation: none; opacity:
 .landing-shell .hero-actions .home-play-button .button-glyph { border-color: #e9b99499; color: #fff1df; background: linear-gradient(145deg, #d8a78126, #45271c33); box-shadow: inset 0 1px #f4d1b640; }
 @media (prefers-reduced-motion: reduce) { .landing-shell .quick-access-trigger::before, .landing-shell .hero-actions .home-play-button::before { opacity: 0; } }
 html[data-motion="reduced"] .landing-shell .quick-access-trigger::before, html[data-motion="reduced"] .landing-shell .hero-actions .home-play-button::before { opacity: 0; }
+
+/* The planet may extend beyond the screen; its label stays inside the hero. */
+.landing-shell .home-region-label { right: clamp(20px, 5vw, 100px); bottom: calc(180px + env(safe-area-inset-bottom)); max-width: calc(100% - 40px); font-size: 11px; line-height: 1.4; text-align: right; color: #c8dce5; text-shadow: 0 1px 4px #071626; }
+.home-region-label .stage-label-value { font-size: 19px; color: #dcb28c; }

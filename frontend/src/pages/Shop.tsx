@@ -427,8 +427,8 @@ const Shop = () => {
         <div className="planet-stage" aria-label="Cryptoid Evolution planet status">
           <div className="planet"><EarthGlobe /><EarthNetwork /></div>
           <span className="orbit-status">{t('ORBITAL DEFENSE ACTIVE')}</span>
-          <div className="stage-label"><span className="stage-label-value">01</span><span>{t('Genesis sector')}</span></div>
         </div>
+        <div className="stage-label home-region-label"><span className="stage-label-value">01</span><span>{t('Genesis sector')}</span></div>
         <footer className="home-footer">
           <button type="button" className="text-button terms-entry" onClick={() => setTermsOpen(true)}>Nutzungsbedingungen / Terms of Service</button>
         </footer>
