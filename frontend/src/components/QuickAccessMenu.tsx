@@ -37,7 +37,7 @@ export default function QuickAccessMenu({ onClose, onAction, signedIn, canAdmin,
       <header className="quick-access-heading"><div><p className="eyebrow">CRYPTOID EVOLUTION</p><h2 id="quick-access-title">{t("Quick access")}</h2></div><button className="close-button" type="button" aria-label={t("Close menu")} onClick={onClose}>×</button></header>
       {username && <p className="quick-access-account">@{username}</p>}
       <nav aria-label={t("Game navigation")}>
-        {groups.map(group => <details key={group.id} className="quick-access-category" open={group.id === initialGroup}>
+        {groups.map(group => <details key={group.id} className="quick-access-category" data-category={group.id} open={group.id === initialGroup}>
           <summary><span aria-hidden="true">{group.glyph}</span><strong>{t(group.title)}</strong><i aria-hidden="true">⌄</i></summary>
           <div className="quick-access-items">{group.items.filter(([action]) => action === "signin" ? !signedIn : action === "signout" ? signedIn : action === "admin" ? canAdmin : action === "exit-admin" ? canAdmin && adminMode : true).map(([action, label]) => <button key={action} type="button" disabled={busy && (action === "signin" || action === "signout" || action === "exit-admin")} onClick={() => onAction(action)}><span>{t(label)}</span><i aria-hidden="true">›</i></button>)}</div>
         </details>)}

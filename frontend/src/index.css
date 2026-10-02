@@ -2326,3 +2326,35 @@ html[data-motion="reduced"] .quick-access-panel { animation: none; }
   .ship-inline-purchase .button { font-size: 13px; }
   .landing-shell .quick-access-trigger { padding: 6px; }
 }
+
+/* Strong navigation accents with a larger centered studio mark. */
+.landing-shell .header-with-quick-access { height: 92px; }
+.header-with-quick-access .brand-wolf-logo { width: clamp(160px, 18vw, 190px); max-height: 88px; }
+.landing-shell .hero-section { height: calc(100dvh - 92px); }
+.landing-shell .quick-access-trigger { border: 2px solid #ffdc88; background: linear-gradient(125deg, #ffe49b, #ffc26e 55%, #ff986e); color: #11273a; box-shadow: inset 0 0 14px #fff5cf55, 0 0 18px #ffc66b4d; }
+.landing-shell .quick-access-trigger > span { color: #11273a; }
+.quick-access-trigger b { font-size: 15px; font-weight: 800; letter-spacing: .02em; }
+.landing-shell .quick-access-trigger:hover, .landing-shell .quick-access-trigger[aria-expanded="true"] { border-color: #fff1bc; background: linear-gradient(125deg, #fff0b4, #ffd18c 55%, #ffaa86); color: #11273a; }
+.quick-access-category { --category-color: #92eaff; border-color: color-mix(in srgb, var(--category-color) 55%, #17334a); border-left: 4px solid var(--category-color); }
+.quick-access-category[data-category="mission"] { --category-color: #8cf1c8; }
+.quick-access-category[data-category="fleet"] { --category-color: #ffd58a; }
+.quick-access-category[data-category="career"] { --category-color: #d7b4ff; }
+.quick-access-category[data-category="settings"] { --category-color: #91dfff; }
+.quick-access-category[data-category="info"] { --category-color: #ffbc98; }
+.quick-access-category[data-category="account"] { --category-color: #ffb4d2; }
+.quick-access-category > summary { min-height: 64px; padding: 14px 12px; background: linear-gradient(100deg, color-mix(in srgb, var(--category-color) 13%, #0b2137), #0b2137); }
+.quick-access-category > summary strong { color: var(--category-color); font-size: 19px; line-height: 1.35; }
+.quick-access-category > summary > span { color: var(--category-color); font-size: 26px; }
+.quick-access-category > summary i, .quick-access-items button i { color: var(--category-color); }
+.quick-access-category[open] > summary { background: color-mix(in srgb, var(--category-color) 18%, #0b2137); border-bottom-color: color-mix(in srgb, var(--category-color) 40%, transparent); }
+.quick-access-items { padding: 6px 10px 10px 24px; }
+.quick-access-items button { min-height: 49px; font-size: 17px; line-height: 1.35; color: #f0f8ff; }
+.quick-access-items button:hover { color: var(--category-color); background: color-mix(in srgb, var(--category-color) 12%, transparent); }
+@media (max-width: 600px) {
+  .landing-shell .header-with-quick-access { height: 84px; gap: 4px; }
+  .header-with-quick-access .brand-wolf-logo { width: clamp(120px, 35vw, 148px); max-height: 80px; }
+  .landing-shell .hero-section { height: calc(100dvh - 84px); }
+  .landing-shell .quick-access-trigger { max-width: 100%; min-height: 56px; padding: 6px 4px; gap: 5px; }
+  .quick-access-trigger b { font-size: 10.5px; letter-spacing: 0; overflow-wrap: anywhere; }
+  .landing-shell .quick-access-trigger > span { font-size: 24px; }
+}
