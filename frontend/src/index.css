@@ -2045,8 +2045,9 @@ html[data-motion="reduced"] .home-combat-ally-1 { left: 27%; top: 66%; opacity: 
 .ship-inline-purchase small { color: #c6dae5; font: 600 12px/1.35 'Rajdhani', sans-serif; }
 .ship-inline-purchase .button { width: 100%; min-height: 44px; padding: 10px 12px; white-space: normal; }
 .landing-shell .ship-search-result-name .ship-search-price { color: #ffda97; font-weight: 700; }
-.pi-price { display: inline-flex; align-items: center; gap: .35em; vertical-align: middle; white-space: nowrap; color: #b8fff3; font-weight: 800; font-variant-numeric: tabular-nums; }
-.pi-price-symbol { flex: 0 0 auto; width: 1.15em; height: 1.15em; overflow: visible; color: #70ffe2; filter: drop-shadow(0 0 3px #70ffe24d); }
+.pi-price { display: inline-flex; align-items: center; gap: .22em; vertical-align: middle; white-space: nowrap; color: #a5ffe8; font: 800 1em/1.2 'DM Mono', monospace; font-variant-numeric: tabular-nums; }
+.pi-price-amount { color: inherit; font: inherit; }
+.pi-price-symbol { flex: 0 0 auto; width: .78em; height: .78em; overflow: visible; color: inherit; }
 .pi-price .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 .pi-price-test { padding: .15em .35em; border: 1px solid #70ffe280; border-radius: 4px; color: #b8fff3; font-size: .7em; line-height: 1.1; letter-spacing: .04em; }
 .button .pi-price { margin-left: .35em; padding: .2em .4em; border-radius: 4px; background: #0a263a; font-size: inherit; text-shadow: none; }
@@ -2283,3 +2284,45 @@ html[data-motion="reduced"] .pickup-notice::before, html[data-motion="reduced"] 
 }
 @media (prefers-reduced-motion: reduce) { .quick-access-panel { animation: none; } }
 html[data-motion="reduced"] .quick-access-panel { animation: none; }
+
+/* One configuration: hull and paint together, then its price and purchase. */
+.ship-one-hero, .ship-selector-shop .ship-one-hero { grid-template-columns: minmax(0, 1fr) minmax(140px, 1fr); gap: 14px; padding: 16px; }
+.ship-one-hero .ship-one-info { grid-column: 1 / -1; padding: 0; gap: 8px; }
+.landing-shell .ship-one-info h3 { font-size: clamp(20px, 4vw, 28px); line-height: 1.2; }
+.ship-one-info h3 small { font-size: 13px; }
+.ship-one-hero .ship-one-art-wrap { min-height: 220px; }
+.ship-one-hero .ship-one-art-frame { height: min(100%, 240px); }
+.ship-one-hero .ship-one-colors { align-content: center; gap: 14px; padding: 14px; }
+.ship-one-colors-heading { flex-direction: column; align-items: flex-start; gap: 7px; }
+.ship-one-colors h4 { font-size: 13px; line-height: 1.4; }
+.ship-one-colors-heading span { font-size: 14px; white-space: normal; overflow: visible; line-height: 1.4; }
+.ship-color-dots { gap: 10px; }
+.ship-color-dots button { flex-basis: 44px; width: 44px; height: 44px; }
+.ship-configuration-summary { grid-column: 1 / -1; display: grid; gap: 12px; min-width: 0; }
+.ship-inline-purchase { gap: 10px; margin: 0; padding: 14px; border: 1px solid #71bfa65e; border-radius: 10px; background: #071b2c; }
+.ship-inline-purchase .ship-purchase-price { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; font: 600 15px/1.4 'Rajdhani', sans-serif; color: #d0e5ee; }
+.ship-inline-purchase .ship-purchase-price .pi-price { font-size: 24px; }
+.ship-inline-purchase .ship-purchase-price:not(:has(.pi-price)) { color: #a5ffe8; font: 800 24px/1.3 'DM Mono', monospace; }
+.ship-inline-purchase .button { font-size: 15px; min-height: 52px; border-radius: 8px; clip-path: none; }
+.ship-inline-purchase small { font-size: 14px; line-height: 1.5; }
+.ship-inline-purchase small .pi-price { font-size: 16px; }
+.landing-shell .ship-configuration-description { margin: 0; color: #d2e7f0; font: 500 16px/1.5 'Rajdhani', sans-serif; }
+.ship-evolution-stage-info small { font-size: 20px; }
+.ship-evolution-stage-info strong { font-size: 13px; }
+.ship-evolution-stage-info em { font-size: 12px; line-height: 1.4; }
+.landing-shell .hangar-offer > .offer-purchase-price { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; color: #d0e5ee; font: 600 16px/1.4 'Rajdhani', sans-serif; }
+.offer-purchase-price .pi-price { font-size: 24px; }
+.landing-shell .quick-access-trigger { min-width: 0; min-height: 48px; border: 1px solid #6bcddd; border-radius: 0; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); background: linear-gradient(135deg, #153b51, #10243e); color: #e3f8ff; box-shadow: inset 0 0 15px #74d9df1c; }
+.landing-shell .quick-access-trigger > span { margin: 0; color: #8ce9e5; font-size: 22px; }
+.landing-shell .quick-access-trigger:hover, .landing-shell .quick-access-trigger[aria-expanded="true"] { background: linear-gradient(135deg, #205a68, #17384d); border-color: #9ff6df; }
+.landing-shell .hero-actions { justify-content: center; }
+@media (max-width: 600px) {
+  .ship-one-hero, .ship-selector-shop .ship-one-hero { grid-template-columns: minmax(0, 1fr) minmax(132px, 1fr); gap: 10px; padding: 10px; }
+  .ship-one-hero .ship-one-art-wrap { min-height: 218px; }
+  .ship-one-hero .ship-one-art-frame { height: min(100%, 190px); }
+  .ship-one-hero .ship-one-colors { padding: 8px; gap: 10px; }
+  .ship-color-dots { gap: 8px; }
+  .ship-inline-purchase { padding: 12px; }
+  .ship-inline-purchase .button { font-size: 13px; }
+  .landing-shell .quick-access-trigger { padding: 6px; }
+}

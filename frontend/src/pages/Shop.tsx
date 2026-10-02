@@ -421,9 +421,6 @@ const Shop = () => {
             <div className="home-launch">
               <button className="button button-primary home-play-button" type="button" onClick={enterGame}>{t("Play")} <span className="button-glyph" aria-hidden="true">→</span></button>
             </div>
-            <button className="button button-secondary" type="button" onClick={() => { setPreviewSkin(selected.skin); setPreviewColor(selected.color); setShopView("hangar"); }}>{t('Shop / Hangar')} <span className="button-glyph" aria-hidden="true">◇</span></button>
-            <button className="button button-secondary" type="button" onClick={() => { setLeadersStatus("loading"); setShopView("leaders"); }}>{t('Top 100')} <span className="button-glyph" aria-hidden="true">⌁</span></button>
-            <button className="button button-secondary" type="button" onClick={() => { setSettingsSection(undefined); setSystemMenuOpen(true); }}>{t('System menu')} <span className="button-glyph" aria-hidden="true">⚙</span></button>
           </div>
         </div>
         <div className="planet-stage" aria-label="Cryptoid Evolution planet status">
