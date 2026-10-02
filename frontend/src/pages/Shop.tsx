@@ -401,7 +401,6 @@ const Shop = () => {
         isLoading={isAuthLoading}
         authPending={!authReady}
         onOpenQuickAccess={() => setQuickGroup(current => current === null ? "mission" : null)}
-        onOpenAccount={() => setQuickGroup("account")}
         quickAccessOpen={quickGroup !== null}
       />
       {adminError && <p role="alert" className="hangar-message">{adminError}</p>}
