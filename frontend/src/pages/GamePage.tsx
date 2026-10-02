@@ -1052,7 +1052,7 @@ const GamePage = () => {
           if (pickup.type === "rapid") state.rapidFireTotalMs = POWER_UP_DURATION_MS;
           if (pickup.type === "weapon") state.weaponSource = "pickup";
           syncSelectedWeapon(state);
-          state.pickupNotice = { id: pickup.id, type: pickup.type, remainingMs: 4_500, level: stageWeaponLevel(shipStageRef.current, state.weaponLevel) };
+          state.pickupNotice = { id: pickup.id, type: pickup.type, remainingMs: 3_200, level: stageWeaponLevel(shipStageRef.current, state.weaponLevel) };
           soundRef.current?.playPickup(pickup.type);
           return false;
         });
@@ -1457,7 +1457,7 @@ const GamePage = () => {
           <button className="game-control pause-control" type="button" disabled={game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { const resuming = game.status === "paused"; stateRef.current.status = resuming ? "playing" : "paused"; setGame({ ...stateRef.current }); if (resuming) window.setTimeout(retryAudio, 0); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
         </header>
         <div className="game-label">{adminRunRef.current && <strong>ADMIN-TEST · </strong>}{t("LEVEL")} {levelLabel} <span>· <strong className="game-region-name">{sectorName(game.sector)}</strong> · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/${BLOCKS_PER_CHAIN}` : game.encounter === "bonus" ? t("BONUS CHALLENGE") : t("CORE WARDEN")}</span></div>
-        {audioNeedsTap && game.status === "playing" && <button className="audio-retry" type="button" onClick={retryAudio}>Ton aktivieren</button>}
+        {audioNeedsTap && game.status === "playing" && <button className={`audio-retry${game.pickupNotice ? " audio-retry-with-pickup" : ""}`} type="button" onClick={retryAudio}>Ton aktivieren</button>}
         {game.encounter === "bonus" && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">{t("BONUS TARGETS")} {game.bonusHits} / {BONUS_TARGET_COUNT} · {t("NO ENEMY FIRE")}</div>}
         
         {game.status === "loading" && <div className="game-overlay"><div className="game-modal"><h1>{startError ? "Admin-Test konnte nicht gestartet werden" : t('Preparing mission')}</h1><p>{startError || t('Checking your saved hangar loadout.')}</p>{startError && <div className="modal-actions"><button className="button button-primary" type="button" onClick={() => { setStartError(""); void activateLoadout(); }}>Erneut versuchen</button><button className="button button-secondary" type="button" onClick={() => { leaveGameFullscreen(); navigate("/admin"); }}>Admin-Zentrale öffnen</button></div>}</div></div>}

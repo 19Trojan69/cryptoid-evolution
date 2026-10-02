@@ -11,8 +11,10 @@ export default function BlockchainProgress ({ blocks, saved = false }: { blocks:
           const index = offset + (row ? 5 : 0);
           return <div className="blockchain-step" key={index}>
             <i className={`blockchain-node${index < blocks ? " active" : ""}${index === blocks - 1 ? " newest" : ""}`}>
-            <span className="blockchain-cube-rotor" style={{ "--cube-period": `${12 - index * .9}s` } as CSSProperties}>
+            <span className="blockchain-cube-rotor" style={{ "--cube-period": `${7.2 - index * .5}s` } as CSSProperties}>
+              <span className="blockchain-cube-body">
               {['front', 'back', 'left', 'right', 'top', 'bottom'].map(face => <span key={face} className={`blockchain-cube-face cube-face-${face}`} />)}
+              </span>
             </span>
             </i>
             {offset < (row ? 3 : 4) && <span className={`blockchain-link${index + 1 < blocks ? " active" : ""}`}><i /></span>}

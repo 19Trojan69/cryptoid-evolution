@@ -1,7 +1,7 @@
 // One encounter per visible block. The tenth slot is the boss and bonus.
 export const SECTIONS_PER_SECTOR = 1;
 export const SECTION_INTRO_MS = 3_200;
-export const SECTION_CLEAR_MS = 5_800;
+export const SECTION_CLEAR_MS = 8_500;
 export const ENTRY_GAP_MS = 220;
 export const FORMATION_SETTLE_MS = 450;
 export const FIRST_ATTACK_DELAY_MS = 750;
