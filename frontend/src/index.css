@@ -2227,3 +2227,59 @@ html[data-motion="reduced"] .pickup-notice::before, html[data-motion="reduced"] 
 .pause-settings-modal h1 { font-size: clamp(24px, 5vw, 36px); }
 .pause-settings-modal > .button { position: sticky; bottom: 0; width: 100%; z-index: 2; box-shadow: 0 0 18px #092536; }
 .pause-settings-modal .language-menu { max-height: 240px; overflow-y: auto; }
+
+/* The brand stays at the screen center, independently of the side controls. */
+.landing-shell .header-with-quick-access { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 12px; padding-inline: clamp(8px, 3vw, 42px); }
+.header-with-quick-access .brand-mark { grid-column: 2; justify-self: center; }
+.header-with-quick-access .user-section { grid-column: 3; justify-self: end; min-width: 0; max-width: 100%; }
+.header-with-quick-access .brand-wolf-logo { width: clamp(112px, 14vw, 148px); }
+.quick-access-trigger { justify-self: start; display: flex; align-items: center; gap: 9px; min-height: 44px; padding: 8px 12px; border: 1px solid #64cbd786; border-radius: 8px; background: #0c2c43c9; color: #d9f8ff; cursor: pointer; }
+.quick-access-trigger > span { font-size: 23px; line-height: 1; }
+.quick-access-trigger b { font: 700 13px 'Oxanium', sans-serif; }
+.quick-access-trigger:hover, .quick-access-trigger[aria-expanded="true"] { border-color: #a0f4ed; background: #15425a; }
+.header-account { display: flex; align-items: center; gap: 6px; min-height: 44px; max-width: 100%; }
+.header-account b { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.quick-access-overlay { position: fixed; z-index: 100; inset: 0; background: #010813bd; }
+.quick-access-panel { display: flex; flex-direction: column; width: min(410px, 94vw); height: 100dvh; overflow-y: auto; overscroll-behavior: contain; padding: max(18px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom)); border-right: 1px solid #72dbe9; background: linear-gradient(150deg, #102743, #071b2c 65%, #10233c); color: #e7f9ff; box-shadow: 12px 0 50px #0008; animation: quick-access-enter .18s ease-out; }
+.quick-access-heading { position: relative; display: flex; align-items: center; justify-content: space-between; padding: 0 44px 16px 4px; }
+.quick-access-heading .eyebrow { margin: 0 0 8px; font-size: 10px; color: #77dadb; }
+.quick-access-heading h2 { margin: 0; font: 800 26px 'Oxanium', sans-serif; color: #ffe1a1; }
+.quick-access-heading .close-button { top: 0; right: 0; width: 44px; height: 44px; }
+.quick-access-account { margin: 0 4px 14px; color: #a2e0ec; overflow-wrap: anywhere; }
+.quick-access-category { margin-bottom: 9px; border: 1px solid #7acddd3d; border-radius: 10px; background: #0a2338; overflow: hidden; }
+.quick-access-category > summary { display: flex; align-items: center; gap: 12px; min-height: 54px; padding: 12px 14px; list-style: none; cursor: pointer; }
+.quick-access-category > summary::-webkit-details-marker { display: none; }
+.quick-access-category > summary > span { width: 25px; color: #8fece7; text-align: center; font-size: 22px; }
+.quick-access-category > summary strong { flex: 1; font: 700 16px 'Oxanium', sans-serif; }
+.quick-access-category > summary i { font-style: normal; color: #94dde5; }
+.quick-access-category[open] > summary { background: #163d53; border-bottom: 1px solid #72dbe940; }
+.quick-access-category[open] > summary i { transform: rotate(180deg); }
+.quick-access-items { padding: 5px 10px 8px 35px; }
+.quick-access-items button { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-height: 44px; padding: 10px 12px; border: 0; border-bottom: 1px solid #8cb6ca1c; background: transparent; color: #def3ff; font: 600 15px 'Space Grotesk', sans-serif; text-align: left; cursor: pointer; }
+.quick-access-items button:last-child { border-bottom: 0; }
+.quick-access-items button:hover { background: #26547570; border-radius: 5px; color: #ffe1a1; }
+.quick-access-items button i { font-style: normal; color: #8bdcde; font-size: 21px; }
+.quick-access-items button:disabled { opacity: .5; cursor: wait; }
+.quick-access-trigger:focus-visible, .quick-access-category summary:focus-visible, .quick-access-items button:focus-visible { outline: 2px solid #ffe1a1; outline-offset: -3px; }
+.system-menu-section[id], .shop-modal [id^="reward-"] { scroll-margin-top: 12px; }
+.guide-ship-gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 18px 0; }
+.guide-ship-gallery figure { display: grid; align-items: center; justify-items: center; gap: 8px; margin: 0; padding: 12px 8px; border: 1px solid #63c5d251; border-radius: 10px; background: #04152599; }
+.guide-ship-gallery img { width: 100%; height: 110px; object-fit: contain; }
+.guide-ship-gallery figcaption { color: #ffe1a1; font: 700 12px 'Oxanium', sans-serif; text-align: center; }
+.guide-ship-gallery .guide-boss-example { grid-column: 1 / -1; }
+.guide-ship-gallery .guide-boss-example img { height: 140px; }
+@keyframes quick-access-enter { from { transform: translateX(-24px); opacity: .5; } to { transform: translateX(0); opacity: 1; } }
+@media (max-width: 600px) {
+  .landing-shell .header-with-quick-access { gap: 4px; padding-inline: 7px; min-height: 65px; }
+  .header-with-quick-access .brand-mark { gap: 2px; }
+  .header-with-quick-access .brand-wolf-logo { width: 112px; max-height: 61px; }
+  .header-with-quick-access .brand-copyright { font-size: 9px; }
+  .quick-access-trigger { flex-direction: column; gap: 3px; padding: 5px 6px; }
+  .quick-access-trigger > span { font-size: 20px; }
+  .quick-access-trigger b { font-size: 10px; }
+  .header-with-quick-access .header-action { padding: 7px 5px; font-size: 10px; letter-spacing: 0; text-align: center; }
+  .header-account b { max-width: 72px; }
+  .guide-ship-gallery img { height: 80px; }
+}
+@media (prefers-reduced-motion: reduce) { .quick-access-panel { animation: none; } }
+html[data-motion="reduced"] .quick-access-panel { animation: none; }

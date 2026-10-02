@@ -1,7 +1,18 @@
 import { useEffect, useState } from "react";
 import { useLocale } from "../i18n";
+import { shipEvolutionAsset } from "./shipEvolution";
 
 const topics = [
+  {
+    id: "overview", label: "Game description", title: "Defend Earth. Evolve your fleet.",
+    intro: "Cryptoid Evolution is an arcade space shooter. Pilot your ship, defeat formations and bosses, collect boosts and build your fleet.",
+    details: ["Each level has nine visible Blocks, then a boss fight and a bonus round.", "Your ship fires automatically. Move to dodge and line up your shots.", "Open Rewards to see linked Blocks, boss stickers, stars, chain milestones, bonus medals and your current service rank."],
+  },
+  {
+    id: "visuals", label: "Illustrated guide", title: "Ships at a glance",
+    intro: "Recognize your ship stages and the boss hulls before your mission.",
+    details: ["Standard, Advanced and Elite share the same ship design, with increasingly reinforced parts.", "Bosses have their own silhouettes, weapon turrets and engine positions. Their appearance differs from the normal ships."],
+  },
   {
     id: "controls", label: "Controls", title: "Move and fire",
     intro: "Your ship fires automatically. Move to dodge and line up your shots.",
@@ -82,11 +93,12 @@ const topics = [
   },
 ] as const;
 
-type GameGuideProps = { onClose: () => void };
+export type GuideTopic = (typeof topics)[number]["id"];
+type GameGuideProps = { onClose: () => void; initialTopic?: GuideTopic; backLabel?: string };
 
-const GameGuide = ({ onClose }: GameGuideProps) => {
+const GameGuide = ({ onClose, initialTopic = "controls", backLabel = "Back to system" }: GameGuideProps) => {
   const { t } = useLocale();
-  const [selected, setSelected] = useState<(typeof topics)[number]["id"]>("controls");
+  const [selected, setSelected] = useState<GuideTopic>(initialTopic);
   const topic = topics.find(item => item.id === selected) ?? topics[0];
   useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") onClose(); };
@@ -96,7 +108,7 @@ const GameGuide = ({ onClose }: GameGuideProps) => {
 
   return <div className="info-panel" role="dialog" aria-modal="true" aria-labelledby="info-title">
     <div className="info-panel-content guide-panel-content">
-      <button className="close-button" type="button" onClick={onClose} aria-label={t("Back to system")}>×</button>
+      <button className="close-button" type="button" onClick={onClose} aria-label={t(backLabel)}>×</button>
       <p className="eyebrow">{t("FIELD GUIDE")}</p>
       <h2 id="info-title">{t("How to Play")}</h2>
       <p className="guide-lead">{t("Choose a topic to learn the current rules before your mission.")}</p>
@@ -106,9 +118,10 @@ const GameGuide = ({ onClose }: GameGuideProps) => {
       <section className="guide-detail" aria-live="polite" aria-labelledby="guide-section-title" key={topic.id}>
         <h3 id="guide-section-title">{t(topic.title)}</h3>
         <p>{t(topic.intro)}</p>
+        {topic.id === "visuals" && <div className="guide-ship-gallery">{([1, 2, 3] as const).map(stage => <figure key={stage}><img src={shipEvolutionAsset(0, stage)} alt={t(stage === 1 ? "Standard ship" : stage === 2 ? "Advanced ship" : "Elite ship")} loading="lazy" /><figcaption>{t(stage === 1 ? "STANDARD" : stage === 2 ? "ADVANCED" : "ELITE")}</figcaption></figure>)}<figure className="guide-boss-example"><img src="/ships/bosses/boss_01.webp" alt={t("Boss ship")} loading="lazy" /><figcaption>{t("CORE WARDEN")}</figcaption></figure></div>}
         <ul>{topic.details.map(detail => <li key={detail}>{t(detail)}</li>)}</ul>
       </section>
-      <button className="button button-secondary guide-back" type="button" onClick={onClose}>← {t("Back to system")}</button>
+      <button className="button button-secondary guide-back" type="button" onClick={onClose}>← {t(backLabel)}</button>
     </div>
   </div>;
 };
