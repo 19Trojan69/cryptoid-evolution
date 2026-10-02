@@ -178,7 +178,7 @@ const Shop = () => {
   const latestRewardLevel = Math.max(1, ...Object.keys(rewardProgress.linkedBlocks ?? {}).map(Number));
   const {
     user, canAdmin, adminMode, setAdminPreview, isAuthenticated, showSignIn, signIn, signOut,
-    closeSignIn, requireAuth, isLoading: isAuthLoading,
+    closeSignIn, requireAuth, isLoading: isAuthLoading, authReady, authError,
   } = useAuth();
   useEffect(() => {
     if (!user) {
@@ -399,11 +399,13 @@ const Shop = () => {
         onSignOut={() => { setInventory(null); void signOut(); }}
         onSendTestNotification={onSendTestNotification}
         isLoading={isAuthLoading}
+        authPending={!authReady}
         onOpenQuickAccess={() => setQuickGroup(current => current === null ? "mission" : null)}
         onOpenAccount={() => setQuickGroup("account")}
         quickAccessOpen={quickGroup !== null}
       />
       {adminError && <p role="alert" className="hangar-message">{adminError}</p>}
+      {authError && <p role="alert" className="hangar-message">{authError}</p>}
       {adminMode && <div className="admin-preview-banner" role="status">Admin-Testmodus aktiv · Käufe und Rekorde werden nicht gespeichert.</div>}
 
       <section className="hero-section" onClick={event => { if (window.matchMedia("(min-width: 701px)").matches && !(event.target as HTMLElement).closest("button, a, input, select, label")) requestGameFullscreen(); }}>
@@ -434,7 +436,7 @@ const Shop = () => {
         </footer>
       </section>
 
-      {quickGroup !== null && <QuickAccessMenu onClose={closeQuickMenu} onAction={openQuickAction} signedIn={Boolean(user)} canAdmin={Boolean(canAdmin)} adminMode={adminMode} username={user?.username} busy={isAuthLoading} />}
+      {quickGroup !== null && <QuickAccessMenu onClose={closeQuickMenu} onAction={openQuickAction} signedIn={Boolean(user)} canAdmin={Boolean(canAdmin)} adminMode={adminMode} username={user?.username} busy={isAuthLoading || !authReady} />}
 
       {systemMenuOpen && <div className="system-menu-overlay" role="dialog" aria-modal="true" aria-labelledby="system-menu-title">
         <section className="system-menu-panel">

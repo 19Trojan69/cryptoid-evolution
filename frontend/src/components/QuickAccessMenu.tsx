@@ -37,11 +37,11 @@ export default function QuickAccessMenu({ onClose, onAction, signedIn, canAdmin,
   return <div className="quick-access-overlay" onClick={event => { if (event.target === event.currentTarget) onClose(); }}>
     <section ref={panelRef} id="quick-access-menu" className="quick-access-panel" role="dialog" aria-modal="true" aria-labelledby="quick-access-title">
       <header className="quick-access-heading"><div><p className="eyebrow">CRYPTOID EVOLUTION</p><h2 id="quick-access-title">{t("Quick access")}</h2></div><button className="close-button" type="button" aria-label={t("Close menu")} onClick={onClose}>×</button></header>
-      {username && <p className="quick-access-account">@{username}</p>}
+      {username && <p className="quick-access-account">{t("Signed in as")} @{username}</p>}
       <nav aria-label={t("Game navigation")}>
         {groups.map(group => <details key={group.id} className="quick-access-category" data-category={group.id} open={openCategory === group.id}>
           <summary onClick={event => { event.preventDefault(); setOpenCategory(current => current === group.id ? null : group.id); }}><span className="category-icon"><BlockchainIcon kind={group.id} /></span><strong>{t(group.title)}</strong><i aria-hidden="true">⌄</i></summary>
-          <div className="quick-access-items">{group.items.filter(([action]) => action === "signin" ? !signedIn : action === "signout" ? signedIn : action === "admin" ? canAdmin : action === "exit-admin" ? canAdmin && adminMode : true).map(([action, label]) => <button key={action} type="button" disabled={busy && (action === "signin" || action === "signout" || action === "exit-admin")} onClick={() => onAction(action)}><span>{t(label)}</span><i aria-hidden="true">›</i></button>)}</div>
+          <div className="quick-access-items">{group.items.filter(([action]) => action === "signin" ? !signedIn && !busy : action === "signout" ? signedIn : action === "admin" ? canAdmin : action === "exit-admin" ? canAdmin && adminMode : true).map(([action, label]) => <button key={action} type="button" disabled={busy && (action === "signin" || action === "signout" || action === "exit-admin")} onClick={() => onAction(action)}><span>{t(label)}</span><i aria-hidden="true">›</i></button>)}</div>
         </details>)}
       </nav>
     </section>

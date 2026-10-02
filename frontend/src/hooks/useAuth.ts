@@ -17,18 +17,16 @@ const detectPiBrowser = async () => {
   }
 
   const userAgent = navigator.userAgent.toLowerCase();
-  const referrer = document.referrer.toLowerCase();
-
   return (
     userAgent.includes("pibrowser") ||
-    userAgent.includes("pi-browser") ||
-    referrer.includes("minepi.com") ||
-    referrer.includes("pi.app")
+    userAgent.includes("pi-browser")
   );
 };
 
 export const useAuth = () => {
   const pendingPayments = useRef<PaymentDTO[]>([]);
+  const signingIn = useRef(false);
+  const autoAttempted = useRef(false);
   const [user, setUser] = useState<User | null>(null);
   const [canAdmin, setCanAdmin] = useState(false);
   const [adminMode, setAdminMode] = useState(false);
@@ -59,28 +57,6 @@ export const useAuth = () => {
     } finally { setAuthReady(true); }
   }, []);
 
-  useEffect(() => {
-    if (!localStorage.getItem("cryptoid_pi_session") && !sessionStorage.getItem(PI_ACCESS_TOKEN_KEY)) {
-      sessionStorage.removeItem(ADMIN_MODE_KEY);
-      setAuthReady(true);
-      return;
-    }
-
-    let active = true;
-    axiosClient.get<SessionUser>("/user/me")
-      .then(({ data }) => { if (active) { setUser(data.user); setCanAdmin(data.canAdmin); setAdminMode(data.adminMode); sessionStorage.setItem(ADMIN_MODE_KEY, data.adminMode ? "1" : "0"); } })
-      .catch((error: unknown) => {
-        if (!active) return;
-        if (axios.isAxiosError(error) && error.response?.status === 401) {
-          localStorage.removeItem("cryptoid_pi_session"); sessionStorage.removeItem(PI_ACCESS_TOKEN_KEY); sessionStorage.removeItem(ADMIN_MODE_KEY);
-          setAuthError("Die Pi-Anmeldung ist abgelaufen. Bitte erneut anmelden.");
-        } else setAuthError("Die Pi-Sitzung konnte nicht geprüft werden. Bitte erneut versuchen.");
-      })
-      .finally(() => { if (active) setAuthReady(true); });
-
-    return () => { active = false; };
-  }, []);
-
   const onIncompletePaymentFound = useCallback(async (payment: PaymentDTO) => {
     pendingPayments.current.push(payment);
   }, []);
@@ -90,6 +66,7 @@ export const useAuth = () => {
     try {
       const { data } = await axiosClient.post<SessionUser>("/user/signin", { authResult });
       localStorage.setItem("cryptoid_pi_session", "1");
+      sessionStorage.removeItem("cryptoid_pi_auto_signed_out");
       setUser(data.user);
       setCanAdmin(data.canAdmin);
       setAdminMode(false);
@@ -109,7 +86,10 @@ export const useAuth = () => {
   }, []);
 
   const signIn = useCallback(async () => {
+    if (signingIn.current) return;
+    signingIn.current = true;
     setIsLoading(true);
+    setAuthError("");
     try {
       const isPiBrowser = await detectPiBrowser();
       if (window.location.pathname === "/admin") sessionStorage.setItem("cryptoid_pi_return_to", "/admin");
@@ -147,14 +127,50 @@ export const useAuth = () => {
       console.error("Error authenticating:", err);
       setAuthError("Die Pi-Anmeldung konnte nicht abgeschlossen werden. Bitte erneut versuchen.");
     } finally {
+      signingIn.current = false;
       setIsLoading(false);
     }
   }, [onIncompletePaymentFound, signInUser]);
+
+  useEffect(() => {
+    let active = true;
+    const start = async () => {
+      try {
+        if (localStorage.getItem("cryptoid_pi_session") || sessionStorage.getItem(PI_ACCESS_TOKEN_KEY)) {
+          try {
+            const { data } = await axiosClient.get<SessionUser>("/user/me");
+            if (!active) return;
+            setUser(data.user); setCanAdmin(data.canAdmin); setAdminMode(data.adminMode);
+            sessionStorage.setItem(ADMIN_MODE_KEY, data.adminMode ? "1" : "0");
+            return;
+          } catch (error) {
+            if (!active) return;
+            if (!axios.isAxiosError(error) || error.response?.status !== 401) {
+              setAuthError("Die Pi-Sitzung konnte nicht geprüft werden. Bitte erneut versuchen.");
+              return;
+            }
+            localStorage.removeItem("cryptoid_pi_session");
+            sessionStorage.removeItem(PI_ACCESS_TOKEN_KEY);
+          }
+        }
+        sessionStorage.removeItem(ADMIN_MODE_KEY);
+        const inPiBrowser = await detectPiBrowser();
+        if (!active || autoAttempted.current || sessionStorage.getItem("cryptoid_pi_auto_signed_out")) return;
+        autoAttempted.current = true;
+        if (inPiBrowser) await signIn();
+      } finally {
+        if (active) setAuthReady(true);
+      }
+    };
+    void start();
+    return () => { active = false; };
+  }, [signIn]);
 
   const signOut = useCallback(async () => {
     setIsLoading(true);
     try {
       await axiosClient.get("/user/signout");
+      sessionStorage.setItem("cryptoid_pi_auto_signed_out", "1");
       setUser(null);
       setCanAdmin(false);
       setAdminMode(false);

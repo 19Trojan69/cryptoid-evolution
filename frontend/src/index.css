@@ -2465,3 +2465,11 @@ html[data-motion="reduced"] .landing-shell .quick-access-trigger::before, html[d
 /* The planet may extend beyond the screen; its label stays inside the hero. */
 .landing-shell .home-region-label { right: clamp(20px, 5vw, 100px); bottom: calc(180px + env(safe-area-inset-bottom)); max-width: calc(100% - 40px); font-size: 11px; line-height: 1.4; text-align: right; color: #c8dce5; text-shadow: 0 1px 4px #071626; }
 .home-region-label .stage-label-value { font-size: 19px; color: #dcb28c; }
+/* Compact, readable Pi session status next to the centered brand. */
+.header-account-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; min-width: 0; }
+.header-account-copy small { font-size: 10px; font-weight: 500; color: #b8d6df; letter-spacing: 0; }
+.header-auth-status { font-size: 12px; line-height: 1.4; color: #b8d6df; text-align: center; }
+@media (max-width: 600px) {
+  .header-account-copy small, .header-auth-status { font-size: 9px; }
+  .header-account-copy small { white-space: nowrap; }
+}
