@@ -1,6 +1,21 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { advanceShipMotion, idleShipMotion, explosionDiameter, fragmentFlight, hullIllumination } from './shipRealism.ts';
+import { advanceShipMotion, idleShipMotion, engineFlamePercent, explosionDiameter, fragmentFlight, hullIllumination } from './shipRealism.ts';
+
+test('engine flames retain launch, attack and return floors and respond to acceleration', () => {
+  assert.equal(engineFlamePercent(0), 7);
+  assert.equal(engineFlamePercent(0, 'launch'), 16);
+  assert.equal(engineFlamePercent(0, 'boost'), 20);
+  assert.equal(engineFlamePercent(0, 'return'), 11);
+  assert.equal(engineFlamePercent(100), 31);
+  assert.equal(engineFlamePercent(-1), 7);
+  let motion = idleShipMotion();
+  for (let i = 0; i < 20; i++) motion = advanceShipMotion(motion, 7, 0, 16);
+  const accelerated = engineFlamePercent(motion.thrust);
+  assert.ok(accelerated > 20);
+  for (let i = 0; i < 60; i++) motion = advanceShipMotion(motion, 0, 0, 16);
+  assert.ok(engineFlamePercent(motion.thrust) < 7.01);
+});
 
 test('bank follows direction, remains subtle and settles after stopping', () => {
   let motion = idleShipMotion();

@@ -3,13 +3,14 @@ import { levelDifficulty } from "./levelDifficulty.ts";
 import { SECTIONS_PER_SECTOR, sectionInSector, sectorForSection } from "./sectorManager.ts";
 import { bossForLevel, type BossConfig } from "./bossManifest.ts";
 import { bossEscortCount } from "./bossEscorts.ts";
+import { advanceShipMotion, idleShipMotion, type ShipMotion } from "./shipRealism.ts";
 
 export const BOSS_ENTRY_MS = 1_800;
 // Three recorded warning signals end before the boss becomes visible.
 export const BOSS_WARNING_MS = 4_900;
 export const BOSS_FIRE_INTERVAL_MS = 2_500;
 
-export type SectorBoss = { turrets:BossTurretState[]; weaponClock:number; turretCursor:number; x: number; y: number; startY: number; radius: number; width: number; height: number; config: BossConfig; volley: number; health: number; maxHealth: number; elapsed: number; fireElapsed: number; lastDamageAt: number; hit?: { id?: number; x: number; y: number }; hullFires?: { id: number; x: number; y: number }[] };
+export type SectorBoss = { visualMotion?: ShipMotion; turrets:BossTurretState[]; weaponClock:number; turretCursor:number; x: number; y: number; startY: number; radius: number; width: number; height: number; config: BossConfig; volley: number; health: number; maxHealth: number; elapsed: number; fireElapsed: number; lastDamageAt: number; hit?: { id?: number; x: number; y: number }; hullFires?: { id: number; x: number; y: number }[] };
 
 export const createSectorBoss = (sector: number, width: number, visibleTop = 0, fieldHeight = 700): SectorBoss => {
   const config = bossForLevel(sector);
@@ -36,7 +37,7 @@ export const moveSectorBoss = (boss: SectorBoss, delta: number, width: number, h
   const critical = Math.max(0, Math.min(1, (0.2 - boss.health / boss.maxHealth) / 0.2));
   const descent = critical * critical * (3 - 2 * critical);
   const targetY = Math.min(restingY + Math.min(height * .04, 32) * descent, height * .49 - boss.height / 2);
-  return {
+  const moved = {
     ...boss,
     x: Math.max(boss.radius + 12, Math.min(width - boss.radius - 12, targetX)),
     y: entry < 1
@@ -45,6 +46,7 @@ export const moveSectorBoss = (boss: SectorBoss, delta: number, width: number, h
     elapsed,
     fireElapsed: entry === 1 ? boss.fireElapsed + delta : 0,
   };
+  return { ...moved, visualMotion: advanceShipMotion(boss.visualMotion ?? idleShipMotion(), moved.x - boss.x, moved.y - boss.y, delta) };
 };
 
 export const bossFireInterval = (boss: SectorBoss, level = 1) => {

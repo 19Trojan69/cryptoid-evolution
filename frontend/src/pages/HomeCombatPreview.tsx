@@ -34,7 +34,7 @@ export default function HomeCombatPreview({ defender, paused = false }: { defend
   useEffect(() => {
     const element = root.current; if (!element) return;
     const media = matchMedia("(prefers-reduced-motion: reduce)");
-    let width = element.clientWidth, height = element.clientHeight, last = 0, frame = 0, clock = 0;
+    let width = element.clientWidth, height = element.clientHeight, last = 0, frame = 0, clock = 1.2;
     let dead = false, volley = 0, enemyVolley = 0, nextSlot = 0;
     const shots: (Shot | null)[] = Array(SHOT_COUNT).fill(null), angles = [0, 0, 0], flashes = [0, 0, 0];
     const fires: HullFire[][] = [[], [], []], hits: (HullFire | undefined)[] = [undefined, undefined, undefined];
@@ -70,7 +70,7 @@ export default function HomeCombatPreview({ defender, paused = false }: { defend
         ship.style.transform = `translate3d(${p.x}px,${p.y}px,0) translate(-50%,-50%) rotate(${angle}deg) scale(${depth})`;
         ship.style.opacity = i === 0 && dead ? "0" : "1";
         ship.style.setProperty("--flight-bank", `${reduced ? 0 : bank}deg`);
-        ship.style.setProperty("--engine-strength", `${.7 + Math.min(.7, speed / 300)}`);
+        ship.style.setProperty("--engine-strength", `${.65 + Math.min(1.1, speed / 240)}`);
         flashes[i] = Math.max(0, flashes[i] - dt); ship.style.setProperty("--hull-light", `${reduced ? 0 : flashes[i] / .12 * .65}`);
       }
       if (!reduced) {
@@ -112,12 +112,17 @@ export default function HomeCombatPreview({ defender, paused = false }: { defend
       if (!pauseRef.current && !document.hidden) frame = requestAnimationFrame(tick);
     };
     resumeRef.current = resume;
+    const wake = () => { if (!frame && !pauseRef.current) resume(); };
     document.addEventListener("visibilitychange", resume);
+    window.addEventListener("pageshow", resume);
+    document.addEventListener("pointerdown", wake, { passive: true });
     resume();
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
       document.removeEventListener("visibilitychange", resume);
+      window.removeEventListener("pageshow", resume);
+      document.removeEventListener("pointerdown", wake);
       if (resumeRef.current === resume) resumeRef.current = null;
     };
   }, [actors, scene]);

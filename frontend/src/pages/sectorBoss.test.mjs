@@ -69,6 +69,21 @@ test("health grows within a cap and a damaged boss fires with a bounded interval
   assert.equal(bossVulnerable(moveSectorBoss(boss, BOSS_ENTRY_MS, 375, 700)), true);
 });
 
+test("boss engine thrust follows movement for every boss size", () => {
+  for (let sector = 10; sector <= 500; sector += 10) {
+    let boss = createSectorBoss(sector, 390, 0, 700);
+    let peak = 0;
+    for (let frame = 0; frame < 112; frame++) {
+      boss = moveSectorBoss(boss, 16, 390, 700);
+      peak = Math.max(peak, boss.visualMotion.thrust);
+    }
+    assert.ok(peak > .1, `boss ${sector} responds during entry`);
+    for (let frame = 0; frame < 300; frame++) boss = moveSectorBoss(boss, 16, 390, 700);
+    assert.ok(boss.visualMotion.thrust < peak, `boss ${sector} settles after entry`);
+    assert.ok(Number.isFinite(boss.visualMotion.thrust));
+  }
+});
+
 test("the boss descends smoothly only during its final 20 percent of health", () => {
   const width = 375;
   const height = 700;
