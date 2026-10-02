@@ -4,6 +4,7 @@ import "../types/session";
 import { isAdminMode } from "../adminAccess";
 import { rankForLevel } from "../rewardRules";
 import { rewardNetwork } from "../rewardNetwork";
+import { readSnapshot } from "../playerSave";
 
 export default function mountLeaderboardEndpoints(router: Router) {
   router.get("/top", async (req, res) => {
@@ -30,9 +31,21 @@ export default function mountLeaderboardEndpoints(router: Router) {
     const uid = req.session.currentUser?.uid;
     const run = req.session.scoreRun;
     if (!uid || !run || req.body?.runId !== run.id) return res.status(403).json({ error: "No active signed-in run" });
-    if (!validRunScore(req.body?.score, run.startedAt, Date.now())) return res.status(400).json({ error: "Invalid score" });
+    if (!validRunScore(req.body?.score - (run.scoreBase || 0), run.startedAt, Date.now())) return res.status(400).json({ error: "Invalid score" });
     try {
-      await req.app.locals.userCollection.updateOne({ uid }, { $max: { bestScore: req.body.score } });
+      const users = req.app.locals.userCollection, network = rewardNetwork(req), key = `playerByNetwork.${network}`;
+      const userBefore = await users.findOne({ uid });
+      if (userBefore?.rewardRunId?.[network] !== run.id) return res.status(409).json({ error: "Run replaced on another device" });
+      if (final && req.body.finished === true) {
+        const snapshot = readSnapshot(req.body.save), player = userBefore.playerByNetwork?.[network];
+        if (!snapshot || snapshot.score !== req.body.score || !player || snapshot.destroyed < (player.creditedDestroyed || 0) || snapshot.shards < (player.creditedShards || 0) || snapshot.shards - (run.shardsBase || 0) > 100 + (Date.now() - run.startedAt) / 1000 * 100) return res.status(400).json({ error: "Invalid final save" });
+        const result = await users.updateOne({ uid, [`${key}.activeRunId`]: run.id, [`${key}.version`]: player.version }, {
+          $max: { bestScore: req.body.score },
+          $set: { [`${key}.mission`]: null, [`${key}.activeRunId`]: null, [`${key}.lastFinishedRunId`]: run.id, [`${key}.updatedAt`]: new Date().toISOString(), [`${key}.creditedShards`]: snapshot.shards, [`${key}.creditedDestroyed`]: snapshot.destroyed },
+          $inc: { [`${key}.balance`]: snapshot.shards - (player.creditedShards || 0), [`${key}.totalShardsEarned`]: snapshot.shards - (player.creditedShards || 0), [`${key}.totalDestroyed`]: snapshot.destroyed - (player.creditedDestroyed || 0), [`${key}.version`]: 1 },
+        });
+        if (!result.modifiedCount) return res.status(409).json({ error: "Save changed; retry" });
+      } else await users.updateOne({ uid, [`rewardRunId.${network}`]: run.id }, { $max: { bestScore: req.body.score } });
       if (final) req.session.scoreRun = null;
       const user = await req.app.locals.userCollection.findOne({ uid }, { projection: { bestScore: 1 } });
       return res.json({ bestScore: user?.bestScore ?? req.body.score });

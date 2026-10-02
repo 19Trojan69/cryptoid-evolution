@@ -17,6 +17,7 @@ import platformAPIClient from "./services/platformAPIClient";
 import mountAdminEndpoints from "./handlers/admin";
 import { restoreAdminPreview } from "./adminAccess";
 import { collectUsage } from "./handlers/usage";
+import mountProgressEndpoints from "./handlers/progress";
 
 // We must import typedefs for ts-node-dev to pick them up when they change (even though tsc would supposedly
 // have no problem here)
@@ -163,6 +164,9 @@ app.use("/payments", paymentsRouter);
 const hangarRouter = express.Router();
 mountHangarEndpoints(hangarRouter);
 app.use("/hangar", hangarRouter);
+const progressRouter = express.Router();
+mountProgressEndpoints(progressRouter);
+app.use("/progress", progressRouter);
 
 const leaderboardRouter = express.Router();
 mountLeaderboardEndpoints(leaderboardRouter);
