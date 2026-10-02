@@ -13,19 +13,20 @@ interface HeaderProps {
   user: User | null;
   serviceRank?: { name: string; symbol: string };
   isLoading?: boolean;
+  authPending?: boolean;
   onOpenQuickAccess?: () => void;
   onOpenAccount?: () => void;
   quickAccessOpen?: boolean;
 }
 
-const Header = ({ user, serviceRank, onSignIn, onSignOut, onSendTestNotification, canAdmin, adminMode, onToggleAdmin, isLoading, onOpenQuickAccess, onOpenAccount, quickAccessOpen }: HeaderProps) => {
+const Header = ({ user, serviceRank, onSignIn, onSignOut, onSendTestNotification, canAdmin, adminMode, onToggleAdmin, isLoading, authPending, onOpenQuickAccess, onOpenAccount, quickAccessOpen }: HeaderProps) => {
   const { t } = useLocale();
   return (
     <header className={`site-header${onOpenQuickAccess ? " header-with-quick-access" : ""}`}>
       {onOpenQuickAccess && <button className="button button-secondary quick-access-trigger" type="button" onClick={onOpenQuickAccess} aria-expanded={quickAccessOpen} aria-controls="quick-access-menu" aria-haspopup="dialog"><span aria-hidden="true"><BlockchainIcon kind="network" /></span><b>{t("Quick access")}</b></button>}
       <a className="brand-mark" href="/" aria-label="Cryptoid Evolution – Trojan Wolf Games"><img className="brand-wolf-logo" src="/trojan-wolf-games.webp" alt="Trojan Wolf Games" width="148" height="74" /><span className="brand-copyright" aria-label="Copyright">©</span></a>
       <div className="user-section">
-        {user && onOpenAccount ? <button className="header-action header-account" type="button" onClick={onOpenAccount} aria-label={t("Account & legal")} title={`@${user.username}`}><span aria-hidden="true">◎</span><b>@{user.username}</b></button> : user ? (
+        {user && onOpenAccount ? <button className="header-action header-account" type="button" onClick={onOpenAccount} aria-label={`${t("Signed in as")} @${user.username} · ${t("Account & legal")}`} title={`@${user.username}`}><span className="header-account-copy"><small>{t("Signed in as")}</small><b>@{user.username}</b></span></button> : user ? (
           <>
             <span className="user-name">@{user.username}{serviceRank && <span className="header-service-rank" title={t(serviceRank.name)}><b aria-hidden="true">{serviceRank.symbol}</b> {t(serviceRank.name)}</span>}</span>
             {canAdmin && <Link className="header-action" to="/admin">Admin-Zentrale</Link>}
@@ -35,8 +36,10 @@ const Header = ({ user, serviceRank, onSignIn, onSignOut, onSendTestNotification
               <button className="header-action" onClick={onSendTestNotification}>{t('Notify')}</button>
             )}
           </>
+        ) : authPending || isLoading ? (
+          <span className="header-auth-status" role="status">{t("Signing in…")}</span>
         ) : (
-          <button className="header-action header-signin" onClick={onSignIn} disabled={isLoading}>{t('Connect Pi')}</button>
+          <button className="header-action header-signin" onClick={onSignIn}>{t('Sign in with Pi')}</button>
         )}
       </div>
     </header>
