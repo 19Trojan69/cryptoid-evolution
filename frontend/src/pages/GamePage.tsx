@@ -1,4 +1,5 @@
 import { gameHaptics } from "./gameHaptics";
+import { advanceShipMotion, idleShipMotion, explosionDiameter, fragmentFlight, hullIllumination, type ShipMotion } from "./shipRealism";
 import { useLocale } from "../i18n";
 import { memo, useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { useNavigate } from "react-router-dom";
@@ -104,6 +105,9 @@ type Asteroid = {
   attackElapsed: number;
   returnElapsed: number;
   firedThisAttack: boolean;
+  visualMotion?: ShipMotion;
+  hullLight?: number;
+  muzzleAt?: number;
   collidedThisAttack: boolean;
 };
 
@@ -130,9 +134,13 @@ type Effect = {
   shipClass?: CryptoidClass;
   debrisColor?: PlayerColorId;
   shipStage?: ShipStage;
+  impactX?: number;
+  impactY?: number;
+  velocityX?: number;
+  velocityY?: number;
 };
 type WeaponSource = "standard" | "paid" | "pickup";
-type GameState = { combo: DoubleKillCombo; asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; rewardNotice: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; pickupNotice: { id: number; type: PowerUpType; remainingMs: number; level: number } | null; score: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; purchasedShieldMs: number; shieldActive: boolean; overdriveMs: number; overdriveTotalMs: number; rapidFireMs: number; rapidFireTotalMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponSource: WeaponSource; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; weaponTimers: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
+type GameState = { bossHullLight: number; combo: DoubleKillCombo; asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; rewardNotice: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; pickupNotice: { id: number; type: PowerUpType; remainingMs: number; level: number } | null; score: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; purchasedShieldMs: number; shieldActive: boolean; overdriveMs: number; overdriveTotalMs: number; rapidFireMs: number; rapidFireTotalMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponSource: WeaponSource; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; weaponTimers: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
 
 const syncSelectedWeapon = (state: GameState) => {
   if (state.weaponSource === "pickup" && state.pickupWeaponMs <= 0) state.weaponSource = state.paidWeaponMs > 0 ? "paid" : "standard";
@@ -177,7 +185,7 @@ const BlockchainProgress = ({ blocks, saved = false }: { blocks: number; saved?:
   </div>
 );
 
-const createInitialState = (): GameState => ({ combo: createDoubleKillCombo(), asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", chainBlocks: 0, chainResult: "", rewardNotice: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: shipStartHeight[readShipStart()] }, thrust: 0, effects: [], powerUps: [], pickupNotice: null, score: 0, shards: 0, hearts: 3, maxHearts: 3, projectileGuard: 0, shieldCharges: 0, shieldMs: 0, purchasedShieldMs: 0, shieldActive: true, overdriveMs: 0, overdriveTotalMs: POWER_UP_DURATION_MS, rapidFireMs: 0, rapidFireTotalMs: POWER_UP_DURATION_MS, empMs: 0, pendingStartPower: null, weaponLevel: 1, weaponSource: "standard", weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], weaponTimers: [0, 0, 0, 0, 0, 0], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") || sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "loading" : "playing" });
+const createInitialState = (): GameState => ({ bossHullLight: 0, combo: createDoubleKillCombo(), asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", chainBlocks: 0, chainResult: "", rewardNotice: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: shipStartHeight[readShipStart()] }, thrust: 0, effects: [], powerUps: [], pickupNotice: null, score: 0, shards: 0, hearts: 3, maxHearts: 3, projectileGuard: 0, shieldCharges: 0, shieldMs: 0, purchasedShieldMs: 0, shieldActive: true, overdriveMs: 0, overdriveTotalMs: POWER_UP_DURATION_MS, rapidFireMs: 0, rapidFireTotalMs: POWER_UP_DURATION_MS, empMs: 0, pendingStartPower: null, weaponLevel: 1, weaponSource: "standard", weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], weaponTimers: [0, 0, 0, 0, 0, 0], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") || sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "loading" : "playing" });
 
 const readRecord = (key: string) => Number(window.localStorage.getItem(key) || 0);
 
@@ -277,21 +285,14 @@ const engineTrails = (sprite: number, className: "exhaust" | "player-engine") =>
   shipNozzleStyles(sprite).map((style, index) => <span key={`${className}-${index}`} className={className} style={style} />);
 
 const scatteredPieces = (effect: Effect, count: number, sprite: number) => {
-  const columns = count === 28 ? 7 : count === 8 ? 4 : 2;
-  const rows = count === 28 ? 4 : 2;
-  const targetColumns = count === 28 ? 7 : columns;
-  const targetRows = count === 28 ? 4 : 2;
+  const columns = count === 16 || count === 8 ? 4 : 2;
+  const rows = count / columns;
   let seed = Math.imul(effect.id, 0x9e3779b1) >>> 0;
   const random = () => {
     seed = (Math.imul(1664525, seed) + 1013904223) >>> 0;
     return seed / 4294967296;
   };
-  const targets = Array.from({ length: count }, (_, index) => index);
-  for (let index = count - 1; index > 0; index--) {
-    const swap = Math.floor(random() * (index + 1));
-    [targets[index], targets[swap]] = [targets[swap], targets[index]];
-  }
-  return targets.map((target, index) => {
+  return Array.from({ length: count }, (_, index) => {
     const x = index % columns;
     const y = Math.floor(index / columns);
     const left = x * 100 / columns;
@@ -300,15 +301,16 @@ const scatteredPieces = (effect: Effect, count: number, sprite: number) => {
     const bottom = (y + 1) * 100 / rows;
     const jag = Math.min(7, 18 / columns);
     const shape = `polygon(${left + random() * jag}% ${top}%, ${right - random() * jag}% ${top}%, ${right}% ${top + random() * jag}%, ${right}% ${bottom - random() * jag}%, ${right - random() * jag}% ${bottom}%, ${left + random() * jag}% ${bottom}%, ${left}% ${bottom - random() * jag}%, ${left}% ${top + random() * jag}%)`;
-    const destinationX = ((target % targetColumns) + .2 + random() * .6) * 100 / targetColumns;
-    const destinationY = (Math.floor(target / targetColumns) + .18 + random() * .64) * 100 / targetRows;
-    const spin = (random() > .5 ? 1 : -1) * (180 + Math.floor(random() * 440));
+    const hullWidth = effect.bossShipWidth ?? effect.debrisSize ?? 58;
+    const hullHeight = effect.kind === "boss-explosion" ? effect.bossHeight ?? 100 : hullWidth;
+    const flight = fragmentFlight(((x + .5) / columns - .5) * hullWidth, ((y + .5) / rows - .5) * hullHeight, effect.impactX ?? 0, effect.impactY ?? 0, hullWidth, random(), effect.velocityX, effect.velocityY);
     const pieceStyle = {
       clipPath: shape,
-      "--fragment-x": effect.kind === "boss-explosion" ? `${(destinationX * (effect.fieldWidth ?? 800) / 100 - effect.x - ((x + .5) / columns - .5) * (effect.bossShipWidth ?? 240)).toFixed(1)}px` : `calc(${destinationX.toFixed(2)}vw - ${effect.x}px)`,
-      "--fragment-y": effect.kind === "boss-explosion" ? `${(destinationY * (effect.fieldHeight ?? 700) / 100 - effect.y - ((y + .5) / rows - .5) * (effect.bossHeight ?? 100)).toFixed(1)}px` : `calc(${destinationY.toFixed(2)}dvh - ${effect.y}px)`,
-      "--fragment-spin": `${spin}deg`,
-      "--fragment-delay": `${Math.floor(random() * 180)}ms`,
+      transformOrigin: `${(x + .5) * 100 / columns}% ${(y + .5) * 100 / rows}%`,
+      "--fragment-x": `${flight.x.toFixed(1)}px`,
+      "--fragment-y": `${flight.y.toFixed(1)}px`,
+      "--fragment-spin": `${flight.spin.toFixed(1)}deg`,
+      "--fragment-delay": `${Math.floor(random() * 45)}ms`,
     } as CSSProperties;
     return <em key={index} className="scattered-debris-piece" style={pieceStyle}>
       {effect.kind === "boss-explosion" ? <b className="boss-fragment-hull" /> : effect.debrisColor ? <PaintedShip className="scattered-debris-sprite" sprite={sprite} color={effect.debrisColor} stage={effect.shipStage} /> : <b style={spriteStyle(sprite)} />}
@@ -321,9 +323,9 @@ const shipDebris = (effect: Effect) => {
   const style = {
     "--debris-size": `${effect.kind === "boss-explosion" ? effect.bossShipWidth ?? effect.debrisSize ?? 240 : effect.debrisSize ?? 58}px`,
     "--debris-height": `${effect.bossHeight ?? 100}px`,
-    "--debris-rotation": `${180 + (effect.debrisRotation ?? 0)}deg`,
+    "--debris-rotation": `${(effect.target === "player" ? 0 : 180) + (effect.debrisRotation ?? 0)}deg`,
   } as CSSProperties;
-  if (effect.kind === "boss-explosion") return <div className="ship-debris scattered-debris boss-debris-field" style={style} aria-hidden="true">{scatteredPieces(effect, 28, 0)}</div>;
+  if (effect.kind === "boss-explosion") return <div className="ship-debris scattered-debris boss-debris-field" style={style} aria-hidden="true">{scatteredPieces(effect, 16, 0)}</div>;
   if (sprite === undefined) return null;
   // A collision can damage the player without destroying the ship.
   if (effect.kind === "player-crash") {
@@ -345,7 +347,7 @@ const fallingBoss = (effect: Effect) => <div className="boss-falling-hull" style
 
 // Effects keep their object identity until they expire. Keep the fragments and
 // their animations mounted instead of rebuilding the entire debris tree on every paint.
-const ImpactEffectView = memo(({ effect }: { effect: Effect }) => effect.kind === "boss-fall" ? fallingBoss(effect) : <div className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y, ...(effect.kind === "boss-explosion" ? { "--boss-explosion-size": `${effect.debrisSize ?? 240}px`, "--boss-image": `url('${effect.bossImage}')`, "--boss-final-delay": `${effect.finalDelayMs ?? 1_450}ms` } : {}) } as CSSProperties} aria-hidden="true">{effect.kind !== "boss-explosion" && <span />}{shipDebris(effect)}</div>);
+const ImpactEffectView = memo(({ effect }: { effect: Effect }) => effect.kind === "boss-fall" ? fallingBoss(effect) : <div className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y, ...(["explosion", "shatter", "player-explosion"].includes(effect.kind) ? { width: explosionDiameter(effect.debrisSize ?? 58), height: explosionDiameter(effect.debrisSize ?? 58), marginLeft: -explosionDiameter(effect.debrisSize ?? 58) / 2, marginTop: -explosionDiameter(effect.debrisSize ?? 58) / 2 } : {}), ...(effect.kind === "boss-explosion" ? { "--boss-explosion-size": `${effect.debrisSize ?? 240}px`, "--boss-image": `url('${effect.bossImage}')`, "--boss-final-delay": `${effect.finalDelayMs ?? 1_450}ms` } : {}) } as CSSProperties} aria-hidden="true">{effect.kind !== "boss-explosion" && <span />}{shipDebris(effect)}</div>);
 
 const GamePage = () => {
   const { t } = useLocale();
@@ -384,7 +386,10 @@ const GamePage = () => {
   const keysRef = useRef(new Set<string>());
   const pointerRef = useRef<number | null>(null);
   const touchOriginRef = useRef<{ x: number; y: number; player: PlayerPosition } | null>(null);
-  const lastPlayerRef = useRef<PlayerPosition>({ x: .5, y: .86 });
+  const lastPlayerRef = useRef<PlayerPosition | null>(null);
+  const playerMotionRef = useRef(idleShipMotion());
+  const playerMuzzleRef = useRef(0);
+  const bossMuzzleRef = useRef(0);
   const [game, setGame] = useState<GameState>(createInitialState);
   const [startError, setStartError] = useState("");
   const [audioNeedsTap, setAudioNeedsTap] = useState(false);
@@ -798,9 +803,11 @@ const GamePage = () => {
             playerShipRef.current.style.top = `${state.player.y * 100}%`;
           }
         }
-        const distance = Math.hypot((state.player.x - lastPlayerRef.current.x) * width, (state.player.y - lastPlayerRef.current.y) * height);
-        const acceleration = distance > 1 ? 1 : 0;
-        state.thrust += (acceleration - state.thrust) * Math.min(1, delta / 150);
+        const previousPlayer = lastPlayerRef.current ?? state.player;
+        playerMotionRef.current = advanceShipMotion(playerMotionRef.current, (state.player.x - previousPlayer.x) * width, (state.player.y - previousPlayer.y) * height, delta);
+        state.thrust = playerMotionRef.current.thrust;
+        playerShipRef.current?.style.setProperty("--visual-bank", `${playerMotionRef.current.bank}deg`);
+        playerShipRef.current?.style.setProperty("--hull-light", String(hullIllumination(state.player.x * width, state.player.y * height, time, playerMuzzleRef.current, state.effects)));
         lastPlayerRef.current = state.player;
         if (!transitionPaused) elapsedRef.current += delta;
         impactCooldownRef.current = Math.max(0, impactCooldownRef.current - delta);
@@ -947,6 +954,8 @@ const GamePage = () => {
         let shieldImpactsRemaining = !purchasedShieldActive && state.shieldActive && state.shieldMs > 0 ? state.shieldCharges : 0;
         state.asteroids.forEach(asteroid => {
           let next = moveAsteroid(asteroid, state.empMs > 0 ? 0 : delta, width, height);
+          next.visualMotion = advanceShipMotion(asteroid.visualMotion ?? idleShipMotion(), next.x - asteroid.x, next.y - asteroid.y, delta);
+          next.hullLight = hullIllumination(next.x, next.y, time, next.muzzleAt ?? 0, state.effects);
           if (asteroid.attackPattern !== null && next.attackPattern === null) attackCooldownRef.current = 0;
           if (next.attackPattern !== null && next.attackDelay === 0 && !next.firedThisAttack && next.attackElapsed < attackTime(next) && next.attackElapsed >= attackTime(next) * .28 && state.enemyShots.length < enemyShotLimit(width, elapsedRef.current, state.sector)) {
             const bullet = createEnemyShot(nextIdRef.current, next.x, next.y + next.radius * .4, state.player, width, height);
@@ -954,7 +963,7 @@ const GamePage = () => {
               nextIdRef.current += 1;
               state.enemyShots.push(bullet);
               soundRef.current?.playEnemyShot(next.x / width * 2 - 1);
-              next = { ...next, firedThisAttack: true };
+              next = { ...next, firedThisAttack: true, muzzleAt: time };
             }
           }
           const activeAttack = next.attackPattern !== null && next.attackDelay === 0;
@@ -975,7 +984,7 @@ const GamePage = () => {
                   shieldImpactsRemaining -= 1;
                 } else {
                   const sprite = next.sprite;
-                  state.effects.push({ id: nextIdRef.current++, x: next.x, y: next.y, kind: next.type === "etherCrystal" ? "shatter" : "explosion", startedAt: time, sprite, debrisSize: next.radius * 2, debrisRotation: next.rotation, shipClass: next.shipClass });
+                  state.effects.push({ id: nextIdRef.current++, x: next.x, y: next.y, kind: next.type === "etherCrystal" ? "shatter" : "explosion", startedAt: time, sprite, debrisSize: next.radius * 2, debrisRotation: next.rotation, shipClass: next.shipClass, debrisColor: next.color, velocityX: (next.x - asteroid.x) * 1000 / Math.max(1, delta), velocityY: (next.y - asteroid.y) * 1000 / Math.max(1, delta) });
                   state.score += next.points;
                   if (collision.destroysEnemy) creditComboDefeat(state, next.reward, elapsedRef.current);
                   soundRef.current?.play("explosion");
@@ -995,6 +1004,7 @@ const GamePage = () => {
         }).filter(target => target.elapsed < BONUS_FLIGHT_MS);
         if (state.encounter === "boss-fight" && state.boss) {
           const previousBoss = state.boss;
+          state.bossHullLight = hullIllumination(state.boss.x, state.boss.y, time, bossMuzzleRef.current, state.effects);
           state.boss = moveSectorBoss(state.boss, state.empMs > 0 ? 0 : delta, width, height);
           const bossContact = contactWithEnemy(state.player, width, height, state.boss, true, false, impactCooldownRef.current, previousBoss);
           if (bossContact.damage) {
@@ -1004,6 +1014,7 @@ const GamePage = () => {
           if (state.empMs === 0) {
             const fired = advanceBossTurrets(state.boss, state.player, width, height, delta, enemyShotLimit(width, elapsedRef.current, state.sector) - state.enemyShots.length, nextIdRef.current);
             nextIdRef.current += fired.shots.length;state.enemyShots.push(...fired.shots);
+            if (fired.events.length) bossMuzzleRef.current = time;
             for(const event of fired.events)soundRef.current?.playBossWeapon(event.kind,event.radius,event.barrels,event.pan);
           }
         }
@@ -1060,7 +1071,7 @@ const GamePage = () => {
           if (pickup.type === "rapid") state.rapidFireTotalMs = POWER_UP_DURATION_MS;
           if (pickup.type === "weapon") state.weaponSource = "pickup";
           syncSelectedWeapon(state);
-          state.pickupNotice = { id: pickup.id, type: pickup.type, remainingMs: 1_550, level: stageWeaponLevel(shipStageRef.current, state.weaponLevel) };
+          state.pickupNotice = { id: pickup.id, type: pickup.type, remainingMs: 4_500, level: stageWeaponLevel(shipStageRef.current, state.weaponLevel) };
           soundRef.current?.playPickup(pickup.type);
           return false;
         });
@@ -1073,6 +1084,7 @@ const GamePage = () => {
           if (state.shots.length < MAX_PLAYER_SHOTS) {
             const volley = makeVolley(effectiveWeapon, state.player.x * width, state.player.y * height - 23, state.overdriveMs > 0, () => nextIdRef.current++, shipStageRef.current === 3);
             state.shots.push(...volley.slice(0, MAX_PLAYER_SHOTS - state.shots.length));
+            playerMuzzleRef.current = time;
             soundRef.current?.play("laser", effectiveWeapon);
           }
         }
@@ -1086,7 +1098,7 @@ const GamePage = () => {
             state.bonusHits += 1;
             creditComboDefeat(state, BONUS_TARGET_SHARD_REWARD, elapsedRef.current);
             state.score += 150;
-            state.effects.push({ id: nextIdRef.current++, x: bonusTarget.x, y: bonusTarget.y, kind: "explosion", startedAt: time, sprite: bonusTarget.sprite, debrisSize: 50 });
+            state.effects.push({ id: nextIdRef.current++, x: bonusTarget.x, y: bonusTarget.y, kind: "explosion", startedAt: time, sprite: bonusTarget.sprite, debrisSize: 50, debrisColor: bonusTarget.color, impactX: shot.x - bonusTarget.x, impactY: shot.y - bonusTarget.y });
             soundRef.current?.play("explosion");
             gameHaptics.explosion();
             continue;
@@ -1111,7 +1123,7 @@ const GamePage = () => {
             const sprite = enemy.sprite;
             enemy.hullFires = addPersistentHullFire(enemy.hullFires, hullFireAtImpact(shot, enemy, enemy.radius * 2, spriteFireSites[sprite], enemy.hullFires, enemy.rotation, spriteVisualOffset(sprite, enemy.radius * 2, true)));
           }
-          if (enemy.health === 0) state.effects.push({ id: nextIdRef.current++, x: enemy.x, y: enemy.y, kind: enemy.type === "etherCrystal" ? "shatter" : "explosion", startedAt: time, sprite: enemy.sprite, debrisSize: enemy.radius * 2, debrisRotation: enemy.rotation, shipClass: enemy.shipClass });
+          if (enemy.health === 0) state.effects.push({ id: nextIdRef.current++, x: enemy.x, y: enemy.y, kind: enemy.type === "etherCrystal" ? "shatter" : "explosion", startedAt: time, sprite: enemy.sprite, debrisSize: enemy.radius * 2, debrisRotation: enemy.rotation, shipClass: enemy.shipClass, debrisColor: enemy.color, velocityX: enemy.visualMotion?.vx, velocityY: enemy.visualMotion?.vy, impactX: shot.x - enemy.x, impactY: shot.y - enemy.y });
           soundRef.current?.play(enemy.health > 0 ? "enemyHit" : "explosion");
           if (enemy.health <= 0) gameHaptics.explosion();
           if (enemy.health > 0) continue;
@@ -1280,7 +1292,7 @@ const GamePage = () => {
         for (const enemy of visible) {
           state.score += enemy.points;
           creditComboDefeat(state, enemy.reward, elapsedRef.current);
-          state.effects.push({ id: nextIdRef.current++, x: enemy.x, y: enemy.y, kind: "explosion", startedAt: now, sprite: enemy.sprite, debrisSize: enemy.radius * 2, shipClass: enemy.shipClass });
+          state.effects.push({ id: nextIdRef.current++, x: enemy.x, y: enemy.y, kind: "explosion", startedAt: now, sprite: enemy.sprite, debrisSize: enemy.radius * 2, shipClass: enemy.shipClass, debrisColor: enemy.color, debrisRotation: enemy.rotation });
         }
         if (visible.length) gameHaptics.explosion();
         const destroyedIds = new Set(visible.map(enemy => enemy.id));
@@ -1407,6 +1419,9 @@ const GamePage = () => {
     pointerRef.current = null;
     touchOriginRef.current = null;
     lastPlayerRef.current = stateRef.current.player;
+    playerMotionRef.current = idleShipMotion();
+    playerMuzzleRef.current = 0;
+    bossMuzzleRef.current = 0;
     lastFrameRef.current = 0;
     lastPaintRef.current = 0;
     slowFramesRef.current = 0;
@@ -1459,7 +1474,7 @@ const GamePage = () => {
           <div className="hud-stat round-hud chain-hud" aria-label={`${t("Block")} ${game.chainBlocks}/${BLOCKS_PER_CHAIN}`}><span>{t("Block")}</span><strong>{game.chainBlocks}<small>/{BLOCKS_PER_CHAIN}</small></strong></div>
           <button className="game-control pause-control" type="button" disabled={game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { const resuming = game.status === "paused"; stateRef.current.status = resuming ? "playing" : "paused"; setGame({ ...stateRef.current }); if (resuming) window.setTimeout(retryAudio, 0); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
         </header>
-        <div className="game-label">{adminRunRef.current && <strong>ADMIN-TEST · </strong>}{t("LEVEL")} {levelLabel} <span>· {sectorName(game.sector)} · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/${BLOCKS_PER_CHAIN}` : game.encounter === "bonus" ? t("BONUS CHALLENGE") : t("CORE WARDEN")}</span></div>
+        <div className="game-label">{adminRunRef.current && <strong>ADMIN-TEST · </strong>}{t("LEVEL")} {levelLabel} <span>· <strong className="game-region-name">{sectorName(game.sector)}</strong> · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/${BLOCKS_PER_CHAIN}` : game.encounter === "bonus" ? t("BONUS CHALLENGE") : t("CORE WARDEN")}</span></div>
         {audioNeedsTap && game.status === "playing" && <button className="audio-retry" type="button" onClick={retryAudio}>Ton aktivieren</button>}
         {game.encounter === "bonus" && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">{t("BONUS TARGETS")} {game.bonusHits} / {BONUS_TARGET_COUNT} · {t("NO ENEMY FIRE")}</div>}
         
@@ -1483,6 +1498,7 @@ const GamePage = () => {
           {game.boss.config.engineAnchors.map(([x, y], index) => <i key={index} className="boss-engine-flame" style={{ left: `${x * 100}%`, top: `${y * 100}%` }} aria-hidden="true" />)}
           <img className="boss-hull" src={game.boss.config.image} alt="" draggable={false} />
           <BossWeaponsView boss={game.boss}/>
+          <i className="hull-reflection" style={{ maskImage: `url('${game.boss.config.image}')`, WebkitMaskImage: `url('${game.boss.config.image}')`, opacity: game.bossHullLight }} aria-hidden="true" />
           <div className="boss-damage-layer" aria-hidden="true">
             {!!game.boss.hullFires?.length && game.boss.hullFires.map(fire => <i key={fire.id} className="hull-fire" style={{ left: `${fire.x}%`, top: `${fire.y}%`, animationDelay: `${-(fire.id % 7) * .07}s` }} />)}
             {performance.now() - game.boss.lastDamageAt < 240 && game.boss.hit && <i className="boss-impact-flash" style={{ left: `${game.boss.hit.x}%`, top: `${game.boss.hit.y}%` }} />}
@@ -1490,7 +1506,7 @@ const GamePage = () => {
           <span className="health-bar" data-critical={game.boss.health / game.boss.maxHealth <= .3} role="progressbar" aria-label={t("Boss hull")} aria-valuenow={Math.ceil(game.boss.health / game.boss.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${game.boss.health / game.boss.maxHealth * 100}%` }} /><small className="boss-health-readout">{Math.ceil(game.boss.health / game.boss.maxHealth * 100)}%</small></span>
         </div>}
         {game.bonusTargets.map(target => <div key={target.id} className="asteroid asteroid-small cryptoid bonus-ship cryptoid-boost" style={{ ...alignedSpritePosition(target.x, target.y, target.sprite, 50), transform: "translate(-50%, -50%)" }}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={target.sprite} color={target.color} />{engineTrails(target.sprite, "exhaust")}</div></div>)}
-        {game.asteroids.map(asteroid => { const sprite = asteroid.sprite; const maskImage = `url('${shipEvolutionAsset(sprite, 1)}')`; return <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid${game.empMs > 0 ? " cryptoid-emp" : ""} cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.hitUntil && asteroid.hitUntil > performance.now() ? " cryptoid-hit" : ""}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}${cryptoidMotionClass(asteroid)}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ ...alignedSpritePosition(asteroid.x, asteroid.y, sprite, asteroid.radius * 2), transform: `translate(-50%, -50%) rotate(${asteroid.rotation}deg)`, ...shipHullStyle(sprite, true) }}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={sprite} color={asteroid.color} />{engineTrails(sprite, "exhaust")}{!!asteroid.hullFires?.length && <div className="hull-fire-layer" style={{ WebkitMaskImage: maskImage, maskImage, WebkitMaskSize: "100% 100%", maskSize: "100% 100%" }} aria-hidden="true">{asteroid.hullFires.map(fire => <i key={fire.id} className="hull-fire" style={{ left: `${100 - fire.x}%`, top: `${100 - fire.y}%`, animationDelay: `${-(fire.id % 7) * .07}s` }} />)}</div>}</div><span className="health-bar" data-critical={asteroid.health / asteroid.maxHealth <= .3} role="progressbar" aria-label={t("Enemy hull")} aria-valuenow={Math.ceil(asteroid.health / asteroid.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${asteroid.health / asteroid.maxHealth * 100}%` }} /></span></div>; })}
+        {game.asteroids.map(asteroid => { const sprite = asteroid.sprite; const maskImage = `url('${shipEvolutionAsset(sprite, 1)}')`; return <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid${game.empMs > 0 ? " cryptoid-emp" : ""} cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.hitUntil && asteroid.hitUntil > performance.now() ? " cryptoid-hit" : ""}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}${cryptoidMotionClass(asteroid)}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ ...alignedSpritePosition(asteroid.x, asteroid.y, sprite, asteroid.radius * 2), transform: `translate(-50%, -50%) rotate(${asteroid.rotation}deg)`, ...shipHullStyle(sprite, true), "--visual-bank": `${asteroid.visualMotion?.bank ?? 0}deg`, "--flame-length": `${5 + (asteroid.visualMotion?.thrust ?? 0) * 14}%`, "--hull-light": asteroid.hullLight ?? 0 } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={sprite} color={asteroid.color} />{engineTrails(sprite, "exhaust")}<i className="hull-reflection" style={{ maskImage, WebkitMaskImage: maskImage }} aria-hidden="true" />{!!asteroid.hullFires?.length && <div className="hull-fire-layer" style={{ WebkitMaskImage: maskImage, maskImage, WebkitMaskSize: "100% 100%", maskSize: "100% 100%" }} aria-hidden="true">{asteroid.hullFires.map(fire => <i key={fire.id} className="hull-fire" style={{ left: `${100 - fire.x}%`, top: `${100 - fire.y}%`, animationDelay: `${-(fire.id % 7) * .07}s` }} />)}</div>}</div><span className="health-bar" data-critical={asteroid.health / asteroid.maxHealth <= .3} role="progressbar" aria-label={t("Enemy hull")} aria-valuenow={Math.ceil(asteroid.health / asteroid.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${asteroid.health / asteroid.maxHealth * 100}%` }} /></span></div>; })}
         {game.powerUps.map(pickup => {
           const pickupLabel = `${t(powerUpNames[pickup.type])} · ${t(powerUpDescriptions[pickup.type])}`;
           return <div key={pickup.id} className={`power-up power-up-${pickup.type}`} role="img" aria-label={pickupLabel} title={pickupLabel} style={{ left: pickup.x, top: pickup.y }}><span aria-hidden="true">{powerUpSymbols[pickup.type]}</span></div>;
@@ -1500,7 +1516,7 @@ const GamePage = () => {
         {game.shots.map(shot => <div key={shot.id} className={`player-laser player-laser-tier-${shot.visualLevel ?? 1}${shot.empowered && shot.visualLevel !== 5 ? " player-laser-overdrive" : ""}`} style={{ left: shot.x, top: shot.y }} aria-hidden="true" />)}
         {game.enemyShots.map(shot => <div key={shot.id} className={`enemy-laser${shot.bossKind ? ` boss-projectile boss-projectile-${shot.bossKind}` : ""}${shot.weaponKind ? ` boss-evolved-shot boss-evolved-${shot.weaponKind}` : ""}`} style={{ left: shot.x, top: shot.y, "--shot-angle": `${-Math.atan2(shot.vx, shot.vy) * 180 / Math.PI}deg`,...(shot.weaponKind?{"--boss-shot-color":shot.weaponColor,"--boss-shot-width":`${shot.weaponWidth}px`,"--boss-shot-diameter":`${shot.radius*2}px`}:{}) } as CSSProperties} aria-hidden="true" />)}
         {game.effects.map(effect => <ImpactEffectView key={effect.id} effect={effect} />)}
-        {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship shielded-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.purchasedShieldMs > 0 || (game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0) ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${5 + game.thrust * 13}%`, ...shipVisualOffset } as CSSProperties} aria-label={t('Your Cryptoid ship')}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} />{engineTrails(shipSelection.skin.sprite, "player-engine")}</div></div>}
+        {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship shielded-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.purchasedShieldMs > 0 || (game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0) ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${5 + game.thrust * 13}%`, ...shipVisualOffset } as CSSProperties} aria-label={t('Your Cryptoid ship')}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} />{engineTrails(shipSelection.skin.sprite, "player-engine")}<i className="hull-reflection" style={{ maskImage: `url('${shipEvolutionAsset(shipSelection.skin.sprite, shipStage)}')`, WebkitMaskImage: `url('${shipEvolutionAsset(shipSelection.skin.sprite, shipStage)}')` }} aria-hidden="true" /></div></div>}
         <div className={`touch-controls touch-controls-${readControlHand()}`}>
           <div className="edge-actions" role="group" aria-label={t('Available equipment')}>
             <div className="weapon-control-wrap" data-source={game.weaponSource}>

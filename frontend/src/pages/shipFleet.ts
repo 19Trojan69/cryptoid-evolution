@@ -28,6 +28,9 @@ export const ADMIN_START_SECTOR_KEY = "cryptoid_admin_start_sector";
 export const ADMIN_SHIP_STAGE_KEY = "cryptoid_admin_ship_stage";
 export const ADMIN_TEST_CONFIG_KEY = "cryptoid_admin_test_config";
 export const EXTRA_STARTER_PRICE = 150;
+// The issued starter is free; buying another copy uses the same Shard price
+// in the shop and in the balance deduction.
+export const standardShipPrice = (skin: { price: number }) => skin.price || EXTRA_STARTER_PRICE;
 
 export const playerSkins = [
   { id: "grey-scout", name: "Grey Scout", sprite: 1, price: 0 },
@@ -147,7 +150,7 @@ export const readShipFleet = (raw: string | null, oldOwned: string | null, oldCo
 
 export const buyShipVariant = (skinId: PlayerSkinId, colorId: PlayerColorId, fleet: ShipFleet, balance: number) => {
   const skin = playerSkins.find(item => item.id === skinId);
-  const price = skin?.price === 0 ? EXTRA_STARTER_PRICE : skin?.price;
+  const price = skin ? standardShipPrice(skin) : undefined;
   if (!skin || !testnetStandardHullAvailable(skinId) || price === undefined || !allPlayerColors.some(color => color.id === colorId) || !Number.isSafeInteger(balance) || balance < price) return null;
   const count = fleetCount(fleet, skinId, colorId);
   if (!Number.isSafeInteger(count) || count >= Number.MAX_SAFE_INTEGER) return null;
