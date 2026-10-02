@@ -3,7 +3,7 @@ import axios from "axios";
 export const PI_ACCESS_TOKEN_KEY = "cryptoid_pi_access_token";
 export const ADMIN_TEST_HEADER = "x-cryptoid-admin-test";
 
-const getBaseURL = () => {
+export const getBaseURL = () => {
   const runtimeURL = typeof window !== "undefined" ? window.__ENV?.backendURL : undefined;
 
   if (runtimeURL && runtimeURL !== "$$BACKEND_URL$$") {

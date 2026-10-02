@@ -50,6 +50,7 @@ test("all dashboard routes require verified ownership, including downloads and w
     await withApp(session, {}, async (request) => {
       for (const [path, body] of [
         ["/status"],
+        ["/usage"],
         ["/payments"],
         ["/payments/export"],
         ["/start", {}],
@@ -62,6 +63,26 @@ test("all dashboard routes require verified ownership, including downloads and w
       }
     });
   }
+});
+
+test("owner statistics are bounded hourly aggregates, with no visitor joins", async () => {
+  let query, projection, limit;
+  const usageCollection = { find(filter, options) {
+    query = filter; projection = options.projection;
+    return { sort() { return this; }, limit(value) { limit = value; return this; }, async toArray() { return [{ hour: new Date("2026-10-02T10:00:00Z"), browser: "pi", network: "testnet", visits: 4, activeSeconds: 90, gameSeconds: 60 }]; } };
+  } };
+  await withApp({ currentUser: { uid: "owner" } }, { usageCollection }, async request => {
+    const response = await request("/usage?days=30&network=testnet");
+    assert.equal(response.status, 200);
+    const data = await response.json();
+    assert.equal(data.rows[0].visits, 4);
+    assert.equal(data.retentionDays, 90);
+    assert.equal(query.network, "testnet");
+    assert.equal(projection._id, 0);
+    assert.equal(limit, 13000);
+    assert.doesNotMatch(JSON.stringify(data), /username|uid|session|ipAddress/);
+    for (const filter of ["days=365", "days=-1", "network=other"]) assert.equal((await request(`/usage?${filter}`)).status, 400);
+  });
 });
 
 test("boss and bonus tests expose the full fleet without creating orders, rewards or score runs", async () => {

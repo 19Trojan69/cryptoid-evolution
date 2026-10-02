@@ -11,6 +11,10 @@
 .admin-shell * {
   box-sizing: border-box;
 }
+.admin-usage-scroll { overflow-x: auto; margin: 14px 0 24px; }
+.admin-usage-scroll table { border-collapse: collapse; width: 100%; min-width: 540px; }
+.admin-usage-scroll th, .admin-usage-scroll td { text-align: left; padding: 10px; border-bottom: 1px solid #264752; }
+.admin-usage-scroll th { color: #f4d386; }
 .admin-shell h1 {
   margin: 0;
   font-size: clamp(23px, 4vw, 34px);
@@ -64,7 +68,7 @@
 }
 .admin-nav {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
   margin-bottom: 24px;
 }

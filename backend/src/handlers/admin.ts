@@ -33,6 +33,22 @@ export default function mountAdminEndpoints(router: Router) {
   // Authenticate every admin route independently of the optional gameplay mode.
   router.use(requireOwner);
 
+  router.get("/usage", async (req, res) => {
+    const days = Number(req.query.days || 7);
+    const network = String(req.query.network || "mainnet");
+    if (![1, 7, 30, 90].includes(days) || !["all", "mainnet", "testnet"].includes(network))
+      return res.status(400).json({ error: "invalid_filter" });
+    const collection = req.app.locals.usageCollection;
+    if (!collection) return res.status(503).json({ error: "database_unavailable" });
+    const until = new Date();
+    const since = new Date(until.getTime() - days * 86_400_000); since.setUTCMinutes(0, 0, 0);
+    try {
+      const filter = { hour: { $gte: since, $lte: until }, ...(network === "all" ? {} : { network }) };
+      const rows = await collection.find(filter, { projection: { _id: 0, hour: 1, browser: 1, network: 1, visits: 1, activeSeconds: 1, gameSeconds: 1 } }).sort({ hour: -1 }).limit(13_000).toArray();
+      return res.json({ since, until, days, rows, retentionDays: 90 });
+    } catch { return res.status(503).json({ error: "statistics_unavailable" }); }
+  });
+
   router.get("/status", (req, res) =>
     res.json({
       username: req.session.currentUser!.username,

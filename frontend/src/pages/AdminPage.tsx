@@ -24,12 +24,14 @@ import { primeGameAudio } from "./gameAudio";
 import { requestGameFullscreen } from "./gameFullscreen";
 import { readEffectsVolume } from "./musicPreferences";
 import "./admin.css";
+import AdminUsage from "./AdminUsage";
 
 const tabs = [
   ["overview", "Übersicht"],
   ["ships", "Raumschiffe"],
   ["levels", "Levels & Bosse"],
   ["payments", "Zahlungseingänge"],
+  ["usage", "Zugriffsstatistik"],
   ["checks", "Audio & Prüfung"],
 ] as const;
 type AdminView = (typeof tabs)[number][0];
@@ -413,6 +415,7 @@ export default function AdminPage() {
               {message}
             </p>
           )}
+          {view === "usage" && <AdminUsage />}
           {view === "overview" && (
             <>
               <section className="admin-shortcuts" aria-label="Schnellzugriff">
