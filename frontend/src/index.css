@@ -2382,3 +2382,26 @@ html[data-motion="reduced"] .quick-access-panel { animation: none; }
 }
 html[data-motion="reduced"] .landing-shell .quick-access-trigger::before { animation: none; opacity: 0; }
 html[data-motion="reduced"] .quick-access-category > summary .category-icon, html[data-motion="reduced"] .blockchain-icon-rotor { transition: none; transform: none; }
+
+/* The launch control uses the same gold alloy as the navigation control. */
+.landing-shell .hero-actions .home-play-button { border-color: #f5d282; background: linear-gradient(115deg, #95611b 0%, #c99537 12%, #f3d785 25%, #fff2bd 31%, #b98428 46%, #e0b550 63%, #fff0a5 76%, #c38f2e 90%, #a36c1f); color: #231a0c; text-shadow: 0 1px 0 #fff1b77a; box-shadow: inset 0 2px 0 #fff7cf, inset 0 -3px 0 #6f4819, inset 0 0 18px #ffedab70, 0 0 22px #d4a74545, 0 8px 22px #080e1a70; animation: none; }
+.landing-shell .hero-actions .home-play-button:hover { border-color: #fff0b2; background: linear-gradient(115deg, #bc8b31, #ffe59c 25%, #fff9d5 32%, #d5a440 48%, #f4d57b 70%, #b17c25); box-shadow: inset 0 2px 0 #fff7cf, inset 0 -3px 0 #6f4819, 0 0 28px #e8be5c66; }
+.landing-shell .hero-actions .home-play-button::before { left: -55%; width: 30%; opacity: .6; background: linear-gradient(90deg, transparent, #fffbea99, transparent); animation: gold-access-shimmer 6s 1.2s ease-in-out infinite; }
+.landing-shell .hero-actions .home-play-button:not(:disabled):hover::before { animation: gold-access-shimmer 2s ease-in-out infinite; }
+.landing-shell .hero-actions .home-play-button::after { height: 2px; background: linear-gradient(90deg, transparent, #fff8d6, transparent); }
+.landing-shell .hero-actions .home-play-button .button-glyph { border-color: #684719; color: #34230e; background: linear-gradient(145deg, #fff1b377, #80531b33); box-shadow: inset 0 1px 0 #fff8d38c; }
+@media (prefers-reduced-motion: reduce) { .landing-shell .hero-actions .home-play-button::before, .landing-shell .hero-actions .home-play-button:not(:disabled):hover::before { animation: none; opacity: 0; } }
+html[data-motion="reduced"] .landing-shell .hero-actions .home-play-button::before { animation: none; opacity: 0; }
+
+/* Colored alloy frames and lettering retain each navigation accent. */
+.quick-access-category { border: 2px solid transparent; background: linear-gradient(#0b2137, #0b2137) padding-box, linear-gradient(135deg, color-mix(in srgb, var(--category-color) 82%, white), var(--category-color) 18%, color-mix(in srgb, var(--category-color) 55%, #203148) 45%, color-mix(in srgb, var(--category-color) 75%, white) 68%, var(--category-color)) border-box; box-shadow: inset 0 1px 0 #ffffff1c, 0 3px 10px #0003; }
+.quick-access-category > summary, .quick-access-category[open] > summary { position: relative; isolation: isolate; overflow: hidden; background: linear-gradient(120deg, color-mix(in srgb, var(--category-color) 20%, #0b2137), color-mix(in srgb, var(--category-color) 7%, #0b2137) 42%, color-mix(in srgb, var(--category-color) 17%, #0b2137) 72%, #0b2137); box-shadow: inset 0 1px 0 color-mix(in srgb, var(--category-color) 32%, transparent), inset 0 -1px 0 #0005; }
+.quick-access-category > summary::before { position: absolute; z-index: -1; top: -80%; bottom: -80%; left: -65%; width: 35%; pointer-events: none; content: ''; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--category-color) 17%, transparent), transparent); transform: rotate(18deg); animation: gold-access-shimmer 9s ease-in-out infinite; }
+.quick-access-category > summary strong { --letter-metal: var(--category-color); }
+.quick-access-items button > span { --letter-metal: #f0f8ff; }
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  .quick-access-category > summary strong, .quick-access-items button > span { color: transparent; background: linear-gradient(175deg, #ffffff 0%, color-mix(in srgb, var(--letter-metal) 80%, white) 19%, var(--letter-metal) 43%, color-mix(in srgb, var(--letter-metal) 76%, #25364a) 49%, color-mix(in srgb, var(--letter-metal) 80%, white) 56%, var(--letter-metal) 80%, color-mix(in srgb, var(--letter-metal) 78%, #25364a) 100%); background-clip: text; -webkit-background-clip: text; filter: drop-shadow(0 1px 1px #0007); }
+}
+.quick-access-items button:hover > span { --letter-metal: var(--category-color); }
+@media (prefers-reduced-motion: reduce) { .quick-access-category > summary::before { animation: none; opacity: 0; } }
+html[data-motion="reduced"] .quick-access-category > summary::before { animation: none; opacity: 0; }

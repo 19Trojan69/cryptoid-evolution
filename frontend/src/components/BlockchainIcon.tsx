@@ -1,8 +1,12 @@
+import { useId } from "react";
+
 type Props = { kind: string; className?: string };
 
 /** Original circuit symbols, sharing the same hexagonal network geometry. */
 export default function BlockchainIcon({ kind, className = "" }: Props) {
-  return <svg className={`blockchain-icon ${className}`} viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+  const metalId = `icon-metal-${useId().replace(/:/g, "")}`;
+  return <svg className={`blockchain-icon ${className}`} viewBox="0 0 48 48" fill="none" stroke={kind === "network" ? "currentColor" : `url(#${metalId})`} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+    <defs><linearGradient id={metalId} x1="0" y1="0" x2=".3" y2="1"><stop offset="0" stopColor="white" /><stop offset=".23" stopColor="currentColor" /><stop offset=".46" stopColor="currentColor" stopOpacity=".7" /><stop offset=".53" stopColor="white" /><stop offset=".68" stopColor="currentColor" /><stop offset="1" stopColor="currentColor" stopOpacity=".8" /></linearGradient></defs>
     <path className="blockchain-icon-frame" d="m24 3 18 10v22L24 45 6 35V13Z" />
     {kind === "mission" ? <><path d="m24 10 9 23-9-5-9 5Z" /><path d="M20 36v3m8-3v3M24 17v8" /></>
       : kind === "fleet" ? <><path d="M11 30V16l13-7 13 7v14M10 36h28M15 32l9-19 9 19-9-4Zm9-13v6" /><path d="M20 36v3m8-3v3" /></>
