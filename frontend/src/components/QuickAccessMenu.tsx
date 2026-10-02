@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useLocale } from "../i18n";
+import BlockchainIcon from "./BlockchainIcon";
 
 export type QuickAction = "play" | "hangar" | "shop" | "upgrades" | "colors" | "weapons" | "armor" | "powers" | "progress" | "rewards" | "leaders" | "ranks" | "bosses" | "medals" | "chains" | "language" | "controls" | "audio" | "display" | "vibration" | "overview" | "visuals" | "guide-controls" | "route" | "combat" | "boosts" | "earnings" | "collection" | "signin" | "signout" | "admin" | "exit-admin" | "privacy" | "terms";
 type Entry = readonly [QuickAction, string];
@@ -12,8 +13,8 @@ const groups: readonly { id: string; title: string; glyph: string; items: readon
   { id: "account", title: "Account & legal", glyph: "◎", items: [["signin", "Connect Pi"], ["signout", "Sign out"], ["admin", "Admin center"], ["exit-admin", "End test mode"], ["privacy", "Privacy policy"], ["terms", "Terms of service"]] },
 ];
 
-type Props = { onClose: () => void; onAction: (action: QuickAction) => void; signedIn: boolean; canAdmin: boolean; adminMode?: boolean; username?: string; initialGroup?: string; busy?: boolean };
-export default function QuickAccessMenu({ onClose, onAction, signedIn, canAdmin, adminMode, username, initialGroup = "mission", busy }: Props) {
+type Props = { onClose: () => void; onAction: (action: QuickAction) => void; signedIn: boolean; canAdmin: boolean; adminMode?: boolean; username?: string; busy?: boolean };
+export default function QuickAccessMenu({ onClose, onAction, signedIn, canAdmin, adminMode, username, busy }: Props) {
   const { t } = useLocale();
   const panelRef = useRef<HTMLElement>(null);
   useEffect(() => {
@@ -37,8 +38,8 @@ export default function QuickAccessMenu({ onClose, onAction, signedIn, canAdmin,
       <header className="quick-access-heading"><div><p className="eyebrow">CRYPTOID EVOLUTION</p><h2 id="quick-access-title">{t("Quick access")}</h2></div><button className="close-button" type="button" aria-label={t("Close menu")} onClick={onClose}>×</button></header>
       {username && <p className="quick-access-account">@{username}</p>}
       <nav aria-label={t("Game navigation")}>
-        {groups.map(group => <details key={group.id} className="quick-access-category" data-category={group.id} open={group.id === initialGroup}>
-          <summary><span aria-hidden="true">{group.glyph}</span><strong>{t(group.title)}</strong><i aria-hidden="true">⌄</i></summary>
+        {groups.map(group => <details key={group.id} className="quick-access-category" data-category={group.id}>
+          <summary><span className="category-icon"><BlockchainIcon kind={group.id} /></span><strong>{t(group.title)}</strong><i aria-hidden="true">⌄</i></summary>
           <div className="quick-access-items">{group.items.filter(([action]) => action === "signin" ? !signedIn : action === "signout" ? signedIn : action === "admin" ? canAdmin : action === "exit-admin" ? canAdmin && adminMode : true).map(([action, label]) => <button key={action} type="button" disabled={busy && (action === "signin" || action === "signout" || action === "exit-admin")} onClick={() => onAction(action)}><span>{t(label)}</span><i aria-hidden="true">›</i></button>)}</div>
         </details>)}
       </nav>

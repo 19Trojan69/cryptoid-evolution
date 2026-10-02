@@ -2358,3 +2358,27 @@ html[data-motion="reduced"] .quick-access-panel { animation: none; }
   .quick-access-trigger b { font-size: 10.5px; letter-spacing: 0; overflow-wrap: anywhere; }
   .landing-shell .quick-access-trigger > span { font-size: 24px; }
 }
+
+/* Brushed gold and custom circuit emblems, with restrained light movement. */
+.landing-shell .quick-access-trigger { border-color: #f5d282; background: linear-gradient(115deg, #95611b 0%, #c99537 12%, #f3d785 25%, #fff2bd 31%, #b98428 46%, #e0b550 63%, #fff0a5 76%, #c38f2e 90%, #a36c1f); color: #231a0c; text-shadow: 0 1px 0 #fff1b77a; box-shadow: inset 0 1px 0 #fff7cf, inset 0 -2px 0 #6f4819, inset 0 0 12px #ffedab70, 0 0 16px #d4a74545; }
+.landing-shell .quick-access-trigger::before { left: -55%; width: 30%; opacity: .6; background: linear-gradient(90deg, transparent, #fffbea99, transparent); animation: gold-access-shimmer 5.5s ease-in-out infinite; }
+.landing-shell .quick-access-trigger::after { height: 2px; background: linear-gradient(90deg, transparent, #fff8d6, transparent); }
+.landing-shell .quick-access-trigger > span { color: #34230e; }
+.landing-shell .quick-access-trigger:hover, .landing-shell .quick-access-trigger[aria-expanded="true"] { background: linear-gradient(115deg, #bc8b31, #ffe59c 25%, #fff9d5 32%, #d5a440 48%, #f4d57b 70%, #b17c25); border-color: #fff0b2; color: #231a0c; }
+.landing-shell .quick-access-trigger:not(:disabled):hover::before { animation: gold-access-shimmer 2s ease-in-out infinite; }
+.blockchain-icon { display: block; width: 40px; height: 40px; flex: none; }
+.quick-access-trigger .blockchain-icon { width: 32px; height: 32px; }
+.quick-access-category > summary { gap: 12px; }
+.quick-access-category > summary > .category-icon { display: grid; place-items: center; width: 46px; height: 46px; flex: 0 0 46px; border-radius: 10px; background: radial-gradient(circle, color-mix(in srgb, var(--category-color) 16%, transparent), transparent 75%); filter: drop-shadow(0 0 4px color-mix(in srgb, var(--category-color) 24%, transparent)); transition: filter .2s ease, transform .2s ease; }
+.blockchain-icon-frame { stroke-opacity: .65; }
+.quick-access-category > summary:hover .category-icon, .quick-access-category[open] .category-icon { filter: drop-shadow(0 0 7px color-mix(in srgb, var(--category-color) 50%, transparent)); transform: scale(1.06); }
+.blockchain-icon-rotor { transform-origin: 24px 23px; transition: transform .6s ease; }
+.quick-access-category > summary:hover .blockchain-icon-rotor, .quick-access-category[open] .blockchain-icon-rotor { transform: rotate(60deg); }
+@keyframes gold-access-shimmer { 0%, 65% { transform: translateX(0) rotate(18deg); } 90%, 100% { transform: translateX(650%) rotate(18deg); } }
+@media (max-width: 600px) { .quick-access-trigger .blockchain-icon { width: 26px; height: 26px; } }
+@media (prefers-reduced-motion: reduce) {
+  .landing-shell .quick-access-trigger::before, .landing-shell .quick-access-trigger:not(:disabled):hover::before { animation: none; opacity: 0; }
+  .quick-access-category > summary .category-icon, .blockchain-icon-rotor { transition: none; transform: none; }
+}
+html[data-motion="reduced"] .landing-shell .quick-access-trigger::before { animation: none; opacity: 0; }
+html[data-motion="reduced"] .quick-access-category > summary .category-icon, html[data-motion="reduced"] .blockchain-icon-rotor { transition: none; transform: none; }

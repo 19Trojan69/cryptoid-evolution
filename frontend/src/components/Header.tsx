@@ -1,6 +1,7 @@
 import { useLocale } from "../i18n";
 import type { User } from "../types/pi.ts";
 import { Link } from "react-router-dom";
+import BlockchainIcon from "./BlockchainIcon";
 
 interface HeaderProps {
   onSignIn: () => void;
@@ -21,7 +22,7 @@ const Header = ({ user, serviceRank, onSignIn, onSignOut, onSendTestNotification
   const { t } = useLocale();
   return (
     <header className={`site-header${onOpenQuickAccess ? " header-with-quick-access" : ""}`}>
-      {onOpenQuickAccess && <button className="button button-secondary quick-access-trigger" type="button" onClick={onOpenQuickAccess} aria-expanded={quickAccessOpen} aria-controls="quick-access-menu" aria-haspopup="dialog"><span aria-hidden="true">☰</span><b>{t("Quick access")}</b></button>}
+      {onOpenQuickAccess && <button className="button button-secondary quick-access-trigger" type="button" onClick={onOpenQuickAccess} aria-expanded={quickAccessOpen} aria-controls="quick-access-menu" aria-haspopup="dialog"><span aria-hidden="true"><BlockchainIcon kind="network" /></span><b>{t("Quick access")}</b></button>}
       <a className="brand-mark" href="/" aria-label="Cryptoid Evolution – Trojan Wolf Games"><img className="brand-wolf-logo" src="/trojan-wolf-games.webp" alt="Trojan Wolf Games" width="148" height="74" /><span className="brand-copyright" aria-label="Copyright">©</span></a>
       <div className="user-section">
         {user && onOpenAccount ? <button className="header-action header-account" type="button" onClick={onOpenAccount} aria-label={t("Account & legal")} title={`@${user.username}`}><span aria-hidden="true">◎</span><b>@{user.username}</b></button> : user ? (
