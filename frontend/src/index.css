@@ -2520,3 +2520,68 @@ html[data-motion="reduced"] .blockchain-node.active .blockchain-cube-rotor { ani
 .game-shell[data-effects-paused="true"] .hull-mini-explosion::before,
 .game-shell[data-effects-paused="true"] .hull-mini-explosion span,
 .game-shell[data-effects-paused="true"] .blockchain-node.active .blockchain-cube-rotor { animation-play-state: paused; }
+
+/* Desktop readability, including windowed Pi Sandbox sessions.
+   Touch-only devices keep the existing layout even in landscape. */
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
+  .game-hud { gap: 12px; padding: max(12px, env(safe-area-inset-top)) 24px 34px; }
+  .game-hud .hud-stat, .game-hud .score-hud { min-height: 68px; gap: 5px; padding: 6px 8px; }
+  .game-hud .hud-stat > span { font-size: 14px; letter-spacing: .04em; color: #e6f4fa; }
+  .game-hud .hud-stat strong, .game-hud .hearts-stat .hearts { font-size: 30px; text-shadow: 0 1px 2px #020b16; }
+  .game-hud .hud-stat strong small { font-size: 18px; }
+  .game-hud .score-hud .shard-line, .game-hud .score-hud .score-line { height: 26px; gap: 8px; }
+  .game-hud .score-hud b { font-size: 26px; }
+  .game-hud .score-hud small { font-size: 14px; }
+  .game-hud .hud-heart-label { height: 18px; }
+  .game-hud .hud-heart-label svg { width: 18px; height: 18px; }
+  .game-hud .home-control, .game-hud .pause-control { width: 56px; min-width: 56px; height: 56px; min-height: 56px; }
+  .game-label { z-index: 11; top: calc(max(12px, env(safe-area-inset-top)) + 74px); font-size: 16px; letter-spacing: .04em; color: #e6f4fa; pointer-events: none; }
+  .game-region-name { font-size: 19px; text-shadow: 0 1px 2px #020b16; }
+  .power-status { top: 128px; font-size: 14px; }
+  .bonus-counter { top: 162px; font-size: 16px; }
+  .game-fullscreen-control { top: max(128px, calc(env(safe-area-inset-top) + 128px)); }
+  .player-ship { width: clamp(112px, 9vw, 160px); height: clamp(112px, 9vw, 160px); }
+
+  .touch-controls { bottom: max(24px, env(safe-area-inset-bottom)); }
+  .edge-actions { gap: 10px; }
+  .edge-action { width: 64px; height: 64px; font-size: 26px; }
+  .edge-action small { font-size: 12px; }
+  .weapon-control-wrap, .weapon-slot { width: 80px; }
+  .weapon-slot { height: 80px; }
+  .weapon-cycle { width: 70px; height: 70px; }
+  .weapon-cycle .weapon-cycle-glyph { font-size: 24px; }
+  .weapon-cycle small, .weapon-cycle em { max-width: 62px; font-size: 11px; }
+  .weapon-slot-reserve { width: 72px; height: 72px; }
+  .weapon-slot-reserve .weapon-cycle { width: 62px; height: 62px; }
+  .weapon-hull-hits { font-size: 14px; }
+  .shield-control-wrap, .power-timer { width: 72px; height: 72px; }
+  .shield-active-indicator, .power-timer-face { width: 64px; height: 64px; }
+  .shield-active-indicator small, .power-timer-face small { max-width: 58px; font-size: 11px; }
+  .power-timer-face span { font-size: 24px; }
+  .weapon-wheel { grid-template-columns: repeat(3, 88px); gap: 8px; }
+  .weapon-wheel-option { width: 88px; height: 72px; grid-template-rows: 24px 18px 16px; }
+  .weapon-wheel-option b { font-size: 21px; }
+  .weapon-wheel-option span { max-width: 80px; font-size: 11px; }
+  .weapon-wheel-option small { font-size: 12px; }
+
+  .shop-modal { width: min(calc(100% - 32px), 1320px); max-height: calc(100dvh - 32px); }
+  .landing-shell:has(.shop-overlay) .wide-fullscreen-control { display: none; }
+  .landing-shell .shop-modal-body { padding: 24px; font-size: 18px; line-height: 1.45; }
+  .landing-shell .shop-tabs { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+  .landing-shell .shop-tabs button > b { font-size: 17px; white-space: normal; line-height: 1.25; }
+  .landing-shell .shop-modal :is(p, label, .text-button, .menu-return) { font-size: 16px; line-height: 1.45; }
+  .landing-shell .shop-modal :is(small, .shard-help, .card-heading, .hangar-offer > span, .hangar-offer > strong) { font-size: 15px; line-height: 1.4; }
+  .landing-shell .shop-modal :is(.button, h4, .ship-one-colors h4) { font-size: 18px; line-height: 1.35; }
+  .landing-shell .shop-modal :is(.ship-stage-strip button span, .ship-stage-strip button small, .ship-evolution-stage-info strong, .ship-evolution-stage-info em) { font-size: 15px; line-height: 1.4; }
+  .landing-shell .shop-modal .ship-one-info p { font-size: 17px; }
+  .landing-shell .reward-rank-path { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+  .landing-shell .reward-rank-path > span { min-height: 64px; padding: 12px; color: #e6f4fa; opacity: 1; background: #0b1d36; }
+  .landing-shell .reward-rank-path > span.earned { background: #6d532f4a; }
+  .landing-shell .shop-modal .reward-rank-path small { font-size: 17px; line-height: 1.35; }
+  .landing-shell .reward-blocks span { min-height: 40px; font-size: 17px; color: #c9dce9; }
+  .landing-shell .boss-sticker-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+  .landing-shell .boss-sticker { min-height: 124px; color: #c5dbe9; }
+  .landing-shell .boss-sticker img { height: 76px; }
+  .landing-shell .boss-sticker > span { font-size: 38px; opacity: .8; }
+  .landing-shell .shop-modal .boss-sticker small { font-size: 16px; }
+}
