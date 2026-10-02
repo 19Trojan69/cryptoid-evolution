@@ -16,6 +16,7 @@ import mountRewardEndpoints from "./handlers/rewards";
 import platformAPIClient from "./services/platformAPIClient";
 import mountAdminEndpoints from "./handlers/admin";
 import { restoreAdminPreview } from "./adminAccess";
+import { collectUsage } from "./handlers/usage";
 
 // We must import typedefs for ts-node-dev to pick them up when they change (even though tsc would supposedly
 // have no problem here)
@@ -43,7 +44,8 @@ export const app: express.Application = express();
 app.set("trust proxy", 1);
 
 // Log requests to the console in a compact format:
-app.use(logger("dev"));
+const skipUsage = (req: express.Request) => req.path === "/usage/collect";
+app.use(logger("dev", { skip: skipUsage }));
 
 // Vercel Functions have a read-only filesystem outside /tmp, so log to stdout there.
 const accessLogStream = process.env.VERCEL
@@ -53,6 +55,7 @@ const accessLogStream = process.env.VERCEL
 app.use(
   logger("common", {
     stream: accessLogStream,
+    skip: skipUsage,
   }),
 );
 
@@ -68,6 +71,8 @@ app.use(
 );
 
 // Handle cookies 🍪
+// Aggregate telemetry never passes through cookies, sessions or Pi auth.
+app.post("/usage/collect", collectUsage);
 app.use(cookieParser());
 
 // Use sessions:
@@ -190,6 +195,9 @@ export const start = async (listen = true): Promise<void> => {
     app.locals.orderCollection = db.collection("orders");
     app.locals.userCollection = db.collection("users");
     app.locals.adminCollection = db.collection("admin_access");
+    app.locals.usageCollection = db.collection("usage_hourly");
+    await app.locals.usageCollection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+    await app.locals.usageCollection.createIndex({ network: 1, hour: -1 });
     await app.locals.orderCollection.createIndex({ pi_payment_id: 1 }, { unique: true });
     await app.locals.orderCollection.createIndex({ payment_network: 1, created_at: -1 });
     await app.locals.userCollection.createIndex({ bestScore: -1, uid: 1 });

@@ -1,6 +1,6 @@
 # Cryptoid Evolution – Privacy Policy / Datenschutzerklärung
 
-Effective date / Stand: 30 September 2026 · Version 0.2
+Effective date / Stand: 2 October 2026 · Version 0.3
 
 ## English
 
@@ -21,6 +21,8 @@ For Pi payments, the app processes the payment identifier, Pi user identifier, p
 Technical access and error logs may include the time of access, requested route, IP address, browser or device information and error details. The app does not use third-party advertising trackers and does not sell personal data.
 
 ### 3. Purposes and legal bases
+
+The owner dashboard includes aggregate usage statistics: page openings and estimated active seconds, grouped by hour, app environment and the broad categories Pi Browser / external browser / unknown. No visitor identifiers, Pi account information, IP addresses, full user-agent strings, individual session histories or exact event timestamps are stored in this statistics collection. Contributions are added directly to shared counters; there is no event log. No analytics cookies, local-storage identifiers or device fingerprints are used. Requests omit credentials and referrers and bypass application session/authentication middleware and application access logging. Ordinary hosting/network infrastructure still necessarily handles requests and may keep technical logs separately. Statistics are used to understand overall app usage, are accessible only to the verified owner and expire after 90 days. Browser detection and durations are estimates, not unique-person counts. Hidden pages, idle time beyond 60 seconds and admin/legal pages are excluded.
 
 Data is processed to authenticate users, maintain sessions, provide the game and leaderboard, save account-based inventory, verify Pi payments, prevent duplicate or fraudulent credits, provide support, maintain security and comply with legal obligations. Depending on the context, processing is based on performance of the requested service, legitimate interests in secure and reliable operation, consent where required, and compliance with legal obligations.
 
@@ -65,6 +67,8 @@ Bei Pi-Zahlungen werden Zahlungskennung, Pi-Benutzerkennung, Produkt, Betrag, Za
 Technische Zugriffs- und Fehlerprotokolle können Zeitpunkt, aufgerufenen Pfad, IP-Adresse, Browser- oder Geräteinformationen und Fehlerdetails enthalten. Die App verwendet keine externen Werbetracker und verkauft keine personenbezogenen Daten.
 
 ### 3. Zwecke und Rechtsgrundlagen
+
+Die Eigentümerübersicht enthält zusammengefasste Nutzungszahlen: Seitenöffnungen und geschätzte aktive Sekunden, gruppiert nach Stunde, App-Umgebung und den Kategorien Pi Browser / externer Browser / unbekannt. In dieser Statistiksammlung werden keine Besucherkennungen, Pi-Kontodaten, IP-Adressen, vollständigen Browserkennungen, einzelnen Sitzungsverläufe oder exakten Ereigniszeitpunkte gespeichert. Beiträge erhöhen direkt gemeinsame Zähler; es gibt kein Ereignisprotokoll. Es werden keine Analyse-Cookies, Local-Storage-Kennungen oder Geräte-Fingerprints eingesetzt. Die Anfragen werden ohne Zugangsdaten und Referrer gesendet und umgehen die Sitzungs-/Anmeldemiddleware sowie die Zugriffsprotokollierung der Anwendung. Hosting- und Netzwerkinfrastruktur verarbeitet weiterhin technisch notwendige Anfragen und kann separate technische Protokolle führen. Die Statistik dient dem Verständnis der Gesamtnutzung, ist nur dem verifizierten Eigentümer zugänglich und wird nach 90 Tagen automatisch entfernt. Browsererkennung und Nutzungsdauer sind Näherungen, keine Zählung eindeutiger Personen. Versteckte Seiten, Leerlauf über 60 Sekunden sowie Admin-/Rechtstextseiten werden nicht gezählt.
 
 Die Datenverarbeitung dient der Anmeldung, Sitzungsverwaltung, Bereitstellung des Spiels und der Bestenliste, Speicherung kontobezogener Inhalte, Prüfung von Pi-Zahlungen, Vermeidung doppelter oder missbräuchlicher Gutschriften, Bearbeitung von Supportanfragen, Systemsicherheit und Erfüllung gesetzlicher Pflichten. Je nach Zusammenhang erfolgt die Verarbeitung zur Vertragserfüllung beziehungsweise Bereitstellung der angeforderten Leistung, aufgrund berechtigter Interessen am sicheren Betrieb, aufgrund einer Einwilligung oder zur Erfüllung rechtlicher Pflichten.
 
