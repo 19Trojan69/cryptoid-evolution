@@ -2,7 +2,7 @@ import SystemSettings, { applySavedDisplaySettings, type SettingsSection } from 
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import QuickAccessMenu, { type QuickAction } from "../components/QuickAccessMenu";
 import type { GuideTopic } from "./GameGuide";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import PiPrice from "../components/PiPrice";
 import SignIn from "../components/SignIn";
@@ -72,18 +72,19 @@ const PowerPreview = ({ offerId }: { offerId: string }) => {
 
 const Shop = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { locale, t } = useLocale();
   const piPrice = (amount: number, testnet = false) => <PiPrice amount={amount} locale={locale} testnet={testnet} />;
   const [activePanel, setActivePanel] = useState<"how" | "progress" | null>(null);
   const [systemMenuOpen, setSystemMenuOpen] = useState(false);
-  const [quickGroup, setQuickGroup] = useState<string | null>(null);
+  const [quickGroup, setQuickGroup] = useState<string | null>(() => location.state?.openQuickMenu ? "mission" : null);
   const [settingsSection, setSettingsSection] = useState<SettingsSection | undefined>();
   const [guideTopic, setGuideTopic] = useState<GuideTopic>("controls");
-  const [guideReturn, setGuideReturn] = useState<"system" | "menu">("system");
   const [quickTarget, setQuickTarget] = useState<string | null>(null);
   const closeQuickMenu = useCallback(() => setQuickGroup(null), []);
   const [shopView, setShopView] = useState<"hangar" | "shop" | "weapons" | "powers" | "progress" | "rewards" | "leaders" | null>(null);
   const [termsOpen, setTermsOpen] = useState(false);
+  const returnToMenu = () => { setShopView(null); setSystemMenuOpen(false); setActivePanel(null); setTermsOpen(false); setQuickTarget(null); setQuickGroup("mission"); };
   const [leaders, setLeaders] = useState<Leader[]>([]);
   const [leadersStatus, setLeadersStatus] = useState<"loading" | "ready" | "error">("loading");
   const [personalBest, setPersonalBest] = useState<number | null>(null);
@@ -365,7 +366,7 @@ const Shop = () => {
     closeQuickMenu();
     setQuickTarget(null);
     const guides: Partial<Record<QuickAction, GuideTopic>> = { overview: "overview", visuals: "visuals", "guide-controls": "controls", route: "route", combat: "survival", boosts: "boosts", earnings: "earnings", collection: "collection" };
-    if (guides[action]) { setGuideTopic(guides[action]); setGuideReturn("menu"); setActivePanel("how"); return; }
+    if (guides[action]) { setGuideTopic(guides[action]); setActivePanel("how"); return; }
     const settings: Partial<Record<QuickAction, SettingsSection>> = { language: "language", controls: "controls", audio: "audio", display: "display", vibration: "display" };
     if (settings[action]) { setSettingsSection(settings[action]); setSystemMenuOpen(true); return; }
     const fleetViews: Partial<Record<QuickAction, NonNullable<typeof shopView>>> = { hangar: "hangar", shop: "shop", upgrades: "shop", colors: "hangar", weapons: "weapons", armor: "weapons", powers: "powers", progress: "progress", rewards: "rewards", leaders: "leaders", ranks: "rewards", bosses: "rewards", medals: "rewards", chains: "rewards" };
@@ -398,7 +399,7 @@ const Shop = () => {
         onSignOut={() => { setInventory(null); void signOut(); }}
         onSendTestNotification={onSendTestNotification}
         isLoading={isAuthLoading}
-        onOpenQuickAccess={() => setQuickGroup("mission")}
+        onOpenQuickAccess={() => setQuickGroup(current => current === null ? "mission" : null)}
         onOpenAccount={() => setQuickGroup("account")}
         quickAccessOpen={quickGroup !== null}
       />
@@ -410,13 +411,13 @@ const Shop = () => {
         <button className="home-music-toggle" type="button" data-state={musicEnabled ? "on" : "off"} aria-pressed={musicEnabled} aria-label={musicLabel} title={musicLabel} onClick={toggleHomeMusic}><span className="home-music-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" />{musicEnabled ? <><path d="M16 9a4 4 0 0 1 0 6" /><path d="M19 6a8 8 0 0 1 0 12" /></> : <path d="m17 9 5 6m0-6-5 6" />}</svg></span></button>
         <Starfield sector={1} player={{ x: .5, y: .8 }} paused={false} />
         <div className="home-deep-space" aria-hidden="true"><span className="home-far-planet home-far-planet-gas" /><span className="home-far-planet home-far-planet-saturn" /><span className="home-far-planet home-far-moon" /><span className="home-black-hole"><i /></span></div>
+        <HomeCombatPreview defender={{ sprite: selected.skin.sprite, color: selected.color.id, stage: selectedStage }} paused={Boolean(shopView || systemMenuOpen || activePanel || termsOpen || quickGroup || showSignIn)} />
         <div className="hero-copy">
           <p className="eyebrow"><span className="signal-dot" /> {t("Mission control online")}</p>
           <h1><span className="home-title-word">Cryptoid</span><span className="home-title-evolution">Evolution</span></h1>
           <p className="hero-tagline">Defend Earth. <span>Evolve your power.</span></p>
           <p className="hero-description">{t('Build your streak, master the grid, and become the force Earth needs.')}</p>
           {adminMode && <div className="admin-level-picker" aria-label="Admin-Teststart"><label>Level <select value={Math.floor((startSector - 1) / 10) + 1} onChange={event => setStartSector((Number(event.target.value) - 1) * 10 + (startSector - 1) % 10 + 1)}>{Array.from({ length: MAX_DIFFICULTY_LEVEL / 10 }, (_, index) => <option key={index} value={index + 1}>{index + 1}</option>)}</select></label><label>Start bei <select value={(startSector - 1) % 10 + 1} onChange={event => setStartSector((Math.floor((startSector - 1) / 10) * 10) + Number(event.target.value))}>{Array.from({ length: 9 }, (_, index) => <option key={index} value={index + 1}>Block {index + 1}</option>)}<option value="10">Boss</option></select></label></div>}
-          <HomeCombatPreview defender={{ sprite: selected.skin.sprite, color: selected.color.id, stage: selectedStage }} />
           <div className="hero-actions">
             <div className="home-launch">
               <button className="button button-primary home-play-button" type="button" onClick={enterGame}>{t("Play")} <span className="button-glyph" aria-hidden="true">→</span></button>
@@ -437,16 +438,17 @@ const Shop = () => {
 
       {systemMenuOpen && <div className="system-menu-overlay" role="dialog" aria-modal="true" aria-labelledby="system-menu-title">
         <section className="system-menu-panel">
+          <button className="text-button menu-return" type="button" onClick={returnToMenu}>← {t("Back to quick access")}</button>
           <button className="close-button" type="button" onClick={() => setSystemMenuOpen(false)} aria-label={t('Close menu')}>×</button>
           <p className="eyebrow">{t('SYSTEM / SETTINGS')}</p>
-          <div className="system-menu-title-row"><h2 id="system-menu-title">{t('System menu')}</h2><button className="system-guide-link" type="button" onClick={() => { setSystemMenuOpen(false); setGuideTopic("controls"); setGuideReturn("system"); setActivePanel('how'); }}><span aria-hidden="true">?</span>{t('Game guide')}</button></div>
+          <div className="system-menu-title-row"><h2 id="system-menu-title">{t('System menu')}</h2><button className="system-guide-link" type="button" onClick={() => { setSystemMenuOpen(false); setGuideTopic("controls"); setActivePanel('how'); }}><span aria-hidden="true">?</span>{t('Game guide')}</button></div>
           <SystemSettings idPrefix="home" initialSection={settingsSection} musicVolume={musicVolume} effectsVolume={effectsVolume} changeMusicVolume={changeMusicVolume} changeEffectsVolume={changeEffectsVolume} />
         </section>
       </div>}
 
       {shopView && <div className="shop-overlay" role="dialog" aria-modal="true" aria-label={t('Shop and hangar')}>
         <div className="shop-modal">
-        <div className="shop-modal-header"><strong>{t(shopTabs.find(([view]) => view === shopView)?.[1] ?? "Shop / Hangar")}</strong><button className="close-button" type="button" onClick={() => setShopView(null)} aria-label={t('Close shop')}>×</button></div>
+        <div className="shop-modal-header"><button className="text-button menu-return" type="button" onClick={returnToMenu}>← {t("Back to quick access")}</button><strong>{t(shopTabs.find(([view]) => view === shopView)?.[1] ?? "Shop / Hangar")}</strong><button className="close-button" type="button" onClick={() => setShopView(null)} aria-label={t('Close shop')}>×</button></div>
           <nav className="shop-tabs" aria-label={t('Shop sections')}>
             {shopTabs.map(([view, label, glyph]) => <button className={`shop-tab shop-tab-${view}`} key={view} type="button" aria-pressed={shopView === view} onClick={() => { setQuickTarget(null); if (view === "leaders") setLeadersStatus("loading"); if (view === "hangar") { setPreviewSkin(selected.skin); setPreviewColor(selected.color); } setShopView(view); }}><span aria-hidden="true">{glyph}</span><b>{t(label)}</b></button>)}
           </nav>
@@ -569,9 +571,10 @@ const Shop = () => {
         </div>
       </div>}
 
-      {activePanel === "how" && <GameGuide initialTopic={guideTopic} backLabel={guideReturn === "menu" ? "Back to quick access" : "Back to system"} onClose={() => { setActivePanel(null); if (guideReturn === "menu") setQuickGroup("info"); else setSystemMenuOpen(true); }} />}
+      {activePanel === "how" && <GameGuide initialTopic={guideTopic} backLabel="Back to quick access" onClose={returnToMenu} />}
       {activePanel === "progress" && <div className="info-panel" role="dialog" aria-modal="true" aria-labelledby="info-title">
         <div className="info-panel-content">
+          <button className="text-button menu-return" type="button" onClick={returnToMenu}>← {t("Back to quick access")}</button>
           <button className="close-button" type="button" onClick={() => setActivePanel(null)} aria-label={t('Close')}>×</button>
           <p className="eyebrow">{t("MISSION LOG")}</p>
           <h2 id="info-title">{t("Your Progress")}</h2>
@@ -580,8 +583,8 @@ const Shop = () => {
         </div>
       </div>}
 
-      {showSignIn && <SignIn onSignIn={signIn} onModalClose={closeSignIn} disabled={isAuthLoading} />}
-      {termsOpen && <TermsDialog onClose={() => setTermsOpen(false)} />}
+      {showSignIn && <SignIn onSignIn={signIn} onModalClose={closeSignIn} onBack={() => { closeSignIn(); returnToMenu(); }} disabled={isAuthLoading} />}
+      {termsOpen && <TermsDialog onClose={() => setTermsOpen(false)} onBack={returnToMenu} />}
     </main>
   );
 };
