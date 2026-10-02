@@ -3,13 +3,15 @@ interface SignInProps {
   onSignIn: () => void;
   onModalClose: () => void;
   disabled?: boolean;
+  onBack?: () => void;
 }
 
-const SignIn = ({ onSignIn, onModalClose, disabled }: SignInProps) => {
+const SignIn = ({ onSignIn, onModalClose, disabled, onBack }: SignInProps) => {
   const { t } = useLocale();
   return (
     <div className="signin-overlay">
       <div className="signin-modal" role="dialog" aria-modal="true" aria-labelledby="signin-title">
+        {onBack && <button className="text-button menu-return" type="button" onClick={onBack}>← {t("Back to quick access")}</button>}
         <button className="close-button" onClick={onModalClose} aria-label={t("Close")}>×</button>
         <p className="eyebrow">{t('SECURE ACCESS')}</p>
         <h2 id="signin-title">{t('Connect your Pi wallet')}</h2>

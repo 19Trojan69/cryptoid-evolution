@@ -2405,3 +2405,45 @@ html[data-motion="reduced"] .landing-shell .hero-actions .home-play-button::befo
 .quick-access-items button:hover > span { --letter-metal: var(--category-color); }
 @media (prefers-reduced-motion: reduce) { .quick-access-category > summary::before { animation: none; opacity: 0; } }
 html[data-motion="reduced"] .quick-access-category > summary::before { animation: none; opacity: 0; }
+
+/* Keep launch visually primary and navigation a quieter secondary control. */
+.landing-shell .quick-access-trigger { box-shadow: inset 0 1px #fff7cf, inset 0 -2px #6f4819, 0 0 9px #d4a74526; }
+.landing-shell .quick-access-trigger::before { opacity: .3; animation-duration: 8s; }
+.quick-access-category > summary::before { animation-duration: 12s; }
+.landing-shell .hero-actions .home-play-button { min-width: 190px; min-height: 66px; box-shadow: inset 0 2px #fff7cf, inset 0 -3px #6f4819, 0 0 24px #d4a74566, 0 8px 22px #080e1a70; }
+.landing-shell .home-combat-cinematic { position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; min-height: 0; margin: 0; overflow: hidden; background: none; }
+.home-combat-cinematic::before { display: none; }
+.landing-shell .hero-copy { pointer-events: none; }
+.landing-shell .hero-copy button, .landing-shell .hero-copy select { pointer-events: auto; }
+.landing-shell .hero-copy > :not(.hero-actions) { position: relative; z-index: 4; }
+.landing-shell .hero-copy .hero-actions { z-index: 5; }
+.home-cinematic-ship { position: absolute; top: 0; left: 0; width: clamp(105px, 21vw, 178px); aspect-ratio: 1; opacity: 0; will-change: transform; filter: drop-shadow(0 5px 5px #0009); }
+.home-cinematic-ship-2 { width: clamp(118px, 24vw, 200px); }
+.home-cinematic-body { position: absolute; inset: 0; transform: perspective(400px) rotateX(12deg) rotateY(var(--flight-bank, 0deg)); transform-style: preserve-3d; }
+.home-cinematic-underside, .home-cinematic-reflection { position: absolute; inset: 0; display: block; background-size: 100% 100%; background-repeat: no-repeat; }
+.home-cinematic-underside { transform: translate(2px, 5px); filter: brightness(.3); }
+.home-cinematic-reflection { z-index: 3; opacity: var(--hull-light, 0); filter: brightness(2.6) saturate(.4); }
+.home-cinematic-body .home-combat-hull { filter: contrast(1.08) drop-shadow(0 -1px 1px #d2f3ff40); }
+.home-cinematic-body .home-combat-engine { animation: none; scale: 1 var(--engine-strength, 1); }
+.home-cinematic-shot { position: absolute; z-index: 3; top: 0; left: 0; width: 3px; height: 22px; margin: -11px 0 0 -1.5px; border-radius: 3px; opacity: 0; background: linear-gradient(transparent, var(--shot-color) 35%, #fff 85%); box-shadow: 0 0 6px var(--shot-color); will-change: transform; }
+.home-cinematic-explosion { z-index: 4; }
+.home-cinematic-fragment { position: absolute; inset: 0; display: block; clip-path: polygon(50% 50%, 0 0, 48% 0); animation: home-fragment-flight 1.3s ease-out both; }
+.home-cinematic-fragment > i { position: absolute; inset: 0; display: block; background-size: 100% 100%; transform: rotate(var(--fragment-angle)); }
+.home-cinematic-fragment:nth-of-type(2) { clip-path: polygon(50% 50%, 48% 0, 100% 0); }
+.home-cinematic-fragment:nth-of-type(3) { clip-path: polygon(50% 50%, 100% 0, 100% 100%); }
+.home-cinematic-fragment:nth-of-type(4) { clip-path: polygon(50% 50%, 100% 100%, 50% 100%); }
+.home-cinematic-fragment:nth-of-type(5) { clip-path: polygon(50% 50%, 50% 100%, 0 100%); }
+.home-cinematic-fragment:nth-of-type(6) { clip-path: polygon(50% 50%, 0 100%, 0 0); }
+@keyframes home-fragment-flight { from { opacity: 1; transform: translate(0, 0); } to { opacity: 0; transform: translate(var(--fragment-x), var(--fragment-y)) rotate(var(--fragment-spin)); } }
+.landing-shell .home-music-toggle { top: auto; bottom: max(16px, env(safe-area-inset-bottom)); right: clamp(20px, 5vw, 100px); width: 32px; height: 32px; min-width: 32px; box-shadow: none; opacity: .8; }
+.home-music-toggle::before { display: none; }
+.home-music-glyph { width: 26px; height: 26px; background: none; box-shadow: none; }
+.home-music-glyph svg { width: 18px; height: 18px; }
+.landing-shell .home-footer { padding-right: 44px; }
+.quick-access-panel { animation: none; }
+.menu-return { min-height: 44px; font-size: 14px; color: #d4eaf0; text-align: left; }
+.shop-modal-header { flex-wrap: wrap; gap: 4px 14px; padding-block: 5px; }
+.shop-modal-header .menu-return { font-size: 13px; letter-spacing: 0; }
+.system-menu-panel > .menu-return, .info-panel-content > .menu-return, .terms-dialog > .menu-return { margin-bottom: 12px; padding-right: 42px; }
+@media (prefers-reduced-motion: reduce) { .home-cinematic-fragment { animation: none; opacity: 0; } }
+html[data-motion="reduced"] .home-cinematic-fragment { animation: none; opacity: 0; }

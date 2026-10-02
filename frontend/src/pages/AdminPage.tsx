@@ -318,6 +318,7 @@ export default function AdminPage() {
           <span className="admin-kicker">CRYPTOID EVOLUTION</span>
           <h1>Admin-Zentrale</h1>
         </div>
+        <Link className="admin-button" to="/" state={{ openQuickMenu: true }}>← Schnellzugriff</Link>
         {allowed ? (
           <button className="admin-button" onClick={leaveAdmin} disabled={busy}>
             Zum normalen Spiel
