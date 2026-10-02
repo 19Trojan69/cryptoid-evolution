@@ -3,8 +3,10 @@ import { awardBlock, awardBonusMedal, awardBossSticker, awardChain, emptyRewardP
 import { isAdminMode } from "../adminAccess";
 import { rewardNetwork } from "../rewardNetwork";
 import "../types/session";
+import { missionAfter, publicSave, readSnapshot } from "../playerSave";
+import { validRunScore } from "../leaderboardRules";
 
-type RewardEvent = { runId: string; kind: "block" | "chain" | "boss" | "bonus"; level: number; stage: number; hits?: number };
+type RewardEvent = { runId: string; kind: "block" | "chain" | "boss" | "bonus"; level: number; stage: number; hits?: number; save?: unknown };
 
 export default function mountRewardEndpoints(router: Router) {
   router.get("/me", async (req, res) => {
@@ -30,29 +32,48 @@ export default function mountRewardEndpoints(router: Router) {
       (event.kind === "bonus" && (!Number.isInteger(event.hits) || event.hits! < 0 || event.hits! > 12))) return res.status(400).json({ error: "Invalid reward event" });
 
     const key = event.kind === "block" ? `block:${event.stage}` : `${event.kind}:${event.level}`;
+    const snapshot = event.save === undefined ? null : readSnapshot(event.save);
+    if (event.save !== undefined && (!snapshot || !validRunScore(snapshot.score - (run.scoreBase || 0), run.startedAt, Date.now()) || snapshot.shards < (run.shardsBase || 0) || snapshot.shards - (run.shardsBase || 0) > 100 + (Date.now() - run.startedAt) / 1000 * 100)) return res.status(400).json({ error: "invalid_save" });
+    if (snapshot && run.unlockedWeaponLevels && !run.unlockedWeaponLevels.includes(snapshot.paidWeaponLevel)) return res.status(400).json({ error: "weapon_not_owned" });
     try {
       const users = req.app.locals.userCollection;
       // The run-scoped event key and version keep retries and concurrent updates idempotent.
       for (let attempt = 0; attempt < 5; attempt++) {
-        const user = await users.findOne({ uid }, { projection: { [`rewardsByNetwork.${network}`]: 1, [`rewardVersion.${network}`]: 1, [`rewardRunId.${network}`]: 1, [`rewardEventKeys.${network}`]: 1 } });
+        const playerKey = `playerByNetwork.${network}`;
+        const user = await users.findOne({ uid }, { projection: { [`rewardsByNetwork.${network}`]: 1, [`rewardVersion.${network}`]: 1, [`rewardRunId.${network}`]: 1, [`rewardEventKeys.${network}`]: 1, [playerKey]: 1 } });
         if (user?.rewardRunId?.[network] !== run.id) return res.status(403).json({ error: "Run has been replaced" });
         const stored = user.rewardsByNetwork?.[network];
         const progress = stored ? readRewardProgress(JSON.stringify(stored)) : emptyRewardProgress();
         const completed: string[] = Array.isArray(user.rewardEventKeys?.[network]) ? user.rewardEventKeys[network] : [];
-        if (completed.includes(key)) return res.json({ progress, awarded: false });
+        const player = user.playerByNetwork?.[network];
+        if (snapshot && player?.activeRunId !== run.id) return res.status(409).json({ error: "run_replaced" });
+        if (completed.includes(key)) return res.json({ progress, awarded: false, ...(player ? { save: publicSave(player) } : {}) });
         const prerequisite = event.kind === "block" ? event.stage % 10 === 1 ? event.level > 1 ? `bonus:${event.level - 1}` : null : `block:${event.stage - 1}`
           : event.kind === "chain" ? `block:${event.stage}` : event.kind === "boss" ? `chain:${event.level}` : `boss:${event.level}`;
         if (prerequisite && !completed.includes(prerequisite)) return res.status(409).json({ error: "Finish the previous stage first" });
-        const next = event.kind === "boss"
+        let next = event.kind === "boss"
           ? reachLevel(awardBossSticker(progress, event.level).progress, Math.min(500, event.stage + 1))
           : event.kind === "chain" ? awardChain(progress, event.level).progress
           : event.kind === "block" ? awardBlock(progress, event.level, event.stage % 10 || 10)
           : awardBonusMedal(progress, event.level, event.hits!).progress;
+        // A saved ninth block opens the boss. Persist its chain prerequisite
+        // in the same write so another device can resume immediately.
+        const closesChain = !!snapshot && event.kind === "block" && event.stage % 10 === 9;
+        if (closesChain) next = awardChain(next, event.level).progress;
         const version = user.rewardVersion?.[network] as number | undefined;
+        const previous = player?.mission?.snapshot;
+        if (snapshot && (snapshot.shards < (previous?.shards || 0) || snapshot.score < (previous?.score || 0) || snapshot.destroyed < (previous?.destroyed || 0))) return res.status(400).json({ error: "save_regressed" });
+        const deltaShards = snapshot ? snapshot.shards - (player.creditedShards ?? previous?.shards ?? 0) : 0;
+        const deltaDestroyed = snapshot ? snapshot.destroyed - (player.creditedDestroyed ?? previous?.destroyed ?? 0) : 0;
+        if (deltaShards < 0 || deltaDestroyed < 0) return res.status(400).json({ error: "save_regressed" });
+        const mission = snapshot ? missionAfter(event, snapshot) : null;
         const result = await users.updateOne({ uid, [`rewardRunId.${network}`]: run.id, [`rewardEventKeys.${network}`]: { $ne: key },
-          [`rewardVersion.${network}`]: version === undefined ? { $exists: false } : version },
-        { $set: { [`rewardsByNetwork.${network}`]: next, [`rewardVersion.${network}`]: (version ?? 0) + 1 }, $addToSet: { [`rewardEventKeys.${network}`]: key } });
-        if (result.modifiedCount) return res.json({ network, progress: next, awarded: true, rank: rewardRank(next) });
+          [`rewardVersion.${network}`]: version === undefined ? { $exists: false } : version,
+          ...(snapshot ? { [`${playerKey}.activeRunId`]: run.id, [`${playerKey}.version`]: player.version } : {}) },
+        { $set: { [`rewardsByNetwork.${network}`]: next, [`rewardVersion.${network}`]: (version ?? 0) + 1,
+          ...(snapshot ? { [`${playerKey}.mission`]: mission, [`${playerKey}.creditedShards`]: snapshot.shards, [`${playerKey}.creditedDestroyed`]: snapshot.destroyed, [`${playerKey}.updatedAt`]: new Date().toISOString() } : {}) },
+          ...(snapshot ? { $max: { [`${playerKey}.highestSector`]: mission?.sector || event.stage }, $inc: { [`${playerKey}.balance`]: deltaShards, [`${playerKey}.totalShardsEarned`]: deltaShards, [`${playerKey}.totalDestroyed`]: deltaDestroyed, [`${playerKey}.version`]: 1 } } : {}), $addToSet: { [`rewardEventKeys.${network}`]: closesChain ? { $each: [key, `chain:${event.level}`] } : key } });
+        if (result.modifiedCount) return res.json({ network, progress: next, awarded: true, rank: rewardRank(next), ...(snapshot ? { save: publicSave({ ...player, balance: player.balance + deltaShards, totalShardsEarned: (player.totalShardsEarned || 0) + deltaShards, totalDestroyed: (player.totalDestroyed || 0) + deltaDestroyed, highestSector: Math.max(player.highestSector || 1, mission?.sector || event.stage), version: player.version + 1, mission }) } : {}) });
       }
       return res.status(409).json({ error: "Reward update busy; retry" });
     } catch { return res.status(503).json({ error: "Could not save reward" }); }

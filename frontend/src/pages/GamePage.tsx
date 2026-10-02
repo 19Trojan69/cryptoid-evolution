@@ -27,6 +27,7 @@ import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVol
 import { MusicPlayer, takeHandoffGameMusic } from "./musicPlayback";
 import SystemSettings, { applySavedDisplaySettings } from "./SystemSettings";
 import { axiosClient } from "../lib/axiosClient";
+import { accountSelection, createSaveQueue, loadAccountSave, localInventory, mutateAccountInventory, retrySave, snapshotOf, type AccountSave, type Snapshot } from "../lib/accountSave";
 import axios from "axios";
 import { fireInterval, makeVolley } from "./playerCombat";
 import { activateCollectedPower } from "./collectedPower";
@@ -369,7 +370,15 @@ const GamePage = () => {
   const [startError, setStartError] = useState("");
   const [audioNeedsTap, setAudioNeedsTap] = useState(false);
   const [homePrompt, setHomePrompt] = useState(false);
-  const [shipSelection] = useState(selectedShip);
+  const [shipSelection, setShipSelection] = useState(selectedShip);
+  const [resumeOffer, setResumeOffer] = useState<AccountSave | null>(null);
+  const [saveNotice, setSaveNotice] = useState("");
+  const [accountRun, setAccountRun] = useState(false);
+  const [recoveryError, setRecoveryError] = useState(false);
+  const saveChoiceRef = useRef<"new" | "resume" | null>(null);
+  const startKeyRef = useRef(crypto.randomUUID());
+  const saveQueueRef = useRef<ReturnType<typeof createSaveQueue> | null>(null);
+  const saveQueueReadyRef = useRef(false);
   const [shipStage, setShipStage] = useState<ShipStage>(1);
   const shipVisualOffset = useShipVisualOffset(shipSelection.skin.sprite, shipStage);
   const shipStageRef = useRef<ShipStage>(1);
@@ -405,15 +414,36 @@ const GamePage = () => {
     if (startRequestRef.current || stateRef.current.status !== "loading") return;
     startRequestRef.current = true;
     try {
-      if (pendingScoreRef.current) await pendingScoreRef.current;
+      if (pendingScoreRef.current) { try { await pendingScoreRef.current; } catch { /* The durable outbox is recovered below. */ } pendingScoreRef.current = null; }
       const adminRequested = sessionStorage.getItem(ADMIN_MODE_KEY) === "1";
       const requestedSector = adminRequested ? Number(sessionStorage.getItem(ADMIN_START_SECTOR_KEY) || 1) : 1;
       const requestedStage = adminRequested ? Number(sessionStorage.getItem(ADMIN_SHIP_STAGE_KEY) || 1) : 1;
       const savedTest = adminRequested ? JSON.parse(sessionStorage.getItem(ADMIN_TEST_CONFIG_KEY) || "null") : null;
-      const { data } = await axiosClient.post<{ weaponLevel: number; unlockedWeaponLevels: number[]; ownedShipUpgrades: string[]; powerUp: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; armorBonus: number; scoreRunId: string | null; startSector: number; shipStage?: ShipStage; startPhase?: "normal" | "boss" | "bonus"; adminPreview: boolean }>(savedTest ? "/admin/start" : "/hangar/start", savedTest || { sector: requestedSector, shipStage: requestedStage });
+      let profile: AccountSave | null = null;
+      if (!adminRequested) {
+        if (!saveQueueReadyRef.current) {
+          const me = await axiosClient.get<{ user: { uid: string } }>("/user/me");
+          saveQueueRef.current ??= createSaveQueue(me.data.user.uid);
+          try { await saveQueueRef.current.recover(); }
+          catch {
+            setRecoveryError(true); setStartError("Eine vorgemerkte Speicherung konnte nicht bestätigt werden. Bitte erneut übertragen oder ausdrücklich beim zuletzt bestätigten Kontostand bleiben.");
+            startRequestRef.current = false; return;
+          }
+          saveQueueReadyRef.current = true;
+        }
+        profile = await loadAccountSave();
+        const legacy = localInventory();
+        const hasLegacy = legacy.balance > 0 || Object.keys(legacy.fleet).length > 1 || Object.keys(legacy.fleet["grey-scout"] || {}).some(c => c !== "grey");
+        if (!saveChoiceRef.current && (profile.mission || profile.version === 0 && hasLegacy)) {
+          setResumeOffer(profile); startRequestRef.current = false; return;
+        }
+        saveChoiceRef.current ??= "new";
+      }
+      const { data } = await retrySave(() => axiosClient.post<{ weaponLevel: number; unlockedWeaponLevels: number[]; ownedShipUpgrades: string[]; powerUp: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; armorBonus: number; scoreRunId: string | null; startSector: number; shipStage?: ShipStage; startPhase?: "normal" | "boss" | "bonus"; adminPreview: boolean; checkpoint?: Snapshot | null; profile?: AccountSave }>(savedTest ? "/admin/start" : "/hangar/start", savedTest || { sector: requestedSector, shipStage: requestedStage, ...(profile ? { action: saveChoiceRef.current, version: profile.version, startKey: startKeyRef.current } : {}) }));
       if (adminRequested && !data.adminPreview) throw new Error("Admin preview session expired");
       adminRunRef.current = data.adminPreview === true;
       scoreRunRef.current = data.scoreRunId;
+      setAccountRun(!adminRunRef.current && Boolean(data.scoreRunId));
       rewardProgressRef.current = emptyRewardProgress();
       if (!adminRunRef.current && data.scoreRunId) {
         try {
@@ -421,7 +451,7 @@ const GamePage = () => {
           rewardProgressRef.current = rewards.data.progress;
         } catch (error) { console.warn("Could not load account rewards", error); }
       }
-      if (adminRunRef.current) {
+      if (adminRunRef.current || data.checkpoint) {
         stateRef.current.sector = data.startSector;
         stateRef.current.section = data.startSector;
         stateRef.current.chainBlocks = (data.startSector - 1) % 10;
@@ -434,7 +464,9 @@ const GamePage = () => {
           stateRef.current.boss = createSectorBoss(data.startSector, fieldRef.current?.clientWidth || 390, visibleTopRef.current, fieldRef.current?.clientHeight || 700);
         }
       }
-      shipStageRef.current = adminRunRef.current ? data.shipStage ?? 1 : ownedShipStage(shipSelection.skin.sprite, data.ownedShipUpgrades);
+      const selected = !adminRunRef.current && data.profile ? accountSelection(data.profile) : shipSelection;
+      setShipSelection(selected);
+      shipStageRef.current = adminRunRef.current ? data.shipStage ?? 1 : ownedShipStage(selected.skin.sprite, data.ownedShipUpgrades);
       setShipStage(shipStageRef.current);
       stateRef.current.projectileGuard = projectileGuardForStage(shipStageRef.current);
       const armorBonus = Number.isInteger(data.armorBonus) ? Math.max(0, Math.min(3, data.armorBonus)) : 0;
@@ -458,6 +490,13 @@ const GamePage = () => {
       }
       stateRef.current.weaponCap = Math.max(...stateRef.current.unlockedWeapons);
       if (data.powerUp) stateRef.current.pendingStartPower = data.powerUp;
+      if (!adminRunRef.current && data.checkpoint) {
+        Object.assign(stateRef.current, data.checkpoint);
+        stateRef.current.hearts = Math.min(stateRef.current.maxHearts, data.checkpoint.hearts);
+        stateRef.current.weaponTimers = data.checkpoint.weaponTimers.map((timer, level) => stateRef.current.unlockedWeapons.includes(level) ? timer : 0);
+        syncSelectedWeapon(stateRef.current);
+        setSaveNotice("Kontospielstand geladen · letzter abgeschlossener Abschnitt.");
+      }
     } catch (error) {
       console.error("Could not load paid loadout", error);
       if (sessionStorage.getItem(ADMIN_MODE_KEY) === "1") {
@@ -468,6 +507,11 @@ const GamePage = () => {
         startRequestRef.current = false;
         return;
       }
+      const status = axios.isAxiosError(error) ? error.response?.status : undefined;
+      if (status === 409) { saveChoiceRef.current = null; startKeyRef.current = crypto.randomUUID(); }
+      setStartError(status === 409 ? "Der Kontospielstand wurde inzwischen geändert. Bitte erneut laden und die Auswahl bestätigen." : "Kontospielstand nicht erreichbar oder Anmeldung abgelaufen. Bitte erneut versuchen oder auf der Startseite anmelden. Es wird kein lokaler Kontostand überschrieben.");
+      startRequestRef.current = false;
+      return;
     }
     stateRef.current.status = "playing";
     setGame({ ...stateRef.current });
@@ -516,7 +560,8 @@ const GamePage = () => {
     if (!runId) return;
     scoreRunRef.current = null;
     setScoreSync("saving");
-    pendingScoreRef.current = pendingRewardsRef.current.then(() => axiosClient.post("/leaderboard/score", { runId, score: state.score }))
+    const body = { runId, score: state.score, finished: state.hearts <= 0 || state.sector === 500 && state.encounter === "bonus" && state.phase === "SECTOR_CLEAR", save: snapshotOf(state) };
+    pendingScoreRef.current = (saveQueueRef.current ? saveQueueRef.current.enqueue({ path: "/leaderboard/score", body }) : retrySave(() => axiosClient.post("/leaderboard/score", body)))
       .then(() => setScoreSync("saved"))
       .catch(() => setScoreSync("failed"));
   };
@@ -599,7 +644,13 @@ const GamePage = () => {
     const result = award(rewardProgressRef.current);
     rewardProgressRef.current = result.progress;
     const runId = scoreRunRef.current;
-    if (runId) pendingRewardsRef.current = pendingRewardsRef.current.then(() => axiosClient.post("/rewards/event", { runId, ...event })).catch(error => { console.warn("Could not save account reward", error); });
+    if (runId) {
+      setSaveNotice("Spielstand wird gespeichert …");
+      const body = { runId, ...event, save: snapshotOf(stateRef.current) };
+      pendingRewardsRef.current = (saveQueueRef.current ? saveQueueRef.current.enqueue({ path: "/rewards/event", body }) : retrySave(() => axiosClient.post("/rewards/event", body)))
+        .then(() => setSaveNotice(saveQueueRef.current?.durable === false ? "Kontospielstand gespeichert; lokaler Offline-Puffer ist nicht verfügbar." : "Kontospielstand gespeichert."))
+        .catch(() => setSaveNotice("Noch nicht bestätigt · letzter Kontospeicherpunkt bleibt erhalten. Übertragung erneut versuchen."));
+    }
     return result.notice;
   };
   const destroyBoss = (state: GameState, time: number) => {
@@ -817,7 +868,7 @@ const GamePage = () => {
           if (clearTimerRef.current >= (state.encounter === "boss-clear" ? BOSS_CLEAR_DURATION_MS : SECTION_CLEAR_MS)) {
             if (state.encounter === "bonus" && state.sector === MAX_DIFFICULTY_LEVEL) {
               if (!recordsSavedRef.current) {
-                if (!adminRunRef.current) saveRecords(state);
+                if (!adminRunRef.current && !scoreRunRef.current) saveRecords(state);
                 recordsSavedRef.current = true;
                 submitScore(state);
               }
@@ -1175,7 +1226,7 @@ const GamePage = () => {
             return { progress: result.progress, notice: result.improved && result.medal ? `BONUS-MEDAILLE · ${result.medal.toUpperCase()}` : "" };
           }, { kind: "bonus", level: campaignLevel(state.sector), stage: state.sector, hits: state.bonusHits });
         }
-        if (!adminRunRef.current && state.score > bestThisDeviceRef.current) {
+        if (!adminRunRef.current && !scoreRunRef.current && state.score > bestThisDeviceRef.current) {
           bestThisDeviceRef.current = state.score;
           window.localStorage.setItem(BEST_SCORE_KEY, String(state.score));
         }
@@ -1195,7 +1246,7 @@ const GamePage = () => {
           state.enemyShots = [];
           state.shots = [];
           if (!recordsSavedRef.current) {
-            if (!adminRunRef.current) saveRecords(state);
+            if (!adminRunRef.current && !scoreRunRef.current) saveRecords(state);
             recordsSavedRef.current = true;
             submitScore(state);
           }
@@ -1400,6 +1451,13 @@ const GamePage = () => {
     impactCooldownRef.current = 0;
     fireTimerRef.current = 0;
     startRequestRef.current = false;
+    saveChoiceRef.current = null;
+    startKeyRef.current = crypto.randomUUID();
+    saveQueueReadyRef.current = false;
+    setResumeOffer(null);
+    setSaveNotice("");
+    setAccountRun(false);
+    setRecoveryError(false);
     pointerRef.current = null;
     touchOriginRef.current = null;
     lastPlayerRef.current = stateRef.current.player;
@@ -1415,7 +1473,7 @@ const GamePage = () => {
 
   const goHome = () => {
     if (!recordsSavedRef.current) {
-      if (!adminRunRef.current) saveRecords(stateRef.current);
+      if (!adminRunRef.current && !scoreRunRef.current) saveRecords(stateRef.current);
       recordsSavedRef.current = true;
       submitScore(stateRef.current);
     }
@@ -1462,7 +1520,22 @@ const GamePage = () => {
         {audioNeedsTap && game.status === "playing" && <button className={`audio-retry${game.pickupNotice ? " audio-retry-with-pickup" : ""}`} type="button" onClick={retryAudio}>Ton aktivieren</button>}
         {game.encounter === "bonus" && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">{t("BONUS TARGETS")} {game.bonusHits} / {BONUS_TARGET_COUNT} · {t("NO ENEMY FIRE")}</div>}
         
-        {game.status === "loading" && <div className="game-overlay"><div className="game-modal"><h1>{startError ? "Admin-Test konnte nicht gestartet werden" : t('Preparing mission')}</h1><p>{startError || t('Checking your saved hangar loadout.')}</p>{startError && <div className="modal-actions"><button className="button button-primary" type="button" onClick={() => { setStartError(""); void activateLoadout(); }}>Erneut versuchen</button><button className="button button-secondary" type="button" onClick={() => { leaveGameFullscreen(); navigate("/admin"); }}>Admin-Zentrale öffnen</button></div>}</div></div>}
+        {saveNotice && game.status !== "loading" && <div className="game-save-status" role="status">{saveNotice}{saveNotice.startsWith("Noch nicht") && <button type="button" onClick={() => { void saveQueueRef.current?.drain().then(() => setSaveNotice("Kontospielstand gespeichert.")).catch(() => setSaveNotice("Noch nicht bestätigt · bitte Verbindung und Anmeldung prüfen.")); }}>Erneut speichern</button>}</div>}
+        {game.status === "loading" && <div className="game-overlay"><div className="game-modal">
+          <h1>{resumeOffer ? "Kontospielstand" : startError ? "Start noch nicht bestätigt" : t('Preparing mission')}</h1>
+          <p>{startError || (resumeOffer ? "Bestätigte Speicherpunkte bleiben im Pi-Konto erhalten. Angefangene Abschnitte werden beim Fortsetzen neu gestartet." : t('Checking your saved hangar loadout.'))}</p>
+          {resumeOffer && <>
+            {resumeOffer.mission && <p>Fortsetzen ab Abschnitt {resumeOffer.mission.sector} · {resumeOffer.mission.phase} · {resumeOffer.mission.snapshot.hearts} Leben · {resumeOffer.mission.snapshot.score} Punkte.</p>}
+            {resumeOffer.version === 0 && <p>Du hast einen alten lokalen Bestand. Die einmalige Übernahme betrifft nur Shards und Standardschiffe, keine Pi-Käufe oder Rekorde. Ohne Übernahme bleibt der lokale Bestand auf diesem Gerät; nach dem ersten Kontospiel ist der Import geschlossen.</p>}
+            <div className="modal-actions">
+              {resumeOffer.mission && <button type="button" className="button button-primary" onClick={() => { saveChoiceRef.current = "resume"; setResumeOffer(null); void activateLoadout(); }}>Fortsetzen</button>}
+              <button type="button" className="button button-secondary" onClick={() => { saveChoiceRef.current = "new"; setResumeOffer(null); void activateLoadout(); }}>{resumeOffer.mission ? "Neues Spiel – alten Lauf ersetzen" : "Mit Kontobestand beginnen"}</button>
+              {resumeOffer.version === 0 && <button type="button" className="button button-secondary" onClick={() => { startRequestRef.current = true; void mutateAccountInventory(resumeOffer, { action: "import", confirm: true, ...localInventory() }).then(() => { startRequestRef.current = false; saveChoiceRef.current = "new"; setResumeOffer(null); void activateLoadout(); }).catch(() => { startRequestRef.current = false; setStartError("Lokale Übernahme nicht bestätigt. Bitte zur Startseite zurückkehren und den Kontobestand im Hangar prüfen."); }); }}>Lokalen Bestand übernehmen und starten</button>}
+            </div>
+          </>}
+          {startError && <div className="modal-actions"><button className="button button-primary" type="button" onClick={() => { setStartError(""); setRecoveryError(false); void activateLoadout(); }}>Erneut versuchen</button>{recoveryError && <button className="button button-secondary" type="button" onClick={() => { saveQueueRef.current?.archive(); saveQueueReadyRef.current = true; setRecoveryError(false); setStartError(""); setSaveNotice("Unbestätigte lokale Übertragung zurückgestellt; bestätigter Kontostand wird verwendet."); void activateLoadout(); }}>Beim bestätigten Kontostand bleiben</button>}</div>}
+          {(startError || resumeOffer) && <button className="button button-secondary" type="button" onClick={() => { leaveGameFullscreen(); navigate(sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "/admin" : "/"); }}>Zurück</button>}
+        </div></div>}
         {game.status === "playing" && !bossDestructionActive && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${game.encounter === "boss-intro" ? " boss-intro-banner" : ""}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite">
           <span>{levelComplete || levelIntro ? sectorName(game.sector) : game.encounter === "bonus" ? game.phase === "SECTOR_CLEAR" ? t("BONUS COMPLETE") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.encounter !== "normal" ? `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.phase === "SECTOR_CLEAR" ? t("BLOCK LINKED") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}`}</span>
           <strong>{transitionHeadline}</strong>
@@ -1543,7 +1616,7 @@ const GamePage = () => {
         {game.status === "paused" && <div className="game-overlay pause-settings-overlay" role="dialog" aria-modal="true" aria-labelledby="pause-settings-title"><div className="game-modal pause-settings-modal"><p className="eyebrow" id="pause-settings-title">{t('MISSION PAUSED')}</p><h1>{t('Hold the line.')}</h1><p>{t('The asteroids are waiting.')}</p><h2>{t("SYSTEM / SETTINGS")}</h2><SystemSettings idPrefix="pause" musicVolume={musicVolume} effectsVolume={effectsVolume} changeMusicVolume={changeMusicVolume} changeEffectsVolume={changeEffectsVolume} onChange={() => { pointerRef.current = null; touchOriginRef.current = null; setGame({ ...stateRef.current }); }} /><button className="button button-primary" type="button" onClick={() => { stateRef.current.status = "playing"; pointerRef.current = null; touchOriginRef.current = null; setGame({ ...stateRef.current }); window.setTimeout(retryAudio, 0); }}>{t("Resume")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button></div></div>}
         {game.status === "game-over" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><h1>{t("Game Over")}</h1><div className="game-over-details"><p className="eyebrow">{t("MISSION FAILED")}</p><p className="game-over-hearts">{t('Hearts')}: {game.hearts}/{game.maxHearts}</p><div className="game-over-stats"><span><b>{game.score}</b>{t('Score')}</span><span><b>{game.destroyed}</b>{t('Destroyed')}</span><span><b>{game.sector}</b>{t('Sector')}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSync !== "idle" && <p role="status">{t(scoreSync === "saving" ? "Saving personal best…" : scoreSync === "saved" ? "Personal best saved." : "Could not sync personal best. Local best is saved.")}</p>}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t('Home')}</button></div></div></div></div>}
         {game.status === "victory" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><p className="eyebrow">{t("CAMPAIGN COMPLETE")}</p><h1>{t("Victory")}</h1><div className="game-over-details"><p>{t("You completed the final bonus challenge.")}</p><div className="game-over-stats"><span><b>{game.score}</b>{t("Score")}</span><span><b>{game.destroyed}</b>{t("Destroyed")}</span><span><b>{game.sector}</b>{t("Sector")}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSync !== "idle" && <p role="status">{t(scoreSync === "saving" ? "Saving personal best…" : scoreSync === "saved" ? "Personal best saved." : "Could not sync personal best. Local best is saved.")}</p>}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t("Home")}</button></div></div></div></div>}
-        {homePrompt && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2>{t('Return to base?')}</h2><p>{t('Your current mission will end. Your records will be saved locally.')}</p><div className="modal-actions"><button className="button button-primary" type="button" onClick={goHome}>{t('Leave game')}</button><button className="button button-secondary" type="button" onClick={() => setHomePrompt(false)}>{t('Keep playing')}</button></div></div></div>}
+        {homePrompt && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2>{t('Return to base?')}</h2><p>{accountRun ? "Dein letzter abgeschlossener Abschnitt bleibt im Konto gespeichert. Beim Fortsetzen beginnt der nächste Abschnitt neu; noch nicht abgeschlossene Fortschritte und Shards werden nicht übernommen." : t('Your current mission will end. Your records will be saved locally.')}</p><div className="modal-actions"><button className="button button-primary" type="button" onClick={goHome}>{t('Leave game')}</button><button className="button button-secondary" type="button" onClick={() => setHomePrompt(false)}>{t('Keep playing')}</button></div></div></div>}
       </div>
     </main>
   );

@@ -8,6 +8,7 @@ import PiPrice from "../components/PiPrice";
 import SignIn from "../components/SignIn";
 
 import { useAuth } from "../hooks/useAuth";
+import { accountSelection, loadAccountSave, localInventory, mutateAccountInventory, type AccountSave } from "../lib/accountSave";
 import { usePayments } from "../hooks/usePayments";
 import { axiosClient } from "../lib/axiosClient.ts";
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "./GamePage.tsx";
@@ -214,8 +215,39 @@ const Shop = () => {
   const [shipSearchOpen, setShipSearchOpen] = useState(false);
   const shipSearchRef = useRef<HTMLDivElement>(null);
   const [fleet, setFleet] = useState(() => readShipFleet(localStorage.getItem(SHIP_FLEET_KEY), localStorage.getItem(SHIP_OWNED_KEY), localStorage.getItem(SHIP_COLORS_KEY)));
-  const visibleFleet = adminMode ? adminFleet : fleet;
+  const [accountState, setAccountState] = useState<{ owner: string; save: AccountSave } | null>(null);
+  const [accountError, setAccountError] = useState("");
+  const [accountBusy, setAccountBusy] = useState(false);
+  const [importConfirmed, setImportConfirmed] = useState(false);
+  const account = user && !adminMode && accountState?.owner === user.uid ? accountState.save : null;
+  const visibleFleet = adminMode ? adminFleet : account?.fleet ?? fleet;
   const [shards, setShards] = useState(() => shardBalance(localStorage.getItem(SHARD_BALANCE_KEY)));
+  const displayedShards = account?.balance ?? shards;
+  const displayedRecords = user && !adminMode ? { highestSector: account?.highestSector || 1, totalDestroyed: account?.totalDestroyed || 0 } : records;
+  const accountUid = user?.uid;
+  useEffect(() => {
+    if (!accountUid || adminMode) return;
+    let active = true;
+    void loadAccountSave().then(save => {
+      if (!active) return;
+      setAccountState({ owner: accountUid, save }); setAccountError("");
+      const choice = accountSelection(save); setSelected(choice); setPreviewSkin(choice.skin); setPreviewColor(choice.color);
+    }).catch(() => { if (active) setAccountError("Kontospielstand nicht verfügbar. Lokale Daten bleiben unverändert; Kontokäufe sind bis zur Verbindung gesperrt."); });
+    return () => { active = false; };
+  }, [accountUid, adminMode]);
+  const accountCommand = async (command: object) => {
+    if (!account || !user || accountBusy) return;
+    setAccountBusy(true); setAccountError("");
+    try {
+      const save = await mutateAccountInventory(account, command);
+      setAccountState({ owner: user.uid, save });
+      setSelected(accountSelection(save));
+      setHangarMessage("Im Pi-Konto gespeichert.");
+    } catch {
+      setAccountError("Nicht bestätigt. Bestand bitte aktualisieren; ein bereits bestätigter Kauf wird nicht automatisch wiederholt.");
+      try { const save = await loadAccountSave(); setAccountState({ owner: user.uid, save }); } catch { /* No local fallback for account balances. */ }
+    } finally { setAccountBusy(false); }
+  };
   const [hangarMessage, setHangarMessage] = useState("");
   const [offers, setOffers] = useState<Offer[]>(() => [...hangarCatalog]);
   const [catalogReady, setCatalogReady] = useState(false);
@@ -235,7 +267,7 @@ const Shop = () => {
       setInventory(null);
     });
     return () => { active = false; };
-  }, [adminMode]);
+  }, [adminMode, user?.uid]);
   const matchingShipOptions = shipSearchOptions.filter(skin =>
     skin.name.toLocaleLowerCase(locale).includes(shipQuery.trim().toLocaleLowerCase(locale)));
   const shipResultsVisible = shipSearchOpen;
@@ -274,6 +306,10 @@ const Shop = () => {
     if (adminMode) return;
     if (previewFocusStage !== 1) return;
     if (!testnetStandardHullAvailable(previewSkin.id)) { setHangarMessage("MAINNET READY"); return; }
+    if (user) {
+      if (!account) { setAccountError("Kontospielstand wird noch geladen oder ist nicht erreichbar."); return; }
+      void accountCommand({ action: "buy", skin: previewSkin.id, color: previewColor.id }); return;
+    }
     const currentFleet = readShipFleet(localStorage.getItem(SHIP_FLEET_KEY), localStorage.getItem(SHIP_OWNED_KEY), localStorage.getItem(SHIP_COLORS_KEY));
     const currentBalance = shardBalance(localStorage.getItem(SHARD_BALANCE_KEY));
     setShards(currentBalance);
@@ -294,6 +330,10 @@ const Shop = () => {
       setSelected({ skin, color });
       setHangarMessage(`${skin.name} · ${t(color.name)} · Admin-Testauswahl`);
       return;
+    }
+    if (user) {
+      if (!account) { setAccountError("Kontospielstand ist noch nicht verfügbar."); return; }
+      void accountCommand({ action: "select", skin: skin.id, color: color.id }); return;
     }
     localStorage.setItem(SHIP_SKIN_KEY, skin.id);
     localStorage.setItem(SHIP_COLOR_KEY, color.id);
@@ -412,6 +452,7 @@ const Shop = () => {
       />
       {adminError && <p role="alert" className="hangar-message">{adminError}</p>}
       {authError && <p role="alert" className="hangar-message">{authError}</p>}
+      {accountError && <p role="alert" className="hangar-message">{accountError}</p>}
       {adminMode && <div className="admin-preview-banner" role="status">Admin-Testmodus aktiv · Käufe und Rekorde werden nicht gespeichert.</div>}
 
       <section className="hero-section" onClick={event => { if (window.matchMedia("(min-width: 701px)").matches && !(event.target as HTMLElement).closest("button, a, input, select, label")) requestGameFullscreen(); }}>
@@ -462,13 +503,13 @@ const Shop = () => {
         {user && <p className="admin-account-id">Pi-Konto-ID: <code>{user.uid}</code></p>}
         <article className="status-card progress-card">
           <div className="card-heading"><span>{t('YOUR PROGRESS')}</span><span className="card-icon">↗</span></div>
-          <div className="progress-row"><strong>{t("Best")} {personalBest ?? records.bestScore}</strong><span>{t("Sector")} {String(records.highestSector).padStart(2, "0")}</span></div>
+          <div className="progress-row"><strong>{t("Best")} {personalBest ?? records.bestScore}</strong><span>{t("Sector")} {String(displayedRecords.highestSector).padStart(2, "0")}</span></div>
           <div className="progress-track"><span style={{ width: `${Math.min(100, (personalBest ?? records.bestScore) / 10)}%` }} /></div>
           <button className="text-button" type="button" onClick={() => setActivePanel("progress")}>{t("My Progress")} <span>→</span></button>
         </article>
         <article className="status-card streak-card">
           <div className="card-heading"><span>{t('ACTIVE STREAK')}</span><span className="flame">✦</span></div>
-          <strong className="streak-number">{records.totalDestroyed} <small>{t("asteroids")}</small></strong>
+          <strong className="streak-number">{displayedRecords.totalDestroyed} <small>{t("asteroids")}</small></strong>
           <p>{t('Total destroyed across all missions.')}</p>
         </article>
       </section>}
@@ -515,7 +556,15 @@ const Shop = () => {
       </section>}
 
       {(shopView === "hangar" || shopView === "shop") && <section className={`ship-selector ship-selector-${shopView}`} aria-labelledby="hangar-heading">
-        <div className="ship-panel-heading"><div><p className="eyebrow">{t(shopView === "hangar" ? "YOUR HANGAR" : "SHIP SHOP")}</p><h2 id="hangar-heading">{t(shopView === "hangar" ? "Your fleet" : "Available ships")}</h2></div><strong className="shard-balance">◆ {shards} <small>{t("Shards")}</small></strong></div>
+        {user && !adminMode && <div className="hangar-message" role="status">
+          {account ? <>Kontobestand gespeichert · {new Date(account.updatedAt).toLocaleString(locale)}. {account.mission && <>Fortsetzen ab Abschnitt {account.mission.sector} ({account.mission.phase}) ist beim Spielstart verfügbar.</>}</> : "Kontospielstand wird geladen …"}
+          {account && account.version === 0 && !account.legacyImported && <div>
+            <p>Alte lokale Shards und Standardschiffe bleiben auf diesem Gerät. Du kannst sie vor dem ersten Kontospiel einmalig übernehmen; dieser Altbestand ist nachträglich nicht überprüfbar. Pi-Käufe und Rekorde werden nicht importiert.</p>
+            <label><input type="checkbox" checked={importConfirmed} onChange={e => setImportConfirmed(e.target.checked)} /> Diesen lokalen Bestand meinem aktuellen Pi-Konto zuordnen.</label>
+            <button type="button" className="button button-secondary" disabled={!importConfirmed || accountBusy} onClick={() => { void accountCommand({ action: "import", confirm: true, ...localInventory() }); }}>Lokalen Bestand einmalig übernehmen</button>
+          </div>}
+        </div>}
+        <div className="ship-panel-heading"><div><p className="eyebrow">{t(shopView === "hangar" ? "YOUR HANGAR" : "SHIP SHOP")}</p><h2 id="hangar-heading">{t(shopView === "hangar" ? "Your fleet" : "Available ships")}</h2></div><strong className="shard-balance">◆ {displayedShards} <small>{t("Shards")}</small></strong></div>
         <p className="testnet-shop-notice" role="note">{shipSaveNetwork === "testnet" ? t("TESTNET SHARDS: Earn and spend Shards on available Standard ships here for testing. Shards and ship purchases do not transfer to Mainnet; there you start from zero.") : t("MAINNET SHARDS: Shards and ship purchases start from zero here. Testnet balances and ships are separate.")}</p>
         <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? "Testnet: Grey Scout kostenlos, 9 Standardtypen für Shards. MAINNET READY = hier noch gesperrt." : "Grey Scout kostenlos, 9 Standardtypen für Shards. Weitere Schiffe sind derzeit gesperrt."}</p>
         <details className="ship-earnings"><summary>{t("How to earn Shards")}</summary><p>{t("At level 1, defeats earn Shards by enemy class: light 2, medium 4–5, elite 6, heavy 8, boss 16. Rewards grow with level. Bonus targets earn 1 each, plus a completion reward that grows with level. Your Shards are saved at mission end.")}</p></details>
@@ -537,7 +586,7 @@ const Shop = () => {
             {matchingShipOptions.length === 0 && <p className="ship-search-empty">{t("No matching ships.")}</p>}
           </div>}
         </div>
-        <ShipSelectionPanel view={shopView} skin={previewSkin} color={previewColor} focusStage={previewFocusStage} ownedStage={previewStage} fleet={visibleFleet} shards={shards} locale={locale} adminPreview={adminMode}
+        <ShipSelectionPanel view={shopView} skin={previewSkin} color={previewColor} focusStage={previewFocusStage} ownedStage={previewStage} fleet={visibleFleet} shards={displayedShards} locale={locale} adminPreview={adminMode}
           offers={offers.filter(offer => offer.kind === "ship_upgrade")}
           selectedSkinId={selected.skin.id} selectedColorId={selected.color.id} message={hangarMessage} t={t}
           onStageChange={stage => { setPreviewFocusStage(stage); if (adminMode) { setAdminStage(stage); sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage)); } setHangarMessage(""); }}
@@ -583,7 +632,7 @@ const Shop = () => {
           <button className="close-button" type="button" onClick={() => setActivePanel(null)} aria-label={t('Close')}>×</button>
           <p className="eyebrow">{t("MISSION LOG")}</p>
           <h2 id="info-title">{t("Your Progress")}</h2>
-          <p>{t("Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.").replace("{score}", String(personalBest ?? records.bestScore)).replace("{sector}", String(records.highestSector)).replace("{destroyed}", String(records.totalDestroyed))}</p>
+          <p>{t("Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.").replace("{score}", String(personalBest ?? records.bestScore)).replace("{sector}", String(displayedRecords.highestSector)).replace("{destroyed}", String(displayedRecords.totalDestroyed))}</p>
           <button className="button button-primary" type="button" onClick={() => setActivePanel(null)}>{t("Close")}</button>
         </div>
       </div>}
