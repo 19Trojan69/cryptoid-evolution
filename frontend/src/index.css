@@ -1068,20 +1068,6 @@ html[data-motion="reduced"] .shooting-star { display: none; }
 .game-coach button:hover { background: rgba(21, 87, 80, .95); }
 .cryptoid-hit .fleet-sprite { filter: brightness(2.2) drop-shadow(0 0 9px #a8faff); }
 .cryptoid-hit .ship-visual { filter: brightness(2.2) drop-shadow(0 0 9px #a8faff); }
-/* Flame layers use the same alpha mask and alignment as the actual ship art.
-   Their glow and tongues cannot paint outside the visible hull. */
-.hull-fire-layer { position: absolute; z-index: 3; inset: 0; pointer-events: none; mask-mode: alpha; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
-.cryptoid .hull-fire-layer { -webkit-mask-image: url('/ships/cryptoid-fleet.png'); mask-image: url('/ships/cryptoid-fleet.png'); -webkit-mask-size: 400% 500%; mask-size: 400% 500%; }
-.sector-boss .boss-damage-layer { position: absolute; z-index: 3; inset: 0; pointer-events: none; -webkit-mask-image: var(--boss-image); mask-image: var(--boss-image); -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
-.hull-fire { position: absolute; display: block; width: 15px; height: 23px; transform: translate(-50%, -64%); transform-origin: 50% 85%; background: url('/effects/hull-flame.webp') center / contain no-repeat; animation: hull-flame-flicker .62s ease-in-out infinite alternate; }
-.asteroid-small .hull-fire { width: 12px; height: 18px; }
-.sector-boss .hull-fire { width: clamp(13px, 4%, 22px); height: clamp(20px, 20%, 35px); }
-.sector-boss .boss-impact-flash { position: absolute; width: 36px; height: 36px; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, #fff 0 14%, #fff8be 21%, #ff9635 35%, #e6511a88 47%, transparent 72%); box-shadow: 0 0 9px #fff9cb, 0 0 16px #ff912c; animation: boss-hit-spark .23s ease-out both; }
-.sector-boss .boss-impact-flash::after { content: ''; position: absolute; inset: -20%; background: conic-gradient(transparent 0 8%, #fff2a3 10% 12%, transparent 14% 29%, #ffad41 32% 34%, transparent 36% 55%, #ffe8a4 58% 60%, transparent 62% 82%, #ff8e30 84% 86%, transparent 88%); }
-@keyframes boss-hit-spark { from { transform: translate(-50%, -50%) scale(.28); opacity: 1; } to { transform: translate(-50%, -50%) scale(1.45); opacity: 0; } }
-@keyframes hull-flame-flicker { from { transform: translate(-50%, -64%) rotate(-8deg) scale(.86, .92); opacity: .8; } to { transform: translate(-50%, -64%) rotate(7deg) scale(1.12, 1.06); opacity: 1; } }
-@media (prefers-reduced-motion: reduce) { .hull-fire { animation: none; } }
-html[data-motion="reduced"] .hull-fire { animation: none; }
 @media (max-width: 560px) {
   .game-hud { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-areas: "home score coins pause" "hearts hearts level round"; gap: 3px; padding: max(8px, env(safe-area-inset-top)) max(7px, env(safe-area-inset-right)) 7px max(7px, env(safe-area-inset-left)); }
   .hud-actions { grid-area: home; }
@@ -2502,3 +2488,41 @@ html[data-motion="reduced"] .landing-shell .quick-access-trigger::before, html[d
 .quick-access-category > .quick-access-category-trigger::before { animation: none; opacity: 0; }
 .quick-access-items[hidden] { display: none; }
 .quick-access-items button, .quick-access-heading button { touch-action: manipulation; }
+
+/* Only linked blocks turn. Six translucent faces keep the cube three-dimensional. */
+.blockchain-node { --cube-edge: calc(var(--chain-node) * .53); perspective: 180px; }
+.blockchain-cube-rotor { position: absolute; display: block; top: calc(50% - var(--cube-edge) / 2); left: calc(50% - var(--cube-edge) / 2); width: var(--cube-edge); height: var(--cube-edge); transform-style: preserve-3d; transform: rotateX(-25deg) rotateY(35deg); }
+.blockchain-node.active .blockchain-cube-rotor { animation: blockchain-cube-turn var(--cube-period, 12s) linear infinite; }
+.blockchain-cube-face { position: absolute; inset: 0; border: 1px solid #ffda83d9; background: linear-gradient(135deg, #fff0b52e, #ffc34d38); box-shadow: inset 0 0 7px #ffd46933; }
+.cube-face-front { transform: translateZ(calc(var(--cube-edge) / 2)); }
+.cube-face-back { transform: rotateY(180deg) translateZ(calc(var(--cube-edge) / 2)); }
+.cube-face-left { transform: rotateY(-90deg) translateZ(calc(var(--cube-edge) / 2)); }
+.cube-face-right { transform: rotateY(90deg) translateZ(calc(var(--cube-edge) / 2)); }
+.cube-face-top { transform: rotateX(90deg) translateZ(calc(var(--cube-edge) / 2)); background: #fff0b538; }
+.cube-face-bottom { transform: rotateX(-90deg) translateZ(calc(var(--cube-edge) / 2)); }
+.blockchain-node.newest .blockchain-cube-face { border-color: #fff2b5; box-shadow: inset 0 0 9px #ffdb7955; }
+@keyframes blockchain-cube-turn { to { transform: rotateX(-25deg) rotateY(395deg); } }
+
+/* Heat stays on the alpha-masked hull. A single moving field spreads across
+   the ship as damage rises, with no JS particle simulation. */
+.hull-heat-layer { position: absolute; z-index: 3; inset: 0; overflow: hidden; pointer-events: none; mask-mode: alpha; mask-size: 100% 100%; -webkit-mask-size: 100% 100%; mask-repeat: no-repeat; -webkit-mask-repeat: no-repeat; }
+.hull-hotspot { position: absolute; width: var(--hotspot-size); aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, #fff3ad 0 5%, #ffc354e6 13%, #f77427c7 28%, #d9361b85 43%, transparent 70%); }
+.hull-heat-spread { position: absolute; inset: -50%; opacity: calc(var(--hull-heat) * .7); background: radial-gradient(ellipse at 25% 37%, #ffdf8999, transparent 27%), radial-gradient(ellipse at 68% 64%, #ff762799, transparent 32%), conic-gradient(from 20deg, transparent, #e7482266 15%, transparent 27%, #ffa74588 42%, transparent 58%, #ff6a3366 76%, transparent); animation: hull-heat-swirl 7s linear infinite; }
+@keyframes hull-heat-swirl { to { transform: rotate(360deg); } }
+.hull-mini-explosion { position: absolute; z-index: 4; display: block; width: clamp(16px, 12%, 32px); aspect-ratio: 1; pointer-events: none; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, #fffef0 0 9%, #ffe295 20%, #ffac40cc 37%, #f2582370 52%, transparent 73%); animation: hull-impact-burst .38s ease-out both; }
+.hull-mini-explosion::before { content: ''; position: absolute; inset: -20%; border: 1px solid #ffd994cc; border-radius: 50%; animation: hull-impact-ring .38s ease-out both; }
+.hull-mini-explosion span { position: absolute; left: 50%; top: 50%; width: 3px; height: 2px; border-radius: 50%; background: #fff0b5; --spark-x: -14px; --spark-y: -10px; animation: hull-impact-spark .36s ease-out both; }
+.hull-mini-explosion span:nth-child(2) { --spark-x: 15px; --spark-y: -7px; }
+.hull-mini-explosion span:nth-child(3) { --spark-x: 5px; --spark-y: 14px; }
+@keyframes hull-impact-burst { 0% { opacity: 1; transform: translate(-50%, -50%) scale(.3); } 30% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(1.45); } }
+@keyframes hull-impact-ring { from { transform: scale(.5); opacity: .9; } to { transform: scale(1.8); opacity: 0; } }
+@keyframes hull-impact-spark { from { transform: translate(0, 0); opacity: 1; } to { transform: translate(var(--spark-x), var(--spark-y)); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .blockchain-node.active .blockchain-cube-rotor, .hull-heat-spread { animation: none; } }
+html[data-motion="reduced"] .blockchain-node.active .blockchain-cube-rotor,
+html[data-motion="reduced"] .hull-heat-spread { animation: none; }
+
+.game-shell[data-effects-paused="true"] .hull-heat-spread,
+.game-shell[data-effects-paused="true"] .hull-mini-explosion,
+.game-shell[data-effects-paused="true"] .hull-mini-explosion::before,
+.game-shell[data-effects-paused="true"] .hull-mini-explosion span,
+.game-shell[data-effects-paused="true"] .blockchain-node.active .blockchain-cube-rotor { animation-play-state: paused; }
