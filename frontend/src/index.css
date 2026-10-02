@@ -500,9 +500,13 @@ html[data-motion="reduced"] .cube-spark, html[data-motion="reduced"] .blockchain
 .cryptoid-ghostCoin .asteroid-shape { clip-path: polygon(50% 0, 71% 24%, 96% 26%, 82% 65%, 100% 85%, 68% 74%, 50% 100%, 32% 74%, 0 85%, 18% 65%, 4% 26%, 29% 24%); }
 .cryptoid::after { display: none; }
 .ship-visual { position: absolute; inset: 0; transform-origin: 50% 50%; pointer-events: none; }
-.shielded-ship .ship-visual { transform: translate(var(--ship-visual-offset-x, 0%), var(--ship-visual-offset-y, 0%)); }
+.shielded-ship .ship-visual { transform: translate(var(--ship-visual-offset-x, 0%), var(--ship-visual-offset-y, 0%)) perspective(420px) rotateY(var(--visual-bank, 0deg)) rotate(var(--visual-bank, 0deg)); }
 .fleet-sprite { position: absolute; inset: 0; background-size: 400% 500%; background-repeat: no-repeat; pointer-events: none; }
-.cryptoid .ship-visual { transform: rotate(180deg); }
+.cryptoid .ship-visual { transform: rotate(180deg) perspective(420px) rotateY(var(--visual-bank, 0deg)); }
+.hull-reflection { position: absolute; inset: 0; z-index: 3; pointer-events: none; background: linear-gradient(135deg, #fffbea, #ffe0aa 38%, #a9eaff 75%); mask-size: 100% 100%; -webkit-mask-size: 100% 100%; mask-repeat: no-repeat; -webkit-mask-repeat: no-repeat; opacity: var(--hull-light, 0); mix-blend-mode: screen; }
+@media (prefers-reduced-motion: reduce) { .ship-visual { --visual-bank: 0deg !important; } .hull-reflection { display: none; } }
+html[data-motion="reduced"] .ship-visual { --visual-bank: 0deg !important; }
+html[data-motion="reduced"] .hull-reflection { display: none; }
 .cryptoid .fleet-sprite { z-index: 1; }
 .cryptoid-light .fleet-sprite { filter: grayscale(1) sepia(1) saturate(1.6) hue-rotate(105deg); }
 .cryptoid-medium .fleet-sprite { filter: grayscale(1) sepia(1) saturate(1.6) hue-rotate(165deg); }
@@ -682,7 +686,7 @@ html[data-motion="reduced"] .cube-spark, html[data-motion="reduced"] .blockchain
 .boss-debris-piece-6 { --boss-dx: -17px; --boss-dy: 72px; --boss-spin: 58deg; clip-path: polygon(35% 52%, 51% 41%, 62% 55%, 68% 100%, 31% 100%); animation-delay: .18s; }
 .boss-debris-piece-7 { --boss-dx: 22px; --boss-dy: 62px; --boss-spin: -68deg; clip-path: polygon(43% 42%, 63% 40%, 72% 74%, 51% 91%, 35% 72%); animation-delay: .22s; }
 
-/* Actual ship destruction scatters clipped hull pieces into screen-wide cells. */
+/* Hull fragments scatter locally away from the impact. */
 .scattered-debris { transform: translate(-50%, -50%); }
 .scattered-debris-piece { position: absolute; inset: 0; display: block; pointer-events: none; opacity: 0; animation: scatter-ship-piece 2.12s cubic-bezier(.1, .49, .23, 1) var(--fragment-delay) both; }
 .scattered-debris-piece b, .scattered-debris-piece > .scattered-debris-sprite { position: absolute; inset: 0; display: block; width: 100%; height: 100%; background-repeat: no-repeat; background-size: 400% 500%; transform: rotate(var(--debris-rotation)); }
@@ -2036,6 +2040,19 @@ html[data-motion="reduced"] .home-combat-ally-1 { left: 27%; top: 66%; opacity: 
 .ship-one-info h3 small { display: block; margin-top: 4px; color: #a1ece1; font-size: 11px; }
 .landing-shell .ship-one-info p { margin: 0; color: #cbdeea; font: 500 13px/1.35 'Rajdhani', sans-serif; }
 .ship-one-info strong { color: #a4f8d7; font: 700 11px 'DM Mono', monospace; }
+.ship-inline-purchase { display: grid; gap: 6px; margin-top: 3px; }
+.ship-inline-purchase .ship-purchase-price { color: #ffda97; font: 800 16px 'DM Mono', monospace; }
+.ship-inline-purchase small { color: #c6dae5; font: 600 12px/1.35 'Rajdhani', sans-serif; }
+.ship-inline-purchase .button { width: 100%; min-height: 44px; padding: 10px 12px; white-space: normal; }
+.landing-shell .ship-search-result-name .ship-search-price { color: #ffda97; font-weight: 700; }
+.pi-price { display: inline-flex; align-items: center; gap: .35em; vertical-align: middle; white-space: nowrap; color: #b8fff3; font-weight: 800; font-variant-numeric: tabular-nums; }
+.pi-price-symbol { flex: 0 0 auto; width: 1.15em; height: 1.15em; overflow: visible; color: #70ffe2; filter: drop-shadow(0 0 3px #70ffe24d); }
+.pi-price .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.pi-price-test { padding: .15em .35em; border: 1px solid #70ffe280; border-radius: 4px; color: #b8fff3; font-size: .7em; line-height: 1.1; letter-spacing: .04em; }
+.button .pi-price { margin-left: .35em; padding: .2em .4em; border-radius: 4px; background: #0a263a; font-size: inherit; text-shadow: none; }
+.button .pi-price span { margin-left: 0; font-size: inherit; }
+.button .pi-price .pi-price-test { font-size: .7em; }
+.ship-inline-purchase .button:disabled { opacity: 1; border-color: #536b82; background: #12273c; color: #b6c6d5; cursor: not-allowed; }
 .ship-one-colors { display: grid; gap: 7px; padding: 10px 12px; border: 1px solid #56869b70; border-radius: 10px; background: #0d2741bb; }
 .ship-one-colors-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 7px; }
 .ship-one-colors h4 { margin: 0; color: #eaf8fb; font: 800 12px 'Oxanium', sans-serif; text-transform: uppercase; }
@@ -2184,17 +2201,22 @@ html[data-motion="reduced"] .home-combat-ally-1 { left: 27%; top: 66%; opacity: 
 :fullscreen .wide-fullscreen-control { display: none; }
 :-webkit-full-screen .wide-fullscreen-control { display: none; }
 
-/* Pickup notices approach from depth and flash once, always above the field. */
-.pickup-notice { width: calc(100% - 16px); gap: 5px; padding: 10px 12px; border: 1px solid color-mix(in srgb, var(--pickup-neon) 65%, transparent); border-radius: 8px; background: linear-gradient(90deg, #04152550, #092b40e8 25% 75%, #04152550); box-shadow: 0 0 18px color-mix(in srgb, var(--pickup-neon) 25%, transparent); animation: pickup-depth-reveal 1.55s ease-out both; }
-.pickup-notice b { width: 100%; font-size: clamp(25px, 6vw, 48px); animation: none; }
-.pickup-notice::after { height: 3px; background: linear-gradient(90deg, transparent, #fff, var(--pickup-neon), transparent); mask: none; -webkit-mask: none; filter: none; animation: pickup-flash .45s ease-out both; }
-@keyframes pickup-depth-reveal { 0% { opacity: 0; transform: translateX(-50%) perspective(800px) translateZ(-420px) scale(.3); } 15% { opacity: 1; transform: translateX(-50%) perspective(800px) translateZ(35px) scale(1.025); } 24%, 73% { opacity: 1; transform: translateX(-50%) perspective(800px) translateZ(0) scale(1); } 100% { opacity: 0; transform: translateX(-50%) scale(.98); } }
+/* Region names stay readable on phones; pickup text stays visible through five light pulses. */
+.game-label { width: max-content; max-width: calc(100% - 16px); font-size: clamp(10px, 2.6vw, 14px); letter-spacing: .08em; line-height: 1.3; color: #b9e7e2; text-align: center; white-space: normal; text-wrap: balance; }
+.game-region-name { font-size: clamp(12px, 3.1vw, 17px); font-weight: 800; white-space: nowrap; color: #ffe1a1; text-shadow: 0 1px 4px #020b16, 0 0 9px #e6bc5f55; }
+.pickup-notice { width: calc(100% - 16px); gap: 7px; padding: 12px 14px; border: 2px solid color-mix(in srgb, var(--pickup-neon) 80%, transparent); border-radius: 8px; background: linear-gradient(90deg, #041525ed, #092b40f5 25% 75%, #041525ed); box-shadow: 0 0 22px color-mix(in srgb, var(--pickup-neon) 35%, transparent); animation: pickup-depth-reveal 4.5s ease-out both; }
+.pickup-notice b { width: 100%; font-size: clamp(28px, 6.8vw, 52px); line-height: 1.12; text-shadow: 0 2px 4px #020a18, 0 0 10px color-mix(in srgb, var(--pickup-neon) 65%, transparent); animation: none; }
+.pickup-notice span { font-size: clamp(15px, 4vw, 22px); line-height: 1.3; color: #f2fffc; text-shadow: 0 2px 4px #020a18; }
+.pickup-notice::before { opacity: 0; animation: pickup-glow-pulse .7s .15s ease-in-out 5; }
+.pickup-notice::after { height: 3px; background: linear-gradient(90deg, transparent, #fff, var(--pickup-neon), transparent); mask: none; -webkit-mask: none; filter: none; opacity: 0; animation: pickup-glow-pulse .7s .15s ease-in-out 5; }
+@keyframes pickup-glow-pulse { 0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(.85, .65); } 35% { opacity: .55; transform: translate(-50%, -50%) scale(1, .8); } }
+@keyframes pickup-depth-reveal { 0% { opacity: 0; transform: translateX(-50%) scale(.96); } 5%, 90% { opacity: 1; transform: translateX(-50%) scale(1); } 100% { opacity: 0; transform: translateX(-50%) scale(1); } }
 .combo-notice { position: absolute; z-index: 9; top: calc(max(4px, env(safe-area-inset-top)) + 116px); left: 50%; transform: translateX(-50%); display: grid; gap: 3px; width: min(92%, 520px); padding: 9px 14px; border: 1px solid #ffd579b3; border-radius: 8px; background: linear-gradient(90deg, #0b1c3080, #16283bec, #0b1c3080); color: #ffe4a2; text-align: center; pointer-events: none; animation: combo-reveal 1.5s ease-out both; }
 .combo-notice b { font: 800 clamp(19px, 4.5vw, 28px) 'Oxanium', sans-serif; text-shadow: 0 0 12px #ffb95780; }
 .combo-notice span, .combo-summary { color: #ffe4a2; font: 700 clamp(11px, 2.8vw, 15px) 'Oxanium', sans-serif; }
 .combo-with-pickup { top: calc(max(4px, env(safe-area-inset-top)) + 242px); }
 @keyframes combo-reveal { 0% { opacity: 0; transform: translateX(-50%) scale(.8); } 12%, 76% { opacity: 1; transform: translateX(-50%) scale(1); } 100% { opacity: 0; transform: translateX(-50%) scale(1.03); } }
-@media (prefers-reduced-motion: reduce) { .pickup-notice, .combo-notice { animation: none; transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .pickup-notice, .combo-notice { animation: none; transform: translateX(-50%); } .pickup-notice b, .pickup-notice span, .pickup-notice::before, .pickup-notice::after { animation: none; } .pickup-notice::before, .pickup-notice::after { display: none; } }
 html[data-motion="reduced"] .pickup-notice, html[data-motion="reduced"] .combo-notice { animation: none; transform: translateX(-50%); }
 html[data-motion="reduced"] .pickup-notice b, html[data-motion="reduced"] .pickup-notice span, html[data-motion="reduced"] .pickup-notice::before, html[data-motion="reduced"] .pickup-notice::after { animation: none; }
 html[data-motion="reduced"] .pickup-notice::before, html[data-motion="reduced"] .pickup-notice::after { display: none; }
