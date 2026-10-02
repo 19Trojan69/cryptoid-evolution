@@ -1,5 +1,7 @@
-import SystemSettings, { applySavedDisplaySettings } from "./SystemSettings";
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import SystemSettings, { applySavedDisplaySettings, type SettingsSection } from "./SystemSettings";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
+import QuickAccessMenu, { type QuickAction } from "../components/QuickAccessMenu";
+import type { GuideTopic } from "./GameGuide";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import PiPrice from "../components/PiPrice";
@@ -74,6 +76,12 @@ const Shop = () => {
   const piPrice = (amount: number, testnet = false) => <PiPrice amount={amount} locale={locale} testnet={testnet} />;
   const [activePanel, setActivePanel] = useState<"how" | "progress" | null>(null);
   const [systemMenuOpen, setSystemMenuOpen] = useState(false);
+  const [quickGroup, setQuickGroup] = useState<string | null>(null);
+  const [settingsSection, setSettingsSection] = useState<SettingsSection | undefined>();
+  const [guideTopic, setGuideTopic] = useState<GuideTopic>("controls");
+  const [guideReturn, setGuideReturn] = useState<"system" | "menu">("system");
+  const [quickTarget, setQuickTarget] = useState<string | null>(null);
+  const closeQuickMenu = useCallback(() => setQuickGroup(null), []);
   const [shopView, setShopView] = useState<"hangar" | "shop" | "weapons" | "powers" | "progress" | "rewards" | "leaders" | null>(null);
   const [termsOpen, setTermsOpen] = useState(false);
   const [leaders, setLeaders] = useState<Leader[]>([]);
@@ -347,6 +355,37 @@ const Shop = () => {
     axiosClient.post("/notifications/send", { notifications: [notification] });
   };
 
+  useEffect(() => {
+    if (!shopView || !quickTarget) return;
+    const frame = requestAnimationFrame(() => { const target = document.querySelector<HTMLElement>(`.shop-modal ${quickTarget}`); if (target) { target.scrollIntoView({ block: "start" }); target.setAttribute("tabindex", "-1"); target.focus({ preventScroll: true }); } });
+    return () => cancelAnimationFrame(frame);
+  }, [shopView, quickTarget, rewardStatus]);
+
+  const openQuickAction = (action: QuickAction) => {
+    closeQuickMenu();
+    setQuickTarget(null);
+    const guides: Partial<Record<QuickAction, GuideTopic>> = { overview: "overview", visuals: "visuals", "guide-controls": "controls", route: "route", combat: "survival", boosts: "boosts", earnings: "earnings", collection: "collection" };
+    if (guides[action]) { setGuideTopic(guides[action]); setGuideReturn("menu"); setActivePanel("how"); return; }
+    const settings: Partial<Record<QuickAction, SettingsSection>> = { language: "language", controls: "controls", audio: "audio", display: "display", vibration: "display" };
+    if (settings[action]) { setSettingsSection(settings[action]); setSystemMenuOpen(true); return; }
+    const fleetViews: Partial<Record<QuickAction, NonNullable<typeof shopView>>> = { hangar: "hangar", shop: "shop", upgrades: "shop", colors: "hangar", weapons: "weapons", armor: "weapons", powers: "powers", progress: "progress", rewards: "rewards", leaders: "leaders", ranks: "rewards", bosses: "rewards", medals: "rewards", chains: "rewards" };
+    const view = fleetViews[action];
+    if (view) {
+      if (view === "hangar" || view === "shop") { setPreviewSkin(selected.skin); setPreviewColor(selected.color); setPreviewFocusStage(1); }
+      if (view === "leaders") setLeadersStatus("loading");
+      const targets: Partial<Record<QuickAction, string>> = { upgrades: ".ship-evolution-stages", colors: ".ship-one-colors", armor: ".hangar-offer-armor", ranks: "#reward-ranks", bosses: "#reward-bosses", medals: "#reward-medals", chains: "#reward-chains" };
+      setQuickTarget(targets[action] ?? null);
+      setShopView(view); return;
+    }
+    if (action === "play") enterGame();
+    else if (action === "signin") signIn();
+    else if (action === "signout") { setInventory(null); void signOut(); }
+    else if (action === "admin") navigate("/admin");
+    else if (action === "exit-admin") void toggleAdmin();
+    else if (action === "privacy") navigate("/privacy");
+    else if (action === "terms") setTermsOpen(true);
+  };
+
   return (
     <main className="app-shell landing-shell">
       <Header
@@ -359,6 +398,9 @@ const Shop = () => {
         onSignOut={() => { setInventory(null); void signOut(); }}
         onSendTestNotification={onSendTestNotification}
         isLoading={isAuthLoading}
+        onOpenQuickAccess={() => setQuickGroup("mission")}
+        onOpenAccount={() => setQuickGroup("account")}
+        quickAccessOpen={quickGroup !== null}
       />
       {adminError && <p role="alert" className="hangar-message">{adminError}</p>}
       {adminMode && <div className="admin-preview-banner" role="status">Admin-Testmodus aktiv · Käufe und Rekorde werden nicht gespeichert.</div>}
@@ -381,7 +423,7 @@ const Shop = () => {
             </div>
             <button className="button button-secondary" type="button" onClick={() => { setPreviewSkin(selected.skin); setPreviewColor(selected.color); setShopView("hangar"); }}>{t('Shop / Hangar')} <span className="button-glyph" aria-hidden="true">◇</span></button>
             <button className="button button-secondary" type="button" onClick={() => { setLeadersStatus("loading"); setShopView("leaders"); }}>{t('Top 100')} <span className="button-glyph" aria-hidden="true">⌁</span></button>
-            <button className="button button-secondary" type="button" onClick={() => setSystemMenuOpen(true)}>{t('System menu')} <span className="button-glyph" aria-hidden="true">⚙</span></button>
+            <button className="button button-secondary" type="button" onClick={() => { setSettingsSection(undefined); setSystemMenuOpen(true); }}>{t('System menu')} <span className="button-glyph" aria-hidden="true">⚙</span></button>
           </div>
         </div>
         <div className="planet-stage" aria-label="Cryptoid Evolution planet status">
@@ -394,12 +436,14 @@ const Shop = () => {
         </footer>
       </section>
 
+      {quickGroup !== null && <QuickAccessMenu onClose={closeQuickMenu} onAction={openQuickAction} signedIn={Boolean(user)} canAdmin={Boolean(canAdmin)} adminMode={adminMode} username={user?.username} initialGroup={quickGroup} busy={isAuthLoading} />}
+
       {systemMenuOpen && <div className="system-menu-overlay" role="dialog" aria-modal="true" aria-labelledby="system-menu-title">
         <section className="system-menu-panel">
           <button className="close-button" type="button" onClick={() => setSystemMenuOpen(false)} aria-label={t('Close menu')}>×</button>
           <p className="eyebrow">{t('SYSTEM / SETTINGS')}</p>
-          <div className="system-menu-title-row"><h2 id="system-menu-title">{t('System menu')}</h2><button className="system-guide-link" type="button" onClick={() => { setSystemMenuOpen(false); setActivePanel('how'); }}><span aria-hidden="true">?</span>{t('Game guide')}</button></div>
-          <SystemSettings idPrefix="home" musicVolume={musicVolume} effectsVolume={effectsVolume} changeMusicVolume={changeMusicVolume} changeEffectsVolume={changeEffectsVolume} />
+          <div className="system-menu-title-row"><h2 id="system-menu-title">{t('System menu')}</h2><button className="system-guide-link" type="button" onClick={() => { setSystemMenuOpen(false); setGuideTopic("controls"); setGuideReturn("system"); setActivePanel('how'); }}><span aria-hidden="true">?</span>{t('Game guide')}</button></div>
+          <SystemSettings idPrefix="home" initialSection={settingsSection} musicVolume={musicVolume} effectsVolume={effectsVolume} changeMusicVolume={changeMusicVolume} changeEffectsVolume={changeEffectsVolume} />
         </section>
       </div>}
 
@@ -407,7 +451,7 @@ const Shop = () => {
         <div className="shop-modal">
         <div className="shop-modal-header"><strong>{t(shopTabs.find(([view]) => view === shopView)?.[1] ?? "Shop / Hangar")}</strong><button className="close-button" type="button" onClick={() => setShopView(null)} aria-label={t('Close shop')}>×</button></div>
           <nav className="shop-tabs" aria-label={t('Shop sections')}>
-            {shopTabs.map(([view, label, glyph]) => <button className={`shop-tab shop-tab-${view}`} key={view} type="button" aria-pressed={shopView === view} onClick={() => { if (view === "leaders") setLeadersStatus("loading"); if (view === "hangar") { setPreviewSkin(selected.skin); setPreviewColor(selected.color); } setShopView(view); }}><span aria-hidden="true">{glyph}</span><b>{t(label)}</b></button>)}
+            {shopTabs.map(([view, label, glyph]) => <button className={`shop-tab shop-tab-${view}`} key={view} type="button" aria-pressed={shopView === view} onClick={() => { setQuickTarget(null); if (view === "leaders") setLeadersStatus("loading"); if (view === "hangar") { setPreviewSkin(selected.skin); setPreviewColor(selected.color); } setShopView(view); }}><span aria-hidden="true">{glyph}</span><b>{t(label)}</b></button>)}
           </nav>
           <div className="shop-modal-body">
       {shopView === "progress" && <section className="dashboard-grid" aria-label={t('Player overview')}>
@@ -435,11 +479,11 @@ const Shop = () => {
           <div className="card-heading"><span>{t("RANK & COLLECTION")}</span><span className="card-icon">✦</span></div>
           <div className="reward-rank-current"><span aria-hidden="true">{rankForLevel(rewardProgress.highestLevel).symbol}</span><div><small>{t("Current service rank")} · {t("Level")} {rewardProgress.highestLevel}/500</small><h3>{t(rewardRank(rewardProgress))}</h3></div></div>
           <p>{Object.keys(rewardProgress.bossWins).length}/{BOSS_STICKER_COUNT} Boss-Sticker · {rewardProgress.completedChains.length} Chains · {rewardProgress.perfectBonuses} perfekte Bonusrunden</p>
-          <div className="reward-rank-path" aria-label={t("Service ranks")}>{[1, 11, 51, 101, 201, 301, 401, 500].map(level => { const tier = rankForLevel(level); return <span key={level} className={rewardProgress.highestLevel >= level ? "earned" : ""}><b aria-hidden="true">{tier.symbol}</b><small>{t(tier.name)}<br />{t("Level")} {level}</small></span>; })}</div>
+          <div id="reward-ranks" className="reward-rank-path" aria-label={t("Service ranks")}>{[1, 11, 51, 101, 201, 301, 401, 500].map(level => { const tier = rankForLevel(level); return <span key={level} className={rewardProgress.highestLevel >= level ? "earned" : ""}><b aria-hidden="true">{tier.symbol}</b><small>{t(tier.name)}<br />{t("Level")} {level}</small></span>; })}</div>
           <h4>{t("Linked Blocks")} · {t("Level")} {latestRewardLevel}</h4>
           <div className="reward-blocks" aria-label={t("Linked Blocks")}>{Array.from({ length: 9 }, (_, index) => <span key={index} className={index < (rewardProgress.linkedBlocks?.[latestRewardLevel] ?? 0) ? "earned" : ""}>{index + 1}</span>)}</div>
-          <div className="reward-milestones" aria-label="Chain-Meilensteine">{CHAIN_MILESTONES.map(target => <span key={target} className={rewardProgress.completedChains.length >= target ? "earned" : ""} title={`${target} Chains`}>◆ {target}</span>)}</div>
-          <h4>Boss-Sticker</h4>
+          <div id="reward-chains" className="reward-milestones" aria-label="Chain-Meilensteine">{CHAIN_MILESTONES.map(target => <span key={target} className={rewardProgress.completedChains.length >= target ? "earned" : ""} title={`${target} Chains`}>◆ {target}</span>)}</div>
+          <h4 id="reward-bosses">Boss-Sticker</h4>
           <div className="boss-sticker-grid">{Array.from({ length: BOSS_STICKER_COUNT }, (_, index) => {
             const id = index + 1;
             const stars = rewardProgress.bossWins[id] ?? 0;
@@ -448,7 +492,7 @@ const Shop = () => {
               <small>#{String(id).padStart(2, "0")}</small>{!!stars && <b>{"★".repeat(stars)}</b>}
             </div>;
           })}</div>
-          <h4>Bonus-Medaillen</h4>
+          <h4 id="reward-medals">Bonus-Medaillen</h4>
           <p>{Object.values(rewardProgress.bonusMedals).filter(medal => medal === "gold").length} Gold · {Object.values(rewardProgress.bonusMedals).filter(medal => medal === "silver").length} Silber · {Object.values(rewardProgress.bonusMedals).filter(medal => medal === "bronze").length} Bronze</p>
           <div className="reward-medal-grid">{Object.entries(rewardProgress.bonusMedals).map(([level, medal]) => <span key={level} className={`reward-medal reward-medal-${medal}`}>✦ <b>{t("Level")} {level}</b> · {t(medal)}</span>)}</div>
           <small>{user ? t("Awards are saved to your Pi account immediately. Admin test runs do not count.") : t("Local awards on this device. Sign in for account rewards.")}</small>
@@ -528,7 +572,7 @@ const Shop = () => {
         </div>
       </div>}
 
-      {activePanel === "how" && <GameGuide onClose={() => { setActivePanel(null); setSystemMenuOpen(true); }} />}
+      {activePanel === "how" && <GameGuide initialTopic={guideTopic} backLabel={guideReturn === "menu" ? "Back to quick access" : "Back to system"} onClose={() => { setActivePanel(null); if (guideReturn === "menu") setQuickGroup("info"); else setSystemMenuOpen(true); }} />}
       {activePanel === "progress" && <div className="info-panel" role="dialog" aria-modal="true" aria-labelledby="info-title">
         <div className="info-panel-content">
           <button className="close-button" type="button" onClick={() => setActivePanel(null)} aria-label={t('Close')}>×</button>
