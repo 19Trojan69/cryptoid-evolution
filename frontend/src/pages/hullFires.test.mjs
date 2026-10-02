@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { addPersistentHullFire, bossFireSites, hullFireAtImpact, spriteFireSites } from './hullFires.ts';
+import { addPersistentHullFire, bossFireSites, hullFireAtImpact, hullFireLimit, spriteFireSites } from './hullFires.ts';
 
 test('rotating and aligned ships ignite their painted hull, not a world-space ring', () => {
   const sites = [[50, 40], [60, 50], [40, 60]];
@@ -29,4 +29,22 @@ test('the first flame survives every later hit until the ship is removed', () =>
   assert.strictEqual(fires[0], first);
   assert.equal(fires.length, 8);
   assert.deepEqual(addPersistentHullFire([], { id: 21, x: 50, y: 50 }, 4), [{ id: 21, x: 50, y: 50 }]);
+});
+
+test('damage permits progressively more sites while keeping bosses and small ships bounded', () => {
+  for (const boss of [false, true]) {
+    let previous = 0;
+    for (let health = 100; health >= 0; health--) {
+      const limit = hullFireLimit(health, 100, boss);
+      assert.ok(limit >= previous && limit <= (boss ? 8 : 4));
+      previous = limit;
+    }
+    assert.equal(previous, boss ? 8 : 4);
+  }
+});
+
+test('repeated boss site fallback never stacks glows over an established site', () => {
+  const first = { id: 1, x: 35, y: 42 };
+  assert.deepEqual(addPersistentHullFire([first], { id: 2, x: 35, y: 42 }, 8), [first]);
+  assert.deepEqual(addPersistentHullFire([first], { id: 1, x: 70, y: 70 }, 8), [first]);
 });

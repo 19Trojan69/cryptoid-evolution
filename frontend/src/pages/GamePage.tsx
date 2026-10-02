@@ -34,7 +34,7 @@ import { leaveGameFullscreen, requestGameFullscreen } from "./gameFullscreen";
 import { levelDifficulty, MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { createDoubleKillCombo, creditComboDefeat, DOUBLE_KILL_SCORE, DOUBLE_KILL_SHARDS, type DoubleKillCombo } from "./doubleKillCombo";
 import { balanceAfterMission, BONUS_TARGET_SHARD_REWARD, bossPoints, bossShardReward, creditReward } from "./shardEarnings";
-import { addPersistentHullFire, hullFireAtImpact, spriteFireSites, type HullFire } from "./hullFires";
+import { addPersistentHullFire, hullFireAtImpact, hullFireLimit, spriteFireSites, type HullFire } from "./hullFires";
 import { bossExplosionSize, bossFallTargetY, bossFireSite, bossHullContains } from "./bossCombat";
 import BossWeaponsView, { preloadBossWeapons } from './BossWeaponsView';
 import { advanceBossTurrets } from './bossTurrets';
@@ -1090,7 +1090,7 @@ const GamePage = () => {
             if (state.boss.health === 0) destroyBoss(state, time);
             else {
               const location = bossFireSite(state.boss, shot.x, shot.y, state.boss.hullFires ?? []);
-              const maxFires = state.boss.health <= state.boss.maxHealth * .25 ? 8 : state.boss.health <= state.boss.maxHealth * .5 ? 5 : 2;
+              const maxFires = hullFireLimit(state.boss.health, state.boss.maxHealth, true);
               state.boss.hullFires = addPersistentHullFire(state.boss.hullFires, { id: shot.id, ...location }, maxFires);
               soundRef.current?.play("enemyHit");
             }
@@ -1103,7 +1103,7 @@ const GamePage = () => {
           if (enemy.health > 0) {
             const sprite = enemy.sprite;
             enemy.hit = hullFireAtImpact(shot, enemy, enemy.radius * 2, spriteFireSites[sprite], [], enemy.rotation, spriteVisualOffset(sprite, enemy.radius * 2, true));
-            enemy.hullFires = addPersistentHullFire(enemy.hullFires, hullFireAtImpact(shot, enemy, enemy.radius * 2, spriteFireSites[sprite], enemy.hullFires, enemy.rotation, spriteVisualOffset(sprite, enemy.radius * 2, true)));
+            enemy.hullFires = addPersistentHullFire(enemy.hullFires, hullFireAtImpact(shot, enemy, enemy.radius * 2, spriteFireSites[sprite], enemy.hullFires, enemy.rotation, spriteVisualOffset(sprite, enemy.radius * 2, true)), hullFireLimit(enemy.health, enemy.maxHealth));
           }
           if (enemy.health === 0) state.effects.push({ id: nextIdRef.current++, x: enemy.x, y: enemy.y, kind: enemy.type === "etherCrystal" ? "shatter" : "explosion", startedAt: time, sprite: enemy.sprite, debrisSize: enemy.radius * 2, debrisRotation: enemy.rotation, shipClass: enemy.shipClass, debrisColor: enemy.color, velocityX: enemy.visualMotion?.vx, velocityY: enemy.visualMotion?.vy, impactX: shot.x - enemy.x, impactY: shot.y - enemy.y });
           soundRef.current?.play(enemy.health > 0 ? "enemyHit" : "explosion");
@@ -1481,7 +1481,7 @@ const GamePage = () => {
           <img className="boss-hull" src={game.boss.config.image} alt="" draggable={false} />
           <BossWeaponsView boss={game.boss}/>
           <i className="hull-reflection" style={{ maskImage: `url('${game.boss.config.image}')`, WebkitMaskImage: `url('${game.boss.config.image}')`, opacity: game.bossHullLight }} aria-hidden="true" />
-          <HullDamage sites={game.boss.hullFires} hit={game.boss.hit} maskImage={`url('${game.boss.config.image}')`} />
+          <HullDamage sites={game.boss.hullFires} hit={game.boss.hit} maskImage={`url('${game.boss.config.image}')`} bossDamage={1 - game.boss.health / game.boss.maxHealth} />
           <span className="health-bar" data-critical={game.boss.health / game.boss.maxHealth <= .3} role="progressbar" aria-label={t("Boss hull")} aria-valuenow={Math.ceil(game.boss.health / game.boss.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${game.boss.health / game.boss.maxHealth * 100}%` }} /><small className="boss-health-readout">{Math.ceil(game.boss.health / game.boss.maxHealth * 100)}%</small></span>
         </div>}
         {game.bonusTargets.map(target => <div key={target.id} className="asteroid asteroid-small cryptoid bonus-ship cryptoid-boost" style={{ ...alignedSpritePosition(target.x, target.y, target.sprite, 50), transform: "translate(-50%, -50%)" }}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={target.sprite} color={target.color} />{engineTrails(target.sprite, "exhaust")}</div></div>)}
