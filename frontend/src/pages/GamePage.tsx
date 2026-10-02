@@ -1031,7 +1031,7 @@ const GamePage = () => {
           if (damaged) {
             const sprite = shipSelection.skin.sprite;
             const shot = { id: nextIdRef.current++, x: playerImpact?.x ?? state.player.x * width, y: playerImpact?.y ?? state.player.y * height - 12 };
-            state.playerHit = hullFireAtImpact(shot, { x: state.player.x * width, y: state.player.y * height }, 76, spriteFireSites[sprite].map(([x, y]) => [100 - x, 100 - y] as const));
+            state.playerHit = hullFireAtImpact(shot, { x: state.player.x * width, y: state.player.y * height }, playerShipRef.current?.offsetWidth || 76, spriteFireSites[sprite].map(([x, y]) => [100 - x, 100 - y] as const));
             state.playerHullFires = addPersistentHullFire(state.playerHullFires, state.playerHit, 4);
             soundRef.current?.play(destroyed ? "playerDestroy" : "collision");
             gameHaptics.explosion();
