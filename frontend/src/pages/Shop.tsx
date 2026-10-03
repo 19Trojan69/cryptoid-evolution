@@ -491,7 +491,7 @@ const Shop = () => {
           <button className="close-button" type="button" onClick={() => setSystemMenuOpen(false)} aria-label={t('Close menu')}>×</button>
           <p className="eyebrow">{t('SYSTEM / SETTINGS')}</p>
           <div className="system-menu-title-row"><h2 id="system-menu-title">{t('System menu')}</h2><button className="system-guide-link" type="button" onClick={() => { setSystemMenuOpen(false); setGuideTopic("controls"); setActivePanel('how'); }}><span aria-hidden="true">?</span>{t('Game guide')}</button></div>
-          <SystemSettings idPrefix="home" initialSection={settingsSection} musicVolume={musicVolume} effectsVolume={effectsVolume} changeMusicVolume={changeMusicVolume} changeEffectsVolume={changeEffectsVolume} />
+          <SystemSettings key={settingsSection ?? "overview"} compactMobile idPrefix="home" initialSection={settingsSection} musicVolume={musicVolume} effectsVolume={effectsVolume} changeMusicVolume={changeMusicVolume} changeEffectsVolume={changeEffectsVolume} />
         </section>
       </div>}
 

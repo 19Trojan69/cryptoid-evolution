@@ -1,0 +1,122 @@
+/* Mobile menu surfaces only; cockpit, ships and desktop styles keep their layout. */
+.mobile-menu-only, .mobile-settings-nav { display: none; }
+.game-modal h1 > .desktop-menu-only { color: inherit; }
+
+@media (max-width: 600px) {
+  :is(.landing-shell, .game-modal, .system-menu-panel, .quick-access-panel) {
+    --menu-night: #101927;
+    --menu-raised: #172539;
+    --menu-action: #24344a;
+    --menu-champagne: #e3d2aa;
+    --menu-text: #f4f1f8;
+    --menu-muted: #b6c2d0;
+    --menu-line: #ffffff14;
+    --menu-font: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  .mobile-menu-only { display: inline; }
+  .desktop-menu-only { display: none; }
+  .game-overlay { padding: 14px; background: #070e18df; backdrop-filter: blur(5px); }
+  :is(.game-modal, .landing-shell .shop-modal, .landing-shell .signin-modal, .landing-shell .info-panel-content, .system-menu-panel) {
+    border: 0; border-radius: 20px; clip-path: none; background: var(--menu-night);
+    color: var(--menu-text); box-shadow: 0 18px 50px #0005; font-family: var(--menu-font);
+  }
+  .game-modal { width: min(100%, 410px); max-height: calc(100dvh - 126px); overflow-y: auto; overscroll-behavior: contain; padding: 24px 22px; }
+  :is(.game-modal, .system-menu-panel) :is(h1, h2) { font-family: var(--menu-font); color: var(--menu-text); font-weight: 600; letter-spacing: -.035em; text-shadow: none; }
+  .game-modal h1 { font-size: 28px; line-height: 1.2; margin: 0 0 12px; }
+  .game-modal h1 > .mobile-menu-only { color: inherit; }
+  .game-modal h2 { font-size: 20px; }
+  .game-modal > p:not(.eyebrow), .game-modal .new-run-confirmation p { font-size: 14px; line-height: 1.55; color: var(--menu-muted); margin-bottom: 20px; }
+  .game-modal .eyebrow, .system-menu-panel .eyebrow { color: #b8b2d7; font: 500 12px/1.4 var(--menu-font); letter-spacing: .06em; margin: 0 0 10px; }
+  .game-modal .modal-actions { gap: 10px; margin-top: 20px; }
+  .game-modal .button,
+  .landing-shell .hero-actions .button,
+  .landing-shell :is(.shop-modal, .signin-modal, .info-panel-content) .button,
+  .system-menu-panel .button {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 50px; padding: 12px 16px; border: 0; border-radius: 13px; clip-path: none;
+    background: var(--menu-action); color: var(--menu-text); box-shadow: none; text-shadow: none;
+    font: 600 15px/1.35 var(--menu-font); letter-spacing: 0; text-transform: none;
+  }
+  .game-modal .button-primary,
+  .landing-shell .hero-actions .button-primary,
+  .landing-shell :is(.shop-modal, .signin-modal, .info-panel-content) .button-primary,
+  .system-menu-panel .button-primary { background: var(--menu-champagne); color: #182433; box-shadow: 0 4px 14px #0002; }
+  .game-modal .button-primary:hover,
+  .landing-shell .hero-actions .button-primary:hover,
+  .landing-shell :is(.shop-modal, .signin-modal, .info-panel-content) .button-primary:hover { background: #edddbc; }
+  :is(.game-modal, .system-menu-panel) .button::before,
+  :is(.game-modal, .system-menu-panel) .button::after,
+  .landing-shell :is(.hero-actions, .shop-modal, .signin-modal, .info-panel-content) .button::before,
+  .landing-shell :is(.hero-actions, .shop-modal, .signin-modal, .info-panel-content) .button::after { display: none; }
+  .game-modal .button > span { margin-left: 0; font-size: inherit; }
+  .game-modal .button:disabled,
+  .landing-shell :is(.shop-modal, .signin-modal, .info-panel-content) .button:disabled { background: #273244; color: #b6c2d0; opacity: .65; box-shadow: none; }
+  .game-modal .mission-back-button { background: transparent; color: var(--menu-muted); width: 100%; margin-top: 8px; font-weight: 400; }
+  .mission-resume-summary.mobile-menu-only { display: block; padding: 18px 0; border-block: 1px solid var(--menu-line); margin-bottom: 22px; }
+  .mission-resume-summary strong { display: block; color: var(--menu-champagne); font-size: 16px; font-weight: 500; margin-bottom: 8px; }
+  .mission-resume-summary p { color: var(--menu-muted); margin: 0 0 6px; font-size: 14px; line-height: 1.5; }
+
+  /* One overview, then one settings group, with all existing controls retained. */
+  .mobile-settings-nav { display: block; margin: 8px 0 22px; }
+  .mobile-settings-row, .mobile-settings-back { font: 400 14px/1.4 var(--menu-font); color: var(--menu-text); background: transparent; border: 0; min-height: 52px; cursor: pointer; touch-action: manipulation; }
+  .mobile-settings-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; padding: 12px 0; border-bottom: 1px solid var(--menu-line); text-align: left; }
+  .mobile-settings-row b { font-weight: 500; }
+  .mobile-settings-row > span { display: flex; gap: 10px; align-items: center; color: var(--menu-muted); text-align: right; font-size: 12px; }
+  .mobile-settings-row i { font-size: 22px; font-style: normal; color: var(--menu-champagne); }
+  .mobile-settings-back { color: var(--menu-champagne); padding: 10px 0; }
+  .mobile-settings-section[data-mobile-active="false"] { display: none; }
+  :is(.game-modal, .system-menu-panel) .system-menu-section { border-color: var(--menu-line); padding: 16px 0; }
+  :is(.game-modal, .system-menu-panel) .system-menu-heading { flex-wrap: wrap; }
+  :is(.game-modal, .system-menu-panel) .system-menu-heading strong { font: 500 15px/1.4 var(--menu-font); letter-spacing: 0; text-transform: none; color: var(--menu-champagne); }
+  :is(.game-modal, .system-menu-panel) .system-menu-heading small { color: var(--menu-muted); font-size: 12px; line-height: 1.5; }
+  :is(.game-modal, .system-menu-panel) :is(.system-setting, .language-trigger, .language-option) { min-height: 48px; padding: 10px 12px; clip-path: none; border: 1px solid var(--menu-line); border-radius: 10px; background: var(--menu-raised); color: var(--menu-text); box-shadow: none; font-family: var(--menu-font); }
+  :is(.game-modal, .system-menu-panel) :is(.system-setting, .language-trigger, .language-option)::before { display: none; }
+  :is(.game-modal, .system-menu-panel) :is(.system-setting, .language-trigger, .language-option)[aria-pressed="true"] { background: #2b3a50; border-color: #e3d2aa80; box-shadow: none; }
+  :is(.game-modal, .system-menu-panel) :is(.system-setting, .language-trigger, .language-option) :is(span, i) { border: 0; color: var(--menu-champagne); box-shadow: none; background: transparent; }
+  :is(.game-modal, .system-menu-panel) :is(.system-setting, .language-trigger, .language-option) b { font-size: 14px; font-weight: 500; }
+  :is(.game-modal, .system-menu-panel) .language-actions { grid-template-columns: 1fr; }
+  :is(.game-modal, .system-menu-panel) .language-menu { border-color: var(--menu-line); border-radius: 12px; clip-path: none; background: var(--menu-night); box-shadow: 0 10px 20px #0005; }
+  :is(.game-modal, .system-menu-panel) .control-choice-group > strong { font: 500 13px/1.5 var(--menu-font); color: var(--menu-muted); letter-spacing: 0; text-transform: none; }
+  :is(.game-modal, .system-menu-panel) .music-volume-slider { background: transparent; border: 0; box-shadow: none; }
+  :is(.game-modal, .system-menu-panel) .music-volume-slider label { font-family: var(--menu-font); color: var(--menu-text); }
+  :is(.game-modal, .system-menu-panel) .music-volume-slider output { color: var(--menu-champagne); }
+  :is(.game-modal, .system-menu-panel) .music-volume-slider input[type="range"] { accent-color: var(--menu-champagne); background: transparent; }
+  :is(.game-modal, .system-menu-panel) .music-volume-slider input[type="range"]::-webkit-slider-runnable-track { border: 0; background: linear-gradient(90deg, var(--menu-champagne) var(--music-fill), #34475d var(--music-fill)); }
+  :is(.game-modal, .system-menu-panel) .music-volume-slider input[type="range"]::-moz-range-track { border: 0; background: linear-gradient(90deg, var(--menu-champagne) var(--music-fill), #34475d var(--music-fill)); }
+  :is(.game-modal, .system-menu-panel) .music-volume-slider input[type="range"]::-webkit-slider-thumb { background: var(--menu-champagne); border-color: var(--menu-champagne); box-shadow: none; }
+  :is(.game-modal, .system-menu-panel) .music-volume-slider input[type="range"]::-moz-range-thumb { background: var(--menu-champagne); border-color: var(--menu-champagne); box-shadow: none; }
+  :is(.game-modal, .system-menu-panel) .music-volume-scale { color: var(--menu-muted); }
+  .pause-settings-modal { display: flex; flex-direction: column; }
+  .pause-settings-modal > .eyebrow { order: 0; }
+  .pause-settings-modal > h1 { order: 1; }
+  .pause-settings-modal > p:not(.eyebrow) { order: 2; }
+  .pause-settings-modal > .pause-resume-button { order: 3; position: static; margin-bottom: 14px; flex-shrink: 0; }
+  .pause-settings-modal > .mobile-settings-nav { order: 4; flex-shrink: 0; }
+  .pause-settings-modal > .system-menu-section { order: 5; flex-shrink: 0; }
+  .pause-settings-modal > .pause-system-title { display: none; }
+  .pause-settings-modal .pause-save-status { order: 6; border: 0; border-top: 1px solid var(--menu-line); border-radius: 0; padding: 16px 0 0; margin: 0; background: transparent; color: var(--menu-muted); flex-shrink: 0; }
+  .pause-settings-modal .pause-save-status h2 { display: none; }
+  .pause-settings-modal .pause-save-status p { font-size: 13px; margin-bottom: 12px; }
+  .pause-settings-modal .pause-save-status .button { width: 100%; margin-top: 8px; }
+
+  /* Home navigation uses the same palette without recoloring the combat scene. */
+  .quick-access-panel { border: 0; background: var(--menu-night); color: var(--menu-text); }
+  .quick-access-heading h2 { font: 600 26px/1.2 var(--menu-font); letter-spacing: -.035em; color: var(--menu-text); }
+  .quick-access-heading .eyebrow { color: #b8b2d7; }
+  .quick-access-account { color: var(--menu-champagne); }
+  .quick-access-category { border: 0; border-radius: 0; background: transparent; border-bottom: 1px solid var(--menu-line); }
+  .quick-access-category-trigger { background: transparent; color: var(--menu-text); font-family: var(--menu-font); }
+  .quick-access-category[data-open="true"] > .quick-access-category-trigger { background: var(--menu-raised); border: 0; border-radius: 10px; }
+  .quick-access-category-trigger :is(span, i), .quick-access-items button i { color: var(--menu-champagne); }
+  .quick-access-items button { font: 400 14px/1.5 var(--menu-font); color: var(--menu-muted); border-color: var(--menu-line); }
+  .quick-access-items button:hover { background: var(--menu-action); color: var(--menu-text); }
+  .landing-shell :is(.header-account, .header-auth-status, .header-signin) { background: #172539; border-color: #e3d2aa40; box-shadow: none; border-radius: 10px; }
+  .landing-shell .header-account-copy b { color: var(--menu-champagne); }
+  .landing-shell .header-account-copy small { color: var(--menu-muted); }
+  .landing-shell .header-signin:hover { background: #24344a; border-color: #e3d2aa80; }
+  .landing-shell :is(.shop-modal, .signin-modal, .info-panel-content) :is(h2, h3) { color: var(--menu-text); text-shadow: none; }
+  .landing-shell .shop-modal-header { background: var(--menu-raised); border-color: var(--menu-line); color: var(--menu-champagne); font-family: var(--menu-font); letter-spacing: 0; }
+  .landing-shell .shop-tabs button { clip-path: none; border-radius: 10px; background: var(--menu-raised); border-color: var(--menu-line); box-shadow: none; color: var(--menu-muted); font-family: var(--menu-font); }
+  .landing-shell .shop-tabs button[aria-pressed="true"] { background: var(--menu-action); border-color: #e3d2aa80; color: var(--menu-champagne); }
+  :is(.landing-shell, .system-menu-panel, .quick-access-panel) .close-button { clip-path: none; border-radius: 10px; border: 0; background: #24344a; color: #e3d2aa; box-shadow: none; min-width: 44px; min-height: 44px; }
+}
