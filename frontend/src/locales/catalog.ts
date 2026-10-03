@@ -5419,3 +5419,21 @@ export const localeCatalog: Record<string, Record<string,string>> = {
     "Free laser rules": "เลเซอร์เดี่ยวฟรี เก็บอาวุธอื่นเป็นตัวเสริมระหว่างภารกิจ"
   }
 };
+
+// Weapon tutorial copy, shared by the shop and field guide.
+Object.assign(localeCatalog["de"], {"Owned — activate in game": "Im Besitz – im Spiel aktivieren", "Tap to switch weapon": "Antippen: Waffe wechseln", "Hold to open weapon selection": "Gedrückt halten: Waffenauswahl öffnen"});
+Object.assign(localeCatalog["es"], {"Owned — activate in game": "En propiedad: activar durante la partida", "Tap to switch weapon": "Toca para cambiar de arma", "Hold to open weapon selection": "Mantén pulsado para abrir las armas"});
+Object.assign(localeCatalog["fr"], {"Owned — activate in game": "Possédée : à activer en jeu", "Tap to switch weapon": "Touchez pour changer d’arme", "Hold to open weapon selection": "Maintenez pour ouvrir le choix des armes"});
+Object.assign(localeCatalog["pt"], {"Owned — activate in game": "Adquirida: ativar durante o jogo", "Tap to switch weapon": "Toque para trocar de arma", "Hold to open weapon selection": "Mantenha premido para abrir as armas"});
+Object.assign(localeCatalog["it"], {"Owned — activate in game": "Posseduta: da attivare in partita", "Tap to switch weapon": "Tocca per cambiare arma", "Hold to open weapon selection": "Tieni premuto per scegliere un’arma"});
+Object.assign(localeCatalog["pl"], {"Owned — activate in game": "Posiadana — aktywuj w grze", "Tap to switch weapon": "Dotknij, aby zmienić broń", "Hold to open weapon selection": "Przytrzymaj, aby otworzyć wybór broni"});
+Object.assign(localeCatalog["tr"], {"Owned — activate in game": "Sahipsin — oyun içinde etkinleştir", "Tap to switch weapon": "Silah değiştirmek için dokun", "Hold to open weapon selection": "Silah seçimini açmak için basılı tut"});
+Object.assign(localeCatalog["ru"], {"Owned — activate in game": "Куплено — активируйте в игре", "Tap to switch weapon": "Нажмите, чтобы сменить оружие", "Hold to open weapon selection": "Удерживайте, чтобы открыть выбор оружия"});
+Object.assign(localeCatalog["hr"], {"Owned — activate in game": "U vlasništvu — aktiviraj u igri", "Tap to switch weapon": "Dodirni za promjenu oružja", "Hold to open weapon selection": "Drži za otvaranje izbora oružja"});
+Object.assign(localeCatalog["cs"], {"Owned — activate in game": "Vlastníš — aktivuj ve hře", "Tap to switch weapon": "Klepnutím změníš zbraň", "Hold to open weapon selection": "Podržením otevřeš výběr zbraní"});
+Object.assign(localeCatalog["sk"], {"Owned — activate in game": "Vlastníš — aktivuj v hre", "Tap to switch weapon": "Ťuknutím zmeníš zbraň", "Hold to open weapon selection": "Podržaním otvoríš výber zbraní"});
+Object.assign(localeCatalog["hu"], {"Owned — activate in game": "Megvásárolva — aktiváld játék közben", "Tap to switch weapon": "Koppints a fegyverváltáshoz", "Hold to open weapon selection": "Tartsd nyomva a fegyverválasztóhoz"});
+Object.assign(localeCatalog["ro"], {"Owned — activate in game": "Deținută — activeaz-o în joc", "Tap to switch weapon": "Atinge pentru a schimba arma", "Hold to open weapon selection": "Ține apăsat pentru a alege arma"});
+Object.assign(localeCatalog["sr"], {"Owned — activate in game": "У власништву — активирај у игри", "Tap to switch weapon": "Додирни за промену оружја", "Hold to open weapon selection": "Држи за отварање избора оружја"});
+Object.assign(localeCatalog["uk"], {"Owned — activate in game": "Придбано — активуйте у грі", "Tap to switch weapon": "Торкніться, щоб змінити зброю", "Hold to open weapon selection": "Утримуйте, щоб відкрити вибір зброї"});
+Object.assign(localeCatalog["th"], {"Owned — activate in game": "เป็นเจ้าของแล้ว — เปิดใช้ในเกม", "Tap to switch weapon": "แตะเพื่อเปลี่ยนอาวุธ", "Hold to open weapon selection": "กดค้างเพื่อเปิดเมนูเลือกอาวุธ"});

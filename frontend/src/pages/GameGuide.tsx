@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import WeaponTutorial from "./WeaponTutorial";
 import { useLocale } from "../i18n";
 import { shipEvolutionAsset } from "./shipEvolution";
 
@@ -119,6 +120,7 @@ const GameGuide = ({ onClose, initialTopic = "controls", backLabel = "Back to sy
         <h3 id="guide-section-title">{t(topic.title)}</h3>
         <p>{t(topic.intro)}</p>
         {topic.id === "visuals" && <div className="guide-ship-gallery">{([1, 2, 3] as const).map(stage => <figure key={stage}><img src={shipEvolutionAsset(0, stage)} alt={t(stage === 1 ? "Standard ship" : stage === 2 ? "Advanced ship" : "Elite ship")} loading="lazy" /><figcaption>{t(stage === 1 ? "STANDARD" : stage === 2 ? "ADVANCED" : "ELITE")}</figcaption></figure>)}<figure className="guide-boss-example"><img src="/ships/bosses/boss_01.webp" alt={t("Boss ship")} loading="lazy" /><figcaption>{t("CORE WARDEN")}</figcaption></figure></div>}
+        {(topic.id === "boosts" || topic.id === "controls") && <WeaponTutorial />}
         <ul>{topic.details.map(detail => <li key={detail}>{t(detail)}</li>)}</ul>
       </section>
       <button className="button button-secondary guide-back" type="button" onClick={onClose}>← {t(backLabel)}</button>
