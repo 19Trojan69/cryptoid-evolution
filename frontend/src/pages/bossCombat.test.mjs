@@ -32,7 +32,9 @@ test("pixel mask excludes transparent wings and gaps while burns stay on the hul
     for (const site of sites) {
       const point = bossAnchorPosition(boss, [site[0] / 100, site[1] / 100]);
       assert.equal(bossHullContains(boss, point.x, point.y), true, `Boss ${boss.config.id} burn site ${site}`);
-      assert.deepEqual(bossFireSite(boss, point.x, point.y, []), { x: site[0], y: site[1] });
+      const fire = bossFireSite(boss, point.x, point.y, []);
+      assert.ok(Math.abs(fire.x - site[0]) < 1e-10 && Math.abs(fire.y - site[1]) < 1e-10);
+      assert.deepEqual(bossFireSite(boss, point.x, point.y, [fire]), fire);
     }
   }
 });

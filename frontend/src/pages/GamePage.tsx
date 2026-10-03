@@ -1140,12 +1140,12 @@ const GamePage = () => {
           }
           if (state.encounter === "boss-fight" && state.boss && bossVulnerable(state.boss) && bossHullContains(state.boss, shot.x, shot.y)) {
             if (!damageSectorBoss(state.boss, shot.damage, time)) continue;
-            state.boss.hit = { id: shot.id, x: (shot.x - state.boss.x) / state.boss.width * 100 + 50, y: (shot.y - state.boss.y) / state.boss.height * 100 + 50 };
+            state.boss.hit = { id: shot.id, x: (shot.x - state.boss.x) / state.boss.width * 100 + 50, y: (shot.y - state.boss.y) / state.boss.height * 100 + 50, impactPower: shot.damage };
             if (state.boss.health === 0) destroyBoss(state, time);
             else {
               const location = bossFireSite(state.boss, shot.x, shot.y, state.boss.hullFires ?? []);
               const maxFires = hullFireLimit(state.boss.health, state.boss.maxHealth, true);
-              state.boss.hullFires = addPersistentHullFire(state.boss.hullFires, { id: shot.id, ...location }, maxFires);
+              state.boss.hullFires = addPersistentHullFire(state.boss.hullFires, { id: shot.id, ...location, impactPower: shot.damage }, maxFires);
               soundRef.current?.play("enemyHit");
             }
             continue;

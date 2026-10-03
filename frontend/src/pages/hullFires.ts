@@ -1,10 +1,38 @@
-export type HullFire = { id: number; x: number; y: number };
+export type HullFire = { id: number; x: number; y: number; impactPower?: number; revision?: number };
 type FireSite = readonly [number, number];
 
-// Keep each established heat site mounted and glowing until its ship is destroyed.
-// Further impacts may add sites as damage rises, but never replace old sites.
-export const addPersistentHullFire = (fires: readonly HullFire[] = [], next: HullFire, maxFires = 4): HullFire[] =>
-  fires.length < maxFires && !fires.some(fire => fire.id === next.id || (fire.x === next.x && fire.y === next.y)) ? [...fires, next] : [...fires];
+// Nearby impacts reheat one small patch instead of manufacturing a regular grid.
+// The number of patches remains capped independently of hit frequency.
+export const addPersistentHullFire = (fires: readonly HullFire[] = [], next: HullFire, maxFires = 4): HullFire[] => {
+  if (fires.some(fire => fire.id === next.id || fire.revision === next.id)) return [...fires];
+  const nearby = fires.findIndex(fire => Math.hypot(fire.x - next.x, fire.y - next.y) < 6);
+  if (nearby >= 0) return fires.map((fire, index) => index === nearby ? { ...fire, revision: next.id, impactPower: next.impactPower } : fire);
+  return fires.length < maxFires ? [...fires, next] : [...fires];
+};
+
+// Stable variation is computed only when rendering a new impact, never random
+// per animation frame. Weapon damage influences the bounded burst size.
+export const hullImpactProfile = (id: number, power = 1) => {
+  const random = (salt: number) => {
+    let n = Math.imul((id | 0) ^ salt, 0x45d9f3b);
+    n = Math.imul(n ^ (n >>> 16), 0x45d9f3b);
+    return ((n ^ (n >>> 16)) >>> 0) / 4294967296;
+  };
+  return {
+    size: .72 + random(17) * .55 + Math.min(4, Math.max(0, power - 1)) * .09,
+    angle: random(29) * 360,
+    aspect: .65 + random(43) * .5,
+    cooling: 1.4 + random(61) * 1.9,
+    flicker: 1.7 + random(83) * 2.6,
+    delay: random(107) * 2,
+    shape: `${28 + random(113) * 35}% ${20 + random(127) * 40}% ${31 + random(131) * 30}% ${22 + random(137) * 40}%`,
+    sparks: Array.from({ length: 3 + Math.floor(random(149) * 3) }, (_, index) => {
+      const angle = random(163 + index * 11) * Math.PI * 2;
+      const distance = 9 + random(181 + index * 13) * 18;
+      return { x: Math.cos(angle) * distance, y: Math.sin(angle) * distance, duration: .22 + random(211 + index * 17) * .27 };
+    }),
+  };
+};
 
 // More severe damage permits more distinct sites; rendering remains bounded.
 export const hullFireLimit = (health: number, maxHealth: number, boss = false) => {
@@ -47,7 +75,7 @@ export const bossFireSites: readonly FireSite[] = [
 ];
 
 export const hullFireAtImpact = (
-  shot: { id: number; x: number; y: number },
+  shot: { id: number; x: number; y: number; damage?: number },
   target: { x: number; y: number },
   size: number,
   sites: readonly FireSite[],
@@ -60,11 +88,14 @@ export const hullFireAtImpact = (
   const dy = shot.y - target.y + offset.y;
   const x = 50 + (dx * Math.cos(angle) + dy * Math.sin(angle)) / size * 100;
   const y = 50 + (-dx * Math.sin(angle) + dy * Math.cos(angle)) / size * 100;
-  // Keep successive fires apart, even when repeated shots hit the same spot.
-  const available = sites.filter(([sx, sy]) => !fires.some(fire => fire.x === sx && fire.y === sy));
-  const separated = available.filter(([sx, sy]) => fires.every(fire => (fire.x - sx) ** 2 + (fire.y - sy) ** 2 >= 22 ** 2));
-  const [fireX, fireY] = (separated.length ? separated : available.length ? available : sites).reduce((closest, site) =>
+  void fires; // retained for callers; existing damage must not move a new impact.
+  if (!sites.length) return { id: shot.id, x: Math.max(0, Math.min(100, x)), y: Math.max(0, Math.min(100, y)), impactPower: shot.damage };
+  const [sx, sy] = sites.reduce((closest, site) =>
     (site[0] - x) ** 2 + (site[1] - y) ** 2 < (closest[0] - x) ** 2 + (closest[1] - y) ** 2 ? site : closest,
   );
-  return { id: shot.id, x: fireX, y: fireY };
+  // Preserve continuous positions around known painted hull areas. The sprite
+  // alpha mask clips heat at wings/gaps; remote collision-box hits stay nearby.
+  const distance = Math.hypot(x - sx, y - sy);
+  const fraction = distance <= 12 ? 1 : 6 / distance;
+  return { id: shot.id, x: sx + (x - sx) * fraction, y: sy + (y - sy) * fraction, impactPower: shot.damage };
 };

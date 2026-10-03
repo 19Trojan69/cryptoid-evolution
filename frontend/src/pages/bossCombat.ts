@@ -59,8 +59,9 @@ export const bossFireSite = (boss: SectorBoss, x: number, y: number, existing: r
   const localX = 50 + (x - boss.x) / boss.width * 100;
   const localY = 50 + (y - boss.y) / boss.height * 100;
   const sites = boss.config.fireSites;
-  const free = sites.filter(([sx, sy]) => existing.every(fire => (fire.x - sx) ** 2 + (fire.y - sy) ** 2 > 14 ** 2));
-  const [px, py] = (free.length ? free : sites).reduce((best, site) =>
+  void existing;
+  if (bossHullContains(boss, x, y)) return { x: localX, y: localY };
+  const [px, py] = sites.reduce((best, site) =>
     (site[0] - localX) ** 2 + (site[1] - localY) ** 2 < (best[0] - localX) ** 2 + (best[1] - localY) ** 2 ? site : best);
   return { x: px, y: py };
 };
