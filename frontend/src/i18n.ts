@@ -348,6 +348,12 @@ const localizedValue = (locale: Locale, source: string, seen = new Set<string>()
   if (sharedNames.has(source)) return source;
   const explicit = localeCatalog[locale]?.[source] ?? legacyCatalog[locale]?.[source];
   if (explicit !== undefined) return explicit;
+  const shipOffer = source.match(/^Ship (\d+) · (Advanced|Elite)$/);
+  if (shipOffer) {
+    const template = localeCatalog[locale]?.['Ship {number} · {stage}'];
+    const stage = localizedValue(locale, shipOffer[2].toUpperCase(), seen);
+    if (template && stage) return template.replace('{number}', shipOffer[1]).replace('{stage}', stage);
+  }
   if (seen.has(source)) return undefined;
   seen.add(source);
   const alias = localeAliases[source];

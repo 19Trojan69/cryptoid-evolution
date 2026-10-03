@@ -24,6 +24,12 @@ function discover(dir) {
         const method = node.expression.getText(ast);
         if (method === 't' || /^set(?:AuthError|AdminError|AccountError|StartError|SaveNotice|LoadoutMessage|Message|HangarMessage)$/.test(method)) collect(node.arguments[0]);
       }
+      if (entry.name === 'QuickAccessMenu.tsx' && ts.isPropertyAssignment(node)) {
+        if (node.name.getText(ast) === 'title') collect(node.initializer);
+        if (node.name.getText(ast) === 'items' && ts.isArrayLiteralExpression(node.initializer)) {
+          for (const item of node.initializer.elements) if (ts.isArrayLiteralExpression(item) && item.elements[1]) collect(item.elements[1]);
+        }
+      }
       // Guide and reward strings are selected by data rather than literal t() calls.
       if (ts.isPropertyAssignment(node) && ['GameGuide.tsx', 'bonusChallenge.ts'].includes(entry.name) && ['label', 'title', 'intro', 'details'].includes(node.name.getText(ast))) {
         if (ts.isArrayLiteralExpression(node.initializer)) node.initializer.elements.forEach(collect);
@@ -50,6 +56,18 @@ function discover(dir) {
   }
 }
 discover(sourceRoot);
+required.add('Ship {number} · {stage}');
+for (const [file, fields] of [
+  [path.resolve(sourceRoot, '../..', 'backend/src/hangarCatalog.ts'), ['name', 'description']],
+  [path.resolve(sourceRoot, '../..', 'backend/src/rewardRules.ts'), ['name']],
+]) {
+  const ast = ts.createSourceFile(file, fs.readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true);
+  const visit = node => {
+    if (ts.isPropertyAssignment(node) && fields.includes(node.name.getText(ast)) && ts.isStringLiteral(node.initializer)) required.add(node.initializer.text);
+    ts.forEachChild(node, visit);
+  };
+  visit(ast);
+}
 const placeholders = text => [...text.matchAll(/\{(\w+)\}/g)].map(match => match[1]).sort();
 for (const locale of Object.keys(languages)) {
   test(`${locale}: every player UI key has a translation and preserves its placeholders`, () => {

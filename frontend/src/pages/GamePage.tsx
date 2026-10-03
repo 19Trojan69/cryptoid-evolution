@@ -1359,7 +1359,7 @@ const GamePage = () => {
     soundRef.current?.play(power === "bomb" ? "nova" : power === "emp" ? "emp" : power === "overdrive" ? "boost" : "pickup");
     setGame({ ...state });
   };
-  const weaponNames = ["", "Standard", "Twin", "Rapid", "Triple", "Plasma"];
+  const weaponNames = ["", t("Standard"), t("Twin"), t("Rapid"), t("Triple"), t("Plasma")];
   const weaponGlyphs = ["", "I", "II", "III", "IV", "V"];
   const selectWeaponLevel = (level: number) => {
     const state = stateRef.current;
