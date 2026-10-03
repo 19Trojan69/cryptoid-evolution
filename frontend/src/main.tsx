@@ -4,6 +4,7 @@ import './index.css'
 import './mobileMenus.css'
 import './floatingNotices.css'
 import './quickAccessMobile.css'
+import './missionDialogMobile.css'
 import App from './App.tsx'
 import { startAggregateUsage } from './lib/aggregateUsage'
 
