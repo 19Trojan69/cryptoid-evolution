@@ -5,6 +5,7 @@ import { rewardNetwork } from "../rewardNetwork";
 import "../types/session";
 import { missionAfter, publicSave, readSnapshot } from "../playerSave";
 import { validRunScore } from "../leaderboardRules";
+import { restoreScoreRun } from "../restoreScoreRun";
 
 type RewardEvent = { runId: string; kind: "block" | "chain" | "boss" | "bonus"; level: number; stage: number; hits?: number; save?: unknown };
 
@@ -23,7 +24,9 @@ export default function mountRewardEndpoints(router: Router) {
   router.post("/event", async (req, res) => {
     if (isAdminMode(req)) return res.status(403).json({ error: "Admin tests do not earn rewards" });
     const uid = req.session.currentUser?.uid;
-    const run = req.session.scoreRun;
+    let run;
+    try { run = await restoreScoreRun(req); }
+    catch { return res.status(503).json({ error: "Could not restore active run" }); }
     const network = rewardNetwork(req);
     const event = req.body as RewardEvent;
     if (!uid || !run || event?.runId !== run.id || Date.now() - run.startedAt > 8 * 60 * 60 * 1000) return res.status(403).json({ error: "No active signed-in run" });

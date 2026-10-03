@@ -519,8 +519,9 @@ html[data-motion="reduced"] .hull-reflection { display: none; }
 .cryptoid-return { --flame-length: 13%; }
 .cryptoid .exhaust { position: absolute; z-index: 0; top: calc(var(--nozzle-y) - 2px); left: var(--nozzle-x); width: var(--nozzle-width, 5%); height: calc(var(--flame-length) + 2px); min-width: 2px; transform: translateX(-50%); transform-origin: 50% 0; background: linear-gradient(180deg, var(--flame-core, #fff8d7) 0%, var(--flame-mid, #ffc65d) 27%, var(--flame-tail, #ed7028) 65%, transparent 100%); filter: drop-shadow(0 2px 2px var(--flame-glow, rgba(255, 132, 39, .66))); clip-path: polygon(12% 0, 88% 0, 82% 18%, 100% 34%, 72% 69%, 55% 100%, 48% 78%, 34% 94%, 27% 64%, 0 34%, 18% 18%); transition: height .16s ease-out; pointer-events: none; }
 .sector-boss .exhaust-main { height: calc(var(--flame-length) + 4px); }
-.game-save-status { position: absolute; z-index: 8; top: 112px; left: 12px; right: 12px; color: #95d3bd; font-size: 11px; text-align: center; pointer-events: none; }
-.game-save-status button { pointer-events: auto; margin-left: 8px; padding: 4px 8px; color: #f4d386; background: #102232; border: 1px solid #647580; border-radius: 6px; }
+.pause-save-status { margin: 12px 0; padding: 12px; border: 1px solid #647580; border-radius: 8px; background: #102232; color: #b9e6d6; }
+.pause-save-status p { font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+.pause-save-status button { min-height: 44px; touch-action: manipulation; }
 .player-ship { width: 76px; height: 76px; }
 .player-ship { filter: none; }
 .player-ship .fleet-sprite { z-index: 1; filter: sepia(1) saturate(4.5) hue-rotate(calc(225deg + var(--ship-hue))); }
