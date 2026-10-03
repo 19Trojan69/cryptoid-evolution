@@ -1,0 +1,66 @@
+/* Floating smartphone notices: the cockpit and game timings stay unchanged. */
+@media (max-width: 600px) {
+  .landing-shell .hero-actions .home-play-button,
+  .landing-shell .hero-actions .home-play-button:hover {
+    isolation: isolate; overflow: visible; border: 0; border-radius: 0; clip-path: none;
+    background: transparent; box-shadow: none; color: #f0e0bb;
+    min-height: 66px; padding: 14px 22px; font-size: 23px; font-weight: 500;
+    letter-spacing: .035em; text-shadow: 0 2px 5px #030a17, 0 0 16px #e3d2aa65;
+    filter: none;
+  }
+  .landing-shell .hero-actions .home-play-button::before {
+    display: block; content: ""; position: absolute; z-index: -1;
+    inset: -6px -12px; width: auto; opacity: .7; transform: none;
+    background: radial-gradient(ellipse, #e3d2aa20, #7c86b610 38%, transparent 70%);
+    animation: launch-light-breathe 4.8s ease-in-out infinite;
+  }
+  .landing-shell .hero-actions .home-play-button:not(:disabled):hover::before { animation: launch-light-breathe 4.8s ease-in-out infinite; }
+  .landing-shell .hero-actions .home-play-button::after {
+    display: block; content: ""; position: absolute; left: 22%; right: 22%; top: auto; bottom: 8px;
+    height: 1px; background: linear-gradient(90deg, transparent, #e3d2aa90, transparent);
+  }
+  .landing-shell .hero-actions .home-play-button .button-glyph {
+    width: 25px; height: 25px; border: 0; background: transparent; box-shadow: none;
+    color: #f0e0bb; font-size: 24px; margin-left: 0; text-shadow: inherit;
+  }
+  .landing-shell .hero-actions .home-play-button:hover .button-glyph { background: transparent; box-shadow: none; filter: none; }
+  .landing-shell .hero-actions .home-play-button:focus-visible { outline: 2px solid #e3d2aa; outline-offset: 5px; border-radius: 8px; }
+
+  .game-field .sector-banner,
+  .game-field .sector-banner.sector-clear-message,
+  .game-field .level-complete-banner.sector-clear-message {
+    isolation: isolate; overflow: visible; border: 0; border-radius: 0;
+    background: transparent; box-shadow: none; backdrop-filter: none;
+    color: #f0dfb4; text-shadow: 0 2px 6px #020b17, 0 0 15px #020b17, 0 0 20px #e3d2aa35;
+  }
+  .game-field .sector-banner::before {
+    content: ""; position: absolute; z-index: -1; inset: -20px -12px;
+    border: 0; border-radius: 50%; pointer-events: none;
+    background: radial-gradient(ellipse, #061222a6, #07142450 43%, transparent 73%);
+  }
+  .game-field .sector-banner::after {
+    content: ""; position: absolute; z-index: -1; inset: -14px 0;
+    border: 0; border-radius: 0; pointer-events: none;
+    background: radial-gradient(circle at 13% 27%, #e3d2aa99 0 1px, transparent 2px),
+      radial-gradient(circle at 82% 68%, #a0cddd80 0 1px, transparent 2px),
+      radial-gradient(circle at 72% 18%, #e3d2aa70 0 1px, transparent 2px);
+  }
+  .game-field .sector-banner > strong { color: #f0dfb4; font-weight: 500; letter-spacing: .035em; }
+  .game-field .sector-banner > span { color: #c0cbd6; letter-spacing: .1em; }
+  .game-field .sector-banner .chain-result { color: #e3d2aa; font-weight: 500; }
+  .game-field .sector-banner .blockchain-progress { border: 0; background: transparent; box-shadow: none; }
+  .game-field .sector-banner .blockchain-binary { border: 0; }
+  .game-field .sector-banner .blockchain-halo { background: radial-gradient(ellipse, #81c7dc25, #a69aca12 42%, transparent 72%); filter: none; }
+  .game-field .sector-banner .reward-unlock { border: 0; background: transparent; box-shadow: none; color: #d3e4ec; }
+  .game-field .sector-clear-message:not(.level-complete-banner) { animation: floating-block-reveal 8.5s ease-in-out both; }
+}
+@keyframes launch-light-breathe { 0%, 100% { opacity: .45; } 50% { opacity: .9; } }
+@keyframes floating-block-reveal { 0% { opacity: 0; transform: translate(-50%, 8px); } 7%, 90% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, -5px); } }
+@media (prefers-reduced-motion: reduce) {
+  .landing-shell .hero-actions .home-play-button::before,
+  .landing-shell .hero-actions .home-play-button:not(:disabled):hover::before { animation: none; }
+  .game-field .sector-clear-message:not(.level-complete-banner) { animation: none; }
+}
+html[data-motion="reduced"] .landing-shell .hero-actions .home-play-button::before,
+html[data-motion="reduced"] .landing-shell .hero-actions .home-play-button:not(:disabled):hover::before { animation: none; }
+html[data-motion="reduced"] .game-field .sector-clear-message:not(.level-complete-banner) { animation: none; }
