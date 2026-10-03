@@ -7,8 +7,8 @@ import MusicVolumeSlider from "./MusicVolumeSlider";
 export const MOTION_STORAGE_KEY = "cryptoid_reduced_effects";
 export const applySavedDisplaySettings = () => { document.documentElement.dataset.motion = localStorage.getItem(MOTION_STORAGE_KEY) === "1" ? "reduced" : "standard"; };
 export type SettingsSection = "language" | "controls" | "audio" | "display";
-type Props = { musicVolume: number; effectsVolume: number; changeMusicVolume: (value: number) => void; changeEffectsVolume: (value: number) => void; onChange?: () => void; idPrefix: string; initialSection?: SettingsSection };
-export default function SystemSettings({ musicVolume, effectsVolume, changeMusicVolume, changeEffectsVolume, onChange, idPrefix, initialSection }: Props) {
+type Props = { musicVolume: number; effectsVolume: number; changeMusicVolume: (value: number) => void; changeEffectsVolume: (value: number) => void; onChange?: () => void; idPrefix: string; initialSection?: SettingsSection; compactMobile?: boolean };
+export default function SystemSettings({ musicVolume, effectsVolume, changeMusicVolume, changeEffectsVolume, onChange, idPrefix, initialSection, compactMobile = false }: Props) {
   const { locale, automatic, choose, t } = useLocale();
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
   const [reducedEffects, setReducedEffects] = useState(() => localStorage.getItem(MOTION_STORAGE_KEY) === "1");
@@ -17,13 +17,26 @@ export default function SystemSettings({ musicVolume, effectsVolume, changeMusic
   const [controlZone, setControlZone] = useState<ControlZone>(readControlZone);
   const [vibrationEnabled, setVibrationEnabled] = useState(readVibrationEnabled);
   const [shipStart, setShipStart] = useState<ShipStart>(readShipStart);
+  const [mobileSection, setMobileSection] = useState<SettingsSection | null>(initialSection ?? null);
+  const openMobileSection = (section: SettingsSection | null) => {
+    setMobileSection(section);
+    requestAnimationFrame(() => {
+      const target = document.getElementById(section ? `${idPrefix}-settings-${section}` : `${idPrefix}-settings-overview`);
+      target?.scrollIntoView({ block: "nearest" });
+      if (section) target?.focus({ preventScroll: true });
+      else target?.querySelector<HTMLButtonElement>("button")?.focus({ preventScroll: true });
+    });
+  };
   useEffect(() => {
     if (!initialSection) return;
     const frame = requestAnimationFrame(() => { const section = document.getElementById(`${idPrefix}-settings-${initialSection}`); section?.scrollIntoView({ block: "start" }); section?.focus({ preventScroll: true }); });
     return () => cancelAnimationFrame(frame);
   }, [idPrefix, initialSection]);
   return <>
-          <div className="system-menu-section" id={`${idPrefix}-settings-language`} tabIndex={-1}>
+          {compactMobile && <nav className="mobile-settings-nav" id={`${idPrefix}-settings-overview`} aria-label={t("System menu")}>
+            {mobileSection ? <button type="button" className="mobile-settings-back" onClick={() => openMobileSection(null)}>← {t("All settings")}</button> : (["audio", "controls", "language", "display"] as const).map(section => <button key={section} type="button" className="mobile-settings-row" aria-controls={`${idPrefix}-settings-${section}`} aria-expanded={false} onClick={() => openMobileSection(section)}><b>{t(section === "audio" ? "Music & effects" : section === "controls" ? "Controls" : section === "language" ? "Language" : "Display")}</b><span>{section === "audio" ? `${musicVolume}%` : section === "controls" ? t(controlHand === "right" ? "Right-handed" : "Left-handed") : section === "language" ? languages[locale] : ""}<i aria-hidden="true">›</i></span></button>)}
+          </nav>}
+          <div className={`system-menu-section${compactMobile ? " mobile-settings-section" : ""}`} data-mobile-active={mobileSection === "language"} id={`${idPrefix}-settings-language`} tabIndex={-1}>
             <div className="system-menu-heading"><strong>{t('Language')}</strong><small>{t('Current language')}: {languages[locale]}</small></div>
             <div className="language-dropdown" data-open={languageMenuOpen ? "true" : "false"}>
               <div className="language-actions">
@@ -39,7 +52,7 @@ export default function SystemSettings({ musicVolume, effectsVolume, changeMusic
               </div>}
             </div>
           </div>
-          <div className="system-menu-section system-quick-settings" id={`${idPrefix}-settings-controls`} tabIndex={-1}>
+          <div className={`system-menu-section system-quick-settings${compactMobile ? " mobile-settings-section" : ""}`} data-mobile-active={mobileSection === "controls"} id={`${idPrefix}-settings-controls`} tabIndex={-1}>
             <div className="system-menu-heading"><strong>{t('Controls')}</strong><small>{t('Move with one thumb; activate power-ups with the other.')}</small></div>
             <button className="system-setting" type="button" aria-pressed={controlHand === "right"} onClick={() => { localStorage.setItem(CONTROL_HAND_KEY, "right"); setControlHand("right"); onChange?.(); }}><span aria-hidden="true">◁</span><b>{t('Right-handed controls')}</b></button>
             <button className="system-setting" type="button" aria-pressed={controlHand === "left"} onClick={() => { localStorage.setItem(CONTROL_HAND_KEY, "left"); setControlHand("left"); onChange?.(); }}><span aria-hidden="true">▷</span><b>{t('Left-handed controls')}</b></button>
@@ -56,12 +69,12 @@ export default function SystemSettings({ musicVolume, effectsVolume, changeMusic
               {(["higher", "touch"] as const).map(value => <button key={value} className="system-setting" type="button" aria-pressed={shipStart === value} onClick={() => { localStorage.setItem(SHIP_START_KEY, value); setShipStart(value); onChange?.(); }}><b>{t(value === "higher" ? "Above finger" : "Under finger")}</b></button>)}
             </div>
           </div>
-          <div className="system-menu-section system-quick-settings" id={`${idPrefix}-settings-audio`} tabIndex={-1}>
+          <div className={`system-menu-section system-quick-settings${compactMobile ? " mobile-settings-section" : ""}`} data-mobile-active={mobileSection === "audio"} id={`${idPrefix}-settings-audio`} tabIndex={-1}>
             <div className="system-menu-heading"><strong>{t('Music volume')}</strong></div>
             <MusicVolumeSlider id={`${idPrefix}-music-volume`} label={t('Music volume')} value={musicVolume} onChange={changeMusicVolume} />
             <MusicVolumeSlider id={`${idPrefix}-effects-volume`} label={t('Effects volume')} value={effectsVolume} onChange={changeEffectsVolume} />
           </div>
-          <div className="system-menu-section system-quick-settings" id={`${idPrefix}-settings-display`} tabIndex={-1}>
+          <div className={`system-menu-section system-quick-settings${compactMobile ? " mobile-settings-section" : ""}`} data-mobile-active={mobileSection === "display"} id={`${idPrefix}-settings-display`} tabIndex={-1}>
             <div className="system-menu-heading"><strong>{t('Display')}</strong></div>
             <button className="system-setting" type="button" onClick={() => requestGameFullscreen()}><span aria-hidden="true">⛶</span><b>{t('Full screen')}</b></button>
             <button className="system-setting" type="button" disabled={!supportsVibration()} aria-pressed={vibrationEnabled && supportsVibration()} onClick={() => { const enabled = !vibrationEnabled; localStorage.setItem(VIBRATION_KEY, enabled ? "on" : "off"); setVibrationEnabled(enabled); onChange?.(); if (!enabled) gameHaptics.stop(); }}><span aria-hidden="true">≋</span><b>{t(!supportsVibration() ? "Vibration unavailable" : vibrationEnabled ? "Vibration on" : "Vibration off")}</b></button>
