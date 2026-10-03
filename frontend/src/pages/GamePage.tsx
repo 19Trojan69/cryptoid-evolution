@@ -1551,7 +1551,7 @@ const GamePage = () => {
   return (
     <main className="game-shell" data-effects-paused={game.status !== "playing"} onPointerDownCapture={event => { retryAudio(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
       <div ref={fieldRef} className="game-field" onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()} onPointerDown={startDrag} onPointerMove={event => { if (pointerRef.current === event.pointerId) positionFromPointer(event); }} onPointerUp={event => { if (pointerRef.current === event.pointerId) { pointerRef.current = null; touchOriginRef.current = null; } }} onPointerCancel={event => { if (pointerRef.current === event.pointerId) { pointerRef.current = null; touchOriginRef.current = null; } }}>
-        <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} showNebula={game.encounter === "boss-fight"} showTwinkles={game.encounter === "normal"} />
+        <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} showNebula={game.encounter === "boss-fight"} />
         <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
         <button className="wide-fullscreen-control game-fullscreen-control" type="button" onClick={requestGameFullscreen} aria-label={t("Full screen")} title={t("Full screen")}>⛶</button>
         <header ref={hudRef} className="game-hud">

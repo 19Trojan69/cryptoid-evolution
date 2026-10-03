@@ -1,7 +1,8 @@
-import { memo, useMemo, type CSSProperties } from "react";
+import { memo, useEffect, useMemo, useState, type CSSProperties } from "react";
 import type { PlayerPosition } from "./playerCombat";
 
 type Star = { x: number; y: number; radius: number; color: string; opacity: number; glint: boolean };
+type Flare = { x: number; y: number; color: string; strength: number; size: number; duration: number };
 
 const makeRandom = (seed: number) => {
   let state = seed >>> 0;
@@ -12,7 +13,7 @@ const makeRandom = (seed: number) => {
 };
 
 const starColors = ["#e9f5ff", "#afe8ff", "#c9d3ff", "#f6dfb9", "#f6a7bf", "#ace9d3"];
-const twinkleColors = ["#9cecff", "#ffd496", "#c8b0ff", "#ffaabb", "#9cf4d1", "#a9caff", "#ffe8b3"];
+const flareColors = ["#b9e8ff", "#e5eaff", "#ffdfb1", "#e0c9ff", "#ffd1ca", "#c5f5eb"];
 
 const makeStars = (columns: number, rows: number, seed: number, nearby: boolean): Star[] => {
   const random = makeRandom(seed);
@@ -27,25 +28,8 @@ const makeStars = (columns: number, rows: number, seed: number, nearby: boolean)
   }));
 };
 
-const makeTwinkles = (seed: number) => {
-  const random = makeRandom(seed);
-  const bands = [0, 1, 2, 3, 4, 5, 6];
-  for (let index = bands.length - 1; index > 0; index--) {
-    const other = Math.floor(random() * (index + 1));
-    [bands[index], bands[other]] = [bands[other], bands[index]];
-  }
-  return bands.map((band, index) => ({
-    left: `${(index + .18 + random() * .64) * 100 / bands.length}%`,
-    top: `${(band + .18 + random() * .64) * 100 / bands.length}%`,
-    width: `${1.3 + random() * 1.9}px`,
-    height: `${1.3 + random() * 1.9}px`,
-    color: twinkleColors[Math.floor(random() * twinkleColors.length)],
-    animationDuration: `${8 + Math.floor(random() * 7)}s`,
-    animationDelay: `${-Math.floor(random() * 13)}s`,
-  }));
-};
-
-const Starfield = ({ sector, player, paused, showNebula = false, showTwinkles = false }: { sector: number; player: PlayerPosition; paused: boolean; showNebula?: boolean; showTwinkles?: boolean }) => {
+const Starfield = ({ sector, player, paused, showNebula = false }: { sector: number; player: PlayerPosition; paused: boolean; showNebula?: boolean }) => {
+  const [flare, setFlare] = useState<Flare | null>(null);
   const style = {
     "--star-parallax-x": `${(player.x - .5) * -14}px`,
     "--star-parallax-y": `${(player.y - .8) * -10}px`,
@@ -56,7 +40,6 @@ const Starfield = ({ sector, player, paused, showNebula = false, showTwinkles = 
     return {
       distant: makeStars(15, 10, seed ^ 0x5f1e2d, false),
       nearby: makeStars(13, 5, seed ^ 0xc291a7, true),
-      twinkles: makeTwinkles(seed ^ 0xa710fee),
       cloud: (() => {
         const random = makeRandom(seed ^ 0xb055c10d);
         return {
@@ -68,10 +51,39 @@ const Starfield = ({ sector, player, paused, showNebula = false, showTwinkles = 
       })(),
     };
   }, [sector]);
+  useEffect(() => {
+    if (paused) { setFlare(null); return; }
+    let timer: number | undefined;
+    let previous: Star | null = null;
+    let previousColor = -1;
+    const candidates = stars.distant.filter(star => star.x > 70 && star.x < 930 && star.y > 80 && star.y < 720);
+    const motionAllowed = () => !document.hidden && document.documentElement.dataset.motion !== "reduced" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const schedule = () => {
+      if (!motionAllowed()) return;
+      timer = window.setTimeout(() => {
+        const previousStar = previous;
+        const spaced = previousStar ? candidates.filter(star => Math.hypot(star.x - previousStar.x, star.y - previousStar.y) >= 230) : candidates;
+        const star = spaced[Math.floor(Math.random() * spaced.length)];
+        previous = star;
+        const duration = 440 + Math.round(Math.random() * 430);
+        previousColor = (previousColor + 1 + Math.floor(Math.random() * (flareColors.length - 1))) % flareColors.length;
+        setFlare({ x: star.x / 10, y: star.y / 8, color: flareColors[previousColor], strength: .45 + Math.random() * .5, size: .75 + Math.random() * .65, duration });
+        timer = window.setTimeout(() => { setFlare(null); schedule(); }, duration);
+      }, 1600 + Math.round(Math.random() * 3400));
+    };
+    const reset = () => { if (timer !== undefined) window.clearTimeout(timer); setFlare(null); schedule(); };
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const observer = new MutationObserver(reset);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-motion"] });
+    document.addEventListener("visibilitychange", reset);
+    motion.addEventListener("change", reset);
+    schedule();
+    return () => { if (timer !== undefined) window.clearTimeout(timer); observer.disconnect(); document.removeEventListener("visibilitychange", reset); motion.removeEventListener("change", reset); };
+  }, [paused, stars.distant]);
   return <div className={`starfield starfield-sector-${palette}${paused ? " starfield-paused" : ""}`} style={style} aria-hidden="true">
     {showNebula && <div className="nebula-field"><span className="nebula-cloud" style={stars.cloud} /></div>}
     <div className="milky-band" />
-    {showTwinkles && <div className="level-twinkles">{stars.twinkles.map((star, index) => <i key={index} style={star} />)}</div>}
+    {flare && <i className="distant-star-flare" style={{ left: `${flare.x}%`, top: `${flare.y}%`, "--flare-color": flare.color, "--flare-strength": flare.strength, "--flare-size": flare.size, "--flare-duration": `${flare.duration}ms` } as CSSProperties} />}
     <svg className="starfield-stars starfield-distant" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice">
       {stars.distant.map((star, index) => <circle key={index} cx={star.x} cy={star.y} r={star.radius} fill={star.color} opacity={star.opacity} />)}
     </svg>
@@ -92,4 +104,4 @@ const Starfield = ({ sector, player, paused, showNebula = false, showTwinkles = 
   </div>;
 };
 
-export default memo(Starfield, (previous, next) => previous.sector === next.sector && previous.paused === next.paused && previous.showNebula === next.showNebula && previous.showTwinkles === next.showTwinkles && (typeof window !== "undefined" && window.matchMedia("(max-width: 700px)").matches || previous.player === next.player));
+export default memo(Starfield, (previous, next) => previous.sector === next.sector && previous.paused === next.paused && previous.showNebula === next.showNebula && (typeof window !== "undefined" && window.matchMedia("(max-width: 700px)").matches || previous.player === next.player));
