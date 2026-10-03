@@ -248,12 +248,13 @@ test('enemy shots use their own cached buffer and share the boss voice cap, slid
     audio.playEnemyShot(-1);
     assert.notEqual(sources[2].buffer, sources[0].buffer);
     assert.notEqual(sources[2].buffer, sources[1].buffer);
-    assert.equal(sources[2].buffer.length, 8640);
+    assert.equal(sources[2].buffer.length, 6720);
     assert.equal(pans.at(-1).pan.value, -.65);
     const enemyBuffer = sources[2].buffer;
     for (let i = 0; i < 25; i++) audio.playEnemyShot();
     assert.equal(buffers.length, 19);
     assert.ok(sources.slice(2).every(source => source.buffer === enemyBuffer));
+    assert.deepEqual(sources.slice(2, 5).map(source => source.playbackRate.value), [.96, 1, 1.04]);
     assert.equal(stopped, 7); // 27 shared weapon voices, only 20 can remain active.
     audio.setEffectsVolume(25);
     assert.equal(gains[0].gain.value, .5);
