@@ -47,6 +47,9 @@ export function createSaveQueue(uid: string) {
     drain,
     get durable() { return durable; },
     async recover() {
+      // A pause-menu exit may occur while the current block is still uploading.
+      // Let it finish before choosing the first pending run to recover.
+      if (inflight) { try { await inflight; } catch { /* Recover the retained entry below. */ } }
       if (!entries.length) return;
       const { data } = await retrySave(() => axiosClient.post<{ finished?: boolean }>("/progress/recover", { runId: entries[0].body.runId }));
       if (data.finished) {
