@@ -533,6 +533,7 @@ html[data-motion="reduced"] .hull-reflection { display: none; }
 .player-ship { width: 76px; height: 76px; }
 .player-ship { filter: none; }
 .player-ship .fleet-sprite { z-index: 1; filter: sepia(1) saturate(4.5) hue-rotate(calc(225deg + var(--ship-hue))); }
+.player-muzzle-flash { position: absolute; z-index: 4; left: 50%; top: 20%; width: 7px; height: 7px; border-radius: 50%; transform: translate(-50%, -50%); opacity: var(--muzzle-light, 0); background: radial-gradient(circle, #fff 0 18%, #b6f5ff 45%, transparent 75%); box-shadow: 0 0 5px 2px #c9f8ff, 0 0 10px 3px #6adfff88; pointer-events: none; }
 .player-ship .player-engine { position: absolute; z-index: 0; top: calc(var(--nozzle-y) - 2px); left: var(--nozzle-x); bottom: auto; width: var(--nozzle-width, 5.5%); height: calc(var(--flame-length) + 2px); min-width: 2px; transform: translateX(-50%); transform-origin: 50% 0; background: linear-gradient(180deg, #fff 0%, #bdf5ff 20%, var(--ship-glow) 52%, #6079ff 72%, transparent 100%); filter: drop-shadow(0 2px 2px var(--ship-glow)); clip-path: polygon(12% 0, 88% 0, 82% 18%, 100% 34%, 72% 69%, 55% 100%, 48% 78%, 34% 94%, 27% 64%, 0 34%, 18% 18%); transition: height .14s ease-out; }
 .player-ship-grey .fleet-sprite { filter: grayscale(1) brightness(1.12); }
 .player-ship-white .fleet-sprite { filter: grayscale(1) brightness(1.55); }
