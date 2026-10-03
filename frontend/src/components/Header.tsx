@@ -2,6 +2,7 @@ import { useLocale } from "../i18n";
 import type { User } from "../types/pi.ts";
 import { Link } from "react-router-dom";
 import BlockchainIcon from "./BlockchainIcon";
+import WolfLogo from "./WolfLogo";
 
 interface HeaderProps {
   onSignIn: () => void;
@@ -23,7 +24,7 @@ const Header = ({ user, serviceRank, onSignIn, onSignOut, onSendTestNotification
   return (
     <header className={`site-header${onOpenQuickAccess ? " header-with-quick-access" : ""}`}>
       {onOpenQuickAccess && <button className="button button-secondary quick-access-trigger" type="button" onClick={onOpenQuickAccess} aria-expanded={quickAccessOpen} aria-controls="quick-access-menu" aria-haspopup="dialog"><span aria-hidden="true"><BlockchainIcon kind="network" /></span><b>{t("Quick access")}</b></button>}
-      <a className="brand-mark" href="/" aria-label="Cryptoid Evolution – Trojan Wolf Games"><img className="brand-wolf-logo" src="/trojan-wolf-games.webp" alt="Trojan Wolf Games" width="148" height="74" /><span className="brand-copyright" aria-hidden="true">©</span></a>
+      <a className="brand-mark" href="/" aria-label="Cryptoid Evolution – Trojan Wolf Games"><WolfLogo /><span className="brand-copyright" aria-hidden="true">©</span></a>
       <div className="user-section">
         {user && onOpenQuickAccess ? (
           <div className="header-account" role="status" title={`${t("Signed in as")} @${user.username}`}>
