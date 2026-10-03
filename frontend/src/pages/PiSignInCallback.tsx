@@ -4,12 +4,15 @@ import { PI_OAUTH_STATE_KEY } from "../config/piOAuth";
 import type { User } from "../types/pi";
 import { ADMIN_MODE_KEY } from "./shipFleet";
 
+import { useLocale } from "../i18n";
+
 type CallbackStatus = "working" | "success" | "error";
 
 const PiSignInCallback = () => {
+  const { t } = useLocale();
   const started = useRef(false);
   const [status, setStatus] = useState<CallbackStatus>("working");
-  const [message, setMessage] = useState("Pi-Anmeldung wird sicher abgeschlossen …");
+  const [message, setMessage] = useState("Completing secure Pi sign-in…");
 
   useEffect(() => {
     if (started.current) return;
@@ -27,13 +30,13 @@ const PiSignInCallback = () => {
       sessionStorage.removeItem(PI_OAUTH_STATE_KEY);
 
       if (!expectedState || returnedState !== expectedState) {
-        throw new Error("Die sichere Anmeldeprüfung ist fehlgeschlagen. Bitte starte die Pi-Anmeldung erneut.");
+        throw new Error("Sign-in verification failed. Start Pi sign-in again.");
       }
       if (error) {
-        throw new Error(error === "access_denied" ? "Die Pi-Anmeldung wurde nicht bestätigt." : "Die Pi-Anmeldung wurde abgebrochen oder ist abgelaufen.");
+        throw new Error(error === "access_denied" ? "Pi sign-in was not approved." : "Pi sign-in was cancelled or expired.");
       }
       if (!accessToken) {
-        throw new Error("Pi hat kein gültiges Anmeldetoken zurückgegeben.");
+        throw new Error("Pi returned no valid sign-in token.");
       }
 
       sessionStorage.setItem(PI_ACCESS_TOKEN_KEY, accessToken);
@@ -43,7 +46,7 @@ const PiSignInCallback = () => {
 
       if (!active) return;
       setStatus("success");
-      setMessage("Anmeldung erfolgreich. Cryptoid Evolution wird geöffnet …");
+      setMessage("Signed in. Opening Cryptoid Evolution…");
       const returnTo = sessionStorage.getItem("cryptoid_pi_return_to") === "/admin" ? "/admin" : "/";
       sessionStorage.removeItem("cryptoid_pi_return_to");
       window.setTimeout(() => window.location.replace(returnTo), 500);
@@ -53,7 +56,8 @@ const PiSignInCallback = () => {
       sessionStorage.removeItem(PI_ACCESS_TOKEN_KEY);
       if (!active) return;
       setStatus("error");
-      setMessage(error instanceof Error ? error.message : "Die Pi-Anmeldung konnte nicht abgeschlossen werden.");
+      const knownErrors = new Set(["Sign-in verification failed. Start Pi sign-in again.", "Pi sign-in was not approved.", "Pi sign-in was cancelled or expired.", "Pi returned no valid sign-in token."]);
+      setMessage(error instanceof Error && knownErrors.has(error.message) ? error.message : "Could not sign in with Pi. Please retry.");
     });
 
     return () => { active = false; };
@@ -63,10 +67,10 @@ const PiSignInCallback = () => {
     <main className="app-shell landing-shell">
       <div className="signin-overlay">
         <section className="signin-modal" role="status" aria-live="polite">
-          <p className="eyebrow">PI SIGN-IN</p>
-          <h1>{status === "error" ? "Anmeldung fehlgeschlagen" : "Pi-Konto verbinden"}</h1>
-          <p>{message}</p>
-          {status === "error" ? <a className="button button-primary" href="/">Zurück zur Startseite</a> : null}
+          <p className="eyebrow">{t("Sign in with Pi")}</p>
+          <h1>{status === "error" ? t("Sign-in failed") : t("Connect your Pi wallet")}</h1>
+          <p>{t(message)}</p>
+          {status === "error" ? <a className="button button-primary" href="/">{t("Go home")}</a> : null}
         </section>
       </div>
     </main>

@@ -49,9 +49,9 @@ export const useAuth = () => {
         sessionStorage.removeItem(PI_ACCESS_TOKEN_KEY);
         sessionStorage.removeItem(ADMIN_MODE_KEY);
         setUser(null); setCanAdmin(false); setAdminMode(false);
-        setAuthError("Die Pi-Anmeldung ist abgelaufen. Bitte erneut anmelden.");
+        setAuthError("Pi session expired. Sign in again.");
       } else {
-        setAuthError("Die Pi-Sitzung konnte nicht geprüft werden. Bitte erneut versuchen.");
+        setAuthError("Could not verify the Pi session. Please retry.");
       }
       throw error;
     } finally { setAuthReady(true); }
@@ -125,7 +125,7 @@ export const useAuth = () => {
       throw new Error("Pi sign-in is unavailable in this browser.");
     } catch (err) {
       console.error("Error authenticating:", err);
-      setAuthError("Die Pi-Anmeldung konnte nicht abgeschlossen werden. Bitte erneut versuchen.");
+      setAuthError("Could not sign in with Pi. Please retry.");
     } finally {
       signingIn.current = false;
       setIsLoading(false);
@@ -146,7 +146,7 @@ export const useAuth = () => {
           } catch (error) {
             if (!active) return;
             if (!axios.isAxiosError(error) || error.response?.status !== 401) {
-              setAuthError("Die Pi-Sitzung konnte nicht geprüft werden. Bitte erneut versuchen.");
+              setAuthError("Could not verify the Pi session. Please retry.");
               return;
             }
             localStorage.removeItem("cryptoid_pi_session");

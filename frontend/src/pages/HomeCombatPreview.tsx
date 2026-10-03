@@ -126,7 +126,7 @@ export default function HomeCombatPreview({ defender, paused = false }: { defend
       if (resumeRef.current === resume) resumeRef.current = null;
     };
   }, [actors, scene]);
-  return <div ref={root} className="home-combat-preview home-combat-cinematic" data-paused={paused} role="img" aria-label="Raumschiffe verfolgen sich durch den Weltraum, feuern und explodieren">
+  return <div ref={root} className="home-combat-preview home-combat-cinematic" data-paused={paused} role="img" aria-hidden="true">
     {actors.map((actor, i) => <span key={`${scene}-${i}`} ref={node => { ships.current[i] = node; }} className={`home-cinematic-ship home-cinematic-ship-${i}`} style={{ "--combat-glow": allPlayerColors.find(color => color.id === actor.color)?.glow } as CSSProperties} aria-hidden="true">
       <span className="home-cinematic-body"><PaintedShip className="home-cinematic-underside" {...actor} />
         {shipNozzleStyles(actor.sprite).map((style, j) => <i key={j} className="home-combat-engine" style={style} />)}

@@ -86,7 +86,7 @@ export default function ShipSelectionPanel({
             <button className="button button-secondary ship-shard-button" type="button" onClick={onBuyStandard} disabled={!standardAvailable || shards < price}>
               {t(hullCount ? "Buy another for" : "Buy for")} ◆ {shardPrice} {t("Shards")}
             </button>
-            {!standardAvailable && <small className="ship-lock-notice">MAINNET READY · {t("Purchases locked")}</small>}
+            {!standardAvailable && <small className="ship-lock-notice">{t("MAINNET READY")} · {t("Purchases locked")}</small>}
             {standardAvailable && shards < price && <small className="ship-shortfall">◆ {(price - shards).toLocaleString(locale)} {t("more Shards needed")}</small>}
           </> : <>
             {ownedStage < stage && <button className="button button-secondary" type="button" disabled>{t("Buy for")} {focusedOffer ? piPrice(focusedOffer.pricePi) : "Pi"} · {t("Purchases locked")}</button>}
@@ -104,14 +104,14 @@ export default function ShipSelectionPanel({
         return <button key={level} className={`ship-evolution-stage${!stageOwned ? " ship-evolution-stage-locked" : ""}`} type="button"
           aria-pressed={focusStage === level} onClick={() => onStageChange(level)}>
           <span className="ship-evolution-stage-art" aria-hidden="true"><img src={`/ships/evolution/ship_${String(skin.sprite + 1).padStart(2, "0")}_stage_${level}.png`} alt="" loading="lazy" decoding="async" style={shipPreviewPlacement(skin.sprite, level)} /></span>
-          <span className="ship-evolution-stage-info"><strong>0{level} · {t(stageLabel(level))}</strong><small>{offer ? piPrice(offer.pricePi) : t("Price unavailable")}</small><em>{stageOwned ? t("OWNED") : "MAINNET READY · " + t("Planned price")}</em></span>
+          <span className="ship-evolution-stage-info"><strong>0{level} · {t(stageLabel(level))}</strong><small>{offer ? piPrice(offer.pricePi) : t("Price unavailable")}</small><em>{stageOwned ? t("OWNED") : t("MAINNET READY") + " · " + t("Planned price")}</em></span>
         </button>;
       })}
     </div>}
     {(view === "hangar" || adminPreview) && <div className="ship-one-checkout">
       {view === "hangar"
         ? <><span>{selectedSkinId === skin.id && selectedColorId === color.id ? t("EQUIPPED") : t("Owned")}</span><button className="button button-secondary" type="button" onClick={onOpenShop}>{t("Shop")} ›</button></>
-        : <><span>Admin-Testzugang · alle Varianten freigeschaltet</span><button className="button button-secondary" type="button" onClick={onEquipPreview}>Für Testflug ausrüsten</button></>}
+        : <><span>{t("Admin test access: all variants unlocked")}</span><button className="button button-secondary" type="button" onClick={onEquipPreview}>{t("Equip for next mission")}</button></>}
     </div>}
     {message && <p className="hangar-message" role="status">{message}</p>}
     <details className="ship-rules"><summary>{t("Shield & protection")}</summary><p>{t("Upgrades apply to this ship type in every color. Each new life restores its projectile protection. An active shield absorbs shots and ship collisions; unshielded ship collisions destroy the hull immediately.")}</p></details>

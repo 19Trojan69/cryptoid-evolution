@@ -4,13 +4,15 @@ import GamePage from "./pages/GamePage.tsx";
 import PiSignInCallback from "./pages/PiSignInCallback.tsx";
 import LegalPage from "./pages/LegalPage.tsx";
 import { lazy, Suspense } from "react";
+import { useLocale } from "./i18n";
+const AdminLoading = () => { const { t } = useLocale(); return <p role="status">{t("Loading admin center…")}</p>; };
 const AdminPage = lazy(() => import("./pages/AdminPage.tsx"));
 
 export const router = createBrowserRouter([
   {
     path: "/admin",
     element: (
-      <Suspense fallback={<p role="status">Admin-Zentrale wird geladen …</p>}>
+      <Suspense fallback={<AdminLoading />}>
         <AdminPage />
       </Suspense>
     ),

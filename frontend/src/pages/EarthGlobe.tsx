@@ -88,7 +88,7 @@ const EarthGlobe = ({ paused = false }: { paused?: boolean }) => {
     map.src = "/planets/earth-map-hd.jpg";
     return () => { disposed = true; if (timer !== undefined) window.clearInterval(timer); resizeObserver?.disconnect(); map.onload = null; };
   }, []);
-  return <canvas ref={canvasRef} width={MIN_SIZE} height={MIN_SIZE} className="earth-globe-canvas" role="img" aria-label="Slowly rotating Earth" />;
+  return <canvas ref={canvasRef} width={MIN_SIZE} height={MIN_SIZE} className="earth-globe-canvas" aria-hidden="true" />;
 };
 
 export default memo(EarthGlobe);

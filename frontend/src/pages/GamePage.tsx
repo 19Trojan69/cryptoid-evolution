@@ -326,7 +326,7 @@ const fallingBoss = (effect: Effect) => <div className="boss-falling-hull" style
 const ImpactEffectView = memo(({ effect }: { effect: Effect }) => effect.kind === "boss-fall" ? fallingBoss(effect) : <div className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y, ...(["explosion", "shatter", "player-explosion"].includes(effect.kind) ? { width: explosionDiameter(effect.debrisSize ?? 58), height: explosionDiameter(effect.debrisSize ?? 58), marginLeft: -explosionDiameter(effect.debrisSize ?? 58) / 2, marginTop: -explosionDiameter(effect.debrisSize ?? 58) / 2 } : {}), ...(effect.kind === "boss-explosion" ? { "--boss-explosion-size": `${effect.debrisSize ?? 240}px`, "--boss-image": `url('${effect.bossImage}')`, "--boss-final-delay": `${effect.finalDelayMs ?? 1_450}ms` } : {}) } as CSSProperties} aria-hidden="true">{effect.kind !== "boss-explosion" && <span />}{shipDebris(effect)}</div>);
 
 const GamePage = () => {
-  const { t } = useLocale();
+  const { t, lives } = useLocale();
   useEffect(applySavedDisplaySettings, []);
   const navigate = useNavigate();
   const fieldRef = useRef<HTMLDivElement>(null);
@@ -431,7 +431,7 @@ const GamePage = () => {
           saveQueueRef.current ??= createSaveQueue(me.data.user.uid);
           try { await saveQueueRef.current.recover(); }
           catch {
-            setRecoveryError(true); setStartError("Eine vorgemerkte Speicherung konnte nicht bestätigt werden. Bitte erneut übertragen oder ausdrücklich beim zuletzt bestätigten Kontostand bleiben.");
+            setRecoveryError(true); setStartError("Save not confirmed. Retry or use the last confirmed save.");
             startRequestRef.current = false; return;
           }
           saveQueueReadyRef.current = true;
@@ -500,21 +500,21 @@ const GamePage = () => {
         stateRef.current.hearts = Math.min(stateRef.current.maxHearts, data.checkpoint.hearts);
         stateRef.current.weaponTimers = data.checkpoint.weaponTimers.map((timer, level) => stateRef.current.unlockedWeapons.includes(level) ? timer : 0);
         syncSelectedWeapon(stateRef.current);
-        setSaveNotice("Kontospielstand geladen · letzter abgeschlossener Abschnitt.");
+        setSaveNotice("Last completed section loaded.");
       }
     } catch (error) {
       console.error("Could not load paid loadout", error);
       if (sessionStorage.getItem(ADMIN_MODE_KEY) === "1") {
         const status = axios.isAxiosError(error) ? error.response?.status : undefined;
-        setStartError(status === 401 ? "Die Pi-Anmeldung ist abgelaufen. Bitte in der Admin-Zentrale erneut anmelden."
-          : status === 403 ? "Dein Pi-Konto hat für diesen Test keinen Admin-Zugriff. Bitte die Sitzung in der Admin-Zentrale prüfen."
-            : "Der Test konnte nicht geladen werden. Bitte erneut versuchen oder die Sitzung in der Admin-Zentrale prüfen.");
+        setStartError(status === 401 ? "Pi session expired. Sign in again."
+          : status === 403 ? "This Pi account has no admin access."
+            : "Could not load the test. Retry or sign in again.");
         startRequestRef.current = false;
         return;
       }
       const status = axios.isAxiosError(error) ? error.response?.status : undefined;
       if (status === 409) { saveChoiceRef.current = null; startKeyRef.current = crypto.randomUUID(); }
-      setStartError(status === 409 ? "Der Kontospielstand wurde inzwischen geändert. Bitte erneut laden und die Auswahl bestätigen." : "Kontospielstand nicht erreichbar oder Anmeldung abgelaufen. Bitte erneut versuchen oder auf der Startseite anmelden. Es wird kein lokaler Kontostand überschrieben.");
+      setStartError(status === 409 ? "Save changed. Reload and choose again." : "Save unavailable. Retry or sign in again. Local data is unchanged.");
       startRequestRef.current = false;
       return;
     }
@@ -650,11 +650,11 @@ const GamePage = () => {
     rewardProgressRef.current = result.progress;
     const runId = scoreRunRef.current;
     if (runId) {
-      setSaveNotice("Spielstand wird gespeichert …");
+      setSaveNotice("Saving game…");
       const body = { runId, ...event, save: snapshotOf(stateRef.current) };
       pendingRewardsRef.current = (saveQueueRef.current ? saveQueueRef.current.enqueue({ path: "/rewards/event", body }) : retrySave(() => axiosClient.post("/rewards/event", body)))
-        .then(() => setSaveNotice(saveQueueRef.current?.durable === false ? "Kontospielstand gespeichert; lokaler Offline-Puffer ist nicht verfügbar." : "Kontospielstand gespeichert."))
-        .catch(() => setSaveNotice("Noch nicht bestätigt · letzter Kontospeicherpunkt bleibt erhalten. Übertragung erneut versuchen."));
+        .then(() => setSaveNotice(saveQueueRef.current?.durable === false ? "Game saved. Offline backup unavailable." : "Game saved."))
+        .catch(() => setSaveNotice("Save not confirmed. Retry or use the last confirmed save."));
     }
     return result.notice;
   };
@@ -687,7 +687,7 @@ const GamePage = () => {
       const result = awardBossSticker(progress, boss.config.id);
       const next = reachLevel(result.progress, Math.min(500, state.sector + 1));
       const rank = rewardRank(next);
-      return { progress: next, notice: `BOSS-STICKER ${boss.config.id}/50 · ${result.stars}★${rank !== previousRank ? ` · NEUER RANG ${rank.toUpperCase()}` : ""}` };
+      return { progress: next, notice: `Boss stickers · ${boss.config.id}/50 · ${result.stars}★${rank !== previousRank ? ` · New rank · ${rank}` : ""}` };
     }, { kind: "boss", level: boss.config.id, stage: state.sector });
     state.encounter = "boss-clear";
     state.asteroids = [];
@@ -1213,7 +1213,7 @@ const GamePage = () => {
           saveReward(progress => ({ progress: awardBlock(progress, campaignLevel(state.sector), sectorInChapter(state.sector)), notice: "" }), { kind: "block", level: campaignLevel(state.sector), stage: state.sector });
           if (link.linked) state.rewardNotice = saveReward(progress => {
             const result = awardChain(progress, campaignLevel(state.sector));
-            return { progress: result.progress, notice: result.milestone ? `CHAIN-ABZEICHEN · ${result.milestone} CHAINS` : "" };
+            return { progress: result.progress, notice: result.milestone ? `Chain milestones · ${result.milestone} · Chains` : "" };
           }, { kind: "chain", level: campaignLevel(state.sector), stage: state.sector });
         }
         if (bonus && state.phase === "SECTOR_CLEAR" && previousPhase !== "SECTOR_CLEAR") {
@@ -1230,7 +1230,7 @@ const GamePage = () => {
           if (reward.powerUps.length || recoveredHeart) soundRef.current?.play("pickup");
           state.rewardNotice = saveReward(progress => {
             const result = awardBonusMedal(progress, campaignLevel(state.sector), state.bonusHits);
-            return { progress: result.progress, notice: result.improved && result.medal ? `BONUS-MEDAILLE · ${result.medal.toUpperCase()}` : "" };
+            return { progress: result.progress, notice: result.improved && result.medal ? `Bonus medals · ${result.medal}` : "" };
           }, { kind: "bonus", level: campaignLevel(state.sector), stage: state.sector, hits: state.bonusHits });
         }
         if (!adminRunRef.current && !scoreRunRef.current && state.score > bestThisDeviceRef.current) {
@@ -1359,7 +1359,7 @@ const GamePage = () => {
     soundRef.current?.play(power === "bomb" ? "nova" : power === "emp" ? "emp" : power === "overdrive" ? "boost" : "pickup");
     setGame({ ...state });
   };
-  const weaponNames = ["", "Standard", "Twin", "Rapid", "Triple", "Plasma"];
+  const weaponNames = ["", t("Standard"), t("Twin"), t("Rapid"), t("Triple"), t("Plasma")];
   const weaponGlyphs = ["", "I", "II", "III", "IV", "V"];
   const selectWeaponLevel = (level: number) => {
     const state = stateRef.current;
@@ -1495,7 +1495,7 @@ const GamePage = () => {
     if (!queue) return;
     pauseLeaveRef.current = true;
     setPauseLeaving(true);
-    setSaveNotice("Speicherübertragung wird geprüft …");
+    setSaveNotice("Checking save…");
     try {
       // Finish pending completed blocks first, then carry only the remaining
       // hearts into the checkpoint. Unfinished points and shards are discarded.
@@ -1507,7 +1507,7 @@ const GamePage = () => {
       leaveGameFullscreen();
       navigate("/");
     } catch {
-      setSaveNotice("Noch nicht bestätigt · Übertragung fehlgeschlagen. Das Spiel bleibt pausiert; bitte erneut speichern.");
+      setSaveNotice("Save failed. The game stays paused. Please retry.");
     } finally {
       pauseLeaveRef.current = false;
       setPauseLeaving(false);
@@ -1520,6 +1520,12 @@ const GamePage = () => {
   const levelComplete = game.encounter === "bonus" && game.phase === "SECTOR_CLEAR";
   const sectorIntro = game.encounter === "normal" && game.phase === "SECTOR_INTRO" && round === 1;
   const levelIntro = sectorIntro && sectorLabel === 1;
+  const translateBonusResult = (result: string) => result.split(" · ").slice(1).map(part => {
+    const value = part.match(/^\+(\d+) (BONUS SHARDS|CHAIN SHARDS)$/);
+    if (value) return `+${value[1]} ${t(value[2] === "BONUS SHARDS" ? "Bonus Shards" : "Chain Shards")}`;
+    if (part === "+1 HEART") return `+1 ${t("Heart")}`;
+    return part.split(" + ").map(key => t(key)).join(" + ");
+  }).join(" · ");
   const transitionHeadline = levelComplete
     ? <><b>{t("LEVEL")} {levelLabel}</b><i>{t("COMPLETE")}</i></>
     : levelIntro
@@ -1527,7 +1533,7 @@ const GamePage = () => {
       : sectorIntro
         ? `${t("Block")} ${sectorLabel} / ${BLOCKS_PER_CHAIN}`
       : game.encounter === "bonus"
-        ? game.phase === "SECTOR_CLEAR" ? game.bonusResult.split(" · ")[0] : t("BONUS CHALLENGE")
+        ? game.phase === "SECTOR_CLEAR" ? t(game.bonusResult.split(" · ")[0]) : t("BONUS CHALLENGE")
         : game.encounter !== "normal"
           ? game.encounter === "boss-clear" ? t("BOSS DEFEATED") : t("WARNING · SECTOR BOSS")
           : game.phase === "SECTOR_CLEAR"
@@ -1538,21 +1544,21 @@ const GamePage = () => {
     const queue = saveQueueRef.current;
     if (!queue || saveRetrying || pauseLeaveRef.current) return;
     setSaveRetrying(true);
-    setSaveNotice("Spielstand wird gespeichert …");
+    setSaveNotice("Saving game…");
     try {
       await queue.recover();
-      setSaveNotice(queue.durable ? "Kontospielstand gespeichert." : "Kontospielstand gespeichert; lokaler Offline-Puffer ist nicht verfügbar.");
+      setSaveNotice(queue.durable ? "Game saved." : "Game saved. Offline backup unavailable.");
     } catch {
-      setSaveNotice("Noch nicht bestätigt · bitte Verbindung und Anmeldung prüfen. Ausstehende Übertragungen bleiben im Offline-Puffer, sofern dieser verfügbar ist.");
+      setSaveNotice("Save not confirmed. Check your connection and sign-in.");
     } finally { setSaveRetrying(false); }
   };
   const scoreSyncStatus = scoreSync !== "idle" && <p role="status">{accountRun
-    ? scoreSync === "saving" ? "Kontospielstand wird gespeichert …" : scoreSync === "saved" ? "Kontospielstand gespeichert." : "Übertragung noch nicht bestätigt. Der lokale Offline-Puffer wartet auf erneute Übertragung."
+    ? scoreSync === "saving" ? t("Saving game…") : scoreSync === "saved" ? t("Game saved.") : t("Save not confirmed. Pending data will be retried.")
     : t(scoreSync === "saving" ? "Saving personal best…" : scoreSync === "saved" ? "Personal best saved." : "Could not sync personal best. Local best is saved.")}
     {accountRun && scoreSync === "failed" && <button className="text-button" type="button" onClick={() => {
       setScoreSync("saving");
-      void saveQueueRef.current?.recover().then(() => { setScoreSync("saved"); setSaveNotice("Kontospielstand gespeichert."); }).catch(() => setScoreSync("failed"));
-    }}>Erneut übertragen</button>}</p>;
+      void saveQueueRef.current?.recover().then(() => { setScoreSync("saved"); setSaveNotice("Game saved."); }).catch(() => setScoreSync("failed"));
+    }}>{t("Retry save")}</button>}</p>;
 
   return (
     <main className="game-shell" data-effects-paused={game.status !== "playing"} onPointerDownCapture={event => { retryAudio(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
@@ -1568,35 +1574,35 @@ const GamePage = () => {
           <div className="hud-stat round-hud chain-hud" aria-label={`${t("Block")} ${game.chainBlocks}/${BLOCKS_PER_CHAIN}`}><span>{t("Block")}</span><strong>{game.chainBlocks}<small>/{BLOCKS_PER_CHAIN}</small></strong></div>
           <button className="game-control pause-control" type="button" disabled={pauseLeaving || game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { if (pauseLeaveRef.current) return; const resuming = game.status === "paused"; stateRef.current.status = resuming ? "playing" : "paused"; setGame({ ...stateRef.current }); if (resuming) window.setTimeout(retryAudio, 0); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
         </header>
-        <div className="game-label">{adminRunRef.current && <strong>ADMIN-TEST · </strong>}{t("LEVEL")} {levelLabel} <span>· <strong className="game-region-name">{sectorName(game.sector)}</strong> · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/${BLOCKS_PER_CHAIN}` : game.encounter === "bonus" ? t("BONUS CHALLENGE") : t("CORE WARDEN")}</span></div>
-        {audioNeedsTap && game.status === "playing" && <button className={`audio-retry${game.pickupNotice ? " audio-retry-with-pickup" : ""}`} type="button" onClick={retryAudio}>Ton aktivieren</button>}
+        <div className="game-label">{adminRunRef.current && <strong>{t("Admin center")} · </strong>}{t("LEVEL")} {levelLabel} <span>· <strong className="game-region-name">{sectorName(game.sector)}</strong> · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/${BLOCKS_PER_CHAIN}` : game.encounter === "bonus" ? t("BONUS CHALLENGE") : t("CORE WARDEN")}</span></div>
+        {audioNeedsTap && game.status === "playing" && <button className={`audio-retry${game.pickupNotice ? " audio-retry-with-pickup" : ""}`} type="button" onClick={retryAudio}>{t("Enable sound")}</button>}
         {game.encounter === "bonus" && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">{t("BONUS TARGETS")} {game.bonusHits} / {BONUS_TARGET_COUNT} · {t("NO ENEMY FIRE")}</div>}
         
         {game.status === "loading" && <div className="game-overlay"><div className="game-modal mission-start-modal">
-          <h1>{resumeOffer ? <><span className="desktop-menu-only">Kontospielstand</span><span className="mobile-menu-only">{t(confirmNewRun ? "Start from the beginning?" : "Your mission")}</span></> : startError ? "Start noch nicht bestätigt" : t('Preparing mission')}</h1>
-          <p>{startError || (resumeOffer ? "Bestätigte Speicherpunkte bleiben im Pi-Konto erhalten. Angefangene Abschnitte werden beim Fortsetzen neu gestartet." : t('Checking your saved hangar loadout.'))}</p>
+          <h1>{resumeOffer ? <><span className="desktop-menu-only">{t("Account save")}</span><span className="mobile-menu-only">{t(confirmNewRun ? "Start from the beginning?" : "Your mission")}</span></> : startError ? t("Start not confirmed") : t('Preparing mission')}</h1>
+          <p>{(startError && t(startError)) || (resumeOffer ? t("Completed sections stay saved in your Pi account. An unfinished section restarts when you resume.") : t('Checking your saved hangar loadout.'))}</p>
           {resumeOffer && !confirmNewRun && <>
-            {resumeOffer.mission && <><p className="desktop-menu-only">Fortsetzen ab Abschnitt {resumeOffer.mission.sector} · {resumeOffer.mission.phase} · {resumeOffer.mission.snapshot.hearts} Leben · {resumeOffer.mission.snapshot.score} Punkte.</p><div className="mobile-menu-only mission-resume-summary"><strong>{sectorName(resumeOffer.mission.sector)}</strong><p>{t("Level")} {campaignLevel(resumeOffer.mission.sector)} · {resumeOffer.mission.phase === "normal" ? `${t("Block")} ${sectorInChapter(resumeOffer.mission.sector)}/9` : resumeOffer.mission.phase === "boss" ? t("Boss") : t("Bonus round")} · {resumeOffer.mission.snapshot.hearts} {t("Hearts")}</p><p>{resumeOffer.mission.snapshot.score} {t("Score")} · {resumeOffer.mission.snapshot.shards} {t("Shards")}</p></div></>}
-            {resumeOffer.version === 0 && <p>Du hast einen alten lokalen Bestand. Die einmalige Übernahme betrifft nur Shards und Standardschiffe, keine Pi-Käufe oder Rekorde. Ohne Übernahme bleibt der lokale Bestand auf diesem Gerät; nach dem ersten Kontospiel ist der Import geschlossen.</p>}
+            {resumeOffer.mission && <><p className="desktop-menu-only">{t("Resume at section {section} · {phase} · {lives} · {score} points.", { section: resumeOffer.mission.sector, phase: t(resumeOffer.mission.phase === "normal" ? "Block" : resumeOffer.mission.phase === "boss" ? "Boss" : "Bonus round"), lives: lives(resumeOffer.mission.snapshot.hearts), score: resumeOffer.mission.snapshot.score })}</p><div className="mobile-menu-only mission-resume-summary"><strong>{sectorName(resumeOffer.mission.sector)}</strong><p>{t("Level")} {campaignLevel(resumeOffer.mission.sector)} · {resumeOffer.mission.phase === "normal" ? `${t("Block")} ${sectorInChapter(resumeOffer.mission.sector)}/9` : resumeOffer.mission.phase === "boss" ? t("Boss") : t("Bonus round")} · {lives(resumeOffer.mission.snapshot.hearts)}</p><p>{resumeOffer.mission.snapshot.score} {t("Score")} · {resumeOffer.mission.snapshot.shards} {t("Shards")}</p></div></>}
+            {resumeOffer.version === 0 && <p>{t("You can import local Shards and Standard ships once, before your first account game. Pi purchases and records are excluded. Otherwise, local items stay on this device.")}</p>}
             <div className="modal-actions">
-              {resumeOffer.mission && <button type="button" className="button button-primary" onClick={() => { saveChoiceRef.current = "resume"; setResumeOffer(null); void activateLoadout(); }}>Fortsetzen</button>}
-              <button type="button" className="button button-secondary" onClick={() => { if (resumeOffer.mission && window.matchMedia("(max-width: 600px)").matches) { setConfirmNewRun(true); return; } saveChoiceRef.current = "new"; setResumeOffer(null); void activateLoadout(); }}>{resumeOffer.mission ? <><span className="desktop-menu-only">Neues Spiel – alten Lauf ersetzen</span><span className="mobile-menu-only">{t("New game")}</span></> : "Mit Kontobestand beginnen"}</button>
-              {resumeOffer.version === 0 && <button type="button" className="button button-secondary" onClick={() => { startRequestRef.current = true; void mutateAccountInventory(resumeOffer, { action: "import", confirm: true, ...localInventory() }).then(() => { startRequestRef.current = false; saveChoiceRef.current = "new"; setResumeOffer(null); void activateLoadout(); }).catch(() => { startRequestRef.current = false; setStartError("Lokale Übernahme nicht bestätigt. Bitte zur Startseite zurückkehren und den Kontobestand im Hangar prüfen."); }); }}>Lokalen Bestand übernehmen und starten</button>}
+              {resumeOffer.mission && <button type="button" className="button button-primary" onClick={() => { saveChoiceRef.current = "resume"; setResumeOffer(null); void activateLoadout(); }}>{t("Resume")}</button>}
+              <button type="button" className="button button-secondary" onClick={() => { if (resumeOffer.mission && window.matchMedia("(max-width: 600px)").matches) { setConfirmNewRun(true); return; } saveChoiceRef.current = "new"; setResumeOffer(null); void activateLoadout(); }}>{resumeOffer.mission ? <><span className="desktop-menu-only">{t("New game – replace saved run")}</span><span className="mobile-menu-only">{t("New game")}</span></> : t("Start with account inventory")}</button>
+              {resumeOffer.version === 0 && <button type="button" className="button button-secondary" onClick={() => { startRequestRef.current = true; void mutateAccountInventory(resumeOffer, { action: "import", confirm: true, ...localInventory() }).then(() => { startRequestRef.current = false; saveChoiceRef.current = "new"; setResumeOffer(null); void activateLoadout(); }).catch(() => { startRequestRef.current = false; setStartError("Import not confirmed. Check your account inventory in the hangar."); }); }}>{t("Import local inventory and start")}</button>}
             </div>
           </>}
           {resumeOffer && confirmNewRun && <div className="new-run-confirmation"><p>{t("Your current mission will be replaced. Your balance and owned ships remain available.")}</p><div className="modal-actions"><button type="button" className="button button-primary" onClick={() => { setConfirmNewRun(false); saveChoiceRef.current = "new"; setResumeOffer(null); void activateLoadout(); }}>{t("Start new game")}</button><button type="button" className="button button-secondary" onClick={() => setConfirmNewRun(false)}>{t("Keep current mission")}</button></div></div>}
-          {startError && <div className="modal-actions"><button className="button button-primary" type="button" onClick={() => { setStartError(""); setRecoveryError(false); void activateLoadout(); }}>Erneut versuchen</button>{recoveryError && <button className="button button-secondary" type="button" onClick={() => { saveQueueRef.current?.archive(); saveQueueReadyRef.current = true; setRecoveryError(false); setStartError(""); setSaveNotice("Unbestätigte lokale Übertragung zurückgestellt; bestätigter Kontostand wird verwendet."); void activateLoadout(); }}>Beim bestätigten Kontostand bleiben</button>}</div>}
-          {(startError || resumeOffer) && <button className="button button-secondary mission-back-button" type="button" onClick={() => { leaveGameFullscreen(); navigate(sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "/admin" : "/"); }}>Zurück</button>}
+          {startError && <div className="modal-actions"><button className="button button-primary" type="button" onClick={() => { setStartError(""); setRecoveryError(false); void activateLoadout(); }}>{t("Try again")}</button>{recoveryError && <button className="button button-secondary" type="button" onClick={() => { saveQueueRef.current?.archive(); saveQueueReadyRef.current = true; setRecoveryError(false); setStartError(""); setSaveNotice("Pending data set aside. Using the confirmed account save."); void activateLoadout(); }}>{t("Use confirmed save")}</button>}</div>}
+          {(startError || resumeOffer) && <button className="button button-secondary mission-back-button" type="button" onClick={() => { leaveGameFullscreen(); navigate(sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "/admin" : "/"); }}>{t("Back")}</button>}
         </div></div>}
         {game.status === "playing" && !bossDestructionActive && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${game.encounter === "boss-intro" ? " boss-intro-banner" : ""}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite">
           <span>{levelComplete || levelIntro ? sectorName(game.sector) : game.encounter === "bonus" ? game.phase === "SECTOR_CLEAR" ? t("BONUS COMPLETE") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.encounter !== "normal" ? `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.phase === "SECTOR_CLEAR" ? t("BLOCK LINKED") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}`}</span>
           <strong>{transitionHeadline}</strong>
           {game.phase === "SECTOR_INTRO" && game.encounter === "bonus" && <small>{t("HIT THE FLYING TARGETS")}</small>}
           {game.phase === "SECTOR_CLEAR" && game.encounter === "normal" && <><small className="chain-result">{t("Block")} {game.chainBlocks}/{BLOCKS_PER_CHAIN} · {t(game.chainResult)}</small><BlockchainProgress blocks={game.chainBlocks} /></>}
-          {levelComplete && <><small className="chain-result">{t("Block")} {BLOCKS_PER_CHAIN}/{BLOCKS_PER_CHAIN}</small><small className="chain-saved-label">CHAIN SAVED</small><BlockchainProgress blocks={BLOCKS_PER_CHAIN} saved /></>}
-          {game.phase === "SECTOR_CLEAR" && game.encounter === "bonus" && <><small className="chain-result">{`${game.bonusHits}/${BONUS_TARGET_COUNT} TARGETS · ${game.bonusResult.split(" · ").slice(1).join(" · ")}`}</small><small className="crypto-explainer">1 Shard per target · completion bonus added immediately.</small></>}
+          {levelComplete && <><small className="chain-result">{t("Block")} {BLOCKS_PER_CHAIN}/{BLOCKS_PER_CHAIN}</small><small className="chain-saved-label">{t("CHAIN SAVED")}</small><BlockchainProgress blocks={BLOCKS_PER_CHAIN} saved /></>}
+          {game.phase === "SECTOR_CLEAR" && game.encounter === "bonus" && <><small className="chain-result">{`${game.bonusHits}/${BONUS_TARGET_COUNT} ${t("BONUS TARGETS")} · ${translateBonusResult(game.bonusResult)}`}</small><small className="crypto-explainer">{t("1 Shard per target. Completion bonus added immediately.")}</small></>}
           {game.phase === "SECTOR_CLEAR" && game.encounter === "bonus" && <small className="combo-summary">{t("Level combo bonus")}: {game.combo.level} × · +{game.combo.level * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.level * DOUBLE_KILL_SHARDS} {t("Shards")}</small>}
-          {game.phase === "SECTOR_CLEAR" && game.rewardNotice && <small className="reward-unlock" role="status">✦ {game.rewardNotice}</small>}
+          {game.phase === "SECTOR_CLEAR" && game.rewardNotice && <small className="reward-unlock" role="status">✦ {game.rewardNotice.split(" · ").map(part => t(part)).join(" · ")}</small>}
         </div>}
         {game.status === "playing" && game.encounter === "normal" && !formationStartedRef.current && (game.phase === "SECTOR_INTRO" || game.phase === "ENTRY" || game.phase === "FORMATION") && <div className="formation-data-stream" aria-hidden="true">{FORMATION_DATA_ROWS.map((row, index) => <div className="formation-data-row" key={index}><span>{row.repeat(4)}</span><span>{row.repeat(4)}</span></div>)}</div>}
         {game.asteroids.filter(asteroid => game.encounter === "normal"
@@ -1626,7 +1632,7 @@ const GamePage = () => {
         <div className={`touch-controls touch-controls-${readControlHand()}`}>
           <div className="edge-actions" role="group" aria-label={t('Available equipment')}>
             <div className="weapon-control-wrap" data-source={game.weaponSource}>
-              {weaponMenuOpen && <div className="weapon-wheel" role="menu" aria-label="Weapon selection">
+              {weaponMenuOpen && <div className="weapon-wheel" role="menu" aria-label={t("Weapons")}>
                 {[1, 2, 3, 4, 5].map(level => {
                   const owned = game.unlockedWeapons.includes(level);
                   const remaining = game.weaponTimers[level] ?? 0;
@@ -1667,17 +1673,17 @@ const GamePage = () => {
         </div>
         {game.status === "paused" && <div className="game-overlay pause-settings-overlay" role="dialog" aria-modal="true" aria-labelledby="pause-settings-title"><div className="game-modal pause-settings-modal">
           <p className="eyebrow" id="pause-settings-title">{t('MISSION PAUSED')}</p><h1><span className="desktop-menu-only">{t('Hold the line.')}</span><span className="mobile-menu-only">{t('A short breather.')}</span></h1><p><span className="desktop-menu-only">{t('The asteroids are waiting.')}</span><span className="mobile-menu-only">{t("Level")} {levelLabel} · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/9` : game.encounter === "bonus" ? t("Bonus round") : t("Boss")} · {sectorName(game.sector)}</span></p>
-          {accountRun && saveNotice && <section className="pause-save-status" aria-label="Kontospielstand">
-            <h2>Kontospielstand</h2><p role="status">{saveNotice}</p>
-            {(saveRetrying || saveNotice.startsWith("Noch nicht")) && <button className="button button-secondary" type="button" disabled={saveRetrying || pauseLeaving} onClick={() => { void retryAccountSave(); }}>{saveRetrying ? "Übertragung läuft …" : "Erneut speichern"}</button>}
-            <p><span className="desktop-menu-only">Nur abgeschlossene Abschnitte werden gespeichert. Beim nächsten Start kannst du ab dem letzten Speicherpunkt fortsetzen.</span><span className="mobile-menu-only">{t("Completed blocks stay saved. The current section restarts when you return.")}</span></p>
-            <button className="button button-secondary" type="button" disabled={saveRetrying || pauseLeaving} onClick={() => { void leaveSavedMission(); }}>{pauseLeaving ? "Speicherstand prüfen …" : "Zur Startseite"}</button>
+          {accountRun && saveNotice && <section className="pause-save-status" aria-label={t("Account save")}>
+            <h2>{t("Account save")}</h2><p role="status">{t(saveNotice)}</p>
+            {(saveRetrying || (saveNotice.startsWith("Save not") || saveNotice.startsWith("Save failed"))) && <button className="button button-secondary" type="button" disabled={saveRetrying || pauseLeaving} onClick={() => { void retryAccountSave(); }}>{saveRetrying ? t("Saving game…") : t("Retry save")}</button>}
+            <p><span className="desktop-menu-only">{t("Completed sections stay saved. Your remaining lives are kept when you leave.")}</span><span className="mobile-menu-only">{t("Completed blocks stay saved. The current section restarts when you return.")}</span></p>
+            <button className="button button-secondary" type="button" disabled={saveRetrying || pauseLeaving} onClick={() => { void leaveSavedMission(); }}>{pauseLeaving ? t("Checking save…") : t("Go home")}</button>
           </section>}
           <h2 className="pause-system-title">{t("SYSTEM / SETTINGS")}</h2><SystemSettings compactMobile idPrefix="pause" musicVolume={musicVolume} effectsVolume={effectsVolume} changeMusicVolume={changeMusicVolume} changeEffectsVolume={changeEffectsVolume} onChange={() => { pointerRef.current = null; touchOriginRef.current = null; setGame({ ...stateRef.current }); }} /><button className="button button-primary pause-resume-button" type="button" disabled={pauseLeaving} onClick={() => { if (pauseLeaveRef.current) return; stateRef.current.status = "playing"; pointerRef.current = null; touchOriginRef.current = null; setGame({ ...stateRef.current }); window.setTimeout(retryAudio, 0); }}>{t("Resume")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button>
         </div></div>}
         {game.status === "game-over" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><h1>{t("Game Over")}</h1><div className="game-over-details"><p className="eyebrow">{t("MISSION FAILED")}</p><p className="game-over-hearts">{t('Hearts')}: {game.hearts}/{game.maxHearts}</p><div className="game-over-stats"><span><b>{game.score}</b>{t('Score')}</span><span><b>{game.destroyed}</b>{t('Destroyed')}</span><span><b>{game.sector}</b>{t('Sector')}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSyncStatus}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t('Home')}</button></div></div></div></div>}
         {game.status === "victory" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><p className="eyebrow">{t("CAMPAIGN COMPLETE")}</p><h1>{t("Victory")}</h1><div className="game-over-details"><p>{t("You completed the final bonus challenge.")}</p><div className="game-over-stats"><span><b>{game.score}</b>{t("Score")}</span><span><b>{game.destroyed}</b>{t("Destroyed")}</span><span><b>{game.sector}</b>{t("Sector")}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSyncStatus}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t("Home")}</button></div></div></div></div>}
-        {homePrompt && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2>{t('Return to base?')}</h2><p>{accountRun ? "Dein letzter abgeschlossener Abschnitt und deine verbliebenen Leben bleiben im Konto gespeichert. Beim Fortsetzen beginnt der angefangene Abschnitt neu; dessen Punkte und Shards werden nicht übernommen." : t('Your current mission will end. Your records will be saved locally.')}</p>{accountRun && <p role="status">{saveNotice}</p>}<div className="modal-actions"><button className="button button-primary" type="button" disabled={pauseLeaving || saveRetrying} onClick={() => { if (accountRun) void leaveSavedMission(); else goHome(); }}>{pauseLeaving ? "Speichern …" : t('Leave game')}</button><button className="button button-secondary" type="button" disabled={pauseLeaving} onClick={() => { setHomePrompt(false); if (homePromptWasPlayingRef.current) { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); } }}>{t('Keep playing')}</button></div></div></div>}
+        {homePrompt && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2>{t('Return to base?')}</h2><p>{accountRun ? t("Your completed sections and remaining lives stay saved. The unfinished section restarts; its points and Shards are discarded.") : t('Your current mission will end. Your records will be saved locally.')}</p>{accountRun && <p role="status">{t(saveNotice)}</p>}<div className="modal-actions"><button className="button button-primary" type="button" disabled={pauseLeaving || saveRetrying} onClick={() => { if (accountRun) void leaveSavedMission(); else goHome(); }}>{pauseLeaving ? t("Saving game…") : t('Leave game')}</button><button className="button button-secondary" type="button" disabled={pauseLeaving} onClick={() => { setHomePrompt(false); if (homePromptWasPlayingRef.current) { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); } }}>{t('Keep playing')}</button></div></div></div>}
       </div>
     </main>
   );

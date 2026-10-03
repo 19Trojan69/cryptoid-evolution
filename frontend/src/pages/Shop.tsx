@@ -53,22 +53,24 @@ const powerTypeForOffer = (offerId: string): PowerUpType => offerId.includes("sh
 const adminFleet: ShipFleet = Object.fromEntries(playerSkins.map(skin => [skin.id, Object.fromEntries(playerColors.map(color => [color.id, 1]))])) as ShipFleet;
 
 const WeaponPreview = ({ offerId, sprite, color }: { offerId: string; sprite: number; color: PlayerColorId }) => {
+  const { t } = useLocale();
   const shotCount = offerId.includes("triple") || offerId.includes("plasma") ? 3 : 2;
   return <div className={`offer-preview weapon-preview${offerId.includes("rapid") ? " weapon-preview-rapid" : ""}${offerId.includes("plasma") ? " weapon-preview-plasma" : ""}`} aria-hidden="true">
     <span className="preview-grid" />
     <span className="preview-ship"><PaintedShip sprite={sprite} color={color} /></span>
     <span className="preview-volley">{Array.from({ length: shotCount }, (_, index) => <i key={index} style={{ "--shot-offset": `${(index - (shotCount - 1) / 2) * 19}px`, "--shot-delay": `${index * -.12}s` } as CSSProperties} />)}</span>
-    <small>LIVE FIRE TEST</small>
+    <small>{t("Live fire test")}</small>
   </div>;
 };
 
 const PowerPreview = ({ offerId }: { offerId: string }) => {
+  const { t } = useLocale();
   const type = powerTypeForOffer(offerId);
   return <div className={`offer-preview power-preview power-preview-${type}`} aria-hidden="true">
     <span className="preview-grid" />
     <span className="power-preview-orbit"><i>{powerUpSymbols[type]}</i></span>
     <span className="power-preview-wave" />
-    <small>ENERGY CORE</small>
+    <small>{t("Energy core")}</small>
   </div>;
 };
 
@@ -232,7 +234,7 @@ const Shop = () => {
       if (!active) return;
       setAccountState({ owner: accountUid, save }); setAccountError("");
       const choice = accountSelection(save); setSelected(choice); setPreviewSkin(choice.skin); setPreviewColor(choice.color);
-    }).catch(() => { if (active) setAccountError("Kontospielstand nicht verfügbar. Lokale Daten bleiben unverändert; Kontokäufe sind bis zur Verbindung gesperrt."); });
+    }).catch(() => { if (active) setAccountError("Save unavailable. Local data is unchanged; account purchases are locked until connected."); });
     return () => { active = false; };
   }, [accountUid, adminMode]);
   const accountCommand = async (command: object) => {
@@ -242,13 +244,14 @@ const Shop = () => {
       const save = await mutateAccountInventory(account, command);
       setAccountState({ owner: user.uid, save });
       setSelected(accountSelection(save));
-      setHangarMessage("Im Pi-Konto gespeichert.");
+      setHangarMessage("Saved to your Pi account.");
     } catch {
-      setAccountError("Nicht bestätigt. Bestand bitte aktualisieren; ein bereits bestätigter Kauf wird nicht automatisch wiederholt.");
+      setAccountError("Not confirmed. Refresh inventory. Confirmed purchases will not be repeated.");
       try { const save = await loadAccountSave(); setAccountState({ owner: user.uid, save }); } catch { /* No local fallback for account balances. */ }
     } finally { setAccountBusy(false); }
   };
-  const [hangarMessage, setHangarMessage] = useState("");
+  const [hangarMessage, setHangarMessage] = useState<string | { ship: string; color: string; status: string; count?: number }>("");
+  const hangarMessageText = typeof hangarMessage === "string" ? t(hangarMessage) : `${hangarMessage.ship} · ${t(hangarMessage.color)} · ${t(hangarMessage.status)}${hangarMessage.count ? ` ×${hangarMessage.count}` : ""}`;
   const [offers, setOffers] = useState<Offer[]>(() => [...hangarCatalog]);
   const [catalogReady, setCatalogReady] = useState(false);
   const [inventory, setInventory] = useState<Inventory | null>(null);
@@ -307,19 +310,19 @@ const Shop = () => {
     if (previewFocusStage !== 1) return;
     if (!testnetStandardHullAvailable(previewSkin.id)) { setHangarMessage("MAINNET READY"); return; }
     if (user) {
-      if (!account) { setAccountError("Kontospielstand wird noch geladen oder ist nicht erreichbar."); return; }
+      if (!account) { setAccountError("Account save is loading or unavailable."); return; }
       void accountCommand({ action: "buy", skin: previewSkin.id, color: previewColor.id }); return;
     }
     const currentFleet = readShipFleet(localStorage.getItem(SHIP_FLEET_KEY), localStorage.getItem(SHIP_OWNED_KEY), localStorage.getItem(SHIP_COLORS_KEY));
     const currentBalance = shardBalance(localStorage.getItem(SHARD_BALANCE_KEY));
     setShards(currentBalance);
     const purchase = buyShipVariant(previewSkin.id, previewColor.id, currentFleet, currentBalance);
-    if (!purchase) { setHangarMessage(t("Not enough Shards yet. Earn them by defeating Cryptoids.")); return; }
+    if (!purchase) { setHangarMessage("Not enough Shards yet. Earn them by defeating Cryptoids."); return; }
     localStorage.setItem(SHIP_FLEET_KEY, JSON.stringify(purchase.fleet));
     localStorage.setItem(SHARD_BALANCE_KEY, String(purchase.balance));
     setFleet(purchase.fleet);
     setShards(purchase.balance);
-    setHangarMessage(`${previewSkin.name} · ${previewColor.name} · ${t("Owned")} ×${fleetCount(purchase.fleet, previewSkin.id, previewColor.id)}`);
+    setHangarMessage({ ship: previewSkin.name, color: previewColor.name, status: "Owned", count: fleetCount(purchase.fleet, previewSkin.id, previewColor.id) });
   };
   const equipShip = (skin: typeof playerSkins[number], color: typeof allPlayerColors[number]) => {
     // Only a variant already in the fleet can become the active ship.
@@ -328,11 +331,11 @@ const Shop = () => {
       sessionStorage.setItem(ADMIN_SHIP_SKIN_KEY, skin.id);
       sessionStorage.setItem(ADMIN_SHIP_COLOR_KEY, color.id);
       setSelected({ skin, color });
-      setHangarMessage(`${skin.name} · ${t(color.name)} · Admin-Testauswahl`);
+      setHangarMessage({ ship: skin.name, color: color.name, status: "Admin center" });
       return;
     }
     if (user) {
-      if (!account) { setAccountError("Kontospielstand ist noch nicht verfügbar."); return; }
+      if (!account) { setAccountError("Account save is loading or unavailable."); return; }
       void accountCommand({ action: "select", skin: skin.id, color: color.id }); return;
     }
     localStorage.setItem(SHIP_SKIN_KEY, skin.id);
@@ -340,11 +343,11 @@ const Shop = () => {
     const nextColors = { ...savedShipColors(localStorage.getItem(SHIP_COLORS_KEY)), [skin.id]: color.id };
     localStorage.setItem(SHIP_COLORS_KEY, JSON.stringify(nextColors));
     setSelected({ skin, color });
-    setHangarMessage(`${skin.name} · ${t(color.name)} · ${t("EQUIPPED")}`);
+    setHangarMessage({ ship: skin.name, color: color.name, status: "EQUIPPED" });
   };
   const toggleAdmin = async () => {
     try { await setAdminPreview(!adminMode); setAdminError(""); }
-    catch { setAdminError("Admin-Modus konnte nicht geändert werden. Bitte erneut anmelden."); }
+    catch { setAdminError("Could not change admin mode. Sign in again."); }
   };
 
   useEffect(() => {
@@ -367,20 +370,20 @@ const Shop = () => {
       if (!Array.isArray(data.ownedWeapons) || !Array.isArray(data.ownedArmor) || !Array.isArray(data.consumables)) throw new Error("Invalid inventory");
       setInventory(data);
     }
-    catch { setLoadoutMessage(t('Connect your Pi account to see your saved loadout.')); }
+    catch { setLoadoutMessage('Connect your Pi account to see your saved loadout.'); }
   };
   useEffect(() => { axiosClient.get<{ offers: Offer[] }>("/hangar/catalog").then(({ data }) => {
     if (!Array.isArray(data.offers)) throw new Error("Invalid catalog");
     setOffers(data.offers);
     setCatalogReady(true);
-  }).catch(() => setLoadoutMessage(t('Hangar catalog unavailable. Try again when the server is online.'))); }, []);
+  }).catch(() => setLoadoutMessage('Hangar catalog unavailable. Try again when the server is online.')); }, []);
   useEffect(() => {
     if (!isAuthenticated) return;
     let active = true;
     axiosClient.get<Inventory>("/hangar/inventory").then(({ data }) => {
       if (!Array.isArray(data.ownedWeapons) || !Array.isArray(data.ownedArmor) || !Array.isArray(data.consumables)) throw new Error("Invalid inventory");
       if (active) setInventory(data);
-    }).catch(() => { if (active) setLoadoutMessage(t('Connect your Pi account to see your saved loadout.')); });
+    }).catch(() => { if (active) setLoadoutMessage('Connect your Pi account to see your saved loadout.'); });
     return () => { active = false; };
   }, [isAuthenticated, adminMode]);
   const equip = async (weapon: string | null, power: string | null) => {
@@ -388,8 +391,8 @@ const Shop = () => {
     try {
       await axiosClient.post("/hangar/equip", { weapon, power });
       await refreshInventory();
-      setLoadoutMessage(t('Loadout saved for the next mission.'));
-    } catch { setLoadoutMessage(t('Could not save loadout. Please retry.')); }
+      setLoadoutMessage('Loadout saved for the next mission.');
+    } catch { setLoadoutMessage('Could not save loadout. Please retry.'); }
   };
 
   const onSendTestNotification = () => {
@@ -450,10 +453,10 @@ const Shop = () => {
         onOpenQuickAccess={() => setQuickGroup(current => current === null ? "mission" : null)}
         quickAccessOpen={quickGroup !== null}
       />
-      {adminError && <p role="alert" className="hangar-message">{adminError}</p>}
-      {authError && <p role="alert" className="hangar-message">{authError}</p>}
-      {accountError && <p role="alert" className="hangar-message">{accountError}</p>}
-      {adminMode && <div className="admin-preview-banner" role="status">Admin-Testmodus aktiv · Käufe und Rekorde werden nicht gespeichert.</div>}
+      {adminError && <p role="alert" className="hangar-message">{t(adminError)}</p>}
+      {authError && <p role="alert" className="hangar-message">{t(authError)}</p>}
+      {accountError && <p role="alert" className="hangar-message">{t(accountError)}</p>}
+      {adminMode && <div className="admin-preview-banner" role="status">{t("Admin test mode: purchases and records are not saved.")}</div>}
 
       <section className="hero-section" onClick={event => { if (window.matchMedia("(min-width: 701px)").matches && !(event.target as HTMLElement).closest("button, a, input, select, label")) requestGameFullscreen(); }}>
         <button className="wide-fullscreen-control home-fullscreen-control" type="button" onClick={requestGameFullscreen} aria-label={t("Full screen")} title={t("Full screen")}>⛶</button>
@@ -464,22 +467,22 @@ const Shop = () => {
         <div className="hero-copy">
           <p className="eyebrow"><span className="signal-dot" /> {t("Mission control online")}</p>
           <h1><span className="home-title-word">Cryptoid</span><span className="home-title-evolution">Evolution</span></h1>
-          <p className="hero-tagline">Defend Earth. <span>Evolve your power.</span></p>
+          <p className="hero-tagline">{t("Defend Earth.")}<span>{t("Evolve your power.")}</span></p>
           <p className="hero-description">{t('Build your streak, master the grid, and become the force Earth needs.')}</p>
-          {adminMode && <div className="admin-level-picker" aria-label="Admin-Teststart"><label>Level <select value={Math.floor((startSector - 1) / 10) + 1} onChange={event => setStartSector((Number(event.target.value) - 1) * 10 + (startSector - 1) % 10 + 1)}>{Array.from({ length: MAX_DIFFICULTY_LEVEL / 10 }, (_, index) => <option key={index} value={index + 1}>{index + 1}</option>)}</select></label><label>Start bei <select value={(startSector - 1) % 10 + 1} onChange={event => setStartSector((Math.floor((startSector - 1) / 10) * 10) + Number(event.target.value))}>{Array.from({ length: 9 }, (_, index) => <option key={index} value={index + 1}>Block {index + 1}</option>)}<option value="10">Boss</option></select></label></div>}
+          {adminMode && <div className="admin-level-picker" aria-label={t("Admin test start")}><label>{t("Level")} <select value={Math.floor((startSector - 1) / 10) + 1} onChange={event => setStartSector((Number(event.target.value) - 1) * 10 + (startSector - 1) % 10 + 1)}>{Array.from({ length: MAX_DIFFICULTY_LEVEL / 10 }, (_, index) => <option key={index} value={index + 1}>{index + 1}</option>)}</select></label><label>{t("Start at")} <select value={(startSector - 1) % 10 + 1} onChange={event => setStartSector((Math.floor((startSector - 1) / 10) * 10) + Number(event.target.value))}>{Array.from({ length: 9 }, (_, index) => <option key={index} value={index + 1}>{t("Block")} {index + 1}</option>)}<option value="10">{t("Boss")}</option></select></label></div>}
           <div className="hero-actions">
             <div className="home-launch">
               <button className="button button-primary home-play-button" type="button" onClick={enterGame}>{t("Play")} <span className="button-glyph" aria-hidden="true">→</span></button>
             </div>
           </div>
         </div>
-        <div className="planet-stage" aria-label="Cryptoid Evolution planet status">
+        <div className="planet-stage" aria-label={t("Planet status")}>
           <div className="planet"><EarthGlobe paused={homePaused} /><EarthNetwork /></div>
           <span className="orbit-status">{t('ORBITAL DEFENSE ACTIVE')}</span>
         </div>
         <div className="stage-label home-region-label"><span className="stage-label-value">01</span><span>{t('Genesis sector')}</span></div>
         <footer className="home-footer">
-          <button type="button" className="text-button terms-entry" onClick={() => setTermsOpen(true)}>Nutzungsbedingungen / Terms of Service</button>
+          <button type="button" className="text-button terms-entry" onClick={() => setTermsOpen(true)}>{t("Terms of service")}</button>
         </footer>
       </section>
 
@@ -500,7 +503,7 @@ const Shop = () => {
         <div className="shop-modal-header"><button className="text-button menu-return" type="button" onClick={returnToMenu}>← {t("Back to quick access")}</button><strong>{t(shopTabs.find(([view]) => view === shopView)?.[1] ?? "Shop / Hangar")}</strong><button className="close-button" type="button" onClick={() => setShopView(null)} aria-label={t('Close shop')}>×</button></div>
           <div className="shop-modal-body">
       {shopView === "progress" && <section className="dashboard-grid" aria-label={t('Player overview')}>
-        {user && <p className="admin-account-id">Pi-Konto-ID: <code>{user.uid}</code></p>}
+        {user && <p className="admin-account-id">{t("Pi account ID:")}<code>{user.uid}</code></p>}
         <article className="status-card progress-card">
           <div className="card-heading"><span>{t('YOUR PROGRESS')}</span><span className="card-icon">↗</span></div>
           <div className="progress-row"><strong>{t("Best")} {personalBest ?? records.bestScore}</strong><span>{t("Sector")} {String(displayedRecords.highestSector).padStart(2, "0")}</span></div>
@@ -523,22 +526,22 @@ const Shop = () => {
         <article className="status-card reward-collection">
           <div className="card-heading"><span>{t("RANK & COLLECTION")}</span><span className="card-icon">✦</span></div>
           <div className="reward-rank-current"><span aria-hidden="true">{rankForLevel(rewardProgress.highestLevel).symbol}</span><div><small>{t("Current service rank")} · {t("Level")} {rewardProgress.highestLevel}/500</small><h3>{t(rewardRank(rewardProgress))}</h3></div></div>
-          <p>{Object.keys(rewardProgress.bossWins).length}/{BOSS_STICKER_COUNT} Boss-Sticker · {rewardProgress.completedChains.length} Chains · {rewardProgress.perfectBonuses} perfekte Bonusrunden</p>
+          <p>{Object.keys(rewardProgress.bossWins).length}/{BOSS_STICKER_COUNT} {t("Boss stickers")} · {rewardProgress.completedChains.length} {t("Chains")} · {rewardProgress.perfectBonuses} {t("Perfect bonus rounds")}</p>
           <div id="reward-ranks" className="reward-rank-path" aria-label={t("Service ranks")}>{[1, 11, 51, 101, 201, 301, 401, 500].map(level => { const tier = rankForLevel(level); return <span key={level} className={rewardProgress.highestLevel >= level ? "earned" : ""}><b aria-hidden="true">{tier.symbol}</b><small>{t(tier.name)}<br />{t("Level")} {level}</small></span>; })}</div>
           <h4>{t("Linked Blocks")} · {t("Level")} {latestRewardLevel}</h4>
           <div className="reward-blocks" aria-label={t("Linked Blocks")}>{Array.from({ length: 9 }, (_, index) => <span key={index} className={index < (rewardProgress.linkedBlocks?.[latestRewardLevel] ?? 0) ? "earned" : ""}>{index + 1}</span>)}</div>
-          <div id="reward-chains" className="reward-milestones" aria-label="Chain-Meilensteine">{CHAIN_MILESTONES.map(target => <span key={target} className={rewardProgress.completedChains.length >= target ? "earned" : ""} title={`${target} Chains`}>◆ {target}</span>)}</div>
-          <h4 id="reward-bosses">Boss-Sticker</h4>
+          <div id="reward-chains" className="reward-milestones" aria-label={t("Chain milestones")}>{CHAIN_MILESTONES.map(target => <span key={target} className={rewardProgress.completedChains.length >= target ? "earned" : ""} title={`${target} ${t("Chains")}`}>◆ {target}</span>)}</div>
+          <h4 id="reward-bosses">{t("Boss stickers")}</h4>
           <div className="boss-sticker-grid">{Array.from({ length: BOSS_STICKER_COUNT }, (_, index) => {
             const id = index + 1;
             const stars = rewardProgress.bossWins[id] ?? 0;
-            return <div key={id} className={`boss-sticker${stars ? " boss-sticker-earned" : ""}`} title={`Boss ${id}: ${stars ? `${stars} Stern${stars > 1 ? "e" : ""}` : "noch nicht besiegt"}`} aria-label={`Boss ${id}: ${stars ? `${stars} von 3 Sternen` : "noch gesperrt"}`}>
+            return <div key={id} className={`boss-sticker${stars ? " boss-sticker-earned" : ""}`} title={t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : t("Not defeated yet") })} aria-label={t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : t("Locked") })}>
               {stars ? <img src={`/ships/bosses/boss_${String(id).padStart(2, "0")}.webp`} alt="" loading="lazy" /> : <span aria-hidden="true">?</span>}
               <small>#{String(id).padStart(2, "0")}</small>{!!stars && <b>{"★".repeat(stars)}</b>}
             </div>;
           })}</div>
-          <h4 id="reward-medals">Bonus-Medaillen</h4>
-          <p>{Object.values(rewardProgress.bonusMedals).filter(medal => medal === "gold").length} Gold · {Object.values(rewardProgress.bonusMedals).filter(medal => medal === "silver").length} Silber · {Object.values(rewardProgress.bonusMedals).filter(medal => medal === "bronze").length} Bronze</p>
+          <h4 id="reward-medals">{t("Bonus medals")}</h4>
+          <p>{Object.values(rewardProgress.bonusMedals).filter(medal => medal === "gold").length} {t("Gold")} · {Object.values(rewardProgress.bonusMedals).filter(medal => medal === "silver").length} {t("Silver")} · {Object.values(rewardProgress.bonusMedals).filter(medal => medal === "bronze").length} {t("Bronze")}</p>
           <div className="reward-medal-grid">{Object.entries(rewardProgress.bonusMedals).map(([level, medal]) => <span key={level} className={`reward-medal reward-medal-${medal}`}>✦ <b>{t("Level")} {level}</b> · {t(medal)}</span>)}</div>
           <small>{user ? t("Awards are saved to your Pi account immediately. Admin test runs do not count.") : t("Local awards on this device. Sign in for account rewards.")}</small>
         </article>
@@ -557,16 +560,16 @@ const Shop = () => {
 
       {(shopView === "hangar" || shopView === "shop") && <section className={`ship-selector ship-selector-${shopView}`} aria-labelledby="hangar-heading">
         {user && !adminMode && <div className="hangar-message" role="status">
-          {account ? <>Kontobestand gespeichert · {new Date(account.updatedAt).toLocaleString(locale)}. {account.mission && <>Fortsetzen ab Abschnitt {account.mission.sector} ({account.mission.phase}) ist beim Spielstart verfügbar.</>}</> : "Kontospielstand wird geladen …"}
+          {account ? <>{t("Account inventory saved")} · {new Date(account.updatedAt).toLocaleString(locale)}. {account.mission && <>{t("Resume available at section {section} ({phase}).", { section: account.mission.sector, phase: t(account.mission.phase === "normal" ? "Block" : account.mission.phase === "boss" ? "Boss" : "Bonus round") })}</>}</> : t("Loading account save…")}
           {account && account.version === 0 && !account.legacyImported && <div>
-            <p>Alte lokale Shards und Standardschiffe bleiben auf diesem Gerät. Du kannst sie vor dem ersten Kontospiel einmalig übernehmen; dieser Altbestand ist nachträglich nicht überprüfbar. Pi-Käufe und Rekorde werden nicht importiert.</p>
-            <label><input type="checkbox" checked={importConfirmed} onChange={e => setImportConfirmed(e.target.checked)} /> Diesen lokalen Bestand meinem aktuellen Pi-Konto zuordnen.</label>
-            <button type="button" className="button button-secondary" disabled={!importConfirmed || accountBusy} onClick={() => { void accountCommand({ action: "import", confirm: true, ...localInventory() }); }}>Lokalen Bestand einmalig übernehmen</button>
+            <p>{t("You can import local Shards and Standard ships once, before your first account game. Pi purchases and records are excluded. Otherwise, local items stay on this device.")}</p>
+            <label><input type="checkbox" checked={importConfirmed} onChange={e => setImportConfirmed(e.target.checked)} />{t("Assign this local inventory to my Pi account.")}</label>
+            <button type="button" className="button button-secondary" disabled={!importConfirmed || accountBusy} onClick={() => { void accountCommand({ action: "import", confirm: true, ...localInventory() }); }}>{t("Import local inventory once")}</button>
           </div>}
         </div>}
         <div className="ship-panel-heading"><div><p className="eyebrow">{t(shopView === "hangar" ? "YOUR HANGAR" : "SHIP SHOP")}</p><h2 id="hangar-heading">{t(shopView === "hangar" ? "Your fleet" : "Available ships")}</h2></div><strong className="shard-balance">◆ {displayedShards} <small>{t("Shards")}</small></strong></div>
         <p className="testnet-shop-notice" role="note">{shipSaveNetwork === "testnet" ? t("TESTNET SHARDS: Earn and spend Shards on available Standard ships here for testing. Shards and ship purchases do not transfer to Mainnet; there you start from zero.") : t("MAINNET SHARDS: Shards and ship purchases start from zero here. Testnet balances and ships are separate.")}</p>
-        <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? "Testnet: Grey Scout kostenlos, 9 Standardtypen für Shards. MAINNET READY = hier noch gesperrt." : "Grey Scout kostenlos, 9 Standardtypen für Shards. Weitere Schiffe sind derzeit gesperrt."}</p>
+        <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? t("Testnet: Grey Scout is free; nine Standard hulls cost Shards. Other hulls are locked until Mainnet.") : t("Grey Scout is free; nine Standard hulls cost Shards. Other hulls are currently locked.")}</p>
         <details className="ship-earnings"><summary>{t("How to earn Shards")}</summary><p>{t("At level 1, defeats earn Shards by enemy class: light 2, medium 4–5, elite 6, heavy 8, boss 16. Rewards grow with level. Bonus targets earn 1 each, plus a completion reward that grows with level. Your Shards are saved at mission end.")}</p></details>
         <label className="ship-search-label" htmlFor="ship-search">{t("Find a ship")} <small>{matchingShipOptions.length}/{shipSearchOptions.length}</small></label>
         <div className="ship-search-wrap" ref={shipSearchRef}>
@@ -577,7 +580,7 @@ const Shop = () => {
           {shipResultsVisible && <div className="ship-search-results" id="ship-search-results" role="group" aria-label={t("Available ships")}>
             {matchingShipOptions.map(skin => {
               const total = fleetCount(visibleFleet, skin.id);
-              const status = total ? `${t("Owned")} ×${total}` : testnetStandardHullAvailable(skin.id) ? t("Not owned") : shipSaveNetwork === "testnet" ? "MAINNET READY" : "GESPERRT";
+              const status = total ? `${t("Owned")} ×${total}` : testnetStandardHullAvailable(skin.id) ? t("Not owned") : shipSaveNetwork === "testnet" ? t("MAINNET READY") : t("Locked");
               return <button className={`ship-search-result${previewSkin.id === skin.id ? " ship-search-selected" : ""}`} key={skin.id} type="button" onClick={() => chooseSearchResult(skin)}>
                 <span className="ship-search-thumb" aria-hidden="true"><img src={shipEvolutionAsset(skin.sprite, 1)} alt="" loading="lazy" decoding="async" style={shipPreviewPlacement(skin.sprite, 1)} /></span>
                 <span className="ship-search-result-name"><strong>{skin.name}</strong><small>{t("STANDARD")} · {status}</small>{shopView === "shop" && <small className="ship-search-price">◆ {standardShipPrice(skin).toLocaleString(locale)} {t("Shards")}{skin.price === 0 ? " · " + t("Additional ship") : ""}</small>}<small>{t("Open for variants and levels")}</small></span><span className="ship-search-arrow" aria-hidden="true">›</span>
@@ -588,7 +591,7 @@ const Shop = () => {
         </div>
         <ShipSelectionPanel view={shopView} skin={previewSkin} color={previewColor} focusStage={previewFocusStage} ownedStage={previewStage} fleet={visibleFleet} shards={displayedShards} locale={locale} adminPreview={adminMode}
           offers={offers.filter(offer => offer.kind === "ship_upgrade")}
-          selectedSkinId={selected.skin.id} selectedColorId={selected.color.id} message={hangarMessage} t={t}
+          selectedSkinId={selected.skin.id} selectedColorId={selected.color.id} message={hangarMessageText} t={t}
           onStageChange={stage => { setPreviewFocusStage(stage); if (adminMode) { setAdminStage(stage); sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage)); } setHangarMessage(""); }}
           onColorChange={color => { setPreviewColor(color); if (shopView === "hangar") equipShip(previewSkin, color); else setHangarMessage(""); }}
           onBuyStandard={purchasePreview}
@@ -598,8 +601,8 @@ const Shop = () => {
 
       {(shopView === "weapons" || shopView === "powers") && <section className="upgrade-section" aria-labelledby="upgrade-heading">
         <div className="section-heading"><div><p className="eyebrow">{t('POWER LAB')}</p><h2 id="upgrade-heading">{t('Weapons and start power-ups')}</h2></div><span className="section-line" /></div>
-        <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? "Testnet: Doppellaser und Schneller Doppellaser mit Test-Pi. Dreifachlaser und Plasma = MAINNET READY / GESPERRT." : "Pi-Käufe sind hier derzeit gesperrt. Waffen-Upgrades können im Spiel eingesammelt werden."}</p>
-        <p>{shipSaveNetwork === "testnet" ? "Der Standardlaser ist kostenlos. Gekaufte Testnet-Waffen werden erst während der Mission über den Waffen-Button aktiviert und laufen zwei Minuten. Dreifachlaser und Plasma können im Testnet nur über eingesammelte Waffen-Power-ups erreicht werden." : "Der Standardlaser ist kostenlos. Weitere Waffen können während der Mission als Power-ups eingesammelt werden."}</p>
+        <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? t("Testnet: Twin Laser and Rapid Twin can be bought with Test-Pi. Triple Laser and Plasma purchases are locked.") : t("Pi purchases are currently locked. Collect weapon upgrades in game.")}</p>
+        <p>{shipSaveNetwork === "testnet" ? t("The single laser is free. Activate bought Testnet weapons in game for two minutes. Triple Laser and Plasma are available as pickups only.") : t("The single laser is free. Collect other weapons as power-ups during the mission.")}</p>
         {([shopView === "weapons" ? "weapon" : "power"] as const).map(kind => <div key={kind} className="hangar-offers"><h3>{t(kind === "weapon" ? "Time-limited weapons" : "One-mission start bonuses")}</h3><div className="hangar-offer-grid">
           {offers.filter(offer => offer.kind === kind).map(offer => {
             const count = inventory?.consumables.find(item => item.id === offer.id)?.count ?? 0;
@@ -607,19 +610,19 @@ const Shop = () => {
             const owned = kind === "weapon" ? testnetWeaponEnabled && inventory?.ownedWeapons.includes(offer.id) : count > 0;
             const selected = kind === "weapon" ? false : inventory?.selectedPower === offer.id;
             const lockedWeapon = kind === "weapon" && !testnetWeaponEnabled;
-            return <article key={offer.id} className={`hangar-offer hangar-offer-${kind}${selected ? " hangar-offer-selected" : ""}`}>{kind === "weapon" ? <WeaponPreview offerId={offer.id} sprite={selectedShip().skin.sprite} color={selectedShip().color.id} /> : <PowerPreview offerId={offer.id} />}<h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span className="offer-purchase-price">{lockedWeapon || kind === "power" ? <>{t("Planned price")}: {piPrice(offer.pricePi)}</> : piPrice(offer.pricePi, true)}</span><span>{lockedWeapon ? shipSaveNetwork === "testnet" ? "MAINNET READY" : "DERZEIT GESPERRT" : kind === "weapon" ? t("2 minutes after activation") : "MAINNET READY"}</span><strong>{lockedWeapon ? "GESPERRT" : selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : "IM SPIEL VERFÜGBAR" : kind === "power" ? "GESPERRT" : t("NOT OWNED")}</strong>{lockedWeapon && <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? "Im Testnet nur als eingesammeltes Waffen-Power-up verfügbar." : "Nur als eingesammeltes Waffen-Power-up verfügbar."}</p>}<div>
+            return <article key={offer.id} className={`hangar-offer hangar-offer-${kind}${selected ? " hangar-offer-selected" : ""}`}>{kind === "weapon" ? <WeaponPreview offerId={offer.id} sprite={selectedShip().skin.sprite} color={selectedShip().color.id} /> : <PowerPreview offerId={offer.id} />}<h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span className="offer-purchase-price">{lockedWeapon || kind === "power" ? <>{t("Planned price")}: {piPrice(offer.pricePi)}</> : piPrice(offer.pricePi, true)}</span><span>{lockedWeapon ? shipSaveNetwork === "testnet" ? t("MAINNET READY") : t("Currently locked") : kind === "weapon" ? t("2 minutes after activation") : t("MAINNET READY")}</span><strong>{lockedWeapon ? t("Locked") : selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : t("Available in game") : kind === "power" ? t("Locked") : t("NOT OWNED")}</strong>{lockedWeapon && <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? t("Available only as a weapon pickup on Testnet.") : t("Available only as a weapon pickup.")}</p>}<div>
               {owned && kind === "power" ? <button className="button button-secondary" type="button" disabled={Boolean(selected)} onClick={() => equip(null, offer.id)}>{t(selected ? "Selected" : "Equip for next mission")}</button> : null}
-              {!adminMode && kind === "weapon" && !lockedWeapon && !owned && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady} onClick={() => orderProduct(`Cryptoid ${offer.name} · 2 minutes after activation · Test-Pi`, offer.pricePi, { productId: offer.id }, () => { setLoadoutMessage(`${offer.name} ${t("purchase confirmed.")}`); void refreshInventory(); })}>{t("Buy with Test-Pi")} · {piPrice(offer.pricePi, true)}</button>}
+              {!adminMode && kind === "weapon" && !lockedWeapon && !owned && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady} onClick={() => orderProduct(`Cryptoid ${t(offer.name)} · ${t("2 minutes after activation")} · Test-Pi`, offer.pricePi, { productId: offer.id }, () => { setLoadoutMessage("purchase confirmed."); void refreshInventory(); })}>{t("Buy with Test-Pi")} · {piPrice(offer.pricePi, true)}</button>}
             </div></article>;
           })}
         </div></div>)}
         {shopView === "weapons" && <div className="hangar-offers"><h3>{t("Permanent armor")}</h3><p>{t("Armor is always active from mission start, needs no shield and remains yours across all future missions. Each upgrade adds to your maximum hearts.")}</p><div className="hangar-offer-grid">
-          {offers.filter(offer => offer.kind === "armor").map(offer => { const owned = inventory?.ownedArmor.includes(offer.id); return <article key={offer.id} className={`hangar-offer hangar-offer-armor${owned ? " hangar-offer-selected" : ""}`}><div className="offer-preview power-preview power-preview-shield" aria-hidden="true"><span className="preview-grid" /><span className="power-preview-orbit"><i>♥</i></span><small>PERMANENT HULL</small></div><h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span className="offer-purchase-price">{t("Planned price")}: {piPrice(offer.pricePi)}</span><span>{owned ? t("Permanent · every mission") : "MAINNET READY"}</span><strong>{owned ? t("OWNED") : "GESPERRT"}</strong></article>; })}
+          {offers.filter(offer => offer.kind === "armor").map(offer => { const owned = inventory?.ownedArmor.includes(offer.id); return <article key={offer.id} className={`hangar-offer hangar-offer-armor${owned ? " hangar-offer-selected" : ""}`}><div className="offer-preview power-preview power-preview-shield" aria-hidden="true"><span className="preview-grid" /><span className="power-preview-orbit"><i>♥</i></span><small>{t("Permanent hull")}</small></div><h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span className="offer-purchase-price">{t("Planned price")}: {piPrice(offer.pricePi)}</span><span>{owned ? t("Permanent · every mission") : t("MAINNET READY")}</span><strong>{owned ? t("OWNED") : t("Locked")}</strong></article>; })}
         </div></div>}
-        {inventory?.equippedWeapon && <p className="testnet-shop-notice">Hinweis: Eine ältere Vorauswahl ist gespeichert, wird im Spiel aber nicht mehr automatisch aktiviert. Jede Mission beginnt mit dem Standardlaser.</p>}
+        {inventory?.equippedWeapon && <p className="testnet-shop-notice">{t("An older weapon selection is saved but no longer activates automatically. Every mission starts with the single laser.")}</p>}
         {inventory?.selectedPower && <button className="text-button" type="button" onClick={() => equip(inventory.equippedWeapon, null)}>{t('Save bonus for a later mission')}</button>}
-        {paymentDiagnostic && <p className="testnet-shop-notice" role="alert"><strong>Zahlungsdiagnose:</strong> {paymentDiagnostic}</p>}
-        {loadoutMessage && <p role="status">{loadoutMessage}</p>}
+        {paymentDiagnostic && <p className="testnet-shop-notice" role="alert"><strong>{t("Payment diagnostics:")}</strong> {t("Payment could not be confirmed. Check your account and retry.")}</p>}
+        {loadoutMessage && <p role="status">{t(loadoutMessage)}</p>}
       </section>}
           </div>
         </div>
@@ -632,7 +635,7 @@ const Shop = () => {
           <button className="close-button" type="button" onClick={() => setActivePanel(null)} aria-label={t('Close')}>×</button>
           <p className="eyebrow">{t("MISSION LOG")}</p>
           <h2 id="info-title">{t("Your Progress")}</h2>
-          <p>{t("Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.").replace("{score}", String(personalBest ?? records.bestScore)).replace("{sector}", String(displayedRecords.highestSector)).replace("{destroyed}", String(displayedRecords.totalDestroyed))}</p>
+          <p>{t("Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.", { score: personalBest ?? records.bestScore, sector: displayedRecords.highestSector, destroyed: displayedRecords.totalDestroyed })}</p>
           <button className="button button-primary" type="button" onClick={() => setActivePanel(null)}>{t("Close")}</button>
         </div>
       </div>}
