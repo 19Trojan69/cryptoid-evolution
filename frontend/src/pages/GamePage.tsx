@@ -377,6 +377,7 @@ const GamePage = () => {
   const [saveRetrying, setSaveRetrying] = useState(false);
   const [pauseLeaving, setPauseLeaving] = useState(false);
   const pauseLeaveRef = useRef(false);
+  const homePromptWasPlayingRef = useRef(false);
   const [accountRun, setAccountRun] = useState(false);
   const [recoveryError, setRecoveryError] = useState(false);
   const saveChoiceRef = useRef<"new" | "resume" | null>(null);
@@ -1494,9 +1495,12 @@ const GamePage = () => {
     setPauseLeaving(true);
     setSaveNotice("Speicherübertragung wird geprüft …");
     try {
-      // Keep the server checkpoint active for Resume. Do not finalize the run
-      // or pretend the unfinished section has become a new checkpoint.
+      // Finish pending completed blocks first, then carry only the remaining
+      // hearts into the checkpoint. Unfinished points and shards are discarded.
       await queue.recover();
+      const runId = scoreRunRef.current;
+      if (!runId) throw new Error("No active run");
+      await retrySave(() => axiosClient.post("/progress/leave", { runId, hearts: stateRef.current.hearts }));
       await loadAccountSave();
       leaveGameFullscreen();
       navigate("/");
@@ -1555,7 +1559,7 @@ const GamePage = () => {
         <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
         <button className="wide-fullscreen-control game-fullscreen-control" type="button" onClick={requestGameFullscreen} aria-label={t("Full screen")} title={t("Full screen")}>⛶</button>
         <header ref={hudRef} className="game-hud">
-          <div className="hud-actions"><button className="game-control home-control" type="button" disabled={game.status === "loading" || game.status === "destroying"} onClick={() => setHomePrompt(true)} aria-label={t("Go home")}><CockpitIcon kind="home" /></button></div>
+          <div className="hud-actions"><button className="game-control home-control" type="button" disabled={game.status === "loading" || game.status === "destroying"} onClick={() => { if (game.status === "game-over" || game.status === "victory") { goHome(); return; } homePromptWasPlayingRef.current = stateRef.current.status === "playing"; stateRef.current.status = "paused"; setGame({ ...stateRef.current }); setHomePrompt(true); }} aria-label={t("Go home")}><CockpitIcon kind="home" /></button></div>
           <div className={`hud-stat hearts-stat${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " hearts-stat-hit" : ""}`}><span className="hud-heart-label" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.2 3.4 13.1C-1.1 8.8 5.3 1.7 10.2 5.9L12 7.5l1.8-1.6c4.9-4.2 11.3 2.9 6.8 7.2L12 21.2Z" /></svg></span><strong className="hearts" role="status" aria-live="polite" aria-label={`${game.hearts} / ${game.maxHearts} ${t('Hearts')}`}>{game.hearts}/{game.maxHearts}</strong></div>
           <div className="hud-stat game-level-hud" aria-label={`${t("Game level")} ${levelLabel}`}><span>{t("Level")}</span><strong>{levelLabel}</strong></div>
           <div className="hud-stat score-hud" aria-label={`${t("Shards")} ${game.shards}, ${t("Score")} ${game.score}`}><span className="shard-line"><b>◆ {game.shards}</b><small>{t("Shards")}</small></span><span className="score-line"><b>{game.score}</b><small>{t("Score")}</small></span></div>
@@ -1671,7 +1675,7 @@ const GamePage = () => {
         </div></div>}
         {game.status === "game-over" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><h1>{t("Game Over")}</h1><div className="game-over-details"><p className="eyebrow">{t("MISSION FAILED")}</p><p className="game-over-hearts">{t('Hearts')}: {game.hearts}/{game.maxHearts}</p><div className="game-over-stats"><span><b>{game.score}</b>{t('Score')}</span><span><b>{game.destroyed}</b>{t('Destroyed')}</span><span><b>{game.sector}</b>{t('Sector')}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSyncStatus}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t('Home')}</button></div></div></div></div>}
         {game.status === "victory" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><p className="eyebrow">{t("CAMPAIGN COMPLETE")}</p><h1>{t("Victory")}</h1><div className="game-over-details"><p>{t("You completed the final bonus challenge.")}</p><div className="game-over-stats"><span><b>{game.score}</b>{t("Score")}</span><span><b>{game.destroyed}</b>{t("Destroyed")}</span><span><b>{game.sector}</b>{t("Sector")}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSyncStatus}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t("Home")}</button></div></div></div></div>}
-        {homePrompt && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2>{t('Return to base?')}</h2><p>{accountRun ? "Dein letzter abgeschlossener Abschnitt bleibt im Konto gespeichert. Beim Fortsetzen beginnt der nächste Abschnitt neu; noch nicht abgeschlossene Fortschritte und Shards werden nicht übernommen." : t('Your current mission will end. Your records will be saved locally.')}</p><div className="modal-actions"><button className="button button-primary" type="button" onClick={goHome}>{t('Leave game')}</button><button className="button button-secondary" type="button" onClick={() => setHomePrompt(false)}>{t('Keep playing')}</button></div></div></div>}
+        {homePrompt && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2>{t('Return to base?')}</h2><p>{accountRun ? "Dein letzter abgeschlossener Abschnitt und deine verbliebenen Leben bleiben im Konto gespeichert. Beim Fortsetzen beginnt der angefangene Abschnitt neu; dessen Punkte und Shards werden nicht übernommen." : t('Your current mission will end. Your records will be saved locally.')}</p>{accountRun && <p role="status">{saveNotice}</p>}<div className="modal-actions"><button className="button button-primary" type="button" disabled={pauseLeaving || saveRetrying} onClick={() => { if (accountRun) void leaveSavedMission(); else goHome(); }}>{pauseLeaving ? "Speichern …" : t('Leave game')}</button><button className="button button-secondary" type="button" disabled={pauseLeaving} onClick={() => { setHomePrompt(false); if (homePromptWasPlayingRef.current) { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); } }}>{t('Keep playing')}</button></div></div></div>}
       </div>
     </main>
   );

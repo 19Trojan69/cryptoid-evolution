@@ -171,6 +171,35 @@ test('leaving preserves last completed section without crediting replayable part
   assert.equal(h.session.scoreRun.id, runId);
 });
 
+test('leaving with one life resumes with one, while unfinished rewards stay discarded', async () => {
+  const h = harness(); await init(h); await start(h);
+  const runId = h.session.scoreRun.id;
+  await h.call('rewards', '/event', { runId, kind: 'block', stage: 1, level: 1, save: snapshot({ score: 100, shards: 5, hearts: 2 }) });
+  const left = await h.call('progress', '/leave', { runId, hearts: 1 });
+  assert.equal(left.code, 200);
+  assert.equal(left.body.save.mission.snapshot.hearts, 1);
+  assert.equal(left.body.save.mission.snapshot.score, 100);
+  assert.equal(left.body.save.mission.snapshot.shards, 5);
+  assert.equal(h.profile().balance, 5);
+  assert.equal((await h.call('progress', '/leave', { runId, hearts: 2 })).body.save.mission.snapshot.hearts, 1);
+  const resumed = await start(h, 'resume', 'resume-key-0000000002');
+  assert.equal(resumed.body.checkpoint.hearts, 1);
+  assert.equal(resumed.body.startSector, 2);
+  assert.equal((await h.call('progress', '/leave', { runId, hearts: 1 })).code, 409);
+});
+
+test('leaving before the first block saves only the remaining lives at the start', async () => {
+  const h = harness(); await init(h); await start(h);
+  const runId = h.session.scoreRun.id;
+  assert.equal((await h.call('progress', '/leave', { runId, hearts: 1 })).code, 200);
+  assert.equal(h.profile().mission.sector, 1);
+  assert.equal(h.profile().mission.snapshot.hearts, 1);
+  assert.equal(h.profile().mission.snapshot.score, 0);
+  assert.equal(h.profile().mission.snapshot.shards, 0);
+  const resumed = await start(h, 'resume', 'resume-key-0000000002');
+  assert.equal(resumed.body.checkpoint.hearts, 1);
+});
+
 test('snapshot whitelist rejects invalid data and preserves only supported fields', () => {
   assert.equal(readSnapshot(snapshot({ hearts: 100 })), null);
   assert.equal(readSnapshot(snapshot({ score: NaN })), null);

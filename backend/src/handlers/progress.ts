@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { rewardNetwork } from "../rewardNetwork";
 import { isAdminMode } from "../adminAccess";
-import { emptyPlayerSave, legacyInventory, publicSave, shipColors, shipPrice, validSelection, type PlayerSave } from "../playerSave";
+import { emptyPlayerSave, firstMissionSnapshot, legacyInventory, publicSave, shipColors, shipPrice, validSelection, type PlayerSave } from "../playerSave";
 
 export async function loadPlayerSave(users: any, uid: string, network: string): Promise<PlayerSave> {
   const key = `playerByNetwork.${network}`;
@@ -30,6 +30,26 @@ export default function mountProgressEndpoints(router: Router) {
       if (Date.now() - save.lastStart.runMeta.startedAt > 8 * 60 * 60 * 1000) return res.status(409).json({ error: "run_expired" });
       req.session.scoreRun = save.lastStart.runMeta;
       return res.json({ recovered: true });
+    } catch { return res.status(503).json({ error: "save_unavailable" }); }
+  });
+  router.post("/leave", async (req, res) => {
+    const { runId, hearts } = req.body || {};
+    if (typeof runId !== "string" || !Number.isSafeInteger(hearts) || hearts < 1 || hearts > 6) return res.status(400).json({ error: "invalid_lives" });
+    const uid = req.session.currentUser!.uid, network = rewardNetwork(req), key = `playerByNetwork.${network}`;
+    try {
+      const users = req.app.locals.userCollection;
+      for (let attempt = 0; attempt < 5; attempt++) {
+        const save = await loadPlayerSave(users, uid, network);
+        if (save.activeRunId !== runId || save.lastStart?.runMeta?.id !== runId || Date.now() - save.lastStart.runMeta.startedAt > 8 * 60 * 60 * 1000) return res.status(409).json({ error: "run_replaced" });
+        if (hearts > 3 + (save.lastStart.armorBonus || 0)) return res.status(400).json({ error: "invalid_lives" });
+        const mission = save.mission || { sector: 1, phase: "normal" as const, snapshot: firstMissionSnapshot(hearts), savedAt: new Date().toISOString() };
+        const remaining = Math.min(mission.snapshot.hearts, hearts);
+        if (save.mission && remaining === mission.snapshot.hearts) return res.json({ save: publicSave(save) });
+        const updated = { ...mission, snapshot: { ...mission.snapshot, hearts: remaining }, savedAt: new Date().toISOString() };
+        const result = await users.updateOne({ uid, [`${key}.activeRunId`]: runId, [`${key}.version`]: save.version }, { $set: { [`${key}.mission`]: updated, [`${key}.updatedAt`]: updated.savedAt }, $inc: { [`${key}.version`]: 1 } });
+        if (result.modifiedCount) return res.json({ save: publicSave({ ...save, mission: updated, version: save.version + 1, updatedAt: updated.savedAt }) });
+      }
+      return res.status(409).json({ error: "save_changed" });
     } catch { return res.status(503).json({ error: "save_unavailable" }); }
   });
   router.post("/inventory", async (req, res) => {
