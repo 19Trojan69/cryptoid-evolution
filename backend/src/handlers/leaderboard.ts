@@ -5,6 +5,7 @@ import { isAdminMode } from "../adminAccess";
 import { rankForLevel } from "../rewardRules";
 import { rewardNetwork } from "../rewardNetwork";
 import { readSnapshot } from "../playerSave";
+import { restoreScoreRun } from "../restoreScoreRun";
 
 export default function mountLeaderboardEndpoints(router: Router) {
   router.get("/top", async (req, res) => {
@@ -29,7 +30,9 @@ export default function mountLeaderboardEndpoints(router: Router) {
   const saveScore = async (req: Request, res: Response, final: boolean) => {
     if (isAdminMode(req)) return res.status(403).json({ error: "Admin tests do not count toward records" });
     const uid = req.session.currentUser?.uid;
-    const run = req.session.scoreRun;
+    let run;
+    try { run = await restoreScoreRun(req); }
+    catch { return res.status(503).json({ error: "Could not restore active run" }); }
     if (!uid || !run || req.body?.runId !== run.id) return res.status(403).json({ error: "No active signed-in run" });
     if (!validRunScore(req.body?.score - (run.scoreBase || 0), run.startedAt, Date.now())) return res.status(400).json({ error: "Invalid score" });
     try {

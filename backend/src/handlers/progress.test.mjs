@@ -57,6 +57,27 @@ const start = async (h, action = 'new', startKey = 'start-key-0000000001') => {
 };
 const init = h => h.call('progress', '/me', null, { method: 'GET' });
 
+test('cookie-less save requests restore only the authenticated active run and remain idempotent', async () => {
+  const h = harness(); await init(h); await start(h);
+  const runId = h.session.scoreRun.id;
+  h.profile().lastStart.runMeta.startedAt = h.session.scoreRun.startedAt;
+  const body = { runId, kind: 'block', level: 1, stage: 1, save: snapshot({ score: 90, shards: 9, destroyed: 9 }) };
+  const fresh = () => ({ currentUser: { uid: 'pilot-a' }, adminMode: false });
+  assert.equal((await h.call('rewards', '/event', body, { session: fresh() })).code, 200);
+  assert.equal((await h.call('rewards', '/event', body, { session: fresh() })).code, 200);
+  assert.equal(h.profile().balance, 9);
+  assert.equal((await h.call('rewards', '/event', body, { session: { currentUser: { uid: 'pilot-b' } } })).code, 403);
+  assert.equal((await h.call('rewards', '/event', body, { session: fresh(), network: 'mainnet' })).code, 403);
+  h.profile().lastStart.runMeta.startedAt = Date.now() - 9 * 60 * 60 * 1000;
+  assert.equal((await h.call('rewards', '/event', body, { session: fresh() })).code, 403);
+  h.profile().lastStart.runMeta.startedAt = Date.now() - 10_000;
+  const final = { runId, score: 100, finished: true, save: snapshot({ score: 100, shards: 10, destroyed: 10 }) };
+  assert.equal((await h.call('leaderboard', '/score', final, { session: fresh() })).code, 200);
+  assert.equal(h.profile().balance, 10);
+  assert.equal((await h.call('rewards', '/event', body, { session: fresh() })).code, 403);
+  assert.equal((await h.call('progress', '/recover', { runId }, { session: fresh() })).body.finished, true);
+});
+
 test('save boundary requires authentication and separates users/networks', async () => {
   const h = harness();
   assert.equal((await h.call('progress', '/me', null, { method: 'GET', session: {} })).code, 401);

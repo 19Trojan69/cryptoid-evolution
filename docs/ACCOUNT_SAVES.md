@@ -37,6 +37,13 @@ cloud state, archiving the unconfirmed local queue. Clearing browser storage can
 destroy unconfirmed writes, but not confirmed database saves. A newer active run
 wins across devices; this does not merge simultaneous unfinished runs.
 
+If the Pi proxy loses a session cookie, reward/score endpoints restore missing
+run metadata from the authenticated UID's active server record, never from client
+metadata. Cross-account/network, expired and replaced runs stay rejected. Manual
+retry is available in the pause menu and recovers the pending queue before replay.
+Detailed save messages do not cover live combat; final-score failures remain
+visible on the game-over/victory screen.
+
 Legacy local standard inventory may be explicitly imported once before the first
 account mission. It is grandfathered browser data, not retrospectively verified
 gameplay. The import cannot create paid Pi ownership, scores or rewards.

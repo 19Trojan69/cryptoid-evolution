@@ -373,6 +373,7 @@ const GamePage = () => {
   const [shipSelection, setShipSelection] = useState(selectedShip);
   const [resumeOffer, setResumeOffer] = useState<AccountSave | null>(null);
   const [saveNotice, setSaveNotice] = useState("");
+  const [saveRetrying, setSaveRetrying] = useState(false);
   const [accountRun, setAccountRun] = useState(false);
   const [recoveryError, setRecoveryError] = useState(false);
   const saveChoiceRef = useRef<"new" | "resume" | null>(null);
@@ -1501,6 +1502,18 @@ const GamePage = () => {
             ? `${t("Block")} ${sectorLabel} ${t("COMPLETE")}`
             : `${t("Block")} ${sectorLabel} / ${BLOCKS_PER_CHAIN}`;
   const bossDestructionActive = game.encounter === "boss-clear" && game.effects.some(effect => effect.kind === "boss-explosion" && performance.now() - effect.startedAt < 6_000);
+  const retryAccountSave = async () => {
+    const queue = saveQueueRef.current;
+    if (!queue || saveRetrying) return;
+    setSaveRetrying(true);
+    setSaveNotice("Spielstand wird gespeichert …");
+    try {
+      await queue.recover();
+      setSaveNotice(queue.durable ? "Kontospielstand gespeichert." : "Kontospielstand gespeichert; lokaler Offline-Puffer ist nicht verfügbar.");
+    } catch {
+      setSaveNotice("Noch nicht bestätigt · bitte Verbindung und Anmeldung prüfen. Ausstehende Übertragungen bleiben im Offline-Puffer, sofern dieser verfügbar ist.");
+    } finally { setSaveRetrying(false); }
+  };
   const scoreSyncStatus = scoreSync !== "idle" && <p role="status">{accountRun
     ? scoreSync === "saving" ? "Kontospielstand wird gespeichert …" : scoreSync === "saved" ? "Kontospielstand gespeichert." : "Übertragung noch nicht bestätigt. Der lokale Offline-Puffer wartet auf erneute Übertragung."
     : t(scoreSync === "saving" ? "Saving personal best…" : scoreSync === "saved" ? "Personal best saved." : "Could not sync personal best. Local best is saved.")}
@@ -1527,7 +1540,6 @@ const GamePage = () => {
         {audioNeedsTap && game.status === "playing" && <button className={`audio-retry${game.pickupNotice ? " audio-retry-with-pickup" : ""}`} type="button" onClick={retryAudio}>Ton aktivieren</button>}
         {game.encounter === "bonus" && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">{t("BONUS TARGETS")} {game.bonusHits} / {BONUS_TARGET_COUNT} · {t("NO ENEMY FIRE")}</div>}
         
-        {saveNotice && game.status !== "loading" && <div className="game-save-status" role="status">{saveNotice}{saveNotice.startsWith("Noch nicht") && <button type="button" onClick={() => { void saveQueueRef.current?.drain().then(() => setSaveNotice("Kontospielstand gespeichert.")).catch(() => setSaveNotice("Noch nicht bestätigt · bitte Verbindung und Anmeldung prüfen.")); }}>Erneut speichern</button>}</div>}
         {game.status === "loading" && <div className="game-overlay"><div className="game-modal">
           <h1>{resumeOffer ? "Kontospielstand" : startError ? "Start noch nicht bestätigt" : t('Preparing mission')}</h1>
           <p>{startError || (resumeOffer ? "Bestätigte Speicherpunkte bleiben im Pi-Konto erhalten. Angefangene Abschnitte werden beim Fortsetzen neu gestartet." : t('Checking your saved hangar loadout.'))}</p>
@@ -1620,7 +1632,14 @@ const GamePage = () => {
             {game.pendingStartPower && <button type="button" className={`edge-action edge-action-${game.pendingStartPower} edge-action-purchased`} disabled={game.status !== "playing" || (game.pendingStartPower === "shield" && game.purchasedShieldMs > 0) || (game.pendingStartPower === "rapid" && game.rapidFireMs > 0) || (game.pendingStartPower === "overdrive" && game.overdriveMs > 0) || (game.pendingStartPower === "emp" && game.empMs > 0)} aria-label={`${t("Tap to activate")} ${t(powerUpNames[game.pendingStartPower])}`} onClick={activateStartPower}><span aria-hidden="true">{powerUpSymbols[game.pendingStartPower]}</span><small>{t(powerUpNames[game.pendingStartPower])}</small><em>{t("Tap to activate")}</em></button>}
           </div>
         </div>
-        {game.status === "paused" && <div className="game-overlay pause-settings-overlay" role="dialog" aria-modal="true" aria-labelledby="pause-settings-title"><div className="game-modal pause-settings-modal"><p className="eyebrow" id="pause-settings-title">{t('MISSION PAUSED')}</p><h1>{t('Hold the line.')}</h1><p>{t('The asteroids are waiting.')}</p><h2>{t("SYSTEM / SETTINGS")}</h2><SystemSettings idPrefix="pause" musicVolume={musicVolume} effectsVolume={effectsVolume} changeMusicVolume={changeMusicVolume} changeEffectsVolume={changeEffectsVolume} onChange={() => { pointerRef.current = null; touchOriginRef.current = null; setGame({ ...stateRef.current }); }} /><button className="button button-primary" type="button" onClick={() => { stateRef.current.status = "playing"; pointerRef.current = null; touchOriginRef.current = null; setGame({ ...stateRef.current }); window.setTimeout(retryAudio, 0); }}>{t("Resume")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button></div></div>}
+        {game.status === "paused" && <div className="game-overlay pause-settings-overlay" role="dialog" aria-modal="true" aria-labelledby="pause-settings-title"><div className="game-modal pause-settings-modal">
+          <p className="eyebrow" id="pause-settings-title">{t('MISSION PAUSED')}</p><h1>{t('Hold the line.')}</h1><p>{t('The asteroids are waiting.')}</p>
+          {accountRun && saveNotice && <section className="pause-save-status" aria-label="Kontospielstand">
+            <h2>Kontospielstand</h2><p role="status">{saveNotice}</p>
+            {(saveRetrying || saveNotice.startsWith("Noch nicht")) && <button className="button button-secondary" type="button" disabled={saveRetrying} onClick={() => { void retryAccountSave(); }}>{saveRetrying ? "Übertragung läuft …" : "Erneut speichern"}</button>}
+          </section>}
+          <h2>{t("SYSTEM / SETTINGS")}</h2><SystemSettings idPrefix="pause" musicVolume={musicVolume} effectsVolume={effectsVolume} changeMusicVolume={changeMusicVolume} changeEffectsVolume={changeEffectsVolume} onChange={() => { pointerRef.current = null; touchOriginRef.current = null; setGame({ ...stateRef.current }); }} /><button className="button button-primary" type="button" onClick={() => { stateRef.current.status = "playing"; pointerRef.current = null; touchOriginRef.current = null; setGame({ ...stateRef.current }); window.setTimeout(retryAudio, 0); }}>{t("Resume")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button>
+        </div></div>}
         {game.status === "game-over" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><h1>{t("Game Over")}</h1><div className="game-over-details"><p className="eyebrow">{t("MISSION FAILED")}</p><p className="game-over-hearts">{t('Hearts')}: {game.hearts}/{game.maxHearts}</p><div className="game-over-stats"><span><b>{game.score}</b>{t('Score')}</span><span><b>{game.destroyed}</b>{t('Destroyed')}</span><span><b>{game.sector}</b>{t('Sector')}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSyncStatus}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t('Home')}</button></div></div></div></div>}
         {game.status === "victory" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><p className="eyebrow">{t("CAMPAIGN COMPLETE")}</p><h1>{t("Victory")}</h1><div className="game-over-details"><p>{t("You completed the final bonus challenge.")}</p><div className="game-over-stats"><span><b>{game.score}</b>{t("Score")}</span><span><b>{game.destroyed}</b>{t("Destroyed")}</span><span><b>{game.sector}</b>{t("Sector")}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSyncStatus}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t("Home")}</button></div></div></div></div>}
         {homePrompt && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2>{t('Return to base?')}</h2><p>{accountRun ? "Dein letzter abgeschlossener Abschnitt bleibt im Konto gespeichert. Beim Fortsetzen beginnt der nächste Abschnitt neu; noch nicht abgeschlossene Fortschritte und Shards werden nicht übernommen." : t('Your current mission will end. Your records will be saved locally.')}</p><div className="modal-actions"><button className="button button-primary" type="button" onClick={goHome}>{t('Leave game')}</button><button className="button button-secondary" type="button" onClick={() => setHomePrompt(false)}>{t('Keep playing')}</button></div></div></div>}
