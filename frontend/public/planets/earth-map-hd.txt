@@ -1,0 +1,4 @@
+Earth surface map: NASA Earth Observatory, Blue Marble: Next Generation, June 2004, Base Map with Topography.
+Source: https://science.nasa.gov/earth/earth-observatory/blue-marble-next-generation/base-topography/
+Image: https://assets.science.nasa.gov/dynamicimage/assets/science/esd/eo/images/bmng/bmng-topography/june/world.topo.200406.3x5400x2700.jpg
+Downloaded rendition: 1280 × 640 pixels. The sphere shading and rotation are rendered separately by EarthGlobe.tsx.
