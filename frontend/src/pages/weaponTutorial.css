@@ -1,0 +1,23 @@
+.weapon-tutorial { margin: 18px 0; color: #e6d4aa; border-block: 1px solid #e6d4aa30; }
+.weapon-tutorial summary { padding: 16px 4px; min-height: 48px; cursor: pointer; font-weight: 650; }
+.weapon-tutorial summary:focus-visible { outline: 2px solid #e6d4aa; outline-offset: 3px; }
+.weapon-tutorial-content > p { color: #bccbd6; line-height: 1.6; }
+.weapon-tutorial-steps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding-bottom: 16px; }
+.weapon-demo { margin: 0; min-width: 0; }
+.weapon-demo-stage { position: relative; height: 136px; background: radial-gradient(ellipse, #526d9130, transparent 72%); }
+.weapon-demo-knob { position: absolute; left: calc(50% - 36px); top: 30px; width: 72px; height: 72px; border: 2px solid #e6d4aa; border-radius: 50%; background: radial-gradient(circle at 35% 25%, #314653, #071321 70%); box-shadow: 0 0 15px #e6d4aa28, inset 0 0 10px #e6d4aa25; text-align: center; }
+.weapon-demo-knob > span { position: absolute; inset: 8px 0 auto; font-size: 26px; }
+.weapon-demo-knob small { position: absolute; bottom: 10px; left: 0; width: 100%; font-size: 10px; }
+.weapon-demo-finger { position: absolute; left: calc(50% + 8px); top: 73px; width: 32px; height: 40px; color: #f5ead4; opacity: 0; animation: weapon-demo-touch 2s ease both; }
+.weapon-demo-twin { animation: weapon-demo-reveal 2s step-end both; }
+.weapon-demo-tap .weapon-demo-single { animation: weapon-demo-hide 2s step-end both; }
+.weapon-demo-hold .weapon-demo-finger { animation-delay: 2s; animation-duration: 2.8s; }
+.weapon-demo-menu { position: absolute; top: 0; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; padding: 7px 13px; border-radius: 12px; background: #26384d; box-shadow: 0 0 12px #e6d4aa30; animation: weapon-demo-reveal 5s step-end both; }
+.weapon-demo figcaption { color: #dce5ee; font-size: 14px; line-height: 1.5; }
+.weapon-demo figcaption b { color: #e6d4aa; }
+@keyframes weapon-demo-touch { 0%, 100% { opacity: 0; transform: translateY(12px); } 25%, 70% { opacity: 1; transform: translateY(0); } }
+@keyframes weapon-demo-reveal { 0%, 65% { opacity: 0; } 66%, 100% { opacity: 1; } }
+@keyframes weapon-demo-hide { 0%, 65% { opacity: 1; } 66%, 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .weapon-demo * { animation: none !important; } .weapon-demo-tap .weapon-demo-single { opacity: 0; } }
+html[data-motion="reduced"] .weapon-demo * { animation: none !important; }
+html[data-motion="reduced"] .weapon-demo-tap .weapon-demo-single { opacity: 0; }
