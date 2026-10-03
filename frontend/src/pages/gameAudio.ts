@@ -50,6 +50,7 @@ export class GameAudio {
   private sampleRequest: Promise<void> | null = null;
   private bossSamples = new Map<string, AudioBuffer>();
   private enemyShotSample: AudioBuffer | null = null;
+  private enemyShotCycle = 0;
   private bossVoices:{source:AudioBufferSourceNode;gain:GainNode;pan:StereoPannerNode|null}[]=[];
   private lastShotAt = 0;
   private destroyCount = 0;
@@ -100,7 +101,8 @@ export class GameAudio {
 
   playEnemyShot(pan = 0) {
     if (!this.enemyShotSample) return false;
-    return this.playWeaponBuffer(this.enemyShotSample, 1, .3, pan);
+    const rate = [.96, 1, 1.04][this.enemyShotCycle++ % 3];
+    return this.playWeaponBuffer(this.enemyShotSample, rate, .3, pan);
   }
 
   stopBossWeapons(){
