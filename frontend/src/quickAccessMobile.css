@@ -1,0 +1,67 @@
+/* A compact, lightly playful smartphone drawer. Desktop navigation is untouched. */
+@media (max-width: 600px) {
+  .quick-access-overlay { background: #020813d9; }
+  .quick-access-panel {
+    width: min(100vw, 420px); max-width: 100vw; height: 100dvh;
+    padding: max(22px, env(safe-area-inset-top)) 18px max(22px, env(safe-area-inset-bottom));
+    border: 0; border-right: 1px solid #e3d2aa24;
+    background: radial-gradient(ellipse 220px 175px at 9% 6%, #63558926, transparent 78%),
+      radial-gradient(ellipse 230px 160px at 94% 31%, #54819a13, transparent 76%), #101927;
+    box-shadow: 14px 0 40px #02071370;
+  }
+  .quick-access-heading { min-height: 82px; padding: 2px 48px 14px 2px; }
+  .quick-access-heading .eyebrow { margin: 0 0 4px; font-size: 10px; letter-spacing: .18em; color: #b9b0ca; }
+  .quick-access-heading h2 { font-size: clamp(25px, 7vw, 30px); line-height: 1.1; letter-spacing: -.035em; }
+  .quick-access-heading .close-button { top: 1px; right: 0; width: 44px; height: 44px; border-radius: 50%; background: #233148; }
+  .quick-access-account {
+    margin: 0 2px 16px; padding: 0 0 14px; border-bottom: 1px solid #e3d2aa29;
+    color: #e3d2aa; font-size: 13px; line-height: 1.4;
+  }
+  .quick-access-panel nav { display: grid; gap: 5px; }
+  .quick-access-category {
+    margin: 0; border: 0; border-bottom: 1px solid #d7dfed17; border-radius: 0;
+    background: transparent; box-shadow: none; overflow: visible;
+  }
+  .quick-access-category > .quick-access-category-trigger,
+  .quick-access-category[data-open="true"] > .quick-access-category-trigger {
+    display: flex; gap: 12px; min-height: 66px; padding: 8px 5px;
+    border: 0; border-radius: 12px; background: transparent; box-shadow: none;
+  }
+  .quick-access-category[data-open="true"] > .quick-access-category-trigger {
+    background: linear-gradient(90deg, color-mix(in srgb, var(--category-color) 10%, #19263a), #19263a40 76%, transparent);
+  }
+  .quick-access-category > .quick-access-category-trigger::before { display: none; }
+  .quick-access-category > .quick-access-category-trigger > .category-icon {
+    display: grid; place-items: center; flex: 0 0 46px; width: 46px; height: 46px;
+    border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--category-color) 25%, transparent), transparent 73%);
+    filter: drop-shadow(0 0 5px color-mix(in srgb, var(--category-color) 24%, transparent));
+  }
+  .quick-access-category .category-icon .blockchain-icon { width: 37px; height: 37px; }
+  .quick-access-category > .quick-access-category-trigger strong {
+    flex: 1; min-width: 0; color: #f4f1f8; background: none; filter: none;
+    font: 600 clamp(15px, 4.2vw, 18px)/1.25 var(--menu-font);
+    letter-spacing: -.015em; -webkit-text-fill-color: currentColor;
+  }
+  .quick-access-category > .quick-access-category-trigger i {
+    display: grid; place-items: center; flex: 0 0 30px; width: 30px; height: 30px;
+    border-radius: 50%; background: #e3d2aa10; color: var(--category-color);
+    font-size: 20px; line-height: 1; transition: transform .16s ease, background-color .16s ease;
+  }
+  .quick-access-category[data-open="true"] > .quick-access-category-trigger i {
+    transform: rotate(180deg); background: color-mix(in srgb, var(--category-color) 18%, transparent);
+  }
+  .quick-access-items { margin: 0 6px 10px 63px; padding: 0 0 0 12px; border-left: 1px solid #e3d2aa42; }
+  .quick-access-items[hidden] { display: none; }
+  .quick-access-items button {
+    min-height: 46px; padding: 9px 10px; border: 0; border-radius: 8px;
+    color: #e5e9ef; font: 500 14px/1.35 var(--menu-font);
+  }
+  .quick-access-items button > span { color: inherit; background: none; filter: none; -webkit-text-fill-color: currentColor; }
+  .quick-access-items button i { color: var(--category-color); }
+  .quick-access-items button:active { background: #ffffff13; }
+  .quick-access-category-trigger:focus-visible, .quick-access-items button:focus-visible { outline: 2px solid #e3d2aa; outline-offset: -2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .quick-access-category > .quick-access-category-trigger i { transition: none; }
+}
+html[data-motion="reduced"] .quick-access-category > .quick-access-category-trigger i { transition: none; }
