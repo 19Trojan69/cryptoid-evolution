@@ -1,0 +1,148 @@
+/* Continue the phone menu language through every destination reached from quick access. */
+@media (max-width: 600px) {
+  :is(.landing-shell, .legal-page) {
+    --deep-night: #101927;
+    --deep-raised: #19283b;
+    --deep-action: #26374d;
+    --deep-gold: #e3d2aa;
+    --deep-text: #f4f1f8;
+    --deep-muted: #b6c2d0;
+    --deep-line: #e3d2aa2b;
+    --deep-font: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  /* Shop, hangar and their ship search, paint, stages and offers. */
+  .landing-shell .shop-modal-body { padding: 14px 12px max(24px, env(safe-area-inset-bottom)); color: var(--deep-text); font-family: var(--deep-font); }
+  .landing-shell .shop-modal-header { min-height: 64px; padding: 8px 55px 8px 14px; border-bottom: 1px solid var(--deep-line); }
+  .landing-shell .shop-modal-header strong { font: 600 17px/1.25 var(--deep-font); color: var(--deep-gold); }
+  .landing-shell .shop-modal :is(.ship-selector, .status-card, .leaderboard-section) {
+    border: 0; border-radius: 15px; background: var(--deep-raised); box-shadow: none;
+  }
+  .landing-shell .shop-modal .ship-selector { padding: 15px 12px; }
+  .landing-shell .shop-modal :is(h2, h3, h4) { color: var(--deep-text); font-family: var(--deep-font); font-weight: 600; line-height: 1.25; letter-spacing: -.02em; text-transform: none; text-shadow: none; }
+  .landing-shell .shop-modal .eyebrow { color: var(--deep-gold); font: 500 11px/1.4 var(--deep-font); letter-spacing: .08em; }
+  .landing-shell .shop-modal :is(p, small, .ship-evolution-stage-description) { line-height: 1.48; }
+  .landing-shell .shop-modal :is(.testnet-shop-notice, .ship-lock-notice, .reward-network-notice, .hangar-message) {
+    border: 0; border-left: 2px solid var(--deep-gold); border-radius: 0 9px 9px 0;
+    background: #e3d2aa10; color: var(--deep-muted); font: 400 13px/1.5 var(--deep-font);
+  }
+  .landing-shell .shop-modal :is(.ship-earnings, .ship-rules) summary { min-height: 44px; display: flex; align-items: center; color: var(--deep-gold); font: 500 14px var(--deep-font); }
+  .landing-shell .shop-modal :is(.ship-earnings, .ship-rules) p { color: var(--deep-muted); font: 400 13px/1.5 var(--deep-font); }
+  .landing-shell .ship-search-label { color: var(--deep-gold); font: 500 14px var(--deep-font); }
+  .landing-shell .ship-search-control :is(.ship-search, .ship-search-toggle),
+  .landing-shell .ship-search-results {
+    border: 1px solid var(--deep-line); border-radius: 11px; background: var(--deep-night);
+    color: var(--deep-text); box-shadow: none; font-family: var(--deep-font);
+  }
+  .landing-shell .ship-search-result, .landing-shell .ship-search-selected {
+    min-height: 64px; border: 1px solid transparent; border-radius: 10px; background: var(--deep-raised); color: var(--deep-text);
+  }
+  .landing-shell .ship-selector-shop .ship-search-selected,
+  .landing-shell .ship-search-result:is(:hover, :focus-visible) { border-color: #e3d2aa90; background: var(--deep-action); outline-color: var(--deep-gold); }
+  .landing-shell .ship-search-result-name strong { font: 600 15px/1.25 var(--deep-font); }
+  .landing-shell .ship-search-result-name small { color: var(--deep-muted); font: 400 12px/1.35 var(--deep-font); }
+  .landing-shell .ship-search-result-name .ship-search-price, .landing-shell .ship-search-arrow { color: var(--deep-gold); }
+  .landing-shell .ship-one-hero, .landing-shell .ship-selector-shop .ship-one-hero,
+  .landing-shell .ship-one-colors, .landing-shell .ship-evolution-offers {
+    border: 1px solid var(--deep-line); border-radius: 14px; background: var(--deep-night); box-shadow: none;
+  }
+  .landing-shell .ship-one-colors h4, .landing-shell .hangar-variant-title { color: var(--deep-gold); font: 600 15px/1.3 var(--deep-font); text-transform: none; }
+  .landing-shell .ship-one-info h3 { color: var(--deep-text); font: 600 20px/1.25 var(--deep-font); }
+  .landing-shell .ship-one-info h3 small, .landing-shell .ship-one-info strong { color: var(--deep-gold); font-family: var(--deep-font); }
+  .landing-shell .ship-one-info p { color: var(--deep-muted); font: 400 14px/1.5 var(--deep-font); }
+  .landing-shell .ship-one-colors-heading span { color: var(--deep-muted); font: 400 13px/1.4 var(--deep-font); }
+  .landing-shell .ship-color-dots button[aria-pressed="true"] { border-color: var(--deep-gold); outline-color: var(--deep-gold); box-shadow: 0 0 0 2px #e3d2aa3a; }
+  .landing-shell .ship-evolution-stage, .landing-shell .ship-stage-strip button,
+  .landing-shell .ship-choice, .landing-shell .ship-variants .ship-choice {
+    border: 1px solid var(--deep-line); border-radius: 11px; clip-path: none;
+    background: var(--deep-raised); color: var(--deep-text); box-shadow: none;
+  }
+  .landing-shell :is(.ship-evolution-stage, .ship-stage-strip button, .ship-choice)[aria-pressed="true"] { border-color: var(--deep-gold); background: var(--deep-action); box-shadow: none; }
+  .landing-shell .ship-evolution-stage-info :is(strong, small, em),
+  .landing-shell .ship-stage-strip button :is(span, small),
+  .landing-shell .ship-choice > span:not(.ship-preview, .metal-swatch) { font-family: var(--deep-font); font-weight: 500; letter-spacing: 0; }
+  .landing-shell .ship-evolution-stage-info small, .landing-shell .ship-stage-strip button small { color: var(--deep-gold); }
+  .landing-shell .ship-evolution-stage-info em { color: var(--deep-muted); }
+  .landing-shell .ship-one-checkout, .landing-shell .ship-configuration-summary,
+  .landing-shell .hangar-selection { border-color: var(--deep-line); border-radius: 10px; background: #e3d2aa0b; color: var(--deep-muted); box-shadow: none; }
+  .landing-shell .ship-one-checkout > span, .landing-shell .hangar-selection strong { color: var(--deep-gold); font-family: var(--deep-font); }
+  .landing-shell .ship-inline-purchase { border: 1px solid var(--deep-line); border-radius: 11px; background: var(--deep-raised); }
+  .landing-shell .ship-inline-purchase .ship-purchase-price:not(:has(.pi-price)),
+  .landing-shell .ship-inline-purchase .ship-purchase-price { color: var(--deep-gold); font: 600 20px/1.25 var(--deep-font); }
+  .landing-shell .ship-inline-purchase small { color: var(--deep-muted); font: 400 13px/1.5 var(--deep-font); }
+  .landing-shell .ship-standard-return { min-height: 44px; color: var(--deep-gold); font: 500 14px var(--deep-font); }
+  .landing-shell .ship-evolution-offers .hangar-offer-grid { grid-template-columns: minmax(0, 1fr); }
+  .landing-shell .shop-modal .hangar-offer { min-width: 0; border: 1px solid var(--deep-line); border-radius: 13px; clip-path: none; background: var(--deep-raised); box-shadow: none; }
+  .landing-shell .shop-modal .hangar-offer-selected { border-color: var(--deep-gold); }
+  .landing-shell .shop-modal .hangar-offer :is(h4, p, span, strong) { font-family: var(--deep-font); text-transform: none; }
+  .landing-shell .shop-modal .hangar-offer h4 { font-size: 16px; }
+  .landing-shell .shop-modal .hangar-offer p { display: block; overflow: visible; -webkit-line-clamp: unset; color: var(--deep-muted); font-size: 13px; }
+  .landing-shell .shop-modal .hangar-offer > :is(span, strong) { color: var(--deep-gold); font-size: 12px; }
+  .landing-shell .shop-modal .hangar-offer .button,
+  .landing-shell .shop-modal .hangar-actions .button { min-height: 48px; border: 0; border-radius: 11px; clip-path: none; background: var(--deep-action); color: var(--deep-text); box-shadow: none; font: 600 14px var(--deep-font); }
+  .landing-shell .shop-modal .hangar-offer .button-primary,
+  .landing-shell .shop-modal .hangar-actions .button-primary { background: var(--deep-gold); color: var(--deep-night); }
+  .landing-shell .shop-modal .hangar-offer .button:disabled { background: #273244; color: var(--deep-muted); }
+
+  /* Career, leaderboard and earned collection keep their information hierarchy. */
+  .landing-shell .shop-modal .dashboard-grid { gap: 10px; }
+  .landing-shell .shop-modal .status-card { padding: 18px 15px; min-height: 0; }
+  .landing-shell .shop-modal .card-heading, .landing-shell .shop-modal .reward-collection h4 { color: var(--deep-gold); font-family: var(--deep-font); }
+  .landing-shell .shop-modal .reward-collection h3 { color: var(--deep-gold); font: 600 22px/1.25 var(--deep-font); }
+  .landing-shell .reward-account, .landing-shell .reward-collection :is(p, small), .landing-shell .leaderboard-section p { color: var(--deep-muted); font-family: var(--deep-font); }
+  .landing-shell .reward-rank-path { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .landing-shell .reward-rank-path > span, .landing-shell .boss-sticker, .landing-shell .reward-medal, .landing-shell .reward-milestones span {
+    border-color: var(--deep-line); background: var(--deep-night); box-shadow: none;
+  }
+  .landing-shell .reward-rank-path > span.earned, .landing-shell .boss-sticker-earned, .landing-shell .reward-milestones .earned { border-color: var(--deep-gold); background: #e3d2aa1b; }
+  .landing-shell .reward-rank-path small, .landing-shell .boss-sticker small, .landing-shell .reward-blocks span { font-family: var(--deep-font); }
+  .landing-shell .reward-rank-current > span { border-color: var(--deep-gold); background: var(--deep-night); box-shadow: none; }
+  .landing-shell .leaderboard-scroll { max-width: 100%; overflow-x: auto; border: 0; border-radius: 10px; background: var(--deep-night); }
+  .landing-shell .leaderboard-scroll table { min-width: 0; font-family: var(--deep-font); }
+  .landing-shell .leaderboard-scroll th { color: var(--deep-gold); }
+  .landing-shell .leader-rank small { font-family: var(--deep-font); }
+
+  /* Guide topic navigation, deepest settings links and account dialogs. */
+  .landing-shell :is(.info-panel, .signin-overlay) { z-index: 20; }
+  .landing-shell .system-menu-panel { font-family: var(--deep-font); }
+  .landing-shell .system-menu-panel h2 { color: var(--deep-text); font: 600 25px/1.2 var(--deep-font); letter-spacing: -.03em; text-transform: none; text-shadow: none; }
+  .landing-shell .system-menu-panel .eyebrow { color: #b8b2d7; font: 500 11px/1.4 var(--deep-font); letter-spacing: .09em; }
+  .landing-shell .system-menu-panel .system-menu-section { border-color: var(--deep-line); }
+  .landing-shell .system-menu-panel :is(.system-menu-heading strong, .control-choice-group > strong) { color: var(--deep-gold); font: 500 15px/1.4 var(--deep-font); letter-spacing: 0; text-transform: none; }
+  .landing-shell .system-menu-panel .system-menu-heading small { color: var(--deep-muted); font: 400 12px/1.45 var(--deep-font); }
+  .landing-shell .system-menu-panel :is(.language-trigger, .language-option, .system-setting) {
+    min-height: 48px; border: 1px solid var(--deep-line); border-radius: 10px;
+    clip-path: none; background: var(--deep-raised); color: var(--deep-text); box-shadow: none;
+  }
+  .landing-shell .system-menu-panel :is(.language-trigger, .language-option, .system-setting)[aria-pressed="true"] { border-color: #e3d2aa90; background: var(--deep-action); box-shadow: none; }
+  .landing-shell .system-menu-panel :is(.language-trigger, .language-option, .system-setting) b { color: var(--deep-text); font: 500 14px/1.35 var(--deep-font); letter-spacing: 0; }
+  .landing-shell .system-menu-panel :is(.language-trigger, .language-option, .system-setting) :is(span, i) { color: var(--deep-gold); }
+  .landing-shell .system-menu-panel .language-menu { border-color: var(--deep-line); border-radius: 11px; background: var(--deep-night); }
+  .landing-shell .system-menu-panel .music-volume-slider { border: 0; background: transparent; box-shadow: none; }
+  .landing-shell .system-menu-panel .music-volume-slider label { color: var(--deep-text); font: 500 14px var(--deep-font); }
+  .landing-shell .system-menu-panel .music-volume-slider output { color: var(--deep-gold); }
+  .landing-shell .guide-topics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .landing-shell .guide-topic { min-height: 48px; border: 1px solid var(--deep-line); border-radius: 10px; background: var(--deep-raised); color: var(--deep-text); font: 500 13px/1.3 var(--deep-font); letter-spacing: 0; }
+  .landing-shell .guide-topic.is-active, .landing-shell .guide-topic:is(:hover, :focus-visible) { border-color: var(--deep-gold); background: var(--deep-action); color: var(--deep-gold); box-shadow: none; }
+  .landing-shell .guide-detail { color: var(--deep-muted); font: 400 14px/1.5 var(--deep-font); scrollbar-color: var(--deep-gold) transparent; }
+  .landing-shell .guide-detail li::marker { color: var(--deep-gold); }
+  .landing-shell .guide-panel-content { padding: 22px 17px; }
+  .landing-shell .guide-ship-gallery figure { border-color: var(--deep-line); background: var(--deep-raised); }
+  .landing-shell .system-guide-link { min-height: 44px; border: 1px solid var(--deep-line); border-radius: 10px; background: var(--deep-raised); color: var(--deep-gold); font: 500 13px/1.25 var(--deep-font); text-transform: none; white-space: normal; }
+  .landing-shell .system-guide-link span { border-color: var(--deep-line); color: var(--deep-gold); }
+  .landing-shell .signin-modal, .landing-shell .info-panel-content { padding: 23px 18px; }
+  .landing-shell :is(.signin-modal, .info-panel-content) :is(h2, h3) { font-family: var(--deep-font); text-transform: none; letter-spacing: -.02em; }
+  .landing-shell :is(.signin-modal, .info-panel-content) > p:not(.eyebrow) { color: var(--deep-muted); font: 400 14px/1.5 var(--deep-font); }
+
+  /* The legal dialog and full privacy page use the same calm reading surface. */
+  .landing-shell .terms-overlay, .legal-page { background: #080f1b; }
+  .landing-shell .terms-dialog { width: 100%; max-height: calc(100dvh - 24px); border: 0; border-radius: 18px; background: var(--deep-night); color: var(--deep-text); box-shadow: 0 18px 50px #0007; font-family: var(--deep-font); }
+  .landing-shell .terms-dialog header { border-bottom: 1px solid var(--deep-line); color: var(--deep-gold); font: 600 15px/1.4 var(--deep-font); }
+  .landing-shell .terms-dialog pre { color: var(--deep-muted); font: 400 14px/1.65 var(--deep-font); }
+  .legal-page { min-height: 100dvh; padding: 12px; color: var(--deep-text); font-family: var(--deep-font); }
+  .legal-page-header { border: 0; border-bottom: 1px solid var(--deep-line); border-radius: 12px 12px 0 0; background: var(--deep-night); }
+  .legal-page-header strong { color: var(--deep-gold); font: 600 17px/1.3 var(--deep-font); }
+  .legal-back { min-height: 44px; display: inline-flex; align-items: center; color: var(--deep-gold); font: 500 14px var(--deep-font); text-transform: none; }
+  .legal-document { margin-top: 0; border: 0; border-radius: 0 0 12px 12px; background: var(--deep-night); box-shadow: none; }
+  .legal-document pre { color: var(--deep-muted); font: 400 14px/1.65 var(--deep-font); }
+}
