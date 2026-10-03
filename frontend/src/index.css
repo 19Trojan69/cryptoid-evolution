@@ -271,6 +271,9 @@ html[data-motion="reduced"] .level-twinkles i { animation: none; opacity: .42; }
 .space-world-surface { position: absolute; z-index: 1; inset: 0; border-radius: 50%; background-color: #293850; background-position: center; background-size: cover; background-repeat: no-repeat; }
 .space-world-surface::after { position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(circle at 29% 25%, #fff2, transparent 47%, #03091b77 94%); content: ''; }
 .space-world .earth-globe-canvas { display: block; width: 100%; height: 100%; border-radius: 50%; }
+.space-scene-1 .space-world.planet-earth { opacity: .82; box-shadow: -2px -2px 4px #c3e7ffad, -7px -7px 17px #62bdf285, 3px 5px 17px #28729d38; }
+.space-world.planet-earth::before { position: absolute; inset: -5%; border-radius: 50%; background: radial-gradient(circle, transparent 71%, #4eaff231 78%, #63c7ff1b 83%, transparent 97%); filter: blur(4px); content: ''; pointer-events: none; }
+.space-world.planet-earth::after { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 30% 22%, #d3efff20, transparent 49%), radial-gradient(circle, transparent 82%, #8dd8ff19 91%, #c6eaff73 99%, transparent 100%); box-shadow: inset 1px 1px 6px #d5efff5c, inset -5px -6px 13px #06255066; content: ''; pointer-events: none; }
 /* The rings and sphere share one coordinate system. The near side covers the lower limb; the far side sits behind it. */
 .saturn-illustration { position: absolute; left: -100%; top: -50%; width: 300%; height: 200%; background: url('/planets/saturn.svg') center / contain no-repeat; }
 .space-world-primary { width: clamp(185px, 29vw, 390px); left: var(--main-x); top: var(--main-y); opacity: .58; transform: translate3d(-50%, -50%, 0) translate3d(var(--parallax-x), var(--parallax-y), 0); }
