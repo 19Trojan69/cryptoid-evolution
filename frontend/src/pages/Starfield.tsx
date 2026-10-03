@@ -1,7 +1,7 @@
 import { memo, useMemo, type CSSProperties } from "react";
 import type { PlayerPosition } from "./playerCombat";
 
-type Star = { x: number; y: number; radius: number; color: string; opacity: number };
+type Star = { x: number; y: number; radius: number; color: string; opacity: number; glint: boolean };
 
 const makeRandom = (seed: number) => {
   let state = seed >>> 0;
@@ -23,6 +23,7 @@ const makeStars = (columns: number, rows: number, seed: number, nearby: boolean)
     radius: nearby ? .9 + random() * 1.4 : .35 + random() * .85,
     color: starColors[Math.floor(random() * starColors.length)],
     opacity: nearby ? .55 + random() * .38 : .25 + random() * .55,
+    glint: nearby && index % 11 === 3,
   }));
 };
 
@@ -75,7 +76,14 @@ const Starfield = ({ sector, player, paused, showNebula = false, showTwinkles = 
       {stars.distant.map((star, index) => <circle key={index} cx={star.x} cy={star.y} r={star.radius} fill={star.color} opacity={star.opacity} />)}
     </svg>
     <svg className="starfield-stars starfield-nearby" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice">
-      {stars.nearby.map((star, index) => <circle key={index} cx={star.x} cy={star.y} r={star.radius} fill={star.color} opacity={star.opacity} />)}
+      {stars.nearby.map((star, index) => <g key={index} opacity={star.opacity}>
+        {star.glint && <>
+          <circle cx={star.x} cy={star.y} r={star.radius * 5} fill={star.color} opacity=".08" />
+          <circle cx={star.x} cy={star.y} r={star.radius * 2.5} fill={star.color} opacity=".12" />
+          <path d={`M${star.x - star.radius * 4} ${star.y}h${star.radius * 8} M${star.x} ${star.y - star.radius * 4}v${star.radius * 8}`} fill="none" stroke={star.color} strokeWidth=".4" opacity=".42" />
+        </>}
+        <circle cx={star.x} cy={star.y} r={star.radius} fill={star.color} />
+      </g>)}
     </svg>
     <i className="shooting-star shooting-star-one"><span /></i>
     <i className="shooting-star shooting-star-two"><span /></i>
