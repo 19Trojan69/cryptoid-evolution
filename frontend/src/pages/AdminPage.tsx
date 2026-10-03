@@ -25,6 +25,7 @@ import { requestGameFullscreen } from "./gameFullscreen";
 import { readEffectsVolume } from "./musicPreferences";
 import "./admin.css";
 import AdminUsage from "./AdminUsage";
+import { translate } from "../i18n";
 
 const tabs = [
   ["overview", "Übersicht"],
@@ -343,7 +344,7 @@ export default function AdminPage() {
               ? `@${auth.user.username} ist für diesen Admin-Bereich nicht freigeschaltet.`
               : "Die Admin-Zentrale ist nur für dein verifiziertes Eigentümerkonto zugänglich."}
           </p>
-          {auth.authError && <p role="alert">{auth.authError}</p>}
+          {auth.authError && <p role="alert">{translate("de", auth.authError)}</p>}
           <div className="admin-actions">
             <button
               className="admin-button admin-primary"
@@ -407,7 +408,7 @@ export default function AdminPage() {
           )}
           {auth.authError && (
             <p className="admin-error" role="alert">
-              {auth.authError}
+              {translate("de", auth.authError)}
             </p>
           )}
           {message && (

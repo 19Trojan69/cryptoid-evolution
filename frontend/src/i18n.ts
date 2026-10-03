@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { formatLives } from "./locales/quantities.ts";
+import { localeAliases, localeCatalog } from "./locales/catalog.ts";
 
 export type Locale = "en" | "de" | "es" | "fr" | "pt" | "it" | "pl" | "tr" | "ru" | "hr" | "cs" | "sk" | "hu" | "ro" | "sr" | "uk" | "th";
 export const languages: Record<Locale, string> = {
@@ -240,7 +242,6 @@ const evolutionShopTranslations: Partial<Record<Locale, Record<string, string>>>
     "Three ship stages": "Trois niveaux de vaisseau"
   }
 };
-const englishGameTerms = new Set(["Network chain", "blocks linked", "CHAIN COMPLETE", "BLOCK LINKED", "Shards", "Shard", "PERFECT CRYPTO HUNT", "GOLD NETWORK", "NETWORK LINK"]);
 const guideTranslations: Partial<Record<Locale, Record<string, string>>> = {
   de: {
     "CAMPAIGN COMPLETE":"KAMPAGNE ABGESCHLOSSEN", "Victory":"Sieg", "You completed the final bonus challenge.":"Du hast die letzte Bonusrunde geschafft.",
@@ -335,12 +336,38 @@ const mobileMenuTranslations: Partial<Record<Locale, Record<string, string>>> = 
   },
 };
 
-export const translate = (locale: Locale, source: string) => englishGameTerms.has(source) ? source : source === "MISSION FAILED" ? failedMissionTranslations[locale] : locale === "en" ? source : mobileMenuTranslations[locale]?.[source] ?? quickAccessTranslations[locale]?.[source] ?? shipPositionTranslations[locale]?.[source] ?? guideTranslations[locale]?.[source] ?? evolutionShopTranslations[locale]?.[source] ?? audioSettingsTranslations[locale]?.[source] ?? gameplayPolishTranslations[locale]?.[source] ?? homeMusicTranslations[locale]?.[source] ?? controlTranslations[locale]?.[source] ?? hudTranslations[locale]?.[source] ?? systemMenuTranslations[locale]?.[source] ?? extendedTranslations[locale]?.[source] ?? powerUpTranslations[locale]?.[source] ?? levelTranslations[locale]?.[source] ?? networkTranslations[locale]?.[source] ?? newerTranslations[locale]?.[source] ?? translations[locale]?.[source] ?? source;
+export type TranslationParams = Record<string, string | number>;
+const legacyCatalog: Partial<Record<Locale, Record<string, string>>> = {};
+for (const locale of Object.keys(languages) as Locale[]) {
+  legacyCatalog[locale] = Object.assign({}, translations[locale as Exclude<Locale, "en">], newerTranslations[locale], networkTranslations[locale], levelTranslations[locale], powerUpTranslations[locale], extendedTranslations[locale], systemMenuTranslations[locale], hudTranslations[locale], controlTranslations[locale], homeMusicTranslations[locale], gameplayPolishTranslations[locale], audioSettingsTranslations[locale], evolutionShopTranslations[locale], guideTranslations[locale], shipPositionTranslations[locale], quickAccessTranslations[locale], mobileMenuTranslations[locale]);
+  legacyCatalog[locale]!["MISSION FAILED"] = failedMissionTranslations[locale];
+}
+// Currency and product names remain the same in every language.
+const sharedNames = new Set(["Shards", "Shard", "Cryptoids", "Cryptoid", "Cryptoid Evolution", "Pi", "Test-Pi", "Testnet", "Mainnet", "Top 100", "Overdrive"]);
+const localizedValue = (locale: Locale, source: string, seen = new Set<string>()): string | undefined => {
+  if (sharedNames.has(source)) return source;
+  const explicit = localeCatalog[locale]?.[source] ?? legacyCatalog[locale]?.[source];
+  if (explicit !== undefined) return explicit;
+  if (seen.has(source)) return undefined;
+  seen.add(source);
+  const alias = localeAliases[source];
+  if (typeof alias === "string") return localizedValue(locale, alias, seen);
+  if (alias) {
+    const parts = alias.map(key => localizedValue(locale, key, new Set(seen)));
+    if (parts.every(part => part !== undefined)) return parts.join(" · ");
+  }
+  return undefined;
+};
+export const hasTranslation = (locale: Locale, source: string) => locale === "en" || localizedValue(locale, source) !== undefined;
+export const translate = (locale: Locale, source: string, params: TranslationParams = {}) => {
+  const text = locale === "en" ? source : localizedValue(locale, source) ?? source;
+  return text.replace(/\{(\w+)\}/g, (placeholder, name: string) => Object.hasOwn(params, name) ? String(params[name]) : placeholder);
+};
 export const useLocale = () => {
   const [locale, setLocale] = useState<Locale>(() => resolveLocale(navigator.languages?.length ? navigator.languages : [navigator.language], localStorage.getItem(STORAGE_KEY)));
   const [automatic, setAutomatic] = useState(() => !localStorage.getItem(STORAGE_KEY));
   useEffect(() => { document.documentElement.lang = locale; }, [locale]);
   useEffect(() => { const update = () => { const override = localStorage.getItem(STORAGE_KEY); setAutomatic(!override); setLocale(resolveLocale(navigator.languages?.length ? navigator.languages : [navigator.language], override)); }; window.addEventListener("cryptoid-language", update); window.addEventListener("languagechange", update); return () => { window.removeEventListener("cryptoid-language", update); window.removeEventListener("languagechange", update); }; }, []);
   const choose = (next: Locale | null) => { if (next) localStorage.setItem(STORAGE_KEY, next); else localStorage.removeItem(STORAGE_KEY); setAutomatic(!next); setLocale(resolveLocale(navigator.languages?.length ? navigator.languages : [navigator.language], next)); window.dispatchEvent(new Event("cryptoid-language")); };
-  return { locale, automatic, choose, t: (source: string) => translate(locale, source) };
+  return { locale, automatic, choose, lives: (count: number) => formatLives(locale, count), t: (source: string, params?: TranslationParams) => translate(locale, source, params) };
 };

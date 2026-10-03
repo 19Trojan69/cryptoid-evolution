@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node_modules/.bin/vite",
-    "build": "node_modules/.bin/tsc -b && vite build",
+    "build": "npm run test:i18n && node_modules/.bin/tsc -b && vite build",
     "lint": "node_modules/.bin/eslint .",
     "preview": "node_modules/.bin/vite preview",
     "format": "prettier --write .",
@@ -17,7 +17,8 @@
     "test:powerups": "node --experimental-strip-types --test src/pages/powerUps.test.mjs",
     "test:player": "node --experimental-strip-types --test src/pages/playerCombat.test.mjs",
     "test:enemy-fire": "node --experimental-strip-types --test src/pages/enemyFire.test.mjs",
-    "test:realism": "node --experimental-strip-types --test src/pages/shipRealism.test.mjs"
+    "test:realism": "node --experimental-strip-types --test src/pages/shipRealism.test.mjs",
+    "test:i18n": "node --experimental-strip-types --test src/i18n.test.mjs"
   },
   "dependencies": {
     "@mui/icons-material": "^7.3.8",

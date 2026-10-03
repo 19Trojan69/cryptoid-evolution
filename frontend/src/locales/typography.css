@@ -1,0 +1,14 @@
+@font-face {
+  font-family: 'Noto Sans Thai';
+  src: url('/fonts/NotoSansThai.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Thai needs joined marks and its own glyphs; load this face only when selected. */
+html:lang(th) body,
+html:lang(th) body * {
+  font-family: 'Noto Sans Thai', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  letter-spacing: normal !important;
+}

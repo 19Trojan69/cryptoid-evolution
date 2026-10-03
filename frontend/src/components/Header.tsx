@@ -23,7 +23,7 @@ const Header = ({ user, serviceRank, onSignIn, onSignOut, onSendTestNotification
   return (
     <header className={`site-header${onOpenQuickAccess ? " header-with-quick-access" : ""}`}>
       {onOpenQuickAccess && <button className="button button-secondary quick-access-trigger" type="button" onClick={onOpenQuickAccess} aria-expanded={quickAccessOpen} aria-controls="quick-access-menu" aria-haspopup="dialog"><span aria-hidden="true"><BlockchainIcon kind="network" /></span><b>{t("Quick access")}</b></button>}
-      <a className="brand-mark" href="/" aria-label="Cryptoid Evolution – Trojan Wolf Games"><img className="brand-wolf-logo" src="/trojan-wolf-games.webp" alt="Trojan Wolf Games" width="148" height="74" /><span className="brand-copyright" aria-label="Copyright">©</span></a>
+      <a className="brand-mark" href="/" aria-label="Cryptoid Evolution – Trojan Wolf Games"><img className="brand-wolf-logo" src="/trojan-wolf-games.webp" alt="Trojan Wolf Games" width="148" height="74" /><span className="brand-copyright" aria-hidden="true">©</span></a>
       <div className="user-section">
         {user && onOpenQuickAccess ? (
           <div className="header-account" role="status" title={`${t("Signed in as")} @${user.username}`}>
@@ -35,8 +35,8 @@ const Header = ({ user, serviceRank, onSignIn, onSignOut, onSendTestNotification
         ) : user ? (
           <>
             <span className="user-name">@{user.username}{serviceRank && <span className="header-service-rank" title={t(serviceRank.name)}><b aria-hidden="true">{serviceRank.symbol}</b> {t(serviceRank.name)}</span>}</span>
-            {canAdmin && <Link className="header-action" to="/admin">Admin-Zentrale</Link>}
-            {canAdmin && adminMode && <button className="header-action" type="button" onClick={onToggleAdmin} disabled={isLoading}>Testmodus beenden</button>}
+            {canAdmin && <Link className="header-action" to="/admin">{t("Admin center")}</Link>}
+            {canAdmin && adminMode && <button className="header-action" type="button" onClick={onToggleAdmin} disabled={isLoading}>{t("End test mode")}</button>}
             <button className="header-action" type="button" onClick={onSignOut} disabled={isLoading}>{t('Sign out')}</button>
             {user.roles.includes("core_team") && (
               <button className="header-action" onClick={onSendTestNotification}>{t('Notify')}</button>
