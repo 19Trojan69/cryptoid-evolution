@@ -191,12 +191,13 @@ const alignedSpritePosition = (x: number, y: number, sprite: number, renderedSiz
   return { left: x - offset.x, top: y - offset.y };
 };
 
-const spawnAsteroid = (id: number, width: number, visibleTop: number, formationIndex: number, sector: number, slots: ReturnType<typeof formationLayout>, offset = 0): Asteroid => {
+const spawnAsteroid = (id: number, width: number, visibleTop: number, formationIndex: number, sector: number, slots: ReturnType<typeof formationLayout>, offset = 0, rulesVersion = 2): Asteroid => {
   const profile = chooseCryptoid(sector, formationIndex + offset);
   const size: AsteroidSize = profile.radius === 25 ? "small" : profile.radius === 36 ? "medium" : "large";
   const target = slots[formationIndex];
-  const entrySide = target.entrySide * (Math.floor(offset / 6) % 2 ? -1 : 1);
-  const entryPattern = entryPatternForSector(sector + Math.floor(offset / 6) * 3);
+  const flightVariation = rulesVersion === 2 ? Math.floor(offset / 6) : 0;
+  const entrySide = target.entrySide * (flightVariation % 2 ? -1 : 1);
+  const entryPattern = entryPatternForSector(sector + flightVariation * 3);
   const startX = entryStartX(entryPattern, formationIndex, width, profile.radius, entrySide);
   const entryStartY = visibleTop + profile.radius + ENTRY_HUD_GAP_PX;
   return { id, x: startX, y: entryStartY, size, ...profile, ...enemyAppearance(sector, formationIndex + offset), entryDuration: Math.max(4_100, Math.round(profile.entryDuration * .85)), health: profile.health, maxHealth: profile.health, cloaked: false, rotation: 0, rotationSpeed: 0, entryElapsed: 0, entryStartX: startX, entryStartY, entryTargetX: target.x, entryTargetY: target.y, entrySide, entryPattern, entryIndex: formationIndex, formationSlot: target.index, formationSlotCount: slots.length, formationElapsed: 0, formationDuration: FORMATION_SETTLE_MS, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, collidedThisAttack: false };
@@ -1021,7 +1022,7 @@ const GamePage = () => {
           spawnTimerRef.current += delta;
           if (spawnTimerRef.current >= ENTRY_GAP_MS) {
             spawnTimerRef.current -= ENTRY_GAP_MS;
-            state.asteroids.push(spawnAsteroid(nextIdRef.current++, width, visibleTop, formationIndexRef.current++, state.sector, slots, formationOffsetRef.current));
+            state.asteroids.push(spawnAsteroid(nextIdRef.current++, width, visibleTop, formationIndexRef.current++, state.sector, slots, formationOffsetRef.current, rulesVersionRef.current));
           }
         }
         if (state.encounter === "boss-fight" && state.boss && bossEscortCount(state.sector) > 0 && state.boss.elapsed >= BOSS_ENTRY_MS + 1_500) {
@@ -1282,7 +1283,7 @@ const GamePage = () => {
           sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height, visibleTop, nextFlight.count, nextFlight.offset);
           formationIndexRef.current = 0;
           formationStartedRef.current = false;
-          sectionElapsedRef.current = SECTION_INTRO_MS - REINFORCEMENT_WARNING_MS;
+          sectionElapsedRef.current = rulesVersionRef.current === 2 ? SECTION_INTRO_MS - REINFORCEMENT_WARNING_MS : 0;
           spawnTimerRef.current = 0;
           attackCooldownRef.current = 0;
           state.shots = [];

@@ -47,3 +47,7 @@ Frontend- und Backend-Build sowie 161 Frontend- und 41 Backend-Tests erfolgreich
 - Bewusste Entscheidung über die vom Dokument abweichende Levelzählung. Bis dahin bleibt der vorhandene Bossrhythmus bestehen.
 
 Optionale Aufgaben und zusätzliche Bossphasen sind gemäß Konzept spätere, getrennte Ausbauschritte. Die Produktion wird erst nach den verbleibenden Prüfungen aktualisiert.
+
+## Ergänzende Prüfung
+
+Die weitere Balanceprüfung und die Korrektur für Einflugwege/Einleitungsdauer alter Missionen sind in `doc/level-expansion-balance.md` dokumentiert. Automatisierte Todesläufe gelten ausdrücklich nicht als bestandene Balanceprüfung.

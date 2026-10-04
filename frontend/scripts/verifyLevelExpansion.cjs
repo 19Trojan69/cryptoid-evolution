@@ -12,13 +12,14 @@ const harnessSource = fs.readFileSync(testFile, 'utf8').split('const get =')[1].
 const makeHarness = new Function('require', 'const get =' + harnessSource + '\nreturn harness;')(backendRequire);
 const { emptyPlayerSave, firstMissionSnapshot } = backendRequire('../../build/playerSave.js');
 const { emptyRewardProgress } = backendRequire('../../build/rewardRules.js');
+const rulesVersion = process.env.CRYPTOID_QA_RULES === "1" ? 1 : 2;
 const results = [], errors = [], screenshots = process.env.CRYPTOID_QA_DIR || '/tmp/cryptoid-expansion-qa';
 fs.mkdirSync(screenshots, { recursive: true });
 (async () => {
   const { createServer } = await import(path.join(repo, 'frontend/node_modules/vite/dist/node/index.js'));
   const instrumentation = `
     (window as any).__flightTest = {
-      inspect: () => ({ state: stateRef.current, refs: Object.fromEntries(COMBAT_REF_KEYS.map(k=>[k,combatRefs[k].current])), rules:rulesVersionRef.current }),
+      inspect: () => ({ state: stateRef.current, refs: Object.fromEntries(COMBAT_REF_KEYS.map(k=>[k,combatRefs[k].current])), rules:rulesVersionRef.current, expectedEntryPattern:entryPatternForSector(stateRef.current.sector) }),
       clearGroup: () => { stateRef.current.asteroids=[]; stateRef.current.shots=[]; formationIndexRef.current=blockFlights(stateRef.current.sector,rulesVersionRef.current)[flightRef.current]; },
       pause: () => { stateRef.current.status="paused";setGame({...stateRef.current}); },
       resume: () => { stateRef.current.status="playing";setGame({...stateRef.current}); },
@@ -37,7 +38,7 @@ fs.mkdirSync(screenshots, { recursive: true });
       const h = makeHarness();
       await h.call('progress', '/me', null, { method: 'GET' });
       const snapshot = firstMissionSnapshot(2);
-      Object.assign(h.profile(), { ...emptyPlayerSave(), version: 1, legacyImported: true, mission: { sector: stage, phase: stage%10 ? 'normal' : 'boss', rulesVersion: 2, snapshot, savedAt: new Date().toISOString() } });
+      Object.assign(h.profile(), { ...emptyPlayerSave(), version: 1, legacyImported: true, mission: { sector: stage, phase: stage%10 ? 'normal' : 'boss', rulesVersion, snapshot, savedAt: new Date().toISOString() } });
       h.docs[0].rewardEventKeys = { testnet: [] };
       for (let s=1;s<stage;s++) if(s%10) {h.docs[0].rewardEventKeys.testnet.push('block:'+s);if(s%10===9)h.docs[0].rewardEventKeys.testnet.push('chain:'+Math.ceil(s/10));}else h.docs[0].rewardEventKeys.testnet.push('boss:'+s/10,'bonus:'+s/10);
       const context = await browser.newContext({ viewport, locale:'en-US', isMobile:viewport.width<700, hasTouch:viewport.width<700 });
@@ -81,6 +82,7 @@ fs.mkdirSync(screenshots, { recursive: true });
           await page.clock.runFor(8200);
           info=await page.evaluate(()=>window.__flightTest.inspect());
           assert.ok(info.state.asteroids.length<=6);
+          if(rulesVersion===1)assert.ok(info.state.asteroids.every(e=>e.entryPattern===info.expectedEntryPattern),"legacy entry patterns stay unchanged");
           await page.evaluate(()=>window.__flightTest.pause());
           await page.evaluate(()=>window.__flightTest.save());
           c=structuredClone(h.profile().mission.combat);
@@ -101,15 +103,16 @@ fs.mkdirSync(screenshots, { recursive: true });
           await page.clock.runFor(34);
           await page.evaluate(()=>window.__flightTest.pause());
           const after=await page.evaluate(()=>window.__flightTest.inspect());
+          assert.equal(after.rules,rulesVersion);
           assert.equal(after.state.sector,stage,'group never advances the stage');
-          if(group<expected-1){assert.equal(after.refs.flight,group+1);assert.equal(after.state.phase,'SECTOR_INTRO');assert.ok(after.refs.sectionElapsed>=2200&&after.refs.sectionElapsed<2700);}
+          if(group<expected-1){assert.equal(after.refs.flight,group+1);assert.equal(after.state.phase,'SECTOR_INTRO');if(rulesVersion===2)assert.ok(after.refs.sectionElapsed>=2200&&after.refs.sectionElapsed<2700);else assert.ok(after.refs.sectionElapsed<100,`legacy reinforcement keeps full intro: ${after.refs.sectionElapsed} ms, rules ${after.rules}`);}
           else assert.equal(after.state.phase,'SECTOR_CLEAR');
           if(group===0&&expected>1){await page.evaluate(()=>window.__flightTest.resume());await page.screenshot({path:path.join(screenshots,`stage-${stage}-warning.png`)});await page.evaluate(()=>window.__flightTest.pause());}
         }
         assert.ok(!h.profile().mission.combat,'completed boundary clears the runtime');
         assert.equal(h.profile().mission.sector,stage+1);
         assert.equal(h.profile().mission.phase,stage%10===9?'boss':'normal');
-        results.push({stage,viewport,groups:expected,checkpoints:'passed',pause:'passed',resume:'passed',onceOnlyClear:'passed'});
+        results.push({stage,rulesVersion,viewport,groups:expected,checkpoints:'passed',pause:'passed',resume:'passed',onceOnlyClear:'passed'});
       }else{
         await page.evaluate(()=>window.__flightTest.resume());await page.clock.runFor(8000);await page.evaluate(()=>window.__flightTest.pause());await page.evaluate(()=>window.__flightTest.save());
         const before=await page.evaluate(()=>window.__flightTest.inspect());
@@ -118,13 +121,13 @@ fs.mkdirSync(screenshots, { recursive: true });
         const restored=await page.evaluate(()=>window.__restoredFlight);
         assert.equal(restored.boss.health,before.state.boss.health);assert.deepEqual(restored.boss.turrets.map(t=>[t.health,t.maxHealth,t.shots]),before.state.boss.turrets.map(t=>[t.health,t.maxHealth,t.shots]));
         assert.ok(after.state.boss.health<=before.state.boss.health,'resuming cannot heal the boss');
-        results.push({stage,viewport,bossResume:'passed'});
+        results.push({stage,rulesVersion,viewport,bossResume:'passed'});
       }
       assert.deepEqual(apiFailures,[]);
       await page.screenshot({path:path.join(screenshots,`stage-${stage}.png`)});
       await context.close();
       console.log(JSON.stringify(results.at(-1)));
     }
-    assert.deepEqual(errors,[]);fs.writeFileSync(path.join(screenshots,process.env.CRYPTOID_QA_STAGES?'boss-results.json':'results.json'),JSON.stringify({results,errors},null,2));
+    assert.deepEqual(errors,[]);fs.writeFileSync(path.join(screenshots,`results-rules-${rulesVersion}.json`),JSON.stringify({results,errors},null,2));
   }finally{await browser.close();await server.close();}
 })().catch(e=>{console.error(e);console.error(JSON.stringify({results,errors}));process.exitCode=1;});
