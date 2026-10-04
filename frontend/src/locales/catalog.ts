@@ -5454,3 +5454,20 @@ Object.assign(localeCatalog["ro"], {"Boss turrets":"Tunurile bossului","Each bos
 Object.assign(localeCatalog["sr"], {"Boss turrets":"Топови боса","Each boss turret has its own energy bar. Destroy it to stop its fire and earn extra points once. Larger turrets have more energy and award more points. Turret hits do not damage the hull. Destroying the hull defeats the boss even with turrets intact, but awards no points for those remaining turrets.":"Сваки топ боса има сопствену траку енергије. Уништи га да зауставиш његову паљбу и једном добијеш додатне поене. Већи топови имају више енергије и доносе више поена. Погоци у топове не оштећују труп. Уништење трупа побеђује боса и са нетакнутим топовима, али за преостале топове нема додатних поена."});
 Object.assign(localeCatalog["uk"], {"Boss turrets":"Гармати боса","Each boss turret has its own energy bar. Destroy it to stop its fire and earn extra points once. Larger turrets have more energy and award more points. Turret hits do not damage the hull. Destroying the hull defeats the boss even with turrets intact, but awards no points for those remaining turrets.":"Кожна гармата боса має власну шкалу енергії. Знищте її, щоб припинити її вогонь і одноразово отримати додаткові очки. Більші гармати мають більше енергії та дають більше очок. Влучання в гармати не пошкоджують корпус. Знищення корпусу перемагає боса навіть із цілими гарматами, але за решту гармат додаткові очки не нараховуються."});
 Object.assign(localeCatalog["th"], {"Boss turrets":"ปืนบอส","Each boss turret has its own energy bar. Destroy it to stop its fire and earn extra points once. Larger turrets have more energy and award more points. Turret hits do not damage the hull. Destroying the hull defeats the boss even with turrets intact, but awards no points for those remaining turrets.":"ปืนบอสแต่ละกระบอกมีแถบพลังงานของตัวเอง ทำลายปืนเพื่อหยุดการยิงและรับคะแนนพิเศษหนึ่งครั้ง ปืนใหญ่มีพลังงานมากกว่าและให้คะแนนมากกว่า การยิงโดนปืนไม่ทำให้ตัวยานเสียหาย ทำลายตัวยานเพื่อชนะบอสได้แม้ยังมีปืนที่ไม่ถูกทำลาย แต่จะไม่ได้คะแนนพิเศษจากปืนที่เหลือ"});
+
+Object.assign(localeCatalog["de"], {"1 minute per charge": "1 Minute pro Ladung"});
+Object.assign(localeCatalog["es"], {"1 minute per charge": "1 minuto por carga"});
+Object.assign(localeCatalog["fr"], {"1 minute per charge": "1 minute par charge"});
+Object.assign(localeCatalog["pt"], {"1 minute per charge": "1 minuto por carga"});
+Object.assign(localeCatalog["it"], {"1 minute per charge": "1 minuto per carica"});
+Object.assign(localeCatalog["pl"], {"1 minute per charge": "1 minuta na ładunek"});
+Object.assign(localeCatalog["tr"], {"1 minute per charge": "Şarj başına 1 dakika"});
+Object.assign(localeCatalog["ru"], {"1 minute per charge": "1 минута на заряд"});
+Object.assign(localeCatalog["hr"], {"1 minute per charge": "1 minuta po punjenju"});
+Object.assign(localeCatalog["cs"], {"1 minute per charge": "1 minuta na náboj"});
+Object.assign(localeCatalog["sk"], {"1 minute per charge": "1 minúta na náboj"});
+Object.assign(localeCatalog["hu"], {"1 minute per charge": "1 perc töltetenként"});
+Object.assign(localeCatalog["ro"], {"1 minute per charge": "1 minut pe încărcătură"});
+Object.assign(localeCatalog["sr"], {"1 minute per charge": "1 минут по пуњењу"});
+Object.assign(localeCatalog["uk"], {"1 minute per charge": "1 хвилина на заряд"});
+Object.assign(localeCatalog["th"], {"1 minute per charge": "1 นาทีต่อชุด"});

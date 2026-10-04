@@ -4,7 +4,7 @@ import { UserData } from "./user";
 declare module 'express-session' {
   export interface SessionData {
     currentUser: UserData | null,
-    scoreRun?: { id: string; startedAt: number; scoreBase?: number; shardsBase?: number; unlockedWeaponLevels?: number[] } | null,
+    scoreRun?: { rulesVersion?: 1 | 2; id: string; startedAt: number; scoreBase?: number; shardsBase?: number; unlockedWeaponLevels?: number[] } | null,
     adminMode?: boolean,
     adminUid?: string | null,
     adminLoadout?: { weapon: string | null; power: string | null } | null,

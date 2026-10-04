@@ -50,12 +50,42 @@ function harness() {
 }
 const snapshot = (overrides = {}) => ({ score: 0, shards: 0, destroyed: 0, hearts: 3, weaponSource: 'standard', paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, weaponTimers: [0, -1, 0, 0, 0, 0], shieldCharges: 0, shieldMs: 0, purchasedShieldMs: 0, shieldActive: false, overdriveMs: 0, overdriveTotalMs: 20000, rapidFireMs: 0, rapidFireTotalMs: 20000, empMs: 0, ...overrides });
 const start = async (h, action = 'new', startKey = 'start-key-0000000001') => {
-  const result = await h.call('hangar', '/start', { action, version: h.profile().version, startKey });
+  const result = await h.call('hangar', '/start', { action, rulesVersion: 2, version: h.profile().version, startKey });
   // Simulate time spent playing without making the test sleep.
   if (result.code === 200) h.session.scoreRun.startedAt -= 10_000;
   return result;
 };
 const init = h => h.call('progress', '/me', null, { method: 'GET' });
+
+test('boss lives exceed three and six, survive retries and resume, and cannot be fabricated', async () => {
+  const h = harness(); await init(h); await start(h);
+  let runId = h.session.scoreRun.id;
+  for (let level=1; level<=5; level++) {
+    const before = 3 + level - 1;
+    for (let block=1; block<=9; block++) {
+      const stage=(level-1)*10+block;
+      assert.equal((await h.call('rewards','/event',{runId,kind:'block',level,stage,save:snapshot({hearts:before})})).code,200);
+    }
+    const event={runId,kind:'boss',level,stage:level*10,save:snapshot({hearts:before+1})};
+    assert.equal((await h.call('rewards','/event',{...event,save:snapshot({hearts:before+2})})).code,400);
+    assert.equal((await h.call('rewards','/event',event)).body.awarded,true);
+    assert.equal((await h.call('rewards','/event',event)).body.awarded,false);
+    assert.equal(h.profile().mission.snapshot.hearts,before+1);
+    const resumed=await start(h,'resume',`boss-heart-resume-${level}`);
+    assert.equal(resumed.code,200);
+    assert.equal(resumed.body.checkpoint.hearts,before+1);
+    runId=resumed.body.scoreRunId;
+    assert.equal((await h.call('rewards','/event',{runId,kind:'bonus',level,stage:level*10,hits:0,save:snapshot({hearts:before+1})})).code,200);
+  }
+  assert.equal(h.profile().mission.snapshot.hearts,8);
+  assert.equal((await h.call('progress','/checkpoint',{runId,combat:combat({stage:51}),save:snapshot({hearts:8})})).code,200);
+  assert.equal((await h.call('progress','/checkpoint',{runId,combat:combat({stage:51,sequence:2}),save:snapshot({hearts:9})})).code,400);
+  assert.equal((await h.call('progress','/leave',{runId,hearts:7})).code,200);
+  const resumed=await start(h,'resume','boss-heart-resume-final');
+  assert.equal(resumed.body.checkpoint.hearts,7);
+  assert.equal(readSnapshot(snapshot({hearts:56})).hearts,56);
+  assert.equal(readSnapshot(snapshot({hearts:57})),null);
+});
 
 test('cookie-less save requests restore only the authenticated active run and remain idempotent', async () => {
   const h = harness(); await init(h); await start(h);
@@ -222,4 +252,139 @@ test('new mission keeps inventory and career, closes import and resets only run 
   assert.equal(h.profile().mission, null);
   assert.deepEqual(h.docs[0].rewardEventKeys.testnet, []);
   assert.equal((await h.call('progress', '/inventory', { action: 'import', version: h.profile().version, confirm: true, balance: 999, fleet: {} })).code, 409);
+});
+
+test('batch inventory and activation are atomic, retryable and survive resume without refilling', async () => {
+  const h=harness(); await init(h); await start(h);
+  h.orders.push({user:'pilot-a',paid:true,product_id:'weapon_twin',pi_payment_id:'ten-charges',quantity:10,weapon_model:2,payment_network:'Pi Testnet'});
+  const inventory=await h.call('hangar','/inventory',null,{method:'GET'});
+  assert.equal(inventory.body.weaponStock.weapon_twin,10);
+  const runId=h.session.scoreRun.id;
+  assert.equal((await h.call('progress','/checkpoint',{runId,combat:combat(),save:snapshot()})).code,200);
+  const activation={runId,level:2,requestId:'activation-request-0001'};
+  const results=await Promise.all([h.call('hangar','/weapon/activate',activation),h.call('hangar','/weapon/activate',activation)]);
+  assert.deepEqual(results.map(r=>r.code),[200,200]);
+  assert.equal(results[0].body.remainingMs,60000);
+  assert.equal(h.docs[0].weaponStockByNetwork.testnet.balances.weapon_twin,9);
+  assert.equal(h.profile().mission.snapshot.weaponTimers[2],60000);
+  assert.equal((await h.call('hangar','/weapon/activate',{...activation,requestId:'activation-request-0002'})).code,409);
+  assert.equal((await h.call('hangar','/weapon/activate',{...activation,level:3})).code,409);
+  const resume=await start(h,'resume','resume-weapon-stock-0001');
+  assert.equal(resume.body.checkpoint.weaponTimers[2],60000);
+  assert.equal((await h.call('hangar','/weapon/activate',activation)).code,409);
+  const newRunId=h.session.scoreRun.id;
+  assert.equal((await h.call('progress','/checkpoint',{runId:newRunId,combat:combat(),save:snapshot({paidWeaponLevel:2,weaponTimers:[0,0,0,0,0,0]})})).code,200);
+  assert.equal((await h.call('hangar','/weapon/activate',{runId:newRunId,level:2,requestId:'activation-request-0003'})).code,200);
+  assert.equal((await h.call('hangar','/inventory',null,{method:'GET'})).body.weaponStock.weapon_twin,8);
+  assert.equal((await h.call('hangar','/weapon/activate',{runId:newRunId,level:4,requestId:'activation-request-0004'})).code,400);
+});
+
+const combat = (changes = {}) => ({
+  version: 1, clock: 5000, sequence: 1, stage: 1, encounter: 'normal', width: 390, height: 844,
+  state: { asteroids: [], bonusTargets: [], bonusHits: 0, boss: null, shots: [], enemyShots: [], player: { x: .5, y: .8 }, powerUps: [], pickupNotice: null, combo: { pendingAt: null, total: 0, level: 0, remainingMs: 0 }, chainBlocks: 0, chainResult: '', bonusResult: '', projectileGuard: 0, pendingStartPower: null, phase: 'ENTRY' },
+  refs: Object.fromEntries(require('../../build/combatCheckpoint.js').COMBAT_REF_KEYS.map(k => [k, k === 'nextId' ? 10 : 0])),
+  formationStarted: false, slots: null, escortSlots: null, ...changes,
+});
+
+test('defeated boss waits across save/resume; pickup commits one heart and then bonus', async () => {
+  const h=harness(); await init(h); await start(h);
+  let runId=h.session.scoreRun.id;
+  for(let stage=1;stage<=9;stage++) assert.equal((await h.call('rewards','/event',{runId,kind:'block',level:1,stage,save:snapshot({hearts:2})})).code,200);
+  const c=combat({stage:10,encounter:'boss-clear'}); c.state.phase='SECTOR_CLEAR'; c.refs.clearTimer=10000;
+  assert.equal((await h.call('progress','/checkpoint',{runId,combat:c,save:snapshot({hearts:2})})).code,200);
+  assert.equal(h.profile().mission.phase,'boss');
+  const resumed=await start(h,'resume','heart-pickup-resume-001');
+  assert.equal(resumed.body.combat.encounter,'boss-clear');
+  assert.equal(resumed.body.checkpoint.hearts,2);
+  runId=resumed.body.scoreRunId;
+  const event={runId,kind:'boss',level:1,stage:10,save:snapshot({hearts:3})};
+  assert.equal((await h.call('rewards','/event',event)).code,200);
+  assert.equal(h.profile().mission.phase,'bonus');
+  assert.equal(h.profile().mission.snapshot.hearts,3);
+  assert.equal((await h.call('rewards','/event',event)).body.awarded,false);
+  assert.equal(h.profile().mission.snapshot.hearts,3);
+  assert.equal((await h.call('progress','/checkpoint',{runId,combat:{...c,sequence:2},save:snapshot({hearts:2})})).code,409);
+});
+
+test('combat checkpoints credit once, restore timers and groups, and reject stale devices', async () => {
+  const h = harness(); await init(h); await start(h);
+  const runId = h.session.scoreRun.id;
+  const c = combat(); c.refs.sectionElapsed = 2600; c.refs.formationIndex = 2;
+  c.state.asteroids = [{ id: 1, x: 60, y: 160, health: 2, maxHealth: 4, entryElapsed: 500, entryDuration: 4100 }];
+  const body = { runId, combat: c, save: snapshot({ hearts: 1, score: 120, shards: 8, destroyed: 3, pickupWeaponMs: 18543 }) };
+  assert.equal((await h.call('progress', '/checkpoint', body)).code, 200);
+  assert.equal((await h.call('progress', '/checkpoint', body)).body.stale, true);
+  assert.equal(h.profile().balance, 8);
+  assert.equal(h.profile().totalDestroyed, 3);
+  const oldSession = structuredClone(h.session);
+  const resumed = await start(h, 'resume', 'resume-combat-00000001');
+  assert.equal(resumed.code, 200);
+  assert.equal(resumed.body.rulesVersion, 2);
+  assert.equal(resumed.body.checkpoint.hearts, 1);
+  assert.equal(resumed.body.checkpoint.pickupWeaponMs, 18543);
+  assert.deepEqual(resumed.body.combat.state.asteroids, c.state.asteroids);
+  assert.equal(resumed.body.combat.refs.sectionElapsed, 2600);
+  assert.equal((await h.call('progress', '/checkpoint', { ...body, combat: { ...c, sequence: 2 } }, { session: oldSession })).code, 409);
+  assert.equal(h.profile().balance, 8);
+  assert.equal((await h.call('progress', '/checkpoint', { ...body, runId: resumed.body.scoreRunId })).code, 200);
+  assert.equal(h.profile().balance, 8);
+});
+
+test('completed block wins over late combat checkpoint without replaying rewards', async () => {
+  const h = harness(); await init(h); await start(h);
+  const runId = h.session.scoreRun.id;
+  const save = snapshot({ score: 100, shards: 12, destroyed: 6 });
+  assert.equal((await h.call('progress', '/checkpoint', { runId, combat: combat(), save })).code, 200);
+  assert.equal((await h.call('rewards', '/event', { runId, kind: 'block', level: 1, stage: 1, save })).code, 200);
+  assert.equal(h.profile().balance, 12);
+  assert.equal(h.profile().mission.sector, 2);
+  assert.equal(h.profile().mission.combat, undefined);
+  assert.equal((await h.call('progress', '/checkpoint', { runId, combat: combat({ sequence: 2 }), save })).code, 409);
+  assert.equal(h.profile().mission.sector, 2);
+  assert.equal(h.profile().balance, 12);
+});
+
+test('combat validation rejects forged positions, ownership, stages and overlarge payloads', async () => {
+  const h = harness(); await init(h); await start(h);
+  const runId = h.session.scoreRun.id;
+  for (const c of [combat({ stage: 500 }), combat({ sequence: -1 }), combat({ width: NaN }), combat({ slots: Array(50).fill({ x: 1, y: 1 }) })]) {
+    assert.equal((await h.call('progress', '/checkpoint', { runId, combat: c, save: snapshot() })).code, 400);
+  }
+  assert.equal((await h.call('progress', '/checkpoint', { runId, combat: combat(), save: snapshot({ paidWeaponLevel: 5 }) })).code, 400);
+  assert.equal((await h.call('progress', '/checkpoint', { runId, combat: combat(), save: snapshot({ hearts: 6 }) })).code, 400);
+  assert.equal(h.profile().balance, 0);
+});
+
+test('new score rules preserve legacy high scores and separate network records', async () => {
+  const h = harness(); await init(h); h.docs[0].bestScore = 9000;
+  await start(h);
+  const runId = h.session.scoreRun.id;
+  assert.equal((await h.call('leaderboard', '/score', { runId, score: 100, finished: true, save: snapshot({ score: 100, hearts: 0 }) })).code, 200);
+  assert.equal(h.docs[0].bestScore, 9000);
+  assert.equal(h.docs[0].bestScoreV2.testnet, 100);
+  assert.equal(h.docs[0].bestScoreV2.mainnet, undefined);
+});
+
+test('unfinished bonus restores hits and targets without paying the bonus twice', async () => {
+  const h=harness();await init(h);await start(h);const runId=h.session.scoreRun.id;
+  const save=snapshot({score:100,shards:10,destroyed:6});
+  h.profile().mission={sector:10,phase:'bonus',rulesVersion:2,snapshot:save,savedAt:new Date().toISOString()};
+  h.docs[0].rewardEventKeys.testnet=['boss:1'];
+  const c=combat({stage:10,encounter:'bonus'});c.state.bonusHits=4;c.state.chainBlocks=9;c.state.bonusTargets=[{id:4,x:180,y:140,elapsed:500}];c.refs.bonusIndex=5;
+  assert.equal((await h.call('progress','/checkpoint',{runId,combat:c,save})).code,200);
+  const resumed=await start(h,'resume','resume-bonus-000000001');
+  assert.equal(resumed.body.combat.state.bonusHits,4);assert.equal(resumed.body.combat.refs.bonusIndex,5);
+  const event={runId:resumed.body.scoreRunId,kind:'bonus',stage:10,level:1,hits:6,save:snapshot({score:120,shards:12,destroyed:6})};
+  assert.equal((await h.call('rewards','/event',event)).body.awarded,true);
+  assert.equal((await h.call('rewards','/event',event)).body.awarded,false);
+  assert.equal(h.profile().balance,12);assert.equal(h.profile().mission.sector,11);
+});
+
+test('checkpoint rejects a skipped reinforcement and a fabricated pending power',async()=>{
+  const h=harness();await init(h);await start(h);const runId=h.session.scoreRun.id;
+  const c=combat();c.refs.flight=2;c.refs.formationOffset=12;
+  assert.equal((await h.call('progress','/checkpoint',{runId,combat:c,save:snapshot()})).code,400);
+  const power=combat();power.state.pendingStartPower='bomb';
+  assert.equal((await h.call('progress','/checkpoint',{runId,combat:power,save:snapshot()})).code,400);
+  assert.equal(h.profile().mission,null);
 });
