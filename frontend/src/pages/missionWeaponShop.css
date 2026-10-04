@@ -1,4 +1,5 @@
-.pause-weapon-shop-button { width: 100%; margin-block: 12px; }
+.pause-settings-modal > .pause-weapon-shop-button { position: static; width: 100%; margin-block: 12px; }
+.pause-settings-overlay:has(.mission-weapon-shop) { z-index: 20; }
 .mission-weapon-shop { text-align: left; }
 .mission-weapon-shop > h2 { color: #f1d490; }
 .mission-weapon-shop > p { line-height: 1.5; }

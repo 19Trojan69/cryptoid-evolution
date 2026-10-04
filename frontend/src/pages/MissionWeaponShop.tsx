@@ -19,6 +19,7 @@ export default function MissionWeaponShop({ authenticated, admin, timers, onInve
   const [refreshing, setRefreshing] = useState(false);
   const [notice, setNotice] = useState('');
   const mounted = useRef(true);
+  const titleRef = useRef<HTMLHeadingElement>(null);
   const inventoryCallback = useRef(onInventory);
   inventoryCallback.current = onInventory;
   const { orderProduct, isLoading, paymentDiagnostic } = usePayments({ isAuthenticated: authenticated && !admin, onRequireAuth: () => setNotice('Connect your Pi account to see your saved loadout.') });
@@ -45,12 +46,15 @@ export default function MissionWeaponShop({ authenticated, admin, timers, onInve
   };
   useEffect(() => {
     mounted.current = true;
+    const modal = titleRef.current?.closest('.pause-settings-modal');
+    if (modal) modal.scrollTop = 0;
+    titleRef.current?.focus({ preventScroll: true });
     void refresh();
     return () => { mounted.current = false; };
   }, []);
   const busy = refreshing || isLoading;
   return <section className="mission-weapon-shop" aria-labelledby="mission-weapon-shop-title" aria-busy={busy}>
-    <h2 id="mission-weapon-shop-title">{t('Weapon shop')}</h2>
+    <h2 id="mission-weapon-shop-title" ref={titleRef} tabIndex={-1}>{t('Weapon shop')}</h2>
     <p>{t('The mission stays paused. Close the shop, then choose Resume.')}</p>
     <WeaponTutorial initiallyOpen />
     <p>{t('Collected weapon upgrades activate immediately. If another timed weapon is available, its own side button lets you switch between them. Previously owned start boosts have a separate activation button.')}</p>
