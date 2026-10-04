@@ -8,7 +8,7 @@ import './weaponPreview.css';
 
 const WeaponPreview = memo(function WeaponPreview({ offerId, sprite, color, stage = 1 }: { offerId: string; sprite: number; color: PlayerColorId; stage?: ShipStage }) {
   const { t } = useLocale();
-  const level = offerId.includes('plasma') ? 5 : offerId.includes('triple') ? 4 : offerId.includes('rapid') ? 3 : 2;
+  const level = offerId.includes('plasma') ? 5 : offerId.includes('triple') ? 4 : offerId.includes('rapid') ? 3 : offerId === 'standard' ? 1 : 2;
   const interval = fireInterval(level, 0);
   return <div className={`weapon-fire-preview weapon-fire-preview-level-${level}`} role="img" aria-label={t('Live fire test')} style={{ '--burst-cycle': `${interval * 4}ms` } as CSSProperties}>
     <span className="weapon-fire-preview-ship"><PaintedShip sprite={sprite} color={color} stage={stage} /></span>

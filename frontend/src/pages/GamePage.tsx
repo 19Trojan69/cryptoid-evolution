@@ -34,6 +34,8 @@ import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVol
 import { MusicPlayer, takeHandoffGameMusic } from "./musicPlayback";
 import SystemSettings, { applySavedDisplaySettings } from "./SystemSettings";
 import MissionWeaponShop from './MissionWeaponShop';
+import WeaponPreview from './WeaponPreview';
+import './weaponSelection.css';
 import { axiosClient } from "../lib/axiosClient";
 import { accountSelection, createSaveQueue, loadAccountSave, localInventory, mutateAccountInventory, retrySave, snapshotOf, type AccountSave, type Snapshot } from "../lib/accountSave";
 import axios from "axios";
@@ -435,6 +437,7 @@ const GamePage = () => {
   const [weaponMenuOpen, setWeaponMenuOpen] = useState(false);
   const [weaponShopOpen, setWeaponShopOpen] = useState(false);
   const [weaponStock, setWeaponStock] = useState<Record<string, number>>({});
+  const [weaponStockLoading, setWeaponStockLoading] = useState(false);
   const [weaponBusy, setWeaponBusy] = useState(false);
   const weaponBusyRef = useRef(false);
   const activationRef = useRef<{ level: number; id: string } | null>(null);
@@ -1530,7 +1533,8 @@ const GamePage = () => {
     pointerRef.current = null; touchOriginRef.current = null; keysRef.current.clear();
     setWeaponMenuOpen(true); setWeaponError(''); setGame({ ...stateRef.current });
     if (accountRun && !adminRunRef.current) {
-      void axiosClient.get<{ weaponStock: Record<string, number> }>('/hangar/inventory').then(({data}) => setWeaponStock(data.weaponStock || {})).catch(() => setWeaponError('Not confirmed. Refresh inventory. Confirmed purchases will not be repeated.'));
+      setWeaponStockLoading(true);
+      void axiosClient.get<{ weaponStock: Record<string, number> }>('/hangar/inventory').then(({data}) => setWeaponStock(data.weaponStock || {})).catch(() => setWeaponError('Not confirmed. Refresh inventory. Confirmed purchases will not be repeated.')).finally(() => setWeaponStockLoading(false));
     }
   };
   const selectWeaponLevel = async (level: number) => {
@@ -1571,7 +1575,6 @@ const GamePage = () => {
       state.weaponSource = "paid";
     }
     syncSelectedWeapon(state);
-    resumeWeaponSelection();
     setGame({ ...state, weaponTimers: [...state.weaponTimers] });
   };
   const selectPickupWeapon = () => {
@@ -1579,7 +1582,6 @@ const GamePage = () => {
     if (state.status !== 'paused' || !weaponMenuOpen || weaponBusyRef.current || activationRef.current || state.pickupWeaponMs <= 0) return;
     state.weaponSource = "pickup";
     syncSelectedWeapon(state);
-    resumeWeaponSelection();
     setGame({ ...state });
   };
 
@@ -1801,22 +1803,36 @@ const GamePage = () => {
         {game.enemyShots.map(shot => <div key={shot.id} className={`enemy-laser${shot.bossKind ? ` boss-projectile boss-projectile-${shot.bossKind}` : ""}${shot.weaponKind ? ` boss-evolved-shot boss-evolved-${shot.weaponKind}` : ""}`} style={{ left: shot.x, top: shot.y, "--shot-angle": `${-Math.atan2(shot.vx, shot.vy) * 180 / Math.PI}deg`,...(shot.weaponKind?{"--boss-shot-color":shot.weaponColor,"--boss-shot-width":`${shot.weaponWidth}px`,"--boss-shot-diameter":`${shot.radius*2}px`}:{}) } as CSSProperties} aria-hidden="true" />)}
         {game.effects.map(effect => <ImpactEffectView key={effect.id} effect={effect} />)}
         {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship shielded-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.purchasedShieldMs > 0 || (game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0) ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${engineFlamePercent(game.thrust)}%`, ...shipVisualOffset } as CSSProperties} aria-label={t('Your Cryptoid ship')}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} />{engineTrails(shipSelection.skin.sprite, "player-engine")}<i className="hull-reflection" style={{ maskImage: `url('${shipEvolutionAsset(shipSelection.skin.sprite, shipStage)}')`, WebkitMaskImage: `url('${shipEvolutionAsset(shipSelection.skin.sprite, shipStage)}')` }} aria-hidden="true" /><i className="player-muzzle-flash" aria-hidden="true" /><HullDamage sites={game.playerHullFires} hit={game.playerHit} maskImage={`url('${shipEvolutionAsset(shipSelection.skin.sprite, shipStage)}')`} /></div></div>}
+        {weaponMenuOpen && <div className="game-overlay weapon-selection-overlay" onPointerDown={event => event.stopPropagation()}>
+          <section className="weapon-selection-dialog" role="dialog" aria-modal="true" aria-labelledby="weapon-selection-title">
+            <header><small>{t("MISSION PAUSED")}</small><h2 id="weapon-selection-title">{t("Weapons")}</h2><p>{t("Charges")} = {t("Available")} · {t("1 minute per charge")}</p></header>
+            <div className="weapon-selection-list">
+              {[1, 2, 3, 4, 5].map(level => {
+                const id = ['standard', 'standard', 'weapon_twin', 'weapon_rapid_twin', 'weapon_triple', 'weapon_plasma'][level];
+                const count = weaponStock[id] || 0;
+                const remaining = game.weaponTimers[level] || 0;
+                const selected = game.weaponSource === 'standard' ? level === 1 : game.weaponSource === 'paid' && game.paidWeaponLevel === level;
+                const available = level === 1 || adminRunRef.current || count > 0 || remaining > 0;
+                return <button key={level} type="button" className="weapon-selection-card" aria-pressed={selected} disabled={!available || weaponBusy || (level > 1 && weaponStockLoading) || (!!activationRef.current && activationRef.current.level !== level)} onClick={() => { void selectWeaponLevel(level); }}>
+                  <WeaponPreview offerId={id} sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} />
+                  <span className="weapon-selection-info"><strong>{weaponGlyphs[level]} · {weaponNames[level]}</strong>
+                    <span>{level === 1 ? t("Base") : level >= 4 && !adminRunRef.current ? t("Weapon pickup") : <>{t("Charges")}: <b>{weaponStockLoading ? '…' : count}</b></>}</span>
+                    {remaining > 0 && <span className="weapon-selection-time">{Math.ceil(remaining / 1000)} s</span>}
+                    <small>{selected ? t("Active weapon") : available ? t("Select") : t("Locked")}</small>
+                  </span>
+                </button>;
+              })}
+              {game.pickupWeaponMs > 0 && <button type="button" className="weapon-selection-card" aria-pressed={game.weaponSource === 'pickup'} disabled={weaponBusy || !!activationRef.current} onClick={selectPickupWeapon}>
+                <WeaponPreview offerId={['standard','standard','weapon_twin','weapon_rapid_twin','weapon_triple','weapon_plasma'][game.pickupWeaponLevel]} sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} />
+                <span className="weapon-selection-info"><strong>{weaponNames[game.pickupWeaponLevel]}</strong><span>{t("Weapon pickup")}</span><span className="weapon-selection-time">{Math.ceil(game.pickupWeaponMs / 1000)} s</span><small>{game.weaponSource === 'pickup' ? t("Active weapon") : t("Select")}</small></span>
+              </button>}
+            </div>
+            <footer>{weaponError && <p role="alert">{t(weaponError)}</p>}<button autoFocus type="button" disabled={weaponBusy || !!activationRef.current} onClick={resumeWeaponSelection}>{t("Resume")} <span aria-hidden="true">▷</span></button></footer>
+          </section>
+        </div>}
         <div className={`touch-controls touch-controls-${readControlHand()}`}>
           <div className="edge-actions" role="group" aria-label={t('Available equipment')}>
             <div className="weapon-control-wrap" data-source={game.weaponSource}>
-              {weaponMenuOpen && <div className="weapon-wheel" role="menu" aria-label={t("Weapons")}>
-                {[1, 2, 3, 4, 5].map(level => {
-                  const owned = level === 1 || adminRunRef.current || (weaponStock[['', '', 'weapon_twin', 'weapon_rapid_twin', 'weapon_triple', 'weapon_plasma'][level]] || 0) > 0 || (game.weaponTimers[level] || 0) > 0;
-                  const remaining = game.weaponTimers[level] ?? 0;
-                  const expired = level > 1 && !owned && remaining === 0;
-                  const selected = level === (game.weaponSource === "paid" ? game.paidWeaponLevel : game.weaponSource === "standard" ? 1 : 0);
-                  const status = level === 1 ? t("Base") : !owned ? t("Locked") : expired ? t("Time expired") : t("Available");
-                  return <button key={level} type="button" role="menuitem" className={`weapon-wheel-option weapon-wheel-option-${level}${selected ? " selected" : ""}${!owned ? " locked" : expired ? " expired" : ""}`} disabled={!owned || weaponBusy || (!!activationRef.current && activationRef.current.level !== level)} onClick={() => { void selectWeaponLevel(level); }} aria-label={`${weaponNames[level]} · ${status}`}><b>{weaponGlyphs[level]}</b><span>{weaponNames[level]}</span><small>{status}</small></button>;
-                })}
-                {game.pickupWeaponMs > 0 && <button type="button" role="menuitem" disabled={weaponBusy || !!activationRef.current} onClick={selectPickupWeapon}>{t('Weapon pickup')} · {weaponNames[game.pickupWeaponLevel]}</button>}
-                <button type="button" disabled={weaponBusy || !!activationRef.current} onClick={resumeWeaponSelection}>{t('Close')}</button>
-                {weaponError && <p role="alert">{t(weaponError)}</p>}
-              </div>}
               <div className="weapon-slot" data-source={game.weaponSource}>
                 {game.weaponSource !== "standard" && <TimedRing remainingMs={game.weaponSource === "paid" ? game.paidWeaponMs : game.pickupWeaponMs} durationMs={game.weaponSource === "paid" ? PURCHASED_WEAPON_DURATION_MS : PICKUP_WEAPON_DURATION_MS} />}
                 <button type="button" className="edge-action edge-action-weapon weapon-cycle" disabled={game.status !== "playing"} onClick={openWeaponSelection} aria-label={`${t("Active weapon")}: ${weaponNames[stageWeaponLevel(shipStage, game.weaponLevel)]}, ${t("Weapon level")} ${stageWeaponLevel(shipStage, game.weaponLevel)} / 5. ${t("Tap to choose a weapon and pause. Resume follows a 3–2–1 countdown.")}${shipStage > 1 ? ` ${t("Projectile hits left")}: ${game.projectileGuard}` : ""}`}>
