@@ -27,6 +27,8 @@ import Starfield from "./Starfield";
 import HomeCombatPreview from "./HomeCombatPreview";
 import GameGuide from "./GameGuide";
 import WeaponTutorial from "./WeaponTutorial";
+import WeaponPurchase from './WeaponPurchase';
+import { bossName } from './bossNames';
 import { useLocale } from "../i18n";
 import EarthGlobe from "./EarthGlobe";
 import EarthNetwork from "./EarthNetwork";
@@ -36,7 +38,7 @@ import { powerUpSymbols, type PowerUpType } from "./powerUps";
 import { BOSS_STICKER_COUNT, CHAIN_MILESTONES, emptyRewardProgress, rankForLevel, readRewardProgress, REWARD_PROGRESS_KEY, rewardRank, type RewardProgress } from "./rewardProgress";
 
 type Offer = { id: string; kind: "weapon" | "power" | "armor" | "ship_upgrade"; name: string; description: string; pricePi: number; shipIndex?: number; stage?: 2 | 3 };
-type Inventory = { ownedWeapons: string[]; ownedArmor: string[]; ownedShipUpgrades?: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
+type Inventory = { weaponStock?: Record<string, number>; ownedWeapons: string[]; ownedArmor: string[]; ownedShipUpgrades?: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
 type Leader = { rank: number; username: string; score: number; serviceRank: { name: string; symbol: string } };
 const HOME_STAR_POSITION = { x: .5, y: .8 };
 
@@ -539,7 +541,7 @@ const Shop = () => {
             const stars = rewardProgress.bossWins[id] ?? 0;
             return <div key={id} className={`boss-sticker${stars ? " boss-sticker-earned" : ""}`} title={t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : t("Not defeated yet") })} aria-label={t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : t("Locked") })}>
               {stars ? <img src={`/ships/bosses/boss_${String(id).padStart(2, "0")}.webp`} alt="" loading="lazy" /> : <span aria-hidden="true">?</span>}
-              <small>#{String(id).padStart(2, "0")}</small>{!!stars && <b>{"★".repeat(stars)}</b>}
+              <small>#{String(id).padStart(2, "0")} · {bossName(id)}</small>{!!stars && <b>{"★".repeat(stars)}</b>}
             </div>;
           })}</div>
           <h4 id="reward-medals">{t("Bonus medals")}</h4>
@@ -605,18 +607,18 @@ const Shop = () => {
       {(shopView === "weapons" || shopView === "powers") && <section className="upgrade-section" aria-labelledby="upgrade-heading">
         <div className="section-heading"><div><p className="eyebrow">{t('POWER LAB')}</p><h2 id="upgrade-heading">{t('Weapons and start power-ups')}</h2></div><span className="section-line" /></div>
         <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? t("Testnet: Twin Laser and Rapid Twin can be bought with Test-Pi. Triple Laser and Plasma purchases are locked.") : t("Pi purchases are currently locked. Collect weapon upgrades in game.")}</p>
-        <p>{shipSaveNetwork === "testnet" ? t("The single laser is free. Activate bought Testnet weapons in game for two minutes. Triple Laser and Plasma are available as pickups only.") : t("The single laser is free. Collect other weapons as power-ups during the mission.")}</p>
+        <p>{shipSaveNetwork === "testnet" ? t("1 minute per charge") : t("The single laser is free. Collect other weapons as power-ups during the mission.")}</p>
         {shopView === "weapons" && <WeaponTutorial />}
         {([shopView === "weapons" ? "weapon" : "power"] as const).map(kind => <div key={kind} className="hangar-offers"><h3>{t(kind === "weapon" ? "Time-limited weapons" : "One-mission start bonuses")}</h3><div className="hangar-offer-grid">
           {offers.filter(offer => offer.kind === kind).map(offer => {
             const count = inventory?.consumables.find(item => item.id === offer.id)?.count ?? 0;
             const testnetWeaponEnabled = kind !== "weapon" || shipSaveNetwork === "testnet" && isTestnetWeaponPurchaseEnabled(offer);
-            const owned = kind === "weapon" ? testnetWeaponEnabled && inventory?.ownedWeapons.includes(offer.id) : count > 0;
+            const owned = kind === "weapon" ? testnetWeaponEnabled && (inventory?.weaponStock?.[offer.id] || 0) > 0 : count > 0;
             const selected = kind === "weapon" ? false : inventory?.selectedPower === offer.id;
             const lockedWeapon = kind === "weapon" && !testnetWeaponEnabled;
-            return <article key={offer.id} className={`hangar-offer hangar-offer-${kind}${selected ? " hangar-offer-selected" : ""}`}>{kind === "weapon" ? <WeaponPreview offerId={offer.id} sprite={selectedShip().skin.sprite} color={selectedShip().color.id} /> : <PowerPreview offerId={offer.id} />}<h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span className="offer-purchase-price">{lockedWeapon || kind === "power" ? <>{t("Planned price")}: {piPrice(offer.pricePi)}</> : piPrice(offer.pricePi, true)}</span><span>{lockedWeapon ? shipSaveNetwork === "testnet" ? t("MAINNET READY") : t("Currently locked") : kind === "weapon" ? t("2 minutes after activation") : t("MAINNET READY")}</span><strong>{lockedWeapon ? t("Locked") : selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : t("Owned — activate in game") : kind === "power" ? t("Locked") : t("NOT OWNED")}</strong>{lockedWeapon && <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? t("Available only as a weapon pickup on Testnet.") : t("Available only as a weapon pickup.")}</p>}<div>
+            return <article key={offer.id} className={`hangar-offer hangar-offer-${kind}${selected ? " hangar-offer-selected" : ""}`}>{kind === "weapon" ? <WeaponPreview offerId={offer.id} sprite={selectedShip().skin.sprite} color={selectedShip().color.id} /> : <PowerPreview offerId={offer.id} />}<h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span className="offer-purchase-price">{lockedWeapon || kind === "power" ? <>{t("Planned price")}: {piPrice(offer.pricePi)}</> : piPrice(offer.pricePi, true)}</span><span>{lockedWeapon ? shipSaveNetwork === "testnet" ? t("MAINNET READY") : t("Currently locked") : kind === "weapon" ? t("1 minute per charge") : t("MAINNET READY")}</span><strong>{lockedWeapon ? t("Locked") : selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : t("Owned — activate in game") : kind === "power" ? t("Locked") : t("NOT OWNED")}</strong>{lockedWeapon && <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? t("Available only as a weapon pickup on Testnet.") : t("Available only as a weapon pickup.")}</p>}<div>
               {owned && kind === "power" ? <button className="button button-secondary" type="button" disabled={Boolean(selected)} onClick={() => equip(null, offer.id)}>{t(selected ? "Selected" : "Equip for next mission")}</button> : null}
-              {!adminMode && kind === "weapon" && !lockedWeapon && !owned && <button className="button button-primary" type="button" disabled={isLoading || !catalogReady} onClick={() => orderProduct(`Cryptoid ${t(offer.name)} · ${t("2 minutes after activation")} · Test-Pi`, offer.pricePi, { productId: offer.id }, () => { setLoadoutMessage("purchase confirmed."); void refreshInventory(); })}>{t("Buy with Test-Pi")} · {piPrice(offer.pricePi, true)}</button>}
+              {kind === "weapon" && !lockedWeapon && <WeaponPurchase id={offer.id} price={offer.pricePi} count={inventory?.weaponStock?.[offer.id] || 0} disabled={adminMode || isLoading || !catalogReady} onBuy={(quantity, total) => { void orderProduct(`Cryptoid ${offer.name} · ${quantity} × 60s · Test-Pi`, total, { productId: offer.id, quantity, weaponModel: 2 }, () => { setLoadoutMessage("purchase confirmed."); void refreshInventory(); }); }} />}
             </div></article>;
           })}
         </div></div>)}

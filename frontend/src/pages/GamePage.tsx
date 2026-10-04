@@ -1,4 +1,5 @@
 import { advanceBossCore } from './bossCore';
+import { bossName } from './bossNames';
 import { collectBossHeart, BOSS_HEART_POSITION, type BossRewardState } from './bossReward';
 import './bossReward.css';
 import { blockFlights, nextBlockFlight, REINFORCEMENT_WARNING_MS, GROUP_CLEAR_POINTS } from "./blockFlights";
@@ -33,8 +34,6 @@ import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVol
 import { MusicPlayer, takeHandoffGameMusic } from "./musicPlayback";
 import SystemSettings, { applySavedDisplaySettings } from "./SystemSettings";
 import MissionWeaponShop from './MissionWeaponShop';
-import { addMissionWeapons } from './missionWeapons';
-import { shipSaveNetwork } from './shipFleet';
 import { axiosClient } from "../lib/axiosClient";
 import { accountSelection, createSaveQueue, loadAccountSave, localInventory, mutateAccountInventory, retrySave, snapshotOf, type AccountSave, type Snapshot } from "../lib/accountSave";
 import axios from "axios";
@@ -435,11 +434,25 @@ const GamePage = () => {
   const startRequestRef = useRef(false);
   const [weaponMenuOpen, setWeaponMenuOpen] = useState(false);
   const [weaponShopOpen, setWeaponShopOpen] = useState(false);
-  const weaponHoldTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const weaponLongPressRef = useRef(false);
+  const [weaponStock, setWeaponStock] = useState<Record<string, number>>({});
+  const [weaponBusy, setWeaponBusy] = useState(false);
+  const weaponBusyRef = useRef(false);
+  const activationRef = useRef<{ level: number; id: string } | null>(null);
+  const [weaponError, setWeaponError] = useState('');
+  const [weaponCountdown, setWeaponCountdown] = useState<number | null>(null);
+  useEffect(() => {
+    if (weaponCountdown === null) return;
+    const timer = window.setInterval(() => {
+      if (document.visibilityState === 'hidden') { setWeaponCountdown(3); return; }
+      if (weaponCountdown > 1) setWeaponCountdown(weaponCountdown - 1);
+      else { setWeaponCountdown(null); stateRef.current.status = 'playing'; setGame({ ...stateRef.current }); }
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, [weaponCountdown]);
 
   const combatRefs = { nextId: nextIdRef, formationIndex: formationIndexRef, formationOffset: formationOffsetRef, flight: flightRef, bonusIndex: bonusIndexRef, bossEscortWave: bossEscortWaveRef, bossEscortSpawned: bossEscortSpawnedRef, bossEscortTimer: bossEscortTimerRef, spawnTimer: spawnTimerRef, sectionElapsed: sectionElapsedRef, clearTimer: clearTimerRef, attackCooldown: attackCooldownRef, elapsed: elapsedRef, attackNumber: attackNumberRef, dropsCreated: dropsCreatedRef, impactCooldown: impactCooldownRef, fireTimer: fireTimerRef };
   const saveCombat = async () => {
+    if (activationRef.current) return; // An uncertain activation must not be overwritten with stale local timers.
     const state = stateRef.current, runId = scoreRunRef.current, queue = saveQueueRef.current;
     if (!runId || !queue || adminRunRef.current || !["playing", "paused"].includes(state.status) || state.hearts < 1 || (state.phase === "SECTOR_CLEAR" && state.encounter !== "boss-clear")) return;
     if (state.status !== "playing") state.combo.pendingAt = null;
@@ -563,7 +576,7 @@ const GamePage = () => {
       stateRef.current.paidWeaponMs = 0;
       stateRef.current.unlockedWeapons = Array.isArray(data.unlockedWeaponLevels) ? [...new Set([1, ...data.unlockedWeaponLevels.filter(level => Number.isInteger(level) && level >= 1 && level <= 5)])].sort((a, b) => a - b) : [1];
       stateRef.current.weaponTimers = [0, 0, 0, 0, 0, 0];
-      for (const level of stateRef.current.unlockedWeapons) if (level > 1) stateRef.current.weaponTimers[level] = -1;
+      if (adminRunRef.current) for (const level of stateRef.current.unlockedWeapons) if (level > 1) stateRef.current.weaponTimers[level] = -1;
       if (adminRunRef.current && data.weaponLevel > 1) {
         stateRef.current.weaponLevel = data.weaponLevel;
         stateRef.current.paidWeaponLevel = data.weaponLevel;
@@ -1510,16 +1523,47 @@ const GamePage = () => {
   };
   const weaponNames = ["", t("Standard"), t("Twin"), t("Rapid"), t("Triple"), t("Plasma")];
   const weaponGlyphs = ["", "I", "II", "III", "IV", "V"];
-  const selectWeaponLevel = (level: number) => {
+  const resumeWeaponSelection = () => { setWeaponMenuOpen(false); setWeaponCountdown(3); };
+  const openWeaponSelection = () => {
+    if (stateRef.current.status !== 'playing') return;
+    stateRef.current.status = 'paused';
+    pointerRef.current = null; touchOriginRef.current = null; keysRef.current.clear();
+    setWeaponMenuOpen(true); setWeaponError(''); setGame({ ...stateRef.current });
+    if (accountRun && !adminRunRef.current) {
+      void axiosClient.get<{ weaponStock: Record<string, number> }>('/hangar/inventory').then(({data}) => setWeaponStock(data.weaponStock || {})).catch(() => setWeaponError('Not confirmed. Refresh inventory. Confirmed purchases will not be repeated.'));
+    }
+  };
+  const selectWeaponLevel = async (level: number) => {
     const state = stateRef.current;
-    if (state.status !== "playing" || !state.unlockedWeapons.includes(level)) return;
+    if (state.status !== 'paused' || !weaponMenuOpen || weaponBusyRef.current || weaponCountdown !== null) return;
     if (level === 1) {
       state.weaponSource = "standard";
     } else {
       let remaining = state.weaponTimers[level] ?? 0;
-      if (remaining === 0) return;
-      if (remaining < 0) {
-        remaining = PURCHASED_WEAPON_DURATION_MS;
+      if (remaining <= 0) {
+        if (adminRunRef.current) remaining = PURCHASED_WEAPON_DURATION_MS;
+        else {
+          if (!accountRun || !scoreRunRef.current) return;
+          weaponBusyRef.current = true; setWeaponBusy(true); setWeaponError('');
+          try {
+            // A retry uses the original request id and must not overwrite a successful server grant.
+            if (!activationRef.current) {
+              await saveCombat();
+              activationRef.current = { level, id: crypto.randomUUID() };
+            }
+            if (activationRef.current.level !== level) throw new Error('Finish pending activation first');
+            const { data } = await axiosClient.post<{ remainingMs: number; weaponStock: Record<string, number> }>('/hangar/weapon/activate', { runId: scoreRunRef.current, level, requestId: activationRef.current.id });
+            remaining = data.remainingMs;
+            setWeaponStock(data.weaponStock);
+            if (!state.unlockedWeapons.includes(level)) state.unlockedWeapons.push(level);
+            activationRef.current = null;
+          } catch (error) {
+            const status = (error as { response?: { status?: number } }).response?.status;
+            if (status && status >= 400 && status < 500) activationRef.current = null;
+            setWeaponError('Not confirmed. Retry the same weapon.');
+            return;
+          } finally { weaponBusyRef.current = false; setWeaponBusy(false); }
+        }
         state.weaponTimers[level] = remaining;
       }
       state.paidWeaponLevel = level;
@@ -1527,47 +1571,17 @@ const GamePage = () => {
       state.weaponSource = "paid";
     }
     syncSelectedWeapon(state);
-    setWeaponMenuOpen(false);
+    resumeWeaponSelection();
     setGame({ ...state, weaponTimers: [...state.weaponTimers] });
   };
   const selectPickupWeapon = () => {
     const state = stateRef.current;
-    if (state.status !== "playing" || state.pickupWeaponMs <= 0) return;
+    if (state.status !== 'paused' || !weaponMenuOpen || weaponBusyRef.current || activationRef.current || state.pickupWeaponMs <= 0) return;
     state.weaponSource = "pickup";
     syncSelectedWeapon(state);
-    setWeaponMenuOpen(false);
+    resumeWeaponSelection();
     setGame({ ...state });
   };
-  const cycleWeapon = () => {
-    const state = stateRef.current;
-    const available: Array<"pickup" | number> = state.unlockedWeapons
-      .filter(level => level === 1 || (state.weaponTimers[level] ?? 0) !== 0)
-      .sort((a, b) => a - b);
-    if (state.pickupWeaponMs > 0) available.push("pickup");
-    if (!available.length) return;
-    const current = state.weaponSource === "pickup" ? "pickup" : state.weaponSource === "paid" ? state.paidWeaponLevel : 1;
-    const index = available.indexOf(current);
-    const next = available[(index + 1 + available.length) % available.length];
-    if (next === "pickup") selectPickupWeapon(); else selectWeaponLevel(next);
-  };
-  const startWeaponHold = () => {
-    if (weaponHoldTimerRef.current !== null) window.clearTimeout(weaponHoldTimerRef.current);
-    weaponLongPressRef.current = false;
-    weaponHoldTimerRef.current = window.setTimeout(() => {
-      weaponHoldTimerRef.current = null;
-      weaponLongPressRef.current = true;
-      setWeaponMenuOpen(true);
-    }, 420);
-  };
-  const finishWeaponHold = () => {
-    if (weaponHoldTimerRef.current !== null) {
-      window.clearTimeout(weaponHoldTimerRef.current);
-      weaponHoldTimerRef.current = null;
-    }
-  };
-  useEffect(() => () => {
-    if (weaponHoldTimerRef.current !== null) window.clearTimeout(weaponHoldTimerRef.current);
-  }, []);
 
   const restart = () => {
     bossDestroyPlayedRef.current = false;
@@ -1716,13 +1730,13 @@ const GamePage = () => {
         <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
         <button className="wide-fullscreen-control game-fullscreen-control" type="button" onClick={requestGameFullscreen} aria-label={t("Full screen")} title={t("Full screen")}>⛶</button>
         <header ref={hudRef} className="game-hud">
-          <div className="hud-actions"><button className="game-control home-control" type="button" disabled={weaponShopOpen || game.status === "loading" || game.status === "destroying"} onClick={() => { if (game.status === "game-over" || game.status === "victory") { goHome(); return; } homePromptWasPlayingRef.current = stateRef.current.status === "playing"; stateRef.current.status = "paused";
+          <div className="hud-actions"><button className="game-control home-control" type="button" disabled={weaponMenuOpen || weaponCountdown !== null || weaponShopOpen || game.status === "loading" || game.status === "destroying"} onClick={() => { if (game.status === "game-over" || game.status === "victory") { goHome(); return; } homePromptWasPlayingRef.current = stateRef.current.status === "playing"; stateRef.current.status = "paused";
         void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); setHomePrompt(true); }} aria-label={t("Go home")}><CockpitIcon kind="home" /></button></div>
           <div className={`hud-stat hearts-stat${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " hearts-stat-hit" : ""}`}><span className="hud-heart-label" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.2 3.4 13.1C-1.1 8.8 5.3 1.7 10.2 5.9L12 7.5l1.8-1.6c4.9-4.2 11.3 2.9 6.8 7.2L12 21.2Z" /></svg></span><strong className="hearts" role="status" aria-live="polite" aria-label={lives(game.hearts)}>/{game.hearts}</strong></div>
           <div className="hud-stat game-level-hud" aria-label={`${t("Game level")} ${levelLabel}`}><span>{t("Level")}</span><strong>{levelLabel}</strong></div>
           <div className="hud-stat score-hud" aria-label={`${t("Shards")} ${game.shards}, ${t("Score")} ${game.score}`}><span className="shard-line"><b>◆ {game.shards}</b><small>{t("Shards")}</small></span><span className="score-line"><b>{game.score}</b><small>{t("Score")}</small></span></div>
           <div className="hud-stat round-hud chain-hud" aria-label={`${t("Block")} ${game.chainBlocks}/${BLOCKS_PER_CHAIN}`}><span>{t("Block")}</span><strong>{game.chainBlocks}<small>/{BLOCKS_PER_CHAIN}</small></strong></div>
-          <button className="game-control pause-control" type="button" disabled={weaponShopOpen || pauseLeaving || game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { if (pauseLeaveRef.current) return; const resuming = game.status === "paused"; stateRef.current.status = resuming ? "playing" : "paused"; if (!resuming) void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); if (resuming) window.setTimeout(retryAudio, 0); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
+          <button className="game-control pause-control" type="button" disabled={weaponMenuOpen || weaponCountdown !== null || weaponShopOpen || pauseLeaving || game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { if (pauseLeaveRef.current) return; const resuming = game.status === "paused"; stateRef.current.status = resuming ? "playing" : "paused"; if (!resuming) void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); if (resuming) window.setTimeout(retryAudio, 0); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
         </header>
         <div className="game-label">{adminRunRef.current && <strong>{t("Admin center")} · </strong>}{t("LEVEL")} {levelLabel} <span>· <strong className="game-region-name">{sectorName(game.sector)}</strong> · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/${BLOCKS_PER_CHAIN}` : game.encounter === "bonus" ? t("BONUS CHALLENGE") : t("CORE WARDEN")}</span></div>
         {game.encounter === "normal" && <span className="flight-indicator" style={{ top: visibleTopRef.current + 25 }}>{t("Group {current}/{total}", { current: flightRef.current + 1, total: blockFlights(game.sector, rulesVersionRef.current).length })}</span>}
@@ -1753,6 +1767,7 @@ const GamePage = () => {
         {game.status === "playing" && !bossDestructionActive && !reinforcementIntro && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${game.encounter === "boss-intro" ? " boss-intro-banner" : ""}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite">
           <span>{levelComplete || levelIntro ? sectorName(game.sector) : game.encounter === "bonus" ? game.phase === "SECTOR_CLEAR" ? t("BONUS COMPLETE") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.encounter !== "normal" ? `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.phase === "SECTOR_CLEAR" ? t("BLOCK LINKED") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}`}</span>
           <strong>{transitionHeadline}</strong>
+          {game.encounter === 'boss-intro' && <small className="boss-callsign">{bossName(Math.ceil(game.sector / 10))}</small>}
           {game.phase === "SECTOR_INTRO" && game.encounter === "bonus" && <small>{t("HIT THE FLYING TARGETS")}</small>}
           {game.phase === "SECTOR_CLEAR" && game.encounter === "normal" && <><small className="chain-result">{t("Block")} {game.chainBlocks}/{BLOCKS_PER_CHAIN} · {t(game.chainResult)}</small><BlockchainProgress blocks={game.chainBlocks} /></>}
           {levelComplete && <><small className="chain-result">{t("Block")} {BLOCKS_PER_CHAIN}/{BLOCKS_PER_CHAIN}</small><small className="chain-saved-label">{t("CHAIN SAVED")}</small><BlockchainProgress blocks={BLOCKS_PER_CHAIN} saved /></>}
@@ -1791,23 +1806,26 @@ const GamePage = () => {
             <div className="weapon-control-wrap" data-source={game.weaponSource}>
               {weaponMenuOpen && <div className="weapon-wheel" role="menu" aria-label={t("Weapons")}>
                 {[1, 2, 3, 4, 5].map(level => {
-                  const owned = game.unlockedWeapons.includes(level);
+                  const owned = level === 1 || adminRunRef.current || (weaponStock[['', '', 'weapon_twin', 'weapon_rapid_twin', 'weapon_triple', 'weapon_plasma'][level]] || 0) > 0 || (game.weaponTimers[level] || 0) > 0;
                   const remaining = game.weaponTimers[level] ?? 0;
-                  const expired = level > 1 && owned && remaining === 0;
+                  const expired = level > 1 && !owned && remaining === 0;
                   const selected = level === (game.weaponSource === "paid" ? game.paidWeaponLevel : game.weaponSource === "standard" ? 1 : 0);
                   const status = level === 1 ? t("Base") : !owned ? t("Locked") : expired ? t("Time expired") : t("Available");
-                  return <button key={level} type="button" role="menuitem" className={`weapon-wheel-option weapon-wheel-option-${level}${selected ? " selected" : ""}${!owned ? " locked" : expired ? " expired" : ""}`} disabled={!owned || expired} onClick={() => selectWeaponLevel(level)} aria-label={`${weaponNames[level]} · ${status}`}><b>{weaponGlyphs[level]}</b><span>{weaponNames[level]}</span><small>{status}</small></button>;
+                  return <button key={level} type="button" role="menuitem" className={`weapon-wheel-option weapon-wheel-option-${level}${selected ? " selected" : ""}${!owned ? " locked" : expired ? " expired" : ""}`} disabled={!owned || weaponBusy || (!!activationRef.current && activationRef.current.level !== level)} onClick={() => { void selectWeaponLevel(level); }} aria-label={`${weaponNames[level]} · ${status}`}><b>{weaponGlyphs[level]}</b><span>{weaponNames[level]}</span><small>{status}</small></button>;
                 })}
+                {game.pickupWeaponMs > 0 && <button type="button" role="menuitem" disabled={weaponBusy || !!activationRef.current} onClick={selectPickupWeapon}>{t('Weapon pickup')} · {weaponNames[game.pickupWeaponLevel]}</button>}
+                <button type="button" disabled={weaponBusy || !!activationRef.current} onClick={resumeWeaponSelection}>{t('Close')}</button>
+                {weaponError && <p role="alert">{t(weaponError)}</p>}
               </div>}
               <div className="weapon-slot" data-source={game.weaponSource}>
                 {game.weaponSource !== "standard" && <TimedRing remainingMs={game.weaponSource === "paid" ? game.paidWeaponMs : game.pickupWeaponMs} durationMs={game.weaponSource === "paid" ? PURCHASED_WEAPON_DURATION_MS : PICKUP_WEAPON_DURATION_MS} />}
-                <button type="button" className="edge-action edge-action-weapon weapon-cycle" disabled={game.status !== "playing"} onPointerDown={startWeaponHold} onPointerUp={finishWeaponHold} onPointerCancel={finishWeaponHold} onPointerLeave={finishWeaponHold} onClick={() => { if (weaponLongPressRef.current) { weaponLongPressRef.current = false; return; } cycleWeapon(); }} aria-label={`${t("Active weapon")}: ${weaponNames[stageWeaponLevel(shipStage, game.weaponLevel)]}, ${t("Weapon level")} ${stageWeaponLevel(shipStage, game.weaponLevel)} / 5. ${t("Tap to switch weapon. Hold for weapon menu.")}${shipStage > 1 ? ` ${t("Projectile hits left")}: ${game.projectileGuard}` : ""}`}>
+                <button type="button" className="edge-action edge-action-weapon weapon-cycle" disabled={game.status !== "playing"} onClick={openWeaponSelection} aria-label={`${t("Active weapon")}: ${weaponNames[stageWeaponLevel(shipStage, game.weaponLevel)]}, ${t("Weapon level")} ${stageWeaponLevel(shipStage, game.weaponLevel)} / 5. ${t("Tap to choose a weapon and pause. Resume follows a 3–2–1 countdown.")}${shipStage > 1 ? ` ${t("Projectile hits left")}: ${game.projectileGuard}` : ""}`}>
                   <span className="weapon-cycle-glyph" aria-hidden="true">{weaponGlyphs[stageWeaponLevel(shipStage, game.weaponLevel)]}</span>
                   <small>{weaponNames[stageWeaponLevel(shipStage, game.weaponLevel)]}</small>
                 </button>
               </div>
-              {game.weaponSource !== "pickup" && game.pickupWeaponMs > 0 && <div className="weapon-slot weapon-slot-reserve" data-source="pickup"><TimedRing remainingMs={game.pickupWeaponMs} durationMs={PICKUP_WEAPON_DURATION_MS} /><button type="button" className="edge-action edge-action-weapon weapon-cycle" disabled={game.status !== "playing"} onClick={selectPickupWeapon} aria-label={`${t("Select")}: ${weaponNames[stageWeaponLevel(shipStage, game.pickupWeaponLevel)]}`}><span className="weapon-cycle-glyph" aria-hidden="true">{weaponGlyphs[stageWeaponLevel(shipStage, game.pickupWeaponLevel)]}</span><small>{weaponNames[stageWeaponLevel(shipStage, game.pickupWeaponLevel)]}</small></button></div>}
-              {game.weaponSource !== "paid" && game.paidWeaponMs > 0 && <div className="weapon-slot weapon-slot-reserve" data-source="paid"><TimedRing remainingMs={game.paidWeaponMs} durationMs={PURCHASED_WEAPON_DURATION_MS} /><button type="button" className="edge-action edge-action-weapon weapon-cycle" disabled={game.status !== "playing"} onClick={() => selectWeaponLevel(game.paidWeaponLevel)} aria-label={`${t("Select")}: ${weaponNames[stageWeaponLevel(shipStage, game.paidWeaponLevel)]}`}><span className="weapon-cycle-glyph" aria-hidden="true">{weaponGlyphs[stageWeaponLevel(shipStage, game.paidWeaponLevel)]}</span><small>{weaponNames[stageWeaponLevel(shipStage, game.paidWeaponLevel)]}</small></button></div>}
+              {game.weaponSource !== "pickup" && game.pickupWeaponMs > 0 && <div className="weapon-slot weapon-slot-reserve" data-source="pickup"><TimedRing remainingMs={game.pickupWeaponMs} durationMs={PICKUP_WEAPON_DURATION_MS} /><button type="button" className="edge-action edge-action-weapon weapon-cycle" disabled={game.status !== "playing"} onClick={openWeaponSelection} aria-label={`${t("Select")}: ${weaponNames[stageWeaponLevel(shipStage, game.pickupWeaponLevel)]}`}><span className="weapon-cycle-glyph" aria-hidden="true">{weaponGlyphs[stageWeaponLevel(shipStage, game.pickupWeaponLevel)]}</span><small>{weaponNames[stageWeaponLevel(shipStage, game.pickupWeaponLevel)]}</small></button></div>}
+              {game.weaponSource !== "paid" && game.paidWeaponMs > 0 && <div className="weapon-slot weapon-slot-reserve" data-source="paid"><TimedRing remainingMs={game.paidWeaponMs} durationMs={PURCHASED_WEAPON_DURATION_MS} /><button type="button" className="edge-action edge-action-weapon weapon-cycle" disabled={game.status !== "playing"} onClick={openWeaponSelection} aria-label={`${t("Select")}: ${weaponNames[stageWeaponLevel(shipStage, game.paidWeaponLevel)]}`}><span className="weapon-cycle-glyph" aria-hidden="true">{weaponGlyphs[stageWeaponLevel(shipStage, game.paidWeaponLevel)]}</span><small>{weaponNames[stageWeaponLevel(shipStage, game.paidWeaponLevel)]}</small></button></div>}
               {shipStage > 1 && <span className="weapon-hull-hits" aria-label={`${t("Projectile hits left")}: ${game.projectileGuard}`}>✦ {game.projectileGuard}/{projectileGuardForStage(shipStage)}</span>}
             </div>
             {game.purchasedShieldMs > 0 && <div className="shield-control-wrap" data-active="true">
@@ -1828,11 +1846,12 @@ const GamePage = () => {
             {game.pendingStartPower && <button type="button" className={`edge-action edge-action-${game.pendingStartPower} edge-action-purchased`} disabled={game.status !== "playing" || (game.pendingStartPower === "shield" && game.purchasedShieldMs > 0) || (game.pendingStartPower === "rapid" && game.rapidFireMs > 0) || (game.pendingStartPower === "overdrive" && game.overdriveMs > 0) || (game.pendingStartPower === "emp" && game.empMs > 0)} aria-label={`${t("Tap to activate")} ${t(powerUpNames[game.pendingStartPower])}`} onClick={activateStartPower}><span aria-hidden="true">{powerUpSymbols[game.pendingStartPower]}</span><small>{t(powerUpNames[game.pendingStartPower])}</small><em>{t("Tap to activate")}</em></button>}
           </div>
         </div>
-        {game.status === "paused" && <div className="game-overlay pause-settings-overlay" role="dialog" aria-modal="true" aria-labelledby={weaponShopOpen ? "mission-weapon-shop-title" : "pause-settings-title"}><div className="game-modal pause-settings-modal">
-          {weaponShopOpen ? <MissionWeaponShop authenticated={accountRun} admin={adminRunRef.current} timers={game.weaponTimers} onClose={() => setWeaponShopOpen(false)} onInventory={async owned => {
+        {weaponCountdown !== null && <div className="game-overlay weapon-resume-countdown" role="status" aria-live="polite"><strong>{weaponCountdown}</strong></div>}
+        {game.status === "paused" && !weaponMenuOpen && weaponCountdown === null && <div className="game-overlay pause-settings-overlay" role="dialog" aria-modal="true" aria-labelledby={weaponShopOpen ? "mission-weapon-shop-title" : "pause-settings-title"}><div className="game-modal pause-settings-modal">
+          {weaponShopOpen ? <MissionWeaponShop authenticated={accountRun} admin={adminRunRef.current} timers={game.weaponTimers} onClose={() => setWeaponShopOpen(false)} onInventory={async (_owned, stock) => {
             const state = stateRef.current;
             if (state.status !== 'paused') return;
-            Object.assign(state, addMissionWeapons(state.unlockedWeapons, state.weaponTimers, owned, shipSaveNetwork === 'testnet'));
+            setWeaponStock(stock);
             setGame({ ...state });
             await saveCombat();
           }} /> : <>

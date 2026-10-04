@@ -8,7 +8,7 @@ export default function WeaponTutorial({ initiallyOpen = false }: { initiallyOpe
   return <details className="weapon-tutorial" open={open} onToggle={event => setOpen(event.currentTarget.open)}>
     <summary>{t("Illustrated guide")} · {t("Weapons")}</summary>
     {open && <div className="weapon-tutorial-content">
-      <p>{t("Select owned Test-Pi weapons during the mission with the side button. Their outer ring shows the remaining time without a seconds counter; when it empties, the weapon disappears. Hold the button to see all owned weapons.")}</p>
+      <p>{t("Tap to choose a weapon and pause. Resume follows a 3–2–1 countdown.")}</p>
       <div className="weapon-tutorial-steps">
         {(["tap", "hold"] as const).map((gesture, index) => <figure key={gesture} className={`weapon-demo weapon-demo-${gesture}`}>
           <div className="weapon-demo-stage" aria-hidden="true">
@@ -16,7 +16,7 @@ export default function WeaponTutorial({ initiallyOpen = false }: { initiallyOpe
             <svg className="weapon-demo-finger" viewBox="0 0 40 50" fill="none"><path d="M14 26V7a4 4 0 0 1 8 0v16l4-3 10 8v10L24 48H14L3 31a4 4 0 0 1 6-5l5 5" stroke="currentColor" strokeWidth="2.5" strokeLinejoin="round" fill="#112337" /></svg>
             {gesture === "hold" && <div className="weapon-demo-menu"><span>Ⅰ</span><span>Ⅱ</span><span>Ⅲ</span></div>}
           </div>
-          <figcaption><b>{index + 1}.</b> {t(gesture === "tap" ? "Tap to switch weapon" : "Hold to open weapon selection")}</figcaption>
+          <figcaption><b>{index + 1}.</b> {t(gesture === "tap" ? "Weapons" : "Select")}</figcaption>
         </figure>)}
       </div>
     </div>}

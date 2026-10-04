@@ -7,6 +7,7 @@ import { isTestnetWeaponPurchaseEnabled } from "../paymentPolicy";
 import { rewardNetwork } from "../rewardNetwork";
 import { loadPlayerSave } from "./progress";
 import { publicSave } from "../playerSave";
+import { syncWeaponStock, WEAPON_CHARGE_MS } from "../weaponStock";
 
 const offersOf = (kind: string) => hangarCatalog.filter(item => item.kind === kind).map(item => item.id);
 const isTestnetRequest = (req: any) => String(req.headers?.["x-cryptoid-app-network"] || "").toLowerCase() === "testnet";
@@ -35,8 +36,47 @@ export default function mountHangarEndpoints(router: Router) {
       const ownedShipUpgrades = hangarCatalog.filter(item => item.kind === "ship_upgrade" && paid.some((order: any) => order.product_id === item.id)).map(item => item.id);
        const consumables = hangarCatalog.filter(item => item.kind === "power").map(item => ({ id: item.id, count: paid.filter((order: any) => order.product_id === item.id && !order.consumed_at).length }));
       const user = await users.findOne({ uid });
-      return res.json({ ownedWeapons, ownedArmor, ownedShipUpgrades, consumables, equippedWeapon: ownedWeapons.includes(user?.loadout?.weapon) ? user.loadout.weapon : null, selectedPower: consumables.some(item => item.id === user?.loadout?.power && item.count > 0) ? user.loadout.power : null });
+      const stock = await syncWeaponStock(users, orders, uid, rewardNetwork(req));
+      return res.json({ weaponStock: stock.balances, ownedWeapons, ownedArmor, ownedShipUpgrades, consumables, equippedWeapon: ownedWeapons.includes(user?.loadout?.weapon) ? user.loadout.weapon : null, selectedPower: consumables.some(item => item.id === user?.loadout?.power && item.count > 0) ? user.loadout.power : null });
     } catch (error) { return res.status(503).json({ error: "Inventory unavailable" }); }
+  });
+
+  router.post('/weapon/activate', async (req, res) => {
+    const uid = req.session.currentUser?.uid;
+    if (!uid || isAdminMode(req)) return res.status(403).json({ error: 'account_required' });
+    const { runId, level, requestId } = req.body || {};
+    const offer = hangarCatalog.find(item => item.kind === 'weapon' && item.level === level);
+    const network = rewardNetwork(req), key = `playerByNetwork.${network}`, stockKey = `weaponStockByNetwork.${network}`;
+    if (network !== 'testnet' || !isTestnetWeaponPurchaseEnabled(offer) || typeof requestId !== 'string' || !/^[a-zA-Z0-9-]{16,80}$/.test(requestId)) return res.status(400).json({ error: 'invalid_activation' });
+    try {
+      const users = req.app.locals.userCollection, orders = req.app.locals.orderCollection;
+      await syncWeaponStock(users, orders, uid, network);
+      for (let attempt = 0; attempt < 8; attempt++) {
+        const user = await users.findOne({ uid }), save = user?.playerByNetwork?.[network], stock = user?.weaponStockByNetwork?.[network];
+        if (!save || !stock || save.activeRunId !== runId || save.lastStart?.runMeta?.id !== runId || Date.now() - save.lastStart.runMeta.startedAt > 8 * 60 * 60 * 1000) return res.status(409).json({ error: 'run_replaced' });
+        const prior = stock.activations[requestId];
+        if (prior) {
+          if (prior.level !== level || prior.runId !== runId) return res.status(409).json({ error: 'activation_conflict' });
+          return res.json({ remainingMs: Math.max(0, save.mission?.snapshot.weaponTimers[level] || 0), weaponStock: stock.balances });
+        }
+        if (!save.mission?.combat) return res.status(409).json({ error: 'save_before_activation' });
+        if (save.mission.snapshot.weaponTimers[level] > 0) return res.status(409).json({ error: 'weapon_already_active' });
+        if (!offer || (stock.balances[offer.id] || 0) < 1) return res.status(409).json({ error: 'weapon_stock_empty' });
+        const snapshot = { ...save.mission.snapshot, weaponTimers: [...save.mission.snapshot.weaponTimers], paidWeaponLevel: level, paidWeaponMs: WEAPON_CHARGE_MS, weaponSource: 'paid' };
+        snapshot.weaponTimers[level] = WEAPON_CHARGE_MS;
+        const unlocked = [...new Set([...(save.lastStart.runMeta.unlockedWeaponLevels || [1]), level])];
+        const result = await users.updateOne({ uid, [`${key}.activeRunId`]: runId, [`${key}.version`]: save.version, [`${stockKey}.revision`]: stock.revision }, {
+          $set: { [`${key}.mission.snapshot`]: snapshot, [`${key}.lastStart.runMeta.unlockedWeaponLevels`]: unlocked, [`${key}.lastStart.unlockedWeaponLevels`]: unlocked, [`${stockKey}.activations.${requestId}`]: { level, runId } },
+          $inc: { [`${key}.version`]: 1, [`${stockKey}.revision`]: 1, [`${stockKey}.balances.${offer.id}`]: -1 },
+        });
+        if (result.modifiedCount) {
+          const sessionRun = req.session.scoreRun;
+          if (sessionRun && sessionRun.id === runId) sessionRun.unlockedWeaponLevels = unlocked;
+          return res.json({ remainingMs: WEAPON_CHARGE_MS, weaponStock: { ...stock.balances, [offer.id]: stock.balances[offer.id] - 1 } });
+        }
+      }
+      return res.status(409).json({ error: 'inventory_changed' });
+    } catch { return res.status(503).json({ error: 'activation_unavailable' }); }
   });
 
   router.post("/equip", async (req, res) => {

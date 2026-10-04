@@ -4,6 +4,8 @@ import type { PaymentDTO } from "../types/pi";
 
 type PaymentMetadata = {
   productId: string;
+  quantity?: number;
+  weaponModel?: 2;
 };
 
 type UsePaymentsArgs = {

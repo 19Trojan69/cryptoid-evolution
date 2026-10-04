@@ -1,0 +1,17 @@
+.weapon-purchase { display: grid; gap: .65rem; margin-top: .8rem; }
+.weapon-purchase input { width: 100%; min-height: 44px; padding: .65rem; color: #edfaff; background: #102538; border: 1px solid #7698aa; border-radius: 8px; font: inherit; }
+.weapon-quantity-presets { display: flex; gap: .5rem; }
+.weapon-quantity-presets button { min-width: 44px; min-height: 40px; color: #e5f7ff; background: #18374a; border: 1px solid #80b5cb; border-radius: 6px; }
+.weapon-purchase .button { width: 100%; min-height: 48px; white-space: normal; }
+.weapon-wheel { max-width: min(360px, 92vw); max-height: 65dvh; overflow-y: auto; pointer-events: auto; }
+.weapon-wheel > p { grid-column: 1/-1; color: #ffccae; font-size: 14px; }
+.weapon-resume-countdown { pointer-events: auto; background: #06132266; }
+.weapon-resume-countdown strong { font-size: clamp(70px, 15vw, 140px); color: #d5faff; text-shadow: 0 0 25px #7de7ff; }
+.boss-callsign { color: #e7c998; letter-spacing: .16em; font-size: clamp(18px, 4vw, 30px); }
+/* Lighting is baked into the globe; do not flatten it with the old cartoon shading. */
+.space-world:not(.planet-earth):not(.planet-gas) { box-shadow: none; }
+.space-world:not(.planet-earth):not(.planet-gas) .space-world-surface { background-color: transparent; }
+.space-world:not(.planet-earth):not(.planet-gas) .space-world-surface::after { content: none; }
+.space-world.planet-ocean .space-world-surface { filter: drop-shadow(-1px -1px 2px #72baff70); }
+.space-world.planet-desert .space-world-surface { filter: drop-shadow(-1px -1px 1px #d9aa7950); }
+.boss-sticker small { overflow-wrap: anywhere; }

@@ -4,6 +4,7 @@ import { createSectorBoss } from './sectorBoss';
 import BossHealthView from './BossHealthView';
 import BossReactorView from './BossReactorView';
 import BossWeaponsView from './BossWeaponsView';
+import { bossName } from './bossNames';
 
 export default function BossPhaseGuide() {
   const { t } = useLocale();
@@ -22,7 +23,7 @@ export default function BossPhaseGuide() {
   return <div className="boss-phase-guide">
     <label className="boss-phase-guide-picker">{t('Boss')}
       <select value={bossId} onChange={event => setBossId(Number(event.target.value))}>
-        {Array.from({length:50},(_,i)=><option key={i+1} value={i+1}>{String(i+1).padStart(2,'0')}</option>)}
+        {Array.from({length:50},(_,i)=><option key={i+1} value={i+1}>{String(i+1).padStart(2,'0')} · {bossName(i+1)}</option>)}
       </select>
     </label>
     <div className="boss-phase-guide-tabs" role="group" aria-label={t('Boss')}>
