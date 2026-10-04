@@ -65,11 +65,14 @@ export default function mountRewardEndpoints(router: Router) {
         if (closesChain) next = awardChain(next, event.level).progress;
         const version = user.rewardVersion?.[network] as number | undefined;
         const previous = player?.mission?.snapshot;
+        const heartLimit = Math.max(3 + (player?.lastStart?.armorBonus || 0), previous?.hearts || 0) + (event.kind === "boss" ? 1 : 0);
+        if (snapshot && snapshot.hearts > heartLimit) return res.status(400).json({ error: "invalid_lives" });
         if (snapshot && (snapshot.shards < (previous?.shards || 0) || snapshot.score < (previous?.score || 0) || snapshot.destroyed < (previous?.destroyed || 0))) return res.status(400).json({ error: "save_regressed" });
         const deltaShards = snapshot ? snapshot.shards - (player.creditedShards ?? previous?.shards ?? 0) : 0;
         const deltaDestroyed = snapshot ? snapshot.destroyed - (player.creditedDestroyed ?? previous?.destroyed ?? 0) : 0;
         if (deltaShards < 0 || deltaDestroyed < 0) return res.status(400).json({ error: "save_regressed" });
         const mission = snapshot ? missionAfter(event, snapshot) : null;
+        if (mission) mission.rulesVersion = run.rulesVersion ?? 1;
         const result = await users.updateOne({ uid, [`rewardRunId.${network}`]: run.id, [`rewardEventKeys.${network}`]: { $ne: key },
           [`rewardVersion.${network}`]: version === undefined ? { $exists: false } : version,
           ...(snapshot ? { [`${playerKey}.activeRunId`]: run.id, [`${playerKey}.version`]: player.version } : {}) },
