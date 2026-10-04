@@ -36,6 +36,7 @@ const topics = [
     id: "survival", label: "Combat & hearts", title: "Survive the attacks",
     intro: "You start with three hearts. The mission ends when all are lost.",
     details: [
+      "Each defeated boss grants one extra heart, even above three. Remaining hearts are saved.",
       "Avoid enemy ships and projectiles. An active shield absorbs an impact; otherwise a collision or an unguarded projectile can cost a heart.",
       "Advanced and Elite ship stages add protection against enemy projectiles per life. A ship collision still needs a shield to be absorbed.",
       "Enemy hulls have different strengths. Even the first boss needs sustained fire; bosses attack faster as their hull weakens.",

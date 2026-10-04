@@ -14,7 +14,7 @@ const integer = (value: unknown, max: number) => typeof value === "number" && Nu
 export function readSnapshot(input: unknown): Snapshot | null {
   if (!input || typeof input !== "object" || Array.isArray(input)) return null;
   const s = input as Snapshot;
-  const limits: Record<string, number> = { score: 10_000_000, shards: 10_000_000, destroyed: 1_000_000, hearts: 6, paidWeaponLevel: 5, paidWeaponMs: 300_000, pickupWeaponLevel: 5, shieldCharges: 20, pickupWeaponMs: 300_000, shieldMs: 300_000, purchasedShieldMs: 300_000, overdriveMs: 300_000, overdriveTotalMs: 300_000, rapidFireMs: 300_000, rapidFireTotalMs: 300_000, empMs: 300_000 };
+  const limits: Record<string, number> = { score: 10_000_000, shards: 10_000_000, destroyed: 1_000_000, hearts: 56, paidWeaponLevel: 5, paidWeaponMs: 300_000, pickupWeaponLevel: 5, shieldCharges: 20, pickupWeaponMs: 300_000, shieldMs: 300_000, purchasedShieldMs: 300_000, overdriveMs: 300_000, overdriveTotalMs: 300_000, rapidFireMs: 300_000, rapidFireTotalMs: 300_000, empMs: 300_000 };
   if (Object.entries(limits).some(([key, max]) => !integer((s as any)[key], max))) return null;
   if (typeof s.shieldActive !== "boolean" || !Array.isArray(s.weaponTimers) || s.weaponTimers.length !== 6 || s.weaponTimers.some(v => v !== -1 && !integer(v, 300_000))) return null;
   if (s.paidWeaponLevel < 1 || s.pickupWeaponLevel < 1) return null;

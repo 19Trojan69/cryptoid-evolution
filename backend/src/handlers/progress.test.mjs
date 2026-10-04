@@ -57,6 +57,36 @@ const start = async (h, action = 'new', startKey = 'start-key-0000000001') => {
 };
 const init = h => h.call('progress', '/me', null, { method: 'GET' });
 
+test('boss lives exceed three and six, survive retries and resume, and cannot be fabricated', async () => {
+  const h = harness(); await init(h); await start(h);
+  let runId = h.session.scoreRun.id;
+  for (let level=1; level<=5; level++) {
+    const before = 3 + level - 1;
+    for (let block=1; block<=9; block++) {
+      const stage=(level-1)*10+block;
+      assert.equal((await h.call('rewards','/event',{runId,kind:'block',level,stage,save:snapshot({hearts:before})})).code,200);
+    }
+    const event={runId,kind:'boss',level,stage:level*10,save:snapshot({hearts:before+1})};
+    assert.equal((await h.call('rewards','/event',{...event,save:snapshot({hearts:before+2})})).code,400);
+    assert.equal((await h.call('rewards','/event',event)).body.awarded,true);
+    assert.equal((await h.call('rewards','/event',event)).body.awarded,false);
+    assert.equal(h.profile().mission.snapshot.hearts,before+1);
+    const resumed=await start(h,'resume',`boss-heart-resume-${level}`);
+    assert.equal(resumed.code,200);
+    assert.equal(resumed.body.checkpoint.hearts,before+1);
+    runId=resumed.body.scoreRunId;
+    assert.equal((await h.call('rewards','/event',{runId,kind:'bonus',level,stage:level*10,hits:0,save:snapshot({hearts:before+1})})).code,200);
+  }
+  assert.equal(h.profile().mission.snapshot.hearts,8);
+  assert.equal((await h.call('progress','/checkpoint',{runId,combat:combat({stage:51}),save:snapshot({hearts:8})})).code,200);
+  assert.equal((await h.call('progress','/checkpoint',{runId,combat:combat({stage:51,sequence:2}),save:snapshot({hearts:9})})).code,400);
+  assert.equal((await h.call('progress','/leave',{runId,hearts:7})).code,200);
+  const resumed=await start(h,'resume','boss-heart-resume-final');
+  assert.equal(resumed.body.checkpoint.hearts,7);
+  assert.equal(readSnapshot(snapshot({hearts:56})).hearts,56);
+  assert.equal(readSnapshot(snapshot({hearts:57})),null);
+});
+
 test('cookie-less save requests restore only the authenticated active run and remain idempotent', async () => {
   const h = harness(); await init(h); await start(h);
   const runId = h.session.scoreRun.id;

@@ -62,7 +62,7 @@ export default function mountProgressEndpoints(router: Router) {
         if (combat.stage !== (save.mission?.sector || 1) || phase !== (save.mission?.phase || "normal")) return res.status(409).json({ error: "checkpoint_stage_changed" });
         const pendingPower = save.mission?.combat ? save.mission.combat.state.pendingStartPower : save.lastStart?.powerUp;
         if (combat.state.pendingStartPower !== null && combat.state.pendingStartPower !== pendingPower) return res.status(400).json({ error: "power_not_owned" });
-        if (snapshot.hearts > 3 + (save.lastStart?.armorBonus || 0) || snapshot.score < (save.mission?.snapshot.score || 0)
+        if (snapshot.hearts > Math.max(3 + (save.lastStart?.armorBonus || 0), save.mission?.snapshot.hearts || 0) || snapshot.score < (save.mission?.snapshot.score || 0)
           || snapshot.shards < (save.creditedShards || 0) || snapshot.destroyed < (save.creditedDestroyed || 0)) return res.status(400).json({ error: "save_regressed" });
         const deltaShards = snapshot.shards - (save.creditedShards || 0), deltaDestroyed = snapshot.destroyed - (save.creditedDestroyed || 0);
         const mission = { sector: combat.stage, phase, rulesVersion: run.rulesVersion ?? 1, snapshot, combat, savedAt: new Date().toISOString() };
@@ -77,14 +77,14 @@ export default function mountProgressEndpoints(router: Router) {
   });
   router.post("/leave", async (req, res) => {
     const { runId, hearts } = req.body || {};
-    if (typeof runId !== "string" || !Number.isSafeInteger(hearts) || hearts < 1 || hearts > 6) return res.status(400).json({ error: "invalid_lives" });
+    if (typeof runId !== "string" || !Number.isSafeInteger(hearts) || hearts < 1 || hearts > 56) return res.status(400).json({ error: "invalid_lives" });
     const uid = req.session.currentUser!.uid, network = rewardNetwork(req), key = `playerByNetwork.${network}`;
     try {
       const users = req.app.locals.userCollection;
       for (let attempt = 0; attempt < 5; attempt++) {
         const save = await loadPlayerSave(users, uid, network);
         if (save.activeRunId !== runId || save.lastStart?.runMeta?.id !== runId || Date.now() - save.lastStart.runMeta.startedAt > 8 * 60 * 60 * 1000) return res.status(409).json({ error: "run_replaced" });
-        if (hearts > 3 + (save.lastStart.armorBonus || 0)) return res.status(400).json({ error: "invalid_lives" });
+        if (hearts > Math.max(3 + (save.lastStart.armorBonus || 0), save.mission?.snapshot.hearts || 0)) return res.status(400).json({ error: "invalid_lives" });
         const mission = save.mission || { sector: 1, phase: "normal" as const, snapshot: firstMissionSnapshot(hearts), savedAt: new Date().toISOString() };
         const remaining = Math.min(mission.snapshot.hearts, hearts);
         if (save.mission && remaining === mission.snapshot.hearts) return res.json({ save: publicSave(save) });
