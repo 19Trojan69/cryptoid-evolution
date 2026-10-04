@@ -284,6 +284,8 @@ html[data-motion="reduced"] .distant-star-flare { display: none; }
 .space-world-near { width: clamp(60px, 8vw, 105px); left: 88%; top: 31%; opacity: .67; transform: translate3d(-50%, -50%, 0) translate3d(var(--parallax-near-x), var(--parallax-near-y), 0); }
 .space-scene-2 .space-world-near, .space-scene-4 .space-world-near, .space-scene-6 .space-world-near { left: 10%; top: 31%; }
 .space-world-distant { width: clamp(32px, 4vw, 58px); left: 43%; top: 60%; opacity: .58; transform: translate3d(-50%, -50%, 0) translate3d(var(--parallax-far-x), var(--parallax-far-y), 0); }
+/* Dim solid worlds with light, never transparency: foreground moons occlude planets. */
+.space-scene .space-world:not(.planet-earth):not(.planet-gas) { opacity: 1; filter: brightness(.78); }
 /* One finished surface per world: craters, ice ridges, continents, lava or gas bands. */
 .space-world.planet-rock .space-world-surface { background-image: url('/planets/rock-natural.webp'); }
 .space-world.planet-desert .space-world-surface { background-image: url('/planets/desert-natural.webp'); }
@@ -2652,3 +2654,16 @@ html[data-motion="reduced"] .blockchain-node.active .blockchain-cube-rotor { ani
 .weapon-wheel-option.expired small { color: #e1e5e8; white-space: normal; line-height: 1.05; text-align: center; }
 .weapon-wheel-option.expired { grid-template-rows: 16px 9px minmax(14px, auto); height: auto; min-height: 46px; }
 @media (min-width: 900px) { .weapon-wheel-option.expired { grid-template-rows: 24px 18px minmax(16px, auto); min-height: 72px; } }
+
+/* Rewards and bonus feedback float freely, without notification cards. */
+.bonus-counter, .combo-notice, .reward-unlock,
+.sector-clear-message:not(.level-complete-banner),
+.level-complete-banner.sector-clear-message {
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  text-shadow: 0 2px 5px #020a18, 0 0 12px currentColor;
+}
+.sector-clear-message:not(.level-complete-banner)::after { content: none; }
