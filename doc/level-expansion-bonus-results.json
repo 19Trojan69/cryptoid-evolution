@@ -1,0 +1,28 @@
+{
+  "results": [
+    {
+      "stage": 10,
+      "rulesVersion": 2,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bonusResume": "passed",
+      "onceOnlyBonus": "passed",
+      "next": 11
+    },
+    {
+      "stage": 500,
+      "rulesVersion": 2,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bonusResume": "passed",
+      "onceOnlyBonus": "passed",
+      "next": "victory"
+    }
+  ],
+  "errors": [],
+  "method": "Local Chromium, real React loop and API handlers, isolated in-memory account; Pi SDK mocked. No live Pi/MongoDB or device-performance validation."
+}

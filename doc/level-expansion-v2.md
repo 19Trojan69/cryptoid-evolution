@@ -51,3 +51,11 @@ Optionale Aufgaben und zusätzliche Bossphasen sind gemäß Konzept spätere, ge
 ## Ergänzende Prüfung
 
 Die weitere Balanceprüfung und die Korrektur für Einflugwege/Einleitungsdauer alter Missionen sind in `doc/level-expansion-balance.md` dokumentiert. Automatisierte Todesläufe gelten ausdrücklich nicht als bestandene Balanceprüfung.
+
+## Ergänzende Bonus- und Vorschauprüfung am 4. Oktober
+
+Der neue lokale Browserfall `CRYPTOID_QA_PHASE=bonus CRYPTOID_QA_STAGES=10,500 node frontend/scripts/verifyLevelExpansion.cjs` prüft nun auch das Neuladen mitten in der Bonusrunde. Beide Fälle bestanden: bereits erzeugte Ziele mit ihrem Flugfortschritt, Trefferzahl, Leben und Shards werden exakt wiederhergestellt; die Bonusbelohnung wird einmalig verbucht. Nach Schritt 10 folgt Schritt 11; nach Schritt 500 folgt Victory und die Mission ist beendet. Rohdaten: `doc/level-expansion-bonus-results.json`. Die Wiederherstellung wird unmittelbar vor dem nächsten Animationsschritt verglichen, damit zwischenzeitlich neu erzeugte Ziele nicht als Speicherfehler gelten.
+
+Die bereitgestellten iPhone-Screenshots bestätigen Startbildschirm und sechs Gegner im ersten Block der Safari-Vorschau. Sie belegen keine Framerate, zusätzlichen Gruppen oder Kontospeicherung. In der Cloud-Browser-Prüfung reagierten Start, Pause und Fortsetzen, jedoch wurden keine Gegner sichtbar; die Ursache ist nicht abschließend geklärt. Der Vercel-Connector verweigert weiterhin den Zugriff auf Deployment-Aliase mit 403, während die Vorschau über den Browser lädt.
+
+Die Safari-Vorschau wurde ohne sichtbare Pi-Anmeldung gestartet. Gastmissionen bieten bereits im bisherigen Code keine gespeicherte Mission zum Fortsetzen; lokale Rekorde sind davon getrennt. Vercel-Anmeldung und Pi-Spielkonto sind unabhängig. Der Pi-OAuth-Einstieg leitet von der individuellen Vorschau zur festen Testnet-Origin weiter, daher ist der echte Kontospeichertest auf diesem Branch noch offen. Keine Authentifizierungs- oder Schutzmechanismen wurden geändert.

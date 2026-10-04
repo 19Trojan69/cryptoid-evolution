@@ -15,6 +15,7 @@ const { emptyRewardProgress } = backendRequire('../../build/rewardRules.js');
 const networkScenario = process.env.CRYPTOID_QA_NETWORK || "normal";
 assert.ok(["normal","offline","lost-ack"].includes(networkScenario));
 const rulesVersion = process.env.CRYPTOID_QA_RULES === "1" ? 1 : 2;
+const bonusScenario = process.env.CRYPTOID_QA_PHASE === 'bonus';
 const results = [], errors = [], screenshots = process.env.CRYPTOID_QA_DIR || '/tmp/cryptoid-expansion-qa';
 fs.mkdirSync(screenshots, { recursive: true });
 (async () => {
@@ -30,19 +31,21 @@ fs.mkdirSync(screenshots, { recursive: true });
       restore: restoreCombat,
     };
   `;
-  const server = await createServer({ root: path.join(repo, 'frontend'), logLevel: 'error', define: { 'import.meta.env.VITE_BACKEND_URL': JSON.stringify('/api') }, server: { host: '127.0.0.1', port: 0, hmr: false }, plugins: [{ name: 'local-flight-qa', enforce: 'pre', transform(code, id) { if (id.endsWith('/GamePage.tsx')) return code.replace('  const levelLabel =', instrumentation + '\n  const levelLabel =').replace('if (data.combat) restoreCombat(data.combat);', 'if (data.combat) { restoreCombat(data.combat); (window as any).__restoredFlight = structuredClone(stateRef.current); }'); } }] });
+  const server = await createServer({ root: path.join(repo, 'frontend'), logLevel: 'error', define: { 'import.meta.env.VITE_BACKEND_URL': JSON.stringify('/api') }, server: { host: '127.0.0.1', port: 0, hmr: false }, plugins: [{ name: 'local-flight-qa', enforce: 'pre', transform(code, id) { if (id.endsWith('/GamePage.tsx')) return code.replace('  const levelLabel =', instrumentation + '\n  const levelLabel =').replace('if (data.combat) restoreCombat(data.combat);', 'if (data.combat) { restoreCombat(data.combat); (window as any).__restoredFlight = structuredClone(stateRef.current); (window as any).__restoredRefs = Object.fromEntries(COMBAT_REF_KEYS.map(k=>[k,combatRefs[k].current])); }'); } }] });
   await server.listen();
   const origin = 'http://127.0.0.1:' + server.httpServer.address().port;
   const browser = await chromium.launch({ executablePath: process.env.CRYPTOID_CHROMIUM || '/tmp/cryptoid-chromium', headless: true, args: ['--no-sandbox', '--disable-dev-shm-usage', '--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
   try {
     for (const [stage, viewport] of [[1,{width:390,height:844}],[9,{width:390,height:844}],[37,{width:1280,height:800}],[99,{width:390,height:844}],[249,{width:1280,height:800}],[499,{width:390,height:844}],[10,{width:390,height:844}],[40,{width:1280,height:800}],[500,{width:390,height:844}]]) {
       if(process.env.CRYPTOID_QA_STAGES&&!process.env.CRYPTOID_QA_STAGES.split(',').includes(String(stage)))continue;
+      if(bonusScenario && stage%10)continue;
       const h = makeHarness();
       await h.call('progress', '/me', null, { method: 'GET' });
       const snapshot = firstMissionSnapshot(2);
-      Object.assign(h.profile(), { ...emptyPlayerSave(), version: 1, legacyImported: true, mission: { sector: stage, phase: stage%10 ? 'normal' : 'boss', rulesVersion, snapshot, savedAt: new Date().toISOString() } });
+      Object.assign(h.profile(), { ...emptyPlayerSave(), version: 1, legacyImported: true, mission: { sector: stage, phase: stage%10 ? 'normal' : bonusScenario ? 'bonus' : 'boss', rulesVersion, snapshot, savedAt: new Date().toISOString() } });
       h.docs[0].rewardEventKeys = { testnet: [] };
       for (let s=1;s<stage;s++) if(s%10) {h.docs[0].rewardEventKeys.testnet.push('block:'+s);if(s%10===9)h.docs[0].rewardEventKeys.testnet.push('chain:'+Math.ceil(s/10));}else h.docs[0].rewardEventKeys.testnet.push('boss:'+s/10,'bonus:'+s/10);
+      if(bonusScenario)h.docs[0].rewardEventKeys.testnet.push('boss:'+stage/10);
       const context = await browser.newContext({ viewport, locale:'en-US', isMobile:viewport.width<700, hasTouch:viewport.width<700 });
       await context.addInitScript(() => { window.__ENV={backendURL:'/api'};window.Pi={init(){},getPiHostAppInfo:async()=>({hostApp:'web'})}; localStorage.setItem('cryptoid_pi_session','1');localStorage.setItem('cryptoid_language','en');localStorage.setItem('cryptoid_home_music','off'); });
       const apiFailures=[];
@@ -140,6 +143,39 @@ fs.mkdirSync(screenshots, { recursive: true });
         assert.equal(h.profile().mission.sector,stage+1);
         assert.equal(h.profile().mission.phase,stage%10===9?'boss':'normal');
         results.push({stage,rulesVersion,networkScenario,failedAttempts,viewport,groups:expected,checkpoints:'passed',pause:'passed',resume:'passed',onceOnlyClear:'passed'});
+      }else if(bonusScenario){
+        await page.evaluate(()=>window.__flightTest.resume());
+        await page.clock.runFor(6000);
+        await page.evaluate(()=>window.__flightTest.pause());
+        await page.evaluate(()=>window.__flightTest.save());
+        const before=await page.evaluate(()=>window.__flightTest.inspect());
+        assert.equal(before.state.encounter,'bonus');
+        assert.ok(before.refs.bonusIndex>0 && before.refs.bonusIndex<12,'save in the middle of bonus spawns');
+        await page.reload();await page.getByRole('button',{name:'Resume',exact:true}).click();
+        await page.waitForFunction(()=>window.__flightTest?.inspect().state.status==='playing');
+        await page.evaluate(()=>window.__flightTest.pause());
+        const restored=await page.evaluate(()=>window.__restoredFlight);
+        const restoredRefs=await page.evaluate(()=>window.__restoredRefs);
+        assert.equal(restoredRefs.bonusIndex,before.refs.bonusIndex);
+        assert.equal(restored.bonusHits,before.state.bonusHits);
+        assert.deepEqual(restored.bonusTargets,before.state.bonusTargets);
+        assert.equal(restored.shards,before.state.shards);
+        assert.equal(restored.hearts,before.state.hearts);
+        await page.evaluate(()=>window.__flightTest.resume());
+        for(let tick=0;tick<60;tick++){
+          await page.clock.runFor(1000);
+          const current=await page.evaluate(()=>window.__flightTest.inspect().state);
+          if(current.status==='victory'||current.sector>stage)break;
+        }
+        assert.equal(h.docs[0].rewardEventKeys.testnet.filter(k=>k==='bonus:'+stage/10).length,1,'bonus reward committed once');
+        if(stage===500){
+          assert.equal((await page.evaluate(()=>window.__flightTest.inspect())).state.status,'victory');
+          assert.equal(h.profile().mission,null,'final bonus completes mission');
+        }else{
+          assert.equal(h.profile().mission.sector,stage+1);
+          assert.equal(h.profile().mission.phase,'normal');
+        }
+        results.push({stage,rulesVersion,viewport,bonusResume:'passed',onceOnlyBonus:'passed',next:stage===500?'victory':stage+1});
       }else{
         await page.evaluate(()=>window.__flightTest.resume());await page.clock.runFor(8000);await page.evaluate(()=>window.__flightTest.pause());await page.evaluate(()=>window.__flightTest.save());
         const before=await page.evaluate(()=>window.__flightTest.inspect());
@@ -155,6 +191,6 @@ fs.mkdirSync(screenshots, { recursive: true });
       await context.close();
       console.log(JSON.stringify(results.at(-1)));
     }
-    assert.deepEqual(errors,[]);fs.writeFileSync(path.join(screenshots,`results-rules-${rulesVersion}-${networkScenario}.json`),JSON.stringify({results,errors},null,2));
+    assert.deepEqual(errors,[]);fs.writeFileSync(path.join(screenshots,`results-rules-${rulesVersion}-${networkScenario}${bonusScenario?'-bonus':''}.json`),JSON.stringify({results,errors},null,2));
   }finally{await browser.close();await server.close();}
 })().catch(e=>{console.error(e);console.error(JSON.stringify({results,errors}));process.exitCode=1;});
