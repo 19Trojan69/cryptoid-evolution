@@ -37,13 +37,13 @@ const topics = [
     id: "survival", label: "Combat & hearts", title: "Survive the attacks",
     intro: "You start with three hearts. The mission ends when all are lost.",
     details: [
-      "Each defeated boss grants one extra heart, even above three. Remaining hearts are saved.",
+      "Collect the heart to start the bonus round.",
       "Avoid enemy ships and projectiles. An active shield absorbs an impact; otherwise a collision or an unguarded projectile can cost a heart.",
       "Advanced and Elite ship stages add protection against enemy projectiles per life. A ship collision still needs a shield to be absorbed.",
       "Enemy hulls have different strengths. Even the first boss needs sustained fire; bosses attack faster as their hull weakens.",
       "During the reactor weapon phase, small escorts return in waves. The pauses shorten as levels rise; from level 50, the next wave enters as soon as the previous one is cleared.",
       "After all turrets explode, a concealed central weapon opens. Attack the now vulnerable hull and dodge its pulses.",
-      "Hit each turret until its metal glows red, orange and finally white-hot before it explodes. Every turret gives extra points; the hull stays protected until all are destroyed.",
+      "Damaged turrets glow intense orange before exploding.",
     ],
   },
   {

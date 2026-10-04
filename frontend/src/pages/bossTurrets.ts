@@ -1,4 +1,5 @@
 import { bossWeapons, type BossGunConfig, type BossWeaponKind } from './bossWeapons.ts';
+import { bossDifficulty } from './bossDifficulty.ts';
 import type { SectorBoss } from './sectorBoss.ts';
 import { bossFireInterval, bossVulnerable } from './sectorBoss.ts';
 import type { EnemyShot, BossProjectileKind } from './enemyFire.ts';
@@ -32,12 +33,13 @@ export const advanceBossTurrets = (boss:SectorBoss,player:PlayerPosition,width:n
  const shots:EnemyShot[]=[],events:BossFireEvent[]=[];
  if(delta<=0||!bossVulnerable(boss)||boss.health<=0)return {shots,events};
  const dt=Math.min(80,delta);boss.weaponClock+=dt;
+ const pressure=bossDifficulty(boss.config.id);
  const guns=bossWeapons[boss.config.id-1];
  for(let i=0;i<guns.length;i++){
   const g=guns[i],state=boss.turrets[i],p=gunPosition(boss,g);
   if(state.health<=0)continue;
   const desired=Math.atan2(-(player.x*width-p.x),player.y*height-p.y),diff=angleDifference(desired,state.a);
-  const speed=Math.min(g.turnSpeed,Math.abs(diff)*6);state.a+=Math.sign(diff)*Math.min(Math.abs(diff),speed*dt/1000);
+  const speed=Math.min(g.turnSpeed*pressure.trackingScale,Math.abs(diff)*6);state.a+=Math.sign(diff)*Math.min(Math.abs(diff),speed*dt/1000);
   const error=Math.abs(angleDifference(desired,state.a));state.lock=error<.035?state.lock+dt:0;
  }
  let slots=Math.max(0,Math.floor(available));const start=boss.turretCursor;
@@ -52,13 +54,13 @@ export const advanceBossTurrets = (boss:SectorBoss,player:PlayerPosition,width:n
    const barrel=state.pendingIndex%g.barrels.length,p=gunMuzzle(boss,g,state,barrel,g.recoil);state.firedBarrels.push(barrel);
    const core=Math.max(1.5,g.visualShotWidth*Math.max(.45,boss.width/904));
    const radius=Math.max(2,core*(g.kind==='laser'?.7:g.kind==='rocket'?1:1.28));
-   shots.push({id:firstId+shots.length,...p,vx:-Math.sin(state.a)*speeds[g.kind],vy:Math.cos(state.a)*speeds[g.kind],radius,bossKind:legacyKind[g.kind],weaponKind:g.kind,weaponColor:g.shotColor,weaponWidth:core,sourceGun:i,caliber:g.caliber});
+   shots.push({id:firstId+shots.length,...p,vx:-Math.sin(state.a)*speeds[g.kind]*pressure.projectileScale,vy:Math.cos(state.a)*speeds[g.kind]*pressure.projectileScale,radius,bossKind:legacyKind[g.kind],weaponKind:g.kind,weaponColor:g.shotColor,weaponWidth:core,sourceGun:i,caliber:g.caliber});
    state.pendingIndex++;slots--;
   }
   const pos=gunPosition(boss,g),desired=Math.atan2(-(player.x*width-pos.x),player.y*height-pos.y);
   events.push({kind:g.kind,radius:g.radius,barrels:count,pan:Math.max(-.65,Math.min(.65,(pos.x/width-.5)*1.3)),gunIndex:i,error:Math.abs(angleDifference(desired,state.a)),lock:state.lock});
   boss.turretCursor=(i+1)%guns.length;boss.fireElapsed=0;boss.volley++;
-  if(state.pendingIndex>=state.pendingTotal){state.pendingTotal=0;state.next=boss.weaponClock+g.interval*1000*bossFireInterval(boss,boss.config.level)/2500;}
+  if(state.pendingIndex>=state.pendingTotal){state.pendingTotal=0;state.next=boss.weaponClock+g.interval*1000*bossFireInterval(boss,boss.config.level)/2500*pressure.cadenceScale;}
   else state.pendingAt=boss.weaponClock+(state.pendingIndex%g.barrels.length===0?130:40);
  }
  return {shots,events};

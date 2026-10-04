@@ -261,6 +261,26 @@ const combat = (changes = {}) => ({
   formationStarted: false, slots: null, escortSlots: null, ...changes,
 });
 
+test('defeated boss waits across save/resume; pickup commits one heart and then bonus', async () => {
+  const h=harness(); await init(h); await start(h);
+  let runId=h.session.scoreRun.id;
+  for(let stage=1;stage<=9;stage++) assert.equal((await h.call('rewards','/event',{runId,kind:'block',level:1,stage,save:snapshot({hearts:2})})).code,200);
+  const c=combat({stage:10,encounter:'boss-clear'}); c.state.phase='SECTOR_CLEAR'; c.refs.clearTimer=10000;
+  assert.equal((await h.call('progress','/checkpoint',{runId,combat:c,save:snapshot({hearts:2})})).code,200);
+  assert.equal(h.profile().mission.phase,'boss');
+  const resumed=await start(h,'resume','heart-pickup-resume-001');
+  assert.equal(resumed.body.combat.encounter,'boss-clear');
+  assert.equal(resumed.body.checkpoint.hearts,2);
+  runId=resumed.body.scoreRunId;
+  const event={runId,kind:'boss',level:1,stage:10,save:snapshot({hearts:3})};
+  assert.equal((await h.call('rewards','/event',event)).code,200);
+  assert.equal(h.profile().mission.phase,'bonus');
+  assert.equal(h.profile().mission.snapshot.hearts,3);
+  assert.equal((await h.call('rewards','/event',event)).body.awarded,false);
+  assert.equal(h.profile().mission.snapshot.hearts,3);
+  assert.equal((await h.call('progress','/checkpoint',{runId,combat:{...c,sequence:2},save:snapshot({hearts:2})})).code,409);
+});
+
 test('combat checkpoints credit once, restore timers and groups, and reject stale devices', async () => {
   const h = harness(); await init(h); await start(h);
   const runId = h.session.scoreRun.id;

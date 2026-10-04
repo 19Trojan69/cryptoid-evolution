@@ -12,12 +12,12 @@ export function paintTurretHeat(context: CanvasRenderingContext2D, width: number
   context.save();
   context.globalCompositeOperation = 'source-atop';
   const gradient = context.createLinearGradient(0, 0, width, height);
-  const hot = heat > .75 ? '#fff2ab' : heat > .4 ? '#ff9827' : '#b5290e';
-  gradient.addColorStop(0, '#60130b');
+  const hot = heat > .75 ? '#ffb12b' : heat > .4 ? '#ff7908' : '#ee4605';
+  gradient.addColorStop(0, '#bc2902');
   gradient.addColorStop(.35, hot);
-  gradient.addColorStop(.58, heat > .75 ? '#fffadc' : '#ff7a18');
-  gradient.addColorStop(1, '#a52c0b');
-  context.globalAlpha = .15 + heat * .68;
+  gradient.addColorStop(.58, heat > .75 ? '#ffd052' : '#ff920a');
+  gradient.addColorStop(1, '#db3b03');
+  context.globalAlpha = .5 + heat * .45;
   context.fillStyle = gradient;
   context.fillRect(0, 0, width, height);
   context.restore();

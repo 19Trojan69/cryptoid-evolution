@@ -1,4 +1,6 @@
 import { advanceBossCore } from './bossCore';
+import { collectBossHeart, BOSS_HEART_POSITION, type BossRewardState } from './bossReward';
+import './bossReward.css';
 import { blockFlights, nextBlockFlight, REINFORCEMENT_WARNING_MS, GROUP_CLEAR_POINTS } from "./blockFlights";
 import { COMBAT_STATE_KEYS, COMBAT_REF_KEYS, readCombatCheckpoint, type CombatCheckpoint } from "../../../backend/src/combatCheckpoint";
 import HullDamage from "./HullDamage";
@@ -158,7 +160,7 @@ type Effect = {
   velocityY?: number;
 };
 type WeaponSource = "standard" | "paid" | "pickup";
-type GameState = { playerHullFires?: HullFire[]; playerHit?: HullFire; bossHullLight: number; combo: DoubleKillCombo; asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; rewardNotice: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; pickupNotice: { id: number; type: PowerUpType; remainingMs: number; level: number } | null; score: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; purchasedShieldMs: number; shieldActive: boolean; overdriveMs: number; overdriveTotalMs: number; rapidFireMs: number; rapidFireTotalMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponSource: WeaponSource; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; weaponTimers: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
+type GameState = BossRewardState & { playerHullFires?: HullFire[]; playerHit?: HullFire; bossHullLight: number; combo: DoubleKillCombo; asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; rewardNotice: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; pickupNotice: { id: number; type: PowerUpType; remainingMs: number; level: number } | null; score: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; purchasedShieldMs: number; shieldActive: boolean; overdriveMs: number; overdriveTotalMs: number; rapidFireMs: number; rapidFireTotalMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponSource: WeaponSource; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; weaponTimers: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
 
 const syncSelectedWeapon = (state: GameState) => {
   if (state.weaponSource === "pickup" && state.pickupWeaponMs <= 0) state.weaponSource = state.paidWeaponMs > 0 ? "paid" : "standard";
@@ -439,7 +441,7 @@ const GamePage = () => {
   const combatRefs = { nextId: nextIdRef, formationIndex: formationIndexRef, formationOffset: formationOffsetRef, flight: flightRef, bonusIndex: bonusIndexRef, bossEscortWave: bossEscortWaveRef, bossEscortSpawned: bossEscortSpawnedRef, bossEscortTimer: bossEscortTimerRef, spawnTimer: spawnTimerRef, sectionElapsed: sectionElapsedRef, clearTimer: clearTimerRef, attackCooldown: attackCooldownRef, elapsed: elapsedRef, attackNumber: attackNumberRef, dropsCreated: dropsCreatedRef, impactCooldown: impactCooldownRef, fireTimer: fireTimerRef };
   const saveCombat = async () => {
     const state = stateRef.current, runId = scoreRunRef.current, queue = saveQueueRef.current;
-    if (!runId || !queue || adminRunRef.current || !["playing", "paused"].includes(state.status) || state.hearts < 1 || state.encounter === "boss-clear" || state.phase === "SECTOR_CLEAR") return;
+    if (!runId || !queue || adminRunRef.current || !["playing", "paused"].includes(state.status) || state.hearts < 1 || (state.phase === "SECTOR_CLEAR" && state.encounter !== "boss-clear")) return;
     if (state.status !== "playing") state.combo.pendingAt = null;
     const combat: CombatCheckpoint = JSON.parse(JSON.stringify({
       version: 1, clock: performance.now(), sequence: ++combatSequenceRef.current, stage: state.sector, encounter: state.encounter,
@@ -742,7 +744,7 @@ const GamePage = () => {
     soundRef.current?.stopBossWeapons();
     const boss = state.boss;
     if (!boss) return;
-    state.hearts += 1;
+    state.bossHeartCollected = false;
     const finalDelayMs = BOSS_FALL_DURATION_MS;
     const fieldWidth = fieldRef.current?.clientWidth || 800;
     const fieldHeight = fieldRef.current?.clientHeight || 700;
@@ -759,17 +761,14 @@ const GamePage = () => {
     clearTimerRef.current = 0;
     state.score += bossPoints(state.sector);
     creditComboDefeat(state, bossShardReward(state.sector), elapsedRef.current);
-    state.rewardNotice = saveReward(progress => {
-      const previousRank = rewardRank(progress);
-      const result = awardBossSticker(progress, boss.config.id);
-      const next = reachLevel(result.progress, Math.min(500, state.sector + 1));
-      const rank = rewardRank(next);
-      return { progress: next, notice: `Boss stickers · ${boss.config.id}/50 · ${result.stars}★${rank !== previousRank ? ` · New rank · ${rank}` : ""}` };
-    }, { kind: "boss", level: boss.config.id, stage: state.sector });
     state.encounter = "boss-clear";
+    state.phase = "SECTOR_CLEAR";
     state.asteroids = [];
     state.enemyShots = [];
+    state.shots = [];
+    state.powerUps = [];
     state.boss = null;
+    void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
   };
   const changeEffectsVolume = (value: number) => {
     localStorage.setItem(EFFECTS_VOLUME_KEY, String(value));
@@ -963,7 +962,19 @@ const GamePage = () => {
             if (bossVictoryPendingRef.current && clearTimerRef.current >= BOSS_VICTORY_START_MS) startBossVictory();
           }
           const victoryStillPlaying = state.encounter === "boss-clear" && musicRef.current?.currentSource === "/audio/boss-victory-v2.mp3" && musicRef.current.playing && !musicRef.current.audio.ended;
-          if (clearTimerRef.current >= (state.encounter === "boss-clear" ? BOSS_CLEAR_DURATION_MS : SECTION_CLEAR_MS) && !victoryStillPlaying) {
+          const clearFinished = clearTimerRef.current >= (state.encounter === "boss-clear" ? BOSS_CLEAR_DURATION_MS : SECTION_CLEAR_MS) && !victoryStillPlaying;
+          if (clearFinished && state.encounter === 'boss-clear' && collectBossHeart(state, state.player, width, height)) {
+            soundRef.current?.play('pickup');
+            const bossId = Math.floor(state.sector / 10);
+            state.rewardNotice = saveReward(progress => {
+              const previousRank = rewardRank(progress);
+              const result = awardBossSticker(progress, bossId);
+              const next = reachLevel(result.progress, Math.min(500, state.sector + 1));
+              const rank = rewardRank(next);
+              return { progress: next, notice: `Boss stickers · ${bossId}/50 · ${result.stars}★${rank !== previousRank ? ` · New rank · ${rank}` : ''}` };
+            }, { kind: 'boss', level: bossId, stage: state.sector });
+          }
+          if (clearFinished && (state.encounter !== 'boss-clear' || state.bossHeartCollected)) {
             if (state.encounter === "bonus" && state.sector === MAX_DIFFICULTY_LEVEL) {
               if (!recordsSavedRef.current) {
                 if (!adminRunRef.current && !scoreRunRef.current) saveRecords(state);
@@ -982,6 +993,7 @@ const GamePage = () => {
             state.section = next.section;
             state.sector = next.sector;
             state.encounter = next.encounter;
+            state.bossHeartCollected = undefined;
             if (next.encounter === "boss-intro") {
               state.boss = createSectorBoss(state.sector, width, visibleTop, height);
               soundRef.current?.play("boss");
@@ -1309,7 +1321,7 @@ const GamePage = () => {
           const usefulDrop = drop?.type === "weapon" && state.weaponLevel >= 5 ? null : drop;
           if (usefulDrop) { nextIdRef.current += 1; dropsCreatedRef.current += 1; state.powerUps.push(usefulDrop); }
         }
-        state.shots = remainingShots;
+        state.shots = state.encounter === 'boss-clear' ? [] : remainingShots;
         const nextFlight = normal ? nextBlockFlight(state.sector, flightRef.current, formationIndexRef.current, state.asteroids.length, rulesVersionRef.current) : null;
         if (nextFlight && state.phase !== "SECTOR_CLEAR") {
           if (rulesVersionRef.current === 2) state.score += GROUP_CLEAR_POINTS;
@@ -1717,6 +1729,10 @@ const GamePage = () => {
         {reinforcementIntro && game.status === "playing" && <div className="reinforcement-notice" role="status">{t("Reinforcements incoming")}</div>}
         {audioNeedsTap && game.status === "playing" && <button className={`audio-retry${game.pickupNotice ? " audio-retry-with-pickup" : ""}`} type="button" onClick={retryAudio}>{t("Enable sound")}</button>}
         {game.encounter === "bonus" && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">{t("BONUS TARGETS")} {game.bonusHits} / {BONUS_TARGET_COUNT} · {t("NO ENEMY FIRE")}</div>}
+        {game.encounter === 'boss-clear' && !game.bossHeartCollected && clearTimerRef.current >= BOSS_CLEAR_DURATION_MS && <div className="boss-heart-pickup" role="status" aria-label={t('Collect the heart to start the bonus round.')} style={{left: `${BOSS_HEART_POSITION.x * 100}%`, top: `${BOSS_HEART_POSITION.y * 100}%`}}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.2 3.4 13.1C-1.1 8.8 5.3 1.7 10.2 5.9L12 7.5l1.8-1.6c4.9-4.2 11.3 2.9 6.8 7.2L12 21.2Z" /></svg>
+          <small>+1 · {t('Collect the heart to start the bonus round.')}</small>
+        </div>}
         
         {game.status === "loading" && <div className="game-overlay"><div className="game-modal mission-start-modal">
           <h1>{resumeOffer ? <><span className="desktop-menu-only">{t("Account save")}</span><span className="mobile-menu-only">{t(confirmNewRun ? "Start from the beginning?" : "Your mission")}</span></> : startError ? t("Start not confirmed") : t('Preparing mission')}</h1>

@@ -1,0 +1,6 @@
+.boss-heart-pickup { position: absolute; z-index: 5; transform: translate(-50%, -50%); pointer-events: none; display: grid; justify-items: center; color: #ff905f; }
+.boss-heart-pickup svg { width: 52px; height: 52px; fill: #ff708e; filter: drop-shadow(0 0 8px #ff557baa); animation: boss-heart-hover 1.6s ease-in-out infinite alternate; }
+.boss-heart-pickup small { margin-top: 10px; color: #ffe2ad; white-space: nowrap; font-size: 13px; }
+@keyframes boss-heart-hover { to { transform: translateY(-7px) scale(1.09); } }
+[data-effects-paused="true"] .boss-heart-pickup svg { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .boss-heart-pickup svg { animation: none; } }
