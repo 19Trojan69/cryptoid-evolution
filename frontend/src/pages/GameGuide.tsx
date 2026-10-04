@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import WeaponTutorial from "./WeaponTutorial";
+import BossPhaseGuide from './BossPhaseGuide';
 import { useLocale } from "../i18n";
 import { shipEvolutionAsset } from "./shipEvolution";
 
@@ -41,7 +42,7 @@ const topics = [
       "Advanced and Elite ship stages add protection against enemy projectiles per life. A ship collision still needs a shield to be absorbed.",
       "Enemy hulls have different strengths. Even the first boss needs sustained fire; bosses attack faster as their hull weakens.",
       "After the last turret is destroyed, the core warns you before firing slow pulses. Later bosses alternate patterns. Destroyed turrets stay disabled.",
-      "Each boss turret has its own energy bar. Destroy it to stop its fire and earn extra points once. Larger turrets have more energy and award more points. Turret hits do not damage the hull. Destroying the hull defeats the boss even with turrets intact, but awards no points for those remaining turrets.",
+      "First destroy every turret, each with its own green energy bar and extra points. The hull is protected, even from bombs. After the last turret falls, the boss energy bar appears: attack the hull and dodge the reactor pulses.",
     ],
   },
   {
@@ -124,6 +125,7 @@ const GameGuide = ({ onClose, initialTopic = "controls", backLabel = "Back to sy
         <p>{t(topic.intro)}</p>
         {topic.id === "visuals" && <div className="guide-ship-gallery">{([1, 2, 3] as const).map(stage => <figure key={stage}><img src={shipEvolutionAsset(0, stage)} alt={t(stage === 1 ? "Standard ship" : stage === 2 ? "Advanced ship" : "Elite ship")} loading="lazy" /><figcaption>{t(stage === 1 ? "STANDARD" : stage === 2 ? "ADVANCED" : "ELITE")}</figcaption></figure>)}<figure className="guide-boss-example"><img src="/ships/bosses/boss_01.webp" alt={t("Boss ship")} loading="lazy" /><figcaption>{t("CORE WARDEN")}</figcaption></figure></div>}
         {(topic.id === "boosts" || topic.id === "controls") && <WeaponTutorial />}
+        {topic.id === "survival" && <BossPhaseGuide />}
         <ul>{topic.details.map(detail => <li key={detail}>{t(detail)}</li>)}</ul>
       </section>
       <button className="button button-secondary guide-back" type="button" onClick={onClose}>← {t(backLabel)}</button>

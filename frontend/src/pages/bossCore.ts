@@ -1,11 +1,11 @@
 import type { SectorBoss } from './sectorBoss.ts';
-import { bossVulnerable } from './sectorBoss.ts';
+import { bossVulnerable, bossHullExposed } from './sectorBoss.ts';
 import type { EnemyShot } from './enemyFire.ts';
 import type { PlayerPosition } from './playerCombat.ts';
 
 export type BossCoreState = { elapsed: number; volley: number };
 export const CORE_WARNING_MS = 1800;
-export const coreActive = (boss: SectorBoss) => boss.health > 0 && boss.turrets.length > 0 && boss.turrets.every(g => g.health <= 0);
+export const coreActive = bossHullExposed;
 export const coreInterval = (boss: SectorBoss) => boss.core?.volley ? 2800 - Math.min(49, boss.config.id - 1) * 12 : CORE_WARNING_MS;
 
 // A damaged ship can still pulse from its reactor. No turret is repaired.

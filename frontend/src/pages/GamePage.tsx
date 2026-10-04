@@ -1,4 +1,4 @@
-import { advanceBossCore, coreActive } from './bossCore';
+import { advanceBossCore } from './bossCore';
 import { blockFlights, nextBlockFlight, REINFORCEMENT_WARNING_MS, GROUP_CLEAR_POINTS } from "./blockFlights";
 import { COMBAT_STATE_KEYS, COMBAT_REF_KEYS, readCombatCheckpoint, type CombatCheckpoint } from "../../../backend/src/combatCheckpoint";
 import HullDamage from "./HullDamage";
@@ -43,6 +43,8 @@ import { addPersistentHullFire, hullFireAtImpact, hullFireLimit, spriteFireSites
 import { bossExplosionSize, bossFallTargetY, bossFireSite } from "./bossCombat";
 import { bossHitTarget } from "./bossHitTarget";
 import BossWeaponsView, { preloadBossWeapons } from './BossWeaponsView';
+import BossHealthView from './BossHealthView';
+import BossReactorView from './BossReactorView';
 import { advanceBossTurrets, damageBossTurret, gunPosition } from './bossTurrets';
 import { bossWeapons } from './bossWeapons';
 import { bossEscortAttackInterval, bossEscortCount, bossEscortReinforcements, bossEscortRosterIndex, bossEscortSlots } from "./bossEscorts";
@@ -1455,7 +1457,7 @@ const GamePage = () => {
         const destroyedIds = new Set(visible.map(enemy => enemy.id));
         state.asteroids = state.asteroids.filter(enemy => !destroyedIds.has(enemy.id));
         if (state.boss && state.encounter === "boss-fight") {
-          state.boss.health = Math.max(0, state.boss.health - 18);
+          damageSectorBoss(state.boss, 18, now, true);
           if (state.boss.health === 0) {
             destroyBoss(state, now);
           }
@@ -1731,11 +1733,10 @@ const GamePage = () => {
           {game.boss.config.engineAnchors.map(([x, y], index) => <i key={index} className="boss-engine-flame" style={{ left: `${x * 100}%`, top: `${y * 100}%` }} aria-hidden="true" />)}
           <img className="boss-hull" src={game.boss.config.image} alt="" draggable={false} />
           <BossWeaponsView boss={game.boss}/>
-          {game.encounter === "boss-fight" && coreActive(game.boss) && <><i className="boss-core-glow" aria-hidden="true" /><small className="boss-core-warning" role="status">{t("Core emergency attack — dodge the pulses!")}</small></>}
-          <small className="boss-turret-count">{t("Boss turrets")}: {game.boss.turrets.filter(gun => gun.health > 0).length}/{game.boss.turrets.length}</small>
+          <BossReactorView boss={game.boss}/>
           <i className="hull-reflection" style={{ maskImage: `url('${game.boss.config.image}')`, WebkitMaskImage: `url('${game.boss.config.image}')`, opacity: game.bossHullLight }} aria-hidden="true" />
           <HullDamage sites={game.boss.hullFires} hit={game.boss.hit} maskImage={`url('${game.boss.config.image}')`} bossDamage={1 - game.boss.health / game.boss.maxHealth} />
-          <span className="health-bar" data-critical={game.boss.health / game.boss.maxHealth <= .3} role="progressbar" aria-label={t("Boss hull")} aria-valuenow={Math.ceil(game.boss.health / game.boss.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${game.boss.health / game.boss.maxHealth * 100}%` }} /><small className="boss-health-readout">{Math.ceil(game.boss.health / game.boss.maxHealth * 100)}%</small></span>
+          <BossHealthView boss={game.boss}/>
         </div>}
         {game.bonusTargets.map(target => <div key={target.id} className="asteroid asteroid-small cryptoid bonus-ship cryptoid-boost" style={{ ...alignedSpritePosition(target.x, target.y, target.sprite, 50), transform: "translate(-50%, -50%)", "--flame-length": `${engineFlamePercent(target.visualMotion?.thrust ?? 0)}%` } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={target.sprite} color={target.color} />{engineTrails(target.sprite, "exhaust")}</div></div>)}
         {game.asteroids.map(asteroid => { const sprite = asteroid.sprite; const maskImage = `url('${shipEvolutionAsset(sprite, 1)}')`; return <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid${game.empMs > 0 ? " cryptoid-emp" : ""} cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.hitUntil && asteroid.hitUntil > performance.now() ? " cryptoid-hit" : ""}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}${cryptoidMotionClass(asteroid)}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ ...alignedSpritePosition(asteroid.x, asteroid.y, sprite, asteroid.radius * 2), transform: `translate(-50%, -50%) rotate(${asteroid.rotation}deg)`, ...shipHullStyle(sprite, true), "--visual-bank": `${asteroid.visualMotion?.bank ?? 0}deg`, "--flame-length": `${engineFlamePercent(asteroid.visualMotion?.thrust ?? 0, asteroid.returnElapsed > 0 ? "return" : asteroid.entryElapsed < asteroid.entryDuration ? "launch" : asteroid.attackPattern !== null && asteroid.attackDelay <= 0 ? "boost" : "idle")}%`, "--hull-light": asteroid.hullLight ?? 0 } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={sprite} color={asteroid.color} />{engineTrails(sprite, "exhaust")}<i className="hull-reflection" style={{ maskImage, WebkitMaskImage: maskImage }} aria-hidden="true" /><HullDamage sites={asteroid.hullFires} hit={asteroid.hit} maskImage={maskImage} mirrored /></div><span className="health-bar" data-critical={asteroid.health / asteroid.maxHealth <= .3} role="progressbar" aria-label={t("Enemy hull")} aria-valuenow={Math.ceil(asteroid.health / asteroid.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${asteroid.health / asteroid.maxHealth * 100}%` }} /></span></div>; })}

@@ -102,6 +102,8 @@ test("the boss descends smoothly only during its final 20 percent of health", ()
 
 test("the opening boss takes three times its former number of hits", () => {
   const boss = createSectorBoss(10, 375);
+  boss.elapsed = BOSS_ENTRY_MS;
+  boss.turrets.forEach(gun => gun.health = 0);
   for (let hit = 0; hit < Math.ceil(boss.maxHealth); hit++) {
     assert.equal(damageSectorBoss(boss, 1, hit * 320), true);
   }
@@ -116,6 +118,8 @@ test("boss entry can begin below the measured HUD instead of behind it", () => {
 
 test("a boss takes one hit per volley and survives opening fire without a shield", () => {
   const boss = createSectorBoss(10, 375);
+  boss.elapsed = BOSS_ENTRY_MS;
+  boss.turrets.forEach(gun => gun.health = 0);
   assert.equal(damageSectorBoss(boss, 2, 1000), true);
   assert.equal(damageSectorBoss(boss, 2, 1000), false);
   assert.equal(damageSectorBoss(boss, 2, 1100), false);

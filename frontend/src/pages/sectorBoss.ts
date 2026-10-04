@@ -55,8 +55,11 @@ export const bossFireInterval = (boss: SectorBoss, level = 1) => {
   return (boss.health <= boss.maxHealth / 2 ? 1_900 : BOSS_FIRE_INTERVAL_MS) - levelReduction;
 };
 
-export const damageSectorBoss = (boss: SectorBoss, damage: number, time: number) => {
-  if (time - boss.lastDamageAt < 180) return false;
+export const bossHullExposed = (boss: SectorBoss) => boss.health > 0 && boss.turrets.length > 0 && boss.turrets.every(gun => gun.health <= 0);
+
+export const damageSectorBoss = (boss: SectorBoss, damage: number, time: number, ignoreHitCooldown = false) => {
+  if (!bossVulnerable(boss) || !bossHullExposed(boss) || !Number.isFinite(damage) || damage <= 0) return false;
+  if (!ignoreHitCooldown && time - boss.lastDamageAt < 180) return false;
   boss.lastDamageAt = time;
   boss.health = Math.max(0, boss.health - damage);
   return true;
