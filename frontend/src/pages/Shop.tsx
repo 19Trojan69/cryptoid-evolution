@@ -1,5 +1,5 @@
 import SystemSettings, { applySavedDisplaySettings, type SettingsSection } from "./SystemSettings";
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import QuickAccessMenu, { type QuickAction } from "../components/QuickAccessMenu";
 import type { GuideTopic } from "./GameGuide";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -12,8 +12,7 @@ import { accountSelection, loadAccountSave, localInventory, mutateAccountInvento
 import { usePayments } from "../hooks/usePayments";
 import { axiosClient } from "../lib/axiosClient.ts";
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "./GamePage.tsx";
-import { allPlayerColors, buyShipVariant, standardShipPrice, fleetCount, playerColors, playerSkins, readShipFleet, savedShipColors, selectedShip, shardBalance, shipSaveNetwork, testnetStandardHullAvailable, ADMIN_SHIP_COLOR_KEY, ADMIN_SHIP_SKIN_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, type PlayerColorId, type ShipFleet } from "./shipFleet";
-import PaintedShip from "./PaintedShip";
+import { allPlayerColors, buyShipVariant, standardShipPrice, fleetCount, playerColors, playerSkins, readShipFleet, savedShipColors, selectedShip, shardBalance, shipSaveNetwork, testnetStandardHullAvailable, ADMIN_SHIP_COLOR_KEY, ADMIN_SHIP_SKIN_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, type ShipFleet } from "./shipFleet";
 import { ownedShipStage, shipEvolutionAsset, type ShipStage } from "./shipEvolution";
 import { shipPreviewPlacement } from "./shipPreviewPlacement";
 import ShipSelectionPanel from "./ShipSelectionPanel";
@@ -28,6 +27,7 @@ import HomeCombatPreview from "./HomeCombatPreview";
 import GameGuide from "./GameGuide";
 import WeaponTutorial from "./WeaponTutorial";
 import WeaponPurchase from './WeaponPurchase';
+import WeaponPreview from './WeaponPreview';
 import { bossName } from './bossNames';
 import { useLocale } from "../i18n";
 import EarthGlobe from "./EarthGlobe";
@@ -54,17 +54,6 @@ const shopTabs = [
 
 const powerTypeForOffer = (offerId: string): PowerUpType => offerId.includes("shield") ? "shield" : offerId.includes("rapid") ? "rapid" : offerId.includes("bomb") ? "bomb" : offerId.includes("emp") ? "emp" : "overdrive";
 const adminFleet: ShipFleet = Object.fromEntries(playerSkins.map(skin => [skin.id, Object.fromEntries(playerColors.map(color => [color.id, 1]))])) as ShipFleet;
-
-const WeaponPreview = ({ offerId, sprite, color }: { offerId: string; sprite: number; color: PlayerColorId }) => {
-  const { t } = useLocale();
-  const shotCount = offerId.includes("triple") || offerId.includes("plasma") ? 3 : 2;
-  return <div className={`offer-preview weapon-preview${offerId.includes("rapid") ? " weapon-preview-rapid" : ""}${offerId.includes("plasma") ? " weapon-preview-plasma" : ""}`} aria-hidden="true">
-    <span className="preview-grid" />
-    <span className="preview-ship"><PaintedShip sprite={sprite} color={color} /></span>
-    <span className="preview-volley">{Array.from({ length: shotCount }, (_, index) => <i key={index} style={{ "--shot-offset": `${(index - (shotCount - 1) / 2) * 19}px`, "--shot-delay": `${index * -.12}s` } as CSSProperties} />)}</span>
-    <small>{t("Live fire test")}</small>
-  </div>;
-};
 
 const PowerPreview = ({ offerId }: { offerId: string }) => {
   const { t } = useLocale();
@@ -364,7 +353,7 @@ const Shop = () => {
     void signIn();
   }, [signIn]);
 
-  const { orderProduct, isLoading, paymentDiagnostic } = usePayments({
+  const { orderProduct, isLoading, paymentDiagnostic, activeProductId, paymentStatus } = usePayments({
     isAuthenticated,
     onRequireAuth: requireAuth,
   });
@@ -618,7 +607,7 @@ const Shop = () => {
             const lockedWeapon = kind === "weapon" && !testnetWeaponEnabled;
             return <article key={offer.id} className={`hangar-offer hangar-offer-${kind}${selected ? " hangar-offer-selected" : ""}`}>{kind === "weapon" ? <WeaponPreview offerId={offer.id} sprite={selectedShip().skin.sprite} color={selectedShip().color.id} /> : <PowerPreview offerId={offer.id} />}<h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span className="offer-purchase-price">{lockedWeapon || kind === "power" ? <>{t("Planned price")}: {piPrice(offer.pricePi)}</> : piPrice(offer.pricePi, true)}</span><span>{lockedWeapon ? shipSaveNetwork === "testnet" ? t("MAINNET READY") : t("Currently locked") : kind === "weapon" ? t("1 minute per charge") : t("MAINNET READY")}</span><strong>{lockedWeapon ? t("Locked") : selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : t("Owned — activate in game") : kind === "power" ? t("Locked") : t("NOT OWNED")}</strong>{lockedWeapon && <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? t("Available only as a weapon pickup on Testnet.") : t("Available only as a weapon pickup.")}</p>}<div>
               {owned && kind === "power" ? <button className="button button-secondary" type="button" disabled={Boolean(selected)} onClick={() => equip(null, offer.id)}>{t(selected ? "Selected" : "Equip for next mission")}</button> : null}
-              {kind === "weapon" && !lockedWeapon && <WeaponPurchase id={offer.id} price={offer.pricePi} count={inventory?.weaponStock?.[offer.id] || 0} disabled={adminMode || isLoading || !catalogReady} onBuy={(quantity, total) => { void orderProduct(`Cryptoid ${offer.name} · ${quantity} × 60s · Test-Pi`, total, { productId: offer.id, quantity, weaponModel: 2 }, () => { setLoadoutMessage("purchase confirmed."); void refreshInventory(); }); }} />}
+              {kind === "weapon" && !lockedWeapon && <WeaponPurchase id={offer.id} price={offer.pricePi} count={inventory?.weaponStock?.[offer.id] || 0} pending={isLoading && activeProductId === offer.id} status={activeProductId === offer.id ? paymentStatus : undefined} diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined} disabled={adminMode || isLoading || !catalogReady} onBuy={(quantity, total) => { void orderProduct(`Cryptoid ${offer.name} · ${quantity} × 60s · Test-Pi`, total, { productId: offer.id, quantity, weaponModel: 2 }, async () => { setLoadoutMessage("purchase confirmed."); await refreshInventory(); }); }} />}
             </div></article>;
           })}
         </div></div>)}
@@ -627,7 +616,7 @@ const Shop = () => {
         </div></div>}
         {inventory?.equippedWeapon && <p className="testnet-shop-notice">{t("An older weapon selection is saved but no longer activates automatically. Every mission starts with the single laser.")}</p>}
         {inventory?.selectedPower && <button className="text-button" type="button" onClick={() => equip(inventory.equippedWeapon, null)}>{t('Save bonus for a later mission')}</button>}
-        {paymentDiagnostic && <p className="testnet-shop-notice" role="alert"><strong>{t("Payment diagnostics:")}</strong> {t("Payment could not be confirmed. Check your account and retry.")}</p>}
+        {paymentDiagnostic && !activeProductId && <p className="testnet-shop-notice" role="alert"><strong>{t("Payment diagnostics:")}</strong> {t("Payment could not be confirmed. Check your account and retry.")}</p>}
         {loadoutMessage && <p role="status">{t(loadoutMessage)}</p>}
       </section>}
           </div>

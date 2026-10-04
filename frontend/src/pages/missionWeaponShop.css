@@ -8,3 +8,16 @@
 .mission-weapon-offers h3 span { color: #f1d490; }
 .mission-weapon-shop .modal-actions { position: static; padding-block: 12px; background: #091827; }
 @media (max-width: 700px) { .mission-weapon-offers { grid-template-columns: 1fr; } }
+
+.pause-settings-modal:has(.mission-weapon-shop) { padding: 18px; }
+.mission-weapon-shop { font-family: system-ui, sans-serif; }
+.mission-weapon-shop > h2 { margin: 0 0 8px; font: 650 22px/1.2 system-ui, sans-serif; }
+.mission-weapon-shop > p { margin: 8px 0; font: 400 13px/1.45 system-ui, sans-serif; }
+.mission-weapon-shop .testnet-shop-notice { padding: 10px 12px; border: 0; border-left: 2px solid #b3996b; border-radius: 0; background: #cab17d09; color: #c9b896; }
+.mission-weapon-offers .hangar-offer { gap: 8px; padding: 12px; border: 1px solid #3b475960; border-radius: 12px; clip-path: none; background: linear-gradient(150deg, #19283d, #101b2c); box-shadow: inset 0 1px #ffffff08; }
+.mission-weapon-offers .hangar-offer h3 { margin: 2px 0 0; color: #f1f4fa; font: 650 17px/1.25 system-ui, sans-serif; }
+.mission-weapon-offers .hangar-offer h3 span { color: #c6ac7a; font-size: 12px; }
+.mission-weapon-offers .hangar-offer > p { min-height: 0; margin: 0; color: #abbcd0; font: 400 12px/1.4 system-ui, sans-serif; }
+.mission-weapon-offers .hangar-offer > strong { font: 500 10px/1.2 system-ui, sans-serif; color: #92cbb8; }
+.mission-weapon-shop .modal-actions { display: flex; gap: 8px; background: transparent; }
+.mission-weapon-shop .modal-actions .button { min-height: 42px; padding: 8px 14px; font: 600 13px/1.2 system-ui, sans-serif; }

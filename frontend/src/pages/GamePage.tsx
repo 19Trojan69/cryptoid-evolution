@@ -1853,7 +1853,6 @@ const GamePage = () => {
             if (state.status !== 'paused') return;
             setWeaponStock(stock);
             setGame({ ...state });
-            await saveCombat();
           }} /> : <>
           <p className="eyebrow" id="pause-settings-title">{t('MISSION PAUSED')}</p><h1><span className="desktop-menu-only">{t('Hold the line.')}</span><span className="mobile-menu-only">{t('A short breather.')}</span></h1><p><span className="desktop-menu-only">{t('The asteroids are waiting.')}</span><span className="mobile-menu-only">{t("Level")} {levelLabel} · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/9` : game.encounter === "bonus" ? t("Bonus round") : t("Boss")} · {sectorName(game.sector)}</span></p>
           {accountRun && saveNotice && <section className="pause-save-status" aria-label={t("Account save")}>

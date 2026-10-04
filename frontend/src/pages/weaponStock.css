@@ -1,12 +1,28 @@
-.weapon-purchase { display: grid; gap: .65rem; margin-top: .8rem; }
-.weapon-purchase input { width: 100%; min-height: 44px; padding: .65rem; color: #edfaff; background: #102538; border: 1px solid #7698aa; border-radius: 8px; font: inherit; }
-.weapon-quantity-presets { display: flex; gap: .5rem; }
-.weapon-quantity-presets button { min-width: 44px; min-height: 40px; color: #e5f7ff; background: #18374a; border: 1px solid #80b5cb; border-radius: 6px; }
-.weapon-purchase .button { width: 100%; min-height: 48px; white-space: normal; }
-.weapon-purchase .weapon-buy-button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 14px 12px; height: auto; min-width: 0; line-height: 1.4; text-align: center; }
-.weapon-purchase .weapon-buy-button > span { max-width: 100%; overflow-wrap: normal; word-break: normal; }
-.weapon-purchase .weapon-buy-button:disabled { opacity: 1; color: #d6deea; background: #29364a; }
-.weapon-purchase .weapon-purchase-reason { margin: 0; color: #f1d490; line-height: 1.5; }
+/* Scoped controls deliberately do not inherit the old hangar button layout. */
+.hangar-offer .weapon-purchase, .hangar-offer > .weapon-purchase:last-child { display: grid; width: 100%; gap: 10px; margin-top: 4px; min-width: 0; }
+.hangar-offer .weapon-purchase p { min-height: 0; margin: 0; font: 400 13px/1.45 system-ui, sans-serif; color: #b6c3d3; }
+.hangar-offer .weapon-purchase .weapon-stock-count strong { color: #edf4fc; font: 600 13px/1.45 system-ui, sans-serif; }
+.weapon-purchase .weapon-purchase-controls { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 6px; }
+.weapon-purchase .weapon-quantity-control { flex: 0 0 54px; }
+.weapon-quantity-control label { display: block; margin: 0 0 5px; color: #aab9cc; font: 500 11px/1.2 system-ui, sans-serif; }
+.weapon-purchase .weapon-quantity-control input { box-sizing: border-box; width: 54px; height: 42px; min-height: 42px; padding: 0 5px; color: #f1f5fb; background: #0b1727; border: 1px solid #506179; border-radius: 7px; font: 600 16px system-ui, sans-serif; text-align: center; appearance: textfield; }
+.weapon-quantity-control input::-webkit-inner-spin-button, .weapon-quantity-control input::-webkit-outer-spin-button { appearance: none; margin: 0; }
+.weapon-purchase .weapon-quantity-presets { display: flex; gap: 3px; }
+.hangar-offer .weapon-purchase .weapon-quantity-presets button { display: grid; place-items: center; flex: none; width: 36px; min-width: 36px; height: 42px; min-height: 42px; margin: 0; padding: 0; border: 1px solid #36465c; border-radius: 7px; clip-path: none; background: linear-gradient(#223149, #172237); box-shadow: inset 0 1px #ffffff0b; color: #c3cede; font: 500 12px system-ui, sans-serif; touch-action: manipulation; }
+.hangar-offer .weapon-purchase .weapon-quantity-presets button[aria-pressed="true"] { color: #f2d8a3; border-color: #b59865; background: linear-gradient(#39382f, #232b36); }
+.hangar-offer .weapon-purchase .weapon-buy-button { position: relative; display: flex; flex: 1 0 112px; align-items: center; justify-content: center; gap: 8px; width: auto; min-width: 112px; height: 42px; min-height: 42px; margin: 0; padding: 0 9px; border: 1px solid #c6aa75; border-radius: 8px; clip-path: none; background: linear-gradient(160deg, #5a4b34, #302d29 52%, #403629); box-shadow: inset 0 1px #ffe4aa33, 0 2px 6px #0003; color: #f6e3bd; cursor: pointer; touch-action: manipulation; }
+.hangar-offer .weapon-purchase .weapon-buy-button :is(span, strong) { color: inherit; font-family: system-ui, sans-serif; }
+.hangar-offer .weapon-purchase .weapon-buy-button .pi-price { font-size: 15px; gap: 3px; white-space: nowrap; }
+.hangar-offer .weapon-purchase .weapon-buy-button .pi-price-amount { font: inherit; }
+.hangar-offer .weapon-purchase .weapon-buy-button .pi-price-test { border: 0; background: transparent; padding: 0; font-size: 9px; color: #d1c1a6; }
+.hangar-offer .weapon-purchase .weapon-buy-button:active:not(:disabled) { background: #615137; transform: translateY(1px); }
+.hangar-offer .weapon-purchase .weapon-buy-button:disabled { opacity: 1; border-color: #425168; color: #b3bfd1; background: #1d293b; cursor: default; }
+.weapon-purchase :is(button, input):focus-visible { outline: 2px solid #edd3a2; outline-offset: 2px; }
+.weapon-purchase .weapon-payment-spinner { width: 14px; height: 14px; flex: 0 0 14px; border: 2px solid #c5a87155; border-top-color: #f8dfb1; border-radius: 50%; animation: weapon-payment-spin .8s linear infinite; }
+@keyframes weapon-payment-spin { to { transform: rotate(360deg); } }
+.hangar-offer .weapon-purchase .weapon-purchase-status { color: #e7d1a7; }
+.hangar-offer .weapon-purchase .weapon-purchase-error { color: #ffc6b9; }
+.weapon-purchase-error small { display: block; margin-top: 4px; overflow-wrap: anywhere; font: 11px/1.4 system-ui, sans-serif; color: #d6b2ac; }
 .weapon-wheel { max-width: min(360px, 92vw); max-height: 65dvh; overflow-y: auto; pointer-events: auto; }
 .weapon-wheel > p { grid-column: 1/-1; color: #ffccae; font-size: 14px; }
 .weapon-resume-countdown { pointer-events: auto; background: #06132266; }
