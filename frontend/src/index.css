@@ -681,7 +681,10 @@ html[data-motion="reduced"] .hull-reflection { display: none; }
 .ship-debris-piece-4 { right: 0; bottom: 0; animation: debris-south-east 1.35s cubic-bezier(.16, .64, .24, 1) both; }
 .ship-debris-piece-4 b, .ship-debris-piece-4 > .ship-debris-sprite { right: 0; bottom: 0; }
 .boss-explosion .ship-debris-piece { animation-duration: 1.8s; }
-.boss-falling-hull { position: absolute; z-index: 5; pointer-events: none; transform: translate(-50%, -50%); animation: boss-hull-descent var(--boss-fall-duration, 2.8s) ease-in-out both; }
+.boss-falling-hull { position: absolute; z-index: 5; pointer-events: none; transform: translate(-50%, -50%); animation: boss-hull-descent var(--boss-fall-duration, 5s) cubic-bezier(.4, 0, .8, 1) both; }
+.boss-shedding { position: absolute; inset: 0; pointer-events: none; }
+.boss-shedding i { position: absolute; width: 6%; height: 8%; background-size: 700% 700%; clip-path: polygon(8% 12%, 72% 0, 100% 48%, 64% 100%, 0 76%); filter: drop-shadow(0 0 3px #ffb56a); opacity: 0; animation: boss-shed-piece 1.6s ease-in both; }
+@keyframes boss-shed-piece { 0% { opacity: 0; transform: translate(0, 0) rotate(0); } 8%, 65% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--shed-x), 85px) rotate(var(--shed-spin)); } }
 .boss-falling-hull > img { display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 16px #ff683eaa); }
 .boss-fall-bursts { position: absolute; inset: 0; }
 .boss-fall-bursts i { position: absolute; width: 13%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, #fff 0 8%, #ffe6a4 14%, #ff992f 35%, #ee451a 56%, transparent 74%); filter: drop-shadow(0 0 7px #ff9d41); opacity: 0; animation: boss-hull-burst .62s ease-out both; }
@@ -730,9 +733,6 @@ html[data-motion="reduced"] .boss-explosion .scattered-debris-piece { animation-
 @keyframes destruction-smoke { 0%, 14% { opacity: 0; transform: scale(.42); } 30% { opacity: .28; transform: translate(2%, -5%) scale(.85, .78); } 55% { opacity: .58; transform: translate(-3%, -12%) scale(1.14, 1.03); } 100% { opacity: 0; transform: translate(3%, -25%) scale(1.5, 1.3); } }
 @keyframes boss-hull-descent {
   0% { opacity: 1; transform: translate(-50%, -50%) rotate(0); }
-  25% { transform: translate(calc(-50% - 10px), calc(-50% + var(--boss-fall-quarter))) rotate(-1.4deg); }
-  50% { transform: translate(calc(-50% + 11px), calc(-50% + var(--boss-fall-half))) rotate(1.6deg); }
-  75% { transform: translate(calc(-50% - 8px), calc(-50% + var(--boss-fall-three-quarters))) rotate(-1deg); }
   97% { opacity: 1; transform: translate(-50%, calc(-50% + var(--boss-fall-distance))) rotate(0); }
   100% { opacity: 0; transform: translate(-50%, calc(-50% + var(--boss-fall-distance))) rotate(0); }
 }
@@ -747,12 +747,19 @@ html[data-motion="reduced"] .boss-explosion .scattered-debris-piece { animation-
 @keyframes hit-flash { from { opacity: 1; transform: scale(.5); } to { opacity: 0; transform: scale(1.7); } }
 @keyframes explode { from { opacity: 1; transform: scale(.35); } to { opacity: 0; transform: scale(1.25); } }
 @media (prefers-reduced-motion: reduce) {
-  .boss-falling-hull { animation-duration: 1.55s; }
+  .boss-shedding { display: none; }
   .boss-fall-bursts i { animation-duration: .45s; }
   .boss-debris-piece { animation-duration: .8s; animation-delay: 0s; }
   .boss-debris-piece:nth-child(n+5) { display: none; }
 }
 html[data-motion="reduced"] .boss-fall-bursts i { animation-duration: .45s; }
+html[data-motion="reduced"] .boss-shedding { display: none; }
+.game-shell[data-effects-paused="true"] .boss-falling-hull,
+.game-shell[data-effects-paused="true"] .boss-falling-hull *,
+.game-shell[data-effects-paused="true"] .boss-explosion,
+.game-shell[data-effects-paused="true"] .boss-explosion *,
+.game-shell[data-effects-paused="true"] .boss-explosion::before,
+.game-shell[data-effects-paused="true"] .boss-explosion::after { animation-play-state: paused !important; }
 html[data-motion="reduced"] .boss-debris-piece { animation-duration: .8s; animation-delay: 0s; }
 html[data-motion="reduced"] .boss-debris-piece:nth-child(n+5) { display: none; }
 .earth { position: absolute; z-index: 0; bottom: -16vw; left: 50%; width: min(110vw, 930px); aspect-ratio: 1; transform: translateX(-50%); text-align: center; }

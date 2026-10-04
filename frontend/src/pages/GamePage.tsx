@@ -51,8 +51,10 @@ const GAME_OVER_REVEAL_MS = 1_750;
 const ENTRY_HUD_GAP_PX = 8;
 const BOSS_VICTORY_VOLUME_BOOST = 1.6;
 // Let the deep impact lead before its long tail overlaps the victory cue.
-const BOSS_FALL_DURATION_MS = 2_800;
-const BOSS_CLEAR_DURATION_MS = 6_400;
+const BOSS_FALL_DURATION_MS = 5_000;
+const BOSS_VICTORY_START_MS = BOSS_FALL_DURATION_MS + 650;
+// The complete victory recording is 3.408 seconds, including its release.
+const BOSS_CLEAR_DURATION_MS = BOSS_VICTORY_START_MS + 3_700;
 const pickupEffectLabels: Record<PowerUpType, string> = {
   shield: "Blocks the next hit", overdrive: "Double shot damage", weapon: "Weapon level", rapid: "Faster automatic fire", bomb: "Clears enemies and shots", emp: "Freezes enemies for 7s",
 };
@@ -319,6 +321,7 @@ const fallingBoss = (effect: Effect) => <div className="boss-falling-hull" style
   <img src={effect.bossImage} alt="" draggable={false} />
   {effect.bossModel && <BossWeaponsView boss={effect.bossModel} frozen/>}
   <div className="boss-fall-bursts">{effect.fireSites?.map(([x, y], index) => <i key={index} style={{ left: `${x}%`, top: `${y}%`, animationDelay: `${index * .3}s` }} />)}</div>
+  <div className="boss-shedding">{effect.fireSites?.map(([x, y], index) => <i key={index} style={{ left: `${x}%`, top: `${y}%`, backgroundImage: `url('${effect.bossImage}')`, backgroundPosition: `${x}% ${y}%`, "--shed-x": `${(index % 2 ? 1 : -1) * (18 + index * 5)}px`, "--shed-spin": `${(index % 2 ? -1 : 1) * (70 + index * 19)}deg`, animationDelay: `${.35 + index * .43}s` } as CSSProperties} />)}</div>
 </div>;
 
 // Effects keep their object identity until they expire. Keep the fragments and
@@ -406,8 +409,8 @@ const GamePage = () => {
   const soundRef = useRef<GameAudio | null>(null);
   useEffect(()=>{if(game.boss)void preloadBossWeapons(game.boss.config).catch(()=>{});},[game.boss?.config]);
   const bossVictoryPendingRef = useRef(false);
-  const bossVictoryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const bossDestroyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const bossVictoryFinishedRef = useRef(false);
+  const bossDestroyPlayedRef = useRef(false);
   const audioCleanupRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const gameOverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const startRequestRef = useRef(false);
@@ -576,6 +579,15 @@ const GamePage = () => {
     void fetch("/audio/boss-victory-v2.mp3").catch(() => {});
     const track = takeHandoffGameMusic() ?? new MusicPlayer("/audio/battle-orbit.mp3", readMusicVolume());
     musicRef.current = track;
+    const finishVictoryMusic = () => {
+      if (stateRef.current.encounter !== "boss-clear" || track.currentSource !== "/audio/boss-victory-v2.mp3") return;
+      bossVictoryFinishedRef.current = true;
+      track.setSource("/audio/battle-orbit.mp3", regularMusicPositionRef.current);
+      track.audio.loop = true;
+      track.setVolume(readMusicVolume());
+      if (stateRef.current.status === "playing") void track.play();
+    };
+    track.audio.addEventListener("ended", finishVictoryMusic);
     const resume = () => {
       if (document.visibilityState === "hidden" || (backgroundHiddenAtRef.current && Date.now() - backgroundHiddenAtRef.current > 1_000) || !["playing", "game-over", "victory"].includes(stateRef.current.status)) return;
       void track.play().then(ok => { if (ok && (readEffectsVolume() === 0 || soundRef.current?.running)) setAudioNeedsTap(false); });
@@ -596,6 +608,7 @@ const GamePage = () => {
       document.removeEventListener("visibilitychange", resume);
       window.removeEventListener("pageshow", resume);
       window.removeEventListener("focus", resume);
+      track.audio.removeEventListener("ended", finishVictoryMusic);
       track.close();
       if (musicRef.current === track) musicRef.current = null;
     };
@@ -608,16 +621,16 @@ const GamePage = () => {
     const desiredSource = game.status === "game-over" ? "/audio/last-signal.mp3"
       : game.status === "victory" ? "/audio/beyond-the-last-star.mp3"
       : game.encounter === "boss-clear"
-      ? waitingForExplosion ? "/audio/dreadnought-duel.mp3" : "/audio/boss-victory-v2.mp3"
+      ? waitingForExplosion ? "/audio/dreadnought-duel.mp3" : bossVictoryFinishedRef.current ? normalSource : "/audio/boss-victory-v2.mp3"
       : game.encounter === "boss-intro" || game.encounter === "boss-fight"
         ? "/audio/dreadnought-duel.mp3"
         : normalSource;
-    track.audio.loop = game.status === "playing" && game.encounter !== "boss-clear";
+    track.audio.loop = game.status === "playing" && (game.encounter !== "boss-clear" || waitingForExplosion || bossVictoryFinishedRef.current);
     if (track.currentSource !== desiredSource) {
       if (track.currentSource === normalSource) regularMusicPositionRef.current = track.audio.currentTime || 0;
       track.setSource(desiredSource, desiredSource === normalSource ? regularMusicPositionRef.current : 0);
     }
-    if ((game.status === "playing" && !waitingForExplosion) || game.status === "game-over" || game.status === "victory") void track.play().then(ok => {
+    if (game.status === "playing" || game.status === "game-over" || game.status === "victory") void track.play().then(ok => {
       if (game.status === "game-over" || game.status === "victory") setAudioNeedsTap(!ok);
       else if (!ok) setAudioNeedsTap(true);
     });
@@ -629,20 +642,13 @@ const GamePage = () => {
       : musicVolume;
     musicRef.current?.setVolume(volume);
   }, [musicVolume, game.encounter]);
-  const startBossVictory = (leadMs: number) => {
-    if (bossVictoryTimerRef.current !== null) return;
-    bossVictoryPendingRef.current = true;
-    musicRef.current?.pause();
-    bossVictoryTimerRef.current = window.setTimeout(() => {
-      bossVictoryTimerRef.current = null;
-      bossVictoryPendingRef.current = false;
-      if (stateRef.current.encounter !== "boss-clear") return;
-      const track = musicRef.current;
-      if (!track) return;
-      track.audio.loop = false;
-      track.setSource("/audio/boss-victory-v2.mp3");
-      if (stateRef.current.status === "playing") void track.play();
-    }, leadMs);
+  const startBossVictory = () => {
+    bossVictoryPendingRef.current = false;
+    const track = musicRef.current;
+    if (!track) return;
+    track.audio.loop = false;
+    track.setSource("/audio/boss-victory-v2.mp3");
+    void track.play();
   };
   const saveReward = (award: (progress: RewardProgress) => { progress: RewardProgress; notice: string }, event: { kind: "block" | "boss" | "chain" | "bonus"; level: number; stage: number; hits?: number }) => {
     if (adminRunRef.current) return "";
@@ -672,14 +678,10 @@ const GamePage = () => {
     soundRef.current?.play("explosion");
     gameHaptics.explosion();
     gameHaptics.boss([25, 420, 30, 420, 35, 420, 40, 420, 45, 420, 50]);
-    if (bossDestroyTimerRef.current !== null) window.clearTimeout(bossDestroyTimerRef.current);
-    bossDestroyTimerRef.current = window.setTimeout(() => {
-      bossDestroyTimerRef.current = null;
-      if (stateRef.current.encounter !== "boss-clear" || stateRef.current.status !== "playing") return;
-      soundRef.current?.play("bossDestroy");
-      gameHaptics.boss([140, 70, 230]);
-    }, finalDelayMs);
-    startBossVictory(finalDelayMs + 850);
+    bossDestroyPlayedRef.current = false;
+    bossVictoryPendingRef.current = true;
+    bossVictoryFinishedRef.current = false;
+    clearTimerRef.current = 0;
     state.score += bossPoints(state.sector);
     creditComboDefeat(state, bossShardReward(state.sector), elapsedRef.current);
     state.rewardNotice = saveReward(progress => {
@@ -694,10 +696,6 @@ const GamePage = () => {
     state.enemyShots = [];
     state.boss = null;
   };
-  useEffect(() => () => {
-    if (bossVictoryTimerRef.current !== null) window.clearTimeout(bossVictoryTimerRef.current);
-    if (bossDestroyTimerRef.current !== null) window.clearTimeout(bossDestroyTimerRef.current);
-  }, []);
   const changeEffectsVolume = (value: number) => {
     localStorage.setItem(EFFECTS_VOLUME_KEY, String(value));
     setEffectsVolume(value);
@@ -810,6 +808,12 @@ const GamePage = () => {
       const frameGap = time - (lastFrameRef.current || time);
       const delta = Math.min(34, frameGap);
       lastFrameRef.current = time;
+      // Preserve destruction effects through a user pause or a backgrounded tab.
+      if (state.status !== "playing") {
+        for (const effect of state.effects) {
+          if (effect.kind === "boss-fall" || effect.kind === "boss-explosion") effect.startedAt += frameGap;
+        }
+      }
       if (state.status === "playing") {
         const field = fieldRef.current;
         const width = field?.clientWidth || 800;
@@ -872,7 +876,16 @@ const GamePage = () => {
         sectionElapsedRef.current += delta;
         if (state.phase === "SECTOR_CLEAR") {
           clearTimerRef.current += delta;
-          if (clearTimerRef.current >= (state.encounter === "boss-clear" ? BOSS_CLEAR_DURATION_MS : SECTION_CLEAR_MS)) {
+          if (state.encounter === "boss-clear") {
+            if (!bossDestroyPlayedRef.current && clearTimerRef.current >= BOSS_FALL_DURATION_MS) {
+              bossDestroyPlayedRef.current = true;
+              soundRef.current?.play("bossDestroy");
+              gameHaptics.boss([140, 70, 230]);
+            }
+            if (bossVictoryPendingRef.current && clearTimerRef.current >= BOSS_VICTORY_START_MS) startBossVictory();
+          }
+          const victoryStillPlaying = state.encounter === "boss-clear" && musicRef.current?.currentSource === "/audio/boss-victory-v2.mp3" && musicRef.current.playing && !musicRef.current.audio.ended;
+          if (clearTimerRef.current >= (state.encounter === "boss-clear" ? BOSS_CLEAR_DURATION_MS : SECTION_CLEAR_MS) && !victoryStillPlaying) {
             if (state.encounter === "bonus" && state.sector === MAX_DIFFICULTY_LEVEL) {
               if (!recordsSavedRef.current) {
                 if (!adminRunRef.current && !scoreRunRef.current) saveRecords(state);
@@ -1247,7 +1260,7 @@ const GamePage = () => {
           });
         }
         if (state.phase === "SECTOR_CLEAR") state.enemyShots = [];
-        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "boss-fall" ? BOSS_FALL_DURATION_MS + 100 : effect.kind === "boss-explosion" ? 6_200 : effect.kind === "player-explosion" ? 2_250 : effect.kind === "player-crash" ? 1_350 : effect.kind === "explosion" || effect.kind === "shatter" ? 2_250 : 390));
+        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "boss-fall" ? BOSS_FALL_DURATION_MS + 100 : effect.kind === "boss-explosion" ? BOSS_FALL_DURATION_MS + 3_400 : effect.kind === "player-explosion" ? 2_250 : effect.kind === "player-crash" ? 1_350 : effect.kind === "explosion" || effect.kind === "shatter" ? 2_250 : 390));
         if (state.hearts === 0) {
           state.status = "destroying";
           state.enemyShots = [];
@@ -1421,11 +1434,9 @@ const GamePage = () => {
   }, []);
 
   const restart = () => {
-    if (bossVictoryTimerRef.current !== null) window.clearTimeout(bossVictoryTimerRef.current);
-    bossVictoryTimerRef.current = null;
-    if (bossDestroyTimerRef.current !== null) window.clearTimeout(bossDestroyTimerRef.current);
-    bossDestroyTimerRef.current = null;
+    bossDestroyPlayedRef.current = false;
     bossVictoryPendingRef.current = false;
+    bossVictoryFinishedRef.current = false;
     if (gameOverTimerRef.current !== null) window.clearTimeout(gameOverTimerRef.current);
     gameOverTimerRef.current = null;
     stateRef.current = createInitialState();
@@ -1539,7 +1550,7 @@ const GamePage = () => {
           : game.phase === "SECTOR_CLEAR"
             ? `${t("Block")} ${sectorLabel} ${t("COMPLETE")}`
             : `${t("Block")} ${sectorLabel} / ${BLOCKS_PER_CHAIN}`;
-  const bossDestructionActive = game.encounter === "boss-clear" && game.effects.some(effect => effect.kind === "boss-explosion" && performance.now() - effect.startedAt < 6_000);
+  const bossDestructionActive = game.encounter === "boss-clear" && clearTimerRef.current < BOSS_FALL_DURATION_MS + 2_500;
   const retryAccountSave = async () => {
     const queue = saveQueueRef.current;
     if (!queue || saveRetrying || pauseLeaveRef.current) return;
