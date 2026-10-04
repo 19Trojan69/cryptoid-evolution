@@ -3,6 +3,10 @@
 .weapon-quantity-presets { display: flex; gap: .5rem; }
 .weapon-quantity-presets button { min-width: 44px; min-height: 40px; color: #e5f7ff; background: #18374a; border: 1px solid #80b5cb; border-radius: 6px; }
 .weapon-purchase .button { width: 100%; min-height: 48px; white-space: normal; }
+.weapon-purchase .weapon-buy-button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 14px 12px; height: auto; min-width: 0; line-height: 1.4; text-align: center; }
+.weapon-purchase .weapon-buy-button > span { max-width: 100%; overflow-wrap: normal; word-break: normal; }
+.weapon-purchase .weapon-buy-button:disabled { opacity: 1; color: #d6deea; background: #29364a; }
+.weapon-purchase .weapon-purchase-reason { margin: 0; color: #f1d490; line-height: 1.5; }
 .weapon-wheel { max-width: min(360px, 92vw); max-height: 65dvh; overflow-y: auto; pointer-events: auto; }
 .weapon-wheel > p { grid-column: 1/-1; color: #ffccae; font-size: 14px; }
 .weapon-resume-countdown { pointer-events: auto; background: #06132266; }

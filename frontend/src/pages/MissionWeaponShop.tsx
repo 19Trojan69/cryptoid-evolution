@@ -70,7 +70,7 @@ export default function MissionWeaponShop({ authenticated, admin, timers, onInve
         <p>{t('1 minute per charge')}</p>
         <strong>{t(locked ? 'Locked' : available || timer > 0 ? 'AVAILABLE' : 'NOT OWNED')}</strong>
         {locked ? <p>{t('Available only as a weapon pickup.')}</p> : <p><PiPrice amount={offer.pricePi} locale={locale} testnet /></p>}
-        {!locked && <WeaponPurchase id={offer.id} price={offer.pricePi} count={stock[offer.id] || 0} disabled={!ready || busy || !authenticated || admin} onBuy={(quantity, total) => { void orderProduct(`Cryptoid ${offer.name} · ${quantity} × 60s · Test-Pi`, total, { productId: offer.id, quantity, weaponModel: 2 }, () => { if (mounted.current) void refresh(); }); }} />}
+        {!locked && <WeaponPurchase id={offer.id} price={offer.pricePi} count={stock[offer.id] || 0} disabledReason={admin ? "Admin test mode: purchases and records are not saved." : !authenticated ? "Connect your Pi account to see your saved loadout." : notice || "Loading account save…"} disabled={!ready || busy || !authenticated || admin} onBuy={(quantity, total) => { void orderProduct(`Cryptoid ${offer.name} · ${quantity} × 60s · Test-Pi`, total, { productId: offer.id, quantity, weaponModel: 2 }, () => { if (mounted.current) void refresh(); }); }} />}
       </article>;
     })}</div>
     <p role="status">{notice && t(notice)}</p>
