@@ -1,0 +1,18 @@
+export const missionShopTranslations: Record<string, Record<string, string>> = Object.fromEntries(Object.entries({
+  de: ['Waffen-Shop', 'Die Mission bleibt pausiert. Schließe den Shop und wähle dann Fortsetzen.'],
+  es: ['Tienda de armas', 'La misión sigue en pausa. Cierra la tienda y elige Reanudar.'],
+  fr: ['Boutique d’armes', 'La mission reste en pause. Ferme la boutique, puis choisis Reprendre.'],
+  pt: ['Loja de armas', 'A missão continua em pausa. Fecha a loja e escolhe Retomar.'],
+  it: ['Negozio di armi', 'La missione resta in pausa. Chiudi il negozio e scegli Riprendi.'],
+  ru: ['Магазин оружия', 'Миссия остаётся на паузе. Закрой магазин и выбери Продолжить.'],
+  pl: ['Sklep z bronią', 'Misja pozostaje wstrzymana. Zamknij sklep i wybierz Wznów.'],
+  tr: ['Silah mağazası', 'Görev duraklatılmış kalır. Mağazayı kapatıp Devam et seçeneğini seç.'],
+  ro: ['Magazin de arme', 'Misiunea rămâne în pauză. Închide magazinul și alege Continuă.'],
+  hr: ['Trgovina oružjem', 'Misija ostaje pauzirana. Zatvori trgovinu i odaberi Nastavi.'],
+  cs: ['Obchod se zbraněmi', 'Mise zůstává pozastavená. Zavři obchod a zvol Pokračovat.'],
+  sk: ['Obchod so zbraňami', 'Misia zostáva pozastavená. Zatvor obchod a vyber Pokračovať.'],
+  hu: ['Fegyverbolt', 'A küldetés szünetel. Zárd be a boltot, majd válaszd a Folytatást.'],
+  sr: ['Продавница оружја', 'Мисија остаје паузирана. Затвори продавницу и изабери Настави.'],
+  uk: ['Магазин зброї', 'Місія залишається на паузі. Закрий магазин і вибери Продовжити.'],
+  th: ['ร้านอาวุธ', 'ภารกิจยังหยุดชั่วคราว ปิดร้านแล้วเลือกเล่นต่อ'],
+}).map(([locale, row]) => [locale, { 'Weapon shop': row[0], 'The mission stays paused. Close the shop, then choose Resume.': row[1] }]));

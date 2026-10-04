@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useLocale } from "../i18n";
 import "./weaponTutorial.css";
 
-export default function WeaponTutorial() {
+export default function WeaponTutorial({ initiallyOpen = false }: { initiallyOpen?: boolean }) {
   const { t } = useLocale();
-  const [open, setOpen] = useState(false);
-  return <details className="weapon-tutorial" onToggle={event => setOpen(event.currentTarget.open)}>
+  const [open, setOpen] = useState(initiallyOpen);
+  return <details className="weapon-tutorial" open={open} onToggle={event => setOpen(event.currentTarget.open)}>
     <summary>{t("Illustrated guide")} · {t("Weapons")}</summary>
     {open && <div className="weapon-tutorial-content">
       <p>{t("Select owned Test-Pi weapons during the mission with the side button. Their outer ring shows the remaining time without a seconds counter; when it empties, the weapon disappears. Hold the button to see all owned weapons.")}</p>

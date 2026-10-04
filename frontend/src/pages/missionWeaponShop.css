@@ -1,0 +1,9 @@
+.pause-weapon-shop-button { width: 100%; margin-block: 12px; }
+.mission-weapon-shop { text-align: left; }
+.mission-weapon-shop > h2 { color: #f1d490; }
+.mission-weapon-shop > p { line-height: 1.5; }
+.mission-weapon-offers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-block: 16px; }
+.mission-weapon-offers .hangar-offer { min-width: 0; padding: 16px; }
+.mission-weapon-offers h3 span { color: #f1d490; }
+.mission-weapon-shop .modal-actions { position: sticky; bottom: 0; padding-block: 12px; background: #091827; }
+@media (max-width: 420px) { .mission-weapon-offers { grid-template-columns: 1fr; } }

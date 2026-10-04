@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { axiosClient } from "../lib/axiosClient";
 import type { PaymentDTO } from "../types/pi";
 
@@ -48,6 +48,7 @@ export const IRRA_TOKEN_CANONICAL =
 
 export const usePayments = ({ isAuthenticated, onRequireAuth }: UsePaymentsArgs) => {
   const [isLoading, setIsLoading] = useState(false);
+  const paymentPending = useRef(false);
   const [paymentDiagnostic, setPaymentDiagnostic] = useState(() => sessionStorage.getItem(PAYMENT_DIAGNOSTIC_KEY) || "");
 
   const rememberDiagnostic = useCallback((message: string) => {
@@ -68,6 +69,7 @@ export const usePayments = ({ isAuthenticated, onRequireAuth }: UsePaymentsArgs)
   }, [rememberDiagnostic]);
 
   const onCancel = useCallback(async (paymentId: string) => {
+    paymentPending.current = false;
     setIsLoading(false);
     try {
       await axiosClient.post("/payments/cancelled_payment", { paymentId });
@@ -77,6 +79,7 @@ export const usePayments = ({ isAuthenticated, onRequireAuth }: UsePaymentsArgs)
   }, []);
 
   const onError = useCallback((error: Error, payment?: PaymentDTO) => {
+    paymentPending.current = false;
     console.error("Payment error:", error, payment);
     setPaymentDiagnostic(current => {
       if (current) return current;
@@ -89,12 +92,14 @@ export const usePayments = ({ isAuthenticated, onRequireAuth }: UsePaymentsArgs)
 
   const orderProduct = useCallback(
     async (memo: string, amount: number, metadata: PaymentMetadata, onConfirmed?: () => void) => {
+      if (paymentPending.current) return;
       if (!isAuthenticated) {
         onRequireAuth();
         return;
       }
 
       rememberDiagnostic("");
+      paymentPending.current = true;
       setIsLoading(true);
       try {
         await window.Pi.createPayment(
@@ -114,20 +119,20 @@ export const usePayments = ({ isAuthenticated, onRequireAuth }: UsePaymentsArgs)
                 const diagnostic = formatPaymentDiagnostic(error);
                 rememberDiagnostic(`Completion: ${diagnostic}`);
                 console.error("Payment verification failed", error);
-              } finally { setIsLoading(false); }
+              } finally { paymentPending.current = false; setIsLoading(false); }
             },
             onCancel,
             onError,
           }
         );
       } catch (err) {
+        paymentPending.current = false;
+        setIsLoading(false);
         if (!sessionStorage.getItem(PAYMENT_DIAGNOSTIC_KEY)) {
           const diagnostic = formatPaymentDiagnostic(err);
           rememberDiagnostic(`Create payment: ${diagnostic}`);
         }
         console.error("Error creating payment:", err);
-      } finally {
-        setIsLoading(false);
       }
     },
     [isAuthenticated, onRequireAuth, onReadyForServerApproval, onCancel, onError, rememberDiagnostic]
