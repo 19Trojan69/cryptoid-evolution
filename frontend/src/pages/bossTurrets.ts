@@ -4,9 +4,19 @@ import { bossFireInterval, bossVulnerable } from './sectorBoss.ts';
 import type { EnemyShot, BossProjectileKind } from './enemyFire.ts';
 import type { PlayerPosition } from './playerCombat.ts';
 
-export type BossTurretState = { a:number; lock:number; next:number; pendingIndex:number; pendingTotal:number; pendingAt:number; lastFired:number; firedBarrels:number[]; shots:number };
+export type BossTurretState = { health:number; maxHealth:number; lastHit:number; a:number; lock:number; next:number; pendingIndex:number; pendingTotal:number; pendingAt:number; lastFired:number; firedBarrels:number[]; shots:number };
 export type BossFireEvent = { kind:BossWeaponKind; radius:number; barrels:number; pan:number; gunIndex:number; error:number; lock:number };
-export const createBossTurrets = (id:number):BossTurretState[] => bossWeapons[id-1].map((g,i)=>({a:g.base,lock:0,next:1100+i*90,pendingIndex:0,pendingTotal:0,pendingAt:0,lastFired:-10000,firedBarrels:[],shots:0}));
+export const turretHealth = (id:number,g:BossGunConfig) => Math.ceil(4 + g.caliber / 4 + (id - 1) * .15);
+export const turretPoints = (id:number,g:BossGunConfig) => 25 * Math.ceil((100 + g.caliber * 5 + (id - 1) * 4) / 25);
+export const createBossTurrets = (id:number):BossTurretState[] => bossWeapons[id-1].map((g,i)=>({health:turretHealth(id,g),maxHealth:turretHealth(id,g),lastHit:-Infinity,a:g.base,lock:0,next:1100+i*90,pendingIndex:0,pendingTotal:0,pendingAt:0,lastFired:-10000,firedBarrels:[],shots:0}));
+export const damageBossTurret = (boss:SectorBoss,index:number,damage:number) => {
+ const state=boss.turrets[index];
+ if(!state||boss.health<=0||!bossVulnerable(boss)||state.health<=0||!Number.isFinite(damage)||damage<=0)return 0;
+ state.health=Math.max(0,state.health-damage);state.lastHit=boss.weaponClock;
+ if(state.health>0)return 0;
+ state.pendingTotal=0;state.pendingIndex=0;state.firedBarrels=[];state.lock=0;
+ return turretPoints(boss.config.id,bossWeapons[boss.config.id-1][index]);
+};
 export const angleDifference = (a:number,b:number) => Math.atan2(Math.sin(a-b),Math.cos(a-b));
 export const gunPosition = (boss:SectorBoss,g:BossGunConfig) => ({x:boss.x+(g.sourceX/boss.config.sourceWidth-.5)*boss.width,y:boss.y+(g.sourceY/boss.config.sourceHeight-.5)*boss.height});
 export const gunMuzzle = (boss:SectorBoss,g:BossGunConfig,state:BossTurretState,barrel:number,recoil=0) => {
@@ -25,6 +35,7 @@ export const advanceBossTurrets = (boss:SectorBoss,player:PlayerPosition,width:n
  const guns=bossWeapons[boss.config.id-1];
  for(let i=0;i<guns.length;i++){
   const g=guns[i],state=boss.turrets[i],p=gunPosition(boss,g);
+  if(state.health<=0)continue;
   const desired=Math.atan2(-(player.x*width-p.x),player.y*height-p.y),diff=angleDifference(desired,state.a);
   const speed=Math.min(g.turnSpeed,Math.abs(diff)*6);state.a+=Math.sign(diff)*Math.min(Math.abs(diff),speed*dt/1000);
   const error=Math.abs(angleDifference(desired,state.a));state.lock=error<.035?state.lock+dt:0;
@@ -32,6 +43,7 @@ export const advanceBossTurrets = (boss:SectorBoss,player:PlayerPosition,width:n
  let slots=Math.max(0,Math.floor(available));const start=boss.turretCursor;
  for(let visit=0;visit<guns.length&&slots>0;visit++){
   const i=(start+visit)%guns.length,g=guns[i],state=boss.turrets[i];
+  if(state.health<=0)continue;
   if(state.lock<160||boss.weaponClock<(state.pendingTotal?state.pendingAt:state.next))continue;
   if(!state.pendingTotal){state.pendingIndex=0;state.pendingTotal=g.barrels.length*g.rows;state.shots++;}
   const rowRemaining=g.barrels.length-state.pendingIndex%g.barrels.length,count=Math.min(slots,rowRemaining);
