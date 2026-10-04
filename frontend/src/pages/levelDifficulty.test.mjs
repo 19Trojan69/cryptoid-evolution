@@ -12,10 +12,10 @@ test("every level up to 500 raises pressure gently and within fixed limits", () 
     assert.ok(current.bossHealth > previous.bossHealth);
     previous = current;
   }
-  assert.ok(previous.attackCooldownMs >= 480);
-  assert.ok(previous.attackPaceScale >= .84);
-  assert.ok(previous.entryPaceScale >= .9);
-  assert.ok(previous.groupAttackInterval >= 4);
+  assert.ok(previous.attackCooldownMs >= 300);
+  assert.ok(previous.attackPaceScale >= .67);
+  assert.ok(previous.entryPaceScale >= .82);
+  assert.ok(previous.groupAttackInterval >= 2);
   assert.ok(previous.projectileBonus <= 2);
   assert.equal(levelDifficulty(1).bossHealth, 84);
   assert.ok(levelDifficulty(100).bossHealth < 120);

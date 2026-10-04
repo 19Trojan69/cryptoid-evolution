@@ -16,6 +16,7 @@ import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerU
 import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, zoneFraction, shipStartHeight } from "./controlPreferences";
 import { advanceShot, contactWithEnemy, MAX_PLAYER_SHOTS, movePlayer, placePlayer, placePlayerFromPointer, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, shipCollisionOutcome, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
 import { advanceEnemyShot, createEnemyShot, enemyShotHitsPlayer, enemyShotLimit, type EnemyShot } from "./enemyFire";
+import { attackPressure, attackSlots } from "./attackPressure";
 import SectorBackdrop from "./SectorBackdrop";
 import Starfield from "./Starfield";
 import { BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusEntryGap, bonusHeartReward, bonusPosition, bonusReward, bonusShowcaseShip, type BonusTarget } from "./bonusChallenge";
@@ -1050,15 +1051,21 @@ const GamePage = () => {
         const ready = state.asteroids.filter(asteroid => asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration);
         const formationComplete = normal && formationReady({ spawned: formationIndexRef.current, total: slots.length, alive: state.asteroids.length, ready: ready.length });
         const escortComplete = state.encounter === "boss-fight" && !!bossEscortSlotsRef.current && formationReady({ spawned: bossEscortSpawnedRef.current, total: bossEscortSlotsRef.current.length, alive: state.asteroids.length, ready: ready.length });
-        if ((formationComplete || escortComplete) && !state.asteroids.some(asteroid => asteroid.attackPattern !== null)) attackCooldownRef.current += delta;
-        else if (!state.asteroids.some(asteroid => asteroid.attackPattern !== null)) attackCooldownRef.current = 0;
-        if (state.empMs === 0 && (formationComplete || escortComplete) && !state.asteroids.some(asteroid => asteroid.attackPattern !== null)
-          && attackCooldownRef.current >= (normal ? levelDifficulty(state.sector).attackCooldownMs : bossEscortAttackInterval(state.sector))) {
+        const activeAttackers = state.asteroids.filter(enemy => enemy.attackPattern !== null).length;
+        const availableAttackers = ready.filter(enemy => enemy.attackPattern === null);
+        const pressure = attackPressure(state.sector);
+        const slotsAvailable = normal ? attackSlots(state.sector, activeAttackers, availableAttackers.length)
+          : activeAttackers === 0 ? availableAttackers.length : 0;
+        if (state.empMs === 0 && (formationComplete || escortComplete)) attackCooldownRef.current += delta;
+        else if (activeAttackers === 0) attackCooldownRef.current = 0;
+        const attackInterval = normal ? activeAttackers > 0 ? pressure.intervalMs : levelDifficulty(state.sector).attackCooldownMs : bossEscortAttackInterval(state.sector);
+        if (state.empMs === 0 && (formationComplete || escortComplete) && slotsAvailable > 0
+          && attackCooldownRef.current >= attackInterval) {
             let pattern = chooseAttackPattern(attackNumberRef.current++, elapsedRef.current, state.sector);
             if (escortComplete && pattern === "vDive") pattern = "double";
-            if (ready.length < attackGroupSize(pattern)) pattern = "curve";
+            if (slotsAvailable < attackGroupSize(pattern)) pattern = slotsAvailable >= 2 ? "double" : "curve";
             const groupSize = attackGroupSize(pattern);
-            const selectedIds = ready.slice(0, groupSize).map(asteroid => asteroid.id);
+            const selectedIds = availableAttackers.slice(0, groupSize).map(asteroid => asteroid.id);
             state.asteroids = state.asteroids.map(asteroid => {
               const index = selectedIds.indexOf(asteroid.id);
               if (index < 0) return asteroid;
@@ -1076,7 +1083,7 @@ const GamePage = () => {
           let next = moveAsteroid(asteroid, state.empMs > 0 ? 0 : delta, width, height);
           next.visualMotion = advanceShipMotion(asteroid.visualMotion ?? idleShipMotion(), next.x - asteroid.x, next.y - asteroid.y, delta);
           next.hullLight = hullIllumination(next.x, next.y, time, next.muzzleAt ?? 0, state.effects);
-          if (asteroid.attackPattern !== null && next.attackPattern === null) attackCooldownRef.current = 0;
+          if (asteroid.attackPattern !== null && next.attackPattern === null && !(normal && pressure.overlap)) attackCooldownRef.current = 0;
           if (next.attackPattern !== null && next.attackDelay === 0 && !next.firedThisAttack && next.attackElapsed < attackTime(next) && next.attackElapsed >= attackTime(next) * .28 && state.enemyShots.length < enemyShotLimit(width, elapsedRef.current, state.sector)) {
             const bullet = createEnemyShot(nextIdRef.current, next.x, next.y + next.radius * .4, state.player, width, height);
             if (bullet) {
