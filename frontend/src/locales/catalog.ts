@@ -5504,3 +5504,20 @@ Object.assign(localeCatalog["sr"], {"Core emergency attack — dodge the pulses!
 Object.assign(localeCatalog["uk"], {"Core emergency attack — dodge the pulses!": "Аварійна атака ядра — ухиляйтеся від імпульсів!", "After the last turret is destroyed, the core warns you before firing slow pulses. Later bosses alternate patterns. Destroyed turrets stay disabled.": "Після знищення останньої турелі ядро попереджає перед пострілом повільних імпульсів. Пізніші боси чергують схеми атак. Знищені турелі залишаються вимкненими."});
 
 Object.assign(localeCatalog["th"], {"Core emergency attack — dodge the pulses!": "แกนกลางโจมตีฉุกเฉิน — หลบคลื่นพลังงาน!", "After the last turret is destroyed, the core warns you before firing slow pulses. Later bosses alternate patterns. Destroyed turrets stay disabled.": "หลังป้อมปืนสุดท้ายถูกทำลาย แกนกลางจะเตือนก่อนยิงคลื่นพลังงานช้า ๆ บอสช่วงหลังจะสลับรูปแบบการโจมตี ป้อมปืนที่ถูกทำลายจะไม่กลับมาทำงาน"});
+
+Object.assign(localeCatalog["de"], {"Time expired": "Zeit abgelaufen"});
+Object.assign(localeCatalog["es"], {"Time expired": "Tiempo agotado"});
+Object.assign(localeCatalog["fr"], {"Time expired": "Temps écoulé"});
+Object.assign(localeCatalog["pt"], {"Time expired": "Tempo esgotado"});
+Object.assign(localeCatalog["it"], {"Time expired": "Tempo scaduto"});
+Object.assign(localeCatalog["pl"], {"Time expired": "Czas minął"});
+Object.assign(localeCatalog["tr"], {"Time expired": "Süre doldu"});
+Object.assign(localeCatalog["ru"], {"Time expired": "Время истекло"});
+Object.assign(localeCatalog["hr"], {"Time expired": "Vrijeme isteklo"});
+Object.assign(localeCatalog["cs"], {"Time expired": "Čas vypršel"});
+Object.assign(localeCatalog["sk"], {"Time expired": "Čas vypršal"});
+Object.assign(localeCatalog["hu"], {"Time expired": "Lejárt az idő"});
+Object.assign(localeCatalog["ro"], {"Time expired": "Timp expirat"});
+Object.assign(localeCatalog["sr"], {"Time expired": "Време је истекло"});
+Object.assign(localeCatalog["uk"], {"Time expired": "Час вичерпано"});
+Object.assign(localeCatalog["th"], {"Time expired": "หมดเวลา"});

@@ -2634,3 +2634,10 @@ html[data-motion="reduced"] .blockchain-node.active .blockchain-cube-rotor { ani
 
 .boss-core-glow { position:absolute; left:50%; top:75%; width:24px; height:24px; transform:translate(-50%,-50%); border-radius:50%; background:#fff0fa; box-shadow:0 0 14px 7px #ff70c8,0 0 32px 12px #b733b3; pointer-events:none; }
 .boss-core-warning { position:absolute; top:calc(100% + 24px); left:50%; transform:translateX(-50%); width:max-content; max-width:85vw; padding:5px 9px; border:1px solid #ff8adb; border-radius:8px; background:#261124; color:#fff0fa; font-size:clamp(11px,1.2vw,16px); text-align:center; pointer-events:none; }
+
+/* Expired weapons remain readable but cannot resemble available equipment. */
+.weapon-wheel-option.expired { filter: grayscale(1); opacity: .55; border-color: #78838b; background: #15202a; box-shadow: none; }
+.weapon-wheel-option.expired b { text-decoration: line-through; }
+.weapon-wheel-option.expired small { color: #e1e5e8; white-space: normal; line-height: 1.05; text-align: center; }
+.weapon-wheel-option.expired { grid-template-rows: 16px 9px minmax(14px, auto); height: auto; min-height: 46px; }
+@media (min-width: 900px) { .weapon-wheel-option.expired { grid-template-rows: 24px 18px minmax(16px, auto); min-height: 72px; } }

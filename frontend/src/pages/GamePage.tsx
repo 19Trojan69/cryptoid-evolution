@@ -1750,8 +1750,8 @@ const GamePage = () => {
                   const remaining = game.weaponTimers[level] ?? 0;
                   const expired = level > 1 && owned && remaining === 0;
                   const selected = level === (game.weaponSource === "paid" ? game.paidWeaponLevel : game.weaponSource === "standard" ? 1 : 0);
-                  const status = level === 1 ? t("Base") : !owned ? t("Locked") : expired ? t("Used") : t("Available");
-                  return <button key={level} type="button" role="menuitem" className={`weapon-wheel-option weapon-wheel-option-${level}${selected ? " selected" : ""}${!owned ? " locked" : ""}`} disabled={!owned || expired} onClick={() => selectWeaponLevel(level)} aria-label={`${weaponNames[level]} · ${status}`}><b>{weaponGlyphs[level]}</b><span>{weaponNames[level]}</span><small>{status}</small></button>;
+                  const status = level === 1 ? t("Base") : !owned ? t("Locked") : expired ? t("Time expired") : t("Available");
+                  return <button key={level} type="button" role="menuitem" className={`weapon-wheel-option weapon-wheel-option-${level}${selected ? " selected" : ""}${!owned ? " locked" : expired ? " expired" : ""}`} disabled={!owned || expired} onClick={() => selectWeaponLevel(level)} aria-label={`${weaponNames[level]} · ${status}`}><b>{weaponGlyphs[level]}</b><span>{weaponNames[level]}</span><small>{status}</small></button>;
                 })}
               </div>}
               <div className="weapon-slot" data-source={game.weaponSource}>
