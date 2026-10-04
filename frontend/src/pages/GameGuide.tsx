@@ -41,8 +41,9 @@ const topics = [
       "Avoid enemy ships and projectiles. An active shield absorbs an impact; otherwise a collision or an unguarded projectile can cost a heart.",
       "Advanced and Elite ship stages add protection against enemy projectiles per life. A ship collision still needs a shield to be absorbed.",
       "Enemy hulls have different strengths. Even the first boss needs sustained fire; bosses attack faster as their hull weakens.",
-      "After the last turret is destroyed, the core warns you before firing slow pulses. Later bosses alternate patterns. Destroyed turrets stay disabled.",
-      "First destroy every turret, each with its own green energy bar and extra points. The hull is protected, even from bombs. After the last turret falls, the boss energy bar appears: attack the hull and dodge the reactor pulses.",
+      "During the reactor weapon phase, small escorts return in waves. The pauses shorten as levels rise; from level 50, the next wave enters as soon as the previous one is cleared.",
+      "After all turrets explode, a concealed central weapon opens. Attack the now vulnerable hull and dodge its pulses.",
+      "Hit each turret until its metal glows red, orange and finally white-hot before it explodes. Every turret gives extra points; the hull stays protected until all are destroyed.",
     ],
   },
   {

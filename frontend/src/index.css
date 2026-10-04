@@ -2632,34 +2632,19 @@ html[data-motion="reduced"] .blockchain-node.active .blockchain-cube-rotor { ani
 
 .reinforcement-notice { position: absolute; z-index: 25; top: 23%; left: 50%; transform: translateX(-50%); max-width: calc(100% - 32px); padding: 10px 16px; border: 1px solid #70c8ff80; border-radius: 8px; color: #ecf8ff; background: #071b30ed; text-align: center; font-size: clamp(16px, 3vw, 23px); font-weight: 700; pointer-events: none; }
 
-.boss-turret-bars { position:absolute; inset:0; z-index:8; pointer-events:none; }
 .boss-phase-guide { max-width:440px; margin:16px auto; border:1px solid #436878; border-radius:12px; overflow:hidden; background:radial-gradient(ellipse at 50% 55%,#15354b,#060d19); }
 .boss-phase-guide-tabs { display:flex; gap:8px; padding:10px; }
 .boss-phase-guide-tabs button { flex:1; min-width:0; padding:8px; border:1px solid #527989; border-radius:7px; color:#e3f8ff; background:#122b3c; font-size:13px; cursor:pointer; }
 .boss-phase-guide-tabs button[aria-pressed="true"] { border-color:#8fffc5; background:#194638; }
 .boss-phase-guide-stage { position:relative; height:315px; }
-.boss-phase-guide .boss-phase-hint { max-width:280px; font-size:12px; }
-.boss-turret-bar-leaders { position:absolute; inset:0; overflow:visible; }
-.boss-turret-bar-leaders line { stroke:#8fffc5; stroke-width:1; opacity:.65; }
-.boss-turret-health { position:absolute; height:8px; padding:1px; transform:translate(-50%,-50%); border:1px solid #b1ffd2; border-radius:4px; background:#03120ff2; box-shadow:0 1px 4px #000,0 0 5px #4effab66; overflow:hidden; }
-.boss-turret-health > b { display:block; height:100%; border-radius:2px; background:linear-gradient(90deg,#23d779,#9bffbd); }
-.boss-phase-hint { position:absolute; z-index:9; top:calc(100% + 22px); left:50%; transform:translateX(-50%); width:max-content; max-width:min(85vw,440px); padding:6px 10px; border:1px solid #7af5b3; border-radius:8px; background:#071d20ed; color:#d9ffe8; font:600 clamp(12px,1.2vw,16px)/1.4 Arial,sans-serif; text-align:center; pointer-events:none; }
-.boss-phase-reactor { border-color:#ff8adb; background:#261124ed; color:#fff0fa; }
-.boss-reactor { position:absolute; z-index:6; left:50%; top:75%; width:clamp(28px,17%,52px); aspect-ratio:1; transform:translate(-50%,-50%); border:2px solid #67757f; border-radius:50%; background:#07121e; box-shadow:0 2px 5px #000; pointer-events:none; }
-.boss-reactor-energy { position:absolute; inset:12%; border-radius:50%; background:radial-gradient(circle,#fff 0 12%,#ffe0f8 24%,#ff72d7 50%,#73289a 75%); opacity:0; transform:scale(.5); }
-.boss-reactor-ring { position:absolute; inset:-12%; border:2px dashed #ff9bdd; border-radius:50%; opacity:0; }
-.boss-reactor-cover { position:absolute; top:-2px; bottom:-2px; width:52%; border:1px solid #93a9b6; background:linear-gradient(100deg,#172634,#526a79 48%,#243c4a 70%); transition:transform .7s ease,opacity .7s ease; }
-.boss-reactor-cover-left { left:-2px; border-radius:100% 10% 10% 100%; }
-.boss-reactor-cover-right { right:-2px; border-radius:10% 100% 100% 10%; }
-.boss-reactor-exposed { border-color:#ff9ddd; box-shadow:0 0 10px #ff70c899; }
-.boss-reactor-exposed .boss-reactor-cover-left { transform:translateX(-75%) rotate(-16deg); opacity:.65; }
-.boss-reactor-exposed .boss-reactor-cover-right { transform:translateX(75%) rotate(16deg); opacity:.65; }
-.boss-reactor-exposed .boss-reactor-energy { opacity:calc(.55 + var(--reactor-charge) * .45); transform:scale(calc(.75 + var(--reactor-charge) * .45)); box-shadow:0 0 12px 5px #ff70c899; }
-.boss-reactor-exposed .boss-reactor-ring { opacity:calc(.25 + var(--reactor-charge) * .75); transform:scale(calc(.9 + var(--reactor-charge) * .3)); }
-.boss-reactor-firing .boss-reactor-energy { opacity:1; transform:scale(1.4); }
-.boss-reactor-firing .boss-reactor-ring { opacity:.85; transform:scale(1.7); }
-.game-field-paused .boss-reactor-cover { transition:none; }
-@media (prefers-reduced-motion:reduce) { .boss-reactor-cover { transition:none; } }
+/* The bay uses original hull pixels as shutters; only the recessed weapon lights up. */
+.boss-special-weapon { position:absolute; z-index:6; overflow:visible; pointer-events:none; }
+.boss-special-conductor { stroke:var(--weapon-energy); stroke-width:2.2; opacity:calc(.25 + var(--weapon-charge) * .75); }
+.boss-special-muzzle { fill:var(--weapon-energy); opacity:calc(.25 + var(--weapon-charge) * .75); }
+.boss-special-weapon-firing .boss-special-muzzle { fill:#fff6dd; opacity:1; }
+.boss-phase-guide-picker { display:flex; align-items:center; justify-content:center; gap:12px; padding:10px 12px 0; color:#c8dce8; font-size:13px; }
+.boss-phase-guide-picker select { max-width:160px; color:#f1f6fb; background:#102638; border:1px solid #527989; border-radius:6px; padding:6px 12px; }
+
 
 /* Expired weapons remain readable but cannot resemble available equipment. */
 .weapon-wheel-option.expired { filter: grayscale(1); opacity: .55; border-color: #78838b; background: #15202a; box-shadow: none; }

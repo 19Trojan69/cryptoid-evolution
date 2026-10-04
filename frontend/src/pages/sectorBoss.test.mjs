@@ -100,11 +100,11 @@ test("the boss descends smoothly only during its final 20 percent of health", ()
   assert.ok(boss.y + boss.height / 2 < height * .5);
 });
 
-test("the opening boss takes three times its former number of hits", () => {
+test("the exposed opening boss takes half its former number of hits", () => {
   const boss = createSectorBoss(10, 375);
   boss.elapsed = BOSS_ENTRY_MS;
   boss.turrets.forEach(gun => gun.health = 0);
-  for (let hit = 0; hit < Math.ceil(boss.maxHealth); hit++) {
+  for (let hit = 0; hit < Math.ceil(boss.maxHealth / 2); hit++) {
     assert.equal(damageSectorBoss(boss, 1, hit * 320), true);
   }
   assert.equal(boss.health, 0);
@@ -123,7 +123,7 @@ test("a boss takes one hit per volley and survives opening fire without a shield
   assert.equal(damageSectorBoss(boss, 2, 1000), true);
   assert.equal(damageSectorBoss(boss, 2, 1000), false);
   assert.equal(damageSectorBoss(boss, 2, 1100), false);
-  assert.equal(boss.health, boss.maxHealth - 2);
-  assert.equal(damageSectorBoss(boss, 2, 1200), true);
   assert.equal(boss.health, boss.maxHealth - 4);
+  assert.equal(damageSectorBoss(boss, 2, 1200), true);
+  assert.equal(boss.health, boss.maxHealth - 8);
 });

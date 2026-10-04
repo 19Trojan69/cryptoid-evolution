@@ -47,7 +47,7 @@ import BossHealthView from './BossHealthView';
 import BossReactorView from './BossReactorView';
 import { advanceBossTurrets, damageBossTurret, gunPosition } from './bossTurrets';
 import { bossWeapons } from './bossWeapons';
-import { bossEscortAttackInterval, bossEscortCount, bossEscortReinforcements, bossEscortRosterIndex, bossEscortSlots } from "./bossEscorts";
+import { bossEscortAttackInterval, bossEscortCount, bossEscortReinforcements, bossEscortRosterIndex, bossEscortSlots, reactorEscortCount, advanceEscortReserve } from "./bossEscorts";
 import { awardBlock, awardBonusMedal, awardBossSticker, awardChain, emptyRewardProgress, reachLevel, rewardRank, type RewardProgress } from "./rewardProgress";
 
 const BEST_SCORE_KEY = "cryptoid_best_score_v2";
@@ -1030,12 +1030,27 @@ const GamePage = () => {
             state.asteroids.push(spawnAsteroid(nextIdRef.current++, width, visibleTop, formationIndexRef.current++, state.sector, slots, formationOffsetRef.current, rulesVersionRef.current));
           }
         }
-        if (state.encounter === "boss-fight" && state.boss && bossEscortCount(state.sector) > 0 && state.boss.elapsed >= BOSS_ENTRY_MS + 1_500) {
-          if (bossEscortSlotsRef.current === null) {
+        if (state.encounter === "boss-fight" && state.boss && state.empMs === 0 && state.boss.elapsed >= BOSS_ENTRY_MS + 1_500) {
+          const reservePhase = state.boss.turrets.every(gun => gun.health <= 0);
+          if (bossEscortSlotsRef.current === null && !reservePhase && bossEscortCount(state.sector) > 0) {
             bossEscortSlotsRef.current = bossEscortSlots(state.sector, width, height, state.boss, bossEscortCount(state.sector));
           }
           let escortSlots = bossEscortSlotsRef.current;
-          if (bossEscortWaveRef.current === 0 && bossEscortSpawnedRef.current === escortSlots.length && state.boss.health <= state.boss.maxHealth * .55
+          const pending = escortSlots !== null && bossEscortSpawnedRef.current < escortSlots.length;
+          if (reservePhase && !pending) {
+            const reserve = advanceEscortReserve(state.boss, state.sector, state.asteroids.length, bossEscortTimerRef.current, delta);
+            bossEscortTimerRef.current = reserve.elapsed;
+            if (reserve.ready) {
+              const nextSlots = bossEscortSlots(state.sector, width, height, state.boss, reactorEscortCount(state.sector));
+              if (nextSlots.length) {
+                bossEscortWaveRef.current++;
+                bossEscortSpawnedRef.current = 0;
+                bossEscortTimerRef.current = 360; // First ship enters this frame, including level 50's zero-gap waves.
+                escortSlots = nextSlots;
+                bossEscortSlotsRef.current = nextSlots;
+              }
+            }
+          } else if (!reservePhase && escortSlots && bossEscortWaveRef.current === 0 && bossEscortSpawnedRef.current === escortSlots.length && state.boss.health <= state.boss.maxHealth * .55
             && state.asteroids.length <= 1 && bossEscortReinforcements(state.sector) > 0) {
             bossEscortWaveRef.current = 1;
             bossEscortSpawnedRef.current = 0;
@@ -1043,11 +1058,12 @@ const GamePage = () => {
             escortSlots = bossEscortSlots(state.sector, width, height, state.boss, bossEscortReinforcements(state.sector));
             bossEscortSlotsRef.current = escortSlots;
           }
-          if (bossEscortSpawnedRef.current < escortSlots.length) {
+          if (escortSlots && bossEscortSpawnedRef.current < escortSlots.length) {
             bossEscortTimerRef.current += delta;
             if (bossEscortTimerRef.current >= 360) {
               bossEscortTimerRef.current -= 360;
               state.asteroids.push(spawnBossEscort(nextIdRef.current++, width, bossEscortSpawnedRef.current++, state.sector, escortSlots, bossEscortWaveRef.current));
+              if (bossEscortSpawnedRef.current === escortSlots.length) bossEscortTimerRef.current = 0;
             }
           }
         }

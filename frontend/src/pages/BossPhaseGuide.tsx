@@ -8,19 +8,26 @@ import BossWeaponsView from './BossWeaponsView';
 export default function BossPhaseGuide() {
   const { t } = useLocale();
   const [exposed, setExposed] = useState(false);
+  const [bossId, setBossId] = useState(1);
   const boss = useMemo(() => {
-    const model = createSectorBoss(10, 300, 0, 760);
+    const model = createSectorBoss(bossId * 10, 300, 0, 760);
     model.elapsed = 3000;
+    model.turrets.forEach((gun,i) => gun.health = Math.max(1, Math.ceil(gun.maxHealth * (i % 3 === 0 ? .14 : i % 3 === 1 ? .48 : 1))));
     if (exposed) {
       model.turrets.forEach(gun => gun.health = 0);
       model.core = { elapsed: 1500, volley: 0 };
     }
     return model;
-  }, [exposed]);
+  }, [exposed, bossId]);
   return <div className="boss-phase-guide">
+    <label className="boss-phase-guide-picker">{t('Boss')}
+      <select value={bossId} onChange={event => setBossId(Number(event.target.value))}>
+        {Array.from({length:50},(_,i)=><option key={i+1} value={i+1}>{String(i+1).padStart(2,'0')}</option>)}
+      </select>
+    </label>
     <div className="boss-phase-guide-tabs" role="group" aria-label={t('Boss')}>
       <button type="button" aria-pressed={!exposed} onClick={() => setExposed(false)}>{t('Boss turrets')}</button>
-      <button type="button" aria-pressed={exposed} onClick={() => setExposed(true)}>{t('Reactor exposed')}</button>
+      <button type="button" aria-pressed={exposed} onClick={() => setExposed(true)}>{t('Reactor weapon')}</button>
     </div>
     <div className="boss-phase-guide-stage">
       <div className="asteroid sector-boss" style={{ left: '50%', top: 125, width: boss.width, height: boss.height, transform: 'translate(-50%,-50%)' }}>

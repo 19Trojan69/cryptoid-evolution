@@ -60,7 +60,7 @@ test('all bosses block hull shots and bombs until every turret is destroyed, inc
   assert.equal(boss.health,hull);
   assert.equal(damageSectorBoss(boss,1,2000),true);
   assert.equal(damageSectorBoss(boss,18,2000,true),true);
-  assert.equal(boss.health,hull-19);
+  assert.equal(boss.health,hull-38);
   assert.equal(damageSectorBoss(boss,10000,2400),true);
   assert.equal(boss.health,0);
   boss.turrets.forEach((_,i)=>assert.equal(damageBossTurret(boss,i,1000),0));

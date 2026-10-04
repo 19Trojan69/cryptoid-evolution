@@ -1,4 +1,5 @@
 import type { SectorBoss } from "./sectorBoss.ts";
+import { bossHullExposed, bossVulnerable } from "./sectorBoss.ts";
 
 // Bosses 1–5 fight alone. Escorts grow by one ship every nine bosses, capped
 // at six active hulls on phones; the later half-health wave is smaller.
@@ -6,6 +7,18 @@ export const bossEscortCount = (level: number) => level < 60 ? 0 : Math.min(6, 2
 export const bossEscortReinforcements = (level: number) => level < 240 ? 0 : Math.max(2, Math.floor(bossEscortCount(level) / 2));
 export const bossEscortAttackInterval = (level: number) => Math.max(1_050, 2_200 - Math.max(0, Math.min(1, (level - 60) / 440)) * 1_150);
 export const bossEscortRosterIndex = (index: number, wave: number) => [0, 1, 5][index % 3] + Math.floor(index / 3) * 6 + wave * 18;
+
+// Small recurring wings in the exposed-weapon phase. Level means the displayed
+// game level: at 50 (boss 5), clearing a wing immediately starts the next one.
+export const reactorEscortCount = (level: number) => Math.min(6, 2 + Math.floor(Math.max(0, level - 10) / 20));
+export const reactorEscortDelay = (level: number) => Math.max(0, 4_000 - Math.max(0, level - 10) * 100);
+export const bossSupportCapacity = (level: number) => Math.max(bossEscortCount(level), reactorEscortCount(level));
+export const advanceEscortReserve = (boss: SectorBoss, level: number, alive: number, elapsed: number, delta: number) => {
+  if (delta <= 0 || !bossHullExposed(boss) || !bossVulnerable(boss)) return {elapsed, ready:false};
+  if (alive > 0) return {elapsed:0, ready:false};
+  const next = Math.min(reactorEscortDelay(level), elapsed + Math.min(80,delta));
+  return {elapsed:next, ready:next >= reactorEscortDelay(level)};
+};
 
 export const bossEscortSlots = (level: number, width: number, height: number, boss: Pick<SectorBoss, "x" | "y" | "height">, count: number) => {
   const radius = 18;

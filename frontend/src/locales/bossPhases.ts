@@ -1,3 +1,4 @@
+import { bossWeaponTranslations } from './bossWeaponUpdate.ts';
 const keys = [
   'Turret {number}',
   'Hull protected',
@@ -24,4 +25,4 @@ const rows: Record<string, string[]> = {
   uk: ['Турель {number}', 'Корпус захищений', 'Реактор відкрито', 'Спершу знищ усі турелі — корпус захищений.', 'Реактор відкрито — атакуй корпус і ухиляйся від імпульсів!', 'Спершу знищ усі турелі: кожна має власну зелену смужку енергії та додаткові очки. Корпус захищений навіть від бомб. Після останньої турелі з’являється смужка енергії боса: атакуй корпус і ухиляйся від імпульсів реактора.'],
   th: ['ป้อมปืน {number}', 'ตัวเรือได้รับการป้องกัน', 'เครื่องปฏิกรณ์ถูกเปิดเผย', 'ทำลายป้อมปืนทั้งหมดก่อน — ตัวเรือยังได้รับการป้องกัน', 'เครื่องปฏิกรณ์ถูกเปิดเผย — โจมตีตัวเรือและหลบพัลส์!', 'ทำลายป้อมปืนทั้งหมดก่อน แต่ละป้อมมีแถบพลังงานสีเขียวและให้คะแนนพิเศษ ตัวเรือได้รับการป้องกันแม้แต่จากระเบิด เมื่อป้อมสุดท้ายถูกทำลาย แถบพลังงานของบอสจะปรากฏ ให้โจมตีตัวเรือและหลบพัลส์จากเครื่องปฏิกรณ์'],
 };
-export const bossPhaseTranslations = Object.fromEntries(Object.entries(rows).map(([locale, values]) => [locale, Object.fromEntries(keys.map((key, index) => [key, values[index]]))]));
+export const bossPhaseTranslations = Object.fromEntries(Object.entries(rows).map(([locale, values]) => [locale, {...Object.fromEntries(keys.map((key, index) => [key, values[index]])), ...bossWeaponTranslations[locale]}]));
