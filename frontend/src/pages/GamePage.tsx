@@ -36,9 +36,11 @@ import { levelDifficulty, MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { createDoubleKillCombo, creditComboDefeat, DOUBLE_KILL_SCORE, DOUBLE_KILL_SHARDS, type DoubleKillCombo } from "./doubleKillCombo";
 import { balanceAfterMission, BONUS_TARGET_SHARD_REWARD, bossPoints, bossShardReward, creditReward } from "./shardEarnings";
 import { addPersistentHullFire, hullFireAtImpact, hullFireLimit, spriteFireSites, type HullFire } from "./hullFires";
-import { bossExplosionSize, bossFallTargetY, bossFireSite, bossHullContains } from "./bossCombat";
+import { bossExplosionSize, bossFallTargetY, bossFireSite } from "./bossCombat";
+import { bossHitTarget } from "./bossHitTarget";
 import BossWeaponsView, { preloadBossWeapons } from './BossWeaponsView';
-import { advanceBossTurrets } from './bossTurrets';
+import { advanceBossTurrets, damageBossTurret, gunPosition } from './bossTurrets';
+import { bossWeapons } from './bossWeapons';
 import { bossEscortAttackInterval, bossEscortCount, bossEscortReinforcements, bossEscortRosterIndex, bossEscortSlots } from "./bossEscorts";
 import { awardBlock, awardBonusMedal, awardBossSticker, awardChain, emptyRewardProgress, reachLevel, rewardRank, type RewardProgress } from "./rewardProgress";
 
@@ -123,6 +125,7 @@ type Effect = {
   y: number;
   kind: "shield" | "explosion" | "boss-fall" | "boss-explosion" | "player-crash" | "player-explosion" | "shatter" | "bomb-wave" | "emp-wave";
   startedAt: number;
+  turretBonus?: number;
   target?: "player";
   sprite?: number;
   debrisSize?: number;
@@ -297,6 +300,7 @@ const scatteredPieces = (effect: Effect, count: number, sprite: number) => {
 };
 
 const shipDebris = (effect: Effect) => {
+  if (effect.turretBonus) return <b className="turret-score-popup">+{effect.turretBonus}</b>;
   const sprite = effect.sprite;
   const style = {
     "--debris-size": `${effect.kind === "boss-explosion" ? effect.bossShipWidth ?? effect.debrisSize ?? 240 : effect.debrisSize ?? 58}px`,
@@ -1157,7 +1161,19 @@ const GamePage = () => {
             gameHaptics.explosion();
             continue;
           }
-          if (state.encounter === "boss-fight" && state.boss && bossVulnerable(state.boss) && bossHullContains(state.boss, shot.x, shot.y)) {
+          const bossTarget = state.encounter === "boss-fight" && state.boss && bossVulnerable(state.boss) ? bossHitTarget(state.boss, previous, shot) : null;
+          if (bossTarget && state.boss) {
+            if (bossTarget.kind === "turret") {
+              const bonus = damageBossTurret(state.boss, bossTarget.index, shot.damage);
+              if (bonus > 0) {
+                const position = gunPosition(state.boss, bossWeapons[state.boss.config.id - 1][bossTarget.index]);
+                state.score += bonus;
+                state.effects.push({ id: nextIdRef.current++, ...position, kind: "explosion", startedAt: time, debrisSize: 28, turretBonus: bonus });
+                soundRef.current?.play("explosion");
+                gameHaptics.explosion();
+              } else soundRef.current?.play("enemyHit");
+              continue;
+            }
             if (!damageSectorBoss(state.boss, shot.damage, time)) continue;
             state.boss.hit = { id: shot.id, x: (shot.x - state.boss.x) / state.boss.width * 100 + 50, y: (shot.y - state.boss.y) / state.boss.height * 100 + 50, impactPower: shot.damage };
             if (state.boss.health === 0) destroyBoss(state, time);
@@ -1624,6 +1640,7 @@ const GamePage = () => {
           {game.boss.config.engineAnchors.map(([x, y], index) => <i key={index} className="boss-engine-flame" style={{ left: `${x * 100}%`, top: `${y * 100}%` }} aria-hidden="true" />)}
           <img className="boss-hull" src={game.boss.config.image} alt="" draggable={false} />
           <BossWeaponsView boss={game.boss}/>
+          <small className="boss-turret-count">{t("Boss turrets")}: {game.boss.turrets.filter(gun => gun.health > 0).length}/{game.boss.turrets.length}</small>
           <i className="hull-reflection" style={{ maskImage: `url('${game.boss.config.image}')`, WebkitMaskImage: `url('${game.boss.config.image}')`, opacity: game.bossHullLight }} aria-hidden="true" />
           <HullDamage sites={game.boss.hullFires} hit={game.boss.hit} maskImage={`url('${game.boss.config.image}')`} bossDamage={1 - game.boss.health / game.boss.maxHealth} />
           <span className="health-bar" data-critical={game.boss.health / game.boss.maxHealth <= .3} role="progressbar" aria-label={t("Boss hull")} aria-valuenow={Math.ceil(game.boss.health / game.boss.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${game.boss.health / game.boss.maxHealth * 100}%` }} /><small className="boss-health-readout">{Math.ceil(game.boss.health / game.boss.maxHealth * 100)}%</small></span>
