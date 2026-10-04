@@ -46,3 +46,21 @@ Frontend-Produktionsbuild erfolgreich. Browserfall Schritt 99 mit Regelversion 1
 ## Noch nötig vor Produktionsfreigabe
 
 Vergleichsläufe erfolgreicher menschlicher Spieler mit gleicher, realistisch verfügbarer Ausrüstung über ganze Neun-Block-Zyklen. Messen: aktive Kampfzeit, Zeit bis zum Boss, Leben, gesamte Shards pro Minute und Drops. Dazu iPhone/Android im echten Pi Browser, Touch-Steuerung, Pause/Hintergrundwechsel und Fortsetzen über zwei Geräte mit dem Testkonto. Die Levelzählung bleibt eine offene Produktentscheidung; die aktuelle Umsetzung hat weiterhin 50 sichtbare Zyklen mit neun Blöcken und einem Boss.
+
+## Zusätzliche Netzfehlerprüfung
+
+Zwei gezielte Browserläufe mit der tatsächlichen lokalen Speicherwarteschlange und den Backend-Handlern bestanden:
+
+- Schritt 37, zwei Gruppen: drei Speicherversuche ohne Netz; der Serverzustand bleibt bis zur Wiederverbindung unverändert. Nach Neuladen und Wechsel von Desktop- zu Smartphone-Format werden ausstehender Kampfstand und verdiente Shards korrekt nachgetragen.
+- Schritt 499, drei Gruppen: Der Server speichert, aber seine Antwort geht dreimal verloren. Wiederholungen und spätere Wiederherstellung schreiben die Shards insgesamt genau einmal gut.
+
+In beiden Fällen verbleibt die unbestätigte Speicherung in localStorage, wird beim Neustart vor dem Fortsetzen abgearbeitet und danach aus der Warteschlange entfernt. Gegner-HP, Gruppenzahl, Leben, Shards und Abschüsse stimmen; der Blockabschluss erfolgt einmalig. Keine JavaScript-Ausnahmen oder unerwarteten API-Fehler. Ergebnisse: `doc/level-expansion-network-results.json`.
+
+Wiederholung:
+
+```sh
+CRYPTOID_QA_STAGES=37 CRYPTOID_QA_NETWORK=offline node frontend/scripts/verifyLevelExpansion.cjs
+CRYPTOID_QA_STAGES=499 CRYPTOID_QA_NETWORK=lost-ack node frontend/scripts/verifyLevelExpansion.cjs
+```
+
+Die Tests nutzen weiterhin eine isolierte In-Memory-Datenbank und ersetzen Pi-Dienste. Der Zugriff auf die aktuelle geschützte Vercel-Vorschau wurde erneut versucht und erneut mit 403 abgelehnt. Für die Live-Prüfung muss die verbundene Vercel-App Zugriff auf das Team `19-trojan69` und das Projekt `cryptoid-evolution-testnet` erhalten. Sicherheitseinstellungen wurden nicht verändert.

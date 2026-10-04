@@ -12,6 +12,8 @@ const harnessSource = fs.readFileSync(testFile, 'utf8').split('const get =')[1].
 const makeHarness = new Function('require', 'const get =' + harnessSource + '\nreturn harness;')(backendRequire);
 const { emptyPlayerSave, firstMissionSnapshot } = backendRequire('../../build/playerSave.js');
 const { emptyRewardProgress } = backendRequire('../../build/rewardRules.js');
+const networkScenario = process.env.CRYPTOID_QA_NETWORK || "normal";
+assert.ok(["normal","offline","lost-ack"].includes(networkScenario));
 const rulesVersion = process.env.CRYPTOID_QA_RULES === "1" ? 1 : 2;
 const results = [], errors = [], screenshots = process.env.CRYPTOID_QA_DIR || '/tmp/cryptoid-expansion-qa';
 fs.mkdirSync(screenshots, { recursive: true });
@@ -44,12 +46,15 @@ fs.mkdirSync(screenshots, { recursive: true });
       const context = await browser.newContext({ viewport, locale:'en-US', isMobile:viewport.width<700, hasTouch:viewport.width<700 });
       await context.addInitScript(() => { window.__ENV={backendURL:'/api'};window.Pi={init(){},getPiHostAppInfo:async()=>({hostApp:'web'})}; localStorage.setItem('cryptoid_pi_session','1');localStorage.setItem('cryptoid_language','en');localStorage.setItem('cryptoid_home_music','off'); });
       const apiFailures=[];
+      let networkFault=false, failedAttempts=0;
       await context.route('**/*',async route=>{
         const u=new URL(route.request().url());
         if(u.origin!==origin)return route.fulfill({status:200,body:'',contentType:'application/javascript'});
         if(!u.pathname.startsWith('/api/'))return route.continue();
         const [group,...parts]=u.pathname.slice(5).split('/'), endpoint='/'+parts.join('/');
         const body=route.request().postDataJSON();let response;
+        const fault=networkFault&&group==='progress'&&endpoint==='/checkpoint';
+        if(fault&&networkScenario==='offline'){failedAttempts++;return route.abort('internetdisconnected');}
         if(group==='user')response={code:200,body:{user:{uid:'pilot-a',username:'QA'},canAdmin:false,adminMode:false}};
         else if(group==='usage')response={code:204};
         else if(['progress','rewards','hangar','leaderboard'].includes(group)) {
@@ -57,6 +62,7 @@ fs.mkdirSync(screenshots, { recursive: true });
           else response=await h.call(group,endpoint,body,{method:route.request().method()});
           if(group==='hangar'&&endpoint==='/start'&&response.code===200){h.session.scoreRun.startedAt-=60_000;h.profile().lastStart.runMeta.startedAt=h.session.scoreRun.startedAt;}
         }else response={code:200,body:{}};
+        if(fault&&networkScenario==='lost-ack'&&response.code===200){failedAttempts++;return route.abort('connectionreset');}
         if(response.code>=400)apiFailures.push({path:u.pathname,status:response.code,body:response.body});
         await route.fulfill({status:response.code,contentType:'application/json',body:response.code===204?'':JSON.stringify(response.body)});
       });
@@ -84,7 +90,22 @@ fs.mkdirSync(screenshots, { recursive: true });
           assert.ok(info.state.asteroids.length<=6);
           if(rulesVersion===1)assert.ok(info.state.asteroids.every(e=>e.entryPattern===info.expectedEntryPattern),"legacy entry patterns stay unchanged");
           await page.evaluate(()=>window.__flightTest.pause());
-          await page.evaluate(()=>window.__flightTest.save());
+          let recoveredBalance=null;
+          if(group===0&&networkScenario!=='normal') {
+            const balanceBefore=h.profile().balance, creditedBefore=h.profile().creditedShards;
+            await page.evaluate(()=>{const s=window.__flightTest.inspect().state;window.__flightTest.alter({score:s.score+20,shards:s.shards+4,destroyed:s.destroyed+1});});
+            const expected=await page.evaluate(()=>window.__flightTest.inspect());
+            recoveredBalance=balanceBefore+expected.state.shards-creditedBefore;
+            networkFault=true;
+            await page.evaluate(()=>{window.__failedSave=false;window.__flightTest.save().catch(()=>{window.__failedSave=true;});});
+            for(let attempt=0;attempt<6&&!await page.evaluate(()=>window.__failedSave);attempt++)await page.clock.runFor(1000);
+            assert.equal(await page.evaluate(()=>window.__failedSave),true,'all retry attempts fail visibly');
+            assert.ok(failedAttempts>=3,'initial attempt plus retries exercised');
+            const pending=await page.evaluate(()=>Object.keys(localStorage).filter(k=>k.startsWith('cryptoid_save_outbox_v1_')).flatMap(k=>JSON.parse(localStorage.getItem(k)||'[]')));
+            assert.ok(pending.some(e=>e.path==='/progress/checkpoint'),'unconfirmed save remains durable');
+            assert.equal(h.profile().balance,networkScenario==='offline'?balanceBefore:recoveredBalance,'lost acknowledgement must not double-credit retries');
+            networkFault=false;
+          } else await page.evaluate(()=>window.__flightTest.save());
           c=structuredClone(h.profile().mission.combat);
           assert.equal(c.refs.flight,group);
           const before=await page.evaluate(()=>window.__flightTest.inspect());
@@ -99,6 +120,12 @@ fs.mkdirSync(screenshots, { recursive: true });
           assert.deepEqual(resumed.state.asteroids.map(e=>[e.id,e.health]),before.state.asteroids.map(e=>[e.id,e.health]));
           assert.equal(resumed.state.hearts,before.state.hearts);
           assert.equal(resumed.state.shards,before.state.shards);
+          if(recoveredBalance!==null){
+            assert.equal(h.profile().balance,recoveredBalance,'replayed checkpoint credits exactly once');
+            const pending=await page.evaluate(()=>Object.keys(localStorage).filter(k=>k.startsWith('cryptoid_save_outbox_v1_')).flatMap(k=>JSON.parse(localStorage.getItem(k)||'[]')));
+            assert.equal(pending.length,0,'recovery drains durable queue');
+            assert.equal(h.profile().mission.snapshot.destroyed,before.state.destroyed);
+          }
           await page.evaluate(()=>{window.__flightTest.clearGroup();window.__flightTest.resume();});
           await page.clock.runFor(34);
           await page.evaluate(()=>window.__flightTest.pause());
@@ -112,7 +139,7 @@ fs.mkdirSync(screenshots, { recursive: true });
         assert.ok(!h.profile().mission.combat,'completed boundary clears the runtime');
         assert.equal(h.profile().mission.sector,stage+1);
         assert.equal(h.profile().mission.phase,stage%10===9?'boss':'normal');
-        results.push({stage,rulesVersion,viewport,groups:expected,checkpoints:'passed',pause:'passed',resume:'passed',onceOnlyClear:'passed'});
+        results.push({stage,rulesVersion,networkScenario,failedAttempts,viewport,groups:expected,checkpoints:'passed',pause:'passed',resume:'passed',onceOnlyClear:'passed'});
       }else{
         await page.evaluate(()=>window.__flightTest.resume());await page.clock.runFor(8000);await page.evaluate(()=>window.__flightTest.pause());await page.evaluate(()=>window.__flightTest.save());
         const before=await page.evaluate(()=>window.__flightTest.inspect());
@@ -128,6 +155,6 @@ fs.mkdirSync(screenshots, { recursive: true });
       await context.close();
       console.log(JSON.stringify(results.at(-1)));
     }
-    assert.deepEqual(errors,[]);fs.writeFileSync(path.join(screenshots,`results-rules-${rulesVersion}.json`),JSON.stringify({results,errors},null,2));
+    assert.deepEqual(errors,[]);fs.writeFileSync(path.join(screenshots,`results-rules-${rulesVersion}-${networkScenario}.json`),JSON.stringify({results,errors},null,2));
   }finally{await browser.close();await server.close();}
 })().catch(e=>{console.error(e);console.error(JSON.stringify({results,errors}));process.exitCode=1;});

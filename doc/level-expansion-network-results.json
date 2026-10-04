@@ -1,0 +1,35 @@
+{
+  "method": "Local Chromium with actual frontend save queue and backend handlers; isolated in-memory account; network faults injected at the request boundary; not a live Pi or MongoDB test",
+  "results": [
+    {
+      "stage": 37,
+      "rulesVersion": 2,
+      "networkScenario": "offline",
+      "failedAttempts": 3,
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "groups": 2,
+      "checkpoints": "passed",
+      "pause": "passed",
+      "resume": "passed",
+      "onceOnlyClear": "passed"
+    },
+    {
+      "stage": 499,
+      "rulesVersion": 2,
+      "networkScenario": "lost-ack",
+      "failedAttempts": 3,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "groups": 3,
+      "checkpoints": "passed",
+      "pause": "passed",
+      "resume": "passed",
+      "onceOnlyClear": "passed"
+    }
+  ]
+}
