@@ -252,7 +252,7 @@ export const localeCatalog: Record<string, Record<string,string>> = {
     "Triple": "Dreifach",
     "Ship {number} · {stage}": "Schiff {number} · {stage}",
     "Data unavailable. Retry.": "Daten nicht verfügbar. Erneut versuchen.",
-    "Testnet weapon rules": "Der Einzellaser ist kostenlos. Doppellaser und schneller Doppellaser sind mit Test-Pi kaufbar und für 2 Minuten aktivierbar. Dreifachlaser und Plasma gibt es nur als Waffenfund.",
+    "Testnet weapon rules": "Der Einzellaser ist kostenlos. Doppellaser und schneller Doppellaser sind mit Test-Pi kaufbar und für 1 Minute aktivierbar. Dreifachlaser und Plasma gibt es nur als Waffenfund.",
     "Free laser rules": "Der Einzellaser ist kostenlos. Sammle andere Waffen während der Mission ein.",
     "Payment": "Zahlung"
   },
@@ -522,7 +522,7 @@ export const localeCatalog: Record<string, Record<string,string>> = {
     "Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.": "Cada jugador Pi aparece una vez con su mejor partida completada. Los invitados guardan su récord en este dispositivo.",
     "Upgrades apply to this ship type in every color. Each new life restores its projectile protection. An active shield absorbs shots and ship collisions; unshielded ship collisions destroy the hull immediately.": "Las mejoras valen para este tipo de nave en todos los colores. Cada vida renueva la protección contra proyectiles. El escudo absorbe disparos y colisiones; sin él, una colisión destruye la nave al instante.",
     "Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.": "Tu récord es {score}, tu sector más alto {sector} y has destruido {destroyed} Cryptoids.",
-    "Testnet weapon rules": "El láser simple es gratis. Compra láser doble y doble rápido con Test-Pi y actívalos durante 2 minutos. Triple y plasma solo se recogen en juego.",
+    "Testnet weapon rules": "El láser simple es gratis. Compra láser doble y doble rápido con Test-Pi y actívalos durante 1 minuto. Triple y plasma solo se recogen en juego.",
     "Free laser rules": "El láser simple es gratis. Recoge otras armas como mejoras durante la misión."
   },
   "fr": {
@@ -791,7 +791,7 @@ export const localeCatalog: Record<string, Record<string,string>> = {
     "Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.": "Chaque joueur Pi apparaît une fois avec sa meilleure partie terminée. Les invités gardent leur record sur cet appareil.",
     "Upgrades apply to this ship type in every color. Each new life restores its projectile protection. An active shield absorbs shots and ship collisions; unshielded ship collisions destroy the hull immediately.": "Les améliorations couvrent ce type de vaisseau dans toutes les couleurs. Chaque vie renouvelle la protection contre les projectiles. Le bouclier absorbe tirs et collisions ; sans lui, une collision détruit immédiatement la coque.",
     "Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.": "Ton record est {score}, ton secteur maximum {sector} et tu as détruit {destroyed} Cryptoids.",
-    "Testnet weapon rules": "Le laser simple est gratuit. Achète double et double rapide avec Test-Pi et active-les pendant 2 minutes. Triple et plasma se ramassent uniquement en jeu.",
+    "Testnet weapon rules": "Le laser simple est gratuit. Achète double et double rapide avec Test-Pi et active-les pendant 1 minute. Triple et plasma se ramassent uniquement en jeu.",
     "Free laser rules": "Le laser simple est gratuit. Récupère les autres armes pendant la mission."
   },
   "pt": {
@@ -1147,7 +1147,7 @@ export const localeCatalog: Record<string, Record<string,string>> = {
     "Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.": "Cada jogador Pi aparece uma vez com o melhor jogo concluído. Visitantes guardam o recorde neste dispositivo.",
     "Upgrades apply to this ship type in every color. Each new life restores its projectile protection. An active shield absorbs shots and ship collisions; unshielded ship collisions destroy the hull immediately.": "Melhorias valem para este tipo de nave em todas as cores. Cada vida renova a proteção contra projéteis. O escudo absorve tiros e colisões; sem ele, colisões destroem o casco imediatamente.",
     "Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.": "O recorde é {score}, o setor máximo {sector} e destruíste {destroyed} Cryptoids.",
-    "Testnet weapon rules": "O laser simples é grátis. Compra duplo e duplo rápido com Test-Pi e ativa por 2 minutos. Triplo e plasma só são recolhidos no jogo.",
+    "Testnet weapon rules": "O laser simples é grátis. Compra duplo e duplo rápido com Test-Pi e ativa por 1 minuto. Triplo e plasma só são recolhidos no jogo.",
     "Free laser rules": "O laser simples é grátis. Recolhe outras armas durante a missão."
   },
   "it": {
@@ -1503,7 +1503,7 @@ export const localeCatalog: Record<string, Record<string,string>> = {
     "Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.": "Ogni giocatore Pi appare una volta con la migliore partita completata. Gli ospiti salvano il record sul dispositivo.",
     "Upgrades apply to this ship type in every color. Each new life restores its projectile protection. An active shield absorbs shots and ship collisions; unshielded ship collisions destroy the hull immediately.": "Gli upgrade valgono per questo tipo di nave in ogni colore. Ogni vita ripristina la protezione dai proiettili. Lo scudo assorbe colpi e collisioni; senza, una collisione distrugge subito lo scafo.",
     "Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.": "Il tuo record è {score}, il settore massimo {sector} e hai distrutto {destroyed} Cryptoids.",
-    "Testnet weapon rules": "Il laser singolo è gratis. Compra doppio e doppio rapido con Test-Pi e attivali per 2 minuti. Triplo e plasma si raccolgono solo in gioco.",
+    "Testnet weapon rules": "Il laser singolo è gratis. Compra doppio e doppio rapido con Test-Pi e attivali per 1 minuto. Triplo e plasma si raccolgono solo in gioco.",
     "Free laser rules": "Il laser singolo è gratis. Raccogli altre armi durante la missione."
   },
   "pl": {
@@ -1859,7 +1859,7 @@ export const localeCatalog: Record<string, Record<string,string>> = {
     "Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.": "Każdy gracz Pi pojawia się raz z najlepszą ukończoną grą. Goście mają lokalny rekord na urządzeniu.",
     "Upgrades apply to this ship type in every color. Each new life restores its projectile protection. An active shield absorbs shots and ship collisions; unshielded ship collisions destroy the hull immediately.": "Ulepszenia działają dla tego typu we wszystkich kolorach. Nowe życie odnawia ochronę przed pociskami. Osłona pochłania strzały i zderzenia; bez niej zderzenie natychmiast niszczy kadłub.",
     "Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.": "Twój rekord to {score}, najwyższy sektor {sector}; zniszczono {destroyed} Cryptoids.",
-    "Testnet weapon rules": "Pojedynczy laser jest darmowy. Kup podwójny i szybki podwójny za Test-Pi i aktywuj na 2 minuty. Potrójny i plazmę można tylko zbierać.",
+    "Testnet weapon rules": "Pojedynczy laser jest darmowy. Kup podwójny i szybki podwójny za Test-Pi i aktywuj na 1 minutę. Potrójny i plazmę można tylko zbierać.",
     "Free laser rules": "Pojedynczy laser jest darmowy. Zbieraj inne bronie podczas misji."
   },
   "tr": {
@@ -2215,7 +2215,7 @@ export const localeCatalog: Record<string, Record<string,string>> = {
     "Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.": "Her Pi oyuncusu en yüksek tamamlanan oyunuyla bir kez görünür. Misafirlerin rekoru bu cihazda kalır.",
     "Upgrades apply to this ship type in every color. Each new life restores its projectile protection. An active shield absorbs shots and ship collisions; unshielded ship collisions destroy the hull immediately.": "Yükseltmeler bu gemi tipinin tüm renkleri için geçerlidir. Her yeni can mermi korumasını yeniler. Kalkan atış ve çarpışmaları emer; kalkansız gemi çarpışması gövdeyi hemen yok eder.",
     "Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.": "Rekorun {score}, en yüksek sektörün {sector}; {destroyed} Cryptoids yok ettin.",
-    "Testnet weapon rules": "Tek lazer ücretsizdir. Test-Pi ile çift ve hızlı çift alıp 2 dakika kullan. Üçlü ve plazma yalnızca oyunda toplanır.",
+    "Testnet weapon rules": "Tek lazer ücretsizdir. Test-Pi ile çift ve hızlı çift alıp 1 dakika kullan. Üçlü ve plazma yalnızca oyunda toplanır.",
     "Free laser rules": "Tek lazer ücretsizdir. Diğer silahları görevde topla."
   },
   "ru": {
@@ -2571,7 +2571,7 @@ export const localeCatalog: Record<string, Record<string,string>> = {
     "Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.": "Каждый игрок Pi показан один раз с лучшим завершённым забегом. Гости сохраняют рекорд на устройстве.",
     "Upgrades apply to this ship type in every color. Each new life restores its projectile protection. An active shield absorbs shots and ship collisions; unshielded ship collisions destroy the hull immediately.": "Улучшения действуют для всех цветов этого типа. Новая жизнь восстанавливает защиту от снарядов. Щит поглощает выстрелы и столкновения; без него столкновение сразу уничтожает корпус.",
     "Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.": "Ваш рекорд {score}, высший сектор {sector}, уничтожено {destroyed} Cryptoids.",
-    "Testnet weapon rules": "Одиночный лазер бесплатен. Купите двойной и скоростной двойной за Test-Pi и включайте на 2 минуты. Тройной и плазма только подбираются.",
+    "Testnet weapon rules": "Одиночный лазер бесплатен. Купите двойной и скоростной двойной за Test-Pi и включайте на 1 минуту. Тройной и плазма только подбираются.",
     "Free laser rules": "Одиночный лазер бесплатен. Подбирайте другое оружие в миссии."
   },
   "hr": {
@@ -2927,7 +2927,7 @@ export const localeCatalog: Record<string, Record<string,string>> = {
     "Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.": "Svaki Pi igrač prikazan je jednom s najboljom završenom igrom. Gosti imaju lokalni rekord na uređaju.",
     "Upgrades apply to this ship type in every color. Each new life restores its projectile protection. An active shield absorbs shots and ship collisions; unshielded ship collisions destroy the hull immediately.": "Nadogradnje vrijede za ovaj tip u svim bojama. Novi život obnavlja zaštitu od projektila. Štit upija metke i sudare; bez štita sudar odmah uništava trup.",
     "Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.": "Tvoj rekord je {score}, najviši sektor {sector}; uništeno je {destroyed} Cryptoids.",
-    "Testnet weapon rules": "Jedan laser je besplatan. Kupi dvostruki i brzi dvostruki uz Test-Pi i aktiviraj na 2 minute. Trostruki i plazma samo se skupljaju.",
+    "Testnet weapon rules": "Jedan laser je besplatan. Kupi dvostruki i brzi dvostruki uz Test-Pi i aktiviraj na 1 minutu. Trostruki i plazma samo se skupljaju.",
     "Free laser rules": "Jedan laser je besplatan. Ostala oružja skupljaj tijekom misije."
   },
   "cs": {
@@ -3283,7 +3283,7 @@ export const localeCatalog: Record<string, Record<string,string>> = {
     "Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.": "Každý hráč Pi je jednou s nejlepším dokončeným během. Hosté mají rekord na zařízení.",
     "Upgrades apply to this ship type in every color. Each new life restores its projectile protection. An active shield absorbs shots and ship collisions; unshielded ship collisions destroy the hull immediately.": "Vylepšení platí pro tento typ ve všech barvách. Nový život obnoví ochranu před projektily. Štít pohltí střely a srážky; bez něj srážka ihned zničí trup.",
     "Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.": "Tvůj rekord je {score}, nejvyšší sektor {sector}; zničeno {destroyed} Cryptoids.",
-    "Testnet weapon rules": "Jeden laser je zdarma. Kup dvojitý a rychlý dvojitý za Test-Pi a aktivuj na 2 minuty. Trojitý a plazma se jen sbírají.",
+    "Testnet weapon rules": "Jeden laser je zdarma. Kup dvojitý a rychlý dvojitý za Test-Pi a aktivuj na 1 minutu. Trojitý a plazma se jen sbírají.",
     "Free laser rules": "Jeden laser je zdarma. Další zbraně sbírej během mise."
   },
   "sk": {
@@ -3639,7 +3639,7 @@ export const localeCatalog: Record<string, Record<string,string>> = {
     "Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.": "Každý hráč Pi je raz s najlepším dokončeným behom. Hostia majú rekord na zariadení.",
     "Upgrades apply to this ship type in every color. Each new life restores its projectile protection. An active shield absorbs shots and ship collisions; unshielded ship collisions destroy the hull immediately.": "Vylepšenia platia pre tento typ vo všetkých farbách. Nový život obnoví ochranu pred projektilmi. Štít pohltí strely a zrážky; bez neho zrážka ihneď zničí trup.",
     "Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.": "Tvoj rekord je {score}, najvyšší sektor {sector}; zničené {destroyed} Cryptoids.",
-    "Testnet weapon rules": "Jeden laser je zadarmo. Kúp dvojitý a rýchly dvojitý za Test-Pi a aktivuj na 2 minúty. Trojitý a plazma sa iba zbierajú.",
+    "Testnet weapon rules": "Jeden laser je zadarmo. Kúp dvojitý a rýchly dvojitý za Test-Pi a aktivuj na 1 minútu. Trojitý a plazma sa iba zbierajú.",
     "Free laser rules": "Jeden laser je zadarmo. Ďalšie zbrane zbieraj počas misie."
   },
   "hu": {
@@ -3995,7 +3995,7 @@ export const localeCatalog: Record<string, Record<string,string>> = {
     "Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.": "Minden Pi-játékos egyszer, legjobb befejezett játékával szerepel. Vendégek rekordja ezen az eszközön marad.",
     "Upgrades apply to this ship type in every color. Each new life restores its projectile protection. An active shield absorbs shots and ship collisions; unshielded ship collisions destroy the hull immediately.": "A fejlesztések e típus minden színére érvényesek. Új élet visszaállítja a lövedékvédelmet. A pajzs elnyeli a lövedékeket és ütközéseket; pajzs nélkül hajóütközés azonnal pusztít.",
     "Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.": "Rekordod {score}, legmagasabb szektorod {sector}; megsemmisített Cryptoids: {destroyed}.",
-    "Testnet weapon rules": "Az egylézer ingyenes. Iker- és gyors ikerlézer Test-Pi-vel vehető és 2 percre aktiválható. Hármas és plazma csak játékban vehető fel.",
+    "Testnet weapon rules": "Az egylézer ingyenes. Iker- és gyors ikerlézer Test-Pi-vel vehető és 1 percre aktiválható. Hármas és plazma csak játékban vehető fel.",
     "Free laser rules": "Az egylézer ingyenes. Más fegyvereket a küldetésben gyűjts."
   },
   "ro": {
@@ -4351,7 +4351,7 @@ export const localeCatalog: Record<string, Record<string,string>> = {
     "Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.": "Fiecare jucător Pi apare o dată cu cea mai bună cursă încheiată. Oaspeții păstrează recordul pe dispozitiv.",
     "Upgrades apply to this ship type in every color. Each new life restores its projectile protection. An active shield absorbs shots and ship collisions; unshielded ship collisions destroy the hull immediately.": "Upgrade-urile se aplică acestui tip în toate culorile. O viață nouă reface protecția de proiectile. Scutul absoarbe focuri și coliziuni; fără el, coliziunea distruge imediat corpul.",
     "Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.": "Recordul tău este {score}, sectorul maxim {sector}; ai distrus {destroyed} Cryptoids.",
-    "Testnet weapon rules": "Laserul simplu este gratuit. Cumpără dublu și dublu rapid cu Test-Pi și activează pentru 2 minute. Triplu și plasmă se colectează doar în joc.",
+    "Testnet weapon rules": "Laserul simplu este gratuit. Cumpără dublu și dublu rapid cu Test-Pi și activează pentru 1 minut. Triplu și plasmă se colectează doar în joc.",
     "Free laser rules": "Laserul simplu este gratuit. Adună alte arme în timpul misiunii."
   },
   "sr": {
@@ -4707,7 +4707,7 @@ export const localeCatalog: Record<string, Record<string,string>> = {
     "Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.": "Сваки Pi играч је приказан једном са најбољом завршеном игром. Гости имају локални рекорд на уређају.",
     "Upgrades apply to this ship type in every color. Each new life restores its projectile protection. An active shield absorbs shots and ship collisions; unshielded ship collisions destroy the hull immediately.": "Надоградње важе за овај тип у свим бојама. Нови живот обнавља заштиту од пројектила. Штит упија метке и сударе; без штита судар одмах уништава труп.",
     "Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.": "Твој рекорд је {score}, највиши сектор {sector}; уништено је {destroyed} Cryptoids.",
-    "Testnet weapon rules": "Један ласер је бесплатан. Купи двоструки и брзи двоструки уз Test-Pi и активирај на 2 минута. Троструки и плазма само се скупљају.",
+    "Testnet weapon rules": "Један ласер је бесплатан. Купи двоструки и брзи двоструки уз Test-Pi и активирај на 1 минут. Троструки и плазма само се скупљају.",
     "Free laser rules": "Један ласер је бесплатан. Остала оружја скупљај током мисије."
   },
   "uk": {
@@ -5063,7 +5063,7 @@ export const localeCatalog: Record<string, Record<string,string>> = {
     "Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.": "Кожен гравець Pi показаний один раз із найкращим завершеним забігом. Гості зберігають рекорд на пристрої.",
     "Upgrades apply to this ship type in every color. Each new life restores its projectile protection. An active shield absorbs shots and ship collisions; unshielded ship collisions destroy the hull immediately.": "Покращення діють для всіх кольорів цього типу. Нове життя відновлює захист від снарядів. Щит поглинає постріли й зіткнення; без нього зіткнення одразу знищує корпус.",
     "Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.": "Ваш рекорд {score}, найвищий сектор {sector}, знищено {destroyed} Cryptoids.",
-    "Testnet weapon rules": "Одинарний лазер безкоштовний. Купіть подвійний і швидкий подвійний за Test-Pi й вмикайте на 2 хвилини. Потрійний і плазма лише підбираються.",
+    "Testnet weapon rules": "Одинарний лазер безкоштовний. Купіть подвійний і швидкий подвійний за Test-Pi й вмикайте на 1 хвилину. Потрійний і плазма лише підбираються.",
     "Free laser rules": "Одинарний лазер безкоштовний. Підбирайте іншу зброю в місії."
   },
   "th": {
@@ -5419,7 +5419,7 @@ export const localeCatalog: Record<string, Record<string,string>> = {
     "Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.": "ผู้เล่น Pi แต่ละคนแสดงครั้งเดียวด้วยเกมที่จบคะแนนสูงสุด ผู้เล่นทั่วไปเก็บสถิติในเครื่อง",
     "Upgrades apply to this ship type in every color. Each new life restores its projectile protection. An active shield absorbs shots and ship collisions; unshielded ship collisions destroy the hull immediately.": "อัปเกรดใช้กับยานชนิดนี้ทุกสี ชีวิตใหม่คืนการกันกระสุน โล่กันกระสุนและการชน ถ้าไม่มีโล่การชนยานทำลายตัวถังทันที",
     "Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.": "คะแนนสูงสุด {score} เขตสูงสุด {sector} ทำลาย Cryptoids แล้ว {destroyed}",
-    "Testnet weapon rules": "เลเซอร์เดี่ยวฟรี ซื้อคู่และคู่ยิงเร็วด้วย Test-Pi แล้วเปิดนาน 2 นาที เลเซอร์สามลำและพลาสมาเก็บได้ในเกมเท่านั้น",
+    "Testnet weapon rules": "เลเซอร์เดี่ยวฟรี ซื้อคู่และคู่ยิงเร็วด้วย Test-Pi แล้วเปิดนาน 1 นาที เลเซอร์สามลำและพลาสมาเก็บได้ในเกมเท่านั้น",
     "Free laser rules": "เลเซอร์เดี่ยวฟรี เก็บอาวุธอื่นเป็นตัวเสริมระหว่างภารกิจ"
   }
 };
