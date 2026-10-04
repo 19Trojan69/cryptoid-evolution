@@ -15,6 +15,7 @@ const { emptyRewardProgress } = backendRequire('../../build/rewardRules.js');
 const networkScenario = process.env.CRYPTOID_QA_NETWORK || "normal";
 assert.ok(["normal","offline","lost-ack"].includes(networkScenario));
 const rulesVersion = process.env.CRYPTOID_QA_RULES === "1" ? 1 : 2;
+const coreScenario = process.env.CRYPTOID_QA_PHASE === 'core';
 const bonusScenario = process.env.CRYPTOID_QA_PHASE === 'bonus';
 const results = [], errors = [], screenshots = process.env.CRYPTOID_QA_DIR || '/tmp/cryptoid-expansion-qa';
 fs.mkdirSync(screenshots, { recursive: true });
@@ -38,7 +39,7 @@ fs.mkdirSync(screenshots, { recursive: true });
   try {
     for (const [stage, viewport] of [[1,{width:390,height:844}],[9,{width:390,height:844}],[37,{width:1280,height:800}],[99,{width:390,height:844}],[249,{width:1280,height:800}],[499,{width:390,height:844}],[10,{width:390,height:844}],[40,{width:1280,height:800}],[500,{width:390,height:844}]]) {
       if(process.env.CRYPTOID_QA_STAGES&&!process.env.CRYPTOID_QA_STAGES.split(',').includes(String(stage)))continue;
-      if(bonusScenario && stage%10)continue;
+      if((bonusScenario || coreScenario) && stage%10)continue;
       const h = makeHarness();
       await h.call('progress', '/me', null, { method: 'GET' });
       const snapshot = firstMissionSnapshot(2);
@@ -178,19 +179,28 @@ fs.mkdirSync(screenshots, { recursive: true });
         results.push({stage,rulesVersion,viewport,bonusResume:'passed',onceOnlyBonus:'passed',next:stage===500?'victory':stage+1});
       }else{
         await page.evaluate(()=>window.__flightTest.resume());await page.clock.runFor(8000);await page.evaluate(()=>window.__flightTest.pause());await page.evaluate(()=>window.__flightTest.save());
+        if(coreScenario){
+          await page.evaluate(()=>{const s=window.__flightTest.inspect().state;for(const g of s.boss.turrets)g.health=0;window.__flightTest.resume();});
+          await page.clock.runFor(900);
+          await page.screenshot({path:path.join(screenshots,`stage-${stage}-core.png`)});
+          await page.evaluate(()=>window.__flightTest.pause());
+          await page.evaluate(()=>window.__flightTest.save());
+          assert.ok(h.profile().mission.combat.state.boss.core,'API stores core state');
+        }
         const before=await page.evaluate(()=>window.__flightTest.inspect());
         await page.reload();await page.getByRole('button',{name:'Resume',exact:true}).click();await page.waitForFunction(()=>window.__flightTest?.inspect().state.status==='playing');await page.evaluate(()=>window.__flightTest.pause());
         const after=await page.evaluate(()=>window.__flightTest.inspect());
         const restored=await page.evaluate(()=>window.__restoredFlight);
         assert.equal(restored.boss.health,before.state.boss.health);assert.deepEqual(restored.boss.turrets.map(t=>[t.health,t.maxHealth,t.shots]),before.state.boss.turrets.map(t=>[t.health,t.maxHealth,t.shots]));
         assert.ok(after.state.boss.health<=before.state.boss.health,'resuming cannot heal the boss');
-        results.push({stage,rulesVersion,viewport,bossResume:'passed'});
+        if(coreScenario)assert.deepEqual(restored.boss.core,before.state.boss.core,'reload preserves warning and volley');
+        results.push({stage,rulesVersion,viewport,bossResume:'passed',...(coreScenario?{coreResume:'passed'}:{})});
       }
       assert.deepEqual(apiFailures,[]);
       await page.screenshot({path:path.join(screenshots,`stage-${stage}.png`)});
       await context.close();
       console.log(JSON.stringify(results.at(-1)));
     }
-    assert.deepEqual(errors,[]);fs.writeFileSync(path.join(screenshots,`results-rules-${rulesVersion}-${networkScenario}${bonusScenario?'-bonus':''}.json`),JSON.stringify({results,errors},null,2));
+    assert.deepEqual(errors,[]);fs.writeFileSync(path.join(screenshots,`results-rules-${rulesVersion}-${networkScenario}${bonusScenario?'-bonus':coreScenario?'-core':''}.json`),JSON.stringify({results,errors},null,2));
   }finally{await browser.close();await server.close();}
 })().catch(e=>{console.error(e);console.error(JSON.stringify({results,errors}));process.exitCode=1;});

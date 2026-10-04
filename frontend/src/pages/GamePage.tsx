@@ -1,3 +1,4 @@
+import { advanceBossCore, coreActive } from './bossCore';
 import { blockFlights, nextBlockFlight, REINFORCEMENT_WARNING_MS, GROUP_CLEAR_POINTS } from "./blockFlights";
 import { COMBAT_STATE_KEYS, COMBAT_REF_KEYS, readCombatCheckpoint, type CombatCheckpoint } from "../../../backend/src/combatCheckpoint";
 import HullDamage from "./HullDamage";
@@ -1136,6 +1137,10 @@ const GamePage = () => {
             nextIdRef.current += fired.shots.length;state.enemyShots.push(...fired.shots);
             if (fired.events.length) bossMuzzleRef.current = time;
             for(const event of fired.events)soundRef.current?.playBossWeapon(event.kind,event.radius,event.barrels,event.pan);
+            const pulses = advanceBossCore(state.boss, state.player, width, height, delta, enemyShotLimit(width, elapsedRef.current, state.sector) - state.enemyShots.length, nextIdRef.current);
+            nextIdRef.current += pulses.length;
+            state.enemyShots.push(...pulses);
+            if (pulses.length) { bossMuzzleRef.current = time; soundRef.current?.playBossWeapon("pulse", 8, pulses.length, 0); }
           }
         }
         let playerImpact: { x: number; y: number } | undefined;
@@ -1718,6 +1723,7 @@ const GamePage = () => {
           {game.boss.config.engineAnchors.map(([x, y], index) => <i key={index} className="boss-engine-flame" style={{ left: `${x * 100}%`, top: `${y * 100}%` }} aria-hidden="true" />)}
           <img className="boss-hull" src={game.boss.config.image} alt="" draggable={false} />
           <BossWeaponsView boss={game.boss}/>
+          {game.encounter === "boss-fight" && coreActive(game.boss) && <><i className="boss-core-glow" aria-hidden="true" /><small className="boss-core-warning" role="status">{t("Core emergency attack — dodge the pulses!")}</small></>}
           <small className="boss-turret-count">{t("Boss turrets")}: {game.boss.turrets.filter(gun => gun.health > 0).length}/{game.boss.turrets.length}</small>
           <i className="hull-reflection" style={{ maskImage: `url('${game.boss.config.image}')`, WebkitMaskImage: `url('${game.boss.config.image}')`, opacity: game.bossHullLight }} aria-hidden="true" />
           <HullDamage sites={game.boss.hullFires} hit={game.boss.hit} maskImage={`url('${game.boss.config.image}')`} bossDamage={1 - game.boss.health / game.boss.maxHealth} />

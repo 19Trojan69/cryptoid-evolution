@@ -1,0 +1,26 @@
+{
+  "results": [
+    {
+      "stage": 10,
+      "rulesVersion": 2,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bossResume": "passed",
+      "coreResume": "passed"
+    },
+    {
+      "stage": 500,
+      "rulesVersion": 2,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bossResume": "passed",
+      "coreResume": "passed"
+    }
+  ],
+  "errors": [],
+  "method": "Local instrumented React game and real API handlers with isolated in-memory account; Pi SDK mocked."
+}

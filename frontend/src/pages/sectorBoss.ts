@@ -1,3 +1,4 @@
+import type { BossCoreState } from './bossCore.ts';
 import { createBossTurrets, type BossTurretState } from './bossTurrets.ts';
 import { levelDifficulty } from "./levelDifficulty.ts";
 import { SECTIONS_PER_SECTOR, sectionInSector, sectorForSection } from "./sectorManager.ts";
@@ -10,7 +11,7 @@ export const BOSS_ENTRY_MS = 1_800;
 export const BOSS_WARNING_MS = 4_900;
 export const BOSS_FIRE_INTERVAL_MS = 2_500;
 
-export type SectorBoss = { visualMotion?: ShipMotion; turrets:BossTurretState[]; weaponClock:number; turretCursor:number; x: number; y: number; startY: number; radius: number; width: number; height: number; config: BossConfig; volley: number; health: number; maxHealth: number; elapsed: number; fireElapsed: number; lastDamageAt: number; hit?: { id?: number; x: number; y: number; impactPower?: number }; hullFires?: { id: number; x: number; y: number; impactPower?: number; revision?: number }[] };
+export type SectorBoss = { core?: BossCoreState; visualMotion?: ShipMotion; turrets:BossTurretState[]; weaponClock:number; turretCursor:number; x: number; y: number; startY: number; radius: number; width: number; height: number; config: BossConfig; volley: number; health: number; maxHealth: number; elapsed: number; fireElapsed: number; lastDamageAt: number; hit?: { id?: number; x: number; y: number; impactPower?: number }; hullFires?: { id: number; x: number; y: number; impactPower?: number; revision?: number }[] };
 
 export const createSectorBoss = (sector: number, width: number, visibleTop = 0, fieldHeight = 700): SectorBoss => {
   const config = bossForLevel(sector);

@@ -39,6 +39,7 @@ const topics = [
       "Avoid enemy ships and projectiles. An active shield absorbs an impact; otherwise a collision or an unguarded projectile can cost a heart.",
       "Advanced and Elite ship stages add protection against enemy projectiles per life. A ship collision still needs a shield to be absorbed.",
       "Enemy hulls have different strengths. Even the first boss needs sustained fire; bosses attack faster as their hull weakens.",
+      "After the last turret is destroyed, the core warns you before firing slow pulses. Later bosses alternate patterns. Destroyed turrets stay disabled.",
       "Each boss turret has its own energy bar. Destroy it to stop its fire and earn extra points once. Larger turrets have more energy and award more points. Turret hits do not damage the hull. Destroying the hull defeats the boss even with turrets intact, but awards no points for those remaining turrets.",
     ],
   },

@@ -36,5 +36,7 @@ export function readCombatCheckpoint(input: unknown): CombatCheckpoint | null {
   for (const slots of [c.slots, c.escortSlots]) if (slots !== null && (!Array.isArray(slots) || slots.length > 12 || slots.some(s => !s || !finite(s.x, 0, 10000) || !finite(s.y, 0, 10000)))) return null;
   if (c.state.asteroids.some((e: any) => !finite(e.health, 1, 1000) || !finite(e.maxHealth, 1, 1000) || e.health > e.maxHealth || !finite(e.entryElapsed, 0, 1e9) || !finite(e.entryDuration, 1, 60000))) return null;
   if (c.encounter.startsWith("boss") && (!c.state.boss || !finite(c.state.boss.health, 1, 10000) || c.state.boss.config?.level !== c.stage)) return null;
+  const core = c.state.boss?.core;
+  if (core !== undefined && (!core || !finite(core.elapsed, 0, 2800) || !Number.isSafeInteger(core.volley) || core.volley < 0 || core.volley > 1e9)) return null;
   return JSON.parse(JSON.stringify({ ...c, state: Object.fromEntries(COMBAT_STATE_KEYS.filter(k => c.state[k] !== undefined).map(k => [k, c.state[k]])), refs: Object.fromEntries(COMBAT_REF_KEYS.map(k => [k, c.refs[k]])) }));
 }
