@@ -90,6 +90,7 @@ export default function mountHangarEndpoints(router: Router) {
       const resume = action === "resume";
       if (resume && !save.mission) return res.status(409).json({ error: "No saved mission" });
       const mission = resume ? save.mission : null;
+      const rulesVersion = resume ? mission?.rulesVersion ?? 1 : req.body.rulesVersion === 2 ? 2 : 1;
       const scoreRun = save.startKey === startKey && save.activeRunId
         ? { id: save.activeRunId, startedAt: Date.now(), scoreBase: mission?.snapshot.score || 0, shardsBase: mission?.snapshot.shards || 0 }
         : { id: randomUUID(), startedAt: Date.now(), scoreBase: mission?.snapshot.score || 0, shardsBase: mission?.snapshot.shards || 0 };
@@ -99,7 +100,7 @@ export default function mountHangarEndpoints(router: Router) {
         const selectedPower = (await users.findOne({ uid }, { projection: { loadout: 1 } }))?.loadout?.power || null;
         const powerOrder = !resume && selectedPower ? await orders.findOne({ user: uid, product_id: selectedPower, paid: true, consumed_at: { $exists: false } }) : null;
         user = await users.findOneAndUpdate({ uid, [`${key}.version`]: version, ...(resume ? {} : { "loadout.power": selectedPower }) }, { $set: {
-          [`${key}.activeRunId`]: scoreRun.id, [`${key}.startKey`]: startKey, [`${key}.lastStart`]: null,
+          [`${key}.activeRunId`]: scoreRun.id, [`${key}.startKey`]: startKey, [`${key}.lastStart`]: null, [`${key}.combatSequence`]: 0,
           [`${key}.mission`]: mission, [`${key}.legacyImported`]: true,
           [`${key}.creditedShards`]: resume ? mission?.snapshot.shards || 0 : 0,
           [`${key}.creditedDestroyed`]: resume ? mission?.snapshot.destroyed || 0 : 0,
@@ -124,8 +125,8 @@ export default function mountHangarEndpoints(router: Router) {
       // must never fall through to a different consumable order.
       const consumed = !resume && selected?.kind === "power" && pending.pendingPowerOrderId
         ? await orders.findOne({ user: uid, _id: pending.pendingPowerOrderId, consumed_run_id: scoreRun.id }) || await orders.findOneAndUpdate({ user: uid, _id: pending.pendingPowerOrderId, product_id: selected.id, paid: true, consumed_at: { $exists: false } }, { $set: { consumed_at: new Date(), consumed_run_id: scoreRun.id } }, { returnDocument: "before" }) || await orders.findOne({ user: uid, _id: pending.pendingPowerOrderId, consumed_run_id: scoreRun.id }) : null;
-      const runMeta = { ...scoreRun, unlockedWeaponLevels };
-      const result = { armorBonus, weaponLevel: owned && weapon?.kind === "weapon" ? weapon.level : 1, unlockedWeaponLevels, ownedShipUpgrades: paidShipUpgrades.map((order: any) => order.product_id), powerUp: consumed && selected?.kind === "power" ? selected.powerUp : null, scoreRunId: scoreRun.id, startSector: mission?.sector || 1, startPhase: mission?.phase || "normal", checkpoint: mission?.snapshot || null, adminPreview: false, runMeta };
+      const runMeta = { ...scoreRun, rulesVersion, unlockedWeaponLevels };
+      const result = { rulesVersion, combat: mission?.combat ?? null, armorBonus, weaponLevel: owned && weapon?.kind === "weapon" ? weapon.level : 1, unlockedWeaponLevels, ownedShipUpgrades: paidShipUpgrades.map((order: any) => order.product_id), powerUp: consumed && selected?.kind === "power" ? selected.powerUp : null, scoreRunId: scoreRun.id, startSector: mission?.sector || 1, startPhase: mission?.phase || "normal", checkpoint: mission?.snapshot || null, adminPreview: false, runMeta };
       const written = await users.updateOne({ uid, [`${key}.activeRunId`]: scoreRun.id }, { $set: { [`${key}.lastStart`]: result } });
       if (!written.matchedCount) return res.status(409).json({ error: "Run replaced on another device" });
       req.session.scoreRun = runMeta;

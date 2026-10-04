@@ -91,6 +91,7 @@ const Shop = () => {
   const [termsOpen, setTermsOpen] = useState(false);
   const returnToMenu = () => { setShopView(null); setSystemMenuOpen(false); setActivePanel(null); setTermsOpen(false); setQuickTarget(null); setQuickGroup("mission"); };
   const [leaders, setLeaders] = useState<Leader[]>([]);
+  const [leaderRules, setLeaderRules] = useState<1 | 2>(2);
   const [leadersStatus, setLeadersStatus] = useState<"loading" | "ready" | "error">("loading");
   const [personalBest, setPersonalBest] = useState<number | null>(null);
   const [musicEnabled, setMusicEnabled] = useState(() => localStorage.getItem(MUSIC_STORAGE_KEY) !== "off");
@@ -159,14 +160,14 @@ const Shop = () => {
     if (shopView !== "leaders" && shopView !== "progress") return;
     let current = true;
     if (shopView === "leaders") {
-      axiosClient.get<{ leaders: Leader[] }>("/leaderboard/top").then(({ data }) => {
+      axiosClient.get<{ leaders: Leader[] }>(`/leaderboard/top?rules=${leaderRules}`).then(({ data }) => {
         if (!Array.isArray(data?.leaders)) throw new Error("Invalid leaderboard response");
         if (current) { setLeaders(data.leaders); setLeadersStatus("ready"); }
       }).catch(() => { if (current) setLeadersStatus("error"); });
     }
-    axiosClient.get<{ bestScore: number }>("/leaderboard/me").then(({ data }) => { if (current) setPersonalBest(data.bestScore); }).catch(() => { if (current) setPersonalBest(null); });
+    axiosClient.get<{ bestScore: number }>(`/leaderboard/me?rules=${shopView === "leaders" ? leaderRules : 2}`).then(({ data }) => { if (current) setPersonalBest(data.bestScore); }).catch(() => { if (current) setPersonalBest(null); });
     return () => { current = false; };
-  }, [shopView]);
+  }, [shopView, leaderRules]);
   useEffect(applySavedDisplaySettings, []);
   useEffect(() => {
     if (!systemMenuOpen) return;
@@ -179,7 +180,7 @@ const Shop = () => {
     const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setShopView(null); };
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
-  }, [shopView]);
+  }, [shopView, leaderRules]);
   const [records] = useState(() => ({ bestScore: Number(localStorage.getItem(BEST_SCORE_KEY) || 0), highestSector: Number(localStorage.getItem(HIGHEST_SECTOR_KEY) || 0), totalDestroyed: Number(localStorage.getItem(TOTAL_DESTROYED_KEY) || 0) }));
   const [rewardProgress, setRewardProgress] = useState<RewardProgress>(emptyRewardProgress);
   const [rewardStatus, setRewardStatus] = useState<"loading" | "ready" | "error">("loading");
@@ -552,6 +553,7 @@ const Shop = () => {
       {shopView === "leaders" && <section className="leaderboard-section" aria-labelledby="leaders-heading">
         <p className="eyebrow">{t("GLOBAL RECORDS")}</p>
         <h2 id="leaders-heading">{t("Top 100")}</h2>
+        <div className="modal-actions">{([2, 1] as const).map(rule => <button className="button button-secondary" type="button" key={rule} aria-pressed={leaderRules === rule} onClick={() => { setLeadersStatus("loading"); setLeaderRules(rule); }}>{t(rule === 2 ? "Expanded levels" : "Previous records")}</button>)}</div>
         <p>{t("Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.")}</p>
         {personalBest !== null && <p className="leaderboard-personal">{t("Your personal best")}: <strong>{personalBest}</strong></p>}
         {leadersStatus === "loading" && <p role="status">{t("Loading scores…")}</p>}

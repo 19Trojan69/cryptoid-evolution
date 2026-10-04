@@ -70,6 +70,7 @@ export default function mountRewardEndpoints(router: Router) {
         const deltaDestroyed = snapshot ? snapshot.destroyed - (player.creditedDestroyed ?? previous?.destroyed ?? 0) : 0;
         if (deltaShards < 0 || deltaDestroyed < 0) return res.status(400).json({ error: "save_regressed" });
         const mission = snapshot ? missionAfter(event, snapshot) : null;
+        if (mission) mission.rulesVersion = run.rulesVersion ?? 1;
         const result = await users.updateOne({ uid, [`rewardRunId.${network}`]: run.id, [`rewardEventKeys.${network}`]: { $ne: key },
           [`rewardVersion.${network}`]: version === undefined ? { $exists: false } : version,
           ...(snapshot ? { [`${playerKey}.activeRunId`]: run.id, [`${playerKey}.version`]: player.version } : {}) },

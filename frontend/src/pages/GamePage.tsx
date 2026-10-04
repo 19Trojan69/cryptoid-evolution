@@ -1,3 +1,5 @@
+import { blockFlights, nextBlockFlight, REINFORCEMENT_WARNING_MS, GROUP_CLEAR_POINTS } from "./blockFlights";
+import { COMBAT_STATE_KEYS, COMBAT_REF_KEYS, readCombatCheckpoint, type CombatCheckpoint } from "../../../backend/src/combatCheckpoint";
 import HullDamage from "./HullDamage";
 import BlockchainProgress from "./BlockchainProgress";
 import { gameHaptics } from "./gameHaptics";
@@ -7,7 +9,7 @@ import { memo, useEffect, useRef, useState, type CSSProperties, type PointerEven
 import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
 import { entryPatternForSector, entryPosition, entryStartX, type EntryPattern } from "./entryPatterns";
-import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, arrangeFormationBySize, campaignLevel, formationBelowHud, formationLayout, formationReady, formationSlotsForCount, reinforcementCount, sectionInSector, sectionPhase, sectorInChapter, sectorName, type SectorPhase } from "./sectorManager";
+import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, arrangeFormationBySize, campaignLevel, formationBelowHud, formationLayout, formationReady, formationSlotsForCount, sectionInSector, sectionPhase, sectorInChapter, sectorName, type SectorPhase } from "./sectorManager";
 import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, POWER_UP_DURATION_MS, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp, type PowerUpType } from "./powerUps";
 import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, zoneFraction, shipStartHeight } from "./controlPreferences";
@@ -44,7 +46,7 @@ import { bossWeapons } from './bossWeapons';
 import { bossEscortAttackInterval, bossEscortCount, bossEscortReinforcements, bossEscortRosterIndex, bossEscortSlots } from "./bossEscorts";
 import { awardBlock, awardBonusMedal, awardBossSticker, awardChain, emptyRewardProgress, reachLevel, rewardRank, type RewardProgress } from "./rewardProgress";
 
-const BEST_SCORE_KEY = "cryptoid_best_score";
+const BEST_SCORE_KEY = "cryptoid_best_score_v2";
 const HIGHEST_SECTOR_KEY = "cryptoid_highest_sector";
 const TOTAL_DESTROYED_KEY = "cryptoid_total_destroyed";
 const RETURN_DURATION_MS = 3_500;
@@ -193,8 +195,8 @@ const spawnAsteroid = (id: number, width: number, visibleTop: number, formationI
   const profile = chooseCryptoid(sector, formationIndex + offset);
   const size: AsteroidSize = profile.radius === 25 ? "small" : profile.radius === 36 ? "medium" : "large";
   const target = slots[formationIndex];
-  const entrySide = target.entrySide;
-  const entryPattern = entryPatternForSector(sector);
+  const entrySide = target.entrySide * (Math.floor(offset / 6) % 2 ? -1 : 1);
+  const entryPattern = entryPatternForSector(sector + Math.floor(offset / 6) * 3);
   const startX = entryStartX(entryPattern, formationIndex, width, profile.radius, entrySide);
   const entryStartY = visibleTop + profile.radius + ENTRY_HUD_GAP_PX;
   return { id, x: startX, y: entryStartY, size, ...profile, ...enemyAppearance(sector, formationIndex + offset), entryDuration: Math.max(4_100, Math.round(profile.entryDuration * .85)), health: profile.health, maxHealth: profile.health, cloaked: false, rotation: 0, rotationSpeed: 0, entryElapsed: 0, entryStartX: startX, entryStartY, entryTargetX: target.x, entryTargetY: target.y, entrySide, entryPattern, entryIndex: formationIndex, formationSlot: target.index, formationSlotCount: slots.length, formationElapsed: 0, formationDuration: FORMATION_SETTLE_MS, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, collidedThisAttack: false };
@@ -344,7 +346,10 @@ const GamePage = () => {
   const nextIdRef = useRef(1);
   const formationIndexRef = useRef(0);
   const formationStartedRef = useRef(false);
-  const reinforcementLaunchedRef = useRef(false);
+  const flightRef = useRef(0);
+  const rulesVersionRef = useRef<1 | 2>(2);
+  const combatSequenceRef = useRef(0);
+  const combatCheckpointAtRef = useRef(0);
   const formationOffsetRef = useRef(0);
   const bonusIndexRef = useRef(0);
   const sectionSlotsRef = useRef<ReturnType<typeof formationLayout> | null>(null);
@@ -422,6 +427,59 @@ const GamePage = () => {
   const weaponHoldTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const weaponLongPressRef = useRef(false);
 
+  const combatRefs = { nextId: nextIdRef, formationIndex: formationIndexRef, formationOffset: formationOffsetRef, flight: flightRef, bonusIndex: bonusIndexRef, bossEscortWave: bossEscortWaveRef, bossEscortSpawned: bossEscortSpawnedRef, bossEscortTimer: bossEscortTimerRef, spawnTimer: spawnTimerRef, sectionElapsed: sectionElapsedRef, clearTimer: clearTimerRef, attackCooldown: attackCooldownRef, elapsed: elapsedRef, attackNumber: attackNumberRef, dropsCreated: dropsCreatedRef, impactCooldown: impactCooldownRef, fireTimer: fireTimerRef };
+  const saveCombat = async () => {
+    const state = stateRef.current, runId = scoreRunRef.current, queue = saveQueueRef.current;
+    if (!runId || !queue || adminRunRef.current || !["playing", "paused"].includes(state.status) || state.hearts < 1 || state.encounter === "boss-clear" || state.phase === "SECTOR_CLEAR") return;
+    if (state.status !== "playing") state.combo.pendingAt = null;
+    const combat: CombatCheckpoint = JSON.parse(JSON.stringify({
+      version: 1, clock: performance.now(), sequence: ++combatSequenceRef.current, stage: state.sector, encounter: state.encounter,
+      width: fieldRef.current?.clientWidth || 800, height: fieldRef.current?.clientHeight || 600,
+      state: Object.fromEntries(COMBAT_STATE_KEYS.map(k => [k, state[k]])),
+      refs: Object.fromEntries(COMBAT_REF_KEYS.map(k => [k, combatRefs[k].current])),
+      formationStarted: formationStartedRef.current, slots: sectionSlotsRef.current, escortSlots: bossEscortSlotsRef.current,
+    }, (_key, value) => typeof value === "number" && !Number.isFinite(value) ? -1e9 : value));
+    if (!readCombatCheckpoint(combat)) throw new Error("Invalid local combat checkpoint");
+    await queue.enqueue({ path: "/progress/checkpoint", body: { runId, combat, save: snapshotOf(state) } });
+    setSaveNotice(queue.durable ? "Game saved." : "Game saved. Offline backup unavailable.");
+  };
+  const restoreCombat = (input: CombatCheckpoint) => {
+    const saved = readCombatCheckpoint(input);
+    if (!saved) throw new Error("Invalid saved combat checkpoint");
+    const width = fieldRef.current?.clientWidth || 800, height = fieldRef.current?.clientHeight || 600;
+    const sx = width / saved.width, sy = height / saved.height;
+    const project = (item: Record<string, unknown>) => {
+      for (const key of ["x", "entryStartX", "entryTargetX", "attackStartX", "returnStartX"]) if (typeof item[key] === "number") item[key] *= sx;
+      for (const key of ["y", "startY", "entryStartY", "entryTargetY", "attackStartY", "returnStartY"]) if (typeof item[key] === "number") item[key] *= sy;
+      if ("muzzleAt" in item) item.muzzleAt = 0;
+      if ("hitUntil" in item) item.hitUntil = 0;
+    };
+    for (const list of [saved.state.asteroids, saved.state.bonusTargets, saved.state.shots, saved.state.enemyShots, saved.state.powerUps, saved.slots, saved.escortSlots]) list?.forEach(project);
+    if (saved.state.boss) {
+      project(saved.state.boss);
+      saved.state.boss.lastDamageAt = Math.max(-1e9, saved.state.boss.lastDamageAt + performance.now() - saved.clock);
+      const model = createSectorBoss(saved.stage, width, visibleTopRef.current, height);
+      for (const key of ["radius", "width", "height"] as const) saved.state.boss[key] = model[key];
+    }
+    if (saved.encounter === "normal" && (sx !== 1 || sy !== 1)) {
+      const plan = blockFlights(saved.stage, rulesVersionRef.current);
+      saved.slots = createFormationSlots(saved.stage, saved.stage, width, height, visibleTopRef.current, plan[saved.refs.flight], saved.refs.formationOffset);
+      for (const enemy of saved.state.asteroids) {
+        const slot = saved.slots.find(s => s.index === enemy.formationSlot);
+        if (slot) { enemy.entryTargetX = slot.x; enemy.entryTargetY = slot.y; }
+        enemy.x = Math.max(enemy.radius, Math.min(width - enemy.radius, enemy.x));
+      }
+    }
+    for (const key of COMBAT_STATE_KEYS) if (saved.state[key] !== undefined) Object.assign(stateRef.current, { [key]: saved.state[key] });
+    stateRef.current.sector = saved.stage;
+    stateRef.current.section = saved.stage;
+    stateRef.current.encounter = saved.encounter;
+    for (const key of COMBAT_REF_KEYS) combatRefs[key].current = saved.refs[key];
+    formationStartedRef.current = saved.formationStarted;
+    sectionSlotsRef.current = saved.slots;
+    bossEscortSlotsRef.current = saved.escortSlots;
+  };
+
   const activateLoadout = async () => {
     if (startRequestRef.current || stateRef.current.status !== "loading") return;
     startRequestRef.current = true;
@@ -451,10 +509,12 @@ const GamePage = () => {
         }
         saveChoiceRef.current ??= "new";
       }
-      const { data } = await retrySave(() => axiosClient.post<{ weaponLevel: number; unlockedWeaponLevels: number[]; ownedShipUpgrades: string[]; powerUp: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; armorBonus: number; scoreRunId: string | null; startSector: number; shipStage?: ShipStage; startPhase?: "normal" | "boss" | "bonus"; adminPreview: boolean; checkpoint?: Snapshot | null; profile?: AccountSave }>(savedTest ? "/admin/start" : "/hangar/start", savedTest || { sector: requestedSector, shipStage: requestedStage, ...(profile ? { action: saveChoiceRef.current, version: profile.version, startKey: startKeyRef.current } : {}) }));
+      const { data } = await retrySave(() => axiosClient.post<{ weaponLevel: number; unlockedWeaponLevels: number[]; ownedShipUpgrades: string[]; powerUp: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; armorBonus: number; scoreRunId: string | null; startSector: number; shipStage?: ShipStage; startPhase?: "normal" | "boss" | "bonus"; adminPreview: boolean; rulesVersion?: 1 | 2; combat?: CombatCheckpoint | null; checkpoint?: Snapshot | null; profile?: AccountSave }>(savedTest ? "/admin/start" : "/hangar/start", savedTest || { rulesVersion: 2, sector: requestedSector, shipStage: requestedStage, ...(profile ? { action: saveChoiceRef.current, version: profile.version, startKey: startKeyRef.current } : {}) }));
       if (adminRequested && !data.adminPreview) throw new Error("Admin preview session expired");
       adminRunRef.current = data.adminPreview === true;
       scoreRunRef.current = data.scoreRunId;
+      rulesVersionRef.current = data.rulesVersion ?? 2;
+      combatSequenceRef.current = 0;
       setAccountRun(!adminRunRef.current && Boolean(data.scoreRunId));
       rewardProgressRef.current = emptyRewardProgress();
       if (!adminRunRef.current && data.scoreRunId) {
@@ -507,7 +567,8 @@ const GamePage = () => {
         stateRef.current.hearts = Math.min(stateRef.current.maxHearts, data.checkpoint.hearts);
         stateRef.current.weaponTimers = data.checkpoint.weaponTimers.map((timer, level) => stateRef.current.unlockedWeapons.includes(level) ? timer : 0);
         syncSelectedWeapon(stateRef.current);
-        setSaveNotice("Last completed section loaded.");
+        if (data.combat) restoreCombat(data.combat);
+        setSaveNotice(data.combat ? "Combat restored." : "Last completed section loaded.");
       }
     } catch (error) {
       console.error("Could not load paid loadout", error);
@@ -766,6 +827,7 @@ const GamePage = () => {
     const blur = () => keysRef.current.clear();
     const pauseAfterBackground = () => {
       if (document.visibilityState === "hidden") {
+        if (stateRef.current.status === "playing") void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
         if (!backgroundHiddenAtRef.current) backgroundHiddenAtRef.current = Date.now();
         keysRef.current.clear();
         pointerRef.current = null;
@@ -774,6 +836,7 @@ const GamePage = () => {
       }
       if (backgroundHiddenAtRef.current && Date.now() - backgroundHiddenAtRef.current > 1_000 && stateRef.current.status === "playing") {
         stateRef.current.status = "paused";
+        void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
         soundRef.current?.setPaused(true);
         musicRef.current?.pause();
         setGame({ ...stateRef.current });
@@ -783,6 +846,7 @@ const GamePage = () => {
       slowFramesRef.current = 0;
     };
     const markPageHidden = () => {
+      if (stateRef.current.status === "playing") void saveCombat().catch(() => {});
       if (!backgroundHiddenAtRef.current) backgroundHiddenAtRef.current = Date.now();
       keysRef.current.clear();
       pointerRef.current = null;
@@ -927,7 +991,7 @@ const GamePage = () => {
             state.effects = [];
             formationIndexRef.current = 0;
             formationStartedRef.current = false;
-            reinforcementLaunchedRef.current = false;
+            flightRef.current = 0;
             formationOffsetRef.current = 0;
             bonusIndexRef.current = 0;
             sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height, visibleTop);
@@ -939,6 +1003,9 @@ const GamePage = () => {
             sectionElapsedRef.current = 0;
             clearTimerRef.current = 0;
             attackCooldownRef.current = 0;
+            setGame({ ...state });
+            animationRef.current = window.requestAnimationFrame(loop);
+            return;
           }
         }
         if (bonus && sectionElapsedRef.current >= SECTION_INTRO_MS && state.phase !== "SECTOR_CLEAR" && bonusIndexRef.current < BONUS_TARGET_COUNT) {
@@ -1207,15 +1274,15 @@ const GamePage = () => {
           if (usefulDrop) { nextIdRef.current += 1; dropsCreatedRef.current += 1; state.powerUps.push(usefulDrop); }
         }
         state.shots = remainingShots;
-        // The later-level escort flight arrives after the first formation is defeated.
-        if (normal && !reinforcementLaunchedRef.current && reinforcementCount(state.sector) > 0
-          && formationIndexRef.current === slots.length && state.asteroids.length === 0) {
-          reinforcementLaunchedRef.current = true;
-          formationOffsetRef.current = slots.length;
-          sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height, visibleTop, reinforcementCount(state.sector), formationOffsetRef.current);
+        const nextFlight = normal ? nextBlockFlight(state.sector, flightRef.current, formationIndexRef.current, state.asteroids.length, rulesVersionRef.current) : null;
+        if (nextFlight && state.phase !== "SECTOR_CLEAR") {
+          if (rulesVersionRef.current === 2) state.score += GROUP_CLEAR_POINTS;
+          flightRef.current = nextFlight.group;
+          formationOffsetRef.current = nextFlight.offset;
+          sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height, visibleTop, nextFlight.count, nextFlight.offset);
           formationIndexRef.current = 0;
           formationStartedRef.current = false;
-          sectionElapsedRef.current = 0;
+          sectionElapsedRef.current = SECTION_INTRO_MS - REINFORCEMENT_WARNING_MS;
           spawnTimerRef.current = 0;
           attackCooldownRef.current = 0;
           state.shots = [];
@@ -1235,6 +1302,7 @@ const GamePage = () => {
             : sectionPhase({ introMs: sectionElapsedRef.current, spawned: formationIndexRef.current, total: (sectionSlotsRef.current ?? slots).length, alive: state.asteroids.length, ready: state.asteroids.filter(asteroid => asteroid.entryElapsed >= asteroid.entryDuration && (asteroid.formationElapsed >= asteroid.formationDuration || asteroid.attackPattern !== null)).length, returning: state.asteroids.some(asteroid => asteroid.attackPattern !== null && asteroid.attackElapsed >= attackTime(asteroid)), attacking: state.asteroids.some(asteroid => asteroid.attackPattern !== null) });
         }
         if (state.encounter === "normal" && state.phase === "SECTOR_CLEAR" && previousPhase !== "SECTOR_CLEAR") {
+          if (rulesVersionRef.current === 2) state.score += GROUP_CLEAR_POINTS;
           const link = appendSectionBlock(state.chainBlocks, state.sector);
           state.chainBlocks = link.blocks;
           creditReward(state, link.shards);
@@ -1274,6 +1342,10 @@ const GamePage = () => {
           void axiosClient.post("/leaderboard/checkpoint", { runId, score }).catch(() => {
             if (checkpointScoreRef.current === score) checkpointScoreRef.current = 0;
           });
+        }
+        if (time - combatCheckpointAtRef.current >= 10_000 && state.hearts > 0 && state.phase !== "SECTOR_CLEAR") {
+          combatCheckpointAtRef.current = time;
+          void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
         }
         if (state.phase === "SECTOR_CLEAR") state.enemyShots = [];
         state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "boss-fall" ? BOSS_FALL_DURATION_MS + 100 : effect.kind === "boss-explosion" ? BOSS_FALL_DURATION_MS + 3_400 : effect.kind === "player-explosion" ? 2_250 : effect.kind === "player-crash" ? 1_350 : effect.kind === "explosion" || effect.kind === "shatter" ? 2_250 : 390));
@@ -1467,7 +1539,7 @@ const GamePage = () => {
     checkpointScoreRef.current = 0;
     formationIndexRef.current = 0;
     formationStartedRef.current = false;
-    reinforcementLaunchedRef.current = false;
+    flightRef.current = 0;
     formationOffsetRef.current = 0;
     bonusIndexRef.current = 0;
     sectionSlotsRef.current = null;
@@ -1524,12 +1596,13 @@ const GamePage = () => {
     setPauseLeaving(true);
     setSaveNotice("Checking save…");
     try {
-      // Finish pending completed blocks first, then carry only the remaining
-      // hearts into the checkpoint. Unfinished points and shards are discarded.
+      // Preserve the full active fight. Completed transitions have already queued
+      // their next-stage snapshot and must not be overwritten by the old stage.
       await queue.recover();
       const runId = scoreRunRef.current;
       if (!runId) throw new Error("No active run");
-      await retrySave(() => axiosClient.post("/progress/leave", { runId, hearts: stateRef.current.hearts }));
+      await saveCombat();
+      await queue.drain();
       await loadAccountSave();
       leaveGameFullscreen();
       navigate("/");
@@ -1545,7 +1618,8 @@ const GamePage = () => {
   const sectorLabel = sectorInChapter(game.sector);
   const round = sectionInSector(game.section);
   const levelComplete = game.encounter === "bonus" && game.phase === "SECTOR_CLEAR";
-  const sectorIntro = game.encounter === "normal" && game.phase === "SECTOR_INTRO" && round === 1;
+  const reinforcementIntro = game.encounter === "normal" && game.phase === "SECTOR_INTRO" && flightRef.current > 0;
+  const sectorIntro = game.encounter === "normal" && game.phase === "SECTOR_INTRO" && round === 1 && !reinforcementIntro;
   const levelIntro = sectorIntro && sectorLabel === 1;
   const translateBonusResult = (result: string) => result.split(" · ").slice(1).map(part => {
     const value = part.match(/^\+(\d+) (BONUS SHARDS|CHAIN SHARDS)$/);
@@ -1553,7 +1627,7 @@ const GamePage = () => {
     if (part === "+1 HEART") return `+1 ${t("Heart")}`;
     return part.split(" + ").map(key => t(key)).join(" + ");
   }).join(" · ");
-  const transitionHeadline = levelComplete
+  const transitionHeadline = reinforcementIntro ? t("Reinforcements incoming") : levelComplete
     ? <><b>{t("LEVEL")} {levelLabel}</b><i>{t("COMPLETE")}</i></>
     : levelIntro
       ? `${t("LEVEL")} ${levelLabel}`
@@ -1594,20 +1668,23 @@ const GamePage = () => {
         <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
         <button className="wide-fullscreen-control game-fullscreen-control" type="button" onClick={requestGameFullscreen} aria-label={t("Full screen")} title={t("Full screen")}>⛶</button>
         <header ref={hudRef} className="game-hud">
-          <div className="hud-actions"><button className="game-control home-control" type="button" disabled={game.status === "loading" || game.status === "destroying"} onClick={() => { if (game.status === "game-over" || game.status === "victory") { goHome(); return; } homePromptWasPlayingRef.current = stateRef.current.status === "playing"; stateRef.current.status = "paused"; setGame({ ...stateRef.current }); setHomePrompt(true); }} aria-label={t("Go home")}><CockpitIcon kind="home" /></button></div>
+          <div className="hud-actions"><button className="game-control home-control" type="button" disabled={game.status === "loading" || game.status === "destroying"} onClick={() => { if (game.status === "game-over" || game.status === "victory") { goHome(); return; } homePromptWasPlayingRef.current = stateRef.current.status === "playing"; stateRef.current.status = "paused";
+        void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); setHomePrompt(true); }} aria-label={t("Go home")}><CockpitIcon kind="home" /></button></div>
           <div className={`hud-stat hearts-stat${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " hearts-stat-hit" : ""}`}><span className="hud-heart-label" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.2 3.4 13.1C-1.1 8.8 5.3 1.7 10.2 5.9L12 7.5l1.8-1.6c4.9-4.2 11.3 2.9 6.8 7.2L12 21.2Z" /></svg></span><strong className="hearts" role="status" aria-live="polite" aria-label={`${game.hearts} / ${game.maxHearts} ${t('Hearts')}`}>{game.hearts}/{game.maxHearts}</strong></div>
           <div className="hud-stat game-level-hud" aria-label={`${t("Game level")} ${levelLabel}`}><span>{t("Level")}</span><strong>{levelLabel}</strong></div>
           <div className="hud-stat score-hud" aria-label={`${t("Shards")} ${game.shards}, ${t("Score")} ${game.score}`}><span className="shard-line"><b>◆ {game.shards}</b><small>{t("Shards")}</small></span><span className="score-line"><b>{game.score}</b><small>{t("Score")}</small></span></div>
           <div className="hud-stat round-hud chain-hud" aria-label={`${t("Block")} ${game.chainBlocks}/${BLOCKS_PER_CHAIN}`}><span>{t("Block")}</span><strong>{game.chainBlocks}<small>/{BLOCKS_PER_CHAIN}</small></strong></div>
-          <button className="game-control pause-control" type="button" disabled={pauseLeaving || game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { if (pauseLeaveRef.current) return; const resuming = game.status === "paused"; stateRef.current.status = resuming ? "playing" : "paused"; setGame({ ...stateRef.current }); if (resuming) window.setTimeout(retryAudio, 0); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
+          <button className="game-control pause-control" type="button" disabled={pauseLeaving || game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { if (pauseLeaveRef.current) return; const resuming = game.status === "paused"; stateRef.current.status = resuming ? "playing" : "paused"; if (!resuming) void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); if (resuming) window.setTimeout(retryAudio, 0); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
         </header>
         <div className="game-label">{adminRunRef.current && <strong>{t("Admin center")} · </strong>}{t("LEVEL")} {levelLabel} <span>· <strong className="game-region-name">{sectorName(game.sector)}</strong> · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/${BLOCKS_PER_CHAIN}` : game.encounter === "bonus" ? t("BONUS CHALLENGE") : t("CORE WARDEN")}</span></div>
+        {game.encounter === "normal" && <span className="flight-indicator" style={{ top: visibleTopRef.current + 25 }}>{t("Group {current}/{total}", { current: flightRef.current + 1, total: blockFlights(game.sector, rulesVersionRef.current).length })}</span>}
+        {reinforcementIntro && game.status === "playing" && <div className="reinforcement-notice" role="status">{t("Reinforcements incoming")}</div>}
         {audioNeedsTap && game.status === "playing" && <button className={`audio-retry${game.pickupNotice ? " audio-retry-with-pickup" : ""}`} type="button" onClick={retryAudio}>{t("Enable sound")}</button>}
         {game.encounter === "bonus" && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">{t("BONUS TARGETS")} {game.bonusHits} / {BONUS_TARGET_COUNT} · {t("NO ENEMY FIRE")}</div>}
         
         {game.status === "loading" && <div className="game-overlay"><div className="game-modal mission-start-modal">
           <h1>{resumeOffer ? <><span className="desktop-menu-only">{t("Account save")}</span><span className="mobile-menu-only">{t(confirmNewRun ? "Start from the beginning?" : "Your mission")}</span></> : startError ? t("Start not confirmed") : t('Preparing mission')}</h1>
-          <p>{(startError && t(startError)) || (resumeOffer ? t("Completed sections stay saved in your Pi account. An unfinished section restarts when you resume.") : t('Checking your saved hangar loadout.'))}</p>
+          <p>{(startError && t(startError)) || (resumeOffer ? t("Combat progress is saved to your Pi account. Older saves resume at the last completed Block.") : t('Checking your saved hangar loadout.'))}</p>
           {resumeOffer && !confirmNewRun && <>
             {resumeOffer.mission && <><p className="desktop-menu-only">{t("Resume at section {section} · {phase} · {lives} · {score} points.", { section: resumeOffer.mission.sector, phase: t(resumeOffer.mission.phase === "normal" ? "Block" : resumeOffer.mission.phase === "boss" ? "Boss" : "Bonus round"), lives: lives(resumeOffer.mission.snapshot.hearts), score: resumeOffer.mission.snapshot.score })}</p><div className="mobile-menu-only mission-resume-summary"><strong>{sectorName(resumeOffer.mission.sector)}</strong><p>{t("Level")} {campaignLevel(resumeOffer.mission.sector)} · {resumeOffer.mission.phase === "normal" ? `${t("Block")} ${sectorInChapter(resumeOffer.mission.sector)}/9` : resumeOffer.mission.phase === "boss" ? t("Boss") : t("Bonus round")} · {lives(resumeOffer.mission.snapshot.hearts)}</p><p>{resumeOffer.mission.snapshot.score} {t("Score")} · {resumeOffer.mission.snapshot.shards} {t("Shards")}</p></div></>}
             {resumeOffer.version === 0 && <p>{t("You can import local Shards and Standard ships once, before your first account game. Pi purchases and records are excluded. Otherwise, local items stay on this device.")}</p>}
@@ -1621,7 +1698,7 @@ const GamePage = () => {
           {startError && <div className="modal-actions"><button className="button button-primary" type="button" onClick={() => { setStartError(""); setRecoveryError(false); void activateLoadout(); }}>{t("Try again")}</button>{recoveryError && <button className="button button-secondary" type="button" onClick={() => { saveQueueRef.current?.archive(); saveQueueReadyRef.current = true; setRecoveryError(false); setStartError(""); setSaveNotice("Pending data set aside. Using the confirmed account save."); void activateLoadout(); }}>{t("Use confirmed save")}</button>}</div>}
           {(startError || resumeOffer) && <button className="button button-secondary mission-back-button" type="button" onClick={() => { leaveGameFullscreen(); navigate(sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "/admin" : "/"); }}>{t("Back")}</button>}
         </div></div>}
-        {game.status === "playing" && !bossDestructionActive && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${game.encounter === "boss-intro" ? " boss-intro-banner" : ""}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite">
+        {game.status === "playing" && !bossDestructionActive && !reinforcementIntro && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${game.encounter === "boss-intro" ? " boss-intro-banner" : ""}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite">
           <span>{levelComplete || levelIntro ? sectorName(game.sector) : game.encounter === "bonus" ? game.phase === "SECTOR_CLEAR" ? t("BONUS COMPLETE") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.encounter !== "normal" ? `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.phase === "SECTOR_CLEAR" ? t("BLOCK LINKED") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}`}</span>
           <strong>{transitionHeadline}</strong>
           {game.phase === "SECTOR_INTRO" && game.encounter === "bonus" && <small>{t("HIT THE FLYING TARGETS")}</small>}
@@ -1704,14 +1781,14 @@ const GamePage = () => {
           {accountRun && saveNotice && <section className="pause-save-status" aria-label={t("Account save")}>
             <h2>{t("Account save")}</h2><p role="status">{t(saveNotice)}</p>
             {(saveRetrying || (saveNotice.startsWith("Save not") || saveNotice.startsWith("Save failed"))) && <button className="button button-secondary" type="button" disabled={saveRetrying || pauseLeaving} onClick={() => { void retryAccountSave(); }}>{saveRetrying ? t("Saving game…") : t("Retry save")}</button>}
-            <p><span className="desktop-menu-only">{t("Completed sections stay saved. Your remaining lives are kept when you leave.")}</span><span className="mobile-menu-only">{t("Completed blocks stay saved. The current section restarts when you return.")}</span></p>
+            <p>{t("Your enemies, remaining groups, lives, weapons and earned rewards are saved so you can continue this fight.")}</p>
             <button className="button button-secondary" type="button" disabled={saveRetrying || pauseLeaving} onClick={() => { void leaveSavedMission(); }}>{pauseLeaving ? t("Checking save…") : t("Go home")}</button>
           </section>}
           <h2 className="pause-system-title">{t("SYSTEM / SETTINGS")}</h2><SystemSettings compactMobile idPrefix="pause" musicVolume={musicVolume} effectsVolume={effectsVolume} changeMusicVolume={changeMusicVolume} changeEffectsVolume={changeEffectsVolume} onChange={() => { pointerRef.current = null; touchOriginRef.current = null; setGame({ ...stateRef.current }); }} /><button className="button button-primary pause-resume-button" type="button" disabled={pauseLeaving} onClick={() => { if (pauseLeaveRef.current) return; stateRef.current.status = "playing"; pointerRef.current = null; touchOriginRef.current = null; setGame({ ...stateRef.current }); window.setTimeout(retryAudio, 0); }}>{t("Resume")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button>
         </div></div>}
         {game.status === "game-over" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><h1>{t("Game Over")}</h1><div className="game-over-details"><p className="eyebrow">{t("MISSION FAILED")}</p><p className="game-over-hearts">{t('Hearts')}: {game.hearts}/{game.maxHearts}</p><div className="game-over-stats"><span><b>{game.score}</b>{t('Score')}</span><span><b>{game.destroyed}</b>{t('Destroyed')}</span><span><b>{game.sector}</b>{t('Sector')}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSyncStatus}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t('Home')}</button></div></div></div></div>}
         {game.status === "victory" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><p className="eyebrow">{t("CAMPAIGN COMPLETE")}</p><h1>{t("Victory")}</h1><div className="game-over-details"><p>{t("You completed the final bonus challenge.")}</p><div className="game-over-stats"><span><b>{game.score}</b>{t("Score")}</span><span><b>{game.destroyed}</b>{t("Destroyed")}</span><span><b>{game.sector}</b>{t("Sector")}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSyncStatus}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t("Home")}</button></div></div></div></div>}
-        {homePrompt && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2>{t('Return to base?')}</h2><p>{accountRun ? t("Your completed sections and remaining lives stay saved. The unfinished section restarts; its points and Shards are discarded.") : t('Your current mission will end. Your records will be saved locally.')}</p>{accountRun && <p role="status">{t(saveNotice)}</p>}<div className="modal-actions"><button className="button button-primary" type="button" disabled={pauseLeaving || saveRetrying} onClick={() => { if (accountRun) void leaveSavedMission(); else goHome(); }}>{pauseLeaving ? t("Saving game…") : t('Leave game')}</button><button className="button button-secondary" type="button" disabled={pauseLeaving} onClick={() => { setHomePrompt(false); if (homePromptWasPlayingRef.current) { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); } }}>{t('Keep playing')}</button></div></div></div>}
+        {homePrompt && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2>{t('Return to base?')}</h2><p>{accountRun ? t("Your enemies, remaining groups, lives, weapons and earned rewards are saved so you can continue this fight.") : t('Your current mission will end. Your records will be saved locally.')}</p>{accountRun && <p role="status">{t(saveNotice)}</p>}<div className="modal-actions"><button className="button button-primary" type="button" disabled={pauseLeaving || saveRetrying} onClick={() => { if (accountRun) void leaveSavedMission(); else goHome(); }}>{pauseLeaving ? t("Saving game…") : t('Leave game')}</button><button className="button button-secondary" type="button" disabled={pauseLeaving} onClick={() => { setHomePrompt(false); if (homePromptWasPlayingRef.current) { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); } }}>{t('Keep playing')}</button></div></div></div>}
       </div>
     </main>
   );

@@ -23,11 +23,11 @@ export async function retrySave<T>(request: () => Promise<T>): Promise<T> {
   }
 }
 
-type PendingSave = { path: "/rewards/event" | "/leaderboard/score"; body: Record<string, unknown> & { runId: string } };
+type PendingSave = { path: "/rewards/event" | "/leaderboard/score" | "/progress/checkpoint"; body: Record<string, unknown> & { runId: string } };
 export function createSaveQueue(uid: string) {
   const key = `cryptoid_save_outbox_v1_${shipSaveNetwork}_${uid}`;
   let entries: PendingSave[] = [];
-  try { const parsed = JSON.parse(localStorage.getItem(key) || "[]"); if (Array.isArray(parsed)) entries = parsed.filter(e => ["/rewards/event", "/leaderboard/score"].includes(e.path) && typeof e.body?.runId === "string"); } catch { /* Preserve malformed backup separately; never grant its data. */ }
+  try { const parsed = JSON.parse(localStorage.getItem(key) || "[]"); if (Array.isArray(parsed)) entries = parsed.filter(e => ["/rewards/event", "/leaderboard/score", "/progress/checkpoint"].includes(e.path) && typeof e.body?.runId === "string"); } catch { /* Preserve malformed backup separately; never grant its data. */ }
   let inflight: Promise<void> | null = null;
   let durable = true;
   const persist = () => { try { localStorage.setItem(key, JSON.stringify(entries)); } catch { durable = false; } };

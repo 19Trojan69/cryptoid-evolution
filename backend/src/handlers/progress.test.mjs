@@ -50,7 +50,7 @@ function harness() {
 }
 const snapshot = (overrides = {}) => ({ score: 0, shards: 0, destroyed: 0, hearts: 3, weaponSource: 'standard', paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, weaponTimers: [0, -1, 0, 0, 0, 0], shieldCharges: 0, shieldMs: 0, purchasedShieldMs: 0, shieldActive: false, overdriveMs: 0, overdriveTotalMs: 20000, rapidFireMs: 0, rapidFireTotalMs: 20000, empMs: 0, ...overrides });
 const start = async (h, action = 'new', startKey = 'start-key-0000000001') => {
-  const result = await h.call('hangar', '/start', { action, version: h.profile().version, startKey });
+  const result = await h.call('hangar', '/start', { action, rulesVersion: 2, version: h.profile().version, startKey });
   // Simulate time spent playing without making the test sleep.
   if (result.code === 200) h.session.scoreRun.startedAt -= 10_000;
   return result;
@@ -222,4 +222,94 @@ test('new mission keeps inventory and career, closes import and resets only run 
   assert.equal(h.profile().mission, null);
   assert.deepEqual(h.docs[0].rewardEventKeys.testnet, []);
   assert.equal((await h.call('progress', '/inventory', { action: 'import', version: h.profile().version, confirm: true, balance: 999, fleet: {} })).code, 409);
+});
+
+const combat = (changes = {}) => ({
+  version: 1, clock: 5000, sequence: 1, stage: 1, encounter: 'normal', width: 390, height: 844,
+  state: { asteroids: [], bonusTargets: [], bonusHits: 0, boss: null, shots: [], enemyShots: [], player: { x: .5, y: .8 }, powerUps: [], pickupNotice: null, combo: { pendingAt: null, total: 0, level: 0, remainingMs: 0 }, chainBlocks: 0, chainResult: '', bonusResult: '', projectileGuard: 0, pendingStartPower: null, phase: 'ENTRY' },
+  refs: Object.fromEntries(require('../../build/combatCheckpoint.js').COMBAT_REF_KEYS.map(k => [k, k === 'nextId' ? 10 : 0])),
+  formationStarted: false, slots: null, escortSlots: null, ...changes,
+});
+
+test('combat checkpoints credit once, restore timers and groups, and reject stale devices', async () => {
+  const h = harness(); await init(h); await start(h);
+  const runId = h.session.scoreRun.id;
+  const c = combat(); c.refs.sectionElapsed = 2600; c.refs.formationIndex = 2;
+  c.state.asteroids = [{ id: 1, x: 60, y: 160, health: 2, maxHealth: 4, entryElapsed: 500, entryDuration: 4100 }];
+  const body = { runId, combat: c, save: snapshot({ hearts: 1, score: 120, shards: 8, destroyed: 3, pickupWeaponMs: 18543 }) };
+  assert.equal((await h.call('progress', '/checkpoint', body)).code, 200);
+  assert.equal((await h.call('progress', '/checkpoint', body)).body.stale, true);
+  assert.equal(h.profile().balance, 8);
+  assert.equal(h.profile().totalDestroyed, 3);
+  const oldSession = structuredClone(h.session);
+  const resumed = await start(h, 'resume', 'resume-combat-00000001');
+  assert.equal(resumed.code, 200);
+  assert.equal(resumed.body.rulesVersion, 2);
+  assert.equal(resumed.body.checkpoint.hearts, 1);
+  assert.equal(resumed.body.checkpoint.pickupWeaponMs, 18543);
+  assert.deepEqual(resumed.body.combat.state.asteroids, c.state.asteroids);
+  assert.equal(resumed.body.combat.refs.sectionElapsed, 2600);
+  assert.equal((await h.call('progress', '/checkpoint', { ...body, combat: { ...c, sequence: 2 } }, { session: oldSession })).code, 409);
+  assert.equal(h.profile().balance, 8);
+  assert.equal((await h.call('progress', '/checkpoint', { ...body, runId: resumed.body.scoreRunId })).code, 200);
+  assert.equal(h.profile().balance, 8);
+});
+
+test('completed block wins over late combat checkpoint without replaying rewards', async () => {
+  const h = harness(); await init(h); await start(h);
+  const runId = h.session.scoreRun.id;
+  const save = snapshot({ score: 100, shards: 12, destroyed: 6 });
+  assert.equal((await h.call('progress', '/checkpoint', { runId, combat: combat(), save })).code, 200);
+  assert.equal((await h.call('rewards', '/event', { runId, kind: 'block', level: 1, stage: 1, save })).code, 200);
+  assert.equal(h.profile().balance, 12);
+  assert.equal(h.profile().mission.sector, 2);
+  assert.equal(h.profile().mission.combat, undefined);
+  assert.equal((await h.call('progress', '/checkpoint', { runId, combat: combat({ sequence: 2 }), save })).code, 409);
+  assert.equal(h.profile().mission.sector, 2);
+  assert.equal(h.profile().balance, 12);
+});
+
+test('combat validation rejects forged positions, ownership, stages and overlarge payloads', async () => {
+  const h = harness(); await init(h); await start(h);
+  const runId = h.session.scoreRun.id;
+  for (const c of [combat({ stage: 500 }), combat({ sequence: -1 }), combat({ width: NaN }), combat({ slots: Array(50).fill({ x: 1, y: 1 }) })]) {
+    assert.equal((await h.call('progress', '/checkpoint', { runId, combat: c, save: snapshot() })).code, 400);
+  }
+  assert.equal((await h.call('progress', '/checkpoint', { runId, combat: combat(), save: snapshot({ paidWeaponLevel: 5 }) })).code, 400);
+  assert.equal((await h.call('progress', '/checkpoint', { runId, combat: combat(), save: snapshot({ hearts: 6 }) })).code, 400);
+  assert.equal(h.profile().balance, 0);
+});
+
+test('new score rules preserve legacy high scores and separate network records', async () => {
+  const h = harness(); await init(h); h.docs[0].bestScore = 9000;
+  await start(h);
+  const runId = h.session.scoreRun.id;
+  assert.equal((await h.call('leaderboard', '/score', { runId, score: 100, finished: true, save: snapshot({ score: 100, hearts: 0 }) })).code, 200);
+  assert.equal(h.docs[0].bestScore, 9000);
+  assert.equal(h.docs[0].bestScoreV2.testnet, 100);
+  assert.equal(h.docs[0].bestScoreV2.mainnet, undefined);
+});
+
+test('unfinished bonus restores hits and targets without paying the bonus twice', async () => {
+  const h=harness();await init(h);await start(h);const runId=h.session.scoreRun.id;
+  const save=snapshot({score:100,shards:10,destroyed:6});
+  h.profile().mission={sector:10,phase:'bonus',rulesVersion:2,snapshot:save,savedAt:new Date().toISOString()};
+  h.docs[0].rewardEventKeys.testnet=['boss:1'];
+  const c=combat({stage:10,encounter:'bonus'});c.state.bonusHits=4;c.state.chainBlocks=9;c.state.bonusTargets=[{id:4,x:180,y:140,elapsed:500}];c.refs.bonusIndex=5;
+  assert.equal((await h.call('progress','/checkpoint',{runId,combat:c,save})).code,200);
+  const resumed=await start(h,'resume','resume-bonus-000000001');
+  assert.equal(resumed.body.combat.state.bonusHits,4);assert.equal(resumed.body.combat.refs.bonusIndex,5);
+  const event={runId:resumed.body.scoreRunId,kind:'bonus',stage:10,level:1,hits:6,save:snapshot({score:120,shards:12,destroyed:6})};
+  assert.equal((await h.call('rewards','/event',event)).body.awarded,true);
+  assert.equal((await h.call('rewards','/event',event)).body.awarded,false);
+  assert.equal(h.profile().balance,12);assert.equal(h.profile().mission.sector,11);
+});
+
+test('checkpoint rejects a skipped reinforcement and a fabricated pending power',async()=>{
+  const h=harness();await init(h);await start(h);const runId=h.session.scoreRun.id;
+  const c=combat();c.refs.flight=2;c.refs.formationOffset=12;
+  assert.equal((await h.call('progress','/checkpoint',{runId,combat:c,save:snapshot()})).code,400);
+  const power=combat();power.state.pendingStartPower='bomb';
+  assert.equal((await h.call('progress','/checkpoint',{runId,combat:power,save:snapshot()})).code,400);
+  assert.equal(h.profile().mission,null);
 });

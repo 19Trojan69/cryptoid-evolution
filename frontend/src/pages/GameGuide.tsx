@@ -27,8 +27,8 @@ const topics = [
     id: "route", label: "Level path", title: "Nine Blocks, boss, bonus",
     intro: "Each level has nine visible Blocks, then a boss fight and a bonus round.",
     details: [
-      "Each Block is one encounter: enemies enter, form a recognizable pattern and break away for attack runs. Defeat the formation to link that Block.",
-      "The nine formations include ranks, V, W, ring, wave, X, A, columns and diamond. Later levels can add reinforcements to Blocks 7–9.",
+      "A Block contains one to three planned groups. Defeat every group to link the Block. Each cleared group earns 50 points once.",
+      "Reinforcements are announced before entering. Up to six enemies are visible at once; new arrivals fire only after docking. Some Blocks stay short.",
       "After Block 9, the boss arrives. Defeat it to enter the bonus round; the next level begins with a fresh chain.",
     ],
   },
