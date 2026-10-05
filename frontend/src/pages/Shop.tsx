@@ -29,6 +29,7 @@ import WeaponTutorial from "./WeaponTutorial";
 import WeaponPurchase from './WeaponPurchase';
 import WeaponPreview from './WeaponPreview';
 import BossPortrait from "./BossPortrait";
+import BossDossier from './BossDossier';
 import { bossName } from './bossNames';
 import { useLocale } from "../i18n";
 import EarthGlobe from "./EarthGlobe";
@@ -81,6 +82,7 @@ const Shop = () => {
   const closeQuickMenu = useCallback(() => setQuickGroup(null), []);
   const [shopView, setShopView] = useState<"hangar" | "shop" | "weapons" | "powers" | "progress" | "rewards" | "leaders" | null>(null);
   const [termsOpen, setTermsOpen] = useState(false);
+  const [selectedBoss, setSelectedBoss] = useState<number | null>(null);
   const returnToMenu = () => { setShopView(null); setSystemMenuOpen(false); setActivePanel(null); setTermsOpen(false); setQuickTarget(null); setQuickGroup("mission"); };
   const [leaders, setLeaders] = useState<Leader[]>([]);
   const [leaderRules, setLeaderRules] = useState<1 | 2>(2);
@@ -169,7 +171,7 @@ const Shop = () => {
   }, [systemMenuOpen]);
   useEffect(() => {
     if (!shopView) return;
-    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setShopView(null); };
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape" && !document.querySelector('dialog.boss-dossier[open]')) setShopView(null); };
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [shopView, leaderRules]);
@@ -183,6 +185,7 @@ const Shop = () => {
     user, canAdmin, adminMode, setAdminPreview, isAuthenticated, showSignIn, signIn, signOut,
     closeSignIn, requireAuth, isLoading: isAuthLoading, authReady, authError,
   } = useAuth();
+  useEffect(() => { setSelectedBoss(null); }, [shopView, user?.uid]);
   useEffect(() => {
     if (!user) {
       setRewardProgress(readRewardProgress(localStorage.getItem(REWARD_PROGRESS_KEY)));
@@ -529,11 +532,13 @@ const Shop = () => {
           <div className="boss-sticker-grid">{Array.from({ length: BOSS_STICKER_COUNT }, (_, index) => {
             const id = index + 1;
             const stars = rewardProgress.bossWins[id] ?? 0;
-            return <div key={id} className={`boss-sticker${stars ? " boss-sticker-earned" : ""}`} title={t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : t("Not defeated yet") })} aria-label={t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : t("Locked") })}>
+            return <button type="button" key={id} disabled={!stars} onClick={() => setSelectedBoss(id)} className={`boss-sticker${stars ? " boss-sticker-earned" : ""}`} title={t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : t("Not defeated yet") })} aria-haspopup={stars ? 'dialog' : undefined} aria-label={`${bossName(id)} · ${t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : t("Locked") })}`}>
               {stars ? <BossPortrait id={id} /> : <span aria-hidden="true">?</span>}
               <small>#{String(id).padStart(2, "0")} · {bossName(id)}</small>{!!stars && <b>{"★".repeat(stars)}</b>}
-            </div>;
+              {!!stars && <span className="boss-sticker-open">{locale.startsWith('de') ? 'Feindakte öffnen ↗' : 'Open dossier ↗'}</span>}
+            </button>;
           })}</div>
+          {selectedBoss !== null && <BossDossier id={selectedBoss} stars={rewardProgress.bossWins[selectedBoss] ?? 0} onClose={() => setSelectedBoss(null)} />}
           <h4 id="reward-medals">{t("Bonus medals")}</h4>
           <p>{Object.values(rewardProgress.bonusMedals).filter(medal => medal === "gold").length} {t("Gold")} · {Object.values(rewardProgress.bonusMedals).filter(medal => medal === "silver").length} {t("Silver")} · {Object.values(rewardProgress.bonusMedals).filter(medal => medal === "bronze").length} {t("Bronze")}</p>
           <div className="reward-medal-grid">{Object.entries(rewardProgress.bonusMedals).map(([level, medal]) => <span key={level} className={`reward-medal reward-medal-${medal}`}>✦ <b>{t("Level")} {level}</b> · {t(medal)}</span>)}</div>
