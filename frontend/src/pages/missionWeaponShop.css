@@ -1,23 +1,42 @@
 .pause-settings-modal > .pause-weapon-shop-button { position: static; width: 100%; margin-block: 12px; }
-.pause-settings-overlay:has(.mission-weapon-shop) { z-index: 20; }
-.mission-weapon-shop { text-align: left; }
-.mission-weapon-shop > h2 { color: #f1d490; }
-.mission-weapon-shop > p { line-height: 1.5; }
-.mission-weapon-offers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-block: 16px; }
-.mission-weapon-offers .hangar-offer { min-width: 0; padding: 16px; }
-.mission-weapon-offers h3 span { color: #f1d490; }
-.mission-weapon-shop .modal-actions { position: static; padding-block: 12px; background: #091827; }
-@media (max-width: 700px) { .mission-weapon-offers { grid-template-columns: 1fr; } }
-
-.pause-settings-modal:has(.mission-weapon-shop) { padding: 18px; }
-.mission-weapon-shop { font-family: system-ui, sans-serif; }
-.mission-weapon-shop > h2 { margin: 0 0 8px; font: 650 22px/1.2 system-ui, sans-serif; }
-.mission-weapon-shop > p { margin: 8px 0; font: 400 13px/1.45 system-ui, sans-serif; }
-.mission-weapon-shop .testnet-shop-notice { padding: 10px 12px; border: 0; border-left: 2px solid #b3996b; border-radius: 0; background: #cab17d09; color: #c9b896; }
-.mission-weapon-offers .hangar-offer { gap: 8px; padding: 12px; border: 1px solid #3b475960; border-radius: 12px; clip-path: none; background: linear-gradient(150deg, #19283d, #101b2c); box-shadow: inset 0 1px #ffffff08; }
-.mission-weapon-offers .hangar-offer h3 { margin: 2px 0 0; color: #f1f4fa; font: 650 17px/1.25 system-ui, sans-serif; }
-.mission-weapon-offers .hangar-offer h3 span { color: #c6ac7a; font-size: 12px; }
-.mission-weapon-offers .hangar-offer > p { min-height: 0; margin: 0; color: #abbcd0; font: 400 12px/1.4 system-ui, sans-serif; }
-.mission-weapon-offers .hangar-offer > strong { font: 500 10px/1.2 system-ui, sans-serif; color: #92cbb8; }
-.mission-weapon-shop .modal-actions { display: flex; gap: 8px; background: transparent; }
-.mission-weapon-shop .modal-actions .button { min-height: 42px; padding: 8px 14px; font: 600 13px/1.2 system-ui, sans-serif; }
+.weapon-selection-dialog:has(.mission-weapon-shop) { width: min(760px, 100%); height: min(840px, 100%); }
+.mission-weapon-shop { display: flex; flex-direction: column; height: 100%; min-height: 0; overflow: hidden; text-align: left; font: 14px/1.45 system-ui,sans-serif; }
+.mission-weapon-shop > header { flex: none; padding: 16px 18px 12px; border-bottom: 1px solid #93b9c329; }
+.mission-weapon-shop header h2 { margin: 3px 0 6px; font: 700 24px/1.2 system-ui,sans-serif; color: #f1d490; }
+.mission-weapon-shop header small { color: #96d4de; font-size: 10px; letter-spacing: .14em; }
+.mission-weapon-shop header p { margin: 0; font-size: 12px; color: #bfd1df; }
+.mission-shop-scroll { flex: 1 1 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; padding: 12px; }
+.mission-weapon-shop .testnet-shop-notice { margin: 0 0 12px; padding: 10px 12px; border-left: 2px solid #b3996b; background: #cab17d09; color: #d4c5a8; font-size: 12px; }
+.mission-weapon-offers { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); align-items: start; gap: 12px; }
+.mission-weapon-offers .mission-weapon-card { display: flex; flex-direction: column; gap: 0; min-width: 0; padding: 0; overflow: hidden; border: 1px solid #455b70; border-radius: 12px; clip-path: none; background: #102235; box-shadow: none; }
+.mission-weapon-offers .mission-weapon-card[data-owned="true"] { border-color: #59bba8; box-shadow: inset 0 0 0 1px #59bba830; }
+.mission-weapon-offers .mission-weapon-card[data-active="true"] { border-color: #efcf87; box-shadow: inset 0 0 0 1px #efcf87; }
+.mission-weapon-card[data-owned="false"] > .weapon-fire-preview { opacity: .55; }
+.mission-weapon-card[data-owned="false"] .mission-weapon-details { background: #0a1827; }
+.mission-weapon-card .weapon-fire-preview { width: 100%; height: 100px; flex: 0 0 100px; border-radius: 0; margin: 0; }
+.mission-weapon-card .weapon-fire-preview > small { display: none; }
+.mission-weapon-card > .mission-weapon-details { display: flex; flex-direction: column; flex-wrap: nowrap; gap: 5px; margin: 0; padding: 12px; }
+.mission-weapon-details h3 { margin: 0; color: #f0e2c5; font: 650 16px/1.3 system-ui,sans-serif; }
+.mission-weapon-details h3 span { color: #efd393; }
+.mission-weapon-details p { margin: 0; min-height: 0; font: 13px/1.4 system-ui,sans-serif; color: #bccfdf; }
+.mission-weapon-details .mission-stock { color: #f0f5fa; font-size: 15px; }
+.mission-stock b { font-size: 21px; font-variant-numeric: tabular-nums; }
+.mission-weapon-details .mission-time { color: #93e7d8; font-variant-numeric: tabular-nums; }
+.mission-weapon-card button.mission-select, .mission-weapon-card button.mission-pickup-select { position: static; flex: none; width: 100%; min-height: 42px; height: auto; margin: 4px 0 0; padding: 8px; border: 1px solid #58b6aa; border-radius: 8px; clip-path: none; color: #d9fff7; background: #153c3c; font: 600 13px/1.3 system-ui,sans-serif; }
+.mission-weapon-card button.mission-select[aria-pressed="true"] { color: #ffe8b5; background: #413823; border-color: #efd393; }
+.mission-weapon-card button.mission-select:disabled { opacity: 1; background: #1b2839; color: #aeb9c6; border-color: #415368; cursor: default; }
+.mission-weapon-card .weapon-purchase { box-sizing: border-box; padding: 0 12px 12px; margin: 0; }
+.mission-weapon-card > .mission-locked { display: block; margin: 0; padding: 0 12px 12px; }
+.mission-locked strong { display: inline-block; padding: 3px 7px; border: 1px solid #c6a55d; border-radius: 5px; background: #372b13; color: #ffe2a0; font: 700 10px/1.4 system-ui,sans-serif; letter-spacing: .06em; }
+.mission-locked p { min-height: 0; margin: 7px 0 0; color: #b8cadb; font: 12px/1.4 system-ui,sans-serif; }
+.mission-weapon-shop > footer.mission-shop-footer { display: flex; flex: none; gap: 8px; padding: 12px max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)); background: #0b1b2a; border-top: 1px solid #93b9c329; }
+.mission-shop-footer button.mission-refresh { flex: none; width: 46px; min-height: 46px; padding: 8px; background: #152c40; color: #d6eaf5; border: 1px solid #566e80; border-radius: 9px; font: 600 24px/1 system-ui,sans-serif; }
+.mission-shop-footer button.mission-return { display: flex; align-items: center; justify-content: center; gap: 8px; flex: 1; width: auto; min-height: 46px; padding: 8px 12px; background: linear-gradient(120deg,#eadbb3,#c4b07f); color: #13202d; border: 1px solid #d4bb86; border-radius: 9px; font: 700 15px/1.3 system-ui,sans-serif; }
+.mission-weapon-shop button:focus-visible { outline: 2px solid #8ce9ef; outline-offset: -3px; }
+.mission-shop-footer button:disabled { opacity: .5; cursor: wait; }
+.edge-action.mission-shop-access { gap: 2px; }
+.edge-action.mission-shop-access small { max-width: 84px; font: 700 11px/1.15 system-ui,sans-serif; white-space: normal; }
+.edge-action.mission-shop-access em { position: static; color: #f3d68f; font: 11px/1.2 system-ui,sans-serif; }
+.edge-action.mission-shop-access .weapon-cycle-glyph { font-size: 23px; }
+@media (max-width: 360px) { .mission-weapon-offers { grid-template-columns: 1fr; } }
+@media (max-height: 500px) { .mission-weapon-shop > header { padding: 8px 12px; } .mission-weapon-shop header h2 { font-size: 20px; } .mission-weapon-shop > footer.mission-shop-footer { padding: 8px 12px; } }

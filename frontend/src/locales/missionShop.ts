@@ -37,3 +37,136 @@ const paymentRows: Record<string, string[]> = {
   th: ['กำลังเชื่อมต่อ Pi…', 'กำลังเปิดการชำระเงิน…', 'กำลังอนุมัติการชำระเงิน…', 'กำลังยืนยันการชำระเงิน…', 'ยกเลิกการชำระเงินแล้ว'],
 };
 for (const [locale, row] of Object.entries(paymentRows)) Object.assign(missionShopTranslations[locale], Object.fromEntries(paymentKeys.map((key, i) => [key, row[i]])));
+
+const selectionKeys = ["Shop & weapons","Owned weapons first · strongest first","Unlimited","Remaining time","Not in stock","Back to game"];
+const selectionRows: Record<string, string[]> = {
+  "de": [
+    "Shop & Waffen",
+    "Vorhandene Waffen zuerst · stärkste zuerst",
+    "Unbegrenzt",
+    "Restlaufzeit",
+    "Kein Vorrat",
+    "Zurück ins Spiel"
+  ],
+  "es": [
+    "Tienda y armas",
+    "Armas disponibles primero · las más fuertes primero",
+    "Ilimitado",
+    "Tiempo restante",
+    "Sin existencias",
+    "Volver al juego"
+  ],
+  "fr": [
+    "Boutique et armes",
+    "Armes disponibles d’abord · les plus puissantes d’abord",
+    "Illimité",
+    "Temps restant",
+    "Aucun stock",
+    "Retour au jeu"
+  ],
+  "pt": [
+    "Loja e armas",
+    "Armas disponíveis primeiro · mais fortes primeiro",
+    "Ilimitado",
+    "Tempo restante",
+    "Sem stock",
+    "Voltar ao jogo"
+  ],
+  "it": [
+    "Negozio e armi",
+    "Prima le armi disponibili · dalla più potente",
+    "Illimitato",
+    "Tempo rimanente",
+    "Nessuna carica",
+    "Torna al gioco"
+  ],
+  "ru": [
+    "Магазин и оружие",
+    "Сначала доступное оружие · от сильного к слабому",
+    "Без ограничений",
+    "Осталось времени",
+    "Нет зарядов",
+    "Вернуться в игру"
+  ],
+  "pl": [
+    "Sklep i broń",
+    "Najpierw dostępna broń · od najsilniejszej",
+    "Bez limitu",
+    "Pozostały czas",
+    "Brak zapasu",
+    "Powrót do gry"
+  ],
+  "tr": [
+    "Mağaza ve silahlar",
+    "Önce mevcut silahlar · en güçlüden başlayarak",
+    "Sınırsız",
+    "Kalan süre",
+    "Stokta yok",
+    "Oyuna dön"
+  ],
+  "ro": [
+    "Magazin și arme",
+    "Armele disponibile întâi · cele mai puternice primele",
+    "Nelimitat",
+    "Timp rămas",
+    "Fără stoc",
+    "Înapoi la joc"
+  ],
+  "hr": [
+    "Trgovina i oružje",
+    "Prvo dostupno oružje · od najjačeg",
+    "Neograničeno",
+    "Preostalo vrijeme",
+    "Nema zaliha",
+    "Natrag u igru"
+  ],
+  "cs": [
+    "Obchod a zbraně",
+    "Nejprve dostupné zbraně · od nejsilnější",
+    "Neomezeně",
+    "Zbývající čas",
+    "Žádné zásoby",
+    "Zpět do hry"
+  ],
+  "sk": [
+    "Obchod a zbrane",
+    "Najprv dostupné zbrane · od najsilnejšej",
+    "Neobmedzene",
+    "Zostávajúci čas",
+    "Žiadne zásoby",
+    "Späť do hry"
+  ],
+  "hu": [
+    "Bolt és fegyverek",
+    "Először az elérhető fegyverek · a legerősebbtől",
+    "Korlátlan",
+    "Hátralévő idő",
+    "Nincs készleten",
+    "Vissza a játékba"
+  ],
+  "sr": [
+    "Продавница и оружје",
+    "Прво доступно оружје · од најјачег",
+    "Неограничено",
+    "Преостало време",
+    "Нема залиха",
+    "Назад у игру"
+  ],
+  "uk": [
+    "Магазин і зброя",
+    "Спочатку доступна зброя · від найсильнішої",
+    "Необмежено",
+    "Залишилося часу",
+    "Немає зарядів",
+    "Повернутися до гри"
+  ],
+  "th": [
+    "ร้านค้าและอาวุธ",
+    "อาวุธที่มีก่อน · เรียงจากแรงที่สุด",
+    "ไม่จำกัด",
+    "เวลาที่เหลือ",
+    "ไม่มีในคลัง",
+    "กลับเข้าเกม"
+  ]
+};
+for (const [locale, row] of Object.entries(selectionRows)) Object.assign(missionShopTranslations[locale], Object.fromEntries(selectionKeys.map((key, i) => [key, row[i]])));

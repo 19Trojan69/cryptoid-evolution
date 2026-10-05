@@ -9,7 +9,7 @@ const { weaponPayment, creditWeaponOrders, emptyWeaponStock } = require(path.joi
 
 (async () => {
   const { createServer } = await import(path.join(repo, 'frontend/node_modules/vite/dist/node/index.js'));
-  const entry = `import React from 'react'; import {createRoot} from 'react-dom/client'; import '/src/index.css'; import '/src/mobileMenus.css'; import '/src/mobileDeepMenus.css'; import MissionWeaponShop from '/src/pages/MissionWeaponShop.tsx'; createRoot(document.getElementById('root')).render(React.createElement('div',{className:'game-shell'},React.createElement('div',{className:'game-overlay pause-settings-overlay'},React.createElement('div',{className:'game-modal pause-settings-modal'},React.createElement(MissionWeaponShop,{authenticated:true,admin:false,timers:[],onInventory:async()=>{},onClose:()=>{}})))));`;
+  const entry = `import React from 'react'; import {createRoot} from 'react-dom/client'; import '/src/index.css'; import '/src/mobileMenus.css'; import '/src/mobileDeepMenus.css'; import MissionWeaponShop from '/src/pages/MissionWeaponShop.tsx'; createRoot(document.getElementById('root')).render(React.createElement('div',{className:'game-shell'},React.createElement('div',{className:'game-overlay pause-settings-overlay'},React.createElement('div',{className:'weapon-selection-dialog'},React.createElement(MissionWeaponShop,{authenticated:true,admin:false,timers:[],onInventory:async()=>{},onClose:()=>{}})))));`;
   const server = await createServer({ plugins: [{name: "isolated-shop-entry", resolveId(id) {if(id === "/qa-entry.tsx") return id;}, load(id) {if(id === "/qa-entry.tsx") return entry;}}], root: path.join(repo, 'frontend'), logLevel: 'error', server: { host: '127.0.0.1', port: 0, hmr: false } });
   await server.listen();
   const origin = 'http://testnet.localhost:' + server.httpServer.address().port;
@@ -77,11 +77,11 @@ const { weaponPayment, creditWeaponOrders, emptyWeaponStock } = require(path.joi
       page.setDefaultTimeout(12000);
       page.on('pageerror', error => { errors.push(error.message); console.error('PAGE',error.message); });
       await page.goto(origin + '/qa-shop');
-      const card = page.locator('.hangar-offer').first();
+      const card = page.locator('.mission-weapon-card[data-level="2"]');
       const buy = card.locator('.weapon-buy-button');
       await buy.waitFor();
       await page.waitForFunction(() => !document.querySelector('.weapon-buy-button').disabled);
-      assert.equal(await page.locator('.weapon-fire-preview').count(), 4);
+      assert.equal(await page.locator('.weapon-fire-preview').count(), 5);
       assert.equal(await card.locator('.weapon-fire-preview-volley').count(), 4);
       await card.getByRole('button', { name: 'Menge: 10', exact: true }).click();
       assert.equal(await card.locator('input').inputValue(), '10');
@@ -99,7 +99,7 @@ const { weaponPayment, creditWeaponOrders, emptyWeaponStock } = require(path.joi
       await page.evaluate(() => window.qa.callbacks.onReadyForServerApproval('purchase-1'));
       await page.evaluate(() => window.qa.callbacks.onReadyForServerCompletion('purchase-1', 'tx-1'));
       await page.waitForFunction(() => !document.querySelector('.weapon-buy-button').disabled);
-      assert.match(await card.locator('.weapon-stock-count').innerText(), /10/);
+      assert.match(await card.locator('.mission-stock').innerText(), /10/);
       await buy.click();
       await page.waitForFunction(() => window.qa.creates.length === 2);
       assert.equal(await page.evaluate(() => window.qa.authCount), 1, 'Repeated purchases reuse the SDK session');
@@ -117,19 +117,19 @@ const { weaponPayment, creditWeaponOrders, emptyWeaponStock } = require(path.joi
       await page.waitForFunction(() => window.qa.creates.length === 4);
       await page.evaluate(() => window.qa.callbacks.onReadyForServerCompletion('purchase-4', 'tx-4'));
       assert.match(await card.locator('[role="alert"]').innerText(), /payment_not_confirmed/);
-      assert.match(await card.locator('.weapon-stock-count').innerText(), /10/);
+      assert.match(await card.locator('.mission-stock').innerText(), /10/);
       completionFailure = false;
       await page.evaluate(() => { window.qa.scenario = 'recovery'; });
       await buy.click();
       await page.waitForFunction(() => !document.querySelector('.weapon-buy-button').disabled);
       assert.equal(await page.evaluate(() => window.qa.creates.length), 4, 'Recover without another charge');
-      assert.match(await card.locator('.weapon-stock-count').innerText(), /11/);
+      assert.match(await card.locator('.mission-stock').innerText(), /11/);
       await page.evaluate(() => { window.qa.scenario = 'success'; });
       await buy.click();
       await page.waitForFunction(() => window.qa.creates.length === 5);
       await page.evaluate(() => { window.qa.incomplete({ identifier: 'recovered' }); window.qa.callbacks.onError(new Error('Previous payment incomplete')); });
       await page.waitForFunction(() => document.querySelector('.weapon-purchase-status')?.textContent?.includes('bestätigt'));
-      assert.match(await card.locator('.weapon-stock-count').innerText(), /11/);
+      assert.match(await card.locator('.mission-stock').innerText(), /11/);
       assert.equal(await page.evaluate(() => window.qa.creates.length), 5);
       await card.locator('input').fill('100');
       assert(await buy.isDisabled());

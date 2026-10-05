@@ -3,13 +3,13 @@ import PiPrice from '../components/PiPrice';
 import { useLocale } from '../i18n';
 import './weaponStock.css';
 
-export default function WeaponPurchase({ id, price, count, disabled, disabledReason, status, diagnostic, pending, onBuy }: { id: string; price: number; count: number; disabled: boolean; disabledReason?: string; status?: string; diagnostic?: string; pending?: boolean; onBuy: (quantity: number, total: number) => void }) {
+export default function WeaponPurchase({ id, price, count, disabled, disabledReason, status, diagnostic, pending, onBuy, showStock = true }: { id: string; price: number; count: number; disabled: boolean; disabledReason?: string; status?: string; diagnostic?: string; pending?: boolean; showStock?: boolean; onBuy: (quantity: number, total: number) => void }) {
   const { t, locale } = useLocale();
   const [quantity, setQuantity] = useState('1');
   const value = Number(quantity), valid = Number.isInteger(value) && value >= 1 && value <= 99;
   const total = Math.round(price * (valid ? value : 0) * 10_000_000) / 10_000_000;
   return <div className="weapon-purchase">
-    <p className="weapon-stock-count">{t('Charges')}: <strong>{count}</strong></p>
+    {showStock && <p className="weapon-stock-count">{t('Charges')}: <strong>{count}</strong></p>}
     <div className="weapon-purchase-controls">
       <div className="weapon-quantity-control">
         <label htmlFor={`quantity-${id}`}>{t('Quantity')}</label>
