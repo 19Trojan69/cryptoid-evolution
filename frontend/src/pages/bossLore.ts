@@ -109,3 +109,5 @@ export const bossLoreEn: readonly BossLore[] = [
 export function bossLore(id: number, locale: string): BossLore | undefined {
   return (locale.toLowerCase().startsWith('de') ? bossLoreDe : bossLoreEn)[id - 1];
 }
+/** Dossiers currently ship in German and English; other locales use English. */
+export const bossDossierLabel = (locale: string) => locale.toLowerCase().startsWith('de') ? 'Feindakte öffnen ↗' : 'Open dossier ↗';

@@ -30,6 +30,7 @@ import WeaponPurchase from './WeaponPurchase';
 import WeaponPreview from './WeaponPreview';
 import BossPortrait from "./BossPortrait";
 import BossDossier from './BossDossier';
+import { bossDossierLabel } from './bossLore';
 import { bossName } from './bossNames';
 import { useLocale } from "../i18n";
 import EarthGlobe from "./EarthGlobe";
@@ -535,7 +536,7 @@ const Shop = () => {
             return <button type="button" key={id} disabled={!stars} onClick={() => setSelectedBoss(id)} className={`boss-sticker${stars ? " boss-sticker-earned" : ""}`} title={t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : t("Not defeated yet") })} aria-haspopup={stars ? 'dialog' : undefined} aria-label={`${bossName(id)} · ${t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : t("Locked") })}`}>
               {stars ? <BossPortrait id={id} /> : <span aria-hidden="true">?</span>}
               <small>#{String(id).padStart(2, "0")} · {bossName(id)}</small>{!!stars && <b>{"★".repeat(stars)}</b>}
-              {!!stars && <span className="boss-sticker-open">{locale.startsWith('de') ? 'Feindakte öffnen ↗' : 'Open dossier ↗'}</span>}
+              {!!stars && <span className="boss-sticker-open">{bossDossierLabel(locale)}</span>}
             </button>;
           })}</div>
           {selectedBoss !== null && <BossDossier id={selectedBoss} stars={rewardProgress.bossWins[selectedBoss] ?? 0} onClose={() => setSelectedBoss(null)} />}

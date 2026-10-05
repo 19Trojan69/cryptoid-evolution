@@ -59,7 +59,7 @@ export default function BossDossier({ id, stars, onClose }: { id: number; stars:
           <p className="boss-dossier-note">{say('Direkt aus der aktuellen Spielkonfiguration. Panzerung = Lebenspunkte, nicht Materialstärke; Kaliber = relativer Spielwert, nicht Millimeter.', 'Read from the current game configuration. Armour means health points, not material thickness; calibre is a relative game value, not millimetres.')}</p>
           <dl className="boss-dossier-stats">
             <div><dt>{say('Boss-Stufe', 'Boss stage')}</dt><dd>{id} / 50</dd></div>
-            <div><dt>{say('Rumpfpanzerung', 'Hull armour')}</dt><dd>{format(difficulty.bossHealth)} HP</dd></div>
+            <div><dt>{say('Rumpfpanzerung', 'Hull armour')}</dt><dd>{format(difficulty.bossHealth)} {say('LP', 'HP')}</dd></div>
             <div><dt>{say('Geschütztürme', 'Turrets')}</dt><dd>{guns.length}</dd></div>
             <div><dt>{say('Läufe gesamt', 'Total barrels')}</dt><dd>{guns.reduce((sum, gun) => sum + gun.barrels.length, 0)}</dd></div>
           </dl>
@@ -72,7 +72,7 @@ export default function BossDossier({ id, stars, onClose }: { id: number; stars:
             const full = gun.interval * (2500 - difficulty.progress * 420) / 2500 * pressure.cadenceScale;
             return <li key={gun.key}><h5><span className="boss-dossier-swatch" style={{ backgroundColor: gun.shotColor }} />{index + 1}. {de ? gun.name : weaponLabels[gun.kind][1]} · {position}</h5>
               <p>{weaponLabels[gun.kind][de ? 0 : 1]} · {say('Kaliber', 'Calibre')} {gun.caliber} · {gun.barrels.length} {say('Läufe', 'barrels')} · {gun.rows} {say('Salvenreihen', 'volley rows')}</p>
-              <p>{say('Panzerung', 'Armour')}: {turretHealth(id, gun)} HP · {say('Salvenpause', 'Volley delay')}: {format(full)} s</p>
+              <p>{say('Panzerung', 'Armour')}: {turretHealth(id, gun)} {say('LP', 'HP')} · {say('Salvenpause', 'Volley delay')}: {format(full)} s</p>
             </li>;
           })}</ol>
           <h4>{say('Zentrale Spezialwaffe', 'Central special weapon')}</h4>
