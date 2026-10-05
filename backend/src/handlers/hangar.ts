@@ -167,10 +167,11 @@ export default function mountHangarEndpoints(router: Router) {
         ? await orders.findOne({ user: uid, _id: pending.pendingPowerOrderId, consumed_run_id: scoreRun.id }) || await orders.findOneAndUpdate({ user: uid, _id: pending.pendingPowerOrderId, product_id: selected.id, paid: true, consumed_at: { $exists: false } }, { $set: { consumed_at: new Date(), consumed_run_id: scoreRun.id } }, { returnDocument: "before" }) || await orders.findOne({ user: uid, _id: pending.pendingPowerOrderId, consumed_run_id: scoreRun.id }) : null;
       const runMeta = { ...scoreRun, rulesVersion, unlockedWeaponLevels };
       const result = { rulesVersion, combat: mission?.combat ?? null, armorBonus, weaponLevel: owned && weapon?.kind === "weapon" ? weapon.level : 1, unlockedWeaponLevels, ownedShipUpgrades: paidShipUpgrades.map((order: any) => order.product_id), powerUp: consumed && selected?.kind === "power" ? selected.powerUp : null, scoreRunId: scoreRun.id, startSector: mission?.sector || 1, startPhase: mission?.phase || "normal", checkpoint: mission?.snapshot || null, adminPreview: false, runMeta };
-      const written = await users.updateOne({ uid, [`${key}.activeRunId`]: scoreRun.id }, { $set: { [`${key}.lastStart`]: result } });
+      const written = await users.updateOne({ uid, [`${key}.activeRunId`]: scoreRun.id }, { $set: { [`${key}.lastStart`]: result }, $addToSet: { [`${key}.usedShipSkins`]: pending.skin } });
       if (!written.matchedCount) return res.status(409).json({ error: "Run replaced on another device" });
       req.session.scoreRun = runMeta;
       return res.json({ ...result, profile: publicSave(await loadPlayerSave(users, uid, network)) });
     } catch (error) { return res.status(503).json({ error: "Could not start mission" }); }
   });
 }
+

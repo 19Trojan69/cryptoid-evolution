@@ -1,3 +1,4 @@
+import Collection from "./Collection";
 import SystemSettings, { applySavedDisplaySettings, type SettingsSection } from "./SystemSettings";
 import { useCallback, useEffect, useRef, useState } from "react";
 import QuickAccessMenu, { type QuickAction } from "../components/QuickAccessMenu";
@@ -43,6 +44,7 @@ import { BOSS_STICKER_COUNT, CHAIN_MILESTONES, emptyRewardProgress, rankForLevel
 type Offer = { id: string; kind: "weapon" | "power" | "armor" | "ship_upgrade"; name: string; description: string; pricePi: number; shipIndex?: number; stage?: 2 | 3 };
 type Inventory = { weaponStock?: Record<string, number>; ownedWeapons: string[]; ownedArmor: string[]; ownedShipUpgrades?: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
 type Leader = { rank: number; username: string; score: number; serviceRank: { name: string; symbol: string } };
+const collectionLabel = (locale: string) => locale.startsWith("de") ? "Sammelkarten" : "Card collection";
 const HOME_STAR_POSITION = { x: .5, y: .8 };
 
 const shopTabs = [
@@ -83,6 +85,7 @@ const Shop = () => {
   const closeQuickMenu = useCallback(() => setQuickGroup(null), []);
   const [shopView, setShopView] = useState<"hangar" | "shop" | "weapons" | "powers" | "progress" | "rewards" | "leaders" | null>(null);
   const [termsOpen, setTermsOpen] = useState(false);
+  const [collectionOpen, setCollectionOpen] = useState(false);
   const [selectedBoss, setSelectedBoss] = useState<number | null>(null);
   const returnToMenu = () => { setShopView(null); setSystemMenuOpen(false); setActivePanel(null); setTermsOpen(false); setQuickTarget(null); setQuickGroup("mission"); };
   const [leaders, setLeaders] = useState<Leader[]>([]);
@@ -434,9 +437,10 @@ const Shop = () => {
     else if (action === "terms") setTermsOpen(true);
   };
 
-  const homePaused = Boolean(shopView || systemMenuOpen || activePanel || termsOpen || quickGroup || showSignIn);
+  const homePaused = Boolean(collectionOpen || shopView || systemMenuOpen || activePanel || termsOpen || quickGroup || showSignIn);
   return (
     <main className="app-shell landing-shell" data-home-paused={homePaused}>
+      {collectionOpen && <Collection key={user?.uid ?? "guest"} uid={user?.uid} onClose={() => setCollectionOpen(false)} />}
       <Header
         user={user}
         serviceRank={user && rewardStatus === "ready" && rewardOwner === user.uid ? rankForLevel(rewardProgress.highestLevel) : undefined}
@@ -473,6 +477,7 @@ const Shop = () => {
               <button className="button button-primary home-play-button" type="button" onClick={enterGame}>{t("Play")} <span className="button-glyph" aria-hidden="true">→</span></button>
             </div>
           </div>
+          <button className="collection-home-button" type="button" disabled={!authReady} onClick={() => setCollectionOpen(true)}>✧ {collectionLabel(locale)}</button>
         </div>
         <div className="planet-stage" aria-label={t("Planet status")}>
           <div className="planet"><EarthGlobe paused={homePaused} /><EarthNetwork /></div>

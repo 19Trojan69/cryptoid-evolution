@@ -2,7 +2,7 @@ import { axiosClient } from "./axiosClient";
 import type { PlayerSave, Snapshot } from "../../../backend/src/playerSave";
 import { allPlayerColors, playerSkins, readShipFleet, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY } from "../pages/shipFleet";
 import { shipSaveNetwork } from "../pages/shipFleet";
-export type AccountSave = Pick<PlayerSave, "version" | "balance" | "fleet" | "skin" | "color" | "mission" | "highestSector" | "totalDestroyed" | "totalShardsEarned" | "totalShardsSpent" | "legacyImported" | "updatedAt">;
+export type AccountSave = Pick<PlayerSave, "usedShipSkins" | "version" | "balance" | "fleet" | "skin" | "color" | "mission" | "highestSector" | "totalDestroyed" | "totalShardsEarned" | "totalShardsSpent" | "legacyImported" | "updatedAt">;
 export type { Snapshot };
 export const loadAccountSave = async () => (await axiosClient.get<{ save: AccountSave }>("/progress/me")).data.save;
 export const accountSelection = (save: AccountSave) => ({ skin: playerSkins.find(s => s.id === save.skin) || playerSkins[0], color: allPlayerColors.find(c => c.id === save.color) || allPlayerColors.find(c => c.id === "grey")! });
@@ -63,3 +63,4 @@ export function createSaveQueue(uid: string) {
     archive() { try { localStorage.setItem(`${key}_unconfirmed`, JSON.stringify(entries)); } catch { durable = false; } entries = []; persist(); },
   };
 }
+
