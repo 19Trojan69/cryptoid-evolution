@@ -22,3 +22,7 @@
 .collection-locked-detail{--card-accent:#708494;background:#101a25;text-align:center}
 .collection-locked-detail .collection-card-art img{filter:brightness(0) invert(.48)}
 .collection-tile.is-locked{cursor:pointer}
+
+/* Use the entire card artwork area for the existing in-game hull and weapons. */
+.collection-art .boss-portrait,
+.collection-card-art .boss-portrait { height: 100%; }
