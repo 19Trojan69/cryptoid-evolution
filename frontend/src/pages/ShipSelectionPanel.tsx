@@ -20,6 +20,7 @@ type Props = {
   locale: string;
   offers: ShipUpgradeOffer[];
   adminPreview?: boolean;
+  purchaseBusy?: boolean;
   message: string;
   selectedSkinId: string;
   selectedColorId: string;
@@ -35,7 +36,7 @@ const stageLabel = (stage: ShipStage) => stage === 1 ? "STANDARD" : stage === 2 
 
 export default function ShipSelectionPanel({
   view, skin, color, focusStage, ownedStage, fleet, shards, locale, offers,
-  adminPreview, message, selectedSkinId, selectedColorId, t, onStageChange, onColorChange,
+  adminPreview, purchaseBusy, message, selectedSkinId, selectedColorId, t, onStageChange, onColorChange,
   onBuyStandard, onEquipPreview, onOpenShop,
 }: Props) {
   const hullCount = fleetCount(fleet, skin.id);
@@ -59,7 +60,7 @@ export default function ShipSelectionPanel({
     <div className="ship-one-hero">
       <div className="ship-one-info">
         <h3>{skin.name} <small>· {t(stageLabel(stage))}</small></h3>
-        <strong>{status}</strong>
+        <strong className={status === "MAINNET READY" ? "mainnet-ready-badge" : undefined}>{status}</strong>
       </div>
       <div className="ship-one-art-wrap" role="img" aria-label={skin.name + " · " + t(color.name) + " · " + t(stageLabel(stage))}>
         <span className="ship-one-art-frame">
@@ -83,10 +84,10 @@ export default function ShipSelectionPanel({
             : focusedOffer ? <>{t("Planned price")}: {piPrice(focusedOffer.pricePi)}</> : t("Price unavailable")}</span>
           {stage === 1 ? <>
             <small>{t(color.name)}{skin.price === 0 ? " · " + t("Starter issued free; price is for an additional ship.") : ""}</small>
-            <button className="button button-secondary ship-shard-button" type="button" onClick={onBuyStandard} disabled={!standardAvailable || shards < price}>
+            <button className="button button-secondary ship-shard-button" type="button" onClick={onBuyStandard} aria-busy={purchaseBusy || undefined} disabled={adminPreview || purchaseBusy || !standardAvailable || shards < price}>
               {t(hullCount ? "Buy another for" : "Buy for")} ◆ {shardPrice} {t("Shards")}
             </button>
-            {!standardAvailable && <small className="ship-lock-notice">{t("MAINNET READY")} · {t("Purchases locked")}</small>}
+            {!standardAvailable && <small className="ship-lock-notice"><span className="mainnet-ready-badge">{t("MAINNET READY")}</span> · {t("Purchases locked")}</small>}
             {standardAvailable && shards < price && <small className="ship-shortfall">◆ {(price - shards).toLocaleString(locale)} {t("more Shards needed")}</small>}
           </> : <>
             {ownedStage < stage && <button className="button button-secondary" type="button" disabled>{t("Buy for")} {focusedOffer ? piPrice(focusedOffer.pricePi) : "Pi"} · {t("Purchases locked")}</button>}
@@ -104,7 +105,7 @@ export default function ShipSelectionPanel({
         return <button key={level} className={`ship-evolution-stage${!stageOwned ? " ship-evolution-stage-locked" : ""}`} type="button"
           aria-pressed={focusStage === level} onClick={() => onStageChange(level)}>
           <span className="ship-evolution-stage-art" aria-hidden="true"><img src={`/ships/evolution/ship_${String(skin.sprite + 1).padStart(2, "0")}_stage_${level}.png`} alt="" loading="lazy" decoding="async" style={shipPreviewPlacement(skin.sprite, level)} /></span>
-          <span className="ship-evolution-stage-info"><strong>0{level} · {t(stageLabel(level))}</strong><small>{offer ? piPrice(offer.pricePi) : t("Price unavailable")}</small><em>{stageOwned ? t("OWNED") : t("MAINNET READY") + " · " + t("Planned price")}</em></span>
+          <span className="ship-evolution-stage-info"><strong>0{level} · {t(stageLabel(level))}</strong><small>{offer ? piPrice(offer.pricePi) : t("Price unavailable")}</small><em>{stageOwned ? t("OWNED") : <><span className="mainnet-ready-badge">{t("MAINNET READY")}</span> · {t("Planned price")}</>}</em></span>
         </button>;
       })}
     </div>}

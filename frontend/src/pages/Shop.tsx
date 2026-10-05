@@ -22,6 +22,8 @@ import { allPlayerColors, buyShipVariant, standardShipPrice, fleetCount, playerC
 import { ownedShipStage, shipEvolutionAsset, type ShipStage } from "./shipEvolution";
 import { shipPreviewPlacement } from "./shipPreviewPlacement";
 import ShipSelectionPanel from "./ShipSelectionPanel";
+import "./shopPurchase.css";
+import { saveGuestShipPurchase } from "./shipFleet";
 import TermsDialog from "../components/TermsDialog";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
 import { isTestnetWeaponPurchaseEnabled } from "../../../backend/src/paymentPolicy";
@@ -257,7 +259,7 @@ const Shop = () => {
       setHangarMessage("Saved to your Pi account.");
     } catch {
       setAccountError("Not confirmed. Refresh inventory. Confirmed purchases will not be repeated.");
-      try { const save = await loadAccountSave(); setAccountState({ owner: user.uid, save }); } catch { /* No local fallback for account balances. */ }
+      try { const save = await loadAccountSave(); setAccountState({ owner: user.uid, save }); setSelected(accountSelection(save)); } catch { /* No local fallback for account balances. */ }
     } finally { setAccountBusy(false); }
   };
   const [hangarMessage, setHangarMessage] = useState<string | { ship: string; color: string; status: string; count?: number }>("");
@@ -330,13 +332,14 @@ const Shop = () => {
     setShards(currentBalance);
     const purchase = buyShipVariant(previewSkin.id, previewColor.id, currentFleet, currentBalance);
     if (!purchase) { setHangarMessage("Not enough Shards yet. Earn them by defeating Cryptoids."); return; }
-    localStorage.setItem(SHIP_FLEET_KEY, JSON.stringify(purchase.fleet));
-    localStorage.setItem(SHARD_BALANCE_KEY, String(purchase.balance));
+    try { saveGuestShipPurchase(localStorage, previewSkin.id, previewColor.id, purchase); }
+    catch { setHangarMessage("Could not save loadout. Please retry."); return; }
+    setSelected({ skin: previewSkin, color: previewColor });
     setFleet(purchase.fleet);
     if(!fleetCount(currentFleet,previewSkin.id))setNewCards(unseenShipCards([{key:`${previewSkin.id}-1`,ship:previewSkin.id,stage:1}],readCardReveals('guest')));
 
     setShards(purchase.balance);
-    setHangarMessage({ ship: previewSkin.name, color: previewColor.name, status: "Owned", count: fleetCount(purchase.fleet, previewSkin.id, previewColor.id) });
+    setHangarMessage({ ship: previewSkin.name, color: previewColor.name, status: "EQUIPPED", count: fleetCount(purchase.fleet, previewSkin.id, previewColor.id) });
   };
   const equipShip = (skin: typeof playerSkins[number], color: typeof allPlayerColors[number]) => {
     // Only a variant already in the fleet can become the active ship.
@@ -562,7 +565,7 @@ const Shop = () => {
             return <button type="button" key={id} disabled={!stars} onClick={() => setSelectedBoss(id)} className={`boss-sticker${stars ? " boss-sticker-earned" : ""}`} title={t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : !available ? t("MAINNET READY") : t("Not defeated yet") })} aria-haspopup={stars ? 'dialog' : undefined} aria-label={`${bossName(id)} · ${t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : !available ? t("MAINNET READY") : t("Locked") })}`}>
               {stars ? <BossPortrait id={id} /> : <span className="boss-sticker-silhouette" aria-hidden="true"><BossPortrait id={id} /></span>}
               <small>#{String(id).padStart(2, "0")} · {bossName(id)}</small>{!!stars && <b>{"★".repeat(stars)}</b>}
-              {!available && <small>{t("MAINNET READY")}</small>}{!!stars && <span className="boss-sticker-open">{bossDossierLabel(locale)}</span>}
+              {!available && <small className="mainnet-ready-badge">{t("MAINNET READY")}</small>}{!!stars && <span className="boss-sticker-open">{bossDossierLabel(locale)}</span>}
             </button>;
           })}</div>
           {selectedBoss !== null && bossCardAvailable(selectedBoss) && <BossDossier id={selectedBoss} stars={rewardProgress.bossWins[selectedBoss] ?? 0} onClose={() => setSelectedBoss(null)} />}
@@ -610,7 +613,7 @@ const Shop = () => {
               const status = total ? `${t("Owned")} ×${total}` : testnetStandardHullAvailable(skin.id) ? t("Not owned") : shipSaveNetwork === "testnet" ? t("MAINNET READY") : t("Locked");
               return <button className={`ship-search-result${previewSkin.id === skin.id ? " ship-search-selected" : ""}`} key={skin.id} type="button" onClick={() => chooseSearchResult(skin)}>
                 <span className="ship-search-thumb" aria-hidden="true"><img src={shipEvolutionAsset(skin.sprite, 1)} alt="" loading="lazy" decoding="async" style={shipPreviewPlacement(skin.sprite, 1)} /></span>
-                <span className="ship-search-result-name"><strong>{skin.name}</strong><small>{t("STANDARD")} · {status}</small>{shopView === "shop" && <small className="ship-search-price">◆ {standardShipPrice(skin).toLocaleString(locale)} {t("Shards")}{skin.price === 0 ? " · " + t("Additional ship") : ""}</small>}<small>{t("Open for variants and levels")}</small></span><span className="ship-search-arrow" aria-hidden="true">›</span>
+                <span className="ship-search-result-name"><strong>{skin.name}</strong><small>{t("STANDARD")} · <span className={!total && !testnetStandardHullAvailable(skin.id) ? "mainnet-ready-badge" : undefined}>{status}</span></small>{shopView === "shop" && <small className="ship-search-price">◆ {standardShipPrice(skin).toLocaleString(locale)} {t("Shards")}{skin.price === 0 ? " · " + t("Additional ship") : ""}</small>}<small>{t("Open for variants and levels")}</small></span><span className="ship-search-arrow" aria-hidden="true">›</span>
               </button>;
             })}
             {matchingShipOptions.length === 0 && <p className="ship-search-empty">{t("No matching ships.")}</p>}
@@ -621,7 +624,7 @@ const Shop = () => {
           selectedSkinId={selected.skin.id} selectedColorId={selected.color.id} message={hangarMessageText} t={t}
           onStageChange={stage => { setPreviewFocusStage(stage); if (adminMode) { setAdminStage(stage); sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage)); } setHangarMessage(""); }}
           onColorChange={color => { setPreviewColor(color); if (shopView === "hangar") equipShip(previewSkin, color); else setHangarMessage(""); }}
-          onBuyStandard={purchasePreview}
+          purchaseBusy={accountBusy || Boolean(user && !account)} onBuyStandard={purchasePreview}
           onEquipPreview={() => equipShip(previewSkin, previewColor)}
           onOpenShop={() => { setPreviewFocusStage(1); setShopView("shop"); }} />
       </section>}
@@ -638,14 +641,14 @@ const Shop = () => {
             const owned = kind === "weapon" ? testnetWeaponEnabled && (inventory?.weaponStock?.[offer.id] || 0) > 0 : count > 0;
             const selected = kind === "weapon" ? false : inventory?.selectedPower === offer.id;
             const lockedWeapon = kind === "weapon" && !testnetWeaponEnabled;
-            return <article key={offer.id} className={`hangar-offer hangar-offer-${kind}${selected ? " hangar-offer-selected" : ""}`}>{kind === "weapon" ? <WeaponPreview offerId={offer.id} sprite={selectedShip().skin.sprite} color={selectedShip().color.id} /> : <PowerPreview offerId={offer.id} />}<h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span className="offer-purchase-price">{lockedWeapon || kind === "power" ? <>{t("Planned price")}: {piPrice(offer.pricePi)}</> : piPrice(offer.pricePi, true)}</span><span>{lockedWeapon ? shipSaveNetwork === "testnet" ? t("MAINNET READY") : t("Currently locked") : kind === "weapon" ? t("1 minute per charge") : t("MAINNET READY")}</span><strong>{lockedWeapon ? t("Locked") : selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : t("Owned — activate in game") : kind === "power" ? t("Locked") : t("NOT OWNED")}</strong>{lockedWeapon && <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? t("Available only as a weapon pickup on Testnet.") : t("Available only as a weapon pickup.")}</p>}<div>
+            return <article key={offer.id} className={`hangar-offer hangar-offer-${kind}${selected ? " hangar-offer-selected" : ""}`}>{kind === "weapon" ? <WeaponPreview offerId={offer.id} sprite={selectedShip().skin.sprite} color={selectedShip().color.id} /> : <PowerPreview offerId={offer.id} />}<h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span className="offer-purchase-price">{lockedWeapon || kind === "power" ? <>{t("Planned price")}: {piPrice(offer.pricePi)}</> : piPrice(offer.pricePi, true)}</span><span className={lockedWeapon || kind === "power" ? "mainnet-ready-badge" : undefined}>{lockedWeapon ? shipSaveNetwork === "testnet" ? t("MAINNET READY") : t("Currently locked") : kind === "weapon" ? t("1 minute per charge") : t("MAINNET READY")}</span><strong>{lockedWeapon ? t("Locked") : selected ? t("EQUIPPED") : owned ? kind === "power" ? `${count} ${t("AVAILABLE")}` : t("Owned — activate in game") : kind === "power" ? t("Locked") : t("NOT OWNED")}</strong>{lockedWeapon && <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? t("Available only as a weapon pickup on Testnet.") : t("Available only as a weapon pickup.")}</p>}<div>
               {owned && kind === "power" ? <button className="button button-secondary" type="button" disabled={Boolean(selected)} onClick={() => equip(null, offer.id)}>{t(selected ? "Selected" : "Equip for next mission")}</button> : null}
               {kind === "weapon" && !lockedWeapon && <WeaponPurchase id={offer.id} price={offer.pricePi} count={inventory?.weaponStock?.[offer.id] || 0} pending={isLoading && activeProductId === offer.id} status={activeProductId === offer.id ? paymentStatus : undefined} diagnostic={activeProductId === offer.id ? paymentDiagnostic : undefined} disabled={adminMode || isLoading || !catalogReady} onBuy={(quantity, total) => { void orderProduct(`Cryptoid ${offer.name} · ${quantity} × 60s · Test-Pi`, total, { productId: offer.id, quantity, weaponModel: 2 }, async () => { setLoadoutMessage("purchase confirmed."); await refreshInventory(); }); }} />}
             </div></article>;
           })}
         </div></div>)}
         {shopView === "weapons" && <div className="hangar-offers"><h3>{t("Permanent armor")}</h3><p>{t("Armor is always active from mission start, needs no shield and remains yours across all future missions. Each upgrade adds to your maximum hearts.")}</p><div className="hangar-offer-grid">
-          {offers.filter(offer => offer.kind === "armor").map(offer => { const owned = inventory?.ownedArmor.includes(offer.id); return <article key={offer.id} className={`hangar-offer hangar-offer-armor${owned ? " hangar-offer-selected" : ""}`}><div className="offer-preview power-preview power-preview-shield" aria-hidden="true"><span className="preview-grid" /><span className="power-preview-orbit"><i>♥</i></span><small>{t("Permanent hull")}</small></div><h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span className="offer-purchase-price">{t("Planned price")}: {piPrice(offer.pricePi)}</span><span>{owned ? t("Permanent · every mission") : t("MAINNET READY")}</span><strong>{owned ? t("OWNED") : t("Locked")}</strong></article>; })}
+          {offers.filter(offer => offer.kind === "armor").map(offer => { const owned = inventory?.ownedArmor.includes(offer.id); return <article key={offer.id} className={`hangar-offer hangar-offer-armor${owned ? " hangar-offer-selected" : ""}`}><div className="offer-preview power-preview power-preview-shield" aria-hidden="true"><span className="preview-grid" /><span className="power-preview-orbit"><i>♥</i></span><small>{t("Permanent hull")}</small></div><h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span className="offer-purchase-price">{t("Planned price")}: {piPrice(offer.pricePi)}</span><span className={!owned ? "mainnet-ready-badge" : undefined}>{owned ? t("Permanent · every mission") : t("MAINNET READY")}</span><strong>{owned ? t("OWNED") : t("Locked")}</strong></article>; })}
         </div></div>}
         {inventory?.equippedWeapon && <p className="testnet-shop-notice">{t("An older weapon selection is saved but no longer activates automatically. Every mission starts with the single laser.")}</p>}
         {inventory?.selectedPower && <button className="text-button" type="button" onClick={() => equip(inventory.equippedWeapon, null)}>{t('Save bonus for a later mission')}</button>}

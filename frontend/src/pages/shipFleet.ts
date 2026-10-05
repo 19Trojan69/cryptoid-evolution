@@ -1,4 +1,4 @@
-import { RELEASED_STANDARD_SHIPS } from './cardAvailability';
+import { RELEASED_STANDARD_SHIPS } from './cardAvailability.ts';
 import type { CSSProperties } from "react";
 import type { CryptoidClass } from "./cryptoidRoster";
 
@@ -157,6 +157,25 @@ export const buyShipVariant = (skinId: PlayerSkinId, colorId: PlayerColorId, fle
   if (!Number.isSafeInteger(count) || count >= Number.MAX_SAFE_INTEGER) return null;
   return { fleet: { ...fleet, [skinId]: { ...fleet[skinId], [colorId]: count + 1 } }, balance: balance - price };
 };
+
+// Do not leave a deducted balance or changed selection when browser storage fails.
+export function saveGuestShipPurchase(storage: Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>, skin: PlayerSkinId, color: PlayerColorId, purchase: NonNullable<ReturnType<typeof buyShipVariant>>) {
+  const values: [string, string][] = [
+    [SHIP_FLEET_KEY, JSON.stringify(purchase.fleet)],
+    [SHARD_BALANCE_KEY, String(purchase.balance)],
+    [SHIP_SKIN_KEY, skin],
+    [SHIP_COLOR_KEY, color],
+    [SHIP_COLORS_KEY, JSON.stringify({ ...savedShipColors(storage.getItem(SHIP_COLORS_KEY)), [skin]: color })],
+  ];
+  const previous = values.map(([key]) => [key, storage.getItem(key)] as const);
+  try { for (const [key, value] of values) storage.setItem(key, value); }
+  catch (error) {
+    for (const [key, value] of previous) {
+      try { if (value === null) storage.removeItem(key); else storage.setItem(key, value); } catch { /* Storage is unavailable; do not report success. */ }
+    }
+    throw error;
+  }
+}
 
 export const savedShipColors = (raw: string | null): Partial<Record<PlayerSkinId, PlayerColorId>> => {
   try {
@@ -338,4 +357,3 @@ export const shipNozzleStyle = (index: number, facesPlayer = false): CSSProperti
     ...shipHullStyle(index, facesPlayer),
   } as CSSProperties;
 };
-

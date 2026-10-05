@@ -13,6 +13,7 @@ import BossPortrait from './BossPortrait';
 import { playerCardUnlocked } from './collectionRules';
 import { bossCard, shipCard } from './collectionData';
 import './collection.css';
+import './shopPurchase.css';
 
 type Ownership={used:string[];upgrades:string[];wins:Record<string,number>};
 export default function Collection({uid,onClose}:{uid?:string;onClose:()=>void}){
@@ -54,12 +55,12 @@ export default function Collection({uid,onClose}:{uid?:string;onClose:()=>void})
      <div className="collection-grid">{entries.map(entry=><button type="button" key={entry.key} className={`collection-tile tier-${entry.tier} ${entry.unlocked?'':'is-locked'}`} aria-label={`${entry.name} · ${entry.unlocked?say('Karte öffnen','Open card'):entry.available?say('GESPERRT','LOCKED'):say('MAINNET READY','MAINNET READY')}`} onClick={()=>setSelected(entry.key)}>
       <span className="collection-serial">{entry.serial} <span>{'✦'.repeat(entry.tier)}</span></span>
       <div className="collection-art">{entry.unlocked&&entry.boss?<BossPortrait id={entry.boss}/>:<img src={entry.image} alt="" loading="lazy"/>}</div>
-      <strong>{entry.name}</strong><small>{entry.unlocked?say('Karte öffnen','Open card'):!entry.available?say('MAINNET READY','MAINNET READY'):say('GESPERRT','LOCKED')}</small>
+      <strong>{entry.name}</strong><small className={!entry.unlocked && !entry.available ? "mainnet-ready-badge" : undefined}>{entry.unlocked?say('Karte öffnen','Open card'):!entry.available?say('MAINNET READY','MAINNET READY'):say('GESPERRT','LOCKED')}</small>
      </button>)}</div></>}
    </>:selected?<CollectionCardView card={selected} stars={selected.bossId ? ownership.wins[selected.bossId] || 0 : 0}/>:<article className="collection-card collection-locked-detail">
     <span className="collection-serial">{activeEntry.serial}</span><h3>{activeEntry.name}</h3>
     <div className="collection-card-art"><img src={activeEntry.image} alt={say('Gesperrte Schiffssilhouette','Locked ship silhouette')}/></div>
-    <h4>{activeEntry.available?say('GESPERRT','LOCKED'):say('MAINNET READY','MAINNET READY')}</h4>
+    <h4 className={!activeEntry.available ? "mainnet-ready-badge" : undefined}>{activeEntry.available?say('GESPERRT','LOCKED'):say('MAINNET READY','MAINNET READY')}</h4>
     <p>{activeEntry.available?say('Erhalte dieses Schiff oder besiege diesen Boss, um Geschichte, Ausstattung und Download freizuschalten.','Acquire this ship or defeat this boss to unlock its story, equipment and download.'):say('Diese Karte ist für die spätere Freigabe vorbereitet. Geschichte, Ausstattung und Download bleiben gesperrt.','This card is prepared for a future release. Its story, equipment and download remain locked.')}</p>
    </article>}
   </div>

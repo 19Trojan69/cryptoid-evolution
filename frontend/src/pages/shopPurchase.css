@@ -1,0 +1,42 @@
+/* Purchase and release states remain distinct, including on small screens. */
+.landing-shell .button.ship-shard-button:not(:disabled) {
+  background: linear-gradient(145deg, #85f3b7, #42ce89);
+  border: 1px solid #b5ffd6;
+  color: #072b20;
+  font-weight: 800;
+  box-shadow: 0 4px 18px #29cb7540, inset 0 1px 0 #ffffff70;
+}
+.landing-shell .button.ship-shard-button:not(:disabled):hover {
+  background: linear-gradient(145deg, #b0ffd3, #63e7a1);
+}
+.landing-shell .button.ship-shard-button:focus-visible {
+  outline: 3px solid #e8fff3;
+  outline-offset: 4px;
+}
+.landing-shell .button.ship-shard-button:disabled {
+  background: #243442;
+  border: 1px solid #637483;
+  color: #bdc8d0;
+  opacity: 1;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.landing-shell .mainnet-ready-badge,
+.landing-shell .shop-modal .mainnet-ready-badge,
+.collection-dialog .collection-tile.is-locked .mainnet-ready-badge,
+.collection-dialog .collection-locked-detail .mainnet-ready-badge {
+  display: inline-block;
+  width: fit-content;
+  max-width: 100%;
+  padding: 5px 9px;
+  border: 1px solid #ffd27a;
+  border-radius: 6px;
+  background: #382910;
+  color: #ffe3a3;
+  font: 800 clamp(12px, 2.8vw, 15px)/1.35 'Rajdhani', sans-serif;
+  letter-spacing: .06em;
+  font-style: normal;
+  text-shadow: 0 0 10px #ffc45735;
+  box-shadow: inset 0 0 12px #ffce6514;
+  overflow-wrap: anywhere;
+}

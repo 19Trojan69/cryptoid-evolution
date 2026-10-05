@@ -115,7 +115,7 @@ export default function mountProgressEndpoints(router: Router) {
         const price = shipPrice(skin);
         if (price === null || !shipColors.includes(color)) return res.status(400).json({ error: "invalid_ship" });
         if (save.balance < price) return res.status(403).json({ error: "not_enough_shards" });
-        fields = { balance: save.balance - price, totalShardsSpent: (save.totalShardsSpent || 0) + price, fleet: { ...save.fleet, [skin]: { ...save.fleet[skin], [color]: (save.fleet[skin]?.[color] || 0) + 1 } } };
+        fields = { skin, color, balance: save.balance - price, totalShardsSpent: (save.totalShardsSpent || 0) + price, fleet: { ...save.fleet, [skin]: { ...save.fleet[skin], [color]: (save.fleet[skin]?.[color] || 0) + 1 } } };
       }
       const updated = { ...save, ...fields, version: version + 1, updatedAt: new Date().toISOString() };
       const result = await users.updateOne({ uid, [`${key}.version`]: version }, { $set: Object.fromEntries(Object.entries(fields).map(([k, v]) => [`${key}.${k}`, v]).concat([[`${key}.updatedAt`, updated.updatedAt]])), $inc: { [`${key}.version`]: 1 } });

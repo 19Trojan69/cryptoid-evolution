@@ -132,6 +132,16 @@ test('explicit import is one-time, strips paid ownership, and purchases use comp
   assert.equal(h.profile().balance, 600);
   assert.equal(h.profile().fleet['solar-lance'].gold, 1);
   assert.equal(h.profile().totalShardsSpent, 400);
+  assert.equal(h.profile().skin, 'solar-lance');
+  assert.equal(h.profile().color, 'gold');
+  const next = await h.call('progress', '/inventory', { action: 'buy', version: h.profile().version, skin: 'nova-wing', color: 'silver' });
+  assert.equal(next.code, 200);
+  assert.equal(next.body.save.skin, 'nova-wing');
+  assert.equal(next.body.save.color, 'silver');
+  const failed = await h.call('progress', '/inventory', { action: 'buy', version: h.profile().version, skin: 'gold-streak', color: 'gold' });
+  assert.equal(failed.code, 403);
+  assert.equal(h.profile().skin, 'nova-wing');
+  assert.equal(h.profile().color, 'silver');
   assert.equal(h.docs[0].loadout, undefined);
 });
 
