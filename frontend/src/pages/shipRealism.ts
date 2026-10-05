@@ -15,6 +15,21 @@ export function advanceShipMotion(previous: ShipMotion, dx: number, dy: number, 
   const thrustTarget = Math.min(1, speed / 650 + acceleration * .65) * (braking ? .35 : 1);
   return { speed, vx: dx / seconds, vy: dy / seconds, bank: previous.bank + (bankTarget - previous.bank) * response, thrust: previous.thrust + (thrustTarget - previous.thrust) * response };
 }
+// Player-only heading changes; filtered input prevents touch jitter.
+export function advancePlayerMotion(previous: ShipMotion, dx: number, dy: number, delta: number): ShipMotion {
+  if (delta <= 0) return previous;
+  const motion = advanceShipMotion(previous, dx, dy, delta);
+  const seconds = delta / 1000;
+  const response = 1 - Math.exp(-delta / 80);
+  const bounded = (v: number) => Math.max(-900, Math.min(900, v));
+  const vx = previous.vx + (bounded(dx / seconds) - previous.vx) * response;
+  const vy = previous.vy + (bounded(dy / seconds) - previous.vy) * response;
+  // Virtual forward flight keeps heading continuous even during sideways movement.
+  const heading = (x: number, y: number) => Math.atan2(x, 320 - Math.max(-200, Math.min(200, y)));
+  const turnRate = (heading(vx, vy) - heading(previous.vx, previous.vy)) / seconds;
+  const target = motion.speed < 8 ? 0 : Math.tanh(turnRate / .9) * 10;
+  return { ...motion, vx, vy, bank: previous.bank + (target - previous.bank) * (1 - Math.exp(-delta / 90)) };
+}
 export const explosionDiameter = (hullSize: number) => Math.max(24, Math.min(480, hullSize * 1.25));
 export function fragmentFlight(x: number, y: number, impactX: number, impactY: number, hullSize: number, random: number, vx = 0, vy = 0) {
   const angle = Math.atan2(y - impactY, x - impactX) + (random - .5) * .45;

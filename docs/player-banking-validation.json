@@ -1,0 +1,47 @@
+{
+  "results": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "right": 7.6889361683818205,
+      "left": -8.051740145001578,
+      "settled": -0.0003199182389230046,
+      "touch": -4.745492941866804,
+      "reducedMotion": "0deg"
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "right": 7.559810325627518,
+      "left": -8.480015489568185,
+      "settled": -0.00033693482062341487,
+      "touch": -5.155654609251766,
+      "reducedMotion": "0deg"
+    },
+    {
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "right": 7.692975504111013,
+      "left": -8.347422271966712,
+      "settled": -0.0003391193899462926,
+      "touch": -4.212912979864296,
+      "reducedMotion": "0deg"
+    }
+  ],
+  "errors": [],
+  "baseCommit": "8b359715984680cef60184a53b545da4b6e6bf9f",
+  "scope": "Player ship only; enemy motion, collisions, weapons and collection artwork unchanged.",
+  "build": "passed",
+  "realismTests": 8,
+  "i18nTests": 22,
+  "liveVerification": "Performed separately after deployment.",
+  "limitations": [
+    "Browser viewport checks, not physical devices. No paid calls."
+  ]
+}
