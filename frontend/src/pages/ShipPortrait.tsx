@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { loadShipArtwork } from './shipArtwork';
 
 export default function ShipPortrait({ src, name, silhouette = false }: { src: string; name: string; silhouette?: boolean }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [ready, setReady] = useState(false);
-  useEffect(() => {
+  useLayoutEffect(() => {
     let current = true;
     setReady(false);
     const previous = canvas.current;
@@ -21,6 +21,7 @@ export default function ShipPortrait({ src, name, silhouette = false }: { src: s
         context.fillStyle = '#858585'; context.fillRect(0, 0, target.width, target.height);
         context.globalCompositeOperation = 'source-over';
       }
+      target.dataset.renderedSource = src;
       setReady(true);
     }, () => {});
     return () => { current = false; };

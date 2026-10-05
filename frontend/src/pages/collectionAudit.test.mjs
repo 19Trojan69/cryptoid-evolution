@@ -18,8 +18,8 @@ test('110 stable background destinations; existing assets and incomplete work co
   assert.deepEqual(['boss','standard','advanced','elite'].map(c => cardBackgroundAssets.filter(a => a.category === c).length), [50,20,20,20]);
   const ready = cardBackgroundAssets.filter(a => a.image);
   // This deliberately reports the actual shortfall, not 110 "completed" placeholder paths.
-  assert.equal(ready.length, 4);
-  assert.equal(cardBackgroundAssets.filter(a => !a.image).length, 106);
+  assert.equal(ready.length, 75);
+  assert.equal(cardBackgroundAssets.filter(a => !a.image).length, 35);
   const hashes = ready.map(a => createHash('sha256').update(fs.readFileSync(new URL(`../../public${a.image}`, import.meta.url))).digest('hex'));
   assert.equal(new Set(hashes).size, ready.length);
   for (const a of cardBackgroundAssets) assert.ok(fs.existsSync(new URL(`../../public${collectionBackground(a.cardKey)}`, import.meta.url)));

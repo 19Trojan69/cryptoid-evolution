@@ -1,7 +1,7 @@
 import { loadCardImage } from './bossArtwork';
 
 const cache = new Map<string, Promise<HTMLCanvasElement>>();
-/** Centre visible pixels, not asymmetric transparent padding in a source sprite. */
+/** Centre the visible hull, ignoring near-transparent encoding specks outside it. */
 export function loadShipArtwork(src: string): Promise<HTMLCanvasElement> {
   const existing = cache.get(src);
   if (existing) return existing;
@@ -14,7 +14,7 @@ export function loadShipArtwork(src: string): Promise<HTMLCanvasElement> {
     const { data } = context.getImageData(0, 0, source.width, source.height);
     let left = source.width, top = source.height, right = -1, bottom = -1;
     for (let y = 0; y < source.height; y++) for (let x = 0; x < source.width; x++) {
-      if (data[(y * source.width + x) * 4 + 3]) {
+      if (data[(y * source.width + x) * 4 + 3] >= 5) {
         left = Math.min(left, x); top = Math.min(top, y);
         right = Math.max(right, x); bottom = Math.max(bottom, y);
       }

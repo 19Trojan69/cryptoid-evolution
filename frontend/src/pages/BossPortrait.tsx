@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { bossName } from './bossNames';
 import { loadBossArtwork } from './bossArtwork';
 import './bossPortrait.css';
@@ -16,7 +16,7 @@ export default memo(function BossPortrait({ id, silhouette = false }: { id: numb
     observer.observe(element);
     return () => observer.disconnect();
   }, []);
-  useEffect(() => {
+  useLayoutEffect(() => {
     let current = true;
     setReady(false);
     // Clear previous pixels immediately when browsing from an unlocked to a locked card.

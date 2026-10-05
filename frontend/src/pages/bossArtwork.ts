@@ -3,7 +3,7 @@ import { preloadBossWeapons } from './BossWeaponsView';
 import { drawBossWeapons, weaponCanvasSize } from './bossWeaponRenderer';
 
 /** One source of truth for cards and PNGs: current game hull + current mounted weapons.
- * Crop transparent padding only; never crop visible pixels or substitute a hull-only image.
+ * Crop empty padding and near-transparent encoding specks only; preserve hull and weapons.
  */
 const cache = new Map<string, Promise<HTMLCanvasElement>>();
 export const loadCardImage = (src: string) => new Promise<HTMLImageElement>((resolve, reject) => {
@@ -36,7 +36,7 @@ export function loadBossArtwork(id: number, resolution = 1200): Promise<HTMLCanv
     const { data } = context.getImageData(0, 0, combined.width, combined.height);
     let left = combined.width, top = combined.height, right = -1, bottom = -1;
     for (let y = 0; y < combined.height; y++) for (let x = 0; x < combined.width; x++) {
-      if (data[(y * combined.width + x) * 4 + 3] > 0) {
+      if (data[(y * combined.width + x) * 4 + 3] >= 5) {
         left = Math.min(left, x); top = Math.min(top, y); right = Math.max(right, x); bottom = Math.max(bottom, y);
       }
     }

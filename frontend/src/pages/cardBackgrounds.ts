@@ -16,13 +16,14 @@ export const cardBackgroundAssets: readonly CardBackgroundAsset[] = [
   ...Array.from({ length: 50 }, (_, index) => ({
     cardKey: `boss-${index + 1}`, category: 'boss' as const,
     plannedImage: index < 3 ? legacy[index] : `/cards/space/unique/boss-${String(index + 1).padStart(2, '0')}.webp`,
-    image: index < 3 ? legacy[index] : index === 3 ? '/cards/space/unique/boss-04.webp' : null,
+    image: index < 3 ? legacy[index] : `/cards/space/unique/boss-${String(index + 1).padStart(2, '0')}.webp`,
     fallbackImage: legacy[index % 3],
   })),
   ...playerCategories.flatMap((category, index) => playerSkins.map(ship => ({
     cardKey: `${ship.id}-${index + 1}`, category,
     plannedImage: `/cards/space/unique/${category}-${String(ship.sprite + 1).padStart(2, '0')}.webp`,
-    image: null,
+    image: category === 'standard' || (category === 'advanced' && ship.sprite < 5)
+      ? `/cards/space/unique/${category}-${String(ship.sprite + 1).padStart(2, '0')}.webp` : null,
     fallbackImage: legacy[(ship.sprite + index) % 3],
   }))),
 ];
