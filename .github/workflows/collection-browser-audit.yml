@@ -38,6 +38,11 @@ jobs:
           pathlib.Path('/tmp/collection-reviewed.patch').write_bytes(patch)
           subprocess.run(['git','apply','--check','--index','/tmp/collection-reviewed.patch'],check=True)
           subprocess.run(['git','apply','--index','/tmp/collection-reviewed.patch'],check=True)
+          p=pathlib.Path('frontend/src/pages/Collection.tsx')
+          text=p.read_text();old="exportVersion.current++;scroller.current?.scrollTo(0,0);setDownload(null);"
+          assert text.count(old)==1
+          p.write_text(text.replace(old,"exportVersion.current++;scroller.current?.scrollTo(0,0);close.current?.focus({preventScroll:true});setDownload(null);"))
+          subprocess.run(['git','add',str(p)],check=True)
           PY
           git diff --cached --stat | tee audit-output/source-changes.txt
       - name: Install app dependencies
