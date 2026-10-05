@@ -1,3 +1,4 @@
+import { collectionTranslations } from './collection.ts';
 import { bossPhaseTranslations } from './bossPhases.ts';
 import { missionShopTranslations } from './missionShop.ts';
 import { weaponStockTranslations } from './weaponStock.ts';
@@ -5545,3 +5546,5 @@ Object.assign(localeCatalog["ro"], {"Each defeated boss grants one extra heart, 
 Object.assign(localeCatalog["sr"], {"Each defeated boss grants one extra heart, even above three. Remaining hearts are saved.":"Сваки побеђени бос даје додатно срце, чак и преко три. Преостала срца се чувају."});
 Object.assign(localeCatalog["uk"], {"Each defeated boss grants one extra heart, even above three. Remaining hearts are saved.":"Кожен переможений бос дає додаткове серце, навіть понад три. Решта сердець зберігається."});
 Object.assign(localeCatalog["th"], {"Each defeated boss grants one extra heart, even above three. Remaining hearts are saved.":"บอสแต่ละตัวที่ปราบได้จะเพิ่มหัวใจหนึ่งดวง แม้มีเกินสามดวงแล้ว จำนวนหัวใจที่เหลือจะถูกบันทึก"});
+
+for (const [locale, entries] of Object.entries(collectionTranslations)) Object.assign(localeCatalog[locale], entries);

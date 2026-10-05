@@ -235,6 +235,8 @@ const Shop = () => {
   const displayedShards = account?.balance ?? shards;
   const displayedRecords = user && !adminMode ? { highestSector: account?.highestSector || 1, totalDestroyed: account?.totalDestroyed || 0 } : records;
   const accountUid = user?.uid;
+  const inventoryOwnerRef = useRef(accountUid);
+  inventoryOwnerRef.current = accountUid;
   useEffect(() => {
     const card = newCards[0];
     if (!card) return;
@@ -243,6 +245,7 @@ const Shop = () => {
     void syncCardReveals(owner).catch(() => { /* Retried when this account is next loaded. */ });
   }, [newCards[0]?.key, accountUid]);
   useEffect(() => {
+    setAccountBusy(false);
     if (!accountUid || adminMode) return;
     let active = true;
     void loadAccountSave().then(save => {
@@ -256,19 +259,29 @@ const Shop = () => {
   }, [accountUid, adminMode]);
   const accountCommand = async (command: object) => {
     if (!account || !user || accountBusy) return;
+    const owner = user.uid;
     setAccountBusy(true); setAccountError("");
+    const applyConfirmed = (save: AccountSave) => {
+      if (inventoryOwnerRef.current !== owner) return;
+      setAccountState({ owner, save });
+      setSelected(accountSelection(save));
+      mergeCardReveals(owner, save.cardReveals || []);
+      const acquired = availableShipCards(playerSkins, save.fleet, save.usedShipSkins || [], [])
+        .filter(card => card.ship && !fleetCount(account.fleet as ShipFleet, card.ship as typeof playerSkins[number]['id']));
+      if (acquired.length) setNewCards(unseenShipCards(acquired, mergeCardReveals(owner, [])));
+    };
     try {
       const save = await mutateAccountInventory(account, command);
-      setAccountState({ owner: user.uid, save });
-      setSelected(accountSelection(save));
-      const acquired=availableShipCards(playerSkins,save.fleet,save.usedShipSkins||[],[]).filter(card=>card.ship&&!fleetCount(account.fleet as ShipFleet,card.ship as typeof playerSkins[number]['id']));
-      if(acquired.length)setNewCards(unseenShipCards(acquired,readCardReveals(user.uid)));
-
+      if (inventoryOwnerRef.current !== owner) return;
+      applyConfirmed(save);
       setHangarMessage("Saved to your Pi account.");
     } catch {
+      if (inventoryOwnerRef.current !== owner) return;
       setAccountError("Not confirmed. Refresh inventory. Confirmed purchases will not be repeated.");
-      try { const save = await loadAccountSave(); setAccountState({ owner: user.uid, save }); setSelected(accountSelection(save)); } catch { /* No local fallback for account balances. */ }
-    } finally { setAccountBusy(false); }
+      // A lost response is not a failed purchase. Reconcile authoritative ownership and
+      // equipment together, and present a genuinely new card once after reconciliation.
+      try { applyConfirmed(await loadAccountSave()); } catch { /* No local fallback for account balances. */ }
+    } finally { if (inventoryOwnerRef.current === owner) setAccountBusy(false); }
   };
   const [hangarMessage, setHangarMessage] = useState<string | { ship: string; color: string; status: string; count?: number }>("");
   const hangarMessageText = typeof hangarMessage === "string" ? t(hangarMessage) : `${hangarMessage.ship} · ${t(hangarMessage.color)} · ${t(hangarMessage.status)}${hangarMessage.count ? ` ×${hangarMessage.count}` : ""}`;
