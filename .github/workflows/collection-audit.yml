@@ -40,19 +40,20 @@ jobs:
           mkdir -p audit-output
           set -o pipefail
           npm run build --prefix frontend 2>&1 | tee audit-output/frontend-build.txt
-      - name: Backend tests
-        if: always() && steps.backend_install.outcome == 'success'
-        run: |
-          mkdir -p audit-output
-          set -o pipefail
-          cd backend
-          find src -name '*.test.mjs' -print0 | xargs -0 node --experimental-strip-types --test 2>&1 | tee ../audit-output/backend-tests.txt
       - name: Backend build
+        id: backend_build
         if: always() && steps.backend_install.outcome == 'success'
         run: |
           mkdir -p audit-output
           set -o pipefail
           npm run build --prefix backend 2>&1 | tee audit-output/backend-build.txt
+      - name: Backend tests
+        if: always() && steps.backend_install.outcome == 'success' && steps.backend_build.outcome == 'success'
+        run: |
+          mkdir -p audit-output
+          set -o pipefail
+          cd backend
+          find src -name '*.test.mjs' -print0 | xargs -0 node --experimental-strip-types --test 2>&1 | tee ../audit-output/backend-tests.txt
       - name: Record source and asset inventory
         if: always()
         run: |
