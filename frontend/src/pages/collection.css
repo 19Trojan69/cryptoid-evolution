@@ -26,3 +26,5 @@
 /* Use the entire card artwork area for the existing in-game hull and weapons. */
 .collection-art .boss-portrait,
 .collection-card-art .boss-portrait { height: 100%; }
+
+.collection-tile.is-locked .boss-portrait,.collection-locked-detail .boss-portrait{filter:grayscale(1) brightness(.28);opacity:.95}
