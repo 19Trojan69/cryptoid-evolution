@@ -1,0 +1,35 @@
+name: Life resume regression
+on:
+  push:
+    branches: [codex/persist-life-loss]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: npm install --prefix frontend --no-audit --no-fund && npm install --prefix backend --no-audit --no-fund
+      - name: Build and existing tests
+        run: |
+          npm run build --prefix backend
+          (cd backend && find src -name '*.test.mjs' -print0 | xargs -0 node --experimental-strip-types --test)
+          (cd frontend && find src -name '*.test.mjs' -print0 | xargs -0 node --experimental-strip-types --test)
+          npm run build --prefix frontend
+      - name: Assert life-loss durability hook
+        run: |
+          node - <<'NODE'
+          const fs=require('fs'),assert=require('assert');
+          const s=fs.readFileSync('frontend/src/pages/GamePage.tsx','utf8');
+          const damage=s.slice(s.indexOf('if (heartsLost > 0)'),s.indexOf('state.powerUps = movePowerUps'));
+          assert(damage.includes('if (state.hearts > 0) void saveCombat()'));
+          assert(damage.indexOf('resolvePlayerDamage') < damage.indexOf('void saveCombat()'));
+          const save=s.slice(s.indexOf('const saveCombat = async'),s.indexOf('const restoreCombat'));
+          assert(save.includes('snapshotOf(state)'));
+          const restore=s.slice(s.indexOf('const restoreCombat'),s.indexOf('const activateLoadout'));
+          assert(s.includes('stateRef.current.hearts = data.checkpoint.hearts'));
+          console.log('Life-loss save occurs after damage and resume restores saved hearts.');
+          NODE
