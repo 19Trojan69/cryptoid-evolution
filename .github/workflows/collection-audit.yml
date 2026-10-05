@@ -1,7 +1,8 @@
 name: Collection audit
 on:
   push:
-    branches: [codex/collection-audit-20261005]
+    branches: [codex/collection-audit-20261005, codex/level-expansion-v2]
+    paths: ['frontend/**', 'backend/**', '.github/workflows/collection-audit.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -19,57 +20,33 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      # Match vercel.json. This repository has Yarn locks, not npm locks.
-      - name: Install frontend dependencies
-        id: frontend_install
-        run: npm install --prefix frontend --no-audit --no-fund
-      - name: Install backend dependencies
-        id: backend_install
-        if: always()
-        run: npm install --prefix backend --no-audit --no-fund
-      - name: Frontend tests
-        if: always() && steps.frontend_install.outcome == 'success'
-        run: |
-          mkdir -p audit-output
-          set -o pipefail
-          cd frontend
-          find src -name '*.test.mjs' -print0 | xargs -0 node --experimental-strip-types --test 2>&1 | tee ../audit-output/frontend-tests.txt
-      - name: Frontend production build
-        if: always() && steps.frontend_install.outcome == 'success'
-        run: |
-          mkdir -p audit-output
-          set -o pipefail
-          npm run build --prefix frontend 2>&1 | tee audit-output/frontend-build.txt
-      - name: Backend build
-        id: backend_build
-        if: always() && steps.backend_install.outcome == 'success'
+      - name: Install app dependencies (same installer as vercel.json)
+        run: npm install --prefix frontend --no-audit --no-fund && npm install --prefix backend --no-audit --no-fund
+      - name: Backend build and tests
         run: |
           mkdir -p audit-output
           set -o pipefail
           npm run build --prefix backend 2>&1 | tee audit-output/backend-build.txt
-      - name: Backend tests
-        if: always() && steps.backend_install.outcome == 'success' && steps.backend_build.outcome == 'success'
+          (cd backend && find src -name '*.test.mjs' -print0 | xargs -0 node --experimental-strip-types --test) 2>&1 | tee audit-output/backend-tests.txt
+      - name: Frontend tests and production build
         run: |
-          mkdir -p audit-output
           set -o pipefail
-          cd backend
-          find src -name '*.test.mjs' -print0 | xargs -0 node --experimental-strip-types --test 2>&1 | tee ../audit-output/backend-tests.txt
-      - name: Record source and asset inventory
-        if: always()
+          (cd frontend && find src -name '*.test.mjs' -print0 | xargs -0 node --experimental-strip-types --test) 2>&1 | tee audit-output/frontend-tests.txt
+          npm run build --prefix frontend 2>&1 | tee audit-output/frontend-build.txt
+      - name: Install isolated browser
         run: |
-          mkdir -p audit-output
-          git rev-parse HEAD > audit-output/commit.txt
-          git ls-files > audit-output/tracked-files.txt
-          find frontend/public -type f -not -path '*/audio/*' -print0 | sort -z | xargs -0 sha256sum > audit-output/asset-sha256.txt
-          git archive --format=tar HEAD frontend/src frontend/scripts backend/src frontend/package.json backend/package.json frontend/tsconfig.app.json frontend/tsconfig.json frontend/tsconfig.node.json backend/tsconfig.json vercel.json | gzip > audit-output/source-code.tar.gz
-      - name: Package dependencies for offline verification
-        if: always() && steps.frontend_install.outcome == 'success' && steps.backend_install.outcome == 'success'
-        run: tar -czf audit-output/dependencies.tar.gz frontend/node_modules backend/node_modules frontend/package-lock.json backend/package-lock.json
-      - name: Save audit evidence
+          npm install --prefix .audit-tools --no-save --no-audit --no-fund playwright@1.56.1
+          .audit-tools/node_modules/.bin/playwright install --with-deps chromium
+      - name: Verify purchases, silhouettes, responsive controls and all card exports
+        env:
+          PLAYWRIGHT_MODULE_PATH: ${{ github.workspace }}/.audit-tools/node_modules/playwright
+        run: set -o pipefail; node frontend/scripts/verifyCollectionAudit.cjs 2>&1 | tee audit-output/browser-log.txt
+      - name: Record tested source
         if: always()
-        uses: actions/upload-artifact@v4
+        run: mkdir -p audit-output && git rev-parse HEAD > audit-output/verified-commit.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: collection-audit-${{ github.sha }}
+          name: collection-evidence-${{ github.sha }}
           path: audit-output/
-          retention-days: 3
-          compression-level: 0
+          retention-days: 7
