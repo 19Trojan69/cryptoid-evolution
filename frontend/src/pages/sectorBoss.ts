@@ -1,8 +1,9 @@
+import type { BossCoreState } from './bossCore.ts';
 import { createBossTurrets, type BossTurretState } from './bossTurrets.ts';
 import { levelDifficulty } from "./levelDifficulty.ts";
 import { SECTIONS_PER_SECTOR, sectionInSector, sectorForSection } from "./sectorManager.ts";
 import { bossForLevel, type BossConfig } from "./bossManifest.ts";
-import { bossEscortCount } from "./bossEscorts.ts";
+import { bossSupportCapacity } from "./bossEscorts.ts";
 import { advanceShipMotion, idleShipMotion, type ShipMotion } from "./shipRealism.ts";
 
 export const BOSS_ENTRY_MS = 1_800;
@@ -10,7 +11,7 @@ export const BOSS_ENTRY_MS = 1_800;
 export const BOSS_WARNING_MS = 4_900;
 export const BOSS_FIRE_INTERVAL_MS = 2_500;
 
-export type SectorBoss = { visualMotion?: ShipMotion; turrets:BossTurretState[]; weaponClock:number; turretCursor:number; x: number; y: number; startY: number; radius: number; width: number; height: number; config: BossConfig; volley: number; health: number; maxHealth: number; elapsed: number; fireElapsed: number; lastDamageAt: number; hit?: { id?: number; x: number; y: number; impactPower?: number }; hullFires?: { id: number; x: number; y: number; impactPower?: number; revision?: number }[] };
+export type SectorBoss = { core?: BossCoreState; visualMotion?: ShipMotion; turrets:BossTurretState[]; weaponClock:number; turretCursor:number; x: number; y: number; startY: number; radius: number; width: number; height: number; config: BossConfig; volley: number; health: number; maxHealth: number; elapsed: number; fireElapsed: number; lastDamageAt: number; hit?: { id?: number; x: number; y: number; impactPower?: number }; hullFires?: { id: number; x: number; y: number; impactPower?: number; revision?: number }[] };
 
 export const createSectorBoss = (sector: number, width: number, visibleTop = 0, fieldHeight = 700): SectorBoss => {
   const config = bossForLevel(sector);
@@ -18,7 +19,7 @@ export const createSectorBoss = (sector: number, width: number, visibleTop = 0, 
   const health = levelDifficulty(sector).bossHealth;
   // Leave a narrow but safe docking lane below later bosses, including on
   // shorter desktop viewports with a tall HUD.
-  const escortHeightCap = bossEscortCount(sector) > 0
+  const escortHeightCap = bossSupportCapacity(sector) > 0
     ? Math.max(fieldHeight * .14, fieldHeight * .5 - visibleTop - Math.min(fieldHeight * .04, 32) - 87)
     : fieldHeight * .29;
   const shipWidth = Math.min(width * config.widthScale, width - 24, fieldHeight * .29 * config.aspectRatio, escortHeightCap / config.heightScale * config.aspectRatio);
@@ -36,7 +37,9 @@ export const moveSectorBoss = (boss: SectorBoss, delta: number, width: number, h
   const restingY = Math.max(height * .19, boss.startY, boss.height / 2 + 12);
   const critical = Math.max(0, Math.min(1, (0.2 - boss.health / boss.maxHealth) / 0.2));
   const descent = critical * critical * (3 - 2 * critical);
-  const targetY = Math.min(restingY + Math.min(height * .04, 32) * descent, height * .49 - boss.height / 2);
+  // Reserve the docking lane even while a damaged boss slowly descends.
+  const supportCeiling = height * .5 - boss.height / 2 - Math.min(height * .04, 32) - 73;
+  const targetY = Math.min(restingY + Math.min(height * .04, 32) * descent, height * .49 - boss.height / 2, supportCeiling);
   const moved = {
     ...boss,
     x: Math.max(boss.radius + 12, Math.min(width - boss.radius - 12, targetX)),
@@ -54,10 +57,14 @@ export const bossFireInterval = (boss: SectorBoss, level = 1) => {
   return (boss.health <= boss.maxHealth / 2 ? 1_900 : BOSS_FIRE_INTERVAL_MS) - levelReduction;
 };
 
-export const damageSectorBoss = (boss: SectorBoss, damage: number, time: number) => {
-  if (time - boss.lastDamageAt < 180) return false;
+export const bossHullExposed = (boss: SectorBoss) => boss.health > 0 && boss.turrets.length > 0 && boss.turrets.every(gun => gun.health <= 0);
+
+export const damageSectorBoss = (boss: SectorBoss, damage: number, time: number, ignoreHitCooldown = false) => {
+  if (!bossVulnerable(boss) || !bossHullExposed(boss) || !Number.isFinite(damage) || damage <= 0) return false;
+  if (!ignoreHitCooldown && time - boss.lastDamageAt < 180) return false;
   boss.lastDamageAt = time;
-  boss.health = Math.max(0, boss.health - damage);
+  // The exposed hull now needs half as many hits, including resumed encounters.
+  boss.health = Math.max(0, boss.health - damage * 2);
   return true;
 };
 

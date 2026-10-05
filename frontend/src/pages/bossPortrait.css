@@ -1,0 +1,8 @@
+.boss-portrait { position: relative; display: block; width: 100%; height: 76px; overflow: hidden; isolation: isolate; pointer-events: none; }
+.boss-portrait-model { position: absolute; left: 8%; top: 50%; width: 84%; transform: translateY(-50%); }
+.boss-portrait .boss-portrait-model > img { display: block; width: 100%; height: 100%; object-fit: fill; }
+.boss-portrait .boss-portrait-hull { position: relative; z-index: 1; }
+.boss-portrait .boss-weapons-loading { position: absolute; inset: 0; z-index: 2; }
+.boss-portrait .boss-weapons-canvas { position: absolute; z-index: 2; left: -22%; top: -70%; width: 144%; height: 240%; }
+.guide-boss-example .boss-portrait { height: auto; aspect-ratio: 2.4; max-height: 240px; }
+@media (max-width: 600px) { .boss-sticker .boss-portrait { height: 55px; } }

@@ -2,7 +2,7 @@ export type PlayerPosition = { x: number; y: number };
 export type PlayerShot = { id: number; x: number; y: number; speedX: number; damage: number; empowered: boolean; visualLevel?: number };
 
 export const PLAYER_SPEED_PX_MS = 0.68;
-export const PURCHASED_WEAPON_DURATION_MS = 2 * 60_000;
+export const PURCHASED_WEAPON_DURATION_MS = 60_000;
 export const PICKUP_WEAPON_DURATION_MS = 20_000;
 export const PLAYER_RADIUS = 23;
 // Ship-to-ship contact follows the visible hull; projectile hits keep the smaller player hitbox.

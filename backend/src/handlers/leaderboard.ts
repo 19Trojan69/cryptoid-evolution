@@ -10,7 +10,7 @@ import { restoreScoreRun } from "../restoreScoreRun";
 
 export default function mountLeaderboardEndpoints(router: Router) {
   router.get("/top", async (req, res) => {
-    const network = rewardNetwork(req), rules = req.query?.rules === "2" ? 2 : 1, field = scoreField(rules, network);
+    const network = rewardNetwork(req), rules = req.query?.rules === "1" ? 1 : 2, field = scoreField(rules, network);
     try {
       const leaders = await req.app.locals.userCollection.find({ [field]: { $gt: 0 } })
         .project({ _id: 0, username: 1, [field]: 1, [`rewardsByNetwork.${network}.highestLevel`]: 1 })
@@ -24,7 +24,7 @@ export default function mountLeaderboardEndpoints(router: Router) {
     if (!uid) return res.status(401).json({ error: "Sign in first" });
     try {
       const user = await req.app.locals.userCollection.findOne({ uid }, { projection: { bestScore: 1, bestScoreV2: 1 } });
-      return res.json({ bestScore: scoreValue(user, req.query?.rules === "2" ? 2 : 1, rewardNetwork(req)), legacyBestScore: user?.bestScore ?? 0 });
+      return res.json({ bestScore: scoreValue(user, req.query?.rules === "1" ? 1 : 2, rewardNetwork(req)), legacyBestScore: user?.bestScore ?? 0 });
     } catch { return res.status(503).json({ error: "Personal record unavailable" }); }
   });
 

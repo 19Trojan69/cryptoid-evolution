@@ -24,12 +24,12 @@ export const levelDifficulty = (level: number): LevelDifficulty => {
   return {
     level: bounded,
     progress,
-    attackCooldownMs: 750 - progress * 270,
-    attackPaceScale: 1 - progress * .16,
-    entryPaceScale: 1 - progress * .1,
-    groupAttackInterval: Math.max(4, 12 - Math.floor(progress * 9)),
+    attackCooldownMs: 650 - Math.sqrt(progress) * 350,
+    attackPaceScale: 1 - Math.sqrt(progress) * .32,
+    entryPaceScale: 1 - Math.sqrt(progress) * .18,
+    groupAttackInterval: Math.max(2, 6 - Math.floor(Math.sqrt(progress) * 4)),
     projectileBonus: Math.min(2, Math.floor(progress * 3)),
-    bossHealth: (28 + progress * 52 + progress * progress * 40) * 3,
+    bossHealth: (28 + progress * 52 + progress * progress * 40) * 9,
   };
 };
 

@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
+import BossPortrait from "./BossPortrait";
+import { bossName } from "./bossNames";
 import WeaponTutorial from "./WeaponTutorial";
+import BossPhaseGuide from './BossPhaseGuide';
 import { useLocale } from "../i18n";
 import { shipEvolutionAsset } from "./shipEvolution";
 
@@ -27,8 +30,8 @@ const topics = [
     id: "route", label: "Level path", title: "Nine Blocks, boss, bonus",
     intro: "Each level has nine visible Blocks, then a boss fight and a bonus round.",
     details: [
-      "Each Block is one encounter: enemies enter, form a recognizable pattern and break away for attack runs. Defeat the formation to link that Block.",
-      "The nine formations include ranks, V, W, ring, wave, X, A, columns and diamond. Later levels can add reinforcements to Blocks 7–9.",
+      "A Block contains one to three planned groups. Defeat every group to link the Block. Each cleared group earns 50 points once.",
+      "Reinforcements are announced before entering. Up to six enemies are visible at once; new arrivals fire only after docking. Some Blocks stay short.",
       "After Block 9, the boss arrives. Defeat it to enter the bonus round; the next level begins with a fresh chain.",
     ],
   },
@@ -36,10 +39,13 @@ const topics = [
     id: "survival", label: "Combat & hearts", title: "Survive the attacks",
     intro: "You start with three hearts. The mission ends when all are lost.",
     details: [
+      "Collect the heart to start the bonus round.",
       "Avoid enemy ships and projectiles. An active shield absorbs an impact; otherwise a collision or an unguarded projectile can cost a heart.",
       "Advanced and Elite ship stages add protection against enemy projectiles per life. A ship collision still needs a shield to be absorbed.",
       "Enemy hulls have different strengths. Even the first boss needs sustained fire; bosses attack faster as their hull weakens.",
-      "Each boss turret has its own energy bar. Destroy it to stop its fire and earn extra points once. Larger turrets have more energy and award more points. Turret hits do not damage the hull. Destroying the hull defeats the boss even with turrets intact, but awards no points for those remaining turrets.",
+      "During the reactor weapon phase, small escorts return in waves. The pauses shorten as levels rise; from level 50, the next wave enters as soon as the previous one is cleared.",
+      "After all turrets explode, a concealed central weapon opens. Attack the now vulnerable hull and dodge its pulses.",
+      "Damaged turrets glow intense orange before exploding.",
     ],
   },
   {
@@ -120,8 +126,9 @@ const GameGuide = ({ onClose, initialTopic = "controls", backLabel = "Back to sy
       <section className="guide-detail" aria-live="polite" aria-labelledby="guide-section-title" key={topic.id}>
         <h3 id="guide-section-title">{t(topic.title)}</h3>
         <p>{t(topic.intro)}</p>
-        {topic.id === "visuals" && <div className="guide-ship-gallery">{([1, 2, 3] as const).map(stage => <figure key={stage}><img src={shipEvolutionAsset(0, stage)} alt={t(stage === 1 ? "Standard ship" : stage === 2 ? "Advanced ship" : "Elite ship")} loading="lazy" /><figcaption>{t(stage === 1 ? "STANDARD" : stage === 2 ? "ADVANCED" : "ELITE")}</figcaption></figure>)}<figure className="guide-boss-example"><img src="/ships/bosses/boss_01.webp" alt={t("Boss ship")} loading="lazy" /><figcaption>{t("CORE WARDEN")}</figcaption></figure></div>}
+        {topic.id === "visuals" && <div className="guide-ship-gallery">{([1, 2, 3] as const).map(stage => <figure key={stage}><img src={shipEvolutionAsset(0, stage)} alt={t(stage === 1 ? "Standard ship" : stage === 2 ? "Advanced ship" : "Elite ship")} loading="lazy" /><figcaption>{t(stage === 1 ? "STANDARD" : stage === 2 ? "ADVANCED" : "ELITE")}</figcaption></figure>)}<figure className="guide-boss-example"><BossPortrait id={1} /><figcaption>#01 · {bossName(1)}</figcaption></figure></div>}
         {(topic.id === "boosts" || topic.id === "controls") && <WeaponTutorial />}
+        {topic.id === "survival" && <BossPhaseGuide />}
         <ul>{topic.details.map(detail => <li key={detail}>{t(detail)}</li>)}</ul>
       </section>
       <button className="button button-secondary guide-back" type="button" onClick={onClose}>← {t(backLabel)}</button>

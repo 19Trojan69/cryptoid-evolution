@@ -1,3 +1,4 @@
+import { RELEASED_STANDARD_SHIPS } from './cardAvailability';
 import type { CSSProperties } from "react";
 import type { CryptoidClass } from "./cryptoidRoster";
 
@@ -56,7 +57,7 @@ export const playerSkins = [
 ] as const;
 // Ten standard hulls are released for Testnet, including the free Grey Scout.
 // Later hulls stay visible, and prior ownership is preserved.
-export const TESTNET_STANDARD_HULL_COUNT = 10;
+export const TESTNET_STANDARD_HULL_COUNT = RELEASED_STANDARD_SHIPS;
 export const testnetStandardHullAvailable = (skinId: PlayerSkinId) => {
   const index = playerSkins.findIndex(skin => skin.id === skinId);
   return index >= 0 && index < TESTNET_STANDARD_HULL_COUNT;
@@ -225,10 +226,16 @@ const enemyColors: readonly PlayerColorId[] = [
   ...playerColors.map(color => color.id), "violet", "cyan", "orange",
 ];
 
-export const enemyAppearance = (sector: number, index: number) => ({
-  sprite: playerSkins[(((Math.max(1, sector) - 1) * 6 + index) * 7) % playerSkins.length].sprite,
-  color: enemyColors[((Math.max(1, sector) - 1) * 5 + index * 7) % enemyColors.length],
-});
+export const enemyAppearance = (sector: number, index: number) => {
+  // A three-flight block can contain 18 different hulls. Preserve the original
+  // first twelve paints and extend its palette without repeating a color.
+  const used = Array.from({ length: Math.min(index, enemyColors.length) }, (_, i) => enemyColors[((Math.max(1, sector) - 1) * 5 + i * 7) % enemyColors.length]);
+  const extras = allPlayerColors.map(c => c.id).filter(color => !used.includes(color));
+  return {
+    sprite: playerSkins[(((Math.max(1, sector) - 1) * 6 + index) * 7) % playerSkins.length].sprite,
+    color: index < enemyColors.length ? enemyColors[((Math.max(1, sector) - 1) * 5 + index * 7) % enemyColors.length] : extras[(index - enemyColors.length) % extras.length],
+  };
+};
 
 export const spriteStyle = (index: number): CSSProperties => ({
   backgroundImage: `url(${FLEET_IMAGE})`,
@@ -331,3 +338,4 @@ export const shipNozzleStyle = (index: number, facesPlayer = false): CSSProperti
     ...shipHullStyle(index, facesPlayer),
   } as CSSProperties;
 };
+

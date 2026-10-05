@@ -1,0 +1,35 @@
+.boss-dossier { padding: 0; border: 1px solid #537c8b; border-radius: 20px; background: #081727; color: #e7edf5; width: min(880px, calc(100vw - 24px)); max-width: none; height: min(900px, calc(100dvh - 24px)); max-height: calc(100dvh - 24px); box-shadow: 0 24px 90px #000b; overflow: hidden; }
+.boss-dossier::backdrop { background: #020812d9; backdrop-filter: blur(5px); }
+.boss-dossier-shell { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+.boss-dossier-header { flex: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 20px 26px 15px; border-bottom: 1px solid #427c8c; background: linear-gradient(120deg,#153647,#1a1730); }
+.boss-dossier-header h2 { margin: 5px 0; font-size: clamp(24px, 4vw, 36px); color: #f0d997; }
+.boss-dossier-header p { margin: 0; }
+.boss-dossier-eyebrow { font-size: 11px; letter-spacing: .14em; color: #80e2e2; }
+.boss-dossier-hostile { color: #ffa99b; border: 1px solid #d57163; border-radius: 5px; padding: 7px; font-size: 11px; letter-spacing: .08em; }
+.boss-dossier-scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 16px 26px 26px; font-size: 16px; line-height: 1.65; }
+.boss-dossier-scroll section { margin-top: 26px; }
+.boss-dossier h3 { color: #f0d997; margin: 0 0 10px; font-size: 22px; }
+.boss-dossier h4 { color: #80e2e2; margin: 22px 0 8px; font-size: 18px; }
+.boss-dossier-hero { margin: 0; padding: 6px 0; background: radial-gradient(ellipse, #183b4f88, transparent 72%); }
+.boss-dossier-hero .boss-portrait { height: auto; aspect-ratio: 2.4; }
+.boss-dossier-hero figcaption { text-align: center; color: #a9becb; font-size: 12px; }
+.boss-dossier-stars { text-align: center; color: #f4d484; font-size: 24px; margin: 8px 0; }
+.boss-dossier-stars span { display: block; font-size: 12px; color: #b7c7d5; }
+.boss-dossier .boss-dossier-note { color: #9fb4c6; font-size: 13px; line-height: 1.5; }
+.boss-dossier-stats { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+.boss-dossier-stats div { padding: 12px; background: #132c40; border-radius: 8px; }
+.boss-dossier-stats dt { font-size: 13px; color: #abc7d4; }
+.boss-dossier-stats dd { margin: 3px 0 0; font-size: 22px; color: #f0d997; }
+.boss-dossier-guns { list-style: none; padding: 0; }
+.boss-dossier-guns li { padding: 12px 0; border-bottom: 1px solid #315065; }
+.boss-dossier-guns h5 { margin: 0 0 6px; font-size: 16px; }
+.boss-dossier-guns p { margin: 3px 0; font-size: 14px; color: #bdcedb; }
+.boss-dossier-swatch { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 8px; }
+.boss-dossier-footer { flex: none; padding: 12px 20px max(12px, env(safe-area-inset-bottom)); border-top: 1px solid #315065; background: #0c1d2e; }
+.boss-dossier-footer button { width: 100%; min-height: 48px; border: 1px solid #ead59b; border-radius: 9px; background: #dfce9f; color: #112238; font: inherit; font-weight: 700; cursor: pointer; }
+.boss-dossier button:focus-visible, .boss-dossier-scroll:focus-visible { outline: 3px solid #75e3ee; outline-offset: -3px; }
+.landing-shell button.boss-sticker { width: 100%; min-width: 0; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+.landing-shell button.boss-sticker:disabled { cursor: default; opacity: 1; }
+.landing-shell button.boss-sticker:focus-visible { outline: 3px solid #75e3ee; outline-offset: 2px; }
+.landing-shell .shop-modal .boss-sticker > .boss-sticker-open { color: #91e2e2; font: 600 11px/1.4 sans-serif; opacity: 1; margin-top: 5px; }
+@media(max-width: 600px) { .boss-dossier-header { padding: 15px; } .boss-dossier-scroll { padding: 12px 16px 22px; } .boss-dossier-hostile { font-size: 9px; } .boss-dossier-footer { padding-inline: 14px; } }

@@ -284,13 +284,15 @@ html[data-motion="reduced"] .distant-star-flare { display: none; }
 .space-world-near { width: clamp(60px, 8vw, 105px); left: 88%; top: 31%; opacity: .67; transform: translate3d(-50%, -50%, 0) translate3d(var(--parallax-near-x), var(--parallax-near-y), 0); }
 .space-scene-2 .space-world-near, .space-scene-4 .space-world-near, .space-scene-6 .space-world-near { left: 10%; top: 31%; }
 .space-world-distant { width: clamp(32px, 4vw, 58px); left: 43%; top: 60%; opacity: .58; transform: translate3d(-50%, -50%, 0) translate3d(var(--parallax-far-x), var(--parallax-far-y), 0); }
+/* Dim solid worlds with light, never transparency: foreground moons occlude planets. */
+.space-scene .space-world:not(.planet-earth):not(.planet-gas) { opacity: 1; filter: brightness(.78); }
 /* One finished surface per world: craters, ice ridges, continents, lava or gas bands. */
-.space-world.planet-rock .space-world-surface { background-image: url('/planets/rock.svg'); }
-.space-world.planet-desert .space-world-surface { background-image: url('/planets/desert.svg'); }
-.space-world.planet-ice .space-world-surface { background-image: url('/planets/ice.svg'); }
-.space-world.planet-crystal .space-world-surface { background-image: url('/planets/crystal.svg'); }
-.space-world.planet-volcanic .space-world-surface { background-image: url('/planets/volcanic.svg'); }
-.space-world.planet-ocean .space-world-surface { background-image: url('/planets/ocean.svg'); }
+.space-world.planet-rock .space-world-surface { background-image: url('/planets/rock-natural.webp'); }
+.space-world.planet-desert .space-world-surface { background-image: url('/planets/desert-natural.webp'); }
+.space-world.planet-ice .space-world-surface { background-image: url('/planets/ice-natural.webp'); }
+.space-world.planet-crystal .space-world-surface { background-image: url('/planets/crystal-natural.webp'); }
+.space-world.planet-volcanic .space-world-surface { background-image: url('/planets/volcanic-natural.webp'); }
+.space-world.planet-ocean .space-world-surface { background-image: url('/planets/ocean-natural.webp'); }
 .space-world.planet-rock { --planet-glow: #aaa39c6b; --planet-rim: #d3d2c4a6; }
 .space-world.planet-desert { --planet-glow: #e1a87770; --planet-rim: #ffddafad; }
 .space-world.planet-ice { --planet-glow: #8bd1ef80; --planet-rim: #d9f7ffb0; }
@@ -1484,7 +1486,7 @@ html[lang="th"] .landing-shell :is(.language-option, .system-setting) b { line-h
 .home-far-planet { position: absolute; display: block; background-position: center; background-repeat: no-repeat; background-size: contain; pointer-events: none; will-change: transform; }
 .home-far-planet-gas { top: 11%; right: 28%; width: clamp(56px, 8vw, 110px); aspect-ratio: 1; background-image: url('/planets/gas.svg'); opacity: .8; filter: saturate(1.25) drop-shadow(-2px -2px 2px #ffe3b982) drop-shadow(-5px -6px 15px #ffb97c66); animation: home-distant-drift 15s ease-in-out infinite alternate; }
 .home-far-planet-saturn { top: 57%; right: 4%; width: clamp(108px, 17vw, 210px); aspect-ratio: 3 / 2; background-image: url('/planets/saturn.svg'); opacity: .72; filter: saturate(1.23) drop-shadow(-2px -2px 2px #ffe1c691) drop-shadow(-5px -6px 16px #d2af9f65); animation: home-distant-drift 19s ease-in-out infinite alternate-reverse; }
-.home-far-moon { top: 44%; left: 39%; width: clamp(28px, 3.8vw, 48px); aspect-ratio: 1; background-image: url('/planets/ice.svg'); opacity: .86; filter: drop-shadow(-1px -1px 2px #d9f7ffad) drop-shadow(-4px -5px 9px #97dff978); animation: home-moon-drift 12s ease-in-out infinite alternate; }
+.home-far-moon { top: 44%; left: 39%; width: clamp(28px, 3.8vw, 48px); aspect-ratio: 1; background-image: url('/planets/ice-natural.webp'); opacity: .86; filter: drop-shadow(-1px -1px 2px #d9f7ffad) drop-shadow(-4px -5px 9px #97dff978); animation: home-moon-drift 12s ease-in-out infinite alternate; }
 @keyframes home-distant-drift { from { transform: translate3d(-7px, 4px, 0) rotate(-4deg); } to { transform: translate3d(11px, -12px, 0) rotate(5deg); } }
 @keyframes home-moon-drift { from { transform: translate3d(-5px, 9px, 0); } to { transform: translate3d(16px, -17px, 0); } }
 .home-black-hole { position: absolute; top: 13%; left: 44%; display: block; width: clamp(115px, 17vw, 220px); aspect-ratio: 1; border-radius: 50%; background: conic-gradient(from 26deg, transparent 0 8%, #9360e28c 13%, #ffe1b09c 20%, transparent 28% 39%, #967bf5bd 47%, #f79e73ba 55%, transparent 65% 75%, #60ecf489 84%, transparent 94%); filter: drop-shadow(0 0 16px #a367db9c); opacity: .84; animation: home-hole-orbit 16s linear infinite; }
@@ -2626,3 +2628,42 @@ html[data-motion="reduced"] .blockchain-node.active .blockchain-cube-rotor { ani
   .landing-shell .boss-sticker > span { font-size: 38px; opacity: .8; }
   .landing-shell .shop-modal .boss-sticker small { font-size: 16px; }
 }
+
+/* Group progress stays inside the instrument panel, away from thumb controls. */
+.flight-indicator { position: absolute; left: 50%; transform: translateX(-50%); color: #c8dcf5; background: #091426e8; border-radius: 6px; padding: 2px 9px; font-size: 11px; line-height: 1.25; white-space: nowrap; pointer-events: none; }
+
+.reinforcement-notice { position: absolute; z-index: 25; top: 23%; left: 50%; transform: translateX(-50%); max-width: calc(100% - 32px); padding: 10px 16px; border: 1px solid #70c8ff80; border-radius: 8px; color: #ecf8ff; background: #071b30ed; text-align: center; font-size: clamp(16px, 3vw, 23px); font-weight: 700; pointer-events: none; }
+
+.boss-phase-guide { max-width:440px; margin:16px auto; border:1px solid #436878; border-radius:12px; overflow:hidden; background:radial-gradient(ellipse at 50% 55%,#15354b,#060d19); }
+.boss-phase-guide-tabs { display:flex; gap:8px; padding:10px; }
+.boss-phase-guide-tabs button { flex:1; min-width:0; padding:8px; border:1px solid #527989; border-radius:7px; color:#e3f8ff; background:#122b3c; font-size:13px; cursor:pointer; }
+.boss-phase-guide-tabs button[aria-pressed="true"] { border-color:#8fffc5; background:#194638; }
+.boss-phase-guide-stage { position:relative; height:315px; }
+/* The bay uses original hull pixels as shutters; only the recessed weapon lights up. */
+.boss-special-weapon { position:absolute; z-index:6; overflow:visible; pointer-events:none; }
+.boss-special-conductor { stroke:var(--weapon-energy); stroke-width:2.2; opacity:calc(.25 + var(--weapon-charge) * .75); }
+.boss-special-muzzle { fill:var(--weapon-energy); opacity:calc(.25 + var(--weapon-charge) * .75); }
+.boss-special-weapon-firing .boss-special-muzzle { fill:#fff6dd; opacity:1; }
+.boss-phase-guide-picker { display:flex; align-items:center; justify-content:center; gap:12px; padding:10px 12px 0; color:#c8dce8; font-size:13px; }
+.boss-phase-guide-picker select { max-width:160px; color:#f1f6fb; background:#102638; border:1px solid #527989; border-radius:6px; padding:6px 12px; }
+
+
+/* Expired weapons remain readable but cannot resemble available equipment. */
+.weapon-wheel-option.expired { filter: grayscale(1); opacity: .55; border-color: #78838b; background: #15202a; box-shadow: none; }
+.weapon-wheel-option.expired b { text-decoration: line-through; }
+.weapon-wheel-option.expired small { color: #e1e5e8; white-space: normal; line-height: 1.05; text-align: center; }
+.weapon-wheel-option.expired { grid-template-rows: 16px 9px minmax(14px, auto); height: auto; min-height: 46px; }
+@media (min-width: 900px) { .weapon-wheel-option.expired { grid-template-rows: 24px 18px minmax(16px, auto); min-height: 72px; } }
+
+/* Rewards and bonus feedback float freely, without notification cards. */
+.bonus-counter, .combo-notice, .reward-unlock,
+.sector-clear-message:not(.level-complete-banner),
+.level-complete-banner.sector-clear-message {
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  text-shadow: 0 2px 5px #020a18, 0 0 12px currentColor;
+}
+.sector-clear-message:not(.level-complete-banner)::after { content: none; }

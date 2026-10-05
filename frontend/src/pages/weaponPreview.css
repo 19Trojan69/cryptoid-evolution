@@ -1,0 +1,14 @@
+.weapon-fire-preview { --laser: #7ee6ff; position: relative; overflow: hidden; isolation: isolate; height: 132px; flex: 0 0 132px; border-radius: 9px; background: radial-gradient(ellipse at 50% 95%, #28465d88, transparent 60%), #070f1c; }
+.weapon-fire-preview::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 18% 22%, #b8dfff 0 1px, transparent 1.5px), radial-gradient(circle at 77% 36%, #b8dfff88 0 1px, transparent 1.5px), radial-gradient(circle at 37% 60%, #b8dfff66 0 1px, transparent 1.5px); }
+.weapon-fire-preview .weapon-fire-preview-ship { position: absolute; width: 68px; height: 68px; bottom: -3px; left: calc(50% - 34px); z-index: 2; filter: drop-shadow(0 4px 7px #0008); }
+.weapon-fire-preview-ship > i { position: absolute; inset: 0; }
+.weapon-fire-preview .weapon-fire-preview-volley { position: absolute; inset: 0; pointer-events: none; }
+.weapon-fire-preview-volley > i { position: absolute; left: calc(50% + var(--shot-x)); bottom: 43px; width: 3px; height: 18px; margin-left: -1.5px; border-radius: 3px; background: linear-gradient(#fff, var(--laser)); box-shadow: 0 0 7px var(--laser); animation: weapon-fire-preview-shot var(--burst-cycle) linear infinite; }
+.weapon-fire-preview-level-3 .weapon-fire-preview-volley > i, .weapon-fire-preview-level-4 .weapon-fire-preview-volley > i, .weapon-fire-preview-level-5 .weapon-fire-preview-volley > i { animation-name: weapon-fire-preview-rapid-shot; }
+.weapon-fire-preview-level-5 { --laser: #c99aff; }
+.weapon-fire-preview-level-5 .weapon-fire-preview-volley > i { width: 6px; height: 23px; margin-left: -3px; }
+.weapon-fire-preview > small { position: absolute; right: 10px; bottom: 8px; color: #a7b8cd; font: 500 10px/1.2 system-ui, sans-serif; letter-spacing: .04em; }
+@keyframes weapon-fire-preview-shot { 0% { opacity: 1; transform: translate(0, 0); } 42% { opacity: 1; transform: translate(var(--shot-spread), -100px); } 43%, 100% { opacity: 0; transform: translate(var(--shot-spread), -100px); } }
+@keyframes weapon-fire-preview-rapid-shot { 0% { opacity: 1; transform: translate(0, 0); } 61% { opacity: 1; transform: translate(var(--shot-spread), -100px); } 62%, 100% { opacity: 0; transform: translate(var(--shot-spread), -100px); } }
+@media (prefers-reduced-motion: reduce) { .weapon-fire-preview-volley > i { animation: none; transform: translateY(-22px); } }
+html[data-motion="reduced"] .weapon-fire-preview-volley > i { animation: none; transform: translateY(-22px); }

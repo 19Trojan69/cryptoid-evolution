@@ -62,8 +62,8 @@ test("health grows within a cap and a damaged boss fires with a bounded interval
   assert.equal(bossFireInterval(boss), 2_500);
   assert.equal(bossFireInterval({ ...boss, health: boss.maxHealth / 2 }), 1_900);
   assert.equal(boss.maxHealth, levelDifficulty(10).bossHealth);
-  assert.ok(boss.maxHealth > 84);
-  assert.equal(createSectorBoss(500, 375).maxHealth, 360);
+  assert.ok(boss.maxHealth > 252);
+  assert.equal(createSectorBoss(500, 375).maxHealth, 1080);
   assert.throws(() => createSectorBoss(999, 375), /No boss/);
   assert.ok(bossFireInterval(createSectorBoss(500, 375), 500) >= 2_080);
   assert.equal(bossVulnerable(moveSectorBoss(boss, BOSS_ENTRY_MS, 375, 700)), true);
@@ -100,9 +100,11 @@ test("the boss descends smoothly only during its final 20 percent of health", ()
   assert.ok(boss.y + boss.height / 2 < height * .5);
 });
 
-test("the opening boss takes three times its former number of hits", () => {
+test("the exposed opening boss takes half its former number of hits", () => {
   const boss = createSectorBoss(10, 375);
-  for (let hit = 0; hit < Math.ceil(boss.maxHealth); hit++) {
+  boss.elapsed = BOSS_ENTRY_MS;
+  boss.turrets.forEach(gun => gun.health = 0);
+  for (let hit = 0; hit < Math.ceil(boss.maxHealth / 2); hit++) {
     assert.equal(damageSectorBoss(boss, 1, hit * 320), true);
   }
   assert.equal(boss.health, 0);
@@ -116,10 +118,12 @@ test("boss entry can begin below the measured HUD instead of behind it", () => {
 
 test("a boss takes one hit per volley and survives opening fire without a shield", () => {
   const boss = createSectorBoss(10, 375);
+  boss.elapsed = BOSS_ENTRY_MS;
+  boss.turrets.forEach(gun => gun.health = 0);
   assert.equal(damageSectorBoss(boss, 2, 1000), true);
   assert.equal(damageSectorBoss(boss, 2, 1000), false);
   assert.equal(damageSectorBoss(boss, 2, 1100), false);
-  assert.equal(boss.health, boss.maxHealth - 2);
-  assert.equal(damageSectorBoss(boss, 2, 1200), true);
   assert.equal(boss.health, boss.maxHealth - 4);
+  assert.equal(damageSectorBoss(boss, 2, 1200), true);
+  assert.equal(boss.health, boss.maxHealth - 8);
 });

@@ -34,7 +34,7 @@ declare global {
           onCancel: (paymentId: string) => void;
           onError: (error: Error, payment?: PaymentDTO) => void;
         }
-      ): Promise<unknown>;
+      ): void | Promise<unknown>;
     };
   }
 }
