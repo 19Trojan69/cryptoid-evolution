@@ -1306,6 +1306,10 @@ const GamePage = () => {
             // tiers are reduced; an active paid tier remains available until its timer expires.
             state.pickupWeaponLevel = Math.min(state.pickupWeaponLevel, state.weaponCap);
             syncSelectedWeapon(state);
+            // A life loss is durable mission progress. Persist it immediately instead
+            // of relying on pagehide/visibility handlers, which a hard reload may cancel.
+            // This prevents Resume from restoring an older checkpoint with more lives.
+            if (state.hearts > 0) void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
           }
           else soundRef.current?.play("shield");
         }
