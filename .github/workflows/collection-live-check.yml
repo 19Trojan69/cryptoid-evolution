@@ -1,0 +1,88 @@
+name: Testnet collection live check
+on:
+  push:
+    branches: [codex/collection-audit-20261005]
+    paths: ['.github/workflows/collection-live-check.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated Chromium
+        run: |
+          npm install --prefix .audit-tools --no-save --no-audit --no-fund playwright@1.56.1
+          .audit-tools/node_modules/.bin/playwright install --with-deps chromium
+      - name: Anonymous Testnet verification (no account or payment writes)
+        run: |
+          mkdir -p live-evidence
+          cat > live-check.cjs <<'JS'
+          const {chromium}=require('./.audit-tools/node_modules/playwright');
+          const fs=require('node:fs'),assert=require('node:assert/strict'),crypto=require('node:crypto');
+          (async()=>{
+            const origin='https://cryptoid-evolution-testnet.vercel.app';
+            const response=await fetch(origin);assert.equal(response.status,200,'Public Testnet must be anonymously accessible');
+            const html=await response.text();const bundle=html.match(/src="(\/assets\/index-[^"]+\.js)"/)?.[1];
+            assert.ok(bundle,'Expected game bundle, not an authentication page');
+            const script=await(await fetch(origin+bundle)).text();
+            assert.ok(script.includes('data-background-state'),'Published bundle lacks the verified registry');
+            assert.ok(script.includes('Guest ship cards are stored on this device.'),'Published bundle lacks guest ownership notice');
+            const result={origin,publishedApplicationCommit:'f16ce1c0a8b8eb41045b5dcf168480f5169681b8',bundle,bundleSha256:crypto.createHash('sha256').update(script).digest('hex'),checkedAt:new Date().toISOString(),cases:[]};
+            fs.writeFileSync('live-evidence/index.html',html);
+            const browser=await chromium.launch({headless:true});let page;
+            try{
+              for(const width of [390,1440]){
+                const context=await browser.newContext({viewport:{width,height:width===390?844:900},locale:'de-DE',hasTouch:width===390});
+                page=await context.newPage();page.setDefaultTimeout(30000);
+                await page.addInitScript(()=>localStorage.setItem('cryptoid_language','de'));
+                let deniedWrites=0;const errors=[];page.on('pageerror',e=>errors.push(e.message));
+                await page.route('**/*',route=>{
+                  if(!['GET','HEAD'].includes(route.request().method())){deniedWrites++;return route.abort();}
+                  return route.continue();
+                });
+                await page.goto(origin);await page.getByRole('button',{name:'✧ Sammelkarten'}).waitFor();
+                await page.screenshot({path:`live-evidence/home-${width}.png`});
+                await page.getByRole('button',{name:'✧ Sammelkarten'}).click();
+                await page.locator('.collection-grid').waitFor();
+                assert.equal(await page.locator('.collection-tile.is-locked').count(),50);
+                await page.locator('.collection-tile').nth(3).click();
+                await page.waitForFunction(()=>document.querySelector('.collection-locked-detail .boss-portrait')?.dataset.ready==='true');
+                const art=await page.locator('.collection-locked-detail canvas').evaluate(c=>{
+                  const d=c.getContext('2d').getImageData(0,0,c.width,c.height).data;let colored=0,opaque=0;
+                  for(let i=0;i<d.length;i+=4)if(d[i+3]){opaque++;if(d[i]!==d[i+1]||d[i]!==d[i+2])colored++;}
+                  return{colored,opaque,guns:Number(c.dataset.turretCount)};
+                });assert.equal(art.colored,0);assert.ok(art.opaque>1000&&art.guns>0);
+                assert.equal(await page.locator('.collection-stats,.collection-download').count(),0);
+                await page.screenshot({path:`live-evidence/locked-boss-${width}.png`});
+                await page.keyboard.press('ArrowLeft');await page.waitForFunction(()=>document.querySelector('.collection-header h2')?.textContent!=='Talvrek');
+                await page.getByRole('button',{name:'← Zurück zur Sammlung'}).click();
+                await page.getByRole('button',{name:'Standard',exact:true}).click();
+                assert.equal(await page.locator('.collection-tile:not(.is-locked)').count(),1);
+                await page.locator('.collection-tile:not(.is-locked)').click();
+                const footer=await page.locator('.collection-footer').boundingBox();assert.ok(footer.y+footer.height<=(width===390?844:900)+1);
+                await page.getByRole('button',{name:'Download vorbereiten'}).click();
+                await page.locator('.collection-download').waitFor();
+                const downloaded=page.waitForEvent('download');await page.locator('.collection-download').click();
+                await(await downloaded).saveAs(`live-evidence/starter-card-${width}.png`);
+                await page.screenshot({path:`live-evidence/starter-card-view-${width}.png`});
+                assert.deepEqual(errors,[]);assert.equal(deniedWrites,0);
+                result.cases.push({width,anonymous:true,lockedBossIncludingGuns:art,ownershipGate:true,footerVisible:true,starterPngDownload:true,deniedWrites,pageErrors:errors});
+                await context.close();page=null;
+              }
+              fs.writeFileSync('live-evidence/result.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result,null,2));
+            }catch(e){if(page){await page.screenshot({path:'live-evidence/failure.png'}).catch(()=>{});fs.writeFileSync('live-evidence/failure.txt',await page.locator('body').innerText().catch(()=>''));}throw e;}
+            finally{await browser.close();}
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node live-check.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: testnet-collection-live-${{ github.run_id }}
+          path: live-evidence/
+          retention-days: 7
