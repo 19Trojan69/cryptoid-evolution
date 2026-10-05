@@ -46,7 +46,7 @@ export default function Collection({uid,onClose}:{uid?:string;onClose:()=>void})
      <div className="collection-grid">{entries.map(entry=><button type="button" key={entry.key} className={`collection-tile tier-${entry.tier} ${entry.unlocked?'':'is-locked'}`} disabled={!entry.unlocked} onClick={()=>setSelected(entry.make())}>
       <span className="collection-serial">{entry.serial} <span>{'✦'.repeat(entry.tier)}</span></span>
       <div className="collection-art">{entry.unlocked&&entry.boss?<BossPortrait id={entry.boss}/>:<img src={entry.image} alt="" loading="lazy"/>}</div>
-      <strong>{entry.name}</strong><small>{entry.unlocked?say('Karte öffnen','Open card'):!entry.available?'Mainnet ready':say('GESPERRT','LOCKED')}</small>
+      <strong>{entry.name}</strong><small>{entry.unlocked?say('Karte öffnen','Open card'):!entry.available?say('MAINNET READY','MAINNET READY'):say('GESPERRT','LOCKED')}</small>
      </button>)}</div></>}
    </>:<CollectionCardView card={selected} stars={selected.bossId ? ownership.wins[selected.bossId] || 0 : 0}/>}
   </div>

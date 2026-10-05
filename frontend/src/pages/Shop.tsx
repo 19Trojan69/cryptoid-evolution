@@ -559,10 +559,10 @@ const Shop = () => {
             const id = index + 1;
             const available = bossCardAvailable(id);
             const stars = available ? rewardProgress.bossWins[id] ?? 0 : 0;
-            return <button type="button" key={id} disabled={!stars} onClick={() => setSelectedBoss(id)} className={`boss-sticker${stars ? " boss-sticker-earned" : ""}`} title={t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : !available ? "Mainnet ready" : t("Not defeated yet") })} aria-haspopup={stars ? 'dialog' : undefined} aria-label={`${bossName(id)} · ${t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : !available ? "Mainnet ready" : t("Locked") })}`}>
+            return <button type="button" key={id} disabled={!stars} onClick={() => setSelectedBoss(id)} className={`boss-sticker${stars ? " boss-sticker-earned" : ""}`} title={t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : !available ? t("MAINNET READY") : t("Not defeated yet") })} aria-haspopup={stars ? 'dialog' : undefined} aria-label={`${bossName(id)} · ${t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : !available ? t("MAINNET READY") : t("Locked") })}`}>
               {stars ? <BossPortrait id={id} /> : <span className="boss-sticker-silhouette" aria-hidden="true"><BossPortrait id={id} /></span>}
               <small>#{String(id).padStart(2, "0")} · {bossName(id)}</small>{!!stars && <b>{"★".repeat(stars)}</b>}
-              {!available && <small>Mainnet ready</small>}{!!stars && <span className="boss-sticker-open">{bossDossierLabel(locale)}</span>}
+              {!available && <small>{t("MAINNET READY")}</small>}{!!stars && <span className="boss-sticker-open">{bossDossierLabel(locale)}</span>}
             </button>;
           })}</div>
           {selectedBoss !== null && bossCardAvailable(selectedBoss) && <BossDossier id={selectedBoss} stars={rewardProgress.bossWins[selectedBoss] ?? 0} onClose={() => setSelectedBoss(null)} />}
