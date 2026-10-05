@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { advancePlayerMotion, advanceShipMotion, idleShipMotion, engineFlamePercent, explosionDiameter, fragmentFlight, hullIllumination } from './shipRealism.ts';
+import { advanceShipMotion, idleShipMotion, engineFlamePercent, explosionDiameter, fragmentFlight, hullIllumination } from './shipRealism.ts';
 
 test('engine flames retain launch, attack and return floors and respond to acceleration', () => {
   assert.equal(engineFlamePercent(0), 7);
@@ -46,37 +46,4 @@ test('light fades quickly, is local and respects delayed boss burst', () => {
   assert.equal(hullIllumination(0, 0, 1400, 0, [source]), 0);
   assert.ok(hullIllumination(0, 0, 1010, 1000, []) > .5);
   assert.equal(hullIllumination(0, 0, 1000, 0, [{ ...source, kind: 'boss-explosion', finalDelayMs: 1450 }]), 0);
-});
-
-const trajectory = (velocity, duration = 1000, step = 10) => {
-  let motion = idleShipMotion(); const samples = [];
-  for (let t = 0; t < duration; t += step) {
-    const [x, y] = velocity(t);
-    motion = advancePlayerMotion(motion, x * step / 1000, y * step / 1000, step);
-    samples.push(motion.bank);
-  }
-  return { motion, samples };
-};
-test('player turn strength mirrors direction and levels on a straight course', () => {
-  const gentle = trajectory(() => [40, 0]), sharp = trajectory(() => [400, 0]), left = trajectory(() => [-400, 0]);
-  assert.ok(Math.max(...sharp.samples) > Math.max(...gentle.samples) + 1);
-  assert.ok(Math.max(...sharp.samples) <= 10);
-  sharp.samples.forEach((v, i) => assert.ok(Math.abs(v + left.samples[i]) < 1e-9));
-  assert.ok(Math.abs(sharp.motion.bank) < .05);
-});
-test('player follows curves consistently across frame rates and settles smoothly', () => {
-  const curve = t => [300 * Math.sin(t / 800), -150 * Math.cos(t / 800)];
-  const a = trajectory(curve, 600, 10), b = trajectory(curve, 600, 20);
-  assert.ok(a.motion.bank > 1);
-  assert.ok(Math.abs(a.motion.bank - b.motion.bank) < .4);
-  let stopped = advancePlayerMotion(a.motion, 0, 0, 16);
-  assert.ok(stopped.bank > 0 && stopped.bank < a.motion.bank);
-  for (let i = 0; i < 60; i++) stopped = advancePlayerMotion(stopped, 0, 0, 16);
-  assert.ok(Math.abs(stopped.bank) < .001);
-});
-test('player banking bounds abrupt touch reversals and ignores paused frames', () => {
-  const a = trajectory(t => [t < 300 ? 20000 : -20000, 0], 600);
-  assert.ok(a.samples.every(v => Number.isFinite(v) && Math.abs(v) <= 10));
-  assert.ok(a.motion.bank < 0);
-  assert.equal(advancePlayerMotion(a.motion, 100, 0, 0), a.motion);
 });

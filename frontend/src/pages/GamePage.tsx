@@ -14,7 +14,7 @@ import { COMBAT_STATE_KEYS, COMBAT_REF_KEYS, readCombatCheckpoint, type CombatCh
 import HullDamage from "./HullDamage";
 import BlockchainProgress from "./BlockchainProgress";
 import { gameHaptics } from "./gameHaptics";
-import { advancePlayerMotion, advanceShipMotion, idleShipMotion, engineFlamePercent, explosionDiameter, fragmentFlight, hullIllumination, type ShipMotion } from "./shipRealism";
+import { advanceShipMotion, idleShipMotion, engineFlamePercent, explosionDiameter, fragmentFlight, hullIllumination, type ShipMotion } from "./shipRealism";
 import { useLocale } from "../i18n";
 import { memo, useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { useNavigate } from "react-router-dom";
@@ -984,7 +984,7 @@ const GamePage = () => {
           }
         }
         const previousPlayer = lastPlayerRef.current ?? state.player;
-        playerMotionRef.current = advancePlayerMotion(playerMotionRef.current, (state.player.x - previousPlayer.x) * width, (state.player.y - previousPlayer.y) * height, delta);
+        playerMotionRef.current = advanceShipMotion(playerMotionRef.current, (state.player.x - previousPlayer.x) * width, (state.player.y - previousPlayer.y) * height, delta);
         state.thrust = playerMotionRef.current.thrust;
         playerShipRef.current?.style.setProperty("--flame-length", `${engineFlamePercent(state.thrust)}%`);
         playerShipRef.current?.style.setProperty("--visual-bank", `${playerMotionRef.current.bank}deg`);
