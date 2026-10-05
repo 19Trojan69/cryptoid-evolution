@@ -2,7 +2,7 @@ import { bossCardAvailable } from './cardAvailability';
 import { keepScreenAwake } from './screenWakeLock';
 import { introGroupBreathingMs } from './introDifficulty';
 import CardReveal from './CardReveal';
-import { availableShipCards, unseenShipCards, type CardReward } from './cardRevealRules';
+import { availableShipCards, type CardReward } from './cardRevealRules';
 import { mergeCardReveals, rememberCard, hasSeenCard, syncCardReveals } from './cardRevealMemory';
 import { primeCardSound } from './cardSound';
 import { advanceBossCore } from './bossCore';
@@ -600,10 +600,10 @@ const GamePage = () => {
       }
       const selected = !adminRunRef.current && data.profile ? accountSelection(data.profile) : shipSelection;
       if(!adminRunRef.current&&data.profile){
-        const seen=mergeCardReveals(cardOwnerRef.current,[...(profile?.cardReveals||[]),...(data.profile.cardReveals||[])]);
+        // Entering a mission is not an acquisition event. Baseline the existing hangar silently.
+        mergeCardReveals(cardOwnerRef.current,[...(profile?.cardReveals||[]),...(data.profile.cardReveals||[]),...availableShipCards(playerSkins,data.profile.fleet,data.profile.usedShipSkins||[],data.ownedShipUpgrades||[]).map(card=>card.key)]);
         void syncCardReveals(cardOwnerRef.current).catch(()=>{});
-        const cards=unseenShipCards(availableShipCards(playerSkins,data.profile.fleet,data.profile.usedShipSkins||[],data.ownedShipUpgrades||[]),seen);
-        rewardCardsRef.current=cards;setRewardCards(cards);
+        rewardCardsRef.current=[];setRewardCards([]);
       }
 
       setShipSelection(selected);

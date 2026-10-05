@@ -1,7 +1,7 @@
 import { bossCardAvailable } from './cardAvailability';
 import CardReveal from './CardReveal';
 import { availableShipCards, unseenShipCards, type CardReward } from './cardRevealRules';
-import { acknowledgeCard, readCardReveals } from './cardRevealMemory';
+import { mergeCardReveals, rememberCard, readCardReveals, syncCardReveals } from './cardRevealMemory';
 import { primeCardSound } from './cardSound';
 import Collection from "./Collection";
 import SystemSettings, { applySavedDisplaySettings, type SettingsSection } from "./SystemSettings";
@@ -236,11 +236,20 @@ const Shop = () => {
   const displayedRecords = user && !adminMode ? { highestSector: account?.highestSector || 1, totalDestroyed: account?.totalDestroyed || 0 } : records;
   const accountUid = user?.uid;
   useEffect(() => {
+    const card = newCards[0];
+    if (!card) return;
+    const owner = accountUid ?? 'guest';
+    rememberCard(owner, card.key);
+    void syncCardReveals(owner).catch(() => { /* Retried when this account is next loaded. */ });
+  }, [newCards[0]?.key, accountUid]);
+  useEffect(() => {
     if (!accountUid || adminMode) return;
     let active = true;
     void loadAccountSave().then(save => {
       if (!active) return;
       setAccountState({ owner: accountUid, save }); setAccountError("");
+      mergeCardReveals(accountUid, save.cardReveals || []);
+      void syncCardReveals(accountUid).catch(() => {});
       const choice = accountSelection(save); setSelected(choice); setPreviewSkin(choice.skin); setPreviewColor(choice.color);
     }).catch(() => { if (active) setAccountError("Save unavailable. Local data is unchanged; account purchases are locked until connected."); });
     return () => { active = false; };
@@ -385,7 +394,7 @@ const Shop = () => {
       const { data } = await axiosClient.get<Inventory>("/hangar/inventory");
       if (!Array.isArray(data.ownedWeapons) || !Array.isArray(data.ownedArmor) || !Array.isArray(data.consumables)) throw new Error("Invalid inventory");
 
-      if(user&&!adminMode&&account){
+      if(user&&!adminMode&&account&&inventory){
         const before=availableShipCards(playerSkins,account.fleet,account.usedShipSkins||[],inventory?.ownedShipUpgrades||[]).map(c=>c.key);
         const acquired=availableShipCards(playerSkins,account.fleet,account.usedShipSkins||[],data.ownedShipUpgrades||[]).filter(c=>!before.includes(c.key));
         if(acquired.length)setNewCards(unseenShipCards(acquired,readCardReveals(user.uid)));
@@ -461,7 +470,7 @@ const Shop = () => {
   const homePaused = Boolean(newCards.length || collectionOpen || shopView || systemMenuOpen || activePanel || termsOpen || quickGroup || showSignIn);
   return (
     <main className="app-shell landing-shell" data-home-paused={homePaused} onPointerDownCapture={primeCardSound}>
-      {newCards[0] && <CardReveal key={user?.uid ?? "guest"} reward={newCards[0]} remaining={newCards.length} onContinue={()=>{acknowledgeCard(user?.uid??"guest",newCards[0].key);setNewCards(cards=>cards.slice(1));}}/>}
+      {newCards[0] && <CardReveal key={user?.uid ?? "guest"} reward={newCards[0]} remaining={newCards.length} onContinue={()=>{setNewCards(cards=>cards.slice(1));}}/>}
       {collectionOpen && <Collection key={user?.uid ?? "guest"} uid={user?.uid} onClose={() => setCollectionOpen(false)} />}
       <Header
         user={user}

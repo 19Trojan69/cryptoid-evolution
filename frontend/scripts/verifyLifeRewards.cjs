@@ -9,7 +9,7 @@ const {emptyRewardProgress}=req('../../build/rewardRules.js');
 (async()=>{
  const {createServer}=await import(path.join(repo,'frontend/node_modules/vite/dist/node/index.js'));
  const hooks=`(window as any).__rewardQA={inspect:()=>stateRef.current,finishBoss:()=>{Object.assign(stateRef.current,{phase:'SECTOR_CLEAR',encounter:'boss-clear',boss:null,bossHeartCollected:false,player:{...BOSS_HEART_POSITION},asteroids:[],enemyShots:[],shots:[],status:'playing'});clearTimerRef.current=BOSS_CLEAR_DURATION_MS+100;bossDestroyPlayedRef.current=true;bossVictoryPendingRef.current=false;musicRef.current?.pause();setGame({...stateRef.current});}};`;
- const server=await createServer({root:path.join(repo,'frontend'),logLevel:'error',define:{'import.meta.env.VITE_BACKEND_URL':JSON.stringify('/api')},server:{host:'127.0.0.1',port:0,hmr:false},plugins:[{name:'reward-qa',enforce:'pre',transform(code,id){
+ const server=await createServer({root:path.join(repo,'frontend'),cacheDir:path.join(repo,'frontend/node_modules/.vite-card-baseline'),logLevel:'error',define:{'import.meta.env.VITE_BACKEND_URL':JSON.stringify('/api')},server:{host:'127.0.0.1',port:0,hmr:false},plugins:[{name:'reward-qa',enforce:'pre',transform(code,id){
   if(id.endsWith('/GamePage.tsx'))return code.replace('  const levelLabel =',hooks+'\n  const levelLabel =');
   if(id.endsWith('/gameAudio.ts'))return code+'\n(window as any).__sounds=[];const qaPlay=GameAudio.prototype.play;GameAudio.prototype.play=function(sound,level){(window as any).__sounds.push(sound);return qaPlay.call(this,sound,level);};';
  }}]});
@@ -20,6 +20,7 @@ const {emptyRewardProgress}=req('../../build/rewardRules.js');
   for(const scenario of ['first','repeat','locked','ship']){
    const h=harness();await h.call('progress','/me',null,{method:'GET'});const stage=scenario==='locked'?40:10;
    Object.assign(h.profile(),{...emptyPlayerSave(),version:1,legacyImported:true,cardReveals:scenario==='ship'?[]:['grey-scout-1'],mission:{sector:stage,phase:'boss',rulesVersion:2,snapshot:firstMissionSnapshot(3),savedAt:new Date().toISOString()}});
+   if(scenario==='ship') h.profile().fleet={'grey-scout':{grey:1},'dark-delta':{grey:1},verdant:{grey:1}};
    h.docs[0].rewardsByNetwork={testnet:emptyRewardProgress()};if(scenario==='repeat')h.docs[0].rewardsByNetwork.testnet.bossWins[1]=1;
    h.docs[0].rewardEventKeys={testnet:[]};for(let s=1;s<stage;s++)if(s%10){h.docs[0].rewardEventKeys.testnet.push('block:'+s);if(s%10===9)h.docs[0].rewardEventKeys.testnet.push('chain:'+Math.ceil(s/10));}else h.docs[0].rewardEventKeys.testnet.push('boss:'+s/10,'bonus:'+s/10);
    const viewport=scenario==='repeat'?{width:1280,height:800}:{width:390,height:844};
@@ -42,12 +43,16 @@ const {emptyRewardProgress}=req('../../build/rewardRules.js');
    const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));await page.clock.install();
    await page.goto(origin+'/game');await page.getByRole('button',{name:'Resume',exact:true}).click();
    if(scenario==='ship'){
-     await page.waitForSelector('.card-reveal-dialog');await page.waitForFunction(()=>document.querySelector('.card-reveal-dialog').open);
-     // Receipt is persisted when shown, even before Continue is clicked.
-     await page.waitForTimeout(100);assert.ok(h.profile().cardReveals.includes('grey-scout-1'));
+     await page.waitForFunction(()=>window.__rewardQA?.inspect().status==='playing');
+     assert.equal(await page.locator('.card-reveal-dialog').count(),0,'Existing fleet never opens a start card queue, even with no prior receipts');
+     await page.waitForTimeout(100);
+     assert.ok(['grey-scout-1','dark-delta-1','verdant-1'].every(key=>h.profile().cardReveals.includes(key)));
+     // Simulate a fresh client or cleared browser storage; old start payload may also be cached.
+     await page.evaluate(()=>{for(const key of Object.keys(localStorage))if(key.startsWith('cryptoid_card_reveals'))localStorage.removeItem(key);});
      await page.reload();await page.getByRole('button',{name:'Resume',exact:true}).click();
-     await page.waitForFunction(()=>window.__rewardQA?.inspect().status==='playing');assert.equal(await page.locator('.card-reveal-dialog').count(),0);
-     results.push({scenario,shownOnce:'passed',accountReceipt:'passed'});await context.close();continue;
+     await page.waitForFunction(()=>window.__rewardQA?.inspect().status==='playing');
+     assert.equal(await page.locator('.card-reveal-dialog').count(),0);
+     results.push({scenario,existingFleetSilent:'passed',freshClient:'passed'});await context.close();continue;
    }
    await page.waitForFunction(()=>window.__rewardQA?.inspect().status==='playing');
    assert.equal(await page.locator('.card-reveal-dialog').count(),0,'account receipts suppress starter cards on a fresh device');
