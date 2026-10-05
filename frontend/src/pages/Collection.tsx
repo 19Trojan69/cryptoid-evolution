@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import { useLocale } from '../i18n';
 import { loadAccountSave } from '../lib/accountSave';
 import { axiosClient } from '../lib/axiosClient';
-import { playerSkins } from './shipFleet';
+import { playerSkins, readShipFleet, fleetCount, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_COLORS_KEY } from './shipFleet';
 import { shipEvolutionAsset, type ShipStage } from './shipEvolution';
 import { bossManifest } from './bossManifest';
 import { bossName } from './bossNames';
@@ -26,7 +26,7 @@ export default function Collection({uid,onClose}:{uid?:string;onClose:()=>void})
  const dialog=useRef<HTMLDialogElement>(null),close=useRef<HTMLButtonElement>(null),scroller=useRef<HTMLDivElement>(null);
  useEffect(()=>{const previous=document.activeElement as HTMLElement|null;dialog.current?.showModal();close.current?.focus();return()=>{dialog.current?.close();previous?.isConnected&&previous.focus();};},[]);
  useEffect(()=>{let alive=true;setStatus('loading');setOwnership({used:[],upgrades:[],wins:{}});
-  if(!uid){setStatus('ready');return;}
+  if(!uid){const localFleet=readShipFleet(localStorage.getItem(SHIP_FLEET_KEY),localStorage.getItem(SHIP_OWNED_KEY),localStorage.getItem(SHIP_COLORS_KEY));setOwnership({used:playerSkins.filter(ship=>fleetCount(localFleet,ship.id)>0).map(ship=>ship.id),upgrades:[],wins:{}});setStatus('ready');return;}
   void Promise.all([loadAccountSave(),axiosClient.get<{ownedShipUpgrades?:string[]}>('/hangar/inventory'),axiosClient.get<{progress:{bossWins:Record<string,number>}}>('/rewards/me')]).then(([save,inventory,rewards])=>{if(alive){setOwnership({used:[...new Set([...(save.usedShipSkins||[]),...Object.keys(save.fleet).filter(id=>Object.values(save.fleet[id]||{}).some(n=>n>0))])],upgrades:inventory.data.ownedShipUpgrades||[],wins:rewards.data.progress.bossWins});setStatus('ready');}},()=>{if(alive)setStatus('error');});
   return()=>{alive=false;};
  },[uid,retry]);
@@ -54,12 +54,12 @@ export default function Collection({uid,onClose}:{uid?:string;onClose:()=>void})
      <p className="collection-count">{entries.filter(e=>e.unlocked).length}/{entries.length} {say('FREIGESCHALTET','UNLOCKED')}</p>
      <div className="collection-grid">{entries.map(entry=><button type="button" key={entry.key} className={`collection-tile tier-${entry.tier} ${entry.unlocked?'':'is-locked'}`} aria-label={`${entry.name} · ${entry.unlocked?say('Karte öffnen','Open card'):entry.available?say('GESPERRT','LOCKED'):say('MAINNET READY','MAINNET READY')}`} onClick={()=>setSelected(entry.key)}>
       <span className="collection-serial">{entry.serial} <span>{'✦'.repeat(entry.tier)}</span></span>
-      <div className="collection-art">{entry.unlocked&&entry.boss?<BossPortrait id={entry.boss}/>:<img src={entry.image} alt="" loading="lazy"/>}</div>
+      <div className="collection-art">{entry.boss?<BossPortrait id={entry.boss}/>:<img src={entry.image} alt="" loading="lazy"/>}</div>
       <strong>{entry.name}</strong><small className={!entry.unlocked && !entry.available ? "mainnet-ready-badge" : undefined}>{entry.unlocked?say('Karte öffnen','Open card'):!entry.available?say('MAINNET READY','MAINNET READY'):say('GESPERRT','LOCKED')}</small>
      </button>)}</div></>}
    </>:selected?<CollectionCardView card={selected} stars={selected.bossId ? ownership.wins[selected.bossId] || 0 : 0}/>:<article className="collection-card collection-locked-detail">
     <span className="collection-serial">{activeEntry.serial}</span><h3>{activeEntry.name}</h3>
-    <div className="collection-card-art"><img src={activeEntry.image} alt={say('Gesperrte Schiffssilhouette','Locked ship silhouette')}/></div>
+    <div className="collection-card-art">{activeEntry.boss?<BossPortrait id={activeEntry.boss}/>:<img src={activeEntry.image} alt={say('Gesperrte Schiffssilhouette','Locked ship silhouette')}/>}</div>
     <h4 className={!activeEntry.available ? "mainnet-ready-badge" : undefined}>{activeEntry.available?say('GESPERRT','LOCKED'):say('MAINNET READY','MAINNET READY')}</h4>
     <p>{activeEntry.available?say('Erhalte dieses Schiff oder besiege diesen Boss, um Geschichte, Ausstattung und Download freizuschalten.','Acquire this ship or defeat this boss to unlock its story, equipment and download.'):say('Diese Karte ist für die spätere Freigabe vorbereitet. Geschichte, Ausstattung und Download bleiben gesperrt.','This card is prepared for a future release. Its story, equipment and download remain locked.')}</p>
    </article>}
