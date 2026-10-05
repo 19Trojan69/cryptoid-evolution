@@ -42,7 +42,6 @@ import { bossDossierLabel } from './bossLore';
 import { bossName } from './bossNames';
 import { useLocale } from "../i18n";
 import EarthGlobe from "./EarthGlobe";
-import EarthNetwork from "./EarthNetwork";
 import { requestGameFullscreen } from "./gameFullscreen";
 import { MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { powerUpSymbols, type PowerUpType } from "./powerUps";
@@ -503,7 +502,7 @@ const Shop = () => {
           <button className="collection-home-button" type="button" disabled={!authReady} onClick={() => setCollectionOpen(true)}>✧ {collectionLabel(locale)}</button>
         </div>
         <div className="planet-stage" aria-label={t("Planet status")}>
-          <div className="planet"><EarthGlobe paused={homePaused} /><EarthNetwork /></div>
+          <div className="planet"><EarthGlobe paused={homePaused} /></div>
           <span className="orbit-status">{t('ORBITAL DEFENSE ACTIVE')}</span>
         </div>
         <div className="stage-label home-region-label"><span className="stage-label-value">01</span><span>{t('Genesis sector')}</span></div>

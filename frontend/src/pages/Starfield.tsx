@@ -28,12 +28,8 @@ const makeStars = (columns: number, rows: number, seed: number, nearby: boolean)
   }));
 };
 
-const Starfield = ({ sector, player, paused, showNebula = false }: { sector: number; player: PlayerPosition; paused: boolean; showNebula?: boolean }) => {
+const Starfield = ({ sector, paused, showNebula = false }: { sector: number; player: PlayerPosition; paused: boolean; showNebula?: boolean }) => {
   const [flare, setFlare] = useState<Flare | null>(null);
-  const style = {
-    "--star-parallax-x": `${(player.x - .5) * -14}px`,
-    "--star-parallax-y": `${(player.y - .8) * -10}px`,
-  } as CSSProperties;
   const palette = ((sector - 1) % 6) + 1;
   const stars = useMemo(() => {
     const seed = Math.imul(sector, 0x9e3779b1) >>> 0;
@@ -80,7 +76,7 @@ const Starfield = ({ sector, player, paused, showNebula = false }: { sector: num
     schedule();
     return () => { if (timer !== undefined) window.clearTimeout(timer); observer.disconnect(); document.removeEventListener("visibilitychange", reset); motion.removeEventListener("change", reset); };
   }, [paused, stars.distant]);
-  return <div className={`starfield starfield-sector-${palette}${paused ? " starfield-paused" : ""}`} style={style} aria-hidden="true">
+  return <div className={`starfield starfield-sector-${palette}${paused ? " starfield-paused" : ""}`} aria-hidden="true">
     {showNebula && <div className="nebula-field"><span className="nebula-cloud" style={stars.cloud} /></div>}
     <div className="milky-band" />
     {flare && <i className="distant-star-flare" style={{ left: `${flare.x}%`, top: `${flare.y}%`, "--flare-color": flare.color, "--flare-strength": flare.strength, "--flare-size": flare.size, "--flare-duration": `${flare.duration}ms` } as CSSProperties} />}
@@ -98,10 +94,7 @@ const Starfield = ({ sector, player, paused, showNebula = false }: { sector: num
       </g>)}
     </svg>
     <i className="shooting-star shooting-star-one"><span /></i>
-    <i className="shooting-star shooting-star-two"><span /></i>
-    <i className="shooting-star shooting-star-three"><span /></i>
-    <i className="shooting-star shooting-star-four"><span /></i>
   </div>;
 };
 
-export default memo(Starfield, (previous, next) => previous.sector === next.sector && previous.paused === next.paused && previous.showNebula === next.showNebula && (typeof window !== "undefined" && window.matchMedia("(max-width: 700px)").matches || previous.player === next.player));
+export default memo(Starfield, (previous, next) => previous.sector === next.sector && previous.paused === next.paused && previous.showNebula === next.showNebula);
