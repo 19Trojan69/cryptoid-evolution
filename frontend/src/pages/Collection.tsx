@@ -17,6 +17,7 @@ export default function Collection({uid,onClose}:{uid?:string;onClose:()=>void})
  const {locale}=useLocale(),de=locale.startsWith('de'),say=(a:string,b:string)=>de?a:b;
  const [category,setCategory]=useState(0),[selected,setSelected]=useState<CollectionCard|null>(null);
  const [ownership,setOwnership]=useState<Ownership>({used:[],upgrades:[],wins:{}}),[status,setStatus]=useState('loading'),[retry,setRetry]=useState(0);
+ const exportVersion=useRef(0);
  const [busy,setBusy]=useState(false),[exportError,setExportError]=useState(false),[download,setDownload]=useState<string|null>(null);
  const dialog=useRef<HTMLDialogElement>(null),close=useRef<HTMLButtonElement>(null),scroller=useRef<HTMLDivElement>(null);
  useEffect(()=>{const previous=document.activeElement as HTMLElement|null;dialog.current?.showModal();close.current?.focus();return()=>{dialog.current?.close();previous?.isConnected&&previous.focus();};},[]);
@@ -26,12 +27,12 @@ export default function Collection({uid,onClose}:{uid?:string;onClose:()=>void})
   return()=>{alive=false;};
  },[uid,retry]);
  useEffect(()=>()=>{if(download)URL.revokeObjectURL(download);},[download]);
- useEffect(()=>{scroller.current?.scrollTo(0,0);setDownload(null);setExportError(false);},[selected,category]);
+ useEffect(()=>{exportVersion.current++;scroller.current?.scrollTo(0,0);setDownload(null);setExportError(false);setBusy(false);return()=>{exportVersion.current++;};},[selected,category]);
  const categories=[say('Bosse','Bosses'),'Standard','Advanced','Elite'];
  const entries=category===0?bossManifest.map(b=>({key:`boss-${b.id}`,name:bossName(b.id),image:b.image,unlocked:(ownership.wins[b.id]||0)>0,tier:Math.ceil(b.id/10),serial:`B-${String(b.id).padStart(2,'0')}`,make:()=>bossCard(b.id,locale),boss:b.id})):playerSkins.map(ship=>({key:`${ship.id}-${category}`,name:ship.name,image:shipEvolutionAsset(ship.sprite,category as ShipStage),unlocked:playerCardUnlocked(ship.id,ship.sprite,category as ShipStage,ownership.used,ownership.upgrades),tier:category,serial:`P-${String(ship.sprite+1).padStart(2,'0')}/${category}`,make:()=>shipCard(ship.id,category as ShipStage,de),boss:0}));
- const save=async()=>{if(!selected||busy)return;setBusy(true);setExportError(false);try{const {exportCollectionCard}=await import('./collectionExport');const blob=await exportCollectionCard(selected,de);setDownload(URL.createObjectURL(blob));}catch{setExportError(true);}finally{setBusy(false);}};
+ const save=async()=>{if(!selected||busy)return;setBusy(true);setExportError(false);const version=exportVersion.current;try{const {exportCollectionCard}=await import('./collectionExport');const blob=await exportCollectionCard(selected,de);if(version===exportVersion.current)setDownload(URL.createObjectURL(blob));}catch{if(version===exportVersion.current)setExportError(true);}finally{if(version===exportVersion.current)setBusy(false);}};
  return createPortal(<dialog ref={dialog} className="collection-dialog" aria-labelledby="collection-title" onCancel={e=>{e.preventDefault();e.stopPropagation();selected?setSelected(null):onClose();}}>
-  <header className="collection-header"><div><p>{say('DAS FLOTENARCHIV','THE FLEET ARCHIVE')}</p><h2 id="collection-title">{selected?selected.name:say('Deine Sammlung','Your collection')}</h2></div><span aria-hidden="true">✧</span></header>
+  <header className="collection-header"><div><p>{say('DAS FLOTTENARCHIV','THE FLEET ARCHIVE')}</p><h2 id="collection-title">{selected?selected.name:say('Deine Sammlung','Your collection')}</h2></div><span aria-hidden="true">✧</span></header>
   <div ref={scroller} className="collection-scroll">
    {!selected?<>
     <p className="collection-intro">{say('Entdecke 50 Bosse und 60 Schiffskarten. Jede freigeschaltete Karte erzählt ihre Geschichte und lässt sich mit ihrer Ausstattung als PNG speichern.','Discover 50 bosses and 60 ship cards. Each unlocked card tells its story and can be saved with its equipment as a PNG.')}</p>
