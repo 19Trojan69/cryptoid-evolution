@@ -2,7 +2,7 @@ import { bossCardAvailable } from './cardAvailability';
 import { keepScreenAwake } from './screenWakeLock';
 import { introGroupBreathingMs } from './introDifficulty';
 import CardReveal from './CardReveal';
-import { availableShipCards, type CardReward } from './cardRevealRules';
+import { availableShipCards, firstMissionStarterCards, type CardReward } from './cardRevealRules';
 import { mergeCardReveals, rememberCard, hasSeenCard, syncCardReveals } from './cardRevealMemory';
 import { primeCardSound } from './cardSound';
 import { advanceBossCore } from './bossCore';
@@ -600,10 +600,15 @@ const GamePage = () => {
       }
       const selected = !adminRunRef.current && data.profile ? accountSelection(data.profile) : shipSelection;
       if(!adminRunRef.current&&data.profile){
-        // Entering a mission is not an acquisition event. Baseline the existing hangar silently.
-        mergeCardReveals(cardOwnerRef.current,[...(profile?.cardReveals||[]),...(data.profile.cardReveals||[]),...availableShipCards(playerSkins,data.profile.fleet,data.profile.usedShipSkins||[],data.ownedShipUpgrades||[]).map(card=>card.key)]);
+        // Never replay the existing hangar. Only a pristine account's first free starter
+        // is an acquisition; versioned/used/imported accounts retain silent baselining.
+        const starterCards = firstMissionStarterCards(profile);
+        const baseline = availableShipCards(playerSkins,data.profile.fleet,data.profile.usedShipSkins||[],data.ownedShipUpgrades||[])
+          .filter(card=>!starterCards.some(starter=>starter.key===card.key));
+        mergeCardReveals(cardOwnerRef.current,[...(profile?.cardReveals||[]),...(data.profile.cardReveals||[]),...baseline.map(card=>card.key)]);
         void syncCardReveals(cardOwnerRef.current).catch(()=>{});
         rewardCardsRef.current=[];setRewardCards([]);
+        showRewardCards(starterCards);
       }
 
       setShipSelection(selected);

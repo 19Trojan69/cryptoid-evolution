@@ -22,3 +22,14 @@ test('release limits keep prepared boss and ship cards locked',()=>{
  assert.equal(bossCardAvailable(0),false);
  assert.deepEqual(availableShipCards([{id:'twin-core',sprite:10}],{'twin-core':{grey:5}},['twin-core'],['ship_11_stage_2']),[]);
 });
+
+import { firstMissionStarterCards } from './cardRevealRules.ts';
+test('only a pristine first mission presents the free starter, never an existing hangar', () => {
+ const fresh={version:0,fleet:{'grey-scout':{grey:1}},usedShipSkins:[],cardReveals:[]};
+ assert.deepEqual(firstMissionStarterCards(fresh).map(c=>c.key), ['grey-scout-1']);
+ assert.deepEqual(firstMissionStarterCards({...fresh,cardReveals:['grey-scout-1']}), []);
+ assert.deepEqual(firstMissionStarterCards({...fresh,version:1}), []);
+ assert.deepEqual(firstMissionStarterCards({...fresh,usedShipSkins:['grey-scout']}), []);
+ assert.deepEqual(firstMissionStarterCards({...fresh,fleet:{...fresh.fleet,'solar-lance':{gold:1}}}), []);
+ assert.deepEqual(firstMissionStarterCards(null), []);
+});

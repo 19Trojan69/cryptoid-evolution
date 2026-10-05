@@ -3,14 +3,14 @@ import assert from 'node:assert/strict';
 import {playerCardUnlocked} from './collectionRules.ts';
 import {shipStories,playerShipStory} from './shipLore.ts';
 import {shipCaptureLore} from './shipCaptureLore.ts';
-test('use unlocks only its Standard card; purchases unlock only their upgrades',()=>{
+test('ownership unlocks its Standard card; upgrades also require their hull',()=>{
  assert.equal(playerCardUnlocked('grey-scout',1,1,[],[]),false);
  assert.equal(playerCardUnlocked('grey-scout',1,1,['grey-scout'],[]),true);
  assert.equal(playerCardUnlocked('nova-wing',0,1,['grey-scout'],[]),false);
  assert.equal(playerCardUnlocked('grey-scout',1,2,['grey-scout'],[]),false);
- assert.equal(playerCardUnlocked('grey-scout',1,2,[],['ship_02_stage_2']),true);
+ assert.equal(playerCardUnlocked('grey-scout',1,2,[],['ship_02_stage_2']),false);
  assert.equal(playerCardUnlocked('grey-scout',1,3,[],['ship_02_stage_3']),false);
- assert.equal(playerCardUnlocked('grey-scout',1,3,[],['ship_02_stage_2','ship_02_stage_3']),true);
+ assert.equal(playerCardUnlocked('grey-scout',1,3,['grey-scout'],['ship_02_stage_2','ship_02_stage_3']),true);
  assert.equal(playerCardUnlocked('nova-wing',0,2,[],['ship_02_stage_2']),false);
 });
 test('20 distinct origins and captures; upgrades do not repeat base histories',()=>{
