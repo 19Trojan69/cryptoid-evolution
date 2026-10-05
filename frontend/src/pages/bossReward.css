@@ -1,6 +1,12 @@
-.boss-heart-pickup { position: absolute; z-index: 5; transform: translate(-50%, -50%); pointer-events: none; display: grid; justify-items: center; color: #ff905f; }
-.boss-heart-pickup svg { width: 52px; height: 52px; fill: #ff708e; filter: drop-shadow(0 0 8px #ff557baa); animation: boss-heart-hover 1.6s ease-in-out infinite alternate; }
-.boss-heart-pickup small { margin-top: 10px; color: #ffe2ad; white-space: nowrap; font-size: 13px; }
-@keyframes boss-heart-hover { to { transform: translateY(-7px) scale(1.09); } }
-[data-effects-paused="true"] .boss-heart-pickup svg { animation-play-state: paused; }
-@media (prefers-reduced-motion: reduce) { .boss-heart-pickup svg { animation: none; } }
+.boss-heart-pickup { --offer-color: #ff6a55; position: absolute; z-index: 5; transform: translate(-50%, -50%); pointer-events: none; display: grid; justify-items: center; color: #ff905f; }
+.boss-heart-orb { position: relative; display: block; width: 96px; height: 96px; }
+.boss-heart-pickup .power-preview-orbit i { background: radial-gradient(circle at 34% 27%, #fff0e7, #ff8d71 25%, #522039 72%); }
+.boss-heart-pickup svg { width: 25px; height: 25px; fill: #ff304c; stroke: #8f142a; stroke-width: .8; filter: drop-shadow(0 1px 2px #440919aa); }
+.boss-heart-pickup small { margin-top: 2px; color: #ffe2ad; white-space: nowrap; font-size: 13px; }
+[data-effects-paused="true"] .boss-heart-pickup .power-preview-orbit,
+[data-effects-paused="true"] .boss-heart-pickup .power-preview-orbit::before,
+[data-effects-paused="true"] .boss-heart-pickup .power-preview-orbit::after { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .boss-heart-pickup .power-preview-orbit, .boss-heart-pickup .power-preview-orbit::before, .boss-heart-pickup .power-preview-orbit::after { animation: none; } }
+html[data-motion="reduced"] .boss-heart-pickup .power-preview-orbit,
+html[data-motion="reduced"] .boss-heart-pickup .power-preview-orbit::before,
+html[data-motion="reduced"] .boss-heart-pickup .power-preview-orbit::after { animation: none; }
