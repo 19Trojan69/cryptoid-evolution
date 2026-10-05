@@ -19,13 +19,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install locked frontend dependencies
+      # Match vercel.json. This repository has Yarn locks, not npm locks.
+      - name: Install frontend dependencies
         id: frontend_install
-        run: npm ci --prefix frontend
-      - name: Install locked backend dependencies
+        run: npm install --prefix frontend --no-audit --no-fund
+      - name: Install backend dependencies
         id: backend_install
         if: always()
-        run: npm ci --prefix backend
+        run: npm install --prefix backend --no-audit --no-fund
       - name: Frontend tests
         if: always() && steps.frontend_install.outcome == 'success'
         run: |
@@ -59,10 +60,10 @@ jobs:
           git rev-parse HEAD > audit-output/commit.txt
           git ls-files > audit-output/tracked-files.txt
           find frontend/public -type f -not -path '*/audio/*' -print0 | sort -z | xargs -0 sha256sum > audit-output/asset-sha256.txt
-          git archive --format=tar HEAD | gzip > audit-output/source.tar.gz
+          git archive --format=tar HEAD frontend/src frontend/scripts backend/src frontend/package.json backend/package.json frontend/tsconfig.app.json frontend/tsconfig.json frontend/tsconfig.node.json backend/tsconfig.json vercel.json | gzip > audit-output/source-code.tar.gz
       - name: Package dependencies for offline verification
         if: always() && steps.frontend_install.outcome == 'success' && steps.backend_install.outcome == 'success'
-        run: tar -czf audit-output/dependencies.tar.gz frontend/node_modules backend/node_modules
+        run: tar -czf audit-output/dependencies.tar.gz frontend/node_modules backend/node_modules frontend/package-lock.json backend/package-lock.json
       - name: Save audit evidence
         if: always()
         uses: actions/upload-artifact@v4
