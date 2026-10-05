@@ -1,0 +1,37 @@
+name: Testnet render diagnosis
+on:
+  push:
+    branches: [codex/collection-audit-20261005]
+    paths: ['.github/workflows/collection-live-diagnosis.yml']
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: npm install playwright@1.56.1 --no-audit --no-fund && npx playwright install --with-deps chromium
+      - run: |
+          mkdir evidence
+          cat > inspect.cjs <<'JS'
+          const {chromium}=require('playwright'),fs=require('fs');
+          (async()=>{
+           const origin='https://cryptoid-evolution-testnet.vercel.app',report={assets:[],requests:[],errors:[],console:[]};
+           for(const p of ['/ships/bosses/evolved/boss-04-hull.webp','/ships/bosses/evolved/boss-04-guns.webp']){const r=await fetch(origin+p);const b=Buffer.from(await r.arrayBuffer());report.assets.push({p,status:r.status,type:r.headers.get('content-type'),bytes:b.length,header:b.subarray(0,40).toString('hex')});}
+           const b=await chromium.launch();const page=await b.newPage({viewport:{width:390,height:844},locale:'de-DE'});
+           await page.addInitScript(()=>{localStorage.setItem('cryptoid_language','de');window.diagnostics=[];for(const method of ['drawImage','getImageData']){const original=CanvasRenderingContext2D.prototype[method];CanvasRenderingContext2D.prototype[method]=function(...a){try{return original.apply(this,a)}catch(e){window.diagnostics.push({method,error:String(e)});throw e}}}});
+           page.on('pageerror',e=>report.errors.push(String(e)));page.on('console',m=>{if(m.type()==='error')report.console.push(m.text())});
+           page.on('response',r=>{if(r.url().includes('/ships/'))report.requests.push({url:r.url(),status:r.status()})});
+           page.on('requestfailed',r=>report.requests.push({url:r.url(),failed:r.failure()}));
+           await page.route('**/*',r=>['GET','HEAD'].includes(r.request().method())?r.continue():r.abort());
+           await page.goto(origin);await page.getByRole('button',{name:'✧ Sammelkarten'}).click();await page.locator('.collection-tile').nth(3).click();await page.waitForTimeout(5000);
+           report.dom=await page.evaluate(()=>({diagnostics:window.diagnostics,portrait:document.querySelector('.collection-locked-detail .boss-portrait')?.outerHTML,canvases:[...document.querySelectorAll('.collection-locked-detail canvas')].map(c=>({width:c.width,height:c.height,rect:c.getBoundingClientRect().toJSON()}))}));
+           fs.writeFileSync('evidence/diagnosis.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));await page.screenshot({path:'evidence/page.png'});await b.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node inspect.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: testnet-render-diagnosis, path: evidence/}
