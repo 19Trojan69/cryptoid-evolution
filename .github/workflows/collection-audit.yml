@@ -1,0 +1,73 @@
+name: Collection audit
+on:
+  push:
+    branches: [codex/collection-audit-20261005]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: collection-audit-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install locked frontend dependencies
+        id: frontend_install
+        run: npm ci --prefix frontend
+      - name: Install locked backend dependencies
+        id: backend_install
+        if: always()
+        run: npm ci --prefix backend
+      - name: Frontend tests
+        if: always() && steps.frontend_install.outcome == 'success'
+        run: |
+          mkdir -p audit-output
+          set -o pipefail
+          cd frontend
+          find src -name '*.test.mjs' -print0 | xargs -0 node --experimental-strip-types --test 2>&1 | tee ../audit-output/frontend-tests.txt
+      - name: Frontend production build
+        if: always() && steps.frontend_install.outcome == 'success'
+        run: |
+          mkdir -p audit-output
+          set -o pipefail
+          npm run build --prefix frontend 2>&1 | tee audit-output/frontend-build.txt
+      - name: Backend tests
+        if: always() && steps.backend_install.outcome == 'success'
+        run: |
+          mkdir -p audit-output
+          set -o pipefail
+          cd backend
+          find src -name '*.test.mjs' -print0 | xargs -0 node --experimental-strip-types --test 2>&1 | tee ../audit-output/backend-tests.txt
+      - name: Backend build
+        if: always() && steps.backend_install.outcome == 'success'
+        run: |
+          mkdir -p audit-output
+          set -o pipefail
+          npm run build --prefix backend 2>&1 | tee audit-output/backend-build.txt
+      - name: Record source and asset inventory
+        if: always()
+        run: |
+          mkdir -p audit-output
+          git rev-parse HEAD > audit-output/commit.txt
+          git ls-files > audit-output/tracked-files.txt
+          find frontend/public -type f -not -path '*/audio/*' -print0 | sort -z | xargs -0 sha256sum > audit-output/asset-sha256.txt
+          git archive --format=tar HEAD | gzip > audit-output/source.tar.gz
+      - name: Package dependencies for offline verification
+        if: always() && steps.frontend_install.outcome == 'success' && steps.backend_install.outcome == 'success'
+        run: tar -czf audit-output/dependencies.tar.gz frontend/node_modules backend/node_modules
+      - name: Save audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: collection-audit-${{ github.sha }}
+          path: audit-output/
+          retention-days: 3
+          compression-level: 0
