@@ -978,245 +978,455 @@
     "cardKey": "iron-guard-2",
     "category": "advanced",
     "plannedImage": "/cards/space/unique/advanced-06.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/blue-nebula.png"
+    "image": "/cards/space/unique/advanced-06.webp",
+    "fallbackImage": "/cards/space/blue-nebula.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "22c988c6767256cfa62f02f6b1ce75bbb7271f37fd77a9a0a0171c9d419c1073",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card advanced-06. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a fractured cobalt molecular cloud with broad black centre. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "vector-2",
     "category": "advanced",
     "plannedImage": "/cards/space/unique/advanced-07.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/amber-galaxy.png"
+    "image": "/cards/space/unique/advanced-07.webp",
+    "fallbackImage": "/cards/space/amber-galaxy.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "a1e0ba0af87055095b29a359cbf6c749ef22b96f6c082489faf87ba118b99580",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card advanced-07. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a frosty white moon showing detailed craters with Saturn-like rings far behind. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "verdant-2",
     "category": "advanced",
     "plannedImage": "/cards/space/unique/advanced-08.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/ringed-world.png"
+    "image": "/cards/space/unique/advanced-08.webp",
+    "fallbackImage": "/cards/space/ringed-world.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "b2fa1153680e016ae36814e8c83ec313c30646c183c9b144e2a4e29b7349465e",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card advanced-08. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a distant pair of interacting orange galaxies with tidal stream. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "storm-wing-2",
     "category": "advanced",
     "plannedImage": "/cards/space/unique/advanced-09.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/blue-nebula.png"
+    "image": "/cards/space/unique/advanced-09.webp",
+    "fallbackImage": "/cards/space/blue-nebula.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "1a6d48cfa35b5d59e4184398656d82d9a7a8513fcf27ac72f7f41ce6ea035c8a",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card advanced-09. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a gold open star cluster surrounded by vivid blue reflection dust. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "red-comet-2",
     "category": "advanced",
     "plannedImage": "/cards/space/unique/advanced-10.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/amber-galaxy.png"
+    "image": "/cards/space/unique/advanced-10.webp",
+    "fallbackImage": "/cards/space/amber-galaxy.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "aebb498ef18fc3cfa9e28d0ad597f22d030e2604a1c31ac4970d5c59b21b137b",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card advanced-10. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a vast ocean-blue planet crescent with bright atmospheric limb. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "twin-core-2",
     "category": "advanced",
     "plannedImage": "/cards/space/unique/advanced-11.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/ringed-world.png"
+    "image": "/cards/space/unique/advanced-11.webp",
+    "fallbackImage": "/cards/space/ringed-world.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "e2a340032f8083f4988343eee010ee5bc2ebadaa29afb46b5757d9a0d3a8a4e2",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card advanced-11. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a faint violet nebula loop encircling a sparse deep starfield. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "orbit-arc-2",
     "category": "advanced",
     "plannedImage": "/cards/space/unique/advanced-12.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/blue-nebula.png"
+    "image": "/cards/space/unique/advanced-12.webp",
+    "fallbackImage": "/cards/space/blue-nebula.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "44c175149c363e58611d9f9565cf6469d9b85bbcf1c788ee57ec9b487a8f6573",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card advanced-12. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a giant dusty spiral arm with emerald emission knots along the right edge. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "night-guard-2",
     "category": "advanced",
     "plannedImage": "/cards/space/unique/advanced-13.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/amber-galaxy.png"
+    "image": "/cards/space/unique/advanced-13.webp",
+    "fallbackImage": "/cards/space/amber-galaxy.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "28cd39e752448337ecf80f5923c5d0f0058cde4845bb5e58881b1029b7086d14",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card advanced-13. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a luminous orange planetary nebula shaped like a double lobe. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "striker-2",
     "category": "advanced",
     "plannedImage": "/cards/space/unique/advanced-14.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/ringed-world.png"
+    "image": "/cards/space/unique/advanced-14.webp",
+    "fallbackImage": "/cards/space/ringed-world.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "c95824c3cb820ae26c9468a598ec0c671608eb6c7b5a40860feedab21097af84",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card advanced-14. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a tiny white dwarf within a thin pink expanding gas shell. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "cargo-hawk-2",
     "category": "advanced",
     "plannedImage": "/cards/space/unique/advanced-15.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/blue-nebula.png"
+    "image": "/cards/space/unique/advanced-15.webp",
+    "fallbackImage": "/cards/space/blue-nebula.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "b80104717212bbf00f3d0323699383e81bc855f96c4094960fefea09e2731c7a",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card advanced-15. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a rugged barren red moon beneath a cold blue giant planet. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "ring-flare-2",
     "category": "advanced",
     "plannedImage": "/cards/space/unique/advanced-16.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/amber-galaxy.png"
+    "image": "/cards/space/unique/advanced-16.webp",
+    "fallbackImage": "/cards/space/amber-galaxy.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "20ae1c7c6e026d53d70c40cf074b190043b74e810bfc5b38b62aeba2432c3d14",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card advanced-16. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a long arched pale dust ribbon with faraway red galaxies. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "sky-breaker-2",
     "category": "advanced",
     "plannedImage": "/cards/space/unique/advanced-17.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/ringed-world.png"
+    "image": "/cards/space/unique/advanced-17.webp",
+    "fallbackImage": "/cards/space/ringed-world.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "fb6dbc6d14f51ead438c70d66a3af8a58441e85a64b395a6ad524ccbae9d159a",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card advanced-17. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a large teal stellar bubble surrounded by orange filament threads. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "olive-fortress-2",
     "category": "advanced",
     "plannedImage": "/cards/space/unique/advanced-18.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/blue-nebula.png"
+    "image": "/cards/space/unique/advanced-18.webp",
+    "fallbackImage": "/cards/space/blue-nebula.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "bd484f2b40a3844ed77ea3922e1baa8c522c46818a5139c7e6b48746659ccaa5",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card advanced-18. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a red comet sweeping past a deep violet interstellar dust bank. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "pi-vanguard-2",
     "category": "advanced",
     "plannedImage": "/cards/space/unique/advanced-19.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/amber-galaxy.png"
+    "image": "/cards/space/unique/advanced-19.webp",
+    "fallbackImage": "/cards/space/amber-galaxy.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "518c308f827b066a1a16fde918399efb721fc409297ba9f63f80a66bdc5343fc",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card advanced-19. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a dark ringed planet eclipsing a distant white star. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "core-carrier-2",
     "category": "advanced",
     "plannedImage": "/cards/space/unique/advanced-20.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/ringed-world.png"
+    "image": "/cards/space/unique/advanced-20.webp",
+    "fallbackImage": "/cards/space/ringed-world.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "6c4b062b52ac30a35cf911e887fdd79b04b6d2b1f7a1e31785a4cfbc87d78bfb",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card advanced-20. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a brilliant gold galaxy core with broad dust lanes high above an empty centre. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "grey-scout-3",
     "category": "elite",
     "plannedImage": "/cards/space/unique/elite-02.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/blue-nebula.png"
+    "image": "/cards/space/unique/elite-02.webp",
+    "fallbackImage": "/cards/space/blue-nebula.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "360f8e278aa12778283259e9e1eff6bceed95d0ee8dd03033d8733e2f5fabdb3",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card elite-02. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a deep ruby nebula cave with many tiny distant bluish stars. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "nova-wing-3",
     "category": "elite",
     "plannedImage": "/cards/space/unique/elite-01.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/ringed-world.png"
+    "image": "/cards/space/unique/elite-01.webp",
+    "fallbackImage": "/cards/space/ringed-world.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "a7bcceaabd9f7448d4198bb483cbec16ba7297935bf3c1227858004dce65153e",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card elite-01. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a pale blue supernova shockwave expanding through coal-black space. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "solar-lance-3",
     "category": "elite",
     "plannedImage": "/cards/space/unique/elite-03.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/amber-galaxy.png"
+    "image": "/cards/space/unique/elite-03.webp",
+    "fallbackImage": "/cards/space/amber-galaxy.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "6b6ac5df253fe583f250d00ff69a4aa0c5e0bbf6da0eba6bb91a05147db59fb1",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card elite-03. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a green-gold cloud edge illuminated by a hot blue young star. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "dark-delta-3",
     "category": "elite",
     "plannedImage": "/cards/space/unique/elite-04.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/ringed-world.png"
+    "image": "/cards/space/unique/elite-04.webp",
+    "fallbackImage": "/cards/space/ringed-world.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "48aec9133a8c77289a135d2bc1a1cbfcb219ef758dbf3ed2788026a1b2ee8177",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card elite-04. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a triple crescent moon conjunction around a dark ice giant. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "gold-streak-3",
     "category": "elite",
     "plannedImage": "/cards/space/unique/elite-05.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/blue-nebula.png"
+    "image": "/cards/space/unique/elite-05.webp",
+    "fallbackImage": "/cards/space/blue-nebula.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "9ec2e48eaf531ee0349815a60d52be8e7564e8ebbe2b21f384feda893a9f1e93",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card elite-05. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a silver galaxy halo cut by intricate deep dark dust streams. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "iron-guard-3",
     "category": "elite",
     "plannedImage": "/cards/space/unique/elite-06.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/amber-galaxy.png"
+    "image": "/cards/space/unique/elite-06.webp",
+    "fallbackImage": "/cards/space/amber-galaxy.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "602ef18ca105d4b1cd0479c0c85c9f7aefefdbad0f07bd1a8f557fce625ff4b5",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card elite-06. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a crimson filament net from an ancient supernova against blue distant space. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "vector-3",
     "category": "elite",
     "plannedImage": "/cards/space/unique/elite-07.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/ringed-world.png"
+    "image": "/cards/space/unique/elite-07.webp",
+    "fallbackImage": "/cards/space/ringed-world.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "aa2f60e389bf386725316472b32862c6ce8ef2d5ddd0b1dce12d15dfc90aaf26",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card elite-07. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a purple reflection cloud with a narrow glittering stellar stream. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "verdant-3",
     "category": "elite",
     "plannedImage": "/cards/space/unique/elite-08.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/blue-nebula.png"
+    "image": "/cards/space/unique/elite-08.webp",
+    "fallbackImage": "/cards/space/blue-nebula.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "87b41685d02efbefb9bdecb8bdcda3844d077bd276c25321e869bb36fe6d592f",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card elite-08. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a huge pale golden exoplanet with delicate white cloud bands. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "storm-wing-3",
     "category": "elite",
     "plannedImage": "/cards/space/unique/elite-09.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/amber-galaxy.png"
+    "image": "/cards/space/unique/elite-09.webp",
+    "fallbackImage": "/cards/space/amber-galaxy.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "bbc584ceaa9960db09b5b456b4579407733dbb3291fa2b18bdf72e35a72cf318",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card elite-09. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a tiny bright quasar in a field of extremely distant red galaxies. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "red-comet-3",
     "category": "elite",
     "plannedImage": "/cards/space/unique/elite-10.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/ringed-world.png"
+    "image": "/cards/space/unique/elite-10.webp",
+    "fallbackImage": "/cards/space/ringed-world.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "8c76e758fcc43dd0bc6dc7db7d7f6bb8370186512e1ede9d170f42be60e0aec1",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card elite-10. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a luminous lavender star-forming arc and black dusty silhouette lower left. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "twin-core-3",
     "category": "elite",
     "plannedImage": "/cards/space/unique/elite-11.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/blue-nebula.png"
+    "image": "/cards/space/unique/elite-11.webp",
+    "fallbackImage": "/cards/space/blue-nebula.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "a870193a0daa2f27313d6fa1a9f13c2821c47141f27efcc3e47cdcfe514e429b",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card elite-11. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a copper nebular bow shock beyond a small dark crescent satellite. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "orbit-arc-3",
     "category": "elite",
     "plannedImage": "/cards/space/unique/elite-12.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/amber-galaxy.png"
+    "image": "/cards/space/unique/elite-12.webp",
+    "fallbackImage": "/cards/space/amber-galaxy.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "0c2bfd51f43d3b4393537a42363f04517cc1de513dd9aaad18d398693044f37c",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card elite-12. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a dense white galactic bulge seen behind cold turquoise dust. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "night-guard-3",
     "category": "elite",
     "plannedImage": "/cards/space/unique/elite-13.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/ringed-world.png"
+    "image": "/cards/space/unique/elite-13.webp",
+    "fallbackImage": "/cards/space/ringed-world.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "594e5732ed4ad522f1949a8d237e523298e13766da93c5d4f7bfea0026373b60",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card elite-13. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a golden comet with separated ion and dust tails in deep space. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "striker-3",
     "category": "elite",
     "plannedImage": "/cards/space/unique/elite-14.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/blue-nebula.png"
+    "image": "/cards/space/unique/elite-14.webp",
+    "fallbackImage": "/cards/space/blue-nebula.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "79bffa8b4a9bf7f4714a504142db4d50d857123de6988989f85fbf1f5d02e9f9",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card elite-14. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a dark maroon molecular cloud with minute diamond-like stars. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "cargo-hawk-3",
     "category": "elite",
     "plannedImage": "/cards/space/unique/elite-15.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/amber-galaxy.png"
+    "image": "/cards/space/unique/elite-15.webp",
+    "fallbackImage": "/cards/space/amber-galaxy.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "7bf7a09e65c679ab3cf1d7256e9debb3b293c47f60b12125eb97d86640c8c005",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card elite-15. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a silver-blue irregular galaxy with mottled starforming areas. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "ring-flare-3",
     "category": "elite",
     "plannedImage": "/cards/space/unique/elite-16.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/ringed-world.png"
+    "image": "/cards/space/unique/elite-16.webp",
+    "fallbackImage": "/cards/space/ringed-world.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "65b4f51f5b9d4bbc293d96fc1c30caab772e7512d6081a69601dc5f298642078",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card elite-16. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a remote cluster of many yellow elliptical galaxies above empty black foreground. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "sky-breaker-3",
     "category": "elite",
     "plannedImage": "/cards/space/unique/elite-17.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/blue-nebula.png"
+    "image": "/cards/space/unique/elite-17.webp",
+    "fallbackImage": "/cards/space/blue-nebula.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "eded7885d4deb95c79e56cb4be6eb3f3d437a616083f96e8cd4fb7fd8b8d0dd4",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card elite-17. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a thin cyan planetary nebula with deep magenta outer halo. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "olive-fortress-3",
     "category": "elite",
     "plannedImage": "/cards/space/unique/elite-18.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/amber-galaxy.png"
+    "image": "/cards/space/unique/elite-18.webp",
+    "fallbackImage": "/cards/space/amber-galaxy.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "81dc5757f6c04c2273ccd92d6ba0ccdfb2e339c92f9b874174a60b6a64c0a4fa",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card elite-18. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a huge gas giant horizon with strong dark bands and faint aurora. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "pi-vanguard-3",
     "category": "elite",
     "plannedImage": "/cards/space/unique/elite-19.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/ringed-world.png"
+    "image": "/cards/space/unique/elite-19.webp",
+    "fallbackImage": "/cards/space/ringed-world.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "14e2bdc005428447a5a1b1c38d515e7ba246e2d2e45eee215990e034ede9f8b6",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card elite-19. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a distant orange star behind a thin edge-on debris disc. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   },
   {
     "cardKey": "core-carrier-3",
     "category": "elite",
     "plannedImage": "/cards/space/unique/elite-20.webp",
-    "image": null,
-    "fallbackImage": "/cards/space/blue-nebula.png"
+    "image": "/cards/space/unique/elite-20.webp",
+    "fallbackImage": "/cards/space/blue-nebula.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "sha256": "252642579424f2b11845213a5bcc865a909d86b7389affdb20353321b16f583f",
+    "generationPrompt": "Use case: photorealistic-natural. Asset type: ONE individual HD space background for a Cryptoid Evolution collectible card elite-20. Generate a single full-frame portrait 1024x1536 astrophotography-like space scene of a delicate white nebular veil beside coal-black dust pillars. Distinct realistic astronomical textures, fine dust and gases, pin-sharp stars, deep dark negative space in the middle for a separate spaceship overlay. Astronomical photography realism, polished cinematic exposure. Background only: no ships, spacecraft, weapons, people, text, labels, borders, emblems, logos, panels or collage. Whole image is ONE scene."
   }
 ]

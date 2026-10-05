@@ -46,7 +46,7 @@ const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
     await page.locator('.card-reveal-dialog').waitFor({ state: 'detached' });
   };
   try {
-    for (const [width, height, account] of [[390,844,false],[1440,900,false],[390,844,true],[1440,900,true],[360,740,false],[844,390,false]]) {
+    for (const [width, height, account] of [[390,844,false],[1440,900,false],[390,844,true],[1440,900,true],[360,740,false],[844,390,false],[768,1024,true]]) {
       const h = harness(); await h.call('progress','/me',null,{method:'GET'}); h.profile().balance = 3000;
       // Old usage and upgrade records are intentionally not proof of current hull ownership.
       h.profile().usedShipSkins = ['iron-guard','twin-core','core-carrier'];
@@ -179,22 +179,38 @@ const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
       const {shipCard,bossCard}=await import('/src/pages/collectionData.ts');
       const {playerSkins}=await import('/src/pages/shipFleet.ts');
       const {exportCollectionCard}=await import('/src/pages/collectionExport.ts');
-      const original=CanvasRenderingContext2D.prototype.fillText;let records=[];
+      const {cardBackgroundAssets}=await import('/src/pages/cardBackgrounds.ts');
+      const backgrounds=await Promise.all(cardBackgroundAssets.map(asset=>new Promise((resolve,reject)=>{
+        if(!asset.image)return reject(new Error('Missing unique background: '+asset.cardKey));
+        const image=new Image();image.onload=()=>image.naturalWidth===1024&&image.naturalHeight===1536?resolve(asset.cardKey):reject(new Error('Wrong dimensions: '+asset.cardKey));
+        image.onerror=()=>reject(new Error('Cannot decode: '+asset.image));image.src=asset.image;
+      })));
+      if(backgrounds.length!==110)throw new Error('Incomplete background set');
+      const original=CanvasRenderingContext2D.prototype.fillText,originalImage=CanvasRenderingContext2D.prototype.drawImage;let records=[],artwork=[];
       CanvasRenderingContext2D.prototype.fillText=function(text,x,y,...rest){
-        if(this.canvas.width===1200){const m=this.measureText(text);records.push({text,x,y,width:m.width,bottom:y+m.actualBoundingBoxDescent,height:this.canvas.height});}
+        if(this.canvas.width===1200){const m=this.measureText(text);records.push({text,x,y,width:m.width,top:y-m.actualBoundingBoxAscent,bottom:y+m.actualBoundingBoxDescent,height:this.canvas.height});}
         return original.call(this,text,x,y,...rest);
+      };
+      CanvasRenderingContext2D.prototype.drawImage=function(source,...args){
+        if(this.canvas.width===1200&&source instanceof HTMLCanvasElement&&args.length===4)artwork.push({x:args[0],y:args[1],width:args[2],height:args[3]});
+        return originalImage.call(this,source,...args);
       };
       const completed=[];
       try{
         for(const de of [true,false])for(const card of [...Array.from({length:50},(_,i)=>bossCard(i+1,de?'de':'en')),...[1,2,3].flatMap(s=>playerSkins.map(ship=>shipCard(ship.id,s,de)))]){
-          records=[];const blob=await exportCollectionCard(card,de);
+          records=[];artwork=[];const blob=await exportCollectionCard(card,de);
           if(blob.type!=='image/png'||blob.size<1000)throw new Error('Invalid PNG: '+card.key);
           const text=records.map(r=>r.text).join('').replace(/\s/g,'');
           for(const p of [...card.story,...card.equipment])if(!text.includes(p.replace(/\s/g,'')))throw new Error('Missing text: '+card.key);
           for(const r of records)if(r.x<0||r.x+r.width>1101||r.bottom>r.height-60)throw new Error('Clipped export: '+card.key+' '+JSON.stringify(r));
+          if(artwork.length!==1)throw new Error('Missing complete ship artwork: '+card.key);
+          const art=artwork[0];
+          // Canvas scales are floating point: 440px may become 440.00000000000006.
+          if(Math.abs(art.x+art.width/2-600)>=1||art.x<100-1e-6||art.x+art.width>1100+1e-6||art.height>440+1e-6)throw new Error('Export artwork not centred or fitting: '+card.key+' '+JSON.stringify(art));
+          for(const r of records)if(r.x<art.x+art.width&&r.x+r.width>art.x&&r.top<art.y+art.height&&r.bottom>art.y)throw new Error('Export text overlaps artwork: '+card.key);
           completed.push({key:card.key,locale:de?'de':'en',height:records[0].height,bytes:blob.size});
         }
-      }finally{CanvasRenderingContext2D.prototype.fillText=original;}
+      }finally{CanvasRenderingContext2D.prototype.fillText=original;CanvasRenderingContext2D.prototype.drawImage=originalImage;}
       return completed;
     });
     assert.equal(exports.length,220);fs.writeFileSync(path.join(out,'all-card-exports.json'),JSON.stringify(exports,null,2));

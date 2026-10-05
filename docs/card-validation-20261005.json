@@ -1,0 +1,152 @@
+{
+  "baseCommit": "dadac2fb9372025e8c932b35c5dd2f0e03e1e69c",
+  "preservedLifePersistenceCommit": "1871557dec332161cfdb0c90bc4d29022632bda6",
+  "backgrounds": {
+    "total": 110,
+    "byCategory": {
+      "boss": 50,
+      "standard": 20,
+      "advanced": 20,
+      "elite": 20
+    },
+    "uniqueSHA256": 110,
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "missing": 0,
+    "previous75Preserved": true
+  },
+  "checks": {
+    "frontendBuild": "passed",
+    "frontendTests": 209,
+    "backendBuild": "passed",
+    "backendProgressTests": 20,
+    "cardGeometryCases": 440,
+    "viewportWidths": [
+      320,
+      390,
+      768,
+      1440
+    ],
+    "centerTolerancePixels": 1,
+    "textOverlaps": 0,
+    "futureAsymmetricFixtures": 2,
+    "purchaseAndNavigationScenarios": [
+      {
+        "width": 390,
+        "height": 844,
+        "account": false,
+        "successAndReload": true,
+        "nextPurchaseEquips": true,
+        "failedPurchaseUnchanged": true,
+        "lostAcknowledgement": "not applicable",
+        "receiptBeforeContinue": true,
+        "releaseLimits": true,
+        "footerVisible": true,
+        "pngDownload": true,
+        "inventoryCalls": 0,
+        "paidCalls": 0
+      },
+      {
+        "width": 1440,
+        "height": 900,
+        "account": false,
+        "successAndReload": true,
+        "nextPurchaseEquips": true,
+        "failedPurchaseUnchanged": true,
+        "lostAcknowledgement": "not applicable",
+        "receiptBeforeContinue": true,
+        "releaseLimits": true,
+        "footerVisible": true,
+        "pngDownload": true,
+        "inventoryCalls": 0,
+        "paidCalls": 0
+      },
+      {
+        "width": 390,
+        "height": 844,
+        "account": true,
+        "successAndReload": true,
+        "nextPurchaseEquips": true,
+        "failedPurchaseUnchanged": true,
+        "lostAcknowledgement": "reconciled",
+        "receiptBeforeContinue": true,
+        "releaseLimits": true,
+        "footerVisible": true,
+        "pngDownload": true,
+        "inventoryCalls": 4,
+        "paidCalls": 0
+      },
+      {
+        "width": 1440,
+        "height": 900,
+        "account": true,
+        "successAndReload": true,
+        "nextPurchaseEquips": true,
+        "failedPurchaseUnchanged": true,
+        "lostAcknowledgement": "reconciled",
+        "receiptBeforeContinue": true,
+        "releaseLimits": true,
+        "footerVisible": true,
+        "pngDownload": true,
+        "inventoryCalls": 4,
+        "paidCalls": 0
+      },
+      {
+        "width": 360,
+        "height": 740,
+        "account": false,
+        "successAndReload": true,
+        "nextPurchaseEquips": true,
+        "failedPurchaseUnchanged": true,
+        "lostAcknowledgement": "not applicable",
+        "receiptBeforeContinue": true,
+        "releaseLimits": true,
+        "footerVisible": true,
+        "pngDownload": true,
+        "inventoryCalls": 0,
+        "paidCalls": 0
+      },
+      {
+        "width": 844,
+        "height": 390,
+        "account": false,
+        "successAndReload": true,
+        "nextPurchaseEquips": true,
+        "failedPurchaseUnchanged": true,
+        "lostAcknowledgement": "not applicable",
+        "receiptBeforeContinue": true,
+        "releaseLimits": true,
+        "footerVisible": true,
+        "pngDownload": true,
+        "inventoryCalls": 0,
+        "paidCalls": 0
+      },
+      {
+        "width": 768,
+        "height": 1024,
+        "account": true,
+        "successAndReload": true,
+        "nextPurchaseEquips": true,
+        "failedPurchaseUnchanged": true,
+        "lostAcknowledgement": "reconciled",
+        "receiptBeforeContinue": true,
+        "releaseLimits": true,
+        "footerVisible": true,
+        "pngDownload": true,
+        "inventoryCalls": 4,
+        "paidCalls": 0
+      }
+    ],
+    "completeDEAndENExports": 220,
+    "exportTextOverlapAndClipping": "passed",
+    "backgroundBrowserDecode": "110 passed",
+    "lifeRewardScenarios": 4
+  },
+  "scope": "Local isolated verification with actual handlers and in-memory accounts. No paid calls. Live deployment verification is recorded separately after publishing.",
+  "limitations": [
+    "No new real-device iPhone/Android/Pi Browser run.",
+    "No live account purchase; authenticated cases use isolated in-memory accounts."
+  ]
+}

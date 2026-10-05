@@ -40,7 +40,7 @@ const path = require('node:path'), fs = require('node:fs'), assert = require('no
         if(Math.abs((L+R+1)/2-art.width/2)>1||Math.abs((T+B+1)/2-art.height/2)>1)throw new Error('Future asymmetric artwork not centred');
       }
     });
-    for (const width of [320,390,1440]) {
+    for (const width of [320,390,768,1440]) {
       await page.setViewportSize({ width, height: 900 });
       for (let index = 0; index < 110; index++) {
         await page.evaluate(index => { window.scrollTo(0,0); window.renderAuditCard(window.auditCards[index]); }, index);
@@ -77,6 +77,6 @@ const path = require('node:path'), fs = require('node:fs'), assert = require('no
     assert.deepEqual(errors, []);
     const out=path.resolve(process.env.AUDIT_OUTPUT||'audit-output');fs.mkdirSync(out,{recursive:true});
     fs.writeFileSync(path.join(out,'card-centering.json'),JSON.stringify({cases:results,errors},null,2));
-    console.log(JSON.stringify({cards:110,futureAsymmetricFixtures:2,viewports:3,checks:results.length,centerTolerancePixels:1,textOverlaps:0,errors}));
+    console.log(JSON.stringify({cards:110,futureAsymmetricFixtures:2,viewports:4,checks:results.length,centerTolerancePixels:1,textOverlaps:0,errors}));
   } finally { await browser.close(); await server.close(); }
 })().catch(error=>{console.error(error);process.exit(1);});

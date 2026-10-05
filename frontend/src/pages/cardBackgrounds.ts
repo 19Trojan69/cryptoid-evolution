@@ -22,8 +22,7 @@ export const cardBackgroundAssets: readonly CardBackgroundAsset[] = [
   ...playerCategories.flatMap((category, index) => playerSkins.map(ship => ({
     cardKey: `${ship.id}-${index + 1}`, category,
     plannedImage: `/cards/space/unique/${category}-${String(ship.sprite + 1).padStart(2, '0')}.webp`,
-    image: category === 'standard' || (category === 'advanced' && ship.sprite < 5)
-      ? `/cards/space/unique/${category}-${String(ship.sprite + 1).padStart(2, '0')}.webp` : null,
+    image: `/cards/space/unique/${category}-${String(ship.sprite + 1).padStart(2, '0')}.webp`,
     fallbackImage: legacy[(ship.sprite + index) % 3],
   }))),
 ];

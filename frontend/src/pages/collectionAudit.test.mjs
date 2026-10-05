@@ -17,11 +17,35 @@ test('110 stable background destinations; existing assets and incomplete work co
   assert.equal(new Set(cardBackgroundAssets.map(a => a.plannedImage)).size, 110);
   assert.deepEqual(['boss','standard','advanced','elite'].map(c => cardBackgroundAssets.filter(a => a.category === c).length), [50,20,20,20]);
   const ready = cardBackgroundAssets.filter(a => a.image);
-  // This deliberately reports the actual shortfall, not 110 "completed" placeholder paths.
-  assert.equal(ready.length, 75);
-  assert.equal(cardBackgroundAssets.filter(a => !a.image).length, 35);
+  // Completion requires actual files, unique content and a matching verified manifest.
+  assert.equal(ready.length, 110);
+  assert.equal(cardBackgroundAssets.filter(a => !a.image).length, 0);
   const hashes = ready.map(a => createHash('sha256').update(fs.readFileSync(new URL(`../../public${a.image}`, import.meta.url))).digest('hex'));
   assert.equal(new Set(hashes).size, ready.length);
+  const manifest = JSON.parse(fs.readFileSync(new URL('../../../docs/card-backgrounds.json', import.meta.url)));
+  assert.equal(manifest.length, 110);
+  for (const asset of ready) {
+    const entry = manifest.find(item => item.cardKey === asset.cardKey);
+    assert.ok(entry, asset.cardKey);
+    assert.equal(entry.image, asset.image);
+    assert.equal(entry.plannedImage, asset.plannedImage);
+    const bytes = fs.readFileSync(new URL(`../../public${asset.image}`, import.meta.url));
+    assert.equal(entry.sha256, createHash('sha256').update(bytes).digest('hex'));
+    let dimensions;
+    if (bytes.subarray(1,4).toString() === 'PNG') dimensions = [bytes.readUInt32BE(16), bytes.readUInt32BE(20)];
+    else {
+      assert.equal(bytes.subarray(8,12).toString(), 'WEBP');
+      for (let offset = 12; offset + 8 < bytes.length; offset += 8 + bytes.readUInt32LE(offset + 4) + (bytes.readUInt32LE(offset + 4) % 2)) {
+        const type = bytes.subarray(offset, offset + 4).toString(), start = offset + 8;
+        if (type === 'VP8X') { dimensions = [bytes.readUIntLE(start + 4,3) + 1,bytes.readUIntLE(start + 7,3) + 1]; break; }
+        if (type === 'VP8 ') { dimensions = [bytes.readUInt16LE(start + 6) & 16383,bytes.readUInt16LE(start + 8) & 16383]; break; }
+        if (type === 'VP8L') { const bits=bytes.readUInt32LE(start + 1); dimensions=[(bits & 16383)+1,((bits >>> 14) & 16383)+1]; break; }
+      }
+    }
+    assert.deepEqual(dimensions, [1024,1536], asset.cardKey);
+    assert.deepEqual(entry.dimensions, dimensions, asset.cardKey);
+    assert.ok(entry.generationPrompt.length > 0);
+  }
   for (const a of cardBackgroundAssets) assert.ok(fs.existsSync(new URL(`../../public${collectionBackground(a.cardKey)}`, import.meta.url)));
   for (const ship of playerSkins) assert.equal(new Set([1,2,3].map(stage => cardBackgroundAsset(`${ship.id}-${stage}`).plannedImage)).size, 3);
   assert.throws(() => collectionBackground('not-a-card'));
