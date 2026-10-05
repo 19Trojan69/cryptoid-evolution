@@ -8,7 +8,8 @@ test('pressure increases from the first blocks and every visible level', () => {
     assert.ok(attackPressure(stage).intervalMs < attackPressure(stage-1).intervalMs);
     assert.ok(levelDifficulty(stage).attackCooldownMs < levelDifficulty(stage-1).attackCooldownMs);
   }
-  assert.ok(levelDifficulty(11).attackPaceScale < .96);
+  assert.ok(levelDifficulty(11).attackPaceScale > 1);
+  assert.ok(levelDifficulty(51).attackPaceScale < 1);
   assert.ok(levelDifficulty(301).attackPaceScale < .76);
 });
 
@@ -23,7 +24,8 @@ test('all stages cap active, preparing and returning attackers; quiet blocks do 
       if([1,3,5].includes((stage-1)%10+1) && active>0) assert.equal(slots,0);
     }
   }
-  assert.equal(attackSlots(4,1,5),1);
-  assert.equal(attackSlots(14,1,5),2);
+  assert.equal(attackSlots(4,1,5),0);
+  assert.equal(attackSlots(14,1,5),1);
+  assert.equal(attackSlots(34,1,5),2);
   assert.equal(attackSlots(14,3,5),0);
 });

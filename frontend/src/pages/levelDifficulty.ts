@@ -1,3 +1,4 @@
+import { introRelief } from './introDifficulty.ts';
 export const MAX_DIFFICULTY_LEVEL = 500;
 
 export type LevelDifficulty = {
@@ -21,11 +22,12 @@ export const levelDifficulty = (level: number): LevelDifficulty => {
   // small step. Every tenth sector is a boss; no regular formation spawns there.
   const campaignStep = Math.floor((bounded - 1) / 10);
   const progress = .8 * (bounded - 1) / (MAX_DIFFICULTY_LEVEL - 1) + .2 * campaignStep / 49;
+  const relief = introRelief(bounded);
   return {
     level: bounded,
     progress,
-    attackCooldownMs: 650 - Math.sqrt(progress) * 350,
-    attackPaceScale: 1 - Math.sqrt(progress) * .32,
+    attackCooldownMs: 650 - Math.sqrt(progress) * 350 + relief * 1_200,
+    attackPaceScale: (1 - Math.sqrt(progress) * .32) * (1 + relief * .3),
     entryPaceScale: 1 - Math.sqrt(progress) * .18,
     groupAttackInterval: Math.max(2, 6 - Math.floor(Math.sqrt(progress) * 4)),
     projectileBonus: Math.min(2, Math.floor(progress * 3)),

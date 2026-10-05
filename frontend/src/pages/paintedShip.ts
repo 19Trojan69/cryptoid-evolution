@@ -2,8 +2,10 @@ import { useEffect, useState, type CSSProperties } from "react";
 import { allPlayerColors, type PlayerColorId } from "./shipFleet";
 import { shipEvolutionAsset, type ShipStage } from "./shipEvolution";
 import { shipVisualCenter } from "./shipVisualCenter";
+import { tintShipPixels } from './shipTint';
 
 const cache = new Map<string, string>();
+const pendingPaints = new Map<string, Promise<string>>();
 const sourceImages = new Map<string, Promise<HTMLImageElement>>();
 const visualCenters = new Map<string, { x: number; y: number }>();
 const shipImage = (url: string) => {
@@ -47,7 +49,7 @@ export const useShipVisualOffset = (index: number, stage: ShipStage): CSSPropert
   } as CSSProperties;
 };
 
-const createPaintedSprite = async (index: number, colorId: PlayerColorId, stage: ShipStage) => {
+const renderPaintedSprite = async (index: number, colorId: PlayerColorId, stage: ShipStage) => {
   const key = `${index}:${stage}:${colorId}`;
   if (cache.has(key)) return cache.get(key)!;
   const url = shipEvolutionAsset(index, stage);
@@ -60,25 +62,24 @@ const createPaintedSprite = async (index: number, colorId: PlayerColorId, stage:
   const pixels = context.getImageData(0, 0, 240, 240);
   const hex = allPlayerColors.find(color => color.id === colorId)?.glow ?? "#a8b3c2";
   const target = [1, 3, 5].map(offset => parseInt(hex.slice(offset, offset + 2), 16));
-  for (let i = 0; i < pixels.data.length; i += 4) {
-    const [r, g, b, a] = pixels.data.slice(i, i + 4);
-    if (a < 20) continue;
-    const brightness = .2126 * r + .7152 * g + .0722 * b;
-    // Preserve dark cockpit glass, guns, and engine details; tint the hull panels.
-    const glass = b > r * 1.18 && b > g * 1.12 && brightness < 115;
-    if (glass) continue;
-    const strength = brightness < 58 ? .32 : .92;
-    const reflection = Math.max(0, brightness - 190) * .42;
-    for (let channel = 0; channel < 3; channel++) {
-      const original = pixels.data[i + channel];
-      const tinted = target[channel] * brightness / 155 + reflection;
-      pixels.data[i + channel] = Math.min(255, Math.round(original * (1 - strength) + tinted * strength));
-    }
-  }
+  tintShipPixels(pixels.data, target);
   context.putImageData(pixels, 0, 0);
-  const paintedUrl = canvas.toDataURL("image/png");
+  // Blob encoding can run off the main thread; large base64 strings are avoided.
+  const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(value => value ? resolve(value) : reject(new Error('Ship encoding failed')), 'image/png'));
+  const paintedUrl = URL.createObjectURL(blob);
   cache.set(key, paintedUrl);
   return paintedUrl;
+};
+
+const createPaintedSprite = (index: number, colorId: PlayerColorId, stage: ShipStage): Promise<string> => {
+  const key = `${index}:${stage}:${colorId}`;
+  const cached = cache.get(key);
+  if (cached) return Promise.resolve(cached);
+  const existing = pendingPaints.get(key);
+  if (existing) return existing;
+  const pending = renderPaintedSprite(index, colorId, stage).finally(() => pendingPaints.delete(key));
+  pendingPaints.set(key, pending);
+  return pending;
 };
 
 export const usePaintedShipStyle = (index: number, colorId: PlayerColorId, stage: ShipStage = 1): CSSProperties => {

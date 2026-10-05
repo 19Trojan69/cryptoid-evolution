@@ -1,4 +1,5 @@
 import { bossCardAvailable } from './cardAvailability';
+import { introGroupBreathingMs } from './introDifficulty';
 import CardReveal from './CardReveal';
 import { availableShipCards, unseenShipCards, type CardReward } from './cardRevealRules';
 import { readCardReveals, acknowledgeCard } from './cardRevealMemory';
@@ -355,6 +356,7 @@ const GamePage = () => {
   useEffect(applySavedDisplaySettings, []);
   const navigate = useNavigate();
   const fieldRef = useRef<HTMLDivElement>(null);
+  const fieldSizeRef = useRef({ width: 800, height: 600 });
   const hudRef = useRef<HTMLElement>(null);
   const visibleTopRef = useRef(96);
   const playerShipRef = useRef<HTMLDivElement>(null);
@@ -651,6 +653,7 @@ const GamePage = () => {
     if (!field || !hud) return;
     const measureVisibleTop = () => {
       const fieldBounds = field.getBoundingClientRect();
+      fieldSizeRef.current = { width: field.clientWidth || 800, height: field.clientHeight || 600 };
       visibleTopRef.current = Math.max(0, hud.getBoundingClientRect().bottom - fieldBounds.top);
     };
     measureVisibleTop();
@@ -935,9 +938,9 @@ const GamePage = () => {
         }
       }
       if (state.status === "playing") {
-        const field = fieldRef.current;
-        const width = field?.clientWidth || 800;
-        const height = field?.clientHeight || 600;
+        // ResizeObserver refreshes geometry only when the field changes size.
+        // Reading layout after moving ships every RAF forces needless reflows.
+        const { width, height } = fieldSizeRef.current;
         const visibleTop = visibleTopRef.current;
         const slots = sectionSlotsRef.current ?? createFormationSlots(state.section, state.sector, width, height, visibleTop);
         sectionSlotsRef.current = slots;
@@ -1169,7 +1172,7 @@ const GamePage = () => {
           next.hullLight = hullIllumination(next.x, next.y, time, next.muzzleAt ?? 0, state.effects);
           if (asteroid.attackPattern !== null && next.attackPattern === null && !(normal && pressure.overlap)) attackCooldownRef.current = 0;
           if (next.attackPattern !== null && next.attackDelay === 0 && !next.firedThisAttack && next.attackElapsed < attackTime(next) && next.attackElapsed >= attackTime(next) * .28 && state.enemyShots.length < enemyShotLimit(width, elapsedRef.current, state.sector)) {
-            const bullet = createEnemyShot(nextIdRef.current, next.x, next.y + next.radius * .4, state.player, width, height);
+            const bullet = createEnemyShot(nextIdRef.current, next.x, next.y + next.radius * .4, state.player, width, height, state.sector);
             if (bullet) {
               nextIdRef.current += 1;
               state.enemyShots.push(bullet);
@@ -1379,7 +1382,7 @@ const GamePage = () => {
           sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height, visibleTop, nextFlight.count, nextFlight.offset);
           formationIndexRef.current = 0;
           formationStartedRef.current = false;
-          sectionElapsedRef.current = rulesVersionRef.current === 2 ? SECTION_INTRO_MS - REINFORCEMENT_WARNING_MS : 0;
+          sectionElapsedRef.current = rulesVersionRef.current === 2 ? SECTION_INTRO_MS - REINFORCEMENT_WARNING_MS - introGroupBreathingMs(state.sector) : 0;
           spawnTimerRef.current = 0;
           attackCooldownRef.current = 0;
           state.shots = [];
@@ -1925,4 +1928,3 @@ const GamePage = () => {
 
 export { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY };
 export default GamePage;
-

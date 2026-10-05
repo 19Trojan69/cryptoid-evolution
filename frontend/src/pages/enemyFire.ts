@@ -1,6 +1,7 @@
 import type { BossWeaponKind } from './bossWeapons.ts';
 import { PLAYER_RADIUS, type PlayerPosition } from "./playerCombat.ts";
 import { levelDifficulty } from "./levelDifficulty.ts";
+import { introShotSpeed } from './introDifficulty.ts';
 
 export type BossProjectileKind = "bolt" | "orb" | "lance" | "split" | "pulse" | "double" | "burst" | "heavy" | "rapid";
 export type EnemyShot = { id: number; x: number; y: number; vx: number; vy: number; radius: number; bossKind?: BossProjectileKind; weaponKind?:BossWeaponKind; weaponColor?:string; weaponWidth?:number; sourceGun?:number; caliber?:number };
@@ -21,14 +22,14 @@ export const enemyShotLimit = (width: number, elapsedMs: number, level = 1) => {
 };
 
 // Aim at the player's position when fired, then lock the direction so it remains dodgeable.
-export const createEnemyShot = (id: number, x: number, y: number, player: PlayerPosition, width: number, height: number): EnemyShot | null => {
+export const createEnemyShot = (id: number, x: number, y: number, player: PlayerPosition, width: number, height: number, stage = 500): EnemyShot | null => {
   if (x < 12 || x > width - 12 || y < 100 || y > height * .5) return null;
   const playerX = player.x * width;
   const playerY = player.y * height;
   const dx = playerX - x;
   const dy = Math.max(1, playerY - y);
   const distance = Math.hypot(dx, dy);
-  const speed = .19;
+  const speed = .19 * introShotSpeed(stage);
   return { id, x, y, vx: dx / distance * speed, vy: dy / distance * speed, radius: 5 };
 };
 

@@ -48,7 +48,10 @@ fs.mkdirSync(screenshots, { recursive: true });
       for (let s=1;s<stage;s++) if(s%10) {h.docs[0].rewardEventKeys.testnet.push('block:'+s);if(s%10===9)h.docs[0].rewardEventKeys.testnet.push('chain:'+Math.ceil(s/10));}else h.docs[0].rewardEventKeys.testnet.push('boss:'+s/10,'bonus:'+s/10);
       if(bonusScenario)h.docs[0].rewardEventKeys.testnet.push('boss:'+stage/10);
       const context = await browser.newContext({ viewport, locale:'en-US', isMobile:viewport.width<700, hasTouch:viewport.width<700 });
-      await context.addInitScript(() => { window.__ENV={backendURL:'/api'};window.Pi={init(){},getPiHostAppInfo:async()=>({hostApp:'web'})}; localStorage.setItem('cryptoid_pi_session','1');localStorage.setItem('cryptoid_language','en');localStorage.setItem('cryptoid_home_music','off'); });
+      await context.addInitScript(() => { window.__ENV={backendURL:'/api'};window.Pi={init(){},getPiHostAppInfo:async()=>({hostApp:'web'})}; localStorage.setItem('cryptoid_pi_session','1');localStorage.setItem('cryptoid_language','en');localStorage.setItem('cryptoid_home_music','off');
+        // This suite tests combat resume; the starter card is already acknowledged.
+        for (const network of ['testnet','mainnet']) localStorage.setItem(`cryptoid_card_reveals_v1_${network}_pilot-a`, JSON.stringify(['grey-scout-1']));
+      });
       const apiFailures=[];
       let networkFault=false, failedAttempts=0;
       await context.route('**/*',async route=>{
@@ -136,7 +139,13 @@ fs.mkdirSync(screenshots, { recursive: true });
           const after=await page.evaluate(()=>window.__flightTest.inspect());
           assert.equal(after.rules,rulesVersion);
           assert.equal(after.state.sector,stage,'group never advances the stage');
-          if(group<expected-1){assert.equal(after.refs.flight,group+1);assert.equal(after.state.phase,'SECTOR_INTRO');if(rulesVersion===2)assert.ok(after.refs.sectionElapsed>=2200&&after.refs.sectionElapsed<2700);else assert.ok(after.refs.sectionElapsed<100,`legacy reinforcement keeps full intro: ${after.refs.sectionElapsed} ms, rules ${after.rules}`);}
+          if(group<expected-1){
+            assert.equal(after.refs.flight,group+1);assert.equal(after.state.phase,'SECTOR_INTRO');
+            if(rulesVersion===2){
+              const breathing=Math.round(650*Math.max(0,1-(stage-1)/49));
+              assert.ok(after.refs.sectionElapsed>=2200-breathing&&after.refs.sectionElapsed<2700-breathing, 'reinforcement preserves the early-level breathing room');
+            }else assert.ok(after.refs.sectionElapsed<100,`legacy reinforcement keeps full intro: ${after.refs.sectionElapsed} ms, rules ${after.rules}`);
+          }
           else assert.equal(after.state.phase,'SECTOR_CLEAR');
           if(group===0&&expected>1){await page.evaluate(()=>window.__flightTest.resume());await page.screenshot({path:path.join(screenshots,`stage-${stage}-warning.png`)});await page.evaluate(()=>window.__flightTest.pause());}
         }

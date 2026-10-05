@@ -1,3 +1,4 @@
+import { introRelief } from './introDifficulty.ts';
 // Internal stages 1..500 correspond to 50 visible campaign levels.
 // Returning ships still count towards the cap. No more than three can threaten
 // the player at once; quiet blocks keep the original single-wave rhythm.
@@ -6,9 +7,9 @@ export const attackPressure = (stage: number) => {
   const progress = Math.sqrt((bounded - 1) / 499);
   const quiet = [1, 3, 5].includes((bounded - 1) % 10 + 1);
   return {
-    overlap: bounded >= 4 && !quiet,
-    cap: bounded < 11 ? 2 : 3,
-    intervalMs: 3400 - progress * 1700,
+    overlap: bounded >= 11 && !quiet,
+    cap: bounded < 11 ? 1 : bounded < 31 ? 2 : 3,
+    intervalMs: 3400 - progress * 1700 + introRelief(bounded) * 2_000,
   };
 };
 
