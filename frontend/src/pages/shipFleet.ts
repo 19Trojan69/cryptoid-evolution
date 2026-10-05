@@ -1,3 +1,4 @@
+import { RELEASED_STANDARD_SHIPS } from './cardAvailability';
 import type { CSSProperties } from "react";
 import type { CryptoidClass } from "./cryptoidRoster";
 
@@ -56,7 +57,7 @@ export const playerSkins = [
 ] as const;
 // Ten standard hulls are released for Testnet, including the free Grey Scout.
 // Later hulls stay visible, and prior ownership is preserved.
-export const TESTNET_STANDARD_HULL_COUNT = 10;
+export const TESTNET_STANDARD_HULL_COUNT = RELEASED_STANDARD_SHIPS;
 export const testnetStandardHullAvailable = (skinId: PlayerSkinId) => {
   const index = playerSkins.findIndex(skin => skin.id === skinId);
   return index >= 0 && index < TESTNET_STANDARD_HULL_COUNT;
@@ -337,3 +338,4 @@ export const shipNozzleStyle = (index: number, facesPlayer = false): CSSProperti
     ...shipHullStyle(index, facesPlayer),
   } as CSSProperties;
 };
+

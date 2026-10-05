@@ -1,3 +1,4 @@
+import { bossCardAvailable } from './cardAvailability';
 import CardReveal from './CardReveal';
 import { availableShipCards, unseenShipCards, type CardReward } from './cardRevealRules';
 import { readCardReveals, acknowledgeCard } from './cardRevealMemory';
@@ -1015,7 +1016,7 @@ const GamePage = () => {
               const rank = rewardRank(next);
               return { progress: next, notice: `Boss stickers · ${bossId}/50 · ${result.stars}★${rank !== previousRank ? ` · New rank · ${rank}` : ''}` };
             }, { kind: 'boss', level: bossId, stage: state.sector });
-            if(!adminRunRef.current){
+            if(!adminRunRef.current&&bossCardAvailable(bossId)){
               showRewardCards([{key:`boss-${bossId}`,boss:bossId,stars:rewardProgressRef.current.bossWins[bossId]||1}]);
               animationRef.current=window.requestAnimationFrame(loop);
               return;

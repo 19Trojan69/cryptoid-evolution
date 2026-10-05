@@ -1,3 +1,4 @@
+import { bossCardAvailable } from './cardAvailability';
 import CardReveal from './CardReveal';
 import { availableShipCards, unseenShipCards, type CardReward } from './cardRevealRules';
 import { acknowledgeCard, readCardReveals } from './cardRevealMemory';
@@ -515,7 +516,7 @@ const Shop = () => {
           <button className="text-button menu-return" type="button" onClick={returnToMenu}>← {t("Back to quick access")}</button>
           <button className="close-button" type="button" onClick={() => setSystemMenuOpen(false)} aria-label={t('Close menu')}>×</button>
           <p className="eyebrow">{t('SYSTEM / SETTINGS')}</p>
-          <div className="system-menu-title-row"><h2 id="system-menu-title">{t('System menu')}</h2><button className="system-guide-link" type="button" onClick={() => { setSystemMenuOpen(false); setGuideTopic("controls"); setActivePanel('how'); }}><span aria-hidden="true">?</span>{t('Game guide')}</button></div>
+          <div className="system-menu-title-row"><h2 id="system-menu-title">{t('System menu')}</h2><button className="system-guide-link" type="button" onClick={() => { setSystemMenuOpen(false); setGuideTopic("controls"); setActivePanel('how'); }}><span className="boss-sticker-silhouette" aria-hidden="true"><BossPortrait id={id} /></span>{t('Game guide')}</button></div>
           <SystemSettings key={settingsSection ?? "overview"} compactMobile idPrefix="home" initialSection={settingsSection} musicVolume={musicVolume} effectsVolume={effectsVolume} changeMusicVolume={changeMusicVolume} changeEffectsVolume={changeEffectsVolume} />
         </section>
       </div>}
@@ -548,7 +549,7 @@ const Shop = () => {
         <article className="status-card reward-collection">
           <div className="card-heading"><span>{t("RANK & COLLECTION")}</span><span className="card-icon">✦</span></div>
           <div className="reward-rank-current"><span aria-hidden="true">{rankForLevel(rewardProgress.highestLevel).symbol}</span><div><small>{t("Current service rank")} · {t("Level")} {rewardProgress.highestLevel}/500</small><h3>{t(rewardRank(rewardProgress))}</h3></div></div>
-          <p>{Object.keys(rewardProgress.bossWins).length}/{BOSS_STICKER_COUNT} {t("Boss stickers")} · {rewardProgress.completedChains.length} {t("Chains")} · {rewardProgress.perfectBonuses} {t("Perfect bonus rounds")}</p>
+          <p>{Object.keys(rewardProgress.bossWins).filter(id=>bossCardAvailable(Number(id))).length}/{BOSS_STICKER_COUNT} {t("Boss stickers")} · {rewardProgress.completedChains.length} {t("Chains")} · {rewardProgress.perfectBonuses} {t("Perfect bonus rounds")}</p>
           <div id="reward-ranks" className="reward-rank-path" aria-label={t("Service ranks")}>{[1, 11, 51, 101, 201, 301, 401, 500].map(level => { const tier = rankForLevel(level); return <span key={level} className={rewardProgress.highestLevel >= level ? "earned" : ""}><b aria-hidden="true">{tier.symbol}</b><small>{t(tier.name)}<br />{t("Level")} {level}</small></span>; })}</div>
           <h4>{t("Linked Blocks")} · {t("Level")} {latestRewardLevel}</h4>
           <div className="reward-blocks" aria-label={t("Linked Blocks")}>{Array.from({ length: 9 }, (_, index) => <span key={index} className={index < (rewardProgress.linkedBlocks?.[latestRewardLevel] ?? 0) ? "earned" : ""}>{index + 1}</span>)}</div>
@@ -556,14 +557,15 @@ const Shop = () => {
           <h4 id="reward-bosses">{t("Boss stickers")}</h4>
           <div className="boss-sticker-grid">{Array.from({ length: BOSS_STICKER_COUNT }, (_, index) => {
             const id = index + 1;
-            const stars = rewardProgress.bossWins[id] ?? 0;
-            return <button type="button" key={id} disabled={!stars} onClick={() => setSelectedBoss(id)} className={`boss-sticker${stars ? " boss-sticker-earned" : ""}`} title={t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : t("Not defeated yet") })} aria-haspopup={stars ? 'dialog' : undefined} aria-label={`${bossName(id)} · ${t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : t("Locked") })}`}>
-              {stars ? <BossPortrait id={id} /> : <span aria-hidden="true">?</span>}
+            const available = bossCardAvailable(id);
+            const stars = available ? rewardProgress.bossWins[id] ?? 0 : 0;
+            return <button type="button" key={id} disabled={!stars} onClick={() => setSelectedBoss(id)} className={`boss-sticker${stars ? " boss-sticker-earned" : ""}`} title={t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : !available ? "Mainnet ready" : t("Not defeated yet") })} aria-haspopup={stars ? 'dialog' : undefined} aria-label={`${bossName(id)} · ${t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : !available ? "Mainnet ready" : t("Locked") })}`}>
+              {stars ? <BossPortrait id={id} /> : <span className="boss-sticker-silhouette" aria-hidden="true"><BossPortrait id={id} /></span>}
               <small>#{String(id).padStart(2, "0")} · {bossName(id)}</small>{!!stars && <b>{"★".repeat(stars)}</b>}
-              {!!stars && <span className="boss-sticker-open">{bossDossierLabel(locale)}</span>}
+              {!available && <small>Mainnet ready</small>}{!!stars && <span className="boss-sticker-open">{bossDossierLabel(locale)}</span>}
             </button>;
           })}</div>
-          {selectedBoss !== null && <BossDossier id={selectedBoss} stars={rewardProgress.bossWins[selectedBoss] ?? 0} onClose={() => setSelectedBoss(null)} />}
+          {selectedBoss !== null && bossCardAvailable(selectedBoss) && <BossDossier id={selectedBoss} stars={rewardProgress.bossWins[selectedBoss] ?? 0} onClose={() => setSelectedBoss(null)} />}
           <h4 id="reward-medals">{t("Bonus medals")}</h4>
           <p>{Object.values(rewardProgress.bonusMedals).filter(medal => medal === "gold").length} {t("Gold")} · {Object.values(rewardProgress.bonusMedals).filter(medal => medal === "silver").length} {t("Silver")} · {Object.values(rewardProgress.bonusMedals).filter(medal => medal === "bronze").length} {t("Bronze")}</p>
           <div className="reward-medal-grid">{Object.entries(rewardProgress.bonusMedals).map(([level, medal]) => <span key={level} className={`reward-medal reward-medal-${medal}`}>✦ <b>{t("Level")} {level}</b> · {t(medal)}</span>)}</div>

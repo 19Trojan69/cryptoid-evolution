@@ -10,7 +10,15 @@ test('only owned starter hulls appear, in order, and confirmation suppresses rep
  assert.deepEqual(unseenShipCards(both,['grey-scout-1']).map(c=>c.key),['nova-wing-1']);
  assert.equal(unseenShipCards(both,both.map(c=>c.key)).length,0);
 });
-test('purchased upgrades preserve prerequisites and never unlock another hull',()=>{
+test('unreleased upgrade cards stay hidden even with legacy purchases',()=>{
  assert.deepEqual(availableShipCards(ships,{},[],['ship_02_stage_3']),[]);
- assert.deepEqual(availableShipCards(ships,{'grey-scout':{grey:1}},[],['ship_02_stage_2','ship_02_stage_3']).map(c=>c.key),['grey-scout-1','grey-scout-2','grey-scout-3']);
+ assert.deepEqual(availableShipCards(ships,{'grey-scout':{grey:1}},[],['ship_02_stage_2','ship_02_stage_3']).map(c=>c.key),['grey-scout-1']);
+});
+
+import {bossCardAvailable,shipCardAvailable} from './cardAvailability.ts';
+test('release limits keep prepared boss and ship cards locked',()=>{
+ for(let id=1;id<=50;id++)assert.equal(bossCardAvailable(id),id<=3);
+ for(let sprite=0;sprite<20;sprite++)for(const stage of [1,2,3])assert.equal(shipCardAvailable(sprite,stage),sprite<10&&stage===1);
+ assert.equal(bossCardAvailable(0),false);
+ assert.deepEqual(availableShipCards([{id:'twin-core',sprite:10}],{'twin-core':{grey:5}},['twin-core'],['ship_11_stage_2']),[]);
 });
