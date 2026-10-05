@@ -56,6 +56,21 @@ const start = async (h, action = 'new', startKey = 'start-key-0000000001') => {
   return result;
 };
 const init = h => h.call('progress', '/me', null, { method: 'GET' });
+test('seen cards persist as a union per player and network without changing inventory or save versions', async () => {
+ const h=harness();await init(h);const before=structuredClone(h.profile());
+ const body={ids:['grey-scout-1','boss-1']};
+ assert.equal((await h.call('progress','/card-reveals',body)).code,200);
+ assert.equal((await h.call('progress','/card-reveals',{ids:['boss-1','nova-wing-1']})).code,200);
+ const seen=(await init(h)).body.save.cardReveals;
+ assert.deepEqual(seen,['grey-scout-1','boss-1','nova-wing-1']);
+ assert.equal(h.profile().version,before.version);
+ assert.deepEqual(h.profile().fleet,before.fleet);assert.equal(h.profile().highestSector,before.highestSector);
+ assert.deepEqual((await h.call('progress','/me',null,{method:'GET',network:'mainnet'})).body.save.cardReveals,[]);
+ assert.deepEqual((await h.call('progress','/me',null,{method:'GET',session:{currentUser:{uid:'pilot-b'}}})).body.save.cardReveals,[]);
+ assert.equal((await h.call('progress','/card-reveals',body,{session:{}})).code,401);
+ assert.equal((await h.call('progress','/card-reveals',body,{session:{currentUser:{uid:'pilot-a'},adminMode:true,adminUid:'pilot-a'}})).code,403);
+ for(const ids of [['bogus'],['boss-0'],['boss-51'],[null],Array(111).fill('boss-1')])assert.equal((await h.call('progress','/card-reveals',{ids})).code,400);
+});
 
 test('boss lives exceed three and six, survive retries and resume, and cannot be fabricated', async () => {
   const h = harness(); await init(h); await start(h);

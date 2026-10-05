@@ -1,12 +1,13 @@
 import { bossCardAvailable } from './cardAvailability';
+import { keepScreenAwake } from './screenWakeLock';
 import { introGroupBreathingMs } from './introDifficulty';
 import CardReveal from './CardReveal';
 import { availableShipCards, unseenShipCards, type CardReward } from './cardRevealRules';
-import { readCardReveals, acknowledgeCard } from './cardRevealMemory';
+import { mergeCardReveals, rememberCard, hasSeenCard, syncCardReveals } from './cardRevealMemory';
 import { primeCardSound } from './cardSound';
 import { advanceBossCore } from './bossCore';
 import { bossName } from './bossNames';
-import { collectBossHeart, BOSS_HEART_POSITION, type BossRewardState } from './bossReward';
+import { collectBossHeart, BOSS_HEART_POSITION, BOSS_EXTRA_LIFE_MS, type BossRewardState } from './bossReward';
 import './bossReward.css';
 import { blockFlights, nextBlockFlight, REINFORCEMENT_WARNING_MS, GROUP_CLEAR_POINTS } from "./blockFlights";
 import { COMBAT_STATE_KEYS, COMBAT_REF_KEYS, readCombatCheckpoint, type CombatCheckpoint } from "../../../backend/src/combatCheckpoint";
@@ -399,7 +400,11 @@ const GamePage = () => {
   const [rewardCards,setRewardCards]=useState<CardReward[]>([]);
   const rewardCardsRef=useRef<CardReward[]>([]);
   const cardOwnerRef=useRef('guest');
+  const bossLifeRemainingRef=useRef(0);
+  const pendingBossCardRef=useRef<CardReward|null>(null);
+  const [extraLifeVisible,setExtraLifeVisible]=useState(false);
   const showRewardCards=(cards:CardReward[])=>{
+    cards=cards.filter(card=>!hasSeenCard(cardOwnerRef.current,card.key)&&!rewardCardsRef.current.some(queued=>queued.key===card.key));
     if(!cards.length)return;
     rewardCardsRef.current=[...rewardCardsRef.current,...cards];
     setRewardCards([...rewardCardsRef.current]);
@@ -407,12 +412,19 @@ const GamePage = () => {
     setGame({...stateRef.current});
   };
   const continueRewardCard=()=>{
-    const card=rewardCardsRef.current[0];if(card&&!card.boss)acknowledgeCard(cardOwnerRef.current,card.key);
     rewardCardsRef.current=rewardCardsRef.current.slice(1);setRewardCards([...rewardCardsRef.current]);
     keysRef.current.clear();pointerRef.current=null;touchOriginRef.current=null;
     if(!rewardCardsRef.current.length){stateRef.current.status='playing';lastFrameRef.current=performance.now();setGame({...stateRef.current});}
   };
   const [game, setGame] = useState<GameState>(createInitialState);
+  useEffect(()=>{
+    if(game.status==='playing')return keepScreenAwake(navigator,document);
+  },[game.status]);
+  useEffect(()=>{
+    const card=rewardCards[0];if(!card)return;
+    rememberCard(cardOwnerRef.current,card.key);
+    void syncCardReveals(cardOwnerRef.current).catch(()=>{/* Local receipt is retried on the next account start. */});
+  },[rewardCards[0]?.key]);
   const [startError, setStartError] = useState("");
   const [audioNeedsTap, setAudioNeedsTap] = useState(false);
   const [homePrompt, setHomePrompt] = useState(false);
@@ -480,6 +492,8 @@ const GamePage = () => {
   const saveCombat = async () => {
     if (activationRef.current) return; // An uncertain activation must not be overwritten with stale local timers.
     const state = stateRef.current, runId = scoreRunRef.current, queue = saveQueueRef.current;
+    // The boss reward already saves the extra life and the next bonus phase.
+    if(state.encounter==='boss-clear'&&state.bossHeartCollected)return;
     if (!runId || !queue || adminRunRef.current || !["playing", "paused"].includes(state.status) || state.hearts < 1 || (state.phase === "SECTOR_CLEAR" && state.encounter !== "boss-clear")) return;
     if (state.status !== "playing") state.combo.pendingAt = null;
     const combat: CombatCheckpoint = JSON.parse(JSON.stringify({
@@ -589,7 +603,9 @@ const GamePage = () => {
       }
       const selected = !adminRunRef.current && data.profile ? accountSelection(data.profile) : shipSelection;
       if(!adminRunRef.current&&data.profile){
-        const cards=unseenShipCards(availableShipCards(playerSkins,data.profile.fleet,data.profile.usedShipSkins||[],data.ownedShipUpgrades||[]),readCardReveals(cardOwnerRef.current));
+        const seen=mergeCardReveals(cardOwnerRef.current,[...(profile?.cardReveals||[]),...(data.profile.cardReveals||[])]);
+        void syncCardReveals(cardOwnerRef.current).catch(()=>{});
+        const cards=unseenShipCards(availableShipCards(playerSkins,data.profile.fleet,data.profile.usedShipSkins||[],data.ownedShipUpgrades||[]),seen);
         rewardCardsRef.current=cards;setRewardCards(cards);
       }
 
@@ -938,6 +954,10 @@ const GamePage = () => {
         }
       }
       if (state.status === "playing") {
+        if(bossLifeRemainingRef.current>0){
+          bossLifeRemainingRef.current=Math.max(0,bossLifeRemainingRef.current-delta);
+          if(bossLifeRemainingRef.current===0)setExtraLifeVisible(false);
+        }
         // ResizeObserver refreshes geometry only when the field changes size.
         // Reading layout after moving ships every RAF forces needless reflows.
         const { width, height } = fieldSizeRef.current;
@@ -1010,8 +1030,11 @@ const GamePage = () => {
           const victoryStillPlaying = state.encounter === "boss-clear" && musicRef.current?.currentSource === "/audio/boss-victory-v2.mp3" && musicRef.current.playing && !musicRef.current.audio.ended;
           const clearFinished = clearTimerRef.current >= (state.encounter === "boss-clear" ? BOSS_CLEAR_DURATION_MS : SECTION_CLEAR_MS) && !victoryStillPlaying;
           if (clearFinished && state.encounter === 'boss-clear' && collectBossHeart(state, state.player, width, height)) {
-            soundRef.current?.play('pickup');
+            soundRef.current?.play('extraLife');
+            bossLifeRemainingRef.current=BOSS_EXTRA_LIFE_MS;
+            setExtraLifeVisible(true);
             const bossId = Math.floor(state.sector / 10);
+            const firstUnlock=!(rewardProgressRef.current.bossWins[bossId]>0);
             state.rewardNotice = saveReward(progress => {
               const previousRank = rewardRank(progress);
               const result = awardBossSticker(progress, bossId);
@@ -1019,14 +1042,15 @@ const GamePage = () => {
               const rank = rewardRank(next);
               return { progress: next, notice: `Boss stickers · ${bossId}/50 · ${result.stars}★${rank !== previousRank ? ` · New rank · ${rank}` : ''}` };
             }, { kind: 'boss', level: bossId, stage: state.sector });
-            if(!adminRunRef.current&&bossCardAvailable(bossId)){
-              showRewardCards([{key:`boss-${bossId}`,boss:bossId,stars:rewardProgressRef.current.bossWins[bossId]||1}]);
-              animationRef.current=window.requestAnimationFrame(loop);
-              return;
-            }
+            if(firstUnlock&&!adminRunRef.current&&bossCardAvailable(bossId)&&!hasSeenCard(cardOwnerRef.current,`boss-${bossId}`))
+              pendingBossCardRef.current={key:`boss-${bossId}`,boss:bossId,stars:rewardProgressRef.current.bossWins[bossId]||1};
 
           }
-          if (clearFinished && (state.encounter !== 'boss-clear' || state.bossHeartCollected)) {
+          if(state.encounter==='boss-clear'&&state.bossHeartCollected&&bossLifeRemainingRef.current===0&&pendingBossCardRef.current){
+            const card=pendingBossCardRef.current;pendingBossCardRef.current=null;
+            showRewardCards([card]);animationRef.current=window.requestAnimationFrame(loop);return;
+          }
+          if (clearFinished && (state.encounter !== 'boss-clear' || state.bossHeartCollected&&bossLifeRemainingRef.current===0)) {
             if (state.encounter === "bonus" && state.sector === MAX_DIFFICULTY_LEVEL) {
               if (!recordsSavedRef.current) {
                 if (!adminRunRef.current && !scoreRunRef.current) saveRecords(state);
@@ -1628,6 +1652,7 @@ const GamePage = () => {
     if (gameOverTimerRef.current !== null) window.clearTimeout(gameOverTimerRef.current);
     gameOverTimerRef.current = null;
     stateRef.current = createInitialState();
+    bossLifeRemainingRef.current=0;pendingBossCardRef.current=null;setExtraLifeVisible(false);
     shipStageRef.current = 1;
     setShipStage(1);
     recordsSavedRef.current = false;
@@ -1764,6 +1789,7 @@ const GamePage = () => {
   return (
     <main className="game-shell" data-effects-paused={game.status !== "playing"} onPointerDownCapture={event => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
       {rewardCards[0] && <CardReveal reward={rewardCards[0]} remaining={rewardCards.length} onContinue={continueRewardCard}/>}
+      {extraLifeVisible&&<div className="boss-extra-life" role="status" aria-live="polite"><strong>{t('EXTRA LIFE')}</strong><span>+1 ♥</span></div>}
       <div ref={fieldRef} className="game-field" onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()} onPointerDown={startDrag} onPointerMove={event => { if (pointerRef.current === event.pointerId) positionFromPointer(event); }} onPointerUp={event => { if (pointerRef.current === event.pointerId) { pointerRef.current = null; touchOriginRef.current = null; } }} onPointerCancel={event => { if (pointerRef.current === event.pointerId) { pointerRef.current = null; touchOriginRef.current = null; } }}>
         <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} showNebula={game.encounter === "boss-fight"} />
         <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
@@ -1803,7 +1829,7 @@ const GamePage = () => {
           {startError && <div className="modal-actions"><button className="button button-primary" type="button" onClick={() => { setStartError(""); setRecoveryError(false); void activateLoadout(); }}>{t("Try again")}</button>{recoveryError && <button className="button button-secondary" type="button" onClick={() => { saveQueueRef.current?.archive(); saveQueueReadyRef.current = true; setRecoveryError(false); setStartError(""); setSaveNotice("Pending data set aside. Using the confirmed account save."); void activateLoadout(); }}>{t("Use confirmed save")}</button>}</div>}
           {(startError || resumeOffer) && <button className="button button-secondary mission-back-button" type="button" onClick={() => { leaveGameFullscreen(); navigate(sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "/admin" : "/"); }}>{t("Back")}</button>}
         </div></div>}
-        {game.status === "playing" && !bossDestructionActive && !reinforcementIntro && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${game.encounter === "boss-intro" ? " boss-intro-banner" : ""}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite">
+        {game.status === "playing" && !extraLifeVisible && !bossDestructionActive && !reinforcementIntro && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${game.encounter === "boss-intro" ? " boss-intro-banner" : ""}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite">
           <span>{levelComplete || levelIntro ? sectorName(game.sector) : game.encounter === "bonus" ? game.phase === "SECTOR_CLEAR" ? t("BONUS COMPLETE") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.encounter !== "normal" ? `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.phase === "SECTOR_CLEAR" ? t("BLOCK LINKED") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}`}</span>
           <strong>{transitionHeadline}</strong>
           {game.encounter === 'boss-intro' && <small className="boss-callsign">{bossName(Math.ceil(game.sector / 10))}</small>}

@@ -3,6 +3,13 @@
 .boss-heart-pickup .power-preview-orbit i { background: radial-gradient(circle at 34% 27%, #fff0e7, #ff8d71 25%, #522039 72%); }
 .boss-heart-pickup svg { width: 25px; height: 25px; fill: #ff304c; stroke: #8f142a; stroke-width: .8; filter: drop-shadow(0 1px 2px #440919aa); }
 .boss-heart-pickup small { margin-top: 2px; color: #ffe2ad; white-space: nowrap; font-size: 13px; }
+.boss-extra-life { position: fixed; z-index: 20; top: max(155px, 22vh); left: 50%; transform: translateX(-50%); display: grid; justify-items: center; gap: 10px; width: min(94vw, 560px); pointer-events: none; text-align: center; color: #ffe5b4; }
+.boss-extra-life strong { font: 900 clamp(30px, 8vw, 54px)/1.1 'Oxanium', sans-serif; text-shadow: 0 2px 5px #071327, 0 0 14px #ff765d; animation: extra-life-blink .56s ease-in-out 5; }
+.boss-extra-life span { color: #ff9e8d; font: 900 25px/1.2 'Oxanium', sans-serif; text-shadow: 0 2px 5px #071327; }
+@keyframes extra-life-blink { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+[data-effects-paused="true"] .boss-extra-life strong { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .boss-extra-life strong { animation: none; } }
+html[data-motion="reduced"] .boss-extra-life strong { animation: none; }
 [data-effects-paused="true"] .boss-heart-pickup .power-preview-orbit,
 [data-effects-paused="true"] .boss-heart-pickup .power-preview-orbit::before,
 [data-effects-paused="true"] .boss-heart-pickup .power-preview-orbit::after { animation-play-state: paused; }

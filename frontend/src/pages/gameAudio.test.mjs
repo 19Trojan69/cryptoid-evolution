@@ -51,6 +51,7 @@ test("game audio plays effects without scheduling background music", async () =>
     audio.play("laser");
     audio.play("collision");
     assert.equal(playedTones, 2);
+    audio.play('extraLife');assert.equal(playedTones,9,'extra life has its own arpeggio and resolving chord');
     assert.equal(intervals.size, 0);
   } finally {
     audio.close();

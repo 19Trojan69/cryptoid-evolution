@@ -5,7 +5,7 @@ import { restoreScoreRun } from "../restoreScoreRun";
 import { Router } from "express";
 import { rewardNetwork } from "../rewardNetwork";
 import { isAdminMode } from "../adminAccess";
-import { emptyPlayerSave, firstMissionSnapshot, readSnapshot, legacyInventory, publicSave, shipColors, shipPrice, validSelection, type PlayerSave } from "../playerSave";
+import { emptyPlayerSave, firstMissionSnapshot, readSnapshot, legacyInventory, publicSave, shipColors, shipPrice, validSelection, standardShips, type PlayerSave } from "../playerSave";
 
 export async function loadPlayerSave(users: any, uid: string, network: string): Promise<PlayerSave> {
   const key = `playerByNetwork.${network}`;
@@ -35,6 +35,19 @@ export default function mountProgressEndpoints(router: Router) {
       req.session.scoreRun = save.lastStart.runMeta;
       return res.json({ recovered: true });
     } catch { return res.status(503).json({ error: "save_unavailable" }); }
+  });
+  // Presentation preferences never grant inventory, cards, rewards or progress.
+  // Atomic union is independent of the version used for account transactions.
+  router.post("/card-reveals", async (req, res) => {
+    const ids = req.body?.ids;
+    const valid = new Set([...standardShips.flatMap(ship => [1, 2, 3].map(stage => `${ship}-${stage}`)), ...Array.from({ length: 50 }, (_, i) => `boss-${i + 1}`)]);
+    if (!Array.isArray(ids) || ids.length > 110 || ids.some(id => typeof id !== 'string' || !valid.has(id))) return res.status(400).json({ error: 'invalid_cards' });
+    try {
+      const users = req.app.locals.userCollection, uid = req.session.currentUser!.uid, network = rewardNetwork(req);
+      await loadPlayerSave(users, uid, network);
+      if (ids.length) await users.updateOne({ uid }, { $addToSet: { [`playerByNetwork.${network}.cardReveals`]: { $each: ids } } });
+      return res.json({ saved: true });
+    } catch { return res.status(503).json({ error: 'save_unavailable' }); }
   });
   router.post("/checkpoint", async (req, res) => {
     try {

@@ -337,9 +337,14 @@ const mobileMenuTranslations: Partial<Record<Locale, Record<string, string>>> = 
 };
 
 export type TranslationParams = Record<string, string | number>;
+const extraLifeTranslations: Partial<Record<Locale, Record<string,string>>> = {
+ de:{'EXTRA LIFE':'EXTRA LEBEN'}, es:{'EXTRA LIFE':'VIDA EXTRA'}, fr:{'EXTRA LIFE':'VIE SUPPLÉMENTAIRE'}, pt:{'EXTRA LIFE':'VIDA EXTRA'}, it:{'EXTRA LIFE':'VITA EXTRA'},
+ pl:{'EXTRA LIFE':'DODATKOWE ŻYCIE'}, tr:{'EXTRA LIFE':'EKSTRA CAN'}, ru:{'EXTRA LIFE':'ДОПОЛНИТЕЛЬНАЯ ЖИЗНЬ'}, hr:{'EXTRA LIFE':'DODATNI ŽIVOT'}, cs:{'EXTRA LIFE':'ŽIVOT NAVÍC'}, sk:{'EXTRA LIFE':'ŽIVOT NAVYŠE'},
+ hu:{'EXTRA LIFE':'EXTRA ÉLET'}, ro:{'EXTRA LIFE':'VIAȚĂ SUPLIMENTARĂ'}, sr:{'EXTRA LIFE':'ДОДАТНИ ЖИВОТ'}, uk:{'EXTRA LIFE':'ДОДАТКОВЕ ЖИТТЯ'}, th:{'EXTRA LIFE':'ชีวิตเพิ่ม'},
+};
 const legacyCatalog: Partial<Record<Locale, Record<string, string>>> = {};
 for (const locale of Object.keys(languages) as Locale[]) {
-  legacyCatalog[locale] = Object.assign({}, translations[locale as Exclude<Locale, "en">], newerTranslations[locale], networkTranslations[locale], levelTranslations[locale], powerUpTranslations[locale], extendedTranslations[locale], systemMenuTranslations[locale], hudTranslations[locale], controlTranslations[locale], homeMusicTranslations[locale], gameplayPolishTranslations[locale], audioSettingsTranslations[locale], evolutionShopTranslations[locale], guideTranslations[locale], shipPositionTranslations[locale], quickAccessTranslations[locale], mobileMenuTranslations[locale]);
+  legacyCatalog[locale] = Object.assign({}, translations[locale as Exclude<Locale, "en">], newerTranslations[locale], networkTranslations[locale], levelTranslations[locale], powerUpTranslations[locale], extendedTranslations[locale], systemMenuTranslations[locale], hudTranslations[locale], controlTranslations[locale], homeMusicTranslations[locale], gameplayPolishTranslations[locale], audioSettingsTranslations[locale], evolutionShopTranslations[locale], guideTranslations[locale], shipPositionTranslations[locale], quickAccessTranslations[locale], mobileMenuTranslations[locale], extraLifeTranslations[locale]);
   legacyCatalog[locale]!["MISSION FAILED"] = failedMissionTranslations[locale];
 }
 // Currency and product names remain the same in every language.
