@@ -28,6 +28,7 @@ import GameGuide from "./GameGuide";
 import WeaponTutorial from "./WeaponTutorial";
 import WeaponPurchase from './WeaponPurchase';
 import WeaponPreview from './WeaponPreview';
+import BossPortrait from "./BossPortrait";
 import { bossName } from './bossNames';
 import { useLocale } from "../i18n";
 import EarthGlobe from "./EarthGlobe";
@@ -529,7 +530,7 @@ const Shop = () => {
             const id = index + 1;
             const stars = rewardProgress.bossWins[id] ?? 0;
             return <div key={id} className={`boss-sticker${stars ? " boss-sticker-earned" : ""}`} title={t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : t("Not defeated yet") })} aria-label={t("Boss {id}: {status}", { id, status: stars ? t("{stars}/3 stars", {stars}) : t("Locked") })}>
-              {stars ? <img src={`/ships/bosses/boss_${String(id).padStart(2, "0")}.webp`} alt="" loading="lazy" /> : <span aria-hidden="true">?</span>}
+              {stars ? <BossPortrait id={id} /> : <span aria-hidden="true">?</span>}
               <small>#{String(id).padStart(2, "0")} · {bossName(id)}</small>{!!stars && <b>{"★".repeat(stars)}</b>}
             </div>;
           })}</div>
