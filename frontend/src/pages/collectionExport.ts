@@ -15,7 +15,7 @@ async function artwork(card:CollectionCard):Promise<HTMLCanvasElement|HTMLImageE
 }
 export async function exportCollectionCard(card:CollectionCard,de:boolean):Promise<Blob>{
  await document.fonts.ready;
- const art=await artwork(card),canvas=document.createElement('canvas');canvas.width=1200;
+ const [art,space]=await Promise.all([artwork(card),loadImage(card.background)]),canvas=document.createElement('canvas');canvas.width=1200;
  const ctx=canvas.getContext('2d')!;
  const wrap=(text:string,width:number,size=30)=>{ctx.font=`${size}px sans-serif`;const lines:string[]=[];let line='';for(const word of text.split(/\s+/)){const next=line?line+' '+word:word;if(line&&ctx.measureText(next).width>width){lines.push(line);line=word;}else line=next;}if(line)lines.push(line);return lines;};
  const sections=[{heading:de?'SCHIFFSGESCHICHTE':'SHIP HISTORY',paragraphs:card.story},{heading:de?'AKTUELLE AUSRÜSTUNG':'CURRENT EQUIPMENT',paragraphs:card.equipment}];
@@ -25,6 +25,10 @@ export async function exportCollectionCard(card:CollectionCard,de:boolean):Promi
  canvas.height=1010+introHeight+blocks.reduce((sum,b)=>sum+90+b.lines.reduce((s,l)=>s+l.length*44+26,0),0);
  const colors=['#a9b9ca','#62e5ea','#d9acff','#f5bd62','#ff719c'];const accent=colors[Math.min(4,card.tier-1)];
  const bg=ctx.createLinearGradient(0,0,1200,canvas.height);bg.addColorStop(0,'#192c43');bg.addColorStop(.4,'#081420');bg.addColorStop(1,'#131427');ctx.fillStyle=bg;ctx.fillRect(0,0,1200,canvas.height);
+ const spaceHeight=1200*space.height/space.width;ctx.drawImage(space,0,0,1200,spaceHeight);
+ const shade=ctx.createLinearGradient(0,0,0,spaceHeight);shade.addColorStop(0,'rgba(4,10,20,.12)');shade.addColorStop(.35,'rgba(4,10,20,.3)');shade.addColorStop(.75,'rgba(4,10,20,.92)');shade.addColorStop(1,'#111525');ctx.fillStyle=shade;ctx.fillRect(0,0,1200,spaceHeight);
+ if(canvas.height>spaceHeight){ctx.fillStyle='#111525';ctx.fillRect(0,spaceHeight,1200,canvas.height-spaceHeight);}
+
  ctx.strokeStyle=accent;ctx.lineWidth=6;ctx.strokeRect(25,25,1150,canvas.height-50);ctx.globalAlpha=.35;ctx.lineWidth=1;ctx.strokeRect(40,40,1120,canvas.height-80);ctx.globalAlpha=1;
  for(let i=0;i<90;i++){ctx.fillStyle=i%3? '#d9e9f0':'#78beca';ctx.globalAlpha=.15+(i%4)*.09;ctx.beginPath();ctx.arc(60+(i*131)%1080,65+(i*197)%760,1+i%2,0,Math.PI*2);ctx.fill();}ctx.globalAlpha=1;
  let y=100;ctx.fillStyle=accent;ctx.font='bold 25px sans-serif';ctx.fillText('CRYPTOID EVOLUTION · '+card.serial,100,y);y+=60;

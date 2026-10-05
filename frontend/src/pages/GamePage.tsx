@@ -1,3 +1,7 @@
+import CardReveal from './CardReveal';
+import { availableShipCards, unseenShipCards, type CardReward } from './cardRevealRules';
+import { readCardReveals, acknowledgeCard } from './cardRevealMemory';
+import { primeCardSound } from './cardSound';
 import { advanceBossCore } from './bossCore';
 import { bossName } from './bossNames';
 import { collectBossHeart, BOSS_HEART_POSITION, type BossRewardState } from './bossReward';
@@ -25,7 +29,7 @@ import Starfield from "./Starfield";
 import { BONUS_FLIGHT_MS, BONUS_TARGET_COUNT, bonusEntryGap, bonusHeartReward, bonusPosition, bonusReward, bonusShowcaseShip, type BonusTarget } from "./bonusChallenge";
 import { appendSectionBlock, bonusChainReward, BLOCKS_PER_CHAIN } from "./networkChain";
 import { advanceAfterClear, BOSS_ENTRY_MS, BOSS_WARNING_MS, damageSectorBoss, bossVulnerable, createSectorBoss, moveSectorBoss, type SectorBoss } from "./sectorBoss";
-import { enemyAppearance, selectedShip, shardBalance, ADMIN_MODE_KEY, ADMIN_TEST_CONFIG_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
+import { playerSkins, enemyAppearance, selectedShip, shardBalance, ADMIN_MODE_KEY, ADMIN_TEST_CONFIG_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
 import { useShipVisualOffset } from "./paintedShip";
 import { ownedShipStage, projectileGuardForStage, projectileImpact, shipEvolutionAsset, stageWeaponLevel, type ShipStage } from "./shipEvolution";
@@ -389,6 +393,22 @@ const GamePage = () => {
   const playerMotionRef = useRef(idleShipMotion());
   const playerMuzzleRef = useRef(0);
   const bossMuzzleRef = useRef(0);
+  const [rewardCards,setRewardCards]=useState<CardReward[]>([]);
+  const rewardCardsRef=useRef<CardReward[]>([]);
+  const cardOwnerRef=useRef('guest');
+  const showRewardCards=(cards:CardReward[])=>{
+    if(!cards.length)return;
+    rewardCardsRef.current=[...rewardCardsRef.current,...cards];
+    setRewardCards([...rewardCardsRef.current]);
+    stateRef.current.status='paused'; keysRef.current.clear(); pointerRef.current=null; touchOriginRef.current=null;
+    setGame({...stateRef.current});
+  };
+  const continueRewardCard=()=>{
+    const card=rewardCardsRef.current[0];if(card&&!card.boss)acknowledgeCard(cardOwnerRef.current,card.key);
+    rewardCardsRef.current=rewardCardsRef.current.slice(1);setRewardCards([...rewardCardsRef.current]);
+    keysRef.current.clear();pointerRef.current=null;touchOriginRef.current=null;
+    if(!rewardCardsRef.current.length){stateRef.current.status='playing';lastFrameRef.current=performance.now();setGame({...stateRef.current});}
+  };
   const [game, setGame] = useState<GameState>(createInitialState);
   const [startError, setStartError] = useState("");
   const [audioNeedsTap, setAudioNeedsTap] = useState(false);
@@ -520,6 +540,7 @@ const GamePage = () => {
       if (!adminRequested) {
         if (!saveQueueReadyRef.current) {
           const me = await axiosClient.get<{ user: { uid: string } }>("/user/me");
+          cardOwnerRef.current=me.data.user.uid;
           saveQueueRef.current ??= createSaveQueue(me.data.user.uid);
           try { await saveQueueRef.current.recover(); }
           catch {
@@ -564,6 +585,11 @@ const GamePage = () => {
         }
       }
       const selected = !adminRunRef.current && data.profile ? accountSelection(data.profile) : shipSelection;
+      if(!adminRunRef.current&&data.profile){
+        const cards=unseenShipCards(availableShipCards(playerSkins,data.profile.fleet,data.profile.usedShipSkins||[],data.ownedShipUpgrades||[]),readCardReveals(cardOwnerRef.current));
+        rewardCardsRef.current=cards;setRewardCards(cards);
+      }
+
       setShipSelection(selected);
       shipStageRef.current = adminRunRef.current ? data.shipStage ?? 1 : ownedShipStage(selected.skin.sprite, data.ownedShipUpgrades);
       setShipStage(shipStageRef.current);
@@ -613,7 +639,7 @@ const GamePage = () => {
       startRequestRef.current = false;
       return;
     }
-    stateRef.current.status = "playing";
+    stateRef.current.status = rewardCardsRef.current.length ? "paused" : "playing";
     setGame({ ...stateRef.current });
   };
   useEffect(() => { if (stateRef.current.status === "loading") void activateLoadout(); }, []);
@@ -843,7 +869,7 @@ const GamePage = () => {
   useEffect(() => {
     const controls = new Set(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "KeyA", "KeyD", "KeyW", "KeyS"]);
     const keyDown = (event: KeyboardEvent) => {
-      if (!controls.has(event.code) || (event.target as HTMLElement)?.closest("input, textarea, select")) return;
+      if (rewardCardsRef.current.length || !controls.has(event.code) || (event.target as HTMLElement)?.closest("input, textarea, select")) return;
       event.preventDefault();
       void startEffects();
       keysRef.current.add(event.code);
@@ -989,6 +1015,12 @@ const GamePage = () => {
               const rank = rewardRank(next);
               return { progress: next, notice: `Boss stickers · ${bossId}/50 · ${result.stars}★${rank !== previousRank ? ` · New rank · ${rank}` : ''}` };
             }, { kind: 'boss', level: bossId, stage: state.sector });
+            if(!adminRunRef.current){
+              showRewardCards([{key:`boss-${bossId}`,boss:bossId,stars:rewardProgressRef.current.bossWins[bossId]||1}]);
+              animationRef.current=window.requestAnimationFrame(loop);
+              return;
+            }
+
           }
           if (clearFinished && (state.encounter !== 'boss-clear' || state.bossHeartCollected)) {
             if (state.encounter === "bonus" && state.sector === MAX_DIFFICULTY_LEVEL) {
@@ -1726,19 +1758,20 @@ const GamePage = () => {
     }}>{t("Retry save")}</button>}</p>;
 
   return (
-    <main className="game-shell" data-effects-paused={game.status !== "playing"} onPointerDownCapture={event => { retryAudio(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
+    <main className="game-shell" data-effects-paused={game.status !== "playing"} onPointerDownCapture={event => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
+      {rewardCards[0] && <CardReveal reward={rewardCards[0]} remaining={rewardCards.length} onContinue={continueRewardCard}/>}
       <div ref={fieldRef} className="game-field" onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()} onPointerDown={startDrag} onPointerMove={event => { if (pointerRef.current === event.pointerId) positionFromPointer(event); }} onPointerUp={event => { if (pointerRef.current === event.pointerId) { pointerRef.current = null; touchOriginRef.current = null; } }} onPointerCancel={event => { if (pointerRef.current === event.pointerId) { pointerRef.current = null; touchOriginRef.current = null; } }}>
         <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} showNebula={game.encounter === "boss-fight"} />
         <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
         <button className="wide-fullscreen-control game-fullscreen-control" type="button" onClick={requestGameFullscreen} aria-label={t("Full screen")} title={t("Full screen")}>⛶</button>
         <header ref={hudRef} className="game-hud">
-          <div className="hud-actions"><button className="game-control home-control" type="button" disabled={weaponMenuOpen || weaponCountdown !== null || weaponShopOpen || game.status === "loading" || game.status === "destroying"} onClick={() => { if (game.status === "game-over" || game.status === "victory") { goHome(); return; } homePromptWasPlayingRef.current = stateRef.current.status === "playing"; stateRef.current.status = "paused";
+          <div className="hud-actions"><button className="game-control home-control" type="button" disabled={rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || weaponShopOpen || game.status === "loading" || game.status === "destroying"} onClick={() => { if (game.status === "game-over" || game.status === "victory") { goHome(); return; } homePromptWasPlayingRef.current = stateRef.current.status === "playing"; stateRef.current.status = "paused";
         void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); setHomePrompt(true); }} aria-label={t("Go home")}><CockpitIcon kind="home" /></button></div>
           <div className={`hud-stat hearts-stat${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " hearts-stat-hit" : ""}`}><span className="hud-heart-label" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.2 3.4 13.1C-1.1 8.8 5.3 1.7 10.2 5.9L12 7.5l1.8-1.6c4.9-4.2 11.3 2.9 6.8 7.2L12 21.2Z" /></svg></span><strong className="hearts" role="status" aria-live="polite" aria-label={lives(game.hearts)}>/{game.hearts}</strong></div>
           <div className="hud-stat game-level-hud" aria-label={`${t("Game level")} ${levelLabel}`}><span>{t("Level")}</span><strong>{levelLabel}</strong></div>
           <div className="hud-stat score-hud" aria-label={`${t("Shards")} ${game.shards}, ${t("Score")} ${game.score}`}><span className="shard-line"><b>◆ {game.shards}</b><small>{t("Shards")}</small></span><span className="score-line"><b>{game.score}</b><small>{t("Score")}</small></span></div>
           <div className="hud-stat round-hud chain-hud" aria-label={`${t("Block")} ${game.chainBlocks}/${BLOCKS_PER_CHAIN}`}><span>{t("Block")}</span><strong>{game.chainBlocks}<small>/{BLOCKS_PER_CHAIN}</small></strong></div>
-          <button className="game-control pause-control" type="button" disabled={weaponMenuOpen || weaponCountdown !== null || weaponShopOpen || pauseLeaving || game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { if (pauseLeaveRef.current) return; const resuming = game.status === "paused"; stateRef.current.status = resuming ? "playing" : "paused"; if (!resuming) void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); if (resuming) window.setTimeout(retryAudio, 0); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
+          <button className="game-control pause-control" type="button" disabled={rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || weaponShopOpen || pauseLeaving || game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { if (pauseLeaveRef.current) return; const resuming = game.status === "paused"; stateRef.current.status = resuming ? "playing" : "paused"; if (!resuming) void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); if (resuming) window.setTimeout(retryAudio, 0); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
         </header>
         <div className="game-label">{adminRunRef.current && <strong>{t("Admin center")} · </strong>}{t("LEVEL")} {levelLabel} <span>· <strong className="game-region-name">{sectorName(game.sector)}</strong> · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/${BLOCKS_PER_CHAIN}` : game.encounter === "bonus" ? t("BONUS CHALLENGE") : t("CORE WARDEN")}</span></div>
         {game.encounter === "normal" && <span className="flight-indicator" style={{ top: visibleTopRef.current + 25 }}>{t("Group {current}/{total}", { current: flightRef.current + 1, total: blockFlights(game.sector, rulesVersionRef.current).length })}</span>}
@@ -1863,7 +1896,7 @@ const GamePage = () => {
           </div>
         </div>
         {weaponCountdown !== null && <div className="game-overlay weapon-resume-countdown" role="status" aria-live="polite"><strong>{weaponCountdown}</strong></div>}
-        {game.status === "paused" && !weaponMenuOpen && weaponCountdown === null && <div className="game-overlay pause-settings-overlay" role="dialog" aria-modal="true" aria-labelledby={weaponShopOpen ? "mission-weapon-shop-title" : "pause-settings-title"}><div className="game-modal pause-settings-modal">
+        {game.status === "paused" && !rewardCards.length && !weaponMenuOpen && weaponCountdown === null && <div className="game-overlay pause-settings-overlay" role="dialog" aria-modal="true" aria-labelledby={weaponShopOpen ? "mission-weapon-shop-title" : "pause-settings-title"}><div className="game-modal pause-settings-modal">
           {weaponShopOpen ? <MissionWeaponShop authenticated={accountRun} admin={adminRunRef.current} timers={game.weaponTimers} onClose={() => setWeaponShopOpen(false)} onInventory={async (_owned, stock) => {
             const state = stateRef.current;
             if (state.status !== 'paused') return;
@@ -1891,3 +1924,4 @@ const GamePage = () => {
 
 export { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY };
 export default GamePage;
+

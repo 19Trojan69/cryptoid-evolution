@@ -1,3 +1,7 @@
+import CardReveal from './CardReveal';
+import { availableShipCards, unseenShipCards, type CardReward } from './cardRevealRules';
+import { acknowledgeCard, readCardReveals } from './cardRevealMemory';
+import { primeCardSound } from './cardSound';
 import Collection from "./Collection";
 import SystemSettings, { applySavedDisplaySettings, type SettingsSection } from "./SystemSettings";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -85,6 +89,7 @@ const Shop = () => {
   const closeQuickMenu = useCallback(() => setQuickGroup(null), []);
   const [shopView, setShopView] = useState<"hangar" | "shop" | "weapons" | "powers" | "progress" | "rewards" | "leaders" | null>(null);
   const [termsOpen, setTermsOpen] = useState(false);
+  const [newCards,setNewCards]=useState<CardReward[]>([]);
   const [collectionOpen, setCollectionOpen] = useState(false);
   const [selectedBoss, setSelectedBoss] = useState<number | null>(null);
   const returnToMenu = () => { setShopView(null); setSystemMenuOpen(false); setActivePanel(null); setTermsOpen(false); setQuickTarget(null); setQuickGroup("mission"); };
@@ -245,6 +250,9 @@ const Shop = () => {
       const save = await mutateAccountInventory(account, command);
       setAccountState({ owner: user.uid, save });
       setSelected(accountSelection(save));
+      const acquired=availableShipCards(playerSkins,save.fleet,save.usedShipSkins||[],[]).filter(card=>card.ship&&!fleetCount(account.fleet as ShipFleet,card.ship as typeof playerSkins[number]['id']));
+      if(acquired.length)setNewCards(unseenShipCards(acquired,readCardReveals(user.uid)));
+
       setHangarMessage("Saved to your Pi account.");
     } catch {
       setAccountError("Not confirmed. Refresh inventory. Confirmed purchases will not be repeated.");
@@ -296,6 +304,7 @@ const Shop = () => {
     else setHangarMessage("");
   };
   const enterGame = () => {
+    primeCardSound();
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     if (adminMode) sessionStorage.setItem(ADMIN_START_SECTOR_KEY, String(Number.isInteger(startSector) ? Math.min(MAX_DIFFICULTY_LEVEL, Math.max(1, startSector)) : 1));
     else sessionStorage.removeItem(ADMIN_START_SECTOR_KEY);
@@ -307,6 +316,7 @@ const Shop = () => {
   };
 
   const purchasePreview = () => {
+    primeCardSound();
     if (adminMode) return;
     if (previewFocusStage !== 1) return;
     if (!testnetStandardHullAvailable(previewSkin.id)) { setHangarMessage("MAINNET READY"); return; }
@@ -322,6 +332,8 @@ const Shop = () => {
     localStorage.setItem(SHIP_FLEET_KEY, JSON.stringify(purchase.fleet));
     localStorage.setItem(SHARD_BALANCE_KEY, String(purchase.balance));
     setFleet(purchase.fleet);
+    if(!fleetCount(currentFleet,previewSkin.id))setNewCards(unseenShipCards([{key:`${previewSkin.id}-1`,ship:previewSkin.id,stage:1}],readCardReveals('guest')));
+
     setShards(purchase.balance);
     setHangarMessage({ ship: previewSkin.name, color: previewColor.name, status: "Owned", count: fleetCount(purchase.fleet, previewSkin.id, previewColor.id) });
   };
@@ -369,6 +381,12 @@ const Shop = () => {
     try {
       const { data } = await axiosClient.get<Inventory>("/hangar/inventory");
       if (!Array.isArray(data.ownedWeapons) || !Array.isArray(data.ownedArmor) || !Array.isArray(data.consumables)) throw new Error("Invalid inventory");
+
+      if(user&&!adminMode&&account){
+        const before=availableShipCards(playerSkins,account.fleet,account.usedShipSkins||[],inventory?.ownedShipUpgrades||[]).map(c=>c.key);
+        const acquired=availableShipCards(playerSkins,account.fleet,account.usedShipSkins||[],data.ownedShipUpgrades||[]).filter(c=>!before.includes(c.key));
+        if(acquired.length)setNewCards(unseenShipCards(acquired,readCardReveals(user.uid)));
+      }
       setInventory(data);
     }
     catch { setLoadoutMessage('Connect your Pi account to see your saved loadout.'); }
@@ -437,9 +455,10 @@ const Shop = () => {
     else if (action === "terms") setTermsOpen(true);
   };
 
-  const homePaused = Boolean(collectionOpen || shopView || systemMenuOpen || activePanel || termsOpen || quickGroup || showSignIn);
+  const homePaused = Boolean(newCards.length || collectionOpen || shopView || systemMenuOpen || activePanel || termsOpen || quickGroup || showSignIn);
   return (
-    <main className="app-shell landing-shell" data-home-paused={homePaused}>
+    <main className="app-shell landing-shell" data-home-paused={homePaused} onPointerDownCapture={primeCardSound}>
+      {newCards[0] && <CardReveal key={user?.uid ?? "guest"} reward={newCards[0]} remaining={newCards.length} onContinue={()=>{acknowledgeCard(user?.uid??"guest",newCards[0].key);setNewCards(cards=>cards.slice(1));}}/>}
       {collectionOpen && <Collection key={user?.uid ?? "guest"} uid={user?.uid} onClose={() => setCollectionOpen(false)} />}
       <Header
         user={user}
