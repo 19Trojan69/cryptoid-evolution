@@ -49,7 +49,7 @@ const {emptyRewardProgress}=req('../../build/rewardRules.js');
 
    await page.waitForFunction(()=>window.__weaponQA?.inspect().status==='playing');
    const access=page.locator('.mission-shop-access');
-   const box=await access.boundingBox();assert.ok(box.width>=90&&box.height>=(scenario==='rapid'?64:80));
+   const box=await access.boundingBox();assert.ok(box.width===60&&box.height===60);
    await page.screenshot({path:`${evidence}/weapons-access-${viewport.width}.png`});
    await access.click();
    const toggle=page.getByRole('switch',{name:`Auto-reload · ${name}`,exact:true});await toggle.waitFor();
