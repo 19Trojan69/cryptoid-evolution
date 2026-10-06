@@ -20,7 +20,7 @@ import BlockchainProgress from "./BlockchainProgress";
 import { gameHaptics } from "./gameHaptics";
 import { advanceShipMotion, idleShipMotion, engineFlamePercent, explosionDiameter, fragmentFlight, hullIllumination, type ShipMotion } from "./shipRealism";
 import { useLocale } from "../i18n";
-import { memo, useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
+import { memo, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
 import { entryPatternForSector, entryPosition, entryStartX, type EntryPattern } from "./entryPatterns";
@@ -1931,7 +1931,7 @@ const GamePage = () => {
 
                 <button type="button" className="edge-action edge-action-weapon weapon-cycle mission-shop-access" disabled={game.status !== "playing"} onClick={openWeaponSelection} aria-label={`${t("Shop & weapons")} · ${t("Active weapon")}: ${weaponNames[stageWeaponLevel(shipStage, game.weaponLevel)]}, ${t("Weapon level")} ${stageWeaponLevel(shipStage, game.weaponLevel)} / 5. ${t("Tap to choose a weapon and pause. Resume follows a 3–2–1 countdown.")}${shipStage > 1 ? ` ${t("Projectile hits left")}: ${game.projectileGuard}` : ""}`}>
                   <span className="mission-access-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="currentColor"><path d="M7 10 9 16 7 29 5 16ZM16 1 18.5 9 16 29 13.5 9ZM25 10 27 16 25 29 23 16Z" /></svg></span>
-                  <span className="mission-access-label">{t('Weapons')}</span>
+                  <MissionAccessLabel text={t('Weapons')} />
                 </button>
                 <span className="mission-active-weapon">{weaponNames[stageWeaponLevel(shipStage, game.weaponLevel)]}{game.weaponSource !== 'standard' && <> · {Math.ceil((game.weaponSource === 'paid' ? game.paidWeaponMs : game.pickupWeaponMs) / 1000)}s</>}</span>
                 {game.weaponSource !== 'standard' && <progress className="mission-charge-progress" aria-label={t('Remaining time')} max={game.weaponSource === 'paid' ? PURCHASED_WEAPON_DURATION_MS : PICKUP_WEAPON_DURATION_MS} value={game.weaponSource === 'paid' ? game.paidWeaponMs : game.pickupWeaponMs} />}
@@ -1981,3 +1981,30 @@ const GamePage = () => {
 
 export { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY };
 export default GamePage;
+
+// Fit translated labels to the fixed touch target without wrapping or clipping.
+function MissionAccessLabel({ text }: { text: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  useLayoutEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    let disposed = false;
+    const fit = () => {
+      if (disposed) return;
+      element.style.fontSize = '11px';
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      const textWidth = range.getBoundingClientRect().width;
+      const available = element.clientWidth;
+      if (available > 0 && textWidth > available) {
+        element.style.fontSize = `${Math.floor(11 * available / textWidth * 100) / 100}px`;
+      }
+    };
+    fit();
+    const observer = new ResizeObserver(fit);
+    observer.observe(element);
+    void document.fonts.ready.then(fit);
+    return () => { disposed = true; observer.disconnect(); };
+  }, [text]);
+  return <span ref={ref} className="mission-access-label">{text}</span>;
+}
