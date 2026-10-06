@@ -56,3 +56,33 @@
 .mission-reload-setting button[role="switch"] { flex: none; clip-path: none; }
 .mission-reload-setting button > span { color: inherit; font: 600 12px/1.3 system-ui,sans-serif; }
 .mission-reload-setting button > .mission-switch-state { font-size: 10px; }
+
+/* Shared card rows keep previews, controls and purchase areas aligned. */
+.mission-weapon-offers { align-items: stretch; }
+.mission-weapon-details h3 { min-height: 2.6em; }
+.mission-weapon-details .mission-stock { min-height: 30px; }
+.mission-weapon-details .mission-duration { min-height: 2.8em; }
+.mission-timers { min-height: 0; }
+.mission-reload-setting, .mission-weapon-details .mission-reload-base { box-sizing: border-box; min-height: 64px; margin: 0; padding: 8px 0 4px; }
+.mission-weapon-details .mission-reload-base { display: flex; align-items: center; border-top: 1px solid #a2c4d52b; }
+@supports (grid-template-rows: subgrid) {
+  .mission-weapon-offers { row-gap: 0; }
+  .mission-weapon-offers .mission-weapon-card { display: grid; grid-template-rows: subgrid; grid-row: span 9; row-gap: 0; margin-bottom: 12px; }
+  .mission-weapon-offers .mission-weapon-card > .mission-weapon-details { display: grid; margin: 0; grid-template-rows: subgrid; grid-row: span 7; padding-block: 12px; gap: 5px; }
+  .mission-weapon-details > h3 { grid-row: 1; }
+  .mission-weapon-details > .mission-stock { grid-row: 2; }
+  .mission-weapon-details > .mission-duration { grid-row: 3; }
+  .mission-weapon-details > .mission-timers { grid-row: 4; }
+  .mission-weapon-details > .mission-reload-setting, .mission-weapon-details > .mission-reload-base { grid-row: 5; }
+  .mission-weapon-details > .mission-select { grid-row: 6; }
+  .mission-weapon-details > .mission-pickup-select { grid-row: 7; }
+}
+.mission-reload-setting button[role="switch"] { border-color: #b99555; background: #302b21; color: #ffe0a0; min-height: 48px; font-weight: 700; }
+.mission-switch-state i { width: 34px; height: 20px; background: #9a7038; box-shadow: inset 0 0 0 1px #ffdc9555; }
+.mission-switch-state i::after { width: 14px; height: 14px; background: #fff3d8; }
+.mission-reload-setting button[aria-checked="true"] { border-color: #65e6b0; color: #d2ffe9; background: #123e30; }
+[aria-checked="true"] .mission-switch-state i { background: #20b97d; }
+[aria-checked="true"] .mission-switch-state i::after { transform: translateX(14px); background: #effff8; }
+.mission-reload-setting button:disabled { opacity: 1; color: #a5b3c0; background: #172430; border-color: #405465; }
+.mission-reload-setting button:disabled .mission-switch-state i { background: #435666; box-shadow: none; }
+.mission-reload-setting button:disabled .mission-switch-state i::after { background: #a5b3c0; }

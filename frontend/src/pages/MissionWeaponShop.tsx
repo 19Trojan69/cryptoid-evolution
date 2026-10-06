@@ -24,12 +24,14 @@ export default function MissionWeaponShop({ autoReload = {}, onAutoReload, authe
   const [refreshing, setRefreshing] = useState(false);
   const [notice, setNotice] = useState('');
   const mounted = useRef(true);
+  const refreshVersion = useRef(0);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const inventoryCallback = useRef(onInventory);
   inventoryCallback.current = onInventory;
   const ship = selectedShip();
   const { orderProduct, isLoading, paymentDiagnostic, activeProductId, paymentStatus } = usePayments({ isAuthenticated: authenticated && !admin, onRequireAuth: () => setNotice('Connect your Pi account to see your saved loadout.') });
   const refresh = async () => {
+    const version = ++refreshVersion.current;
     setRefreshing(true);
     setReady(false);
     try {
@@ -38,18 +40,18 @@ export default function MissionWeaponShop({ autoReload = {}, onAutoReload, authe
         authenticated ? axiosClient.get<{ ownedWeapons: string[]; weaponStock?: Record<string, number> }>('/hangar/inventory') : Promise.resolve(null),
       ]);
       if (!Array.isArray(catalog.offers) || (inventory && !Array.isArray(inventory.data.ownedWeapons))) throw new Error('Invalid inventory');
-      if (!mounted.current) return;
+      if (!mounted.current || version !== refreshVersion.current) return;
       const weapons = inventory?.data.ownedWeapons ?? [];
       setOffers(catalog.offers.filter(offer => offer.kind === 'weapon'));
       setStock(inventory?.data.weaponStock ?? {});
       setReady(true);
       setNotice(authenticated ? '' : 'Connect your Pi account to see your saved loadout.');
       if (authenticated && !admin) void inventoryCallback.current(weapons, inventory?.data.weaponStock ?? {}).catch(() => {
-        if (mounted.current) setNotice('Not confirmed. Refresh inventory. Confirmed purchases will not be repeated.');
+        if (mounted.current && version === refreshVersion.current) setNotice('Not confirmed. Refresh inventory. Confirmed purchases will not be repeated.');
       });
     } catch {
-      if (mounted.current) setNotice('Not confirmed. Refresh inventory. Confirmed purchases will not be repeated.');
-    } finally { if (mounted.current) setRefreshing(false); }
+      if (mounted.current && version === refreshVersion.current) setNotice('Not confirmed. Refresh inventory. Confirmed purchases will not be repeated.');
+    } finally { if (mounted.current && version === refreshVersion.current) setRefreshing(false); }
   };
   useEffect(() => {
     mounted.current = true;
@@ -57,8 +59,8 @@ export default function MissionWeaponShop({ autoReload = {}, onAutoReload, authe
     if (modal) modal.scrollTop = 0;
     titleRef.current?.focus({ preventScroll: true });
     void refresh();
-    return () => { mounted.current = false; };
-  }, []);
+    return () => { mounted.current = false; refreshVersion.current++; };
+  }, [authenticated, admin]);
   useEffect(() => { if (initialStock) setStock(initialStock); }, [initialStock]);
   const busy = refreshing || isLoading || selectionBusy;
   const standard: Offer = { id: 'standard', kind: 'weapon', name: 'Standard', description: '', pricePi: 0, level: 1 };
@@ -91,13 +93,13 @@ export default function MissionWeaponShop({ autoReload = {}, onAutoReload, authe
           <h3><span aria-hidden="true">{['', 'Ⅰ', 'Ⅱ', 'Ⅲ', 'Ⅳ', 'Ⅴ'][level]}</span> {t(offer.name)}</h3>
           <p className="mission-stock">{level === 1 ? t('Unlimited') : <>{t('Charges')}: <b>{authenticated && !ready ? '…' : count}</b></>}</p>
           <p className="mission-duration">{level > 1 ? t('1 minute per charge') : t('Base')}</p>
-          {timer > 0 && <p className="mission-time">{t('Remaining time')}: {Math.ceil(timer / 1000)} s</p>}
+          <div className="mission-timers">{timer > 0 && <p className="mission-time">{t('Remaining time')}: {Math.ceil(timer / 1000)} s</p>}
           {pickup && <p className="mission-time">{t('Weapon pickup')}: {Math.ceil(pickupMs / 1000)} s</p>}
+          </div>
           {level > 1 && onAutoReload && <div className="mission-reload-setting">
             <button type="button" role="switch" aria-checked={autoReload[level] === true} aria-label={`${t('Auto-reload')} · ${t(offer.name)}`} disabled={blocked || locked || !authenticated || admin || !ready} onClick={() => onAutoReload(level, !autoReload[level])}>
               <span>{t('Auto-reload')}</span><span className="mission-switch-state">{t(autoReload[level] ? 'On' : 'Off')}<i aria-hidden="true" /></span>
             </button>
-            {locked && <small>{t('Available only as a weapon pickup.')}</small>}
           </div>}
           {level === 1 && <p className="mission-reload-base">{t('No reload required')}</p>}
           {onSelect && <button type="button" className="mission-select" aria-pressed={selected} disabled={!available || blocked || (!usablePaid && !pickup) || (level > 1 && !ready && !admin && !pickup && timer <= 0)} onClick={() => { if (selected) return; if (!usablePaid && pickup) onPickup?.(); else onSelect(level); }}>{selected ? t('Active weapon') : available ? t('Select') : t('Not in stock')}</button>}

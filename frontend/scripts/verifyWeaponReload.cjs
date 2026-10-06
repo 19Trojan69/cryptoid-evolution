@@ -9,7 +9,7 @@ const {emptyRewardProgress}=req('../../build/rewardRules.js');
 (async()=>{
  const {createServer}=await import(path.join(repo,'frontend/node_modules/vite/dist/node/index.js'));
  const hooks=`(window as any).__weaponQA={inspect:()=>stateRef.current,expire:()=>{const state=stateRef.current;state.phase='ATTACK_CYCLE';state.encounter='boss-fight';state.weaponTimers[state.paidWeaponLevel]=1;state.paidWeaponMs=1;setGame({...state});}};`;
- const server=await createServer({root:path.join(repo,'frontend'),cacheDir:path.join(repo,'frontend/node_modules/.vite-card-baseline'),logLevel:'error',define:{'import.meta.env.VITE_BACKEND_URL':JSON.stringify('/api')},server:{host:'127.0.0.1',port:0,hmr:false},plugins:[{name:'reward-qa',enforce:'pre',transform(code,id){
+ const server=await createServer({root:path.join(repo,'frontend'),cacheDir:path.join(repo,'frontend/node_modules/.vite-card-baseline'),logLevel:'error',define:{'import.meta.env.VITE_BACKEND_URL':JSON.stringify('/api')},server:{host:'127.0.0.1',port:0,hmr:false},plugins:[{name:'reward-qa',enforce:'pre',transformIndexHtml:{order:'post',handler(html){return html.replace(/backendURL:\s*"[^"]*"/,'backendURL: "/api"');}},transform(code,id){
   if(id.endsWith('/shipFleet.ts'))return code.replace(/export const shipSaveNetwork = [^;]+;/, 'export const shipSaveNetwork: ShipSaveNetwork = \"testnet\";');
   if(id.endsWith('/GamePage.tsx'))return code.replace('  const levelLabel =',hooks+'\n  const levelLabel =');
  }}]});
@@ -26,7 +26,7 @@ const {emptyRewardProgress}=req('../../build/rewardRules.js');
    h.docs[0].rewardEventKeys={testnet:[]};for(let s=1;s<stage;s++)if(s%10){h.docs[0].rewardEventKeys.testnet.push('block:'+s);if(s%10===9)h.docs[0].rewardEventKeys.testnet.push('chain:'+Math.ceil(s/10));}else h.docs[0].rewardEventKeys.testnet.push('boss:'+s/10,'bonus:'+s/10);
    const viewport={width:{success:390,lost:1440,off:320,empty:768,rapid:844}[scenario],height:scenario==='rapid'?390:900};
    const context=await browser.newContext({viewport,locale:'en-US'});
-   await context.addInitScript(()=>{window.Pi={init(){}};localStorage.setItem('cryptoid_pi_session','1');localStorage.setItem('cryptoid_language','en');localStorage.setItem('cryptoid_home_music','off');});
+   await context.addInitScript(scenario=>{window.Pi={init(){},getPiHostAppInfo:async()=>({hostApp:'pi-browser'}),authenticate:async()=>({accessToken:'isolated-qa-token',user:{uid:'pilot-a',username:'QA',roles:[]}})};if(scenario!=='success')localStorage.setItem('cryptoid_pi_session','1');localStorage.setItem('cryptoid_language','en');localStorage.setItem('cryptoid_home_music','off');},scenario);
    h.orders.push({user:'pilot-a',paid:true,product_id:product,pi_payment_id:'reload-fixture',quantity:scenario==='empty'?1:scenario==='lost'?2:3,weapon_model:2,payment_network:'Pi Testnet'});
    const apiErrors=[],activationIds=[];let loseReply=scenario==='lost';
    await context.route('**/*',async route=>{

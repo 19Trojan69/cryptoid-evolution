@@ -6,27 +6,30 @@ import { createPiOAuthState, PI_OAUTH_CLIENT_ID, PI_OAUTH_ORIGIN, PI_OAUTH_REDIR
 import axios from "axios";
 
 const detectPiBrowser = async () => {
-  try {
-    if (typeof window.Pi?.getPiHostAppInfo === "function") {
-      const timeout = new Promise<null>((resolve) => window.setTimeout(() => resolve(null), 1500));
-      const hostInfo = await Promise.race([window.Pi.getPiHostAppInfo(), timeout]);
-      if (hostInfo?.hostApp === "pi-browser") return true;
-    }
-  } catch (err) {
-    console.warn("Could not query Pi Browser host info", err);
+  const ua = navigator.userAgent.toLowerCase();
+  // Native identification should not wait for a potentially slow SDK host query.
+  if (ua.includes('pibrowser') || ua.includes('pi-browser')) return true;
+  // The SDK/host bridge can arrive after the React app on mobile browsers.
+  for (let attempt = 0; !window.Pi && attempt < 10; attempt++) {
+    await new Promise(resolve => window.setTimeout(resolve, 200));
   }
-
-  const userAgent = navigator.userAgent.toLowerCase();
-  return (
-    userAgent.includes("pibrowser") ||
-    userAgent.includes("pi-browser")
-  );
+  if (typeof window.Pi?.getPiHostAppInfo !== 'function') return false;
+  let timer: number | undefined;
+  try {
+    const hostInfo = await Promise.race([
+      window.Pi.getPiHostAppInfo(),
+      new Promise<null>(resolve => { timer = window.setTimeout(() => resolve(null), 5000); }),
+    ]);
+    return hostInfo?.hostApp === 'pi-browser';
+  } catch { return false; }
+  finally { window.clearTimeout(timer); }
 };
 
 export const useAuth = () => {
   const pendingPayments = useRef<PaymentDTO[]>([]);
   const signingIn = useRef(false);
   const autoAttempted = useRef(false);
+  const confirmedPiBrowser = useRef(false);
   const [user, setUser] = useState<User | null>(null);
   const [canAdmin, setCanAdmin] = useState(false);
   const [adminMode, setAdminMode] = useState(false);
@@ -91,12 +94,16 @@ export const useAuth = () => {
     setIsLoading(true);
     setAuthError("");
     try {
-      const isPiBrowser = await detectPiBrowser();
+      const isPiBrowser = confirmedPiBrowser.current || await detectPiBrowser();
       if (window.location.pathname === "/admin") sessionStorage.setItem("cryptoid_pi_return_to", "/admin");
 
       // Pi Apps running inside Pi Browser must use the Browser SDK authentication
       // flow. Pi.signIn is the separate OAuth flow intended for ordinary browsers.
       if (isPiBrowser) {
+        for (let attempt = 0; typeof window.Pi?.authenticate !== 'function' && attempt < 25; attempt++) {
+          await new Promise(resolve => window.setTimeout(resolve, 200));
+        }
+        if (typeof window.Pi?.authenticate !== 'function') throw new Error('Pi SDK unavailable');
         const authResult = await window.Pi.authenticate(
           ["username", "payments", "wallet_address"],
           onIncompletePaymentFound,
@@ -110,7 +117,7 @@ export const useAuth = () => {
         return;
       }
 
-      if (typeof window.Pi.signIn === "function") {
+      if (typeof window.Pi?.signIn === "function") {
         const state = createPiOAuthState();
         sessionStorage.setItem(PI_OAUTH_STATE_KEY, state);
         window.Pi.signIn({
@@ -157,7 +164,7 @@ export const useAuth = () => {
         const inPiBrowser = await detectPiBrowser();
         if (!active || autoAttempted.current || sessionStorage.getItem("cryptoid_pi_auto_signed_out")) return;
         autoAttempted.current = true;
-        if (inPiBrowser) await signIn();
+        if (inPiBrowser) { confirmedPiBrowser.current = true; await signIn(); }
       } finally {
         if (active) setAuthReady(true);
       }

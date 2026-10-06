@@ -1,3 +1,4 @@
+import { useAuth } from '../hooks/useAuth';
 import { autoReloadKey, parseAutoReload, shouldAutoReload, type AutoReloadPreferences } from './weaponAutoReload';
 import { shipSaveNetwork } from './shipFleet';
 import { isTestnetWeaponPurchaseEnabled } from '../../../backend/src/paymentPolicy';
@@ -1980,7 +1981,21 @@ const GamePage = () => {
 };
 
 export { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY };
-export default GamePage;
+function GameEntry() {
+  const { authReady, isLoading, authError, signIn } = useAuth();
+  const { t } = useLocale();
+  // Decide guest/account ownership only after authentication has settled.
+  // Once mounted, the mission retains its original owner until it is left.
+  if (authReady && !isLoading && !authError) return <GamePage />;
+  return <div className="game-overlay"><div className="game-modal">
+    <p role="status">{t(!authReady || isLoading ? 'Signing in…' : authError)}</p>
+    {authReady && !isLoading && <div className="modal-actions">
+      <button className="button button-primary" onClick={() => { void signIn(); }}>{t('Retry')}</button>
+      <button className="button button-secondary" onClick={() => { window.location.assign('/'); }}>{t('Home')}</button>
+    </div>}
+  </div></div>;
+}
+export default GameEntry;
 
 // Fit translated labels to the fixed touch target without wrapping or clipping.
 function MissionAccessLabel({ text }: { text: string }) {
