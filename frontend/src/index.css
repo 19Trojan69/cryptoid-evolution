@@ -2671,7 +2671,7 @@ html[data-motion="reduced"] .blockchain-node.active .blockchain-cube-rotor { ani
 .touch-controls .weapon-slot-main { width: 68px; height: auto; gap: 4px; }
 .touch-controls .edge-action.mission-shop-access { width: 60px; height: 60px; min-height: 60px; padding: 5px 3px; gap: 2px; border-radius: 13px; border: 1px solid #e7c983; background: linear-gradient(150deg,#314351f5,#132635fa); color: #ffe5a6; box-shadow: inset 0 1px #fff4,0 3px 12px #0007; }
 .mission-shop-access .mission-access-icon { display: block; width: 28px; height: 28px; flex: none; }
-.mission-access-icon svg { display: block; width: 100%; height: 100%; }
+.mission-access-icon svg { display: block; width: 100%; height: 100%; color: #b9f5ff; filter: drop-shadow(0 0 2px #34cfff) drop-shadow(0 0 4px #149edd); }
 .mission-shop-access .mission-access-label { display: block; max-width: 52px; font: 700 11px/1.2 system-ui,sans-serif; text-align: center; white-space: normal; overflow-wrap: anywhere; }
 .mission-active-weapon { max-width: 68px; padding: 3px 7px; border-radius: 6px; background: #061624e8; color: #e3edf5; font: 600 11px/1.25 system-ui,sans-serif; text-align: center; font-variant-numeric: tabular-nums; }
 .mission-charge-progress { appearance: none; width: 56px; height: 4px; border: 0; border-radius: 3px; overflow: hidden; background: #183548; }
