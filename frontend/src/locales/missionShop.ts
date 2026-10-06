@@ -170,3 +170,106 @@ const selectionRows: Record<string, string[]> = {
   ]
 };
 for (const [locale, row] of Object.entries(selectionRows)) Object.assign(missionShopTranslations[locale], Object.fromEntries(selectionKeys.map((key, i) => [key, row[i]])));
+
+const reloadKeys = ["Auto-reload", "Auto-reload uses owned charges only. No automatic purchases.", "No reload required", "Reloading weapon…"];
+const reloadRows: Record<string, string[]> = {
+  "de": [
+    "Auto-Reload",
+    "Auto-Reload nutzt nur vorhandene Ladungen. Keine automatischen Käufe.",
+    "Kein Nachladen nötig",
+    "Waffe wird nachgeladen…"
+  ],
+  "es": [
+    "Recarga automática",
+    "La recarga automática solo usa cargas disponibles. Sin compras automáticas.",
+    "No necesita recarga",
+    "Recargando arma…"
+  ],
+  "fr": [
+    "Recharge auto",
+    "La recharge auto utilise uniquement les charges possédées. Aucun achat automatique.",
+    "Aucune recharge nécessaire",
+    "Recharge de l’arme…"
+  ],
+  "pt": [
+    "Recarga automática",
+    "A recarga automática só usa cargas disponíveis. Sem compras automáticas.",
+    "Não requer recarga",
+    "Recarregando arma…"
+  ],
+  "it": [
+    "Ricarica automatica",
+    "La ricarica automatica usa solo cariche possedute. Nessun acquisto automatico.",
+    "Nessuna ricarica necessaria",
+    "Ricarica arma…"
+  ],
+  "pl": [
+    "Autoładowanie",
+    "Autoładowanie zużywa tylko posiadane ładunki. Bez automatycznych zakupów.",
+    "Przeładowanie zbędne",
+    "Przeładowywanie broni…"
+  ],
+  "tr": [
+    "Otomatik doldurma",
+    "Otomatik doldurma yalnızca mevcut yükleri kullanır. Otomatik satın alma yapılmaz.",
+    "Doldurma gerekmiyor",
+    "Silah dolduruluyor…"
+  ],
+  "ru": [
+    "Автоперезарядка",
+    "Автоперезарядка использует только имеющиеся заряды. Без автоматических покупок.",
+    "Перезарядка не нужна",
+    "Перезарядка оружия…"
+  ],
+  "hr": [
+    "Automatsko punjenje",
+    "Automatsko punjenje koristi samo postojeća punjenja. Bez automatske kupnje.",
+    "Punjenje nije potrebno",
+    "Punjenje oružja…"
+  ],
+  "cs": [
+    "Automatické nabíjení",
+    "Automatické nabíjení používá pouze vlastněné náboje. Žádné automatické nákupy.",
+    "Nabíjení není potřeba",
+    "Nabíjení zbraně…"
+  ],
+  "sk": [
+    "Automatické nabíjanie",
+    "Automatické nabíjanie používa iba vlastnené náboje. Žiadne automatické nákupy.",
+    "Nabíjanie nie je potrebné",
+    "Nabíjanie zbrane…"
+  ],
+  "hu": [
+    "Automatikus újratöltés",
+    "Az automatikus újratöltés csak meglévő tölteteket használ. Nincs automatikus vásárlás.",
+    "Nem kell újratölteni",
+    "Fegyver újratöltése…"
+  ],
+  "ro": [
+    "Reîncărcare automată",
+    "Reîncărcarea automată folosește doar încărcăturile deținute. Fără cumpărări automate.",
+    "Nu necesită reîncărcare",
+    "Se reîncarcă arma…"
+  ],
+  "sr": [
+    "Аутоматско пуњење",
+    "Аутоматско пуњење користи само постојећа пуњења. Без аутоматске куповине.",
+    "Пуњење није потребно",
+    "Пуњење оружја…"
+  ],
+  "uk": [
+    "Автоперезаряджання",
+    "Автоперезаряджання використовує лише наявні заряди. Без автоматичних покупок.",
+    "Перезаряджання не потрібне",
+    "Перезаряджання зброї…"
+  ],
+  "th": [
+    "บรรจุอัตโนมัติ",
+    "บรรจุอัตโนมัติใช้เฉพาะจำนวนที่มีอยู่ ไม่มีการซื้ออัตโนมัติ",
+    "ไม่ต้องบรรจุใหม่",
+    "กำลังบรรจุอาวุธ…"
+  ]
+};
+for (const [locale, row] of Object.entries(reloadRows)) Object.assign(missionShopTranslations[locale], Object.fromEntries(reloadKeys.map((key, i) => [key, row[i]])));
+const reloadSwitchRows: Record<string, string[]> = {de:['Ein','Aus'],es:['Sí','No'],fr:['Oui','Non'],pt:['Ligado','Desligado'],it:['Sì','No'],pl:['Wł.','Wył.'],tr:['Açık','Kapalı'],ru:['Вкл.','Выкл.'],hr:['Uklj.','Isklj.'],cs:['Zap.','Vyp.'],sk:['Zap.','Vyp.'],hu:['Be','Ki'],ro:['Pornit','Oprit'],sr:['Укљ.','Искљ.'],uk:['Увімк.','Вимк.'],th:['เปิด','ปิด']};
+for (const [locale, [on, off]] of Object.entries(reloadSwitchRows)) Object.assign(missionShopTranslations[locale], {On:on, Off:off});

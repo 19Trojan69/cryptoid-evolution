@@ -40,3 +40,19 @@
 .edge-action.mission-shop-access .weapon-cycle-glyph { font-size: 23px; }
 @media (max-width: 360px) { .mission-weapon-offers { grid-template-columns: 1fr; } }
 @media (max-height: 500px) { .mission-weapon-shop > header { padding: 8px 12px; } .mission-weapon-shop header h2 { font-size: 20px; } .mission-weapon-shop > footer.mission-shop-footer { padding: 8px 12px; } }
+.mission-reload-setting { padding: 8px 0 4px; border-top: 1px solid #a2c4d52b; }
+.mission-reload-setting button[role="switch"] { position: static; display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; min-height: 44px; height: auto; margin: 0; padding: 8px; border: 1px solid #526879; border-radius: 8px; background: #172a3a; color: #d4e2eb; font: 600 12px/1.3 system-ui,sans-serif; text-align: left; }
+.mission-reload-setting button[aria-checked="true"] { border-color: #70d9bb; color: #b4f7df; background: #153d35; }
+.mission-switch-state { display: flex; align-items: center; gap: 5px; flex: none; font-size: 10px; text-transform: uppercase; }
+.mission-switch-state i { display: block; position: relative; width: 30px; height: 18px; border-radius: 10px; background: #617788; }
+.mission-switch-state i::after { content: ''; position: absolute; top: 3px; left: 3px; width: 12px; height: 12px; border-radius: 50%; background: #f4f9fc; }
+[aria-checked="true"] .mission-switch-state i { background: #369775; }
+[aria-checked="true"] .mission-switch-state i::after { transform: translateX(12px); }
+.mission-reload-setting button:disabled { opacity: .55; cursor: default; }
+.mission-reload-setting > small { display: block; padding-top: 4px; color: #aebdca; font: 11px/1.4 system-ui,sans-serif; }
+.mission-reload-explanation { padding: 10px 12px; border-radius: 8px; background: #152c3b; color: #c6dce6; font: 12px/1.5 system-ui,sans-serif; }
+.mission-weapon-details .mission-reload-base { color: #95b8c9; font-size: 12px; }
+
+.mission-reload-setting button[role="switch"] { flex: none; clip-path: none; }
+.mission-reload-setting button > span { color: inherit; font: 600 12px/1.3 system-ui,sans-serif; }
+.mission-reload-setting button > .mission-switch-state { font-size: 10px; }

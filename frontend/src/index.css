@@ -2665,3 +2665,23 @@ html[data-motion="reduced"] .blockchain-node.active .blockchain-cube-rotor { ani
   text-shadow: 0 2px 5px #020a18, 0 0 12px currentColor;
 }
 .sector-clear-message:not(.level-complete-banner)::after { content: none; }
+
+/* Mission access: readable label and icon, with weapon status outside the control. */
+.touch-controls .weapon-control-wrap { width: 104px; align-items: center; gap: 8px; }
+.touch-controls .weapon-slot-main { width: 104px; height: auto; gap: 5px; }
+.touch-controls .edge-action.mission-shop-access { width: 96px; height: auto; min-height: 86px; padding: 9px 6px; gap: 5px; border-radius: 16px; border: 1px solid #e7c983; background: linear-gradient(150deg,#314351f5,#132635fa); color: #ffe5a6; box-shadow: inset 0 1px #fff4,0 3px 12px #0007; }
+.mission-shop-access .mission-access-icon { display: block; width: 34px; height: 34px; flex: none; }
+.mission-access-icon svg { display: block; width: 100%; height: 100%; }
+.mission-shop-access .mission-access-label { display: block; max-width: 84px; font: 700 12px/1.25 system-ui,sans-serif; text-align: center; white-space: normal; overflow-wrap: anywhere; }
+.mission-active-weapon { max-width: 104px; padding: 3px 7px; border-radius: 6px; background: #061624e8; color: #e3edf5; font: 600 11px/1.25 system-ui,sans-serif; text-align: center; font-variant-numeric: tabular-nums; }
+.mission-charge-progress { appearance: none; width: 88px; height: 4px; border: 0; border-radius: 3px; overflow: hidden; background: #183548; }
+.mission-charge-progress::-webkit-progress-bar { background: #183548; }
+.mission-charge-progress::-webkit-progress-value { background: #f1ce82; }
+.mission-charge-progress::-moz-progress-bar { background: #f1ce82; }
+.touch-controls .weapon-slot-reserve { width: 64px; height: 64px; }
+.touch-controls .weapon-slot-reserve .weapon-cycle { width: 54px; height: 54px; opacity: 1; }
+.touch-controls .weapon-slot-reserve .weapon-cycle-glyph { font-size: 19px; }
+.touch-controls .weapon-slot-reserve small { font: 600 10px/1.2 system-ui,sans-serif; max-width: 50px; }
+.weapon-reloading > div { display: grid; justify-items: center; gap: 10px; padding: 24px 32px; border-radius: 16px; border: 1px solid #b0d9df70; background: #102737; color: #effbff; }
+.weapon-reloading span { font-size: 32px; color: #82e0d4; }
+@media (max-height: 500px) { .touch-controls .edge-action.mission-shop-access { min-height: 64px; padding: 5px; } .mission-shop-access .mission-access-icon { width: 26px; height: 26px; } .touch-controls .weapon-control-wrap { flex-direction: row; width: auto; align-items: end; } }
