@@ -2685,3 +2685,8 @@ html[data-motion="reduced"] .blockchain-node.active .blockchain-cube-rotor { ani
 .weapon-reloading > div { display: grid; justify-items: center; gap: 10px; padding: 24px 32px; border-radius: 16px; border: 1px solid #b0d9df70; background: #102737; color: #effbff; }
 .weapon-reloading span { font-size: 32px; color: #82e0d4; }
 @media (max-height: 500px) { .touch-controls .edge-action.mission-shop-access { min-height: 60px; padding: 5px 3px; } .mission-shop-access .mission-access-icon { width: 26px; height: 26px; } .touch-controls .weapon-control-wrap { flex-direction: row; width: auto; align-items: end; } }
+
+/* Thin, count-scaled turret meters; no labels or glow covering boss artwork. */
+.boss-turret-health { position: absolute; z-index: 7; display: block; transform: translate(-50%, -50%); border-radius: 2px; background: #071019d9; box-shadow: 0 0 0 1px #02060bb3; overflow: hidden; pointer-events: none; }
+.boss-turret-health > b { display: block; height: 100%; border-radius: inherit; transition: width 240ms ease-out, background-color 350ms linear; }
+@media (prefers-reduced-motion: reduce) { .boss-turret-health > b { transition: none; } }
