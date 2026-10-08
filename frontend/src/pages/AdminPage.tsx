@@ -32,6 +32,7 @@ const tabs = [
   ["ships", "Raumschiffe"],
   ["levels", "Levels & Bosse"],
   ["payments", "Zahlungseingänge"],
+  ["scores", "Eigene Rekorde"],
   ["usage", "Zugriffsstatistik"],
   ["checks", "Audio & Prüfung"],
 ] as const;
@@ -72,6 +73,7 @@ type AdminStatus = {
   services: { database: boolean; mainnetPayments: boolean; testnetPayments: boolean };
   game: { sections: number; levels: number; bosses: number; ships: number; stages: number };
 };
+type AdminScores = { network: "testnet" | "mainnet"; careerScore: number; bestRun: { score: number; level: number | null }; bestScore: number };
 const levelCount = campaignLevel(MAX_DIFFICULTY_LEVEL);
 const stageNames = ["Standard", "Advanced", "Elite"];
 const weaponNames = ["Single Laser", "Twin Laser", "Rapid Twin", "Triple Laser", "Plasma"];
@@ -141,6 +143,9 @@ export default function AdminPage() {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [ownScores, setOwnScores] = useState<AdminScores | null>(null);
+  const [resetName, setResetName] = useState("");
+  const [resetChecked, setResetChecked] = useState(false);
   const [reload, setReload] = useState(0);
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -185,6 +190,16 @@ export default function AdminPage() {
       active = false;
     };
   }, [allowed, view, network, status, page, reload]);
+
+  useEffect(() => {
+    if (!allowed || view !== "scores") return;
+    let active = true;
+    setOwnScores(null);
+    axiosClient.get<AdminScores>("/leaderboard/me?rules=2")
+      .then(({ data }) => { if (active) setOwnScores(data); })
+      .catch((err: unknown) => { if (active) setError(errorMessage(err)); });
+    return () => { active = false; };
+  }, [allowed, view, reload]);
 
   useEffect(
     () => () => {
@@ -241,6 +256,18 @@ export default function AdminPage() {
       sessionStorage.removeItem(ADMIN_TEST_CONFIG_KEY);
       navigate("/");
     });
+  };
+  const resetOwnScores = () => {
+    if (!ownScores || !resetChecked || resetName !== auth.user?.username || busy) return;
+    setBusy(true); setError(""); setMessage("");
+    void axiosClient.post<AdminScores>("/admin/scores/reset", { network: ownScores.network, confirmUsername: resetName, confirm: true })
+      .then(({ data }) => {
+        setOwnScores(data); setResetName(""); setResetChecked(false);
+        setMessage(`Deine Rekorde im ${data.network === "testnet" ? "Testnet" : "Mainnet"} wurden zurückgesetzt.`);
+      })
+      .catch((err: unknown) => setError(axios.isAxiosError(err) && err.response?.status === 409
+        ? "Eine Mission ist noch aktiv. Beende sie vor dem Zurücksetzen." : errorMessage(err)))
+      .finally(() => setBusy(false));
   };
   const exportPayments = () => {
     void perform(async () => {
@@ -424,6 +451,7 @@ export default function AdminPage() {
                   ["ships", "Raumschiffe testen", "Alle 20 Modelle · Standard, Advanced und Elite"],
                   ["levels", "Level oder Boss starten", "Block, Bosskampf und Bonusrunde direkt öffnen"],
                   ["payments", "Zahlungseingänge ansehen", "Echte Pi, Test-Pi, Details und CSV-Download"],
+                  ["scores", "Eigene Rekorde", "Karrierepunkte und Best Run nur für dieses Netzwerk zurücksetzen"],
                 ].map(([key, title, description]) => (
                   <button key={key} onClick={() => openView(key as AdminView)}>
                     <strong>{title}</strong>
@@ -657,6 +685,17 @@ export default function AdminPage() {
               )}
             </>
           )}
+          {view === "scores" && <section className="admin-panel admin-score-reset">
+            <h2>Eigene Rekorde zurücksetzen</h2>
+            {!ownScores ? !error && <p role="status">Rekorde werden geladen …</p> : <>
+              <p>Netzwerk: <strong>{ownScores.network === "testnet" ? "Testnet" : "Mainnet"}</strong> · Konto: <strong>@{auth.user?.username}</strong></p>
+              <p>Karrierepunkte: {ownScores.careerScore.toLocaleString("de-AT")} · Bester Lauf: {ownScores.bestRun.score.toLocaleString("de-AT")} (Level {ownScores.bestRun.level ?? "—"}) · Bisheriger V2-Rekord: {ownScores.bestScore.toLocaleString("de-AT")}</p>
+              <p>Nur deine Score-Werte in diesem Netzwerk werden auf null gesetzt. Spielstand, Shards, Käufe und das andere Netzwerk bleiben erhalten. Der ältere gemeinsame Archivrekord bleibt unverändert.</p>
+              <label>Zur Bestätigung deinen Pi-Namen eingeben: <input type="text" value={resetName} onChange={event => setResetName(event.target.value)} autoComplete="off" /></label>
+              <label className="admin-score-confirm"><input type="checkbox" checked={resetChecked} onChange={event => setResetChecked(event.target.checked)} /> Ich möchte meine Rekorde in diesem Netzwerk zurücksetzen.</label>
+              <div className="admin-actions"><button className="admin-button" type="button" disabled={busy || !resetChecked || resetName !== auth.user?.username} onClick={resetOwnScores}>Eigene Rekorde zurücksetzen</button></div>
+            </>}
+          </section>}
           {view === "payments" && (
             <section className="admin-panel">
               <div className="admin-section-head">

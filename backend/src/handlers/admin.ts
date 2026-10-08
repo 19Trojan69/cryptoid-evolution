@@ -13,6 +13,8 @@ import {
 } from "../paymentRecords";
 import { readPaymentReceipt } from "../paymentReceipt";
 import { platformAPIClientForRequest } from "../services/platformAPIClient";
+import { rewardNetwork } from "../rewardNetwork";
+import { bestRunField, careerField } from "../scoreRules";
 
 const networks = ["all", "mainnet", "testnet", "unknown"] as const;
 const statuses = ["all", "confirmed", "pending", "cancelled"] as const;
@@ -65,6 +67,20 @@ export default function mountAdminEndpoints(router: Router) {
       game: { sections: 500, levels: 50, bosses: 50, ships: 20, stages: 3 },
     }),
   );
+
+  router.post("/scores/reset", async (req, res) => {
+    const uid = req.session.currentUser!.uid, network = rewardNetwork(req);
+    if (req.body?.network !== network || req.body?.confirmUsername !== req.session.currentUser!.username || req.body?.confirm !== true)
+      return res.status(400).json({ error: "confirm_own_network_score_reset" });
+    try {
+      const users = req.app.locals.userCollection;
+      const result = await users.updateOne({ uid, [`playerByNetwork.${network}.activeRunId`]: null }, {
+        $set: { [careerField(network)]: 0, [bestRunField(network)]: { score: 0, level: null }, [`bestScoreV2.${network}`]: 0 },
+      });
+      if (!result.matchedCount) return res.status(409).json({ error: "finish_active_run_before_reset" });
+      return res.json({ network, careerScore: 0, bestRun: { score: 0, level: null }, bestScore: 0 });
+    } catch { return res.status(503).json({ error: "score_reset_unavailable" }); }
+  });
 
   router.post("/start", async (req, res) => {
     const {

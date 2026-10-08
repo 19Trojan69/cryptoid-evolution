@@ -1072,6 +1072,7 @@ html[data-motion="reduced"] .shooting-star { display: none; }
 .leaderboard-scroll th, .leaderboard-scroll td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #365456; }
 .leaderboard-scroll th { position: sticky; top: 0; z-index: 1; background: #112f37; color: var(--gold); }
 .leaderboard-scroll td:last-child, .leaderboard-scroll th:last-child { text-align: right; }
+.leaderboard-career table { min-width: 660px; }
 
 /* First mission feedback, precise touch controls, and a legible two-row phone HUD. */
 .control-choice-group { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }

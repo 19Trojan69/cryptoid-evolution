@@ -268,6 +268,10 @@
     16px "Space Grotesk",
     sans-serif;
 }
+.admin-score-reset label { margin: 14px 0; }
+.admin-score-reset input[type="text"] { max-width: 24rem; }
+.admin-score-reset .admin-score-confirm { flex-direction: row; align-items: center; }
+.admin-score-reset .admin-score-confirm input { width: 20px; min-height: 20px; height: 20px; padding: 0; flex: none; }
 .admin-colors {
   display: flex;
   flex-wrap: wrap;
