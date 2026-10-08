@@ -2,11 +2,14 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import { loadShipArtwork } from './shipArtwork';
 
 export default function ShipPortrait({ src, name, silhouette = false }: { src: string; name: string; silhouette?: boolean }) {
+  return <ShipPortraitCanvas key={`${src}:${silhouette}`} src={src} name={name} silhouette={silhouette} />;
+}
+
+function ShipPortraitCanvas({ src, name, silhouette }: { src: string; name: string; silhouette: boolean }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [ready, setReady] = useState(false);
   useLayoutEffect(() => {
     let current = true;
-    setReady(false);
     const previous = canvas.current;
     previous?.getContext('2d')?.clearRect(0, 0, previous.width, previous.height);
     void loadShipArtwork(src).then(art => {

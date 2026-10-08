@@ -44,7 +44,8 @@ import { ownedShipStage, projectileGuardForStage, projectileImpact, shipEvolutio
 import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio";
 import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, readMusicVolume, resetAudioVolumeDefaults } from "./musicPreferences";
 import { MusicPlayer, takeHandoffGameMusic } from "./musicPlayback";
-import SystemSettings, { applySavedDisplaySettings } from "./SystemSettings";
+import SystemSettings from "./SystemSettings";
+import { applySavedDisplaySettings } from './displaySettings';
 import MissionWeaponShop from './MissionWeaponShop';
 import './weaponSelection.css';
 import { axiosClient } from "../lib/axiosClient";
@@ -59,7 +60,8 @@ import { missionShardBase, missionShardTotal, uncreditedGuestShards, BONUS_TARGE
 import { addPersistentHullFire, hullFireAtImpact, hullFireLimit, spriteFireSites, type HullFire } from "./hullFires";
 import { bossExplosionSize, bossFallTargetY, bossFireSite } from "./bossCombat";
 import { bossHitTarget } from "./bossHitTarget";
-import BossWeaponsView, { preloadBossWeapons } from './BossWeaponsView';
+import BossWeaponsView from './BossWeaponsView';
+import { preloadBossWeapons } from './bossWeaponTextures';
 import BossHealthView from './BossHealthView';
 import BossReactorView from './BossReactorView';
 import { advanceBossTurrets, damageBossTurret, gunPosition } from './bossTurrets';
@@ -403,6 +405,7 @@ const GamePage = () => {
   const playerMuzzleRef = useRef(0);
   const bossMuzzleRef = useRef(0);
   const [rewardCards,setRewardCards]=useState<CardReward[]>([]);
+  const firstRewardCard = rewardCards[0];
   const rewardCardsRef=useRef<CardReward[]>([]);
   const cardOwnerRef=useRef('guest');
   const bossLifeRemainingRef=useRef(0);
@@ -426,14 +429,16 @@ const GamePage = () => {
     if(game.status==='playing')return keepScreenAwake(navigator,document);
   },[game.status]);
   useEffect(()=>{
-    const card=rewardCards[0];if(!card)return;
-    rememberCard(cardOwnerRef.current,card.key);
+    if(!firstRewardCard)return;
+    rememberCard(cardOwnerRef.current,firstRewardCard.key);
     void syncCardReveals(cardOwnerRef.current).catch(()=>{/* Local receipt is retried on the next account start. */});
-  },[rewardCards[0]?.key]);
+  },[firstRewardCard]);
   const [startError, setStartError] = useState("");
   const [audioNeedsTap, setAudioNeedsTap] = useState(false);
   const [homePrompt, setHomePrompt] = useState(false);
   const [shipSelection, setShipSelection] = useState(selectedShip);
+  const shipSelectionRef = useRef(shipSelection);
+  shipSelectionRef.current = shipSelection;
   const [resumeOffer, setResumeOffer] = useState<AccountSave | null>(null);
   const [confirmNewRun, setConfirmNewRun] = useState(false);
   const [saveNotice, setSaveNotice] = useState("");
@@ -483,7 +488,8 @@ const GamePage = () => {
     setAudioNeedsTap(stateRef.current.status === 'playing' &&
       ((readEffectsVolume() > 0 && !soundRef.current?.running) || (musicWanted && !musicRef.current?.playing)));
   }, []);
-  useEffect(()=>{if(game.boss)void preloadBossWeapons(game.boss.config).catch(()=>{});},[game.boss?.config]);
+  const bossConfig = game.boss?.config;
+  useEffect(()=>{if(bossConfig)void preloadBossWeapons(bossConfig).catch(()=>{});},[bossConfig]);
   const bossVictoryPendingRef = useRef(false);
   const bossVictoryFinishedRef = useRef(false);
   const bossDestroyPlayedRef = useRef(false);
@@ -543,6 +549,8 @@ const GamePage = () => {
     await queue.enqueue({ path: "/progress/checkpoint", body: { runId, combat, save: snapshotOf(state) } });
     setSaveNotice(queue.durable ? "Game saved." : "Game saved. Offline backup unavailable.");
   };
+  const saveCombatRef = useRef(saveCombat);
+  saveCombatRef.current = saveCombat;
   const restoreCombat = (input: CombatCheckpoint) => {
     const saved = readCombatCheckpoint(input);
     if (!saved) throw new Error("Invalid saved combat checkpoint");
@@ -723,7 +731,8 @@ const GamePage = () => {
     stateRef.current.status = rewardCardsRef.current.length ? "paused" : "playing";
     setGame({ ...stateRef.current });
   };
-  useEffect(() => { if (stateRef.current.status === "loading") void activateLoadout(); }, []);
+  const initialActivateLoadoutRef = useRef(activateLoadout);
+  useEffect(() => { if (stateRef.current.status === "loading") void initialActivateLoadoutRef.current(); }, []);
 
   useEffect(() => {
     const field = fieldRef.current;
@@ -838,7 +847,7 @@ const GamePage = () => {
       ? Math.min(100, musicVolume * BOSS_VICTORY_VOLUME_BOOST)
       : musicVolume;
     musicRef.current?.setVolume(volume);
-  }, [musicVolume, game.encounter]);
+  }, [musicVolume, game.encounter, game.status]);
   const startBossVictory = () => {
     bossVictoryPendingRef.current = false;
     const track = musicRef.current;
@@ -893,6 +902,8 @@ const GamePage = () => {
     state.boss = null;
     void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
   };
+  const destroyBossRef = useRef(destroyBoss);
+  destroyBossRef.current = destroyBoss;
   const changeEffectsVolume = (value: number) => {
     localStorage.setItem(EFFECTS_VOLUME_KEY, String(value));
     setEffectsVolume(value);
@@ -929,6 +940,8 @@ const GamePage = () => {
     // Retry inside each gesture: Safari can interrupt Web Audio after fullscreen.
     return soundRef.current.start().then(ok => { refreshAudioStatus(); return ok; });
   }, [refreshAudioStatus]);
+  const startEffectsRef = useRef(startEffects);
+  startEffectsRef.current = startEffects;
   useEffect(() => { if (hasPrimedGameAudio()) void startEffects(); }, [startEffects]);
 
   useEffect(() => {
@@ -943,20 +956,22 @@ const GamePage = () => {
     void startEffects().then(refreshAudioStatus);
     if (musicEnabled && musicRef.current) void musicRef.current.play().then(refreshAudioStatus);
   };
+  const retryAudioRef = useRef(retryAudio);
+  retryAudioRef.current = retryAudio;
 
   useEffect(() => {
     const controls = new Set(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "KeyA", "KeyD", "KeyW", "KeyS"]);
     const keyDown = (event: KeyboardEvent) => {
       if (rewardCardsRef.current.length || !controls.has(event.code) || (event.target as HTMLElement)?.closest("input, textarea, select")) return;
       event.preventDefault();
-      void startEffects();
+      void startEffectsRef.current();
       keysRef.current.add(event.code);
     };
     const keyUp = (event: KeyboardEvent) => keysRef.current.delete(event.code);
     const blur = () => keysRef.current.clear();
     const pauseAfterBackground = () => {
       if (document.visibilityState === "hidden") {
-        if (stateRef.current.status === "playing") void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
+        if (stateRef.current.status === "playing") void saveCombatRef.current().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
         if (!backgroundHiddenAtRef.current) backgroundHiddenAtRef.current = Date.now();
         if (stateRef.current.status === 'playing') {
           stateRef.current.status = 'paused';
@@ -971,7 +986,7 @@ const GamePage = () => {
       }
       if (backgroundHiddenAtRef.current && Date.now() - backgroundHiddenAtRef.current > 1_000 && stateRef.current.status === "playing") {
         stateRef.current.status = "paused";
-        void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
+        void saveCombatRef.current().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
         soundRef.current?.setPaused(true);
         musicRef.current?.pause();
         setGame({ ...stateRef.current });
@@ -987,7 +1002,7 @@ const GamePage = () => {
       slowFramesRef.current = 0;
     };
     const markPageHidden = () => {
-      if (stateRef.current.status === "playing") void saveCombat().catch(() => {});
+      if (stateRef.current.status === "playing") void saveCombatRef.current().catch(() => {});
       if (!backgroundHiddenAtRef.current) backgroundHiddenAtRef.current = Date.now();
       keysRef.current.clear();
       pointerRef.current = null;
@@ -996,7 +1011,7 @@ const GamePage = () => {
     window.addEventListener("keydown", keyDown);
     const resumeAudio = () => {
       if (document.visibilityState === "hidden" || (backgroundHiddenAtRef.current && Date.now() - backgroundHiddenAtRef.current > 1_000) || stateRef.current.status !== "playing") return;
-      retryAudio();
+      retryAudioRef.current();
     };
     document.addEventListener("pointerup", resumeAudio, true);
     document.addEventListener("touchend", resumeAudio, true);
@@ -1380,9 +1395,10 @@ const GamePage = () => {
           const damaged = state.hearts < previousHearts;
           damageTaken = damaged;
           const destroyed = damaged && state.hearts === 0;
-          state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: destroyed ? "player-explosion" : damaged ? "player-crash" : "shield", startedAt: time, target: "player", sprite: damaged ? shipSelection.skin.sprite : undefined, debrisSize: damaged ? 86 : undefined, debrisColor: damaged ? shipSelection.color.id : undefined, shipStage: shipStageRef.current });
+          const currentShip = shipSelectionRef.current;
+          state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: destroyed ? "player-explosion" : damaged ? "player-crash" : "shield", startedAt: time, target: "player", sprite: damaged ? currentShip.skin.sprite : undefined, debrisSize: damaged ? 86 : undefined, debrisColor: damaged ? currentShip.color.id : undefined, shipStage: shipStageRef.current });
           if (damaged) {
-            const sprite = shipSelection.skin.sprite;
+            const sprite = currentShip.skin.sprite;
             const shot = { id: nextIdRef.current++, x: playerImpact?.x ?? state.player.x * width, y: playerImpact?.y ?? state.player.y * height - 12 };
             state.playerHit = hullFireAtImpact(shot, { x: state.player.x * width, y: state.player.y * height }, playerShipRef.current?.offsetWidth || 76, spriteFireSites[sprite].map(([x, y]) => [100 - x, 100 - y] as const));
             state.playerHullFires = addPersistentHullFire(state.playerHullFires, state.playerHit, 4);
@@ -1397,7 +1413,7 @@ const GamePage = () => {
             // A life loss is durable mission progress. Persist it immediately instead
             // of relying on pagehide/visibility handlers, which a hard reload may cancel.
             // This prevents Resume from restoring an older checkpoint with more lives.
-            if (state.hearts > 0) void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
+            if (state.hearts > 0) void saveCombatRef.current().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
           }
           else soundRef.current?.play("shield");
         }
@@ -1456,7 +1472,7 @@ const GamePage = () => {
             }
             if (!damageSectorBoss(state.boss, shot.damage, time)) continue;
             state.boss.hit = { id: shot.id, x: (shot.x - state.boss.x) / state.boss.width * 100 + 50, y: (shot.y - state.boss.y) / state.boss.height * 100 + 50, impactPower: shot.damage };
-            if (state.boss.health === 0) destroyBoss(state, time);
+            if (state.boss.health === 0) destroyBossRef.current(state, time);
             else {
               const location = bossFireSite(state.boss, shot.x, shot.y, state.boss.hullFires ?? []);
               const maxFires = hullFireLimit(state.boss.health, state.boss.maxHealth, true);
@@ -1557,7 +1573,7 @@ const GamePage = () => {
         }
         if (time - combatCheckpointAtRef.current >= 10_000 && state.hearts > 0 && state.phase !== "SECTOR_CLEAR") {
           combatCheckpointAtRef.current = time;
-          void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
+          void saveCombatRef.current().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
         }
         if (state.phase === "SECTOR_CLEAR") { state.enemyShots = []; state.shots = []; }
         persistGuestShards();
