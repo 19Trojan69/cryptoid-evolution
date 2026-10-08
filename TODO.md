@@ -60,6 +60,12 @@ Vorhanden: separate Geschütz-HP, adaptive schmale grün-rote Balken, modulare B
 
 Nachweis: [docs/lint-stability-2026-10-08.md](docs/lint-stability-2026-10-08.md). Paket 4 bleibt getrennt.
 
+## Nächste Performancearbeit – offen, gesonderte Freigabe
+
+- **offen: großen JavaScript-Chunk untersuchen.** Beim Frontend-Build entsteht ein Haupt-Chunk von rund 1,72 MB (minifiziert; rund 493 KB gzip). Bundle-Zusammensetzung, Ladezeit und Ausführung auf Mobilgeräten messen, bevor Änderungen vorgenommen werden.
+- **offen: bedarfsgerechtes Laden prüfen.** Selten benötigte Bereiche wie Sammlung und Shop nach Möglichkeit erst beim Öffnen laden; für Spielstart und laufenden Kampf benötigten Code rechtzeitig verfügbar halten. Ladezustände und Fehlerpfade sauber behandeln.
+- **offen: Wirkung und Regressionen prüfen.** Vorher/nachher Chunk-Größen, Startzeit und mobile Spielperformance vergleichen; Spielstart, Navigation, Sammlung, Shop, Wiederaufnahme und Pi-Browser prüfen. Bestehende Effekte und Funktionen erhalten. Umsetzung erst als separat freigegebene Performancearbeit.
+
 ## Paket 4 – visuelles Gameplay & HUD — offen
 
 15. **offen: Warnungen.** Flotte/Verstärkung und ähnliche Hinweise kurz in Bildschirmmitte, ohne Box/Rahmen; hochwertiger Sci-Fi-Text, kurzes Blinken/Flackern, sprachabhängig, keine dauerhafte Sichtblockade.
@@ -85,7 +91,7 @@ Vorhanden: zentrale i18n-Kataloge und Sprachtests. Umfang/Erkennung vor Paket 7 
 
 ## Zusätzliche Befunde / nicht Teil der Paket-1-Freigabe
 
-- Die historischen 55 Lint-Fehler/16 Warnungen aus Paket 1 wurden mit damaligen Abhängigkeiten gemessen. Mit den am 8. Oktober neu installierten, festgeschriebenen Yarn-Abhängigkeiten zeigten Paket 2 und 3 beide 14 Fehler/16 Warnungen. Das separate Stabilitätspaket bereinigt diese auf 0/0. Der große JS-Bundle-Chunk bleibt als gesonderter Performance-Befund.
+- Die historischen 55 Lint-Fehler/16 Warnungen aus Paket 1 wurden mit damaligen Abhängigkeiten gemessen. Mit den am 8. Oktober neu installierten, festgeschriebenen Yarn-Abhängigkeiten zeigten Paket 2 und 3 beide 14 Fehler/16 Warnungen. Das separate Stabilitätspaket bereinigt diese auf 0/0. Der große JS-Bundle-Chunk ist für die nächste gesonderte Performancearbeit vorgemerkt.
 - Lokaler Gast-Chromium meldet `Pi is not defined` aus der vorhandenen Pi-Integration im Konsolenereignis, obwohl Spielstart und Waffenmenü bedienbar sind. Separat in einer Pi-/Browser-Abnahme untersuchen; kein Paket-2-Nebenumbau.
 - Oberer Blockzähler zählt abgeschlossene Blocks, Abschnittstext den laufenden Block. Vorhandene Erklärung geprüft; eine Vereinheitlichung ist gesondert zu entscheiden.
 
