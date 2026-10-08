@@ -29,7 +29,7 @@ import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, 
 import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, POWER_UP_DURATION_MS, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp, type PowerUpType } from "./powerUps";
 import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, zoneFraction, shipStartHeight } from "./controlPreferences";
-import { advanceShot, contactWithEnemy, MAX_PLAYER_SHOTS, movePlayer, placePlayer, placePlayerFromPointer, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, shipCollisionOutcome, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
+import { advanceShot, contactWithEnemy, enemyMotionVisible, MAX_PLAYER_SHOTS, movePlayer, placePlayer, placePlayerFromPointer, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, retainContactLatch, shipCollisionOutcome, shipContactPoint, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
 import { advanceEnemyShot, createEnemyShot, enemyShotHitsPlayer, enemyShotOutsideField, enemyShotLimit, type EnemyShot } from "./enemyFire";
 import { attackPressure, attackSlots } from "./attackPressure";
 import SectorBackdrop from "./SectorBackdrop";
@@ -173,6 +173,7 @@ type Effect = {
   impactY?: number;
   velocityX?: number;
   velocityY?: number;
+  collision?: boolean;
 };
 type WeaponSource = "standard" | "paid" | "pickup";
 type GameState = BossRewardState & { playerHullFires?: HullFire[]; playerHit?: HullFire; bossHullLight: number; combo: DoubleKillCombo; asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; rewardNotice: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; powerUpTypes: PowerUpType[]; pickupNotice: { id: number; type: PowerUpType; remainingMs: number; level: number } | null; score: number; shardBase: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; purchasedShieldMs: number; shieldActive: boolean; overdriveMs: number; overdriveTotalMs: number; rapidFireMs: number; rapidFireTotalMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponSource: WeaponSource; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; weaponTimers: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
@@ -334,13 +335,7 @@ const shipDebris = (effect: Effect) => {
   } as CSSProperties;
   if (effect.kind === "boss-explosion") return <div className="ship-debris scattered-debris boss-debris-field" style={style} aria-hidden="true">{scatteredPieces(effect, 16, 0)}</div>;
   if (sprite === undefined) return null;
-  // A collision can damage the player without destroying the ship.
-  if (effect.kind === "player-crash") {
-    return <div className="ship-debris player-crash-debris" style={style} aria-hidden="true">
-      {[0, 1, 2, 3].map(index => <em className={`ship-debris-piece ship-debris-piece-${index + 1}`} key={index}>{effect.debrisColor ? <PaintedShip className="ship-debris-sprite" sprite={sprite} color={effect.debrisColor} stage={effect.shipStage} /> : <b style={spriteStyle(sprite)} />}</em>)}
-    </div>;
-  }
-  const count = effect.shipClass === "heavy" || (effect.debrisSize ?? 0) >= 86 ? 8 : 4;
+  const count = effect.collision || effect.kind === "player-crash" || effect.shipClass === "heavy" || (effect.debrisSize ?? 0) >= 86 ? 8 : 4;
   return <div className={`ship-debris scattered-debris${effect.shipClass ? ` ship-debris-${effect.shipClass}` : ""}`} style={style} aria-hidden="true">
     {scatteredPieces(effect, count, sprite)}
   </div>;
@@ -1297,11 +1292,13 @@ const GamePage = () => {
               next = { ...next, firedThisAttack: true, muzzleAt: time };
             }
           }
-          const activeAttack = next.attackPattern !== null && next.attackDelay === 0;
-          const contact = contactWithEnemy(state.player, width, height, next, !next.cloaked && next.x >= 0 && next.x <= width && next.y >= 0 && next.y <= height, activeAttack && next.collidedThisAttack, impactCooldownRef.current, asteroid);
+          // A blocked impact must only suppress the same continuous overlap.
+          // Once the ships separate, a returning enemy is a new collision.
+          if (next.collidedThisAttack && !retainContactLatch(next.collidedThisAttack, previousPlayer, width, height, asteroid)) next = { ...next, collidedThisAttack: false };
+          const contact = contactWithEnemy(state.player, width, height, next, !next.cloaked && enemyMotionVisible(asteroid, next, width, height), next.collidedThisAttack, impactCooldownRef.current, asteroid, previousPlayer);
           if (contact.connected) {
             if (contact.damage) {
-              if (activeAttack) next = { ...next, collidedThisAttack: true };
+              next = { ...next, collidedThisAttack: true };
               impactCooldownRef.current = IMPACT_COOLDOWN_MS;
               if (purchasedShieldActive) {
                 state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: "shield", startedAt: time, target: "player" });
@@ -1315,7 +1312,8 @@ const GamePage = () => {
                   shieldImpactsRemaining -= 1;
                 } else {
                   const sprite = next.sprite;
-                  state.effects.push({ id: nextIdRef.current++, x: next.x, y: next.y, kind: next.type === "etherCrystal" ? "shatter" : "explosion", startedAt: time, sprite, debrisSize: next.radius * 2, debrisRotation: next.rotation, shipClass: next.shipClass, debrisColor: next.color, velocityX: (next.x - asteroid.x) * 1000 / Math.max(1, delta), velocityY: (next.y - asteroid.y) * 1000 / Math.max(1, delta) });
+                  const impact = shipContactPoint(state.player, width, height, asteroid, next, previousPlayer);
+                  state.effects.push({ id: nextIdRef.current++, x: impact.x, y: impact.y, kind: next.type === "etherCrystal" ? "shatter" : "explosion", startedAt: time, sprite, debrisSize: next.radius * 2, debrisRotation: next.rotation, shipClass: next.shipClass, debrisColor: next.color, velocityX: (next.x - asteroid.x) * 1000 / Math.max(1, delta), velocityY: (next.y - asteroid.y) * 1000 / Math.max(1, delta), collision: true });
                   state.score += next.points;
                   if (collision.destroysEnemy) creditComboDefeat(state, next.reward, elapsedRef.current);
                   soundRef.current?.play("explosion");
@@ -1338,7 +1336,7 @@ const GamePage = () => {
           const previousBoss = state.boss;
           state.bossHullLight = hullIllumination(state.boss.x, state.boss.y, time, bossMuzzleRef.current, state.effects);
           state.boss = moveSectorBoss(state.boss, delta, width, height);
-          const bossContact = contactWithEnemy(state.player, width, height, state.boss, true, false, impactCooldownRef.current, previousBoss);
+          const bossContact = contactWithEnemy(state.player, width, height, state.boss, true, false, impactCooldownRef.current, previousBoss, previousPlayer);
           if (bossContact.damage) {
             heartsLost = Math.max(heartsLost, 1);
             impactCooldownRef.current = IMPACT_COOLDOWN_MS;
