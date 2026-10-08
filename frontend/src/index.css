@@ -2730,7 +2730,7 @@ html[data-motion="reduced"] .blockchain-node .blockchain-cube-rotor { animation:
 .game-shell[data-effects-paused="true"] .impact-effect::after { animation-play-state: paused !important; }
 
 /* Combat warnings are brief typography in the middle of the field, never panels. */
-.reinforcement-notice, .game-field .boss-intro-banner.sector-transition {
+.reinforcement-notice, .game-field .sector-banner.boss-intro-banner.sector-transition {
   box-sizing: border-box;
   top: 50%; left: 50%;
   width: min(92vw, 720px); max-width: min(92vw, 720px);
@@ -2743,10 +2743,10 @@ html[data-motion="reduced"] .blockchain-node .blockchain-cube-rotor { animation:
   text-align: center; overflow-wrap: anywhere; pointer-events: none;
 }
 .reinforcement-notice { animation: combat-warning-flash 1.05s ease-out both; }
-.game-field .boss-intro-banner.sector-transition { gap: 8px; transform: translate(-50%, -50%); animation: combat-warning-flash 2.2s ease-out both; }
-.game-field .boss-intro-banner.sector-transition strong { font: inherit; letter-spacing: inherit; }
-.game-field .boss-intro-banner.sector-transition span,
-.game-field .boss-intro-banner.sector-transition small { color: #aeeef1; font: 650 clamp(12px, 2.8vw, 18px)/1.25 'Oxanium', sans-serif; letter-spacing: .1em; }
+.game-field .sector-banner.boss-intro-banner.sector-transition { gap: 8px; transform: translate(-50%, -50%); animation: combat-warning-flash 2.2s ease-out both; }
+.game-field .sector-banner.boss-intro-banner.sector-transition strong { font: inherit; letter-spacing: inherit; }
+.game-field .sector-banner.boss-intro-banner.sector-transition span,
+.game-field .sector-banner.boss-intro-banner.sector-transition small { color: #aeeef1; font: 650 clamp(12px, 2.8vw, 18px)/1.25 'Oxanium', sans-serif; letter-spacing: .1em; }
 @keyframes combat-warning-flash {
   0% { opacity: 0; transform: translate(-50%, -50%) scale(.96); }
   15%, 32%, 46%, 80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
@@ -2758,7 +2758,7 @@ html[data-motion="reduced"] .blockchain-node .blockchain-cube-rotor { animation:
   20%, 72% { opacity: 1; }
   100% { opacity: 0; transform: translate(-50%, -50%); }
 }
-@media (prefers-reduced-motion: reduce) { .reinforcement-notice { animation: combat-warning-quiet 1.05s linear both; } .game-field .boss-intro-banner.sector-transition { animation: combat-warning-quiet 2.2s linear both; } }
+@media (prefers-reduced-motion: reduce) { .reinforcement-notice { animation: combat-warning-quiet 1.05s linear both; } .game-field .sector-banner.boss-intro-banner.sector-transition { animation: combat-warning-quiet 2.2s linear both; } }
 html[data-motion="reduced"] .reinforcement-notice { animation: combat-warning-quiet 1.05s linear both; }
-html[data-motion="reduced"] .game-field .boss-intro-banner.sector-transition { animation: combat-warning-quiet 2.2s linear both; }
+html[data-motion="reduced"] .game-field .sector-banner.boss-intro-banner.sector-transition { animation: combat-warning-quiet 2.2s linear both; }
 @media (max-height: 680px) and (max-width: 700px) { .player-ship { width: 94px; height: 94px; } }
