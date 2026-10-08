@@ -535,7 +535,7 @@ html[data-motion="reduced"] .hull-reflection { display: none; }
 .pause-save-status { margin: 12px 0; padding: 12px; border: 1px solid #647580; border-radius: 8px; background: #102232; color: #b9e6d6; }
 .pause-save-status p { font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
 .pause-save-status button { min-height: 44px; touch-action: manipulation; }
-.player-ship { width: 76px; height: 76px; }
+.player-ship { width: clamp(104px, 25vw, 132px); height: clamp(104px, 25vw, 132px); }
 .player-ship { filter: none; }
 .player-ship .fleet-sprite { z-index: 1; filter: sepia(1) saturate(4.5) hue-rotate(calc(225deg + var(--ship-hue))); }
 .player-muzzle-flash { position: absolute; z-index: 4; left: 50%; top: 20%; width: 7px; height: 7px; border-radius: 50%; transform: translate(-50%, -50%); opacity: var(--muzzle-light, 0); background: radial-gradient(circle, #fff 0 18%, #b6f5ff 45%, transparent 75%); box-shadow: 0 0 5px 2px #c9f8ff, 0 0 10px 3px #6adfff88; pointer-events: none; }
@@ -2529,10 +2529,10 @@ html[data-motion="reduced"] .landing-shell .quick-access-trigger::before, html[d
 .quick-access-items button, .quick-access-heading button { touch-action: manipulation; }
 
 /* Only linked blocks turn. Six translucent faces keep the cube three-dimensional. */
-.blockchain-node { --cube-edge: calc(var(--chain-node) * .53); perspective: 180px; }
+.blockchain-node { --cube-edge: calc(var(--chain-node) * .53); perspective: 500px; }
 .blockchain-cube-rotor { position: absolute; display: block; top: calc(50% - var(--cube-edge) / 2); left: calc(50% - var(--cube-edge) / 2); width: var(--cube-edge); height: var(--cube-edge); -webkit-transform-style: preserve-3d; transform-style: preserve-3d; transform: rotateY(35deg); }
 .blockchain-cube-body { position: absolute; display: block; inset: 0; -webkit-transform-style: preserve-3d; transform-style: preserve-3d; transform: rotateX(-25deg); }
-.blockchain-node.active .blockchain-cube-rotor { animation: blockchain-cube-turn var(--cube-period, 12s) linear infinite; }
+.blockchain-node .blockchain-cube-rotor { animation: blockchain-cube-turn 7.2s linear infinite; }
 .blockchain-cube-face { position: absolute; inset: 0; border: 1px solid #ffda83d9; background: linear-gradient(135deg, #fff0b52e, #ffc34d38); box-shadow: inset 0 0 7px #ffd46933; }
 .cube-face-front { transform: translateZ(calc(var(--cube-edge) / 2)); }
 .cube-face-back { transform: rotateY(180deg) translateZ(calc(var(--cube-edge) / 2)); }
@@ -2557,10 +2557,10 @@ html[data-motion="reduced"] .landing-shell .quick-access-trigger::before, html[d
 @keyframes hull-impact-burst { 0% { opacity: 1; transform: translate(-50%, -50%) rotate(var(--impact-angle, 0deg)) scale(.25); } 24% { opacity: 1; transform: translate(-50%, -50%) rotate(var(--impact-angle, 0deg)) scale(1.05); } 100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--impact-angle, 0deg)) scale(1.35); } }
 @keyframes hull-impact-ring { from { transform: scale(.5); opacity: .9; } to { transform: scale(1.8); opacity: 0; } }
 @keyframes hull-impact-spark { from { transform: translate(0, 0); opacity: 1; } to { transform: translate(var(--spark-x), var(--spark-y)); opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .blockchain-node.active .blockchain-cube-rotor { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .blockchain-node .blockchain-cube-rotor { animation: none; } }
 @media (prefers-reduced-motion: reduce) { .hull-hotspot b, .hull-hotspot::after { animation: none; } }
 html[data-motion="reduced"] .hull-hotspot b, html[data-motion="reduced"] .hull-hotspot::after { animation: none; }
-html[data-motion="reduced"] .blockchain-node.active .blockchain-cube-rotor { animation: none; }
+html[data-motion="reduced"] .blockchain-node .blockchain-cube-rotor { animation: none; }
 
 .home-combat-preview[data-paused="true"] .hull-hotspot,
 .home-combat-preview[data-paused="true"] .hull-hotspot b,
@@ -2574,7 +2574,7 @@ html[data-motion="reduced"] .blockchain-node.active .blockchain-cube-rotor { ani
 .game-shell[data-effects-paused="true"] .hull-mini-explosion,
 .game-shell[data-effects-paused="true"] .hull-mini-explosion::before,
 .game-shell[data-effects-paused="true"] .hull-mini-explosion span,
-.game-shell[data-effects-paused="true"] .blockchain-node.active .blockchain-cube-rotor { animation-play-state: paused; }
+.game-shell[data-effects-paused="true"] .blockchain-node .blockchain-cube-rotor { animation-play-state: paused; }
 
 /* Desktop readability, including windowed Pi Sandbox sessions.
    Touch-only devices keep the existing layout even in landscape. */
@@ -2728,3 +2728,37 @@ html[data-motion="reduced"] .blockchain-node.active .blockchain-cube-rotor { ani
 .game-shell[data-effects-paused="true"] .impact-effect *,
 .game-shell[data-effects-paused="true"] .impact-effect::before,
 .game-shell[data-effects-paused="true"] .impact-effect::after { animation-play-state: paused !important; }
+
+/* Combat warnings are brief typography in the middle of the field, never panels. */
+.reinforcement-notice, .game-field .sector-banner.boss-intro-banner.sector-transition {
+  box-sizing: border-box;
+  top: 50%; left: 50%;
+  width: min(92vw, 720px); max-width: min(92vw, 720px);
+  padding: 0 12px; border: 0; border-radius: 0;
+  background: none; box-shadow: none; backdrop-filter: none;
+  color: #f8e6b5;
+  font: 750 clamp(22px, 6vw, 48px)/1.12 'Oxanium', 'Space Grotesk', sans-serif;
+  letter-spacing: .08em; text-transform: uppercase;
+  text-shadow: 0 2px 5px #020916, 0 0 13px #fb9d61, 0 0 25px #dc645c8c;
+  text-align: center; overflow-wrap: anywhere; pointer-events: none;
+}
+.reinforcement-notice { animation: combat-warning-flash 1.05s ease-out both; }
+.game-field .sector-banner.boss-intro-banner.sector-transition { gap: 8px; transform: translate(-50%, -50%); animation: combat-warning-flash 2.2s ease-out both; }
+.game-field .sector-banner.boss-intro-banner.sector-transition strong { font: inherit; letter-spacing: inherit; }
+.game-field .sector-banner.boss-intro-banner.sector-transition span,
+.game-field .sector-banner.boss-intro-banner.sector-transition small { color: #aeeef1; font: 650 clamp(12px, 2.8vw, 18px)/1.25 'Oxanium', sans-serif; letter-spacing: .1em; }
+@keyframes combat-warning-flash {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.96); }
+  15%, 32%, 46%, 80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  23%, 39% { opacity: .58; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.02); }
+}
+@keyframes combat-warning-quiet {
+  0%, 12% { opacity: 0; transform: translate(-50%, -50%); }
+  20%, 72% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%); }
+}
+@media (prefers-reduced-motion: reduce) { .reinforcement-notice { animation: combat-warning-quiet 1.05s linear both; } .game-field .sector-banner.boss-intro-banner.sector-transition { animation: combat-warning-quiet 2.2s linear both; } }
+html[data-motion="reduced"] .reinforcement-notice { animation: combat-warning-quiet 1.05s linear both; }
+html[data-motion="reduced"] .game-field .sector-banner.boss-intro-banner.sector-transition { animation: combat-warning-quiet 2.2s linear both; }
+@media (max-height: 680px) and (max-width: 700px) { .player-ship { width: 94px; height: 94px; } }
