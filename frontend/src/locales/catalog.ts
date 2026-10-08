@@ -1,3 +1,5 @@
+import { chineseCollectionTranslations } from './chineseCollection.ts';
+import { collectionEquipmentTranslations } from './collectionEquipment.ts';
 import { regionalTranslations } from './regional.ts';
 import { collectionTranslations } from './collection.ts';
 import { bossPhaseTranslations } from './bossPhases.ts';
@@ -5557,3 +5559,7 @@ Object.assign(localeCatalog["th"], {"Each defeated boss grants one extra heart, 
 for (const [locale, entries] of Object.entries(collectionTranslations)) Object.assign(localeCatalog[locale], entries);
 
 for (const [locale, entries] of Object.entries(regionalTranslations)) localeCatalog[locale] = { ...localeCatalog[locale], ...entries };
+
+for (const [locale, entries] of Object.entries(collectionEquipmentTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
+
+Object.assign(localeCatalog.zh ??= {}, chineseCollectionTranslations);

@@ -8,10 +8,10 @@ import { playCardSound, primeCardSound } from './cardSound';
 import './collection.css';
 
 export default function CardReveal({reward,remaining=1,onContinue}:{reward:CardReward;remaining?:number;onContinue:()=>void}){
- const {locale}=useLocale(),de=locale.startsWith('de'),say=(a:string,b:string)=>de?a:b;
+ const {locale,t}=useLocale(),de=locale.startsWith('de'),say=(a:string,b:string)=>de?a:t(b);
  const dialog=useRef<HTMLDialogElement>(null),next=useRef<HTMLButtonElement>(null),played=useRef<string|null>(null);
  const [needsSound,setNeedsSound]=useState(false);
- const card=useMemo(()=>reward.boss?bossCard(reward.boss,locale):shipCard(reward.ship!,reward.stage||1,de),[reward,locale,de]);
+ const card=useMemo(()=>reward.boss?bossCard(reward.boss,locale):shipCard(reward.ship!,reward.stage||1,locale),[reward,locale]);
  useEffect(()=>{const previous=document.activeElement as HTMLElement|null;const el=dialog.current;el?.showModal();next.current?.focus({preventScroll:true});return()=>{el?.close();if(previous?.isConnected)previous.focus({preventScroll:true});};},[]);
  useEffect(()=>{let timer:number|undefined;if(played.current!==reward.key){played.current=reward.key;timer=window.setTimeout(()=>setNeedsSound(!playCardSound()),0);}dialog.current?.querySelector('.collection-scroll')?.scrollTo(0,0);return()=>{if(timer!==undefined)window.clearTimeout(timer);};},[reward.key]);
  const enableSound=()=>{primeCardSound();window.setTimeout(()=>setNeedsSound(!playCardSound()),0);};

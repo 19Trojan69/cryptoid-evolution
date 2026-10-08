@@ -360,9 +360,10 @@ const localizedValue = (locale: Locale, source: string, seen = new Set<string>()
   }
   return undefined;
 };
-export const hasTranslation = (locale: Locale, source: string) => locale === "en" || localizedValue(locale, source) !== undefined;
+export const hasExplicitTranslation = (locale: Locale, source: string) => localizedValue(locale, source) !== undefined;
+export const hasTranslation = (locale: Locale, source: string) => locale === "en" || hasExplicitTranslation(locale, source);
 export const translate = (locale: Locale, source: string, params: TranslationParams = {}) => {
-  const text = locale === "en" ? source : localizedValue(locale, source) ?? source;
+  const text = localizedValue(locale, source) ?? localeCatalog.en?.[source] ?? source;
   return text.replace(/\{(\w+)\}/g, (placeholder, name: string) => Object.hasOwn(params, name) ? String(params[name]) : placeholder);
 };
 export const useLocale = () => {
