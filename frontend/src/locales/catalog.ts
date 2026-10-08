@@ -1,4 +1,7 @@
 import { chineseCollectionTranslations } from './chineseCollection.ts';
+import { chineseGameplayTranslations } from './chineseGameplay.ts';
+import { chineseAdminTranslations } from './chineseAdmin.ts';
+import { chineseLoreTranslations } from './chineseLore.ts';
 import { collectionEquipmentTranslations } from './collectionEquipment.ts';
 import { regionalTranslations } from './regional.ts';
 import { collectionTranslations } from './collection.ts';
@@ -5563,3 +5566,6 @@ for (const [locale, entries] of Object.entries(regionalTranslations)) localeCata
 for (const [locale, entries] of Object.entries(collectionEquipmentTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 
 Object.assign(localeCatalog.zh ??= {}, chineseCollectionTranslations);
+Object.assign(localeCatalog.zh, chineseGameplayTranslations);
+Object.assign(localeCatalog.zh, chineseAdminTranslations);
+Object.assign(localeCatalog.zh, chineseLoreTranslations);

@@ -75,7 +75,8 @@ function scan(directory) {
         if (node.initializer) dossier(node.initializer);
       }
       if (name === 'shipCaptureLore.ts' && ts.isPropertyAssignment(node) && ts.isArrayLiteralExpression(node.initializer) && node.initializer.elements[1]) collect(node.initializer.elements[1]);
-      if (name === 'shipLore.ts' && ts.isConditionalExpression(node)) collect(node.whenFalse);
+      // Only the DE/EN copy branches contain display text; locale-code branches do not.
+      if (name === 'shipLore.ts' && ts.isConditionalExpression(node) && node.condition.getText(source) === 'de') collect(node.whenFalse);
       if (name === 'BossDossier.tsx' && ts.isVariableDeclaration(node) && node.name.getText(source) === 'weaponLabels' && node.initializer && ts.isObjectLiteralExpression(node.initializer)) {
         for (const property of node.initializer.properties) if (ts.isPropertyAssignment(property) && ts.isArrayLiteralExpression(property.initializer)) collect(property.initializer.elements[1]);
       }
