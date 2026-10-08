@@ -1,6 +1,6 @@
 # Cryptoid Evolution – zentrale Entwicklungs-TODO
 
-Stand: 8. Oktober 2026. Pakete 1–3 und das separate Lint-Stabilitätspaket wurden im getrennten Testnet-Projekt veröffentlicht. **Paket 4 und die anschließend freigegebenen Pakete 4.1, 4.2 und 4.3 sind auf der festen Testnet-Adresse spielbar. Paket 5 ist im separaten Branch umgesetzt, automatisiert getestet und auf der festen Testnet-Adresse mit eigener Testnet-Backend-Vorschau veröffentlicht; authentifizierte und physische Abnahme bleibt offen. Pi-Browser-/Produktionsfassung unverändert.**
+Stand: 8. Oktober 2026. Pakete 1–3 und das separate Lint-Stabilitätspaket wurden im getrennten Testnet-Projekt veröffentlicht. **Paket 4 und die anschließend freigegebenen Pakete 4.1, 4.2 und 4.3 sind auf der festen Testnet-Adresse spielbar. Paket 5 ist im separaten Branch umgesetzt, automatisiert getestet und auf der festen Testnet-Adresse mit eigener Testnet-Backend-Vorschau veröffentlicht; authentifizierte und physische Abnahme bleibt offen. Paket 6 ist mit vier Gegnerklängen und begrenztem Boss-/Gegnermix im Testnet veröffentlicht und im Browser geprüft; physische Hörabnahme offen. Pi-Browser-/Produktionsfassung unverändert.**
 
 Status: **offen** = noch nicht vollständig umgesetzt/verifiziert; **in Arbeit** = aktuelle Bearbeitung; **erledigt** = implementiert; **getestet** = dokumentierte Prüfungen bestanden (Geräte-/Live-Lücken separat ausweisen).
 
@@ -110,7 +110,7 @@ Nachweis: [docs/package-4-3-collision-hit-feedback-2026-10-08.md](docs/package-4
 
 Nachweis: [docs/package-5-score-leaderboard-admin-2026-10-08.md](docs/package-5-score-leaderboard-admin-2026-10-08.md).
 
-## Paket 6 – Audio-Polish — implementiert / automatisiert getestet, Testnet-Veröffentlichung in Prüfung
+## Paket 6 – Audio-Polish — implementiert / im Testnet und Browser geprüft, physische Hörabnahme offen
 
 22. **erledigt / automatisiert getestet: Gegnerwaffen.** Vier eigene gepufferte Schussklänge für Light, Medium, Heavy und Elite, höhere Einzelpegel und kaliberabhängige Bosspegel. Heavy-/Siege-Bosse mit zusätzlichen mittleren Obertönen für kleine Lautsprecher. Eigener Gegnerwaffen-Bus begrenzt die Summe einschließlich ausblendender Stimmen; Warnungen und Spielerwaffen umgehen diesen Bus. Bestehender Effektregler, Kompressor, Stereoortung, Pausierung und 20 aktive Waffenstimmen bleiben erhalten. Musik/Spielmechanik unverändert.
 
