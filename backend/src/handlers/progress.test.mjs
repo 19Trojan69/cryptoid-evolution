@@ -116,7 +116,7 @@ test('cookie-less save requests restore only the authenticated active run and re
   h.profile().lastStart.runMeta.startedAt = Date.now() - 9 * 60 * 60 * 1000;
   assert.equal((await h.call('rewards', '/event', body, { session: fresh() })).code, 403);
   h.profile().lastStart.runMeta.startedAt = Date.now() - 10_000;
-  const final = { runId, score: 100, finished: true, save: snapshot({ score: 100, shards: 10, destroyed: 10 }) };
+  const final = { runId, score: 100, finished: true, save: snapshot({ score: 100, shards: 10, destroyed: 10, hearts: 0 }) };
   assert.equal((await h.call('leaderboard', '/score', final, { session: fresh() })).code, 200);
   assert.equal(h.profile().balance, 10);
   assert.equal((await h.call('rewards', '/event', body, { session: fresh() })).code, 403);
@@ -400,6 +400,17 @@ test('new score rules preserve legacy high scores and separate network records',
   assert.equal(h.docs[0].bestScore, 9000);
   assert.equal(h.docs[0].bestScoreV2.testnet, 100);
   assert.equal(h.docs[0].bestScoreV2.mainnet, undefined);
+  assert.equal(h.docs[0].careerScoreByNetwork.testnet, 100);
+  assert.deepEqual(h.docs[0].bestRunByNetwork.testnet, { score: 100, level: 1 });
+  assert.equal(h.docs[0].careerScoreByNetwork.mainnet, undefined);
+  assert.equal((await h.call('leaderboard', '/score', { runId, score: 100, finished: true, save: snapshot({ score: 100, hearts: 0 }) })).code, 403);
+  const second = await start(h, 'new', 'second-score-run-0000001');
+  assert.equal(second.code, 200);
+  const secondId = second.body.scoreRunId;
+  assert.equal((await h.call('leaderboard', '/score', { runId: secondId, score: 80, finished: true, save: snapshot({ score: 80, hearts: 0 }) })).code, 200);
+  assert.equal(h.docs[0].careerScoreByNetwork.testnet, 180);
+  assert.deepEqual(h.docs[0].bestRunByNetwork.testnet, { score: 100, level: 1 });
+  assert.equal((await h.call('leaderboard', '/me', null, {method: 'GET'})).body.careerScore, 180);
 });
 
 test('unfinished bonus restores hits and targets without paying the bonus twice', async () => {

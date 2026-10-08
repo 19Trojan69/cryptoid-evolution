@@ -1,6 +1,6 @@
 # Cryptoid Evolution – zentrale Entwicklungs-TODO
 
-Stand: 8. Oktober 2026. Pakete 1–3 und das separate Lint-Stabilitätspaket wurden im getrennten Testnet-Projekt veröffentlicht. **Paket 4 und die anschließend freigegebenen Pakete 4.1, 4.2 und 4.3 sind implementiert und auf der festen Testnet-Adresse spielbar. Die Geräteabnahme der Treffer und des Wiedereinstiegs aus Paket 4.3 ist offen. Pi-Browser-/Produktionsfassung unverändert. Paket 5 wartet auf Freigabe.**
+Stand: 8. Oktober 2026. Pakete 1–3 und das separate Lint-Stabilitätspaket wurden im getrennten Testnet-Projekt veröffentlicht. **Paket 4 und die anschließend freigegebenen Pakete 4.1, 4.2 und 4.3 sind auf der festen Testnet-Adresse spielbar. Paket 5 ist im separaten Branch umgesetzt und automatisiert getestet; die Testnet-Veröffentlichung wartet auf eine Backend-Staging-Lösung. Pi-Browser-/Produktionsfassung unverändert.**
 
 Status: **offen** = noch nicht vollständig umgesetzt/verifiziert; **in Arbeit** = aktuelle Bearbeitung; **erledigt** = implementiert; **getestet** = dokumentierte Prüfungen bestanden (Geräte-/Live-Lücken separat ausweisen).
 
@@ -89,7 +89,7 @@ Nachweis: [docs/package-4-1-audio-ship-motion-2026-10-08.md](docs/package-4-1-au
 - **erledigt / Audiologik und Pausen-UI geprüft: Musik im Menü.** Ein allgemeiner Audio-Retry lief bislang auch bei Klicks in pausierten Dialogen und konnte Musik ungewollt wieder starten. Retry nur bei aktiver Mission (beziehungsweise Game Over/Sieg) und sichtbarer Seite; Musik beim Öffnen von Waffen- oder Pausemenü sofort anhalten, beim bewussten Fortsetzen innerhalb der Nutzergeste wieder anstoßen. Vorhandene Musikquelle und Abspielposition bleiben erhalten. Hörbare iPhone-/Pi-Browser-Prüfung und App-Wechsel ausstehend.
 - **geprüft / kein Datenumbau: unterschiedliche Schiffe und Größen.** Pi Browser zeigt weiter die bisherige Produktionsfassung; die größeren Spielerschiffe aus Paket 4 sind jetzt auch auf der festen Testnet-Adresse spielbar. Testnet und Pi Browser haben verschiedene Browser-Adressen/Local-Storage-Origins und Netzwerk-Spielstände. Die Screenshots zeigen verschiedene Shard-Bestände. Keine Übernahme, Überschreibung oder Vermischung von Testnet-/Mainnet-Spielständen oder Käufen. Bei einem identischen Konto/Netzwerk und derselben Version kann die Auswahl bei Geräteabnahme verglichen werden.
 
-Nachweis: [docs/package-4-2-menu-audio-2026-10-08.md](docs/package-4-2-menu-audio-2026-10-08.md). Paket 5 bleibt offen.
+Nachweis: [docs/package-4-2-menu-audio-2026-10-08.md](docs/package-4-2-menu-audio-2026-10-08.md). Paket 5 wird getrennt bearbeitet.
 
 ## Paket 4.3 – Schiffskollisionen, Trefferauswertung und Wiedereinstieg — erledigt / automatisiert getestet / festes Testnet geprüft, Geräteabnahme offen
 
@@ -98,14 +98,17 @@ Nachweis: [docs/package-4-2-menu-audio-2026-10-08.md](docs/package-4-2-menu-audi
 - **erledigt / Build geprüft: beide Schiffe zerfallen.** Bei ungeschütztem Lebensverlust durch einen normalen Gegner erscheinen für beide Schiffe acht kleinere Rumpfteile an der Kontaktstelle. Das intakte Spielerschiff bleibt während des Zerfalls zunächst unsichtbar und erscheint dann mit drei kurzen Blinkimpulsen innerhalb der vorhandenen Schutzzeit. Endgültiger Lebensverlust und Schildtreffer behalten ihre eigenen Regeln.
 - **offen: physische Geräteabnahme.** Rückflug nach abgefangenem Schildtreffer, direkter Zusammenstoß ohne Schild, Treffer länglicher Boss- und normaler Gegnergeschosse auf den Spieler, Lebensanzeige, Sound und mehrere schnelle Kollisionen auf iPhone/Pi Browser und Android prüfen. Keine Spielstände oder Käufe migrieren.
 
-Nachweis: [docs/package-4-3-collision-hit-feedback-2026-10-08.md](docs/package-4-3-collision-hit-feedback-2026-10-08.md). Paket 5 bleibt offen.
+Nachweis: [docs/package-4-3-collision-hit-feedback-2026-10-08.md](docs/package-4-3-collision-hit-feedback-2026-10-08.md). Paket 5 wird getrennt bearbeitet.
 
-## Paket 5 – Score, Rangliste & Admin — offen
+## Paket 5 – Score, Rangliste & Admin — implementiert / automatisiert getestet, Testnet-Ende-zu-Ende offen
 
-18. **offen: Career Score.** Dauerhafte Summe regulärer Run-Punkte, primäres Top-100-Sortierkriterium, Schutz gegen offensichtliches Farming/Exploits.
-19. **offen: Best Run.** Höchster einzelner Run plus dabei erreichtes Level; separat speichern, niemals mit Career Score überschreiben/vermischen.
-20. **offen: Rangliste.** Name, Rang, Career Score, Best Run, eindeutig zugehöriges Run-Level; Profil-Level und Run-Level unterscheiden.
-21. **offen: Eigener Admin-Reset.** Eigener Highscore/Test-Highscore mit Sicherheitsabfrage; keine fremden Werte; Reset nach Testnet/Mainnet trennen.
+18. **erledigt / getestet: Career Score.** Summe der Punkte aller seit Einführung verifiziert abgeschlossenen Konto-Runs, beim finalen Run-Abschluss einmalig und atomar gutgeschrieben. Top 100 sortiert standardmäßig danach. Lauf-ID, gültige Score-Grenzen, Abschlusszustand, versionierter Spielstand und Netzwerk werden geprüft. Vergangene unvollständige Run-Summen sind nicht rekonstruierbar und werden nicht erfunden; alte Rekordlisten bleiben erhalten.
+19. **erledigt / getestet: Best Run.** Höchster einzelner abgeschlossener Run mit tatsächlich erreichtem Level separat gespeichert. Bestehende V2-Rekorde bleiben lesbar; wenn deren früheres Run-Level nicht gespeichert wurde, erscheint ausdrücklich „—“. Profilfortschritt bleibt eigenständig.
+20. **erledigt / getestet: Rangliste.** Name, Rang, Career Score, Best Run, Run-Level und Profillevel; historische V2- und frühere Rekordlisten als getrennte Ansichten. Für 17 bisher unterstützte Sprachen aktualisierte Texte. Breite mobile Tabellen sind horizontal scrollbar.
+21. **erledigt / getestet: Eigener Admin-Reset.** Nur verifizierter Eigentümer, eigener UID, genau das aktuell verwendete Netzwerk, eingegebener Pi-Name und zusätzliche Bestätigung. Aktiver Run blockiert den Reset. Setzt ausschließlich eigene Karriere-/Best-Run-/V2-Score-Werte zurück, nicht Spielstand, Shards, Käufe oder den alten netzwerkübergreifenden Archivwert.
+- **offen: Testnet-Ende-zu-Ende.** `api/index.ts` leitet auf dem Testnet alle API-Aufrufe an den bisherigen Produktions-Backend-Commit weiter. Das Testnet-Projekt hat keinen konfigurierten MongoDB-Zugang für eine eigenständige Backend-Instanz. Eine Frontend-Veröffentlichung allein würde neue Score-Endpunkte nicht bereitstellen; feste Testnet-Adresse bleibt daher auf Paket 4.3. Vor der Freigabe isolierte Backend-Staging-Route und Daten-/Auth-Migration prüfen, ohne Produktion zu veröffentlichen oder Testnet-Käufe/Spielstände zu verlieren.
+
+Nachweis: [docs/package-5-score-leaderboard-admin-2026-10-08.md](docs/package-5-score-leaderboard-admin-2026-10-08.md).
 
 ## Paket 6 – Audio-Polish — offen
 
@@ -136,4 +139,4 @@ Implementierung erledigt; automatisierte Prüfungen bestanden. Bericht: [docs/pa
 - Browser 390×844 und 1280×800: Explosion/Treffer/Schutz/Übergänge; echte Handler mit isoliertem Speicher: Shards, Lebensverlust und Boss-Clear-Resume; Hintergrundpause auch bei gestoppter RAF geprüft.
 - Lint nicht grün: exakt wie vorher 55 Fehler / 16 Warnungen; keine zusätzlichen Meldungen.
 - Offene Geräteabnahme: physischer iPhone-/Pi-Browser-/Android-Test. Testnet wurde anschließend über das getrennte Vercel-Projekt mit Commit `861f9fe` unter `cryptoid-evolution-testnet.vercel.app` veröffentlicht und im Browser angespielt. Produktion unverändert.
-- Paket 2 und 3 sowie das separat freigegebene Lint-Stabilitätspaket wurden im getrennten Testnet-Projekt veröffentlicht. Paket 4 und die Folgepakete 4.1 und 4.2 wurden im Preview geprüft und mit dem getesteten Paket-4.2-Deployment auf die feste Testnet-Adresse gelegt. Paket 4.3 wurde gezielt getestet und mit dem geprüften Commit `2a39a58` auf die feste Testnet-Adresse gelegt; physische Geräteabnahme offen. Paket 5 wartet auf Freigabe.
+- Paket 2 und 3 sowie das separat freigegebene Lint-Stabilitätspaket wurden im getrennten Testnet-Projekt veröffentlicht. Paket 4 und die Folgepakete 4.1 und 4.2 wurden im Preview geprüft und mit dem getesteten Paket-4.2-Deployment auf die feste Testnet-Adresse gelegt. Paket 4.3 wurde gezielt getestet und mit dem geprüften Commit `2a39a58` auf die feste Testnet-Adresse gelegt; physische Geräteabnahme offen. Paket 5 ist im separaten Branch implementiert; Testnet-Ende-zu-Ende wartet auf Backend-Staging.

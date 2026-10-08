@@ -97,7 +97,7 @@ const topics = [
     id: "features", label: "Progress & settings", title: "Find your way around",
     intro: "The home screen opens Hangar, Shop, Weapons, Power-ups, Progress, Rewards and Top 100.",
     details: [
-      "Progress shows your best score, highest stage and defeated enemies. Rewards shows your collection and service rank; Top 100 lists online high scores with each player's rank.",
+      "Progress shows Career Score, Best Run with its level, highest stage and defeated enemies. Rewards shows your collection and service rank; Top 100 ranks verified completed runs by Career Score. Earlier records remain available.",
       "In System, choose language, touch-control side, sensitivity and ship start height. Music, effects volume and reduced visual effects have their own controls.",
       "Signed-in players receive completed Rewards immediately in their Pi account. Admin test runs do not add collection progress.",
     ],
