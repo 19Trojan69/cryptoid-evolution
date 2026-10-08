@@ -8,6 +8,7 @@ export class MusicPlayer {
   private volume: number;
   private source: string;
   private closed = false;
+  private wantsPlayback = false;
 
   constructor(src: string, volume: number) {
     this.audio = new Audio(src);
@@ -67,22 +68,26 @@ export class MusicPlayer {
 
   async play(): Promise<boolean> {
     if (this.closed) return false;
+    this.wantsPlayback = true;
     this.prepare();
     try {
       // Start both while still inside the user gesture on mobile Safari.
       const resume = this.context && this.context.state !== "running" ? this.context.resume() : Promise.resolve();
       const playback = this.audio.paused ? this.audio.play() : Promise.resolve();
       await Promise.all([resume, playback]);
-      return !this.closed && !this.audio.paused && (!this.context || this.context.state === "running");
+      // A pending play may resolve after mute, pause, route change or a track switch.
+      if (this.closed || !this.wantsPlayback) { this.audio.pause(); return false; }
+      return this.playing;
     } catch {
       return false;
     }
   }
 
-  pause() { this.audio.pause(); }
+  pause() { this.wantsPlayback = false; this.audio.pause(); }
 
   close() {
     this.closed = true;
+    this.wantsPlayback = false;
     this.audio.pause();
     this.audio.removeAttribute("src");
     this.audio.load();

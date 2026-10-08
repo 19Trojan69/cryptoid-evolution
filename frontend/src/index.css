@@ -2690,3 +2690,17 @@ html[data-motion="reduced"] .blockchain-node.active .blockchain-cube-rotor { ani
 .boss-turret-health { position: absolute; z-index: 7; display: block; transform: translate(-50%, -50%); border-radius: 2px; background: #071019d9; box-shadow: 0 0 0 1px #02060bb3; overflow: hidden; pointer-events: none; }
 .boss-turret-health > b { display: block; height: 100%; border-radius: inherit; transition: width 240ms ease-out, background-color 350ms linear; }
 @media (prefers-reduced-motion: reduce) { .boss-turret-health > b { transition: none; } }
+
+/* A lethal hit swaps hull and explosion in one paint: no transparent first frame. */
+.impact-effect.explosion::before, .impact-effect.shatter::before { animation-name: enemy-destruction-fire; }
+@keyframes enemy-destruction-fire {
+  0% { opacity: 1; transform: scale(.48, .44); }
+  21% { opacity: 1; transform: translate(-2%, -3%) scale(.96, .88); }
+  46% { opacity: .86; transform: translate(2%, -5%) scale(1.16, 1.08); }
+  72% { opacity: .38; transform: translate(-1%, -8%) scale(1.27, 1.18); }
+  100% { opacity: 0; transform: translate(1%, -12%) scale(1.32, 1.24); }
+}
+.game-shell[data-effects-paused="true"] .impact-effect,
+.game-shell[data-effects-paused="true"] .impact-effect *,
+.game-shell[data-effects-paused="true"] .impact-effect::before,
+.game-shell[data-effects-paused="true"] .impact-effect::after { animation-play-state: paused !important; }

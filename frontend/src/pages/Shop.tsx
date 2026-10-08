@@ -160,7 +160,12 @@ const Shop = () => {
     if (next) void homeMusicRef.current?.play().then(ok => setMusicNeedsTap(!ok));
     else { homeMusicRef.current?.pause(); setMusicNeedsTap(false); }
   };
-  const musicLabel = t(musicEnabled ? musicNeedsTap ? "Tap for music" : "Music on" : "Music off");
+  useEffect(() => {
+    const sync = () => setMusicNeedsTap(musicEnabledRef.current && readMusicVolume() > 0 && !homeMusicRef.current?.playing);
+    const timer = window.setInterval(sync, 500);
+    return () => window.clearInterval(timer);
+  }, []);
+  const musicLabel = t(musicEnabled && musicVolume > 0 ? musicNeedsTap ? "Tap for music" : "Music on" : "Music off");
   useEffect(() => {
     if (shopView !== "leaders" && shopView !== "progress") return;
     let current = true;
@@ -622,7 +627,7 @@ const Shop = () => {
         <div className="ship-panel-heading"><div><p className="eyebrow">{t(shopView === "hangar" ? "YOUR HANGAR" : "SHIP SHOP")}</p><h2 id="hangar-heading">{t(shopView === "hangar" ? "Your fleet" : "Available ships")}</h2></div><strong className="shard-balance">◆ {displayedShards} <small>{t("Shards")}</small></strong></div>
         <p className="testnet-shop-notice" role="note">{shipSaveNetwork === "testnet" ? t("TESTNET SHARDS: Earn and spend Shards on available Standard ships here for testing. Shards and ship purchases do not transfer to Mainnet; there you start from zero.") : t("MAINNET SHARDS: Shards and ship purchases start from zero here. Testnet balances and ships are separate.")}</p>
         <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? t("Testnet: Grey Scout is free; nine Standard hulls cost Shards. Other hulls are locked until Mainnet.") : t("Grey Scout is free; nine Standard hulls cost Shards. Other hulls are currently locked.")}</p>
-        <details className="ship-earnings"><summary>{t("How to earn Shards")}</summary><p>{t("At level 1, defeats earn Shards by enemy class: light 2, medium 4–5, elite 6, heavy 8, boss 16. Rewards grow with level. Bonus targets earn 1 each, plus a completion reward that grows with level. Your Shards are saved at mission end.")}</p></details>
+        <details className="ship-earnings"><summary>{t("How to earn Shards")}</summary><p>{t("At level 1, defeats earn Shards by enemy class: light 2, medium 4–5, elite 6, heavy 8, boss 16. Rewards grow with level. Bonus targets earn 1 each, plus a completion reward that grows with level. The HUD shows your previous Shard balance plus this mission's earnings.")}</p></details>
         <label className="ship-search-label" htmlFor="ship-search">{t("Find a ship")} <small>{matchingShipOptions.length}/{shipSearchOptions.length}</small></label>
         <div className="ship-search-wrap" ref={shipSearchRef}>
           <div className="ship-search-control">

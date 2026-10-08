@@ -97,3 +97,27 @@ test('navigation transfers the unlocked home player into the game', async () => 
   assert.equal(takeHandoffGameMusic(), null);
   player.close();
 });
+
+test('mute during pending autoplay cannot leave music playing behind an off label', async () => {
+  const player = new MusicPlayer('/audio/battle-orbit.mp3', 50);
+  let finish;
+  player.audio.play = () => new Promise(resolve => { finish = () => { player.audio.paused = false; resolve(); }; });
+  const pending = player.play();
+  player.pause();
+  finish();
+  assert.equal(await pending, false);
+  assert.equal(player.playing, false);
+  player.close();
+});
+
+test('late success after a source switch or close cannot revive retired music', async () => {
+  const player = new MusicPlayer('/audio/battle-orbit.mp3', 50);
+  let finish;
+  player.audio.play = () => new Promise(resolve => { finish = () => { player.audio.paused = false; resolve(); }; });
+  const pending = player.play();
+  player.setSource('/audio/dreadnought-duel.mp3');
+  player.close();
+  finish();
+  assert.equal(await pending, false);
+  assert.equal(player.playing, false);
+});
