@@ -56,20 +56,6 @@ test("shots travel upward, collide only with visible enemies; player hitbox rema
   assert.equal(shipHitsEnemy({ x: .5, y: .85 }, 800, 600, { x: 460, y: 510, radius: 25 }), false);
 });
 
-test("a shot registers a moving enemy crossed between frames, without distant or cloaked hits", () => {
-  const start = { id: 1, x: 400, y: 520, speedX: 0, damage: 1, empowered: false };
-  const end = { ...start, y: 480 };
-  const hull = { x: 400, y: 500, radius: 20, cloaked: false };
-  assert.equal(shotHitsEnemy(start, hull), false);
-  assert.equal(shotHitsEnemy(end, hull), false);
-  assert.equal(shotHitsEnemy(end, hull, start), true);
-  assert.equal(shotHitsEnemy(end, { ...hull, x: 425 }, start), false);
-  assert.equal(shotHitsEnemy(end, { ...hull, cloaked: true }, start), false);
-  assert.equal(shotHitsEnemy({ ...end, y: -19 }, { ...hull, y: 0, radius: 18 }, { ...start, y: 19 }), true); // crosses before offscreen cleanup
-  assert.equal(shotHitsEnemy({ ...end, y: 510 }, { ...hull, y: 530 }, { ...start, y: 550 }, { x: 400, y: 490 }), true);
-  assert.equal(shotHitsEnemy({ ...end, y: 510 }, { ...hull, y: 490 }, { ...start, y: 550 }, { x: 400, y: 530 }), false);
-});
-
 test("visible ships collide in every phase; cooldown and dive state prevent repeated damage", () => {
   const player = { x: .5, y: .85 };
   const touching = { x: 400, y: 510, radius: 25 };

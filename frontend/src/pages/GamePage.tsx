@@ -1273,7 +1273,6 @@ const GamePage = () => {
             });
             attackCooldownRef.current = 0;
         }
-        const previousAsteroids = state.asteroids;
         const nextAsteroids: Asteroid[] = [];
         let heartsLost = 0;
         let damageTaken = false;
@@ -1436,6 +1435,7 @@ const GamePage = () => {
         const remainingShots: PlayerShot[] = [];
         for (const previous of state.shots) {
           const shot = advanceShot(previous, delta);
+          if (shot.y < -10) continue;
           const bonusTarget = state.bonusTargets.find(target => shotHitsEnemy(shot, { ...target, cloaked: false }));
           if (bonusTarget) {
             state.bonusTargets = state.bonusTargets.filter(target => target.id !== bonusTarget.id);
@@ -1471,8 +1471,8 @@ const GamePage = () => {
             }
             continue;
           }
-          const enemy = state.asteroids.find(item => shotHitsEnemy(shot, item, previous, previousAsteroids.find(before => before.id === item.id) ?? item));
-          if (!enemy) { if (shot.y >= -10) remainingShots.push(shot); continue; }
+          const enemy = state.asteroids.find(item => shotHitsEnemy(shot, item));
+          if (!enemy) { remainingShots.push(shot); continue; }
           enemy.health = Math.max(0, enemy.health - shot.damage);
           enemy.hitUntil = time + 190;
           if (enemy.health > 0) {

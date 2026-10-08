@@ -40,16 +40,8 @@ export const movePlayer = (position: PlayerPosition, horizontal: number, vertica
 
 export const advanceShot = (shot: PlayerShot, delta: number): PlayerShot => ({ ...shot, x: shot.x + shot.speedX * delta, y: shot.y - SHOT_SPEED_PX_MS * delta });
 
-// Compare the shot and hull at the same instant along the frame. Testing only
-// their final positions skips hits when either one moves across the other.
-export const shotHitsEnemy = (shot: PlayerShot, enemy: { x: number; y: number; radius: number; cloaked: boolean }, previousShot: PlayerShot = shot, previousEnemy: { x: number; y: number } = enemy) => {
-  if (enemy.cloaked) return false;
-  const startX = previousShot.x - previousEnemy.x, startY = previousShot.y - previousEnemy.y;
-  const endX = shot.x - enemy.x, endY = shot.y - enemy.y;
-  const dx = endX - startX, dy = endY - startY;
-  const progress = dx * dx + dy * dy ? Math.max(0, Math.min(1, -(startX * dx + startY * dy) / (dx * dx + dy * dy))) : 0;
-  return Math.hypot(startX + dx * progress, startY + dy * progress) < enemy.radius * 0.7 + 5;
-};
+export const shotHitsEnemy = (shot: PlayerShot, enemy: { x: number; y: number; radius: number; cloaked: boolean }) =>
+  !enemy.cloaked && Math.hypot(shot.x - enemy.x, shot.y - enemy.y) < enemy.radius * 0.7 + 5;
 
 export const shipHitsEnemy = (player: PlayerPosition, width: number, height: number, enemy: { x: number; y: number; radius: number }) =>
   Math.hypot(player.x * width - enemy.x, player.y * height - enemy.y) < PLAYER_CONTACT_RADIUS + enemy.radius;
