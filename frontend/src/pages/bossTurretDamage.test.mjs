@@ -9,7 +9,7 @@ import { firstMissionSnapshot, readSnapshot, missionAfter } from '../../../backe
 import { validRunScore } from '../../../backend/src/leaderboardRules.ts';
 import { levelDifficulty } from './levelDifficulty.ts';
 
-test('every boss hull has triple legacy HP and every turret double legacy HP',()=>{
+test('every boss hull has triple legacy HP and later turret batteries gain armor',()=>{
  for(let id=1;id<=50;id++){
   const boss=createSectorBoss(id*10,390,90,760);
   const p=levelDifficulty(id*10).progress;
@@ -17,8 +17,8 @@ test('every boss hull has triple legacy HP and every turret double legacy HP',()
   assert.ok(Math.abs(boss.maxHealth-oldHull*3)<1e-9);
   boss.turrets.forEach((turret,index)=>{
    const oldTurret=Math.ceil(4+bossWeapons[id-1][index].caliber/4+(id-1)*.15);
-   assert.equal(turret.health,oldTurret*2);
-   assert.equal(turret.maxHealth,oldTurret*2);
+   assert.equal(turret.health,oldTurret*2+2*Math.floor((id-1)/5));
+   assert.equal(turret.maxHealth,turret.health);
   });
  }
 });

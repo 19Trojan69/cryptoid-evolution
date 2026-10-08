@@ -1,6 +1,6 @@
 # Cryptoid Evolution – zentrale Entwicklungs-TODO
 
-Stand: 8. Oktober 2026. Paket 1 wurde im getrennten Testnet-Projekt veröffentlicht. **Paket 2 ist implementiert und lokal getestet; Paket 3 wartet auf ausdrückliche Freigabe.**
+Stand: 8. Oktober 2026. Paket 1 und 2 wurden im getrennten Testnet-Projekt veröffentlicht. **Paket 3 ist implementiert und automatisiert getestet; Browser-/Testnet-Abnahme folgt.**
 
 Status: **offen** = noch nicht vollständig umgesetzt/verifiziert; **in Arbeit** = aktuelle Bearbeitung; **erledigt** = implementiert; **getestet** = dokumentierte Prüfungen bestanden (Geräte-/Live-Lücken separat ausweisen).
 
@@ -42,14 +42,14 @@ Vorhanden: modulare Gegner-/Spielerkollision, alle Bossgeschütze, 1.500-ms-Tref
 
 Vorhandenes Inventar, Timer, Opt-in-Nachladen und Pi-Aktivierung werden weiterverwendet. Nachweis: [docs/package-2-weapons-2026-10-08.md](docs/package-2-weapons-2026-10-08.md). Physische Pi-/Android-/iPhone-Abnahme steht aus.
 
-## Paket 3 – Bombe, EMP & Bosskampf — offen
+## Paket 3 – Bombe, EMP & Bosskampf — erledigt / automatisiert getestet, Browser-Abnahme offen
 
-11. **offen: Bomben-/EMP-Optik.** Moderne, hochwertige, professionelle, unterscheidbare Effekte ohne relevante Performancekosten.
-12. **offen: Mechaniken trennen.** Bombe zerstört alle betroffenen normalen Blockgegner, verursacht Boss-Schaden ohne sofortigen Bosskill. Separate Geschütz-HP; beim ersten Boss kann eine Bombe alle Geschütze zerstören, später zunehmende Haltbarkeit/skalierter Schaden, kein garantierter Gesamt-Kill. EMP zerstört nichts, deaktiviert zeitweise ausschließlich gegnerische Feuerkraft; Gegner/Geschütze bleiben bestehen.
-13. **offen: Geschütztrefferfeedback.** Kleine sichtbare hochwertige lokale Explosionen; keine Überdeckung, performant; eigene Energie/Schadensanzeige bis zum letzten Geschütz.
-14. **offen: Boss-Langzeitperformance.** Ursache untersuchen: Projektile, Partikel, Listener, RAF/Loops, Objektlisten, Timer, GC, Explosionen, Geschütze, Kollisionen, unnötige Re-Renders. Keine pauschale Effektreduktion; längere Kämpfe flüssig.
+11. **getestet (automatisch): Bomben-/EMP-Optik.** Moderne, hochwertige, professionelle, unterscheidbare Effekte ohne relevante Performancekosten.
+12. **getestet (automatisch): Mechaniken trennen.** Bombe zerstört alle betroffenen normalen Blockgegner, verursacht Boss-Schaden ohne sofortigen Bosskill. Separate Geschütz-HP; beim ersten Boss kann eine Bombe alle Geschütze zerstören, später zunehmende Haltbarkeit/skalierter Schaden, kein garantierter Gesamt-Kill. EMP zerstört nichts, deaktiviert zeitweise ausschließlich gegnerische Feuerkraft; Gegner/Geschütze bleiben bestehen.
+13. **getestet (automatisch): Geschütztrefferfeedback.** Kleine sichtbare hochwertige lokale Explosionen; keine Überdeckung, performant; eigene Energie/Schadensanzeige bis zum letzten Geschütz.
+14. **getestet (automatisch): Boss-Langzeitperformance.** Ursache untersuchen: Projektile, Partikel, Listener, RAF/Loops, Objektlisten, Timer, GC, Explosionen, Geschütze, Kollisionen, unnötige Re-Renders. Keine pauschale Effektreduktion; längere Kämpfe flüssig.
 
-Vorhanden: separate Geschütz-HP, adaptive schmale grün-rote Balken, modulare Bosswaffen/Reaktor; deren Verhalten erhalten.
+Vorhanden: separate Geschütz-HP, adaptive schmale grün-rote Balken, modulare Bosswaffen/Reaktor; deren Verhalten erhalten. Paket-3-Nachweis: [docs/package-3-combat-2026-10-08.md](docs/package-3-combat-2026-10-08.md). Physische iPhone-/Android-/Pi-Browser- und echter Kauf-/Langzeit-Frame-Test stehen aus.
 
 ## Paket 4 – visuelles Gameplay & HUD — offen
 
@@ -92,4 +92,4 @@ Implementierung erledigt; automatisierte Prüfungen bestanden. Bericht: [docs/pa
 - Browser 390×844 und 1280×800: Explosion/Treffer/Schutz/Übergänge; echte Handler mit isoliertem Speicher: Shards, Lebensverlust und Boss-Clear-Resume; Hintergrundpause auch bei gestoppter RAF geprüft.
 - Lint nicht grün: exakt wie vorher 55 Fehler / 16 Warnungen; keine zusätzlichen Meldungen.
 - Offene Geräteabnahme: physischer iPhone-/Pi-Browser-/Android-Test. Testnet wurde anschließend über das getrennte Vercel-Projekt mit Commit `861f9fe` unter `cryptoid-evolution-testnet.vercel.app` veröffentlicht und im Browser angespielt. Produktion unverändert.
-- Paket 2 wurde am 8. Oktober ausdrücklich freigegeben; nur dieses Paket ist jetzt in Arbeit.
+- Paket 2 wurde am 8. Oktober abgeschlossen und im getrennten Testnet-Projekt veröffentlicht. Paket 3 ist ausdrücklich freigegeben, umgesetzt und automatisiert geprüft; Live-Abnahme läuft. Paket 4 wartet auf Freigabe.

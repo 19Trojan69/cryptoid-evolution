@@ -53,7 +53,8 @@ const topics = [
     intro: "Fly through glowing drops to collect boosts that activate immediately.",
     details: [
       "Shield absorbs hits, Overdrive doubles shot damage, Rapid Fire increases the firing rate and Weapon Upgrade raises the weapon stage. A short message explains each effect when collected.",
-      "Weapon stages go from the free single laser to twin, rapid twin, triple and plasma fire. Nova Bomb clears visible enemies and shots; EMP freezes enemies briefly.",
+      "Weapon stages go from the free single laser to twin, rapid twin, triple and plasma fire.",
+      "Nova Bomb destroys visible enemies and shots, hitting boss turrets before the exposed hull. EMP disables enemy weapons for seven seconds without stopping ships or shots.",
       "Open the side Weapons tab to choose equipment. Closing it resumes the mission after 3–2–1.",
       "When a timed weapon expires, the strongest enabled weapon takes over; otherwise the standard laser. Auto-reload uses owned charges without pausing.",
       "Collected weapon upgrades activate immediately. If another timed weapon is available, its own side button lets you switch between them. Previously owned start boosts have a separate activation button.",
