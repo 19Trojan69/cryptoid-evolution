@@ -26,6 +26,19 @@ Stand: 8. Oktober 2026. Sauberer Ausgangspunkt `codex/package-4-3-collision-hit-
 - Backend: TypeScript-Build und vollständige Suite mit 52 Tests erfolgreich, einschließlich vorhandener Admin-/Payment-/Progress-Regressionen. Lokale HTTP-Integrationstests wurden mit Loopback-Freigabe ausgeführt.
 - `git diff --check` bestanden. Keine Änderungen an Pi-SDK- oder Payment-Code. Der bekannte große JS-Chunk ist weiterhin eine getrennte Performanceaufgabe.
 
-## Freigabeblock für Testnet
+## Ursprünglicher Freigabeblock für Testnet
 
 `api/index.ts` leitet im Testnet **alle** `/api`-Routen an den gegenwärtigen Produktions-Backend-Dienst weiter. Dessen Commit enthält die neuen Endpunkte und Score-Felder noch nicht. Das separate Testnet-Projekt hat keinen eigenen MongoDB-Zugang konfiguriert. Eine bloße Frontend-Alias-Umschaltung würde eine scheinbar spielbare, aber inkonsistente Rangliste veröffentlichen. Daher keine Aktualisierung der festen Testnet-Adresse und kein Produktionsrelease. Für einen echten Ende-zu-Ende-Test benötigt Paket 5 einen geprüften separaten Backend-Staging-Pfad mit verifizierter Authentifizierung und Erhalt des bestehenden Testnet-Spielstands; erst danach dürfen Tests mit realem Konto und Geräten sowie die Testnet-Freigabe folgen.
+
+## Fortsetzung: eigenständige Testnet-Backend-Vorschau
+
+Der ursprüngliche Blocker wurde weiter untersucht. Das bestehende Projekt `cryptoid-evolution` verfügt bereits über einen MongoDB-Zugang für Preview-Deployments. Die geschützte Paket-5-Vorschau `dpl_9CaA2djeSGLx4PR4oFFoyhFi6ybr` wurde über einen befristeten, auf die Vorschau beschränkten Vercel-Zugang gelesen. Ihre elf Testnet-V2-Rekorde stimmen in Rang, Benutzername, Score und Dienstgrad mit der bisherigen festen Testnet-API überein. Keine Benutzer-/Inventar-/Score-Werte wurden hierfür verändert.
+
+- `api/index.ts` lädt das Backend erst, wenn es tatsächlich lokal benötigt wird. Ein reines Proxy-Deployment initialisiert keine eigene MongoDB-/Session-Instanz.
+- `backend/src/apiGateway.ts` unterstützt `CRYPTOID_TESTNET_BACKEND=local` ausschließlich bei `VERCEL_ENV=preview`. Diese Config-Variable wurde ausschließlich für den Paket-5-Branch im Preview-Bereich des bestehenden Projekts gesetzt. Produktion erhält keine neue Einstellung.
+- In diesem Modus werden sämtliche lokalen API-Anfragen serverseitig auf Testnet festgelegt, auch bei fehlendem oder widersprüchlichem Client-Header. Vorhandene Benutzer- und Spielstanddokumente werden weiterverwendet.
+- Pi-Zahlungen, Zahlungsadministration, Dienststatus und Benachrichtigungen verwenden weiterhin den bisherigen geprüften Produktionsdienst mit erzwungenem Testnet-Header. API-Schlüssel werden weder kopiert noch exportiert. Score-Abrechnung, Fortschritt und eigener Score-Reset verwenden den Paket-5-Backend-Code.
+- Query-Parameter der lokalen API bleiben beim Umschreiben erhalten; die historische Ranglistenauswahl funktioniert dadurch auch im lokalen Backend-Modus. Vorschau-Zugangsdaten werden nicht an den Zahlungsproxy weitergereicht.
+- Fünf zusätzliche Gateway-Tests prüfen Netzwerktrennung, opt-in ausschließlich für Preview, Auth-/Body-/Cookie-Weitergabe, Erhalt des Zahlungsdiensts und Wiederaufnahme nach einem Startfehler. Die vollständige Backend-Suite besteht nun aus 57 erfolgreichen Tests. Frontend: 209 Spieltests und 22 i18n-Tests, Build und Lint erfolgreich.
+
+**Status:** Routing vorbereitet und automatisiert geprüft. Neue Backend-Vorschau, Live-API-Prüfung und feste Testnet-Veröffentlichung folgen vor der Geräteabnahme. Kein Merge nach `main`, kein Produktionsrelease und kein tatsächlicher Score-Reset.
