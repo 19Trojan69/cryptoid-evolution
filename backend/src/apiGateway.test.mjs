@@ -42,7 +42,7 @@ test('preview opt-in cannot change the production network or archive query', asy
   assert.deepEqual(calls.at(-1), { url: '/leaderboard/top?rules=2', network: 'mainnet' });
 });
 
-test('default Testnet proxy does not load MongoDB and keeps authentication, body and response cookies', async t => {
+test('default Testnet proxy does not start the local backend and keeps authentication, body and response cookies', async t => {
   let sent;
   t.mock.method(globalThis, 'fetch', async (url, init) => {
     sent = { url: String(url), init };
