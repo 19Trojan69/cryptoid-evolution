@@ -1,6 +1,6 @@
 # Cryptoid Evolution – zentrale Entwicklungs-TODO
 
-Stand: 8. Oktober 2026. Pakete 1–3 und das separate Lint-Stabilitätspaket wurden im getrennten Testnet-Projekt veröffentlicht. **Paket 4 ist implementiert, automatisiert getestet und im separaten Preview angespielt; physische Geräteabnahme offen. Zwei Befunde aus dem iPhone-Preview sind als Paket 4.1 vorgemerkt. Die feste Testnet-Adresse blieb wegen fehlender Vercel-Connector-Berechtigung unverändert. Paket 5 wartet auf Freigabe.**
+Stand: 8. Oktober 2026. Pakete 1–3 und das separate Lint-Stabilitätspaket wurden im getrennten Testnet-Projekt veröffentlicht. **Paket 4 und das anschließend freigegebene Paket 4.1 sind implementiert, automatisiert getestet und im separaten Preview angespielt; physische Geräteabnahme offen. Die feste Testnet-Adresse blieb wegen fehlender Vercel-Connector-Berechtigung unverändert. Paket 5 wartet auf Freigabe.**
 
 Status: **offen** = noch nicht vollständig umgesetzt/verifiziert; **in Arbeit** = aktuelle Bearbeitung; **erledigt** = implementiert; **getestet** = dokumentierte Prüfungen bestanden (Geräte-/Live-Lücken separat ausweisen).
 
@@ -75,13 +75,13 @@ Nachweis: [docs/lint-stability-2026-10-08.md](docs/lint-stability-2026-10-08.md)
 
 Nachweis: [docs/package-4-visual-hud-touch-2026-10-08.md](docs/package-4-visual-hud-touch-2026-10-08.md). Paket 5 bleibt getrennt.
 
-## Paket 4.1 – iPhone-Feedback: Audiohinweis und Schiffsbewegung — offen, Umsetzung nicht freigegeben
+## Paket 4.1 – iPhone-Feedback: Audiohinweis und Schiffsbewegung — erledigt / automatisiert und im Preview getestet, Geräteabnahme offen
 
-- **offen: Audiohinweis im Spiel entfernen/verlegen.** Auf dem iPhone-Preview erscheint „Ton einschalten“ als schwebende Schaltfläche mitten in der Blockabschlussanzeige. Audio ein-/ausschalten gehört in die vorhandenen Systemeinstellungen, nicht über das Spielfeld oder Übergangstexte. Die bestehende Erkennung von stummgeschaltetem beziehungsweise unterbrochenem AudioContext und die Wiederaufnahme durch zulässige Nutzergesten prüfen; UI und tatsächlich hörbarer Zustand müssen übereinstimmen. Eine eventuell notwendige Fehlermeldung darf weder Kampf noch Übergänge überdecken oder die Bedienung blockieren. Bei einer Lösung Einstellungen, Pausenmenü und Übersetzungen konsistent halten.
-- **offen: Spielerraumschiff schlingert bei Links-/Rechtsflug.** Die bestehende Bewegung setzt `--visual-bank` als `rotateY(...)` und zusätzlich `rotate(...)` auf ein flaches Schiffssprite; letzteres dreht das Schiff sichtbar in der Bildschirmebene. Gewünscht ist ein ruhiger, kontrollierter Flug. Eine Schräglage um die Längsachse nur mit einer überzeugenden räumlichen Darstellung verwenden; falls mit dem vorhandenen Sprite nicht sauber möglich, die störende Schlingerbewegung weglassen, ohne Steuerung, Flammen, Kollisionen oder Hitbox zu verändern. Keine übereilte 3D-Neuentwicklung.
-- **offen: Geräteprüfung.** Auf iPhone/Safari, Android/Chrome und nach Möglichkeit Pi Browser Audio-Sperre, Spielstart, Hintergrundwechsel, Pausieren, Blockübergang sowie schnelle Richtungswechsel prüfen. Automatisierte Audio-Status-/Bewegungstests und Frontend-Lint/-Build ergänzen. Ausgangsbefunde: zwei iPhone-Screenshots vom 8. Oktober 2026, 17:19–17:20 Uhr, im separaten Paket-4-Preview.
+- **erledigt / Browser-Preview getestet: Audiohinweis aus dem Spielfeld entfernt.** „Ton einschalten“ überdeckte auf dem iPhone-Preview den Blockabschluss. Die vorhandenen Musik-/Effektregler im Pausenmenü und die Musikumschaltung im Hangar bleiben bedienbar. Wiederaufnahmeversuche des AudioContext und der Musik bei Nutzergesten, nach Pause und bei Sichtbarkeitswechsel bleiben erhalten; das nur für die entfernte Schaltfläche nötige Status-Polling entfällt. Kein Audio-Overlay mehr im Kampf oder Übergang; hörbare Wiedergabe und App-Wechsel auf realen Geräten noch prüfen.
+- **erledigt / Browser-Preview getestet: ruhige Spieler- und Gegnerschiffe.** Die seitliche Neigung nutzt nur eine dezente perspektivische Drehung um die Schiffslängsachse (`rotateY`); die zusätzliche Drehung in der Bildebene (`rotate`) beim Spieler und bei regulären Gegnern sowie Einflug-Bank-Berechnung sind entfernt. Gegnerflugbahnen, Triebwerksreaktion, Kollisionsradien und Hitboxen bleiben bestehen. Boss- und Bonus-Schiffe hatten diese Bildebenen-Drehung nicht. Eine echte 3D-Geometrie wurde nicht eingeführt.
+- **offen: Geräteabnahme.** Auf iPhone/Safari, Android/Chrome und nach Möglichkeit Pi Browser Audio-Sperre, Spielstart, Hintergrundwechsel, Pausieren, Blockübergang und schnelle Richtungswechsel prüfen. Ausgangsbefunde: zwei iPhone-Screenshots vom 8. Oktober 2026, 17:19–17:20 Uhr, im separaten Paket-4-Preview. Frontend-Lint (0/0), 50 Spieltestdateien, i18n sowie Frontend-/Backend-Build bestanden; im neuen Testnet-Preview Spielstart, Links-/Rechtsflug, Gegnerausrichtung, Overlay-Abwesenheit und Pausenregler geprüft.
 
-Dieses kleine Folgepaket ist unabhängig von Score/Rangliste (Paket 5) und vom Klangdesign gegnerischer Waffen (Paket 6). Es wird erst nach gesonderter Freigabe umgesetzt; bis dahin keine Änderung an Audio- oder Bewegungslogik.
+Nachweis: [docs/package-4-1-audio-ship-motion-2026-10-08.md](docs/package-4-1-audio-ship-motion-2026-10-08.md). Dieses kleine Folgepaket ist unabhängig von Score/Rangliste (Paket 5) und vom Klangdesign gegnerischer Waffen (Paket 6). Paket 5 bleibt offen.
 
 ## Paket 5 – Score, Rangliste & Admin — offen
 
@@ -119,4 +119,4 @@ Implementierung erledigt; automatisierte Prüfungen bestanden. Bericht: [docs/pa
 - Browser 390×844 und 1280×800: Explosion/Treffer/Schutz/Übergänge; echte Handler mit isoliertem Speicher: Shards, Lebensverlust und Boss-Clear-Resume; Hintergrundpause auch bei gestoppter RAF geprüft.
 - Lint nicht grün: exakt wie vorher 55 Fehler / 16 Warnungen; keine zusätzlichen Meldungen.
 - Offene Geräteabnahme: physischer iPhone-/Pi-Browser-/Android-Test. Testnet wurde anschließend über das getrennte Vercel-Projekt mit Commit `861f9fe` unter `cryptoid-evolution-testnet.vercel.app` veröffentlicht und im Browser angespielt. Produktion unverändert.
-- Paket 2 und 3 sowie das separat freigegebene Lint-Stabilitätspaket wurden im getrennten Testnet-Projekt veröffentlicht. Paket 4 ist implementiert und automatisiert geprüft; Paket 5 wartet auf Freigabe.
+- Paket 2 und 3 sowie das separat freigegebene Lint-Stabilitätspaket wurden im getrennten Testnet-Projekt veröffentlicht. Paket 4 und das Folgepaket 4.1 sind implementiert und automatisiert sowie im separaten Preview geprüft; Paket 5 wartet auf Freigabe.
