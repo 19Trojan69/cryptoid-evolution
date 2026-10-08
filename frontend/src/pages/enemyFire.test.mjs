@@ -46,9 +46,18 @@ test("visible enemy projectile tips damage the player while glow and near misses
   assert.equal(enemyShotHitsPlayer(lance, player, width, height), true);
   assert.equal(enemyShotHitsPlayer({ ...lance, x: 434 }, player, width, height), false);
   assert.equal(enemyShotHitsPlayer({ ...lance, y: y - 41 }, player, width, height), false);
+  assert.equal(enemyShotHitsPlayer({ ...lance, y: y + 34 }, player, width, height), false);
   assert.equal(enemyShotHitsPlayer({ ...lance, bossKind: 'rapid', y: y - 34 }, player, width, height), true);
   assert.equal(enemyShotHitsPlayer({ ...lance, bossKind: 'bolt' }, player, width, height), false);
   assert.equal(enemyShotHitsPlayer({ ...lance, bossKind: 'orb', radius: 7 }, player, width, height), false);
+});
+
+test("a fast enemy shot crossing the ship between frames still hits", () => {
+  const player = { x: .5, y: .85 };
+  const previous = { id: 4, x: 400, y: 630, vx: 0, vy: .3, radius: 5 };
+  const moved = { ...previous, y: 730 };
+  assert.equal(enemyShotHitsPlayer(moved, player, 800, 800, previous), true);
+  assert.equal(enemyShotHitsPlayer({ ...moved, x: 460 }, player, 800, 800, { ...previous, x: 460 }), false);
 });
 
 test("an unprotected enemy shot removes one life; shields and hull guard retain their protection", () => {
