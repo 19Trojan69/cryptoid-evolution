@@ -71,6 +71,7 @@ Nachweis: [docs/lint-stability-2026-10-08.md](docs/lint-stability-2026-10-08.md)
 15. **offen: Warnungen.** Flotte/Verstärkung und ähnliche Hinweise kurz in Bildschirmmitte, ohne Box/Rahmen; hochwertiger Sci-Fi-Text, kurzes Blinken/Flackern, sprachabhängig, keine dauerhafte Sichtblockade.
 16. **offen: Einheitliche Würfel.** Exakte gleichseitige Proportionen, identische Darstellung, Drehrichtung, Logik und Geschwindigkeit; Kopien dürfen identisch sein.
 17. **offen: Größere Gameplay-Schiffe.** Vor allem Spieler, teilweise Gegner vergrößern; Grafik/Hitbox sinnvoll trennen, keine unfairen Treffer, HUD/Bewegung erhalten. Bereits vorhandenen lokalen Entwurf bei späterer Freigabe prüfen.
+- **offen: Doppeltippen und Bildschirmlupe (mobile Bedienung).** Im laufenden Spiel soll Doppeltippen auf der Spielfläche nicht ungewollt die Ansicht vergrößern und das eigene Schiff aus dem Blickfeld bringen. Ursache und Reproduzierbarkeit auf iPhone/Safari, Pi Browser sowie Android/Chrome prüfen; Browser-Doppeltipp-Zoom von einer Betriebssystem-Bedienungshilfe unterscheiden. Eine Korrektur auf den Spielbereich begrenzen und Bewegung, HUD, Menüs sowie Zugänglichkeit auf beiden Plattformen nachtesten.
 
 ## Paket 5 – Score, Rangliste & Admin — offen
 
