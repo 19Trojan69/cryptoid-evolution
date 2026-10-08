@@ -1,6 +1,6 @@
 # Cryptoid Evolution – zentrale Entwicklungs-TODO
 
-Stand: 8. Oktober 2026. Pakete 1–3 und das separate Lint-Stabilitätspaket wurden im getrennten Testnet-Projekt veröffentlicht. **Paket 4 ist implementiert, automatisiert getestet und im separaten Preview angespielt; physische Geräteabnahme offen. Die feste Testnet-Adresse blieb wegen fehlender Vercel-Connector-Berechtigung unverändert. Paket 5 wartet auf Freigabe.**
+Stand: 8. Oktober 2026. Pakete 1–3 und das separate Lint-Stabilitätspaket wurden im getrennten Testnet-Projekt veröffentlicht. **Paket 4 ist implementiert, automatisiert getestet und im separaten Preview angespielt; physische Geräteabnahme offen. Zwei Befunde aus dem iPhone-Preview sind als Paket 4.1 vorgemerkt. Die feste Testnet-Adresse blieb wegen fehlender Vercel-Connector-Berechtigung unverändert. Paket 5 wartet auf Freigabe.**
 
 Status: **offen** = noch nicht vollständig umgesetzt/verifiziert; **in Arbeit** = aktuelle Bearbeitung; **erledigt** = implementiert; **getestet** = dokumentierte Prüfungen bestanden (Geräte-/Live-Lücken separat ausweisen).
 
@@ -74,6 +74,14 @@ Nachweis: [docs/lint-stability-2026-10-08.md](docs/lint-stability-2026-10-08.md)
 - **erledigt / physische Geräteabnahme offen: Doppeltippen und Bildschirmlupe.** Den bestehenden Schutz für die Spielfläche um einen frühzeitigen, positionsabhängigen Doppeltipp-Schutz ergänzt; UI-Schaltflächen und globale Seitenvergrößerung nicht gesperrt. Auf iPhone/Safari, Pi Browser und Android/Chrome prüfen, ob es Browser-Zoom oder eine Betriebssystem-Bedienungshilfe war; letzteres kann die Webseite nicht steuern. Bewegung, HUD, Menüs und Zugänglichkeit nachtesten.
 
 Nachweis: [docs/package-4-visual-hud-touch-2026-10-08.md](docs/package-4-visual-hud-touch-2026-10-08.md). Paket 5 bleibt getrennt.
+
+## Paket 4.1 – iPhone-Feedback: Audiohinweis und Schiffsbewegung — offen, Umsetzung nicht freigegeben
+
+- **offen: Audiohinweis im Spiel entfernen/verlegen.** Auf dem iPhone-Preview erscheint „Ton einschalten“ als schwebende Schaltfläche mitten in der Blockabschlussanzeige. Audio ein-/ausschalten gehört in die vorhandenen Systemeinstellungen, nicht über das Spielfeld oder Übergangstexte. Die bestehende Erkennung von stummgeschaltetem beziehungsweise unterbrochenem AudioContext und die Wiederaufnahme durch zulässige Nutzergesten prüfen; UI und tatsächlich hörbarer Zustand müssen übereinstimmen. Eine eventuell notwendige Fehlermeldung darf weder Kampf noch Übergänge überdecken oder die Bedienung blockieren. Bei einer Lösung Einstellungen, Pausenmenü und Übersetzungen konsistent halten.
+- **offen: Spielerraumschiff schlingert bei Links-/Rechtsflug.** Die bestehende Bewegung setzt `--visual-bank` als `rotateY(...)` und zusätzlich `rotate(...)` auf ein flaches Schiffssprite; letzteres dreht das Schiff sichtbar in der Bildschirmebene. Gewünscht ist ein ruhiger, kontrollierter Flug. Eine Schräglage um die Längsachse nur mit einer überzeugenden räumlichen Darstellung verwenden; falls mit dem vorhandenen Sprite nicht sauber möglich, die störende Schlingerbewegung weglassen, ohne Steuerung, Flammen, Kollisionen oder Hitbox zu verändern. Keine übereilte 3D-Neuentwicklung.
+- **offen: Geräteprüfung.** Auf iPhone/Safari, Android/Chrome und nach Möglichkeit Pi Browser Audio-Sperre, Spielstart, Hintergrundwechsel, Pausieren, Blockübergang sowie schnelle Richtungswechsel prüfen. Automatisierte Audio-Status-/Bewegungstests und Frontend-Lint/-Build ergänzen. Ausgangsbefunde: zwei iPhone-Screenshots vom 8. Oktober 2026, 17:19–17:20 Uhr, im separaten Paket-4-Preview.
+
+Dieses kleine Folgepaket ist unabhängig von Score/Rangliste (Paket 5) und vom Klangdesign gegnerischer Waffen (Paket 6). Es wird erst nach gesonderter Freigabe umgesetzt; bis dahin keine Änderung an Audio- oder Bewegungslogik.
 
 ## Paket 5 – Score, Rangliste & Admin — offen
 
