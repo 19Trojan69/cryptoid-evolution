@@ -4,6 +4,7 @@ import { missionShopTranslations } from './missionShop.ts';
 import { weaponStockTranslations } from './weaponStock.ts';
 import { bossRewardTranslations } from './bossReward.ts';
 import { package2Translations } from './package2.ts';
+import { package3Translations } from './package3.ts';
 // Shared localization catalog. Rows are kept explicit for coverage and placeholder checks.
 export const localeAliases: Record<string, string | string[]> = {
   "A short breather.": "MISSION PAUSED",
@@ -5530,6 +5531,7 @@ Object.assign(localeCatalog["th"], {"Time expired": "หมดเวลา"});
 for (const [locale, translations] of Object.entries(bossPhaseTranslations)) Object.assign(localeCatalog[locale], translations);
 for (const [locale, translations] of Object.entries(missionShopTranslations)) Object.assign(localeCatalog[locale], translations);
 for (const [locale, translations] of Object.entries(package2Translations)) Object.assign(localeCatalog[locale], translations);
+for (const [locale, translations] of Object.entries(package3Translations)) Object.assign(localeCatalog[locale], translations);
 for (const [locale, translations] of Object.entries(weaponStockTranslations)) Object.assign(localeCatalog[locale], translations);
 for (const [locale, translations] of Object.entries(bossRewardTranslations)) Object.assign(localeCatalog[locale], translations);
 Object.assign(localeCatalog["de"], {"Each defeated boss grants one extra heart, even above three. Remaining hearts are saved.":"Jeder besiegte Boss gibt ein zusätzliches Herz, auch über drei hinaus. Verbleibende Herzen werden gespeichert."});

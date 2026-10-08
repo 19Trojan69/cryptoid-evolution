@@ -63,6 +63,7 @@ import BossWeaponsView, { preloadBossWeapons } from './BossWeaponsView';
 import BossHealthView from './BossHealthView';
 import BossReactorView from './BossReactorView';
 import { advanceBossTurrets, damageBossTurret, gunPosition } from './bossTurrets';
+import { detonateBossBomb, disableEnemyWeapons } from './specialPowers';
 import { bossWeapons } from './bossWeapons';
 import { bossEscortAttackInterval, bossEscortCount, bossEscortReinforcements, bossEscortRosterIndex, bossEscortSlots, reactorEscortCount, advanceEscortReserve } from "./bossEscorts";
 import { awardBlock, awardBonusMedal, awardBossSticker, awardChain, emptyRewardProgress, reachLevel, rewardRank, type RewardProgress } from "./rewardProgress";
@@ -81,7 +82,7 @@ const BOSS_VICTORY_START_MS = BOSS_FALL_DURATION_MS + 650;
 // The complete victory recording is 3.408 seconds, including its release.
 const BOSS_CLEAR_DURATION_MS = BOSS_VICTORY_START_MS + 3_700;
 const pickupEffectLabels: Record<PowerUpType, string> = {
-  shield: "Blocks the next hit", overdrive: "Double shot damage", weapon: "Weapon level", rapid: "Faster automatic fire", bomb: "Clears enemies and shots", emp: "Freezes enemies for 7s",
+  shield: "Blocks the next hit", overdrive: "Double shot damage", weapon: "Weapon level", rapid: "Faster automatic fire", bomb: "Destroys enemies and shots", emp: "Disables enemy weapons for 7s",
 };
 const FORMATION_DATA_ROWS = [
   "1011010001101001110001010011011010101100",
@@ -146,7 +147,7 @@ type Effect = {
   id: number;
   x: number;
   y: number;
-  kind: "shield" | "explosion" | "boss-fall" | "boss-explosion" | "player-crash" | "player-explosion" | "shatter" | "bomb-wave" | "emp-wave";
+  kind: "shield" | "explosion" | "boss-fall" | "boss-explosion" | "player-crash" | "player-explosion" | "shatter" | "bomb-wave" | "emp-wave" | "turret-hit" | "turret-burst";
   startedAt: number;
   turretBonus?: number;
   target?: "player";
@@ -1207,7 +1208,7 @@ const GamePage = () => {
             state.asteroids.push(spawnAsteroid(nextIdRef.current++, width, visibleTop, formationIndexRef.current++, state.sector, slots, formationOffsetRef.current, rulesVersionRef.current));
           }
         }
-        if (state.encounter === "boss-fight" && state.boss && state.empMs === 0 && state.boss.elapsed >= BOSS_ENTRY_MS + 1_500) {
+        if (state.encounter === "boss-fight" && state.boss && state.boss.elapsed >= BOSS_ENTRY_MS + 1_500) {
           const reservePhase = state.boss.turrets.every(gun => gun.health <= 0);
           if (bossEscortSlotsRef.current === null && !reservePhase && bossEscortCount(state.sector) > 0) {
             bossEscortSlotsRef.current = bossEscortSlots(state.sector, width, height, state.boss, bossEscortCount(state.sector));
@@ -1276,11 +1277,11 @@ const GamePage = () => {
         const purchasedShieldActive = state.purchasedShieldMs > 0;
         let shieldImpactsRemaining = !purchasedShieldActive && state.shieldActive && state.shieldMs > 0 ? state.shieldCharges : 0;
         state.asteroids.forEach(asteroid => {
-          let next = moveAsteroid(asteroid, state.empMs > 0 ? 0 : delta, width, height);
+          let next = moveAsteroid(asteroid, delta, width, height);
           next.visualMotion = advanceShipMotion(asteroid.visualMotion ?? idleShipMotion(), next.x - asteroid.x, next.y - asteroid.y, delta);
           next.hullLight = hullIllumination(next.x, next.y, time, next.muzzleAt ?? 0, state.effects);
           if (asteroid.attackPattern !== null && next.attackPattern === null && !(normal && pressure.overlap)) attackCooldownRef.current = 0;
-          if (next.attackPattern !== null && next.attackDelay === 0 && !next.firedThisAttack && next.attackElapsed < attackTime(next) && next.attackElapsed >= attackTime(next) * .28 && state.enemyShots.length < enemyShotLimit(width, elapsedRef.current, state.sector)) {
+          if (state.empMs === 0 && next.attackPattern !== null && next.attackDelay === 0 && !next.firedThisAttack && next.attackElapsed < attackTime(next) && next.attackElapsed >= attackTime(next) * .28 && state.enemyShots.length < enemyShotLimit(width, elapsedRef.current, state.sector)) {
             const bullet = createEnemyShot(nextIdRef.current, next.x, next.y + next.radius * .4, state.player, width, height, state.sector);
             if (bullet) {
               nextIdRef.current += 1;
@@ -1329,7 +1330,7 @@ const GamePage = () => {
         if (state.encounter === "boss-fight" && state.boss) {
           const previousBoss = state.boss;
           state.bossHullLight = hullIllumination(state.boss.x, state.boss.y, time, bossMuzzleRef.current, state.effects);
-          state.boss = moveSectorBoss(state.boss, state.empMs > 0 ? 0 : delta, width, height);
+          state.boss = moveSectorBoss(state.boss, delta, width, height);
           const bossContact = contactWithEnemy(state.player, width, height, state.boss, true, false, impactCooldownRef.current, previousBoss);
           if (bossContact.damage) {
             heartsLost = Math.max(heartsLost, 1);
@@ -1349,7 +1350,7 @@ const GamePage = () => {
         let playerImpact: { x: number; y: number } | undefined;
         const incomingShots: EnemyShot[] = [];
         for (const shot of state.enemyShots) {
-          const moved = advanceEnemyShot(shot, state.empMs > 0 ? 0 : delta);
+          const moved = advanceEnemyShot(shot, delta);
           if (enemyShotHitsPlayer(moved, state.player, width, height, shot, previousPlayer)) {
             if (impactCooldownRef.current === 0) {
               if (purchasedShieldActive) {
@@ -1444,10 +1445,10 @@ const GamePage = () => {
           if (bossTarget && state.boss) {
             if (bossTarget.kind === "turret") {
               const bonus = damageBossTurret(state.boss, bossTarget.index, shot.damage);
+              const position = gunPosition(state.boss, bossWeapons[state.boss.config.id - 1][bossTarget.index]);
+              state.effects.push({ id: nextIdRef.current++, ...position, kind: bonus > 0 ? "turret-burst" : "turret-hit", startedAt: time, turretBonus: bonus || undefined });
               if (bonus > 0) {
-                const position = gunPosition(state.boss, bossWeapons[state.boss.config.id - 1][bossTarget.index]);
                 state.score += bonus;
-                state.effects.push({ id: nextIdRef.current++, ...position, kind: "explosion", startedAt: time, debrisSize: 28, turretBonus: bonus });
                 soundRef.current?.play("explosion");
                 gameHaptics.explosion();
               } else soundRef.current?.play("enemyHit");
@@ -1560,7 +1561,7 @@ const GamePage = () => {
         }
         if (state.phase === "SECTOR_CLEAR") { state.enemyShots = []; state.shots = []; }
         persistGuestShards();
-        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "boss-fall" ? BOSS_FALL_DURATION_MS + 100 : effect.kind === "boss-explosion" ? BOSS_FALL_DURATION_MS + 3_400 : effect.kind === "player-explosion" ? 2_250 : effect.kind === "player-crash" ? 1_350 : effect.kind === "explosion" || effect.kind === "shatter" ? 2_250 : 390));
+        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "turret-hit" ? 340 : effect.kind === "turret-burst" ? 720 : effect.kind === "boss-fall" ? BOSS_FALL_DURATION_MS + 100 : effect.kind === "boss-explosion" ? BOSS_FALL_DURATION_MS + 3_400 : effect.kind === "player-explosion" ? 2_250 : effect.kind === "player-crash" ? 1_350 : effect.kind === "explosion" || effect.kind === "shatter" ? 2_250 : 390));
         if (state.hearts === 0) {
           state.status = "destroying";
           state.enemyShots = [];
@@ -1639,10 +1640,10 @@ const GamePage = () => {
       const height = fieldRef.current?.clientHeight || 600;
       const now = performance.now();
       state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: power === "bomb" ? "bomb-wave" : "emp-wave", startedAt: now });
-      state.enemyShots = [];
       if (power === "emp") {
-        state.empMs = 7_000;
+        disableEnemyWeapons(state);
       } else {
+        state.enemyShots = [];
         const visible = state.asteroids.filter(enemy => enemy.x >= -enemy.radius && enemy.x <= width + enemy.radius && enemy.y >= -enemy.radius && enemy.y <= height + enemy.radius);
         for (const enemy of visible) {
           state.score += enemy.points;
@@ -1653,10 +1654,13 @@ const GamePage = () => {
         const destroyedIds = new Set(visible.map(enemy => enemy.id));
         state.asteroids = state.asteroids.filter(enemy => !destroyedIds.has(enemy.id));
         if (state.boss && state.encounter === "boss-fight") {
-          damageSectorBoss(state.boss, 18, now, true);
-          if (state.boss.health === 0) {
-            destroyBoss(state, now);
+          const blast = detonateBossBomb(state.boss, now);
+          for (const impact of blast.impacts) {
+            const position = gunPosition(state.boss, bossWeapons[state.boss.config.id - 1][impact.index]);
+            state.effects.push({ id: nextIdRef.current++, ...position, kind: impact.destroyed ? "turret-burst" : "turret-hit", startedAt: now, turretBonus: impact.bonus || undefined });
+            state.score += impact.bonus;
           }
+          if (blast.impacts.length) gameHaptics.explosion();
         }
         attackCooldownRef.current = 0;
       }

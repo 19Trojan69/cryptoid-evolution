@@ -22,8 +22,8 @@ export const powerUpDescriptions: Record<PowerUpType, string> = {
   overdrive: "Powers each shot up to deal two damage for 20 seconds.",
   weapon: "Raises your weapon by one level for 20 seconds, up to level 5.",
   rapid: "Sets automatic fire to its fast cadence for 20 seconds.",
-  bomb: "Clears visible enemies and hostile shots; damages the boss.",
-  emp: "Freezes enemy attacks and movement for 7 seconds.",
+  bomb: "Destroys visible enemies and shots; damages boss turrets, then the exposed hull.",
+  emp: "Disables enemy weapons for 7 seconds without stopping ships or shots.",
 };
 
 export const createPowerUpDrop = ({ id, x, y, width, height, threats, activeCount, chanceRoll, kindRoll, destroyed, dropsCreated, level = 1, usedTypes = [], weaponMaxed = false }: {

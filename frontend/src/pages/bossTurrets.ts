@@ -7,7 +7,7 @@ import type { PlayerPosition } from './playerCombat.ts';
 
 export type BossTurretState = { health:number; maxHealth:number; lastHit:number; a:number; lock:number; next:number; pendingIndex:number; pendingTotal:number; pendingAt:number; lastFired:number; firedBarrels:number[]; shots:number };
 export type BossFireEvent = { kind:BossWeaponKind; radius:number; barrels:number; pan:number; gunIndex:number; error:number; lock:number };
-export const turretHealth = (id:number,g:BossGunConfig) => 2 * Math.ceil(4 + g.caliber / 4 + (id - 1) * .15);
+export const turretHealth = (id:number,g:BossGunConfig) => 2 * Math.ceil(4 + g.caliber / 4 + (id - 1) * .15) + 2 * Math.floor((id - 1) / 5);
 export const turretPoints = (id:number,g:BossGunConfig) => 25 * Math.ceil((100 + g.caliber * 5 + (id - 1) * 4) / 25);
 export const createBossTurrets = (id:number):BossTurretState[] => bossWeapons[id-1].map((g,i)=>({health:turretHealth(id,g),maxHealth:turretHealth(id,g),lastHit:-Infinity,a:g.base,lock:0,next:1100+i*90,pendingIndex:0,pendingTotal:0,pendingAt:0,lastFired:-10000,firedBarrels:[],shots:0}));
 export const damageBossTurret = (boss:SectorBoss,index:number,damage:number) => {
