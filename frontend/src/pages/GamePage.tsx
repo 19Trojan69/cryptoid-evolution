@@ -213,6 +213,8 @@ const alignedSpritePosition = (x: number, y: number, sprite: number, renderedSiz
   const offset = spriteVisualOffset(sprite, renderedSize, true);
   return { left: x - offset.x, top: y - offset.y };
 };
+// Keep physics radii unchanged while making the visible enemy hull easier to read.
+const enemyVisualDiameter = (radius: number) => radius * 2 * 1.1;
 
 const spawnAsteroid = (id: number, width: number, visibleTop: number, formationIndex: number, sector: number, slots: ReturnType<typeof formationLayout>, offset = 0, rulesVersion = 2): Asteroid => {
   const profile = chooseCryptoid(sector, formationIndex + offset);
@@ -754,21 +756,26 @@ const GamePage = () => {
   useEffect(() => {
     const field = fieldRef.current;
     if (!field) return;
-    let lastTouchEnd = 0;
-    const preventGesture = (event: Event) => event.preventDefault();
-    const preventDoubleTap = (event: TouchEvent) => {
-      if (event.target instanceof Element && event.target.closest("button, .game-hud, .game-overlay, .touch-controls")) return;
-      const now = performance.now();
-      if (now - lastTouchEnd < 360) event.preventDefault();
-      lastTouchEnd = now;
+    let lastTap: { time: number; x: number; y: number } | null = null;
+    const isPlayfieldTouch = (event: TouchEvent) => stateRef.current.status === "playing" && event.touches.length <= 1 &&
+      !(event.target instanceof Element && event.target.closest("button, a, input, select, textarea, [role='button'], .game-hud, .game-overlay, .touch-controls"));
+    const isSecondTap = (touch: Touch, now: number) => lastTap !== null && now - lastTap.time < 360 &&
+      Math.hypot(touch.clientX - lastTap.x, touch.clientY - lastTap.y) < 44;
+    const preventSecondTouchStart = (event: TouchEvent) => {
+      if (isPlayfieldTouch(event) && event.touches[0] && isSecondTap(event.touches[0], performance.now())) event.preventDefault();
     };
-    field.addEventListener("touchend", preventDoubleTap, { passive: false });
-    field.addEventListener("gesturestart", preventGesture, { passive: false });
-    field.addEventListener("gesturechange", preventGesture, { passive: false });
+    const preventDoubleTap = (event: TouchEvent) => {
+      if (!isPlayfieldTouch(event) || event.changedTouches.length !== 1) { lastTap = null; return; }
+      const touch = event.changedTouches[0];
+      const now = performance.now();
+      if (isSecondTap(touch, now)) event.preventDefault();
+      lastTap = { time: now, x: touch.clientX, y: touch.clientY };
+    };
+    field.addEventListener("touchstart", preventSecondTouchStart, { capture: true, passive: false });
+    field.addEventListener("touchend", preventDoubleTap, { capture: true, passive: false });
     return () => {
-      field.removeEventListener("touchend", preventDoubleTap);
-      field.removeEventListener("gesturestart", preventGesture);
-      field.removeEventListener("gesturechange", preventGesture);
+      field.removeEventListener("touchstart", preventSecondTouchStart, true);
+      field.removeEventListener("touchend", preventDoubleTap, true);
     };
   }, []);
 
@@ -1991,8 +1998,8 @@ const GamePage = () => {
           <HullDamage sites={game.boss.hullFires} hit={game.boss.hit} maskImage={`url('${game.boss.config.image}')`} bossDamage={1 - game.boss.health / game.boss.maxHealth} />
           <BossHealthView boss={game.boss}/>
         </div>}
-        {game.bonusTargets.map(target => <div key={target.id} className="asteroid asteroid-small cryptoid bonus-ship cryptoid-boost" style={{ ...alignedSpritePosition(target.x, target.y, target.sprite, 50), transform: "translate(-50%, -50%)", "--flame-length": `${engineFlamePercent(target.visualMotion?.thrust ?? 0)}%` } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={target.sprite} color={target.color} />{engineTrails(target.sprite, "exhaust")}</div></div>)}
-        {game.asteroids.map(asteroid => { const sprite = asteroid.sprite; const maskImage = `url('${shipEvolutionAsset(sprite, 1)}')`; return <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid${game.empMs > 0 ? " cryptoid-emp" : ""} cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.hitUntil && asteroid.hitUntil > performance.now() ? " cryptoid-hit" : ""}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}${cryptoidMotionClass(asteroid)}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ ...alignedSpritePosition(asteroid.x, asteroid.y, sprite, asteroid.radius * 2), transform: `translate(-50%, -50%) rotate(${asteroid.rotation}deg)`, ...shipHullStyle(sprite, true), "--visual-bank": `${asteroid.visualMotion?.bank ?? 0}deg`, "--flame-length": `${engineFlamePercent(asteroid.visualMotion?.thrust ?? 0, asteroid.returnElapsed > 0 ? "return" : asteroid.entryElapsed < asteroid.entryDuration ? "launch" : asteroid.attackPattern !== null && asteroid.attackDelay <= 0 ? "boost" : "idle")}%`, "--hull-light": asteroid.hullLight ?? 0 } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={sprite} color={asteroid.color} />{engineTrails(sprite, "exhaust")}<i className="hull-reflection" style={{ maskImage, WebkitMaskImage: maskImage }} aria-hidden="true" /><HullDamage sites={asteroid.hullFires} hit={asteroid.hit} maskImage={maskImage} mirrored /></div><span className="health-bar" data-critical={asteroid.health / asteroid.maxHealth <= .3} role="progressbar" aria-label={t("Enemy hull")} aria-valuenow={Math.ceil(asteroid.health / asteroid.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${asteroid.health / asteroid.maxHealth * 100}%` }} /></span></div>; })}
+        {game.bonusTargets.map(target => <div key={target.id} className="asteroid asteroid-small cryptoid bonus-ship cryptoid-boost" style={{ ...alignedSpritePosition(target.x, target.y, target.sprite, 55), width: 55, height: 55, transform: "translate(-50%, -50%)", "--flame-length": `${engineFlamePercent(target.visualMotion?.thrust ?? 0)}%` } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={target.sprite} color={target.color} />{engineTrails(target.sprite, "exhaust")}</div></div>)}
+        {game.asteroids.map(asteroid => { const sprite = asteroid.sprite; const maskImage = `url('${shipEvolutionAsset(sprite, 1)}')`; const visualSize = enemyVisualDiameter(asteroid.radius); return <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid${game.empMs > 0 ? " cryptoid-emp" : ""} cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.hitUntil && asteroid.hitUntil > performance.now() ? " cryptoid-hit" : ""}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}${cryptoidMotionClass(asteroid)}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ ...alignedSpritePosition(asteroid.x, asteroid.y, sprite, visualSize), width: visualSize, height: visualSize, transform: `translate(-50%, -50%) rotate(${asteroid.rotation}deg)`, ...shipHullStyle(sprite, true), "--visual-bank": `${asteroid.visualMotion?.bank ?? 0}deg`, "--flame-length": `${engineFlamePercent(asteroid.visualMotion?.thrust ?? 0, asteroid.returnElapsed > 0 ? "return" : asteroid.entryElapsed < asteroid.entryDuration ? "launch" : asteroid.attackPattern !== null && asteroid.attackDelay <= 0 ? "boost" : "idle")}%`, "--hull-light": asteroid.hullLight ?? 0 } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={sprite} color={asteroid.color} />{engineTrails(sprite, "exhaust")}<i className="hull-reflection" style={{ maskImage, WebkitMaskImage: maskImage }} aria-hidden="true" /><HullDamage sites={asteroid.hullFires} hit={asteroid.hit} maskImage={maskImage} mirrored /></div><span className="health-bar" data-critical={asteroid.health / asteroid.maxHealth <= .3} role="progressbar" aria-label={t("Enemy hull")} aria-valuenow={Math.ceil(asteroid.health / asteroid.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${asteroid.health / asteroid.maxHealth * 100}%` }} /></span></div>; })}
         {game.powerUps.map(pickup => {
           const pickupLabel = `${t(powerUpNames[pickup.type])} · ${t(powerUpDescriptions[pickup.type])}`;
           return <div key={pickup.id} className={`power-up power-up-${pickup.type}`} role="img" aria-label={pickupLabel} title={pickupLabel} style={{ left: pickup.x, top: pickup.y }}><span aria-hidden="true">{powerUpSymbols[pickup.type]}</span></div>;
