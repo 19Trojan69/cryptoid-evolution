@@ -43,3 +43,13 @@ for (const [locale, row] of Object.entries(rows)) {
  if(values.length!==collectionEquipmentKeys.length)throw new Error(`Invalid collection equipment row: ${locale}`);
  collectionEquipmentTranslations[locale as Locale]=Object.fromEntries(collectionEquipmentKeys.map((key,index)=>[key,values[index]]));
 }
+const collectionLabels: Partial<Record<Locale, string>> = {
+ de:'Sammelkarten', es:'Cartas de colección', fr:'Cartes de collection', pt:'Cartas de coleção',
+ it:'Carte da collezione', pl:'Karty kolekcjonerskie', tr:'Koleksiyon kartları', ru:'Коллекционные карты',
+ hr:'Kolekcionarske karte', cs:'Sběratelské karty', sk:'Zberateľské karty', hu:'Gyűjtőkártyák',
+ ro:'Cărți de colecție', sr:'Колекционарске карте', uk:'Колекційні картки', th:'การ์ดสะสม',
+ zh:'卡片收藏', vi:'Thẻ sưu tầm', id:'Kartu koleksi', ko:'수집 카드', ja:'収集カード',
+ hi:'संग्रह कार्ड', bn:'সংগ্রহের কার্ড', ar:'بطاقات المقتنيات', ur:'مجموعے کے کارڈ',
+ fa:'کارت‌های مجموعه', fil:'Koleksiyon ng mga kard', sw:'Kadi za mkusanyiko',
+};
+for (const [locale, label] of Object.entries(collectionLabels)) (collectionEquipmentTranslations[locale as Locale] ??= {})['Card collection']=label;

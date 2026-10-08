@@ -52,7 +52,6 @@ type Offer = { id: string; kind: "weapon" | "power" | "armor" | "ship_upgrade"; 
 type Inventory = { weaponStock?: Record<string, number>; ownedWeapons: string[]; ownedArmor: string[]; ownedShipUpgrades?: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
 type Leader = { rank: number; username: string; score: number; careerScore?: number; bestRun?: { score: number; level: number | null }; profileLevel?: number; serviceRank: { name: string; symbol: string } };
 type PersonalScores = { careerScore: number; bestRun: { score: number; level: number | null } };
-const collectionLabel = (locale: string) => locale.startsWith("de") ? "Sammelkarten" : "Card collection";
 const HOME_STAR_POSITION = { x: .5, y: .8 };
 
 const shopTabs = [
@@ -537,7 +536,7 @@ const Shop = () => {
               <button className="button button-primary home-play-button" disabled={!authReady || isAuthLoading} type="button" onClick={enterGame}>{t("Play")} <span className="button-glyph" aria-hidden="true">→</span></button>
             </div>
           </div>
-          <button className="collection-home-button" type="button" disabled={!authReady} onClick={() => setCollectionOpen(true)}>✧ {collectionLabel(locale)}</button>
+          <button className="collection-home-button" type="button" disabled={!authReady} onClick={() => setCollectionOpen(true)}>✧ {t('Card collection')}</button>
         </div>
         <div className="planet-stage" aria-label={t("Planet status")}>
           <div className="planet"><EarthGlobe paused={homePaused} /></div>

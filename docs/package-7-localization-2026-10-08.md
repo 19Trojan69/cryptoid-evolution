@@ -23,11 +23,11 @@ Zusätzlich zu den bisherigen 17 Sprachen sind zwölf Profile integriert: verein
 
 - 252 Tests bestanden: 211 Spieltests und 41 Sprach-/Speicher-/Kartenprüfungen.
 - Frontend-Build und ESLint bestanden. Die bekannte Warnung zum großen Hauptbundle bleibt bestehen.
-- `npm run audit:i18n --prefix frontend` erfasst 1020 statische Texte und keine verbleibenden direkten JSX-Fragmente in diesem Scan. Die Bestandsaufnahme umfasst jetzt auch deutsche Admin-Texte und einzelne Boss-Geschichtsabsätze. Sie ist keine Garantie, sämtliche dynamischen Texte zu erfassen.
-- Chinesisch deckt 257 von 1020 erfassten Einträgen ab; die übrigen elf neuen Sprachen jeweils 157. Diese Zahlen enthalten gemeinsam genutzte Namen und Aliasse. Deutsch deckt 684, die übrigen bisherigen nichtenglischen Sprachen jeweils 532 ab. Englisch deckt 864 ab; fehlende deutsche Admin-Texte sind ausdrücklich sichtbar.
+- `npm run audit:i18n --prefix frontend` erfasst 1021 statische Texte und keine verbleibenden direkten JSX-Fragmente in diesem Scan. Die Bestandsaufnahme umfasst jetzt auch deutsche Admin-Texte und einzelne Boss-Geschichtsabsätze. Sie ist keine Garantie, sämtliche dynamischen Texte zu erfassen.
+- Chinesisch deckt 263 von 1021 erfassten Einträgen ab; die übrigen elf neuen Sprachen jeweils 158. Diese Zahlen enthalten gemeinsam genutzte Namen und Aliasse. Deutsch deckt 685, die übrigen bisherigen nichtenglischen Sprachen jeweils 533 ab. Englisch deckt 865 ab; fehlende deutsche Admin-Texte sind ausdrücklich sichtbar.
 - `npm run check:i18n:release --prefix frontend` muss vor der Veröffentlichung bestehen. Aktuell schlägt diese zusätzliche Prüfung wie vorgesehen fehl. Sie prüft fehlende Texte und die Erhaltung aller Platzhalter.
 - Das statische Inventar hat Schema 2: fehlende Texte referenzieren die Eintrags-IDs, statt längere Geschichten pro Sprache zu duplizieren.
-- Browserprüfung über eine separate Vercel-Preview durchgeführt: alle 29 Profile sichtbar; Chinesisch auswählbar und nach Neuladen erhalten (`lang=zh-Hans`, `dir=ltr`); Arabisch wechselt auf `lang=ar`, `dir=rtl`. Die RTL-Systemansicht wurde visuell geprüft. Die lokale Verbindung war zuvor mit `ERR_CONNECTION_REFUSED` blockiert. Physische Mobilgeräte, Pi Browser und PNG-Export bleiben offen.
+- Browserprüfung über eine separate Vercel-Preview durchgeführt: alle 29 Profile sichtbar; Chinesisch auswählbar und nach Neuladen erhalten (`lang=zh-Hans`, `dir=ltr`); Arabisch wechselt auf `lang=ar`, `dir=rtl`. Die RTL-Systemansicht wurde visuell geprüft. Ein Gastspiel ließ sich öffnen und pausieren; Spielfeld und Touch-Steuerung behielten bei arabischer Dokumentrichtung `ltr`. Die automatische Sprachwahl konnte anschließend wiederhergestellt werden. Die lokale Verbindung war zuvor mit `ERR_CONNECTION_REFUSED` blockiert. Physische Mobilgeräte, Pi Browser und PNG-Export bleiben offen.
 
 ## Offene Arbeit vor Veröffentlichung
 
@@ -40,3 +40,5 @@ Google hat die Testanfrage mit HTTP 429 und einer ausdrücklichen Sperre für au
 ## Separate Prüfvorschau
 
 Der Stand `2c62aaf4b4c03d988808ddf7039f36af8d6a65c5` wurde als Preview `dpl_7Hr2uCd5aoQDRA3um7duSLZ4kSSz` bereitgestellt (Vercel-Projekt `prj_BAIJH4BzLLwun36kWVEnTdx69j0q`, Ziel Preview, READY). Der feste Testnet-Link wurde nicht umgestellt. Ein kurzzeitig erzeugter, nicht benötigter Freigabelink wurde wieder widerrufen. Die Browserprüfung machte noch fehlende chinesische Startseiten-/Schnellzugriffstexte sichtbar; diese wurden anschließend lokal ergänzt.
+
+Die aktualisierte Vorschau `dpl_84NJsBbPosPYnzvpBnMfCUpqoC1a` (`d15725e10b6c4a14c891e0665e83931fe7ac62a8`, Preview, READY) bestätigte chinesische System-/Steuerungstexte. Die Prüfung zeigte noch unterschiedliche Groß-/Kleinschreibung einiger Startseitenschlüssel sowie eine feste DE/EN-Sammelkartenbeschriftung auf der Startseite; diese wurden anschließend korrigiert. Die Karten-Schaltfläche verwendet nun den Sprachkatalog für alle 29 Sprachen.

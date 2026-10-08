@@ -1,6 +1,8 @@
 /** Locally written simplified Chinese copy; no runtime translation service. */
 export const chineseCollectionTranslations: Record<string, string> = {
  'MISSION CONTROL ONLINE':'任务控制中心在线',
+ 'Mission control online':'任务控制中心在线',
+ 'Defend Earth.':'保卫地球。', 'Evolve your power.':'提升你的实力。', 'Genesis sector':'起源星区',
  'DEFEND EARTH. EVOLVE YOUR POWER.':'保卫地球，提升你的实力。',
  'Build your streak, master the grid, and become the force Earth needs.':'延续连胜，掌控战场，成为地球需要的守护力量。',
  'Card collection':'卡片收藏', 'Planet status':'行星状态', 'ORBITAL DEFENSE ACTIVE':'轨道防御已启动',
