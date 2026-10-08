@@ -1,5 +1,6 @@
 import { generateBossSound, bossSoundReferences } from './bossWeaponSound.ts';
-import { generateEnemyShotSound } from './enemyWeaponSound.ts';
+import { generateEnemyShotSound, enemySoundProfiles } from './enemyWeaponSound.ts';
+import type { CryptoidClass } from './cryptoidRoster.ts';
 import type { BossWeaponKind } from './bossWeapons.ts';
 import { effectsGain, readEffectsVolume } from "./musicPreferences.ts";
 import type { PowerUpType } from "./powerUps.ts";
@@ -39,6 +40,8 @@ const sampleGains: Record<SampleName, number> = {
   "pickup-emp": .8,
 };
 
+type WeaponVoice = { source: AudioBufferSourceNode; gain: GainNode; pan: StereoPannerNode | null; volume: number };
+
 // Game effects only; audio starts after a player gesture on browsers that require one.
 export class GameAudio {
   private context: AudioContext | null = null;
@@ -49,9 +52,11 @@ export class GameAudio {
   private samples = new Map<SampleName, AudioBuffer>();
   private sampleRequest: Promise<void> | null = null;
   private bossSamples = new Map<string, AudioBuffer>();
-  private enemyShotSample: AudioBuffer | null = null;
+  private enemyShotSamples = new Map<CryptoidClass, AudioBuffer>();
+  private weaponBus: GainNode | null = null;
+  private weaponMixVoices = new Set<WeaponVoice>();
   private enemyShotCycle = 0;
-  private bossVoices:{source:AudioBufferSourceNode;gain:GainNode;pan:StereoPannerNode|null}[]=[];
+  private bossVoices: WeaponVoice[] = [];
   private lastShotAt = 0;
   private destroyCount = 0;
 
@@ -92,23 +97,35 @@ export class GameAudio {
   }
 
   private prepareEnemySound(context: AudioContext) {
-    if (this.enemyShotSample || typeof context.createBuffer !== "function") return;
-    const pcm = generateEnemyShotSound(context.sampleRate);
-    const buffer = context.createBuffer(1, pcm.length, context.sampleRate);
-    buffer.copyToChannel(pcm, 0);
-    this.enemyShotSample = buffer;
+    if (this.enemyShotSamples.size || typeof context.createBuffer !== "function") return;
+    for (const shipClass of Object.keys(enemySoundProfiles) as CryptoidClass[]) {
+      const pcm = generateEnemyShotSound(context.sampleRate, shipClass);
+      const buffer = context.createBuffer(1, pcm.length, context.sampleRate);
+      buffer.copyToChannel(pcm, 0);
+      this.enemyShotSamples.set(shipClass, buffer);
+    }
   }
 
-  playEnemyShot(pan = 0) {
-    if (!this.enemyShotSample) return false;
+  playEnemyShot(pan = 0, shipClass: CryptoidClass = 'light') {
+    const buffer = this.enemyShotSamples.get(shipClass);
+    if (!buffer) return false;
     const rate = [.96, 1, 1.04][this.enemyShotCycle++ % 3];
-    return this.playWeaponBuffer(this.enemyShotSample, rate, .3, pan);
+    return this.playWeaponBuffer(buffer, rate, enemySoundProfiles[shipClass].gain, pan);
+  }
+
+  // Every synthesized buffer peaks at <= .72. Reserve headroom for the
+  // player's effects/warnings, even while retired voices fade out.
+  private updateWeaponMix() {
+    if (!this.weaponBus) return;
+    let peak = 0;
+    for (const voice of this.weaponMixVoices) peak += voice.volume * .72;
+    this.weaponBus.gain.value = Math.min(1, .62 / Math.max(peak, .62));
   }
 
   stopBossWeapons(){
     for(const voice of [...this.bossVoices])this.retireBossVoice(voice);
   }
-  private retireBossVoice(voice:{source:AudioBufferSourceNode;gain:GainNode;pan:StereoPannerNode|null}){
+  private retireBossVoice(voice: WeaponVoice){
     const index=this.bossVoices.indexOf(voice);if(index>=0)this.bossVoices.splice(index,1);
     try{const at=this.context!.currentTime;voice.gain.gain.cancelScheduledValues(at);voice.gain.gain.setTargetAtTime(0,at,.003);voice.source.stop(at+.018);}catch{/* Already ended. */}
   }
@@ -117,20 +134,54 @@ export class GameAudio {
     const relative=radius/bossSoundReferences[kind],variant=relative<.9?0:relative>1.12?2:1,buffer=this.bossSamples.get(kind+variant);
     if(!buffer){this.tone(kind==='laser'?1500:kind==='siege'?85:260,kind==='laser'?430:55,.14,.025);return true;}
     const rate=Math.max(.84,Math.min(1.16,Math.sqrt([.8,1,1.25][variant]/relative)));
-    const volume=(kind==='laser'?.34:kind==='pulse'?.42:kind==='plasma'?.52:kind==='heavy'?.65:kind==='siege'?.74:.5)*Math.min(1.15,1+(barrels-1)*.035);
+    const volume=(kind==='laser'?.4:kind==='pulse'?.48:kind==='plasma'?.57:kind==='heavy'?.68:kind==='siege'?.78:.55)*Math.min(1.15,1+(barrels-1)*.035);
     return this.playWeaponBuffer(buffer,rate,volume,pan);
   }
 
-  private playWeaponBuffer(buffer:AudioBuffer,rate:number,volume:number,pan:number) {
-    const context=this.context;if(!context||context.state!=="running"||this.paused||this.effectsVolume===0||!this.effectsBus)return false;
-    try{
-      while(this.bossVoices.length>=20)this.retireBossVoice(this.bossVoices[0]);
-      const source=context.createBufferSource(),gain=context.createGain(),panner=typeof context.createStereoPanner==='function'?context.createStereoPanner():null;
-      source.buffer=buffer;source.playbackRate.value=rate;
-      gain.gain.value=volume/Math.sqrt(1+this.bossVoices.length*.12);
-      source.connect(gain);if(panner){panner.pan.value=Math.max(-.65,Math.min(.65,pan));gain.connect(panner);panner.connect(this.effectsBus);}else gain.connect(this.effectsBus);
-      const voice={source,gain,pan:panner};this.bossVoices.push(voice);source.onended=()=>{const index=this.bossVoices.indexOf(voice);if(index>=0)this.bossVoices.splice(index,1);source.disconnect();gain.disconnect();panner?.disconnect();};source.start();return true;
-    }catch{/* Audio failure must not stop the fight. */return false;}
+  private releaseWeaponVoice(voice: WeaponVoice) {
+    this.weaponMixVoices.delete(voice);
+    const index = this.bossVoices.indexOf(voice);
+    if (index >= 0) this.bossVoices.splice(index, 1);
+    voice.source.disconnect();
+    voice.gain.disconnect();
+    voice.pan?.disconnect();
+    this.updateWeaponMix();
+  }
+
+  private playWeaponBuffer(buffer: AudioBuffer, rate: number, volume: number, pan: number) {
+    const context = this.context;
+    if (!context || context.state !== "running" || this.paused || this.effectsVolume === 0 || !this.effectsBus) return false;
+    let voice: WeaponVoice | null = null;
+    try {
+      if (!this.weaponBus) {
+        this.weaponBus = context.createGain();
+        this.weaponBus.connect(this.effectsBus);
+      }
+      while (this.bossVoices.length >= 20) this.retireBossVoice(this.bossVoices[0]);
+      const source = context.createBufferSource(), gain = context.createGain();
+      const panner = typeof context.createStereoPanner === 'function' ? context.createStereoPanner() : null;
+      voice = { source, gain, pan: panner, volume };
+      source.buffer = buffer;
+      source.playbackRate.value = rate;
+      gain.gain.value = volume;
+      source.connect(gain);
+      if (panner) {
+        panner.pan.value = Math.max(-.65, Math.min(.65, pan));
+        gain.connect(panner);
+        panner.connect(this.weaponBus);
+      } else gain.connect(this.weaponBus);
+      this.bossVoices.push(voice);
+      this.weaponMixVoices.add(voice);
+      this.updateWeaponMix();
+      const playingVoice = voice;
+      source.onended = () => this.releaseWeaponVoice(playingVoice);
+      source.start();
+      return true;
+    } catch {
+      // A failed source must not leave a silent voice consuming the mix budget.
+      if (voice) this.releaseWeaponVoice(voice);
+      return false;
+    }
   }
 
   private async loadSamples(context: AudioContext) {
@@ -247,7 +298,9 @@ export class GameAudio {
     this.limiter = null;
     this.samples.clear();
     this.bossSamples.clear();
-    this.enemyShotSample = null;
+    this.enemyShotSamples.clear();
+    this.weaponMixVoices.clear();
+    this.weaponBus = null;
   }
 }
 
