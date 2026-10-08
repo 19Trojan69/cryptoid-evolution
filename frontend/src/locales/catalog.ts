@@ -1,3 +1,4 @@
+import { regionalTranslations } from './regional.ts';
 import { collectionTranslations } from './collection.ts';
 import { bossPhaseTranslations } from './bossPhases.ts';
 import { missionShopTranslations } from './missionShop.ts';
@@ -5529,13 +5530,13 @@ Object.assign(localeCatalog["ro"], {"Time expired": "Timp expirat"});
 Object.assign(localeCatalog["sr"], {"Time expired": "Време је истекло"});
 Object.assign(localeCatalog["uk"], {"Time expired": "Час вичерпано"});
 Object.assign(localeCatalog["th"], {"Time expired": "หมดเวลา"});
-for (const [locale, translations] of Object.entries(bossPhaseTranslations)) Object.assign(localeCatalog[locale], translations);
-for (const [locale, translations] of Object.entries(missionShopTranslations)) Object.assign(localeCatalog[locale], translations);
-for (const [locale, translations] of Object.entries(package2Translations)) Object.assign(localeCatalog[locale], translations);
-for (const [locale, translations] of Object.entries(package3Translations)) Object.assign(localeCatalog[locale], translations);
-for (const [locale, translations] of Object.entries(package5Translations)) Object.assign(localeCatalog[locale], translations);
-for (const [locale, translations] of Object.entries(weaponStockTranslations)) Object.assign(localeCatalog[locale], translations);
-for (const [locale, translations] of Object.entries(bossRewardTranslations)) Object.assign(localeCatalog[locale], translations);
+for (const [locale, translations] of Object.entries(bossPhaseTranslations)) Object.assign(localeCatalog[locale] ??= {}, translations);
+for (const [locale, translations] of Object.entries(missionShopTranslations)) Object.assign(localeCatalog[locale] ??= {}, translations);
+for (const [locale, translations] of Object.entries(package2Translations)) Object.assign(localeCatalog[locale] ??= {}, translations);
+for (const [locale, translations] of Object.entries(package3Translations)) Object.assign(localeCatalog[locale] ??= {}, translations);
+for (const [locale, translations] of Object.entries(package5Translations)) Object.assign(localeCatalog[locale] ??= {}, translations);
+for (const [locale, translations] of Object.entries(weaponStockTranslations)) Object.assign(localeCatalog[locale] ??= {}, translations);
+for (const [locale, translations] of Object.entries(bossRewardTranslations)) Object.assign(localeCatalog[locale] ??= {}, translations);
 Object.assign(localeCatalog["de"], {"Each defeated boss grants one extra heart, even above three. Remaining hearts are saved.":"Jeder besiegte Boss gibt ein zusätzliches Herz, auch über drei hinaus. Verbleibende Herzen werden gespeichert."});
 Object.assign(localeCatalog["es"], {"Each defeated boss grants one extra heart, even above three. Remaining hearts are saved.":"Cada jefe derrotado otorga un corazón extra, incluso por encima de tres. Los corazones restantes se guardan."});
 Object.assign(localeCatalog["fr"], {"Each defeated boss grants one extra heart, even above three. Remaining hearts are saved.":"Chaque boss vaincu accorde un cœur supplémentaire, même au-delà de trois. Les cœurs restants sont sauvegardés."});
@@ -5554,3 +5555,5 @@ Object.assign(localeCatalog["uk"], {"Each defeated boss grants one extra heart, 
 Object.assign(localeCatalog["th"], {"Each defeated boss grants one extra heart, even above three. Remaining hearts are saved.":"บอสแต่ละตัวที่ปราบได้จะเพิ่มหัวใจหนึ่งดวง แม้มีเกินสามดวงแล้ว จำนวนหัวใจที่เหลือจะถูกบันทึก"});
 
 for (const [locale, entries] of Object.entries(collectionTranslations)) Object.assign(localeCatalog[locale], entries);
+
+for (const [locale, entries] of Object.entries(regionalTranslations)) localeCatalog[locale] = { ...localeCatalog[locale], ...entries };

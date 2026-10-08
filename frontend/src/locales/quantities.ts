@@ -12,6 +12,10 @@ const lifeLabels: Record<Locale, Partial<Record<Intl.LDMLPluralRule, string>> & 
   hu: { other: 'élet' }, ro: { one: 'viață', other: 'vieți' },
   sr: { one: 'живот', few: 'живота', other: 'живота' },
   uk: { one: 'життя', few: 'життя', other: 'життів' }, th: { other: 'ชีวิต' },
+  zh: { other: '条生命' }, vi: { other: 'mạng' }, id: { other: 'nyawa' },
+  ko: { other: '목숨' }, ja: { other: 'ライフ' }, hi: { other: 'जीवन' }, bn: { other: 'জীবন' },
+  ar: { one: 'حياة', two: 'حياتان', few: 'حيوات', other: 'حياة' },
+  ur: { other: 'جان' }, fa: { other: 'جان' }, fil: { other: 'buhay' }, sw: { other: 'maisha' },
 };
 const rules = new Map<Locale, Intl.PluralRules>();
 export const formatLives = (locale: Locale, count: number) => {

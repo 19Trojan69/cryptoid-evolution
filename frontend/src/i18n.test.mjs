@@ -5,6 +5,7 @@ import path from 'node:path';
 import ts from 'typescript';
 import { formatLives } from './locales/quantities.ts';
 import { languages, hasTranslation, translate, resolveLocale } from './i18n.ts';
+import { regionalCoreKeys, regionalLocales } from './locales/regional.ts';
 
 const sourceRoot = path.dirname(new URL(import.meta.url).pathname);
 const rawUiTexts = [];
@@ -70,10 +71,11 @@ for (const [file, fields] of [
 }
 const placeholders = text => [...text.matchAll(/\{(\w+)\}/g)].map(match => match[1]).sort();
 for (const locale of Object.keys(languages)) {
-  test(`${locale}: every player UI key has a translation and preserves its placeholders`, () => {
-    const missing = [...required].filter(key => !hasTranslation(locale, key));
+  test(`${locale}: ${regionalLocales.includes(locale) ? 'draft core controls' : 'every player UI key'} has a translation and preserves its placeholders`, () => {
+    const keys = regionalLocales.includes(locale) ? regionalCoreKeys : [...required];
+    const missing = keys.filter(key => !hasTranslation(locale, key));
     assert.deepEqual(missing, [], `${locale}: missing translations`);
-    for (const key of required) {
+    for (const key of keys) {
       assert.deepEqual(placeholders(translate(locale, key)), placeholders(key), `${locale}: ${key}`);
       if (locale !== 'en' && key.length > 90) assert.notEqual(translate(locale, key), key, `${locale}: untranslated prose`);
     }

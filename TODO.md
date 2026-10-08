@@ -116,11 +116,11 @@ Nachweis: [docs/package-5-score-leaderboard-admin-2026-10-08.md](docs/package-5-
 
 Nachweis: [docs/package-6-audio-polish-2026-10-08.md](docs/package-6-audio-polish-2026-10-08.md). 211 Spieltests, 22 Sprachtests, Build und Lint bestanden. Hörabnahme auf iPhone/Android/Pi Browser, mit Musik und bei großen Boss-Salven, bleibt offen.
 
-## Paket 7 – Sprachen & Lokalisierung — offen
+## Paket 7 – Sprachen & Lokalisierung — in Arbeit, Entwurf
 
 23. **offen: Vereinfachtes Chinesisch und erweiterbare Sprachpakete.** Priorität: gespeicherte manuelle Wahl → Browser-/Gerätesprache → unterstützte Entsprechung → definierter Fallback. Nicht primär Standort. Jederzeit manuell änderbar und dauerhaft gespeichert. Menüs, HUD, Shop, Warnungen, Waffen, Power-ups, Bosse, Card Collection, Rangliste, Admin, Hilfe, Fehler, Beschreibungen vollständig prüfen; keine abgeschnittenen Texte.
 
-Vorhanden: zentrale i18n-Kataloge und Sprachtests. Umfang/Erkennung vor Paket 7 erneut prüfen.
+Vorbereitet: 29 Sprachprofile, darunter zwölf zusätzliche Sprachen; robuste gespeicherte/manuelle Wahl, regionale Codes, RTL-Metadaten, Schrift-Fallbacks und zentrale Bedienungs-/Kampftexte. 249 Tests, Build und Lint bestanden. Die separate Vollständigkeitsprüfung bleibt rot: längere Beschreibungen, Admin- und Sammelkarten-Texte sind noch offen. Keine Veröffentlichung auf dem stabilen Testnet; dort bleibt Paket 6. Externe Stapelübersetzung an Google Translate erfordert nach Ablehnung durch die automatische Freigabeprüfung die ausdrückliche Zustimmung zur Weitergabe statischer UI-Texte. Nachweis: [docs/package-7-localization-2026-10-08.md](docs/package-7-localization-2026-10-08.md).
 
 ## Zusätzliche Befunde / nicht Teil der Paket-1-Freigabe
 
