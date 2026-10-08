@@ -4,7 +4,7 @@ import type { BossWeaponKind } from './bossWeapons.ts';
 import { effectsGain, readEffectsVolume } from "./musicPreferences.ts";
 import type { PowerUpType } from "./powerUps.ts";
 
-export type GameSound = "laser" | "enemyHit" | "explosion" | "collision" | "playerDestroy" | "shield" | "pickup" | "extraLife" | "boost" | "boss" | "bossDestroy" | "nova" | "emp";
+export type GameSound = "laser" | "enemyHit" | "explosion" | "collision" | "playerDestroy" | "shield" | "pickup" | "extraLife" | "boost" | "boss" | "bossDestroy" | "nova" | "emp" | "reload";
 
 const sampleNames = ["shot-single", "shot-twin", "shot-rapid", "shot-triple", "shot-plasma", "enemy-hit", "enemy-destroy", "enemy-destroy-alt", "player-collision", "shield", "boost", "boss-warning-siren", "boss-destroy", "boss-destroy-v3", "pickup-shield", "pickup-overdrive", "pickup-weapon", "pickup-rapid", "pickup-bomb", "pickup-emp"] as const;
 type SampleName = typeof sampleNames[number];
@@ -214,6 +214,10 @@ export class GameAudio {
         [523.25, 659.25, 783.99].forEach(note => this.tone(note, note, .8, .027, "triangle", .58));
         break;
       case "boost": this.tone(270, 860, .42, .08, "sawtooth"); break;
+      case "reload":
+        this.tone(390, 590, .11, .028, "triangle");
+        this.tone(630, 900, .16, .024, "sine", .09);
+        break;
       // The boss uses only its dedicated recording; do not replay the old dull tones.
       case "boss": break;
       case "playerDestroy": this.tone(150, 60, .48, .055, "triangle"); break;

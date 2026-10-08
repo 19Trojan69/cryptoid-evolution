@@ -4,11 +4,11 @@ import { collectPowerUp, createPowerUpDrop, freeDropChance, movePowerUps, powerU
 
 const safe = { id: 1, x: 400, y: 220, width: 800, height: 600, hearts: 2, threats: [], activeCount: 0, chanceRoll: 0.04, kindRoll: 0.1, destroyed: 1, dropsCreated: 0 };
 
-test("free pickups taper out continuously before the final levels", () => {
-  assert.equal(freeDropChance(250), .11);
-  assert.ok(freeDropChance(350) < freeDropChance(250));
-  assert.equal(freeDropChance(450), 0);
-  assert.equal(createPowerUpDrop({ ...safe, level: 450, chanceRoll: 0, destroyed: 3 }), null);
+test("free pickups stay available in late levels without making early levels easier", () => {
+  assert.equal(freeDropChance(1), .065);
+  assert.ok(freeDropChance(250) > freeDropChance(1));
+  assert.equal(freeDropChance(450), .1);
+  assert.ok(createPowerUpDrop({ ...safe, level: 450, chanceRoll: 0, destroyed: 3 }));
 });
 
 test("drops stay rare, but the first safe pickup appears after three kills", () => {
@@ -20,6 +20,22 @@ test("drops stay rare, but the first safe pickup appears after three kills", () 
   assert.equal(createPowerUpDrop({ ...safe, kindRoll: 0.7 })?.type, "weapon");
   assert.equal(createPowerUpDrop({ ...safe, kindRoll: 0.8 })?.type, "rapid");
   assert.equal(createPowerUpDrop({ ...safe, kindRoll: 0.99 })?.type, "rapid");
+});
+
+test("every free boost appears at most once per level, including after the drop is collected", () => {
+  let usedTypes = [];
+  for (let id = 1; id <= 4; id++) {
+    const drop = createPowerUpDrop({ ...safe, id, kindRoll: 0, usedTypes, dropsCreated: id - 1 });
+    assert.ok(drop);
+    assert.ok(!usedTypes.includes(drop.type));
+    usedTypes = [...usedTypes, drop.type];
+  }
+  assert.deepEqual(new Set(usedTypes), new Set(["shield", "overdrive", "weapon", "rapid"]));
+  assert.equal(createPowerUpDrop({ ...safe, usedTypes }), null);
+  assert.equal(createPowerUpDrop({ ...safe, usedTypes: ["shield"], kindRoll: 0 })?.type, "overdrive");
+  assert.notEqual(createPowerUpDrop({ ...safe, weaponMaxed: true, kindRoll: .8 })?.type, "weapon");
+  assert.equal(createPowerUpDrop({ ...safe, usedTypes: ["shield", "overdrive", "rapid"], weaponMaxed: true }), null);
+  assert.ok(createPowerUpDrop({ ...safe, usedTypes: [], dropsCreated: 0 })); // fresh level
 });
 
 test("drops avoid occupied paths and the lower danger area", () => {
