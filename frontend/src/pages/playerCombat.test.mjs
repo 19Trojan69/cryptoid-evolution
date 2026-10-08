@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { activeWeaponLevel, advanceShot, contactWithEnemy, movePlayer, placePlayer, placePlayerFromPointer, shipCollisionOutcome, shipHitsEnemy, shotHitsEnemy, MAX_PLAYER_SHOTS, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, TOUCH_SHIP_OFFSET_PX, fireInterval, makeVolley } from "./playerCombat.ts";
+import { activeWeaponLevel, advanceShot, contactWithEnemy, enemyMotionVisible, movePlayer, placePlayer, placePlayerFromPointer, retainContactLatch, shipCollisionOutcome, shipContactPoint, shipHitsEnemy, shotHitsEnemy, MAX_PLAYER_SHOTS, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, TOUCH_SHIP_OFFSET_PX, fireInterval, makeVolley } from "./playerCombat.ts";
 
 test("weapon tiers fire multi-shot volleys and apply plasma damage", () => {
   let next = 0;
@@ -56,6 +56,20 @@ test("shots travel upward, collide only with visible enemies; player hitbox rema
   assert.equal(shipHitsEnemy({ x: .5, y: .85 }, 800, 600, { x: 460, y: 510, radius: 25 }), false);
 });
 
+test("a shot registers a moving enemy crossed between frames, without distant or cloaked hits", () => {
+  const start = { id: 1, x: 400, y: 520, speedX: 0, damage: 1, empowered: false };
+  const end = { ...start, y: 480 };
+  const hull = { x: 400, y: 500, radius: 20, cloaked: false };
+  assert.equal(shotHitsEnemy(start, hull), false);
+  assert.equal(shotHitsEnemy(end, hull), false);
+  assert.equal(shotHitsEnemy(end, hull, start), true);
+  assert.equal(shotHitsEnemy(end, { ...hull, x: 425 }, start), false);
+  assert.equal(shotHitsEnemy(end, { ...hull, cloaked: true }, start), false);
+  assert.equal(shotHitsEnemy({ ...end, y: -19 }, { ...hull, y: 0, radius: 18 }, { ...start, y: 19 }), true); // crosses before offscreen cleanup
+  assert.equal(shotHitsEnemy({ ...end, y: 510 }, { ...hull, y: 530 }, { ...start, y: 550 }, { x: 400, y: 490 }), true);
+  assert.equal(shotHitsEnemy({ ...end, y: 510 }, { ...hull, y: 490 }, { ...start, y: 550 }, { x: 400, y: 530 }), false);
+});
+
 test("visible ships collide in every phase; cooldown and dive state prevent repeated damage", () => {
   const player = { x: .5, y: .85 };
   const touching = { x: 400, y: 510, radius: 25 };
@@ -79,6 +93,27 @@ test("a ship crossing the player between two frames causes one impact", () => {
   const after = { x: 400, y: 620, radius: 25 };
   assert.deepEqual(contactWithEnemy(player, 800, 600, after, true, false, 0, before), { connected: true, damage: 1 });
   assert.deepEqual(contactWithEnemy(player, 800, 600, after, true, true, 0, before), { connected: false, damage: 0 });
+});
+
+test("a shielded attacker can separate below the player and collide again on return", () => {
+  const player = { x: .5, y: .85 }, width = 800, height = 600;
+  const touching = { x: 400, y: 510, radius: 25 };
+  assert.equal(contactWithEnemy(player, width, height, touching, true, false, 0).damage, 1);
+  assert.equal(retainContactLatch(true, player, width, height, touching), true);
+  assert.equal(contactWithEnemy(player, width, height, touching, true, true, 0).damage, 0);
+  const below = { ...touching, y: 610 };
+  assert.equal(retainContactLatch(true, player, width, height, below), false);
+  assert.equal(enemyMotionVisible(below, touching, width, height), true);
+  assert.equal(contactWithEnemy(player, width, height, touching, true, false, 0, below).damage, 1);
+  assert.deepEqual(shipContactPoint(player, width, height, below, touching), { x: 400, y: 510, distance: 0 });
+  assert.equal(contactWithEnemy(player, width, height, touching, true, false, 500, below).damage, 0); // protection frames
+  assert.equal(enemyMotionVisible({ ...below, y: 900 }, { ...below, y: 850 }, width, height), false);
+});
+
+test("relative ship movement catches a crossing without widening the hitbox", () => {
+  const from = { x: 400, y: 450 }, to = { x: 400, y: 550, radius: 25 };
+  assert.equal(contactWithEnemy({ x: .5, y: .75 }, 800, 600, to, true, false, 0, from, { x: .5, y: .92 }).damage, 1);
+  assert.equal(contactWithEnemy({ x: .7, y: .75 }, 800, 600, to, true, false, 0, from, { x: .7, y: .92 }).damage, 0);
 });
 
 test("an active shield absorbs a ship collision; an inactive or expired shield does not", () => {

@@ -1,6 +1,6 @@
 # Cryptoid Evolution – zentrale Entwicklungs-TODO
 
-Stand: 8. Oktober 2026. Pakete 1–3 und das separate Lint-Stabilitätspaket wurden im getrennten Testnet-Projekt veröffentlicht. **Paket 4 und die anschließend freigegebenen Pakete 4.1 und 4.2 sind implementiert, im Preview geprüft und zusammen mit Paket 4.2 auf der festen Testnet-Adresse spielbar; physische Geräteabnahme offen. Pi-Browser-/Produktionsfassung unverändert. Paket 5 wartet auf Freigabe.**
+Stand: 8. Oktober 2026. Pakete 1–3 und das separate Lint-Stabilitätspaket wurden im getrennten Testnet-Projekt veröffentlicht. **Paket 4 und die anschließend freigegebenen Pakete 4.1 und 4.2 sind implementiert und auf der festen Testnet-Adresse spielbar. Paket 4.3 prüft und korrigiert Kollisionen, Treffer und den Wiedereinstieg; Geräteabnahme offen. Pi-Browser-/Produktionsfassung unverändert. Paket 5 wartet auf Freigabe.**
 
 Status: **offen** = noch nicht vollständig umgesetzt/verifiziert; **in Arbeit** = aktuelle Bearbeitung; **erledigt** = implementiert; **getestet** = dokumentierte Prüfungen bestanden (Geräte-/Live-Lücken separat ausweisen).
 
@@ -91,6 +91,15 @@ Nachweis: [docs/package-4-1-audio-ship-motion-2026-10-08.md](docs/package-4-1-au
 
 Nachweis: [docs/package-4-2-menu-audio-2026-10-08.md](docs/package-4-2-menu-audio-2026-10-08.md). Paket 5 bleibt offen.
 
+## Paket 4.3 – Schiffskollisionen, Trefferauswertung und Wiedereinstieg — erledigt / automatisiert getestet, Geräteabnahme offen
+
+- **erledigt / gezielt getestet: Rückflug von unten.** Der Kollisionsmerker gilt nur für denselben ununterbrochenen Kontakt. Nach räumlicher Trennung kann derselbe Gegner beim Rückflug erneut treffen. Der 1,5-Sekunden-Schutz nach einem Treffer und aktive Schilde bleiben wirksam; auch ein am Spielfeldrand sichtbarer Schiffsrumpf wird berücksichtigt.
+- **erledigt / gezielt getestet: Schüsse gegen bewegte Gegner.** Projektil und Gegner werden gemeinsam über das letzte Frame verfolgt. Ein Treffer zwischen zwei Bildpositionen wird gezählt; entfernte Beinahetreffer und Tarnung bleiben geschützt. Schiffskontakt berücksichtigt ebenso gleichzeitige Spielerbewegung; die Hitbox wurde nicht vergrößert.
+- **erledigt / Build geprüft: beide Schiffe zerfallen.** Bei ungeschütztem Lebensverlust durch einen normalen Gegner erscheinen für beide Schiffe acht kleinere Rumpfteile an der Kontaktstelle. Das intakte Spielerschiff bleibt während des Zerfalls zunächst unsichtbar und erscheint dann mit drei kurzen Blinkimpulsen innerhalb der vorhandenen Schutzzeit. Endgültiger Lebensverlust und Schildtreffer behalten ihre eigenen Regeln.
+- **offen: physische Geräteabnahme.** Rückflug nach abgefangenem Schildtreffer, direkter Zusammenstoß ohne Schild, Projektiltreffer auf bewegte Gegner, Lebensanzeige, Sound und mehrere schnelle Kollisionen auf iPhone/Pi Browser und Android prüfen. Keine Spielstände oder Käufe migrieren.
+
+Nachweis: [docs/package-4-3-collision-hit-feedback-2026-10-08.md](docs/package-4-3-collision-hit-feedback-2026-10-08.md). Paket 5 bleibt offen.
+
 ## Paket 5 – Score, Rangliste & Admin — offen
 
 18. **offen: Career Score.** Dauerhafte Summe regulärer Run-Punkte, primäres Top-100-Sortierkriterium, Schutz gegen offensichtliches Farming/Exploits.
@@ -127,4 +136,4 @@ Implementierung erledigt; automatisierte Prüfungen bestanden. Bericht: [docs/pa
 - Browser 390×844 und 1280×800: Explosion/Treffer/Schutz/Übergänge; echte Handler mit isoliertem Speicher: Shards, Lebensverlust und Boss-Clear-Resume; Hintergrundpause auch bei gestoppter RAF geprüft.
 - Lint nicht grün: exakt wie vorher 55 Fehler / 16 Warnungen; keine zusätzlichen Meldungen.
 - Offene Geräteabnahme: physischer iPhone-/Pi-Browser-/Android-Test. Testnet wurde anschließend über das getrennte Vercel-Projekt mit Commit `861f9fe` unter `cryptoid-evolution-testnet.vercel.app` veröffentlicht und im Browser angespielt. Produktion unverändert.
-- Paket 2 und 3 sowie das separat freigegebene Lint-Stabilitätspaket wurden im getrennten Testnet-Projekt veröffentlicht. Paket 4 und die Folgepakete 4.1 und 4.2 wurden im Preview geprüft und mit dem getesteten Paket-4.2-Deployment auf die feste Testnet-Adresse gelegt; Paket 5 wartet auf Freigabe.
+- Paket 2 und 3 sowie das separat freigegebene Lint-Stabilitätspaket wurden im getrennten Testnet-Projekt veröffentlicht. Paket 4 und die Folgepakete 4.1 und 4.2 wurden im Preview geprüft und mit dem getesteten Paket-4.2-Deployment auf die feste Testnet-Adresse gelegt. Paket 4.3 ist automatisiert getestet; Paket 5 wartet auf Freigabe.
