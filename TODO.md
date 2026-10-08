@@ -1,6 +1,6 @@
 # Cryptoid Evolution – zentrale Entwicklungs-TODO
 
-Stand: 8. Oktober 2026. Pakete 1–3 und das separate Lint-Stabilitätspaket wurden im getrennten Testnet-Projekt veröffentlicht. **Paket 4 ist implementiert und automatisiert getestet; Browser- und Geräteabnahme sowie Testnet-Aktualisierung werden geprüft. Paket 5 wartet auf Freigabe.**
+Stand: 8. Oktober 2026. Pakete 1–3 und das separate Lint-Stabilitätspaket wurden im getrennten Testnet-Projekt veröffentlicht. **Paket 4 ist implementiert, automatisiert getestet und im separaten Preview angespielt; physische Geräteabnahme offen. Die feste Testnet-Adresse blieb wegen fehlender Vercel-Connector-Berechtigung unverändert. Paket 5 wartet auf Freigabe.**
 
 Status: **offen** = noch nicht vollständig umgesetzt/verifiziert; **in Arbeit** = aktuelle Bearbeitung; **erledigt** = implementiert; **getestet** = dokumentierte Prüfungen bestanden (Geräte-/Live-Lücken separat ausweisen).
 
@@ -66,11 +66,11 @@ Nachweis: [docs/lint-stability-2026-10-08.md](docs/lint-stability-2026-10-08.md)
 - **offen: bedarfsgerechtes Laden prüfen.** Selten benötigte Bereiche wie Sammlung und Shop nach Möglichkeit erst beim Öffnen laden; für Spielstart und laufenden Kampf benötigten Code rechtzeitig verfügbar halten. Ladezustände und Fehlerpfade sauber behandeln.
 - **offen: Wirkung und Regressionen prüfen.** Vorher/nachher Chunk-Größen, Startzeit und mobile Spielperformance vergleichen; Spielstart, Navigation, Sammlung, Shop, Wiederaufnahme und Pi-Browser prüfen. Bestehende Effekte und Funktionen erhalten. Umsetzung erst als separat freigegebene Performancearbeit.
 
-## Paket 4 – visuelles Gameplay & HUD — erledigt / automatisiert getestet, Geräteabnahme offen
+## Paket 4 – visuelles Gameplay & HUD — erledigt / automatisiert und im Preview getestet, Geräteabnahme offen
 
-15. **erledigt / Browser-Abnahme offen: Warnungen.** Verstärkung und Bosswarnung kurz in der Bildschirmmitte, ohne Box/Rahmen, mit Signalblinken und ruhiger Variante für reduzierte Bewegung. Vorhandene lokalisierte Texte bleiben erhalten; sonstige Level-/Kettenmeldungen behalten ihre eigene Darstellung.
-16. **erledigt / Browser-Abnahme offen: Einheitliche Würfel.** Quadratische 3D-Flächen, gleiche Drehrichtung und 7,2 Sekunden pro Umdrehung für alle neun Würfel; Rotationen pausieren mit dem Spiel und respektieren reduzierte Bewegung.
-17. **erledigt / Browser-Abnahme offen: Größere Gameplay-Schiffe.** Spieler auf Mobilgeräten 104–132 px, bei geringer Höhe 94 px; reguläre Gegner und Bonusziele optisch 10 % größer. Kollisionsradien und gespeicherte Positionen unverändert; HUD/Bewegung im Browser und auf Geräten nachtesten.
+15. **erledigt / Übergangs-Abnahme offen: Warnungen.** Verstärkung und Bosswarnung kurz in der Bildschirmmitte, ohne Box/Rahmen, mit Signalblinken und ruhiger Variante für reduzierte Bewegung. Vorhandene lokalisierte Texte bleiben erhalten; reale Block-/Bossübergänge auf Geräten noch prüfen.
+16. **erledigt / Übergangs-Abnahme offen: Einheitliche Würfel.** Quadratische 3D-Flächen, gleiche Drehrichtung und 7,2 Sekunden pro Umdrehung für alle neun Würfel; Rotationen pausieren mit dem Spiel und respektieren reduzierte Bewegung. Blockabschluss im Browser und auf Geräten noch visuell prüfen.
+17. **erledigt / Browser-Preview geprüft, Geräteabnahme offen: Größere Gameplay-Schiffe.** Spieler auf Mobilgeräten 104–132 px, bei geringer Höhe 94 px; reguläre Gegner und Bonusziele optisch 10 % größer. Kollisionsradien und gespeicherte Positionen unverändert; schmale/kurze Bildschirme auf Geräten nachtesten.
 - **erledigt / physische Geräteabnahme offen: Doppeltippen und Bildschirmlupe.** Den bestehenden Schutz für die Spielfläche um einen frühzeitigen, positionsabhängigen Doppeltipp-Schutz ergänzt; UI-Schaltflächen und globale Seitenvergrößerung nicht gesperrt. Auf iPhone/Safari, Pi Browser und Android/Chrome prüfen, ob es Browser-Zoom oder eine Betriebssystem-Bedienungshilfe war; letzteres kann die Webseite nicht steuern. Bewegung, HUD, Menüs und Zugänglichkeit nachtesten.
 
 Nachweis: [docs/package-4-visual-hud-touch-2026-10-08.md](docs/package-4-visual-hud-touch-2026-10-08.md). Paket 5 bleibt getrennt.
@@ -96,6 +96,8 @@ Vorhanden: zentrale i18n-Kataloge und Sprachtests. Umfang/Erkennung vor Paket 7 
 
 - Die historischen 55 Lint-Fehler/16 Warnungen aus Paket 1 wurden mit damaligen Abhängigkeiten gemessen. Mit den am 8. Oktober neu installierten, festgeschriebenen Yarn-Abhängigkeiten zeigten Paket 2 und 3 beide 14 Fehler/16 Warnungen. Das separate Stabilitätspaket bereinigt diese auf 0/0. Der große JS-Bundle-Chunk ist für die nächste gesonderte Performancearbeit vorgemerkt.
 - Lokaler Gast-Chromium meldet `Pi is not defined` aus der vorhandenen Pi-Integration im Konsolenereignis, obwohl Spielstart und Waffenmenü bedienbar sind. Separat in einer Pi-/Browser-Abnahme untersuchen; kein Paket-2-Nebenumbau.
+- Im Paket-4-Preview meldete die Pi-SDK-Datei nach längerer Sitzung Messaging-Timeouts in Chrome außerhalb des Pi Browsers. Spiel und Waffenmenü blieben bedienbar; im Pi Browser separat prüfen.
+- Der Paket-4-Preview-Build ist spielbar; die feste Testnet-Adresse wurde nicht umgestellt. Vercel verweigerte die Promotion (422) und sowohl Produktions-Deployment im getrennten Testnet-Projekt als auch Alias-Zuordnung (403). Produktion bleibt auf `main`.
 - Oberer Blockzähler zählt abgeschlossene Blocks, Abschnittstext den laufenden Block. Vorhandene Erklärung geprüft; eine Vereinheitlichung ist gesondert zu entscheiden.
 
 - Die ältere `doc/cryptoid-gameplay-roadmap.md` enthält historische, teils überholte Regeln. Diese zentrale TODO bestimmt neue Arbeit; keine Gameplay-Änderung aus historischen Notizen ableiten.
