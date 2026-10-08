@@ -23,7 +23,7 @@ Stand: 8. Oktober 2026. Sauberer Ausgangspunkt `codex/package-4-3-collision-hit-
 ## Prüfungen
 
 - Frontend: 50 Seitentestdateien und i18n-Test bestanden; TypeScript/Vite-Build und ESLint erfolgreich.
-- Backend: TypeScript-Build und vollständige Suite mit 52 Tests erfolgreich, einschließlich vorhandener Admin-/Payment-/Progress-Regressionen. Lokale HTTP-Integrationstests wurden mit Loopback-Freigabe ausgeführt.
+- Backend: TypeScript-Build und vollständige Suite mit 57 Tests erfolgreich, einschließlich vorhandener Admin-/Payment-/Progress-Regressionen. Lokale HTTP-Integrationstests wurden mit Loopback-Freigabe ausgeführt.
 - `git diff --check` bestanden. Keine Änderungen an Pi-SDK- oder Payment-Code. Der bekannte große JS-Chunk ist weiterhin eine getrennte Performanceaufgabe.
 
 ## Ursprünglicher Freigabeblock für Testnet
@@ -41,4 +41,23 @@ Der ursprüngliche Blocker wurde weiter untersucht. Das bestehende Projekt `cryp
 - Query-Parameter der lokalen API bleiben beim Umschreiben erhalten; die historische Ranglistenauswahl funktioniert dadurch auch im lokalen Backend-Modus. Vorschau-Zugangsdaten werden nicht an den Zahlungsproxy weitergereicht.
 - Fünf zusätzliche Gateway-Tests prüfen Netzwerktrennung, opt-in ausschließlich für Preview, Auth-/Body-/Cookie-Weitergabe, Erhalt des Zahlungsdiensts und Wiederaufnahme nach einem Startfehler. Die vollständige Backend-Suite besteht nun aus 57 erfolgreichen Tests. Frontend: 209 Spieltests und 22 i18n-Tests, Build und Lint erfolgreich.
 
-**Status:** Routing vorbereitet und automatisiert geprüft. Neue Backend-Vorschau, Live-API-Prüfung und feste Testnet-Veröffentlichung folgen vor der Geräteabnahme. Kein Merge nach `main`, kein Produktionsrelease und kein tatsächlicher Score-Reset.
+**Status:** Routing implementiert, automatisiert geprüft und im festen Testnet veröffentlicht. Kein Merge nach `main` und kein Produktionsrelease. Authentifizierte Run-Abrechnung, tatsächlicher eigener Reset, echte Test-Pi-Zahlungen und Geräteabnahme bleiben als Live-Prüfung offen.
+
+## Veröffentlichung und Live-Nachweise
+
+- Geprüfter Code-Commit: `fb35905ba8eadd24dec4c9406a5eec42518a2597`.
+- Deployment: `dpl_Di7czb4by1ojoURREsp1dzb4soca`, **Preview**, bestehendes Projekt `cryptoid-evolution`, mit dessen bereits vorhandenem MongoDB-Preview-Zugang und der branchbezogenen Testnet-Config.
+- Feste Testnet-Adresse: https://cryptoid-evolution-testnet.vercel.app ist diesem Deployment manuell zugeordnet. Die Domainkonfiguration beider Vercel-Projekte wurde vor/nach der Zuordnung verglichen und bleibt identisch: Produktionsdomain beim Hauptprojekt, Testnet-Domain beim Testnet-Projekt. Der Testnet-Alias selbst zeigt auf die geprüfte Preview des Hauptprojekts. Keine Projektverschiebung und keine Schlüsselkopie.
+- Produktionsalias unverändert auf `dpl_CgXqLk1XMPs4DycKYZrUNvGPBT12`; `main` unverändert auf `1871557dec332161cfdb0c90bc4d29022632bda6`.
+
+| Lesende Live-Prüfung auf der festen Testnet-Adresse | Ergebnis |
+| --- | --- |
+| `/api/leaderboard/top?sort=career` | 200, Netzwerk Testnet, `x-cryptoid-score-api: 5`, Backend `testnet-local`; noch keine neu abgeschlossenen Career-Runs |
+| `/api/leaderboard/top?rules=2`, mit widersprüchlichem Mainnet-Header | 200, weiterhin Testnet; elf bisherige Rekorde in Rang/Benutzername/Score/Dienstgrad identisch mit der bisherigen Testnet-API |
+| `/api/leaderboard/top?rules=1` | 200, zwei vorhandene Archivrekorde erreichbar |
+| `/api/leaderboard/me`, ohne Anmeldung | 401; persönliche Werte bleiben hinter der Anmeldung |
+| `/api/admin/status`, ohne Anmeldung | 401, Backend `production-proxy`; bestehender Pi-Key-Dienst bleibt zuständig |
+
+**Grenzen der Abnahme:** Die automatische Freigabeprüfung lehnte eine Batch-Live-Prüfung mit POST auf Score-, Admin-Reset- und Zahlungsfreigabe-Endpunkte wegen möglicher Daten-/Zahlungsänderungen ab. Sie wurde durch ausschließlich lesende Live-Prüfungen ersetzt. Gutschrift, Einmalzählung, Eigentümerprüfung, Reset und Payment-Regeln wurden in der lokalen Suite mit Testdaten geprüft. Das ist kein Nachweis eines echten angemeldeten Pi-Laufs oder einer echten Zahlung auf einem Gerät. Ein eigener Reset muss daher weiterhin bewusst vom Eigentümer geprüft werden und wurde nicht als Test angefordert.
+
+**Folgepakete:** Bei einem neuen Arbeitsbranch die Preview-Config `CRYPTOID_TESTNET_BACKEND=local` gezielt auch für diesen Branch setzen. Nur ein Preview mit bestätigtem Netzwerk Testnet und funktionierender Score-API darf auf die feste Testnet-Adresse gelegt werden. Ein reines Frontend-Deployment im bisherigen Testnet-Projekt würde ohne eigenen MongoDB-Zugang weiterhin das alte Produktions-Backend verwenden. Die feste Testnet-Adresse bleibt bis zur nächsten geprüften Veröffentlichung auf dem oben genannten Code-Deployment; reine Dokumentations-Commits werden nicht erneut zugeordnet.
