@@ -1,6 +1,6 @@
 # Cryptoid Evolution – zentrale Entwicklungs-TODO
 
-Stand: 8. Oktober 2026. Dieser Auftrag ist die maßgebliche Reihenfolge; ältere Roadmaps bleiben als Historie erhalten. **Nur Paket 1 ist zur Umsetzung freigegeben. Nach seinem Bericht STOPP; Paket 2 benötigt ausdrückliche Freigabe.**
+Stand: 8. Oktober 2026. Paket 1 wurde im getrennten Testnet-Projekt veröffentlicht. **Paket 2 ist implementiert und lokal getestet; Paket 3 wartet auf ausdrückliche Freigabe.**
 
 Status: **offen** = noch nicht vollständig umgesetzt/verifiziert; **in Arbeit** = aktuelle Bearbeitung; **erledigt** = implementiert; **getestet** = dokumentierte Prüfungen bestanden (Geräte-/Live-Lücken separat ausweisen).
 
@@ -16,7 +16,7 @@ Status: **offen** = noch nicht vollständig umgesetzt/verifiziert; **in Arbeit**
 - Stabilität > saubere Architektur > Performance > Optik > Zusatzfeatures. Mobile Performance priorisieren; Effekte nicht zur Verschleierung von Problemen reduzieren.
 - Spielstände, Käufe, Shards, Benutzerwerte erhalten; Testnet/Mainnet strikt getrennt; Pi SDK, MongoDB, Payments schützen.
 - Pro Paket gezielte Tests und vorhandene Build-/Lint-/Test-Schritte; Dateien, Fehler, Tests, Risiken dokumentieren.
-- **Keine Produktionsaktualisierung ohne ausdrückliche Freigabe.** Testnet nur als vollständiges, stabiles Paket. Keine großen Zusatzumbauten; Nebenfehler hier dokumentieren und nur bei direkter Notwendigkeit für Paket 1 beheben.
+- **Keine Produktionsaktualisierung ohne ausdrückliche Freigabe.** Testnet nur als vollständiges, stabiles Paket. Keine großen Zusatzumbauten; Nebenfehler hier dokumentieren und nur bei direkter Notwendigkeit für das freigegebene Paket beheben.
 
 ## Dauerregel: Texte und Übersetzungen
 
@@ -32,15 +32,15 @@ Bei jeder Mechanikänderung Spielbeschreibung, Anleitung/Help, Tooltips, Waffen-
 
 Vorhanden: modulare Gegner-/Spielerkollision, alle Bossgeschütze, 1.500-ms-Trefferschutz, Schiffspanzerung, Schildlogik, persistente Run-Snapshots, sofortiges Speichern von Lebensverlust, Netzwerktrennung, 9-Block/Boss/Bonus-Übergänge. Diese Logik wird gezielt korrigiert, nicht ersetzt.
 
-## Paket 2 – Waffen & Power-ups — offen, nicht freigegeben
+## Paket 2 – Waffen & Power-ups — erledigt / lokal getestet
 
-6. **offen: Einklappbares Waffenmenü.** Schmaler seitlicher Tab mit lokalisiertem Waffen/Weapons, optional vertikal, nie „Vertical Weapons“. Menü fährt ins Bild, normale Überschrift, etwas transparenter. Unten nur bei nachweislich besserer Bedienung.
-7. **offen: Schiff vor UI.** Spielerschiff optisch vor Waffenmenü/Buttons; Buttons ggf. transparenter, weiter gut sichtbar und bedienbar.
-8. **offen: Nicht blockierendes Nachladen.** Reloading-Dialog und Spielstopp entfernen; kurzer rahmenloser lokalisierter Hinweis und passendes Geräusch; kein gefährlicher harter Wiedereinstieg.
-9. **offen: Automatischer Waffenwechsel.** Leere Spezialwaffe → nächstbeste verfügbare, vom Spieler AKTIV gesetzte Waffe, sonst Standardschuss; ohne Spielstopp.
-10. **offen: Power-up-Balance.** Regelmäßige Drops, derselbe Typ nie zweimal pro Level, verschiedene Typen erlaubt; frühe Level nicht zu leicht, Progression beachten.
+6. **getestet (lokal): Einklappbares Waffenmenü.** Schmaler seitlicher Tab mit lokalisiertem Waffen/Weapons; Menü fährt ins Bild, normale Überschrift, transparentere Fläche. Mobile/Desktop-Chromium geprüft.
+7. **getestet (lokal): Schiff vor UI.** Spielerschiff optisch vor Waffenmenü/Buttons; transparente, weiterhin bedienbare Buttons. Grafikgröße/Hitbox unverändert.
+8. **getestet (automatisch): Nicht blockierendes Nachladen.** Dialog/Spielstopp entfernt; kurzer rahmenloser lokalisierter Hinweis und passendes Geräusch. Aktivierung nutzt weiterhin Server-Idempotenz; verspätete Antworten überschreiben keine neu ausgewählte Waffe.
+9. **getestet (automatisch): Automatischer Waffenwechsel.** Leere Spezialwaffe → stärkste noch laufende aktivierte Waffe beziehungsweise verfügbare stärkere Pickup-Waffe, sonst Standardschuss; ohne Spielstopp.
+10. **getestet (automatisch): Power-up-Balance.** Frühe Dropchance 6,5 %, später bis 10 %; pro Level jeder freie Typ höchstens einmal, andere Typen weiterhin möglich. Die Kapitelhistorie wird gesichert und nach der Bonusrunde zurückgesetzt; ältere Spielstände bleiben lesbar.
 
-Vorhanden: kompakter Waffenbutton, Inventar/Timer, Opt-in-Nachladen je Waffe; noch blockierende Abläufe. Keine Neuimplementierung ohne Prüfung.
+Vorhandenes Inventar, Timer, Opt-in-Nachladen und Pi-Aktivierung werden weiterverwendet. Nachweis: [docs/package-2-weapons-2026-10-08.md](docs/package-2-weapons-2026-10-08.md). Physische Pi-/Android-/iPhone-Abnahme steht aus.
 
 ## Paket 3 – Bombe, EMP & Bosskampf — offen
 
@@ -77,6 +77,8 @@ Vorhanden: zentrale i18n-Kataloge und Sprachtests. Umfang/Erkennung vor Paket 7 
 ## Zusätzliche Befunde / nicht Teil der Paket-1-Freigabe
 
 - Bestehende Lint-Schulden (55 Fehler, 16 Warnungen) und großer JS-Bundle-Chunk separat bearbeiten; kein Paket-1-Nebenumbau.
+- Mit den am 8. Oktober neu installierten, festgeschriebenen Yarn-Abhängigkeiten zeigen Basis und Paket 2 beide 14 Lint-Fehler/16 Warnungen; keine zusätzliche Meldung. Der frühere Paket-1-Bericht hatte mit der damaligen lokalen Installation 55 Fehler/16 Warnungen gemessen.
+- Lokaler Gast-Chromium meldet `Pi is not defined` aus der vorhandenen Pi-Integration im Konsolenereignis, obwohl Spielstart und Waffenmenü bedienbar sind. Separat in einer Pi-/Browser-Abnahme untersuchen; kein Paket-2-Nebenumbau.
 - Oberer Blockzähler zählt abgeschlossene Blocks, Abschnittstext den laufenden Block. Vorhandene Erklärung geprüft; eine Vereinheitlichung ist gesondert zu entscheiden.
 
 - Die ältere `doc/cryptoid-gameplay-roadmap.md` enthält historische, teils überholte Regeln. Diese zentrale TODO bestimmt neue Arbeit; keine Gameplay-Änderung aus historischen Notizen ableiten.
@@ -89,5 +91,5 @@ Implementierung erledigt; automatisierte Prüfungen bestanden. Bericht: [docs/pa
 - Frontend/Backend gebaut; 219 Frontend-/Sprachtests und 47 Backend-Tests bestanden.
 - Browser 390×844 und 1280×800: Explosion/Treffer/Schutz/Übergänge; echte Handler mit isoliertem Speicher: Shards, Lebensverlust und Boss-Clear-Resume; Hintergrundpause auch bei gestoppter RAF geprüft.
 - Lint nicht grün: exakt wie vorher 55 Fehler / 16 Warnungen; keine zusätzlichen Meldungen.
-- Offene Abnahme: physischer iPhone-/Pi-Browser-/Android-Test und Testnet-Veröffentlichung. Vercel verweigert Deployment-Zugriff (403), deshalb Testnet-Domain nicht aktualisiert. Produktion unverändert.
-- **STOPP nach Paket 1. Paket 2 bleibt offen und benötigt ausdrückliche Freigabe.**
+- Offene Geräteabnahme: physischer iPhone-/Pi-Browser-/Android-Test. Testnet wurde anschließend über das getrennte Vercel-Projekt mit Commit `861f9fe` unter `cryptoid-evolution-testnet.vercel.app` veröffentlicht und im Browser angespielt. Produktion unverändert.
+- Paket 2 wurde am 8. Oktober ausdrücklich freigegeben; nur dieses Paket ist jetzt in Arbeit.

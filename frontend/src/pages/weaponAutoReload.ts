@@ -8,3 +8,12 @@ export function parseAutoReload(raw: string | null): AutoReloadPreferences {
 export function shouldAutoReload(level: number, source: string, beforeMs: number, afterMs: number, preferences: AutoReloadPreferences, stock: Record<string, number>, allowed: boolean) {
   return allowed && source === 'paid' && beforeMs > 0 && afterMs === 0 && preferences[level] === true && (stock[products[level]] || 0) > 0;
 }
+
+// Already activated timers are available without consuming another charge.
+// The automatic setting is the player's explicit opt-in for each paid weapon.
+export function nextActiveWeapon(timers: readonly number[], preferences: AutoReloadPreferences, pickupLevel: number, pickupMs: number) {
+  const paid = [5, 4, 3, 2].find(level => preferences[level] === true && (timers[level] ?? 0) > 0) ?? 1;
+  if (pickupMs > 0 && pickupLevel >= paid && pickupLevel > 1) return { source: 'pickup' as const, level: pickupLevel };
+  if (paid > 1) return { source: 'paid' as const, level: paid };
+  return { source: 'standard' as const, level: 1 };
+}

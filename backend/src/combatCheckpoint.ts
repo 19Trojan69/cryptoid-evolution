@@ -1,4 +1,4 @@
-export const COMBAT_STATE_KEYS = ["asteroids", "bonusTargets", "bonusHits", "boss", "shots", "enemyShots", "player", "powerUps", "pickupNotice", "combo", "chainBlocks", "chainResult", "bonusResult", "projectileGuard", "pendingStartPower", "playerHullFires", "playerHit", "phase"] as const;
+export const COMBAT_STATE_KEYS = ["asteroids", "bonusTargets", "bonusHits", "boss", "shots", "enemyShots", "player", "powerUps", "powerUpTypes", "pickupNotice", "combo", "chainBlocks", "chainResult", "bonusResult", "projectileGuard", "pendingStartPower", "playerHullFires", "playerHit", "phase"] as const;
 export const COMBAT_REF_KEYS = ["nextId", "formationIndex", "formationOffset", "flight", "bonusIndex", "bossEscortWave", "bossEscortSpawned", "bossEscortTimer", "spawnTimer", "sectionElapsed", "clearTimer", "attackCooldown", "elapsed", "attackNumber", "dropsCreated", "impactCooldown", "fireTimer"] as const;
 export type CombatCheckpoint = {
   version: 1; clock: number; sequence: number; stage: number; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus";
@@ -29,6 +29,8 @@ export function readCombatCheckpoint(input: unknown): CombatCheckpoint | null {
     const list = c.state[key];
     if (!Array.isArray(list) || list.length > max || list.some((item: any) => !item || !finite(item.x, -10000, 10000) || !finite(item.y, -10000, 10000))) return null;
   }
+  const types = c.state.powerUpTypes;
+  if (types !== undefined && (!Array.isArray(types) || types.length > 4 || new Set(types).size !== types.length || types.some(type => !['shield', 'overdrive', 'weapon', 'rapid'].includes(type)))) return null;
   if (!c.state.player || !finite(c.state.player.x, 0, 1) || !finite(c.state.player.y, 0, 1)
     || !c.state.combo || !finite(c.state.combo.remainingMs, 0, 1e9) || !finite(c.state.projectileGuard, 0, 3)
     || !Number.isInteger(c.state.chainBlocks) || c.state.chainBlocks < 0 || c.state.chainBlocks > 9

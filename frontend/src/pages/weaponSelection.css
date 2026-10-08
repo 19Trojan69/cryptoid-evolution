@@ -22,3 +22,21 @@
 .weapon-selection-dialog footer button:disabled { opacity: .5; cursor: wait; }
 .weapon-selection-dialog button:focus-visible { outline: 2px solid #8ce9ef; outline-offset: -4px; }
 @media (max-height: 500px) { .weapon-selection-dialog header { padding: 8px 16px; } .weapon-selection-dialog h2 { font-size: 20px; } .weapon-selection-dialog footer { padding: 8px 12px; } }
+
+/* A side drawer leaves the ship visible and keeps the existing shop controls intact. */
+.game-overlay.weapon-selection-overlay { inset: max(90px, calc(env(safe-area-inset-top) + 72px)) 0 0; display: flex; justify-content: flex-start; align-items: stretch; padding: 0; background: rgba(2, 10, 20, .1); backdrop-filter: none; }
+.game-overlay.weapon-drawer-right { justify-content: flex-end; }
+.game-overlay.weapon-selection-overlay .weapon-selection-dialog:has(.mission-weapon-shop) { width: min(420px, calc(100% - 44px)); height: 100%; max-height: none; border-radius: 0 16px 0 0; background: rgba(9, 27, 42, .88); box-shadow: 8px 0 34px rgba(0,0,0,.4); animation: weapon-drawer-enter .22s ease-out both; }
+.game-overlay.weapon-drawer-right .weapon-selection-dialog:has(.mission-weapon-shop) { border-radius: 16px 0 0 0; box-shadow: -8px 0 34px rgba(0,0,0,.4); animation-name: weapon-drawer-enter-right; }
+.game-overlay.weapon-selection-overlay .mission-weapon-offers { grid-template-columns: 1fr; }
+.game-overlay.weapon-selection-overlay .mission-weapon-offers .mission-weapon-card { display: flex; margin-bottom: 0; }
+.game-overlay.weapon-selection-overlay .mission-weapon-offers .mission-weapon-card > .mission-weapon-details { display: flex; }
+.game-overlay.weapon-selection-overlay .mission-weapon-card .weapon-fire-preview { height: 74px; flex-basis: 74px; }
+.game-overlay.weapon-selection-overlay .mission-weapon-card, .game-overlay.weapon-selection-overlay .mission-weapon-details { background-color: rgba(11, 32, 50, .88); }
+.game-overlay.weapon-selection-overlay .mission-weapon-shop > footer { background: rgba(9, 25, 40, .94); }
+.weapon-drawer-tab { position: absolute; top: min(30%, 200px); left: min(420px, calc(100% - 44px)); display: flex; align-items: center; justify-content: center; gap: 5px; width: 44px; min-height: 104px; padding: 9px 4px; border: 1px solid #e7c983; border-left: 0; border-radius: 0 12px 12px 0; background: rgba(19, 45, 63, .88); color: #ffe5a6; font: 700 11px/1.1 system-ui,sans-serif; writing-mode: vertical-rl; cursor: pointer; }
+.weapon-drawer-right .weapon-drawer-tab { right: min(420px, calc(100% - 44px)); left: auto; border-right: 0; border-left: 1px solid #e7c983; border-radius: 12px 0 0 12px; }
+.weapon-drawer-tab:focus-visible { outline: 2px solid #8ce9ef; }
+@keyframes weapon-drawer-enter { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+@keyframes weapon-drawer-enter-right { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@media (prefers-reduced-motion: reduce) { .game-overlay.weapon-selection-overlay .weapon-selection-dialog:has(.mission-weapon-shop) { animation: none; } }

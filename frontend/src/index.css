@@ -2682,9 +2682,19 @@ html[data-motion="reduced"] .blockchain-node.active .blockchain-cube-rotor { ani
 .touch-controls .weapon-slot-reserve .weapon-cycle { width: 54px; height: 54px; opacity: 1; }
 .touch-controls .weapon-slot-reserve .weapon-cycle-glyph { font-size: 19px; }
 .touch-controls .weapon-slot-reserve small { font: 600 10px/1.2 system-ui,sans-serif; max-width: 50px; }
-.weapon-reloading > div { display: grid; justify-items: center; gap: 10px; padding: 24px 32px; border-radius: 16px; border: 1px solid #b0d9df70; background: #102737; color: #effbff; }
-.weapon-reloading span { font-size: 32px; color: #82e0d4; }
 @media (max-height: 500px) { .touch-controls .edge-action.mission-shop-access { min-height: 60px; padding: 5px 3px; } .mission-shop-access .mission-access-icon { width: 26px; height: 26px; } .touch-controls .weapon-control-wrap { flex-direction: row; width: auto; align-items: end; } }
+
+/* The player stays above the side drawer and controls without enlarging the hitbox. */
+.game-field .player-ship { z-index: 32; }
+.touch-controls .weapon-control-wrap, .touch-controls .weapon-slot-main { width: 48px; }
+.touch-controls .edge-action.mission-shop-access { width: 42px; min-height: 110px; height: 110px; padding: 7px 3px; background: linear-gradient(150deg, rgba(49,67,81,.77), rgba(19,38,53,.82)); }
+.mission-shop-access .mission-access-icon { width: 25px; height: 25px; }
+.mission-shop-access .mission-access-label { width: auto; max-width: none; max-height: 72px; font-size: 12px; line-height: 1.15; writing-mode: vertical-rl; text-orientation: mixed; white-space: nowrap; overflow: visible; }
+.touch-controls .weapon-slot-main .mission-active-weapon { max-width: 46px; overflow-wrap: anywhere; font-size: 10px; }
+.touch-controls .weapon-slot-main .mission-charge-progress { width: 42px; }
+.touch-controls .edge-action, .touch-controls .power-timer-face { background-color: rgba(12, 39, 57, .78); }
+.weapon-reloading, .weapon-reload-error { position: absolute; z-index: 34; top: 19%; left: 50%; transform: translateX(-50%); width: max-content; max-width: calc(100% - 40px); color: #a9f5e9; font: 750 clamp(16px, 4vw, 24px)/1.2 'Space Grotesk',sans-serif; text-align: center; text-shadow: 0 2px 8px #020a18, 0 0 12px currentColor; pointer-events: none; }
+.weapon-reload-error { color: #ffb3a8; }
 
 /* Thin, count-scaled turret meters; no labels or glow covering boss artwork. */
 .boss-turret-health { position: absolute; z-index: 7; display: block; transform: translate(-50%, -50%); border-radius: 2px; background: #071019d9; box-shadow: 0 0 0 1px #02060bb3; overflow: hidden; pointer-events: none; }

@@ -311,6 +311,18 @@ const combat = (changes = {}) => ({
   formationStarted: false, slots: null, escortSlots: null, ...changes,
 });
 
+test('power-up history survives a checkpoint and legacy saves remain readable', async () => {
+  const h = harness(); await init(h); await start(h);
+  const runId = h.session.scoreRun.id;
+  const c = combat(); c.state.powerUpTypes = ['shield', 'rapid']; c.refs.dropsCreated = 2;
+  assert.equal((await h.call('progress', '/checkpoint', { runId, combat: c, save: snapshot() })).code, 200);
+  assert.deepEqual(h.profile().mission.combat.state.powerUpTypes, ['shield', 'rapid']);
+  const invalid = combat({ sequence: 2 }); invalid.state.powerUpTypes = ['shield', 'shield'];
+  assert.equal((await h.call('progress', '/checkpoint', { runId, combat: invalid, save: snapshot() })).code, 400);
+  const legacy = combat({ sequence: 2 });
+  assert.equal((await h.call('progress', '/checkpoint', { runId, combat: legacy, save: snapshot() })).code, 200);
+});
+
 test('defeated boss waits across save/resume; pickup commits one heart and then bonus', async () => {
   const h=harness(); await init(h); await start(h);
   let runId=h.session.scoreRun.id;

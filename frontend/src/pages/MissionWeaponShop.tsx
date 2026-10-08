@@ -75,13 +75,13 @@ export default function MissionWeaponShop({ autoReload = {}, onAutoReload, authe
   return <section className="mission-weapon-shop" aria-labelledby="mission-weapon-shop-title" aria-busy={busy}>
     <header>
       <small>{t('MISSION PAUSED')}</small>
-      <h2 id="mission-weapon-shop-title" ref={titleRef} tabIndex={-1}>{t('Shop & weapons')}</h2>
+      <h2 id="mission-weapon-shop-title" ref={titleRef} tabIndex={-1}>{t('Weapons')}</h2>
       <p>{t('Owned weapons first · strongest first')}</p>
     </header>
     <div className="mission-shop-scroll">
     <p className="testnet-shop-notice">{shipSaveNetwork === 'testnet' ? t('Testnet: Twin Laser and Rapid Twin can be bought with Test-Pi. Triple Laser and Plasma purchases are locked.') : t('Pi purchases are currently locked. Collect weapon upgrades in game.')}</p>
     {admin && <p>{t('Admin test mode: purchases and records are not saved.')}</p>}
-    <p className="mission-reload-explanation">{t('Auto-reload uses owned charges only. No automatic purchases.')}</p>
+    <p className="mission-reload-explanation">{t('When a timed weapon expires, the strongest enabled weapon takes over; otherwise the standard laser. Auto-reload uses owned charges without pausing.')}</p>
     <div className="mission-weapon-offers">{items.map(({ offer, level, count, timer, pickup, available }) => {
       const locked = shipSaveNetwork !== 'testnet' || !isTestnetWeaponPurchaseEnabled(offer);
       const selected = activeLevel === level && (source !== 'pickup' || pickup);
