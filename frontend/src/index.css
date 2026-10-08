@@ -223,7 +223,6 @@ h2 { margin: 0; color: #eff8f3; font-size: clamp(22px, 3vw, 31px); font-weight: 
 .game-shell { width: 100%; height: 100dvh; overflow: hidden; background: #030e1b; color: #f0f7f5; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: none; overscroll-behavior: none; }
 .game-field { position: relative; width: 100%; height: 100%; overflow: clip; isolation: isolate; touch-action: none; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; background: radial-gradient(circle at 50% 78%, rgba(18, 87, 91, .24), transparent 24%), linear-gradient(180deg, #020b19 0%, #061d32 60%, #082c3a 100%); }
 .game-field *, .player-ship, .player-ship * { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-user-drag: none; }
-.audio-retry { position: absolute; z-index: 12; top: max(118px, calc(env(safe-area-inset-top) + 88px)); left: 50%; transform: translateX(-50%); min-height: 44px; padding: 7px 18px; border: 1px solid #79dcd8; border-radius: 22px; background: #08263dec; box-shadow: 0 0 12px #67d9e478; color: #f1ffff; font: 700 14px 'Oxanium', sans-serif; white-space: nowrap; cursor: pointer; }
 .starfield { position: absolute; inset: -3%; z-index: 0; overflow: hidden; pointer-events: none; transform: none; }
 /* Single compact boss cloud, kept between the boss and the player. */
 .nebula-field { position: absolute; inset: 0; overflow: hidden; pointer-events: none; contain: paint; }
@@ -513,7 +512,7 @@ html[data-motion="reduced"] .cube-spark, html[data-motion="reduced"] .blockchain
 .cryptoid-ghostCoin .asteroid-shape { clip-path: polygon(50% 0, 71% 24%, 96% 26%, 82% 65%, 100% 85%, 68% 74%, 50% 100%, 32% 74%, 0 85%, 18% 65%, 4% 26%, 29% 24%); }
 .cryptoid::after { display: none; }
 .ship-visual { position: absolute; inset: 0; transform-origin: 50% 50%; pointer-events: none; }
-.shielded-ship .ship-visual { transform: translate(var(--ship-visual-offset-x, 0%), var(--ship-visual-offset-y, 0%)) perspective(420px) rotateY(var(--visual-bank, 0deg)) rotate(var(--visual-bank, 0deg)); }
+.shielded-ship .ship-visual { transform: translate(var(--ship-visual-offset-x, 0%), var(--ship-visual-offset-y, 0%)) perspective(420px) rotateY(var(--visual-bank, 0deg)); }
 .fleet-sprite { position: absolute; inset: 0; background-size: 400% 500%; background-repeat: no-repeat; pointer-events: none; }
 .cryptoid .ship-visual { transform: rotate(180deg) perspective(420px) rotateY(var(--visual-bank, 0deg)); }
 .hull-reflection { position: absolute; inset: 0; z-index: 3; pointer-events: none; background: linear-gradient(135deg, #fffbea, #ffe0aa 38%, #a9eaff 75%); mask-size: 100% 100%; -webkit-mask-size: 100% 100%; mask-repeat: no-repeat; -webkit-mask-repeat: no-repeat; opacity: var(--hull-light, 0); mix-blend-mode: screen; }
@@ -2230,7 +2229,6 @@ html[data-motion="reduced"] .home-combat-ally-1 { left: 27%; top: 66%; opacity: 
 .game-region-name { font-size: clamp(12px, 3.1vw, 17px); font-weight: 800; white-space: nowrap; color: #ffe1a1; text-shadow: 0 1px 4px #020b16, 0 0 9px #e6bc5f55; }
 .pickup-notice { width: calc(100% - 16px); gap: 7px; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; animation: pickup-depth-reveal 3.2s ease-out both; }
 .pickup-notice b { width: 100%; font-size: clamp(28px, 7.8vw, 58px); line-height: 1.12; text-shadow: 0 2px 4px #020a18, 0 0 12px var(--pickup-neon), 0 0 28px var(--pickup-neon); animation: pickup-neon-pulse .65s .5s ease-in-out 3; }
-.audio-retry-with-pickup { top: max(235px, calc(env(safe-area-inset-top) + 215px)); }
 .pickup-notice span { font-size: clamp(15px, 4vw, 22px); line-height: 1.3; color: var(--pickup-neon); text-shadow: 0 2px 4px #020a18, 0 0 12px var(--pickup-neon); }
 .pickup-notice::before { opacity: 0; animation: pickup-glow-pulse .7s .15s ease-in-out 5; }
 .pickup-notice::after { height: 3px; background: linear-gradient(90deg, transparent, #fff, var(--pickup-neon), transparent); mask: none; -webkit-mask: none; filter: none; opacity: 0; animation: pickup-glow-pulse .7s .15s ease-in-out 5; }
