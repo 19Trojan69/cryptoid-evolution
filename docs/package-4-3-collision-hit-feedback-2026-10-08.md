@@ -20,6 +20,7 @@ Es gibt keine Änderungen an Lebens-, Schild- oder Schutzzeitregeln, Spielständ
 - Gezielte Kollisions- und Projektiltests: `playerCombat.test.mjs` und `enemyFire.test.mjs`, einschließlich fehlender/definierter Schutzwirkung.
 - Gesamte Frontend-Suite: 50 Seitentestdateien bestanden; `npm run lint` ohne Fehler und Warnungen; `npm run build` samt i18n-Test, TypeScript und Vite bestanden.
 - Backend: `npm run build` bestanden, ohne Backend-Änderungen. `git diff --check` bestanden.
+- Das separate Testnet-Deployment `dpl_5HZSiJoQ4Ex9JutapERnRhdrxowV` für Code-Commit `2a39a58` ist READY. Der Spielstart wurde im Browser sowohl unter dem Preview als auch unter `https://cryptoid-evolution-testnet.vercel.app/game` mit HUD und Spielerobjekt geprüft; kein Fehler aus der Spielanwendung in der Browserkonsole. Die feste Testnet-Adresse zeigt auf genau dieses Deployment. Das Produktionsprojekt zeigt weiterhin auf Commit `1871557`; kein Produktionsrelease.
 
 ## Offen
 
