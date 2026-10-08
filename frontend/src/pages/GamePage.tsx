@@ -21,7 +21,7 @@ import BlockchainProgress from "./BlockchainProgress";
 import { gameHaptics } from "./gameHaptics";
 import { advanceShipMotion, idleShipMotion, engineFlamePercent, explosionDiameter, fragmentFlight, hullIllumination, type ShipMotion } from "./shipRealism";
 import { useLocale } from "../i18n";
-import { memo, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
+import { memo, useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
 import { entryPatternForSector, entryPosition, entryStartX, type EntryPattern } from "./entryPatterns";
@@ -30,7 +30,7 @@ import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, POWER_UP_DURATION_MS, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp, type PowerUpType } from "./powerUps";
 import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, zoneFraction, shipStartHeight } from "./controlPreferences";
 import { advanceShot, contactWithEnemy, MAX_PLAYER_SHOTS, movePlayer, placePlayer, placePlayerFromPointer, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, shipCollisionOutcome, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
-import { advanceEnemyShot, createEnemyShot, enemyShotHitsPlayer, enemyShotLimit, type EnemyShot } from "./enemyFire";
+import { advanceEnemyShot, createEnemyShot, enemyShotHitsPlayer, enemyShotOutsideField, enemyShotLimit, type EnemyShot } from "./enemyFire";
 import { attackPressure, attackSlots } from "./attackPressure";
 import SectorBackdrop from "./SectorBackdrop";
 import Starfield from "./Starfield";
@@ -55,7 +55,7 @@ import { activateCollectedPower } from "./collectedPower";
 import { leaveGameFullscreen, requestGameFullscreen } from "./gameFullscreen";
 import { levelDifficulty, MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { createDoubleKillCombo, creditComboDefeat, DOUBLE_KILL_SCORE, DOUBLE_KILL_SHARDS, type DoubleKillCombo } from "./doubleKillCombo";
-import { balanceAfterMission, BONUS_TARGET_SHARD_REWARD, bossPoints, bossShardReward, creditReward } from "./shardEarnings";
+import { missionShardBase, missionShardTotal, uncreditedGuestShards, BONUS_TARGET_SHARD_REWARD, bossPoints, bossShardReward, creditReward } from "./shardEarnings";
 import { addPersistentHullFire, hullFireAtImpact, hullFireLimit, spriteFireSites, type HullFire } from "./hullFires";
 import { bossExplosionSize, bossFallTargetY, bossFireSite } from "./bossCombat";
 import { bossHitTarget } from "./bossHitTarget";
@@ -172,7 +172,7 @@ type Effect = {
   velocityY?: number;
 };
 type WeaponSource = "standard" | "paid" | "pickup";
-type GameState = BossRewardState & { playerHullFires?: HullFire[]; playerHit?: HullFire; bossHullLight: number; combo: DoubleKillCombo; asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; rewardNotice: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; pickupNotice: { id: number; type: PowerUpType; remainingMs: number; level: number } | null; score: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; purchasedShieldMs: number; shieldActive: boolean; overdriveMs: number; overdriveTotalMs: number; rapidFireMs: number; rapidFireTotalMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponSource: WeaponSource; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; weaponTimers: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
+type GameState = BossRewardState & { playerHullFires?: HullFire[]; playerHit?: HullFire; bossHullLight: number; combo: DoubleKillCombo; asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; rewardNotice: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; pickupNotice: { id: number; type: PowerUpType; remainingMs: number; level: number } | null; score: number; shardBase: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; purchasedShieldMs: number; shieldActive: boolean; overdriveMs: number; overdriveTotalMs: number; rapidFireMs: number; rapidFireTotalMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponSource: WeaponSource; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; weaponTimers: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
 
 const syncSelectedWeapon = (state: GameState) => {
   if (state.weaponSource === "pickup" && state.pickupWeaponMs <= 0) state.weaponSource = state.paidWeaponMs > 0 ? "paid" : "standard";
@@ -189,7 +189,7 @@ const TimedRing = ({ remainingMs, durationMs }: { remainingMs: number; durationM
 };
 
 
-const createInitialState = (): GameState => ({ bossHullLight: 0, combo: createDoubleKillCombo(), asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", chainBlocks: 0, chainResult: "", rewardNotice: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: shipStartHeight[readShipStart()] }, thrust: 0, effects: [], powerUps: [], pickupNotice: null, score: 0, shards: 0, hearts: 3, maxHearts: 3, projectileGuard: 0, shieldCharges: 0, shieldMs: 0, purchasedShieldMs: 0, shieldActive: true, overdriveMs: 0, overdriveTotalMs: POWER_UP_DURATION_MS, rapidFireMs: 0, rapidFireTotalMs: POWER_UP_DURATION_MS, empMs: 0, pendingStartPower: null, weaponLevel: 1, weaponSource: "standard", weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], weaponTimers: [0, 0, 0, 0, 0, 0], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") || sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "loading" : "playing" });
+const createInitialState = (): GameState => ({ bossHullLight: 0, combo: createDoubleKillCombo(), asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", chainBlocks: 0, chainResult: "", rewardNotice: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: shipStartHeight[readShipStart()] }, thrust: 0, effects: [], powerUps: [], pickupNotice: null, score: 0, shardBase: shardBalance(localStorage.getItem(SHARD_BALANCE_KEY)), shards: 0, hearts: 3, maxHearts: 3, projectileGuard: 0, shieldCharges: 0, shieldMs: 0, purchasedShieldMs: 0, shieldActive: true, overdriveMs: 0, overdriveTotalMs: POWER_UP_DURATION_MS, rapidFireMs: 0, rapidFireTotalMs: POWER_UP_DURATION_MS, empMs: 0, pendingStartPower: null, weaponLevel: 1, weaponSource: "standard", weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], weaponTimers: [0, 0, 0, 0, 0, 0], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") || sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "loading" : "playing" });
 
 const readRecord = (key: string) => Number(window.localStorage.getItem(key) || 0);
 
@@ -197,8 +197,7 @@ const saveRecords = (state: GameState) => {
   window.localStorage.setItem(BEST_SCORE_KEY, String(Math.max(readRecord(BEST_SCORE_KEY), state.score)));
   window.localStorage.setItem(HIGHEST_SECTOR_KEY, String(Math.max(readRecord(HIGHEST_SECTOR_KEY), state.sector)));
   window.localStorage.setItem(TOTAL_DESTROYED_KEY, String(readRecord(TOTAL_DESTROYED_KEY) + state.destroyed));
-  // Earned Shards persist between runs; the current run starts at zero.
-  window.localStorage.setItem(SHARD_BALANCE_KEY, String(balanceAfterMission(shardBalance(window.localStorage.getItem(SHARD_BALANCE_KEY)), state)));
+  // Shards are credited incrementally; records must never credit them again.
 };
 
 const createFormationSlots = (section: number, sector: number, width: number, height: number, hudBottom: number, count?: number, offset = 0) => {
@@ -366,6 +365,7 @@ const GamePage = () => {
   const visibleTopRef = useRef(96);
   const playerShipRef = useRef<HTMLDivElement>(null);
   const stateRef = useRef<GameState>(createInitialState());
+  const guestCreditedShardsRef = useRef(0);
   const nextIdRef = useRef(1);
   const formationIndexRef = useRef(0);
   const formationStartedRef = useRef(false);
@@ -454,6 +454,17 @@ const GamePage = () => {
   const rewardProgressRef = useRef<RewardProgress>(emptyRewardProgress());
   const pendingRewardsRef = useRef<Promise<unknown>>(Promise.resolve());
   const adminRunRef = useRef(false);
+  const persistGuestShards = () => {
+    const earned = stateRef.current.shards;
+    const delta = uncreditedGuestShards(earned, guestCreditedShardsRef.current);
+    if (!delta || adminRunRef.current || scoreRunRef.current || stateRef.current.status === 'loading' || localStorage.getItem('cryptoid_pi_session')) return;
+    try {
+      const total = shardBalance(localStorage.getItem(SHARD_BALANCE_KEY)) + delta;
+      localStorage.setItem(SHARD_BALANCE_KEY, String(total));
+      guestCreditedShardsRef.current = earned;
+      stateRef.current.shardBase = missionShardBase(total, earned);
+    } catch { setSaveNotice('Save failed. Please retry.'); }
+  };
   const pendingScoreRef = useRef<Promise<unknown> | null>(null);
   const bestThisDeviceRef = useRef(readRecord(BEST_SCORE_KEY));
   const checkpointAtRef = useRef(0);
@@ -466,6 +477,11 @@ const GamePage = () => {
   const musicRef = useRef<MusicPlayer | null>(null);
   const regularMusicPositionRef = useRef(0);
   const soundRef = useRef<GameAudio | null>(null);
+  const refreshAudioStatus = useCallback(() => {
+    const musicWanted = localStorage.getItem(MUSIC_STORAGE_KEY) !== 'off' && readMusicVolume() > 0;
+    setAudioNeedsTap(stateRef.current.status === 'playing' &&
+      ((readEffectsVolume() > 0 && !soundRef.current?.running) || (musicWanted && !musicRef.current?.playing)));
+  }, []);
   useEffect(()=>{if(game.boss)void preloadBossWeapons(game.boss.config).catch(()=>{});},[game.boss?.config]);
   const bossVictoryPendingRef = useRef(false);
   const bossVictoryFinishedRef = useRef(false);
@@ -559,6 +575,15 @@ const GamePage = () => {
     formationStartedRef.current = saved.formationStarted;
     sectionSlotsRef.current = saved.slots;
     bossEscortSlotsRef.current = saved.escortSlots;
+    lastPlayerRef.current = { ...stateRef.current.player };
+    // A saved defeated boss has no live hull/effect timeline. Resume at its
+    // pending heart, without replaying rewards or a sound-only destruction.
+    if (saved.encounter === 'boss-clear') {
+      clearTimerRef.current = BOSS_CLEAR_DURATION_MS;
+      bossDestroyPlayedRef.current = true;
+      bossVictoryPendingRef.current = false;
+      bossVictoryFinishedRef.current = true;
+    }
   };
 
   const activateLoadout = async () => {
@@ -597,6 +622,7 @@ const GamePage = () => {
       scoreRunRef.current = data.scoreRunId;
       rulesVersionRef.current = data.rulesVersion ?? 2;
       combatSequenceRef.current = 0;
+      stateRef.current.shardBase = adminRunRef.current ? 0 : missionShardBase(data.profile?.balance ?? profile?.balance ?? 0, data.checkpoint?.shards ?? 0);
       setAccountRun(!adminRunRef.current && Boolean(data.scoreRunId));
       const reloadPreferences = parseAutoReload(localStorage.getItem(autoReloadKey(shipSaveNetwork, cardOwnerRef.current)));
       autoReloadRef.current = reloadPreferences; setAutoReload(reloadPreferences);
@@ -798,12 +824,9 @@ const GamePage = () => {
       if (track.currentSource === normalSource) regularMusicPositionRef.current = track.audio.currentTime || 0;
       track.setSource(desiredSource, desiredSource === normalSource ? regularMusicPositionRef.current : 0);
     }
-    if (game.status === "playing" || game.status === "game-over" || game.status === "victory") void track.play().then(ok => {
-      if (game.status === "game-over" || game.status === "victory") setAudioNeedsTap(!ok);
-      else if (!ok) setAudioNeedsTap(true);
-    });
+    if (game.status === "playing" || game.status === "game-over" || game.status === "victory") void track.play().then(refreshAudioStatus);
     else if (game.status !== "loading") track.pause();
-  }, [game.status, game.encounter, musicEnabled]);
+  }, [game.status, game.encounter, musicEnabled, refreshAudioStatus]);
   useEffect(() => {
     const volume = game.status === "playing" && game.encounter === "boss-clear"
       ? Math.min(100, musicVolume * BOSS_VICTORY_VOLUME_BOOST)
@@ -855,6 +878,8 @@ const GamePage = () => {
     creditComboDefeat(state, bossShardReward(state.sector), elapsedRef.current);
     state.encounter = "boss-clear";
     state.phase = "SECTOR_CLEAR";
+    // Escorts leave with the boss, but must not simply vanish.
+    for (const enemy of state.asteroids) state.effects.push({ id: nextIdRef.current++, x: enemy.x, y: enemy.y, kind: 'explosion', startedAt: time, sprite: enemy.sprite, debrisSize: enemy.radius * 2, debrisColor: enemy.color });
     state.asteroids = [];
     state.enemyShots = [];
     state.shots = [];
@@ -887,7 +912,7 @@ const GamePage = () => {
     soundRef.current?.setPaused(game.status === "loading" || game.status === "paused" || game.status === "game-over" || game.status === "victory");
   }, [game.sector, game.status]);
 
-  const startEffects = () => {
+  const startEffects = useCallback(() => {
     if (!soundRef.current) {
       const audio = takePrimedGameAudio() ?? new GameAudio();
       audio.setEffectsVolume(readEffectsVolume());
@@ -896,24 +921,21 @@ const GamePage = () => {
       soundRef.current = audio;
     }
     // Retry inside each gesture: Safari can interrupt Web Audio after fullscreen.
-    return soundRef.current.start();
-  };
-  useEffect(() => { if (hasPrimedGameAudio()) void startEffects(); }, []);
+    return soundRef.current.start().then(ok => { refreshAudioStatus(); return ok; });
+  }, [refreshAudioStatus]);
+  useEffect(() => { if (hasPrimedGameAudio()) void startEffects(); }, [startEffects]);
 
   useEffect(() => {
-    if (game.status !== "playing") return;
-    // A suspended context can leave resume() pending on iOS. Offer a gesture
-    // instead of allowing an indefinitely silent mission.
-    const timer = window.setTimeout(() => {
-      if ((readEffectsVolume() > 0 && !soundRef.current?.running) || (musicEnabled && !musicRef.current?.playing)) setAudioNeedsTap(true);
-    }, 1_500);
-    return () => window.clearTimeout(timer);
-  }, [game.status, musicEnabled]);
+    if (game.status !== 'playing') return;
+    // Also catches a pending iOS resume(), late autoplay success and interruptions.
+    const initial = window.setTimeout(refreshAudioStatus, 1500);
+    const timer = window.setInterval(refreshAudioStatus, 500);
+    return () => { window.clearTimeout(initial); window.clearInterval(timer); };
+  }, [game.status, musicEnabled, effectsVolume, musicVolume, refreshAudioStatus]);
 
   const retryAudio = () => {
-    void Promise.all([startEffects(), musicEnabled && musicRef.current ? musicRef.current.play() : Promise.resolve(true)]).then(([effects, music]) => {
-      setAudioNeedsTap((readEffectsVolume() > 0 && !effects) || (musicEnabled && !music));
-    });
+    void startEffects().then(refreshAudioStatus);
+    if (musicEnabled && musicRef.current) void musicRef.current.play().then(refreshAudioStatus);
   };
 
   useEffect(() => {
@@ -930,6 +952,12 @@ const GamePage = () => {
       if (document.visibilityState === "hidden") {
         if (stateRef.current.status === "playing") void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
         if (!backgroundHiddenAtRef.current) backgroundHiddenAtRef.current = Date.now();
+        if (stateRef.current.status === 'playing') {
+          stateRef.current.status = 'paused';
+          soundRef.current?.setPaused(true);
+          musicRef.current?.pause();
+          setGame({ ...stateRef.current });
+        }
         keysRef.current.clear();
         pointerRef.current = null;
         touchOriginRef.current = null;
@@ -941,6 +969,12 @@ const GamePage = () => {
         soundRef.current?.setPaused(true);
         musicRef.current?.pause();
         setGame({ ...stateRef.current });
+      }
+      // Background tabs can stop RAF entirely. Keep effect ages aligned with
+      // paused CSS animations before resetting the simulation frame clock.
+      if (stateRef.current.status === 'paused' && lastFrameRef.current > 0) {
+        const unpaintedPause = Math.max(0, performance.now() - lastFrameRef.current);
+        for (const effect of stateRef.current.effects) effect.startedAt += unpaintedPause;
       }
       backgroundHiddenAtRef.current = 0;
       lastFrameRef.current = 0;
@@ -980,7 +1014,7 @@ const GamePage = () => {
       // Preserve destruction effects through a user pause or a backgrounded tab.
       if (state.status !== "playing") {
         for (const effect of state.effects) {
-          if (effect.kind === "boss-fall" || effect.kind === "boss-explosion") effect.startedAt += frameGap;
+          effect.startedAt += frameGap;
         }
       }
       if (state.status === "playing") {
@@ -1123,6 +1157,9 @@ const GamePage = () => {
             state.bonusHits = 0;
             state.bonusResult = "";
             state.chainResult = "";
+            state.rewardNotice = "";
+            state.powerUps = [];
+            state.pickupNotice = null;
             state.shots = [];
             state.enemyShots = [];
             state.effects = [];
@@ -1272,7 +1309,7 @@ const GamePage = () => {
               }
             }
           }
-          if (next.y >= -next.radius) nextAsteroids.push({ ...next, cloaked: isGhostCloaked(next.type, next.attackPattern === null && next.entryElapsed >= next.entryDuration && next.formationElapsed >= next.formationDuration, elapsedRef.current) });
+          nextAsteroids.push({ ...next, cloaked: isGhostCloaked(next.type, next.attackPattern === null && next.entryElapsed >= next.entryDuration && next.formationElapsed >= next.formationDuration, elapsedRef.current) });
         });
         state.asteroids = nextAsteroids;
         state.bonusTargets = state.bonusTargets.map(target => {
@@ -1304,8 +1341,7 @@ const GamePage = () => {
         const incomingShots: EnemyShot[] = [];
         for (const shot of state.enemyShots) {
           const moved = advanceEnemyShot(shot, state.empMs > 0 ? 0 : delta);
-          if (moved.y > height + 12 || moved.x < -12 || moved.x > width + 12) continue;
-          if (enemyShotHitsPlayer(moved, state.player, width, height)) {
+          if (enemyShotHitsPlayer(moved, state.player, width, height, shot, previousPlayer)) {
             if (impactCooldownRef.current === 0) {
               if (purchasedShieldActive) {
                 state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: "shield", startedAt: time, target: "player" });
@@ -1325,7 +1361,7 @@ const GamePage = () => {
             }
             continue;
           }
-          incomingShots.push(moved);
+          if (!enemyShotOutsideField(moved, width, height)) incomingShots.push(moved);
         }
         state.enemyShots = incomingShots;
         if (heartsLost > 0) {
@@ -1514,7 +1550,8 @@ const GamePage = () => {
           combatCheckpointAtRef.current = time;
           void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
         }
-        if (state.phase === "SECTOR_CLEAR") state.enemyShots = [];
+        if (state.phase === "SECTOR_CLEAR") { state.enemyShots = []; state.shots = []; }
+        persistGuestShards();
         state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "boss-fall" ? BOSS_FALL_DURATION_MS + 100 : effect.kind === "boss-explosion" ? BOSS_FALL_DURATION_MS + 3_400 : effect.kind === "player-explosion" ? 2_250 : effect.kind === "player-crash" ? 1_350 : effect.kind === "explosion" || effect.kind === "shatter" ? 2_250 : 390));
         if (state.hearts === 0) {
           state.status = "destroying";
@@ -1624,6 +1661,7 @@ const GamePage = () => {
       if (power === "rapid") state.rapidFireTotalMs = PURCHASED_POWER_UP_DURATION_MS;
     }
     state.pendingStartPower = null;
+    persistGuestShards();
     soundRef.current?.play(power === "bomb" ? "nova" : power === "emp" ? "emp" : power === "overdrive" ? "boost" : "pickup");
     setGame({ ...state });
   };
@@ -1706,6 +1744,8 @@ const GamePage = () => {
     if (gameOverTimerRef.current !== null) window.clearTimeout(gameOverTimerRef.current);
     gameOverTimerRef.current = null;
     stateRef.current = createInitialState();
+    stateRef.current.shardBase = shardBalance(localStorage.getItem(SHARD_BALANCE_KEY));
+    guestCreditedShardsRef.current = 0;
     bossLifeRemainingRef.current=0;pendingBossCardRef.current=null;setExtraLifeVisible(false);
     shipStageRef.current = 1;
     setShipStage(1);
@@ -1757,6 +1797,7 @@ const GamePage = () => {
   };
 
   const goHome = () => {
+    persistGuestShards();
     if (!recordsSavedRef.current) {
       if (!adminRunRef.current && !scoreRunRef.current) saveRecords(stateRef.current);
       recordsSavedRef.current = true;
@@ -1793,6 +1834,7 @@ const GamePage = () => {
     }
   };
 
+  const totalShards = missionShardTotal(game.shardBase, game.shards);
   const levelLabel = String(campaignLevel(game.sector));
   const sectorLabel = sectorInChapter(game.sector);
   const round = sectionInSector(game.section);
@@ -1841,7 +1883,7 @@ const GamePage = () => {
     }}>{t("Retry save")}</button>}</p>;
 
   return (
-    <main className="game-shell" data-effects-paused={game.status !== "playing"} onPointerDownCapture={event => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
+    <main className="game-shell" data-effects-paused={game.status === "paused" || game.status === "loading"} onPointerDownCapture={event => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
       {rewardCards[0] && <CardReveal reward={rewardCards[0]} remaining={rewardCards.length} onContinue={continueRewardCard}/>}
       {extraLifeVisible&&<div className="boss-extra-life" role="status" aria-live="polite"><strong>{t('EXTRA LIFE')}</strong><span>+1 ♥</span></div>}
       <div ref={fieldRef} className="game-field" onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()} onPointerDown={startDrag} onPointerMove={event => { if (pointerRef.current === event.pointerId) positionFromPointer(event); }} onPointerUp={event => { if (pointerRef.current === event.pointerId) { pointerRef.current = null; touchOriginRef.current = null; } }} onPointerCancel={event => { if (pointerRef.current === event.pointerId) { pointerRef.current = null; touchOriginRef.current = null; } }}>
@@ -1853,7 +1895,7 @@ const GamePage = () => {
         void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); setHomePrompt(true); }} aria-label={t("Go home")}><CockpitIcon kind="home" /></button></div>
           <div className={`hud-stat hearts-stat${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " hearts-stat-hit" : ""}`}><span className="hud-heart-label" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.2 3.4 13.1C-1.1 8.8 5.3 1.7 10.2 5.9L12 7.5l1.8-1.6c4.9-4.2 11.3 2.9 6.8 7.2L12 21.2Z" /></svg></span><strong className="hearts" role="status" aria-live="polite" aria-label={lives(game.hearts)}>/{game.hearts}</strong></div>
           <div className="hud-stat game-level-hud" aria-label={`${t("Game level")} ${levelLabel}`}><span>{t("Level")}</span><strong>{levelLabel}</strong></div>
-          <div className="hud-stat score-hud" aria-label={`${t("Shards")} ${game.shards}, ${t("Score")} ${game.score}`}><span className="shard-line"><b>◆ {game.shards}</b><small>{t("Shards")}</small></span><span className="score-line"><b>{game.score}</b><small>{t("Score")}</small></span></div>
+          <div className="hud-stat score-hud" aria-label={`${t("Shards")} ${totalShards}, ${t("Score")} ${game.score}`}><span className="shard-line"><b>◆ {totalShards}</b><small>{t("Shards")}</small></span><span className="score-line"><b>{game.score}</b><small>{t("Score")}</small></span></div>
           <div className="hud-stat round-hud chain-hud" aria-label={`${t("Block")} ${game.chainBlocks}/${BLOCKS_PER_CHAIN}`}><span>{t("Block")}</span><strong>{game.chainBlocks}<small>/{BLOCKS_PER_CHAIN}</small></strong></div>
           <button className="game-control pause-control" type="button" disabled={weaponBusy || rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || pauseLeaving || game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { if (pauseLeaveRef.current) return; const resuming = game.status === "paused"; stateRef.current.status = resuming ? "playing" : "paused"; if (!resuming) void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); if (resuming) window.setTimeout(retryAudio, 0); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
         </header>

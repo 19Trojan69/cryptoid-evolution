@@ -1,0 +1,93 @@
+# Cryptoid Evolution – zentrale Entwicklungs-TODO
+
+Stand: 8. Oktober 2026. Dieser Auftrag ist die maßgebliche Reihenfolge; ältere Roadmaps bleiben als Historie erhalten. **Nur Paket 1 ist zur Umsetzung freigegeben. Nach seinem Bericht STOPP; Paket 2 benötigt ausdrückliche Freigabe.**
+
+Status: **offen** = noch nicht vollständig umgesetzt/verifiziert; **in Arbeit** = aktuelle Bearbeitung; **erledigt** = implementiert; **getestet** = dokumentierte Prüfungen bestanden (Geräte-/Live-Lücken separat ausweisen).
+
+## Ausgangsstand und Schutzregeln
+
+- Remote-Branches vollständig abgefragt; Git-Historie nachgeladen, da vorhandener Checkout shallow war.
+- `main`: `1871557dec332161cfdb0c90bc4d29022632bda6`; `codex/level-expansion-v2`: `f16ce1c0a8b8eb41045b5dcf168480f5169681b8`.
+- Arbeitsbasis: `codex/card-artwork-centering` / `749d3d525615d377a9380d05e385f21955178e16`, enthält main plus neuere Karten-/Audio-/Waffen-/Login-/Geschützleisten-Arbeit. Separater Worktree/Branch `codex/package-1-stability`.
+- Vorhandene uncommittete Schiffsgrößen-/Mündungsänderungen im älteren Worktree unangetastet lassen; Paket 4 nicht vorziehen.
+- Offene PRs geprüft: #3, #11, #13, #29, #34, #67. Keine ungeprüfte Übernahme; #67 ist ausdrücklich nur Sandbox.
+- Testnet-Branch hat eigene Collection-Audit-Historie. Vor einer Aktualisierung Unterschiede prüfen; niemals durch Force-Push ersetzen.
+- Keine neueren Funktionen entfernen/überschreiben. Funktionierende Module weiterverwenden; Änderungen modular und dauerhaft lösen.
+- Stabilität > saubere Architektur > Performance > Optik > Zusatzfeatures. Mobile Performance priorisieren; Effekte nicht zur Verschleierung von Problemen reduzieren.
+- Spielstände, Käufe, Shards, Benutzerwerte erhalten; Testnet/Mainnet strikt getrennt; Pi SDK, MongoDB, Payments schützen.
+- Pro Paket gezielte Tests und vorhandene Build-/Lint-/Test-Schritte; Dateien, Fehler, Tests, Risiken dokumentieren.
+- **Keine Produktionsaktualisierung ohne ausdrückliche Freigabe.** Testnet nur als vollständiges, stabiles Paket. Keine großen Zusatzumbauten; Nebenfehler hier dokumentieren und nur bei direkter Notwendigkeit für Paket 1 beheben.
+
+## Dauerregel: Texte und Übersetzungen
+
+Bei jeder Mechanikänderung Spielbeschreibung, Anleitung/Help, Tooltips, Waffen-, Power-up- und Bossbeschreibungen, Shop, Rangliste, Admin, Card Collection, Warnungen, Fehlermeldungen und sonstige Erklärungen prüfen. Alle unterstützten Sprachen konsistent aktualisieren; keine widersprüchlichen Alttexte. Textlängen und abgeschnittene Labels prüfen.
+
+## Paket 1 – kritische Spiellogik & Stabilität — erledigt / automatisiert getestet
+
+1. **getestet (automatisch): Gegner bis zur Explosion sichtbar.** Keine Lücke zwischen sichtbarem Gegner und Explosionsbeginn; erst der Explosionsmoment entfernt das Objekt. Alle Zerstörungspfade berücksichtigen.
+2. **getestet (automatisch): Audiozustand beim Start.** Gespeicherte Einstellungen, initiale UI, AudioContext, Spielstart, App-/Browserwechsel prüfen. Anzeige und tatsächliche Wiedergabe müssen zusammenpassen, auch bei blockiertem Autoplay.
+3. **getestet (automatisch): Boss-Projektilschaden.** Alle 50 Bosse, Waffen und Projektilklassen prüfen: Hitbox, Kollision, Schaden, Immunität, Schild, I-Frames und Sonderlogik. Jeder gültige ungeschützte Treffer verursacht vorgesehenen Schaden; bestehende definierte Schutzmechaniken erhalten.
+4. **getestet (automatisch): Gesamt-Shards im HUD.** Vorbestand plus Run-Ertrag (1.250 + 20 = 1.270), auch bei neuer Mission und Resume. Persistenz/HUD synchron; keine Doppelgutschriften oder Vermischung von Netzwerk/Account.
+5. **getestet (automatisch): Übergänge.** Block → Block, Block 9 → Boss, Boss → Bonus, Bonus → nächstes Level, allgemeine Levelwechsel und Continue/Resume prüfen. Keine Freezes, Sprünge, Duplikate, Restprojektile, falschen HUD-/Text-/Gegnerzustände, Audioabbrüche, Timingfehler oder verschwundenen Spieler. Spieler, Audio, Effekte und Simulation synchron.
+
+Vorhanden: modulare Gegner-/Spielerkollision, alle Bossgeschütze, 1.500-ms-Trefferschutz, Schiffspanzerung, Schildlogik, persistente Run-Snapshots, sofortiges Speichern von Lebensverlust, Netzwerktrennung, 9-Block/Boss/Bonus-Übergänge. Diese Logik wird gezielt korrigiert, nicht ersetzt.
+
+## Paket 2 – Waffen & Power-ups — offen, nicht freigegeben
+
+6. **offen: Einklappbares Waffenmenü.** Schmaler seitlicher Tab mit lokalisiertem Waffen/Weapons, optional vertikal, nie „Vertical Weapons“. Menü fährt ins Bild, normale Überschrift, etwas transparenter. Unten nur bei nachweislich besserer Bedienung.
+7. **offen: Schiff vor UI.** Spielerschiff optisch vor Waffenmenü/Buttons; Buttons ggf. transparenter, weiter gut sichtbar und bedienbar.
+8. **offen: Nicht blockierendes Nachladen.** Reloading-Dialog und Spielstopp entfernen; kurzer rahmenloser lokalisierter Hinweis und passendes Geräusch; kein gefährlicher harter Wiedereinstieg.
+9. **offen: Automatischer Waffenwechsel.** Leere Spezialwaffe → nächstbeste verfügbare, vom Spieler AKTIV gesetzte Waffe, sonst Standardschuss; ohne Spielstopp.
+10. **offen: Power-up-Balance.** Regelmäßige Drops, derselbe Typ nie zweimal pro Level, verschiedene Typen erlaubt; frühe Level nicht zu leicht, Progression beachten.
+
+Vorhanden: kompakter Waffenbutton, Inventar/Timer, Opt-in-Nachladen je Waffe; noch blockierende Abläufe. Keine Neuimplementierung ohne Prüfung.
+
+## Paket 3 – Bombe, EMP & Bosskampf — offen
+
+11. **offen: Bomben-/EMP-Optik.** Moderne, hochwertige, professionelle, unterscheidbare Effekte ohne relevante Performancekosten.
+12. **offen: Mechaniken trennen.** Bombe zerstört alle betroffenen normalen Blockgegner, verursacht Boss-Schaden ohne sofortigen Bosskill. Separate Geschütz-HP; beim ersten Boss kann eine Bombe alle Geschütze zerstören, später zunehmende Haltbarkeit/skalierter Schaden, kein garantierter Gesamt-Kill. EMP zerstört nichts, deaktiviert zeitweise ausschließlich gegnerische Feuerkraft; Gegner/Geschütze bleiben bestehen.
+13. **offen: Geschütztrefferfeedback.** Kleine sichtbare hochwertige lokale Explosionen; keine Überdeckung, performant; eigene Energie/Schadensanzeige bis zum letzten Geschütz.
+14. **offen: Boss-Langzeitperformance.** Ursache untersuchen: Projektile, Partikel, Listener, RAF/Loops, Objektlisten, Timer, GC, Explosionen, Geschütze, Kollisionen, unnötige Re-Renders. Keine pauschale Effektreduktion; längere Kämpfe flüssig.
+
+Vorhanden: separate Geschütz-HP, adaptive schmale grün-rote Balken, modulare Bosswaffen/Reaktor; deren Verhalten erhalten.
+
+## Paket 4 – visuelles Gameplay & HUD — offen
+
+15. **offen: Warnungen.** Flotte/Verstärkung und ähnliche Hinweise kurz in Bildschirmmitte, ohne Box/Rahmen; hochwertiger Sci-Fi-Text, kurzes Blinken/Flackern, sprachabhängig, keine dauerhafte Sichtblockade.
+16. **offen: Einheitliche Würfel.** Exakte gleichseitige Proportionen, identische Darstellung, Drehrichtung, Logik und Geschwindigkeit; Kopien dürfen identisch sein.
+17. **offen: Größere Gameplay-Schiffe.** Vor allem Spieler, teilweise Gegner vergrößern; Grafik/Hitbox sinnvoll trennen, keine unfairen Treffer, HUD/Bewegung erhalten. Bereits vorhandenen lokalen Entwurf bei späterer Freigabe prüfen.
+
+## Paket 5 – Score, Rangliste & Admin — offen
+
+18. **offen: Career Score.** Dauerhafte Summe regulärer Run-Punkte, primäres Top-100-Sortierkriterium, Schutz gegen offensichtliches Farming/Exploits.
+19. **offen: Best Run.** Höchster einzelner Run plus dabei erreichtes Level; separat speichern, niemals mit Career Score überschreiben/vermischen.
+20. **offen: Rangliste.** Name, Rang, Career Score, Best Run, eindeutig zugehöriges Run-Level; Profil-Level und Run-Level unterscheiden.
+21. **offen: Eigener Admin-Reset.** Eigener Highscore/Test-Highscore mit Sicherheitsabfrage; keine fremden Werte; Reset nach Testnet/Mainnet trennen.
+
+## Paket 6 – Audio-Polish — offen
+
+22. **offen: Gegnerwaffen.** Etwas lauter/präsenter/druckvoller/moderner, unterschiedliche Klassen (leicht/schwer/Boss massiv). Keine Übersteuerung oder Überdeckung von Musik, Spielerwaffen und Warnungen.
+
+## Paket 7 – Sprachen & Lokalisierung — offen
+
+23. **offen: Vereinfachtes Chinesisch und erweiterbare Sprachpakete.** Priorität: gespeicherte manuelle Wahl → Browser-/Gerätesprache → unterstützte Entsprechung → definierter Fallback. Nicht primär Standort. Jederzeit manuell änderbar und dauerhaft gespeichert. Menüs, HUD, Shop, Warnungen, Waffen, Power-ups, Bosse, Card Collection, Rangliste, Admin, Hilfe, Fehler, Beschreibungen vollständig prüfen; keine abgeschnittenen Texte.
+
+Vorhanden: zentrale i18n-Kataloge und Sprachtests. Umfang/Erkennung vor Paket 7 erneut prüfen.
+
+## Zusätzliche Befunde / nicht Teil der Paket-1-Freigabe
+
+- Bestehende Lint-Schulden (55 Fehler, 16 Warnungen) und großer JS-Bundle-Chunk separat bearbeiten; kein Paket-1-Nebenumbau.
+- Oberer Blockzähler zählt abgeschlossene Blocks, Abschnittstext den laufenden Block. Vorhandene Erklärung geprüft; eine Vereinheitlichung ist gesondert zu entscheiden.
+
+- Die ältere `doc/cryptoid-gameplay-roadmap.md` enthält historische, teils überholte Regeln. Diese zentrale TODO bestimmt neue Arbeit; keine Gameplay-Änderung aus historischen Notizen ableiten.
+- Testnet- und main-Historie sind auseinander gelaufen; neuester Arbeitsbranch enthält zusätzliche Kartenassets und bestätigte spätere Funktionen. Deployment-Basis separat abgleichen.
+
+## Paket-1-Nachweis
+
+Implementierung erledigt; automatisierte Prüfungen bestanden. Bericht: [docs/package-1-stability-2026-10-08.md](docs/package-1-stability-2026-10-08.md), maschinenlesbar: [docs/package-1-validation.json](docs/package-1-validation.json).
+
+- Frontend/Backend gebaut; 219 Frontend-/Sprachtests und 47 Backend-Tests bestanden.
+- Browser 390×844 und 1280×800: Explosion/Treffer/Schutz/Übergänge; echte Handler mit isoliertem Speicher: Shards, Lebensverlust und Boss-Clear-Resume; Hintergrundpause auch bei gestoppter RAF geprüft.
+- Lint nicht grün: exakt wie vorher 55 Fehler / 16 Warnungen; keine zusätzlichen Meldungen.
+- Offene Abnahme: physischer iPhone-/Pi-Browser-/Android-Test und Testnet-Veröffentlichung. Vercel verweigert Deployment-Zugriff (403), deshalb Testnet-Domain nicht aktualisiert. Produktion unverändert.
+- **STOPP nach Paket 1. Paket 2 bleibt offen und benötigt ausdrückliche Freigabe.**

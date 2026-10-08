@@ -60,7 +60,7 @@ const topics = [
   },
   {
     id: "earnings", label: "Rewards", title: "Shards, points and bonus targets",
-    intro: "Defeated enemies earn points and in-game Shards. Shards are added to your balance at mission end.",
+    intro: "Defeated enemies earn points and in-game Shards. The HUD shows your previous Shard balance plus this mission's earnings.",
     details: [
       "Two defeats within 500 ms: +50 Score and +20 Shards.",
       "Every defeat counts in only one pair. Four simultaneous defeats earn two combos; an unpaired third defeat can start the next pair. Combos also apply in boss battles and bonus rounds.",

@@ -1,4 +1,4 @@
-// The HUD and the balance saved at mission end use the same earned-Shards total.
+// Run earnings remain separate from the wallet so existing checkpoint delta-crediting is unchanged.
 import { levelDifficulty } from "./levelDifficulty.ts";
 
 export const BOSS_SHARD_REWARD = 16;
@@ -27,3 +27,8 @@ export const creditReward = (run: ShardRun, reward: number) => {
 };
 
 export const balanceAfterMission = (balance: number, run: ShardRun) => balance + run.shards;
+
+// A resumed snapshot has already been credited to the wallet. Do not add it twice.
+export const missionShardBase = (balance: number, creditedRunShards = 0) => balance - creditedRunShards;
+export const missionShardTotal = (base: number, earned: number) => Math.max(0, base + earned);
+export const uncreditedGuestShards = (earned: number, credited: number) => Math.max(0, earned - credited);
