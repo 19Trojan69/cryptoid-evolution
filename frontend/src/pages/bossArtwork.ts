@@ -1,5 +1,5 @@
 import { createSectorBoss } from './sectorBoss';
-import { preloadBossWeapons } from './BossWeaponsView';
+import { preloadBossWeapons } from './bossWeaponTextures';
 import { drawBossWeapons, weaponCanvasSize } from './bossWeaponRenderer';
 
 /** One source of truth for cards and PNGs: current game hull + current mounted weapons.

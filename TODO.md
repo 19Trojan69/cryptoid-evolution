@@ -1,6 +1,6 @@
 # Cryptoid Evolution – zentrale Entwicklungs-TODO
 
-Stand: 8. Oktober 2026. Paket 1 und 2 wurden im getrennten Testnet-Projekt veröffentlicht. **Paket 3 ist implementiert und automatisiert getestet; Browser-/Testnet-Abnahme folgt.**
+Stand: 8. Oktober 2026. Pakete 1–3 wurden im getrennten Testnet-Projekt veröffentlicht. **Das separat freigegebene Stabilitätspaket für Lint ist implementiert und automatisiert getestet; Testnet-Abnahme folgt. Paket 4 wartet weiterhin auf Freigabe.**
 
 Status: **offen** = noch nicht vollständig umgesetzt/verifiziert; **in Arbeit** = aktuelle Bearbeitung; **erledigt** = implementiert; **getestet** = dokumentierte Prüfungen bestanden (Geräte-/Live-Lücken separat ausweisen).
 
@@ -51,6 +51,15 @@ Vorhandenes Inventar, Timer, Opt-in-Nachladen und Pi-Aktivierung werden weiterve
 
 Vorhanden: separate Geschütz-HP, adaptive schmale grün-rote Balken, modulare Bosswaffen/Reaktor; deren Verhalten erhalten. Paket-3-Nachweis: [docs/package-3-combat-2026-10-08.md](docs/package-3-combat-2026-10-08.md). Physische iPhone-/Android-/Pi-Browser- und echter Kauf-/Langzeit-Frame-Test stehen aus.
 
+## Separates Stabilitätspaket – Lint und React-Zustände — erledigt / automatisiert getestet
+
+- **getestet (automatisch): 14 Fehler und 16 Warnungen bereinigt.** Lint endet ohne Befund; Regeln bleiben aktiviert. Komponenten/Hilfsfunktionen sauber getrennt, unbenutzte Parameter und Ausdrucksformen korrigiert.
+- **getestet (automatisch): Laufende Spielschleife.** RAF und Startaktivierung bleiben einmalig. Gespeicherte Missionen, Audio- und Bossereignisse lesen aktuelle Handler; Treffer-/Explosionseffekte verwenden die aktuell ausgewählte Schiffsgrafik.
+- **getestet (automatisch): Shop, Sammlung und Bilder.** Inventarabruf, Kartenfreischaltung, Downloads und Lazy-Porträts behalten ihre Schutzlogik bei Konto-/Auswahlwechsel; keine kurzzeitig freigelegten Silhouetten. Boss-Energiebalken bleiben zwischengespeichert.
+- **offen: reale Geräte- und Pi-Abnahme.** Browser/Testnet sowie Käufe, Kontowechsel und lange Sitzungen nach Veröffentlichung prüfen. Keine Daten- oder Netzwerkschemata geändert.
+
+Nachweis: [docs/lint-stability-2026-10-08.md](docs/lint-stability-2026-10-08.md). Paket 4 bleibt getrennt.
+
 ## Paket 4 – visuelles Gameplay & HUD — offen
 
 15. **offen: Warnungen.** Flotte/Verstärkung und ähnliche Hinweise kurz in Bildschirmmitte, ohne Box/Rahmen; hochwertiger Sci-Fi-Text, kurzes Blinken/Flackern, sprachabhängig, keine dauerhafte Sichtblockade.
@@ -76,8 +85,7 @@ Vorhanden: zentrale i18n-Kataloge und Sprachtests. Umfang/Erkennung vor Paket 7 
 
 ## Zusätzliche Befunde / nicht Teil der Paket-1-Freigabe
 
-- Bestehende Lint-Schulden (55 Fehler, 16 Warnungen) und großer JS-Bundle-Chunk separat bearbeiten; kein Paket-1-Nebenumbau.
-- Mit den am 8. Oktober neu installierten, festgeschriebenen Yarn-Abhängigkeiten zeigen Basis und Paket 2 beide 14 Lint-Fehler/16 Warnungen; keine zusätzliche Meldung. Der frühere Paket-1-Bericht hatte mit der damaligen lokalen Installation 55 Fehler/16 Warnungen gemessen.
+- Die historischen 55 Lint-Fehler/16 Warnungen aus Paket 1 wurden mit damaligen Abhängigkeiten gemessen. Mit den am 8. Oktober neu installierten, festgeschriebenen Yarn-Abhängigkeiten zeigten Paket 2 und 3 beide 14 Fehler/16 Warnungen. Das separate Stabilitätspaket bereinigt diese auf 0/0. Der große JS-Bundle-Chunk bleibt als gesonderter Performance-Befund.
 - Lokaler Gast-Chromium meldet `Pi is not defined` aus der vorhandenen Pi-Integration im Konsolenereignis, obwohl Spielstart und Waffenmenü bedienbar sind. Separat in einer Pi-/Browser-Abnahme untersuchen; kein Paket-2-Nebenumbau.
 - Oberer Blockzähler zählt abgeschlossene Blocks, Abschnittstext den laufenden Block. Vorhandene Erklärung geprüft; eine Vereinheitlichung ist gesondert zu entscheiden.
 
@@ -92,4 +100,4 @@ Implementierung erledigt; automatisierte Prüfungen bestanden. Bericht: [docs/pa
 - Browser 390×844 und 1280×800: Explosion/Treffer/Schutz/Übergänge; echte Handler mit isoliertem Speicher: Shards, Lebensverlust und Boss-Clear-Resume; Hintergrundpause auch bei gestoppter RAF geprüft.
 - Lint nicht grün: exakt wie vorher 55 Fehler / 16 Warnungen; keine zusätzlichen Meldungen.
 - Offene Geräteabnahme: physischer iPhone-/Pi-Browser-/Android-Test. Testnet wurde anschließend über das getrennte Vercel-Projekt mit Commit `861f9fe` unter `cryptoid-evolution-testnet.vercel.app` veröffentlicht und im Browser angespielt. Produktion unverändert.
-- Paket 2 wurde am 8. Oktober abgeschlossen und im getrennten Testnet-Projekt veröffentlicht. Paket 3 ist ausdrücklich freigegeben, umgesetzt und automatisiert geprüft; Live-Abnahme läuft. Paket 4 wartet auf Freigabe.
+- Paket 2 und 3 wurden im getrennten Testnet-Projekt veröffentlicht. Das separat freigegebene Lint-Stabilitätspaket ist automatisiert geprüft; Paket 4 wartet auf Freigabe.

@@ -1,5 +1,5 @@
 import type { AutoReloadPreferences } from './weaponAutoReload';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { axiosClient } from '../lib/axiosClient';
 import { usePayments } from '../hooks/usePayments';
 import { useLocale } from '../i18n';
@@ -30,7 +30,7 @@ export default function MissionWeaponShop({ autoReload = {}, onAutoReload, authe
   inventoryCallback.current = onInventory;
   const ship = selectedShip();
   const { orderProduct, isLoading, paymentDiagnostic, activeProductId, paymentStatus } = usePayments({ isAuthenticated: authenticated && !admin, onRequireAuth: () => setNotice('Connect your Pi account to see your saved loadout.') });
-  const refresh = async () => {
+  const refresh = useCallback(async () => {
     const version = ++refreshVersion.current;
     setRefreshing(true);
     setReady(false);
@@ -52,15 +52,16 @@ export default function MissionWeaponShop({ autoReload = {}, onAutoReload, authe
     } catch {
       if (mounted.current && version === refreshVersion.current) setNotice('Not confirmed. Refresh inventory. Confirmed purchases will not be repeated.');
     } finally { if (mounted.current && version === refreshVersion.current) setRefreshing(false); }
-  };
+  }, [authenticated, admin]);
   useEffect(() => {
     mounted.current = true;
     const modal = titleRef.current?.closest('.pause-settings-modal');
     if (modal) modal.scrollTop = 0;
     titleRef.current?.focus({ preventScroll: true });
     void refresh();
-    return () => { mounted.current = false; refreshVersion.current++; };
-  }, [authenticated, admin]);
+    const versionRef = refreshVersion;
+    return () => { mounted.current = false; versionRef.current++; };
+  }, [refresh]);
   useEffect(() => { if (initialStock) setStock(initialStock); }, [initialStock]);
   const busy = refreshing || isLoading || selectionBusy;
   const standard: Offer = { id: 'standard', kind: 'weapon', name: 'Standard', description: '', pricePi: 0, level: 1 };

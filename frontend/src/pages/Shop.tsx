@@ -4,7 +4,8 @@ import { availableShipCards, unseenShipCards, type CardReward } from './cardReve
 import { mergeCardReveals, rememberCard, readCardReveals, syncCardReveals } from './cardRevealMemory';
 import { primeCardSound } from './cardSound';
 import Collection from "./Collection";
-import SystemSettings, { applySavedDisplaySettings, type SettingsSection } from "./SystemSettings";
+import SystemSettings from "./SystemSettings";
+import { applySavedDisplaySettings, type SettingsSection } from './displaySettings';
 import { useCallback, useEffect, useRef, useState } from "react";
 import QuickAccessMenu, { type QuickAction } from "../components/QuickAccessMenu";
 import type { GuideTopic } from "./GameGuide";
@@ -202,8 +203,10 @@ const Shop = () => {
     closeSignIn, requireAuth, isLoading: isAuthLoading, authReady, authError,
   } = useAuth();
   useEffect(() => { setSelectedBoss(null); }, [shopView, user?.uid]);
+  const rewardUserId = user?.uid;
+  const rewardsVisible = shopView === 'rewards';
   useEffect(() => {
-    if (!user) {
+    if (!rewardUserId) {
       setRewardProgress(readRewardProgress(localStorage.getItem(REWARD_PROGRESS_KEY)));
       setRewardOwner(null);
       setRewardStatus("ready");
@@ -212,10 +215,10 @@ const Shop = () => {
     let active = true;
     setRewardStatus("loading");
     axiosClient.get<{ progress: RewardProgress; network: "testnet" | "mainnet" }>("/rewards/me")
-      .then(({ data }) => { if (active) { setRewardProgress(data.progress); setRewardNetwork(data.network); setRewardOwner(user.uid); setRewardStatus("ready"); } })
+      .then(({ data }) => { if (active) { setRewardProgress(data.progress); setRewardNetwork(data.network); setRewardOwner(rewardUserId); setRewardStatus("ready"); } })
       .catch(() => { if (active) setRewardStatus("error"); });
     return () => { active = false; };
-  }, [user?.uid, shopView === "rewards"]);
+  }, [rewardUserId, rewardsVisible]);
   const [adminError, setAdminError] = useState("");
   const [startSector, setStartSector] = useState(1);
   const [selected, setSelected] = useState(selectedShip);
@@ -242,13 +245,13 @@ const Shop = () => {
   const accountUid = user?.uid;
   const inventoryOwnerRef = useRef(accountUid);
   inventoryOwnerRef.current = accountUid;
+  const firstNewCardKey = newCards[0]?.key;
   useEffect(() => {
-    const card = newCards[0];
-    if (!card) return;
+    if (!firstNewCardKey) return;
     const owner = accountUid ?? 'guest';
-    rememberCard(owner, card.key);
+    rememberCard(owner, firstNewCardKey);
     void syncCardReveals(owner).catch(() => { /* Retried when this account is next loaded. */ });
-  }, [newCards[0]?.key, accountUid]);
+  }, [firstNewCardKey, accountUid]);
   useEffect(() => {
     setAccountBusy(false);
     if (!accountUid || adminMode) return;

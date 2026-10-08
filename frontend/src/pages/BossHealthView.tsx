@@ -1,11 +1,13 @@
 import { useMemo } from 'react';
-import { turretBarPositions } from './bossHealthLayout';
+import { turretBarPositionsForLayout } from './bossHealthLayout';
 import { useLocale } from '../i18n';
 import { bossHullExposed, type SectorBoss } from './sectorBoss';
 
 export default function BossHealthView({ boss }: { boss: SectorBoss }) {
   const { t } = useLocale();
-  const positions = useMemo(() => turretBarPositions(boss), [boss.config.id, boss.width, boss.height]);
+  const { id, sourceWidth, sourceHeight } = boss.config;
+  const { width, height } = boss;
+  const positions = useMemo(() => turretBarPositionsForLayout(id, sourceWidth, sourceHeight, width, height), [id, sourceWidth, sourceHeight, width, height]);
   if (boss.health <= 0) return null;
   if (!bossHullExposed(boss)) return <>{positions.map(bar => {
     const gun = boss.turrets[bar.index];

@@ -5,11 +5,18 @@ import './bossPortrait.css';
 
 /** Same composited model as the downloadable card, including every mounted turret. */
 export default memo(function BossPortrait({ id, silhouette = false }: { id: number; silhouette?: boolean }) {
+  return <BossPortraitCanvas key={`${id}:${silhouette}`} id={id} silhouette={silhouette} />;
+});
+
+function BossPortraitCanvas({ id, silhouette }: { id: number; silhouette: boolean }) {
   const root = useRef<HTMLDivElement>(null), canvas = useRef<HTMLCanvasElement>(null);
   const [visible, setVisible] = useState(false), [ready, setReady] = useState(false);
   useEffect(() => {
     const element = root.current;
-    if (!element || typeof IntersectionObserver === 'undefined') { setVisible(true); return; }
+    if (!element || typeof IntersectionObserver === 'undefined') {
+      const timer = window.setTimeout(() => setVisible(true), 0);
+      return () => window.clearTimeout(timer);
+    }
     const observer = new IntersectionObserver(entries => {
       if (entries.some(entry => entry.isIntersecting)) { setVisible(true); observer.disconnect(); }
     }, { rootMargin: '180px' });
@@ -18,7 +25,6 @@ export default memo(function BossPortrait({ id, silhouette = false }: { id: numb
   }, []);
   useLayoutEffect(() => {
     let current = true;
-    setReady(false);
     // Clear previous pixels immediately when browsing from an unlocked to a locked card.
     const output = canvas.current;
     output?.getContext('2d')?.clearRect(0, 0, output.width, output.height);
@@ -45,4 +51,4 @@ export default memo(function BossPortrait({ id, silhouette = false }: { id: numb
     data-boss-id={id} data-silhouette={silhouette} data-ready={ready}>
     <canvas ref={canvas} className="boss-portrait-composite" aria-hidden="true" style={{ visibility: ready ? 'visible' : 'hidden' }} />
   </div>;
-});
+}

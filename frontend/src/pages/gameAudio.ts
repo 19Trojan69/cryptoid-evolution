@@ -232,7 +232,7 @@ export class GameAudio {
     if (this.effectsBus) this.effectsBus.gain.value = effectsGain(this.effectsVolume);
   }
 
-  setSector(_sector: number) { /* Reserved for future sector-specific effects. */ }
+  setSector(sector: number) { void sector; /* Reserved for future sector-specific effects. */ }
 
   setPaused(paused: boolean) {
     this.paused = paused;
