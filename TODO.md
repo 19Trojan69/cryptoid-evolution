@@ -110,9 +110,11 @@ Nachweis: [docs/package-4-3-collision-hit-feedback-2026-10-08.md](docs/package-4
 
 Nachweis: [docs/package-5-score-leaderboard-admin-2026-10-08.md](docs/package-5-score-leaderboard-admin-2026-10-08.md).
 
-## Paket 6 – Audio-Polish — offen
+## Paket 6 – Audio-Polish — implementiert / automatisiert getestet, Testnet-Veröffentlichung in Prüfung
 
-22. **offen: Gegnerwaffen.** Etwas lauter/präsenter/druckvoller/moderner, unterschiedliche Klassen (leicht/schwer/Boss massiv). Keine Übersteuerung oder Überdeckung von Musik, Spielerwaffen und Warnungen.
+22. **erledigt / automatisiert getestet: Gegnerwaffen.** Vier eigene gepufferte Schussklänge für Light, Medium, Heavy und Elite, höhere Einzelpegel und kaliberabhängige Bosspegel. Heavy-/Siege-Bosse mit zusätzlichen mittleren Obertönen für kleine Lautsprecher. Eigener Gegnerwaffen-Bus begrenzt die Summe einschließlich ausblendender Stimmen; Warnungen und Spielerwaffen umgehen diesen Bus. Bestehender Effektregler, Kompressor, Stereoortung, Pausierung und 20 aktive Waffenstimmen bleiben erhalten. Musik/Spielmechanik unverändert.
+
+Nachweis: [docs/package-6-audio-polish-2026-10-08.md](docs/package-6-audio-polish-2026-10-08.md). 211 Spieltests, 22 Sprachtests, Build und Lint bestanden. Hörabnahme auf iPhone/Android/Pi Browser, mit Musik und bei großen Boss-Salven, bleibt offen.
 
 ## Paket 7 – Sprachen & Lokalisierung — offen
 

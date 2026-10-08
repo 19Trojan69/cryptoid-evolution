@@ -205,7 +205,7 @@ test("mobile effects decode no more than three samples concurrently", async () =
   }
 });
 
-test('boss voices reuse eighteen boss buffers plus one enemy buffer, obey mute and pause, and stay below twenty voices',async()=>{
+test('boss voices reuse eighteen boss buffers plus four enemy class buffers, obey mute and pause, and stay below twenty voices',async()=>{
  const previous=globalThis.AudioContext;let buffers=0,started=0,stopped=0;
  globalThis.AudioContext=class{
   state='running';currentTime=0;sampleRate=48000;destination={};
@@ -215,7 +215,7 @@ test('boss voices reuse eighteen boss buffers plus one enemy buffer, obey mute a
   createBufferSource(){return {playbackRate:{value:1},connect(){},disconnect(){},start(){started++;},stop(){stopped++;}};}
  };
  const audio=new GameAudio();try{
-  await audio.start();assert.equal(buffers,19);await audio.start();assert.equal(buffers,19);
+  await audio.start();assert.equal(buffers,22);await audio.start();assert.equal(buffers,22);
   audio.setEffectsVolume(0);assert.equal(audio.playBossWeapon('laser',6),false);
   audio.setEffectsVolume(35);for(let i=0;i<30;i++)assert.equal(audio.playBossWeapon('siege',28),true);
   assert.equal(started,30);assert.equal(stopped,10);
@@ -242,7 +242,7 @@ test('enemy shots use their own cached buffer and share the boss voice cap, slid
   try {
     await audio.start();
     await new Promise(resolve => setImmediate(resolve));
-    assert.equal(buffers.length, 19);
+    assert.equal(buffers.length, 22);
     audio.play('laser');
     assert.equal(sources[0].buffer.playerRecording, true);
     audio.playBossWeapon('laser', 6);
@@ -253,7 +253,7 @@ test('enemy shots use their own cached buffer and share the boss voice cap, slid
     assert.equal(pans.at(-1).pan.value, -.65);
     const enemyBuffer = sources[2].buffer;
     for (let i = 0; i < 25; i++) audio.playEnemyShot();
-    assert.equal(buffers.length, 19);
+    assert.equal(buffers.length, 22);
     assert.ok(sources.slice(2).every(source => source.buffer === enemyBuffer));
     assert.deepEqual(sources.slice(2, 5).map(source => source.playbackRate.value), [.96, 1, 1.04]);
     assert.equal(stopped, 7); // 27 shared weapon voices, only 20 can remain active.
@@ -271,5 +271,52 @@ test('enemy shots use their own cached buffer and share the boss voice cap, slid
     assert.equal(audio.playEnemyShot(), true);
     audio.close();
     assert.equal(audio.playEnemyShot(), false);
+  } finally { audio.close(); globalThis.AudioContext = previous.AudioContext; globalThis.fetch = previous.fetch; }
+});
+
+test('hostile volleys reserve mix headroom including fading voices, while warning recordings bypass the weapon bus', async () => {
+  const previous = { AudioContext: globalThis.AudioContext, fetch: globalThis.fetch };
+  const gains = [], sources = [];
+  let failStart = false;
+  globalThis.fetch = async () => ({ ok: true, arrayBuffer: async () => new ArrayBuffer(0) });
+  globalThis.AudioContext = class {
+    state = 'running'; currentTime = 0; sampleRate = 48000; destination = {};
+    async resume() {} async close() {}
+    async decodeAudioData() { return { recording: true }; }
+    createBuffer(ch, length) { return { length, copyToChannel() {} }; }
+    createGain() { const node = { gain: { value: 1, cancelScheduledValues() {}, setTargetAtTime() {} }, connect(output) { this.output = output; return output; }, disconnect() {} }; gains.push(node); return node; }
+    createBufferSource() { const source = { playbackRate: { value: 1 }, connect(output) { this.output = output; return output; }, disconnect() {}, start() { if (failStart) throw new Error('Audio source unavailable'); sources.push(this); }, stop() { this.stopped = true; } }; return source; }
+  };
+  const audio = new GameAudio();
+  try {
+    await audio.start(); await new Promise(resolve => setImmediate(resolve));
+    for (const shipClass of ['light', 'medium', 'heavy', 'elite']) assert.equal(audio.playEnemyShot(0, shipClass), true);
+    assert.deepEqual(sources.map(source => source.buffer.length), [6720, 9120, 12480, 10080]);
+    const weaponBus = gains[1];
+    const assertBudget = () => {
+      const peakBound = sources.filter(source => !source.buffer.recording && !source.ended)
+        .reduce((sum, source) => sum + source.output.gain.value * .72, 0) * weaponBus.gain.value;
+      assert.ok(peakBound <= .620001, `hostile peak budget ${peakBound}`);
+    };
+    assert.ok(sources[0].output.gain.value > .3);
+    for (let i = 0; i < 45; i++) { audio.playBossWeapon('siege', 28, 4); assertBudget(); }
+    assert.equal(sources.filter(source => !source.stopped).length, 20);
+    assert.ok(weaponBus.gain.value < 1);
+    audio.play('boss');
+    const warning = sources.at(-1);
+    assert.equal(warning.buffer.recording, true);
+    assert.equal(warning.output.gain.value, .72);
+    assert.equal(warning.output.output, gains[0]);
+    for (const source of sources.filter(source => !source.buffer.recording)) { source.ended = true; source.onended(); assertBudget(); }
+    assert.equal(weaponBus.gain.value, 1);
+    failStart = true;
+    assert.equal(audio.playEnemyShot(), false);
+    assert.equal(weaponBus.gain.value, 1);
+    failStart = false;
+    assert.equal(audio.playEnemyShot(), true);
+    audio.setPaused(true);
+    for (const shipClass of ['light', 'medium', 'heavy', 'elite']) assert.equal(audio.playEnemyShot(0, shipClass), false);
+    audio.setPaused(false); audio.setEffectsVolume(0);
+    assert.equal(audio.playBossWeapon('siege', 28), false);
   } finally { audio.close(); globalThis.AudioContext = previous.AudioContext; globalThis.fetch = previous.fetch; }
 });

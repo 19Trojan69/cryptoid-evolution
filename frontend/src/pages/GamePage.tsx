@@ -1288,7 +1288,7 @@ const GamePage = () => {
             if (bullet) {
               nextIdRef.current += 1;
               state.enemyShots.push(bullet);
-              soundRef.current?.playEnemyShot(next.x / width * 2 - 1);
+              soundRef.current?.playEnemyShot(next.x / width * 2 - 1, next.shipClass);
               next = { ...next, firedThisAttack: true, muzzleAt: time };
             }
           }
