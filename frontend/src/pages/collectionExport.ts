@@ -13,7 +13,7 @@ export async function exportCollectionCard(card: CollectionCard, language: boole
   const t=(source:string)=>translate(locale,source), rtl=localeDirection(locale)==='rtl';
   await document.fonts.ready;
   const [art, space, emblem] = await Promise.all([
-    card.bossId ? loadBossArtwork(card.bossId, 1200) : loadShipArtwork(card.image),
+    card.bossId ? loadBossArtwork(card.bossId, 1200) : loadShipArtwork(card.image, card.color),
     loadCardImage(card.background),
     loadCardImage(factionEmblem(card.key)),
   ]);
