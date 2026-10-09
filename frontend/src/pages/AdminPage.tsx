@@ -41,6 +41,8 @@ type Network = "mainnet" | "testnet" | "unknown";
 type Status = "all" | "confirmed" | "pending" | "cancelled";
 type Phase = "normal" | "boss" | "bonus";
 type Payment = {
+  username: string | null; quantity: number | null;
+  purchasePrice: { availability: string; purchaseAt: string | null; usdPerPi: number | null; eurPerPi: number | null; usdAmount: number | null; eurAmount: number | null; source: string | null; quotedAt: string | null; eurMethod: string | null };
   id: string;
   txid: string | null;
   network: string;
@@ -66,6 +68,10 @@ type Payment = {
     recordedAt: string;
   } | null;
 };
+const normalizePayment = (payment: Payment): Payment => ({ ...payment,
+  quantity: payment.quantity ?? null, username: payment.username || null,
+  purchasePrice: payment.purchasePrice ?? { availability: payment.network === "Pi Testnet" ? "test_payment" : "unavailable", purchaseAt: payment.createdAt, usdPerPi: null, eurPerPi: null, usdAmount: null, eurAmount: null, source: null, quotedAt: null, eurMethod: null },
+});
 type Summary = { _id: Network; total: number; confirmed: number; confirmedPi: number; missingAmounts: number };
 type Ledger = { payments: Payment[]; total: number; page: number; pageSize: number; summary: Summary[] };
 type AdminStatus = {
@@ -81,7 +87,7 @@ const networkNames: Record<Network, string> = { mainnet: "Echte Pi", testnet: "T
 const statusNames = { confirmed: "Bestätigt", pending: "Offen", cancelled: "Storniert" };
 const date = (value: string | null) =>
   value && Number.isFinite(Date.parse(value))
-    ? new Date(value).toLocaleString("de-AT", { timeZone: "Europe/Vienna" })
+    ? new Date(value).toLocaleString("de-AT", { timeZone: "Europe/Vienna", timeZoneName: "shortOffset" })
     : "Nicht dokumentiert";
 const amount = (value: number | null) =>
   value === null ? "Nicht dokumentiert" : value.toLocaleString("de-AT", { maximumFractionDigits: 7 });
@@ -148,6 +154,8 @@ export default function AdminPage() {
   const [resetName, setResetName] = useState("");
   const [resetChecked, setResetChecked] = useState(false);
   const [reload, setReload] = useState(0);
+  const [csvFile, setCsvFile] = useState<{ url: string; file: File } | null>(null);
+  useEffect(() => () => { if (csvFile) URL.revokeObjectURL(csvFile.url); }, [csvFile]);
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playingAudio, setPlayingAudio] = useState("");
@@ -179,7 +187,7 @@ export default function AdminPage() {
     axiosClient
       .get<Ledger>("/admin/payments", { params: { network, status, page } })
       .then(({ data }) => {
-        if (active) setLedger(data);
+        if (active) setLedger({ ...data, payments: data.payments.map(normalizePayment) });
       })
       .catch((err: unknown) => {
         if (active) setLedgerError(errorMessage(err));
@@ -277,15 +285,15 @@ export default function AdminPage() {
         responseType: "blob",
         timeout: 60_000,
       });
-      const url = URL.createObjectURL(data);
+      const contents = await data.text();
+      if (!contents.startsWith('"Netzwerk"') && !contents.startsWith('\uFEFF"Netzwerk"')) throw new Error("Invalid CSV response");
+      const file = new File(["\uFEFF", contents.replace(/^\uFEFF/, "")], `cryptoid-pi-zahlungen-${network}-${status}.csv`, { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(file);
+      setCsvFile({ url, file });
       const link = document.createElement("a");
-      link.href = url;
-      link.download = `cryptoid-pi-zahlungen-${network}-${status}.csv`;
-      document.body.append(link);
-      link.click();
-      link.remove();
-      window.setTimeout(() => URL.revokeObjectURL(url), 15_000);
-      setMessage("CSV-Download gestartet.");
+      link.href = url; link.download = file.name;
+      document.body.append(link); link.click(); link.remove();
+      setMessage(t("CSV ready. Use Save or Share if the download does not start."));
     });
   };
 
@@ -295,7 +303,7 @@ export default function AdminPage() {
         `/admin/payments/${encodeURIComponent(payment.id)}/refresh`,
         { network: target }
       );
-      setSelectedPayment(data.payment);
+      setSelectedPayment(normalizePayment(data.payment));
       setReload(value => value + 1);
       setMessage(
         data.receiptFound
@@ -317,7 +325,7 @@ export default function AdminPage() {
           receiptNumber: String(form.get("receipt") || ""),
         }
       );
-      setSelectedPayment(data.payment);
+      setSelectedPayment(normalizePayment(data.payment));
       setReload(value => value + 1);
       setMessage("EUR-Bewertung zum Wallet-Eingangszeitpunkt gespeichert.");
     });
@@ -496,6 +504,7 @@ export default function AdminPage() {
                           key={key}
                           onClick={() => {
                             setNetwork(key);
+                      setCsvFile(null);
                             setPage(1);
                             openView("payments");
                           }}
@@ -695,6 +704,7 @@ export default function AdminPage() {
                     aria-pressed={network === key}
                     onClick={() => {
                       setNetwork(key);
+                      setCsvFile(null);
                       setPage(1);
                       setSelectedPayment(null);
                     }}
@@ -709,6 +719,7 @@ export default function AdminPage() {
                     value={status}
                     onChange={event => {
                       setStatus(event.target.value as Status);
+                      setCsvFile(null);
                       setPage(1);
                       setSelectedPayment(null);
                     }}
@@ -722,6 +733,14 @@ export default function AdminPage() {
                 <button className="admin-button admin-primary" disabled={busy} onClick={exportPayments}>
                   {t("CSV herunterladen")} </button>
               </div>
+              {csvFile && <div className="admin-actions" role="status">
+                <a className="admin-button admin-primary" href={csvFile.url} download={csvFile.file.name}>{t("Save CSV")}</a>
+                <button className="admin-button" type="button" onClick={() => {
+                  if (navigator.canShare?.({ files: [csvFile.file] })) void navigator.share({ files: [csvFile.file] }).catch(() => setMessage(t("Save CSV")));
+                  else { const link = document.createElement("a"); link.href = csvFile.url; link.target = "_blank"; link.rel = "noopener"; link.click(); setMessage(t("Use your browser menu to save or share the file.")); }
+                }}>{t("Share CSV")}</button>
+                <p>{t("The export includes all pages for the selected network and status.")}</p>
+              </div>}
               {selectedPayment ? (
                 <div className="admin-payment-detail">
                   <div className="admin-section-head">
@@ -732,6 +751,18 @@ export default function AdminPage() {
                   <dl>
                     {[
                       ["Produkt", selectedPayment.productName],
+                      ["Product ID", selectedPayment.productId],
+                      ["Quantity", amount(selectedPayment.quantity)],
+                      ["Username", selectedPayment.username || t("Not recorded")],
+                      ["Purchase time", date(selectedPayment.purchasePrice.purchaseAt)],
+                      ["Historical Pi price (USD)", amount(selectedPayment.purchasePrice.usdPerPi)],
+                      ["Historical Pi price (EUR)", amount(selectedPayment.purchasePrice.eurPerPi)],
+                      ["Purchase value (USD)", amount(selectedPayment.purchasePrice.usdAmount)],
+                      ["Purchase value (EUR)", amount(selectedPayment.purchasePrice.eurAmount)],
+                      ["Price source", selectedPayment.purchasePrice.source || t("Not available")],
+                      ["Price timestamp", date(selectedPayment.purchasePrice.quotedAt)],
+                      ["Historical price", t(selectedPayment.purchasePrice.availability === "test_payment" ? "Test payment: no monetary value" : selectedPayment.purchasePrice.availability === "available" ? "Available" : "Not available")],
+                      ["EUR method", selectedPayment.purchasePrice.eurMethod === "provider_quote" ? t("Direct EUR quote from provider") : t("Not available")],
                       ["Status", statusNames[selectedPayment.status]],
                       ["Netzwerk", selectedPayment.network],
                       [
@@ -826,7 +857,7 @@ export default function AdminPage() {
                               })}
                             </p>
                           )}
-                          <button className="admin-button" disabled={busy}>
+                          <button className="admin-button" disabled={busy || !!selectedPayment.valuation}>
                             {t("Bewertung speichern")} </button>
                         </form>
                       ) : (
