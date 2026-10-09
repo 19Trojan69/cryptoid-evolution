@@ -29,7 +29,7 @@ type Props = {
   onColorChange: (color: Color) => void;
   onBuyStandard: () => void;
   onEquipPreview: () => void;
-  onOpenShop: () => void;
+  onOpenShop: (stage: ShipStage) => void;
 };
 
 const stageLabel = (stage: ShipStage) => stage === 1 ? "STANDARD" : stage === 2 ? "ADVANCED" : "ELITE";
@@ -104,14 +104,14 @@ export default function ShipSelectionPanel({
         const offer = offerFor(level);
         return <button key={level} className={`ship-evolution-stage${!stageOwned ? " ship-evolution-stage-locked" : ""}`} type="button"
           aria-pressed={focusStage === level} onClick={() => onStageChange(level)}>
-          <span className="ship-evolution-stage-art" aria-hidden="true"><img src={`/ships/evolution/ship_${String(skin.sprite + 1).padStart(2, "0")}_stage_${level}.png`} alt="" loading="lazy" decoding="async" style={shipPreviewPlacement(skin.sprite, level)} /></span>
+          <span className="ship-evolution-stage-art" aria-hidden="true"><span style={shipPreviewPlacement(skin.sprite, level)}><PaintedShip sprite={skin.sprite} color={color.id} stage={level}/></span></span>
           <span className="ship-evolution-stage-info"><strong>0{level} · {t(stageLabel(level))}</strong><small>{offer ? piPrice(offer.pricePi) : t("Price unavailable")}</small><em>{stageOwned ? t("OWNED") : <><span className="mainnet-ready-badge">{t("MAINNET READY")}</span> · {t("Planned price")}</>}</em></span>
         </button>;
       })}
     </div>}
     {(view === "hangar" || adminPreview) && <div className="ship-one-checkout">
       {view === "hangar"
-        ? <><span>{selectedSkinId === skin.id && selectedColorId === color.id ? t("EQUIPPED") : t("Owned")}</span><button className="button button-secondary" type="button" onClick={onOpenShop}>{t("Shop")} ›</button></>
+        ? <><span>{selectedSkinId === skin.id && selectedColorId === color.id ? t("EQUIPPED") : t("Owned")}</span><button className="button button-secondary" type="button" onClick={() => onOpenShop(ownedStage < 2 ? 2 : 3)}>{t("Shop")} · {t(ownedStage < 2 ? "ADVANCED" : "ELITE")} ›</button></>
         : <><span>{t("Admin test access: all variants unlocked")}</span><button className="button button-secondary" type="button" onClick={onEquipPreview}>{t("Equip for next mission")}</button></>}
     </div>}
     {message && <p className="hangar-message" role="status">{message}</p>}
