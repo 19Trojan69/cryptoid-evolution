@@ -41,7 +41,7 @@ export default function BossReactorView({ boss }: { boss: SectorBoss }) {
       <path d="M28 20H72L83 41V86L70 113H30L17 86V41Z" fill={url('armor')} stroke="#a0aaa7" strokeWidth="1.2"/>
       <path d="M29 26H42V70L30 88H23V43ZM71 26H58V70L70 88H77V43Z" fill={mount.trim} stroke="#171f28" strokeWidth="2"/>
       <path d="M44 28H56V78H44Z" fill="#16232c"/>
-      <path className="boss-reactor-pulse" d="M50 36L57 45V58L50 67L43 58V45Z" fill={energy}/>
+      <path className="boss-reactor-pulse" d="M50 30L63 42V62L50 77L37 62V42Z" fill={energy}/>
       <path d="M47 33V67M53 33V67" className="boss-special-conductor"/>
       {[34,46,58,70].map(y=><path key={y} d={`M23 ${y}H34M66 ${y}H77`} stroke="#050b10" strokeWidth="3"/>)}
       {mount.shape === 'lance' || mount.shape === 'fork' ? <>
