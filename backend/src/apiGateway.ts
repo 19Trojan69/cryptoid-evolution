@@ -20,7 +20,7 @@ const isTestnetDeployment = (req: any, env: GatewayEnvironment) => {
 // Preview credentials only provide MongoDB. Keep operations requiring the
 // existing Pi application keys on the verified payment service.
 const needsPiApplicationKey = (path: string) =>
-  /^(?:payments|notifications)(?:\/|$)/.test(path) || /^admin\/payments(?:\/|$)/.test(path) || path === "admin/status";
+  /^(?:payments|notifications)(?:\/|$)/.test(path) || /^admin\/payments\/[^/]+\/refresh$/.test(path) || path === "admin/status";
 
 const proxyToProduction = async (req: any, res: any, path: string, requestURL: URL) => {
   const target = new URL(`/api/${path}`, productionBackendOrigin);
