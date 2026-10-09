@@ -136,3 +136,9 @@ Alle 234 bislang offenen deutschen Schiffs- und Bossgeschichten sind direkt erg�
 ### Spanische Geschichten vollständig
 
 Alle 234 spanischen Schiffs- und Bossgeschichten sind direkt übersetzt. Der statische spanische Katalog erreicht 1020/1020; für Französisch, Portugiesisch, Italienisch und Russisch fehlen jeweils 234 Lore-Texte (insgesamt 936). Die Freigabeprüfung und Laufzeittests folgen.
+
+## Freigabeumfang und spätere Übersetzungen (9. Oktober 2026)
+
+Der Nutzer hat den Umfang geändert: Die vollständig vorhandenen Sprachen `en`, `de`, `es`, `zh` (vereinfacht) und `vi` werden jetzt fertiggestellt und zur Freigabe geprüft. Gerät/Browser wählt eine davon automatisch; eine gespeicherte manuelle Auswahl hat Vorrang. Für nicht unterstützte Gerätesprachen gilt Englisch. `fr`, `pt`, `it` und `ru` werden vorerst nicht angeboten; ihre bisherigen Übersetzungen bleiben erhalten. Ihre restlichen 936 Geschichten sind für Ende nächster Woche (Freitag, 16. Oktober 2026, Europe/Vienna) zurückgestellt. 75 bereits direkt verfasste französische Entwürfe sind in `package-7-deferred-french-lore-2026-10-09.json` gesichert und noch nicht in den Laufzeitkatalog eingebunden.
+
+Der Release-Scan prüft die fünf angebotenen Sprachen vollständig. Das statische Inventar enthält je 1020/1020 Texte, keine fehlenden Platzhalter und keine unübersetzten JSX-Fragmente. Diese Bestandsaufnahme ersetzt keine Browser-, Geräte- oder Pi-Zahlungsprüfung. Frühere Abschnitte beschreiben den neunsprachigen Zwischenstand und sind historisch.

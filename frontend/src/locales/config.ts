@@ -11,8 +11,7 @@ export type Locale = keyof typeof languageLabels;
 // Only these languages are offered and matched automatically. Other catalog copy stays archived.
 export const supportedLanguages: Partial<Record<Locale, string>> = {
   en: languageLabels.en, de: languageLabels.de, es: languageLabels.es,
-  fr: languageLabels.fr, pt: languageLabels.pt, it: languageLabels.it,
-  ru: languageLabels.ru, zh: languageLabels.zh, vi: languageLabels.vi,
+  zh: languageLabels.zh, vi: languageLabels.vi,
 };
 export const localeDirection = (locale: Locale): 'ltr' | 'rtl' => ['ar', 'ur', 'fa'].includes(locale) ? 'rtl' : 'ltr';
 export const documentLanguage = (locale: Locale) => locale === 'zh' ? 'zh-Hans' : locale;

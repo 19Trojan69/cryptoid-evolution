@@ -100,8 +100,8 @@ test('automatic language choice and manual override resolve supported locales', 
   assert.equal(resolveLocale(['en-US', 'de-AT']), 'en');
   assert.equal(resolveLocale(['en-US'], 'zh-CN'), 'zh');
   assert.equal(resolveLocale(['es-MX']), 'es');
-  assert.equal(resolveLocale(['fr-CA']), 'fr');
-  assert.equal(resolveLocale(['pt-BR']), 'pt');
+  assert.equal(resolveLocale(['fr-CA']), 'en');
+  assert.equal(resolveLocale(['pt-BR']), 'en');
   assert.equal(resolveLocale(['zh-Hant-TW', 'vi-VN']), 'vi');
   assert.equal(resolveLocale(['zh-TW']), 'en');
   assert.equal(resolveLocale(['th-TH']), 'en');
@@ -111,7 +111,7 @@ test('automatic language choice and manual override resolve supported locales', 
 });
 
 test('the picker exposes only maintained languages while archived translations remain available', () => {
-  assert.deepEqual(Object.keys(languages), ['en', 'de', 'es', 'fr', 'pt', 'it', 'ru', 'zh', 'vi']);
+  assert.deepEqual(Object.keys(languages), ['en', 'de', 'es', 'zh', 'vi']);
   assert.equal(translate('th', 'Play'), 'เล่น');
   assert.equal(resolveLocale(['th-TH', 'zh-Hans-CN']), 'zh');
 });
