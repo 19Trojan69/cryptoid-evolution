@@ -21,19 +21,21 @@ type Post = {
   replies: { id: string; text: string; username: string; createdAt: string; developer: true }[];
 };
 const categories: Record<Category, string> = {
-  rating: "Rate the game",
-  idea: "Suggest an idea",
-  problem: "Report a problem",
+  rating: "Reviews",
+  idea: "Ideas & suggestions",
+  problem: "Problem reports",
 };
 const statuses = { open: "Open", review: "Under review", planned: "Planned", done: "Fixed / implemented" };
 export default function FeedbackHub({
   signedIn,
   onSignIn,
   onClose,
+  onProfile,
 }: {
   signedIn: boolean;
   onSignIn: () => void;
   onClose: () => void;
+  onProfile: (username: string) => void;
 }) {
   const { locale, t } = useLocale(),
     dialog = useRef<HTMLDialogElement>(null);
@@ -135,12 +137,13 @@ export default function FeedbackHub({
       <header>
         <h2 id="feedback-title">
           <BlockchainIcon kind="feedback" />
-          {t("Feedback & ideas")}
+          {t("Community & Feedback")}
         </h2>
         <button type="button" onClick={onClose} aria-label={t("Close")}>
           ×
         </button>
       </header>
+      <button className="menu-return" type="button" onClick={onClose}>← {t("Back to quick access")}</button>
       <div className="feedback-tabs" role="group" aria-label={t("Category")}>
         {(Object.keys(categories) as Category[]).map(key => (
           <button
@@ -180,7 +183,7 @@ export default function FeedbackHub({
         {category === "rating" ? (
           <>
             <p>
-              {t("Stars rate the game. Votes support individual ideas. Your new rating replaces your previous rating.")}
+              {t("Stars rate the game. Thumbs rate individual contributions. You can update your game rating.")}
             </p>
             <div className="feedback-stars" role="group" aria-label={t("Stars")}>
               {[1, 2, 3, 4, 5].map(n => (
@@ -237,7 +240,7 @@ export default function FeedbackHub({
             }}
           >
             <option value="newest">{t("Newest contributions")}</option>
-            <option value="support">{t("Most support")}</option>
+            <option value="support">{t("Best rated contributions")}</option>
           </select>
         </label>
         {admin && (
@@ -270,8 +273,8 @@ export default function FeedbackHub({
                 <div>
                   <h3>{post.category === "rating" ? `${number(post.stars || 0)} / ${number(5)} ★` : post.title}</h3>
                   <small>
-                    @{post.username} ·{" "}
-                    {new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(new Date(post.createdAt))}
+                    <button className="feedback-profile-link" type="button" onClick={() => onProfile(post.username)}> @{post.username}</button> ·{" "}
+                    {new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }).format(new Date(post.createdAt))}
                   </small>
                 </div>
                 <span className="feedback-status">
@@ -286,7 +289,7 @@ export default function FeedbackHub({
               </header>
               {post.hidden && <p>{t("Moderated contribution")}</p>}
               <p className="feedback-description">{post.description}</p>
-              {post.category !== "rating" && (
+              {(
                 <div className="feedback-votes">
                   <button
                     type="button"
@@ -298,9 +301,9 @@ export default function FeedbackHub({
                       )
                     }
                   >
-                    👍 {t(post.category === "idea" ? "For" : "Affects me too")} · {number(post.up)}
+                    👍 {t("Thumbs up")} · {number(post.up)}
                   </button>
-                  {post.category === "idea" && (
+                  {(
                     <button
                       type="button"
                       aria-pressed={post.ownVote === -1}
@@ -311,7 +314,7 @@ export default function FeedbackHub({
                         )
                       }
                     >
-                      👎 {t("Against")} · {number(post.down)}
+                      👎 {t("Thumbs down")} · {number(post.down)}
                     </button>
                   )}
                 </div>
@@ -319,7 +322,7 @@ export default function FeedbackHub({
               {post.replies.map(reply => (
                 <aside className="developer-reply" key={reply.id}>
                   <b>{t("Developer reply")}</b>
-                  <small>@{reply.username}</small>
+                  <small>@{reply.username} · {new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }).format(new Date(reply.createdAt))}</small>
                   <p>{reply.text}</p>
                 </aside>
               ))}
