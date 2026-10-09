@@ -132,3 +132,7 @@ Alle 234 bislang offenen deutschen Schiffs- und Bossgeschichten sind direkt erg�
 ### Spanische Geschichten, erster Block
 
 100 der 234 spanischen Schiffs- und Bossgeschichten wurden direkt übertragen. Der statische spanische Bestand erreicht 886/1020; insgesamt verbleiben 1070 Texte. Der vollständige deutsche Stand `fee6f89d` hat den Preview-Build bestanden. Produktionsdomain und fester Testnet-Link bleiben auf ihren bisher zugewiesenen Deployments.
+
+### Spanische Geschichten vollständig
+
+Alle 234 spanischen Schiffs- und Bossgeschichten sind direkt übersetzt. Der statische spanische Katalog erreicht 1020/1020; für Französisch, Portugiesisch, Italienisch und Russisch fehlen jeweils 234 Lore-Texte (insgesamt 936). Die Freigabeprüfung und Laufzeittests folgen.
