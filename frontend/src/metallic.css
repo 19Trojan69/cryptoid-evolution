@@ -35,7 +35,14 @@
 .language-picker-row i { color:#f0bd87;font-style:normal;font-size:20px; }
 .language-picker button:focus-visible { outline:3px solid #dfb18d;outline-offset:2px; }
 @media(prefers-reduced-motion:reduce) { .quick-access-items button,.collection-tile,.language-picker-row { transition:none; } }
-.pilot-profile { width:min(660px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto;box-sizing:border-box;border-radius:20px;padding:20px; }
+.pilot-profile { width:min(660px,calc(100vw - 24px));max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;box-sizing:border-box;border-radius:20px;padding:20px; }
+.pilot-profile :is(section,div,label,input,select,textarea,button) { min-width:0;max-width:100%;box-sizing:border-box; }
+.pilot-profile :is(h2,h3,p,b,small,button) { overflow-wrap:anywhere; }
+.pilot-profile :is(input,select,textarea) { width:100%; }
+.pilot-profile input[type=file] { overflow:hidden; }
+.pilot-profile .badge-grid button { min-width:0; }
+.pilot-profile .profile-save { background:linear-gradient(145deg,#765234,#473323);border:2px solid #ffd29d;font-weight:700;flex:1 1 100%; }
+.pilot-profile .profile-actions { position:sticky;bottom:0;z-index:2;padding:12px 0;background:#202129; }
 .pilot-profile::backdrop { background:#070710e6; }
 .pilot-profile header { display:flex;align-items:center;justify-content:space-between;gap:12px; }
 .pilot-profile button,.pilot-profile select,.pilot-profile input,.pilot-profile textarea { font:inherit;color:#f0e7df;background:#24232c;border:1px solid #96806c;border-radius:9px;min-height:44px;padding:10px;box-sizing:border-box; }
