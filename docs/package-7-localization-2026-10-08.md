@@ -116,3 +116,7 @@ Je 98 bisher fehlende erfasste Texte für Karten, Boss-Kampfdaten und zugehörig
 ### Französische und portugiesische Admin-Texte
 
 Je 155 Texte der Eigentümer- und Zugriffsstatistikansicht wurden direkt auf Französisch und Portugiesisch ergänzt. Platzhalter, Netzwerkgrenzen, Kaufhinweise und Zeitangaben wurden beim Eintragen abgeglichen. Beide Sprachen stehen nun wie Spanisch bei 786/1020; insgesamt fehlen 1714 erfasste Texte. Produktion bleibt auf dem bisherigen Stand.
+
+### Italienische und russische Admin-Texte
+
+Auch für Italienisch und Russisch wurden je 155 Admin-Texte direkt ergänzt. Damit sind die erfassten Admin- und Sammlungsoberflächen der fünf Sprachen abgedeckt. Für Deutsch, Spanisch, Französisch, Portugiesisch, Italienisch und Russisch verbleiben jeweils 234 fiktive Geschichten- und Bossakten-Texte, zusammen 1404. Die Produktionsfreigabe bleibt gesperrt, bis diese übersetzt und die vollständige Prüfung bestanden sind.

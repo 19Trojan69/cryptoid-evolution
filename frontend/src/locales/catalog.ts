@@ -1,3 +1,5 @@
+import { russianAdminTranslations } from './russianAdmin.ts';
+import { italianAdminTranslations } from './italianAdmin.ts';
 import { portugueseAdminTranslations } from './portugueseAdmin.ts';
 import { frenchAdminTranslations } from './frenchAdmin.ts';
 import { spanishAdminTranslations } from './spanishAdmin.ts';
@@ -5604,3 +5606,7 @@ Object.assign(localeCatalog.es ??= {}, spanishAdminTranslations);
 Object.assign(localeCatalog.fr ??= {}, frenchAdminTranslations);
 
 Object.assign(localeCatalog.pt ??= {}, portugueseAdminTranslations);
+
+Object.assign(localeCatalog.it ??= {}, italianAdminTranslations);
+
+Object.assign(localeCatalog.ru ??= {}, russianAdminTranslations);
