@@ -1,0 +1,23 @@
+name: Paket 7 build check
+on:
+  push:
+    branches: [codex/package-7-localization]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - name: Install frontend dependencies
+        run: corepack yarn install --frozen-lockfile
+        working-directory: frontend
+      - name: Build
+        run: npm run build --prefix frontend
+      - name: Static translation audit
+        run: npm run audit:i18n --prefix frontend
