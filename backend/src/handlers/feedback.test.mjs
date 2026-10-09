@@ -93,7 +93,7 @@ function harness() {
         }));
       result.sort(
         (a, b) =>
-          (sort.up && b.up - a.up) ||
+          (sort.voteScore && (b.up-b.down) - (a.up-a.down)) || (sort.up && b.up - a.up) ||
           b.createdAt.localeCompare(a.createdAt) ||
           a._id.localeCompare(b._id),
       );
@@ -182,10 +182,11 @@ test("feedback validates login and fields, separates ratings and scopes all oper
   assert.equal(
     (await h.call("PUT /posts/:id/vote", { value: 1 }, { id: rating._id }))
       .code,
-    400,
+    200,
   );
+  assert.equal(rating.ratingHistory.length, 1);
 });
-test("one vote per account supports change, undo and concurrent retry without counter drift; problems never have downvotes", async () => {
+test("one vote per account supports change, undo and concurrent retry without counter drift; every category supports downvotes", async () => {
   const h = harness();
   const id = (await h.call("POST /posts", idea)).body.post.id;
   await Promise.all(
@@ -214,7 +215,7 @@ test("one vote per account supports change, undo and concurrent retry without co
   ).body.post.id;
   assert.equal(
     (await h.call("PUT /posts/:id/vote", { value: -1 }, { id: problem })).code,
-    400,
+    200,
   );
   assert.equal(
     (await h.call("PUT /posts/:id/vote", { value: 1 }, { id: problem })).code,
@@ -308,7 +309,7 @@ test("only verified admin can reply, assign status and moderate; editing a ratin
   });
   assert.equal(h.posts.find((p) => p._id === rating).hidden, true);
 });
-test("support sorting uses positive votes and paginates, with network constraint inside vote lookup", async () => {
+test("support sorting uses net votes and paginates, with network constraint inside vote lookup", async () => {
   const h = harness();
   for (let i = 0; i < 32; i++)
     await h.call("POST /posts", { ...idea, title: "Idea " + i });
@@ -327,4 +328,17 @@ test("support sorting uses positive votes and paginates, with network constraint
   assert.equal(lookup.from, "feedback_votes");
   assert.ok(JSON.stringify(lookup.pipeline).includes("testnet"));
   assert.equal((await h.call("GET /posts", {}, { page: -1 })).code, 400);
+});
+
+test('net score accounts for negative votes and withdrawn votes retain their record', async () => {
+  const h = harness();
+  const a = (await h.call('POST /posts', idea)).body.post.id;
+  const b = (await h.call('POST /posts', { ...idea, title: 'Second' })).body.post.id;
+  for (const uid of ['one','two']) await h.call('PUT /posts/:id/vote', {value:1}, {id:a,uid});
+  for (const uid of ['three','four','five']) await h.call('PUT /posts/:id/vote', {value:-1}, {id:a,uid});
+  await h.call('PUT /posts/:id/vote', {value:1}, {id:b,uid:'one'});
+  assert.equal((await h.call('GET /posts', {}, {sort:'support'})).body.posts[0].id, b);
+  const count = h.votes.length;
+  await h.call('PUT /posts/:id/vote', {value:0}, {id:b,uid:'one'});
+  assert.equal(h.votes.length,count);
 });
