@@ -1,3 +1,5 @@
+import { translate } from '../i18n.ts';
+import { normalizeLocale } from '../locales/config.ts';
 import { shipCaptureLore } from './shipCaptureLore.ts';
 import type { ShipStage } from './shipEvolution';
 type Story = { de: string; en: string; advanced: [string,string]; elite: [string,string] };
@@ -27,14 +29,16 @@ export const shipStories: Record<string, Story> = {
 export const sharedHullNote = (de: boolean) => de
  ? 'Diese Baureihe wird von Spielern UND gegnerischen Flotten eingesetzt. Die Silhouette verrät keine Zugehörigkeit; Gegnerwerte richten sich nach ihrer eigenen Klasse und dem Level.'
  : 'This hull family is used by BOTH players and enemy fleets. Its silhouette does not identify allegiance; enemy stats depend on their own class and level.';
-export function playerShipStory(id: string, stage: ShipStage, de: boolean): string[] {
+export function playerShipStory(id: string, stage: ShipStage, locale: boolean | string): string[] {
+ const resolved=typeof locale==='boolean'?(locale?'de':'en'):normalizeLocale(locale)??'en', de=resolved==='de';
  const item = shipStories[id]; if (!item) return [];
  const language = de ? 0 : 1;
  const purpose = stage === 2 ? item.advanced[language] : item.elite[language];
  const upgrade = stage === 2
    ? (de ? 'Für diesen Auftrag ergänzt die Advanced-Aufrüstung den Grundrumpf um dauerhaften Doppelschuss und Schutz vor einem gegnerischen Projektiltreffer je Leben.' : 'For this assignment, the Advanced refit adds permanent twin fire and protection against one enemy projectile hit per life to the base hull.')
    : (de ? 'Der Elite-Umbau verstärkt den Zwillingslaser und erhöht den Schutz auf zwei gegnerische Projektiltreffer je Leben. So wird die Advanced-Ausführung für diesen anspruchsvolleren Auftrag weiterentwickelt.' : 'The Elite refit strengthens the twin laser and raises protection to two enemy projectile hits per life, developing the Advanced edition for this more demanding assignment.');
- return stage === 1
+ const paragraphs = stage === 1
    ? [de ? item.de : item.en, shipCaptureLore[id][language]]
    : [purpose, upgrade, sharedHullNote(de)];
+ return de?paragraphs:paragraphs.map(text=>translate(resolved,text));
 }

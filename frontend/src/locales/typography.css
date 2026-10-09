@@ -12,3 +12,42 @@ html:lang(th) body * {
   font-family: 'Noto Sans Thai', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
   letter-spacing: normal !important;
 }
+
+/* Installed device fonts supply these scripts without a per-start download. */
+html[data-complex-script='true'] body,
+html[data-complex-script='true'] body * {
+  letter-spacing: normal !important;
+}
+html:lang(zh) body, html:lang(zh) body * {
+  font-family: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif !important;
+}
+html:lang(ja) body, html:lang(ja) body * {
+  font-family: 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', sans-serif !important;
+}
+html:lang(ko) body, html:lang(ko) body * {
+  font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans CJK KR', sans-serif !important;
+}
+html:lang(hi) body, html:lang(hi) body *, html:lang(bn) body, html:lang(bn) body * {
+  font-family: 'Nirmala UI', 'Kohinoor Devanagari', 'Kohinoor Bangla', sans-serif !important;
+}
+html[dir='rtl'] body, html[dir='rtl'] body * {
+  font-family: 'Geeza Pro', 'Tahoma', 'Arial', sans-serif !important;
+}
+/* Physics, thumb sides and numeric counters retain their physical layout. */
+.game-field, .touch-controls, .hearts, .hud-stat strong, .language-option span {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+html[dir='rtl'] .game-overlay,
+html[dir='rtl'] .system-menu-section,
+html[dir='rtl'] .weapon-selection-dialog {
+  direction: rtl;
+}
+.language-option b, .language-trigger b, .system-menu-heading strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+html[data-complex-script='true'] .hud-stat > span {
+  font-size: clamp(.55rem, 1.6vw, .82rem);
+}

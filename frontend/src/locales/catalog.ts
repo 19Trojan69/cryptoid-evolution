@@ -1,3 +1,25 @@
+import { spanishLoreCompletionTranslations } from './spanishLoreCompletion.ts';
+import { germanLoreCompletionTranslations } from './germanLoreCompletion.ts';
+import { russianAdminTranslations } from './russianAdmin.ts';
+import { italianAdminTranslations } from './italianAdmin.ts';
+import { portugueseAdminTranslations } from './portugueseAdmin.ts';
+import { frenchAdminTranslations } from './frenchAdmin.ts';
+import { spanishAdminTranslations } from './spanishAdmin.ts';
+import { russianCompletionTranslations } from './russianCompletion.ts';
+import { italianCompletionTranslations } from './italianCompletion.ts';
+import { portugueseCompletionTranslations } from './portugueseCompletion.ts';
+import { frenchCompletionTranslations } from './frenchCompletion.ts';
+import { spanishCompletionTranslations } from './spanishCompletion.ts';
+import { germanCompletionTranslations } from './germanCompletion.ts';
+import { indonesianInterfaceTranslations } from './indonesianInterface.ts';
+import { englishAdminTranslations } from './englishAdmin.ts';
+import { chineseCollectionTranslations } from './chineseCollection.ts';
+import { chineseGameplayTranslations } from './chineseGameplay.ts';
+import { chineseAdminTranslations } from './chineseAdmin.ts';
+import { chineseLoreTranslations } from './chineseLore.ts';
+import { vietnameseGuideTranslations } from './vietnameseGuide.ts';
+import { collectionEquipmentTranslations } from './collectionEquipment.ts';
+import { regionalTranslations } from './regional.ts';
 import { collectionTranslations } from './collection.ts';
 import { bossPhaseTranslations } from './bossPhases.ts';
 import { missionShopTranslations } from './missionShop.ts';
@@ -5529,13 +5551,13 @@ Object.assign(localeCatalog["ro"], {"Time expired": "Timp expirat"});
 Object.assign(localeCatalog["sr"], {"Time expired": "Време је истекло"});
 Object.assign(localeCatalog["uk"], {"Time expired": "Час вичерпано"});
 Object.assign(localeCatalog["th"], {"Time expired": "หมดเวลา"});
-for (const [locale, translations] of Object.entries(bossPhaseTranslations)) Object.assign(localeCatalog[locale], translations);
-for (const [locale, translations] of Object.entries(missionShopTranslations)) Object.assign(localeCatalog[locale], translations);
-for (const [locale, translations] of Object.entries(package2Translations)) Object.assign(localeCatalog[locale], translations);
-for (const [locale, translations] of Object.entries(package3Translations)) Object.assign(localeCatalog[locale], translations);
-for (const [locale, translations] of Object.entries(package5Translations)) Object.assign(localeCatalog[locale], translations);
-for (const [locale, translations] of Object.entries(weaponStockTranslations)) Object.assign(localeCatalog[locale], translations);
-for (const [locale, translations] of Object.entries(bossRewardTranslations)) Object.assign(localeCatalog[locale], translations);
+for (const [locale, translations] of Object.entries(bossPhaseTranslations)) Object.assign(localeCatalog[locale] ??= {}, translations);
+for (const [locale, translations] of Object.entries(missionShopTranslations)) Object.assign(localeCatalog[locale] ??= {}, translations);
+for (const [locale, translations] of Object.entries(package2Translations)) Object.assign(localeCatalog[locale] ??= {}, translations);
+for (const [locale, translations] of Object.entries(package3Translations)) Object.assign(localeCatalog[locale] ??= {}, translations);
+for (const [locale, translations] of Object.entries(package5Translations)) Object.assign(localeCatalog[locale] ??= {}, translations);
+for (const [locale, translations] of Object.entries(weaponStockTranslations)) Object.assign(localeCatalog[locale] ??= {}, translations);
+for (const [locale, translations] of Object.entries(bossRewardTranslations)) Object.assign(localeCatalog[locale] ??= {}, translations);
 Object.assign(localeCatalog["de"], {"Each defeated boss grants one extra heart, even above three. Remaining hearts are saved.":"Jeder besiegte Boss gibt ein zusätzliches Herz, auch über drei hinaus. Verbleibende Herzen werden gespeichert."});
 Object.assign(localeCatalog["es"], {"Each defeated boss grants one extra heart, even above three. Remaining hearts are saved.":"Cada jefe derrotado otorga un corazón extra, incluso por encima de tres. Los corazones restantes se guardan."});
 Object.assign(localeCatalog["fr"], {"Each defeated boss grants one extra heart, even above three. Remaining hearts are saved.":"Chaque boss vaincu accorde un cœur supplémentaire, même au-delà de trois. Les cœurs restants sont sauvegardés."});
@@ -5554,3 +5576,43 @@ Object.assign(localeCatalog["uk"], {"Each defeated boss grants one extra heart, 
 Object.assign(localeCatalog["th"], {"Each defeated boss grants one extra heart, even above three. Remaining hearts are saved.":"บอสแต่ละตัวที่ปราบได้จะเพิ่มหัวใจหนึ่งดวง แม้มีเกินสามดวงแล้ว จำนวนหัวใจที่เหลือจะถูกบันทึก"});
 
 for (const [locale, entries] of Object.entries(collectionTranslations)) Object.assign(localeCatalog[locale], entries);
+
+for (const [locale, entries] of Object.entries(regionalTranslations)) localeCatalog[locale] = { ...localeCatalog[locale], ...entries };
+
+for (const [locale, entries] of Object.entries(collectionEquipmentTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
+
+Object.assign(localeCatalog.zh ??= {}, chineseCollectionTranslations);
+Object.assign(localeCatalog.zh, chineseGameplayTranslations);
+Object.assign(localeCatalog.zh, chineseAdminTranslations);
+Object.assign(localeCatalog.zh, chineseLoreTranslations);
+Object.assign(localeCatalog.vi, vietnameseGuideTranslations);
+
+Object.assign(localeCatalog.en ??= {}, englishAdminTranslations);
+
+Object.assign(localeCatalog.id ??= {}, indonesianInterfaceTranslations);
+
+Object.assign(localeCatalog.de ??= {}, germanCompletionTranslations);
+
+Object.assign(localeCatalog.es ??= {}, spanishCompletionTranslations);
+
+Object.assign(localeCatalog.fr ??= {}, frenchCompletionTranslations);
+
+Object.assign(localeCatalog.pt ??= {}, portugueseCompletionTranslations);
+
+Object.assign(localeCatalog.it ??= {}, italianCompletionTranslations);
+
+Object.assign(localeCatalog.ru ??= {}, russianCompletionTranslations);
+
+Object.assign(localeCatalog.es ??= {}, spanishAdminTranslations);
+
+Object.assign(localeCatalog.fr ??= {}, frenchAdminTranslations);
+
+Object.assign(localeCatalog.pt ??= {}, portugueseAdminTranslations);
+
+Object.assign(localeCatalog.it ??= {}, italianAdminTranslations);
+
+Object.assign(localeCatalog.ru ??= {}, russianAdminTranslations);
+
+Object.assign(localeCatalog.de ??= {}, germanLoreCompletionTranslations);
+
+Object.assign(localeCatalog.es ??= {}, spanishLoreCompletionTranslations);

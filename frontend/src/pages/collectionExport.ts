@@ -1,10 +1,14 @@
+import { translate } from '../i18n.ts';
+import { normalizeLocale, localeDirection } from '../locales/config.ts';
 import type { CollectionCard } from './collectionData';
 import { loadBossArtwork, loadCardImage } from './bossArtwork';
 import { wrapCardText } from './cardTextLayout';
 import { loadShipArtwork } from './shipArtwork';
 
 /** Measure every line before allocating the PNG. The footer is below, not over, the content. */
-export async function exportCollectionCard(card: CollectionCard, de: boolean): Promise<Blob> {
+export async function exportCollectionCard(card: CollectionCard, language: boolean | string): Promise<Blob> {
+  const locale=typeof language==='boolean'?(language?'de':'en'):normalizeLocale(language)??'en', de=locale==='de';
+  const t=(source:string)=>translate(locale,source), rtl=localeDirection(locale)==='rtl';
   await document.fonts.ready;
   const [art, space] = await Promise.all([
     card.bossId ? loadBossArtwork(card.bossId, 2400) : loadShipArtwork(card.image),
@@ -22,12 +26,12 @@ export async function exportCollectionCard(card: CollectionCard, de: boolean): P
   const category = wrap(`${card.category.toUpperCase()}  ${'✦'.repeat(card.tier)}`, 23, true);
   const stats = card.stats.map(([label, value]) => wrap(`${label}: ${value}`, 28));
   const sections = [
-    { heading: de ? 'SCHIFFSGESCHICHTE' : 'SHIP HISTORY', paragraphs: card.story },
-    { heading: de ? 'AKTUELLE AUSRÜSTUNG' : 'CURRENT EQUIPMENT', paragraphs: card.equipment },
+    { heading: de ? 'SCHIFFSGESCHICHTE' : t('SHIP HISTORY'), paragraphs: card.story },
+    { heading: de ? 'AKTUELLE AUSRÜSTUNG' : t('CURRENT EQUIPMENT'), paragraphs: card.equipment },
   ].map(section => ({ heading: wrap(section.heading, 28, true), paragraphs: section.paragraphs.map(text => wrap(text, 30)) }));
   const footer = wrap(de
     ? 'SAMMELKARTE · Fiktion aus dem Cryptoid-Universum / tatsächliche Spielwerte · Edition 01'
-    : 'COLLECTOR CARD · Fiction from the Cryptoid universe / actual game stats · Edition 01', 22);
+    : t('COLLECTOR CARD · Fiction from the Cryptoid universe / actual game stats · Edition 01'), 22);
   const intro = 160 + title.length * 78 + subtitle.length * 42 + 22 + category.length * 34 + 30;
   const statsHeight = stats.reduce((sum, lines) => sum + lines.length * 42, 0);
   const bodyHeight = sections.reduce((sum, section) => sum + section.heading.length * 40 + 14
@@ -48,7 +52,8 @@ export async function exportCollectionCard(card: CollectionCard, de: boolean): P
   ctx.fillStyle = accent; ctx.font = 'bold 25px sans-serif'; ctx.fillText(`CRYPTOID EVOLUTION · ${card.serial}`, 100, y); y += 60;
   const paint = (lines: string[], size: number, advance: number, color: string, bold = false) => {
     ctx.font = `${bold ? 'bold ' : ''}${size}px sans-serif`; ctx.fillStyle = color;
-    for (const line of lines) { ctx.fillText(line, 100, y); y += advance; }
+    ctx.direction=rtl?'rtl':'ltr';ctx.textAlign=rtl?'right':'left';
+    for (const line of lines) { ctx.fillText(line, rtl?1100:100, y); y += advance; }
   };
   paint(title, 66, 78, '#f2f4fa', true); paint(subtitle, 30, 42, accent);
   y += 22; paint(category, 23, 34, accent, true); y += 30;

@@ -20,7 +20,7 @@ import './shopPurchase.css';
 
 type Ownership={owner:string;used:string[];upgrades:string[];wins:Record<string,number>};
 export default function Collection({uid,onClose}:{uid?:string;onClose:()=>void}){
- const {locale,t}=useLocale(),de=locale.startsWith('de'),say=(a:string,b:string)=>de?a:b;
+ const {locale,t}=useLocale(),de=locale.startsWith('de'),say=(a:string,b:string)=>de?a:t(b);
  const [category,setCategory]=useState(0),[selectedKey,setSelected]=useState<string|null>(null);
  const [ownership,setOwnership]=useState<Ownership>({owner:'',used:[],upgrades:[],wins:{}}),[status,setStatus]=useState('loading'),[retry,setRetry]=useState(0);
  const exportVersion=useRef(0);
@@ -36,8 +36,8 @@ export default function Collection({uid,onClose}:{uid?:string;onClose:()=>void})
  useEffect(()=>()=>{if(download)URL.revokeObjectURL(download);},[download]);
  useEffect(()=>{const versionRef=exportVersion;versionRef.current++;scroller.current?.scrollTo(0,0);close.current?.focus({preventScroll:true});setDownload(null);setExportError(false);setBusy(false);return()=>{versionRef.current++;};},[selectedKey,category,uid]);
  const visibleOwnership=ownership.owner===(uid||'guest')?ownership:{used:[],upgrades:[],wins:{} as Record<string,number>};
- const categories=[say('Bosse','Bosses'),'Standard','Advanced','Elite'];
- const entries=category===0?bossManifest.map(b=>({key:`boss-${b.id}`,name:bossName(b.id),image:b.image,available:bossCardAvailable(b.id),unlocked:bossCardAvailable(b.id)&&(visibleOwnership.wins[b.id]||0)>0,tier:Math.ceil(b.id/10),serial:`B-${String(b.id).padStart(2,'0')}`,make:()=>bossCard(b.id,locale),boss:b.id})):playerSkins.map(ship=>({key:`${ship.id}-${category}`,name:ship.name,image:shipEvolutionAsset(ship.sprite,category as ShipStage),available:shipCardAvailable(ship.sprite,category as ShipStage),unlocked:shipCardAvailable(ship.sprite,category as ShipStage)&&playerCardUnlocked(ship.id,ship.sprite,category as ShipStage,visibleOwnership.used,visibleOwnership.upgrades),tier:category,serial:`P-${String(ship.sprite+1).padStart(2,'0')}/${category}`,make:()=>shipCard(ship.id,category as ShipStage,de),boss:0}));
+ const categories=[say('Bosse','Bosses'),t('STANDARD'),t('ADVANCED'),t('ELITE')];
+ const entries=category===0?bossManifest.map(b=>({key:`boss-${b.id}`,name:bossName(b.id),image:b.image,available:bossCardAvailable(b.id),unlocked:bossCardAvailable(b.id)&&(visibleOwnership.wins[b.id]||0)>0,tier:Math.ceil(b.id/10),serial:`B-${String(b.id).padStart(2,'0')}`,make:()=>bossCard(b.id,locale),boss:b.id})):playerSkins.map(ship=>({key:`${ship.id}-${category}`,name:ship.name,image:shipEvolutionAsset(ship.sprite,category as ShipStage),available:shipCardAvailable(ship.sprite,category as ShipStage),unlocked:shipCardAvailable(ship.sprite,category as ShipStage)&&playerCardUnlocked(ship.id,ship.sprite,category as ShipStage,visibleOwnership.used,visibleOwnership.upgrades),tier:category,serial:`P-${String(ship.sprite+1).padStart(2,'0')}/${category}`,make:()=>shipCard(ship.id,category as ShipStage,locale),boss:0}));
  const selectedIndex=entries.findIndex(entry=>entry.key===selectedKey);
  const activeEntry=selectedIndex>=0?entries[selectedIndex]:null;
  const selected=activeEntry?.unlocked?activeEntry.make():null;
@@ -45,7 +45,7 @@ export default function Collection({uid,onClose}:{uid?:string;onClose:()=>void})
   const next=selectedIndex+direction;
   if(activeEntry&&next>=0&&next<entries.length)setSelected(entries[next].key);
  };
- const save=async()=>{if(!selected||busy)return;setBusy(true);setExportError(false);const version=exportVersion.current;try{const {exportCollectionCard}=await import('./collectionExport');const blob=await exportCollectionCard(selected,de);if(version===exportVersion.current)setDownload(URL.createObjectURL(blob));}catch{if(version===exportVersion.current)setExportError(true);}finally{if(version===exportVersion.current)setBusy(false);}};
+ const save=async()=>{if(!selected||busy)return;setBusy(true);setExportError(false);const version=exportVersion.current;try{const {exportCollectionCard}=await import('./collectionExport');const blob=await exportCollectionCard(selected,locale);if(version===exportVersion.current)setDownload(URL.createObjectURL(blob));}catch{if(version===exportVersion.current)setExportError(true);}finally{if(version===exportVersion.current)setBusy(false);}};
  return createPortal(<dialog ref={dialog} className="collection-dialog" aria-labelledby="collection-title" onCancel={e=>{e.preventDefault();e.stopPropagation();if(activeEntry)setSelected(null);else onClose();}} onKeyDown={e=>{if(!activeEntry||e.altKey||e.ctrlKey||e.metaKey)return;if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();e.stopPropagation();moveCard(e.key==='ArrowRight'?1:-1);}}}>
   <header className="collection-header"><div><p>{say('DAS FLOTTENARCHIV','THE FLEET ARCHIVE')}</p><h2 id="collection-title">{activeEntry?activeEntry.name:say('Deine Sammlung','Your collection')}</h2></div><span aria-hidden="true">✧</span></header>
   <div ref={scroller} className={`collection-scroll ${activeEntry?'collection-swipe':''}`} onTouchStart={e=>{swipe.current=activeEntry&&e.touches.length===1?{x:e.touches[0].clientX,y:e.touches[0].clientY}:null;}} onTouchCancel={()=>{swipe.current=null;}} onTouchEnd={e=>{const start=swipe.current;swipe.current=null;if(!start||e.changedTouches.length!==1)return;const dx=e.changedTouches[0].clientX-start.x,dy=e.changedTouches[0].clientY-start.y;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)moveCard(dx<0?1:-1);}}>

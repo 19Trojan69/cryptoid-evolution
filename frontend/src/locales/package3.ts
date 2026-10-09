@@ -1,3 +1,4 @@
+import { regionalCombatRows } from './regionalCombat.ts';
 const keys = [
   'One use per mission. Destroys visible enemies and hostile shots. Damages boss turrets first; later turrets withstand more damage. The exposed boss hull survives the blast.',
   'One use per mission. Disables enemy and boss weapons for 7 seconds. Ships and existing shots keep moving; EMP deals no damage.',
@@ -159,3 +160,8 @@ const rows: Record<string, string[]> = {
 export const package3Translations: Record<string, Record<string, string>> = Object.fromEntries(
   Object.entries(rows).map(([locale, values]) => [locale, Object.fromEntries(keys.map((key, index) => [key, values[index]]))]),
 );
+
+for (const [locale, values] of Object.entries(regionalCombatRows)) {
+  if (values.length !== keys.length) throw new Error(`Combat row length: ${locale}`);
+  package3Translations[locale] = Object.fromEntries(keys.map((key, index) => [key, values[index]]));
+}

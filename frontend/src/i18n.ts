@@ -2,20 +2,11 @@ import { useEffect, useState } from "react";
 import { formatLives } from "./locales/quantities.ts";
 import { localeAliases, localeCatalog } from "./locales/catalog.ts";
 
-export type Locale = "en" | "de" | "es" | "fr" | "pt" | "it" | "pl" | "tr" | "ru" | "hr" | "cs" | "sk" | "hu" | "ro" | "sr" | "uk" | "th";
-export const languages: Record<Locale, string> = {
-  en: "English", de: "Deutsch", es: "Español", fr: "Français", pt: "Português", it: "Italiano", pl: "Polski", tr: "Türkçe",
-  ru: "Русский", hr: "Hrvatski", cs: "Čeština", sk: "Slovenčina", hu: "Magyar", ro: "Română", sr: "Српски", uk: "Українська", th: "ไทย",
-};
-const STORAGE_KEY = "cryptoid_language";
-export const resolveLocale = (preferred: readonly string[], override?: string | null): Locale => {
-  if (override && override in languages) return override as Locale;
-  for (const tag of preferred) {
-    const base = tag.toLowerCase().split("-")[0];
-    if (base in languages) return base as Locale;
-  }
-  return "en";
-};
+import { languageLabels, supportedLanguages, resolveLocale, documentLanguage, localeDirection, complexScript, type Locale } from './locales/config.ts';
+import { languagePreferences, deviceLanguages, LANGUAGE_STORAGE_KEY } from './locales/preferences.ts';
+export type { Locale } from './locales/config.ts';
+export { resolveLocale } from './locales/config.ts';
+export const languages = supportedLanguages;
 const translations: Partial<Record<Exclude<Locale, "en">, Record<string, string>>> = {
   de: {
     "Signed in as": "Eingeloggt als", "Signing in…": "Anmeldung läuft …", "Open PiNet": "PiNet öffnen",
@@ -206,7 +197,7 @@ const audioSettingsTranslations: Partial<Record<Locale, Record<string, string>>>
   uk: { "Music volume": "Гучність музики", "Quiet": "Тихо", "Balanced": "Збалансовано", "Loud": "Голосно" },
   th: { "Music volume": "ระดับเสียงเพลง", "Quiet": "เบา", "Balanced": "สมดุล", "Loud": "ดัง" },
 };
-const failedMissionTranslations: Record<Locale, string> = {
+const failedMissionTranslations: Partial<Record<Locale, string>> = {
   en: "MISSION FAILED", de: "MISSION GESCHEITERT", es: "MISIÓN FALLIDA", fr: "MISSION ÉCHOUÉE",
   pt: "MISSÃO FALHOU", it: "MISSIONE FALLITA", pl: "MISJA NIEUDANA", tr: "GÖREV BAŞARISIZ",
   ru: "МИССИЯ ПРОВАЛЕНА", hr: "MISIJA NIJE USPJELA", cs: "MISE SELHALA", sk: "MISIA ZLYHALA",
@@ -343,9 +334,9 @@ const extraLifeTranslations: Partial<Record<Locale, Record<string,string>>> = {
  hu:{'EXTRA LIFE':'EXTRA ÉLET'}, ro:{'EXTRA LIFE':'VIAȚĂ SUPLIMENTARĂ'}, sr:{'EXTRA LIFE':'ДОДАТНИ ЖИВОТ'}, uk:{'EXTRA LIFE':'ДОДАТКОВЕ ЖИТТЯ'}, th:{'EXTRA LIFE':'ชีวิตเพิ่ม'},
 };
 const legacyCatalog: Partial<Record<Locale, Record<string, string>>> = {};
-for (const locale of Object.keys(languages) as Locale[]) {
+for (const locale of Object.keys(languageLabels) as Locale[]) {
   legacyCatalog[locale] = Object.assign({}, translations[locale as Exclude<Locale, "en">], newerTranslations[locale], networkTranslations[locale], levelTranslations[locale], powerUpTranslations[locale], extendedTranslations[locale], systemMenuTranslations[locale], hudTranslations[locale], controlTranslations[locale], homeMusicTranslations[locale], gameplayPolishTranslations[locale], audioSettingsTranslations[locale], evolutionShopTranslations[locale], guideTranslations[locale], shipPositionTranslations[locale], quickAccessTranslations[locale], mobileMenuTranslations[locale], extraLifeTranslations[locale]);
-  legacyCatalog[locale]!["MISSION FAILED"] = failedMissionTranslations[locale];
+  legacyCatalog[locale]!["MISSION FAILED"] = failedMissionTranslations[locale] ?? "MISSION FAILED";
 }
 // Currency and product names remain the same in every language.
 const sharedNames = new Set(["Shards", "Shard", "Cryptoids", "Cryptoid", "Cryptoid Evolution", "Pi", "Test-Pi", "Testnet", "Mainnet", "Top 100", "Overdrive"]);
@@ -369,16 +360,44 @@ const localizedValue = (locale: Locale, source: string, seen = new Set<string>()
   }
   return undefined;
 };
-export const hasTranslation = (locale: Locale, source: string) => locale === "en" || localizedValue(locale, source) !== undefined;
+export const hasExplicitTranslation = (locale: Locale, source: string) => localizedValue(locale, source) !== undefined;
+export const hasTranslation = (locale: Locale, source: string) => locale === "en" || hasExplicitTranslation(locale, source);
 export const translate = (locale: Locale, source: string, params: TranslationParams = {}) => {
-  const text = locale === "en" ? source : localizedValue(locale, source) ?? source;
+  const text = localizedValue(locale, source) ?? localeCatalog.en?.[source] ?? source;
   return text.replace(/\{(\w+)\}/g, (placeholder, name: string) => Object.hasOwn(params, name) ? String(params[name]) : placeholder);
 };
 export const useLocale = () => {
-  const [locale, setLocale] = useState<Locale>(() => resolveLocale(navigator.languages?.length ? navigator.languages : [navigator.language], localStorage.getItem(STORAGE_KEY)));
-  const [automatic, setAutomatic] = useState(() => !localStorage.getItem(STORAGE_KEY));
-  useEffect(() => { document.documentElement.lang = locale; }, [locale]);
-  useEffect(() => { const update = () => { const override = localStorage.getItem(STORAGE_KEY); setAutomatic(!override); setLocale(resolveLocale(navigator.languages?.length ? navigator.languages : [navigator.language], override)); }; window.addEventListener("cryptoid-language", update); window.addEventListener("languagechange", update); return () => { window.removeEventListener("cryptoid-language", update); window.removeEventListener("languagechange", update); }; }, []);
-  const choose = (next: Locale | null) => { if (next) localStorage.setItem(STORAGE_KEY, next); else localStorage.removeItem(STORAGE_KEY); setAutomatic(!next); setLocale(resolveLocale(navigator.languages?.length ? navigator.languages : [navigator.language], next)); window.dispatchEvent(new Event("cryptoid-language")); };
+  const [locale, setLocale] = useState<Locale>(() => resolveLocale(deviceLanguages(), languagePreferences.read()));
+  const [automatic, setAutomatic] = useState(() => !languagePreferences.read());
+  useEffect(() => {
+    document.documentElement.lang = documentLanguage(locale);
+    document.documentElement.dir = localeDirection(locale);
+    document.documentElement.dataset.complexScript = String(complexScript(locale));
+  }, [locale]);
+  useEffect(() => {
+    const update = () => {
+      const override = languagePreferences.read();
+      setAutomatic(!override);
+      setLocale(resolveLocale(deviceLanguages(), override));
+    };
+    const storageUpdate = (event: StorageEvent) => {
+      if (event.key === LANGUAGE_STORAGE_KEY || event.key === null) { languagePreferences.refresh(); update(); }
+    };
+    window.addEventListener('cryptoid-language', update);
+    window.addEventListener('languagechange', update);
+    window.addEventListener('storage', storageUpdate);
+    return () => {
+      window.removeEventListener('cryptoid-language', update);
+      window.removeEventListener('languagechange', update);
+      window.removeEventListener('storage', storageUpdate);
+    };
+  }, []);
+  const choose = (next: Locale | null) => {
+    languagePreferences.write(next);
+    const override = languagePreferences.read();
+    setAutomatic(!override);
+    setLocale(resolveLocale(deviceLanguages(), override));
+    window.dispatchEvent(new Event('cryptoid-language'));
+  };
   return { locale, automatic, choose, lives: (count: number) => formatLives(locale, count), t: (source: string, params?: TranslationParams) => translate(locale, source, params) };
 };
