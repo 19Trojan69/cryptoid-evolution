@@ -1,5 +1,7 @@
 export const sevenPackageTranslations: Record<string, Record<string, string>> = {
   "de": {
+    "Im Pi-Blockchain-Explorer öffnen": "Im Pi-Blockchain-Explorer öffnen",
+    "Technische Rohdaten (API)": "Technische Rohdaten (API)",
     "This page could not be loaded.": "Diese Seite konnte nicht geladen werden.",
     "Reload to open the current version. Your saved data is preserved.": "Lade die aktuelle Version neu. Deine gespeicherten Daten bleiben erhalten.",
     "Reload page": "Seite neu laden",
@@ -55,6 +57,8 @@ export const sevenPackageTranslations: Record<string, Record<string, string>> = 
     "Problem reports": "Problemmeldungen"
   },
   "es": {
+    "Im Pi-Blockchain-Explorer öffnen": "Abrir en el explorador de la cadena de Pi",
+    "Technische Rohdaten (API)": "Datos técnicos sin procesar (API)",
     "This page could not be loaded.": "No se pudo cargar esta página.",
     "Reload to open the current version. Your saved data is preserved.": "Recarga para abrir la versión actual. Tus datos guardados se conservan.",
     "Reload page": "Recargar página",
@@ -110,6 +114,8 @@ export const sevenPackageTranslations: Record<string, Record<string, string>> = 
     "Problem reports": "Informes de problemas"
   },
   "zh": {
+    "Im Pi-Blockchain-Explorer öffnen": "在 Pi 区块链浏览器中打开",
+    "Technische Rohdaten (API)": "技术原始数据（API）",
     "This page could not be loaded.": "无法加载此页面。",
     "Reload to open the current version. Your saved data is preserved.": "请重新加载以打开当前版本。已保存的数据会保留。",
     "Reload page": "重新加载页面",
@@ -165,6 +171,8 @@ export const sevenPackageTranslations: Record<string, Record<string, string>> = 
     "Problem reports": "问题报告"
   },
   "vi": {
+    "Im Pi-Blockchain-Explorer öffnen": "Mở trong trình khám phá chuỗi khối Pi",
+    "Technische Rohdaten (API)": "Dữ liệu kỹ thuật thô (API)",
     "This page could not be loaded.": "Không thể tải trang này.",
     "Reload to open the current version. Your saved data is preserved.": "Tải lại để mở phiên bản hiện tại. Dữ liệu đã lưu của bạn được giữ nguyên.",
     "Reload page": "Tải lại trang",
@@ -220,6 +228,8 @@ export const sevenPackageTranslations: Record<string, Record<string, string>> = 
     "Problem reports": "Báo cáo sự cố"
   },
   "en": {
+    "Im Pi-Blockchain-Explorer öffnen": "Open in Pi blockchain explorer",
+    "Technische Rohdaten (API)": "Technical raw data (API)",
     "This page could not be loaded.": "This page could not be loaded.",
     "Reload to open the current version. Your saved data is preserved.": "Reload to open the current version. Your saved data is preserved.",
     "Reload page": "Reload page",
