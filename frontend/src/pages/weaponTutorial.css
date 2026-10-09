@@ -11,7 +11,7 @@
 .weapon-demo-finger { position: absolute; left: calc(50% + 8px); top: 73px; width: 32px; height: 40px; color: #f5ead4; opacity: 0; animation: weapon-demo-touch 2s ease both; }
 .weapon-demo-twin { animation: weapon-demo-reveal 2s step-end both; }
 .weapon-demo-tap .weapon-demo-single { animation: weapon-demo-hide 2s step-end both; }
-.weapon-demo-hold .weapon-demo-finger { animation-delay: 2s; animation-duration: 2.8s; }
+.weapon-demo-select .weapon-demo-finger { animation-delay: 2s; animation-duration: 2.8s; }
 .weapon-demo-menu { position: absolute; top: 0; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; padding: 7px 13px; border-radius: 12px; background: #26384d; box-shadow: 0 0 12px #e6d4aa30; animation: weapon-demo-reveal 5s step-end both; }
 .weapon-demo figcaption { color: #dce5ee; font-size: 14px; line-height: 1.5; }
 .weapon-demo figcaption b { color: #e6d4aa; }

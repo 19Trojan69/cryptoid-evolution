@@ -18,9 +18,9 @@ const weaponLabels: Record<BossWeaponKind, [string, string]> = {
 };
 
 export default function BossDossier({ id, stars, onClose }: { id: number; stars: number; onClose: () => void }) {
-  const { locale } = useLocale();
+  const { locale, t } = useLocale();
   const de = locale.toLowerCase().startsWith('de');
-  const say = (german: string, english: string) => de ? german : english;
+  const say = (german: string, english: string) => de ? german : t(english);
   const dialog = useRef<HTMLDialogElement>(null);
   const close = useRef<HTMLButtonElement>(null);
   const lore = bossLore(id, locale);
@@ -50,7 +50,7 @@ export default function BossDossier({ id, stars, onClose }: { id: number; stars:
       </header>
       <div className="boss-dossier-scroll" tabIndex={0} aria-label={say('Schiffsgeschichte und Kampfdaten', 'Ship story and combat data')}>
         <figure className="boss-dossier-hero"><BossPortrait id={id} /><figcaption>{say('Aktuelles Schiff mit montierten Geschützen', 'Current ship with mounted weapons')}</figcaption></figure>
-        <p className="boss-dossier-stars" aria-label={say(`${stars} von 3 Sternen`, `${stars} of 3 stars`)}>{'★'.repeat(Math.min(3, stars))}{'☆'.repeat(Math.max(0, 3 - stars))} <span>{say('Deine Auszeichnung', 'Your award')}</span></p>
+        <p className="boss-dossier-stars" aria-label={say(`${stars} von 3 Sternen`, t("{value0} of 3 stars", {value0: stars}))}>{'★'.repeat(Math.min(3, stars))}{'☆'.repeat(Math.max(0, 3 - stars))} <span>{say('Deine Auszeichnung', 'Your award')}</span></p>
         <section aria-labelledby="boss-lore-heading"><h3 id="boss-lore-heading">{say('Die Geschichte', 'The story')}</h3>
           <p className="boss-dossier-note">{say('Fiktive Geschichte aus dem Cryptoid-Universum. Keine zusätzlichen Kampffähigkeiten.', 'Fiction from the Cryptoid universe. Does not add combat abilities.')}</p>
           {lore.story.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
@@ -70,8 +70,8 @@ export default function BossDossier({ id, stars, onClose }: { id: number; stars:
             const left = gun.sourceX / config.sourceWidth;
             const position = left < .4 ? say('Links', 'Left') : left > .6 ? say('Rechts', 'Right') : say('Mitte', 'Centre');
             const full = gun.interval * (2500 - difficulty.progress * 420) / 2500 * pressure.cadenceScale;
-            return <li key={gun.key}><h5><span className="boss-dossier-swatch" style={{ backgroundColor: gun.shotColor }} />{index + 1}. {de ? gun.name : weaponLabels[gun.kind][1]} · {position}</h5>
-              <p>{weaponLabels[gun.kind][de ? 0 : 1]} · {say('Kaliber', 'Calibre')} {gun.caliber} · {gun.barrels.length} {say('Läufe', 'barrels')} · {gun.rows} {say('Salvenreihen', 'volley rows')}</p>
+            return <li key={gun.key}><h5><span className="boss-dossier-swatch" style={{ backgroundColor: gun.shotColor }} />{index + 1}. {de ? gun.name : t(weaponLabels[gun.kind][1])} · {position}</h5>
+              <p>{de ? weaponLabels[gun.kind][0] : t(weaponLabels[gun.kind][1])} · {say('Kaliber', 'Calibre')} {gun.caliber} · {gun.barrels.length} {say('Läufe', 'barrels')} · {gun.rows} {say('Salvenreihen', 'volley rows')}</p>
               <p>{say('Panzerung', 'Armour')}: {turretHealth(id, gun)} {say('LP', 'HP')} · {say('Salvenpause', 'Volley delay')}: {format(full)} s</p>
             </li>;
           })}</ol>

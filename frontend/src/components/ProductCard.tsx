@@ -1,3 +1,4 @@
+import { useLocale } from "../i18n";
 interface ProductCardProps {
   name: string;
   description: string;
@@ -17,21 +18,22 @@ const ProductCard = ({
   onClickBuyWithIrra,
   disabled,
 }: ProductCardProps) => {
+  const { t } = useLocale();
   return (
     <article className="product-card">
       <div className="product-image-wrap">
           <img className="product-image" src={pictureURL} alt={name} />
-          <span className="product-badge">POWER ITEM</span>
+          <span className="product-badge">{t("POWER ITEM")}</span>
         </div>
       <div className="product-info">
-        <div><h3>{name}</h3><p>{description}</p></div>
+        <div><h3>{t(name)}</h3><p>{t(description)}</p></div>
         <strong>{price} <small>Pi</small></strong>
       </div>
       <div className="payment-actions">
-        <button className="payment-button payment-pi" onClick={onClickBuyWithPi} disabled={disabled}>Pay with Pi <span>↗</span></button>
-        <button className="payment-button" onClick={onClickBuyWithIrra} disabled={disabled}>Pay with IRRA <span>↗</span></button>
+        <button className="payment-button payment-pi" onClick={onClickBuyWithPi} disabled={disabled}>{t("Pay with Pi")} <span>↗</span></button>
+        <button className="payment-button" onClick={onClickBuyWithIrra} disabled={disabled}>{t("Pay with IRRA")} <span>↗</span></button>
       </div>
-      <p className="payment-note">IRRA pricing is for demo purposes.</p>
+      <p className="payment-note">{t("IRRA pricing is for demo purposes.")}</p>
     </article>
   );
 };

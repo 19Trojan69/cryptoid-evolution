@@ -1,6 +1,6 @@
 // Real handlers, isolated account and local-only Vite hooks; never live purchases.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),{createRequire}=require('node:module');
-const {chromium}=require(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES+'/playwright');
+const {chromium}=require(process.env.PLAYWRIGHT_MODULE_PATH || 'playwright');
 const repo=path.resolve(__dirname,'../..'),testFile=path.join(repo,'backend/src/handlers/progress.test.mjs'),req=createRequire(testFile);
 const src=fs.readFileSync(testFile,'utf8').split('const get =')[1].split('const snapshot =')[0];
 const harness=new Function('require','const get ='+src+'\nreturn harness;')(req);

@@ -116,7 +116,7 @@ test('cookie-less save requests restore only the authenticated active run and re
   h.profile().lastStart.runMeta.startedAt = Date.now() - 9 * 60 * 60 * 1000;
   assert.equal((await h.call('rewards', '/event', body, { session: fresh() })).code, 403);
   h.profile().lastStart.runMeta.startedAt = Date.now() - 10_000;
-  const final = { runId, score: 100, finished: true, save: snapshot({ score: 100, shards: 10, destroyed: 10 }) };
+  const final = { runId, score: 100, finished: true, save: snapshot({ score: 100, shards: 10, destroyed: 10, hearts: 0 }) };
   assert.equal((await h.call('leaderboard', '/score', final, { session: fresh() })).code, 200);
   assert.equal(h.profile().balance, 10);
   assert.equal((await h.call('rewards', '/event', body, { session: fresh() })).code, 403);
@@ -311,6 +311,18 @@ const combat = (changes = {}) => ({
   formationStarted: false, slots: null, escortSlots: null, ...changes,
 });
 
+test('power-up history survives a checkpoint and legacy saves remain readable', async () => {
+  const h = harness(); await init(h); await start(h);
+  const runId = h.session.scoreRun.id;
+  const c = combat(); c.state.powerUpTypes = ['shield', 'rapid']; c.refs.dropsCreated = 2;
+  assert.equal((await h.call('progress', '/checkpoint', { runId, combat: c, save: snapshot() })).code, 200);
+  assert.deepEqual(h.profile().mission.combat.state.powerUpTypes, ['shield', 'rapid']);
+  const invalid = combat({ sequence: 2 }); invalid.state.powerUpTypes = ['shield', 'shield'];
+  assert.equal((await h.call('progress', '/checkpoint', { runId, combat: invalid, save: snapshot() })).code, 400);
+  const legacy = combat({ sequence: 2 });
+  assert.equal((await h.call('progress', '/checkpoint', { runId, combat: legacy, save: snapshot() })).code, 200);
+});
+
 test('defeated boss waits across save/resume; pickup commits one heart and then bonus', async () => {
   const h=harness(); await init(h); await start(h);
   let runId=h.session.scoreRun.id;
@@ -388,6 +400,17 @@ test('new score rules preserve legacy high scores and separate network records',
   assert.equal(h.docs[0].bestScore, 9000);
   assert.equal(h.docs[0].bestScoreV2.testnet, 100);
   assert.equal(h.docs[0].bestScoreV2.mainnet, undefined);
+  assert.equal(h.docs[0].careerScoreByNetwork.testnet, 100);
+  assert.deepEqual(h.docs[0].bestRunByNetwork.testnet, { score: 100, level: 1 });
+  assert.equal(h.docs[0].careerScoreByNetwork.mainnet, undefined);
+  assert.equal((await h.call('leaderboard', '/score', { runId, score: 100, finished: true, save: snapshot({ score: 100, hearts: 0 }) })).code, 403);
+  const second = await start(h, 'new', 'second-score-run-0000001');
+  assert.equal(second.code, 200);
+  const secondId = second.body.scoreRunId;
+  assert.equal((await h.call('leaderboard', '/score', { runId: secondId, score: 80, finished: true, save: snapshot({ score: 80, hearts: 0 }) })).code, 200);
+  assert.equal(h.docs[0].careerScoreByNetwork.testnet, 180);
+  assert.deepEqual(h.docs[0].bestRunByNetwork.testnet, { score: 100, level: 1 });
+  assert.equal((await h.call('leaderboard', '/me', null, {method: 'GET'})).body.careerScore, 180);
 });
 
 test('unfinished bonus restores hits and targets without paying the bonus twice', async () => {

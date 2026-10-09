@@ -1,3 +1,5 @@
+import { translate, hasTranslation } from '../i18n.ts';
+import { normalizeLocale } from '../locales/config.ts';
 /** Fictional enemy dossiers. Index + 1 is the stable reward/boss id, never originalId. */
 export type BossLore = { title: string; story: string[] };
 const entry = (title: string, story: string): BossLore => ({ title, story: story.split('|') });
@@ -107,7 +109,11 @@ export const bossLoreEn: readonly BossLore[] = [
   entry('The Lord of False Truth', 'Drazevorn was assembled from abandoned command decks. Its archives unite the earlier enemies’ deceptions: stolen names, false chronicles and sealed evidence. It symbolises an order in which one voice alone decides what is true.|Its mission is to subordinate every free node to a single hostile register. Memories need not vanish if nobody can check them independently. Defeating Drazevorn ends that claim. The final victory belongs to participants who can once again compare, disagree and choose trust together.'),
 ];
 export function bossLore(id: number, locale: string): BossLore | undefined {
-  return (locale.toLowerCase().startsWith('de') ? bossLoreDe : bossLoreEn)[id - 1];
+  const language=normalizeLocale(locale)??'en';
+  const dossier=(language==='de'?bossLoreDe:bossLoreEn)[id-1];
+  if(!dossier||language==='de'||language==='en')return dossier;
+  if(![dossier.title,...dossier.story].some(text=>hasTranslation(language,text)))return dossier;
+  return {title:translate(language,dossier.title),story:dossier.story.map(text=>translate(language,text))};
 }
-/** Dossiers currently ship in German and English; other locales use English. */
-export const bossDossierLabel = (locale: string) => locale.toLowerCase().startsWith('de') ? 'Feindakte öffnen ↗' : 'Open dossier ↗';
+/** Missing dossier translations use the English source until the release gate passes. */
+export const bossDossierLabel = (locale: string) => locale.toLowerCase().startsWith('de') ? 'Feindakte öffnen ↗' : translate(normalizeLocale(locale)??'en','Open dossier ↗');

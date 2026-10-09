@@ -1,3 +1,4 @@
+import { useLocale } from "../i18n";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -10,6 +11,7 @@ import { redirectToLaunchpad } from "../utils/redirectToLaunchpad.ts";
 const COOLDOWN_DURATION_MS = 5 * 1000 * 60;
 
 const EngagementTasksPage = () => {
+  const { t } = useLocale();
   const onBackToLaunchpad = () => {
     redirectToLaunchpad();
   };
@@ -21,17 +23,11 @@ const EngagementTasksPage = () => {
       <ScrollableContainer flex={1} paddingBottom={120}>
         <Box px={2} pt={3} pb={1}>
           <Typography fontSize={18} fontWeight={700} color="black">
-            Demo App Tasks
-          </Typography>
+            {t("Demo App Tasks")} </Typography>
           <Typography mt={1} variant="body2" color="#88828B" lineHeight={1.6}>
-            Engagement is a broad concept, like visiting the app to taking specific actions within its interface. In the
-            future, individual apps will guide you through the specific interactions that define their unique engagement
-            criteria.
-          </Typography>
+            {t("Engagement is a broad concept, like visiting the app to taking specific actions within its interface. In the future, individual apps will guide you through the specific interactions that define their unique engagement criteria.")} </Typography>
           <Typography mt={2} variant="body2" color="#88828B" lineHeight={1.6}>
-            To demonstrate this mechanism on the Testnet, we have simplified the process: for this test app, engagement
-            is defined by simply pushing the buttons below.
-          </Typography>
+            {t("To demonstrate this mechanism on the Testnet, we have simplified the process: for this test app, engagement is defined by simply pushing the buttons below.")} </Typography>
         </Box>
 
         <Box px={2} py={2} display="grid" gap={1.5}>
@@ -61,19 +57,17 @@ const EngagementTasksPage = () => {
             </Box>
             <Box flex={1}>
               <Typography fontSize={14} fontWeight={700} color="black">
-                Tap the Button
-              </Typography>
+                {t("Tap the Button")} </Typography>
               <Typography variant="body2" color="#88828B" mt={0.5}>
-                Complete this activity to earn points
-              </Typography>
+                {t("Complete this activity to earn points")} </Typography>
             </Box>
             <TaskActionButton
               cooldownMs={COOLDOWN_DURATION_MS}
               storageKey="engagement_task_tap_cooldown"
               onTap={onTapTask}
-              tapLabel="Tap"
-              refreshLabel="Refresh"
-              unlockInLabel={countdown => `Unlock ${countdown}`}
+              tapLabel={t("Tap")}
+              refreshLabel={t("Refresh")}
+              unlockInLabel={countdown => t("Unlock {countdown}", { countdown })}
             />
           </Box>
 
@@ -103,19 +97,17 @@ const EngagementTasksPage = () => {
             </Box>
             <Box flex={1}>
               <Typography fontSize={14} fontWeight={700} color="black">
-                Tap the new button
-              </Typography>
+                {t("Tap the new button")} </Typography>
               <Typography variant="body2" color="#88828B" mt={0.5}>
-                New engagement task available
-              </Typography>
+                {t("New engagement task available")} </Typography>
             </Box>
             <TaskActionButton
               cooldownMs={COOLDOWN_DURATION_MS}
               storageKey="engagement_task_new_button_cooldown"
               onTap={onTapTask}
-              tapLabel="Tap"
-              refreshLabel="Refresh"
-              unlockInLabel={countdown => `Unlock ${countdown}`}
+              tapLabel={t("Tap")}
+              refreshLabel={t("Refresh")}
+              unlockInLabel={countdown => t("Unlock {countdown}", { countdown })}
             />
           </Box>
         </Box>
@@ -123,8 +115,7 @@ const EngagementTasksPage = () => {
 
       <FixedBottomButtonsContainer>
         <Button variant="contained" size="large" fullWidth onClick={onBackToLaunchpad}>
-          Return to Launchpad
-        </Button>
+          {t("Return to Launchpad")} </Button>
       </FixedBottomButtonsContainer>
     </>
   );

@@ -5,6 +5,7 @@ import path from 'node:path';
 import ts from 'typescript';
 import { formatLives } from './locales/quantities.ts';
 import { languages, hasTranslation, translate, resolveLocale } from './i18n.ts';
+import { completeLanguages } from './locales/config.ts';
 
 const sourceRoot = path.dirname(new URL(import.meta.url).pathname);
 const rawUiTexts = [];
@@ -69,16 +70,28 @@ for (const [file, fields] of [
   visit(ast);
 }
 const placeholders = text => [...text.matchAll(/\{(\w+)\}/g)].map(match => match[1]).sort();
-for (const locale of Object.keys(languages)) {
+for (const locale of completeLanguages) {
   test(`${locale}: every player UI key has a translation and preserves its placeholders`, () => {
-    const missing = [...required].filter(key => !hasTranslation(locale, key));
+    const keys = [...required];
+    const missing = keys.filter(key => !hasTranslation(locale, key));
     assert.deepEqual(missing, [], `${locale}: missing translations`);
-    for (const key of required) {
+    for (const key of keys) {
       assert.deepEqual(placeholders(translate(locale, key)), placeholders(key), `${locale}: ${key}`);
       if (locale !== 'en' && key.length > 90) assert.notEqual(translate(locale, key), key, `${locale}: untranslated prose`);
     }
   });
 }
+test('legacy locales remain selectable and use existing translations with English fallback', () => {
+  const legacy = ['fr', 'pt', 'it', 'pl', 'tr', 'ru', 'hr', 'cs', 'sk', 'hu', 'ro', 'sr', 'uk', 'th'];
+  for (const locale of legacy) {
+    assert.ok(languages[locale], `${locale} is selectable`);
+    assert.equal(resolveLocale([`${locale}-XX`]), locale);
+    assert.ok(hasTranslation(locale, 'Play'), `${locale} keeps its existing play label`);
+    assert.deepEqual(placeholders(translate(locale, 'Resume at section {section} · {phase} · {hearts} lives · {score} points.')), ['hearts', 'phase', 'score', 'section']);
+  }
+  assert.equal(translate('th', 'Untranslated future message {count}'), 'Untranslated future message {count}');
+});
+
 test('English mission resume contains no German source text', () => {
   const description = 'Completed sections stay saved in your Pi account. An unfinished section restarts when you resume.';
   const text = ['Your mission', description, 'Resume', 'New game', 'Back'].map(key => translate('en', key)).join(' ');
@@ -96,9 +109,22 @@ test('interpolation handles all repeated values and a locale change preserves li
 });
 test('automatic language choice and manual override resolve supported locales', () => {
   assert.equal(resolveLocale(['en-US', 'de-AT']), 'en');
-  assert.equal(resolveLocale(['en-US'], 'th'), 'th');
+  assert.equal(resolveLocale(['en-US'], 'zh-CN'), 'zh');
+  assert.equal(resolveLocale(['es-MX']), 'es');
+  assert.equal(resolveLocale(['fr-CA']), 'fr');
+  assert.equal(resolveLocale(['pt-BR']), 'pt');
+  assert.equal(resolveLocale(['zh-Hant-TW', 'vi-VN']), 'vi');
+  assert.equal(resolveLocale(['zh-TW']), 'en');
+  assert.equal(resolveLocale(['th-TH']), 'th');
+  assert.equal(resolveLocale(['de-AT'], 'th'), 'th');
   assert.equal(resolveLocale(['de-AT']), 'de');
   assert.equal(resolveLocale(['xx-ZZ']), 'en');
+});
+
+test('the picker includes the original 17 languages plus Chinese and Vietnamese', () => {
+  assert.deepEqual(Object.keys(languages), ['en', 'de', 'es', 'fr', 'pt', 'it', 'pl', 'tr', 'ru', 'hr', 'cs', 'sk', 'hu', 'ro', 'sr', 'uk', 'th', 'zh', 'vi']);
+  assert.equal(translate('th', 'Play'), 'เล่น');
+  assert.equal(resolveLocale(['th-TH', 'zh-Hans-CN']), 'th');
 });
 
 test('remaining lives use the correct singular and plural forms', () => {

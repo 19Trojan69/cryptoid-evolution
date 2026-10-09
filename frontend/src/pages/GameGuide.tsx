@@ -53,14 +53,17 @@ const topics = [
     intro: "Fly through glowing drops to collect boosts that activate immediately.",
     details: [
       "Shield absorbs hits, Overdrive doubles shot damage, Rapid Fire increases the firing rate and Weapon Upgrade raises the weapon stage. A short message explains each effect when collected.",
-      "Weapon stages go from the free single laser to twin, rapid twin, triple and plasma fire. Nova Bomb clears visible enemies and shots; EMP freezes enemies briefly.",
-      "Select owned Test-Pi weapons during the mission with the side button. Their outer ring shows the remaining time without a seconds counter; when it empties, the weapon disappears. Hold the button to see all owned weapons.",
+      "Weapon stages go from the free single laser to twin, rapid twin, triple and plasma fire.",
+      "Nova Bomb destroys visible enemies and shots, hitting boss turrets before the exposed hull. EMP disables enemy weapons for seven seconds without stopping ships or shots.",
+      "Open the side Weapons tab to choose equipment. Closing it resumes the mission after 3–2–1.",
+      "When a timed weapon expires, the strongest enabled weapon takes over; otherwise the standard laser. Auto-reload uses owned charges without pausing.",
       "Collected weapon upgrades activate immediately. If another timed weapon is available, its own side button lets you switch between them. Previously owned start boosts have a separate activation button.",
+      "Free boosts can appear throughout the campaign, but each type appears only once per level.",
     ],
   },
   {
     id: "earnings", label: "Rewards", title: "Shards, points and bonus targets",
-    intro: "Defeated enemies earn points and in-game Shards. Shards are added to your balance at mission end.",
+    intro: "Defeated enemies earn points and in-game Shards. The HUD shows your previous Shard balance plus this mission's earnings.",
     details: [
       "Two defeats within 500 ms: +50 Score and +20 Shards.",
       "Every defeat counts in only one pair. Four simultaneous defeats earn two combos; an unpaired third defeat can start the next pair. Combos also apply in boss battles and bonus rounds.",
@@ -94,7 +97,7 @@ const topics = [
     id: "features", label: "Progress & settings", title: "Find your way around",
     intro: "The home screen opens Hangar, Shop, Weapons, Power-ups, Progress, Rewards and Top 100.",
     details: [
-      "Progress shows your best score, highest stage and defeated enemies. Rewards shows your collection and service rank; Top 100 lists online high scores with each player's rank.",
+      "Progress shows Career Score, Best Run with its level, highest stage and defeated enemies. Rewards shows your collection and service rank; Top 100 ranks verified completed runs by Career Score. Earlier records remain available.",
       "In System, choose language, touch-control side, sensitivity and ship start height. Music, effects volume and reduced visual effects have their own controls.",
       "Signed-in players receive completed Rewards immediately in their Pi account. Admin test runs do not add collection progress.",
     ],

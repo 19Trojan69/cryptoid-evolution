@@ -25,13 +25,14 @@ import { requestGameFullscreen } from "./gameFullscreen";
 import { readEffectsVolume } from "./musicPreferences";
 import "./admin.css";
 import AdminUsage from "./AdminUsage";
-import { translate } from "../i18n";
+import { useLocale } from "../i18n";
 
 const tabs = [
   ["overview", "Übersicht"],
   ["ships", "Raumschiffe"],
   ["levels", "Levels & Bosse"],
   ["payments", "Zahlungseingänge"],
+  ["scores", "Eigene Rekorde"],
   ["usage", "Zugriffsstatistik"],
   ["checks", "Audio & Prüfung"],
 ] as const;
@@ -72,6 +73,7 @@ type AdminStatus = {
   services: { database: boolean; mainnetPayments: boolean; testnetPayments: boolean };
   game: { sections: number; levels: number; bosses: number; ships: number; stages: number };
 };
+type AdminScores = { network: "testnet" | "mainnet"; careerScore: number; bestRun: { score: number; level: number | null }; bestScore: number };
 const levelCount = campaignLevel(MAX_DIFFICULTY_LEVEL);
 const stageNames = ["Standard", "Advanced", "Elite"];
 const weaponNames = ["Single Laser", "Twin Laser", "Rapid Twin", "Triple Laser", "Plasma"];
@@ -113,6 +115,7 @@ const audioTests = [
 ] as const;
 
 export default function AdminPage() {
+  const { t } = useLocale();
   const auth = useAuth();
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
@@ -141,6 +144,9 @@ export default function AdminPage() {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [ownScores, setOwnScores] = useState<AdminScores | null>(null);
+  const [resetName, setResetName] = useState("");
+  const [resetChecked, setResetChecked] = useState(false);
   const [reload, setReload] = useState(0);
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -185,6 +191,16 @@ export default function AdminPage() {
       active = false;
     };
   }, [allowed, view, network, status, page, reload]);
+
+  useEffect(() => {
+    if (!allowed || view !== "scores") return;
+    let active = true;
+    setOwnScores(null);
+    axiosClient.get<AdminScores>("/leaderboard/me?rules=2")
+      .then(({ data }) => { if (active) setOwnScores(data); })
+      .catch((err: unknown) => { if (active) setError(errorMessage(err)); });
+    return () => { active = false; };
+  }, [allowed, view, reload]);
 
   useEffect(
     () => () => {
@@ -241,6 +257,18 @@ export default function AdminPage() {
       sessionStorage.removeItem(ADMIN_TEST_CONFIG_KEY);
       navigate("/");
     });
+  };
+  const resetOwnScores = () => {
+    if (!ownScores || !resetChecked || resetName !== auth.user?.username || busy) return;
+    setBusy(true); setError(""); setMessage("");
+    void axiosClient.post<AdminScores>("/admin/scores/reset", { network: ownScores.network, confirmUsername: resetName, confirm: true })
+      .then(({ data }) => {
+        setOwnScores(data); setResetName(""); setResetChecked(false);
+        setMessage(`Deine Rekorde im ${data.network === "testnet" ? "Testnet" : "Mainnet"} wurden zurückgesetzt.`);
+      })
+      .catch((err: unknown) => setError(axios.isAxiosError(err) && err.response?.status === 409
+        ? "Eine Mission ist noch aktiv. Beende sie vor dem Zurücksetzen." : errorMessage(err)))
+      .finally(() => setBusy(false));
   };
   const exportPayments = () => {
     void perform(async () => {
@@ -318,33 +346,31 @@ export default function AdminPage() {
           <img src="/trojan-wolf-games.webp" width="104" height="52" alt="Trojan Wolf Games" />
         </Link>
         <div>
-          <span className="admin-kicker">CRYPTOID EVOLUTION</span>
-          <h1>Admin-Zentrale</h1>
+          <span className="admin-kicker">{t("CRYPTOID EVOLUTION")}</span>
+          <h1>{t("Admin-Zentrale")}</h1>
         </div>
-        <Link className="admin-button" to="/" state={{ openQuickMenu: true }}>← Schnellzugriff</Link>
+        <Link className="admin-button" to="/" state={{ openQuickMenu: true }}>{t("← Schnellzugriff")}</Link>
         {allowed ? (
           <button className="admin-button" onClick={leaveAdmin} disabled={busy}>
-            Zum normalen Spiel
-          </button>
+            {t("Zum normalen Spiel")} </button>
         ) : (
           <Link className="admin-button" to="/">
-            Startseite
-          </Link>
+            {t("Startseite")} </Link>
         )}
       </header>
       {!auth.authReady ? (
         <section className="admin-panel" role="status">
-          <h2>Pi-Zugriff wird geprüft …</h2>
+          <h2>{t("Pi-Zugriff wird geprüft …")}</h2>
         </section>
       ) : !allowed ? (
         <section className="admin-panel admin-access">
-          <h2>{auth.user ? "Kein Admin-Zugriff" : "Mit deinem Pi-Konto anmelden"}</h2>
+          <h2>{auth.user ? t("Kein Admin-Zugriff") : t("Mit deinem Pi-Konto anmelden")}</h2>
           <p>
             {auth.user
-              ? `@${auth.user.username} ist für diesen Admin-Bereich nicht freigeschaltet.`
-              : "Die Admin-Zentrale ist nur für dein verifiziertes Eigentümerkonto zugänglich."}
+              ? t("@{value0} ist für diesen Admin-Bereich nicht freigeschaltet.", {value0: auth.user.username})
+              : t("Die Admin-Zentrale ist nur für dein verifiziertes Eigentümerkonto zugänglich.")}
           </p>
-          {auth.authError && <p role="alert">{translate("de", auth.authError)}</p>}
+          {auth.authError && <p role="alert">{t(auth.authError)}</p>}
           <div className="admin-actions">
             <button
               className="admin-button admin-primary"
@@ -353,8 +379,7 @@ export default function AdminPage() {
               }}
               disabled={auth.isLoading}
             >
-              Mit Pi anmelden
-            </button>
+              {t("Mit Pi anmelden")} </button>
             <button
               className="admin-button"
               onClick={() => {
@@ -364,8 +389,7 @@ export default function AdminPage() {
               }}
               disabled={busy}
             >
-              Sitzung erneut prüfen
-            </button>
+              {t("Sitzung erneut prüfen")} </button>
             {auth.user && (
               <button
                 className="admin-button"
@@ -373,13 +397,12 @@ export default function AdminPage() {
                   void auth.signOut();
                 }}
               >
-                Abmelden
-              </button>
+                {t("Abmelden")} </button>
             )}
           </div>
           {error && (
             <p role="alert" className="admin-error">
-              {error}
+              {t(error)}
             </p>
           )}
         </section>
@@ -387,9 +410,9 @@ export default function AdminPage() {
         <>
           <div className="admin-owner">
             <span>@{auth.user?.username}</span>
-            <span>Geschützter Eigentümerzugriff</span>
+            <span>{t("Geschützter Eigentümerzugriff")}</span>
           </div>
-          <nav className="admin-nav" aria-label="Admin-Seiten">
+          <nav className="admin-nav" aria-label={t("Admin-Seiten")}>
             {tabs.map(([key, label]) => (
               <button
                 key={key}
@@ -397,71 +420,70 @@ export default function AdminPage() {
                 aria-current={view === key ? "page" : undefined}
                 onClick={() => openView(key)}
               >
-                {label}
+                {t(label)}
               </button>
             ))}
           </nav>
           {error && (
             <p className="admin-error" role="alert">
-              {error}
+              {t(error)}
             </p>
           )}
           {auth.authError && (
             <p className="admin-error" role="alert">
-              {translate("de", auth.authError)}
+              {t(auth.authError)}
             </p>
           )}
           {message && (
             <p className="admin-message" role="status">
-              {message}
+              {t(message)}
             </p>
           )}
           {view === "usage" && <AdminUsage />}
           {view === "overview" && (
             <>
-              <section className="admin-shortcuts" aria-label="Schnellzugriff">
+              <section className="admin-shortcuts" aria-label={t("Schnellzugriff")}>
                 {[
                   ["ships", "Raumschiffe testen", "Alle 20 Modelle · Standard, Advanced und Elite"],
                   ["levels", "Level oder Boss starten", "Block, Bosskampf und Bonusrunde direkt öffnen"],
                   ["payments", "Zahlungseingänge ansehen", "Echte Pi, Test-Pi, Details und CSV-Download"],
+                  ["scores", "Eigene Rekorde", "Karrierepunkte und Best Run nur für dieses Netzwerk zurücksetzen"],
                 ].map(([key, title, description]) => (
                   <button key={key} onClick={() => openView(key as AdminView)}>
-                    <strong>{title}</strong>
-                    <span>{description}</span>
-                    <b>Öffnen</b>
+                    <strong>{t(title)}</strong>
+                    <span>{t(description)}</span>
+                    <b>{t("Öffnen")}</b>
                   </button>
                 ))}
               </section>
               <section className="admin-panel">
-                <h2>Bereit zum Testen</h2>
+                <h2>{t("Bereit zum Testen")}</h2>
                 <div className="admin-metrics">
                   <div>
                     <strong>20</strong>
-                    <span>Schiffsmodelle</span>
+                    <span>{t("Schiffsmodelle")}</span>
                   </div>
                   <div>
                     <strong>60</strong>
-                    <span>Schiffsstufen</span>
+                    <span>{t("Schiffsstufen")}</span>
                   </div>
                   <div>
                     <strong>50</strong>
-                    <span>Bosse</span>
+                    <span>{t("Bosse")}</span>
                   </div>
                   <div>
                     <strong>500</strong>
-                    <span>Spielabschnitte</span>
+                    <span>{t("Spielabschnitte")}</span>
                   </div>
                 </div>
                 <p>
-                  Der aktuelle Ablauf umfasst {levelCount} angezeigte Level mit jeweils neun Blocks, Boss und
-                  Bonusrunde.
-                </p>
-                <p>Admin-Testläufe schreiben keine Rekorde, Shards, Käufe oder Belohnungen gut.</p>
+                  {t("Der aktuelle Ablauf umfasst")} {levelCount} {t("angezeigte Level mit jeweils neun Blocks, Boss und Bonusrunde.")} </p>
+                <p>{t("Admin-Testläufe schreiben keine Rekorde, Shards, Käufe oder Belohnungen gut.")}</p>
               </section>
               <section className="admin-panel">
-                <h2>Bestätigte Zahlungseingänge</h2>
+                <h2>{t("Bestätigte Zahlungseingänge")}</h2>
                 {ledgerLoading ? (
-                  <p role="status">Zahlungen werden geladen …</p>
+                  <p role="status">{t("Zahlungen werden geladen …")}</p>
                 ) : ledgerError ? (
                   <p role="alert">{ledgerError}</p>
                 ) : (
@@ -480,11 +502,10 @@ export default function AdminPage() {
                         >
                           <strong>
                             {amount(summary?.confirmedPi ?? 0)}{" "}
-                            {key === "testnet" ? "Test-Pi" : key === "mainnet" ? "Pi" : ""}
+                            {key === "testnet" ? t("Test-Pi") : key === "mainnet" ? "Pi" : ""}
                           </strong>
                           <span>
-                            {networkNames[key]} · {summary?.confirmed ?? 0} bestätigt
-                            {summary?.missingAmounts ? ` · ${summary.missingAmounts} Beträge fehlen` : ""}
+                            {t(networkNames[key])} · {summary?.confirmed ?? 0} {t("bestätigt")} {summary?.missingAmounts ? t(" · {value0} Beträge fehlen", {value0: summary.missingAmounts}) : ""}
                           </span>
                         </button>
                       );
@@ -500,14 +521,13 @@ export default function AdminPage() {
                 <div className="admin-selected-hull">
                   <PaintedShip className="admin-hull" sprite={selectedSkin.sprite} stage={stage} color={colorId} />
                   <strong>{selectedSkin.name}</strong>
-                  <span>{stageNames[stage - 1]}</span>
+                  <span>{t(stageNames[stage - 1])}</span>
                 </div>
                 <div className="admin-test-options">
-                  <h2>Testauswahl</h2>
+                  <h2>{t("Testauswahl")}</h2>
                   <div className="admin-field-grid">
                     <label>
-                      Raumschiff
-                      <select aria-label="Raumschiff" value={skinId} onChange={event => setSkinId(event.target.value as PlayerSkinId)}>
+                      {t("Raumschiff")} <select aria-label={t("Raumschiff")} value={skinId} onChange={event => setSkinId(event.target.value as PlayerSkinId)}>
                         {playerSkins.map(skin => (
                           <option key={skin.id} value={skin.id}>
                             {skin.name}
@@ -516,29 +536,26 @@ export default function AdminPage() {
                       </select>
                     </label>
                     <label>
-                      Schiffsstufe
-                      <select aria-label="Schiffsstufe" value={stage} onChange={event => setStage(Number(event.target.value) as ShipStage)}>
+                      {t("Schiffsstufe")} <select aria-label={t("Schiffsstufe")} value={stage} onChange={event => setStage(Number(event.target.value) as ShipStage)}>
                         {stageNames.map((name, index) => (
                           <option key={name} value={index + 1}>
-                            {index + 1} · {name}
+                            {index + 1} · {t(name)}
                           </option>
                         ))}
                       </select>
                     </label>
                     <label>
-                      Waffe
-                      <select aria-label="Waffe" value={weapon} onChange={event => setWeapon(Number(event.target.value))}>
+                      {t("Waffe")} <select aria-label={t("Waffe")} value={weapon} onChange={event => setWeapon(Number(event.target.value))}>
                         {weaponNames.map((name, index) => (
                           <option key={name} value={index + 1}>
-                            {name}
+                            {t(name)}
                           </option>
                         ))}
                       </select>
                     </label>
                     <label>
-                      Start-Power-up
-                      <select aria-label="Start-Power-up" value={power} onChange={event => setPower(event.target.value)}>
-                        <option value="">Keines</option>
+                      {t("Start-Power-up")} <select aria-label={t("Start-Power-up")} value={power} onChange={event => setPower(event.target.value)}>
+                        <option value="">{t("Keines")}</option>
                         {hangarCatalog
                           .filter(offer => offer.kind === "power")
                           .map(offer => (
@@ -550,7 +567,7 @@ export default function AdminPage() {
                     </label>
                   </div>
                   <fieldset className="admin-colors">
-                    <legend>Schiffsfarbe</legend>
+                    <legend>{t("Schiffsfarbe")}</legend>
                     {playerColors.map(color => (
                       <button
                         key={color.id}
@@ -563,16 +580,15 @@ export default function AdminPage() {
                       />
                     ))}
                   </fieldset>
-                  <p>Alle Modelle, Stufen und Waffen stehen im Test zur Verfügung.</p>
+                  <p>{t("Alle Modelle, Stufen und Waffen stehen im Test zur Verfügung.")}</p>
                 </div>
               </section>
               {view === "ships" ? (
                 <section className="admin-panel">
                   <div className="admin-section-head">
-                    <h2>Alle Raumschiffe</h2>
+                    <h2>{t("Alle Raumschiffe")}</h2>
                     <button className="admin-button admin-primary" onClick={() => startTest("normal")} disabled={busy}>
-                      Ausgewähltes Schiff testen
-                    </button>
+                      {t("Ausgewähltes Schiff testen")} </button>
                   </div>
                   <div className="admin-fleet">
                     {playerSkins.map(skin => (
@@ -590,7 +606,7 @@ export default function AdminPage() {
                           loading="lazy"
                         />
                         <strong>{skin.name}</strong>
-                        <span>{stageNames[stage - 1]}</span>
+                        <span>{t(stageNames[stage - 1])}</span>
                       </button>
                     ))}
                   </div>
@@ -598,24 +614,22 @@ export default function AdminPage() {
               ) : (
                 <>
                   <section className="admin-panel">
-                    <h2>Direkt starten</h2>
+                    <h2>{t("Direkt starten")}</h2>
                     <div className="admin-field-grid">
                       <label>
-                        Level
-                        <select aria-label="Level" value={level} onChange={event => setLevel(Number(event.target.value))}>
+                        {t("Level")} <select aria-label={t("Level")} value={level} onChange={event => setLevel(Number(event.target.value))}>
                           {Array.from({ length: levelCount }, (_, index) => (
                             <option key={index} value={index + 1}>
-                              Level {index + 1}
+                              {t("Level")} {index + 1}
                             </option>
                           ))}
                         </select>
                       </label>
                       <label>
-                        Block
-                        <select aria-label="Block" value={block} onChange={event => setBlock(Number(event.target.value))}>
+                        {t("Block")} <select aria-label={t("Block")} value={block} onChange={event => setBlock(Number(event.target.value))}>
                           {Array.from({ length: 9 }, (_, index) => (
                             <option key={index} value={index + 1}>
-                              Block {index + 1}/9
+                              {t("Block")} {index + 1}/9
                             </option>
                           ))}
                         </select>
@@ -627,19 +641,16 @@ export default function AdminPage() {
                         onClick={() => startTest("normal")}
                         disabled={busy}
                       >
-                        Block starten
-                      </button>
+                        {t("Block starten")} </button>
                       <button className="admin-button" onClick={() => startTest("boss")} disabled={busy}>
-                        Boss starten
-                      </button>
+                        {t("Boss starten")} </button>
                       <button className="admin-button" onClick={() => startTest("bonus")} disabled={busy}>
-                        Bonusrunde starten
-                      </button>
+                        {t("Bonusrunde starten")} </button>
                     </div>
                   </section>
                   <section className="admin-panel">
-                    <h2>Alle 50 Bosse</h2>
-                    <p>Ein Button startet den jeweiligen Boss mit deiner Testauswahl.</p>
+                    <h2>{t("Alle 50 Bosse")}</h2>
+                    <p>{t("Ein Button startet den jeweiligen Boss mit deiner Testauswahl.")}</p>
                     <div className="admin-bosses">
                       {Array.from({ length: 50 }, (_, index) => (
                         <button
@@ -648,7 +659,7 @@ export default function AdminPage() {
                           onClick={() => startTest("boss", index + 1)}
                           disabled={busy}
                         >
-                          Boss {String(index + 1).padStart(2, "0")}
+                          {t("Boss")} {String(index + 1).padStart(2, "0")}
                         </button>
                       ))}
                     </div>
@@ -657,19 +668,27 @@ export default function AdminPage() {
               )}
             </>
           )}
+          {view === "scores" && <section className="admin-panel admin-score-reset">
+            <h2>{t("Eigene Rekorde zurücksetzen")}</h2>
+            {!ownScores ? !error && <p role="status">{t("Rekorde werden geladen …")}</p> : <>
+              <p>{t("Netzwerk:")} <strong>{ownScores.network === "testnet" ? "Testnet" : "Mainnet"}</strong> {t("· Konto:")} <strong>@{auth.user?.username}</strong></p>
+              <p>{t("Karrierepunkte:")} {ownScores.careerScore.toLocaleString("de-AT")} {t("· Bester Lauf:")} {ownScores.bestRun.score.toLocaleString("de-AT")} {t("(Level")} {ownScores.bestRun.level ?? "—"}{t(") · Bisheriger V2-Rekord:")} {ownScores.bestScore.toLocaleString("de-AT")}</p>
+              <p>{t("Nur deine Score-Werte in diesem Netzwerk werden auf null gesetzt. Spielstand, Shards, Käufe und das andere Netzwerk bleiben erhalten. Der ältere gemeinsame Archivrekord bleibt unverändert.")}</p>
+              <label>{t("Zur Bestätigung deinen Pi-Namen eingeben:")} <input type="text" value={resetName} onChange={event => setResetName(event.target.value)} autoComplete="off" /></label>
+              <label className="admin-score-confirm"><input type="checkbox" checked={resetChecked} onChange={event => setResetChecked(event.target.checked)} /> {t("Ich möchte meine Rekorde in diesem Netzwerk zurücksetzen.")}</label>
+              <div className="admin-actions"><button className="admin-button" type="button" disabled={busy || !resetChecked || resetName !== auth.user?.username} onClick={resetOwnScores}>{t("Eigene Rekorde zurücksetzen")}</button></div>
+            </>}
+          </section>}
           {view === "payments" && (
             <section className="admin-panel">
               <div className="admin-section-head">
-                <h2>Zahlungseingänge</h2>
+                <h2>{t("Zahlungseingänge")}</h2>
                 <button className="admin-button" onClick={() => setReload(value => value + 1)} disabled={ledgerLoading}>
-                  Aktualisieren
-                </button>
+                  {t("Aktualisieren")} </button>
               </div>
               <p>
-                App-Käufe und ihre Zahlungseingänge. Andere Überweisungen in deine private Wallet sind hier nicht
-                enthalten.
-              </p>
-              <div className="admin-network-switch" aria-label="Zahlungsnetzwerk">
+                {t("App-Käufe und ihre Zahlungseingänge. Andere Überweisungen in deine private Wallet sind hier nicht enthalten.")} </p>
+              <div className="admin-network-switch" aria-label={t("Zahlungsnetzwerk")}>
                 {(["mainnet", "testnet", "unknown"] as const).map(key => (
                   <button
                     key={key}
@@ -680,14 +699,13 @@ export default function AdminPage() {
                       setSelectedPayment(null);
                     }}
                   >
-                    {networkNames[key]}
+                    {t(networkNames[key])}
                   </button>
                 ))}
               </div>
               <div className="admin-payment-tools">
                 <label>
-                  Status
-                  <select aria-label="Status"
+                  {t("Status")} <select aria-label={t("Status")}
                     value={status}
                     onChange={event => {
                       setStatus(event.target.value as Status);
@@ -695,23 +713,21 @@ export default function AdminPage() {
                       setSelectedPayment(null);
                     }}
                   >
-                    <option value="all">Alle Vorgänge</option>
-                    <option value="confirmed">Bestätigte Eingänge</option>
-                    <option value="pending">Offen</option>
-                    <option value="cancelled">Storniert</option>
+                    <option value="all">{t("Alle Vorgänge")}</option>
+                    <option value="confirmed">{t("Bestätigte Eingänge")}</option>
+                    <option value="pending">{t("Offen")}</option>
+                    <option value="cancelled">{t("Storniert")}</option>
                   </select>
                 </label>
                 <button className="admin-button admin-primary" disabled={busy} onClick={exportPayments}>
-                  CSV herunterladen
-                </button>
+                  {t("CSV herunterladen")} </button>
               </div>
               {selectedPayment ? (
                 <div className="admin-payment-detail">
                   <div className="admin-section-head">
-                    <h3>Zahlungsdetails</h3>
+                    <h3>{t("Zahlungsdetails")}</h3>
                     <button className="admin-button" onClick={() => setSelectedPayment(null)}>
-                      Zur Liste
-                    </button>
+                      {t("Zur Liste")} </button>
                   </div>
                   <dl>
                     {[
@@ -733,19 +749,16 @@ export default function AdminPage() {
                       ["Beschreibung", selectedPayment.memo || "—"],
                     ].map(([label, value]) => (
                       <div key={label}>
-                        <dt>{label}</dt>
+                        <dt>{t(label)}</dt>
                         <dd>{value}</dd>
                       </div>
                     ))}
                   </dl>
                   <p>
-                    Wallet-Eingang = bestätigter Blockchain-Zeitpunkt. Der App-Abschluss wird getrennt angezeigt. Alle
-                    Uhrzeiten: Wien.
-                  </p>
+                    {t("Wallet-Eingang = bestätigter Blockchain-Zeitpunkt. Der App-Abschluss wird getrennt angezeigt. Alle Uhrzeiten: Wien.")} </p>
                   {selectedPayment.receiptSource && (
                     <a href={selectedPayment.receiptSource} target="_blank" rel="noreferrer" className="admin-button">
-                      Blockchain-Nachweis öffnen
-                    </a>
+                      {t("Blockchain-Nachweis öffnen")} </a>
                   )}
                   <div className="admin-actions">
                     {selectedPayment.network !== "Pi Testnet" && (
@@ -754,8 +767,7 @@ export default function AdminPage() {
                         disabled={busy}
                         onClick={() => refreshPayment(selectedPayment, "mainnet")}
                       >
-                        Mit Mainnet abgleichen
-                      </button>
+                        {t("Mit Mainnet abgleichen")} </button>
                     )}
                     {selectedPayment.network !== "Pi Network" && (
                       <button
@@ -763,26 +775,22 @@ export default function AdminPage() {
                         disabled={busy}
                         onClick={() => refreshPayment(selectedPayment, "testnet")}
                       >
-                        Mit Testnet abgleichen
-                      </button>
+                        {t("Mit Testnet abgleichen")} </button>
                     )}
                   </div>
                   {selectedPayment.network === "Pi Network" && selectedPayment.status === "confirmed" && (
                     <div className="admin-valuation">
-                      <h3>EUR-Bewertung am Wallet-Eingang</h3>
+                      <h3>{t("EUR-Bewertung am Wallet-Eingang")}</h3>
                       {selectedPayment.receivedAt ? (
                         <form
                           key={`${selectedPayment.id}:${selectedPayment.valuation?.recordedAt || ""}`}
                           onSubmit={event => saveValuation(event, selectedPayment)}
                         >
                           <p>
-                            Bewertungszeitpunkt: {date(selectedPayment.receivedAt)}. Trage den belegten Kurs dieses
-                            Zeitpunkts ein.
-                          </p>
+                            {t("Bewertungszeitpunkt:")} {date(selectedPayment.receivedAt)}{t(". Trage den belegten Kurs dieses Zeitpunkts ein.")} </p>
                           <div className="admin-field-grid">
                             <label>
-                              EUR je Pi
-                              <input
+                              {t("EUR je Pi")} <input
                                 name="rate"
                                 type="number"
                                 min="0.00000001"
@@ -793,18 +801,16 @@ export default function AdminPage() {
                               />
                             </label>
                             <label>
-                              Kursquelle
-                              <input
+                              {t("Kursquelle")} <input
                                 name="source"
                                 maxLength={500}
                                 required
                                 defaultValue={selectedPayment.valuation?.source}
-                                placeholder="Quelle oder Beleg zum historischen Kurs"
+                                placeholder={t("Quelle oder Beleg zum historischen Kurs")}
                               />
                             </label>
                             <label>
-                              Belegnummer
-                              <input
+                              {t("Belegnummer")} <input
                                 name="receipt"
                                 maxLength={100}
                                 defaultValue={selectedPayment.valuation?.receiptNumber}
@@ -813,7 +819,7 @@ export default function AdminPage() {
                           </div>
                           {selectedPayment.valuation && (
                             <p>
-                              Gespeicherter Gegenwert:{" "}
+                              {t("Gespeicherter Gegenwert:")}{" "}
                               {selectedPayment.valuation.eurAmount.toLocaleString("de-AT", {
                                 style: "currency",
                                 currency: "EUR",
@@ -821,31 +827,28 @@ export default function AdminPage() {
                             </p>
                           )}
                           <button className="admin-button" disabled={busy}>
-                            Bewertung speichern
-                          </button>
+                            {t("Bewertung speichern")} </button>
                         </form>
                       ) : (
                         <p>
-                          Bitte zuerst den Wallet-Eingang mit Mainnet abgleichen. Ein aktueller Kurs wird nicht als
-                          historischer Eingangskurs verwendet.
-                        </p>
+                          {t("Bitte zuerst den Wallet-Eingang mit Mainnet abgleichen. Ein aktueller Kurs wird nicht als historischer Eingangskurs verwendet.")} </p>
                       )}
                     </div>
                   )}
                 </div>
               ) : ledgerLoading ? (
-                <p role="status">Zahlungen werden geladen …</p>
+                <p role="status">{t("Zahlungen werden geladen …")}</p>
               ) : ledgerError ? (
                 <p role="alert" className="admin-error">
                   {ledgerError}
                 </p>
               ) : !ledger?.payments.length ? (
                 <div className="admin-empty">
-                  <h3>Keine Einträge für diese Auswahl</h3>
+                  <h3>{t("Keine Einträge für diese Auswahl")}</h3>
                   <p>
                     {network === "unknown"
-                      ? "Ältere Vorgänge ohne gesicherte Netzwerkangabe erscheinen hier."
-                      : `Noch keine ${networkNames[network]}-Zahlungen für diesen Filter gespeichert.`}
+                      ? t("Ältere Vorgänge ohne gesicherte Netzwerkangabe erscheinen hier.")
+                      : t("Noch keine {value0}-Zahlungen für diesen Filter gespeichert.", {value0: networkNames[network]})}
                   </p>
                 </div>
               ) : (
@@ -857,20 +860,20 @@ export default function AdminPage() {
                           <strong>{payment.productName}</strong>
                           <span>
                             {payment.receivedAt
-                              ? `Wallet-Eingang: ${date(payment.receivedAt)}`
-                              : `App-Vorgang: ${date(payment.completedAt || payment.createdAt)}`}
+                              ? t("Wallet-Eingang: {value0}", {value0: date(payment.receivedAt)})
+                              : t("App-Vorgang: {value0}", {value0: date(payment.completedAt || payment.createdAt)})}
                           </span>
                         </div>
                         <div>
                           <strong>
                             {amount(payment.amountPi)}
-                            {payment.amountPi === null ? "" : network === "testnet" ? " Test-Pi" : " Pi"}
+                            {payment.amountPi === null ? "" : network === "testnet" ? t(" Test-Pi") : " Pi"}
                           </strong>
                           <span className={`admin-payment-status ${payment.status}`}>
-                            {statusNames[payment.status]}
+                            {t(statusNames[payment.status])}
                           </span>
                         </div>
-                        <b>Details</b>
+                        <b>{t("Details")}</b>
                       </button>
                     ))}
                   </div>
@@ -880,18 +883,15 @@ export default function AdminPage() {
                       disabled={page <= 1 || ledgerLoading}
                       onClick={() => setPage(value => value - 1)}
                     >
-                      Vorherige
-                    </button>
+                      {t("Vorherige")} </button>
                     <span>
-                      Seite {page} / {Math.max(1, Math.ceil(ledger.total / ledger.pageSize))} · {ledger.total} Einträge
-                    </span>
+                      {t("Seite")} {page} / {Math.max(1, Math.ceil(ledger.total / ledger.pageSize))} · {ledger.total} {t("Einträge")} </span>
                     <button
                       className="admin-button"
                       disabled={page * ledger.pageSize >= ledger.total || ledgerLoading}
                       onClick={() => setPage(value => value + 1)}
                     >
-                      Nächste
-                    </button>
+                      {t("Nächste")} </button>
                   </div>
                 </>
               )}
@@ -901,7 +901,7 @@ export default function AdminPage() {
             <>
               <section className="admin-panel">
                 <div className="admin-section-head">
-                  <h2>Zugriff & Verbindung</h2>
+                  <h2>{t("Zugriff & Verbindung")}</h2>
                   <button
                     className="admin-button"
                     disabled={busy}
@@ -913,46 +913,45 @@ export default function AdminPage() {
                       });
                     }}
                   >
-                    Sitzung prüfen
-                  </button>
+                    {t("Sitzung prüfen")} </button>
                 </div>
                 <dl className="admin-checks">
                   <div>
-                    <dt>Eigentümerkonto</dt>
-                    <dd>@{auth.user?.username} · verifiziert</dd>
+                    <dt>{t("Eigentümerkonto")}</dt>
+                    <dd>@{auth.user?.username} {t("· verifiziert")}</dd>
                   </div>
                   <div>
-                    <dt>Datenbank</dt>
+                    <dt>{t("Datenbank")}</dt>
                     <dd>
-                      {services ? (services.services.database ? "Erreichbar" : "Nicht bereit") : "Wird geprüft …"}
+                      {services ? (services.services.database ? "Erreichbar" : "Nicht bereit") : t("Wird geprüft …")}
                     </dd>
                   </div>
                   <div>
-                    <dt>Mainnet-Zahlungsanbindung</dt>
+                    <dt>{t("Mainnet-Zahlungsanbindung")}</dt>
                     <dd>
                       {services
                         ? services.services.mainnetPayments
-                          ? "Konfiguriert"
-                          : "Nicht eingerichtet"
-                        : "Wird geprüft …"}
+                          ? t("Konfiguriert")
+                          : t("Nicht eingerichtet")
+                        : t("Wird geprüft …")}
                     </dd>
                   </div>
                   <div>
-                    <dt>Testnet-Zahlungsanbindung</dt>
+                    <dt>{t("Testnet-Zahlungsanbindung")}</dt>
                     <dd>
                       {services
                         ? services.services.testnetPayments
-                          ? "Konfiguriert"
-                          : "Nicht eingerichtet"
-                        : "Wird geprüft …"}
+                          ? t("Konfiguriert")
+                          : t("Nicht eingerichtet")
+                        : t("Wird geprüft …")}
                     </dd>
                   </div>
                 </dl>
-                <p>Die Prüfung bestätigt den Zugriff und die Konfiguration. Sie führt keinen Kauf durch.</p>
+                <p>{t("Die Prüfung bestätigt den Zugriff und die Konfiguration. Sie führt keinen Kauf durch.")}</p>
               </section>
               <section className="admin-panel">
                 <div className="admin-section-head">
-                  <h2>Sounds & Musik testen</h2>
+                  <h2>{t("Sounds & Musik testen")}</h2>
                   <button
                     className="admin-button"
                     onClick={() => {
@@ -960,11 +959,10 @@ export default function AdminPage() {
                       setPlayingAudio("");
                     }}
                   >
-                    Ton stoppen
-                  </button>
+                    {t("Ton stoppen")} </button>
                 </div>
                 <p role="status">
-                  {playingAudio ? `Wiedergabe: ${playingAudio}` : "Tippe auf einen Ton, um ihn abzuspielen."}
+                  {playingAudio ? t("Wiedergabe: {value0}", {value0: playingAudio}) : t("Tippe auf einen Ton, um ihn abzuspielen.")}
                 </p>
                 <div className="admin-sound-grid">
                   {audioTests.map(([name, file]) => (
@@ -976,7 +974,7 @@ export default function AdminPage() {
                         void testAudio(name, file);
                       }}
                     >
-                      {name}
+                      {t(name)}
                     </button>
                   ))}
                 </div>

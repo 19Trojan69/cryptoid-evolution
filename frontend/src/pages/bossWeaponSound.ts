@@ -21,10 +21,10 @@ export const generateBossSound=(kind:BossWeaponKind,variant=1,sampleRate=48000)=
     envelope=Math.exp(-t*8);body=.56*Math.sin(phase)+.17*Math.sin(phase*2.4)+.62*air*(.65+.35*Math.sin(t*92))*Math.exp(-t*3);
    }else if(kind==='heavy'){
     frequency=(85*Math.exp(-t*14)+48)/Math.sqrt(size);phase+=2*Math.PI*frequency/sampleRate;
-    envelope=Math.exp(-t*10);body=.72*Math.sin(phase)+.45*n*Math.exp(-t*80)+1.8*low*Math.exp(-t*5)+.1*Math.sin(t*2*Math.PI*940)*Math.exp(-t*55);
+    envelope=Math.exp(-t*10);body=.60*Math.sin(phase)+.18*Math.sin(phase*3)+.13*Math.sin(phase*5)+.45*n*Math.exp(-t*80)+1.8*low*Math.exp(-t*5)+.1*Math.sin(t*2*Math.PI*940)*Math.exp(-t*55);
    }else if(kind==='siege'){
     frequency=(48*Math.exp(-t*10)+33)/Math.sqrt(size);phase+=2*Math.PI*frequency/sampleRate;
-    envelope=Math.exp(-t*5.8);body=.64*Math.sin(phase)+.26*Math.sin(phase*2.02)+2.1*low*Math.exp(-t*1.5)+.36*n*Math.exp(-t*55);
+    envelope=Math.exp(-t*5.8);body=.52*Math.sin(phase)+.26*Math.sin(phase*2.02)+.18*Math.sin(phase*4.02)+.10*Math.sin(phase*6.01)+2.1*low*Math.exp(-t*1.5)+.36*n*Math.exp(-t*55);
    }else{
     frequency=(96+100*Math.min(1,t/.22))/Math.sqrt(size);phase+=2*Math.PI*frequency/sampleRate;
     envelope=Math.exp(-t*5.5)*(1-Math.exp(-t*95));body=1.8*air+.16*Math.sin(phase)+.3*(n-air)*Math.exp(-t*9);

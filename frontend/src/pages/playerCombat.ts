@@ -46,18 +46,40 @@ export const shotHitsEnemy = (shot: PlayerShot, enemy: { x: number; y: number; r
 export const shipHitsEnemy = (player: PlayerPosition, width: number, height: number, enemy: { x: number; y: number; radius: number }) =>
   Math.hypot(player.x * width - enemy.x, player.y * height - enemy.y) < PLAYER_CONTACT_RADIUS + enemy.radius;
 
-export const shipCrossesPlayer = (player: PlayerPosition, width: number, height: number, from: { x: number; y: number }, to: { x: number; y: number; radius: number }) => {
-  const dx = to.x - from.x;
-  const dy = to.y - from.y;
-  const travel = dx * dx + dy * dy;
-  const progress = travel ? Math.max(0, Math.min(1, ((player.x * width - from.x) * dx + (player.y * height - from.y) * dy) / travel)) : 1;
-  return Math.hypot(player.x * width - (from.x + dx * progress), player.y * height - (from.y + dy * progress)) < PLAYER_CONTACT_RADIUS + to.radius;
+const partlyInField = (ship: { x: number; y: number; radius: number }, width: number, height: number) =>
+  ship.x >= -ship.radius && ship.x <= width + ship.radius && ship.y >= -ship.radius && ship.y <= height + ship.radius;
+export const enemyMotionVisible = (before: { x: number; y: number; radius: number }, after: { x: number; y: number; radius: number }, width: number, height: number) =>
+  partlyInField(before, width, height) || partlyInField(after, width, height);
+
+// Retain the latch only while the previous overlap continues. An enemy that
+// passes below the player can make a fresh impact when it returns.
+export const retainContactLatch = (latched: boolean, previousPlayer: PlayerPosition, width: number, height: number, previousEnemy: { x: number; y: number; radius: number }) =>
+  latched && shipHitsEnemy(previousPlayer, width, height, previousEnemy);
+
+const shipContactProgress = (player: PlayerPosition, width: number, height: number, from: { x: number; y: number }, to: { x: number; y: number }, previousPlayer: PlayerPosition) => {
+  const startX = from.x - previousPlayer.x * width, startY = from.y - previousPlayer.y * height;
+  const endX = to.x - player.x * width, endY = to.y - player.y * height;
+  const dx = endX - startX, dy = endY - startY, travel = dx * dx + dy * dy;
+  return travel ? Math.max(0, Math.min(1, -(startX * dx + startY * dy) / travel)) : 0;
+};
+export const shipContactPoint = (player: PlayerPosition, width: number, height: number, from: { x: number; y: number }, to: { x: number; y: number }, previousPlayer: PlayerPosition = player) => {
+  const progress = shipContactProgress(player, width, height, from, to, previousPlayer);
+  const relativeX = from.x - previousPlayer.x * width + ((to.x - player.x * width) - (from.x - previousPlayer.x * width)) * progress;
+  const relativeY = from.y - previousPlayer.y * height + ((to.y - player.y * height) - (from.y - previousPlayer.y * height)) * progress;
+  return { x: from.x + (to.x - from.x) * progress, y: from.y + (to.y - from.y) * progress, distance: Math.hypot(relativeX, relativeY) };
 };
 
-// Visible ships collide in entry, formation, attack and return. The game passes
-// collidedThisAttack only during a dive so one run cannot deal repeated damage.
-export const contactWithEnemy = (player: PlayerPosition, width: number, height: number, enemy: { x: number; y: number; radius: number }, visible: boolean, collidedThisAttack: boolean, cooldownMs: number, previous?: { x: number; y: number }) => {
-  const connected = visible && !collidedThisAttack && (previous ? shipCrossesPlayer(player, width, height, previous, enemy) : shipHitsEnemy(player, width, height, enemy));
+export const shipCrossesPlayer = (player: PlayerPosition, width: number, height: number, from: { x: number; y: number }, to: { x: number; y: number; radius: number }, previousPlayer: PlayerPosition = player) => {
+  const progress = shipContactProgress(player, width, height, from, to, previousPlayer);
+  const relativeX = from.x - previousPlayer.x * width + ((to.x - player.x * width) - (from.x - previousPlayer.x * width)) * progress;
+  const relativeY = from.y - previousPlayer.y * height + ((to.y - player.y * height) - (from.y - previousPlayer.y * height)) * progress;
+  return Math.hypot(relativeX, relativeY) < PLAYER_CONTACT_RADIUS + to.radius;
+};
+
+// Visible ships collide in entry, formation, attack and return. A latched
+// overlap and the protection cooldown each prevent repeated damage.
+export const contactWithEnemy = (player: PlayerPosition, width: number, height: number, enemy: { x: number; y: number; radius: number }, visible: boolean, collidedThisAttack: boolean, cooldownMs: number, previous?: { x: number; y: number }, previousPlayer: PlayerPosition = player) => {
+  const connected = visible && !collidedThisAttack && (previous ? shipCrossesPlayer(player, width, height, previous, enemy, previousPlayer) : shipHitsEnemy(player, width, height, enemy));
   return { connected, damage: connected && cooldownMs <= 0 ? 1 : 0 };
 };
 

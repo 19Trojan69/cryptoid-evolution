@@ -8,7 +8,8 @@ export const PURCHASED_POWER_UP_DURATION_MS = 60_000;
 export const OVERDRIVE_DURATION_MS = POWER_UP_DURATION_MS;
 export const RAPID_DURATION_MS = POWER_UP_DURATION_MS;
 export const MAX_ACTIVE_POWER_UPS = 3;
-export const freeDropChance = (level: number) => .11 * (1 - Math.max(0, Math.min(1, (level - 250) / 200)));
+export const freeDropChance = (level: number) => .065 + .035 * Math.min(1, Math.max(0, (level - 1) / 250));
+const dropKinds = ["shield", "overdrive", "weapon", "rapid"] as const;
 
 export const powerUpNames: Record<PowerUpType, string> = {
   shield: "Shield", overdrive: "Overdrive", weapon: "Weapon Upgrade", rapid: "Rapid Fire", bomb: "Nova Bomb", emp: "EMP Pulse",
@@ -21,20 +22,25 @@ export const powerUpDescriptions: Record<PowerUpType, string> = {
   overdrive: "Powers each shot up to deal two damage for 20 seconds.",
   weapon: "Raises your weapon by one level for 20 seconds, up to level 5.",
   rapid: "Sets automatic fire to its fast cadence for 20 seconds.",
-  bomb: "Clears visible enemies and hostile shots; damages the boss.",
-  emp: "Freezes enemy attacks and movement for 7 seconds.",
+  bomb: "Destroys visible enemies and shots; damages boss turrets, then the exposed hull.",
+  emp: "Disables enemy weapons for 7 seconds without stopping ships or shots.",
 };
 
-export const createPowerUpDrop = ({ id, x, y, width, height, threats, activeCount, chanceRoll, kindRoll, destroyed, dropsCreated, level = 1 }: {
+export const createPowerUpDrop = ({ id, x, y, width, height, threats, activeCount, chanceRoll, kindRoll, destroyed, dropsCreated, level = 1, usedTypes = [], weaponMaxed = false }: {
   id: number; x: number; y: number; width: number; height: number;
-  threats: Threat[]; activeCount: number; chanceRoll: number; kindRoll: number; destroyed: number; dropsCreated: number; level?: number;
+  threats: Threat[]; activeCount: number; chanceRoll: number; kindRoll: number; destroyed: number; dropsCreated: number; level?: number; usedTypes?: readonly PowerUpType[]; weaponMaxed?: boolean;
 }): PowerUp | null => {
   const chance = freeDropChance(level);
-  if (activeCount >= MAX_ACTIVE_POWER_UPS || chance === 0 || (chanceRoll >= chance && !(dropsCreated === 0 && destroyed >= 3 && chance === .11))) return null;
+  const available = dropKinds.filter(type => !usedTypes.includes(type) && !(type === 'weapon' && weaponMaxed));
+  if (!available.length || activeCount >= MAX_ACTIVE_POWER_UPS || (chanceRoll >= chance && !(dropsCreated === 0 && destroyed >= 3))) return null;
   // Drops begin where the enemy was defeated. Skip any location near immediate danger.
   if (x < 35 || x > width - 35 || y < 105 || y > height * 0.62) return null;
   if (threats.some(threat => Math.abs(threat.x - x) < threat.radius + 36 && threat.y >= y - 45 && threat.y <= y + 130)) return null;
-  const type: PowerUpType = kindRoll < 0.3 ? "shield" : kindRoll < 0.57 ? "overdrive" : kindRoll < 0.79 ? "weapon" : "rapid";
+  const weights = available.map(type => type === 'shield' ? .3 : type === 'overdrive' ? .27 : type === 'weapon' ? .22 : .21);
+  const total = weights.reduce((sum, weight) => sum + weight, 0);
+  let choice = Math.max(0, Math.min(.999999, kindRoll)) * total;
+  let type: PowerUpType = available[available.length - 1];
+  for (let i = 0; i < available.length; i++) { choice -= weights[i]; if (choice < 0) { type = available[i]; break; } }
   return { id, type, x, y };
 };
 

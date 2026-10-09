@@ -4,9 +4,7 @@ import { CONTROL_HAND_KEY, CONTROL_SENSITIVITY_KEY, CONTROL_ZONE_KEY, SHIP_START
 import { VIBRATION_KEY, readVibrationEnabled, supportsVibration, gameHaptics } from "./gameHaptics";
 import { requestGameFullscreen } from "./gameFullscreen";
 import MusicVolumeSlider from "./MusicVolumeSlider";
-export const MOTION_STORAGE_KEY = "cryptoid_reduced_effects";
-export const applySavedDisplaySettings = () => { document.documentElement.dataset.motion = localStorage.getItem(MOTION_STORAGE_KEY) === "1" ? "reduced" : "standard"; };
-export type SettingsSection = "language" | "controls" | "audio" | "display";
+import { MOTION_STORAGE_KEY, applySavedDisplaySettings, type SettingsSection } from './displaySettings';
 type Props = { musicVolume: number; effectsVolume: number; changeMusicVolume: (value: number) => void; changeEffectsVolume: (value: number) => void; onChange?: () => void; idPrefix: string; initialSection?: SettingsSection; compactMobile?: boolean };
 export default function SystemSettings({ musicVolume, effectsVolume, changeMusicVolume, changeEffectsVolume, onChange, idPrefix, initialSection, compactMobile = false }: Props) {
   const { locale, automatic, choose, t } = useLocale();

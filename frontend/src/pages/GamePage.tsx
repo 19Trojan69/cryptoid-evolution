@@ -1,8 +1,13 @@
+import { useAuth } from '../hooks/useAuth';
+import { autoReloadKey, nextActiveWeapon, parseAutoReload, shouldAutoReload, type AutoReloadPreferences } from './weaponAutoReload';
+import { shipSaveNetwork } from './shipFleet';
+import { isTestnetWeaponPurchaseEnabled } from '../../../backend/src/paymentPolicy';
+import { hangarCatalog } from '../../../backend/src/hangarCatalog';
 import { bossCardAvailable } from './cardAvailability';
 import { keepScreenAwake } from './screenWakeLock';
 import { introGroupBreathingMs } from './introDifficulty';
 import CardReveal from './CardReveal';
-import { availableShipCards, type CardReward } from './cardRevealRules';
+import { availableShipCards, firstMissionStarterCards, type CardReward } from './cardRevealRules';
 import { mergeCardReveals, rememberCard, hasSeenCard, syncCardReveals } from './cardRevealMemory';
 import { primeCardSound } from './cardSound';
 import { advanceBossCore } from './bossCore';
@@ -16,7 +21,7 @@ import BlockchainProgress from "./BlockchainProgress";
 import { gameHaptics } from "./gameHaptics";
 import { advanceShipMotion, idleShipMotion, engineFlamePercent, explosionDiameter, fragmentFlight, hullIllumination, type ShipMotion } from "./shipRealism";
 import { useLocale } from "../i18n";
-import { memo, useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
+import { memo, useCallback, useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
 import { entryPatternForSector, entryPosition, entryStartX, type EntryPattern } from "./entryPatterns";
@@ -24,8 +29,8 @@ import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, 
 import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, POWER_UP_DURATION_MS, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp, type PowerUpType } from "./powerUps";
 import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, zoneFraction, shipStartHeight } from "./controlPreferences";
-import { advanceShot, contactWithEnemy, MAX_PLAYER_SHOTS, movePlayer, placePlayer, placePlayerFromPointer, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, shipCollisionOutcome, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
-import { advanceEnemyShot, createEnemyShot, enemyShotHitsPlayer, enemyShotLimit, type EnemyShot } from "./enemyFire";
+import { advanceShot, contactWithEnemy, enemyMotionVisible, MAX_PLAYER_SHOTS, movePlayer, placePlayer, placePlayerFromPointer, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, retainContactLatch, shipCollisionOutcome, shipContactPoint, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
+import { advanceEnemyShot, createEnemyShot, enemyShotHitsPlayer, enemyShotOutsideField, enemyShotLimit, type EnemyShot } from "./enemyFire";
 import { attackPressure, attackSlots } from "./attackPressure";
 import SectorBackdrop from "./SectorBackdrop";
 import Starfield from "./Starfield";
@@ -39,7 +44,8 @@ import { ownedShipStage, projectileGuardForStage, projectileImpact, shipEvolutio
 import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio";
 import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, readMusicVolume, resetAudioVolumeDefaults } from "./musicPreferences";
 import { MusicPlayer, takeHandoffGameMusic } from "./musicPlayback";
-import SystemSettings, { applySavedDisplaySettings } from "./SystemSettings";
+import SystemSettings from "./SystemSettings";
+import { applySavedDisplaySettings } from './displaySettings';
 import MissionWeaponShop from './MissionWeaponShop';
 import './weaponSelection.css';
 import { axiosClient } from "../lib/axiosClient";
@@ -50,14 +56,16 @@ import { activateCollectedPower } from "./collectedPower";
 import { leaveGameFullscreen, requestGameFullscreen } from "./gameFullscreen";
 import { levelDifficulty, MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { createDoubleKillCombo, creditComboDefeat, DOUBLE_KILL_SCORE, DOUBLE_KILL_SHARDS, type DoubleKillCombo } from "./doubleKillCombo";
-import { balanceAfterMission, BONUS_TARGET_SHARD_REWARD, bossPoints, bossShardReward, creditReward } from "./shardEarnings";
+import { missionShardBase, missionShardTotal, uncreditedGuestShards, BONUS_TARGET_SHARD_REWARD, bossPoints, bossShardReward, creditReward } from "./shardEarnings";
 import { addPersistentHullFire, hullFireAtImpact, hullFireLimit, spriteFireSites, type HullFire } from "./hullFires";
 import { bossExplosionSize, bossFallTargetY, bossFireSite } from "./bossCombat";
 import { bossHitTarget } from "./bossHitTarget";
-import BossWeaponsView, { preloadBossWeapons } from './BossWeaponsView';
+import BossWeaponsView from './BossWeaponsView';
+import { preloadBossWeapons } from './bossWeaponTextures';
 import BossHealthView from './BossHealthView';
 import BossReactorView from './BossReactorView';
 import { advanceBossTurrets, damageBossTurret, gunPosition } from './bossTurrets';
+import { detonateBossBomb, disableEnemyWeapons } from './specialPowers';
 import { bossWeapons } from './bossWeapons';
 import { bossEscortAttackInterval, bossEscortCount, bossEscortReinforcements, bossEscortRosterIndex, bossEscortSlots, reactorEscortCount, advanceEscortReserve } from "./bossEscorts";
 import { awardBlock, awardBonusMedal, awardBossSticker, awardChain, emptyRewardProgress, reachLevel, rewardRank, type RewardProgress } from "./rewardProgress";
@@ -76,7 +84,7 @@ const BOSS_VICTORY_START_MS = BOSS_FALL_DURATION_MS + 650;
 // The complete victory recording is 3.408 seconds, including its release.
 const BOSS_CLEAR_DURATION_MS = BOSS_VICTORY_START_MS + 3_700;
 const pickupEffectLabels: Record<PowerUpType, string> = {
-  shield: "Blocks the next hit", overdrive: "Double shot damage", weapon: "Weapon level", rapid: "Faster automatic fire", bomb: "Clears enemies and shots", emp: "Freezes enemies for 7s",
+  shield: "Blocks the next hit", overdrive: "Double shot damage", weapon: "Weapon level", rapid: "Faster automatic fire", bomb: "Destroys enemies and shots", emp: "Disables enemy weapons for 7s",
 };
 const FORMATION_DATA_ROWS = [
   "1011010001101001110001010011011010101100",
@@ -141,7 +149,7 @@ type Effect = {
   id: number;
   x: number;
   y: number;
-  kind: "shield" | "explosion" | "boss-fall" | "boss-explosion" | "player-crash" | "player-explosion" | "shatter" | "bomb-wave" | "emp-wave";
+  kind: "shield" | "explosion" | "boss-fall" | "boss-explosion" | "player-crash" | "player-explosion" | "shatter" | "bomb-wave" | "emp-wave" | "turret-hit" | "turret-burst";
   startedAt: number;
   turretBonus?: number;
   target?: "player";
@@ -165,9 +173,10 @@ type Effect = {
   impactY?: number;
   velocityX?: number;
   velocityY?: number;
+  collision?: boolean;
 };
 type WeaponSource = "standard" | "paid" | "pickup";
-type GameState = BossRewardState & { playerHullFires?: HullFire[]; playerHit?: HullFire; bossHullLight: number; combo: DoubleKillCombo; asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; rewardNotice: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; pickupNotice: { id: number; type: PowerUpType; remainingMs: number; level: number } | null; score: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; purchasedShieldMs: number; shieldActive: boolean; overdriveMs: number; overdriveTotalMs: number; rapidFireMs: number; rapidFireTotalMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponSource: WeaponSource; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; weaponTimers: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
+type GameState = BossRewardState & { playerHullFires?: HullFire[]; playerHit?: HullFire; bossHullLight: number; combo: DoubleKillCombo; asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; rewardNotice: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; powerUpTypes: PowerUpType[]; pickupNotice: { id: number; type: PowerUpType; remainingMs: number; level: number } | null; score: number; shardBase: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; purchasedShieldMs: number; shieldActive: boolean; overdriveMs: number; overdriveTotalMs: number; rapidFireMs: number; rapidFireTotalMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponSource: WeaponSource; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; weaponTimers: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
 
 const syncSelectedWeapon = (state: GameState) => {
   if (state.weaponSource === "pickup" && state.pickupWeaponMs <= 0) state.weaponSource = state.paidWeaponMs > 0 ? "paid" : "standard";
@@ -184,7 +193,7 @@ const TimedRing = ({ remainingMs, durationMs }: { remainingMs: number; durationM
 };
 
 
-const createInitialState = (): GameState => ({ bossHullLight: 0, combo: createDoubleKillCombo(), asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", chainBlocks: 0, chainResult: "", rewardNotice: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: shipStartHeight[readShipStart()] }, thrust: 0, effects: [], powerUps: [], pickupNotice: null, score: 0, shards: 0, hearts: 3, maxHearts: 3, projectileGuard: 0, shieldCharges: 0, shieldMs: 0, purchasedShieldMs: 0, shieldActive: true, overdriveMs: 0, overdriveTotalMs: POWER_UP_DURATION_MS, rapidFireMs: 0, rapidFireTotalMs: POWER_UP_DURATION_MS, empMs: 0, pendingStartPower: null, weaponLevel: 1, weaponSource: "standard", weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], weaponTimers: [0, 0, 0, 0, 0, 0], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") || sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "loading" : "playing" });
+const createInitialState = (): GameState => ({ bossHullLight: 0, combo: createDoubleKillCombo(), asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", chainBlocks: 0, chainResult: "", rewardNotice: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: shipStartHeight[readShipStart()] }, thrust: 0, effects: [], powerUps: [], powerUpTypes: [], pickupNotice: null, score: 0, shardBase: shardBalance(localStorage.getItem(SHARD_BALANCE_KEY)), shards: 0, hearts: 3, maxHearts: 3, projectileGuard: 0, shieldCharges: 0, shieldMs: 0, purchasedShieldMs: 0, shieldActive: true, overdriveMs: 0, overdriveTotalMs: POWER_UP_DURATION_MS, rapidFireMs: 0, rapidFireTotalMs: POWER_UP_DURATION_MS, empMs: 0, pendingStartPower: null, weaponLevel: 1, weaponSource: "standard", weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], weaponTimers: [0, 0, 0, 0, 0, 0], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") || sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "loading" : "playing" });
 
 const readRecord = (key: string) => Number(window.localStorage.getItem(key) || 0);
 
@@ -192,8 +201,7 @@ const saveRecords = (state: GameState) => {
   window.localStorage.setItem(BEST_SCORE_KEY, String(Math.max(readRecord(BEST_SCORE_KEY), state.score)));
   window.localStorage.setItem(HIGHEST_SECTOR_KEY, String(Math.max(readRecord(HIGHEST_SECTOR_KEY), state.sector)));
   window.localStorage.setItem(TOTAL_DESTROYED_KEY, String(readRecord(TOTAL_DESTROYED_KEY) + state.destroyed));
-  // Earned Shards persist between runs; the current run starts at zero.
-  window.localStorage.setItem(SHARD_BALANCE_KEY, String(balanceAfterMission(shardBalance(window.localStorage.getItem(SHARD_BALANCE_KEY)), state)));
+  // Shards are credited incrementally; records must never credit them again.
 };
 
 const createFormationSlots = (section: number, sector: number, width: number, height: number, hudBottom: number, count?: number, offset = 0) => {
@@ -206,6 +214,8 @@ const alignedSpritePosition = (x: number, y: number, sprite: number, renderedSiz
   const offset = spriteVisualOffset(sprite, renderedSize, true);
   return { left: x - offset.x, top: y - offset.y };
 };
+// Keep physics radii unchanged while making the visible enemy hull easier to read.
+const enemyVisualDiameter = (radius: number) => radius * 2 * 1.1;
 
 const spawnAsteroid = (id: number, width: number, visibleTop: number, formationIndex: number, sector: number, slots: ReturnType<typeof formationLayout>, offset = 0, rulesVersion = 2): Asteroid => {
   const profile = chooseCryptoid(sector, formationIndex + offset);
@@ -262,15 +272,12 @@ const moveAsteroid = (asteroid: Asteroid, delta: number, width: number, height: 
   const elapsed = Math.min(asteroid.entryDuration, asteroid.entryElapsed + delta);
   const progress = elapsed / asteroid.entryDuration;
   const point = entryPosition({ pattern: asteroid.entryPattern, progress, startX: asteroid.entryStartX, startY: asteroid.entryStartY, targetX: asteroid.entryTargetX, targetY: asteroid.entryTargetY, width, height, radius, side: asteroid.entrySide, index: asteroid.entryIndex });
-  const ahead = entryPosition({ pattern: asteroid.entryPattern, progress: Math.min(1, progress + .01), startX: asteroid.entryStartX, startY: asteroid.entryStartY, targetX: asteroid.entryTargetX, targetY: asteroid.entryTargetY, width, height, radius, side: asteroid.entrySide, index: asteroid.entryIndex });
-  const behind = entryPosition({ pattern: asteroid.entryPattern, progress: Math.max(0, progress - .01), startX: asteroid.entryStartX, startY: asteroid.entryStartY, targetX: asteroid.entryTargetX, targetY: asteroid.entryTargetY, width, height, radius, side: asteroid.entrySide, index: asteroid.entryIndex });
-  const bank = 7 * Math.tanh((ahead.x - behind.x) / (width * .04)) * Math.sin(Math.PI * progress);
   return {
     ...asteroid,
     ...point,
     entryElapsed: elapsed,
     formationElapsed: Math.min(asteroid.formationDuration, delta - entryDelta),
-    rotation: bank,
+    rotation,
   };
 };
 
@@ -328,13 +335,7 @@ const shipDebris = (effect: Effect) => {
   } as CSSProperties;
   if (effect.kind === "boss-explosion") return <div className="ship-debris scattered-debris boss-debris-field" style={style} aria-hidden="true">{scatteredPieces(effect, 16, 0)}</div>;
   if (sprite === undefined) return null;
-  // A collision can damage the player without destroying the ship.
-  if (effect.kind === "player-crash") {
-    return <div className="ship-debris player-crash-debris" style={style} aria-hidden="true">
-      {[0, 1, 2, 3].map(index => <em className={`ship-debris-piece ship-debris-piece-${index + 1}`} key={index}>{effect.debrisColor ? <PaintedShip className="ship-debris-sprite" sprite={sprite} color={effect.debrisColor} stage={effect.shipStage} /> : <b style={spriteStyle(sprite)} />}</em>)}
-    </div>;
-  }
-  const count = effect.shipClass === "heavy" || (effect.debrisSize ?? 0) >= 86 ? 8 : 4;
+  const count = effect.collision || effect.kind === "player-crash" || effect.shipClass === "heavy" || (effect.debrisSize ?? 0) >= 86 ? 8 : 4;
   return <div className={`ship-debris scattered-debris${effect.shipClass ? ` ship-debris-${effect.shipClass}` : ""}`} style={style} aria-hidden="true">
     {scatteredPieces(effect, count, sprite)}
   </div>;
@@ -361,6 +362,7 @@ const GamePage = () => {
   const visibleTopRef = useRef(96);
   const playerShipRef = useRef<HTMLDivElement>(null);
   const stateRef = useRef<GameState>(createInitialState());
+  const guestCreditedShardsRef = useRef(0);
   const nextIdRef = useRef(1);
   const formationIndexRef = useRef(0);
   const formationStartedRef = useRef(false);
@@ -397,6 +399,7 @@ const GamePage = () => {
   const playerMuzzleRef = useRef(0);
   const bossMuzzleRef = useRef(0);
   const [rewardCards,setRewardCards]=useState<CardReward[]>([]);
+  const firstRewardCard = rewardCards[0];
   const rewardCardsRef=useRef<CardReward[]>([]);
   const cardOwnerRef=useRef('guest');
   const bossLifeRemainingRef=useRef(0);
@@ -420,14 +423,15 @@ const GamePage = () => {
     if(game.status==='playing')return keepScreenAwake(navigator,document);
   },[game.status]);
   useEffect(()=>{
-    const card=rewardCards[0];if(!card)return;
-    rememberCard(cardOwnerRef.current,card.key);
+    if(!firstRewardCard)return;
+    rememberCard(cardOwnerRef.current,firstRewardCard.key);
     void syncCardReveals(cardOwnerRef.current).catch(()=>{/* Local receipt is retried on the next account start. */});
-  },[rewardCards[0]?.key]);
+  },[firstRewardCard]);
   const [startError, setStartError] = useState("");
-  const [audioNeedsTap, setAudioNeedsTap] = useState(false);
   const [homePrompt, setHomePrompt] = useState(false);
   const [shipSelection, setShipSelection] = useState(selectedShip);
+  const shipSelectionRef = useRef(shipSelection);
+  shipSelectionRef.current = shipSelection;
   const [resumeOffer, setResumeOffer] = useState<AccountSave | null>(null);
   const [confirmNewRun, setConfirmNewRun] = useState(false);
   const [saveNotice, setSaveNotice] = useState("");
@@ -449,6 +453,17 @@ const GamePage = () => {
   const rewardProgressRef = useRef<RewardProgress>(emptyRewardProgress());
   const pendingRewardsRef = useRef<Promise<unknown>>(Promise.resolve());
   const adminRunRef = useRef(false);
+  const persistGuestShards = () => {
+    const earned = stateRef.current.shards;
+    const delta = uncreditedGuestShards(earned, guestCreditedShardsRef.current);
+    if (!delta || adminRunRef.current || scoreRunRef.current || stateRef.current.status === 'loading' || localStorage.getItem('cryptoid_pi_session')) return;
+    try {
+      const total = shardBalance(localStorage.getItem(SHARD_BALANCE_KEY)) + delta;
+      localStorage.setItem(SHARD_BALANCE_KEY, String(total));
+      guestCreditedShardsRef.current = earned;
+      stateRef.current.shardBase = missionShardBase(total, earned);
+    } catch { setSaveNotice('Save failed. Please retry.'); }
+  };
   const pendingScoreRef = useRef<Promise<unknown> | null>(null);
   const bestThisDeviceRef = useRef(readRecord(BEST_SCORE_KEY));
   const checkpointAtRef = useRef(0);
@@ -461,7 +476,8 @@ const GamePage = () => {
   const musicRef = useRef<MusicPlayer | null>(null);
   const regularMusicPositionRef = useRef(0);
   const soundRef = useRef<GameAudio | null>(null);
-  useEffect(()=>{if(game.boss)void preloadBossWeapons(game.boss.config).catch(()=>{});},[game.boss?.config]);
+  const bossConfig = game.boss?.config;
+  useEffect(()=>{if(bossConfig)void preloadBossWeapons(bossConfig).catch(()=>{});},[bossConfig]);
   const bossVictoryPendingRef = useRef(false);
   const bossVictoryFinishedRef = useRef(false);
   const bossDestroyPlayedRef = useRef(false);
@@ -470,6 +486,23 @@ const GamePage = () => {
   const startRequestRef = useRef(false);
   const [weaponMenuOpen, setWeaponMenuOpen] = useState(false);
   const [weaponStock, setWeaponStock] = useState<Record<string, number>>({});
+  const stockRef = useRef(weaponStock); stockRef.current = weaponStock;
+  const [autoReload, setAutoReload] = useState<AutoReloadPreferences>({});
+  const autoReloadRef = useRef(autoReload); autoReloadRef.current = autoReload;
+  const [autoReloading, setAutoReloading] = useState<number | null>(null);
+  const reloadNoticeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const reloadPendingRef = useRef(false);
+  const reloadRequestRef = useRef<(level: number) => boolean>(() => false);
+  const weaponMountedRef = useRef(true);
+  useEffect(() => { weaponMountedRef.current = true; return () => { weaponMountedRef.current = false; if (reloadNoticeTimerRef.current) window.clearTimeout(reloadNoticeTimerRef.current); }; }, []);
+  useEffect(() => {
+    setAutoReload(parseAutoReload(localStorage.getItem(autoReloadKey(shipSaveNetwork, cardOwnerRef.current))));
+  }, [accountRun]);
+  const changeAutoReload = (level: number, enabled: boolean) => {
+    const next = { ...autoReloadRef.current, [level]: enabled };
+    autoReloadRef.current = next; setAutoReload(next);
+    try { localStorage.setItem(autoReloadKey(shipSaveNetwork, cardOwnerRef.current), JSON.stringify(next)); } catch { /* Session choice remains usable. */ }
+  };
   const [weaponBusy, setWeaponBusy] = useState(false);
   const weaponBusyRef = useRef(false);
   const activationRef = useRef<{ level: number; id: string } | null>(null);
@@ -504,6 +537,8 @@ const GamePage = () => {
     await queue.enqueue({ path: "/progress/checkpoint", body: { runId, combat, save: snapshotOf(state) } });
     setSaveNotice(queue.durable ? "Game saved." : "Game saved. Offline backup unavailable.");
   };
+  const saveCombatRef = useRef(saveCombat);
+  saveCombatRef.current = saveCombat;
   const restoreCombat = (input: CombatCheckpoint) => {
     const saved = readCombatCheckpoint(input);
     if (!saved) throw new Error("Invalid saved combat checkpoint");
@@ -532,6 +567,9 @@ const GamePage = () => {
       }
     }
     for (const key of COMBAT_STATE_KEYS) if (saved.state[key] !== undefined) Object.assign(stateRef.current, { [key]: saved.state[key] });
+    // Older checkpoints do not record which already collected types appeared this level.
+    // Avoid duplicate grants until the next level resets the history.
+    if (saved.state.powerUpTypes === undefined) stateRef.current.powerUpTypes = saved.refs.dropsCreated > 0 ? ['shield', 'overdrive', 'weapon', 'rapid'] : [];
     stateRef.current.sector = saved.stage;
     stateRef.current.section = saved.stage;
     stateRef.current.encounter = saved.encounter;
@@ -539,6 +577,15 @@ const GamePage = () => {
     formationStartedRef.current = saved.formationStarted;
     sectionSlotsRef.current = saved.slots;
     bossEscortSlotsRef.current = saved.escortSlots;
+    lastPlayerRef.current = { ...stateRef.current.player };
+    // A saved defeated boss has no live hull/effect timeline. Resume at its
+    // pending heart, without replaying rewards or a sound-only destruction.
+    if (saved.encounter === 'boss-clear') {
+      clearTimerRef.current = BOSS_CLEAR_DURATION_MS;
+      bossDestroyPlayedRef.current = true;
+      bossVictoryPendingRef.current = false;
+      bossVictoryFinishedRef.current = true;
+    }
   };
 
   const activateLoadout = async () => {
@@ -577,7 +624,16 @@ const GamePage = () => {
       scoreRunRef.current = data.scoreRunId;
       rulesVersionRef.current = data.rulesVersion ?? 2;
       combatSequenceRef.current = 0;
+      stateRef.current.shardBase = adminRunRef.current ? 0 : missionShardBase(data.profile?.balance ?? profile?.balance ?? 0, data.checkpoint?.shards ?? 0);
       setAccountRun(!adminRunRef.current && Boolean(data.scoreRunId));
+      const reloadPreferences = parseAutoReload(localStorage.getItem(autoReloadKey(shipSaveNetwork, cardOwnerRef.current)));
+      autoReloadRef.current = reloadPreferences; setAutoReload(reloadPreferences);
+      if (!adminRunRef.current && data.scoreRunId && Object.values(reloadPreferences).some(Boolean)) {
+        try {
+          const inventory = await axiosClient.get<{ weaponStock: Record<string, number> }>('/hangar/inventory', { timeout: 8000 });
+          if (weaponMountedRef.current && scoreRunRef.current === data.scoreRunId) { stockRef.current = inventory.data.weaponStock; setWeaponStock(inventory.data.weaponStock); }
+        } catch { /* No unconfirmed stock is consumed; the menu can refresh inventory. */ }
+      }
       rewardProgressRef.current = emptyRewardProgress();
       if (!adminRunRef.current && data.scoreRunId) {
         try {
@@ -600,10 +656,15 @@ const GamePage = () => {
       }
       const selected = !adminRunRef.current && data.profile ? accountSelection(data.profile) : shipSelection;
       if(!adminRunRef.current&&data.profile){
-        // Entering a mission is not an acquisition event. Baseline the existing hangar silently.
-        mergeCardReveals(cardOwnerRef.current,[...(profile?.cardReveals||[]),...(data.profile.cardReveals||[]),...availableShipCards(playerSkins,data.profile.fleet,data.profile.usedShipSkins||[],data.ownedShipUpgrades||[]).map(card=>card.key)]);
+        // Never replay the existing hangar. Only a pristine account's first free starter
+        // is an acquisition; versioned/used/imported accounts retain silent baselining.
+        const starterCards = firstMissionStarterCards(profile);
+        const baseline = availableShipCards(playerSkins,data.profile.fleet,data.profile.usedShipSkins||[],data.ownedShipUpgrades||[])
+          .filter(card=>!starterCards.some(starter=>starter.key===card.key));
+        mergeCardReveals(cardOwnerRef.current,[...(profile?.cardReveals||[]),...(data.profile.cardReveals||[]),...baseline.map(card=>card.key)]);
         void syncCardReveals(cardOwnerRef.current).catch(()=>{});
         rewardCardsRef.current=[];setRewardCards([]);
+        showRewardCards(starterCards);
       }
 
       setShipSelection(selected);
@@ -658,7 +719,8 @@ const GamePage = () => {
     stateRef.current.status = rewardCardsRef.current.length ? "paused" : "playing";
     setGame({ ...stateRef.current });
   };
-  useEffect(() => { if (stateRef.current.status === "loading") void activateLoadout(); }, []);
+  const initialActivateLoadoutRef = useRef(activateLoadout);
+  useEffect(() => { if (stateRef.current.status === "loading") void initialActivateLoadoutRef.current(); }, []);
 
   useEffect(() => {
     const field = fieldRef.current;
@@ -680,21 +742,26 @@ const GamePage = () => {
   useEffect(() => {
     const field = fieldRef.current;
     if (!field) return;
-    let lastTouchEnd = 0;
-    const preventGesture = (event: Event) => event.preventDefault();
-    const preventDoubleTap = (event: TouchEvent) => {
-      if (event.target instanceof Element && event.target.closest("button, .game-hud, .game-overlay, .touch-controls")) return;
-      const now = performance.now();
-      if (now - lastTouchEnd < 360) event.preventDefault();
-      lastTouchEnd = now;
+    let lastTap: { time: number; x: number; y: number } | null = null;
+    const isPlayfieldTouch = (event: TouchEvent) => stateRef.current.status === "playing" && event.touches.length <= 1 &&
+      !(event.target instanceof Element && event.target.closest("button, a, input, select, textarea, [role='button'], .game-hud, .game-overlay, .touch-controls"));
+    const isSecondTap = (touch: Touch, now: number) => lastTap !== null && now - lastTap.time < 360 &&
+      Math.hypot(touch.clientX - lastTap.x, touch.clientY - lastTap.y) < 44;
+    const preventSecondTouchStart = (event: TouchEvent) => {
+      if (isPlayfieldTouch(event) && event.touches[0] && isSecondTap(event.touches[0], performance.now())) event.preventDefault();
     };
-    field.addEventListener("touchend", preventDoubleTap, { passive: false });
-    field.addEventListener("gesturestart", preventGesture, { passive: false });
-    field.addEventListener("gesturechange", preventGesture, { passive: false });
+    const preventDoubleTap = (event: TouchEvent) => {
+      if (!isPlayfieldTouch(event) || event.changedTouches.length !== 1) { lastTap = null; return; }
+      const touch = event.changedTouches[0];
+      const now = performance.now();
+      if (isSecondTap(touch, now)) event.preventDefault();
+      lastTap = { time: now, x: touch.clientX, y: touch.clientY };
+    };
+    field.addEventListener("touchstart", preventSecondTouchStart, { capture: true, passive: false });
+    field.addEventListener("touchend", preventDoubleTap, { capture: true, passive: false });
     return () => {
-      field.removeEventListener("touchend", preventDoubleTap);
-      field.removeEventListener("gesturestart", preventGesture);
-      field.removeEventListener("gesturechange", preventGesture);
+      field.removeEventListener("touchstart", preventSecondTouchStart, true);
+      field.removeEventListener("touchend", preventDoubleTap, true);
     };
   }, []);
 
@@ -725,7 +792,7 @@ const GamePage = () => {
     track.audio.addEventListener("ended", finishVictoryMusic);
     const resume = () => {
       if (document.visibilityState === "hidden" || (backgroundHiddenAtRef.current && Date.now() - backgroundHiddenAtRef.current > 1_000) || !["playing", "game-over", "victory"].includes(stateRef.current.status)) return;
-      void track.play().then(ok => { if (ok && (readEffectsVolume() === 0 || soundRef.current?.running)) setAudioNeedsTap(false); });
+      void track.play();
     };
     document.addEventListener("pointerdown", resume, true);
     document.addEventListener("pointerup", resume, true);
@@ -765,10 +832,7 @@ const GamePage = () => {
       if (track.currentSource === normalSource) regularMusicPositionRef.current = track.audio.currentTime || 0;
       track.setSource(desiredSource, desiredSource === normalSource ? regularMusicPositionRef.current : 0);
     }
-    if (game.status === "playing" || game.status === "game-over" || game.status === "victory") void track.play().then(ok => {
-      if (game.status === "game-over" || game.status === "victory") setAudioNeedsTap(!ok);
-      else if (!ok) setAudioNeedsTap(true);
-    });
+    if (game.status === "playing" || game.status === "game-over" || game.status === "victory") void track.play();
     else if (game.status !== "loading") track.pause();
   }, [game.status, game.encounter, musicEnabled]);
   useEffect(() => {
@@ -776,7 +840,7 @@ const GamePage = () => {
       ? Math.min(100, musicVolume * BOSS_VICTORY_VOLUME_BOOST)
       : musicVolume;
     musicRef.current?.setVolume(volume);
-  }, [musicVolume, game.encounter]);
+  }, [musicVolume, game.encounter, game.status]);
   const startBossVictory = () => {
     bossVictoryPendingRef.current = false;
     const track = musicRef.current;
@@ -822,6 +886,8 @@ const GamePage = () => {
     creditComboDefeat(state, bossShardReward(state.sector), elapsedRef.current);
     state.encounter = "boss-clear";
     state.phase = "SECTOR_CLEAR";
+    // Escorts leave with the boss, but must not simply vanish.
+    for (const enemy of state.asteroids) state.effects.push({ id: nextIdRef.current++, x: enemy.x, y: enemy.y, kind: 'explosion', startedAt: time, sprite: enemy.sprite, debrisSize: enemy.radius * 2, debrisColor: enemy.color });
     state.asteroids = [];
     state.enemyShots = [];
     state.shots = [];
@@ -829,6 +895,8 @@ const GamePage = () => {
     state.boss = null;
     void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
   };
+  const destroyBossRef = useRef(destroyBoss);
+  destroyBossRef.current = destroyBoss;
   const changeEffectsVolume = (value: number) => {
     localStorage.setItem(EFFECTS_VOLUME_KEY, String(value));
     setEffectsVolume(value);
@@ -854,7 +922,7 @@ const GamePage = () => {
     soundRef.current?.setPaused(game.status === "loading" || game.status === "paused" || game.status === "game-over" || game.status === "victory");
   }, [game.sector, game.status]);
 
-  const startEffects = () => {
+  const startEffects = useCallback(() => {
     if (!soundRef.current) {
       const audio = takePrimedGameAudio() ?? new GameAudio();
       audio.setEffectsVolume(readEffectsVolume());
@@ -864,39 +932,40 @@ const GamePage = () => {
     }
     // Retry inside each gesture: Safari can interrupt Web Audio after fullscreen.
     return soundRef.current.start();
-  };
-  useEffect(() => { if (hasPrimedGameAudio()) void startEffects(); }, []);
-
-  useEffect(() => {
-    if (game.status !== "playing") return;
-    // A suspended context can leave resume() pending on iOS. Offer a gesture
-    // instead of allowing an indefinitely silent mission.
-    const timer = window.setTimeout(() => {
-      if ((readEffectsVolume() > 0 && !soundRef.current?.running) || (musicEnabled && !musicRef.current?.playing)) setAudioNeedsTap(true);
-    }, 1_500);
-    return () => window.clearTimeout(timer);
-  }, [game.status, musicEnabled]);
+  }, []);
+  const startEffectsRef = useRef(startEffects);
+  startEffectsRef.current = startEffects;
+  useEffect(() => { if (hasPrimedGameAudio()) void startEffects(); }, [startEffects]);
 
   const retryAudio = () => {
-    void Promise.all([startEffects(), musicEnabled && musicRef.current ? musicRef.current.play() : Promise.resolve(true)]).then(([effects, music]) => {
-      setAudioNeedsTap((readEffectsVolume() > 0 && !effects) || (musicEnabled && !music));
-    });
+    // Menu taps must not restart the soundtrack while the simulation is paused.
+    if (document.visibilityState === "hidden" || !["playing", "game-over", "victory"].includes(stateRef.current.status)) return;
+    void startEffects();
+    if (musicEnabled && musicRef.current) void musicRef.current.play();
   };
+  const retryAudioRef = useRef(retryAudio);
+  retryAudioRef.current = retryAudio;
 
   useEffect(() => {
     const controls = new Set(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "KeyA", "KeyD", "KeyW", "KeyS"]);
     const keyDown = (event: KeyboardEvent) => {
       if (rewardCardsRef.current.length || !controls.has(event.code) || (event.target as HTMLElement)?.closest("input, textarea, select")) return;
       event.preventDefault();
-      void startEffects();
+      void startEffectsRef.current();
       keysRef.current.add(event.code);
     };
     const keyUp = (event: KeyboardEvent) => keysRef.current.delete(event.code);
     const blur = () => keysRef.current.clear();
     const pauseAfterBackground = () => {
       if (document.visibilityState === "hidden") {
-        if (stateRef.current.status === "playing") void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
+        if (stateRef.current.status === "playing") void saveCombatRef.current().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
         if (!backgroundHiddenAtRef.current) backgroundHiddenAtRef.current = Date.now();
+        if (stateRef.current.status === 'playing') {
+          stateRef.current.status = 'paused';
+          soundRef.current?.setPaused(true);
+          musicRef.current?.pause();
+          setGame({ ...stateRef.current });
+        }
         keysRef.current.clear();
         pointerRef.current = null;
         touchOriginRef.current = null;
@@ -904,17 +973,23 @@ const GamePage = () => {
       }
       if (backgroundHiddenAtRef.current && Date.now() - backgroundHiddenAtRef.current > 1_000 && stateRef.current.status === "playing") {
         stateRef.current.status = "paused";
-        void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
+        void saveCombatRef.current().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
         soundRef.current?.setPaused(true);
         musicRef.current?.pause();
         setGame({ ...stateRef.current });
+      }
+      // Background tabs can stop RAF entirely. Keep effect ages aligned with
+      // paused CSS animations before resetting the simulation frame clock.
+      if (stateRef.current.status === 'paused' && lastFrameRef.current > 0) {
+        const unpaintedPause = Math.max(0, performance.now() - lastFrameRef.current);
+        for (const effect of stateRef.current.effects) effect.startedAt += unpaintedPause;
       }
       backgroundHiddenAtRef.current = 0;
       lastFrameRef.current = 0;
       slowFramesRef.current = 0;
     };
     const markPageHidden = () => {
-      if (stateRef.current.status === "playing") void saveCombat().catch(() => {});
+      if (stateRef.current.status === "playing") void saveCombatRef.current().catch(() => {});
       if (!backgroundHiddenAtRef.current) backgroundHiddenAtRef.current = Date.now();
       keysRef.current.clear();
       pointerRef.current = null;
@@ -923,7 +998,7 @@ const GamePage = () => {
     window.addEventListener("keydown", keyDown);
     const resumeAudio = () => {
       if (document.visibilityState === "hidden" || (backgroundHiddenAtRef.current && Date.now() - backgroundHiddenAtRef.current > 1_000) || stateRef.current.status !== "playing") return;
-      retryAudio();
+      retryAudioRef.current();
     };
     document.addEventListener("pointerup", resumeAudio, true);
     document.addEventListener("touchend", resumeAudio, true);
@@ -947,7 +1022,7 @@ const GamePage = () => {
       // Preserve destruction effects through a user pause or a backgrounded tab.
       if (state.status !== "playing") {
         for (const effect of state.effects) {
-          if (effect.kind === "boss-fall" || effect.kind === "boss-explosion") effect.startedAt += frameGap;
+          effect.startedAt += frameGap;
         }
       }
       if (state.status === "playing") {
@@ -998,6 +1073,9 @@ const GamePage = () => {
         const playerRecovering = state.effects.some(effect => effect.target === "player" && (effect.kind === "player-crash" || effect.kind === "player-explosion"));
         const purchasedWeaponDelta = transitionPaused || playerRecovering || state.weaponSource !== "paid" ? 0 : delta;
         const pickupWeaponDelta = transitionPaused ? 0 : delta;
+        const expiringLevel = state.paidWeaponLevel;
+        const expiringSource = state.weaponSource;
+        const expiringMs = state.paidWeaponMs;
         state.weaponTimers = state.weaponTimers.map((remaining, level) => level === state.paidWeaponLevel && remaining > 0 ? Math.max(0, remaining - purchasedWeaponDelta) : remaining);
         if (state.paidWeaponLevel > 1) {
           state.paidWeaponMs = Math.max(0, state.weaponTimers[state.paidWeaponLevel] ?? 0);
@@ -1007,7 +1085,17 @@ const GamePage = () => {
         }
         state.pickupWeaponMs = Math.max(0, state.pickupWeaponMs - pickupWeaponDelta);
         if (state.pickupWeaponMs === 0) state.pickupWeaponLevel = 1;
+        const selectedExpired = (expiringSource === 'paid' && expiringMs > 0 && state.paidWeaponMs === 0)
+          || (expiringSource === 'pickup' && state.pickupWeaponMs === 0 && pickupWeaponDelta > 0);
+        if (selectedExpired) {
+          const next = nextActiveWeapon(state.weaponTimers, autoReloadRef.current, state.pickupWeaponLevel, state.pickupWeaponMs);
+          state.weaponSource = next.source;
+          if (next.source === 'paid') { state.paidWeaponLevel = next.level; state.paidWeaponMs = state.weaponTimers[next.level]; }
+        }
         syncSelectedWeapon(state);
+        const expired = expiringMs > 0 && state.weaponTimers[expiringLevel] === 0;
+        const reloadOffer = expired ? hangarCatalog.find(offer => offer.kind === 'weapon' && offer.level === expiringLevel) : undefined;
+        if (shouldAutoReload(expiringLevel, expiringSource, expiringMs, state.weaponTimers[expiringLevel] ?? 0, autoReloadRef.current, stockRef.current, shipSaveNetwork === 'testnet' && isTestnetWeaponPurchaseEnabled(reloadOffer))) reloadRequestRef.current(expiringLevel);
         state.combo.remainingMs = Math.max(0, state.combo.remainingMs - delta);
         if (state.pickupNotice) {
           state.pickupNotice.remainingMs -= transitionPaused ? 0 : delta;
@@ -1074,13 +1162,16 @@ const GamePage = () => {
               state.boss = null;
             }
             state.combo.pendingAt = null;
-            if (next.resetChain) { state.chainBlocks = 0; state.combo.level = 0; }
+            if (next.resetChain) { state.chainBlocks = 0; state.combo.level = 0; state.powerUpTypes = []; dropsCreatedRef.current = 0; }
             state.phase = "SECTOR_INTRO";
             state.asteroids = [];
             state.bonusTargets = [];
             state.bonusHits = 0;
             state.bonusResult = "";
             state.chainResult = "";
+            state.rewardNotice = "";
+            state.powerUps = [];
+            state.pickupNotice = null;
             state.shots = [];
             state.enemyShots = [];
             state.effects = [];
@@ -1119,7 +1210,7 @@ const GamePage = () => {
             state.asteroids.push(spawnAsteroid(nextIdRef.current++, width, visibleTop, formationIndexRef.current++, state.sector, slots, formationOffsetRef.current, rulesVersionRef.current));
           }
         }
-        if (state.encounter === "boss-fight" && state.boss && state.empMs === 0 && state.boss.elapsed >= BOSS_ENTRY_MS + 1_500) {
+        if (state.encounter === "boss-fight" && state.boss && state.boss.elapsed >= BOSS_ENTRY_MS + 1_500) {
           const reservePhase = state.boss.turrets.every(gun => gun.health <= 0);
           if (bossEscortSlotsRef.current === null && !reservePhase && bossEscortCount(state.sector) > 0) {
             bossEscortSlotsRef.current = bossEscortSlots(state.sector, width, height, state.boss, bossEscortCount(state.sector));
@@ -1188,24 +1279,26 @@ const GamePage = () => {
         const purchasedShieldActive = state.purchasedShieldMs > 0;
         let shieldImpactsRemaining = !purchasedShieldActive && state.shieldActive && state.shieldMs > 0 ? state.shieldCharges : 0;
         state.asteroids.forEach(asteroid => {
-          let next = moveAsteroid(asteroid, state.empMs > 0 ? 0 : delta, width, height);
+          let next = moveAsteroid(asteroid, delta, width, height);
           next.visualMotion = advanceShipMotion(asteroid.visualMotion ?? idleShipMotion(), next.x - asteroid.x, next.y - asteroid.y, delta);
           next.hullLight = hullIllumination(next.x, next.y, time, next.muzzleAt ?? 0, state.effects);
           if (asteroid.attackPattern !== null && next.attackPattern === null && !(normal && pressure.overlap)) attackCooldownRef.current = 0;
-          if (next.attackPattern !== null && next.attackDelay === 0 && !next.firedThisAttack && next.attackElapsed < attackTime(next) && next.attackElapsed >= attackTime(next) * .28 && state.enemyShots.length < enemyShotLimit(width, elapsedRef.current, state.sector)) {
+          if (state.empMs === 0 && next.attackPattern !== null && next.attackDelay === 0 && !next.firedThisAttack && next.attackElapsed < attackTime(next) && next.attackElapsed >= attackTime(next) * .28 && state.enemyShots.length < enemyShotLimit(width, elapsedRef.current, state.sector)) {
             const bullet = createEnemyShot(nextIdRef.current, next.x, next.y + next.radius * .4, state.player, width, height, state.sector);
             if (bullet) {
               nextIdRef.current += 1;
               state.enemyShots.push(bullet);
-              soundRef.current?.playEnemyShot(next.x / width * 2 - 1);
+              soundRef.current?.playEnemyShot(next.x / width * 2 - 1, next.shipClass);
               next = { ...next, firedThisAttack: true, muzzleAt: time };
             }
           }
-          const activeAttack = next.attackPattern !== null && next.attackDelay === 0;
-          const contact = contactWithEnemy(state.player, width, height, next, !next.cloaked && next.x >= 0 && next.x <= width && next.y >= 0 && next.y <= height, activeAttack && next.collidedThisAttack, impactCooldownRef.current, asteroid);
+          // A blocked impact must only suppress the same continuous overlap.
+          // Once the ships separate, a returning enemy is a new collision.
+          if (next.collidedThisAttack && !retainContactLatch(next.collidedThisAttack, previousPlayer, width, height, asteroid)) next = { ...next, collidedThisAttack: false };
+          const contact = contactWithEnemy(state.player, width, height, next, !next.cloaked && enemyMotionVisible(asteroid, next, width, height), next.collidedThisAttack, impactCooldownRef.current, asteroid, previousPlayer);
           if (contact.connected) {
             if (contact.damage) {
-              if (activeAttack) next = { ...next, collidedThisAttack: true };
+              next = { ...next, collidedThisAttack: true };
               impactCooldownRef.current = IMPACT_COOLDOWN_MS;
               if (purchasedShieldActive) {
                 state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: "shield", startedAt: time, target: "player" });
@@ -1219,7 +1312,8 @@ const GamePage = () => {
                   shieldImpactsRemaining -= 1;
                 } else {
                   const sprite = next.sprite;
-                  state.effects.push({ id: nextIdRef.current++, x: next.x, y: next.y, kind: next.type === "etherCrystal" ? "shatter" : "explosion", startedAt: time, sprite, debrisSize: next.radius * 2, debrisRotation: next.rotation, shipClass: next.shipClass, debrisColor: next.color, velocityX: (next.x - asteroid.x) * 1000 / Math.max(1, delta), velocityY: (next.y - asteroid.y) * 1000 / Math.max(1, delta) });
+                  const impact = shipContactPoint(state.player, width, height, asteroid, next, previousPlayer);
+                  state.effects.push({ id: nextIdRef.current++, x: impact.x, y: impact.y, kind: next.type === "etherCrystal" ? "shatter" : "explosion", startedAt: time, sprite, debrisSize: next.radius * 2, debrisRotation: next.rotation, shipClass: next.shipClass, debrisColor: next.color, velocityX: (next.x - asteroid.x) * 1000 / Math.max(1, delta), velocityY: (next.y - asteroid.y) * 1000 / Math.max(1, delta), collision: true });
                   state.score += next.points;
                   if (collision.destroysEnemy) creditComboDefeat(state, next.reward, elapsedRef.current);
                   soundRef.current?.play("explosion");
@@ -1230,7 +1324,7 @@ const GamePage = () => {
               }
             }
           }
-          if (next.y >= -next.radius) nextAsteroids.push({ ...next, cloaked: isGhostCloaked(next.type, next.attackPattern === null && next.entryElapsed >= next.entryDuration && next.formationElapsed >= next.formationDuration, elapsedRef.current) });
+          nextAsteroids.push({ ...next, cloaked: isGhostCloaked(next.type, next.attackPattern === null && next.entryElapsed >= next.entryDuration && next.formationElapsed >= next.formationDuration, elapsedRef.current) });
         });
         state.asteroids = nextAsteroids;
         state.bonusTargets = state.bonusTargets.map(target => {
@@ -1241,8 +1335,8 @@ const GamePage = () => {
         if (state.encounter === "boss-fight" && state.boss) {
           const previousBoss = state.boss;
           state.bossHullLight = hullIllumination(state.boss.x, state.boss.y, time, bossMuzzleRef.current, state.effects);
-          state.boss = moveSectorBoss(state.boss, state.empMs > 0 ? 0 : delta, width, height);
-          const bossContact = contactWithEnemy(state.player, width, height, state.boss, true, false, impactCooldownRef.current, previousBoss);
+          state.boss = moveSectorBoss(state.boss, delta, width, height);
+          const bossContact = contactWithEnemy(state.player, width, height, state.boss, true, false, impactCooldownRef.current, previousBoss, previousPlayer);
           if (bossContact.damage) {
             heartsLost = Math.max(heartsLost, 1);
             impactCooldownRef.current = IMPACT_COOLDOWN_MS;
@@ -1261,9 +1355,8 @@ const GamePage = () => {
         let playerImpact: { x: number; y: number } | undefined;
         const incomingShots: EnemyShot[] = [];
         for (const shot of state.enemyShots) {
-          const moved = advanceEnemyShot(shot, state.empMs > 0 ? 0 : delta);
-          if (moved.y > height + 12 || moved.x < -12 || moved.x > width + 12) continue;
-          if (enemyShotHitsPlayer(moved, state.player, width, height)) {
+          const moved = advanceEnemyShot(shot, delta);
+          if (enemyShotHitsPlayer(moved, state.player, width, height, shot, previousPlayer)) {
             if (impactCooldownRef.current === 0) {
               if (purchasedShieldActive) {
                 state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: "shield", startedAt: time, target: "player" });
@@ -1283,7 +1376,7 @@ const GamePage = () => {
             }
             continue;
           }
-          incomingShots.push(moved);
+          if (!enemyShotOutsideField(moved, width, height)) incomingShots.push(moved);
         }
         state.enemyShots = incomingShots;
         if (heartsLost > 0) {
@@ -1292,9 +1385,10 @@ const GamePage = () => {
           const damaged = state.hearts < previousHearts;
           damageTaken = damaged;
           const destroyed = damaged && state.hearts === 0;
-          state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: destroyed ? "player-explosion" : damaged ? "player-crash" : "shield", startedAt: time, target: "player", sprite: damaged ? shipSelection.skin.sprite : undefined, debrisSize: damaged ? 86 : undefined, debrisColor: damaged ? shipSelection.color.id : undefined, shipStage: shipStageRef.current });
+          const currentShip = shipSelectionRef.current;
+          state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: destroyed ? "player-explosion" : damaged ? "player-crash" : "shield", startedAt: time, target: "player", sprite: damaged ? currentShip.skin.sprite : undefined, debrisSize: damaged ? 86 : undefined, debrisColor: damaged ? currentShip.color.id : undefined, shipStage: shipStageRef.current });
           if (damaged) {
-            const sprite = shipSelection.skin.sprite;
+            const sprite = currentShip.skin.sprite;
             const shot = { id: nextIdRef.current++, x: playerImpact?.x ?? state.player.x * width, y: playerImpact?.y ?? state.player.y * height - 12 };
             state.playerHit = hullFireAtImpact(shot, { x: state.player.x * width, y: state.player.y * height }, playerShipRef.current?.offsetWidth || 76, spriteFireSites[sprite].map(([x, y]) => [100 - x, 100 - y] as const));
             state.playerHullFires = addPersistentHullFire(state.playerHullFires, state.playerHit, 4);
@@ -1309,7 +1403,7 @@ const GamePage = () => {
             // A life loss is durable mission progress. Persist it immediately instead
             // of relying on pagehide/visibility handlers, which a hard reload may cancel.
             // This prevents Resume from restoring an older checkpoint with more lives.
-            if (state.hearts > 0) void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
+            if (state.hearts > 0) void saveCombatRef.current().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
           }
           else soundRef.current?.play("shield");
         }
@@ -1357,10 +1451,10 @@ const GamePage = () => {
           if (bossTarget && state.boss) {
             if (bossTarget.kind === "turret") {
               const bonus = damageBossTurret(state.boss, bossTarget.index, shot.damage);
+              const position = gunPosition(state.boss, bossWeapons[state.boss.config.id - 1][bossTarget.index]);
+              state.effects.push({ id: nextIdRef.current++, ...position, kind: bonus > 0 ? "turret-burst" : "turret-hit", startedAt: time, turretBonus: bonus || undefined });
               if (bonus > 0) {
-                const position = gunPosition(state.boss, bossWeapons[state.boss.config.id - 1][bossTarget.index]);
                 state.score += bonus;
-                state.effects.push({ id: nextIdRef.current++, ...position, kind: "explosion", startedAt: time, debrisSize: 28, turretBonus: bonus });
                 soundRef.current?.play("explosion");
                 gameHaptics.explosion();
               } else soundRef.current?.play("enemyHit");
@@ -1368,7 +1462,7 @@ const GamePage = () => {
             }
             if (!damageSectorBoss(state.boss, shot.damage, time)) continue;
             state.boss.hit = { id: shot.id, x: (shot.x - state.boss.x) / state.boss.width * 100 + 50, y: (shot.y - state.boss.y) / state.boss.height * 100 + 50, impactPower: shot.damage };
-            if (state.boss.health === 0) destroyBoss(state, time);
+            if (state.boss.health === 0) destroyBossRef.current(state, time);
             else {
               const location = bossFireSite(state.boss, shot.x, shot.y, state.boss.hullFires ?? []);
               const maxFires = hullFireLimit(state.boss.health, state.boss.maxHealth, true);
@@ -1394,9 +1488,8 @@ const GamePage = () => {
           creditComboDefeat(state, enemy.reward, elapsedRef.current);
           state.asteroids = state.asteroids.filter(item => item.id !== enemy.id);
           if (enemy.attackPattern !== null) attackCooldownRef.current = 0;
-          const drop = enemy.escort ? null : createPowerUpDrop({ id: nextIdRef.current, x: enemy.x, y: enemy.y, width, height, threats: state.asteroids, activeCount: state.powerUps.length, chanceRoll: Math.random(), kindRoll: Math.random(), destroyed: state.destroyed, dropsCreated: dropsCreatedRef.current, level: state.sector });
-          const usefulDrop = drop?.type === "weapon" && state.weaponLevel >= 5 ? null : drop;
-          if (usefulDrop) { nextIdRef.current += 1; dropsCreatedRef.current += 1; state.powerUps.push(usefulDrop); }
+          const drop = enemy.escort ? null : createPowerUpDrop({ id: nextIdRef.current, x: enemy.x, y: enemy.y, width, height, threats: state.asteroids, activeCount: state.powerUps.length, chanceRoll: Math.random(), kindRoll: Math.random(), destroyed: state.destroyed, dropsCreated: dropsCreatedRef.current, level: state.sector, usedTypes: state.powerUpTypes, weaponMaxed: state.weaponLevel >= 5 });
+          if (drop) { nextIdRef.current += 1; dropsCreatedRef.current += 1; state.powerUpTypes.push(drop.type); state.powerUps.push(drop); }
         }
         state.shots = state.encounter === 'boss-clear' ? [] : remainingShots;
         const nextFlight = normal ? nextBlockFlight(state.sector, flightRef.current, formationIndexRef.current, state.asteroids.length, rulesVersionRef.current) : null;
@@ -1470,10 +1563,11 @@ const GamePage = () => {
         }
         if (time - combatCheckpointAtRef.current >= 10_000 && state.hearts > 0 && state.phase !== "SECTOR_CLEAR") {
           combatCheckpointAtRef.current = time;
-          void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
+          void saveCombatRef.current().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
         }
-        if (state.phase === "SECTOR_CLEAR") state.enemyShots = [];
-        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "boss-fall" ? BOSS_FALL_DURATION_MS + 100 : effect.kind === "boss-explosion" ? BOSS_FALL_DURATION_MS + 3_400 : effect.kind === "player-explosion" ? 2_250 : effect.kind === "player-crash" ? 1_350 : effect.kind === "explosion" || effect.kind === "shatter" ? 2_250 : 390));
+        if (state.phase === "SECTOR_CLEAR") { state.enemyShots = []; state.shots = []; }
+        persistGuestShards();
+        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "turret-hit" ? 340 : effect.kind === "turret-burst" ? 720 : effect.kind === "boss-fall" ? BOSS_FALL_DURATION_MS + 100 : effect.kind === "boss-explosion" ? BOSS_FALL_DURATION_MS + 3_400 : effect.kind === "player-explosion" ? 2_250 : effect.kind === "player-crash" ? 1_350 : effect.kind === "explosion" || effect.kind === "shatter" ? 2_250 : 390));
         if (state.hearts === 0) {
           state.status = "destroying";
           state.enemyShots = [];
@@ -1552,10 +1646,10 @@ const GamePage = () => {
       const height = fieldRef.current?.clientHeight || 600;
       const now = performance.now();
       state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: power === "bomb" ? "bomb-wave" : "emp-wave", startedAt: now });
-      state.enemyShots = [];
       if (power === "emp") {
-        state.empMs = 7_000;
+        disableEnemyWeapons(state);
       } else {
+        state.enemyShots = [];
         const visible = state.asteroids.filter(enemy => enemy.x >= -enemy.radius && enemy.x <= width + enemy.radius && enemy.y >= -enemy.radius && enemy.y <= height + enemy.radius);
         for (const enemy of visible) {
           state.score += enemy.points;
@@ -1566,10 +1660,13 @@ const GamePage = () => {
         const destroyedIds = new Set(visible.map(enemy => enemy.id));
         state.asteroids = state.asteroids.filter(enemy => !destroyedIds.has(enemy.id));
         if (state.boss && state.encounter === "boss-fight") {
-          damageSectorBoss(state.boss, 18, now, true);
-          if (state.boss.health === 0) {
-            destroyBoss(state, now);
+          const blast = detonateBossBomb(state.boss, now);
+          for (const impact of blast.impacts) {
+            const position = gunPosition(state.boss, bossWeapons[state.boss.config.id - 1][impact.index]);
+            state.effects.push({ id: nextIdRef.current++, ...position, kind: impact.destroyed ? "turret-burst" : "turret-hit", startedAt: now, turretBonus: impact.bonus || undefined });
+            state.score += impact.bonus;
           }
+          if (blast.impacts.length) gameHaptics.explosion();
         }
         attackCooldownRef.current = 0;
       }
@@ -1582,6 +1679,7 @@ const GamePage = () => {
       if (power === "rapid") state.rapidFireTotalMs = PURCHASED_POWER_UP_DURATION_MS;
     }
     state.pendingStartPower = null;
+    persistGuestShards();
     soundRef.current?.play(power === "bomb" ? "nova" : power === "emp" ? "emp" : power === "overdrive" ? "boost" : "pickup");
     setGame({ ...state });
   };
@@ -1591,17 +1689,18 @@ const GamePage = () => {
   const openWeaponSelection = () => {
     if (stateRef.current.status !== 'playing' && stateRef.current.status !== 'paused') return;
     stateRef.current.status = 'paused';
+    musicRef.current?.pause();
     pointerRef.current = null; touchOriginRef.current = null; keysRef.current.clear();
     setWeaponMenuOpen(true); setWeaponError(''); setGame({ ...stateRef.current });
 
   };
-  const selectWeaponLevel = async (level: number) => {
-    const state = stateRef.current;
-    if (state.status !== 'paused' || !weaponMenuOpen || weaponBusyRef.current || weaponCountdown !== null) return;
-    if (level === 1) {
-      state.weaponSource = "standard";
-    } else {
-      let remaining = state.weaponTimers[level] ?? 0;
+  const selectWeaponLevel = async (level: number, automatic = false) => {
+    const state = stateRef.current, runId = scoreRunRef.current;
+    const current = () => weaponMountedRef.current && stateRef.current === state && scoreRunRef.current === runId;
+    if ((!automatic && (state.status !== 'paused' || !weaponMenuOpen)) || (automatic && state.status !== 'playing') || weaponBusyRef.current || weaponCountdown !== null) { if (automatic) reloadPendingRef.current = false; return; }
+    const previousSelection = { source: state.weaponSource, level: state.weaponLevel };
+    let remaining = level === 1 ? 0 : state.weaponTimers[level] ?? 0;
+    if (level !== 1) {
       if (remaining <= 0) {
         if (adminRunRef.current) remaining = PURCHASED_WEAPON_DURATION_MS;
         else {
@@ -1611,29 +1710,49 @@ const GamePage = () => {
             // A retry uses the original request id and must not overwrite a successful server grant.
             if (!activationRef.current) {
               await saveCombat();
+              if (!current()) return;
               activationRef.current = { level, id: crypto.randomUUID() };
             }
             if (activationRef.current.level !== level) throw new Error('Finish pending activation first');
-            const { data } = await axiosClient.post<{ remainingMs: number; weaponStock: Record<string, number> }>('/hangar/weapon/activate', { runId: scoreRunRef.current, level, requestId: activationRef.current.id });
+            const { data } = await axiosClient.post<{ remainingMs: number; weaponStock: Record<string, number> }>('/hangar/weapon/activate', { runId, level, requestId: activationRef.current.id }, { timeout: 12000 });
+            if (!current()) return;
             remaining = data.remainingMs;
-            setWeaponStock(data.weaponStock);
+            stockRef.current = data.weaponStock; setWeaponStock(data.weaponStock);
             if (!state.unlockedWeapons.includes(level)) state.unlockedWeapons.push(level);
             activationRef.current = null;
           } catch (error) {
+            if (!current()) return;
             const status = (error as { response?: { status?: number } }).response?.status;
             if (status && status >= 400 && status < 500) activationRef.current = null;
             setWeaponError('Not confirmed. Retry the same weapon.');
+            if (automatic) {
+              if (reloadNoticeTimerRef.current) window.clearTimeout(reloadNoticeTimerRef.current);
+              setAutoReloading(null);
+              reloadNoticeTimerRef.current = window.setTimeout(() => setWeaponError(''), 2_500);
+            }
             return;
-          } finally { weaponBusyRef.current = false; setWeaponBusy(false); }
+          } finally { if (current()) { weaponBusyRef.current = false; setWeaponBusy(false); reloadPendingRef.current = false; } }
         }
         state.weaponTimers[level] = remaining;
       }
-      state.paidWeaponLevel = level;
-      state.paidWeaponMs = remaining;
-      state.weaponSource = "paid";
+    }
+    // A collected pickup or a manual selection can take over while the server confirms the charge.
+    if (!automatic || (state.status === 'playing' && state.weaponSource === previousSelection.source && state.weaponLevel === previousSelection.level)) {
+      if (level > 1) { state.paidWeaponLevel = level; state.paidWeaponMs = remaining; }
+      state.weaponSource = level === 1 ? 'standard' : 'paid';
     }
     syncSelectedWeapon(state);
     setGame({ ...state, weaponTimers: [...state.weaponTimers] });
+  };
+  reloadRequestRef.current = level => {
+    if (!accountRun || !scoreRunRef.current || adminRunRef.current || weaponBusyRef.current || activationRef.current || reloadPendingRef.current) return false;
+    reloadPendingRef.current = true;
+    setAutoReloading(level);
+    soundRef.current?.play('reload');
+    if (reloadNoticeTimerRef.current) window.clearTimeout(reloadNoticeTimerRef.current);
+    reloadNoticeTimerRef.current = window.setTimeout(() => setAutoReloading(null), 1_250);
+    void selectWeaponLevel(level, true);
+    return true;
   };
   const selectPickupWeapon = () => {
     const state = stateRef.current;
@@ -1650,11 +1769,20 @@ const GamePage = () => {
     if (gameOverTimerRef.current !== null) window.clearTimeout(gameOverTimerRef.current);
     gameOverTimerRef.current = null;
     stateRef.current = createInitialState();
+    stateRef.current.shardBase = shardBalance(localStorage.getItem(SHARD_BALANCE_KEY));
+    guestCreditedShardsRef.current = 0;
     bossLifeRemainingRef.current=0;pendingBossCardRef.current=null;setExtraLifeVisible(false);
     shipStageRef.current = 1;
     setShipStage(1);
     recordsSavedRef.current = false;
     scoreRunRef.current = null;
+    activationRef.current = null;
+    weaponBusyRef.current = false;
+    setWeaponBusy(false);
+    reloadPendingRef.current = false;
+    setAutoReloading(null);
+    setWeaponError('');
+    if (reloadNoticeTimerRef.current) window.clearTimeout(reloadNoticeTimerRef.current);
     adminRunRef.current = false;
     setScoreSync("idle");
     setWeaponMenuOpen(false);
@@ -1701,6 +1829,7 @@ const GamePage = () => {
   };
 
   const goHome = () => {
+    persistGuestShards();
     if (!recordsSavedRef.current) {
       if (!adminRunRef.current && !scoreRunRef.current) saveRecords(stateRef.current);
       recordsSavedRef.current = true;
@@ -1737,6 +1866,7 @@ const GamePage = () => {
     }
   };
 
+  const totalShards = missionShardTotal(game.shardBase, game.shards);
   const levelLabel = String(campaignLevel(game.sector));
   const sectorLabel = sectorInChapter(game.sector);
   const round = sectionInSector(game.section);
@@ -1785,7 +1915,7 @@ const GamePage = () => {
     }}>{t("Retry save")}</button>}</p>;
 
   return (
-    <main className="game-shell" data-effects-paused={game.status !== "playing"} onPointerDownCapture={event => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
+    <main className="game-shell" data-effects-paused={game.status === "paused" || game.status === "loading"} onPointerDownCapture={event => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
       {rewardCards[0] && <CardReveal reward={rewardCards[0]} remaining={rewardCards.length} onContinue={continueRewardCard}/>}
       {extraLifeVisible&&<div className="boss-extra-life" role="status" aria-live="polite"><strong>{t('EXTRA LIFE')}</strong><span>+1 ♥</span></div>}
       <div ref={fieldRef} className="game-field" onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()} onPointerDown={startDrag} onPointerMove={event => { if (pointerRef.current === event.pointerId) positionFromPointer(event); }} onPointerUp={event => { if (pointerRef.current === event.pointerId) { pointerRef.current = null; touchOriginRef.current = null; } }} onPointerCancel={event => { if (pointerRef.current === event.pointerId) { pointerRef.current = null; touchOriginRef.current = null; } }}>
@@ -1793,18 +1923,17 @@ const GamePage = () => {
         <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
         <button className="wide-fullscreen-control game-fullscreen-control" type="button" onClick={requestGameFullscreen} aria-label={t("Full screen")} title={t("Full screen")}>⛶</button>
         <header ref={hudRef} className="game-hud">
-          <div className="hud-actions"><button className="game-control home-control" type="button" disabled={rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || game.status === "loading" || game.status === "destroying"} onClick={() => { if (game.status === "game-over" || game.status === "victory") { goHome(); return; } homePromptWasPlayingRef.current = stateRef.current.status === "playing"; stateRef.current.status = "paused";
-        void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); setHomePrompt(true); }} aria-label={t("Go home")}><CockpitIcon kind="home" /></button></div>
+          <div className="hud-actions"><button className="game-control home-control" type="button" disabled={weaponBusy || rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || game.status === "loading" || game.status === "destroying"} onClick={() => { if (game.status === "game-over" || game.status === "victory") { goHome(); return; } homePromptWasPlayingRef.current = stateRef.current.status === "playing"; stateRef.current.status = "paused";
+        musicRef.current?.pause(); void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); setHomePrompt(true); }} aria-label={t("Go home")}><CockpitIcon kind="home" /></button></div>
           <div className={`hud-stat hearts-stat${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " hearts-stat-hit" : ""}`}><span className="hud-heart-label" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.2 3.4 13.1C-1.1 8.8 5.3 1.7 10.2 5.9L12 7.5l1.8-1.6c4.9-4.2 11.3 2.9 6.8 7.2L12 21.2Z" /></svg></span><strong className="hearts" role="status" aria-live="polite" aria-label={lives(game.hearts)}>/{game.hearts}</strong></div>
           <div className="hud-stat game-level-hud" aria-label={`${t("Game level")} ${levelLabel}`}><span>{t("Level")}</span><strong>{levelLabel}</strong></div>
-          <div className="hud-stat score-hud" aria-label={`${t("Shards")} ${game.shards}, ${t("Score")} ${game.score}`}><span className="shard-line"><b>◆ {game.shards}</b><small>{t("Shards")}</small></span><span className="score-line"><b>{game.score}</b><small>{t("Score")}</small></span></div>
+          <div className="hud-stat score-hud" aria-label={`${t("Shards")} ${totalShards}, ${t("Score")} ${game.score}`}><span className="shard-line"><b>◆ {totalShards}</b><small>{t("Shards")}</small></span><span className="score-line"><b>{game.score}</b><small>{t("Score")}</small></span></div>
           <div className="hud-stat round-hud chain-hud" aria-label={`${t("Block")} ${game.chainBlocks}/${BLOCKS_PER_CHAIN}`}><span>{t("Block")}</span><strong>{game.chainBlocks}<small>/{BLOCKS_PER_CHAIN}</small></strong></div>
-          <button className="game-control pause-control" type="button" disabled={rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || pauseLeaving || game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { if (pauseLeaveRef.current) return; const resuming = game.status === "paused"; stateRef.current.status = resuming ? "playing" : "paused"; if (!resuming) void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); if (resuming) window.setTimeout(retryAudio, 0); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
+          <button className="game-control pause-control" type="button" disabled={weaponBusy || rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || pauseLeaving || game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { if (pauseLeaveRef.current) return; const resuming = game.status === "paused"; stateRef.current.status = resuming ? "playing" : "paused"; if (!resuming) { musicRef.current?.pause(); void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); } setGame({ ...stateRef.current }); if (resuming) retryAudio(); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
         </header>
         <div className="game-label">{adminRunRef.current && <strong>{t("Admin center")} · </strong>}{t("LEVEL")} {levelLabel} <span>· <strong className="game-region-name">{sectorName(game.sector)}</strong> · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/${BLOCKS_PER_CHAIN}` : game.encounter === "bonus" ? t("BONUS CHALLENGE") : t("CORE WARDEN")}</span></div>
         {game.encounter === "normal" && <span className="flight-indicator" style={{ top: visibleTopRef.current + 25 }}>{t("Group {current}/{total}", { current: flightRef.current + 1, total: blockFlights(game.sector, rulesVersionRef.current).length })}</span>}
         {reinforcementIntro && game.status === "playing" && <div className="reinforcement-notice" role="status">{t("Reinforcements incoming")}</div>}
-        {audioNeedsTap && game.status === "playing" && <button className={`audio-retry${game.pickupNotice ? " audio-retry-with-pickup" : ""}`} type="button" onClick={retryAudio}>{t("Enable sound")}</button>}
         {game.encounter === "bonus" && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">{t("BONUS TARGETS")} {game.bonusHits} / {BONUS_TARGET_COUNT} · {t("NO ENEMY FIRE")}</div>}
         {game.encounter === 'boss-clear' && !game.bossHeartCollected && clearTimerRef.current >= BOSS_CLEAR_DURATION_MS && <div className="boss-heart-pickup" role="status" aria-label={t('Collect the heart to start the bonus round.')} style={{left: `${BOSS_HEART_POSITION.x * 100}%`, top: `${BOSS_HEART_POSITION.y * 100}%`}}>
           <span className="boss-heart-orb" aria-hidden="true"><span className="power-preview-orbit"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.2 3.4 13.1C-1.1 8.8 5.3 1.7 10.2 5.9L12 7.5l1.8-1.6c4.9-4.2 11.3 2.9 6.8 7.2L12 21.2Z" /></svg></i></span></span>
@@ -1852,8 +1981,8 @@ const GamePage = () => {
           <HullDamage sites={game.boss.hullFires} hit={game.boss.hit} maskImage={`url('${game.boss.config.image}')`} bossDamage={1 - game.boss.health / game.boss.maxHealth} />
           <BossHealthView boss={game.boss}/>
         </div>}
-        {game.bonusTargets.map(target => <div key={target.id} className="asteroid asteroid-small cryptoid bonus-ship cryptoid-boost" style={{ ...alignedSpritePosition(target.x, target.y, target.sprite, 50), transform: "translate(-50%, -50%)", "--flame-length": `${engineFlamePercent(target.visualMotion?.thrust ?? 0)}%` } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={target.sprite} color={target.color} />{engineTrails(target.sprite, "exhaust")}</div></div>)}
-        {game.asteroids.map(asteroid => { const sprite = asteroid.sprite; const maskImage = `url('${shipEvolutionAsset(sprite, 1)}')`; return <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid${game.empMs > 0 ? " cryptoid-emp" : ""} cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.hitUntil && asteroid.hitUntil > performance.now() ? " cryptoid-hit" : ""}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}${cryptoidMotionClass(asteroid)}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ ...alignedSpritePosition(asteroid.x, asteroid.y, sprite, asteroid.radius * 2), transform: `translate(-50%, -50%) rotate(${asteroid.rotation}deg)`, ...shipHullStyle(sprite, true), "--visual-bank": `${asteroid.visualMotion?.bank ?? 0}deg`, "--flame-length": `${engineFlamePercent(asteroid.visualMotion?.thrust ?? 0, asteroid.returnElapsed > 0 ? "return" : asteroid.entryElapsed < asteroid.entryDuration ? "launch" : asteroid.attackPattern !== null && asteroid.attackDelay <= 0 ? "boost" : "idle")}%`, "--hull-light": asteroid.hullLight ?? 0 } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={sprite} color={asteroid.color} />{engineTrails(sprite, "exhaust")}<i className="hull-reflection" style={{ maskImage, WebkitMaskImage: maskImage }} aria-hidden="true" /><HullDamage sites={asteroid.hullFires} hit={asteroid.hit} maskImage={maskImage} mirrored /></div><span className="health-bar" data-critical={asteroid.health / asteroid.maxHealth <= .3} role="progressbar" aria-label={t("Enemy hull")} aria-valuenow={Math.ceil(asteroid.health / asteroid.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${asteroid.health / asteroid.maxHealth * 100}%` }} /></span></div>; })}
+        {game.bonusTargets.map(target => <div key={target.id} className="asteroid asteroid-small cryptoid bonus-ship cryptoid-boost" style={{ ...alignedSpritePosition(target.x, target.y, target.sprite, 55), width: 55, height: 55, transform: "translate(-50%, -50%)", "--flame-length": `${engineFlamePercent(target.visualMotion?.thrust ?? 0)}%` } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={target.sprite} color={target.color} />{engineTrails(target.sprite, "exhaust")}</div></div>)}
+        {game.asteroids.map(asteroid => { const sprite = asteroid.sprite; const maskImage = `url('${shipEvolutionAsset(sprite, 1)}')`; const visualSize = enemyVisualDiameter(asteroid.radius); return <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid${game.empMs > 0 ? " cryptoid-emp" : ""} cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.hitUntil && asteroid.hitUntil > performance.now() ? " cryptoid-hit" : ""}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}${cryptoidMotionClass(asteroid)}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ ...alignedSpritePosition(asteroid.x, asteroid.y, sprite, visualSize), width: visualSize, height: visualSize, transform: "translate(-50%, -50%)", ...shipHullStyle(sprite, true), "--visual-bank": `${asteroid.visualMotion?.bank ?? 0}deg`, "--flame-length": `${engineFlamePercent(asteroid.visualMotion?.thrust ?? 0, asteroid.returnElapsed > 0 ? "return" : asteroid.entryElapsed < asteroid.entryDuration ? "launch" : asteroid.attackPattern !== null && asteroid.attackDelay <= 0 ? "boost" : "idle")}%`, "--hull-light": asteroid.hullLight ?? 0 } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={sprite} color={asteroid.color} />{engineTrails(sprite, "exhaust")}<i className="hull-reflection" style={{ maskImage, WebkitMaskImage: maskImage }} aria-hidden="true" /><HullDamage sites={asteroid.hullFires} hit={asteroid.hit} maskImage={maskImage} mirrored /></div><span className="health-bar" data-critical={asteroid.health / asteroid.maxHealth <= .3} role="progressbar" aria-label={t("Enemy hull")} aria-valuenow={Math.ceil(asteroid.health / asteroid.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${asteroid.health / asteroid.maxHealth * 100}%` }} /></span></div>; })}
         {game.powerUps.map(pickup => {
           const pickupLabel = `${t(powerUpNames[pickup.type])} · ${t(powerUpDescriptions[pickup.type])}`;
           return <div key={pickup.id} className={`power-up power-up-${pickup.type}`} role="img" aria-label={pickupLabel} title={pickupLabel} style={{ left: pickup.x, top: pickup.y }}><span aria-hidden="true">{powerUpSymbols[pickup.type]}</span></div>;
@@ -1863,21 +1992,24 @@ const GamePage = () => {
         {game.shots.map(shot => <div key={shot.id} className={`player-laser player-laser-tier-${shot.visualLevel ?? 1}${shot.empowered && shot.visualLevel !== 5 ? " player-laser-overdrive" : ""}`} style={{ left: shot.x, top: shot.y }} aria-hidden="true" />)}
         {game.enemyShots.map(shot => <div key={shot.id} className={`enemy-laser${shot.bossKind ? ` boss-projectile boss-projectile-${shot.bossKind}` : ""}${shot.weaponKind ? ` boss-evolved-shot boss-evolved-${shot.weaponKind}` : ""}`} style={{ left: shot.x, top: shot.y, "--shot-angle": `${-Math.atan2(shot.vx, shot.vy) * 180 / Math.PI}deg`,...(shot.weaponKind?{"--boss-shot-color":shot.weaponColor,"--boss-shot-width":`${shot.weaponWidth}px`,"--boss-shot-diameter":`${shot.radius*2}px`}:{}) } as CSSProperties} aria-hidden="true" />)}
         {game.effects.map(effect => <ImpactEffectView key={effect.id} effect={effect} />)}
-        {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship shielded-ship${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.purchasedShieldMs > 0 || (game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0) ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${engineFlamePercent(game.thrust)}%`, ...shipVisualOffset } as CSSProperties} aria-label={t('Your Cryptoid ship')}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} />{engineTrails(shipSelection.skin.sprite, "player-engine")}<i className="hull-reflection" style={{ maskImage: `url('${shipEvolutionAsset(shipSelection.skin.sprite, shipStage)}')`, WebkitMaskImage: `url('${shipEvolutionAsset(shipSelection.skin.sprite, shipStage)}')` }} aria-hidden="true" /><i className="player-muzzle-flash" aria-hidden="true" /><HullDamage sites={game.playerHullFires} hit={game.playerHit} maskImage={`url('${shipEvolutionAsset(shipSelection.skin.sprite, shipStage)}')`} /></div></div>}
-        {weaponMenuOpen && <div className="game-overlay weapon-selection-overlay" onPointerDown={event => event.stopPropagation()}>
+        {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship shielded-ship${game.status === "paused" && weaponCountdown === null ? " player-ship-dialog-hidden" : ""}${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.purchasedShieldMs > 0 || (game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0) ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${engineFlamePercent(game.thrust)}%`, ...shipVisualOffset } as CSSProperties} aria-label={t('Your Cryptoid ship')}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} />{engineTrails(shipSelection.skin.sprite, "player-engine")}<i className="hull-reflection" style={{ maskImage: `url('${shipEvolutionAsset(shipSelection.skin.sprite, shipStage)}')`, WebkitMaskImage: `url('${shipEvolutionAsset(shipSelection.skin.sprite, shipStage)}')` }} aria-hidden="true" /><i className="player-muzzle-flash" aria-hidden="true" /><HullDamage sites={game.playerHullFires} hit={game.playerHit} maskImage={`url('${shipEvolutionAsset(shipSelection.skin.sprite, shipStage)}')`} /></div></div>}
+        {weaponMenuOpen && <div className={`game-overlay weapon-selection-overlay${readControlHand() === 'right' ? ' weapon-drawer-left' : ' weapon-drawer-right'}`} onPointerDown={event => event.stopPropagation()}>
           <div className="weapon-selection-dialog" role="dialog" aria-modal="true" aria-labelledby="mission-weapon-shop-title">
-            <MissionWeaponShop authenticated={accountRun} admin={adminRunRef.current} timers={game.weaponTimers} initialStock={weaponStock} activeLevel={game.weaponLevel} source={game.weaponSource} pickupLevel={game.pickupWeaponLevel} pickupMs={game.pickupWeaponMs} stage={shipStage} selectionBusy={weaponBusy} pendingLevel={activationRef.current?.level} selectionError={weaponError} onSelect={level => { void selectWeaponLevel(level); }} onPickup={selectPickupWeapon} onClose={resumeWeaponSelection} onInventory={async (_owned, stock) => { setWeaponStock(stock); }} />
+            <MissionWeaponShop autoReload={autoReload} onAutoReload={changeAutoReload} authenticated={accountRun} admin={adminRunRef.current} timers={game.weaponTimers} initialStock={weaponStock} activeLevel={game.weaponLevel} source={game.weaponSource} pickupLevel={game.pickupWeaponLevel} pickupMs={game.pickupWeaponMs} stage={shipStage} selectionBusy={weaponBusy} pendingLevel={activationRef.current?.level} selectionError={weaponError} onSelect={level => { void selectWeaponLevel(level); }} onPickup={selectPickupWeapon} onClose={resumeWeaponSelection} onInventory={async (_owned, stock) => { setWeaponStock(stock); }} />
           </div>
+          <button type="button" className="weapon-drawer-tab" onClick={resumeWeaponSelection} disabled={weaponBusy} aria-label={t('Back to game')}>{t('Weapons')} <span aria-hidden="true">{readControlHand() === 'right' ? '‹' : '›'}</span></button>
         </div>}
         <div className={`touch-controls touch-controls-${readControlHand()}`}>
           <div className="edge-actions" role="group" aria-label={t('Available equipment')}>
             <div className="weapon-control-wrap" data-source={game.weaponSource}>
-              <div className="weapon-slot" data-source={game.weaponSource}>
-                {game.weaponSource !== "standard" && <TimedRing remainingMs={game.weaponSource === "paid" ? game.paidWeaponMs : game.pickupWeaponMs} durationMs={game.weaponSource === "paid" ? PURCHASED_WEAPON_DURATION_MS : PICKUP_WEAPON_DURATION_MS} />}
-                <button type="button" className="edge-action edge-action-weapon weapon-cycle mission-shop-access" disabled={game.status !== "playing"} onClick={openWeaponSelection} aria-label={`${t("Shop & weapons")} · ${t("Active weapon")}: ${weaponNames[stageWeaponLevel(shipStage, game.weaponLevel)]}, ${t("Weapon level")} ${stageWeaponLevel(shipStage, game.weaponLevel)} / 5. ${t("Tap to choose a weapon and pause. Resume follows a 3–2–1 countdown.")}${shipStage > 1 ? ` ${t("Projectile hits left")}: ${game.projectileGuard}` : ""}`}>
-                  <span className="weapon-cycle-glyph" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M3 4h2l3 12h10l3-9H6M10 20h.01M18 20h.01" strokeLinecap="round" strokeLinejoin="round" /></svg></span>
-                  <small>{t("Shop & weapons")}</small><em>{weaponNames[stageWeaponLevel(shipStage, game.weaponLevel)]}</em>
+              <div className="weapon-slot weapon-slot-main" data-source={game.weaponSource}>
+
+                <button type="button" className="edge-action edge-action-weapon weapon-cycle mission-shop-access" disabled={game.status !== "playing"} onClick={openWeaponSelection} aria-label={`${t("Weapons")} · ${t("Active weapon")}: ${weaponNames[stageWeaponLevel(shipStage, game.weaponLevel)]}, ${t("Weapon level")} ${stageWeaponLevel(shipStage, game.weaponLevel)} / 5. ${t("Tap to choose a weapon and pause. Resume follows a 3–2–1 countdown.")}${shipStage > 1 ? ` ${t("Projectile hits left")}: ${game.projectileGuard}` : ""}`}>
+                  <span className="mission-access-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="currentColor"><path d="M7 10 9 16 7 29 5 16ZM16 1 18.5 9 16 29 13.5 9ZM25 10 27 16 25 29 23 16Z" /></svg></span>
+                  <span className="mission-access-label">{t('Weapons')}</span>
                 </button>
+                <span className="mission-active-weapon">{weaponNames[stageWeaponLevel(shipStage, game.weaponLevel)]}{game.weaponSource !== 'standard' && <> · {Math.ceil((game.weaponSource === 'paid' ? game.paidWeaponMs : game.pickupWeaponMs) / 1000)}s</>}</span>
+                {game.weaponSource !== 'standard' && <progress className="mission-charge-progress" aria-label={t('Remaining time')} max={game.weaponSource === 'paid' ? PURCHASED_WEAPON_DURATION_MS : PICKUP_WEAPON_DURATION_MS} value={game.weaponSource === 'paid' ? game.paidWeaponMs : game.pickupWeaponMs} />}
               </div>
               {game.weaponSource !== "pickup" && game.pickupWeaponMs > 0 && <div className="weapon-slot weapon-slot-reserve" data-source="pickup"><TimedRing remainingMs={game.pickupWeaponMs} durationMs={PICKUP_WEAPON_DURATION_MS} /><button type="button" className="edge-action edge-action-weapon weapon-cycle" disabled={game.status !== "playing"} onClick={openWeaponSelection} aria-label={`${t("Select")}: ${weaponNames[stageWeaponLevel(shipStage, game.pickupWeaponLevel)]}`}><span className="weapon-cycle-glyph" aria-hidden="true">{weaponGlyphs[stageWeaponLevel(shipStage, game.pickupWeaponLevel)]}</span><small>{weaponNames[stageWeaponLevel(shipStage, game.pickupWeaponLevel)]}</small></button></div>}
               {game.weaponSource !== "paid" && game.paidWeaponMs > 0 && <div className="weapon-slot weapon-slot-reserve" data-source="paid"><TimedRing remainingMs={game.paidWeaponMs} durationMs={PURCHASED_WEAPON_DURATION_MS} /><button type="button" className="edge-action edge-action-weapon weapon-cycle" disabled={game.status !== "playing"} onClick={openWeaponSelection} aria-label={`${t("Select")}: ${weaponNames[stageWeaponLevel(shipStage, game.paidWeaponLevel)]}`}><span className="weapon-cycle-glyph" aria-hidden="true">{weaponGlyphs[stageWeaponLevel(shipStage, game.paidWeaponLevel)]}</span><small>{weaponNames[stageWeaponLevel(shipStage, game.paidWeaponLevel)]}</small></button></div>}
@@ -1901,6 +2033,8 @@ const GamePage = () => {
             {game.pendingStartPower && <button type="button" className={`edge-action edge-action-${game.pendingStartPower} edge-action-purchased`} disabled={game.status !== "playing" || (game.pendingStartPower === "shield" && game.purchasedShieldMs > 0) || (game.pendingStartPower === "rapid" && game.rapidFireMs > 0) || (game.pendingStartPower === "overdrive" && game.overdriveMs > 0) || (game.pendingStartPower === "emp" && game.empMs > 0)} aria-label={`${t("Tap to activate")} ${t(powerUpNames[game.pendingStartPower])}`} onClick={activateStartPower}><span aria-hidden="true">{powerUpSymbols[game.pendingStartPower]}</span><small>{t(powerUpNames[game.pendingStartPower])}</small><em>{t("Tap to activate")}</em></button>}
           </div>
         </div>
+        {autoReloading !== null && <div className="weapon-reloading" role="status" aria-live="polite">{t('Reloading weapon…')} · {weaponNames[autoReloading]}</div>}
+        {weaponError && !weaponMenuOpen && <div className="weapon-reload-error" role="alert">{t(weaponError)}</div>}
         {weaponCountdown !== null && <div className="game-overlay weapon-resume-countdown" role="status" aria-live="polite"><strong>{weaponCountdown}</strong></div>}
         {game.status === "paused" && !rewardCards.length && !weaponMenuOpen && weaponCountdown === null && <div className="game-overlay pause-settings-overlay" role="dialog" aria-modal="true" aria-labelledby="pause-settings-title"><div className="game-modal pause-settings-modal">
           <p className="eyebrow" id="pause-settings-title">{t('MISSION PAUSED')}</p><h1><span className="desktop-menu-only">{t('Hold the line.')}</span><span className="mobile-menu-only">{t('A short breather.')}</span></h1><p><span className="desktop-menu-only">{t('The asteroids are waiting.')}</span><span className="mobile-menu-only">{t("Level")} {levelLabel} · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/9` : game.encounter === "bonus" ? t("Bonus round") : t("Boss")} · {sectorName(game.sector)}</span></p>
@@ -1911,15 +2045,29 @@ const GamePage = () => {
             <button className="button button-secondary" type="button" disabled={saveRetrying || pauseLeaving} onClick={() => { void leaveSavedMission(); }}>{pauseLeaving ? t("Checking save…") : t("Go home")}</button>
           </section>}
           <button className="button button-secondary pause-weapon-shop-button" type="button" disabled={pauseLeaving || saveRetrying} onClick={openWeaponSelection}>{t('Shop & weapons')}</button>
-          <h2 className="pause-system-title">{t("SYSTEM / SETTINGS")}</h2><SystemSettings compactMobile idPrefix="pause" musicVolume={musicVolume} effectsVolume={effectsVolume} changeMusicVolume={changeMusicVolume} changeEffectsVolume={changeEffectsVolume} onChange={() => { pointerRef.current = null; touchOriginRef.current = null; setGame({ ...stateRef.current }); }} /><button className="button button-primary pause-resume-button" type="button" disabled={pauseLeaving} onClick={() => { if (pauseLeaveRef.current) return; stateRef.current.status = "playing"; pointerRef.current = null; touchOriginRef.current = null; setGame({ ...stateRef.current }); window.setTimeout(retryAudio, 0); }}>{t("Resume")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button>
+          <h2 className="pause-system-title">{t("SYSTEM / SETTINGS")}</h2><SystemSettings compactMobile idPrefix="pause" musicVolume={musicVolume} effectsVolume={effectsVolume} changeMusicVolume={changeMusicVolume} changeEffectsVolume={changeEffectsVolume} onChange={() => { pointerRef.current = null; touchOriginRef.current = null; setGame({ ...stateRef.current }); }} /><button className="button button-primary pause-resume-button" type="button" disabled={pauseLeaving} onClick={() => { if (pauseLeaveRef.current) return; stateRef.current.status = "playing"; pointerRef.current = null; touchOriginRef.current = null; setGame({ ...stateRef.current }); retryAudio(); }}>{t("Resume")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button>
         </div></div>}
         {game.status === "game-over" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><h1>{t("Game Over")}</h1><div className="game-over-details"><p className="eyebrow">{t("MISSION FAILED")}</p><p className="game-over-hearts">{t('Hearts')}: {game.hearts}</p><div className="game-over-stats"><span><b>{game.score}</b>{t('Score')}</span><span><b>{game.destroyed}</b>{t('Destroyed')}</span><span><b>{game.sector}</b>{t('Sector')}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSyncStatus}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t('Home')}</button></div></div></div></div>}
         {game.status === "victory" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><p className="eyebrow">{t("CAMPAIGN COMPLETE")}</p><h1>{t("Victory")}</h1><div className="game-over-details"><p>{t("You completed the final bonus challenge.")}</p><div className="game-over-stats"><span><b>{game.score}</b>{t("Score")}</span><span><b>{game.destroyed}</b>{t("Destroyed")}</span><span><b>{game.sector}</b>{t("Sector")}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSyncStatus}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t("Home")}</button></div></div></div></div>}
-        {homePrompt && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2>{t('Return to base?')}</h2><p>{accountRun ? t("Your enemies, remaining groups, lives, weapons and earned rewards are saved so you can continue this fight.") : t('Your current mission will end. Your records will be saved locally.')}</p>{accountRun && <p role="status">{t(saveNotice)}</p>}<div className="modal-actions"><button className="button button-primary" type="button" disabled={pauseLeaving || saveRetrying} onClick={() => { if (accountRun) void leaveSavedMission(); else goHome(); }}>{pauseLeaving ? t("Saving game…") : t('Leave game')}</button><button className="button button-secondary" type="button" disabled={pauseLeaving} onClick={() => { setHomePrompt(false); if (homePromptWasPlayingRef.current) { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); } }}>{t('Keep playing')}</button></div></div></div>}
+        {homePrompt && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2>{t('Return to base?')}</h2><p>{accountRun ? t("Your enemies, remaining groups, lives, weapons and earned rewards are saved so you can continue this fight.") : t('Your current mission will end. Your records will be saved locally.')}</p>{accountRun && <p role="status">{t(saveNotice)}</p>}<div className="modal-actions"><button className="button button-primary" type="button" disabled={pauseLeaving || saveRetrying} onClick={() => { if (accountRun) void leaveSavedMission(); else goHome(); }}>{pauseLeaving ? t("Saving game…") : t('Leave game')}</button><button className="button button-secondary" type="button" disabled={pauseLeaving} onClick={() => { setHomePrompt(false); if (homePromptWasPlayingRef.current) { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); retryAudio(); } }}>{t('Keep playing')}</button></div></div></div>}
       </div>
     </main>
   );
 };
 
 export { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY };
-export default GamePage;
+function GameEntry() {
+  const { authReady, isLoading, authError, signIn } = useAuth();
+  const { t } = useLocale();
+  // Decide guest/account ownership only after authentication has settled.
+  // Once mounted, the mission retains its original owner until it is left.
+  if (authReady && !isLoading && !authError) return <GamePage />;
+  return <div className="game-overlay"><div className="game-modal">
+    <p role="status">{t(!authReady || isLoading ? 'Signing in…' : authError)}</p>
+    {authReady && !isLoading && <div className="modal-actions">
+      <button className="button button-primary" onClick={() => { void signIn(); }}>{t('Retry')}</button>
+      <button className="button button-secondary" onClick={() => { window.location.assign('/'); }}>{t('Home')}</button>
+    </div>}
+  </div></div>;
+}
+export default GameEntry;

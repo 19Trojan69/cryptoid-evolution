@@ -28,31 +28,13 @@ const makeStars = (columns: number, rows: number, seed: number, nearby: boolean)
   }));
 };
 
-const Starfield = ({ sector, paused, showNebula = false }: { sector: number; player: PlayerPosition; paused: boolean; showNebula?: boolean }) => {
+function StarFlare({ stars }: { stars: Star[] }) {
   const [flare, setFlare] = useState<Flare | null>(null);
-  const palette = ((sector - 1) % 6) + 1;
-  const stars = useMemo(() => {
-    const seed = Math.imul(sector, 0x9e3779b1) >>> 0;
-    return {
-      distant: makeStars(15, 10, seed ^ 0x5f1e2d, false),
-      nearby: makeStars(13, 5, seed ^ 0xc291a7, true),
-      cloud: (() => {
-        const random = makeRandom(seed ^ 0xb055c10d);
-        return {
-          left: `${12 + random() * 25}%`,
-          top: `${43 + random() * 8}%`,
-          width: `${54 + random() * 7}%`,
-          height: `${24 + random() * 4}%`,
-        };
-      })(),
-    };
-  }, [sector]);
   useEffect(() => {
-    if (paused) { setFlare(null); return; }
     let timer: number | undefined;
     let previous: Star | null = null;
     let previousColor = -1;
-    const candidates = stars.distant.filter(star => star.x > 70 && star.x < 930 && star.y > 80 && star.y < 720);
+    const candidates = stars.filter(star => star.x > 70 && star.x < 930 && star.y > 80 && star.y < 720);
     const motionAllowed = () => !document.hidden && document.documentElement.dataset.motion !== "reduced" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const schedule = () => {
       if (!motionAllowed()) return;
@@ -75,11 +57,32 @@ const Starfield = ({ sector, paused, showNebula = false }: { sector: number; pla
     motion.addEventListener("change", reset);
     schedule();
     return () => { if (timer !== undefined) window.clearTimeout(timer); observer.disconnect(); document.removeEventListener("visibilitychange", reset); motion.removeEventListener("change", reset); };
-  }, [paused, stars.distant]);
+  }, [stars]);
+  return flare && <i className="distant-star-flare" style={{ left: `${flare.x}%`, top: `${flare.y}%`, "--flare-color": flare.color, "--flare-strength": flare.strength, "--flare-size": flare.size, "--flare-duration": `${flare.duration}ms` } as CSSProperties} />;
+}
+
+const Starfield = ({ sector, paused, showNebula = false }: { sector: number; player: PlayerPosition; paused: boolean; showNebula?: boolean }) => {
+  const palette = ((sector - 1) % 6) + 1;
+  const stars = useMemo(() => {
+    const seed = Math.imul(sector, 0x9e3779b1) >>> 0;
+    return {
+      distant: makeStars(15, 10, seed ^ 0x5f1e2d, false),
+      nearby: makeStars(13, 5, seed ^ 0xc291a7, true),
+      cloud: (() => {
+        const random = makeRandom(seed ^ 0xb055c10d);
+        return {
+          left: `${12 + random() * 25}%`,
+          top: `${43 + random() * 8}%`,
+          width: `${54 + random() * 7}%`,
+          height: `${24 + random() * 4}%`,
+        };
+      })(),
+    };
+  }, [sector]);
   return <div className={`starfield starfield-sector-${palette}${paused ? " starfield-paused" : ""}`} aria-hidden="true">
     {showNebula && <div className="nebula-field"><span className="nebula-cloud" style={stars.cloud} /></div>}
     <div className="milky-band" />
-    {flare && <i className="distant-star-flare" style={{ left: `${flare.x}%`, top: `${flare.y}%`, "--flare-color": flare.color, "--flare-strength": flare.strength, "--flare-size": flare.size, "--flare-duration": `${flare.duration}ms` } as CSSProperties} />}
+    {!paused && <StarFlare stars={stars.distant} />}
     <svg className="starfield-stars starfield-distant" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice">
       {stars.distant.map((star, index) => <circle key={index} cx={star.x} cy={star.y} r={star.radius} fill={star.color} opacity={star.opacity} />)}
     </svg>

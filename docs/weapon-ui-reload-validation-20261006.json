@@ -1,0 +1,117 @@
+{
+  "results": [
+    {
+      "scenario": "success",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "access": {
+        "x": 20,
+        "y": 767.25,
+        "width": 96,
+        "height": 89
+      },
+      "activationRequests": 2,
+      "uniqueActivations": 2,
+      "preferences": "{\"2\":false,\"3\":false,\"4\":false,\"5\":false}",
+      "stock": 1
+    },
+    {
+      "scenario": "lost",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "access": {
+        "x": 20,
+        "y": 762.25,
+        "width": 96,
+        "height": 89
+      },
+      "activationRequests": 3,
+      "uniqueActivations": 2,
+      "preferences": "{\"2\":true,\"3\":false,\"4\":false,\"5\":false}",
+      "stock": 0
+    },
+    {
+      "scenario": "off",
+      "viewport": {
+        "width": 320,
+        "height": 900
+      },
+      "access": {
+        "x": 20,
+        "y": 767.25,
+        "width": 96,
+        "height": 89
+      },
+      "activationRequests": 1,
+      "uniqueActivations": 1,
+      "preferences": null,
+      "stock": 2
+    },
+    {
+      "scenario": "empty",
+      "viewport": {
+        "width": 768,
+        "height": 900
+      },
+      "access": {
+        "x": 20,
+        "y": 762.25,
+        "width": 96,
+        "height": 89
+      },
+      "activationRequests": 1,
+      "uniqueActivations": 1,
+      "preferences": "{\"2\":true,\"3\":false,\"4\":false,\"5\":false}",
+      "stock": 0
+    },
+    {
+      "scenario": "rapid",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "access": {
+        "x": 20,
+        "y": 268.25,
+        "width": 96,
+        "height": 73
+      },
+      "activationRequests": 2,
+      "uniqueActivations": 2,
+      "preferences": "{\"2\":false,\"3\":true,\"4\":false,\"5\":false}",
+      "stock": 1
+    }
+  ],
+  "errors": [],
+  "paidCalls": 0,
+  "baseCommit": "a9531b4b23c98d1261e5312e03eab051f8fce5cc",
+  "frontendTests": 189,
+  "i18nTests": 22,
+  "backendProgressTests": 20,
+  "frontendBuild": "passed",
+  "design": {
+    "button": "96px wide, named action, separate weapon status and duration",
+    "autoReload": "Opt-in per purchased weapon, existing charges only, same idempotent activation as manual selection. Short safe pause during confirmation.",
+    "preferences": "Browser storage scoped by network and account; default off.",
+    "lockedWeapons": "Unchanged; base weapon requires no reload."
+  },
+  "comparisonSources": [
+    {
+      "url": "https://www.idreams.pl/en/our-products/show/product/77-Sky-Force-Reloaded",
+      "use": "Comparable touch arcade shooter; contextual special-weapon controls."
+    },
+    {
+      "url": "https://ubisoft-mobile.helpshift.com/hc/de/8-hungry-shark-evolution/faq/83-what-is-the-shark-shop-and-how-do-i-use-it/",
+      "use": "Explicitly named actions and separate item selection / purchase confirmation."
+    }
+  ],
+  "limitations": [
+    "Browser viewports, not physical iPhone or Pi Browser.",
+    "Inventory and activation tested with actual handlers and isolated in-memory accounts. No paid calls.",
+    "Live verification is performed after deployment."
+  ]
+}

@@ -1,3 +1,4 @@
+import { segmentDistance } from './projectileCollision.ts';
 import type { BossWeaponKind } from './bossWeapons.ts';
 import { PLAYER_RADIUS, type PlayerPosition } from "./playerCombat.ts";
 import { levelDifficulty } from "./levelDifficulty.ts";
@@ -34,5 +35,34 @@ export const createEnemyShot = (id: number, x: number, y: number, player: Player
 };
 
 export const advanceEnemyShot = (shot: EnemyShot, delta: number): EnemyShot => ({ ...shot, x: shot.x + shot.vx * delta, y: shot.y + shot.vy * delta });
-export const enemyShotHitsPlayer = (shot: EnemyShot, player: PlayerPosition, width: number, height: number) =>
-  Math.hypot(shot.x - player.x * width, shot.y - player.y * height) < PLAYER_RADIUS + shot.radius;
+// Match the solid projectile body, excluding decorative glow and exhaust.
+export const enemyShotBody = (shot: EnemyShot) => {
+  const radius = shot.weaponKind === 'laser' ? (shot.weaponWidth ?? shot.radius * 2) / 2 : shot.radius;
+  // Match the painted solid body along its direction of travel. Boss lances
+  // and rapid shots are visibly longer than their circular spawn radius.
+  const radial = shot.bossKind === 'orb' || shot.bossKind === 'heavy' || shot.bossKind === 'pulse';
+  const halfLength = shot.weaponKind === 'laser' ? 12 : shot.weaponKind === 'rocket' ? shot.radius * 1.9 : shot.weaponKind ? shot.radius * 1.45
+    : shot.bossKind === 'lance' ? 16 : shot.bossKind === 'rapid' ? 12.5
+    : shot.bossKind === 'split' || shot.bossKind === 'double' ? 12
+    : radial ? shot.radius : shot.bossKind === 'burst' ? 9.5 : 10;
+  const extension = Math.max(0, halfLength - radius);
+  // The ordinary/lance/rapid gradient is transparent at the trailing end.
+  const trailing = shot.weaponKind === 'laser' ? Math.max(0, 5.3 - radius)
+    : shot.weaponKind ? extension : shot.bossKind === 'lance' ? Math.max(0, 8.3 - radius)
+    : shot.bossKind === 'rapid' ? Math.max(0, 6.5 - radius)
+    : shot.bossKind === 'split' || shot.bossKind === 'double' || shot.bossKind === 'burst' ? extension : 0;
+  return { radius, extension, trailing };
+};
+export const enemyShotHitsPlayer = (shot: EnemyShot, player: PlayerPosition, width: number, height: number, previousShot: EnemyShot = shot, previousPlayer: PlayerPosition = player) => {
+  const body = enemyShotBody(shot), speed = Math.hypot(shot.vx, shot.vy);
+  const direction = { x: speed ? shot.vx / speed : 0, y: speed ? shot.vy / speed : 1 };
+  const from = { x: previousPlayer.x * width - previousShot.x, y: previousPlayer.y * height - previousShot.y };
+  const to = { x: player.x * width - shot.x, y: player.y * height - shot.y };
+  return segmentDistance(from, to,
+    { x: -direction.x * body.trailing, y: -direction.y * body.trailing },
+    { x: direction.x * body.extension, y: direction.y * body.extension }) < PLAYER_RADIUS + body.radius;
+};
+export const enemyShotOutsideField = (shot: EnemyShot, width: number, height: number) => {
+  const margin = Math.max(24, shot.radius * 2);
+  return shot.y < -margin || shot.y > height + margin || shot.x < -margin || shot.x > width + margin;
+};

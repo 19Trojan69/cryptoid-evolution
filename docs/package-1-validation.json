@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-08",
+  "base": "749d3d525615d377a9380d05e385f21955178e16",
+  "scope": "Package 1 only",
+  "frontendBuild": "passed",
+  "backendBuild": "passed",
+  "frontendTests": {
+    "passed": 219,
+    "failed": 0
+  },
+  "backendTests": {
+    "passed": 47,
+    "failed": 0
+  },
+  "browser": {
+    "results": [
+      {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "guestWallet": "1250 → 1270 → reload 1270",
+        "damage": "hit, immunity, shield, armor passed",
+        "explosion": "opaque first frame",
+        "transitions": "block, boss, bonus passed"
+      },
+      {
+        "viewport": {
+          "width": 1280,
+          "height": 800
+        },
+        "guestWallet": "1250 → 1270 → reload 1270",
+        "damage": "hit, immunity, shield, armor passed",
+        "explosion": "opaque first frame",
+        "transitions": "block, boss, bonus passed"
+      },
+      {
+        "accountResume": "1270 + 15 = 1285, save/reload without duplicate credit",
+        "lives": "loss survives reload",
+        "bossClearResume": "heart available, no duplicate destruction/reward",
+        "appSwitch": "pauses immediately"
+      }
+    ],
+    "errors": []
+  },
+  "backgroundRafPause": "passed: 60 seconds without RAF retains effect age",
+  "lint": {
+    "baseline": {
+      "errors": 55,
+      "warnings": 16
+    },
+    "current": {
+      "errors": 55,
+      "warnings": 16
+    },
+    "passed": false,
+    "newFindings": 0
+  },
+  "deployment": {
+    "testnet": "not deployed: Vercel deployment permission denied (403)",
+    "production": "unchanged"
+  },
+  "physicalDeviceTesting": "pending"
+}

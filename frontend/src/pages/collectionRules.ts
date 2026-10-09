@@ -1,4 +1,4 @@
 import { ownedShipStage, type ShipStage } from './shipEvolution.ts';
-export function playerCardUnlocked(id: string, sprite: number, stage: ShipStage, used: readonly string[], upgrades: readonly string[]): boolean {
-  return stage === 1 ? used.includes(id) : ownedShipStage(sprite, upgrades) >= stage;
+export function playerCardUnlocked(id: string, sprite: number, stage: ShipStage, owned: readonly string[], upgrades: readonly string[]): boolean {
+  return owned.includes(id) && (stage === 1 || ownedShipStage(sprite, upgrades) >= stage);
 }

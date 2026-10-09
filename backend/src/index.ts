@@ -207,6 +207,8 @@ export const start = async (listen = true): Promise<void> => {
     await app.locals.userCollection.createIndex({ bestScore: -1, uid: 1 });
     await app.locals.userCollection.createIndex({ "bestScoreV2.testnet": -1, uid: 1 });
     await app.locals.userCollection.createIndex({ "bestScoreV2.mainnet": -1, uid: 1 });
+    await app.locals.userCollection.createIndex({ "careerScoreByNetwork.testnet": -1, uid: 1 });
+    await app.locals.userCollection.createIndex({ "careerScoreByNetwork.mainnet": -1, uid: 1 });
     console.log("Connected to MongoDB");
 
     if (listen) {

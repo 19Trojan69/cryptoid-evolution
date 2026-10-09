@@ -4,7 +4,8 @@ import { availableShipCards, unseenShipCards, type CardReward } from './cardReve
 import { mergeCardReveals, rememberCard, readCardReveals, syncCardReveals } from './cardRevealMemory';
 import { primeCardSound } from './cardSound';
 import Collection from "./Collection";
-import SystemSettings, { applySavedDisplaySettings, type SettingsSection } from "./SystemSettings";
+import SystemSettings from "./SystemSettings";
+import { applySavedDisplaySettings, type SettingsSection } from './displaySettings';
 import { useCallback, useEffect, useRef, useState } from "react";
 import QuickAccessMenu, { type QuickAction } from "../components/QuickAccessMenu";
 import type { GuideTopic } from "./GameGuide";
@@ -49,8 +50,8 @@ import { BOSS_STICKER_COUNT, CHAIN_MILESTONES, emptyRewardProgress, rankForLevel
 
 type Offer = { id: string; kind: "weapon" | "power" | "armor" | "ship_upgrade"; name: string; description: string; pricePi: number; shipIndex?: number; stage?: 2 | 3 };
 type Inventory = { weaponStock?: Record<string, number>; ownedWeapons: string[]; ownedArmor: string[]; ownedShipUpgrades?: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
-type Leader = { rank: number; username: string; score: number; serviceRank: { name: string; symbol: string } };
-const collectionLabel = (locale: string) => locale.startsWith("de") ? "Sammelkarten" : "Card collection";
+type Leader = { rank: number; username: string; score: number; careerScore?: number; bestRun?: { score: number; level: number | null }; profileLevel?: number; serviceRank: { name: string; symbol: string } };
+type PersonalScores = { careerScore: number; bestRun: { score: number; level: number | null } };
 const HOME_STAR_POSITION = { x: .5, y: .8 };
 
 const shopTabs = [
@@ -81,6 +82,10 @@ const Shop = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { locale, t } = useLocale();
+  const {
+    user, canAdmin, adminMode, setAdminPreview, isAuthenticated, showSignIn, signIn, signOut,
+    closeSignIn, requireAuth, isLoading: isAuthLoading, authReady, authError,
+  } = useAuth();
   const piPrice = (amount: number, testnet = false) => <PiPrice amount={amount} locale={locale} testnet={testnet} />;
   const [activePanel, setActivePanel] = useState<"how" | "progress" | null>(null);
   const [systemMenuOpen, setSystemMenuOpen] = useState(false);
@@ -96,9 +101,11 @@ const Shop = () => {
   const [selectedBoss, setSelectedBoss] = useState<number | null>(null);
   const returnToMenu = () => { setShopView(null); setSystemMenuOpen(false); setActivePanel(null); setTermsOpen(false); setQuickTarget(null); setQuickGroup("mission"); };
   const [leaders, setLeaders] = useState<Leader[]>([]);
-  const [leaderRules, setLeaderRules] = useState<1 | 2>(2);
+  const [leaderRules, setLeaderRules] = useState<"career" | 1 | 2>("career");
   const [leadersStatus, setLeadersStatus] = useState<"loading" | "ready" | "error">("loading");
   const [personalBest, setPersonalBest] = useState<number | null>(null);
+  const [personalScores, setPersonalScores] = useState<PersonalScores | null>(null);
+  const leaderboardUserId = user?.uid;
   const [musicEnabled, setMusicEnabled] = useState(() => localStorage.getItem(MUSIC_STORAGE_KEY) !== "off");
   const [musicNeedsTap, setMusicNeedsTap] = useState(false);
   const musicEnabledRef = useRef(musicEnabled);
@@ -160,19 +167,28 @@ const Shop = () => {
     if (next) void homeMusicRef.current?.play().then(ok => setMusicNeedsTap(!ok));
     else { homeMusicRef.current?.pause(); setMusicNeedsTap(false); }
   };
-  const musicLabel = t(musicEnabled ? musicNeedsTap ? "Tap for music" : "Music on" : "Music off");
+  useEffect(() => {
+    const sync = () => setMusicNeedsTap(musicEnabledRef.current && readMusicVolume() > 0 && !homeMusicRef.current?.playing);
+    const timer = window.setInterval(sync, 500);
+    return () => window.clearInterval(timer);
+  }, []);
+  const musicLabel = t(musicEnabled && musicVolume > 0 ? musicNeedsTap ? "Tap for music" : "Music on" : "Music off");
   useEffect(() => {
     if (shopView !== "leaders" && shopView !== "progress") return;
     let current = true;
+    setPersonalBest(null); setPersonalScores(null);
     if (shopView === "leaders") {
-      axiosClient.get<{ leaders: Leader[] }>(`/leaderboard/top?rules=${leaderRules}`).then(({ data }) => {
-        if (!Array.isArray(data?.leaders)) throw new Error("Invalid leaderboard response");
+      axiosClient.get<{ leaders: Leader[]; network?: string }>(leaderRules === "career" ? "/leaderboard/top?sort=career" : `/leaderboard/top?rules=${leaderRules}`).then(({ data }) => {
+        if (!Array.isArray(data?.leaders) || leaderRules === "career" && (!data.network || data.leaders.some(entry => !Number.isSafeInteger(entry.careerScore) || !entry.bestRun))) throw new Error("Career leaderboard API unavailable");
         if (current) { setLeaders(data.leaders); setLeadersStatus("ready"); }
       }).catch(() => { if (current) setLeadersStatus("error"); });
     }
-    axiosClient.get<{ bestScore: number }>(`/leaderboard/me?rules=${shopView === "leaders" ? leaderRules : 2}`).then(({ data }) => { if (current) setPersonalBest(data.bestScore); }).catch(() => { if (current) setPersonalBest(null); });
+    if (leaderboardUserId) axiosClient.get<{ bestScore: number } & PersonalScores>(`/leaderboard/me?rules=${leaderRules === 1 ? 1 : 2}`).then(({ data }) => {
+      if (!Number.isSafeInteger(data.careerScore) || !data.bestRun) throw new Error("Career score API unavailable");
+      if (current) { setPersonalBest(data.bestScore); setPersonalScores({ careerScore: data.careerScore, bestRun: data.bestRun }); }
+    }).catch(() => { if (current) { setPersonalBest(null); setPersonalScores(null); } });
     return () => { current = false; };
-  }, [shopView, leaderRules]);
+  }, [shopView, leaderRules, leaderboardUserId]);
   useEffect(applySavedDisplaySettings, []);
   useEffect(() => {
     if (!systemMenuOpen) return;
@@ -192,13 +208,11 @@ const Shop = () => {
   const [rewardOwner, setRewardOwner] = useState<string | null>(null);
   const [rewardNetwork, setRewardNetwork] = useState<"testnet" | "mainnet">(() => window.location.hostname.includes("testnet") ? "testnet" : "mainnet");
   const latestRewardLevel = Math.max(1, ...Object.keys(rewardProgress.linkedBlocks ?? {}).map(Number));
-  const {
-    user, canAdmin, adminMode, setAdminPreview, isAuthenticated, showSignIn, signIn, signOut,
-    closeSignIn, requireAuth, isLoading: isAuthLoading, authReady, authError,
-  } = useAuth();
   useEffect(() => { setSelectedBoss(null); }, [shopView, user?.uid]);
+  const rewardUserId = user?.uid;
+  const rewardsVisible = shopView === 'rewards';
   useEffect(() => {
-    if (!user) {
+    if (!rewardUserId) {
       setRewardProgress(readRewardProgress(localStorage.getItem(REWARD_PROGRESS_KEY)));
       setRewardOwner(null);
       setRewardStatus("ready");
@@ -207,10 +221,10 @@ const Shop = () => {
     let active = true;
     setRewardStatus("loading");
     axiosClient.get<{ progress: RewardProgress; network: "testnet" | "mainnet" }>("/rewards/me")
-      .then(({ data }) => { if (active) { setRewardProgress(data.progress); setRewardNetwork(data.network); setRewardOwner(user.uid); setRewardStatus("ready"); } })
+      .then(({ data }) => { if (active) { setRewardProgress(data.progress); setRewardNetwork(data.network); setRewardOwner(rewardUserId); setRewardStatus("ready"); } })
       .catch(() => { if (active) setRewardStatus("error"); });
     return () => { active = false; };
-  }, [user?.uid, shopView === "rewards"]);
+  }, [rewardUserId, rewardsVisible]);
   const [adminError, setAdminError] = useState("");
   const [startSector, setStartSector] = useState(1);
   const [selected, setSelected] = useState(selectedShip);
@@ -235,14 +249,17 @@ const Shop = () => {
   const displayedShards = account?.balance ?? shards;
   const displayedRecords = user && !adminMode ? { highestSector: account?.highestSector || 1, totalDestroyed: account?.totalDestroyed || 0 } : records;
   const accountUid = user?.uid;
+  const inventoryOwnerRef = useRef(accountUid);
+  inventoryOwnerRef.current = accountUid;
+  const firstNewCardKey = newCards[0]?.key;
   useEffect(() => {
-    const card = newCards[0];
-    if (!card) return;
+    if (!firstNewCardKey) return;
     const owner = accountUid ?? 'guest';
-    rememberCard(owner, card.key);
+    rememberCard(owner, firstNewCardKey);
     void syncCardReveals(owner).catch(() => { /* Retried when this account is next loaded. */ });
-  }, [newCards[0]?.key, accountUid]);
+  }, [firstNewCardKey, accountUid]);
   useEffect(() => {
+    setAccountBusy(false);
     if (!accountUid || adminMode) return;
     let active = true;
     void loadAccountSave().then(save => {
@@ -256,19 +273,29 @@ const Shop = () => {
   }, [accountUid, adminMode]);
   const accountCommand = async (command: object) => {
     if (!account || !user || accountBusy) return;
+    const owner = user.uid;
     setAccountBusy(true); setAccountError("");
+    const applyConfirmed = (save: AccountSave) => {
+      if (inventoryOwnerRef.current !== owner) return;
+      setAccountState({ owner, save });
+      setSelected(accountSelection(save));
+      mergeCardReveals(owner, save.cardReveals || []);
+      const acquired = availableShipCards(playerSkins, save.fleet, save.usedShipSkins || [], [])
+        .filter(card => card.ship && !fleetCount(account.fleet as ShipFleet, card.ship as typeof playerSkins[number]['id']));
+      if (acquired.length) setNewCards(unseenShipCards(acquired, mergeCardReveals(owner, [])));
+    };
     try {
       const save = await mutateAccountInventory(account, command);
-      setAccountState({ owner: user.uid, save });
-      setSelected(accountSelection(save));
-      const acquired=availableShipCards(playerSkins,save.fleet,save.usedShipSkins||[],[]).filter(card=>card.ship&&!fleetCount(account.fleet as ShipFleet,card.ship as typeof playerSkins[number]['id']));
-      if(acquired.length)setNewCards(unseenShipCards(acquired,readCardReveals(user.uid)));
-
+      if (inventoryOwnerRef.current !== owner) return;
+      applyConfirmed(save);
       setHangarMessage("Saved to your Pi account.");
     } catch {
+      if (inventoryOwnerRef.current !== owner) return;
       setAccountError("Not confirmed. Refresh inventory. Confirmed purchases will not be repeated.");
-      try { const save = await loadAccountSave(); setAccountState({ owner: user.uid, save }); setSelected(accountSelection(save)); } catch { /* No local fallback for account balances. */ }
-    } finally { setAccountBusy(false); }
+      // A lost response is not a failed purchase. Reconcile authoritative ownership and
+      // equipment together, and present a genuinely new card once after reconciliation.
+      try { applyConfirmed(await loadAccountSave()); } catch { /* No local fallback for account balances. */ }
+    } finally { if (inventoryOwnerRef.current === owner) setAccountBusy(false); }
   };
   const [hangarMessage, setHangarMessage] = useState<string | { ship: string; color: string; status: string; count?: number }>("");
   const hangarMessageText = typeof hangarMessage === "string" ? t(hangarMessage) : `${hangarMessage.ship} · ${t(hangarMessage.color)} · ${t(hangarMessage.status)}${hangarMessage.count ? ` ×${hangarMessage.count}` : ""}`;
@@ -315,6 +342,7 @@ const Shop = () => {
     else setHangarMessage("");
   };
   const enterGame = () => {
+    if (!authReady || isAuthLoading) return;
     primeCardSound();
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     if (adminMode) sessionStorage.setItem(ADMIN_START_SECTOR_KEY, String(Number.isInteger(startSector) ? Math.min(MAX_DIFFICULTY_LEVEL, Math.max(1, startSector)) : 1));
@@ -505,10 +533,10 @@ const Shop = () => {
           {adminMode && <div className="admin-level-picker" aria-label={t("Admin test start")}><label>{t("Level")} <select value={Math.floor((startSector - 1) / 10) + 1} onChange={event => setStartSector((Number(event.target.value) - 1) * 10 + (startSector - 1) % 10 + 1)}>{Array.from({ length: MAX_DIFFICULTY_LEVEL / 10 }, (_, index) => <option key={index} value={index + 1}>{index + 1}</option>)}</select></label><label>{t("Start at")} <select value={(startSector - 1) % 10 + 1} onChange={event => setStartSector((Math.floor((startSector - 1) / 10) * 10) + Number(event.target.value))}>{Array.from({ length: 9 }, (_, index) => <option key={index} value={index + 1}>{t("Block")} {index + 1}</option>)}<option value="10">{t("Boss")}</option></select></label></div>}
           <div className="hero-actions">
             <div className="home-launch">
-              <button className="button button-primary home-play-button" type="button" onClick={enterGame}>{t("Play")} <span className="button-glyph" aria-hidden="true">→</span></button>
+              <button className="button button-primary home-play-button" disabled={!authReady || isAuthLoading} type="button" onClick={enterGame}>{t("Play")} <span className="button-glyph" aria-hidden="true">→</span></button>
             </div>
           </div>
-          <button className="collection-home-button" type="button" disabled={!authReady} onClick={() => setCollectionOpen(true)}>✧ {collectionLabel(locale)}</button>
+          <button className="collection-home-button" type="button" disabled={!authReady} onClick={() => setCollectionOpen(true)}>✧ {t('Card collection')}</button>
         </div>
         <div className="planet-stage" aria-label={t("Planet status")}>
           <div className="planet"><EarthGlobe paused={homePaused} /></div>
@@ -540,8 +568,9 @@ const Shop = () => {
         {user && <p className="admin-account-id">{t("Pi account ID:")}<code>{user.uid}</code></p>}
         <article className="status-card progress-card">
           <div className="card-heading"><span>{t('YOUR PROGRESS')}</span><span className="card-icon">↗</span></div>
-          <div className="progress-row"><strong>{t("Best")} {personalBest ?? records.bestScore}</strong><span>{t("Sector")} {String(displayedRecords.highestSector).padStart(2, "0")}</span></div>
-          <div className="progress-track"><span style={{ width: `${Math.min(100, (personalBest ?? records.bestScore) / 10)}%` }} /></div>
+          <div className="progress-row"><strong>{user ? personalScores ? `${t("Career Score")} ${personalScores.careerScore.toLocaleString(locale)}` : t("Leaderboard unavailable. Try again later.") : `${t("Best")} ${records.bestScore}`}</strong><span>{t("Sector")} {String(displayedRecords.highestSector).padStart(2, "0")}</span></div>
+          {personalScores && user && <p>{t("Best Run")}: {personalScores.bestRun.score.toLocaleString(locale)} · {t("Run level")}: {personalScores.bestRun.level ?? "—"}</p>}
+          <div className="progress-track"><span style={{ width: `${Math.min(100, (personalScores && user ? personalScores.careerScore : records.bestScore) / 10)}%` }} /></div>
           <button className="text-button" type="button" onClick={() => setActivePanel("progress")}>{t("My Progress")} <span>→</span></button>
         </article>
         <article className="status-card streak-card">
@@ -588,12 +617,12 @@ const Shop = () => {
       {shopView === "leaders" && <section className="leaderboard-section" aria-labelledby="leaders-heading">
         <p className="eyebrow">{t("GLOBAL RECORDS")}</p>
         <h2 id="leaders-heading">{t("Top 100")}</h2>
-        <div className="modal-actions">{([2, 1] as const).map(rule => <button className="button button-secondary" type="button" key={rule} aria-pressed={leaderRules === rule} onClick={() => { setLeadersStatus("loading"); setLeaderRules(rule); }}>{t(rule === 2 ? "Expanded levels" : "Previous records")}</button>)}</div>
-        <p>{t("Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.")}</p>
-        {personalBest !== null && <p className="leaderboard-personal">{t("Your personal best")}: <strong>{personalBest}</strong></p>}
+        <div className="modal-actions">{(["career", 2, 1] as const).map(rule => <button className="button button-secondary" type="button" key={rule} aria-pressed={leaderRules === rule} onClick={() => { setLeadersStatus("loading"); setLeaderRules(rule); }}>{t(rule === "career" ? "Career Score" : rule === 2 ? "Expanded levels" : "Previous records")}</button>)}</div>
+        <p>{t(leaderRules === "career" ? "Career Score adds verified completed runs. Best Run is the highest single run with its reached level. Profile level is separate. Earlier records remain in the previous lists." : "Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.")}</p>
+        {leaderRules === "career" && personalScores ? <p className="leaderboard-personal">{t("Career Score")}: <strong>{personalScores.careerScore.toLocaleString(locale)}</strong> · {t("Best Run")}: <strong>{personalScores.bestRun.score.toLocaleString(locale)}</strong> · {t("Run level")}: {personalScores.bestRun.level ?? "—"}</p> : leaderRules !== "career" && personalBest !== null && <p className="leaderboard-personal">{t("Your personal best")}: <strong>{personalBest}</strong></p>}
         {leadersStatus === "loading" && <p role="status">{t("Loading scores…")}</p>}
         {leadersStatus === "error" && <p role="status">{t("Leaderboard unavailable. Try again later.")}</p>}
-        {leadersStatus === "ready" && (leaders.length ? <div className="leaderboard-scroll"><table><thead><tr><th>#</th><th>{t("Player")} · {t("Service rank")}</th><th>{t("Best score")}</th></tr></thead><tbody>{leaders.map(entry => <tr key={entry.rank}><td>{entry.rank}</td><td><div className="leader-identity"><strong>@{entry.username}</strong><span className="leader-rank"><b aria-hidden="true">{entry.serviceRank?.symbol ?? "◇"}</b><small>{t(entry.serviceRank?.name ?? "Rookie")}</small></span></div></td><td>{entry.score.toLocaleString(locale)}</td></tr>)}</tbody></table></div> : <p>{t("No records yet. Complete a mission to be first.")}</p>)}
+        {leadersStatus === "ready" && (leaders.length ? <div className={`leaderboard-scroll${leaderRules === "career" ? " leaderboard-career" : ""}`}><table><thead><tr><th>#</th><th>{t("Player")} · {t("Service rank")}</th><th>{t(leaderRules === "career" ? "Career Score" : "Best score")}</th>{leaderRules === "career" && <><th>{t("Best Run")}</th><th>{t("Run level")}</th><th>{t("Profile level")}</th></>}</tr></thead><tbody>{leaders.map(entry => <tr key={entry.rank}><td>{entry.rank}</td><td><div className="leader-identity"><strong>@{entry.username}</strong><span className="leader-rank"><b aria-hidden="true">{entry.serviceRank?.symbol ?? "◇"}</b><small>{t(entry.serviceRank?.name ?? "Rookie")}</small></span></div></td><td>{entry.score.toLocaleString(locale)}</td>{leaderRules === "career" && <><td>{entry.bestRun?.score.toLocaleString(locale) ?? "—"}</td><td>{entry.bestRun?.level ?? "—"}</td><td>{entry.profileLevel ?? "—"}</td></>}</tr>)}</tbody></table></div> : <p>{t("No records yet. Complete a mission to be first.")}</p>)}
       </section>}
 
       {(shopView === "hangar" || shopView === "shop") && <section className={`ship-selector ship-selector-${shopView}`} aria-labelledby="hangar-heading">
@@ -608,7 +637,7 @@ const Shop = () => {
         <div className="ship-panel-heading"><div><p className="eyebrow">{t(shopView === "hangar" ? "YOUR HANGAR" : "SHIP SHOP")}</p><h2 id="hangar-heading">{t(shopView === "hangar" ? "Your fleet" : "Available ships")}</h2></div><strong className="shard-balance">◆ {displayedShards} <small>{t("Shards")}</small></strong></div>
         <p className="testnet-shop-notice" role="note">{shipSaveNetwork === "testnet" ? t("TESTNET SHARDS: Earn and spend Shards on available Standard ships here for testing. Shards and ship purchases do not transfer to Mainnet; there you start from zero.") : t("MAINNET SHARDS: Shards and ship purchases start from zero here. Testnet balances and ships are separate.")}</p>
         <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? t("Testnet: Grey Scout is free; nine Standard hulls cost Shards. Other hulls are locked until Mainnet.") : t("Grey Scout is free; nine Standard hulls cost Shards. Other hulls are currently locked.")}</p>
-        <details className="ship-earnings"><summary>{t("How to earn Shards")}</summary><p>{t("At level 1, defeats earn Shards by enemy class: light 2, medium 4–5, elite 6, heavy 8, boss 16. Rewards grow with level. Bonus targets earn 1 each, plus a completion reward that grows with level. Your Shards are saved at mission end.")}</p></details>
+        <details className="ship-earnings"><summary>{t("How to earn Shards")}</summary><p>{t("At level 1, defeats earn Shards by enemy class: light 2, medium 4–5, elite 6, heavy 8, boss 16. Rewards grow with level. Bonus targets earn 1 each, plus a completion reward that grows with level. The HUD shows your previous Shard balance plus this mission's earnings.")}</p></details>
         <label className="ship-search-label" htmlFor="ship-search">{t("Find a ship")} <small>{matchingShipOptions.length}/{shipSearchOptions.length}</small></label>
         <div className="ship-search-wrap" ref={shipSearchRef}>
           <div className="ship-search-control">
@@ -674,7 +703,7 @@ const Shop = () => {
           <button className="close-button" type="button" onClick={() => setActivePanel(null)} aria-label={t('Close')}>×</button>
           <p className="eyebrow">{t("MISSION LOG")}</p>
           <h2 id="info-title">{t("Your Progress")}</h2>
-          <p>{t("Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.", { score: personalBest ?? records.bestScore, sector: displayedRecords.highestSector, destroyed: displayedRecords.totalDestroyed })}</p>
+          {user ? personalScores ? <p>{t("Career Score adds verified completed runs. Best Run is the highest single run with its reached level. Profile level is separate. Earlier records remain in the previous lists.")} {t("Career Score")}: {personalScores.careerScore.toLocaleString(locale)} · {t("Best Run")}: {personalScores.bestRun.score.toLocaleString(locale)} · {t("Run level")}: {personalScores.bestRun.level ?? "—"}. {t("Sector")} {displayedRecords.highestSector} · {t("Destroyed")} {displayedRecords.totalDestroyed}.</p> : <p role="status">{t("Leaderboard unavailable. Try again later.")}</p> : <p>{t("Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.", { score: records.bestScore, sector: displayedRecords.highestSector, destroyed: displayedRecords.totalDestroyed })}</p>}
           <button className="button button-primary" type="button" onClick={() => setActivePanel(null)}>{t("Close")}</button>
         </div>
       </div>}

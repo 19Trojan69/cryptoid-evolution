@@ -39,3 +39,23 @@ test('enemy discharge is reproducible and differs from every boss calibre sound'
     }
   }
 });
+
+test('all four enemy classes stay bounded and distinct across device sample rates', () => {
+  for (const rate of [22050, 44100, 48000, 96000]) {
+    const sounds = ['light', 'medium', 'heavy', 'elite'].map(shipClass => generateEnemyShotSound(rate, shipClass));
+    for (const pcm of sounds) {
+      assert.ok(pcm.every(Number.isFinite));
+      assert.ok(pcm.reduce((max, value) => Math.max(max, Math.abs(value)), 0) <= .641);
+      assert.equal(Math.abs(pcm[0]), 0);
+      assert.ok(Math.abs(pcm.at(-1)) < .0001);
+      assert.ok(Math.sqrt(pcm.reduce((sum, value) => sum + value * value, 0) / pcm.length) > .05);
+    }
+    for (let a = 0; a < sounds.length; a++) for (let b = a + 1; b < sounds.length; b++) {
+      let cross = 0, ae = 0, be = 0;
+      for (let i = 0; i < Math.min(sounds[a].length, sounds[b].length); i++) {
+        cross += sounds[a][i] * sounds[b][i]; ae += sounds[a][i] ** 2; be += sounds[b][i] ** 2;
+      }
+      assert.ok(Math.abs(cross / Math.sqrt(ae * be)) < .3, `${a}/${b} at ${rate}`);
+    }
+  }
+});
