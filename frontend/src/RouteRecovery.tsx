@@ -1,7 +1,7 @@
-import { useLocale } from "./i18n";
+import { useAdminLocale } from "./adminLocale";
 
 export default function RouteRecovery() {
-  const { t } = useLocale();
+  const { t } = useAdminLocale();
   return (
     <main className="admin-shell">
       <section className="admin-panel" role="alert">
