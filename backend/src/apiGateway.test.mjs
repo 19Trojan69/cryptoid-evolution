@@ -71,12 +71,12 @@ test('local preview retains the existing Pi-key service for payments and payment
     return new Response('{}', { headers: { 'content-type': 'application/json' } });
   });
   const gateway = createApiGateway(async () => { throw new Error('must not load backend'); }, () => preview);
-  for (const path of ['payments/approve', 'payments/complete', 'payments/incomplete', 'admin/payments/export', 'admin/payments/id/refresh', 'admin/status', 'notifications/send']) {
+  for (const path of ['payments/approve', 'payments/complete', 'payments/incomplete', 'admin/payments/id/refresh', 'admin/status', 'notifications/send']) {
     const res = response();
     await gateway({ method: 'POST', url: `/api/index?path=${path}`, body: {}, headers: { host: 'preview.vercel.app' } }, res);
     assert.equal(res.headers['x-cryptoid-backend'], 'production-proxy');
   }
-  assert.equal(urls.length, 7);
+  assert.equal(urls.length, 6);
 });
 
 test('local score and reset routes stay Testnet and a failed startup can recover', async t => {
@@ -95,4 +95,16 @@ test('local score and reset routes stay Testnet and a failed startup can recover
   assert.equal(attempts, 2);
   assert.equal(calls.filter(call => 'start' in call).length, 1);
   assert.ok(calls.filter(call => call.url).every(call => call.network === 'testnet'));
+});
+
+
+test('local Testnet ledger and CSV do not require application API keys', async () => {
+  const { backend, calls } = backendFixture();
+  const gateway = createApiGateway(async () => backend, () => preview);
+  for (const path of ['admin/payments', 'admin/payments/export', 'admin/payments/id/valuation']) {
+    const res = response();
+    await gateway({ method: 'GET', url: `/api/index?path=${path}`, headers: { host: 'preview.vercel.app' } }, res);
+    assert.equal(res.headers['x-cryptoid-backend'], 'testnet-local');
+  }
+
 });
