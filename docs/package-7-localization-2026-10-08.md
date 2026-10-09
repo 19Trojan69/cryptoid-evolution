@@ -112,3 +112,7 @@ Je 98 bisher fehlende erfasste Texte für Karten, Boss-Kampfdaten und zugehörig
 ### Spanische Admin-Oberfläche
 
 155 fehlende Texte der Eigentümer- und Zugriffsstatistikansicht sind direkt auf Spanisch ergänzt. Zahlungshinweise, Kontoabgrenzung, datensparsame Nutzungsstatistik und Bestätigungen wurden mit unveränderten Platzhaltern übertragen. Spanisch steht nun bei 786/1020; 234 fiktive Geschichten fehlen. Der gesamte aktive Restbestand sinkt auf 2024. Mainnet bleibt unverändert.
+
+### Französische und portugiesische Admin-Texte
+
+Je 155 Texte der Eigentümer- und Zugriffsstatistikansicht wurden direkt auf Französisch und Portugiesisch ergänzt. Platzhalter, Netzwerkgrenzen, Kaufhinweise und Zeitangaben wurden beim Eintragen abgeglichen. Beide Sprachen stehen nun wie Spanisch bei 786/1020; insgesamt fehlen 1714 erfasste Texte. Produktion bleibt auf dem bisherigen Stand.
