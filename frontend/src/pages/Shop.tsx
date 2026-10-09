@@ -112,6 +112,7 @@ const Shop = () => {
   const returnToMenu = () => { setShopView(null); setSystemMenuOpen(false); setActivePanel(null); setTermsOpen(false); setQuickTarget(null); setQuickGroup("mission"); };
   const [leaders, setLeaders] = useState<Leader[]>([]);
   const [leaderRules, setLeaderRules] = useState<"career" | 1 | 2>("career");
+  const [leaderPage, setLeaderPage] = useState(0);
   const [leadersStatus, setLeadersStatus] = useState<"loading" | "ready" | "error">("loading");
   const [personalBest, setPersonalBest] = useState<number | null>(null);
   const [personalScores, setPersonalScores] = useState<PersonalScores | null>(null);
@@ -190,7 +191,7 @@ const Shop = () => {
     if (shopView === "leaders") {
       axiosClient.get<{ leaders: Leader[]; network?: string }>(leaderRules === "career" ? "/leaderboard/top?sort=career" : `/leaderboard/top?rules=${leaderRules}`).then(({ data }) => {
         if (!Array.isArray(data?.leaders) || leaderRules === "career" && (!data.network || data.leaders.some(entry => !Number.isSafeInteger(entry.careerScore) || !entry.bestRun))) throw new Error("Career leaderboard API unavailable");
-        if (current) { setLeaders(data.leaders); setLeadersStatus("ready"); }
+        if (current) { setLeaders(data.leaders); setLeaderPage(0); setLeadersStatus("ready"); }
       }).catch(() => { if (current) setLeadersStatus("error"); });
     }
     if (leaderboardUserId) axiosClient.get<{ bestScore: number } & PersonalScores>(`/leaderboard/me?rules=${leaderRules === 1 ? 1 : 2}`).then(({ data }) => {
@@ -633,14 +634,14 @@ const Shop = () => {
         <p className="eyebrow">{t("GLOBAL RECORDS")}</p>
         <h2 id="leaders-heading">{t("Top 100")}</h2>
         <div className="leaderboard-tabs" role="group" aria-label={t("Top 100")}>{(["career", 2, 1] as const).map(rule => <button className="button button-secondary" type="button" key={rule} aria-pressed={leaderRules === rule} onClick={() => { setLeadersStatus("loading"); setLeaderRules(rule); }}>{t(rule === "career" ? "Career Score" : rule === 2 ? "Expanded levels" : "Previous records")}</button>)}</div>
-        <p>{t(leaderRules === "career" ? "Career Score adds verified completed runs. Best Run is the highest single run with its reached level. Profile level is separate. Earlier records remain in the previous lists." : leaderRules === 2 ? "Expanded records use the current scoring rules. Run level belongs to that record; profile level shows career progress." : "Historical records use earlier scoring rules. Missing run levels were not recorded and cannot be recovered from today’s profile.")}</p>
+        <details className="leaderboard-explanation" key={leaderRules}><summary>{t("Ranking explained")}</summary><p>{t(leaderRules === "career" ? "Career Score adds verified completed runs. Best Run is the highest single run with its reached level. Profile level is separate. Earlier records remain in the previous lists." : leaderRules === 2 ? "Expanded records use the current scoring rules. Run level belongs to that record; profile level shows career progress." : "Historical records use earlier scoring rules. Missing run levels were not recorded and cannot be recovered from today’s profile.")}</p></details>
         {leaderRules === "career" && personalScores ? <p className="leaderboard-personal">{t("Career Score")}: <strong>{personalScores.careerScore.toLocaleString(locale)}</strong> · {t("Best Run")}: <strong>{personalScores.bestRun.score.toLocaleString(locale)}</strong> · {t("Run level")}: {personalScores.bestRun.level == null ? t("Not recorded") : number(personalScores.bestRun.level)}</p> : leaderRules !== "career" && personalBest !== null && <p className="leaderboard-personal">{t("Your personal best")}: <strong>{number(personalBest)}</strong></p>}
         {leadersStatus === "loading" && <p role="status">{t("Loading scores…")}</p>}
         {leadersStatus === "error" && <p role="status">{t("Leaderboard unavailable. Try again later.")}</p>}
-        {leadersStatus === "ready" && (leaders.length ? <ol className="leaderboard-list">{leaders.map(entry => <li key={entry.rank}>
+        {leadersStatus === "ready" && (leaders.length ? <><ol className="leaderboard-list" start={leaderPage * 5 + 1}>{leaders.slice(leaderPage * 5, leaderPage * 5 + 5).map(entry => <li key={entry.rank}>
           <div className="leader-identity"><span className="leader-place">{number(entry.rank)}</span><button className="leader-profile-link" type="button" onClick={()=>setPilotOpen(entry.username)}><PilotAvatar avatar={entry.avatar??null} name=""/><strong>@{entry.username}</strong></button><span className="leader-rank"><b aria-hidden="true">{entry.serviceRank?.symbol ?? "◇"}</b><small>{t(entry.serviceRank?.name ?? "Rookie")}</small></span></div>
           <dl className="leader-metrics"><div><dt>{t(leaderRules === "career" ? "Career Score" : "Best score")}</dt><dd>{number(entry.score)}</dd></div>{leaderRules === "career" && <div><dt>{t("Best Run")}</dt><dd>{number(entry.bestRun?.score ?? 0)}</dd></div>}<div><dt>{t("Run level")}</dt><dd>{entry.runLevel == null ? t("Not recorded") : number(entry.runLevel)}</dd></div><div><dt>{t("Profile level")}</dt><dd>{entry.profileLevel == null ? t("Not recorded") : number(entry.profileLevel)}</dd></div></dl>
-        </li>)}</ol> : <p>{t("No records yet. Complete a mission to be first.")}</p>)}
+        </li>)}</ol>{leaders.length > 5 && <nav className="leaderboard-pages" aria-label={t("Top 100")}><button type="button" disabled={leaderPage === 0} onClick={() => setLeaderPage(page => Math.max(0, page - 1))}>{t("Previous page")}</button><span role="status">{number(leaderPage + 1)} / {number(Math.ceil(leaders.length / 5))}</span><button type="button" disabled={(leaderPage + 1) * 5 >= leaders.length} onClick={() => setLeaderPage(page => page + 1)}>{t("Next page")}</button></nav>}</> : <p>{t("No records yet. Complete a mission to be first.")}</p>)}
       </section>}
 
       {(shopView === "hangar" || shopView === "shop") && <section className={`ship-selector ship-selector-${shopView}`} aria-labelledby="hangar-heading">
