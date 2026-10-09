@@ -1,8 +1,8 @@
 # Paket 7 – Erweiterte Lokalisierung, geprüfter Entwurf
 
-Status: Fünf-Sprachen-Teststand auf dem festen Testnet-Link, noch nicht für Produktion freigegeben. Basis ist Paket 6 (`a5f700cfb5a2f6801ca5889a15dd19d797a2c8b3`); Produktion bleibt unverändert. Frühere Abschnitte unten beschreiben historische Zwischenstände.
+Status: Paket-7-Entwurf auf Basis von Paket 6 (`a5f700cfb5a2f6801ca5889a15dd19d797a2c8b3`); Produktion bleibt unverändert. Frühere Abschnitte unten beschreiben historische Zwischenstände.
 
-**Aktueller Umfang (9. Oktober):** Sichtbar und automatisch erkennbar sind `en`, `de`, `es`, `zh` (vereinfacht) und `vi`; je 1020/1020 statisch erfasste Texte. Die Wahl folgt der Gerätesprache, sofern keine manuelle Sprache gespeichert ist. `fr`, `pt`, `it` und `ru` sind für Freitag, 16. Oktober 2026 zurückgestellt; je 234 Geschichten fehlen. Die übrigen Sprachtexte bleiben im Quellkatalog erhalten, sind aber nicht auswählbar.
+**Aktueller Umfang (9. Oktober):** Die ursprünglichen 17 Sprachen `en`, `de`, `es`, `fr`, `pt`, `it`, `pl`, `tr`, `ru`, `hr`, `cs`, `sk`, `hu`, `ro`, `sr`, `uk`, `th` sowie `zh` (vereinfacht) und `vi` sind sichtbar und über die Gerätesprache automatisch wählbar. Die fünf vollständigen Kataloge `en`, `de`, `es`, `zh` und `vi` haben je 1020/1020 statisch erfasste Texte und bleiben harte Freigabebedingung. Bei fehlenden Texten der anderen Sprachen erscheint die englische Fassung; ihre bestehenden Übersetzungen bleiben nutzbar. `fr`, `pt`, `it` und `ru` sind zur weiteren Vervollständigung für Freitag, 16. Oktober 2026 zurückgestellt.
 
 ## Sprachumfang
 
@@ -146,3 +146,7 @@ Der Release-Scan prüft die fünf angebotenen Sprachen vollständig. Das statisc
 ## Fünf-Sprachen-Testnetstand: 9. Oktober 2026
 
 Der feste Link https://cryptoid-evolution-testnet.vercel.app wurde nach erfolgreichem Vercel-Build auf Commit `c127486275c243df9e70e6a1add7ea62990ef63a` (`dpl_CNHfoohzvR2CKYUUP8xig5njpPpc`) umgestellt. Die Alias-Zuordnung wurde anschließend bestätigt. Der Build führt 34 i18n-Tests und die Freigabeprüfung des aktiven statischen Katalogs aus; die fünf angebotenen Sprachen erreichen je 1020/1020 ohne Platzhalterfehler. Die geschützte Testnet-Oberfläche konnte über den Vercel-Connector wegen 403 bei der Schutzfreigabe noch nicht direkt geprüft werden. Der Nutzer hat die Verschiebung der vier übrigen Sprachen genehmigt; die Erinnerung für den 16. Oktober ist aktiv. Produktion und `main` bleiben auf dem bisherigen Stand, da dieser Branch auf offenen Paket-Branches 4–6 beruht und Browser-/Pi-Abnahme vor der Freigabe fehlt.
+
+## Wiederherstellung der bestehenden Sprachen: 9. Oktober 2026
+
+Der Nutzer hat klargestellt, dass die 17 zuvor angebotenen Sprachen einschließlich Französisch und Thailändisch weiterhin wählbar bleiben sollen. Zusammen mit vereinfachtem Chinesisch und Vietnamesisch ergibt das 19 Sprachoptionen. Die vorhandenen Übersetzungen wurden nie gelöscht; fehlende neue Texte verwenden weiterhin den englischen Fallback. Die statische Freigabeprüfung verlangt volle Abdeckung für `en`, `de`, `es`, `zh` und `vi` und prüft die Platzhalter aller angebotenen Sprachen; unvollständige ältere Kataloge werden im Bericht als Entwurf markiert. Die weitere Übersetzungsarbeit für `fr`, `pt`, `it` und `ru` bleibt für den 16. Oktober vorgemerkt. Der vorherige Fünf-Sprachen-Testnetstand ist bis zur erfolgreichen Build- und Aliasprüfung noch live.
