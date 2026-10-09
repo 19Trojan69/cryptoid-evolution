@@ -1,3 +1,5 @@
+import ServiceBadge from "../components/ServiceBadge";
+import CareerDashboard from "./CareerDashboard";
 import FeedbackHub from "./FeedbackHub";
 import PilotProfile from "./PilotProfile";
 import PilotAvatar, { type Avatar } from "../components/PilotAvatar";
@@ -24,10 +26,10 @@ import { accountSelection, loadAccountSave, localInventory, mutateAccountInvento
 import { usePayments } from "../hooks/usePayments";
 import { axiosClient } from "../lib/axiosClient.ts";
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "./GamePage.tsx";
-import { allPlayerColors, buyShipVariant, standardShipPrice, fleetCount, playerColors, playerSkins, readShipFleet, savedShipColors, selectedShip, shardBalance, shipSaveNetwork, testnetStandardHullAvailable, ADMIN_SHIP_COLOR_KEY, ADMIN_SHIP_SKIN_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, type ShipFleet } from "./shipFleet";
-import { ownedShipStage, shipEvolutionAsset, type ShipStage } from "./shipEvolution";
-import { shipPreviewPlacement } from "./shipPreviewPlacement";
-import ShipSelectionPanel from "./ShipSelectionPanel";
+import { allPlayerColors, buyShipVariant, fleetCount, playerColors, playerSkins, readShipFleet, savedShipColors, selectedShip, shardBalance, shipSaveNetwork, testnetStandardHullAvailable, ADMIN_SHIP_COLOR_KEY, ADMIN_SHIP_SKIN_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, type ShipFleet } from "./shipFleet";
+import { ownedShipStage, type ShipStage } from "./shipEvolution";
+
+import FleetShipPanel from "./FleetShipPanel";
 import "./shopPurchase.css";
 import "../metallic.css";
 import { saveGuestShipPurchase } from "./shipFleet";
@@ -239,16 +241,11 @@ const Shop = () => {
   const [adminError, setAdminError] = useState("");
   const [startSector, setStartSector] = useState(1);
   const [selected, setSelected] = useState(selectedShip);
-  const [previewSkin, setPreviewSkin] = useState(() => selectedShip().skin);
-  const [previewColor, setPreviewColor] = useState(() => selectedShip().color);
-  const [previewFocusStage, setPreviewFocusStage] = useState<ShipStage>(1);
   const [adminStage, setAdminStage] = useState<ShipStage>(() => {
     const saved = Number(sessionStorage.getItem(ADMIN_SHIP_STAGE_KEY));
     return saved === 2 || saved === 3 ? saved : 1;
   });
-  const [shipQuery, setShipQuery] = useState("");
-  const [shipSearchOpen, setShipSearchOpen] = useState(false);
-  const shipSearchRef = useRef<HTMLDivElement>(null);
+  const [shopTarget, setShopTarget] = useState<{ skin: string; stage: ShipStage } | null>(null);
   const [fleet, setFleet] = useState(() => readShipFleet(localStorage.getItem(SHIP_FLEET_KEY), localStorage.getItem(SHIP_OWNED_KEY), localStorage.getItem(SHIP_COLORS_KEY)));
   const [accountState, setAccountState] = useState<{ owner: string; save: AccountSave } | null>(null);
   const [accountError, setAccountError] = useState("");
@@ -278,7 +275,7 @@ const Shop = () => {
       setAccountState({ owner: accountUid, save }); setAccountError("");
       mergeCardReveals(accountUid, save.cardReveals || []);
       void syncCardReveals(accountUid).catch(() => {});
-      const choice = accountSelection(save); setSelected(choice); setPreviewSkin(choice.skin); setPreviewColor(choice.color);
+      const choice = accountSelection(save); setSelected(choice);
     }).catch(() => { if (active) setAccountError("Save unavailable. Local data is unchanged; account purchases are locked until connected."); });
     return () => { active = false; };
   }, [accountUid, adminMode]);
@@ -314,7 +311,6 @@ const Shop = () => {
   const [catalogReady, setCatalogReady] = useState(false);
   const [inventory, setInventory] = useState<Inventory | null>(null);
   const selectedStage = adminMode ? adminStage : ownedShipStage(selected.skin.sprite, inventory?.ownedShipUpgrades);
-  const previewStage = ownedShipStage(previewSkin.sprite, inventory?.ownedShipUpgrades);
   const [loadoutMessage, setLoadoutMessage] = useState("");
   const shipSearchOptions = playerSkins.filter(skin => shopView === "shop" || fleetCount(visibleFleet, skin.id) > 0);
   useEffect(() => {
@@ -323,35 +319,15 @@ const Shop = () => {
       if (!active) return;
       const current = selectedShip();
       setSelected(current);
-      setPreviewSkin(current.skin);
-      setPreviewColor(current.color);
       setInventory(null);
     });
     return () => { active = false; };
   }, [adminMode, user?.uid]);
-  const matchingShipOptions = shipSearchOptions.filter(skin =>
-    skin.name.toLocaleLowerCase(locale).includes(shipQuery.trim().toLocaleLowerCase(locale)));
-  const shipResultsVisible = shipSearchOpen;
-  useEffect(() => { setShipQuery(""); setShipSearchOpen(shopView === "shop"); if (shopView === "shop") setPreviewFocusStage(adminMode ? adminStage : 1); }, [shopView, adminMode, adminStage]);
   useEffect(() => {
-    if (!shipSearchOpen) return;
-    const closeOutside = (event: PointerEvent) => {
-      if (event.target instanceof Node && !shipSearchRef.current?.contains(event.target)) setShipSearchOpen(false);
-    };
-    document.addEventListener("pointerdown", closeOutside);
-    return () => document.removeEventListener("pointerdown", closeOutside);
-  }, [shipSearchOpen]);
-  const chooseSearchResult = (skin: typeof playerSkins[number]) => {
-    const color = skin.id === selected.skin.id ? selected.color : allPlayerColors.find(item => fleetCount(visibleFleet, skin.id, item.id)) ?? playerColors[0];
-    setPreviewSkin(skin);
-    setPreviewColor(color);
-    setPreviewFocusStage(adminMode ? adminStage : 1);
-    setShipQuery("");
-    setShipSearchOpen(false);
-    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
-    if (shopView === "hangar") equipShip(skin, color);
-    else setHangarMessage("");
-  };
+    if (shopView !== "shop" || !shopTarget) return;
+    const frame = requestAnimationFrame(() => document.getElementById(`fleet-${shopTarget.skin}`)?.scrollIntoView({ block: "start" }));
+    return () => cancelAnimationFrame(frame);
+  }, [shopView, shopTarget]);
   const enterGame = () => {
     if (!authReady || isAuthLoading) return;
     primeCardSound();
@@ -365,10 +341,9 @@ const Shop = () => {
     primeGameAudio(); requestGameFullscreen(); navigate("/game");
   };
 
-  const purchasePreview = () => {
+  const purchasePreview = (previewSkin: typeof playerSkins[number], previewColor: typeof allPlayerColors[number]) => {
     primeCardSound();
     if (adminMode) return;
-    if (previewFocusStage !== 1) return;
     if (!testnetStandardHullAvailable(previewSkin.id)) { setHangarMessage("MAINNET READY"); return; }
     if (user) {
       if (!account) { setAccountError("Account save is loading or unavailable."); return; }
@@ -491,7 +466,7 @@ const Shop = () => {
     const fleetViews: Partial<Record<QuickAction, NonNullable<typeof shopView>>> = { hangar: "hangar", shop: "shop", upgrades: "shop", colors: "hangar", weapons: "weapons", armor: "weapons", powers: "powers", progress: "progress", rewards: "rewards", leaders: "leaders", ranks: "rewards", bosses: "rewards", medals: "rewards", chains: "rewards" };
     const view = fleetViews[action];
     if (view) {
-      if (view === "hangar" || view === "shop") { setPreviewSkin(selected.skin); setPreviewColor(selected.color); setPreviewFocusStage(1); }
+      if (view === "hangar" || view === "shop") setShopTarget(null);
       if (view === "leaders") setLeadersStatus("loading");
       const targets: Partial<Record<QuickAction, string>> = { upgrades: ".ship-evolution-stages", colors: ".ship-one-colors", armor: ".hangar-offer-armor", ranks: "#reward-ranks", bosses: "#reward-bosses", medals: "#reward-medals", chains: "#reward-chains" };
       setQuickTarget(targets[action] ?? null);
@@ -562,7 +537,7 @@ const Shop = () => {
         </footer>
       </section>
 
-      {feedbackOpen && <FeedbackHub key={user?.uid ?? "guest"} signedIn={!!user} onSignIn={()=>{setFeedbackOpen(false);requireAuth();}} onClose={()=>setFeedbackOpen(false)}/>}
+      {feedbackOpen && <FeedbackHub key={user?.uid ?? "guest"} signedIn={!!user} onSignIn={()=>{setFeedbackOpen(false);requireAuth();}} onProfile={username => setPilotOpen(username)} onClose={()=>{setFeedbackOpen(false);returnToMenu();}}/>}
       {pilotOpen !== null && <PilotProfile key={`${user?.uid}-${pilotOpen}`} username={pilotOpen || undefined} onClose={()=>setPilotOpen(null)} onSaved={()=>setLeaderRefresh(n=>n+1)}/>}
       {quickGroup !== null && <QuickAccessMenu onClose={closeQuickMenu} onAction={openQuickAction} signedIn={Boolean(user)} canAdmin={Boolean(canAdmin)} adminMode={adminMode} username={user?.username} busy={isAuthLoading || !authReady} />}
 
@@ -580,21 +555,7 @@ const Shop = () => {
         <div className="shop-modal">
         <div className="shop-modal-header"><button className="text-button menu-return" type="button" onClick={returnToMenu}>← {t("Back to quick access")}</button><strong>{t(shopTabs.find(([view]) => view === shopView)?.[1] ?? "Shop / Hangar")}</strong><button className="close-button" type="button" onClick={() => setShopView(null)} aria-label={t('Close shop')}>×</button></div>
           <div className="shop-modal-body">
-      {shopView === "progress" && <section className="dashboard-grid" aria-label={t('Player overview')}>
-        {user && <p className="admin-account-id">{t("Pi account ID:")}<code>{user.uid}</code></p>}
-        <article className="status-card progress-card">
-          <div className="card-heading"><span>{t('YOUR PROGRESS')}</span><span className="card-icon">↗</span></div>
-          <div className="progress-row"><strong>{user ? personalScores ? `${t("Career Score")} ${personalScores.careerScore.toLocaleString(locale)}` : t("Leaderboard unavailable. Try again later.") : `${t("Best")} ${records.bestScore}`}</strong><span>{t("Sector")} {String(displayedRecords.highestSector).padStart(2, "0")}</span></div>
-          {personalScores && user && <p>{t("Best Run")}: {personalScores.bestRun.score.toLocaleString(locale)} · {t("Run level")}: {personalScores.bestRun.level == null ? t("Not recorded") : number(personalScores.bestRun.level)}</p>}
-          <div className="progress-track"><span style={{ width: `${Math.min(100, (personalScores && user ? personalScores.careerScore : records.bestScore) / 10)}%` }} /></div>
-          <button className="text-button" type="button" onClick={() => setActivePanel("progress")}>{t("My Progress")} <span>→</span></button>
-        </article>
-        <article className="status-card streak-card">
-          <div className="card-heading"><span>{t('ACTIVE STREAK')}</span><span className="flame">✦</span></div>
-          <strong className="streak-number">{displayedRecords.totalDestroyed} <small>{t("asteroids")}</small></strong>
-          <p>{t('Total destroyed across all missions.')}</p>
-        </article>
-      </section>}
+      {shopView === "progress" && <CareerDashboard progress={!user || rewardStatus === "ready" && rewardOwner === user.uid ? rewardProgress : null} scores={user ? personalScores : null} records={!user || account ? displayedRecords : null} accountId={user?.uid} localBest={!user ? records.bestScore : undefined} loading={!!user && rewardStatus === "loading"}/>}
 
       {shopView === "rewards" && <section className="dashboard-grid rewards-dashboard" aria-label={t("Rewards")}>
         <p className="reward-network-notice" role="note">{rewardNetwork === "testnet" ? t("TESTNET REWARDS: Your progress here is for testing only. It will not transfer to Mainnet. Mainnet rewards start from zero and are saved permanently to your account.") : t("MAINNET REWARDS: Your collection starts from zero here and is saved permanently to your account. Testnet progress is separate.")}</p>
@@ -604,9 +565,9 @@ const Shop = () => {
         {(!user || (rewardStatus === "ready" && rewardOwner === user.uid)) && <>
         <article className="status-card reward-collection">
           <div className="card-heading"><span>{t("RANK & COLLECTION")}</span><span className="card-icon">✦</span></div>
-          <div className="reward-rank-current"><span aria-hidden="true">{rankForLevel(rewardProgress.highestLevel).symbol}</span><div><small>{t("Current service rank")} · {t("Level")} {rewardProgress.highestLevel}/500</small><h3>{t(rewardRank(rewardProgress))}</h3></div></div>
+          <div className="reward-rank-current"><ServiceBadge name={rankForLevel(rewardProgress.highestLevel).name} size="large"/><div><small>{t("Current service rank")} · {t("Level")} {rewardProgress.highestLevel}/500</small><h3>{t(rewardRank(rewardProgress))}</h3></div></div>
           <p>{Object.keys(rewardProgress.bossWins).filter(id=>bossCardAvailable(Number(id))).length}/{BOSS_STICKER_COUNT} {t("Boss stickers")} · {rewardProgress.completedChains.length} {t("Chains")} · {rewardProgress.perfectBonuses} {t("Perfect bonus rounds")}</p>
-          <div id="reward-ranks" className="reward-rank-path" aria-label={t("Service ranks")}>{[1, 11, 51, 101, 201, 301, 401, 500].map(level => { const tier = rankForLevel(level); return <span key={level} className={rewardProgress.highestLevel >= level ? "earned" : ""}><b aria-hidden="true">{tier.symbol}</b><small>{t(tier.name)}<br />{t("Level")} {level}</small></span>; })}</div>
+          <div id="reward-ranks" className="reward-rank-path" aria-label={t("Service ranks")}>{[1, 11, 51, 101, 201, 301, 401, 500].map(level => { const tier = rankForLevel(level); return <span key={level} className={rewardProgress.highestLevel >= level ? "earned" : ""}><ServiceBadge name={tier.name} size="medium" locked={rewardProgress.highestLevel < level}/><small>{t(tier.name)}<br />{t("Level")} {level}</small></span>; })}</div>
           <h4>{t("Linked Blocks")} · {t("Level")} {latestRewardLevel}</h4>
           <div className="reward-blocks" aria-label={t("Linked Blocks")}>{Array.from({ length: 9 }, (_, index) => <span key={index} className={index < (rewardProgress.linkedBlocks?.[latestRewardLevel] ?? 0) ? "earned" : ""}>{index + 1}</span>)}</div>
           <div id="reward-chains" className="reward-milestones" aria-label={t("Chain milestones")}>{CHAIN_MILESTONES.map(target => <span key={target} className={rewardProgress.completedChains.length >= target ? "earned" : ""} title={`${target} ${t("Chains")}`}>◆ {target}</span>)}</div>
@@ -633,14 +594,22 @@ const Shop = () => {
       {shopView === "leaders" && <section className="leaderboard-section" aria-labelledby="leaders-heading">
         <p className="eyebrow">{t("GLOBAL RECORDS")}</p>
         <h2 id="leaders-heading">{t("Top 100")}</h2>
-        <div className="leaderboard-tabs" role="group" aria-label={t("Top 100")}>{(["career", 2, 1] as const).map(rule => <button className="button button-secondary" type="button" key={rule} aria-pressed={leaderRules === rule} onClick={() => { setLeadersStatus("loading"); setLeaderRules(rule); }}>{t(rule === "career" ? "Career Score" : rule === 2 ? "Expanded levels" : "Previous records")}</button>)}</div>
-        <details className="leaderboard-explanation" key={leaderRules}><summary>{t("Ranking explained")}</summary><p>{t(leaderRules === "career" ? "Career Score adds verified completed runs. Best Run is the highest single run with its reached level. Profile level is separate. Earlier records remain in the previous lists." : leaderRules === 2 ? "Expanded records use the current scoring rules. Run level belongs to that record; profile level shows career progress." : "Historical records use earlier scoring rules. Missing run levels were not recorded and cannot be recovered from today’s profile.")}</p></details>
+        <div className="leaderboard-tabs" role="group" aria-label={t("Top 100")}>{(["career", 2, 1] as const).map(rule => <button className="button button-secondary" type="button" key={rule} aria-pressed={leaderRules === rule} onClick={() => { setLeadersStatus("loading"); setLeaderRules(rule); }}>{t(rule === "career" ? "Career Score" : rule === 2 ? "Mission high scores" : "Earlier record archive")}</button>)}</div>
+        <p className="leaderboard-explanation" key={leaderRules}>{t(leaderRules === "career" ? "Sum of verified completed missions, sorted by total career points." : leaderRules === 2 ? "Highest saved mission score under the current rules, including saved checkpoints. Sorted by score." : "Earlier high scores under the old rules, sorted by score. Their network and run level were not recorded.")}</p>
+        {leaderRules === 1 && <p className="leaderboard-archive-notice">{t("Historical archive · preserved original records")}</p>}
+        <details className="leaderboard-glossary"><summary>{t("Ranking explained")}</summary><dl>
+          <div><dt>{t("Best Run")}</dt><dd>{t("Highest score from a verified completed mission.")}</dd></div>
+          <div><dt>{t("Mission high scores")}</dt><dd>{t("Highest saved mission score; the mission may still be in progress.")}</dd></div>
+          <div><dt>{t("Run level")}</dt><dd>{t("Level reached in that recorded mission; unavailable for older records.")}</dd></div>
+          <div><dt>{t("Profile level")}</dt><dd>{t("Highest campaign level in the player's career. Separate from the record's run level.")}</dd></div>
+        </dl></details>
         {leaderRules === "career" && personalScores ? <p className="leaderboard-personal">{t("Career Score")}: <strong>{personalScores.careerScore.toLocaleString(locale)}</strong> · {t("Best Run")}: <strong>{personalScores.bestRun.score.toLocaleString(locale)}</strong> · {t("Run level")}: {personalScores.bestRun.level == null ? t("Not recorded") : number(personalScores.bestRun.level)}</p> : leaderRules !== "career" && personalBest !== null && <p className="leaderboard-personal">{t("Your personal best")}: <strong>{number(personalBest)}</strong></p>}
         {leadersStatus === "loading" && <p role="status">{t("Loading scores…")}</p>}
         {leadersStatus === "error" && <p role="status">{t("Leaderboard unavailable. Try again later.")}</p>}
-        {leadersStatus === "ready" && (leaders.length ? <><ol className="leaderboard-list" start={leaderPage * 5 + 1}>{leaders.slice(leaderPage * 5, leaderPage * 5 + 5).map(entry => <li key={entry.rank}>
-          <div className="leader-identity"><span className="leader-place">{number(entry.rank)}</span><button className="leader-profile-link" type="button" onClick={()=>setPilotOpen(entry.username)}><PilotAvatar avatar={entry.avatar??null} name=""/><strong>@{entry.username}</strong></button><span className="leader-rank"><b aria-hidden="true">{entry.serviceRank?.symbol ?? "◇"}</b><small>{t(entry.serviceRank?.name ?? "Rookie")}</small></span></div>
-          <dl className="leader-metrics"><div><dt>{t(leaderRules === "career" ? "Career Score" : "Best score")}</dt><dd>{number(entry.score)}</dd></div>{leaderRules === "career" && <div><dt>{t("Best Run")}</dt><dd>{number(entry.bestRun?.score ?? 0)}</dd></div>}<div><dt>{t("Run level")}</dt><dd>{entry.runLevel == null ? t("Not recorded") : number(entry.runLevel)}</dd></div><div><dt>{t("Profile level")}</dt><dd>{entry.profileLevel == null ? t("Not recorded") : number(entry.profileLevel)}</dd></div></dl>
+        {leadersStatus === "ready" && user && !leaders.some(entry => entry.username === user.username) && <p>{t("Your account is not in this Top 100.")}</p>}
+        {leadersStatus === "ready" && (leaders.length ? <><ol className="leaderboard-list" start={leaderPage * 5 + 1}>{leaders.slice(leaderPage * 5, leaderPage * 5 + 5).map(entry => <li key={entry.rank} data-own={user?.username === entry.username} aria-current={user?.username === entry.username ? "true" : undefined}>
+          <div className="leader-identity"><span className="leader-place">{number(entry.rank)}</span><button className="leader-profile-link" type="button" onClick={()=>setPilotOpen(entry.username)}><PilotAvatar avatar={entry.avatar??null} name=""/><strong>@{entry.username}{user?.username === entry.username && <small> · {t("You")}</small>}</strong></button><span className="leader-rank"><ServiceBadge name={entry.serviceRank?.name ?? "Rookie"}/><small>{t(entry.serviceRank?.name ?? "Rookie")}</small></span></div>
+          <dl className="leader-metrics"><div><dt>{t(leaderRules === "career" ? "Career Score" : "Mission high scores")}</dt><dd>{number(entry.score)}</dd></div>{leaderRules === "career" && <div><dt>{t("Best Run")}</dt><dd>{number(entry.bestRun?.score ?? 0)}</dd></div>}<div><dt>{t("Run level")}</dt><dd>{entry.runLevel == null ? t("Not recorded") : number(entry.runLevel)}</dd></div><div><dt>{t("Profile level")}</dt><dd>{entry.profileLevel == null ? t("Not recorded") : number(entry.profileLevel)}</dd></div></dl>
         </li>)}</ol>{leaders.length > 5 && <nav className="leaderboard-pages" aria-label={t("Top 100")}><button type="button" disabled={leaderPage === 0} onClick={() => setLeaderPage(page => Math.max(0, page - 1))}>{t("Previous page")}</button><span role="status">{number(leaderPage + 1)} / {number(Math.ceil(leaders.length / 5))}</span><button type="button" disabled={(leaderPage + 1) * 5 >= leaders.length} onClick={() => setLeaderPage(page => page + 1)}>{t("Next page")}</button></nav>}</> : <p>{t("No records yet. Complete a mission to be first.")}</p>)}
       </section>}
 
@@ -657,32 +626,18 @@ const Shop = () => {
         <p className="testnet-shop-notice" role="note">{shipSaveNetwork === "testnet" ? t("TESTNET SHARDS: Earn and spend Shards on available Standard ships here for testing. Shards and ship purchases do not transfer to Mainnet; there you start from zero.") : t("MAINNET SHARDS: Shards and ship purchases start from zero here. Testnet balances and ships are separate.")}</p>
         <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? t("Testnet: Grey Scout is free; nine Standard hulls cost Shards. Other hulls are locked until Mainnet.") : t("Grey Scout is free; nine Standard hulls cost Shards. Other hulls are currently locked.")}</p>
         <details className="ship-earnings"><summary>{t("How to earn Shards")}</summary><p>{t("At level 1, defeats earn Shards by enemy class: light 2, medium 4–5, elite 6, heavy 8, boss 16. Rewards grow with level. Bonus targets earn 1 each, plus a completion reward that grows with level. The HUD shows your previous Shard balance plus this mission's earnings.")}</p></details>
-        <label className="ship-search-label" htmlFor="ship-search">{t("Find a ship")} <small>{matchingShipOptions.length}/{shipSearchOptions.length}</small></label>
-        <div className="ship-search-wrap" ref={shipSearchRef}>
-          <div className="ship-search-control">
-            <input id="ship-search" className="ship-search" type="search" value={shipQuery} onFocus={() => setShipSearchOpen(true)} onChange={event => { setShipQuery(event.target.value); setShipSearchOpen(true); }} onKeyDown={event => { if (event.key === "Escape") { setShipSearchOpen(false); event.currentTarget.blur(); } else if (event.key === "Enter") { event.currentTarget.blur(); } else if (event.key === "ArrowDown" && shipResultsVisible) { event.preventDefault(); shipSearchRef.current?.querySelector<HTMLButtonElement>(".ship-search-result")?.focus(); } }} placeholder={t("Search ship name")} aria-expanded={shipResultsVisible} aria-controls="ship-search-results" autoComplete="off" />
-            <button className="ship-search-toggle" type="button" aria-label={t("Show ships")} aria-expanded={shipSearchOpen} aria-controls="ship-search-results" onClick={() => setShipSearchOpen(open => !open)}><span aria-hidden="true">⌄</span></button>
-          </div>
-          {shipResultsVisible && <div className="ship-search-results" id="ship-search-results" role="group" aria-label={t("Available ships")}>
-            {matchingShipOptions.map(skin => {
-              const total = fleetCount(visibleFleet, skin.id);
-              const status = total ? `${t("Owned")} ×${total}` : testnetStandardHullAvailable(skin.id) ? t("Not owned") : shipSaveNetwork === "testnet" ? t("MAINNET READY") : t("Locked");
-              return <button className={`ship-search-result${previewSkin.id === skin.id ? " ship-search-selected" : ""}`} key={skin.id} type="button" onClick={() => chooseSearchResult(skin)}>
-                <span className="ship-search-thumb" aria-hidden="true"><img src={shipEvolutionAsset(skin.sprite, 1)} alt="" loading="lazy" decoding="async" style={shipPreviewPlacement(skin.sprite, 1)} /></span>
-                <span className="ship-search-result-name"><strong>{skin.name}</strong><small>{t("STANDARD")} · <span className={!total && !testnetStandardHullAvailable(skin.id) ? "mainnet-ready-badge" : undefined}>{status}</span></small>{shopView === "shop" && <small className="ship-search-price">◆ {standardShipPrice(skin).toLocaleString(locale)} {t("Shards")}{skin.price === 0 ? " · " + t("Additional ship") : ""}</small>}<small>{t("Open for variants and levels")}</small></span><span className="ship-search-arrow" aria-hidden="true">›</span>
-              </button>;
-            })}
-            {matchingShipOptions.length === 0 && <p className="ship-search-empty">{t("No matching ships.")}</p>}
-          </div>}
+        <div className="fleet-scroll-list">
+          {shipSearchOptions.map(skin => <article id={`fleet-${skin.id}`} key={`${shopView}:${skin.id}`} className="fleet-list-entry">
+            <FleetShipPanel view={shopView} skin={skin} ownedStage={ownedShipStage(skin.sprite, inventory?.ownedShipUpgrades)} fleet={visibleFleet} shards={displayedShards} locale={locale} adminPreview={adminMode}
+              offers={offers.filter(offer => offer.kind === "ship_upgrade")} selectedSkinId={selected.skin.id} selectedColorId={selected.color.id}
+              message={typeof hangarMessage === "object" && hangarMessage.ship === skin.name ? hangarMessageText : ""} t={t}
+              requestedStage={shopTarget?.skin === skin.id ? shopTarget.stage : undefined}
+              purchaseBusy={accountBusy || Boolean(user && !account)} onBuy={color => purchasePreview(skin, color)}
+              onEquip={color => equipShip(skin, color)}
+              onStage={stage => { if (adminMode) { setAdminStage(stage); sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage)); } }}
+              onUpgrade={stage => { setShopTarget({ skin: skin.id, stage }); setShopView("shop"); }} />
+          </article>)}
         </div>
-        <ShipSelectionPanel view={shopView} skin={previewSkin} color={previewColor} focusStage={previewFocusStage} ownedStage={previewStage} fleet={visibleFleet} shards={displayedShards} locale={locale} adminPreview={adminMode}
-          offers={offers.filter(offer => offer.kind === "ship_upgrade")}
-          selectedSkinId={selected.skin.id} selectedColorId={selected.color.id} message={hangarMessageText} t={t}
-          onStageChange={stage => { setPreviewFocusStage(stage); if (adminMode) { setAdminStage(stage); sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage)); } setHangarMessage(""); }}
-          onColorChange={color => { setPreviewColor(color); if (shopView === "hangar") equipShip(previewSkin, color); else setHangarMessage(""); }}
-          purchaseBusy={accountBusy || Boolean(user && !account)} onBuyStandard={purchasePreview}
-          onEquipPreview={() => equipShip(previewSkin, previewColor)}
-          onOpenShop={() => { setPreviewFocusStage(1); setShopView("shop"); }} />
       </section>}
 
       {(shopView === "weapons" || shopView === "powers") && <section className="upgrade-section" aria-labelledby="upgrade-heading">
@@ -722,7 +677,7 @@ const Shop = () => {
           <button className="close-button" type="button" onClick={() => setActivePanel(null)} aria-label={t('Close')}>×</button>
           <p className="eyebrow">{t("MISSION LOG")}</p>
           <h2 id="info-title">{t("Your Progress")}</h2>
-          {user ? personalScores ? <p>{t("Career Score adds verified completed runs. Best Run is the highest single run with its reached level. Profile level is separate. Earlier records remain in the previous lists.")} {t("Career Score")}: {personalScores.careerScore.toLocaleString(locale)} · {t("Best Run")}: {personalScores.bestRun.score.toLocaleString(locale)} · {t("Run level")}: {personalScores.bestRun.level == null ? t("Not recorded") : number(personalScores.bestRun.level)}. {t("Sector")} {displayedRecords.highestSector} · {t("Destroyed")} {displayedRecords.totalDestroyed}.</p> : <p role="status">{t("Leaderboard unavailable. Try again later.")}</p> : <p>{t("Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.", { score: records.bestScore, sector: displayedRecords.highestSector, destroyed: displayedRecords.totalDestroyed })}</p>}
+          <CareerDashboard progress={!user || rewardStatus === "ready" && rewardOwner === user.uid ? rewardProgress : null} scores={user ? personalScores : null} records={!user || account ? displayedRecords : null} accountId={user?.uid} localBest={!user ? records.bestScore : undefined} loading={!!user && rewardStatus === "loading"}/>
           <button className="button button-primary" type="button" onClick={() => setActivePanel(null)}>{t("Close")}</button>
         </div>
       </div>}
