@@ -68,3 +68,7 @@ Weitere 89 vietnamesische Spiel-, Speicher-, Waffen-, Fortschritts- und Kauftext
 ## Fortlaufende Übersetzung: 9. Oktober 2026
 
 Weitere 339 vietnamesische Einträge für die gesamte übrige erfasste Oberfläche einschließlich Administratoransicht, Testnet-/Mainnet-Hinweise, Bedienung, Speichern und Status wurden direkt ergänzt. Der statische Bestand steht bei 786/1020; 234 fiktive Geschichten- und Kartentexte bleiben. Platzhalter wurden verglichen; Build, Browser und muttersprachliche Abnahme für diese Erweiterung stehen noch aus. Keine Änderung an Produktion oder stabilem Testnet.
+
+### Vietnamesischer statischer Bestand
+
+Alle 234 zuletzt fehlenden fiktiven Schiffsgeschichten, Bossakten, Kartenbeschreibungen und Titel wurden direkt auf Vietnamesisch ergänzt. Damit sind 1020/1020 statisch erfasste Einträge vorhanden; Platzhalter und Schlüssel sind vollständig abgeglichen. Die Texte benötigen noch eine sprachliche Prüfung durch Muttersprachler sowie Browser- und Gerätekontrollen. Andere neue Sprachen und ältere Sprachlücken bleiben für die Gesamtfreigabe offen.
