@@ -12,7 +12,7 @@ import { turretHealth } from './bossTurrets';
 import { levelDifficulty } from './levelDifficulty';
 import { bossDifficulty } from './bossDifficulty';
 
-export type CollectionCard = { key: string; name: string; subtitle: string; serial: string; tier: number; category: string; image: string; background: string; story: string[]; equipment: string[]; stats: [string,string][]; bossId?: number };
+export type CollectionCard = { key: string; name: string; subtitle: string; serial: string; tier: number; category: string; image: string; background: string; story: string[]; equipment: string[]; stats: [string,string][]; bossId?: number; color?: import("./shipFleet").PlayerColorId };
 export function shipCard(id: string, stage: ShipStage, language: boolean | string): CollectionCard {
  const locale = typeof language === 'boolean' ? (language ? 'de' : 'en') : normalizeLocale(language) ?? 'en';
  const de = locale === 'de', t = (source: string, params?: Record<string, string | number>) => translate(locale, source, params);
