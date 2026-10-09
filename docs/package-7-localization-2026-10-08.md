@@ -72,3 +72,7 @@ Weitere 339 vietnamesische Einträge für die gesamte übrige erfasste Oberfläc
 ### Vietnamesischer statischer Bestand
 
 Alle 234 zuletzt fehlenden fiktiven Schiffsgeschichten, Bossakten, Kartenbeschreibungen und Titel wurden direkt auf Vietnamesisch ergänzt. Damit sind 1020/1020 statisch erfasste Einträge vorhanden; Platzhalter und Schlüssel sind vollständig abgeglichen. Die Texte benötigen noch eine sprachliche Prüfung durch Muttersprachler sowie Browser- und Gerätekontrollen. Andere neue Sprachen und ältere Sprachlücken bleiben für die Gesamtfreigabe offen.
+
+### Englische Admin-Texte
+
+Alle 156 zuvor fehlenden deutschen Quelltexte der Administratoransicht besitzen jetzt eine explizite englische Übersetzung. Auch identische Begriffe wie Block und Level sind ausdrücklich hinterlegt. Der englische statische Bestand steht damit bei 1020/1020. Die anderen bestehenden und neuen Sprachen sind weiterhin unvollständig; die Freigabeprüfung bleibt gesperrt.
