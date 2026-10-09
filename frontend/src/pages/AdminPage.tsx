@@ -22,7 +22,8 @@ import PaintedShip from "./PaintedShip";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
 import { primeGameAudio } from "./gameAudio";
 import { requestGameFullscreen } from "./gameFullscreen";
-import { readEffectsVolume } from "./musicPreferences";
+import { readEffectsVolume, readMusicVolume } from "./musicPreferences";
+import { MusicPlayer } from "./musicPlayback";
 import "./admin.css";
 import AdminUsage from "./AdminUsage";
 import { useAdminLocale } from "../adminLocale";
@@ -157,7 +158,8 @@ export default function AdminPage() {
   const [csvFile, setCsvFile] = useState<{ url: string; file: File } | null>(null);
   useEffect(() => () => { if (csvFile) URL.revokeObjectURL(csvFile.url); }, [csvFile]);
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioRef = useRef<MusicPlayer | null>(null);
+  const audioRequest = useRef(0);
   const [playingAudio, setPlayingAudio] = useState("");
   const selectedSkin = playerSkins.find(skin => skin.id === skinId)!;
   const allowed = auth.authReady && auth.canAdmin;
@@ -212,7 +214,9 @@ export default function AdminPage() {
 
   useEffect(
     () => () => {
-      audioRef.current?.pause();
+      audioRequest.current += 1;
+      audioRef.current?.close();
+      audioRef.current = null;
     },
     []
   );
@@ -253,6 +257,7 @@ export default function AdminPage() {
       sessionStorage.setItem(ADMIN_SHIP_COLOR_KEY, colorId);
       sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage));
       sessionStorage.setItem(ADMIN_START_SECTOR_KEY, String(configuration.sector));
+      audioRequest.current += 1;
       audioRef.current?.pause();
       requestGameFullscreen();
       navigate("/game");
@@ -332,19 +337,25 @@ export default function AdminPage() {
   };
 
   const testAudio = async (name: string, file: string) => {
-    audioRef.current?.pause();
+    const request = ++audioRequest.current;
     setError("");
-    const audio = new Audio(`/audio/${file}.mp3`);
-    audio.volume = readEffectsVolume();
-    audioRef.current = audio;
-    audio.onended = () => setPlayingAudio("");
-    try {
-      await audio.play();
-      setPlayingAudio(name);
-    } catch {
-      setPlayingAudio("");
-      setError("Dieser Ton konnte nicht gestartet werden. Bitte erneut antippen.");
-    }
+    setPlayingAudio("");
+    const source = `/audio/${file}.mp3`;
+    // Keep one unlocked media element and use the existing iOS-safe gain control.
+    const player = audioRef.current ?? new MusicPlayer(source, readEffectsVolume());
+    audioRef.current = player;
+    player.pause();
+    player.setSource(source);
+    player.audio.currentTime = 0;
+    player.audio.loop = false;
+    player.setVolume(file === "home-galactic-chain" || file === "battle-orbit" || file === "dreadnought-duel"
+      ? readMusicVolume() : readEffectsVolume());
+    player.audio.onended = () => setPlayingAudio("");
+    const played = await player.play();
+    // Ignore a completed play request after Stop, navigation or another test.
+    if (audioRequest.current !== request || audioRef.current !== player) return;
+    if (played) { if (player.playing) setPlayingAudio(name); }
+    else setError("Dieser Ton konnte nicht gestartet werden. Bitte erneut antippen.");
   };
 
   return (
@@ -986,6 +997,7 @@ export default function AdminPage() {
                   <button
                     className="admin-button"
                     onClick={() => {
+                      audioRequest.current += 1;
                       audioRef.current?.pause();
                       setPlayingAudio("");
                     }}
