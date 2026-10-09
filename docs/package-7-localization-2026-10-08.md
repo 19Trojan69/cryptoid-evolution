@@ -120,3 +120,7 @@ Je 155 Texte der Eigentümer- und Zugriffsstatistikansicht wurden direkt auf Fra
 ### Italienische und russische Admin-Texte
 
 Auch für Italienisch und Russisch wurden je 155 Admin-Texte direkt ergänzt. Damit sind die erfassten Admin- und Sammlungsoberflächen der fünf Sprachen abgedeckt. Für Deutsch, Spanisch, Französisch, Portugiesisch, Italienisch und Russisch verbleiben jeweils 234 fiktive Geschichten- und Bossakten-Texte, zusammen 1404. Die Produktionsfreigabe bleibt gesperrt, bis diese übersetzt und die vollständige Prüfung bestanden sind.
+
+### Deutsche Schiffsgeschichten, erster Block
+
+75 der 234 noch offenen deutschen Geschichts- und Bossakten-Texte sind kontextbezogen übertragen. Namen und Spielmechanik bleiben erhalten; der erfasste deutsche Stand erreicht 861/1020. Insgesamt sind 1329 statische Texte offen. Der letzte Code-Stand vor diesen Geschichten (`bf850cc1`) erreichte einen READY-Preview-Build. Browser- und muttersprachliche Prüfung bleiben ausstehend.
