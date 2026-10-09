@@ -10,6 +10,7 @@ import './mobileDeepMenus.css'
 import './hudDepth.css'
 import './locales/typography.css'
 import './selectionControls.css'
+import './fleetMenus.css'
 import App from './App.tsx'
 import { startAggregateUsage } from './lib/aggregateUsage'
 
