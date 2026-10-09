@@ -39,6 +39,10 @@ export const paymentRecordHeaders = [
   "Kursquelle",
   "Bewertungszeitpunkt UTC",
   "Beleg-/Rechnungsnummer",
+  "Benutzername", "Stueckzahl", "Zahlungsart", "Kaufzeitpunkt UTC",
+  "Historischer USD je Pi", "Historischer EUR je Pi", "Kaufgegenwert USD", "Kaufgegenwert EUR",
+  "Kaufkursquelle", "Kaufkurszeitpunkt UTC", "Kaufkursverfuegbarkeit", "Kurserfassung UTC",
+  "EUR-Methode", "USD-EUR Wechselkurs", "Wechselkursquelle", "Wechselkurszeitpunkt UTC",
 ];
 
 const safeCell = (value: unknown): string => {
@@ -56,7 +60,22 @@ const safeCell = (value: unknown): string => {
 export const csvRow = (cells: unknown[]) =>
   `${cells.map(safeCell).join(";")}\r\n`;
 
-export const paymentRecord = (order: any): unknown[] => [
+export const purchasePriceView = (order: any) => {
+  const quote = order.purchaseQuote;
+  const usable = order.payment_network === "Pi Network" && quote?.availability === "available";
+  return {
+    availability: order.payment_network === "Pi Testnet" ? "test_payment" : usable ? "available" : "unavailable",
+    purchaseAt: quote?.purchaseAt || order.pi_created_at || null,
+    usdPerPi: usable ? quote.usdPerPi : null, eurPerPi: usable ? quote.eurPerPi : null,
+    usdAmount: usable && typeof order.payment_amount_pi === "number" ? order.payment_amount_pi * quote.usdPerPi : null,
+    eurAmount: usable && typeof order.payment_amount_pi === "number" ? order.payment_amount_pi * quote.eurPerPi : null,
+    source: usable ? quote.source : null, quotedAt: usable ? quote.quotedAt : null,
+    recordedAt: quote?.recordedAt || null, eurMethod: usable ? quote.eurMethod : null,
+    fxRate: usable ? quote.fxRate || null : null, fxSource: usable ? quote.fxSource || null : null,
+    fxAt: usable ? quote.fxAt || null : null,
+  };
+};
+export const paymentRecord = (order: any): unknown[] => { const price = purchasePriceView(order); return [
   piNetwork(order.payment_network),
   order.cancelled ? "Storniert" : order.paid ? "Bestaetigt" : "Offen",
   order.pi_payment_id,
@@ -74,12 +93,17 @@ export const paymentRecord = (order: any): unknown[] => [
   order.from_address,
   order.to_address,
   order.payment_memo,
-  order.valuation?.eurPerPi,
-  order.valuation?.eurAmount,
+  order.payment_network === "Pi Network" ? order.valuation?.eurPerPi : null,
+  order.payment_network === "Pi Network" ? order.valuation?.eurAmount : null,
   order.valuation?.source,
   order.valuation?.at,
   order.valuation?.receiptNumber,
-];
+  order.username || "nicht erfasst", order.quantity ?? "nicht erfasst",
+  order.payment_network === "Pi Testnet" ? "Testzahlung - kein Geldwert" : "Pi-Zahlung",
+  price.purchaseAt, price.usdPerPi, price.eurPerPi, price.usdAmount, price.eurAmount,
+  price.source, price.quotedAt, price.availability === "test_payment" ? "Testzahlung - kein Geldwert" : price.availability === "available" ? "verfuegbar" : "nicht verfuegbar",
+  price.recordedAt, price.eurMethod, price.fxRate, price.fxSource, price.fxAt,
+]; };
 
 export type LedgerNetwork = "mainnet" | "testnet" | "unknown" | "all";
 export type LedgerStatus = "all" | "confirmed" | "pending" | "cancelled";
@@ -111,6 +135,7 @@ export const paymentView = (order: any) => ({
   productId: order.product_id,
   productName: order.product_name || order.product_id || "Unbekanntes Produkt",
   userUid: order.user,
+  username: order.username || null, quantity: order.quantity ?? null, purchasePrice: purchasePriceView(order),
   amountPi:
     typeof order.payment_amount_pi === "number" &&
     Number.isFinite(order.payment_amount_pi)
