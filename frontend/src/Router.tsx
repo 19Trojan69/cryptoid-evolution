@@ -3,18 +3,14 @@ import Shop from "./pages/Shop";
 import GamePage from "./pages/GamePage.tsx";
 import PiSignInCallback from "./pages/PiSignInCallback.tsx";
 import LegalPage from "./pages/LegalPage.tsx";
-import { lazy, Suspense } from "react";
-import AdminLoading from "./AdminLoading";
-const AdminPage = lazy(() => import("./pages/AdminPage.tsx"));
+import AdminPage from "./pages/AdminPage.tsx";
+import RouteRecovery from "./RouteRecovery";
 
 export const router = createBrowserRouter([
   {
     path: "/admin",
-    element: (
-      <Suspense fallback={<AdminLoading />}>
-        <AdminPage />
-      </Suspense>
-    ),
+    element: <AdminPage />,
+    errorElement: <RouteRecovery />,
   },
   {
     path: "/",
