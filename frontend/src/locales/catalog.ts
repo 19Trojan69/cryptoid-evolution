@@ -1,3 +1,4 @@
+import { spanishCompletionTranslations } from './spanishCompletion.ts';
 import { germanCompletionTranslations } from './germanCompletion.ts';
 import { indonesianInterfaceTranslations } from './indonesianInterface.ts';
 import { englishAdminTranslations } from './englishAdmin.ts';
@@ -5580,3 +5581,5 @@ Object.assign(localeCatalog.en ??= {}, englishAdminTranslations);
 Object.assign(localeCatalog.id ??= {}, indonesianInterfaceTranslations);
 
 Object.assign(localeCatalog.de ??= {}, germanCompletionTranslations);
+
+Object.assign(localeCatalog.es ??= {}, spanishCompletionTranslations);
