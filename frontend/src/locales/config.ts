@@ -8,11 +8,19 @@ export const languageLabels = {
   ur: 'اردو', fa: 'فارسی', fil: 'Filipino', sw: 'Kiswahili',
 } as const;
 export type Locale = keyof typeof languageLabels;
-// Only these languages are offered and matched automatically. Other catalog copy stays archived.
+// Keep the original 17 languages selectable alongside Simplified Chinese and Vietnamese.
+// The original language packs can fall back to English for copy added in Paket 7.
 export const supportedLanguages: Partial<Record<Locale, string>> = {
   en: languageLabels.en, de: languageLabels.de, es: languageLabels.es,
+  fr: languageLabels.fr, pt: languageLabels.pt, it: languageLabels.it,
+  pl: languageLabels.pl, tr: languageLabels.tr, ru: languageLabels.ru,
+  hr: languageLabels.hr, cs: languageLabels.cs, sk: languageLabels.sk,
+  hu: languageLabels.hu, ro: languageLabels.ro, sr: languageLabels.sr,
+  uk: languageLabels.uk, th: languageLabels.th,
   zh: languageLabels.zh, vi: languageLabels.vi,
 };
+// These five catalogs have complete coverage of the current static inventory.
+export const completeLanguages = ['en', 'de', 'es', 'zh', 'vi'] as const;
 export const localeDirection = (locale: Locale): 'ltr' | 'rtl' => ['ar', 'ur', 'fa'].includes(locale) ? 'rtl' : 'ltr';
 export const documentLanguage = (locale: Locale) => locale === 'zh' ? 'zh-Hans' : locale;
 export const complexScript = (locale: Locale) => ['th', 'zh', 'ko', 'ja', 'hi', 'bn', 'ar', 'ur', 'fa'].includes(locale);
