@@ -79,4 +79,4 @@ Alle 156 zuvor fehlenden deutschen Quelltexte der Administratoransicht besitzen 
 
 ### Indonesische Bedienungstexte
 
-247 weitere kurze Spiel-, Einstellungs-, Status-, Speicher- und Shoptexte wurden direkt auf Indonesisch ergänzt. Der erfasste Bestand steigt auf 405/1020; 615 Einträge fehlen noch. Platzhalter wurden abgeglichen. Der Entwurf bleibt von Produktion und stabilem Testnet getrennt.
+247 weitere kurze Spiel-, Einstellungs-, Status-, Speicher- und Shoptexte wurden direkt auf Indonesisch ergänzt. Der erfasste Bestand steigt auf 408/1020; 612 Einträge fehlen noch. Platzhalter wurden abgeglichen. Der Entwurf bleibt von Produktion und stabilem Testnet getrennt.
