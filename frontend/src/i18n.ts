@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { sevenPackageTranslations } from "./locales/sevenPackages.ts";
 import { seriesTranslations } from "./locales/seriesAE.ts";
 import { formatLives } from "./locales/quantities.ts";
 import { localeAliases, localeCatalog } from "./locales/catalog.ts";
 
+for (const [locale, entries] of Object.entries(sevenPackageTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(seriesTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 
 import { languageLabels, supportedLanguages, resolveLocale, documentLanguage, localeDirection, complexScript, type Locale } from './locales/config.ts';
