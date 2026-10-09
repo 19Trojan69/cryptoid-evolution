@@ -1,9 +1,14 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "installCommand": "npm install --prefix frontend && npm install --prefix backend",
+  "installCommand": "npm install --prefix frontend && npm install --include=optional --prefix backend",
   "buildCommand": "npm run build --prefix frontend",
   "outputDirectory": "frontend/dist",
+  "functions": {
+    "api/index.ts": {
+      "includeFiles": "backend/node_modules/@img/**"
+    }
+  },
   "rewrites": [
     {
       "source": "/api/:path*",
