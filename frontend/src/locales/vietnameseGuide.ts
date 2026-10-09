@@ -1,5 +1,9 @@
 /** Direct Vietnamese guide and card copy; wider coverage remains in progress. */
 export const vietnameseGuideTranslations: Record<string, string> = {
+  "Combat restored.": "Đã khôi phục trận chiến.",
+  "Ship {number} · {stage}": "Tàu {number} · {stage}",
+  "ADVANCED": "Nâng cao",
+  "ELITE": "Tinh nhuệ",
   "← Back to collection": "← Quay lại bộ sưu tập",
   "A Block contains one to three planned groups. Defeat every group to link the Block. Each cleared group earns 50 points once.": "Mỗi Khối gồm một đến ba nhóm địch được bố trí sẵn. Tiêu diệt tất cả các nhóm để nối Khối. Mỗi nhóm bị tiêu diệt mang lại 50 điểm, chỉ tính một lần.",
   "Acquire this ship or defeat this boss to unlock its story, equipment and download.": "Sở hữu tàu này hoặc đánh bại trùm tương ứng để mở khóa câu chuyện, trang bị và tính năng tải thẻ.",
