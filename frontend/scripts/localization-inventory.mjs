@@ -3,7 +3,6 @@ import path from 'node:path';
 import ts from 'typescript';
 import { fileURLToPath } from 'node:url';
 import { languages, hasExplicitTranslation, translate } from '../src/i18n.ts';
-import { regionalLocales } from '../src/locales/regional.ts';
 import { completeLanguages } from '../src/locales/config.ts';
 
 // Static copy only: no runtime account, payment, database, configuration or secret values.
@@ -100,7 +99,7 @@ const placeholders = text => [...text.matchAll(/\{(\w+)\}/g)].map(match => match
 const coverage = Object.fromEntries(Object.keys(languages).map(locale => {
   const missing = entries.filter(entry => locale !== entry.language && !hasExplicitTranslation(locale, entry.source)).map(entry => entry.id);
   const invalidPlaceholders = entries.filter(entry => !missing.includes(entry.id) && placeholders(translate(locale, entry.source)) !== placeholders(entry.source)).map(entry => entry.id);
-  return [locale, { label: languages[locale], required: entries.length, translated: entries.length - missing.length, missing, invalidPlaceholders, draft: regionalLocales.includes(locale) || !completeLanguages.includes(locale) }];
+  return [locale, { label: languages[locale], required: entries.length, translated: entries.length - missing.length, missing, invalidPlaceholders, draft: !completeLanguages.includes(locale) }];
 }));
 // Missing entries reference IDs above rather than duplicating long stories for every language.
 const report = { schemaVersion: 2, staticCopyOnly: true, entries, unwrapped, coverage, completeLanguages, releaseReady: unwrapped.length === 0 && completeLanguages.every(code => coverage[code]?.missing.length === 0) && Object.values(coverage).every(locale => locale.invalidPlaceholders.length === 0) };
