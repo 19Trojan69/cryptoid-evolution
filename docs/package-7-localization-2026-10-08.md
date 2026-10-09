@@ -80,3 +80,7 @@ Alle 156 zuvor fehlenden deutschen Quelltexte der Administratoransicht besitzen 
 ### Indonesische Bedienungstexte
 
 247 weitere kurze Spiel-, Einstellungs-, Status-, Speicher- und Shoptexte wurden direkt auf Indonesisch ergänzt. Der erfasste Bestand steigt auf 408/1020; 612 Einträge fehlen noch. Platzhalter wurden abgeglichen. Der Entwurf bleibt von Produktion und stabilem Testnet getrennt.
+
+### Buildprüfung des Fortsetzungsstands
+
+Nach Korrektur eines fehlenden Trennzeichens im vietnamesischen Katalog und Initialisierung des englischen Katalogs bestand der Code-Stand `5432155d2a27c4c5c3496876f49195fd15f112dc` in GitHub Actions alle 34 Sprachtests, den TypeScript-/Vite-Build und den statischen Sprachscan. Der Scan meldete 1020 Texte, 0 direkte JSX-Fragmente, Englisch/Chinesisch/Vietnamesisch je 1020 und Indonesisch 408. Die drei gegenüber der direkten Eintragszählung zusätzlichen indonesischen Texte werden durch Katalogaliase abgedeckt. Die diagnostische Workflow-Datei wurde danach entfernt. Eine separate Vercel-Preview dieses Code-Stands erreichte READY. Die globale Freigabeprüfung ist weiterhin nicht erfüllt; 16.010 statische Übersetzungen fehlen in den übrigen Sprachen. Muttersprachliche und physische Geräteprüfungen stehen aus.
