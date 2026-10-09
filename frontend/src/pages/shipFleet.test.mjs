@@ -202,3 +202,10 @@ test("free starter repaint preserves total and additional copies cost Shards", (
   assert.equal(fleetCount(second.fleet, "grey-scout"), 2);
   assert.equal(second.balance, 0);
 });
+
+
+test("Testnet preview build scopes frontend saves even with a random deployment hostname", () => {
+ assert.equal(shipSaveNetworkForHost("cryptoid-evolution-random.vercel.app", "testnet"), "testnet");
+ assert.equal(shipSaveNetworkForHost("cryptoid-evolution.vercel.app", ""), "mainnet");
+ assert.equal(shipSaveNetworkForHost("cryptoid-evolution-random.vercel.app", "invalid"), "mainnet");
+});

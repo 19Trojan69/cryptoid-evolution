@@ -5,7 +5,7 @@ import BlockchainIcon from "./BlockchainIcon";
 export type QuickAction = "profile" | "feedback" | "play" | "hangar" | "shop" | "upgrades" | "colors" | "weapons" | "armor" | "powers" | "progress" | "rewards" | "leaders" | "ranks" | "bosses" | "medals" | "chains" | "language" | "controls" | "audio" | "display" | "vibration" | "overview" | "visuals" | "guide-controls" | "route" | "combat" | "boosts" | "earnings" | "collection" | "signin" | "signout" | "admin" | "exit-admin" | "privacy" | "terms";
 type Entry = readonly [QuickAction, string];
 const groups: readonly { id: string; title: string; glyph: string; items: readonly Entry[] }[] = [
-  { id: "mission", title: "Game & mission", glyph: "▷", items: [["play", "Play"], ["overview", "Illustrated guide"]] },
+  { id: "mission", title: "Game & mission", glyph: "▷", items: [["play", "Play"], ["overview", "Illustrated guide"], ["feedback", "Feedback & ideas"]] },
   { id: "fleet", title: "Shop & hangar", glyph: "◇", items: [["hangar", "Your fleet"], ["shop", "Ship shop"], ["weapons", "Weapons"], ["powers", "Power-ups"]] },
   { id: "career", title: "Career & rewards", glyph: "✧", items: [["profile", "My pilot profile"], ["progress", "Progress"], ["leaders", "Top 100"], ["rewards", "Rewards"]] },
   { id: "settings", title: "Settings", glyph: "⚙", items: [["language", "Language"], ["controls", "Controls"], ["audio", "Music & sound"], ["display", "Display & effects"]] },

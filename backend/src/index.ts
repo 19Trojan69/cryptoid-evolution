@@ -1,3 +1,4 @@
+import mountFeedbackEndpoints from "./handlers/feedback";
 import mountPilotEndpoints from "./handlers/pilots";
 import fs from "fs";
 import path from "path";
@@ -162,6 +163,10 @@ const paymentsRouter = express.Router();
 mountPaymentsEndpoints(paymentsRouter);
 app.use("/payments", paymentsRouter);
 
+const feedbackRouter = express.Router();
+mountFeedbackEndpoints(feedbackRouter);
+app.use("/feedback", feedbackRouter);
+
 const pilotRouter = express.Router();
 mountPilotEndpoints(pilotRouter);
 app.use("/pilots", pilotRouter);
@@ -203,6 +208,11 @@ export const start = async (listen = true): Promise<void> => {
     const db = client.db(dbName);
     app.locals.orderCollection = db.collection("orders");
     app.locals.userCollection = db.collection("users");
+    app.locals.feedbackCollection = db.collection("feedback_posts");
+    app.locals.feedbackVotesCollection = db.collection("feedback_votes");
+    await app.locals.feedbackCollection.createIndex({network:1,category:1,hidden:1,createdAt:-1});
+    await app.locals.feedbackVotesCollection.createIndex({network:1,postId:1,value:1});
+    await app.locals.feedbackVotesCollection.createIndex({network:1,postId:1,uid:1},{unique:true});
     app.locals.adminCollection = db.collection("admin_access");
     app.locals.usageCollection = db.collection("usage_hourly");
     await app.locals.usageCollection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });

@@ -1,3 +1,4 @@
+import FeedbackHub from "./FeedbackHub";
 import PilotProfile from "./PilotProfile";
 import PilotAvatar, { type Avatar } from "../components/PilotAvatar";
 import BlockchainIcon from "../components/BlockchainIcon";
@@ -103,6 +104,7 @@ const Shop = () => {
   const [shopView, setShopView] = useState<"hangar" | "shop" | "weapons" | "powers" | "progress" | "rewards" | "leaders" | null>(null);
   const [termsOpen, setTermsOpen] = useState(false);
   const [newCards,setNewCards]=useState<CardReward[]>([]);
+  const [feedbackOpen,setFeedbackOpen]=useState(false);
   const [leaderRefresh,setLeaderRefresh]=useState(0);
   const [pilotOpen,setPilotOpen]=useState<string|null>(null);
   const [collectionOpen, setCollectionOpen] = useState(false);
@@ -494,6 +496,7 @@ const Shop = () => {
       setQuickTarget(targets[action] ?? null);
       setShopView(view); return;
     }
+    if (action === "feedback") { setFeedbackOpen(true); return; }
     if (action === "profile") { if(user)setPilotOpen("");else requireAuth(); return; }
     if (action === "play") enterGame();
     else if (action === "signin") signIn();
@@ -558,6 +561,7 @@ const Shop = () => {
         </footer>
       </section>
 
+      {feedbackOpen && <FeedbackHub key={user?.uid ?? "guest"} signedIn={!!user} onSignIn={()=>{setFeedbackOpen(false);requireAuth();}} onClose={()=>setFeedbackOpen(false)}/>}
       {pilotOpen !== null && <PilotProfile key={`${user?.uid}-${pilotOpen}`} username={pilotOpen || undefined} onClose={()=>setPilotOpen(null)} onSaved={()=>setLeaderRefresh(n=>n+1)}/>}
       {quickGroup !== null && <QuickAccessMenu onClose={closeQuickMenu} onAction={openQuickAction} signedIn={Boolean(user)} canAdmin={Boolean(canAdmin)} adminMode={adminMode} username={user?.username} busy={isAuthLoading || !authReady} />}
 
