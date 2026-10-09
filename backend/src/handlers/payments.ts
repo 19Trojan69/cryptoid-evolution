@@ -6,6 +6,7 @@ import { isAdminMode } from "../adminAccess";
 import { testPiPurchaseAllowed } from "../paymentPolicy";
 import { paymentSnapshot } from "../paymentRecords";
 import { readPaymentReceipt } from "../paymentReceipt";
+import { capturePurchaseQuote } from "../purchaseQuote";
 import { weaponPayment } from "../weaponStock";
 
 const identifier = (value: unknown) => typeof value === "string" && /^[a-zA-Z0-9_-]{1,100}$/.test(value) ? value : null;
@@ -67,7 +68,10 @@ export default function mountPaymentsEndpoints(router: Router) {
       if (!existing && (offer.kind === "armor" || offer.kind === "ship_upgrade") && await orders.findOne({ user: uid, product_id: offer.id, paid: true })) return res.status(409).json({ error: "already_owned", stage: "approval", message: "Permanent upgrade already owned" });
       const prerequisite = shipUpgradePrerequisite(offer);
       if (prerequisite && !await orders.findOne({ user: uid, product_id: prerequisite, paid: true })) return res.status(403).json({ error: "prerequisite_missing", stage: "approval", message: "Advanced stage required before Elite" });
-       if (!existing) await orders.updateOne({ pi_payment_id: id }, { $setOnInsert: { pi_payment_id: id, product_id: offer.id, user: uid, paid: false, created_at: new Date() } }, { upsert: true });
+       if (!existing) {
+        const purchaseQuote = await capturePurchaseQuote(payment);
+        await orders.updateOne({ pi_payment_id: id }, { $setOnInsert: { pi_payment_id: id, product_id: offer.id, user: uid, username: req.session.currentUser?.username || null, paid: false, created_at: new Date(), purchaseQuote } }, { upsert: true });
+      }
       if (!payment.status?.developer_approved) await platformAPIClientForRequest(req).post(`/v2/payments/${id}/approve`);
       await orders.updateOne({ pi_payment_id: id, user: uid, paid: false }, { $set: { ...paymentSnapshot(payment, offer.name), quantity: purchase.quantity, weapon_model: payment.metadata?.weaponModel === 2 ? 2 : 1, approved_at: new Date() } });
       return res.json({ approved: true });
