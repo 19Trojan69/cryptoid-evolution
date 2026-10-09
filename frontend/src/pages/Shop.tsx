@@ -1,3 +1,4 @@
+import { releaseVersion } from "../release";
 import { bossCardAvailable } from './cardAvailability';
 import CardReveal from './CardReveal';
 import { availableShipCards, unseenShipCards, type CardReward } from './cardRevealRules';
@@ -50,7 +51,7 @@ import { BOSS_STICKER_COUNT, CHAIN_MILESTONES, emptyRewardProgress, rankForLevel
 
 type Offer = { id: string; kind: "weapon" | "power" | "armor" | "ship_upgrade"; name: string; description: string; pricePi: number; shipIndex?: number; stage?: 2 | 3 };
 type Inventory = { weaponStock?: Record<string, number>; ownedWeapons: string[]; ownedArmor: string[]; ownedShipUpgrades?: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
-type Leader = { rank: number; username: string; score: number; careerScore?: number; bestRun?: { score: number; level: number | null }; profileLevel?: number; serviceRank: { name: string; symbol: string } };
+type Leader = { rank: number; username: string; score: number; careerScore?: number; bestRun?: { score: number; level: number | null }; runLevel?: number | null; profileLevel?: number; serviceRank: { name: string; symbol: string } };
 type PersonalScores = { careerScore: number; bestRun: { score: number; level: number | null } };
 const HOME_STAR_POSITION = { x: .5, y: .8 };
 
@@ -82,6 +83,7 @@ const Shop = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { locale, t } = useLocale();
+  const number = (value: number) => new Intl.NumberFormat(locale).format(value);
   const {
     user, canAdmin, adminMode, setAdminPreview, isAuthenticated, showSignIn, signIn, signOut,
     closeSignIn, requireAuth, isLoading: isAuthLoading, authReady, authError,
@@ -544,6 +546,7 @@ const Shop = () => {
         </div>
         <div className="stage-label home-region-label"><span className="stage-label-value">01</span><span>{t('Genesis sector')}</span></div>
         <footer className="home-footer">
+          <span className="release-version">v{releaseVersion}</span>
           <button type="button" className="text-button terms-entry" onClick={() => setTermsOpen(true)}>{t("Terms of service")}</button>
         </footer>
       </section>
@@ -569,7 +572,7 @@ const Shop = () => {
         <article className="status-card progress-card">
           <div className="card-heading"><span>{t('YOUR PROGRESS')}</span><span className="card-icon">↗</span></div>
           <div className="progress-row"><strong>{user ? personalScores ? `${t("Career Score")} ${personalScores.careerScore.toLocaleString(locale)}` : t("Leaderboard unavailable. Try again later.") : `${t("Best")} ${records.bestScore}`}</strong><span>{t("Sector")} {String(displayedRecords.highestSector).padStart(2, "0")}</span></div>
-          {personalScores && user && <p>{t("Best Run")}: {personalScores.bestRun.score.toLocaleString(locale)} · {t("Run level")}: {personalScores.bestRun.level ?? "—"}</p>}
+          {personalScores && user && <p>{t("Best Run")}: {personalScores.bestRun.score.toLocaleString(locale)} · {t("Run level")}: {personalScores.bestRun.level == null ? t("Not recorded") : number(personalScores.bestRun.level)}</p>}
           <div className="progress-track"><span style={{ width: `${Math.min(100, (personalScores && user ? personalScores.careerScore : records.bestScore) / 10)}%` }} /></div>
           <button className="text-button" type="button" onClick={() => setActivePanel("progress")}>{t("My Progress")} <span>→</span></button>
         </article>
@@ -617,12 +620,15 @@ const Shop = () => {
       {shopView === "leaders" && <section className="leaderboard-section" aria-labelledby="leaders-heading">
         <p className="eyebrow">{t("GLOBAL RECORDS")}</p>
         <h2 id="leaders-heading">{t("Top 100")}</h2>
-        <div className="modal-actions">{(["career", 2, 1] as const).map(rule => <button className="button button-secondary" type="button" key={rule} aria-pressed={leaderRules === rule} onClick={() => { setLeadersStatus("loading"); setLeaderRules(rule); }}>{t(rule === "career" ? "Career Score" : rule === 2 ? "Expanded levels" : "Previous records")}</button>)}</div>
-        <p>{t(leaderRules === "career" ? "Career Score adds verified completed runs. Best Run is the highest single run with its reached level. Profile level is separate. Earlier records remain in the previous lists." : "Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.")}</p>
-        {leaderRules === "career" && personalScores ? <p className="leaderboard-personal">{t("Career Score")}: <strong>{personalScores.careerScore.toLocaleString(locale)}</strong> · {t("Best Run")}: <strong>{personalScores.bestRun.score.toLocaleString(locale)}</strong> · {t("Run level")}: {personalScores.bestRun.level ?? "—"}</p> : leaderRules !== "career" && personalBest !== null && <p className="leaderboard-personal">{t("Your personal best")}: <strong>{personalBest}</strong></p>}
+        <div className="leaderboard-tabs" role="group" aria-label={t("Top 100")}>{(["career", 2, 1] as const).map(rule => <button className="button button-secondary" type="button" key={rule} aria-pressed={leaderRules === rule} onClick={() => { setLeadersStatus("loading"); setLeaderRules(rule); }}>{t(rule === "career" ? "Career Score" : rule === 2 ? "Expanded levels" : "Previous records")}</button>)}</div>
+        <p>{t(leaderRules === "career" ? "Career Score adds verified completed runs. Best Run is the highest single run with its reached level. Profile level is separate. Earlier records remain in the previous lists." : leaderRules === 2 ? "Expanded records use the current scoring rules. Run level belongs to that record; profile level shows career progress." : "Historical records use earlier scoring rules. Missing run levels were not recorded and cannot be recovered from today’s profile.")}</p>
+        {leaderRules === "career" && personalScores ? <p className="leaderboard-personal">{t("Career Score")}: <strong>{personalScores.careerScore.toLocaleString(locale)}</strong> · {t("Best Run")}: <strong>{personalScores.bestRun.score.toLocaleString(locale)}</strong> · {t("Run level")}: {personalScores.bestRun.level == null ? t("Not recorded") : number(personalScores.bestRun.level)}</p> : leaderRules !== "career" && personalBest !== null && <p className="leaderboard-personal">{t("Your personal best")}: <strong>{number(personalBest)}</strong></p>}
         {leadersStatus === "loading" && <p role="status">{t("Loading scores…")}</p>}
         {leadersStatus === "error" && <p role="status">{t("Leaderboard unavailable. Try again later.")}</p>}
-        {leadersStatus === "ready" && (leaders.length ? <div className={`leaderboard-scroll${leaderRules === "career" ? " leaderboard-career" : ""}`}><table><thead><tr><th>#</th><th>{t("Player")} · {t("Service rank")}</th><th>{t(leaderRules === "career" ? "Career Score" : "Best score")}</th>{leaderRules === "career" && <><th>{t("Best Run")}</th><th>{t("Run level")}</th><th>{t("Profile level")}</th></>}</tr></thead><tbody>{leaders.map(entry => <tr key={entry.rank}><td>{entry.rank}</td><td><div className="leader-identity"><strong>@{entry.username}</strong><span className="leader-rank"><b aria-hidden="true">{entry.serviceRank?.symbol ?? "◇"}</b><small>{t(entry.serviceRank?.name ?? "Rookie")}</small></span></div></td><td>{entry.score.toLocaleString(locale)}</td>{leaderRules === "career" && <><td>{entry.bestRun?.score.toLocaleString(locale) ?? "—"}</td><td>{entry.bestRun?.level ?? "—"}</td><td>{entry.profileLevel ?? "—"}</td></>}</tr>)}</tbody></table></div> : <p>{t("No records yet. Complete a mission to be first.")}</p>)}
+        {leadersStatus === "ready" && (leaders.length ? <ol className="leaderboard-list">{leaders.map(entry => <li key={entry.rank}>
+          <div className="leader-identity"><span className="leader-place">{number(entry.rank)}</span><strong>@{entry.username}</strong><span className="leader-rank"><b aria-hidden="true">{entry.serviceRank?.symbol ?? "◇"}</b><small>{t(entry.serviceRank?.name ?? "Rookie")}</small></span></div>
+          <dl className="leader-metrics"><div><dt>{t(leaderRules === "career" ? "Career Score" : "Best score")}</dt><dd>{number(entry.score)}</dd></div>{leaderRules === "career" && <div><dt>{t("Best Run")}</dt><dd>{number(entry.bestRun?.score ?? 0)}</dd></div>}<div><dt>{t("Run level")}</dt><dd>{entry.runLevel == null ? t("Not recorded") : number(entry.runLevel)}</dd></div><div><dt>{t("Profile level")}</dt><dd>{entry.profileLevel == null ? t("Not recorded") : number(entry.profileLevel)}</dd></div></dl>
+        </li>)}</ol> : <p>{t("No records yet. Complete a mission to be first.")}</p>)}
       </section>}
 
       {(shopView === "hangar" || shopView === "shop") && <section className={`ship-selector ship-selector-${shopView}`} aria-labelledby="hangar-heading">
@@ -703,7 +709,7 @@ const Shop = () => {
           <button className="close-button" type="button" onClick={() => setActivePanel(null)} aria-label={t('Close')}>×</button>
           <p className="eyebrow">{t("MISSION LOG")}</p>
           <h2 id="info-title">{t("Your Progress")}</h2>
-          {user ? personalScores ? <p>{t("Career Score adds verified completed runs. Best Run is the highest single run with its reached level. Profile level is separate. Earlier records remain in the previous lists.")} {t("Career Score")}: {personalScores.careerScore.toLocaleString(locale)} · {t("Best Run")}: {personalScores.bestRun.score.toLocaleString(locale)} · {t("Run level")}: {personalScores.bestRun.level ?? "—"}. {t("Sector")} {displayedRecords.highestSector} · {t("Destroyed")} {displayedRecords.totalDestroyed}.</p> : <p role="status">{t("Leaderboard unavailable. Try again later.")}</p> : <p>{t("Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.", { score: records.bestScore, sector: displayedRecords.highestSector, destroyed: displayedRecords.totalDestroyed })}</p>}
+          {user ? personalScores ? <p>{t("Career Score adds verified completed runs. Best Run is the highest single run with its reached level. Profile level is separate. Earlier records remain in the previous lists.")} {t("Career Score")}: {personalScores.careerScore.toLocaleString(locale)} · {t("Best Run")}: {personalScores.bestRun.score.toLocaleString(locale)} · {t("Run level")}: {personalScores.bestRun.level == null ? t("Not recorded") : number(personalScores.bestRun.level)}. {t("Sector")} {displayedRecords.highestSector} · {t("Destroyed")} {displayedRecords.totalDestroyed}.</p> : <p role="status">{t("Leaderboard unavailable. Try again later.")}</p> : <p>{t("Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.", { score: records.bestScore, sector: displayedRecords.highestSector, destroyed: displayedRecords.totalDestroyed })}</p>}
           <button className="button button-primary" type="button" onClick={() => setActivePanel(null)}>{t("Close")}</button>
         </div>
       </div>}

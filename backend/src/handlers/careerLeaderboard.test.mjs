@@ -25,3 +25,19 @@ test('career top 100 sorts by network career total and labels best-run versus pr
   assert.equal(res.body.leaders[1].profileLevel, 18);
   assert.equal(res.body.leaders[1].score, 300);
 });
+
+test('expanded record level belongs to its exact score; historical and unmatched levels stay unknown', async () => {
+  const entries = [
+    { username: 'known', bestScore: 99, bestScoreV2: { testnet: 200 }, bestRunByNetwork: { testnet: { score: 200, level: 2 } }, rewardsByNetwork: { testnet: { highestLevel: 400 } } },
+    { username: 'old', bestScore: 90, bestScoreV2: { testnet: 250 }, bestRunByNetwork: { testnet: { score: 200, level: 2 } }, rewardsByNetwork: { testnet: { highestLevel: 490 } } },
+  ];
+  const users = { find() { return { project() { return this; }, sort() { return this; }, limit() { return this; }, async toArray() { return entries; } }; } };
+  for (const rules of ['2', '1']) {
+    const req = { query: { rules }, get: () => 'testnet', app: { locals: { userCollection: users } } };
+    const res = { json(value) { this.body = value; return this; }, status() { return this; } };
+    await routes['/top'](req, res);
+    assert.equal(res.body.leaders[0].runLevel, rules === '2' ? 2 : null);
+    assert.equal(res.body.leaders[1].runLevel, null);
+    assert.equal(res.body.leaders[1].profileLevel, 49);
+  }
+});
