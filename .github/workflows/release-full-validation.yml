@@ -18,11 +18,11 @@ jobs:
         run: npm install --prefix backend --ignore-scripts --no-audit --no-fund
       - name: Frontend tests
         run: find frontend/src -name '*.test.mjs' -print0 | xargs -0 node --experimental-strip-types --test --test-concurrency=2
+      - name: Backend build
+        run: npm run build --prefix backend
       - name: Backend tests
         run: find backend/src -name '*.test.mjs' -print0 | xargs -0 node --experimental-strip-types --test --test-concurrency=2
       - name: Frontend release build
         run: npm run build --prefix frontend
-      - name: Backend build
-        run: npm run build --prefix backend
       - name: Frontend lint
         run: npm run lint --prefix frontend
