@@ -134,7 +134,7 @@ const GameGuide = ({ onClose, initialTopic = "controls", backLabel = "Back to sy
         {topic.id === "survival" && <BossPhaseGuide />}
         <ul>{topic.details.map(detail => <li key={detail}>{t(detail)}</li>)}</ul>
       </section>
-      <button className="button button-secondary guide-back" type="button" onClick={onClose}>← {t(backLabel)}</button>
+      <button className="button button-secondary guide-back" type="button" onClick={onClose}><span className="guide-back-arrow" aria-hidden="true">←</span>{t(backLabel)}</button>
     </div>
   </div>;
 };
