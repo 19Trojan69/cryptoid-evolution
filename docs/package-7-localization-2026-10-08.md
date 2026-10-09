@@ -124,3 +124,7 @@ Auch für Italienisch und Russisch wurden je 155 Admin-Texte direkt ergänzt. Da
 ### Deutsche Schiffsgeschichten, erster Block
 
 75 der 234 noch offenen deutschen Geschichts- und Bossakten-Texte sind kontextbezogen übertragen. Namen und Spielmechanik bleiben erhalten; der erfasste deutsche Stand erreicht 861/1020. Insgesamt sind 1329 statische Texte offen. Der letzte Code-Stand vor diesen Geschichten (`bf850cc1`) erreichte einen READY-Preview-Build. Browser- und muttersprachliche Prüfung bleiben ausstehend.
+
+### Deutscher statischer Bestand vollständig
+
+Alle 234 bislang offenen deutschen Schiffs- und Bossgeschichten sind direkt ergänzt. Zusammen mit den bereits übersetzten Bedienungs- und Admin-Texten erreicht Deutsch 1020/1020 erfasste Einträge. Platzhalter und Eigennamen wurden abgeglichen; die Geschichte bleibt ausdrücklich Fiktion und verleiht keine Spielmechanik. Noch offen sind je 234 Geschichten auf Spanisch, Französisch, Portugiesisch, Italienisch und Russisch, insgesamt 1170 Texte. Eine vollständige Browser- und muttersprachliche Abnahme steht aus.
