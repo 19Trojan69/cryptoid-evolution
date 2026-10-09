@@ -108,3 +108,7 @@ Vor der Umschaltung geprüft: Vercel-Build READY; neun auswählbare Sprachen mit
 ### Sammlung und Bossakten in weiteren Sprachen
 
 Je 98 bisher fehlende erfasste Texte für Karten, Boss-Kampfdaten und zugehörige Bedienung wurden direkt für Französisch, Portugiesisch, Italienisch und Russisch ergänzt. Die bereits gesicherten spanischen 98 Einträge sind im selben Oberflächenbereich. Jede dieser fünf Sprachen steht nun rechnerisch bei 631/1020, Deutsch bei 786/1020. Insgesamt bleiben 2179 statische Texte, vor allem Admin-Ansichten und fiktive Geschichten. Platzhalter wurden beim Eintragen verglichen; Browser- und muttersprachliche Prüfung stehen noch aus. Keine Produktionsfreigabe.
+
+### Spanische Admin-Oberfläche
+
+155 fehlende Texte der Eigentümer- und Zugriffsstatistikansicht sind direkt auf Spanisch ergänzt. Zahlungshinweise, Kontoabgrenzung, datensparsame Nutzungsstatistik und Bestätigungen wurden mit unveränderten Platzhaltern übertragen. Spanisch steht nun bei 786/1020; 234 fiktive Geschichten fehlen. Der gesamte aktive Restbestand sinkt auf 2024. Mainnet bleibt unverändert.
