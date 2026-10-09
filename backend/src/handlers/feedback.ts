@@ -108,10 +108,11 @@ export default function mountFeedbackEndpoints(router: Router) {
               down: { $ifNull: [{ $arrayElemAt: ["$counts.down", 0] }, 0] },
             },
           },
+          { $set: { voteScore: { $subtract: ["$up", "$down"] } } },
           {
             $sort:
               sort === "support"
-                ? { up: -1, createdAt: -1, _id: 1 }
+                ? { voteScore: -1, up: -1, createdAt: -1, _id: 1 }
                 : { createdAt: -1, _id: 1 },
           },
           { $skip: (page - 1) * 30 },
@@ -184,14 +185,16 @@ export default function mountFeedbackEndpoints(router: Router) {
       const posts = req.app.locals.feedbackCollection;
       if (body.category === "rating") {
         // One editable rating per verified account; editing cannot unhide moderation.
+        const previous = await posts.findOne({ _id: id, network, uid: user.uid });
         await posts.updateOne(
           { _id: id, network, uid: user.uid },
           {
             $set: {
               username: post.username,
               description: post.description,
-              stars: post.stars,
+              stars: post.stars, updatedAt: post.createdAt,
             },
+            ...(previous ? { $push: { ratingHistory: { stars: previous.stars, description: previous.description, createdAt: previous.updatedAt || previous.createdAt, archivedAt: post.createdAt } } } : {}),
             $setOnInsert: {
               network,
               uid: user.uid,
@@ -232,15 +235,9 @@ export default function mountFeedbackEndpoints(router: Router) {
         hidden: false,
       });
       if (!post) return res.status(404).json({ error: "not_found" });
-      if (
-        post.category === "rating" ||
-        (post.category === "problem" && value === -1)
-      )
-        return res.status(400).json({ error: "invalid_vote" });
       const votes = req.app.locals.feedbackVotesCollection,
         _id = voteKey(network, id, user.uid);
-      if (value === 0) await votes.deleteOne({ _id });
-      else {
+      {
         const update = { $set: { network, postId: id, uid: user.uid, value } };
         try {
           await votes.updateOne({ _id }, update, { upsert: true });
