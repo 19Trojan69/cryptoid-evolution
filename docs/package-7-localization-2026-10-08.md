@@ -76,3 +76,7 @@ Alle 234 zuletzt fehlenden fiktiven Schiffsgeschichten, Bossakten, Kartenbeschre
 ### Englische Admin-Texte
 
 Alle 156 zuvor fehlenden deutschen Quelltexte der Administratoransicht besitzen jetzt eine explizite englische Übersetzung. Auch identische Begriffe wie Block und Level sind ausdrücklich hinterlegt. Der englische statische Bestand steht damit bei 1020/1020. Die anderen bestehenden und neuen Sprachen sind weiterhin unvollständig; die Freigabeprüfung bleibt gesperrt.
+
+### Indonesische Bedienungstexte
+
+247 weitere kurze Spiel-, Einstellungs-, Status-, Speicher- und Shoptexte wurden direkt auf Indonesisch ergänzt. Der erfasste Bestand steigt auf 405/1020; 615 Einträge fehlen noch. Platzhalter wurden abgeglichen. Der Entwurf bleibt von Produktion und stabilem Testnet getrennt.

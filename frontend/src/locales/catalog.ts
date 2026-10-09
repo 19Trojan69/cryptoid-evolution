@@ -1,3 +1,4 @@
+import { indonesianInterfaceTranslations } from './indonesianInterface.ts';
 import { englishAdminTranslations } from './englishAdmin.ts';
 import { chineseCollectionTranslations } from './chineseCollection.ts';
 import { chineseGameplayTranslations } from './chineseGameplay.ts';
@@ -5574,3 +5575,5 @@ Object.assign(localeCatalog.zh, chineseLoreTranslations);
 Object.assign(localeCatalog.vi, vietnameseGuideTranslations);
 
 Object.assign(localeCatalog.en ??= {}, englishAdminTranslations);
+
+Object.assign(localeCatalog.id ??= {}, indonesianInterfaceTranslations);
