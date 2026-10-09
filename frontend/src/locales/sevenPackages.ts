@@ -1,5 +1,9 @@
 export const sevenPackageTranslations: Record<string, Record<string, string>> = {
   "de": {
+    "This page could not be loaded.": "Diese Seite konnte nicht geladen werden.",
+    "Reload to open the current version. Your saved data is preserved.": "Lade die aktuelle Version neu. Deine gespeicherten Daten bleiben erhalten.",
+    "Reload page": "Seite neu laden",
+    "Return to home": "Zur Startseite",
     "CSV ready. Use Save or Share if the download does not start.": "CSV bereit. Falls der Download nicht startet, nutze Speichern oder Teilen.",
     "Save CSV": "CSV speichern",
     "Share CSV": "CSV teilen",
@@ -51,6 +55,10 @@ export const sevenPackageTranslations: Record<string, Record<string, string>> = 
     "Problem reports": "Problemmeldungen"
   },
   "es": {
+    "This page could not be loaded.": "No se pudo cargar esta página.",
+    "Reload to open the current version. Your saved data is preserved.": "Recarga para abrir la versión actual. Tus datos guardados se conservan.",
+    "Reload page": "Recargar página",
+    "Return to home": "Volver al inicio",
     "CSV ready. Use Save or Share if the download does not start.": "CSV listo. Si la descarga no se inicia, usa Guardar o Compartir.",
     "Save CSV": "Guardar CSV",
     "Share CSV": "Compartir CSV",
@@ -102,6 +110,10 @@ export const sevenPackageTranslations: Record<string, Record<string, string>> = 
     "Problem reports": "Informes de problemas"
   },
   "zh": {
+    "This page could not be loaded.": "无法加载此页面。",
+    "Reload to open the current version. Your saved data is preserved.": "请重新加载以打开当前版本。已保存的数据会保留。",
+    "Reload page": "重新加载页面",
+    "Return to home": "返回首页",
     "CSV ready. Use Save or Share if the download does not start.": "CSV 已准备好。如果下载未开始，请使用保存或分享。",
     "Save CSV": "保存 CSV",
     "Share CSV": "分享 CSV",
@@ -153,6 +165,10 @@ export const sevenPackageTranslations: Record<string, Record<string, string>> = 
     "Problem reports": "问题报告"
   },
   "vi": {
+    "This page could not be loaded.": "Không thể tải trang này.",
+    "Reload to open the current version. Your saved data is preserved.": "Tải lại để mở phiên bản hiện tại. Dữ liệu đã lưu của bạn được giữ nguyên.",
+    "Reload page": "Tải lại trang",
+    "Return to home": "Về trang chủ",
     "CSV ready. Use Save or Share if the download does not start.": "CSV đã sẵn sàng. Nếu tệp chưa tải xuống, hãy chọn Lưu hoặc Chia sẻ.",
     "Save CSV": "Lưu CSV",
     "Share CSV": "Chia sẻ CSV",
@@ -204,6 +220,10 @@ export const sevenPackageTranslations: Record<string, Record<string, string>> = 
     "Problem reports": "Báo cáo sự cố"
   },
   "en": {
+    "This page could not be loaded.": "This page could not be loaded.",
+    "Reload to open the current version. Your saved data is preserved.": "Reload to open the current version. Your saved data is preserved.",
+    "Reload page": "Reload page",
+    "Return to home": "Return to home",
     "CSV ready. Use Save or Share if the download does not start.": "CSV ready. Use Save or Share if the download does not start.",
     "Save CSV": "Save CSV",
     "Share CSV": "Share CSV",
