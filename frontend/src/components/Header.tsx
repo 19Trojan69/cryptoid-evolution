@@ -1,3 +1,4 @@
+import ServiceBadge from "./ServiceBadge";
 import { useLocale } from "../i18n";
 import type { User } from "../types/pi.ts";
 import { Link } from "react-router-dom";
@@ -35,7 +36,7 @@ const Header = ({ user, serviceRank, onSignIn, onSignOut, onSendTestNotification
           </div>
         ) : user ? (
           <>
-            <span className="user-name">@{user.username}{serviceRank && <span className="header-service-rank" title={t(serviceRank.name)}><b aria-hidden="true">{serviceRank.symbol}</b> {t(serviceRank.name)}</span>}</span>
+            <span className="user-name">@{user.username}{serviceRank && <span className="header-service-rank" title={t(serviceRank.name)}><ServiceBadge name={serviceRank.name}/> {t(serviceRank.name)}</span>}</span>
             {canAdmin && <Link className="header-action" to="/admin">{t("Admin center")}</Link>}
             {canAdmin && adminMode && <button className="header-action" type="button" onClick={onToggleAdmin} disabled={isLoading}>{t("End test mode")}</button>}
             <button className="header-action" type="button" onClick={onSignOut} disabled={isLoading}>{t('Sign out')}</button>
