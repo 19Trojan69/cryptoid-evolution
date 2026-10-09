@@ -30,3 +30,5 @@ const downloadCopy: Record<string,string[]> = {
 };
 const downloadKeys=['Save or share','Open image to save','Hold the image to save it, or use your browser’s image menu.'];
 for(const [locale,values] of Object.entries(downloadCopy)) for(const [index,key] of downloadKeys.entries()) seriesTranslations[locale][key]=values[index];
+
+for(const [locale,value] of Object.entries({de:'Sprachen suchen',es:'Buscar idiomas',zh:'搜索语言',vi:'Tìm ngôn ngữ'})) seriesTranslations[locale]['Search languages']=value;

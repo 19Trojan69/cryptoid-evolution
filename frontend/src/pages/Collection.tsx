@@ -1,3 +1,4 @@
+import { factionEmblem } from './cardFaction';
 import { cardFilename, canShareCard, shareCard } from './cardDownload';
 import { collectionBackground, cardBackgroundAsset } from './cardBackgrounds';
 import { bossCardAvailable, shipCardAvailable } from './cardAvailability';
@@ -59,7 +60,7 @@ export default function Collection({uid,onClose}:{uid?:string;onClose:()=>void})
     {status==='loading'?<p role="status">{say('Sammlung wird geladen …','Loading collection …')}</p>:status==='error'?<div role="alert"><p>{say('Die Sammlung konnte nicht geladen werden.','Could not load your collection.')}</p><button type="button" onClick={()=>setRetry(n=>n+1)}>{say('Erneut versuchen','Retry')}</button></div>:<>
      <p className="collection-count">{entries.filter(e=>e.unlocked).length}/{entries.length} {say('FREIGESCHALTET','UNLOCKED')}</p>
      <div className="collection-grid">{entries.map(entry=><button type="button" key={entry.key} className={`collection-tile tier-${entry.tier} ${entry.unlocked?'':'is-locked'}`} aria-label={`${entry.name} · ${entry.unlocked?say('Karte öffnen','Open card'):entry.available?say('GESPERRT','LOCKED'):say('MAINNET READY','MAINNET READY')}`} data-background-state={entry.unlocked?(cardBackgroundAsset(entry.key).image?'unique':'pending'):'locked'} style={entry.unlocked?{backgroundImage:`linear-gradient(180deg,rgba(5,12,24,.2),rgba(5,12,24,.93)),url("${collectionBackground(entry.key)}")`}:undefined} onClick={()=>setSelected(entry.key)}>
-      <span className="collection-serial">{entry.serial} <span>{'✦'.repeat(entry.tier)}</span></span>
+      <span className="collection-serial"><img className="faction-emblem" src={factionEmblem(entry.key)} alt=""/>{entry.serial} <span>{'✦'.repeat(entry.tier)}</span></span>
       <div className="collection-art">{entry.boss?<BossPortrait id={entry.boss} silhouette={!entry.unlocked}/>:<ShipPortrait src={entry.image} name={entry.name} silhouette={!entry.unlocked}/>}</div>
       <strong>{entry.name}</strong><small className={!entry.unlocked && !entry.available ? "mainnet-ready-badge" : undefined}>{entry.unlocked?say('Karte öffnen','Open card'):!entry.available?say('MAINNET READY','MAINNET READY'):say('GESPERRT','LOCKED')}</small>
      </button>)}</div></>}

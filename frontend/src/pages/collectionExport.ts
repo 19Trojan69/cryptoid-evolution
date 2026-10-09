@@ -1,3 +1,4 @@
+import { factionEmblem } from './cardFaction';
 import { cardCanvasDimensions } from './cardDownload';
 import { translate } from '../i18n.ts';
 import { normalizeLocale, localeDirection } from '../locales/config.ts';
@@ -11,9 +12,10 @@ export async function exportCollectionCard(card: CollectionCard, language: boole
   const locale=typeof language==='boolean'?(language?'de':'en'):normalizeLocale(language)??'en', de=locale==='de';
   const t=(source:string)=>translate(locale,source), rtl=localeDirection(locale)==='rtl';
   await document.fonts.ready;
-  const [art, space] = await Promise.all([
+  const [art, space, emblem] = await Promise.all([
     card.bossId ? loadBossArtwork(card.bossId, 1200) : loadShipArtwork(card.image),
     loadCardImage(card.background),
+    loadCardImage(factionEmblem(card.key)),
   ]);
   const canvas = document.createElement('canvas');
   canvas.width = 1200;
@@ -41,7 +43,7 @@ export async function exportCollectionCard(card: CollectionCard, language: boole
   const dimensions = cardCanvasDimensions(logicalHeight);
   canvas.width = dimensions.width; canvas.height = dimensions.height;
   ctx.scale(dimensions.scale, dimensions.scale);
-  const colors = ['#a9b9ca', '#62e5ea', '#d9acff', '#f5bd62', '#ff719c'];
+  const colors = ['#b4a2d1', '#bd9fe8', '#d9acff', '#e4b66c', '#ff91bd'];
   const accent = colors[Math.min(4, card.tier - 1)];
   ctx.fillStyle = '#101525'; ctx.fillRect(0, 0, 1200, logicalHeight);
   const spaceHeight = 1200 * space.height / space.width;
@@ -50,8 +52,11 @@ export async function exportCollectionCard(card: CollectionCard, language: boole
   shade.addColorStop(0, 'rgba(4,10,20,.34)'); shade.addColorStop(.35, 'rgba(4,10,20,.45)');
   shade.addColorStop(.75, 'rgba(4,10,20,.95)'); shade.addColorStop(1, '#101525');
   ctx.fillStyle = shade; ctx.fillRect(0, 0, 1200, spaceHeight);
-  ctx.strokeStyle = accent; ctx.lineWidth = 6; ctx.strokeRect(25, 25, 1150, logicalHeight - 50);
+  const metal = ctx.createLinearGradient(0, 0, 1200, logicalHeight);
+  metal.addColorStop(0, '#ece1ff'); metal.addColorStop(.2, accent); metal.addColorStop(.48, '#5b426c'); metal.addColorStop(.53, '#f2deff'); metal.addColorStop(1, '#b78665');
+  ctx.strokeStyle = metal; ctx.lineWidth = 8; ctx.strokeRect(25, 25, 1150, logicalHeight - 50);
   ctx.globalAlpha = .35; ctx.lineWidth = 1; ctx.strokeRect(40, 40, 1120, logicalHeight - 80); ctx.globalAlpha = 1;
+  ctx.drawImage(emblem, 1000, 62, 80, 80);
   let y = 100;
   ctx.fillStyle = accent; ctx.font = 'bold 25px sans-serif'; ctx.fillText(`CRYPTOID EVOLUTION · ${card.serial}`, 100, y); y += 60;
   const paint = (lines: string[], size: number, advance: number, color: string, bold = false) => {

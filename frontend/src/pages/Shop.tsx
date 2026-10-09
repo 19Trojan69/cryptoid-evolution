@@ -1,3 +1,4 @@
+import BlockchainIcon from "../components/BlockchainIcon";
 import { releaseVersion } from "../release";
 import { bossCardAvailable } from './cardAvailability';
 import CardReveal from './CardReveal';
@@ -25,6 +26,7 @@ import { ownedShipStage, shipEvolutionAsset, type ShipStage } from "./shipEvolut
 import { shipPreviewPlacement } from "./shipPreviewPlacement";
 import ShipSelectionPanel from "./ShipSelectionPanel";
 import "./shopPurchase.css";
+import "../metallic.css";
 import { saveGuestShipPurchase } from "./shipFleet";
 import TermsDialog from "../components/TermsDialog";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
@@ -499,7 +501,7 @@ const Shop = () => {
 
   const homePaused = Boolean(newCards.length || collectionOpen || shopView || systemMenuOpen || activePanel || termsOpen || quickGroup || showSignIn);
   return (
-    <main className="app-shell landing-shell" data-home-paused={homePaused} onPointerDownCapture={primeCardSound}>
+    <main data-shop-area={shopView ?? "home"} className="app-shell landing-shell" data-home-paused={homePaused} onPointerDownCapture={primeCardSound}>
       {newCards[0] && <CardReveal key={user?.uid ?? "guest"} reward={newCards[0]} remaining={newCards.length} onContinue={()=>{setNewCards(cards=>cards.slice(1));}}/>}
       {collectionOpen && <Collection key={user?.uid ?? "guest"} uid={user?.uid} onClose={() => setCollectionOpen(false)} />}
       <Header
@@ -538,7 +540,7 @@ const Shop = () => {
               <button className="button button-primary home-play-button" disabled={!authReady || isAuthLoading} type="button" onClick={enterGame}>{t("Play")} <span className="button-glyph" aria-hidden="true">→</span></button>
             </div>
           </div>
-          <button className="collection-home-button" type="button" disabled={!authReady} onClick={() => setCollectionOpen(true)}>✧ {t('Card collection')}</button>
+          <button className="collection-home-button" type="button" disabled={!authReady} onClick={() => setCollectionOpen(true)}><BlockchainIcon kind="collection"/> {t('Card collection')}</button>
         </div>
         <div className="planet-stage" aria-label={t("Planet status")}>
           <div className="planet"><EarthGlobe paused={homePaused} /></div>
