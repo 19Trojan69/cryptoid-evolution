@@ -25,7 +25,7 @@ import { requestGameFullscreen } from "./gameFullscreen";
 import { readEffectsVolume } from "./musicPreferences";
 import "./admin.css";
 import AdminUsage from "./AdminUsage";
-import { useLocale } from "../i18n";
+import { useAdminLocale } from "../adminLocale";
 
 const tabs = [
   ["overview", "Übersicht"],
@@ -108,20 +108,20 @@ const audioTests = [
   ["Plasma", "shot-plasma"],
   ["Waffen-Upgrade", "pickup-weapon"],
   ["Schild", "pickup-shield"],
-  ["Overdrive", "pickup-overdrive"],
-  ["Rapid", "pickup-rapid"],
+  ["Leistungsboost", "pickup-overdrive"],
+  ["Schnellfeuer", "pickup-rapid"],
   ["Bombe", "pickup-bomb"],
   ["EMP", "pickup-emp"],
   ["Boss-Sirene", "boss-warning-siren"],
   ["Boss-Explosion", "boss-destroy-v3"],
   ["Boss-Sieg", "boss-victory-v2"],
-  ["Home-Musik", "home-galactic-chain"],
+  ["Startseitenmusik", "home-galactic-chain"],
   ["Spielmusik", "battle-orbit"],
   ["Boss-Musik", "dreadnought-duel"],
 ] as const;
 
 export default function AdminPage() {
-  const { t } = useLocale();
+  const { t } = useAdminLocale();
   const auth = useAuth();
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
@@ -569,7 +569,7 @@ export default function AdminPage() {
                           .filter(offer => offer.kind === "power")
                           .map(offer => (
                             <option key={offer.id} value={offer.id}>
-                              {offer.name}
+                              {t(offer.name)}
                             </option>
                           ))}
                       </select>
@@ -581,8 +581,8 @@ export default function AdminPage() {
                       <button
                         key={color.id}
                         type="button"
-                        aria-label={color.name}
-                        title={color.name}
+                        aria-label={t(color.name)}
+                        title={t(color.name)}
                         aria-pressed={colorId === color.id}
                         style={{ backgroundColor: color.glow }}
                         onClick={() => setColorId(color.id)}
@@ -764,7 +764,7 @@ export default function AdminPage() {
                       ["Historical price", t(selectedPayment.purchasePrice.availability === "test_payment" ? "Test payment: no monetary value" : selectedPayment.purchasePrice.availability === "available" ? "Available" : "Not available")],
                       ["EUR method", selectedPayment.purchasePrice.eurMethod === "provider_quote" ? t("Direct EUR quote from provider") : t("Not available")],
                       ["Status", statusNames[selectedPayment.status]],
-                      ["Netzwerk", selectedPayment.network],
+                      ["Netzwerk", selectedPayment.network === "Pi Testnet" ? "Testnetz" : selectedPayment.network === "Pi Network" ? "Hauptnetz" : "Ungeklärt"],
                       [
                         "Betrag",
                         `${amount(selectedPayment.amountPi)}${selectedPayment.amountPi === null ? "" : selectedPayment.network === "Pi Testnet" ? " Test-Pi" : " Pi"}`,
@@ -993,7 +993,7 @@ export default function AdminPage() {
                     {t("Ton stoppen")} </button>
                 </div>
                 <p role="status">
-                  {playingAudio ? t("Wiedergabe: {value0}", {value0: playingAudio}) : t("Tippe auf einen Ton, um ihn abzuspielen.")}
+                  {playingAudio ? t("Wiedergabe: {value0}", {value0: t(playingAudio)}) : t("Tippe auf einen Ton, um ihn abzuspielen.")}
                 </p>
                 <div className="admin-sound-grid">
                   {audioTests.map(([name, file]) => (
