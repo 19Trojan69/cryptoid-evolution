@@ -138,7 +138,7 @@ export const vietnameseGuideTranslations: Record<string, string> = {
   "You start with three hearts. The mission ends when all are lost.": "Bạn bắt đầu với ba tim. Nhiệm vụ kết thúc khi mất hết tim.",
   "Your award": "Phần thưởng của bạn",
   "Your service rank rises with completed difficulty stages up to stage 500. The newest rank replaces the previous one beside your name and appears in the Top 100.": "Quân hàm tăng theo các giai đoạn độ khó đã hoàn thành, tối đa đến giai đoạn 500. Quân hàm mới thay quân hàm cũ cạnh tên và xuất hiện trong Top 100.",
-  "Your ship fires automatically. Move to dodge and line up your shots.": "Tàu tự động bắn. Di chuyển để né đòn và căn hướng bắn."
+  "Your ship fires automatically. Move to dodge and line up your shots.": "Tàu tự động bắn. Di chuyển để né đòn và căn hướng bắn.",
   "Account inventory saved": "Đã lưu vật phẩm trong tài khoản",
   "Account rewards": "Phần thưởng tài khoản",
   "Account save": "Bản lưu tài khoản",
