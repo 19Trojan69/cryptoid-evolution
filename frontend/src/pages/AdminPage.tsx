@@ -26,6 +26,7 @@ import { readEffectsVolume, readMusicVolume } from "./musicPreferences";
 import { MusicPlayer } from "./musicPlayback";
 import "./admin.css";
 import AdminUsage from "./AdminUsage";
+import { paymentEvidenceLinks } from "./paymentEvidenceLinks";
 import { useAdminLocale } from "../adminLocale";
 
 const tabs = [
@@ -161,6 +162,7 @@ export default function AdminPage() {
   const audioRef = useRef<MusicPlayer | null>(null);
   const audioRequest = useRef(0);
   const [playingAudio, setPlayingAudio] = useState("");
+  const evidenceLinks = selectedPayment ? paymentEvidenceLinks(selectedPayment) : null;
   const selectedSkin = playerSkins.find(skin => skin.id === skinId)!;
   const allowed = auth.authReady && auth.canAdmin;
 
@@ -798,10 +800,14 @@ export default function AdminPage() {
                   </dl>
                   <p>
                     {t("Wallet-Eingang = bestätigter Blockchain-Zeitpunkt. Der App-Abschluss wird getrennt angezeigt. Alle Uhrzeiten: Wien.")} </p>
-                  {selectedPayment.receiptSource && (
-                    <a href={selectedPayment.receiptSource} target="_blank" rel="noreferrer" className="admin-button">
-                      {t("Blockchain-Nachweis öffnen")} </a>
-                  )}
+                  {(evidenceLinks?.explorer || evidenceLinks?.api) && <div className="admin-actions">
+                    {evidenceLinks.explorer && <a href={evidenceLinks.explorer} target="_blank" rel="noopener noreferrer" className="admin-button admin-primary">
+                      {t("Im Pi-Blockchain-Explorer öffnen")} · {evidenceLinks.chain === "testnet" ? "Testnet" : "Mainnet"}
+                    </a>}
+                    {evidenceLinks.api && <a href={evidenceLinks.api} target="_blank" rel="noopener noreferrer" className="admin-button">
+                      {t("Technische Rohdaten (API)")}
+                    </a>}
+                  </div>}
                   <div className="admin-actions">
                     {selectedPayment.network !== "Pi Testnet" && (
                       <button
