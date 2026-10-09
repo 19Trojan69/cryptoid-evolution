@@ -1,6 +1,6 @@
 # Paket 7 – Erweiterte Lokalisierung, geprüfter Entwurf
 
-Status: nicht veröffentlichungsbereit. Basis ist Paket 6 (`a5f700cfb5a2f6801ca5889a15dd19d797a2c8b3`); Produktion und der stabile Testnet-Stand bleiben unverändert.
+Status: Testnet-Teststand, nicht für Mainnet freigegeben. Basis ist Paket 6 (`a5f700cfb5a2f6801ca5889a15dd19d797a2c8b3`); Produktion bleibt unverändert. Frühere Abschnitte unten beschreiben den Entwicklungsstand vor der Testnet-Umschaltung.
 
 **Aktueller Umfang (9. Oktober):** Sichtbar und automatisch erkennbar sind `en`, `de`, `es`, `fr`, `pt`, `it`, `ru`, `zh` (vereinfacht) und `vi`. Die übrigen Sprachtexte bleiben im Quellkatalog erhalten, sind aber nicht auswählbar. Die älteren Abschnitte unten dokumentieren den vorherigen 29-Sprachen-Entwurf.
 
@@ -94,3 +94,9 @@ Nach der geänderten Vorgabe stehen neun Sprachen im Auswahlmenü: Englisch, Deu
 Ohne manuelle Auswahl wird bei jedem Start die bevorzugte Gerätesprache aus `navigator.languages` geprüft. Regionale Varianten wie `es-MX`, `fr-CA` oder `pt-BR` verwenden das passende vorhandene Sprachpaket. Wenn die erste Gerätesprache nicht unterstützt wird, folgt die nächste; danach Englisch. `zh-Hans` und `zh-CN` verwenden vereinfachtes Chinesisch. `zh-Hant`, `zh-TW`, `zh-HK` und `zh-MO` fallen auf eine weitere unterstützte Gerätesprache oder Englisch zurück, da kein traditionell-chinesisches Paket vorhanden ist. Eine gespeicherte manuelle Wahl hat weiterhin Vorrang, bis „Automatisch“ gewählt wird. Alte gespeicherte Codes außerhalb der sichtbaren Auswahl werden wie automatische Wahl behandelt.
 
 Der statische Freigabebestand zählt weiterhin 1020 Texte, aber nur die neun aktiven Sprachen: Englisch, Chinesisch und Vietnamesisch je 1020; Deutsch 685; Spanisch, Französisch, Portugiesisch, Italienisch und Russisch je 533. Es fehlen damit 2770 aktive Übersetzungen. Die Freigabeprüfung bleibt gesperrt; insbesondere Geschichten, Admin und längere Beschreibungen der bisherigen Sprachen benötigen Nacharbeit. Gesicherte Übersetzungen anderer Sprachen werden durch die Eingrenzung nicht gelöscht. Physische Geräte- und Pi-Browser-Abnahme stehen weiterhin aus.
+
+## Testnet-Teststand: 9. Oktober 2026
+
+Nach ausdrücklichem Nutzerwunsch wurde die READY-Preview `dpl_GnrnaqbCsZMUKkLo2xigPjFGb3hc` des Code-Commits `754e4e49fa217e80bbef967cfca9c55903facd06` auf den festen Testnet-Link https://cryptoid-evolution-testnet.vercel.app gelegt. Die Zuordnung wurde anschließend über Vercel erneut gelesen und zeigt auf genau dieses Deployment. Beide Produktionsadressen zeigen weiter auf `dpl_CgXqLk1XMPs4DycKYZrUNvGPBT12` (Commit `1871557dec332161cfdb0c90bc4d29022632bda6`). Der PR bleibt Entwurf; es gab keinen Merge.
+
+Vor der Umschaltung geprüft: Vercel-Build READY; neun auswählbare Sprachen mit automatischer Gerätewahl; statischer Bestand ohne direkten JSX-Text und ohne ungültige Platzhalter; branchgebundene Preview-Variable `CRYPTOID_TESTNET_BACKEND=local`. Der Paket-7-Diff enthält keine Backend-Dateien; der unveränderte Gateway erzwingt im Preview-Testnet `x-cryptoid-app-network: testnet`. Die 2770 fehlenden aktiven Übersetzungen bleiben bekannt, deshalb ist dies ein Teststand und keine Sprachfreigabe für Mainnet. Anmeldung, Zahlung, muttersprachliche Abnahme und physische Mobil-/Pi-Browser-Prüfung wurden bei dieser Umschaltung nicht durchgeführt. Eine direkte HTTP-Prüfung der geschützten Preview war über den vorhandenen Vercel-Connector mit 403 nicht möglich; die Alias- und Buildprüfung sind davon getrennte Nachweise.
