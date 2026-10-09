@@ -8,16 +8,23 @@ export const languageLabels = {
   ur: 'اردو', fa: 'فارسی', fil: 'Filipino', sw: 'Kiswahili',
 } as const;
 export type Locale = keyof typeof languageLabels;
+// Only these languages are offered and matched automatically. Other catalog copy stays archived.
+export const supportedLanguages: Partial<Record<Locale, string>> = {
+  en: languageLabels.en, de: languageLabels.de, es: languageLabels.es,
+  fr: languageLabels.fr, pt: languageLabels.pt, it: languageLabels.it,
+  ru: languageLabels.ru, zh: languageLabels.zh, vi: languageLabels.vi,
+};
 export const localeDirection = (locale: Locale): 'ltr' | 'rtl' => ['ar', 'ur', 'fa'].includes(locale) ? 'rtl' : 'ltr';
 export const documentLanguage = (locale: Locale) => locale === 'zh' ? 'zh-Hans' : locale;
 export const complexScript = (locale: Locale) => ['th', 'zh', 'ko', 'ja', 'hi', 'bn', 'ar', 'ur', 'fa'].includes(locale);
 
 export const normalizeLocale = (tag: unknown): Locale | null => {
   if (typeof tag !== 'string') return null;
-  const base = tag.trim().toLowerCase().replaceAll('_', '-').split('-')[0];
-  // Filipino's current BCP-47 code and older Tagalog device tags.
-  const code = base === 'tl' ? 'fil' : base;
-  return Object.hasOwn(languageLabels, code) ? code as Locale : null;
+  const normalized = tag.trim().toLowerCase().replaceAll('_', '-');
+  const [code, ...subtags] = normalized.split('-');
+  // The Chinese catalog is Simplified only. Traditional device tags need a fallback.
+  if (code === 'zh' && (subtags.includes('hant') || ['tw', 'hk', 'mo'].some(region => subtags.includes(region)))) return null;
+  return Object.hasOwn(supportedLanguages, code) ? code as Locale : null;
 };
 export const resolveLocale = (preferred: readonly string[], override?: string | null): Locale => {
   const selected = normalizeLocale(override);

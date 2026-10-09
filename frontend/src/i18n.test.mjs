@@ -98,9 +98,22 @@ test('interpolation handles all repeated values and a locale change preserves li
 });
 test('automatic language choice and manual override resolve supported locales', () => {
   assert.equal(resolveLocale(['en-US', 'de-AT']), 'en');
-  assert.equal(resolveLocale(['en-US'], 'th'), 'th');
+  assert.equal(resolveLocale(['en-US'], 'zh-CN'), 'zh');
+  assert.equal(resolveLocale(['es-MX']), 'es');
+  assert.equal(resolveLocale(['fr-CA']), 'fr');
+  assert.equal(resolveLocale(['pt-BR']), 'pt');
+  assert.equal(resolveLocale(['zh-Hant-TW', 'vi-VN']), 'vi');
+  assert.equal(resolveLocale(['zh-TW']), 'en');
+  assert.equal(resolveLocale(['th-TH']), 'en');
+  assert.equal(resolveLocale(['de-AT'], 'th'), 'de');
   assert.equal(resolveLocale(['de-AT']), 'de');
   assert.equal(resolveLocale(['xx-ZZ']), 'en');
+});
+
+test('the picker exposes only maintained languages while archived translations remain available', () => {
+  assert.deepEqual(Object.keys(languages), ['en', 'de', 'es', 'fr', 'pt', 'it', 'ru', 'zh', 'vi']);
+  assert.equal(translate('th', 'Play'), 'เล่น');
+  assert.equal(resolveLocale(['th-TH', 'zh-Hans-CN']), 'zh');
 });
 
 test('remaining lives use the correct singular and plural forms', () => {

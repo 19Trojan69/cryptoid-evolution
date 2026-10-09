@@ -2,6 +2,8 @@
 
 Status: nicht veröffentlichungsbereit. Basis ist Paket 6 (`a5f700cfb5a2f6801ca5889a15dd19d797a2c8b3`); Produktion und der stabile Testnet-Stand bleiben unverändert.
 
+**Aktueller Umfang (9. Oktober):** Sichtbar und automatisch erkennbar sind `en`, `de`, `es`, `fr`, `pt`, `it`, `ru`, `zh` (vereinfacht) und `vi`. Die übrigen Sprachtexte bleiben im Quellkatalog erhalten, sind aber nicht auswählbar. Die älteren Abschnitte unten dokumentieren den vorherigen 29-Sprachen-Entwurf.
+
 ## Sprachumfang
 
 Zusätzlich zu den bisherigen 17 Sprachen sind zwölf Profile integriert: vereinfachtes Chinesisch (`zh`), Vietnamesisch (`vi`), Indonesisch (`id`), Koreanisch (`ko`), Japanisch (`ja`), Hindi (`hi`), Bengali (`bn`), Arabisch (`ar`), Urdu (`ur`), Persisch (`fa`), Filipino (`fil`) und Swahili (`sw`). Diese Auswahl erweitert die regionale Abdeckung; sie ist keine statistisch belegte Rangliste der Pi-Network-Verbreitung und keine Behauptung, sämtliche Länder oder Landessprachen abzudecken.
@@ -84,3 +86,11 @@ Alle 156 zuvor fehlenden deutschen Quelltexte der Administratoransicht besitzen 
 ### Buildprüfung des Fortsetzungsstands
 
 Nach Korrektur eines fehlenden Trennzeichens im vietnamesischen Katalog und Initialisierung des englischen Katalogs bestand der Code-Stand `5432155d2a27c4c5c3496876f49195fd15f112dc` in GitHub Actions alle 34 Sprachtests, den TypeScript-/Vite-Build und den statischen Sprachscan. Der Scan meldete 1020 Texte, 0 direkte JSX-Fragmente, Englisch/Chinesisch/Vietnamesisch je 1020 und Indonesisch 408. Die drei gegenüber der direkten Eintragszählung zusätzlichen indonesischen Texte werden durch Katalogaliase abgedeckt. Die diagnostische Workflow-Datei wurde danach entfernt. Eine separate Vercel-Preview dieses Code-Stands erreichte READY. Die globale Freigabeprüfung ist weiterhin nicht erfüllt; 16.010 statische Übersetzungen fehlen in den übrigen Sprachen. Muttersprachliche und physische Geräteprüfungen stehen aus.
+
+## Reduzierter Sprachumfang und Gerätewahl: 9. Oktober 2026
+
+Nach der geänderten Vorgabe stehen neun Sprachen im Auswahlmenü: Englisch, Deutsch, Spanisch, Französisch, Portugiesisch, Italienisch, Russisch, vereinfachtes Chinesisch und Vietnamesisch. Die Auswahl ist eine pragmatische Begrenzung auf bisherige zentrale Sprachen und die vollständig erfassten chinesischen und vietnamesischen Pakete; sie ist keine belegte Nutzungsrangliste der Pi-Spieler. Andere bereits geschriebene Übersetzungen, darunter die indonesischen, bleiben im Katalog und können später erneut aktiviert werden.
+
+Ohne manuelle Auswahl wird bei jedem Start die bevorzugte Gerätesprache aus `navigator.languages` geprüft. Regionale Varianten wie `es-MX`, `fr-CA` oder `pt-BR` verwenden das passende vorhandene Sprachpaket. Wenn die erste Gerätesprache nicht unterstützt wird, folgt die nächste; danach Englisch. `zh-Hans` und `zh-CN` verwenden vereinfachtes Chinesisch. `zh-Hant`, `zh-TW`, `zh-HK` und `zh-MO` fallen auf eine weitere unterstützte Gerätesprache oder Englisch zurück, da kein traditionell-chinesisches Paket vorhanden ist. Eine gespeicherte manuelle Wahl hat weiterhin Vorrang, bis „Automatisch“ gewählt wird. Alte gespeicherte Codes außerhalb der sichtbaren Auswahl werden wie automatische Wahl behandelt.
+
+Der statische Freigabebestand zählt weiterhin 1020 Texte, aber nur die neun aktiven Sprachen: Englisch, Chinesisch und Vietnamesisch je 1020; Deutsch 685; Spanisch, Französisch, Portugiesisch, Italienisch und Russisch je 533. Es fehlen damit 2770 aktive Übersetzungen. Die Freigabeprüfung bleibt gesperrt; insbesondere Geschichten, Admin und längere Beschreibungen der bisherigen Sprachen benötigen Nacharbeit. Gesicherte Übersetzungen anderer Sprachen werden durch die Eingrenzung nicht gelöscht. Physische Geräte- und Pi-Browser-Abnahme stehen weiterhin aus.

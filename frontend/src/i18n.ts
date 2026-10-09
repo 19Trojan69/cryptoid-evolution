@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { formatLives } from "./locales/quantities.ts";
 import { localeAliases, localeCatalog } from "./locales/catalog.ts";
 
-import { languageLabels, resolveLocale, documentLanguage, localeDirection, complexScript, type Locale } from './locales/config.ts';
+import { languageLabels, supportedLanguages, resolveLocale, documentLanguage, localeDirection, complexScript, type Locale } from './locales/config.ts';
 import { languagePreferences, deviceLanguages, LANGUAGE_STORAGE_KEY } from './locales/preferences.ts';
 export type { Locale } from './locales/config.ts';
 export { resolveLocale } from './locales/config.ts';
-export const languages = languageLabels;
+export const languages = supportedLanguages;
 const translations: Partial<Record<Exclude<Locale, "en">, Record<string, string>>> = {
   de: {
     "Signed in as": "Eingeloggt als", "Signing in…": "Anmeldung läuft …", "Open PiNet": "PiNet öffnen",
@@ -334,7 +334,7 @@ const extraLifeTranslations: Partial<Record<Locale, Record<string,string>>> = {
  hu:{'EXTRA LIFE':'EXTRA ÉLET'}, ro:{'EXTRA LIFE':'VIAȚĂ SUPLIMENTARĂ'}, sr:{'EXTRA LIFE':'ДОДАТНИ ЖИВОТ'}, uk:{'EXTRA LIFE':'ДОДАТКОВЕ ЖИТТЯ'}, th:{'EXTRA LIFE':'ชีวิตเพิ่ม'},
 };
 const legacyCatalog: Partial<Record<Locale, Record<string, string>>> = {};
-for (const locale of Object.keys(languages) as Locale[]) {
+for (const locale of Object.keys(languageLabels) as Locale[]) {
   legacyCatalog[locale] = Object.assign({}, translations[locale as Exclude<Locale, "en">], newerTranslations[locale], networkTranslations[locale], levelTranslations[locale], powerUpTranslations[locale], extendedTranslations[locale], systemMenuTranslations[locale], hudTranslations[locale], controlTranslations[locale], homeMusicTranslations[locale], gameplayPolishTranslations[locale], audioSettingsTranslations[locale], evolutionShopTranslations[locale], guideTranslations[locale], shipPositionTranslations[locale], quickAccessTranslations[locale], mobileMenuTranslations[locale], extraLifeTranslations[locale]);
   legacyCatalog[locale]!["MISSION FAILED"] = failedMissionTranslations[locale] ?? "MISSION FAILED";
 }
