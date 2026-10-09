@@ -1,3 +1,7 @@
+import { russianCompletionTranslations } from './russianCompletion.ts';
+import { italianCompletionTranslations } from './italianCompletion.ts';
+import { portugueseCompletionTranslations } from './portugueseCompletion.ts';
+import { frenchCompletionTranslations } from './frenchCompletion.ts';
 import { spanishCompletionTranslations } from './spanishCompletion.ts';
 import { germanCompletionTranslations } from './germanCompletion.ts';
 import { indonesianInterfaceTranslations } from './indonesianInterface.ts';
@@ -5583,3 +5587,11 @@ Object.assign(localeCatalog.id ??= {}, indonesianInterfaceTranslations);
 Object.assign(localeCatalog.de ??= {}, germanCompletionTranslations);
 
 Object.assign(localeCatalog.es ??= {}, spanishCompletionTranslations);
+
+Object.assign(localeCatalog.fr ??= {}, frenchCompletionTranslations);
+
+Object.assign(localeCatalog.pt ??= {}, portugueseCompletionTranslations);
+
+Object.assign(localeCatalog.it ??= {}, italianCompletionTranslations);
+
+Object.assign(localeCatalog.ru ??= {}, russianCompletionTranslations);

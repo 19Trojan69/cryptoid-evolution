@@ -104,3 +104,7 @@ Vor der Umschaltung geprüft: Vercel-Build READY; neun auswählbare Sprachen mit
 ### Deutsche Sammlung und Kampfdaten
 
 101 zuvor fehlende deutsche Texte für Sammlung, Bossakten, Ausrüstung, Kartenexport und Demo-Aufgaben wurden direkt übersetzt. Der deutsche statische Bestand steigt von 685 auf 786 von 1020. Eigennamen und der Platzhalter `{countdown}` bleiben erhalten. Weitere 234 deutsche Geschichten- und Aktenabsätze sowie 2435 Einträge in Spanisch, Französisch, Portugiesisch, Italienisch und Russisch bleiben offen; die Produktionsfreigabe ist weiterhin gesperrt.
+
+### Sammlung und Bossakten in weiteren Sprachen
+
+Je 98 bisher fehlende erfasste Texte für Karten, Boss-Kampfdaten und zugehörige Bedienung wurden direkt für Französisch, Portugiesisch, Italienisch und Russisch ergänzt. Die bereits gesicherten spanischen 98 Einträge sind im selben Oberflächenbereich. Jede dieser fünf Sprachen steht nun rechnerisch bei 631/1020, Deutsch bei 786/1020. Insgesamt bleiben 2179 statische Texte, vor allem Admin-Ansichten und fiktive Geschichten. Platzhalter wurden beim Eintragen verglichen; Browser- und muttersprachliche Prüfung stehen noch aus. Keine Produktionsfreigabe.
