@@ -21,3 +21,12 @@ export const seriesTranslations: Record<string, Record<string, string>> = {
  },
  fr: {"Not recorded":"non enregistré"}, pt:{"Not recorded":"não registrado"}, it:{"Not recorded":"non registrato"}, pl:{"Not recorded":"nie zarejestrowano"}, tr:{"Not recorded":"kaydedilmedi"}, ru:{"Not recorded":"не зафиксировано"}, hr:{"Not recorded":"nije zabilježeno"}, cs:{"Not recorded":"nezaznamenáno"}, sk:{"Not recorded":"nezaznamenané"}, hu:{"Not recorded":"nincs rögzítve"}, ro:{"Not recorded":"neînregistrat"}, sr:{"Not recorded":"није забележено"}, uk:{"Not recorded":"не зафіксовано"}, th:{"Not recorded":"ไม่ได้บันทึก"},
 };
+
+const downloadCopy: Record<string,string[]> = {
+ de:['Speichern oder teilen','Bild zum Speichern öffnen','Halte das Bild gedrückt, um es zu speichern, oder nutze das Bildmenü deines Browsers.'],
+ es:['Guardar o compartir','Abrir imagen para guardar','Mantén pulsada la imagen para guardarla o usa el menú de imágenes de tu navegador.'],
+ zh:['保存或分享','打开图片以保存','长按图片即可保存，也可使用浏览器的图片菜单。'],
+ vi:['Lưu hoặc chia sẻ','Mở ảnh để lưu','Nhấn giữ ảnh để lưu hoặc sử dụng menu hình ảnh của trình duyệt.'],
+};
+const downloadKeys=['Save or share','Open image to save','Hold the image to save it, or use your browser’s image menu.'];
+for(const [locale,values] of Object.entries(downloadCopy)) for(const [index,key] of downloadKeys.entries()) seriesTranslations[locale][key]=values[index];

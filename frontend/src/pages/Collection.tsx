@@ -1,3 +1,4 @@
+import { cardFilename, canShareCard, shareCard } from './cardDownload';
 import { collectionBackground, cardBackgroundAsset } from './cardBackgrounds';
 import { bossCardAvailable, shipCardAvailable } from './cardAvailability';
 import CollectionCardView from './CollectionCardView';
@@ -26,6 +27,7 @@ export default function Collection({uid,onClose}:{uid?:string;onClose:()=>void})
  const exportVersion=useRef(0);
  const swipe=useRef<{x:number;y:number}|null>(null);
  const [busy,setBusy]=useState(false),[exportError,setExportError]=useState(false),[download,setDownload]=useState<string|null>(null);
+ const [downloadBlob,setDownloadBlob]=useState<Blob|null>(null),[imageOpen,setImageOpen]=useState(false);
  const dialog=useRef<HTMLDialogElement>(null),close=useRef<HTMLButtonElement>(null),scroller=useRef<HTMLDivElement>(null);
  useEffect(()=>{const previous=document.activeElement as HTMLElement|null;const element=dialog.current;element?.showModal();close.current?.focus();return()=>{element?.close();if(previous?.isConnected)previous.focus();};},[]);
  useEffect(()=>{let alive=true;setStatus('loading');setOwnership({owner:uid||'guest',used:[],upgrades:[],wins:{}});
@@ -34,7 +36,7 @@ export default function Collection({uid,onClose}:{uid?:string;onClose:()=>void})
   return()=>{alive=false;};
  },[uid,retry]);
  useEffect(()=>()=>{if(download)URL.revokeObjectURL(download);},[download]);
- useEffect(()=>{const versionRef=exportVersion;versionRef.current++;scroller.current?.scrollTo(0,0);close.current?.focus({preventScroll:true});setDownload(null);setExportError(false);setBusy(false);return()=>{versionRef.current++;};},[selectedKey,category,uid]);
+ useEffect(()=>{const versionRef=exportVersion;versionRef.current++;scroller.current?.scrollTo(0,0);close.current?.focus({preventScroll:true});setDownload(null);setDownloadBlob(null);setImageOpen(false);setExportError(false);setBusy(false);return()=>{versionRef.current++;};},[selectedKey,category,uid]);
  const visibleOwnership=ownership.owner===(uid||'guest')?ownership:{used:[],upgrades:[],wins:{} as Record<string,number>};
  const categories=[say('Bosse','Bosses'),t('STANDARD'),t('ADVANCED'),t('ELITE')];
  const entries=category===0?bossManifest.map(b=>({key:`boss-${b.id}`,name:bossName(b.id),image:b.image,available:bossCardAvailable(b.id),unlocked:bossCardAvailable(b.id)&&(visibleOwnership.wins[b.id]||0)>0,tier:Math.ceil(b.id/10),serial:`B-${String(b.id).padStart(2,'0')}`,make:()=>bossCard(b.id,locale),boss:b.id})):playerSkins.map(ship=>({key:`${ship.id}-${category}`,name:ship.name,image:shipEvolutionAsset(ship.sprite,category as ShipStage),available:shipCardAvailable(ship.sprite,category as ShipStage),unlocked:shipCardAvailable(ship.sprite,category as ShipStage)&&playerCardUnlocked(ship.id,ship.sprite,category as ShipStage,visibleOwnership.used,visibleOwnership.upgrades),tier:category,serial:`P-${String(ship.sprite+1).padStart(2,'0')}/${category}`,make:()=>shipCard(ship.id,category as ShipStage,locale),boss:0}));
@@ -45,7 +47,7 @@ export default function Collection({uid,onClose}:{uid?:string;onClose:()=>void})
   const next=selectedIndex+direction;
   if(activeEntry&&next>=0&&next<entries.length)setSelected(entries[next].key);
  };
- const save=async()=>{if(!selected||busy)return;setBusy(true);setExportError(false);const version=exportVersion.current;try{const {exportCollectionCard}=await import('./collectionExport');const blob=await exportCollectionCard(selected,locale);if(version===exportVersion.current)setDownload(URL.createObjectURL(blob));}catch{if(version===exportVersion.current)setExportError(true);}finally{if(version===exportVersion.current)setBusy(false);}};
+ const save=async()=>{if(!selected||busy)return;setBusy(true);setExportError(false);const version=exportVersion.current;try{const {exportCollectionCard}=await import('./collectionExport');const blob=await exportCollectionCard(selected,locale,selected.bossId?visibleOwnership.wins[selected.bossId]||0:0);if(version===exportVersion.current){setDownloadBlob(blob);setDownload(URL.createObjectURL(blob));}}catch{if(version===exportVersion.current)setExportError(true);}finally{if(version===exportVersion.current)setBusy(false);}};
  return createPortal(<dialog ref={dialog} className="collection-dialog" aria-labelledby="collection-title" onCancel={e=>{e.preventDefault();e.stopPropagation();if(activeEntry)setSelected(null);else onClose();}} onKeyDown={e=>{if(!activeEntry||e.altKey||e.ctrlKey||e.metaKey)return;if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();e.stopPropagation();moveCard(e.key==='ArrowRight'?1:-1);}}}>
   <header className="collection-header"><div><p>{say('DAS FLOTTENARCHIV','THE FLEET ARCHIVE')}</p><h2 id="collection-title">{activeEntry?activeEntry.name:say('Deine Sammlung','Your collection')}</h2></div><span aria-hidden="true">✧</span></header>
   <div ref={scroller} className={`collection-scroll ${activeEntry?'collection-swipe':''}`} onTouchStart={e=>{swipe.current=activeEntry&&e.touches.length===1?{x:e.touches[0].clientX,y:e.touches[0].clientY}:null;}} onTouchCancel={()=>{swipe.current=null;}} onTouchEnd={e=>{const start=swipe.current;swipe.current=null;if(!start||e.changedTouches.length!==1)return;const dx=e.changedTouches[0].clientX-start.x,dy=e.changedTouches[0].clientY-start.y;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)moveCard(dx<0?1:-1);}}>
@@ -61,7 +63,7 @@ export default function Collection({uid,onClose}:{uid?:string;onClose:()=>void})
       <div className="collection-art">{entry.boss?<BossPortrait id={entry.boss} silhouette={!entry.unlocked}/>:<ShipPortrait src={entry.image} name={entry.name} silhouette={!entry.unlocked}/>}</div>
       <strong>{entry.name}</strong><small className={!entry.unlocked && !entry.available ? "mainnet-ready-badge" : undefined}>{entry.unlocked?say('Karte öffnen','Open card'):!entry.available?say('MAINNET READY','MAINNET READY'):say('GESPERRT','LOCKED')}</small>
      </button>)}</div></>}
-   </>:selected?<CollectionCardView card={selected} stars={selected.bossId ? visibleOwnership.wins[selected.bossId] || 0 : 0}/>:<article className="collection-card collection-locked-detail">
+   </>:selected?<>{imageOpen&&download&&<figure className="card-save-preview"><img src={download} alt={selected.name}/><figcaption>{t("Hold the image to save it, or use your browser’s image menu.")}</figcaption></figure>}<CollectionCardView card={selected} stars={selected.bossId ? visibleOwnership.wins[selected.bossId] || 0 : 0}/></>:<article className="collection-card collection-locked-detail">
     <span className="collection-serial">{activeEntry.serial}</span><h3>{activeEntry.name}</h3>
     <div className="collection-card-art">{activeEntry.boss?<BossPortrait id={activeEntry.boss} silhouette/>:<ShipPortrait src={activeEntry.image} name={say('Gesperrte Schiffssilhouette','Locked ship silhouette')} silhouette/>}</div>
     <h4 className={!activeEntry.available ? "mainnet-ready-badge" : undefined}>{activeEntry.available?say('GESPERRT','LOCKED'):say('MAINNET READY','MAINNET READY')}</h4>
@@ -74,7 +76,7 @@ export default function Collection({uid,onClose}:{uid?:string;onClose:()=>void})
     <span aria-live="polite">{categories[category]} · {selectedIndex+1}/{entries.length}<small>{say('Seitlich wischen','Swipe sideways')}</small></span>
     <button type="button" disabled={selectedIndex===entries.length-1} onClick={()=>moveCard(1)} aria-label={say('Nächste Karte','Next card')}>→</button>
    </nav>}
-   {selected&&<>{exportError&&<p role="alert">{say('Export fehlgeschlagen. Bitte erneut versuchen.','Export failed. Please retry.')}</p>}{download?<a className="collection-download" href={download} download={`cryptoid-${selected.key}.png`}>{say('PNG herunterladen','Download PNG')} ↓</a>:<button type="button" disabled={busy} onClick={()=>void save()}>{busy?say('Karte wird erstellt …','Creating card …'):say('Download vorbereiten','Prepare download')}</button>}</>}
+   {selected&&<>{exportError&&<p role="alert">{say('Export fehlgeschlagen. Bitte erneut versuchen.','Export failed. Please retry.')}</p>}{download?<><a className="collection-download" href={download} download={cardFilename(selected.name,selected.serial)}>{say('PNG herunterladen','Download PNG')} ↓</a>{downloadBlob&&canShareCard(downloadBlob,cardFilename(selected.name,selected.serial))&&<button type="button" onClick={()=>void shareCard(downloadBlob,cardFilename(selected.name,selected.serial)).catch(error=>{if(error?.name!=='AbortError')setImageOpen(true);})}>{t("Save or share")}</button>}<button type="button" onClick={()=>{setImageOpen(true);scroller.current?.scrollTo(0,0);}}>{t("Open image to save")}</button></>:<button type="button" disabled={busy} onClick={()=>void save()}>{busy?say('Karte wird erstellt …','Creating card …'):say('Download vorbereiten','Prepare download')}</button>}</>}
    <button ref={close} type="button" onClick={()=>activeEntry?setSelected(null):onClose()}>{activeEntry?say('← Zurück zur Sammlung','← Back to collection'):say('Zurück zur Startseite','Back to home')}</button>
   </footer>
  </dialog>,document.body);
