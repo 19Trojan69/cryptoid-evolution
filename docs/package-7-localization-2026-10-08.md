@@ -1,8 +1,8 @@
 # Paket 7 – Erweiterte Lokalisierung, geprüfter Entwurf
 
-Status: Testnet-Teststand, nicht für Mainnet freigegeben. Basis ist Paket 6 (`a5f700cfb5a2f6801ca5889a15dd19d797a2c8b3`); Produktion bleibt unverändert. Frühere Abschnitte unten beschreiben den Entwicklungsstand vor der Testnet-Umschaltung.
+Status: Fünf-Sprachen-Teststand auf dem festen Testnet-Link, noch nicht für Produktion freigegeben. Basis ist Paket 6 (`a5f700cfb5a2f6801ca5889a15dd19d797a2c8b3`); Produktion bleibt unverändert. Frühere Abschnitte unten beschreiben historische Zwischenstände.
 
-**Aktueller Umfang (9. Oktober):** Sichtbar und automatisch erkennbar sind `en`, `de`, `es`, `fr`, `pt`, `it`, `ru`, `zh` (vereinfacht) und `vi`. Die übrigen Sprachtexte bleiben im Quellkatalog erhalten, sind aber nicht auswählbar. Die älteren Abschnitte unten dokumentieren den vorherigen 29-Sprachen-Entwurf.
+**Aktueller Umfang (9. Oktober):** Sichtbar und automatisch erkennbar sind `en`, `de`, `es`, `zh` (vereinfacht) und `vi`; je 1020/1020 statisch erfasste Texte. Die Wahl folgt der Gerätesprache, sofern keine manuelle Sprache gespeichert ist. `fr`, `pt`, `it` und `ru` sind für Freitag, 16. Oktober 2026 zurückgestellt; je 234 Geschichten fehlen. Die übrigen Sprachtexte bleiben im Quellkatalog erhalten, sind aber nicht auswählbar.
 
 ## Sprachumfang
 
@@ -142,3 +142,7 @@ Alle 234 spanischen Schiffs- und Bossgeschichten sind direkt übersetzt. Der sta
 Der Nutzer hat den Umfang geändert: Die vollständig vorhandenen Sprachen `en`, `de`, `es`, `zh` (vereinfacht) und `vi` werden jetzt fertiggestellt und zur Freigabe geprüft. Gerät/Browser wählt eine davon automatisch; eine gespeicherte manuelle Auswahl hat Vorrang. Für nicht unterstützte Gerätesprachen gilt Englisch. `fr`, `pt`, `it` und `ru` werden vorerst nicht angeboten; ihre bisherigen Übersetzungen bleiben erhalten. Ihre restlichen 936 Geschichten sind für Ende nächster Woche (Freitag, 16. Oktober 2026, Europe/Vienna) zurückgestellt. 75 bereits direkt verfasste französische Entwürfe sind in `package-7-deferred-french-lore-2026-10-09.json` gesichert und noch nicht in den Laufzeitkatalog eingebunden.
 
 Der Release-Scan prüft die fünf angebotenen Sprachen vollständig. Das statische Inventar enthält je 1020/1020 Texte, keine fehlenden Platzhalter und keine unübersetzten JSX-Fragmente. Diese Bestandsaufnahme ersetzt keine Browser-, Geräte- oder Pi-Zahlungsprüfung. Frühere Abschnitte beschreiben den neunsprachigen Zwischenstand und sind historisch.
+
+## Fünf-Sprachen-Testnetstand: 9. Oktober 2026
+
+Der feste Link https://cryptoid-evolution-testnet.vercel.app wurde nach erfolgreichem Vercel-Build auf Commit `c127486275c243df9e70e6a1add7ea62990ef63a` (`dpl_CNHfoohzvR2CKYUUP8xig5njpPpc`) umgestellt. Die Alias-Zuordnung wurde anschließend bestätigt. Der Build führt 34 i18n-Tests und die Freigabeprüfung des aktiven statischen Katalogs aus; die fünf angebotenen Sprachen erreichen je 1020/1020 ohne Platzhalterfehler. Die geschützte Testnet-Oberfläche konnte über den Vercel-Connector wegen 403 bei der Schutzfreigabe noch nicht direkt geprüft werden. Der Nutzer hat die Verschiebung der vier übrigen Sprachen genehmigt; die Erinnerung für den 16. Oktober ist aktiv. Produktion und `main` bleiben auf dem bisherigen Stand, da dieser Branch auf offenen Paket-Branches 4–6 beruht und Browser-/Pi-Abnahme vor der Freigabe fehlt.
