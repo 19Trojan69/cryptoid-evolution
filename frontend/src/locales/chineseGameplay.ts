@@ -1,5 +1,9 @@
 /** Directly translated simplified Chinese gameplay and interface copy. */
 export const chineseGameplayTranslations: Record<string, string> = {
+  "Combat restored.": "战斗已恢复。",
+  "Ship {number} · {stage}": "飞船 {number} · {stage}",
+  "ADVANCED": "进阶",
+  "ELITE": "精英",
   "{stars}/3 stars": "{stars}/3 星",
   "1 minute per charge": "每次充能可用 1 分钟",
   "1 Shard per target. Completion bonus added immediately.": "每击中一个目标获得 1 枚碎片。完成奖励立即发放。",
