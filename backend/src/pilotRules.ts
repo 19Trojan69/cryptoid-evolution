@@ -5,11 +5,11 @@ export type BadgeId = typeof badgeIds[number];
 export const profileKey = (network:string) => `pilotProfileByNetwork.${network}`;
 export const unlockedBadges = (user:any, network:string): BadgeId[] => {
  const wins=user?.rewardsByNetwork?.[network]?.bossWins||{};
- const bosses=Object.entries(wins).filter(([id,n])=>Number.isInteger(Number(id))&&Number(id)>=1&&Number(id)<=50&&typeof n==='number'&&n>0);
+ const bosses=Object.entries(wins).filter(([id,n])=>Number.isInteger(Number(id))&&Number(id)>=1&&Number(id)<=50&&typeof n==='number'&&Number.isSafeInteger(n)&&n>0);
  const evidence=user?.badgeEvidenceByNetwork?.[network]||{};
  const bossCount=Math.max(bosses.reduce((sum,[,n])=>sum+Math.min(3,Number(n)),0),Number.isSafeInteger(evidence.bossDefeats)?evidence.bossDefeats:0);
  const fleet=user?.playerByNetwork?.[network]?.fleet||{};
- return badgeIds.filter(id=>id==='first-boss'?bosses.length>=1:id==='ten-bosses'?bossCount>=10:id==='final-boss'?bosses.some(([id])=>id==='50'):id==='full-fleet'?standardShips.every(skin=>Object.values(fleet[skin]||{}).some(n=>typeof n==='number'&&n>0)):id==='perfect-formation'?evidence.perfectFormation===true:evidence.highCombo===true);
+ return badgeIds.filter(id=>id==='first-boss'?bosses.length>=1:id==='ten-bosses'?bossCount>=10:id==='final-boss'?bosses.some(([id])=>id==='50'):id==='full-fleet'?standardShips.every(skin=>Object.values(fleet[skin]||{}).some(n=>typeof n==='number'&&Number.isSafeInteger(n)&&n>0)):id==='perfect-formation'?evidence.perfectFormation===true:evidence.highCombo===true);
 };
 // Block damage baseline is written at section start, never replaced by checkpoints.
 export const verifiedBlockBadges = (player:any,event:any,snapshot:any): { perfectFormation?:true; highCombo?:true } => {
