@@ -35,3 +35,29 @@
 .language-picker-row i { color:#f0bd87;font-style:normal;font-size:20px; }
 .language-picker button:focus-visible { outline:3px solid #dfb18d;outline-offset:2px; }
 @media(prefers-reduced-motion:reduce) { .quick-access-items button,.collection-tile,.language-picker-row { transition:none; } }
+.pilot-profile { width:min(660px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto;box-sizing:border-box;border-radius:20px;padding:20px; }
+.pilot-profile::backdrop { background:#070710e6; }
+.pilot-profile header { display:flex;align-items:center;justify-content:space-between;gap:12px; }
+.pilot-profile button,.pilot-profile select,.pilot-profile input,.pilot-profile textarea { font:inherit;color:#f0e7df;background:#24232c;border:1px solid #96806c;border-radius:9px;min-height:44px;padding:10px;box-sizing:border-box; }
+.pilot-profile label { display:grid;gap:8px;margin:16px 0; }
+.pilot-profile textarea { min-height:80px;resize:vertical; }
+.pilot-profile button:focus-visible { outline:3px solid #eab28d; }
+.pilot-profile button:disabled { opacity:.45; }
+.pilot-profile button[aria-pressed="true"] { border:2px solid #ffd29d;background:#57402f; }
+.pilot-identity { display:flex;align-items:center;gap:16px;flex-wrap:wrap; }
+.pilot-avatar { width:96px;height:96px;border-radius:20px;object-fit:cover;border:1px solid #c59a77; }
+.pilot-bio { overflow-wrap:anywhere;white-space:pre-wrap; }
+.avatar-grid { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px; }
+.avatar-grid button { padding:5px;min-width:0; }
+.avatar-grid img { display:block;width:100%;height:auto;border-radius:10px; }
+.avatar-cropper canvas { display:block;width:256px;max-width:100%;height:auto;border:2px solid #d3a580;border-radius:14px; }
+.badge-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px; }
+.badge-grid img { display:block;width:70px;max-width:100%;height:auto;margin:0 auto 8px; }
+.badge-grid small { display:block;margin-top:8px; }
+.profile-actions { display:flex;flex-wrap:wrap;gap:10px;margin:20px 0; }
+.favorite-badges { display:flex;gap:16px;flex-wrap:wrap; }
+.favorite-badges figure { margin:0;max-width:110px;text-align:center; }
+.favorite-badges img { width:80px;height:80px; }
+.leader-profile-link { display:flex;align-items:center;gap:8px;border:0;background:transparent;color:inherit;padding:0;text-align:left;font:inherit;cursor:pointer;min-height:44px;overflow-wrap:anywhere; }
+.leader-profile-link .pilot-avatar { width:42px;height:42px;border-radius:11px; }
+@media(max-width:400px){ .badge-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.pilot-profile{padding:14px}.pilot-avatar{width:80px;height:80px} }

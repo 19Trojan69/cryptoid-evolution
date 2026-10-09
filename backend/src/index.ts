@@ -1,3 +1,4 @@
+import mountPilotEndpoints from "./handlers/pilots";
 import fs from "fs";
 import path from "path";
 import cors from "cors";
@@ -160,6 +161,10 @@ app.use("/admin", adminRouter);
 const paymentsRouter = express.Router();
 mountPaymentsEndpoints(paymentsRouter);
 app.use("/payments", paymentsRouter);
+
+const pilotRouter = express.Router();
+mountPilotEndpoints(pilotRouter);
+app.use("/pilots", pilotRouter);
 
 const hangarRouter = express.Router();
 mountHangarEndpoints(hangarRouter);

@@ -436,3 +436,21 @@ test('checkpoint rejects a skipped reinforcement and a fabricated pending power'
   assert.equal((await h.call('progress','/checkpoint',{runId,combat:power,save:snapshot()})).code,400);
   assert.equal(h.profile().mission,null);
 });
+
+
+test('badge proof survives checkpoints, rejects counter rollback and commits with the reward exactly once',async()=>{
+ const h=harness();await init(h);await start(h);const runId=h.session.scoreRun.id;
+ assert.equal(h.profile().lastStart.badgeMetrics,1);
+ assert.equal((await h.call('progress','/checkpoint',{runId,combat:combat(),save:snapshot({damageCount:0,comboTotal:0,destroyed:1,score:10})})).code,200);
+ assert.equal(h.profile().mission.damageAtStart,0);assert.equal(h.profile().mission.destroyedAtStart,0);
+ const event={runId,kind:'block',stage:1,level:1,save:snapshot({damageCount:0,comboTotal:10,destroyed:20,score:500})};
+ assert.equal((await h.call('rewards','/event',event)).code,200);
+ assert.deepEqual(h.docs[0].badgeEvidenceByNetwork.testnet,{perfectFormation:true,highCombo:true});
+ assert.equal((await h.call('rewards','/event',event)).body.awarded,false);
+ assert.equal((await h.call('rewards','/event',{...event,stage:2,save:snapshot({destroyed:25,score:600,damageCount:0,comboTotal:9})})).code,400);
+ const h2=harness();await init(h2);await start(h2);const run2=h2.session.scoreRun.id;
+ await h2.call('progress','/checkpoint',{runId:run2,combat:combat(),save:snapshot({damageCount:0,comboTotal:0,destroyed:1,score:10})});
+ await h2.call('progress','/leave',{runId:run2,hearts:2});
+ assert.equal((await h2.call('rewards','/event',{...event,runId:run2,save:snapshot({damageCount:0,comboTotal:0,destroyed:20,score:500,hearts:2})})).code,200);
+ assert.equal(h2.docs[0].badgeEvidenceByNetwork?.testnet?.perfectFormation,undefined);
+});

@@ -1,3 +1,5 @@
+import PilotProfile from "./PilotProfile";
+import PilotAvatar, { type Avatar } from "../components/PilotAvatar";
 import BlockchainIcon from "../components/BlockchainIcon";
 import { releaseVersion } from "../release";
 import { bossCardAvailable } from './cardAvailability';
@@ -53,7 +55,7 @@ import { BOSS_STICKER_COUNT, CHAIN_MILESTONES, emptyRewardProgress, rankForLevel
 
 type Offer = { id: string; kind: "weapon" | "power" | "armor" | "ship_upgrade"; name: string; description: string; pricePi: number; shipIndex?: number; stage?: 2 | 3 };
 type Inventory = { weaponStock?: Record<string, number>; ownedWeapons: string[]; ownedArmor: string[]; ownedShipUpgrades?: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
-type Leader = { rank: number; username: string; score: number; careerScore?: number; bestRun?: { score: number; level: number | null }; runLevel?: number | null; profileLevel?: number; serviceRank: { name: string; symbol: string } };
+type Leader = { avatar?: Avatar; rank: number; username: string; score: number; careerScore?: number; bestRun?: { score: number; level: number | null }; runLevel?: number | null; profileLevel?: number; serviceRank: { name: string; symbol: string } };
 type PersonalScores = { careerScore: number; bestRun: { score: number; level: number | null } };
 const HOME_STAR_POSITION = { x: .5, y: .8 };
 
@@ -101,6 +103,8 @@ const Shop = () => {
   const [shopView, setShopView] = useState<"hangar" | "shop" | "weapons" | "powers" | "progress" | "rewards" | "leaders" | null>(null);
   const [termsOpen, setTermsOpen] = useState(false);
   const [newCards,setNewCards]=useState<CardReward[]>([]);
+  const [leaderRefresh,setLeaderRefresh]=useState(0);
+  const [pilotOpen,setPilotOpen]=useState<string|null>(null);
   const [collectionOpen, setCollectionOpen] = useState(false);
   const [selectedBoss, setSelectedBoss] = useState<number | null>(null);
   const returnToMenu = () => { setShopView(null); setSystemMenuOpen(false); setActivePanel(null); setTermsOpen(false); setQuickTarget(null); setQuickGroup("mission"); };
@@ -192,7 +196,7 @@ const Shop = () => {
       if (current) { setPersonalBest(data.bestScore); setPersonalScores({ careerScore: data.careerScore, bestRun: data.bestRun }); }
     }).catch(() => { if (current) { setPersonalBest(null); setPersonalScores(null); } });
     return () => { current = false; };
-  }, [shopView, leaderRules, leaderboardUserId]);
+  }, [shopView, leaderRules, leaderboardUserId, leaderRefresh]);
   useEffect(applySavedDisplaySettings, []);
   useEffect(() => {
     if (!systemMenuOpen) return;
@@ -490,6 +494,7 @@ const Shop = () => {
       setQuickTarget(targets[action] ?? null);
       setShopView(view); return;
     }
+    if (action === "profile") { if(user)setPilotOpen("");else requireAuth(); return; }
     if (action === "play") enterGame();
     else if (action === "signin") signIn();
     else if (action === "signout") { setInventory(null); void signOut(); }
@@ -553,6 +558,7 @@ const Shop = () => {
         </footer>
       </section>
 
+      {pilotOpen !== null && <PilotProfile key={`${user?.uid}-${pilotOpen}`} username={pilotOpen || undefined} onClose={()=>setPilotOpen(null)} onSaved={()=>setLeaderRefresh(n=>n+1)}/>}
       {quickGroup !== null && <QuickAccessMenu onClose={closeQuickMenu} onAction={openQuickAction} signedIn={Boolean(user)} canAdmin={Boolean(canAdmin)} adminMode={adminMode} username={user?.username} busy={isAuthLoading || !authReady} />}
 
       {systemMenuOpen && <div className="system-menu-overlay" role="dialog" aria-modal="true" aria-labelledby="system-menu-title">
@@ -628,7 +634,7 @@ const Shop = () => {
         {leadersStatus === "loading" && <p role="status">{t("Loading scores…")}</p>}
         {leadersStatus === "error" && <p role="status">{t("Leaderboard unavailable. Try again later.")}</p>}
         {leadersStatus === "ready" && (leaders.length ? <ol className="leaderboard-list">{leaders.map(entry => <li key={entry.rank}>
-          <div className="leader-identity"><span className="leader-place">{number(entry.rank)}</span><strong>@{entry.username}</strong><span className="leader-rank"><b aria-hidden="true">{entry.serviceRank?.symbol ?? "◇"}</b><small>{t(entry.serviceRank?.name ?? "Rookie")}</small></span></div>
+          <div className="leader-identity"><span className="leader-place">{number(entry.rank)}</span><button className="leader-profile-link" type="button" onClick={()=>setPilotOpen(entry.username)}><PilotAvatar avatar={entry.avatar??null} name=""/><strong>@{entry.username}</strong></button><span className="leader-rank"><b aria-hidden="true">{entry.serviceRank?.symbol ?? "◇"}</b><small>{t(entry.serviceRank?.name ?? "Rookie")}</small></span></div>
           <dl className="leader-metrics"><div><dt>{t(leaderRules === "career" ? "Career Score" : "Best score")}</dt><dd>{number(entry.score)}</dd></div>{leaderRules === "career" && <div><dt>{t("Best Run")}</dt><dd>{number(entry.bestRun?.score ?? 0)}</dd></div>}<div><dt>{t("Run level")}</dt><dd>{entry.runLevel == null ? t("Not recorded") : number(entry.runLevel)}</dd></div><div><dt>{t("Profile level")}</dt><dd>{entry.profileLevel == null ? t("Not recorded") : number(entry.profileLevel)}</dd></div></dl>
         </li>)}</ol> : <p>{t("No records yet. Complete a mission to be first.")}</p>)}
       </section>}

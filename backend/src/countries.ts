@@ -1,0 +1,1 @@
+export const countryCodes = ["AT", "DE", "CZ", "US", "GB", "FR", "TH", "VN", "CN", "ES", "PT", "IT", "PL", "TR", "RU", "HR", "SK", "HU", "RO", "RS", "UA", "CH", "AU", "CA", "BR", "JP", "KR", "IN", "ID"] as const;
