@@ -5573,4 +5573,4 @@ Object.assign(localeCatalog.zh, chineseAdminTranslations);
 Object.assign(localeCatalog.zh, chineseLoreTranslations);
 Object.assign(localeCatalog.vi, vietnameseGuideTranslations);
 
-Object.assign(localeCatalog.en, englishAdminTranslations);
+Object.assign(localeCatalog.en ??= {}, englishAdminTranslations);
