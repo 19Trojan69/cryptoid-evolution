@@ -128,3 +128,7 @@ Auch für Italienisch und Russisch wurden je 155 Admin-Texte direkt ergänzt. Da
 ### Deutscher statischer Bestand vollständig
 
 Alle 234 bislang offenen deutschen Schiffs- und Bossgeschichten sind direkt ergänzt. Zusammen mit den bereits übersetzten Bedienungs- und Admin-Texten erreicht Deutsch 1020/1020 erfasste Einträge. Platzhalter und Eigennamen wurden abgeglichen; die Geschichte bleibt ausdrücklich Fiktion und verleiht keine Spielmechanik. Noch offen sind je 234 Geschichten auf Spanisch, Französisch, Portugiesisch, Italienisch und Russisch, insgesamt 1170 Texte. Eine vollständige Browser- und muttersprachliche Abnahme steht aus.
+
+### Spanische Geschichten, erster Block
+
+100 der 234 spanischen Schiffs- und Bossgeschichten wurden direkt übertragen. Der statische spanische Bestand erreicht 886/1020; insgesamt verbleiben 1070 Texte. Der vollständige deutsche Stand `fee6f89d` hat den Preview-Build bestanden. Produktionsdomain und fester Testnet-Link bleiben auf ihren bisher zugewiesenen Deployments.
