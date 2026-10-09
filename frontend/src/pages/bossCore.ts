@@ -5,7 +5,7 @@ import type { EnemyShot } from './enemyFire.ts';
 import type { PlayerPosition } from './playerCombat.ts';
 import { specialWeaponMuzzle, specialWeaponMount } from './bossSpecialWeapon.ts';
 
-export type BossCoreState = { elapsed: number; volley: number };
+export type BossCoreState = { elapsed: number; volley: number; lastShotColor?: string };
 export const CORE_WARNING_MS = 1800;
 export const coreActive = bossHullExposed;
 export const coreInterval = (boss: SectorBoss) => boss.core?.volley ? bossDifficulty(boss.config.id).coreInterval : CORE_WARNING_MS;
@@ -25,6 +25,7 @@ export function advanceBossCore(boss: SectorBoss, player: PlayerPosition, width:
   const angles = fan ? (tier === 2 ? [-.60, -.24, .24, .60] : [-.34, .34]) : [aim];
   const speed = bossDifficulty(boss.config.id).coreSpeed;
   const shots = angles.slice(0, slots).map((a, i): EnemyShot => ({ id: firstId + i, ...specialWeaponMuzzle(boss,i), vx: Math.sin(a) * speed, vy: Math.cos(a) * speed, radius: 6, bossKind: 'pulse', weaponKind: 'pulse', weaponColor: specialWeaponMount(boss).energy, weaponWidth: 5, caliber: 8 }));
+  core.lastShotColor = shots[0]?.weaponColor;
   core.elapsed = 0;
   core.volley++;
   return shots;
