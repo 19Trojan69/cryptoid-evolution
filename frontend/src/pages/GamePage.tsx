@@ -22,7 +22,7 @@ import BlockchainProgress from "./BlockchainProgress";
 import { gameHaptics } from "./gameHaptics";
 import { advanceShipMotion, idleShipMotion, engineFlamePercent, explosionDiameter, fragmentFlight, hullIllumination, type ShipMotion } from "./shipRealism";
 import { useLocale } from "../i18n";
-import { memo, useCallback, useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
 import { entryPatternForSector, entryPosition, entryStartX, type EntryPattern } from "./entryPatterns";
@@ -351,7 +351,9 @@ const fallingBoss = (effect: Effect) => <div className="boss-falling-hull" style
 const ImpactEffectView = memo(({ effect }: { effect: Effect }) => effect.kind === "boss-fall" ? fallingBoss(effect) : <div className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y, ...(["explosion", "shatter", "player-explosion"].includes(effect.kind) ? { width: explosionDiameter(effect.debrisSize ?? 58), height: explosionDiameter(effect.debrisSize ?? 58), marginLeft: -explosionDiameter(effect.debrisSize ?? 58) / 2, marginTop: -explosionDiameter(effect.debrisSize ?? 58) / 2 } : {}), ...(effect.kind === "boss-explosion" ? { "--boss-explosion-size": `${effect.debrisSize ?? 240}px`, "--boss-image": `url('${effect.bossImage}')`, "--boss-final-delay": `${effect.finalDelayMs ?? 1_450}ms` } : {}) } as CSSProperties} aria-hidden="true">{effect.kind !== "boss-explosion" && <span />}{shipDebris(effect)}</div>);
 
 const GamePage = () => {
-  const { t, lives } = useLocale();
+  const { t, lives, locale } = useLocale();
+  const compactNumber = useMemo(() => new Intl.NumberFormat(locale, { notation: "compact", maximumFractionDigits: 1 }), [locale]);
+  const hudNumber = (value: number) => value < 1_000_000 ? String(value) : compactNumber.format(value);
   useEffect(applySavedDisplaySettings, []);
   const navigate = useNavigate();
   const fieldRef = useRef<HTMLDivElement>(null);
@@ -732,6 +734,7 @@ const GamePage = () => {
       const fieldBounds = field.getBoundingClientRect();
       fieldSizeRef.current = { width: field.clientWidth || 800, height: field.clientHeight || 600 };
       visibleTopRef.current = Math.max(0, hud.getBoundingClientRect().bottom - fieldBounds.top);
+      field.style.setProperty("--hud-bottom", `${visibleTopRef.current}px`);
       const playerWidth = playerShipRef.current?.clientWidth;
       if (playerWidth) setPlayerDisplayDiameter(playerWidth);
     };
@@ -1875,6 +1878,8 @@ const GamePage = () => {
   const totalShards = missionShardTotal(game.shardBase, game.shards);
   const levelLabel = String(campaignLevel(game.sector));
   const sectorLabel = sectorInChapter(game.sector);
+  // Show the active block during formations; the completed chain remains 9/9 at the boss/bonus.
+  const hudBlock = game.encounter === "normal" ? sectorLabel : game.chainBlocks;
   const round = sectionInSector(game.section);
   const levelComplete = game.encounter === "bonus" && game.phase === "SECTOR_CLEAR";
   const reinforcementIntro = game.encounter === "normal" && game.phase === "SECTOR_INTRO" && flightRef.current > 0;
@@ -1933,8 +1938,8 @@ const GamePage = () => {
         musicRef.current?.pause(); void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); setHomePrompt(true); }} aria-label={t("Go home")}><CockpitIcon kind="home" /></button></div>
           <div className={`hud-stat hearts-stat${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " hearts-stat-hit" : ""}`}><span className="hud-heart-label" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.2 3.4 13.1C-1.1 8.8 5.3 1.7 10.2 5.9L12 7.5l1.8-1.6c4.9-4.2 11.3 2.9 6.8 7.2L12 21.2Z" /></svg></span><strong className="hearts" role="status" aria-live="polite" aria-label={lives(game.hearts)}>/{game.hearts}</strong></div>
           <div className="hud-stat game-level-hud" aria-label={`${t("Game level")} ${levelLabel}`}><span>{t("Level")}</span><strong>{levelLabel}</strong></div>
-          <div className="hud-stat score-hud" aria-label={`${t("Shards")} ${totalShards}, ${t("Score")} ${game.score}`}><span className="shard-line"><b>◆ {totalShards}</b><small>{t("Shards")}</small></span><span className="score-line"><b>{game.score}</b><small>{t("Score")}</small></span></div>
-          <div className="hud-stat round-hud chain-hud" aria-label={`${t("Block")} ${game.chainBlocks}/${BLOCKS_PER_CHAIN}`}><span>{t("Block")}</span><strong>{game.chainBlocks}<small>/{BLOCKS_PER_CHAIN}</small></strong></div>
+          <div className="hud-stat score-hud" aria-label={`${t("Shards")} ${totalShards}, ${t("Score")} ${game.score}`}><span className="shard-line"><b title={String(totalShards)}>◆ {hudNumber(totalShards)}</b><small>{t("Shards")}</small></span><span className="score-line"><b title={String(game.score)}>{hudNumber(game.score)}</b><small>{t("Score")}</small></span></div>
+          <div className="hud-stat round-hud chain-hud" aria-label={`${t("Block")} ${hudBlock}/${BLOCKS_PER_CHAIN}`}><span>{t("Block")}</span><strong>{hudBlock}<small>/{BLOCKS_PER_CHAIN}</small></strong></div>
           <button className="game-control pause-control" type="button" disabled={weaponBusy || rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || pauseLeaving || game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { if (pauseLeaveRef.current) return; const resuming = game.status === "paused"; stateRef.current.status = resuming ? "playing" : "paused"; if (!resuming) { musicRef.current?.pause(); void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); } setGame({ ...stateRef.current }); if (resuming) retryAudio(); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
         </header>
         <div className="game-label">{adminRunRef.current && <strong>{t("Admin center")} · </strong>}{t("LEVEL")} {levelLabel} <span>· <strong className="game-region-name">{sectorName(game.sector)}</strong> · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/${BLOCKS_PER_CHAIN}` : game.encounter === "bonus" ? t("BONUS CHALLENGE") : t("CORE WARDEN")}</span></div>
@@ -2014,7 +2019,7 @@ const GamePage = () => {
                   <span className="mission-access-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="currentColor"><path d="M7 10 9 16 7 29 5 16ZM16 1 18.5 9 16 29 13.5 9ZM25 10 27 16 25 29 23 16Z" /></svg></span>
                   <span className="mission-access-label">{t('Weapons')}</span>
                 </button>
-                <span className="mission-active-weapon">{weaponNames[stageWeaponLevel(shipStage, game.weaponLevel)]}{game.weaponSource !== 'standard' && <> · {Math.ceil((game.weaponSource === 'paid' ? game.paidWeaponMs : game.pickupWeaponMs) / 1000)}s</>}</span>
+                <span className="mission-active-weapon"><b>{weaponNames[stageWeaponLevel(shipStage, game.weaponLevel)]}</b>{game.weaponSource !== 'standard' && <small>{Math.ceil((game.weaponSource === 'paid' ? game.paidWeaponMs : game.pickupWeaponMs) / 1000)}s</small>}</span>
                 {game.weaponSource !== 'standard' && <progress className="mission-charge-progress" aria-label={t('Remaining time')} max={game.weaponSource === 'paid' ? PURCHASED_WEAPON_DURATION_MS : PICKUP_WEAPON_DURATION_MS} value={game.weaponSource === 'paid' ? game.paidWeaponMs : game.pickupWeaponMs} />}
               </div>
               {game.weaponSource !== "pickup" && game.pickupWeaponMs > 0 && <div className="weapon-slot weapon-slot-reserve" data-source="pickup"><TimedRing remainingMs={game.pickupWeaponMs} durationMs={PICKUP_WEAPON_DURATION_MS} /><button type="button" className="edge-action edge-action-weapon weapon-cycle" disabled={game.status !== "playing"} onClick={openWeaponSelection} aria-label={`${t("Select")}: ${weaponNames[stageWeaponLevel(shipStage, game.pickupWeaponLevel)]}`}><span className="weapon-cycle-glyph" aria-hidden="true">{weaponGlyphs[stageWeaponLevel(shipStage, game.pickupWeaponLevel)]}</span><small>{weaponNames[stageWeaponLevel(shipStage, game.pickupWeaponLevel)]}</small></button></div>}
