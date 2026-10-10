@@ -47,7 +47,7 @@ import BossDossier from './BossDossier';
 import { bossDossierLabel } from './bossLore';
 import { bossName } from './bossNames';
 import { useLocale } from "../i18n";
-import { requestGameFullscreen } from "./gameFullscreen";
+import { requestGameFullscreen, toggleGameFullscreen } from "./gameFullscreen";
 import { MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { powerUpSymbols, type PowerUpType } from "./powerUps";
 import { BOSS_STICKER_COUNT, CHAIN_MILESTONES, emptyRewardProgress, rankForLevel, readRewardProgress, REWARD_PROGRESS_KEY, rewardRank, type RewardProgress } from "./rewardProgress";
@@ -510,7 +510,9 @@ const Shop = () => {
         onCommunity={() => openQuickAction("feedback")}
         onTerms={() => setTermsOpen(true)}
         onSound={toggleHomeMusic}
-        onFullscreen={requestGameFullscreen}
+        onFullscreen={toggleGameFullscreen}
+        signedIn={Boolean(user)}
+        onProfile={() => openQuickAction("profile")}
       >
           {adminMode && <div className="admin-level-picker" aria-label={t("Admin test start")}><label>{t("Level")} <select value={Math.floor((startSector - 1) / 10) + 1} onChange={event => setStartSector((Number(event.target.value) - 1) * 10 + (startSector - 1) % 10 + 1)}>{Array.from({ length: MAX_DIFFICULTY_LEVEL / 10 }, (_, index) => <option key={index} value={index + 1}>{index + 1}</option>)}</select></label><label>{t("Start at")} <select value={(startSector - 1) % 10 + 1} onChange={event => setStartSector((Math.floor((startSector - 1) / 10) * 10) + Number(event.target.value))}>{Array.from({ length: 9 }, (_, index) => <option key={index} value={index + 1}>{t("Block")} {index + 1}</option>)}<option value="10">{t("Boss")}</option></select></label></div>}
       </CinematicHome>
@@ -586,7 +588,7 @@ const Shop = () => {
         {leadersStatus === "error" && <p role="status">{t("Leaderboard unavailable. Try again later.")}</p>}
         {leadersStatus === "ready" && user && !leaders.some(entry => entry.username === user.username) && <p>{t("Your account is not in this Top 100.")}</p>}
         {leadersStatus === "ready" && (leaders.length ? <><ol className="leaderboard-list" start={leaderPage * 5 + 1}>{leaders.slice(leaderPage * 5, leaderPage * 5 + 5).map(entry => <li key={entry.rank} data-own={user?.username === entry.username} aria-current={user?.username === entry.username ? "true" : undefined}>
-          <div className="leader-identity"><span className="leader-place">{number(entry.rank)}</span><button className="leader-profile-link" type="button" onClick={()=>setPilotOpen(entry.username)}><PilotAvatar avatar={entry.avatar??null} name=""/><strong>@{entry.username}{user?.username === entry.username && <small> · {t("You")}</small>}</strong></button><span className="leader-rank"><ServiceBadge name={entry.serviceRank?.name ?? "Rookie"}/><small>{t(entry.serviceRank?.name ?? "Rookie")}</small></span></div>
+          <div className="leader-identity"><span className="leader-place">{number(entry.rank)}</span><button className="leader-profile-link" type="button" aria-label={`${t("Pilot profile")} · @${entry.username}`} onClick={()=>setPilotOpen(entry.username)}><PilotAvatar avatar={entry.avatar??null} name=""/><span className="leader-profile-copy"><strong>@{entry.username}{user?.username === entry.username && <small> · {t("You")}</small>}</strong><small>{t("Pilot profile")} →</small></span></button><span className="leader-rank"><ServiceBadge name={entry.serviceRank?.name ?? "Rookie"}/><small>{t(entry.serviceRank?.name ?? "Rookie")}</small></span></div>
           <dl className="leader-metrics"><div><dt>{t(leaderRules === "career" ? "Career Score" : "Mission high scores")}</dt><dd>{number(entry.score)}</dd></div>{leaderRules === "career" && <div><dt>{t("Best Run")}</dt><dd>{number(entry.bestRun?.score ?? 0)}</dd></div>}<div><dt>{t("Run level")}</dt><dd>{entry.runLevel == null ? t("Not recorded") : number(entry.runLevel)}</dd></div><div><dt>{t("Profile level")}</dt><dd>{entry.profileLevel == null ? t("Not recorded") : number(entry.profileLevel)}</dd></div></dl>
         </li>)}</ol>{leaders.length > 5 && <nav className="leaderboard-pages" aria-label={t("Top 100")}><button type="button" disabled={leaderPage === 0} onClick={() => setLeaderPage(page => Math.max(0, page - 1))}>{t("Previous page")}</button><span role="status">{number(leaderPage + 1)} / {number(Math.ceil(leaders.length / 5))}</span><button type="button" disabled={(leaderPage + 1) * 5 >= leaders.length} onClick={() => setLeaderPage(page => page + 1)}>{t("Next page")}</button></nav>}</> : <p>{t("No records yet. Complete a mission to be first.")}</p>)}
       </section>}

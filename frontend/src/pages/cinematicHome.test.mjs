@@ -13,6 +13,8 @@ function component(file,imports,globals={}) {
   const code=ts.transpileModule(readFileSync(new URL(file,import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX}}).outputText;
   const exports={};vm.runInNewContext(code,{exports,require:name=>{
     if(name==='react/jsx-runtime')return jsx;
+    if(name==='react'&&!imports.react)return {useEffect:()=>{},useState:value=>[typeof value==='function'?value():value,()=>{}]};
+    if(name==='./gameFullscreen'&&!imports[name])return {isGameFullscreen:()=>false};
     if(name.endsWith('.css'))return {};
     assert.ok(name in imports,`Unmapped dependency: ${name}`);return imports[name];
   },...globals});return exports.default;
@@ -23,12 +25,12 @@ const elements=tree=>{
 const text=node=>typeof node==='string'?node:typeof node==='number'?String(node):Array.isArray(node)?node.map(text).join(''):node?.props?text(node.props.children):'';
 
 test('every home button invokes its actual supplied action and the actual rank is shown',()=>{
-  const hits=[],callbacks=Object.fromEntries(['Play','Career','Cards','Community','Terms','Sound','Fullscreen'].map(name=>['on'+name,()=>hits.push(name)]));
+  const hits=[],callbacks=Object.fromEntries(['Play','Career','Cards','Community','Terms','Sound','Fullscreen','Profile'].map(name=>['on'+name,()=>hits.push(name)]));
   const Home=component('./CinematicHome.tsx',{'../i18n':{useLocale:()=>({t:source=>translate('de',source)})},'../components/ServiceBadge':{default:()=>null},'../components/BlockchainIcon':{default:()=>null},'./HomeEarthNetwork':{default:()=>null}});
-  const nodes=elements(Home({...callbacks,paused:false,busy:false,rankName:'Admiral',musicEnabled:true,musicLabel:'Ton ausschalten'}));
-  const buttons=nodes.filter(node=>node.type==='button');assert.equal(buttons.length,7);
+  const nodes=elements(Home({...callbacks,paused:false,busy:false,signedIn:true,rankName:'Admiral',musicEnabled:true,musicLabel:'Ton ausschalten'}));
+  const buttons=nodes.filter(node=>node.type==='button');assert.equal(buttons.length,8);
   for(const button of buttons){assert.equal(button.props.type,'button');button.props.onClick();}
-  assert.deepEqual(hits.sort(),['Play','Career','Cards','Community','Terms','Sound','Fullscreen'].sort());
+  assert.deepEqual(hits.sort(),['Play','Career','Cards','Community','Terms','Sound','Fullscreen','Profile'].sort());
   assert.ok(nodes.some(node=>node.props.name==='Admiral'));
   assert.ok(nodes.some(node=>node.props.className==='cinematic-career-copy'&&text(node).includes('Admiral')));
   const busy=elements(Home({...callbacks,busy:true,musicEnabled:false,musicLabel:'Ton einschalten'}));
@@ -38,9 +40,39 @@ test('every home button invokes its actual supplied action and the actual rank i
 });
 
 test('new visible labels are translated in all 19 selectable languages',()=>{
-  for(const locale of Object.keys(languages))for(const key of ['Your career','Service rank & progress','View progress','Community']) {
+  for(const locale of Object.keys(languages))for(const key of ['Your career','Service rank & progress','View progress','Community','Exit full screen','Edit profile image & bio','This browser does not support full screen. Use the installed app for a view without the address bar.','The browser did not allow full screen. You can continue playing in this view.','The installed app is already displayed without the browser address bar.']) {
     const translated=translate(locale,key);assert.ok(translated.length>0);
     if(!['en','de'].includes(locale))assert.notEqual(translated,key,`${locale}: ${key}`);
+  }
+});
+
+test('the actual home button shows fullscreen state, browser feedback and handles Escape',async()=>{
+  for(const result of ['changed','unavailable','denied','app-view']) {
+    const states=[],effects=[],listeners=new Map();let cursor=0,mounted=false;
+    const doc={fullscreenElement:null,addEventListener:(name,fn)=>listeners.set(name,fn),removeEventListener:name=>listeners.delete(name)};
+    const imports={
+      react:{useState:initial=>{const i=cursor++;if(!(i in states))states[i]=typeof initial==='function'?initial():initial;return [states[i],next=>states[i]=next];},useEffect:fn=>{if(!mounted)effects.push(fn);}},
+      '../i18n':{useLocale:()=>({t:source=>translate('de',source)})},
+      '../components/ServiceBadge':{default:()=>null},'../components/BlockchainIcon':{default:()=>null},'./HomeEarthNetwork':{default:()=>null},
+      './gameFullscreen':{isGameFullscreen:()=>Boolean(doc.fullscreenElement)},
+    };
+    const Home=component('./CinematicHome.tsx',imports,{document:doc});
+    const props={paused:false,busy:false,signedIn:false,musicEnabled:false,onFullscreen:()=>{if(result==='changed'){doc.fullscreenElement={};listeners.get('fullscreenchange')();}return Promise.resolve(result);}};
+    const render=()=>{cursor=0;const nodes=elements(Home(props));mounted=true;return nodes;};
+    let nodes=render();const cleanups=effects.map(fn=>fn());
+    const button=()=>render().find(node=>node.props.className==='cinematic-fullscreen');
+    assert.equal(button().props['aria-label'],'Vollbild');
+    button().props.onClick();assert.equal(button().props.disabled,true);
+    await new Promise(setImmediate);nodes=render();assert.equal(button().props.disabled,false);
+    const notice=nodes.find(node=>node.props.className==='cinematic-fullscreen-notice');
+    if(result==='changed') {
+      assert.equal(button().props['aria-label'],'Vollbild verlassen');assert.equal(button().props['aria-pressed'],true);assert.equal(notice,undefined);
+      doc.fullscreenElement=null;listeners.get('fullscreenchange')();assert.equal(button().props['aria-pressed'],false);
+    } else {
+      assert.ok(notice);assert.equal(notice.props.role,'status');assert.match(text(notice),result==='app-view'?/installierte App/:/Browser/);
+      assert.equal(button().props['aria-pressed'],false);
+    }
+    cleanups.forEach(fn=>fn());assert.equal(listeners.size,0);
   }
 });
 
@@ -73,7 +105,7 @@ test('home actions reach the existing game, career, cards, feedback and profile 
   Object.assign(imports['./rewardProgress'],{emptyRewardProgress:()=>({highestLevel:1,linkedBlocks:{},completedChains:[],bossWins:{},bonusMedals:{}}),rankForLevel:()=>({name:'Rookie'}),CHAIN_MILESTONES:[]});
   imports['../../../backend/src/hangarCatalog']={hangarCatalog:[]};
   imports['./musicPreferences']={readMusicVolume:()=>50,readEffectsVolume:()=>50,MUSIC_STORAGE_KEY:'music'};
-  imports['./gameFullscreen']={requestGameFullscreen:()=>fullscreen++};
+  imports['./gameFullscreen']={requestGameFullscreen:()=>fullscreen++,toggleGameFullscreen:()=>fullscreen++};
   const componentTypes=['./CinematicHome','./FeedbackHub','./PilotProfile','./Collection','../components/Header','../components/TermsDialog','./CareerDashboard','../components/QuickAccessMenu'];
   for(const name of componentTypes)imports[name]={default:Object.assign(()=>null,{displayName:name})};
   const storageApi={getItem:key=>storage.get(key)??null,setItem:(key,value)=>storage.set(key,value),removeItem:key=>storage.delete(key)};
@@ -86,7 +118,7 @@ test('home actions reach the existing game, career, cards, feedback and profile 
   nodes=render();home=find(nodes,'./CinematicHome');assert.equal(home.props.paused,false);home.props.onCards();nodes=render();assert.ok(find(nodes,'./Collection'));assert.equal(find(nodes,'./CinematicHome').props.paused,true);
   find(nodes,'./Collection').props.onClose();nodes=render();home=find(nodes,'./CinematicHome');home.props.onCommunity();nodes=render();assert.ok(find(nodes,'./FeedbackHub'));assert.equal(find(nodes,'./CinematicHome').props.paused,true);
   find(nodes,'./FeedbackHub').props.onClose();nodes=render();find(nodes,'../components/Header').props.onOpenProfile();assert.equal(authRequests,1);
-  user={uid:'qa-only',username:'qa',roles:[]};nodes=render();find(nodes,'../components/Header').props.onOpenProfile();nodes=render();assert.ok(find(nodes,'./PilotProfile'));assert.equal(find(nodes,'./CinematicHome').props.paused,true);
+  user={uid:'qa-only',username:'qa',roles:[]};nodes=render();find(nodes,'./CinematicHome').props.onProfile();nodes=render();assert.ok(find(nodes,'./PilotProfile'));assert.equal(find(nodes,'./CinematicHome').props.paused,true);
   find(nodes,'./PilotProfile').props.onClose();nodes=render();find(nodes,'./CinematicHome').props.onTerms();nodes=render();assert.ok(find(nodes,'../components/TermsDialog'));
   find(nodes,'./CinematicHome').props.onSound();assert.equal(storage.get('music'),'off');
   assert.equal(storage.size,1); // No player, payment, reward or inventory writes.

@@ -2806,3 +2806,7 @@ html[data-motion="reduced"] .game-field .sector-banner.boss-intro-banner.sector-
   .leaderboard-section h2 { font-size: 20px; }
   .leaderboard-list .leader-rank { flex-direction: column; }
 }
+
+.leader-profile-copy { display:grid; gap:3px; min-width:0; }
+.leader-profile-copy > small { color:#8de3ed; font-size:11px; line-height:1.35; }
+.leader-profile-link:focus-visible { outline:2px solid #8de3ed; outline-offset:3px; border-radius:6px; }

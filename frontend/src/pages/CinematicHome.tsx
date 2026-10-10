@@ -1,18 +1,40 @@
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useLocale } from "../i18n";
 import ServiceBadge from "../components/ServiceBadge";
 import BlockchainIcon from "../components/BlockchainIcon";
 import HomeEarthNetwork from "./HomeEarthNetwork";
 import "./cinematicHome.css";
+import { isGameFullscreen, type FullscreenResult } from "./gameFullscreen";
 
 type Props = {
   paused: boolean; busy: boolean; rankName?: string; musicEnabled: boolean; musicLabel: string;
   onPlay: () => void; onCareer: () => void; onCards: () => void; onCommunity: () => void;
-  onTerms: () => void; onSound: () => void; onFullscreen: () => void; children?: ReactNode;
+  onTerms: () => void; onSound: () => void; onFullscreen: () => Promise<FullscreenResult> | void;
+  onProfile: () => void; signedIn: boolean; children?: ReactNode;
 };
 
-export default function CinematicHome({paused,busy,rankName,musicEnabled,musicLabel,onPlay,onCareer,onCards,onCommunity,onTerms,onSound,onFullscreen,children}: Props) {
+export default function CinematicHome({paused,busy,rankName,musicEnabled,musicLabel,onPlay,onCareer,onCards,onCommunity,onTerms,onSound,onFullscreen,onProfile,signedIn,children}: Props) {
   const {t}=useLocale();
+  const [fullscreen,setFullscreen]=useState(isGameFullscreen);
+  const [fullscreenBusy,setFullscreenBusy]=useState(false);
+  const [fullscreenNotice,setFullscreenNotice]=useState("");
+  useEffect(()=>{
+    const sync=()=>{setFullscreen(isGameFullscreen());setFullscreenNotice("");};
+    document.addEventListener("fullscreenchange",sync);
+    document.addEventListener("webkitfullscreenchange",sync);
+    return ()=>{document.removeEventListener("fullscreenchange",sync);document.removeEventListener("webkitfullscreenchange",sync);};
+  },[]);
+  const toggleFullscreen=async()=>{
+    setFullscreenNotice("");setFullscreenBusy(true);
+    try {
+      const result=await onFullscreen();
+      setFullscreen(isGameFullscreen());
+      if(result==="unavailable")setFullscreenNotice("This browser does not support full screen. Use the installed app for a view without the address bar.");
+      else if(result==="denied")setFullscreenNotice("The browser did not allow full screen. You can continue playing in this view.");
+      else if(result==="app-view")setFullscreenNotice("The installed app is already displayed without the browser address bar.");
+    } catch {setFullscreenNotice("The browser did not allow full screen. You can continue playing in this view.");}
+    finally {setFullscreenBusy(false);}
+  };
   return <section className="cinematic-home-content" aria-labelledby="cinematic-home-title">
     <div className="cinematic-scene">
       <div className="cinematic-art" aria-hidden="true">
@@ -25,14 +47,16 @@ export default function CinematicHome({paused,busy,rankName,musicEnabled,musicLa
         <p className="cinematic-tagline">{t("Defend Earth.")}<span>{t("Evolve your power.")}</span></p>
         {children}
       </div>
-      <button className="cinematic-fullscreen" type="button" onClick={onFullscreen} aria-label={t("Full screen")} title={t("Full screen")}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button>
+      <button className="cinematic-fullscreen" type="button" onClick={()=>void toggleFullscreen()} disabled={fullscreenBusy} aria-pressed={fullscreen} aria-label={t(fullscreen?"Exit full screen":"Full screen")} title={t(fullscreen?"Exit full screen":"Full screen")}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={fullscreen?"M3 8h5V3m8 0v5h5M8 21v-5H3m18 0h-5v5":"M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"}/></svg></button>
     </div>
+    {fullscreenNotice&&<p className="cinematic-fullscreen-notice" role="status">{t(fullscreenNotice)}</p>}
     <div className="cinematic-actions">
       <button className="cinematic-play" type="button" disabled={busy} onClick={onPlay}>{t("Play")}<span aria-hidden="true">→</span></button>
       <button className="cinematic-career" type="button" onClick={onCareer}>
         {rankName?<ServiceBadge name={rankName} size="large"/>:<BlockchainIcon kind="career"/>}
         <span className="cinematic-career-copy"><strong>{t("Your career")}</strong><span>{rankName?t(rankName):t("Service rank & progress")}</span><b>{t("View progress")} <i aria-hidden="true">→</i></b></span>
       </button>
+      {signedIn&&<button className="cinematic-profile" type="button" onClick={onProfile}><BlockchainIcon kind="account"/><span><strong>{t("My pilot profile")}</strong><small>{t("Edit profile image & bio")}</small></span><i aria-hidden="true">→</i></button>}
       <div className="cinematic-shortcuts">
         <button className="cinematic-cards" type="button" disabled={busy} onClick={onCards}><BlockchainIcon kind="collection"/><span>{t("Card collection")}</span><i aria-hidden="true">→</i></button>
         <button className="cinematic-community" type="button" onClick={onCommunity}><BlockchainIcon kind="feedback"/><span>{t("Community")}</span><i aria-hidden="true">→</i></button>
