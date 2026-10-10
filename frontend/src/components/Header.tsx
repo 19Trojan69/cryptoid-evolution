@@ -31,7 +31,7 @@ const Header = ({ user, serviceRank, onSignIn, onSignOut, onSendTestNotification
         {user && onOpenQuickAccess && onOpenProfile ? (
           <button className="header-account" type="button" onClick={onOpenProfile} disabled={isLoading} aria-label={`${t("My pilot profile")} · @${user.username}`}>
             <BlockchainIcon kind="account"/>
-            <span className="header-account-copy"><small>{t("Signed in as")}</small><b title={`@${user.username}`}>@{user.username}</b><span className="header-profile-label">{t("My pilot profile")} <i aria-hidden="true">›</i></span></span>
+            <span className="header-account-copy"><b title={`${t("Signed in as")} @${user.username}`}>@{user.username}</b><span className="header-profile-label">{t("Pilot profile")} <i aria-hidden="true">›</i></span></span>
           </button>
         ) : user && onOpenQuickAccess ? (
           <div className="header-account" role="status" title={`${t("Signed in as")} @${user.username}`}>

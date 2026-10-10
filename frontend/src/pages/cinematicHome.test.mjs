@@ -98,8 +98,8 @@ test('the signed-in account button opens the existing profile action',()=>{
   assert.ok(account);account.props.onClick();assert.equal(opened,1);assert.match(account.props['aria-label'],/@19Trojan69/);
   const copy=elements(account).find(node=>node.props.className==='header-account-copy');
   const children=copy.props.children;
-  assert.equal(children[1].type,'b');assert.equal(text(children[1]),'@19Trojan69');
-  assert.equal(children[2].props.className,'header-profile-label');assert.match(text(children[2]),/Pilotenprofil/);
+  assert.equal(children[0].type,'b');assert.equal(text(children[0]),'@19Trojan69');
+  assert.equal(children[1].props.className,'header-profile-label');assert.match(text(children[1]),/Pilotenprofil/);
 });
 
 test('home actions reach the existing game, career, cards, feedback and profile in Shop',()=>{
