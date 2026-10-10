@@ -98,13 +98,13 @@ const Shop = () => {
   const [guideTopic, setGuideTopic] = useState<GuideTopic>("controls");
   const [quickTarget, setQuickTarget] = useState<string | null>(null);
   const closeQuickMenu = useCallback(() => setQuickGroup(null), []);
-  const [shopView, setShopView] = useState<"hangar" | "shop" | "weapons" | "powers" | "progress" | "rewards" | "leaders" | null>(null);
+  const [shopView, setShopView] = useState<"hangar" | "shop" | "weapons" | "powers" | "progress" | "rewards" | "leaders" | null>(() => location.state?.openShopView === "shop" ? "shop" : location.state?.openShopView === "hangar" ? "hangar" : null);
   const [termsOpen, setTermsOpen] = useState(false);
   const [newCards,setNewCards]=useState<CardReward[]>([]);
   const [feedbackOpen,setFeedbackOpen]=useState(false);
   const [leaderRefresh,setLeaderRefresh]=useState(0);
   const [pilotOpen,setPilotOpen]=useState<string|null>(null);
-  const [collectionOpen, setCollectionOpen] = useState(false);
+  const [collectionOpen, setCollectionOpen] = useState(() => location.state?.openCollection === true);
   const [selectedBoss, setSelectedBoss] = useState<number | null>(null);
   const returnToMenu = () => { setShopView(null); setSystemMenuOpen(false); setActivePanel(null); setTermsOpen(false); setQuickTarget(null); setQuickGroup("mission"); };
   const [leaders, setLeaders] = useState<Leader[]>([]);
@@ -449,6 +449,7 @@ const Shop = () => {
   const openQuickAction = (action: QuickAction) => {
     closeQuickMenu();
     setQuickTarget(null);
+    if (action === "galaxy") { navigate("/galaxy", { state: { fromQuick: true, owner: user?.uid } }); return; }
     const guides: Partial<Record<QuickAction, GuideTopic>> = { overview: "overview", visuals: "visuals", "guide-controls": "controls", route: "route", combat: "survival", boosts: "boosts", earnings: "earnings", collection: "collection" };
     if (guides[action]) { setGuideTopic(guides[action]); setActivePanel("how"); return; }
     const settings: Partial<Record<QuickAction, SettingsSection>> = { language: "language", controls: "controls", audio: "audio", display: "display", vibration: "display" };
@@ -507,6 +508,7 @@ const Shop = () => {
         onPlay={enterGame}
         onCareer={() => openQuickAction("progress")}
         onCards={() => setCollectionOpen(true)}
+        onGalaxy={() => navigate("/galaxy", { state: { owner: user?.uid } })}
         onCommunity={() => openQuickAction("feedback")}
         onTerms={() => setTermsOpen(true)}
         onSound={toggleHomeMusic}

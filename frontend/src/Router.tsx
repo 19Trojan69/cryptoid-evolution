@@ -8,6 +8,11 @@ import RouteRecovery from "./RouteRecovery";
 
 export const router = createBrowserRouter([
   {
+    path: "/galaxy",
+    lazy: async () => ({ Component: (await import("./pages/GalaxyMap")).default }),
+    errorElement: <RouteRecovery />,
+  },
+  {
     path: "/admin",
     element: <AdminPage />,
     errorElement: <RouteRecovery />,
