@@ -8,6 +8,7 @@ import { rankForLevel } from "../rewardRules";
 import { rewardNetwork } from "../rewardNetwork";
 import { readSnapshot } from "../playerSave";
 import { restoreScoreRun } from "../restoreScoreRun";
+import { maxMissionHearts } from "../lifeRules";
 
 export default function mountLeaderboardEndpoints(router: Router) {
   router.get("/top", async (req, res) => {
@@ -55,7 +56,7 @@ export default function mountLeaderboardEndpoints(router: Router) {
       if (final && req.body.finished === true) {
         const snapshot = readSnapshot(req.body.save);
         const wonCampaign = player.mission === null && userBefore.rewardEventKeys?.[network]?.includes("bonus:50");
-        if (!snapshot || snapshot.score !== req.body.score || snapshot.hearts !== 0 && !wonCampaign ||
+        if (!snapshot || snapshot.hearts > maxMissionHearts(player.lastStart?.armorBonus) || snapshot.score !== req.body.score || snapshot.hearts !== 0 && !wonCampaign ||
           snapshot.score < (player.mission?.snapshot.score || 0) || snapshot.destroyed < (player.creditedDestroyed || 0) ||
           snapshot.shards < (player.creditedShards || 0) || snapshot.shards - (run.shardsBase || 0) > 100 + (Date.now() - run.startedAt) / 1000 * 100)
           return res.status(400).json({ error: "Invalid final save" });

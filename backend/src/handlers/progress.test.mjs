@@ -72,34 +72,70 @@ test('seen cards persist as a union per player and network without changing inve
  for(const ids of [['bogus'],['boss-0'],['boss-51'],[null],Array(111).fill('boss-1')])assert.equal((await h.call('progress','/card-reveals',{ids})).code,400);
 });
 
-test('boss lives exceed three and six, survive retries and resume, and cannot be fabricated', async () => {
-  const h = harness(); await init(h); await start(h);
-  let runId = h.session.scoreRun.id;
-  for (let level=1; level<=5; level++) {
-    const before = 3 + level - 1;
-    for (let block=1; block<=9; block++) {
-      const stage=(level-1)*10+block;
-      assert.equal((await h.call('rewards','/event',{runId,kind:'block',level,stage,save:snapshot({hearts:before})})).code,200);
+test('full-heart boss Shards credit once, survive resume, and never increase maximum lives', async () => {
+  for (const [armorIds,maxHearts] of [[[],3],[['armor_hull_mk1'],4],[['armor_hull_mk1','armor_hull_mk2'],6]]) {
+    const h = harness(); await init(h);
+    for (const id of armorIds) h.orders.push({user:'pilot-a',product_id:id,paid:true});
+    await start(h);
+    let runId = h.session.scoreRun.id;
+    for (let level=1; level<=5; level++) {
+      const beforeShards=5*(level-1);
+      for (let block=1; block<=9; block++) {
+        const stage=(level-1)*10+block;
+        assert.equal((await h.call('rewards','/event',{runId,kind:'block',level,stage,save:snapshot({hearts:maxHearts,shards:beforeShards})})).code,200);
+      }
+      const event={runId,kind:'boss',level,stage:level*10,save:snapshot({hearts:maxHearts,shards:beforeShards+5})};
+      assert.equal((await h.call('rewards','/event',{...event,save:snapshot({hearts:maxHearts+1,shards:beforeShards+5})})).code,400);
+      assert.equal((await h.call('rewards','/event',event)).body.awarded,true);
+      assert.equal((await h.call('rewards','/event',event)).body.awarded,false);
+      assert.equal(h.profile().mission.snapshot.hearts,maxHearts);
+      assert.equal(h.profile().balance,5*level);
+      const resumed=await start(h,'resume',`boss-heart-resume-${level}`);
+      assert.equal(resumed.code,200);
+      assert.equal(resumed.body.checkpoint.hearts,maxHearts);
+      runId=resumed.body.scoreRunId;
+      assert.equal((await h.call('rewards','/event',{runId,kind:'bonus',level,stage:level*10,hits:0,save:snapshot({hearts:maxHearts,shards:5*level})})).code,200);
     }
-    const event={runId,kind:'boss',level,stage:level*10,save:snapshot({hearts:before+1})};
-    assert.equal((await h.call('rewards','/event',{...event,save:snapshot({hearts:before+2})})).code,400);
-    assert.equal((await h.call('rewards','/event',event)).body.awarded,true);
-    assert.equal((await h.call('rewards','/event',event)).body.awarded,false);
-    assert.equal(h.profile().mission.snapshot.hearts,before+1);
-    const resumed=await start(h,'resume',`boss-heart-resume-${level}`);
-    assert.equal(resumed.code,200);
-    assert.equal(resumed.body.checkpoint.hearts,before+1);
-    runId=resumed.body.scoreRunId;
-    assert.equal((await h.call('rewards','/event',{runId,kind:'bonus',level,stage:level*10,hits:0,save:snapshot({hearts:before+1})})).code,200);
+    assert.equal((await h.call('progress','/checkpoint',{runId,combat:combat({stage:51}),save:snapshot({hearts:maxHearts,shards:25})})).code,200);
+    assert.equal((await h.call('progress','/checkpoint',{runId,combat:combat({stage:51,sequence:2}),save:snapshot({hearts:maxHearts+1,shards:25})})).code,400);
+    assert.equal((await h.call('progress','/leave',{runId,hearts:maxHearts+1})).code,400);
+    assert.equal((await h.call('progress','/leave',{runId,hearts:maxHearts-1})).code,200);
+    assert.equal((await start(h,'resume','boss-heart-resume-final')).body.checkpoint.hearts,maxHearts-1);
+    assert.equal(h.profile().balance,25);
   }
-  assert.equal(h.profile().mission.snapshot.hearts,8);
-  assert.equal((await h.call('progress','/checkpoint',{runId,combat:combat({stage:51}),save:snapshot({hearts:8})})).code,200);
-  assert.equal((await h.call('progress','/checkpoint',{runId,combat:combat({stage:51,sequence:2}),save:snapshot({hearts:9})})).code,400);
-  assert.equal((await h.call('progress','/leave',{runId,hearts:7})).code,200);
-  const resumed=await start(h,'resume','boss-heart-resume-final');
-  assert.equal(resumed.body.checkpoint.hearts,7);
-  assert.equal(readSnapshot(snapshot({hearts:56})).hearts,56);
-  assert.equal(readSnapshot(snapshot({hearts:57})),null);
+  assert.equal(readSnapshot(snapshot({hearts:6})).hearts,6);
+  assert.equal(readSnapshot(snapshot({hearts:7})),null);
+  assert.equal(readSnapshot(snapshot({hearts:56})),null);
+});
+
+test('legacy accumulated hearts are capped in the profile, resume, and repeated start response', async () => {
+  for (const [armorIds,maxHearts] of [[[],3],[['armor_hull_mk1'],4],[['armor_hull_mk2'],5],[['armor_hull_mk1','armor_hull_mk2'],6]]) {
+    const h=harness(); await init(h);
+    for (const id of armorIds) h.orders.push({user:'pilot-a',product_id:id,paid:true});
+    await start(h);
+    h.profile().mission={sector:1,phase:'normal',rulesVersion:2,snapshot:snapshot({hearts:56,score:120,shards:8}),savedAt:new Date().toISOString()};
+    h.profile().creditedShards=8;
+    assert.equal((await h.call('progress','/recover',{runId:h.session.scoreRun.id})).body.maxHearts,maxHearts);
+    assert.equal((await init(h)).body.save.mission.snapshot.hearts,maxHearts);
+    const resumed=await start(h,'resume','legacy-life-resume-0001');
+    assert.equal(resumed.code,200);
+    assert.equal(resumed.body.checkpoint.hearts,maxHearts);
+    assert.equal(h.profile().mission.snapshot.hearts,maxHearts);
+    assert.equal(resumed.body.checkpoint.score,120);
+    assert.equal(resumed.body.checkpoint.shards,8);
+    h.profile().lastStart.checkpoint.hearts=56;
+    const retried=await start(h,'resume','legacy-life-resume-0001');
+    assert.equal(retried.body.checkpoint.hearts,maxHearts);
+    assert.equal(retried.body.scoreRunId,resumed.body.scoreRunId);
+    assert.equal((await h.call('progress','/checkpoint',{runId:retried.body.scoreRunId,combat:combat(),save:snapshot({hearts:maxHearts+1,score:120,shards:8})})).code,400);
+  }
+});
+
+test('campaign completion also rejects hearts beyond the purchased armor limit', async () => {
+  const h=harness();await init(h);await start(h);const runId=h.session.scoreRun.id;
+  h.docs[0].rewardEventKeys.testnet=['bonus:50'];
+  assert.equal((await h.call('leaderboard','/score',{runId,score:100,finished:true,save:snapshot({score:100,hearts:4})})).code,400);
+  assert.equal((await h.call('leaderboard','/score',{runId,score:100,finished:true,save:snapshot({score:100,hearts:3})})).code,200);
 });
 
 test('cookie-less save requests restore only the authenticated active run and remain idempotent', async () => {

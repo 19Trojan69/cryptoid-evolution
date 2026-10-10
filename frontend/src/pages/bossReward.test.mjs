@@ -4,7 +4,7 @@ import { collectBossHeart, BOSS_HEART_POSITION } from './bossReward.ts';
 import { bossDifficulty } from './bossDifficulty.ts';
 import { paintTurretHeat } from './bossTurretHeat.ts';
 test('a defeated boss awards no life until physical pickup, exactly once', () => {
-  const state = { hearts: 2, bossHeartCollected: false };
+  const state = { hearts: 2, maxHearts: 3, shards: 0, bossHeartCollected: false };
   assert.equal(collectBossHeart(state, {x:.1,y:.9},390,760),false);
   assert.equal(state.hearts,2);
   const restored = JSON.parse(JSON.stringify(state));
@@ -13,11 +13,28 @@ test('a defeated boss awards no life until physical pickup, exactly once', () =>
   assert.equal(collectBossHeart(restored, BOSS_HEART_POSITION,390,760),false);
   assert.equal(restored.hearts,3);
 });
-test('extra life exceeds initial three and pickup is reachable on all viewports', () => {
-  for(const [w,h] of [[320,568],[390,844],[1366,768]]) {
-    const state={hearts:4};
-    assert.equal(collectBossHeart(state,BOSS_HEART_POSITION,w,h),true);
-    assert.equal(state.hearts,5);
+test('boss pickup restores one heart at every armor limit and remains reachable on all viewports', () => {
+  for (const maxHearts of [3, 4, 5, 6]) {
+    for (const [w,h] of [[320,568],[390,844],[1366,768]]) {
+      const state = { hearts: maxHearts - 1, maxHearts, shards: 20 };
+      assert.equal(collectBossHeart(state,BOSS_HEART_POSITION,w,h),true);
+      assert.equal(state.hearts,maxHearts);
+      assert.equal(state.shards,20);
+    }
+  }
+});
+test('full hearts grant five Shards once per boss and fifty bosses never exceed the armor limit', () => {
+  for (const maxHearts of [3, 4, 5, 6]) {
+    const state = { hearts: maxHearts, maxHearts, shards: 0 };
+    for (let boss = 1; boss <= 50; boss++) {
+      state.bossHeartCollected = false;
+      assert.equal(collectBossHeart(state,BOSS_HEART_POSITION,390,844),true);
+      assert.equal(state.hearts,maxHearts);
+      assert.equal(state.bossHeartShards,5);
+      assert.equal(state.shards,5*boss);
+      assert.equal(collectBossHeart(state,BOSS_HEART_POSITION,390,844),false);
+      assert.equal(state.shards,5*boss);
+    }
   }
 });
 test('each of 50 bosses has strictly increasing bounded attack pressure', () => {

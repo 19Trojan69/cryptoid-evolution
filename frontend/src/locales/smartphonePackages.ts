@@ -1,5 +1,10 @@
 export const smartphoneTranslations: Record<string, Record<string, string>> = {
   de: {
+    "You start with 3 hearts, or 4 with Reinforced Hull and 6 with both armor upgrades. The mission ends when all hearts are lost.": "Du startest mit 3 Herzen, mit verstärktem Rumpf mit 4 und mit beiden Panzerungen mit 6. Sind alle Herzen verloren, endet die Mission.",
+    "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 5 Shards instead.": "Bossherzen stellen ein verlorenes Herz wieder her, höchstens bis zur Panzerungsgrenze. Bei vollen Herzen erhältst du beim Einsammeln stattdessen 5 Shards.",
+    "Advanced and Elite projectile protection does not increase your maximum hearts.": "Der Projektilschutz von Advanced und Elite erhöht deine maximale Herzzahl nicht.",
+    "FULL HEARTS": "HERZEN VOLL",
+    "HEART RESTORED": "HERZ AUFGEFÜLLT",
     "Requires Reinforced Hull": "Verstärkter Rumpf erforderlich",
     "Total with Reinforced Hull": "Gesamt mit verstärktem Rumpf",
     "Applies to all your ships, including Advanced and Elite.": "Gilt für alle deine Schiffe, auch Advanced und Elite.",
@@ -18,6 +23,11 @@ export const smartphoneTranslations: Record<string, Record<string, string>> = {
     "The browser did not allow full screen. You can continue playing in this view.": "Der Browser hat Vollbild nicht zugelassen. Du kannst in dieser Ansicht weiterspielen.",
   },
   es: {
+    "You start with 3 hearts, or 4 with Reinforced Hull and 6 with both armor upgrades. The mission ends when all hearts are lost.": "Empiezas con 3 corazones, 4 con casco reforzado o 6 con ambas mejoras de blindaje. La misión termina cuando los pierdes todos.",
+    "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 5 Shards instead.": "Los corazones de los jefes recuperan un corazón perdido, hasta el límite de tu blindaje. Si ya tienes todos los corazones, recoger uno te da 5 fragmentos.",
+    "Advanced and Elite projectile protection does not increase your maximum hearts.": "La protección contra proyectiles de Advanced y Elite no aumenta tu máximo de corazones.",
+    "FULL HEARTS": "CORAZONES COMPLETOS",
+    "HEART RESTORED": "CORAZÓN RECUPERADO",
     "Requires Reinforced Hull": "Requiere casco reforzado",
     "Total with Reinforced Hull": "Total con casco reforzado",
     "Applies to all your ships, including Advanced and Elite.": "Se aplica a todas tus naves, incluidas Advanced y Elite.",
@@ -35,6 +45,11 @@ export const smartphoneTranslations: Record<string, Record<string, string>> = {
     "The browser did not allow full screen. You can continue playing in this view.": "El navegador no ha permitido la pantalla completa. Puedes seguir jugando en esta vista.",
   },
   zh: {
+    "You start with 3 hearts, or 4 with Reinforced Hull and 6 with both armor upgrades. The mission ends when all hearts are lost.": "初始有3颗心；强化舰体可提升至4颗，同时拥有两种装甲则为6颗。失去所有心后，任务结束。",
+    "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 5 Shards instead.": "首领掉落的心可恢复一颗失去的心，但不能超过装甲的生命上限。生命已满时，拾取后改为获得5个碎片。",
+    "Advanced and Elite projectile protection does not increase your maximum hearts.": "Advanced和Elite的弹丸防护不会增加生命上限。",
+    "FULL HEARTS": "生命已满",
+    "HEART RESTORED": "生命已恢复",
     "Requires Reinforced Hull": "需要强化舰体",
     "Total with Reinforced Hull": "含强化舰体的总价",
     "Applies to all your ships, including Advanced and Elite.": "适用于你的所有飞船，包括 Advanced 和 Elite。",
@@ -52,6 +67,11 @@ export const smartphoneTranslations: Record<string, Record<string, string>> = {
     "The browser did not allow full screen. You can continue playing in this view.": "浏览器未允许全屏。你可以在当前视图中继续游戏。",
   },
   vi: {
+    "You start with 3 hearts, or 4 with Reinforced Hull and 6 with both armor upgrades. The mission ends when all hearts are lost.": "Bạn bắt đầu với 3 tim, 4 tim nếu có Thân tàu gia cố hoặc 6 tim nếu có cả hai nâng cấp giáp. Nhiệm vụ kết thúc khi mất hết tim.",
+    "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 5 Shards instead.": "Tim từ trùm hồi phục một tim đã mất, tối đa đến giới hạn của giáp. Khi đã đầy tim, nhặt tim sẽ nhận 5 Shards thay thế.",
+    "Advanced and Elite projectile protection does not increase your maximum hearts.": "Khả năng chặn đạn của Advanced và Elite không tăng số tim tối đa.",
+    "FULL HEARTS": "ĐẦY TIM",
+    "HEART RESTORED": "ĐÃ HỒI PHỤC TIM",
     "Requires Reinforced Hull": "Cần Thân tàu gia cố",
     "Total with Reinforced Hull": "Tổng giá gồm Thân tàu gia cố",
     "Applies to all your ships, including Advanced and Elite.": "Áp dụng cho tất cả tàu của bạn, bao gồm Advanced và Elite.",

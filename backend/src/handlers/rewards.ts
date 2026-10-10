@@ -7,6 +7,7 @@ import "../types/session";
 import { missionAfter, publicSave, readSnapshot } from "../playerSave";
 import { validRunScore } from "../leaderboardRules";
 import { restoreScoreRun } from "../restoreScoreRun";
+import { maxMissionHearts } from "../lifeRules";
 
 type RewardEvent = { runId: string; kind: "block" | "chain" | "boss" | "bonus"; level: number; stage: number; hits?: number; save?: unknown };
 
@@ -66,7 +67,7 @@ export default function mountRewardEndpoints(router: Router) {
         if (closesChain) next = awardChain(next, event.level).progress;
         const version = user.rewardVersion?.[network] as number | undefined;
         const previous = player?.mission?.snapshot;
-        const heartLimit = Math.max(3 + (player?.lastStart?.armorBonus || 0), previous?.hearts || 0) + (event.kind === "boss" ? 1 : 0);
+        const heartLimit = maxMissionHearts(player?.lastStart?.armorBonus);
         if (snapshot && snapshot.hearts > heartLimit) return res.status(400).json({ error: "invalid_lives" });
         if (snapshot && (snapshot.shards < (previous?.shards || 0) || snapshot.score < (previous?.score || 0) || snapshot.destroyed < (previous?.destroyed || 0)
           || previous?.damageCount !== undefined && (snapshot.damageCount === undefined || snapshot.damageCount < previous.damageCount)

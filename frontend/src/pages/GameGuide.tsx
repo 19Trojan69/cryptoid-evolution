@@ -11,7 +11,7 @@ const topics = [
   {
     id: "overview", label: "Game description", title: "Defend Earth. Evolve your fleet.",
     intro: "Cryptoid Evolution is an arcade space shooter. Pilot your ship, defeat formations and bosses, collect boosts and build your fleet.",
-    details: ["Each level has nine visible Blocks, then a boss fight and a bonus round.", "Your ship fires automatically. Move to dodge and line up your shots.", "Open Rewards to see linked Blocks, boss stickers, stars, chain milestones, bonus medals and your current service rank."],
+    details: ["Each level has nine visible Blocks, then a boss fight and a bonus round.", "Your ship fires automatically. Move to dodge and line up your shots.", "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 5 Shards instead.", "Open Rewards to see linked Blocks, boss stickers, stars, chain milestones, bonus medals and your current service rank."],
   },
   {
     id: "visuals", label: "Illustrated guide", title: "Ships at a glance",
@@ -38,9 +38,11 @@ const topics = [
   },
   {
     id: "survival", label: "Combat & hearts", title: "Survive the attacks",
-    intro: "You start with three hearts. The mission ends when all are lost.",
+    intro: "You start with 3 hearts, or 4 with Reinforced Hull and 6 with both armor upgrades. The mission ends when all hearts are lost.",
     details: [
       "Collect the heart to start the bonus round.",
+      "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 5 Shards instead.",
+      "Advanced and Elite projectile protection does not increase your maximum hearts.",
       "Avoid enemy ships and projectiles. An active shield absorbs an impact; otherwise a collision or an unguarded projectile can cost a heart.",
       "Advanced and Elite ship stages add protection against enemy projectiles per life. A ship collision still needs a shield to be absorbed.",
       "Enemy hulls have different strengths. Even the first boss needs sustained fire; bosses attack faster as their hull weakens.",

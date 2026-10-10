@@ -14,6 +14,7 @@ import { primeCardSound } from './cardSound';
 import { advanceBossCore } from './bossCore';
 import { bossName } from './bossNames';
 import { collectBossHeart, BOSS_HEART_POSITION, BOSS_EXTRA_LIFE_MS, type BossRewardState } from './bossReward';
+import { BOSS_FULL_HEART_SHARDS, maxMissionHearts } from '../../../backend/src/lifeRules';
 import './bossReward.css';
 import { blockFlights, nextBlockFlight, REINFORCEMENT_WARNING_MS, GROUP_CLEAR_POINTS } from "./blockFlights";
 import { COMBAT_STATE_KEYS, COMBAT_REF_KEYS, readCombatCheckpoint, type CombatCheckpoint } from "../../../backend/src/combatCheckpoint";
@@ -672,8 +673,7 @@ const GamePage = () => {
       shipStageRef.current = adminRunRef.current ? data.shipStage ?? 1 : ownedShipStage(selected.skin.sprite, data.ownedShipUpgrades);
       setShipStage(shipStageRef.current);
       stateRef.current.projectileGuard = projectileGuardForStage(shipStageRef.current);
-      const armorBonus = Number.isInteger(data.armorBonus) ? Math.max(0, Math.min(3, data.armorBonus)) : 0;
-      stateRef.current.maxHearts = 3 + armorBonus;
+      stateRef.current.maxHearts = maxMissionHearts(data.armorBonus);
       stateRef.current.hearts = stateRef.current.maxHearts;
       checkpointAtRef.current = 0;
       checkpointScoreRef.current = 0;
@@ -698,7 +698,7 @@ const GamePage = () => {
         stateRef.current.damageCount = data.checkpoint.damageCount;
         stateRef.current.comboTotal = data.checkpoint.comboTotal;
         if (data.checkpoint.comboTotal !== undefined) stateRef.current.combo.total = data.checkpoint.comboTotal;
-        stateRef.current.hearts = data.checkpoint.hearts;
+        stateRef.current.hearts = Math.min(stateRef.current.maxHearts, data.checkpoint.hearts);
         stateRef.current.weaponTimers = data.checkpoint.weaponTimers.map((timer, level) => stateRef.current.unlockedWeapons.includes(level) ? timer : 0);
         syncSelectedWeapon(stateRef.current);
         if (data.combat) restoreCombat(data.combat);
@@ -876,6 +876,7 @@ const GamePage = () => {
     const boss = state.boss;
     if (!boss) return;
     state.bossHeartCollected = false;
+    state.bossHeartShards = 0;
     const finalDelayMs = BOSS_FALL_DURATION_MS;
     const fieldWidth = fieldRef.current?.clientWidth || 800;
     const fieldHeight = fieldRef.current?.clientHeight || 700;
@@ -1938,7 +1939,7 @@ const GamePage = () => {
   return (
     <main className="game-shell" data-effects-paused={game.status === "paused" || game.status === "loading"} onPointerDownCapture={event => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
       {rewardCards[0] && <CardReveal reward={rewardCards[0]} remaining={rewardCards.length} onContinue={continueRewardCard}/>}
-      {extraLifeVisible&&<div className="boss-extra-life" role="status" aria-live="polite"><strong>{t('EXTRA LIFE')}</strong><span>+1 ♥</span></div>}
+      {extraLifeVisible&&<div className="boss-extra-life" role="status" aria-live="polite"><strong>{t(game.bossHeartShards ? 'FULL HEARTS' : 'HEART RESTORED')}</strong><span>{game.bossHeartShards ? `+${game.bossHeartShards} ◆` : '+1 ♥'}</span></div>}
       <div ref={fieldRef} className="game-field" onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()} onPointerDown={startDrag} onPointerMove={event => { if (pointerRef.current === event.pointerId) positionFromPointer(event); }} onPointerUp={event => { if (pointerRef.current === event.pointerId) { pointerRef.current = null; touchOriginRef.current = null; } }} onPointerCancel={event => { if (pointerRef.current === event.pointerId) { pointerRef.current = null; touchOriginRef.current = null; } }}>
         <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} showNebula={game.encounter === "boss-fight"} />
         <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
@@ -1958,7 +1959,7 @@ const GamePage = () => {
         {game.encounter === "bonus" && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">{t("BONUS TARGETS")} {game.bonusHits} / {BONUS_TARGET_COUNT} · {t("NO ENEMY FIRE")}</div>}
         {game.encounter === 'boss-clear' && !game.bossHeartCollected && clearTimerRef.current >= BOSS_CLEAR_DURATION_MS && <div className="boss-heart-pickup" role="status" aria-label={t('Collect the heart to start the bonus round.')} style={{left: `${BOSS_HEART_POSITION.x * 100}%`, top: `${BOSS_HEART_POSITION.y * 100}%`}}>
           <span className="boss-heart-orb" aria-hidden="true"><span className="power-preview-orbit"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.2 3.4 13.1C-1.1 8.8 5.3 1.7 10.2 5.9L12 7.5l1.8-1.6c4.9-4.2 11.3 2.9 6.8 7.2L12 21.2Z" /></svg></i></span></span>
-          <small>+1 · {t('Collect the heart to start the bonus round.')}</small>
+          <small>{game.hearts >= game.maxHearts ? `+${BOSS_FULL_HEART_SHARDS} ◆` : '+1 ♥'} · {t('Collect the heart to start the bonus round.')}</small>
         </div>}
         
         {game.status === "loading" && <div className="game-overlay"><div className="game-modal mission-start-modal">
