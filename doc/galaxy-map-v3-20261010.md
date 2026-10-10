@@ -40,8 +40,10 @@ ihres tatsächlichen Schiffs. Bosskarten bleiben zusätzlich an die bestehende
 `cardAvailability` gebunden. Ein Kartensieg erzeugt keine Freischaltung.
 
 Die aktuell gespeicherte Schiffsform, Farbe und tatsächlich besessene
-Ausbaustufe werden angezeigt. »Zu meiner Position«, Level 1, Level 500 und
-ein Level-Sprungformular stehen bereit. Schiff und Beschriftung haben einen
+Ausbaustufe werden angezeigt. Ein dezenter schwebender »Zu meiner Position«-
+Button führt zum gespeicherten Fortschritt. Die untere technische Leiste mit
+Level-Sprüngen, Eingabefeld und Aktualisieren wurde auf Wunsch entfernt; der
+Zurück-Button trägt das Nachtblau-Champagner-Design des Spiels. Schiff und Beschriftung haben einen
 freien Platz neben normalen Levels beziehungsweise oberhalb mehrteiliger
 Stationen. Nur ein neu bestätigter benachbarter Aufstieg kann eine kurze
 Fluganimation auslösen. Beim Öffnen wird die Karriere nicht erneut abgeflogen.

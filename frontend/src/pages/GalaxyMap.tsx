@@ -17,9 +17,8 @@ export default function GalaxyMap() {
   const { t } = useLocale();
   const navigate = useNavigate(), location = useLocation();
   const fromQuick = location.state?.fromQuick === true;
-  const { snapshot, status, refresh } = useGalaxyData(typeof location.state?.owner === 'string' ? location.state.owner : undefined);
+  const { snapshot, status } = useGalaxyData(typeof location.state?.owner === 'string' ? location.state.owner : undefined);
   const [selection, setSelection] = useState<GalaxySelection | null>(null);
-  const [jump, setJump] = useState('1');
   const scroll = useRef<HTMLDivElement>(null), ship = useRef<HTMLDivElement>(null);
   const previousLevel = useRef<number | null>(null);
   const close = useCallback(() => setSelection(null), []);
@@ -63,10 +62,11 @@ export default function GalaxyMap() {
   const home = (state: object = {}) => navigate('/', { state });
   return <main className="galaxy-page" data-progress-status={status} data-network={shipSaveNetwork}>
     <header className="galaxy-toolbar">
-      <button type="button" className="galaxy-back" onClick={() => home({ openQuickMenu: fromQuick })}>← <span>{t('Back')}</span></button>
+      <button type="button" className="galaxy-back" onClick={() => home({ openQuickMenu: fromQuick })}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m14 6-6 6 6 6M8 12h12"/></svg><span>{t('Back')}</span></button>
       <div><p>CRYPTOID EVOLUTION</p><h1>{t('Galaxy map')}</h1></div>
       <span className="galaxy-preview-badge">{t('Preview · In development')}</span>
     </header>
+    {status !== 'ready' && <p className="galaxy-data-status" role="status">{status === 'loading' ? t('Loading saved progress…') : t('Saved progress is unavailable. You can still explore; your data is unchanged.')}</p>}
     <div className="galaxy-scroll" ref={scroll} tabIndex={0} aria-label={t('Galaxy map')}>
       <div className="galaxy-map-world">
         {[...galaxyRegions.keys()].reverse().map(region => <GalaxySector key={region} region={region} progress={progress} onSelect={setSelection}/>)}
@@ -82,11 +82,7 @@ export default function GalaxyMap() {
         <p className="galaxy-note">{t('Exploring the map does not start a mission or change your progress.')}</p>
       </article>
     </div>
-    <nav className="galaxy-navigation" aria-label={t('Game navigation')}>
-      <div className="galaxy-progress-status" role="status">{status === 'loading' ? t('Loading saved progress…') : status === 'error' ? t('Saved progress is unavailable. You can still explore; your data is unchanged.') : `${t('Level')} ${progress.currentLevel} · ${skin.name}`}</div>
-      <div className="galaxy-navigation-row"><button type="button" disabled={status !== 'ready'} onClick={() => goTo(progress.currentLevel)}>{t('To my position')}</button><button type="button" onClick={() => goTo(1)}>{t('Level')} 1</button><button type="button" onClick={() => goTo(500)}>{t('Level')} 500</button><button type="button" onClick={refresh} disabled={status === 'loading'} aria-label={t('Refresh progress')} title={t('Refresh progress')}>↻</button></div>
-      <form onSubmit={event => { event.preventDefault(); const level = Number(jump); if (Number.isInteger(level) && level >= 1 && level <= 500) goTo(level); }}><label htmlFor="galaxy-jump">{t('Go to level')}</label><input id="galaxy-jump" type="number" inputMode="numeric" min="1" max="500" required value={jump} onChange={event => setJump(event.target.value)}/><button type="submit">→</button></form>
-    </nav>
+    <button type="button" className="galaxy-position" disabled={status !== 'ready'} onClick={() => goTo(progress.currentLevel)} title={status === 'ready' ? `${t('Level')} ${progress.currentLevel} · ${skin.name}` : undefined}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="1.5"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></svg><span>{t('To my position')}</span></button>
     {selection && <GalaxyInfoDialog key={`${selection.kind}:${selection.level}`} selection={selection} progress={progress} onClose={close} onShop={view => home({ openShopView: view })} onCards={() => home({ openCollection: true })}/>}
   </main>;
 }
