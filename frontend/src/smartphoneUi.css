@@ -38,6 +38,7 @@
 .feedback-hub .feedback-stars button { width: 48px; min-width: 48px; min-height: 48px; padding: 0; }
 .legal-page .legal-back { display: inline-flex; align-items: center; min-height: 48px; padding: 8px 12px; border: 1px solid var(--menu-border); border-radius: var(--menu-radius); background: var(--menu-raised); color: var(--menu-cyan); font: 600 14px/1.35 system-ui,sans-serif; text-transform: none; }
 .legal-page .legal-back:focus-visible { outline: 2px solid var(--menu-cyan); outline-offset: 2px; }
+.galaxy-page button:enabled,.galaxy-page button:disabled { min-width: 48px; min-height: 48px; }
 :is(.shop-modal,.system-menu-panel,.pause-settings-modal,.pilot-profile,.feedback-hub,.language-picker,.collection-dialog,.terms-dialog) :is(button,a,input,select,textarea,summary):focus-visible {
   outline: 2px solid var(--menu-cyan);
   outline-offset: 2px;
