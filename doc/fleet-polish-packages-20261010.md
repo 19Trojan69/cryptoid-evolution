@@ -89,5 +89,39 @@ Unterdeckung, gesperrte Hulls, laufende Käufe, unbesessene Farben und Stufen.
 Eine echte Smartphone-, Tablet- und Pi-Browser-Prüfung bleibt offen. In dieser
 verwalteten Umgebung ist kein `control-browser` verfügbar; ein Ersatzbrowser
 wurde entsprechend der bestehenden Sites-Anweisung nicht gestartet.
-Die Bereitstellung wird nach dem abschließenden Release-Abgleich separat
-mit Commit-ID und Deployment-ID dokumentiert.
+## Veröffentlichung und lesende Live-Prüfung
+
+Veröffentlichter Anwendungscode: `1fc8a66aec127009f1e04e2d760659e512e59a8b`.
+Pull Request: https://github.com/19Trojan69/cryptoid-evolution/pull/144.
+Der PR bleibt offen; `main` und der bisherige Release-Branch wurden nicht
+überschrieben. Die folgenden Bereitstellungen verwenden exakt den geprüften
+Code-Commit. Ein späterer reiner Dokumentationscommit wird nicht neu zugeordnet.
+
+| Umgebung | Adresse | Deployment | Ergebnis |
+| --- | --- | --- | --- |
+| Testnet / Preview | https://cryptoid-evolution-testnet.vercel.app | `dpl_CJu4SdUL8c4j5mvjUZq5855zcgKB` | READY |
+| Hauptseite / Produktion | https://cryptoid-evolution.vercel.app | `dpl_8AU7rcLqSH7kxEKxoCDYtMwzDukZ` | READY |
+
+Beide stammen aus dem bestehenden Projekt `cryptoid-evolution`. Der neue
+Arbeitsbranch verwendet die bestehende branchbezogene Preview-Konfiguration
+`CRYPTOID_TESTNET_BACKEND=local`. Produktionsvariablen und Geheimnisse wurden
+nicht geändert. Sechs vorhandene Gateway-Regressionstests bestehen zusätzlich
+zur Frontend-Suite; sie prüfen unter anderem die Netztrennung und den weiterhin
+getrennten Pi-Zahlungsdienst.
+
+Lesende HTTP-Prüfung auf den festen öffentlichen Adressen:
+
+| Prüfung | Testnet | Hauptseite |
+| --- | --- | --- |
+| Startseite und neuer Anwendungsbundle | 200; neue Profil-/Versionsklassen enthalten, unterer Profilbutton fehlt | 200; dieselben Änderungen enthalten |
+| Runtime-Testnet-Kennzeichnung | `appNetwork=testnet`, API `/api` | Kein Preview-Testnet-Schalter |
+| `/api/hangar/catalog` | 200, Backend `testnet-local` | 200, Backend `local` |
+| `/api/leaderboard/top?sort=career` | 200, Netzwerk `testnet` | 200, Netzwerk `mainnet` |
+| `/api/rewards/me` ohne Anmeldung | 401 | 401 |
+| `/api/hangar/inventory` ohne Anmeldung | 401 | 401 |
+
+Schiffbild und neue Styles wurden auf der Testnet-Adresse mit HTTP 200 geprüft.
+Keine Anmeldung, Zahlung, Inventaränderung, Gutschrift oder Fortschrittsänderung
+wurde als Live-Test ausgelöst. Die direkten Deployment-Adressen sind geschützt;
+die Live-Prüfung erfolgte über die vorhandenen öffentlichen Haupt-/Testnet-Adressen.
+Die offene Geräteabnahme ist davon unabhängig und bleibt offen.
