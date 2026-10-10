@@ -59,6 +59,19 @@ test('invalid records cannot create future stations or simulated boss wins', () 
   assert.deepEqual(progress,model.emptyGalaxyProgress());
 });
 
+test('the ship and its label never cover a level number at any of the 500 mobile positions',()=>{
+  const width=305;
+  const overlaps=(a,b)=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
+  const levels=Array.from({length:500},(_,i)=>model.galaxyPoint(i+1)).map(p=>({left:p.x/100*width-22,right:p.x/100*width+22,top:p.mapY-22,bottom:p.mapY+22}));
+  for(let level=1;level<=500;level++) {
+    const p=model.galaxyShipPoint(level),x=p.x/100*width+p.dx,y=p.mapY+p.dy;
+    const ship={left:x-21,right:x+21,top:y-26,bottom:y+26};
+    const label={left:x-60,right:x+60,top:p.port==='above'?y-38:y+26,bottom:p.port==='above'?y-26:y+38};
+    assert.ok(ship.left>=0&&ship.right<=width&&label.left>=0&&label.right<=width,`Level ${level}`);
+    assert.ok(!levels.some(node=>overlaps(node,ship)||overlaps(node,label)),`Level ${level}`);
+  }
+});
+
 test('guest progress uses existing origin-local records but never a different network override', () => {
   const data=new Map([[REWARD_PROGRESS_KEY,JSON.stringify({...emptyRewardProgress(),bossWins:{1:1}})],['cryptoid_highest_sector','18']]);
   const storage={getItem:key=>data.get(key)??null};

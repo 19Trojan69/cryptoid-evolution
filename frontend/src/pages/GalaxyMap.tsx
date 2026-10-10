@@ -8,7 +8,7 @@ import { ownedShipStage, shipEvolutionAsset } from './shipEvolution';
 import useGalaxyData from './useGalaxyData';
 import GalaxySector from './GalaxySector';
 import GalaxyInfoDialog from './GalaxyInfoDialog';
-import { emptyGalaxyProgress, galaxyPoint, galaxyRegions, type GalaxySelection } from './galaxyModel';
+import { emptyGalaxyProgress, galaxyPoint, galaxyShipPoint, galaxyRegions, type GalaxySelection } from './galaxyModel';
 import { MOTION_STORAGE_KEY } from './displaySettings';
 import './galaxyMap.css';
 
@@ -23,7 +23,7 @@ export default function GalaxyMap() {
   const previousLevel = useRef<number | null>(null);
   const close = useCallback(() => setSelection(null), []);
   const progress = status === 'ready' ? snapshot.progress : emptyGalaxyProgress();
-  const point = galaxyPoint(progress.currentLevel);
+  const point = galaxyShipPoint(progress.currentLevel);
   const skin = playerSkins.find(entry => entry.id === snapshot.skin) ?? playerSkins[0];
   const color = allPlayerColors.find(entry => entry.id === snapshot.color) ?? allPlayerColors.find(entry => entry.id === 'grey')!;
   const stage = ownedShipStage(skin.sprite, snapshot.upgrades);
@@ -52,11 +52,11 @@ export default function GalaxyMap() {
     previousLevel.current = progress.currentLevel;
     if (before === null || before >= progress.currentLevel || !ship.current) return;
     if (document.documentElement.dataset.motion === 'reduced' || localStorage.getItem(MOTION_STORAGE_KEY) === '1' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const a = galaxyPoint(before), b = galaxyPoint(progress.currentLevel);
+    const a = galaxyShipPoint(before), b = galaxyShipPoint(progress.currentLevel);
     // Animate only a newly confirmed adjacent stage; never replay an entire career.
     if (progress.currentLevel - before !== 1) return;
     const width = ship.current.parentElement?.clientWidth ?? 0;
-    const animation = ship.current.animate([{ transform: `translate(calc(-50% + ${(a.x - b.x) / 100 * width}px), calc(-50% + ${a.mapY - b.mapY}px))` }, { transform: 'translate(-50%, -50%)' }], { duration: 850, easing: 'ease-in-out' });
+    const animation = ship.current.animate([{ transform: `translate(calc(-50% + ${(a.x - b.x) / 100 * width + a.dx - b.dx}px), calc(-50% + ${a.mapY + a.dy - b.mapY - b.dy}px))` }, { transform: 'translate(-50%, -50%)' }], { duration: 850, easing: 'ease-in-out' });
     return () => animation.cancel();
   }, [status, progress.currentLevel]);
   const home = (state: object = {}) => navigate('/', { state });
@@ -69,7 +69,7 @@ export default function GalaxyMap() {
     <div className="galaxy-scroll" ref={scroll} tabIndex={0} aria-label={t('Galaxy map')}>
       <div className="galaxy-map-world">
         {[...galaxyRegions.keys()].reverse().map(region => <GalaxySector key={region} region={region} progress={progress} onSelect={setSelection}/>)}
-        {status === 'ready' && <div ref={ship} className="galaxy-player" data-player-level={progress.currentLevel} style={{ '--player-x': `${point.x}%`, '--player-y': `${point.mapY + 42}px` } as CSSProperties}>
+        {status === 'ready' && <div ref={ship} className="galaxy-player" data-player-level={progress.currentLevel} data-player-port={point.port} style={{ '--player-x': `calc(${point.x}% + ${point.dx}px)`, '--player-y': `${point.mapY + point.dy}px` } as CSSProperties}>
           <ShipPortrait src={shipEvolutionAsset(skin.sprite, stage)} color={color.id} name={`${t('Your ship')} · ${skin.name}`}/><span aria-hidden="true" className="galaxy-engine"/><small>{t('Your ship')}</small>
         </div>}
       </div>

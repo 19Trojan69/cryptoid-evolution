@@ -36,6 +36,12 @@ export const galaxyPoint = (level: number) => {
   return { ...station, region, mapY: (9 - region) * GALAXY_REGION_HEIGHT + station.y };
 };
 
+/** Reserve a clear berth: beside ordinary levels, above multi-port junctions. */
+export const galaxyShipPoint = (level: number) => {
+  const point = galaxyPoint(level);
+  return { ...point, dx: point.mini ? 0 : point.x > 50 ? -54 : 54, dy: point.mini ? -48 : 0, port: point.mini ? 'above' : 'side' };
+};
+
 export const galaxyRoute = (stations: readonly GalaxyStation[]) => {
   // SVG x is a percentage and y is in CSS pixels; control points follow each turn.
   const first = stations[0];
