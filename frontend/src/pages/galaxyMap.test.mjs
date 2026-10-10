@@ -11,6 +11,7 @@ import { bossManifest } from './bossManifest.ts';
 import { bossName } from './bossNames.ts';
 import { translate, languages } from '../i18n.ts';
 import { galaxyMapTranslations } from '../locales/galaxyMap.ts';
+import { galaxyScenery, galaxySceneryAsset } from './galaxyScenery.ts';
 
 test('500 unique levels ascend from the bottom across ten regions with exact port counts', () => {
   const stations = model.galaxyStations.flat();
@@ -123,8 +124,38 @@ const elements=tree=>{const result=[];const walk=node=>{if(!node||typeof node!==
 const text=node=>typeof node==='string'?node:typeof node==='number'?String(node):Array.isArray(node)?node.map(text).join(''):node?.props?text(node.props.children):'';
 const locale={'../i18n':{useLocale:()=>({t:source=>translate('de',source)})}};
 
+test('every region has ten HD scene stretches and all shipped artwork URLs resolve',()=>{
+  assert.equal(galaxyScenery.length,10);
+  const assets=new Set(galaxyScenery.flat().map(galaxySceneryAsset));
+  assert.ok(assets.size>=70);
+  for(const region of galaxyScenery)assert.equal(region.length,10);
+  for(const asset of assets) {
+    const bytes=readFileSync(new URL(`../../public${asset}`,import.meta.url));
+    assert.equal(bytes.subarray(8,12).toString(),'WEBP',asset);
+    assert.ok(bytes.length>10000,asset);
+  }
+});
+
+test('actual scenery loads images only near the viewport and releases offscreen image elements',()=>{
+  let near=false,callback,observed=false,disconnected=false;
+  const effects=[];
+  const Backdrop=component('./GalaxyBackdrop.tsx',{
+    './galaxyModel':model,'./galaxyScenery':{galaxyScenery,galaxySceneryAsset},
+    react:{memo:fn=>fn,useRef:()=>({current:{}}),useEffect:effect=>effects.push(effect),useState:()=>[near,value=>{near=value;}]},
+  },{IntersectionObserver:class{constructor(fn){callback=fn;}observe(){observed=true;}disconnect(){disconnected=true;}}});
+  const scene=elements(Backdrop({region:9})).find(node=>typeof node.type==='function');
+  assert.equal(elements(scene.type(scene.props)).filter(node=>node.type==='img').length,0);
+  const cleanup=effects[0]();assert.equal(observed,true);
+  callback([{isIntersecting:true}]);
+  const image=elements(scene.type(scene.props)).find(node=>node.type==='img');
+  assert.equal(image.props.src,'/galaxy/final-singularity-hd.webp');
+  callback([{isIntersecting:false}]);
+  assert.equal(elements(scene.type(scene.props)).filter(node=>node.type==='img').length,0);
+  cleanup();assert.equal(disconnected,true);
+});
+
 test('actual sector buttons have labels and independent level, boss, mini-game and trade callbacks',()=>{
-  const hits=[],Sector=component('./GalaxySector.tsx',{...locale,'./galaxyModel':model,'./GalaxyBossArt':{default:()=>null},'../components/BlockchainIcon':{default:()=>null}});
+  const hits=[],Sector=component('./GalaxySector.tsx',{...locale,'./galaxyModel':model,'./GalaxyBackdrop':{default:()=>null},'./GalaxyBossArt':{default:()=>null},'../components/BlockchainIcon':{default:()=>null}});
   const nodes=model.galaxyRegions.flatMap((_,region)=>elements(Sector({region,progress:model.emptyGalaxyProgress(),onSelect:value=>hits.push(value)})));
   const buttons=nodes.filter(node=>node.type==='button');
   assert.equal(buttons.length,660);

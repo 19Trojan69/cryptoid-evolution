@@ -1,0 +1,97 @@
+/* Cinematic scenery revision. HD images remain sharp and are loaded only near
+   the viewport. All station geometry and economic/data callbacks stay intact. */
+.galaxy-page {
+  background: #030616 url('/cards/space/unique/advanced-01.webp') center / cover no-repeat;
+}
+.galaxy-page::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(90deg, #030616b0, #03061630 35%, #03061630 65%, #030616b0);
+}
+.galaxy-scroll { background: transparent; }
+.galaxy-map-world { width: min(100%, 900px); }
+.galaxy-sector {
+  background: #050918; border: 0;
+}
+.galaxy-sector::after {
+  z-index: -1;
+  background: linear-gradient(90deg, #02061620, transparent 28%, #0308191c 50%, transparent 72%, #02061620);
+}
+.galaxy-backdrop { position: absolute; inset: 0; z-index: -3; overflow: hidden; pointer-events: none; }
+.galaxy-art-scene {
+  position: absolute; left: 0; right: 0;
+  mask-image: linear-gradient(transparent, #000 15%, #000 85%, transparent);
+  -webkit-mask-image: linear-gradient(transparent, #000 15%, #000 85%, transparent);
+}
+.galaxy-art-scene img {
+  display: block; width: 100%; height: 100%; object-fit: cover;
+  object-position: 50% 28%; opacity: .96; user-select: none;
+}
+.galaxy-art-scene[data-scene='singularity'] img { object-position: 66% 15%; }
+.galaxy-region-heading {
+  left: 12px; right: 12px; top: 14px;
+  background: linear-gradient(100deg, #070d22e6, #07102499, transparent);
+  border-left: 2px solid var(--galaxy-accent); border-radius: 2px;
+  box-shadow: none; padding: 12px 15px;
+}
+.galaxy-region-heading h2 { letter-spacing: 1.5px; font-weight: 500; }
+.galaxy-region-heading small { letter-spacing: 2.5px; }
+
+/* An energy stream with fine navigational light, without road edges or lane dashes. */
+.galaxy-route-aura { stroke: var(--galaxy-accent); stroke-width: 15; opacity: .07; }
+.galaxy-route-glow { stroke: var(--galaxy-accent); stroke-width: 5; opacity: .25; }
+.galaxy-route-line { stroke: #d6ebff; stroke-width: .9; opacity: .7; stroke-dasharray: none; }
+.galaxy-route-impulse {
+  stroke: #fff1ce; stroke-width: 2.3; stroke-dasharray: .8 48;
+  opacity: .95; animation: galaxy-stardrive 18s linear infinite;
+}
+@keyframes galaxy-stardrive { to { stroke-dashoffset: 195.2; } }
+.galaxy-level {
+  border-color: #c4dbf08f !important;
+  background: #071022e8 !important; color: #f3e9d5 !important;
+  box-shadow: inset 0 0 0 3px #101c344d, 0 0 0 3px #02081980, 0 0 15px #89c7ff1c;
+  font-weight: 500; font-size: 14px !important;
+}
+.galaxy-level::after {
+  content: ''; position: absolute; inset: -5px;
+  border: 1px solid #b8d7e334; border-radius: 50%; pointer-events: none;
+}
+.galaxy-level[data-completed=true] {
+  color: #ffe9b5 !important; background: #211c19ed !important;
+  border-color: #f2d39c !important;
+}
+.galaxy-level[aria-current=step] {
+  outline-color: #f9dda1; box-shadow: 0 0 25px #ebc57865;
+}
+.galaxy-mini-orbit {
+  background: radial-gradient(ellipse at center, #69e9f520, #020e1f 65%);
+  border-width: 1px; box-shadow: 0 0 0 4px #67f9ff12, 0 0 24px #3bb9ca50, inset 0 0 14px #69faff24;
+}
+.galaxy-mini-orbit::before {
+  content: ''; position: absolute; inset: -7px; border: 1px solid #82ffff35;
+  border-radius: 50%; transform: rotate(-30deg) scaleY(.76); pointer-events: none;
+}
+.galaxy-mini strong {
+  background: #031323ef; border-color: #75eaff75;
+  color: #c5ffff; letter-spacing: .7px; box-shadow: 0 3px 12px #0009;
+}
+.galaxy-mini small, .galaxy-boss small { text-shadow: 0 1px 4px #000, 0 0 6px #000; }
+.galaxy-boss-frame {
+  border-color: #d7b8929c; border-radius: 8px;
+  background: #060c1fe6;
+  box-shadow: 0 0 0 4px #080b1870, inset 0 0 20px #91b1d316, 0 5px 20px #0008;
+}
+.galaxy-boss strong { background: #030818e8; color: #f7ddb7; letter-spacing: .3px; }
+.galaxy-boss-frame i { background: #0d1325; border-color: #d7bb93; }
+.galaxy-trade {
+  border-radius: 8px !important; background: linear-gradient(115deg, #382a1cec, #0b1328f0) !important;
+  box-shadow: inset 0 1px #fde0a322, 0 6px 24px #0008;
+}
+.galaxy-toolbar { background: linear-gradient(120deg, #070e20f5, #13132af5); }
+.galaxy-navigation { background: #060c1cec; }
+.galaxy-intro { width: min(100%, 900px); background: linear-gradient(140deg, #17122af2, #061222f2); }
+
+@media (min-width: 701px) {
+  .galaxy-art-scene img { object-position: 50% 20%; }
+  .galaxy-art-scene[data-scene='singularity'] img { object-position: 65% 12%; }
+}
+@media (max-width: 360px) { .galaxy-mini strong { letter-spacing: .2px; } }

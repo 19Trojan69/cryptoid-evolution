@@ -11,6 +11,7 @@ import GalaxyInfoDialog from './GalaxyInfoDialog';
 import { emptyGalaxyProgress, galaxyPoint, galaxyShipPoint, galaxyRegions, type GalaxySelection } from './galaxyModel';
 import { MOTION_STORAGE_KEY } from './displaySettings';
 import './galaxyMap.css';
+import './galaxyArt.css';
 
 export default function GalaxyMap() {
   const { t } = useLocale();

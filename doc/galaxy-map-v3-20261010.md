@@ -18,8 +18,9 @@ durch zehn Regionen bis Level 500 oben. Alle 500 Levelnummern sind anklickbar.
 Handelsstationen haben unabhängige Zugänge. Auch bei Level 10 bleiben
 Levelnummer, Boss und Minispiel getrennt.
 
-Die gesamte HTML-V3-Referenz wurde analysiert. Ihre zehn eingebetteten
-Weltraumgrafiken werden als kleine JPG-Dateien wiederverwendet; Demonstrations-
+Die gesamte HTML-V3-Referenz wurde analysiert. Die zu stark komprimierten Prototypbilder wurden nach der visuellen
+Rückmeldung ersetzt: 100 sich überblendende Abschnitte verwenden 82 vorhandene
+HD-Weltraumgrafiken und eine neu erzeugte Singularitätsgrafik. Demonstrations-
 Freischaltungen und simulierte Siege wurden nicht übernommen. Die Spielfläche
 ist keine iframe-Integration. Nur die separate technische Layout-Prüfseite
 verwendet einen iframe, um die tatsächliche Route bei verschiedenen Breiten zu
@@ -85,7 +86,7 @@ Netztrennung und Zahlungsabwicklung werden wiederverwendet.
 
 | Prüfung | Ergebnis |
 | --- | --- |
-| Frontend-Tests einschließlich Kartentests | 285 bestanden; 14 gezielte Kartentests |
+| Frontend-Tests einschließlich Kartentests | 287 bestanden; 16 gezielte Kartentests |
 | Zahlungs-, Kauf-, Waffenbestands- und Gateway-Regressionsprüfungen | 16 bestanden; lokale isolierte Tests ohne Live-Buchungen |
 | Frontend-Produktionsbuild / TypeScript | Bestanden |
 | Backend-Build | Bestanden |
@@ -131,8 +132,8 @@ Schiffausbaustufen sind durch isolierte Adapter-/Komponententests abgedeckt;
 ein visueller Kontotest mit einem tatsächlich besiegten Boss bleibt offen.
 Live-Pi-Zahlungen wurden nicht ausgelöst. Der vorhandene große Hauptbundle
 verursacht weiterhin eine Vite-Größenwarnung; die Karte selbst wird separat
-geladen (rund 16 KB JavaScript und 15 KB CSS vor gzip, rund 408 KB für alle
-zehn Regionsgrafiken zusammen).
+geladen (rund 17 KB JavaScript und 16 KB CSS vor gzip; vorhandene HD-Grafiken werden
+wiederverwendet, die neue Singularitätsgrafik umfasst rund 401 KB).
 
 Die isolierten Vercel-Deployments können eine Vercel-Anmeldung erfordern.
 Die Verbindung konnte keinen temporären Freigabelink erzeugen (403/404).
@@ -145,7 +146,8 @@ Produktion bleibt von Marc Wolfs ausdrücklicher Freigabe abhängig.
 Neu: `GalaxyMap.tsx`, `GalaxySector.tsx`, `GalaxyInfoDialog.tsx`,
 `GalaxyBossArt.tsx`, `galaxyModel.ts`, `galaxyData.ts`, `useGalaxyData.ts`,
 `galaxyMap.css`, `galaxyEntry.css`, `galaxyMap.test.mjs`,
-`locales/galaxyMap.ts`, zehn `public/galaxy/region-*.jpg`,
+`locales/galaxyMap.ts`, `GalaxyBackdrop.tsx`, `galaxyScenery.ts`,
+`galaxyArt.css`, `public/galaxy/final-singularity-hd.webp`,
 `public/galaxy-layout-check.html` und dieser Bericht.
 
 Geändert: `Router.tsx`, `QuickAccessMenu.tsx`, `BlockchainIcon.tsx`,
@@ -156,3 +158,30 @@ Spielerdaten-Datei wurde geändert.
 Die fertige Vorschauadresse und der Pull Request sind im Abschlussbericht
 des Arbeitsauftrags verlinkt. Die technische Layout-Prüfseite ist unter
 `/galaxy-layout-check.html` derselben isolierten Vorschau erreichbar.
+
+## Visuelle Überarbeitung nach Rückmeldung
+
+Die Ablehnung der ersten Gestaltung wurde berücksichtigt. Die einfachen
+CSS-Planeten, Ringellipsen, Polygonwracks und Quadratstationen sind entfernt.
+Die zehn stark komprimierten Prototyp-JPGs sind nicht mehr Teil der Integration.
+Jede Region besitzt zehn überblendete Foto-/Matte-Painting-Abschnitte mit
+detaillierten Planeten, Ringsystemen, Sternennebeln, Asteroiden und kosmischen
+Anomalien. Alle Quellen haben 1024 × 1536 Pixel; die Bilder werden nicht mehr
+über die gesamte Regionshöhe gestreckt. Die Galerie nutzt unterschiedliche
+Motive für alle zehn Regionen, bis zur neu gestalteten finalen Singularität.
+
+Die Straße mit schwarzer Einfassung und gestrichelter Mittellinie wurde durch
+eine feine leuchtende Navigationslinie mit transparentem Energiesaum und
+wandernden Lichtimpulsen ersetzt. Die Kurven sind weiter und variieren je
+Region. Die Stationsgeometrie behält separate Boss-/Minispielzugänge.
+
+Jeder Bildabschnitt lädt erst in der Nähe des sichtbaren Ausschnitts; außerhalb
+werden seine Bildelemente entfernt. Im Browsercache dürfen die Dateien für
+eine schnelle Rückkehr verbleiben. Es werden keine unscharfen oder großflächig
+gefilterten Bildkopien animiert. Die zusätzliche Singularitätsgrafik wurde mit
+dem eingebauten Imagegen-Werkzeug erzeugt und als WebP für das Spiel gespeichert.
+Motiv und Prompt sind in `doc/galaxy-art-prompts.md` dokumentiert.
+
+Die beiden ergänzten automatisierten Tests prüfen vollständige Bildquellen
+und das tatsächliche Nachladen/Freigeben der Bildkomponenten. Shop-, Zahlungs-,
+Fortschritts- und Spielerdaten-Code wurden in dieser Überarbeitung nicht geändert.

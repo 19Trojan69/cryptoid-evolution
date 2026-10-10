@@ -23,7 +23,7 @@ export const galaxyStations: readonly (readonly GalaxyStation[])[] = galaxyRegio
     const y = cursor + height / 2;
     cursor += height;
     // Separate ports need a centred junction, with generous mobile hit targets.
-    const x = mini ? 50 : 50 + Math.sin(level * .31) * 23;
+    const x = mini ? 50 : 50 + Math.sin(level * .19 + region * .73) * 25;
     const boss = level % 10 === 0 ? bossManifest[level / 10 - 1] : undefined;
     return { level, x: Math.round(x * 100) / 100, y, mini, trade, boss, name: boss ? bossName(boss.id) : undefined };
   });
