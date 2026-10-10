@@ -91,6 +91,9 @@
 .quick-access-direct .blockchain-icon { width: 28px; height: 28px; flex: none; }
 .quick-access-direct strong { flex: 1; min-width: 0; }
 .quick-access-direct i { font-style: normal; }
+.quick-access-panel .quick-access-heading .close-button { width: 48px; height: 48px; min-width: 48px; min-height: 48px; }
+.cinematic-home .cinematic-footer button { min-height: 48px; }
+.landing-shell .shop-modal :is(.ship-earnings,.ship-rules,.ship-configuration-details,.leaderboard-explanation,.leader-record-details) summary { min-height: 48px; }
 .fleet-toolbar { display: grid; gap: 8px; margin: 12px 0 16px; }
 .fleet-toolbar label { display: grid; gap: 7px; font-size: 13px; color: var(--menu-muted); }
 .fleet-toolbar input { width: 100%; min-height: 48px; padding: 10px 12px; border: 1px solid var(--menu-border); border-radius: var(--menu-radius); }
@@ -126,7 +129,8 @@
 }
 .pilot-profile.metallic-dialog button[aria-pressed="true"],.language-picker.metallic-dialog button[aria-pressed="true"] { border-color: var(--menu-gold); background: #3c392c; color: #ffebc3; }
 .pilot-profile.metallic-dialog .pilot-avatar { border-color: var(--menu-gold); }
-.mission-weapon-card .mission-select,.mission-weapon-card .mission-pickup-select,.mission-shop-footer button.mission-refresh,.mission-shop-footer button.mission-return { min-height: 48px; }
+.mission-weapon-card button.mission-select,.mission-weapon-card button.mission-pickup-select,.mission-shop-footer button.mission-refresh,.mission-shop-footer button.mission-return { min-height: 48px; }
+.mission-shop-footer button.mission-refresh { width: 48px; min-width: 48px; }
 .mission-weapon-shop .mission-locked { margin: 0 12px 12px; padding: 0; }
 .mission-weapon-shop .mission-reload-explanation { margin-bottom: 12px; }
 .mission-reload-explanation p { font-size: 13px; color: var(--menu-muted); }

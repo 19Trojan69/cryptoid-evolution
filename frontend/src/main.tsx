@@ -11,9 +11,9 @@ import './hudDepth.css'
 import './locales/typography.css'
 import './selectionControls.css'
 import './fleetMenus.css'
-import './smartphoneUi.css'
 import App from './App.tsx'
 import { startAggregateUsage } from './lib/aggregateUsage'
+import './smartphoneUi.css'
 
 void startAggregateUsage();
 

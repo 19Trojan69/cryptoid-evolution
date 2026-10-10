@@ -29,9 +29,11 @@
   size.addEventListener('change',resize);route.addEventListener('change',()=>{frame.src=route.value;});document.querySelector('#reload').addEventListener('click',()=>{frame.src=route.value;});
   document.querySelector('#measure').addEventListener('click',()=>{
     try{const doc=frame.contentDocument,win=frame.contentWindow;
-      const buttons=Array.from(doc.querySelectorAll('button,summary,a.collection-download')).map(e=>({element:e,rect:e.getBoundingClientRect()})).filter(({element,rect})=>rect.width>0&&rect.height>0&&rect.bottom>0&&rect.top<win.innerHeight&&win.getComputedStyle(element).visibility!=='hidden');
+      const panels=Array.from(doc.querySelectorAll('dialog[open],[role="dialog"][aria-modal="true"]')).filter(e=>e.getClientRects().length);
+      const scope=panels.at(-1)||doc;
+      const buttons=Array.from(scope.querySelectorAll('button,summary,a.collection-download')).map(e=>({element:e,rect:e.getBoundingClientRect()})).filter(({element,rect})=>rect.width>0&&rect.height>0&&rect.bottom>0&&rect.top<win.innerHeight&&win.getComputedStyle(element).visibility!=='hidden');
       const small=buttons.filter(({rect})=>rect.width<47.5||rect.height<47.5).map(({element,rect})=>({label:element.getAttribute('aria-label')||element.textContent.trim().slice(0,100),width:Math.round(rect.width*10)/10,height:Math.round(rect.height*10)/10}));
-      result.textContent=JSON.stringify({path:win.location.pathname,viewport:{width:win.innerWidth,height:win.innerHeight},documentWidth:doc.documentElement.scrollWidth,horizontalOverflow:doc.documentElement.scrollWidth>win.innerWidth,visibleControls:buttons.length,controlsBelow48px:small,dialogs:Array.from(doc.querySelectorAll('dialog[open],[role="dialog"][aria-modal="true"]')).map(e=>({class:e.className,width:Math.round(e.getBoundingClientRect().width),height:Math.round(e.getBoundingClientRect().height)}))},null,2);
+      result.textContent=JSON.stringify({path:win.location.pathname,viewport:{width:win.innerWidth,height:win.innerHeight},documentWidth:doc.documentElement.scrollWidth,horizontalOverflow:doc.documentElement.scrollWidth>win.innerWidth,scope:scope===doc?'page':'top dialog',visibleControls:buttons.length,controlsBelow48px:small,dialogs:panels.map(e=>({class:e.className,width:Math.round(e.getBoundingClientRect().width),height:Math.round(e.getBoundingClientRect().height)}))},null,2);
     }catch{result.textContent='Diese Ansicht lässt sich nicht messen. Bitte erneut laden.';}
   });resize();
 </script>
