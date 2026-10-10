@@ -35,8 +35,16 @@ export default function GalaxyMap() {
   };
   useEffect(() => {
     // Always begin the first view at Level 1. No progress value is changed.
+    const htmlOverflow = document.documentElement.style.overflow;
+    const bodyOverflow = document.body.style.overflow;
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
     const element = scroll.current;
     if (element) element.scrollTop = galaxyPoint(1).mapY - element.clientHeight * .55;
+    return () => {
+      document.documentElement.style.overflow = htmlOverflow;
+      document.body.style.overflow = bodyOverflow;
+    };
   }, []);
   useEffect(() => {
     if (status !== 'ready') return;

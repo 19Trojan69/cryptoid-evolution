@@ -157,3 +157,40 @@ test('all 19 selectable languages translate every new map string and retain thei
     }
   }
 });
+
+test('actual ship flight only reflects a new adjacent confirmed stage and never writes progress',()=>{
+  let cursor=0,refIndex=0;
+  const hooks=[],pending=[],flights=[],scrollCalls=[];
+  const scroll={clientHeight:700,scrollTop:0,scrollTo:options=>scrollCalls.push(options)};
+  const ship={parentElement:{clientWidth:390},animate:(frames,options)=>{flights.push({frames,options});return {cancel(){}};}};
+  let data={snapshot:{...emptyGalaxySnapshot(),progress:{currentLevel:11,completedLevel:10,bossWins:{1:1}}},status:'ready',refresh:()=>{}};
+  const original=JSON.stringify(data.snapshot);
+  const doc={documentElement:{dataset:{motion:'standard'},style:{overflow:'auto'}},body:{style:{overflow:''}}};
+  const Map=component('./GalaxyMap.tsx',{
+    ...locale,
+    react:{useCallback:fn=>fn,useState:initial=>{const id=cursor++;return hooks[id]??(hooks[id]=[typeof initial==='function'?initial():initial,()=>{}]);},useRef:initial=>{const id=cursor++,target=refIndex++;return hooks[id]??(hooks[id]={current:target===0?scroll:target===1?ship:initial});},useEffect:(fn,deps)=>{const id=cursor++,before=hooks[id];if(!before||deps.some((value,i)=>value!==before.deps[i]))pending.push(()=>{before?.cleanup?.();hooks[id]={deps,cleanup:fn()};});}},
+    'react-router-dom':{useLocation:()=>({state:null}),useNavigate:()=>()=>{}},
+    '../components/BlockchainIcon':{default:()=>null},'./ShipPortrait':{default:()=>null},
+    './GalaxySector':{default:()=>null},'./GalaxyInfoDialog':{default:()=>null},
+    './useGalaxyData':{default:()=>data},'./galaxyModel':model,'./displaySettings':{MOTION_STORAGE_KEY:'motion'},
+    './shipFleet':{shipSaveNetwork:'testnet',playerSkins:[{id:'grey-scout',name:'Grey Scout',sprite:1}],allPlayerColors:[{id:'grey',name:'Grey'}]},
+    './shipEvolution':{ownedShipStage:()=>1,shipEvolutionAsset:()=>'/existing.png'},
+  },{document:doc,localStorage:{getItem:()=>null},window:{matchMedia:()=>({matches:false})}});
+  const render=()=>{cursor=0;refIndex=0;const nodes=elements(Map());pending.splice(0).forEach(fn=>fn());return nodes;};
+  let nodes=render();assert.equal(flights.length,0);assert.equal(JSON.stringify(data.snapshot),original);
+  const player=nodes.find(node=>node.props.className==='galaxy-player');assert.equal(player.props['data-player-level'],11);
+  nodes.find(node=>node.type==='button'&&text(node)==='Zu meiner Position').props.onClick();
+  assert.equal(scrollCalls[0].top,model.galaxyPoint(11).mapY-385);
+  data={...data,snapshot:{...data.snapshot,progress:{...data.snapshot.progress,currentLevel:12,completedLevel:11}}};
+  render();assert.equal(flights.length,1);assert.equal(flights[0].options.duration,850);
+  render();assert.equal(flights.length,1);
+  data={...data,snapshot:{...data.snapshot,progress:{...data.snapshot.progress,currentLevel:180,completedLevel:179}}};
+  render();assert.equal(flights.length,1);
+  doc.documentElement.dataset.motion='reduced';
+  data={...data,snapshot:{...data.snapshot,progress:{...data.snapshot.progress,currentLevel:181,completedLevel:180}}};
+  render();assert.equal(flights.length,1);
+  assert.equal(data.snapshot.progress.completedLevel,180);
+  assert.equal(doc.documentElement.style.overflow,'hidden');
+  hooks.forEach(hook=>hook?.cleanup?.());
+  assert.equal(doc.documentElement.style.overflow,'auto');assert.equal(doc.body.style.overflow,'');
+});
