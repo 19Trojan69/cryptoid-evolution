@@ -1,5 +1,5 @@
 import { allPlayerColors, type PlayerColorId } from './shipFleet';
-import { tintShipPixels } from './shipTint';
+import { paintShipMaterial } from './shipMaterial';
 import { namedShipAccent, namedShipColor } from './shipIdentityColor';
 import { loadCardImage } from './bossArtwork';
 
@@ -20,7 +20,7 @@ export function loadShipArtwork(src: string, color?: PlayerColorId): Promise<HTM
     const sprite = Number(src.match(/ship_(\d+)_stage/)?.[1]) - 1;
     const identity = color ?? namedShipColor(sprite);
     const paintHex = allPlayerColors.find(color => color.id === identity)?.glow;
-    if (paintHex) { tintShipPixels(data, [1,3,5].map(offset => parseInt(paintHex.slice(offset, offset+2),16)), namedShipAccent(sprite)); context.putImageData(pixels, 0, 0); }
+    if (paintHex) { paintShipMaterial(data, source.width, source.height, [1,3,5].map(offset => parseInt(paintHex.slice(offset, offset+2),16)), namedShipAccent(sprite)); context.putImageData(pixels, 0, 0); }
     let left = source.width, top = source.height, right = -1, bottom = -1;
     for (let y = 0; y < source.height; y++) for (let x = 0; x < source.width; x++) {
       if (data[(y * source.width + x) * 4 + 3] >= 5) {

@@ -22,7 +22,7 @@ import BlockchainProgress from "./BlockchainProgress";
 import { gameHaptics } from "./gameHaptics";
 import { advanceShipMotion, idleShipMotion, engineFlamePercent, explosionDiameter, fragmentFlight, hullIllumination, type ShipMotion } from "./shipRealism";
 import { useLocale } from "../i18n";
-import { memo, useCallback, useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
 import { entryPatternForSector, entryPosition, entryStartX, type EntryPattern } from "./entryPatterns";
@@ -48,7 +48,10 @@ import { MusicPlayer, takeHandoffGameMusic } from "./musicPlayback";
 import SystemSettings from "./SystemSettings";
 import { applySavedDisplaySettings } from './displaySettings';
 import MissionWeaponShop from './MissionWeaponShop';
+import useModalNavigation from '../hooks/useModalNavigation';
+import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "../lib/localRecordKeys";
 import './weaponSelection.css';
+import './equipmentEdge.css';
 import { axiosClient } from "../lib/axiosClient";
 import { accountSelection, createSaveQueue, loadAccountSave, localInventory, mutateAccountInventory, retrySave, snapshotOf, type AccountSave, type Snapshot } from "../lib/accountSave";
 import axios from "axios";
@@ -71,9 +74,6 @@ import { bossWeapons } from './bossWeapons';
 import { bossEscortAttackInterval, bossEscortCount, bossEscortReinforcements, bossEscortRosterIndex, bossEscortSlots, reactorEscortCount, advanceEscortReserve } from "./bossEscorts";
 import { awardBlock, awardBonusMedal, awardBossSticker, awardChain, emptyRewardProgress, reachLevel, rewardRank, type RewardProgress } from "./rewardProgress";
 
-const BEST_SCORE_KEY = "cryptoid_best_score_v2";
-const HIGHEST_SECTOR_KEY = "cryptoid_highest_sector";
-const TOTAL_DESTROYED_KEY = "cryptoid_total_destroyed";
 const RETURN_DURATION_MS = 3_500;
 const IMPACT_COOLDOWN_MS = 1_500;
 const GAME_OVER_REVEAL_MS = 1_750;
@@ -351,7 +351,9 @@ const fallingBoss = (effect: Effect) => <div className="boss-falling-hull" style
 const ImpactEffectView = memo(({ effect }: { effect: Effect }) => effect.kind === "boss-fall" ? fallingBoss(effect) : <div className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y, ...(["explosion", "shatter", "player-explosion"].includes(effect.kind) ? { width: explosionDiameter(effect.debrisSize ?? 58), height: explosionDiameter(effect.debrisSize ?? 58), marginLeft: -explosionDiameter(effect.debrisSize ?? 58) / 2, marginTop: -explosionDiameter(effect.debrisSize ?? 58) / 2 } : {}), ...(effect.kind === "boss-explosion" ? { "--boss-explosion-size": `${effect.debrisSize ?? 240}px`, "--boss-image": `url('${effect.bossImage}')`, "--boss-final-delay": `${effect.finalDelayMs ?? 1_450}ms` } : {}) } as CSSProperties} aria-hidden="true">{effect.kind !== "boss-explosion" && <span />}{shipDebris(effect)}</div>);
 
 const GamePage = () => {
-  const { t, lives } = useLocale();
+  const { t, lives, locale } = useLocale();
+  const compactNumber = useMemo(() => new Intl.NumberFormat(locale, { notation: "compact", maximumFractionDigits: 1 }), [locale]);
+  const hudNumber = (value: number) => value < 1_000_000 ? String(value) : compactNumber.format(value);
   useEffect(applySavedDisplaySettings, []);
   const navigate = useNavigate();
   const fieldRef = useRef<HTMLDivElement>(null);
@@ -732,6 +734,7 @@ const GamePage = () => {
       const fieldBounds = field.getBoundingClientRect();
       fieldSizeRef.current = { width: field.clientWidth || 800, height: field.clientHeight || 600 };
       visibleTopRef.current = Math.max(0, hud.getBoundingClientRect().bottom - fieldBounds.top);
+      field.style.setProperty("--hud-bottom", `${visibleTopRef.current}px`);
       const playerWidth = playerShipRef.current?.clientWidth;
       if (playerWidth) setPlayerDisplayDiameter(playerWidth);
     };
@@ -1692,6 +1695,16 @@ const GamePage = () => {
   const weaponNames = ["", t("Standard"), t("Twin"), t("Rapid"), t("Triple"), t("Plasma")];
   const weaponGlyphs = ["", "I", "II", "III", "IV", "V"];
   const resumeWeaponSelection = () => { setWeaponMenuOpen(false); setWeaponCountdown(3); };
+  const closeHomePrompt = () => {
+    setHomePrompt(false);
+    if (homePromptWasPlayingRef.current) resumeWeaponSelection();
+  };
+  const pauseVisible = game.status === "paused" && !rewardCards.length && !weaponMenuOpen && weaponCountdown === null;
+  useModalNavigation(homePrompt ? "leave" : weaponMenuOpen ? "weapons" : pauseVisible ? "pause" : null, () => {
+    if (pauseLeaving || saveRetrying || weaponBusy || activationRef.current) return;
+    if (homePrompt) closeHomePrompt();
+    else resumeWeaponSelection();
+  });
   const openWeaponSelection = () => {
     if (stateRef.current.status !== 'playing' && stateRef.current.status !== 'paused') return;
     stateRef.current.status = 'paused';
@@ -1875,6 +1888,8 @@ const GamePage = () => {
   const totalShards = missionShardTotal(game.shardBase, game.shards);
   const levelLabel = String(campaignLevel(game.sector));
   const sectorLabel = sectorInChapter(game.sector);
+  // Show the active block during formations; the completed chain remains 9/9 at the boss/bonus.
+  const hudBlock = game.encounter === "normal" ? sectorLabel : game.chainBlocks;
   const round = sectionInSector(game.section);
   const levelComplete = game.encounter === "bonus" && game.phase === "SECTOR_CLEAR";
   const reinforcementIntro = game.encounter === "normal" && game.phase === "SECTOR_INTRO" && flightRef.current > 0;
@@ -1933,9 +1948,9 @@ const GamePage = () => {
         musicRef.current?.pause(); void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); setHomePrompt(true); }} aria-label={t("Go home")}><CockpitIcon kind="home" /></button></div>
           <div className={`hud-stat hearts-stat${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " hearts-stat-hit" : ""}`}><span className="hud-heart-label" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.2 3.4 13.1C-1.1 8.8 5.3 1.7 10.2 5.9L12 7.5l1.8-1.6c4.9-4.2 11.3 2.9 6.8 7.2L12 21.2Z" /></svg></span><strong className="hearts" role="status" aria-live="polite" aria-label={lives(game.hearts)}>/{game.hearts}</strong></div>
           <div className="hud-stat game-level-hud" aria-label={`${t("Game level")} ${levelLabel}`}><span>{t("Level")}</span><strong>{levelLabel}</strong></div>
-          <div className="hud-stat score-hud" aria-label={`${t("Shards")} ${totalShards}, ${t("Score")} ${game.score}`}><span className="shard-line"><b>◆ {totalShards}</b><small>{t("Shards")}</small></span><span className="score-line"><b>{game.score}</b><small>{t("Score")}</small></span></div>
-          <div className="hud-stat round-hud chain-hud" aria-label={`${t("Block")} ${game.chainBlocks}/${BLOCKS_PER_CHAIN}`}><span>{t("Block")}</span><strong>{game.chainBlocks}<small>/{BLOCKS_PER_CHAIN}</small></strong></div>
-          <button className="game-control pause-control" type="button" disabled={weaponBusy || rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || pauseLeaving || game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { if (pauseLeaveRef.current) return; const resuming = game.status === "paused"; stateRef.current.status = resuming ? "playing" : "paused"; if (!resuming) { musicRef.current?.pause(); void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); } setGame({ ...stateRef.current }); if (resuming) retryAudio(); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
+          <div className="hud-stat score-hud" aria-label={`${t("Shards")} ${totalShards}, ${t("Score")} ${game.score}`}><span className="shard-line"><b title={String(totalShards)}>◆ {hudNumber(totalShards)}</b><small>{t("Shards")}</small></span><span className="score-line"><b title={String(game.score)}>{hudNumber(game.score)}</b><small>{t("Score")}</small></span></div>
+          <div className="hud-stat round-hud chain-hud" aria-label={`${t("Block")} ${hudBlock}/${BLOCKS_PER_CHAIN}`}><span>{t("Block")}</span><strong>{hudBlock}<small>/{BLOCKS_PER_CHAIN}</small></strong></div>
+          <button className="game-control pause-control" type="button" disabled={weaponBusy || rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || pauseLeaving || game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { if (pauseLeaveRef.current) return; if (game.status === "paused") { resumeWeaponSelection(); return; } stateRef.current.status = "paused"; musicRef.current?.pause(); void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
         </header>
         <div className="game-label">{adminRunRef.current && <strong>{t("Admin center")} · </strong>}{t("LEVEL")} {levelLabel} <span>· <strong className="game-region-name">{sectorName(game.sector)}</strong> · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/${BLOCKS_PER_CHAIN}` : game.encounter === "bonus" ? t("BONUS CHALLENGE") : t("CORE WARDEN")}</span></div>
         {game.encounter === "normal" && <span className="flight-indicator" style={{ top: visibleTopRef.current + 25 }}>{t("Group {current}/{total}", { current: flightRef.current + 1, total: blockFlights(game.sector, rulesVersionRef.current).length })}</span>}
@@ -2014,7 +2029,7 @@ const GamePage = () => {
                   <span className="mission-access-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="currentColor"><path d="M7 10 9 16 7 29 5 16ZM16 1 18.5 9 16 29 13.5 9ZM25 10 27 16 25 29 23 16Z" /></svg></span>
                   <span className="mission-access-label">{t('Weapons')}</span>
                 </button>
-                <span className="mission-active-weapon">{weaponNames[stageWeaponLevel(shipStage, game.weaponLevel)]}{game.weaponSource !== 'standard' && <> · {Math.ceil((game.weaponSource === 'paid' ? game.paidWeaponMs : game.pickupWeaponMs) / 1000)}s</>}</span>
+                <span className="mission-active-weapon"><b>{weaponNames[stageWeaponLevel(shipStage, game.weaponLevel)]}</b>{game.weaponSource !== 'standard' && <small>{Math.ceil((game.weaponSource === 'paid' ? game.paidWeaponMs : game.pickupWeaponMs) / 1000)}s</small>}</span>
                 {game.weaponSource !== 'standard' && <progress className="mission-charge-progress" aria-label={t('Remaining time')} max={game.weaponSource === 'paid' ? PURCHASED_WEAPON_DURATION_MS : PICKUP_WEAPON_DURATION_MS} value={game.weaponSource === 'paid' ? game.paidWeaponMs : game.pickupWeaponMs} />}
               </div>
               {game.weaponSource !== "pickup" && game.pickupWeaponMs > 0 && <div className="weapon-slot weapon-slot-reserve" data-source="pickup"><TimedRing remainingMs={game.pickupWeaponMs} durationMs={PICKUP_WEAPON_DURATION_MS} /><button type="button" className="edge-action edge-action-weapon weapon-cycle" disabled={game.status !== "playing"} onClick={openWeaponSelection} aria-label={`${t("Select")}: ${weaponNames[stageWeaponLevel(shipStage, game.pickupWeaponLevel)]}`}><span className="weapon-cycle-glyph" aria-hidden="true">{weaponGlyphs[stageWeaponLevel(shipStage, game.pickupWeaponLevel)]}</span><small>{weaponNames[stageWeaponLevel(shipStage, game.pickupWeaponLevel)]}</small></button></div>}
@@ -2042,7 +2057,7 @@ const GamePage = () => {
         {autoReloading !== null && <div className="weapon-reloading" role="status" aria-live="polite">{t('Reloading weapon…')} · {weaponNames[autoReloading]}</div>}
         {weaponError && !weaponMenuOpen && <div className="weapon-reload-error" role="alert">{t(weaponError)}</div>}
         {weaponCountdown !== null && <div className="game-overlay weapon-resume-countdown" role="status" aria-live="polite"><strong>{weaponCountdown}</strong></div>}
-        {game.status === "paused" && !rewardCards.length && !weaponMenuOpen && weaponCountdown === null && <div className="game-overlay pause-settings-overlay" role="dialog" aria-modal="true" aria-labelledby="pause-settings-title"><div className="game-modal pause-settings-modal">
+        {pauseVisible && !homePrompt && <div className="game-overlay pause-settings-overlay" role="dialog" aria-modal="true" aria-labelledby="pause-settings-title"><div className="game-modal pause-settings-modal">
           <p className="eyebrow" id="pause-settings-title">{t('MISSION PAUSED')}</p><h1><span className="desktop-menu-only">{t('Hold the line.')}</span><span className="mobile-menu-only">{t('A short breather.')}</span></h1><p><span className="desktop-menu-only">{t('The asteroids are waiting.')}</span><span className="mobile-menu-only">{t("Level")} {levelLabel} · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/9` : game.encounter === "bonus" ? t("Bonus round") : t("Boss")} · {sectorName(game.sector)}</span></p>
           {accountRun && saveNotice && <section className="pause-save-status" aria-label={t("Account save")}>
             <h2>{t("Account save")}</h2><p role="status">{t(saveNotice)}</p>
@@ -2051,11 +2066,11 @@ const GamePage = () => {
             <button className="button button-secondary" type="button" disabled={saveRetrying || pauseLeaving} onClick={() => { void leaveSavedMission(); }}>{pauseLeaving ? t("Checking save…") : t("Go home")}</button>
           </section>}
           <button className="button button-secondary pause-weapon-shop-button" type="button" disabled={pauseLeaving || saveRetrying} onClick={openWeaponSelection}>{t('Shop & weapons')}</button>
-          <h2 className="pause-system-title">{t("SYSTEM / SETTINGS")}</h2><SystemSettings compactMobile idPrefix="pause" musicVolume={musicVolume} effectsVolume={effectsVolume} changeMusicVolume={changeMusicVolume} changeEffectsVolume={changeEffectsVolume} onChange={() => { pointerRef.current = null; touchOriginRef.current = null; setGame({ ...stateRef.current }); }} /><button className="button button-primary pause-resume-button" type="button" disabled={pauseLeaving} onClick={() => { if (pauseLeaveRef.current) return; stateRef.current.status = "playing"; pointerRef.current = null; touchOriginRef.current = null; setGame({ ...stateRef.current }); retryAudio(); }}>{t("Resume")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button>
+          <h2 className="pause-system-title">{t("SYSTEM / SETTINGS")}</h2><SystemSettings compactMobile idPrefix="pause" musicVolume={musicVolume} effectsVolume={effectsVolume} changeMusicVolume={changeMusicVolume} changeEffectsVolume={changeEffectsVolume} onChange={() => { pointerRef.current = null; touchOriginRef.current = null; setGame({ ...stateRef.current }); }} /><button className="button button-primary pause-resume-button" type="button" disabled={pauseLeaving} onClick={() => { if (!pauseLeaveRef.current) resumeWeaponSelection(); }}>{t("Resume")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button>
         </div></div>}
         {game.status === "game-over" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><h1>{t("Game Over")}</h1><div className="game-over-details"><p className="eyebrow">{t("MISSION FAILED")}</p><p className="game-over-hearts">{t('Hearts')}: {game.hearts}</p><div className="game-over-stats"><span><b>{game.score}</b>{t('Score')}</span><span><b>{game.destroyed}</b>{t('Destroyed')}</span><span><b>{game.sector}</b>{t('Sector')}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSyncStatus}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t('Home')}</button></div></div></div></div>}
         {game.status === "victory" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><p className="eyebrow">{t("CAMPAIGN COMPLETE")}</p><h1>{t("Victory")}</h1><div className="game-over-details"><p>{t("You completed the final bonus challenge.")}</p><div className="game-over-stats"><span><b>{game.score}</b>{t("Score")}</span><span><b>{game.destroyed}</b>{t("Destroyed")}</span><span><b>{game.sector}</b>{t("Sector")}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSyncStatus}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t("Home")}</button></div></div></div></div>}
-        {homePrompt && <div className="game-overlay"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2>{t('Return to base?')}</h2><p>{accountRun ? t("Your enemies, remaining groups, lives, weapons and earned rewards are saved so you can continue this fight.") : t('Your current mission will end. Your records will be saved locally.')}</p>{accountRun && <p role="status">{t(saveNotice)}</p>}<div className="modal-actions"><button className="button button-primary" type="button" disabled={pauseLeaving || saveRetrying} onClick={() => { if (accountRun) void leaveSavedMission(); else goHome(); }}>{pauseLeaving ? t("Saving game…") : t('Leave game')}</button><button className="button button-secondary" type="button" disabled={pauseLeaving} onClick={() => { setHomePrompt(false); if (homePromptWasPlayingRef.current) { stateRef.current.status = "playing"; setGame({ ...stateRef.current }); retryAudio(); } }}>{t('Keep playing')}</button></div></div></div>}
+        {homePrompt && <div className="game-overlay" role="dialog" aria-modal="true" aria-labelledby="leave-mission-title"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2 id="leave-mission-title">{t('Return to base?')}</h2><p>{accountRun ? t("Your enemies, remaining groups, lives, weapons and earned rewards are saved so you can continue this fight.") : t('Your current mission will end. Your records will be saved locally.')}</p>{accountRun && <p role="status">{t(saveNotice)}</p>}<div className="modal-actions"><button className="button button-primary" type="button" disabled={pauseLeaving || saveRetrying} onClick={() => { if (accountRun) void leaveSavedMission(); else goHome(); }}>{pauseLeaving ? t("Saving game…") : t('Leave game')}</button><button className="button button-secondary" type="button" disabled={pauseLeaving} onClick={closeHomePrompt}>{t('Keep playing')}</button></div></div></div>}
       </div>
     </main>
   );

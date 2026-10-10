@@ -77,3 +77,65 @@
 .feedback-hub button { min-height:44px; }.feedback-post { background:linear-gradient(145deg,#1c2e45,#101c31);border:1px solid #71899c6b;border-radius:12px;box-shadow:inset 0 1px #cfdae82f,0 6px 14px #0004;padding:16px; }.feedback-profile-link { color:#9fe1ed;background:transparent;border:0;padding:0;min-height:32px; }
 .feedback-votes { display:flex;flex-wrap:wrap;gap:8px; }.feedback-votes button { border:1px solid #6488a0;border-radius:9px;background:linear-gradient(#263c53,#17273e);padding:10px; }.feedback-votes button[aria-pressed="true"] { border-color:#ead196;color:#f4d99f; }
 .developer-reply { margin-top:14px;border-left:3px solid #d8bd7e;border-radius:0 9px 9px 0;padding:14px;background:#3b324444; }.developer-reply b { display:block;color:#f0d392; }.developer-reply small { display:block;color:#b8d2e1;margin-top:6px; }
+
+/* A single prominent profile entry beneath the signed-in name. */
+.landing-shell .header-account { border:1px solid #d8bb7c8c; border-radius:10px; background:linear-gradient(145deg,#293951,#122338); padding:9px 10px; cursor:pointer; }
+.landing-shell .header-account-copy b { white-space:normal; overflow-wrap:anywhere; text-overflow:clip; line-height:1.2; }
+.header-profile-label { display:flex;align-items:center;justify-content:space-between;gap:5px;width:100%;margin-top:3px;padding:5px 7px;border-radius:5px;background:linear-gradient(110deg,#e6ce93,#bba36c);color:#142238;font-size:12px;font-weight:800;line-height:1.25;white-space:normal; }
+.header-profile-label i { font-style:normal;font-size:18px; }
+.landing-shell .header-account:hover { border-color:#ffe1a1; background:linear-gradient(145deg,#35455d,#182c44); }
+.landing-shell .header-account:focus-visible { outline:2px solid #ffe1a1;outline-offset:3px; }
+@media(max-width:600px) { .landing-shell .header-account { padding:6px; } .header-profile-label { font-size:10px;padding:4px; } }
+
+/* One hull preview with compact version switches and nearby actions. */
+.landing-shell .ship-compact-configuration { gap:12px;min-width:0; }
+.ship-version-tabs { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px; }
+.ship-version-tabs button { display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:0;min-height:54px;padding:7px 5px;border:1px solid #6e829969;border-radius:8px;background:linear-gradient(#263851,#132237);color:#cbdce8;cursor:pointer; }
+.ship-version-tabs strong { font:700 clamp(10px,2.8vw,13px)/1.2 'Oxanium',sans-serif; }
+.ship-version-tabs small { font-size:11px;line-height:1.2; }
+.ship-version-tabs button[aria-pressed="true"] { border-color:#e5c78a;color:#ffe5b4;background:linear-gradient(#485268,#29374c);box-shadow:inset 0 2px #f8e3b166,0 2px 5px #0007; }
+.ship-version-tabs button:focus-visible { outline:2px solid #b9eef1;outline-offset:2px; }
+.landing-shell .ship-compact-configuration .ship-one-hero { display:grid;grid-template-columns:minmax(125px,.9fr) minmax(0,1.1fr);gap:12px;padding:12px;min-height:0; }
+.ship-compact-configuration .ship-one-info { grid-column:1 / -1;flex-direction:row;align-items:center;justify-content:space-between;gap:8px; }
+.ship-compact-configuration .ship-one-info h3 { overflow-wrap:anywhere; }
+.ship-compact-configuration .ship-one-info strong { flex-shrink:0; }
+.landing-shell .ship-compact-configuration .ship-one-art-wrap { grid-column:1;grid-row:2 / 4;min-height:180px;align-self:center; }
+.landing-shell .ship-compact-configuration .ship-one-art-frame { width:min(100%,190px);height:auto;aspect-ratio:1; }
+.ship-compact-configuration .ship-one-colors { grid-column:2;align-self:start;padding:8px;gap:7px;min-width:0; }
+.ship-compact-configuration .ship-one-colors-heading { align-items:flex-start;flex-direction:column;gap:4px; }
+.ship-compact-configuration .ship-one-colors-heading span { white-space:normal;overflow:visible; }
+.ship-compact-configuration .ship-color-dots { gap:8px; }
+.ship-compact-configuration .ship-color-dots button { position:relative;flex:0 0 48px;width:48px;min-width:48px;height:48px;min-height:48px;padding:0;border-radius:9px;border-width:1px;touch-action:manipulation; }
+.ship-color-dots button span { display:block;color:#fff;font-size:21px;text-shadow:0 1px 3px #000; }
+.ship-color-dots button[data-owned="true"]::after { content:"";position:absolute;bottom:3px;right:3px;width:4px;height:4px;background:#d2ffe9;border-radius:50%;box-shadow:0 0 2px #132a2b; }
+.ship-compact-configuration .ship-configuration-summary { grid-column:2;grid-row:3;display:grid;gap:8px;min-width:0; }
+.ship-compact-configuration .ship-inline-purchase { margin:0;padding:0;border:0;background:none; }
+.ship-compact-configuration .ship-purchase-price { font-size:15px; }
+.ship-compact-configuration .ship-inline-purchase .button { min-height:44px;padding:9px;font-size:13px; }
+.ship-version-benefits { display:flex;flex-wrap:wrap;gap:6px; }
+.ship-version-benefits span { display:flex;align-items:center;gap:6px;padding:5px 7px;border:1px solid #7e9aaa4d;border-radius:6px;color:#d4e5ed;background:#142c40;font-size:12px;line-height:1.3; }
+.ship-version-benefits b { color:#f0d59b;font-size:15px; }
+.ship-compact-configuration .ship-configuration-description { margin:0;color:#c9dbe6;font-size:13px;line-height:1.45; }
+.ship-compact-configuration .ship-one-checkout { display:flex;flex-wrap:wrap;gap:8px;min-height:0; }
+.ship-compact-configuration .ship-one-checkout .button { min-height:44px;font-size:13px;padding:9px; }
+.ship-compact-configuration .ship-rules { margin-top:0;color:#bbcedf;font-size:12px;line-height:1.45; }
+.ship-compact-configuration .ship-rules summary { min-height:36px;display:flex;align-items:center;cursor:pointer; }
+.landing-shell .fleet-scroll-list { gap:14px; }
+.landing-shell .fleet-list-entry { contain-intrinsic-size:auto 440px; }
+@media(max-width:420px) {
+  .landing-shell .ship-compact-configuration .ship-one-hero { grid-template-columns:minmax(0,1fr);gap:9px;padding:8px; }
+  .landing-shell .ship-compact-configuration .ship-one-art-wrap { grid-row:2;grid-column:1;min-height:150px; }
+  .landing-shell .ship-compact-configuration .ship-one-art-frame { width:min(100%,155px);height:auto; }
+  .ship-compact-configuration .ship-one-colors { grid-row:3;grid-column:1; }
+  .ship-compact-configuration .ship-one-colors-heading { flex-direction:row;align-items:baseline;flex-wrap:wrap; }
+  .ship-compact-configuration .ship-configuration-summary { grid-row:4;grid-column:1; }
+}
+
+/* Static hull light is alpha-masked. Cached material, not a frame-time shader. */
+.material-hull { background-repeat:no-repeat;image-rendering:auto; }
+.game-field .material-hull::after { content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(125deg,#d9f3ff3b 8%,transparent 37%,#020b1f26 74%,#eff7ff18);mask-image:var(--ship-surface-mask);-webkit-mask-image:var(--ship-surface-mask);mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat; }
+.game-field .player-ship .ship-visual { filter:drop-shadow(0 2px 2px #010719); }
+.game-field .cryptoid .ship-visual { filter:drop-shadow(0 2px 1px #010719); }
+.game-field .cryptoid-emp .material-hull { opacity:.65; }
+
+.cinematic-home > .site-header .header-account { border-color:#a3997d; }

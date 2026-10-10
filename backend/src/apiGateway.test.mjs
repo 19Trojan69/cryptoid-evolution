@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const { createApiGateway } = require('../build/apiGateway.js');
+const { hangarCatalog } = require('../build/hangarCatalog.js');
 
 const response = () => ({
   code: 200, headers: {},
@@ -19,6 +20,25 @@ const backendFixture = () => {
     app(req, res) { calls.push({ url: req.url, network: req.headers['x-cryptoid-app-network'] }); return res.json({ ok: true }); },
   } };
 };
+
+test('Testnet serves its own public catalog without the production proxy or database startup', async t => {
+  t.mock.method(globalThis, 'fetch', async () => { throw new Error('catalog must not use production'); });
+  for (const [host, env] of [
+    ['cryptoid-evolution-testnet.vercel.app', { VERCEL_ENV: 'preview' }],
+    ['preview.vercel.app', { VERCEL_ENV: 'preview', VERCEL_PROJECT_PRODUCTION_URL: 'cryptoid-evolution-testnet.vercel.app' }],
+    ['preview.vercel.app', preview],
+  ]) {
+    const gateway = createApiGateway(async () => { throw new Error('catalog must not start the database'); }, () => env);
+    for (const method of ['GET', 'HEAD']) {
+      const res = response();
+      await gateway({ method, url: '/api/index?path=hangar%2Fcatalog', headers: { host } }, res);
+      assert.equal(res.code, 200);
+      assert.deepEqual(res.body, { offers: hangarCatalog });
+      assert.equal(res.headers['x-cryptoid-backend'], 'testnet-catalog');
+      assert.equal(res.headers['Cache-Control'], 'no-store');
+    }
+  }
+});
 
 test('local Testnet preview overrides a Mainnet header, preserves queries and starts once', async () => {
   const { backend, calls } = backendFixture();

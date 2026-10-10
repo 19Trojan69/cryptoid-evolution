@@ -49,5 +49,5 @@ html[dir='rtl'] .weapon-selection-dialog {
   white-space: normal;
 }
 html[data-complex-script='true'] .hud-stat > span {
-  font-size: clamp(.55rem, 1.6vw, .82rem);
+  font-size: 12px;
 }

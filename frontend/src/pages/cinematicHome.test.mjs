@@ -25,12 +25,13 @@ const elements=tree=>{
 const text=node=>typeof node==='string'?node:typeof node==='number'?String(node):Array.isArray(node)?node.map(text).join(''):node?.props?text(node.props.children):'';
 
 test('every home button invokes its actual supplied action and the actual rank is shown',()=>{
-  const hits=[],callbacks=Object.fromEntries(['Play','Career','Cards','Community','Terms','Sound','Profile'].map(name=>['on'+name,()=>hits.push(name)]));
+  const hits=[],callbacks=Object.fromEntries(['Play','Career','Cards','Community','Terms','Sound'].map(name=>['on'+name,()=>hits.push(name)]));
   const Home=component('./CinematicHome.tsx',{'../i18n':{useLocale:()=>({t:source=>translate('de',source)})},'../components/ServiceBadge':{default:()=>null},'../components/BlockchainIcon':{default:()=>null},'./HomeEarthNetwork':{default:()=>null}});
   const nodes=elements(Home({...callbacks,paused:false,busy:false,signedIn:true,rankName:'Admiral',musicEnabled:true,musicLabel:'Ton ausschalten'}));
-  const buttons=nodes.filter(node=>node.type==='button');assert.equal(buttons.length,7);
+  const buttons=nodes.filter(node=>node.type==='button');assert.equal(buttons.length,6);
+  assert.ok(!nodes.some(node=>node.props.className==='cinematic-profile'));
   for(const button of buttons){assert.equal(button.props.type,'button');button.props.onClick();}
-  assert.deepEqual(hits.sort(),['Play','Career','Cards','Community','Terms','Sound','Profile'].sort());
+  assert.deepEqual(hits.sort(),['Play','Career','Cards','Community','Terms','Sound'].sort());
   assert.ok(nodes.some(node=>node.props.name==='Admiral'));
   assert.ok(nodes.some(node=>node.props.className==='cinematic-career-copy'&&text(node).includes('Admiral')));
   const busy=elements(Home({...callbacks,busy:true,musicEnabled:false,musicLabel:'Ton einschalten'}));
@@ -95,6 +96,10 @@ test('the signed-in account button opens the existing profile action',()=>{
   const tree=Header({user:{username:'19Trojan69',roles:[]},onOpenQuickAccess:()=>{},onOpenProfile:()=>opened++,onSignIn:()=>{}});
   const account=elements(tree).find(node=>node.type==='button'&&node.props.className==='header-account');
   assert.ok(account);account.props.onClick();assert.equal(opened,1);assert.match(account.props['aria-label'],/@19Trojan69/);
+  const copy=elements(account).find(node=>node.props.className==='header-account-copy');
+  const children=copy.props.children;
+  assert.equal(children[0].type,'b');assert.equal(text(children[0]),'@19Trojan69');
+  assert.equal(children[1].props.className,'header-profile-label');assert.match(text(children[1]),/Pilotenprofil/);
 });
 
 test('home actions reach the existing game, career, cards, feedback and profile in Shop',()=>{
@@ -131,7 +136,7 @@ test('home actions reach the existing game, career, cards, feedback and profile 
   nodes=render();home=find(nodes,'./CinematicHome');assert.equal(home.props.paused,false);home.props.onCards();nodes=render();assert.ok(find(nodes,'./Collection'));assert.equal(find(nodes,'./CinematicHome').props.paused,true);
   find(nodes,'./Collection').props.onClose();nodes=render();home=find(nodes,'./CinematicHome');home.props.onCommunity();nodes=render();assert.ok(find(nodes,'./FeedbackHub'));assert.equal(find(nodes,'./CinematicHome').props.paused,true);
   find(nodes,'./FeedbackHub').props.onClose();nodes=render();find(nodes,'../components/Header').props.onOpenProfile();assert.equal(authRequests,1);
-  user={uid:'qa-only',username:'qa',roles:[]};nodes=render();find(nodes,'./CinematicHome').props.onProfile();nodes=render();assert.ok(find(nodes,'./PilotProfile'));assert.equal(find(nodes,'./CinematicHome').props.paused,true);
+  user={uid:'qa-only',username:'qa',roles:[]};nodes=render();find(nodes,'../components/Header').props.onOpenProfile();nodes=render();assert.ok(find(nodes,'./PilotProfile'));assert.equal(find(nodes,'./CinematicHome').props.paused,true);
   find(nodes,'./PilotProfile').props.onClose();nodes=render();find(nodes,'./CinematicHome').props.onTerms();nodes=render();assert.ok(find(nodes,'../components/TermsDialog'));
   find(nodes,'./CinematicHome').props.onSound();assert.equal(storage.get('music'),'off');
   assert.equal(storage.size,1); // No player, payment, reward or inventory writes.
