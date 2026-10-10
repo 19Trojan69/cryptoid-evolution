@@ -13,7 +13,7 @@ function component(file,imports,globals={}) {
   const code=ts.transpileModule(readFileSync(new URL(file,import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX}}).outputText;
   const exports={};vm.runInNewContext(code,{exports,require:name=>{
     if(name==='react/jsx-runtime')return jsx;
-    if(name==='react'&&!imports.react)return {useEffect:()=>{},useState:value=>[typeof value==='function'?value():value,()=>{}]};
+    if(name==='react'&&!imports.react)return {useRef:value=>({current:value}),useEffect:()=>{},useState:value=>[typeof value==='function'?value():value,()=>{}]};
     if(name==='./gameFullscreen'&&!imports[name])return {isGameFullscreen:()=>false};
     if(name.endsWith('.css'))return {};
     assert.ok(name in imports,`Unmapped dependency: ${name}`);return imports[name];
@@ -25,12 +25,12 @@ const elements=tree=>{
 const text=node=>typeof node==='string'?node:typeof node==='number'?String(node):Array.isArray(node)?node.map(text).join(''):node?.props?text(node.props.children):'';
 
 test('every home button invokes its actual supplied action and the actual rank is shown',()=>{
-  const hits=[],callbacks=Object.fromEntries(['Play','Career','Cards','Community','Terms','Sound','Fullscreen','Profile'].map(name=>['on'+name,()=>hits.push(name)]));
+  const hits=[],callbacks=Object.fromEntries(['Play','Career','Cards','Community','Terms','Sound','Profile'].map(name=>['on'+name,()=>hits.push(name)]));
   const Home=component('./CinematicHome.tsx',{'../i18n':{useLocale:()=>({t:source=>translate('de',source)})},'../components/ServiceBadge':{default:()=>null},'../components/BlockchainIcon':{default:()=>null},'./HomeEarthNetwork':{default:()=>null}});
   const nodes=elements(Home({...callbacks,paused:false,busy:false,signedIn:true,rankName:'Admiral',musicEnabled:true,musicLabel:'Ton ausschalten'}));
-  const buttons=nodes.filter(node=>node.type==='button');assert.equal(buttons.length,8);
+  const buttons=nodes.filter(node=>node.type==='button');assert.equal(buttons.length,7);
   for(const button of buttons){assert.equal(button.props.type,'button');button.props.onClick();}
-  assert.deepEqual(hits.sort(),['Play','Career','Cards','Community','Terms','Sound','Fullscreen','Profile'].sort());
+  assert.deepEqual(hits.sort(),['Play','Career','Cards','Community','Terms','Sound','Profile'].sort());
   assert.ok(nodes.some(node=>node.props.name==='Admiral'));
   assert.ok(nodes.some(node=>node.props.className==='cinematic-career-copy'&&text(node).includes('Admiral')));
   const busy=elements(Home({...callbacks,busy:true,musicEnabled:false,musicLabel:'Ton einschalten'}));
@@ -46,33 +46,46 @@ test('new visible labels are translated in all 19 selectable languages',()=>{
   }
 });
 
-test('the actual home button shows fullscreen state, browser feedback and handles Escape',async()=>{
-  for(const result of ['changed','unavailable','denied','app-view']) {
-    const states=[],effects=[],listeners=new Map();let cursor=0,mounted=false;
-    const doc={fullscreenElement:null,addEventListener:(name,fn)=>listeners.set(name,fn),removeEventListener:name=>listeners.delete(name)};
-    const imports={
-      react:{useState:initial=>{const i=cursor++;if(!(i in states))states[i]=typeof initial==='function'?initial():initial;return [states[i],next=>states[i]=next];},useEffect:fn=>{if(!mounted)effects.push(fn);}},
-      '../i18n':{useLocale:()=>({t:source=>translate('de',source)})},
-      '../components/ServiceBadge':{default:()=>null},'../components/BlockchainIcon':{default:()=>null},'./HomeEarthNetwork':{default:()=>null},
-      './gameFullscreen':{isGameFullscreen:()=>Boolean(doc.fullscreenElement)},
-    };
-    const Home=component('./CinematicHome.tsx',imports,{document:doc});
-    const props={paused:false,busy:false,signedIn:false,musicEnabled:false,onFullscreen:()=>{if(result==='changed'){doc.fullscreenElement={};listeners.get('fullscreenchange')();}return Promise.resolve(result);}};
-    const render=()=>{cursor=0;const nodes=elements(Home(props));mounted=true;return nodes;};
-    let nodes=render();const cleanups=effects.map(fn=>fn());
-    const button=()=>render().find(node=>node.props.className==='cinematic-fullscreen');
-    assert.equal(button().props['aria-label'],'Vollbild');
-    button().props.onClick();assert.equal(button().props.disabled,true);
-    await new Promise(setImmediate);nodes=render();assert.equal(button().props.disabled,false);
-    const notice=nodes.find(node=>node.props.className==='cinematic-fullscreen-notice');
-    if(result==='changed') {
-      assert.equal(button().props['aria-label'],'Vollbild verlassen');assert.equal(button().props['aria-pressed'],true);assert.equal(notice,undefined);
-      doc.fullscreenElement=null;listeners.get('fullscreenchange')();assert.equal(button().props['aria-pressed'],false);
-    } else {
-      assert.ok(notice);assert.equal(notice.props.role,'status');assert.match(text(notice),result==='app-view'?/installierte App/:/Browser/);
-      assert.equal(button().props['aria-pressed'],false);
-    }
-    cleanups.forEach(fn=>fn());assert.equal(listeners.size,0);
+function autoFullscreenHome({hidden=false,active=false}={}) {
+  let now=0,sequence=0,cursor=0,requests=0;
+  const hooks=[],pending=[],timers=new Map(),events=new Map();
+  const doc={hidden,fullscreenElement:active?{}:null,addEventListener:(name,fn)=>events.set(name,fn),removeEventListener:name=>events.delete(name)};
+  const Home=component('./CinematicHome.tsx',{
+    react:{useRef:initial=>{const i=cursor++;return hooks[i]??(hooks[i]={current:initial});},useEffect:(fn,deps)=>{const i=cursor++,old=hooks[i];if(!old||deps.some((dep,n)=>dep!==old.deps[n]))pending.push(()=>{old?.cleanup?.();hooks[i]={deps,cleanup:fn()};});}},
+    '../i18n':{useLocale:()=>({t:source=>translate('de',source)})},'../components/ServiceBadge':{default:()=>null},'../components/BlockchainIcon':{default:()=>null},'./HomeEarthNetwork':{default:()=>null},
+    './gameFullscreen':{isGameFullscreen:()=>Boolean(doc.fullscreenElement),requestGameFullscreen:()=>{requests++;return Promise.resolve('denied');}},
+  },{document:doc,setTimeout:(fn,delay)=>{timers.set(++sequence,{fn,due:now+delay});return sequence;},clearTimeout:id=>timers.delete(id)});
+  const render=(paused=false)=>{cursor=0;const nodes=elements(Home({paused,busy:false,signedIn:false,musicEnabled:false}));pending.splice(0).forEach(fn=>fn());return nodes;};
+  const tick=duration=>{now+=duration;for(const [id,timer] of [...timers])if(timer.due<=now){timers.delete(id);timer.fn();}};
+  return {doc,render,tick,emit:name=>events.get(name)?.(),requests:()=>requests,timers:()=>timers.size,listeners:()=>events.size,unmount:()=>hooks.forEach(hook=>hook.cleanup?.())};
+}
+
+test('home has no fullscreen control and makes only one quiet attempt after three seconds',async()=>{
+  const h=autoFullscreenHome(),nodes=h.render();
+  assert.ok(!nodes.some(node=>node.props.className?.includes('cinematic-fullscreen')));
+  h.tick(2999);assert.equal(h.requests(),0);h.tick(1);assert.equal(h.requests(),1);
+  await new Promise(setImmediate);h.render();h.tick(10000);h.emit('visibilitychange');h.tick(3000);
+  assert.equal(h.requests(),1);assert.equal(h.timers(),0);
+  h.unmount();assert.equal(h.listeners(),0);
+});
+
+test('hidden home waits until visible and dialogs cancel its timer',()=>{
+  const h=autoFullscreenHome({hidden:true});h.render();h.tick(10000);assert.equal(h.requests(),0);
+  h.doc.hidden=false;h.emit('visibilitychange');h.tick(2000);h.render(true);h.tick(5000);assert.equal(h.requests(),0);
+  h.render(false);h.tick(2999);assert.equal(h.requests(),0);h.tick(1);assert.equal(h.requests(),1);h.unmount();
+});
+
+test('navigation away cancels delayed entry and releases all home listeners',()=>{
+  const h=autoFullscreenHome();h.render();h.tick(1000);h.unmount();h.tick(5000);
+  assert.equal(h.requests(),0);assert.equal(h.timers(),0);assert.equal(h.listeners(),0);
+});
+
+test('home never exits existing fullscreen or re-enters after the user leaves it',()=>{
+  for(const initiallyActive of [true,false]) {
+    const h=autoFullscreenHome({active:initiallyActive});h.render();
+    if(!initiallyActive){h.doc.fullscreenElement={};h.emit('fullscreenchange');}
+    h.doc.fullscreenElement=null;h.emit('fullscreenchange');h.render(true);h.render(false);h.emit('visibilitychange');h.tick(10000);
+    assert.equal(h.requests(),0);h.unmount();assert.equal(h.listeners(),0);
   }
 });
 

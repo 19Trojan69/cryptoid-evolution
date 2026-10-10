@@ -47,7 +47,7 @@ import BossDossier from './BossDossier';
 import { bossDossierLabel } from './bossLore';
 import { bossName } from './bossNames';
 import { useLocale } from "../i18n";
-import { requestGameFullscreen, toggleGameFullscreen } from "./gameFullscreen";
+import { requestGameFullscreen } from "./gameFullscreen";
 import { MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { powerUpSymbols, type PowerUpType } from "./powerUps";
 import { BOSS_STICKER_COUNT, CHAIN_MILESTONES, emptyRewardProgress, rankForLevel, readRewardProgress, REWARD_PROGRESS_KEY, rewardRank, type RewardProgress } from "./rewardProgress";
@@ -510,7 +510,6 @@ const Shop = () => {
         onCommunity={() => openQuickAction("feedback")}
         onTerms={() => setTermsOpen(true)}
         onSound={toggleHomeMusic}
-        onFullscreen={toggleGameFullscreen}
         signedIn={Boolean(user)}
         onProfile={() => openQuickAction("profile")}
       >
