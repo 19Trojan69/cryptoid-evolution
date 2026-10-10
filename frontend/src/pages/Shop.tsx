@@ -3,8 +3,6 @@ import CareerDashboard from "./CareerDashboard";
 import FeedbackHub from "./FeedbackHub";
 import PilotProfile from "./PilotProfile";
 import PilotAvatar, { type Avatar } from "../components/PilotAvatar";
-import BlockchainIcon from "../components/BlockchainIcon";
-import { releaseVersion } from "../release";
 import { bossCardAvailable } from './cardAvailability';
 import CardReveal from './CardReveal';
 import { availableShipCards, unseenShipCards, type CardReward } from './cardRevealRules';
@@ -39,8 +37,7 @@ import { isTestnetWeaponPurchaseEnabled } from "../../../backend/src/paymentPoli
 import { primeGameAudio } from "./gameAudio";
 import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, readMusicVolume, resetAudioVolumeDefaults } from "./musicPreferences";
 import { handoffGameMusic, MusicPlayer } from "./musicPlayback";
-import Starfield from "./Starfield";
-import HomeCombatPreview from "./HomeCombatPreview";
+import CinematicHome from "./CinematicHome";
 import GameGuide from "./GameGuide";
 import WeaponTutorial from "./WeaponTutorial";
 import WeaponPurchase from './WeaponPurchase';
@@ -50,7 +47,6 @@ import BossDossier from './BossDossier';
 import { bossDossierLabel } from './bossLore';
 import { bossName } from './bossNames';
 import { useLocale } from "../i18n";
-import EarthGlobe from "./EarthGlobe";
 import { requestGameFullscreen } from "./gameFullscreen";
 import { MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { powerUpSymbols, type PowerUpType } from "./powerUps";
@@ -60,7 +56,6 @@ type Offer = { id: string; kind: "weapon" | "power" | "armor" | "ship_upgrade"; 
 type Inventory = { weaponStock?: Record<string, number>; ownedWeapons: string[]; ownedArmor: string[]; ownedShipUpgrades?: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
 type Leader = { avatar?: Avatar; rank: number; username: string; score: number; careerScore?: number; bestRun?: { score: number; level: number | null }; runLevel?: number | null; profileLevel?: number; serviceRank: { name: string; symbol: string } };
 type PersonalScores = { careerScore: number; bestRun: { score: number; level: number | null } };
-const HOME_STAR_POSITION = { x: .5, y: .8 };
 
 const shopTabs = [
   ["hangar", "Hangar", "◇"],
@@ -241,10 +236,6 @@ const Shop = () => {
   const [adminError, setAdminError] = useState("");
   const [startSector, setStartSector] = useState(1);
   const [selected, setSelected] = useState(selectedShip);
-  const [adminStage, setAdminStage] = useState<ShipStage>(() => {
-    const saved = Number(sessionStorage.getItem(ADMIN_SHIP_STAGE_KEY));
-    return saved === 2 || saved === 3 ? saved : 1;
-  });
   const [shopTarget, setShopTarget] = useState<{ skin: string; stage: ShipStage } | null>(null);
   const [fleet, setFleet] = useState(() => readShipFleet(localStorage.getItem(SHIP_FLEET_KEY), localStorage.getItem(SHIP_OWNED_KEY), localStorage.getItem(SHIP_COLORS_KEY)));
   const [accountState, setAccountState] = useState<{ owner: string; save: AccountSave } | null>(null);
@@ -310,7 +301,6 @@ const Shop = () => {
   const [offers, setOffers] = useState<Offer[]>(() => [...hangarCatalog]);
   const [catalogReady, setCatalogReady] = useState(false);
   const [inventory, setInventory] = useState<Inventory | null>(null);
-  const selectedStage = adminMode ? adminStage : ownedShipStage(selected.skin.sprite, inventory?.ownedShipUpgrades);
   const [loadoutMessage, setLoadoutMessage] = useState("");
   const shipSearchOptions = playerSkins.filter(skin => shopView === "shop" || fleetCount(visibleFleet, skin.id) > 0);
   useEffect(() => {
@@ -483,13 +473,14 @@ const Shop = () => {
     else if (action === "terms") setTermsOpen(true);
   };
 
-  const homePaused = Boolean(newCards.length || collectionOpen || shopView || systemMenuOpen || activePanel || termsOpen || quickGroup || showSignIn);
+  const homePaused = Boolean(newCards.length || collectionOpen || shopView || systemMenuOpen || activePanel || termsOpen || quickGroup || showSignIn || feedbackOpen || pilotOpen !== null);
   return (
-    <main data-shop-area={shopView ?? "home"} className="app-shell landing-shell" data-home-paused={homePaused} onPointerDownCapture={primeCardSound}>
+    <main data-shop-area={shopView ?? "home"} className="app-shell landing-shell cinematic-home" data-home-paused={homePaused} onPointerDownCapture={primeCardSound}>
       {newCards[0] && <CardReveal key={user?.uid ?? "guest"} reward={newCards[0]} remaining={newCards.length} onContinue={()=>{setNewCards(cards=>cards.slice(1));}}/>}
       {collectionOpen && <Collection key={user?.uid ?? "guest"} uid={user?.uid} onClose={() => setCollectionOpen(false)} />}
       <Header
         user={user}
+        onOpenProfile={() => openQuickAction("profile")}
         serviceRank={user && rewardStatus === "ready" && rewardOwner === user.uid ? rankForLevel(rewardProgress.highestLevel) : undefined}
         canAdmin={canAdmin}
         adminMode={adminMode}
@@ -507,35 +498,22 @@ const Shop = () => {
       {accountError && <p role="alert" className="hangar-message">{t(accountError)}</p>}
       {adminMode && <div className="admin-preview-banner" role="status">{t("Admin test mode: purchases and records are not saved.")}</div>}
 
-      <section className="hero-section" onClick={event => { if (window.matchMedia("(min-width: 701px)").matches && !(event.target as HTMLElement).closest("button, a, input, select, label")) requestGameFullscreen(); }}>
-        <button className="wide-fullscreen-control home-fullscreen-control" type="button" onClick={requestGameFullscreen} aria-label={t("Full screen")} title={t("Full screen")}>⛶</button>
-        <button className="home-music-toggle" type="button" data-state={musicEnabled ? "on" : "off"} aria-pressed={musicEnabled} aria-label={musicLabel} title={musicLabel} onClick={toggleHomeMusic}><span className="home-music-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" />{musicEnabled ? <><path d="M16 9a4 4 0 0 1 0 6" /><path d="M19 6a8 8 0 0 1 0 12" /></> : <path d="m17 9 5 6m0-6-5 6" />}</svg></span></button>
-        <Starfield sector={1} player={HOME_STAR_POSITION} paused={homePaused} />
-        <div className="home-deep-space" aria-hidden="true"><span className="home-far-planet home-far-planet-gas" /><span className="home-far-planet home-far-planet-saturn" /><span className="home-far-planet home-far-moon" /><span className="home-black-hole"><i /></span></div>
-        <HomeCombatPreview defender={{ sprite: selected.skin.sprite, color: selected.color.id, stage: selectedStage }} paused={homePaused} />
-        <div className="hero-copy">
-          <p className="eyebrow"><span className="signal-dot" /> {t("Mission control online")}</p>
-          <h1><span className="home-title-word">Cryptoid</span><span className="home-title-evolution">Evolution</span></h1>
-          <p className="hero-tagline">{t("Defend Earth.")}<span>{t("Evolve your power.")}</span></p>
-          <p className="hero-description">{t('Build your streak, master the grid, and become the force Earth needs.')}</p>
+      <CinematicHome
+        paused={homePaused}
+        busy={!authReady || isAuthLoading}
+        rankName={!user || rewardStatus === "ready" && rewardOwner === user.uid ? rankForLevel(rewardProgress.highestLevel).name : undefined}
+        musicEnabled={musicEnabled}
+        musicLabel={musicLabel}
+        onPlay={enterGame}
+        onCareer={() => openQuickAction("progress")}
+        onCards={() => setCollectionOpen(true)}
+        onCommunity={() => openQuickAction("feedback")}
+        onTerms={() => setTermsOpen(true)}
+        onSound={toggleHomeMusic}
+        onFullscreen={requestGameFullscreen}
+      >
           {adminMode && <div className="admin-level-picker" aria-label={t("Admin test start")}><label>{t("Level")} <select value={Math.floor((startSector - 1) / 10) + 1} onChange={event => setStartSector((Number(event.target.value) - 1) * 10 + (startSector - 1) % 10 + 1)}>{Array.from({ length: MAX_DIFFICULTY_LEVEL / 10 }, (_, index) => <option key={index} value={index + 1}>{index + 1}</option>)}</select></label><label>{t("Start at")} <select value={(startSector - 1) % 10 + 1} onChange={event => setStartSector((Math.floor((startSector - 1) / 10) * 10) + Number(event.target.value))}>{Array.from({ length: 9 }, (_, index) => <option key={index} value={index + 1}>{t("Block")} {index + 1}</option>)}<option value="10">{t("Boss")}</option></select></label></div>}
-          <div className="hero-actions">
-            <div className="home-launch">
-              <button className="button button-primary home-play-button" disabled={!authReady || isAuthLoading} type="button" onClick={enterGame}>{t("Play")} <span className="button-glyph" aria-hidden="true">→</span></button>
-            </div>
-          </div>
-          <button className="collection-home-button" type="button" disabled={!authReady} onClick={() => setCollectionOpen(true)}><BlockchainIcon kind="collection"/> {t('Card collection')}</button>
-        </div>
-        <div className="planet-stage" aria-label={t("Planet status")}>
-          <div className="planet"><EarthGlobe paused={homePaused} /></div>
-          <span className="orbit-status">{t('ORBITAL DEFENSE ACTIVE')}</span>
-        </div>
-        <div className="stage-label home-region-label"><span className="stage-label-value">01</span><span>{t('Genesis sector')}</span></div>
-        <footer className="home-footer">
-          <span className="release-version">v{releaseVersion}</span>
-          <button type="button" className="text-button terms-entry" onClick={() => setTermsOpen(true)}>{t("Terms of service")}</button>
-        </footer>
-      </section>
+      </CinematicHome>
 
       {feedbackOpen && <FeedbackHub key={user?.uid ?? "guest"} signedIn={!!user} onSignIn={()=>{setFeedbackOpen(false);requireAuth();}} onProfile={username => setPilotOpen(username)} onClose={()=>{setFeedbackOpen(false);returnToMenu();}}/>}
       {pilotOpen !== null && <PilotProfile key={`${user?.uid}-${pilotOpen}`} username={pilotOpen || undefined} onClose={()=>setPilotOpen(null)} onSaved={()=>setLeaderRefresh(n=>n+1)}/>}
@@ -634,7 +612,7 @@ const Shop = () => {
               requestedStage={shopTarget?.skin === skin.id ? shopTarget.stage : undefined}
               purchaseBusy={accountBusy || Boolean(user && !account)} onBuy={color => purchasePreview(skin, color)}
               onEquip={color => equipShip(skin, color)}
-              onStage={stage => { if (adminMode) { setAdminStage(stage); sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage)); } }}
+              onStage={stage => { if (adminMode) sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage)); }}
               onUpgrade={stage => { setShopTarget({ skin: skin.id, stage }); setShopView("shop"); }} />
           </article>)}
         </div>

@@ -1,0 +1,22 @@
+// New home labels have direct translations in all currently selectable packs.
+export const homeScreenTranslations: Record<string,Record<string,string>> = {
+  en:{"Your career":"Your career","Service rank & progress":"Service rank & progress","View progress":"View progress","Community":"Community"},
+  de:{"Your career":"Deine Karriere","Service rank & progress":"Dienstgrad & Fortschritt","View progress":"Fortschritt ansehen","Community":"Community"},
+  es:{"Your career":"Tu carrera","Service rank & progress":"Rango y progreso","View progress":"Ver progreso","Community":"Comunidad"},
+  fr:{"Your career":"Votre carrière","Service rank & progress":"Grade et progression","View progress":"Voir la progression","Community":"Communauté"},
+  pt:{"Your career":"A tua carreira","Service rank & progress":"Patente e progresso","View progress":"Ver progresso","Community":"Comunidade"},
+  it:{"Your career":"La tua carriera","Service rank & progress":"Grado e progressi","View progress":"Vedi i progressi","Community":"Comunità"},
+  pl:{"Your career":"Twoja kariera","Service rank & progress":"Stopień i postępy","View progress":"Zobacz postępy","Community":"Społeczność"},
+  tr:{"Your career":"Kariyerin","Service rank & progress":"Rütbe ve ilerleme","View progress":"İlerlemeyi gör","Community":"Topluluk"},
+  ru:{"Your career":"Твоя карьера","Service rank & progress":"Звание и прогресс","View progress":"Посмотреть прогресс","Community":"Сообщество"},
+  hr:{"Your career":"Tvoja karijera","Service rank & progress":"Čin i napredak","View progress":"Pogledaj napredak","Community":"Zajednica"},
+  cs:{"Your career":"Tvoje kariéra","Service rank & progress":"Hodnost a postup","View progress":"Zobrazit postup","Community":"Komunita"},
+  sk:{"Your career":"Tvoja kariéra","Service rank & progress":"Hodnosť a postup","View progress":"Zobraziť postup","Community":"Komunita"},
+  hu:{"Your career":"A karriered","Service rank & progress":"Rendfokozat és haladás","View progress":"Haladás megtekintése","Community":"Közösség"},
+  ro:{"Your career":"Cariera ta","Service rank & progress":"Grad și progres","View progress":"Vezi progresul","Community":"Comunitate"},
+  sr:{"Your career":"Твоја каријера","Service rank & progress":"Чин и напредак","View progress":"Погледај напредак","Community":"Заједница"},
+  uk:{"Your career":"Твоя кар'єра","Service rank & progress":"Звання та прогрес","View progress":"Переглянути прогрес","Community":"Спільнота"},
+  th:{"Your career":"เส้นทางของคุณ","Service rank & progress":"ยศและความคืบหน้า","View progress":"ดูความคืบหน้า","Community":"ชุมชน"},
+  zh:{"Your career":"你的生涯","Service rank & progress":"军衔与进度","View progress":"查看进度","Community":"社区"},
+  vi:{"Your career":"Sự nghiệp của bạn","Service rank & progress":"Cấp bậc và tiến độ","View progress":"Xem tiến độ","Community":"Cộng đồng"},
+};

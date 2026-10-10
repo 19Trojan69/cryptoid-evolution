@@ -18,16 +18,22 @@ interface HeaderProps {
   authPending?: boolean;
   onOpenQuickAccess?: () => void;
   quickAccessOpen?: boolean;
+  onOpenProfile?: () => void;
 }
 
-const Header = ({ user, serviceRank, onSignIn, onSignOut, onSendTestNotification, canAdmin, adminMode, onToggleAdmin, isLoading, authPending, onOpenQuickAccess, quickAccessOpen }: HeaderProps) => {
+const Header = ({ user, serviceRank, onSignIn, onSignOut, onSendTestNotification, canAdmin, adminMode, onToggleAdmin, isLoading, authPending, onOpenQuickAccess, quickAccessOpen, onOpenProfile }: HeaderProps) => {
   const { t } = useLocale();
   return (
     <header className={`site-header${onOpenQuickAccess ? " header-with-quick-access" : ""}`}>
       {onOpenQuickAccess && <button className="button button-secondary quick-access-trigger" type="button" onClick={onOpenQuickAccess} aria-expanded={quickAccessOpen} aria-controls="quick-access-menu" aria-haspopup="dialog"><span aria-hidden="true"><BlockchainIcon kind="network" /></span><b>{t("Quick access")}</b></button>}
       <a className="brand-mark" href="/" aria-label="Cryptoid Evolution – Trojan Wolf Games"><WolfLogo /><span className="brand-copyright" aria-hidden="true">©</span></a>
       <div className="user-section">
-        {user && onOpenQuickAccess ? (
+        {user && onOpenQuickAccess && onOpenProfile ? (
+          <button className="header-account" type="button" onClick={onOpenProfile} disabled={isLoading} aria-label={`${t("My pilot profile")} · @${user.username}`}>
+            <BlockchainIcon kind="account"/>
+            <span className="header-account-copy"><small>{t("Signed in as")}</small><b>@{user.username}</b></span>
+          </button>
+        ) : user && onOpenQuickAccess ? (
           <div className="header-account" role="status" title={`${t("Signed in as")} @${user.username}`}>
             <span className="header-account-copy">
               <small>{t("Signed in as")}</small>
