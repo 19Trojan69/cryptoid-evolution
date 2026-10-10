@@ -215,3 +215,6 @@
   .guide-panel-content .guide-lead { margin-right: 0; }
   .guide-panel-content .guide-detail { min-height: 96px; }
 }
+@media (max-height:500px) {
+  .guide-panel-content .guide-lead { display: none; }
+}
