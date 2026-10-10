@@ -8,6 +8,7 @@ export default function useModalNavigation(layer: string | null, onBack: () => v
   const navigate = useNavigate();
   const active = layer !== null;
   const requested = useRef(false);
+  const leavingRoute = useRef(false);
   const previousFocus = useRef<HTMLElement | null>(null);
   const backAction = useRef(onBack);
   useEffect(() => { backAction.current = onBack; }, [onBack]);
@@ -17,7 +18,12 @@ export default function useModalNavigation(layer: string | null, onBack: () => v
     if (dialog) dialog.dispatchEvent(new Event("cancel", { cancelable: true }));
     else backAction.current();
   }, []);
-  const blocker = useBlocker(({ historyAction }) => active && historyAction === "POP");
+  const blocker = useBlocker(({ currentLocation, nextLocation, historyAction }) => {
+    if (historyAction !== "POP" && currentLocation.pathname !== nextLocation.pathname) {
+      leavingRoute.current = true;
+    }
+    return active && historyAction === "POP";
+  });
   useEffect(() => {
     if (blocker.state !== "blocked") return;
     closeTop();
@@ -25,6 +31,9 @@ export default function useModalNavigation(layer: string | null, onBack: () => v
   }, [blocker, closeTop]);
   useEffect(() => {
     if (blocker.state !== "unblocked") return;
+    // Closing the menu and starting a route transition can happen together.
+    // Do not pop the guard while that transition is loading: it would cancel it.
+    if (leavingRoute.current) return;
     if (active && !location.state?.cryptoidModalGuard && !requested.current) {
       requested.current = true;
       void navigate(location.pathname + location.search + location.hash, {
