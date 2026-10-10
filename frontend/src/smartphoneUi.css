@@ -120,6 +120,7 @@
 .ship-configuration-details summary,.ship-rules summary,.ship-earnings summary,.leader-record-details summary,.mission-reload-explanation summary,.mission-locked summary { cursor: pointer; color: var(--menu-cyan); font-size: 13px; padding-block: 10px; }
 .leader-record-details { margin-top: 8px; border-top: 1px solid #718ca13d; }
 .leaderboard-list .leader-primary-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.landing-shell.app-shell .shop-modal .leaderboard-tabs .button { min-height: 48px; }
 .leader-metrics dd { overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
 .pilot-profile.metallic-dialog :is(button,select,input,textarea),.language-picker.metallic-dialog :is(button,input) { border-color: var(--menu-border); color: var(--menu-text); background: var(--menu-raised); }
 .pilot-profile.metallic-dialog .profile-actions { background: var(--menu-surface); }
