@@ -8,8 +8,8 @@ export const hangarCatalog = [
   { id: "start_overdrive", kind: "power", name: "Start Overdrive", description: "Activate stronger shots from the screen-edge icon for 60 seconds.", pricePi: 0.12, powerUp: "overdrive" },
   { id: "start_bomb", kind: "power", name: "Nova Bomb", description: "One use per mission. Destroys visible enemies and hostile shots. Damages boss turrets first; later turrets withstand more damage. The exposed boss hull survives the blast.", pricePi: 0.18, powerUp: "bomb" },
   { id: "start_emp", kind: "power", name: "EMP Pulse", description: "One use per mission. Disables enemy and boss weapons for 7 seconds. Ships and existing shots keep moving; EMP deals no damage.", pricePi: 0.14, powerUp: "emp" },
-  { id: "armor_hull_mk1", kind: "armor", name: "Reinforced Hull", description: "Permanent armor: +1 heart at the start of every mission. No shield needed.", pricePi: 0.6, bonusHearts: 1 },
-  { id: "armor_hull_mk2", kind: "armor", name: "Titanium Plating", description: "Permanent armor: +2 more hearts at the start of every mission. Stacks with Reinforced Hull.", pricePi: 1.2, bonusHearts: 2 },
+  { id: "armor_hull_mk1", kind: "armor", name: "Reinforced Hull", description: "Permanent armor: +1 heart at the start of every mission. No shield needed.", pricePi: 19.9, bonusHearts: 1 },
+  { id: "armor_hull_mk2", kind: "armor", name: "Titanium Plating", description: "Permanent armor: +2 more hearts at the start of every mission. Stacks with Reinforced Hull.", pricePi: 29.9, bonusHearts: 2 },
 
   // Ship evolution upgrades are Pi purchases. Stage 1 hulls remain Shard purchases.
   { id: "ship_01_stage_2", kind: "ship_upgrade", name: "Ship 01 · Advanced", description: "Permanent Advanced: twin fire and one free enemy shot hit per life. An active shield also protects against ship collisions.", pricePi: 9.9, shipIndex: 0, stage: 2 },
