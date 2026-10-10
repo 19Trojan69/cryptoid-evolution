@@ -28,8 +28,8 @@ export default function QuickAccessMenu({ onClose, onAction, signedIn, canAdmin,
   useEffect(() => {
     const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const panel = panelRef.current;
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    // The route's useModalNavigation hook owns the page scroll lock.
+    // A second lock here can restore "hidden" after the menu has closed.
     panel?.querySelector<HTMLButtonElement>(".close-button")?.focus({ preventScroll: true });
     const keyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") { event.preventDefault(); onClose(); }
@@ -41,7 +41,6 @@ export default function QuickAccessMenu({ onClose, onAction, signedIn, canAdmin,
     };
     document.addEventListener("keydown", keyDown);
     return () => {
-      document.body.style.overflow = originalOverflow;
       document.removeEventListener("keydown", keyDown);
       const active = document.activeElement;
       if (active === document.body || panel?.contains(active)) {

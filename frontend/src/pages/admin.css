@@ -1,6 +1,11 @@
 .admin-shell {
-  min-height: 100dvh;
+  height: var(--menu-viewport-height, 100dvh);
+  min-height: 0;
   max-width: 1220px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scroll-padding-block: 24px;
   margin: auto;
   padding: 24px;
   color: #e7f4f8;
@@ -11,6 +16,10 @@
 .admin-shell * {
   box-sizing: border-box;
 }
+.admin-shell :is(button, a.admin-button, select, input:not([type="checkbox"])) {
+  min-height: 48px;
+}
+.admin-shell .admin-colors button { min-width: 48px; }
 .admin-usage-scroll { overflow-x: auto; margin: 14px 0 24px; }
 .admin-usage-scroll table { border-collapse: collapse; width: 100%; min-width: 540px; }
 .admin-usage-scroll th, .admin-usage-scroll td { text-align: left; padding: 10px; border-bottom: 1px solid #264752; }

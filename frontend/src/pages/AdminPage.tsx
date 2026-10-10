@@ -361,7 +361,7 @@ export default function AdminPage() {
   };
 
   return (
-    <main className="admin-shell">
+    <main className="admin-shell" tabIndex={0} aria-label={t("Admin-Zentrale")}>
       <header className="admin-header">
         <Link className="admin-brand" to="/">
           <img src="/trojan-wolf-games.webp" width="104" height="52" alt="Trojan Wolf Games" />
