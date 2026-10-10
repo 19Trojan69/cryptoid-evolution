@@ -33,7 +33,7 @@ import "./shopPurchase.css";
 import "../metallic.css";
 import { saveGuestShipPurchase } from "./shipFleet";
 import TermsDialog from "../components/TermsDialog";
-import { hangarCatalog } from "../../../backend/src/hangarCatalog";
+import { hangarCatalog, purchasePrerequisite } from "../../../backend/src/hangarCatalog";
 import { isTestnetWeaponPurchaseEnabled } from "../../../backend/src/paymentPolicy";
 import { primeGameAudio } from "./gameAudio";
 import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, readMusicVolume, resetAudioVolumeDefaults } from "./musicPreferences";
@@ -664,8 +664,20 @@ const Shop = () => {
             </div></article>;
           })}
         </div></div>)}
-        {shopView === "weapons" && <div className="hangar-offers"><h3>{t("Permanent armor")}</h3><p>{t("Armor is always active from mission start, needs no shield and remains yours across all future missions. Each upgrade adds to your maximum hearts.")}</p><div className="hangar-offer-grid">
-          {offers.filter(offer => offer.kind === "armor").map(offer => { const owned = inventory?.ownedArmor.includes(offer.id); return <article key={offer.id} className={`hangar-offer hangar-offer-armor${owned ? " hangar-offer-selected" : ""}`}><div className="offer-preview power-preview power-preview-shield" aria-hidden="true"><span className="preview-grid" /><span className="power-preview-orbit"><i>♥</i></span><small>{t("Permanent hull")}</small></div><h4>{t(offer.name)}</h4><p>{t(offer.description)}</p><span className="offer-purchase-price">{t("Planned price")}: {piPrice(offer.pricePi)}</span><span className={!owned ? "mainnet-ready-badge" : undefined}>{owned ? t("Permanent · every mission") : t("MAINNET READY")}</span><strong>{owned ? t("OWNED") : t("Locked")}</strong></article>; })}
+        {shopView === "weapons" && <div className="hangar-offers"><h3>{t("Permanent armor")}</h3><p>{t("Armor is always active from mission start, needs no shield and remains yours across all future missions. Each upgrade adds to your maximum hearts.")}</p><p>{t("Applies to all your ships, including Advanced and Elite.")}</p><div className="hangar-offer-grid">
+          {offers.filter(offer => offer.kind === "armor").map(offer => {
+            const owned = inventory?.ownedArmor.includes(offer.id);
+            const prerequisite = offers.find(item => item.id === purchasePrerequisite(offer));
+            return <article key={offer.id} className={`hangar-offer hangar-offer-armor${owned ? " hangar-offer-selected" : ""}`}>
+              <div className="offer-preview power-preview power-preview-shield" aria-hidden="true"><span className="preview-grid" /><span className="power-preview-orbit"><i>♥</i></span><small>{t("Permanent hull")}</small></div>
+              <h4>{t(offer.name)}</h4><p>{t(offer.description)}</p>
+              {prerequisite && <p><strong>{t("Requires Reinforced Hull")}</strong></p>}
+              <span className="offer-purchase-price">{t("Planned price")}: {piPrice(offer.pricePi)}</span>
+              {prerequisite && <span className="offer-purchase-price">{t("Total with Reinforced Hull")}: {piPrice(Math.round((prerequisite.pricePi + offer.pricePi) * 100) / 100)}</span>}
+              <span className={!owned ? "mainnet-ready-badge" : undefined}>{owned ? t("Permanent · every mission") : t("MAINNET READY")}</span>
+              <strong>{owned ? t("OWNED") : t("Locked")}</strong>
+            </article>;
+          })}
         </div></div>}
         {inventory?.equippedWeapon && <p className="testnet-shop-notice">{t("An older weapon selection is saved but no longer activates automatically. Every mission starts with the single laser.")}</p>}
         {inventory?.selectedPower && <button className="text-button" type="button" onClick={() => equip(inventory.equippedWeapon, null)}>{t('Save bonus for a later mission')}</button>}
