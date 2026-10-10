@@ -123,6 +123,12 @@ const GameGuide = ({ onClose, initialTopic = "controls", backLabel = "Back to sy
       <p className="eyebrow">{t("FIELD GUIDE")}</p>
       <h2 id="info-title">{t("How to Play")}</h2>
       <p className="guide-lead">{t("Choose a topic to learn the current rules before your mission.")}</p>
+      <label className="guide-topic-picker">
+        <span>{t("Guide topics")}</span>
+        <select value={selected} onChange={event => setSelected(event.target.value as GuideTopic)}>
+          {topics.map(item => <option key={item.id} value={item.id}>{t(item.label)}</option>)}
+        </select>
+      </label>
       <nav className="guide-topics" aria-label={t("Guide topics")}>
         {topics.map(item => <button key={item.id} type="button" className={selected === item.id ? "guide-topic is-active" : "guide-topic"} aria-pressed={selected === item.id} onClick={() => setSelected(item.id)}>{t(item.label)}</button>)}
       </nav>
