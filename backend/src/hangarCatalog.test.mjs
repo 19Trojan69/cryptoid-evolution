@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { armorBonusFromPaid, hangarCatalog, shipUpgradePrerequisite } from "./hangarCatalog.ts";
+import { armorBonusFromPaid, hangarCatalog, purchasePrerequisite, shipUpgradePrerequisite } from "./hangarCatalog.ts";
 
 test("only paid permanent armor grants hearts and duplicate orders do not stack", () => {
   assert.equal(armorBonusFromPaid([]), 0);
@@ -25,5 +25,24 @@ test("all twenty Elite purchases require the matching paid Advanced stage", () =
     assert.equal(elite.pricePi, 19.9);
     assert.equal(shipUpgradePrerequisite(advanced), null);
     assert.equal(shipUpgradePrerequisite(elite), advanced.id);
+    assert.equal(purchasePrerequisite(advanced), null);
+    assert.equal(purchasePrerequisite(elite), advanced.id);
+  }
+});
+
+test("Titanium is the second armor purchase while existing paid armor keeps its hearts", () => {
+  const hull = hangarCatalog.find(offer => offer.id === "armor_hull_mk1");
+  const titanium = hangarCatalog.find(offer => offer.id === "armor_hull_mk2");
+  assert.equal(purchasePrerequisite(hull), null);
+  assert.equal(purchasePrerequisite(titanium), hull.id);
+  // The lookup also protects requests from clients with an older catalog.
+  assert.equal(purchasePrerequisite({ id: titanium.id }), hull.id);
+  assert.equal(hull.pricePi, 19.9);
+  assert.equal(titanium.pricePi, 29.9);
+  assert.equal(Math.round((hull.pricePi + titanium.pricePi) * 100), 4980);
+  assert.equal(armorBonusFromPaid([titanium.id]), 2);
+  assert.equal(armorBonusFromPaid([hull.id, titanium.id]), 3);
+  for (const offer of hangarCatalog.filter(item => item.kind === "weapon" || item.kind === "power")) {
+    assert.equal(purchasePrerequisite(offer), null);
   }
 });

@@ -1,5 +1,8 @@
 export const smartphoneTranslations: Record<string, Record<string, string>> = {
   de: {
+    "Requires Reinforced Hull": "Verstärkter Rumpf erforderlich",
+    "Total with Reinforced Hull": "Gesamt mit verstärktem Rumpf",
+    "Applies to all your ships, including Advanced and Elite.": "Gilt für alle deine Schiffe, auch Advanced und Elite.",
     "Stage owned": "Stufe im Besitz", "Stage not owned": "Stufe nicht im Besitz",
     "Color owned": "Farbe im Besitz", "Color not owned": "Farbe nicht im Besitz",
     "Buy ship": "Schiff kaufen", "Buy another ship": "Weiteres Schiff kaufen",
@@ -15,6 +18,9 @@ export const smartphoneTranslations: Record<string, Record<string, string>> = {
     "The browser did not allow full screen. You can continue playing in this view.": "Der Browser hat Vollbild nicht zugelassen. Du kannst in dieser Ansicht weiterspielen.",
   },
   es: {
+    "Requires Reinforced Hull": "Requiere casco reforzado",
+    "Total with Reinforced Hull": "Total con casco reforzado",
+    "Applies to all your ships, including Advanced and Elite.": "Se aplica a todas tus naves, incluidas Advanced y Elite.",
     "Stage owned": "Nivel adquirido", "Stage not owned": "Nivel no adquirido",
     "Color owned": "Color adquirido", "Color not owned": "Color no adquirido",
     "Buy ship": "Comprar nave", "Buy another ship": "Comprar otra nave",
@@ -29,6 +35,9 @@ export const smartphoneTranslations: Record<string, Record<string, string>> = {
     "The browser did not allow full screen. You can continue playing in this view.": "El navegador no ha permitido la pantalla completa. Puedes seguir jugando en esta vista.",
   },
   zh: {
+    "Requires Reinforced Hull": "需要强化舰体",
+    "Total with Reinforced Hull": "含强化舰体的总价",
+    "Applies to all your ships, including Advanced and Elite.": "适用于你的所有飞船，包括 Advanced 和 Elite。",
     "Stage owned": "已拥有此阶段", "Stage not owned": "尚未拥有此阶段",
     "Color owned": "已拥有此颜色", "Color not owned": "尚未拥有此颜色",
     "Buy ship": "购买飞船", "Buy another ship": "再购买一艘飞船",
@@ -43,6 +52,9 @@ export const smartphoneTranslations: Record<string, Record<string, string>> = {
     "The browser did not allow full screen. You can continue playing in this view.": "浏览器未允许全屏。你可以在当前视图中继续游戏。",
   },
   vi: {
+    "Requires Reinforced Hull": "Cần Thân tàu gia cố",
+    "Total with Reinforced Hull": "Tổng giá gồm Thân tàu gia cố",
+    "Applies to all your ships, including Advanced and Elite.": "Áp dụng cho tất cả tàu của bạn, bao gồm Advanced và Elite.",
     "Stage owned": "Đã sở hữu cấp này", "Stage not owned": "Chưa sở hữu cấp này",
     "Color owned": "Đã sở hữu màu này", "Color not owned": "Chưa sở hữu màu này",
     "Buy ship": "Mua tàu", "Buy another ship": "Mua thêm tàu",

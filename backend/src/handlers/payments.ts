@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { platformAPIClientForRequest } from "../services/platformAPIClient";
-import { findOffer, shipUpgradePrerequisite } from "../hangarCatalog";
+import { findOffer, purchasePrerequisite } from "../hangarCatalog";
 import "../types/session";
 import { isAdminMode } from "../adminAccess";
 import { testPiPurchaseAllowed } from "../paymentPolicy";
@@ -11,6 +11,9 @@ import { weaponPayment } from "../weaponStock";
 
 const identifier = (value: unknown) => typeof value === "string" && /^[a-zA-Z0-9_-]{1,100}$/.test(value) ? value : null;
 const fetchPayment = async (req: any, id: string) => (await platformAPIClientForRequest(req).get(`/v2/payments/${id}`)).data;
+const prerequisiteMessage = (prerequisite: string) => prerequisite === "armor_hull_mk1"
+  ? "Reinforced Hull required before Titanium Plating"
+  : "Advanced stage required before Elite";
 
 
 const safeDiagnosticText = (value: unknown) => {
@@ -66,8 +69,8 @@ export default function mountPaymentsEndpoints(router: Router) {
       const existing = await orders.findOne({ pi_payment_id: id });
       if (existing && (existing.user !== uid || existing.product_id !== offer.id || existing.cancelled)) return res.status(409).json({ error: "payment_conflict", stage: "approval", message: "Payment is already assigned or cancelled" });
       if (!existing && (offer.kind === "armor" || offer.kind === "ship_upgrade") && await orders.findOne({ user: uid, product_id: offer.id, paid: true })) return res.status(409).json({ error: "already_owned", stage: "approval", message: "Permanent upgrade already owned" });
-      const prerequisite = shipUpgradePrerequisite(offer);
-      if (prerequisite && !await orders.findOne({ user: uid, product_id: prerequisite, paid: true })) return res.status(403).json({ error: "prerequisite_missing", stage: "approval", message: "Advanced stage required before Elite" });
+      const prerequisite = purchasePrerequisite(offer);
+      if (prerequisite && !await orders.findOne({ user: uid, product_id: prerequisite, paid: true, cancelled: { $ne: true } })) return res.status(403).json({ error: "prerequisite_missing", stage: "approval", prerequisite, message: prerequisiteMessage(prerequisite) });
        if (!existing) {
         const purchaseQuote = await capturePurchaseQuote(payment);
         await orders.updateOne({ pi_payment_id: id }, { $setOnInsert: { pi_payment_id: id, product_id: offer.id, user: uid, username: req.session.currentUser?.username || null, paid: false, created_at: new Date(), purchaseQuote } }, { upsert: true });
@@ -98,8 +101,8 @@ export default function mountPaymentsEndpoints(router: Router) {
       if (!offer || !purchase || purchase.quantity !== (order.quantity ?? 1) || (payment.metadata?.weaponModel === 2 ? 2 : 1) !== (order.weapon_model ?? 1) || payment.identifier !== id || payment.user_uid !== uid || payment.metadata?.productId !== offer.id || payment.direction !== "user_to_app" || payment.amount !== purchase.amount || !payment.status?.developer_approved || payment.status?.cancelled || payment.status?.user_cancelled || !payment.status?.transaction_verified || !txid || (suppliedTxid && suppliedTxid !== txid)) {
         return res.status(400).json({ error: "Payment not verified" });
       }
-      const prerequisite = shipUpgradePrerequisite(offer);
-      if (prerequisite && !await orders.findOne({ user: uid, product_id: prerequisite, paid: true })) return res.status(403).json({ error: "Advanced stage required before Elite" });
+      const prerequisite = purchasePrerequisite(offer);
+      if (prerequisite && !await orders.findOne({ user: uid, product_id: prerequisite, paid: true, cancelled: { $ne: true } })) return res.status(403).json({ error: prerequisiteMessage(prerequisite), prerequisite });
       if (!payment.status?.developer_completed) await platformAPIClientForRequest(req).post(`/v2/payments/${id}/complete`, { txid });
       // Credit only after Pi has confirmed /complete (or reported already completed).
       const receipt = await readPaymentReceipt(payment);
