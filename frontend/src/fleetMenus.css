@@ -139,4 +139,4 @@
 .game-field .cryptoid .ship-visual { filter:drop-shadow(0 2px 1px #010719); }
 .game-field .cryptoid-emp .material-hull { opacity:.65; }
 
-.cinematic-home > .site-header .header-account { border:1px solid #d8bb7c8c;border-radius:10px;background:linear-gradient(145deg,#293951,#122338);padding:8px; }
+.cinematic-home > .site-header .header-account { border-color:#a3997d; }
