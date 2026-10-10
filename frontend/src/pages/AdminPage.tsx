@@ -15,10 +15,10 @@ import {
   type PlayerSkinId,
   type PlayerColorId,
 } from "./shipFleet";
-import { type ShipStage, shipEvolutionAsset } from "./shipEvolution";
+import { type ShipStage } from "./shipEvolution";
 import { MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { campaignLevel } from "./sectorManager";
-import PaintedShip from "./PaintedShip";
+import ShipPreview from "./ShipPreview";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
 import { primeGameAudio } from "./gameAudio";
 import { requestGameFullscreen } from "./gameFullscreen";
@@ -541,7 +541,7 @@ export default function AdminPage() {
             <>
               <section className="admin-panel admin-test-selection">
                 <div className="admin-selected-hull">
-                  <PaintedShip className="admin-hull" sprite={selectedSkin.sprite} stage={stage} color={colorId} />
+                  <div className="admin-hull" role="img" aria-label={`${selectedSkin.name} · ${t(stageNames[stage - 1])}`}><ShipPreview sprite={selectedSkin.sprite} stage={stage} color={colorId} /></div>
                   <strong>{selectedSkin.name}</strong>
                   <span>{t(stageNames[stage - 1])}</span>
                 </div>
@@ -620,13 +620,7 @@ export default function AdminPage() {
                         aria-pressed={skin.id === skinId}
                         onClick={() => setSkinId(skin.id)}
                       >
-                        <img
-                          src={shipEvolutionAsset(skin.sprite, stage)}
-                          alt=""
-                          width="100"
-                          height="100"
-                          loading="lazy"
-                        />
+                        <ShipPreview sprite={skin.sprite} stage={stage} color={colorId} />
                         <strong>{skin.name}</strong>
                         <span>{t(stageNames[stage - 1])}</span>
                       </button>

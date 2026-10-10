@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import BossPortrait from "./BossPortrait";
+import ShipPortrait from "./ShipPortrait";
 import { bossName } from "./bossNames";
 import WeaponTutorial from "./WeaponTutorial";
 import BossPhaseGuide from './BossPhaseGuide';
@@ -135,7 +136,7 @@ const GameGuide = ({ onClose, initialTopic = "controls", backLabel = "Back to sy
       <section className="guide-detail" aria-live="polite" aria-labelledby="guide-section-title" key={topic.id}>
         <h3 id="guide-section-title">{t(topic.title)}</h3>
         <p>{t(topic.intro)}</p>
-        {topic.id === "visuals" && <div className="guide-ship-gallery">{([1, 2, 3] as const).map(stage => <figure key={stage}><img src={shipEvolutionAsset(0, stage)} alt={t(stage === 1 ? "Standard ship" : stage === 2 ? "Advanced ship" : "Elite ship")} loading="lazy" /><figcaption>{t(stage === 1 ? "STANDARD" : stage === 2 ? "ADVANCED" : "ELITE")}</figcaption></figure>)}<figure className="guide-boss-example"><BossPortrait id={1} /><figcaption>#01 · {bossName(1)}</figcaption></figure></div>}
+        {topic.id === "visuals" && <div className="guide-ship-gallery">{([1, 2, 3] as const).map(stage => <figure key={stage}><ShipPortrait src={shipEvolutionAsset(0, stage)} color="grey" name={t(stage === 1 ? "Standard ship" : stage === 2 ? "Advanced ship" : "Elite ship")} /><figcaption>{t(stage === 1 ? "STANDARD" : stage === 2 ? "ADVANCED" : "ELITE")}</figcaption></figure>)}<figure className="guide-boss-example"><BossPortrait id={1} /><figcaption>#01 · {bossName(1)}</figcaption></figure></div>}
         {(topic.id === "boosts" || topic.id === "controls") && <WeaponTutorial />}
         {topic.id === "survival" && <BossPhaseGuide />}
         <ul>{topic.details.map(detail => <li key={detail}>{t(detail)}</li>)}</ul>

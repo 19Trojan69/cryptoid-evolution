@@ -318,10 +318,10 @@
   border: 2px solid #87dce8;
   background: #173a48;
 }
-.admin-fleet img {
+.admin-fleet .ship-preview {
   width: min(100%, 115px);
   height: 115px;
-  object-fit: contain;
+  flex-shrink: 0;
 }
 .admin-fleet strong {
   font:
