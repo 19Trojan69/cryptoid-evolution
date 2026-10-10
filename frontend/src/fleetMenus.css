@@ -104,8 +104,8 @@
 .ship-compact-configuration .ship-one-colors { grid-column:2;align-self:start;padding:8px;gap:7px;min-width:0; }
 .ship-compact-configuration .ship-one-colors-heading { align-items:flex-start;flex-direction:column;gap:4px; }
 .ship-compact-configuration .ship-one-colors-heading span { white-space:normal;overflow:visible; }
-.ship-compact-configuration .ship-color-dots { gap:4px; }
-.ship-compact-configuration .ship-color-dots button { position:relative;flex:0 0 36px;width:36px;height:36px;border-radius:9px;border-width:1px; }
+.ship-compact-configuration .ship-color-dots { gap:8px; }
+.ship-compact-configuration .ship-color-dots button { position:relative;flex:0 0 48px;width:48px;min-width:48px;height:48px;min-height:48px;padding:0;border-radius:9px;border-width:1px;touch-action:manipulation; }
 .ship-color-dots button span { display:block;color:#fff;font-size:21px;text-shadow:0 1px 3px #000; }
 .ship-color-dots button[data-owned="true"]::after { content:"";position:absolute;bottom:3px;right:3px;width:4px;height:4px;background:#d2ffe9;border-radius:50%;box-shadow:0 0 2px #132a2b; }
 .ship-compact-configuration .ship-configuration-summary { grid-column:2;grid-row:3;display:grid;gap:8px;min-width:0; }
@@ -130,7 +130,6 @@
   .ship-compact-configuration .ship-one-colors-heading { flex-direction:row;align-items:baseline;flex-wrap:wrap; }
   .ship-compact-configuration .ship-configuration-summary { grid-row:4;grid-column:1; }
 }
-@media(pointer:coarse) { .ship-compact-configuration .ship-color-dots button { flex-basis:40px;width:40px;height:40px; } }
 
 /* Static hull light is alpha-masked. Cached material, not a frame-time shader. */
 .material-hull { background-repeat:no-repeat;image-rendering:auto; }

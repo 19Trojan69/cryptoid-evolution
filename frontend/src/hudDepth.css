@@ -32,7 +32,7 @@
   border-radius: 50% 50% 70% 70%; pointer-events: none; content: "";
   background: linear-gradient(180deg, #ffffff25, transparent);
 }
-.game-hud .hud-stat > span { color: var(--hud-light); text-shadow: 0 0 5px color-mix(in srgb, var(--hud-accent) 55%, transparent); }
+.game-hud .hud-stat > span { color: var(--hud-light); font-size: 12px; line-height: 1.2; letter-spacing: .02em; text-shadow: 0 0 5px color-mix(in srgb, var(--hud-accent) 55%, transparent); }
 .game-hud .hud-stat strong { color: var(--hud-light); font-variant-numeric: tabular-nums; text-shadow: 0 1px #000, 0 0 7px color-mix(in srgb, var(--hud-accent) 75%, transparent); }
 .game-hud .game-level-hud { --hud-accent: #78dfff; }
 .game-hud .game-level-hud strong { color: #c5f1ff; }
@@ -46,6 +46,7 @@
 .game-hud .score-hud .shard-line b { color: #f4d693; text-shadow: 0 1px #1b1308, 0 0 8px #f7ce7b91; }
 .game-hud .score-hud .score-line b { color: #a9ffe9; text-shadow: 0 1px #001f21, 0 0 8px #4cebc991; }
 .game-hud .score-hud :is(.shard-line, .score-line) small { color: inherit; opacity: .95; text-shadow: 0 0 5px currentColor; }
+.game-hud .score-hud small { font-size: 12px; }
 .game-hud .round-hud { --hud-accent: #e7c887; }
 .game-hud .round-hud :is(span, strong, strong small) { color: #f5dfae; }
 .game-hud .game-control { --hud-accent: #9ed8ef; color: #b8ebff; border-radius: 50%; }
@@ -55,26 +56,45 @@
 .game-hud .game-control:hover { border-color: #f7dea8; color: #f7dea8; filter: brightness(1.1); }
 .game-hud .game-control:focus-visible { outline: 2px solid #f4d693; outline-offset: 3px; }
 .game-hud .game-control:disabled { opacity: .52; }
+.game-hud .hud-actions .home-control,
+.game-hud .pause-control { width: 48px; min-width: 48px; height: 48px; min-height: 48px; padding: 0; touch-action: manipulation; }
 .game-hud .hearts-stat-hit { animation: hearts-impact .23s ease-out; }
 
-@media (max-width: 560px) {
-  .game-hud { grid-template-columns: 36px minmax(43px, .78fr) minmax(39px, .66fr) minmax(111px, 2.12fr) minmax(43px, .75fr) 36px; gap: 3px; padding-inline: max(4px, env(safe-area-inset-left)) max(4px, env(safe-area-inset-right)); }
-  .game-hud .hud-stat { min-width: 0; padding: 3px 1px; border-radius: 10px; }
-  .game-hud .score-hud { border-radius: 12px; }
-  .game-hud .game-control { width: 36px; min-width: 36px; height: 44px; min-height: 44px; }
-  .game-hud .hearts-stat { gap: 2px; }
-  .game-hud .hud-stat strong:not(.hearts) { font-size: clamp(13px, 4vw, 17px); }
-  .game-hud .score-hud :is(.shard-line, .score-line) { gap: 3px; }
-  .game-hud .score-hud b { font-size: clamp(13px, 4.15vw, 17px); letter-spacing: -.035em; }
-  .game-hud .score-hud small { font-size: clamp(6px, 1.9vw, 8px); letter-spacing: 0; }
-  .game-hud .hearts-stat .hearts { font-size: clamp(13px, 3.9vw, 17px); }
-  .game-hud .round-hud strong small { margin-left: 0; font-size: clamp(8px, 2.7vw, 11px); }
+.game-field .game-label { top: calc(var(--hud-bottom, 96px) + 6px); }
+.game-field .power-status { top: calc(var(--hud-bottom, 96px) + 26px); }
+.game-field .bonus-counter { top: calc(var(--hud-bottom, 96px) + 46px); }
+
+/* Two compact rows leave room for real labels and separate 48px touch targets. */
+@media (max-width: 700px) {
+  .game-hud {
+    grid-template-columns: 48px repeat(3, minmax(0, 1fr)) 48px;
+    grid-template-areas: "home hearts level round pause" "score score score score score";
+    gap: 6px;
+    padding: max(6px, env(safe-area-inset-top)) max(6px, env(safe-area-inset-right)) 8px max(6px, env(safe-area-inset-left));
+    border-radius: 0 0 18px 18px;
+  }
+  .game-hud .hud-actions { grid-area: home; }
+  .game-hud .hearts-stat { grid-area: hearts; }
+  .game-hud .game-level-hud { grid-area: level; }
+  .game-hud .round-hud { grid-area: round; }
+  .game-hud .pause-control { grid-area: pause; }
+  .game-hud .hud-stat { min-width: 0; min-height: 48px; gap: 3px; padding: 3px 2px; border-radius: 10px; }
+  .game-hud .hud-stat strong:not(.hearts) { font-size: 20px; }
+  .game-hud .hud-stat > span { font-size: 11px; letter-spacing: 0; }
+  .game-hud .score-hud { grid-area: score; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); min-height: 42px; padding: 4px 6px; gap: 8px; border-radius: 12px; }
+  .game-hud .score-hud :is(.shard-line, .score-line) { flex-direction: column-reverse; height: auto; gap: 3px; min-height: 32px; }
+  .game-hud .score-hud .shard-line { border-bottom: 0; border-right: 1px solid #d1c09b4d; padding-right: 8px; }
+  .game-hud .score-hud b { font-size: 18px; line-height: 1.1; letter-spacing: 0; }
+  .game-hud .score-hud small { font-size: 11px; line-height: 1.2; letter-spacing: 0; }
+  .game-hud .hearts-stat { gap: 3px; }
+  .game-hud .hud-heart-label svg { width: 17px; height: 17px; }
+  .game-hud .hearts-stat .hearts { font-size: 20px; }
+  .game-hud .round-hud strong small { margin-left: 1px; font-size: 13px; }
+  .game-field .game-label { max-width: calc(100% - 16px); font-size: 10px; letter-spacing: 0; white-space: normal; text-align: center; }
 }
-@media (max-width: 375px) {
-  .game-hud { grid-template-columns: 30px minmax(38px, .77fr) minmax(34px, .65fr) minmax(98px, 2.1fr) minmax(38px, .74fr) 30px; gap: 2px; padding-inline: 3px; }
-  .game-hud .game-control { width: 30px; min-width: 30px; }
-  .game-hud .score-hud b { font-size: clamp(12px, 3.8vw, 14px); }
-  .game-hud .score-hud small { font-size: 6px; }
+@media (min-width: 1100px) {
+  .game-hud .hud-stat > span, .game-hud .score-hud small { font-size: 14px; }
+  .game-hud .hud-actions .home-control, .game-hud .pause-control { width: 56px; min-width: 56px; height: 56px; min-height: 56px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .game-hud .hearts-stat-hit { animation: none; }
