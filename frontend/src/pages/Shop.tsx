@@ -1,4 +1,5 @@
 import ServiceBadge from "../components/ServiceBadge";
+import useModalNavigation from "../hooks/useModalNavigation";
 import CareerDashboard from "./CareerDashboard";
 import FeedbackHub from "./FeedbackHub";
 import PilotProfile from "./PilotProfile";
@@ -200,13 +201,13 @@ const Shop = () => {
   useEffect(applySavedDisplaySettings, []);
   useEffect(() => {
     if (!systemMenuOpen) return;
-    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") { setSystemMenuOpen(false); } };
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape" && !document.querySelector('dialog[open]')) { setSystemMenuOpen(false); } };
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [systemMenuOpen]);
   useEffect(() => {
     if (!shopView) return;
-    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape" && !document.querySelector('dialog.boss-dossier[open]')) setShopView(null); };
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape" && !document.querySelector('dialog[open]')) setShopView(null); };
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [shopView, leaderRules]);
@@ -302,7 +303,13 @@ const Shop = () => {
   const [catalogReady, setCatalogReady] = useState(false);
   const [inventory, setInventory] = useState<Inventory | null>(null);
   const [loadoutMessage, setLoadoutMessage] = useState("");
-  const shipSearchOptions = playerSkins.filter(skin => shopView === "shop" || fleetCount(visibleFleet, skin.id) > 0);
+  const [shipQuery, setShipQuery] = useState("");
+  const [shipFilter, setShipFilter] = useState<"all" | "owned" | "available">("all");
+  const shipSearchOptions = playerSkins.filter(skin => {
+    const owned = fleetCount(visibleFleet, skin.id) > 0;
+    return (shopView === "shop" || owned) && skin.name.toLocaleLowerCase(locale).includes(shipQuery.trim().toLocaleLowerCase(locale)) &&
+      (shopTarget?.skin === skin.id || shipFilter === "all" || (shipFilter === "owned" ? owned : testnetStandardHullAvailable(skin.id)));
+  });
   useEffect(() => {
     let active = true;
     queueMicrotask(() => {
@@ -475,6 +482,19 @@ const Shop = () => {
   };
 
   const homePaused = Boolean(newCards.length || collectionOpen || shopView || systemMenuOpen || activePanel || termsOpen || quickGroup || showSignIn || feedbackOpen || pilotOpen !== null);
+  const modalLayer = pilotOpen !== null ? "profile" : collectionOpen ? "collection" : newCards.length ? "card" : showSignIn ? "signin" : feedbackOpen ? "feedback" : termsOpen ? "terms" : activePanel ? "guide" : systemMenuOpen ? "settings" : shopView ? shopView : quickGroup ? "quick" : null;
+  useModalNavigation(modalLayer, () => {
+    if (pilotOpen !== null) setPilotOpen(null);
+    else if (collectionOpen) setCollectionOpen(false);
+    else if (newCards.length) setNewCards(cards => cards.slice(1));
+    else if (showSignIn) closeSignIn();
+    else if (feedbackOpen) setFeedbackOpen(false);
+    else if (termsOpen) setTermsOpen(false);
+    else if (activePanel) setActivePanel(null);
+    else if (systemMenuOpen) setSystemMenuOpen(false);
+    else if (shopView) setShopView(null);
+    else closeQuickMenu();
+  });
   return (
     <main data-shop-area={shopView ?? "home"} className="app-shell landing-shell cinematic-home" data-home-paused={homePaused} onPointerDownCapture={primeCardSound}>
       {newCards[0] && <CardReveal key={user?.uid ?? "guest"} reward={newCards[0]} remaining={newCards.length} onContinue={()=>{setNewCards(cards=>cards.slice(1));}}/>}
@@ -584,11 +604,12 @@ const Shop = () => {
         </dl></details>
         {leaderRules === "career" && personalScores ? <p className="leaderboard-personal">{t("Career Score")}: <strong>{personalScores.careerScore.toLocaleString(locale)}</strong> · {t("Best Run")}: <strong>{personalScores.bestRun.score.toLocaleString(locale)}</strong> · {t("Run level")}: {personalScores.bestRun.level == null ? t("Not recorded") : number(personalScores.bestRun.level)}</p> : leaderRules !== "career" && personalBest !== null && <p className="leaderboard-personal">{t("Your personal best")}: <strong>{number(personalBest)}</strong></p>}
         {leadersStatus === "loading" && <p role="status">{t("Loading scores…")}</p>}
-        {leadersStatus === "error" && <p role="status">{t("Leaderboard unavailable. Try again later.")}</p>}
+        {leadersStatus === "error" && <div role="alert"><p>{t("Leaderboard unavailable. Try again later.")}</p><button type="button" className="button button-secondary" onClick={() => { setLeadersStatus("loading"); setLeaderRefresh(n => n + 1); }}>{t("Retry")}</button></div>}
         {leadersStatus === "ready" && user && !leaders.some(entry => entry.username === user.username) && <p>{t("Your account is not in this Top 100.")}</p>}
         {leadersStatus === "ready" && (leaders.length ? <><ol className="leaderboard-list" start={leaderPage * 5 + 1}>{leaders.slice(leaderPage * 5, leaderPage * 5 + 5).map(entry => <li key={entry.rank} data-own={user?.username === entry.username} aria-current={user?.username === entry.username ? "true" : undefined}>
           <div className="leader-identity"><span className="leader-place">{number(entry.rank)}</span><button className="leader-profile-link" type="button" aria-label={`${t("Pilot profile")} · @${entry.username}`} onClick={()=>setPilotOpen(entry.username)}><PilotAvatar avatar={entry.avatar??null} name=""/><span className="leader-profile-copy"><strong>@{entry.username}{user?.username === entry.username && <small> · {t("You")}</small>}</strong><small>{t("Pilot profile")} →</small></span></button><span className="leader-rank"><ServiceBadge name={entry.serviceRank?.name ?? "Rookie"}/><small>{t(entry.serviceRank?.name ?? "Rookie")}</small></span></div>
-          <dl className="leader-metrics"><div><dt>{t(leaderRules === "career" ? "Career Score" : "Mission high scores")}</dt><dd>{number(entry.score)}</dd></div>{leaderRules === "career" && <div><dt>{t("Best Run")}</dt><dd>{number(entry.bestRun?.score ?? 0)}</dd></div>}<div><dt>{t("Run level")}</dt><dd>{entry.runLevel == null ? t("Not recorded") : number(entry.runLevel)}</dd></div><div><dt>{t("Profile level")}</dt><dd>{entry.profileLevel == null ? t("Not recorded") : number(entry.profileLevel)}</dd></div></dl>
+          <dl className="leader-metrics leader-primary-metrics"><div><dt>{t(leaderRules === "career" ? "Career Score" : "Mission high scores")}</dt><dd>{number(entry.score)}</dd></div><div><dt>{t("Profile level")}</dt><dd>{entry.profileLevel == null ? t("Not recorded") : number(entry.profileLevel)}</dd></div></dl>
+          <details className="leader-record-details"><summary>{t("Mission details")}</summary><dl className="leader-metrics">{leaderRules === "career" && <div><dt>{t("Best Run")}</dt><dd>{number(entry.bestRun?.score ?? 0)}</dd></div>}<div><dt>{t("Run level")}</dt><dd>{entry.runLevel == null ? t("Not recorded") : number(entry.runLevel)}</dd></div></dl></details>
         </li>)}</ol>{leaders.length > 5 && <nav className="leaderboard-pages" aria-label={t("Top 100")}><button type="button" disabled={leaderPage === 0} onClick={() => setLeaderPage(page => Math.max(0, page - 1))}>{t("Previous page")}</button><span role="status">{number(leaderPage + 1)} / {number(Math.ceil(leaders.length / 5))}</span><button type="button" disabled={(leaderPage + 1) * 5 >= leaders.length} onClick={() => setLeaderPage(page => page + 1)}>{t("Next page")}</button></nav>}</> : <p>{t("No records yet. Complete a mission to be first.")}</p>)}
       </section>}
 
@@ -602,9 +623,15 @@ const Shop = () => {
           </div>}
         </div>}
         <div className="ship-panel-heading"><div><p className="eyebrow">{t(shopView === "hangar" ? "YOUR HANGAR" : "SHIP SHOP")}</p><h2 id="hangar-heading">{t(shopView === "hangar" ? "Your fleet" : "Available ships")}</h2></div><strong className="shard-balance">◆ {displayedShards} <small>{t("Shards")}</small></strong></div>
-        <p className="testnet-shop-notice" role="note">{shipSaveNetwork === "testnet" ? t("TESTNET SHARDS: Earn and spend Shards on available Standard ships here for testing. Shards and ship purchases do not transfer to Mainnet; there you start from zero.") : t("MAINNET SHARDS: Shards and ship purchases start from zero here. Testnet balances and ships are separate.")}</p>
-        <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? t("Testnet: Grey Scout is free; nine Standard hulls cost Shards. Other hulls are locked until Mainnet.") : t("Grey Scout is free; nine Standard hulls cost Shards. Other hulls are currently locked.")}</p>
-        <details className="ship-earnings"><summary>{t("How to earn Shards")}</summary><p>{t("At level 1, defeats earn Shards by enemy class: light 2, medium 4–5, elite 6, heavy 8, boss 16. Rewards grow with level. Bonus targets earn 1 each, plus a completion reward that grows with level. The HUD shows your previous Shard balance plus this mission's earnings.")}</p></details>
+        <p className="testnet-shop-notice" role="note">{t(shipSaveNetwork === "testnet" ? "Testnet progress stays separate from Mainnet." : "Mainnet progress stays separate from Testnet.")}</p>
+        <details className="ship-earnings"><summary>{t("Shards & purchase rules")}</summary><p>{shipSaveNetwork === "testnet" ? t("TESTNET SHARDS: Earn and spend Shards on available Standard ships here for testing. Shards and ship purchases do not transfer to Mainnet; there you start from zero.") : t("MAINNET SHARDS: Shards and ship purchases start from zero here. Testnet balances and ships are separate.")}</p><p>{shipSaveNetwork === "testnet" ? t("Testnet: Grey Scout is free; nine Standard hulls cost Shards. Other hulls are locked until Mainnet.") : t("Grey Scout is free; nine Standard hulls cost Shards. Other hulls are currently locked.")}</p><p>{t("At level 1, defeats earn Shards by enemy class: light 2, medium 4–5, elite 6, heavy 8, boss 16. Rewards grow with level. Bonus targets earn 1 each, plus a completion reward that grows with level. The HUD shows your previous Shard balance plus this mission's earnings.")}</p></details>
+        <div className="fleet-toolbar">
+          <label>{t("Find a ship")}<input type="search" value={shipQuery} placeholder={t("Search ship name")} onChange={event => { setShipQuery(event.target.value); setShopTarget(null); }} /></label>
+          <div className="fleet-filters" role="group" aria-label={t("Available ships")}>{(["all", "owned", "available"] as const).map(filter => <button type="button" key={filter} aria-pressed={shipFilter === filter} onClick={() => { setShipFilter(filter); setShopTarget(null); }}>{t(filter === "all" ? "All ships" : filter === "owned" ? "Owned ships" : "Available with Shards")}</button>)}</div>
+          {(shipQuery || shipFilter !== "all") && <button className="fleet-reset" type="button" onClick={() => { setShipQuery(""); setShipFilter("all"); }}>{t("Reset filters")}</button>}
+          <p role="status">{number(shipSearchOptions.length)} · {t("Available ships")}</p>
+        </div>
+        {!shipSearchOptions.length && <p role="status">{t("No ships match these filters.")}</p>}
         <div className="fleet-scroll-list">
           {shipSearchOptions.map(skin => <article id={`fleet-${skin.id}`} key={`${shopView}:${skin.id}`} className="fleet-list-entry">
             <FleetShipPanel view={shopView} skin={skin} ownedStage={ownedShipStage(skin.sprite, inventory?.ownedShipUpgrades)} fleet={visibleFleet} shards={displayedShards} locale={locale} adminPreview={adminMode}
@@ -614,7 +641,7 @@ const Shop = () => {
               purchaseBusy={accountBusy || Boolean(user && !account)} onBuy={color => purchasePreview(skin, color)}
               onEquip={color => equipShip(skin, color)}
               onStage={stage => { if (adminMode) sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage)); }}
-              onUpgrade={stage => { setShopTarget({ skin: skin.id, stage }); setShopView("shop"); }} />
+              onUpgrade={stage => { setShipQuery(""); setShipFilter("all"); setShopTarget({ skin: skin.id, stage }); setShopView("shop"); }} />
           </article>)}
         </div>
       </section>}

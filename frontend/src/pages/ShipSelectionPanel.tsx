@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import PaintedShip from "./PaintedShip";
+import ShipPreview from "./ShipPreview";
 import PiPrice from "../components/PiPrice";
 import { allPlayerColors, fleetCount, playerColors, standardShipPrice, testnetStandardHullAvailable, type ShipFleet } from "./shipFleet";
 import { projectileGuardForStage, type ShipStage } from "./shipEvolution";
@@ -52,9 +52,9 @@ export default function ShipSelectionPanel({
     ? playerColors.some(available => available.id === item.id) || fleetCount(fleet, skin.id, item.id) > 0
     : fleetCount(fleet, skin.id, item.id) > 0);
   const description = stage === 1 ? t("Single fire. No free enemy projectile hits. An active shield protects against shots and ship collisions.") : t(offerFor(stage)?.description ?? "");
-  const status = stage === 1
-    ? hullCount ? t("Owned") + " ×" + hullCount : standardAvailable ? t("Not owned") : "MAINNET READY"
-    : ownedStage >= stage ? t("OWNED") : "MAINNET READY";
+  const stageOwned = hullCount > 0 && ownedStage >= stage;
+  const locked = stage === 1 ? !standardAvailable : !stageOwned;
+  const status = stageOwned ? t("Stage owned") : t("Stage not owned");
 
   const equipped = selectedSkinId === skin.id && selectedColorId === color.id && stage === ownedStage;
   const canEquip = Boolean(adminPreview || hullCount > 0 && fleetCount(fleet, skin.id, color.id) > 0 && stage === ownedStage);
@@ -70,37 +70,37 @@ export default function ShipSelectionPanel({
     <div className="ship-one-hero">
       <div className="ship-one-info">
         <h3>{skin.name} <small>· {t(stageLabel(stage))}</small></h3>
-        <strong className={status === "MAINNET READY" ? "mainnet-ready-badge" : undefined}>{status}</strong>
+        <strong className="ship-stage-status" data-owned={stageOwned}>{status}{stage === 1 && hullCount > 0 ? ` ×${hullCount}` : ""}</strong>
       </div>
       <div className="ship-one-art-wrap" role="img" aria-label={skin.name + " · " + t(color.name) + " · " + t(stageLabel(stage))}>
         <span className="ship-one-art-frame">
           <span className="ship-one-art" style={shipPreviewPlacement(skin.sprite, stage)}>
-            <PaintedShip sprite={skin.sprite} color={color.id} stage={stage} />
+            <ShipPreview sprite={skin.sprite} color={color.id} stage={stage} />
           </span>
         </span>
       </div>
       <div className="ship-one-colors">
-        <div className="ship-one-colors-heading"><h4>{t("Color variants")}</h4><span>{t(color.name)}{fleetCount(fleet, skin.id, color.id) ? " · " + t("Owned") + " ×" + fleetCount(fleet, skin.id, color.id) : ""}</span></div>
+        <div className="ship-one-colors-heading"><h4>{t("Color variants")}</h4><span>{t(color.name)} · {t(fleetCount(fleet, skin.id, color.id) ? "Color owned" : "Color not owned")}{fleetCount(fleet, skin.id, color.id) ? " ×" + fleetCount(fleet, skin.id, color.id) : ""}</span></div>
         <div className="ship-color-dots" role="group" aria-label={t("Ship paint")}>
           {colors.map(item => <button key={item.id} type="button" aria-pressed={color.id === item.id}
-            aria-label={t(item.name) + (fleetCount(fleet, skin.id, item.id) ? " · " + t("Owned") : " · " + t("Not owned"))}
+            aria-label={t(item.name) + " · " + t(fleetCount(fleet, skin.id, item.id) ? "Color owned" : "Color not owned")}
             title={t(item.name)} data-owned={fleetCount(fleet, skin.id, item.id) > 0} style={{ "--paint": item.glow } as CSSProperties} onClick={() => onColorChange(item)}><span aria-hidden="true">{color.id === item.id ? "✓" : ""}</span></button>)}
         </div>
       </div>
       <div className="ship-configuration-summary">
         {view === "shop" && !adminPreview && <div className="ship-inline-purchase">
+          {locked && <p className="ship-lock-notice"><strong>{t("Purchases locked")}</strong> · <span className="mainnet-ready-badge">{t("MAINNET READY")}</span></p>}
           <span className="ship-purchase-price">{stage === 1
             ? `◆ ${shardPrice} ${t("Shards")}`
             : focusedOffer ? <>{t("Planned price")}: {piPrice(focusedOffer.pricePi)}</> : t("Price unavailable")}</span>
           {stage === 1 ? <>
             <small>{t(color.name)}{skin.price === 0 ? " · " + t("Starter issued free; price is for an additional ship.") : ""}</small>
-            <button className="button button-secondary ship-shard-button" type="button" onClick={onBuyStandard} aria-busy={purchaseBusy || undefined} disabled={adminPreview || purchaseBusy || !standardAvailable || shards < price}>
-              {t(hullCount ? "Buy another for" : "Buy for")} ◆ {shardPrice} {t("Shards")}
+            <button className="button button-secondary ship-shard-button" type="button" onClick={onBuyStandard} aria-label={`${t(hullCount ? "Buy another ship" : "Buy ship")} · ${skin.name} · ${t(color.name)} · ${shardPrice} ${t("Shards")}`} aria-busy={purchaseBusy || undefined} disabled={adminPreview || purchaseBusy || !standardAvailable || shards < price}>
+              {t(hullCount ? "Buy another ship" : "Buy ship")}
             </button>
-            {!standardAvailable && <small className="ship-lock-notice"><span className="mainnet-ready-badge">{t("MAINNET READY")}</span> · {t("Purchases locked")}</small>}
             {standardAvailable && shards < price && <small className="ship-shortfall">◆ {(price - shards).toLocaleString(locale)} {t("more Shards needed")}</small>}
           </> : <>
-            {ownedStage < stage && <button className="button button-secondary" type="button" disabled>{t("Buy for")} {focusedOffer ? piPrice(focusedOffer.pricePi) : "Pi"} · {t("Purchases locked")}</button>}
+            {!stageOwned && <button className="button button-secondary" type="button" disabled>{t("Purchases locked")}</button>}
             {stage === 3 && advancedOffer && focusedOffer && <small>{t("Requires Stage 2")} · {t("Total with Advanced")}: {piPrice(advancedOffer.pricePi + focusedOffer.pricePi)}</small>}
           </>}
         </div>}
@@ -108,7 +108,7 @@ export default function ShipSelectionPanel({
           <span><b aria-hidden="true">{stage === 1 ? "Ⅰ" : stage === 2 ? "Ⅱ" : "Ⅱ+"}</b>{t(stage === 1 ? "Single laser" : "Twin Laser")}</span>
           <span><b>{projectileGuardForStage(stage)}</b>{t("Projectile hits left")}</span>
         </div>
-        <p className="ship-configuration-description">{description}</p>
+        <details className="ship-configuration-details"><summary>{t("Ship details")}</summary><p className="ship-configuration-description">{description}</p></details>
       </div>
     </div>
     {(view === "hangar" || adminPreview || canEquip) && <div className="ship-one-checkout">
