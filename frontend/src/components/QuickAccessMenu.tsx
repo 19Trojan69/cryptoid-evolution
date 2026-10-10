@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { useLocale } from "../i18n";
 import BlockchainIcon from "./BlockchainIcon";
 
-export type QuickAction = "profile" | "feedback" | "play" | "hangar" | "shop" | "upgrades" | "colors" | "weapons" | "armor" | "powers" | "progress" | "rewards" | "leaders" | "ranks" | "bosses" | "medals" | "chains" | "language" | "controls" | "audio" | "display" | "vibration" | "overview" | "visuals" | "guide-controls" | "route" | "combat" | "boosts" | "earnings" | "collection" | "signin" | "signout" | "admin" | "exit-admin" | "privacy" | "terms";
+export type QuickAction = "galaxy" | "profile" | "feedback" | "play" | "hangar" | "shop" | "upgrades" | "colors" | "weapons" | "armor" | "powers" | "progress" | "rewards" | "leaders" | "ranks" | "bosses" | "medals" | "chains" | "language" | "controls" | "audio" | "display" | "vibration" | "overview" | "visuals" | "guide-controls" | "route" | "combat" | "boosts" | "earnings" | "collection" | "signin" | "signout" | "admin" | "exit-admin" | "privacy" | "terms";
 type Entry = readonly [QuickAction, string];
 const groups: readonly { id: string; title: string; glyph: string; items: readonly Entry[] }[] = [
-  { id: "mission", title: "Game & mission", glyph: "▷", items: [["play", "Play"], ["overview", "Illustrated guide"], ["feedback", "Community & Feedback"]] },
+  { id: "mission", title: "Game & mission", glyph: "▷", items: [["play", "Play"], ["galaxy", "Galaxy map"], ["overview", "Illustrated guide"], ["feedback", "Community & Feedback"]] },
   { id: "fleet", title: "Shop & hangar", glyph: "◇", items: [["hangar", "Your fleet"], ["shop", "Ship shop"], ["weapons", "Weapons"], ["powers", "Power-ups"]] },
   { id: "career", title: "Career & rewards", glyph: "✧", items: [["profile", "My pilot profile"], ["progress", "Progress"], ["leaders", "Top 100"], ["rewards", "Rewards"]] },
   { id: "settings", title: "Settings", glyph: "⚙", items: [["language", "Language"], ["controls", "Controls"], ["audio", "Music & sound"], ["display", "Display & effects"]] },
@@ -49,7 +49,7 @@ export default function QuickAccessMenu({ onClose, onAction, signedIn, canAdmin,
       <nav aria-label={t("Game navigation")}>
         {groups.map(group => <div key={group.id} className="quick-access-category" data-category={group.id} data-open={openCategory === group.id}>
           <button className="quick-access-category-trigger" type="button" aria-expanded={openCategory === group.id} aria-controls={`quick-access-${group.id}`} onClick={() => setOpenCategory(current => current === group.id ? null : group.id)}><span className="category-icon"><BlockchainIcon kind={group.id} /></span><strong>{t(group.title)}</strong><i aria-hidden="true">⌄</i></button>
-          <div id={`quick-access-${group.id}`} className="quick-access-items" hidden={openCategory !== group.id}>{group.items.filter(([action]) => action === "signin" ? !signedIn && !busy : action === "signout" ? signedIn : action === "admin" ? canAdmin : action === "exit-admin" ? canAdmin && adminMode : true).map(([action, label]) => <button key={action} type="button" disabled={busy && (action === "signin" || action === "signout" || action === "exit-admin")} onClick={() => onAction(action)}><BlockchainIcon kind={action}/><span>{t(label)}</span><i aria-hidden="true">›</i></button>)}</div>
+          <div id={`quick-access-${group.id}`} className="quick-access-items" hidden={openCategory !== group.id}>{group.items.filter(([action]) => action === "signin" ? !signedIn && !busy : action === "signout" ? signedIn : action === "admin" ? canAdmin : action === "exit-admin" ? canAdmin && adminMode : true).map(([action, label]) => <button key={action} type="button" disabled={busy && (action === "signin" || action === "signout" || action === "exit-admin")} onClick={() => onAction(action)}><BlockchainIcon kind={action}/><span className={action === "galaxy" ? "quick-galaxy-copy" : undefined}>{t(label)}{action === "galaxy" && <><small>{t("500 levels · 50 bosses · 100 mini-games")}</small><em>{t("Preview · In development")}</em></>}</span><i aria-hidden="true">›</i></button>)}</div>
         </div>)}
       </nav>
     </section>
