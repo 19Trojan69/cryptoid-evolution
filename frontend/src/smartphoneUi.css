@@ -119,7 +119,7 @@
 .ship-compact-configuration .ship-lock-notice { margin: 0 0 7px; color: #f4d9a6; font-size: 12px; line-height: 1.5; }
 .ship-compact-configuration .ship-inline-purchase .button,.ship-compact-configuration .ship-one-checkout .button { min-height: 48px; border-radius: var(--menu-radius); clip-path: none; }
 .ship-compact-configuration .ship-purchase-price { display: block; margin-bottom: 5px; font-size: 16px; line-height: 1.4; }
-.ship-preview { position: relative; display: block; width: 100%; height: 100%; }
+.ship-preview,.landing-shell .ship-preview { position: relative; display: block; width: 100%; height: 100%; }
 .ship-preview > .collection-ship-portrait { display: block; width: 100%; height: 100%; object-fit: contain; object-position: 50% 50%; image-rendering: auto; }
 .landing-shell .ship-compact-configuration .ship-one-art-frame { inset: 8px; width: auto; height: auto; aspect-ratio: auto; transform: none; }
 .guide-ship-gallery .collection-ship-portrait { display: block; width: 100%; height: 110px; object-fit: contain; object-position: 50% 50%; }
