@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Galaxy layout check · development QA</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;padding:16px;background:#050919;color:#efdbb6;font:14px system-ui}header{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:16px}p{margin:0;max-width:65ch;font-size:12px;color:#b3c3dc}select{background:#14213c;color:inherit;border:1px solid #697b9e;padding:8px;border-radius:8px}iframe{display:block;width:320px;height:844px;border:1px solid #8491b3;margin:0 auto;background:#030616}main{overflow:auto}
+  </style>
+</head>
+<body>
+  <header>
+    <label>Layout viewport <select id="viewport">
+      <option value="320">320 px · small phone</option>
+      <option value="375">375 px · phone</option>
+      <option value="390">390 px · phone</option>
+      <option value="414">414 px · large phone</option>
+      <option value="768">768 px · tablet</option>
+    </select></label>
+    <p>Development QA only. This embeds the actual read-only /galaxy page without fixtures, simulated wins or rewards. Viewport checks do not emulate a physical device or Pi Browser.</p>
+  </header>
+  <main><iframe id="galaxy-check" title="Galaxy map layout" src="/galaxy"></iframe></main>
+  <script>document.getElementById('viewport').addEventListener('change',event=>{document.getElementById('galaxy-check').style.width=event.target.value+'px';});</script>
+</body>
+</html>
