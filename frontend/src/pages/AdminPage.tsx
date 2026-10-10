@@ -15,17 +15,19 @@ import {
   type PlayerSkinId,
   type PlayerColorId,
 } from "./shipFleet";
-import { type ShipStage, shipEvolutionAsset } from "./shipEvolution";
+import { type ShipStage } from "./shipEvolution";
 import { MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { campaignLevel } from "./sectorManager";
-import PaintedShip from "./PaintedShip";
+import ShipPreview from "./ShipPreview";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
 import { primeGameAudio } from "./gameAudio";
 import { requestGameFullscreen } from "./gameFullscreen";
-import { readEffectsVolume } from "./musicPreferences";
+import { readEffectsVolume, readMusicVolume } from "./musicPreferences";
+import { MusicPlayer } from "./musicPlayback";
 import "./admin.css";
 import AdminUsage from "./AdminUsage";
-import { useLocale } from "../i18n";
+import { paymentEvidenceLinks } from "./paymentEvidenceLinks";
+import { useAdminLocale } from "../adminLocale";
 
 const tabs = [
   ["overview", "Übersicht"],
@@ -41,6 +43,8 @@ type Network = "mainnet" | "testnet" | "unknown";
 type Status = "all" | "confirmed" | "pending" | "cancelled";
 type Phase = "normal" | "boss" | "bonus";
 type Payment = {
+  username: string | null; quantity: number | null;
+  purchasePrice: { availability: string; purchaseAt: string | null; usdPerPi: number | null; eurPerPi: number | null; usdAmount: number | null; eurAmount: number | null; source: string | null; quotedAt: string | null; eurMethod: string | null };
   id: string;
   txid: string | null;
   network: string;
@@ -66,6 +70,10 @@ type Payment = {
     recordedAt: string;
   } | null;
 };
+const normalizePayment = (payment: Payment): Payment => ({ ...payment,
+  quantity: payment.quantity ?? null, username: payment.username || null,
+  purchasePrice: payment.purchasePrice ?? { availability: payment.network === "Pi Testnet" ? "test_payment" : "unavailable", purchaseAt: payment.createdAt, usdPerPi: null, eurPerPi: null, usdAmount: null, eurAmount: null, source: null, quotedAt: null, eurMethod: null },
+});
 type Summary = { _id: Network; total: number; confirmed: number; confirmedPi: number; missingAmounts: number };
 type Ledger = { payments: Payment[]; total: number; page: number; pageSize: number; summary: Summary[] };
 type AdminStatus = {
@@ -81,7 +89,7 @@ const networkNames: Record<Network, string> = { mainnet: "Echte Pi", testnet: "T
 const statusNames = { confirmed: "Bestätigt", pending: "Offen", cancelled: "Storniert" };
 const date = (value: string | null) =>
   value && Number.isFinite(Date.parse(value))
-    ? new Date(value).toLocaleString("de-AT", { timeZone: "Europe/Vienna" })
+    ? new Date(value).toLocaleString("de-AT", { timeZone: "Europe/Vienna", timeZoneName: "shortOffset" })
     : "Nicht dokumentiert";
 const amount = (value: number | null) =>
   value === null ? "Nicht dokumentiert" : value.toLocaleString("de-AT", { maximumFractionDigits: 7 });
@@ -102,20 +110,20 @@ const audioTests = [
   ["Plasma", "shot-plasma"],
   ["Waffen-Upgrade", "pickup-weapon"],
   ["Schild", "pickup-shield"],
-  ["Overdrive", "pickup-overdrive"],
-  ["Rapid", "pickup-rapid"],
+  ["Leistungsboost", "pickup-overdrive"],
+  ["Schnellfeuer", "pickup-rapid"],
   ["Bombe", "pickup-bomb"],
   ["EMP", "pickup-emp"],
   ["Boss-Sirene", "boss-warning-siren"],
   ["Boss-Explosion", "boss-destroy-v3"],
   ["Boss-Sieg", "boss-victory-v2"],
-  ["Home-Musik", "home-galactic-chain"],
+  ["Startseitenmusik", "home-galactic-chain"],
   ["Spielmusik", "battle-orbit"],
   ["Boss-Musik", "dreadnought-duel"],
 ] as const;
 
 export default function AdminPage() {
-  const { t } = useLocale();
+  const { t } = useAdminLocale();
   const auth = useAuth();
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
@@ -148,9 +156,13 @@ export default function AdminPage() {
   const [resetName, setResetName] = useState("");
   const [resetChecked, setResetChecked] = useState(false);
   const [reload, setReload] = useState(0);
+  const [csvFile, setCsvFile] = useState<{ url: string; file: File } | null>(null);
+  useEffect(() => () => { if (csvFile) URL.revokeObjectURL(csvFile.url); }, [csvFile]);
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioRef = useRef<MusicPlayer | null>(null);
+  const audioRequest = useRef(0);
   const [playingAudio, setPlayingAudio] = useState("");
+  const evidenceLinks = selectedPayment ? paymentEvidenceLinks(selectedPayment) : null;
   const selectedSkin = playerSkins.find(skin => skin.id === skinId)!;
   const allowed = auth.authReady && auth.canAdmin;
 
@@ -179,7 +191,7 @@ export default function AdminPage() {
     axiosClient
       .get<Ledger>("/admin/payments", { params: { network, status, page } })
       .then(({ data }) => {
-        if (active) setLedger(data);
+        if (active) setLedger({ ...data, payments: data.payments.map(normalizePayment) });
       })
       .catch((err: unknown) => {
         if (active) setLedgerError(errorMessage(err));
@@ -204,7 +216,9 @@ export default function AdminPage() {
 
   useEffect(
     () => () => {
-      audioRef.current?.pause();
+      audioRequest.current += 1;
+      audioRef.current?.close();
+      audioRef.current = null;
     },
     []
   );
@@ -245,6 +259,7 @@ export default function AdminPage() {
       sessionStorage.setItem(ADMIN_SHIP_COLOR_KEY, colorId);
       sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage));
       sessionStorage.setItem(ADMIN_START_SECTOR_KEY, String(configuration.sector));
+      audioRequest.current += 1;
       audioRef.current?.pause();
       requestGameFullscreen();
       navigate("/game");
@@ -277,15 +292,15 @@ export default function AdminPage() {
         responseType: "blob",
         timeout: 60_000,
       });
-      const url = URL.createObjectURL(data);
+      const contents = await data.text();
+      if (!contents.startsWith('"Netzwerk"') && !contents.startsWith('\uFEFF"Netzwerk"')) throw new Error("Invalid CSV response");
+      const file = new File(["\uFEFF", contents.replace(/^\uFEFF/, "")], `cryptoid-pi-zahlungen-${network}-${status}.csv`, { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(file);
+      setCsvFile({ url, file });
       const link = document.createElement("a");
-      link.href = url;
-      link.download = `cryptoid-pi-zahlungen-${network}-${status}.csv`;
-      document.body.append(link);
-      link.click();
-      link.remove();
-      window.setTimeout(() => URL.revokeObjectURL(url), 15_000);
-      setMessage("CSV-Download gestartet.");
+      link.href = url; link.download = file.name;
+      document.body.append(link); link.click(); link.remove();
+      setMessage(t("CSV ready. Use Save or Share if the download does not start."));
     });
   };
 
@@ -295,7 +310,7 @@ export default function AdminPage() {
         `/admin/payments/${encodeURIComponent(payment.id)}/refresh`,
         { network: target }
       );
-      setSelectedPayment(data.payment);
+      setSelectedPayment(normalizePayment(data.payment));
       setReload(value => value + 1);
       setMessage(
         data.receiptFound
@@ -317,30 +332,36 @@ export default function AdminPage() {
           receiptNumber: String(form.get("receipt") || ""),
         }
       );
-      setSelectedPayment(data.payment);
+      setSelectedPayment(normalizePayment(data.payment));
       setReload(value => value + 1);
       setMessage("EUR-Bewertung zum Wallet-Eingangszeitpunkt gespeichert.");
     });
   };
 
   const testAudio = async (name: string, file: string) => {
-    audioRef.current?.pause();
+    const request = ++audioRequest.current;
     setError("");
-    const audio = new Audio(`/audio/${file}.mp3`);
-    audio.volume = readEffectsVolume();
-    audioRef.current = audio;
-    audio.onended = () => setPlayingAudio("");
-    try {
-      await audio.play();
-      setPlayingAudio(name);
-    } catch {
-      setPlayingAudio("");
-      setError("Dieser Ton konnte nicht gestartet werden. Bitte erneut antippen.");
-    }
+    setPlayingAudio("");
+    const source = `/audio/${file}.mp3`;
+    // Keep one unlocked media element and use the existing iOS-safe gain control.
+    const player = audioRef.current ?? new MusicPlayer(source, readEffectsVolume());
+    audioRef.current = player;
+    player.pause();
+    player.setSource(source);
+    player.audio.currentTime = 0;
+    player.audio.loop = false;
+    player.setVolume(file === "home-galactic-chain" || file === "battle-orbit" || file === "dreadnought-duel"
+      ? readMusicVolume() : readEffectsVolume());
+    player.audio.onended = () => setPlayingAudio("");
+    const played = await player.play();
+    // Ignore a completed play request after Stop, navigation or another test.
+    if (audioRequest.current !== request || audioRef.current !== player) return;
+    if (played) { if (player.playing) setPlayingAudio(name); }
+    else setError("Dieser Ton konnte nicht gestartet werden. Bitte erneut antippen.");
   };
 
   return (
-    <main className="admin-shell">
+    <main className="admin-shell" tabIndex={0} aria-label={t("Admin-Zentrale")}>
       <header className="admin-header">
         <Link className="admin-brand" to="/">
           <img src="/trojan-wolf-games.webp" width="104" height="52" alt="Trojan Wolf Games" />
@@ -496,6 +517,7 @@ export default function AdminPage() {
                           key={key}
                           onClick={() => {
                             setNetwork(key);
+                      setCsvFile(null);
                             setPage(1);
                             openView("payments");
                           }}
@@ -519,7 +541,7 @@ export default function AdminPage() {
             <>
               <section className="admin-panel admin-test-selection">
                 <div className="admin-selected-hull">
-                  <PaintedShip className="admin-hull" sprite={selectedSkin.sprite} stage={stage} color={colorId} />
+                  <div className="admin-hull" role="img" aria-label={`${selectedSkin.name} · ${t(stageNames[stage - 1])}`}><ShipPreview sprite={selectedSkin.sprite} stage={stage} color={colorId} /></div>
                   <strong>{selectedSkin.name}</strong>
                   <span>{t(stageNames[stage - 1])}</span>
                 </div>
@@ -560,7 +582,7 @@ export default function AdminPage() {
                           .filter(offer => offer.kind === "power")
                           .map(offer => (
                             <option key={offer.id} value={offer.id}>
-                              {offer.name}
+                              {t(offer.name)}
                             </option>
                           ))}
                       </select>
@@ -572,8 +594,8 @@ export default function AdminPage() {
                       <button
                         key={color.id}
                         type="button"
-                        aria-label={color.name}
-                        title={color.name}
+                        aria-label={t(color.name)}
+                        title={t(color.name)}
                         aria-pressed={colorId === color.id}
                         style={{ backgroundColor: color.glow }}
                         onClick={() => setColorId(color.id)}
@@ -598,13 +620,7 @@ export default function AdminPage() {
                         aria-pressed={skin.id === skinId}
                         onClick={() => setSkinId(skin.id)}
                       >
-                        <img
-                          src={shipEvolutionAsset(skin.sprite, stage)}
-                          alt=""
-                          width="100"
-                          height="100"
-                          loading="lazy"
-                        />
+                        <ShipPreview sprite={skin.sprite} stage={stage} color={colorId} />
                         <strong>{skin.name}</strong>
                         <span>{t(stageNames[stage - 1])}</span>
                       </button>
@@ -695,6 +711,7 @@ export default function AdminPage() {
                     aria-pressed={network === key}
                     onClick={() => {
                       setNetwork(key);
+                      setCsvFile(null);
                       setPage(1);
                       setSelectedPayment(null);
                     }}
@@ -709,6 +726,7 @@ export default function AdminPage() {
                     value={status}
                     onChange={event => {
                       setStatus(event.target.value as Status);
+                      setCsvFile(null);
                       setPage(1);
                       setSelectedPayment(null);
                     }}
@@ -722,6 +740,14 @@ export default function AdminPage() {
                 <button className="admin-button admin-primary" disabled={busy} onClick={exportPayments}>
                   {t("CSV herunterladen")} </button>
               </div>
+              {csvFile && <div className="admin-actions" role="status">
+                <a className="admin-button admin-primary" href={csvFile.url} download={csvFile.file.name}>{t("Save CSV")}</a>
+                <button className="admin-button" type="button" onClick={() => {
+                  if (navigator.canShare?.({ files: [csvFile.file] })) void navigator.share({ files: [csvFile.file] }).catch(() => setMessage(t("Save CSV")));
+                  else { const link = document.createElement("a"); link.href = csvFile.url; link.target = "_blank"; link.rel = "noopener"; link.click(); setMessage(t("Use your browser menu to save or share the file.")); }
+                }}>{t("Share CSV")}</button>
+                <p>{t("The export includes all pages for the selected network and status.")}</p>
+              </div>}
               {selectedPayment ? (
                 <div className="admin-payment-detail">
                   <div className="admin-section-head">
@@ -732,8 +758,20 @@ export default function AdminPage() {
                   <dl>
                     {[
                       ["Produkt", selectedPayment.productName],
+                      ["Product ID", selectedPayment.productId],
+                      ["Quantity", amount(selectedPayment.quantity)],
+                      ["Username", selectedPayment.username || t("Not recorded")],
+                      ["Purchase time", date(selectedPayment.purchasePrice.purchaseAt)],
+                      ["Historical Pi price (USD)", amount(selectedPayment.purchasePrice.usdPerPi)],
+                      ["Historical Pi price (EUR)", amount(selectedPayment.purchasePrice.eurPerPi)],
+                      ["Purchase value (USD)", amount(selectedPayment.purchasePrice.usdAmount)],
+                      ["Purchase value (EUR)", amount(selectedPayment.purchasePrice.eurAmount)],
+                      ["Price source", selectedPayment.purchasePrice.source || t("Not available")],
+                      ["Price timestamp", date(selectedPayment.purchasePrice.quotedAt)],
+                      ["Historical price", t(selectedPayment.purchasePrice.availability === "test_payment" ? "Test payment: no monetary value" : selectedPayment.purchasePrice.availability === "available" ? "Available" : "Not available")],
+                      ["EUR method", selectedPayment.purchasePrice.eurMethod === "provider_quote" ? t("Direct EUR quote from provider") : t("Not available")],
                       ["Status", statusNames[selectedPayment.status]],
-                      ["Netzwerk", selectedPayment.network],
+                      ["Netzwerk", selectedPayment.network === "Pi Testnet" ? "Testnetz" : selectedPayment.network === "Pi Network" ? "Hauptnetz" : "Ungeklärt"],
                       [
                         "Betrag",
                         `${amount(selectedPayment.amountPi)}${selectedPayment.amountPi === null ? "" : selectedPayment.network === "Pi Testnet" ? " Test-Pi" : " Pi"}`,
@@ -756,10 +794,14 @@ export default function AdminPage() {
                   </dl>
                   <p>
                     {t("Wallet-Eingang = bestätigter Blockchain-Zeitpunkt. Der App-Abschluss wird getrennt angezeigt. Alle Uhrzeiten: Wien.")} </p>
-                  {selectedPayment.receiptSource && (
-                    <a href={selectedPayment.receiptSource} target="_blank" rel="noreferrer" className="admin-button">
-                      {t("Blockchain-Nachweis öffnen")} </a>
-                  )}
+                  {(evidenceLinks?.explorer || evidenceLinks?.api) && <div className="admin-actions">
+                    {evidenceLinks.explorer && <a href={evidenceLinks.explorer} target="_blank" rel="noopener noreferrer" className="admin-button admin-primary">
+                      {t("Im Pi-Blockchain-Explorer öffnen")} · {evidenceLinks.chain === "testnet" ? "Testnet" : "Mainnet"}
+                    </a>}
+                    {evidenceLinks.api && <a href={evidenceLinks.api} target="_blank" rel="noopener noreferrer" className="admin-button">
+                      {t("Technische Rohdaten (API)")}
+                    </a>}
+                  </div>}
                   <div className="admin-actions">
                     {selectedPayment.network !== "Pi Testnet" && (
                       <button
@@ -826,7 +868,7 @@ export default function AdminPage() {
                               })}
                             </p>
                           )}
-                          <button className="admin-button" disabled={busy}>
+                          <button className="admin-button" disabled={busy || !!selectedPayment.valuation}>
                             {t("Bewertung speichern")} </button>
                         </form>
                       ) : (
@@ -955,6 +997,7 @@ export default function AdminPage() {
                   <button
                     className="admin-button"
                     onClick={() => {
+                      audioRequest.current += 1;
                       audioRef.current?.pause();
                       setPlayingAudio("");
                     }}
@@ -962,7 +1005,7 @@ export default function AdminPage() {
                     {t("Ton stoppen")} </button>
                 </div>
                 <p role="status">
-                  {playingAudio ? t("Wiedergabe: {value0}", {value0: playingAudio}) : t("Tippe auf einen Ton, um ihn abzuspielen.")}
+                  {playingAudio ? t("Wiedergabe: {value0}", {value0: t(playingAudio)}) : t("Tippe auf einen Ton, um ihn abzuspielen.")}
                 </p>
                 <div className="admin-sound-grid">
                   {audioTests.map(([name, file]) => (

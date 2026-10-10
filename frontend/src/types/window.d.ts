@@ -3,6 +3,7 @@ import { AuthResult, PaymentDTO } from "./pi";
 declare global {
   interface Window {
     __ENV?: {
+      appNetwork?: string;
       backendURL?: string;
     };
     Pi: {

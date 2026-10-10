@@ -1,0 +1,137 @@
+/* A narrow, translucent equipment rail follows the safe edge on either hand. */
+.game-field .touch-controls {
+  --equipment-target: clamp(48px, 5vmin, 56px);
+  --equipment-width: calc(var(--equipment-target) + 8px);
+  --equipment-align: flex-end;
+  right: max(4px, env(safe-area-inset-right));
+  left: auto;
+  bottom: max(8px, env(safe-area-inset-bottom));
+}
+
+.game-field .touch-controls-right {
+  --equipment-align: flex-start;
+  right: auto;
+  left: max(4px, env(safe-area-inset-left));
+}
+
+.game-field .touch-controls .edge-actions {
+  box-sizing: border-box;
+  width: var(--equipment-width);
+  align-items: var(--equipment-align);
+  gap: 4px;
+  padding: 1px;
+  max-height: calc(100dvh - var(--hud-bottom, 96px) - 24px - env(safe-area-inset-bottom));
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #bcdde32e transparent;
+}
+
+.game-field .touch-controls .weapon-control-wrap {
+  width: 100%;
+  flex-direction: column-reverse;
+  align-items: var(--equipment-align);
+  gap: 4px;
+}
+
+.game-field .touch-controls .weapon-slot-main {
+  display: flex;
+  flex-direction: column;
+  align-items: var(--equipment-align);
+  width: 100%;
+  height: auto;
+  gap: 3px;
+}
+
+.game-field .touch-controls .edge-action {
+  box-sizing: border-box;
+  width: var(--equipment-target);
+  min-width: var(--equipment-target);
+  height: var(--equipment-target);
+  min-height: var(--equipment-target);
+  padding: 3px;
+  border-color: color-mix(in srgb, currentColor 32%, transparent);
+  background: linear-gradient(150deg, #1736481c, #06162430);
+  box-shadow: none;
+  text-shadow: 0 1px 2px #020b1680;
+}
+
+.game-field .touch-controls .edge-action::before,
+.game-field .touch-controls .edge-action-purchased::after {
+  display: none;
+}
+
+.game-field .touch-controls .edge-action > span { opacity: .72; }
+.game-field .touch-controls .edge-action :is(small, em) { opacity: .64; }
+.game-field .touch-controls .edge-action:hover { filter: none; box-shadow: none; }
+.game-field .touch-controls .edge-action:focus-visible {
+  outline: 2px solid #edd7a0;
+  outline-offset: -3px;
+}
+.game-field .touch-controls .edge-action:disabled {
+  background: #06162424;
+  box-shadow: none;
+  opacity: .5;
+}
+
+.game-field .touch-controls .edge-action.mission-shop-access {
+  height: clamp(80px, 11dvh, 90px);
+  min-height: 80px;
+  padding: 5px 3px;
+  gap: 3px;
+  border-radius: 11px;
+}
+.game-field .mission-shop-access .mission-access-icon { width: 21px; height: 21px; }
+.game-field .mission-access-icon svg { filter: none; }
+.game-field .touch-controls .mission-shop-access .mission-access-label { font-size: 10.5px; line-height: 1.1; opacity: .64; }
+
+.game-field .touch-controls .weapon-slot-main .mission-active-weapon {
+  width: 100%;
+  max-width: 100%;
+  padding: 2px 0;
+  background: transparent;
+  font-size: 10px;
+  line-height: 1.2;
+  color: #e3edf5a8;
+  text-shadow: 0 1px 2px #020b1680;
+}
+.game-field .mission-active-weapon small { font-size: 10px; color: #f1ce82a8; }
+.game-field .touch-controls .weapon-slot-main .mission-charge-progress {
+  width: var(--equipment-target);
+  height: 3px;
+  opacity: .48;
+}
+
+.game-field .touch-controls :is(.weapon-slot-reserve, .shield-control-wrap, .power-timer) {
+  width: var(--equipment-target);
+  height: var(--equipment-target);
+}
+.game-field .touch-controls .weapon-slot-reserve .weapon-cycle {
+  width: var(--equipment-target);
+  height: var(--equipment-target);
+  opacity: 1;
+}
+.game-field .touch-controls .weapon-cycle .weapon-cycle-glyph { font-size: 18px; }
+.game-field .touch-controls .weapon-slot-reserve small { max-width: 42px; font-size: 9px; }
+
+.game-field .touch-controls .timed-ring { opacity: .45; }
+.game-field .touch-controls .timed-ring circle { stroke-width: 2; }
+.game-field .touch-controls .timed-ring-progress { filter: none; }
+.game-field .touch-controls :is(.power-timer-face, .shield-active-indicator) {
+  box-sizing: border-box;
+  width: calc(var(--equipment-target) - 6px);
+  height: calc(var(--equipment-target) - 6px);
+  border-color: color-mix(in srgb, currentColor 24%, transparent);
+  background: #06162424;
+  box-shadow: none;
+}
+.game-field .touch-controls .power-timer-face span { font-size: 17px; opacity: .72; }
+.game-field .touch-controls .power-timer-face small {
+  max-width: 36px;
+  font-size: 7px;
+  opacity: .64;
+}
+.game-field .touch-controls .edge-action-purchased { height: auto; min-height: 64px; font-size: 22px; }
+.game-field .touch-controls .edge-action-purchased small { max-width: 42px; font-size: 9px; }
+.game-field .touch-controls .edge-action-purchased em { font-size: 8px; }
+.game-field .touch-controls .weapon-hull-hits { font-size: 10px; opacity: .64; }

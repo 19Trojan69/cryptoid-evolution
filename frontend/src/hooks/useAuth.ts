@@ -4,6 +4,7 @@ import type { AuthResult, PaymentDTO, SessionUser, User } from "../types/pi";
 import { ADMIN_MODE_KEY } from "../pages/shipFleet";
 import { createPiOAuthState, PI_OAUTH_CLIENT_ID, PI_OAUTH_ORIGIN, PI_OAUTH_REDIRECT_URI, PI_OAUTH_STATE_KEY } from "../config/piOAuth";
 import axios from "axios";
+import { withPiAuthTimeout } from "../lib/piAuthTimeout";
 
 const detectPiBrowser = async () => {
   const ua = navigator.userAgent.toLowerCase();
@@ -104,10 +105,10 @@ export const useAuth = () => {
           await new Promise(resolve => window.setTimeout(resolve, 200));
         }
         if (typeof window.Pi?.authenticate !== 'function') throw new Error('Pi SDK unavailable');
-        const authResult = await window.Pi.authenticate(
+        const authResult = await withPiAuthTimeout(() => window.Pi.authenticate(
           ["username", "payments", "wallet_address"],
           onIncompletePaymentFound,
-        );
+        ));
         await signInUser(authResult);
         return;
       }
@@ -136,6 +137,7 @@ export const useAuth = () => {
     } finally {
       signingIn.current = false;
       setIsLoading(false);
+      setAuthReady(true);
     }
   }, [onIncompletePaymentFound, signInUser]);
 

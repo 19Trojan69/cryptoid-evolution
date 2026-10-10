@@ -1,3 +1,4 @@
+import { factionEmblem } from './cardFaction';
 import { cardBackgroundAsset } from './cardBackgrounds';
 import { useLocale } from '../i18n';
 import BossPortrait from './BossPortrait';
@@ -6,8 +7,8 @@ import type { CollectionCard } from './collectionData';
 export default function CollectionCardView({card,stars=0}:{card:CollectionCard;stars?:number}){
  const {locale,t}=useLocale(),de=locale.startsWith('de'),say=(a:string,b:string)=>de?a:t(b);
  return <article className={`collection-card tier-${card.tier}`} data-card-key={card.key} data-background-state={cardBackgroundAsset(card.key).image?'unique':'pending'} style={{backgroundImage:`linear-gradient(180deg,rgba(5,12,24,.15),rgba(5,12,24,.55) 380px,rgba(5,12,24,.92) 700px),url("${card.background}")`}}>
-    <div className="collection-serial">{card.serial}<span>{'✦'.repeat(card.tier)}</span></div><p className="collection-category">{card.category}</p><h3>{card.name}</h3><p className="collection-subtitle">{card.subtitle}</p>
-    <div className="collection-card-art">{card.bossId?<BossPortrait id={card.bossId}/>:<ShipPortrait src={card.image} name={card.name}/>}</div>
+    <div className="collection-serial"><img className="faction-emblem" src={factionEmblem(card.key)} alt=""/>{card.serial}<span>{'✦'.repeat(card.tier)}</span></div><p className="collection-category">{card.category}</p><h3>{card.name}</h3><p className="collection-subtitle">{card.subtitle}</p>
+    <div className="collection-card-art">{card.bossId?<BossPortrait id={card.bossId}/>:<ShipPortrait src={card.image} name={card.name} color={card.color}/>}</div>
     {card.bossId&&<p className="collection-stars">{'★'.repeat(Math.min(3,stars))}</p>}
     <dl className="collection-stats">{card.stats.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
     <h4>{say('Die Geschichte','The story')}</h4>{card.story.map((p,i)=><p key={i}>{p}</p>)}

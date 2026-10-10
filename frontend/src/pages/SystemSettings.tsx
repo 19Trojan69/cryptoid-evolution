@@ -1,15 +1,26 @@
 import { useEffect, useState } from "react";
-import { languages, useLocale, type Locale } from "../i18n";
+import LanguagePicker from "../components/LanguagePicker";
+import { languages, useLocale } from "../i18n";
 import { CONTROL_HAND_KEY, CONTROL_SENSITIVITY_KEY, CONTROL_ZONE_KEY, SHIP_START_KEY, readControlHand, readControlSensitivity, readControlZone, readShipStart, type ControlHand, type ControlSensitivity, type ControlZone, type ShipStart } from "./controlPreferences";
 import { VIBRATION_KEY, readVibrationEnabled, supportsVibration, gameHaptics } from "./gameHaptics";
 import { requestGameFullscreen } from "./gameFullscreen";
 import MusicVolumeSlider from "./MusicVolumeSlider";
-import { MOTION_STORAGE_KEY, applySavedDisplaySettings, type SettingsSection } from './displaySettings';
+import { MOTION_STORAGE_KEY, applySavedDisplaySettings, readReducedEffects, type SettingsSection } from './displaySettings';
 type Props = { musicVolume: number; effectsVolume: number; changeMusicVolume: (value: number) => void; changeEffectsVolume: (value: number) => void; onChange?: () => void; idPrefix: string; initialSection?: SettingsSection; compactMobile?: boolean };
 export default function SystemSettings({ musicVolume, effectsVolume, changeMusicVolume, changeEffectsVolume, onChange, idPrefix, initialSection, compactMobile = false }: Props) {
-  const { locale, automatic, choose, t } = useLocale();
+  const { locale, automatic, t } = useLocale();
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
-  const [reducedEffects, setReducedEffects] = useState(() => localStorage.getItem(MOTION_STORAGE_KEY) === "1");
+  const [reducedEffects, setReducedEffects] = useState(readReducedEffects);
+  const [fullscreenStatus, setFullscreenStatus] = useState("");
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => { applySavedDisplaySettings(); setReducedEffects(readReducedEffects()); };
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+  const fullScreen = () => {
+    void requestGameFullscreen().then(result => setFullscreenStatus(result === "unavailable" ? "This browser does not support full screen. Use the installed app for a view without the address bar." : result === "denied" ? "The browser did not allow full screen. You can continue playing in this view." : ""));
+  };
   const [controlHand, setControlHand] = useState<ControlHand>(readControlHand);
   const [controlSensitivity, setControlSensitivity] = useState<ControlSensitivity>(readControlSensitivity);
   const [controlZone, setControlZone] = useState<ControlZone>(readControlZone);
@@ -36,19 +47,8 @@ export default function SystemSettings({ musicVolume, effectsVolume, changeMusic
           </nav>}
           <div className={`system-menu-section${compactMobile ? " mobile-settings-section" : ""}`} data-mobile-active={mobileSection === "language"} id={`${idPrefix}-settings-language`} tabIndex={-1}>
             <div className="system-menu-heading"><strong>{t('Language')}</strong><small>{t('Current language')}: {languages[locale]}</small></div>
-            <div className="language-dropdown" data-open={languageMenuOpen ? "true" : "false"}>
-              <div className="language-actions">
-                <button type="button" className="language-trigger language-auto" aria-pressed={automatic} aria-expanded={languageMenuOpen} aria-controls={`${idPrefix}-language-options`} onClick={() => { choose(null); setLanguageMenuOpen(true); }}>
-                  <span aria-hidden="true">◎</span><b>{t('Automatic (device language)')}</b><i aria-hidden="true">⌄</i>
-                </button>
-                <button type="button" className="language-trigger language-change" aria-pressed={!automatic} aria-expanded={languageMenuOpen} aria-controls={`${idPrefix}-language-options`} onClick={() => setLanguageMenuOpen(open => !open)}>
-                  <span aria-hidden="true">{locale.toUpperCase()}</span><b>{t('Change')}</b><i aria-hidden="true">⌄</i>
-                </button>
-              </div>
-              {languageMenuOpen && <div id={`${idPrefix}-language-options`} className="language-menu" role="group" aria-label={t('Language')}>
-                {Object.entries(languages).map(([code, label]) => <button type="button" className="language-option" key={code} aria-pressed={!automatic && locale === code} onClick={() => { choose(code as Locale); setLanguageMenuOpen(false); }}><span aria-hidden="true">{code.toUpperCase()}</span><b>{label}</b></button>)}
-              </div>}
-            </div>
+            <button type="button" className="language-trigger language-change" aria-haspopup="dialog" onClick={() => setLanguageMenuOpen(true)}><span aria-hidden="true">◎</span><b>{automatic ? t('Automatic (device language)') : languages[locale]}</b><i aria-hidden="true">⌄</i></button>
+            {languageMenuOpen && <LanguagePicker onClose={() => setLanguageMenuOpen(false)} />}
           </div>
           <div className={`system-menu-section system-quick-settings${compactMobile ? " mobile-settings-section" : ""}`} data-mobile-active={mobileSection === "controls"} id={`${idPrefix}-settings-controls`} tabIndex={-1}>
             <div className="system-menu-heading"><strong>{t('Controls')}</strong><small>{t('Move with one thumb; activate power-ups with the other.')}</small></div>
@@ -74,9 +74,10 @@ export default function SystemSettings({ musicVolume, effectsVolume, changeMusic
           </div>
           <div className={`system-menu-section system-quick-settings${compactMobile ? " mobile-settings-section" : ""}`} data-mobile-active={mobileSection === "display"} id={`${idPrefix}-settings-display`} tabIndex={-1}>
             <div className="system-menu-heading"><strong>{t('Display')}</strong></div>
-            <button className="system-setting" type="button" onClick={() => requestGameFullscreen()}><span aria-hidden="true">⛶</span><b>{t('Full screen')}</b></button>
+            <button className="system-setting" type="button" onClick={fullScreen}><span aria-hidden="true">⛶</span><b>{t('Full screen')}</b></button>
+            {fullscreenStatus && <p role="status" className="fullscreen-status">{t(fullscreenStatus)}</p>}
             <button className="system-setting" type="button" disabled={!supportsVibration()} aria-pressed={vibrationEnabled && supportsVibration()} onClick={() => { const enabled = !vibrationEnabled; localStorage.setItem(VIBRATION_KEY, enabled ? "on" : "off"); setVibrationEnabled(enabled); onChange?.(); if (!enabled) gameHaptics.stop(); }}><span aria-hidden="true">≋</span><b>{t(!supportsVibration() ? "Vibration unavailable" : vibrationEnabled ? "Vibration on" : "Vibration off")}</b></button>
-            <button className="system-setting" type="button" aria-pressed={reducedEffects} onClick={() => { const reduced = !reducedEffects; localStorage.setItem(MOTION_STORAGE_KEY, reduced ? "1" : "0"); applySavedDisplaySettings(); setReducedEffects(reduced); if (reduced) gameHaptics.stop(); onChange?.(); }}><span aria-hidden="true">◌</span><b>{t(reducedEffects ? 'Reduced effects' : 'Standard effects')}</b></button>
+            <button className="system-setting" type="button" aria-pressed={reducedEffects} onClick={() => { const reduced = !reducedEffects; localStorage.setItem(MOTION_STORAGE_KEY, reduced ? "1" : "0"); applySavedDisplaySettings(); setReducedEffects(readReducedEffects()); if (reduced) gameHaptics.stop(); onChange?.(); }}><span aria-hidden="true">◌</span><b>{t(reducedEffects ? 'Reduced effects' : 'Standard effects')}</b></button>
           </div>
   </>;
 }

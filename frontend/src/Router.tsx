@@ -1,20 +1,20 @@
 import { createBrowserRouter } from "react-router-dom";
 import Shop from "./pages/Shop";
-import GamePage from "./pages/GamePage.tsx";
 import PiSignInCallback from "./pages/PiSignInCallback.tsx";
 import LegalPage from "./pages/LegalPage.tsx";
-import { lazy, Suspense } from "react";
-import AdminLoading from "./AdminLoading";
-const AdminPage = lazy(() => import("./pages/AdminPage.tsx"));
+import AdminPage from "./pages/AdminPage.tsx";
+import RouteRecovery from "./RouteRecovery";
 
 export const router = createBrowserRouter([
   {
+    path: "/galaxy",
+    lazy: async () => ({ Component: (await import("./pages/GalaxyMap")).default }),
+    errorElement: <RouteRecovery />,
+  },
+  {
     path: "/admin",
-    element: (
-      <Suspense fallback={<AdminLoading />}>
-        <AdminPage />
-      </Suspense>
-    ),
+    element: <AdminPage />,
+    errorElement: <RouteRecovery />,
   },
   {
     path: "/",
@@ -22,7 +22,8 @@ export const router = createBrowserRouter([
   },
   {
     path: "/game",
-    element: <GamePage />,
+    lazy: async () => ({ Component: (await import("./pages/GamePage")).default }),
+    errorElement: <RouteRecovery />,
   },
   {
     path: "/signin/callback",

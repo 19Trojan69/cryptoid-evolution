@@ -8,6 +8,7 @@ export default function BossReactorView({ boss }: { boss: SectorBoss }) {
   const id = useId().replace(/:/g, '');
   const mount = specialWeaponMount(boss);
   const box = specialWeaponBox(boss);
+  const energy = boss.core?.lastShotColor ?? mount.energy;
   const exposed = coreActive(boss);
   const elapsed = boss.core?.elapsed ?? 0;
   const open = exposed ? Math.min(1, (boss.core?.volley ?? 0) > 0 ? 1 : elapsed / 900) : 0;
@@ -18,7 +19,7 @@ export default function BossReactorView({ boss }: { boss: SectorBoss }) {
   const barrels = specialWeaponBarrels(mount.shape);
   const hatch = 'M22 9H78L93 28V125L73 151H27L7 125V28Z';
   const texture = <image href={boss.config.image} x={-box.left / box.width * 100} y={-box.top / box.height * 160} width={boss.width / box.width * 100} height={boss.height / box.height * 160} preserveAspectRatio="none" />;
-  return <svg className={`boss-special-weapon${firing ? ' boss-special-weapon-firing' : ''}`} viewBox="0 0 100 160" preserveAspectRatio="none" style={{zIndex:exposed ? 6 : 1,left:box.left,top:box.top,width:box.width,height:box.height,'--weapon-energy':mount.energy,'--weapon-charge':charge} as CSSProperties} aria-hidden="true">
+  return <svg className={`boss-special-weapon${firing ? ' boss-special-weapon-firing' : ''}`} viewBox="0 0 100 160" preserveAspectRatio="none" style={{zIndex:exposed ? 6 : 1,left:box.left,top:box.top,width:box.width,height:box.height,'--weapon-energy':energy,'--weapon-charge':charge} as CSSProperties} aria-hidden="true">
     <defs>
       <linearGradient id={`${id}-steel`} x1="0" x2="1" y1="0" y2="0">
         <stop offset="0" stopColor="#121b24"/><stop offset=".22" stopColor={mount.metal}/><stop offset=".4" stopColor="#ccd0c5"/><stop offset=".55" stopColor={mount.metal}/><stop offset=".8" stopColor="#35414b"/><stop offset="1" stopColor="#131d27"/>
@@ -40,6 +41,7 @@ export default function BossReactorView({ boss }: { boss: SectorBoss }) {
       <path d="M28 20H72L83 41V86L70 113H30L17 86V41Z" fill={url('armor')} stroke="#a0aaa7" strokeWidth="1.2"/>
       <path d="M29 26H42V70L30 88H23V43ZM71 26H58V70L70 88H77V43Z" fill={mount.trim} stroke="#171f28" strokeWidth="2"/>
       <path d="M44 28H56V78H44Z" fill="#16232c"/>
+      <path className="boss-reactor-pulse" d="M50 30L63 42V62L50 77L37 62V42Z" fill={energy}/>
       <path d="M47 33V67M53 33V67" className="boss-special-conductor"/>
       {[34,46,58,70].map(y=><path key={y} d={`M23 ${y}H34M66 ${y}H77`} stroke="#050b10" strokeWidth="3"/>)}
       {mount.shape === 'lance' || mount.shape === 'fork' ? <>

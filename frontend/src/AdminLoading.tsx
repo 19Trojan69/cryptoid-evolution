@@ -1,6 +1,6 @@
-import { useLocale } from './i18n';
+import { useAdminLocale } from './adminLocale';
 
 export default function AdminLoading() {
-  const { t } = useLocale();
+  const { t } = useAdminLocale();
   return <p role="status">{t('Loading admin center…')}</p>;
 }

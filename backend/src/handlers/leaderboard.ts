@@ -1,3 +1,4 @@
+import { profileKey } from "../pilotRules";
 import { bestRunField, bestRunValue, careerField, careerValue, runLevel, scoreField, scoreValue } from "../scoreRules";
 import { Router, type Request, type Response } from "express";
 import { TOP_LIMIT, validRunScore } from "../leaderboardRules";
@@ -14,11 +15,12 @@ export default function mountLeaderboardEndpoints(router: Router) {
     const career = req.query?.sort === "career" || req.query?.rules === undefined, order = career ? careerField(network) : field;
     try {
       const leaders = await req.app.locals.userCollection.find({ [order]: { $gt: 0 } })
-        .project({ _id: 0, username: 1, [order]: 1, ...(career ? { [bestRunField(network)]: 1, [`bestScoreV2.${network}`]: 1 } : {}), [`rewardsByNetwork.${network}.highestLevel`]: 1 })
+        .project({ _id: 0, username: 1, [profileKey(network)]: 1, [order]: 1, [bestRunField(network)]: 1, [`bestScoreV2.${network}`]: 1, [`rewardsByNetwork.${network}.highestLevel`]: 1 })
         .sort({ [order]: -1, uid: 1 }).limit(TOP_LIMIT).toArray();
       return res.json({ network, leaders: leaders.map((entry: any, index: number) => {
         const highestStage = entry.rewardsByNetwork?.[network]?.highestLevel ?? 1;
-        return { rank: index + 1, username: entry.username, score: career ? careerValue(entry, network) : scoreValue(entry, rules, network),
+        return { avatar: entry.pilotProfileByNetwork?.[network]?.avatar || null, rank: index + 1, username: entry.username, score: career ? careerValue(entry, network) : scoreValue(entry, rules, network),
+          runLevel: career ? bestRunValue(entry, network).level : rules === 2 && bestRunValue(entry, network).score === scoreValue(entry, rules, network) ? bestRunValue(entry, network).level : null,
           ...(career ? { careerScore: careerValue(entry, network), bestRun: bestRunValue(entry, network) } : {}),
           profileLevel: Math.ceil(highestStage / 10), serviceRank: rankForLevel(highestStage) };
       }) });

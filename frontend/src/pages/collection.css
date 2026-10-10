@@ -51,3 +51,6 @@
 
 /* Keep complete stat values readable on phones, including longer translated weapons. */
 @media(max-width:480px){.collection-stats{grid-template-columns:minmax(0,1fr)}.collection-stats dd{font-size:17px;line-height:1.4}}
+.card-save-preview { margin: 0 auto 24px; max-width: 660px; }
+.card-save-preview img { display: block; width: 100%; height: auto; touch-action: auto; user-select: auto; -webkit-touch-callout: default; }
+.card-save-preview figcaption { margin: 12px 0; color: #dfc9f4; line-height: 1.5; }

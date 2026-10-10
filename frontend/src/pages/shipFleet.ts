@@ -4,9 +4,9 @@ import type { CryptoidClass } from "./cryptoidRoster";
 
 export const FLEET_IMAGE = "/ships/cryptoid-fleet.png";
 export type ShipSaveNetwork = "testnet" | "mainnet";
-export const shipSaveNetworkForHost = (hostname: string): ShipSaveNetwork => hostname.toLowerCase().includes("testnet") ? "testnet" : "mainnet";
+export const shipSaveNetworkForHost = (hostname: string, buildNetwork?: string): ShipSaveNetwork => buildNetwork === "testnet" || hostname.toLowerCase().includes("testnet") ? "testnet" : "mainnet";
 export const shipSaveKey = (legacyKey: string, network: ShipSaveNetwork) => `${legacyKey}_${network}`;
-export const shipSaveNetwork = shipSaveNetworkForHost(typeof window === "undefined" ? "" : window.location.hostname);
+export const shipSaveNetwork = shipSaveNetworkForHost(typeof window === "undefined" ? "" : window.location.hostname, typeof window === "undefined" ? undefined : window.__ENV?.appNetwork);
 const legacyShipKeys = ["cryptoid_player_ship_skin", "cryptoid_player_ship_color", "cryptoid_player_ship_colors", "cryptoid_owned_ship_skins", "cryptoid_ship_fleet_v2", "cryptoid_shard_balance"] as const;
 export const migrateLegacyTestnetShipSave = (storage: Pick<Storage, "getItem" | "setItem">) => {
   for (const key of legacyShipKeys) {

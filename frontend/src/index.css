@@ -2706,12 +2706,14 @@ html[data-motion="reduced"] .blockchain-node .blockchain-cube-rotor { animation:
 /* Full-screen dialogs supersede the gameplay layers; the ship reappears for the resume countdown. */
 .game-field > .game-overlay { z-index: 40; }
 .game-field .player-ship.player-ship-dialog-hidden { visibility: hidden; }
-.touch-controls .weapon-control-wrap, .touch-controls .weapon-slot-main { width: 48px; }
-.touch-controls .edge-action.mission-shop-access { width: 42px; min-height: 110px; height: 110px; padding: 7px 3px; background: linear-gradient(150deg, rgba(49,67,81,.77), rgba(19,38,53,.82)); }
+.touch-controls .weapon-control-wrap, .touch-controls .weapon-slot-main { width: 80px; }
+.touch-controls .edge-action.mission-shop-access { width: 48px; min-width: 48px; min-height: 110px; height: 110px; padding: 7px 3px; background: linear-gradient(150deg, rgba(49,67,81,.77), rgba(19,38,53,.82)); }
 .mission-shop-access .mission-access-icon { width: 25px; height: 25px; }
 .mission-shop-access .mission-access-label { width: auto; max-width: none; max-height: 72px; font-size: 12px; line-height: 1.15; writing-mode: vertical-rl; text-orientation: mixed; white-space: nowrap; overflow: visible; }
-.touch-controls .weapon-slot-main .mission-active-weapon { max-width: 46px; overflow-wrap: anywhere; font-size: 10px; }
-.touch-controls .weapon-slot-main .mission-charge-progress { width: 42px; }
+.touch-controls .weapon-slot-main .mission-active-weapon { box-sizing: border-box; display: grid; gap: 3px; width: 80px; max-width: 80px; overflow-wrap: normal; word-break: normal; hyphens: none; font-size: 12px; }
+.mission-active-weapon b { font: inherit; }
+.mission-active-weapon small { font: 500 11px/1.2 system-ui,sans-serif; color: #f1ce82; }
+.touch-controls .weapon-slot-main .mission-charge-progress { width: 64px; }
 .touch-controls .edge-action, .touch-controls .power-timer-face { background-color: rgba(12, 39, 57, .78); }
 .weapon-reloading, .weapon-reload-error { position: absolute; z-index: 34; top: 19%; left: 50%; transform: translateX(-50%); width: max-content; max-width: calc(100% - 40px); color: #a9f5e9; font: 750 clamp(16px, 4vw, 24px)/1.2 'Space Grotesk',sans-serif; text-align: center; text-shadow: 0 2px 8px #020a18, 0 0 12px currentColor; pointer-events: none; }
 .weapon-reload-error { color: #ffb3a8; }
@@ -2768,3 +2770,45 @@ html[data-motion="reduced"] .blockchain-node .blockchain-cube-rotor { animation:
 html[data-motion="reduced"] .reinforcement-notice { animation: combat-warning-quiet 1.05s linear both; }
 html[data-motion="reduced"] .game-field .sector-banner.boss-intro-banner.sector-transition { animation: combat-warning-quiet 2.2s linear both; }
 @media (max-height: 680px) and (max-width: 700px) { .player-ship { width: 94px; height: 94px; } }
+
+/* Series A: every metric stays reachable on a narrow screen. */
+.release-version { color: #e4c6a4; font: 12px 'DM Mono', monospace; overflow-wrap: anywhere; }
+.home-footer { gap: 10px; flex-wrap: wrap; }
+.leaderboard-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.leaderboard-tabs .button { min-width: 0; white-space: normal; overflow-wrap: anywhere; padding: 12px 8px; font-size: clamp(12px, 3.2vw, 16px); line-height: 1.35; }
+.leaderboard-tabs [aria-pressed="true"] { color: #fff3c4; background: linear-gradient(145deg, #7a5b20, #34291a); border: 2px solid #f5d176; box-shadow: inset 0 1px #fff5c6, 0 0 12px #e6b65042; }
+.leaderboard-list { list-style: none; padding: 0; margin: 8px 0; display: grid; gap: 6px; }
+.leaderboard-list li { min-width: 0; padding: 10px; border: 1px solid #a17e474d; border-radius: 10px; background: #101a25; }
+.leaderboard-list .leader-identity { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; align-items: center; gap: 6px; overflow-wrap: anywhere; }
+.leaderboard-list .leader-profile-link { min-width: 0; }
+.leaderboard-list .leader-profile-link strong { min-width: 0; overflow-wrap: anywhere; font-size: 14px; }
+.leaderboard-list .pilot-avatar { flex-shrink: 0; width: 32px; height: 32px; border-radius: 8px; }
+.leaderboard-list .leader-rank { min-width: 0; gap: 3px; flex-direction: row; }
+.leaderboard-list .leader-rank b { font-size: 16px; }
+.leaderboard-list .leader-rank small { margin: 0; font-size: 11px; }
+.leader-place { color: #efca77; min-width: 24px; }
+.leader-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px 10px; margin: 6px 0 0; }
+.leader-metrics dt { color: #c2cbd6; font-size: 12px; line-height: 1.4; }
+.leader-metrics dd { margin: 2px 0 0; color: #ffde96; font-size: 15px; overflow-wrap: anywhere; }
+.leaderboard-explanation { margin: 8px 0; color: #c2cbd6; font-size: 13px; }
+.leaderboard-explanation summary { cursor: pointer; min-height: 44px; align-content: center; }
+.leaderboard-pages { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.leaderboard-pages button { min-height: 44px; border: 1px solid #a17e4770; border-radius: 8px; background: #182838; color: #ffde96; padding: 6px 10px; }
+.leaderboard-pages button:disabled { opacity: .45; }
+/* Outrank inherited landing/mobile button styles: labels must never be clipped. */
+.landing-shell .shop-modal .leaderboard-tabs .button { min-width: 0; max-width: 100%; min-height: 44px; height: auto; white-space: normal; overflow-wrap: anywhere; clip-path: none; padding: 8px; font-size: 13px; line-height: 1.3; letter-spacing: 0; }
+.landing-shell .shop-modal .leaderboard-tabs [aria-pressed="true"] { color: #fff3c4; background: linear-gradient(145deg, #7a5b20, #34291a); border: 2px solid #f5d176; box-shadow: inset 0 1px #fff5c6; }
+.landing-shell .shop-modal .leaderboard-personal { margin: 8px 0; font-size: 14px; line-height: 1.4; overflow-wrap: anywhere; }
+@media(max-width: 540px) {
+  .leader-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .leaderboard-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .leaderboard-tabs .button:first-child { grid-column: 1 / -1; }
+  .landing-shell .shop-modal .leaderboard-section { padding: 12px; }
+  .leaderboard-section > .eyebrow { display: none; }
+  .leaderboard-section h2 { font-size: 20px; }
+  .leaderboard-list .leader-rank { flex-direction: column; }
+}
+
+.leader-profile-copy { display:grid; gap:3px; min-width:0; }
+.leader-profile-copy > small { color:#8de3ed; font-size:11px; line-height:1.35; }
+.leader-profile-link:focus-visible { outline:2px solid #8de3ed; outline-offset:3px; border-radius:6px; }

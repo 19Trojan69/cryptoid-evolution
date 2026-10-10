@@ -8,9 +8,9 @@ export const loadAccountSave = async () => (await axiosClient.get<{ save: Accoun
 export const accountSelection = (save: AccountSave) => ({ skin: playerSkins.find(s => s.id === save.skin) || playerSkins[0], color: allPlayerColors.find(c => c.id === save.color) || allPlayerColors.find(c => c.id === "grey")! });
 export const localInventory = () => ({ balance: shardBalance(localStorage.getItem(SHARD_BALANCE_KEY)), fleet: readShipFleet(localStorage.getItem(SHIP_FLEET_KEY), localStorage.getItem(SHIP_OWNED_KEY), localStorage.getItem(SHIP_COLORS_KEY)), skin: localStorage.getItem(SHIP_SKIN_KEY) || "grey-scout", color: localStorage.getItem(SHIP_COLOR_KEY) || "grey" });
 export const mutateAccountInventory = async (save: AccountSave, command: object) => (await axiosClient.post<{ save: AccountSave }>("/progress/inventory", { version: save.version, ...command })).data.save;
-export const snapshotOf = (s: Snapshot): Snapshot => {
+export const snapshotOf = (s: Snapshot & { combo?: {total:number} }): Snapshot => {
   const keys = ["score", "shards", "destroyed", "hearts", "paidWeaponLevel", "paidWeaponMs", "pickupWeaponLevel", "pickupWeaponMs", "shieldCharges", "shieldMs", "purchasedShieldMs", "overdriveMs", "overdriveTotalMs", "rapidFireMs", "rapidFireTotalMs", "empMs"] as const;
-  return { ...Object.fromEntries(keys.map(key => [key, Math.max(0, Math.round(s[key]))])), weaponSource: s.weaponSource, shieldActive: s.shieldActive, weaponTimers: s.weaponTimers.map(n => Math.round(n)) } as Snapshot;
+  return { ...(s.damageCount===undefined?{}:{damageCount:s.damageCount}), ...(s.comboTotal===undefined?{}:{comboTotal:s.combo?.total ?? s.comboTotal}), ...Object.fromEntries(keys.map(key => [key, Math.max(0, Math.round(s[key]))])), weaponSource: s.weaponSource, shieldActive: s.shieldActive, weaponTimers: s.weaponTimers.map(n => Math.round(n)) } as Snapshot;
 };
 export async function retrySave<T>(request: () => Promise<T>): Promise<T> {
   for (let attempt = 0; ; attempt++) {

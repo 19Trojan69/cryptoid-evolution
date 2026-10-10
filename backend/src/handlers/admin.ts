@@ -333,6 +333,7 @@ export default function mountAdminEndpoints(router: Router) {
       ) {
         return res.status(409).json({ error: "verified_receipt_required" });
       }
+      if (order.valuation) return res.status(409).json({ error: "historical_valuation_already_recorded" });
       const valuation = {
         eurPerPi,
         eurAmount: Math.round(order.payment_amount_pi * eurPerPi * 100) / 100,
@@ -342,7 +343,7 @@ export default function mountAdminEndpoints(router: Router) {
         recordedAt: new Date(),
         recordedBy: req.session.currentUser!.uid,
       };
-      await orders.updateOne({ pi_payment_id: id }, { $set: { valuation } });
+      await orders.updateOne({ pi_payment_id: id, valuation: { $exists: false } }, { $set: { valuation } });
       return res.json({ payment: paymentView({ ...order, valuation }) });
     } catch {
       return res.status(503).json({ error: "valuation_unavailable" });

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="de">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cryptoid · Mobile Layoutprüfung</title>
+<style>
+  *{box-sizing:border-box}body{margin:0;background:#071827;color:#eaf3fa;font:16px/1.5 system-ui,sans-serif}
+  header{padding:18px 24px;border-bottom:1px solid #6c879b;max-width:1200px;margin:auto}h1{font-size:23px;margin:0 0 6px;color:#edd6a4}p{margin:0 0 12px;color:#becedc}
+  .controls{display:flex;flex-wrap:wrap;gap:12px;align-items:end}label{display:grid;gap:5px;font-size:14px}select,button{min-height:48px;padding:9px 14px;border:1px solid #8da5b6;border-radius:10px;color:#eaf3fa;background:#173249;font:inherit}
+  main{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,380px);gap:20px;align-items:start;padding:20px;max-width:1400px;margin:auto}.device{justify-self:center;max-width:100%;border:2px solid #ad9a79;border-radius:18px;overflow:hidden;background:#071827}iframe{display:block;border:0;background:#071827;max-width:100%}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;background:#10273a;border-radius:12px;padding:14px;margin:0}a{color:#a2edf1}
+  @media(max-width:780px){main{grid-template-columns:1fr}.device{justify-self:start}header{padding:14px}main{padding:12px}}
+</style>
+<header>
+  <h1>Cryptoid · Smartphone-Layoutprüfung</h1>
+  <p>Die echte Testnet-Oberfläche wird in der gewählten CSS-Größe angezeigt. Dies simuliert weder echte Touch-Hardware noch Pi Browser, Gerätegeschwindigkeit, Notch oder Bildschirmtastatur. Vollbild ist im Prüffenster gesperrt.</p>
+  <div class="controls">
+    <label>Ansichtsgröße<select id="size">
+      <option value="320,568">320 × 568</option><option value="360,800">360 × 800</option><option value="375,667">375 × 667</option><option value="390,844" selected>390 × 844</option><option value="430,932">430 × 932</option><option value="852,393">852 × 393 · Querformat</option><option value="800,1100">800 × 1100 · Tablet</option><option value="320,320">320 × 320 · Niedrige Ansicht</option>
+    </select></label>
+    <label>Startansicht<select id="route"><option value="/">Startseite und Menüs</option><option value="/game">Spiel und HUD</option><option value="/admin">Admin-Zentrale</option></select></label>
+    <button id="reload" type="button">Ansicht neu laden</button><button id="measure" type="button">Layout messen</button>
+    <a href="/">Zur Testnet-Startseite</a>
+  </div>
+</header>
+<main><div class="device"><iframe id="game" title="Cryptoid Smartphone-Testansicht" src="/" allow="fullscreen 'none'"></iframe></div><section><p>Menüs im Prüffenster direkt öffnen. Sprache über den normalen Schnellzugriff ändern. Gemessen werden die aktuelle Ansicht, seitlicher Überlauf und sichtbare Bedienflächen.</p><pre id="result" aria-live="polite">Noch keine Messung.</pre></section></main>
+<script>
+  const frame=document.querySelector('#game'),size=document.querySelector('#size'),route=document.querySelector('#route'),result=document.querySelector('#result');
+  function resize(){const [w,h]=size.value.split(',').map(Number);frame.style.width=w+'px';frame.style.height=h+'px';result.textContent='Ansicht geändert. Layout bei Bedarf neu messen.';}
+  size.addEventListener('change',resize);route.addEventListener('change',()=>{frame.src=route.value;});document.querySelector('#reload').addEventListener('click',()=>{frame.src=route.value;});
+  document.querySelector('#measure').addEventListener('click',()=>{
+    try{const doc=frame.contentDocument,win=frame.contentWindow;
+      const panels=Array.from(doc.querySelectorAll('dialog[open],[role="dialog"][aria-modal="true"]')).filter(e=>e.getClientRects().length);
+      const scope=panels.at(-1)||doc;
+      const buttons=Array.from(scope.querySelectorAll('button,summary,a.collection-download,a.admin-button')).map(e=>({element:e,rect:e.getBoundingClientRect()})).filter(({element,rect})=>rect.width>0&&rect.height>0&&rect.bottom>0&&rect.top<win.innerHeight&&win.getComputedStyle(element).visibility!=='hidden');
+      const small=buttons.filter(({rect})=>rect.width<47.5||rect.height<47.5).map(({element,rect})=>({label:element.getAttribute('aria-label')||element.textContent.trim().slice(0,100),width:Math.round(rect.width*10)/10,height:Math.round(rect.height*10)/10}));
+      result.textContent=JSON.stringify({path:win.location.pathname,viewport:{width:win.innerWidth,height:win.innerHeight},documentWidth:doc.documentElement.scrollWidth,horizontalOverflow:doc.documentElement.scrollWidth>win.innerWidth,scope:scope===doc?'page':'top dialog',visibleControls:buttons.length,controlsBelow48px:small,dialogs:panels.map(e=>({class:e.className,width:Math.round(e.getBoundingClientRect().width),height:Math.round(e.getBoundingClientRect().height)}))},null,2);
+    }catch{result.textContent='Diese Ansicht lässt sich nicht messen. Bitte erneut laden.';}
+  });resize();
+</script>
+</html>

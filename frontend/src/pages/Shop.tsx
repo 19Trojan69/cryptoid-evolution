@@ -1,3 +1,9 @@
+import ServiceBadge from "../components/ServiceBadge";
+import useModalNavigation from "../hooks/useModalNavigation";
+import CareerDashboard from "./CareerDashboard";
+import FeedbackHub from "./FeedbackHub";
+import PilotProfile from "./PilotProfile";
+import PilotAvatar, { type Avatar } from "../components/PilotAvatar";
 import { bossCardAvailable } from './cardAvailability';
 import CardReveal from './CardReveal';
 import { availableShipCards, unseenShipCards, type CardReward } from './cardRevealRules';
@@ -18,12 +24,13 @@ import { useAuth } from "../hooks/useAuth";
 import { accountSelection, loadAccountSave, localInventory, mutateAccountInventory, type AccountSave } from "../lib/accountSave";
 import { usePayments } from "../hooks/usePayments";
 import { axiosClient } from "../lib/axiosClient.ts";
-import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "./GamePage.tsx";
-import { allPlayerColors, buyShipVariant, standardShipPrice, fleetCount, playerColors, playerSkins, readShipFleet, savedShipColors, selectedShip, shardBalance, shipSaveNetwork, testnetStandardHullAvailable, ADMIN_SHIP_COLOR_KEY, ADMIN_SHIP_SKIN_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, type ShipFleet } from "./shipFleet";
-import { ownedShipStage, shipEvolutionAsset, type ShipStage } from "./shipEvolution";
-import { shipPreviewPlacement } from "./shipPreviewPlacement";
-import ShipSelectionPanel from "./ShipSelectionPanel";
+import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "../lib/localRecordKeys";
+import { allPlayerColors, buyShipVariant, fleetCount, playerColors, playerSkins, readShipFleet, savedShipColors, selectedShip, shardBalance, shipSaveNetwork, testnetStandardHullAvailable, ADMIN_SHIP_COLOR_KEY, ADMIN_SHIP_SKIN_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, type ShipFleet } from "./shipFleet";
+import { ownedShipStage, type ShipStage } from "./shipEvolution";
+
+import FleetShipPanel from "./FleetShipPanel";
 import "./shopPurchase.css";
+import "../metallic.css";
 import { saveGuestShipPurchase } from "./shipFleet";
 import TermsDialog from "../components/TermsDialog";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
@@ -31,8 +38,7 @@ import { isTestnetWeaponPurchaseEnabled } from "../../../backend/src/paymentPoli
 import { primeGameAudio } from "./gameAudio";
 import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, readMusicVolume, resetAudioVolumeDefaults } from "./musicPreferences";
 import { handoffGameMusic, MusicPlayer } from "./musicPlayback";
-import Starfield from "./Starfield";
-import HomeCombatPreview from "./HomeCombatPreview";
+import CinematicHome from "./CinematicHome";
 import GameGuide from "./GameGuide";
 import WeaponTutorial from "./WeaponTutorial";
 import WeaponPurchase from './WeaponPurchase';
@@ -42,7 +48,6 @@ import BossDossier from './BossDossier';
 import { bossDossierLabel } from './bossLore';
 import { bossName } from './bossNames';
 import { useLocale } from "../i18n";
-import EarthGlobe from "./EarthGlobe";
 import { requestGameFullscreen } from "./gameFullscreen";
 import { MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { powerUpSymbols, type PowerUpType } from "./powerUps";
@@ -50,9 +55,8 @@ import { BOSS_STICKER_COUNT, CHAIN_MILESTONES, emptyRewardProgress, rankForLevel
 
 type Offer = { id: string; kind: "weapon" | "power" | "armor" | "ship_upgrade"; name: string; description: string; pricePi: number; shipIndex?: number; stage?: 2 | 3 };
 type Inventory = { weaponStock?: Record<string, number>; ownedWeapons: string[]; ownedArmor: string[]; ownedShipUpgrades?: string[]; consumables: { id: string; count: number }[]; equippedWeapon: string | null; selectedPower: string | null };
-type Leader = { rank: number; username: string; score: number; careerScore?: number; bestRun?: { score: number; level: number | null }; profileLevel?: number; serviceRank: { name: string; symbol: string } };
+type Leader = { avatar?: Avatar; rank: number; username: string; score: number; careerScore?: number; bestRun?: { score: number; level: number | null }; runLevel?: number | null; profileLevel?: number; serviceRank: { name: string; symbol: string } };
 type PersonalScores = { careerScore: number; bestRun: { score: number; level: number | null } };
-const HOME_STAR_POSITION = { x: .5, y: .8 };
 
 const shopTabs = [
   ["hangar", "Hangar", "◇"],
@@ -82,6 +86,7 @@ const Shop = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { locale, t } = useLocale();
+  const number = (value: number) => new Intl.NumberFormat(locale).format(value);
   const {
     user, canAdmin, adminMode, setAdminPreview, isAuthenticated, showSignIn, signIn, signOut,
     closeSignIn, requireAuth, isLoading: isAuthLoading, authReady, authError,
@@ -94,14 +99,18 @@ const Shop = () => {
   const [guideTopic, setGuideTopic] = useState<GuideTopic>("controls");
   const [quickTarget, setQuickTarget] = useState<string | null>(null);
   const closeQuickMenu = useCallback(() => setQuickGroup(null), []);
-  const [shopView, setShopView] = useState<"hangar" | "shop" | "weapons" | "powers" | "progress" | "rewards" | "leaders" | null>(null);
+  const [shopView, setShopView] = useState<"hangar" | "shop" | "weapons" | "powers" | "progress" | "rewards" | "leaders" | null>(() => location.state?.openShopView === "shop" ? "shop" : location.state?.openShopView === "hangar" ? "hangar" : null);
   const [termsOpen, setTermsOpen] = useState(false);
   const [newCards,setNewCards]=useState<CardReward[]>([]);
-  const [collectionOpen, setCollectionOpen] = useState(false);
+  const [feedbackOpen,setFeedbackOpen]=useState(false);
+  const [leaderRefresh,setLeaderRefresh]=useState(0);
+  const [pilotOpen,setPilotOpen]=useState<string|null>(null);
+  const [collectionOpen, setCollectionOpen] = useState(() => location.state?.openCollection === true);
   const [selectedBoss, setSelectedBoss] = useState<number | null>(null);
   const returnToMenu = () => { setShopView(null); setSystemMenuOpen(false); setActivePanel(null); setTermsOpen(false); setQuickTarget(null); setQuickGroup("mission"); };
   const [leaders, setLeaders] = useState<Leader[]>([]);
   const [leaderRules, setLeaderRules] = useState<"career" | 1 | 2>("career");
+  const [leaderPage, setLeaderPage] = useState(0);
   const [leadersStatus, setLeadersStatus] = useState<"loading" | "ready" | "error">("loading");
   const [personalBest, setPersonalBest] = useState<number | null>(null);
   const [personalScores, setPersonalScores] = useState<PersonalScores | null>(null);
@@ -180,7 +189,7 @@ const Shop = () => {
     if (shopView === "leaders") {
       axiosClient.get<{ leaders: Leader[]; network?: string }>(leaderRules === "career" ? "/leaderboard/top?sort=career" : `/leaderboard/top?rules=${leaderRules}`).then(({ data }) => {
         if (!Array.isArray(data?.leaders) || leaderRules === "career" && (!data.network || data.leaders.some(entry => !Number.isSafeInteger(entry.careerScore) || !entry.bestRun))) throw new Error("Career leaderboard API unavailable");
-        if (current) { setLeaders(data.leaders); setLeadersStatus("ready"); }
+        if (current) { setLeaders(data.leaders); setLeaderPage(0); setLeadersStatus("ready"); }
       }).catch(() => { if (current) setLeadersStatus("error"); });
     }
     if (leaderboardUserId) axiosClient.get<{ bestScore: number } & PersonalScores>(`/leaderboard/me?rules=${leaderRules === 1 ? 1 : 2}`).then(({ data }) => {
@@ -188,17 +197,17 @@ const Shop = () => {
       if (current) { setPersonalBest(data.bestScore); setPersonalScores({ careerScore: data.careerScore, bestRun: data.bestRun }); }
     }).catch(() => { if (current) { setPersonalBest(null); setPersonalScores(null); } });
     return () => { current = false; };
-  }, [shopView, leaderRules, leaderboardUserId]);
+  }, [shopView, leaderRules, leaderboardUserId, leaderRefresh]);
   useEffect(applySavedDisplaySettings, []);
   useEffect(() => {
     if (!systemMenuOpen) return;
-    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") { setSystemMenuOpen(false); } };
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape" && !document.querySelector('dialog[open]')) { setSystemMenuOpen(false); } };
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [systemMenuOpen]);
   useEffect(() => {
     if (!shopView) return;
-    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape" && !document.querySelector('dialog.boss-dossier[open]')) setShopView(null); };
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape" && !document.querySelector('dialog[open]')) setShopView(null); };
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [shopView, leaderRules]);
@@ -228,16 +237,7 @@ const Shop = () => {
   const [adminError, setAdminError] = useState("");
   const [startSector, setStartSector] = useState(1);
   const [selected, setSelected] = useState(selectedShip);
-  const [previewSkin, setPreviewSkin] = useState(() => selectedShip().skin);
-  const [previewColor, setPreviewColor] = useState(() => selectedShip().color);
-  const [previewFocusStage, setPreviewFocusStage] = useState<ShipStage>(1);
-  const [adminStage, setAdminStage] = useState<ShipStage>(() => {
-    const saved = Number(sessionStorage.getItem(ADMIN_SHIP_STAGE_KEY));
-    return saved === 2 || saved === 3 ? saved : 1;
-  });
-  const [shipQuery, setShipQuery] = useState("");
-  const [shipSearchOpen, setShipSearchOpen] = useState(false);
-  const shipSearchRef = useRef<HTMLDivElement>(null);
+  const [shopTarget, setShopTarget] = useState<{ skin: string; stage: ShipStage } | null>(null);
   const [fleet, setFleet] = useState(() => readShipFleet(localStorage.getItem(SHIP_FLEET_KEY), localStorage.getItem(SHIP_OWNED_KEY), localStorage.getItem(SHIP_COLORS_KEY)));
   const [accountState, setAccountState] = useState<{ owner: string; save: AccountSave } | null>(null);
   const [accountError, setAccountError] = useState("");
@@ -267,7 +267,7 @@ const Shop = () => {
       setAccountState({ owner: accountUid, save }); setAccountError("");
       mergeCardReveals(accountUid, save.cardReveals || []);
       void syncCardReveals(accountUid).catch(() => {});
-      const choice = accountSelection(save); setSelected(choice); setPreviewSkin(choice.skin); setPreviewColor(choice.color);
+      const choice = accountSelection(save); setSelected(choice);
     }).catch(() => { if (active) setAccountError("Save unavailable. Local data is unchanged; account purchases are locked until connected."); });
     return () => { active = false; };
   }, [accountUid, adminMode]);
@@ -302,45 +302,29 @@ const Shop = () => {
   const [offers, setOffers] = useState<Offer[]>(() => [...hangarCatalog]);
   const [catalogReady, setCatalogReady] = useState(false);
   const [inventory, setInventory] = useState<Inventory | null>(null);
-  const selectedStage = adminMode ? adminStage : ownedShipStage(selected.skin.sprite, inventory?.ownedShipUpgrades);
-  const previewStage = ownedShipStage(previewSkin.sprite, inventory?.ownedShipUpgrades);
   const [loadoutMessage, setLoadoutMessage] = useState("");
-  const shipSearchOptions = playerSkins.filter(skin => shopView === "shop" || fleetCount(visibleFleet, skin.id) > 0);
+  const [shipQuery, setShipQuery] = useState("");
+  const [shipFilter, setShipFilter] = useState<"all" | "owned" | "available">("all");
+  const shipSearchOptions = playerSkins.filter(skin => {
+    const owned = fleetCount(visibleFleet, skin.id) > 0;
+    return (shopView === "shop" || owned) && skin.name.toLocaleLowerCase(locale).includes(shipQuery.trim().toLocaleLowerCase(locale)) &&
+      (shopTarget?.skin === skin.id || shipFilter === "all" || (shipFilter === "owned" ? owned : testnetStandardHullAvailable(skin.id)));
+  });
   useEffect(() => {
     let active = true;
     queueMicrotask(() => {
       if (!active) return;
       const current = selectedShip();
       setSelected(current);
-      setPreviewSkin(current.skin);
-      setPreviewColor(current.color);
       setInventory(null);
     });
     return () => { active = false; };
   }, [adminMode, user?.uid]);
-  const matchingShipOptions = shipSearchOptions.filter(skin =>
-    skin.name.toLocaleLowerCase(locale).includes(shipQuery.trim().toLocaleLowerCase(locale)));
-  const shipResultsVisible = shipSearchOpen;
-  useEffect(() => { setShipQuery(""); setShipSearchOpen(shopView === "shop"); if (shopView === "shop") setPreviewFocusStage(adminMode ? adminStage : 1); }, [shopView, adminMode, adminStage]);
   useEffect(() => {
-    if (!shipSearchOpen) return;
-    const closeOutside = (event: PointerEvent) => {
-      if (event.target instanceof Node && !shipSearchRef.current?.contains(event.target)) setShipSearchOpen(false);
-    };
-    document.addEventListener("pointerdown", closeOutside);
-    return () => document.removeEventListener("pointerdown", closeOutside);
-  }, [shipSearchOpen]);
-  const chooseSearchResult = (skin: typeof playerSkins[number]) => {
-    const color = skin.id === selected.skin.id ? selected.color : allPlayerColors.find(item => fleetCount(visibleFleet, skin.id, item.id)) ?? playerColors[0];
-    setPreviewSkin(skin);
-    setPreviewColor(color);
-    setPreviewFocusStage(adminMode ? adminStage : 1);
-    setShipQuery("");
-    setShipSearchOpen(false);
-    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
-    if (shopView === "hangar") equipShip(skin, color);
-    else setHangarMessage("");
-  };
+    if (shopView !== "shop" || !shopTarget) return;
+    const frame = requestAnimationFrame(() => document.getElementById(`fleet-${shopTarget.skin}`)?.scrollIntoView({ block: "start" }));
+    return () => cancelAnimationFrame(frame);
+  }, [shopView, shopTarget]);
   const enterGame = () => {
     if (!authReady || isAuthLoading) return;
     primeCardSound();
@@ -354,10 +338,9 @@ const Shop = () => {
     primeGameAudio(); requestGameFullscreen(); navigate("/game");
   };
 
-  const purchasePreview = () => {
+  const purchasePreview = (previewSkin: typeof playerSkins[number], previewColor: typeof allPlayerColors[number]) => {
     primeCardSound();
     if (adminMode) return;
-    if (previewFocusStage !== 1) return;
     if (!testnetStandardHullAvailable(previewSkin.id)) { setHangarMessage("MAINNET READY"); return; }
     if (user) {
       if (!account) { setAccountError("Account save is loading or unavailable."); return; }
@@ -473,6 +456,7 @@ const Shop = () => {
   const openQuickAction = (action: QuickAction) => {
     closeQuickMenu();
     setQuickTarget(null);
+    if (action === "galaxy") { navigate("/galaxy", { state: { fromQuick: true, owner: user?.uid } }); return; }
     const guides: Partial<Record<QuickAction, GuideTopic>> = { overview: "overview", visuals: "visuals", "guide-controls": "controls", route: "route", combat: "survival", boosts: "boosts", earnings: "earnings", collection: "collection" };
     if (guides[action]) { setGuideTopic(guides[action]); setActivePanel("how"); return; }
     const settings: Partial<Record<QuickAction, SettingsSection>> = { language: "language", controls: "controls", audio: "audio", display: "display", vibration: "display" };
@@ -480,12 +464,14 @@ const Shop = () => {
     const fleetViews: Partial<Record<QuickAction, NonNullable<typeof shopView>>> = { hangar: "hangar", shop: "shop", upgrades: "shop", colors: "hangar", weapons: "weapons", armor: "weapons", powers: "powers", progress: "progress", rewards: "rewards", leaders: "leaders", ranks: "rewards", bosses: "rewards", medals: "rewards", chains: "rewards" };
     const view = fleetViews[action];
     if (view) {
-      if (view === "hangar" || view === "shop") { setPreviewSkin(selected.skin); setPreviewColor(selected.color); setPreviewFocusStage(1); }
+      if (view === "hangar" || view === "shop") setShopTarget(null);
       if (view === "leaders") setLeadersStatus("loading");
       const targets: Partial<Record<QuickAction, string>> = { upgrades: ".ship-evolution-stages", colors: ".ship-one-colors", armor: ".hangar-offer-armor", ranks: "#reward-ranks", bosses: "#reward-bosses", medals: "#reward-medals", chains: "#reward-chains" };
       setQuickTarget(targets[action] ?? null);
       setShopView(view); return;
     }
+    if (action === "feedback") { setFeedbackOpen(true); return; }
+    if (action === "profile") { if(user)setPilotOpen("");else requireAuth(); return; }
     if (action === "play") enterGame();
     else if (action === "signin") signIn();
     else if (action === "signout") { setInventory(null); void signOut(); }
@@ -495,13 +481,27 @@ const Shop = () => {
     else if (action === "terms") setTermsOpen(true);
   };
 
-  const homePaused = Boolean(newCards.length || collectionOpen || shopView || systemMenuOpen || activePanel || termsOpen || quickGroup || showSignIn);
+  const homePaused = Boolean(newCards.length || collectionOpen || shopView || systemMenuOpen || activePanel || termsOpen || quickGroup || showSignIn || feedbackOpen || pilotOpen !== null);
+  const modalLayer = pilotOpen !== null ? "profile" : collectionOpen ? "collection" : newCards.length ? "card" : showSignIn ? "signin" : feedbackOpen ? "feedback" : termsOpen ? "terms" : activePanel ? "guide" : systemMenuOpen ? "settings" : shopView ? shopView : quickGroup ? "quick" : null;
+  useModalNavigation(modalLayer, () => {
+    if (pilotOpen !== null) setPilotOpen(null);
+    else if (collectionOpen) setCollectionOpen(false);
+    else if (newCards.length) setNewCards(cards => cards.slice(1));
+    else if (showSignIn) closeSignIn();
+    else if (feedbackOpen) setFeedbackOpen(false);
+    else if (termsOpen) setTermsOpen(false);
+    else if (activePanel) setActivePanel(null);
+    else if (systemMenuOpen) setSystemMenuOpen(false);
+    else if (shopView) setShopView(null);
+    else closeQuickMenu();
+  });
   return (
-    <main className="app-shell landing-shell" data-home-paused={homePaused} onPointerDownCapture={primeCardSound}>
+    <main data-shop-area={shopView ?? "home"} className="app-shell landing-shell cinematic-home" data-home-paused={homePaused} onPointerDownCapture={primeCardSound}>
       {newCards[0] && <CardReveal key={user?.uid ?? "guest"} reward={newCards[0]} remaining={newCards.length} onContinue={()=>{setNewCards(cards=>cards.slice(1));}}/>}
       {collectionOpen && <Collection key={user?.uid ?? "guest"} uid={user?.uid} onClose={() => setCollectionOpen(false)} />}
       <Header
         user={user}
+        onOpenProfile={() => openQuickAction("profile")}
         serviceRank={user && rewardStatus === "ready" && rewardOwner === user.uid ? rankForLevel(rewardProgress.highestLevel) : undefined}
         canAdmin={canAdmin}
         adminMode={adminMode}
@@ -519,35 +519,25 @@ const Shop = () => {
       {accountError && <p role="alert" className="hangar-message">{t(accountError)}</p>}
       {adminMode && <div className="admin-preview-banner" role="status">{t("Admin test mode: purchases and records are not saved.")}</div>}
 
-      <section className="hero-section" onClick={event => { if (window.matchMedia("(min-width: 701px)").matches && !(event.target as HTMLElement).closest("button, a, input, select, label")) requestGameFullscreen(); }}>
-        <button className="wide-fullscreen-control home-fullscreen-control" type="button" onClick={requestGameFullscreen} aria-label={t("Full screen")} title={t("Full screen")}>⛶</button>
-        <button className="home-music-toggle" type="button" data-state={musicEnabled ? "on" : "off"} aria-pressed={musicEnabled} aria-label={musicLabel} title={musicLabel} onClick={toggleHomeMusic}><span className="home-music-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" />{musicEnabled ? <><path d="M16 9a4 4 0 0 1 0 6" /><path d="M19 6a8 8 0 0 1 0 12" /></> : <path d="m17 9 5 6m0-6-5 6" />}</svg></span></button>
-        <Starfield sector={1} player={HOME_STAR_POSITION} paused={homePaused} />
-        <div className="home-deep-space" aria-hidden="true"><span className="home-far-planet home-far-planet-gas" /><span className="home-far-planet home-far-planet-saturn" /><span className="home-far-planet home-far-moon" /><span className="home-black-hole"><i /></span></div>
-        <HomeCombatPreview defender={{ sprite: selected.skin.sprite, color: selected.color.id, stage: selectedStage }} paused={homePaused} />
-        <div className="hero-copy">
-          <p className="eyebrow"><span className="signal-dot" /> {t("Mission control online")}</p>
-          <h1><span className="home-title-word">Cryptoid</span><span className="home-title-evolution">Evolution</span></h1>
-          <p className="hero-tagline">{t("Defend Earth.")}<span>{t("Evolve your power.")}</span></p>
-          <p className="hero-description">{t('Build your streak, master the grid, and become the force Earth needs.')}</p>
+      <CinematicHome
+        paused={homePaused}
+        busy={!authReady || isAuthLoading}
+        rankName={!user || rewardStatus === "ready" && rewardOwner === user.uid ? rankForLevel(rewardProgress.highestLevel).name : undefined}
+        musicEnabled={musicEnabled}
+        musicLabel={musicLabel}
+        onPlay={enterGame}
+        onCareer={() => openQuickAction("progress")}
+        onCards={() => setCollectionOpen(true)}
+        onGalaxy={() => navigate("/galaxy", { state: { owner: user?.uid } })}
+        onCommunity={() => openQuickAction("feedback")}
+        onTerms={() => setTermsOpen(true)}
+        onSound={toggleHomeMusic}
+      >
           {adminMode && <div className="admin-level-picker" aria-label={t("Admin test start")}><label>{t("Level")} <select value={Math.floor((startSector - 1) / 10) + 1} onChange={event => setStartSector((Number(event.target.value) - 1) * 10 + (startSector - 1) % 10 + 1)}>{Array.from({ length: MAX_DIFFICULTY_LEVEL / 10 }, (_, index) => <option key={index} value={index + 1}>{index + 1}</option>)}</select></label><label>{t("Start at")} <select value={(startSector - 1) % 10 + 1} onChange={event => setStartSector((Math.floor((startSector - 1) / 10) * 10) + Number(event.target.value))}>{Array.from({ length: 9 }, (_, index) => <option key={index} value={index + 1}>{t("Block")} {index + 1}</option>)}<option value="10">{t("Boss")}</option></select></label></div>}
-          <div className="hero-actions">
-            <div className="home-launch">
-              <button className="button button-primary home-play-button" disabled={!authReady || isAuthLoading} type="button" onClick={enterGame}>{t("Play")} <span className="button-glyph" aria-hidden="true">→</span></button>
-            </div>
-          </div>
-          <button className="collection-home-button" type="button" disabled={!authReady} onClick={() => setCollectionOpen(true)}>✧ {t('Card collection')}</button>
-        </div>
-        <div className="planet-stage" aria-label={t("Planet status")}>
-          <div className="planet"><EarthGlobe paused={homePaused} /></div>
-          <span className="orbit-status">{t('ORBITAL DEFENSE ACTIVE')}</span>
-        </div>
-        <div className="stage-label home-region-label"><span className="stage-label-value">01</span><span>{t('Genesis sector')}</span></div>
-        <footer className="home-footer">
-          <button type="button" className="text-button terms-entry" onClick={() => setTermsOpen(true)}>{t("Terms of service")}</button>
-        </footer>
-      </section>
+      </CinematicHome>
 
+      {feedbackOpen && <FeedbackHub key={user?.uid ?? "guest"} signedIn={!!user} onSignIn={()=>{setFeedbackOpen(false);requireAuth();}} onProfile={username => setPilotOpen(username)} onClose={()=>{setFeedbackOpen(false);returnToMenu();}}/>}
+      {pilotOpen !== null && <PilotProfile key={`${user?.uid}-${pilotOpen}`} username={pilotOpen || undefined} onClose={()=>setPilotOpen(null)} onSaved={()=>setLeaderRefresh(n=>n+1)}/>}
       {quickGroup !== null && <QuickAccessMenu onClose={closeQuickMenu} onAction={openQuickAction} signedIn={Boolean(user)} canAdmin={Boolean(canAdmin)} adminMode={adminMode} username={user?.username} busy={isAuthLoading || !authReady} />}
 
       {systemMenuOpen && <div className="system-menu-overlay" role="dialog" aria-modal="true" aria-labelledby="system-menu-title">
@@ -564,21 +554,7 @@ const Shop = () => {
         <div className="shop-modal">
         <div className="shop-modal-header"><button className="text-button menu-return" type="button" onClick={returnToMenu}>← {t("Back to quick access")}</button><strong>{t(shopTabs.find(([view]) => view === shopView)?.[1] ?? "Shop / Hangar")}</strong><button className="close-button" type="button" onClick={() => setShopView(null)} aria-label={t('Close shop')}>×</button></div>
           <div className="shop-modal-body">
-      {shopView === "progress" && <section className="dashboard-grid" aria-label={t('Player overview')}>
-        {user && <p className="admin-account-id">{t("Pi account ID:")}<code>{user.uid}</code></p>}
-        <article className="status-card progress-card">
-          <div className="card-heading"><span>{t('YOUR PROGRESS')}</span><span className="card-icon">↗</span></div>
-          <div className="progress-row"><strong>{user ? personalScores ? `${t("Career Score")} ${personalScores.careerScore.toLocaleString(locale)}` : t("Leaderboard unavailable. Try again later.") : `${t("Best")} ${records.bestScore}`}</strong><span>{t("Sector")} {String(displayedRecords.highestSector).padStart(2, "0")}</span></div>
-          {personalScores && user && <p>{t("Best Run")}: {personalScores.bestRun.score.toLocaleString(locale)} · {t("Run level")}: {personalScores.bestRun.level ?? "—"}</p>}
-          <div className="progress-track"><span style={{ width: `${Math.min(100, (personalScores && user ? personalScores.careerScore : records.bestScore) / 10)}%` }} /></div>
-          <button className="text-button" type="button" onClick={() => setActivePanel("progress")}>{t("My Progress")} <span>→</span></button>
-        </article>
-        <article className="status-card streak-card">
-          <div className="card-heading"><span>{t('ACTIVE STREAK')}</span><span className="flame">✦</span></div>
-          <strong className="streak-number">{displayedRecords.totalDestroyed} <small>{t("asteroids")}</small></strong>
-          <p>{t('Total destroyed across all missions.')}</p>
-        </article>
-      </section>}
+      {shopView === "progress" && <CareerDashboard progress={!user || rewardStatus === "ready" && rewardOwner === user.uid ? rewardProgress : null} scores={user ? personalScores : null} records={!user || account ? displayedRecords : null} accountId={user?.uid} localBest={!user ? records.bestScore : undefined} loading={!!user && rewardStatus === "loading"}/>}
 
       {shopView === "rewards" && <section className="dashboard-grid rewards-dashboard" aria-label={t("Rewards")}>
         <p className="reward-network-notice" role="note">{rewardNetwork === "testnet" ? t("TESTNET REWARDS: Your progress here is for testing only. It will not transfer to Mainnet. Mainnet rewards start from zero and are saved permanently to your account.") : t("MAINNET REWARDS: Your collection starts from zero here and is saved permanently to your account. Testnet progress is separate.")}</p>
@@ -588,9 +564,9 @@ const Shop = () => {
         {(!user || (rewardStatus === "ready" && rewardOwner === user.uid)) && <>
         <article className="status-card reward-collection">
           <div className="card-heading"><span>{t("RANK & COLLECTION")}</span><span className="card-icon">✦</span></div>
-          <div className="reward-rank-current"><span aria-hidden="true">{rankForLevel(rewardProgress.highestLevel).symbol}</span><div><small>{t("Current service rank")} · {t("Level")} {rewardProgress.highestLevel}/500</small><h3>{t(rewardRank(rewardProgress))}</h3></div></div>
+          <div className="reward-rank-current"><ServiceBadge name={rankForLevel(rewardProgress.highestLevel).name} size="large"/><div><small>{t("Current service rank")} · {t("Level")} {rewardProgress.highestLevel}/500</small><h3>{t(rewardRank(rewardProgress))}</h3></div></div>
           <p>{Object.keys(rewardProgress.bossWins).filter(id=>bossCardAvailable(Number(id))).length}/{BOSS_STICKER_COUNT} {t("Boss stickers")} · {rewardProgress.completedChains.length} {t("Chains")} · {rewardProgress.perfectBonuses} {t("Perfect bonus rounds")}</p>
-          <div id="reward-ranks" className="reward-rank-path" aria-label={t("Service ranks")}>{[1, 11, 51, 101, 201, 301, 401, 500].map(level => { const tier = rankForLevel(level); return <span key={level} className={rewardProgress.highestLevel >= level ? "earned" : ""}><b aria-hidden="true">{tier.symbol}</b><small>{t(tier.name)}<br />{t("Level")} {level}</small></span>; })}</div>
+          <div id="reward-ranks" className="reward-rank-path" aria-label={t("Service ranks")}>{[1, 11, 51, 101, 201, 301, 401, 500].map(level => { const tier = rankForLevel(level); return <span key={level} className={rewardProgress.highestLevel >= level ? "earned" : ""}><ServiceBadge name={tier.name} size="medium" locked={rewardProgress.highestLevel < level}/><small>{t(tier.name)}<br />{t("Level")} {level}</small></span>; })}</div>
           <h4>{t("Linked Blocks")} · {t("Level")} {latestRewardLevel}</h4>
           <div className="reward-blocks" aria-label={t("Linked Blocks")}>{Array.from({ length: 9 }, (_, index) => <span key={index} className={index < (rewardProgress.linkedBlocks?.[latestRewardLevel] ?? 0) ? "earned" : ""}>{index + 1}</span>)}</div>
           <div id="reward-chains" className="reward-milestones" aria-label={t("Chain milestones")}>{CHAIN_MILESTONES.map(target => <span key={target} className={rewardProgress.completedChains.length >= target ? "earned" : ""} title={`${target} ${t("Chains")}`}>◆ {target}</span>)}</div>
@@ -617,12 +593,24 @@ const Shop = () => {
       {shopView === "leaders" && <section className="leaderboard-section" aria-labelledby="leaders-heading">
         <p className="eyebrow">{t("GLOBAL RECORDS")}</p>
         <h2 id="leaders-heading">{t("Top 100")}</h2>
-        <div className="modal-actions">{(["career", 2, 1] as const).map(rule => <button className="button button-secondary" type="button" key={rule} aria-pressed={leaderRules === rule} onClick={() => { setLeadersStatus("loading"); setLeaderRules(rule); }}>{t(rule === "career" ? "Career Score" : rule === 2 ? "Expanded levels" : "Previous records")}</button>)}</div>
-        <p>{t(leaderRules === "career" ? "Career Score adds verified completed runs. Best Run is the highest single run with its reached level. Profile level is separate. Earlier records remain in the previous lists." : "Each signed-in Pi player appears once with their highest completed run. Guests keep a local best on this device.")}</p>
-        {leaderRules === "career" && personalScores ? <p className="leaderboard-personal">{t("Career Score")}: <strong>{personalScores.careerScore.toLocaleString(locale)}</strong> · {t("Best Run")}: <strong>{personalScores.bestRun.score.toLocaleString(locale)}</strong> · {t("Run level")}: {personalScores.bestRun.level ?? "—"}</p> : leaderRules !== "career" && personalBest !== null && <p className="leaderboard-personal">{t("Your personal best")}: <strong>{personalBest}</strong></p>}
+        <div className="leaderboard-tabs" role="group" aria-label={t("Top 100")}>{(["career", 2, 1] as const).map(rule => <button className="button button-secondary" type="button" key={rule} aria-pressed={leaderRules === rule} onClick={() => { setLeadersStatus("loading"); setLeaderRules(rule); }}>{t(rule === "career" ? "Career Score" : rule === 2 ? "Mission high scores" : "Earlier record archive")}</button>)}</div>
+        <p className="leaderboard-explanation" key={leaderRules}>{t(leaderRules === "career" ? "Sum of verified completed missions, sorted by total career points." : leaderRules === 2 ? "Highest saved mission score under the current rules, including saved checkpoints. Sorted by score." : "Earlier high scores under the old rules, sorted by score. Their network and run level were not recorded.")}</p>
+        {leaderRules === 1 && <p className="leaderboard-archive-notice">{t("Historical archive · preserved original records")}</p>}
+        <details className="leaderboard-glossary"><summary>{t("Ranking explained")}</summary><dl>
+          <div><dt>{t("Best Run")}</dt><dd>{t("Highest score from a verified completed mission.")}</dd></div>
+          <div><dt>{t("Mission high scores")}</dt><dd>{t("Highest saved mission score; the mission may still be in progress.")}</dd></div>
+          <div><dt>{t("Run level")}</dt><dd>{t("Level reached in that recorded mission; unavailable for older records.")}</dd></div>
+          <div><dt>{t("Profile level")}</dt><dd>{t("Highest campaign level in the player's career. Separate from the record's run level.")}</dd></div>
+        </dl></details>
+        {leaderRules === "career" && personalScores ? <p className="leaderboard-personal">{t("Career Score")}: <strong>{personalScores.careerScore.toLocaleString(locale)}</strong> · {t("Best Run")}: <strong>{personalScores.bestRun.score.toLocaleString(locale)}</strong> · {t("Run level")}: {personalScores.bestRun.level == null ? t("Not recorded") : number(personalScores.bestRun.level)}</p> : leaderRules !== "career" && personalBest !== null && <p className="leaderboard-personal">{t("Your personal best")}: <strong>{number(personalBest)}</strong></p>}
         {leadersStatus === "loading" && <p role="status">{t("Loading scores…")}</p>}
-        {leadersStatus === "error" && <p role="status">{t("Leaderboard unavailable. Try again later.")}</p>}
-        {leadersStatus === "ready" && (leaders.length ? <div className={`leaderboard-scroll${leaderRules === "career" ? " leaderboard-career" : ""}`}><table><thead><tr><th>#</th><th>{t("Player")} · {t("Service rank")}</th><th>{t(leaderRules === "career" ? "Career Score" : "Best score")}</th>{leaderRules === "career" && <><th>{t("Best Run")}</th><th>{t("Run level")}</th><th>{t("Profile level")}</th></>}</tr></thead><tbody>{leaders.map(entry => <tr key={entry.rank}><td>{entry.rank}</td><td><div className="leader-identity"><strong>@{entry.username}</strong><span className="leader-rank"><b aria-hidden="true">{entry.serviceRank?.symbol ?? "◇"}</b><small>{t(entry.serviceRank?.name ?? "Rookie")}</small></span></div></td><td>{entry.score.toLocaleString(locale)}</td>{leaderRules === "career" && <><td>{entry.bestRun?.score.toLocaleString(locale) ?? "—"}</td><td>{entry.bestRun?.level ?? "—"}</td><td>{entry.profileLevel ?? "—"}</td></>}</tr>)}</tbody></table></div> : <p>{t("No records yet. Complete a mission to be first.")}</p>)}
+        {leadersStatus === "error" && <div role="alert"><p>{t("Leaderboard unavailable. Try again later.")}</p><button type="button" className="button button-secondary" onClick={() => { setLeadersStatus("loading"); setLeaderRefresh(n => n + 1); }}>{t("Retry")}</button></div>}
+        {leadersStatus === "ready" && user && !leaders.some(entry => entry.username === user.username) && <p>{t("Your account is not in this Top 100.")}</p>}
+        {leadersStatus === "ready" && (leaders.length ? <><ol className="leaderboard-list" start={leaderPage * 5 + 1}>{leaders.slice(leaderPage * 5, leaderPage * 5 + 5).map(entry => <li key={entry.rank} data-own={user?.username === entry.username} aria-current={user?.username === entry.username ? "true" : undefined}>
+          <div className="leader-identity"><span className="leader-place">{number(entry.rank)}</span><button className="leader-profile-link" type="button" aria-label={`${t("Pilot profile")} · @${entry.username}`} onClick={()=>setPilotOpen(entry.username)}><PilotAvatar avatar={entry.avatar??null} name=""/><span className="leader-profile-copy"><strong>@{entry.username}{user?.username === entry.username && <small> · {t("You")}</small>}</strong><small>{t("Pilot profile")} →</small></span></button><span className="leader-rank"><ServiceBadge name={entry.serviceRank?.name ?? "Rookie"}/><small>{t(entry.serviceRank?.name ?? "Rookie")}</small></span></div>
+          <dl className="leader-metrics leader-primary-metrics"><div><dt>{t(leaderRules === "career" ? "Career Score" : "Mission high scores")}</dt><dd>{number(entry.score)}</dd></div><div><dt>{t("Profile level")}</dt><dd>{entry.profileLevel == null ? t("Not recorded") : number(entry.profileLevel)}</dd></div></dl>
+          <details className="leader-record-details"><summary>{t("Mission details")}</summary><dl className="leader-metrics">{leaderRules === "career" && <div><dt>{t("Best Run")}</dt><dd>{number(entry.bestRun?.score ?? 0)}</dd></div>}<div><dt>{t("Run level")}</dt><dd>{entry.runLevel == null ? t("Not recorded") : number(entry.runLevel)}</dd></div></dl></details>
+        </li>)}</ol>{leaders.length > 5 && <nav className="leaderboard-pages" aria-label={t("Top 100")}><button type="button" disabled={leaderPage === 0} onClick={() => setLeaderPage(page => Math.max(0, page - 1))}>{t("Previous page")}</button><span role="status">{number(leaderPage + 1)} / {number(Math.ceil(leaders.length / 5))}</span><button type="button" disabled={(leaderPage + 1) * 5 >= leaders.length} onClick={() => setLeaderPage(page => page + 1)}>{t("Next page")}</button></nav>}</> : <p>{t("No records yet. Complete a mission to be first.")}</p>)}
       </section>}
 
       {(shopView === "hangar" || shopView === "shop") && <section className={`ship-selector ship-selector-${shopView}`} aria-labelledby="hangar-heading">
@@ -635,35 +623,27 @@ const Shop = () => {
           </div>}
         </div>}
         <div className="ship-panel-heading"><div><p className="eyebrow">{t(shopView === "hangar" ? "YOUR HANGAR" : "SHIP SHOP")}</p><h2 id="hangar-heading">{t(shopView === "hangar" ? "Your fleet" : "Available ships")}</h2></div><strong className="shard-balance">◆ {displayedShards} <small>{t("Shards")}</small></strong></div>
-        <p className="testnet-shop-notice" role="note">{shipSaveNetwork === "testnet" ? t("TESTNET SHARDS: Earn and spend Shards on available Standard ships here for testing. Shards and ship purchases do not transfer to Mainnet; there you start from zero.") : t("MAINNET SHARDS: Shards and ship purchases start from zero here. Testnet balances and ships are separate.")}</p>
-        <p className="testnet-shop-notice">{shipSaveNetwork === "testnet" ? t("Testnet: Grey Scout is free; nine Standard hulls cost Shards. Other hulls are locked until Mainnet.") : t("Grey Scout is free; nine Standard hulls cost Shards. Other hulls are currently locked.")}</p>
-        <details className="ship-earnings"><summary>{t("How to earn Shards")}</summary><p>{t("At level 1, defeats earn Shards by enemy class: light 2, medium 4–5, elite 6, heavy 8, boss 16. Rewards grow with level. Bonus targets earn 1 each, plus a completion reward that grows with level. The HUD shows your previous Shard balance plus this mission's earnings.")}</p></details>
-        <label className="ship-search-label" htmlFor="ship-search">{t("Find a ship")} <small>{matchingShipOptions.length}/{shipSearchOptions.length}</small></label>
-        <div className="ship-search-wrap" ref={shipSearchRef}>
-          <div className="ship-search-control">
-            <input id="ship-search" className="ship-search" type="search" value={shipQuery} onFocus={() => setShipSearchOpen(true)} onChange={event => { setShipQuery(event.target.value); setShipSearchOpen(true); }} onKeyDown={event => { if (event.key === "Escape") { setShipSearchOpen(false); event.currentTarget.blur(); } else if (event.key === "Enter") { event.currentTarget.blur(); } else if (event.key === "ArrowDown" && shipResultsVisible) { event.preventDefault(); shipSearchRef.current?.querySelector<HTMLButtonElement>(".ship-search-result")?.focus(); } }} placeholder={t("Search ship name")} aria-expanded={shipResultsVisible} aria-controls="ship-search-results" autoComplete="off" />
-            <button className="ship-search-toggle" type="button" aria-label={t("Show ships")} aria-expanded={shipSearchOpen} aria-controls="ship-search-results" onClick={() => setShipSearchOpen(open => !open)}><span aria-hidden="true">⌄</span></button>
-          </div>
-          {shipResultsVisible && <div className="ship-search-results" id="ship-search-results" role="group" aria-label={t("Available ships")}>
-            {matchingShipOptions.map(skin => {
-              const total = fleetCount(visibleFleet, skin.id);
-              const status = total ? `${t("Owned")} ×${total}` : testnetStandardHullAvailable(skin.id) ? t("Not owned") : shipSaveNetwork === "testnet" ? t("MAINNET READY") : t("Locked");
-              return <button className={`ship-search-result${previewSkin.id === skin.id ? " ship-search-selected" : ""}`} key={skin.id} type="button" onClick={() => chooseSearchResult(skin)}>
-                <span className="ship-search-thumb" aria-hidden="true"><img src={shipEvolutionAsset(skin.sprite, 1)} alt="" loading="lazy" decoding="async" style={shipPreviewPlacement(skin.sprite, 1)} /></span>
-                <span className="ship-search-result-name"><strong>{skin.name}</strong><small>{t("STANDARD")} · <span className={!total && !testnetStandardHullAvailable(skin.id) ? "mainnet-ready-badge" : undefined}>{status}</span></small>{shopView === "shop" && <small className="ship-search-price">◆ {standardShipPrice(skin).toLocaleString(locale)} {t("Shards")}{skin.price === 0 ? " · " + t("Additional ship") : ""}</small>}<small>{t("Open for variants and levels")}</small></span><span className="ship-search-arrow" aria-hidden="true">›</span>
-              </button>;
-            })}
-            {matchingShipOptions.length === 0 && <p className="ship-search-empty">{t("No matching ships.")}</p>}
-          </div>}
+        <p className="testnet-shop-notice" role="note">{t(shipSaveNetwork === "testnet" ? "Testnet progress stays separate from Mainnet." : "Mainnet progress stays separate from Testnet.")}</p>
+        <details className="ship-earnings"><summary>{t("Shards & purchase rules")}</summary><p>{shipSaveNetwork === "testnet" ? t("TESTNET SHARDS: Earn and spend Shards on available Standard ships here for testing. Shards and ship purchases do not transfer to Mainnet; there you start from zero.") : t("MAINNET SHARDS: Shards and ship purchases start from zero here. Testnet balances and ships are separate.")}</p><p>{shipSaveNetwork === "testnet" ? t("Testnet: Grey Scout is free; nine Standard hulls cost Shards. Other hulls are locked until Mainnet.") : t("Grey Scout is free; nine Standard hulls cost Shards. Other hulls are currently locked.")}</p><p>{t("At level 1, defeats earn Shards by enemy class: light 2, medium 4–5, elite 6, heavy 8, boss 16. Rewards grow with level. Bonus targets earn 1 each, plus a completion reward that grows with level. The HUD shows your previous Shard balance plus this mission's earnings.")}</p></details>
+        <div className="fleet-toolbar">
+          <label>{t("Find a ship")}<input type="search" value={shipQuery} placeholder={t("Search ship name")} onChange={event => { setShipQuery(event.target.value); setShopTarget(null); }} /></label>
+          <div className="fleet-filters" role="group" aria-label={t("Available ships")}>{(["all", "owned", "available"] as const).map(filter => <button type="button" key={filter} aria-pressed={shipFilter === filter} onClick={() => { setShipFilter(filter); setShopTarget(null); }}>{t(filter === "all" ? "All ships" : filter === "owned" ? "Owned ships" : "Available with Shards")}</button>)}</div>
+          {(shipQuery || shipFilter !== "all") && <button className="fleet-reset" type="button" onClick={() => { setShipQuery(""); setShipFilter("all"); }}>{t("Reset filters")}</button>}
+          <p role="status">{number(shipSearchOptions.length)} · {t("Available ships")}</p>
         </div>
-        <ShipSelectionPanel view={shopView} skin={previewSkin} color={previewColor} focusStage={previewFocusStage} ownedStage={previewStage} fleet={visibleFleet} shards={displayedShards} locale={locale} adminPreview={adminMode}
-          offers={offers.filter(offer => offer.kind === "ship_upgrade")}
-          selectedSkinId={selected.skin.id} selectedColorId={selected.color.id} message={hangarMessageText} t={t}
-          onStageChange={stage => { setPreviewFocusStage(stage); if (adminMode) { setAdminStage(stage); sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage)); } setHangarMessage(""); }}
-          onColorChange={color => { setPreviewColor(color); if (shopView === "hangar") equipShip(previewSkin, color); else setHangarMessage(""); }}
-          purchaseBusy={accountBusy || Boolean(user && !account)} onBuyStandard={purchasePreview}
-          onEquipPreview={() => equipShip(previewSkin, previewColor)}
-          onOpenShop={() => { setPreviewFocusStage(1); setShopView("shop"); }} />
+        {!shipSearchOptions.length && <p role="status">{t("No ships match these filters.")}</p>}
+        <div className="fleet-scroll-list">
+          {shipSearchOptions.map(skin => <article id={`fleet-${skin.id}`} key={`${shopView}:${skin.id}`} className="fleet-list-entry">
+            <FleetShipPanel view={shopView} skin={skin} ownedStage={ownedShipStage(skin.sprite, inventory?.ownedShipUpgrades)} fleet={visibleFleet} shards={displayedShards} locale={locale} adminPreview={adminMode}
+              offers={offers.filter(offer => offer.kind === "ship_upgrade")} selectedSkinId={selected.skin.id} selectedColorId={selected.color.id}
+              message={typeof hangarMessage === "object" && hangarMessage.ship === skin.name ? hangarMessageText : ""} t={t}
+              requestedStage={shopTarget?.skin === skin.id ? shopTarget.stage : undefined}
+              purchaseBusy={accountBusy || Boolean(user && !account)} onBuy={color => purchasePreview(skin, color)}
+              onEquip={color => equipShip(skin, color)}
+              onStage={stage => { if (adminMode) sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage)); }}
+              onUpgrade={stage => { setShipQuery(""); setShipFilter("all"); setShopTarget({ skin: skin.id, stage }); setShopView("shop"); }} />
+          </article>)}
+        </div>
       </section>}
 
       {(shopView === "weapons" || shopView === "powers") && <section className="upgrade-section" aria-labelledby="upgrade-heading">
@@ -703,7 +683,7 @@ const Shop = () => {
           <button className="close-button" type="button" onClick={() => setActivePanel(null)} aria-label={t('Close')}>×</button>
           <p className="eyebrow">{t("MISSION LOG")}</p>
           <h2 id="info-title">{t("Your Progress")}</h2>
-          {user ? personalScores ? <p>{t("Career Score adds verified completed runs. Best Run is the highest single run with its reached level. Profile level is separate. Earlier records remain in the previous lists.")} {t("Career Score")}: {personalScores.careerScore.toLocaleString(locale)} · {t("Best Run")}: {personalScores.bestRun.score.toLocaleString(locale)} · {t("Run level")}: {personalScores.bestRun.level ?? "—"}. {t("Sector")} {displayedRecords.highestSector} · {t("Destroyed")} {displayedRecords.totalDestroyed}.</p> : <p role="status">{t("Leaderboard unavailable. Try again later.")}</p> : <p>{t("Your best score is {score}, your highest sector is {sector}, and you have destroyed {destroyed} Cryptoids.", { score: records.bestScore, sector: displayedRecords.highestSector, destroyed: displayedRecords.totalDestroyed })}</p>}
+          <CareerDashboard progress={!user || rewardStatus === "ready" && rewardOwner === user.uid ? rewardProgress : null} scores={user ? personalScores : null} records={!user || account ? displayedRecords : null} accountId={user?.uid} localBest={!user ? records.bestScore : undefined} loading={!!user && rewardStatus === "loading"}/>
           <button className="button button-primary" type="button" onClick={() => setActivePanel(null)}>{t("Close")}</button>
         </div>
       </div>}

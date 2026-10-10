@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import BossPortrait from "./BossPortrait";
+import ShipPortrait from "./ShipPortrait";
 import { bossName } from "./bossNames";
 import WeaponTutorial from "./WeaponTutorial";
 import BossPhaseGuide from './BossPhaseGuide';
@@ -123,18 +124,24 @@ const GameGuide = ({ onClose, initialTopic = "controls", backLabel = "Back to sy
       <p className="eyebrow">{t("FIELD GUIDE")}</p>
       <h2 id="info-title">{t("How to Play")}</h2>
       <p className="guide-lead">{t("Choose a topic to learn the current rules before your mission.")}</p>
+      <label className="guide-topic-picker">
+        <span>{t("Guide topics")}</span>
+        <select value={selected} onChange={event => setSelected(event.target.value as GuideTopic)}>
+          {topics.map(item => <option key={item.id} value={item.id}>{t(item.label)}</option>)}
+        </select>
+      </label>
       <nav className="guide-topics" aria-label={t("Guide topics")}>
         {topics.map(item => <button key={item.id} type="button" className={selected === item.id ? "guide-topic is-active" : "guide-topic"} aria-pressed={selected === item.id} onClick={() => setSelected(item.id)}>{t(item.label)}</button>)}
       </nav>
       <section className="guide-detail" aria-live="polite" aria-labelledby="guide-section-title" key={topic.id}>
         <h3 id="guide-section-title">{t(topic.title)}</h3>
         <p>{t(topic.intro)}</p>
-        {topic.id === "visuals" && <div className="guide-ship-gallery">{([1, 2, 3] as const).map(stage => <figure key={stage}><img src={shipEvolutionAsset(0, stage)} alt={t(stage === 1 ? "Standard ship" : stage === 2 ? "Advanced ship" : "Elite ship")} loading="lazy" /><figcaption>{t(stage === 1 ? "STANDARD" : stage === 2 ? "ADVANCED" : "ELITE")}</figcaption></figure>)}<figure className="guide-boss-example"><BossPortrait id={1} /><figcaption>#01 · {bossName(1)}</figcaption></figure></div>}
+        {topic.id === "visuals" && <div className="guide-ship-gallery">{([1, 2, 3] as const).map(stage => <figure key={stage}><ShipPortrait src={shipEvolutionAsset(0, stage)} color="grey" name={t(stage === 1 ? "Standard ship" : stage === 2 ? "Advanced ship" : "Elite ship")} /><figcaption>{t(stage === 1 ? "STANDARD" : stage === 2 ? "ADVANCED" : "ELITE")}</figcaption></figure>)}<figure className="guide-boss-example"><BossPortrait id={1} /><figcaption>#01 · {bossName(1)}</figcaption></figure></div>}
         {(topic.id === "boosts" || topic.id === "controls") && <WeaponTutorial />}
         {topic.id === "survival" && <BossPhaseGuide />}
         <ul>{topic.details.map(detail => <li key={detail}>{t(detail)}</li>)}</ul>
       </section>
-      <button className="button button-secondary guide-back" type="button" onClick={onClose}>← {t(backLabel)}</button>
+      <button className="button button-secondary guide-back" type="button" onClick={onClose}><span className="guide-back-arrow" aria-hidden="true">←</span>{t(backLabel)}</button>
     </div>
   </div>;
 };

@@ -30,7 +30,7 @@ export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:Can
   c.save();c.translate(x,y);c.rotate(state.a);c.translate(0,-recoil);
   c.globalAlpha=.64;tile(c,image,g.shadow,-g.spritePivot.x*scale-12*scale+3*scale,-g.spritePivot.y*scale-12*scale+6*scale,scale);
   c.globalAlpha=1;
-  const heat=turretHeatStep(state);
+  const heat=frozen?0:turretHeatStep(state);
   if(heat){
    const key=`${i}:${heat}`;let hot=cached.heated.get(key);
    if(!hot){

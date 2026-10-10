@@ -13,7 +13,7 @@ export default function BossPhaseGuide() {
   const boss = useMemo(() => {
     const model = createSectorBoss(bossId * 10, 300, 0, 760);
     model.elapsed = 3000;
-    model.turrets.forEach((gun,i) => gun.health = Math.max(1, Math.ceil(gun.maxHealth * (i % 3 === 0 ? .14 : i % 3 === 1 ? .48 : 1))));
+    model.turrets.forEach(gun => gun.health = gun.maxHealth);
     if (exposed) {
       model.turrets.forEach(gun => gun.health = 0);
       model.core = { elapsed: 1500, volley: 0 };
@@ -33,7 +33,7 @@ export default function BossPhaseGuide() {
     <div className="boss-phase-guide-stage">
       <div className="asteroid sector-boss" style={{ left: '50%', top: 125, width: boss.width, height: boss.height, transform: 'translate(-50%,-50%)' }}>
         <img className="boss-hull" src={boss.config.image} alt="" draggable={false}/>
-        <BossWeaponsView boss={boss}/>
+        <BossWeaponsView boss={boss} frozen/>
         <BossReactorView boss={boss}/>
         <BossHealthView boss={boss}/>
       </div>

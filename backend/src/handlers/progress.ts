@@ -76,9 +76,11 @@ export default function mountProgressEndpoints(router: Router) {
         const pendingPower = save.mission?.combat ? save.mission.combat.state.pendingStartPower : save.lastStart?.powerUp;
         if (combat.state.pendingStartPower !== null && combat.state.pendingStartPower !== pendingPower) return res.status(400).json({ error: "power_not_owned" });
         if (snapshot.hearts > Math.max(3 + (save.lastStart?.armorBonus || 0), save.mission?.snapshot.hearts || 0) || snapshot.score < (save.mission?.snapshot.score || 0)
+          || save.mission?.snapshot.damageCount !== undefined && (snapshot.damageCount === undefined || snapshot.damageCount < save.mission.snapshot.damageCount)
+          || save.mission?.snapshot.comboTotal !== undefined && (snapshot.comboTotal === undefined || snapshot.comboTotal < save.mission.snapshot.comboTotal)
           || snapshot.shards < (save.creditedShards || 0) || snapshot.destroyed < (save.creditedDestroyed || 0)) return res.status(400).json({ error: "save_regressed" });
         const deltaShards = snapshot.shards - (save.creditedShards || 0), deltaDestroyed = snapshot.destroyed - (save.creditedDestroyed || 0);
-        const mission = { sector: combat.stage, phase, rulesVersion: run.rulesVersion ?? 1, snapshot, combat, savedAt: new Date().toISOString() };
+        const mission = { ...(save.mission?.damageAtStart === undefined ? (!save.mission && save.lastStart?.badgeMetrics === 1 ? {damageAtStart:0,destroyedAtStart:0} : {}) : { damageAtStart: save.mission.damageAtStart, destroyedAtStart:save.mission.destroyedAtStart }), sector: combat.stage, phase, rulesVersion: run.rulesVersion ?? 1, snapshot, combat, savedAt: new Date().toISOString() };
         const result = await users.updateOne({ uid, [`${key}.activeRunId`]: run.id, [`${key}.version`]: save.version }, {
           $set: { [`${key}.mission`]: mission, [`${key}.combatSequence`]: combat.sequence, [`${key}.creditedShards`]: snapshot.shards, [`${key}.creditedDestroyed`]: snapshot.destroyed, [`${key}.updatedAt`]: mission.savedAt },
           $inc: { [`${key}.version`]: 1, [`${key}.balance`]: deltaShards, [`${key}.totalShardsEarned`]: deltaShards, [`${key}.totalDestroyed`]: deltaDestroyed },
@@ -101,7 +103,7 @@ export default function mountProgressEndpoints(router: Router) {
         const mission = save.mission || { sector: 1, phase: "normal" as const, snapshot: firstMissionSnapshot(hearts), savedAt: new Date().toISOString() };
         const remaining = Math.min(mission.snapshot.hearts, hearts);
         if (save.mission && remaining === mission.snapshot.hearts) return res.json({ save: publicSave(save) });
-        const updated = { ...mission, snapshot: { ...mission.snapshot, hearts: remaining }, savedAt: new Date().toISOString() };
+        const updated = { ...mission, ...(remaining < (save.mission?.snapshot.hearts ?? 3 + (save.lastStart.armorBonus || 0)) ? {damageAtStart:-1} : {}), snapshot: { ...mission.snapshot, hearts: remaining }, savedAt: new Date().toISOString() };
         const result = await users.updateOne({ uid, [`${key}.activeRunId`]: runId, [`${key}.version`]: save.version }, { $set: { [`${key}.mission`]: updated, [`${key}.updatedAt`]: updated.savedAt }, $inc: { [`${key}.version`]: 1 } });
         if (result.modifiedCount) return res.json({ save: publicSave({ ...save, mission: updated, version: save.version + 1, updatedAt: updated.savedAt }) });
       }

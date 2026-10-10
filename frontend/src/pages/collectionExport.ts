@@ -1,3 +1,5 @@
+import { factionEmblem } from './cardFaction';
+import { cardCanvasDimensions } from './cardDownload';
 import { translate } from '../i18n.ts';
 import { normalizeLocale, localeDirection } from '../locales/config.ts';
 import type { CollectionCard } from './collectionData';
@@ -6,13 +8,14 @@ import { wrapCardText } from './cardTextLayout';
 import { loadShipArtwork } from './shipArtwork';
 
 /** Measure every line before allocating the PNG. The footer is below, not over, the content. */
-export async function exportCollectionCard(card: CollectionCard, language: boolean | string): Promise<Blob> {
+export async function exportCollectionCard(card: CollectionCard, language: boolean | string, stars = 0): Promise<Blob> {
   const locale=typeof language==='boolean'?(language?'de':'en'):normalizeLocale(language)??'en', de=locale==='de';
   const t=(source:string)=>translate(locale,source), rtl=localeDirection(locale)==='rtl';
   await document.fonts.ready;
-  const [art, space] = await Promise.all([
-    card.bossId ? loadBossArtwork(card.bossId, 2400) : loadShipArtwork(card.image),
+  const [art, space, emblem] = await Promise.all([
+    card.bossId ? loadBossArtwork(card.bossId, 1200) : loadShipArtwork(card.image, card.color),
     loadCardImage(card.background),
+    loadCardImage(factionEmblem(card.key)),
   ]);
   const canvas = document.createElement('canvas');
   canvas.width = 1200;
@@ -23,7 +26,7 @@ export async function exportCollectionCard(card: CollectionCard, language: boole
     return wrapCardText(text, 1000, line => ctx.measureText(line).width);
   };
   const title = wrap(card.name, 66, true), subtitle = wrap(card.subtitle, 30);
-  const category = wrap(`${card.category.toUpperCase()}  ${'✦'.repeat(card.tier)}`, 23, true);
+  const category = wrap(`${card.category.toUpperCase()}  ${'✦'.repeat(card.tier)}${card.bossId ? '  ' + '★'.repeat(Math.max(0, Math.min(3, stars))) : ''}`, 23, true);
   const stats = card.stats.map(([label, value]) => wrap(`${label}: ${value}`, 28));
   const sections = [
     { heading: de ? 'SCHIFFSGESCHICHTE' : t('SHIP HISTORY'), paragraphs: card.story },
@@ -36,18 +39,24 @@ export async function exportCollectionCard(card: CollectionCard, language: boole
   const statsHeight = stats.reduce((sum, lines) => sum + lines.length * 42, 0);
   const bodyHeight = sections.reduce((sum, section) => sum + section.heading.length * 40 + 14
     + section.paragraphs.reduce((height, lines) => height + lines.length * 44 + 26, 0) + 30, 0);
-  canvas.height = Math.ceil(intro + 475 + 46 + statsHeight + 32 + bodyHeight + 50 + footer.length * 32 + 70);
-  const colors = ['#a9b9ca', '#62e5ea', '#d9acff', '#f5bd62', '#ff719c'];
+  const logicalHeight = Math.ceil(intro + 475 + 46 + statsHeight + 32 + bodyHeight + 50 + footer.length * 32 + 70);
+  const dimensions = cardCanvasDimensions(logicalHeight);
+  canvas.width = dimensions.width; canvas.height = dimensions.height;
+  ctx.scale(dimensions.scale, dimensions.scale);
+  const colors = ['#b4a2d1', '#bd9fe8', '#d9acff', '#e4b66c', '#ff91bd'];
   const accent = colors[Math.min(4, card.tier - 1)];
-  ctx.fillStyle = '#101525'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-  const spaceHeight = canvas.width * space.height / space.width;
-  ctx.drawImage(space, 0, 0, canvas.width, spaceHeight);
+  ctx.fillStyle = '#101525'; ctx.fillRect(0, 0, 1200, logicalHeight);
+  const spaceHeight = 1200 * space.height / space.width;
+  ctx.drawImage(space, 0, 0, 1200, spaceHeight);
   const shade = ctx.createLinearGradient(0, 0, 0, spaceHeight);
   shade.addColorStop(0, 'rgba(4,10,20,.34)'); shade.addColorStop(.35, 'rgba(4,10,20,.45)');
   shade.addColorStop(.75, 'rgba(4,10,20,.95)'); shade.addColorStop(1, '#101525');
-  ctx.fillStyle = shade; ctx.fillRect(0, 0, canvas.width, spaceHeight);
-  ctx.strokeStyle = accent; ctx.lineWidth = 6; ctx.strokeRect(25, 25, 1150, canvas.height - 50);
-  ctx.globalAlpha = .35; ctx.lineWidth = 1; ctx.strokeRect(40, 40, 1120, canvas.height - 80); ctx.globalAlpha = 1;
+  ctx.fillStyle = shade; ctx.fillRect(0, 0, 1200, spaceHeight);
+  const metal = ctx.createLinearGradient(0, 0, 1200, logicalHeight);
+  metal.addColorStop(0, '#ece1ff'); metal.addColorStop(.2, accent); metal.addColorStop(.48, '#5b426c'); metal.addColorStop(.53, '#f2deff'); metal.addColorStop(1, '#b78665');
+  ctx.strokeStyle = metal; ctx.lineWidth = 8; ctx.strokeRect(25, 25, 1150, logicalHeight - 50);
+  ctx.globalAlpha = .35; ctx.lineWidth = 1; ctx.strokeRect(40, 40, 1120, logicalHeight - 80); ctx.globalAlpha = 1;
+  ctx.drawImage(emblem, 1000, 62, 80, 80);
   let y = 100;
   ctx.fillStyle = accent; ctx.font = 'bold 25px sans-serif'; ctx.fillText(`CRYPTOID EVOLUTION · ${card.serial}`, 100, y); y += 60;
   const paint = (lines: string[], size: number, advance: number, color: string, bold = false) => {
@@ -68,9 +77,9 @@ export async function exportCollectionCard(card: CollectionCard, language: boole
     y += 30;
   }
   y += 50; paint(footer, 22, 32, accent);
-  if (y > canvas.height - 60) throw new Error('Card layout exceeded its measured height');
+  if (y > logicalHeight - 60) throw new Error('Card layout exceeded its measured height');
   return new Promise((resolve, reject) => canvas.toBlob(blob => {
     canvas.width = 0; canvas.height = 0;
-    if (blob) resolve(blob); else reject(new Error('PNG export failed'));
+    if (blob && blob.size > 8 && blob.type === 'image/png') resolve(blob); else reject(new Error('PNG export failed'));
   }, 'image/png'));
 }

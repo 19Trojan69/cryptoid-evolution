@@ -1,4 +1,4 @@
-import { useLocale } from "../i18n";
+import { useAdminLocale } from "../adminLocale";
 import { useEffect, useState } from "react";
 import { axiosClient } from "../lib/axiosClient";
 
@@ -13,7 +13,7 @@ const dayFormat = new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Vienna" }
 const hourFormat = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Vienna", hour: "2-digit", hourCycle: "h23" });
 
 export default function AdminUsage() {
-  const { t } = useLocale();
+  const { t } = useAdminLocale();
   const [days, setDays] = useState(7), [network, setNetwork] = useState("mainnet"), [reload, setReload] = useState(0);
   const [result, setResult] = useState<Result | null>(null), [error, setError] = useState("");
   useEffect(() => {
