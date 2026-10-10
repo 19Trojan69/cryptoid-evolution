@@ -17,8 +17,8 @@ export const homeScreenTranslations: Record<string,Record<string,string>> = {
   sr:{"Your career":"Твоја каријера","Service rank & progress":"Чин и напредак","View progress":"Погледај напредак","Community":"Заједница"},
   uk:{"Your career":"Твоя кар'єра","Service rank & progress":"Звання та прогрес","View progress":"Переглянути прогрес","Community":"Спільнота"},
   th:{"Your career":"เส้นทางของคุณ","Service rank & progress":"ยศและความคืบหน้า","View progress":"ดูความคืบหน้า","Community":"ชุมชน"},
-  zh:{"Your career":"你的生涯","Service rank & progress":"军衔与进度","View progress":"查看进度","Community":"社区"},
-  vi:{"Your career":"Sự nghiệp của bạn","Service rank & progress":"Cấp bậc và tiến độ","View progress":"Xem tiến độ","Community":"Cộng đồng"},
+  zh:{"Single laser":"单束激光","Your career":"你的生涯","Service rank & progress":"军衔与进度","View progress":"查看进度","Community":"社区"},
+  vi:{"Single laser":"Laser đơn","Your career":"Sự nghiệp của bạn","Service rank & progress":"Cấp bậc và tiến độ","View progress":"Xem tiến độ","Community":"Cộng đồng"},
 };
 
 // Fullscreen feedback and the visible pilot-profile entry.

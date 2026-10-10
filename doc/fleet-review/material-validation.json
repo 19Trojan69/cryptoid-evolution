@@ -1,0 +1,11 @@
+{
+  "hulls": 20,
+  "stages": 3,
+  "paints": 9,
+  "variants": 540,
+  "alphaBoundsPreserved": true,
+  "nativeRenderingOnly": true,
+  "medianMaterialMs": 2.451,
+  "p95MaterialMs": 6.509,
+  "note": "Node/native measurements are not mobile browser FPS or device validation."
+}

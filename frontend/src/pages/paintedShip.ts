@@ -3,7 +3,7 @@ import { allPlayerColors, type PlayerColorId } from "./shipFleet";
 import { shipEvolutionAsset, type ShipStage } from "./shipEvolution";
 import { shipVisualCenter } from "./shipVisualCenter";
 import { namedShipAccent } from './shipIdentityColor';
-import { tintShipPixels } from './shipTint';
+import { paintShipMaterial } from './shipMaterial';
 
 const cache = new Map<string, string>();
 const pendingPaints = new Map<string, Promise<string>>();
@@ -56,14 +56,15 @@ const renderPaintedSprite = async (index: number, colorId: PlayerColorId, stage:
   const url = shipEvolutionAsset(index, stage);
   const image = await shipImage(url);
   const canvas = document.createElement("canvas");
-  canvas.width = canvas.height = 240;
+  canvas.width = image.naturalWidth;
+  canvas.height = image.naturalHeight;
   const context = canvas.getContext("2d", { willReadFrequently: true });
   if (!context) throw new Error("Canvas unavailable");
-  context.drawImage(image, 0, 0, 240, 240);
-  const pixels = context.getImageData(0, 0, 240, 240);
+  context.drawImage(image, 0, 0);
+  const pixels = context.getImageData(0, 0, canvas.width, canvas.height);
   const hex = allPlayerColors.find(color => color.id === colorId)?.glow ?? "#a8b3c2";
   const target = [1, 3, 5].map(offset => parseInt(hex.slice(offset, offset + 2), 16));
-  tintShipPixels(pixels.data, target, namedShipAccent(index));
+  paintShipMaterial(pixels.data, canvas.width, canvas.height, target, namedShipAccent(index));
   context.putImageData(pixels, 0, 0);
   // Blob encoding can run off the main thread; large base64 strings are avoided.
   const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(value => value ? resolve(value) : reject(new Error('Ship encoding failed')), 'image/png'));
@@ -95,6 +96,6 @@ export const usePaintedShipStyle = (index: number, colorId: PlayerColorId, stage
   }, [key, index, colorId, stage]);
   const painted = cache.get(key) === url ? url : cache.get(key);
   return painted
-    ? { backgroundImage: `url(${painted})`, backgroundPosition: "center", backgroundSize: "100% 100%", filter: "none" }
-    : { backgroundImage: `url(${shipEvolutionAsset(index, stage)})`, backgroundPosition: "center", backgroundSize: "100% 100%", filter: "grayscale(1)" };
+    ? { backgroundImage: `url(${painted})`, "--ship-surface-mask": `url(${painted})`, backgroundPosition: "center", backgroundSize: "100% 100%", filter: "none" } as CSSProperties
+    : { backgroundImage: `url(${shipEvolutionAsset(index, stage)})`, "--ship-surface-mask": `url(${shipEvolutionAsset(index, stage)})`, backgroundPosition: "center", backgroundSize: "100% 100%", filter: "none" } as CSSProperties;
 };

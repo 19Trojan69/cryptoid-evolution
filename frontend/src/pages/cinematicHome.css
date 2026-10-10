@@ -50,12 +50,6 @@
 .cinematic-tagline {margin:14px 0 0; max-width:82%; color:#f3d79b; font-size:clamp(19px,5.2vw,29px); line-height:1.15; font-weight:700; letter-spacing:0; text-shadow:0 1px 5px #020c17;}
 .cinematic-tagline > span {display:block; margin-top:3px; color:#f3f5f7; font-size:.9em; font-weight:500;}
 .cinematic-home .cinematic-footer {order:4;}
-.cinematic-profile {display:flex; align-items:center; gap:12px; min-height:52px; padding:9px 13px; border:1px solid #64bdcc; border-radius:9px; background:#0a2032; color:#dff4fa; text-align:start;}
-.cinematic-profile > .blockchain-icon {width:28px; height:32px; flex:none;}
-.cinematic-profile > span {display:grid; gap:3px; flex:1; min-width:0;}
-.cinematic-profile strong {color:#ecd7a9; font-size:14px;}
-.cinematic-profile small {font-size:12px; line-height:1.35; color:#badce5;}
-.cinematic-profile i {font-style:normal; color:#70e8f2;}
 .cinematic-actions {position:relative; z-index:3; display:grid; gap:16px; padding-top:8px;}
 .cinematic-actions button {width:100%; height:auto; cursor:pointer; touch-action:manipulation; white-space:normal; overflow-wrap:anywhere;}
 .cinematic-play {display:flex; align-items:center; justify-content:center; gap:22px; min-height:58px; padding:8px 15px; border:2px solid #fee5ad; border-radius:13px; outline:1px solid #a88349; outline-offset:2px; color:#051726; background:linear-gradient(170deg,#fff2bd,#e2c17d 35%,#bf9254 70%,#f5d393); box-shadow:inset 0 0 0 2px #c8a467,inset 0 2px #fff7d5,0 0 15px #e2ba6440; font:800 clamp(25px,6.5vw,34px)/1.15 'Oxanium','Arial Black',sans-serif; text-transform:uppercase;}

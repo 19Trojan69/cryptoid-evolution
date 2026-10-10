@@ -510,8 +510,6 @@ const Shop = () => {
         onCommunity={() => openQuickAction("feedback")}
         onTerms={() => setTermsOpen(true)}
         onSound={toggleHomeMusic}
-        signedIn={Boolean(user)}
-        onProfile={() => openQuickAction("profile")}
       >
           {adminMode && <div className="admin-level-picker" aria-label={t("Admin test start")}><label>{t("Level")} <select value={Math.floor((startSector - 1) / 10) + 1} onChange={event => setStartSector((Number(event.target.value) - 1) * 10 + (startSector - 1) % 10 + 1)}>{Array.from({ length: MAX_DIFFICULTY_LEVEL / 10 }, (_, index) => <option key={index} value={index + 1}>{index + 1}</option>)}</select></label><label>{t("Start at")} <select value={(startSector - 1) % 10 + 1} onChange={event => setStartSector((Math.floor((startSector - 1) / 10) * 10) + Number(event.target.value))}>{Array.from({ length: 9 }, (_, index) => <option key={index} value={index + 1}>{t("Block")} {index + 1}</option>)}<option value="10">{t("Boss")}</option></select></label></div>}
       </CinematicHome>
