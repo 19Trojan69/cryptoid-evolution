@@ -25,7 +25,7 @@ export default function CinematicHome({paused,busy,rankName,musicEnabled,musicLa
         <p className="cinematic-tagline">{t("Defend Earth.")}<span>{t("Evolve your power.")}</span></p>
         {children}
       </div>
-      <button className="cinematic-fullscreen" type="button" onClick={onFullscreen} aria-label={t("Full screen")} title={t("Full screen")}>⛶</button>
+      <button className="cinematic-fullscreen" type="button" onClick={onFullscreen} aria-label={t("Full screen")} title={t("Full screen")}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button>
     </div>
     <div className="cinematic-actions">
       <button className="cinematic-play" type="button" disabled={busy} onClick={onPlay}>{t("Play")}<span aria-hidden="true">→</span></button>
@@ -41,7 +41,8 @@ export default function CinematicHome({paused,busy,rankName,musicEnabled,musicLa
     <footer className="cinematic-footer">
       <button className="cinematic-terms" type="button" onClick={onTerms}>{t("Terms of service")}</button>
       <button className="home-music-toggle cinematic-sound" type="button" data-state={musicEnabled?"on":"off"} aria-pressed={musicEnabled} aria-label={musicLabel} title={musicLabel} onClick={onSound}>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/>{musicEnabled?<><path d="M16 9a4 4 0 0 1 0 6"/><path d="M19 6a8 8 0 0 1 0 12"/></>:<path d="m17 9 5 6m0-6-5 6"/>}</svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/>{musicEnabled?<><path d="M16 9a4 4 0 0 1 0 6"/><path d="M19 6a8 8 0 0 1 0 12"/></>:<path d="m17 9 5 6m0-6-5 6"/>}</svg>
+        <span>{musicLabel}</span>
       </button>
     </footer>
   </section>;
