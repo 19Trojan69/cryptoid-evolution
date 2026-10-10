@@ -49,6 +49,7 @@ import SystemSettings from "./SystemSettings";
 import { applySavedDisplaySettings } from './displaySettings';
 import MissionWeaponShop from './MissionWeaponShop';
 import useModalNavigation from '../hooks/useModalNavigation';
+import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "../lib/localRecordKeys";
 import './weaponSelection.css';
 import { axiosClient } from "../lib/axiosClient";
 import { accountSelection, createSaveQueue, loadAccountSave, localInventory, mutateAccountInventory, retrySave, snapshotOf, type AccountSave, type Snapshot } from "../lib/accountSave";
@@ -72,9 +73,6 @@ import { bossWeapons } from './bossWeapons';
 import { bossEscortAttackInterval, bossEscortCount, bossEscortReinforcements, bossEscortRosterIndex, bossEscortSlots, reactorEscortCount, advanceEscortReserve } from "./bossEscorts";
 import { awardBlock, awardBonusMedal, awardBossSticker, awardChain, emptyRewardProgress, reachLevel, rewardRank, type RewardProgress } from "./rewardProgress";
 
-const BEST_SCORE_KEY = "cryptoid_best_score_v2";
-const HIGHEST_SECTOR_KEY = "cryptoid_highest_sector";
-const TOTAL_DESTROYED_KEY = "cryptoid_total_destroyed";
 const RETURN_DURATION_MS = 3_500;
 const IMPACT_COOLDOWN_MS = 1_500;
 const GAME_OVER_REVEAL_MS = 1_750;

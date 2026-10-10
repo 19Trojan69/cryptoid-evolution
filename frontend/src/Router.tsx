@@ -1,6 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
 import Shop from "./pages/Shop";
-import GamePage from "./pages/GamePage.tsx";
 import PiSignInCallback from "./pages/PiSignInCallback.tsx";
 import LegalPage from "./pages/LegalPage.tsx";
 import AdminPage from "./pages/AdminPage.tsx";
@@ -23,7 +22,8 @@ export const router = createBrowserRouter([
   },
   {
     path: "/game",
-    element: <GamePage />,
+    lazy: async () => ({ Component: (await import("./pages/GamePage")).default }),
+    errorElement: <RouteRecovery />,
   },
   {
     path: "/signin/callback",

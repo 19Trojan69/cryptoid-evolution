@@ -10,7 +10,7 @@ export const smartphoneTranslations: Record<string, Record<string, string>> = {
     "Testnet progress stays separate from Mainnet.": "Testnet-Fortschritt bleibt vom Mainnet getrennt.",
     "Mainnet progress stays separate from Testnet.": "Mainnet-Fortschritt bleibt vom Testnet getrennt.",
     "Loading ship…": "Schiff wird geladen …", "Preview unavailable": "Vorschau nicht verfügbar",
-    "Rewards": "Belohnungen",
+    "Rewards": "Belohnungen", "Career & rewards": "Karriere & Belohnungen",
     "This browser does not support full screen. Use the installed app for a view without the address bar.": "Dieser Browser unterstützt kein Vollbild. Über die installierte App kannst du ohne Adressleiste spielen.",
     "The browser did not allow full screen. You can continue playing in this view.": "Der Browser hat Vollbild nicht zugelassen. Du kannst in dieser Ansicht weiterspielen.",
   },
