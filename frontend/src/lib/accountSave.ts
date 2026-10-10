@@ -2,6 +2,7 @@ import { axiosClient } from "./axiosClient";
 import type { PlayerSave, Snapshot } from "../../../backend/src/playerSave";
 import { allPlayerColors, playerSkins, readShipFleet, shardBalance, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY } from "../pages/shipFleet";
 import { shipSaveNetwork } from "../pages/shipFleet";
+import { BASE_MISSION_HEARTS, MAX_MISSION_HEARTS, cappedSnapshot } from "../../../backend/src/lifeRules";
 export type AccountSave = Pick<PlayerSave, "cardReveals" | "usedShipSkins" | "version" | "balance" | "fleet" | "skin" | "color" | "mission" | "highestSector" | "totalDestroyed" | "totalShardsEarned" | "totalShardsSpent" | "legacyImported" | "updatedAt">;
 export type { Snapshot };
 export const loadAccountSave = async () => (await axiosClient.get<{ save: AccountSave }>("/progress/me")).data.save;
@@ -51,12 +52,24 @@ export function createSaveQueue(uid: string) {
       // Let it finish before choosing the first pending run to recover.
       if (inflight) { try { await inflight; } catch { /* Recover the retained entry below. */ } }
       if (!entries.length) return;
-      const { data } = await retrySave(() => axiosClient.post<{ finished?: boolean }>("/progress/recover", { runId: entries[0].body.runId }));
+      const recoveredRun = entries[0].body.runId;
+      const { data } = await retrySave(() => axiosClient.post<{ finished?: boolean; maxHearts?: number }>("/progress/recover", { runId: recoveredRun }));
       if (data.finished) {
         const finishedRun = entries[0].body.runId;
         entries = entries.filter(entry => entry.body.runId !== finishedRun); persist();
         if (entries.length) await this.recover();
         return;
+      }
+      // Preserve queued earnings from the old accumulating-life rule. The
+      // authenticated server supplies the current run's armor limit.
+      const limit = data.maxHearts;
+      if (typeof limit === "number" && Number.isInteger(limit) && limit >= BASE_MISSION_HEARTS && limit <= MAX_MISSION_HEARTS) {
+        entries = entries.map(entry => {
+          const save = entry.body.save;
+          if (entry.body.runId !== recoveredRun || !save || typeof save !== "object" || !("hearts" in save) || typeof save.hearts !== "number") return entry;
+          return { ...entry, body: { ...entry.body, save: cappedSnapshot(save as Snapshot, limit) } };
+        });
+        persist();
       }
       await drain();
     },

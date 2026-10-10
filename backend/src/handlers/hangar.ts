@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { cappedSnapshot, maxMissionHearts } from "../lifeRules";
 import { randomUUID } from "node:crypto";
 import { armorBonusFromPaid, findOffer, hangarCatalog } from "../hangarCatalog";
 import "../types/session";
@@ -6,7 +7,7 @@ import { isAdminMode } from "../adminAccess";
 import { isTestnetWeaponPurchaseEnabled } from "../paymentPolicy";
 import { rewardNetwork } from "../rewardNetwork";
 import { loadPlayerSave } from "./progress";
-import { publicSave } from "../playerSave";
+import { cappedMission, publicSave } from "../playerSave";
 import { syncWeaponStock, WEAPON_CHARGE_MS } from "../weaponStock";
 
 const offersOf = (kind: string) => hangarCatalog.filter(item => item.kind === kind).map(item => item.id);
@@ -125,11 +126,14 @@ export default function mountHangarEndpoints(router: Router) {
       // A lost response can be retried with the same key without consuming again.
       if (save.startKey === startKey && save.lastStart && save.activeRunId) {
         req.session.scoreRun = save.lastStart.runMeta;
-        return res.json({ ...save.lastStart, profile: publicSave(save) });
+        const checkpoint = save.lastStart.checkpoint;
+        return res.json({ ...save.lastStart, checkpoint: checkpoint ? cappedSnapshot(checkpoint, maxMissionHearts(save.lastStart.armorBonus)) : null, profile: publicSave(save) });
       }
       const resume = action === "resume";
       if (resume && !save.mission) return res.status(409).json({ error: "No saved mission" });
-      const mission = resume ? save.mission : null;
+      const paidArmor = await orders.find({ user: uid, paid: true, product_id: { $in: hangarCatalog.filter(item => item.kind === "armor").map(item => item.id) } }).project({ product_id: 1 }).toArray();
+      const armorBonus = armorBonusFromPaid(paidArmor.map((order: any) => order.product_id));
+      const mission = resume ? cappedMission(save.mission, maxMissionHearts(armorBonus)) : null;
       const rulesVersion = resume ? mission?.rulesVersion ?? 1 : req.body.rulesVersion === 2 ? 2 : 1;
       const scoreRun = save.startKey === startKey && save.activeRunId
         ? { id: save.activeRunId, startedAt: Date.now(), scoreBase: mission?.snapshot.score || 0, shardsBase: mission?.snapshot.shards || 0 }
@@ -155,9 +159,7 @@ export default function mountHangarEndpoints(router: Router) {
       const owned = weapon?.kind === "weapon" && await orders.findOne({ user: uid, product_id: weapon.id, paid: true });
       const enabledWeaponOffers = hangarCatalog.filter(item => weaponEnabledForRequest(req, item));
       const paidWeapons = await orders.find({ user: uid, paid: true, product_id: { $in: enabledWeaponOffers.map(item => item.id) } }).project({ product_id: 1 }).toArray();
-      const paidArmor = await orders.find({ user: uid, paid: true, product_id: { $in: hangarCatalog.filter(item => item.kind === "armor").map(item => item.id) } }).project({ product_id: 1 }).toArray();
       const paidShipUpgrades = await orders.find({ user: uid, paid: true, product_id: { $in: hangarCatalog.filter(item => item.kind === "ship_upgrade").map(item => item.id) } }).project({ product_id: 1 }).toArray();
-       const armorBonus = armorBonusFromPaid(paidArmor.map((order: any) => order.product_id));
        const unlockedWeaponLevels = [1, ...enabledWeaponOffers.filter(item => paidWeapons.some((order: any) => order.product_id === item.id)).map(item => item.kind === "weapon" ? item.level : 1)];
       const pending = await loadPlayerSave(users, uid, network);
       const selected = findOffer(pending.pendingPower);
