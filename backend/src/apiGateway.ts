@@ -1,3 +1,5 @@
+import { hangarCatalog } from "./hangarCatalog";
+
 const productionBackendOrigin = "https://cryptoid-evolution.vercel.app";
 
 type Backend = { app: (req: any, res: any) => unknown; start: (listen: boolean) => Promise<void> };
@@ -75,6 +77,13 @@ export const createApiGateway = (
       const env = environment();
       const testnet = isTestnetDeployment(req, env);
       const localTestnet = localTestnetEnabled(env);
+      // The public catalog must match this deployment's Shop, even while
+      // account and payment requests use the established Pi service.
+      if (testnet && path === "hangar/catalog" && ["GET", "HEAD"].includes(req.method || "GET")) {
+        res.setHeader("Cache-Control", "no-store");
+        res.setHeader("x-cryptoid-backend", "testnet-catalog");
+        return res.status(200).json({ offers: hangarCatalog });
+      }
       if (testnet && (!localTestnet || needsPiApplicationKey(path))) {
         return await proxyToProduction(req, res, path, url);
       }
