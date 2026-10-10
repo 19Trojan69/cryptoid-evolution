@@ -9,12 +9,14 @@ export default function useModalNavigation(layer: string | null, onBack: () => v
   const active = layer !== null;
   const requested = useRef(false);
   const previousFocus = useRef<HTMLElement | null>(null);
+  const backAction = useRef(onBack);
+  useEffect(() => { backAction.current = onBack; }, [onBack]);
   const closeTop = useCallback(() => {
     const dialogs = Array.from(document.querySelectorAll<HTMLDialogElement>("dialog[open]"));
     const dialog = dialogs.at(-1);
     if (dialog) dialog.dispatchEvent(new Event("cancel", { cancelable: true }));
-    else onBack();
-  }, [onBack]);
+    else backAction.current();
+  }, []);
   const blocker = useBlocker(({ historyAction }) => active && historyAction === "POP");
   useEffect(() => {
     if (blocker.state !== "blocked") return;

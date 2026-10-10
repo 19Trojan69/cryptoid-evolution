@@ -92,7 +92,7 @@
 .quick-access-direct strong { flex: 1; min-width: 0; }
 .quick-access-direct i { font-style: normal; }
 .quick-access-panel .quick-access-heading .close-button { width: 48px; height: 48px; min-width: 48px; min-height: 48px; }
-.cinematic-home .cinematic-footer button { min-height: 48px; }
+.cinematic-home .cinematic-footer button,.cinematic-home .cinematic-footer button.cinematic-sound { min-height: 48px; }
 .landing-shell .shop-modal :is(.ship-earnings,.ship-rules,.ship-configuration-details,.leaderboard-explanation,.leader-record-details) summary { min-height: 48px; }
 .fleet-toolbar { display: grid; gap: 8px; margin: 12px 0 16px; }
 .fleet-toolbar label { display: grid; gap: 7px; font-size: 13px; color: var(--menu-muted); }
@@ -134,7 +134,17 @@
 .mission-weapon-shop .mission-locked { margin: 0 12px 12px; padding: 0; }
 .mission-weapon-shop .mission-reload-explanation { margin-bottom: 12px; }
 .mission-reload-explanation p { font-size: 13px; color: var(--menu-muted); }
-.pause-settings-modal .pause-resume-button { position: sticky; bottom: 0; z-index: 4; margin-top: 14px; border-radius: var(--menu-radius); box-shadow: 0 -10px 14px #0b1c2dcc; }
+.pause-settings-modal .pause-resume-button { position: sticky; bottom: 0; z-index: 4; margin-top: 14px; border-radius: var(--menu-radius); border-color: var(--menu-gold); background: linear-gradient(120deg,#f0ddb5,#c4ac7b); color: #0c1c2c; box-shadow: 0 -10px 14px #0b1c2dcc; }
+.pause-settings-modal > .button { font: 650 15px/1.35 system-ui,sans-serif; }
+.game-overlay.weapon-selection-overlay {
+  top: calc(var(--menu-viewport-top) + max(90px,calc(env(safe-area-inset-top) + 72px)));
+  bottom: auto;
+  height: calc(var(--menu-viewport-height) - max(90px,calc(env(safe-area-inset-top) + 72px)));
+  padding: 0;
+}
+.game-overlay.weapon-selection-overlay .weapon-selection-dialog:has(.mission-weapon-shop) { width: min(420px,calc(100% - 48px)); height: 100%; max-height: 100%; }
+.weapon-selection-overlay .weapon-drawer-tab { width: 48px; min-width: 48px; left: min(420px,calc(100% - 48px)); }
+.weapon-selection-overlay.weapon-drawer-right .weapon-drawer-tab { right: min(420px,calc(100% - 48px)); left: auto; }
 .fullscreen-status { color: var(--menu-muted); font-size: 13px; line-height: 1.5; }
 .profile-save-state { color: #b5f2d3; }
 .game-field .game-fullscreen-control { width: 48px; height: 48px; min-width: 48px; min-height: 48px; }
