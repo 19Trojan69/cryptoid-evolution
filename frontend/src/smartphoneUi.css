@@ -1,0 +1,199 @@
+/* Shared navy/champagne controls for the smartphone package. */
+:root {
+  --menu-surface: #0b1c2d;
+  --menu-raised: #162e43;
+  --menu-border: #7991a3;
+  --menu-text: #eaf3fa;
+  --menu-muted: #bdcedc;
+  --menu-gold: #edd6a4;
+  --menu-cyan: #a2edf1;
+  --menu-radius: 12px;
+  --menu-viewport-height: 100dvh;
+  --menu-viewport-top: 0px;
+}
+:is(.quick-access-panel,.shop-modal,.system-menu-panel,.pause-settings-modal,.weapon-selection-dialog,.pilot-profile,.feedback-hub,.language-picker,.collection-dialog,.terms-dialog,.guide-panel-content) {
+  box-sizing: border-box;
+  color: var(--menu-text);
+  border-radius: 18px;
+  overflow-wrap: anywhere;
+}
+:is(.quick-access-panel,.shop-modal,.system-menu-panel,.pause-settings-modal,.weapon-selection-dialog,.pilot-profile.metallic-dialog,.feedback-hub.metallic-dialog,.language-picker.metallic-dialog,.collection-dialog,.terms-dialog) {
+  border-color: var(--menu-border);
+  background: linear-gradient(150deg,#172e43,var(--menu-surface) 72%);
+  box-shadow: 0 18px 48px #0009,inset 0 1px #ffffff12;
+}
+:is(.shop-modal,.system-menu-panel,.pause-settings-modal,.weapon-selection-dialog,.pilot-profile,.feedback-hub,.language-picker,.collection-dialog,.terms-dialog,.guide-panel-content) :is(button:not(.collection-tile),summary,.collection-download) {
+  box-sizing: border-box;
+  min-height: 48px;
+  touch-action: manipulation;
+  line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.landing-shell.app-shell :is(.shop-modal,.system-menu-panel,.info-panel-content,.terms-dialog) :is(button,summary),
+.game-shell .game-field :is(.pause-settings-modal,.weapon-selection-dialog,.game-modal) :is(button,summary) { min-height: 48px; }
+:is(.shop-modal,.system-menu-panel,.pause-settings-modal,.pilot-profile,.feedback-hub,.language-picker,.collection-dialog,.terms-dialog) :is(button,a,input,select,textarea,summary):focus-visible {
+  outline: 2px solid var(--menu-cyan);
+  outline-offset: 2px;
+}
+:is(.shop-modal,.system-menu-panel,.pause-settings-modal,.pilot-profile,.feedback-hub,.language-picker,.collection-dialog,.terms-dialog) :is(input,textarea,select) {
+  min-width: 0;
+  max-width: 100%;
+  font-size: 16px;
+  color: var(--menu-text);
+  background: #081828;
+  border-color: var(--menu-border);
+}
+:is(.shop-modal,.system-menu-panel,.pause-settings-modal,.pilot-profile,.feedback-hub,.language-picker,.collection-dialog,.terms-dialog) :is(.close-button,header > button[aria-label]) {
+  width: 48px;
+  min-width: 48px;
+  min-height: 48px;
+  flex-shrink: 0;
+  border: 1px solid var(--menu-border);
+  border-radius: var(--menu-radius);
+  clip-path: none;
+  background: var(--menu-raised);
+  color: var(--menu-gold);
+  font-size: 25px;
+}
+.landing-shell .shop-modal-header {
+  gap: 8px;
+  color: var(--menu-gold);
+  border-color: #7890a54d;
+  background: var(--menu-surface);
+}
+.landing-shell .shop-modal-header .menu-return,.system-menu-panel .menu-return,.terms-dialog .menu-return {
+  padding: 8px 10px;
+  font-size: 13px;
+  color: var(--menu-cyan);
+  border-radius: var(--menu-radius);
+  background: #152c40;
+}
+.quick-access-panel .quick-access-direct {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.quick-access-direct button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 60px;
+  padding: 10px;
+  border: 1px solid #bba37c;
+  border-radius: var(--menu-radius);
+  background: var(--menu-raised);
+  color: var(--menu-gold);
+  font-size: 14px;
+  text-align: start;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.quick-access-direct .blockchain-icon { width: 28px; height: 28px; flex: none; }
+.quick-access-direct strong { flex: 1; min-width: 0; }
+.quick-access-direct i { font-style: normal; }
+.quick-access-panel .quick-access-heading .close-button { width: 48px; height: 48px; min-width: 48px; min-height: 48px; }
+.cinematic-home .cinematic-footer button,.cinematic-home .cinematic-footer button.cinematic-sound { min-height: 48px; }
+.landing-shell .shop-modal :is(.ship-earnings,.ship-rules,.ship-configuration-details,.leaderboard-explanation,.leader-record-details) summary { min-height: 48px; }
+.fleet-toolbar { display: grid; gap: 8px; margin: 12px 0 16px; }
+.fleet-toolbar label { display: grid; gap: 7px; font-size: 13px; color: var(--menu-muted); }
+.fleet-toolbar input { width: 100%; min-height: 48px; padding: 10px 12px; border: 1px solid var(--menu-border); border-radius: var(--menu-radius); }
+.fleet-filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.fleet-filters button,.fleet-reset { padding: 9px 12px; border: 1px solid var(--menu-border); border-radius: var(--menu-radius); background: var(--menu-raised); color: var(--menu-text); font-size: 13px; cursor: pointer; }
+.fleet-filters button[aria-pressed="true"] { border-color: var(--menu-gold); background: #3c392c; color: #ffe6b5; }
+.fleet-reset { justify-self: start; color: var(--menu-cyan); }
+.fleet-toolbar > p { margin: 0; color: var(--menu-muted); font-size: 12px; }
+.ship-compact-configuration .ship-one-info { flex-wrap: wrap; align-items: start; }
+.ship-compact-configuration .ship-one-info h3 { margin: 0; }
+.ship-compact-configuration .ship-stage-status { font-size: 12px; color: var(--menu-muted); white-space: normal; }
+.ship-stage-status[data-owned="true"] { color: #b5f2d3; }
+.ship-compact-configuration .ship-version-tabs strong { font-size: 12px; }
+.ship-compact-configuration .ship-one-colors-heading span { font-size: 12px; line-height: 1.45; color: var(--menu-muted); }
+.ship-compact-configuration .ship-lock-notice { margin: 0 0 7px; color: #f4d9a6; font-size: 12px; line-height: 1.5; }
+.ship-compact-configuration .ship-inline-purchase .button,.ship-compact-configuration .ship-one-checkout .button { min-height: 48px; border-radius: var(--menu-radius); clip-path: none; }
+.ship-compact-configuration .ship-purchase-price { display: block; margin-bottom: 5px; font-size: 16px; line-height: 1.4; }
+.ship-preview { position: relative; display: block; width: 100%; height: 100%; }
+.ship-preview > img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.ship-preview > .material-hull { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ship-preview-status { position: absolute; inset: 0; display: grid; place-items: center; padding: 8px; color: var(--menu-muted); font-size: 12px; text-align: center; }
+.ship-configuration-details summary,.ship-rules summary,.ship-earnings summary,.leader-record-details summary,.mission-reload-explanation summary,.mission-locked summary { cursor: pointer; color: var(--menu-cyan); font-size: 13px; padding-block: 10px; }
+.leader-record-details { margin-top: 8px; border-top: 1px solid #718ca13d; }
+.leaderboard-list .leader-primary-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.landing-shell.app-shell .shop-modal .leaderboard-tabs .button { min-height: 48px; }
+.leader-metrics dd { overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.pilot-profile.metallic-dialog :is(button,select,input,textarea),.language-picker.metallic-dialog :is(button,input) { border-color: var(--menu-border); color: var(--menu-text); background: var(--menu-raised); }
+.pilot-profile.metallic-dialog .profile-actions { background: var(--menu-surface); }
+.pilot-profile.metallic-dialog .profile-save,.mission-shop-footer button.mission-return {
+  border-color: var(--menu-gold);
+  border-radius: var(--menu-radius);
+  background: linear-gradient(120deg,#f0ddb5,#c4ac7b);
+  color: #0c1c2c;
+}
+.pilot-profile.metallic-dialog button[aria-pressed="true"],.language-picker.metallic-dialog button[aria-pressed="true"] { border-color: var(--menu-gold); background: #3c392c; color: #ffebc3; }
+.pilot-profile.metallic-dialog .pilot-avatar { border-color: var(--menu-gold); }
+.mission-weapon-card button.mission-select,.mission-weapon-card button.mission-pickup-select,.mission-shop-footer button.mission-refresh,.mission-shop-footer button.mission-return { min-height: 48px; }
+.mission-shop-footer button.mission-refresh { width: 48px; min-width: 48px; }
+.mission-weapon-shop .mission-locked { margin: 0 12px 12px; padding: 0; }
+.mission-weapon-shop .mission-reload-explanation { margin-bottom: 12px; }
+.mission-reload-explanation p { font-size: 13px; color: var(--menu-muted); }
+.pause-settings-modal .pause-resume-button { position: sticky; bottom: 0; z-index: 4; margin-top: 14px; border-radius: var(--menu-radius); border-color: var(--menu-gold); background: linear-gradient(120deg,#f0ddb5,#c4ac7b); color: #0c1c2c; box-shadow: 0 -10px 14px #0b1c2dcc; }
+.pause-settings-modal > .button { font: 650 15px/1.35 system-ui,sans-serif; }
+.game-shell .game-overlay.weapon-selection-overlay {
+  top: calc(var(--menu-viewport-top) + max(90px,calc(env(safe-area-inset-top) + 72px)));
+  bottom: auto;
+  height: calc(var(--menu-viewport-height) - max(90px,calc(env(safe-area-inset-top) + 72px)));
+  padding: 0;
+}
+.game-shell .game-overlay.weapon-selection-overlay .weapon-selection-dialog:has(.mission-weapon-shop) { width: min(420px,calc(100% - 48px)); height: 100%; max-height: 100%; }
+.weapon-selection-overlay .weapon-drawer-tab { width: 48px; min-width: 48px; left: min(420px,calc(100% - 48px)); }
+.weapon-selection-overlay.weapon-drawer-right .weapon-drawer-tab { right: min(420px,calc(100% - 48px)); left: auto; }
+.fullscreen-status { color: var(--menu-muted); font-size: 13px; line-height: 1.5; }
+.profile-save-state { color: #b5f2d3; }
+.game-field .game-fullscreen-control { width: 48px; height: 48px; min-width: 48px; min-height: 48px; }
+@media (max-width:700px) {
+  :is(.shop-overlay,.system-menu-overlay,.quick-access-overlay,.terms-overlay,.pause-settings-overlay,.weapon-selection-overlay) {
+    box-sizing: border-box;
+    top: var(--menu-viewport-top);
+    bottom: auto;
+    height: var(--menu-viewport-height);
+    padding: max(10px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));
+  }
+  :is(.shop-overlay .shop-modal,.system-menu-overlay .system-menu-panel,.quick-access-overlay .quick-access-panel,.pause-settings-overlay .pause-settings-modal,.weapon-selection-overlay .weapon-selection-dialog,.terms-overlay .terms-dialog) {
+    max-width: 100%;
+    max-height: 100%;
+    min-width: 0;
+  }
+  :is(dialog.pilot-profile,dialog.feedback-hub,dialog.language-picker,dialog.collection-dialog,dialog.boss-dossier) {
+    position: fixed;
+    top: calc(var(--menu-viewport-top) + max(10px,env(safe-area-inset-top)));
+    bottom: auto;
+    margin-block: 0;
+    max-width: calc(100vw - 20px - env(safe-area-inset-left) - env(safe-area-inset-right));
+    max-height: calc(var(--menu-viewport-height) - 20px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    overflow-x: hidden;
+    overscroll-behavior-y: contain;
+  }
+  .cinematic-home > .site-header.header-with-quick-access { height: auto; min-height: 76px; gap: 8px; padding: max(7px,env(safe-area-inset-top)) 9px 7px; grid-template-columns:minmax(0,1fr) minmax(85px,1fr) minmax(0,1.2fr); }
+  .cinematic-home > .site-header :is(.header-account,.header-signin,.header-auth-status,.quick-access-trigger) { height: auto; min-height: 64px; }
+  .cinematic-home > .site-header .quick-access-trigger b,.cinematic-home > .site-header .header-account-copy b,.cinematic-home > .site-header .header-profile-label { font-size: 13px; line-height: 1.35; }
+  .cinematic-home .cinematic-eyebrow { font-size: 12px; letter-spacing: .08em; }
+  .cinematic-home .cinematic-shortcuts button { font-size: 14px; }
+  .cinematic-home .cinematic-footer button { min-height: 48px; }
+  .landing-shell .shop-modal-header { flex-wrap: wrap; padding: 10px; }
+  .landing-shell .shop-modal-header > strong { flex: 1; min-width: 70px; font-size: 15px; }
+  .landing-shell .shop-modal-header .menu-return { max-width: calc(100% - 56px); }
+  .collection-dialog .collection-tabs { display: grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+  .collection-dialog .collection-tabs button { font-size: 13px; padding: 10px 6px; }
+  .collection-footer { gap: 8px; }
+  .collection-footer > :is(button,a) { font-size: 14px; }
+  .mission-weapon-offers { grid-template-columns:minmax(0,1fr); }
+  .mission-weapon-card .weapon-fire-preview { height: 76px; flex-basis: 76px; }
+  .mission-weapon-card .mission-weapon-details { padding: 10px 12px; }
+  .mission-weapon-card .mission-weapon-details h3 { font-size: 17px; }
+  .pause-settings-modal { scroll-padding-bottom: 72px; }
+  .pilot-profile.metallic-dialog { padding: 14px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  :is(.quick-access-panel,.shop-modal,.pause-settings-modal,.collection-dialog) { animation: none; scroll-behavior: auto; }
+}

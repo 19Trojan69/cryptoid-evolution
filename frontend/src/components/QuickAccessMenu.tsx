@@ -15,7 +15,15 @@ const groups: readonly { id: string; title: string; glyph: string; items: readon
 type Props = { onClose: () => void; onAction: (action: QuickAction) => void; signedIn: boolean; canAdmin: boolean; adminMode?: boolean; username?: string; busy?: boolean };
 export default function QuickAccessMenu({ onClose, onAction, signedIn, canAdmin, adminMode, username, busy }: Props) {
   const { t } = useLocale();
-  const [openCategory, setOpenCategory] = useState<string | null>(null);
+  const [openCategory, setOpenCategory] = useState<string | null>(() => {
+    try { const saved = sessionStorage.getItem("cryptoid_quick_category"); return groups.some(group => group.id === saved) ? saved : null; }
+    catch { return null; }
+  });
+  const toggleCategory = (id: string) => setOpenCategory(current => {
+    const next = current === id ? null : id;
+    try { if (next) sessionStorage.setItem("cryptoid_quick_category", next); else sessionStorage.removeItem("cryptoid_quick_category"); } catch { /* Navigation remains available without storage. */ }
+    return next;
+  });
   const panelRef = useRef<HTMLElement>(null);
   useEffect(() => {
     const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
@@ -47,8 +55,11 @@ export default function QuickAccessMenu({ onClose, onAction, signedIn, canAdmin,
       <header className="quick-access-heading"><div><p className="eyebrow">CRYPTOID EVOLUTION</p><h2 id="quick-access-title">{t("Quick access")}</h2></div><button className="close-button" type="button" aria-label={t("Close menu")} onClick={onClose}>×</button></header>
       {username && <p className="quick-access-account">{t("Signed in as")} @{username}</p>}
       <nav aria-label={t("Game navigation")}>
+        <div className="quick-access-direct">
+          {([["hangar", "Your fleet"], ["shop", "Ship shop"]] as const).map(([action, label]) => <button type="button" key={action} onClick={() => onAction(action)}><BlockchainIcon kind={action}/><strong>{t(label)}</strong><i aria-hidden="true">›</i></button>)}
+        </div>
         {groups.map(group => <div key={group.id} className="quick-access-category" data-category={group.id} data-open={openCategory === group.id}>
-          <button className="quick-access-category-trigger" type="button" aria-expanded={openCategory === group.id} aria-controls={`quick-access-${group.id}`} onClick={() => setOpenCategory(current => current === group.id ? null : group.id)}><span className="category-icon"><BlockchainIcon kind={group.id} /></span><strong>{t(group.title)}</strong><i aria-hidden="true">⌄</i></button>
+          <button className="quick-access-category-trigger" type="button" aria-expanded={openCategory === group.id} aria-controls={`quick-access-${group.id}`} onClick={() => toggleCategory(group.id)}><span className="category-icon"><BlockchainIcon kind={group.id} /></span><strong>{t(group.title)}</strong><i aria-hidden="true">⌄</i></button>
           <div id={`quick-access-${group.id}`} className="quick-access-items" hidden={openCategory !== group.id}>{group.items.filter(([action]) => action === "signin" ? !signedIn && !busy : action === "signout" ? signedIn : action === "admin" ? canAdmin : action === "exit-admin" ? canAdmin && adminMode : true).map(([action, label]) => <button key={action} type="button" disabled={busy && (action === "signin" || action === "signout" || action === "exit-admin")} onClick={() => onAction(action)}><BlockchainIcon kind={action}/><span className={action === "galaxy" ? "quick-galaxy-copy" : undefined}>{t(label)}{action === "galaxy" && <><small>{t("500 levels · 50 bosses · 100 mini-games")}</small><em>{t("Preview · In development")}</em></>}</span><i aria-hidden="true">›</i></button>)}</div>
         </div>)}
       </nav>

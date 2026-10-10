@@ -7,10 +7,10 @@ import * as jsx from 'react/jsx-runtime';
 import * as fleet from './shipFleet.ts';
 import * as evolution from './shipEvolution.ts';
 import {hangarCatalog} from '../../../backend/src/hangarCatalog.ts';
-const PaintedShip=()=>null;
+const ShipPreview=()=>null;
 const code=ts.transpileModule(readFileSync(new URL('./ShipSelectionPanel.tsx',import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX}}).outputText;
 const exports={};
-vm.runInNewContext(code,{exports,require:name=>({'react/jsx-runtime':jsx,'./PaintedShip':{default:PaintedShip},'../components/PiPrice':{default:()=>null},'./shipFleet':fleet,'./shipEvolution':evolution,'./shipPreviewPlacement':{shipPreviewPlacement:()=>({})}})[name]});
+vm.runInNewContext(code,{exports,require:name=>({'react/jsx-runtime':jsx,'./ShipPreview':{default:ShipPreview},'../components/PiPrice':{default:()=>null},'./shipFleet':fleet,'./shipEvolution':evolution,'./shipPreviewPlacement':{shipPreviewPlacement:()=>({})}})[name]});
 const Panel=exports.default;
 const nodes=tree=>{const out=[];function walk(node){if(!node||typeof node!=='object')return;if(node.type)out.push(node);for(const child of [node.props?.children].flat(Infinity))walk(child);}walk(tree);return out;};
 const label=node=>typeof node==='string'?node:Array.isArray(node)?node.map(label).join(''):node?.props?label(node.props.children):'';
@@ -23,7 +23,7 @@ test('all versions use one preview with the corresponding stage, paint and actua
     const buttons=nodes(tabs).filter(x=>x.type==='button');assert.equal(buttons.length,3);
     assert.deepEqual(buttons.map(x=>x.props['aria-pressed']),[stage===1,stage===2,stage===3]);
     buttons.forEach(x=>x.props.onClick());assert.deepEqual(clicks,[1,2,3]);
-    const artwork=tree.filter(x=>x.type===PaintedShip);assert.equal(artwork.length,1);assert.equal(artwork[0].props.stage,stage);assert.equal(artwork[0].props.color,'silver');
+    const artwork=tree.filter(x=>x.type===ShipPreview);assert.equal(artwork.length,1);assert.equal(artwork[0].props.stage,stage);assert.equal(artwork[0].props.color,'silver');
     assert.equal(tree.some(x=>x.props.className==='ship-evolution-stage-art'),false);
     if(stage>1)assert.ok(tree.some(x=>x.type==='p'&&label(x).includes(stage===2?'one free':'two free')));
   }

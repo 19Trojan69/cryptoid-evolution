@@ -13,6 +13,7 @@ import './selectionControls.css'
 import './fleetMenus.css'
 import App from './App.tsx'
 import { startAggregateUsage } from './lib/aggregateUsage'
+import './smartphoneUi.css'
 
 void startAggregateUsage();
 
