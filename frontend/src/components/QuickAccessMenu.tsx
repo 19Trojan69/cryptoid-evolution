@@ -28,8 +28,8 @@ export default function QuickAccessMenu({ onClose, onAction, signedIn, canAdmin,
   useEffect(() => {
     const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const panel = panelRef.current;
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    // The route's useModalNavigation hook owns the page scroll lock.
+    // A second lock here can restore "hidden" after the menu has closed.
     panel?.querySelector<HTMLButtonElement>(".close-button")?.focus({ preventScroll: true });
     const keyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") { event.preventDefault(); onClose(); }
@@ -41,7 +41,6 @@ export default function QuickAccessMenu({ onClose, onAction, signedIn, canAdmin,
     };
     document.addEventListener("keydown", keyDown);
     return () => {
-      document.body.style.overflow = originalOverflow;
       document.removeEventListener("keydown", keyDown);
       const active = document.activeElement;
       if (active === document.body || panel?.contains(active)) {
@@ -60,7 +59,7 @@ export default function QuickAccessMenu({ onClose, onAction, signedIn, canAdmin,
         </div>
         {groups.map(group => <div key={group.id} className="quick-access-category" data-category={group.id} data-open={openCategory === group.id}>
           <button className="quick-access-category-trigger" type="button" aria-expanded={openCategory === group.id} aria-controls={`quick-access-${group.id}`} onClick={() => toggleCategory(group.id)}><span className="category-icon"><BlockchainIcon kind={group.id} /></span><strong>{t(group.title)}</strong><i aria-hidden="true">⌄</i></button>
-          <div id={`quick-access-${group.id}`} className="quick-access-items" hidden={openCategory !== group.id}>{group.items.filter(([action]) => action === "signin" ? !signedIn && !busy : action === "signout" ? signedIn : action === "admin" ? canAdmin : action === "exit-admin" ? canAdmin && adminMode : true).map(([action, label]) => <button key={action} type="button" disabled={busy && (action === "signin" || action === "signout" || action === "exit-admin")} onClick={() => onAction(action)}><BlockchainIcon kind={action}/><span className={action === "galaxy" ? "quick-galaxy-copy" : undefined}>{t(label)}{action === "galaxy" && <><small>{t("500 levels · 50 bosses · 100 mini-games")}</small><em>{t("Preview · In development")}</em></>}</span><i aria-hidden="true">›</i></button>)}</div>
+          <div id={`quick-access-${group.id}`} className="quick-access-items" hidden={openCategory !== group.id}>{group.items.filter(([action]) => action === "signin" ? !signedIn && !busy : action === "signout" ? signedIn : action === "admin" ? canAdmin : action === "exit-admin" ? canAdmin && adminMode : true).map(([action, label]) => <button key={action} type="button" disabled={busy && (action === "play" || action === "signin" || action === "signout" || action === "exit-admin")} onClick={() => onAction(action)}><BlockchainIcon kind={action}/><span className={action === "galaxy" ? "quick-galaxy-copy" : undefined}>{t(label)}{action === "galaxy" && <><small>{t("500 levels · 50 bosses · 100 mini-games")}</small><em>{t("Preview · In development")}</em></>}</span><i aria-hidden="true">›</i></button>)}</div>
         </div>)}
       </nav>
     </section>

@@ -3,7 +3,6 @@ import ShipPreview from "./ShipPreview";
 import PiPrice from "../components/PiPrice";
 import { allPlayerColors, fleetCount, playerColors, standardShipPrice, testnetStandardHullAvailable, type ShipFleet } from "./shipFleet";
 import { projectileGuardForStage, type ShipStage } from "./shipEvolution";
-import { shipPreviewPlacement } from "./shipPreviewPlacement";
 
 type Skin = typeof import("./shipFleet").playerSkins[number];
 type Color = typeof allPlayerColors[number];
@@ -74,7 +73,7 @@ export default function ShipSelectionPanel({
       </div>
       <div className="ship-one-art-wrap" role="img" aria-label={skin.name + " · " + t(color.name) + " · " + t(stageLabel(stage))}>
         <span className="ship-one-art-frame">
-          <span className="ship-one-art" style={shipPreviewPlacement(skin.sprite, stage)}>
+          <span className="ship-one-art">
             <ShipPreview sprite={skin.sprite} color={color.id} stage={stage} />
           </span>
         </span>
