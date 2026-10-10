@@ -101,8 +101,20 @@ Netztrennung und Zahlungsabwicklung werden wiederverwendet.
 | Handelsstation → bestehender Schiff-Shop | Im Browser bestätigt; keine Käufe ausgelöst |
 | Smartphone-/Tablet-Geometrie | 320, 375, 390, 414 und 768 px: kein horizontaler Überlauf, keine abgeschnittenen Buttons |
 | Mobile Dialoge | Boss- und Minispielhinweis bei 320 px; Schließen und Escape geprüft; langer Inhalt vertikal scrollbar |
+| Alle 19 Sprachen bei 320 px | Über die bestehende Sprachauswahl einzeln geöffnet: en, de, es, fr, pt, it, pl, tr, ru, hr, cs, sk, hu, ro, sr, uk, th, zh-Hans, vi. Jeweils 100 beschriftete Minispiele, keine horizontalen Überläufe in Karte/Dialog, keine abgeschnittenen Navigationsbuttons |
+| Gespeicherte reduzierte Effekte im Browser | Über die bestehende Einstellung aktiviert: Route, Portalring und Schiffsantrieb haben jeweils `animation-name: none`. Danach ursprüngliche Standardeffekte wiederhergestellt |
+| Tastatur und Fokus im Browser | Enter öffnet Level 5; Schließen-Button erhält Fokus; Escape schließt; Fokus kehrt zur Level-5-Station zurück |
 | Schiffbewegung und Datenzugriffe | Tatsächliche React-Callbacks getestet: keine Schreibfunktionen, keine Wiederholungsflüge, reduzierte Effekte; alle 500 mobilen Schiffsplätze ohne verdeckte Levelnummer |
 | Schnelles Scrollen / begrenzte aktive Regionen | Wiederholte Sprünge und PageUp im Browser; nur nahe Regionen aktiv; keine beobachteten Bedienausfälle |
+
+Die ergänzende Sprach- und Einstellungsabnahme wurde am tatsächlich ausgelieferten
+Commit `fe7d1cb34098acdd27797bcf5498a2ce8b3d9d83` im isolierten Testnet-Preview
+durchgeführt. Bei allen 19 Sprachprüfungen blieben Gastposition Level 1 und
+Anzahl abgeschlossener Levels 0 unverändert. Die ursprüngliche automatische
+Gerätesprache wurde anschließend wiederhergestellt. GitHub meldet den PR als
+konfliktfrei; beide Vercel-Projekte melden erfolgreiche Preview-Builds. Es gab
+zum Prüfzeitpunkt keine offenen Review-Rückmeldungen. Diese zusätzliche Prüfung
+erforderte keine weiteren Änderungen an Spielcode oder Daten.
 
 ## Grenzen der Abnahme
 
