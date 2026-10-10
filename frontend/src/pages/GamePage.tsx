@@ -51,6 +51,7 @@ import MissionWeaponShop from './MissionWeaponShop';
 import useModalNavigation from '../hooks/useModalNavigation';
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "../lib/localRecordKeys";
 import './weaponSelection.css';
+import './equipmentEdge.css';
 import { axiosClient } from "../lib/axiosClient";
 import { accountSelection, createSaveQueue, loadAccountSave, localInventory, mutateAccountInventory, retrySave, snapshotOf, type AccountSave, type Snapshot } from "../lib/accountSave";
 import axios from "axios";
