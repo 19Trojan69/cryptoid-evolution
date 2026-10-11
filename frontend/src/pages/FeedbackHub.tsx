@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLocale } from "../i18n";
 import { axiosClient } from "../lib/axiosClient";
+import CommunityText from "./CommunityText";
+import FeedbackDescription from "./FeedbackDescription";
 import BlockchainIcon from "../components/BlockchainIcon";
 
 type Category = "rating" | "idea" | "problem";
@@ -50,6 +52,9 @@ export default function FeedbackHub({
     [loading, setLoading] = useState(true),
     [busy, setBusy] = useState(false),
     [notice, setNotice] = useState("");
+  const [composer, setComposer] = useState(false);
+  const [openReplies, setOpenReplies] = useState<Record<string, boolean>>({});
+  const listTop = useRef<HTMLDivElement>(null);
   const [title, setTitle] = useState(""),
     [description, setDescription] = useState(""),
     [stars, setStars] = useState(0),
@@ -120,6 +125,7 @@ export default function FeedbackHub({
     setNotice("");
     setTitle("");
     setDescription("");
+    setComposer(false);
   };
   const moderate = (post: Post, patch: { status?: string; hidden?: boolean }) =>
     void run(() => axiosClient.patch(`/feedback/posts/${post.id}/moderate`, patch));
@@ -143,7 +149,9 @@ export default function FeedbackHub({
           ×
         </button>
       </header>
-      <button className="menu-return" type="button" onClick={onClose}>← {t("Back to quick access")}</button>
+      <button className="menu-return" type="button" onClick={onClose}>
+        ← {t("Back to quick access")}
+      </button>
       <div className="feedback-tabs" role="group" aria-label={t("Category")}>
         {(Object.keys(categories) as Category[]).map(key => (
           <button
@@ -165,69 +173,71 @@ export default function FeedbackHub({
           </button>
         </p>
       )}
-      <form
-        onSubmit={e => {
-          e.preventDefault();
-          void run(async () => {
-            await axiosClient.post("/feedback/posts", {
-              category,
-              title,
-              description,
-              ...(category === "rating" ? { stars } : {}),
-            });
-            setTitle("");
-            setDescription("");
-          }, "Contribution saved");
-        }}
-      >
-        {category === "rating" ? (
-          <>
-            <p>
-              {t("Stars rate the game. Thumbs rate individual contributions. You can update your game rating.")}
-            </p>
-            <div className="feedback-stars" role="group" aria-label={t("Stars")}>
-              {[1, 2, 3, 4, 5].map(n => (
-                <button
-                  type="button"
-                  key={n}
-                  disabled={!signedIn || busy}
-                  aria-label={`${number(n)} ${t("Stars")}`}
-                  aria-pressed={stars === n}
-                  onClick={() => setStars(n)}
-                >
-                  {n <= stars ? "★" : "☆"}
-                </button>
-              ))}
-            </div>
-          </>
-        ) : (
+      <details className="feedback-compose" open={composer} onToggle={event => setComposer(event.currentTarget.open)}>
+        <summary>{t(category === "rating" ? "Write a review" : "New contribution")}</summary>
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            void run(async () => {
+              await axiosClient.post("/feedback/posts", {
+                category,
+                title,
+                description,
+                ...(category === "rating" ? { stars } : {}),
+              });
+              setTitle("");
+              setDescription("");
+              setComposer(false);
+            }, "Contribution saved");
+          }}
+        >
+          {category === "rating" ? (
+            <>
+              <p>{t("Stars rate the game. Thumbs rate individual contributions. You can update your game rating.")}</p>
+              <div className="feedback-stars" role="group" aria-label={t("Stars")}>
+                {[1, 2, 3, 4, 5].map(n => (
+                  <button
+                    type="button"
+                    key={n}
+                    disabled={!signedIn || busy}
+                    aria-label={`${number(n)} ${t("Stars")}`}
+                    aria-pressed={stars === n}
+                    onClick={() => setStars(n)}
+                  >
+                    {n <= stars ? "★" : "☆"}
+                  </button>
+                ))}
+              </div>
+            </>
+          ) : (
+            <label>
+              {t("Title")}
+              <input
+                required
+                maxLength={100}
+                value={title}
+                disabled={!signedIn || busy}
+                onChange={e => setTitle(e.target.value)}
+              />
+            </label>
+          )}
           <label>
-            {t("Title")}
-            <input
-              required
-              maxLength={100}
-              value={title}
+            {t(category === "rating" ? "Short comment (optional)" : "Description")}
+            <textarea
+              required={category !== "rating"}
+              maxLength={category === "rating" ? 500 : 3000}
+              value={description}
               disabled={!signedIn || busy}
-              onChange={e => setTitle(e.target.value)}
+              onChange={e => setDescription(e.target.value)}
             />
           </label>
-        )}
-        <label>
-          {t(category === "rating" ? "Short comment (optional)" : "Description")}
-          <textarea
-            required={category !== "rating"}
-            maxLength={category === "rating" ? 500 : 3000}
-            value={description}
-            disabled={!signedIn || busy}
-            onChange={e => setDescription(e.target.value)}
-          />
-        </label>
-        <button type="submit" disabled={!signedIn || busy || (category === "rating" && stars === 0)}>
-          {t(busy ? "Saving…" : "Submit")}
-        </button>
-      </form>
+          <button type="submit" disabled={!signedIn || busy || (category === "rating" && stars === 0)}>
+            {t(busy ? "Saving…" : "Submit")}
+          </button>
+        </form>
+      </details>
       {notice && <p role="status">{t(notice)}</p>}
-      <div className="feedback-filters">
+      <div className="feedback-filters" ref={listTop}>
         <label>
           {t("Sort by")}
           <select
@@ -244,7 +254,7 @@ export default function FeedbackHub({
           </select>
         </label>
         {admin && (
-          <label>
+          <label className="feedback-hidden-filter">
             <input
               type="checkbox"
               checked={hidden}
@@ -269,30 +279,49 @@ export default function FeedbackHub({
           {posts.length === 0 && <p>{t("No contributions yet.")}</p>}
           {posts.map(post => (
             <article key={post.id} className="feedback-post" data-hidden={post.hidden}>
-              <header>
-                <div>
-                  <h3>{post.category === "rating" ? `${number(post.stars || 0)} / ${number(5)} ★` : post.title}</h3>
-                  <small>
-                    <button className="feedback-profile-link" type="button" onClick={() => onProfile(post.username)}> @{post.username}</button> ·{" "}
-                    {new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }).format(new Date(post.createdAt))}
-                  </small>
-                </div>
-                <span className="feedback-status">
-                  {t(
-                    post.status === "done"
-                      ? post.category === "problem"
-                        ? "Fixed"
-                        : "Implemented"
-                      : statuses[post.status]
-                  )}
-                </span>
-              </header>
-              {post.hidden && <p>{t("Moderated contribution")}</p>}
-              <p className="feedback-description">{post.description}</p>
-              {(
+              <CommunityText postId={post.id} fields={[post.title, post.description]} hidden={post.hidden}>
+                {([translatedTitle, translatedDescription]) => (
+                  <>
+                    <header>
+                      <div>
+                        <h3>
+                          {post.category === "rating" ? `${number(post.stars || 0)} / ${number(5)} ★` : translatedTitle}
+                        </h3>
+                        <small>
+                          <button
+                            className="feedback-profile-link"
+                            type="button"
+                            onClick={() => onProfile(post.username)}
+                          >
+                            {" "}
+                            @{post.username}
+                          </button>{" "}
+                          ·{" "}
+                          {new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }).format(
+                            new Date(post.createdAt)
+                          )}
+                        </small>
+                      </div>
+                      <span className="feedback-status">
+                        {t(
+                          post.status === "done"
+                            ? post.category === "problem"
+                              ? "Fixed"
+                              : "Implemented"
+                            : statuses[post.status]
+                        )}
+                      </span>
+                    </header>
+                    {post.hidden && <p>{t("Moderated contribution")}</p>}
+                    <FeedbackDescription text={translatedDescription} />
+                  </>
+                )}
+              </CommunityText>
+              {
                 <div className="feedback-votes">
                   <button
                     type="button"
+                    aria-label={`${t("Thumbs up")} · ${number(post.up)}`}
                     aria-pressed={post.ownVote === 1}
                     disabled={!signedIn || busy || post.hidden}
                     onClick={() =>
@@ -301,11 +330,12 @@ export default function FeedbackHub({
                       )
                     }
                   >
-                    👍 {t("Thumbs up")} · {number(post.up)}
+                    <span aria-hidden="true">👍</span> {number(post.up)}
                   </button>
-                  {(
+                  {
                     <button
                       type="button"
+                      aria-label={`${t("Thumbs down")} · ${number(post.down)}`}
                       aria-pressed={post.ownVote === -1}
                       disabled={!signedIn || busy || post.hidden}
                       onClick={() =>
@@ -314,20 +344,42 @@ export default function FeedbackHub({
                         )
                       }
                     >
-                      👎 {t("Thumbs down")} · {number(post.down)}
+                      <span aria-hidden="true">👎</span> {number(post.down)}
                     </button>
-                  )}
+                  }
                 </div>
+              }
+              {post.replies.length > 0 && (
+                <details
+                  className="feedback-replies"
+                  onToggle={event => {
+                    const open = event.currentTarget.open;
+                    setOpenReplies(old => ({ ...old, [post.id]: open }));
+                  }}
+                >
+                  <summary>
+                    {t("Developer reply")} · {number(post.replies.length)}
+                  </summary>
+                  {openReplies[post.id] &&
+                    post.replies.map(reply => (
+                      <aside className="developer-reply" key={reply.id}>
+                        <b>{t("Developer reply")}</b>
+                        <small>
+                          @{reply.username} ·{" "}
+                          {new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }).format(
+                            new Date(reply.createdAt)
+                          )}
+                        </small>
+                        <CommunityText postId={post.id} replyId={reply.id} fields={[reply.text]} hidden={post.hidden}>
+                          {([text]) => <p>{text}</p>}
+                        </CommunityText>
+                      </aside>
+                    ))}
+                </details>
               )}
-              {post.replies.map(reply => (
-                <aside className="developer-reply" key={reply.id}>
-                  <b>{t("Developer reply")}</b>
-                  <small>@{reply.username} · {new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }).format(new Date(reply.createdAt))}</small>
-                  <p>{reply.text}</p>
-                </aside>
-              ))}
               {admin && (
-                <section className="feedback-moderation">
+                <details className="feedback-moderation">
+                  <summary>{t("Manage contribution")}</summary>
                   <label>
                     {t("Status")}
                     <select
@@ -368,7 +420,7 @@ export default function FeedbackHub({
                       {t("Reply")}
                     </button>
                   </form>
-                </section>
+                </details>
               )}
             </article>
           ))}
@@ -381,6 +433,7 @@ export default function FeedbackHub({
           onClick={() => {
             setPage(n => n - 1);
             setLoading(true);
+            listTop.current?.scrollIntoView({ block: "start" });
           }}
         >
           {t("Previous")}
@@ -392,6 +445,7 @@ export default function FeedbackHub({
           onClick={() => {
             setPage(n => n + 1);
             setLoading(true);
+            listTop.current?.scrollIntoView({ block: "start" });
           }}
         >
           {t("Next")}

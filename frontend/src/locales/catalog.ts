@@ -5616,3 +5616,14 @@ Object.assign(localeCatalog.ru ??= {}, russianAdminTranslations);
 Object.assign(localeCatalog.de ??= {}, germanLoreCompletionTranslations);
 
 Object.assign(localeCatalog.es ??= {}, spanishLoreCompletionTranslations);
+
+// Community controls; authored content is translated separately by the service.
+const communityKeys = ['Automatically translated','Show translation','Show original','Translation unavailable. Original shown.','Write a review','New contribution','Show less','Read more','Manage contribution'];
+const communityRows: Record<string, string[]> = {
+  de: ['Automatisch übersetzt','Übersetzung anzeigen','Original anzeigen','Übersetzung nicht verfügbar. Original wird angezeigt.','Bewertung schreiben','Beitrag verfassen','Weniger anzeigen','Weiterlesen','Beitrag verwalten'],
+  es: ['Traducido automáticamente','Mostrar traducción','Mostrar original','Traducción no disponible. Se muestra el original.','Escribir una reseña','Nueva contribución','Mostrar menos','Leer más','Gestionar contribución'],
+  zh: ['自动翻译','显示译文','显示原文','翻译暂不可用，已显示原文。','撰写评价','发表帖子','收起','阅读全文','管理帖子'],
+  vi: ['Được dịch tự động','Hiện bản dịch','Hiện bản gốc','Bản dịch không khả dụng. Đang hiển thị bản gốc.','Viết đánh giá','Đóng góp mới','Thu gọn','Đọc thêm','Quản lý đóng góp'],
+};
+for (const [locale, row] of Object.entries(communityRows))
+  Object.assign(localeCatalog[locale] ??= {}, Object.fromEntries(communityKeys.map((key, index) => [key,row[index]])));

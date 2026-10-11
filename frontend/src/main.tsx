@@ -14,6 +14,7 @@ import './fleetMenus.css'
 import App from './App.tsx'
 import { startAggregateUsage } from './lib/aggregateUsage'
 import './smartphoneUi.css'
+import './pages/feedbackCompact.css'
 
 void startAggregateUsage();
 

@@ -210,6 +210,8 @@ export const start = async (listen = true): Promise<void> => {
     app.locals.userCollection = db.collection("users");
     app.locals.feedbackCollection = db.collection("feedback_posts");
     app.locals.feedbackVotesCollection = db.collection("feedback_votes");
+    app.locals.feedbackTranslationsCollection = db.collection("feedback_translations");
+    await app.locals.feedbackTranslationsCollection.createIndex({expiresAt:1},{expireAfterSeconds:0});
     await app.locals.feedbackCollection.createIndex({network:1,category:1,hidden:1,createdAt:-1});
     await app.locals.feedbackVotesCollection.createIndex({network:1,postId:1,value:1});
     await app.locals.feedbackVotesCollection.createIndex({network:1,postId:1,uid:1},{unique:true});

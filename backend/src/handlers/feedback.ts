@@ -3,6 +3,11 @@ import { Router, type Request, type Response } from "express";
 import { canAdmin } from "../adminAccess";
 import { rewardNetwork } from "../rewardNetwork";
 import "../types/session";
+import {
+  communityLocale,
+  translationKey,
+  translateCommunity,
+} from "../communityTranslation";
 
 export const feedbackCategories = ["rating", "idea", "problem"] as const;
 export const feedbackStatuses = ["open", "review", "planned", "done"] as const;
@@ -145,6 +150,55 @@ export default function mountFeedbackEndpoints(router: Router) {
       return fail(res);
     }
   });
+  router.get("/posts/:id/translation", async (req, res) => {
+    const locale = communityLocale(req.query.locale),
+      id = req.params.id;
+    if (
+      !validId(id) ||
+      !locale ||
+      (req.query.reply !== undefined &&
+        (typeof req.query.reply !== "string" ||
+          !/^[a-f0-9-]{36}$/.test(req.query.reply)))
+    )
+      return res.status(400).json({ error: "invalid_translation" });
+    try {
+      const network = rewardNetwork(req);
+      const post = await req.app.locals.feedbackCollection.findOne({
+        _id: id,
+        network,
+        hidden: false,
+      });
+      if (!post) return res.status(404).json({ error: "not_found" });
+      const reply = req.query.reply
+        ? (post.replies || []).find((item: any) => item.id === req.query.reply)
+        : null;
+      if (req.query.reply && !reply)
+        return res.status(404).json({ error: "not_found" });
+      const fields: string[] = reply
+        ? [reply.text]
+        : [post.title || "", post.description || ""];
+      const _id = translationKey(
+        network,
+        id + (reply?.id || ""),
+        locale,
+        fields,
+      );
+      const cache = req.app.locals.feedbackTranslationsCollection;
+      const cached = cache ? await cache.findOne({ _id }) : null;
+      if (cached && new Date(cached.expiresAt).getTime() > Date.now())
+        return res.json(cached.result);
+      const result = await translateCommunity(fields, locale);
+      if (cache)
+        await cache.updateOne(
+          { _id },
+          { $set: { result, expiresAt: new Date(Date.now() + 7 * 86400_000) } },
+          { upsert: true },
+        );
+      return res.json(result);
+    } catch {
+      return res.status(503).json({ error: "translation_unavailable" });
+    }
+  });
   router.post("/posts", async (req, res) => {
     const user = signedIn(req, res);
     if (!user) return;
@@ -185,16 +239,32 @@ export default function mountFeedbackEndpoints(router: Router) {
       const posts = req.app.locals.feedbackCollection;
       if (body.category === "rating") {
         // One editable rating per verified account; editing cannot unhide moderation.
-        const previous = await posts.findOne({ _id: id, network, uid: user.uid });
+        const previous = await posts.findOne({
+          _id: id,
+          network,
+          uid: user.uid,
+        });
         await posts.updateOne(
           { _id: id, network, uid: user.uid },
           {
             $set: {
               username: post.username,
               description: post.description,
-              stars: post.stars, updatedAt: post.createdAt,
+              stars: post.stars,
+              updatedAt: post.createdAt,
             },
-            ...(previous ? { $push: { ratingHistory: { stars: previous.stars, description: previous.description, createdAt: previous.updatedAt || previous.createdAt, archivedAt: post.createdAt } } } : {}),
+            ...(previous
+              ? {
+                  $push: {
+                    ratingHistory: {
+                      stars: previous.stars,
+                      description: previous.description,
+                      createdAt: previous.updatedAt || previous.createdAt,
+                      archivedAt: post.createdAt,
+                    },
+                  },
+                }
+              : {}),
             $setOnInsert: {
               network,
               uid: user.uid,
