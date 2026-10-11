@@ -31,7 +31,9 @@ export const levelDifficulty = (level: number): LevelDifficulty => {
     entryPaceScale: 1 - Math.sqrt(progress) * .18,
     groupAttackInterval: Math.max(2, 6 - Math.floor(Math.sqrt(progress) * 4)),
     projectileBonus: Math.min(2, Math.floor(progress * 3)),
-    bossHealth: (28 + progress * 52 + progress * progress * 40) * 9,
+    // Reactor endurance rises more slowly than attack pressure. Balance must
+    // remain viable with the base weapon: free weapon pickups last only 20s.
+    bossHealth: 252 + progress * 108 + progress * progress * 36,
   };
 };
 

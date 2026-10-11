@@ -1,0 +1,149 @@
+{
+  "baseline": "e633594",
+  "scenarios": 60000,
+  "assumptions": "Ideal connected shots, sequential targets, firing intervals; excludes travel, aim, movement, incoming damage and escorts. Weapon-5 rows assume sustained fire; free-twin rows expire at 20 seconds.",
+  "enemyClasses": [
+    {
+      "type": "solflare",
+      "class": "light",
+      "baseHealth": 4,
+      "lateOldHealth": 8,
+      "lateHealth": 6
+    },
+    {
+      "type": "memeSwarm",
+      "class": "light",
+      "baseHealth": 4,
+      "lateOldHealth": 8,
+      "lateHealth": 6
+    },
+    {
+      "type": "etherCrystal",
+      "class": "medium",
+      "baseHealth": 8,
+      "lateOldHealth": 12,
+      "lateHealth": 12
+    },
+    {
+      "type": "stableCore",
+      "class": "medium",
+      "baseHealth": 8,
+      "lateOldHealth": 12,
+      "lateHealth": 12
+    },
+    {
+      "type": "bitrock",
+      "class": "heavy",
+      "baseHealth": 12,
+      "lateOldHealth": 16,
+      "lateHealth": 18
+    },
+    {
+      "type": "ghostCoin",
+      "class": "elite",
+      "baseHealth": 10,
+      "lateOldHealth": 14,
+      "lateHealth": 15
+    }
+  ],
+  "bosses": [
+    {
+      "level": 10,
+      "guns": 2,
+      "turretHealth": 36,
+      "coreHealth": 253.57,
+      "greyStandardOld": 53.12,
+      "greyStandard": 52.16,
+      "greyAdvanced": 26.24,
+      "greyElite": 13.12,
+      "greyWeapon5Old": 15.62,
+      "greyWeapon5": 6.16,
+      "redWeapon5": 4.97,
+      "greyFreeTwin20s": 32.32
+    },
+    {
+      "level": 50,
+      "guns": 3,
+      "turretHealth": 42.6,
+      "coreHealth": 262.57,
+      "greyStandardOld": 63.36,
+      "greyStandard": 56.64,
+      "greyAdvanced": 28.48,
+      "greyElite": 14.4,
+      "greyWeapon5Old": 18.26,
+      "greyWeapon5": 6.6,
+      "redWeapon5": 5.36,
+      "greyFreeTwin20s": 36.8
+    },
+    {
+      "level": 100,
+      "guns": 4,
+      "turretHealth": 52.87,
+      "coreHealth": 274.48,
+      "greyStandardOld": 85.44,
+      "greyStandard": 61.44,
+      "greyAdvanced": 30.72,
+      "greyElite": 15.68,
+      "greyWeapon5Old": 22.88,
+      "greyWeapon5": 7.26,
+      "redWeapon5": 5.74,
+      "greyFreeTwin20s": 41.6
+    },
+    {
+      "level": 250,
+      "guns": 8,
+      "turretHealth": 97.17,
+      "coreHealth": 314.59,
+      "greyStandardOld": 167.36,
+      "greyStandard": 82.56,
+      "greyAdvanced": 41.28,
+      "greyElite": 21.44,
+      "greyWeapon5Old": 40.26,
+      "greyWeapon5": 9.9,
+      "redWeapon5": 7.65,
+      "greyFreeTwin20s": 62.72
+    },
+    {
+      "level": 480,
+      "guns": 12,
+      "turretHealth": 204.42,
+      "coreHealth": 388.82,
+      "greyStandardOld": 343.36,
+      "greyStandard": 130.24,
+      "greyAdvanced": 65.28,
+      "greyElite": 33.6,
+      "greyWeapon5Old": 77.22,
+      "greyWeapon5": 15.4,
+      "redWeapon5": 12.24,
+      "greyFreeTwin20s": 110.4
+    },
+    {
+      "level": 490,
+      "guns": 20,
+      "turretHealth": 210.17,
+      "coreHealth": 392.39,
+      "greyStandardOld": 450.88,
+      "greyStandard": 133.44,
+      "greyAdvanced": 66.88,
+      "greyElite": 35.2,
+      "greyWeapon5Old": 90.42,
+      "greyWeapon5": 16.06,
+      "redWeapon5": 12.24,
+      "greyFreeTwin20s": 113.6
+    },
+    {
+      "level": 500,
+      "guns": 21,
+      "turretHealth": 216,
+      "coreHealth": 396,
+      "greyStandardOld": 480,
+      "greyStandard": 136.32,
+      "greyAdvanced": 68.16,
+      "greyElite": 34.88,
+      "greyWeapon5Old": 94.6,
+      "greyWeapon5": 16.06,
+      "redWeapon5": 13.01,
+      "greyFreeTwin20s": 116.48
+    }
+  ]
+}
