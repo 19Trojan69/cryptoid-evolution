@@ -24,7 +24,8 @@ export const readShipStart = (): ShipStart => {
   return value === "touch" ? "touch" : "higher";
 };
 export const sensitivityMultiplier: Record<ControlSensitivity, number> = { gentle: .75, normal: 1, fast: 1.3 };
-export const zoneFraction: Record<ControlZone, number> = { compact: .5, normal: .65, wide: .8 };
+// Area size adjusts vertical reach; either hand can steer across the full width.
+export const controlAreaTop: Record<ControlZone, number> = { compact: .65, normal: .5, wide: .4 };
 // On a typical phone playfield, the touch position starts about 30 CSS pixels
 // (roughly 8 mm) below the established upper position.
 export const shipStartHeight: Record<ShipStart, number> = { higher: .78, touch: .82 };

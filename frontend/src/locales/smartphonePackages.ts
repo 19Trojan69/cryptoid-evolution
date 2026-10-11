@@ -1,5 +1,8 @@
 export const smartphoneTranslations: Record<string, Record<string, string>> = {
   de: {
+    "The mission was paused after a technical interruption. Try Resume to continue.": "Die Mission wurde wegen einer technischen Unterbrechung pausiert. Versuche, mit Fortsetzen weiterzuspielen.",
+    "The control area changes vertical reach. Steering is available across its full width.": "Der Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.",
+    "Steering works on both sides of the lower playfield. Handedness only changes the button positions.": "Du kannst auf beiden Seiten des unteren Spielfelds steuern. Die Händigkeit bestimmt nur die Position der Buttons.",
     "You start with 3 hearts, or 4 with Reinforced Hull and 6 with both armor upgrades. The mission ends when all hearts are lost.": "Du startest mit 3 Herzen, mit verstärktem Rumpf mit 4 und mit beiden Panzerungen mit 6. Sind alle Herzen verloren, endet die Mission.",
     "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 5 Shards instead.": "Bossherzen stellen ein verlorenes Herz wieder her, höchstens bis zur Panzerungsgrenze. Bei vollen Herzen erhältst du beim Einsammeln stattdessen 5 Shards.",
     "Advanced and Elite projectile protection does not increase your maximum hearts.": "Der Projektilschutz von Advanced und Elite erhöht deine maximale Herzzahl nicht.",
@@ -23,6 +26,9 @@ export const smartphoneTranslations: Record<string, Record<string, string>> = {
     "The browser did not allow full screen. You can continue playing in this view.": "Der Browser hat Vollbild nicht zugelassen. Du kannst in dieser Ansicht weiterspielen.",
   },
   es: {
+    "The mission was paused after a technical interruption. Try Resume to continue.": "La misión se ha pausado por una interrupción técnica. Pulsa Continuar para intentar seguir jugando.",
+    "The control area changes vertical reach. Steering is available across its full width.": "El área de control determina el alcance vertical. Puedes mover la nave en toda su anchura.",
+    "Steering works on both sides of the lower playfield. Handedness only changes the button positions.": "Puedes mover la nave a ambos lados de la parte inferior del campo. La mano elegida solo cambia la posición de los botones.",
     "You start with 3 hearts, or 4 with Reinforced Hull and 6 with both armor upgrades. The mission ends when all hearts are lost.": "Empiezas con 3 corazones, 4 con casco reforzado o 6 con ambas mejoras de blindaje. La misión termina cuando los pierdes todos.",
     "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 5 Shards instead.": "Los corazones de los jefes recuperan un corazón perdido, hasta el límite de tu blindaje. Si ya tienes todos los corazones, recoger uno te da 5 fragmentos.",
     "Advanced and Elite projectile protection does not increase your maximum hearts.": "La protección contra proyectiles de Advanced y Elite no aumenta tu máximo de corazones.",
@@ -45,6 +51,9 @@ export const smartphoneTranslations: Record<string, Record<string, string>> = {
     "The browser did not allow full screen. You can continue playing in this view.": "El navegador no ha permitido la pantalla completa. Puedes seguir jugando en esta vista.",
   },
   zh: {
+    "The mission was paused after a technical interruption. Try Resume to continue.": "任务因技术中断而暂停。请点击继续，尝试恢复游戏。",
+    "The control area changes vertical reach. Steering is available across its full width.": "控制区域设置决定可操作区域的纵向范围。你可以在该区域的整个宽度内操控飞船。",
+    "Steering works on both sides of the lower playfield. Handedness only changes the button positions.": "你可以在游戏区域下半部的左右两侧操控飞船。惯用手设置仅改变按钮的位置。",
     "You start with 3 hearts, or 4 with Reinforced Hull and 6 with both armor upgrades. The mission ends when all hearts are lost.": "初始有3颗心；强化舰体可提升至4颗，同时拥有两种装甲则为6颗。失去所有心后，任务结束。",
     "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 5 Shards instead.": "首领掉落的心可恢复一颗失去的心，但不能超过装甲的生命上限。生命已满时，拾取后改为获得5个碎片。",
     "Advanced and Elite projectile protection does not increase your maximum hearts.": "Advanced和Elite的弹丸防护不会增加生命上限。",
@@ -67,6 +76,9 @@ export const smartphoneTranslations: Record<string, Record<string, string>> = {
     "The browser did not allow full screen. You can continue playing in this view.": "浏览器未允许全屏。你可以在当前视图中继续游戏。",
   },
   vi: {
+    "The mission was paused after a technical interruption. Try Resume to continue.": "Nhiệm vụ đã tạm dừng do gián đoạn kỹ thuật. Hãy nhấn Tiếp tục để thử chơi tiếp.",
+    "The control area changes vertical reach. Steering is available across its full width.": "Vùng điều khiển quyết định phạm vi theo chiều dọc. Bạn có thể điều khiển trên toàn bộ chiều rộng của vùng này.",
+    "Steering works on both sides of the lower playfield. Handedness only changes the button positions.": "Bạn có thể điều khiển ở cả hai bên phần dưới sân chơi. Lựa chọn tay thuận chỉ thay đổi vị trí các nút.",
     "You start with 3 hearts, or 4 with Reinforced Hull and 6 with both armor upgrades. The mission ends when all hearts are lost.": "Bạn bắt đầu với 3 tim, 4 tim nếu có Thân tàu gia cố hoặc 6 tim nếu có cả hai nâng cấp giáp. Nhiệm vụ kết thúc khi mất hết tim.",
     "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 5 Shards instead.": "Tim từ trùm hồi phục một tim đã mất, tối đa đến giới hạn của giáp. Khi đã đầy tim, nhặt tim sẽ nhận 5 Shards thay thế.",
     "Advanced and Elite projectile protection does not increase your maximum hearts.": "Khả năng chặn đạn của Advanced và Elite không tăng số tim tối đa.",
