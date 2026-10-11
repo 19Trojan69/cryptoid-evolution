@@ -39,6 +39,8 @@ npm run build
 
 Browserprüfung: Start, Bewegung, Pause/Fortsetzen, Shop/Steuerungshinweise, Größenwechsel und Laufzeitmeldungen. Die vorhandene `mobile-layout-check.html` zeigt die echte App in kleinen Ansichten, simuliert aber keine Touch-Hardware.
 
+Live geprüft: Die neue Anleitung und Einstellung erscheinen im Testnet; die linke Spielfeldseite nimmt neue Eingaben an, und Pause/Fortsetzen einschließlich Countdown ist bedienbar. Bei 320 × 568 Pixeln gibt es keinen horizontalen Überlauf, die gemessenen sichtbaren Buttons sind mindestens 48 Pixel groß, und das Pausenmenü ist scrollbar. Die visuelle Prüfung zeigte zunächst einen zwischen Buttons eingequetschten Erklärungstext; ein voller Grid-Zeilenspan korrigiert dies. Die vollständige Dauer einer Mission und echte Multi-Touch-Gesten wurden im Cloud-Browser nicht abschließend verifiziert. Die vorhandenen Pi-SDK-Zeitüberschreitungen außerhalb des Pi Browsers bleiben von diesem Fix getrennt.
+
 Für die Geräteabnahme: Auf iPhone und Android im Pi Browser mehrfach links/rechts steuern, zweiten Finger auf die Waffen legen, außerhalb loslassen, Bildschirm drehen sowie App wechseln/zurückkehren. Nach jeder Unterbrechung muss eine neue Geste funktionieren; Herzen und bezahlte Timer dürfen nicht aufgefüllt werden. Diese Hardwareprüfung ist durch automatisierte Ereignis-Fixtures nicht ersetzt.
 
 Ein dauerhaft blockierter JavaScript-Hauptthread, Betriebssystemabbruch oder Browserabsturz kann nicht während der Blockierung durch einen JavaScript-Watchdog behoben werden. Der Fix schützt die gefundenen Eingabe- und Scheduler-Fehler; er garantiert nicht die Wiederherstellung jeder möglichen Geräte- oder Browserstörung.

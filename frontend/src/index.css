@@ -1090,6 +1090,7 @@ html[data-motion="reduced"] .shooting-star { display: none; }
 .game-modal .music-volume-slider { margin: 14px 0; text-align: left; }
 
 .control-choice-group > strong { grid-column: 1 / -1; margin-top: 7px; color: #f5c86d; font: 600 11px 'DM Mono', monospace; letter-spacing: .08em; text-transform: uppercase; }
+.control-choice-group > p { grid-column: 1 / -1; margin: 0; }
 .control-choice-group .system-setting { justify-content: center; min-height: 44px; padding: 7px 4px; text-align: center; }
 .control-choice-group .system-setting b { font-size: 11px; }
 .game-coach { position: absolute; z-index: 7; bottom: max(19px, env(safe-area-inset-bottom)); left: 50%; width: min(320px, calc(100% - 28px)); padding: 9px 12px; transform: translateX(-50%); border: 1px solid rgba(102, 228, 208, .76); background: linear-gradient(135deg, rgba(5, 33, 47, .96), rgba(17, 39, 61, .94)); color: #e6f9f4; box-shadow: 0 0 22px rgba(59, 216, 192, .18), inset 0 -2px rgba(102, 228, 208, .48); clip-path: polygon(0 8px, 8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px)); text-align: center; pointer-events: none; }
