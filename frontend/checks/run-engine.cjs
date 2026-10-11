@@ -24,21 +24,37 @@ const boosted=mount();Object.assign(boosted.raw(),{weaponLevel:5,weaponCap:5,pai
 // Pickups remain collectable across every kind of encounter transition.
 const carried=mount();
 for (const [section,sector,encounter,nextSector,nextEncounter] of [[1,1,'normal',2,'normal'],[9,9,'normal',10,'boss-intro'],[10,10,'boss-clear',10,'bonus'],[10,10,'bonus',11,'normal']]) {
- const state=carried.raw(), pickup={id:850,type:'shield',x:100,y:723};
- Object.assign(state,{section,sector,encounter,phase:'SECTOR_CLEAR',bossHeartCollected:true,powerUps:[pickup],powerUpTypes:['shield'],player:{x:.9,y:.88}});
+ const state=carried.raw(), pickup={id:850,type:'shield',x:100,y:300};
+ Object.assign(state,{section,sector,encounter,phase:'SECTOR_CLEAR',bossHeartCollected:true,powerUps:[pickup],powerUpTypes:['shield'],shieldCharges:0,overdriveMs:12000,rapidFireMs:11000,pickupWeaponMs:10000,player:{x:.9,y:.88}});
  carried.refs().clearTimer.current=100000;
  tick(carried,16,safe);
  assert.equal(state.sector,nextSector);assert.equal(state.encounter,nextEncounter);
- assert.deepEqual(state.powerUps,[pickup]);
- tick(carried,160,safe);assert.deepEqual(state.powerUps,[pickup]);
+ assert.equal(state.powerUps.length,1);assert.equal(state.powerUps[0].id,pickup.id);
+ assert.ok(Math.abs(state.powerUps[0].y-(pickup.y+16*.052))<1e-9);
+ const beforeFall=state.powerUps[0].y;
+ tick(carried,160,safe);assert.equal(state.powerUps.length,1);assert.ok(Math.abs(state.powerUps[0].y-(beforeFall+160*.052))<1e-9);
+ assert.equal(state.overdriveMs,12000);assert.equal(state.rapidFireMs,11000);assert.equal(state.pickupWeaponMs,10000);
  if (encounter==='bonus') {assert.deepEqual(state.powerUpTypes,['shield']);assert.equal(carried.refs().dropsCreated.current,1);}
+}
+for(const [encounter,phase] of [['normal','SECTOR_INTRO'],['normal','ENTRY'],['normal','FORMATION'],['normal','SECTOR_CLEAR'],['boss-intro','SECTOR_INTRO'],['boss-clear','SECTOR_CLEAR'],['bonus','SECTOR_INTRO'],['bonus','SECTOR_CLEAR']]) {
+ const state=carried.raw();Object.assign(state,{sector:1,section:1,encounter,phase,boss:null,bossHeartCollected:false,powerUps:[{id:850,type:'shield',x:100,y:300}],player:{x:.9,y:.88},overdriveMs:12000,rapidFireMs:11000,pickupWeaponMs:10000});
+ carried.refs().clearTimer.current=0;carried.refs().sectionElapsed.current=0;
+ tick(carried,480,safe);
+ assert.equal(state.powerUps.length,1);assert.ok(Math.abs(state.powerUps[0].y-(300+480*.052))<1e-8);
+ assert.equal(state.overdriveMs,12000);assert.equal(state.rapidFireMs,11000);assert.equal(state.pickupWeaponMs,10000);
 }
 const carryState=carried.raw();carryState.boss=e.createSectorBoss(10,390,95,760);carryState.sector=10;carryState.encounter='boss-fight';
 carried.destroyBoss();assert.equal(carryState.encounter,'boss-clear');assert.equal(carryState.powerUps[0].id,850);
-carried.pause();tick(carried,50000);assert.equal(carryState.powerUps[0].y,723);carried.resume();
-carryState.player={x:100/390,y:723/760};tick(carried,16);assert.equal(carryState.powerUps.length,0);assert.equal(carryState.shieldCharges,1);tick(carried,16);assert.equal(carryState.shieldCharges,1);
+const pausedY=carryState.powerUps[0].y;carried.pause();tick(carried,50000);assert.equal(carryState.powerUps[0].y,pausedY);assert.equal(carryState.overdriveMs,12000);carried.resume();
+carryState.player={x:100/390,y:pausedY/760};tick(carried,16);assert.equal(carryState.powerUps.length,0);assert.equal(carryState.shieldCharges,1);tick(carried,16);assert.equal(carryState.shieldCharges,1);
 carried.restart();assert.equal(carried.raw().powerUps.length,0);
-report.push('Pickups survive block/boss/bonus/level switches and boss destruction, freeze during transitions and pause, remain collectable exactly once, retain drop limits, and clear on restart.');
+report.push('Pickups survive block/boss/bonus/level switches and boss destruction, keep falling continuously during transitions, protect active boost timers and freeze only on actual pause, remain collectable exactly once, retain drop limits, and clear on restart.');
+const timedPickup=mount();tick(timedPickup,800,safe);
+timedPickup.raw().powerUps=[{id:851,type:'rapid',x:351,y:.88*760}];
+tick(timedPickup,16,safe);assert.equal(timedPickup.raw().powerUps.length,0);assert.equal(timedPickup.raw().rapidFireMs,20000);
+tick(timedPickup,400,safe);assert.equal(timedPickup.formationStarted(),false);assert.equal(timedPickup.raw().rapidFireMs,20000);
+tick(timedPickup,4000,safe);assert.equal(timedPickup.formationStarted(),true);assert.ok(timedPickup.raw().rapidFireMs<20000&&timedPickup.raw().rapidFireMs>0);
+report.push('Pickup collected during formation setup retains its full 20 seconds; countdown starts only when the formation is ready.');
 const campaign=mount();const visited=new Set();let sawBoss=0,sawBonus=0,heavyAt=null,carriedTransitions=0;
 for(let i=0;i<1600000;i++){
  const s=campaign.raw(),info=campaign.snapshot();visited.add(s.sector);s.enemyShots=[];s.shots=[];s.player={x:.92,y:.9};
@@ -49,7 +65,7 @@ for(let i=0;i<1600000;i++){
  if(s.encounter==='boss-clear')sawBoss=Math.max(sawBoss,s.sector/10);
  if(s.encounter==='bonus'){sawBonus=Math.max(sawBonus,s.sector/10);s.bonusTargets=[];}
  const wasClear=s.phase==='SECTOR_CLEAR', previousStage=s.sector, previousEncounter=s.encounter;
- if(wasClear)s.powerUps=[{id:3000000+i,type:'rapid',x:35,y:723}];
+ if(wasClear)s.powerUps=[{id:3000000+i,type:'rapid',x:35,y:300}];
  const carriedId=s.powerUps[0]?.id;
  engineStep(clock+=16);
  if(wasClear&&(s.sector!==previousStage||s.encounter!==previousEncounter)&&s.status!=='victory') {assert.ok(s.powerUps.some(p=>p.id===carriedId));carriedTransitions++;}

@@ -1235,6 +1235,9 @@ const GamePage = () => {
           if (state.pickupNotice.remainingMs <= 0) state.pickupNotice = null;
         }
         sectionElapsedRef.current += delta;
+        // Uncollected pickups keep falling through every playing transition frame.
+        // Active boost timers retain their existing transition protection above.
+        state.powerUps = movePowerUps(state.powerUps, delta, height);
         if (state.phase === "SECTOR_CLEAR") {
           clearTimerRef.current += delta;
           if (state.encounter === "boss-clear") {
@@ -1573,7 +1576,6 @@ const GamePage = () => {
           }
           state.rocks=state.rocks.filter(r=>Math.hypot(r.x-state.player.x*width,r.y-state.player.y*height)>r.radius+playerDiameterRef.current*.6 && !state.powerUps.some(p=>Math.hypot(p.x-r.x,p.y-r.y)<r.radius+35));
         }
-        state.powerUps = movePowerUps(state.powerUps, combatVarietyEnabled && transitionPaused ? 0 : delta, height);
         state.powerUps = state.powerUps.filter(pickup => {
           if (Math.hypot(pickup.x - state.player.x * width, pickup.y - state.player.y * height) > 34) return true;
           Object.assign(state, activateCollectedPower(state, pickup.type));

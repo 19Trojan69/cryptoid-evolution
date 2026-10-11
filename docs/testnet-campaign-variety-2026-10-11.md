@@ -36,3 +36,6 @@ Uncollected pickups are retained across blocks, boss destruction, boss/bonus tra
 
 
 At Marcus’s subsequent request, small enemy sprites are reduced by 25% from the doubled version (1.5 times their original width and height). Formation clearance uses the same revised factor. All other ship sizes, gameplay and retained pickups are unchanged.
+
+
+At Marcus’s next request, uncollected power-ups continue falling at the original speed during every playing transition frame, including the frame that starts a new encounter. They remain collectable and are not deleted at switches. As explicitly selected, active boost countdowns retain transition protection; actual user pause freezes both movement and timers. Engine verification checks continuous fall through all transition phases, timer protection, actual pause and one-time collection.
