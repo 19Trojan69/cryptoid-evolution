@@ -17,3 +17,11 @@ html[data-motion="reduced"] .boss-extra-life strong { animation: none; }
 html[data-motion="reduced"] .boss-heart-pickup .power-preview-orbit,
 html[data-motion="reduced"] .boss-heart-pickup .power-preview-orbit::before,
 html[data-motion="reduced"] .boss-heart-pickup .power-preview-orbit::after { animation: none; }
+
+/* Same floating glass sphere, golden Shard core when lives are already full. */
+.boss-heart-pickup.boss-shard-pickup { --offer-color: #f2cc78; color: #f5d892; }
+.boss-shard-pickup .power-preview-orbit i { background: radial-gradient(circle at 34% 27%, #fff6db, #eac574 25%, #493324 72%); }
+.boss-shard-pickup svg { fill: #ffd982; stroke: #75531b; filter: drop-shadow(0 1px 2px #49300eaa); }
+.boss-shard-pickup svg .boss-shard-facets { fill: none; stroke: #9e6a24; stroke-width: .8; }
+.boss-extra-life.boss-shard-reward strong { text-shadow: 0 2px 5px #071327, 0 0 14px #eac574; }
+.boss-extra-life.boss-shard-reward span { color: #f5d892; }
