@@ -1,0 +1,16 @@
+.combat-variety-notice {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 12;
+  max-width: min(86%, 420px);
+  padding: 7px 13px;
+  border: 1px solid #9fb7d644;
+  border-radius: 14px;
+  background: #091626df;
+  color: #dcebf7;
+  font-size: clamp(11px, 2.8vw, 14px);
+  font-weight: 650;
+  text-align: center;
+  pointer-events: none;
+}

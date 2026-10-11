@@ -111,6 +111,20 @@ export class GameAudio {
     }
   }
 
+  private rockLastAt = -1;
+  private rockContext: AudioContext | null = null;
+  private rockBuffers = new Map<string, AudioBuffer>();
+  playRock(large: boolean, final: boolean) {
+    const ctx=this.context;
+    if (ctx !== this.rockContext) { this.rockContext = ctx; this.rockBuffers.clear(); this.rockLastAt = -1; }
+    if(!ctx||ctx.state!=="running"||this.paused||this.effectsVolume===0||ctx.currentTime-this.rockLastAt<.12)return false;
+    this.rockLastAt=ctx.currentTime;
+    const key=String(large)+String(final);let buffer=this.rockBuffers.get(key);
+    if(!buffer){const duration=final?(large?.25:.18):.065;buffer=ctx.createBuffer(1,Math.floor(ctx.sampleRate*duration),ctx.sampleRate);const data=buffer.getChannelData(0);let smoothed=0;
+      for(let i=0;i<data.length;i++){const t=i/ctx.sampleRate;const noise=Math.random()*2-1;smoothed=smoothed*.58+noise*.42;const cracks=1+.5*Math.sin(t*(large?950:1600))*Math.sin(t*3200);data[i]=(smoothed*.62+noise*.2)*Math.exp(-t/(duration*.23))*cracks;}
+      this.rockBuffers.set(key,buffer);}
+    return this.playWeaponBuffer(buffer,1,final?.65:.22,0);
+  }
   playEnemyShot(pan = 0, shipClass: CryptoidClass = 'light', variant: 'single' | 'double' = 'single') {
     const buffer = (variant === 'double' ? this.enemyDoubleSamples : this.enemyShotSamples).get(shipClass);
     if (!buffer) return false;

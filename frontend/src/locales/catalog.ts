@@ -1,3 +1,4 @@
+import { combatVarietyTranslations } from './combatVariety.ts';
 import { spanishLoreCompletionTranslations } from './spanishLoreCompletion.ts';
 import { germanLoreCompletionTranslations } from './germanLoreCompletion.ts';
 import { russianAdminTranslations } from './russianAdmin.ts';
@@ -5627,3 +5628,5 @@ const communityRows: Record<string, string[]> = {
 };
 for (const [locale, row] of Object.entries(communityRows))
   Object.assign(localeCatalog[locale] ??= {}, Object.fromEntries(communityKeys.map((key, index) => [key,row[index]])));
+
+for (const [locale, entries] of Object.entries(combatVarietyTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);

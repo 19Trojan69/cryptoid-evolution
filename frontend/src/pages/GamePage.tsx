@@ -1,3 +1,7 @@
+import { combatCryptoid, combatTiming, combatEntryStage, combatAttackPattern, createCombatVariety, readCombatVariety, safeEarlyPickup, type CombatVarietyRuntime } from './combatVariety';
+import { advanceBonusRock, spawnBonusRock, hitBonusRock, rockHitsShot, rockInField, nextRockEventMs, MAX_ROCKS, MAX_ROCK_EFFECTS, type BonusRock, type RockEffect } from './bonusRocks';
+import BonusRockLayer from './BonusRockLayer';
+import './combatVariety.css';
 import { useAuth } from '../hooks/useAuth';
 import { enemyVisualDiameter } from './shipDisplayScale';
 import { autoReloadKey, nextActiveWeapon, parseAutoReload, shouldAutoReload, type AutoReloadPreferences } from './weaponAutoReload';
@@ -33,7 +37,7 @@ import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
 import { entryPatternForSector, entryPosition, entryStartX, type EntryPattern } from "./entryPatterns";
 import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, arrangeFormationBySize, campaignLevel, formationBelowHud, formationLayout, formationReady, formationSlotsForCount, sectionInSector, sectionPhase, sectorInChapter, sectorName, type SectorPhase } from "./sectorManager";
-import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
+import { chooseCryptoid as originalCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, POWER_UP_DURATION_MS, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp, type PowerUpType } from "./powerUps";
 import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, shipStartHeight } from "./controlPreferences";
 import { advanceShot, contactWithEnemy, enemyMotionVisible, MAX_PLAYER_SHOTS, movePlayer, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, retainContactLatch, shipCollisionOutcome, shipContactPoint, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
@@ -189,7 +193,9 @@ type Effect = {
   collision?: boolean;
 };
 type WeaponSource = "standard" | "paid" | "pickup";
-type GameState = BossRewardState & { damageCount?: number; comboTotal?: number; playerHullFires?: HullFire[]; playerHit?: HullFire; bossHullLight: number; combo: DoubleKillCombo; asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; rewardNotice: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; powerUpTypes: PowerUpType[]; pickupNotice: { id: number; type: PowerUpType; remainingMs: number; level: number } | null; score: number; shardBase: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; purchasedShieldMs: number; shieldActive: boolean; overdriveMs: number; overdriveTotalMs: number; rapidFireMs: number; rapidFireTotalMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponSource: WeaponSource; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; weaponTimers: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
+const combatVarietyEnabled = shipSaveNetwork === "testnet";
+const chooseCryptoid = (stage: number, index: number) => combatVarietyEnabled ? combatCryptoid(stage, index) : originalCryptoid(stage, index);
+type GameState = BossRewardState & { rocks: BonusRock[]; rockEffects: RockEffect[]; damageCount?: number; comboTotal?: number; playerHullFires?: HullFire[]; playerHit?: HullFire; bossHullLight: number; combo: DoubleKillCombo & { variety?: CombatVarietyRuntime }; asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; rewardNotice: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; powerUpTypes: PowerUpType[]; pickupNotice: { id: number; type: PowerUpType; remainingMs: number; level: number } | null; score: number; shardBase: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; purchasedShieldMs: number; shieldActive: boolean; overdriveMs: number; overdriveTotalMs: number; rapidFireMs: number; rapidFireTotalMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponSource: WeaponSource; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; weaponTimers: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
 
 const syncSelectedWeapon = (state: GameState) => {
   if (state.weaponSource === "pickup" && state.pickupWeaponMs <= 0) state.weaponSource = state.paidWeaponMs > 0 ? "paid" : "standard";
@@ -206,7 +212,7 @@ const TimedRing = ({ remainingMs, durationMs }: { remainingMs: number; durationM
 };
 
 
-const createInitialState = (): GameState => ({ damageCount: 0, comboTotal: 0, bossHullLight: 0, combo: createDoubleKillCombo(), asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", chainBlocks: 0, chainResult: "", rewardNotice: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: shipStartHeight[readShipStart()] }, thrust: 0, effects: [], powerUps: [], powerUpTypes: [], pickupNotice: null, score: 0, shardBase: shardBalance(localStorage.getItem(SHARD_BALANCE_KEY)), shards: 0, hearts: 3, maxHearts: 3, projectileGuard: 0, shieldCharges: 0, shieldMs: 0, purchasedShieldMs: 0, shieldActive: true, overdriveMs: 0, overdriveTotalMs: POWER_UP_DURATION_MS, rapidFireMs: 0, rapidFireTotalMs: POWER_UP_DURATION_MS, empMs: 0, pendingStartPower: null, weaponLevel: 1, weaponSource: "standard", weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], weaponTimers: [0, 0, 0, 0, 0, 0], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") || sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "loading" : "playing" });
+const createInitialState = (): GameState => ({ rocks: [], rockEffects: [], damageCount: 0, comboTotal: 0, bossHullLight: 0, combo: createDoubleKillCombo(), asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", chainBlocks: 0, chainResult: "", rewardNotice: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: shipStartHeight[readShipStart()] }, thrust: 0, effects: [], powerUps: [], powerUpTypes: [], pickupNotice: null, score: 0, shardBase: shardBalance(localStorage.getItem(SHARD_BALANCE_KEY)), shards: 0, hearts: 3, maxHearts: 3, projectileGuard: 0, shieldCharges: 0, shieldMs: 0, purchasedShieldMs: 0, shieldActive: true, overdriveMs: 0, overdriveTotalMs: POWER_UP_DURATION_MS, rapidFireMs: 0, rapidFireTotalMs: POWER_UP_DURATION_MS, empMs: 0, pendingStartPower: null, weaponLevel: 1, weaponSource: "standard", weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], weaponTimers: [0, 0, 0, 0, 0, 0], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") || sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "loading" : "playing" });
 
 const readRecord = (key: string) => Number(window.localStorage.getItem(key) || 0);
 
@@ -233,10 +239,11 @@ const spawnAsteroid = (id: number, width: number, visibleTop: number, formationI
   const target = slots[formationIndex];
   const flightVariation = rulesVersion === 2 ? Math.floor(offset / 6) : 0;
   const entrySide = target.entrySide * (flightVariation % 2 ? -1 : 1);
-  const entryPattern = entryPatternForSector(sector + flightVariation * 3);
-  const startX = entryStartX(entryPattern, formationIndex, width, profile.radius, entrySide, sector, target.x);
+  const choreography = combatVarietyEnabled ? combatEntryStage(sector, flightVariation) : sector;
+  const entryPattern = entryPatternForSector(choreography + flightVariation * 3);
+  const startX = entryStartX(entryPattern, formationIndex, width, profile.radius, entrySide, choreography, target.x);
   const entryStartY = visibleTop + profile.radius + ENTRY_HUD_GAP_PX;
-  return { id, x: startX, y: entryStartY, size, ...profile, ...enemyAppearance(sector, formationIndex + offset), entryDuration: Math.max(4_100, Math.round(profile.entryDuration * .85)), health: profile.health, maxHealth: profile.health, cloaked: false, rotation: 0, rotationSpeed: 0, entryElapsed: 0, entryStartX: startX, entryStartY, entryTargetX: target.x, entryTargetY: target.y, entrySide, entryPattern, entryStage: sector, entryIndex: formationIndex, formationSlot: target.index, formationSlotCount: slots.length, formationElapsed: 0, formationDuration: FORMATION_SETTLE_MS, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, collidedThisAttack: false };
+  return { id, x: startX, y: entryStartY, size, ...profile, ...enemyAppearance(sector, formationIndex + offset), entryDuration: combatVarietyEnabled ? combatTiming(sector).entryMs + (profile.shipClass === "heavy" ? 600 : 0) : Math.max(4_100, Math.round(profile.entryDuration * .85)), health: profile.health, maxHealth: profile.health, cloaked: false, rotation: 0, rotationSpeed: 0, entryElapsed: 0, entryStartX: startX, entryStartY, entryTargetX: target.x, entryTargetY: target.y, entrySide, entryPattern, entryStage: choreography, entryIndex: formationIndex, formationSlot: target.index, formationSlotCount: slots.length, formationElapsed: 0, formationDuration: combatVarietyEnabled ? 180 : FORMATION_SETTLE_MS, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, collidedThisAttack: false };
 };
 
 const spawnBossEscort = (id: number, width: number, index: number, level: number, slots: ReturnType<typeof bossEscortSlots>, wave: number): Asteroid => {
@@ -261,7 +268,12 @@ const moveAsteroid = (asteroid: Asteroid, delta: number, width: number, height: 
     return { ...asteroid, x: keepInField(asteroid.entryTargetX), y: asteroid.entryTargetY, formationElapsed: Math.min(asteroid.formationDuration, elapsed), rotation };
   }
   if (asteroid.entryElapsed >= asteroid.entryDuration) {
-    if (asteroid.attackPattern === null) return { ...asteroid, x: keepInField(asteroid.entryTargetX), y: asteroid.entryTargetY, rotation };
+    if (asteroid.attackPattern === null) {
+      const elapsed = asteroid.formationElapsed + delta;
+      const drift = combatVarietyEnabled && !asteroid.escort && [3, 5, 8].includes(asteroid.entryStage ?? 0)
+        ? Math.sin(elapsed * .0009) * Math.min(12, width * .025) : 0;
+      return { ...asteroid, formationElapsed: elapsed, x: keepInField(asteroid.entryTargetX + drift), y: asteroid.entryTargetY, rotation };
+    }
     if (asteroid.attackDelay > 0) return { ...asteroid, attackDelay: Math.max(0, asteroid.attackDelay - delta), rotation };
     const duration = attackTime(asteroid);
     if (asteroid.attackElapsed < duration) {
@@ -400,6 +412,8 @@ const GamePage = () => {
   const clearTimerRef = useRef(0);
   const attackCooldownRef = useRef(0);
   const elapsedRef = useRef(0);
+  const varietyRef = useRef(createCombatVariety());
+  const waveCompleteRef = useRef(false);
   const attackNumberRef = useRef(0);
   const dropsCreatedRef = useRef(0);
   const impactCooldownRef = useRef(0);
@@ -548,6 +562,9 @@ const GamePage = () => {
     if(state.encounter==='boss-clear'&&state.bossHeartCollected)return;
     if (!runId || !queue || adminRunRef.current || !["playing", "paused"].includes(state.status) || state.hearts < 1 || (state.phase === "SECTOR_CLEAR" && state.encounter !== "boss-clear")) return;
     if (state.status !== "playing") state.combo.pendingAt = null;
+    // Keep optional combat metadata inside the existing extensible combo object.
+    // The established Testnet proxy preserves this field without a backend migration.
+    if (combatVarietyEnabled) state.combo.variety = { ...varietyRef.current, rocks: state.rocks };
     const combat: CombatCheckpoint = JSON.parse(JSON.stringify({
       version: 1, clock: performance.now(), sequence: ++combatSequenceRef.current, stage: state.sector, encounter: state.encounter,
       width: fieldRef.current?.clientWidth || 800, height: fieldRef.current?.clientHeight || 600,
@@ -585,6 +602,12 @@ const GamePage = () => {
     if (!saved) throw new Error("Invalid saved combat checkpoint");
     const width = fieldRef.current?.clientWidth || 800, height = fieldRef.current?.clientHeight || 600;
     const sx = width / saved.width, sy = height / saved.height;
+    if (combatVarietyEnabled) {
+      varietyRef.current = readCombatVariety(saved.state.combo.variety) ?? createCombatVariety(saved.stage > 1 || saved.refs.elapsed > 0);
+      stateRef.current.rocks = varietyRef.current.rocks.map(rock => ({ ...rock, x: rock.x * sx, y: rock.y * sy }));
+      stateRef.current.rockEffects = [];
+      waveCompleteRef.current = varietyRef.current.waveComplete;
+    }
     const project = (item: Record<string, unknown>) => {
       for (const key of ["x", "entryStartX", "entryTargetX", "attackStartX", "returnStartX"]) if (typeof item[key] === "number") item[key] *= sx;
       for (const key of ["y", "startY", "entryStartY", "entryTargetY", "attackStartY", "returnStartY"]) if (typeof item[key] === "number") item[key] *= sy;
@@ -746,6 +769,7 @@ const GamePage = () => {
         stateRef.current.weaponTimers = data.checkpoint.weaponTimers.map((timer, level) => stateRef.current.unlockedWeapons.includes(level) ? timer : 0);
         syncSelectedWeapon(stateRef.current);
         if (data.combat) restoreCombat(data.combat);
+        else varietyRef.current = createCombatVariety(true);
         setSaveNotice(data.combat ? "Combat restored." : "Last completed section loaded.");
       }
     } catch (error) {
@@ -1134,6 +1158,14 @@ const GamePage = () => {
         // Reading layout after moving ships every RAF forces needless reflows.
         const { width, height } = fieldSizeRef.current;
         const visibleTop = visibleTopRef.current;
+        const variety = combatVarietyEnabled && state.encounter === "normal";
+        const early = variety && state.sector <= 29;
+        const timing = variety ? combatTiming(state.sector) : { introMs: SECTION_INTRO_MS, gapMs: ENTRY_GAP_MS, clearMs: SECTION_CLEAR_MS, entryMs: 4100, breathingMs: 0 };
+        const intro = varietyRef.current;
+        intro.noticeMs = Math.max(0, intro.noticeMs - delta);
+        if (variety && state.phase !== "SECTOR_CLEAR") intro.clock += delta;
+        if (variety && intro.asteroidStage !== state.sector) { intro.asteroidStage = state.sector; intro.asteroidStageEvents = 0; }
+        state.rockEffects = state.rockEffects.map(e => ({ ...e, age: e.age + delta })).filter(e => e.age < (e.final ? 750 : 250));
         const slots = sectionSlotsRef.current ?? createFormationSlots(state.section, state.sector, width, height, visibleTop, playerDiameterRef.current);
         sectionSlotsRef.current = slots;
         const bonus = state.encounter === "bonus";
@@ -1213,7 +1245,7 @@ const GamePage = () => {
             if (bossVictoryPendingRef.current && clearTimerRef.current >= BOSS_VICTORY_START_MS) startBossVictory();
           }
           const victoryStillPlaying = state.encounter === "boss-clear" && musicRef.current?.currentSource === "/audio/boss-victory-v2.mp3" && musicRef.current.playing && !musicRef.current.audio.ended;
-          const clearFinished = clearTimerRef.current >= (state.encounter === "boss-clear" ? BOSS_CLEAR_DURATION_MS : SECTION_CLEAR_MS) && !victoryStillPlaying;
+          const clearFinished = clearTimerRef.current >= (state.encounter === "boss-clear" ? BOSS_CLEAR_DURATION_MS : timing.clearMs) && !victoryStillPlaying;
           if (clearFinished && state.encounter === 'boss-clear' && collectBossHeart(state, state.player, width, height)) {
             soundRef.current?.play('extraLife');
             bossLifeRemainingRef.current=BOSS_EXTRA_LIFE_MS;
@@ -1273,7 +1305,10 @@ const GamePage = () => {
             state.pickupNotice = null;
             state.shots = [];
             state.enemyShots = [];
-            state.effects = [];
+            state.effects = []; state.rocks = []; state.rockEffects = [];
+            waveCompleteRef.current = false; intro.waveComplete = false;
+            intro.waveDamage = state.damageCount ?? 0; intro.waveDestroyed = state.destroyed; intro.waveCombo = state.combo.total;
+            intro.noticeMs = 0;
             formationIndexRef.current = 0;
             formationStartedRef.current = false;
             flightRef.current = 0;
@@ -1301,10 +1336,11 @@ const GamePage = () => {
             state.bonusTargets.push({ id: nextIdRef.current++, index, elapsed: 0, ...bonusPosition(index, 0, width, height), radius: 22, ...bonusShowcaseShip(index, state.sector) });
           }
         }
-        if (normal && sectionElapsedRef.current >= SECTION_INTRO_MS && state.phase !== "SECTOR_CLEAR" && formationIndexRef.current < slots.length) {
+        if (normal && sectionElapsedRef.current >= timing.introMs && state.phase !== "SECTOR_CLEAR" && formationIndexRef.current < slots.length) {
           spawnTimerRef.current += delta;
-          if (spawnTimerRef.current >= ENTRY_GAP_MS) {
-            spawnTimerRef.current -= ENTRY_GAP_MS;
+          if (spawnTimerRef.current >= timing.gapMs) {
+            spawnTimerRef.current -= timing.gapMs;
+            if (variety && formationIndexRef.current === 0) { intro.notice = chooseCryptoid(state.sector, formationOffsetRef.current).shipClass === "heavy" ? "Heavy attacker incoming" : [5, 8].includes((state.sector - 1) % 10 + 1) ? "Finish this wave without a hit" : (state.sector - 1) % 10 + 1 === 7 ? "Hold your combo" : "Clear the formation"; intro.noticeMs = 2000; }
             state.asteroids.push(spawnAsteroid(nextIdRef.current++, width, visibleTop, formationIndexRef.current++, state.sector, slots, formationOffsetRef.current, rulesVersionRef.current));
           }
         }
@@ -1355,10 +1391,10 @@ const GamePage = () => {
           : activeAttackers === 0 ? availableAttackers.length : 0;
         if (state.empMs === 0 && (formationComplete || escortComplete)) attackCooldownRef.current += delta;
         else if (activeAttackers === 0) attackCooldownRef.current = 0;
-        const attackInterval = normal ? activeAttackers > 0 ? pressure.intervalMs : levelDifficulty(state.sector).attackCooldownMs + pressure.breathingMs : bossEscortAttackInterval(state.sector);
+        const attackInterval = normal ? activeAttackers > 0 ? pressure.intervalMs : early ? (state.sector === 1 ? 1600 : 1900) : levelDifficulty(state.sector).attackCooldownMs + pressure.breathingMs + (variety ? timing.breathingMs : 0) : bossEscortAttackInterval(state.sector);
         if (state.empMs === 0 && (formationComplete || escortComplete) && slotsAvailable > 0
           && attackCooldownRef.current >= attackInterval) {
-            let pattern = chooseAttackPattern(attackNumberRef.current++, elapsedRef.current, state.sector);
+            let pattern = variety ? combatAttackPattern(state.sector, attackNumberRef.current++, elapsedRef.current) : chooseAttackPattern(attackNumberRef.current++, elapsedRef.current, state.sector);
             if (escortComplete && pattern === "vDive") pattern = "double";
             if (slotsAvailable < attackGroupSize(pattern)) pattern = slotsAvailable >= 2 ? "double" : "curve";
             const groupSize = attackGroupSize(pattern);
@@ -1369,7 +1405,7 @@ const GamePage = () => {
               const groupDelay = pattern === "double" ? index * 350 : pattern === "vDive" ? index * 180 : 0;
               const fireCycle = (asteroid.fireCycle ?? 0) + 1;
               const firingClass = asteroid.escort ? 'light' : asteroid.shipClass;
-              return { ...asteroid, attackPattern: pattern, attackDelay: 650 + groupDelay, attackLane: index - (groupSize - 1) / 2, firedThisAttack: false, collidedThisAttack: false,
+              return { ...asteroid, attackPattern: pattern, attackDelay: (variety ? 900 : 650) + groupDelay, attackLane: index - (groupSize - 1) / 2, firedThisAttack: false, collidedThisAttack: false,
                 fireCycle, fireProgress: { kind: enemyVolleyKind(firingClass, state.sector, fireCycle + asteroid.entryIndex), pulses: 0, lastPulseMs: null } };
             });
             attackCooldownRef.current = 0;
@@ -1514,6 +1550,23 @@ const GamePage = () => {
           }
           else soundRef.current?.play("shield");
         }
+        if (variety && !intro.weaponIssued && intro.clock >= intro.weaponDue && state.phase !== "SECTOR_CLEAR") {
+          const pickup = safeEarlyPickup(state,stageWeaponLevel(shipStageRef.current,state.weaponLevel),width,height,visibleTop);
+          if(pickup){ state.powerUps.push({id:nextIdRef.current++,...pickup}); state.powerUpTypes.push(pickup.type); dropsCreatedRef.current++; intro.weaponIssued=true; intro.notice=powerUpNames[pickup.type]; intro.noticeMs=2_600; }
+        }
+        const rockAllowed = variety && normal && state.asteroids.length > 0 && formationStartedRef.current && state.phase !== "SECTOR_INTRO" && state.phase !== "SECTOR_CLEAR";
+        if(!rockAllowed){state.rocks=[];} else {
+          state.rocks=state.rocks.map(r=>advanceBonusRock(r,delta)).filter(r=>rockInField(r,width,height));
+          if(intro.clock>=intro.asteroidDue){
+            intro.asteroidDue=intro.clock+nextRockEventMs(Math.random());
+            const roll=Math.random();
+            if(roll<.72 && intro.asteroidStageEvents < 2 && state.rocks.length<MAX_ROCKS){
+              const rock=spawnBonusRock(nextIdRef.current++,state.sector,width,height,visibleTop,Math.random(),Math.floor(Math.random()*100_000));
+              if(!state.asteroids.some(e=>Math.hypot(e.x-rock.x,e.y-rock.y)<e.radius+rock.radius+30) && !state.powerUps.some(p=>Math.hypot(p.x-rock.x,p.y-rock.y)<70)){state.rocks.push(rock);intro.asteroidEvents++; intro.asteroidStageEvents++;}
+            }
+          }
+          state.rocks=state.rocks.filter(r=>Math.hypot(r.x-state.player.x*width,r.y-state.player.y*height)>r.radius+playerDiameterRef.current*.6 && !state.powerUps.some(p=>Math.hypot(p.x-r.x,p.y-r.y)<r.radius+35));
+        }
         state.powerUps = movePowerUps(state.powerUps, delta, height);
         state.powerUps = state.powerUps.filter(pickup => {
           if (Math.hypot(pickup.x - state.player.x * width, pickup.y - state.player.y * height) > 34) return true;
@@ -1579,7 +1632,10 @@ const GamePage = () => {
             continue;
           }
           const enemy = state.asteroids.find(item => shotHitsEnemy(shot, item));
-          if (!enemy) { remainingShots.push(shot); continue; }
+          if (!enemy) {
+            const rock = state.rocks.find(r => rockHitsShot(r, previous, shot));
+            if (rock) { const hit=hitBonusRock(rock,shot.damage); Object.assign(rock,hit.rock); state.score+=hit.points; state.rockEffects.push({id:nextIdRef.current++,x:rock.x,y:rock.y,radius:rock.radius,seed:rock.seed,age:0,points:hit.points,final:hit.final}); state.rockEffects=state.rockEffects.slice(-MAX_ROCK_EFFECTS); if(hit.final){state.rocks=state.rocks.filter(r=>r.id!==rock.id);soundRef.current?.playRock(rock.radius>20,true);}else soundRef.current?.playRock(rock.radius>20,false); continue; }
+            remainingShots.push(shot); continue; }
           enemy.health = Math.max(0, enemy.health - shot.damage);
           if (enemy.health < 1e-9) enemy.health = 0;
           enemy.hitUntil = time + 190;
@@ -1596,10 +1652,16 @@ const GamePage = () => {
           creditComboDefeat(state, enemy.reward, elapsedRef.current);
           state.asteroids = state.asteroids.filter(item => item.id !== enemy.id);
           if (enemy.attackPattern !== null) attackCooldownRef.current = 0;
-          const drop = enemy.escort ? null : createPowerUpDrop({ id: nextIdRef.current, x: enemy.x, y: enemy.y, width, height, threats: state.asteroids, activeCount: state.powerUps.length, chanceRoll: Math.random(), kindRoll: Math.random(), destroyed: state.destroyed, dropsCreated: dropsCreatedRef.current, level: state.sector, usedTypes: state.powerUpTypes, weaponMaxed: state.weaponLevel >= 5 });
+          const drop = enemy.escort ? null : createPowerUpDrop({ id: nextIdRef.current, x: enemy.x, y: enemy.y, width, height, threats: state.asteroids, activeCount: state.powerUps.length, chanceRoll: Math.random(), kindRoll: Math.random(), destroyed: state.destroyed, dropsCreated: dropsCreatedRef.current, level: state.sector, usedTypes: variety && !intro.weaponIssued ? [...state.powerUpTypes, "weapon"] : state.powerUpTypes, weaponMaxed: state.weaponLevel >= 5 });
           if (drop) { nextIdRef.current += 1; dropsCreatedRef.current += 1; state.powerUpTypes.push(drop.type); state.powerUps.push(drop); }
         }
         state.shots = state.encounter === 'boss-clear' ? [] : remainingShots;
+        if (variety && !waveCompleteRef.current && formationIndexRef.current === slots.length && state.asteroids.length === 0) {
+          waveCompleteRef.current = true; intro.waveComplete = true;
+          intro.notice = (state.damageCount ?? 0) === intro.waveDamage && state.destroyed - intro.waveDestroyed >= slots.length ? "Perfect formation" : "FORMATION CLEARED";
+          intro.noticeMs = 2100; soundRef.current?.play("pickup");
+          state.rocks = []; state.rockEffects = [];
+        }
         const nextFlight = normal ? nextBlockFlight(state.sector, flightRef.current, formationIndexRef.current, state.asteroids.length, rulesVersionRef.current) : null;
         if (nextFlight && state.phase !== "SECTOR_CLEAR") {
           if (rulesVersionRef.current === 2) state.score += GROUP_CLEAR_POINTS;
@@ -1608,7 +1670,9 @@ const GamePage = () => {
           sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height, visibleTop, playerDiameterRef.current, nextFlight.count, nextFlight.offset);
           formationIndexRef.current = 0;
           formationStartedRef.current = false;
-          sectionElapsedRef.current = rulesVersionRef.current === 2 ? SECTION_INTRO_MS - REINFORCEMENT_WARNING_MS - introGroupBreathingMs(state.sector) : 0;
+          sectionElapsedRef.current = variety ? Math.max(0, timing.introMs - REINFORCEMENT_WARNING_MS - timing.breathingMs) : rulesVersionRef.current === 2 ? SECTION_INTRO_MS - REINFORCEMENT_WARNING_MS - introGroupBreathingMs(state.sector) : 0;
+          waveCompleteRef.current = false; intro.waveComplete = false;
+          intro.waveDamage = state.damageCount ?? 0; intro.waveDestroyed = state.destroyed; intro.waveCombo = state.combo.total;
           spawnTimerRef.current = 0;
           attackCooldownRef.current = 0;
           state.shots = [];
@@ -1625,7 +1689,7 @@ const GamePage = () => {
         } else {
           state.phase = bonus
             ? sectionPhase({ introMs: sectionElapsedRef.current, spawned: bonusIndexRef.current, total: BONUS_TARGET_COUNT, alive: state.bonusTargets.length, ready: state.bonusTargets.length, returning: false, attacking: false })
-            : sectionPhase({ introMs: sectionElapsedRef.current, spawned: formationIndexRef.current, total: (sectionSlotsRef.current ?? slots).length, alive: state.asteroids.length, ready: state.asteroids.filter(asteroid => asteroid.entryElapsed >= asteroid.entryDuration && (asteroid.formationElapsed >= asteroid.formationDuration || asteroid.attackPattern !== null)).length, returning: state.asteroids.some(asteroid => asteroid.attackPattern !== null && asteroid.attackElapsed >= attackTime(asteroid)), attacking: state.asteroids.some(asteroid => asteroid.attackPattern !== null) });
+            : sectionPhase({ introMs: sectionElapsedRef.current + SECTION_INTRO_MS - timing.introMs, spawned: formationIndexRef.current, total: (sectionSlotsRef.current ?? slots).length, alive: state.asteroids.length, ready: state.asteroids.filter(asteroid => asteroid.entryElapsed >= asteroid.entryDuration && (asteroid.formationElapsed >= asteroid.formationDuration || asteroid.attackPattern !== null)).length, returning: state.asteroids.some(asteroid => asteroid.attackPattern !== null && asteroid.attackElapsed >= attackTime(asteroid)), attacking: state.asteroids.some(asteroid => asteroid.attackPattern !== null) });
         }
         if (state.encounter === "normal" && state.phase === "SECTOR_CLEAR" && previousPhase !== "SECTOR_CLEAR") {
           if (rulesVersionRef.current === 2) state.score += GROUP_CLEAR_POINTS;
@@ -1865,6 +1929,7 @@ const GamePage = () => {
     if (gameOverTimerRef.current !== null) window.clearTimeout(gameOverTimerRef.current);
     gameOverTimerRef.current = null;
     stateRef.current = createInitialState();
+    varietyRef.current = createCombatVariety(); waveCompleteRef.current = false;
     stateRef.current.shardBase = shardBalance(localStorage.getItem(SHARD_BALANCE_KEY));
     guestCreditedShardsRef.current = 0;
     bossLifeRemainingRef.current=0;pendingBossCardRef.current=null;setExtraLifeVisible(false);
@@ -2017,6 +2082,8 @@ const GamePage = () => {
       {rewardCards[0] && <CardReveal reward={rewardCards[0]} remaining={rewardCards.length} onContinue={continueRewardCard}/>}
       {extraLifeVisible&&<div className={`boss-extra-life${game.bossHeartShards ? " boss-shard-reward" : ""}`} role="status" aria-live="polite"><strong>{t(game.bossHeartShards ? 'FULL HEARTS' : 'HEART RESTORED')}</strong><span>{game.bossHeartShards ? `+${game.bossHeartShards} ◆` : '+1 ♥'}</span></div>}
       <div ref={fieldRef} className="game-field" onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()}>
+        {combatVarietyEnabled && <BonusRockLayer rocks={game.rocks} effects={game.rockEffects} width={fieldSizeRef.current.width} height={fieldSizeRef.current.height} />}
+        {combatVarietyEnabled && varietyRef.current.noticeMs > 0 && <div className="combat-variety-notice" role="status" style={{ top: visibleTopRef.current + 48 }}>{varietyRef.current.notice === "Perfect formation" ? t("Perfect formation") : varietyRef.current.notice === "FORMATION CLEARED" ? t("FORMATION CLEARED") : varietyRef.current.notice === "Clear the formation" ? t("Clear the formation") : varietyRef.current.notice === "Heavy attacker incoming" ? t("Heavy attacker incoming") : varietyRef.current.notice === "Finish this wave without a hit" ? t("Finish this wave without a hit") : varietyRef.current.notice === "Hold your combo" ? t("Hold your combo") : t(varietyRef.current.notice)}</div>}
         <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} showNebula={game.encounter === "boss-fight"} />
         <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
         <button className="wide-fullscreen-control game-fullscreen-control" type="button" onClick={requestGameFullscreen} aria-label={t("Full screen")} title={t("Full screen")}>⛶</button>
