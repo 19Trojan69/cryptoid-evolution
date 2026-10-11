@@ -1,3 +1,15 @@
+## Testnet-Freigabe mit wiederhergestelltem Cockpit (11. Oktober)
+
+Die mobile zweizeilige Anzeige wurde durch die frühere kompakte Cockpit-Armatur ersetzt: eine Reihe, Shards über Score in der Mitte, Leben/Level/Block daneben. Die gewölbte obere Armatur bleibt. Die Formationsposition berücksichtigt jetzt auch auf Smartphones den gemessenen HUD-Rand, Zielmarkierung und die tatsächliche skalierte Gegnerdarstellung. Fortgesetzte Missionen und Änderungen der HUD-Größe aktualisieren ihre Formationsziele.
+
+Freigabebereich: interne Blöcke 1–9 und der erste Boss in Slot 10. Neue spätere Doppel-/Salvenprofile bleiben in der Testnet-Spielschleife deaktiviert; ab Slot 11 bleiben ursprüngliche Einzelschuss-Geometrie, Geschwindigkeit und Auslösezeit erhalten. Die Tabelle weiter unten beschreibt die vorbereiteten Profile, nicht ihre aktuelle Freigabe. Klassenbezogene Klangverbesserungen und die Lautstärkebegrenzung bleiben aktiv. Keine Änderungen an Leben, Bossgeschützen, Schadenswerten, Highscores, Käufen oder Fingerabstand.
+
+Erneut geprüft: 322 Frontend-Spiel-/Hilfsmodultests; 12 Sprachtests und vollständiges Release-Sprachinventar; TypeScript und Vite-Build. Die Formationsprüfung deckt alle 500 Slots mit Smartphone-/Tablet-/Desktopmaßen und skalierten Schiffen ab. Die Freigabegrenze und die unveränderten späteren Einzelschüsse sind getestet. Die bereits vorher geprüften Backendmodule wurden nicht geändert. Kein interaktiver Browser- oder physischer Gerätetest in dieser Umgebung; die optische Wirkung des Cockpits, reale FPS und Klangwahrnehmung benötigen einen Spieltest.
+
+Veröffentlichung ausschließlich im Vercel-Projekt cryptoid-evolution-testnet. Mainnet/Produktionsprojekt und Git-main bleiben unverändert.
+
+---
+
 # Kampfvariation und Gegneraudio – Testversion vom 11. Oktober 2026
 
 Basis: `907d2a7363345d00f0f90c54402bf04e887b64d9` (Kampfwertabstimmung #157).

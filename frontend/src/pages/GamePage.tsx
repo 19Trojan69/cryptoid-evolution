@@ -35,7 +35,7 @@ import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, POWER_UP_DURATION_MS, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp, type PowerUpType } from "./powerUps";
 import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, shipStartHeight } from "./controlPreferences";
 import { advanceShot, contactWithEnemy, enemyMotionVisible, MAX_PLAYER_SHOTS, movePlayer, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, retainContactLatch, shipCollisionOutcome, shipContactPoint, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
-import { advanceEnemyShot, advanceEnemyFire, enemyVolleyKind, enemyAttackFireTime, enemyProjectileProfiles, enemyMuzzleOffsets, enemyShotHitsPlayer, enemyShotOutsideField, enemyShotLimit, type EnemyShot, type EnemyFireProgress } from "./enemyFire";
+import { advanceEnemyShot, advanceEnemyFire, releasedEnemyVolleyKind, openingCombatEnabled, enemyAttackFireTime, enemyProjectileProfiles, enemyMuzzleOffsets, enemyShotHitsPlayer, enemyShotOutsideField, enemyShotLimit, type EnemyShot, type EnemyFireProgress } from "./enemyFire";
 import { attackPressure, attackSlots } from "./attackPressure";
 import SectorBackdrop from "./SectorBackdrop";
 import Starfield from "./Starfield";
@@ -213,10 +213,10 @@ const saveRecords = (state: GameState) => {
   // Shards are credited incrementally; records must never credit them again.
 };
 
-const createFormationSlots = (section: number, sector: number, width: number, height: number, hudBottom: number, count?: number, offset = 0) => {
+const createFormationSlots = (section: number, sector: number, width: number, height: number, hudBottom: number, playerDiameter: number, count?: number, offset = 0) => {
   const slots = formationSlotsForCount(formationLayout(section, width, height, sector), count ?? 6);
   const radii = slots.map((_, index) => chooseCryptoid(sector, index + offset).radius);
-  return formationBelowHud(arrangeFormationBySize(slots, radii), radii, width, hudBottom);
+  return formationBelowHud(arrangeFormationBySize(slots, radii), radii, width, hudBottom, playerDiameter);
 };
 
 const alignedSpritePosition = (x: number, y: number, sprite: number, renderedSize: number) => {
@@ -368,6 +368,7 @@ const GamePage = () => {
   const fieldSizeRef = useRef({ width: 800, height: 600 });
   const hudRef = useRef<HTMLElement>(null);
   const visibleTopRef = useRef(96);
+  const playerDiameterRef = useRef(94);
   const playerShipRef = useRef<HTMLDivElement>(null);
   const [playerDisplayDiameter, setPlayerDisplayDiameter] = useState(94);
   const stateRef = useRef<GameState>(createInitialState());
@@ -593,12 +594,16 @@ const GamePage = () => {
       const model = createSectorBoss(saved.stage, width, visibleTopRef.current, height);
       for (const key of ["radius", "width", "height"] as const) saved.state.boss[key] = model[key];
     }
-    if (saved.encounter === "normal" && (sx !== 1 || sy !== 1)) {
+    if (saved.encounter === "normal") {
       const plan = blockFlights(saved.stage, rulesVersionRef.current);
-      saved.slots = createFormationSlots(saved.stage, saved.stage, width, height, visibleTopRef.current, plan[saved.refs.flight], saved.refs.formationOffset);
+      saved.slots = createFormationSlots(saved.stage, saved.stage, width, height, visibleTopRef.current, playerDiameterRef.current, plan[saved.refs.flight], saved.refs.formationOffset);
       for (const enemy of saved.state.asteroids) {
         const slot = saved.slots.find(s => s.index === enemy.formationSlot);
-        if (slot) { enemy.entryTargetX = slot.x; enemy.entryTargetY = slot.y; }
+        if (slot) {
+          const shift = slot.y - enemy.entryTargetY;
+          enemy.entryTargetX = slot.x; enemy.entryTargetY = slot.y;
+          if (enemy.attackPattern === null && enemy.entryElapsed >= enemy.entryDuration) enemy.y += shift;
+        }
         enemy.x = Math.max(enemy.radius, Math.min(width - enemy.radius, enemy.x));
       }
     }
@@ -772,6 +777,22 @@ const GamePage = () => {
       field.style.setProperty("--hud-bottom", `${visibleTopRef.current}px`);
       const playerWidth = playerShipRef.current?.clientWidth;
       if (playerWidth) setPlayerDisplayDiameter(playerWidth);
+      playerDiameterRef.current = playerWidth || 94;
+      const currentSlots = sectionSlotsRef.current;
+      if (currentSlots?.length && stateRef.current.encounter === "normal") {
+        const radii = currentSlots.map((_, index) => chooseCryptoid(stateRef.current.sector, index + formationOffsetRef.current).radius);
+        const adjusted = formationBelowHud(currentSlots, radii, field.clientWidth, visibleTopRef.current, playerDiameterRef.current);
+        if (adjusted !== currentSlots) {
+          sectionSlotsRef.current = adjusted;
+          for (const enemy of stateRef.current.asteroids) {
+            const slot = adjusted.find(item => item.index === enemy.formationSlot);
+            if (!slot) continue;
+            const shift = slot.y - enemy.entryTargetY;
+            enemy.entryTargetY = slot.y;
+            if (enemy.attackPattern === null && enemy.entryElapsed >= enemy.entryDuration) enemy.y += shift;
+          }
+        }
+      }
     };
     measureVisibleTop();
     const observer = new ResizeObserver(measureVisibleTop);
@@ -1103,7 +1124,7 @@ const GamePage = () => {
         // Reading layout after moving ships every RAF forces needless reflows.
         const { width, height } = fieldSizeRef.current;
         const visibleTop = visibleTopRef.current;
-        const slots = sectionSlotsRef.current ?? createFormationSlots(state.section, state.sector, width, height, visibleTop);
+        const slots = sectionSlotsRef.current ?? createFormationSlots(state.section, state.sector, width, height, visibleTop, playerDiameterRef.current);
         sectionSlotsRef.current = slots;
         const bonus = state.encounter === "bonus";
         const normal = state.encounter === "normal";
@@ -1248,7 +1269,7 @@ const GamePage = () => {
             flightRef.current = 0;
             formationOffsetRef.current = 0;
             bonusIndexRef.current = 0;
-            sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height, visibleTop);
+            sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height, visibleTop, playerDiameterRef.current);
             bossEscortSlotsRef.current = null;
             bossEscortWaveRef.current = 0;
             bossEscortSpawnedRef.current = 0;
@@ -1339,7 +1360,7 @@ const GamePage = () => {
               const fireCycle = (asteroid.fireCycle ?? 0) + 1;
               const firingClass = asteroid.escort ? 'light' : asteroid.shipClass;
               return { ...asteroid, attackPattern: pattern, attackDelay: 650 + groupDelay, attackLane: index - (groupSize - 1) / 2, firedThisAttack: false, collidedThisAttack: false,
-                fireCycle, fireProgress: { kind: enemyVolleyKind(firingClass, state.sector, fireCycle + asteroid.entryIndex), pulses: 0, lastPulseMs: null } };
+                fireCycle, fireProgress: { kind: releasedEnemyVolleyKind(firingClass, state.sector, fireCycle + asteroid.entryIndex), pulses: 0, lastPulseMs: null } };
             });
             attackCooldownRef.current = 0;
         }
@@ -1355,10 +1376,11 @@ const GamePage = () => {
           if (asteroid.attackPattern !== null && next.attackPattern === null && !(normal && pressure.overlap)) attackCooldownRef.current = 0;
           if (state.empMs === 0 && next.attackPattern !== null && next.attackDelay === 0 && !next.firedThisAttack && next.attackElapsed < attackTime(next)) {
             const firingClass = next.escort ? 'light' : next.shipClass;
-            const fireTime = next.escort ? attackTime(next) * .28 : enemyAttackFireTime(attackTime(next), next.entryTargetY, height, next.radius);
+            const enhanced = openingCombatEnabled(state.sector);
+            const fireTime = next.escort || !enhanced ? attackTime(next) * .28 : enemyAttackFireTime(attackTime(next), next.entryTargetY, height, next.radius);
             const fired = advanceEnemyFire({ progress: next.fireProgress ?? { kind: 'single', pulses: 0, lastPulseMs: null }, elapsedMs: next.attackElapsed - fireTime,
               id: nextIdRef.current, x: next.x, y: next.y + next.radius * .4, radius: next.radius, shipClass: firingClass, player: state.player, width, height, stage: state.sector,
-              available: enemyShotLimit(width, elapsedRef.current, state.sector) - state.enemyShots.length });
+              available: enemyShotLimit(width, elapsedRef.current, state.sector) - state.enemyShots.length, enhanced });
             next = { ...next, fireProgress: fired.progress, firedThisAttack: fired.complete };
             if (fired.sound) {
               nextIdRef.current += fired.shots.length;
@@ -1574,7 +1596,7 @@ const GamePage = () => {
           if (rulesVersionRef.current === 2) state.score += GROUP_CLEAR_POINTS;
           flightRef.current = nextFlight.group;
           formationOffsetRef.current = nextFlight.offset;
-          sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height, visibleTop, nextFlight.count, nextFlight.offset);
+          sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height, visibleTop, playerDiameterRef.current, nextFlight.count, nextFlight.offset);
           formationIndexRef.current = 0;
           formationStartedRef.current = false;
           sectionElapsedRef.current = rulesVersionRef.current === 2 ? SECTION_INTRO_MS - REINFORCEMENT_WARNING_MS - introGroupBreathingMs(state.sector) : 0;

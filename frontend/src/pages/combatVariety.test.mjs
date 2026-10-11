@@ -5,7 +5,7 @@ import { entryStartX, entryPosition, entryPatternForSector } from './entryPatter
 import { attackPressure, attackSlots } from './attackPressure.ts';
 import { formationLayout, arrangeFormationBySize } from './sectorManager.ts';
 import { chooseCryptoid } from './cryptoidRoster.ts';
-import { advanceEnemyFire, advanceEnemyShot, enemyAttackFireTime, enemyVolleyKind, enemyShotLimit, enemyShotHitsPlayer, ENEMY_BURST_GAP_MS } from './enemyFire.ts';
+import { advanceEnemyFire, advanceEnemyShot, enemyAttackFireTime, enemyVolleyKind, openingCombatEnabled, releasedEnemyVolleyKind, createEnemyShot, enemyShotLimit, enemyShotHitsPlayer, ENEMY_BURST_GAP_MS } from './enemyFire.ts';
 import { createPowerUpDrop } from './powerUps.ts';
 import { activateCollectedPower } from './collectedPower.ts';
 import { activeWeaponLevel, placePlayerFromPointer, TOUCH_SHIP_OFFSET_PX } from './playerCombat.ts';
@@ -144,4 +144,18 @@ test('old and new combat saves preserve burst progress, class projectiles and th
   assert.ok(readCombatCheckpoint(saved));
   assert.equal(nextAfterClear(1, 'normal', 9), 'boss');
   assert.deepEqual(advanceAfterClear(9, 'normal'), {encounter: 'boss-intro', section: 10, sector: 10, resetChain: false});
+});
+
+
+test('Testnet rollout ends at the first boss and retains later single-shot physics', () => {
+  for (let stage = 1; stage <= 500; stage++) {
+    assert.equal(openingCombatEnabled(stage), stage <= 10);
+    for (const shipClass of classes) for (let cycle = 0; cycle < 120; cycle++)
+      assert.equal(releasedEnemyVolleyKind(shipClass, stage, cycle), 'single');
+    if (stage <= 10) continue;
+    const actual = fire({stage, enhanced: false, progress: {kind: 'double', pulses: 0, lastPulseMs: null}});
+    assert.deepEqual(actual.shots, [createEnemyShot(1, 195, 220, {x: .5, y: .85}, 390, 844, stage)]);
+    assert.equal(actual.sound, 'single');
+    assert.equal(actual.complete, true);
+  }
 });
