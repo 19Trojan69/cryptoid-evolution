@@ -35,12 +35,6 @@ export const enemyVolleyKind = (shipClass: CryptoidClass, stage: number, cycle: 
   return 'single';
 };
 
-// Testnet release is limited to the first nine blocks and their first boss.
-// Later volley profiles remain available for tests, pending campaign playtesting.
-export const openingCombatEnabled = (stage: number) => stage >= 1 && stage <= 10;
-export const releasedEnemyVolleyKind = (shipClass: CryptoidClass, stage: number, cycle: number) =>
-  openingCombatEnabled(stage) ? enemyVolleyKind(shipClass, stage, cycle) : 'single';
-
 export const enemyMuzzleOffsets = (barrels: number, radius: number) => barrels === 2 ? [-radius * .28, radius * .28] : [0];
 // Low formation slots fire earlier in their warned dive, rather than missing
 // their entire firing window or shooting inside the player's lower half.
@@ -49,18 +43,17 @@ export const enemyAttackFireTime = (duration: number, startY: number, height: nu
 
 // Called by the combat tick. A sound event is returned only for projectiles
 // actually spawned in that tick. Burst pulses cannot collapse after a stall.
-export const advanceEnemyFire = ({ progress, elapsedMs, id, x, y, radius, shipClass, player, width, height, stage, available, enhanced = true }: {
+export const advanceEnemyFire = ({ progress, elapsedMs, id, x, y, radius, shipClass, player, width, height, stage, available }: {
   progress: EnemyFireProgress; elapsedMs: number; id: number; x: number; y: number; radius: number;
-  shipClass: CryptoidClass; player: PlayerPosition; width: number; height: number; stage: number; available: number; enhanced?: boolean;
+  shipClass: CryptoidClass; player: PlayerPosition; width: number; height: number; stage: number; available: number;
 }): { progress: EnemyFireProgress; complete: boolean; shots: EnemyShot[]; sound: 'single' | 'double' | null } => {
-  const pulses = enhanced && progress.kind === 'burst' ? 2 : 1;
+  const pulses = progress.kind === 'burst' ? 2 : 1;
   const empty = (complete = false) => ({ progress, complete, shots: [] as EnemyShot[], sound: null });
   if (progress.pulses >= pulses) return empty(true);
   if (elapsedMs < 0 || available < 1) return empty();
   if (progress.lastPulseMs !== null && elapsedMs - progress.lastPulseMs < ENEMY_BURST_GAP_MS) return empty();
   const base = createEnemyShot(id, x, y, player, width, height, stage);
   if (!base) return empty(y > height * .5); // No late shots in the player's flight area.
-  if (!enhanced) return { progress: { kind: 'single', pulses: 1, lastPulseMs: elapsedMs }, complete: true, shots: [base], sound: 'single' };
   const barrels = progress.kind === 'double' && available >= 2 ? 2 : 1;
   const profile = enemyProjectileProfiles[shipClass];
   const straight = progress.kind !== 'single';

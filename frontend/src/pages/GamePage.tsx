@@ -35,7 +35,7 @@ import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, POWER_UP_DURATION_MS, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp, type PowerUpType } from "./powerUps";
 import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, shipStartHeight } from "./controlPreferences";
 import { advanceShot, contactWithEnemy, enemyMotionVisible, MAX_PLAYER_SHOTS, movePlayer, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, retainContactLatch, shipCollisionOutcome, shipContactPoint, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
-import { advanceEnemyShot, advanceEnemyFire, releasedEnemyVolleyKind, openingCombatEnabled, enemyAttackFireTime, enemyProjectileProfiles, enemyMuzzleOffsets, enemyShotHitsPlayer, enemyShotOutsideField, enemyShotLimit, type EnemyShot, type EnemyFireProgress } from "./enemyFire";
+import { advanceEnemyShot, advanceEnemyFire, enemyVolleyKind, enemyAttackFireTime, enemyProjectileProfiles, enemyMuzzleOffsets, enemyShotHitsPlayer, enemyShotOutsideField, enemyShotLimit, type EnemyShot, type EnemyFireProgress } from "./enemyFire";
 import { attackPressure, attackSlots } from "./attackPressure";
 import SectorBackdrop from "./SectorBackdrop";
 import Starfield from "./Starfield";
@@ -1360,7 +1360,7 @@ const GamePage = () => {
               const fireCycle = (asteroid.fireCycle ?? 0) + 1;
               const firingClass = asteroid.escort ? 'light' : asteroid.shipClass;
               return { ...asteroid, attackPattern: pattern, attackDelay: 650 + groupDelay, attackLane: index - (groupSize - 1) / 2, firedThisAttack: false, collidedThisAttack: false,
-                fireCycle, fireProgress: { kind: releasedEnemyVolleyKind(firingClass, state.sector, fireCycle + asteroid.entryIndex), pulses: 0, lastPulseMs: null } };
+                fireCycle, fireProgress: { kind: enemyVolleyKind(firingClass, state.sector, fireCycle + asteroid.entryIndex), pulses: 0, lastPulseMs: null } };
             });
             attackCooldownRef.current = 0;
         }
@@ -1376,11 +1376,10 @@ const GamePage = () => {
           if (asteroid.attackPattern !== null && next.attackPattern === null && !(normal && pressure.overlap)) attackCooldownRef.current = 0;
           if (state.empMs === 0 && next.attackPattern !== null && next.attackDelay === 0 && !next.firedThisAttack && next.attackElapsed < attackTime(next)) {
             const firingClass = next.escort ? 'light' : next.shipClass;
-            const enhanced = openingCombatEnabled(state.sector);
-            const fireTime = next.escort || !enhanced ? attackTime(next) * .28 : enemyAttackFireTime(attackTime(next), next.entryTargetY, height, next.radius);
+            const fireTime = next.escort ? attackTime(next) * .28 : enemyAttackFireTime(attackTime(next), next.entryTargetY, height, next.radius);
             const fired = advanceEnemyFire({ progress: next.fireProgress ?? { kind: 'single', pulses: 0, lastPulseMs: null }, elapsedMs: next.attackElapsed - fireTime,
               id: nextIdRef.current, x: next.x, y: next.y + next.radius * .4, radius: next.radius, shipClass: firingClass, player: state.player, width, height, stage: state.sector,
-              available: enemyShotLimit(width, elapsedRef.current, state.sector) - state.enemyShots.length, enhanced });
+              available: enemyShotLimit(width, elapsedRef.current, state.sector) - state.enemyShots.length });
             next = { ...next, fireProgress: fired.progress, firedThisAttack: fired.complete };
             if (fired.sound) {
               nextIdRef.current += fired.shots.length;
