@@ -3,6 +3,7 @@ import ShipPreview from "./ShipPreview";
 import PiPrice from "../components/PiPrice";
 import { allPlayerColors, fleetCount, playerColors, standardShipPrice, testnetStandardHullAvailable, type ShipFleet } from "./shipFleet";
 import { projectileGuardForStage, type ShipStage } from "./shipEvolution";
+import { attributesForHull, shipBaseFirepower } from "./shipAttributes";
 
 type Skin = typeof import("./shipFleet").playerSkins[number];
 type Color = typeof allPlayerColors[number];
@@ -23,6 +24,7 @@ type Props = {
   message: string;
   selectedSkinId: string;
   selectedColorId: string;
+  selectedStage?: ShipStage;
   t: (source: string) => string;
   onStageChange: (stage: ShipStage) => void;
   onColorChange: (color: Color) => void;
@@ -35,7 +37,7 @@ const stageLabel = (stage: ShipStage) => stage === 1 ? "STANDARD" : stage === 2 
 
 export default function ShipSelectionPanel({
   view, skin, color, focusStage, ownedStage, fleet, shards, locale, offers,
-  adminPreview, purchaseBusy, message, selectedSkinId, selectedColorId, t, onStageChange, onColorChange,
+  adminPreview, purchaseBusy, message, selectedSkinId, selectedColorId, selectedStage = 1, t, onStageChange, onColorChange,
   onBuyStandard, onEquipPreview, onOpenShop,
 }: Props) {
   const hullCount = fleetCount(fleet, skin.id);
@@ -54,6 +56,16 @@ export default function ShipSelectionPanel({
   const stageOwned = hullCount > 0 && ownedStage >= stage;
   const locked = stage === 1 ? !standardAvailable : !stageOwned;
   const status = stageOwned ? t("Stage owned") : t("Stage not owned");
+  const attributes = attributesForHull(skin.id);
+  const firepower = shipBaseFirepower(skin.id, stage);
+  const baseline = shipBaseFirepower("grey-scout", 1);
+  const compared = Math.round((firepower / shipBaseFirepower(selectedSkinId, selectedStage) - 1) * 100);
+  const percent = (value: number) => new Intl.NumberFormat(locale, { style: "percent", maximumFractionDigits: 0 }).format(value / 100);
+  const role = attributes.role === "power" ? t("Power-focused hull") : attributes.role === "rapid" ? t("Rapid-fire hull") : t("Balanced hull");
+  const roleDescription = attributes.role === "power"
+    ? t("Stronger individual shots are this hull's main advantage.")
+    : attributes.role === "rapid" ? t("Faster automatic firing is this hull's main advantage.")
+      : t("Balanced shot strength and firing cadence.");
 
   const equipped = selectedSkinId === skin.id && selectedColorId === color.id && stage === ownedStage;
   const canEquip = Boolean(adminPreview || hullCount > 0 && fleetCount(fleet, skin.id, color.id) > 0 && stage === ownedStage);
@@ -107,7 +119,22 @@ export default function ShipSelectionPanel({
           <span><b aria-hidden="true">{stage === 1 ? "Ⅰ" : stage === 2 ? "Ⅱ" : "Ⅱ+"}</b>{t(stage === 1 ? "Single laser" : "Twin Laser")}</span>
           <span><b>{projectileGuardForStage(stage)}</b>{t("Projectile hits left")}</span>
         </div>
-        <details className="ship-configuration-details"><summary>{t("Ship details")}</summary><p className="ship-configuration-description">{description}</p></details>
+        <div className="ship-hull-characteristics" aria-label={t("Hull characteristics")}>
+          <strong className="ship-hull-role">{role}</strong>
+          <dl className="ship-hull-stats">
+            <div><dt>{t("Shot damage bonus")}</dt><dd>+{percent(attributes.damageBonus)}</dd></div>
+            <div><dt>{t("Fire rate bonus")}</dt><dd>+{percent(attributes.fireRateBonus)}</dd></div>
+            <div><dt>{t("Base firepower")}</dt><dd>{percent(firepower / baseline * 100)}</dd></div>
+          </dl>
+          <p className="ship-hull-comparison" data-improved={compared > 0}>{t("Compared with equipped ship")}: <b>{compared > 0 ? "+" : ""}{percent(compared)}</b></p>
+        </div>
+        <details className="ship-configuration-details"><summary>{t("Ship details")}</summary>
+          <p className="ship-configuration-description">{roleDescription}</p>
+          <p className="ship-configuration-description">{description}</p>
+          <p className="ship-configuration-description">{t("Grey Scout Standard = 100%. Paint does not change combat stats.")}</p>
+          <p className="ship-configuration-description">{t("Hull bonuses also apply to weapon upgrades and power-ups.")}</p>
+          <p className="ship-configuration-description">{t("Base firepower compares total damage per second before accuracy and enemy protection.")}</p>
+        </details>
       </div>
     </div>
     {(view === "hangar" || adminPreview || canEquip) && <div className="ship-one-checkout">

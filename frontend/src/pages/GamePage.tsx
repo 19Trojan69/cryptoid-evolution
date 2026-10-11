@@ -59,7 +59,7 @@ import './equipmentEdge.css';
 import { axiosClient } from "../lib/axiosClient";
 import { accountSelection, createSaveQueue, loadAccountSave, localInventory, mutateAccountInventory, retrySave, snapshotOf, type AccountSave, type Snapshot } from "../lib/accountSave";
 import axios from "axios";
-import { fireInterval, makeVolley } from "./playerCombat";
+import { makeShipVolley, shipFireInterval } from "./shipAttributes";
 import { activateCollectedPower } from "./collectedPower";
 import { leaveGameFullscreen, requestGameFullscreen } from "./gameFullscreen";
 import { levelDifficulty, MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
@@ -700,6 +700,7 @@ const GamePage = () => {
       }
 
       setShipSelection(selected);
+      shipSelectionRef.current = selected;
       shipStageRef.current = adminRunRef.current ? data.shipStage ?? 1 : ownedShipStage(selected.skin.sprite, data.ownedShipUpgrades);
       setShipStage(shipStageRef.current);
       stateRef.current.projectileGuard = projectileGuardForStage(shipStageRef.current);
@@ -1485,11 +1486,11 @@ const GamePage = () => {
         if (transitionPaused) fireTimerRef.current = 0;
         else fireTimerRef.current += delta;
         const effectiveWeapon = stageWeaponLevel(shipStageRef.current, state.weaponLevel);
-        const interval = fireInterval(effectiveWeapon, state.rapidFireMs);
+        const interval = shipFireInterval(shipSelectionRef.current.skin.id, effectiveWeapon, state.rapidFireMs);
         if (!transitionPaused && fireTimerRef.current >= interval) {
           fireTimerRef.current %= interval;
           if (state.shots.length < MAX_PLAYER_SHOTS) {
-            const volley = makeVolley(effectiveWeapon, state.player.x * width, state.player.y * height - 23, state.overdriveMs > 0, () => nextIdRef.current++, shipStageRef.current === 3);
+            const volley = makeShipVolley(shipSelectionRef.current.skin.id, shipStageRef.current, state.weaponLevel, state.player.x * width, state.player.y * height - 23, state.overdriveMs > 0, () => nextIdRef.current++);
             state.shots.push(...volley.slice(0, MAX_PLAYER_SHOTS - state.shots.length));
             playerMuzzleRef.current = time;
             soundRef.current?.play("laser", effectiveWeapon);
@@ -1537,6 +1538,7 @@ const GamePage = () => {
           const enemy = state.asteroids.find(item => shotHitsEnemy(shot, item));
           if (!enemy) { remainingShots.push(shot); continue; }
           enemy.health = Math.max(0, enemy.health - shot.damage);
+          if (enemy.health < 1e-9) enemy.health = 0;
           enemy.hitUntil = time + 190;
           if (enemy.health > 0) {
             const sprite = enemy.sprite;

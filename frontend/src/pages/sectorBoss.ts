@@ -65,6 +65,7 @@ export const damageSectorBoss = (boss: SectorBoss, damage: number, time: number,
   boss.lastDamageAt = time;
   // The exposed hull now needs half as many hits, including resumed encounters.
   boss.health = Math.max(0, boss.health - damage * 2);
+  if (boss.health < 1e-9) boss.health = 0;
   return true;
 };
 
