@@ -226,7 +226,7 @@ const saveRecords = (state: GameState) => {
 const createFormationSlots = (section: number, sector: number, width: number, height: number, hudBottom: number, playerDiameter: number, count?: number, offset = 0) => {
   const slots = formationSlotsForCount(formationLayout(section, width, height, sector), count ?? 6);
   const radii = slots.map((_, index) => chooseCryptoid(sector, index + offset).radius);
-  const visualRadii = radii.map(radius => combatVarietyEnabled && radius === 25 ? radius * 2 : radius);
+  const visualRadii = radii.map(radius => combatVarietyEnabled && radius === 25 ? radius * 1.5 : radius);
   return formationBelowHud(arrangeFormationBySize(slots, radii), visualRadii, width, hudBottom, playerDiameter);
 };
 
@@ -809,7 +809,7 @@ const GamePage = () => {
       playerDiameterRef.current = playerWidth || 94;
       const currentSlots = sectionSlotsRef.current;
       if (currentSlots?.length && stateRef.current.encounter === "normal") {
-        const radii = currentSlots.map((_, index) => { const radius = chooseCryptoid(stateRef.current.sector, index + formationOffsetRef.current).radius; return combatVarietyEnabled && radius === 25 ? radius * 2 : radius; });
+        const radii = currentSlots.map((_, index) => { const radius = chooseCryptoid(stateRef.current.sector, index + formationOffsetRef.current).radius; return combatVarietyEnabled && radius === 25 ? radius * 1.5 : radius; });
         const adjusted = formationBelowHud(currentSlots, radii, field.clientWidth, visibleTopRef.current, playerDiameterRef.current);
         if (adjusted !== currentSlots) {
           sectionSlotsRef.current = adjusted;

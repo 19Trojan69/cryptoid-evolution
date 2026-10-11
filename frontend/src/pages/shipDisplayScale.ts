@@ -2,4 +2,4 @@
 // fullscreen rules. Physics radii and persisted encounter data stay unchanged.
 const BASE_PLAYER_DIAMETER = 94;
 export const enemyVisualDiameter = (radius: number, playerDiameter: number, enlargeSmall = false) =>
-  radius * 2 * 1.1 * Math.max(1, playerDiameter / BASE_PLAYER_DIAMETER) * (enlargeSmall ? 2 : 1);
+  radius * 2 * 1.1 * Math.max(1, playerDiameter / BASE_PLAYER_DIAMETER) * (enlargeSmall ? 1.5 : 1);

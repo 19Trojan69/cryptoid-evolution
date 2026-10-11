@@ -33,3 +33,6 @@ Engine-Simulation: im Frontend `node checks/build.mjs && node checks/run-engine.
 Testnet now omits formation-position circles entirely, including escort markers. The small enemy sprites (normal Light ships and the smallest escorts) render at exactly twice their prior width and height. All player ships, larger enemies, bosses, physical radii, damage, projectiles and existing audio retain their settings. Formation clearance below the HUD accounts for the larger small sprites.
 
 Uncollected pickups are retained across blocks, boss destruction, boss/bonus transitions and new levels. Falling pauses in transition phases; pickup effects and durations are unchanged. Carried pickup types and count are included in the next level's existing duplicate and active-drop limits. Restart still clears the run. Actual-engine checks cover each transition, collection exactly once, pause, restart and all 500 stages.
+
+
+At Marcus’s subsequent request, small enemy sprites are reduced by 25% from the doubled version (1.5 times their original width and height). Formation clearance uses the same revised factor. All other ship sizes, gameplay and retained pickups are unchanged.
