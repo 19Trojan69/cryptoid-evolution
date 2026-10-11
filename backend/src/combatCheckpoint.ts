@@ -36,8 +36,10 @@ export function readCombatCheckpoint(input: unknown): CombatCheckpoint | null {
     || !Number.isInteger(c.state.chainBlocks) || c.state.chainBlocks < 0 || c.state.chainBlocks > 9
     || ![null, "shield", "rapid", "overdrive", "bomb", "emp"].includes(c.state.pendingStartPower)) return null;
   for (const slots of [c.slots, c.escortSlots]) if (slots !== null && (!Array.isArray(slots) || slots.length > 12 || slots.some(s => !s || !finite(s.x, 0, 10000) || !finite(s.y, 0, 10000)))) return null;
-  if (c.state.asteroids.some((e: any) => !finite(e.health, 1, 1000) || !finite(e.maxHealth, 1, 1000) || e.health > e.maxHealth || !finite(e.entryElapsed, 0, 1e9) || !finite(e.entryDuration, 1, 60000))) return null;
-  if (['boss-intro', 'boss-fight'].includes(c.encounter) && (!c.state.boss || !finite(c.state.boss.health, 1, 10000) || c.state.boss.config?.level !== c.stage)) return null;
+  // Hull damage bonuses can leave a living target below one health point.
+  // Preserve that exact progress; zero/negative health still denotes defeat.
+  if (c.state.asteroids.some((e: any) => !finite(e.health, Number.MIN_VALUE, 1000) || !finite(e.maxHealth, 1, 1000) || e.health > e.maxHealth || !finite(e.entryElapsed, 0, 1e9) || !finite(e.entryDuration, 1, 60000))) return null;
+  if (['boss-intro', 'boss-fight'].includes(c.encounter) && (!c.state.boss || !finite(c.state.boss.health, Number.MIN_VALUE, 10000) || c.state.boss.config?.level !== c.stage)) return null;
   // A defeated boss awaits its heart pickup; no live enemies or projectiles can survive here.
   if (c.encounter === 'boss-clear' && (c.state.boss !== null || c.state.asteroids.length || c.state.enemyShots.length || c.state.shots.length)) return null;
   const core = c.state.boss?.core;

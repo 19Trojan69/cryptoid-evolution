@@ -6,11 +6,12 @@ import ts from 'typescript';
 import * as jsx from 'react/jsx-runtime';
 import * as fleet from './shipFleet.ts';
 import * as evolution from './shipEvolution.ts';
+import * as attributes from './shipAttributes.ts';
 import {hangarCatalog} from '../../../backend/src/hangarCatalog.ts';
 const ShipPreview=()=>null;
 const code=ts.transpileModule(readFileSync(new URL('./ShipSelectionPanel.tsx',import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX}}).outputText;
 const exports={};
-vm.runInNewContext(code,{exports,require:name=>({'react/jsx-runtime':jsx,'./ShipPreview':{default:ShipPreview},'../components/PiPrice':{default:()=>null},'./shipFleet':fleet,'./shipEvolution':evolution,'./shipPreviewPlacement':{shipPreviewPlacement:()=>({})}})[name]});
+vm.runInNewContext(code,{exports,require:name=>({'react/jsx-runtime':jsx,'./ShipPreview':{default:ShipPreview},'../components/PiPrice':{default:()=>null},'./shipFleet':fleet,'./shipEvolution':evolution,'./shipAttributes':attributes,'./shipPreviewPlacement':{shipPreviewPlacement:()=>({})}})[name]});
 const Panel=exports.default;
 const nodes=tree=>{const out=[];function walk(node){if(!node||typeof node!=='object')return;if(node.type)out.push(node);for(const child of [node.props?.children].flat(Infinity))walk(child);}walk(tree);return out;};
 const label=node=>typeof node==='string'?node:Array.isArray(node)?node.map(label).join(''):node?.props?label(node.props.children):'';
@@ -53,4 +54,14 @@ test('hangar previews only equip the owned paint at the actual owned stage',()=>
 
 test('missing standard ownership and an unowned color never expose an equip action',()=>{
   for(const props of [{fleet:{}},{color:fleet.playerColors[1]}])assert.equal(nodes(Panel({...defaults(),...props})).some(x=>x.props.className?.includes('ship-equip-button')),false);
+});
+
+test('shop comparisons reflect the actual equipped hull and owned stage rather than paint or preview stage',()=>{
+  const comparison=props=>nodes(Panel({...defaults(),locale:'en',...props})).find(x=>x.props.className==='ship-hull-comparison');
+  let node=comparison({skin:fleet.playerSkins[1],selectedSkinId:'grey-scout',selectedStage:1});
+  assert.match(label(node),/\+6%/);assert.equal(node.props['data-improved'],true);
+  node=comparison({skin:fleet.playerSkins[1],selectedSkinId:'grey-scout',selectedStage:3});
+  assert.match(label(node),/-73%/);assert.equal(node.props['data-improved'],false);
+  node=comparison({skin:fleet.playerSkins[1],selectedSkinId:'nova-wing',focusStage:2,selectedStage:2,color:fleet.playerColors[1]});
+  assert.match(label(node),/: 0%/);
 });

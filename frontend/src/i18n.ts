@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { galaxyMapTranslations } from "./locales/galaxyMap.ts";
 import { smartphoneTranslations } from "./locales/smartphonePackages.ts";
+import { shipAttributeTranslations } from "./locales/shipAttributes.ts";
 import { sevenPackageTranslations } from "./locales/sevenPackages.ts";
 import { homeScreenTranslations } from "./locales/homeScreen.ts";
 import { seriesTranslations } from "./locales/seriesAE.ts";
@@ -12,6 +13,7 @@ for (const [locale, entries] of Object.entries(homeScreenTranslations)) Object.a
 for (const [locale, entries] of Object.entries(seriesTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(galaxyMapTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(smartphoneTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
+for (const [locale, entries] of Object.entries(shipAttributeTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 
 import { languageLabels, supportedLanguages, resolveLocale, documentLanguage, localeDirection, complexScript, type Locale } from './locales/config.ts';
 import { languagePreferences, deviceLanguages, LANGUAGE_STORAGE_KEY } from './locales/preferences.ts';

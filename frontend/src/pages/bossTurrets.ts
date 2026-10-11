@@ -13,7 +13,7 @@ export const createBossTurrets = (id:number):BossTurretState[] => bossWeapons[id
 export const damageBossTurret = (boss:SectorBoss,index:number,damage:number) => {
  const state=boss.turrets[index];
  if(!state||boss.health<=0||!bossVulnerable(boss)||state.health<=0||!Number.isFinite(damage)||damage<=0)return 0;
- state.health=Math.max(0,state.health-damage);state.lastHit=boss.weaponClock;
+ state.health=Math.max(0,state.health-damage);if(state.health<1e-9)state.health=0;state.lastHit=boss.weaponClock;
  if(state.health>0)return 0;
  state.pendingTotal=0;state.pendingIndex=0;state.firedBarrels=[];state.lock=0;
  return turretPoints(boss.config.id,bossWeapons[boss.config.id-1][index]);

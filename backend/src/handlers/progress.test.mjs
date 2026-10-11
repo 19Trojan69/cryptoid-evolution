@@ -417,6 +417,18 @@ test('completed block wins over late combat checkpoint without replaying rewards
   assert.equal(h.profile().balance, 12);
 });
 
+test('ship damage bonuses preserve wounded enemies and projectiles across account save and resume', async () => {
+  const h = harness(); await init(h); await start(h);
+  const c = combat(); c.refs.formationIndex = 1;
+  c.state.asteroids = [{ id: 1, x: 60, y: 160, health: .92, maxHealth: 4, entryElapsed: 500, entryDuration: 4100 }];
+  c.state.shots = [{ id: 2, x: 100, y: 500, damage: 1.08, speedX: 0, empowered: false }];
+  assert.equal((await h.call('progress', '/checkpoint', { runId: h.session.scoreRun.id, combat: c, save: snapshot() })).code, 200);
+  const resumed = await start(h, 'resume', 'resume-hull-bonus-00000001');
+  assert.equal(resumed.code, 200);
+  assert.equal(resumed.body.combat.state.asteroids[0].health, .92);
+  assert.equal(resumed.body.combat.state.shots[0].damage, 1.08);
+});
+
 test('combat validation rejects forged positions, ownership, stages and overlarge payloads', async () => {
   const h = harness(); await init(h); await start(h);
   const runId = h.session.scoreRun.id;
