@@ -60,6 +60,7 @@ export default function SystemSettings({ musicVolume, effectsVolume, changeMusic
             </div>
             <div className="control-choice-group" role="group" aria-label={t('Control area')}>
               <strong>{t('Control area')}</strong>
+              <p>{t("The control area changes vertical reach. Steering is available across its full width.")}</p>
               {(["compact", "normal", "wide"] as const).map(value => <button key={value} className="system-setting" type="button" aria-pressed={controlZone === value} onClick={() => { localStorage.setItem(CONTROL_ZONE_KEY, value); setControlZone(value); onChange?.(); }}><b>{t(value === "compact" ? "Compact" : value === "normal" ? "Normal" : "Wide")}</b></button>)}
             </div>
             <div className="control-choice-group ship-start-choice-group" role="group" aria-label={t('Ship start position')}>

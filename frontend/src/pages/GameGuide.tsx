@@ -23,6 +23,7 @@ const topics = [
     intro: "Your ship fires automatically. Move to dodge and line up your shots.",
     details: [
       "On a touchscreen, steer with your thumb in the lower playfield. The ship stays visible above your touch point.",
+      "Steering works on both sides of the lower playfield. Handedness only changes the button positions.",
       "On a keyboard, use the arrow keys or WASD. Move left and right, with limited room to dodge upward.",
       "The top HUD shows hearts, level, Shards, score and completed Blocks. Your active weapon is shown at the side; use the button at the top to pause.",
     ],

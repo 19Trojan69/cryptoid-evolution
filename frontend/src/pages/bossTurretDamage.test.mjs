@@ -1,11 +1,15 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
 import { createSectorBoss, damageSectorBoss, bossHullExposed } from './sectorBoss.ts';
 import { bossWeapons } from './bossWeapons.ts';
 import { advanceBossTurrets, damageBossTurret, gunPosition, turretPoints } from './bossTurrets.ts';
 import { bossHitTarget } from './bossHitTarget.ts';
 import { drawBossWeapons } from './bossWeaponRenderer.ts';
-import { firstMissionSnapshot, readSnapshot, missionAfter } from '../../../backend/src/playerSave.ts';
+// playerSave has backend CommonJS imports; exercise the built backend as its own
+// tests do, instead of relying on Node to resolve extensionless TypeScript.
+const require = createRequire(import.meta.url);
+const { firstMissionSnapshot, readSnapshot, missionAfter } = require('../../../backend/build/playerSave.js');
 import { validRunScore } from '../../../backend/src/leaderboardRules.ts';
 import { levelDifficulty } from './levelDifficulty.ts';
 

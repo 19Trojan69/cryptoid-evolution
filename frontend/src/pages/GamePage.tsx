@@ -21,17 +21,20 @@ import { COMBAT_STATE_KEYS, COMBAT_REF_KEYS, readCombatCheckpoint, type CombatCh
 import HullDamage from "./HullDamage";
 import BlockchainProgress from "./BlockchainProgress";
 import { gameHaptics } from "./gameHaptics";
+import { bindGameInput } from './gameInput';
+import { startGuardedGameLoop, type GameInterruption } from './gameLoop';
+import { recordGameDiagnostic } from './gameDiagnostics';
 import { advanceShipMotion, idleShipMotion, engineFlamePercent, explosionDiameter, fragmentFlight, hullIllumination, type ShipMotion } from "./shipRealism";
 import { useLocale } from "../i18n";
-import { memo, useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
 import { entryPatternForSector, entryPosition, entryStartX, type EntryPattern } from "./entryPatterns";
 import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, arrangeFormationBySize, campaignLevel, formationBelowHud, formationLayout, formationReady, formationSlotsForCount, sectionInSector, sectionPhase, sectorInChapter, sectorName, type SectorPhase } from "./sectorManager";
 import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, POWER_UP_DURATION_MS, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp, type PowerUpType } from "./powerUps";
-import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, zoneFraction, shipStartHeight } from "./controlPreferences";
-import { advanceShot, contactWithEnemy, enemyMotionVisible, MAX_PLAYER_SHOTS, movePlayer, placePlayer, placePlayerFromPointer, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, retainContactLatch, shipCollisionOutcome, shipContactPoint, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
+import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, shipStartHeight } from "./controlPreferences";
+import { advanceShot, contactWithEnemy, enemyMotionVisible, MAX_PLAYER_SHOTS, movePlayer, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, retainContactLatch, shipCollisionOutcome, shipContactPoint, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
 import { advanceEnemyShot, createEnemyShot, enemyShotHitsPlayer, enemyShotOutsideField, enemyShotLimit, type EnemyShot } from "./enemyFire";
 import { attackPressure, attackSlots } from "./attackPressure";
 import SectorBackdrop from "./SectorBackdrop";
@@ -379,7 +382,6 @@ const GamePage = () => {
   const bossEscortWaveRef = useRef(0);
   const bossEscortSpawnedRef = useRef(0);
   const bossEscortTimerRef = useRef(0);
-  const animationRef = useRef<number | null>(null);
   const lastFrameRef = useRef(0);
   const lastPaintRef = useRef(0);
   const slowFramesRef = useRef(0);
@@ -396,6 +398,14 @@ const GamePage = () => {
   const keysRef = useRef(new Set<string>());
   const pointerRef = useRef<number | null>(null);
   const touchOriginRef = useRef<{ x: number; y: number; player: PlayerPosition } | null>(null);
+  const inputRef = useRef<ReturnType<typeof bindGameInput> | null>(null);
+  const interruptionRef = useRef<(reason: GameInterruption, error?: unknown) => void>(() => {});
+  const clearControls = useCallback(() => {
+    inputRef.current?.reset();
+    pointerRef.current = null;
+    touchOriginRef.current = null;
+    keysRef.current.clear();
+  }, []);
   const lastPlayerRef = useRef<PlayerPosition | null>(null);
   const playerMotionRef = useRef(idleShipMotion());
   const playerMuzzleRef = useRef(0);
@@ -407,20 +417,21 @@ const GamePage = () => {
   const bossLifeRemainingRef=useRef(0);
   const pendingBossCardRef=useRef<CardReward|null>(null);
   const [extraLifeVisible,setExtraLifeVisible]=useState(false);
-  const showRewardCards=(cards:CardReward[])=>{
+  const [game, setGame] = useState<GameState>(createInitialState);
+  const [technicalPause, setTechnicalPause] = useState(false);
+  const showRewardCards=useCallback((cards:CardReward[])=>{
     cards=cards.filter(card=>!hasSeenCard(cardOwnerRef.current,card.key)&&!rewardCardsRef.current.some(queued=>queued.key===card.key));
     if(!cards.length)return;
     rewardCardsRef.current=[...rewardCardsRef.current,...cards];
     setRewardCards([...rewardCardsRef.current]);
-    stateRef.current.status='paused'; keysRef.current.clear(); pointerRef.current=null; touchOriginRef.current=null;
+    stateRef.current.status='paused'; clearControls();
     setGame({...stateRef.current});
-  };
+  }, [clearControls]);
   const continueRewardCard=()=>{
     rewardCardsRef.current=rewardCardsRef.current.slice(1);setRewardCards([...rewardCardsRef.current]);
-    keysRef.current.clear();pointerRef.current=null;touchOriginRef.current=null;
+    clearControls();
     if(!rewardCardsRef.current.length){stateRef.current.status='playing';lastFrameRef.current=performance.now();setGame({...stateRef.current});}
   };
-  const [game, setGame] = useState<GameState>(createInitialState);
   useEffect(()=>{
     if(game.status==='playing')return keepScreenAwake(navigator,document);
   },[game.status]);
@@ -515,10 +526,10 @@ const GamePage = () => {
     const timer = window.setInterval(() => {
       if (document.visibilityState === 'hidden') { setWeaponCountdown(3); return; }
       if (weaponCountdown > 1) setWeaponCountdown(weaponCountdown - 1);
-      else { setWeaponCountdown(null); stateRef.current.status = 'playing'; setGame({ ...stateRef.current }); }
+      else { clearControls(); lastFrameRef.current = 0; setWeaponCountdown(null); stateRef.current.status = 'playing'; setGame({ ...stateRef.current }); }
     }, 1000);
     return () => window.clearInterval(timer);
-  }, [weaponCountdown]);
+  }, [weaponCountdown, clearControls]);
 
   const combatRefs = { nextId: nextIdRef, formationIndex: formationIndexRef, formationOffset: formationOffsetRef, flight: flightRef, bonusIndex: bonusIndexRef, bossEscortWave: bossEscortWaveRef, bossEscortSpawned: bossEscortSpawnedRef, bossEscortTimer: bossEscortTimerRef, spawnTimer: spawnTimerRef, sectionElapsed: sectionElapsedRef, clearTimer: clearTimerRef, attackCooldown: attackCooldownRef, elapsed: elapsedRef, attackNumber: attackNumberRef, dropsCreated: dropsCreatedRef, impactCooldown: impactCooldownRef, fireTimer: fireTimerRef };
   const saveCombat = async () => {
@@ -541,6 +552,25 @@ const GamePage = () => {
   };
   const saveCombatRef = useRef(saveCombat);
   saveCombatRef.current = saveCombat;
+  useEffect(() => {
+    interruptionRef.current = (reason, error) => {
+      const state = stateRef.current;
+      clearControls();
+      lastFrameRef.current = 0;
+      if (state.status === 'playing') {
+        state.status = 'paused';
+        setTechnicalPause(true);
+        setWeaponCountdown(null);
+        setWeaponMenuOpen(false);
+      } else if (state.status === 'destroying') state.status = 'game-over';
+      try { soundRef.current?.setPaused(true); musicRef.current?.pause(); } catch { /* Audio cannot prevent the safe pause. */ }
+      recordGameDiagnostic({ reason, errorName: error instanceof Error ? error.name : '',
+        sector: state.sector, phase: state.phase, encounter: state.encounter, status: state.status,
+        width: fieldSizeRef.current.width, height: fieldSizeRef.current.height, browser: navigator.userAgent });
+      setGame({ ...state });
+      void saveCombatRef.current().catch(() => setSaveNotice('Save not confirmed. Pending data will be retried.'));
+    };
+  }, [clearControls]);
   const restoreCombat = (input: CombatCheckpoint) => {
     const saved = readCombatCheckpoint(input);
     if (!saved) throw new Error("Invalid saved combat checkpoint");
@@ -956,15 +986,44 @@ const GamePage = () => {
   retryAudioRef.current = retryAudio;
 
   useEffect(() => {
+    const field = fieldRef.current;
+    if (!field) return;
+    const input = bindGameInput(field, {
+      pointer: pointerRef, origin: touchOriginRef,
+      playing: () => stateRef.current.status === 'playing',
+      aboveFinger: () => readShipStart() !== 'touch',
+      sensitivity: () => sensitivityMultiplier[readControlSensitivity()],
+      area: readControlZone,
+      position: player => {
+        stateRef.current.player = player;
+        if (playerShipRef.current) {
+          playerShipRef.current.style.left = `${player.x * 100}%`;
+          playerShipRef.current.style.top = `${player.y * 100}%`;
+        }
+      },
+      fault: error => interruptionRef.current('input-error', error),
+    });
+    inputRef.current = input;
+    return () => { input.dispose(); inputRef.current = null; };
+  }, []);
+
+  useEffect(() => {
     const controls = new Set(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "KeyA", "KeyD", "KeyW", "KeyS"]);
     const keyDown = (event: KeyboardEvent) => {
-      if (rewardCardsRef.current.length || !controls.has(event.code) || (event.target as HTMLElement)?.closest("input, textarea, select")) return;
+      if (stateRef.current.status !== 'playing' || rewardCardsRef.current.length || !controls.has(event.code) || (event.target as HTMLElement)?.closest("input, textarea, select")) return;
       event.preventDefault();
       void startEffectsRef.current();
       keysRef.current.add(event.code);
     };
     const keyUp = (event: KeyboardEvent) => keysRef.current.delete(event.code);
-    const blur = () => keysRef.current.clear();
+    const blur = () => {
+      clearControls();
+      if (stateRef.current.status !== 'playing') return;
+      stateRef.current.status = 'paused';
+      soundRef.current?.setPaused(true); musicRef.current?.pause();
+      setGame({ ...stateRef.current });
+      void saveCombatRef.current().catch(() => setSaveNotice('Save not confirmed. Pending data will be retried.'));
+    };
     const pauseAfterBackground = () => {
       if (document.visibilityState === "hidden") {
         if (stateRef.current.status === "playing") void saveCombatRef.current().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
@@ -975,13 +1034,11 @@ const GamePage = () => {
           musicRef.current?.pause();
           setGame({ ...stateRef.current });
         }
-        keysRef.current.clear();
-        pointerRef.current = null;
-        touchOriginRef.current = null;
+        clearControls();
         return;
       }
       if (backgroundHiddenAtRef.current && Date.now() - backgroundHiddenAtRef.current > 1_000 && stateRef.current.status === "playing") {
-        stateRef.current.status = "paused";
+        stateRef.current.status = "paused"; clearControls();
         void saveCombatRef.current().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
         soundRef.current?.setPaused(true);
         musicRef.current?.pause();
@@ -1000,9 +1057,7 @@ const GamePage = () => {
     const markPageHidden = () => {
       if (stateRef.current.status === "playing") void saveCombatRef.current().catch(() => {});
       if (!backgroundHiddenAtRef.current) backgroundHiddenAtRef.current = Date.now();
-      keysRef.current.clear();
-      pointerRef.current = null;
-      touchOriginRef.current = null;
+      clearControls();
     };
     window.addEventListener("keydown", keyDown);
     const resumeAudio = () => {
@@ -1020,10 +1075,10 @@ const GamePage = () => {
     window.addEventListener("keyup", keyUp);
     window.addEventListener("blur", blur);
     return () => { window.removeEventListener("keydown", keyDown); window.removeEventListener("keyup", keyUp); window.removeEventListener("blur", blur); document.removeEventListener("pointerup", resumeAudio, true); document.removeEventListener("touchend", resumeAudio, true); document.removeEventListener("visibilitychange", resumeAudio); document.removeEventListener("visibilitychange", pauseAfterBackground); window.removeEventListener("pagehide", markPageHidden); window.removeEventListener("pageshow", resumeAudio); window.removeEventListener("pageshow", pauseAfterBackground); window.removeEventListener("focus", resumeAudio); };
-  }, []);
+  }, [clearControls]);
 
   useEffect(() => {
-    const loop = (time: number) => {
+    const step = (time: number) => {
       const state = stateRef.current;
       const frameGap = time - (lastFrameRef.current || time);
       const delta = Math.min(34, frameGap);
@@ -1142,7 +1197,7 @@ const GamePage = () => {
           }
           if(state.encounter==='boss-clear'&&state.bossHeartCollected&&bossLifeRemainingRef.current===0&&pendingBossCardRef.current){
             const card=pendingBossCardRef.current;pendingBossCardRef.current=null;
-            showRewardCards([card]);animationRef.current=window.requestAnimationFrame(loop);return;
+            showRewardCards([card]);return;
           }
           if (clearFinished && (state.encounter !== 'boss-clear' || state.bossHeartCollected&&bossLifeRemainingRef.current===0)) {
             if (state.encounter === "bonus" && state.sector === MAX_DIFFICULTY_LEVEL) {
@@ -1155,7 +1210,6 @@ const GamePage = () => {
               state.enemyShots = [];
               state.shots = [];
               setGame({ ...state });
-              animationRef.current = window.requestAnimationFrame(loop);
               return;
             }
             const clearEncounter = state.encounter === "boss-clear" ? "boss-clear" : state.encounter === "bonus" ? "bonus" : "normal";
@@ -1199,7 +1253,6 @@ const GamePage = () => {
             clearTimerRef.current = 0;
             attackCooldownRef.current = 0;
             setGame({ ...state });
-            animationRef.current = window.requestAnimationFrame(loop);
             return;
           }
         }
@@ -1606,45 +1659,23 @@ const GamePage = () => {
           setGame({ ...state, boss: state.boss ? { ...state.boss } : null, asteroids: [...state.asteroids], bonusTargets: [...state.bonusTargets], shots: [...state.shots], enemyShots: [...state.enemyShots], effects: [...state.effects], powerUps: [...state.powerUps] });
         }
       }
-      animationRef.current = window.requestAnimationFrame(loop);
     };
-    animationRef.current = window.requestAnimationFrame(loop);
+    const stop = startGuardedGameLoop({ step,
+      fault: (reason, error) => interruptionRef.current(reason, error),
+      active: () => stateRef.current.status === 'playing',
+      visible: () => document.visibilityState !== 'hidden',
+      now: () => performance.now(),
+      requestFrame: callback => window.requestAnimationFrame(callback),
+      cancelFrame: id => window.cancelAnimationFrame(id),
+      watch: callback => window.setInterval(callback, 500),
+      unwatch: id => window.clearInterval(id),
+    });
     return () => {
-      if (animationRef.current !== null) window.cancelAnimationFrame(animationRef.current);
-      animationRef.current = null;
+      stop();
       if (gameOverTimerRef.current !== null) window.clearTimeout(gameOverTimerRef.current);
       gameOverTimerRef.current = null;
     };
-  }, []);
-
-  const positionFromPointer = (event: ReactPointerEvent<HTMLDivElement>) => {
-    const field = fieldRef.current;
-    if (!field) return;
-    const bounds = field.getBoundingClientRect();
-    const origin = event.pointerType === "touch" ? touchOriginRef.current : null;
-    const player = origin
-      ? placePlayer(origin.player.x * bounds.width + (event.clientX - origin.x) * sensitivityMultiplier[readControlSensitivity()], origin.player.y * bounds.height + (event.clientY - origin.y) * sensitivityMultiplier[readControlSensitivity()], bounds.width, bounds.height)
-      : placePlayerFromPointer(event.clientX - bounds.left, event.clientY - bounds.top, bounds.width, bounds.height, false);
-    stateRef.current.player = player;
-    if (playerShipRef.current) {
-      playerShipRef.current.style.left = `${player.x * 100}%`;
-      playerShipRef.current.style.top = `${player.y * 100}%`;
-    }
-  };
-
-  const startDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (stateRef.current.status !== "playing" || (event.target as HTMLElement).closest("button, .game-hud, .game-overlay, .touch-controls")) return;
-    if (event.pointerType === "touch") event.preventDefault();
-    if (pointerRef.current !== null) return;
-    const bounds = event.currentTarget.getBoundingClientRect();
-    if (event.clientY - bounds.top < bounds.height * .5) return;
-    const moveFraction = zoneFraction[readControlZone()];
-    if (event.pointerType === "touch" && (readControlHand() === "right" ? event.clientX - bounds.left < bounds.width * (1 - moveFraction) : event.clientX - bounds.left > bounds.width * moveFraction)) return;
-    pointerRef.current = event.pointerId;
-    touchOriginRef.current = event.pointerType === "touch" ? { x: event.clientX, y: event.clientY, player: placePlayerFromPointer(event.clientX - bounds.left, event.clientY - bounds.top, bounds.width, bounds.height, readShipStart() !== "touch") } : null;
-    if (event.pointerType !== "touch") event.currentTarget.setPointerCapture(event.pointerId);
-    positionFromPointer(event);
-  };
+  }, [showRewardCards]);
 
   const activateStartPower = () => {
     const state = stateRef.current;
@@ -1695,7 +1726,7 @@ const GamePage = () => {
   };
   const weaponNames = ["", t("Standard"), t("Twin"), t("Rapid"), t("Triple"), t("Plasma")];
   const weaponGlyphs = ["", "I", "II", "III", "IV", "V"];
-  const resumeWeaponSelection = () => { setWeaponMenuOpen(false); setWeaponCountdown(3); };
+  const resumeWeaponSelection = () => { clearControls(); setTechnicalPause(false); setWeaponMenuOpen(false); setWeaponCountdown(3); };
   const closeHomePrompt = () => {
     setHomePrompt(false);
     if (homePromptWasPlayingRef.current) resumeWeaponSelection();
@@ -1710,7 +1741,7 @@ const GamePage = () => {
     if (stateRef.current.status !== 'playing' && stateRef.current.status !== 'paused') return;
     stateRef.current.status = 'paused';
     musicRef.current?.pause();
-    pointerRef.current = null; touchOriginRef.current = null; keysRef.current.clear();
+    clearControls();
     setWeaponMenuOpen(true); setWeaponError(''); setGame({ ...stateRef.current });
 
   };
@@ -1835,8 +1866,8 @@ const GamePage = () => {
     setSaveNotice("");
     setAccountRun(false);
     setRecoveryError(false);
-    pointerRef.current = null;
-    touchOriginRef.current = null;
+    clearControls();
+    setTechnicalPause(false);
     lastPlayerRef.current = stateRef.current.player;
     playerMotionRef.current = idleShipMotion();
     playerMuzzleRef.current = 0;
@@ -1940,18 +1971,18 @@ const GamePage = () => {
     <main className="game-shell" data-effects-paused={game.status === "paused" || game.status === "loading"} onPointerDownCapture={event => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
       {rewardCards[0] && <CardReveal reward={rewardCards[0]} remaining={rewardCards.length} onContinue={continueRewardCard}/>}
       {extraLifeVisible&&<div className="boss-extra-life" role="status" aria-live="polite"><strong>{t(game.bossHeartShards ? 'FULL HEARTS' : 'HEART RESTORED')}</strong><span>{game.bossHeartShards ? `+${game.bossHeartShards} ◆` : '+1 ♥'}</span></div>}
-      <div ref={fieldRef} className="game-field" onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()} onPointerDown={startDrag} onPointerMove={event => { if (pointerRef.current === event.pointerId) positionFromPointer(event); }} onPointerUp={event => { if (pointerRef.current === event.pointerId) { pointerRef.current = null; touchOriginRef.current = null; } }} onPointerCancel={event => { if (pointerRef.current === event.pointerId) { pointerRef.current = null; touchOriginRef.current = null; } }}>
+      <div ref={fieldRef} className="game-field" onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()}>
         <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} showNebula={game.encounter === "boss-fight"} />
         <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
         <button className="wide-fullscreen-control game-fullscreen-control" type="button" onClick={requestGameFullscreen} aria-label={t("Full screen")} title={t("Full screen")}>⛶</button>
         <header ref={hudRef} className="game-hud">
-          <div className="hud-actions"><button className="game-control home-control" type="button" disabled={weaponBusy || rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || game.status === "loading" || game.status === "destroying"} onClick={() => { if (game.status === "game-over" || game.status === "victory") { goHome(); return; } homePromptWasPlayingRef.current = stateRef.current.status === "playing"; stateRef.current.status = "paused";
+          <div className="hud-actions"><button className="game-control home-control" type="button" disabled={weaponBusy || rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || game.status === "loading" || game.status === "destroying"} onClick={() => { if (game.status === "game-over" || game.status === "victory") { goHome(); return; } homePromptWasPlayingRef.current = stateRef.current.status === "playing"; stateRef.current.status = "paused"; clearControls();
         musicRef.current?.pause(); void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); setHomePrompt(true); }} aria-label={t("Go home")}><CockpitIcon kind="home" /></button></div>
           <div className={`hud-stat hearts-stat${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " hearts-stat-hit" : ""}`}><span className="hud-heart-label" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.2 3.4 13.1C-1.1 8.8 5.3 1.7 10.2 5.9L12 7.5l1.8-1.6c4.9-4.2 11.3 2.9 6.8 7.2L12 21.2Z" /></svg></span><strong className="hearts" role="status" aria-live="polite" aria-label={lives(game.hearts)}>/{game.hearts}</strong></div>
           <div className="hud-stat game-level-hud" aria-label={`${t("Game level")} ${levelLabel}`}><span>{t("Level")}</span><strong>{levelLabel}</strong></div>
           <div className="hud-stat score-hud" aria-label={`${t("Shards")} ${totalShards}, ${t("Score")} ${game.score}`}><span className="shard-line"><b title={String(totalShards)}>◆ {hudNumber(totalShards)}</b><small>{t("Shards")}</small></span><span className="score-line"><b title={String(game.score)}>{hudNumber(game.score)}</b><small>{t("Score")}</small></span></div>
           <div className="hud-stat round-hud chain-hud" aria-label={`${t("Block")} ${hudBlock}/${BLOCKS_PER_CHAIN}`}><span>{t("Block")}</span><strong>{hudBlock}<small>/{BLOCKS_PER_CHAIN}</small></strong></div>
-          <button className="game-control pause-control" type="button" disabled={weaponBusy || rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || pauseLeaving || game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { if (pauseLeaveRef.current) return; if (game.status === "paused") { resumeWeaponSelection(); return; } stateRef.current.status = "paused"; musicRef.current?.pause(); void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
+          <button className="game-control pause-control" type="button" disabled={weaponBusy || rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || pauseLeaving || game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { if (pauseLeaveRef.current) return; if (game.status === "paused") { resumeWeaponSelection(); return; } stateRef.current.status = "paused"; clearControls(); musicRef.current?.pause(); void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
         </header>
         <div className="game-label">{adminRunRef.current && <strong>{t("Admin center")} · </strong>}{t("LEVEL")} {levelLabel} <span>· <strong className="game-region-name">{sectorName(game.sector)}</strong> · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/${BLOCKS_PER_CHAIN}` : game.encounter === "bonus" ? t("BONUS CHALLENGE") : t("CORE WARDEN")}</span></div>
         {game.encounter === "normal" && <span className="flight-indicator" style={{ top: visibleTopRef.current + 25 }}>{t("Group {current}/{total}", { current: flightRef.current + 1, total: blockFlights(game.sector, rulesVersionRef.current).length })}</span>}
@@ -2060,6 +2091,7 @@ const GamePage = () => {
         {weaponCountdown !== null && <div className="game-overlay weapon-resume-countdown" role="status" aria-live="polite"><strong>{weaponCountdown}</strong></div>}
         {pauseVisible && !homePrompt && <div className="game-overlay pause-settings-overlay" role="dialog" aria-modal="true" aria-labelledby="pause-settings-title"><div className="game-modal pause-settings-modal">
           <p className="eyebrow" id="pause-settings-title">{t('MISSION PAUSED')}</p><h1><span className="desktop-menu-only">{t('Hold the line.')}</span><span className="mobile-menu-only">{t('A short breather.')}</span></h1><p><span className="desktop-menu-only">{t('The asteroids are waiting.')}</span><span className="mobile-menu-only">{t("Level")} {levelLabel} · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/9` : game.encounter === "bonus" ? t("Bonus round") : t("Boss")} · {sectorName(game.sector)}</span></p>
+          {technicalPause && <p role="alert">{t("The mission was paused after a technical interruption. Try Resume to continue.")}</p>}
           {accountRun && saveNotice && <section className="pause-save-status" aria-label={t("Account save")}>
             <h2>{t("Account save")}</h2><p role="status">{t(saveNotice)}</p>
             {(saveRetrying || (saveNotice.startsWith("Save not") || saveNotice.startsWith("Save failed"))) && <button className="button button-secondary" type="button" disabled={saveRetrying || pauseLeaving} onClick={() => { void retryAccountSave(); }}>{saveRetrying ? t("Saving game…") : t("Retry save")}</button>}
@@ -2067,7 +2099,7 @@ const GamePage = () => {
             <button className="button button-secondary" type="button" disabled={saveRetrying || pauseLeaving} onClick={() => { void leaveSavedMission(); }}>{pauseLeaving ? t("Checking save…") : t("Go home")}</button>
           </section>}
           <button className="button button-secondary pause-weapon-shop-button" type="button" disabled={pauseLeaving || saveRetrying} onClick={openWeaponSelection}>{t('Shop & weapons')}</button>
-          <h2 className="pause-system-title">{t("SYSTEM / SETTINGS")}</h2><SystemSettings compactMobile idPrefix="pause" musicVolume={musicVolume} effectsVolume={effectsVolume} changeMusicVolume={changeMusicVolume} changeEffectsVolume={changeEffectsVolume} onChange={() => { pointerRef.current = null; touchOriginRef.current = null; setGame({ ...stateRef.current }); }} /><button className="button button-primary pause-resume-button" type="button" disabled={pauseLeaving} onClick={() => { if (!pauseLeaveRef.current) resumeWeaponSelection(); }}>{t("Resume")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button>
+          <h2 className="pause-system-title">{t("SYSTEM / SETTINGS")}</h2><SystemSettings compactMobile idPrefix="pause" musicVolume={musicVolume} effectsVolume={effectsVolume} changeMusicVolume={changeMusicVolume} changeEffectsVolume={changeEffectsVolume} onChange={() => { clearControls(); setGame({ ...stateRef.current }); }} /><button className="button button-primary pause-resume-button" type="button" disabled={pauseLeaving} onClick={() => { if (!pauseLeaveRef.current) resumeWeaponSelection(); }}>{t("Resume")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button>
         </div></div>}
         {game.status === "game-over" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><h1>{t("Game Over")}</h1><div className="game-over-details"><p className="eyebrow">{t("MISSION FAILED")}</p><p className="game-over-hearts">{t('Hearts')}: {game.hearts}</p><div className="game-over-stats"><span><b>{game.score}</b>{t('Score')}</span><span><b>{game.destroyed}</b>{t('Destroyed')}</span><span><b>{game.sector}</b>{t('Sector')}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSyncStatus}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t('Home')}</button></div></div></div></div>}
         {game.status === "victory" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><p className="eyebrow">{t("CAMPAIGN COMPLETE")}</p><h1>{t("Victory")}</h1><div className="game-over-details"><p>{t("You completed the final bonus challenge.")}</p><div className="game-over-stats"><span><b>{game.score}</b>{t("Score")}</span><span><b>{game.destroyed}</b>{t("Destroyed")}</span><span><b>{game.sector}</b>{t("Sector")}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSyncStatus}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t("Home")}</button></div></div></div></div>}
