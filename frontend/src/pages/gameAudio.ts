@@ -1,5 +1,5 @@
 import { generateBossSound, bossSoundReferences } from './bossWeaponSound.ts';
-import { generateEnemyShotSound, enemySoundProfiles } from './enemyWeaponSound.ts';
+import { generateEnemyShotSound, generateEnemyDoubleShotSound, enemySoundProfiles } from './enemyWeaponSound.ts';
 import type { CryptoidClass } from './cryptoidRoster.ts';
 import type { BossWeaponKind } from './bossWeapons.ts';
 import { effectsGain, readEffectsVolume } from "./musicPreferences.ts";
@@ -53,6 +53,7 @@ export class GameAudio {
   private sampleRequest: Promise<void> | null = null;
   private bossSamples = new Map<string, AudioBuffer>();
   private enemyShotSamples = new Map<CryptoidClass, AudioBuffer>();
+  private enemyDoubleSamples = new Map<CryptoidClass, AudioBuffer>();
   private weaponBus: GainNode | null = null;
   private weaponMixVoices = new Set<WeaponVoice>();
   private enemyShotCycle = 0;
@@ -103,14 +104,18 @@ export class GameAudio {
       const buffer = context.createBuffer(1, pcm.length, context.sampleRate);
       buffer.copyToChannel(pcm, 0);
       this.enemyShotSamples.set(shipClass, buffer);
+      const doublePcm = generateEnemyDoubleShotSound(context.sampleRate, shipClass);
+      const doubleBuffer = context.createBuffer(1, doublePcm.length, context.sampleRate);
+      doubleBuffer.copyToChannel(doublePcm, 0);
+      this.enemyDoubleSamples.set(shipClass, doubleBuffer);
     }
   }
 
-  playEnemyShot(pan = 0, shipClass: CryptoidClass = 'light') {
-    const buffer = this.enemyShotSamples.get(shipClass);
+  playEnemyShot(pan = 0, shipClass: CryptoidClass = 'light', variant: 'single' | 'double' = 'single') {
+    const buffer = (variant === 'double' ? this.enemyDoubleSamples : this.enemyShotSamples).get(shipClass);
     if (!buffer) return false;
     const rate = [.96, 1, 1.04][this.enemyShotCycle++ % 3];
-    return this.playWeaponBuffer(buffer, rate, enemySoundProfiles[shipClass].gain, pan);
+    return this.playWeaponBuffer(buffer, rate, enemySoundProfiles[shipClass].gain * (variant === 'double' ? 1.1 : 1), pan);
   }
 
   // Every synthesized buffer peaks at <= .72. Reserve headroom for the
@@ -119,7 +124,10 @@ export class GameAudio {
     if (!this.weaponBus) return;
     let peak = 0;
     for (const voice of this.weaponMixVoices) peak += voice.volume * .72;
-    this.weaponBus.gain.value = Math.min(1, .62 / Math.max(peak, .62));
+    // The effects slider reaches 2x at 100%. Keep the hostile peak budget
+    // after that gain as well, before the final shared compressor.
+    const budget = .62 / Math.max(1, effectsGain(this.effectsVolume));
+    this.weaponBus.gain.value = Math.min(1, budget / Math.max(peak, budget));
   }
 
   stopBossWeapons(){
@@ -281,6 +289,7 @@ export class GameAudio {
   setEffectsVolume(percent: number) {
     this.effectsVolume = Math.max(0, Math.min(100, Number.isFinite(percent) ? percent : 100));
     if (this.effectsBus) this.effectsBus.gain.value = effectsGain(this.effectsVolume);
+    this.updateWeaponMix();
   }
 
   setSector(sector: number) { void sector; /* Reserved for future sector-specific effects. */ }
@@ -299,6 +308,7 @@ export class GameAudio {
     this.samples.clear();
     this.bossSamples.clear();
     this.enemyShotSamples.clear();
+    this.enemyDoubleSamples.clear();
     this.weaponMixVoices.clear();
     this.weaponBus = null;
   }

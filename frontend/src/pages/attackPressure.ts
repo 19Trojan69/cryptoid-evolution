@@ -10,6 +10,8 @@ export const attackPressure = (stage: number) => {
     overlap: bounded >= 11 && !quiet,
     cap: bounded < 11 ? 1 : bounded < 31 ? 2 : 3,
     intervalMs: 3400 - progress * 1700 + introRelief(bounded) * 2_000,
+    // Rest after a returning solo attacker, without increasing speed or count.
+    breathingMs: bounded <= 9 ? [600, 0, 850, 0, 1_000, 0, 500, 0, 0][Math.floor(bounded) - 1] : 0,
   };
 };
 

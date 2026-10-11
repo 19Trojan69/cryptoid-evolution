@@ -2813,3 +2813,11 @@ html[data-motion="reduced"] .game-field .sector-banner.boss-intro-banner.sector-
 .leader-profile-copy { display:grid; gap:3px; min-width:0; }
 .leader-profile-copy > small { color:#8de3ed; font-size:11px; line-height:1.35; }
 .leader-profile-link:focus-visible { outline:2px solid #8de3ed; outline-offset:3px; border-radius:6px; }
+
+/* Ordinary cannons share the existing collision loop and hostile audio bus. */
+.enemy-laser[class*="enemy-projectile-"] { background: linear-gradient(180deg, transparent, var(--enemy-shot-color) 45%, #fff2da); box-shadow: 0 0 7px var(--enemy-shot-color); }
+.enemy-laser.enemy-projectile-medium, .enemy-laser.enemy-projectile-heavy { border-radius: 50%; background: radial-gradient(circle, #fff4db 15%, var(--enemy-shot-color) 65%); }
+.enemy-laser.enemy-projectile-elite { box-shadow: 0 0 8px #efacff; }
+.enemy-muzzle-flash { position: absolute; z-index: 3; width: 10px; height: 15px; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(ellipse, #fff6df, #ff9b57 40%, transparent 72%); pointer-events: none; }
+
+.enemy-laser.enemy-projectile-medium::before, .enemy-laser.enemy-projectile-heavy::before { display: none; }

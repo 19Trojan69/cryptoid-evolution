@@ -32,10 +32,14 @@ export const createPowerUpDrop = ({ id, x, y, width, height, threats, activeCoun
 }): PowerUp | null => {
   const chance = freeDropChance(level);
   const available = dropKinds.filter(type => !usedTypes.includes(type) && !(type === 'weapon' && weaponMaxed));
-  if (!available.length || activeCount >= MAX_ACTIVE_POWER_UPS || (chanceRoll >= chance && !(dropsCreated === 0 && destroyed >= 3))) return null;
+  // Reserve one existing temporary weapon drop in the opening level. Safe
+  // placement and the chapter-wide duplicate ledger still apply; no stock is added.
+  const introWeapon = level >= 1 && level <= 9 && destroyed >= 3 && available.includes('weapon');
+  if (!available.length || activeCount >= MAX_ACTIVE_POWER_UPS || (chanceRoll >= chance && !introWeapon && !(dropsCreated === 0 && destroyed >= 3))) return null;
   // Drops begin where the enemy was defeated. Skip any location near immediate danger.
   if (x < 35 || x > width - 35 || y < 105 || y > height * 0.62) return null;
   if (threats.some(threat => Math.abs(threat.x - x) < threat.radius + 36 && threat.y >= y - 45 && threat.y <= y + 130)) return null;
+  if (introWeapon) return { id, type: 'weapon', x, y };
   const weights = available.map(type => type === 'shield' ? .3 : type === 'overdrive' ? .27 : type === 'weapon' ? .22 : .21);
   const total = weights.reduce((sum, weight) => sum + weight, 0);
   let choice = Math.max(0, Math.min(.999999, kindRoll)) * total;

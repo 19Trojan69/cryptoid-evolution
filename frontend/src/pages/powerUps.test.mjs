@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { collectPowerUp, createPowerUpDrop, freeDropChance, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, receiveImpacts, resolvePlayerDamage } from "./powerUps.ts";
 
-const safe = { id: 1, x: 400, y: 220, width: 800, height: 600, hearts: 2, threats: [], activeCount: 0, chanceRoll: 0.04, kindRoll: 0.1, destroyed: 1, dropsCreated: 0 };
+const safe = { id: 1, x: 400, y: 220, width: 800, height: 600, hearts: 2, threats: [], activeCount: 0, chanceRoll: 0.04, kindRoll: 0.1, destroyed: 1, dropsCreated: 0, level: 11 };
 
 test("free pickups stay available in late levels without making early levels easier", () => {
   assert.equal(freeDropChance(1), .065);
