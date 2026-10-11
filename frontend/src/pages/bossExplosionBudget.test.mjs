@@ -60,10 +60,10 @@ test('actual GamePage boss destruction saves the waiting reward and installs the
   let declaration;
   const visit=node=>{if(ts.isVariableDeclaration(node)&&node.name.getText(ast)==='destroyBoss')declaration=node.getText(ast);ts.forEachChild(node,visit);};visit(ast);
   assert.ok(declaration);
-  for(let id=1;id<=50;id++) {
+  for(let id=1;id<=50;id++) for(const combatVarietyEnabled of [false,true]) {
     let saved;
     const state={boss:createSectorBoss(id*10,390,40,760),sector:id*10,hearts:2,maxHearts:3,score:0,shards:0,destroyed:0,combo:createDoubleKillCombo(),effects:[],asteroids:[],enemyShots:[{}],shots:[{}],powerUps:[{}]};
-    const context={Image:class {},bossExplosionBudget,bossExplosionSize,bossFallTargetY,bossPoints,bossShardReward,creditComboDefeat,
+    const context={combatVarietyEnabled,Image:class {},bossExplosionBudget,bossExplosionSize,bossFallTargetY,bossPoints,bossShardReward,creditComboDefeat,
       BOSS_FALL_DURATION_MS:5000,soundRef:{current:null},fieldRef:{current:{clientWidth:390,clientHeight:760}},
       window:{devicePixelRatio:3,matchMedia:()=>({matches:false})},document:{documentElement:{dataset:{}}},nextIdRef:{current:1},
       gameHaptics:{explosion(){},boss(){}},bossDestroyPlayedRef:{current:true},bossVictoryPendingRef:{current:false},bossVictoryFinishedRef:{current:true},
@@ -73,6 +73,8 @@ test('actual GamePage boss destruction saves the waiting reward and installs the
     assert.equal(state.encounter,'boss-clear');assert.equal(state.phase,'SECTOR_CLEAR');assert.equal(state.boss,null);
     assert.equal(saved.hearts,2);assert.equal(saved.bossHeartCollected,false);assert.equal(saved.encounter,'boss-clear');
     assert.equal(state.enemyShots.length,0);assert.equal(state.shots.length,0);
+    assert.equal(state.powerUps.length,combatVarietyEnabled?1:0);
+    assert.equal(JSON.stringify(saved.powerUps),JSON.stringify(state.powerUps));
     const effect=state.effects.find(effect=>effect.kind==='boss-explosion');
     assert.ok(effect.bossFragments<=8);assert.equal(effect.boundedBossImpact,true);assert.equal(bossExplosionReady(effect),false);
     assert.equal(bossExplosionReady(activateBossExplosion(effect,6000)),true);
