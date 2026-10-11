@@ -31,7 +31,7 @@ test("the same enemy earns more Shards and points as its health and level rise",
   assert.equal(first.reward, 8);
   assert.equal(later.reward, 12);
   assert.ok(later.health > first.health);
-  assert.equal(later.health, (6 + 2) * 2);
+  assert.equal(later.health, 18);
   assert.ok(later.points > first.points);
   assert.equal(chooseCryptoid(1000, 28).reward, later.reward);
 });

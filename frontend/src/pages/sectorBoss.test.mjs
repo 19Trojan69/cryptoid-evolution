@@ -63,7 +63,7 @@ test("health grows within a cap and a damaged boss fires with a bounded interval
   assert.equal(bossFireInterval({ ...boss, health: boss.maxHealth / 2 }), 1_900);
   assert.equal(boss.maxHealth, levelDifficulty(10).bossHealth);
   assert.ok(boss.maxHealth > 252);
-  assert.equal(createSectorBoss(500, 375).maxHealth, 1080);
+  assert.equal(createSectorBoss(500, 375).maxHealth, 396);
   assert.throws(() => createSectorBoss(999, 375), /No boss/);
   assert.ok(bossFireInterval(createSectorBoss(500, 375), 500) >= 2_080);
   assert.equal(bossVulnerable(moveSectorBoss(boss, BOSS_ENTRY_MS, 375, 700)), true);
@@ -116,14 +116,16 @@ test("boss entry can begin below the measured HUD instead of behind it", () => {
   assert.ok(boss.y >= visibleTop + boss.height / 2);
 });
 
-test("a boss takes one hit per volley and survives opening fire without a shield", () => {
+test("the exposed reactor accepts every connected twin/triple projectile, including simultaneous hits", () => {
   const boss = createSectorBoss(10, 375);
   boss.elapsed = BOSS_ENTRY_MS;
   boss.turrets.forEach(gun => gun.health = 0);
   assert.equal(damageSectorBoss(boss, 2, 1000), true);
-  assert.equal(damageSectorBoss(boss, 2, 1000), false);
-  assert.equal(damageSectorBoss(boss, 2, 1100), false);
-  assert.equal(boss.health, boss.maxHealth - 4);
+  assert.equal(damageSectorBoss(boss, 2, 1000), true);
+  assert.equal(damageSectorBoss(boss, 2, 1100), true);
+  assert.equal(boss.health, boss.maxHealth - 12);
   assert.equal(damageSectorBoss(boss, 2, 1200), true);
-  assert.equal(boss.health, boss.maxHealth - 8);
+  assert.equal(boss.health, boss.maxHealth - 16);
+  assert.equal(damageSectorBoss(boss, Infinity, 1200), false);
+  assert.equal(damageSectorBoss(boss, -1, 1200), false);
 });

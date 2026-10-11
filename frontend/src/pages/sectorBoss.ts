@@ -59,9 +59,11 @@ export const bossFireInterval = (boss: SectorBoss, level = 1) => {
 
 export const bossHullExposed = (boss: SectorBoss) => boss.health > 0 && boss.turrets.length > 0 && boss.turrets.every(gun => gun.health <= 0);
 
-export const damageSectorBoss = (boss: SectorBoss, damage: number, time: number, ignoreHitCooldown = false) => {
+export const damageSectorBoss = (boss: SectorBoss, damage: number, time: number) => {
   if (!bossVulnerable(boss) || !bossHullExposed(boss) || !Number.isFinite(damage) || damage <= 0) return false;
-  if (!ignoreHitCooldown && time - boss.lastDamageAt < 180) return false;
+  // GamePage consumes each colliding projectile once. A shared 180ms gate
+  // discarded the rest of twin/triple volleys, neutralizing their firepower
+  // against the reactor. Every connected projectile now deals its damage.
   boss.lastDamageAt = time;
   // The exposed hull now needs half as many hits, including resumed encounters.
   boss.health = Math.max(0, boss.health - damage * 2);

@@ -46,7 +46,10 @@ export const chooseCryptoid = (sector: number, index: number): CryptoidProfile =
   return {
     type,
     ...base,
-    health: (base.health + extraHealth) * 2,
+    // The same 0/25/50% durability progression applies to every class. An
+    // additive bonus used to double light hulls but add only a third to heavy
+    // hulls, eroding their roles late in the campaign.
+    health: base.health * 2 * (1 + extraHealth / 4),
     reward: scaledShardReward(base.reward, sector),
     points: scaledEnemyPoints(base.points, sector, extraHealth),
     entryDuration: base.entryDuration * difficulty.entryPaceScale,

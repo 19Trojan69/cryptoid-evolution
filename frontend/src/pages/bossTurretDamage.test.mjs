@@ -12,16 +12,15 @@ const require = createRequire(import.meta.url);
 const { firstMissionSnapshot, readSnapshot, missionAfter } = require('../../../backend/build/playerSave.js');
 import { validRunScore } from '../../../backend/src/leaderboardRules.ts';
 import { levelDifficulty } from './levelDifficulty.ts';
+import { bossDifficulty } from './bossDifficulty.ts';
 
-test('every boss hull has triple legacy HP and later turret batteries gain armor',()=>{
+test('every reactor and battery use bounded campaign budgets instead of multiplying legacy HP',()=>{
  for(let id=1;id<=50;id++){
   const boss=createSectorBoss(id*10,390,90,760);
-  const p=levelDifficulty(id*10).progress;
-  const oldHull=(28+p*52+p*p*40)*3;
-  assert.ok(Math.abs(boss.maxHealth-oldHull*3)<1e-9);
-  boss.turrets.forEach((turret,index)=>{
-   const oldTurret=Math.ceil(4+bossWeapons[id-1][index].caliber/4+(id-1)*.15);
-   assert.equal(turret.health,oldTurret*2+2*Math.floor((id-1)/5));
+  assert.equal(boss.maxHealth,levelDifficulty(id*10).bossHealth);
+  assert.ok(boss.maxHealth>=252&&boss.maxHealth<=396);
+  assert.ok(Math.abs(boss.turrets.reduce((sum,g)=>sum+g.health,0)-bossDifficulty(id).turretHealthBudget)<.00002);
+  boss.turrets.forEach(turret=>{
    assert.equal(turret.maxHealth,turret.health);
   });
  }
@@ -55,7 +54,6 @@ test('all bosses block hull shots and bombs until every turret is destroyed, inc
   for(let i=0;i<boss.turrets.length;i++){
    assert.equal(bossHullExposed(boss),false);
    assert.equal(damageSectorBoss(boss,10000,1000),false);
-   assert.equal(damageSectorBoss(boss,10000,1000,true),false);
    assert.equal(boss.health,hull);
    assert.ok(damageBossTurret(boss,i,boss.turrets[i].health)>0);
    boss=JSON.parse(JSON.stringify(boss));boss.lastDamageAt=-1e9;
@@ -63,7 +61,7 @@ test('all bosses block hull shots and bombs until every turret is destroyed, inc
   assert.equal(bossHullExposed(boss),true);
   assert.equal(boss.health,hull);
   assert.equal(damageSectorBoss(boss,1,2000),true);
-  assert.equal(damageSectorBoss(boss,18,2000,true),true);
+  assert.equal(damageSectorBoss(boss,18,2000),true);
   assert.equal(boss.health,hull-38);
   assert.equal(damageSectorBoss(boss,10000,2400),true);
   assert.equal(boss.health,0);
