@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { arrangeFormationBySize, BLOCK_FORMATION_NAMES, formationLayout, formationBelowHud, formationReady, formationSlotsForCount, reinforcementCount, SECTION_INTRO_MS, sectionPhase, sectorForSection, sectionInSector, sectorName, sectorChapter, campaignLevel, sectorInChapter } from "./sectorManager.ts";
+import { arrangeFormationBySize, BLOCK_FORMATION_NAMES, formationLayout, formationBelowHud, formationTopExtent, formationReady, formationSlotsForCount, reinforcementCount, SECTION_INTRO_MS, sectionPhase, sectorForSection, sectionInSector, sectorName, sectorChapter, campaignLevel, sectorInChapter } from "./sectorManager.ts";
 import { chooseCryptoid } from "./cryptoidRoster.ts";
 
 test("all planned enemies must spawn and die before an endless section advances", () => {
@@ -104,12 +104,31 @@ test('wide formations clear the measured HUD including target lock pulses for ev
   }
 });
 
-test('phone formations and already-clear wide formations retain their original positions', () => {
+test('already-clear formations retain their original positions on all screen sizes', () => {
   for (const width of [320, 390, 700]) {
     const slots = formationLayout(1, width, 700);
-    assert.equal(formationBelowHud(slots, [50, 36, 25, 36, 25, 25], width, 120), slots);
+    assert.equal(formationBelowHud(slots, [50, 36, 25, 36, 25, 25], width, 20), slots);
   }
   const slots = formationLayout(1, 1363, 936);
   assert.equal(formationBelowHud(slots, [50, 36, 25, 36, 25, 25], 1363, 80), slots);
   assert.deepEqual(formationBelowHud([], [], 1363, 80), []);
+});
+
+
+test('phone and tablet formations clear the cockpit, scaled hulls and lock pulses', () => {
+  for (const [width, height, hud, playerDiameter] of [[320,568,68,104], [390,844,110,112], [700,700,72,104], [768,1024,94,132], [1024,768,94,132], [1363,936,118,160]]) {
+    for (let stage = 1; stage <= 500; stage++) {
+      if (stage % 10 === 0) continue;
+      const slots = formationLayout(stage, width, height, stage);
+      const radii = slots.map((_, index) => chooseCryptoid(stage, index).radius);
+      const arranged = arrangeFormationBySize(slots, radii);
+      const adjusted = formationBelowHud(arranged, radii, width, hud, playerDiameter);
+      const shift = adjusted[0].y - arranged[0].y;
+      adjusted.forEach((slot, index) => {
+        assert.ok(slot.y - formationTopExtent(radii[index], playerDiameter) >= hud + 28 - 1e-8);
+        assert.equal(slot.x, arranged[index].x);
+        assert.ok(Math.abs(slot.y - arranged[index].y - shift) < 1e-8);
+      });
+    }
+  }
 });

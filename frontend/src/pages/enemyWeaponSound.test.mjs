@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { generateEnemyShotSound } from './enemyWeaponSound.ts';
+import { generateEnemyShotSound, generateEnemyDoubleShotSound } from './enemyWeaponSound.ts';
 import { generateBossSound, bossSoundReferences } from './bossWeaponSound.ts';
 
 test('enemy discharge is finite, punchy and click-free at common device sample rates', () => {
@@ -57,5 +57,17 @@ test('all four enemy classes stay bounded and distinct across device sample rate
       }
       assert.ok(Math.abs(cross / Math.sqrt(ae * be)) < .3, `${a}/${b} at ${rate}`);
     }
+  }
+});
+
+test('simultaneous double discharges are distinct cached candidates with bounded peaks and clean tails', () => {
+  for (const rate of [22050, 44100, 48000, 96000]) for (const shipClass of ['light', 'medium', 'heavy', 'elite']) {
+    const single = generateEnemyShotSound(rate, shipClass), double = generateEnemyDoubleShotSound(rate, shipClass);
+    assert.equal(double.length, single.length + Math.round(rate * .012));
+    assert.ok(double.every(Number.isFinite));
+    const peak = double.reduce((max, v) => Math.max(max, Math.abs(v)), 0);
+    assert.ok(peak >= .679 && peak <= .681);
+    assert.equal(double[0], 0); assert.ok(Math.abs(double.at(-1)) < .0001);
+    assert.deepEqual(double, generateEnemyDoubleShotSound(rate, shipClass));
   }
 });

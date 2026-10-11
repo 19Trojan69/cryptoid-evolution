@@ -1,0 +1,6 @@
+/* Avoid large offscreen filter intermediates in high-DPI mobile WebViews. */
+.impact-effect.boss-explosion[data-bounded-impact="true"]::before,
+.impact-effect.boss-explosion[data-bounded-impact="true"]::after { filter: none; }
+@media (max-width: 700px), (min-resolution: 1.5dppx) {
+  .boss-falling-hull > img, .boss-shedding i, .boss-fall-bursts i { filter: none; }
+}

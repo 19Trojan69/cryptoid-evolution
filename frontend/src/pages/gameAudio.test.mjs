@@ -205,7 +205,7 @@ test("mobile effects decode no more than three samples concurrently", async () =
   }
 });
 
-test('boss voices reuse eighteen boss buffers plus four enemy class buffers, obey mute and pause, and stay below twenty voices',async()=>{
+test('boss voices reuse eighteen boss buffers plus eight enemy single/double buffers, obey mute and pause, and stay below twenty voices',async()=>{
  const previous=globalThis.AudioContext;let buffers=0,started=0,stopped=0;
  globalThis.AudioContext=class{
   state='running';currentTime=0;sampleRate=48000;destination={};
@@ -215,7 +215,7 @@ test('boss voices reuse eighteen boss buffers plus four enemy class buffers, obe
   createBufferSource(){return {playbackRate:{value:1},connect(){},disconnect(){},start(){started++;},stop(){stopped++;}};}
  };
  const audio=new GameAudio();try{
-  await audio.start();assert.equal(buffers,22);await audio.start();assert.equal(buffers,22);
+  await audio.start();assert.equal(buffers,26);await audio.start();assert.equal(buffers,26);
   audio.setEffectsVolume(0);assert.equal(audio.playBossWeapon('laser',6),false);
   audio.setEffectsVolume(35);for(let i=0;i<30;i++)assert.equal(audio.playBossWeapon('siege',28),true);
   assert.equal(started,30);assert.equal(stopped,10);
@@ -242,7 +242,7 @@ test('enemy shots use their own cached buffer and share the boss voice cap, slid
   try {
     await audio.start();
     await new Promise(resolve => setImmediate(resolve));
-    assert.equal(buffers.length, 22);
+    assert.equal(buffers.length, 26);
     audio.play('laser');
     assert.equal(sources[0].buffer.playerRecording, true);
     audio.playBossWeapon('laser', 6);
@@ -253,7 +253,7 @@ test('enemy shots use their own cached buffer and share the boss voice cap, slid
     assert.equal(pans.at(-1).pan.value, -.65);
     const enemyBuffer = sources[2].buffer;
     for (let i = 0; i < 25; i++) audio.playEnemyShot();
-    assert.equal(buffers.length, 22);
+    assert.equal(buffers.length, 26);
     assert.ok(sources.slice(2).every(source => source.buffer === enemyBuffer));
     assert.deepEqual(sources.slice(2, 5).map(source => source.playbackRate.value), [.96, 1, 1.04]);
     assert.equal(stopped, 7); // 27 shared weapon voices, only 20 can remain active.
@@ -319,4 +319,40 @@ test('hostile volleys reserve mix headroom including fading voices, while warnin
     audio.setPaused(false); audio.setEffectsVolume(0);
     assert.equal(audio.playBossWeapon('siege', 28), false);
   } finally { audio.close(); globalThis.AudioContext = previous.AudioContext; globalThis.fetch = previous.fetch; }
+});
+
+test('simultaneous doubles reuse their layered buffers and obey the same mute, headroom and pause controls', async () => {
+  const previous = {AudioContext: globalThis.AudioContext, fetch: globalThis.fetch};
+  let buffers = 0;
+  const sources = [], gains = [];
+  globalThis.fetch = async () => ({ok: false});
+  globalThis.AudioContext = class {
+    state = 'running'; currentTime = 0; sampleRate = 48000; destination = {};
+    async resume() {} async close() {}
+    createBuffer(ch, length) { buffers++; return {length, copyToChannel() {}}; }
+    createGain() { const g = {gain: {value: 1, cancelScheduledValues() {}, setTargetAtTime() {}}, connect(output) {return output;}, disconnect() {}}; gains.push(g); return g; }
+    createBufferSource() { return {playbackRate: {value: 1}, connect(output) {this.output = output;}, disconnect() {}, start() {sources.push(this);}, stop() {this.stopped = true;}}; }
+  };
+  const audio = new GameAudio();
+  try {
+    await audio.start(); assert.equal(buffers, 26);
+    audio.playEnemyShot(0, 'heavy', 'single');
+    const single = sources.at(-1);
+    audio.playEnemyShot(0, 'heavy', 'double');
+    const double = sources.at(-1);
+    assert.notEqual(single.buffer, double.buffer);
+    assert.equal(double.buffer.length, single.buffer.length + 576);
+    assert.ok(double.output.gain.value > single.output.gain.value);
+    for (let i = 0; i < 40; i++) audio.playEnemyShot(0, 'heavy', 'double');
+    assert.equal(buffers, 26); assert.equal(sources.filter(s => !s.stopped).length, 20);
+    const sum = sources.reduce((n, s) => n + s.output.gain.value * .72, 0);
+    assert.ok(sum * gains[1].gain.value <= .620001);
+    audio.setEffectsVolume(25); assert.equal(gains[0].gain.value, .5);
+    audio.setEffectsVolume(0); const count = sources.length;
+    assert.equal(audio.playEnemyShot(0, 'heavy', 'double'), false); assert.equal(sources.length, count);
+    audio.setEffectsVolume(100); assert.equal(gains[0].gain.value, 2);
+    assert.ok(sum * gains[1].gain.value * gains[0].gain.value <= .620001, 'headroom survives the maximum effects slider');
+    audio.setPaused(true); assert.equal(audio.playEnemyShot(0, 'heavy', 'double'), false);
+    audio.setPaused(false); assert.equal(audio.playEnemyShot(0, 'heavy', 'double'), true);
+  } finally {audio.close(); globalThis.AudioContext = previous.AudioContext; globalThis.fetch = previous.fetch;}
 });

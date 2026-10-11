@@ -1,3 +1,5 @@
+import { enemyVisualDiameter } from './shipDisplayScale.ts';
+
 // One encounter per visible block. The tenth slot is the boss and bonus.
 export const SECTIONS_PER_SECTOR = 1;
 export const SECTION_INTRO_MS = 3_200;
@@ -92,9 +94,14 @@ export const arrangeFormationBySize = <T extends { index: number; x: number; y: 
 
 // Move the whole formation together, including its ships' actual destinations.
 // Include the target's lock pulse and a gap for the label below the cockpit HUD.
-export const formationBelowHud = <T extends { y: number }>(slots: T[], radii: number[], width: number, hudBottom: number): T[] => {
-  if (width <= 700 || slots.length === 0) return slots;
-  const top = Math.min(...slots.map((slot, index) => slot.y - ((radii[index] + 4) * 1.35 + 12)));
+export const formationTopExtent = (radius: number, playerDiameter = 94) =>
+  Math.max((radius + 4) * 1.35 + 12, enemyVisualDiameter(radius, playerDiameter) * .7 + 8);
+
+export const formationBelowHud = <T extends { y: number }>(slots: T[], radii: number[], _width: number, hudBottom: number, playerDiameter = 94): T[] => {
+  if (slots.length === 0) return slots;
+  // Include the actual scaled sprite and its measured centre offset (<= 18.7%).
+  // Phone formations need the same protection as wide screens.
+  const top = Math.min(...slots.map((slot, index) => slot.y - formationTopExtent(radii[index], playerDiameter)));
   const offset = Math.max(0, hudBottom + 28 - top);
   return offset === 0 ? slots : slots.map(slot => ({ ...slot, y: slot.y + offset }));
 };

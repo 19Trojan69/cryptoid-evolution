@@ -6,7 +6,7 @@ export const smartphoneTranslations: Record<string, Record<string, string>> = {
     "You start with 3 hearts, or 4 with Reinforced Hull and 6 with both armor upgrades. The mission ends when all hearts are lost.": "Du startest mit 3 Herzen, mit verstärktem Rumpf mit 4 und mit beiden Panzerungen mit 6. Sind alle Herzen verloren, endet die Mission.",
     "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 5 Shards instead.": "Bossherzen stellen ein verlorenes Herz wieder her, höchstens bis zur Panzerungsgrenze. Bei vollen Herzen erhältst du beim Einsammeln stattdessen 5 Shards.",
     "Advanced and Elite projectile protection does not increase your maximum hearts.": "Der Projektilschutz von Advanced und Elite erhöht deine maximale Herzzahl nicht.",
-    "FULL HEARTS": "HERZEN VOLL",
+    "FULL HEARTS": "LEBEN VOLL",
     "HEART RESTORED": "HERZ AUFGEFÜLLT",
     "Requires Reinforced Hull": "Verstärkter Rumpf erforderlich",
     "Total with Reinforced Hull": "Gesamt mit verstärktem Rumpf",

@@ -128,3 +128,60 @@ test('local Testnet ledger and CSV do not require application API keys', async (
   }
 
 });
+
+const publicTranslationEnv = {VERCEL_ENV:'production',VERCEL_PROJECT_PRODUCTION_URL:'cryptoid-evolution-testnet.vercel.app'};
+const translationId = 'a'.repeat(32), replyId = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
+const translationRequest = query => ({method:'GET',url:`/api/index?path=feedback/posts/${translationId}/translation&${query}`,headers:{host:'cryptoid-evolution-testnet.vercel.app',authorization:'Bearer private-token',cookie:'private-session','x-cryptoid-app-network':'mainnet'}});
+test('Testnet translation gateway validates language, reference and public-list context before fetching', async t => {
+  t.mock.method(globalThis,'fetch',async()=>{throw Error('must not fetch');});
+  const gateway=createApiGateway(async()=>{throw Error('must not start database');},()=>publicTranslationEnv);
+  for(const query of ['locale=xx','locale=de&reply=invalid','locale=de&category=private','locale=de&page=0','locale=de&page=1.5','locale=de&sort=bogus']) {
+    const res=response();await gateway(translationRequest(query),res);assert.equal(res.code,400);
+  }
+});
+test('Testnet translation gateway reads public Testnet posts without credentials and translates posts/replies', async t => {
+  let reads=0, translations=0;
+  t.mock.method(globalThis,'fetch',async(url,init)=>{
+    if(String(url).startsWith('https://cryptoid-evolution.vercel.app/api/feedback/posts')) {
+      reads++;
+      assert.equal(new Headers(init.headers).get('authorization'),null);
+      assert.equal(new Headers(init.headers).get('cookie'),null);
+      assert.equal(new Headers(init.headers).get('x-cryptoid-app-network'),'testnet');
+      assert.equal(new URL(url).searchParams.get('hidden'),'0');
+      assert.equal(new URL(url).searchParams.get('category'),'problem');
+      assert.equal(new URL(url).searchParams.get('sort'),'support');
+      assert.equal(new URL(url).searchParams.get('page'),'2');
+      return Response.json({network:'testnet',posts:[{id:translationId,hidden:false,title:'Gateway public translation test',description:'A unique public gateway description to translate.',replies:[{id:replyId,text:'A unique gateway developer reply.'}]}]});
+    }
+    assert.equal(new URL(url).hostname,'api.mymemory.translated.net');
+    assert.equal(new Headers(init.headers).get('authorization'),null);
+    translations++;
+    return Response.json({responseStatus:200,responseData:{translatedText:'Übersetzung: '+new URL(url).searchParams.get('q')}});
+  });
+  const gateway=createApiGateway(async()=>{throw Error('must not start database');},()=>publicTranslationEnv);
+  const query='locale=de-AT&category=problem&page=2&sort=support';
+  const post=response();await gateway(translationRequest(query),post);
+  assert.equal(post.code,200);assert.equal(post.headers['x-cryptoid-backend'],'testnet-translation');
+  assert.equal(post.body.locale,'de');assert.equal(post.body.fields.length,2);assert.equal(translations,2);
+  const cached=response();await gateway(translationRequest(query),cached);
+  assert.deepEqual(cached.body,post.body);assert.equal(translations,2);
+  const reply=response();await gateway(translationRequest(query+'&reply='+replyId),reply);
+  assert.equal(reply.body.fields.length,1);assert.equal(translations,3);assert.equal(reads,3);
+});
+test('Testnet translation gateway excludes hidden and Mainnet posts and handles upstream failures', async t => {
+  let data;
+  t.mock.method(globalThis,'fetch',async()=>data instanceof Error?Promise.reject(data):Response.json(data));
+  const gateway=createApiGateway(async()=>{throw Error('must not start database');},()=>publicTranslationEnv);
+  for(const value of [{network:'testnet',posts:[]},{network:'testnet',posts:[{id:translationId,hidden:true}]},{network:'mainnet',posts:[{id:translationId,hidden:false}]}]) {
+    data=value;const res=response();await gateway(translationRequest('locale=de'),res);assert.equal(res.code,404);
+  }
+  data=Error('upstream offline');const res=response();await gateway(translationRequest('locale=de'),res);assert.equal(res.code,503);
+});
+test('Mainnet and opted-in local Testnet keep the native translation handler', async () => {
+  for(const env of [{VERCEL_ENV:'production'},preview]) {
+    const {backend,calls}=backendFixture(), gateway=createApiGateway(async()=>backend,()=>env);
+    const req=translationRequest('locale=de');req.headers.host='cryptoid-evolution.vercel.app';
+    const res=response();await gateway(req,res);assert.equal(res.code,200);
+    assert.equal(calls.at(-1).url,`/feedback/posts/${translationId}/translation?locale=de`);
+  }
+});
