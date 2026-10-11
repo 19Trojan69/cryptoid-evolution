@@ -8,12 +8,18 @@ export default function CommunityText({
   replyId,
   fields,
   hidden,
+  category,
+  page,
+  sort,
   children,
 }: {
   postId: string;
   replyId?: string;
   fields: string[];
   hidden?: boolean;
+  category: string;
+  page: number;
+  sort: string;
   children: (texts: string[]) => ReactNode;
 }) {
   const { locale, t } = useLocale();
@@ -23,7 +29,7 @@ export default function CommunityText({
   const [result, setResult] = useState<(Result & { key: string }) | null>(null),
     [failedKey, setFailedKey] = useState<string | null>(null);
   const contentKey = JSON.stringify(fields);
-  const requestKey = JSON.stringify([postId, replyId, locale, contentKey, hidden]);
+  const requestKey = JSON.stringify([postId, replyId, locale, contentKey, hidden, category, page, sort]);
   const current = result?.key === requestKey ? result : null;
   const original = originalKey === requestKey;
   useEffect(() => {
@@ -48,9 +54,9 @@ export default function CommunityText({
     const controller = new AbortController();
     axiosClient
       .get<Result>(`/feedback/posts/${postId}/translation`, {
-        params: { locale, ...(replyId ? { reply: replyId } : {}) },
+        params: { locale, category, page, sort, ...(replyId ? { reply: replyId } : {}) },
         signal: controller.signal,
-        timeout: 35_000,
+        timeout: 45_000,
       })
       .then(({ data }) => {
         if (!controller.signal.aborted && data.locale === locale && data.fields.length === texts.length)
@@ -61,7 +67,7 @@ export default function CommunityText({
       });
     return () => controller.abort();
     // Stable content identity avoids requests on parent re-renders.
-  }, [visible, hidden, postId, replyId, locale, contentKey, requestKey]);
+  }, [visible, hidden, postId, replyId, locale, contentKey, requestKey, category, page, sort]);
   return (
     <div ref={container} className="community-text" lang={current?.translated && !original ? locale : undefined}>
       {children(current?.translated && !original ? current.fields : fields)}

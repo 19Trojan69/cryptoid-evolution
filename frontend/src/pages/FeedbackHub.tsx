@@ -279,7 +279,14 @@ export default function FeedbackHub({
           {posts.length === 0 && <p>{t("No contributions yet.")}</p>}
           {posts.map(post => (
             <article key={post.id} className="feedback-post" data-hidden={post.hidden}>
-              <CommunityText postId={post.id} fields={[post.title, post.description]} hidden={post.hidden}>
+              <CommunityText
+                postId={post.id}
+                fields={[post.title, post.description]}
+                hidden={post.hidden}
+                category={category}
+                page={page}
+                sort={sort}
+              >
                 {([translatedTitle, translatedDescription]) => (
                   <>
                     <header>
@@ -370,7 +377,15 @@ export default function FeedbackHub({
                             new Date(reply.createdAt)
                           )}
                         </small>
-                        <CommunityText postId={post.id} replyId={reply.id} fields={[reply.text]} hidden={post.hidden}>
+                        <CommunityText
+                          postId={post.id}
+                          replyId={reply.id}
+                          fields={[reply.text]}
+                          hidden={post.hidden}
+                          category={category}
+                          page={page}
+                          sort={sort}
+                        >
                           {([text]) => <p>{text}</p>}
                         </CommunityText>
                       </aside>
