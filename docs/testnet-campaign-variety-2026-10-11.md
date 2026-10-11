@@ -26,3 +26,10 @@ Optionale Kampfmetadaten sind im vorhandenen, erweiterbaren `combat.state.combo.
 - Smartphone-/Tablet-Pfade numerisch geprüft. Physischer Pi Browser, iPhone und Xiaomi Pad 7 sowie reale Geräte-FPS noch nicht geprüft.
 
 Engine-Simulation: im Frontend `node checks/build.mjs && node checks/run-engine.cjs`. Die Hooks/UI werden in diesen Tests ersetzt, der eigentliche Spielablauf kommt aus dem unveränderten Produktions-GamePage-Modul mit ausschließlich temporären Test-Inspektionszugängen. Keine Testzugänge werden in den Spielbuild eingebaut.
+
+
+## Follow-up requested by Marcus on 11 October 2026
+
+Testnet now omits formation-position circles entirely, including escort markers. The small enemy sprites (normal Light ships and the smallest escorts) render at exactly twice their prior width and height. All player ships, larger enemies, bosses, physical radii, damage, projectiles and existing audio retain their settings. Formation clearance below the HUD accounts for the larger small sprites.
+
+Uncollected pickups are retained across blocks, boss destruction, boss/bonus transitions and new levels. Falling pauses in transition phases; pickup effects and durations are unchanged. Carried pickup types and count are included in the next level's existing duplicate and active-drop limits. Restart still clears the run. Actual-engine checks cover each transition, collection exactly once, pause, restart and all 500 stages.

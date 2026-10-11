@@ -30,5 +30,16 @@ test('the actual game measures the player on resize and passes that size into th
   assert.match(game, /playerShipRef\.current\?\.clientWidth/);
   assert.match(game, /if \(playerWidth\) setPlayerDisplayDiameter\(playerWidth\)/);
   assert.match(game, /new ResizeObserver\(measureVisibleTop\)/);
-  assert.match(game, /enemyVisualDiameter\(asteroid\.radius, playerDisplayDiameter\)/);
+  assert.match(game, /enemyVisualDiameter\(asteroid\.radius, playerDisplayDiameter, combatVarietyEnabled && asteroid\.size === "small"\)/);
+});
+
+
+test('Testnet small opponents are exactly twice as visible without changing physics or other sizes', () => {
+  for (const player of [94, 104, 112, 132, 160]) {
+    for (const radius of [18, 25]) assert.equal(enemyVisualDiameter(radius, player, true), 2 * enemyVisualDiameter(radius, player));
+    for (const radius of [36, 50]) assert.equal(enemyVisualDiameter(radius, player, false), enemyVisualDiameter(radius, player));
+  }
+  const profile = chooseCryptoid(1, 0), before = {...profile};
+  enemyVisualDiameter(profile.radius, 132, true);
+  assert.deepEqual(profile, before);
 });

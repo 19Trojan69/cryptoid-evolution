@@ -226,7 +226,8 @@ const saveRecords = (state: GameState) => {
 const createFormationSlots = (section: number, sector: number, width: number, height: number, hudBottom: number, playerDiameter: number, count?: number, offset = 0) => {
   const slots = formationSlotsForCount(formationLayout(section, width, height, sector), count ?? 6);
   const radii = slots.map((_, index) => chooseCryptoid(sector, index + offset).radius);
-  return formationBelowHud(arrangeFormationBySize(slots, radii), radii, width, hudBottom, playerDiameter);
+  const visualRadii = radii.map(radius => combatVarietyEnabled && radius === 25 ? radius * 2 : radius);
+  return formationBelowHud(arrangeFormationBySize(slots, radii), visualRadii, width, hudBottom, playerDiameter);
 };
 
 const alignedSpritePosition = (x: number, y: number, sprite: number, renderedSize: number) => {
@@ -808,7 +809,7 @@ const GamePage = () => {
       playerDiameterRef.current = playerWidth || 94;
       const currentSlots = sectionSlotsRef.current;
       if (currentSlots?.length && stateRef.current.encounter === "normal") {
-        const radii = currentSlots.map((_, index) => chooseCryptoid(stateRef.current.sector, index + formationOffsetRef.current).radius);
+        const radii = currentSlots.map((_, index) => { const radius = chooseCryptoid(stateRef.current.sector, index + formationOffsetRef.current).radius; return combatVarietyEnabled && radius === 25 ? radius * 2 : radius; });
         const adjusted = formationBelowHud(currentSlots, radii, field.clientWidth, visibleTopRef.current, playerDiameterRef.current);
         if (adjusted !== currentSlots) {
           sectionSlotsRef.current = adjusted;
@@ -990,7 +991,7 @@ const GamePage = () => {
     state.asteroids = [];
     state.enemyShots = [];
     state.shots = [];
-    state.powerUps = [];
+    if (!combatVarietyEnabled) state.powerUps = [];
     state.boss = null;
     void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
   };
@@ -1293,7 +1294,12 @@ const GamePage = () => {
               state.boss = null;
             }
             state.combo.pendingAt = null;
-            if (next.resetChain) { state.chainBlocks = 0; state.combo.level = 0; state.powerUpTypes = []; dropsCreatedRef.current = 0; }
+            if (next.resetChain) {
+              state.chainBlocks = 0; state.combo.level = 0;
+              // Carried pickups count toward the next level's existing drop and duplicate limits.
+              state.powerUpTypes = combatVarietyEnabled ? [...new Set(state.powerUps.map(pickup => pickup.type))] : [];
+              dropsCreatedRef.current = combatVarietyEnabled ? state.powerUps.length : 0;
+            }
             state.phase = "SECTOR_INTRO";
             state.asteroids = [];
             state.bonusTargets = [];
@@ -1301,7 +1307,7 @@ const GamePage = () => {
             state.bonusResult = "";
             state.chainResult = "";
             state.rewardNotice = "";
-            state.powerUps = [];
+            if (!combatVarietyEnabled) state.powerUps = [];
             state.pickupNotice = null;
             state.shots = [];
             state.enemyShots = [];
@@ -1567,7 +1573,7 @@ const GamePage = () => {
           }
           state.rocks=state.rocks.filter(r=>Math.hypot(r.x-state.player.x*width,r.y-state.player.y*height)>r.radius+playerDiameterRef.current*.6 && !state.powerUps.some(p=>Math.hypot(p.x-r.x,p.y-r.y)<r.radius+35));
         }
-        state.powerUps = movePowerUps(state.powerUps, delta, height);
+        state.powerUps = movePowerUps(state.powerUps, combatVarietyEnabled && transitionPaused ? 0 : delta, height);
         state.powerUps = state.powerUps.filter(pickup => {
           if (Math.hypot(pickup.x - state.player.x * width, pickup.y - state.player.y * height) > 34) return true;
           Object.assign(state, activateCollectedPower(state, pickup.type));
@@ -2133,7 +2139,7 @@ const GamePage = () => {
           {game.phase === "SECTOR_CLEAR" && game.rewardNotice && <small className="reward-unlock" role="status">✦ {game.rewardNotice.split(" · ").map(part => t(part)).join(" · ")}</small>}
         </div>}
         {game.status === "playing" && game.encounter === "normal" && !formationStartedRef.current && (game.phase === "SECTOR_INTRO" || game.phase === "ENTRY" || game.phase === "FORMATION") && <div className="formation-data-stream" aria-hidden="true">{FORMATION_DATA_ROWS.map((row, index) => <div className="formation-data-row" key={index}><span>{row.repeat(4)}</span><span>{row.repeat(4)}</span></div>)}</div>}
-        {game.asteroids.filter(asteroid => game.encounter === "normal"
+        {!combatVarietyEnabled && game.asteroids.filter(asteroid => game.encounter === "normal"
           ? game.phase === "ENTRY" || game.phase === "FORMATION" || game.phase === "REFORM"
           : game.encounter === "boss-fight" && asteroid.escort && asteroid.attackPattern === null
         ).map(asteroid => { const locked = asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration; const diameter = asteroid.radius * 2 + 8; return <div key={`formation-${asteroid.id}`} className={`formation-target${locked ? " formation-target-locked" : ""}`} style={{ left: asteroid.entryTargetX, top: asteroid.entryTargetY, width: diameter, height: diameter }} aria-hidden="true"><span /></div>; })}
@@ -2147,7 +2153,7 @@ const GamePage = () => {
           <BossHealthView boss={game.boss}/>
         </div>}
         {game.bonusTargets.map(target => <div key={target.id} className="asteroid asteroid-small cryptoid bonus-ship cryptoid-boost" style={{ ...alignedSpritePosition(target.x, target.y, target.sprite, 55), width: 55, height: 55, transform: "translate(-50%, -50%)", "--flame-length": `${engineFlamePercent(target.visualMotion?.thrust ?? 0)}%` } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={target.sprite} color={target.color} />{engineTrails(target.sprite, "exhaust")}</div></div>)}
-        {game.asteroids.map(asteroid => { const sprite = asteroid.sprite; const maskImage = `url('${shipEvolutionAsset(sprite, 1)}')`; const visualSize = enemyVisualDiameter(asteroid.radius, playerDisplayDiameter); return <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid${game.empMs > 0 ? " cryptoid-emp" : ""} cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.hitUntil && asteroid.hitUntil > performance.now() ? " cryptoid-hit" : ""}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}${cryptoidMotionClass(asteroid)}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ ...alignedSpritePosition(asteroid.x, asteroid.y, sprite, visualSize), width: visualSize, height: visualSize, transform: "translate(-50%, -50%)", ...shipHullStyle(sprite, true), "--visual-bank": `${asteroid.visualMotion?.bank ?? 0}deg`, "--flame-length": `${engineFlamePercent(asteroid.visualMotion?.thrust ?? 0, asteroid.returnElapsed > 0 ? "return" : asteroid.entryElapsed < asteroid.entryDuration ? "launch" : asteroid.attackPattern !== null && asteroid.attackDelay <= 0 ? "boost" : "idle")}%`, "--hull-light": asteroid.hullLight ?? 0 } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={sprite} color={asteroid.color} />{engineTrails(sprite, "exhaust")}<i className="hull-reflection" style={{ maskImage, WebkitMaskImage: maskImage }} aria-hidden="true" /><HullDamage sites={asteroid.hullFires} hit={asteroid.hit} maskImage={maskImage} mirrored /></div>{enemyMuzzleOffsets(asteroid.muzzleBarrels ?? 1, asteroid.radius).map((offset, barrel) => <i key={`muzzle-${barrel}`} className="enemy-muzzle-flash" style={{ left: `calc(50% + ${offset}px)`, top: `calc(50% + ${asteroid.radius * .4}px)`, opacity: asteroid.muzzleAt ? Math.max(0, 1 - (performance.now() - asteroid.muzzleAt) / 100) : 0 }} aria-hidden="true" />)}<span className="health-bar" data-critical={asteroid.health / asteroid.maxHealth <= .3} role="progressbar" aria-label={t("Enemy hull")} aria-valuenow={Math.ceil(asteroid.health / asteroid.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${asteroid.health / asteroid.maxHealth * 100}%` }} /></span></div>; })}
+        {game.asteroids.map(asteroid => { const sprite = asteroid.sprite; const maskImage = `url('${shipEvolutionAsset(sprite, 1)}')`; const visualSize = enemyVisualDiameter(asteroid.radius, playerDisplayDiameter, combatVarietyEnabled && asteroid.size === "small"); return <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid${game.empMs > 0 ? " cryptoid-emp" : ""} cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.hitUntil && asteroid.hitUntil > performance.now() ? " cryptoid-hit" : ""}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}${cryptoidMotionClass(asteroid)}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ ...alignedSpritePosition(asteroid.x, asteroid.y, sprite, visualSize), width: visualSize, height: visualSize, transform: "translate(-50%, -50%)", ...shipHullStyle(sprite, true), "--visual-bank": `${asteroid.visualMotion?.bank ?? 0}deg`, "--flame-length": `${engineFlamePercent(asteroid.visualMotion?.thrust ?? 0, asteroid.returnElapsed > 0 ? "return" : asteroid.entryElapsed < asteroid.entryDuration ? "launch" : asteroid.attackPattern !== null && asteroid.attackDelay <= 0 ? "boost" : "idle")}%`, "--hull-light": asteroid.hullLight ?? 0 } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={sprite} color={asteroid.color} />{engineTrails(sprite, "exhaust")}<i className="hull-reflection" style={{ maskImage, WebkitMaskImage: maskImage }} aria-hidden="true" /><HullDamage sites={asteroid.hullFires} hit={asteroid.hit} maskImage={maskImage} mirrored /></div>{enemyMuzzleOffsets(asteroid.muzzleBarrels ?? 1, asteroid.radius).map((offset, barrel) => <i key={`muzzle-${barrel}`} className="enemy-muzzle-flash" style={{ left: `calc(50% + ${offset}px)`, top: `calc(50% + ${asteroid.radius * .4}px)`, opacity: asteroid.muzzleAt ? Math.max(0, 1 - (performance.now() - asteroid.muzzleAt) / 100) : 0 }} aria-hidden="true" />)}<span className="health-bar" data-critical={asteroid.health / asteroid.maxHealth <= .3} role="progressbar" aria-label={t("Enemy hull")} aria-valuenow={Math.ceil(asteroid.health / asteroid.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${asteroid.health / asteroid.maxHealth * 100}%` }} /></span></div>; })}
         {game.powerUps.map(pickup => {
           const pickupLabel = `${t(powerUpNames[pickup.type])} · ${t(powerUpDescriptions[pickup.type])}`;
           return <div key={pickup.id} className={`power-up power-up-${pickup.type}`} role="img" aria-label={pickupLabel} title={pickupLabel} style={{ left: pickup.x, top: pickup.y }}><span aria-hidden="true">{powerUpSymbols[pickup.type]}</span></div>;
