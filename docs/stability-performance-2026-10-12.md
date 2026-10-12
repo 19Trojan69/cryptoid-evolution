@@ -42,7 +42,11 @@ Der ursprüngliche Pi-Browser-/Meme-Nebula-Abbruch ist nicht reproduziert und ni
 
 Die anderen Browser-JSONs und simulation-current.json stammen aus früheren Entwicklungsständen und gelten nicht als Messung dieser korrigierten Testnet-Grundlage. Der unveränderte Lackierungsvergleich bleibt begrenzt aussagekräftig: 48 statt 240 Cache-Varianten, acht statt 60 Quellen; keine beobachtete Aufgabe über 50 ms gegenüber maximal 244 ms zuvor, rund 2,8 % längere Gesamtdauer. Daraus folgt keine allgemeine mobile FPS-Steigerung.
 
-Testnet-Korrektur ist vom Nutzer autorisiert. Der GitHub-Branch erzeugt Vercel-Previews; eine Preview allein ersetzt die öffentliche Testnet-Domain nicht. Der verbundene Vercel-Zugriff verweigert Promotion mit HTTP 403. Deshalb muss der Nutzer den erfolgreich gebauten **neuen Testnet-Commit** im Projekt cryptoid-evolution-testnet promoten. Vercels Bezeichnung Production bezeichnet dort die öffentliche Testnet-Domain; Mainnet ist ein separates Projekt. Main und Mainnet werden nicht verändert.
+Testnet-Korrektur ist vom Nutzer autorisiert und am 12. Oktober 2026 veröffentlicht. Die zusätzliche teamId-Angabe im verbundenen API-Aufruf lieferte trotz korrektem Team 403/404 bzw. leere Projektlisten. Der aktuelle Kontokontext listet dasselbe Testnet-Projekt mit der zuvor bestätigten accountId. Nach Prüfung von Projekt-ID, accountId und exaktem Commit funktionierte der projektbezogene Zugriff ohne den widersprüchlichen Team-Parameter. Keine Änderung des Zielteams oder anderer Konten.
+
+Aus der geprüften Preview wurde mit Production-Umgebung und unverändertem Commit **0c4a6e76a201b6d9956f3ae6eb7cb151d85131a4** neu gebaut. Deployment **dpl_8AGNNdBLRiBTwJZt4LyKaFMg8mi1** ist READY; die öffentliche Domain **https://cryptoid-evolution-testnet.vercel.app** löst laut Vercel auf genau dieses Deployment/Commit auf. HTTP 200 und ausgelieferte Produktions-Bundles bestätigen schnellen Einflug, letzte einzeilige HUD-Regel, Testnet-Marker-Bedingung, Bonusfelsen und Session-Diagnose. Rohdaten: testnet-release-verification.json. Diese statische Auslieferungsprüfung ersetzt keinen Geräte-/Pixel-/Audio-Test.
+
+Mainnet bleibt auf **907d2a7363345d00f0f90c54402bf04e887b64d9**, Deployment dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe (READY, separates Mainnet-Projekt). Kein Main-Merge oder Mainnet-Release. Vercels Bezeichnung Production im Testnet-Projekt bezeichnet allein dessen öffentliche Testnet-Domain.
 
 ## Reproduktion und Gerätetest
 
