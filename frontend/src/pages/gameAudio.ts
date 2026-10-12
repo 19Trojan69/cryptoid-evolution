@@ -69,19 +69,26 @@ export class GameAudio {
   async start() {
     if (typeof AudioContext === "undefined") return false;
     if (!this.context) {
-      this.context = new AudioContext();
-      this.effectsBus = this.context.createGain();
-      this.effectsBus.gain.value = effectsGain(this.effectsVolume);
-      if (typeof this.context.createDynamicsCompressor === "function") {
-        this.limiter = this.context.createDynamicsCompressor();
-        this.limiter.threshold.value = -12;
-        this.limiter.knee.value = 12;
-        this.limiter.ratio.value = 8;
-        this.limiter.attack.value = .003;
-        this.limiter.release.value = .2;
-        this.effectsBus.connect(this.limiter).connect(this.context.destination);
-      } else {
-        this.effectsBus.connect(this.context.destination);
+      let context: AudioContext | null = null, bus: GainNode | null = null, limiter: DynamicsCompressorNode | null = null;
+      try {
+        context = new AudioContext();
+        bus = context.createGain();
+        bus.gain.value = effectsGain(this.effectsVolume);
+        if (typeof context.createDynamicsCompressor === "function") {
+          limiter = context.createDynamicsCompressor();
+          limiter.threshold.value = -12;
+          limiter.knee.value = 12;
+          limiter.ratio.value = 8;
+          limiter.attack.value = .003;
+          limiter.release.value = .2;
+          bus.connect(limiter).connect(context.destination);
+        } else bus.connect(context.destination);
+        this.context = context; this.effectsBus = bus; this.limiter = limiter;
+      } catch {
+        try { bus?.disconnect(); } catch { /* Partially initialized host. */ }
+        try { limiter?.disconnect(); } catch { /* Partially initialized host. */ }
+        try { void context?.close().catch(() => {}); } catch { /* Host already closed. */ }
+        return false;
       }
     }
     const context = this.context;
@@ -90,31 +97,35 @@ export class GameAudio {
       this.loadController = new AbortController();
       this.sampleRequest = this.loadSamples(context, this.loadController.signal);
     }
-    try { const resumed=context.resume();this.prepareBossSounds(context);this.prepareEnemySound(context);await resumed; } catch { return false; }
+    try { const resumed=context.resume();void resumed.catch(() => {});this.prepareBossSounds(context);this.prepareEnemySound(context);await resumed; } catch { return false; }
     if (this.context !== context) return false;
     return context.state === "running";
   }
 
   private prepareBossSounds(context:AudioContext) {
     if(this.bossSamples.size||typeof context.createBuffer!=="function")return;
+    const samples = new Map<string, AudioBuffer>();
     for(const kind of Object.keys(bossSoundReferences) as BossWeaponKind[])for(let variant=0;variant<3;variant++){
       const pcm=generateBossSound(kind,variant,context.sampleRate),buffer=context.createBuffer(1,pcm.length,context.sampleRate);
-      buffer.copyToChannel(pcm,0);this.bossSamples.set(kind+variant,buffer);
+      buffer.copyToChannel(pcm,0);samples.set(kind+variant,buffer);
     }
+    this.bossSamples = samples;
   }
 
   private prepareEnemySound(context: AudioContext) {
     if (this.enemyShotSamples.size || typeof context.createBuffer !== "function") return;
+    const singles = new Map<CryptoidClass, AudioBuffer>(), doubles = new Map<CryptoidClass, AudioBuffer>();
     for (const shipClass of Object.keys(enemySoundProfiles) as CryptoidClass[]) {
       const pcm = generateEnemyShotSound(context.sampleRate, shipClass);
       const buffer = context.createBuffer(1, pcm.length, context.sampleRate);
       buffer.copyToChannel(pcm, 0);
-      this.enemyShotSamples.set(shipClass, buffer);
+      singles.set(shipClass, buffer);
       const doublePcm = generateEnemyDoubleShotSound(context.sampleRate, shipClass);
       const doubleBuffer = context.createBuffer(1, doublePcm.length, context.sampleRate);
       doubleBuffer.copyToChannel(doublePcm, 0);
-      this.enemyDoubleSamples.set(shipClass, doubleBuffer);
+      doubles.set(shipClass, doubleBuffer);
     }
+    this.enemyShotSamples = singles; this.enemyDoubleSamples = doubles;
   }
 
   private rockLastAt = -1;
