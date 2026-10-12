@@ -13,7 +13,7 @@ const output =
 const hooks = `
 globalThis.__campaignQA = {
  info:()=>({sector:stateRef.current.sector,encounter:stateRef.current.encounter,phase:stateRef.current.phase,status:stateRef.current.status,score:stateRef.current.score,shards:stateRef.current.shards,hearts:stateRef.current.hearts,paid:stateRef.current.paidWeaponMs,rapid:stateRef.current.rapidFireMs,enemies:stateRef.current.asteroids.length,shots:stateRef.current.shots.length,hostile:stateRef.current.enemyShots.length,effects:stateRef.current.effects.length}),
- render:()=>{const game=stateRef.current;return /* ACTUAL_SCENE */;},
+ render:()=>{const game=stateRef.current;/* ACTUAL_PRESENTATION */},
  arrivals:()=>stateRef.current.asteroids.map(enemy=>({duration:enemy.entryDuration,settle:enemy.formationDuration,shipClass:enemy.shipClass,pattern:enemy.entryPattern})),
  protect:()=>{stateRef.current.hearts=99;adminRunRef.current=true;},
  clearGroup:()=>{stateRef.current.asteroids=[];stateRef.current.shots=[];formationIndexRef.current=blockFlights(stateRef.current.sector,rulesVersionRef.current)[flightRef.current];},
@@ -114,10 +114,12 @@ const presentation =
                 true,
                 ts.ScriptKind.TSX,
               );
-            let restoreBlock, scene;
+            let restoreBlock, scene, presentationBody;
             const visit = (node) => {
               if (ts.isVariableDeclaration(node) && node.name.getText(ast) === "GamePage")
                 scene = node.initializer.body.statements.findLast(ts.isReturnStatement).expression.getText(ast);
+              if (ts.isVariableDeclaration(node) && node.name.getText(ast) === "renderScene")
+                presentationBody = node.initializer.body.getText(ast).slice(1, -1);
               if (
                 ts.isIfStatement(node) &&
                 node.expression.getText(ast) ===
@@ -132,9 +134,9 @@ const presentation =
             return {
               contents:
                 source.replace(
-                  "  const levelLabel =",
-                  hooks.replace("/* ACTUAL_RESTORE_BLOCK */", restoreBlock).replace("/* ACTUAL_SCENE */", scene) +
-                    "\n  const levelLabel =",
+                  presentationBody ? "  const renderScene =" : "  const levelLabel =",
+                  hooks.replace("/* ACTUAL_RESTORE_BLOCK */", restoreBlock).replace("/* ACTUAL_PRESENTATION */", presentationBody || `return ${scene};`) +
+                    (presentationBody ? "\n  const renderScene =" : "\n  const levelLabel ="),
                 ) + "\nglobalThis.__GamePageFactory=GamePage;",
               loader: "tsx",
             };
