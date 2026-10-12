@@ -56,4 +56,16 @@ const bootstrap=`window.__ENV={appNetwork:'testnet'};window.__previewLevel=25;co
 const styleBoot=`let css=${JSON.stringify(css)};css=css.replace(/url\\(\\s*['"]?(\\/[^)'"\\s]+)['"]?\\s*\\)/g,(m,p)=>'url('+window.__previewAsset(p)+')');const style=document.createElement('style');style.textContent=css;document.head.append(style);`;
 const extra=`html,body,#root{margin:0;min-height:100%;background:#030916}.preview-menu{min-height:100dvh;display:grid;place-items:center;padding:24px;font-family:system-ui;color:#e4dece;background:radial-gradient(ellipse at 50% 0,#172643,transparent 70%)}.preview-menu section{width:min(420px,100%)}.preview-menu small{color:#a29b88;letter-spacing:.12em}.preview-menu h1{font-size:clamp(36px,10vw,56px);line-height:.98;letter-spacing:.025em}.preview-menu h1 span{color:#d8c89a}.preview-menu label{display:grid;gap:7px;margin:20px 0}.preview-menu select,.preview-menu button{min-height:48px;border-radius:10px;border:1px solid #b3a88c66;background:#101e32;color:#eee6d0;padding:10px;font:inherit}.preview-start{width:100%;background:linear-gradient(120deg,#d6c49b,#9c8862)!important;color:#071020!important;font-weight:700!important}.preview-note{font-size:13px;line-height:1.55;opacity:.75}.preview-toolbar{position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 14px;background:#041122df;color:#d2cbb8;font:11px system-ui}.preview-toolbar button{border:1px solid #b4a685;border-radius:6px;color:#eee1bb;background:#13263b;padding:6px 12px}.preview-toolbar+.game-shell{padding-bottom:40px}`;
 fs.mkdirSync(path.dirname(output),{recursive:true});fs.writeFileSync(output,`<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Cryptoid Evolution – Stabilitätstest</title><style>${extra}</style></head><body><div id="root"></div><script>${bootstrap.replaceAll('</script','<\\/script')}${styleBoot}${js.replaceAll('</script','<\\/script')}</script></body></html>`);
+// An optional web directory keeps HD assets as ordinary cacheable files.
+// It carries the same isolated API/auth/storage stubs as the offline copy.
+const webDirectory=process.argv[3];
+if(webDirectory){
+ const destination=path.resolve(webDirectory);fs.mkdirSync(destination,{recursive:true});
+ for(const [relative,asset] of assets){const file=path.join(destination,relative.slice(1));fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,Buffer.from(asset.data,'base64'));}
+ const onlineBootstrap="window.__ENV={appNetwork:'testnet'};window.__previewLevel=25;window.__previewAsset=p=>p;";
+ const html=fs.readFileSync(output,'utf8').replace(bootstrap.replaceAll('</script','<\\/script'),onlineBootstrap);
+ fs.writeFileSync(path.join(destination,'index.html'),html);
+ fs.writeFileSync(path.join(destination,'robots.txt'),'User-agent: *\nDisallow: /\n');
+ console.log(JSON.stringify({webDirectory:destination,assetFiles:assets.size,htmlBytes:Buffer.byteLength(html)}));
+}
 fs.rmSync(temp,{recursive:true,force:true});console.log(JSON.stringify({output,bytes:fs.statSync(output).size,assets:assets.size}));
