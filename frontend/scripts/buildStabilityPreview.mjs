@@ -19,7 +19,7 @@ export const previewUUID=()=>globalThis.crypto?.randomUUID?.()??'preview-'+Math.
 export const offlineAsset=p=>window.__previewAsset(p);
 `;
 fs.writeFileSync(path.join(temp,'memory.ts'),memory);
-const entry=`import {createRoot} from 'react-dom/client';import {useState,useMemo} from 'react';import {createMemoryRouter,RouterProvider} from 'react-router-dom';import Game from '../src/pages/GamePage';import {playerSkins,SHIP_SKIN_KEY,SHIP_COLOR_KEY} from '../src/pages/shipFleet';import {localStorage,sessionStorage} from './memory';import '../src/index.css';import '../src/hudDepth.css';import '../src/smartphoneUi.css';
+const entry=`import {createRoot} from 'react-dom/client';import {useState,useMemo} from 'react';import {createMemoryRouter,RouterProvider} from 'react-router-dom';import Game from '../src/pages/GamePage';import {playerSkins,SHIP_SKIN_KEY,SHIP_COLOR_KEY} from '../src/pages/shipFleet';import {localStorage,sessionStorage} from './memory';import '../src/index.css';import '../src/hudDepth.css';import '../src/smartphoneUi.css';import '../scripts/stabilityPreview.css';
 function Preview(){const [playing,setPlaying]=useState(false),[run,setRun]=useState(0),[level,setLevel]=useState(25),[ship,setShip]=useState('grey-scout'),[hand,setHand]=useState('right');const router=useMemo(()=>createMemoryRouter([{path:'*',element:<Game/>}]),[run]);
 const start=()=>{localStorage.clear();sessionStorage.clear();for(const [k,v] of Object.entries({cryptoid_language:'de',cryptoid_home_music:'off',cryptoid_effects_volume:'35',cryptoid_control_hand:hand,cryptoid_ship_start:'higher',[SHIP_SKIN_KEY]:ship,[SHIP_COLOR_KEY]:'gold'}))localStorage.setItem(k,v);window.__previewLevel=level;setRun(n=>n+1);setPlaying(true);};
 return playing?<><nav className="preview-toolbar"><strong>ISOLIERTER STABILITÄTSTEST</strong><button onClick={()=>setPlaying(false)}>Testmenü</button></nav><RouterProvider key={run} router={router}/></>:<main className="preview-menu"><section><small>TROJAN WOLF GAMES · TESTVORSCHAU</small><h1>CRYPTOID<br/><span>EVOLUTION</span></h1><p>Stabilitäts- und Performance-Test</p><label>Startpunkt<select value={level} onChange={e=>setLevel(Number(e.target.value))}><option value={1}>Genesis Belt · Block 1/9</option><option value={25}>Meme Nebula · Block 5/9</option><option value={30}>Meme Nebula · Boss</option><option value={500}>Letzter Boss · Level 500</option></select></label><label>Testschiff<select value={ship} onChange={e=>setShip(e.target.value)}>{playerSkins.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></label><label>Steuerhand<select value={hand} onChange={e=>setHand(e.target.value)}><option value="right">Rechtshänder</option><option value="left">Linkshänder</option></select></label><button className="preview-start" onClick={start}>Test starten ▶</button><p className="preview-note">Originale Kampfwerte und HD-Schiffe. Soundeffekte sind aktiv; Musik ist in dieser Vorschau ausgeschaltet. Käufe, Konten und dauerhafte Belohnungen sind deaktiviert. Testfortschritt bleibt nur während der geöffneten Sitzung erhalten.</p></section></main>;
@@ -63,9 +63,12 @@ if(webDirectory){
  const destination=path.resolve(webDirectory);fs.mkdirSync(destination,{recursive:true});
  for(const [relative,asset] of assets){const file=path.join(destination,relative.slice(1));fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,Buffer.from(asset.data,'base64'));}
  const onlineBootstrap="window.__ENV={appNetwork:'testnet'};window.__previewLevel=25;window.__previewAsset=p=>p;";
- const html=fs.readFileSync(output,'utf8').replace(bootstrap.replaceAll('</script','<\\/script'),onlineBootstrap);
+ let html=fs.readFileSync(output,'utf8').replace(bootstrap.replaceAll('</script','<\\/script'),onlineBootstrap);
+ const fontImport=fs.readFileSync(path.join(root,'src/index.css'),'utf8').match(/@import url\(['"]([^'"]+)['"]\);/);
+ if(fontImport)html=html.replace('</head>','<link rel="stylesheet" href="'+fontImport[1]+'"></head>');
  fs.writeFileSync(path.join(destination,'index.html'),html);
  fs.writeFileSync(path.join(destination,'robots.txt'),'User-agent: *\nDisallow: /\n');
  console.log(JSON.stringify({webDirectory:destination,assetFiles:assets.size,htmlBytes:Buffer.byteLength(html)}));
 }
 fs.rmSync(temp,{recursive:true,force:true});console.log(JSON.stringify({output,bytes:fs.statSync(output).size,assets:assets.size}));
+

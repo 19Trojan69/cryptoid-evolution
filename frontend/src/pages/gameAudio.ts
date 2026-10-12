@@ -214,13 +214,7 @@ export class GameAudio {
   }
 
   private trackEffect(source: EffectVoice['source'], gain: GainNode) {
-    // Limit only overlapping repeated effects; warnings and pickups remain
-    // audible as newer voices replace the oldest voice in an extreme burst.
-    if (this.effectVoices.size >= 32) {
-      const oldest = this.effectVoices.values().next().value!;
-      try { oldest.source.stop(); } catch { /* Already ended. */ }
-      this.releaseEffectVoice(oldest);
-    }
+    // Track all original sounds; cleanup on ended/pause without truncating voices.
     const voice = { source, gain }; this.effectVoices.add(voice);
     source.onended = () => this.releaseEffectVoice(voice);
     return voice;
@@ -357,3 +351,4 @@ export const takePrimedGameAudio = () => {
   return audio;
 };
 export const hasPrimedGameAudio = () => primedAudio !== null;
+

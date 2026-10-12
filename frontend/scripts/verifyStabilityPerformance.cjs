@@ -5,7 +5,7 @@ const {chromium}=require(process.env.PLAYWRIGHT_MODULE_PATH||'playwright');
 const repo=path.resolve(__dirname,'../..'),output=process.env.CRYPTOID_STABILITY_OUT||'/tmp/cryptoid-stability.json';
 const hooks=`
  (window as any).__stabilityQA={
-  info:()=>({sector:stateRef.current.sector,encounter:stateRef.current.encounter,phase:stateRef.current.phase,status:stateRef.current.status,hearts:stateRef.current.hearts,score:stateRef.current.score,shards:stateRef.current.shards,enemies:stateRef.current.asteroids.length,shots:stateRef.current.shots.length,hostile:stateRef.current.enemyShots.length,effects:stateRef.current.effects.length,paid:stateRef.current.paidWeaponMs,rapid:stateRef.current.rapidFireMs,paintTier:performanceRef.current.level}),
+  info:()=>({sector:stateRef.current.sector,encounter:stateRef.current.encounter,phase:stateRef.current.phase,status:stateRef.current.status,hearts:stateRef.current.hearts,score:stateRef.current.score,shards:stateRef.current.shards,enemies:stateRef.current.asteroids.length,shots:stateRef.current.shots.length,hostile:stateRef.current.enemyShots.length,effects:stateRef.current.effects.length,paid:stateRef.current.paidWeaponMs,rapid:stateRef.current.rapidFireMs,paintTier:0}),
   clearGroup:()=>{stateRef.current.asteroids=[];stateRef.current.shots=[];formationIndexRef.current=blockFlights(stateRef.current.sector,rulesVersionRef.current)[flightRef.current];},
   killBoss:()=>destroyBoss(stateRef.current,performance.now()),
   heart:()=>{stateRef.current.player={...BOSS_HEART_POSITION};lastPlayerRef.current={...stateRef.current.player};},
@@ -59,7 +59,7 @@ const hooks=`
      const sector=info.sector;await page.clock.runFor(6000);await page.evaluate(()=>window.__stabilityQA.killBoss());await page.clock.runFor(1000);
      assert.equal(await page.locator('.impact-effect.boss-explosion').count(),0,'defer the final blast');
      await page.clock.runFor(4100);assert.equal(await page.locator('.impact-effect.boss-explosion').count(),1);
-     const fragments=await page.locator('.boss-debris-field .scattered-debris-piece').count();assert.ok(fragments<= (viewport.width===390?8:16));
+     const fragments=await page.locator('.boss-debris-field .scattered-debris-piece').count();assert.ok(fragments<= (16));
      await page.clock.runFor(5000);await page.evaluate(()=>window.__stabilityQA.heart());await page.clock.runFor(2400);await page.evaluate(()=>window.__stabilityQA.cards());await page.clock.runFor(1000);bosses.push({sector,fragments});
     }else if(info.encounter==='bonus'){
      await page.clock.runFor(8200);await page.evaluate(()=>window.__stabilityQA.clearBonus());await page.clock.runFor(100);await page.clock.runFor(8600);
@@ -77,3 +77,4 @@ const hooks=`
   assert.deepEqual(errors,[]);fs.mkdirSync(path.dirname(output),{recursive:true});fs.writeFileSync(output,JSON.stringify({results,errors,mode:'accelerated actual loop; forced group cleanup, real transitions and effects; no FPS inference'},null,2));console.log(JSON.stringify({passed:true,scenarios:results.map(r=>({viewport:r.viewport,blocks:r.normal.length,bosses:r.bosses.length})),errors}));
  }finally{if(browser)await browser.close();await server.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});
+

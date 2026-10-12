@@ -35,18 +35,13 @@ function StarFlare({ stars }: { stars: Star[] }) {
     let previous: Star | null = null;
     let previousColor = -1;
     const candidates = stars.filter(star => star.x > 70 && star.x < 930 && star.y > 80 && star.y < 720);
-    const field = document.querySelector('.game-field');
-    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const motionAllowed = () => !document.hidden && document.documentElement.dataset.motion !== "reduced" && !motion.matches && (!field || !field.getAttribute('data-performance') || field.getAttribute('data-performance') === '0');
+    const motionAllowed = () => !document.hidden && document.documentElement.dataset.motion !== "reduced" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const schedule = () => {
       if (!motionAllowed()) return;
       timer = window.setTimeout(() => {
-        if (!motionAllowed()) { setFlare(null); return; }
         const previousStar = previous;
         const spaced = previousStar ? candidates.filter(star => Math.hypot(star.x - previousStar.x, star.y - previousStar.y) >= 230) : candidates;
-        const choices = spaced.length ? spaced : candidates;
-        const star = choices[Math.floor(Math.random() * choices.length)];
-        if (!star) { schedule(); return; }
+        const star = spaced[Math.floor(Math.random() * spaced.length)];
         previous = star;
         const duration = 440 + Math.round(Math.random() * 430);
         previousColor = (previousColor + 1 + Math.floor(Math.random() * (flareColors.length - 1))) % flareColors.length;
@@ -55,9 +50,9 @@ function StarFlare({ stars }: { stars: Star[] }) {
       }, 1600 + Math.round(Math.random() * 3400));
     };
     const reset = () => { if (timer !== undefined) window.clearTimeout(timer); setFlare(null); schedule(); };
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const observer = new MutationObserver(reset);
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-motion"] });
-    if (field) observer.observe(field, { attributes: true, attributeFilter: ['data-performance'] });
     document.addEventListener("visibilitychange", reset);
     motion.addEventListener("change", reset);
     schedule();
@@ -106,3 +101,4 @@ const Starfield = ({ sector, paused, showNebula = false }: { sector: number; pla
 };
 
 export default memo(Starfield, (previous, next) => previous.sector === next.sector && previous.paused === next.paused && previous.showNebula === next.showNebula);
+

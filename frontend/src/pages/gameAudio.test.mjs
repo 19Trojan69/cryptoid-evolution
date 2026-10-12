@@ -321,7 +321,7 @@ test('hostile volleys reserve mix headroom including fading voices, while warnin
   } finally { audio.close(); globalThis.AudioContext = previous.AudioContext; globalThis.fetch = previous.fetch; }
 });
 
-test('one-off tones disconnect, obey a bounded voice budget and allocate nothing while muted',async()=>{
+test('one-off tones disconnect, preserve all overlapping voices and allocate nothing while muted',async()=>{
  const previous=globalThis.AudioContext;const sources=[];let disconnected=0;
  globalThis.AudioContext=class{
   state='running';currentTime=0;destination={};async resume(){}async close(){}
@@ -329,9 +329,10 @@ test('one-off tones disconnect, obey a bounded voice budget and allocate nothing
   createOscillator(){const source={frequency:{setValueAtTime(){},exponentialRampToValueAtTime(){}},connect:out=>out,disconnect(){disconnected++;},start(){},stop(){}};sources.push(source);return source;}
  };
  const audio=new GameAudio();try{
-  await audio.start();for(let i=0;i<100;i++)audio.play('extraLife');assert.ok(audio.activeVoiceCount<=32);
+  await audio.start();for(let i=0;i<100;i++)audio.play('extraLife');assert.equal(audio.activeVoiceCount,700);
   for(const source of sources)source.onended?.();assert.equal(audio.activeVoiceCount,0);assert.equal(disconnected,1400);
   audio.setEffectsVolume(0);const count=sources.length;audio.play('extraLife');assert.equal(sources.length,count);
   audio.setEffectsVolume(35);audio.play('extraLife');audio.close();assert.equal(audio.activeVoiceCount,0);
  }finally{audio.close();globalThis.AudioContext=previous;}
 });
+

@@ -24,10 +24,7 @@ import { gameHaptics } from "./gameHaptics";
 import { bindGameInput } from './gameInput';
 import { startGuardedGameLoop, type GameInterruption } from './gameLoop';
 import { recordGameDiagnostic, createGameSessionDiagnostics } from './gameDiagnostics';
-import { createPerformanceGovernor, simulationFrameTimes, MAX_GAME_CATCHUP_MS } from './gamePerformance';
-import { activateBossExplosion, bossExplosionReady, bossExplosionBudget } from './bossExplosionBudget';
-import './gamePerformance.css';
-import './bossExplosionBudget.css';
+import { activateBossExplosion, bossExplosionReady } from './effectLifecycle';
 import GameSceneBoundary from './GameSceneBoundary';
 import { advanceShipMotion, idleShipMotion, engineFlamePercent, explosionDiameter, fragmentFlight, hullIllumination, type ShipMotion } from "./shipRealism";
 import { useLocale } from "../i18n";
@@ -184,9 +181,6 @@ type Effect = {
   velocityX?: number;
   velocityY?: number;
   collision?: boolean;
-  detailLevel?: number;
-  fragments?: number;
-  boundedImpact?: boolean;
 };
 type WeaponSource = "standard" | "paid" | "pickup";
 type GameState = BossRewardState & { damageCount?: number; comboTotal?: number; playerHullFires?: HullFire[]; playerHit?: HullFire; bossHullLight: number; combo: DoubleKillCombo; asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; rewardNotice: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; powerUpTypes: PowerUpType[]; pickupNotice: { id: number; type: PowerUpType; remainingMs: number; level: number } | null; score: number; shardBase: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; purchasedShieldMs: number; shieldActive: boolean; overdriveMs: number; overdriveTotalMs: number; rapidFireMs: number; rapidFireTotalMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponSource: WeaponSource; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; weaponTimers: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
@@ -343,11 +337,11 @@ const shipDebris = (effect: Effect) => {
     "--debris-height": `${effect.bossHeight ?? 100}px`,
     "--debris-rotation": `${(effect.target === "player" ? 0 : 180) + (effect.debrisRotation ?? 0)}deg`,
   } as CSSProperties;
-  if (effect.kind === "boss-explosion") return <div className="ship-debris scattered-debris boss-debris-field" style={style} aria-hidden="true">{scatteredPieces(effect, effect.fragments ?? 16, 0)}</div>;
+  if (effect.kind === "boss-explosion") return <div className="ship-debris scattered-debris boss-debris-field" style={style} aria-hidden="true">{scatteredPieces(effect, 16, 0)}</div>;
   if (sprite === undefined) return null;
   const count = effect.collision || effect.kind === "player-crash" || effect.shipClass === "heavy" || (effect.debrisSize ?? 0) >= 86 ? 8 : 4;
   return <div className={`ship-debris scattered-debris${effect.shipClass ? ` ship-debris-${effect.shipClass}` : ""}`} style={style} aria-hidden="true">
-    {scatteredPieces(effect, (effect.detailLevel ?? 0) >= 1 ? 4 : count, sprite)}
+    {scatteredPieces(effect, count, sprite)}
   </div>;
 };
 
@@ -360,7 +354,7 @@ const fallingBoss = (effect: Effect) => <div className="boss-falling-hull" style
 
 // Effects keep their object identity until they expire. Keep the fragments and
 // their animations mounted instead of rebuilding the entire debris tree on every paint.
-const ImpactEffectView = memo(({ effect }: { effect: Effect }) => !bossExplosionReady(effect) ? null : effect.kind === "boss-fall" ? fallingBoss(effect) : <div className={`impact-effect ${effect.kind}`} data-bounded-impact={effect.boundedImpact} style={{ left: effect.x, top: effect.y, ...(["explosion", "shatter", "player-explosion"].includes(effect.kind) ? { width: explosionDiameter(effect.debrisSize ?? 58), height: explosionDiameter(effect.debrisSize ?? 58), marginLeft: -explosionDiameter(effect.debrisSize ?? 58) / 2, marginTop: -explosionDiameter(effect.debrisSize ?? 58) / 2 } : {}), ...(effect.kind === "boss-explosion" ? { "--boss-explosion-size": `${effect.debrisSize ?? 240}px`, "--boss-image": `url('${effect.bossImage}')`, "--boss-final-delay": `${effect.finalDelayMs ?? 1_450}ms` } : {}) } as CSSProperties} aria-hidden="true">{effect.kind !== "boss-explosion" && <span />}{shipDebris(effect)}</div>);
+const ImpactEffectView = memo(({ effect }: { effect: Effect }) => !bossExplosionReady(effect) ? null : effect.kind === "boss-fall" ? fallingBoss(effect) : <div className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y, ...(["explosion", "shatter", "player-explosion"].includes(effect.kind) ? { width: explosionDiameter(effect.debrisSize ?? 58), height: explosionDiameter(effect.debrisSize ?? 58), marginLeft: -explosionDiameter(effect.debrisSize ?? 58) / 2, marginTop: -explosionDiameter(effect.debrisSize ?? 58) / 2 } : {}), ...(effect.kind === "boss-explosion" ? { "--boss-explosion-size": `${effect.debrisSize ?? 240}px`, "--boss-image": `url('${effect.bossImage}')`, "--boss-final-delay": `${effect.finalDelayMs ?? 1_450}ms` } : {}) } as CSSProperties} aria-hidden="true">{effect.kind !== "boss-explosion" && <span />}{shipDebris(effect)}</div>);
 
 const GamePage = () => {
   const { t, lives, locale } = useLocale();
@@ -393,9 +387,7 @@ const GamePage = () => {
   const bossEscortTimerRef = useRef(0);
   const lastFrameRef = useRef(0);
   const lastPaintRef = useRef(0);
-  const performanceRef = useRef<ReturnType<typeof createPerformanceGovernor>>(null!);
-  if (!performanceRef.current) performanceRef.current = createPerformanceGovernor();
-  const renderTimeRef = useRef(0);
+  const slowFramesRef = useRef(0);
   const lastMeasuredFrameRef = useRef(0);
   const lastSavedAtRef = useRef(0);
   const diagnosticsRef = useRef<ReturnType<typeof createGameSessionDiagnostics> | null>(null);
@@ -962,11 +954,10 @@ const GamePage = () => {
     state.bossHeartShards = 0;
     const finalDelayMs = BOSS_FALL_DURATION_MS;
     const { width: fieldWidth, height: fieldHeight } = fieldSizeRef.current;
-    const impactBudget = bossExplosionBudget(boss.width, boss.height, bossExplosionSize(boss.config, boss.width), fieldWidth, fieldHeight, window.devicePixelRatio, performanceRef.current.level > 0);
     const finalY = bossFallTargetY(boss, fieldHeight);
-    const fireSites = Array.from({ length: impactBudget.fireSites }, (_, index) => boss.config.fireSites[Math.floor(index * boss.config.fireSites.length / impactBudget.fireSites)]);
+    const fireSites = Array.from({ length: 8 }, (_, index) => boss.config.fireSites[Math.floor(index * boss.config.fireSites.length / 8)]);
     state.effects.push({ id: nextIdRef.current++, x: boss.x, y: boss.y, kind: "boss-fall", startedAt: time, bossShipWidth: boss.width, bossHeight: boss.height, bossImage: boss.config.image, bossModel:{...boss,turrets:boss.turrets.map(g=>({...g,firedBarrels:[...g.firedBarrels]}))}, fallDistance: finalY - boss.y, fireSites });
-    state.effects.push({ id: nextIdRef.current++, x: boss.x, y: finalY, kind: "boss-explosion", startedAt: time, debrisSize: impactBudget.diameter, fragments: impactBudget.fragments, boundedImpact: impactBudget.bounded, bossShipWidth: boss.width, bossHeight: boss.height, bossImage: boss.config.wreckImage, finalDelayMs, fieldWidth, fieldHeight, shipClass: "heavy" });
+    state.effects.push({ id: nextIdRef.current++, x: boss.x, y: finalY, kind: "boss-explosion", startedAt: time, debrisSize: bossExplosionSize(boss.config, boss.width), bossShipWidth: boss.width, bossHeight: boss.height, bossImage: boss.config.wreckImage, finalDelayMs, fieldWidth, fieldHeight, shipClass: "heavy" });
     soundRef.current?.play("explosion");
     gameHaptics.explosion();
     gameHaptics.boss([25, 420, 30, 420, 35, 420, 40, 420, 45, 420, 50]);
@@ -1105,7 +1096,7 @@ const GamePage = () => {
       }
       backgroundHiddenAtRef.current = 0;
       lastFrameRef.current = 0;
-      performanceRef.current.reset();
+      slowFramesRef.current = 0;
     };
     const markPageHidden = () => {
       if (stateRef.current.status === "playing") void saveCombatRef.current().catch(() => {});
@@ -1134,7 +1125,7 @@ const GamePage = () => {
     const simulate = (time: number) => {
       const state = stateRef.current;
       const frameGap = time - (lastFrameRef.current || time);
-      const delta = Math.max(0, frameGap);
+      const delta = Math.min(34, frameGap);
       lastFrameRef.current = time;
       // Preserve destruction effects through a user pause or a backgrounded tab.
       if (state.status !== "playing") {
@@ -1166,7 +1157,7 @@ const GamePage = () => {
         if (horizontal || vertical) {
           state.player = movePlayer(state.player, horizontal, vertical, delta, width, height);
           // Keep the ship at display cadence without re-rendering every projectile on mobile.
-          if (time === renderTimeRef.current && playerShipRef.current) {
+          if (playerShipRef.current) {
             playerShipRef.current.style.left = `${state.player.x * 100}%`;
             playerShipRef.current.style.top = `${state.player.y * 100}%`;
           }
@@ -1174,14 +1165,11 @@ const GamePage = () => {
         const previousPlayer = lastPlayerRef.current ?? state.player;
         playerMotionRef.current = advanceShipMotion(playerMotionRef.current, (state.player.x - previousPlayer.x) * width, (state.player.y - previousPlayer.y) * height, delta);
         state.thrust = playerMotionRef.current.thrust;
-        // Physics substeps must not issue intermediate DOM writes or light scans.
-        if (time === renderTimeRef.current) {
-          playerShipRef.current?.style.setProperty("--flame-length", `${engineFlamePercent(state.thrust)}%`);
-          playerShipRef.current?.style.setProperty("--visual-bank", `${playerMotionRef.current.bank}deg`);
-          // Muzzle light belongs at the gun, not across the entire ship skin.
-          playerShipRef.current?.style.setProperty("--hull-light", String(hullIllumination(state.player.x * width, state.player.y * height, time, 0, state.effects)));
-          playerShipRef.current?.style.setProperty("--muzzle-light", String(playerMuzzleRef.current > 0 ? Math.max(0, 1 - (time - playerMuzzleRef.current) / 95) * .75 : 0));
-        }
+        playerShipRef.current?.style.setProperty("--flame-length", `${engineFlamePercent(state.thrust)}%`);
+        playerShipRef.current?.style.setProperty("--visual-bank", `${playerMotionRef.current.bank}deg`);
+        // Muzzle light belongs at the gun, not across the entire ship skin.
+        playerShipRef.current?.style.setProperty("--hull-light", String(hullIllumination(state.player.x * width, state.player.y * height, time, 0, state.effects)));
+        playerShipRef.current?.style.setProperty("--muzzle-light", String(playerMuzzleRef.current > 0 ? Math.max(0, 1 - (time - playerMuzzleRef.current) / 95) * .75 : 0));
         lastPlayerRef.current = state.player;
         if (!transitionPaused) elapsedRef.current += delta;
         impactCooldownRef.current = Math.max(0, impactCooldownRef.current - delta);
@@ -1688,7 +1676,7 @@ const GamePage = () => {
         }
         if (state.phase === "SECTOR_CLEAR") { state.enemyShots = []; state.shots = []; }
         persistGuestShards();
-        state.effects = state.effects.map(effect => activateBossExplosion(effect, time)).filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "turret-hit" ? 340 : effect.kind === "turret-burst" ? 720 : effect.kind === "boss-fall" ? BOSS_FALL_DURATION_MS + 100 : effect.kind === "boss-explosion" ? (effect.finalDelayMs ?? 0) + 3_400 : effect.kind === "player-explosion" ? 2_250 : effect.kind === "player-crash" ? 1_350 : effect.kind === "explosion" || effect.kind === "shatter" ? 2_250 : 390)).map(effect => effect.detailLevel === undefined ? { ...effect, detailLevel: performanceRef.current.level } : effect);
+        state.effects = state.effects.map(effect => activateBossExplosion(effect, time)).filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "turret-hit" ? 340 : effect.kind === "turret-burst" ? 720 : effect.kind === "boss-fall" ? BOSS_FALL_DURATION_MS + 100 : effect.kind === "boss-explosion" ? (effect.finalDelayMs ?? 0) + 3_400 : effect.kind === "player-explosion" ? 2_250 : effect.kind === "player-crash" ? 1_350 : effect.kind === "explosion" || effect.kind === "shatter" ? 2_250 : 390));
         if (state.hearts === 0) {
           state.status = "destroying";
           state.enemyShots = [];
@@ -1705,29 +1693,24 @@ const GamePage = () => {
             setGame({ ...stateRef.current, effects: [...stateRef.current.effects] });
           }, GAME_OVER_REVEAL_MS);
         }
-        const paintInterval = performanceRef.current.paintInterval;
-        if (damageTaken || (time === renderTimeRef.current && time - lastPaintRef.current + .75 >= paintInterval) || state.phase !== previousPhase || state.status !== "playing") {
+        // Desktop/tablet motion stays at display cadence; compact phones limit paints.
+        // When a compact phone is falling behind, reduce React scene paints
+        // while keeping simulation and direct ship movement at RAF cadence.
+        slowFramesRef.current = width > 700 ? 0 : frameGap > 48
+          ? Math.min(12, slowFramesRef.current + 2)
+          : Math.max(0, slowFramesRef.current - 1);
+        const paintInterval = width > 700 ? 16 : slowFramesRef.current >= 6 ? 50 : 32;
+        if (damageTaken || time - lastPaintRef.current >= paintInterval || state.phase !== previousPhase || state.status !== "playing") {
           lastPaintRef.current = time;
           setGame({ ...state, boss: state.boss ? { ...state.boss } : null, asteroids: [...state.asteroids], bonusTargets: [...state.bonusTargets], shots: [...state.shots], enemyShots: [...state.enemyShots], effects: [...state.effects], powerUps: [...state.powerUps] });
         }
       }
     };
     const step = (time: number) => {
-      const begin = performance.now();
-      const gap = lastFrameRef.current ? Math.max(0, time - lastFrameRef.current) : 0;
-      lastMeasuredFrameRef.current = gap;
-      renderTimeRef.current = time;
-      if (stateRef.current.status !== 'playing') { performanceRef.current.reset(time); simulate(time); return; }
+      lastMeasuredFrameRef.current = lastFrameRef.current ? Math.max(0, time - lastFrameRef.current) : 0;
       if (document.hidden) return;
-      if (gap > MAX_GAME_CATCHUP_MS) { interruptionRef.current('loop-stall'); return; }
-      for (const frameTime of simulationFrameTimes(lastFrameRef.current, time)) simulate(frameTime);
-      const previousLevel = performanceRef.current.level;
-      const sample = performanceRef.current.observe(time, gap, performance.now() - begin);
-      if (sample && previousLevel !== sample.level) {
-        if (fieldRef.current) fieldRef.current.dataset.performance = String(sample.level);
-        recordGameDiagnostic({ ...diagnosticContext(), frameMs: Math.round(sample.meanFrameMs * 10) / 10,
-          workMs: Math.round(sample.meanWorkMs * 10) / 10, performanceLevel: sample.level });
-      }
+      // Preserve the official single-step timing and mobile paint behavior.
+      simulate(time);
       if (diagnosticsRef.current?.due()) diagnosticsRef.current.update(diagnosticContext(), stateRef.current.status === 'playing', false);
     };
     const stop = startGuardedGameLoop({ step,
@@ -1944,7 +1927,7 @@ const GamePage = () => {
     bossMuzzleRef.current = 0;
     lastFrameRef.current = 0;
     lastPaintRef.current = 0;
-    performanceRef.current.reset();
+    slowFramesRef.current = 0;
     setGame(stateRef.current);
     if (stateRef.current.status === "loading") void activateLoadout();
   };
@@ -2197,3 +2180,4 @@ function GameEntry() {
   </div></div>;
 }
 export default GameEntry;
+
