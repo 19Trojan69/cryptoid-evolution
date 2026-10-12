@@ -1,8 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
-import Shop from "./pages/Shop";
 import PiSignInCallback from "./pages/PiSignInCallback.tsx";
 import LegalPage from "./pages/LegalPage.tsx";
-import AdminPage from "./pages/AdminPage.tsx";
 import RouteRecovery from "./RouteRecovery";
 
 export const router = createBrowserRouter([
@@ -13,12 +11,13 @@ export const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <AdminPage />,
+    lazy: async () => ({ Component: (await import("./pages/AdminPage")).default }),
     errorElement: <RouteRecovery />,
   },
   {
     path: "/",
-    element: <Shop />,
+    lazy: async () => ({ Component: (await import("./pages/Shop")).default }),
+    errorElement: <RouteRecovery />,
   },
   {
     path: "/game",

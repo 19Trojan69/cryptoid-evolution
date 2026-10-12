@@ -101,3 +101,4 @@ const Starfield = ({ sector, paused, showNebula = false }: { sector: number; pla
 };
 
 export default memo(Starfield, (previous, next) => previous.sector === next.sector && previous.paused === next.paused && previous.showNebula === next.showNebula);
+

@@ -4,10 +4,11 @@ import { shipEvolutionAsset, type ShipStage } from "./shipEvolution";
 import { shipVisualCenter } from "./shipVisualCenter";
 import { namedShipAccent } from './shipIdentityColor';
 import { paintShipMaterial } from './shipMaterial';
+import { ResourceCache } from './resourceCache';
 
-const cache = new Map<string, string>();
+const cache = new ResourceCache<string>(48, 24 * 1024 * 1024, url => URL.revokeObjectURL(url));
 const pendingPaints = new Map<string, Promise<string>>();
-const sourceImages = new Map<string, Promise<HTMLImageElement>>();
+const sourceImages = new ResourceCache<Promise<HTMLImageElement>>(8, Infinity);
 const visualCenters = new Map<string, { x: number; y: number }>();
 const shipImage = (url: string) => {
   let pending = sourceImages.get(url);
@@ -15,16 +16,20 @@ const shipImage = (url: string) => {
     pending = new Promise<HTMLImageElement>((resolve, reject) => {
       const image = new Image();
       image.onload = () => {
+        image.onload = image.onerror = null;
         const canvas = document.createElement("canvas");
         canvas.width = canvas.height = 240;
         const context = canvas.getContext("2d", { willReadFrequently: true });
-        if (context) {
-          context.drawImage(image, 0, 0, 240, 240);
-          visualCenters.set(url, shipVisualCenter(context.getImageData(0, 0, 240, 240).data, 240, 240));
-        }
+        try {
+          if (context && !visualCenters.has(url)) {
+            context.drawImage(image, 0, 0, 240, 240);
+            visualCenters.set(url, shipVisualCenter(context.getImageData(0, 0, 240, 240).data, 240, 240));
+          }
+        } catch { /* A tainted canvas must not leave the image promise pending. */ }
+        finally { canvas.width = canvas.height = 0; }
         resolve(image);
       };
-      image.onerror = reject;
+      image.onerror = () => { image.onload = image.onerror = null; sourceImages.delete(url); reject(new Error('Ship image unavailable')); };
       image.src = url;
     });
     sourceImages.set(url, pending);
@@ -52,26 +57,33 @@ export const useShipVisualOffset = (index: number, stage: ShipStage): CSSPropert
 
 const renderPaintedSprite = async (index: number, colorId: PlayerColorId, stage: ShipStage) => {
   const key = `${index}:${stage}:${colorId}`;
-  if (cache.has(key)) return cache.get(key)!;
+  const cached = cache.get(key);
+  if (cached) return cached;
   const url = shipEvolutionAsset(index, stage);
   const image = await shipImage(url);
   const canvas = document.createElement("canvas");
   canvas.width = image.naturalWidth;
   canvas.height = image.naturalHeight;
-  const context = canvas.getContext("2d", { willReadFrequently: true });
-  if (!context) throw new Error("Canvas unavailable");
-  context.drawImage(image, 0, 0);
-  const pixels = context.getImageData(0, 0, canvas.width, canvas.height);
-  const hex = allPlayerColors.find(color => color.id === colorId)?.glow ?? "#a8b3c2";
-  const target = [1, 3, 5].map(offset => parseInt(hex.slice(offset, offset + 2), 16));
-  paintShipMaterial(pixels.data, canvas.width, canvas.height, target, namedShipAccent(index));
-  context.putImageData(pixels, 0, 0);
-  // Blob encoding can run off the main thread; large base64 strings are avoided.
-  const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(value => value ? resolve(value) : reject(new Error('Ship encoding failed')), 'image/png'));
-  const paintedUrl = URL.createObjectURL(blob);
-  cache.set(key, paintedUrl);
-  return paintedUrl;
+  try {
+    const context = canvas.getContext("2d", { willReadFrequently: true });
+    if (!context) throw new Error("Canvas unavailable");
+    context.drawImage(image, 0, 0);
+    const pixels = context.getImageData(0, 0, canvas.width, canvas.height);
+    const hex = allPlayerColors.find(color => color.id === colorId)?.glow ?? "#a8b3c2";
+    const target = [1, 3, 5].map(offset => parseInt(hex.slice(offset, offset + 2), 16));
+    paintShipMaterial(pixels.data, canvas.width, canvas.height, target, namedShipAccent(index));
+    context.putImageData(pixels, 0, 0);
+    // Blob encoding can run off the main thread; large base64 strings are avoided.
+    const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(value => value ? resolve(value) : reject(new Error('Ship encoding failed')), 'image/png'));
+    const paintedUrl = URL.createObjectURL(blob);
+    cache.set(key, paintedUrl, blob.size + canvas.width * canvas.height * 4);
+    return paintedUrl;
+  } finally { canvas.width = canvas.height = 0; }
 };
+
+// Yield between variants so a new formation cannot start many pixel jobs in
+// one microtask burst. No rendering quality or source resolution is reduced.
+let paintTail: Promise<unknown> = Promise.resolve();
 
 const createPaintedSprite = (index: number, colorId: PlayerColorId, stage: ShipStage): Promise<string> => {
   const key = `${index}:${stage}:${colorId}`;
@@ -79,7 +91,9 @@ const createPaintedSprite = (index: number, colorId: PlayerColorId, stage: ShipS
   if (cached) return Promise.resolve(cached);
   const existing = pendingPaints.get(key);
   if (existing) return existing;
-  const pending = renderPaintedSprite(index, colorId, stage).finally(() => pendingPaints.delete(key));
+  const pending = paintTail.then(() => new Promise<void>(resolve => window.setTimeout(resolve, 0)))
+    .then(() => renderPaintedSprite(index, colorId, stage)).finally(() => pendingPaints.delete(key));
+  paintTail = pending.catch(() => {});
   pendingPaints.set(key, pending);
   return pending;
 };
@@ -89,13 +103,16 @@ export const usePaintedShipStyle = (index: number, colorId: PlayerColorId, stage
   const [url, setUrl] = useState(() => cache.get(key));
   useEffect(() => {
     let active = true;
+    const release = cache.retain(key);
     const cached = cache.get(key);
-    if (cached) return;
-    void createPaintedSprite(index, colorId, stage).then(result => { if (active) setUrl(result); }).catch(() => {});
-    return () => { active = false; };
+    if (cached) setUrl(cached);
+    else void createPaintedSprite(index, colorId, stage).then(result => { if (active) setUrl(result); }).catch(() => {});
+    return () => { active = false; release(); };
   }, [key, index, colorId, stage]);
   const painted = cache.get(key) === url ? url : cache.get(key);
   return painted
     ? { backgroundImage: `url(${painted})`, "--ship-surface-mask": `url(${painted})`, backgroundPosition: "center", backgroundSize: "100% 100%", filter: "none" } as CSSProperties
     : { backgroundImage: `url(${shipEvolutionAsset(index, stage)})`, "--ship-surface-mask": `url(${shipEvolutionAsset(index, stage)})`, backgroundPosition: "center", backgroundSize: "100% 100%", filter: "none" } as CSSProperties;
 };
+
+export const paintedShipResourceStats = () => ({ painted: cache.size, estimatedBytes: cache.bytes, sources: sourceImages.size, pending: pendingPaints.size });

@@ -13,6 +13,7 @@ test('iOS-style fixed element volume still obeys Web Audio gain and the slider',
     volume = 1;
     constructor(src) { this.src = src; this.currentTime = 0; this.duration = 180; this.listeners = {}; }
     addEventListener(name, listener) { this.listeners[name] = listener; }
+    removeEventListener(name, listener) { if (this.listeners[name] === listener) delete this.listeners[name]; }
     play() { this.paused = false; return Promise.resolve(); }
     pause() { this.paused = true; }
     removeAttribute() {}
@@ -121,3 +122,95 @@ test('late success after a source switch or close cannot revive retired music', 
   assert.equal(await pending, false);
   assert.equal(player.playing, false);
 });
+
+function lifecycleAudio() {
+  const previous = { Audio: globalThis.Audio, AudioContext: globalThis.AudioContext };
+  const graph = { sources: [], gains: [], closes: 0 };
+  globalThis.Audio = class {
+    paused = true;
+    currentTime = 0;
+    duration = 180;
+    listeners = new Set();
+    constructor(src) { this.src = src; }
+    addEventListener(name, fn) { assert.equal(name, 'loadedmetadata'); this.listeners.add(fn); }
+    removeEventListener(name, fn) { assert.equal(name, 'loadedmetadata'); this.listeners.delete(fn); }
+    metadata() { for (const fn of [...this.listeners]) fn(); }
+    play() { this.paused = false; return Promise.resolve(); }
+    pause() { this.paused = true; }
+    removeAttribute() { this.src = ''; }
+    load() {}
+  };
+  globalThis.AudioContext = class {
+    state = 'running';
+    destination = {};
+    createMediaElementSource() {
+      const source = { disconnected: 0, connect: gain => gain, disconnect() { this.disconnected++; } };
+      graph.sources.push(source); return source;
+    }
+    createGain() {
+      const gain = { gain: { value: 0 }, connect() { return this; }, disconnected: 0, disconnect() { this.disconnected++; } };
+      graph.gains.push(gain); return gain;
+    }
+    close() { graph.closes++; return Promise.resolve(); }
+  };
+  return { graph, restore() { globalThis.Audio = previous.Audio; globalThis.AudioContext = previous.AudioContext; } };
+}
+
+test('interrupted soundtrack loads retain one seek listener and retire it on switch/close', () => {
+  const h = lifecycleAudio();
+  try {
+    const player = new MusicPlayer('/audio/battle-orbit.mp3', 25);
+    for (let i = 0; i < 100; i++) {
+      player.setSource(`/audio/track-${i}.mp3`, 42);
+      assert.equal(player.audio.listeners.size, 1);
+    }
+    player.audio.metadata();
+    assert.equal(player.audio.currentTime, 42);
+    assert.equal(player.audio.listeners.size, 0);
+    player.setSource('/audio/battle-orbit.mp3', 42);
+    player.setSource('/audio/dreadnought-duel.mp3');
+    assert.equal(player.audio.listeners.size, 0);
+    player.setSource('/audio/battle-orbit.mp3', 42);
+    player.close();
+    assert.equal(player.audio.listeners.size, 0);
+  } finally { h.restore(); }
+});
+
+test('closing music disconnects its graph and is idempotent', async () => {
+  const h = lifecycleAudio();
+  try {
+    const player = new MusicPlayer('/audio/battle-orbit.mp3', 25);
+    assert.equal(await player.play(), true);
+    player.close(); player.close();
+    assert.equal(h.graph.sources[0].disconnected, 1);
+    assert.equal(h.graph.gains[0].disconnected, 1);
+    assert.equal(h.graph.closes, 1);
+    assert.equal(await player.play(), false);
+  } finally { h.restore(); }
+});
+
+test('an unavailable AudioContext constructor preserves HTML audio playback', async () => {
+  const h = lifecycleAudio();
+  globalThis.AudioContext = class { constructor() { throw new Error('audio host unavailable'); } };
+  try {
+    const player = new MusicPlayer('/audio/battle-orbit.mp3', 25);
+    assert.equal(await player.play(), true);
+    assert.equal(player.audio.volume, .25);
+    player.close();
+  } finally { h.restore(); }
+});
+
+test('asynchronous context-close failures are consumed during cleanup', async () => {
+  const h = lifecycleAudio();
+  const Original = globalThis.AudioContext;
+  globalThis.AudioContext = class extends Original {
+    close() { h.graph.closes++; return Promise.reject(new Error('audio context already retired')); }
+  };
+  try {
+    const player = new MusicPlayer('/audio/battle-orbit.mp3', 25);
+    await player.play(); player.close();
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(h.graph.closes, 1);
+  } finally { h.restore(); }
+});
+

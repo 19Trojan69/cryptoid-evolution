@@ -1,3 +1,7 @@
+import { combatCryptoid, combatTiming, combatEntryStage, combatAttackPattern, createCombatVariety, readCombatVariety, safeEarlyPickup, type CombatVarietyRuntime } from './combatVariety';
+import { advanceBonusRock, spawnBonusRock, hitBonusRock, rockHitsShot, rockInField, nextRockEventMs, MAX_ROCKS, MAX_ROCK_EFFECTS, type BonusRock, type RockEffect } from './bonusRocks';
+import BonusRockLayer from './BonusRockLayer';
+import './combatVariety.css';
 import { useAuth } from '../hooks/useAuth';
 import { enemyVisualDiameter } from './shipDisplayScale';
 import { autoReloadKey, nextActiveWeapon, parseAutoReload, shouldAutoReload, type AutoReloadPreferences } from './weaponAutoReload';
@@ -14,6 +18,8 @@ import { primeCardSound } from './cardSound';
 import { advanceBossCore } from './bossCore';
 import { bossName } from './bossNames';
 import { collectBossHeart, BOSS_HEART_POSITION, BOSS_EXTRA_LIFE_MS, type BossRewardState } from './bossReward';
+import { activateBossExplosion, bossExplosionBudget, bossExplosionReady } from './bossExplosionBudget';
+import './bossExplosionBudget.css';
 import { BOSS_FULL_HEART_SHARDS, maxMissionHearts } from '../../../backend/src/lifeRules';
 import './bossReward.css';
 import { blockFlights, nextBlockFlight, REINFORCEMENT_WARNING_MS, GROUP_CLEAR_POINTS } from "./blockFlights";
@@ -23,7 +29,8 @@ import BlockchainProgress from "./BlockchainProgress";
 import { gameHaptics } from "./gameHaptics";
 import { bindGameInput } from './gameInput';
 import { startGuardedGameLoop, type GameInterruption } from './gameLoop';
-import { recordGameDiagnostic } from './gameDiagnostics';
+import { recordGameDiagnostic, createGameSessionDiagnostics } from './gameDiagnostics';
+import GameSceneBoundary from './GameSceneBoundary';
 import { advanceShipMotion, idleShipMotion, engineFlamePercent, explosionDiameter, fragmentFlight, hullIllumination, type ShipMotion } from "./shipRealism";
 import { useLocale } from "../i18n";
 import { memo, useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
@@ -31,11 +38,11 @@ import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
 import { entryPatternForSector, entryPosition, entryStartX, type EntryPattern } from "./entryPatterns";
 import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, arrangeFormationBySize, campaignLevel, formationBelowHud, formationLayout, formationReady, formationSlotsForCount, sectionInSector, sectionPhase, sectorInChapter, sectorName, type SectorPhase } from "./sectorManager";
-import { chooseCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
+import { chooseCryptoid as originalCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, POWER_UP_DURATION_MS, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp, type PowerUpType } from "./powerUps";
 import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, shipStartHeight } from "./controlPreferences";
 import { advanceShot, contactWithEnemy, enemyMotionVisible, MAX_PLAYER_SHOTS, movePlayer, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, retainContactLatch, shipCollisionOutcome, shipContactPoint, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
-import { advanceEnemyShot, createEnemyShot, enemyShotHitsPlayer, enemyShotOutsideField, enemyShotLimit, type EnemyShot } from "./enemyFire";
+import { advanceEnemyShot, advanceEnemyFire, enemyVolleyKind, enemyAttackFireTime, enemyProjectileProfiles, enemyMuzzleOffsets, enemyShotHitsPlayer, enemyShotOutsideField, enemyShotLimit, type EnemyShot, type EnemyFireProgress } from "./enemyFire";
 import { attackPressure, attackSlots } from "./attackPressure";
 import SectorBackdrop from "./SectorBackdrop";
 import Starfield from "./Starfield";
@@ -133,6 +140,7 @@ type Asteroid = {
   entryTargetY: number;
   entrySide: number;
   entryPattern: EntryPattern;
+  entryStage?: number;
   entryIndex: number;
   formationSlot: number;
   formationSlotCount: number;
@@ -147,6 +155,9 @@ type Asteroid = {
   visualMotion?: ShipMotion;
   hullLight?: number;
   muzzleAt?: number;
+  muzzleBarrels?: number;
+  fireCycle?: number;
+  fireProgress?: EnemyFireProgress;
   collidedThisAttack: boolean;
 };
 
@@ -164,6 +175,8 @@ type Effect = {
   bossModel?: SectorBoss;
   bossHeight?: number;
   bossShipWidth?: number;
+  bossFragments?: number;
+  boundedBossImpact?: boolean;
   fieldWidth?: number;
   fieldHeight?: number;
   fallDistance?: number;
@@ -181,7 +194,9 @@ type Effect = {
   collision?: boolean;
 };
 type WeaponSource = "standard" | "paid" | "pickup";
-type GameState = BossRewardState & { damageCount?: number; comboTotal?: number; playerHullFires?: HullFire[]; playerHit?: HullFire; bossHullLight: number; combo: DoubleKillCombo; asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; rewardNotice: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; powerUpTypes: PowerUpType[]; pickupNotice: { id: number; type: PowerUpType; remainingMs: number; level: number } | null; score: number; shardBase: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; purchasedShieldMs: number; shieldActive: boolean; overdriveMs: number; overdriveTotalMs: number; rapidFireMs: number; rapidFireTotalMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponSource: WeaponSource; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; weaponTimers: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
+const combatVarietyEnabled = shipSaveNetwork === "testnet";
+const chooseCryptoid = (stage: number, index: number) => combatVarietyEnabled ? combatCryptoid(stage, index) : originalCryptoid(stage, index);
+type GameState = BossRewardState & { rocks: BonusRock[]; rockEffects: RockEffect[]; damageCount?: number; comboTotal?: number; playerHullFires?: HullFire[]; playerHit?: HullFire; bossHullLight: number; combo: DoubleKillCombo & { variety?: CombatVarietyRuntime }; asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; rewardNotice: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; powerUpTypes: PowerUpType[]; pickupNotice: { id: number; type: PowerUpType; remainingMs: number; level: number } | null; score: number; shardBase: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; purchasedShieldMs: number; shieldActive: boolean; overdriveMs: number; overdriveTotalMs: number; rapidFireMs: number; rapidFireTotalMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponSource: WeaponSource; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; weaponTimers: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
 
 const syncSelectedWeapon = (state: GameState) => {
   if (state.weaponSource === "pickup" && state.pickupWeaponMs <= 0) state.weaponSource = state.paidWeaponMs > 0 ? "paid" : "standard";
@@ -198,7 +213,7 @@ const TimedRing = ({ remainingMs, durationMs }: { remainingMs: number; durationM
 };
 
 
-const createInitialState = (): GameState => ({ damageCount: 0, comboTotal: 0, bossHullLight: 0, combo: createDoubleKillCombo(), asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", chainBlocks: 0, chainResult: "", rewardNotice: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: shipStartHeight[readShipStart()] }, thrust: 0, effects: [], powerUps: [], powerUpTypes: [], pickupNotice: null, score: 0, shardBase: shardBalance(localStorage.getItem(SHARD_BALANCE_KEY)), shards: 0, hearts: 3, maxHearts: 3, projectileGuard: 0, shieldCharges: 0, shieldMs: 0, purchasedShieldMs: 0, shieldActive: true, overdriveMs: 0, overdriveTotalMs: POWER_UP_DURATION_MS, rapidFireMs: 0, rapidFireTotalMs: POWER_UP_DURATION_MS, empMs: 0, pendingStartPower: null, weaponLevel: 1, weaponSource: "standard", weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], weaponTimers: [0, 0, 0, 0, 0, 0], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") || sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "loading" : "playing" });
+const createInitialState = (): GameState => ({ rocks: [], rockEffects: [], damageCount: 0, comboTotal: 0, bossHullLight: 0, combo: createDoubleKillCombo(), asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", chainBlocks: 0, chainResult: "", rewardNotice: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: shipStartHeight[readShipStart()] }, thrust: 0, effects: [], powerUps: [], powerUpTypes: [], pickupNotice: null, score: 0, shardBase: shardBalance(localStorage.getItem(SHARD_BALANCE_KEY)), shards: 0, hearts: 3, maxHearts: 3, projectileGuard: 0, shieldCharges: 0, shieldMs: 0, purchasedShieldMs: 0, shieldActive: true, overdriveMs: 0, overdriveTotalMs: POWER_UP_DURATION_MS, rapidFireMs: 0, rapidFireTotalMs: POWER_UP_DURATION_MS, empMs: 0, pendingStartPower: null, weaponLevel: 1, weaponSource: "standard", weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], weaponTimers: [0, 0, 0, 0, 0, 0], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") || sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "loading" : "playing" });
 
 const readRecord = (key: string) => Number(window.localStorage.getItem(key) || 0);
 
@@ -209,10 +224,11 @@ const saveRecords = (state: GameState) => {
   // Shards are credited incrementally; records must never credit them again.
 };
 
-const createFormationSlots = (section: number, sector: number, width: number, height: number, hudBottom: number, count?: number, offset = 0) => {
+const createFormationSlots = (section: number, sector: number, width: number, height: number, hudBottom: number, playerDiameter: number, count?: number, offset = 0) => {
   const slots = formationSlotsForCount(formationLayout(section, width, height, sector), count ?? 6);
   const radii = slots.map((_, index) => chooseCryptoid(sector, index + offset).radius);
-  return formationBelowHud(arrangeFormationBySize(slots, radii), radii, width, hudBottom);
+  const visualRadii = radii.map(radius => combatVarietyEnabled && radius === 25 ? radius * 1.5 : radius);
+  return formationBelowHud(arrangeFormationBySize(slots, radii), visualRadii, width, hudBottom, playerDiameter);
 };
 
 const alignedSpritePosition = (x: number, y: number, sprite: number, renderedSize: number) => {
@@ -225,10 +241,11 @@ const spawnAsteroid = (id: number, width: number, visibleTop: number, formationI
   const target = slots[formationIndex];
   const flightVariation = rulesVersion === 2 ? Math.floor(offset / 6) : 0;
   const entrySide = target.entrySide * (flightVariation % 2 ? -1 : 1);
-  const entryPattern = entryPatternForSector(sector + flightVariation * 3);
-  const startX = entryStartX(entryPattern, formationIndex, width, profile.radius, entrySide);
+  const choreography = combatVarietyEnabled ? combatEntryStage(sector, flightVariation) : sector;
+  const entryPattern = entryPatternForSector(choreography + flightVariation * 3);
+  const startX = entryStartX(entryPattern, formationIndex, width, profile.radius, entrySide, choreography, target.x);
   const entryStartY = visibleTop + profile.radius + ENTRY_HUD_GAP_PX;
-  return { id, x: startX, y: entryStartY, size, ...profile, ...enemyAppearance(sector, formationIndex + offset), entryDuration: Math.max(4_100, Math.round(profile.entryDuration * .85)), health: profile.health, maxHealth: profile.health, cloaked: false, rotation: 0, rotationSpeed: 0, entryElapsed: 0, entryStartX: startX, entryStartY, entryTargetX: target.x, entryTargetY: target.y, entrySide, entryPattern, entryIndex: formationIndex, formationSlot: target.index, formationSlotCount: slots.length, formationElapsed: 0, formationDuration: FORMATION_SETTLE_MS, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, collidedThisAttack: false };
+  return { id, x: startX, y: entryStartY, size, ...profile, ...enemyAppearance(sector, formationIndex + offset), entryDuration: combatVarietyEnabled ? Math.round((combatTiming(sector).entryMs + (profile.shipClass === "heavy" ? 600 : 0)) * 1.1) : Math.max(4_100, Math.round(profile.entryDuration * .85)), health: profile.health, maxHealth: profile.health, cloaked: false, rotation: 0, rotationSpeed: 0, entryElapsed: 0, entryStartX: startX, entryStartY, entryTargetX: target.x, entryTargetY: target.y, entrySide, entryPattern, entryStage: choreography, entryIndex: formationIndex, formationSlot: target.index, formationSlotCount: slots.length, formationElapsed: 0, formationDuration: combatVarietyEnabled ? 180 : FORMATION_SETTLE_MS, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, collidedThisAttack: false };
 };
 
 const spawnBossEscort = (id: number, width: number, index: number, level: number, slots: ReturnType<typeof bossEscortSlots>, wave: number): Asteroid => {
@@ -237,7 +254,7 @@ const spawnBossEscort = (id: number, width: number, index: number, level: number
   const enemy = spawnAsteroid(id, width, slot.y - 8, index, level, slots, rosterIndex - index);
   const startX = slot.entrySide === 1 ? 22 : width - 22;
   return { ...enemy, escort: true, size: "small", radius: 18, x: startX, y: slot.y - 8,
-    entryStartX: startX, entryStartY: slot.y - 8, entryDuration: 1_850, formationDuration: 300 };
+    entryStartX: startX, entryStartY: slot.y - 8, entryStage: 500, entryDuration: 1_850, formationDuration: 300 };
 };
 
 const attackTime = (asteroid: Asteroid) => asteroid.attackPattern === null ? 0 : attackDuration(asteroid.attackPattern) * asteroid.attackPace;
@@ -253,7 +270,14 @@ const moveAsteroid = (asteroid: Asteroid, delta: number, width: number, height: 
     return { ...asteroid, x: keepInField(asteroid.entryTargetX), y: asteroid.entryTargetY, formationElapsed: Math.min(asteroid.formationDuration, elapsed), rotation };
   }
   if (asteroid.entryElapsed >= asteroid.entryDuration) {
-    if (asteroid.attackPattern === null) return { ...asteroid, x: keepInField(asteroid.entryTargetX), y: asteroid.entryTargetY, rotation };
+    if (asteroid.attackPattern === null) {
+      const elapsed = asteroid.formationElapsed + delta;
+      // Resting Testnet ships sway with the existing slow rhythm, independent
+      // of the arrival identifier (which older checkpoints may omit or retain).
+      const drift = combatVarietyEnabled && !asteroid.escort
+        ? Math.sin(Math.max(0, elapsed - asteroid.formationDuration) * .0009) * Math.min(12, width * .025) : 0;
+      return { ...asteroid, formationElapsed: elapsed, x: keepInField(asteroid.entryTargetX + drift), y: asteroid.entryTargetY, rotation };
+    }
     if (asteroid.attackDelay > 0) return { ...asteroid, attackDelay: Math.max(0, asteroid.attackDelay - delta), rotation };
     const duration = attackTime(asteroid);
     if (asteroid.attackElapsed < duration) {
@@ -264,7 +288,7 @@ const moveAsteroid = (asteroid: Asteroid, delta: number, width: number, height: 
     const elapsed = Math.min(RETURN_DURATION_MS, asteroid.returnElapsed + delta);
     const progress = elapsed / RETURN_DURATION_MS;
     if (elapsed === RETURN_DURATION_MS) {
-      return { ...asteroid, x: keepInField(asteroid.entryTargetX), y: asteroid.entryTargetY, formationElapsed: 0, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, collidedThisAttack: false, rotation };
+      return { ...asteroid, x: keepInField(asteroid.entryTargetX), y: asteroid.entryTargetY, formationElapsed: 0, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, fireProgress: undefined, collidedThisAttack: false, rotation };
     }
     const returnX = diveEndX + (asteroid.entryTargetX - diveEndX) * progress - asteroid.entrySide * Math.min(width * 0.09, 85) * Math.sin(Math.PI * progress);
     const returnY = diveEndY + (asteroid.entryTargetY - diveEndY) * progress;
@@ -273,7 +297,7 @@ const moveAsteroid = (asteroid: Asteroid, delta: number, width: number, height: 
   const entryDelta = Math.min(delta, asteroid.entryDuration - asteroid.entryElapsed);
   const elapsed = Math.min(asteroid.entryDuration, asteroid.entryElapsed + delta);
   const progress = elapsed / asteroid.entryDuration;
-  const point = entryPosition({ pattern: asteroid.entryPattern, progress, startX: asteroid.entryStartX, startY: asteroid.entryStartY, targetX: asteroid.entryTargetX, targetY: asteroid.entryTargetY, width, height, radius, side: asteroid.entrySide, index: asteroid.entryIndex });
+  const point = entryPosition({ pattern: asteroid.entryPattern, progress, startX: asteroid.entryStartX, startY: asteroid.entryStartY, targetX: asteroid.entryTargetX, targetY: asteroid.entryTargetY, width, height, radius, side: asteroid.entrySide, index: asteroid.entryIndex, stage: asteroid.entryStage });
   return {
     ...asteroid,
     ...point,
@@ -335,7 +359,7 @@ const shipDebris = (effect: Effect) => {
     "--debris-height": `${effect.bossHeight ?? 100}px`,
     "--debris-rotation": `${(effect.target === "player" ? 0 : 180) + (effect.debrisRotation ?? 0)}deg`,
   } as CSSProperties;
-  if (effect.kind === "boss-explosion") return <div className="ship-debris scattered-debris boss-debris-field" style={style} aria-hidden="true">{scatteredPieces(effect, 16, 0)}</div>;
+  if (effect.kind === "boss-explosion") return <div className="ship-debris scattered-debris boss-debris-field" style={style} aria-hidden="true">{scatteredPieces(effect, effect.bossFragments ?? 16, 0)}</div>;
   if (sprite === undefined) return null;
   const count = effect.collision || effect.kind === "player-crash" || effect.shipClass === "heavy" || (effect.debrisSize ?? 0) >= 86 ? 8 : 4;
   return <div className={`ship-debris scattered-debris${effect.shipClass ? ` ship-debris-${effect.shipClass}` : ""}`} style={style} aria-hidden="true">
@@ -352,7 +376,7 @@ const fallingBoss = (effect: Effect) => <div className="boss-falling-hull" style
 
 // Effects keep their object identity until they expire. Keep the fragments and
 // their animations mounted instead of rebuilding the entire debris tree on every paint.
-const ImpactEffectView = memo(({ effect }: { effect: Effect }) => effect.kind === "boss-fall" ? fallingBoss(effect) : <div className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y, ...(["explosion", "shatter", "player-explosion"].includes(effect.kind) ? { width: explosionDiameter(effect.debrisSize ?? 58), height: explosionDiameter(effect.debrisSize ?? 58), marginLeft: -explosionDiameter(effect.debrisSize ?? 58) / 2, marginTop: -explosionDiameter(effect.debrisSize ?? 58) / 2 } : {}), ...(effect.kind === "boss-explosion" ? { "--boss-explosion-size": `${effect.debrisSize ?? 240}px`, "--boss-image": `url('${effect.bossImage}')`, "--boss-final-delay": `${effect.finalDelayMs ?? 1_450}ms` } : {}) } as CSSProperties} aria-hidden="true">{effect.kind !== "boss-explosion" && <span />}{shipDebris(effect)}</div>);
+const ImpactEffectView = memo(({ effect }: { effect: Effect }) => effect.kind === "boss-fall" ? fallingBoss(effect) : <div className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y, ...(["explosion", "shatter", "player-explosion"].includes(effect.kind) ? { width: explosionDiameter(effect.debrisSize ?? 58), height: explosionDiameter(effect.debrisSize ?? 58), marginLeft: -explosionDiameter(effect.debrisSize ?? 58) / 2, marginTop: -explosionDiameter(effect.debrisSize ?? 58) / 2 } : {}), ...(effect.kind === "boss-explosion" ? { "--boss-explosion-size": `${effect.debrisSize ?? 240}px`, "--boss-image": `url('${effect.bossImage}')`, "--boss-final-delay": `${effect.finalDelayMs ?? 1_450}ms` } : {}) } as CSSProperties} data-bounded-impact={effect.boundedBossImpact ? "true" : undefined} aria-hidden="true">{effect.kind !== "boss-explosion" && <span />}{shipDebris(effect)}</div>);
 
 const GamePage = () => {
   const { t, lives, locale } = useLocale();
@@ -364,9 +388,11 @@ const GamePage = () => {
   const fieldSizeRef = useRef({ width: 800, height: 600 });
   const hudRef = useRef<HTMLElement>(null);
   const visibleTopRef = useRef(96);
+  const playerDiameterRef = useRef(94);
   const playerShipRef = useRef<HTMLDivElement>(null);
   const [playerDisplayDiameter, setPlayerDisplayDiameter] = useState(94);
-  const stateRef = useRef<GameState>(createInitialState());
+  const stateRef = useRef<GameState>(null!);
+  if (!stateRef.current) stateRef.current = createInitialState();
   const guestCreditedShardsRef = useRef(0);
   const nextIdRef = useRef(1);
   const formationIndexRef = useRef(0);
@@ -385,12 +411,17 @@ const GamePage = () => {
   const lastFrameRef = useRef(0);
   const lastPaintRef = useRef(0);
   const slowFramesRef = useRef(0);
+  const lastMeasuredFrameRef = useRef(0);
+  const lastSavedAtRef = useRef(0);
+  const diagnosticsRef = useRef<ReturnType<typeof createGameSessionDiagnostics> | null>(null);
   const backgroundHiddenAtRef = useRef(0);
   const spawnTimerRef = useRef(0);
   const sectionElapsedRef = useRef(0);
   const clearTimerRef = useRef(0);
   const attackCooldownRef = useRef(0);
   const elapsedRef = useRef(0);
+  const varietyRef = useRef(createCombatVariety());
+  const waveCompleteRef = useRef(false);
   const attackNumberRef = useRef(0);
   const dropsCreatedRef = useRef(0);
   const impactCooldownRef = useRef(0);
@@ -539,6 +570,9 @@ const GamePage = () => {
     if(state.encounter==='boss-clear'&&state.bossHeartCollected)return;
     if (!runId || !queue || adminRunRef.current || !["playing", "paused"].includes(state.status) || state.hearts < 1 || (state.phase === "SECTOR_CLEAR" && state.encounter !== "boss-clear")) return;
     if (state.status !== "playing") state.combo.pendingAt = null;
+    // Keep optional combat metadata inside the existing extensible combo object.
+    // The established Testnet proxy preserves this field without a backend migration.
+    if (combatVarietyEnabled) state.combo.variety = { ...varietyRef.current, rocks: state.rocks };
     const combat: CombatCheckpoint = JSON.parse(JSON.stringify({
       version: 1, clock: performance.now(), sequence: ++combatSequenceRef.current, stage: state.sector, encounter: state.encounter,
       width: fieldRef.current?.clientWidth || 800, height: fieldRef.current?.clientHeight || 600,
@@ -548,6 +582,7 @@ const GamePage = () => {
     }, (_key, value) => typeof value === "number" && !Number.isFinite(value) ? -1e9 : value));
     if (!readCombatCheckpoint(combat)) throw new Error("Invalid local combat checkpoint");
     await queue.enqueue({ path: "/progress/checkpoint", body: { runId, combat, save: snapshotOf(state) } });
+    lastSavedAtRef.current = Date.now();
     setSaveNotice(queue.durable ? "Game saved." : "Game saved. Offline backup unavailable.");
   };
   const saveCombatRef = useRef(saveCombat);
@@ -566,16 +601,59 @@ const GamePage = () => {
       try { soundRef.current?.setPaused(true); musicRef.current?.pause(); } catch { /* Audio cannot prevent the safe pause. */ }
       recordGameDiagnostic({ reason, errorName: error instanceof Error ? error.name : '',
         sector: state.sector, phase: state.phase, encounter: state.encounter, status: state.status,
+        block: sectorInChapter(state.sector), enemies: state.asteroids?.length ?? 0,
+        projectiles: (state.shots?.length ?? 0) + (state.enemyShots?.length ?? 0), effects: state.effects?.length ?? 0,
+        lastSavedAt: lastSavedAtRef.current,
+        frameMs: Math.round(lastMeasuredFrameRef.current),
         width: fieldSizeRef.current.width, height: fieldSizeRef.current.height, browser: navigator.userAgent });
       setGame({ ...state });
       void saveCombatRef.current().catch(() => setSaveNotice('Save not confirmed. Pending data will be retried.'));
     };
   }, [clearControls]);
+  const diagnosticContext = useCallback(() => {
+    const state = stateRef.current;
+    return { reason: 'performance' as const, errorName: '', sector: state.sector, block: sectorInChapter(state.sector),
+      phase: state.phase, encounter: state.encounter, status: state.status, width: fieldSizeRef.current.width,
+      height: fieldSizeRef.current.height, browser: navigator.userAgent, enemies: state.asteroids.length,
+      projectiles: state.shots.length + state.enemyShots.length, effects: state.effects.length, lastSavedAt: lastSavedAtRef.current };
+  }, []);
+  useEffect(() => {
+    const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+    const monitor = createGameSessionDiagnostics(undefined, recordGameDiagnostic, Date.now, navigation?.type);
+    diagnosticsRef.current = monitor;
+    const update = () => monitor.update(diagnosticContext(), stateRef.current.status === 'playing', document.hidden, true);
+    const hidden = () => { monitor.pagehide(); update(); };
+    const shown = () => { monitor.pageshow(); update(); };
+    const onError = (event: ErrorEvent) => {
+      if (event.error && stateRef.current.status === 'playing') interruptionRef.current('javascript-error', event.error);
+    };
+    const onRejection = (event: PromiseRejectionEvent) => {
+      if (stateRef.current.status === 'playing') interruptionRef.current('unhandled-rejection', event.reason);
+    };
+    update();
+    window.addEventListener('error', onError);
+    window.addEventListener('unhandledrejection', onRejection);
+    window.addEventListener('pagehide', hidden);
+    window.addEventListener('pageshow', shown);
+    document.addEventListener('visibilitychange', update);
+    return () => {
+      monitor.finish(); diagnosticsRef.current = null;
+      window.removeEventListener('error', onError); window.removeEventListener('unhandledrejection', onRejection);
+      window.removeEventListener('pagehide', hidden); window.removeEventListener('pageshow', shown);
+      document.removeEventListener('visibilitychange', update);
+    };
+  }, [diagnosticContext]);
   const restoreCombat = (input: CombatCheckpoint) => {
     const saved = readCombatCheckpoint(input);
     if (!saved) throw new Error("Invalid saved combat checkpoint");
     const width = fieldRef.current?.clientWidth || 800, height = fieldRef.current?.clientHeight || 600;
     const sx = width / saved.width, sy = height / saved.height;
+    if (combatVarietyEnabled) {
+      varietyRef.current = readCombatVariety(saved.state.combo.variety) ?? createCombatVariety(saved.stage > 1 || saved.refs.elapsed > 0);
+      stateRef.current.rocks = varietyRef.current.rocks.map(rock => ({ ...rock, x: rock.x * sx, y: rock.y * sy }));
+      stateRef.current.rockEffects = [];
+      waveCompleteRef.current = varietyRef.current.waveComplete;
+    }
     const project = (item: Record<string, unknown>) => {
       for (const key of ["x", "entryStartX", "entryTargetX", "attackStartX", "returnStartX"]) if (typeof item[key] === "number") item[key] *= sx;
       for (const key of ["y", "startY", "entryStartY", "entryTargetY", "attackStartY", "returnStartY"]) if (typeof item[key] === "number") item[key] *= sy;
@@ -589,12 +667,16 @@ const GamePage = () => {
       const model = createSectorBoss(saved.stage, width, visibleTopRef.current, height);
       for (const key of ["radius", "width", "height"] as const) saved.state.boss[key] = model[key];
     }
-    if (saved.encounter === "normal" && (sx !== 1 || sy !== 1)) {
+    if (saved.encounter === "normal") {
       const plan = blockFlights(saved.stage, rulesVersionRef.current);
-      saved.slots = createFormationSlots(saved.stage, saved.stage, width, height, visibleTopRef.current, plan[saved.refs.flight], saved.refs.formationOffset);
+      saved.slots = createFormationSlots(saved.stage, saved.stage, width, height, visibleTopRef.current, playerDiameterRef.current, plan[saved.refs.flight], saved.refs.formationOffset);
       for (const enemy of saved.state.asteroids) {
         const slot = saved.slots.find(s => s.index === enemy.formationSlot);
-        if (slot) { enemy.entryTargetX = slot.x; enemy.entryTargetY = slot.y; }
+        if (slot) {
+          const shift = slot.y - enemy.entryTargetY;
+          enemy.entryTargetX = slot.x; enemy.entryTargetY = slot.y;
+          if (enemy.attackPattern === null && enemy.entryElapsed >= enemy.entryDuration) enemy.y += shift;
+        }
         enemy.x = Math.max(enemy.radius, Math.min(width - enemy.radius, enemy.x));
       }
     }
@@ -733,6 +815,7 @@ const GamePage = () => {
         stateRef.current.weaponTimers = data.checkpoint.weaponTimers.map((timer, level) => stateRef.current.unlockedWeapons.includes(level) ? timer : 0);
         syncSelectedWeapon(stateRef.current);
         if (data.combat) restoreCombat(data.combat);
+        else varietyRef.current = createCombatVariety(true);
         setSaveNotice(data.combat ? "Combat restored." : "Last completed section loaded.");
       }
     } catch (error) {
@@ -768,6 +851,22 @@ const GamePage = () => {
       field.style.setProperty("--hud-bottom", `${visibleTopRef.current}px`);
       const playerWidth = playerShipRef.current?.clientWidth;
       if (playerWidth) setPlayerDisplayDiameter(playerWidth);
+      playerDiameterRef.current = playerWidth || 94;
+      const currentSlots = sectionSlotsRef.current;
+      if (currentSlots?.length && stateRef.current.encounter === "normal") {
+        const radii = currentSlots.map((_, index) => { const radius = chooseCryptoid(stateRef.current.sector, index + formationOffsetRef.current).radius; return combatVarietyEnabled && radius === 25 ? radius * 1.5 : radius; });
+        const adjusted = formationBelowHud(currentSlots, radii, field.clientWidth, visibleTopRef.current, playerDiameterRef.current);
+        if (adjusted !== currentSlots) {
+          sectionSlotsRef.current = adjusted;
+          for (const enemy of stateRef.current.asteroids) {
+            const slot = adjusted.find(item => item.index === enemy.formationSlot);
+            if (!slot) continue;
+            const shift = slot.y - enemy.entryTargetY;
+            enemy.entryTargetY = slot.y;
+            if (enemy.attackPattern === null && enemy.entryElapsed >= enemy.entryDuration) enemy.y += shift;
+          }
+        }
+      }
     };
     measureVisibleTop();
     const observer = new ResizeObserver(measureVisibleTop);
@@ -897,7 +996,7 @@ const GamePage = () => {
       if (stateRef.current.comboTotal !== undefined) stateRef.current.comboTotal = stateRef.current.combo.total;
       const body = { runId, ...event, save: snapshotOf(stateRef.current) };
       pendingRewardsRef.current = (saveQueueRef.current ? saveQueueRef.current.enqueue({ path: "/rewards/event", body }) : retrySave(() => axiosClient.post("/rewards/event", body)))
-        .then(() => setSaveNotice(saveQueueRef.current?.durable === false ? "Game saved. Offline backup unavailable." : "Game saved."))
+        .then(() => { lastSavedAtRef.current = Date.now(); setSaveNotice(saveQueueRef.current?.durable === false ? "Game saved. Offline backup unavailable." : "Game saved."); })
         .catch(() => setSaveNotice("Save not confirmed. Retry or use the last confirmed save."));
     }
     return result.notice;
@@ -909,12 +1008,17 @@ const GamePage = () => {
     state.bossHeartCollected = false;
     state.bossHeartShards = 0;
     const finalDelayMs = BOSS_FALL_DURATION_MS;
-    const fieldWidth = fieldRef.current?.clientWidth || 800;
-    const fieldHeight = fieldRef.current?.clientHeight || 700;
+    const { width: fieldWidth, height: fieldHeight } = fieldSizeRef.current;
     const finalY = bossFallTargetY(boss, fieldHeight);
-    const fireSites = Array.from({ length: 8 }, (_, index) => boss.config.fireSites[Math.floor(index * boss.config.fireSites.length / 8)]);
+    // Warm the one wreck image during descent, without mounting its fragment layers.
+    const wreck = new Image();
+    wreck.decoding = 'async';
+    wreck.src = boss.config.wreckImage;
+    const presentation = bossExplosionBudget(boss.width, boss.height, bossExplosionSize(boss.config, boss.width), fieldWidth, fieldHeight,
+      window.devicePixelRatio || 1, document.documentElement.dataset.motion === 'reduced' || window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    const fireSites = Array.from({ length: presentation.fireSites }, (_, index) => boss.config.fireSites[Math.floor(index * boss.config.fireSites.length / presentation.fireSites)]);
     state.effects.push({ id: nextIdRef.current++, x: boss.x, y: boss.y, kind: "boss-fall", startedAt: time, bossShipWidth: boss.width, bossHeight: boss.height, bossImage: boss.config.image, bossModel:{...boss,turrets:boss.turrets.map(g=>({...g,firedBarrels:[...g.firedBarrels]}))}, fallDistance: finalY - boss.y, fireSites });
-    state.effects.push({ id: nextIdRef.current++, x: boss.x, y: finalY, kind: "boss-explosion", startedAt: time, debrisSize: bossExplosionSize(boss.config, boss.width), bossShipWidth: boss.width, bossHeight: boss.height, bossImage: boss.config.wreckImage, finalDelayMs, fieldWidth, fieldHeight, shipClass: "heavy" });
+    state.effects.push({ id: nextIdRef.current++, x: boss.x, y: finalY, kind: "boss-explosion", startedAt: time, debrisSize: presentation.diameter, bossFragments: presentation.fragments, boundedBossImpact: presentation.bounded, bossShipWidth: boss.width, bossHeight: boss.height, bossImage: boss.config.wreckImage, finalDelayMs, fieldWidth, fieldHeight, shipClass: "heavy" });
     soundRef.current?.play("explosion");
     gameHaptics.explosion();
     gameHaptics.boss([25, 420, 30, 420, 35, 420, 40, 420, 45, 420, 50]);
@@ -931,7 +1035,7 @@ const GamePage = () => {
     state.asteroids = [];
     state.enemyShots = [];
     state.shots = [];
-    state.powerUps = [];
+    if (!combatVarietyEnabled) state.powerUps = [];
     state.boss = null;
     void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
   };
@@ -1079,7 +1183,7 @@ const GamePage = () => {
   }, [clearControls]);
 
   useEffect(() => {
-    const step = (time: number) => {
+    const simulate = (time: number) => {
       const state = stateRef.current;
       const frameGap = time - (lastFrameRef.current || time);
       const delta = Math.min(34, frameGap);
@@ -1099,11 +1203,20 @@ const GamePage = () => {
         // Reading layout after moving ships every RAF forces needless reflows.
         const { width, height } = fieldSizeRef.current;
         const visibleTop = visibleTopRef.current;
-        const slots = sectionSlotsRef.current ?? createFormationSlots(state.section, state.sector, width, height, visibleTop);
+        const variety = combatVarietyEnabled && state.encounter === "normal";
+        const early = variety && state.sector <= 29;
+        const timing = variety ? combatTiming(state.sector) : { introMs: SECTION_INTRO_MS, gapMs: ENTRY_GAP_MS, clearMs: SECTION_CLEAR_MS, entryMs: 4100, breathingMs: 0 };
+        const intro = varietyRef.current;
+        intro.noticeMs = Math.max(0, intro.noticeMs - delta);
+        if (variety && state.phase !== "SECTOR_CLEAR") intro.clock += delta;
+        if (variety && intro.asteroidStage !== state.sector) { intro.asteroidStage = state.sector; intro.asteroidStageEvents = 0; }
+        state.rockEffects = state.rockEffects.map(e => ({ ...e, age: e.age + delta })).filter(e => e.age < (e.final ? 750 : 250));
+        const slots = sectionSlotsRef.current ?? createFormationSlots(state.section, state.sector, width, height, visibleTop, playerDiameterRef.current);
         sectionSlotsRef.current = slots;
         const bonus = state.encounter === "bonus";
         const normal = state.encounter === "normal";
-        const readyCount = state.asteroids.filter(asteroid => asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration).length;
+        let readyCount = 0;
+        for (const asteroid of state.asteroids) if (asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration) readyCount++;
         const formationIsReady = normal && formationReady({ spawned: formationIndexRef.current, total: slots.length, alive: state.asteroids.length, ready: readyCount });
         if (formationIsReady) formationStartedRef.current = true;
         const transitionPaused = state.phase === "SECTOR_INTRO" || state.phase === "SECTOR_CLEAR" || state.encounter === "boss-intro" || state.encounter === "boss-clear" || (normal && !formationStartedRef.current);
@@ -1167,6 +1280,9 @@ const GamePage = () => {
           if (state.pickupNotice.remainingMs <= 0) state.pickupNotice = null;
         }
         sectionElapsedRef.current += delta;
+        // Uncollected pickups keep falling through every playing transition frame.
+        // Active boost timers retain their existing transition protection above.
+        state.powerUps = movePowerUps(state.powerUps, delta, height);
         if (state.phase === "SECTOR_CLEAR") {
           clearTimerRef.current += delta;
           if (state.encounter === "boss-clear") {
@@ -1178,7 +1294,7 @@ const GamePage = () => {
             if (bossVictoryPendingRef.current && clearTimerRef.current >= BOSS_VICTORY_START_MS) startBossVictory();
           }
           const victoryStillPlaying = state.encounter === "boss-clear" && musicRef.current?.currentSource === "/audio/boss-victory-v2.mp3" && musicRef.current.playing && !musicRef.current.audio.ended;
-          const clearFinished = clearTimerRef.current >= (state.encounter === "boss-clear" ? BOSS_CLEAR_DURATION_MS : SECTION_CLEAR_MS) && !victoryStillPlaying;
+          const clearFinished = clearTimerRef.current >= (state.encounter === "boss-clear" ? BOSS_CLEAR_DURATION_MS : timing.clearMs) && !victoryStillPlaying;
           if (clearFinished && state.encounter === 'boss-clear' && collectBossHeart(state, state.player, width, height)) {
             soundRef.current?.play('extraLife');
             bossLifeRemainingRef.current=BOSS_EXTRA_LIFE_MS;
@@ -1226,7 +1342,12 @@ const GamePage = () => {
               state.boss = null;
             }
             state.combo.pendingAt = null;
-            if (next.resetChain) { state.chainBlocks = 0; state.combo.level = 0; state.powerUpTypes = []; dropsCreatedRef.current = 0; }
+            if (next.resetChain) {
+              state.chainBlocks = 0; state.combo.level = 0;
+              // Carried pickups count toward the next level's existing drop and duplicate limits.
+              state.powerUpTypes = combatVarietyEnabled ? [...new Set(state.powerUps.map(pickup => pickup.type))] : [];
+              dropsCreatedRef.current = combatVarietyEnabled ? state.powerUps.length : 0;
+            }
             state.phase = "SECTOR_INTRO";
             state.asteroids = [];
             state.bonusTargets = [];
@@ -1234,17 +1355,20 @@ const GamePage = () => {
             state.bonusResult = "";
             state.chainResult = "";
             state.rewardNotice = "";
-            state.powerUps = [];
+            if (!combatVarietyEnabled) state.powerUps = [];
             state.pickupNotice = null;
             state.shots = [];
             state.enemyShots = [];
-            state.effects = [];
+            state.effects = []; state.rocks = []; state.rockEffects = [];
+            waveCompleteRef.current = false; intro.waveComplete = false;
+            intro.waveDamage = state.damageCount ?? 0; intro.waveDestroyed = state.destroyed; intro.waveCombo = state.combo.total;
+            intro.noticeMs = 0;
             formationIndexRef.current = 0;
             formationStartedRef.current = false;
             flightRef.current = 0;
             formationOffsetRef.current = 0;
             bonusIndexRef.current = 0;
-            sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height, visibleTop);
+            sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height, visibleTop, playerDiameterRef.current);
             bossEscortSlotsRef.current = null;
             bossEscortWaveRef.current = 0;
             bossEscortSpawnedRef.current = 0;
@@ -1266,10 +1390,11 @@ const GamePage = () => {
             state.bonusTargets.push({ id: nextIdRef.current++, index, elapsed: 0, ...bonusPosition(index, 0, width, height), radius: 22, ...bonusShowcaseShip(index, state.sector) });
           }
         }
-        if (normal && sectionElapsedRef.current >= SECTION_INTRO_MS && state.phase !== "SECTOR_CLEAR" && formationIndexRef.current < slots.length) {
+        if (normal && sectionElapsedRef.current >= timing.introMs && state.phase !== "SECTOR_CLEAR" && formationIndexRef.current < slots.length) {
           spawnTimerRef.current += delta;
-          if (spawnTimerRef.current >= ENTRY_GAP_MS) {
-            spawnTimerRef.current -= ENTRY_GAP_MS;
+          if (spawnTimerRef.current >= timing.gapMs) {
+            spawnTimerRef.current -= timing.gapMs;
+            if (variety && formationIndexRef.current === 0) { intro.notice = chooseCryptoid(state.sector, formationOffsetRef.current).shipClass === "heavy" ? "Heavy attacker incoming" : [5, 8].includes((state.sector - 1) % 10 + 1) ? "Finish this wave without a hit" : (state.sector - 1) % 10 + 1 === 7 ? "Hold your combo" : "Clear the formation"; intro.noticeMs = 2000; }
             state.asteroids.push(spawnAsteroid(nextIdRef.current++, width, visibleTop, formationIndexRef.current++, state.sector, slots, formationOffsetRef.current, rulesVersionRef.current));
           }
         }
@@ -1320,10 +1445,10 @@ const GamePage = () => {
           : activeAttackers === 0 ? availableAttackers.length : 0;
         if (state.empMs === 0 && (formationComplete || escortComplete)) attackCooldownRef.current += delta;
         else if (activeAttackers === 0) attackCooldownRef.current = 0;
-        const attackInterval = normal ? activeAttackers > 0 ? pressure.intervalMs : levelDifficulty(state.sector).attackCooldownMs : bossEscortAttackInterval(state.sector);
+        const attackInterval = normal ? activeAttackers > 0 ? pressure.intervalMs : early ? (state.sector === 1 ? 1600 : 1900) : levelDifficulty(state.sector).attackCooldownMs + pressure.breathingMs + (variety ? timing.breathingMs : 0) : bossEscortAttackInterval(state.sector);
         if (state.empMs === 0 && (formationComplete || escortComplete) && slotsAvailable > 0
           && attackCooldownRef.current >= attackInterval) {
-            let pattern = chooseAttackPattern(attackNumberRef.current++, elapsedRef.current, state.sector);
+            let pattern = variety ? combatAttackPattern(state.sector, attackNumberRef.current++, elapsedRef.current) : chooseAttackPattern(attackNumberRef.current++, elapsedRef.current, state.sector);
             if (escortComplete && pattern === "vDive") pattern = "double";
             if (slotsAvailable < attackGroupSize(pattern)) pattern = slotsAvailable >= 2 ? "double" : "curve";
             const groupSize = attackGroupSize(pattern);
@@ -1332,7 +1457,10 @@ const GamePage = () => {
               const index = selectedIds.indexOf(asteroid.id);
               if (index < 0) return asteroid;
               const groupDelay = pattern === "double" ? index * 350 : pattern === "vDive" ? index * 180 : 0;
-              return { ...asteroid, attackPattern: pattern, attackDelay: 650 + groupDelay, attackLane: index - (groupSize - 1) / 2, firedThisAttack: false, collidedThisAttack: false };
+              const fireCycle = (asteroid.fireCycle ?? 0) + 1;
+              const firingClass = asteroid.escort ? 'light' : asteroid.shipClass;
+              return { ...asteroid, attackPattern: pattern, attackDelay: (variety ? 900 : 650) + groupDelay, attackLane: index - (groupSize - 1) / 2, firedThisAttack: false, collidedThisAttack: false,
+                fireCycle, fireProgress: { kind: enemyVolleyKind(firingClass, state.sector, fireCycle + asteroid.entryIndex), pulses: 0, lastPulseMs: null } };
             });
             attackCooldownRef.current = 0;
         }
@@ -1346,13 +1474,18 @@ const GamePage = () => {
           next.visualMotion = advanceShipMotion(asteroid.visualMotion ?? idleShipMotion(), next.x - asteroid.x, next.y - asteroid.y, delta);
           next.hullLight = hullIllumination(next.x, next.y, time, next.muzzleAt ?? 0, state.effects);
           if (asteroid.attackPattern !== null && next.attackPattern === null && !(normal && pressure.overlap)) attackCooldownRef.current = 0;
-          if (state.empMs === 0 && next.attackPattern !== null && next.attackDelay === 0 && !next.firedThisAttack && next.attackElapsed < attackTime(next) && next.attackElapsed >= attackTime(next) * .28 && state.enemyShots.length < enemyShotLimit(width, elapsedRef.current, state.sector)) {
-            const bullet = createEnemyShot(nextIdRef.current, next.x, next.y + next.radius * .4, state.player, width, height, state.sector);
-            if (bullet) {
-              nextIdRef.current += 1;
-              state.enemyShots.push(bullet);
-              soundRef.current?.playEnemyShot(next.x / width * 2 - 1, next.shipClass);
-              next = { ...next, firedThisAttack: true, muzzleAt: time };
+          if (state.empMs === 0 && next.attackPattern !== null && next.attackDelay === 0 && !next.firedThisAttack && next.attackElapsed < attackTime(next)) {
+            const firingClass = next.escort ? 'light' : next.shipClass;
+            const fireTime = next.escort ? attackTime(next) * .28 : enemyAttackFireTime(attackTime(next), next.entryTargetY, height, next.radius);
+            const fired = advanceEnemyFire({ progress: next.fireProgress ?? { kind: 'single', pulses: 0, lastPulseMs: null }, elapsedMs: next.attackElapsed - fireTime,
+              id: nextIdRef.current, x: next.x, y: next.y + next.radius * .4, radius: next.radius, shipClass: firingClass, player: state.player, width, height, stage: state.sector,
+              available: enemyShotLimit(width, elapsedRef.current, state.sector) - state.enemyShots.length });
+            next = { ...next, fireProgress: fired.progress, firedThisAttack: fired.complete };
+            if (fired.sound) {
+              nextIdRef.current += fired.shots.length;
+              state.enemyShots.push(...fired.shots);
+              soundRef.current?.playEnemyShot(next.x / width * 2 - 1, firingClass, fired.sound);
+              next = { ...next, muzzleAt: time, muzzleBarrels: fired.shots.length };
             }
           }
           // A blocked impact must only suppress the same continuous overlap.
@@ -1471,7 +1604,23 @@ const GamePage = () => {
           }
           else soundRef.current?.play("shield");
         }
-        state.powerUps = movePowerUps(state.powerUps, delta, height);
+        if (variety && !intro.weaponIssued && intro.clock >= intro.weaponDue && state.phase !== "SECTOR_CLEAR") {
+          const pickup = safeEarlyPickup(state,stageWeaponLevel(shipStageRef.current,state.weaponLevel),width,height,visibleTop);
+          if(pickup){ state.powerUps.push({id:nextIdRef.current++,...pickup}); state.powerUpTypes.push(pickup.type); dropsCreatedRef.current++; intro.weaponIssued=true; intro.notice=powerUpNames[pickup.type]; intro.noticeMs=2_600; }
+        }
+        const rockAllowed = variety && normal && state.asteroids.length > 0 && formationStartedRef.current && state.phase !== "SECTOR_INTRO" && state.phase !== "SECTOR_CLEAR";
+        if(!rockAllowed){state.rocks=[];} else {
+          state.rocks=state.rocks.map(r=>advanceBonusRock(r,delta)).filter(r=>rockInField(r,width,height));
+          if(intro.clock>=intro.asteroidDue){
+            intro.asteroidDue=intro.clock+nextRockEventMs(Math.random());
+            const roll=Math.random();
+            if(roll<.72 && intro.asteroidStageEvents < 2 && state.rocks.length<MAX_ROCKS){
+              const rock=spawnBonusRock(nextIdRef.current++,state.sector,width,height,visibleTop,Math.random(),Math.floor(Math.random()*100_000));
+              if(!state.asteroids.some(e=>Math.hypot(e.x-rock.x,e.y-rock.y)<e.radius+rock.radius+30) && !state.powerUps.some(p=>Math.hypot(p.x-rock.x,p.y-rock.y)<70)){state.rocks.push(rock);intro.asteroidEvents++; intro.asteroidStageEvents++;}
+            }
+          }
+          state.rocks=state.rocks.filter(r=>Math.hypot(r.x-state.player.x*width,r.y-state.player.y*height)>r.radius+playerDiameterRef.current*.6 && !state.powerUps.some(p=>Math.hypot(p.x-r.x,p.y-r.y)<r.radius+35));
+        }
         state.powerUps = state.powerUps.filter(pickup => {
           if (Math.hypot(pickup.x - state.player.x * width, pickup.y - state.player.y * height) > 34) return true;
           Object.assign(state, activateCollectedPower(state, pickup.type));
@@ -1479,7 +1628,7 @@ const GamePage = () => {
           if (pickup.type === "rapid") state.rapidFireTotalMs = POWER_UP_DURATION_MS;
           if (pickup.type === "weapon") state.weaponSource = "pickup";
           syncSelectedWeapon(state);
-          state.pickupNotice = { id: pickup.id, type: pickup.type, remainingMs: 3_200, level: stageWeaponLevel(shipStageRef.current, state.weaponLevel) };
+          state.pickupNotice = { id: pickup.id, type: pickup.type, remainingMs: 2_400, level: stageWeaponLevel(shipStageRef.current, state.weaponLevel) };
           soundRef.current?.playPickup(pickup.type);
           return false;
         });
@@ -1536,7 +1685,10 @@ const GamePage = () => {
             continue;
           }
           const enemy = state.asteroids.find(item => shotHitsEnemy(shot, item));
-          if (!enemy) { remainingShots.push(shot); continue; }
+          if (!enemy) {
+            const rock = state.rocks.find(r => rockHitsShot(r, previous, shot));
+            if (rock) { const hit=hitBonusRock(rock,shot.damage); Object.assign(rock,hit.rock); state.score+=hit.points; state.rockEffects.push({id:nextIdRef.current++,x:rock.x,y:rock.y,radius:rock.radius,seed:rock.seed,age:0,points:hit.points,final:hit.final}); state.rockEffects=state.rockEffects.slice(-MAX_ROCK_EFFECTS); if(hit.final){state.rocks=state.rocks.filter(r=>r.id!==rock.id);soundRef.current?.playRock(rock.radius>20,true);}else soundRef.current?.playRock(rock.radius>20,false); continue; }
+            remainingShots.push(shot); continue; }
           enemy.health = Math.max(0, enemy.health - shot.damage);
           if (enemy.health < 1e-9) enemy.health = 0;
           enemy.hitUntil = time + 190;
@@ -1553,19 +1705,27 @@ const GamePage = () => {
           creditComboDefeat(state, enemy.reward, elapsedRef.current);
           state.asteroids = state.asteroids.filter(item => item.id !== enemy.id);
           if (enemy.attackPattern !== null) attackCooldownRef.current = 0;
-          const drop = enemy.escort ? null : createPowerUpDrop({ id: nextIdRef.current, x: enemy.x, y: enemy.y, width, height, threats: state.asteroids, activeCount: state.powerUps.length, chanceRoll: Math.random(), kindRoll: Math.random(), destroyed: state.destroyed, dropsCreated: dropsCreatedRef.current, level: state.sector, usedTypes: state.powerUpTypes, weaponMaxed: state.weaponLevel >= 5 });
+          const drop = enemy.escort ? null : createPowerUpDrop({ id: nextIdRef.current, x: enemy.x, y: enemy.y, width, height, threats: state.asteroids, activeCount: state.powerUps.length, chanceRoll: Math.random(), kindRoll: Math.random(), destroyed: state.destroyed, dropsCreated: dropsCreatedRef.current, level: state.sector, usedTypes: variety && !intro.weaponIssued ? [...state.powerUpTypes, "weapon"] : state.powerUpTypes, weaponMaxed: state.weaponLevel >= 5 });
           if (drop) { nextIdRef.current += 1; dropsCreatedRef.current += 1; state.powerUpTypes.push(drop.type); state.powerUps.push(drop); }
         }
         state.shots = state.encounter === 'boss-clear' ? [] : remainingShots;
+        if (variety && !waveCompleteRef.current && formationIndexRef.current === slots.length && state.asteroids.length === 0) {
+          waveCompleteRef.current = true; intro.waveComplete = true;
+          intro.notice = (state.damageCount ?? 0) === intro.waveDamage && state.destroyed - intro.waveDestroyed >= slots.length ? "Perfect formation" : "FORMATION CLEARED";
+          intro.noticeMs = 2100; soundRef.current?.play("pickup");
+          state.rocks = []; state.rockEffects = [];
+        }
         const nextFlight = normal ? nextBlockFlight(state.sector, flightRef.current, formationIndexRef.current, state.asteroids.length, rulesVersionRef.current) : null;
         if (nextFlight && state.phase !== "SECTOR_CLEAR") {
           if (rulesVersionRef.current === 2) state.score += GROUP_CLEAR_POINTS;
           flightRef.current = nextFlight.group;
           formationOffsetRef.current = nextFlight.offset;
-          sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height, visibleTop, nextFlight.count, nextFlight.offset);
+          sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height, visibleTop, playerDiameterRef.current, nextFlight.count, nextFlight.offset);
           formationIndexRef.current = 0;
           formationStartedRef.current = false;
-          sectionElapsedRef.current = rulesVersionRef.current === 2 ? SECTION_INTRO_MS - REINFORCEMENT_WARNING_MS - introGroupBreathingMs(state.sector) : 0;
+          sectionElapsedRef.current = variety ? Math.max(0, timing.introMs - REINFORCEMENT_WARNING_MS - timing.breathingMs) : rulesVersionRef.current === 2 ? SECTION_INTRO_MS - REINFORCEMENT_WARNING_MS - introGroupBreathingMs(state.sector) : 0;
+          waveCompleteRef.current = false; intro.waveComplete = false;
+          intro.waveDamage = state.damageCount ?? 0; intro.waveDestroyed = state.destroyed; intro.waveCombo = state.combo.total;
           spawnTimerRef.current = 0;
           attackCooldownRef.current = 0;
           state.shots = [];
@@ -1582,7 +1742,7 @@ const GamePage = () => {
         } else {
           state.phase = bonus
             ? sectionPhase({ introMs: sectionElapsedRef.current, spawned: bonusIndexRef.current, total: BONUS_TARGET_COUNT, alive: state.bonusTargets.length, ready: state.bonusTargets.length, returning: false, attacking: false })
-            : sectionPhase({ introMs: sectionElapsedRef.current, spawned: formationIndexRef.current, total: (sectionSlotsRef.current ?? slots).length, alive: state.asteroids.length, ready: state.asteroids.filter(asteroid => asteroid.entryElapsed >= asteroid.entryDuration && (asteroid.formationElapsed >= asteroid.formationDuration || asteroid.attackPattern !== null)).length, returning: state.asteroids.some(asteroid => asteroid.attackPattern !== null && asteroid.attackElapsed >= attackTime(asteroid)), attacking: state.asteroids.some(asteroid => asteroid.attackPattern !== null) });
+            : sectionPhase({ introMs: sectionElapsedRef.current + SECTION_INTRO_MS - timing.introMs, spawned: formationIndexRef.current, total: (sectionSlotsRef.current ?? slots).length, alive: state.asteroids.length, ready: state.asteroids.filter(asteroid => asteroid.entryElapsed >= asteroid.entryDuration && (asteroid.formationElapsed >= asteroid.formationDuration || asteroid.attackPattern !== null)).length, returning: state.asteroids.some(asteroid => asteroid.attackPattern !== null && asteroid.attackElapsed >= attackTime(asteroid)), attacking: state.asteroids.some(asteroid => asteroid.attackPattern !== null) });
         }
         if (state.encounter === "normal" && state.phase === "SECTOR_CLEAR" && previousPhase !== "SECTOR_CLEAR") {
           if (rulesVersionRef.current === 2) state.score += GROUP_CLEAR_POINTS;
@@ -1626,13 +1786,13 @@ const GamePage = () => {
             if (checkpointScoreRef.current === score) checkpointScoreRef.current = 0;
           });
         }
-        if (time - combatCheckpointAtRef.current >= 10_000 && state.hearts > 0 && state.phase !== "SECTOR_CLEAR") {
+        if (scoreRunRef.current && time - combatCheckpointAtRef.current >= 10_000 && state.hearts > 0 && state.phase !== "SECTOR_CLEAR") {
           combatCheckpointAtRef.current = time;
           void saveCombatRef.current().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
         }
         if (state.phase === "SECTOR_CLEAR") { state.enemyShots = []; state.shots = []; }
         persistGuestShards();
-        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "turret-hit" ? 340 : effect.kind === "turret-burst" ? 720 : effect.kind === "boss-fall" ? BOSS_FALL_DURATION_MS + 100 : effect.kind === "boss-explosion" ? BOSS_FALL_DURATION_MS + 3_400 : effect.kind === "player-explosion" ? 2_250 : effect.kind === "player-crash" ? 1_350 : effect.kind === "explosion" || effect.kind === "shatter" ? 2_250 : 390));
+        state.effects = state.effects.map(effect => activateBossExplosion(effect, time)).filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "turret-hit" ? 340 : effect.kind === "turret-burst" ? 720 : effect.kind === "boss-fall" ? BOSS_FALL_DURATION_MS + 100 : effect.kind === "boss-explosion" ? (effect.finalDelayMs ?? 0) + 3_400 : effect.kind === "player-explosion" ? 2_250 : effect.kind === "player-crash" ? 1_350 : effect.kind === "explosion" || effect.kind === "shatter" ? 2_250 : 390));
         if (state.hearts === 0) {
           state.status = "destroying";
           state.enemyShots = [];
@@ -1662,6 +1822,13 @@ const GamePage = () => {
         }
       }
     };
+    const step = (time: number) => {
+      lastMeasuredFrameRef.current = lastFrameRef.current ? Math.max(0, time - lastFrameRef.current) : 0;
+      if (document.hidden) return;
+      // Preserve the official single-step timing and mobile paint behavior.
+      simulate(time);
+      if (diagnosticsRef.current?.due()) diagnosticsRef.current.update(diagnosticContext(), stateRef.current.status === 'playing', false);
+    };
     const stop = startGuardedGameLoop({ step,
       fault: (reason, error) => interruptionRef.current(reason, error),
       active: () => stateRef.current.status === 'playing',
@@ -1677,7 +1844,7 @@ const GamePage = () => {
       if (gameOverTimerRef.current !== null) window.clearTimeout(gameOverTimerRef.current);
       gameOverTimerRef.current = null;
     };
-  }, [showRewardCards]);
+  }, [showRewardCards, diagnosticContext]);
 
   const activateStartPower = () => {
     const state = stateRef.current;
@@ -1822,6 +1989,7 @@ const GamePage = () => {
     if (gameOverTimerRef.current !== null) window.clearTimeout(gameOverTimerRef.current);
     gameOverTimerRef.current = null;
     stateRef.current = createInitialState();
+    varietyRef.current = createCombatVariety(); waveCompleteRef.current = false;
     stateRef.current.shardBase = shardBalance(localStorage.getItem(SHARD_BALANCE_KEY));
     guestCreditedShardsRef.current = 0;
     bossLifeRemainingRef.current=0;pendingBossCardRef.current=null;setExtraLifeVisible(false);
@@ -1972,8 +2140,11 @@ const GamePage = () => {
   return (
     <main className="game-shell" data-effects-paused={game.status === "paused" || game.status === "loading"} onPointerDownCapture={event => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
       {rewardCards[0] && <CardReveal reward={rewardCards[0]} remaining={rewardCards.length} onContinue={continueRewardCard}/>}
-      {extraLifeVisible&&<div className="boss-extra-life" role="status" aria-live="polite"><strong>{t(game.bossHeartShards ? 'FULL HEARTS' : 'HEART RESTORED')}</strong><span>{game.bossHeartShards ? `+${game.bossHeartShards} ◆` : '+1 ♥'}</span></div>}
+      {extraLifeVisible&&<div className={`boss-extra-life${game.bossHeartShards ? " boss-shard-reward" : ""}`} role="status" aria-live="polite"><strong>{t(game.bossHeartShards ? 'FULL HEARTS' : 'HEART RESTORED')}</strong><span>{game.bossHeartShards ? `+${game.bossHeartShards} ◆` : '+1 ♥'}</span></div>}
       <div ref={fieldRef} className="game-field" onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()}>
+        <GameSceneBoundary onError={error => interruptionRef.current('render-error', error)} fallback={retry => <div className="game-overlay"><div className="game-modal" role="alert"><h1>{t('MISSION PAUSED')}</h1><p>{t("The mission was paused after a technical interruption. Try Resume to continue.")}</p><button type="button" className="button button-primary" onClick={retry}>{t('Try again')}</button></div></div>}>
+        {combatVarietyEnabled && <BonusRockLayer rocks={game.rocks} effects={game.rockEffects} width={fieldSizeRef.current.width} height={fieldSizeRef.current.height} />}
+        {combatVarietyEnabled && varietyRef.current.noticeMs > 0 && <div className="combat-variety-notice" role="status" style={{ top: visibleTopRef.current + 48 }}>{varietyRef.current.notice === "Perfect formation" ? t("Perfect formation") : varietyRef.current.notice === "FORMATION CLEARED" ? t("FORMATION CLEARED") : varietyRef.current.notice === "Clear the formation" ? t("Clear the formation") : varietyRef.current.notice === "Heavy attacker incoming" ? t("Heavy attacker incoming") : varietyRef.current.notice === "Finish this wave without a hit" ? t("Finish this wave without a hit") : varietyRef.current.notice === "Hold your combo" ? t("Hold your combo") : t(varietyRef.current.notice)}</div>}
         <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} showNebula={game.encounter === "boss-fight"} />
         <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
         <button className="wide-fullscreen-control game-fullscreen-control" type="button" onClick={requestGameFullscreen} aria-label={t("Full screen")} title={t("Full screen")}>⛶</button>
@@ -1990,9 +2161,9 @@ const GamePage = () => {
         {game.encounter === "normal" && <span className="flight-indicator" style={{ top: visibleTopRef.current + 25 }}>{t("Group {current}/{total}", { current: flightRef.current + 1, total: blockFlights(game.sector, rulesVersionRef.current).length })}</span>}
         {reinforcementIntro && game.status === "playing" && <div className="reinforcement-notice" role="status">{t("Reinforcements incoming")}</div>}
         {game.encounter === "bonus" && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">{t("BONUS TARGETS")} {game.bonusHits} / {BONUS_TARGET_COUNT} · {t("NO ENEMY FIRE")}</div>}
-        {game.encounter === 'boss-clear' && !game.bossHeartCollected && clearTimerRef.current >= BOSS_CLEAR_DURATION_MS && <div className="boss-heart-pickup" role="status" aria-label={t('Collect the heart to start the bonus round.')} style={{left: `${BOSS_HEART_POSITION.x * 100}%`, top: `${BOSS_HEART_POSITION.y * 100}%`}}>
-          <span className="boss-heart-orb" aria-hidden="true"><span className="power-preview-orbit"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.2 3.4 13.1C-1.1 8.8 5.3 1.7 10.2 5.9L12 7.5l1.8-1.6c4.9-4.2 11.3 2.9 6.8 7.2L12 21.2Z" /></svg></i></span></span>
-          <small>{game.hearts >= game.maxHearts ? `+${BOSS_FULL_HEART_SHARDS} ◆` : '+1 ♥'} · {t('Collect the heart to start the bonus round.')}</small>
+        {game.encounter === 'boss-clear' && !game.bossHeartCollected && clearTimerRef.current >= BOSS_CLEAR_DURATION_MS && <div className={`boss-heart-pickup${game.hearts >= game.maxHearts ? " boss-shard-pickup" : ""}`} role="status" aria-label={t(game.hearts >= game.maxHearts ? 'Collect the Shards to start the bonus round.' : 'Collect the heart to start the bonus round.')} style={{left: `${BOSS_HEART_POSITION.x * 100}%`, top: `${BOSS_HEART_POSITION.y * 100}%`}}>
+          <span className="boss-heart-orb" aria-hidden="true"><span className="power-preview-orbit"><i>{game.hearts >= game.maxHearts ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 21 12 12 22 3 12Z" /><path className="boss-shard-facets" d="m12 2-4 10 4 10 4-10ZM3 12h18" /></svg> : <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.2 3.4 13.1C-1.1 8.8 5.3 1.7 10.2 5.9L12 7.5l1.8-1.6c4.9-4.2 11.3 2.9 6.8 7.2L12 21.2Z" /></svg>}</i></span></span>
+          <small>{game.hearts >= game.maxHearts ? `+${BOSS_FULL_HEART_SHARDS} ◆` : '+1 ♥'} · {t(game.hearts >= game.maxHearts ? 'Collect the Shards to start the bonus round.' : 'Collect the heart to start the bonus round.')}</small>
         </div>}
         
         {game.status === "loading" && <div className="game-overlay"><div className="game-modal mission-start-modal">
@@ -2023,7 +2194,7 @@ const GamePage = () => {
           {game.phase === "SECTOR_CLEAR" && game.rewardNotice && <small className="reward-unlock" role="status">✦ {game.rewardNotice.split(" · ").map(part => t(part)).join(" · ")}</small>}
         </div>}
         {game.status === "playing" && game.encounter === "normal" && !formationStartedRef.current && (game.phase === "SECTOR_INTRO" || game.phase === "ENTRY" || game.phase === "FORMATION") && <div className="formation-data-stream" aria-hidden="true">{FORMATION_DATA_ROWS.map((row, index) => <div className="formation-data-row" key={index}><span>{row.repeat(4)}</span><span>{row.repeat(4)}</span></div>)}</div>}
-        {game.asteroids.filter(asteroid => game.encounter === "normal"
+        {!combatVarietyEnabled && game.asteroids.filter(asteroid => game.encounter === "normal"
           ? game.phase === "ENTRY" || game.phase === "FORMATION" || game.phase === "REFORM"
           : game.encounter === "boss-fight" && asteroid.escort && asteroid.attackPattern === null
         ).map(asteroid => { const locked = asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration; const diameter = asteroid.radius * 2 + 8; return <div key={`formation-${asteroid.id}`} className={`formation-target${locked ? " formation-target-locked" : ""}`} style={{ left: asteroid.entryTargetX, top: asteroid.entryTargetY, width: diameter, height: diameter }} aria-hidden="true"><span /></div>; })}
@@ -2037,16 +2208,16 @@ const GamePage = () => {
           <BossHealthView boss={game.boss}/>
         </div>}
         {game.bonusTargets.map(target => <div key={target.id} className="asteroid asteroid-small cryptoid bonus-ship cryptoid-boost" style={{ ...alignedSpritePosition(target.x, target.y, target.sprite, 55), width: 55, height: 55, transform: "translate(-50%, -50%)", "--flame-length": `${engineFlamePercent(target.visualMotion?.thrust ?? 0)}%` } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={target.sprite} color={target.color} />{engineTrails(target.sprite, "exhaust")}</div></div>)}
-        {game.asteroids.map(asteroid => { const sprite = asteroid.sprite; const maskImage = `url('${shipEvolutionAsset(sprite, 1)}')`; const visualSize = enemyVisualDiameter(asteroid.radius, playerDisplayDiameter); return <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid${game.empMs > 0 ? " cryptoid-emp" : ""} cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.hitUntil && asteroid.hitUntil > performance.now() ? " cryptoid-hit" : ""}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}${cryptoidMotionClass(asteroid)}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ ...alignedSpritePosition(asteroid.x, asteroid.y, sprite, visualSize), width: visualSize, height: visualSize, transform: "translate(-50%, -50%)", ...shipHullStyle(sprite, true), "--visual-bank": `${asteroid.visualMotion?.bank ?? 0}deg`, "--flame-length": `${engineFlamePercent(asteroid.visualMotion?.thrust ?? 0, asteroid.returnElapsed > 0 ? "return" : asteroid.entryElapsed < asteroid.entryDuration ? "launch" : asteroid.attackPattern !== null && asteroid.attackDelay <= 0 ? "boost" : "idle")}%`, "--hull-light": asteroid.hullLight ?? 0 } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={sprite} color={asteroid.color} />{engineTrails(sprite, "exhaust")}<i className="hull-reflection" style={{ maskImage, WebkitMaskImage: maskImage }} aria-hidden="true" /><HullDamage sites={asteroid.hullFires} hit={asteroid.hit} maskImage={maskImage} mirrored /></div><span className="health-bar" data-critical={asteroid.health / asteroid.maxHealth <= .3} role="progressbar" aria-label={t("Enemy hull")} aria-valuenow={Math.ceil(asteroid.health / asteroid.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${asteroid.health / asteroid.maxHealth * 100}%` }} /></span></div>; })}
+        {game.asteroids.map(asteroid => { const sprite = asteroid.sprite; const maskImage = `url('${shipEvolutionAsset(sprite, 1)}')`; const visualSize = enemyVisualDiameter(asteroid.radius, playerDisplayDiameter, combatVarietyEnabled && asteroid.size === "small"); return <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid${game.empMs > 0 ? " cryptoid-emp" : ""} cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.hitUntil && asteroid.hitUntil > performance.now() ? " cryptoid-hit" : ""}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}${cryptoidMotionClass(asteroid)}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ ...alignedSpritePosition(asteroid.x, asteroid.y, sprite, visualSize), width: visualSize, height: visualSize, transform: "translate(-50%, -50%)", ...shipHullStyle(sprite, true), "--visual-bank": `${asteroid.visualMotion?.bank ?? 0}deg`, "--flame-length": `${engineFlamePercent(asteroid.visualMotion?.thrust ?? 0, asteroid.returnElapsed > 0 ? "return" : asteroid.entryElapsed < asteroid.entryDuration ? "launch" : asteroid.attackPattern !== null && asteroid.attackDelay <= 0 ? "boost" : "idle")}%`, "--hull-light": asteroid.hullLight ?? 0 } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={sprite} color={asteroid.color} />{engineTrails(sprite, "exhaust")}<i className="hull-reflection" style={{ maskImage, WebkitMaskImage: maskImage }} aria-hidden="true" /><HullDamage sites={asteroid.hullFires} hit={asteroid.hit} maskImage={maskImage} mirrored /></div>{enemyMuzzleOffsets(asteroid.muzzleBarrels ?? 1, asteroid.radius).map((offset, barrel) => <i key={`muzzle-${barrel}`} className="enemy-muzzle-flash" style={{ left: `calc(50% + ${offset}px)`, top: `calc(50% + ${asteroid.radius * .4}px)`, opacity: asteroid.muzzleAt ? Math.max(0, 1 - (performance.now() - asteroid.muzzleAt) / 100) : 0 }} aria-hidden="true" />)}<span className="health-bar" data-critical={asteroid.health / asteroid.maxHealth <= .3} role="progressbar" aria-label={t("Enemy hull")} aria-valuenow={Math.ceil(asteroid.health / asteroid.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${asteroid.health / asteroid.maxHealth * 100}%` }} /></span></div>; })}
         {game.powerUps.map(pickup => {
           const pickupLabel = `${t(powerUpNames[pickup.type])} · ${t(powerUpDescriptions[pickup.type])}`;
           return <div key={pickup.id} className={`power-up power-up-${pickup.type}`} role="img" aria-label={pickupLabel} title={pickupLabel} style={{ left: pickup.x, top: pickup.y }}><span aria-hidden="true">{powerUpSymbols[pickup.type]}</span></div>;
         })}
         {game.combo.remainingMs > 0 && game.status === "playing" && <div key={`combo-${game.combo.total}`} className={`combo-notice${game.pickupNotice ? " combo-with-pickup" : ""}`} role="status"><b>{t("DOUBLE KILL")}</b><span>+{DOUBLE_KILL_SCORE} {t("Score")} · +{DOUBLE_KILL_SHARDS} {t("Shards")}</span></div>}
-        {game.pickupNotice && game.status === "playing" && <div key={game.pickupNotice.id} className={`pickup-notice pickup-notice-${game.pickupNotice.type}`} role="status"><b>{powerUpSymbols[game.pickupNotice.type]} {t(powerUpNames[game.pickupNotice.type])}</b><span>{game.pickupNotice.type === "weapon" ? `${t(pickupEffectLabels.weapon)} ${game.pickupNotice.level} · ${weaponNames[game.pickupNotice.level]}` : t(pickupEffectLabels[game.pickupNotice.type])}</span></div>}
+        {game.pickupNotice && game.status === "playing" && <div key={game.pickupNotice.id} className={`pickup-notice pickup-notice-${game.pickupNotice.type}`} role="status"><b>{powerUpSymbols[game.pickupNotice.type]} {game.pickupNotice.type === "weapon" ? weaponNames[game.pickupNotice.level] : t(powerUpNames[game.pickupNotice.type])}</b><span>{game.pickupNotice.type === "weapon" ? `${t(pickupEffectLabels.weapon)} ${game.pickupNotice.level} · ${weaponNames[game.pickupNotice.level]} · ${PICKUP_WEAPON_DURATION_MS / 1000}s` : t(pickupEffectLabels[game.pickupNotice.type])}</span></div>}
         {game.shots.map(shot => <div key={shot.id} className={`player-laser player-laser-tier-${shot.visualLevel ?? 1}${shot.empowered && shot.visualLevel !== 5 ? " player-laser-overdrive" : ""}`} style={{ left: shot.x, top: shot.y }} aria-hidden="true" />)}
-        {game.enemyShots.map(shot => <div key={shot.id} className={`enemy-laser${shot.bossKind ? ` boss-projectile boss-projectile-${shot.bossKind}` : ""}${shot.weaponKind ? ` boss-evolved-shot boss-evolved-${shot.weaponKind}` : ""}`} style={{ left: shot.x, top: shot.y, "--shot-angle": `${-Math.atan2(shot.vx, shot.vy) * 180 / Math.PI}deg`,...(shot.weaponKind?{"--boss-shot-color":shot.weaponColor,"--boss-shot-width":`${shot.weaponWidth}px`,"--boss-shot-diameter":`${shot.radius*2}px`}:{}) } as CSSProperties} aria-hidden="true" />)}
-        {game.effects.map(effect => <ImpactEffectView key={effect.id} effect={effect} />)}
+        {game.enemyShots.map(shot => <div key={shot.id} className={`enemy-laser${shot.enemyClass ? ` enemy-projectile-${shot.enemyClass}` : ""}${shot.bossKind ? ` boss-projectile boss-projectile-${shot.bossKind}` : ""}${shot.weaponKind ? ` boss-evolved-shot boss-evolved-${shot.weaponKind}` : ""}`} style={{ left: shot.x, top: shot.y, ...(shot.enemyClass ? { width: shot.radius * 2, ...(shot.enemyClass === "medium" || shot.enemyClass === "heavy" ? { height: shot.radius * 2 } : {}), "--enemy-shot-color": enemyProjectileProfiles[shot.enemyClass].color } : {}), "--shot-angle": `${-Math.atan2(shot.vx, shot.vy) * 180 / Math.PI}deg`,...(shot.weaponKind?{"--boss-shot-color":shot.weaponColor,"--boss-shot-width":`${shot.weaponWidth}px`,"--boss-shot-diameter":`${shot.radius*2}px`}:{}) } as CSSProperties} aria-hidden="true" />)}
+        {game.effects.filter(bossExplosionReady).map(effect => <ImpactEffectView key={effect.id} effect={effect} />)}
         {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship shielded-ship${game.status === "paused" && weaponCountdown === null ? " player-ship-dialog-hidden" : ""}${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.purchasedShieldMs > 0 || (game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0) ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${engineFlamePercent(game.thrust)}%`, ...shipVisualOffset } as CSSProperties} aria-label={t('Your Cryptoid ship')}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} />{engineTrails(shipSelection.skin.sprite, "player-engine")}<i className="hull-reflection" style={{ maskImage: `url('${shipEvolutionAsset(shipSelection.skin.sprite, shipStage)}')`, WebkitMaskImage: `url('${shipEvolutionAsset(shipSelection.skin.sprite, shipStage)}')` }} aria-hidden="true" /><i className="player-muzzle-flash" aria-hidden="true" /><HullDamage sites={game.playerHullFires} hit={game.playerHit} maskImage={`url('${shipEvolutionAsset(shipSelection.skin.sprite, shipStage)}')`} /></div></div>}
         {weaponMenuOpen && <div className={`game-overlay weapon-selection-overlay${readControlHand() === 'right' ? ' weapon-drawer-left' : ' weapon-drawer-right'}`} onPointerDown={event => event.stopPropagation()}>
           <div className="weapon-selection-dialog" role="dialog" aria-modal="true" aria-labelledby="mission-weapon-shop-title">
@@ -2106,6 +2277,7 @@ const GamePage = () => {
         {game.status === "game-over" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><h1>{t("Game Over")}</h1><div className="game-over-details"><p className="eyebrow">{t("MISSION FAILED")}</p><p className="game-over-hearts">{t('Hearts')}: {game.hearts}</p><div className="game-over-stats"><span><b>{game.score}</b>{t('Score')}</span><span><b>{game.destroyed}</b>{t('Destroyed')}</span><span><b>{game.sector}</b>{t('Sector')}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSyncStatus}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t('Home')}</button></div></div></div></div>}
         {game.status === "victory" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><p className="eyebrow">{t("CAMPAIGN COMPLETE")}</p><h1>{t("Victory")}</h1><div className="game-over-details"><p>{t("You completed the final bonus challenge.")}</p><div className="game-over-stats"><span><b>{game.score}</b>{t("Score")}</span><span><b>{game.destroyed}</b>{t("Destroyed")}</span><span><b>{game.sector}</b>{t("Sector")}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSyncStatus}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t("Home")}</button></div></div></div></div>}
         {homePrompt && <div className="game-overlay" role="dialog" aria-modal="true" aria-labelledby="leave-mission-title"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2 id="leave-mission-title">{t('Return to base?')}</h2><p>{accountRun ? t("Your enemies, remaining groups, lives, weapons and earned rewards are saved so you can continue this fight.") : t('Your current mission will end. Your records will be saved locally.')}</p>{accountRun && <p role="status">{t(saveNotice)}</p>}<div className="modal-actions"><button className="button button-primary" type="button" disabled={pauseLeaving || saveRetrying} onClick={() => { if (accountRun) void leaveSavedMission(); else goHome(); }}>{pauseLeaving ? t("Saving game…") : t('Leave game')}</button><button className="button button-secondary" type="button" disabled={pauseLeaving} onClick={closeHomePrompt}>{t('Keep playing')}</button></div></div></div>}
+        </GameSceneBoundary>
       </div>
     </main>
   );
@@ -2127,3 +2299,4 @@ function GameEntry() {
   </div></div>;
 }
 export default GameEntry;
+

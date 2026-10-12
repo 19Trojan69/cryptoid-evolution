@@ -1,0 +1,205 @@
+/* Scope these rules to Community so the global menu touch sizes stay intact. */
+.feedback-hub {
+  padding: 12px !important;
+  font:
+    400 15px/1.45 system-ui,
+    sans-serif;
+}
+.feedback-hub > header {
+  align-items: center;
+  gap: 8px;
+}
+.feedback-hub h2 {
+  font-size: clamp(19px, 5vw, 26px);
+  line-height: 1.2;
+  margin: 0;
+}
+.feedback-hub h2 svg {
+  width: 24px;
+  height: 24px;
+  flex: none;
+}
+.feedback-hub .menu-return {
+  margin: 6px 0;
+  font-size: 13px;
+  padding: 7px 10px;
+}
+.feedback-hub .feedback-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+  margin: 8px 0;
+}
+.feedback-hub .feedback-tabs button {
+  min-width: 0;
+  font-size: 13px;
+  line-height: 1.25;
+  padding: 6px;
+}
+.feedback-hub :is(.feedback-compose, .feedback-replies, .feedback-moderation) > summary {
+  display: list-item;
+  cursor: pointer;
+  min-height: 44px;
+  padding: 10px 8px;
+  font-weight: 600;
+}
+.feedback-hub .feedback-compose {
+  border: 1px solid #7991a366;
+  border-radius: 10px;
+  margin: 8px 0;
+}
+.feedback-hub .feedback-compose form {
+  padding: 0 10px 10px;
+}
+.feedback-hub label {
+  margin: 6px 0;
+  font-size: 14px;
+}
+.feedback-hub :is(input:not([type="checkbox"]), textarea, select) {
+  padding: 8px;
+  font-size: 16px;
+}
+.feedback-hub textarea {
+  min-height: 76px;
+}
+.feedback-hub .feedback-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0;
+}
+.feedback-hub .feedback-filters > label:first-child {
+  flex: 1;
+  min-width: 130px;
+}
+.feedback-hub .feedback-filters > button {
+  padding: 8px;
+  font-size: 13px;
+}
+.feedback-hub .feedback-hidden-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  order: 3;
+  width: 100%;
+  margin: 0;
+}
+.feedback-hub .feedback-hidden-filter input {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+.feedback-hub .feedback-post {
+  padding: 12px;
+  margin: 9px 0;
+}
+.feedback-hub .community-text header {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+.feedback-hub .feedback-post h3 {
+  font-size: 17px;
+  line-height: 1.35;
+  margin: 0 0 4px;
+}
+.feedback-hub .feedback-post small {
+  font-size: 12px;
+  line-height: 1.4;
+}
+.feedback-hub .feedback-status {
+  align-self: start;
+  padding: 3px 6px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+.feedback-hub .feedback-profile-link {
+  display: inline;
+  color: #9fe1ed;
+  background: none;
+  border: 0;
+  box-shadow: none;
+  min-height: 0;
+  padding: 2px 0;
+  font-size: 12px;
+}
+.feedback-hub .feedback-description {
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 10px 0 4px;
+}
+.feedback-hub .feedback-description-preview {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+}
+.feedback-hub .feedback-expand {
+  border: 0;
+  background: none;
+  box-shadow: none;
+  color: #f0dfb7;
+  min-height: 44px;
+  padding: 5px 0;
+  font-size: 13px;
+}
+.feedback-hub .feedback-votes {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+.feedback-hub .feedback-votes button {
+  min-width: 64px;
+  min-height: 44px;
+  padding: 6px 10px;
+  font-size: 15px;
+}
+.feedback-hub .feedback-replies {
+  border-top: 1px solid #7991a344;
+  margin-top: 8px;
+}
+.feedback-hub .developer-reply {
+  margin: 4px 0;
+  padding: 8px 10px;
+  border-left: 2px solid #bfa06a;
+}
+.feedback-hub .developer-reply p {
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 8px 0;
+}
+.feedback-hub .feedback-moderation {
+  margin-top: 6px;
+  padding-top: 0;
+}
+.feedback-hub .community-translation {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  color: #a2edf1;
+  margin-top: 4px;
+}
+.feedback-hub .community-translation button {
+  min-height: 44px;
+  font-size: 12px;
+  padding: 4px 8px;
+}
+.feedback-hub .community-translation-unavailable {
+  display: block;
+  opacity: 0.8;
+  margin-top: 5px;
+}
+.feedback-hub .feedback-pagination {
+  margin: 12px 0;
+}
+@media (max-width: 360px) {
+  .feedback-hub .feedback-tabs button {
+    font-size: 12px;
+  }
+  .feedback-hub .community-text header {
+    flex-wrap: wrap;
+  }
+}

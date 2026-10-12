@@ -1,0 +1,16 @@
+{
+  "http": 200,
+  "entry": "/assets/index-DQFb7Mo8.js",
+  "gameBundle": "GamePage-IVQ4cfM9.js",
+  "stylesheet": "/assets/index-jaywVuOe.css",
+  "approvedFastArrival": true,
+  "approvedSingleRowHudLastRule": true,
+  "sessionDiagnostics": true,
+  "approvedBonusRocks": true,
+  "testnetMarkerConditional": true,
+  "sourceCommit": "0c4a6e76a201b6d9956f3ae6eb7cb151d85131a4",
+  "deploymentId": "dpl_8AGNNdBLRiBTwJZt4LyKaFMg8mi1",
+  "mainnetUnchangedCommit": "907d2a7363345d00f0f90c54402bf04e887b64d9",
+  "visualDeviceTest": false,
+  "verifiedAt": "2026-10-12T11:06:30.597041+00:00"
+}

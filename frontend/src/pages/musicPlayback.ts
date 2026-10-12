@@ -1,10 +1,16 @@
 import { musicGain } from "./musicPreferences.ts";
 
+const closeContext = (context: AudioContext | null) => {
+  try { void context?.close().catch(() => {}); } catch { /* A retired audio host cannot interrupt cleanup. */ }
+};
+
 // A GainNode controls music on iOS, where HTMLMediaElement.volume can be ignored.
 export class MusicPlayer {
   readonly audio: HTMLAudioElement;
   private context: AudioContext | null = null;
   private gain: GainNode | null = null;
+  private mediaSource: MediaElementAudioSourceNode | null = null;
+  private metadataListener: (() => void) | null = null;
   private volume: number;
   private source: string;
   private closed = false;
@@ -22,20 +28,32 @@ export class MusicPlayer {
 
   private prepare() {
     if (this.context || typeof AudioContext === "undefined") return;
-    const context = new AudioContext();
+    let context: AudioContext | null = null;
+    let source: MediaElementAudioSourceNode | null = null;
+    let gain: GainNode | null = null;
     try {
-      const source = context.createMediaElementSource(this.audio);
-      const gain = context.createGain();
+      context = new AudioContext();
+      source = context.createMediaElementSource(this.audio);
+      gain = context.createGain();
       gain.gain.value = musicGain(this.volume);
       source.connect(gain).connect(context.destination);
       this.context = context;
       this.gain = gain;
+      this.mediaSource = source;
       // The media element is part of this Web Audio graph. Its own volume
       // would otherwise attenuate the signal a second time.
       this.audio.volume = 1;
     } catch {
-      void context.close();
+      try { source?.disconnect(); } catch { /* Partially initialized graph. */ }
+      try { gain?.disconnect(); } catch { /* Partially initialized graph. */ }
+      closeContext(context);
     }
+  }
+
+  private clearMetadataListener() {
+    if (!this.metadataListener) return;
+    this.audio.removeEventListener("loadedmetadata", this.metadataListener);
+    this.metadataListener = null;
   }
 
   get currentSource() { return this.source; }
@@ -45,14 +63,19 @@ export class MusicPlayer {
   // and the existing AudioContext/GainNode. A new Audio() here would need a fresh gesture.
   setSource(src: string, resumeAt = 0) {
     if (this.closed || this.source === src) return;
+    this.clearMetadataListener();
     this.audio.pause();
     this.source = src;
     this.audio.src = src;
     this.audio.load();
     if (resumeAt > 0) {
-      this.audio.addEventListener("loadedmetadata", () => {
-        if (this.source === src) this.audio.currentTime = Math.min(resumeAt, this.audio.duration || resumeAt);
-      }, { once: true });
+      const loaded = () => {
+        if (this.metadataListener !== loaded) return;
+        this.clearMetadataListener();
+        if (!this.closed && this.source === src) this.audio.currentTime = Math.min(resumeAt, this.audio.duration || resumeAt);
+      };
+      this.metadataListener = loaded;
+      this.audio.addEventListener("loadedmetadata", loaded, { once: true });
     }
   }
 
@@ -86,14 +109,19 @@ export class MusicPlayer {
   pause() { this.wantsPlayback = false; this.audio.pause(); }
 
   close() {
+    if (this.closed) return;
     this.closed = true;
     this.wantsPlayback = false;
+    this.clearMetadataListener();
     this.audio.pause();
     this.audio.removeAttribute("src");
     this.audio.load();
-    void this.context?.close();
+    try { this.mediaSource?.disconnect(); } catch { /* Host already disconnected. */ }
+    try { this.gain?.disconnect(); } catch { /* Host already disconnected. */ }
+    closeContext(this.context);
     this.context = null;
     this.gain = null;
+    this.mediaSource = null;
   }
 }
 
@@ -111,3 +139,4 @@ export const takeHandoffGameMusic = () => {
   primedGameMusic = null;
   return player;
 };
+

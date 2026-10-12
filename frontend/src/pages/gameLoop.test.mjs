@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import ts from 'typescript';
 import { startGuardedGameLoop, GAME_STALL_MS } from './gameLoop.ts';
-import { recordGameDiagnostic, GAME_DIAGNOSTICS_KEY } from './gameDiagnostics.ts';
+import { recordGameDiagnostic, GAME_DIAGNOSTICS_KEY, createGameSessionDiagnostics } from './gameDiagnostics.ts';
 
 function harness(step = () => {}, onFault = () => {}) {
   let clock = 0, next = 0, active = true, visible = true;
@@ -78,6 +78,7 @@ test('actual GamePage recovery preserves run, lives, rewards and paid timers eve
     soundRef: { current: { setPaused: () => { throw new Error('audio host unavailable'); } } }, musicRef: { current: null },
     recordGameDiagnostic: value => reports.push(value), fieldSizeRef: { current: { width: 390, height: 760 } },
     navigator: { userAgent: 'test browser' }, setGame: value => updates.push(value),
+    sectorInChapter: sector => (sector - 1) % 10 + 1, lastSavedAtRef: { current: 0 }, lastMeasuredFrameRef: { current: 0 },
     saveCombatRef: { current: async () => { saved.push(structuredClone(state)); throw new Error('offline'); } },
     setSaveNotice: value => notice = value,
   };
@@ -97,4 +98,37 @@ test('diagnostics stay local and bounded and malformed/unavailable storage canno
   const records = JSON.parse(value); assert.equal(records.length, 20); assert.equal(records[0].browser.length, 240);
   assert.equal('account' in records[0], false); assert.equal('message' in records[0], false);
   assert.doesNotThrow(() => recordGameDiagnostic(report, { getItem: () => { throw new Error('storage disabled'); }, setItem: () => {} }));
+});
+
+
+test('denied sessionStorage cannot fail GamePage diagnostics setup or remove its error protection', () => {
+  const source = fs.readFileSync(new URL('./GamePage.tsx', import.meta.url), 'utf8');
+  const ast = ts.createSourceFile('GamePage.tsx', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  let callback;
+  const visit = node => {
+    if (ts.isCallExpression(node) && node.expression.getText(ast) === 'useEffect'
+      && node.arguments[0]?.getText(ast).includes('createGameSessionDiagnostics(')) callback = node.arguments[0].getText(ast);
+    ts.forEachChild(node, visit);
+  }; visit(ast); assert.ok(callback);
+  const listeners = new Map(), faults = [], reports = [], state = {status:'playing'};
+  const host = {addEventListener:(name,fn)=>listeners.set(name,fn),removeEventListener:name=>listeners.delete(name)};
+  Object.defineProperty(host,'sessionStorage',{get(){throw new Error('SecurityError: storage denied');}});
+  const previousWindow = globalThis.window; globalThis.window = host;
+  const context = {window:host,document:{hidden:false,addEventListener:host.addEventListener,removeEventListener:host.removeEventListener},
+    performance:{getEntriesByType:()=>[]}, Date, diagnosticsRef:{current:null},
+    stateRef:{current:state}, interruptionRef:{current:(reason,error)=>faults.push({reason,error})},
+    recordGameDiagnostic:entry=>reports.push(entry), createGameSessionDiagnostics,
+    diagnosticContext:()=>({reason:'performance',errorName:'',sector:25,phase:'FORMATION',encounter:'normal',status:'playing',width:390,height:760,browser:'test'}),
+  };
+  try {
+    vm.runInNewContext(ts.transpileModule('globalThis.installDiagnostics = '+callback,
+      {compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText,context);
+    const cleanup = context.installDiagnostics();
+    assert.equal(listeners.size,5); assert.ok(context.diagnosticsRef.current);
+    assert.doesNotThrow(()=>listeners.get('visibilitychange')());
+    const error=new Error('test fault');listeners.get('error')({error});
+    assert.deepEqual(faults,[{reason:'javascript-error',error}]);
+    cleanup();assert.equal(listeners.size,0);assert.equal(context.diagnosticsRef.current,null);
+    assert.equal(reports.length,0);
+  } finally {if(previousWindow===undefined)delete globalThis.window;else globalThis.window=previousWindow;}
 });

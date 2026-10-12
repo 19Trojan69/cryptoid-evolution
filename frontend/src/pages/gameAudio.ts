@@ -1,5 +1,5 @@
 import { generateBossSound, bossSoundReferences } from './bossWeaponSound.ts';
-import { generateEnemyShotSound, enemySoundProfiles } from './enemyWeaponSound.ts';
+import { generateEnemyShotSound, generateEnemyDoubleShotSound, enemySoundProfiles } from './enemyWeaponSound.ts';
 import type { CryptoidClass } from './cryptoidRoster.ts';
 import type { BossWeaponKind } from './bossWeapons.ts';
 import { effectsGain, readEffectsVolume } from "./musicPreferences.ts";
@@ -41,6 +41,7 @@ const sampleGains: Record<SampleName, number> = {
 };
 
 type WeaponVoice = { source: AudioBufferSourceNode; gain: GainNode; pan: StereoPannerNode | null; volume: number };
+type EffectVoice = { source: AudioBufferSourceNode | OscillatorNode; gain: GainNode };
 
 // Game effects only; audio starts after a player gesture on browsers that require one.
 export class GameAudio {
@@ -53,12 +54,15 @@ export class GameAudio {
   private sampleRequest: Promise<void> | null = null;
   private bossSamples = new Map<string, AudioBuffer>();
   private enemyShotSamples = new Map<CryptoidClass, AudioBuffer>();
+  private enemyDoubleSamples = new Map<CryptoidClass, AudioBuffer>();
   private weaponBus: GainNode | null = null;
   private weaponMixVoices = new Set<WeaponVoice>();
   private enemyShotCycle = 0;
   private bossVoices: WeaponVoice[] = [];
   private lastShotAt = 0;
   private destroyCount = 0;
+  private effectVoices = new Set<EffectVoice>();
+  private loadController: AbortController | null = null;
 
   get running() { return this.context?.state === "running"; }
 
@@ -82,7 +86,10 @@ export class GameAudio {
     }
     const context = this.context;
     // Start decoding immediately, even if iOS delays resume() until a gesture.
-    if (!this.sampleRequest && typeof context.decodeAudioData === "function") this.sampleRequest = this.loadSamples(context);
+    if (!this.sampleRequest && typeof context.decodeAudioData === "function") {
+      this.loadController = new AbortController();
+      this.sampleRequest = this.loadSamples(context, this.loadController.signal);
+    }
     try { const resumed=context.resume();this.prepareBossSounds(context);this.prepareEnemySound(context);await resumed; } catch { return false; }
     if (this.context !== context) return false;
     return context.state === "running";
@@ -103,14 +110,32 @@ export class GameAudio {
       const buffer = context.createBuffer(1, pcm.length, context.sampleRate);
       buffer.copyToChannel(pcm, 0);
       this.enemyShotSamples.set(shipClass, buffer);
+      const doublePcm = generateEnemyDoubleShotSound(context.sampleRate, shipClass);
+      const doubleBuffer = context.createBuffer(1, doublePcm.length, context.sampleRate);
+      doubleBuffer.copyToChannel(doublePcm, 0);
+      this.enemyDoubleSamples.set(shipClass, doubleBuffer);
     }
   }
 
-  playEnemyShot(pan = 0, shipClass: CryptoidClass = 'light') {
-    const buffer = this.enemyShotSamples.get(shipClass);
+  private rockLastAt = -1;
+  private rockContext: AudioContext | null = null;
+  private rockBuffers = new Map<string, AudioBuffer>();
+  playRock(large: boolean, final: boolean) {
+    const ctx=this.context;
+    if (ctx !== this.rockContext) { this.rockContext = ctx; this.rockBuffers.clear(); this.rockLastAt = -1; }
+    if(!ctx||ctx.state!=="running"||this.paused||this.effectsVolume===0||ctx.currentTime-this.rockLastAt<.12)return false;
+    this.rockLastAt=ctx.currentTime;
+    const key=String(large)+String(final);let buffer=this.rockBuffers.get(key);
+    if(!buffer){const duration=final?(large?.25:.18):.065;buffer=ctx.createBuffer(1,Math.floor(ctx.sampleRate*duration),ctx.sampleRate);const data=buffer.getChannelData(0);let smoothed=0;
+      for(let i=0;i<data.length;i++){const t=i/ctx.sampleRate;const noise=Math.random()*2-1;smoothed=smoothed*.58+noise*.42;const cracks=1+.5*Math.sin(t*(large?950:1600))*Math.sin(t*3200);data[i]=(smoothed*.62+noise*.2)*Math.exp(-t/(duration*.23))*cracks;}
+      this.rockBuffers.set(key,buffer);}
+    return this.playWeaponBuffer(buffer,1,final?.65:.22,0);
+  }
+  playEnemyShot(pan = 0, shipClass: CryptoidClass = 'light', variant: 'single' | 'double' = 'single') {
+    const buffer = (variant === 'double' ? this.enemyDoubleSamples : this.enemyShotSamples).get(shipClass);
     if (!buffer) return false;
     const rate = [.96, 1, 1.04][this.enemyShotCycle++ % 3];
-    return this.playWeaponBuffer(buffer, rate, enemySoundProfiles[shipClass].gain, pan);
+    return this.playWeaponBuffer(buffer, rate, enemySoundProfiles[shipClass].gain * (variant === 'double' ? 1.1 : 1), pan);
   }
 
   // Every synthesized buffer peaks at <= .72. Reserve headroom for the
@@ -119,7 +144,10 @@ export class GameAudio {
     if (!this.weaponBus) return;
     let peak = 0;
     for (const voice of this.weaponMixVoices) peak += voice.volume * .72;
-    this.weaponBus.gain.value = Math.min(1, .62 / Math.max(peak, .62));
+    // The effects slider reaches 2x at 100%. Keep the hostile peak budget
+    // after that gain as well, before the final shared compressor.
+    const budget = .62 / Math.max(1, effectsGain(this.effectsVolume));
+    this.weaponBus.gain.value = Math.min(1, budget / Math.max(peak, budget));
   }
 
   stopBossWeapons(){
@@ -139,12 +167,13 @@ export class GameAudio {
   }
 
   private releaseWeaponVoice(voice: WeaponVoice) {
+    voice.source.onended = null;
     this.weaponMixVoices.delete(voice);
     const index = this.bossVoices.indexOf(voice);
     if (index >= 0) this.bossVoices.splice(index, 1);
-    voice.source.disconnect();
-    voice.gain.disconnect();
-    voice.pan?.disconnect();
+    voice.source.disconnect?.();
+    voice.gain.disconnect?.();
+    voice.pan?.disconnect?.();
     this.updateWeaponMix();
   }
 
@@ -184,7 +213,7 @@ export class GameAudio {
     }
   }
 
-  private async loadSamples(context: AudioContext) {
+  private async loadSamples(context: AudioContext, signal: AbortSignal) {
     // Decode only a few samples at once. Mobile WebKit and Chromium can stall
     // the game when every compressed effect is fetched and decoded together.
     let next = 0;
@@ -192,7 +221,7 @@ export class GameAudio {
       while (next < sampleNames.length && this.context === context) {
         const name = sampleNames[next++];
         try {
-          const response = await fetch(`/audio/${name}.mp3`);
+          const response = await fetch(`/audio/${name}.mp3`, { signal });
           if (!response.ok) continue;
           const sound = await context.decodeAudioData(await response.arrayBuffer());
           if (this.context === context) this.samples.set(name, sound);
@@ -201,24 +230,36 @@ export class GameAudio {
     }));
   }
 
+  private releaseEffectVoice(voice: EffectVoice) {
+    this.effectVoices.delete(voice); voice.source.onended = null;
+    voice.source.disconnect?.(); voice.gain.disconnect?.();
+  }
+
+  private trackEffect(source: EffectVoice['source'], gain: GainNode) {
+    // Track all original sounds; cleanup on ended/pause without truncating voices.
+    const voice = { source, gain }; this.effectVoices.add(voice);
+    source.onended = () => this.releaseEffectVoice(voice);
+    return voice;
+  }
+
   private sample(name: SampleName, rate = 1) {
     const context = this.context;
     const buffer = this.samples.get(name);
-    if (!context || context.state !== "running" || this.paused || !buffer || !this.effectsBus || typeof context.createBufferSource !== "function") return false;
+    if (!context || context.state !== "running" || this.paused || this.effectsVolume === 0 || !buffer || !this.effectsBus || typeof context.createBufferSource !== "function") return false;
     const source = context.createBufferSource();
     const gain = context.createGain();
     source.buffer = buffer;
     source.playbackRate.value = rate;
     gain.gain.value = sampleGains[name];
     source.connect(gain).connect(this.effectsBus);
-    source.start();
-    source.onended = () => { source.disconnect(); gain.disconnect(); };
+    const voice = this.trackEffect(source, gain);
+    try { source.start(); } catch { this.releaseEffectVoice(voice); return false; }
     return true;
   }
 
   private tone(frequency: number, end: number, duration: number, gain: number, type: OscillatorType = "sine", delay = 0) {
     const context = this.context;
-    if (!context || context.state !== "running" || this.paused) return;
+    if (!context || context.state !== "running" || this.paused || this.effectsVolume === 0) return;
     const at = context.currentTime + delay;
     const oscillator = context.createOscillator();
     const envelope = context.createGain();
@@ -229,8 +270,9 @@ export class GameAudio {
     envelope.gain.exponentialRampToValueAtTime(Math.min(.5, gain * 3), at + .008);
     envelope.gain.exponentialRampToValueAtTime(.0001, at + duration);
     oscillator.connect(envelope).connect(this.effectsBus!);
-    oscillator.start(at);
-    oscillator.stop(at + duration + .01);
+    const voice = this.trackEffect(oscillator, envelope);
+    try { oscillator.start(at); oscillator.stop(at + duration + .01); }
+    catch { this.releaseEffectVoice(voice); }
   }
 
   playPickup(type: PowerUpType) {
@@ -281,24 +323,41 @@ export class GameAudio {
   setEffectsVolume(percent: number) {
     this.effectsVolume = Math.max(0, Math.min(100, Number.isFinite(percent) ? percent : 100));
     if (this.effectsBus) this.effectsBus.gain.value = effectsGain(this.effectsVolume);
+    this.updateWeaponMix();
   }
 
   setSector(sector: number) { void sector; /* Reserved for future sector-specific effects. */ }
 
   setPaused(paused: boolean) {
     this.paused = paused;
-    if(paused)this.stopBossWeapons();
+    if(paused) {
+      this.stopBossWeapons();
+      for (const voice of [...this.effectVoices]) {
+        try { voice.source.stop(); } catch { /* Already ended. */ }
+        this.releaseEffectVoice(voice);
+      }
+    }
   }
+
+  get activeVoiceCount() { return this.weaponMixVoices.size + this.effectVoices.size; }
 
   close() {
     this.setPaused(true);
-    void this.context?.close();
+    this.loadController?.abort(); this.loadController = null; this.sampleRequest = null;
+    for (const voice of [...this.weaponMixVoices]) this.releaseWeaponVoice(voice);
+    this.bossVoices = [];
+    try { void this.context?.close().catch(() => {}); } catch { /* Host already closed. */ }
+    this.effectsBus?.disconnect?.(); this.limiter?.disconnect?.(); this.weaponBus?.disconnect?.();
     this.context = null;
     this.effectsBus = null;
     this.limiter = null;
     this.samples.clear();
     this.bossSamples.clear();
     this.enemyShotSamples.clear();
+    this.enemyDoubleSamples.clear();
+    this.rockBuffers.clear();
+    this.rockContext = null;
+    this.rockLastAt = -1;
     this.weaponMixVoices.clear();
     this.weaponBus = null;
   }
@@ -319,3 +378,4 @@ export const takePrimedGameAudio = () => {
   return audio;
 };
 export const hasPrimedGameAudio = () => primedAudio !== null;
+

@@ -4,8 +4,19 @@ export type AttackPattern = "dive" | "curve" | "sCurve" | "loop" | "side" | "dou
 
 const soloPatterns: AttackPattern[] = ["curve", "dive", "sCurve", "loop", "side"];
 const groupPatterns: AttackPattern[] = ["double", "vDive"];
+// Only the first nine blocks use this teaching sequence. Quiet blocks repeat
+// a familiar dive; the next block adds one recognisable solo manoeuvre.
+const introPatterns: readonly (readonly AttackPattern[])[] = [
+  ["dive"], ["dive", "curve"], ["dive", "side"],
+  ["curve", "dive"], ["dive"], ["side", "curve", "sCurve"],
+  ["curve", "loop"], ["sCurve", "side"], ["dive", "curve", "loop"],
+];
 
 export const chooseAttackPattern = (attackNumber: number, elapsedMs: number, level = 1): AttackPattern => {
+  if (level >= 1 && level <= 9) {
+    const patterns = introPatterns[Math.floor(level) - 1];
+    return patterns[Math.abs(attackNumber) % patterns.length];
+  }
   if (level <= 1 && elapsedMs < 5 * 60_000) return soloPatterns[attackNumber % soloPatterns.length];
   const groupInterval = levelDifficulty(level).groupAttackInterval;
   if (attackNumber > 0 && attackNumber % groupInterval === 0) {

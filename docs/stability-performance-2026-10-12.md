@@ -1,0 +1,59 @@
+# Cryptoid Evolution – Stabilitätskorrekturen und Testnet-Wiederherstellung, 12. Oktober 2026
+
+## Verbindliche Grundlage und behobene Regression
+
+Nur Stabilität verbessern; alle Seiten, Sounds und die zuletzt freigegebene Spielmechanik erhalten. Der kompakte HUD aus IMG_5288.jpeg ist verbindlich. Die richtige offizielle Testnet-Grundlage ist `codex/testnet-campaign-variety-20261011` bei **21eb4b2151b9e5cb5b1f32f3e78d666bb860fdb1**. `main` bei 907d2a7 enthält diese bereits freigegebenen Testnet-Änderungen noch nicht.
+
+Der vorher veröffentlichte Stabilitätsstand 9a29416 wurde irrtümlich auf main aufgebaut und ersetzte dadurch freigegebene Testnet-Funktionen: zweizeiliger HUD, sichtbare Positionsmarker, längere Einflüge und weitere Abweichungen. Eine Preview-Compatibility-CSS verdeckte die falsche Grundlage nur in der isolierten Vorschau. Das war eine tatsächliche Regression, keine Vermutung über das Nutzergerät.
+
+Der korrigierte Entwicklungsbranch übernimmt die vollständige 59-Dateien-Differenz der freigegebenen Testnet-Grundlage. GamePage und Audio werden per Drei-Wege-Merge mit den Stabilitätskorrekturen zusammengeführt. Die übrige Darstellung und Spiellogik bleiben aus der freigegebenen Grundlage. Die Vorschau verwendet jetzt dieselben Produktions-Styles ohne eigene HUD-/Marker-Overrides. Die Herkunft wird als zweiter Commit-Parent dokumentiert; kein Main-Merge und keine Mainnet-Promotion.
+
+Erhalten: einzeiliger HUD mit Shards über Punkten, keine Marker-DOM-Elemente im Testnet, alle neun Einflugsarten und die ursprünglichen schnellen Timings (bis Sektor 29: 1300 ms, Heavy zusätzlich 600 ms, Formationssetzen 180 ms), größere kleine Schiffe aus dem freigegebenen Stand, klassenspezifische Schüsse und Sounds, gelegentliche HD-Bonusfelsen, erhaltene und weiter fallende Power-ups mit während Formationsaufbau geschützten Timern, Herz-/Shard-Belohnungen sowie Community-Darstellung und Übersetzung. Die bestehende Testnet/Mainnet-Umschaltung bleibt erhalten. Kein neuer Qualitätsregler, kein anderer Schwierigkeitsgrad und keine Änderung der Wirtschaft.
+
+## Verbleibende technische Stabilitätskorrekturen
+
+- Lackierungen: LRU-Ziel 48 Varianten / geschätzte 24 MiB, acht Quellbilder. Sichtbare und in Erstellung befindliche Verbraucher bleiben gepinnt; nur ungenutzte Blob-URLs werden widerrufen. HD-Auflösung, Pixelberechnung und Materialien bleiben gleich. Temporäre Canvas-Flächen/Image-Handler werden freigegeben, Pixeljobs seriell mit Browser-Yield verarbeitet. Aktive Pins können das Ziel vorübergehend überschreiten.
+- GamePage initialisiert den Ref-Spielzustand einmal statt bei jedem React-Render. Bereitschaftszählung ohne temporäre Filterliste; gecachte Spielfeldgröße vermeidet einen zusätzlichen Layout-Read bei Bosszerstörung. Keine Veränderung der Bewegungs-, Treffer- oder Zeitberechnung.
+- Bosswaffen geben Canvas-Flächen beim Resize/Unmount frei; nur das aktuelle Hitze-Tile bleibt. Die bereits freigegebene Boss-Explosionsbudgetierung und verzögerte finale Explosion werden unverändert übernommen. Die Stabilitäts-Hilfsdatei exportiert deren Timeline-Funktionen, statt eine parallele Implementierung zu pflegen.
+- Audio: alle originalen Effekte, klassenspezifischen Einzel-/Doppelschüsse und Felsgeräusche bleiben erhalten. Nodes werden nach Ende beziehungsweise im bestehenden Pause-/Close-Lifecycle getrennt; Sample-Fetches beim Schließen abgebrochen. Close gibt auch die Fels-Puffer und ihre alte AudioContext-Referenz frei. Keine neue Stimmenbegrenzung, keine Änderung von Samples, Pitch oder Lautstärke.
+- MusicPlayer: höchstens ein ausstehender Metadaten-Seek-Listener, entfernt nach Seek/Titelwechsel/Close. Source/Gain-Verbindungen werden beim Schließen getrennt. Werfende AudioContext-Erstellung nutzt den vorhandenen HTML-Audio-Fallback; Context-Close-Fehler erzeugen keine unbehandelte Ablehnung. Dateien, Titel, Lautstärken und Wiederaufnahmepositionen bleiben gleich.
+- Checkpoints: nur aufeinanderfolgende, noch nicht hochgeladene Saves desselben Runs/Stages/Encounters zusammenfassen. Laufende Uploads, Reward-/Score-Barrieren und Idempotenz erhalten. Kein neuer Checkpoint-Pfad.
+- Vorhandener Guarded Loop: JS-/Promise-Fehler und Renderfehler möglichst kontrolliert pausieren. Die Szenen-Boundary lässt den Kampfspeicher-Besitzer bestehen. Ein Fehler direkt im GamePage-Render kann weiterhin den äußeren Router-Fallback erreichen.
+- Diagnose: höchstens 20 lokale Einträge; Sektor/Block/Phase, Objektzahlen, letzte bestätigte Speicherung und auffällige Frame-Lücke. Per-Tab-Marker höchstens alle zehn Sekunden plus Lifecycle. Verweigerter sessionStorage-Getter wird in der optionalen Diagnose abgefangen. Keine Kontodaten/Stacks/automatische Übertragung. Hintergrund, Pause, manuelles Reload und vermuteter Prozessabbruch werden unterschieden; OS-Kill ist nicht sicher diagnostizierbar.
+- Shop/Admin werden über bestehendes Routing verzögert geladen, Inhalte unverändert. Der Backend-Lockfile wird um die bereits freigegebene tinyld-Abhängigkeit ergänzt.
+
+## Aktuelle Überprüfung der korrigierten Grundlage
+
+- **371 Frontend-Tests bestanden, null Fehler, keine ausgeschlossenen Testdateien.** Einschließlich Kampfwerte, Waffen, Power-ups, alle 500 Sektoren, 50 Bosse, Käufe, 110 Original-Kartenhintergründe und Galaxiekarte. Die zuvor fehlenden 111 Originalbilder wurden aus dem öffentlichen Testnet wiederhergestellt und gegen Git-Blob-SHA sowie bei Karten zusätzlich gegen das vorhandene SHA256-Manifest geprüft. Keine Ersatzgrafiken, keine Asset-Änderungen.
+- **106 Backend-Tests und TypeScript-Build bestanden.** Die bereits freigegebenen Community-/Übersetzungsänderungen sind wieder enthalten; Netzwerk- und Kaufgrenzen werden weiterhin geprüft.
+- **Produktions-Build einschließlich TypeScript und Übersetzungs-Release-Gate erfolgreich.** Keine Hinweise auf fehlende Kartenbilder mehr; vorhandene Vite-Warnung über große Chunks bleibt.
+- Neue Regressionprüfung untersucht die reale Stylesheet-Reihenfolge von main.tsx und bestätigt einen einzigen HUD-Grid-Row für 320, 375, 390, 430, 560, 561 und 700 px. Ein CSS-Override nur in der Vorschau kann diese Prüfung nicht erfüllen.
+- Tatsächliche GamePage-Simulation: **30 normale Blöcke plus Bosse 10, 20, 30**, Meme Nebula Sektor 25/Block 5 inklusive. Bei 37 gerenderten Gruppen: null Testnet-Positionsmarker-DOM, korrekte HUD-Reihenfolge und ursprüngliche Einflug-/Setzzeiten; alle neun Einflugsarten beobachtet.
+- Derselbe Test verarbeitet 80 eigene und 80 feindliche Projektile plus zwölf eingespritzte Explosionen. Nach fünf Sekunden sind alle eingespritzten Geschosse/Effekte entfernt. 30 s Pause, 60 s Hintergrund und injizierter Frame-Fehler bewahren Run/Timer. Tatsächlicher Serializer und Wiederherstellungsblock zweimal ohne zusätzliche Score/Shards/Leben. Nach Unmount: null RAF-Callbacks, Timer, Listener.
+- **Vorhandener Engine-Test traversiert alle 500 Stufen, 50 Bosse und 50 Bonusrunden bis Victory.** Zusätzlich: Power-ups über Block/Boss/Bonus/Level hinweg einsammelbar, kontinuierlicher Fall, Timer erst nach Formationsbereitschaft, Punkte genau einmal für Felsen, Wiederherstellung ihrer Gesundheit/Event-Uhr, vollständige Bereinigung beim Neustart.
+- Beide Simulationen beschleunigen durch erzwungene Clears, Bosszerstörung bzw. zusätzliche Leben; React-Präsentation, Audiohardware und APIs sind Test-Stubs. Sie belegen Übergänge/Logik, keine reale 30-minütige Laufzeit, Bildschirmqualität, GPU/FPS oder vollständige Servertransaktionen.
+- Isolierter Preview-Build erfolgreich, echte freigegebene Produktions-Styles, Originalbilder/-effekte; Musik aus und Konten/API/Käufe/dauerhafte Belohnungen deaktiviert wie zuvor vereinbart.
+
+Rohdaten: `stability-performance-2026-10-12/simulation-corrected-testnet.json` und `campaign-500-corrected.json`. Simulierte Zeit des 30-Block-Tests: 771,764 s. GC-bereinigter Node-Heap an Übergängen: 29,14–29,90 MiB (erster/letzter Messpunkt 29,26/29,74 MiB). Der Test selbst behält Messpunkte; DOM, Bilder, Audiohardware und GPU sind ausgeschlossen. Kein Nachweis allgemeiner Leak-Freiheit.
+
+## Grenzen und Veröffentlichung
+
+Der ursprüngliche Pi-Browser-/Meme-Nebula-Abbruch ist nicht reproduziert und nicht als sicher behoben nachgewiesen. Kein echter Pi Browser/WebKit-Gerätetest, kein Pixelvergleich auf dem iPhone, keine Temperatur-, Energie- oder GPU-Speichermessung. Keine garantierte Absturzfreiheit oder neue allgemeine FPS-Behauptung.
+
+Die anderen Browser-JSONs und simulation-current.json stammen aus früheren Entwicklungsständen und gelten nicht als Messung dieser korrigierten Testnet-Grundlage. Der unveränderte Lackierungsvergleich bleibt begrenzt aussagekräftig: 48 statt 240 Cache-Varianten, acht statt 60 Quellen; keine beobachtete Aufgabe über 50 ms gegenüber maximal 244 ms zuvor, rund 2,8 % längere Gesamtdauer. Daraus folgt keine allgemeine mobile FPS-Steigerung.
+
+Testnet-Korrektur ist vom Nutzer autorisiert und am 12. Oktober 2026 veröffentlicht. Die zusätzliche teamId-Angabe im verbundenen API-Aufruf lieferte trotz korrektem Team 403/404 bzw. leere Projektlisten. Der aktuelle Kontokontext listet dasselbe Testnet-Projekt mit der zuvor bestätigten accountId. Nach Prüfung von Projekt-ID, accountId und exaktem Commit funktionierte der projektbezogene Zugriff ohne den widersprüchlichen Team-Parameter. Keine Änderung des Zielteams oder anderer Konten.
+
+Aus der geprüften Preview wurde mit Production-Umgebung und unverändertem Commit **0c4a6e76a201b6d9956f3ae6eb7cb151d85131a4** neu gebaut. Deployment **dpl_8AGNNdBLRiBTwJZt4LyKaFMg8mi1** ist READY; die öffentliche Domain **https://cryptoid-evolution-testnet.vercel.app** löst laut Vercel auf genau dieses Deployment/Commit auf. HTTP 200 und ausgelieferte Produktions-Bundles bestätigen schnellen Einflug, letzte einzeilige HUD-Regel, Testnet-Marker-Bedingung, Bonusfelsen und Session-Diagnose. Rohdaten: testnet-release-verification.json. Diese statische Auslieferungsprüfung ersetzt keinen Geräte-/Pixel-/Audio-Test.
+
+Mainnet bleibt auf **907d2a7363345d00f0f90c54402bf04e887b64d9**, Deployment dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe (READY, separates Mainnet-Projekt). Kein Main-Merge oder Mainnet-Release. Vercels Bezeichnung Production im Testnet-Projekt bezeichnet allein dessen öffentliche Testnet-Domain.
+
+## Reproduktion und Gerätetest
+
+Frontend: `node --experimental-strip-types --test $(rg --files src | rg '\.test\.mjs$')`; `npm run build`; `node --expose-gc scripts/verifySimulationStability.cjs`; `node checks/build.mjs && node checks/run-engine.cjs`. Backend: `npm run build`, anschließend alle src/*.test.mjs. CRYPTOID_SIMULATION_OUT wählt den JSON-Zielpfad, CRYPTOID_SIMULATION_BLOCKS den Umfang (Standard 30), Zufalls-Seed 20261012.
+
+Auf Pi Browser iPhone/Android, Xiaomi Pad/Safari und Desktop mit isoliertem Testkonto mindestens 30 echte Blöcke inklusive Bossen testen. Original-HUD, Markerfreiheit, neun Formationen, Sounds und Fall-/Timerverhalten direkt vergleichen. Meme Nebula 5/9, dichte Schüsse und Boss-Fall-/Explosionsphase wiederholen. Pause, Hintergrund/Sperrbildschirm, Netzunterbrechung, Reload und vollständiges Browser-Schließen prüfen; bestätigten Save sowie keine doppelten Shards/Leben/Belohnungen/Scores überprüfen. An Sektorgrenzen Framezeiten und verfügbare Heap-/DOM-/Canvas-/Prozessdaten aufnehmen. Vermuteter OS-Prozessabbruch bleibt als unsicherer Befund dokumentiert.
+
+## Nachfolgende Nutzerkorrektur der Bewegung
+
+Nach der ersten korrigierten Testnet-Veröffentlichung bat Marc um langsames Pendeln ruhender Gegner und minimal langsamere Einflüge. Die neue schmale Ausnahme ist in frontend/AGENTS.md dokumentiert. Änderung, 374 erfolgreiche Frontend-Tests und erneute 30-/500-Stufen-Durchläufe: [testnet-enemy-motion-2026-10-12.md](testnet-enemy-motion-2026-10-12.md). Die oben aufgeführte 1300-ms-Timing-/Release-Verifikation bezieht sich auf die vorherige Veröffentlichung 0c4a6e7.
