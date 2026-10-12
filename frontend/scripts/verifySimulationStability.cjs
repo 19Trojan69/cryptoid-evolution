@@ -64,7 +64,7 @@ const presentation =
           b.onResolve(
             {
               filter:
-                /(?:hooks\/useAuth|hooks\/useModalNavigation|paintedShip|gameAudio|musicPlayback|bossWeaponTextures)$/,
+                /(?:hooks\/useAuth|hooks\/useModalNavigation|paintedShip|gameAudio|musicPlayback|bossWeaponTextures|sceneResources|sceneResourceGate)$/,
             },
             (a) => ({ path: a.path, namespace: "host" }),
           );
@@ -76,7 +76,7 @@ const presentation =
             let contents;
             if (a.path === "react")
               contents =
-                "export const {useState,useRef,useEffect,useMemo,useCallback,memo}=globalThis.__reactHost;";
+                "export const {useState,useRef,useEffect,useMemo,useCallback,memo}=globalThis.__reactHost;export const useLayoutEffect=useEffect;";
             else if (a.path === "react/jsx-runtime")
               contents =
                 'export const jsx=(type,props)=>({type,props}),jsxs=jsx,Fragment="fragment";';
@@ -90,6 +90,10 @@ const presentation =
                 'export const useAuth=()=>({authReady:true,isLoading:false,authError:"",isAuthenticated:false,user:null,signIn:async()=>{}});';
             else if (a.path.endsWith("useModalNavigation"))
               contents = "export default ()=>{};";
+            else if (a.path.endsWith("sceneResourceGate"))
+              contents = "export class SceneResourceGate { constructor(pending){pending(false);} ensure(){return true;} retry(){} dispose(){} }";
+            else if (a.path.endsWith("sceneResources"))
+              contents = "export const prepareSceneResources=()=>({ready:Promise.resolve(),release(){}});";
             else if (a.path.endsWith("paintedShip"))
               contents = "export const useShipVisualOffset=()=>({});";
             else if (a.path.endsWith("gameAudio"))
@@ -336,7 +340,7 @@ const presentation =
           if (arrivals.length) {
             for (const enemy of arrivals) {
               const expected = sector <= 29 ? 1300 : Math.max(1600, 2400 - Math.floor(sector / 50) * 80);
-              assert.equal(enemy.duration, Math.round((expected + (enemy.shipClass === "heavy" ? 600 : 0)) * 1.1), "approved Testnet arrival timing with the requested slight slowdown");
+              assert.equal(enemy.duration, Math.round(Math.round((expected + (enemy.shipClass === "heavy" ? 600 : 0)) * 1.1) / .75), "approved Testnet arrival timing with the requested slight slowdown");
               assert.equal(enemy.settle, 180, "approved Testnet settling timing");
               arrivalPatterns.add(enemy.pattern);
             }
@@ -481,7 +485,7 @@ const presentation =
       peaks,
       simulatedSeconds: (clock - 1000) / 1000,
       randomSeed: 20261012,
-      approvedTestnetPresentation: { checkedGroups: presentationChecks, arrivalPatterns: [...arrivalPatterns], positioningMarkers: 0, hudOrder: "home hearts level shards-over-score block pause", arrivalMsFirst29: 1430, heavyExtraMs: 660, settleMs: 180, restingSway: "all normal Testnet enemies; original amplitude and rhythm" },
+      approvedTestnetPresentation: { checkedGroups: presentationChecks, arrivalPatterns: [...arrivalPatterns], positioningMarkers: 0, hudOrder: "home hearts level shards-over-score block pause", arrivalMsFirst29: 1907, arrivalSpeedScale: .75, settleMs: 180, restingSway: "all normal Testnet enemies; original amplitude and rhythm" },
       stressObjectsReleased: count >= 25,
       pausePreservesTimers: count >= 25,
       backgroundPreservesTimers: true,

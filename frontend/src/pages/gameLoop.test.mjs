@@ -163,7 +163,7 @@ test('actual GamePage pauses a pressured outbox once without adding more saves a
   weaponTimers:[0,0,60000,0,0,0],asteroids:[],shots:[],enemyShots:[],effects:[]};
  const original=structuredClone(state),reports=[],countdowns=[];let notice='';
  const forbidden=()=>{throw Error('pressure recovery must not produce another save');};
- const context={stateRef:{current:state},document:{hidden:false},performance:{now:()=>100},
+ const context={resourceGateRef:{current:null},ensureSceneResourcesRef:{current:()=>true},stateRef:{current:state},document:{hidden:false},performance:{now:()=>100},
   lastFrameRef:{current:84},lastMeasuredFrameRef:{current:0},lastWorkMsRef:{current:0},lastSavedAtRef:{current:0},
   simulate:()=>{},saveQueueRef:{current:{underPressure:true}},interruptionRef:{current:null},
   sceneFailedRef:{current:false},diagnosticsRef:{current:null},frameDiagnosticsRef:{current:{sample:forbidden}},

@@ -40,10 +40,24 @@ for (const name of ['createFormationSlots', 'spawnAsteroid', 'moveAsteroid', 'sa
   assert.ok(expected.includes(authorizedTimedPickup));
   expected=expected.replace(authorizedTimedPickup,'').replace('usedTypes: variety && !intro.weaponIssued ? [...state.powerUpTypes, "weapon"] : state.powerUpTypes','usedTypes: state.powerUpTypes');
  }
- assert.equal(after.get(name), expected, name);
- functions[name] = { identical: after.get(name)===before.get(name), sha256: digest(after.get(name)), ...(name==='simulate'?{authorizedChangeOnly:'Remove timed pickup; use the unchanged drop selector exclusively on ship defeat.'}:{}) };
+ let actual=after.get(name);
+ if(name==='spawnAsteroid') expected=expected.replace('entryDuration: combatVarietyEnabled ? Math.round((combatTiming(sector).entryMs + (profile.shipClass === "heavy" ? 600 : 0)) * 1.1) : Math.max(4_100, Math.round(profile.entryDuration * .85))','entryDuration: slowerEnemyArrival(combatVarietyEnabled ? Math.round((combatTiming(sector).entryMs + (profile.shipClass === "heavy" ? 600 : 0)) * 1.1) : Math.max(4_100, Math.round(profile.entryDuration * .85)))');
+ if(name==='restoreCombat') {
+  const migration=`    stateRef.current.asteroids = stateRef.current.asteroids.map(enemy => {
+      const profile = Array.from({ length: 13 }, (_, index) => chooseCryptoid(saved.stage, index)).find(candidate => candidate.type === enemy.type) ?? chooseCryptoid(saved.stage, enemy.entryIndex ?? 0);
+      const previous = enemy.escort ? 1_850 : combatVarietyEnabled
+        ? Math.round((combatTiming(saved.stage).entryMs + (enemy.shipClass === 'heavy' ? 600 : 0)) * 1.1)
+        : Math.max(4_100, Math.round(profile.entryDuration * .85));
+      return restoreSlowerArrival(enemy, previous, !enemy.escort && combatVarietyEnabled ? combatTiming(saved.stage).entryMs + (enemy.shipClass === 'heavy' ? 600 : 0) : undefined);
+    });
+`;
+  assert.ok(actual.includes(migration));actual=actual.replace(migration,'');
+ }
+ assert.equal(actual, expected, name);
+ functions[name] = { identical: after.get(name)===before.get(name), sha256: digest(after.get(name)), ...(['simulate','spawnAsteroid','restoreCombat'].includes(name)?{authorizedChangeOnly:name==='simulate'?'Remove timed pickup; drop exclusively on ship defeat.':'25% lower arrival speed; migrate restored progress exactly once.'}:{}) };
 }
-assert.equal(main(next), main(old), 'normal game markup');
+const normalizedMain=main(next).replace(' style={{ visibility: resourcesWaiting ? \'hidden\' : undefined }}','').replace('data-effects-paused={resourcesWaiting || ','data-effects-paused={').replace(' * bossEscortVisualScale(asteroid.escort)','');
+assert.equal(normalizedMain,main(old),'normal game markup except authorized resource wait and escort size');
 const changed = execFileSync('git', ['diff', '--name-only', base, '--'], { cwd: repo, encoding: 'utf8' }).trim().split('\n').filter(Boolean);
 const visualChanges = changed.filter(name => name.startsWith('frontend/public/') || name.endsWith('.css'));
 assert.deepEqual(visualChanges, [], 'styles and original assets');
@@ -58,7 +72,7 @@ for (const [name, value] of audioBefore) {
  assert.equal(audioAfter.get(name), value, `audio ${name}`); unchangedAudioMembers++;
 }
 assert.equal(declarations(previous(audioFile)).get('sampleGains'), declarations(current(audioFile)).get('sampleGains'));
-const result = { passed: true, base, normalGameMarkup: { identical: true, sha256: digest(main(next)) }, functions,
+const result = { passed: true, base, normalGameMarkup: { identical: main(next)===main(old), authorizedChangeOnly:'Resource readiness visibility/pause and 25% escort visual size; normalized original markup identical.', sha256: digest(main(next)) }, functions,
  stylesAndPublicAssetsChanged: visualChanges, audio: { unchangedMembers: unchangedAudioMembers, sampleGainsIdentical: true, changedOnlyInitializationAndAtomicSamplePreparation: true },
  limitation: 'Source evidence only: no physical iPhone pixel comparison, audible listening test or proof of OS/GPU stability.' };
 if (process.env.CRYPTOID_PRESERVATION_OUT) fs.writeFileSync(process.env.CRYPTOID_PRESERVATION_OUT, JSON.stringify(result, null, 2));

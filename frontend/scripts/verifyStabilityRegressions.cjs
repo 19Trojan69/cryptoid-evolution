@@ -17,7 +17,7 @@ async function audio(before){
 function lateActivation(before){
  const tree=ast(read('pages/GamePage.tsx',before));let step;const visit=n=>{if(ts.isVariableDeclaration(n)&&n.name.getText(tree)==='step')step=n.initializer.getText(tree);ts.forEachChild(n,visit);};visit(tree);assert.ok(step);
  const state={status:'playing',hearts:2,score:123,shards:45,weaponTimers:[0,0,60000,0,0,0]},simulatedStatuses=[],faults=[];
- const context={stateRef:{current:state},sceneFailedRef:{current:true},document:{hidden:false},performance:{now:()=>100},
+ const context={ensureSceneResourcesRef:{current:()=>true},stateRef:{current:state},sceneFailedRef:{current:true},document:{hidden:false},performance:{now:()=>100},
   lastFrameRef:{current:84},lastMeasuredFrameRef:{current:0},lastWorkMsRef:{current:0},diagnosticsRef:{current:null},saveQueueRef:{current:null},
   frameDiagnosticsRef:{current:{sample(){}}},simulate:()=>simulatedStatuses.push(state.status),interruptionRef:{current:reason=>{faults.push(reason);state.status='paused';}}};
  vm.runInNewContext(compile('globalThis.step='+step),context);context.step(100);

@@ -10,6 +10,7 @@ import { entryPatternForSector, entryPosition, entryStartX } from './entryPatter
 import { attackDuration, attackPosition } from './attackPatterns.ts';
 import { bossEscortRosterIndex } from './bossEscorts.ts';
 import { enemyAppearance } from './shipFleet.ts';
+import { slowerEnemyArrival } from './enemyArrival.ts';
 
 // Execute the actual component's simulation functions without changing exports
 // or adding test hooks to the shipped game.
@@ -28,7 +29,7 @@ const code = ts.transpileModule([...declarations.values()].map(declaration => `c
 function simulation(testnet = true) {
   const context = { combatVarietyEnabled: testnet, chooseCryptoid: testnet ? combatCryptoid : chooseCryptoid,
     combatEntryStage, combatTiming, FORMATION_SETTLE_MS, entryPatternForSector, entryPosition, entryStartX,
-    attackDuration, attackPosition, bossEscortRosterIndex, enemyAppearance };
+    attackDuration, attackPosition, bossEscortRosterIndex, enemyAppearance, slowerEnemyArrival };
   vm.runInNewContext(code, context);
   return context.motion;
 }
@@ -69,14 +70,15 @@ test('sway is time-based; Mainnet and boss escorts retain their existing station
   }
 });
 
-test('normal Testnet arrivals take ten percent longer across all stages without changing profiles or docking', () => {
+test('normal arrivals use 25 percent less speed than the prior Testnet build across all stages', () => {
   for (let stage = 1; stage <= 500; stage++) {
     if (stage % 10 === 0) continue;
     const slots = formationLayout(stage, 390, 844, stage);
     for (let index = 0; index < slots.length; index++) {
       const profile = combatCryptoid(stage, index), enemy = motion.spawnAsteroid(index, 390, 90, index, stage, slots);
       const beforeDuration = combatTiming(stage).entryMs + (profile.shipClass === 'heavy' ? 600 : 0);
-      assert.ok(enemy.entryDuration / beforeDuration >= 1.0995 && enemy.entryDuration / beforeDuration <= 1.1005);
+      assert.equal(enemy.entryDuration,slowerEnemyArrival(Math.round(beforeDuration*1.1)));
+      assert.ok(Math.abs(Math.round(beforeDuration*1.1)/enemy.entryDuration-.75)<.001);
       for (const key of ['health', 'points', 'reward', 'attackPace', 'radius']) assert.equal(enemy[key], profile[key]);
       const beforeDock = motion.moveAsteroid(enemy, beforeDuration, 390, 844);
       assert.ok(beforeDock.entryElapsed < beforeDock.entryDuration);
@@ -86,5 +88,5 @@ test('normal Testnet arrivals take ten percent longer across all stages without 
     }
   }
   const escort = motion.spawnBossEscort(1, 390, 0, 10, [{ x: 100, y: 200, index: 0, entrySide: 1 }], 0);
-  assert.equal(escort.entryDuration, 1850); assert.equal(escort.formationDuration, 300);
+  assert.equal(escort.entryDuration, 2467); assert.equal(escort.formationDuration, 300);
 });
