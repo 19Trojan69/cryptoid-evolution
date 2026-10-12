@@ -17,6 +17,7 @@
     "test:powerups": "node --experimental-strip-types --test src/pages/powerUps.test.mjs",
     "test:player": "node --experimental-strip-types --test src/pages/playerCombat.test.mjs",
     "test:enemy-fire": "node --experimental-strip-types --test src/pages/enemyFire.test.mjs",
+    "test:combat-variety": "node --experimental-strip-types --test src/pages/combatVariety.test.mjs src/pages/enemyWeaponSound.test.mjs src/pages/gameAudio.test.mjs",
     "test:realism": "node --experimental-strip-types --test src/pages/shipRealism.test.mjs",
     "test:i18n": "node --experimental-strip-types --test src/i18n.test.mjs",
     "audit:i18n": "node --experimental-strip-types scripts/localization-inventory.mjs",

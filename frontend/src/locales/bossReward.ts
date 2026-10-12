@@ -18,3 +18,26 @@ uk: ['Збери серце, щоб почати бонус.', 'Пошкодже
 th: ['เก็บหัวใจเพื่อเริ่มรอบโบนัส', 'ป้อมปืนที่เสียหายจะเรืองแสงสีส้มเข้มก่อนระเบิด'],
 };
 export const bossRewardTranslations = Object.fromEntries(Object.entries(rows).map(([locale, row]) => [locale, Object.fromEntries(keys.map((key, i) => [key, row[i]]))]));
+
+const shardPickupLabels: Record<string, string> = {
+  de: 'Sammle die Shards für die Bonusrunde ein.',
+  es: 'Recoge los Shards para iniciar la ronda extra.',
+  fr: 'Ramasse les Shards pour lancer le bonus.',
+  pt: 'Recolhe os Shards para iniciar o bónus.',
+  it: 'Raccogli gli Shards per iniziare il bonus.',
+  pl: 'Zbierz Shards, aby rozpocząć rundę bonusową.',
+  tr: 'Bonus turunu başlatmak için Shards topla.',
+  ru: 'Собери Shards, чтобы начать бонусный раунд.',
+  hr: 'Pokupi Shards za početak bonus runde.',
+  cs: 'Seber Shards a spusť bonusové kolo.',
+  sk: 'Zober Shards a spusti bonusové kolo.',
+  hu: 'Vedd fel a Shards jutalmat a bónuszkörhöz.',
+  ro: 'Colectează Shards pentru runda bonus.',
+  sr: 'Покупи Shards за почетак бонус рунде.',
+  uk: 'Збери Shards, щоб почати бонусний раунд.',
+  th: 'เก็บ Shards เพื่อเริ่มรอบโบนัส',
+  zh: '拾取碎片即可开始奖励回合。',
+  vi: 'Nhặt Shards để bắt đầu vòng thưởng.',
+};
+for (const [locale, label] of Object.entries(shardPickupLabels))
+  Object.assign(bossRewardTranslations[locale] ??= {}, { 'Collect the Shards to start the bonus round.': label });

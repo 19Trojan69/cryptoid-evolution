@@ -27,7 +27,7 @@ const matches = (doc, query) =>
 function harness() {
   const posts = [],
     votes = [],
-    pipelines = [];
+    pipelines = [], translations = [];
   const collection = (docs) => ({
     async findOne(q) {
       return structuredClone(docs.find((d) => matches(d, q)) || null);
@@ -70,6 +70,7 @@ function harness() {
   const locals = {
     feedbackCollection: collection(posts),
     feedbackVotesCollection: collection(votes),
+    feedbackTranslationsCollection: collection(translations),
   };
   locals.feedbackCollection.aggregate = (pipeline) => ({
     async toArray() {
@@ -111,6 +112,7 @@ function harness() {
         sort: opts.sort || "newest",
         page: opts.page || 1,
         ...(opts.hidden ? { hidden: "1" } : {}),
+        ...(opts.query || {}),
       },
       session: uid ? { currentUser: { uid, username: uid } } : {},
       headers: { "x-cryptoid-app-network": network },
@@ -132,7 +134,7 @@ function harness() {
     await routes[method](req, res);
     return res;
   }
-  return { posts, votes, pipelines, call };
+  return { posts, votes, pipelines, translations, call };
 }
 const idea = {
   category: "idea",
@@ -341,4 +343,43 @@ test('net score accounts for negative votes and withdrawn votes retain their rec
   const count = h.votes.length;
   await h.call('PUT /posts/:id/vote', {value:0}, {id:b,uid:'one'});
   assert.equal(h.votes.length,count);
+});
+
+test('translation endpoint validates references and hides other-network or moderated content', async () => {
+  const h = harness();
+  const created = await h.call('POST /posts', idea);
+  const id = created.body.post.id;
+  for (const query of [{locale:'bogus'}, {locale:'de',reply:'wrong-id'}]) assert.equal((await h.call('GET /posts/:id/translation', {}, {id,query})).code, 400);
+  assert.equal((await h.call('GET /posts/:id/translation', {}, {id:'invalid',query:{locale:'de'}})).code, 400);
+  assert.equal((await h.call('GET /posts/:id/translation', {}, {id,network:'mainnet',query:{locale:'de'}})).code, 404);
+  assert.equal((await h.call('GET /posts/:id/translation', {}, {id,query:{locale:'de',reply:'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'}})).code, 404);
+  h.posts[0].hidden = true;
+  assert.equal((await h.call('GET /posts/:id/translation', {}, {id,uid:'developer',query:{locale:'de'}})).code, 404);
+});
+test('translation endpoint reuses durable cache, invalidates edits and translates replies separately', async () => {
+  const service = require('../../build/communityTranslation.js');
+  const originalService = service.translateCommunity;
+  let calls = 0;
+  service.translateCommunity = async(fields,locale) => { calls++; return {fields:fields.map(value=>'translated:'+value),locale,translated:true}; };
+  try {
+    const h = harness(), created = await h.call('POST /posts', idea), id = created.body.post.id;
+    const opts = {id,uid:null,query:{locale:'de-AT'}};
+    const first = await h.call('GET /posts/:id/translation', {}, opts);
+    assert.equal(first.code,200); assert.equal(first.body.locale,'de'); assert.equal(calls,1);
+    assert.equal(h.translations.length,1);
+    const second = await h.call('GET /posts/:id/translation', {}, opts);
+    assert.deepEqual(second.body,first.body); assert.equal(calls,1);
+    h.posts[0].description = 'An edited description';
+    const edited = await h.call('GET /posts/:id/translation', {}, opts);
+    assert.equal(edited.body.fields[1],'translated:An edited description'); assert.equal(calls,2);
+    h.posts[0].replies.push({id:'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',text:'A developer reply'});
+    const reply = await h.call('GET /posts/:id/translation', {}, {...opts,query:{locale:'de',reply:h.posts[0].replies[0].id}});
+    assert.deepEqual(reply.body.fields,['translated:A developer reply']); assert.equal(calls,3);
+    h.translations[2].expiresAt = new Date(0);
+    await h.call('GET /posts/:id/translation', {}, {...opts,query:{locale:'de',reply:h.posts[0].replies[0].id}});
+    assert.equal(calls,4);
+    service.translateCommunity = async() => { throw Error('provider offline'); };
+    assert.equal((await h.call('GET /posts/:id/translation', {}, {...opts,query:{locale:'es'}})).code,503);
+    assert.equal(h.posts[0].description,'An edited description');
+  } finally { service.translateCommunity = originalService; }
 });

@@ -6,10 +6,10 @@ const patterns = ["dive", "curve", "sCurve", "loop", "side", "double", "vDive"];
 
 test("early attacks stay solo and group patterns unlock later", () => {
   for (let index = 0; index < 25; index++) assert.equal(attackGroupSize(chooseAttackPattern(index, 299_999)), 1);
-  assert.equal(chooseAttackPattern(5, 300_000), "vDive");
-  assert.equal(chooseAttackPattern(6, 300_000), "double");
-  assert.equal(attackGroupSize(chooseAttackPattern(6, 0, 2)), 2);
-  assert.equal(attackGroupSize(chooseAttackPattern(12, 0, 2)), 3);
+  assert.equal(chooseAttackPattern(5, 300_000, 11), "vDive");
+  assert.equal(chooseAttackPattern(6, 300_000, 11), "double");
+  assert.equal(attackGroupSize(chooseAttackPattern(6, 0, 11)), 2);
+  assert.equal(attackGroupSize(chooseAttackPattern(12, 0, 11)), 3);
   assert.equal(attackGroupSize(chooseAttackPattern(2, 0, 500)), 2);
   assert.equal(attackGroupSize(chooseAttackPattern(4, 0, 500)), 3);
   assert.equal(attackGroupSize("double"), 2);

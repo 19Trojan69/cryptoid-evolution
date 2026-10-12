@@ -13,6 +13,8 @@ const output =
 const hooks = `
 globalThis.__campaignQA = {
  info:()=>({sector:stateRef.current.sector,encounter:stateRef.current.encounter,phase:stateRef.current.phase,status:stateRef.current.status,score:stateRef.current.score,shards:stateRef.current.shards,hearts:stateRef.current.hearts,paid:stateRef.current.paidWeaponMs,rapid:stateRef.current.rapidFireMs,enemies:stateRef.current.asteroids.length,shots:stateRef.current.shots.length,hostile:stateRef.current.enemyShots.length,effects:stateRef.current.effects.length}),
+ render:()=>{const game=stateRef.current;return /* ACTUAL_SCENE */;},
+ arrivals:()=>stateRef.current.asteroids.map(enemy=>({duration:enemy.entryDuration,settle:enemy.formationDuration,shipClass:enemy.shipClass,pattern:enemy.entryPattern})),
  protect:()=>{stateRef.current.hearts=99;adminRunRef.current=true;},
  clearGroup:()=>{stateRef.current.asteroids=[];stateRef.current.shots=[];formationIndexRef.current=blockFlights(stateRef.current.sector,rulesVersionRef.current)[flightRef.current];},
  killBoss:()=>destroyBoss(stateRef.current,performance.now()),
@@ -32,7 +34,7 @@ globalThis.__campaignQA = {
 };
 `;
 const presentation =
-  /(?:CardReveal|HullDamage|BlockchainProgress|SectorBackdrop|Starfield|PaintedShip|SystemSettings|MissionWeaponShop|BossWeaponsView|BossHealthView|BossReactorView|GameSceneBoundary)$/;
+  /(?:CardReveal|HullDamage|BlockchainProgress|SectorBackdrop|Starfield|PaintedShip|SystemSettings|MissionWeaponShop|BossWeaponsView|BossHealthView|BossReactorView|GameSceneBoundary|BonusRockLayer)$/;
 (async () => {
   const compiled = await build({
     absWorkingDir: root,
@@ -112,8 +114,10 @@ const presentation =
                 true,
                 ts.ScriptKind.TSX,
               );
-            let restoreBlock;
+            let restoreBlock, scene;
             const visit = (node) => {
+              if (ts.isVariableDeclaration(node) && node.name.getText(ast) === "GamePage")
+                scene = node.initializer.body.statements.findLast(ts.isReturnStatement).expression.getText(ast);
               if (
                 ts.isIfStatement(node) &&
                 node.expression.getText(ast) ===
@@ -124,11 +128,12 @@ const presentation =
             };
             visit(ast);
             assert.ok(restoreBlock);
+            assert.ok(scene);
             return {
               contents:
                 source.replace(
                   "  const levelLabel =",
-                  hooks.replace("/* ACTUAL_RESTORE_BLOCK */", restoreBlock) +
+                  hooks.replace("/* ACTUAL_RESTORE_BLOCK */", restoreBlock).replace("/* ACTUAL_SCENE */", scene) +
                     "\n  const levelLabel =",
                 ) + "\nglobalThis.__GamePageFactory=GamePage;",
               loader: "tsx",
@@ -233,6 +238,8 @@ const presentation =
     console,
     process: { env: {} },
     URL,
+    Image: class {},
+    structuredClone,
     Error,
     setTimeout: host.setTimeout,
     clearTimeout: host.clearTimeout,
@@ -311,6 +318,8 @@ const presentation =
     bosses = [],
     snapshots = [];
   let turns = 0;
+  const arrivalPatterns = new Set();
+  let presentationChecks = 0;
   const count = Number(process.env.CRYPTOID_SIMULATION_BLOCKS || 30);
   try {
     while (normal.length < count) {
@@ -321,6 +330,29 @@ const presentation =
         const sector = info.sector;
         for (let group = 0; group < 4; group++) {
           await advance(8200);
+          const arrivals = qa.arrivals();
+          if (arrivals.length) {
+            for (const enemy of arrivals) {
+              const expected = sector <= 29 ? 1300 : Math.max(1600, 2400 - Math.floor(sector / 50) * 80);
+              assert.equal(enemy.duration, expected + (enemy.shipClass === "heavy" ? 600 : 0), "approved Testnet arrival timing");
+              assert.equal(enemy.settle, 180, "approved Testnet settling timing");
+              arrivalPatterns.add(enemy.pattern);
+            }
+            const nodes = [];
+            const walk = value => {
+              if (Array.isArray(value)) { value.forEach(walk); return; }
+              if (!value || typeof value !== "object") return;
+              if (value.props) { nodes.push(value); walk(value.props.children); }
+            };
+            walk(qa.render());
+            assert.equal(nodes.filter(n => /\bformation-target\b/.test(n.props.className || "")).length, 0, "no Testnet positioning-marker DOM");
+            const hud = nodes.find(n => n.props.className === "game-hud");
+            assert.ok(hud);
+            const hudNodes = hud.props.children;
+            assert.deepEqual(Array.from(hudNodes, n => n.props.className.replace(" hearts-stat-hit", "")), ["hud-actions", "hud-stat hearts-stat", "hud-stat game-level-hud", "hud-stat score-hud", "hud-stat round-hud chain-hud", "game-control pause-control"]);
+            assert.deepEqual(Array.from(hudNodes[3].props.children, n => n.props.className), ["shard-line", "score-line"]);
+            presentationChecks++;
+          }
           if (sector === 25 && group === 0) {
             assert.notEqual(qa.info().phase, "SECTOR_CLEAR");
             qa.timers();
@@ -395,6 +427,7 @@ const presentation =
         );
     }
     if (count >= 25) assert.ok(normal.includes(25));
+    if (count >= 25) { assert.ok(presentationChecks >= 25); assert.ok(arrivalPatterns.size >= 6); }
     assert.equal(bosses.length, Math.floor(normal.length / 9));
     const beforeBackground = qa.info();
     document.hidden = true;
@@ -446,6 +479,7 @@ const presentation =
       peaks,
       simulatedSeconds: (clock - 1000) / 1000,
       randomSeed: 20261012,
+      approvedTestnetPresentation: { checkedGroups: presentationChecks, arrivalPatterns: [...arrivalPatterns], positioningMarkers: 0, hudOrder: "home hearts level shards-over-score block pause", arrivalMsFirst29: 1300, heavyExtraMs: 600, settleMs: 180 },
       stressObjectsReleased: count >= 25,
       pausePreservesTimers: count >= 25,
       backgroundPreservesTimers: true,
