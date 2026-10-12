@@ -245,7 +245,7 @@ const spawnAsteroid = (id: number, width: number, visibleTop: number, formationI
   const entryPattern = entryPatternForSector(choreography + flightVariation * 3);
   const startX = entryStartX(entryPattern, formationIndex, width, profile.radius, entrySide, choreography, target.x);
   const entryStartY = visibleTop + profile.radius + ENTRY_HUD_GAP_PX;
-  return { id, x: startX, y: entryStartY, size, ...profile, ...enemyAppearance(sector, formationIndex + offset), entryDuration: combatVarietyEnabled ? combatTiming(sector).entryMs + (profile.shipClass === "heavy" ? 600 : 0) : Math.max(4_100, Math.round(profile.entryDuration * .85)), health: profile.health, maxHealth: profile.health, cloaked: false, rotation: 0, rotationSpeed: 0, entryElapsed: 0, entryStartX: startX, entryStartY, entryTargetX: target.x, entryTargetY: target.y, entrySide, entryPattern, entryStage: choreography, entryIndex: formationIndex, formationSlot: target.index, formationSlotCount: slots.length, formationElapsed: 0, formationDuration: combatVarietyEnabled ? 180 : FORMATION_SETTLE_MS, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, collidedThisAttack: false };
+  return { id, x: startX, y: entryStartY, size, ...profile, ...enemyAppearance(sector, formationIndex + offset), entryDuration: combatVarietyEnabled ? Math.round((combatTiming(sector).entryMs + (profile.shipClass === "heavy" ? 600 : 0)) * 1.1) : Math.max(4_100, Math.round(profile.entryDuration * .85)), health: profile.health, maxHealth: profile.health, cloaked: false, rotation: 0, rotationSpeed: 0, entryElapsed: 0, entryStartX: startX, entryStartY, entryTargetX: target.x, entryTargetY: target.y, entrySide, entryPattern, entryStage: choreography, entryIndex: formationIndex, formationSlot: target.index, formationSlotCount: slots.length, formationElapsed: 0, formationDuration: combatVarietyEnabled ? 180 : FORMATION_SETTLE_MS, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, collidedThisAttack: false };
 };
 
 const spawnBossEscort = (id: number, width: number, index: number, level: number, slots: ReturnType<typeof bossEscortSlots>, wave: number): Asteroid => {
@@ -272,8 +272,10 @@ const moveAsteroid = (asteroid: Asteroid, delta: number, width: number, height: 
   if (asteroid.entryElapsed >= asteroid.entryDuration) {
     if (asteroid.attackPattern === null) {
       const elapsed = asteroid.formationElapsed + delta;
-      const drift = combatVarietyEnabled && !asteroid.escort && [3, 5, 8].includes(asteroid.entryStage ?? 0)
-        ? Math.sin(elapsed * .0009) * Math.min(12, width * .025) : 0;
+      // Resting Testnet ships sway with the existing slow rhythm, independent
+      // of the arrival identifier (which older checkpoints may omit or retain).
+      const drift = combatVarietyEnabled && !asteroid.escort
+        ? Math.sin(Math.max(0, elapsed - asteroid.formationDuration) * .0009) * Math.min(12, width * .025) : 0;
       return { ...asteroid, formationElapsed: elapsed, x: keepInField(asteroid.entryTargetX + drift), y: asteroid.entryTargetY, rotation };
     }
     if (asteroid.attackDelay > 0) return { ...asteroid, attackDelay: Math.max(0, asteroid.attackDelay - delta), rotation };

@@ -2,6 +2,8 @@
 
 The user confirmed IMG_5288.jpeg on 12 October 2026 as the original visual reference. This task authorizes stability fixes only.
 
+Explicit movement correction requested on 12 October after testing: resting normal Testnet enemies should slowly sway back and forth, including restored formations; keep the existing sway amplitude/rhythm, and make normal formation arrivals 10% longer. This narrow authorization supersedes the frozen-motion rule below for these two corrections only. Boss escorts, attack paths, weapons, HUD, markers, sounds and Mainnet retain their prior behavior.
+
 - Do not change the appearance or layout of any game page, menu, header, ship, weapon, explosion, background, card or control.
 - Keep the compact original HUD: Home, hearts, Level, Shards above Score in the center, Block, Pause, all in one row. Do not enlarge the occupied game area.
 - Enemy positioning markers remain invisible. Preserve all existing entry, attack, regroup and sector formations.

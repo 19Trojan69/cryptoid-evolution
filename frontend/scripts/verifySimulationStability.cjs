@@ -334,7 +334,7 @@ const presentation =
           if (arrivals.length) {
             for (const enemy of arrivals) {
               const expected = sector <= 29 ? 1300 : Math.max(1600, 2400 - Math.floor(sector / 50) * 80);
-              assert.equal(enemy.duration, expected + (enemy.shipClass === "heavy" ? 600 : 0), "approved Testnet arrival timing");
+              assert.equal(enemy.duration, Math.round((expected + (enemy.shipClass === "heavy" ? 600 : 0)) * 1.1), "approved Testnet arrival timing with the requested slight slowdown");
               assert.equal(enemy.settle, 180, "approved Testnet settling timing");
               arrivalPatterns.add(enemy.pattern);
             }
@@ -479,7 +479,7 @@ const presentation =
       peaks,
       simulatedSeconds: (clock - 1000) / 1000,
       randomSeed: 20261012,
-      approvedTestnetPresentation: { checkedGroups: presentationChecks, arrivalPatterns: [...arrivalPatterns], positioningMarkers: 0, hudOrder: "home hearts level shards-over-score block pause", arrivalMsFirst29: 1300, heavyExtraMs: 600, settleMs: 180 },
+      approvedTestnetPresentation: { checkedGroups: presentationChecks, arrivalPatterns: [...arrivalPatterns], positioningMarkers: 0, hudOrder: "home hearts level shards-over-score block pause", arrivalMsFirst29: 1430, heavyExtraMs: 660, settleMs: 180, restingSway: "all normal Testnet enemies; original amplitude and rhythm" },
       stressObjectsReleased: count >= 25,
       pausePreservesTimers: count >= 25,
       backgroundPreservesTimers: true,
