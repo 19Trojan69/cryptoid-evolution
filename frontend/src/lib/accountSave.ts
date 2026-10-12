@@ -32,7 +32,14 @@ export function createSaveQueue(uid: string) {
   let inflight: Promise<void> | null = null;
   let uploading: PendingSave | null = null;
   let durable = true;
-  const persist = () => { try { localStorage.setItem(key, JSON.stringify(entries)); } catch { durable = false; } };
+  let pendingBytes = 0;
+  const persist = () => {
+    try {
+      const encoded = JSON.stringify(entries);
+      pendingBytes = encoded.length * 2; // Conservative UTF-16 storage estimate.
+      localStorage.setItem(key, encoded); durable = true;
+    } catch { durable = false; }
+  };
   const drain = (): Promise<void> => {
     if (inflight) return inflight;
     inflight = (async () => {
@@ -49,6 +56,11 @@ export function createSaveQueue(uid: string) {
     enqueue(entry: PendingSave) { appendPendingSave(entries, entry, uploading); persist(); return drain(); },
     drain,
     get durable() { return durable; },
+    get pendingCount() { return entries.length; },
+    get pendingBytes() { return pendingBytes; },
+    // Keep every reward/score barrier. Stop the game producer instead of
+    // discarding purchases/progress when a prolonged outage fills the outbox.
+    get underPressure() { return entries.length > 0 && (!durable || entries.length >= 32 || pendingBytes >= 2 * 1024 * 1024); },
     async recover() {
       // A pause-menu exit may occur while the current block is still uploading.
       // Let it finish before choosing the first pending run to recover.

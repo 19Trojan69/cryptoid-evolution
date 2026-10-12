@@ -78,7 +78,7 @@ test('actual GamePage recovery preserves run, lives, rewards and paid timers eve
     soundRef: { current: { setPaused: () => { throw new Error('audio host unavailable'); } } }, musicRef: { current: null },
     recordGameDiagnostic: value => reports.push(value), fieldSizeRef: { current: { width: 390, height: 760 } },
     navigator: { userAgent: 'test browser' }, setGame: value => updates.push(value),
-    sectorInChapter: sector => (sector - 1) % 10 + 1, lastSavedAtRef: { current: 0 }, lastMeasuredFrameRef: { current: 0 },
+    sectorInChapter: sector => (sector - 1) % 10 + 1, lastSavedAtRef: { current: 0 }, lastMeasuredFrameRef: { current: 0 }, lastWorkMsRef: { current: 0 },
     saveCombatRef: { current: async () => { saved.push(structuredClone(state)); throw new Error('offline'); } },
     setSaveNotice: value => notice = value,
   };
@@ -129,6 +129,67 @@ test('denied sessionStorage cannot fail GamePage diagnostics setup or remove its
     const error=new Error('test fault');listeners.get('error')({error});
     assert.deepEqual(faults,[{reason:'javascript-error',error}]);
     cleanup();assert.equal(listeners.size,0);assert.equal(context.diagnosticsRef.current,null);
-    assert.equal(reports.length,0);
+    assert.equal(reports.length,1); assert.equal(reports[0].reason,'lifecycle'); assert.equal(reports[0].lifecycle,'visibility-visible');
   } finally {if(previousWindow===undefined)delete globalThis.window;else globalThis.window=previousWindow;}
+});
+
+test('actual resume and modal Back handlers cannot restart a failed, hidden presentation',()=>{
+ const source=fs.readFileSync(new URL('./GamePage.tsx',import.meta.url),'utf8');
+ const ast=ts.createSourceFile('GamePage.tsx',source,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);
+ let resume,back;
+ const visit=node=>{
+  if(ts.isVariableDeclaration(node)&&node.name.getText(ast)==='resumeWeaponSelection')resume=node.initializer.getText(ast);
+  if(ts.isCallExpression(node)&&node.expression.getText(ast)==='useModalNavigation')back=node.arguments[1].getText(ast);
+  ts.forEachChild(node,visit);
+ };visit(ast);assert.ok(resume&&back);
+ const forbidden=()=>{throw Error('hidden mission must remain paused');};
+ const context={sceneFailedRef:{current:true},clearControls:forbidden,setTechnicalPause:forbidden,setWeaponMenuOpen:forbidden,setWeaponCountdown:forbidden};
+ vm.runInNewContext(ts.transpileModule('globalThis.resume='+resume+';globalThis.back='+back,
+  {compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText,context);
+ assert.doesNotThrow(()=>context.resume());assert.doesNotThrow(()=>context.back());
+});
+
+test('actual GamePage pauses a pressured outbox once without adding more saves and gates Resume until drained',()=>{
+ const source=fs.readFileSync(new URL('./GamePage.tsx',import.meta.url),'utf8');
+ const ast=ts.createSourceFile('GamePage.tsx',source,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);
+ let step,interruption,resume;
+ const visit=node=>{
+  if(ts.isVariableDeclaration(node)&&node.name.getText(ast)==='step')step=node.initializer.getText(ast);
+  if(ts.isVariableDeclaration(node)&&node.name.getText(ast)==='resumeWeaponSelection')resume=node.initializer.getText(ast);
+  if(ts.isBinaryExpression(node)&&node.left.getText(ast)==='interruptionRef.current')interruption=node.getText(ast);
+  ts.forEachChild(node,visit);
+ };visit(ast);assert.ok(step&&interruption&&resume);
+ const state={status:'playing',sector:25,phase:'FORMATION',encounter:'normal',hearts:3,score:123,shards:45,
+  weaponTimers:[0,0,60000,0,0,0],asteroids:[],shots:[],enemyShots:[],effects:[]};
+ const original=structuredClone(state),reports=[],countdowns=[];let notice='';
+ const forbidden=()=>{throw Error('pressure recovery must not produce another save');};
+ const context={stateRef:{current:state},document:{hidden:false},performance:{now:()=>100},
+  lastFrameRef:{current:84},lastMeasuredFrameRef:{current:0},lastWorkMsRef:{current:0},lastSavedAtRef:{current:0},
+  simulate:()=>{},saveQueueRef:{current:{underPressure:true}},interruptionRef:{current:null},
+  sceneFailedRef:{current:false},diagnosticsRef:{current:null},frameDiagnosticsRef:{current:{sample:forbidden}},
+  clearControls:()=>{},setTechnicalPause:()=>{},setWeaponMenuOpen:()=>{},setWeaponCountdown:v=>countdowns.push(v),
+  soundRef:{current:null},musicRef:{current:null},setGame:()=>{},sectorInChapter:()=>5,
+  fieldSizeRef:{current:{width:390,height:844}},navigator:{userAgent:'fixture'},
+  recordGameDiagnostic:v=>reports.push(v),saveCombatRef:{current:forbidden},setSaveNotice:v=>notice=v};
+ vm.runInNewContext(ts.transpileModule(interruption+';globalThis.step='+step+';globalThis.resume='+resume,
+  {compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText,context);
+ context.step(100);context.step(116);
+ assert.deepEqual(state,{...original,status:'paused'});assert.equal(reports.length,1);assert.equal(reports[0].reason,'save-pressure');
+ assert.match(notice,/Save not confirmed/);assert.deepEqual(countdowns,[null]);
+ context.resume();assert.deepEqual(countdowns,[null]);
+ context.saveQueueRef.current.underPressure=false;context.resume();assert.deepEqual(countdowns,[null,3]);
+});
+
+test('a late asynchronous activation cannot simulate combat while the presentation is still failed',()=>{
+ const source=fs.readFileSync(new URL('./GamePage.tsx',import.meta.url),'utf8');
+ const ast=ts.createSourceFile('GamePage.tsx',source,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);let step;
+ const visit=node=>{if(ts.isVariableDeclaration(node)&&node.name.getText(ast)==='step')step=node.initializer.getText(ast);ts.forEachChild(node,visit);};visit(ast);assert.ok(step);
+ const state={status:'playing',hearts:2,shards:45,score:123,weaponTimers:[0,0,60000,0,0,0]},original=structuredClone(state),faults=[];
+ const context={stateRef:{current:state},sceneFailedRef:{current:true},document:{hidden:false},
+  lastFrameRef:{current:84},lastMeasuredFrameRef:{current:0},lastWorkMsRef:{current:0},performance:{now:()=>100},
+  interruptionRef:{current:reason=>{faults.push(reason);state.status='paused';}},
+  simulate:()=>assert.equal(state.status,'paused','the actual step must pause before any simulation'),
+  saveQueueRef:{current:null},frameDiagnosticsRef:{current:{sample:()=>assert.fail('hidden combat sample')}},diagnosticsRef:{current:null}};
+ vm.runInNewContext(ts.transpileModule('globalThis.step='+step,{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText,context);
+ context.step(100);context.step(116);assert.deepEqual(faults,['render-error']);assert.deepEqual(state,{...original,status:'paused'});
 });
