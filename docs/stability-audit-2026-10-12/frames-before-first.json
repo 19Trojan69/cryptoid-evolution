@@ -1,0 +1,92 @@
+{
+  "baseline": true,
+  "base": "16fcfb43aad836de0e38f684c0d4cade82b78976",
+  "browser": "153.0.8010.0",
+  "mode": "isolated instrumented production; Chromium software GPU; forced clears/invulnerability and fixture saves; virtual campaign clock; performance samples use a separate real-time page; no Pi Browser or iOS inference",
+  "errors": [],
+  "campaigns": [],
+  "beforeSampling": {
+    "info": {
+      "sector": 25,
+      "encounter": "normal",
+      "phase": "SECTOR_INTRO",
+      "status": "paused",
+      "hearts": 99,
+      "score": 0,
+      "shards": 0,
+      "enemies": 0,
+      "shots": 0,
+      "hostile": 0,
+      "effects": 0,
+      "paid": 0,
+      "rapid": 0
+    },
+    "visibility": "visible",
+    "focused": true,
+    "diagnostics": [
+      {
+        "reason": "loop-stall",
+        "errorName": "",
+        "sector": 25,
+        "phase": "SECTOR_INTRO",
+        "encounter": "normal",
+        "status": "paused",
+        "block": 5,
+        "enemies": 0,
+        "projectiles": 0,
+        "effects": 0,
+        "lastSavedAt": 0,
+        "frameMs": 0,
+        "width": 390,
+        "height": 844,
+        "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+        "at": "2026-10-12T17:00:16.515Z"
+      }
+    ]
+  },
+  "realTime": {
+    "samples": 247,
+    "meanFrameMs": 79.88906882591093,
+    "p95FrameMs": 200,
+    "maxFrameMs": 799.8999999999996,
+    "meanWorkMs": 0.4862348180611124,
+    "maxWorkMs": 14.899999998509884,
+    "uuidCalls": 198,
+    "objects": {
+      "sector": 25,
+      "encounter": "normal",
+      "phase": "FORMATION",
+      "status": "playing",
+      "hearts": 99,
+      "score": 52,
+      "shards": 4,
+      "enemies": 5,
+      "shots": 2,
+      "hostile": 0,
+      "effects": 0,
+      "paid": 0,
+      "rapid": 0
+    },
+    "diagnostics": [
+      {
+        "reason": "loop-stall",
+        "errorName": "",
+        "sector": 25,
+        "phase": "SECTOR_INTRO",
+        "encounter": "normal",
+        "status": "paused",
+        "block": 5,
+        "enemies": 0,
+        "projectiles": 0,
+        "effects": 0,
+        "lastSavedAt": 0,
+        "frameMs": 0,
+        "width": 390,
+        "height": 844,
+        "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+        "at": "2026-10-12T17:00:16.515Z"
+      }
+    ]
+  },
+  "passed": true
+}

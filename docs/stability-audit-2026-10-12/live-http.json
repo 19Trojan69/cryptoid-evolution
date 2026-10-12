@@ -1,0 +1,26 @@
+{
+  "testnet": {
+    "url": "https://cryptoid-evolution-testnet.vercel.app",
+    "status": 200,
+    "scripts": [
+      "https://sdk.minepi.com/pi-sdk.js",
+      "/assets/index-BWDLeoYB.js"
+    ],
+    "css": [
+      "/assets/index-jaywVuOe.css"
+    ],
+    "cssSha256": "c93f34d1220e0e84a74e17db399c91d51a23c18b07c32289124c0eeaa76b91cd"
+  },
+  "mainnet": {
+    "url": "https://cryptoid-evolution.vercel.app",
+    "status": 200,
+    "scripts": [
+      "https://sdk.minepi.com/pi-sdk.js",
+      "/assets/index-DB9vrZWh.js"
+    ],
+    "css": [
+      "/assets/index-xNfrOuJR.css"
+    ],
+    "cssSha256": "f4b0df61b153ff7964ed13b4f9514585a3811270e19180b43fe06dffda457e54"
+  }
+}

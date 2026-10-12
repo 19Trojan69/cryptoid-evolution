@@ -1,0 +1,1920 @@
+{
+  "baseline": false,
+  "base": "16fcfb43aad836de0e38f684c0d4cade82b78976",
+  "browser": "153.0.8010.0",
+  "mode": "isolated instrumented production; Chromium software GPU; forced clears/invulnerability and fixture saves; virtual campaign clock; performance samples use a separate real-time page; no Pi Browser or iOS inference",
+  "errors": [],
+  "campaigns": [
+    {
+      "start": 1,
+      "normal": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        31,
+        32,
+        33
+      ],
+      "bosses": [
+        10,
+        20,
+        30
+      ],
+      "snapshots": [
+        {
+          "sector": 2,
+          "encounter": "normal",
+          "phase": "FORMATION",
+          "status": "playing",
+          "hearts": 99,
+          "score": 125,
+          "shards": 8,
+          "enemies": 5,
+          "shots": 2,
+          "hostile": 1,
+          "effects": 1,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 8719024,
+          "dom": 461,
+          "paint": {
+            "painted": 13,
+            "estimatedBytes": 4807804,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 3,
+          "encounter": "normal",
+          "phase": "ATTACK_CYCLE",
+          "status": "playing",
+          "hearts": 97,
+          "score": 270,
+          "shards": 22,
+          "enemies": 4,
+          "shots": 4,
+          "hostile": 0,
+          "effects": 2,
+          "paid": 0,
+          "rapid": 15568,
+          "rewardCards": 0,
+          "heapBytes": 9095592,
+          "dom": 474,
+          "paint": {
+            "painted": 19,
+            "estimatedBytes": 7051444,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 4,
+          "encounter": "normal",
+          "phase": "ATTACK_CYCLE",
+          "status": "playing",
+          "hearts": 98,
+          "score": 345,
+          "shards": 26,
+          "enemies": 5,
+          "shots": 2,
+          "hostile": 1,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 2912,
+          "rewardCards": 0,
+          "heapBytes": 9199948,
+          "dom": 470,
+          "paint": {
+            "painted": 25,
+            "estimatedBytes": 9244724,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 5,
+          "encounter": "normal",
+          "phase": "FORMATION",
+          "status": "playing",
+          "hearts": 97,
+          "score": 565,
+          "shards": 38,
+          "enemies": 5,
+          "shots": 2,
+          "hostile": 0,
+          "effects": 1,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9281208,
+          "dom": 471,
+          "paint": {
+            "painted": 31,
+            "estimatedBytes": 11452878,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 6,
+          "encounter": "normal",
+          "phase": "FORMATION",
+          "status": "playing",
+          "hearts": 98,
+          "score": 678,
+          "shards": 46,
+          "enemies": 4,
+          "shots": 3,
+          "hostile": 0,
+          "effects": 1,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9495212,
+          "dom": 453,
+          "paint": {
+            "painted": 37,
+            "estimatedBytes": 13702456,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 7,
+          "encounter": "normal",
+          "phase": "FORMATION",
+          "status": "playing",
+          "hearts": 98,
+          "score": 868,
+          "shards": 56,
+          "enemies": 5,
+          "shots": 1,
+          "hostile": 1,
+          "effects": 1,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9453708,
+          "dom": 469,
+          "paint": {
+            "painted": 43,
+            "estimatedBytes": 15918067,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 8,
+          "encounter": "normal",
+          "phase": "ATTACK_CYCLE",
+          "status": "playing",
+          "hearts": 97,
+          "score": 968,
+          "shards": 64,
+          "enemies": 5,
+          "shots": 3,
+          "hostile": 1,
+          "effects": 1,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9500880,
+          "dom": 474,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17756966,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 9,
+          "encounter": "normal",
+          "phase": "FORMATION",
+          "status": "playing",
+          "hearts": 97,
+          "score": 1165,
+          "shards": 76,
+          "enemies": 5,
+          "shots": 1,
+          "hostile": 1,
+          "effects": 1,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9542168,
+          "dom": 472,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17772284,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 10,
+          "encounter": "boss-fight",
+          "phase": "ATTACK_CYCLE",
+          "status": "playing",
+          "hearts": 99,
+          "score": 1412,
+          "shards": 100,
+          "enemies": 0,
+          "shots": 4,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9409128,
+          "dom": 495,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17772009,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            },
+            {
+              "width": 989,
+              "height": 618
+            }
+          ]
+        },
+        {
+          "sector": 10,
+          "encounter": "bonus",
+          "phase": "SECTOR_INTRO",
+          "status": "playing",
+          "hearts": 3,
+          "score": 3535,
+          "shards": 121,
+          "enemies": 0,
+          "shots": 0,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9369956,
+          "dom": 410,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17772009,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 11,
+          "encounter": "normal",
+          "phase": "SECTOR_INTRO",
+          "status": "playing",
+          "hearts": 3,
+          "score": 3985,
+          "shards": 127,
+          "enemies": 0,
+          "shots": 0,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9608884,
+          "dom": 425,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17744315,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 12,
+          "encounter": "normal",
+          "phase": "ATTACK_CYCLE",
+          "status": "playing",
+          "hearts": 99,
+          "score": 4115,
+          "shards": 139,
+          "enemies": 4,
+          "shots": 4,
+          "hostile": 1,
+          "effects": 1,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9673556,
+          "dom": 461,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17787677,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 13,
+          "encounter": "normal",
+          "phase": "FORMATION",
+          "status": "playing",
+          "hearts": 97,
+          "score": 4190,
+          "shards": 143,
+          "enemies": 5,
+          "shots": 1,
+          "hostile": 0,
+          "effects": 1,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9898552,
+          "dom": 480,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17783407,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 14,
+          "encounter": "normal",
+          "phase": "ATTACK_CYCLE",
+          "status": "playing",
+          "hearts": 98,
+          "score": 4290,
+          "shards": 151,
+          "enemies": 5,
+          "shots": 0,
+          "hostile": 1,
+          "effects": 1,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9884188,
+          "dom": 473,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17757876,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 15,
+          "encounter": "normal",
+          "phase": "FORMATION",
+          "status": "playing",
+          "hearts": 98,
+          "score": 4595,
+          "shards": 175,
+          "enemies": 5,
+          "shots": 1,
+          "hostile": 0,
+          "effects": 1,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9944128,
+          "dom": 477,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17749395,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 16,
+          "encounter": "normal",
+          "phase": "FORMATION",
+          "status": "playing",
+          "hearts": 98,
+          "score": 4700,
+          "shards": 183,
+          "enemies": 4,
+          "shots": 2,
+          "hostile": 0,
+          "effects": 1,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9930596,
+          "dom": 458,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17771639,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 17,
+          "encounter": "normal",
+          "phase": "FORMATION",
+          "status": "playing",
+          "hearts": 98,
+          "score": 4952,
+          "shards": 195,
+          "enemies": 5,
+          "shots": 1,
+          "hostile": 0,
+          "effects": 2,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9736716,
+          "dom": 493,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17768985,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 18,
+          "encounter": "normal",
+          "phase": "ATTACK_CYCLE",
+          "status": "playing",
+          "hearts": 97,
+          "score": 5054,
+          "shards": 203,
+          "enemies": 5,
+          "shots": 2,
+          "hostile": 0,
+          "effects": 2,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9773888,
+          "dom": 495,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17729707,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 19,
+          "encounter": "normal",
+          "phase": "FORMATION",
+          "status": "playing",
+          "hearts": 97,
+          "score": 5252,
+          "shards": 215,
+          "enemies": 5,
+          "shots": 1,
+          "hostile": 1,
+          "effects": 1,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9763712,
+          "dom": 476,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17744632,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 20,
+          "encounter": "boss-fight",
+          "phase": "ATTACK_CYCLE",
+          "status": "playing",
+          "hearts": 98,
+          "score": 5500,
+          "shards": 239,
+          "enemies": 0,
+          "shots": 3,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9582096,
+          "dom": 496,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17763260,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            },
+            {
+              "width": 989,
+              "height": 618
+            }
+          ]
+        },
+        {
+          "sector": 20,
+          "encounter": "bonus",
+          "phase": "SECTOR_INTRO",
+          "status": "playing",
+          "hearts": 3,
+          "score": 7654,
+          "shards": 260,
+          "enemies": 0,
+          "shots": 0,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9536196,
+          "dom": 415,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17763260,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 21,
+          "encounter": "normal",
+          "phase": "SECTOR_INTRO",
+          "status": "playing",
+          "hearts": 3,
+          "score": 9154,
+          "shards": 271,
+          "enemies": 0,
+          "shots": 0,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9774132,
+          "dom": 436,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17768939,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 22,
+          "encounter": "normal",
+          "phase": "ATTACK_CYCLE",
+          "status": "playing",
+          "hearts": 99,
+          "score": 9298,
+          "shards": 283,
+          "enemies": 4,
+          "shots": 2,
+          "hostile": 0,
+          "effects": 2,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9807584,
+          "dom": 470,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17771140,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 23,
+          "encounter": "normal",
+          "phase": "ATTACK_CYCLE",
+          "status": "playing",
+          "hearts": 98,
+          "score": 9400,
+          "shards": 291,
+          "enemies": 4,
+          "shots": 2,
+          "hostile": 1,
+          "effects": 1,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9993996,
+          "dom": 469,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17770181,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 24,
+          "encounter": "normal",
+          "phase": "ATTACK_CYCLE",
+          "status": "playing",
+          "hearts": 98,
+          "score": 9487,
+          "shards": 295,
+          "enemies": 5,
+          "shots": 0,
+          "hostile": 1,
+          "effects": 1,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9984472,
+          "dom": 478,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17766124,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 25,
+          "encounter": "normal",
+          "phase": "FORMATION",
+          "status": "playing",
+          "hearts": 98,
+          "score": 9727,
+          "shards": 311,
+          "enemies": 5,
+          "shots": 1,
+          "hostile": 0,
+          "effects": 1,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 10008336,
+          "dom": 476,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17722473,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 26,
+          "encounter": "normal",
+          "phase": "ATTACK_CYCLE",
+          "status": "playing",
+          "hearts": 99,
+          "score": 9923,
+          "shards": 345,
+          "enemies": 4,
+          "shots": 8,
+          "hostile": 1,
+          "effects": 0,
+          "paid": 50512,
+          "rapid": 5512,
+          "rewardCards": 0,
+          "heapBytes": 9900252,
+          "dom": 462,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17724764,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 27,
+          "encounter": "normal",
+          "phase": "ATTACK_CYCLE",
+          "status": "playing",
+          "hearts": 99,
+          "score": 10139,
+          "shards": 361,
+          "enemies": 4,
+          "shots": 4,
+          "hostile": 0,
+          "effects": 1,
+          "paid": 35376,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 10170440,
+          "dom": 463,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17706596,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 28,
+          "encounter": "normal",
+          "phase": "FORMATION",
+          "status": "playing",
+          "hearts": 98,
+          "score": 10267,
+          "shards": 369,
+          "enemies": 4,
+          "shots": 6,
+          "hostile": 0,
+          "effects": 1,
+          "paid": 24080,
+          "rapid": 18928,
+          "rewardCards": 0,
+          "heapBytes": 10198472,
+          "dom": 475,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17701185,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 29,
+          "encounter": "normal",
+          "phase": "ATTACK_CYCLE",
+          "status": "playing",
+          "hearts": 96,
+          "score": 10405,
+          "shards": 381,
+          "enemies": 4,
+          "shots": 8,
+          "hostile": 0,
+          "effects": 2,
+          "paid": 14976,
+          "rapid": 6272,
+          "rewardCards": 0,
+          "heapBytes": 10225288,
+          "dom": 492,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17744209,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 30,
+          "encounter": "boss-fight",
+          "phase": "ATTACK_CYCLE",
+          "status": "playing",
+          "hearts": 99,
+          "score": 10593,
+          "shards": 405,
+          "enemies": 0,
+          "shots": 3,
+          "hostile": 0,
+          "effects": 1,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9830304,
+          "dom": 505,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17764178,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            },
+            {
+              "width": 989,
+              "height": 748
+            }
+          ]
+        },
+        {
+          "sector": 30,
+          "encounter": "bonus",
+          "phase": "SECTOR_INTRO",
+          "status": "playing",
+          "hearts": 3,
+          "score": 12779,
+          "shards": 426,
+          "enemies": 0,
+          "shots": 0,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9773880,
+          "dom": 413,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17764178,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 31,
+          "encounter": "normal",
+          "phase": "SECTOR_INTRO",
+          "status": "playing",
+          "hearts": 3,
+          "score": 14279,
+          "shards": 437,
+          "enemies": 0,
+          "shots": 0,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 10210012,
+          "dom": 435,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17785233,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 32,
+          "encounter": "normal",
+          "phase": "ATTACK_CYCLE",
+          "status": "playing",
+          "hearts": 99,
+          "score": 14355,
+          "shards": 441,
+          "enemies": 6,
+          "shots": 1,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9947240,
+          "dom": 488,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17774249,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 33,
+          "encounter": "normal",
+          "phase": "ATTACK_CYCLE",
+          "status": "playing",
+          "hearts": 99,
+          "score": 14548,
+          "shards": 455,
+          "enemies": 6,
+          "shots": 1,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 9962576,
+          "dom": 481,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17774621,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        },
+        {
+          "sector": 34,
+          "encounter": "normal",
+          "phase": "ATTACK_CYCLE",
+          "status": "playing",
+          "hearts": 98,
+          "score": 14687,
+          "shards": 467,
+          "enemies": 6,
+          "shots": 0,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "rewardCards": 0,
+          "heapBytes": 10186268,
+          "dom": 473,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17785787,
+            "sources": 8,
+            "pending": 0
+          },
+          "canvases": [
+            {
+              "width": 585,
+              "height": 1266
+            }
+          ]
+        }
+      ],
+      "complete": true,
+      "restoreTenTimes": true,
+      "parentRenderCaught": true
+    }
+  ],
+  "sourceHashes": {
+    "pages/GamePage.tsx": "be4667612a260032352fb2c39464d477fae6cfdbf8a1f6c8313e1c5e64ca35af",
+    "pages/GameSceneBoundary.tsx": "970de10ac210224bdc90e8b6eb44127c5f6b596d60f427f2e82f8c9d5301bf05",
+    "pages/gameAudio.ts": "5b46f10de700c19e3f40854d37988db7bdaa1e9405ddd1456d683829551fb7be",
+    "pages/gameDiagnostics.ts": "5fa4ac81b9e42d116471736797eb3b9de646a984d081635c167ef9b107605136",
+    "hooks/useModalNavigation.ts": "35a3126957f3376ed5eb8a66c669416024fea4025bfdb2b679e6aae792589bf6",
+    "App.tsx": "7253b846b518bbaa7f563eb25449bb31a3b22a44f7e08e893193311fa1581bdc",
+    "RouteRecovery.tsx": "5db08781e36a75f7f29e026903140bf385a758d63235a5de5b7d07b07fe54e1f",
+    "release.ts": "06f95b316cc3a498976bcfc57e757077ebc746a6b31d47cd4755b6edb8976208",
+    "lib/accountSave.ts": "04959078542afff941a8c2243dddc3760de4c6c1c3944f0952d31e848576ec5c",
+    "pages/gameLoop.ts": "f404ef28d4f1c0a9d7f3eced96399b884ee8edfbac19cc314aae67cdd4a13dea"
+  },
+  "orphanGuard": {
+    "path": "/game"
+  },
+  "latestDiagnostics": [
+    {
+      "reason": "lifecycle",
+      "buildId": "0.11.0 · 36f70839",
+      "errorName": "",
+      "sector": 25,
+      "phase": "ATTACK_CYCLE",
+      "encounter": "normal",
+      "status": "paused",
+      "width": 390,
+      "height": 844,
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+      "block": 5,
+      "enemies": 1,
+      "projectiles": 6,
+      "effects": 0,
+      "frameMs": 60000,
+      "workMs": 0,
+      "lastSavedAt": 0,
+      "frames": 1024,
+      "meanFrameMs": 16,
+      "p95FrameMs": 16,
+      "maxFrameMs": 16,
+      "maxWorkMs": 0,
+      "lifecycle": "visibility-visible",
+      "at": "2026-10-12T12:09:50.665Z"
+    },
+    {
+      "reason": "navigation",
+      "buildId": "0.11.0 · 36f70839",
+      "errorName": "",
+      "sector": 25,
+      "phase": "ATTACK_CYCLE",
+      "encounter": "normal",
+      "status": "paused",
+      "width": 390,
+      "height": 844,
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+      "block": 5,
+      "enemies": 1,
+      "projectiles": 6,
+      "effects": 0,
+      "frameMs": 60000,
+      "workMs": 0,
+      "lastSavedAt": 0,
+      "frames": 1024,
+      "meanFrameMs": 16,
+      "p95FrameMs": 16,
+      "maxFrameMs": 16,
+      "maxWorkMs": 0,
+      "navigationAction": "POP",
+      "from": "/game",
+      "to": "/game",
+      "at": "2026-10-12T12:09:50.697Z"
+    },
+    {
+      "reason": "performance",
+      "buildId": "0.11.0 · 36f70839",
+      "errorName": "",
+      "sector": 26,
+      "phase": "ATTACK_CYCLE",
+      "encounter": "normal",
+      "status": "playing",
+      "width": 390,
+      "height": 844,
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+      "block": 6,
+      "enemies": 4,
+      "projectiles": 6,
+      "effects": 1,
+      "frameMs": 16,
+      "workMs": 0,
+      "lastSavedAt": 0,
+      "frames": 1024,
+      "meanFrameMs": 16,
+      "p95FrameMs": 16,
+      "maxFrameMs": 16,
+      "maxWorkMs": 0,
+      "at": "2026-10-12T12:10:00.672Z"
+    },
+    {
+      "reason": "performance",
+      "buildId": "0.11.0 · 36f70839",
+      "errorName": "",
+      "sector": 26,
+      "phase": "FORMATION",
+      "encounter": "normal",
+      "status": "playing",
+      "width": 390,
+      "height": 844,
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+      "block": 6,
+      "enemies": 6,
+      "projectiles": 0,
+      "effects": 0,
+      "frameMs": 16,
+      "workMs": 0,
+      "lastSavedAt": 0,
+      "frames": 1024,
+      "meanFrameMs": 16,
+      "p95FrameMs": 16,
+      "maxFrameMs": 16,
+      "maxWorkMs": 0,
+      "at": "2026-10-12T12:10:10.672Z"
+    },
+    {
+      "reason": "performance",
+      "buildId": "0.11.0 · 36f70839",
+      "errorName": "",
+      "sector": 27,
+      "phase": "FORMATION",
+      "encounter": "normal",
+      "status": "playing",
+      "width": 390,
+      "height": 844,
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+      "block": 7,
+      "enemies": 6,
+      "projectiles": 0,
+      "effects": 0,
+      "frameMs": 16,
+      "workMs": 0,
+      "lastSavedAt": 0,
+      "frames": 1024,
+      "meanFrameMs": 16,
+      "p95FrameMs": 16,
+      "maxFrameMs": 16,
+      "maxWorkMs": 0,
+      "at": "2026-10-12T12:10:20.672Z"
+    },
+    {
+      "reason": "performance",
+      "buildId": "0.11.0 · 36f70839",
+      "errorName": "",
+      "sector": 27,
+      "phase": "REFORM",
+      "encounter": "normal",
+      "status": "playing",
+      "width": 390,
+      "height": 844,
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+      "block": 7,
+      "enemies": 4,
+      "projectiles": 6,
+      "effects": 0,
+      "frameMs": 16,
+      "workMs": 0,
+      "lastSavedAt": 0,
+      "frames": 1024,
+      "meanFrameMs": 16,
+      "p95FrameMs": 16,
+      "maxFrameMs": 16,
+      "maxWorkMs": 0,
+      "at": "2026-10-12T12:10:30.672Z"
+    },
+    {
+      "reason": "performance",
+      "buildId": "0.11.0 · 36f70839",
+      "errorName": "",
+      "sector": 28,
+      "phase": "FORMATION",
+      "encounter": "normal",
+      "status": "playing",
+      "width": 390,
+      "height": 844,
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+      "block": 8,
+      "enemies": 4,
+      "projectiles": 6,
+      "effects": 1,
+      "frameMs": 16,
+      "workMs": 0,
+      "lastSavedAt": 0,
+      "frames": 1024,
+      "meanFrameMs": 16,
+      "p95FrameMs": 16,
+      "maxFrameMs": 16,
+      "maxWorkMs": 0,
+      "at": "2026-10-12T12:10:40.672Z"
+    },
+    {
+      "reason": "performance",
+      "buildId": "0.11.0 · 36f70839",
+      "errorName": "",
+      "sector": 28,
+      "phase": "SECTOR_CLEAR",
+      "encounter": "normal",
+      "status": "playing",
+      "width": 390,
+      "height": 844,
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+      "block": 8,
+      "enemies": 0,
+      "projectiles": 0,
+      "effects": 0,
+      "frameMs": 16,
+      "workMs": 0,
+      "lastSavedAt": 0,
+      "frames": 1024,
+      "meanFrameMs": 16,
+      "p95FrameMs": 16,
+      "maxFrameMs": 16,
+      "maxWorkMs": 0,
+      "at": "2026-10-12T12:10:50.672Z"
+    },
+    {
+      "reason": "performance",
+      "buildId": "0.11.0 · 36f70839",
+      "errorName": "",
+      "sector": 29,
+      "phase": "ATTACK_CYCLE",
+      "encounter": "normal",
+      "status": "playing",
+      "width": 390,
+      "height": 844,
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+      "block": 9,
+      "enemies": 4,
+      "projectiles": 6,
+      "effects": 0,
+      "frameMs": 16,
+      "workMs": 0,
+      "lastSavedAt": 0,
+      "frames": 1024,
+      "meanFrameMs": 16,
+      "p95FrameMs": 16,
+      "maxFrameMs": 16,
+      "maxWorkMs": 0,
+      "at": "2026-10-12T12:11:00.672Z"
+    },
+    {
+      "reason": "performance",
+      "buildId": "0.11.0 · 36f70839",
+      "errorName": "",
+      "sector": 29,
+      "phase": "FORMATION",
+      "encounter": "normal",
+      "status": "playing",
+      "width": 390,
+      "height": 844,
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+      "block": 9,
+      "enemies": 6,
+      "projectiles": 2,
+      "effects": 0,
+      "frameMs": 16,
+      "workMs": 0,
+      "lastSavedAt": 0,
+      "frames": 1024,
+      "meanFrameMs": 16,
+      "p95FrameMs": 16,
+      "maxFrameMs": 16,
+      "maxWorkMs": 0,
+      "at": "2026-10-12T12:11:10.672Z"
+    },
+    {
+      "reason": "performance",
+      "buildId": "0.11.0 · 36f70839",
+      "errorName": "",
+      "sector": 30,
+      "phase": "SECTOR_INTRO",
+      "encounter": "boss-intro",
+      "status": "playing",
+      "width": 390,
+      "height": 844,
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+      "block": 10,
+      "enemies": 0,
+      "projectiles": 0,
+      "effects": 0,
+      "frameMs": 16,
+      "workMs": 0,
+      "lastSavedAt": 0,
+      "frames": 1024,
+      "meanFrameMs": 16,
+      "p95FrameMs": 16,
+      "maxFrameMs": 16,
+      "maxWorkMs": 0,
+      "at": "2026-10-12T12:11:20.672Z"
+    },
+    {
+      "reason": "performance",
+      "buildId": "0.11.0 · 36f70839",
+      "errorName": "",
+      "sector": 30,
+      "phase": "SECTOR_CLEAR",
+      "encounter": "boss-clear",
+      "status": "playing",
+      "width": 390,
+      "height": 844,
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+      "block": 10,
+      "enemies": 0,
+      "projectiles": 0,
+      "effects": 2,
+      "frameMs": 16,
+      "workMs": 0,
+      "lastSavedAt": 0,
+      "frames": 1024,
+      "meanFrameMs": 16,
+      "p95FrameMs": 16,
+      "maxFrameMs": 16,
+      "maxWorkMs": 0,
+      "at": "2026-10-12T12:11:30.672Z"
+    },
+    {
+      "reason": "performance",
+      "buildId": "0.11.0 · 36f70839",
+      "errorName": "",
+      "sector": 30,
+      "phase": "SECTOR_CLEAR",
+      "encounter": "boss-clear",
+      "status": "playing",
+      "width": 390,
+      "height": 844,
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+      "block": 10,
+      "enemies": 0,
+      "projectiles": 0,
+      "effects": 0,
+      "frameMs": 16,
+      "workMs": 0,
+      "lastSavedAt": 0,
+      "frames": 1024,
+      "meanFrameMs": 16,
+      "p95FrameMs": 16,
+      "maxFrameMs": 16,
+      "maxWorkMs": 0,
+      "at": "2026-10-12T12:11:40.672Z"
+    },
+    {
+      "reason": "performance",
+      "buildId": "0.11.0 · 36f70839",
+      "errorName": "",
+      "sector": 30,
+      "phase": "ENTRY",
+      "encounter": "bonus",
+      "status": "playing",
+      "width": 390,
+      "height": 844,
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+      "block": 10,
+      "enemies": 0,
+      "projectiles": 2,
+      "effects": 1,
+      "frameMs": 16,
+      "workMs": 0,
+      "lastSavedAt": 0,
+      "frames": 1024,
+      "meanFrameMs": 16,
+      "p95FrameMs": 16,
+      "maxFrameMs": 16,
+      "maxWorkMs": 0,
+      "at": "2026-10-12T12:11:50.672Z"
+    },
+    {
+      "reason": "performance",
+      "buildId": "0.11.0 · 36f70839",
+      "errorName": "",
+      "sector": 31,
+      "phase": "SECTOR_INTRO",
+      "encounter": "normal",
+      "status": "playing",
+      "width": 390,
+      "height": 844,
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+      "block": 1,
+      "enemies": 0,
+      "projectiles": 0,
+      "effects": 0,
+      "frameMs": 16,
+      "workMs": 0,
+      "lastSavedAt": 0,
+      "frames": 1024,
+      "meanFrameMs": 16,
+      "p95FrameMs": 16,
+      "maxFrameMs": 16,
+      "maxWorkMs": 0,
+      "at": "2026-10-12T12:12:00.672Z"
+    },
+    {
+      "reason": "performance",
+      "buildId": "0.11.0 · 36f70839",
+      "errorName": "",
+      "sector": 32,
+      "phase": "SECTOR_INTRO",
+      "encounter": "normal",
+      "status": "playing",
+      "width": 390,
+      "height": 844,
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+      "block": 2,
+      "enemies": 0,
+      "projectiles": 0,
+      "effects": 0,
+      "frameMs": 16,
+      "workMs": 0,
+      "lastSavedAt": 0,
+      "frames": 1024,
+      "meanFrameMs": 16,
+      "p95FrameMs": 16,
+      "maxFrameMs": 16,
+      "maxWorkMs": 0,
+      "at": "2026-10-12T12:12:10.672Z"
+    },
+    {
+      "reason": "performance",
+      "buildId": "0.11.0 · 36f70839",
+      "errorName": "",
+      "sector": 32,
+      "phase": "ATTACK_CYCLE",
+      "encounter": "normal",
+      "status": "playing",
+      "width": 390,
+      "height": 844,
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+      "block": 2,
+      "enemies": 4,
+      "projectiles": 3,
+      "effects": 1,
+      "frameMs": 16,
+      "workMs": 0,
+      "lastSavedAt": 0,
+      "frames": 1024,
+      "meanFrameMs": 16,
+      "p95FrameMs": 16,
+      "maxFrameMs": 16,
+      "maxWorkMs": 0,
+      "at": "2026-10-12T12:12:20.672Z"
+    },
+    {
+      "reason": "performance",
+      "buildId": "0.11.0 · 36f70839",
+      "errorName": "",
+      "sector": 33,
+      "phase": "ENTRY",
+      "encounter": "normal",
+      "status": "playing",
+      "width": 390,
+      "height": 844,
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+      "block": 3,
+      "enemies": 6,
+      "projectiles": 0,
+      "effects": 0,
+      "frameMs": 16,
+      "workMs": 0,
+      "lastSavedAt": 0,
+      "frames": 1024,
+      "meanFrameMs": 16,
+      "p95FrameMs": 16,
+      "maxFrameMs": 16,
+      "maxWorkMs": 0,
+      "at": "2026-10-12T12:12:30.672Z"
+    },
+    {
+      "reason": "performance",
+      "buildId": "0.11.0 · 36f70839",
+      "errorName": "",
+      "sector": 33,
+      "phase": "REFORM",
+      "encounter": "normal",
+      "status": "playing",
+      "width": 390,
+      "height": 844,
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+      "block": 3,
+      "enemies": 4,
+      "projectiles": 2,
+      "effects": 0,
+      "frameMs": 16,
+      "workMs": 0,
+      "lastSavedAt": 0,
+      "frames": 1024,
+      "meanFrameMs": 16,
+      "p95FrameMs": 16,
+      "maxFrameMs": 16,
+      "maxWorkMs": 0,
+      "at": "2026-10-12T12:12:40.672Z"
+    },
+    {
+      "reason": "performance",
+      "buildId": "0.11.0 · 36f70839",
+      "errorName": "",
+      "sector": 34,
+      "phase": "ATTACK_CYCLE",
+      "encounter": "normal",
+      "status": "playing",
+      "width": 390,
+      "height": 844,
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+      "block": 4,
+      "enemies": 6,
+      "projectiles": 0,
+      "effects": 0,
+      "frameMs": 16,
+      "workMs": 0,
+      "lastSavedAt": 0,
+      "frames": 1024,
+      "meanFrameMs": 16,
+      "p95FrameMs": 16,
+      "maxFrameMs": 16,
+      "maxWorkMs": 0,
+      "at": "2026-10-12T12:12:50.672Z"
+    }
+  ],
+  "memeStressReleased": true,
+  "syntheticBackgroundProtected": true,
+  "higher": [
+    {
+      "sector": 101,
+      "encounter": "normal",
+      "phase": "REFORM",
+      "status": "playing",
+      "hearts": 98,
+      "score": 192,
+      "shards": 37,
+      "enemies": 2,
+      "shots": 3,
+      "hostile": 0,
+      "effects": 2,
+      "paid": 0,
+      "rapid": 0,
+      "rewardCards": 0
+    },
+    {
+      "sector": 481,
+      "encounter": "normal",
+      "phase": "FORMATION",
+      "status": "playing",
+      "hearts": 97,
+      "score": 270,
+      "shards": 44,
+      "enemies": 2,
+      "shots": 3,
+      "hostile": 0,
+      "effects": 2,
+      "paid": 0,
+      "rapid": 0,
+      "rewardCards": 0
+    },
+    {
+      "sector": 500,
+      "encounter": "boss-clear",
+      "phase": "SECTOR_CLEAR",
+      "status": "playing",
+      "hearts": 99,
+      "score": 3675,
+      "shards": 24,
+      "enemies": 0,
+      "shots": 0,
+      "hostile": 0,
+      "effects": 0,
+      "paid": 0,
+      "rapid": 0,
+      "rewardCards": 0
+    }
+  ],
+  "explicitLocalDownload": {
+    "passed": true,
+    "entries": 4,
+    "fileName": "cryptoid-diagnostics-2026-10-12.json"
+  },
+  "beforeSampling": {
+    "info": {
+      "sector": 25,
+      "encounter": "normal",
+      "phase": "SECTOR_INTRO",
+      "status": "paused",
+      "hearts": 99,
+      "score": 0,
+      "shards": 0,
+      "enemies": 0,
+      "shots": 0,
+      "hostile": 0,
+      "effects": 0,
+      "paid": 0,
+      "rapid": 0,
+      "rewardCards": 0
+    },
+    "visibility": "visible",
+    "focused": true,
+    "diagnostics": [
+      {
+        "reason": "loop-stall",
+        "buildId": "0.11.0 · 36f70839",
+        "errorName": "",
+        "sector": 25,
+        "phase": "SECTOR_INTRO",
+        "encounter": "normal",
+        "status": "paused",
+        "width": 390,
+        "height": 844,
+        "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+        "block": 5,
+        "enemies": 0,
+        "projectiles": 0,
+        "effects": 0,
+        "frameMs": 0,
+        "workMs": 5.1,
+        "lastSavedAt": 0,
+        "at": "2026-10-12T18:03:31.121Z"
+      }
+    ]
+  },
+  "realTime": {
+    "samples": 184,
+    "meanFrameMs": 108.05760869565219,
+    "p95FrameMs": 283.3000000000029,
+    "maxFrameMs": 1416.7000000000007,
+    "meanWorkMs": 0.49076087023738935,
+    "maxWorkMs": 15.600000001490116,
+    "uuidCalls": 2,
+    "objects": {
+      "sector": 25,
+      "encounter": "normal",
+      "phase": "ATTACK_CYCLE",
+      "status": "playing",
+      "hearts": 99,
+      "score": 0,
+      "shards": 0,
+      "enemies": 6,
+      "shots": 2,
+      "hostile": 0,
+      "effects": 0,
+      "paid": 0,
+      "rapid": 0,
+      "rewardCards": 0
+    },
+    "diagnostics": [
+      {
+        "reason": "loop-stall",
+        "buildId": "0.11.0 · 36f70839",
+        "errorName": "",
+        "sector": 25,
+        "phase": "SECTOR_INTRO",
+        "encounter": "normal",
+        "status": "paused",
+        "width": 390,
+        "height": 844,
+        "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+        "block": 5,
+        "enemies": 0,
+        "projectiles": 0,
+        "effects": 0,
+        "frameMs": 0,
+        "workMs": 5.1,
+        "lastSavedAt": 0,
+        "at": "2026-10-12T18:03:31.121Z"
+      },
+      {
+        "reason": "navigation",
+        "buildId": "0.11.0 · 36f70839",
+        "errorName": "",
+        "sector": 1,
+        "phase": "SECTOR_INTRO",
+        "encounter": "normal",
+        "status": "playing",
+        "width": 800,
+        "height": 600,
+        "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+        "block": 1,
+        "enemies": 0,
+        "projectiles": 0,
+        "effects": 0,
+        "frameMs": 0,
+        "workMs": 0,
+        "lastSavedAt": 0,
+        "frames": 0,
+        "meanFrameMs": 0,
+        "p95FrameMs": 0,
+        "maxFrameMs": 0,
+        "maxWorkMs": 0,
+        "navigationAction": "PUSH",
+        "from": "/game",
+        "to": "/game",
+        "at": "2026-10-12T18:03:31.163Z"
+      },
+      {
+        "reason": "navigation",
+        "buildId": "0.11.0 · 36f70839",
+        "errorName": "",
+        "sector": 1,
+        "phase": "SECTOR_INTRO",
+        "encounter": "normal",
+        "status": "playing",
+        "width": 800,
+        "height": 600,
+        "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+        "block": 1,
+        "enemies": 0,
+        "projectiles": 0,
+        "effects": 0,
+        "frameMs": 0,
+        "workMs": 0,
+        "lastSavedAt": 0,
+        "frames": 0,
+        "meanFrameMs": 0,
+        "p95FrameMs": 0,
+        "maxFrameMs": 0,
+        "maxWorkMs": 0,
+        "navigationAction": "POP",
+        "from": "/game",
+        "to": "/game",
+        "at": "2026-10-12T18:03:31.254Z"
+      },
+      {
+        "reason": "performance",
+        "buildId": "0.11.0 · 36f70839",
+        "errorName": "",
+        "sector": 25,
+        "phase": "ENTRY",
+        "encounter": "normal",
+        "status": "playing",
+        "width": 390,
+        "height": 844,
+        "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+        "block": 5,
+        "enemies": 0,
+        "projectiles": 80,
+        "effects": 12,
+        "frameMs": 33,
+        "workMs": 0.3,
+        "lastSavedAt": 0,
+        "frames": 20,
+        "meanFrameMs": 50,
+        "p95FrameMs": 183.3,
+        "maxFrameMs": 183.3,
+        "maxWorkMs": 1.8,
+        "at": "2026-10-12T18:03:32.283Z"
+      },
+      {
+        "reason": "performance",
+        "buildId": "0.11.0 · 36f70839",
+        "errorName": "",
+        "sector": 25,
+        "phase": "ENTRY",
+        "encounter": "normal",
+        "status": "playing",
+        "width": 390,
+        "height": 844,
+        "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.0 Safari/537.36",
+        "block": 5,
+        "enemies": 6,
+        "projectiles": 0,
+        "effects": 0,
+        "frameMs": 300,
+        "workMs": 1.2,
+        "lastSavedAt": 0,
+        "frames": 94,
+        "meanFrameMs": 117.9,
+        "p95FrameMs": 433.3,
+        "maxFrameMs": 1416.7,
+        "maxWorkMs": 15.6,
+        "at": "2026-10-12T18:03:42.372Z"
+      }
+    ]
+  },
+  "passed": true
+}

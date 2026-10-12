@@ -1,0 +1,169 @@
+{
+  "passed": true,
+  "baseline": "16fcfb43aad836de0e38f684c0d4cade82b78976",
+  "testedLocalRuntime": "36f708395080bec6719163517eb155fed8f8f36f",
+  "equivalentGitHubRuntime": "76c92d682763d7cc0138ead95c047495c1d1eeaf",
+  "runtimeTree": "4d0ea387bc47e497886f03567ee3c8277e405152",
+  "allCapturedRuntimeSourceHashesMatchFinal": true,
+  "tests": {
+    "frontend": 390,
+    "backend": 106,
+    "frontendFailed": 0,
+    "backendFailed": 0,
+    "productionBuild": true,
+    "engineStages": 500,
+    "engineBosses": 50,
+    "engineBonusRounds": 50
+  },
+  "browserCampaign": {
+    "normalBlocks": 30,
+    "bosses": [
+      10,
+      20,
+      30
+    ],
+    "higherStages": [
+      101,
+      481,
+      500
+    ],
+    "memeStressReleased": true,
+    "syntheticBackgroundProtected": true,
+    "restoreTenTimes": true,
+    "parentRenderCaught": true,
+    "retryInputRebound": true,
+    "orphanGuardBefore": "/",
+    "orphanGuardAfter": "/game",
+    "explicitLocalDownload": {
+      "passed": true,
+      "entries": 4,
+      "fileName": "cryptoid-diagnostics-2026-10-12.json"
+    },
+    "beforeHeap": {
+      "points": 36,
+      "firstMiB": 8.333732604980469,
+      "lastMiB": 9.71042251586914,
+      "minMiB": 8.333732604980469,
+      "maxMiB": 9.749141693115234,
+      "changeMiB": 1.3766899108886719
+    },
+    "afterHeap": {
+      "points": 36,
+      "firstMiB": 8.315109252929688,
+      "lastMiB": 9.71438217163086,
+      "minMiB": 8.315109252929688,
+      "maxMiB": 9.751594543457031,
+      "changeMiB": 1.3992729187011719
+    },
+    "beforeResources": {
+      "maxDOM": 503,
+      "maxPainted": 48,
+      "maxSourceImages": 8,
+      "maxEstimatedPaintMiB": 16.963650703430176,
+      "maxPendingAtTransition": 0
+    },
+    "afterResources": {
+      "maxDOM": 505,
+      "maxPainted": 48,
+      "maxSourceImages": 8,
+      "maxEstimatedPaintMiB": 16.963650703430176,
+      "maxPendingAtTransition": 0
+    }
+  },
+  "nodeSimulation": {
+    "beforeHeap": {
+      "points": 36,
+      "firstMiB": 29.254669189453125,
+      "lastMiB": 29.750709533691406,
+      "minMiB": 29.14960479736328,
+      "maxMiB": 29.945899963378906,
+      "changeMiB": 0.49604034423828125
+    },
+    "afterHeap": {
+      "points": 36,
+      "firstMiB": 29.2559814453125,
+      "lastMiB": 29.728286743164062,
+      "minMiB": 29.120880126953125,
+      "maxMiB": 29.923233032226562,
+      "changeMiB": 0.4723052978515625
+    },
+    "beforePeaks": {
+      "enemies": 6,
+      "shots": 82,
+      "hostile": 80,
+      "effects": 14
+    },
+    "afterPeaks": {
+      "enemies": 6,
+      "shots": 82,
+      "hostile": 80,
+      "effects": 14
+    },
+    "cleanup": {
+      "raf": 0,
+      "timers": 0,
+      "listeners": 0
+    }
+  },
+  "frames": {
+    "beforeFirst": {
+      "samples": 247,
+      "meanFrameMs": 79.88906882591093,
+      "p95FrameMs": 200,
+      "maxFrameMs": 799.8999999999996,
+      "meanWorkMs": 0.4862348180611124,
+      "maxWorkMs": 14.899999998509884,
+      "uuidCalls": 198
+    },
+    "afterFirst": {
+      "samples": 184,
+      "meanFrameMs": 108.05760869565219,
+      "p95FrameMs": 283.3000000000029,
+      "maxFrameMs": 1416.7000000000007,
+      "meanWorkMs": 0.49076087023738935,
+      "maxWorkMs": 15.600000001490116,
+      "uuidCalls": 2
+    },
+    "beforeRepeat": {
+      "samples": 138,
+      "meanFrameMs": 143.3514492753623,
+      "p95FrameMs": 533.2000000000007,
+      "maxFrameMs": 950,
+      "meanWorkMs": 1.577536232067623,
+      "maxWorkMs": 63.29999999701977,
+      "uuidCalls": 122
+    },
+    "afterRepeat": {
+      "samples": 272,
+      "meanFrameMs": 72.48455882352941,
+      "p95FrameMs": 200,
+      "maxFrameMs": 499.90000000000146,
+      "meanWorkMs": 0.6687499998849543,
+      "maxWorkMs": 75.60000000149012,
+      "uuidCalls": 2
+    },
+    "samplingMs": 20000,
+    "warmupMs": 5000,
+    "interpretation": "First pair has larger gaps after the changes; repeat has smaller gaps after them. Short software-GPU runs vary strongly and end in different combat phases. No general FPS improvement or mobile performance regression conclusion is justified."
+  },
+  "limits": [
+    "Chromium 153 software GPU, 390x844 CSS pixels/DPR 3; not Pi Browser, iOS or WebKit.",
+    "Campaign uses virtual time, forced clears/boss destruction, extra lives, silent audio and isolated API/save fixtures.",
+    "Before campaign clock advanced between automation commands; after clock was frozen between them. After adds synthetic background lifecycle; heap comparison is approximate.",
+    "Frame tests use native scheduling; work timing includes synchronous simulation, excludes asynchronous React commits and GPU/audio/decode work.",
+    "GC JS heap and cache estimates exclude native images, GPU/compositor surfaces, audio buffers and OS process memory. Cache warming and retained test snapshots contribute to growth.",
+    "An initial zero-sample paused measurement and incomplete development runs were not counted as completed tests."
+  ],
+  "originalIncident": {
+    "reproduced": false,
+    "fixProved": false,
+    "reportedURL": "Testnet",
+    "device": "iPhone / Pi Browser",
+    "situation": "normal combat",
+    "incidentBuild": "unknown",
+    "exactModelOSLevelBlockDurationTime": "unknown"
+  },
+  "databaseBackupVerified": false,
+  "databaseRestoreVerified": false,
+  "publicReleasePerformed": false
+}
