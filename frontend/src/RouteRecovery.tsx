@@ -1,7 +1,16 @@
 import { useAdminLocale } from "./adminLocale";
+import { useEffect } from 'react';
+import { useRouteError } from 'react-router-dom';
+import { readGameDiagnosticContext, recordGameDiagnostic } from './pages/gameDiagnostics';
 
 export default function RouteRecovery() {
   const { t } = useAdminLocale();
+  const error = useRouteError();
+  useEffect(() => {
+    if (window.location.pathname === '/game') recordGameDiagnostic({
+      ...readGameDiagnosticContext(), reason: 'route-error', errorName: error instanceof Error ? error.name : '',
+    });
+  }, [error]);
   return (
     <main className="admin-shell">
       <section className="admin-panel" role="alert">
