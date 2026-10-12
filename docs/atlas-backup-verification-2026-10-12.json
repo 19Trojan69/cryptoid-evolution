@@ -1,0 +1,250 @@
+{
+  "recordedAt": "2026-10-12T19:11:51.966Z",
+  "provider": "MongoDB Atlas",
+  "projectId": "6ab5bca802812f284aa97625",
+  "cluster": "cryptoid-testnet",
+  "clusterId": "6ab5becc97a49331a9a201f7",
+  "instanceType": "FREE",
+  "mongoDBVersion": "8.0.34",
+  "region": "EU_CENTRAL_1",
+  "database": "demo-app",
+  "liveBackendMapping": "candidate matches documented default database and expected collections; deployed MONGODB_URI host/database not independently matched",
+  "collections": [
+    "users",
+    "feedback_posts",
+    "admin_access",
+    "usage_hourly",
+    "user_sessions",
+    "feedback_votes",
+    "orders"
+  ],
+  "databaseStats": {
+    "collections": 7,
+    "views": 0,
+    "objects": 9102,
+    "dataSizeBytes": 77301671,
+    "storageSizeBytes": 21286912,
+    "indexes": 20,
+    "indexSizeBytes": 1384448
+  },
+  "indexes": [
+    {
+      "collection": "feedback_posts",
+      "classicIndexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          }
+        },
+        {
+          "name": "network_1_category_1_hidden_1_createdAt_-1",
+          "key": {
+            "network": 1,
+            "category": 1,
+            "hidden": 1,
+            "createdAt": -1
+          }
+        }
+      ],
+      "searchIndexes": [],
+      "classicIndexesCount": 2,
+      "searchIndexesCount": 0,
+      "isError": false
+    },
+    {
+      "collection": "admin_access",
+      "classicIndexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          }
+        }
+      ],
+      "searchIndexes": [],
+      "classicIndexesCount": 1,
+      "searchIndexesCount": 0,
+      "isError": false
+    },
+    {
+      "collection": "usage_hourly",
+      "classicIndexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          }
+        },
+        {
+          "name": "expiresAt_1",
+          "key": {
+            "expiresAt": 1
+          }
+        },
+        {
+          "name": "network_1_hour_-1",
+          "key": {
+            "network": 1,
+            "hour": -1
+          }
+        }
+      ],
+      "searchIndexes": [],
+      "classicIndexesCount": 3,
+      "searchIndexesCount": 0,
+      "isError": false
+    },
+    {
+      "collection": "user_sessions",
+      "classicIndexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          }
+        },
+        {
+          "name": "expires_1",
+          "key": {
+            "expires": 1
+          }
+        }
+      ],
+      "searchIndexes": [],
+      "classicIndexesCount": 2,
+      "searchIndexesCount": 0,
+      "isError": false
+    },
+    {
+      "collection": "feedback_votes",
+      "classicIndexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          }
+        },
+        {
+          "name": "network_1_postId_1_value_1",
+          "key": {
+            "network": 1,
+            "postId": 1,
+            "value": 1
+          }
+        },
+        {
+          "name": "network_1_postId_1_uid_1",
+          "key": {
+            "network": 1,
+            "postId": 1,
+            "uid": 1
+          }
+        }
+      ],
+      "searchIndexes": [],
+      "classicIndexesCount": 3,
+      "searchIndexesCount": 0,
+      "isError": false
+    },
+    {
+      "collection": "users",
+      "classicIndexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          }
+        },
+        {
+          "name": "bestScore_-1_uid_1",
+          "key": {
+            "bestScore": -1,
+            "uid": 1
+          }
+        },
+        {
+          "name": "bestScoreV2.testnet_-1_uid_1",
+          "key": {
+            "bestScoreV2.testnet": -1,
+            "uid": 1
+          }
+        },
+        {
+          "name": "bestScoreV2.mainnet_-1_uid_1",
+          "key": {
+            "bestScoreV2.mainnet": -1,
+            "uid": 1
+          }
+        },
+        {
+          "name": "careerScoreByNetwork.testnet_-1_uid_1",
+          "key": {
+            "careerScoreByNetwork.testnet": -1,
+            "uid": 1
+          }
+        },
+        {
+          "name": "careerScoreByNetwork.mainnet_-1_uid_1",
+          "key": {
+            "careerScoreByNetwork.mainnet": -1,
+            "uid": 1
+          }
+        }
+      ],
+      "searchIndexes": [],
+      "classicIndexesCount": 6,
+      "searchIndexesCount": 0
+    },
+    {
+      "collection": "orders",
+      "classicIndexes": [
+        {
+          "name": "_id_",
+          "key": {
+            "_id": 1
+          }
+        },
+        {
+          "name": "pi_payment_id_1",
+          "key": {
+            "pi_payment_id": 1
+          }
+        },
+        {
+          "name": "payment_network_1_created_at_-1",
+          "key": {
+            "payment_network": 1,
+            "created_at": -1
+          }
+        }
+      ],
+      "searchIndexes": [],
+      "classicIndexesCount": 3,
+      "searchIndexesCount": 0
+    }
+  ],
+  "backup": {
+    "status": "not-created-or-verified",
+    "nativeAtlasScheduledBackupSupported": false,
+    "logicalDumpAvailableViaConnector": false,
+    "oplogDumpSupported": false,
+    "consistentDumpRequiresWritesStopped": true,
+    "completedBackupId": null,
+    "isolatedRestore": null,
+    "encryptedStorageTargetConfirmed": false
+  },
+  "operations": {
+    "readOnly": true,
+    "credentialsRead": false,
+    "customerDocumentsRead": false,
+    "liveDataExported": false,
+    "liveDatabaseChanged": false,
+    "paidChanges": false,
+    "gamePublished": false
+  },
+  "sources": [
+    "https://www.mongodb.com/docs/atlas/reference/free-shared-limitations/",
+    "https://www.mongodb.com/docs/manual/tutorial/backup-and-restore-tools/"
+  ]
+}
