@@ -591,7 +591,7 @@ const GamePage = () => {
   }, []);
   useEffect(() => {
     const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
-    const monitor = createGameSessionDiagnostics(sessionStorage, recordGameDiagnostic, Date.now, navigation?.type);
+    const monitor = createGameSessionDiagnostics(undefined, recordGameDiagnostic, Date.now, navigation?.type);
     diagnosticsRef.current = monitor;
     const update = () => monitor.update(diagnosticContext(), stateRef.current.status === 'playing', document.hidden, true);
     const hidden = () => { monitor.pagehide(); update(); };

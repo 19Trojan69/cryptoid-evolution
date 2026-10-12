@@ -27,13 +27,17 @@ type SessionMarker = { context: Diagnostic; active: boolean; hidden: boolean; pa
 // The marker is per-tab session storage, avoiding false crashes from another
 // open game tab. OS kills cannot be identified conclusively; absence of a
 // pagehide callback is only a hint. No account, exception message or stack is saved.
-export function createGameSessionDiagnostics(storage: Pick<Storage, 'getItem' | 'setItem'>,
+export function createGameSessionDiagnostics(storage?: Pick<Storage, 'getItem' | 'setItem'>,
   report: (entry: Diagnostic) => unknown = recordGameDiagnostic, now = Date.now, navigationType = '') {
+  // Web Storage access itself may throw in an embedded/private browser.
+  // Keep optional diagnostics from failing the owner of the combat state.
+  let target = storage;
+  if (!target) { try { target = window.sessionStorage; } catch { /* Optional. */ } }
   let lastWrite = 0;
   let context: Diagnostic | null = null;
   let pageHidden = false;
   try {
-    const previous = JSON.parse(storage.getItem(SESSION_KEY) ?? 'null') as SessionMarker | null;
+    const previous = JSON.parse(target?.getItem(SESSION_KEY) ?? 'null') as SessionMarker | null;
     if (previous?.active && previous.context && now() - previous.at < 24 * 60 * 60 * 1000) {
       report({ ...previous.context, reason: 'unexpected-restart', errorName: '',
         restartHint: navigationType === 'reload' ? 'page-reload'
@@ -46,7 +50,7 @@ export function createGameSessionDiagnostics(storage: Pick<Storage, 'getItem' | 
       context = next;
       if (!force && now() - lastWrite < 10_000) return;
       lastWrite = now();
-      try { storage.setItem(SESSION_KEY, JSON.stringify({ context, active, hidden, pageHidden, at: lastWrite })); } catch { /* Optional. */ }
+      try { target?.setItem(SESSION_KEY, JSON.stringify({ context, active, hidden, pageHidden, at: lastWrite })); } catch { /* Optional. */ }
     },
     pagehide() { pageHidden = true; },
     pageshow() { pageHidden = false; },
@@ -55,3 +59,4 @@ export function createGameSessionDiagnostics(storage: Pick<Storage, 'getItem' | 
     },
   };
 }
+
