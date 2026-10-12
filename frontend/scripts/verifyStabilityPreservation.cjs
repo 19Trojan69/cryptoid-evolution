@@ -26,9 +26,22 @@ function main(source) {
 }
 const file = 'frontend/src/pages/GamePage.tsx', old = previous(file), next = current(file);
 const before = declarations(old), after = declarations(next), functions = {};
+// Explicit user correction after the private device test on 12 October:
+// pickups may originate only at defeated ships, never from the 18s timer.
+const authorizedTimedPickup = `        if (variety && !intro.weaponIssued && intro.clock >= intro.weaponDue && state.phase !== "SECTOR_CLEAR") {
+          const pickup = safeEarlyPickup(state,stageWeaponLevel(shipStageRef.current,state.weaponLevel),width,height,visibleTop);
+          if(pickup){ state.powerUps.push({id:nextIdRef.current++,...pickup}); state.powerUpTypes.push(pickup.type); dropsCreatedRef.current++; intro.weaponIssued=true; intro.notice=powerUpNames[pickup.type]; intro.noticeMs=2_600; }
+        }
+`;
 for (const name of ['createFormationSlots', 'spawnAsteroid', 'moveAsteroid', 'saveCombat', 'restoreCombat', 'destroyBoss', 'simulate', 'activateStartPower']) {
- assert.ok(before.has(name), name); assert.equal(after.get(name), before.get(name), name);
- functions[name] = { identical: true, sha256: digest(after.get(name)) };
+ assert.ok(before.has(name), name);
+ let expected=before.get(name);
+ if(name==='simulate') {
+  assert.ok(expected.includes(authorizedTimedPickup));
+  expected=expected.replace(authorizedTimedPickup,'').replace('usedTypes: variety && !intro.weaponIssued ? [...state.powerUpTypes, "weapon"] : state.powerUpTypes','usedTypes: state.powerUpTypes');
+ }
+ assert.equal(after.get(name), expected, name);
+ functions[name] = { identical: after.get(name)===before.get(name), sha256: digest(after.get(name)), ...(name==='simulate'?{authorizedChangeOnly:'Remove timed pickup; use the unchanged drop selector exclusively on ship defeat.'}:{}) };
 }
 assert.equal(main(next), main(old), 'normal game markup');
 const changed = execFileSync('git', ['diff', '--name-only', base, '--'], { cwd: repo, encoding: 'utf8' }).trim().split('\n').filter(Boolean);
