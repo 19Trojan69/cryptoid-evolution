@@ -1,0 +1,35 @@
+{
+  "recordedAt": "2026-10-12T12:14:24.179423+00:00",
+  "repository": "19Trojan69/cryptoid-evolution",
+  "publicReleaseAllowedByBackupEvidence": false,
+  "databaseBackup": {
+    "status": "unverified",
+    "completedBackupId": null,
+    "lastIsolatedRestoreTest": null,
+    "provider": "MongoDB Atlas (historical setup reference; live configuration unverified)",
+    "credentialsRead": false,
+    "liveDataExported": false,
+    "historicalProjectId": "6ab5bca802812f284aa97625",
+    "historicalCluster": "cryptoid-testnet",
+    "historicalBackupStatus": "reported inactive on 2026-10-02; not a current verification"
+  },
+  "codeBackups": [
+    {
+      "network": "testnet",
+      "ref": "backup/testnet-20261012-1c1c7f9",
+      "commit": "1c1c7f9b6c5e8ac7d41b9bf1c4b44036cc196220",
+      "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+      "currentDeployment": "dpl_FTwoRZ4GApix1tyJvMPV5XsPnveV",
+      "previousTestedDeployment": "dpl_8AGNNdBLRiBTwJZt4LyKaFMg8mi1"
+    },
+    {
+      "network": "mainnet",
+      "ref": "backup/mainnet-20261012-907d2a7",
+      "commit": "907d2a7363345d00f0f90c54402bf04e887b64d9",
+      "projectId": "prj_BAIJH4BzLLwun36kWVEnTdx69j0q",
+      "currentDeployment": "dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe"
+    }
+  ],
+  "independentOffsiteCopyVerified": false,
+  "automaticDatabaseScheduleVerified": false
+}
