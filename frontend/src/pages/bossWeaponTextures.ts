@@ -6,8 +6,12 @@ export const preloadBossWeapons = (config: BossConfig) => {
   if (found) return found;
   found = new Promise<HTMLImageElement>((resolve, reject) => {
     const image = new Image();
-    image.onload = () => resolve(image);
-    image.onerror = () => reject(new Error('Boss weapon texture failed'));
+    let settled=false;
+    const clean=()=>{clearTimeout(timer);image.onload=image.onerror=null;};
+    const fail=(error:unknown)=>{if(settled)return;settled=true;clean();image.src='';reject(error);};
+    const timer=setTimeout(()=>fail(new Error('Boss weapon texture timed out')),20_000);
+    image.onload = async () => {try{await image.decode?.();if(settled)return;settled=true;clean();resolve(image);}catch(error){fail(error);} };
+    image.onerror = () => fail(new Error('Boss weapon texture failed'));
     image.src = config.weaponImage;
   });
   textures.set(config.weaponImage, found);

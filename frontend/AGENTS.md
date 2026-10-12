@@ -4,6 +4,8 @@ The user confirmed IMG_5288.jpeg on 12 October 2026 as the original visual refer
 
 Explicit movement correction requested on 12 October after testing: resting normal Testnet enemies should slowly sway back and forth, including restored formations; keep the existing sway amplitude/rhythm, and make normal formation arrivals 10% longer. This narrow authorization supersedes the frozen-motion rule below for these two corrections only. Boss escorts, attack paths, weapons, HUD, markers, sounds and Mainnet retain their prior behavior.
 
+Later private-device feedback on 12 October explicitly authorizes these additional narrow corrections: new floating power-ups only after a ship is shot down; enemy arrivals at 75% of the speed of the previously tested (already 10%-extended) build; Boss escort graphics 25% larger, preserving physics radii. Prepare/decode the original full-quality resources before showing engines/hulls, protect game timers while loading, and optimize redundant work without changing the finished graphics, audio or combat. These latest instructions supersede the earlier fixed-arrival/escort-size rules only within that scope. Public Testnet/Mainnet release still requires separate explicit approval and verified database backup/restore.
+
 - Do not change the appearance or layout of any game page, menu, header, ship, weapon, explosion, background, card or control.
 - Keep the compact original HUD: Home, hearts, Level, Shards above Score in the center, Block, Pause, all in one row. Do not enlarge the occupied game area.
 - Enemy positioning markers remain invisible. Preserve all existing entry, attack, regroup and sector formations.

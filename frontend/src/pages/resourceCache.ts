@@ -36,6 +36,7 @@ export class ResourceCache<T> {
     const entry = this.entries.get(key);
     if (entry) { this.entries.delete(key); this.dispose(entry.value); }
   }
+  retained(key: string) { return this.pins.has(key); }
   trim() {
     let bytes = this.bytes;
     for (const [key, entry] of this.entries) {

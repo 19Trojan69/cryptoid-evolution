@@ -1,3 +1,7 @@
+import { slowerEnemyArrival, bossEscortVisualScale, restoreSlowerArrival } from './enemyArrival';
+import { SceneResourceGate } from './sceneResourceGate';
+import { prepareSceneResources } from './sceneResources';
+import type { ShipResource } from './paintedShip';
 import { combatCryptoid, combatTiming, combatEntryStage, combatAttackPattern, createCombatVariety, readCombatVariety, type CombatVarietyRuntime } from './combatVariety';
 import { advanceBonusRock, spawnBonusRock, hitBonusRock, rockHitsShot, rockInField, nextRockEventMs, MAX_ROCKS, MAX_ROCK_EFFECTS, type BonusRock, type RockEffect } from './bonusRocks';
 import BonusRockLayer from './BonusRockLayer';
@@ -33,7 +37,7 @@ import { recordGameDiagnostic, createGameSessionDiagnostics, createGameFrameDiag
 import GameSceneBoundary from './GameSceneBoundary';
 import { advanceShipMotion, idleShipMotion, engineFlamePercent, explosionDiameter, fragmentFlight, hullIllumination, type ShipMotion } from "./shipRealism";
 import { useLocale } from "../i18n";
-import { memo, useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
 import { entryPatternForSector, entryPosition, entryStartX, type EntryPattern } from "./entryPatterns";
@@ -245,7 +249,7 @@ const spawnAsteroid = (id: number, width: number, visibleTop: number, formationI
   const entryPattern = entryPatternForSector(choreography + flightVariation * 3);
   const startX = entryStartX(entryPattern, formationIndex, width, profile.radius, entrySide, choreography, target.x);
   const entryStartY = visibleTop + profile.radius + ENTRY_HUD_GAP_PX;
-  return { id, x: startX, y: entryStartY, size, ...profile, ...enemyAppearance(sector, formationIndex + offset), entryDuration: combatVarietyEnabled ? Math.round((combatTiming(sector).entryMs + (profile.shipClass === "heavy" ? 600 : 0)) * 1.1) : Math.max(4_100, Math.round(profile.entryDuration * .85)), health: profile.health, maxHealth: profile.health, cloaked: false, rotation: 0, rotationSpeed: 0, entryElapsed: 0, entryStartX: startX, entryStartY, entryTargetX: target.x, entryTargetY: target.y, entrySide, entryPattern, entryStage: choreography, entryIndex: formationIndex, formationSlot: target.index, formationSlotCount: slots.length, formationElapsed: 0, formationDuration: combatVarietyEnabled ? 180 : FORMATION_SETTLE_MS, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, collidedThisAttack: false };
+  return { id, x: startX, y: entryStartY, size, ...profile, ...enemyAppearance(sector, formationIndex + offset), entryDuration: slowerEnemyArrival(combatVarietyEnabled ? Math.round((combatTiming(sector).entryMs + (profile.shipClass === "heavy" ? 600 : 0)) * 1.1) : Math.max(4_100, Math.round(profile.entryDuration * .85))), health: profile.health, maxHealth: profile.health, cloaked: false, rotation: 0, rotationSpeed: 0, entryElapsed: 0, entryStartX: startX, entryStartY, entryTargetX: target.x, entryTargetY: target.y, entrySide, entryPattern, entryStage: choreography, entryIndex: formationIndex, formationSlot: target.index, formationSlotCount: slots.length, formationElapsed: 0, formationDuration: combatVarietyEnabled ? 180 : FORMATION_SETTLE_MS, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, collidedThisAttack: false };
 };
 
 const spawnBossEscort = (id: number, width: number, index: number, level: number, slots: ReturnType<typeof bossEscortSlots>, wave: number): Asteroid => {
@@ -254,7 +258,7 @@ const spawnBossEscort = (id: number, width: number, index: number, level: number
   const enemy = spawnAsteroid(id, width, slot.y - 8, index, level, slots, rosterIndex - index);
   const startX = slot.entrySide === 1 ? 22 : width - 22;
   return { ...enemy, escort: true, size: "small", radius: 18, x: startX, y: slot.y - 8,
-    entryStartX: startX, entryStartY: slot.y - 8, entryStage: 500, entryDuration: 1_850, formationDuration: 300 };
+    entryStartX: startX, entryStartY: slot.y - 8, entryStage: 500, entryDuration: slowerEnemyArrival(1_850), formationDuration: 300 };
 };
 
 const attackTime = (asteroid: Asteroid) => asteroid.attackPattern === null ? 0 : attackDuration(asteroid.attackPattern) * asteroid.attackPace;
@@ -391,6 +395,9 @@ const GamePage = () => {
   const playerDiameterRef = useRef(94);
   const playerShipRef = useRef<HTMLDivElement>(null);
   const [playerDisplayDiameter, setPlayerDisplayDiameter] = useState(94);
+  const [resourcesWaiting, setResourcesWaiting] = useState(true);
+  const resourceGateRef = useRef<SceneResourceGate | null>(null);
+  const resourcesWaitingRef = useRef(true);
   const stateRef = useRef<GameState>(null!);
   if (!stateRef.current) stateRef.current = createInitialState();
   const guestCreditedShardsRef = useRef(0);
@@ -703,6 +710,13 @@ const GamePage = () => {
     // Older checkpoints do not record which already collected types appeared this level.
     // Avoid duplicate grants until the next level resets the history.
     if (saved.state.powerUpTypes === undefined) stateRef.current.powerUpTypes = saved.refs.dropsCreated > 0 ? ['shield', 'overdrive', 'weapon', 'rapid'] : [];
+    stateRef.current.asteroids = stateRef.current.asteroids.map(enemy => {
+      const profile = Array.from({ length: 13 }, (_, index) => chooseCryptoid(saved.stage, index)).find(candidate => candidate.type === enemy.type) ?? chooseCryptoid(saved.stage, enemy.entryIndex ?? 0);
+      const previous = enemy.escort ? 1_850 : combatVarietyEnabled
+        ? Math.round((combatTiming(saved.stage).entryMs + (enemy.shipClass === 'heavy' ? 600 : 0)) * 1.1)
+        : Math.max(4_100, Math.round(profile.entryDuration * .85));
+      return restoreSlowerArrival(enemy, previous, !enemy.escort && combatVarietyEnabled ? combatTiming(saved.stage).entryMs + (enemy.shipClass === 'heavy' ? 600 : 0) : undefined);
+    });
     stateRef.current.sector = saved.stage;
     stateRef.current.section = saved.stage;
     stateRef.current.encounter = saved.encounter;
@@ -861,6 +875,41 @@ const GamePage = () => {
     stateRef.current.status = rewardCardsRef.current.length ? "paused" : "playing";
     setGame({ ...stateRef.current });
   };
+  const ensureSceneResources = () => {
+    const state = stateRef.current;
+    const selected = shipSelectionRef.current;
+    const key = `${state.sector}:${state.encounter.startsWith('boss') ? 'boss' : state.encounter}:${flightRef.current}:${bossEscortWaveRef.current}:${selected.skin.sprite}:${selected.color.id}:${shipStageRef.current}`;
+    return resourceGateRef.current?.ensure(key, () => {
+      const ships: ShipResource[] = [{ sprite: selected.skin.sprite, color: selected.color.id, stage: shipStageRef.current }];
+      const upcoming: typeof ships = [];
+      for (const enemy of state.asteroids) ships.push({ sprite: enemy.sprite, color: enemy.color, stage: 1 });
+      if (state.encounter === 'normal') {
+        const counts = blockFlights(state.sector, rulesVersionRef.current);
+        const offset = counts.slice(0, flightRef.current).reduce((sum, value) => sum + value, 0);
+        // Prepare this and the next finite flight in the existing paint cache.
+        const count = (counts[flightRef.current] ?? 0) + (counts[flightRef.current + 1] ?? 0);
+        for (let index = 0; index < count; index++) (index < (counts[flightRef.current] ?? 0) ? ships : upcoming).push({ ...enemyAppearance(state.sector, offset + index), stage: 1 });
+      } else if (state.encounter === 'bonus') {
+        for (let index = 0; index < BONUS_TARGET_COUNT; index++) ships.push({ ...bonusShowcaseShip(index, state.sector), stage: 1 });
+      } else if (state.boss) {
+        for (let wave = bossEscortWaveRef.current; wave <= bossEscortWaveRef.current + 1; wave++)
+          for (let index = 0; index < Math.max(bossEscortCount(state.sector), reactorEscortCount(state.sector)); index++)
+            (wave === bossEscortWaveRef.current ? ships : upcoming).push({ ...enemyAppearance(state.sector, bossEscortRosterIndex(index, wave)), stage: 1 });
+      }
+      return prepareSceneResources(ships, state.boss?.config, upcoming);
+    }) ?? false;
+  };
+  const ensureSceneResourcesRef = useRef(ensureSceneResources);
+  ensureSceneResourcesRef.current = ensureSceneResources;
+  useEffect(() => {
+    const gate = new SceneResourceGate(waiting => { resourcesWaitingRef.current = waiting; setResourcesWaiting(waiting); }, error => interruptionRef.current('javascript-error', error));
+    resourceGateRef.current = gate;
+    ensureSceneResourcesRef.current();
+    return () => { gate.dispose(); if (resourceGateRef.current === gate) resourceGateRef.current = null; };
+  }, []);
+  // Account restoration and a new wave can commit new ship props before RAF.
+  // Gate that commit before the browser paints engines with an unloaded hull.
+  useLayoutEffect(() => { ensureSceneResourcesRef.current(); }, [game.sector, game.encounter, shipSelection.skin.sprite, shipSelection.color.id, shipStage, flightRef.current, bossEscortWaveRef.current]);
   const initialActivateLoadoutRef = useRef(activateLoadout);
   useEffect(() => { if (stateRef.current.status === "loading") void initialActivateLoadoutRef.current(); }, []);
 
@@ -1119,7 +1168,7 @@ const GamePage = () => {
     if (!field) return;
     const input = bindGameInput(field, {
       pointer: pointerRef, origin: touchOriginRef,
-      playing: () => stateRef.current.status === 'playing',
+      playing: () => stateRef.current.status === 'playing' && !resourcesWaitingRef.current,
       aboveFinger: () => readShipStart() !== 'touch',
       sensitivity: () => sensitivityMultiplier[readControlSensitivity()],
       area: readControlZone,
@@ -1139,7 +1188,7 @@ const GamePage = () => {
   useEffect(() => {
     const controls = new Set(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "KeyA", "KeyD", "KeyW", "KeyS"]);
     const keyDown = (event: KeyboardEvent) => {
-      if (stateRef.current.status !== 'playing' || rewardCardsRef.current.length || !controls.has(event.code) || (event.target as HTMLElement)?.closest("input, textarea, select")) return;
+      if (stateRef.current.status !== 'playing' || resourcesWaitingRef.current || rewardCardsRef.current.length || !controls.has(event.code) || (event.target as HTMLElement)?.closest("input, textarea, select")) return;
       event.preventDefault();
       void startEffectsRef.current();
       keysRef.current.add(event.code);
@@ -1848,6 +1897,11 @@ const GamePage = () => {
       // A pending load/activation may settle after the presentation failed.
       // Keep that late transition from advancing an invisible combat scene.
       if (sceneFailedRef.current && stateRef.current.status === 'playing') interruptionRef.current('render-error');
+      if (stateRef.current.status === 'playing' && !ensureSceneResourcesRef.current()) {
+        const waitingGap = Math.max(0, time - (lastFrameRef.current || time));
+        for (const effect of stateRef.current.effects) effect.startedAt += waitingGap;
+        lastFrameRef.current = time; lastMeasuredFrameRef.current = 0; return;
+      }
       // Preserve the official single-step timing and mobile paint behavior.
       const started = performance.now();
       try { simulate(time); } finally { lastWorkMsRef.current = Math.round((performance.now() - started) * 10) / 10; }
@@ -1925,7 +1979,7 @@ const GamePage = () => {
   };
   const weaponNames = ["", t("Standard"), t("Twin"), t("Rapid"), t("Triple"), t("Plasma")];
   const weaponGlyphs = ["", "I", "II", "III", "IV", "V"];
-  const resumeWeaponSelection = () => { if (sceneFailedRef.current) return; if (saveQueueRef.current?.underPressure) { setSaveNotice('Save not confirmed. Pending data will be retried.'); return; } clearControls(); setTechnicalPause(false); setWeaponMenuOpen(false); setWeaponCountdown(3); };
+  const resumeWeaponSelection = () => { if (sceneFailedRef.current) return; resourceGateRef.current?.retry(); if (saveQueueRef.current?.underPressure) { setSaveNotice('Save not confirmed. Pending data will be retried.'); return; } clearControls(); setTechnicalPause(false); setWeaponMenuOpen(false); setWeaponCountdown(3); };
   const closeHomePrompt = () => {
     setHomePrompt(false);
     if (homePromptWasPlayingRef.current) resumeWeaponSelection();
@@ -2170,7 +2224,7 @@ const GamePage = () => {
     }}>{t("Retry save")}</button>}</p>;
 
   return (
-    <main className="game-shell" data-effects-paused={game.status === "paused" || game.status === "loading"} onPointerDownCapture={event => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
+    <><main className="game-shell" style={{ visibility: resourcesWaiting ? 'hidden' : undefined }} data-effects-paused={resourcesWaiting || game.status === "paused" || game.status === "loading"} onPointerDownCapture={event => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
       {rewardCards[0] && <CardReveal reward={rewardCards[0]} remaining={rewardCards.length} onContinue={continueRewardCard}/>}
       {extraLifeVisible&&<div className={`boss-extra-life${game.bossHeartShards ? " boss-shard-reward" : ""}`} role="status" aria-live="polite"><strong>{t(game.bossHeartShards ? 'FULL HEARTS' : 'HEART RESTORED')}</strong><span>{game.bossHeartShards ? `+${game.bossHeartShards} ◆` : '+1 ♥'}</span></div>}
       <div ref={fieldRef} className="game-field" onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()}>
@@ -2239,7 +2293,7 @@ const GamePage = () => {
           <BossHealthView boss={game.boss}/>
         </div>}
         {game.bonusTargets.map(target => <div key={target.id} className="asteroid asteroid-small cryptoid bonus-ship cryptoid-boost" style={{ ...alignedSpritePosition(target.x, target.y, target.sprite, 55), width: 55, height: 55, transform: "translate(-50%, -50%)", "--flame-length": `${engineFlamePercent(target.visualMotion?.thrust ?? 0)}%` } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={target.sprite} color={target.color} />{engineTrails(target.sprite, "exhaust")}</div></div>)}
-        {game.asteroids.map(asteroid => { const sprite = asteroid.sprite; const maskImage = `url('${shipEvolutionAsset(sprite, 1)}')`; const visualSize = enemyVisualDiameter(asteroid.radius, playerDisplayDiameter, combatVarietyEnabled && asteroid.size === "small"); return <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid${game.empMs > 0 ? " cryptoid-emp" : ""} cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.hitUntil && asteroid.hitUntil > performance.now() ? " cryptoid-hit" : ""}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}${cryptoidMotionClass(asteroid)}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ ...alignedSpritePosition(asteroid.x, asteroid.y, sprite, visualSize), width: visualSize, height: visualSize, transform: "translate(-50%, -50%)", ...shipHullStyle(sprite, true), "--visual-bank": `${asteroid.visualMotion?.bank ?? 0}deg`, "--flame-length": `${engineFlamePercent(asteroid.visualMotion?.thrust ?? 0, asteroid.returnElapsed > 0 ? "return" : asteroid.entryElapsed < asteroid.entryDuration ? "launch" : asteroid.attackPattern !== null && asteroid.attackDelay <= 0 ? "boost" : "idle")}%`, "--hull-light": asteroid.hullLight ?? 0 } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={sprite} color={asteroid.color} />{engineTrails(sprite, "exhaust")}<i className="hull-reflection" style={{ maskImage, WebkitMaskImage: maskImage }} aria-hidden="true" /><HullDamage sites={asteroid.hullFires} hit={asteroid.hit} maskImage={maskImage} mirrored /></div>{enemyMuzzleOffsets(asteroid.muzzleBarrels ?? 1, asteroid.radius).map((offset, barrel) => <i key={`muzzle-${barrel}`} className="enemy-muzzle-flash" style={{ left: `calc(50% + ${offset}px)`, top: `calc(50% + ${asteroid.radius * .4}px)`, opacity: asteroid.muzzleAt ? Math.max(0, 1 - (performance.now() - asteroid.muzzleAt) / 100) : 0 }} aria-hidden="true" />)}<span className="health-bar" data-critical={asteroid.health / asteroid.maxHealth <= .3} role="progressbar" aria-label={t("Enemy hull")} aria-valuenow={Math.ceil(asteroid.health / asteroid.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${asteroid.health / asteroid.maxHealth * 100}%` }} /></span></div>; })}
+        {game.asteroids.map(asteroid => { const sprite = asteroid.sprite; const maskImage = `url('${shipEvolutionAsset(sprite, 1)}')`; const visualSize = enemyVisualDiameter(asteroid.radius, playerDisplayDiameter, combatVarietyEnabled && asteroid.size === "small") * bossEscortVisualScale(asteroid.escort); return <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid${game.empMs > 0 ? " cryptoid-emp" : ""} cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.hitUntil && asteroid.hitUntil > performance.now() ? " cryptoid-hit" : ""}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}${cryptoidMotionClass(asteroid)}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ ...alignedSpritePosition(asteroid.x, asteroid.y, sprite, visualSize), width: visualSize, height: visualSize, transform: "translate(-50%, -50%)", ...shipHullStyle(sprite, true), "--visual-bank": `${asteroid.visualMotion?.bank ?? 0}deg`, "--flame-length": `${engineFlamePercent(asteroid.visualMotion?.thrust ?? 0, asteroid.returnElapsed > 0 ? "return" : asteroid.entryElapsed < asteroid.entryDuration ? "launch" : asteroid.attackPattern !== null && asteroid.attackDelay <= 0 ? "boost" : "idle")}%`, "--hull-light": asteroid.hullLight ?? 0 } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={sprite} color={asteroid.color} />{engineTrails(sprite, "exhaust")}<i className="hull-reflection" style={{ maskImage, WebkitMaskImage: maskImage }} aria-hidden="true" /><HullDamage sites={asteroid.hullFires} hit={asteroid.hit} maskImage={maskImage} mirrored /></div>{enemyMuzzleOffsets(asteroid.muzzleBarrels ?? 1, asteroid.radius).map((offset, barrel) => <i key={`muzzle-${barrel}`} className="enemy-muzzle-flash" style={{ left: `calc(50% + ${offset}px)`, top: `calc(50% + ${asteroid.radius * .4}px)`, opacity: asteroid.muzzleAt ? Math.max(0, 1 - (performance.now() - asteroid.muzzleAt) / 100) : 0 }} aria-hidden="true" />)}<span className="health-bar" data-critical={asteroid.health / asteroid.maxHealth <= .3} role="progressbar" aria-label={t("Enemy hull")} aria-valuenow={Math.ceil(asteroid.health / asteroid.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${asteroid.health / asteroid.maxHealth * 100}%` }} /></span></div>; })}
         {game.powerUps.map(pickup => {
           const pickupLabel = `${t(powerUpNames[pickup.type])} · ${t(powerUpDescriptions[pickup.type])}`;
           return <div key={pickup.id} className={`power-up power-up-${pickup.type}`} role="img" aria-label={pickupLabel} title={pickupLabel} style={{ left: pickup.x, top: pickup.y }}><span aria-hidden="true">{powerUpSymbols[pickup.type]}</span></div>;
@@ -2309,7 +2363,7 @@ const GamePage = () => {
         {game.status === "victory" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><p className="eyebrow">{t("CAMPAIGN COMPLETE")}</p><h1>{t("Victory")}</h1><div className="game-over-details"><p>{t("You completed the final bonus challenge.")}</p><div className="game-over-stats"><span><b>{game.score}</b>{t("Score")}</span><span><b>{game.destroyed}</b>{t("Destroyed")}</span><span><b>{game.sector}</b>{t("Sector")}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSyncStatus}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t("Home")}</button></div></div></div></div>}
         {homePrompt && <div className="game-overlay" role="dialog" aria-modal="true" aria-labelledby="leave-mission-title"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2 id="leave-mission-title">{t('Return to base?')}</h2><p>{accountRun ? t("Your enemies, remaining groups, lives, weapons and earned rewards are saved so you can continue this fight.") : t('Your current mission will end. Your records will be saved locally.')}</p>{accountRun && <p role="status">{t(saveNotice)}</p>}<div className="modal-actions"><button className="button button-primary" type="button" disabled={pauseLeaving || saveRetrying} onClick={() => { if (accountRun) void leaveSavedMission(); else goHome(); }}>{pauseLeaving ? t("Saving game…") : t('Leave game')}</button><button className="button button-secondary" type="button" disabled={pauseLeaving} onClick={closeHomePrompt}>{t('Keep playing')}</button></div></div></div>}
       </div>
-    </main>
+    </main>{resourcesWaiting && <div className="game-overlay" style={{ background: '#071b2b' }}><div className="game-modal" role="status">{t("Preparing mission")}</div></div>}</>
   );
   };
   return <GameSceneBoundary render={renderScene} onError={error => interruptionRef.current('render-error', error)} onRetry={() => { sceneFailedRef.current = false; setSceneRevision(value => value + 1); }} fallback={retry => <div className="game-overlay"><div className="game-modal" role="alert"><h1>{t('MISSION PAUSED')}</h1><p>{t("The mission was paused after a technical interruption. Try Resume to continue.")}</p><button type="button" className="button button-primary" onClick={retry}>{t('Try again')}</button></div></div>} />;
