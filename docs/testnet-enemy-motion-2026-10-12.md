@@ -22,3 +22,9 @@ Normale Testnet-Einflugdauern werden mit 1,1 multipliziert (10 % länger, rund 9
 Rohdaten: stability-performance-2026-10-12/simulation-restored-sway.json und campaign-500-restored-sway.json. Tests sind beschleunigte Node-Simulationen mit UI/Hardware/API-Stubs, keine reale Pi-Browser-/GPU-/Audio-Langzeitmessung. Der ursprüngliche Absturz bleibt nicht reproduziert; keine Garantie der Absturzfreiheit.
 
 Release nur ins bereits autorisierte Testnet, kein Main-Merge oder Mainnet-Release. Die isolierte private Vorschau bleibt als dokumentierter vorheriger Stand 0c4a6e7 erhalten; sie ist nicht der öffentliche Testnet-Link.
+
+## Veröffentlichung bestätigt
+
+Öffentliches Testnet https://cryptoid-evolution-testnet.vercel.app: Commit **1c1c7f9b6c5e8ac7d41b9bf1c4b44036cc196220**, Production-Deployment **dpl_FTwoRZ4GApix1tyJvMPV5XsPnveV**, READY. Aus der erfolgreichen Preview wurde exakt derselbe Commit mit Production-Umgebung neu gebaut. Vercel-Domainauflösung und HTTP/Bundles bestätigen Pendeln unabhängig von entryStage, 1,1-fache normale Einflugdauer und unveränderte Produktions-CSS index-jaywVuOe.css. Rohdaten: stability-performance-2026-10-12/testnet-sway-release-verification.json.
+
+Mainnet bleibt READY bei 907d2a7 / dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe. Kein Main-Merge. Geräteprüfung des tatsächlichen Pendel-Eindrucks weiterhin vom Nutzer/Pi Browser erforderlich.

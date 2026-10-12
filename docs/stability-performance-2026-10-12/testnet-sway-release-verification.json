@@ -1,0 +1,13 @@
+{
+  "http": 200,
+  "entry": "/assets/index-BWDLeoYB.js",
+  "gameBundle": "GamePage-Cl167RWT.js",
+  "stylesheet": "/assets/index-jaywVuOe.css",
+  "arrivalDurationScale110Percent": true,
+  "restingSwayIndependentOfEntryStage": true,
+  "unchangedStylesheet": true,
+  "codeCommit": "1c1c7f9b6c5e8ac7d41b9bf1c4b44036cc196220",
+  "deploymentId": "dpl_FTwoRZ4GApix1tyJvMPV5XsPnveV",
+  "verifiedAt": "2026-10-12T11:27:46.032720+00:00",
+  "physicalPiBrowserTest": false
+}
