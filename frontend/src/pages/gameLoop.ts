@@ -1,4 +1,4 @@
-export type GameInterruption = 'frame-error' | 'loop-stall' | 'input-error';
+export type GameInterruption = 'frame-error' | 'loop-stall' | 'input-error' | 'javascript-error' | 'unhandled-rejection' | 'render-error';
 type LoopOptions = {
   step: (time: number) => void;
   fault: (reason: GameInterruption, error?: unknown) => void;
@@ -40,7 +40,9 @@ export function startGuardedGameLoop(options: LoopOptions) {
     });
   };
   const watcher = options.watch(() => {
-    if (!running || !options.active() || !options.visible() || options.now() - heartbeat <= GAME_STALL_MS) return;
+    if (!running) return;
+    if (!options.active() || !options.visible()) { heartbeat = options.now(); return; }
+    if (options.now() - heartbeat <= GAME_STALL_MS) return;
     signal('loop-stall');
     heartbeat = options.now();
     if (pending !== null) options.cancelFrame(pending);

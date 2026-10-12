@@ -265,7 +265,7 @@ test('enemy shots use their own cached buffer and share the boss voice cap, slid
     assert.equal(sources.length, count);
     audio.setEffectsVolume(35);
     audio.setPaused(true);
-    assert.equal(stopped, 27);
+    assert.equal(stopped, 28); // Pausing also releases the player's active recording.
     assert.equal(audio.playEnemyShot(), false);
     audio.setPaused(false);
     assert.equal(audio.playEnemyShot(), true);
@@ -319,4 +319,19 @@ test('hostile volleys reserve mix headroom including fading voices, while warnin
     audio.setPaused(false); audio.setEffectsVolume(0);
     assert.equal(audio.playBossWeapon('siege', 28), false);
   } finally { audio.close(); globalThis.AudioContext = previous.AudioContext; globalThis.fetch = previous.fetch; }
+});
+
+test('one-off tones disconnect, obey a bounded voice budget and allocate nothing while muted',async()=>{
+ const previous=globalThis.AudioContext;const sources=[];let disconnected=0;
+ globalThis.AudioContext=class{
+  state='running';currentTime=0;destination={};async resume(){}async close(){}
+  createGain(){return {gain:{value:1,setValueAtTime(){},exponentialRampToValueAtTime(){}},connect:out=>out,disconnect(){disconnected++;}};}
+  createOscillator(){const source={frequency:{setValueAtTime(){},exponentialRampToValueAtTime(){}},connect:out=>out,disconnect(){disconnected++;},start(){},stop(){}};sources.push(source);return source;}
+ };
+ const audio=new GameAudio();try{
+  await audio.start();for(let i=0;i<100;i++)audio.play('extraLife');assert.ok(audio.activeVoiceCount<=32);
+  for(const source of sources)source.onended?.();assert.equal(audio.activeVoiceCount,0);assert.equal(disconnected,1400);
+  audio.setEffectsVolume(0);const count=sources.length;audio.play('extraLife');assert.equal(sources.length,count);
+  audio.setEffectsVolume(35);audio.play('extraLife');audio.close();assert.equal(audio.activeVoiceCount,0);
+ }finally{audio.close();globalThis.AudioContext=previous;}
 });

@@ -1,0 +1,11 @@
+/* Preserve all scenery and combat visuals. Tier one stops only decorative
+   recurring background movement before any reduction in scene paint rate. */
+.game-field[data-performance="1"] .shooting-star,
+.game-field[data-performance="2"] .shooting-star,
+.game-field[data-performance="3"] .shooting-star,
+.game-field[data-performance="1"] .formation-data-row span,
+.game-field[data-performance="2"] .formation-data-row span,
+.game-field[data-performance="3"] .formation-data-row span { animation-play-state: paused; }
+.game-field[data-performance="1"] .distant-star-flare,
+.game-field[data-performance="2"] .distant-star-flare,
+.game-field[data-performance="3"] .distant-star-flare { display: none; }

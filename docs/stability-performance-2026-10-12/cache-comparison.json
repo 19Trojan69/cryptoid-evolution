@@ -1,0 +1,22 @@
+[
+  {
+    "root": "baseline-907d2a7",
+    "painted": 240,
+    "sources": 60,
+    "variants": 240,
+    "totalMs": 3148.7000000001863,
+    "maxLongTask": 244,
+    "longTasks": 4
+  },
+  {
+    "root": "optimization-branch",
+    "painted": 48,
+    "estimatedBytes": 18990933,
+    "sources": 8,
+    "pending": 0,
+    "variants": 240,
+    "totalMs": 3235.399999999441,
+    "maxLongTask": 0,
+    "longTasks": 0
+  }
+]

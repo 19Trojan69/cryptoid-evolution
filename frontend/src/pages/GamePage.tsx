@@ -23,7 +23,12 @@ import BlockchainProgress from "./BlockchainProgress";
 import { gameHaptics } from "./gameHaptics";
 import { bindGameInput } from './gameInput';
 import { startGuardedGameLoop, type GameInterruption } from './gameLoop';
-import { recordGameDiagnostic } from './gameDiagnostics';
+import { recordGameDiagnostic, createGameSessionDiagnostics } from './gameDiagnostics';
+import { createPerformanceGovernor, simulationFrameTimes, MAX_GAME_CATCHUP_MS } from './gamePerformance';
+import { activateBossExplosion, bossExplosionReady, bossExplosionBudget } from './bossExplosionBudget';
+import './gamePerformance.css';
+import './bossExplosionBudget.css';
+import GameSceneBoundary from './GameSceneBoundary';
 import { advanceShipMotion, idleShipMotion, engineFlamePercent, explosionDiameter, fragmentFlight, hullIllumination, type ShipMotion } from "./shipRealism";
 import { useLocale } from "../i18n";
 import { memo, useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
@@ -179,6 +184,9 @@ type Effect = {
   velocityX?: number;
   velocityY?: number;
   collision?: boolean;
+  detailLevel?: number;
+  fragments?: number;
+  boundedImpact?: boolean;
 };
 type WeaponSource = "standard" | "paid" | "pickup";
 type GameState = BossRewardState & { damageCount?: number; comboTotal?: number; playerHullFires?: HullFire[]; playerHit?: HullFire; bossHullLight: number; combo: DoubleKillCombo; asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; rewardNotice: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; powerUpTypes: PowerUpType[]; pickupNotice: { id: number; type: PowerUpType; remainingMs: number; level: number } | null; score: number; shardBase: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; purchasedShieldMs: number; shieldActive: boolean; overdriveMs: number; overdriveTotalMs: number; rapidFireMs: number; rapidFireTotalMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponSource: WeaponSource; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; weaponTimers: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
@@ -335,11 +343,11 @@ const shipDebris = (effect: Effect) => {
     "--debris-height": `${effect.bossHeight ?? 100}px`,
     "--debris-rotation": `${(effect.target === "player" ? 0 : 180) + (effect.debrisRotation ?? 0)}deg`,
   } as CSSProperties;
-  if (effect.kind === "boss-explosion") return <div className="ship-debris scattered-debris boss-debris-field" style={style} aria-hidden="true">{scatteredPieces(effect, 16, 0)}</div>;
+  if (effect.kind === "boss-explosion") return <div className="ship-debris scattered-debris boss-debris-field" style={style} aria-hidden="true">{scatteredPieces(effect, effect.fragments ?? 16, 0)}</div>;
   if (sprite === undefined) return null;
   const count = effect.collision || effect.kind === "player-crash" || effect.shipClass === "heavy" || (effect.debrisSize ?? 0) >= 86 ? 8 : 4;
   return <div className={`ship-debris scattered-debris${effect.shipClass ? ` ship-debris-${effect.shipClass}` : ""}`} style={style} aria-hidden="true">
-    {scatteredPieces(effect, count, sprite)}
+    {scatteredPieces(effect, (effect.detailLevel ?? 0) >= 1 ? 4 : count, sprite)}
   </div>;
 };
 
@@ -352,7 +360,7 @@ const fallingBoss = (effect: Effect) => <div className="boss-falling-hull" style
 
 // Effects keep their object identity until they expire. Keep the fragments and
 // their animations mounted instead of rebuilding the entire debris tree on every paint.
-const ImpactEffectView = memo(({ effect }: { effect: Effect }) => effect.kind === "boss-fall" ? fallingBoss(effect) : <div className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y, ...(["explosion", "shatter", "player-explosion"].includes(effect.kind) ? { width: explosionDiameter(effect.debrisSize ?? 58), height: explosionDiameter(effect.debrisSize ?? 58), marginLeft: -explosionDiameter(effect.debrisSize ?? 58) / 2, marginTop: -explosionDiameter(effect.debrisSize ?? 58) / 2 } : {}), ...(effect.kind === "boss-explosion" ? { "--boss-explosion-size": `${effect.debrisSize ?? 240}px`, "--boss-image": `url('${effect.bossImage}')`, "--boss-final-delay": `${effect.finalDelayMs ?? 1_450}ms` } : {}) } as CSSProperties} aria-hidden="true">{effect.kind !== "boss-explosion" && <span />}{shipDebris(effect)}</div>);
+const ImpactEffectView = memo(({ effect }: { effect: Effect }) => !bossExplosionReady(effect) ? null : effect.kind === "boss-fall" ? fallingBoss(effect) : <div className={`impact-effect ${effect.kind}`} data-bounded-impact={effect.boundedImpact} style={{ left: effect.x, top: effect.y, ...(["explosion", "shatter", "player-explosion"].includes(effect.kind) ? { width: explosionDiameter(effect.debrisSize ?? 58), height: explosionDiameter(effect.debrisSize ?? 58), marginLeft: -explosionDiameter(effect.debrisSize ?? 58) / 2, marginTop: -explosionDiameter(effect.debrisSize ?? 58) / 2 } : {}), ...(effect.kind === "boss-explosion" ? { "--boss-explosion-size": `${effect.debrisSize ?? 240}px`, "--boss-image": `url('${effect.bossImage}')`, "--boss-final-delay": `${effect.finalDelayMs ?? 1_450}ms` } : {}) } as CSSProperties} aria-hidden="true">{effect.kind !== "boss-explosion" && <span />}{shipDebris(effect)}</div>);
 
 const GamePage = () => {
   const { t, lives, locale } = useLocale();
@@ -366,7 +374,8 @@ const GamePage = () => {
   const visibleTopRef = useRef(96);
   const playerShipRef = useRef<HTMLDivElement>(null);
   const [playerDisplayDiameter, setPlayerDisplayDiameter] = useState(94);
-  const stateRef = useRef<GameState>(createInitialState());
+  const stateRef = useRef<GameState>(null!);
+  if (!stateRef.current) stateRef.current = createInitialState();
   const guestCreditedShardsRef = useRef(0);
   const nextIdRef = useRef(1);
   const formationIndexRef = useRef(0);
@@ -384,7 +393,12 @@ const GamePage = () => {
   const bossEscortTimerRef = useRef(0);
   const lastFrameRef = useRef(0);
   const lastPaintRef = useRef(0);
-  const slowFramesRef = useRef(0);
+  const performanceRef = useRef<ReturnType<typeof createPerformanceGovernor>>(null!);
+  if (!performanceRef.current) performanceRef.current = createPerformanceGovernor();
+  const renderTimeRef = useRef(0);
+  const lastMeasuredFrameRef = useRef(0);
+  const lastSavedAtRef = useRef(0);
+  const diagnosticsRef = useRef<ReturnType<typeof createGameSessionDiagnostics> | null>(null);
   const backgroundHiddenAtRef = useRef(0);
   const spawnTimerRef = useRef(0);
   const sectionElapsedRef = useRef(0);
@@ -548,6 +562,7 @@ const GamePage = () => {
     }, (_key, value) => typeof value === "number" && !Number.isFinite(value) ? -1e9 : value));
     if (!readCombatCheckpoint(combat)) throw new Error("Invalid local combat checkpoint");
     await queue.enqueue({ path: "/progress/checkpoint", body: { runId, combat, save: snapshotOf(state) } });
+    lastSavedAtRef.current = Date.now();
     setSaveNotice(queue.durable ? "Game saved." : "Game saved. Offline backup unavailable.");
   };
   const saveCombatRef = useRef(saveCombat);
@@ -566,11 +581,48 @@ const GamePage = () => {
       try { soundRef.current?.setPaused(true); musicRef.current?.pause(); } catch { /* Audio cannot prevent the safe pause. */ }
       recordGameDiagnostic({ reason, errorName: error instanceof Error ? error.name : '',
         sector: state.sector, phase: state.phase, encounter: state.encounter, status: state.status,
+        block: sectorInChapter(state.sector), enemies: state.asteroids?.length ?? 0,
+        projectiles: (state.shots?.length ?? 0) + (state.enemyShots?.length ?? 0), effects: state.effects?.length ?? 0,
+        lastSavedAt: lastSavedAtRef.current,
+        frameMs: Math.round(lastMeasuredFrameRef.current),
         width: fieldSizeRef.current.width, height: fieldSizeRef.current.height, browser: navigator.userAgent });
       setGame({ ...state });
       void saveCombatRef.current().catch(() => setSaveNotice('Save not confirmed. Pending data will be retried.'));
     };
   }, [clearControls]);
+  const diagnosticContext = useCallback(() => {
+    const state = stateRef.current;
+    return { reason: 'performance' as const, errorName: '', sector: state.sector, block: sectorInChapter(state.sector),
+      phase: state.phase, encounter: state.encounter, status: state.status, width: fieldSizeRef.current.width,
+      height: fieldSizeRef.current.height, browser: navigator.userAgent, enemies: state.asteroids.length,
+      projectiles: state.shots.length + state.enemyShots.length, effects: state.effects.length, lastSavedAt: lastSavedAtRef.current };
+  }, []);
+  useEffect(() => {
+    const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+    const monitor = createGameSessionDiagnostics(sessionStorage, recordGameDiagnostic, Date.now, navigation?.type);
+    diagnosticsRef.current = monitor;
+    const update = () => monitor.update(diagnosticContext(), stateRef.current.status === 'playing', document.hidden, true);
+    const hidden = () => { monitor.pagehide(); update(); };
+    const shown = () => { monitor.pageshow(); update(); };
+    const onError = (event: ErrorEvent) => {
+      if (event.error && stateRef.current.status === 'playing') interruptionRef.current('javascript-error', event.error);
+    };
+    const onRejection = (event: PromiseRejectionEvent) => {
+      if (stateRef.current.status === 'playing') interruptionRef.current('unhandled-rejection', event.reason);
+    };
+    update();
+    window.addEventListener('error', onError);
+    window.addEventListener('unhandledrejection', onRejection);
+    window.addEventListener('pagehide', hidden);
+    window.addEventListener('pageshow', shown);
+    document.addEventListener('visibilitychange', update);
+    return () => {
+      monitor.finish(); diagnosticsRef.current = null;
+      window.removeEventListener('error', onError); window.removeEventListener('unhandledrejection', onRejection);
+      window.removeEventListener('pagehide', hidden); window.removeEventListener('pageshow', shown);
+      document.removeEventListener('visibilitychange', update);
+    };
+  }, [diagnosticContext]);
   const restoreCombat = (input: CombatCheckpoint) => {
     const saved = readCombatCheckpoint(input);
     if (!saved) throw new Error("Invalid saved combat checkpoint");
@@ -897,7 +949,7 @@ const GamePage = () => {
       if (stateRef.current.comboTotal !== undefined) stateRef.current.comboTotal = stateRef.current.combo.total;
       const body = { runId, ...event, save: snapshotOf(stateRef.current) };
       pendingRewardsRef.current = (saveQueueRef.current ? saveQueueRef.current.enqueue({ path: "/rewards/event", body }) : retrySave(() => axiosClient.post("/rewards/event", body)))
-        .then(() => setSaveNotice(saveQueueRef.current?.durable === false ? "Game saved. Offline backup unavailable." : "Game saved."))
+        .then(() => { lastSavedAtRef.current = Date.now(); setSaveNotice(saveQueueRef.current?.durable === false ? "Game saved. Offline backup unavailable." : "Game saved."); })
         .catch(() => setSaveNotice("Save not confirmed. Retry or use the last confirmed save."));
     }
     return result.notice;
@@ -909,12 +961,12 @@ const GamePage = () => {
     state.bossHeartCollected = false;
     state.bossHeartShards = 0;
     const finalDelayMs = BOSS_FALL_DURATION_MS;
-    const fieldWidth = fieldRef.current?.clientWidth || 800;
-    const fieldHeight = fieldRef.current?.clientHeight || 700;
+    const { width: fieldWidth, height: fieldHeight } = fieldSizeRef.current;
+    const impactBudget = bossExplosionBudget(boss.width, boss.height, bossExplosionSize(boss.config, boss.width), fieldWidth, fieldHeight, window.devicePixelRatio, performanceRef.current.level > 0);
     const finalY = bossFallTargetY(boss, fieldHeight);
-    const fireSites = Array.from({ length: 8 }, (_, index) => boss.config.fireSites[Math.floor(index * boss.config.fireSites.length / 8)]);
+    const fireSites = Array.from({ length: impactBudget.fireSites }, (_, index) => boss.config.fireSites[Math.floor(index * boss.config.fireSites.length / impactBudget.fireSites)]);
     state.effects.push({ id: nextIdRef.current++, x: boss.x, y: boss.y, kind: "boss-fall", startedAt: time, bossShipWidth: boss.width, bossHeight: boss.height, bossImage: boss.config.image, bossModel:{...boss,turrets:boss.turrets.map(g=>({...g,firedBarrels:[...g.firedBarrels]}))}, fallDistance: finalY - boss.y, fireSites });
-    state.effects.push({ id: nextIdRef.current++, x: boss.x, y: finalY, kind: "boss-explosion", startedAt: time, debrisSize: bossExplosionSize(boss.config, boss.width), bossShipWidth: boss.width, bossHeight: boss.height, bossImage: boss.config.wreckImage, finalDelayMs, fieldWidth, fieldHeight, shipClass: "heavy" });
+    state.effects.push({ id: nextIdRef.current++, x: boss.x, y: finalY, kind: "boss-explosion", startedAt: time, debrisSize: impactBudget.diameter, fragments: impactBudget.fragments, boundedImpact: impactBudget.bounded, bossShipWidth: boss.width, bossHeight: boss.height, bossImage: boss.config.wreckImage, finalDelayMs, fieldWidth, fieldHeight, shipClass: "heavy" });
     soundRef.current?.play("explosion");
     gameHaptics.explosion();
     gameHaptics.boss([25, 420, 30, 420, 35, 420, 40, 420, 45, 420, 50]);
@@ -1053,7 +1105,7 @@ const GamePage = () => {
       }
       backgroundHiddenAtRef.current = 0;
       lastFrameRef.current = 0;
-      slowFramesRef.current = 0;
+      performanceRef.current.reset();
     };
     const markPageHidden = () => {
       if (stateRef.current.status === "playing") void saveCombatRef.current().catch(() => {});
@@ -1079,10 +1131,10 @@ const GamePage = () => {
   }, [clearControls]);
 
   useEffect(() => {
-    const step = (time: number) => {
+    const simulate = (time: number) => {
       const state = stateRef.current;
       const frameGap = time - (lastFrameRef.current || time);
-      const delta = Math.min(34, frameGap);
+      const delta = Math.max(0, frameGap);
       lastFrameRef.current = time;
       // Preserve destruction effects through a user pause or a backgrounded tab.
       if (state.status !== "playing") {
@@ -1103,7 +1155,8 @@ const GamePage = () => {
         sectionSlotsRef.current = slots;
         const bonus = state.encounter === "bonus";
         const normal = state.encounter === "normal";
-        const readyCount = state.asteroids.filter(asteroid => asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration).length;
+        let readyCount = 0;
+        for (const asteroid of state.asteroids) if (asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration) readyCount++;
         const formationIsReady = normal && formationReady({ spawned: formationIndexRef.current, total: slots.length, alive: state.asteroids.length, ready: readyCount });
         if (formationIsReady) formationStartedRef.current = true;
         const transitionPaused = state.phase === "SECTOR_INTRO" || state.phase === "SECTOR_CLEAR" || state.encounter === "boss-intro" || state.encounter === "boss-clear" || (normal && !formationStartedRef.current);
@@ -1113,7 +1166,7 @@ const GamePage = () => {
         if (horizontal || vertical) {
           state.player = movePlayer(state.player, horizontal, vertical, delta, width, height);
           // Keep the ship at display cadence without re-rendering every projectile on mobile.
-          if (playerShipRef.current) {
+          if (time === renderTimeRef.current && playerShipRef.current) {
             playerShipRef.current.style.left = `${state.player.x * 100}%`;
             playerShipRef.current.style.top = `${state.player.y * 100}%`;
           }
@@ -1121,11 +1174,14 @@ const GamePage = () => {
         const previousPlayer = lastPlayerRef.current ?? state.player;
         playerMotionRef.current = advanceShipMotion(playerMotionRef.current, (state.player.x - previousPlayer.x) * width, (state.player.y - previousPlayer.y) * height, delta);
         state.thrust = playerMotionRef.current.thrust;
-        playerShipRef.current?.style.setProperty("--flame-length", `${engineFlamePercent(state.thrust)}%`);
-        playerShipRef.current?.style.setProperty("--visual-bank", `${playerMotionRef.current.bank}deg`);
-        // Muzzle light belongs at the gun, not across the entire ship skin.
-        playerShipRef.current?.style.setProperty("--hull-light", String(hullIllumination(state.player.x * width, state.player.y * height, time, 0, state.effects)));
-        playerShipRef.current?.style.setProperty("--muzzle-light", String(playerMuzzleRef.current > 0 ? Math.max(0, 1 - (time - playerMuzzleRef.current) / 95) * .75 : 0));
+        // Physics substeps must not issue intermediate DOM writes or light scans.
+        if (time === renderTimeRef.current) {
+          playerShipRef.current?.style.setProperty("--flame-length", `${engineFlamePercent(state.thrust)}%`);
+          playerShipRef.current?.style.setProperty("--visual-bank", `${playerMotionRef.current.bank}deg`);
+          // Muzzle light belongs at the gun, not across the entire ship skin.
+          playerShipRef.current?.style.setProperty("--hull-light", String(hullIllumination(state.player.x * width, state.player.y * height, time, 0, state.effects)));
+          playerShipRef.current?.style.setProperty("--muzzle-light", String(playerMuzzleRef.current > 0 ? Math.max(0, 1 - (time - playerMuzzleRef.current) / 95) * .75 : 0));
+        }
         lastPlayerRef.current = state.player;
         if (!transitionPaused) elapsedRef.current += delta;
         impactCooldownRef.current = Math.max(0, impactCooldownRef.current - delta);
@@ -1626,13 +1682,13 @@ const GamePage = () => {
             if (checkpointScoreRef.current === score) checkpointScoreRef.current = 0;
           });
         }
-        if (time - combatCheckpointAtRef.current >= 10_000 && state.hearts > 0 && state.phase !== "SECTOR_CLEAR") {
+        if (scoreRunRef.current && time - combatCheckpointAtRef.current >= 10_000 && state.hearts > 0 && state.phase !== "SECTOR_CLEAR") {
           combatCheckpointAtRef.current = time;
           void saveCombatRef.current().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
         }
         if (state.phase === "SECTOR_CLEAR") { state.enemyShots = []; state.shots = []; }
         persistGuestShards();
-        state.effects = state.effects.filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "turret-hit" ? 340 : effect.kind === "turret-burst" ? 720 : effect.kind === "boss-fall" ? BOSS_FALL_DURATION_MS + 100 : effect.kind === "boss-explosion" ? BOSS_FALL_DURATION_MS + 3_400 : effect.kind === "player-explosion" ? 2_250 : effect.kind === "player-crash" ? 1_350 : effect.kind === "explosion" || effect.kind === "shatter" ? 2_250 : 390));
+        state.effects = state.effects.map(effect => activateBossExplosion(effect, time)).filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "turret-hit" ? 340 : effect.kind === "turret-burst" ? 720 : effect.kind === "boss-fall" ? BOSS_FALL_DURATION_MS + 100 : effect.kind === "boss-explosion" ? (effect.finalDelayMs ?? 0) + 3_400 : effect.kind === "player-explosion" ? 2_250 : effect.kind === "player-crash" ? 1_350 : effect.kind === "explosion" || effect.kind === "shatter" ? 2_250 : 390)).map(effect => effect.detailLevel === undefined ? { ...effect, detailLevel: performanceRef.current.level } : effect);
         if (state.hearts === 0) {
           state.status = "destroying";
           state.enemyShots = [];
@@ -1649,18 +1705,30 @@ const GamePage = () => {
             setGame({ ...stateRef.current, effects: [...stateRef.current.effects] });
           }, GAME_OVER_REVEAL_MS);
         }
-        // Desktop/tablet motion stays at display cadence; compact phones limit paints.
-        // When a compact phone is falling behind, reduce React scene paints
-        // while keeping simulation and direct ship movement at RAF cadence.
-        slowFramesRef.current = width > 700 ? 0 : frameGap > 48
-          ? Math.min(12, slowFramesRef.current + 2)
-          : Math.max(0, slowFramesRef.current - 1);
-        const paintInterval = width > 700 ? 16 : slowFramesRef.current >= 6 ? 50 : 32;
-        if (damageTaken || time - lastPaintRef.current >= paintInterval || state.phase !== previousPhase || state.status !== "playing") {
+        const paintInterval = performanceRef.current.paintInterval;
+        if (damageTaken || (time === renderTimeRef.current && time - lastPaintRef.current + .75 >= paintInterval) || state.phase !== previousPhase || state.status !== "playing") {
           lastPaintRef.current = time;
           setGame({ ...state, boss: state.boss ? { ...state.boss } : null, asteroids: [...state.asteroids], bonusTargets: [...state.bonusTargets], shots: [...state.shots], enemyShots: [...state.enemyShots], effects: [...state.effects], powerUps: [...state.powerUps] });
         }
       }
+    };
+    const step = (time: number) => {
+      const begin = performance.now();
+      const gap = lastFrameRef.current ? Math.max(0, time - lastFrameRef.current) : 0;
+      lastMeasuredFrameRef.current = gap;
+      renderTimeRef.current = time;
+      if (stateRef.current.status !== 'playing') { performanceRef.current.reset(time); simulate(time); return; }
+      if (document.hidden) return;
+      if (gap > MAX_GAME_CATCHUP_MS) { interruptionRef.current('loop-stall'); return; }
+      for (const frameTime of simulationFrameTimes(lastFrameRef.current, time)) simulate(frameTime);
+      const previousLevel = performanceRef.current.level;
+      const sample = performanceRef.current.observe(time, gap, performance.now() - begin);
+      if (sample && previousLevel !== sample.level) {
+        if (fieldRef.current) fieldRef.current.dataset.performance = String(sample.level);
+        recordGameDiagnostic({ ...diagnosticContext(), frameMs: Math.round(sample.meanFrameMs * 10) / 10,
+          workMs: Math.round(sample.meanWorkMs * 10) / 10, performanceLevel: sample.level });
+      }
+      if (diagnosticsRef.current?.due()) diagnosticsRef.current.update(diagnosticContext(), stateRef.current.status === 'playing', false);
     };
     const stop = startGuardedGameLoop({ step,
       fault: (reason, error) => interruptionRef.current(reason, error),
@@ -1677,7 +1745,7 @@ const GamePage = () => {
       if (gameOverTimerRef.current !== null) window.clearTimeout(gameOverTimerRef.current);
       gameOverTimerRef.current = null;
     };
-  }, [showRewardCards]);
+  }, [showRewardCards, diagnosticContext]);
 
   const activateStartPower = () => {
     const state = stateRef.current;
@@ -1876,7 +1944,7 @@ const GamePage = () => {
     bossMuzzleRef.current = 0;
     lastFrameRef.current = 0;
     lastPaintRef.current = 0;
-    slowFramesRef.current = 0;
+    performanceRef.current.reset();
     setGame(stateRef.current);
     if (stateRef.current.status === "loading") void activateLoadout();
   };
@@ -1974,6 +2042,7 @@ const GamePage = () => {
       {rewardCards[0] && <CardReveal reward={rewardCards[0]} remaining={rewardCards.length} onContinue={continueRewardCard}/>}
       {extraLifeVisible&&<div className="boss-extra-life" role="status" aria-live="polite"><strong>{t(game.bossHeartShards ? 'FULL HEARTS' : 'HEART RESTORED')}</strong><span>{game.bossHeartShards ? `+${game.bossHeartShards} ◆` : '+1 ♥'}</span></div>}
       <div ref={fieldRef} className="game-field" onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()}>
+        <GameSceneBoundary onError={error => interruptionRef.current('render-error', error)} fallback={retry => <div className="game-overlay"><div className="game-modal" role="alert"><h1>{t('MISSION PAUSED')}</h1><p>{t("The mission was paused after a technical interruption. Try Resume to continue.")}</p><button type="button" className="button button-primary" onClick={retry}>{t('Try again')}</button></div></div>}>
         <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} showNebula={game.encounter === "boss-fight"} />
         <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
         <button className="wide-fullscreen-control game-fullscreen-control" type="button" onClick={requestGameFullscreen} aria-label={t("Full screen")} title={t("Full screen")}>⛶</button>
@@ -2106,6 +2175,7 @@ const GamePage = () => {
         {game.status === "game-over" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><h1>{t("Game Over")}</h1><div className="game-over-details"><p className="eyebrow">{t("MISSION FAILED")}</p><p className="game-over-hearts">{t('Hearts')}: {game.hearts}</p><div className="game-over-stats"><span><b>{game.score}</b>{t('Score')}</span><span><b>{game.destroyed}</b>{t('Destroyed')}</span><span><b>{game.sector}</b>{t('Sector')}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSyncStatus}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t('Home')}</button></div></div></div></div>}
         {game.status === "victory" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><p className="eyebrow">{t("CAMPAIGN COMPLETE")}</p><h1>{t("Victory")}</h1><div className="game-over-details"><p>{t("You completed the final bonus challenge.")}</p><div className="game-over-stats"><span><b>{game.score}</b>{t("Score")}</span><span><b>{game.destroyed}</b>{t("Destroyed")}</span><span><b>{game.sector}</b>{t("Sector")}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSyncStatus}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t("Home")}</button></div></div></div></div>}
         {homePrompt && <div className="game-overlay" role="dialog" aria-modal="true" aria-labelledby="leave-mission-title"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2 id="leave-mission-title">{t('Return to base?')}</h2><p>{accountRun ? t("Your enemies, remaining groups, lives, weapons and earned rewards are saved so you can continue this fight.") : t('Your current mission will end. Your records will be saved locally.')}</p>{accountRun && <p role="status">{t(saveNotice)}</p>}<div className="modal-actions"><button className="button button-primary" type="button" disabled={pauseLeaving || saveRetrying} onClick={() => { if (accountRun) void leaveSavedMission(); else goHome(); }}>{pauseLeaving ? t("Saving game…") : t('Leave game')}</button><button className="button button-secondary" type="button" disabled={pauseLeaving} onClick={closeHomePrompt}>{t('Keep playing')}</button></div></div></div>}
+        </GameSceneBoundary>
       </div>
     </main>
   );

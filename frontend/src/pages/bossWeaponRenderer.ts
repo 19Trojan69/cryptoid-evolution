@@ -4,6 +4,15 @@ import { turretHeatStep, paintTurretHeat } from './bossTurretHeat.ts';
 
 type CanvasFactory = (width:number,height:number)=>HTMLCanvasElement;
 const bases=new WeakMap<HTMLCanvasElement,{id:number;width:number;height:number;layer:HTMLCanvasElement;heated:Map<string,HTMLCanvasElement>}>();
+export const disposeBossWeapons = (canvas: HTMLCanvasElement) => {
+ const cached = bases.get(canvas);
+ if (cached) {
+  cached.layer.width = cached.layer.height = 0;
+  for (const tile of cached.heated.values()) tile.width = tile.height = 0;
+  cached.heated.clear(); bases.delete(canvas);
+ }
+ canvas.width = canvas.height = 0;
+};
 const factory:CanvasFactory=(w,h)=>{const c=document.createElement('canvas');c.width=w;c.height=h;return c;};
 export const weaponCanvasSize=(boss:SectorBoss)=>({width:boss.width*1.44,height:boss.height*2.4,padX:boss.width*.22,padY:boss.height*.7});
 const tile=(c:CanvasRenderingContext2D,image:CanvasImageSource,r:AtlasRect,x:number,y:number,scale:number)=>c.drawImage(image,r.x,r.y,r.width,r.height,x,y,r.width*scale/2,r.height*scale/2);
@@ -14,6 +23,10 @@ export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:Can
  const guns=bossWeapons[boss.config.id-1];
  let cached=bases.get(canvas);
  if(!cached||cached.id!==boss.config.id||cached.width!==canvas.width||cached.height!==canvas.height){
+  if (cached) {
+   cached.layer.width = cached.layer.height = 0;
+   for (const hot of cached.heated.values()) hot.width = hot.height = 0;
+  }
   const layer=make(canvas.width,canvas.height),base=layer.getContext('2d');if(!base)return;
   base.setTransform(sx,0,0,sy,0,0);
   for(const g of guns){const x=size.padX+g.sourceX/boss.config.sourceWidth*boss.width,y=size.padY+g.sourceY/boss.config.sourceHeight*boss.height;tile(base,image,g.socket,x-g.socket.width*scale/4,y-g.socket.height*scale/4,scale);}
@@ -23,6 +36,7 @@ export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:Can
  for(let i=0;i<guns.length;i++){
   const g=guns[i],state=boss.turrets[i],x=size.padX+g.sourceX/boss.config.sourceWidth*boss.width,y=size.padY+g.sourceY/boss.config.sourceHeight*boss.height;
   if(state.health<=0){
+   for (const [key, hot] of cached.heated) if (key.startsWith(`${i}:`)) { hot.width = hot.height = 0; cached.heated.delete(key); }
    const radius=Math.max(3,g.radius*scale);c.fillStyle='#151c24';c.beginPath();c.ellipse(x,y,radius,radius*.65,0,0,Math.PI*2);c.fill();
    c.strokeStyle='#bf7446';c.lineWidth=Math.max(1,scale*2);c.beginPath();c.moveTo(x-radius*.6,y-radius*.35);c.lineTo(x+radius*.5,y+radius*.25);c.stroke();continue;
   }
@@ -34,6 +48,9 @@ export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:Can
   if(heat){
    const key=`${i}:${heat}`;let hot=cached.heated.get(key);
    if(!hot){
+    // Only the current heat tile for a gun is useful. Past damage stages
+    // otherwise retain large canvas surfaces until the entire boss unmounts.
+    for (const [previous, tile] of cached.heated) if (previous.startsWith(`${i}:`)) { tile.width = tile.height = 0; cached.heated.delete(previous); }
     hot=make(g.sprite.width,g.sprite.height);const hc=hot.getContext('2d');
     if(hc){hc.drawImage(image,g.sprite.x,g.sprite.y,g.sprite.width,g.sprite.height,0,0,g.sprite.width,g.sprite.height);paintTurretHeat(hc,g.sprite.width,g.sprite.height,heat);cached.heated.set(key,hot);}
    }

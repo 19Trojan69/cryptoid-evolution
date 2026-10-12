@@ -1,0 +1,371 @@
+{
+  "results": [
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "normal": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13
+      ],
+      "bosses": [
+        {
+          "sector": 10,
+          "fragments": 16
+        }
+      ],
+      "snapshots": [
+        {
+          "sector": 2,
+          "encounter": "normal",
+          "phase": "SECTOR_INTRO",
+          "status": "playing",
+          "hearts": 3,
+          "score": 50,
+          "shards": 0,
+          "enemies": 0,
+          "shots": 0,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "paintTier": 0,
+          "heapBytes": 15081472,
+          "dom": 428,
+          "paint": {
+            "painted": 7,
+            "estimatedBytes": 2584436,
+            "sources": 6,
+            "pending": 0
+          }
+        },
+        {
+          "sector": 3,
+          "encounter": "normal",
+          "phase": "SECTOR_INTRO",
+          "status": "playing",
+          "hearts": 3,
+          "score": 100,
+          "shards": 0,
+          "enemies": 0,
+          "shots": 0,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "paintTier": 0,
+          "heapBytes": 15717832,
+          "dom": 429,
+          "paint": {
+            "painted": 13,
+            "estimatedBytes": 4823982,
+            "sources": 8,
+            "pending": 0
+          }
+        },
+        {
+          "sector": 4,
+          "encounter": "normal",
+          "phase": "SECTOR_INTRO",
+          "status": "playing",
+          "hearts": 3,
+          "score": 150,
+          "shards": 0,
+          "enemies": 0,
+          "shots": 0,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "paintTier": 0,
+          "heapBytes": 15857144,
+          "dom": 428,
+          "paint": {
+            "painted": 19,
+            "estimatedBytes": 7080481,
+            "sources": 8,
+            "pending": 0
+          }
+        },
+        {
+          "sector": 5,
+          "encounter": "normal",
+          "phase": "SECTOR_INTRO",
+          "status": "playing",
+          "hearts": 3,
+          "score": 200,
+          "shards": 0,
+          "enemies": 0,
+          "shots": 0,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "paintTier": 0,
+          "heapBytes": 16575188,
+          "dom": 429,
+          "paint": {
+            "painted": 25,
+            "estimatedBytes": 9285072,
+            "sources": 8,
+            "pending": 0
+          }
+        },
+        {
+          "sector": 6,
+          "encounter": "normal",
+          "phase": "SECTOR_INTRO",
+          "status": "playing",
+          "hearts": 3,
+          "score": 250,
+          "shards": 0,
+          "enemies": 0,
+          "shots": 0,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "paintTier": 0,
+          "heapBytes": 16381696,
+          "dom": 428,
+          "paint": {
+            "painted": 31,
+            "estimatedBytes": 11500206,
+            "sources": 8,
+            "pending": 0
+          }
+        },
+        {
+          "sector": 7,
+          "encounter": "normal",
+          "phase": "SECTOR_INTRO",
+          "status": "playing",
+          "hearts": 3,
+          "score": 300,
+          "shards": 0,
+          "enemies": 0,
+          "shots": 0,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "paintTier": 0,
+          "heapBytes": 15815652,
+          "dom": 429,
+          "paint": {
+            "painted": 36,
+            "estimatedBytes": 13386260,
+            "sources": 8,
+            "pending": 1
+          }
+        },
+        {
+          "sector": 8,
+          "encounter": "normal",
+          "phase": "SECTOR_INTRO",
+          "status": "playing",
+          "hearts": 3,
+          "score": 350,
+          "shards": 0,
+          "enemies": 0,
+          "shots": 0,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "paintTier": 0,
+          "heapBytes": 15913796,
+          "dom": 428,
+          "paint": {
+            "painted": 43,
+            "estimatedBytes": 15987820,
+            "sources": 8,
+            "pending": 0
+          }
+        },
+        {
+          "sector": 9,
+          "encounter": "normal",
+          "phase": "SECTOR_INTRO",
+          "status": "playing",
+          "hearts": 3,
+          "score": 400,
+          "shards": 0,
+          "enemies": 0,
+          "shots": 0,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "paintTier": 0,
+          "heapBytes": 16216336,
+          "dom": 428,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17835727,
+            "sources": 8,
+            "pending": 0
+          }
+        },
+        {
+          "sector": 10,
+          "encounter": "boss-intro",
+          "phase": "SECTOR_INTRO",
+          "status": "playing",
+          "hearts": 3,
+          "score": 500,
+          "shards": 12,
+          "enemies": 0,
+          "shots": 0,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "paintTier": 0,
+          "heapBytes": 16371184,
+          "dom": 412,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17866177,
+            "sources": 8,
+            "pending": 0
+          }
+        },
+        {
+          "sector": 10,
+          "encounter": "bonus",
+          "phase": "SECTOR_INTRO",
+          "status": "playing",
+          "hearts": 3,
+          "score": 2623,
+          "shards": 33,
+          "enemies": 0,
+          "shots": 0,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "paintTier": 0,
+          "heapBytes": 16177768,
+          "dom": 413,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17866177,
+            "sources": 8,
+            "pending": 0
+          }
+        },
+        {
+          "sector": 11,
+          "encounter": "normal",
+          "phase": "SECTOR_INTRO",
+          "status": "playing",
+          "hearts": 3,
+          "score": 2773,
+          "shards": 37,
+          "enemies": 0,
+          "shots": 0,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "paintTier": 0,
+          "heapBytes": 16639452,
+          "dom": 429,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17844360,
+            "sources": 8,
+            "pending": 0
+          }
+        },
+        {
+          "sector": 12,
+          "encounter": "normal",
+          "phase": "SECTOR_INTRO",
+          "status": "playing",
+          "hearts": 3,
+          "score": 2823,
+          "shards": 37,
+          "enemies": 0,
+          "shots": 0,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "paintTier": 0,
+          "heapBytes": 16273172,
+          "dom": 428,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17847533,
+            "sources": 8,
+            "pending": 0
+          }
+        },
+        {
+          "sector": 13,
+          "encounter": "normal",
+          "phase": "SECTOR_INTRO",
+          "status": "playing",
+          "hearts": 3,
+          "score": 2873,
+          "shards": 37,
+          "enemies": 0,
+          "shots": 0,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "paintTier": 0,
+          "heapBytes": 16117648,
+          "dom": 428,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17870812,
+            "sources": 8,
+            "pending": 0
+          }
+        },
+        {
+          "sector": 14,
+          "encounter": "normal",
+          "phase": "SECTOR_INTRO",
+          "status": "playing",
+          "hearts": 3,
+          "score": 2923,
+          "shards": 37,
+          "enemies": 0,
+          "shots": 0,
+          "hostile": 0,
+          "effects": 0,
+          "paid": 0,
+          "rapid": 0,
+          "paintTier": 0,
+          "heapBytes": 16373964,
+          "dom": 428,
+          "paint": {
+            "painted": 48,
+            "estimatedBytes": 17868524,
+            "sources": 8,
+            "pending": 0
+          }
+        }
+      ],
+      "faultPreservesRun": true
+    }
+  ],
+  "errors": [],
+  "mode": "accelerated actual loop; forced group cleanup, real transitions and effects; no FPS inference"
+}

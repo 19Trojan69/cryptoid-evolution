@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import vm from 'node:vm';
+import { appendPendingSave } from './saveOutbox.ts';
 const require = createRequire(import.meta.url);
 const ts = require('typescript');
 const source = readFileSync(new URL('./accountSave.ts', import.meta.url), 'utf8');
@@ -29,6 +30,7 @@ function fixture(entries, limit, rejectedRun) {
     if (id === './axiosClient') return {axiosClient};
     if (id === '../pages/shipFleet') return {shipSaveNetwork:'testnet'};
     if (id === '../../../backend/src/lifeRules') return rules;
+    if (id === './saveOutbox') return { appendPendingSave };
     throw Error(`Unexpected dependency: ${id}`);
   }, {localStorage});
   return {queue:exports.createSaveQueue('pilot-a'),stored,writes,sent,key};

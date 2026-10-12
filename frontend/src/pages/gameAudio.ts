@@ -41,6 +41,7 @@ const sampleGains: Record<SampleName, number> = {
 };
 
 type WeaponVoice = { source: AudioBufferSourceNode; gain: GainNode; pan: StereoPannerNode | null; volume: number };
+type EffectVoice = { source: AudioBufferSourceNode | OscillatorNode; gain: GainNode };
 
 // Game effects only; audio starts after a player gesture on browsers that require one.
 export class GameAudio {
@@ -59,6 +60,8 @@ export class GameAudio {
   private bossVoices: WeaponVoice[] = [];
   private lastShotAt = 0;
   private destroyCount = 0;
+  private effectVoices = new Set<EffectVoice>();
+  private loadController: AbortController | null = null;
 
   get running() { return this.context?.state === "running"; }
 
@@ -82,7 +85,10 @@ export class GameAudio {
     }
     const context = this.context;
     // Start decoding immediately, even if iOS delays resume() until a gesture.
-    if (!this.sampleRequest && typeof context.decodeAudioData === "function") this.sampleRequest = this.loadSamples(context);
+    if (!this.sampleRequest && typeof context.decodeAudioData === "function") {
+      this.loadController = new AbortController();
+      this.sampleRequest = this.loadSamples(context, this.loadController.signal);
+    }
     try { const resumed=context.resume();this.prepareBossSounds(context);this.prepareEnemySound(context);await resumed; } catch { return false; }
     if (this.context !== context) return false;
     return context.state === "running";
@@ -139,12 +145,13 @@ export class GameAudio {
   }
 
   private releaseWeaponVoice(voice: WeaponVoice) {
+    voice.source.onended = null;
     this.weaponMixVoices.delete(voice);
     const index = this.bossVoices.indexOf(voice);
     if (index >= 0) this.bossVoices.splice(index, 1);
-    voice.source.disconnect();
-    voice.gain.disconnect();
-    voice.pan?.disconnect();
+    voice.source.disconnect?.();
+    voice.gain.disconnect?.();
+    voice.pan?.disconnect?.();
     this.updateWeaponMix();
   }
 
@@ -184,7 +191,7 @@ export class GameAudio {
     }
   }
 
-  private async loadSamples(context: AudioContext) {
+  private async loadSamples(context: AudioContext, signal: AbortSignal) {
     // Decode only a few samples at once. Mobile WebKit and Chromium can stall
     // the game when every compressed effect is fetched and decoded together.
     let next = 0;
@@ -192,7 +199,7 @@ export class GameAudio {
       while (next < sampleNames.length && this.context === context) {
         const name = sampleNames[next++];
         try {
-          const response = await fetch(`/audio/${name}.mp3`);
+          const response = await fetch(`/audio/${name}.mp3`, { signal });
           if (!response.ok) continue;
           const sound = await context.decodeAudioData(await response.arrayBuffer());
           if (this.context === context) this.samples.set(name, sound);
@@ -201,24 +208,42 @@ export class GameAudio {
     }));
   }
 
+  private releaseEffectVoice(voice: EffectVoice) {
+    this.effectVoices.delete(voice); voice.source.onended = null;
+    voice.source.disconnect?.(); voice.gain.disconnect?.();
+  }
+
+  private trackEffect(source: EffectVoice['source'], gain: GainNode) {
+    // Limit only overlapping repeated effects; warnings and pickups remain
+    // audible as newer voices replace the oldest voice in an extreme burst.
+    if (this.effectVoices.size >= 32) {
+      const oldest = this.effectVoices.values().next().value!;
+      try { oldest.source.stop(); } catch { /* Already ended. */ }
+      this.releaseEffectVoice(oldest);
+    }
+    const voice = { source, gain }; this.effectVoices.add(voice);
+    source.onended = () => this.releaseEffectVoice(voice);
+    return voice;
+  }
+
   private sample(name: SampleName, rate = 1) {
     const context = this.context;
     const buffer = this.samples.get(name);
-    if (!context || context.state !== "running" || this.paused || !buffer || !this.effectsBus || typeof context.createBufferSource !== "function") return false;
+    if (!context || context.state !== "running" || this.paused || this.effectsVolume === 0 || !buffer || !this.effectsBus || typeof context.createBufferSource !== "function") return false;
     const source = context.createBufferSource();
     const gain = context.createGain();
     source.buffer = buffer;
     source.playbackRate.value = rate;
     gain.gain.value = sampleGains[name];
     source.connect(gain).connect(this.effectsBus);
-    source.start();
-    source.onended = () => { source.disconnect(); gain.disconnect(); };
+    const voice = this.trackEffect(source, gain);
+    try { source.start(); } catch { this.releaseEffectVoice(voice); return false; }
     return true;
   }
 
   private tone(frequency: number, end: number, duration: number, gain: number, type: OscillatorType = "sine", delay = 0) {
     const context = this.context;
-    if (!context || context.state !== "running" || this.paused) return;
+    if (!context || context.state !== "running" || this.paused || this.effectsVolume === 0) return;
     const at = context.currentTime + delay;
     const oscillator = context.createOscillator();
     const envelope = context.createGain();
@@ -229,8 +254,9 @@ export class GameAudio {
     envelope.gain.exponentialRampToValueAtTime(Math.min(.5, gain * 3), at + .008);
     envelope.gain.exponentialRampToValueAtTime(.0001, at + duration);
     oscillator.connect(envelope).connect(this.effectsBus!);
-    oscillator.start(at);
-    oscillator.stop(at + duration + .01);
+    const voice = this.trackEffect(oscillator, envelope);
+    try { oscillator.start(at); oscillator.stop(at + duration + .01); }
+    catch { this.releaseEffectVoice(voice); }
   }
 
   playPickup(type: PowerUpType) {
@@ -287,12 +313,24 @@ export class GameAudio {
 
   setPaused(paused: boolean) {
     this.paused = paused;
-    if(paused)this.stopBossWeapons();
+    if(paused) {
+      this.stopBossWeapons();
+      for (const voice of [...this.effectVoices]) {
+        try { voice.source.stop(); } catch { /* Already ended. */ }
+        this.releaseEffectVoice(voice);
+      }
+    }
   }
+
+  get activeVoiceCount() { return this.weaponMixVoices.size + this.effectVoices.size; }
 
   close() {
     this.setPaused(true);
-    void this.context?.close();
+    this.loadController?.abort(); this.loadController = null; this.sampleRequest = null;
+    for (const voice of [...this.weaponMixVoices]) this.releaseWeaponVoice(voice);
+    this.bossVoices = [];
+    try { void this.context?.close().catch(() => {}); } catch { /* Host already closed. */ }
+    this.effectsBus?.disconnect?.(); this.limiter?.disconnect?.(); this.weaponBus?.disconnect?.();
     this.context = null;
     this.effectsBus = null;
     this.limiter = null;

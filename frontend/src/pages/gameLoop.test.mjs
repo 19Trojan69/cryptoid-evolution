@@ -78,6 +78,7 @@ test('actual GamePage recovery preserves run, lives, rewards and paid timers eve
     soundRef: { current: { setPaused: () => { throw new Error('audio host unavailable'); } } }, musicRef: { current: null },
     recordGameDiagnostic: value => reports.push(value), fieldSizeRef: { current: { width: 390, height: 760 } },
     navigator: { userAgent: 'test browser' }, setGame: value => updates.push(value),
+    sectorInChapter: sector => (sector - 1) % 10 + 1, lastSavedAtRef: { current: 0 }, lastMeasuredFrameRef: { current: 0 },
     saveCombatRef: { current: async () => { saved.push(structuredClone(state)); throw new Error('offline'); } },
     setSaveNotice: value => notice = value,
   };
