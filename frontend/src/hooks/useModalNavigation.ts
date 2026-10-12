@@ -7,7 +7,8 @@ export default function useModalNavigation(layer: string | null, onBack: () => v
   const location = useLocation();
   const navigate = useNavigate();
   const active = layer !== null;
-  const requested = useRef(false);
+  const ownedGuard = useRef<string | null>(null);
+  const pendingGuard = useRef<{ kind: 'push' | 'pop' | 'replace'; from: string } | null>(null);
   const leavingRoute = useRef(false);
   const previousFocus = useRef<HTMLElement | null>(null);
   const backAction = useRef(onBack);
@@ -34,15 +35,33 @@ export default function useModalNavigation(layer: string | null, onBack: () => v
     // Closing the menu and starting a route transition can happen together.
     // Do not pop the guard while that transition is loading: it would cancel it.
     if (leavingRoute.current) return;
-    if (active && !location.state?.cryptoidModalGuard && !requested.current) {
-      requested.current = true;
+    const pending = pendingGuard.current;
+    // Router transitions are asynchronous. Replayed effects and intermediate
+    // renders must not issue a second POP before the first one settles.
+    if (pending?.from === location.key) return;
+    if (pending) {
+      if (pending.kind === 'push' && location.state?.cryptoidModalGuard) ownedGuard.current = location.key;
+      else ownedGuard.current = null;
+      pendingGuard.current = null;
+    }
+    if (location.state?.cryptoidModalGuard && ownedGuard.current !== location.key) {
+      // Reload/restore can retain location.state without this hook's guard
+      // ownership or its preceding same-route entry. Never blindly go Back.
+      const state = { ...location.state };
+      delete state.cryptoidModalGuard;
+      pendingGuard.current = { kind: 'replace', from: location.key };
+      void navigate(location.pathname + location.search + location.hash, {
+        replace: true, state, preventScrollReset: true,
+      });
+    } else if (active && !location.state?.cryptoidModalGuard) {
+      pendingGuard.current = { kind: 'push', from: location.key };
       void navigate(location.pathname + location.search + location.hash, {
         state: { ...location.state, cryptoidModalGuard: true }, preventScrollReset: true,
       });
     } else if (!active && location.state?.cryptoidModalGuard) {
-      requested.current = false;
+      pendingGuard.current = { kind: 'pop', from: location.key };
       void navigate(-1);
-    } else if (!active) requested.current = false;
+    }
   }, [active, location, navigate, blocker.state]);
   useEffect(() => {
     if (!active) return;
