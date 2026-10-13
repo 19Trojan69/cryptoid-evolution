@@ -1,0 +1,32 @@
+{
+  "official": {
+    "checkedAt": "2026-10-13T06:35:46.128Z",
+    "url": "https://cryptoid-evolution-testnet.vercel.app",
+    "id": "dpl_FTwoRZ4GApix1tyJvMPV5XsPnveV",
+    "state": "READY",
+    "aliases": [
+      "cryptoid-evolution-testnet.vercel.app",
+      "cryptoid-evolution-testnet-19-trojan69.vercel.app",
+      "cryptoid-evolution-testnet-git-codex-stabili-581a4f-19-trojan69.vercel.app"
+    ],
+    "commit": "1c1c7f9b6c5e8ac7d41b9bf1c4b44036cc196220",
+    "branch": "codex/stability-performance-20261012"
+  },
+  "private": {
+    "id": "appgdep_6acdd1c3b67c8191b0ecae66f0391889",
+    "project_id": "appgprj_6acd33650fcc8191a7e718e40b8acea5",
+    "title": "Cryptoid Evolution – privater Stabilitätstest",
+    "version_id": "appgprj_6acd33650fcc8191a7e718e40b8acea5~appgver_296e04e799308191a982dfb80cb3bda6",
+    "type": "publish",
+    "status": "succeeded",
+    "url": "https://cryptoid-stability-private-20261012.xwsk9s27cg.chatgpt.site",
+    "has_mcp": false,
+    "screenshot_asset_pointer": null,
+    "provider_deployment_id": "site---6acd33650fcc8191a7e718e40b8acea5",
+    "failure_message": null,
+    "env_set_revision": 0,
+    "updated_at": "2026-10-13T06:38:16.085931+00:00",
+    "sourceCommit": "ddb04a515a2f46e60cc3d353af038c6db4b53a39"
+  },
+  "scope": "exact official frontend with guest/account/network isolation; later stability corrections remain separate draft; no public game release"
+}

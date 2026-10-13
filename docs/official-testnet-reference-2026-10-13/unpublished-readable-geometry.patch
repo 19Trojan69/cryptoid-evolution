@@ -1,0 +1,353 @@
+diff --git a/frontend/AGENTS.md b/frontend/AGENTS.md
+index 61ef5f4..8843344 100644
+--- a/frontend/AGENTS.md
++++ b/frontend/AGENTS.md
+@@ -12,6 +12,8 @@ Latest explicit feedback on 13 October (IMG_5312.jpeg) supersedes the prior limi
+ 
+ The subsequent 13 October clarification explicitly requires an equal split: the usable field below the HUD is 50% enemy space and 50% player space. Do not derive or enlarge the enemy half from formation size. Fit original formation shapes and clearly different visible strength-class hull sizes into the upper half; responsive normal-enemy sizing and row spacing are authorized for this correction. Normalize transparent sprite margins so the visible hull hierarchy, not only CSS box sizes, is distinct. Keep the player hull in the lower half (normal hull edge margins apply), including boss/bonus phases. The physical boss-reward pickup must stay reachable inside that half; only its necessary position changes, retaining its graphic, collection radius, timing, value and once-only/save behavior. Enemy attacks retain their original paths and contact damage. Preserve original high-resolution assets, HUD, audio, firing cadence/speed, physical hit radii, profile statistics and public-release restrictions. This clarification supersedes the prior formation-dependent player boundary.
+ 
++Latest screenshot feedback IMG_5315/5316 on 13 October rejects tiny ships and the visually disproportionate result. Remove the global field-height shrinking factor; preserve readable existing HD hulls with clear strength sizes and fit destinations across the upper half instead. The player steering boundary uses the unchanged physical contact radius inside the lower half, not a permanent full shield-envelope deduction. The split remains exact below the HUD, and resting/new formations retain physical separation. Necessary X/Y spacing and position corrections are authorized; start from all nine existing varied shapes and retain the central leader. Do not change attacks, fire cadence/speed, collision radii, health/rewards, original resources, audio or public-release restrictions. Legacy restored X/Y destinations must match their new layout without stale swept-contact endpoints.
++
+ - Do not change the appearance or layout of any game page, menu, header, ship, weapon, explosion, background, card or control.
+ - Keep the compact original HUD: Home, hearts, Level, Shards above Score in the center, Block, Pause, all in one row. Do not enlarge the occupied game area.
+ - Enemy positioning markers remain invisible. Preserve all existing entry, attack, regroup and sector formations.
+diff --git a/frontend/scripts/verifyCombatAreas.mjs b/frontend/scripts/verifyCombatAreas.mjs
+index 49e9d6b..f8942b6 100644
+--- a/frontend/scripts/verifyCombatAreas.mjs
++++ b/frontend/scripts/verifyCombatAreas.mjs
+@@ -25,14 +25,14 @@ for(const name of unchanged)assert.equal(after.get(name),before.get(name),name);
+ assert.equal(after.get('simulate').replace('movePlayer(state.player, horizontal, vertical, delta, width, height, combatAreaRef.current.minimumY);','movePlayer(state.player, horizontal, vertical, delta, width, height);').replace('collectBossHeart(state, state.player, width, height, combatAreaRef.current.rewardPosition)','collectBossHeart(state, state.player, width, height)'),before.get('simulate'),'all simulation except approved keyboard boundary remains identical');
+ const visual='(combatVarietyEnabled && !asteroid.escort ? normalEnemyVisualDiameter(asteroid.shipClass, playerDisplayDiameter, sprite, combatAreaRef.current.visualScale) : enemyVisualDiameter(asteroid.radius, playerDisplayDiameter, combatVarietyEnabled && asteroid.size === "small"))';
+ assert.equal(after.get('renderScene').replace(visual,'enemyVisualDiameter(asteroid.radius, playerDisplayDiameter, combatVarietyEnabled && asteroid.size === "small")').replaceAll('combatAreaRef.current.rewardPosition.x','BOSS_HEART_POSITION.x').replaceAll('combatAreaRef.current.rewardPosition.y','BOSS_HEART_POSITION.y'),before.get('renderScene'),'only approved normal enemy visual sizing changes the scene markup');
+-assert.equal(after.get('restoreCombat').replace("    combatAreaRef.current.sector = 0;\n",''),before.get('restoreCombat'),'saved state changes only invalidate geometry cache');
++assert.equal(after.get('restoreCombat').replace("    combatAreaRef.current.sector = 0;\n",'').replace('          retargetFormationY(enemy, slot.y, width, height, slot.x);','          enemy.entryTargetX = slot.x;\n          retargetFormationY(enemy, slot.y, width, height);'),before.get('restoreCombat'),'saved state changes only invalidate geometry cache');
+ for(const path of ['frontend/src/pages/gameAudio.ts','frontend/src/pages/musicPlayback.ts','frontend/src/pages/shipMaterial.ts','frontend/src/pages/bossWeaponRenderer.ts','frontend/src/pages/shipAttributes.ts'])assert.equal(fs.readFileSync(new URL(path,root),'utf8'),execFileSync('git',['show',base+':'+path],{cwd:root,encoding:'utf8'}),path);
+ const rewardFile='frontend/src/pages/bossReward.ts',rewardOld=execFileSync('git',['show',base+':'+rewardFile],{cwd:root,encoding:'utf8'});
+ assert.equal(fs.readFileSync(new URL(rewardFile,root),'utf8'),rewardOld.replace('width: number, height: number) {','width: number, height: number, position = BOSS_HEART_POSITION) {').replaceAll('player.x - BOSS_HEART_POSITION.x','player.x - position.x').replaceAll('player.y - BOSS_HEART_POSITION.y','player.y - position.y'),'boss reward changes only optional collection position, never its radius/value/once-only protection');
+ const changed=execFileSync('git',['diff','--name-only',base,'--'],{cwd:root,encoding:'utf8'}).trim().split('\n');assert.deepEqual(changed.filter(p=>p.endsWith('.css')||p.startsWith('frontend/public/')),[]);
+ 
+ const cases=[];let flights=0,sideEntries=0;
+-for(const [width,height,hud,diameter] of [[393,659,64,94],[320,568,64,94],[390,844,80,104],[430,932,90,107.5],[768,1024,94,132],[1280,720,80,115],[800,600,80,112]]){
++for(const [width,height,hud,diameter] of [[393,659,64,94],[390,844,80,104],[430,932,90,107.5],[768,1024,94,132],[1280,720,80,115],[800,600,80,112]]){
+  let minimum=1,maximum=0,clearance=Infinity;
+  for(let stage=1;stage<=500;stage++)if(stage%10){
+   const campaign=area.campaignCombatArea(stage,width,height,hud,diameter),current=area.normalCombatArea(stage,width,height,hud,diameter);
+@@ -88,5 +88,5 @@ for(const level of [1,2,3,4,5]){
+ }
+ assert.equal(player.advanceShot({x:0,y:100,speedX:0},100).y,36);
+ const tiny=area.campaignCombatArea(159,844,390,64,112);assert.equal(tiny.valid,false,'impossible viewport is explicit, never hidden invulnerability or a reduced graphics tier');
+-const report={passed:true,base,mode:'real component/cache/firing and geometry in controlled Node; no native Pi Browser/GPU/audio/FPS proof',split:'50%/50% of usable height below HUD; hull-edge safety margins within each half',fixedAcrossNormalBossBonus:true,invalidSavedTargetsCannotEnlargeEnemyHalf:true,visibleStrengthRatios:[1,1.5,2,2.5],cases,flightsChecked:flights,sideEntriesChecked:sideEntries,cachedCalls:10000,geometryComputationsAcrossNineBlocks:1,cachedCallsMilliseconds:cachedMilliseconds,firing:shots,projectilePixelsPer100ms:64,protectedFunctionsUnchanged:unchanged,sceneChangesOnly:'visible hull-normalized strength sizing and reachable boss reward position',simulationChangesOnly:'player movement boundary and reachable boss reward position',stylesAndAssetsUnchanged:true,audioAndBossRendererUnchanged:true,limitations:['Some later formations do not fit the extreme 844x390 field with unchanged hit radii; controlled technical pause.','Geometry fixtures are explicit assumptions, not DOM measurements from the user screenshot.','Hull-edge safety margins constrain center positions within the fixed halves; projectile speed and firing cadence are unchanged.','The existing full strength-profile mixture and aggregate rewards are unchanged by this follow-up.']};
++const report={passed:true,base,mode:'real component/cache/firing and geometry in controlled Node; no native Pi Browser/GPU/audio/FPS proof',split:'50%/50% below HUD; player contact-circle margin instead of full shield envelope',fixedAcrossNormalBossBonus:true,invalidSavedTargetsCannotEnlargeEnemyHalf:true,visibleStrengthRatios:[1,1.4,1.8,2.2],minimumVisibleLightHullPx:55,cases,flightsChecked:flights,sideEntriesChecked:sideEntries,cachedCalls:10000,geometryComputationsAcrossNineBlocks:1,cachedCallsMilliseconds:cachedMilliseconds,firing:shots,projectilePixelsPer100ms:64,protectedFunctionsUnchanged:unchanged,sceneChangesOnly:'visible hull-normalized strength sizing and reachable boss reward position',simulationChangesOnly:'player movement boundary and reachable boss reward position',stylesAndAssetsUnchanged:true,audioAndBossRendererUnchanged:true,limitations:['Extreme 844x390 cannot fit these readable hulls; nine later 320x568 stages need protective pause instead of shrinking the ships.','Geometry fixtures are explicit assumptions, not DOM measurements from the user screenshot.','Hull-edge safety margins constrain center positions within the fixed halves; projectile speed and firing cadence are unchanged.','The existing full strength-profile mixture and aggregate rewards are unchanged by this follow-up.']};
+ if(process.env.CRYPTOID_AREA_OUT)fs.writeFileSync(process.env.CRYPTOID_AREA_OUT,JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));
+diff --git a/frontend/src/pages/GamePage.tsx b/frontend/src/pages/GamePage.tsx
+index 6a26aa1..f514157 100644
+--- a/frontend/src/pages/GamePage.tsx
++++ b/frontend/src/pages/GamePage.tsx
+@@ -318,16 +318,19 @@ const moveAsteroid = (asteroid: Asteroid, delta: number, width: number, height:
+   };
+ };
+ 
+-const retargetFormationY = (enemy: Asteroid, targetY: number, width: number, height: number) => {
++const retargetFormationY = (enemy: Asteroid, targetY: number, width: number, height: number, targetX = enemy.entryTargetX) => {
++  const shiftX = targetX - enemy.entryTargetX;
++  enemy.entryTargetX = targetX;
+   const shift = targetY - enemy.entryTargetY;
+   enemy.entryTargetY = targetY;
+   if (combatVarietyEnabled && (enemy.entryStartX < 0 || enemy.entryStartX > width)) enemy.entryStartY = targetY;
+   if (enemy.attackPattern !== null) return;
+-  if (enemy.entryElapsed >= enemy.entryDuration) enemy.y += shift;
+-  else if (combatVarietyEnabled && shift !== 0) {
++  if (enemy.entryElapsed >= enemy.entryDuration) { enemy.x += shiftX; enemy.y += shift; }
++  else if (combatVarietyEnabled && (shift !== 0 || shiftX !== 0)) {
+     // A restored/resized arrival must already occupy its new curve position
+     // before swept-contact checks use it as the previous frame's endpoint.
+-    enemy.y = moveAsteroid(enemy, 0, width, height).y;
++    const position = moveAsteroid(enemy, 0, width, height);
++    enemy.x = position.x; enemy.y = position.y;
+   }
+ };
+ 
+@@ -720,8 +723,7 @@ const GamePage = () => {
+       for (const enemy of saved.state.asteroids) {
+         const slot = saved.slots.find(s => s.index === enemy.formationSlot);
+         if (slot) {
+-          enemy.entryTargetX = slot.x;
+-          retargetFormationY(enemy, slot.y, width, height);
++          retargetFormationY(enemy, slot.y, width, height, slot.x);
+         }
+         enemy.x = Math.max(enemy.radius, Math.min(width - enemy.radius, enemy.x));
+       }
+@@ -967,9 +969,7 @@ const GamePage = () => {
+           for (const enemy of stateRef.current.asteroids) {
+             const slot = adjusted.find(item => item.index === enemy.formationSlot);
+             if (!slot) continue;
+-            const shiftX=slot.x-enemy.entryTargetX;enemy.entryTargetX=slot.x;
+-            if(enemy.attackPattern===null&&enemy.entryElapsed>=enemy.entryDuration)enemy.x+=shiftX;
+-            retargetFormationY(enemy, slot.y, field.clientWidth, field.clientHeight);
++            retargetFormationY(enemy, slot.y, field.clientWidth, field.clientHeight, slot.x);
+           }
+         }
+       }
+diff --git a/frontend/src/pages/bossReward.test.mjs b/frontend/src/pages/bossReward.test.mjs
+index eb496e5..17d16a0 100644
+--- a/frontend/src/pages/bossReward.test.mjs
++++ b/frontend/src/pages/bossReward.test.mjs
+@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
+ import { collectBossHeart, BOSS_HEART_POSITION } from './bossReward.ts';
+ import { bossDifficulty } from './bossDifficulty.ts';
+ import { paintTurretHeat } from './bossTurretHeat.ts';
+-import {splitCombatArea} from './combatArea.ts';
++import {splitCombatArea,playerUpperExtent} from './combatArea.ts';
+ import {placePlayer} from './playerCombat.ts';
+ 
+ test('boss reward remains physically reachable in the fixed player half and cannot be credited again after restore',()=>{
+@@ -13,7 +13,9 @@ test('boss reward remains physically reachable in the fixed player half and cann
+   const player=placePlayer(position.x*width,position.y*height,width,height,minimumPlayerY);
+   for(const hearts of [2,3]){
+    const state={hearts,maxHearts:3,shards:20};
+-   assert.equal(collectBossHeart(state,player,width,height),false,'old fixed pickup reproduces the unreachable reward');
++   const divider=hud+(height-hud)/2;
++   const oldPlayer=placePlayer(position.x*width,0,width,height,(divider+playerUpperExtent(diameter)+6)/height);
++   assert.equal(collectBossHeart(state,oldPlayer,width,height),false,'previous full-shield boundary reproduces the unreachable old reward');
+    assert.equal(collectBossHeart(state,player,width,height,position),true);
+    const restored=JSON.parse(JSON.stringify(state));
+    assert.equal(collectBossHeart(restored,player,width,height,position),false);
+diff --git a/frontend/src/pages/combatArea.ts b/frontend/src/pages/combatArea.ts
+index 0dba21e..f02c983 100644
+--- a/frontend/src/pages/combatArea.ts
++++ b/frontend/src/pages/combatArea.ts
+@@ -9,10 +9,10 @@ import {PLAYER_CONTACT_RADIUS} from './playerCombat.ts';
+ export const COMBAT_AREA_GAP=12;
+ export const playerUpperExtent=(diameter:number)=>Math.max(PLAYER_CONTACT_RADIUS,diameter/2+16);
+ // HUD is outside the usable arena. Its remaining height is split exactly 50/50.
+-export const splitCombatArea=(height:number,hud:number,playerDiameter:number)=>{
++export const splitCombatArea=(height:number,hud:number,_playerDiameter:number)=>{
+  const top=Math.max(0,Math.min(height,hud)),half=(height-top)/2,divider=top+half;
+  return{enemyTop:top,divider,enemyHeight:half,playerHeight:half,
+-  minimumPlayerY:(divider+playerUpperExtent(playerDiameter)+COMBAT_AREA_GAP/2)/height,
++  minimumPlayerY:(divider+PLAYER_CONTACT_RADIUS+COMBAT_AREA_GAP/2)/height,
+   enemyCeiling:divider-COMBAT_AREA_GAP/2};
+ };
+ export function enemyFormationExtents(radius:number,shipClass:'light'|'medium'|'heavy'|'elite',sprite:number,playerDiameter:number,visualScale=1){
+@@ -22,36 +22,84 @@ export function enemyFormationExtents(radius:number,shipClass:'light'|'medium'|'
+   bottom:Math.max(radius,hull.bottom+2),hull,diameter};
+ }
+ 
+-// One finite flight. Ship pixels, physics and nine template topologies remain
+-// intact; vertical spacing responds only when the viewport requires it.
++// One finite flight, starting from the nine existing template shapes.
++// Fit positions and fill the enemy half; never shrink readable hulls.
+ export function normalFormation(section:number,stage:number,width:number,height:number,hud:number,playerDiameter:number,count=6,offset=0){
+  const profiles=Array.from({length:count},(_,index)=>combatCryptoid(stage,index+offset));
+  const appearances=profiles.map((_,index)=>enemyAppearance(stage,index+offset));
+  const visualScale=normalEnemyLayoutScale(height,hud,playerDiameter);
+  const extents=profiles.map((p,index)=>enemyFormationExtents(p.radius,p.shipClass,appearances[index].sprite,playerDiameter,visualScale));
+  const slots=arrangeFormationBySize(formationSlotsForCount(variedFormationLayout(section,width,height,stage,Math.floor(offset/6)),count),profiles.map(p=>strengthVisualDiameter(p.shipClass,playerDiameter)*visualScale));
+- const first=Math.min(...slots.map(s=>s.y)),relative=slots.map(s=>s.y-first);
+- let minimumScale=0;
+- for(let a=0;a<count;a++)for(let b=a+1;b<count;b++){
+-  const dy=Math.abs(relative[a]-relative[b]),dx=Math.abs(slots[a].x-slots[b].x);
+-  // Enemies do not collide with each other. Reserve their visible hulls,
+-  // rather than their player/projectile hit circles, for row spacing.
+-  const visibleRadius=(index:number)=>Math.max(extents[index].hull.left+extents[index].hull.right,extents[index].hull.top+extents[index].hull.bottom)/2;
+-  const hullGap=visibleRadius(a)+visibleRadius(b)+6;
+-  if(dy)minimumScale=Math.max(minimumScale,Math.sqrt(Math.max(0,hullGap*hullGap-dx*dx))/dy);
+- }
++ const first=Math.min(...slots.map(s=>s.y)),last=Math.max(...slots.map(s=>s.y));
++ const relative=slots.map(s=>(s.y-first)/Math.max(1,last-first));
++ const order=slots.map((_,i)=>i).sort((a,b)=>relative[a]-relative[b]||slots[a].index-slots[b].index);
+  const ceiling=splitCombatArea(height,hud,playerDiameter).enemyCeiling;
+- const position=(scale:number)=>{
+-  const base=Math.max(...relative.map((y,index)=>hud+8+extents[index].top-y*scale));
+-  return{slots:slots.map((slot,index)=>({...slot,y:base+relative[index]*scale,visualDiameter:extents[index].diameter})),bottom:Math.max(...relative.map((y,index)=>base+y*scale+extents[index].bottom))};
++ const sway=Math.min(12,width*.025);
++ const position=(spread:number)=>{
++  const x=slots.map((slot,index)=>Math.max(extents[index].hull.left+sway+6,Math.min(width-extents[index].hull.right-sway-6,width/2+(slot.x-width/2)*spread)));
++  const edges:{upper:number;lower:number;gap:number}[]=[];
++  for(let a=0;a<count;a++)for(let b=a+1;b<count;b++){
++   const i=order[a],j=order[b];
++   const radius=(n:number)=>strengthVisualDiameter(profiles[n].shipClass,playerDiameter)/2;
++   const centerX=(n:number)=>x[n]+(extents[n].hull.right-extents[n].hull.left)/2;
++   const centerY=(n:number)=>(extents[n].hull.bottom-extents[n].hull.top)/2;
++   const distance=radius(i)+radius(j)+6,dx=Math.abs(centerX(i)-centerX(j));
++   if(dx<distance)edges.push({upper:i,lower:j,gap:Math.sqrt(distance*distance-dx*dx)+centerY(i)-centerY(j)});
++  }
++  const earliest=extents.map(e=>hud+42+e.top),latest=extents.map(e=>ceiling-e.bottom);
++  for(const i of order)for(const edge of edges)if(edge.lower===i)earliest[i]=Math.max(earliest[i],earliest[edge.upper]+edge.gap);
++  for(const i of [...order].reverse())for(const edge of edges)if(edge.upper===i)latest[i]=Math.min(latest[i],latest[edge.lower]-edge.gap);
++ const y=extents.map((_,index)=>earliest[index]+(latest[index]-earliest[index])*relative[index]);
++  for(const i of order)for(const edge of edges)if(edge.lower===i)y[i]=Math.max(y[i],y[edge.upper]+edge.gap);
++  const valid=earliest.every((v,index)=>v<=latest[index]+1e-7);
++  return{slots:slots.map((slot,index)=>({...slot,x:x[index],y:y[index],visualDiameter:extents[index].diameter})),bottom:Math.max(...y.map((v,index)=>v+extents[index].bottom)),valid,spread,scale:1,visualScale};
+  };
+- let scale=Math.max(1,minimumScale),placed=position(scale);
+- if(placed.bottom>ceiling&&minimumScale<scale){
+-  let low=minimumScale,high=scale;
+-  for(let n=0;n<32;n++){const mid=(low+high)/2;if(position(mid).bottom<=ceiling)low=mid;else high=mid;}
+-  scale=low;placed=position(scale);
++ let placed=position(1);
++ for(const spread of [1.08,1.16,1.24,1.32,1.4,1.5]){if(placed.valid)break;placed=position(spread);}
++ if(!placed.valid){
++  const radius=profiles.map(p=>strengthVisualDiameter(p.shipClass,playerDiameter)/2);
++  const ox=extents.map(e=>(e.hull.right-e.hull.left)/2),oy=extents.map(e=>(e.hull.bottom-e.hull.top)/2);
++  const minimumX=extents.map(e=>e.hull.left+sway+6),maximumX=extents.map(e=>width-e.hull.right-sway-6);
++  const minimumY=extents.map(e=>hud+42+e.top),maximumY=extents.map(e=>ceiling-e.bottom);
++  const clamp=(v:number,low:number,high:number)=>Math.max(low,Math.min(high,v));
++  if(minimumY.every((v,i)=>v<=maximumY[i]))for(let seed=0;seed<66;seed++){
++   const spread=[1,1.25,1.5][seed%3];
++   const row=(i:number)=>seed<3?relative[i]:((seed-3)&(1<<i))?1:0;
++   const rows=[slots.map((_,i)=>i).filter(i=>row(i)<.5),slots.map((_,i)=>i).filter(i=>row(i)>=.5)];
++   if(seed>=3&&rows.some(r=>r.length>4||r.length===0))continue;
++   rows.forEach(r=>{r.sort((a,b)=>slots[a].x-slots[b].x);const anchor=r.findIndex(i=>slots[i].anchor);if(anchor>=0){const center=Math.floor(r.length/2);[r[anchor],r[center]]=[r[center],r[anchor]];}});
++   const x=slots.map((slot,i)=>{const r=rows[row(i)<.5?0:1],column=r.indexOf(i),fraction=r.length===1?.5:.18+.64*column/(r.length-1);return clamp(slot.anchor?width/2:seed<3?width/2+(slot.x-width/2)*spread:width*fraction,minimumX[i],maximumX[i]);});
++   const y=slots.map((_,i)=>minimumY[i]+(maximumY[i]-minimumY[i])*row(i));
++   let valid=false;
++   for(let pass=0;pass<120;pass++){
++    let overlaps=0;
++    for(let i=0;i<count;i++)for(let j=i+1;j<count;j++){
++     let dx=x[j]+ox[j]-x[i]-ox[i],dy=y[j]+oy[j]-y[i]-oy[i];
++     const distance=Math.hypot(dx,dy),required=radius[i]+radius[j]+6;
++     if(distance>=required-1e-4)continue;
++     overlaps++;
++     const directionX=Math.sign(dx)||Math.sign(slots[j].x-slots[i].x)||1;
++     const directionY=Math.sign(dy)||Math.sign(relative[j]-relative[i])||1;
++     const needX=Math.sqrt(Math.max(0,required*required-dy*dy))-Math.abs(dx)+.05;
++     const needY=Math.sqrt(Math.max(0,required*required-dx*dx))-Math.abs(dy)+.05;
++     const lowX=(n:number)=>slots[n].anchor?Math.max(minimumX[n],width/2-Math.min(64,width/6)):minimumX[n];
++     const highX=(n:number)=>slots[n].anchor?Math.min(maximumX[n],width/2+Math.min(64,width/6)):maximumX[n];
++     const capacityX=[directionX>0?x[i]-lowX(i):highX(i)-x[i],directionX>0?highX(j)-x[j]:x[j]-lowX(j)];
++     const capacityY=[directionY>0?y[i]-minimumY[i]:maximumY[i]-y[i],directionY>0?maximumY[j]-y[j]:y[j]-minimumY[j]];
++     const useX=capacityX[0]+capacityX[1]>=needX&&(capacityY[0]+capacityY[1]<needY||needX<needY);
++     const capacity=useX?capacityX:capacityY,needed=useX?needX:needY;
++     const first=Math.min(capacity[0],Math.max(needed/2,needed-capacity[1]));
++     const second=Math.min(capacity[1],needed-first);
++     if(useX){x[i]=clamp(x[i]-directionX*first,lowX(i),highX(i));x[j]=clamp(x[j]+directionX*second,lowX(j),highX(j));}
++     else{y[i]=clamp(y[i]-directionY*first,minimumY[i],maximumY[i]);y[j]=clamp(y[j]+directionY*second,minimumY[j],maximumY[j]);}
++    }
++    if(!overlaps){valid=true;break;}
++   }
++   if(valid){placed={slots:slots.map((slot,i)=>({...slot,x:x[i],y:y[i],visualDiameter:extents[i].diameter})),bottom:Math.max(...y.map((v,i)=>v+extents[i].bottom)),valid:true,spread,scale:1,visualScale};break;}
++  }
+  }
+- return{...placed,scale,visualScale,valid:placed.bottom<=ceiling+1e-7};
++
++ return placed;
+ }
+ 
+ export function normalCombatArea(stage:number,width:number,height:number,hud:number,playerDiameter:number,rulesVersion=2){
+diff --git a/frontend/src/pages/formationPlacement.test.mjs b/frontend/src/pages/formationPlacement.test.mjs
+index 8a091c8..aee8416 100644
+--- a/frontend/src/pages/formationPlacement.test.mjs
++++ b/frontend/src/pages/formationPlacement.test.mjs
+@@ -28,7 +28,7 @@ function game(testnet=true){const context={...sector,combatVarietyEnabled:testne
+ 
+ test('all normal flights fit above an exact 50/50 split with distinct normalized hulls and unchanged contacts',()=>{
+  const runtime=game();
+- for(const [width,height,hud,diameter] of [[393,659,64,94],[320,568,64,94],[390,844,80,104],[1280,720,80,115],[800,600,80,112]])
++ for(const [width,height,hud,diameter] of [[393,659,64,94],[390,844,80,104],[1280,720,80,115],[800,600,80,112]])
+  for(let stage=1;stage<=500;stage++)if(stage%10){
+   const area=normalCombatArea(stage,width,height,hud,diameter);assert.equal(area.valid,true);
+   let offset=0;
+@@ -39,11 +39,12 @@ test('all normal flights fit above an exact 50/50 split with distinct normalized
+    assert.equal(visibleSizes[anchor],Math.max(...visibleSizes),'strongest visible class retains the formation anchor');
+    placed.forEach((slot,index)=>{
+     const profile=combatCryptoid(stage,index+offset),sprite=enemyAppearance(stage,index+offset).sprite,extent=enemyFormationExtents(profile.radius,profile.shipClass,sprite,diameter,area.visualScale);
+-    assert.ok(slot.y-extent.top>=hud+8-1e-7,'complete visible envelope stays below HUD');
++    assert.ok(slot.y-extent.top>=hud+42-1e-7,'complete visible envelope stays below HUD');
+     assert.equal(area.enemyHeight,area.playerHeight);
+     assert.equal(area.divider,hud+(height-hud)/2);
++    assert.equal(area.minimumPlayerY,(area.divider+PLAYER_CONTACT_RADIUS+6)/height,'no permanent full-shield deduction');
+     assert.ok(slot.y+extent.bottom<=area.enemyCeiling+1e-7,'enemy stays in its fixed half');
+-    assert.ok(area.minimumPlayerY*height-playerUpperExtent(diameter)>=area.divider+6-1e-7,'player hull stays in its fixed half');
++    assert.ok(area.minimumPlayerY*height-PLAYER_CONTACT_RADIUS>=area.divider+6-1e-7,'player contact circle stays in its fixed half');
+     let enemy=runtime.spawnAsteroid(index,width,hud,index,stage,placed,offset);
+     for(let frame=0;frame<24;frame++){
+      const before=enemy;enemy=runtime.moveAsteroid(enemy,enemy.entryDuration/23,width,height);
+@@ -55,6 +56,18 @@ test('all normal flights fit above an exact 50/50 split with distinct normalized
+  }
+ });
+ 
++test('short fields protect invalid geometry without reducing readable hull sizes or taking player space',()=>{
++ let unsupported=0;
++ for(let stage=1;stage<=500;stage++)if(stage%10){
++  const area=normalCombatArea(stage,320,568,64,94);
++  if(!area.valid)unsupported++;
++  assert.equal(area.visualScale,1);
++  assert.equal(area.minimumPlayerY,(64+(568-64)/2+PLAYER_CONTACT_RADIUS+6)/568);
++ }
++ assert.equal(unsupported,9);
++ assert.equal(normalCombatArea(1,844,390,64,112).valid,false);
++});
++
+ test('HUD resize corrections move both ways, remain idempotent, and preserve the Mainnet placement',()=>{
+  const slots=sector.formationLayout(4,390,844),radii=[50,36,37.5,37.5,36,37.5];
+  const first=sector.formationNearHud(slots,radii,80,104);
+@@ -73,8 +86,8 @@ test('all strength classes are shown at distinct sizes; first 29 stages use the
+  for(const diameter of [94,104,132,160]){
+   const sizes=['light','medium','heavy','elite'].map(c=>strengthVisualDiameter(c,diameter));
+   for(let i=1;i<sizes.length;i++)assert.ok(sizes[i]>sizes[i-1]);
+-  assert.equal(sizes[0],55*Math.max(1,diameter/94));
+-  assert.equal(sizes[2],sizes[0]*2);
++  assert.equal(sizes[0],55*Math.min(1.1,Math.max(1,diameter/94)));
++  assert.ok(Math.abs(sizes[2]-sizes[0]*1.8)<1e-8);
+  }
+  for(let stage=1;stage<=29;stage++)if(stage%10){
+   const profiles=Array.from({length:6},(_,i)=>combatCryptoid(stage,i));
+@@ -96,7 +109,7 @@ test('moving an in-flight checkpoint/resize to its new target cannot leave a sta
+  const context={...sector,combatVarietyEnabled:true,chooseCryptoid:combatCryptoid,combatEntryStage,combatTiming,entryPatternForSector,entryPosition,entryStartX,attackDuration,attackPosition,enemyAppearance,slowerEnemyArrival,normalFormation,normalArrival,strengthVisualDiameter};
+  vm.runInNewContext(code,context);
+  let helper,restoreTarget;
+- const visit=n=>{if(ts.isVariableDeclaration(n)&&n.name.getText(ast)==='retargetFormationY')helper=`const ${n.getText(ast)};globalThis.retarget=retargetFormationY;`;if(ts.isIfStatement(n)&&n.expression.getText(ast)==='slot'&&n.thenStatement.getText(ast).includes('enemy.entryTargetX'))restoreTarget=n.getText(ast);ts.forEachChild(n,visit);};visit(ast);
++ const visit=n=>{if(ts.isVariableDeclaration(n)&&n.name.getText(ast)==='retargetFormationY')helper=`const ${n.getText(ast)};globalThis.retarget=retargetFormationY;`;if(ts.isIfStatement(n)&&n.expression.getText(ast)==='slot'&&n.thenStatement.getText(ast).includes('retargetFormationY'))restoreTarget=n.getText(ast);ts.forEachChild(n,visit);};visit(ast);
+  assert.ok(restoreTarget,'execute the actual restore target branch');
+  if(helper)vm.runInNewContext(ts.transpileModule(helper,{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText,context);
+  const width=390,height=844,engine=context.game,slots=engine.createFormationSlots(6,6,width,height,80,104);
+@@ -111,6 +124,6 @@ test('moving an in-flight checkpoint/resize to its new target cannot leave a sta
+  const next=engine.moveAsteroid(enemy,16,width,height);
+  assert.equal(contactWithEnemy(player,width,height,next,true,false,0,enemy,player).connected,false,'no artificial swept hit from stale restore endpoint');
+  assert.deepEqual({elapsed:enemy.entryElapsed,duration:enemy.entryDuration,health:enemy.health,formationElapsed:enemy.formationElapsed},snapshot);
+- const docked={...enemy,entryElapsed:enemy.entryDuration,y:target};context.retarget(docked,target-10,width,height);assert.equal(docked.y,target-10);
++ const docked={...enemy,entryElapsed:enemy.entryDuration,y:target};const oldX=docked.x;context.retarget(docked,target-10,width,height,docked.entryTargetX+20);assert.equal(docked.y,target-10);assert.equal(docked.x,oldX+20);
+  const attacking={...enemy,attackPattern:'dive',y:410};context.retarget(attacking,target-10,width,height);assert.equal(attacking.y,410,'active attack position remains unchanged');
+ });
+diff --git a/frontend/src/pages/shipDisplayScale.test.mjs b/frontend/src/pages/shipDisplayScale.test.mjs
+index 969bf36..221ca27 100644
+--- a/frontend/src/pages/shipDisplayScale.test.mjs
++++ b/frontend/src/pages/shipDisplayScale.test.mjs
+@@ -9,7 +9,9 @@ import {enemyHullSpan} from './shipHullBounds.ts';
+ test('visible hulls retain exact strength ratios across all 20 transparent sprites and viewport sizes',()=>{
+  for(const [height,hud,player] of [[659,64,94],[568,64,94],[844,80,104],[1024,94,132],[600,80,112]]){
+   const scale=normalEnemyLayoutScale(height,hud,player);
+-  for(const [kind,ratio] of [['light',1],['medium',1.5],['heavy',2],['elite',2.5]])for(let sprite=0;sprite<20;sprite++){
++  assert.equal(scale,1);
++  assert.ok(strengthVisualDiameter('light',player)>=55);
++  for(const [kind,ratio] of [['light',1],['medium',1.4],['heavy',1.8],['elite',2.2]])for(let sprite=0;sprite<20;sprite++){
+    const visible=normalEnemyVisualDiameter(kind,player,sprite,scale)*enemyHullSpan(sprite);
+    const light=strengthVisualDiameter('light',player)*scale;
+    assert.ok(Math.abs(visible-light*ratio)<1e-8,'transparent margins cannot flatten the actual size hierarchy');
+diff --git a/frontend/src/pages/shipDisplayScale.ts b/frontend/src/pages/shipDisplayScale.ts
+index 6ae1e7f..252700c 100644
+--- a/frontend/src/pages/shipDisplayScale.ts
++++ b/frontend/src/pages/shipDisplayScale.ts
+@@ -6,15 +6,15 @@ const BASE_PLAYER_DIAMETER = 94;
+ export const enemyVisualDiameter = (radius: number, playerDiameter: number, enlargeSmall = false) =>
+   radius * 2 * 1.1 * Math.max(1, playerDiameter / BASE_PLAYER_DIAMETER) * (enlargeSmall ? 1.5 : 1);
+ 
+-// Desired visible hull lengths: medium is 1.5x light, heavy 2x, elite 2.5x.
++// Readable visible hull lengths: 55/77/99/121px before the modest
++// player-size adjustment. Transparent padding cannot flatten strength sizes.
+ // The original full-resolution images and physical radii remain unchanged.
+ export const strengthVisualDiameter = (shipClass: 'light'|'medium'|'heavy'|'elite', playerDiameter:number) =>
+-  ({light:55,medium:82.5,heavy:110,elite:137.5}[shipClass]) * Math.max(1,playerDiameter/BASE_PLAYER_DIAMETER);
++  ({light:55,medium:77,heavy:99,elite:121}[shipClass]) * Math.min(1.1,Math.max(1,playerDiameter/BASE_PLAYER_DIAMETER));
+ 
+ export const normalEnemyVisualDiameter=(shipClass:'light'|'medium'|'heavy'|'elite',playerDiameter:number,sprite:number,scale=1)=>
+  strengthVisualDiameter(shipClass,playerDiameter)*scale/enemyHullSpan(sprite);
+ 
+-// Layout sizing, never a frame-time/quality governor. Keep one scale for the
+-// viewport so strength ratios do not change with blocks, kills or load.
+-export const normalEnemyLayoutScale=(height:number,hud:number,playerDiameter:number)=>
+- Math.min(1,Math.max(0,height-hud)/980/Math.max(1,playerDiameter/BASE_PLAYER_DIAMETER));
++// Size follows the existing measured player diameter, never a field-height
++// reduction. Keep readable hulls even when a formation needs rearrangement.
++export const normalEnemyLayoutScale=(_height:number,_hud:number,_playerDiameter:number)=>1;
