@@ -1,10 +1,10 @@
 {
   "passed": true,
   "base": "16fcfb43aad836de0e38f684c0d4cade82b78976",
-  "earlierAuditedCheckpoint": "c070f7e0745401abd3dd2ceabd79e36be329e725",
+  "earlierAuditedCheckpoint": "dd41e366c703b6d50e46021d942d4ae2fd076434",
   "latestAuthorizedAreasAndFiring": {
     "passed": true,
-    "base": "c070f7e0745401abd3dd2ceabd79e36be329e725",
+    "base": "dd41e366c703b6d50e46021d942d4ae2fd076434",
     "mode": "real component/cache/firing and geometry in controlled Node; no native Pi Browser/GPU/audio/FPS proof",
     "cases": [
       {
@@ -82,7 +82,7 @@
     "sideEntriesChecked": 5769,
     "cachedCalls": 10000,
     "geometryComputationsAcrossNineBlocks": 1,
-    "cachedCallsMilliseconds": 14.52857400000039,
+    "cachedCallsMilliseconds": 14.222855999999865,
     "firing": [
       {
         "level": 1,

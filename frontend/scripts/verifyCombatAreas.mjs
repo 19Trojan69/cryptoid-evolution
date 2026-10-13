@@ -14,7 +14,9 @@ import {normalArrival} from '../src/pages/normalArrival.ts';
 import {entryPosition,entryStartX,entryPatternForSector} from '../src/pages/entryPatterns.ts';
 import {combatEntryStage,combatCryptoid,combatTiming} from '../src/pages/combatVariety.ts';
 import {slowerEnemyArrival} from '../src/pages/enemyArrival.ts';
-const root=new URL('../../',import.meta.url),base=process.env.CRYPTOID_AREA_BASE||'c070f7e0745401abd3dd2ceabd79e36be329e725';
+// Use the shared immutable tree: local and connector commits have different
+// metadata/SHAs, but every checkout contains this same audited source tree.
+const root=new URL('../../',import.meta.url),base=process.env.CRYPTOID_AREA_BASE||'dd41e366c703b6d50e46021d942d4ae2fd076434';
 const file='frontend/src/pages/GamePage.tsx',source=fs.readFileSync(new URL('../src/pages/GamePage.tsx',import.meta.url),'utf8'),old=execFileSync('git',['show',base+':'+file],{cwd:root,encoding:'utf8'});
 const map=s=>{const ast=ts.createSourceFile('game.tsx',s,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX),m=new Map();const visit=n=>{if(ts.isVariableDeclaration(n)&&n.initializer)m.set(n.name.getText(ast),n.initializer.getText(ast));ts.forEachChild(n,visit);};visit(ast);return m;};
 const before=map(old),after=map(source),unchanged=['moveAsteroid','attackTime','destroyBoss','saveCombat','activateStartPower'];

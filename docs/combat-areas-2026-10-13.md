@@ -64,3 +64,16 @@ Konkreter Gerätetest (30–60 Minuten): private Ansicht neu laden; ein normaler
 Nur der bestehende owner-private Site wird aktualisiert; keine öffentliche Testnet-/Mainnet-Veröffentlichung, kein Kostenupgrade, keine Live-Datenänderung. Datenbankbackup und isolierter DB-Restore weiterhin **nicht verifiziert**; damit bleibt öffentliche Veröffentlichung gesperrt. Ein Codebranch und ein Gameplay-Save sind kein DB-Backup.
 
 Code-Rückweg: Baum dd41e366 am lokalen datierten Backup bzw. Remote-Commit 80b7b364. Private Site-Rückweg: bisheriger Source-Commit 85be0bf04b2d001d688520b5e30c734b3d433583, Version appgprj_6acd33650fcc8191a7e718e40b8acea5~appgver_e4dfbd3057648191a908efbbe4c8a466, Deployment appgdep_6acda7f0f87c81919fb329e1dacface0. Neue Deploymentprovenienz wird nach erfolgreicher privater Aktualisierung separat ergänzt.
+
+
+## Erfolgreiche private Testansicht
+
+13.10.2026 06:34:50 Europe/Vienna: Native private Veröffentlichung erfolgreich. URL https://cryptoid-stability-private-20261012.xwsk9s27cg.chatgpt.site . Bestehender Eigentümerzugriff unverändert.
+
+- Runtime lokal `637171ab6e2459b00112d5d83d1c6feede440599`, Remote `b665800ef431ea030d050ac581ad7e4e822403bf`, verifiziert gleicher Baum `e8941bb3303bb8414054a804e89d78ffe4878645`.
+- Site-Source `3aafe636764d1bab962c56b29c6ca6ebbc1102b7`.
+- Version `appgprj_6acd33650fcc8191a7e718e40b8acea5~appgver_6c6ac94ee0e08191bb94f7b4db6f2878`; Deployment `appgdep_6acdb4d32df88191a189834852eb03a4`, Status succeeded. Kein Browsernachweis durch diesen Status.
+- Alle 464 Original-Assets bytegleich; die sechs tatsächlich erzeugten CSS-Hashes sind mit der vorherigen privaten Version identisch.
+- Die Nachweis-Scripts verwenden jetzt den gemeinsamen unveränderlichen Basisbaum dd41e366 statt einer nur lokal existierenden Commit-Metadaten-SHA. Erneuter kumulativer Erhaltungscheck erfolgreich; Änderungen betreffen keine Laufzeitfunktion. Nachweisdaten refreshed.
+
+Die Ansicht neu laden. Für die neue vollständige Stärkemischung einen neuen Gastdurchlauf beginnen: eine bereits gespeicherte Gegnerformation behält absichtlich ihre originalen Klassen/Gesundheit, bis der nächste reguläre Flug entsteht. Keine realen Konten, Käufe oder Backend-Saves in dieser isolierten Ansicht. Kein öffentlicher Deploy oder Main-Merge.

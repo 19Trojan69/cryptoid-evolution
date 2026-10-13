@@ -27,7 +27,7 @@ function main(source) {
 // Audit the cumulative earlier authorized fixes at their immutable checkpoint;
 // then audit today's live source against that checkpoint with the dedicated
 // geometry/firing verifier. Neither stage broadly ignores gameplay functions.
-const areaBase='c070f7e0745401abd3dd2ceabd79e36be329e725';
+const areaBase='dd41e366c703b6d50e46021d942d4ae2fd076434';
 const file = 'frontend/src/pages/GamePage.tsx', old = previous(file), next = execFileSync('git',['show',`${areaBase}:${file}`],{cwd:repo,encoding:'utf8'});
 const before = declarations(old), after = declarations(next), functions = {};
 // Explicit user correction after the private device test on 12 October:
