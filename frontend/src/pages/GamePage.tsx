@@ -1,4 +1,4 @@
-import { combatCryptoid, combatTiming, combatEntryStage, combatAttackPattern, createCombatVariety, readCombatVariety, safeEarlyPickup, type CombatVarietyRuntime } from './combatVariety';
+import { combatCryptoid, combatTiming, combatEntryStage, combatAttackPattern, createCombatVariety, readCombatVariety, type CombatVarietyRuntime } from './combatVariety';
 import { advanceBonusRock, spawnBonusRock, hitBonusRock, rockHitsShot, rockInField, nextRockEventMs, MAX_ROCKS, MAX_ROCK_EFFECTS, type BonusRock, type RockEffect } from './bonusRocks';
 import BonusRockLayer from './BonusRockLayer';
 import './combatVariety.css';
@@ -607,7 +607,8 @@ const GamePage = () => {
         frameMs: Math.round(lastMeasuredFrameRef.current),
         width: fieldSizeRef.current.width, height: fieldSizeRef.current.height, browser: navigator.userAgent });
       setGame({ ...state });
-      void saveCombatRef.current().catch(() => setSaveNotice('Save not confirmed. Pending data will be retried.'));
+      if (reason === 'save-pressure') setSaveNotice('Save not confirmed. Pending data will be retried.');
+      else void saveCombatRef.current().catch(() => setSaveNotice('Save not confirmed. Pending data will be retried.'));
     };
   }, [clearControls]);
   const diagnosticContext = useCallback(() => {
@@ -1604,10 +1605,6 @@ const GamePage = () => {
           }
           else soundRef.current?.play("shield");
         }
-        if (variety && !intro.weaponIssued && intro.clock >= intro.weaponDue && state.phase !== "SECTOR_CLEAR") {
-          const pickup = safeEarlyPickup(state,stageWeaponLevel(shipStageRef.current,state.weaponLevel),width,height,visibleTop);
-          if(pickup){ state.powerUps.push({id:nextIdRef.current++,...pickup}); state.powerUpTypes.push(pickup.type); dropsCreatedRef.current++; intro.weaponIssued=true; intro.notice=powerUpNames[pickup.type]; intro.noticeMs=2_600; }
-        }
         const rockAllowed = variety && normal && state.asteroids.length > 0 && formationStartedRef.current && state.phase !== "SECTOR_INTRO" && state.phase !== "SECTOR_CLEAR";
         if(!rockAllowed){state.rocks=[];} else {
           state.rocks=state.rocks.map(r=>advanceBonusRock(r,delta)).filter(r=>rockInField(r,width,height));
@@ -1705,7 +1702,7 @@ const GamePage = () => {
           creditComboDefeat(state, enemy.reward, elapsedRef.current);
           state.asteroids = state.asteroids.filter(item => item.id !== enemy.id);
           if (enemy.attackPattern !== null) attackCooldownRef.current = 0;
-          const drop = enemy.escort ? null : createPowerUpDrop({ id: nextIdRef.current, x: enemy.x, y: enemy.y, width, height, threats: state.asteroids, activeCount: state.powerUps.length, chanceRoll: Math.random(), kindRoll: Math.random(), destroyed: state.destroyed, dropsCreated: dropsCreatedRef.current, level: state.sector, usedTypes: variety && !intro.weaponIssued ? [...state.powerUpTypes, "weapon"] : state.powerUpTypes, weaponMaxed: state.weaponLevel >= 5 });
+          const drop = enemy.escort ? null : createPowerUpDrop({ id: nextIdRef.current, x: enemy.x, y: enemy.y, width, height, threats: state.asteroids, activeCount: state.powerUps.length, chanceRoll: Math.random(), kindRoll: Math.random(), destroyed: state.destroyed, dropsCreated: dropsCreatedRef.current, level: state.sector, usedTypes: state.powerUpTypes, weaponMaxed: state.weaponLevel >= 5 });
           if (drop) { nextIdRef.current += 1; dropsCreatedRef.current += 1; state.powerUpTypes.push(drop.type); state.powerUps.push(drop); }
         }
         state.shots = state.encounter === 'boss-clear' ? [] : remainingShots;
@@ -1827,6 +1824,7 @@ const GamePage = () => {
       if (document.hidden) return;
       // Preserve the official single-step timing and mobile paint behavior.
       simulate(time);
+      if (stateRef.current.status === 'playing' && saveQueueRef.current?.underPressure) interruptionRef.current('save-pressure');
       if (diagnosticsRef.current?.due()) diagnosticsRef.current.update(diagnosticContext(), stateRef.current.status === 'playing', false);
     };
     const stop = startGuardedGameLoop({ step,
@@ -1895,7 +1893,7 @@ const GamePage = () => {
   };
   const weaponNames = ["", t("Standard"), t("Twin"), t("Rapid"), t("Triple"), t("Plasma")];
   const weaponGlyphs = ["", "I", "II", "III", "IV", "V"];
-  const resumeWeaponSelection = () => { clearControls(); setTechnicalPause(false); setWeaponMenuOpen(false); setWeaponCountdown(3); };
+  const resumeWeaponSelection = () => { if (saveQueueRef.current?.underPressure) { setSaveNotice('Save not confirmed. Pending data will be retried.'); return; } clearControls(); setTechnicalPause(false); setWeaponMenuOpen(false); setWeaponCountdown(3); };
   const closeHomePrompt = () => {
     setHomePrompt(false);
     if (homePromptWasPlayingRef.current) resumeWeaponSelection();

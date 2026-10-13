@@ -1,5 +1,19 @@
 # Preserve the officially approved game
 
+## Latest scope reset: 13 October 2026
+
+The user withdrew the earlier experimental corrections. Start from the verified
+official Testnet commit 1c1c7f9b6c5e8ac7d41b9bf1c4b44036cc196220.
+Preserve its sizes, formations, player area, entry timing, HUD, graphics, sound,
+combat timing and economy. Do not import the withdrawn PR 160/161 packages.
+Only stability/resource-lifetime corrections are authorized, plus the explicitly
+reaffirmed requirement that floating combat power-ups originate from defeated
+enemy ships rather than elapsed time. Keep existing drop probabilities and timers.
+Do not slow shooting, simulation, visual updates or normal arrivals. Do not add
+preparation overlays or a new quality/particle reduction system.
+Public release remains blocked until verified database backup and isolated restore
+evidence, a dated source rollback point, and explicit user release approval exist.
+
 The user confirmed IMG_5288.jpeg on 12 October 2026 as the original visual reference. This task authorizes stability fixes only.
 
 Explicit movement correction requested on 12 October after testing: resting normal Testnet enemies should slowly sway back and forth, including restored formations; keep the existing sway amplitude/rhythm, and make normal formation arrivals 10% longer. This narrow authorization supersedes the frozen-motion rule below for these two corrections only. Boss escorts, attack paths, weapons, HUD, markers, sounds and Mainnet retain their prior behavior.

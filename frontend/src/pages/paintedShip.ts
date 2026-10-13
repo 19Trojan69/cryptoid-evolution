@@ -17,22 +17,27 @@ const shipImage = (url: string) => {
       const image = new Image();
       image.onload = () => {
         image.onload = image.onerror = null;
-        const canvas = document.createElement("canvas");
-        canvas.width = canvas.height = 240;
-        const context = canvas.getContext("2d", { willReadFrequently: true });
+        let canvas: HTMLCanvasElement | undefined;
         try {
-          if (context && !visualCenters.has(url)) {
-            context.drawImage(image, 0, 0, 240, 240);
-            visualCenters.set(url, shipVisualCenter(context.getImageData(0, 0, 240, 240).data, 240, 240));
-          }
-        } catch { /* A tainted canvas must not leave the image promise pending. */ }
-        finally { canvas.width = canvas.height = 0; }
-        resolve(image);
+          canvas = document.createElement("canvas");
+          canvas.width = canvas.height = 240;
+          const context = canvas.getContext("2d", { willReadFrequently: true });
+          try {
+            if (context && !visualCenters.has(url)) {
+              context.drawImage(image, 0, 0, 240, 240);
+              visualCenters.set(url, shipVisualCenter(context.getImageData(0, 0, 240, 240).data, 240, 240));
+            }
+          } catch { /* Preserve the optional visual offset fallback for a tainted image. */ }
+          resolve(image);
+        } catch (error) { reject(error); }
+        finally { if (canvas) canvas.width = canvas.height = 0; }
       };
-      image.onerror = () => { image.onload = image.onerror = null; sourceImages.delete(url); reject(new Error('Ship image unavailable')); };
+      image.onerror = () => { image.onload = image.onerror = null; reject(new Error('Ship image unavailable')); };
       image.src = url;
     });
     sourceImages.set(url, pending);
+    const current = pending;
+    void current.catch(() => { if (sourceImages.get(url) === current) sourceImages.delete(url); });
   }
   return pending;
 };
@@ -62,9 +67,9 @@ const renderPaintedSprite = async (index: number, colorId: PlayerColorId, stage:
   const url = shipEvolutionAsset(index, stage);
   const image = await shipImage(url);
   const canvas = document.createElement("canvas");
-  canvas.width = image.naturalWidth;
-  canvas.height = image.naturalHeight;
   try {
+    canvas.width = image.naturalWidth;
+    canvas.height = image.naturalHeight;
     const context = canvas.getContext("2d", { willReadFrequently: true });
     if (!context) throw new Error("Canvas unavailable");
     context.drawImage(image, 0, 0);
@@ -92,7 +97,16 @@ const createPaintedSprite = (index: number, colorId: PlayerColorId, stage: ShipS
   const existing = pendingPaints.get(key);
   if (existing) return existing;
   const pending = paintTail.then(() => new Promise<void>(resolve => window.setTimeout(resolve, 0)))
-    .then(() => renderPaintedSprite(index, colorId, stage)).finally(() => pendingPaints.delete(key));
+    .then(() => {
+      if (!cache.retained(key)) {
+        // Nobody can display this queued variant anymore. Remove it now so a
+        // newly mounted consumer can request a fresh job rather than inherit
+        // a cancelled promise. Never cancel a pinned/on-screen consumer.
+        if (pendingPaints.get(key) === pending) pendingPaints.delete(key);
+        throw new Error('Ship preparation cancelled');
+      }
+      return renderPaintedSprite(index, colorId, stage);
+    }).finally(() => { if (pendingPaints.get(key) === pending) pendingPaints.delete(key); });
   paintTail = pending.catch(() => {});
   pendingPaints.set(key, pending);
   return pending;

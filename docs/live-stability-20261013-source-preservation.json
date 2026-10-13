@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "baseline": "1c1c7f9b6c5e8ac7d41b9bf1c4b44036cc196220",
+  "normalMarkupSha256": "c74faea0c427d485dc149771af8b77af307047ac91e0d195ebe4ef5c0569cc16",
+  "identicalGameplayFunctions": [
+    "createFormationSlots",
+    "spawnAsteroid",
+    "spawnBossEscort",
+    "moveAsteroid",
+    "destroyBoss",
+    "saveCombat",
+    "restoreCombat",
+    "activateStartPower"
+  ],
+  "simulationChangedOnly": "Remove elapsed-time pickup and its artificial weapon reservation; existing defeat-drop function and limits remain byte-identical",
+  "stepChangedOnly": "Existing technical pause when save outbox is pressured; no rate/gate/quality change",
+  "stylesAssetsBackendChanged": false,
+  "audioSourceIdentical": true,
+  "shipSizesFormationsEntryTimingsIdentical": true,
+  "materialPixelAlgorithmIdentical": true,
+  "limits": "Source/logic evidence only; no real-device pixel/audio/GPU/FPS or original crash-fix proof"
+}

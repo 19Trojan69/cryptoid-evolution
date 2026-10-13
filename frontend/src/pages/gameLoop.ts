@@ -1,4 +1,4 @@
-export type GameInterruption = 'frame-error' | 'loop-stall' | 'input-error' | 'javascript-error' | 'unhandled-rejection' | 'render-error';
+export type GameInterruption = 'frame-error' | 'loop-stall' | 'input-error' | 'javascript-error' | 'unhandled-rejection' | 'render-error' | 'save-pressure';
 type LoopOptions = {
   step: (time: number) => void;
   fault: (reason: GameInterruption, error?: unknown) => void;

@@ -28,11 +28,19 @@ export async function retrySave<T>(request: () => Promise<T>): Promise<T> {
 export function createSaveQueue(uid: string) {
   const key = `cryptoid_save_outbox_v1_${shipSaveNetwork}_${uid}`;
   let entries: PendingSave[] = [];
-  try { const parsed = JSON.parse(localStorage.getItem(key) || "[]"); if (Array.isArray(parsed)) entries = parsed.filter(e => ["/rewards/event", "/leaderboard/score", "/progress/checkpoint"].includes(e.path) && typeof e.body?.runId === "string"); } catch { /* Preserve malformed backup separately; never grant its data. */ }
+  let pendingBytes = 0;
+  try { const serialized = localStorage.getItem(key) || "[]"; const parsed = JSON.parse(serialized); if (Array.isArray(parsed)) entries = parsed.filter(e => ["/rewards/event", "/leaderboard/score", "/progress/checkpoint"].includes(e.path) && typeof e.body?.runId === "string"); pendingBytes = serialized.length * 2; } catch { /* Preserve malformed backup separately; never grant its data. */ }
   let inflight: Promise<void> | null = null;
   let uploading: PendingSave | null = null;
   let durable = true;
-  const persist = () => { try { localStorage.setItem(key, JSON.stringify(entries)); } catch { durable = false; } };
+  const persist = () => {
+    try {
+      const serialized = JSON.stringify(entries);
+      pendingBytes = serialized.length * 2;
+      localStorage.setItem(key, serialized);
+      durable = true;
+    } catch { durable = false; }
+  };
   const drain = (): Promise<void> => {
     if (inflight) return inflight;
     inflight = (async () => {
@@ -49,6 +57,11 @@ export function createSaveQueue(uid: string) {
     enqueue(entry: PendingSave) { appendPendingSave(entries, entry, uploading); persist(); return drain(); },
     drain,
     get durable() { return durable; },
+    get pendingCount() { return entries.length; },
+    get pendingBytes() { return pendingBytes; },
+    // Preserve all queued reward barriers. Pause the producer, never discard
+    // progress, when prolonged outages or denied storage exhaust the outbox.
+    get underPressure() { return entries.length > 0 && (!durable || entries.length >= 32 || pendingBytes >= 2 * 1024 * 1024); },
     async recover() {
       // A pause-menu exit may occur while the current block is still uploading.
       // Let it finish before choosing the first pending run to recover.
