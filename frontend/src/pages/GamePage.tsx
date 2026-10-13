@@ -1,6 +1,7 @@
 import { slowerEnemyArrival, bossEscortVisualScale, restoreSlowerArrival } from './enemyArrival';
 import { SceneResourceGate } from './sceneResourceGate';
 import { prepareSceneResources } from './sceneResources';
+import { sceneResourcePlan } from './sceneResourcePlan';
 import type { ShipResource } from './paintedShip';
 import { combatCryptoid, combatTiming, combatEntryStage, combatAttackPattern, createCombatVariety, readCombatVariety, type CombatVarietyRuntime } from './combatVariety';
 import { advanceBonusRock, spawnBonusRock, hitBonusRock, rockHitsShot, rockInField, nextRockEventMs, MAX_ROCKS, MAX_ROCK_EFFECTS, type BonusRock, type RockEffect } from './bonusRocks';
@@ -878,25 +879,13 @@ const GamePage = () => {
   const ensureSceneResources = () => {
     const state = stateRef.current;
     const selected = shipSelectionRef.current;
-    const key = `${state.sector}:${state.encounter.startsWith('boss') ? 'boss' : state.encounter}:${flightRef.current}:${bossEscortWaveRef.current}:${selected.skin.sprite}:${selected.color.id}:${shipStageRef.current}`;
+    const key = `${state.sector}:${state.encounter.startsWith('boss') ? 'boss' : state.encounter}:${state.encounter.startsWith('boss') ? bossEscortWaveRef.current : 0}:${selected.skin.sprite}:${selected.color.id}:${shipStageRef.current}`;
     return resourceGateRef.current?.ensure(key, () => {
       const ships: ShipResource[] = [{ sprite: selected.skin.sprite, color: selected.color.id, stage: shipStageRef.current }];
-      const upcoming: typeof ships = [];
       for (const enemy of state.asteroids) ships.push({ sprite: enemy.sprite, color: enemy.color, stage: 1 });
-      if (state.encounter === 'normal') {
-        const counts = blockFlights(state.sector, rulesVersionRef.current);
-        const offset = counts.slice(0, flightRef.current).reduce((sum, value) => sum + value, 0);
-        // Prepare this and the next finite flight in the existing paint cache.
-        const count = (counts[flightRef.current] ?? 0) + (counts[flightRef.current + 1] ?? 0);
-        for (let index = 0; index < count; index++) (index < (counts[flightRef.current] ?? 0) ? ships : upcoming).push({ ...enemyAppearance(state.sector, offset + index), stage: 1 });
-      } else if (state.encounter === 'bonus') {
-        for (let index = 0; index < BONUS_TARGET_COUNT; index++) ships.push({ ...bonusShowcaseShip(index, state.sector), stage: 1 });
-      } else if (state.boss) {
-        for (let wave = bossEscortWaveRef.current; wave <= bossEscortWaveRef.current + 1; wave++)
-          for (let index = 0; index < Math.max(bossEscortCount(state.sector), reactorEscortCount(state.sector)); index++)
-            (wave === bossEscortWaveRef.current ? ships : upcoming).push({ ...enemyAppearance(state.sector, bossEscortRosterIndex(index, wave)), stage: 1 });
-      }
-      return prepareSceneResources(ships, state.boss?.config, upcoming);
+      const plan = sceneResourcePlan(state.sector, state.encounter, bossEscortWaveRef.current, rulesVersionRef.current);
+      ships.push(...plan.ships);
+      return prepareSceneResources(ships, state.boss?.config, plan.upcoming, plan.upcomingBoss);
     }) ?? false;
   };
   const ensureSceneResourcesRef = useRef(ensureSceneResources);

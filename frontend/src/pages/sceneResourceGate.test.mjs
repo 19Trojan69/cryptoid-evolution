@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { SceneResourceGate } from './sceneResourceGate.ts';
 import { slowerEnemyArrival, restoreSlowerArrival, bossEscortVisualScale } from './enemyArrival.ts';
+import { ResourceCache } from './resourceCache.ts';
 const deferred=()=>{let resolve,reject;const ready=new Promise((a,b)=>{resolve=a;reject=b});return{ready,resolve,reject};};
 test('all 500-stage arrival times use 75% speed and restored progress migrates exactly once',()=>{
  for(let duration=1000;duration<=12000;duration+=37){
@@ -42,4 +43,25 @@ test('failed loading pauses once; explicit retry starts one fresh batch',async()
  assert.equal(faults.length,1);gate.retry();assert.equal(releases,1);
  gate.ensure('a',()=>({ready:b.ready,release:()=>releases++}));b.resolve();await Promise.resolve();
  assert.equal(gate.ensure('a',()=>assert.fail()),true);gate.dispose();assert.equal(releases,2);
+});
+test('decoded formations switch synchronously without a waiting callback or lost frame',async()=>{
+ const waiting=[],gate=new SceneResourceGate(value=>waiting.push(value),()=>assert.fail());
+ for(let wave=0;wave<1000;wave++) {
+  assert.equal(gate.ensure(String(wave),()=>({ready:Promise.resolve(),isReady:()=>true,release(){}})),true);
+ }
+ await Promise.resolve();assert.equal(waiting.includes(true),false);
+ gate.dispose();
+});
+test('incoming resources are pinned before old forecast pins release and trim the cache',()=>{
+ const revoked=[],cache=new ResourceCache(1,Infinity,url=>revoked.push(url));
+ const gate=new SceneResourceGate(()=>{},()=>assert.fail());
+ const oldPin=cache.retain('next');cache.set('next','decoded-next');
+ gate.ensure('old',()=>({ready:Promise.resolve(),isReady:()=>true,release:oldPin}));
+ cache.set('recent','recent-resource');
+ assert.equal(gate.ensure('next',()=>{
+  const release=cache.retain('next');
+  return{ready:Promise.resolve(),isReady:()=>cache.get('next')==='decoded-next',release};
+ }),true);
+ assert.equal(cache.get('next'),'decoded-next');assert.equal(revoked.includes('decoded-next'),false);
+ gate.dispose();
 });

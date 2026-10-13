@@ -117,6 +117,7 @@ export function preparePaintedShips(ships:readonly ShipResource[]) {
   let released=false;
   return {
     ready:Promise.all([...unique.values()].map(ship=>createPaintedSprite(ship.sprite,ship.color,ship.stage))),
+    isReady:()=>[...unique.keys()].every(key=>cache.get(key)!==undefined),
     release:()=>{if(released)return;released=true;for(const release of releases)release();},
   };
 }
