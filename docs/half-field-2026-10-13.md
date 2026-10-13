@@ -61,3 +61,12 @@ Vorheriger Remote-Stand `bb00de2b0411a751467875d686834bb45935d0f7`, lokal gleich
 Bisheriger privater Site-Source `3aafe636764d1bab962c56b29c6ca6ebbc1102b7`; Version `appgprj_6acd33650fcc8191a7e718e40b8acea5~appgver_6c6ac94ee0e08191bb94f7b4db6f2878`; Deployment `appgdep_6acdb4d32df88191a189834852eb03a4`. Source wurde nach Workspace-Wartung über denselben privaten Site wiederhergestellt; keine Kopie realer Daten.
 
 Nur bestehender owner-private Site wird aktualisiert. Kein öffentlicher Testnet-/Mainnet-Deploy, Main-Merge, Kostenupgrade oder Live-DB-Eingriff. DB-Backup und isolierter Wiederherstellungsnachweis weiterhin unverifiziert; öffentliche Veröffentlichung bleibt gesperrt. Neue private Provenienz wird nach erfolgreicher Aktualisierung ergänzt.
+
+
+## Erfolgreiche private Aktualisierung
+
+13.10.2026 07:31:00 Europe/Vienna: bestehender owner-private Site erfolgreich aktualisiert. URL https://cryptoid-stability-private-20261012.xwsk9s27cg.chatgpt.site .
+
+Runtime lokal `c8994d549dbf3e768dc287384db05dce6e4d0d13`, Remote `e84281e747f5c67a1d599ae68d609d238d0508f1`; gleiche geprüfte Git-Tree `d0675c4ee9f20fe5b561d4e204e8beee48c81ad8`. Site-Source `bbe80e744c357c2ee80148674723d879fee89237`, Version `appgprj_6acd33650fcc8191a7e718e40b8acea5~appgver_195ba74ca99c8191a5ec7aa053d8f083`, Deployment `appgdep_6acdc201bacc81919215ee537ddf14c0`, succeeded. Provenienz separat in private-deployment.json.
+
+Alle 464 Originaldateien bytegleich und alle sechs erzeugten CSS-Hashes identisch mit der vorigen privaten Version. Der finale kumulative Sourcecheck wurde erneut ausgeführt; seine Kategorien benennen jetzt sowohl Stärkegrößen als auch den notwendigen Boss-Sammelpunkt ausdrücklich (preservation-final.json). Diese Berichtsänderung beeinflusst keine ausgelieferte Laufzeitfunktion. Der erfolgreiche Deploy beweist die Bereitstellung, keinen mobilen Grafik-/Audio-/Langzeitlauf. Öffentliche Testnet/Mainnet-Domains wurden durch diese Arbeit nicht verändert.
