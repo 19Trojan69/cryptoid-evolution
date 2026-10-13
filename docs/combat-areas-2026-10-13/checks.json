@@ -1,0 +1,16 @@
+{
+  "frontend": {
+    "passed": 408,
+    "failed": 0,
+    "command": "node --experimental-strip-types --test $(rg --files src | rg '\\.test\\.mjs$')"
+  },
+  "backend": {
+    "passed": 106,
+    "failed": 0
+  },
+  "frontendProductionBuild": "passed including TypeScript and release i18n checks",
+  "backendBuild": "passed",
+  "nativeBrowser": "unavailable; no Pi Browser/WebKit/GPU/FPS/audio measurement",
+  "publicRelease": false,
+  "databaseBackupAndIsolatedRestore": "still unverified"
+}

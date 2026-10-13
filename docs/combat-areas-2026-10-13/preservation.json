@@ -1,0 +1,182 @@
+{
+  "passed": true,
+  "base": "16fcfb43aad836de0e38f684c0d4cade82b78976",
+  "earlierAuditedCheckpoint": "c070f7e0745401abd3dd2ceabd79e36be329e725",
+  "latestAuthorizedAreasAndFiring": {
+    "passed": true,
+    "base": "c070f7e0745401abd3dd2ceabd79e36be329e725",
+    "mode": "real component/cache/firing and geometry in controlled Node; no native Pi Browser/GPU/audio/FPS proof",
+    "cases": [
+      {
+        "width": 393,
+        "height": 659,
+        "assumedHudBottom": 64,
+        "playerDiameter": 94,
+        "minimumBoundary": 0.6994673636191198,
+        "maximumBoundary": 0.7410163795144157,
+        "minimumVerticalContactClearancePx": 58.97829409999997,
+        "all450StagesAndFlightsValid": true
+      },
+      {
+        "width": 320,
+        "height": 568,
+        "assumedHudBottom": 64,
+        "playerDiameter": 94,
+        "minimumBoundary": 0.7719577334947183,
+        "maximumBoundary": 0.8458337444142126,
+        "minimumVerticalContactClearancePx": 62.98865209999997,
+        "all450StagesAndFlightsValid": true
+      },
+      {
+        "width": 390,
+        "height": 844,
+        "assumedHudBottom": 80,
+        "playerDiameter": 104,
+        "minimumBoundary": 0.598193798943733,
+        "maximumBoundary": 0.6328584071090047,
+        "minimumVerticalContactClearancePx": 68.31058070638295,
+        "all450StagesAndFlightsValid": true
+      },
+      {
+        "width": 430,
+        "height": 932,
+        "assumedHudBottom": 90,
+        "playerDiameter": 107.5,
+        "minimumBoundary": 0.5597932878932288,
+        "maximumBoundary": 0.5916917018508583,
+        "minimumVerticalContactClearancePx": 71.80420601861692,
+        "all450StagesAndFlightsValid": true
+      },
+      {
+        "width": 768,
+        "height": 1024,
+        "assumedHudBottom": 94,
+        "playerDiameter": 132,
+        "minimumBoundary": 0.6255218482640044,
+        "maximumBoundary": 0.6625740818359375,
+        "minimumVerticalContactClearancePx": 91.0095832042553,
+        "all450StagesAndFlightsValid": true
+      },
+      {
+        "width": 1280,
+        "height": 720,
+        "assumedHudBottom": 80,
+        "playerDiameter": 115,
+        "minimumBoundary": 0.7978126352227394,
+        "maximumBoundary": 0.8455712739583333,
+        "minimumVerticalContactClearancePx": 75.5105459734043,
+        "all450StagesAndFlightsValid": true
+      },
+      {
+        "width": 800,
+        "height": 600,
+        "assumedHudBottom": 80,
+        "playerDiameter": 112,
+        "minimumBoundary": 0.8433333333317481,
+        "maximumBoundary": 0.8901678825454545,
+        "minimumVerticalContactClearancePx": 63.167240798634396,
+        "all450StagesAndFlightsValid": true
+      }
+    ],
+    "flightsChecked": 5635,
+    "sideEntriesChecked": 5769,
+    "cachedCalls": 10000,
+    "geometryComputationsAcrossNineBlocks": 1,
+    "cachedCallsMilliseconds": 14.52857400000039,
+    "firing": [
+      {
+        "level": 1,
+        "volleyCount10Seconds": 31,
+        "identicalToPrevious": true
+      },
+      {
+        "level": 2,
+        "volleyCount10Seconds": 31,
+        "identicalToPrevious": true
+      },
+      {
+        "level": 3,
+        "volleyCount10Seconds": 45,
+        "identicalToPrevious": true
+      },
+      {
+        "level": 4,
+        "volleyCount10Seconds": 45,
+        "identicalToPrevious": true
+      },
+      {
+        "level": 5,
+        "volleyCount10Seconds": 45,
+        "identicalToPrevious": true
+      }
+    ],
+    "projectilePixelsPer100ms": 64,
+    "protectedFunctionsUnchanged": [
+      "moveAsteroid",
+      "attackTime",
+      "destroyBoss",
+      "saveCombat",
+      "activateStartPower"
+    ],
+    "sceneChangesOnly": "normal strength size",
+    "simulationChangesOnly": "player movement boundary",
+    "stylesAndAssetsUnchanged": true,
+    "audioAndBossRendererUnchanged": true,
+    "limitations": [
+      "Extreme 844x390/112px-player field does not fit the unchanged full graphics; controlled technical pause before combat.",
+      "Geometry fixtures are explicit assumptions, not DOM measurements from the user screenshot.",
+      "A lower legal player position increases projectile travel distance; its speed and firing cadence are unchanged.",
+      "Early stages restore the original existing strength mixture; aggregate health/rewards differ from the removed light-only simplification."
+    ]
+  },
+  "normalGameMarkup": {
+    "identical": false,
+    "authorizedChangeOnly": "At the earlier checkpoint: resource readiness visibility/pause and 25% escort visual size; normalized original markup identical. Latest strength-size/boundary changes checked separately above.",
+    "sha256": "19f3f1808e7f04a59a755714a920b9058344df33de78f5c773b211d20f22484f"
+  },
+  "functions": {
+    "createFormationSlots": {
+      "identical": false,
+      "sha256": "1b9f566674efa15bbde2a9ba9c087c077880d97a047be80ba44bf640b5da9df9",
+      "authorizedChangeOnly": "Authorized whole-formation vertical placement close below the HUD, preserving all relative coordinates."
+    },
+    "spawnAsteroid": {
+      "identical": false,
+      "sha256": "459f2995ad03c4445f8edf0c39be565a7e7b76438ec9693858bf7b6de8a6f3bb",
+      "authorizedChangeOnly": "25% lower arrival speed; restored progress migrates once, and authorized formation repositioning keeps an in-flight restore on its actual new curve."
+    },
+    "moveAsteroid": {
+      "identical": true,
+      "sha256": "d8af547671f4fcc007ae349319c3599ff99f2ab391b95f4f0e471e830a2576a9"
+    },
+    "saveCombat": {
+      "identical": true,
+      "sha256": "0f236c1dd5a5b4e7bfcb3249d034a65def2a1fc0e52ff3da5b775c09f41359ef"
+    },
+    "restoreCombat": {
+      "identical": false,
+      "sha256": "6f6c7dc3fe1c007dad8cf34899739d3e90a9e1c2ae722b984417ee7f929c429a",
+      "authorizedChangeOnly": "25% lower arrival speed; restored progress migrates once, and authorized formation repositioning keeps an in-flight restore on its actual new curve."
+    },
+    "destroyBoss": {
+      "identical": true,
+      "sha256": "df5dc302f6442da1242c0ec9362a97546bd554df7bce660d5306771bcc8634bc"
+    },
+    "simulate": {
+      "identical": false,
+      "sha256": "34b887b25d6820e4933d3d11cd9314d0fe238a7224a54b582eb1783505b13f3a",
+      "authorizedChangeOnly": "Remove timed pickup; drop exclusively on ship defeat."
+    },
+    "activateStartPower": {
+      "identical": true,
+      "sha256": "84b3d5d73c38ed790be2ad420eacd49bce5204bd37ee0c66cab723dd5d8432a6"
+    }
+  },
+  "stylesAndPublicAssetsChanged": [],
+  "audio": {
+    "unchangedMembers": 42,
+    "sampleGainsIdentical": true,
+    "changedOnlyInitializationAndAtomicSamplePreparation": true
+  },
+  "limitation": "Source evidence only: no physical iPhone pixel comparison, audible listening test or proof of OS/GPU stability."
+}

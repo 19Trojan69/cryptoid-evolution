@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "mode": "actual resource pipeline and actual GamePage step; controlled Node Image/Canvas/worker fallback; no native browser/GPU/FPS proof",
+  "decodeGate": true,
+  "warmTransitions": 76,
+  "formationChecks": 96,
+  "warmTransitionWaitingCallbacks": 0,
+  "bossTexturesDecoded": true,
+  "failedImageCanRetry": true,
+  "forecastDoesNotBlockCurrent": true,
+  "loadingChecksDeduplicated": 1000,
+  "cacheAfter100Batches": {
+    "painted": 48,
+    "estimatedBytes": 3216,
+    "sources": 8,
+    "pending": 0
+  },
+  "temporaryCanvasesReleased": 1321,
+  "blobURLsRevoked": 685,
+  "waitingMilliseconds": 10000,
+  "powerTimersAndProgressFrozen": true,
+  "effectAgeProtected": true,
+  "resumeDeltaMs": 16
+}

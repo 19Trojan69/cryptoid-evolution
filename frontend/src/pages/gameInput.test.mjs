@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { bindGameInput, canStartSteering } from './gameInput.ts';
 import { TOUCH_SHIP_OFFSET_PX } from './playerCombat.ts';
 
-function harness({ legacy = false } = {}) {
+function harness({ legacy = false, minimumY = .5 } = {}) {
   const win = new EventTarget(), doc = new EventTarget(), field = new EventTarget();
   if (!legacy) win.PointerEvent = function () {};
   doc.defaultView = win; doc.visibilityState = 'visible'; field.ownerDocument = doc;
@@ -17,7 +17,7 @@ function harness({ legacy = false } = {}) {
   const pointer = { current: null }, origin = { current: null }, moves = [], faults = [];
   let playing = true, sensitivity = 1, area = 'normal', above = true;
   const input = bindGameInput(field, { pointer, origin, playing: () => playing, aboveFinger: () => above,
-    sensitivity: () => sensitivity, area: () => area, position: p => moves.push(p), fault: e => faults.push(e) });
+    sensitivity: () => sensitivity, area: () => area, minimumY:()=>minimumY, position: p => moves.push(p), fault: e => faults.push(e) });
   return { win, doc, field, input, pointer, origin, moves, faults, captures,
     down: (data = {}) => fire(field, 'pointerdown', data), move: (data = {}) => fire(field, 'pointermove', data),
     setPlaying: value => playing = value, setSensitivity: value => sensitivity = value,
@@ -137,4 +137,13 @@ test('legacy touch-only WebView can steer, cancel and start again', () => {
 test('dispose removes handlers so late events cannot move the ship', () => {
   const h = harness(); h.input.dispose(); h.down(); assert.equal(h.moves.length, 0);
   fire(h.win, 'pointerup'); assert.equal(h.pointer.current, null);
+});
+
+
+test('touch and mouse respect the enemy-area boundary immediately without a drag dead zone',()=>{
+ const h=harness({minimumY:.75});h.setArea('wide');
+ h.down({clientY:450});assert.equal(h.moves.at(-1).y,.75);
+ h.move({clientY:465});assert.ok(Math.abs(h.moves.at(-1).y-.75-15/760)<1e-9);
+ h.move({clientY:0});assert.equal(h.moves.at(-1).y,.75);
+ fire(h.win,'pointerup');h.down({pointerType:'mouse',clientY:450});assert.equal(h.moves.at(-1).y,.75);h.input.dispose();
 });

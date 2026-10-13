@@ -12,6 +12,7 @@ type Options = {
   aboveFinger: () => boolean;
   sensitivity: () => number;
   area: () => ControlZone;
+  minimumY?: () => number;
   position: (position: PlayerPosition) => void;
   fault: (error: unknown) => void;
 };
@@ -46,8 +47,8 @@ export function bindGameInput(field: HTMLElement, options: Options) {
     if (event.cancelable) event.preventDefault();
     const origin = event.pointerType === 'touch' ? options.origin.current : null;
     options.position(origin
-      ? placePlayer(origin.player.x * bounds.width + (event.clientX - origin.x) * options.sensitivity(), origin.player.y * bounds.height + (event.clientY - origin.y) * options.sensitivity(), bounds.width, bounds.height)
-      : placePlayerFromPointer(event.clientX - bounds.left, event.clientY - bounds.top, bounds.width, bounds.height, false));
+      ? placePlayer(origin.player.x * bounds.width + (event.clientX - origin.x) * options.sensitivity(), origin.player.y * bounds.height + (event.clientY - origin.y) * options.sensitivity(), bounds.width, bounds.height, options.minimumY?.())
+      : placePlayerFromPointer(event.clientX - bounds.left, event.clientY - bounds.top, bounds.width, bounds.height, false, options.minimumY?.()));
   };
   const start = (event: SteeringEvent) => {
     if (!options.playing() || (event.target as Element | null)?.closest?.(controls) ||
@@ -58,7 +59,7 @@ export function bindGameInput(field: HTMLElement, options: Options) {
     options.pointer.current = event.pointerId;
     options.origin.current = event.pointerType === 'touch' ? {
       x: event.clientX, y: event.clientY,
-      player: placePlayerFromPointer(event.clientX - bounds.left, event.clientY - bounds.top, bounds.width, bounds.height, options.aboveFinger()),
+      player: placePlayerFromPointer(event.clientX - bounds.left, event.clientY - bounds.top, bounds.width, bounds.height, options.aboveFinger(), options.minimumY?.()),
     } : null;
     try { field.setPointerCapture?.(event.pointerId); } catch { /* Global release handlers remain available in embedded browsers. */ }
     move(event);

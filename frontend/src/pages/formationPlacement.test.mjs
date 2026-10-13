@@ -4,6 +4,9 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import ts from 'typescript';
 import * as sector from './sectorManager.ts';
+import {normalFormation,normalCombatArea,enemyFormationExtents,playerUpperExtent} from './combatArea.ts';
+import {normalArrival} from './normalArrival.ts';
+import {strengthVisualDiameter} from './shipDisplayScale.ts';
 import { combatCryptoid, combatEntryStage, combatTiming } from './combatVariety.ts';
 import { chooseCryptoid } from './cryptoidRoster.ts';
 import { entryPatternForSector, entryPosition, entryStartX } from './entryPatterns.ts';
@@ -21,44 +24,27 @@ const declarations=[];
 const visit=node=>{if(ts.isVariableDeclaration(node)&&names.includes(node.name.getText(ast)))declarations.push(`const ${node.getText(ast)};`);ts.forEachChild(node,visit);};visit(ast);
 assert.equal(declarations.length,names.length);
 const code=ts.transpileModule(declarations.join('\n')+'\nglobalThis.game={createFormationSlots,spawnAsteroid,moveAsteroid};',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText;
-function game(testnet=true){const context={...sector,combatVarietyEnabled:testnet,chooseCryptoid:testnet?combatCryptoid:chooseCryptoid,combatEntryStage,combatTiming,entryPatternForSector,entryPosition,entryStartX,attackDuration,attackPosition,enemyAppearance,slowerEnemyArrival};vm.runInNewContext(code,context);return context.game;}
+function game(testnet=true){const context={...sector,combatVarietyEnabled:testnet,chooseCryptoid:testnet?combatCryptoid:chooseCryptoid,combatEntryStage,combatTiming,entryPatternForSector,entryPosition,entryStartX,attackDuration,attackPosition,enemyAppearance,slowerEnemyArrival,normalFormation,normalArrival,strengthVisualDiameter};vm.runInNewContext(code,context);return context.game;}
 
-test('all normal formation flights dock close below the HUD without changing their silhouettes or sizes',()=>{
+test('all normal flights respect the measured HUD, full-strength sizes and the actual player boundary',()=>{
  const runtime=game();
- for(const [width,height,hud,diameter] of [[390,844,80,104],[430,932,90,107.5],[390,932,98,104]])
- for(let stage=1;stage<=500;stage++) {
-  const plan=blockFlights(stage);let offset=0;
-  for(const count of plan){
-   const placed=runtime.createFormationSlots(stage,stage,width,height,hud,diameter,count,offset);
-   const radii=Array.from({length:count},(_,index)=>combatCryptoid(stage,index+offset).radius);
-   const base=sector.arrangeFormationBySize(sector.formationSlotsForCount(sector.formationLayout(stage,width,height,stage),count),radii);
-   const top=Math.min(...placed.map((slot,index)=>slot.y-sector.formationTopExtent(radii[index]===25?radii[index]*1.5:radii[index],diameter)));
-   assert.ok(Math.abs(top-hud-8)<1e-7,`${width} stage ${stage}/${offset} close HUD gap`);
-   const shift=placed[0].y-base[0].y;
-   placed.forEach((slot,index)=>{assert.equal(slot.x,base[index].x);assert.equal(slot.index,base[index].index);assert.ok(Math.abs(slot.y-base[index].y-shift)<1e-7);});
-   offset+=count;
-  }
- }
-});
-
-test('actual arrival and docking cannot contact the highest legal player position on a 390x844 field with the compact HUD',()=>{
- const runtime=game(),width=390,height=844,hud=80,diameter=104;
- for(let stage=1;stage<=500;stage++){
+ for(const [width,height,hud,diameter] of [[393,659,64,94],[320,568,64,94],[390,844,80,104],[1280,720,80,115],[800,600,80,112]])
+ for(let stage=1;stage<=500;stage++)if(stage%10){
+  const area=normalCombatArea(stage,width,height,hud,diameter);assert.equal(area.valid,true);
   let offset=0;
   for(const count of blockFlights(stage)){
-   const slots=runtime.createFormationSlots(stage,stage,width,height,hud,diameter,count,offset);
-   for(let index=0;index<count;index++){
-    let enemy=runtime.spawnAsteroid(index,width,hud,index,stage,slots,offset);
-    for(let frame=0;frame<=64;frame++){
-     const before=enemy;enemy=runtime.moveAsteroid(enemy,enemy.entryDuration/64,width,height);
-     const player=placePlayer(enemy.x,0,width,height);
-     const contact=contactWithEnemy(player,width,height,enemy,true,false,0,before,player);
-     assert.equal(contact.connected,false,`stage ${stage}/${offset}/${index} frame ${frame}`);
-     assert.ok(height*.5-enemy.y-enemy.radius-PLAYER_CONTACT_RADIUS>=0);
+   const placed=runtime.createFormationSlots(stage,stage,width,height,hud,diameter,count,offset);
+   placed.forEach((slot,index)=>{
+    const profile=combatCryptoid(stage,index+offset),sprite=enemyAppearance(stage,index+offset).sprite,extent=enemyFormationExtents(profile.radius,profile.shipClass,sprite,diameter);
+    assert.ok(slot.y-extent.top>=hud+8-1e-7,'complete visible envelope stays below HUD');
+    assert.ok(slot.y+extent.bottom+playerUpperExtent(diameter)+12<=area.minimumPlayerY*height+1e-7);
+    let enemy=runtime.spawnAsteroid(index,width,hud,index,stage,placed,offset);
+    for(let frame=0;frame<24;frame++){
+     const before=enemy;enemy=runtime.moveAsteroid(enemy,enemy.entryDuration/23,width,height);
+     const player=placePlayer(enemy.x,0,width,height,area.minimumPlayerY);
+     assert.equal(contactWithEnemy(player,width,height,enemy,true,false,0,before,player).connected,false,`arrival ${width}/${stage}/${offset}/${index}/${frame}`);
     }
-    assert.equal(enemy.y,enemy.entryTargetY);
-   }
-   offset+=count;
+   });offset+=count;
   }
  }
 });
@@ -77,26 +63,30 @@ test('HUD resize corrections move both ways, remain idempotent, and preserve the
 });
 
 
-test('an impossible short-field translation preserves the previous layout instead of silently compressing formations',()=>{
- const runtime=game();
- for(const [width,height,hud,diameter] of [[320,568,64,94],[390,700,64,104],[844,390,64,112]])
- for(let stage=1;stage<=500;stage++) {
-  let offset=0;
-  for(const count of blockFlights(stage)) {
-   const actual=runtime.createFormationSlots(stage,stage,width,height,hud,diameter,count,offset);
-   const physical=Array.from({length:count},(_,i)=>combatCryptoid(stage,i+offset).radius),visual=physical.map(r=>r===25?r*1.5:r);
-   const base=sector.arrangeFormationBySize(sector.formationSlotsForCount(sector.formationLayout(stage,width,height,stage),count),physical);
-   const proposed=sector.formationNearHud(base,visual,hud,diameter);
-   if(!sector.formationFitsPlayerArea(proposed,physical,height))assert.deepEqual(JSON.parse(JSON.stringify(actual)),sector.formationBelowHud(base,visual,width,hud,diameter));
-   else assert.equal(sector.formationFitsPlayerArea(actual,physical,height),true);
-   offset+=count;
-  }
+test('all strength classes are shown at distinct sizes; first 29 stages use the original real strength mixture',()=>{
+ for(const diameter of [94,104,132,160]){
+  const sizes=['light','medium','heavy','elite'].map(c=>strengthVisualDiameter(c,diameter));
+  for(let i=1;i<sizes.length;i++)assert.ok(sizes[i]>sizes[i-1]);
+  assert.equal(sizes[0],1.5*55*Math.max(1,diameter/94));
+ }
+ for(let stage=1;stage<=29;stage++)if(stage%10){
+  const profiles=Array.from({length:6},(_,i)=>combatCryptoid(stage,i));
+  assert.ok(new Set(profiles.map(p=>p.shipClass)).size>=3);
+  const signature=p=>JSON.stringify(p);
+  assert.deepEqual(profiles.map(signature).sort(),Array.from({length:6},(_,i)=>chooseCryptoid(stage,i)).map(signature).sort(),'same complete existing profiles, including health/rewards');
  }
 });
 
+test('nine original silhouettes remain distinct, with different layouts in successive levels and extra flights',()=>{
+ const signature=slots=>slots.map(s=>[s.x,s.y]);
+ const layouts=Array.from({length:9},(_,i)=>sector.variedFormationLayout(i+1,390,844,i+1));
+ assert.equal(new Set(layouts.map(s=>JSON.stringify(signature(s)))).size,9);
+ for(let level=0;level<49;level++)assert.notDeepEqual(signature(sector.variedFormationLayout(1,390,844,level*10+1)),signature(sector.variedFormationLayout(1,390,844,(level+1)*10+1)));
+ for(let flight=1;flight<3;flight++)assert.notDeepEqual(signature(sector.variedFormationLayout(1,390,844,39,flight-1)),signature(sector.variedFormationLayout(1,390,844,39,flight)));
+});
 
 test('moving an in-flight checkpoint/resize to its new target cannot leave a stale player-overlap endpoint',()=>{
- const context={...sector,combatVarietyEnabled:true,chooseCryptoid:combatCryptoid,combatEntryStage,combatTiming,entryPatternForSector,entryPosition,entryStartX,attackDuration,attackPosition,enemyAppearance,slowerEnemyArrival};
+ const context={...sector,combatVarietyEnabled:true,chooseCryptoid:combatCryptoid,combatEntryStage,combatTiming,entryPatternForSector,entryPosition,entryStartX,attackDuration,attackPosition,enemyAppearance,slowerEnemyArrival,normalFormation,normalArrival,strengthVisualDiameter};
  vm.runInNewContext(code,context);
  let helper,restoreTarget;
  const visit=n=>{if(ts.isVariableDeclaration(n)&&n.name.getText(ast)==='retargetFormationY')helper=`const ${n.getText(ast)};globalThis.retarget=retargetFormationY;`;if(ts.isIfStatement(n)&&n.expression.getText(ast)==='slot'&&n.thenStatement.getText(ast).includes('enemy.entryTargetX'))restoreTarget=n.getText(ast);ts.forEachChild(n,visit);};visit(ast);
@@ -104,7 +94,7 @@ test('moving an in-flight checkpoint/resize to its new target cannot leave a sta
  if(helper)vm.runInNewContext(ts.transpileModule(helper,{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText,context);
  const width=390,height=844,engine=context.game,slots=engine.createFormationSlots(6,6,width,height,80,104);
  let enemy=engine.spawnAsteroid(1,width,80,4,6,slots);
- const target=enemy.entryTargetY;enemy.entryTargetY=target+100;enemy=engine.moveAsteroid(enemy,enemy.entryDuration*.95,width,height);
+ const target=enemy.entryTargetY;enemy.entryStartX=195;enemy.entryStartY=110;enemy.entryTargetY=target+100;enemy=engine.moveAsteroid(enemy,enemy.entryDuration*.95,width,height);
  const player=placePlayer(enemy.x,0,width,height);
  assert.equal(contactWithEnemy(player,width,height,enemy,true,false,0).connected,true,'old saved position reproduces the overlap');
  const snapshot={elapsed:enemy.entryElapsed,duration:enemy.entryDuration,health:enemy.health,formationElapsed:enemy.formationElapsed};

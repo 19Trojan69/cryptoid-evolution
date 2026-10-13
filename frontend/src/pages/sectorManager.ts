@@ -77,6 +77,13 @@ export const formationLayout = (section: number, width: number, height: number, 
   }));
 };
 
+// Each new visible level rotates the nine original silhouettes; extra flights
+// choose another silhouette, rather than docking in the same repeated raster.
+export const variedFormationLayout = (section:number,width:number,height:number,stage:number,flight=0) => {
+  const variant=((stage-1)%10 + Math.floor((stage-1)/10)*3 + flight*2)%9;
+  return formationLayout(section,width,height,variant+1);
+};
+
 export const arrangeFormationBySize = <T extends { index: number; x: number; y: number; anchor?: boolean }>(slots: T[], sizes: number[]) => {
   if (slots.length !== sizes.length) return slots;
   const centerX = slots.reduce((sum, slot) => sum + slot.x, 0) / Math.max(1, slots.length);

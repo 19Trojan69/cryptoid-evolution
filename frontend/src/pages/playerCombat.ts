@@ -25,17 +25,17 @@ export const activeWeaponLevel = (paidLevel: number, paidMs: number, pickupLevel
   return Math.max(paid, pickup);
 };
 
-export const placePlayer = (x: number, y: number, width: number, height: number): PlayerPosition => ({
+export const placePlayer = (x: number, y: number, width: number, height: number, minimumY = .5): PlayerPosition => ({
   x: clamp(x / width, 30 / width, 1 - 30 / width),
-  y: clamp(y / height, 0.5, Math.min(0.91, 1 - 36 / height)),
+  y: clamp(y / height, Math.min(minimumY, Math.min(.91, 1 - 36 / height)), Math.min(0.91, 1 - 36 / height)),
 });
 
-export const placePlayerFromPointer = (x: number, y: number, width: number, height: number, isTouch: boolean) =>
-  placePlayer(x, y - (isTouch ? TOUCH_SHIP_OFFSET_PX : 0), width, height);
+export const placePlayerFromPointer = (x: number, y: number, width: number, height: number, isTouch: boolean, minimumY = .5) =>
+  placePlayer(x, y - (isTouch ? TOUCH_SHIP_OFFSET_PX : 0), width, height, minimumY);
 
-export const movePlayer = (position: PlayerPosition, horizontal: number, vertical: number, delta: number, width: number, height: number) => {
+export const movePlayer = (position: PlayerPosition, horizontal: number, vertical: number, delta: number, width: number, height: number, minimumY = .5) => {
   const magnitude = Math.max(1, Math.hypot(horizontal, vertical));
-  return placePlayer(position.x * width + horizontal / magnitude * PLAYER_SPEED_PX_MS * delta, position.y * height + vertical / magnitude * PLAYER_SPEED_PX_MS * delta, width, height);
+  return placePlayer(position.x * width + horizontal / magnitude * PLAYER_SPEED_PX_MS * delta, position.y * height + vertical / magnitude * PLAYER_SPEED_PX_MS * delta, width, height, minimumY);
 };
 
 export const advanceShot = (shot: PlayerShot, delta: number): PlayerShot => ({ ...shot, x: shot.x + shot.speedX * delta, y: shot.y - SHOT_SPEED_PX_MS * delta });

@@ -8,6 +8,8 @@ Later private-device feedback on 12 October explicitly authorizes these addition
 
 User feedback on 13 October additionally authorizes moving normal formation destinations closer below the upper HUD and away from the player's flight area. Retain all nine distinct formations, HUD, ship sizes, entry timing, steering and collision rules. This correction changes normal formation placement; it does not authorize smaller graphics, a new player steering limit or disabled collisions.
 
+Latest explicit feedback on 13 October (IMG_5312.jpeg) supersedes the prior limits for these corrections: restore a visible hierarchy of enemy sizes by existing strength class, restore different normal formations across blocks/levels, keep the player outside the planned enemy formation area, and allow restrained side entries within that area. Use the existing strength profiles without inventing combat statistics. Existing attacks can still enter player space and cause normal contact damage. This permits necessary normal formation spacing/placement and player movement-boundary corrections; preserve HUD, images, particles, audio, rewards per existing profile, weapon timers, already saved health/rewards and network separation. No public release or main merge is authorized.
+
 - Do not change the appearance or layout of any game page, menu, header, ship, weapon, explosion, background, card or control.
 - Keep the compact original HUD: Home, hearts, Level, Shards above Score in the center, Block, Pause, all in one row. Do not enlarge the occupied game area.
 - Enemy positioning markers remain invisible. Preserve all existing entry, attack, regroup and sector formations.

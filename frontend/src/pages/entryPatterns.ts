@@ -63,5 +63,5 @@ export const entryPosition = ({ progress, startX, startY, targetX, targetY, widt
   // Introduce just one shallow S bend in block eight; later arrivals retain
   // their existing arc. All arrivals stay above the player's flight area.
   if (stage === 8) x += side * Math.min(18, width * .04) * Math.sin(2 * Math.PI * p) * Math.sin(Math.PI * p);
-  return { x: Math.max(radius, Math.min(width - radius, x)), y };
+  return { x: startX < 0 || startX > width ? x : Math.max(radius, Math.min(width - radius, x)), y };
 };

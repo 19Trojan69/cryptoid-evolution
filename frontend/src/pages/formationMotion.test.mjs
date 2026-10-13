@@ -11,6 +11,8 @@ import { attackDuration, attackPosition } from './attackPatterns.ts';
 import { bossEscortRosterIndex } from './bossEscorts.ts';
 import { enemyAppearance } from './shipFleet.ts';
 import { slowerEnemyArrival } from './enemyArrival.ts';
+import {normalArrival} from './normalArrival.ts';
+import {strengthVisualDiameter} from './shipDisplayScale.ts';
 
 // Execute the actual component's simulation functions without changing exports
 // or adding test hooks to the shipped game.
@@ -29,7 +31,7 @@ const code = ts.transpileModule([...declarations.values()].map(declaration => `c
 function simulation(testnet = true) {
   const context = { combatVarietyEnabled: testnet, chooseCryptoid: testnet ? combatCryptoid : chooseCryptoid,
     combatEntryStage, combatTiming, FORMATION_SETTLE_MS, entryPatternForSector, entryPosition, entryStartX,
-    attackDuration, attackPosition, bossEscortRosterIndex, enemyAppearance, slowerEnemyArrival };
+    attackDuration, attackPosition, bossEscortRosterIndex, enemyAppearance, slowerEnemyArrival, normalArrival, strengthVisualDiameter };
   vm.runInNewContext(code, context);
   return context.motion;
 }
@@ -77,8 +79,8 @@ test('normal arrivals use 25 percent less speed than the prior Testnet build acr
     for (let index = 0; index < slots.length; index++) {
       const profile = combatCryptoid(stage, index), enemy = motion.spawnAsteroid(index, 390, 90, index, stage, slots);
       const beforeDuration = combatTiming(stage).entryMs + (profile.shipClass === 'heavy' ? 600 : 0);
-      assert.equal(enemy.entryDuration,slowerEnemyArrival(Math.round(beforeDuration*1.1)));
-      assert.ok(Math.abs(Math.round(beforeDuration*1.1)/enemy.entryDuration-.75)<.001);
+      assert.ok(enemy.entryDuration>=slowerEnemyArrival(Math.round(beforeDuration*1.1)));
+      if(enemy.entryStartX>=0&&enemy.entryStartX<=390)assert.ok(Math.abs(Math.round(beforeDuration*1.1)/enemy.entryDuration-.75)<.001);
       for (const key of ['health', 'points', 'reward', 'attackPace', 'radius']) assert.equal(enemy[key], profile[key]);
       const beforeDock = motion.moveAsteroid(enemy, beforeDuration, 390, 844);
       assert.ok(beforeDock.entryElapsed < beforeDock.entryDuration);

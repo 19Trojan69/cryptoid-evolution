@@ -7,16 +7,6 @@ import type { BonusRock } from './bonusRocks.ts';
 export function combatCryptoid(stage: number, index: number) {
   if (stage % 10 === 0) return chooseCryptoid(stage, index);
   const block = (stage - 1) % 10 + 1;
-  if (stage <= 29) {
-    const type = stage === 1 ? index < 4 ? 'solflare' : 'etherCrystal'
-      : [4, 7, 9].includes(block) && index % 6 === 0 ? 'bitrock'
-      : block === 1 || block === 6 ? 'solflare'
-      : index % 3 === 0 ? 'etherCrystal' : 'solflare';
-    for (let i = 0; i < 12; i++) {
-      const profile = chooseCryptoid(stage, i);
-      if (profile.type === type) return profile;
-    }
-  }
   // Reorder the existing roster within each flight, retaining every profile,
   // class radius, health, reward and point value in later levels.
   const orders = [[0, 1, 2, 3, 4, 5], [4, 0, 1, 2, 3, 5], [2, 0, 5, 1, 4, 3]];

@@ -11,7 +11,7 @@ function mount(){localStorage.clear();sessionStorage.clear();e.effects.length=0;
 const tick=(d,ms,action)=>{for(let t=0;t<ms;t+=16){action?.(d.raw());engineStep(clock+=16);}return d.snapshot();};
 const safe=st=>{st.player={x:.9,y:.88};st.enemyShots=[];st.shots=[];};
 const report=[];
-const d=mount();tick(d,900);assert.ok(d.raw().asteroids.length);assert.ok(d.raw().asteroids.every(a=>a.radius===25));report.push('First ships under one second; original Light radius 25.');
+const d=mount();tick(d,900);assert.ok(d.raw().asteroids.length);assert.ok(d.raw().asteroids.every(a=>[25,36,50].includes(a.radius)));tick(d,900);assert.ok(d.raw().asteroids.some(a=>a.shipClass==='heavy'));report.push('First ships under one second; complete first flight retains original mixed class radii 25/36/50.');
 tick(d,18000,safe);assert.equal(d.snapshot().intro.weaponIssued,false);assert.equal(d.raw().powerUps.length,0);
 const seedEnemy={...d.raw().asteroids[0]},random=Math.random;
 try { Math.random=()=>0;
@@ -21,7 +21,7 @@ try { Math.random=()=>0;
   tick(d,16,st=>{st.enemyShots=[];st.player={x:.9,y:.88};});
  }
 } finally {Math.random=random;}
-const pickup=d.raw().powerUps.find(p=>p.type==='weapon');assert.ok(pickup);d.raw().player={x:pickup.x/390,y:pickup.y/760};tick(d,16,st=>{st.enemyShots=[];st.shots=[];});assert.equal(d.raw().weaponLevel,2);assert.equal(d.raw().pickupWeaponMs,20000);assert.equal(d.raw().maxHearts,3);report.push('No automatic 18-second drop. Actual ship defeats create the original weapon pickup: Single to Twin, unchanged duration and hearts.');
+const pickup=d.raw().powerUps.find(p=>p.type==='weapon');assert.ok(pickup);pickup.y=.88*760;d.raw().player={x:pickup.x/390,y:.88};tick(d,16,st=>{st.enemyShots=[];st.shots=[];});assert.equal(d.raw().weaponLevel,2);assert.equal(d.raw().pickupWeaponMs,20000);assert.equal(d.raw().maxHearts,3);report.push('No automatic 18-second drop. Actual ship defeats create the original weapon pickup: Single to Twin, unchanged duration and hearts.');
 d.pause();const p=d.snapshot();tick(d,50000);assert.equal(d.snapshot().intro.clock,p.intro.clock);assert.equal(d.raw().pickupWeaponMs,p.pickupWeaponMs);assert.equal(d.raw().score,p.score);d.resume();tick(d,32,safe);assert.equal(d.raw().powerUpTypes.filter(t=>t==='weapon').length,1);report.push('Pause/resume freezes clocks, score and power-up timer; no repeated drop.');
 const st=d.raw();const rock=e.spawnBonusRock(900,st.sector,390,760,95,.9,55);Object.assign(rock,{x:190,y:500,health:2});st.rocks=[rock];st.shots=[{id:800,x:190,y:509,speedX:0,damage:2,empowered:false}];const before={score:st.score,shards:st.shards,destroyed:st.destroyed};tick(d,16,s=>{s.enemyShots=[];});assert.equal(st.score,before.score+rock.points);assert.equal(st.shards,before.shards);assert.equal(st.destroyed,before.destroyed);assert.equal(st.rocks.length,0);assert.ok(st.rockEffects.some(f=>f.final));tick(d,64,safe);assert.equal(st.score,before.score+rock.points);report.push('Swept shot destroys rock and awards its small bonus exactly once, without Shards/defeats.');
 // The old proxy decoder must retain optional metadata inside the existing combo field.
@@ -55,7 +55,7 @@ for(const [encounter,phase] of [['normal','SECTOR_INTRO'],['normal','ENTRY'],['n
 const carryState=carried.raw();carryState.boss=e.createSectorBoss(10,390,95,760);carryState.sector=10;carryState.encounter='boss-fight';
 carried.destroyBoss();assert.equal(carryState.encounter,'boss-clear');assert.equal(carryState.powerUps[0].id,850);
 const pausedY=carryState.powerUps[0].y;carried.pause();tick(carried,50000);assert.equal(carryState.powerUps[0].y,pausedY);assert.equal(carryState.overdriveMs,12000);carried.resume();
-carryState.player={x:100/390,y:pausedY/760};tick(carried,16);assert.equal(carryState.powerUps.length,0);assert.equal(carryState.shieldCharges,1);tick(carried,16);assert.equal(carryState.shieldCharges,1);
+carryState.powerUps[0].y=.88*760;carryState.player={x:100/390,y:.88};tick(carried,16);assert.equal(carryState.powerUps.length,0);assert.equal(carryState.shieldCharges,1);tick(carried,16);assert.equal(carryState.shieldCharges,1);
 carried.restart();assert.equal(carried.raw().powerUps.length,0);
 report.push('Pickups survive block/boss/bonus/level switches and boss destruction, keep falling continuously during transitions, protect active boost timers and freeze only on actual pause, remain collectable exactly once, retain drop limits, and clear on restart.');
 const timedPickup=mount();tick(timedPickup,800,safe);

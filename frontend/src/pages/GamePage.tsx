@@ -1,3 +1,6 @@
+import { normalArrival } from './normalArrival';
+import { normalFormation, campaignCombatArea, enemyFormationExtents, playerUpperExtent, COMBAT_AREA_GAP } from './combatArea';
+import { placePlayer } from './playerCombat';
 import { slowerEnemyArrival, bossEscortVisualScale, restoreSlowerArrival } from './enemyArrival';
 import { SceneResourceGate } from './sceneResourceGate';
 import { prepareSceneResources } from './sceneResources';
@@ -8,7 +11,7 @@ import { advanceBonusRock, spawnBonusRock, hitBonusRock, rockHitsShot, rockInFie
 import BonusRockLayer from './BonusRockLayer';
 import './combatVariety.css';
 import { useAuth } from '../hooks/useAuth';
-import { enemyVisualDiameter } from './shipDisplayScale';
+import { enemyVisualDiameter, strengthVisualDiameter } from './shipDisplayScale';
 import { autoReloadKey, nextActiveWeapon, parseAutoReload, shouldAutoReload, type AutoReloadPreferences } from './weaponAutoReload';
 import { shipSaveNetwork } from './shipFleet';
 import { isTestnetWeaponPurchaseEnabled } from '../../../backend/src/paymentPolicy';
@@ -42,7 +45,7 @@ import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useStat
 import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
 import { entryPatternForSector, entryPosition, entryStartX, type EntryPattern } from "./entryPatterns";
-import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, arrangeFormationBySize, campaignLevel, formationBelowHud, formationNearHud, formationFitsPlayerArea, formationLayout, formationReady, formationSlotsForCount, sectionInSector, sectionPhase, sectorInChapter, sectorName, type SectorPhase } from "./sectorManager";
+import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, arrangeFormationBySize, campaignLevel, formationBelowHud, formationLayout, formationReady, formationSlotsForCount, sectionInSector, sectionPhase, sectorInChapter, sectorName, type SectorPhase } from "./sectorManager";
 import { chooseCryptoid as originalCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, POWER_UP_DURATION_MS, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp, type PowerUpType } from "./powerUps";
 import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, shipStartHeight } from "./controlPreferences";
@@ -230,17 +233,10 @@ const saveRecords = (state: GameState) => {
 };
 
 const createFormationSlots = (section: number, sector: number, width: number, height: number, hudBottom: number, playerDiameter: number, count?: number, offset = 0) => {
+  if (combatVarietyEnabled) return normalFormation(section, sector, width, height, hudBottom, playerDiameter, count ?? 6, offset).slots;
   const slots = formationSlotsForCount(formationLayout(section, width, height, sector), count ?? 6);
   const radii = slots.map((_, index) => chooseCryptoid(sector, index + offset).radius);
-  const visualRadii = radii.map(radius => combatVarietyEnabled && radius === 25 ? radius * 1.5 : radius);
-  const arranged = arrangeFormationBySize(slots, radii);
-  if (combatVarietyEnabled) {
-    const placed = formationNearHud(arranged, visualRadii, hudBottom, playerDiameter);
-    if (formationFitsPlayerArea(placed, radii, height)) return placed;
-  }
-  // Insufficient space needs an explicitly reviewed row-spacing correction;
-  // never introduce a new overlap or shrink ships to force an invalid fit.
-  return formationBelowHud(arranged, visualRadii, width, hudBottom, playerDiameter);
+  return formationBelowHud(arrangeFormationBySize(slots, radii), radii, width, hudBottom, playerDiameter);
 };
 
 const alignedSpritePosition = (x: number, y: number, sprite: number, renderedSize: number) => {
@@ -255,9 +251,12 @@ const spawnAsteroid = (id: number, width: number, visibleTop: number, formationI
   const entrySide = target.entrySide * (flightVariation % 2 ? -1 : 1);
   const choreography = combatVarietyEnabled ? combatEntryStage(sector, flightVariation) : sector;
   const entryPattern = entryPatternForSector(choreography + flightVariation * 3);
-  const startX = entryStartX(entryPattern, formationIndex, width, profile.radius, entrySide, choreography, target.x);
-  const entryStartY = visibleTop + profile.radius + ENTRY_HUD_GAP_PX;
-  return { id, x: startX, y: entryStartY, size, ...profile, ...enemyAppearance(sector, formationIndex + offset), entryDuration: slowerEnemyArrival(combatVarietyEnabled ? Math.round((combatTiming(sector).entryMs + (profile.shipClass === "heavy" ? 600 : 0)) * 1.1) : Math.max(4_100, Math.round(profile.entryDuration * .85))), health: profile.health, maxHealth: profile.health, cloaked: false, rotation: 0, rotationSpeed: 0, entryElapsed: 0, entryStartX: startX, entryStartY, entryTargetX: target.x, entryTargetY: target.y, entrySide, entryPattern, entryStage: choreography, entryIndex: formationIndex, formationSlot: target.index, formationSlotCount: slots.length, formationElapsed: 0, formationDuration: combatVarietyEnabled ? 180 : FORMATION_SETTLE_MS, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, collidedThisAttack: false };
+  const originalX = entryStartX(entryPattern, formationIndex, width, profile.radius, entrySide, choreography, target.x);
+  const originalY = visibleTop + profile.radius + ENTRY_HUD_GAP_PX;
+  const originalDuration = slowerEnemyArrival(combatVarietyEnabled ? Math.round((combatTiming(sector).entryMs + (profile.shipClass === "heavy" ? 600 : 0)) * 1.1) : Math.max(4_100, Math.round(profile.entryDuration * .85)));
+  const arrival = combatVarietyEnabled ? normalArrival({pattern:entryPattern,startX:originalX,startY:originalY,targetX:target.x,targetY:target.y,width,height:0,radius:profile.radius,side:entrySide,index:formationIndex,stage:choreography},originalDuration,sector,flightVariation,strengthVisualDiameter(profile.shipClass,94)) : {startX:originalX,startY:originalY,duration:originalDuration};
+  const startX = arrival.startX, entryStartY = arrival.startY;
+  return { id, x: startX, y: entryStartY, size, ...profile, ...enemyAppearance(sector, formationIndex + offset), entryDuration: arrival.duration, health: profile.health, maxHealth: profile.health, cloaked: false, rotation: 0, rotationSpeed: 0, entryElapsed: 0, entryStartX: startX, entryStartY, entryTargetX: target.x, entryTargetY: target.y, entrySide, entryPattern, entryStage: choreography, entryIndex: formationIndex, formationSlot: target.index, formationSlotCount: slots.length, formationElapsed: 0, formationDuration: combatVarietyEnabled ? 180 : FORMATION_SETTLE_MS, attackPattern: null, attackDelay: 0, attackLane: 0, attackElapsed: 0, returnElapsed: 0, firedThisAttack: false, collidedThisAttack: false };
 };
 
 const spawnBossEscort = (id: number, width: number, index: number, level: number, slots: ReturnType<typeof bossEscortSlots>, wave: number): Asteroid => {
@@ -322,6 +321,7 @@ const moveAsteroid = (asteroid: Asteroid, delta: number, width: number, height: 
 const retargetFormationY = (enemy: Asteroid, targetY: number, width: number, height: number) => {
   const shift = targetY - enemy.entryTargetY;
   enemy.entryTargetY = targetY;
+  if (combatVarietyEnabled && (enemy.entryStartX < 0 || enemy.entryStartX > width)) enemy.entryStartY = targetY;
   if (enemy.attackPattern !== null) return;
   if (enemy.entryElapsed >= enemy.entryDuration) enemy.y += shift;
   else if (combatVarietyEnabled && shift !== 0) {
@@ -413,6 +413,7 @@ const GamePage = () => {
   const hudRef = useRef<HTMLElement>(null);
   const visibleTopRef = useRef(96);
   const playerDiameterRef = useRef(94);
+  const combatAreaRef = useRef({key:'',sector:0,mode:'',width:0,height:0,hud:0,diameter:0,rules:0,minimumY:.5,valid:true});
   const playerShipRef = useRef<HTMLDivElement>(null);
   const [playerDisplayDiameter, setPlayerDisplayDiameter] = useState(94);
   const [resourcesWaiting, setResourcesWaiting] = useState(true);
@@ -743,6 +744,7 @@ const GamePage = () => {
     formationStartedRef.current = saved.formationStarted;
     sectionSlotsRef.current = saved.slots;
     bossEscortSlotsRef.current = saved.escortSlots;
+    combatAreaRef.current.sector = 0;
     lastPlayerRef.current = { ...stateRef.current.player };
     // A saved defeated boss has no live hull/effect timeline. Resume at its
     // pending heart, without replaying rewards or a sound-only destruction.
@@ -894,6 +896,32 @@ const GamePage = () => {
     stateRef.current.status = rewardCardsRef.current.length ? "paused" : "playing";
     setGame({ ...stateRef.current });
   };
+  const refreshCombatArea = (force = false) => {
+    if (!combatVarietyEnabled) return true;
+    const state = stateRef.current, {width,height} = fieldSizeRef.current, diameter = playerDiameterRef.current;
+    const mode = state.encounter === 'normal' ? 'normal' : state.encounter.startsWith('boss') ? 'boss' : 'bonus';
+    const cached=combatAreaRef.current,hud=visibleTopRef.current,rules=rulesVersionRef.current;
+    const regionStage=mode==='normal'?Math.floor((state.sector-1)/10)*10+1:state.sector;
+    if (force || cached.sector!==regionStage || cached.mode!==mode || cached.width!==width || cached.height!==height || cached.hud!==hud || cached.diameter!==diameter || cached.rules!==rules) {
+      const area = mode === 'normal' ? campaignCombatArea(state.sector,width,height,visibleTopRef.current,diameter,rulesVersionRef.current) : {minimumPlayerY:.5,valid:true};
+      let minimumY = area.minimumPlayerY;
+      for (const enemy of state.asteroids) {
+        const bottom = enemy.escort ? Math.max(enemy.radius,enemyVisualDiameter(enemy.radius,diameter,true)*1.25*.4) : enemyFormationExtents(enemy.radius,enemy.shipClass,enemy.sprite,diameter).bottom;
+        minimumY = Math.max(minimumY,(enemy.entryTargetY+bottom+playerUpperExtent(diameter)+COMBAT_AREA_GAP)/height);
+      }
+      if(mode==='boss'&&Math.max(bossEscortCount(state.sector),reactorEscortCount(state.sector))>0)
+        minimumY=Math.max(minimumY,(height*.5-49+Math.max(18,enemyVisualDiameter(18,diameter,true)*1.25*.4)+playerUpperExtent(diameter)+COMBAT_AREA_GAP)/height);
+      Object.assign(cached,{key:'ready',sector:regionStage,mode,width,height,hud,diameter,rules,minimumY,valid:area.valid && minimumY<=Math.min(.91,1-36/height)+1e-7});
+    }
+    if(state.player.y < combatAreaRef.current.minimumY || state.player.y > Math.min(.91,1-36/height)){
+      const position = placePlayer(state.player.x*width,state.player.y*height,width,height,combatAreaRef.current.minimumY);
+      state.player = position; lastPlayerRef.current = {...position};
+      if(playerShipRef.current){playerShipRef.current.style.left=`${position.x*100}%`;playerShipRef.current.style.top=`${position.y*100}%`;}
+    }
+    return combatAreaRef.current.valid;
+  };
+  const refreshCombatAreaRef = useRef(refreshCombatArea);
+  refreshCombatAreaRef.current = refreshCombatArea;
   const ensureSceneResources = () => {
     const state = stateRef.current;
     const selected = shipSelectionRef.current;
@@ -934,20 +962,22 @@ const GamePage = () => {
       playerDiameterRef.current = playerWidth || 94;
       const currentSlots = sectionSlotsRef.current;
       if (currentSlots?.length && stateRef.current.encounter === "normal") {
-        const physicalRadii = currentSlots.map((_, index) => chooseCryptoid(stateRef.current.sector, index + formationOffsetRef.current).radius);
-        const radii = physicalRadii.map(radius => combatVarietyEnabled && radius === 25 ? radius * 1.5 : radius);
-        const placed = combatVarietyEnabled ? formationNearHud(currentSlots, radii, visibleTopRef.current, playerDiameterRef.current) : currentSlots;
-        const adjusted = combatVarietyEnabled && formationFitsPlayerArea(placed, physicalRadii, field.clientHeight) ? placed
-          : formationBelowHud(currentSlots, radii, field.clientWidth, visibleTopRef.current, playerDiameterRef.current);
+        const legacyRadii = combatVarietyEnabled ? [] : currentSlots.map((_, index) => chooseCryptoid(stateRef.current.sector, index + formationOffsetRef.current).radius);
+        const adjusted = combatVarietyEnabled
+          ? createFormationSlots(stateRef.current.section,stateRef.current.sector,field.clientWidth,field.clientHeight,visibleTopRef.current,playerDiameterRef.current,currentSlots.length,formationOffsetRef.current)
+          : formationBelowHud(currentSlots,legacyRadii,field.clientWidth,visibleTopRef.current,playerDiameterRef.current);
         if (adjusted !== currentSlots) {
           sectionSlotsRef.current = adjusted;
           for (const enemy of stateRef.current.asteroids) {
             const slot = adjusted.find(item => item.index === enemy.formationSlot);
             if (!slot) continue;
+            const shiftX=slot.x-enemy.entryTargetX;enemy.entryTargetX=slot.x;
+            if(enemy.attackPattern===null&&enemy.entryElapsed>=enemy.entryDuration)enemy.x+=shiftX;
             retargetFormationY(enemy, slot.y, field.clientWidth, field.clientHeight);
           }
         }
       }
+      refreshCombatAreaRef.current(true);
     };
     measureVisibleTop();
     const observer = new ResizeObserver(measureVisibleTop);
@@ -1180,6 +1210,7 @@ const GamePage = () => {
       aboveFinger: () => readShipStart() !== 'touch',
       sensitivity: () => sensitivityMultiplier[readControlSensitivity()],
       area: readControlZone,
+      minimumY: () => combatAreaRef.current.minimumY,
       position: player => {
         stateRef.current.player = player;
         if (playerShipRef.current) {
@@ -1305,7 +1336,7 @@ const GamePage = () => {
         const horizontal = Number(keys.has("ArrowRight") || keys.has("KeyD")) - Number(keys.has("ArrowLeft") || keys.has("KeyA"));
         const vertical = Number(keys.has("ArrowDown") || keys.has("KeyS")) - Number(keys.has("ArrowUp") || keys.has("KeyW"));
         if (horizontal || vertical) {
-          state.player = movePlayer(state.player, horizontal, vertical, delta, width, height);
+          state.player = movePlayer(state.player, horizontal, vertical, delta, width, height, combatAreaRef.current.minimumY);
           // Keep the ship at display cadence without re-rendering every projectile on mobile.
           if (playerShipRef.current) {
             playerShipRef.current.style.left = `${state.player.x * 100}%`;
@@ -1905,6 +1936,7 @@ const GamePage = () => {
       // A pending load/activation may settle after the presentation failed.
       // Keep that late transition from advancing an invisible combat scene.
       if (sceneFailedRef.current && stateRef.current.status === 'playing') interruptionRef.current('render-error');
+      if (stateRef.current.status === 'playing' && !refreshCombatAreaRef.current()) { interruptionRef.current('input-error', new Error('Formation does not fit the playfield')); lastFrameRef.current = time; return; }
       if (stateRef.current.status === 'playing' && !ensureSceneResourcesRef.current()) {
         const waitingGap = Math.max(0, time - (lastFrameRef.current || time));
         for (const effect of stateRef.current.effects) effect.startedAt += waitingGap;
@@ -2301,7 +2333,7 @@ const GamePage = () => {
           <BossHealthView boss={game.boss}/>
         </div>}
         {game.bonusTargets.map(target => <div key={target.id} className="asteroid asteroid-small cryptoid bonus-ship cryptoid-boost" style={{ ...alignedSpritePosition(target.x, target.y, target.sprite, 55), width: 55, height: 55, transform: "translate(-50%, -50%)", "--flame-length": `${engineFlamePercent(target.visualMotion?.thrust ?? 0)}%` } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={target.sprite} color={target.color} />{engineTrails(target.sprite, "exhaust")}</div></div>)}
-        {game.asteroids.map(asteroid => { const sprite = asteroid.sprite; const maskImage = `url('${shipEvolutionAsset(sprite, 1)}')`; const visualSize = enemyVisualDiameter(asteroid.radius, playerDisplayDiameter, combatVarietyEnabled && asteroid.size === "small") * bossEscortVisualScale(asteroid.escort); return <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid${game.empMs > 0 ? " cryptoid-emp" : ""} cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.hitUntil && asteroid.hitUntil > performance.now() ? " cryptoid-hit" : ""}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}${cryptoidMotionClass(asteroid)}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ ...alignedSpritePosition(asteroid.x, asteroid.y, sprite, visualSize), width: visualSize, height: visualSize, transform: "translate(-50%, -50%)", ...shipHullStyle(sprite, true), "--visual-bank": `${asteroid.visualMotion?.bank ?? 0}deg`, "--flame-length": `${engineFlamePercent(asteroid.visualMotion?.thrust ?? 0, asteroid.returnElapsed > 0 ? "return" : asteroid.entryElapsed < asteroid.entryDuration ? "launch" : asteroid.attackPattern !== null && asteroid.attackDelay <= 0 ? "boost" : "idle")}%`, "--hull-light": asteroid.hullLight ?? 0 } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={sprite} color={asteroid.color} />{engineTrails(sprite, "exhaust")}<i className="hull-reflection" style={{ maskImage, WebkitMaskImage: maskImage }} aria-hidden="true" /><HullDamage sites={asteroid.hullFires} hit={asteroid.hit} maskImage={maskImage} mirrored /></div>{enemyMuzzleOffsets(asteroid.muzzleBarrels ?? 1, asteroid.radius).map((offset, barrel) => <i key={`muzzle-${barrel}`} className="enemy-muzzle-flash" style={{ left: `calc(50% + ${offset}px)`, top: `calc(50% + ${asteroid.radius * .4}px)`, opacity: asteroid.muzzleAt ? Math.max(0, 1 - (performance.now() - asteroid.muzzleAt) / 100) : 0 }} aria-hidden="true" />)}<span className="health-bar" data-critical={asteroid.health / asteroid.maxHealth <= .3} role="progressbar" aria-label={t("Enemy hull")} aria-valuenow={Math.ceil(asteroid.health / asteroid.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${asteroid.health / asteroid.maxHealth * 100}%` }} /></span></div>; })}
+        {game.asteroids.map(asteroid => { const sprite = asteroid.sprite; const maskImage = `url('${shipEvolutionAsset(sprite, 1)}')`; const visualSize = (combatVarietyEnabled && !asteroid.escort ? strengthVisualDiameter(asteroid.shipClass, playerDisplayDiameter) : enemyVisualDiameter(asteroid.radius, playerDisplayDiameter, combatVarietyEnabled && asteroid.size === "small")) * bossEscortVisualScale(asteroid.escort); return <div key={asteroid.id} className={`asteroid asteroid-${asteroid.size} cryptoid${game.empMs > 0 ? " cryptoid-emp" : ""} cryptoid-${asteroid.type} cryptoid-${asteroid.shipClass}${asteroid.hitUntil && asteroid.hitUntil > performance.now() ? " cryptoid-hit" : ""}${asteroid.attackPattern !== null && asteroid.attackDelay > 0 ? " asteroid-preparing" : ""}${asteroid.cloaked ? " cryptoid-cloaked" : ""}${cryptoidMotionClass(asteroid)}`} title={`${cryptoidDisplayName[asteroid.type]} · ${asteroid.shipClass} · ${asteroid.faction}`} style={{ ...alignedSpritePosition(asteroid.x, asteroid.y, sprite, visualSize), width: visualSize, height: visualSize, transform: "translate(-50%, -50%)", ...shipHullStyle(sprite, true), "--visual-bank": `${asteroid.visualMotion?.bank ?? 0}deg`, "--flame-length": `${engineFlamePercent(asteroid.visualMotion?.thrust ?? 0, asteroid.returnElapsed > 0 ? "return" : asteroid.entryElapsed < asteroid.entryDuration ? "launch" : asteroid.attackPattern !== null && asteroid.attackDelay <= 0 ? "boost" : "idle")}%`, "--hull-light": asteroid.hullLight ?? 0 } as CSSProperties}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={sprite} color={asteroid.color} />{engineTrails(sprite, "exhaust")}<i className="hull-reflection" style={{ maskImage, WebkitMaskImage: maskImage }} aria-hidden="true" /><HullDamage sites={asteroid.hullFires} hit={asteroid.hit} maskImage={maskImage} mirrored /></div>{enemyMuzzleOffsets(asteroid.muzzleBarrels ?? 1, asteroid.radius).map((offset, barrel) => <i key={`muzzle-${barrel}`} className="enemy-muzzle-flash" style={{ left: `calc(50% + ${offset}px)`, top: `calc(50% + ${asteroid.radius * .4}px)`, opacity: asteroid.muzzleAt ? Math.max(0, 1 - (performance.now() - asteroid.muzzleAt) / 100) : 0 }} aria-hidden="true" />)}<span className="health-bar" data-critical={asteroid.health / asteroid.maxHealth <= .3} role="progressbar" aria-label={t("Enemy hull")} aria-valuenow={Math.ceil(asteroid.health / asteroid.maxHealth * 100)} aria-valuemin={0} aria-valuemax={100}><b style={{ width: `${asteroid.health / asteroid.maxHealth * 100}%` }} /></span></div>; })}
         {game.powerUps.map(pickup => {
           const pickupLabel = `${t(powerUpNames[pickup.type])} · ${t(powerUpDescriptions[pickup.type])}`;
           return <div key={pickup.id} className={`power-up power-up-${pickup.type}`} role="img" aria-label={pickupLabel} title={pickupLabel} style={{ left: pickup.x, top: pickup.y }}><span aria-hidden="true">{powerUpSymbols[pickup.type]}</span></div>;
