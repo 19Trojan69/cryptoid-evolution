@@ -60,9 +60,14 @@ for (const name of ['createFormationSlots', 'spawnAsteroid', 'moveAsteroid', 'sa
     });
 `;
   assert.ok(actual.includes(migration));actual=actual.replace(migration,'');
+  const retarget=`          enemy.entryTargetX = slot.x;
+          retargetFormationY(enemy, slot.y, width, height);`;
+  assert.ok(actual.includes(retarget));actual=actual.replace(retarget,`          const shift = slot.y - enemy.entryTargetY;
+          enemy.entryTargetX = slot.x; enemy.entryTargetY = slot.y;
+          if (enemy.attackPattern === null && enemy.entryElapsed >= enemy.entryDuration) enemy.y += shift;`);
  }
  assert.equal(actual, expected, name);
- functions[name] = { identical: after.get(name)===before.get(name), sha256: digest(after.get(name)), ...(['simulate','spawnAsteroid','restoreCombat','createFormationSlots'].includes(name)?{authorizedChangeOnly:name==='createFormationSlots'?'Authorized whole-formation vertical placement close below the HUD, preserving all relative coordinates.':name==='simulate'?'Remove timed pickup; drop exclusively on ship defeat.':'25% lower arrival speed; migrate restored progress exactly once.'}:{}) };
+ functions[name] = { identical: after.get(name)===before.get(name), sha256: digest(after.get(name)), ...(['simulate','spawnAsteroid','restoreCombat','createFormationSlots'].includes(name)?{authorizedChangeOnly:name==='createFormationSlots'?'Authorized whole-formation vertical placement close below the HUD, preserving all relative coordinates.':name==='simulate'?'Remove timed pickup; drop exclusively on ship defeat.':'25% lower arrival speed; restored progress migrates once, and authorized formation repositioning keeps an in-flight restore on its actual new curve.'}:{}) };
 }
 const normalizedMain=main(next).replace(' style={{ visibility: resourcesWaiting ? \'hidden\' : undefined }}','').replace('data-effects-paused={resourcesWaiting || ','data-effects-paused={').replace(' * bossEscortVisualScale(asteroid.escort)','');
 assert.equal(normalizedMain,main(old),'normal game markup except authorized resource wait and escort size');

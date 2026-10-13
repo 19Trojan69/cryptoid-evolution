@@ -319,6 +319,18 @@ const moveAsteroid = (asteroid: Asteroid, delta: number, width: number, height: 
   };
 };
 
+const retargetFormationY = (enemy: Asteroid, targetY: number, width: number, height: number) => {
+  const shift = targetY - enemy.entryTargetY;
+  enemy.entryTargetY = targetY;
+  if (enemy.attackPattern !== null) return;
+  if (enemy.entryElapsed >= enemy.entryDuration) enemy.y += shift;
+  else if (combatVarietyEnabled && shift !== 0) {
+    // A restored/resized arrival must already occupy its new curve position
+    // before swept-contact checks use it as the previous frame's endpoint.
+    enemy.y = moveAsteroid(enemy, 0, width, height).y;
+  }
+};
+
 const cryptoidMotionClass = (asteroid: Asteroid) => {
   if (asteroid.returnElapsed > 0) return " cryptoid-return";
   if (asteroid.entryElapsed < asteroid.entryDuration) return " cryptoid-launch";
@@ -707,9 +719,8 @@ const GamePage = () => {
       for (const enemy of saved.state.asteroids) {
         const slot = saved.slots.find(s => s.index === enemy.formationSlot);
         if (slot) {
-          const shift = slot.y - enemy.entryTargetY;
-          enemy.entryTargetX = slot.x; enemy.entryTargetY = slot.y;
-          if (enemy.attackPattern === null && enemy.entryElapsed >= enemy.entryDuration) enemy.y += shift;
+          enemy.entryTargetX = slot.x;
+          retargetFormationY(enemy, slot.y, width, height);
         }
         enemy.x = Math.max(enemy.radius, Math.min(width - enemy.radius, enemy.x));
       }
@@ -933,9 +944,7 @@ const GamePage = () => {
           for (const enemy of stateRef.current.asteroids) {
             const slot = adjusted.find(item => item.index === enemy.formationSlot);
             if (!slot) continue;
-            const shift = slot.y - enemy.entryTargetY;
-            enemy.entryTargetY = slot.y;
-            if (enemy.attackPattern === null && enemy.entryElapsed >= enemy.entryDuration) enemy.y += shift;
+            retargetFormationY(enemy, slot.y, field.clientWidth, field.clientHeight);
           }
         }
       }

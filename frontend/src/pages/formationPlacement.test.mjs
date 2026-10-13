@@ -93,3 +93,27 @@ test('an impossible short-field translation preserves the previous layout instea
   }
  }
 });
+
+
+test('moving an in-flight checkpoint/resize to its new target cannot leave a stale player-overlap endpoint',()=>{
+ const context={...sector,combatVarietyEnabled:true,chooseCryptoid:combatCryptoid,combatEntryStage,combatTiming,entryPatternForSector,entryPosition,entryStartX,attackDuration,attackPosition,enemyAppearance,slowerEnemyArrival};
+ vm.runInNewContext(code,context);
+ let helper,restoreTarget;
+ const visit=n=>{if(ts.isVariableDeclaration(n)&&n.name.getText(ast)==='retargetFormationY')helper=`const ${n.getText(ast)};globalThis.retarget=retargetFormationY;`;if(ts.isIfStatement(n)&&n.expression.getText(ast)==='slot'&&n.thenStatement.getText(ast).includes('enemy.entryTargetX'))restoreTarget=n.getText(ast);ts.forEachChild(n,visit);};visit(ast);
+ assert.ok(restoreTarget,'execute the actual restore target branch');
+ if(helper)vm.runInNewContext(ts.transpileModule(helper,{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText,context);
+ const width=390,height=844,engine=context.game,slots=engine.createFormationSlots(6,6,width,height,80,104);
+ let enemy=engine.spawnAsteroid(1,width,80,4,6,slots);
+ const target=enemy.entryTargetY;enemy.entryTargetY=target+100;enemy=engine.moveAsteroid(enemy,enemy.entryDuration*.95,width,height);
+ const player=placePlayer(enemy.x,0,width,height);
+ assert.equal(contactWithEnemy(player,width,height,enemy,true,false,0).connected,true,'old saved position reproduces the overlap');
+ const snapshot={elapsed:enemy.entryElapsed,duration:enemy.entryDuration,health:enemy.health,formationElapsed:enemy.formationElapsed};
+ context.enemy=enemy;context.slot={x:enemy.entryTargetX,y:target};context.width=width;context.height=height;
+ vm.runInNewContext(ts.transpileModule(restoreTarget,{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText,context);
+ assert.equal(contactWithEnemy(player,width,height,enemy,true,false,0).connected,false);
+ const next=engine.moveAsteroid(enemy,16,width,height);
+ assert.equal(contactWithEnemy(player,width,height,next,true,false,0,enemy,player).connected,false,'no artificial swept hit from stale restore endpoint');
+ assert.deepEqual({elapsed:enemy.entryElapsed,duration:enemy.entryDuration,health:enemy.health,formationElapsed:enemy.formationElapsed},snapshot);
+ const docked={...enemy,entryElapsed:enemy.entryDuration,y:target};context.retarget(docked,target-10,width,height);assert.equal(docked.y,target-10);
+ const attacking={...enemy,attackPattern:'dive',y:410};context.retarget(attacking,target-10,width,height);assert.equal(attacking.y,410,'active attack position remains unchanged');
+});
