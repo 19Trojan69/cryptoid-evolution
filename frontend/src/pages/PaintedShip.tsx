@@ -1,9 +1,11 @@
 import { memo } from "react";
-import { usePaintedShipStyle } from "./paintedShip";
+import { useHullSourceReady, usePaintedShipStyle } from "./paintedShip";
+import { shipEvolutionAsset } from './shipEvolution';
+import './hullArrival.css';
 import type { PlayerColorId } from "./shipFleet";
 import type { ShipStage } from "./shipEvolution";
 
 const PaintedShip = ({ sprite, color, stage = 1, className }: { sprite: number; color: PlayerColorId; stage?: ShipStage; className?: string }) =>
-  <i className={`${className ?? ""} material-hull`.trim()} style={usePaintedShipStyle(sprite, color, stage)} aria-hidden="true" />;
+  <i className={`${className ?? ""} material-hull`.trim()} style={usePaintedShipStyle(sprite, color, stage)} data-hull-ready={useHullSourceReady(shipEvolutionAsset(sprite, stage))} aria-hidden="true" />;
 
 export default memo(PaintedShip);

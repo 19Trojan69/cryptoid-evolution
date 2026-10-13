@@ -52,7 +52,8 @@ import { appendSectionBlock, bonusChainReward, BLOCKS_PER_CHAIN } from "./networ
 import { advanceAfterClear, BOSS_ENTRY_MS, BOSS_WARNING_MS, damageSectorBoss, bossVulnerable, createSectorBoss, moveSectorBoss, type SectorBoss } from "./sectorBoss";
 import { playerSkins, enemyAppearance, selectedShip, shardBalance, ADMIN_MODE_KEY, ADMIN_TEST_CONFIG_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
-import { useShipVisualOffset } from "./paintedShip";
+import { preloadHullSources, useHullSourceReady, useShipVisualOffset } from "./paintedShip";
+import { hullSourcePlan } from './hullSourcePlan';
 import { ownedShipStage, projectileGuardForStage, projectileImpact, shipEvolutionAsset, stageWeaponLevel, type ShipStage } from "./shipEvolution";
 import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio";
 import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, readMusicVolume, resetAudioVolumeDefaults } from "./musicPreferences";
@@ -2094,6 +2095,12 @@ const GamePage = () => {
   const round = sectionInSector(game.section);
   const levelComplete = game.encounter === "bonus" && game.phase === "SECTOR_CLEAR";
   const reinforcementIntro = game.encounter === "normal" && game.phase === "SECTOR_INTRO" && flightRef.current > 0;
+  const hullOffset = formationOffsetRef.current;
+  const hullWave = bossEscortWaveRef.current;
+  const bossHullReady = useHullSourceReady(game.boss?.config.image);
+  useEffect(() => {
+    preloadHullSources(hullSourcePlan(game.sector, game.encounter, hullOffset, hullWave));
+  }, [game.sector, game.encounter, hullOffset, hullWave]);
   const sectorIntro = game.encounter === "normal" && game.phase === "SECTOR_INTRO" && round === 1 && !reinforcementIntro;
   const levelIntro = sectorIntro && sectorLabel === 1;
   const translateBonusResult = (result: string) => result.split(" · ").slice(1).map(part => {
@@ -2197,7 +2204,7 @@ const GamePage = () => {
           ? game.phase === "ENTRY" || game.phase === "FORMATION" || game.phase === "REFORM"
           : game.encounter === "boss-fight" && asteroid.escort && asteroid.attackPattern === null
         ).map(asteroid => { const locked = asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration; const diameter = asteroid.radius * 2 + 8; return <div key={`formation-${asteroid.id}`} className={`formation-target${locked ? " formation-target-locked" : ""}`} style={{ left: asteroid.entryTargetX, top: asteroid.entryTargetY, width: diameter, height: diameter }} aria-hidden="true"><span /></div>; })}
-        {game.boss && game.encounter === "boss-fight" && <div className={`asteroid sector-boss${game.boss.health <= game.boss.maxHealth / 2 ? " boss-enraged" : ""}${game.boss.health <= game.boss.maxHealth * .25 ? " boss-critical" : ""}${performance.now() - game.boss.lastDamageAt < 240 ? " boss-hit" : ""}`} style={{ left: game.boss.x, top: game.boss.y, width: game.boss.width, height: game.boss.height, transform: "translate(-50%, -50%)", "--boss-image": `url('${game.boss.config.image}')`, "--boss-thrust": `${6 + game.boss.height * engineFlamePercent(game.boss.visualMotion?.thrust ?? 0, game.boss.elapsed < BOSS_ENTRY_MS ? "launch" : "idle") / 100}px` } as CSSProperties} title={`${t("CORE WARDEN")} · ${t("Sector")} boss`}>
+        {game.boss && game.encounter === "boss-fight" && <div className={`asteroid sector-boss${game.boss.health <= game.boss.maxHealth / 2 ? " boss-enraged" : ""}${game.boss.health <= game.boss.maxHealth * .25 ? " boss-critical" : ""}${performance.now() - game.boss.lastDamageAt < 240 ? " boss-hit" : ""}`} style={{ left: game.boss.x, top: game.boss.y, width: game.boss.width, height: game.boss.height, transform: "translate(-50%, -50%)", "--boss-image": `url('${game.boss.config.image}')`, "--boss-thrust": `${6 + game.boss.height * engineFlamePercent(game.boss.visualMotion?.thrust ?? 0, game.boss.elapsed < BOSS_ENTRY_MS ? "launch" : "idle") / 100}px` } as CSSProperties} data-hull-ready={bossHullReady} title={`${t("CORE WARDEN")} · ${t("Sector")} boss`}>
           {game.boss.config.engineAnchors.map(([x, y], index) => <i key={index} className="boss-engine-flame" style={{ left: `${x * 100}%`, top: `${y * 100}%` }} aria-hidden="true" />)}
           <img className="boss-hull" src={game.boss.config.image} alt="" draggable={false} />
           <BossWeaponsView boss={game.boss}/>

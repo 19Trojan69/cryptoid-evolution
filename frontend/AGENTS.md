@@ -2,6 +2,12 @@
 
 ## Latest scope reset: 13 October 2026
 
+Additional explicit request at 22:43 Vienna: hull and engine flames must arrive
+together; flames must not be visible before their associated hull source loads.
+Bounded source preparation using the existing cache and a source-readiness flame
+guard are authorized. No simulation wait, preparation overlay, field hiding,
+slower arrivals/shooting or full-campaign resource preloading.
+
 Additional explicit request after private testing at 22:35 Vienna: fix player
 explosion at a boundary without a real collision. A width-based circular boss
 contact extending below its rendered height is confirmed; correcting that false

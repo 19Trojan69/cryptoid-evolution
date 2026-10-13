@@ -9,6 +9,7 @@ import { ResourceCache } from './resourceCache';
 const cache = new ResourceCache<string>(48, 24 * 1024 * 1024, url => URL.revokeObjectURL(url));
 const pendingPaints = new Map<string, Promise<string>>();
 const sourceImages = new ResourceCache<Promise<HTMLImageElement>>(8, Infinity);
+const readySources = new WeakSet<Promise<HTMLImageElement>>();
 const visualCenters = new Map<string, { x: number; y: number }>();
 const shipImage = (url: string) => {
   let pending = sourceImages.get(url);
@@ -37,9 +38,29 @@ const shipImage = (url: string) => {
     });
     sourceImages.set(url, pending);
     const current = pending;
+    void current.then(() => readySources.add(current), () => {});
     void current.catch(() => { if (sourceImages.get(url) === current) sourceImages.delete(url); });
   }
   return pending;
+};
+
+// Use the existing eight-source cache, not an additional preload cache/queue.
+export const preloadHullSources = (urls: readonly string[]) => {
+  for (const url of [...new Set(urls)].slice(0, 7)) void shipImage(url).catch(() => {});
+};
+
+export const useHullSourceReady = (url: string | undefined) => {
+  const [loadedUrl, setLoadedUrl] = useState<string | undefined>(() => {
+    const pending = url ? sourceImages.get(url) : undefined;
+    return pending && readySources.has(pending) ? url : undefined;
+  });
+  useEffect(() => {
+    if (!url) return;
+    let active = true;
+    void shipImage(url).then(() => { if (active) setLoadedUrl(url); }, () => {});
+    return () => { active = false; };
+  }, [url]);
+  return !!url && loadedUrl === url;
 };
 
 // Apply this to the owner of a .ship-visual, including any future shielded ship.
@@ -81,6 +102,17 @@ const renderPaintedSprite = async (index: number, colorId: PlayerColorId, stage:
     // Blob encoding can run off the main thread; large base64 strings are avoided.
     const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(value => value ? resolve(value) : reject(new Error('Ship encoding failed')), 'image/png'));
     const paintedUrl = URL.createObjectURL(blob);
+    // A Blob URL is not decoded merely because encoding finished. Keep the
+    // already-loaded source hull until the replacement is ready for display.
+    try {
+      const decoded = new Image();
+      await new Promise<void>((resolve, reject) => {
+        decoded.onload = () => { decoded.onload = decoded.onerror = null; resolve(); };
+        decoded.onerror = () => { decoded.onload = decoded.onerror = null; reject(new Error('Painted ship image unavailable')); };
+        decoded.src = paintedUrl;
+      });
+      if (typeof decoded.decode === 'function') await decoded.decode();
+    } catch (error) { URL.revokeObjectURL(paintedUrl); throw error; }
     cache.set(key, paintedUrl, blob.size + canvas.width * canvas.height * 4);
     return paintedUrl;
   } finally { canvas.width = canvas.height = 0; }
