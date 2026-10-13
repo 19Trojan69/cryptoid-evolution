@@ -3,13 +3,14 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 import { createRequire } from 'node:module';
-import { hullSourcePlan } from './hullSourcePlan.ts';
+import { hullSourcePlan, preparedHullPlan } from './hullSourcePlan.ts';
 import { enemyAppearance } from './shipFleet.ts';
 import { shipEvolutionAsset } from './shipEvolution.ts';
 const {build}=createRequire(import.meta.url)('esbuild');
 
 async function fixture() {
   const built=await build({entryPoints:['src/pages/paintedShip.ts'],bundle:true,write:false,platform:'node',format:'cjs',logLevel:'silent',plugins:[{name:'readiness-host',setup(b){
+    b.onLoad({filter:/paintedShip\.ts$/},a=>({contents:fs.readFileSync(a.path,'utf8')+'\nexport {cache};',loader:'ts'}));
     b.onResolve({filter:/^react$/},()=>({path:'react',namespace:'host'}));
     b.onLoad({filter:/.*/,namespace:'host'},()=>({contents:'export const useState=globalThis.__hooks.useState,useEffect=globalThis.__hooks.useEffect;',loader:'js'}));
   }}]});
@@ -35,6 +36,11 @@ test('unmounted readiness consumer receives no late state update',async()=>{
   const cleanup=f.effects.pop()();cleanup();f.images[0].onload();
   await new Promise(resolve=>setImmediate(resolve));assert.equal(f.updates(),0);
 });
+test('decoded prepared hull does not wait for an evicted raw source or hide its flames',async()=>{
+  const f=await fixture();f.api.cache.set('0:1:gold','blob:already-decoded');
+  assert.equal(f.api.usePreparedHullReady(0,'gold',1),true);
+  f.effects.pop()();assert.equal(f.images.length,0,'prepared hull must not reload raw source to release flames');
+});
 
 test('source warming is deduplicated, capped at seven and does not wait or paint variants',async()=>{
   const f=await fixture(),urls=Array.from({length:20},(_,i)=>`/ship-${i}.png`);
@@ -59,4 +65,20 @@ test('flame guard is restricted to unloaded hull siblings, not ships or the fiel
   assert.ok(css.includes('.sector-boss[data-hull-ready="false"] > .boss-engine-flame'));
   assert.equal((css.match(/visibility: hidden/g)||[]).length,1);
   assert.ok(!css.includes('display:')&&!css.includes('animation:'));
+});
+test('full preparation covers current/next groups and post-boss bonus transition without campaign-wide loading',()=>{
+  for(let sector=1;sector<=500;sector++) {
+    for(const encounter of ['normal','boss-fight','bonus'])for(const group of [0,1]) {
+      const plan=preparedHullPlan(sector,encounter,6,1,group,2);
+      assert.ok(plan.length<=12);assert.ok(plan.every(hull=>Number.isInteger(hull.sprite)&&typeof hull.color==='string'));
+      if(encounter==='normal')for(let index=0;index<6;index++) {
+        const expected=enemyAppearance(sector,6+index);
+        assert.ok(plan.some(hull=>hull.sprite===expected.sprite&&hull.color===expected.color));
+      }
+      if(encounter==='bonus'&&group===1&&sector<500) {
+        const expected=enemyAppearance(sector+1,0);
+        assert.ok(plan.some(hull=>hull.sprite===expected.sprite&&hull.color===expected.color));
+      }
+    }
+  }
 });

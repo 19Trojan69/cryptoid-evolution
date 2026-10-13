@@ -37,3 +37,21 @@ test('failed painted Blob decoding never publishes an unready hull and releases 
  assert.ok(f.canvases.every(canvas=>canvas.width===0&&canvas.height===0));
  f.allow();assert.ok((await f.api.createPaintedSprite(0,'gold',1)).startsWith('blob:'));release();
 });
+test('complete colored decoded hull is cached before its future consumer mounts',async()=>{
+ const f=await fixture();
+ const prepared=f.api.retainPreparedHulls([{sprite:0,color:'gold'},{sprite:0,color:'gold'}]);
+ assert.deepEqual(Array.from(await prepared.settled),[true]);
+ const url=f.api.cache.get('0:1:gold');assert.ok(url.startsWith('blob:'));
+ const images=f.images(),blobs=f.blobs();const mounted=f.api.cache.retain('0:1:gold');
+ assert.equal(await f.api.createPaintedSprite(0,'gold',1),url);
+ assert.equal(f.images(),images);assert.equal(f.blobs(),blobs,'mount must not enqueue painting or decode again');
+ prepared.release();prepared.release();assert.equal(f.api.cache.retained('0:1:gold'),true);
+ mounted();assert.equal(f.api.cache.retained('0:1:gold'),false);
+});
+test('obsolete prepared groups cancel before allocation and never exceed twelve unique pins',async()=>{
+ const f=await fixture(),hulls=Array.from({length:30},(_,sprite)=>({sprite,color:'gold'}));
+ const prepared=f.api.retainPreparedHulls(hulls);prepared.release();
+ const results=await prepared.settled;assert.equal(results.length,12);
+ assert.ok(results.every(value=>value===false));assert.equal(f.images(),0);assert.equal(f.blobs(),0);
+ for(let sprite=0;sprite<30;sprite++)assert.equal(f.api.cache.retained(`${sprite}:1:gold`),false);
+});

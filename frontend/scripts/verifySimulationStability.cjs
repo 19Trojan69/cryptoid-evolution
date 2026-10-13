@@ -91,7 +91,7 @@ const presentation =
             else if (a.path.endsWith("useModalNavigation"))
               contents = "export default ()=>{};";
             else if (a.path.endsWith("paintedShip"))
-              contents = "export const useShipVisualOffset=()=>({}),useHullSourceReady=()=>true,preloadHullSources=()=>{};";
+              contents = "export const useShipVisualOffset=()=>({}),useHullSourceReady=()=>true,preloadHullSources=()=>{},retainPreparedHulls=()=>({release(){}});";
             else if (a.path.endsWith("gameAudio"))
               contents =
                 "export class GameAudio{};export const hasPrimedGameAudio=()=>false,takePrimedGameAudio=()=>null;";

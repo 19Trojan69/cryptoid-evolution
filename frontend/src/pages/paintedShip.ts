@@ -144,6 +144,27 @@ const createPaintedSprite = (index: number, colorId: PlayerColorId, stage: ShipS
   return pending;
 };
 
+export type PreparedHull = { sprite: number; color: PlayerColorId; stage?: ShipStage };
+export const retainPreparedHulls = (hulls: readonly PreparedHull[]) => {
+  const unique = new Map<string, PreparedHull>();
+  for (const hull of hulls) unique.set(`${hull.sprite}:${hull.stage ?? 1}:${hull.color}`, hull);
+  const selected = [...unique.entries()].slice(0, 12);
+  const releases = selected.map(([key]) => cache.retain(key));
+  // The existing serial queue, shader, Blob decoder and cache do all work.
+  // Cancellation releases only preparation pins; mounted consumers keep theirs.
+  const settled = Promise.all(selected.map(([, hull]) =>
+    createPaintedSprite(hull.sprite, hull.color, hull.stage ?? 1).then(() => true, () => false)));
+  let released = false;
+  return { settled, release() { if (released) return; released = true; releases.forEach(release => release()); } };
+};
+
+export const usePreparedHullReady = (index: number, colorId: PlayerColorId, stage: ShipStage = 1) => {
+  const prepared = cache.get(`${index}:${stage}:${colorId}`);
+  // A decoded prepared hull is ready even if its raw-source LRU entry was evicted.
+  const sourceReady = useHullSourceReady(prepared ? undefined : shipEvolutionAsset(index, stage));
+  return !!prepared || sourceReady;
+};
+
 export const usePaintedShipStyle = (index: number, colorId: PlayerColorId, stage: ShipStage = 1): CSSProperties => {
   const key = `${index}:${stage}:${colorId}`;
   const [url, setUrl] = useState(() => cache.get(key));

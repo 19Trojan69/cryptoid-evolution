@@ -2,6 +2,12 @@
 
 ## Latest scope reset: 13 October 2026
 
+Follow-up feedback at 22:59 Vienna: raw-source warming alone still lets ships
+appear late. Prepare complete colored/decoded hulls before their consumers mount,
+using only the existing serial paint queue and cache. Pin at most twelve unique
+current/imminent variants per game owner; release preparation pins on transitions
+and unmount, preserving active consumer pins. No simulation waiting or hiding.
+
 Additional explicit request at 22:43 Vienna: hull and engine flames must arrive
 together; flames must not be visible before their associated hull source loads.
 Bounded source preparation using the existing cache and a source-readiness flame

@@ -52,8 +52,8 @@ import { appendSectionBlock, bonusChainReward, BLOCKS_PER_CHAIN } from "./networ
 import { advanceAfterClear, BOSS_ENTRY_MS, BOSS_WARNING_MS, damageSectorBoss, bossVulnerable, createSectorBoss, moveSectorBoss, type SectorBoss } from "./sectorBoss";
 import { playerSkins, enemyAppearance, selectedShip, shardBalance, ADMIN_MODE_KEY, ADMIN_TEST_CONFIG_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
-import { preloadHullSources, useHullSourceReady, useShipVisualOffset } from "./paintedShip";
-import { hullSourcePlan } from './hullSourcePlan';
+import { preloadHullSources, retainPreparedHulls, useHullSourceReady, useShipVisualOffset } from "./paintedShip";
+import { hullSourcePlan, preparedHullPlan } from './hullSourcePlan';
 import { ownedShipStage, projectileGuardForStage, projectileImpact, shipEvolutionAsset, stageWeaponLevel, type ShipStage } from "./shipEvolution";
 import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio";
 import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, readMusicVolume, resetAudioVolumeDefaults } from "./musicPreferences";
@@ -2097,10 +2097,14 @@ const GamePage = () => {
   const reinforcementIntro = game.encounter === "normal" && game.phase === "SECTOR_INTRO" && flightRef.current > 0;
   const hullOffset = formationOffsetRef.current;
   const hullWave = bossEscortWaveRef.current;
+  const hullBonusGroup = Math.floor(bonusIndexRef.current / 6);
+  const hullRules = rulesVersionRef.current;
   const bossHullReady = useHullSourceReady(game.boss?.config.image);
   useEffect(() => {
     preloadHullSources(hullSourcePlan(game.sector, game.encounter, hullOffset, hullWave));
-  }, [game.sector, game.encounter, hullOffset, hullWave]);
+    const prepared = retainPreparedHulls(preparedHullPlan(game.sector, game.encounter, hullOffset, hullWave, hullBonusGroup, hullRules));
+    return prepared.release;
+  }, [game.sector, game.encounter, hullOffset, hullWave, hullBonusGroup, hullRules]);
   const sectorIntro = game.encounter === "normal" && game.phase === "SECTOR_INTRO" && round === 1 && !reinforcementIntro;
   const levelIntro = sectorIntro && sectorLabel === 1;
   const translateBonusResult = (result: string) => result.split(" · ").slice(1).map(part => {
