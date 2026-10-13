@@ -1,0 +1,54 @@
+{
+  "passed": true,
+  "base": "16fcfb43aad836de0e38f684c0d4cade82b78976",
+  "normalGameMarkup": {
+    "identical": false,
+    "authorizedChangeOnly": "Resource readiness visibility/pause and 25% escort visual size; normalized original markup identical.",
+    "sha256": "19f3f1808e7f04a59a755714a920b9058344df33de78f5c773b211d20f22484f"
+  },
+  "functions": {
+    "createFormationSlots": {
+      "identical": false,
+      "sha256": "1b9f566674efa15bbde2a9ba9c087c077880d97a047be80ba44bf640b5da9df9",
+      "authorizedChangeOnly": "Authorized whole-formation vertical placement close below the HUD, preserving all relative coordinates."
+    },
+    "spawnAsteroid": {
+      "identical": false,
+      "sha256": "459f2995ad03c4445f8edf0c39be565a7e7b76438ec9693858bf7b6de8a6f3bb",
+      "authorizedChangeOnly": "25% lower arrival speed; restored progress migrates once, and authorized formation repositioning keeps an in-flight restore on its actual new curve."
+    },
+    "moveAsteroid": {
+      "identical": true,
+      "sha256": "d8af547671f4fcc007ae349319c3599ff99f2ab391b95f4f0e471e830a2576a9"
+    },
+    "saveCombat": {
+      "identical": true,
+      "sha256": "0f236c1dd5a5b4e7bfcb3249d034a65def2a1fc0e52ff3da5b775c09f41359ef"
+    },
+    "restoreCombat": {
+      "identical": false,
+      "sha256": "6f6c7dc3fe1c007dad8cf34899739d3e90a9e1c2ae722b984417ee7f929c429a",
+      "authorizedChangeOnly": "25% lower arrival speed; restored progress migrates once, and authorized formation repositioning keeps an in-flight restore on its actual new curve."
+    },
+    "destroyBoss": {
+      "identical": true,
+      "sha256": "df5dc302f6442da1242c0ec9362a97546bd554df7bce660d5306771bcc8634bc"
+    },
+    "simulate": {
+      "identical": false,
+      "sha256": "34b887b25d6820e4933d3d11cd9314d0fe238a7224a54b582eb1783505b13f3a",
+      "authorizedChangeOnly": "Remove timed pickup; drop exclusively on ship defeat."
+    },
+    "activateStartPower": {
+      "identical": true,
+      "sha256": "84b3d5d73c38ed790be2ad420eacd49bce5204bd37ee0c66cab723dd5d8432a6"
+    }
+  },
+  "stylesAndPublicAssetsChanged": [],
+  "audio": {
+    "unchangedMembers": 42,
+    "sampleGainsIdentical": true,
+    "changedOnlyInitializationAndAtomicSamplePreparation": true
+  },
+  "limitation": "Source evidence only: no physical iPhone pixel comparison, audible listening test or proof of OS/GPU stability."
+}

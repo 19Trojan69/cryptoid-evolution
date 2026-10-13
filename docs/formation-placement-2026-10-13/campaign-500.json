@@ -1,0 +1,14 @@
+{
+  "passed": [
+    "First ships under one second; original Light radius 25.",
+    "No automatic 18-second drop. Actual ship defeats create the original weapon pickup: Single to Twin, unchanged duration and hearts.",
+    "Pause/resume freezes clocks, score and power-up timer; no repeated drop.",
+    "Swept shot destroys rock and awards its small bonus exactly once, without Shards/defeats.",
+    "Established checkpoint/proxy format retains event clock, issued drop and live-rock health; resume does not replay points.",
+    "Restart cleans all rocks, fragments, pickups, clocks and points.",
+    "Maxed loadout gets no spontaneous boost; weapon, armor and hull guard retained.",
+    "Pickups survive block/boss/bonus/level switches and boss destruction, keep falling continuously during transitions, protect active boost timers and freeze only on actual pause, remain collectable exactly once, retain drop limits, and clear on restart.",
+    "Pickup collected during formation setup retains its full 20 seconds; countdown starts only when the formation is ready.",
+    "Actual transition loop traverses 500 stages, all 50 bosses and bonus rounds to victory; scripted first heavy before minute one."
+  ]
+}

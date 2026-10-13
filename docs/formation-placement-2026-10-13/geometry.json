@@ -1,0 +1,261 @@
+{
+  "before": "2fa0b3e6158ab62751718f5f02c82a040685eaff",
+  "mode": "Real formation creation and real contact rules; assumed explicit geometry fixtures, no DOM/native rendering or measured user viewport",
+  "requiredHudEnvelopeGapPx": 8,
+  "formationRelativeCoordinatesUnchanged": true,
+  "steeringAndCollisionRulesUnchanged": true,
+  "cases": [
+    {
+      "width": 320,
+      "height": 568,
+      "assumedMeasuredHudBottom": 64,
+      "playerDiameter": 94,
+      "before": {
+        "flights": 805,
+        "ships": 4830,
+        "minVerticalContactClearancePx": -94.165,
+        "contactingDestinationsAtHighestLegalPlayer": 2635,
+        "example": {
+          "stage": 1,
+          "flightOffset": 0,
+          "index": 2,
+          "enemyY": 263.401,
+          "radius": 25,
+          "playerY": 284
+        }
+      },
+      "after": {
+        "flights": 805,
+        "ships": 4830,
+        "minVerticalContactClearancePx": -94.165,
+        "contactingDestinationsAtHighestLegalPlayer": 2635,
+        "example": {
+          "stage": 1,
+          "flightOffset": 0,
+          "index": 2,
+          "enemyY": 263.401,
+          "radius": 25,
+          "playerY": 284
+        }
+      }
+    },
+    {
+      "width": 390,
+      "height": 700,
+      "assumedMeasuredHudBottom": 64,
+      "playerDiameter": 104,
+      "before": {
+        "flights": 805,
+        "ships": 4830,
+        "minVerticalContactClearancePx": -68.394,
+        "contactingDestinationsAtHighestLegalPlayer": 1599,
+        "example": {
+          "stage": 1,
+          "flightOffset": 0,
+          "index": 5,
+          "enemyY": 289.8936170212766,
+          "radius": 36,
+          "playerY": 350
+        }
+      },
+      "after": {
+        "flights": 805,
+        "ships": 4830,
+        "minVerticalContactClearancePx": -68.394,
+        "contactingDestinationsAtHighestLegalPlayer": 1598,
+        "example": {
+          "stage": 2,
+          "flightOffset": 0,
+          "index": 0,
+          "enemyY": 334.8936170212766,
+          "radius": 36,
+          "playerY": 350
+        }
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "assumedMeasuredHudBottom": 80,
+      "playerDiameter": 104,
+      "before": {
+        "flights": 805,
+        "ships": 4830,
+        "minVerticalContactClearancePx": -12.394,
+        "contactingDestinationsAtHighestLegalPlayer": 698,
+        "example": {
+          "stage": 4,
+          "flightOffset": 0,
+          "index": 3,
+          "enemyY": 368.8936170212766,
+          "radius": 36,
+          "playerY": 422
+        }
+      },
+      "after": {
+        "flights": 805,
+        "ships": 4830,
+        "minVerticalContactClearancePx": 7.606,
+        "contactingDestinationsAtHighestLegalPlayer": 0,
+        "example": null
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "assumedMeasuredHudBottom": 100,
+      "playerDiameter": 104,
+      "before": {
+        "flights": 805,
+        "ships": 4830,
+        "minVerticalContactClearancePx": -32.394,
+        "contactingDestinationsAtHighestLegalPlayer": 1048,
+        "example": {
+          "stage": 2,
+          "flightOffset": 0,
+          "index": 0,
+          "enemyY": 370.8936170212766,
+          "radius": 36,
+          "playerY": 422
+        }
+      },
+      "after": {
+        "flights": 805,
+        "ships": 4830,
+        "minVerticalContactClearancePx": -32.394,
+        "contactingDestinationsAtHighestLegalPlayer": 792,
+        "example": {
+          "stage": 4,
+          "flightOffset": 0,
+          "index": 3,
+          "enemyY": 388.8936170212766,
+          "radius": 36,
+          "playerY": 422
+        }
+      }
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "assumedMeasuredHudBottom": 90,
+      "playerDiameter": 107.5,
+      "before": {
+        "flights": 805,
+        "ships": 4830,
+        "minVerticalContactClearancePx": 14.58,
+        "contactingDestinationsAtHighestLegalPlayer": 0,
+        "example": null
+      },
+      "after": {
+        "flights": 805,
+        "ships": 4830,
+        "minVerticalContactClearancePx": 39.456,
+        "contactingDestinationsAtHighestLegalPlayer": 0,
+        "example": null
+      }
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "assumedMeasuredHudBottom": 94,
+      "playerDiameter": 112,
+      "before": {
+        "flights": 805,
+        "ships": 4830,
+        "minVerticalContactClearancePx": -20.059,
+        "contactingDestinationsAtHighestLegalPlayer": 698,
+        "example": {
+          "stage": 4,
+          "flightOffset": 0,
+          "index": 3,
+          "enemyY": 461.3085106382979,
+          "radius": 36,
+          "playerY": 512
+        }
+      },
+      "after": {
+        "flights": 805,
+        "ships": 4830,
+        "minVerticalContactClearancePx": -20.059,
+        "contactingDestinationsAtHighestLegalPlayer": 10,
+        "example": {
+          "stage": 6,
+          "flightOffset": 0,
+          "index": 4,
+          "enemyY": 480.0585106382979,
+          "radius": 25,
+          "playerY": 512
+        }
+      }
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "assumedMeasuredHudBottom": 80,
+      "playerDiameter": 115,
+      "before": {
+        "flights": 805,
+        "ships": 4830,
+        "minVerticalContactClearancePx": -137.852,
+        "contactingDestinationsAtHighestLegalPlayer": 1724,
+        "example": {
+          "stage": 1,
+          "flightOffset": 0,
+          "index": 2,
+          "enemyY": 347.9315957446808,
+          "radius": 25,
+          "playerY": 360
+        }
+      },
+      "after": {
+        "flights": 805,
+        "ships": 4830,
+        "minVerticalContactClearancePx": -137.852,
+        "contactingDestinationsAtHighestLegalPlayer": 1724,
+        "example": {
+          "stage": 1,
+          "flightOffset": 0,
+          "index": 2,
+          "enemyY": 347.9315957446808,
+          "radius": 25,
+          "playerY": 360
+        }
+      }
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "assumedMeasuredHudBottom": 64,
+      "playerDiameter": 112,
+      "before": {
+        "flights": 805,
+        "ships": 4830,
+        "minVerticalContactClearancePx": -169.369,
+        "contactingDestinationsAtHighestLegalPlayer": 3477,
+        "example": {
+          "stage": 1,
+          "flightOffset": 0,
+          "index": 2,
+          "enemyY": 168.80851063829786,
+          "radius": 25,
+          "playerY": 195
+        }
+      },
+      "after": {
+        "flights": 805,
+        "ships": 4830,
+        "minVerticalContactClearancePx": -169.369,
+        "contactingDestinationsAtHighestLegalPlayer": 3477,
+        "example": {
+          "stage": 1,
+          "flightOffset": 0,
+          "index": 2,
+          "enemyY": 168.80851063829786,
+          "radius": 25,
+          "playerY": 195
+        }
+      }
+    }
+  ],
+  "limits": "Uniform translation cannot guarantee both HUD clearance and player separation when the unchanged formation span cannot fit the available upper half. Those geometries are reported as unresolved; no invisible invulnerability, ship reduction or steering restriction was added."
+}

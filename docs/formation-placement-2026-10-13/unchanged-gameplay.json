@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "base": "2fa0b3e6158ab62751718f5f02c82a040685eaff",
+  "remoteEquivalent": "640c43a5fb34fcc935fc449a31683f5c6a82c1aa",
+  "identicalDeclarations": [
+    "spawnAsteroid",
+    "spawnBossEscort",
+    "moveAsteroid",
+    "saveCombat",
+    "destroyBoss",
+    "simulate",
+    "activateStartPower",
+    "renderScene"
+  ],
+  "changedOnly": [
+    "createFormationSlots",
+    "ResizeObserver Y target assignment",
+    "restoreCombat Y target assignment; clocks and other state remain intact"
+  ],
+  "limits": "Source equality, not native pixel/audio verification"
+}

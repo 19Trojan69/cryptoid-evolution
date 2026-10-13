@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "before": {
+    "commit": "640c43a5fb34fcc935fc449a31683f5c6a82c1aa",
+    "localEquivalent": "2fa0b3e6158ab62751718f5f02c82a040685eaff",
+    "tests": 5,
+    "pass": 1,
+    "fail": 4
+  },
+  "after": {
+    "runtime": "2ac65439ea7302574382977cb8e5a21016c26576",
+    "tests": 5,
+    "pass": 5,
+    "fail": 0
+  },
+  "mode": "Actual component formation/movement and restore target branch, controlled Node VM; no physical device or native rendering proof"
+}
