@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "base": "9d4cb39816d067bfc7db2ca870b123b7e81b9c45",
+  "identicalDeclarations": [
+    "createFormationSlots",
+    "spawnAsteroid",
+    "spawnBossEscort",
+    "moveAsteroid",
+    "saveCombat",
+    "restoreCombat",
+    "destroyBoss",
+    "simulate",
+    "activateStartPower",
+    "renderScene"
+  ],
+  "meaning": "The entire existing presentation function and these combat/recovery functions are byte-identical to the previous private runtime.",
+  "limits": "Source equality, not native pixel/audio verification"
+}

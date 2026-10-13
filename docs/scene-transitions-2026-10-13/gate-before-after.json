@@ -1,0 +1,20 @@
+{
+  "beforeCommit": "9d4cb39816d067bfc7db2ca870b123b7e81b9c45",
+  "afterRuntimeCommit": "ad1ad61e3d9ebcdb7d1ed0927822b702d6b65fbd",
+  "sameRuntimeTree": "39bfad7227f231d90341e3aa41fe2488ff0b84e2",
+  "mode": "Actual gate before/after with controlled decoded leases, not physical frame/FPS measurement",
+  "warmKeyChecks": 1000,
+  "before": {
+    "synchronousReadyChecks": 0,
+    "waitingTrueCallbacks": 1000,
+    "regressionTestsPassed": 4,
+    "regressionTestsFailed": 2
+  },
+  "after": {
+    "synchronousReadyChecks": 1000,
+    "waitingTrueCallbacks": 0,
+    "regressionTestsPassed": 6,
+    "regressionTestsFailed": 0
+  },
+  "limits": "Native image, GPU, Worker heap and mobile frame timing were not measured. A genuinely incomplete resource can still require protective waiting."
+}
