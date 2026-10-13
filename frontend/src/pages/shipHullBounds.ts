@@ -5,3 +5,9 @@ export function enemyHullExtents(sprite:number,diameter:number){
  const [left,top,right,bottom]=bounds[sprite]??bounds[0],offset=spriteVisualOffset(sprite,diameter,true);
  return{left:(right-.5)*diameter+offset.x,right:(.5-left)*diameter-offset.x,top:(bottom-.5)*diameter+offset.y,bottom:(.5-top)*diameter-offset.y};
 }
+
+// Normalize the painted hull, not its transparent square, for class sizing.
+export function enemyHullSpan(sprite:number){
+ const [left,top,right,bottom]=bounds[sprite]??bounds[0];
+ return Math.max(right-left,bottom-top);
+}

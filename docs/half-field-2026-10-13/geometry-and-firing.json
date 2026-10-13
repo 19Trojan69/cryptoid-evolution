@@ -1,0 +1,136 @@
+{
+  "passed": true,
+  "base": "dd41e366c703b6d50e46021d942d4ae2fd076434",
+  "mode": "real component/cache/firing and geometry in controlled Node; no native Pi Browser/GPU/audio/FPS proof",
+  "split": "50%/50% of usable height below HUD; hull-edge safety margins within each half",
+  "fixedAcrossNormalBossBonus": true,
+  "invalidSavedTargetsCannotEnlargeEnemyHalf": true,
+  "visibleStrengthRatios": [
+    1,
+    1.5,
+    2,
+    2.5
+  ],
+  "cases": [
+    {
+      "width": 393,
+      "height": 659,
+      "assumedHudBottom": 64,
+      "playerDiameter": 94,
+      "minimumBoundary": 0.6532625189681336,
+      "maximumBoundary": 0.6532625189681336,
+      "minimumVerticalContactClearancePx": 48.00000000176118,
+      "all450StagesAndFlightsValid": true
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "assumedHudBottom": 64,
+      "playerDiameter": 94,
+      "minimumBoundary": 0.6778169014084507,
+      "maximumBoundary": 0.6778169014084507,
+      "minimumVerticalContactClearancePx": 48.00000000180904,
+      "all450StagesAndFlightsValid": true
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "assumedHudBottom": 80,
+      "playerDiameter": 104,
+      "minimumBoundary": 0.6350710900473934,
+      "maximumBoundary": 0.6350710900473934,
+      "minimumVerticalContactClearancePx": 95.57055115503545,
+      "all450StagesAndFlightsValid": true
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "assumedHudBottom": 90,
+      "playerDiameter": 107.5,
+      "minimumBoundary": 0.6295600858369099,
+      "maximumBoundary": 0.6295600858369099,
+      "minimumVerticalContactClearancePx": 109.34238990932147,
+      "all450StagesAndFlightsValid": true
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "assumedHudBottom": 94,
+      "playerDiameter": 132,
+      "minimumBoundary": 0.6318359375,
+      "maximumBoundary": 0.6318359375,
+      "minimumVerticalContactClearancePx": 108.94572659152732,
+      "all450StagesAndFlightsValid": true
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "assumedHudBottom": 80,
+      "playerDiameter": 115,
+      "minimumBoundary": 0.6659722222222222,
+      "maximumBoundary": 0.6659722222222222,
+      "minimumVerticalContactClearancePx": 58.50000000041564,
+      "all450StagesAndFlightsValid": true
+    },
+    {
+      "width": 800,
+      "height": 600,
+      "assumedHudBottom": 80,
+      "playerDiameter": 112,
+      "minimumBoundary": 0.6966666666666667,
+      "maximumBoundary": 0.6966666666666667,
+      "minimumVerticalContactClearancePx": 57.000000000478735,
+      "all450StagesAndFlightsValid": true
+    }
+  ],
+  "flightsChecked": 5635,
+  "sideEntriesChecked": 6230,
+  "cachedCalls": 10000,
+  "geometryComputationsAcrossNineBlocks": 1,
+  "cachedCallsMilliseconds": 27.10424299999977,
+  "firing": [
+    {
+      "level": 1,
+      "volleyCount10Seconds": 31,
+      "identicalToPrevious": true
+    },
+    {
+      "level": 2,
+      "volleyCount10Seconds": 31,
+      "identicalToPrevious": true
+    },
+    {
+      "level": 3,
+      "volleyCount10Seconds": 45,
+      "identicalToPrevious": true
+    },
+    {
+      "level": 4,
+      "volleyCount10Seconds": 45,
+      "identicalToPrevious": true
+    },
+    {
+      "level": 5,
+      "volleyCount10Seconds": 45,
+      "identicalToPrevious": true
+    }
+  ],
+  "projectilePixelsPer100ms": 64,
+  "protectedFunctionsUnchanged": [
+    "moveAsteroid",
+    "attackTime",
+    "destroyBoss",
+    "saveCombat",
+    "activateStartPower"
+  ],
+  "sceneChangesOnly": "visible hull-normalized strength sizing fitted to fixed enemy half",
+  "simulationChangesOnly": "player movement boundary",
+  "stylesAndAssetsUnchanged": true,
+  "audioAndBossRendererUnchanged": true,
+  "limitations": [
+    "Some later formations do not fit the extreme 844x390 field with unchanged hit radii; controlled technical pause.",
+    "Geometry fixtures are explicit assumptions, not DOM measurements from the user screenshot.",
+    "Hull-edge safety margins constrain center positions within the fixed halves; projectile speed and firing cadence are unchanged.",
+    "The existing full strength-profile mixture and aggregate rewards are unchanged by this follow-up."
+  ]
+}

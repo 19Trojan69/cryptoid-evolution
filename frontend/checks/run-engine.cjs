@@ -67,7 +67,7 @@ report.push('Pickup collected during formation setup retains its full 20 seconds
 const campaign=mount();const visited=new Set();let sawBoss=0,sawBonus=0,heavyAt=null,carriedTransitions=0;
 for(let i=0;i<1600000;i++){
  const s=campaign.raw(),info=campaign.snapshot();visited.add(s.sector);s.enemyShots=[];s.shots=[];s.player={x:.92,y:.9};
- if(s.encounter==='boss-clear')s.player={x:.5,y:.58};
+ if(s.encounter==='boss-clear')s.player={...campaign.rewardPosition()};
  if(s.asteroids.some(a=>a.shipClass==='heavy')&&heavyAt===null)heavyAt=info.intro.clock;
  if(s.asteroids.length&&s.asteroids.every(a=>a.entryElapsed>=a.entryDuration)&&info.sectionMs>4500){s.destroyed+=s.asteroids.length;s.asteroids=[];}
  if(s.encounter==='boss-fight'&&s.boss){s.boss.turrets.forEach(t=>t.health=0);s.boss.health=1;s.shots=[{id:2000000+i,x:s.boss.x,y:s.boss.y+5,speedX:0,damage:1000,empowered:false}];}

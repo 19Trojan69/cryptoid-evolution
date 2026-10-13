@@ -1,0 +1,14 @@
+{
+  "frontendTests": 410,
+  "backendTests": 106,
+  "failures": 0,
+  "frontendProductionBuild": "passed; TypeScript and release i18n",
+  "backendBuild": "passed",
+  "alphaBounds": {
+    "originalPNGs": 20,
+    "maximumNormalizedRoundingError": 4.964539002116908e-09
+  },
+  "nativeMobileTest": false,
+  "publicDeployment": false,
+  "databaseBackupAndIsolatedRestore": "unverified"
+}

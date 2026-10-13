@@ -3,6 +3,19 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { enemyVisualDiameter } from './shipDisplayScale.ts';
 import { chooseCryptoid } from './cryptoidRoster.ts';
+import {normalEnemyVisualDiameter,normalEnemyLayoutScale,strengthVisualDiameter} from './shipDisplayScale.ts';
+import {enemyHullSpan} from './shipHullBounds.ts';
+
+test('visible hulls retain exact strength ratios across all 20 transparent sprites and viewport sizes',()=>{
+ for(const [height,hud,player] of [[659,64,94],[568,64,94],[844,80,104],[1024,94,132],[600,80,112]]){
+  const scale=normalEnemyLayoutScale(height,hud,player);
+  for(const [kind,ratio] of [['light',1],['medium',1.5],['heavy',2],['elite',2.5]])for(let sprite=0;sprite<20;sprite++){
+   const visible=normalEnemyVisualDiameter(kind,player,sprite,scale)*enemyHullSpan(sprite);
+   const light=strengthVisualDiameter('light',player)*scale;
+   assert.ok(Math.abs(visible-light*ratio)<1e-8,'transparent margins cannot flatten the actual size hierarchy');
+  }
+ }
+});
 
 test('normal opponents keep the same proportions to the player on phones and tablets', () => {
   for (const radius of [25, 36, 50]) {

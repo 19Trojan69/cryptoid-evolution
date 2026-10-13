@@ -18,7 +18,7 @@ globalThis.__campaignQA = {
  protect:()=>{stateRef.current.hearts=99;adminRunRef.current=true;},
  clearGroup:()=>{stateRef.current.asteroids=[];stateRef.current.shots=[];formationIndexRef.current=blockFlights(stateRef.current.sector,rulesVersionRef.current)[flightRef.current];},
  killBoss:()=>destroyBoss(stateRef.current,performance.now()),
- heart:()=>{stateRef.current.player={...BOSS_HEART_POSITION};lastPlayerRef.current={...stateRef.current.player};},
+ heart:()=>{stateRef.current.player={...combatAreaRef.current.rewardPosition};lastPlayerRef.current={...stateRef.current.player};},
  clearBonus:()=>{stateRef.current.bonusTargets=[];bonusIndexRef.current=BONUS_TARGET_COUNT;},
  cards:()=>{rewardCardsRef.current=[];pendingBossCardRef.current=null;setRewardCards([]);stateRef.current.status='playing';lastFrameRef.current=0;},
  pause:()=>{stateRef.current.status='paused';setGame({...stateRef.current});},

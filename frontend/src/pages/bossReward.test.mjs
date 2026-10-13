@@ -3,6 +3,24 @@ import assert from 'node:assert/strict';
 import { collectBossHeart, BOSS_HEART_POSITION } from './bossReward.ts';
 import { bossDifficulty } from './bossDifficulty.ts';
 import { paintTurretHeat } from './bossTurretHeat.ts';
+import {splitCombatArea} from './combatArea.ts';
+import {placePlayer} from './playerCombat.ts';
+
+test('boss reward remains physically reachable in the fixed player half and cannot be credited again after restore',()=>{
+ for(const [width,height,hud,diameter] of [[320,568,64,94],[393,659,64,94],[390,844,80,104],[768,1024,94,132],[1280,720,80,115],[800,600,80,112]]){
+  const {minimumPlayerY}=splitCombatArea(height,hud,diameter);
+  const position={x:BOSS_HEART_POSITION.x,y:Math.max(BOSS_HEART_POSITION.y,minimumPlayerY)};
+  const player=placePlayer(position.x*width,position.y*height,width,height,minimumPlayerY);
+  for(const hearts of [2,3]){
+   const state={hearts,maxHearts:3,shards:20};
+   assert.equal(collectBossHeart(state,player,width,height),false,'old fixed pickup reproduces the unreachable reward');
+   assert.equal(collectBossHeart(state,player,width,height,position),true);
+   const restored=JSON.parse(JSON.stringify(state));
+   assert.equal(collectBossHeart(restored,player,width,height,position),false);
+   assert.equal(restored.hearts,3);assert.equal(restored.shards,hearts===3?25:20);
+  }
+ }
+});
 test('a defeated boss awards no life until physical pickup, exactly once', () => {
   const state = { hearts: 2, maxHearts: 3, shards: 0, bossHeartCollected: false };
   assert.equal(collectBossHeart(state, {x:.1,y:.9},390,760),false);
