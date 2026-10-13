@@ -14,7 +14,7 @@ const timed=`        if (variety && !intro.weaponIssued && intro.clock >= intro.
         }
 `;
 assert.ok(before.get('simulate').includes(timed));
-assert.equal(after.get('simulate'),before.get('simulate').replace(timed,'').replace('usedTypes: variety && !intro.weaponIssued ? [...state.powerUpTypes, "weapon"] : state.powerUpTypes','usedTypes: state.powerUpTypes'),'only explicitly authorized pickup-origin changes in simulation');
+assert.equal(after.get('simulate'),before.get('simulate').replace(timed,'').replace('usedTypes: variety && !intro.weaponIssued ? [...state.powerUpTypes, "weapon"] : state.powerUpTypes','usedTypes: state.powerUpTypes').replace('contactWithEnemy(state.player, width, height, state.boss, true, false, impactCooldownRef.current, previousBoss, previousPlayer)', 'contactWithBoss(state.player, width, height, state.boss, impactCooldownRef.current, previousBoss, previousPlayer)'), 'only authorized pickup-origin and false boss-contact corrections in simulation');
 assert.equal(after.get('step'),before.get('step').replace('      simulate(time);','      simulate(time);\n      if (stateRef.current.status === \'playing\' && saveQueueRef.current?.underPressure) interruptionRef.current(\'save-pressure\');'),'unchanged RAF/paint step except save-pressure safety pause');
 assert.equal(gameMarkup(next),gameMarkup(old),'complete game markup, dimensions and effects');
 const changed=execFileSync('git',['diff','--name-only',base,'--'],{cwd:repo,encoding:'utf8'}).trim().split('\n').filter(Boolean);

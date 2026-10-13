@@ -42,6 +42,7 @@ import { chooseCryptoid as originalCryptoid, cryptoidDisplayName, isGhostCloaked
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, POWER_UP_DURATION_MS, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp, type PowerUpType } from "./powerUps";
 import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, shipStartHeight } from "./controlPreferences";
 import { advanceShot, contactWithEnemy, enemyMotionVisible, MAX_PLAYER_SHOTS, movePlayer, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, retainContactLatch, shipCollisionOutcome, shipContactPoint, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
+import { contactWithBoss } from './bossContact';
 import { advanceEnemyShot, advanceEnemyFire, enemyVolleyKind, enemyAttackFireTime, enemyProjectileProfiles, enemyMuzzleOffsets, enemyShotHitsPlayer, enemyShotOutsideField, enemyShotLimit, type EnemyShot, type EnemyFireProgress } from "./enemyFire";
 import { attackPressure, attackSlots } from "./attackPressure";
 import SectorBackdrop from "./SectorBackdrop";
@@ -1533,7 +1534,7 @@ const GamePage = () => {
           const previousBoss = state.boss;
           state.bossHullLight = hullIllumination(state.boss.x, state.boss.y, time, bossMuzzleRef.current, state.effects);
           state.boss = moveSectorBoss(state.boss, delta, width, height);
-          const bossContact = contactWithEnemy(state.player, width, height, state.boss, true, false, impactCooldownRef.current, previousBoss, previousPlayer);
+          const bossContact = contactWithBoss(state.player, width, height, state.boss, impactCooldownRef.current, previousBoss, previousPlayer);
           if (bossContact.damage) {
             heartsLost = Math.max(heartsLost, 1);
             impactCooldownRef.current = IMPACT_COOLDOWN_MS;

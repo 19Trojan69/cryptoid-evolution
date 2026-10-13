@@ -2,6 +2,11 @@
 
 ## Latest scope reset: 13 October 2026
 
+Additional explicit request after private testing at 22:35 Vienna: fix player
+explosion at a boundary without a real collision. A width-based circular boss
+contact extending below its rendered height is confirmed; correcting that false
+boss contact is authorized. Do not remove legitimate projectile/enemy damage.
+
 The user withdrew the earlier experimental corrections. Start from the verified
 official Testnet commit 1c1c7f9b6c5e8ac7d41b9bf1c4b44036cc196220.
 Preserve its sizes, formations, player area, entry timing, HUD, graphics, sound,
