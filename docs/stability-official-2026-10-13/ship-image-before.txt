@@ -1,0 +1,70 @@
+✖ actual ship image preparation recovers after create throws (42.902731ms)
+✖ actual ship image preparation recovers after allocation throws (22.208864ms)
+✖ actual ship image preparation recovers after context throws (21.377119ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 0
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 203.833402
+
+✖ failing tests:
+
+test at src/pages/shipImageRecovery.test.mjs:42:53
+✖ actual ship image preparation recovers after create throws (42.902731ms)
+  AssertionError [ERR_ASSERTION]: a failed Canvas must settle the image promise instead of wedging the serial paint queue
+  + actual - expected
+  
+  + 'pending'
+  - 'rejected'
+  
+      at fixture (file:///workspace/scratch/86ac3be80ae7/cryptoid-stability-official/frontend/src/pages/shipImageRecovery.test.mjs:34:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'pending',
+    expected: 'rejected',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at src/pages/shipImageRecovery.test.mjs:42:53
+✖ actual ship image preparation recovers after allocation throws (22.208864ms)
+  AssertionError [ERR_ASSERTION]: a failed Canvas must settle the image promise instead of wedging the serial paint queue
+  + actual - expected
+  
+  + 'pending'
+  - 'rejected'
+  
+      at fixture (file:///workspace/scratch/86ac3be80ae7/cryptoid-stability-official/frontend/src/pages/shipImageRecovery.test.mjs:34:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'pending',
+    expected: 'rejected',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at src/pages/shipImageRecovery.test.mjs:42:53
+✖ actual ship image preparation recovers after context throws (21.377119ms)
+  AssertionError [ERR_ASSERTION]: a failed Canvas must settle the image promise instead of wedging the serial paint queue
+  + actual - expected
+  
+  + 'pending'
+  - 'rejected'
+  
+      at fixture (file:///workspace/scratch/86ac3be80ae7/cryptoid-stability-official/frontend/src/pages/shipImageRecovery.test.mjs:34:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'pending',
+    expected: 'rejected',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

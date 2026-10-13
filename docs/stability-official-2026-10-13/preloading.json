@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "mode": "actual resource pipeline and actual GamePage forecast with controlled 282px Image/Canvas hosts, original pixel algorithm fallback, no browser/GPU/FPS proof",
+  "warmTransitions": 81,
+  "deduplicatedCalls": 10000,
+  "loopGatesAdded": 0,
+  "loadingOverlaysAdded": 0,
+  "forecastFailuresDoNotPauseCombat": true,
+  "failedImageRetry": true,
+  "peaks": {
+    "painted": 48,
+    "sources": 8,
+    "pending": 23,
+    "estimatedBytes": 18148608,
+    "retained": 43
+  },
+  "afterUnmount": {
+    "painted": 48,
+    "estimatedBytes": 18148608,
+    "sources": 8,
+    "pending": 0,
+    "retained": 0
+  },
+  "temporaryCanvasesReleased": 1187,
+  "blobURLsRevoked": 620
+}

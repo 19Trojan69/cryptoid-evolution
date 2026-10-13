@@ -1,0 +1,43 @@
+{
+  "before": {
+    "heapMiB": {
+      "first": 29.263587951660156,
+      "last": 29.75336456298828,
+      "min": 29.173583984375,
+      "max": 29.948509216308594
+    },
+    "objectPeaks": {
+      "enemies": 6,
+      "shots": 82,
+      "hostile": 80,
+      "effects": 14
+    },
+    "cleanup": {
+      "raf": 0,
+      "timers": 0,
+      "listeners": 0
+    },
+    "simulatedSeconds": 771.764
+  },
+  "after": {
+    "heapMiB": {
+      "first": 29.242050170898438,
+      "last": 29.713401794433594,
+      "min": 29.112060546875,
+      "max": 29.90758514404297
+    },
+    "objectPeaks": {
+      "enemies": 6,
+      "shots": 82,
+      "hostile": 80,
+      "effects": 14
+    },
+    "cleanup": {
+      "raf": 0,
+      "timers": 0,
+      "listeners": 0
+    },
+    "simulatedSeconds": 771.764
+  },
+  "limits": "Node GamePage with presentation/resource/audio/API stubs; no native image, audio or GPU memory, no real frame timings, no mobile FPS claim."
+}

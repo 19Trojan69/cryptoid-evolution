@@ -1,0 +1,65 @@
+{
+  "base": "16fcfb43aad836de0e38f684c0d4cade82b78976",
+  "mode": "actual source with isolated fixtures; no mobile or original incident reproduction",
+  "atomicSamples": {
+    "before": {
+      "first": false,
+      "partialBossSamples": 2,
+      "retry": true,
+      "bossSamplesAfterRetry": 2,
+      "expected": 18
+    },
+    "after": {
+      "first": false,
+      "partialBossSamples": 0,
+      "retry": true,
+      "bossSamplesAfterRetry": 18,
+      "expected": 18
+    }
+  },
+  "lateActivation": {
+    "before": {
+      "simulatedStatuses": [
+        "playing"
+      ],
+      "faults": [],
+      "state": {
+        "status": "playing",
+        "hearts": 2,
+        "score": 123,
+        "shards": 45,
+        "weaponTimers": [
+          0,
+          0,
+          60000,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "after": {
+      "simulatedStatuses": [
+        "paused"
+      ],
+      "faults": [
+        "render-error"
+      ],
+      "state": {
+        "status": "paused",
+        "hearts": 2,
+        "score": 123,
+        "shards": 45,
+        "weaponTimers": [
+          0,
+          0,
+          60000,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "passed": true
+}

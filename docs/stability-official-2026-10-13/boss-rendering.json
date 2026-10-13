@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "mode": "actual Canvas draw commands with controlled Node contexts; no pixel rasterization/native GPU/frame-time proof",
+  "cases": 36,
+  "levels": [
+    10,
+    250,
+    500
+  ],
+  "identicalCommands": 5862,
+  "combinedHash": "08ebc0f876d3f7be0bae543854c5653652eb21e94ea6b283bf94f58d34e0fb49",
+  "beforeHeatCacheEntriesScanned": 1757,
+  "afterHeatCacheEntriesScanned": 0,
+  "beforeCanvasesCreated": 112,
+  "afterCanvasesCreated": 112,
+  "allSurfacesDisposed": true
+}

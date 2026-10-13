@@ -1,0 +1,47 @@
+{
+  "sourceCommit": "c0d28f4bb498a0d7ca5728ac74aa1fbcc02d830d",
+  "runtimeCommit": "c0d28f4bb498a0d7ca5728ac74aa1fbcc02d830d",
+  "officialGameplayCommit": "1c1c7f9b6c5e8ac7d41b9bf1c4b44036cc196220",
+  "approvedTestnetCommit": "21eb4b2151b9e5cb5b1f32f3e78d666bb860fdb1",
+  "publicAssetsCopiedExactly": 464,
+  "css": [
+    {
+      "file": "AdminPage-BVHazyxQ.css",
+      "sha256": "924ca9fcbdfa9b27abb3610ebdb7c5080d26cdb0b43c0def1453d16e1a857225"
+    },
+    {
+      "file": "GalaxyMap-ByhGHt12.css",
+      "sha256": "ad079ee5b4a8c5dfacf72adb1bb05b73b79915e414b10be75e91c44eabe4d350"
+    },
+    {
+      "file": "GamePage-D_GIl0KJ.css",
+      "sha256": "739ea086c3fa4125a43d92c8b837215fac216082844c92a474de5b2f1f17bfc6"
+    },
+    {
+      "file": "Shop-BkuKP0aD.css",
+      "sha256": "fc42f73d41af3e30b6b6f1e130fa41113fd7a1e996c802cb5ea912b1d0c08ca2"
+    },
+    {
+      "file": "index-jaywVuOe.css",
+      "sha256": "c93f34d1220e0e84a74e17db399c91d51a23c18b07c32289124c0eeaa76b91cd"
+    },
+    {
+      "file": "powerUps-Bp4oAZoc.css",
+      "sha256": "39bf9f0c80e393791f448bc590a3078c871fceee56f07e38d8431f8d86b54c5a"
+    }
+  ],
+  "isolation": [
+    "Guest-only",
+    "Axios adapter rejects every API call",
+    "No Pi SDK/account/payment connection",
+    "Independent origin and local storage"
+  ],
+  "mechanics": "Official Testnet gameplay at 1c1c7f9 preserved; same formation, size, steering, shots, collision and pickup logic. Stability fixes cover owned modal history, full presentation boundary, atomic audio initialization, save-pressure protection, recoverable ship Canvas errors, pixel-identical material worker and optional bounded scene forecasts. No resource loop gate, field hiding or loading overlay",
+  "limits": "Real accounts, account checkpoints, online highscore and purchases are not tested by this guest preview",
+  "officialIndexCssComparedDirectly": {
+    "matches": true,
+    "sha256": "c93f34d1220e0e84a74e17db399c91d51a23c18b07c32289124c0eeaa76b91cd"
+  },
+  "protectedGameplayAndMarkupProof": "All 9 checked gameplay functions and normal game markup equal official Testnet; step equals the previously audited error-protected step.",
+  "previousOfficialReferenceVersion": "appgprj_6acd33650fcc8191a7e718e40b8acea5~appgver_296e04e799308191a982dfb80cb3bda6"
+}

@@ -1,0 +1,11 @@
+✔ actual ship image preparation recovers after create throws (53.584428ms)
+✔ actual ship image preparation recovers after allocation throws (21.487391ms)
+✔ actual ship image preparation recovers after context throws (17.784082ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 214.884147

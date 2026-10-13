@@ -1,0 +1,24 @@
+{
+  "sourceRuntime": "c0d28f4bb498a0d7ca5728ac74aa1fbcc02d830d",
+  "remoteRuntime": "05830f5e49ba8a81b53eb2692cc1d16703f031ef",
+  "runtimeTree": "b10e17f8338d88b119d1a4d51bf88d9a70639fbb",
+  "privateSource": "916e23fc61dae5b51b3c9213add5428c8eef11fe",
+  "privateDeployment": {
+    "id": "appgdep_6acdd80f15188191a94db84356a5180c",
+    "project_id": "appgprj_6acd33650fcc8191a7e718e40b8acea5",
+    "title": "Cryptoid Evolution – privater Stabilitätstest",
+    "version_id": "appgprj_6acd33650fcc8191a7e718e40b8acea5~appgver_8091a438d9808191b9f3b2ca0ae79d32",
+    "type": "publish",
+    "status": "succeeded",
+    "url": "https://cryptoid-stability-private-20261012.xwsk9s27cg.chatgpt.site",
+    "has_mcp": false,
+    "screenshot_asset_pointer": null,
+    "provider_deployment_id": "site---6acd33650fcc8191a7e718e40b8acea5",
+    "failure_message": null,
+    "env_set_revision": 0,
+    "updated_at": "2026-10-13T07:05:06.961841+00:00"
+  },
+  "previousOfficialReferenceVersion": "appgprj_6acd33650fcc8191a7e718e40b8acea5~appgver_296e04e799308191a982dfb80cb3bda6",
+  "publicRelease": false,
+  "backupVerified": false
+}

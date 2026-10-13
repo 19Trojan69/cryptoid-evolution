@@ -1,0 +1,54 @@
+{
+  "passed": true,
+  "base": "16fcfb43aad836de0e38f684c0d4cade82b78976",
+  "gameLoopStepIdenticalToAuditedFixes": true,
+  "normalGameMarkup": {
+    "identical": true,
+    "sha256": "3f8fd98a1918a563ff3c9160ac037dd9a07de610fb39d8507f713b1fe58f6114"
+  },
+  "functions": {
+    "createFormationSlots": {
+      "identical": true,
+      "sha256": "99278e644d0a64c2edff4204e951675070a88212cf5362d29e3f9645d601e56d"
+    },
+    "spawnAsteroid": {
+      "identical": true,
+      "sha256": "edc27709bae2abde281cdf3ade987127c986a1bd8e2e2e6b179cb7bfd7766d6d"
+    },
+    "moveAsteroid": {
+      "identical": true,
+      "sha256": "d8af547671f4fcc007ae349319c3599ff99f2ab391b95f4f0e471e830a2576a9"
+    },
+    "saveCombat": {
+      "identical": true,
+      "sha256": "0f236c1dd5a5b4e7bfcb3249d034a65def2a1fc0e52ff3da5b775c09f41359ef"
+    },
+    "restoreCombat": {
+      "identical": true,
+      "sha256": "2baa835d81d063eba43e00788250d80cb8dfe516f4148c730ef6147a4ae480e4"
+    },
+    "destroyBoss": {
+      "identical": true,
+      "sha256": "df5dc302f6442da1242c0ec9362a97546bd554df7bce660d5306771bcc8634bc"
+    },
+    "simulate": {
+      "identical": true,
+      "sha256": "69324f9e54f5986af10a6f6dfead244a6059ef0eb5f2a9082a3659a99692b220"
+    },
+    "activateStartPower": {
+      "identical": true,
+      "sha256": "84b3d5d73c38ed790be2ad420eacd49bce5204bd37ee0c66cab723dd5d8432a6"
+    },
+    "spawnBossEscort": {
+      "identical": true,
+      "sha256": "408a63a3e6d25c53de5bdf79a6ae161bedf13480e29bf921c3e923a05cfbbfdf"
+    }
+  },
+  "stylesAndPublicAssetsChanged": [],
+  "audio": {
+    "unchangedMembers": 42,
+    "sampleGainsIdentical": true,
+    "changedOnlyInitializationAndAtomicSamplePreparation": true
+  },
+  "limitation": "Source evidence only: no physical iPhone pixel comparison, audible listening test or proof of OS/GPU stability."
+}
