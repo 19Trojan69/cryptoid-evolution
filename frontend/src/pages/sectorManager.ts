@@ -1,4 +1,5 @@
 import { enemyVisualDiameter } from './shipDisplayScale.ts';
+import { PLAYER_CONTACT_RADIUS } from './playerCombat.ts';
 
 // One encounter per visible block. The tenth slot is the boss and bonus.
 export const SECTIONS_PER_SECTOR = 1;
@@ -105,6 +106,19 @@ export const formationBelowHud = <T extends { y: number }>(slots: T[], radii: nu
   const offset = Math.max(0, hudBottom + 28 - top);
   return offset === 0 ? slots : slots.map(slot => ({ ...slot, y: slot.y + offset }));
 };
+
+// Explicit device feedback: dock the rearmost visible formation envelope
+// closely below the HUD. Translate all destinations together, upwards too;
+// preserve every relative coordinate, ship size and formation silhouette.
+export const formationNearHud = <T extends { y: number }>(slots: T[], radii: number[], hudBottom: number, playerDiameter = 94): T[] => {
+  if (slots.length === 0) return slots;
+  const top = Math.min(...slots.map((slot, index) => slot.y - formationTopExtent(radii[index], playerDiameter)));
+  const offset = hudBottom + 8 - top;
+  return Math.abs(offset) < 1e-8 ? slots : slots.map(slot => ({ ...slot, y: slot.y + offset }));
+};
+
+export const formationFitsPlayerArea = (slots: readonly {y:number}[], radii: readonly number[], height:number) =>
+  slots.every((slot,index) => slot.y + radii[index] + PLAYER_CONTACT_RADIUS <= height * .5);
 
 export const sectionPhase = ({ introMs, spawned, total, alive, ready, returning, attacking }: {
   introMs: number; spawned: number; total: number; alive: number; ready: number; returning: boolean; attacking: boolean;

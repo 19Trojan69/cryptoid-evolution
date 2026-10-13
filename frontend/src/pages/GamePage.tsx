@@ -42,7 +42,7 @@ import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useStat
 import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
 import { entryPatternForSector, entryPosition, entryStartX, type EntryPattern } from "./entryPatterns";
-import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, arrangeFormationBySize, campaignLevel, formationBelowHud, formationLayout, formationReady, formationSlotsForCount, sectionInSector, sectionPhase, sectorInChapter, sectorName, type SectorPhase } from "./sectorManager";
+import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, arrangeFormationBySize, campaignLevel, formationBelowHud, formationNearHud, formationFitsPlayerArea, formationLayout, formationReady, formationSlotsForCount, sectionInSector, sectionPhase, sectorInChapter, sectorName, type SectorPhase } from "./sectorManager";
 import { chooseCryptoid as originalCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, POWER_UP_DURATION_MS, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp, type PowerUpType } from "./powerUps";
 import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, shipStartHeight } from "./controlPreferences";
@@ -233,7 +233,14 @@ const createFormationSlots = (section: number, sector: number, width: number, he
   const slots = formationSlotsForCount(formationLayout(section, width, height, sector), count ?? 6);
   const radii = slots.map((_, index) => chooseCryptoid(sector, index + offset).radius);
   const visualRadii = radii.map(radius => combatVarietyEnabled && radius === 25 ? radius * 1.5 : radius);
-  return formationBelowHud(arrangeFormationBySize(slots, radii), visualRadii, width, hudBottom, playerDiameter);
+  const arranged = arrangeFormationBySize(slots, radii);
+  if (combatVarietyEnabled) {
+    const placed = formationNearHud(arranged, visualRadii, hudBottom, playerDiameter);
+    if (formationFitsPlayerArea(placed, radii, height)) return placed;
+  }
+  // Insufficient space needs an explicitly reviewed row-spacing correction;
+  // never introduce a new overlap or shrink ships to force an invalid fit.
+  return formationBelowHud(arranged, visualRadii, width, hudBottom, playerDiameter);
 };
 
 const alignedSpritePosition = (x: number, y: number, sprite: number, renderedSize: number) => {
@@ -916,8 +923,11 @@ const GamePage = () => {
       playerDiameterRef.current = playerWidth || 94;
       const currentSlots = sectionSlotsRef.current;
       if (currentSlots?.length && stateRef.current.encounter === "normal") {
-        const radii = currentSlots.map((_, index) => { const radius = chooseCryptoid(stateRef.current.sector, index + formationOffsetRef.current).radius; return combatVarietyEnabled && radius === 25 ? radius * 1.5 : radius; });
-        const adjusted = formationBelowHud(currentSlots, radii, field.clientWidth, visibleTopRef.current, playerDiameterRef.current);
+        const physicalRadii = currentSlots.map((_, index) => chooseCryptoid(stateRef.current.sector, index + formationOffsetRef.current).radius);
+        const radii = physicalRadii.map(radius => combatVarietyEnabled && radius === 25 ? radius * 1.5 : radius);
+        const placed = combatVarietyEnabled ? formationNearHud(currentSlots, radii, visibleTopRef.current, playerDiameterRef.current) : currentSlots;
+        const adjusted = combatVarietyEnabled && formationFitsPlayerArea(placed, physicalRadii, field.clientHeight) ? placed
+          : formationBelowHud(currentSlots, radii, field.clientWidth, visibleTopRef.current, playerDiameterRef.current);
         if (adjusted !== currentSlots) {
           sectionSlotsRef.current = adjusted;
           for (const enemy of stateRef.current.asteroids) {

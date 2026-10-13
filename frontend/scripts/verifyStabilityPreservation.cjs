@@ -40,6 +40,14 @@ for (const name of ['createFormationSlots', 'spawnAsteroid', 'moveAsteroid', 'sa
   assert.ok(expected.includes(authorizedTimedPickup));
   expected=expected.replace(authorizedTimedPickup,'').replace('usedTypes: variety && !intro.weaponIssued ? [...state.powerUpTypes, "weapon"] : state.powerUpTypes','usedTypes: state.powerUpTypes');
  }
+ if(name==='createFormationSlots') expected=expected.replace('return formationBelowHud(arrangeFormationBySize(slots, radii), visualRadii, width, hudBottom, playerDiameter);', `const arranged = arrangeFormationBySize(slots, radii);
+  if (combatVarietyEnabled) {
+    const placed = formationNearHud(arranged, visualRadii, hudBottom, playerDiameter);
+    if (formationFitsPlayerArea(placed, radii, height)) return placed;
+  }
+  // Insufficient space needs an explicitly reviewed row-spacing correction;
+  // never introduce a new overlap or shrink ships to force an invalid fit.
+  return formationBelowHud(arranged, visualRadii, width, hudBottom, playerDiameter);`);
  let actual=after.get(name);
  if(name==='spawnAsteroid') expected=expected.replace('entryDuration: combatVarietyEnabled ? Math.round((combatTiming(sector).entryMs + (profile.shipClass === "heavy" ? 600 : 0)) * 1.1) : Math.max(4_100, Math.round(profile.entryDuration * .85))','entryDuration: slowerEnemyArrival(combatVarietyEnabled ? Math.round((combatTiming(sector).entryMs + (profile.shipClass === "heavy" ? 600 : 0)) * 1.1) : Math.max(4_100, Math.round(profile.entryDuration * .85)))');
  if(name==='restoreCombat') {
@@ -54,7 +62,7 @@ for (const name of ['createFormationSlots', 'spawnAsteroid', 'moveAsteroid', 'sa
   assert.ok(actual.includes(migration));actual=actual.replace(migration,'');
  }
  assert.equal(actual, expected, name);
- functions[name] = { identical: after.get(name)===before.get(name), sha256: digest(after.get(name)), ...(['simulate','spawnAsteroid','restoreCombat'].includes(name)?{authorizedChangeOnly:name==='simulate'?'Remove timed pickup; drop exclusively on ship defeat.':'25% lower arrival speed; migrate restored progress exactly once.'}:{}) };
+ functions[name] = { identical: after.get(name)===before.get(name), sha256: digest(after.get(name)), ...(['simulate','spawnAsteroid','restoreCombat','createFormationSlots'].includes(name)?{authorizedChangeOnly:name==='createFormationSlots'?'Authorized whole-formation vertical placement close below the HUD, preserving all relative coordinates.':name==='simulate'?'Remove timed pickup; drop exclusively on ship defeat.':'25% lower arrival speed; migrate restored progress exactly once.'}:{}) };
 }
 const normalizedMain=main(next).replace(' style={{ visibility: resourcesWaiting ? \'hidden\' : undefined }}','').replace('data-effects-paused={resourcesWaiting || ','data-effects-paused={').replace(' * bossEscortVisualScale(asteroid.escort)','');
 assert.equal(normalizedMain,main(old),'normal game markup except authorized resource wait and escort size');

@@ -6,6 +6,8 @@ Explicit movement correction requested on 12 October after testing: resting norm
 
 Later private-device feedback on 12 October explicitly authorizes these additional narrow corrections: new floating power-ups only after a ship is shot down; enemy arrivals at 75% of the speed of the previously tested (already 10%-extended) build; Boss escort graphics 25% larger, preserving physics radii. Prepare/decode the original full-quality resources before showing engines/hulls, protect game timers while loading, and optimize redundant work without changing the finished graphics, audio or combat. These latest instructions supersede the earlier fixed-arrival/escort-size rules only within that scope. Public Testnet/Mainnet release still requires separate explicit approval and verified database backup/restore.
 
+User feedback on 13 October additionally authorizes moving normal formation destinations closer below the upper HUD and away from the player's flight area. Retain all nine distinct formations, HUD, ship sizes, entry timing, steering and collision rules. This correction changes normal formation placement; it does not authorize smaller graphics, a new player steering limit or disabled collisions.
+
 - Do not change the appearance or layout of any game page, menu, header, ship, weapon, explosion, background, card or control.
 - Keep the compact original HUD: Home, hearts, Level, Shards above Score in the center, Block, Pause, all in one row. Do not enlarge the occupied game area.
 - Enemy positioning markers remain invisible. Preserve all existing entry, attack, regroup and sector formations.
