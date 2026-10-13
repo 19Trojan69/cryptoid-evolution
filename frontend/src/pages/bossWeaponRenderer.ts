@@ -3,12 +3,12 @@ import type { SectorBoss } from './sectorBoss.ts';
 import { turretHeatStep, paintTurretHeat } from './bossTurretHeat.ts';
 
 type CanvasFactory = (width:number,height:number)=>HTMLCanvasElement;
-const bases=new WeakMap<HTMLCanvasElement,{id:number;width:number;height:number;layer:HTMLCanvasElement;heated:Map<string,HTMLCanvasElement>}>();
+const bases=new WeakMap<HTMLCanvasElement,{id:number;width:number;height:number;layer:HTMLCanvasElement;heated:Map<number,{step:number;tile:HTMLCanvasElement}>}>();
 export const disposeBossWeapons = (canvas: HTMLCanvasElement) => {
  const cached = bases.get(canvas);
  if (cached) {
   cached.layer.width = cached.layer.height = 0;
-  for (const tile of cached.heated.values()) tile.width = tile.height = 0;
+  for (const {tile} of cached.heated.values()) tile.width = tile.height = 0;
   cached.heated.clear(); bases.delete(canvas);
  }
  canvas.width = canvas.height = 0;
@@ -25,7 +25,7 @@ export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:Can
  if(!cached||cached.id!==boss.config.id||cached.width!==canvas.width||cached.height!==canvas.height){
   if (cached) {
    cached.layer.width = cached.layer.height = 0;
-   for (const hot of cached.heated.values()) hot.width = hot.height = 0;
+   for (const {tile:hot} of cached.heated.values()) hot.width = hot.height = 0;
   }
   const layer=make(canvas.width,canvas.height),base=layer.getContext('2d');if(!base)return;
   base.setTransform(sx,0,0,sy,0,0);
@@ -36,7 +36,8 @@ export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:Can
  for(let i=0;i<guns.length;i++){
   const g=guns[i],state=boss.turrets[i],x=size.padX+g.sourceX/boss.config.sourceWidth*boss.width,y=size.padY+g.sourceY/boss.config.sourceHeight*boss.height;
   if(state.health<=0){
-   for (const [key, hot] of cached.heated) if (key.startsWith(`${i}:`)) { hot.width = hot.height = 0; cached.heated.delete(key); }
+   const oldHeat = cached.heated.get(i);
+   if (oldHeat) { oldHeat.tile.width = oldHeat.tile.height = 0; cached.heated.delete(i); }
    const radius=Math.max(3,g.radius*scale);c.fillStyle='#151c24';c.beginPath();c.ellipse(x,y,radius,radius*.65,0,0,Math.PI*2);c.fill();
    c.strokeStyle='#bf7446';c.lineWidth=Math.max(1,scale*2);c.beginPath();c.moveTo(x-radius*.6,y-radius*.35);c.lineTo(x+radius*.5,y+radius*.25);c.stroke();continue;
   }
@@ -46,13 +47,13 @@ export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:Can
   c.globalAlpha=1;
   const heat=frozen?0:turretHeatStep(state);
   if(heat){
-   const key=`${i}:${heat}`;let hot=cached.heated.get(key);
+   const previous = cached.heated.get(i);let hot=previous?.step===heat?previous.tile:undefined;
    if(!hot){
     // Only the current heat tile for a gun is useful. Past damage stages
     // otherwise retain large canvas surfaces until the entire boss unmounts.
-    for (const [previous, tile] of cached.heated) if (previous.startsWith(`${i}:`)) { tile.width = tile.height = 0; cached.heated.delete(previous); }
+    if (previous) { previous.tile.width = previous.tile.height = 0; cached.heated.delete(i); }
     hot=make(g.sprite.width,g.sprite.height);const hc=hot.getContext('2d');
-    if(hc){hc.drawImage(image,g.sprite.x,g.sprite.y,g.sprite.width,g.sprite.height,0,0,g.sprite.width,g.sprite.height);paintTurretHeat(hc,g.sprite.width,g.sprite.height,heat);cached.heated.set(key,hot);}
+    if(hc){hc.drawImage(image,g.sprite.x,g.sprite.y,g.sprite.width,g.sprite.height,0,0,g.sprite.width,g.sprite.height);paintTurretHeat(hc,g.sprite.width,g.sprite.height,heat);cached.heated.set(i,{step:heat,tile:hot});}
    }
    tile(c,hot,{x:0,y:0,width:g.sprite.width,height:g.sprite.height},-g.spritePivot.x*scale,-g.spritePivot.y*scale,scale);
   }else tile(c,image,g.sprite,-g.spritePivot.x*scale,-g.spritePivot.y*scale,scale);

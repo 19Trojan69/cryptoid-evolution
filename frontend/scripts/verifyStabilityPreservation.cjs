@@ -26,10 +26,12 @@ function main(source) {
 }
 const file = 'frontend/src/pages/GamePage.tsx', old = previous(file), next = current(file);
 const before = declarations(old), after = declarations(next), functions = {};
-for (const name of ['createFormationSlots', 'spawnAsteroid', 'moveAsteroid', 'saveCombat', 'restoreCombat', 'destroyBoss', 'simulate', 'activateStartPower']) {
+for (const name of ['createFormationSlots', 'spawnAsteroid', 'moveAsteroid', 'saveCombat', 'restoreCombat', 'destroyBoss', 'simulate', 'activateStartPower', 'spawnBossEscort']) {
  assert.ok(before.has(name), name); assert.equal(after.get(name), before.get(name), name);
  functions[name] = { identical: true, sha256: digest(after.get(name)) };
 }
+const auditedStep = declarations(execFileSync('git', ['show', '0bdae83:frontend/src/pages/GamePage.tsx'], { cwd: repo, encoding: 'utf8' })).get('step');
+assert.equal(after.get('step'), auditedStep, 'resource preparation does not gate or alter the audited simulation step');
 assert.equal(main(next), main(old), 'normal game markup');
 const changed = execFileSync('git', ['diff', '--name-only', base, '--'], { cwd: repo, encoding: 'utf8' }).trim().split('\n').filter(Boolean);
 const visualChanges = changed.filter(name => name.startsWith('frontend/public/') || name.endsWith('.css'));
@@ -45,7 +47,7 @@ for (const [name, value] of audioBefore) {
  assert.equal(audioAfter.get(name), value, `audio ${name}`); unchangedAudioMembers++;
 }
 assert.equal(declarations(previous(audioFile)).get('sampleGains'), declarations(current(audioFile)).get('sampleGains'));
-const result = { passed: true, base, normalGameMarkup: { identical: true, sha256: digest(main(next)) }, functions,
+const result = { passed: true, base, gameLoopStepIdenticalToAuditedFixes: true, normalGameMarkup: { identical: true, sha256: digest(main(next)) }, functions,
  stylesAndPublicAssetsChanged: visualChanges, audio: { unchangedMembers: unchangedAudioMembers, sampleGainsIdentical: true, changedOnlyInitializationAndAtomicSamplePreparation: true },
  limitation: 'Source evidence only: no physical iPhone pixel comparison, audible listening test or proof of OS/GPU stability.' };
 if (process.env.CRYPTOID_PRESERVATION_OUT) fs.writeFileSync(process.env.CRYPTOID_PRESERVATION_OUT, JSON.stringify(result, null, 2));

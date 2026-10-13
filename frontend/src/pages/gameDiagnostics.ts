@@ -4,7 +4,7 @@ import { releaseVersion } from '../release.ts';
 export const GAME_DIAGNOSTICS_KEY = 'cryptoid_game_diagnostics_v1';
 export type GameLifecycle = 'visibility-hidden' | 'visibility-visible' | 'pagehide' | 'pageshow';
 type Diagnostic = {
-  reason: GameInterruption | 'performance' | 'unexpected-restart' | 'navigation' | 'lifecycle' | 'route-error'; errorName: string; sector: number; phase: string;
+  reason: GameInterruption | 'performance' | 'unexpected-restart' | 'navigation' | 'lifecycle' | 'route-error' | 'resource-preparation'; errorName: string; sector: number; phase: string;
   encounter: string; status: string; width: number; height: number; browser: string;
   block?: number; enemies?: number; projectiles?: number; effects?: number;
   frameMs?: number; workMs?: number; performanceLevel?: number; lastSavedAt?: number;
@@ -15,7 +15,7 @@ type Diagnostic = {
 const text = (value: unknown, limit: number) => typeof value === 'string' ? value.slice(0, limit) : '';
 const route = (value: unknown) => typeof value === 'string' && ['/', '/game', '/galaxy', '/admin', '/signin/callback', '/privacy', '/terms'].includes(value) ? value : 'other';
 const errorNames = new Set(['Error', 'TypeError', 'RangeError', 'ReferenceError', 'SyntaxError', 'AggregateError', 'AbortError', 'SecurityError', 'QuotaExceededError', 'NotAllowedError', 'NotSupportedError', 'InvalidStateError', 'NetworkError']);
-const reasons = new Set(['frame-error', 'loop-stall', 'input-error', 'javascript-error', 'unhandled-rejection', 'render-error', 'save-pressure', 'performance', 'unexpected-restart', 'navigation', 'lifecycle', 'route-error']);
+const reasons = new Set(['frame-error', 'loop-stall', 'input-error', 'javascript-error', 'unhandled-rejection', 'render-error', 'save-pressure', 'performance', 'unexpected-restart', 'navigation', 'lifecycle', 'route-error', 'resource-preparation']);
 function sanitize(diagnostic: Diagnostic, buildFallback = releaseVersion) {
   // Explicit allowlist: optional diagnostics cannot capture a caller's account,
   // URL query, token, exception message or stack through object spreading.

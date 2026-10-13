@@ -64,7 +64,7 @@ const presentation =
           b.onResolve(
             {
               filter:
-                /(?:hooks\/useAuth|hooks\/useModalNavigation|paintedShip|gameAudio|musicPlayback|bossWeaponTextures)$/,
+                /(?:hooks\/useAuth|hooks\/useModalNavigation|paintedShip|gameAudio|musicPlayback|bossWeaponTextures|sceneResources)$/,
             },
             (a) => ({ path: a.path, namespace: "host" }),
           );
@@ -92,6 +92,8 @@ const presentation =
               contents = "export default ()=>{};";
             else if (a.path.endsWith("paintedShip"))
               contents = "export const useShipVisualOffset=()=>({});";
+            else if (a.path.endsWith("sceneResources"))
+              contents = "export const prepareSceneResources=()=>({ready:Promise.resolve(),release(){}});";
             else if (a.path.endsWith("gameAudio"))
               contents =
                 "export class GameAudio{};export const hasPrimedGameAudio=()=>false,takePrimedGameAudio=()=>null;";

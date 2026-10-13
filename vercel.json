@@ -3,7 +3,8 @@
   "framework": null,
   "git": {
     "deploymentEnabled": {
-      "codex/stability-audit-20261012": false
+      "codex/stability-audit-20261012": false,
+      "codex/stability-official-20261013": false
     }
   },
   "installCommand": "npm install --prefix frontend && npm install --include=optional --prefix backend",

@@ -1,3 +1,7 @@
+import { SceneResourcePreloader } from './sceneResourcePreloader';
+import { prepareSceneResources } from './sceneResources';
+import { sceneResourcePlan } from './sceneResourcePlan';
+import type { ShipResource } from './paintedShip';
 import { combatCryptoid, combatTiming, combatEntryStage, combatAttackPattern, createCombatVariety, readCombatVariety, safeEarlyPickup, type CombatVarietyRuntime } from './combatVariety';
 import { advanceBonusRock, spawnBonusRock, hitBonusRock, rockHitsShot, rockInField, nextRockEventMs, MAX_ROCKS, MAX_ROCK_EFFECTS, type BonusRock, type RockEffect } from './bonusRocks';
 import BonusRockLayer from './BonusRockLayer';
@@ -861,6 +865,32 @@ const GamePage = () => {
     stateRef.current.status = rewardCardsRef.current.length ? "paused" : "playing";
     setGame({ ...stateRef.current });
   };
+  const sceneResourcePreloaderRef = useRef<SceneResourcePreloader | null>(null);
+  const prepareSceneForecast = () => {
+    const state = stateRef.current, selected = shipSelectionRef.current;
+    const encounter = state.encounter.startsWith('boss') ? 'boss' : state.encounter;
+    const key = `${state.sector}:${encounter}:${bossEscortWaveRef.current}:${selected.skin.sprite}:${selected.color.id}:${shipStageRef.current}:${rulesVersionRef.current}`;
+    sceneResourcePreloaderRef.current?.prepare(key, () => {
+      const ships: ShipResource[] = [{ sprite: selected.skin.sprite, color: selected.color.id, stage: shipStageRef.current }];
+      for (const enemy of state.asteroids) ships.push({ sprite: enemy.sprite, color: enemy.color, stage: 1 });
+      const plan = sceneResourcePlan(state.sector, state.encounter, bossEscortWaveRef.current, rulesVersionRef.current);
+      ships.push(...plan.ships);
+      return prepareSceneResources(ships, state.boss?.config, plan.upcoming, plan.upcomingBoss);
+    });
+  };
+  const prepareSceneForecastRef = useRef(prepareSceneForecast);
+  prepareSceneForecastRef.current = prepareSceneForecast;
+  useEffect(() => {
+    const preloader = new SceneResourcePreloader(error => recordGameDiagnostic({
+      ...diagnosticContext(), reason: 'resource-preparation', errorName: error instanceof Error ? error.name : '',
+    }));
+    sceneResourcePreloaderRef.current = preloader;
+    prepareSceneForecastRef.current();
+    return () => { preloader.dispose(); if (sceneResourcePreloaderRef.current === preloader) sceneResourcePreloaderRef.current = null; };
+  }, [diagnosticContext]);
+  // Optional finite lookahead only: no loading overlay, wait state, simulation
+  // gate or different paint interval. The normal loop and controls stay intact.
+  useEffect(() => { prepareSceneForecastRef.current(); }, [game.sector, game.encounter, shipSelection.skin.sprite, shipSelection.color.id, shipStage, bossEscortWaveRef.current]);
   const initialActivateLoadoutRef = useRef(activateLoadout);
   useEffect(() => { if (stateRef.current.status === "loading") void initialActivateLoadoutRef.current(); }, []);
 
