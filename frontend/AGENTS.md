@@ -2,6 +2,12 @@
 
 ## Latest scope reset: 13 October 2026
 
+14 October, 05:34 Vienna: user authorized local measurement of frame times,
+actual volley gaps, projectile caps, render commits and hull preparation.
+Enable only with the explicit private-test combatProbe flag. Reuse the existing
+bounded diagnostic ring, no automatic upload and no account data. Do not change
+shooting, simulation timing, artwork/HUD/audio or public deployments for this probe.
+
 Follow-up feedback at 22:59 Vienna: raw-source warming alone still lets ships
 appear late. Prepare complete colored/decoded hulls before their consumers mount,
 using only the existing serial paint queue and cache. Pin at most twelve unique

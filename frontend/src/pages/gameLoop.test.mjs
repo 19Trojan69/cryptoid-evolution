@@ -118,6 +118,7 @@ test('denied sessionStorage cannot fail GamePage diagnostics setup or remove its
     performance:{getEntriesByType:()=>[]}, Date, diagnosticsRef:{current:null},
     stateRef:{current:state}, interruptionRef:{current:(reason,error)=>faults.push({reason,error})},
     recordGameDiagnostic:entry=>reports.push(entry), createGameSessionDiagnostics,
+    isCombatProbeEnabled:()=>false,combatProbeRef:{current:null},
     diagnosticContext:()=>({reason:'performance',errorName:'',sector:25,phase:'FORMATION',encounter:'normal',status:'playing',width:390,height:760,browser:'test'}),
   };
   try {

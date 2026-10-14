@@ -53,6 +53,7 @@ test('actual GamePage pauses pressure without generating another save and blocks
  assert.ok(functions.step&&functions.interrupt&&functions.resumeWeaponSelection);
  const state={status:'playing',sector:31,phase:'ENTRY',encounter:'normal',hearts:3,score:800,shards:51,paidWeaponMs:18000,asteroids:[],shots:[],enemyShots:[],effects:[]};let saves=0,simulations=0;const countdown=[],diagnostics=[];
  const scope={stateRef:{current:state},saveQueueRef:{current:{underPressure:true}},lastFrameRef:{current:0},lastMeasuredFrameRef:{current:0},lastSavedAtRef:{current:0},fieldSizeRef:{current:{width:390,height:760}},soundRef:{current:null},musicRef:{current:null},navigator:{userAgent:'Fixture'},document:{hidden:false},diagnosticsRef:{current:null},clearControls(){},setTechnicalPause(){},setWeaponCountdown:value=>countdown.push(value),setWeaponMenuOpen(){},setGame(){},setSaveNotice(){},recordGameDiagnostic:value=>diagnostics.push(value),sectorInChapter:stage=>(stage-1)%10+1,saveCombatRef:{current:()=>{saves++;return Promise.resolve();}},simulate:()=>{if(state.status==='playing')simulations++;}};
+ scope.combatProbeRef={current:null};
  for(const [name,code] of Object.entries(functions))vm.runInNewContext(ts.transpileModule('globalThis.'+name+'='+code,{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText,scope);
  scope.interruptionRef={current:scope.interrupt};scope.step(1000);
  assert.equal(state.status,'paused');assert.equal(simulations,1);assert.equal(saves,0);assert.equal(diagnostics[0]?.reason,'save-pressure');

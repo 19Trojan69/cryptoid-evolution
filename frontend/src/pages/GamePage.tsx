@@ -29,7 +29,7 @@ import BlockchainProgress from "./BlockchainProgress";
 import { gameHaptics } from "./gameHaptics";
 import { bindGameInput } from './gameInput';
 import { startGuardedGameLoop, type GameInterruption } from './gameLoop';
-import { recordGameDiagnostic, createGameSessionDiagnostics } from './gameDiagnostics';
+import { recordGameDiagnostic, createGameSessionDiagnostics, createCombatProbe, isCombatProbeEnabled } from './gameDiagnostics';
 import GameSceneBoundary from './GameSceneBoundary';
 import { advanceShipMotion, idleShipMotion, engineFlamePercent, explosionDiameter, fragmentFlight, hullIllumination, type ShipMotion } from "./shipRealism";
 import { useLocale } from "../i18n";
@@ -52,7 +52,7 @@ import { appendSectionBlock, bonusChainReward, BLOCKS_PER_CHAIN } from "./networ
 import { advanceAfterClear, BOSS_ENTRY_MS, BOSS_WARNING_MS, damageSectorBoss, bossVulnerable, createSectorBoss, moveSectorBoss, type SectorBoss } from "./sectorBoss";
 import { playerSkins, enemyAppearance, selectedShip, shardBalance, ADMIN_MODE_KEY, ADMIN_TEST_CONFIG_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
-import { preloadHullSources, retainPreparedHulls, useHullSourceReady, useShipVisualOffset } from "./paintedShip";
+import { preloadHullSources, retainPreparedHulls, useHullSourceReady, useShipVisualOffset, paintedShipResourceStats } from "./paintedShip";
 import { hullSourcePlan, preparedHullPlan } from './hullSourcePlan';
 import { ownedShipStage, projectileGuardForStage, projectileImpact, shipEvolutionAsset, stageWeaponLevel, type ShipStage } from "./shipEvolution";
 import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio";
@@ -88,6 +88,7 @@ import { bossEscortAttackInterval, bossEscortCount, bossEscortReinforcements, bo
 import { awardBlock, awardBonusMedal, awardBossSticker, awardChain, emptyRewardProgress, reachLevel, rewardRank, type RewardProgress } from "./rewardProgress";
 
 const RETURN_DURATION_MS = 3_500;
+declare const __CRYPTOID_RELEASE__: string;
 const IMPACT_COOLDOWN_MS = 1_500;
 const GAME_OVER_REVEAL_MS = 1_750;
 const ENTRY_HUD_GAP_PX = 8;
@@ -428,6 +429,7 @@ const GamePage = () => {
   const dropsCreatedRef = useRef(0);
   const impactCooldownRef = useRef(0);
   const fireTimerRef = useRef(0);
+  const combatProbeRef = useRef<ReturnType<typeof createCombatProbe> | null>(null);
   const keysRef = useRef(new Set<string>());
   const pointerRef = useRef<number | null>(null);
   const touchOriginRef = useRef<{ x: number; y: number; player: PlayerPosition } | null>(null);
@@ -622,10 +624,15 @@ const GamePage = () => {
   }, []);
   useEffect(() => {
     const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+    const probe = isCombatProbeEnabled() ? createCombatProbe({
+      context: () => ({ ...diagnosticContext(), build: typeof __CRYPTOID_RELEASE__ === 'string' ? __CRYPTOID_RELEASE__ : 'local' }),
+      resources: paintedShipResourceStats,
+    }) : null;
+    combatProbeRef.current = probe;
     const monitor = createGameSessionDiagnostics(undefined, recordGameDiagnostic, Date.now, navigation?.type);
     diagnosticsRef.current = monitor;
-    const update = () => monitor.update(diagnosticContext(), stateRef.current.status === 'playing', document.hidden, true);
-    const hidden = () => { monitor.pagehide(); update(); };
+    const update = () => { monitor.update(diagnosticContext(), stateRef.current.status === 'playing', document.hidden, true); if (document.hidden) probe?.suspend(performance.now()); };
+    const hidden = () => { probe?.suspend(performance.now()); monitor.pagehide(); update(); };
     const shown = () => { monitor.pageshow(); update(); };
     const onError = (event: ErrorEvent) => {
       if (event.error && stateRef.current.status === 'playing') interruptionRef.current('javascript-error', event.error);
@@ -640,12 +647,14 @@ const GamePage = () => {
     window.addEventListener('pageshow', shown);
     document.addEventListener('visibilitychange', update);
     return () => {
+      probe?.finish(performance.now()); combatProbeRef.current = null;
       monitor.finish(); diagnosticsRef.current = null;
       window.removeEventListener('error', onError); window.removeEventListener('unhandledrejection', onRejection);
       window.removeEventListener('pagehide', hidden); window.removeEventListener('pageshow', shown);
       document.removeEventListener('visibilitychange', update);
     };
   }, [diagnosticContext]);
+  useEffect(() => { combatProbeRef.current?.render(performance.now()); });
   const restoreCombat = (input: CombatCheckpoint) => {
     const saved = readCombatCheckpoint(input);
     if (!saved) throw new Error("Invalid saved combat checkpoint");
@@ -1636,10 +1645,13 @@ const GamePage = () => {
         const effectiveWeapon = stageWeaponLevel(shipStageRef.current, state.weaponLevel);
         const interval = shipFireInterval(shipSelectionRef.current.skin.id, effectiveWeapon, state.rapidFireMs);
         if (!transitionPaused && fireTimerRef.current >= interval) {
+          combatProbeRef.current?.attempt(interval, state.shots.length >= MAX_PLAYER_SHOTS);
           fireTimerRef.current %= interval;
           if (state.shots.length < MAX_PLAYER_SHOTS) {
+            const probeShotCount = state.shots.length;
             const volley = makeShipVolley(shipSelectionRef.current.skin.id, shipStageRef.current, state.weaponLevel, state.player.x * width, state.player.y * height - 23, state.overdriveMs > 0, () => nextIdRef.current++);
             state.shots.push(...volley.slice(0, MAX_PLAYER_SHOTS - state.shots.length));
+            combatProbeRef.current?.shot(time, state.shots.length - probeShotCount);
             playerMuzzleRef.current = time;
             soundRef.current?.play("laser", effectiveWeapon);
           }
@@ -1824,8 +1836,15 @@ const GamePage = () => {
     const step = (time: number) => {
       lastMeasuredFrameRef.current = lastFrameRef.current ? Math.max(0, time - lastFrameRef.current) : 0;
       if (document.hidden) return;
+      const probeStarted = combatProbeRef.current ? performance.now() : 0;
       // Preserve the official single-step timing and mobile paint behavior.
       simulate(time);
+      if (combatProbeRef.current) {
+        const state = stateRef.current;
+        const eligible = !['SECTOR_INTRO', 'SECTOR_CLEAR'].includes(state.phase) && !['boss-intro', 'boss-clear'].includes(state.encounter) && (state.encounter !== 'normal' || formationStartedRef.current);
+        combatProbeRef.current.frame(time, lastMeasuredFrameRef.current, Math.min(34, lastMeasuredFrameRef.current), performance.now() - probeStarted,
+          state.status === 'playing', eligible, state.shots.length, state.enemyShots.length, state.effects.length, state.asteroids.length);
+      }
       if (stateRef.current.status === 'playing' && saveQueueRef.current?.underPressure) interruptionRef.current('save-pressure');
       if (diagnosticsRef.current?.due()) diagnosticsRef.current.update(diagnosticContext(), stateRef.current.status === 'playing', false);
     };

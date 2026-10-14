@@ -15,6 +15,7 @@ async function fixture(kind='none') {
  const makeCanvas=()=>{if(fault==='create')throw new Error('Canvas creation fixture');let width=0,height=0;const canvas={get width(){return width;},set width(value){if(fault==='allocation'&&value>0)throw new RangeError('Canvas allocation fixture');width=value;},get height(){return height;},set height(value){height=value;},getContext(){if(fault==='context')throw new Error('Canvas context fixture');return {drawImage(){},getImageData:(_x,_y,w,h)=>({data:new Uint8ClampedArray(w*h*4).fill(128)}),putImageData(){}};},toBlob:callback=>queueMicrotask(()=>callback({size:31}))};canvases.push(canvas);return canvas;};
  const storage={getItem(){return null;},setItem(){}};
  const scope={exports:{},module:{exports:{}},console,Image,Uint8ClampedArray,queueMicrotask,URL:{createObjectURL:()=>`blob:fixture-${++blobs}`,revokeObjectURL(){revoked++;}},window:{setTimeout,clearTimeout,localStorage:storage,location:{hostname:'localhost'},__ENV:{appNetwork:'testnet'}},localStorage:storage,document:{createElement:makeCanvas}};
+ let probeClock=0;scope.performance={now:()=>++probeClock};scope.window.__ENV.combatProbe=kind==='probe';
  scope.module.exports=scope.exports;vm.runInNewContext(compiled.outputFiles[0].text,scope);
  return {api:scope.module.exports,allow:()=>fault='none',canvases,escaped,images:()=>images,blobs:()=>blobs,revoked:()=>revoked};
 }
@@ -54,4 +55,12 @@ test('obsolete prepared groups cancel before allocation and never exceed twelve 
  const results=await prepared.settled;assert.equal(results.length,12);
  assert.ok(results.every(value=>value===false));assert.equal(f.images(),0);assert.equal(f.blobs(),0);
  for(let sprite=0;sprite<30;sprite++)assert.equal(f.api.cache.retained(`${sprite}:1:gold`),false);
+});
+test('opt-in paint measurement keeps output/cache allocation unchanged and is silent by default',async()=>{
+ const measured=await fixture('probe'),normal=await fixture();
+ for(const f of [measured,normal]){const release=f.api.cache.retain('0:1:gold');await f.api.createPaintedSprite(0,'gold',1);release();}
+ const stats=measured.api.paintedShipResourceStats(),off=normal.api.paintedShipResourceStats();
+ assert.equal(stats.jobsStarted,1);assert.equal(stats.jobsFinished,1);assert.ok(stats.materialTotalMs>0);assert.ok(stats.decodeTotalMs>0);
+ assert.equal(off.jobsStarted,0);assert.equal(off.materialTotalMs,0);
+ assert.equal(stats.estimatedBytes,off.estimatedBytes);assert.equal(measured.images(),normal.images());assert.equal(measured.blobs(),normal.blobs());
 });

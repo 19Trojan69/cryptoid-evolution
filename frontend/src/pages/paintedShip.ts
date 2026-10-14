@@ -5,9 +5,13 @@ import { shipVisualCenter } from "./shipVisualCenter";
 import { namedShipAccent } from './shipIdentityColor';
 import { paintShipMaterial } from './shipMaterial';
 import { ResourceCache } from './resourceCache';
+import { isCombatProbeEnabled } from './gameDiagnostics';
 
 const cache = new ResourceCache<string>(48, 24 * 1024 * 1024, url => URL.revokeObjectURL(url));
 const pendingPaints = new Map<string, Promise<string>>();
+const preparationProbe = { jobsStarted: 0, jobsFinished: 0, queueWaitMaxMs: 0,
+  materialTotalMs: 0, materialMaxMs: 0, encodeTotalMs: 0, decodeTotalMs: 0,
+  sourceWorkTotalMs: 0, sourceWorkMaxMs: 0 };
 const sourceImages = new ResourceCache<Promise<HTMLImageElement>>(8, Infinity);
 const readySources = new WeakSet<Promise<HTMLImageElement>>();
 const visualCenters = new Map<string, { x: number; y: number }>();
@@ -18,6 +22,8 @@ const shipImage = (url: string) => {
       const image = new Image();
       image.onload = () => {
         image.onload = image.onerror = null;
+        const timed = isCombatProbeEnabled();
+        const sourceStarted = timed ? performance.now() : 0;
         let canvas: HTMLCanvasElement | undefined;
         try {
           canvas = document.createElement("canvas");
@@ -31,7 +37,7 @@ const shipImage = (url: string) => {
           } catch { /* Preserve the optional visual offset fallback for a tainted image. */ }
           resolve(image);
         } catch (error) { reject(error); }
-        finally { if (canvas) canvas.width = canvas.height = 0; }
+        finally { if (canvas) canvas.width = canvas.height = 0; if (timed) { const work = performance.now() - sourceStarted; preparationProbe.sourceWorkTotalMs += work; preparationProbe.sourceWorkMaxMs = Math.max(preparationProbe.sourceWorkMaxMs, work); } }
       };
       image.onerror = () => { image.onload = image.onerror = null; reject(new Error('Ship image unavailable')); };
       image.src = url;
@@ -87,6 +93,8 @@ const renderPaintedSprite = async (index: number, colorId: PlayerColorId, stage:
   if (cached) return cached;
   const url = shipEvolutionAsset(index, stage);
   const image = await shipImage(url);
+  const timed = isCombatProbeEnabled();
+  const materialStarted = timed ? performance.now() : 0;
   const canvas = document.createElement("canvas");
   try {
     canvas.width = image.naturalWidth;
@@ -99,8 +107,12 @@ const renderPaintedSprite = async (index: number, colorId: PlayerColorId, stage:
     const target = [1, 3, 5].map(offset => parseInt(hex.slice(offset, offset + 2), 16));
     paintShipMaterial(pixels.data, canvas.width, canvas.height, target, namedShipAccent(index));
     context.putImageData(pixels, 0, 0);
+    const encodingStarted = timed ? performance.now() : 0;
+    if (timed) { const work = encodingStarted - materialStarted; preparationProbe.materialTotalMs += work; preparationProbe.materialMaxMs = Math.max(preparationProbe.materialMaxMs, work); }
     // Blob encoding can run off the main thread; large base64 strings are avoided.
     const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(value => value ? resolve(value) : reject(new Error('Ship encoding failed')), 'image/png'));
+    const decodingStarted = timed ? performance.now() : 0;
+    if (timed) preparationProbe.encodeTotalMs += decodingStarted - encodingStarted;
     const paintedUrl = URL.createObjectURL(blob);
     // A Blob URL is not decoded merely because encoding finished. Keep the
     // already-loaded source hull until the replacement is ready for display.
@@ -112,6 +124,7 @@ const renderPaintedSprite = async (index: number, colorId: PlayerColorId, stage:
         decoded.src = paintedUrl;
       });
       if (typeof decoded.decode === 'function') await decoded.decode();
+      if (timed) preparationProbe.decodeTotalMs += performance.now() - decodingStarted;
     } catch (error) { URL.revokeObjectURL(paintedUrl); throw error; }
     cache.set(key, paintedUrl, blob.size + canvas.width * canvas.height * 4);
     return paintedUrl;
@@ -128,6 +141,9 @@ const createPaintedSprite = (index: number, colorId: PlayerColorId, stage: ShipS
   if (cached) return Promise.resolve(cached);
   const existing = pendingPaints.get(key);
   if (existing) return existing;
+  const timed = isCombatProbeEnabled();
+  const queuedAt = timed ? performance.now() : 0;
+  let started = false;
   const pending = paintTail.then(() => new Promise<void>(resolve => window.setTimeout(resolve, 0)))
     .then(() => {
       if (!cache.retained(key)) {
@@ -137,8 +153,9 @@ const createPaintedSprite = (index: number, colorId: PlayerColorId, stage: ShipS
         if (pendingPaints.get(key) === pending) pendingPaints.delete(key);
         throw new Error('Ship preparation cancelled');
       }
+      if (timed) { started = true; preparationProbe.jobsStarted++; preparationProbe.queueWaitMaxMs = Math.max(preparationProbe.queueWaitMaxMs, performance.now() - queuedAt); }
       return renderPaintedSprite(index, colorId, stage);
-    }).finally(() => { if (pendingPaints.get(key) === pending) pendingPaints.delete(key); });
+    }).finally(() => { if (timed && started) preparationProbe.jobsFinished++; if (pendingPaints.get(key) === pending) pendingPaints.delete(key); });
   paintTail = pending.catch(() => {});
   pendingPaints.set(key, pending);
   return pending;
@@ -182,4 +199,4 @@ export const usePaintedShipStyle = (index: number, colorId: PlayerColorId, stage
     : { backgroundImage: `url(${shipEvolutionAsset(index, stage)})`, "--ship-surface-mask": `url(${shipEvolutionAsset(index, stage)})`, backgroundPosition: "center", backgroundSize: "100% 100%", filter: "none" } as CSSProperties;
 };
 
-export const paintedShipResourceStats = () => ({ painted: cache.size, estimatedBytes: cache.bytes, sources: sourceImages.size, pending: pendingPaints.size });
+export const paintedShipResourceStats = () => ({ painted: cache.size, estimatedBytes: cache.bytes, sources: sourceImages.size, pending: pendingPaints.size, ...preparationProbe });
