@@ -6,13 +6,16 @@ const fs = require("node:fs"),
 const assert = require("node:assert/strict");
 const { build } = require("esbuild");
 const ts = require("typescript");
+const { createHash } = require("node:crypto");
 const { webcrypto } = require("node:crypto");
 const root = path.resolve(__dirname, "..");
 const output =
   process.env.CRYPTOID_SIMULATION_OUT || "/tmp/cryptoid-simulation.json";
 const hooks = `
 globalThis.__campaignQA = {
- info:()=>({sector:stateRef.current.sector,encounter:stateRef.current.encounter,phase:stateRef.current.phase,status:stateRef.current.status,score:stateRef.current.score,shards:stateRef.current.shards,hearts:stateRef.current.hearts,paid:stateRef.current.paidWeaponMs,rapid:stateRef.current.rapidFireMs,enemies:stateRef.current.asteroids.length,shots:stateRef.current.shots.length,hostile:stateRef.current.enemyShots.length,effects:stateRef.current.effects.length}),
+ trace:()=>JSON.stringify({state:stateRef.current,refs:Object.fromEntries(Object.entries(combatRefs).map(([k,v])=>[k,v.current]))}),
+ sustain:()=>{for(const e of stateRef.current.asteroids)e.health=e.maxHealth=1000000;const b=stateRef.current.boss;if(b){b.health=b.maxHealth=1000000;for(const g of b.turrets)g.health=g.maxHealth=1000000;}},
+ info:()=>({attackers:stateRef.current.asteroids.filter(a=>a.attackPattern!==null&&a.attackDelay===0&&a.returnElapsed===0).length,returning:stateRef.current.asteroids.filter(a=>a.returnElapsed>0).length,patterns:stateRef.current.asteroids.filter(a=>a.attackPattern!==null).map(a=>a.attackPattern),sector:stateRef.current.sector,encounter:stateRef.current.encounter,phase:stateRef.current.phase,status:stateRef.current.status,score:stateRef.current.score,shards:stateRef.current.shards,hearts:stateRef.current.hearts,paid:stateRef.current.paidWeaponMs,rapid:stateRef.current.rapidFireMs,enemies:stateRef.current.asteroids.length,shots:stateRef.current.shots.length,hostile:stateRef.current.enemyShots.length,effects:stateRef.current.effects.length}),
  render:()=>{const game=stateRef.current;return /* ACTUAL_SCENE */;},
  arrivals:()=>stateRef.current.asteroids.map(enemy=>({duration:enemy.entryDuration,settle:enemy.formationDuration,shipClass:enemy.shipClass,pattern:enemy.entryPattern})),
  protect:()=>{stateRef.current.hearts=99;adminRunRef.current=true;},
@@ -46,7 +49,7 @@ const presentation =
     jsx: "automatic",
     target: ["es2022"],
     define: {
-      "import.meta.env": "{}",
+      "import.meta.env": process.env.CRYPTOID_PROBE === "1" ? '{"VITE_CRYPTOID_DIAGNOSTICS":"1"}' : "{}",
       __CRYPTOID_RELEASE__: '"SIMULATION QA"',
     },
     plugins: [
@@ -91,7 +94,7 @@ const presentation =
             else if (a.path.endsWith("useModalNavigation"))
               contents = "export default ()=>{};";
             else if (a.path.endsWith("paintedShip"))
-              contents = "export const useShipVisualOffset=()=>({});";
+              contents = "export const useShipVisualOffset=()=>({}),paintedShipResourceStats=()=>({painted:0,estimatedBytes:0,sources:0,pending:0});";
             else if (a.path.endsWith("gameAudio"))
               contents =
                 "export class GameAudio{};export const hasPrimedGameAudio=()=>false,takePrimedGameAudio=()=>null;";
@@ -106,7 +109,7 @@ const presentation =
             loader: "js",
           }));
           b.onLoad({ filter: /GamePage\.tsx$/ }, (a) => {
-            const source = fs.readFileSync(a.path, "utf8"),
+            const source = fs.readFileSync(process.env.CRYPTOID_GAME_SOURCE || a.path, "utf8"),
               ast = ts.createSourceFile(
                 "GamePage.tsx",
                 source,
@@ -131,7 +134,7 @@ const presentation =
             assert.ok(scene);
             return {
               contents:
-                source.replace(
+                source.replace("useRef({ width: 800, height: 600 })", `useRef({ width: ${Number(process.env.CRYPTOID_WIDTH || 800)}, height: ${Number(process.env.CRYPTOID_HEIGHT || 600)} })`).replace(
                   "  const levelLabel =",
                   hooks.replace("/* ACTUAL_RESTORE_BLOCK */", restoreBlock).replace("/* ACTUAL_SCENE */", scene) +
                     "\n  const levelLabel =",
@@ -209,8 +212,8 @@ const presentation =
       hostname: "testnet.localhost",
       origin: "http://testnet.localhost",
     },
-    innerWidth: 800,
-    innerHeight: 600,
+    innerWidth: Number(process.env.CRYPTOID_WIDTH || 800),
+    innerHeight: Number(process.env.CRYPTOID_HEIGHT || 600),
   };
   const document = {
     ...events,
@@ -285,7 +288,14 @@ const presentation =
   assert.ok(qa);
   qa.cards();
   qa.protect();
-  const peaks = { enemies: 0, shots: 0, hostile: 0, effects: 0 };
+  const peaks = { enemies: 0, shots: 0, hostile: 0, effects: 0, attackers: 0, returning: 0 };
+  let sustaining = false, lastTrace = 0, activeAttackFrames = 0, returningFrames = 0;
+  const observedAttackPatterns = new Set(), hash = createHash('sha256'), cpu = {};
+  const histSample = (label, ms) => { const h = cpu[label] ||= { count: 0, totalMs: 0, maxMs: 0, bins: new Uint32Array(2001) };
+    h.count++; h.totalMs += ms; h.maxMs = Math.max(h.maxMs, ms); h.bins[Math.min(2000, Math.floor(ms / .005))]++; };
+  const cpuSummary = () => Object.fromEntries(Object.entries(cpu).map(([label,h]) => {
+    const q = p => { let n=0; for(let i=0;i<h.bins.length;i++){ n+=h.bins[i]; if(n>=h.count*p)return (i+1)*.005; } return h.maxMs; };
+    return [label, {count:h.count, meanMs:h.totalMs/h.count, p50Ms:q(.5), p95Ms:q(.95), maxMs:h.maxMs}]; }));
   const errors = [],
     unhandled = (error) => errors.push(String(error));
   process.on("unhandledRejection", unhandled);
@@ -301,10 +311,18 @@ const presentation =
         }
       const ready = [...frames];
       frames.clear();
+      const before = qa.info();
+      if (sustaining) qa.sustain();
+      const cpuStart = process.hrtime.bigint();
       for (const [, fn] of ready) fn(clock);
+      histSample(before.status !== 'playing' ? 'paused' : before.encounter.startsWith('boss') ? before.encounter : before.phase === 'SECTOR_CLEAR' || before.phase === 'SECTOR_INTRO' ? 'transition' : before.attackers ? 'attack' : before.returning ? 'return' : 'formation', Number(process.hrtime.bigint() - cpuStart) / 1e6);
       assert.equal(frames.size, 1, "one RAF owner");
       assert.ok(qa.finite(), "finite coordinates");
       const live = qa.info();
+      assert.equal(live.status, before.status === 'playing' ? 'playing' : before.status, 'no unexpected interruption');
+      activeAttackFrames += Number(live.attackers > 0); returningFrames += Number(live.returning > 0);
+      live.patterns.forEach(p => observedAttackPatterns.add(p));
+      if (clock - lastTrace >= 1000) { hash.update(qa.trace()); lastTrace = clock; }
       for (const key of Object.keys(peaks))
         peaks[key] = Math.max(peaks[key], live[key]);
       qa.protect();
@@ -323,11 +341,13 @@ const presentation =
   const count = Number(process.env.CRYPTOID_SIMULATION_BLOCKS || 30);
   try {
     while (normal.length < count) {
-      assert.ok(++turns < 100);
+      assert.ok(++turns < count + Math.ceil(count / 9) * 2 + 5);
       let info = qa.info();
       assert.equal(info.status, "playing", JSON.stringify(info));
       if (info.encounter === "normal") {
         const sector = info.sector;
+        const sustainedMs = Number(process.env.CRYPTOID_SUSTAIN_MS || 0);
+        if (sustainedMs && [1, 25, 49, 99, 249, 499].includes(sector)) { sustaining = true; await advance(sustainedMs); sustaining = false; }
         for (let group = 0; group < 4; group++) {
           await advance(8200);
           const arrivals = qa.arrivals();
@@ -397,6 +417,7 @@ const presentation =
       ) {
         const sector = info.sector;
         await advance(6000);
+        if (process.env.CRYPTOID_SUSTAIN_MS && [10, 50, 100, 250, 500].includes(sector)) { sustaining = true; await advance(Number(process.env.CRYPTOID_SUSTAIN_MS)); sustaining = false; }
         qa.killBoss();
         await advance(11000);
         qa.heart();
@@ -428,7 +449,9 @@ const presentation =
     }
     if (count >= 25) assert.ok(normal.includes(25));
     if (count >= 25) { assert.ok(presentationChecks >= 25); assert.ok(arrivalPatterns.size >= 6); }
-    assert.equal(bosses.length, Math.floor(normal.length / 9));
+    assert.equal(bosses.length, Math.floor((normal.length - 1) / 9));
+    const gameplayHash = hash.copy().digest('hex');
+    const developerTrace = host.__cryptoidDiagnostics?.export();
     const beforeBackground = qa.info();
     document.hidden = true;
     document.visibilityState = "hidden";
@@ -478,7 +501,10 @@ const presentation =
       snapshots,
       peaks,
       simulatedSeconds: (clock - 1000) / 1000,
+      viewport: {width:host.innerWidth,height:host.innerHeight},
       randomSeed: 20261012,
+      gameplayHash, cpu: cpuSummary(), activeAttackFrames, returningFrames, observedAttackPatterns: [...observedAttackPatterns],
+      developerTrace: developerTrace || null,
       approvedTestnetPresentation: { checkedGroups: presentationChecks, arrivalPatterns: [...arrivalPatterns], positioningMarkers: 0, hudOrder: "home hearts level shards-over-score block pause", arrivalMsFirst29: 1430, heavyExtraMs: 660, settleMs: 180, restingSway: "all normal Testnet enemies; original amplitude and rhythm" },
       stressObjectsReleased: count >= 25,
       pausePreservesTimers: count >= 25,

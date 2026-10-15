@@ -1,0 +1,324 @@
+{
+  "baseline": "1c1c7f9b6c5e8ac7d41b9bf1c4b44036cc196220",
+  "branch": "codex/crash-diagnosis-20261015",
+  "browserQa": false,
+  "piBrowserQa": false,
+  "physicalPhoneQa": false,
+  "fpsBeforeAfter": null,
+  "crashRootCauseConfirmed": false,
+  "crashFixClaimed": false,
+  "comparisons": {
+    "landscape": {
+      "viewport": {
+        "width": 800,
+        "height": 600
+      },
+      "normalStages": 450,
+      "bosses": 49,
+      "simulatedSeconds": 13646.316,
+      "gameplayHashIdentical": true,
+      "gameplayHash": "e3867243f6bc73a41d52941f9c62080835ab54125bcdbd26c4b8c3d6b5f567de",
+      "attackFrames": 256308,
+      "returnFrames": 145594,
+      "patterns": [
+        "dive",
+        "side",
+        "curve",
+        "sCurve",
+        "double",
+        "vDive",
+        "loop"
+      ],
+      "cleanup": {
+        "raf": 0,
+        "timers": 0,
+        "listeners": 0
+      },
+      "cpuBefore": {
+        "transition": {
+          "count": 127264,
+          "meanMs": 0.015185497784134711,
+          "p50Ms": 0.015,
+          "p95Ms": 0.025,
+          "maxMs": 4.241228
+        },
+        "formation": {
+          "count": 302089,
+          "meanMs": 0.044083126055566496,
+          "p50Ms": 0.04,
+          "p95Ms": 0.085,
+          "maxMs": 27.348976
+        },
+        "attack": {
+          "count": 252472,
+          "meanMs": 0.04759924012959684,
+          "p50Ms": 0.04,
+          "p95Ms": 0.09,
+          "maxMs": 5.962031
+        },
+        "return": {
+          "count": 58711,
+          "meanMs": 0.042233830900512415,
+          "p50Ms": 0.035,
+          "p95Ms": 0.075,
+          "maxMs": 13.363689
+        },
+        "boss-intro": {
+          "count": 15350,
+          "meanMs": 0.010896992833876195,
+          "p50Ms": 0.01,
+          "p95Ms": 0.02,
+          "maxMs": 1.196858
+        },
+        "boss-fight": {
+          "count": 54689,
+          "meanMs": 0.05802265583572653,
+          "p50Ms": 0.045,
+          "p95Ms": 0.13,
+          "maxMs": 6.313031
+        },
+        "boss-clear": {
+          "count": 37393,
+          "meanMs": 0.012221395822747382,
+          "p50Ms": 0.01,
+          "p95Ms": 0.02,
+          "maxMs": 3.081821
+        },
+        "paused": {
+          "count": 1940,
+          "meanMs": 0.0013053505154639212,
+          "p50Ms": 0.005,
+          "p95Ms": 0.005,
+          "maxMs": 0.090807
+        }
+      },
+      "cpuAfter": {
+        "transition": {
+          "count": 127264,
+          "meanMs": 0.015399038683367576,
+          "p50Ms": 0.015,
+          "p95Ms": 0.025,
+          "maxMs": 6.363207
+        },
+        "formation": {
+          "count": 302089,
+          "meanMs": 0.044105913105078075,
+          "p50Ms": 0.04,
+          "p95Ms": 0.085,
+          "maxMs": 18.084833
+        },
+        "attack": {
+          "count": 252472,
+          "meanMs": 0.04740195894594196,
+          "p50Ms": 0.04,
+          "p95Ms": 0.09,
+          "maxMs": 35.3808
+        },
+        "return": {
+          "count": 58711,
+          "meanMs": 0.043109482328695686,
+          "p50Ms": 0.035,
+          "p95Ms": 0.08,
+          "maxMs": 6.79423
+        },
+        "boss-intro": {
+          "count": 15350,
+          "meanMs": 0.010503552508143265,
+          "p50Ms": 0.01,
+          "p95Ms": 0.02,
+          "maxMs": 1.469393
+        },
+        "boss-fight": {
+          "count": 54689,
+          "meanMs": 0.06301280507963272,
+          "p50Ms": 0.05,
+          "p95Ms": 0.14,
+          "maxMs": 65.355743
+        },
+        "boss-clear": {
+          "count": 37393,
+          "meanMs": 0.012834973363998577,
+          "p50Ms": 0.01,
+          "p95Ms": 0.02,
+          "maxMs": 3.349506
+        },
+        "paused": {
+          "count": 1940,
+          "meanMs": 0.0016570711340206192,
+          "p50Ms": 0.005,
+          "p95Ms": 0.005,
+          "maxMs": 0.180022
+        }
+      },
+      "heapBytesBefore": {
+        "first": 30918048,
+        "last": 32033872
+      },
+      "heapBytesAfter": {
+        "first": 30953520,
+        "last": 32048992
+      }
+    },
+    "phone": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "normalStages": 450,
+      "bosses": 49,
+      "simulatedSeconds": 13646.316,
+      "gameplayHashIdentical": true,
+      "gameplayHash": "17eb03869fc0a1e12b7c8dafd891b6a511853cd2ac7e493d48ecd36e06575f25",
+      "attackFrames": 248587,
+      "returnFrames": 121478,
+      "patterns": [
+        "dive",
+        "curve",
+        "side",
+        "sCurve",
+        "double",
+        "vDive",
+        "loop"
+      ],
+      "cleanup": {
+        "raf": 0,
+        "timers": 0,
+        "listeners": 0
+      },
+      "cpuBefore": {
+        "transition": {
+          "count": 127264,
+          "meanMs": 0.016493314928024267,
+          "p50Ms": 0.015,
+          "p95Ms": 0.025,
+          "maxMs": 8.155229
+        },
+        "formation": {
+          "count": 317765,
+          "meanMs": 0.04938345237832944,
+          "p50Ms": 0.04,
+          "p95Ms": 0.095,
+          "maxMs": 6.104427
+        },
+        "attack": {
+          "count": 242845,
+          "meanMs": 0.05587997205625058,
+          "p50Ms": 0.045,
+          "p95Ms": 0.11,
+          "maxMs": 137.455941
+        },
+        "return": {
+          "count": 52662,
+          "meanMs": 0.04578957390528222,
+          "p50Ms": 0.04,
+          "p95Ms": 0.085,
+          "maxMs": 6.123575
+        },
+        "boss-intro": {
+          "count": 15350,
+          "meanMs": 0.011272529706840296,
+          "p50Ms": 0.01,
+          "p95Ms": 0.02,
+          "maxMs": 0.755373
+        },
+        "boss-fight": {
+          "count": 54689,
+          "meanMs": 0.06315854120572688,
+          "p50Ms": 0.05,
+          "p95Ms": 0.15,
+          "maxMs": 4.425014
+        },
+        "boss-clear": {
+          "count": 37393,
+          "meanMs": 0.012978091193538866,
+          "p50Ms": 0.01,
+          "p95Ms": 0.02,
+          "maxMs": 4.098681
+        },
+        "paused": {
+          "count": 1940,
+          "meanMs": 0.001542484536082477,
+          "p50Ms": 0.005,
+          "p95Ms": 0.005,
+          "maxMs": 0.032068
+        }
+      },
+      "cpuAfter": {
+        "transition": {
+          "count": 127264,
+          "meanMs": 0.01659578185504213,
+          "p50Ms": 0.015,
+          "p95Ms": 0.025,
+          "maxMs": 4.215809
+        },
+        "formation": {
+          "count": 317765,
+          "meanMs": 0.050203812458893986,
+          "p50Ms": 0.04,
+          "p95Ms": 0.095,
+          "maxMs": 141.149027
+        },
+        "attack": {
+          "count": 242845,
+          "meanMs": 0.054737965760051965,
+          "p50Ms": 0.045,
+          "p95Ms": 0.105,
+          "maxMs": 7.108948
+        },
+        "return": {
+          "count": 52662,
+          "meanMs": 0.04607272437431141,
+          "p50Ms": 0.04,
+          "p95Ms": 0.085,
+          "maxMs": 3.439675
+        },
+        "boss-intro": {
+          "count": 15350,
+          "meanMs": 0.010809678827361455,
+          "p50Ms": 0.01,
+          "p95Ms": 0.02,
+          "maxMs": 2.173269
+        },
+        "boss-fight": {
+          "count": 54689,
+          "meanMs": 0.061631010605423586,
+          "p50Ms": 0.05,
+          "p95Ms": 0.135,
+          "maxMs": 5.519962
+        },
+        "boss-clear": {
+          "count": 37393,
+          "meanMs": 0.012392898644131222,
+          "p50Ms": 0.01,
+          "p95Ms": 0.02,
+          "maxMs": 4.082306
+        },
+        "paused": {
+          "count": 1940,
+          "meanMs": 0.00177913762886598,
+          "p50Ms": 0.005,
+          "p95Ms": 0.005,
+          "maxMs": 0.073161
+        }
+      },
+      "heapBytesBefore": {
+        "first": 30902296,
+        "last": 32022944
+      },
+      "heapBytesAfter": {
+        "first": 30934864,
+        "last": 32034616
+      }
+    }
+  },
+  "functionalTestsPassed": 356,
+  "fullCampaignTransitions": {
+    "stages": 500,
+    "bosses": 50,
+    "bonusRounds": 50,
+    "forcedClears": true
+  },
+  "privatePreview": "https://cryptoid-crash-diagnosis-20261015.xwsk9s27cg.chatgpt.site",
+  "noPublicDeployment": true,
+  "testnetDeployment": "dpl_FTwoRZ4GApix1tyJvMPV5XsPnveV"
+}

@@ -18,5 +18,10 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ]
+  ],
+  "git": {
+    "deploymentEnabled": {
+      "codex/crash-diagnosis-20261015": false
+    }
+  }
 }

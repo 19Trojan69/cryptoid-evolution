@@ -30,6 +30,7 @@ import { gameHaptics } from "./gameHaptics";
 import { bindGameInput } from './gameInput';
 import { startGuardedGameLoop, type GameInterruption } from './gameLoop';
 import { recordGameDiagnostic, createGameSessionDiagnostics } from './gameDiagnostics';
+import { browserProbeRuntime, createPerformanceProbe, developerProbeEnabled } from './performanceDiagnostics';
 import GameSceneBoundary from './GameSceneBoundary';
 import { advanceShipMotion, idleShipMotion, engineFlamePercent, explosionDiameter, fragmentFlight, hullIllumination, type ShipMotion } from "./shipRealism";
 import { useLocale } from "../i18n";
@@ -51,7 +52,7 @@ import { appendSectionBlock, bonusChainReward, BLOCKS_PER_CHAIN } from "./networ
 import { advanceAfterClear, BOSS_ENTRY_MS, BOSS_WARNING_MS, damageSectorBoss, bossVulnerable, createSectorBoss, moveSectorBoss, type SectorBoss } from "./sectorBoss";
 import { playerSkins, enemyAppearance, selectedShip, shardBalance, ADMIN_MODE_KEY, ADMIN_TEST_CONFIG_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
-import { useShipVisualOffset } from "./paintedShip";
+import { useShipVisualOffset, paintedShipResourceStats } from "./paintedShip";
 import { ownedShipStage, projectileGuardForStage, projectileImpact, shipEvolutionAsset, stageWeaponLevel, type ShipStage } from "./shipEvolution";
 import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio";
 import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, readMusicVolume, resetAudioVolumeDefaults } from "./musicPreferences";
@@ -414,6 +415,7 @@ const GamePage = () => {
   const lastMeasuredFrameRef = useRef(0);
   const lastSavedAtRef = useRef(0);
   const diagnosticsRef = useRef<ReturnType<typeof createGameSessionDiagnostics> | null>(null);
+  const performanceProbeRef = useRef<ReturnType<typeof createPerformanceProbe> | null>(null);
   const backgroundHiddenAtRef = useRef(0);
   const spawnTimerRef = useRef(0);
   const sectionElapsedRef = useRef(0);
@@ -589,6 +591,7 @@ const GamePage = () => {
   saveCombatRef.current = saveCombat;
   useEffect(() => {
     interruptionRef.current = (reason, error) => {
+      performanceProbeRef.current?.lifecycle(reason, error);
       const state = stateRef.current;
       clearControls();
       lastFrameRef.current = 0;
@@ -619,15 +622,32 @@ const GamePage = () => {
   }, []);
   useEffect(() => {
     const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+    const probe = developerProbeEnabled() ? createPerformanceProbe({ runtime: () => ({
+      ...browserProbeRuntime(), ...paintedShipResourceStats(), audioVoices: soundRef.current?.activeVoiceCount ?? 0,
+      knownTimers: 1 + Number(gameOverTimerRef.current !== null) + Number(reloadNoticeTimerRef.current !== null),
+      knownListeners: 5,
+    }) }) : null;
+    performanceProbeRef.current = probe;
+    const probeHost = window as Window & { __cryptoidDiagnostics?: { export: () => unknown } };
+    const previousProbe = probeHost.__cryptoidDiagnostics;
+    const probeApi = probe ? { export: probe.export } : undefined;
+    if (probeApi) probeHost.__cryptoidDiagnostics = probeApi;
+    let observer: PerformanceObserver | undefined;
+    if (probe && typeof PerformanceObserver !== 'undefined') {
+      try { observer = new PerformanceObserver(list => { for (const entry of list.getEntries()) probe.longTask(entry.duration); }); observer.observe({ type: 'longtask', buffered: false }); }
+      catch { observer?.disconnect(); } // Long Tasks is absent in WebKit.
+    }
     const monitor = createGameSessionDiagnostics(undefined, recordGameDiagnostic, Date.now, navigation?.type);
     diagnosticsRef.current = monitor;
     const update = () => monitor.update(diagnosticContext(), stateRef.current.status === 'playing', document.hidden, true);
-    const hidden = () => { monitor.pagehide(); update(); };
-    const shown = () => { monitor.pageshow(); update(); };
+    const hidden = () => { probe?.lifecycle('pagehide'); probe?.suspend(performance.now()); monitor.pagehide(); update(); };
+    const shown = () => { probe?.lifecycle('pageshow'); monitor.pageshow(); update(); };
     const onError = (event: ErrorEvent) => {
+      probe?.lifecycle('error', event.error);
       if (event.error && stateRef.current.status === 'playing') interruptionRef.current('javascript-error', event.error);
     };
     const onRejection = (event: PromiseRejectionEvent) => {
+      probe?.lifecycle('rejection', event.reason);
       if (stateRef.current.status === 'playing') interruptionRef.current('unhandled-rejection', event.reason);
     };
     update();
@@ -637,6 +657,10 @@ const GamePage = () => {
     window.addEventListener('pageshow', shown);
     document.addEventListener('visibilitychange', update);
     return () => {
+      observer?.disconnect(); probe?.finish(); performanceProbeRef.current = null;
+      if (probeApi && probeHost.__cryptoidDiagnostics === probeApi) {
+        if (previousProbe) probeHost.__cryptoidDiagnostics = previousProbe; else delete probeHost.__cryptoidDiagnostics;
+      }
       monitor.finish(); diagnosticsRef.current = null;
       window.removeEventListener('error', onError); window.removeEventListener('unhandledrejection', onRejection);
       window.removeEventListener('pagehide', hidden); window.removeEventListener('pageshow', shown);
@@ -1283,6 +1307,7 @@ const GamePage = () => {
         // Uncollected pickups keep falling through every playing transition frame.
         // Active boost timers retain their existing transition protection above.
         state.powerUps = movePowerUps(state.powerUps, delta, height);
+        performanceProbeRef.current?.mark('setup-and-boosts');
         if (state.phase === "SECTOR_CLEAR") {
           clearTimerRef.current += delta;
           if (state.encounter === "boss-clear") {
@@ -1381,6 +1406,7 @@ const GamePage = () => {
             return;
           }
         }
+        performanceProbeRef.current?.mark('transitions');
         if (bonus && sectionElapsedRef.current >= SECTION_INTRO_MS && state.phase !== "SECTOR_CLEAR" && bonusIndexRef.current < BONUS_TARGET_COUNT) {
           spawnTimerRef.current += delta;
           const entryGap = bonusEntryGap(bonusIndexRef.current);
@@ -1464,6 +1490,7 @@ const GamePage = () => {
             });
             attackCooldownRef.current = 0;
         }
+        performanceProbeRef.current?.mark('spawn-and-attack-selection');
         const nextAsteroids: Asteroid[] = [];
         let heartsLost = 0;
         let damageTaken = false;
@@ -1528,6 +1555,7 @@ const GamePage = () => {
           const position = bonusPosition(target.index, elapsed, width, height);
           return { ...target, elapsed, ...position, visualMotion: advanceShipMotion(target.visualMotion ?? idleShipMotion(), position.x - target.x, position.y - target.y, delta) };
         }).filter(target => target.elapsed < BONUS_FLIGHT_MS);
+        performanceProbeRef.current?.mark('enemy-motion-and-fire');
         if (state.encounter === "boss-fight" && state.boss) {
           const previousBoss = state.boss;
           state.bossHullLight = hullIllumination(state.boss.x, state.boss.y, time, bossMuzzleRef.current, state.effects);
@@ -1548,6 +1576,7 @@ const GamePage = () => {
             if (pulses.length) { bossMuzzleRef.current = time; soundRef.current?.playBossWeapon("pulse", 8, pulses.length, 0); }
           }
         }
+        performanceProbeRef.current?.mark('boss-motion-and-weapons');
         let playerImpact: { x: number; y: number } | undefined;
         const incomingShots: EnemyShot[] = [];
         for (const shot of state.enemyShots) {
@@ -1604,6 +1633,7 @@ const GamePage = () => {
           }
           else soundRef.current?.play("shield");
         }
+        performanceProbeRef.current?.mark('hostile-shots-and-damage');
         if (variety && !intro.weaponIssued && intro.clock >= intro.weaponDue && state.phase !== "SECTOR_CLEAR") {
           const pickup = safeEarlyPickup(state,stageWeaponLevel(shipStageRef.current,state.weaponLevel),width,height,visibleTop);
           if(pickup){ state.powerUps.push({id:nextIdRef.current++,...pickup}); state.powerUpTypes.push(pickup.type); dropsCreatedRef.current++; intro.weaponIssued=true; intro.notice=powerUpNames[pickup.type]; intro.noticeMs=2_600; }
@@ -1632,11 +1662,13 @@ const GamePage = () => {
           soundRef.current?.playPickup(pickup.type);
           return false;
         });
+        performanceProbeRef.current?.mark('powerups-and-rocks');
         if (transitionPaused) fireTimerRef.current = 0;
         else fireTimerRef.current += delta;
         const effectiveWeapon = stageWeaponLevel(shipStageRef.current, state.weaponLevel);
         const interval = shipFireInterval(shipSelectionRef.current.skin.id, effectiveWeapon, state.rapidFireMs);
         if (!transitionPaused && fireTimerRef.current >= interval) {
+          performanceProbeRef.current?.volley(time, state.shots.length >= MAX_PLAYER_SHOTS);
           fireTimerRef.current %= interval;
           if (state.shots.length < MAX_PLAYER_SHOTS) {
             const volley = makeShipVolley(shipSelectionRef.current.skin.id, shipStageRef.current, state.weaponLevel, state.player.x * width, state.player.y * height - 23, state.overdriveMs > 0, () => nextIdRef.current++);
@@ -1715,6 +1747,7 @@ const GamePage = () => {
           intro.noticeMs = 2100; soundRef.current?.play("pickup");
           state.rocks = []; state.rockEffects = [];
         }
+        performanceProbeRef.current?.mark('player-shots-and-collisions');
         const nextFlight = normal ? nextBlockFlight(state.sector, flightRef.current, formationIndexRef.current, state.asteroids.length, rulesVersionRef.current) : null;
         if (nextFlight && state.phase !== "SECTOR_CLEAR") {
           if (rulesVersionRef.current === 2) state.score += GROUP_CLEAR_POINTS;
@@ -1826,7 +1859,16 @@ const GamePage = () => {
       lastMeasuredFrameRef.current = lastFrameRef.current ? Math.max(0, time - lastFrameRef.current) : 0;
       if (document.hidden) return;
       // Preserve the official single-step timing and mobile paint behavior.
-      simulate(time);
+      const probe = performanceProbeRef.current;
+      probe?.begin(time, { sector: stateRef.current.sector, flight: flightRef.current, phase: stateRef.current.phase,
+        encounter: stateRef.current.encounter, status: stateRef.current.status, enemies: stateRef.current.asteroids.length,
+        attackers: stateRef.current.asteroids.filter(a => a.attackPattern !== null && a.attackDelay === 0 && a.returnElapsed === 0).length,
+        returning: stateRef.current.asteroids.filter(a => a.returnElapsed > 0).length,
+        playerShots: stateRef.current.shots.length, enemyShots: stateRef.current.enemyShots.length,
+        effects: stateRef.current.effects.length, rocks: stateRef.current.rocks.length,
+        rockEffects: stateRef.current.rockEffects.length, pickups: stateRef.current.powerUps.length });
+      try { simulate(time); }
+      finally { probe?.mark('phase-save-and-paint'); probe?.end(time); }
       if (diagnosticsRef.current?.due()) diagnosticsRef.current.update(diagnosticContext(), stateRef.current.status === 'playing', false);
     };
     const stop = startGuardedGameLoop({ step,
@@ -2057,6 +2099,7 @@ const GamePage = () => {
       submitScore(stateRef.current);
     }
     leaveGameFullscreen();
+    performanceProbeRef.current?.lifecycle('home-intent');
     navigate(adminRunRef.current ? "/admin" : "/");
   };
 
@@ -2078,6 +2121,7 @@ const GamePage = () => {
       await queue.drain();
       await loadAccountSave();
       leaveGameFullscreen();
+      performanceProbeRef.current?.lifecycle('saved-exit-intent');
       navigate("/");
     } catch {
       setSaveNotice("Save failed. The game stays paused. Please retry.");
