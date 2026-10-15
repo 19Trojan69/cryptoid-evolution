@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "originalAssetFiles": 262,
+  "byExtension": {
+    ".svg": 9,
+    ".png": 62,
+    ".webp": 158,
+    ".jpg": 2,
+    ".txt": 2,
+    ".ttf": 1,
+    ".mp3": 27,
+    ".md": 1
+  },
+  "rootHtmlMatches": true,
+  "independentBackupCode": true
+}

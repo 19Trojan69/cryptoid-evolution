@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "protocol": "authenticated HTTPS against deployed private Site; no browser",
+  "checkpointAcknowledged": true,
+  "independentRequestRestored": true,
+  "staleRevisionRejected": true,
+  "privateAccessEnforced": true,
+  "unauthenticatedStatus": 401,
+  "sensitiveFieldsRemoved": true,
+  "qaExcludedFromLatest": true,
+  "exactRootAndBundle": true,
+  "runId": "server-qa-ecac37b5-300f-478c-8a8e-fa3ce63929c5",
+  "savedAt": 1792094764213,
+  "limits": "Synthetic record; no real device crash or final unsent frame proof."
+}

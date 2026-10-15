@@ -6,6 +6,7 @@ export function diagnosticExport(host: {
   __cryptoidDiagnostics?: { export: () => unknown };
   __cryptoidLatestTrace?: unknown;
   __cryptoidPreviousTrace?: unknown;
+  __cryptoidRecoveredTrace?: unknown;
   localStorage?: Pick<Storage, "getItem">;
   sessionStorage?: Pick<Storage, "getItem">;
 }) {
@@ -23,6 +24,7 @@ export function diagnosticExport(host: {
       /* Optional storage. */
     }
   }
+  trace ??= host.__cryptoidRecoveredTrace ?? null;
   return {
     baseline: "1c1c7f9b6c5e8ac7d41b9bf1c4b44036cc196220",
     trace,

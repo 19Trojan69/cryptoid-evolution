@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "bosses": 50,
+  "liveAndFallingHostTreesIdentical": true,
+  "hullHostRetained": true,
+  "weaponCanvasRetained": true,
+  "legacyWeaponMountsPerBoss": 2,
+  "newWeaponMountsPerBoss": 1,
+  "allWeaponMountsDisposed": true,
+  "limits": "Actual React test renderer; no Safari decoding, CSS rasterization or device-crash proof."
+}

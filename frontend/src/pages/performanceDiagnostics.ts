@@ -1,5 +1,6 @@
 // This probe is compiled in only for an explicitly enabled developer build.
-// It owns no game timer, RAF, input handler or network connection.
+// It owns no game timer, RAF or input handler. Only the private preview can
+// supply the optional independent checkpoint sink.
 export const PERFORMANCE_TRACE_KEY = "cryptoid_developer_trace_v1";
 export const PERFORMANCE_SAMPLE_LIMIT = 90;
 export type ProbeContext = {
@@ -80,6 +81,7 @@ type Options = {
   now?: () => number;
   runtime?: () => Runtime;
   persist?: (serialized: string) => void;
+  backup?: (trace: unknown) => void;
 };
 const bounded = <T>(items: T[], item: T, limit: number) => {
   if (items.length >= limit) items.shift();
@@ -194,6 +196,7 @@ export function createPerformanceProbe(options: Options = {}) {
     }
     if (typeof window !== "undefined")
       (window as Window & { __cryptoidLatestTrace?: unknown }).__cryptoidLatestTrace = exportTrace();
+    try { options.backup?.(exportTrace()); } catch { /* Backup cannot interrupt play. */ }
   };
   const flush = (at: number) => {
     if (!context || !frames) return;
@@ -339,6 +342,7 @@ export function createPerformanceProbe(options: Options = {}) {
         | "render-error"
         | "boss-defeat-start"
         | "boss-defeat-complete"
+        | "boss-final-blast"
         | "boss-victory-start",
       error?: unknown
     ) {

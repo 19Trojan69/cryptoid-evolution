@@ -4,6 +4,12 @@ import { diagnosticExport } from "./diagnosticExport.ts";
 import { createPerformanceProbe } from "./performanceDiagnostics.ts";
 
 const trace = { samples: [{ sector: 30 }], events: [] };
+test("export restores the independent backup when a reopened browser has no local data", () => {
+  const host = { __cryptoidRecoveredTrace: trace };
+  assert.equal(diagnosticExport(host).trace, trace);
+  assert.equal(diagnosticExport(host).available, true);
+  assert.equal(diagnosticExport({ ...host, __cryptoidLatestTrace: { samples: [{ sector: 40 }] } }).trace.samples[0].sector, 40);
+});
 test("export prefers live measurements and retains the last session when storage is denied", () => {
   assert.equal(diagnosticExport({ __cryptoidDiagnostics: { export: () => trace } }).trace, trace);
   const host = { __cryptoidLatestTrace: trace };
@@ -40,7 +46,8 @@ test("probe keeps evidence in memory when both native storage getters throw", ()
     });
   globalThis.window = host;
   let now = 1000;
-  const probe = createPerformanceProbe({ now: () => now });
+  const backups = [];
+  const probe = createPerformanceProbe({ now: () => now, backup: value => backups.push(value) });
   try {
     const state = {
       sector: 30,
@@ -63,6 +70,8 @@ test("probe keeps evidence in memory when both native storage getters throw", ()
       probe.begin(now, state);
       probe.end(now);
     }
+    probe.lifecycle("boss-final-blast");
+    assert.ok(backups.some(value => value.events.some(event => event.kind === "boss-final-blast")));
     probe.finish();
     const data = diagnosticExport(host);
     assert.equal(data.available, true);

@@ -1,0 +1,80 @@
+{
+  "baseline": "004fc05a88c5bef7961573c522dae65c7bf90210",
+  "version": "V4",
+  "tests": {
+    "passed": 412,
+    "failed": 0
+  },
+  "simulation": {
+    "simulatedSeconds": 13646.316,
+    "gameplayHash": "2168c6035edd5e762b404e8c4568d73a89c41b78d940de51ac8a4d3849a2c398",
+    "cleanup": {
+      "raf": 0,
+      "timers": 0,
+      "listeners": 0
+    },
+    "activeAttackFrames": 248587,
+    "returningFrames": 121478,
+    "observedAttackPatterns": [
+      "dive",
+      "curve",
+      "side",
+      "sCurve",
+      "double",
+      "vDive",
+      "loop"
+    ]
+  },
+  "normalStages": 450,
+  "bosses": 49,
+  "probeSimulationSeconds": 1513.544,
+  "hosted": {
+    "passed": true,
+    "protocol": "authenticated HTTPS against deployed private Site; no browser",
+    "checkpointAcknowledged": true,
+    "independentRequestRestored": true,
+    "staleRevisionRejected": true,
+    "privateAccessEnforced": true,
+    "unauthenticatedStatus": 401,
+    "sensitiveFieldsRemoved": true,
+    "qaExcludedFromLatest": true,
+    "exactRootAndBundle": true,
+    "runId": "server-qa-ecac37b5-300f-478c-8a8e-fa3ce63929c5",
+    "savedAt": 1792094764213,
+    "limits": "Synthetic record; no real device crash or final unsent frame proof."
+  },
+  "bossHandoff": {
+    "passed": true,
+    "bosses": 50,
+    "liveAndFallingHostTreesIdentical": true,
+    "hullHostRetained": true,
+    "weaponCanvasRetained": true,
+    "legacyWeaponMountsPerBoss": 2,
+    "newWeaponMountsPerBoss": 1,
+    "allWeaponMountsDisposed": true,
+    "limits": "Actual React test renderer; no Safari decoding, CSS rasterization or device-crash proof."
+  },
+  "assets": {
+    "passed": true,
+    "originalAssetFiles": 262,
+    "byExtension": {
+      ".svg": 9,
+      ".png": 62,
+      ".webp": 158,
+      ".jpg": 2,
+      ".txt": 2,
+      ".ttf": 1,
+      ".mp3": 27,
+      ".md": 1
+    },
+    "rootHtmlMatches": true,
+    "independentBackupCode": true
+  },
+  "publicTestnetChanged": false,
+  "productionChanged": false,
+  "deviceCrashReproduced": false,
+  "newDeviceFPSMeasured": false,
+  "piBrowserTested": false,
+  "privateSiteSource": "81494b13db072753aab10018cc775331f4a70875",
+  "privateDeployment": "appgdep_6ad131d629108191894a43eeb8e89fe1"
+}

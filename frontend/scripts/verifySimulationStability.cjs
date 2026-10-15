@@ -37,7 +37,7 @@ globalThis.__campaignQA = {
 };
 `;
 const presentation =
-  /(?:CardReveal|HullDamage|BlockchainProgress|SectorBackdrop|Starfield|PaintedShip|SystemSettings|MissionWeaponShop|BossWeaponsView|BossHealthView|BossReactorView|GameSceneBoundary|BonusRockLayer)$/;
+  /(?:CardReveal|HullDamage|BlockchainProgress|SectorBackdrop|Starfield|PaintedShip|SystemSettings|MissionWeaponShop|BossWeaponsView|BossHealthView|BossReactorView|BossHullView|GameSceneBoundary|BonusRockLayer)$/;
 (async () => {
   const compiled = await build({
     absWorkingDir: root,
