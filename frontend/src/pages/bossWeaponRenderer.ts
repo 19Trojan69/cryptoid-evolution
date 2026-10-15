@@ -1,4 +1,4 @@
-import { bossWeapons, type AtlasRect } from './bossWeapons.ts';
+import { bossWeapons, type AtlasRect, type BossGunConfig } from './bossWeapons.ts';
 import type { SectorBoss } from './sectorBoss.ts';
 import { turretHeatStep, paintTurretHeat } from './bossTurretHeat.ts';
 
@@ -20,7 +20,7 @@ const tile=(c:CanvasRenderingContext2D,image:CanvasImageSource,r:AtlasRect,x:num
 export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:CanvasImageSource,frozen=false,make:CanvasFactory=factory)=>{
  const c=canvas.getContext('2d');if(!c)return;
  const size=weaponCanvasSize(boss),sx=canvas.width/size.width,sy=canvas.height/size.height,scale=boss.width/boss.config.sourceWidth;
- const guns=bossWeapons[boss.config.id-1];
+ const guns=(boss.weaponSlots??bossWeapons[boss.config.id-1]);
  let cached=bases.get(canvas);
  if(!cached||cached.id!==boss.config.id||cached.width!==canvas.width||cached.height!==canvas.height){
   if (cached) {
@@ -42,6 +42,7 @@ export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:Can
   }
   const age=(boss.weaponClock-state.lastFired)/1000,recoil=frozen?0:Math.max(0,1-age/.25)*g.recoil*scale;
   c.save();c.translate(x,y);c.rotate(state.a);c.translate(0,-recoil);
+  const gunScale=(g as BossGunConfig & {renderScale?:number}).renderScale??1;if(gunScale!==1)c.scale(gunScale,gunScale);
   c.globalAlpha=.64;tile(c,image,g.shadow,-g.spritePivot.x*scale-12*scale+3*scale,-g.spritePivot.y*scale-12*scale+6*scale,scale);
   c.globalAlpha=1;
   const heat=frozen?0:turretHeatStep(state);

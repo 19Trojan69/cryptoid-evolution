@@ -1,0 +1,156 @@
+{
+  "passed": true,
+  "scenarios": 63,
+  "viewports": [
+    {
+      "width": 320,
+      "height": 568,
+      "visibleTop": 80,
+      "bossWidth": 185.21,
+      "bossHeight": 105.83,
+      "maxHullBottom": 210.83,
+      "contactClearanceToPlayerTop": 46.17,
+      "playerCenterTop": 284,
+      "playerCenterBottom": 516.88,
+      "playerCenterWidth": 260,
+      "reservedEscapeCenters": 66,
+      "minimumPhysicalGap": 112,
+      "bodyFreePlayerArea": {
+        "left": 30,
+        "right": 290,
+        "top": 284,
+        "bottom": 516.88
+      }
+    },
+    {
+      "width": 375,
+      "height": 667,
+      "visibleTop": 80,
+      "bossWidth": 256.8,
+      "bossHeight": 146.74,
+      "maxHullBottom": 251.74,
+      "contactClearanceToPlayerTop": 54.76,
+      "playerCenterTop": 333.5,
+      "playerCenterBottom": 606.97,
+      "playerCenterWidth": 315,
+      "reservedEscapeCenters": 66,
+      "minimumPhysicalGap": 112,
+      "bodyFreePlayerArea": {
+        "left": 30,
+        "right": 345,
+        "top": 333.5,
+        "bottom": 606.97
+      }
+    },
+    {
+      "width": 390,
+      "height": 760,
+      "visibleTop": 90,
+      "bossWidth": 292.6,
+      "bossHeight": 167.2,
+      "maxHullBottom": 282.2,
+      "contactClearanceToPlayerTop": 70.8,
+      "playerCenterTop": 380,
+      "playerCenterBottom": 691.6,
+      "playerCenterWidth": 330,
+      "reservedEscapeCenters": 66,
+      "minimumPhysicalGap": 112,
+      "bodyFreePlayerArea": {
+        "left": 30,
+        "right": 360,
+        "top": 380,
+        "bottom": 691.6
+      }
+    },
+    {
+      "width": 430,
+      "height": 820,
+      "visibleTop": 90,
+      "bossWidth": 315.7,
+      "bossHeight": 180.4,
+      "maxHullBottom": 295.4,
+      "contactClearanceToPlayerTop": 87.6,
+      "playerCenterTop": 410,
+      "playerCenterBottom": 746.2,
+      "playerCenterWidth": 370,
+      "reservedEscapeCenters": 66,
+      "minimumPhysicalGap": 112,
+      "bodyFreePlayerArea": {
+        "left": 30,
+        "right": 400,
+        "top": 410,
+        "bottom": 746.2
+      }
+    },
+    {
+      "width": 768,
+      "height": 920,
+      "visibleTop": 90,
+      "bossWidth": 354.2,
+      "bossHeight": 202.4,
+      "maxHullBottom": 317.4,
+      "contactClearanceToPlayerTop": 115.6,
+      "playerCenterTop": 460,
+      "playerCenterBottom": 837.2,
+      "playerCenterWidth": 708,
+      "reservedEscapeCenters": 66,
+      "minimumPhysicalGap": 112,
+      "bodyFreePlayerArea": {
+        "left": 30,
+        "right": 738,
+        "top": 460,
+        "bottom": 837.2
+      }
+    },
+    {
+      "width": 1024,
+      "height": 600,
+      "visibleTop": 60,
+      "bossWidth": 231,
+      "bossHeight": 132,
+      "maxHullBottom": 217,
+      "contactClearanceToPlayerTop": 56,
+      "playerCenterTop": 300,
+      "playerCenterBottom": 546,
+      "playerCenterWidth": 964,
+      "reservedEscapeCenters": 66,
+      "minimumPhysicalGap": 112,
+      "bodyFreePlayerArea": {
+        "left": 30,
+        "right": 994,
+        "top": 300,
+        "bottom": 546
+      }
+    },
+    {
+      "width": 844,
+      "height": 360,
+      "visibleTop": 60,
+      "bossWidth": 62.71,
+      "bossHeight": 35.83,
+      "maxHullBottom": 120.83,
+      "contactClearanceToPlayerTop": 32.17,
+      "playerCenterTop": 180,
+      "playerCenterBottom": 324,
+      "playerCenterWidth": 784,
+      "reservedEscapeCenters": 66,
+      "minimumPhysicalGap": 112,
+      "bodyFreePlayerArea": {
+        "left": 30,
+        "right": 814,
+        "top": 180,
+        "bottom": 324
+      }
+    }
+  ],
+  "planner": {
+    "recordedMs": 16000,
+    "stepMs": 40,
+    "gridPx": 10,
+    "reactionMs": 300,
+    "speedPxMs": 0.32,
+    "gameSpeedPxMs": 0.68,
+    "collision": "actual swept enemyShotHitsPlayer",
+    "limits": "Frozen target recordings; route moves horizontally. Does not prove every adaptive path or real mobile latency. Continuous full-height corridor checked separately in unit tests."
+  }
+}

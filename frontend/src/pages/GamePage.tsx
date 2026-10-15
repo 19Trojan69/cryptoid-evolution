@@ -77,6 +77,7 @@ import { missionShardBase, missionShardTotal, uncreditedGuestShards, BONUS_TARGE
 import { addPersistentHullFire, hullFireAtImpact, hullFireLimit, spriteFireSites, type HullFire } from "./hullFires";
 import { bossExplosionSize, bossFallTargetY, bossFireSite } from "./bossCombat";
 import { bossHitTarget } from "./bossHitTarget";
+import './insectBoss.css';
 import BossWeaponsView from './BossWeaponsView';
 import { preloadBossWeapons } from './bossWeaponTextures';
 import BossHealthView from './BossHealthView';
@@ -216,6 +217,7 @@ const TimedRing = ({ remainingMs, durationMs }: { remainingMs: number; durationM
 };
 
 
+const insectBossPreviewEnabled = import.meta.env.VITE_INSECT_BOSS_PREVIEW === 'true';
 const createInitialState = (): GameState => ({ rocks: [], rockEffects: [], damageCount: 0, comboTotal: 0, bossHullLight: 0, combo: createDoubleKillCombo(), asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", chainBlocks: 0, chainResult: "", rewardNotice: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: shipStartHeight[readShipStart()] }, thrust: 0, effects: [], powerUps: [], powerUpTypes: [], pickupNotice: null, score: 0, shardBase: shardBalance(localStorage.getItem(SHARD_BALANCE_KEY)), shards: 0, hearts: 3, maxHearts: 3, projectileGuard: 0, shieldCharges: 0, shieldMs: 0, purchasedShieldMs: 0, shieldActive: true, overdriveMs: 0, overdriveTotalMs: POWER_UP_DURATION_MS, rapidFireMs: 0, rapidFireTotalMs: POWER_UP_DURATION_MS, empMs: 0, pendingStartPower: null, weaponLevel: 1, weaponSource: "standard", weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], weaponTimers: [0, 0, 0, 0, 0, 0], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") || sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "loading" : "playing" });
 
 const readRecord = (key: string) => Number(window.localStorage.getItem(key) || 0);
@@ -676,7 +678,7 @@ const GamePage = () => {
     if (saved.state.boss) {
       project(saved.state.boss);
       saved.state.boss.lastDamageAt = Math.max(-1e9, saved.state.boss.lastDamageAt + performance.now() - saved.clock);
-      const model = createSectorBoss(saved.stage, width, visibleTopRef.current, height);
+      const model = createSectorBoss(saved.stage, width, visibleTopRef.current, height, insectBossPreviewEnabled);
       for (const key of ["radius", "width", "height"] as const) saved.state.boss[key] = model[key];
     }
     if (saved.encounter === "normal") {
@@ -777,7 +779,7 @@ const GamePage = () => {
           stateRef.current.boss = null;
         } else if (data.startSector % 10 === 0 && data.startSector <= 500) {
           stateRef.current.encounter = "boss-intro";
-          stateRef.current.boss = createSectorBoss(data.startSector, fieldRef.current?.clientWidth || 390, visibleTopRef.current, fieldRef.current?.clientHeight || 700);
+          stateRef.current.boss = createSectorBoss(data.startSector, fieldRef.current?.clientWidth || 390, visibleTopRef.current, fieldRef.current?.clientHeight || 700, insectBossPreviewEnabled);
         }
       }
       const selected = !adminRunRef.current && data.profile ? accountSelection(data.profile) : shipSelection;
@@ -1348,7 +1350,7 @@ const GamePage = () => {
             state.encounter = next.encounter;
             state.bossHeartCollected = undefined;
             if (next.encounter === "boss-intro") {
-              state.boss = createSectorBoss(state.sector, width, visibleTop, height);
+              state.boss = createSectorBoss(state.sector, width, visibleTop, height, insectBossPreviewEnabled);
               soundRef.current?.play("boss");
             } else {
               state.boss = null;
@@ -1410,7 +1412,7 @@ const GamePage = () => {
             state.asteroids.push(spawnAsteroid(nextIdRef.current++, width, visibleTop, formationIndexRef.current++, state.sector, slots, formationOffsetRef.current, rulesVersionRef.current));
           }
         }
-        if (state.encounter === "boss-fight" && state.boss && state.boss.elapsed >= BOSS_ENTRY_MS + 1_500) {
+        if (state.encounter === "boss-fight" && state.boss && !state.boss.insect && state.boss.elapsed >= BOSS_ENTRY_MS + 1_500) {
           const reservePhase = state.boss.turrets.every(gun => gun.health <= 0);
           if (bossEscortSlotsRef.current === null && !reservePhase && bossEscortCount(state.sector) > 0) {
             bossEscortSlotsRef.current = bossEscortSlots(state.sector, width, height, state.boss, bossEscortCount(state.sector));
@@ -1550,14 +1552,14 @@ const GamePage = () => {
             impactCooldownRef.current = IMPACT_COOLDOWN_MS;
           }
           if (state.empMs === 0) {
-            const fired = advanceBossTurrets(state.boss, state.player, width, height, delta, enemyShotLimit(width, elapsedRef.current, state.sector) - state.enemyShots.length, nextIdRef.current);
+            const fired = advanceBossTurrets(state.boss, state.player, width, height, delta, enemyShotLimit(width, elapsedRef.current, state.sector) - state.enemyShots.length, nextIdRef.current, state.enemyShots);
             nextIdRef.current += fired.shots.length;state.enemyShots.push(...fired.shots);
             if (fired.events.length) bossMuzzleRef.current = time;
             for(const event of fired.events)soundRef.current?.playBossWeapon(event.kind,event.radius,event.barrels,event.pan);
-            const pulses = advanceBossCore(state.boss, state.player, width, height, delta, enemyShotLimit(width, elapsedRef.current, state.sector) - state.enemyShots.length, nextIdRef.current);
+            const pulses = advanceBossCore(state.boss, state.player, width, height, delta, enemyShotLimit(width, elapsedRef.current, state.sector) - state.enemyShots.length, nextIdRef.current, state.enemyShots);
             nextIdRef.current += pulses.length;
             state.enemyShots.push(...pulses);
-            if (pulses.length) { bossMuzzleRef.current = time; soundRef.current?.playBossWeapon("pulse", 8, pulses.length, 0); }
+            if (pulses.length) { bossMuzzleRef.current = time; soundRef.current?.playBossWeapon(state.boss.insect ? "siege" : "pulse", state.boss.insect ? 28 : 8, pulses.length, 0); }
           }
         }
         let playerImpact: { x: number; y: number } | undefined;
@@ -1573,7 +1575,7 @@ const GamePage = () => {
                 const shielded = state.shieldActive && state.shieldCharges > 0 && state.shieldMs > 0;
                 const impact = projectileImpact(state.projectileGuard, shielded);
                 state.projectileGuard = impact.guard;
-                heartsLost += impact.damage;
+                heartsLost += impact.damage * (moved.damage ?? 1);
                 if (impact.damage > 0) playerImpact = { x: moved.x, y: moved.y };
                 if (impact.blockedByHull) {
                   state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: "shield", startedAt: time, target: "player" });
@@ -1675,7 +1677,7 @@ const GamePage = () => {
           if (bossTarget && state.boss) {
             if (bossTarget.kind === "turret") {
               const bonus = damageBossTurret(state.boss, bossTarget.index, shot.damage);
-              const position = gunPosition(state.boss, bossWeapons[state.boss.config.id - 1][bossTarget.index]);
+              const position = gunPosition(state.boss, (state.boss.weaponSlots??bossWeapons[state.boss.config.id - 1])[bossTarget.index]);
               state.effects.push({ id: nextIdRef.current++, ...position, kind: bonus > 0 ? "turret-burst" : "turret-hit", startedAt: time, turretBonus: bonus || undefined });
               if (bonus > 0) {
                 state.score += bonus;
@@ -1891,7 +1893,7 @@ const GamePage = () => {
         if (state.boss && state.encounter === "boss-fight") {
           const blast = detonateBossBomb(state.boss, now);
           for (const impact of blast.impacts) {
-            const position = gunPosition(state.boss, bossWeapons[state.boss.config.id - 1][impact.index]);
+            const position = gunPosition(state.boss, (state.boss.weaponSlots??bossWeapons[state.boss.config.id - 1])[impact.index]);
             state.effects.push({ id: nextIdRef.current++, ...position, kind: impact.destroyed ? "turret-burst" : "turret-hit", startedAt: now, turretBonus: impact.bonus || undefined });
             state.score += impact.bonus;
           }
@@ -2227,10 +2229,11 @@ const GamePage = () => {
           ? game.phase === "ENTRY" || game.phase === "FORMATION" || game.phase === "REFORM"
           : game.encounter === "boss-fight" && asteroid.escort && asteroid.attackPattern === null
         ).map(asteroid => { const locked = asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration; const diameter = asteroid.radius * 2 + 8; return <div key={`formation-${asteroid.id}`} className={`formation-target${locked ? " formation-target-locked" : ""}`} style={{ left: asteroid.entryTargetX, top: asteroid.entryTargetY, width: diameter, height: diameter }} aria-hidden="true"><span /></div>; })}
-        {game.boss && game.encounter === "boss-fight" && <div className={`asteroid sector-boss${game.boss.health <= game.boss.maxHealth / 2 ? " boss-enraged" : ""}${game.boss.health <= game.boss.maxHealth * .25 ? " boss-critical" : ""}${performance.now() - game.boss.lastDamageAt < 240 ? " boss-hit" : ""}`} style={{ left: game.boss.x, top: game.boss.y, width: game.boss.width, height: game.boss.height, transform: "translate(-50%, -50%)", "--boss-image": `url('${game.boss.config.image}')`, "--boss-thrust": `${6 + game.boss.height * engineFlamePercent(game.boss.visualMotion?.thrust ?? 0, game.boss.elapsed < BOSS_ENTRY_MS ? "launch" : "idle") / 100}px` } as CSSProperties} data-hull-ready={bossHullReady} title={`${t("CORE WARDEN")} · ${t("Sector")} boss`}>
+        {game.boss && game.encounter === "boss-fight" && <div className={`asteroid sector-boss${game.boss.insect ? " insect-boss" : ""}${game.boss.health <= game.boss.maxHealth / 2 ? " boss-enraged" : ""}${game.boss.health <= game.boss.maxHealth * .25 ? " boss-critical" : ""}${performance.now() - game.boss.lastDamageAt < 240 ? " boss-hit" : ""}`} style={{ left: game.boss.x, top: game.boss.y, width: game.boss.width, height: game.boss.height, transform: "translate(-50%, -50%)", "--boss-image": `url('${game.boss.config.image}')`, "--boss-thrust": `${6 + game.boss.height * engineFlamePercent(game.boss.visualMotion?.thrust ?? 0, game.boss.elapsed < BOSS_ENTRY_MS ? "launch" : "idle") / 100}px` } as CSSProperties} data-hull-ready={bossHullReady} title={`${t("CORE WARDEN")} · ${t("Sector")} boss`}>
           {game.boss.config.engineAnchors.map(([x, y], index) => <i key={index} className="boss-engine-flame" style={{ left: `${x * 100}%`, top: `${y * 100}%` }} aria-hidden="true" />)}
           <img className="boss-hull" src={game.boss.config.image} alt="" draggable={false} />
           <BossWeaponsView boss={game.boss}/>
+          {game.boss.insect && game.boss.insect.telegraphGun>=0 && (()=>{const g=(game.boss.weaponSlots??[])[game.boss.insect.telegraphGun];return g?<i className="insect-charge" style={{left:`${g.sourceX/game.boss.config.sourceWidth*100}%`,top:`${g.sourceY/game.boss.config.sourceHeight*100}%`,opacity:.45+.5*Math.sin(game.boss.weaponClock*.012)**2}} aria-hidden="true"/>:null;})()}
           <BossReactorView boss={game.boss}/>
           <i className="hull-reflection" style={{ maskImage: `url('${game.boss.config.image}')`, WebkitMaskImage: `url('${game.boss.config.image}')`, opacity: game.bossHullLight }} aria-hidden="true" />
           <HullDamage sites={game.boss.hullFires} hit={game.boss.hit} maskImage={`url('${game.boss.config.image}')`} bossDamage={1 - game.boss.health / game.boss.maxHealth} />
@@ -2245,7 +2248,7 @@ const GamePage = () => {
         {game.combo.remainingMs > 0 && game.status === "playing" && <div key={`combo-${game.combo.total}`} className={`combo-notice${game.pickupNotice ? " combo-with-pickup" : ""}`} role="status"><b>{t("DOUBLE KILL")}</b><span>+{DOUBLE_KILL_SCORE} {t("Score")} · +{DOUBLE_KILL_SHARDS} {t("Shards")}</span></div>}
         {game.pickupNotice && game.status === "playing" && <div key={game.pickupNotice.id} className={`pickup-notice pickup-notice-${game.pickupNotice.type}`} role="status"><b>{powerUpSymbols[game.pickupNotice.type]} {game.pickupNotice.type === "weapon" ? weaponNames[game.pickupNotice.level] : t(powerUpNames[game.pickupNotice.type])}</b><span>{game.pickupNotice.type === "weapon" ? `${t(pickupEffectLabels.weapon)} ${game.pickupNotice.level} · ${weaponNames[game.pickupNotice.level]} · ${PICKUP_WEAPON_DURATION_MS / 1000}s` : t(pickupEffectLabels[game.pickupNotice.type])}</span></div>}
         {game.shots.map(shot => <div key={shot.id} className={`player-laser player-laser-tier-${shot.visualLevel ?? 1}${shot.empowered && shot.visualLevel !== 5 ? " player-laser-overdrive" : ""}`} style={{ left: shot.x, top: shot.y }} aria-hidden="true" />)}
-        {game.enemyShots.map(shot => <div key={shot.id} className={`enemy-laser${shot.enemyClass ? ` enemy-projectile-${shot.enemyClass}` : ""}${shot.bossKind ? ` boss-projectile boss-projectile-${shot.bossKind}` : ""}${shot.weaponKind ? ` boss-evolved-shot boss-evolved-${shot.weaponKind}` : ""}`} style={{ left: shot.x, top: shot.y, ...(shot.enemyClass ? { width: shot.radius * 2, ...(shot.enemyClass === "medium" || shot.enemyClass === "heavy" ? { height: shot.radius * 2 } : {}), "--enemy-shot-color": enemyProjectileProfiles[shot.enemyClass].color } : {}), "--shot-angle": `${-Math.atan2(shot.vx, shot.vy) * 180 / Math.PI}deg`,...(shot.weaponKind?{"--boss-shot-color":shot.weaponColor,"--boss-shot-width":`${shot.weaponWidth}px`,"--boss-shot-diameter":`${shot.radius*2}px`}:{}) } as CSSProperties} aria-hidden="true" />)}
+        {game.enemyShots.map(shot => <div key={shot.id} className={`enemy-laser${shot.projectileType?.startsWith("insect-") ? " insect-projectile" : ""}${shot.enemyClass ? ` enemy-projectile-${shot.enemyClass}` : ""}${shot.bossKind ? ` boss-projectile boss-projectile-${shot.bossKind}` : ""}${shot.weaponKind ? ` boss-evolved-shot boss-evolved-${shot.weaponKind}` : ""}`} style={{ left: shot.x, top: shot.y, ...(shot.enemyClass ? { width: shot.radius * 2, ...(shot.enemyClass === "medium" || shot.enemyClass === "heavy" ? { height: shot.radius * 2 } : {}), "--enemy-shot-color": enemyProjectileProfiles[shot.enemyClass].color } : {}), "--shot-angle": `${-Math.atan2(shot.vx, shot.vy) * 180 / Math.PI}deg`,...(shot.weaponKind?{"--boss-shot-color":shot.weaponColor,"--boss-shot-width":`${shot.weaponWidth}px`,"--boss-shot-diameter":`${shot.radius*2}px`}:{}) } as CSSProperties} aria-hidden="true" />)}
         {game.effects.filter(bossExplosionReady).map(effect => <ImpactEffectView key={effect.id} effect={effect} />)}
         {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship shielded-ship${game.status === "paused" && weaponCountdown === null ? " player-ship-dialog-hidden" : ""}${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.purchasedShieldMs > 0 || (game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0) ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${engineFlamePercent(game.thrust)}%`, ...shipVisualOffset } as CSSProperties} aria-label={t('Your Cryptoid ship')}><div className="ship-visual"><PaintedShip className="fleet-sprite" sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} />{engineTrails(shipSelection.skin.sprite, "player-engine")}<i className="hull-reflection" style={{ maskImage: `url('${shipEvolutionAsset(shipSelection.skin.sprite, shipStage)}')`, WebkitMaskImage: `url('${shipEvolutionAsset(shipSelection.skin.sprite, shipStage)}')` }} aria-hidden="true" /><i className="player-muzzle-flash" aria-hidden="true" /><HullDamage sites={game.playerHullFires} hit={game.playerHit} maskImage={`url('${shipEvolutionAsset(shipSelection.skin.sprite, shipStage)}')`} /></div></div>}
         {weaponMenuOpen && <div className={`game-overlay weapon-selection-overlay${readControlHand() === 'right' ? ' weapon-drawer-left' : ' weapon-drawer-right'}`} onPointerDown={event => event.stopPropagation()}>

@@ -1,3 +1,4 @@
+import { insectHullMask } from './insectHullMask.ts';
 import { bossMasks } from "./bossMasks.ts";
 import type { BossConfig } from "./bossManifest.ts";
 import { createBossShot, type BossProjectileKind, type EnemyShot } from "./enemyFire.ts";
@@ -9,15 +10,16 @@ export const bossAnchorPosition = (boss: SectorBoss, [x, y]: readonly [number, n
   y: boss.y + (y - .5) * boss.height,
 });
 
-const decodedMasks = new Map<number, Uint8Array>();
+const decodedMasks = new Map<number|string, Uint8Array>();
 export const bossHullContains = (boss: SectorBoss, x: number, y: number) => {
   const column = Math.floor((x - boss.x + boss.width / 2) / boss.width * 128);
   const row = Math.floor((y - boss.y + boss.height / 2) / boss.height * 48);
   if (column < 0 || column >= 128 || row < 0 || row >= 48) return false;
-  let bytes = decodedMasks.get(boss.config.id);
+  const maskKey=boss.insect?'insect-reference':boss.config.id;
+  let bytes = decodedMasks.get(maskKey);
   if (!bytes) {
-    bytes = Uint8Array.from(atob(bossMasks[boss.config.id - 1]), char => char.charCodeAt(0));
-    decodedMasks.set(boss.config.id, bytes);
+    bytes = Uint8Array.from(atob(boss.insect?insectHullMask:bossMasks[boss.config.id - 1]), char => char.charCodeAt(0));
+    decodedMasks.set(maskKey, bytes);
   }
   const bit = row * 128 + column;
   return !!(bytes[bit >> 3] & (128 >> (bit & 7)));

@@ -1,0 +1,4 @@
+/* New-generation shots use circular solid bodies and a smaller collision body. */
+.enemy-laser.boss-evolved-shot.insect-projectile{height:var(--boss-shot-diameter);width:var(--boss-shot-diameter);border-radius:50%;background:radial-gradient(circle,#fff9d4 0 22%,var(--boss-shot-color) 30% 74%,transparent 78%);box-shadow:0 0 5px var(--boss-shot-color)}
+.enemy-laser.boss-evolved-shot.insect-projectile::before{display:none}
+.insect-charge{position:absolute;width:18px;height:18px;border:2px solid #edff74;border-radius:50%;background:#d4ff4c88;transform:translate(-50%,-50%);pointer-events:none;z-index:8}

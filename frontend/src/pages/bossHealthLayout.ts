@@ -1,13 +1,13 @@
-import { bossWeapons } from './bossWeapons.ts';
+import { bossWeapons, type BossGunConfig } from './bossWeapons.ts';
 import type { SectorBoss } from './sectorBoss.ts';
 
 export type TurretBarPosition = { index: number; x: number; y: number; gunX: number; gunY: number; width: number; height: number };
 
 // Stable positions include destroyed guns, so surviving bars never jump around.
 // A compact grid keeps densely mounted batteries readable on narrow phones.
-export function turretBarPositionsForLayout(id: number, sourceWidth: number, sourceHeight: number, bossWidth: number, bossHeight: number): TurretBarPosition[] {
+export function turretBarPositionsForLayout(id: number, sourceWidth: number, sourceHeight: number, bossWidth: number, bossHeight: number, mountedGuns:readonly BossGunConfig[]=bossWeapons[id-1]): TurretBarPosition[] {
   const scale = bossWidth / sourceWidth;
-  const count = bossWeapons[id - 1].length;
+  const count = mountedGuns.length;
   const width = Math.max(14, Math.min(count <= 4 ? 32 : count <= 8 ? 26 : count <= 12 ? 21 : 16, bossWidth * .12));
   const height = count <= 4 ? 3 : count <= 8 ? 2.5 : 2;
   const bars: TurretBarPosition[] = [];
@@ -17,7 +17,7 @@ export function turretBarPositionsForLayout(id: number, sourceWidth: number, sou
     x: (index % columns + .5) * bossWidth / columns,
     y: 5 + Math.floor(index / columns) * 12,
   }));
-  const guns = bossWeapons[id - 1].map((gun, index) => ({
+  const guns = mountedGuns.map((gun, index) => ({
     index, gunX: gun.sourceX / sourceWidth * bossWidth,
     gunY: gun.sourceY / sourceHeight * bossHeight,
     back: gun.back * scale,
@@ -33,5 +33,5 @@ export function turretBarPositionsForLayout(id: number, sourceWidth: number, sou
 }
 
 export function turretBarPositions(boss: SectorBoss): TurretBarPosition[] {
-  return turretBarPositionsForLayout(boss.config.id, boss.config.sourceWidth, boss.config.sourceHeight, boss.width, boss.height);
+  return turretBarPositionsForLayout(boss.config.id, boss.config.sourceWidth, boss.config.sourceHeight, boss.width, boss.height,boss.weaponSlots);
 }

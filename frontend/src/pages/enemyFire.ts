@@ -6,7 +6,7 @@ import { introShotSpeed } from './introDifficulty.ts';
 import type { CryptoidClass } from './cryptoidRoster.ts';
 
 export type BossProjectileKind = "bolt" | "orb" | "lance" | "split" | "pulse" | "double" | "burst" | "heavy" | "rapid";
-export type EnemyShot = { id: number; x: number; y: number; vx: number; vy: number; radius: number; enemyClass?: CryptoidClass; bossKind?: BossProjectileKind; weaponKind?:BossWeaponKind; weaponColor?:string; weaponWidth?:number; sourceGun?:number; caliber?:number };
+export type EnemyShot = { projectileType?:string;faction?:'enemy';damage?:number;ageMs?:number;lifetimeMs?:number;renderRadius?:number;collisionRadius?:number; id: number; x: number; y: number; vx: number; vy: number; radius: number; enemyClass?: CryptoidClass; bossKind?: BossProjectileKind; weaponKind?:BossWeaponKind; weaponColor?:string; weaponWidth?:number; sourceGun?:number; caliber?:number };
 export type EnemyVolleyKind = 'single' | 'double' | 'burst';
 export type EnemyFireProgress = { kind: EnemyVolleyKind; pulses: number; lastPulseMs: number | null };
 export const ENEMY_BURST_GAP_MS = 260;
@@ -97,9 +97,10 @@ export const createEnemyShot = (id: number, x: number, y: number, player: Player
   return { id, x, y, vx: dx / distance * speed, vy: dy / distance * speed, radius: 5 };
 };
 
-export const advanceEnemyShot = (shot: EnemyShot, delta: number): EnemyShot => ({ ...shot, x: shot.x + shot.vx * delta, y: shot.y + shot.vy * delta });
+export const advanceEnemyShot = (shot: EnemyShot, delta: number): EnemyShot => ({ ...shot, x: shot.x + shot.vx * delta, y: shot.y + shot.vy * delta, ...(shot.lifetimeMs ? {ageMs:(shot.ageMs ?? 0)+delta} : {}) });
 // Match the solid projectile body, excluding decorative glow and exhaust.
 export const enemyShotBody = (shot: EnemyShot) => {
+  if (shot.collisionRadius !== undefined) return {radius:shot.collisionRadius,extension:0,trailing:0};
   const radius = shot.weaponKind === 'laser' ? (shot.weaponWidth ?? shot.radius * 2) / 2 : shot.radius;
   if (shot.enemyClass === 'medium' || shot.enemyClass === 'heavy') return { radius, extension: 0, trailing: 0 };
   // Match the painted solid body along its direction of travel. Boss lances
@@ -127,6 +128,7 @@ export const enemyShotHitsPlayer = (shot: EnemyShot, player: PlayerPosition, wid
     { x: direction.x * body.extension, y: direction.y * body.extension }) < PLAYER_RADIUS + body.radius;
 };
 export const enemyShotOutsideField = (shot: EnemyShot, width: number, height: number) => {
+  if (shot.lifetimeMs && (shot.ageMs ?? 0) >= shot.lifetimeMs) return true;
   const margin = Math.max(24, shot.radius * 2);
   return shot.y < -margin || shot.y > height + margin || shot.x < -margin || shot.x > width + margin;
 };

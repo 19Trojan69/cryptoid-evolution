@@ -1,3 +1,5 @@
+import { insectDifficulty, insectLayout, insectReferenceConfig, insectReferenceGuns, INSECT_REFERENCE_LEVEL, type InsectCombat } from './insectBoss.ts';
+import type { BossGunConfig } from './bossWeapons.ts';
 import type { BossCoreState } from './bossCore.ts';
 import { createBossTurrets, type BossTurretState } from './bossTurrets.ts';
 import { levelDifficulty } from "./levelDifficulty.ts";
@@ -11,11 +13,21 @@ export const BOSS_ENTRY_MS = 1_800;
 export const BOSS_WARNING_MS = 4_900;
 export const BOSS_FIRE_INTERVAL_MS = 2_500;
 
-export type SectorBoss = { core?: BossCoreState; visualMotion?: ShipMotion; turrets:BossTurretState[]; weaponClock:number; turretCursor:number; x: number; y: number; startY: number; radius: number; width: number; height: number; config: BossConfig; volley: number; health: number; maxHealth: number; elapsed: number; fireElapsed: number; lastDamageAt: number; hit?: { id?: number; x: number; y: number; impactPower?: number }; hullFires?: { id: number; x: number; y: number; impactPower?: number; revision?: number }[] };
+export type SectorBoss = { insect?:InsectCombat; weaponSlots?:readonly BossGunConfig[]; core?: BossCoreState; visualMotion?: ShipMotion; turrets:BossTurretState[]; weaponClock:number; turretCursor:number; x: number; y: number; startY: number; radius: number; width: number; height: number; config: BossConfig; volley: number; health: number; maxHealth: number; elapsed: number; fireElapsed: number; lastDamageAt: number; hit?: { id?: number; x: number; y: number; impactPower?: number }; hullFires?: { id: number; x: number; y: number; impactPower?: number; revision?: number }[] };
 
-export const createSectorBoss = (sector: number, width: number, visibleTop = 0, fieldHeight = 700): SectorBoss => {
+export const createSectorBoss = (sector: number, width: number, visibleTop = 0, fieldHeight = 700, insectPreview = false): SectorBoss => {
   const config = bossForLevel(sector);
   if (!config) throw new Error(`No boss is assigned to level ${sector}`);
+  if (insectPreview && sector === INSECT_REFERENCE_LEVEL) {
+    const layout = insectLayout(width, fieldHeight, visibleTop);
+    const custom = insectReferenceConfig(config), difficulty = insectDifficulty(sector);
+    return {config:custom,weaponSlots:insectReferenceGuns,
+      insect:{generation:'insect-v2',name:'Viridian Harvester',nextAttackAt:1100,lane:'left',phrase:0,telegraphGun:-1,warningStarted:0,visibleTop},
+      turrets:createBossTurrets(config.id,insectReferenceGuns,difficulty.turretBudget),
+      weaponClock:0,turretCursor:0,x:width/2,y:layout.centerY-14,startY:layout.centerY-14,
+      radius:layout.width/2,width:layout.width,height:layout.height,volley:0,
+      health:difficulty.hullHP,maxHealth:difficulty.hullHP,elapsed:0,fireElapsed:0,lastDamageAt:-Infinity};
+  }
   const health = levelDifficulty(sector).bossHealth;
   // Leave a narrow but safe docking lane below later bosses, including on
   // shorter desktop viewports with a tall HUD.
@@ -32,6 +44,18 @@ export const createSectorBoss = (sector: number, width: number, visibleTop = 0, 
 export const moveSectorBoss = (boss: SectorBoss, delta: number, width: number, height: number): SectorBoss => {
   const elapsed = boss.elapsed + delta;
   const entry = Math.min(1, elapsed / BOSS_ENTRY_MS);
+  if (boss.insect) {
+    const layout = insectLayout(width,height,boss.insect.visibleTop);
+    const phase = Math.max(0,elapsed-BOSS_ENTRY_MS);
+    const free = Math.max(0,(width-layout.width)/2-36);
+    const x = width/2 + Math.min(free,width*.045)*Math.sin(phase*.00048);
+    const y = Math.min(layout.centerY + Math.sin(phase*.00031)*5,
+      layout.bottomLimit-layout.height*.7);
+    return {...boss,width:layout.width,height:layout.height,radius:layout.width/2,x,
+      y:entry < 1 ? boss.startY+(y-boss.startY)*entry : y,elapsed,
+      fireElapsed:entry===1?boss.fireElapsed+delta:0,
+      visualMotion:advanceShipMotion(boss.visualMotion??idleShipMotion(),x-boss.x,y-boss.y,delta)};
+  }
   const freeX = Math.max(0, (width - boss.width) / 2 - 12);
   const targetX = width / 2 + Math.min(freeX, width * .07) * Math.sin(Math.max(0, elapsed - BOSS_ENTRY_MS) * .00075);
   const restingY = Math.max(height * .19, boss.startY, boss.height / 2 + 12);

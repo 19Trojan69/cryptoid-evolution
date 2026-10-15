@@ -36,7 +36,8 @@ export const bossSpecialWeapons: readonly SpecialWeaponMount[] = placements.map(
   const [metal,trim,energy] = finishes[i % finishes.length];
   return {id:i+1,y,height,aspect,shape,metal,trim,energy};
 });
-export const specialWeaponMount = (boss: SectorBoss) => bossSpecialWeapons[boss.config.id - 1];
+const insectSpecialWeapon:SpecialWeaponMount={id:6,y:.53,height:.38,aspect:.72,shape:'siege',metal:'#5f7360',trim:'#91ae35',energy:'#b6ff38'};
+export const specialWeaponMount = (boss: SectorBoss):SpecialWeaponMount => boss.insect ? insectSpecialWeapon : bossSpecialWeapons[boss.config.id - 1];
 export const specialWeaponBox = (boss: SectorBoss) => {
   const mount = specialWeaponMount(boss);
   const height = boss.height * mount.height;

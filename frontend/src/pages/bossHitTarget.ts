@@ -1,3 +1,4 @@
+import { specialWeaponBox } from './bossSpecialWeapon.ts';
 import { bossWeapons } from './bossWeapons.ts';
 import { gunPosition } from './bossTurrets.ts';
 import { bossHullContains } from './bossCombat.ts';
@@ -16,7 +17,7 @@ export function bossHitTarget(boss:SectorBoss,from:{x:number;y:number},to:{x:num
   // gun analytically rather than sampling every 2px against every gun.
   const scale=boss.width/boss.config.sourceWidth;
   let earliest=Infinity,hitIndex=-1;
-  const guns=bossWeapons[boss.config.id-1];
+  const guns=(boss.weaponSlots??bossWeapons[boss.config.id-1]);
   for(let index=0;index<guns.length;index++){
    const state=boss.turrets[index];if(state.health<=0)continue;
    const gun=guns[index],pos=gunPosition(boss,gun),c=Math.cos(state.a),s=Math.sin(state.a);
@@ -37,7 +38,9 @@ export function bossHitTarget(boss:SectorBoss,from:{x:number;y:number},to:{x:num
  const steps=Math.max(1,Math.ceil(Math.hypot(dx,dy)/2));
  for(let step=0;step<=steps;step++){
   const x=from.x+dx*step/steps,y=from.y+dy*step/steps;
-  if(bossHullContains(boss,x,y))return {kind:'hull' as const,x,y};
+  const bay=boss.insect?specialWeaponBox(boss):null;
+  const reactor=bay && x>=boss.x-boss.width/2+bay.left && x<=boss.x-boss.width/2+bay.left+bay.width && y>=boss.y-boss.height/2+bay.top && y<=boss.y-boss.height/2+bay.top+bay.height;
+  if(boss.insect ? reactor : bossHullContains(boss,x,y))return {kind:'hull' as const,x,y};
  }
  return null;
 }

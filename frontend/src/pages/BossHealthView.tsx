@@ -7,7 +7,7 @@ export default function BossHealthView({ boss }: { boss: SectorBoss }) {
   const { t } = useLocale();
   const { id, sourceWidth, sourceHeight } = boss.config;
   const { width, height } = boss;
-  const positions = useMemo(() => turretBarPositionsForLayout(id, sourceWidth, sourceHeight, width, height), [id, sourceWidth, sourceHeight, width, height]);
+  const positions = useMemo(() => turretBarPositionsForLayout(id, sourceWidth, sourceHeight, width, height,boss.weaponSlots), [id, sourceWidth, sourceHeight, width, height,boss.weaponSlots]);
   if (boss.health <= 0) return null;
   if (!bossHullExposed(boss)) return <>{positions.map(bar => {
     const gun = boss.turrets[bar.index];
