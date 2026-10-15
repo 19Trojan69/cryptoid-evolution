@@ -31,10 +31,11 @@ import { bindGameInput } from './gameInput';
 import { startGuardedGameLoop, type GameInterruption } from './gameLoop';
 import { recordGameDiagnostic, createGameSessionDiagnostics } from './gameDiagnostics';
 import { browserProbeRuntime, createPerformanceProbe, developerProbeEnabled } from './performanceDiagnostics';
+import { renderWorkStats } from './renderWork';
 import GameSceneBoundary from './GameSceneBoundary';
 import { advanceShipMotion, idleShipMotion, engineFlamePercent, explosionDiameter, fragmentFlight, hullIllumination, type ShipMotion } from "./shipRealism";
 import { useLocale } from "../i18n";
-import { memo, useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { useNavigate } from "react-router-dom";
 import { attackDuration, attackGroupSize, attackPosition, chooseAttackPattern, type AttackPattern } from "./attackPatterns";
 import { entryPatternForSector, entryPosition, entryStartX, type EntryPattern } from "./entryPatterns";
@@ -419,6 +420,8 @@ const GamePage = () => {
   const lastSavedAtRef = useRef(0);
   const diagnosticsRef = useRef<ReturnType<typeof createGameSessionDiagnostics> | null>(null);
   const performanceProbeRef = useRef<ReturnType<typeof createPerformanceProbe> | null>(null);
+  const sceneRenderStarted = performanceProbeRef.current?.sceneRenderBegin();
+  useLayoutEffect(() => { performanceProbeRef.current?.sceneCommitted(sceneRenderStarted); });
   const backgroundHiddenAtRef = useRef(0);
   const spawnTimerRef = useRef(0);
   const sectionElapsedRef = useRef(0);
@@ -625,8 +628,10 @@ const GamePage = () => {
   }, []);
   useEffect(() => {
     const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+    let longTasksSupported = false;
     const probe = developerProbeEnabled() ? createPerformanceProbe({ runtime: () => ({
-      ...browserProbeRuntime(), ...paintedShipResourceStats(), audioVoices: soundRef.current?.activeVoiceCount ?? 0,
+      ...browserProbeRuntime(), ...paintedShipResourceStats(), ...renderWorkStats(), audioVoices: soundRef.current?.activeVoiceCount ?? 0,
+      longTasksSupported,
       knownTimers: 1 + Number(gameOverTimerRef.current !== null) + Number(reloadNoticeTimerRef.current !== null),
       knownListeners: 5,
     }) }) : null;
@@ -636,8 +641,8 @@ const GamePage = () => {
     const probeApi = probe ? { export: probe.export } : undefined;
     if (probeApi) probeHost.__cryptoidDiagnostics = probeApi;
     let observer: PerformanceObserver | undefined;
-    if (probe && typeof PerformanceObserver !== 'undefined') {
-      try { observer = new PerformanceObserver(list => { for (const entry of list.getEntries()) probe.longTask(entry.duration); }); observer.observe({ type: 'longtask', buffered: false }); }
+    if (probe && typeof PerformanceObserver !== 'undefined' && PerformanceObserver.supportedEntryTypes?.includes('longtask')) {
+      try { observer = new PerformanceObserver(list => { for (const entry of list.getEntries()) probe.longTask(entry.duration); }); observer.observe({ type: 'longtask', buffered: false }); longTasksSupported = true; }
       catch { observer?.disconnect(); } // Long Tasks is absent in WebKit.
     }
     const monitor = createGameSessionDiagnostics(undefined, recordGameDiagnostic, Date.now, navigation?.type);
@@ -1862,6 +1867,7 @@ const GamePage = () => {
         const paintInterval = width > 700 ? 16 : slowFramesRef.current >= 6 ? 50 : 32;
         if (damageTaken || time - lastPaintRef.current >= paintInterval || state.phase !== previousPhase || state.status !== "playing") {
           lastPaintRef.current = time;
+          performanceProbeRef.current?.sceneRequested();
           setGame({ ...state, boss: state.boss ? { ...state.boss } : null, asteroids: [...state.asteroids], bonusTargets: [...state.bonusTargets], shots: [...state.shots], enemyShots: [...state.enemyShots], effects: [...state.effects], powerUps: [...state.powerUps] });
         }
       }
@@ -1879,7 +1885,7 @@ const GamePage = () => {
         effects: stateRef.current.effects.length, rocks: stateRef.current.rocks.length,
         rockEffects: stateRef.current.rockEffects.length, pickups: stateRef.current.powerUps.length,
         bossHealth: stateRef.current.boss?.health, liveTurrets: stateRef.current.boss?.turrets.filter(g => g.health > 0).length,
-        bossHeartCollected: stateRef.current.bossHeartCollected, clearMs: clearTimerRef.current });
+        bossHeartCollected: stateRef.current.bossHeartCollected, clearMs: clearTimerRef.current, hearts: stateRef.current.hearts });
       try { simulate(time); }
       finally { probe?.mark('phase-save-and-paint'); probe?.end(time); }
       if (diagnosticsRef.current?.due()) diagnosticsRef.current.update(diagnosticContext(), stateRef.current.status === 'playing', false);

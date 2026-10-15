@@ -21,6 +21,7 @@ export type ProbeContext = {
   liveTurrets?: number;
   bossHeartCollected?: boolean;
   clearMs?: number;
+  hearts?: number;
 };
 type Work = { count: number; totalMs: number; maxMs: number };
 type Runtime = {
@@ -35,6 +36,7 @@ type Runtime = {
   audioVoices?: number;
   knownTimers?: number;
   knownListeners?: number;
+  longTasksSupported?: boolean;
 };
 type Sample = ProbeContext &
   Runtime & {
@@ -52,6 +54,13 @@ type Sample = ProbeContext &
     longTasks: number;
     longTaskMaxMs: number;
     work: Record<string, Work>;
+    sampleDurationMs: number;
+    sceneRequests: number;
+    sceneCommits: number;
+    sceneCommitWaitP95Ms: number;
+    sceneRenderToCommitP95Ms: number;
+    runtimeAgeMs: number;
+    runtimeSampleMs: number;
   };
 type Event = {
   atMs: number;
@@ -65,6 +74,7 @@ type Event = {
   file?: string;
   line?: number;
   column?: number;
+  hearts?: number;
 };
 type Options = {
   now?: () => number;
@@ -119,6 +129,10 @@ export function createPerformanceProbe(options: Options = {}) {
     longTasks = 0,
     longTaskMaxMs = 0;
   let finished = false;
+  let sceneRequests = 0, sceneCommits = 0;
+  let sceneCommitWaits: number[] = [], sceneRenderTimes: number[] = [];
+  let pendingSceneAt: number | undefined;
+  let cachedRuntime: Runtime = {}, runtimeAt = -Infinity, runtimeSampleMs = 0;
   let persistence = "not-yet-written";
   const event = (kind: string, at: number, extra: Partial<Event> = {}) => {
     if (!context) return;
@@ -132,13 +146,14 @@ export function createPerformanceProbe(options: Options = {}) {
         phase: context.phase,
         encounter: context.encounter,
         status: context.status,
+        hearts: context.hearts,
         ...extra,
       },
       64
     );
   };
   const exportTrace = () => ({
-    version: 1,
+    version: 2,
     environment: "developer-only",
     persistence,
     samples: samples.slice(),
@@ -149,6 +164,9 @@ export function createPerformanceProbe(options: Options = {}) {
       particles: "rendered fragment nodes; not a simulation particle system",
       heap: "JS heap only when supported; excludes GPU/WebView memory",
       cpu: "instrumented simulation sections; rendering and audio work may occur outside them",
+      scene: "GamePage render start to layout effect and request-to-commit; includes reconciliation/scheduling, excludes browser paint/GPU",
+      longTasks: "zero counts are meaningful only when longTasksSupported is true",
+      runtime: "DOM/animation/cache/audio counters sampled at most once per 2 seconds; runtimeAgeMs indicates age, runtimeSampleMs measures that diagnostic work",
     },
   });
   const persist = (force = false) => {
@@ -179,19 +197,22 @@ export function createPerformanceProbe(options: Options = {}) {
   };
   const flush = (at: number) => {
     if (!context || !frames) return;
-    let runtime: Runtime = {};
-    try {
-      runtime = options.runtime?.() ?? {};
-    } catch {
-      /* Optional browser APIs. */
+    if (at - runtimeAt >= 2_000) {
+      const started = now();
+      try { cachedRuntime = options.runtime?.() ?? {}; }
+      catch { cachedRuntime = {}; } // Optional browser APIs.
+      runtimeSampleMs = Math.max(0, now() - started);
+      runtimeAt = at;
     }
     bounded(
       samples,
       {
         ...context,
-        ...runtime,
+        ...cachedRuntime,
+        runtimeAgeMs: Math.max(0, Math.round(at - runtimeAt)), runtimeSampleMs,
         atMs: Math.round(at - origin),
-        fps: gaps.length ? Math.round(((gaps.length * 1000) / Math.max(1, at - windowStart)) * 100) / 100 : 0,
+        fps: gaps.length ? Math.round(((gaps.length * 1000) / Math.max(1, gaps.reduce((sum, gap) => sum + gap, 0))) * 100) / 100 : 0,
+        sampleDurationMs: Math.max(0, Math.round(at - windowStart)),
         frameP50Ms: percentile(gaps, 0.5),
         frameP95Ms: percentile(gaps, 0.95),
         frameMaxMs: Math.max(0, ...gaps),
@@ -204,6 +225,9 @@ export function createPerformanceProbe(options: Options = {}) {
         longTasks,
         longTaskMaxMs,
         work,
+        sceneRequests, sceneCommits,
+        sceneCommitWaitP95Ms: percentile(sceneCommitWaits, 0.95),
+        sceneRenderToCommitP95Ms: percentile(sceneRenderTimes, 0.95),
       },
       PERFORMANCE_SAMPLE_LIMIT
     );
@@ -212,6 +236,8 @@ export function createPerformanceProbe(options: Options = {}) {
     volleyGaps = [];
     work = {};
     frames = volleys = capBlocked = longTasks = longTaskMaxMs = 0;
+    sceneRequests = sceneCommits = 0;
+    sceneCommitWaits = []; sceneRenderTimes = [];
     windowStart = at;
     persist();
   };
@@ -220,7 +246,13 @@ export function createPerformanceProbe(options: Options = {}) {
       if (finished) return;
       if (next.status !== "playing") {
         this.suspend(at);
+        const changed = context?.status !== next.status;
+        context = next;
+        if (changed) { event("status-change", at); persist(true); }
         return;
+      }
+      if (context && context.status !== next.status) {
+        context = next; event("status-change", at); persist(true);
       }
       const nextSignature = `${next.sector}:${next.flight}:${next.encounter}:${next.phase}`;
       if (signature !== nextSignature) {
@@ -272,6 +304,19 @@ export function createPerformanceProbe(options: Options = {}) {
         longTaskMaxMs = Math.max(longTaskMaxMs, duration);
       }
     },
+    sceneRequested() {
+      if (finished) return;
+      sceneRequests++;
+      pendingSceneAt ??= now();
+    },
+    sceneRenderBegin() { return finished ? undefined : now(); },
+    sceneCommitted(started: number | undefined) {
+      if (finished || started === undefined) return;
+      const at = now(); sceneCommits++;
+      bounded(sceneRenderTimes, Math.max(0, at - started), 256);
+      if (pendingSceneAt !== undefined) bounded(sceneCommitWaits, Math.max(0, at - pendingSceneAt), 256);
+      pendingSceneAt = undefined;
+    },
     hit(source: "boss-hull" | "enemy-hull" | "projectile") {
       event("damage-" + source, now());
       persist(true);
@@ -304,6 +349,7 @@ export function createPerformanceProbe(options: Options = {}) {
       flush(at);
       previousFrame = frameStart = lastVolley = 0;
       signature = "";
+      pendingSceneAt = undefined;
     },
     finish() {
       if (finished) return;

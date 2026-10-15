@@ -1,0 +1,164 @@
+{
+  "sourceBaseline": "9cdf32caba9787f94879c380673de9f21a798562",
+  "publicBaseline": "1c1c7f9b6c5e8ac7d41b9bf1c4b44036cc196220",
+  "tests": {
+    "passed": 405,
+    "failed": 0
+  },
+  "renderWork": {
+    "passed": true,
+    "corrected": true,
+    "baseline": "9cdf32caba9787f94879c380673de9f21a798562",
+    "before": {
+      "idleClears": 240,
+      "blockRenders": 240,
+      "activeCommands": "09aa798948fe7913ee9656740d0425830bc3a283498668bd8baf885c98f0f03f",
+      "removalClears": 1,
+      "afterRemovalCommands": 160,
+      "normalTree": "6e234ba03cc873490de418120c8fd7e1e8db95598464070e8cc94a9ec80a0b5d",
+      "changedTree": "f3df455ffdee5b48cd349ed3c996976abc54edda0614a88878607cae4bb907f0",
+      "savedTree": "b835e022e1189ed7c5987944ce58356f87a1cdaed8751ee16ba9836f2e53f0fc",
+      "cleanupTimers": 0
+    },
+    "after": {
+      "idleClears": 0,
+      "blockRenders": 1,
+      "activeCommands": "09aa798948fe7913ee9656740d0425830bc3a283498668bd8baf885c98f0f03f",
+      "removalClears": 1,
+      "afterRemovalCommands": 0,
+      "normalTree": "6e234ba03cc873490de418120c8fd7e1e8db95598464070e8cc94a9ec80a0b5d",
+      "changedTree": "f3df455ffdee5b48cd349ed3c996976abc54edda0614a88878607cae4bb907f0",
+      "savedTree": "b835e022e1189ed7c5987944ce58356f87a1cdaed8751ee16ba9836f2e53f0fc",
+      "cleanupTimers": 0
+    },
+    "limits": "Actual React test renderer and mocked Canvas; no browser, GPU or FPS inference."
+  },
+  "preservation": {
+    "passed": true,
+    "baseline": "1c1c7f9b6c5e8ac7d41b9bf1c4b44036cc196220",
+    "unchangedFunctions": [
+      "moveAsteroid",
+      "spawnAsteroid",
+      "spawnBossEscort",
+      "attackTime",
+      "createInitialState",
+      "createFormationSlots",
+      "syncSelectedWeapon",
+      "engineTrails",
+      "scatteredPieces",
+      "fallingBoss"
+    ],
+    "gameJSXUnchangedExceptHullReadiness": true,
+    "simulationUnchangedExceptAuthorizedFixes": true,
+    "existingStylesAndAssetsUnchanged": true,
+    "ordinaryDropChanceUnchanged": true,
+    "authorizedChanges": [
+      "boss contact extents",
+      "kill-origin opening benefit",
+      "unloaded-hull flame guard",
+      "bounded hull preparation",
+      "developer diagnostics/export"
+    ]
+  },
+  "campaign": {
+    "stages": 500,
+    "bosses": 50,
+    "bonusRounds": 50,
+    "passed": true
+  },
+  "longSimulation": {
+    "passed": true,
+    "normal": 450,
+    "bosses": 49,
+    "simulatedSeconds": 13646.316,
+    "gameplayHash": "2168c6035edd5e762b404e8c4568d73a89c41b78d940de51ac8a4d3849a2c398",
+    "equalsV2": true,
+    "cleanup": {
+      "raf": 0,
+      "timers": 0,
+      "listeners": 0
+    },
+    "cpu": {
+      "transition": {
+        "count": 127264,
+        "meanMs": 0.014138860313992932,
+        "p50Ms": 0.015,
+        "p95Ms": 0.02,
+        "maxMs": 3.116054
+      },
+      "formation": {
+        "count": 317765,
+        "meanMs": 0.04128709452268181,
+        "p50Ms": 0.04,
+        "p95Ms": 0.075,
+        "maxMs": 4.154577
+      },
+      "attack": {
+        "count": 242845,
+        "meanMs": 0.04666939948526879,
+        "p50Ms": 0.045,
+        "p95Ms": 0.085,
+        "maxMs": 4.230171
+      },
+      "return": {
+        "count": 52662,
+        "meanMs": 0.03859253080019748,
+        "p50Ms": 0.035,
+        "p95Ms": 0.065,
+        "maxMs": 6.794972
+      },
+      "boss-intro": {
+        "count": 15350,
+        "meanMs": 0.009805893355048896,
+        "p50Ms": 0.01,
+        "p95Ms": 0.015,
+        "maxMs": 0.340585
+      },
+      "boss-fight": {
+        "count": 54689,
+        "meanMs": 0.05682838812192631,
+        "p50Ms": 0.05,
+        "p95Ms": 0.115,
+        "maxMs": 12.389437
+      },
+      "boss-clear": {
+        "count": 37393,
+        "meanMs": 0.010915845024469689,
+        "p50Ms": 0.01,
+        "p95Ms": 0.02,
+        "maxMs": 0.720931
+      },
+      "paused": {
+        "count": 1940,
+        "meanMs": 0.0014234654639175266,
+        "p50Ms": 0.005,
+        "p95Ms": 0.005,
+        "maxMs": 0.042584
+      }
+    },
+    "peaks": {
+      "enemies": 6,
+      "shots": 81,
+      "hostile": 80,
+      "effects": 13,
+      "attackers": 3,
+      "returning": 3
+    }
+  },
+  "diagnosticSimulation": {
+    "passed": true,
+    "normal": 60,
+    "bosses": 6,
+    "simulatedSeconds": 1543.544,
+    "probeVersion": 2,
+    "cleanup": {
+      "raf": 0,
+      "timers": 0,
+      "listeners": 0
+    }
+  },
+  "deviceFpsImprovement": null,
+  "fullDeviceFreezeReproduced": false,
+  "browserQA": false,
+  "piBrowserQA": false
+}

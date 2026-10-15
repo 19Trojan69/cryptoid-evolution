@@ -1,5 +1,6 @@
 import { memo, useEffect, useRef } from 'react';
 import type { BonusRock, RockEffect } from './bonusRocks';
+import { beginRockPaint, endRockPaint } from './renderWork';
 const textures = new Map<number, HTMLCanvasElement>();
 function rockTexture(seed: number) {
   const key = Math.abs(Math.floor(seed)) % 7;
@@ -23,6 +24,7 @@ function rockTexture(seed: number) {
 }
 const BonusRockLayer = ({ rocks, effects, width, height }: { rocks: BonusRock[];effects: RockEffect[];width:number;height:number }) => {
   const ref=useRef<HTMLCanvasElement>(null);
+  const occupied=useRef(false);
   useEffect(()=>{
     let canceled=false,next=0;
     let timer=window.setTimeout(prepare,80);
@@ -31,7 +33,11 @@ const BonusRockLayer = ({ rocks, effects, width, height }: { rocks: BonusRock[];
   },[]);
   useEffect(()=>{
     const c=ref.current;if(!c)return;const dpr=Math.min(1.5,window.devicePixelRatio||1);
-    if(c.width!==Math.round(width*dpr)||c.height!==Math.round(height*dpr)){c.width=Math.round(width*dpr);c.height=Math.round(height*dpr);}
+    if(c.width!==Math.round(width*dpr)||c.height!==Math.round(height*dpr)){c.width=Math.round(width*dpr);c.height=Math.round(height*dpr);occupied.current=false;}
+    // Resizing already clears the surface. Once empty, leave its transparent
+    // pixels untouched until something is drawn; clear the last visible frame once.
+    if(!rocks.length&&!effects.length&&!occupied.current)return;
+    const paintStarted=beginRockPaint();
     const g=c.getContext('2d');if(!g)return;g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,width,height);
     for(const r of rocks){g.save();g.translate(r.x,r.y);g.rotate(r.rotation);const size=r.radius*1.23;g.drawImage(rockTexture(r.seed),-size,-size,size*2,size*2);if(r.hitMs>0){g.globalAlpha=Math.min(.7,r.hitMs/220);g.fillStyle='#f1d3ac';g.beginPath();g.arc(0,r.radius*.44,Math.max(2,r.radius*.17),0,Math.PI*2);g.fill();}g.restore();}
     for(const e of effects){const t=e.age/1000,p=Math.min(1,t/(e.final?.75:.25));if(p>=1)continue;g.save();g.translate(e.x,e.y);g.globalAlpha=(1-p)*.35;const dust=g.createRadialGradient(0,0,0,0,0,e.radius*(1+p*2));dust.addColorStop(0,'#d3b69b');dust.addColorStop(1,'rgba(158,143,126,0)');g.fillStyle=dust;g.beginPath();g.arc(0,0,e.radius*(1+p*2),0,Math.PI*2);g.fill();g.globalAlpha=1-p;
@@ -39,6 +45,8 @@ const BonusRockLayer = ({ rocks, effects, width, height }: { rocks: BonusRock[];
       const n=e.final?(e.radius>20?9:6):3;
       for(let i=0;i<n;i++){const a=i/n*Math.PI*2+e.seed,speed=25+(i*17)%63;const x=Math.cos(a)*speed*t,y=Math.sin(a)*speed*t+45*t*t;g.save();g.translate(x,y);g.rotate(a+t*(i%2?4:-4));const r=(e.final?e.radius*.48:5)*(1-p*.7);g.beginPath();g.moveTo(-r,-r*.4);g.lineTo(r*.3,-r);g.lineTo(r,r*.2);g.lineTo(r*.2,r*.85);g.lineTo(-r*.7,r*.5);g.closePath();g.clip();const texture=rockTexture(e.seed+i);g.drawImage(texture,46+(i*11)%31,43+(i*17)%35,65,65,-r,-r,r*2,r*2);g.restore();}
       if(e.points){g.globalAlpha=1-p;g.textAlign='center';g.font='bold 16px system-ui';g.fillStyle='#f2d7a7';g.fillText('+'+e.points,0,-e.radius-12-p*25);}g.restore();}
+    occupied.current=rocks.length>0||effects.length>0;
+    endRockPaint(paintStarted);
   },[rocks,effects,width,height]);
   return <canvas ref={ref} className="bonus-rock-layer" style={{position:'absolute',inset:0,width:'100%',height:'100%',zIndex:2,pointerEvents:'none'}} aria-hidden="true"/>;
 };

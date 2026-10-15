@@ -79,7 +79,7 @@ const presentation =
             let contents;
             if (a.path === "react")
               contents =
-                "export const {useState,useRef,useEffect,useMemo,useCallback,memo}=globalThis.__reactHost;";
+                "export const {useState,useRef,useEffect,useMemo,useCallback,memo}=globalThis.__reactHost;export const useLayoutEffect=()=>{};";
             else if (a.path === "react/jsx-runtime")
               contents =
                 'export const jsx=(type,props)=>({type,props}),jsxs=jsx,Fragment="fragment";';

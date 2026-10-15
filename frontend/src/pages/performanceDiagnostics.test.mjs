@@ -110,3 +110,46 @@ test("forensic events exclude exception text, origins, query tokens, accounts an
     assert.ok(!serialized.includes(sensitive));
   assert.deepEqual(errorSite({ stack: "malformed" }), {});
 });
+
+test("game over and exit report the real status and remaining hearts", () => {
+  let now=1000;
+  const probe=createPerformanceProbe({now:()=>now,persist(){}});
+  probe.begin(now,{...playing,hearts:1});now+=1;probe.end(now);
+  now+=16;probe.begin(now,{...playing,status:'destroying',hearts:0});
+  now+=2250;probe.begin(now,{...playing,status:'game-over',hearts:0});
+  probe.lifecycle('home-intent');probe.finish();
+  const events=probe.export().events;
+  assert.deepEqual(events.filter(e=>e.kind==='status-change').map(e=>[e.status,e.hearts]),[['destroying',0],['game-over',0]]);
+  assert.equal(events.at(-1).status,'game-over');assert.equal(events.at(-1).hearts,0);
+});
+
+test("short phase windows calculate FPS from measured frame intervals", () => {
+  let now=1000;const probe=createPerformanceProbe({now:()=>now,persist(){}});
+  probe.begin(now,playing);probe.end(now);
+  now+=20;probe.begin(now,playing);probe.end(now);
+  now+=20;probe.begin(now,{...playing,phase:'REFORM'});probe.end(now);
+  now+=20;probe.begin(now,{...playing,phase:'ENTRY'});probe.end(now);
+  probe.finish();
+  assert.ok(probe.export().samples.filter(s=>s.frames>1).every(s=>s.fps===50));
+  assert.ok(probe.export().samples.every(s=>Number.isFinite(s.sampleDurationMs)));
+});
+
+test("rapid phase changes do not repeatedly enumerate DOM animations", () => {
+  let now=1000,calls=0;const probe=createPerformanceProbe({now:()=>now,persist(){},runtime(){calls++;now+=3;return{animations:40};}});
+  for(let i=0;i<100;i++){now+=16;probe.begin(now,{...playing,phase:i%2?'ENTRY':'REFORM'});probe.end(now);}
+  probe.finish();
+  assert.equal(calls,1);assert.equal(probe.export().samples.at(-1).runtimeSampleMs,3);
+  assert.ok(probe.export().samples.every(s=>s.runtimeAgeMs<2000));
+});
+
+test("scene measurements distinguish render-to-commit work and scheduling wait without new loops", () => {
+  let now=1000;const probe=createPerformanceProbe({now:()=>now,persist(){}});
+  probe.begin(now,playing);probe.end(now);probe.sceneRequested();
+  now+=8;const started=probe.sceneRenderBegin();now+=12;probe.sceneCommitted(started);
+  now+=20;probe.begin(now,playing);probe.end(now);probe.finish();
+  const sample=probe.export().samples.at(-1);
+  assert.equal(sample.sceneRequests,1);assert.equal(sample.sceneCommits,1);
+  assert.equal(sample.sceneCommitWaitP95Ms,20);assert.equal(sample.sceneRenderToCommitP95Ms,12);
+  const frozen=JSON.stringify(probe.export());probe.sceneRequested();probe.sceneCommitted(now);
+  assert.equal(JSON.stringify(probe.export()),frozen);
+});

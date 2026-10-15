@@ -10,7 +10,7 @@ const names=['moveAsteroid','spawnAsteroid','spawnBossEscort','attackTime','crea
 for(const name of names){assert.ok(a.nodes.has(name)&&b.nodes.has(name),name);assert.equal(b.nodes.get(name).getText(b.ast),a.nodes.get(name).getText(a.ast),name+' unchanged');}
 const scene=x=>x.nodes.get('GamePage').body.statements.findLast(ts.isReturnStatement).expression.getText(x.ast);
 assert.equal(scene(b).replace(' data-hull-ready={bossHullReady}',''),scene(a),'only unloaded-boss flame-readiness attribute added to game JSX');
-const stripProbe=s=>s.replace(/^[ \t]*performanceProbeRef\.current\?\.(?:mark|volley|hit)\([^\n]+\);\n/gm,'');
+const stripProbe=s=>s.replace(/^[ \t]*performanceProbeRef\.current\?\.(?:mark|volley|hit|sceneRequested)\([^\n]*\);\n/gm,'');
 let baseSimulation=stripProbe(a.nodes.get('simulate').getText(a.ast)),currentSimulation=stripProbe(b.nodes.get('simulate').getText(b.ast));
 const timedStart=baseSimulation.indexOf('        if (variety && !intro.weaponIssued && intro.clock >= intro.weaponDue');
 assert.ok(timedStart>=0);const timedEnd=baseSimulation.indexOf('        const rockAllowed =',timedStart);baseSimulation=baseSimulation.slice(0,timedStart)+baseSimulation.slice(timedEnd);

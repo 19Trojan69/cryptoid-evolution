@@ -1,8 +1,11 @@
 import { BLOCKS_PER_CHAIN } from "./networkChain";
 import { useLocale } from "../i18n";
+import { memo } from "react";
+import { recordBlockchainRender } from "./renderWork";
 const CHAIN_BINARY = "1011010001101001110001010011011010101100".repeat(4);
 
-export default function BlockchainProgress ({ blocks, saved = false }: { blocks: number; saved?: boolean }) {
+const BlockchainProgress = memo(function BlockchainProgress ({ blocks, saved = false }: { blocks: number; saved?: boolean }) {
+  recordBlockchainRender();
   const { t } = useLocale();
   return (
   <div className={`blockchain-progress${saved ? " blockchain-progress-saved" : ""}`} role="img" aria-label={`${t("Block")} ${blocks}/${BLOCKS_PER_CHAIN}`}>
@@ -28,4 +31,5 @@ export default function BlockchainProgress ({ blocks, saved = false }: { blocks:
     <div className="blockchain-binary" aria-hidden="true"><div className="blockchain-binary-track"><span>{CHAIN_BINARY}</span><span>{CHAIN_BINARY}</span></div></div>
   </div>
   );
-}
+});
+export default BlockchainProgress;

@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "corrected": true,
+  "baseline": "9cdf32caba9787f94879c380673de9f21a798562",
+  "before": {
+    "idleClears": 240,
+    "blockRenders": 240,
+    "activeCommands": "09aa798948fe7913ee9656740d0425830bc3a283498668bd8baf885c98f0f03f",
+    "removalClears": 1,
+    "afterRemovalCommands": 160,
+    "normalTree": "6e234ba03cc873490de418120c8fd7e1e8db95598464070e8cc94a9ec80a0b5d",
+    "changedTree": "f3df455ffdee5b48cd349ed3c996976abc54edda0614a88878607cae4bb907f0",
+    "savedTree": "b835e022e1189ed7c5987944ce58356f87a1cdaed8751ee16ba9836f2e53f0fc",
+    "cleanupTimers": 0
+  },
+  "after": {
+    "idleClears": 0,
+    "blockRenders": 1,
+    "activeCommands": "09aa798948fe7913ee9656740d0425830bc3a283498668bd8baf885c98f0f03f",
+    "removalClears": 1,
+    "afterRemovalCommands": 0,
+    "normalTree": "6e234ba03cc873490de418120c8fd7e1e8db95598464070e8cc94a9ec80a0b5d",
+    "changedTree": "f3df455ffdee5b48cd349ed3c996976abc54edda0614a88878607cae4bb907f0",
+    "savedTree": "b835e022e1189ed7c5987944ce58356f87a1cdaed8751ee16ba9836f2e53f0fc",
+    "cleanupTimers": 0
+  },
+  "limits": "Actual React test renderer and mocked Canvas; no browser, GPU or FPS inference."
+}
