@@ -1,12 +1,11 @@
 import {useEffect,useRef,useState} from 'react';
 import {InsectoidsEngine} from '../src/pages/insectoidsEngine';
-import {insectoidRoster,insectoidSvg} from '../src/pages/insectoidRoster';
-import {drawBossWeapons,weaponCanvasSize,disposeBossWeapons} from '../src/pages/bossWeaponRenderer';
-import {specialWeaponBox} from '../src/pages/bossSpecialWeapon';
+import {insectoidRoster,insectoidAsset} from '../src/pages/insectoidRoster';
+import {drawAnatomicalWeapons,drawInsectEye,prepareInsectEye,type EyeAtlas} from './insectOrganicRenderer';
 import {GameAudio} from '../src/pages/gameAudio';
 import './insectoidsPreview.css';
 
-type Assets={enemies:HTMLImageElement[];hull:HTMLImageElement;atlas:HTMLImageElement;player:HTMLImageElement;viruses:HTMLCanvasElement[];flashes:HTMLCanvasElement[]};
+type Assets={enemies:HTMLImageElement[];hull:HTMLImageElement;weapon:HTMLImageElement;eye:EyeAtlas;backdrop:HTMLImageElement;player:HTMLImageElement;viruses:HTMLCanvasElement[];flashes:HTMLCanvasElement[]};
 const loadImage=(src:string)=>new Promise<HTMLImageElement>((resolve,reject)=>{const i=new Image();i.onload=()=>resolve(i);i.onerror=()=>reject(new Error('Grafik konnte nicht geladen werden.'));i.src=src;});
 const canvas=(w:number,h:number)=>{const c=document.createElement('canvas');c.width=w;c.height=h;return c;};
 const phaseLabel=(e:InsectoidsEngine)=>e.phase==='round'?`Vorrunde ${e.round}/9`:e.phase==='boss-warning'?'SIGNAL: VIRIDIAN HARVESTER':e.phase==='boss'?'SPECIAL BOSS':e.phase==='boss-explosion'?'REAKTOR ZERSTÖRT':e.phase==='heart'?'EXTRA-LIFE EINSAMMELN':e.phase==='bonus'?'BONUSRUNDE':e.phase==='victory'?'MISSION ABGESCHLOSSEN':'VERSUCH BEENDET';
@@ -27,12 +26,12 @@ export default function InsectoidsPreview(){
  const [hud,setHud]=useState({label:'',score:0,hearts:3,paused:false,fault:'',end:false});
  const [gallery,setGallery]=useState(false);
  useEffect(()=>{let live=true;
-  const urls=insectoidRoster.map(d=>URL.createObjectURL(new Blob([insectoidSvg(d)],{type:'image/svg+xml'})));
-  void Promise.all([Promise.all(urls.map(loadImage)),loadImage('/ships/bosses/insect/viridian-harvester.webp'),loadImage('/ships/bosses/evolved/boss-01-guns.webp'),loadImage('/ships/evolution/ship_01_stage_1.png')]).then(([enemies,hull,atlas,player])=>{if(live){assets.current={enemies,hull,atlas,player,viruses:Array.from({length:12},(_,i)=>virusSprite(i)),flashes:Array.from({length:3},(_,i)=>explosionSprite(i))};setReady(true);}},()=>{if(live)setLoadingError('Grafiken laden fehlgeschlagen. Bitte neu laden.');});
-  return()=>{live=false;for(const u of urls)URL.revokeObjectURL(u);};
+  const urls=insectoidRoster.map(d=>insectoidAsset(d.id));
+  void Promise.all([Promise.all(urls.map(loadImage)),loadImage('/ships/bosses/insect/viridian-harvester.webp'),loadImage('/ships/bosses/insect/anatomical-stinger.webp'),loadImage('/ships/evolution/ship_01_stage_1.png'),loadImage('/ships/bosses/insect/reactor-eye-mantis.webp'),loadImage('/ships/bosses/insect/earth-backdrop.webp')]).then(([enemies,hull,weapon,player,eye,backdrop])=>{if(live){assets.current={enemies,hull,weapon,player,eye:prepareInsectEye(eye,hull,canvas),backdrop,viruses:Array.from({length:12},(_,i)=>virusSprite(i)),flashes:Array.from({length:3},(_,i)=>explosionSprite(i))};setReady(true);}}).catch(()=>{if(live)setLoadingError('Grafiken laden fehlgeschlagen. Bitte neu laden.');});
+  return()=>{live=false;assets.current?.eye.dispose();assets.current=null;};
  },[]);
  const start=(boss=false)=>{
-  const w=Math.min(window.innerWidth,1000),h=Math.max(280,window.innerHeight-86);
+  const w=Math.min(window.innerWidth,1000),h=Math.max(280,window.innerHeight-76);
   const e=new InsectoidsEngine(w,h,weapon,boss);engine.current=e;
   audio.current?.close();audio.current=null;
   if(sound){const a=new GameAudio();audio.current=a;void a.start().catch(()=>{});e.audio=(kind,pan)=>{try{if(kind==='player')a.play('laser',e.weaponLevel);else if(kind==='hit')a.play('enemyHit');else if(kind==='explosion')a.play('explosion');else if(kind==='pickup')a.play('pickup');else a.playBossWeapon(kind,kind==='siege'?28:kind==='heavy'?20:kind==='plasma'?10:6,1,pan);}catch{/* Audio is optional; simulation continues. */}};}
@@ -41,8 +40,10 @@ export default function InsectoidsPreview(){
  useEffect(()=>{
   if(!running||!view.current||!assets.current||!engine.current)return;
   const c=view.current,a=assets.current,e=engine.current,ctx=c.getContext('2d',{alpha:false});if(!ctx)return;
-  const guns=canvas(1,1);let frame=0,last=0,acc=0,hudClock=0,dead=false,renderFailed=false;let pointerId:number|null=null;
-  const resize=()=>{const box=c.getBoundingClientRect();e.resize(Math.max(160,box.width),Math.max(240,box.height));const dpr=Math.min(1.5,window.devicePixelRatio||1);c.width=Math.round(e.width*dpr);c.height=Math.round(e.height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);};
+  const background=canvas(1,1);let frame=0,last=0,acc=0,hudClock=0,dead=false,renderFailed=false;let pointerId:number|null=null;
+  const resize=()=>{const box=c.getBoundingClientRect();e.resize(Math.max(160,box.width),Math.max(240,box.height));const dpr=Math.min(1.5,window.devicePixelRatio||1);c.width=Math.round(e.width*dpr);c.height=Math.round(e.height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+    background.width=Math.ceil(e.width);background.height=Math.ceil(e.height);const bg=background.getContext('2d')!;bg.fillStyle='#040c18';bg.fillRect(0,0,e.width,e.height);const planet=Math.min(e.width*.92,e.height*.62);bg.globalAlpha=.16;bg.drawImage(a.backdrop,(e.width-planet)/2,e.height*.28,planet,planet);bg.globalAlpha=1;bg.fillStyle='#59798c';for(let i=0;i<46;i++){const x=((i*137+31)%997)/997*e.width,y=((i*251+23)%991)/991*e.height;bg.fillRect(x,y,i%7===0?1.5:1,1);}
+  };
   resize();
   const sync=()=>setHud({label:phaseLabel(e),score:e.score,hearts:e.hearts,paused:e.paused,fault:e.fault,end:e.phase==='victory'||e.phase==='defeat'});
   const pointer=(ev:PointerEvent)=>{if(ev.pointerType!=='mouse'&&ev.pointerId!==pointerId)return;if(ev.pointerType!=='mouse')ev.preventDefault();const r=c.getBoundingClientRect();e.point(ev.clientX-r.left,ev.clientY-r.top-(ev.pointerType==='mouse'?0:68));};
@@ -51,19 +52,16 @@ export default function InsectoidsPreview(){
   const hidden=()=>{if(document.hidden){e.pause();audio.current?.setPaused(true);last=0;acc=0;sync();}};
   const key=(ev:KeyboardEvent)=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(ev.key)){ev.preventDefault();const dx=ev.key==='ArrowLeft'?-55:ev.key==='ArrowRight'?55:0,dy=ev.key==='ArrowUp'?-55:ev.key==='ArrowDown'?55:0;e.point(e.target.x*e.width+dx,e.target.y*e.height+dy);}else if(ev.key==='Escape'){e.pause();sync();}};
   const render=()=>{
-   ctx.fillStyle='#040c18';ctx.fillRect(0,0,e.width,e.height);
-   // Fixed stars: bounded work, no textures, blur, haze or animated backdrop.
-   ctx.fillStyle='#59798c';for(let i=0;i<46;i++){const x=((i*137+31)%997)/997*e.width,y=((i*251+23)%991)/991*e.height;ctx.fillRect(x,y,i%7===0?1.5:1,1);}
+   ctx.drawImage(background,0,0,e.width,e.height);
    if(e.phase==='round')for(const n of e.enemies)if(n.active){ctx.drawImage(a.enemies[n.type],n.x-n.radius,n.y-n.radius,n.radius*2,n.radius*2);}
    if(e.phase==='bonus')for(const n of e.enemies)if(n.active){ctx.fillStyle='#e4c77a';ctx.beginPath();ctx.moveTo(n.x,n.y-14);ctx.lineTo(n.x+10,n.y);ctx.lineTo(n.x,n.y+14);ctx.lineTo(n.x-10,n.y);ctx.closePath();ctx.fill();}
    const b=e.boss;
    if(b&&e.phase!=='boss-warning'){
     ctx.save();if(e.phase==='boss-explosion')ctx.globalAlpha=Math.max(0,1-e.phaseTime/3800);
     ctx.drawImage(a.hull,b.x-b.width/2,b.y-b.height/2,b.width,b.height);
-    const size=weaponCanvasSize(b),gw=Math.ceil(size.width),gh=Math.ceil(size.height);if(guns.width!==gw||guns.height!==gh){guns.width=gw;guns.height=gh;}
-    drawBossWeapons(guns,b,a.atlas,e.phase==='boss-explosion');ctx.drawImage(guns,b.x-b.width/2-size.padX,b.y-b.height/2-size.padY);
-    const exposed=b.turrets.every(t=>t.health<=0),bay=specialWeaponBox(b),x=b.x-b.width/2+bay.left,y=b.y-b.height/2+bay.top;
-    if(exposed){ctx.fillStyle='#060b10';ctx.fillRect(x,y,bay.width,bay.height);ctx.strokeStyle='#647958';ctx.lineWidth=2;ctx.strokeRect(x,y,bay.width,bay.height);ctx.fillStyle='#94e73c';ctx.globalAlpha=.45+.5*Math.sin(e.time*.005)**2;ctx.fillRect(x+bay.width*.2,y+bay.height*.18,bay.width*.6,bay.height*.45);ctx.globalAlpha=1;ctx.fillStyle='#7c887a';ctx.fillRect(x+bay.width*.2,y+bay.height*.64,bay.width*.6,bay.height*.28);ctx.fillStyle='#19251b';ctx.fillRect(x+bay.width*.3,y+bay.height*.85,bay.width*.4,5);}
+    drawAnatomicalWeapons(ctx,b,a.weapon,e.phase==='boss-explosion');
+    drawInsectEye(ctx,b,a.eye,e.time);
+    const exposed=b.turrets.every(t=>t.health<=0);
     for(let i=0;i<b.turrets.length;i++){const s=b.turrets[i],g=b.weaponSlots![i],px=b.x+(g.sourceX/b.config.sourceWidth-.5)*b.width,py=b.y+(g.sourceY/b.config.sourceHeight-.5)*b.height;
       if(s.health>0){ctx.fillStyle='#14221e';ctx.fillRect(px-13,py-18,26,3);ctx.fillStyle=s.health/s.maxHealth>.4?'#a8e443':'#ff6b48';ctx.fillRect(px-13,py-18,26*s.health/s.maxHealth,3);}
       if(b.insect!.telegraphGun===i&&s.health>0){ctx.strokeStyle='#efff8a';ctx.lineWidth=2;ctx.beginPath();ctx.arc(px,py,9+3*Math.sin(e.time*.012),0,Math.PI*2);ctx.stroke();}
@@ -90,10 +88,10 @@ export default function InsectoidsPreview(){
    frame=requestAnimationFrame(tick);
   };
   c.addEventListener('pointerdown',down);c.addEventListener('pointerup',up);c.addEventListener('pointercancel',up);c.addEventListener('pointermove',pointer,{passive:false});document.addEventListener('visibilitychange',hidden);window.addEventListener('resize',resize);window.addEventListener('keydown',key);frame=requestAnimationFrame(tick);
-  return()=>{dead=true;cancelAnimationFrame(frame);c.removeEventListener('pointerdown',down);c.removeEventListener('pointerup',up);c.removeEventListener('pointercancel',up);c.removeEventListener('pointermove',pointer);document.removeEventListener('visibilitychange',hidden);window.removeEventListener('resize',resize);window.removeEventListener('keydown',key);disposeBossWeapons(guns);e.dispose();audio.current?.close();audio.current=null;};
+  return()=>{dead=true;cancelAnimationFrame(frame);c.removeEventListener('pointerdown',down);c.removeEventListener('pointerup',up);c.removeEventListener('pointercancel',up);c.removeEventListener('pointermove',pointer);document.removeEventListener('visibilitychange',hidden);window.removeEventListener('resize',resize);window.removeEventListener('keydown',key);background.width=background.height=0;e.dispose();audio.current?.close();audio.current=null;};
  },[running,run]);
  const leave=()=>{setRunning(false);engine.current=null;};
  const pause=()=>{const e=engine.current;if(!e)return;if(e.paused){e.resume();audio.current?.setPaused(false);}else{e.pause();audio.current?.setPaused(true);}setHud(h=>({...h,paused:e.paused,fault:e.fault}));};
- if(!running)return <main className="insect-menu"><section><p className="insect-eyebrow">TROJAN WOLF GAMES · PRIVATE TESTMISSION</p><h1>CRYPTOID<br/><em>SPECIAL MISSION</em></h1><p>Special Mission · Verdant Breach</p><p className="insect-intro">20 mechanische Insektoid-Gegner. Neun Vorrunden mit Virenmunition. Dann wartet der erste Special-Boss.</p><div className="insect-menu-controls"><label>Testwaffe<select value={weapon} onChange={e=>setWeapon(Number(e.target.value))}><option value={1}>L1 · Standard</option><option value={3}>L3 · Schnellere Teststrecke</option><option value={5}>L5 · Phasen schnell prüfen</option></select></label><label className="insect-check"><input type="checkbox" checked={sound} onChange={e=>setSound(e.target.checked)}/> Soundeffekte</label></div><button disabled={!ready} onClick={()=>start(false)}>{ready?'9 Vorrunden + Special-Boss spielen':'Grafiken werden vorbereitet …'}</button><button className="insect-secondary" disabled={!ready} onClick={()=>start(true)}>Boss direkt testen</button><button className="insect-secondary" onClick={()=>setGallery(!gallery)}>{gallery?'Gegnerübersicht schließen':'Die 20 Gegner ansehen'}</button>{loadingError&&<p role="alert">{loadingError}</p>}<p className="insect-fine">Eigenständiger Prototyp: eine vollständige Testmission. 49 weitere Special-Bosse folgen erst nach Stabilitäts- und Gerätetests. Keine Konten, Käufe oder dauerhaften Belohnungen. Mit Finger bewegen, das Schiff feuert automatisch. Am Computer: Maus oder Pfeiltasten.</p>{gallery&&<div className="insect-gallery">{insectoidRoster.map((d,i)=><figure key={d.id}><img src={assets.current?.enemies[i]?.src} alt={d.name}/><figcaption>{i+1}. {d.name}</figcaption></figure>)}</div>}</section></main>;
- return <main className="insect-game"><header><span>SPECIAL MISSION</span><b>{hud.hearts>0?'♥'.repeat(hud.hearts):'—'}</b><span>{hud.score.toLocaleString('de-DE')}</span><button onClick={pause}>{hud.paused?'Fortsetzen':'Pause'}</button></header><div className="insect-round-label" aria-live="polite">{hud.label}</div><canvas ref={view} aria-label="Special-Mission-Spielfeld, mit Finger oder Maus steuerbar"/>{(hud.paused||hud.end)&&<div className="insect-overlay"><section><h2>{hud.paused?'Pausiert':hud.label}</h2><p>{hud.fault||(hud.end?'Dieser Prototyp bleibt nach der Mission hier. Weitere Bossmissionen sind noch nicht freigeschaltet.':'Dein Lauf bleibt an dieser Stelle erhalten.')}</p>{hud.paused&&<button onClick={pause}>Fortsetzen</button>}<button onClick={leave}>Zum Testmenü</button></section></div>}</main>;
+ if(!running)return <main className="insect-menu"><section><p className="insect-eyebrow">TROJAN WOLF GAMES · PRIVATE TESTMISSION</p><h1>CRYPTOID<br/><em>EVOLUTION</em></h1><p>SPECIAL MISSION · VERDANT BREACH</p><p className="insect-intro">20 biomechanische Raumgegner. Neun Vorrunden mit Virenmunition. Beim Special-Boss öffnet sich das Facettenauge als Kernwaffe.</p><div className="insect-menu-controls"><label>Testwaffe<select value={weapon} onChange={e=>setWeapon(Number(e.target.value))}><option value={1}>L1 · Standard</option><option value={3}>L3 · Schnellere Teststrecke</option><option value={5}>L5 · Phasen schnell prüfen</option></select></label><label className="insect-check"><input type="checkbox" checked={sound} onChange={e=>setSound(e.target.checked)}/> Soundeffekte</label></div><button disabled={!ready} onClick={()=>start(false)}>{ready?'9 Vorrunden + Special-Boss spielen':'Grafiken werden vorbereitet …'}</button><button className="insect-secondary" disabled={!ready} onClick={()=>start(true)}>Boss direkt testen</button><button className="insect-secondary" onClick={()=>setGallery(!gallery)}>{gallery?'Gegnerübersicht schließen':'Die 20 Gegner ansehen'}</button>{loadingError&&<p role="alert">{loadingError}</p>}<p className="insect-fine">Eigenständiger Prototyp: eine vollständige Testmission. 49 weitere Special-Bosse folgen erst nach Stabilitäts- und Gerätetests. Keine Konten, Käufe oder dauerhaften Belohnungen. Mit Finger bewegen, das Schiff feuert automatisch. Am Computer: Maus oder Pfeiltasten.</p>{gallery&&<div className="insect-gallery">{insectoidRoster.map((d,i)=><figure key={d.id}><img src={assets.current?.enemies[i]?.src} alt={d.name}/><figcaption>{i+1}. {d.name}</figcaption></figure>)}</div>}</section></main>;
+ return <main className="insect-game"><header><button onClick={leave} className="insect-home" aria-label="Zum Testmenü">⌂</button><span className="insect-mode-label">SPECIAL</span><b>{hud.hearts>0?'♥'.repeat(hud.hearts):'—'}</b><span className="insect-score"><small>SCORE</small>{hud.score.toLocaleString('de-DE')}</span><button onClick={pause}>{hud.paused?'Fortsetzen':'Pause'}</button></header><div className="insect-round-label" aria-live="polite">{hud.label}</div><canvas ref={view} aria-label="Special-Mission-Spielfeld, mit Finger oder Maus steuerbar"/>{(hud.paused||hud.end)&&<div className="insect-overlay"><section><h2>{hud.paused?'Pausiert':hud.label}</h2><p>{hud.fault||(hud.end?'Dieser Prototyp bleibt nach der Mission hier. Weitere Bossmissionen sind noch nicht freigeschaltet.':'Dein Lauf bleibt an dieser Stelle erhalten.')}</p>{hud.paused&&<button onClick={pause}>Fortsetzen</button>}<button onClick={leave}>Zum Testmenü</button></section></div>}</main>;
 }

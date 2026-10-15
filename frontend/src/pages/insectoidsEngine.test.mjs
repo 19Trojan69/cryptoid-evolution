@@ -1,12 +1,15 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';
 import {InsectoidsEngine} from './insectoidsEngine.ts';
-import {insectoidRoster,insectoidSvg} from './insectoidRoster.ts';
+import {readFileSync} from 'node:fs';import {createHash} from 'node:crypto';
+import {insectoidRoster,insectoidAsset} from './insectoidRoster.ts';
 import {gunPosition} from './bossTurrets.ts';
 
-test('twenty named mechanical silhouettes differ in geometry, not just color',()=>{
+test('twenty distinct transparent raster assets remain bounded and individually named',()=>{
  assert.equal(insectoidRoster.length,20);assert.equal(new Set(insectoidRoster.map(x=>x.name)).size,20);
- const shapes=insectoidRoster.map(x=>insectoidSvg({...x,color:'#fff',trim:'#555'}));assert.equal(new Set(shapes).size,20);
- assert.ok(shapes.every(s=>!s.includes('<filter')&&!s.includes('<script')));
+ const sprites=insectoidRoster.map(x=>readFileSync(new URL('../../public'+insectoidAsset(x.id),import.meta.url)));
+ assert.equal(new Set(sprites.map(s=>createHash('sha256').update(s).digest('hex'))).size,20);
+ for(const sprite of sprites){assert.equal(sprite.toString('ascii',0,4),'RIFF');assert.equal(sprite.toString('ascii',8,12),'WEBP');assert.ok(sprite.length<50000);}
+ assert.ok(sprites.reduce((sum,s)=>sum+s.length,0)<800000);
 });
 
 test('actual pooled mission clears all nine rounds, every enemy type, turrets, reactor, heart and bonus without a menu reset',()=>{

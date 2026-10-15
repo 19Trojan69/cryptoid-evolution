@@ -5,7 +5,8 @@ fs.writeFileSync(entry,`import{createRoot}from'react-dom/client';import Preview 
 try{
  fs.mkdirSync(dest,{recursive:true});
  await build({absWorkingDir:root,entryPoints:[entry],bundle:true,format:'iife',outfile:path.join(dest,'app.js'),minify:true,jsx:'automatic',target:['es2022'],define:{'process.env.NODE_ENV':'"production"'}});
- for(const relative of ['ships/bosses/insect/viridian-harvester.webp','ships/bosses/evolved/boss-01-guns.webp','ships/evolution/ship_01_stage_1.png']){const output=path.join(dest,relative);fs.mkdirSync(path.dirname(output),{recursive:true});fs.copyFileSync(path.join(root,'public',relative),output);}
+ for(const relative of ['ships/bosses/insect/viridian-harvester.webp','ships/bosses/insect/anatomical-stinger.webp','ships/bosses/insect/reactor-eye-mantis.webp','ships/bosses/insect/earth-backdrop.webp','ships/evolution/ship_01_stage_1.png']){const output=path.join(dest,relative);fs.mkdirSync(path.dirname(output),{recursive:true});fs.copyFileSync(path.join(root,'public',relative),output);}
+ for(let i=1;i<=20;i++){const rel=`ships/insectoids/enemy-${String(i).padStart(2,'0')}.webp`,out=path.join(dest,rel);fs.mkdirSync(path.dirname(out),{recursive:true});fs.copyFileSync(path.join(root,'public',rel),out);}
  const audioDir=path.join(dest,'audio');fs.mkdirSync(audioDir,{recursive:true});
  // Existing game audio starts a fixed 20-file sample set; copy exactly that set.
  const audioSource=fs.readFileSync(path.join(root,'src/pages/gameAudio.ts'),'utf8'),names=audioSource.match(/const sampleNames = \[([^\]]+)\]/)[1].match(/"([^"]+)"/g).map(n=>n.slice(1,-1));

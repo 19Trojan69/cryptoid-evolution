@@ -53,6 +53,6 @@ export const specialWeaponMuzzle = (boss: SectorBoss, barrel = 0) => {
   const barrels = specialWeaponBarrels(specialWeaponMount(boss).shape);
   return {
     x:boss.x - boss.width / 2 + box.left + box.width * barrels[barrel % barrels.length] / 100,
-    y:boss.y - boss.height / 2 + box.top + box.height * .925,
+    y:boss.y - boss.height / 2 + box.top + box.height * (boss.insect ? .5 : .925),
   };
 };

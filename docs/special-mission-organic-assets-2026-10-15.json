@@ -1,0 +1,117 @@
+[
+  {
+    "path": "ships/insectoids/enemy-01.webp",
+    "bytes": 31276,
+    "sha256": "5146e54d02fb06525615ed5f16f13c46b93ce1279e66920ded72d8419adcee78"
+  },
+  {
+    "path": "ships/insectoids/enemy-02.webp",
+    "bytes": 30330,
+    "sha256": "029189590ffcf291fddca6056688d7890756f733d464fd0dc1caf2e993932db8"
+  },
+  {
+    "path": "ships/insectoids/enemy-03.webp",
+    "bytes": 29942,
+    "sha256": "bd536bece67dd788ced64a1c380fa0b06187d9315e2394ba0ab2be810739d8ce"
+  },
+  {
+    "path": "ships/insectoids/enemy-04.webp",
+    "bytes": 27126,
+    "sha256": "7bf4bdf4ee7d0c25d5f80e4c0433c3451e9d04fc29bd66d9b35e15b76b8c8099"
+  },
+  {
+    "path": "ships/insectoids/enemy-05.webp",
+    "bytes": 37102,
+    "sha256": "74ca4fe2cfa0546582145258cd8c1014308eb8ea0c3e661f3902da1d0b7a73ac"
+  },
+  {
+    "path": "ships/insectoids/enemy-06.webp",
+    "bytes": 32666,
+    "sha256": "32e7e30e3b560ebad314409f909beb9f04bf642ae7e199f9f07d195bbc0ab59f"
+  },
+  {
+    "path": "ships/insectoids/enemy-07.webp",
+    "bytes": 34494,
+    "sha256": "ffa643b1db25dac6f4ec89df58b91aaef94f66da44f5b3cc3c9a9a234186419e"
+  },
+  {
+    "path": "ships/insectoids/enemy-08.webp",
+    "bytes": 31010,
+    "sha256": "fd9b3a797ee02a35dfceba7b5026a8e331dfb8641904fc6c6041264c6ca5e0f7"
+  },
+  {
+    "path": "ships/insectoids/enemy-09.webp",
+    "bytes": 36278,
+    "sha256": "06c2b16eab97b34a4dd6a56c7648d69c3e02941966e173d7301d85cce06f1031"
+  },
+  {
+    "path": "ships/insectoids/enemy-10.webp",
+    "bytes": 26288,
+    "sha256": "7a6a9d11734c8c4c6fdd5308055fb8549961da5bca79410d35d3643d3b821385"
+  },
+  {
+    "path": "ships/insectoids/enemy-11.webp",
+    "bytes": 36498,
+    "sha256": "2579d04f6a4e27553e15b8912c8bbb6dea120064e8189323485d7a1f5de81755"
+  },
+  {
+    "path": "ships/insectoids/enemy-12.webp",
+    "bytes": 25904,
+    "sha256": "97e13047fb9e5b9334a1e0741531c34194582d27946f834cd091f221d5285c26"
+  },
+  {
+    "path": "ships/insectoids/enemy-13.webp",
+    "bytes": 31454,
+    "sha256": "bd1a711ec6b5bcb38403244a458b2aae18e86074192b8b1a400f9ad5b525065b"
+  },
+  {
+    "path": "ships/insectoids/enemy-14.webp",
+    "bytes": 30712,
+    "sha256": "70a5dd371c64019ba9105c7d924b9e3dbc7656f15317c284579ed7fe7027dc26"
+  },
+  {
+    "path": "ships/insectoids/enemy-15.webp",
+    "bytes": 36296,
+    "sha256": "15a2f0879f27e0dcc616002c96de9abaa205d86a528fefa0a909fc78d8b1d302"
+  },
+  {
+    "path": "ships/insectoids/enemy-16.webp",
+    "bytes": 32044,
+    "sha256": "f6d07e02672f52c7187ac1b66aa07589bc9ea838ade3cf902a828aaad89bdf07"
+  },
+  {
+    "path": "ships/insectoids/enemy-17.webp",
+    "bytes": 33128,
+    "sha256": "36acb18591dcbf9592f532ceb74bfb99334721207564b94a3effb19d0ce6ee58"
+  },
+  {
+    "path": "ships/insectoids/enemy-18.webp",
+    "bytes": 31098,
+    "sha256": "e75f65ec88570205e8f1e9f898419f7b4780a1807cee363052333e800b686ccc"
+  },
+  {
+    "path": "ships/insectoids/enemy-19.webp",
+    "bytes": 32702,
+    "sha256": "4cf75349e0afcf15cd6aabb5590a0cb92fbc54fff723ff2323839acb9d7c4dda"
+  },
+  {
+    "path": "ships/insectoids/enemy-20.webp",
+    "bytes": 29176,
+    "sha256": "bb92df99612cdc2dcb6236eadcafff106d9c2fcb40826d8dc47b5f1c4ff08a91"
+  },
+  {
+    "path": "ships/bosses/insect/anatomical-stinger.webp",
+    "bytes": 15512,
+    "sha256": "cf53ebe386f54b534789f50e82f1554930107babf4ecabd0bb63f4bcc1949dec"
+  },
+  {
+    "path": "ships/bosses/insect/reactor-eye-mantis.webp",
+    "bytes": 29442,
+    "sha256": "ea1af0e684406e5f51a6d3657029fd00f0e07aa1272e8fa878aa18ec76a8ab61"
+  },
+  {
+    "path": "ships/bosses/insect/earth-backdrop.webp",
+    "bytes": 124376,
+    "sha256": "d8866320255f9e00db1eb84c81ffd282fa2dd6e3873854b31c2d539037fb7831"
+  }
+]

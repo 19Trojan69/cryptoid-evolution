@@ -23,6 +23,8 @@ const root=path.resolve(__dirname,'..');
  context.exports=context.module.exports;vm.createContext(context);vm.runInContext(compiled.outputFiles[0].text,context);
  const render=()=>{cursor=0;pending=false;context.module.exports.default();const todo=effects;effects=[];todo.forEach(f=>f());};const flush=()=>{for(let n=0;pending&&n<10;n++)render();};render();
  for(let i=0;i<200&&!context.__missionQA.assets.current;i++){await new Promise(r=>setTimeout(r,5));flush();}
+ assert.ok(context.__missionQA.assets.current,'all real image assets decode');
+ assert.equal(context.__missionQA.assets.current.eye.frames.length,13);
  assert.equal(context.__missionQA.assets.current.enemies.length,20);context.__missionQA.start(false);flush();assert.equal(frames.size,1);
  const tick=n=>{for(let i=0;i<n;i++){clock+=16.6667;const queue=[...frames.values()];frames.clear();queue.forEach(f=>f(clock));flush();assert.equal(frames.size,1);}};
  tick(240);const e=context.__missionQA.engine.current;assert.ok(e.time>3000);assert.ok(e.virusShots>0);
@@ -33,7 +35,13 @@ const root=path.resolve(__dirname,'..');
  // Repeat mount/run to expose multiple animation owners or duplicate listeners.
  context.__missionQA.start(true);flush();tick(240);assert.equal(frames.size,1);assert.equal(context.__missionQA.engine.current.phase,'boss');
  fs.writeFileSync('/workspace/scratch/5fce634eaaca/special-boss-canvas-qa.png',canvas.toBuffer('image/png'));
+ const boss=context.__missionQA.engine.current.boss,atlas=context.__missionQA.assets.current.eye,atlasFrames=[...atlas.frames];
+ const panel=createCanvas(432,192),panelCtx=panel.getContext('2d');panelCtx.fillStyle='#040c18';panelCtx.fillRect(0,0,432,192);for(let i=0;i<3;i++)panelCtx.drawImage(atlas.frames[i*6],i*144,0);fs.writeFileSync('/workspace/scratch/5fce634eaaca/insect-eye-lids-qa.png',panel.toBuffer('image/png'));
+ assert.notDeepEqual(atlas.frames[0].toBuffer('image/png'),atlas.frames[12].toBuffer('image/png'));
+ boss.turrets.forEach(g=>g.health=0);boss.core={elapsed:450,volley:0};tick(1);fs.writeFileSync('/workspace/scratch/5fce634eaaca/special-boss-eye-opening-qa.png',canvas.toBuffer('image/png'));boss.core={elapsed:1000,volley:0};tick(1);fs.writeFileSync('/workspace/scratch/5fce634eaaca/special-boss-eye-open-qa.png',canvas.toBuffer('image/png'));
+ assert.ok(atlas.frames.every((f,i)=>f===atlasFrames[i]));
  context.__missionQA.leave();flush();assert.equal(frames.size,0);assert.equal([...listeners.values()].reduce((n,s)=>n+s.size,0),0);
  for(const s of slots)s?.cleanup?.();
- console.log(JSON.stringify({passed:true,actualComponentEffects:true,actualNativeCanvasRendering:true,decodedEnemySprites:20,singleAnimationOwner:true,pauseAndBackground:true,repeatedStartAndStop:true,remainingRAF:frames.size,remainingListeners:0,limits:'Node host, no browser, no real device or GPU/FPS claims'}));
+ assert.equal(atlas.frames.length,0);assert.ok(atlasFrames.every(f=>f.width===1&&f.height===1));
+ console.log(JSON.stringify({passed:true,eyeFrames:13,eyeResourceReuse:true,eyeResourceDisposal:true,actualComponentEffects:true,actualNativeCanvasRendering:true,decodedEnemySprites:20,singleAnimationOwner:true,pauseAndBackground:true,repeatedStartAndStop:true,remainingRAF:frames.size,remainingListeners:0,limits:'Node host, no browser, no real device or GPU/FPS claims'}));
 })().catch(e=>{console.error(e);process.exitCode=1});

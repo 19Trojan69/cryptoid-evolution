@@ -6,7 +6,7 @@ import {advanceBossCore} from './bossCore.ts';
 import {advanceEnemyShot,enemyShotOutsideField,enemyShotHitsPlayer} from './enemyFire.ts';
 import {contactWithBoss} from './bossContact.ts';
 import {bossHitTarget} from './bossHitTarget.ts';
-import {specialWeaponBox} from './bossSpecialWeapon.ts';
+import {specialWeaponBox,specialWeaponMuzzle} from './bossSpecialWeapon.ts';
 import {insectBossSchedule,insectDifficulty,insectLayout,ESCAPE_CENTER_WIDTH,INSECT_LOCK_MS} from './insectBoss.ts';
 import {PLAYER_RADIUS,PLAYER_CONTACT_RADIUS,placePlayer} from './playerCombat.ts';
 
@@ -96,4 +96,10 @@ test('new solid bodies sweep through the real hitbox and expire; ordinary bounda
  assert.equal(enemyShotOutsideField(advanceEnemyShot(base,8000),390,3000),true);
  assert.equal(PLAYER_RADIUS,23);assert.equal(PLAYER_CONTACT_RADIUS,27);
  assert.deepEqual(placePlayer(-999,0,390,760),{x:30/390,y:.5});
+});
+
+
+test('the insect core muzzle matches the eye center; legacy muzzle stays at its barrel end',()=>{
+ const eye=createSectorBoss(60,390,90,760,true),old=createSectorBoss(60,390,90,760);
+ for(const [b,ratio] of [[eye,.5],[old,.925]]){const box=specialWeaponBox(b),m=specialWeaponMuzzle(b);assert.equal(m.y,b.y-b.height/2+box.top+box.height*ratio);}
 });
