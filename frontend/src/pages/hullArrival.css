@@ -1,0 +1,7 @@
+/* Only prevent detached effects while the associated hull source is loading.
+   No field/ship hiding, animation throttle, geometry or loaded-state restyling. */
+.ship-visual > .material-hull[data-hull-ready="false"] ~ .exhaust,
+.ship-visual > .material-hull[data-hull-ready="false"] ~ .player-engine,
+.sector-boss[data-hull-ready="false"] > .boss-engine-flame {
+  visibility: hidden;
+}

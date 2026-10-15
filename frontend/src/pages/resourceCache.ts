@@ -44,6 +44,7 @@ export class ResourceCache<T> {
       this.entries.delete(key); bytes -= entry.bytes; this.dispose(entry.value);
     }
   }
+  retained(key: string) { return this.pins.has(key); }
   get size() { return this.entries.size; }
   get bytes() { let bytes = 0; for (const entry of this.entries.values()) bytes += entry.bytes; return bytes; }
 }

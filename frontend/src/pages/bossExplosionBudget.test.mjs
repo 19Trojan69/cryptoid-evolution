@@ -61,15 +61,16 @@ test('actual GamePage boss destruction saves the waiting reward and installs the
   const visit=node=>{if(ts.isVariableDeclaration(node)&&node.name.getText(ast)==='destroyBoss')declaration=node.getText(ast);ts.forEachChild(node,visit);};visit(ast);
   assert.ok(declaration);
   for(let id=1;id<=50;id++) for(const combatVarietyEnabled of [false,true]) {
-    let saved;
+    let saved; const lifecycle=[];
     const state={boss:createSectorBoss(id*10,390,40,760),sector:id*10,hearts:2,maxHearts:3,score:0,shards:0,destroyed:0,combo:createDoubleKillCombo(),effects:[],asteroids:[],enemyShots:[{}],shots:[{}],powerUps:[{}]};
-    const context={combatVarietyEnabled,Image:class {},bossExplosionBudget,bossExplosionSize,bossFallTargetY,bossPoints,bossShardReward,creditComboDefeat,
+    const context={combatVarietyEnabled,performanceProbeRef:{current:{lifecycle:kind=>lifecycle.push(kind)}},Image:class {},bossExplosionBudget,bossExplosionSize,bossFallTargetY,bossPoints,bossShardReward,creditComboDefeat,
       BOSS_FALL_DURATION_MS:5000,soundRef:{current:null},fieldSizeRef:{current:{width:390,height:760}},
       window:{devicePixelRatio:3,matchMedia:()=>({matches:false})},document:{documentElement:{dataset:{}}},nextIdRef:{current:1},
       gameHaptics:{explosion(){},boss(){}},bossDestroyPlayedRef:{current:true},bossVictoryPendingRef:{current:false},bossVictoryFinishedRef:{current:true},
       clearTimerRef:{current:100},elapsedRef:{current:1000},saveCombat:async()=>{saved=structuredClone(state);},setSaveNotice(){}};
     vm.runInNewContext(ts.transpileModule('const '+declaration+';globalThis.run=destroyBoss;', {compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText,context);
     context.run(state,1000);await Promise.resolve();
+    assert.deepEqual(lifecycle,['boss-defeat-start','boss-defeat-complete']);
     assert.equal(state.encounter,'boss-clear');assert.equal(state.phase,'SECTOR_CLEAR');assert.equal(state.boss,null);
     assert.equal(saved.hearts,2);assert.equal(saved.bossHeartCollected,false);assert.equal(saved.encounter,'boss-clear');
     assert.equal(state.enemyShots.length,0);assert.equal(state.shots.length,0);

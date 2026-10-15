@@ -1,4 +1,4 @@
-import { combatCryptoid, combatTiming, combatEntryStage, combatAttackPattern, createCombatVariety, readCombatVariety, safeEarlyPickup, type CombatVarietyRuntime } from './combatVariety';
+import { combatCryptoid, combatTiming, combatEntryStage, combatAttackPattern, createCombatVariety, readCombatVariety, type CombatVarietyRuntime } from './combatVariety';
 import { advanceBonusRock, spawnBonusRock, hitBonusRock, rockHitsShot, rockInField, nextRockEventMs, MAX_ROCKS, MAX_ROCK_EFFECTS, type BonusRock, type RockEffect } from './bonusRocks';
 import BonusRockLayer from './BonusRockLayer';
 import './combatVariety.css';
@@ -52,7 +52,10 @@ import { appendSectionBlock, bonusChainReward, BLOCKS_PER_CHAIN } from "./networ
 import { advanceAfterClear, BOSS_ENTRY_MS, BOSS_WARNING_MS, damageSectorBoss, bossVulnerable, createSectorBoss, moveSectorBoss, type SectorBoss } from "./sectorBoss";
 import { playerSkins, enemyAppearance, selectedShip, shardBalance, ADMIN_MODE_KEY, ADMIN_TEST_CONFIG_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, shipHullStyle, shipNozzleStyles, spriteStyle, spriteVisualOffset, type PlayerColorId } from "./shipFleet";
 import PaintedShip from "./PaintedShip";
-import { useShipVisualOffset, paintedShipResourceStats } from "./paintedShip";
+import { useShipVisualOffset, paintedShipResourceStats, preloadHullSources, retainPreparedHulls, useHullSourceReady } from "./paintedShip";
+import { hullSourcePlan, preparedHullPlan } from "./hullSourcePlan";
+import { contactWithBoss } from "./bossContact";
+import { openingKillPickup } from "./pickupOrigin";
 import { ownedShipStage, projectileGuardForStage, projectileImpact, shipEvolutionAsset, stageWeaponLevel, type ShipStage } from "./shipEvolution";
 import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio";
 import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, readMusicVolume, resetAudioVolumeDefaults } from "./musicPreferences";
@@ -1003,6 +1006,7 @@ const GamePage = () => {
     musicRef.current?.setVolume(volume);
   }, [musicVolume, game.encounter, game.status]);
   const startBossVictory = () => {
+    performanceProbeRef.current?.lifecycle('boss-victory-start');
     bossVictoryPendingRef.current = false;
     const track = musicRef.current;
     if (!track) return;
@@ -1026,6 +1030,7 @@ const GamePage = () => {
     return result.notice;
   };
   const destroyBoss = (state: GameState, time: number) => {
+    performanceProbeRef.current?.lifecycle('boss-defeat-start');
     soundRef.current?.stopBossWeapons();
     const boss = state.boss;
     if (!boss) return;
@@ -1061,6 +1066,7 @@ const GamePage = () => {
     state.shots = [];
     if (!combatVarietyEnabled) state.powerUps = [];
     state.boss = null;
+    performanceProbeRef.current?.lifecycle('boss-defeat-complete');
     void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
   };
   const destroyBossRef = useRef(destroyBoss);
@@ -1521,6 +1527,7 @@ const GamePage = () => {
           const contact = contactWithEnemy(state.player, width, height, next, !next.cloaked && enemyMotionVisible(asteroid, next, width, height), next.collidedThisAttack, impactCooldownRef.current, asteroid, previousPlayer);
           if (contact.connected) {
             if (contact.damage) {
+              performanceProbeRef.current?.hit('enemy-hull');
               next = { ...next, collidedThisAttack: true };
               impactCooldownRef.current = IMPACT_COOLDOWN_MS;
               if (purchasedShieldActive) {
@@ -1560,8 +1567,9 @@ const GamePage = () => {
           const previousBoss = state.boss;
           state.bossHullLight = hullIllumination(state.boss.x, state.boss.y, time, bossMuzzleRef.current, state.effects);
           state.boss = moveSectorBoss(state.boss, delta, width, height);
-          const bossContact = contactWithEnemy(state.player, width, height, state.boss, true, false, impactCooldownRef.current, previousBoss, previousPlayer);
+          const bossContact = contactWithBoss(state.player, width, height, state.boss, impactCooldownRef.current, previousBoss, previousPlayer);
           if (bossContact.damage) {
+            performanceProbeRef.current?.hit('boss-hull');
             heartsLost = Math.max(heartsLost, 1);
             impactCooldownRef.current = IMPACT_COOLDOWN_MS;
           }
@@ -1583,6 +1591,7 @@ const GamePage = () => {
           const moved = advanceEnemyShot(shot, delta);
           if (enemyShotHitsPlayer(moved, state.player, width, height, shot, previousPlayer)) {
             if (impactCooldownRef.current === 0) {
+              performanceProbeRef.current?.hit('projectile');
               if (purchasedShieldActive) {
                 state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: "shield", startedAt: time, target: "player" });
                 soundRef.current?.play("shield");
@@ -1634,10 +1643,6 @@ const GamePage = () => {
           else soundRef.current?.play("shield");
         }
         performanceProbeRef.current?.mark('hostile-shots-and-damage');
-        if (variety && !intro.weaponIssued && intro.clock >= intro.weaponDue && state.phase !== "SECTOR_CLEAR") {
-          const pickup = safeEarlyPickup(state,stageWeaponLevel(shipStageRef.current,state.weaponLevel),width,height,visibleTop);
-          if(pickup){ state.powerUps.push({id:nextIdRef.current++,...pickup}); state.powerUpTypes.push(pickup.type); dropsCreatedRef.current++; intro.weaponIssued=true; intro.notice=powerUpNames[pickup.type]; intro.noticeMs=2_600; }
-        }
         const rockAllowed = variety && normal && state.asteroids.length > 0 && formationStartedRef.current && state.phase !== "SECTOR_INTRO" && state.phase !== "SECTOR_CLEAR";
         if(!rockAllowed){state.rocks=[];} else {
           state.rocks=state.rocks.map(r=>advanceBonusRock(r,delta)).filter(r=>rockInField(r,width,height));
@@ -1737,8 +1742,14 @@ const GamePage = () => {
           creditComboDefeat(state, enemy.reward, elapsedRef.current);
           state.asteroids = state.asteroids.filter(item => item.id !== enemy.id);
           if (enemy.attackPattern !== null) attackCooldownRef.current = 0;
-          const drop = enemy.escort ? null : createPowerUpDrop({ id: nextIdRef.current, x: enemy.x, y: enemy.y, width, height, threats: state.asteroids, activeCount: state.powerUps.length, chanceRoll: Math.random(), kindRoll: Math.random(), destroyed: state.destroyed, dropsCreated: dropsCreatedRef.current, level: state.sector, usedTypes: variety && !intro.weaponIssued ? [...state.powerUpTypes, "weapon"] : state.powerUpTypes, weaponMaxed: state.weaponLevel >= 5 });
-          if (drop) { nextIdRef.current += 1; dropsCreatedRef.current += 1; state.powerUpTypes.push(drop.type); state.powerUps.push(drop); }
+          const ordinaryDrop = enemy.escort ? null : createPowerUpDrop({ id: nextIdRef.current, x: enemy.x, y: enemy.y, width, height, threats: state.asteroids, activeCount: state.powerUps.length, chanceRoll: Math.random(), kindRoll: Math.random(), destroyed: state.destroyed, dropsCreated: dropsCreatedRef.current, level: state.sector, usedTypes: variety && !intro.weaponIssued ? [...state.powerUpTypes, "weapon"] : state.powerUpTypes, weaponMaxed: state.weaponLevel >= 5 });
+          const openingDrop = !enemy.escort && variety && !intro.weaponIssued && intro.clock >= intro.weaponDue
+            ? openingKillPickup(state, stageWeaponLevel(shipStageRef.current, state.weaponLevel), enemy,
+              nextIdRef.current, width, height, visibleTop) : null;
+          const drop = openingDrop ?? ordinaryDrop;
+          if (drop) { nextIdRef.current += 1; dropsCreatedRef.current += 1; state.powerUpTypes.push(drop.type); state.powerUps.push(drop);
+            if (openingDrop) { intro.weaponIssued = true; intro.notice = powerUpNames[drop.type]; intro.noticeMs = 2_600; }
+          }
         }
         state.shots = state.encounter === 'boss-clear' ? [] : remainingShots;
         if (variety && !waveCompleteRef.current && formationIndexRef.current === slots.length && state.asteroids.length === 0) {
@@ -1866,7 +1877,9 @@ const GamePage = () => {
         returning: stateRef.current.asteroids.filter(a => a.returnElapsed > 0).length,
         playerShots: stateRef.current.shots.length, enemyShots: stateRef.current.enemyShots.length,
         effects: stateRef.current.effects.length, rocks: stateRef.current.rocks.length,
-        rockEffects: stateRef.current.rockEffects.length, pickups: stateRef.current.powerUps.length });
+        rockEffects: stateRef.current.rockEffects.length, pickups: stateRef.current.powerUps.length,
+        bossHealth: stateRef.current.boss?.health, liveTurrets: stateRef.current.boss?.turrets.filter(g => g.health > 0).length,
+        bossHeartCollected: stateRef.current.bossHeartCollected, clearMs: clearTimerRef.current });
       try { simulate(time); }
       finally { probe?.mark('phase-save-and-paint'); probe?.end(time); }
       if (diagnosticsRef.current?.due()) diagnosticsRef.current.update(diagnosticContext(), stateRef.current.status === 'playing', false);
@@ -2137,6 +2150,14 @@ const GamePage = () => {
   // Show the active block during formations; the completed chain remains 9/9 at the boss/bonus.
   const hudBlock = game.encounter === "normal" ? sectorLabel : game.chainBlocks;
   const round = sectionInSector(game.section);
+  const hullOffset = formationOffsetRef.current, hullWave = bossEscortWaveRef.current;
+  const hullBonusGroup = Math.floor(bonusIndexRef.current / 6), hullRules = rulesVersionRef.current;
+  const bossHullReady = useHullSourceReady(game.boss?.config.image);
+  useEffect(() => {
+    preloadHullSources(hullSourcePlan(game.sector, game.encounter, hullOffset, hullWave));
+    const prepared = retainPreparedHulls(preparedHullPlan(game.sector, game.encounter, hullOffset, hullWave, hullBonusGroup, hullRules));
+    return prepared.release;
+  }, [game.sector, game.encounter, hullOffset, hullWave, hullBonusGroup, hullRules]);
   const levelComplete = game.encounter === "bonus" && game.phase === "SECTOR_CLEAR";
   const reinforcementIntro = game.encounter === "normal" && game.phase === "SECTOR_INTRO" && flightRef.current > 0;
   const sectorIntro = game.encounter === "normal" && game.phase === "SECTOR_INTRO" && round === 1 && !reinforcementIntro;
@@ -2242,7 +2263,7 @@ const GamePage = () => {
           ? game.phase === "ENTRY" || game.phase === "FORMATION" || game.phase === "REFORM"
           : game.encounter === "boss-fight" && asteroid.escort && asteroid.attackPattern === null
         ).map(asteroid => { const locked = asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration; const diameter = asteroid.radius * 2 + 8; return <div key={`formation-${asteroid.id}`} className={`formation-target${locked ? " formation-target-locked" : ""}`} style={{ left: asteroid.entryTargetX, top: asteroid.entryTargetY, width: diameter, height: diameter }} aria-hidden="true"><span /></div>; })}
-        {game.boss && game.encounter === "boss-fight" && <div className={`asteroid sector-boss${game.boss.health <= game.boss.maxHealth / 2 ? " boss-enraged" : ""}${game.boss.health <= game.boss.maxHealth * .25 ? " boss-critical" : ""}${performance.now() - game.boss.lastDamageAt < 240 ? " boss-hit" : ""}`} style={{ left: game.boss.x, top: game.boss.y, width: game.boss.width, height: game.boss.height, transform: "translate(-50%, -50%)", "--boss-image": `url('${game.boss.config.image}')`, "--boss-thrust": `${6 + game.boss.height * engineFlamePercent(game.boss.visualMotion?.thrust ?? 0, game.boss.elapsed < BOSS_ENTRY_MS ? "launch" : "idle") / 100}px` } as CSSProperties} title={`${t("CORE WARDEN")} · ${t("Sector")} boss`}>
+        {game.boss && game.encounter === "boss-fight" && <div className={`asteroid sector-boss${game.boss.health <= game.boss.maxHealth / 2 ? " boss-enraged" : ""}${game.boss.health <= game.boss.maxHealth * .25 ? " boss-critical" : ""}${performance.now() - game.boss.lastDamageAt < 240 ? " boss-hit" : ""}`} style={{ left: game.boss.x, top: game.boss.y, width: game.boss.width, height: game.boss.height, transform: "translate(-50%, -50%)", "--boss-image": `url('${game.boss.config.image}')`, "--boss-thrust": `${6 + game.boss.height * engineFlamePercent(game.boss.visualMotion?.thrust ?? 0, game.boss.elapsed < BOSS_ENTRY_MS ? "launch" : "idle") / 100}px` } as CSSProperties} data-hull-ready={bossHullReady} title={`${t("CORE WARDEN")} · ${t("Sector")} boss`}>
           {game.boss.config.engineAnchors.map(([x, y], index) => <i key={index} className="boss-engine-flame" style={{ left: `${x * 100}%`, top: `${y * 100}%` }} aria-hidden="true" />)}
           <img className="boss-hull" src={game.boss.config.image} alt="" draggable={false} />
           <BossWeaponsView boss={game.boss}/>

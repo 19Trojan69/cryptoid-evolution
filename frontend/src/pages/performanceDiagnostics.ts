@@ -17,6 +17,10 @@ export type ProbeContext = {
   rocks: number;
   rockEffects: number;
   pickups: number;
+  bossHealth?: number;
+  liveTurrets?: number;
+  bossHeartCollected?: boolean;
+  clearMs?: number;
 };
 type Work = { count: number; totalMs: number; maxMs: number };
 type Runtime = {
@@ -115,6 +119,7 @@ export function createPerformanceProbe(options: Options = {}) {
     longTasks = 0,
     longTaskMaxMs = 0;
   let finished = false;
+  let persistence = "not-yet-written";
   const event = (kind: string, at: number, extra: Partial<Event> = {}) => {
     if (!context) return;
     bounded(
@@ -135,6 +140,7 @@ export function createPerformanceProbe(options: Options = {}) {
   const exportTrace = () => ({
     version: 1,
     environment: "developer-only",
+    persistence,
     samples: samples.slice(),
     events: events.slice(),
     coverage: {
@@ -149,13 +155,27 @@ export function createPerformanceProbe(options: Options = {}) {
     const time = now();
     if (!force && time - lastPersist < 10_000) return;
     lastPersist = time;
+    const trace = exportTrace();
+    if (typeof window !== "undefined")
+      (window as Window & { __cryptoidLatestTrace?: unknown }).__cryptoidLatestTrace = trace;
     try {
-      const serialized = JSON.stringify(exportTrace());
-      if (options.persist) options.persist(serialized);
-      else window["localStorage"].setItem(PERFORMANCE_TRACE_KEY, serialized);
+      if (options.persist) {
+        persistence = "custom";
+        options.persist(JSON.stringify(exportTrace()));
+      } else {
+        persistence = "localStorage";
+        window["localStorage"].setItem(PERFORMANCE_TRACE_KEY, JSON.stringify(exportTrace()));
+      }
     } catch {
-      /* Quota/private mode must never interrupt the game. */
+      persistence = "sessionStorage";
+      try {
+        window["sessionStorage"].setItem(PERFORMANCE_TRACE_KEY, JSON.stringify(exportTrace()));
+      } catch {
+        persistence = "memory-only";
+      }
     }
+    if (typeof window !== "undefined")
+      (window as Window & { __cryptoidLatestTrace?: unknown }).__cryptoidLatestTrace = exportTrace();
   };
   const flush = (at: number) => {
     if (!context || !frames) return;
@@ -212,6 +232,7 @@ export function createPerformanceProbe(options: Options = {}) {
         event("phase-start", at);
         signature = nextSignature;
         phaseStart = at;
+        persist();
       }
       context = next;
       if (previousFrame) bounded(gaps, Math.max(0, at - previousFrame), 256);
@@ -251,6 +272,10 @@ export function createPerformanceProbe(options: Options = {}) {
         longTaskMaxMs = Math.max(longTaskMaxMs, duration);
       }
     },
+    hit(source: "boss-hull" | "enemy-hull" | "projectile") {
+      event("damage-" + source, now());
+      persist(true);
+    },
     lifecycle(
       kind:
         | "pagehide"
@@ -266,7 +291,10 @@ export function createPerformanceProbe(options: Options = {}) {
         | "input-error"
         | "javascript-error"
         | "unhandled-rejection"
-        | "render-error",
+        | "render-error"
+        | "boss-defeat-start"
+        | "boss-defeat-complete"
+        | "boss-victory-start",
       error?: unknown
     ) {
       event(kind, now(), errorSite(error));

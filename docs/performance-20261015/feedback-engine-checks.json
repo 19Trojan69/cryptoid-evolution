@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "checks": [
+    "30 seconds without a lethal shot creates no floating timed power-up.",
+    "The due opening benefit is emitted exactly at the defeated hull/explosion.",
+    "Carrier pickup still grants the original 20-second Twin upgrade.",
+    "A non-lethal hit never emits the reserved benefit.",
+    "Every point of a dense legal player-area grid is harmless during boss descent.",
+    "Boss fall, blast, waiting heart, collection and bonus transition complete without damage or deadlock.",
+    "Real steering handlers accept input after the boss/bonus transition and release every listener on disposal."
+  ]
+}

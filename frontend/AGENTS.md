@@ -1,5 +1,19 @@
 # Preserve the officially approved game
 
+## Explicit feedback scope, 15 October 2026, 20:26–20:29 Vienna
+
+The user authorizes isolated fixes for flame-before-hull/late hull appearance,
+remaining technical slowdowns, false boss contact below the rendered hull and
+around its descent, and floating power-ups appearing without a defeated carrier.
+Keep existing drop probabilities, durations, movement paths/speeds, sizes, HUD,
+styles and loaded artwork. Tie the existing opening benefit to the next safe
+lethal enemy hit; never spawn it from a clock alone. Fix developer report export
+so unavailable Web Storage cannot silently produce an empty report. Full loss of
+input after a boss was reported; do not claim that freeze reproduced or fixed
+without evidence. Public Testnet/Mainnet remain untouched; only the existing
+private diagnosis preview is authorized for updating.
+
+
 The user confirmed IMG_5288.jpeg on 12 October 2026 as the original visual reference. This task authorizes stability fixes only.
 
 Explicit movement correction requested on 12 October after testing: resting normal Testnet enemies should slowly sway back and forth, including restored formations; keep the existing sway amplitude/rhythm, and make normal formation arrivals 10% longer. This narrow authorization supersedes the frozen-motion rule below for these two corrections only. Boss escorts, attack paths, weapons, HUD, markers, sounds and Mainnet retain their prior behavior.
