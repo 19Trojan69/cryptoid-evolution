@@ -1,6 +1,7 @@
 // This probe is compiled in only for an explicitly enabled developer build.
 // It owns no game timer, RAF or input handler. Only the private preview can
 // supply the optional independent checkpoint sink.
+import type { BossResourceKind, BossResourceDetails } from './bossResourceDiagnostics';
 export const PERFORMANCE_TRACE_KEY = "cryptoid_developer_trace_v1";
 export const PERFORMANCE_SAMPLE_LIMIT = 90;
 export type ProbeContext = {
@@ -35,6 +36,7 @@ type Runtime = {
   sources?: number;
   pending?: number;
   audioVoices?: number;
+  audioBufferBytes?: number;
   knownTimers?: number;
   knownListeners?: number;
   longTasksSupported?: boolean;
@@ -63,7 +65,7 @@ type Sample = ProbeContext &
     runtimeAgeMs: number;
     runtimeSampleMs: number;
   };
-type Event = {
+type Event = Partial<BossResourceDetails> & {
   atMs: number;
   kind: string;
   sector: number;
@@ -169,6 +171,8 @@ export function createPerformanceProbe(options: Options = {}) {
       scene: "GamePage render start to layout effect and request-to-commit; includes reconciliation/scheduling, excludes browser paint/GPU",
       longTasks: "zero counts are meaningful only when longTasksSupported is true",
       runtime: "DOM/animation/cache/audio counters sampled at most once per 2 seconds; runtimeAgeMs indicates age, runtimeSampleMs measures that diagnostic work",
+      boss: "model/texture/first Canvas-call milestones; first draw means drawing routine returned, not GPU presentation",
+      audio: "audioBufferBytes estimates retained effect PCM data; excludes streamed music and internal browser audio memory",
     },
   });
   const persist = (force = false) => {
@@ -267,13 +271,18 @@ export function createPerformanceProbe(options: Options = {}) {
         event("phase-start", at);
         signature = nextSignature;
         phaseStart = at;
-        persist();
+        persist(next.encounter.startsWith('boss') || next.phase === 'SECTOR_CLEAR' && (next.sector + 1) % 10 === 0);
       }
       context = next;
       if (previousFrame) bounded(gaps, Math.max(0, at - previousFrame), 256);
       else windowStart = at;
       previousFrame = at;
       frameStart = markAt = now();
+    },
+    checkpoint(kind: BossResourceKind | 'boss-model-start' | 'boss-model-ready', details: Partial<ProbeContext> & Partial<BossResourceDetails> = {}) {
+      if (finished) return;
+      event(kind, now(), details);
+      persist(true);
     },
     mark(label: string) {
       if (!frameStart || finished) return;

@@ -76,7 +76,7 @@ export function createRemoteTraceBackup(options: Options) {
     enqueue(trace: unknown) {
       const clean = backupTrace(trace);
       if (!clean) return;
-      pending = { runId, revision: ++revision, clientVersion: "V4", trace: clean };
+      pending = { runId, revision: ++revision, clientVersion: "V5", trace: clean };
       if (!inflight && !scheduled) {
         scheduled = true;
         queueMicrotask(() => void send());

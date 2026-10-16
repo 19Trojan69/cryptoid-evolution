@@ -14,13 +14,13 @@ const json=async(route,init)=>{const r=await request(route,init);assert.equal(r.
 try {
  const initial=await json('/api/diagnostics');assert.equal(initial.ready,true);
  const runId='server-qa-'+randomUUID();
- const trace={version:2,environment:'developer-only',samples:[{sector:100,flight:0,phase:'SECTOR_CLEAR',encounter:'boss-clear',status:'playing',hearts:3,fps:30,secret:'must-be-removed'}],events:[{atMs:5000,kind:'boss-final-blast',sector:100,message:'must-be-removed'}]};
+ const trace={version:2,environment:'developer-only',samples:[{sector:100,flight:0,phase:'SECTOR_CLEAR',encounter:'boss-clear',status:'playing',hearts:3,fps:30,secret:'must-be-removed'}],events:[{atMs:5000,kind:'boss-final-blast',sector:100,message:'must-be-removed'},{atMs:5001,kind:'boss-texture-ready',sector:40,bossId:4,bossTextureWidth:2048,bossTextureHeight:966}]};
  const post=revision=>json('/api/diagnostics',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({runId,revision,clientVersion:'server-qa',trace})});
  const ack=await post(3);assert.equal(ack.revision,3);assert.equal(ack.runId,runId);assert.ok(Number.isFinite(ack.savedAt));
  await post(1);
  // Independent requests carry no localStorage/sessionStorage or browser state.
  const recovered=await json('/api/diagnostics?runId='+encodeURIComponent(runId));
- assert.equal(recovered.latest.revision,3);assert.equal(recovered.latest.trace.samples[0].sector,100);assert.equal(recovered.latest.trace.events[0].kind,'boss-final-blast');assert.ok(!JSON.stringify(recovered).includes('must-be-removed'));
+ assert.equal(recovered.latest.revision,3);assert.equal(recovered.latest.trace.samples[0].sector,100);assert.equal(recovered.latest.trace.events[0].kind,'boss-final-blast');assert.ok(!JSON.stringify(recovered).includes('must-be-removed'));assert.equal(recovered.latest.trace.events[1].kind,'boss-texture-ready');assert.equal(recovered.latest.trace.events[1].bossTextureWidth,2048);
  const latest=await json('/api/diagnostics');assert.equal(latest.latest?.runId,initial.latest?.runId,'QA must not replace the user report');
  const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
  for(const [route,file] of [['/','public/index.html'],['/assets/crash-probe.js','public/assets/crash-probe.js']]){
@@ -28,7 +28,7 @@ try {
  }
  const unauthenticated=await fetch(origin+'/api/diagnostics',{redirect:'manual',signal:AbortSignal.timeout(15000)});
  assert.ok([301,302,303,307,308,401,403].includes(unauthenticated.status),'private route must reject unauthenticated access');
- const result={passed:true,protocol:'authenticated HTTPS against deployed private Site; no browser',checkpointAcknowledged:true,independentRequestRestored:true,staleRevisionRejected:true,privateAccessEnforced:true,unauthenticatedStatus:unauthenticated.status,sensitiveFieldsRemoved:true,qaExcludedFromLatest:true,exactRootAndBundle:true,runId,savedAt:ack.savedAt,limits:'Synthetic record; no real device crash or final unsent frame proof.'};
+ const result={passed:true,protocol:'authenticated HTTPS against deployed private Site; no browser',checkpointAcknowledged:true,bossMilestonesRestored:true,independentRequestRestored:true,staleRevisionRejected:true,privateAccessEnforced:true,unauthenticatedStatus:unauthenticated.status,sensitiveFieldsRemoved:true,qaExcludedFromLatest:true,exactRootAndBundle:true,runId,savedAt:ack.savedAt,limits:'Synthetic record; no real device crash or final unsent frame proof.'};
  fs.writeFileSync(config.output,JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));
 } catch(error) { console.error(error instanceof Error?error.message:'Verification failed');process.exitCode=1; }
 process.stdin.destroy();

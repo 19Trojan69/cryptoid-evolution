@@ -25,7 +25,7 @@ the existing private Site before editing, preserve its ID and owner-only access.
 From the frontend checkout:
 
 ```sh
-node scripts/buildCrashPreview.mjs /tmp/Cryptoid_Absturzdiagnose_V4.html SITE_CHECKOUT/public
+node scripts/buildCrashPreview.mjs /tmp/Cryptoid_Absturzdiagnose_V5.html SITE_CHECKOUT/public
 node scripts/prepareCrashPreviewServer.mjs SITE_CHECKOUT
 ```
 
@@ -40,3 +40,5 @@ src/pages/diagnosticExport.test.mjs`. SQLite tests execute the actual service SQ
 including recovery after complete browser-storage loss, revision protection,
 bounded retention, payload filtering and network failure. They do not prove that
 a device crash is fixed or that its last unsent frame can be recovered.
+
+V5 adds boss model/texture/first Canvas routine checkpoints and estimated retained effect PCM bytes. These are not GPU-memory or successful-presentation measurements. Critical boss phase starts are persisted immediately; ordinary frame checkpoints keep their previous cadence.

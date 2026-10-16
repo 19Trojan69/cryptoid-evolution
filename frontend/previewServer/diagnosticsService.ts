@@ -66,7 +66,7 @@ export async function handleDiagnostics(request: Request, db: DiagnosticDB, now 
     return response({ error: "packet" }, 400);
   const trace = backupTrace(body.trace);
   if (!trace) return response({ error: "trace" }, 400);
-  const version = body.clientVersion === "server-qa" ? "server-qa" : "V4";
+  const version = body.clientVersion === "server-qa" ? "server-qa" : body.clientVersion === "V5" ? "V5" : "V4";
   await db.batch([
     db
       .prepare(

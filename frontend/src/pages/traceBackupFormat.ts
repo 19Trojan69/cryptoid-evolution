@@ -28,9 +28,10 @@ const kinds = [
   "boss-defeat-complete",
   "boss-victory-start",
   "boss-final-blast",
+  "boss-model-start", "boss-model-ready", "boss-texture-start", "boss-texture-ready", "boss-texture-error", "boss-canvas-first-draw", "boss-canvas-release",
 ];
 const metrics =
-  "sector flight enemies attackers returning playerShots enemyShots effects rocks rockEffects pickups clearMs hearts bossHealth liveTurrets atMs fps frameP50Ms frameP95Ms frameMaxMs simulationP95Ms simulationMaxMs frames volleys volleyGapP95Ms capBlocked longTasks longTaskMaxMs sampleDurationMs sceneRequests sceneCommits sceneCommitWaitP95Ms sceneRenderToCommitP95Ms runtimeAgeMs runtimeSampleMs heapBytes animations particles domNodes painted estimatedBytes sources pending jobsStarted jobsFinished queueWaitMaxMs materialTotalMs materialMaxMs encodeTotalMs decodeTotalMs sourceWorkTotalMs sourceWorkMaxMs audioVoices knownTimers knownListeners rockPaints rockPaintTotalMs rockPaintMaxMs blockchainRenders durationMs line column".split(
+  "sector flight enemies attackers returning playerShots enemyShots effects rocks rockEffects pickups clearMs hearts bossHealth liveTurrets atMs fps frameP50Ms frameP95Ms frameMaxMs simulationP95Ms simulationMaxMs frames volleys volleyGapP95Ms capBlocked longTasks longTaskMaxMs sampleDurationMs sceneRequests sceneCommits sceneCommitWaitP95Ms sceneRenderToCommitP95Ms runtimeAgeMs runtimeSampleMs heapBytes animations particles domNodes painted estimatedBytes sources pending jobsStarted jobsFinished queueWaitMaxMs materialTotalMs materialMaxMs encodeTotalMs decodeTotalMs sourceWorkTotalMs sourceWorkMaxMs audioVoices audioBufferBytes knownTimers knownListeners rockPaints rockPaintTotalMs rockPaintMaxMs blockchainRenders durationMs line column bossId bossTextureWidth bossTextureHeight bossCanvasWidth bossCanvasHeight".split(
     " "
   );
 const sections = [

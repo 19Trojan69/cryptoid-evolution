@@ -153,3 +153,21 @@ test("scene measurements distinguish render-to-commit work and scheduling wait w
   const frozen=JSON.stringify(probe.export());probe.sceneRequested();probe.sceneCommitted(now);
   assert.equal(JSON.stringify(probe.export()),frozen);
 });
+
+
+test("boss checkpoints persist immediately with fresh context without changing the frame context", () => {
+ let now = 1000; const saved = [];
+ const probe = createPerformanceProbe({ now: () => now, persist: () => {}, backup: trace => saved.push(trace) });
+ probe.begin(now, { ...playing, sector: 39, phase: 'SECTOR_CLEAR' }); probe.end(now);
+ now += 17;
+ probe.checkpoint('boss-model-start', { sector: 40, phase: 'SECTOR_INTRO', encounter: 'boss-intro', hearts: 1 });
+ assert.equal(saved.at(-1).events.at(-1).kind, 'boss-model-start');
+ assert.equal(saved.at(-1).events.at(-1).sector, 40);
+ probe.begin(now, { ...playing, sector: 40, phase: 'SECTOR_INTRO', encounter: 'boss-intro' });
+ const complete = probe.export().events.find(event => event.kind === 'phase-complete');
+ assert.equal(complete.sector, 39);
+ assert.equal(saved.at(-1).events.at(-1).kind, 'phase-start');
+ probe.checkpoint('boss-texture-ready', { bossId: 4, bossTextureWidth: 2048, bossTextureHeight: 966 });
+ assert.equal(saved.at(-1).events.at(-1).bossTextureWidth, 2048);
+ probe.finish(); const count = saved.length; probe.checkpoint('boss-model-ready'); assert.equal(saved.length, count);
+});

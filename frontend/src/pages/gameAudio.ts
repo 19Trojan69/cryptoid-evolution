@@ -340,6 +340,12 @@ export class GameAudio {
   }
 
   get activeVoiceCount() { return this.weaponMixVoices.size + this.effectVoices.size; }
+  get diagnosticBufferBytes() {
+    let bytes = 0;
+    for (const cache of [this.samples, this.bossSamples, this.enemyShotSamples, this.enemyDoubleSamples])
+      for (const buffer of cache.values()) bytes += (buffer.length || 0) * (buffer.numberOfChannels || 0) * 4;
+    return bytes;
+  }
 
   close() {
     this.setPaused(true);

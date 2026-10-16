@@ -41,3 +41,9 @@ Noch benötigt: Browser dieses Laufs und genauer Abbruchzustand (eingefrorenes B
 Rückkehr zum privaten Testmenü oder Browser-/Seitenneustart). Danach gezielter
 Vergleich von Bossstart, Bild-/Canvas-/Audio-Ressourcen und Navigation. Weiterhin
 keine Änderungen an HUD, Bewegungen, Schiffgrößen, Spielmechanik, Testnet oder Produktion.
+
+## Nachtrag
+
+Marc hat Safari bestätigt. Ob nach dem Abbruch ein weißer Bildschirm erschien,
+ist ausdrücklich unsicher. Das wird nicht als bestätigter Renderfehler oder
+Browser-Neustart behandelt. Siehe `BOSS_ENTRY_V5.md` für die gezielte Messergänzung.

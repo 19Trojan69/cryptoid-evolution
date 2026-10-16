@@ -13,7 +13,7 @@ const scene=x=>x.nodes.get('GamePage').body.statements.findLast(ts.isReturnState
 // trees and retained image/canvas are checked for all 50 bosses separately.
 const bossScene=x=>{let bossNode;const visit=n=>{if(ts.isJsxExpression(n)&&n.expression?.getText(x.ast).startsWith('game.boss && game.encounter === "boss-fight" &&'))bossNode=n; if(ts.isJsxSelfClosingElement(n)&&n.tagName.getText(x.ast)==='BossHullView')bossNode=n;ts.forEachChild(n,visit);};visit(x.ast);assert.ok(bossNode);return scene(x).replace(bossNode.getText(x.ast),'<BOSS_HANDOFF />').replace('.filter(effect => effect !== fallingBossHull)','');};
 assert.equal(bossScene(b),bossScene(a),'all other game JSX unchanged');
-const stripProbe=s=>s.replace(/^[ \t]*performanceProbeRef\.current\?\.(?:mark|volley|hit|sceneRequested)\([^\n]*\);\n/gm,'').replace(/^[ \t]*performanceProbeRef\.current\?\.lifecycle\('boss-final-blast'\);\n/gm,'');
+const stripProbe=s=>s.replace(/^[ \t]*performanceProbeRef\.current\?\.(?:mark|volley|hit|sceneRequested|checkpoint)\([^\n]*\);\n/gm,'').replace(/^[ \t]*performanceProbeRef\.current\?\.lifecycle\('boss-final-blast'\);\n/gm,'');
 let baseSimulation=stripProbe(a.nodes.get('simulate').getText(a.ast)),currentSimulation=stripProbe(b.nodes.get('simulate').getText(b.ast));
 const timedStart=baseSimulation.indexOf('        if (variety && !intro.weaponIssued && intro.clock >= intro.weaponDue');
 assert.ok(timedStart>=0);const timedEnd=baseSimulation.indexOf('        const rockAllowed =',timedStart);baseSimulation=baseSimulation.slice(0,timedStart)+baseSimulation.slice(timedEnd);

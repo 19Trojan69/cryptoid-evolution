@@ -1,0 +1,27 @@
+{
+  "version": "V5",
+  "baseline": "b86ed7d6d51af805e7706c6ec301a9e6fd3393b8",
+  "testsPassed": 415,
+  "deviceCrashReproduced": false,
+  "deviceFPSMeasured": false,
+  "publicTestnetChanged": false,
+  "productionChanged": false,
+  "siteSource": "7d0e077cca2479f579ca6956627d13db153cb8e0",
+  "deployment": "appgdep_6ad1e6b0dc4c8191abb29009c85f477e",
+  "hosted": {
+    "passed": true,
+    "protocol": "authenticated HTTPS against deployed private Site; no browser",
+    "checkpointAcknowledged": true,
+    "bossMilestonesRestored": true,
+    "independentRequestRestored": true,
+    "staleRevisionRejected": true,
+    "privateAccessEnforced": true,
+    "unauthenticatedStatus": 401,
+    "sensitiveFieldsRemoved": true,
+    "qaExcludedFromLatest": true,
+    "exactRootAndBundle": true,
+    "runId": "server-qa-ee5cde5c-e5b0-4f3d-aaa5-876d5dcfa4bd",
+    "savedAt": 1792141039606,
+    "limits": "Synthetic record; no real device crash or final unsent frame proof."
+  }
+}

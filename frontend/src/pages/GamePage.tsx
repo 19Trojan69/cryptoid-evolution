@@ -82,6 +82,7 @@ import { bossExplosionSize, bossFallTargetY, bossFireSite } from "./bossCombat";
 import { bossHitTarget } from "./bossHitTarget";
 import BossWeaponsView from './BossWeaponsView';
 import { preloadBossWeapons } from './bossWeaponTextures';
+import { observeBossResources } from './bossResourceDiagnostics';
 import BossHullView from './BossHullView';
 import { advanceBossTurrets, damageBossTurret, gunPosition } from './bossTurrets';
 import { detonateBossBomb, disableEnemyWeapons } from './specialPowers';
@@ -632,11 +633,16 @@ const GamePage = () => {
       backup: trace => (window as Window & { __cryptoidTraceSink?: (trace: unknown) => void }).__cryptoidTraceSink?.(trace),
       runtime: () => ({
       ...browserProbeRuntime(), ...paintedShipResourceStats(), ...renderWorkStats(), audioVoices: soundRef.current?.activeVoiceCount ?? 0,
+      audioBufferBytes: soundRef.current?.diagnosticBufferBytes ?? 0,
       longTasksSupported,
       knownTimers: 1 + Number(gameOverTimerRef.current !== null) + Number(reloadNoticeTimerRef.current !== null),
       knownListeners: 5,
     }) }) : null;
     performanceProbeRef.current = probe;
+    const stopBossObservation = probe ? observeBossResources((kind, details) => {
+      const state = stateRef.current;
+      probe.checkpoint(kind, { sector: state.sector, flight: flightRef.current, phase: state.phase, encounter: state.encounter, status: state.status, hearts: state.hearts, ...details });
+    }) : undefined;
     const probeHost = window as Window & { __cryptoidDiagnostics?: { export: () => unknown } };
     const previousProbe = probeHost.__cryptoidDiagnostics;
     const probeApi = probe ? { export: probe.export } : undefined;
@@ -666,7 +672,7 @@ const GamePage = () => {
     window.addEventListener('pageshow', shown);
     document.addEventListener('visibilitychange', update);
     return () => {
-      observer?.disconnect(); probe?.finish(); performanceProbeRef.current = null;
+      stopBossObservation?.(); observer?.disconnect(); probe?.finish(); performanceProbeRef.current = null;
       if (probeApi && probeHost.__cryptoidDiagnostics === probeApi) {
         if (previousProbe) probeHost.__cryptoidDiagnostics = previousProbe; else delete probeHost.__cryptoidDiagnostics;
       }
@@ -1374,7 +1380,9 @@ const GamePage = () => {
             state.encounter = next.encounter;
             state.bossHeartCollected = undefined;
             if (next.encounter === "boss-intro") {
+              performanceProbeRef.current?.checkpoint('boss-model-start', { sector: state.sector, encounter: 'boss-intro', phase: 'SECTOR_INTRO', hearts: state.hearts });
               state.boss = createSectorBoss(state.sector, width, visibleTop, height);
+              performanceProbeRef.current?.checkpoint('boss-model-ready', { sector: state.sector, encounter: 'boss-intro', phase: 'SECTOR_INTRO', hearts: state.hearts, bossId: state.boss.config.id });
               soundRef.current?.play("boss");
             } else {
               state.boss = null;
