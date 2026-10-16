@@ -89,6 +89,19 @@ export class MusicPlayer {
     }
   }
 
+  // Resume the existing graph during the Resume gesture without starting the
+  // paused media element. The countdown/account request can finish afterwards.
+  async unlock(): Promise<boolean> {
+    if (this.closed) return false;
+    this.prepare();
+    try {
+      if (this.context && this.context.state !== "running") await this.context.resume();
+      return !this.closed && (!this.context || this.context.state === "running");
+    } catch {
+      return false;
+    }
+  }
+
   async play(): Promise<boolean> {
     if (this.closed) return false;
     this.wantsPlayback = true;
