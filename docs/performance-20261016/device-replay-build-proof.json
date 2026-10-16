@@ -1,0 +1,31 @@
+{
+  "id": "device-replay-20261016-v1",
+  "gameCommit": "27d174788327c3423f04ace32be61af67a2004cc",
+  "gameSourceSha256": "eb628a5d73247ea64ec5443d2ff4efdab071a97228634f16f2aa915cdc832607",
+  "applicationApisRemoved": true,
+  "authModuleRemoved": true,
+  "staticAssetsReadOnlyFrom": "https://cryptoid-evolution-testnet.vercel.app",
+  "inputs": 201,
+  "files": [
+    {
+      "file": "public/index.html",
+      "bytes": 1776,
+      "sha256": "0a8749bdd3fe0548938c88fa5d5333159c90e0e8376d92701d0278dea4c7ee9e"
+    },
+    {
+      "file": "public/replay.js",
+      "bytes": 2930148,
+      "sha256": "86948b42dccfbd52a704acc4c196a47ac26d80309536bc3a285d5bc777214ee2"
+    },
+    {
+      "file": "public/blocked.json",
+      "bytes": 58,
+      "sha256": "08784fee8cd124b37437e73e0b568a6bb509152f9ad6b09a5ea3c1b2dda9ccdd"
+    },
+    {
+      "file": "vercel.json",
+      "bytes": 2402,
+      "sha256": "6085eb765e78ae5a6667667aa5a7b9c49fdca5f4af09e8e45801cf35d3efa2e3"
+    }
+  ]
+}

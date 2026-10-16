@@ -1,0 +1,49 @@
+  // This hook exists only in the generated, isolated device-test bundle.
+  useEffect(() => {
+    const host = (window as any).__cryptoidDeviceReplay;
+    if (!host) return;
+    const start = (mode: { enemies: number; double: boolean; shield: boolean }) => {
+      clearControls();
+      const { width, height } = fieldSizeRef.current;
+      const s = createInitialState();
+      Object.assign(s, { sector: 12, section: 12, chainBlocks: 1, status: 'playing', phase: 'ATTACK_CYCLE',
+        encounter: 'normal', hearts: 3, maxHearts: 3, player: { x: .25, y: .86 },
+        weaponLevel: mode.double ? 2 : 1, weaponSource: mode.double ? 'pickup' : 'standard',
+        weaponCap: 2, pickupWeaponLevel: mode.double ? 2 : 1, pickupWeaponMs: mode.double ? 20000 : 0,
+        shieldActive: mode.shield, shieldCharges: mode.shield ? 1 : 0, shieldMs: mode.shield ? 120000 : 0,
+        powerUpTypes: ['shield','overdrive','weapon','rapid'] });
+      const slots = createFormationSlots(12,12,width,height,visibleTopRef.current,playerDiameterRef.current);
+      s.asteroids = Array.from({ length: mode.enemies },(_,i) => {
+        const enemy = spawnAsteroid(nextIdRef.current++,width,visibleTopRef.current,i,12,slots);
+        enemy.entryElapsed=enemy.entryDuration;enemy.formationElapsed=enemy.formationDuration;
+        enemy.health=enemy.maxHealth=1000000;
+        return enemy;
+      });
+      stateRef.current=s;adminRunRef.current=true;scoreRunRef.current=null;
+      formationIndexRef.current=blockFlights(12,rulesVersionRef.current)[0];
+      formationOffsetRef.current=0;flightRef.current=0;formationStartedRef.current=true;
+      sectionSlotsRef.current=slots;sectionElapsedRef.current=20000;clearTimerRef.current=0;
+      spawnTimerRef.current=0;attackCooldownRef.current=0;fireTimerRef.current=0;
+      elapsedRef.current=0;dropsCreatedRef.current=4;lastFrameRef.current=0;
+      varietyRef.current=createCombatVariety(true);lastPlayerRef.current={...s.player};
+      waveCompleteRef.current=false;
+      setGame({ ...s });
+    };
+    const read = () => {
+      const s=stateRef.current;
+      return { sector:s.sector,phase:s.phase,status:s.status,enemies:s.asteroids.length,
+        shots:s.shots.length,enemyShots:s.enemyShots.length,effects:s.effects.length,
+        shield:s.shieldActive&&s.shieldMs>0,weaponLevel:s.weaponLevel,pickupWeaponMs:s.pickupWeaponMs,
+        fieldWidth:fieldSizeRef.current.width,fieldHeight:fieldSizeRef.current.height,
+        audioVoices:soundRef.current?.activeVoiceCount??0 };
+    };
+    const sustain = (mode: { enemies: number; double: boolean; shield: boolean }) => {
+      const s=stateRef.current;
+      if(s.encounter!=='normal'||s.phase==='SECTOR_CLEAR'||!s.asteroids.length){start(mode);return true;}
+      s.hearts=s.maxHearts=3;
+      if(mode.shield){s.shieldActive=true;s.shieldCharges=1;s.shieldMs=120000;}
+      for(const enemy of s.asteroids)enemy.health=enemy.maxHealth=1000000;
+      return false;
+    };
+    return host.install({start,read,sustain});
+  }, []);
