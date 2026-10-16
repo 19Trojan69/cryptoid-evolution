@@ -1,0 +1,181 @@
+{
+  "passed": true,
+  "limitation": "Injected RAF timestamps in actual GamePage simulation; no rendering or browser performance inference",
+  "cases": [
+    {
+      "name": "60hz",
+      "segments": [
+        {
+          "frameStepsMs": [
+            16.666666666666668
+          ],
+          "wallMs": 30000,
+          "simulationMs": 30000,
+          "volleys": 93,
+          "meanGapMs": 319.92753623188355,
+          "p95GapMs": 333.3333333333576,
+          "maxGapMs": 333.3333333333576,
+          "nominalIntervalMs": 320,
+          "hull": "grey-scout",
+          "peakShots": 4
+        }
+      ],
+      "cleanup": {
+        "raf": 0,
+        "timers": 0,
+        "listeners": 0
+      }
+    },
+    {
+      "name": "30hz",
+      "segments": [
+        {
+          "frameStepsMs": [
+            33.333333333333336
+          ],
+          "wallMs": 30000,
+          "simulationMs": 30000,
+          "volleys": 93,
+          "meanGapMs": 319.9275362318843,
+          "p95GapMs": 333.3333333333576,
+          "maxGapMs": 333.3333333333576,
+          "nominalIntervalMs": 320,
+          "hull": "grey-scout",
+          "peakShots": 4
+        }
+      ],
+      "cleanup": {
+        "raf": 0,
+        "timers": 0,
+        "listeners": 0
+      }
+    },
+    {
+      "name": "25hz",
+      "segments": [
+        {
+          "frameStepsMs": [
+            40
+          ],
+          "wallMs": 30000,
+          "simulationMs": 25500,
+          "volleys": 79,
+          "meanGapMs": 376.4102564102564,
+          "p95GapMs": 400,
+          "maxGapMs": 400,
+          "nominalIntervalMs": 320,
+          "hull": "grey-scout",
+          "peakShots": 4
+        }
+      ],
+      "cleanup": {
+        "raf": 0,
+        "timers": 0,
+        "listeners": 0
+      }
+    },
+    {
+      "name": "20hz",
+      "segments": [
+        {
+          "frameStepsMs": [
+            50
+          ],
+          "wallMs": 30000,
+          "simulationMs": 20400,
+          "volleys": 63,
+          "meanGapMs": 470.16129032258067,
+          "p95GapMs": 500,
+          "maxGapMs": 500,
+          "nominalIntervalMs": 320,
+          "hull": "grey-scout",
+          "peakShots": 4
+        }
+      ],
+      "cleanup": {
+        "raf": 0,
+        "timers": 0,
+        "listeners": 0
+      }
+    },
+    {
+      "name": "jitter",
+      "segments": [
+        {
+          "frameStepsMs": [
+            16,
+            16,
+            16,
+            100
+          ],
+          "wallMs": 30000,
+          "simulationMs": 16646,
+          "volleys": 52,
+          "meanGapMs": 576.6274509803922,
+          "p95GapMs": 592,
+          "maxGapMs": 592,
+          "nominalIntervalMs": 320,
+          "hull": "grey-scout",
+          "peakShots": 4
+        }
+      ],
+      "cleanup": {
+        "raf": 0,
+        "timers": 0,
+        "listeners": 0
+      }
+    },
+    {
+      "name": "recovery",
+      "segments": [
+        {
+          "frameStepsMs": [
+            16.666666666666668
+          ],
+          "wallMs": 30000,
+          "simulationMs": 30000,
+          "volleys": 93,
+          "meanGapMs": 319.92753623188355,
+          "p95GapMs": 333.3333333333576,
+          "maxGapMs": 333.3333333333576,
+          "nominalIntervalMs": 320,
+          "hull": "grey-scout",
+          "peakShots": 4
+        },
+        {
+          "frameStepsMs": [
+            50
+          ],
+          "wallMs": 30000,
+          "simulationMs": 20400,
+          "volleys": 64,
+          "meanGapMs": 470.63492063492066,
+          "p95GapMs": 500,
+          "maxGapMs": 500,
+          "nominalIntervalMs": 320,
+          "hull": "grey-scout",
+          "peakShots": 4
+        },
+        {
+          "frameStepsMs": [
+            16.666666666666668
+          ],
+          "wallMs": 30000,
+          "simulationMs": 30000,
+          "volleys": 94,
+          "meanGapMs": 320.07168458790676,
+          "p95GapMs": 333.33333333343035,
+          "maxGapMs": 333.33333333343035,
+          "nominalIntervalMs": 320,
+          "hull": "grey-scout",
+          "peakShots": 4
+        }
+      ],
+      "cleanup": {
+        "raf": 0,
+        "timers": 0,
+        "listeners": 0
+      }
+    }
+  ]
+}
