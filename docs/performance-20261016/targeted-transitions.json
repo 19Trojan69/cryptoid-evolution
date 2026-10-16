@@ -1,0 +1,4275 @@
+{
+  "passed": true,
+  "testedGamePageSha256": "eb628a5d73247ea64ec5443d2ff4efdab071a97228634f16f2aa915cdc832607",
+  "mode": "Actual GamePage, direct starts, controlled extra lives/forced clears; presentation/audio/API stubs",
+  "limitation": "Not a browser/GPU/FPS benchmark or a full 500-stage playthrough",
+  "cases": [
+    {
+      "scenario": "bonus-level1-to-level2",
+      "profile": "steady60",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          11,
+          12
+        ],
+        "bosses": [],
+        "snapshots": [
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 11,
+            "encounter": "normal",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 450,
+            "shards": 6,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 43810776,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "dive"
+            ],
+            "sector": 12,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 500,
+            "shards": 6,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 3,
+            "hostile": 1,
+            "effects": 0,
+            "heapBytes": 44100960,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "side"
+            ],
+            "sector": 13,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 550,
+            "shards": 6,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 3,
+            "hostile": 1,
+            "effects": 0,
+            "heapBytes": 41490760,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 4,
+          "hostile": 1,
+          "effects": 2,
+          "attackers": 2,
+          "returning": 1
+        },
+        "simulatedSeconds": 111.66,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 10,
+        "frameProfile": {
+          "name": "steady60",
+          "steps": [
+            16.666666666666668
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1,
+        "sustainedRuns": [],
+        "gameplayHash": "d4917ebe3268a1374d6c39d32c95505bb10a12cf833db026c47f28d17414a424",
+        "cpu": {
+          "transition": {
+            "count": 946,
+            "meanMs": 0.031239852008456664,
+            "p50Ms": 0.02,
+            "p95Ms": 0.085,
+            "maxMs": 2.726518
+          },
+          "formation": {
+            "count": 1254,
+            "meanMs": 0.08411743221690582,
+            "p50Ms": 0.055,
+            "p95Ms": 0.23500000000000001,
+            "maxMs": 2.386821
+          },
+          "attack": {
+            "count": 842,
+            "meanMs": 0.11160640973871723,
+            "p50Ms": 0.08,
+            "p95Ms": 0.23500000000000001,
+            "maxMs": 1.46301
+          },
+          "paused": {
+            "count": 62,
+            "meanMs": 0.0032743870967741943,
+            "p50Ms": 0.005,
+            "p95Ms": 0.005,
+            "maxMs": 0.13273
+          }
+        },
+        "activeAttackFrames": 907,
+        "returningFrames": 210,
+        "observedAttackPatterns": [
+          "dive",
+          "curve",
+          "side"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 2,
+          "arrivalPatterns": [
+            "zigzag",
+            "figureEight"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": false,
+        "pausePreservesTimers": false,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "bonus-level1-to-level2",
+      "profile": "slow20",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          11,
+          12
+        ],
+        "bosses": [],
+        "snapshots": [
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 11,
+            "encounter": "normal",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 450,
+            "shards": 6,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 39254872,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "dive"
+            ],
+            "sector": 12,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 500,
+            "shards": 6,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 3,
+            "hostile": 1,
+            "effects": 0,
+            "heapBytes": 39076008,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "side"
+            ],
+            "sector": 13,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 550,
+            "shards": 6,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 3,
+            "hostile": 1,
+            "effects": 0,
+            "heapBytes": 40578552,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 4,
+          "hostile": 1,
+          "effects": 1,
+          "attackers": 2,
+          "returning": 1
+        },
+        "simulatedSeconds": 135.97058823529412,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 10,
+        "frameProfile": {
+          "name": "slow20",
+          "steps": [
+            50
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1.4705882352941178,
+        "sustainedRuns": [],
+        "gameplayHash": "61d0b30b13f034d7c984a3498c854f7809885ce732ee2d001dff6d32acd46cc1",
+        "cpu": {
+          "transition": {
+            "count": 464,
+            "meanMs": 0.05494475646551729,
+            "p50Ms": 0.025,
+            "p95Ms": 0.13,
+            "maxMs": 2.768752
+          },
+          "formation": {
+            "count": 615,
+            "meanMs": 0.10218657723577233,
+            "p50Ms": 0.07,
+            "p95Ms": 0.28,
+            "maxMs": 1.531243
+          },
+          "attack": {
+            "count": 413,
+            "meanMs": 0.21846757384987897,
+            "p50Ms": 0.18,
+            "p95Ms": 0.48,
+            "maxMs": 3.572166
+          },
+          "paused": {
+            "count": 31,
+            "meanMs": 0.0035804838709677417,
+            "p50Ms": 0.005,
+            "p95Ms": 0.01,
+            "maxMs": 0.041643
+          }
+        },
+        "activeAttackFrames": 447,
+        "returningFrames": 102,
+        "observedAttackPatterns": [
+          "dive",
+          "curve",
+          "side"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 2,
+          "arrivalPatterns": [
+            "zigzag",
+            "figureEight"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": false,
+        "pausePreservesTimers": false,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "bonus-level1-to-level2",
+      "profile": "intermittent",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          11,
+          12
+        ],
+        "bosses": [],
+        "snapshots": [
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 11,
+            "encounter": "normal",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 450,
+            "shards": 6,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 41927760,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "dive"
+            ],
+            "sector": 12,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 500,
+            "shards": 6,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 3,
+            "hostile": 1,
+            "effects": 0,
+            "heapBytes": 33520080,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "side"
+            ],
+            "sector": 13,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 550,
+            "shards": 6,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 3,
+            "hostile": 1,
+            "effects": 0,
+            "heapBytes": 40689344,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 4,
+          "hostile": 1,
+          "effects": 1,
+          "attackers": 2,
+          "returning": 1
+        },
+        "simulatedSeconds": 153.24,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 10,
+        "frameProfile": {
+          "name": "intermittent",
+          "steps": [
+            16,
+            16,
+            16,
+            100
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1.8048780487804879,
+        "sustainedRuns": [],
+        "gameplayHash": "620f8d4ecbcad96c8a5e3bcf40c88e8e66c2ad21519fff9ae2ae1eb1c5e24d0d",
+        "cpu": {
+          "transition": {
+            "count": 769,
+            "meanMs": 0.028588820546163872,
+            "p50Ms": 0.02,
+            "p95Ms": 0.07,
+            "maxMs": 2.654569
+          },
+          "formation": {
+            "count": 1017,
+            "meanMs": 0.10179469714847582,
+            "p50Ms": 0.07,
+            "p95Ms": 0.28500000000000003,
+            "maxMs": 1.839924
+          },
+          "attack": {
+            "count": 686,
+            "meanMs": 0.12142817201166169,
+            "p50Ms": 0.08,
+            "p95Ms": 0.255,
+            "maxMs": 3.923657
+          },
+          "paused": {
+            "count": 54,
+            "meanMs": 0.00246462962962963,
+            "p50Ms": 0.005,
+            "p95Ms": 0.01,
+            "maxMs": 0.036355
+          }
+        },
+        "activeAttackFrames": 743,
+        "returningFrames": 171,
+        "observedAttackPatterns": [
+          "dive",
+          "curve",
+          "side"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 2,
+          "arrivalPatterns": [
+            "zigzag",
+            "figureEight"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": false,
+        "pausePreservesTimers": false,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "level2-block2-long-combat",
+      "profile": "steady60",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          12,
+          13
+        ],
+        "bosses": [],
+        "snapshots": [
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "side"
+            ],
+            "sector": 13,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 50,
+            "shards": 0,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 3,
+            "hostile": 1,
+            "effects": 0,
+            "heapBytes": 34604096,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "dive"
+            ],
+            "sector": 14,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 100,
+            "shards": 0,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 3,
+            "hostile": 1,
+            "effects": 0,
+            "heapBytes": 42459704,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 4,
+          "hostile": 1,
+          "effects": 1,
+          "attackers": 2,
+          "returning": 1
+        },
+        "simulatedSeconds": 274.76,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 12,
+        "frameProfile": {
+          "name": "steady60",
+          "steps": [
+            16.666666666666668
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1,
+        "sustainedRuns": [
+          {
+            "sector": 12,
+            "nominalWaitMs": 180000,
+            "injectedWallMs": 180000,
+            "attackFrames": 10170,
+            "returnFrames": 6738
+          }
+        ],
+        "gameplayHash": "220e0f07d910f493a47532eed49ad0971386334bc6398e095a9338831923d0d7",
+        "cpu": {
+          "transition": {
+            "count": 241,
+            "meanMs": 0.05412455601659754,
+            "p50Ms": 0.015,
+            "p95Ms": 0.08,
+            "maxMs": 5.396492
+          },
+          "formation": {
+            "count": 957,
+            "meanMs": 0.06916323510971788,
+            "p50Ms": 0.04,
+            "p95Ms": 0.155,
+            "maxMs": 5.109062
+          },
+          "attack": {
+            "count": 11129,
+            "meanMs": 0.04985029966753531,
+            "p50Ms": 0.04,
+            "p95Ms": 0.11,
+            "maxMs": 2.558292
+          },
+          "return": {
+            "count": 502,
+            "meanMs": 0.04562492430278888,
+            "p50Ms": 0.035,
+            "p95Ms": 0.105,
+            "maxMs": 0.588799
+          },
+          "paused": {
+            "count": 62,
+            "meanMs": 0.0029203870967741915,
+            "p50Ms": 0.005,
+            "p95Ms": 0.005,
+            "maxMs": 0.064878
+          }
+        },
+        "activeAttackFrames": 11193,
+        "returningFrames": 7328,
+        "observedAttackPatterns": [
+          "curve",
+          "dive",
+          "side"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 2,
+          "arrivalPatterns": [
+            "figureEight",
+            "cross"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": false,
+        "pausePreservesTimers": false,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "level2-block2-long-combat",
+      "profile": "slow20",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          12,
+          13
+        ],
+        "bosses": [],
+        "snapshots": [
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "curve"
+            ],
+            "sector": 13,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 50,
+            "shards": 0,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 3,
+            "hostile": 1,
+            "effects": 0,
+            "heapBytes": 38176616,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "curve"
+            ],
+            "sector": 14,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 100,
+            "shards": 0,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 3,
+            "hostile": 1,
+            "effects": 0,
+            "heapBytes": 35038976,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 4,
+          "hostile": 1,
+          "effects": 1,
+          "attackers": 2,
+          "returning": 1
+        },
+        "simulatedSeconds": 375.8235294117646,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 12,
+        "frameProfile": {
+          "name": "slow20",
+          "steps": [
+            50
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1.4705882352941178,
+        "sustainedRuns": [
+          {
+            "sector": 12,
+            "nominalWaitMs": 180000,
+            "injectedWallMs": 264705.8823529412,
+            "attackFrames": 5006,
+            "returnFrames": 3270
+          }
+        ],
+        "gameplayHash": "aa0ccfb7c33149d41dd131aba9358e6064eaf3e40d2a92359cff41c74228f4cb",
+        "cpu": {
+          "transition": {
+            "count": 119,
+            "meanMs": 0.05048180672268907,
+            "p50Ms": 0.02,
+            "p95Ms": 0.135,
+            "maxMs": 2.360755
+          },
+          "formation": {
+            "count": 482,
+            "meanMs": 0.06605945850622404,
+            "p50Ms": 0.045,
+            "p95Ms": 0.17,
+            "maxMs": 1.594914
+          },
+          "attack": {
+            "count": 5461,
+            "meanMs": 0.07133089727156196,
+            "p50Ms": 0.04,
+            "p95Ms": 0.17500000000000002,
+            "maxMs": 19.462076
+          },
+          "return": {
+            "count": 227,
+            "meanMs": 0.06003022026431718,
+            "p50Ms": 0.04,
+            "p95Ms": 0.155,
+            "maxMs": 0.626887
+          },
+          "paused": {
+            "count": 31,
+            "meanMs": 0.005396838709677419,
+            "p50Ms": 0.005,
+            "p95Ms": 0.015,
+            "maxMs": 0.098839
+          }
+        },
+        "activeAttackFrames": 5494,
+        "returningFrames": 3571,
+        "observedAttackPatterns": [
+          "curve",
+          "dive"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 2,
+          "arrivalPatterns": [
+            "figureEight",
+            "cross"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": false,
+        "pausePreservesTimers": false,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "level2-block2-long-combat",
+      "profile": "intermittent",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          12,
+          13
+        ],
+        "bosses": [],
+        "snapshots": [
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "curve"
+            ],
+            "sector": 13,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 50,
+            "shards": 0,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 3,
+            "hostile": 1,
+            "effects": 0,
+            "heapBytes": 34226672,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "curve"
+            ],
+            "sector": 14,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 100,
+            "shards": 0,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 3,
+            "hostile": 1,
+            "effects": 0,
+            "heapBytes": 38991840,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 4,
+          "hostile": 1,
+          "effects": 1,
+          "attackers": 2,
+          "returning": 1
+        },
+        "simulatedSeconds": 447.6156097560976,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 12,
+        "frameProfile": {
+          "name": "intermittent",
+          "steps": [
+            16,
+            16,
+            16,
+            100
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1.8048780487804879,
+        "sustainedRuns": [
+          {
+            "sector": 12,
+            "nominalWaitMs": 180000,
+            "injectedWallMs": 324878.0487804878,
+            "attackFrames": 8250,
+            "returnFrames": 5474
+          }
+        ],
+        "gameplayHash": "dcdd76d7acb5e13802279e691957b85a19ac69a2fdeda25f77c31faed3d1061d",
+        "cpu": {
+          "transition": {
+            "count": 197,
+            "meanMs": 0.0379962081218274,
+            "p50Ms": 0.015,
+            "p95Ms": 0.13,
+            "maxMs": 2.406495
+          },
+          "formation": {
+            "count": 796,
+            "meanMs": 0.06201115452261314,
+            "p50Ms": 0.04,
+            "p95Ms": 0.155,
+            "maxMs": 1.28466
+          },
+          "attack": {
+            "count": 9003,
+            "meanMs": 0.055477355548150614,
+            "p50Ms": 0.04,
+            "p95Ms": 0.145,
+            "maxMs": 2.401057
+          },
+          "return": {
+            "count": 432,
+            "meanMs": 0.05517064120370375,
+            "p50Ms": 0.035,
+            "p95Ms": 0.155,
+            "maxMs": 0.654489
+          },
+          "paused": {
+            "count": 54,
+            "meanMs": 0.005471185185185184,
+            "p50Ms": 0.005,
+            "p95Ms": 0.07,
+            "maxMs": 0.107332
+          }
+        },
+        "activeAttackFrames": 9059,
+        "returningFrames": 5967,
+        "observedAttackPatterns": [
+          "curve",
+          "dive"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 2,
+          "arrivalPatterns": [
+            "figureEight",
+            "cross"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": false,
+        "pausePreservesTimers": false,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "block39-boss40-bonus-block41",
+      "profile": "steady60",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          39,
+          41
+        ],
+        "bosses": [
+          40
+        ],
+        "snapshots": [
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 40,
+            "encounter": "boss-fight",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 100,
+            "shards": 12,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 4,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 38389408,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 40,
+            "encounter": "bonus",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 2318,
+            "shards": 34,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 36918376,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 41,
+            "encounter": "normal",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 2768,
+            "shards": 40,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 45114224,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [
+              "side"
+            ],
+            "sector": 42,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 2872,
+            "shards": 44,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 1,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 36362056,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 4,
+          "hostile": 3,
+          "effects": 3,
+          "attackers": 1,
+          "returning": 0
+        },
+        "simulatedSeconds": 140.324,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 39,
+        "frameProfile": {
+          "name": "steady60",
+          "steps": [
+            16.666666666666668
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1,
+        "sustainedRuns": [],
+        "gameplayHash": "479008ca1b2d400422575f3811fa8d35b7fff3d44e4a76d5ade35718ac761ca9",
+        "cpu": {
+          "transition": {
+            "count": 1124,
+            "meanMs": 0.02085783007117434,
+            "p50Ms": 0.01,
+            "p95Ms": 0.055,
+            "maxMs": 2.131639
+          },
+          "formation": {
+            "count": 1878,
+            "meanMs": 0.05596863152289678,
+            "p50Ms": 0.045,
+            "p95Ms": 0.13,
+            "maxMs": 1.205982
+          },
+          "attack": {
+            "count": 157,
+            "meanMs": 0.09735389808917201,
+            "p50Ms": 0.06,
+            "p95Ms": 0.2,
+            "maxMs": 1.42986
+          },
+          "boss-intro": {
+            "count": 294,
+            "meanMs": 0.0545742891156463,
+            "p50Ms": 0.01,
+            "p95Ms": 0.055,
+            "maxMs": 8.518016
+          },
+          "boss-fight": {
+            "count": 479,
+            "meanMs": 0.058811970772442594,
+            "p50Ms": 0.045,
+            "p95Ms": 0.12,
+            "maxMs": 2.91355
+          },
+          "boss-clear": {
+            "count": 833,
+            "meanMs": 0.012096794717887157,
+            "p50Ms": 0.01,
+            "p95Ms": 0.025,
+            "maxMs": 0.175355
+          },
+          "paused": {
+            "count": 63,
+            "meanMs": 0.002771031746031747,
+            "p50Ms": 0.005,
+            "p95Ms": 0.005,
+            "maxMs": 0.044668
+          }
+        },
+        "activeAttackFrames": 159,
+        "returningFrames": 0,
+        "observedAttackPatterns": [
+          "loop",
+          "side",
+          "sCurve"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 3,
+          "arrivalPatterns": [
+            "zigzag",
+            "sweep",
+            "figureEight"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": false,
+        "pausePreservesTimers": false,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "block39-boss40-bonus-block41",
+      "profile": "slow20",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          39,
+          41
+        ],
+        "bosses": [
+          40
+        ],
+        "snapshots": [
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 40,
+            "encounter": "boss-fight",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 100,
+            "shards": 12,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 4,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 37419480,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 40,
+            "encounter": "bonus",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 2318,
+            "shards": 34,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 46138600,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 41,
+            "encounter": "normal",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 2768,
+            "shards": 40,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 35879448,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [
+              "side"
+            ],
+            "sector": 42,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 2872,
+            "shards": 44,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 1,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 48734208,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 4,
+          "hostile": 3,
+          "effects": 2,
+          "attackers": 1,
+          "returning": 0
+        },
+        "simulatedSeconds": 178.1235294117647,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 39,
+        "frameProfile": {
+          "name": "slow20",
+          "steps": [
+            50
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1.4705882352941178,
+        "sustainedRuns": [],
+        "gameplayHash": "5a58fa909244dd475108ce19fa2a04105c7049bbc8e0dae3f1c572ad5021ada0",
+        "cpu": {
+          "transition": {
+            "count": 549,
+            "meanMs": 0.02913067759562841,
+            "p50Ms": 0.015,
+            "p95Ms": 0.06,
+            "maxMs": 2.231571
+          },
+          "formation": {
+            "count": 921,
+            "meanMs": 0.06290779153094463,
+            "p50Ms": 0.045,
+            "p95Ms": 0.155,
+            "maxMs": 1.01968
+          },
+          "attack": {
+            "count": 80,
+            "meanMs": 0.096846625,
+            "p50Ms": 0.055,
+            "p95Ms": 0.28500000000000003,
+            "maxMs": 0.651384
+          },
+          "boss-intro": {
+            "count": 145,
+            "meanMs": 0.015270427586206892,
+            "p50Ms": 0.01,
+            "p95Ms": 0.045,
+            "maxMs": 0.210408
+          },
+          "boss-fight": {
+            "count": 234,
+            "meanMs": 0.08290189743589746,
+            "p50Ms": 0.055,
+            "p95Ms": 0.23500000000000001,
+            "maxMs": 0.757484
+          },
+          "boss-clear": {
+            "count": 409,
+            "meanMs": 0.016920305623471896,
+            "p50Ms": 0.015,
+            "p95Ms": 0.055,
+            "maxMs": 0.214804
+          },
+          "paused": {
+            "count": 31,
+            "meanMs": 0.03421364516129035,
+            "p50Ms": 0.005,
+            "p95Ms": 0.01,
+            "maxMs": 1.01949
+          }
+        },
+        "activeAttackFrames": 82,
+        "returningFrames": 0,
+        "observedAttackPatterns": [
+          "loop",
+          "side",
+          "sCurve"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 3,
+          "arrivalPatterns": [
+            "zigzag",
+            "sweep",
+            "figureEight"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": false,
+        "pausePreservesTimers": false,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "block39-boss40-bonus-block41",
+      "profile": "intermittent",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          39,
+          41
+        ],
+        "bosses": [
+          40
+        ],
+        "snapshots": [
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 40,
+            "encounter": "boss-fight",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 100,
+            "shards": 12,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 4,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 45204752,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 40,
+            "encounter": "bonus",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 2318,
+            "shards": 34,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 43487536,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 41,
+            "encounter": "normal",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 2768,
+            "shards": 40,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 34029192,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [
+              "side"
+            ],
+            "sector": 42,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 2872,
+            "shards": 44,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 1,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 36022728,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 4,
+          "hostile": 3,
+          "effects": 2,
+          "attackers": 1,
+          "returning": 0
+        },
+        "simulatedSeconds": 204.97502439024393,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 39,
+        "frameProfile": {
+          "name": "intermittent",
+          "steps": [
+            16,
+            16,
+            16,
+            100
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1.8048780487804879,
+        "sustainedRuns": [],
+        "gameplayHash": "252ffbcdfa1508cb43cdaead1b88db6de7e451f80967920d8f6d7a52884cf8ab",
+        "cpu": {
+          "transition": {
+            "count": 913,
+            "meanMs": 0.021786396495071192,
+            "p50Ms": 0.01,
+            "p95Ms": 0.055,
+            "maxMs": 2.298201
+          },
+          "formation": {
+            "count": 1525,
+            "meanMs": 0.06846151737704916,
+            "p50Ms": 0.04,
+            "p95Ms": 0.20500000000000002,
+            "maxMs": 1.792347
+          },
+          "attack": {
+            "count": 129,
+            "meanMs": 0.1950070697674418,
+            "p50Ms": 0.14,
+            "p95Ms": 0.525,
+            "maxMs": 1.591554
+          },
+          "boss-intro": {
+            "count": 239,
+            "meanMs": 0.03145329288702927,
+            "p50Ms": 0.02,
+            "p95Ms": 0.115,
+            "maxMs": 0.473585
+          },
+          "boss-fight": {
+            "count": 392,
+            "meanMs": 0.09651218622448976,
+            "p50Ms": 0.05,
+            "p95Ms": 0.29,
+            "maxMs": 1.577934
+          },
+          "boss-clear": {
+            "count": 678,
+            "meanMs": 0.015602501474926242,
+            "p50Ms": 0.01,
+            "p95Ms": 0.03,
+            "maxMs": 0.86709
+          },
+          "paused": {
+            "count": 54,
+            "meanMs": 0.003368833333333334,
+            "p50Ms": 0.005,
+            "p95Ms": 0.01,
+            "maxMs": 0.075955
+          }
+        },
+        "activeAttackFrames": 131,
+        "returningFrames": 0,
+        "observedAttackPatterns": [
+          "loop",
+          "side",
+          "sCurve"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 3,
+          "arrivalPatterns": [
+            "zigzag",
+            "sweep",
+            "figureEight"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": false,
+        "pausePreservesTimers": false,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "boss40-direct",
+      "profile": "steady60",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          41
+        ],
+        "bosses": [
+          40
+        ],
+        "snapshots": [
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 40,
+            "encounter": "bonus",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 2218,
+            "shards": 22,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 44452864,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 41,
+            "encounter": "normal",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 2518,
+            "shards": 27,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 39117648,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [
+              "sCurve"
+            ],
+            "sector": 42,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 2622,
+            "shards": 31,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 1,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 33272416,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 3,
+          "hostile": 1,
+          "effects": 2,
+          "attackers": 1,
+          "returning": 0
+        },
+        "simulatedSeconds": 115.196,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 40,
+        "frameProfile": {
+          "name": "steady60",
+          "steps": [
+            16.666666666666668
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1,
+        "sustainedRuns": [],
+        "gameplayHash": "502c450df207f222f34b127461fac7321f453c8ed66bca8be02d7ff539948554",
+        "cpu": {
+          "boss-intro": {
+            "count": 294,
+            "meanMs": 0.019674302721088426,
+            "p50Ms": 0.01,
+            "p95Ms": 0.035,
+            "maxMs": 1.841782
+          },
+          "boss-fight": {
+            "count": 66,
+            "meanMs": 0.0447289090909091,
+            "p50Ms": 0.025,
+            "p95Ms": 0.12,
+            "maxMs": 0.656321
+          },
+          "boss-clear": {
+            "count": 831,
+            "meanMs": 0.02631435138387483,
+            "p50Ms": 0.02,
+            "p95Ms": 0.055,
+            "maxMs": 0.964758
+          },
+          "transition": {
+            "count": 913,
+            "meanMs": 0.01965627272727273,
+            "p50Ms": 0.015,
+            "p95Ms": 0.045,
+            "maxMs": 0.441096
+          },
+          "formation": {
+            "count": 1130,
+            "meanMs": 0.06926258584070791,
+            "p50Ms": 0.04,
+            "p95Ms": 0.19,
+            "maxMs": 1.450901
+          },
+          "attack": {
+            "count": 20,
+            "meanMs": 0.17747895000000002,
+            "p50Ms": 0.1,
+            "p95Ms": 0.56,
+            "maxMs": 0.877656
+          },
+          "paused": {
+            "count": 62,
+            "meanMs": 0.0019894838709677426,
+            "p50Ms": 0.005,
+            "p95Ms": 0.005,
+            "maxMs": 0.039249
+          }
+        },
+        "activeAttackFrames": 20,
+        "returningFrames": 0,
+        "observedAttackPatterns": [
+          "curve",
+          "sCurve"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 1,
+          "arrivalPatterns": [
+            "figureEight"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": false,
+        "pausePreservesTimers": false,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "boss40-direct",
+      "profile": "slow20",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          41
+        ],
+        "bosses": [
+          40
+        ],
+        "snapshots": [
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 40,
+            "encounter": "bonus",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 2218,
+            "shards": 22,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 39763672,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 41,
+            "encounter": "normal",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 2668,
+            "shards": 28,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 44674232,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [
+              "sCurve"
+            ],
+            "sector": 42,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 2772,
+            "shards": 32,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 1,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 43368480,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 3,
+          "hostile": 1,
+          "effects": 2,
+          "attackers": 1,
+          "returning": 0
+        },
+        "simulatedSeconds": 141.17058823529413,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 40,
+        "frameProfile": {
+          "name": "slow20",
+          "steps": [
+            50
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1.4705882352941178,
+        "sustainedRuns": [],
+        "gameplayHash": "b98c98a2e91c76ef3b7aeeb89797dae5f565f3babb14e6544f49cf970d740ae0",
+        "cpu": {
+          "boss-intro": {
+            "count": 145,
+            "meanMs": 0.03243219999999999,
+            "p50Ms": 0.015,
+            "p95Ms": 0.075,
+            "maxMs": 1.896344
+          },
+          "boss-fight": {
+            "count": 32,
+            "meanMs": 0.11342740625000002,
+            "p50Ms": 0.045,
+            "p95Ms": 0.425,
+            "maxMs": 0.78114
+          },
+          "boss-clear": {
+            "count": 409,
+            "meanMs": 0.020401396088019566,
+            "p50Ms": 0.015,
+            "p95Ms": 0.05,
+            "maxMs": 0.646647
+          },
+          "transition": {
+            "count": 447,
+            "meanMs": 0.018143979865771813,
+            "p50Ms": 0.015,
+            "p95Ms": 0.045,
+            "maxMs": 0.261876
+          },
+          "formation": {
+            "count": 553,
+            "meanMs": 0.061256184448462855,
+            "p50Ms": 0.045,
+            "p95Ms": 0.165,
+            "maxMs": 1.333765
+          },
+          "attack": {
+            "count": 11,
+            "meanMs": 0.21273909090909093,
+            "p50Ms": 0.145,
+            "p95Ms": 0.53,
+            "maxMs": 0.528338
+          },
+          "paused": {
+            "count": 31,
+            "meanMs": 0.0032820645161290318,
+            "p50Ms": 0.005,
+            "p95Ms": 0.015,
+            "maxMs": 0.037297
+          }
+        },
+        "activeAttackFrames": 11,
+        "returningFrames": 0,
+        "observedAttackPatterns": [
+          "curve",
+          "sCurve"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 1,
+          "arrivalPatterns": [
+            "figureEight"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": false,
+        "pausePreservesTimers": false,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "boss40-direct",
+      "profile": "intermittent",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          41
+        ],
+        "bosses": [
+          40
+        ],
+        "snapshots": [
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 40,
+            "encounter": "bonus",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 2218,
+            "shards": 22,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 42590400,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 41,
+            "encounter": "normal",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 2668,
+            "shards": 28,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 35392152,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [
+              "sCurve"
+            ],
+            "sector": 42,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 2772,
+            "shards": 32,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 1,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 40109856,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 3,
+          "hostile": 1,
+          "effects": 2,
+          "attackers": 1,
+          "returning": 0
+        },
+        "simulatedSeconds": 159.62204878048783,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 40,
+        "frameProfile": {
+          "name": "intermittent",
+          "steps": [
+            16,
+            16,
+            16,
+            100
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1.8048780487804879,
+        "sustainedRuns": [],
+        "gameplayHash": "daa6c73ee5eebdc0c6b6b7c2989773b309b35ab9bfe17296bfae50f71bdbd1ca",
+        "cpu": {
+          "boss-intro": {
+            "count": 240,
+            "meanMs": 0.020237258333333334,
+            "p50Ms": 0.01,
+            "p95Ms": 0.035,
+            "maxMs": 1.758706
+          },
+          "boss-fight": {
+            "count": 54,
+            "meanMs": 0.04072498148148145,
+            "p50Ms": 0.025,
+            "p95Ms": 0.065,
+            "maxMs": 0.580186
+          },
+          "boss-clear": {
+            "count": 678,
+            "meanMs": 0.01361967846607669,
+            "p50Ms": 0.015,
+            "p95Ms": 0.025,
+            "maxMs": 0.43035
+          },
+          "transition": {
+            "count": 743,
+            "meanMs": 0.01381241722745625,
+            "p50Ms": 0.01,
+            "p95Ms": 0.03,
+            "maxMs": 0.279863
+          },
+          "formation": {
+            "count": 915,
+            "meanMs": 0.048698398907103806,
+            "p50Ms": 0.04,
+            "p95Ms": 0.13,
+            "maxMs": 1.076536
+          },
+          "attack": {
+            "count": 18,
+            "meanMs": 0.1509206111111111,
+            "p50Ms": 0.075,
+            "p95Ms": 0.685,
+            "maxMs": 0.684263
+          },
+          "paused": {
+            "count": 54,
+            "meanMs": 0.0017491666666666673,
+            "p50Ms": 0.005,
+            "p95Ms": 0.005,
+            "maxMs": 0.030876
+          }
+        },
+        "activeAttackFrames": 18,
+        "returningFrames": 0,
+        "observedAttackPatterns": [
+          "curve",
+          "sCurve"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 1,
+          "arrivalPatterns": [
+            "figureEight"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": false,
+        "pausePreservesTimers": false,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "stress-pause-resume",
+      "profile": "steady60",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          25,
+          26
+        ],
+        "bosses": [],
+        "snapshots": [
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "side"
+            ],
+            "sector": 26,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 154,
+            "shards": 28,
+            "hearts": 99,
+            "paid": 51885.9999999992,
+            "rapid": 5519.333333332725,
+            "enemies": 6,
+            "shots": 12,
+            "hostile": 1,
+            "effects": 0,
+            "heapBytes": 38967632,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "sCurve"
+            ],
+            "sector": 27,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 254,
+            "shards": 28,
+            "hearts": 99,
+            "paid": 36752.666666666235,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 6,
+            "hostile": 1,
+            "effects": 0,
+            "heapBytes": 33974072,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 84,
+          "hostile": 81,
+          "effects": 16,
+          "attackers": 2,
+          "returning": 1
+        },
+        "simulatedSeconds": 138.088,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 25,
+        "frameProfile": {
+          "name": "steady60",
+          "steps": [
+            16.666666666666668
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1,
+        "sustainedRuns": [],
+        "gameplayHash": "87632ed481a136b8a4cb9b47c652c923d4f485c46be3f3f490d34bb2e8cfb4bc",
+        "cpu": {
+          "transition": {
+            "count": 274,
+            "meanMs": 0.03177659489051091,
+            "p50Ms": 0.015,
+            "p95Ms": 0.07,
+            "maxMs": 2.365132
+          },
+          "formation": {
+            "count": 1273,
+            "meanMs": 0.0632484776119402,
+            "p50Ms": 0.045,
+            "p95Ms": 0.15,
+            "maxMs": 3.990857
+          },
+          "attack": {
+            "count": 1127,
+            "meanMs": 0.09167880922803906,
+            "p50Ms": 0.055,
+            "p95Ms": 0.29,
+            "maxMs": 1.630383
+          },
+          "paused": {
+            "count": 1864,
+            "meanMs": 0.004979814914163085,
+            "p50Ms": 0.005,
+            "p95Ms": 0.005,
+            "maxMs": 5.088706
+          },
+          "return": {
+            "count": 153,
+            "meanMs": 0.04902217647058824,
+            "p50Ms": 0.04,
+            "p95Ms": 0.135,
+            "maxMs": 0.307284
+          }
+        },
+        "activeAttackFrames": 2993,
+        "returningFrames": 365,
+        "observedAttackPatterns": [
+          "dive",
+          "side",
+          "sCurve"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 3,
+          "arrivalPatterns": [
+            "pincer",
+            "sweep",
+            "zigzag"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": true,
+        "pausePreservesTimers": true,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "stress-pause-resume",
+      "profile": "slow20",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          25,
+          26
+        ],
+        "bosses": [],
+        "snapshots": [
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "side"
+            ],
+            "sector": 26,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 154,
+            "shards": 28,
+            "hearts": 99,
+            "paid": 51429.05882352941,
+            "rapid": 5511.058823529413,
+            "enemies": 6,
+            "shots": 12,
+            "hostile": 1,
+            "effects": 0,
+            "heapBytes": 33306656,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "sCurve"
+            ],
+            "sector": 27,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 254,
+            "shards": 28,
+            "hearts": 99,
+            "paid": 35397.41176470589,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 6,
+            "hostile": 1,
+            "effects": 0,
+            "heapBytes": 41734224,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 84,
+          "hostile": 81,
+          "effects": 16,
+          "attackers": 2,
+          "returning": 1
+        },
+        "simulatedSeconds": 174.83529411764707,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 25,
+        "frameProfile": {
+          "name": "slow20",
+          "steps": [
+            50
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1.4705882352941178,
+        "sustainedRuns": [],
+        "gameplayHash": "79252777af801d5e758777c502485b8e85f24277294f607ae07f6740128b9f63",
+        "cpu": {
+          "transition": {
+            "count": 136,
+            "meanMs": 0.04943206617647057,
+            "p50Ms": 0.02,
+            "p95Ms": 0.125,
+            "maxMs": 2.669061
+          },
+          "formation": {
+            "count": 623,
+            "meanMs": 0.08011905778491162,
+            "p50Ms": 0.065,
+            "p95Ms": 0.19,
+            "maxMs": 1.386835
+          },
+          "attack": {
+            "count": 555,
+            "meanMs": 0.12835477477477475,
+            "p50Ms": 0.07,
+            "p95Ms": 0.37,
+            "maxMs": 4.642312
+          },
+          "paused": {
+            "count": 914,
+            "meanMs": 0.00454233807439825,
+            "p50Ms": 0.005,
+            "p95Ms": 0.02,
+            "maxMs": 0.105609
+          },
+          "return": {
+            "count": 74,
+            "meanMs": 0.05933356756756756,
+            "p50Ms": 0.04,
+            "p95Ms": 0.11,
+            "maxMs": 0.3177
+          }
+        },
+        "activeAttackFrames": 1471,
+        "returningFrames": 178,
+        "observedAttackPatterns": [
+          "dive",
+          "side",
+          "sCurve"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 3,
+          "arrivalPatterns": [
+            "pincer",
+            "sweep",
+            "zigzag"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": true,
+        "pausePreservesTimers": true,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "stress-pause-resume",
+      "profile": "intermittent",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          25,
+          26
+        ],
+        "bosses": [],
+        "snapshots": [
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "side"
+            ],
+            "sector": 26,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 154,
+            "shards": 28,
+            "hearts": 99,
+            "paid": 51226,
+            "rapid": 5438,
+            "enemies": 6,
+            "shots": 10,
+            "hostile": 1,
+            "effects": 0,
+            "heapBytes": 37779200,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "sCurve"
+            ],
+            "sector": 27,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 254,
+            "shards": 28,
+            "hearts": 99,
+            "paid": 34824,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 6,
+            "hostile": 1,
+            "effects": 0,
+            "heapBytes": 41023952,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 84,
+          "hostile": 81,
+          "effects": 16,
+          "attackers": 2,
+          "returning": 1
+        },
+        "simulatedSeconds": 200.93931707317074,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 25,
+        "frameProfile": {
+          "name": "intermittent",
+          "steps": [
+            16,
+            16,
+            16,
+            100
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1.8048780487804879,
+        "sustainedRuns": [],
+        "gameplayHash": "d90352814857884d5d2bdd1b76ec9a526259f43a48038b0ea9a7be7fa2dd87b2",
+        "cpu": {
+          "transition": {
+            "count": 223,
+            "meanMs": 0.03197134529147982,
+            "p50Ms": 0.015,
+            "p95Ms": 0.075,
+            "maxMs": 2.359484
+          },
+          "formation": {
+            "count": 1031,
+            "meanMs": 0.06762276430649852,
+            "p50Ms": 0.045,
+            "p95Ms": 0.17500000000000002,
+            "maxMs": 1.652456
+          },
+          "attack": {
+            "count": 919,
+            "meanMs": 0.10376469423286187,
+            "p50Ms": 0.06,
+            "p95Ms": 0.305,
+            "maxMs": 3.705893
+          },
+          "paused": {
+            "count": 1518,
+            "meanMs": 0.0025783458498023714,
+            "p50Ms": 0.005,
+            "p95Ms": 0.015,
+            "maxMs": 0.071568
+          },
+          "return": {
+            "count": 127,
+            "meanMs": 0.04600116535433071,
+            "p50Ms": 0.04,
+            "p95Ms": 0.115,
+            "maxMs": 0.194363
+          }
+        },
+        "activeAttackFrames": 2439,
+        "returningFrames": 300,
+        "observedAttackPatterns": [
+          "dive",
+          "side",
+          "sCurve"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 3,
+          "arrivalPatterns": [
+            "pincer",
+            "sweep",
+            "zigzag"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": true,
+        "pausePreservesTimers": true,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "block249-boss250-bonus-block251",
+      "profile": "steady60",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          249,
+          251
+        ],
+        "bosses": [
+          250
+        ],
+        "snapshots": [
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 250,
+            "encounter": "boss-fight",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 150,
+            "shards": 15,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 4,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 33514872,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 250,
+            "encounter": "bonus",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 3033,
+            "shards": 40,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 37930080,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 251,
+            "encounter": "normal",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 3483,
+            "shards": 47,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 46194680,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "sCurve"
+            ],
+            "sector": 252,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 3533,
+            "shards": 47,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 0,
+            "hostile": 1,
+            "effects": 0,
+            "heapBytes": 37489312,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 4,
+          "hostile": 4,
+          "effects": 7,
+          "attackers": 3,
+          "returning": 0
+        },
+        "simulatedSeconds": 148.588,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 249,
+        "frameProfile": {
+          "name": "steady60",
+          "steps": [
+            16.666666666666668
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1,
+        "sustainedRuns": [],
+        "gameplayHash": "bcb73b15d2a2cfa9fe2fc188793c45922d01b55000bdc35224f3d304197cf01a",
+        "cpu": {
+          "transition": {
+            "count": 1175,
+            "meanMs": 0.017369245106383012,
+            "p50Ms": 0.01,
+            "p95Ms": 0.03,
+            "maxMs": 2.134815
+          },
+          "formation": {
+            "count": 1996,
+            "meanMs": 0.04943925450901814,
+            "p50Ms": 0.04,
+            "p95Ms": 0.115,
+            "maxMs": 1.828121
+          },
+          "attack": {
+            "count": 483,
+            "meanMs": 0.07644307453416144,
+            "p50Ms": 0.055,
+            "p95Ms": 0.18,
+            "maxMs": 1.237859
+          },
+          "boss-intro": {
+            "count": 294,
+            "meanMs": 0.01634543197278912,
+            "p50Ms": 0.015,
+            "p95Ms": 0.02,
+            "maxMs": 0.130256
+          },
+          "boss-fight": {
+            "count": 480,
+            "meanMs": 0.09093093749999993,
+            "p50Ms": 0.08,
+            "p95Ms": 0.17,
+            "maxMs": 1.003566
+          },
+          "boss-clear": {
+            "count": 833,
+            "meanMs": 0.011473080432172862,
+            "p50Ms": 0.01,
+            "p95Ms": 0.02,
+            "maxMs": 0.231991
+          },
+          "paused": {
+            "count": 63,
+            "meanMs": 0.0030136190476190475,
+            "p50Ms": 0.005,
+            "p95Ms": 0.005,
+            "maxMs": 0.108094
+          }
+        },
+        "activeAttackFrames": 551,
+        "returningFrames": 0,
+        "observedAttackPatterns": [
+          "vDive",
+          "side",
+          "curve",
+          "dive",
+          "double",
+          "sCurve"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 4,
+          "arrivalPatterns": [
+            "diamond",
+            "spiral",
+            "doubleLoop"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": false,
+        "pausePreservesTimers": false,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "block249-boss250-bonus-block251",
+      "profile": "slow20",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          249,
+          251
+        ],
+        "bosses": [
+          250
+        ],
+        "snapshots": [
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 250,
+            "encounter": "boss-fight",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 150,
+            "shards": 15,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 4,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 45131344,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 250,
+            "encounter": "bonus",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 3033,
+            "shards": 40,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 41936704,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 251,
+            "encounter": "normal",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 3483,
+            "shards": 47,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 46184768,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "sCurve"
+            ],
+            "sector": 252,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 3533,
+            "shards": 47,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 0,
+            "hostile": 1,
+            "effects": 0,
+            "heapBytes": 42527672,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 4,
+          "hostile": 4,
+          "effects": 7,
+          "attackers": 3,
+          "returning": 0
+        },
+        "simulatedSeconds": 190.2764705882353,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 249,
+        "frameProfile": {
+          "name": "slow20",
+          "steps": [
+            50
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1.4705882352941178,
+        "sustainedRuns": [],
+        "gameplayHash": "794ec7b4c257905fbf4b751464fe65afbcd1d2e6a43dceb964719758707d46e3",
+        "cpu": {
+          "transition": {
+            "count": 574,
+            "meanMs": 0.02361147560975609,
+            "p50Ms": 0.01,
+            "p95Ms": 0.06,
+            "maxMs": 1.937487
+          },
+          "formation": {
+            "count": 978,
+            "meanMs": 0.05808004703476479,
+            "p50Ms": 0.045,
+            "p95Ms": 0.135,
+            "maxMs": 1.074584
+          },
+          "attack": {
+            "count": 242,
+            "meanMs": 0.0832956900826446,
+            "p50Ms": 0.065,
+            "p95Ms": 0.21,
+            "maxMs": 0.534717
+          },
+          "boss-intro": {
+            "count": 145,
+            "meanMs": 0.03344464827586206,
+            "p50Ms": 0.035,
+            "p95Ms": 0.055,
+            "maxMs": 0.15901
+          },
+          "boss-fight": {
+            "count": 234,
+            "meanMs": 0.10708097435897432,
+            "p50Ms": 0.085,
+            "p95Ms": 0.215,
+            "maxMs": 1.433525
+          },
+          "boss-clear": {
+            "count": 409,
+            "meanMs": 0.0127992151589242,
+            "p50Ms": 0.01,
+            "p95Ms": 0.025,
+            "maxMs": 0.221815
+          },
+          "paused": {
+            "count": 31,
+            "meanMs": 0.00420841935483871,
+            "p50Ms": 0.005,
+            "p95Ms": 0.03,
+            "maxMs": 0.038198
+          }
+        },
+        "activeAttackFrames": 278,
+        "returningFrames": 0,
+        "observedAttackPatterns": [
+          "vDive",
+          "side",
+          "curve",
+          "dive",
+          "double",
+          "sCurve"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 4,
+          "arrivalPatterns": [
+            "diamond",
+            "spiral",
+            "doubleLoop"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": false,
+        "pausePreservesTimers": false,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "block249-boss250-bonus-block251",
+      "profile": "intermittent",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          249,
+          251
+        ],
+        "bosses": [
+          250
+        ],
+        "snapshots": [
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 250,
+            "encounter": "boss-fight",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 150,
+            "shards": 15,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 4,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 40427408,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 250,
+            "encounter": "bonus",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 3033,
+            "shards": 40,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 41228424,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 251,
+            "encounter": "normal",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 3483,
+            "shards": 47,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 48370696,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "sCurve"
+            ],
+            "sector": 252,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 3533,
+            "shards": 47,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 0,
+            "hostile": 1,
+            "effects": 0,
+            "heapBytes": 34425392,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 4,
+          "hostile": 4,
+          "effects": 7,
+          "attackers": 3,
+          "returning": 0
+        },
+        "simulatedSeconds": 219.89053658536588,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 249,
+        "frameProfile": {
+          "name": "intermittent",
+          "steps": [
+            16,
+            16,
+            16,
+            100
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1.8048780487804879,
+        "sustainedRuns": [],
+        "gameplayHash": "b530e11ff5f22cddf1096a6af3f26c21f001ae677f6a8e753f865429f32ac64b",
+        "cpu": {
+          "transition": {
+            "count": 955,
+            "meanMs": 0.020798296335078535,
+            "p50Ms": 0.015,
+            "p95Ms": 0.055,
+            "maxMs": 2.134294
+          },
+          "formation": {
+            "count": 1618,
+            "meanMs": 0.059398853522867646,
+            "p50Ms": 0.04,
+            "p95Ms": 0.155,
+            "maxMs": 1.560162
+          },
+          "attack": {
+            "count": 398,
+            "meanMs": 0.09055334673366836,
+            "p50Ms": 0.065,
+            "p95Ms": 0.21,
+            "maxMs": 0.500476
+          },
+          "boss-intro": {
+            "count": 239,
+            "meanMs": 0.014074824267782421,
+            "p50Ms": 0.01,
+            "p95Ms": 0.035,
+            "maxMs": 0.141274
+          },
+          "boss-fight": {
+            "count": 392,
+            "meanMs": 0.11741355102040815,
+            "p50Ms": 0.085,
+            "p95Ms": 0.315,
+            "maxMs": 1.278511
+          },
+          "boss-clear": {
+            "count": 678,
+            "meanMs": 0.01420055604719765,
+            "p50Ms": 0.01,
+            "p95Ms": 0.05,
+            "maxMs": 0.155195
+          },
+          "paused": {
+            "count": 54,
+            "meanMs": 0.004152222222222222,
+            "p50Ms": 0.005,
+            "p95Ms": 0.015,
+            "maxMs": 0.097657
+          }
+        },
+        "activeAttackFrames": 457,
+        "returningFrames": 0,
+        "observedAttackPatterns": [
+          "vDive",
+          "side",
+          "curve",
+          "dive",
+          "double",
+          "sCurve"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 4,
+          "arrivalPatterns": [
+            "diamond",
+            "spiral",
+            "doubleLoop"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": false,
+        "pausePreservesTimers": false,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "boss490-direct",
+      "profile": "steady60",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          491
+        ],
+        "bosses": [
+          490
+        ],
+        "snapshots": [
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 490,
+            "encounter": "bonus",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 3643,
+            "shards": 29,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 44558072,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 491,
+            "encounter": "normal",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 3943,
+            "shards": 35,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 39191840,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "sCurve",
+              "double",
+              "double"
+            ],
+            "sector": 492,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 3993,
+            "shards": 35,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 1,
+            "heapBytes": 35278592,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 3,
+          "hostile": 1,
+          "effects": 2,
+          "attackers": 1,
+          "returning": 0
+        },
+        "simulatedSeconds": 115.196,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 490,
+        "frameProfile": {
+          "name": "steady60",
+          "steps": [
+            16.666666666666668
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1,
+        "sustainedRuns": [],
+        "gameplayHash": "888f243a054a240f0063af49aa8eea848cf4cb04b12a10437c72076f16df2e36",
+        "cpu": {
+          "boss-intro": {
+            "count": 294,
+            "meanMs": 0.020514976190476177,
+            "p50Ms": 0.01,
+            "p95Ms": 0.04,
+            "maxMs": 1.945498
+          },
+          "boss-fight": {
+            "count": 66,
+            "meanMs": 0.04283969696969698,
+            "p50Ms": 0.025,
+            "p95Ms": 0.095,
+            "maxMs": 0.653568
+          },
+          "boss-clear": {
+            "count": 831,
+            "meanMs": 0.017678438026474123,
+            "p50Ms": 0.015,
+            "p95Ms": 0.04,
+            "maxMs": 0.677203
+          },
+          "transition": {
+            "count": 913,
+            "meanMs": 0.015168565169769993,
+            "p50Ms": 0.015,
+            "p95Ms": 0.035,
+            "maxMs": 0.221134
+          },
+          "formation": {
+            "count": 960,
+            "meanMs": 0.06332021041666663,
+            "p50Ms": 0.04,
+            "p95Ms": 0.15,
+            "maxMs": 3.590533
+          },
+          "attack": {
+            "count": 190,
+            "meanMs": 0.07231823684210525,
+            "p50Ms": 0.05,
+            "p95Ms": 0.17500000000000002,
+            "maxMs": 0.528709
+          },
+          "paused": {
+            "count": 62,
+            "meanMs": 0.003150225806451613,
+            "p50Ms": 0.005,
+            "p95Ms": 0.01,
+            "maxMs": 0.077197
+          }
+        },
+        "activeAttackFrames": 254,
+        "returningFrames": 0,
+        "observedAttackPatterns": [
+          "curve",
+          "sCurve",
+          "double"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 1,
+          "arrivalPatterns": [
+            "diamond"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": false,
+        "pausePreservesTimers": false,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "boss490-direct",
+      "profile": "slow20",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          491
+        ],
+        "bosses": [
+          490
+        ],
+        "snapshots": [
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 490,
+            "encounter": "bonus",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 3643,
+            "shards": 29,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 39806128,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 491,
+            "encounter": "normal",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 4093,
+            "shards": 36,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 44760992,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "sCurve",
+              "double",
+              "double"
+            ],
+            "sector": 492,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 4143,
+            "shards": 36,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 1,
+            "heapBytes": 43159224,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 3,
+          "hostile": 1,
+          "effects": 2,
+          "attackers": 1,
+          "returning": 0
+        },
+        "simulatedSeconds": 141.17058823529413,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 490,
+        "frameProfile": {
+          "name": "slow20",
+          "steps": [
+            50
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1.4705882352941178,
+        "sustainedRuns": [],
+        "gameplayHash": "2df5670c0f268132c6611131ffe89456a9f57e46f110cd9baff33f0548e2d24e",
+        "cpu": {
+          "boss-intro": {
+            "count": 145,
+            "meanMs": 0.030847227586206897,
+            "p50Ms": 0.015,
+            "p95Ms": 0.045,
+            "maxMs": 2.035344
+          },
+          "boss-fight": {
+            "count": 32,
+            "meanMs": 0.060410624999999996,
+            "p50Ms": 0.025,
+            "p95Ms": 0.255,
+            "maxMs": 0.680508
+          },
+          "boss-clear": {
+            "count": 409,
+            "meanMs": 0.01738854278728605,
+            "p50Ms": 0.015,
+            "p95Ms": 0.04,
+            "maxMs": 0.501067
+          },
+          "transition": {
+            "count": 447,
+            "meanMs": 0.016592268456375833,
+            "p50Ms": 0.015,
+            "p95Ms": 0.045,
+            "maxMs": 0.188214
+          },
+          "formation": {
+            "count": 470,
+            "meanMs": 0.06653858723404256,
+            "p50Ms": 0.045,
+            "p95Ms": 0.165,
+            "maxMs": 1.550492
+          },
+          "attack": {
+            "count": 94,
+            "meanMs": 0.09869910638297874,
+            "p50Ms": 0.07,
+            "p95Ms": 0.28,
+            "maxMs": 0.705285
+          },
+          "paused": {
+            "count": 31,
+            "meanMs": 0.008008935483870968,
+            "p50Ms": 0.005,
+            "p95Ms": 0.07,
+            "maxMs": 0.101603
+          }
+        },
+        "activeAttackFrames": 127,
+        "returningFrames": 0,
+        "observedAttackPatterns": [
+          "curve",
+          "sCurve",
+          "double"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 1,
+          "arrivalPatterns": [
+            "diamond"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": false,
+        "pausePreservesTimers": false,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "boss490-direct",
+      "profile": "intermittent",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          491
+        ],
+        "bosses": [
+          490
+        ],
+        "snapshots": [
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 490,
+            "encounter": "bonus",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 3643,
+            "shards": 29,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 42684424,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 491,
+            "encounter": "normal",
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "score": 4093,
+            "shards": 36,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 35647480,
+            "raf": 1,
+            "timers": 1
+          },
+          {
+            "attackers": 1,
+            "returning": 0,
+            "patterns": [
+              "sCurve",
+              "double",
+              "double"
+            ],
+            "sector": 492,
+            "encounter": "normal",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 4143,
+            "shards": 36,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 6,
+            "shots": 0,
+            "hostile": 0,
+            "effects": 1,
+            "heapBytes": 40752904,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 3,
+          "hostile": 1,
+          "effects": 2,
+          "attackers": 1,
+          "returning": 0
+        },
+        "simulatedSeconds": 159.62204878048783,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 490,
+        "frameProfile": {
+          "name": "intermittent",
+          "steps": [
+            16,
+            16,
+            16,
+            100
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1.8048780487804879,
+        "sustainedRuns": [],
+        "gameplayHash": "16e59589c0479323e0db87262ecce121aa606f838ae514c8da72f0aed2e42570",
+        "cpu": {
+          "boss-intro": {
+            "count": 240,
+            "meanMs": 0.02114898749999999,
+            "p50Ms": 0.01,
+            "p95Ms": 0.035,
+            "maxMs": 1.916745
+          },
+          "boss-fight": {
+            "count": 54,
+            "meanMs": 0.04485516666666666,
+            "p50Ms": 0.025,
+            "p95Ms": 0.185,
+            "maxMs": 0.510951
+          },
+          "boss-clear": {
+            "count": 678,
+            "meanMs": 0.014413547197640118,
+            "p50Ms": 0.015,
+            "p95Ms": 0.03,
+            "maxMs": 0.572274
+          },
+          "transition": {
+            "count": 743,
+            "meanMs": 0.01405235531628533,
+            "p50Ms": 0.015,
+            "p95Ms": 0.03,
+            "maxMs": 0.308095
+          },
+          "formation": {
+            "count": 776,
+            "meanMs": 0.04826325128865978,
+            "p50Ms": 0.04,
+            "p95Ms": 0.125,
+            "maxMs": 1.673819
+          },
+          "attack": {
+            "count": 157,
+            "meanMs": 0.07110484713375798,
+            "p50Ms": 0.05,
+            "p95Ms": 0.15,
+            "maxMs": 0.658885
+          },
+          "paused": {
+            "count": 54,
+            "meanMs": 0.003941259259259259,
+            "p50Ms": 0.005,
+            "p95Ms": 0.01,
+            "maxMs": 0.131047
+          }
+        },
+        "activeAttackFrames": 213,
+        "returningFrames": 0,
+        "observedAttackPatterns": [
+          "curve",
+          "sCurve",
+          "double"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 1,
+          "arrivalPatterns": [
+            "diamond"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": false,
+        "pausePreservesTimers": false,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "block499-to-final-boss-intro",
+      "profile": "steady60",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          499
+        ],
+        "bosses": [],
+        "snapshots": [
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 500,
+            "encounter": "boss-fight",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 150,
+            "shards": 18,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 4,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 36201168,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 4,
+          "hostile": 3,
+          "effects": 1,
+          "attackers": 3,
+          "returning": 0
+        },
+        "simulatedSeconds": 94.424,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 499,
+        "frameProfile": {
+          "name": "steady60",
+          "steps": [
+            16.666666666666668
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1,
+        "sustainedRuns": [],
+        "gameplayHash": "828a027efec38abf021d5a08defb40cf509f877ce51642e67ff6997f8d6281a2",
+        "cpu": {
+          "transition": {
+            "count": 261,
+            "meanMs": 0.04760185440613027,
+            "p50Ms": 0.015,
+            "p95Ms": 0.09,
+            "maxMs": 2.570643
+          },
+          "formation": {
+            "count": 802,
+            "meanMs": 0.06195993266832911,
+            "p50Ms": 0.045,
+            "p95Ms": 0.16,
+            "maxMs": 1.617983
+          },
+          "attack": {
+            "count": 529,
+            "meanMs": 0.08093473345935721,
+            "p50Ms": 0.05,
+            "p95Ms": 0.17500000000000002,
+            "maxMs": 3.881843
+          },
+          "boss-intro": {
+            "count": 294,
+            "meanMs": 0.019975261904761902,
+            "p50Ms": 0.01,
+            "p95Ms": 0.035,
+            "maxMs": 1.015915
+          },
+          "boss-fight": {
+            "count": 119,
+            "meanMs": 0.04508179831932772,
+            "p50Ms": 0.025,
+            "p95Ms": 0.14,
+            "maxMs": 0.667228
+          },
+          "paused": {
+            "count": 62,
+            "meanMs": 0.001754306451612903,
+            "p50Ms": 0.005,
+            "p95Ms": 0.005,
+            "maxMs": 0.044207
+          }
+        },
+        "activeAttackFrames": 532,
+        "returningFrames": 0,
+        "observedAttackPatterns": [
+          "loop",
+          "double",
+          "curve",
+          "dive",
+          "side"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 3,
+          "arrivalPatterns": [
+            "cascade",
+            "figureEight",
+            "diamond"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": false,
+        "pausePreservesTimers": false,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "block499-to-final-boss-intro",
+      "profile": "slow20",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          499
+        ],
+        "bosses": [],
+        "snapshots": [
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 500,
+            "encounter": "boss-fight",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 150,
+            "shards": 18,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 4,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 32327240,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 4,
+          "hostile": 3,
+          "effects": 1,
+          "attackers": 3,
+          "returning": 0
+        },
+        "simulatedSeconds": 110.62352941176471,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 499,
+        "frameProfile": {
+          "name": "slow20",
+          "steps": [
+            50
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1.4705882352941178,
+        "sustainedRuns": [],
+        "gameplayHash": "6600e9b6d92fdcc34989125cab3bdfb84525dd52f6efeccf5f4f19acc84f0f38",
+        "cpu": {
+          "transition": {
+            "count": 127,
+            "meanMs": 0.05018086614173225,
+            "p50Ms": 0.02,
+            "p95Ms": 0.085,
+            "maxMs": 2.318442
+          },
+          "formation": {
+            "count": 393,
+            "meanMs": 0.0879145750636132,
+            "p50Ms": 0.055,
+            "p95Ms": 0.20500000000000002,
+            "maxMs": 1.488719
+          },
+          "attack": {
+            "count": 263,
+            "meanMs": 0.1251354296577947,
+            "p50Ms": 0.1,
+            "p95Ms": 0.305,
+            "maxMs": 0.732316
+          },
+          "boss-intro": {
+            "count": 145,
+            "meanMs": 0.012932544827586203,
+            "p50Ms": 0.015,
+            "p95Ms": 0.025,
+            "maxMs": 0.113412
+          },
+          "boss-fight": {
+            "count": 57,
+            "meanMs": 0.09115592982456142,
+            "p50Ms": 0.045,
+            "p95Ms": 0.5,
+            "maxMs": 1.20476
+          },
+          "paused": {
+            "count": 31,
+            "meanMs": 0.002700387096774193,
+            "p50Ms": 0.005,
+            "p95Ms": 0.015,
+            "maxMs": 0.043395
+          }
+        },
+        "activeAttackFrames": 266,
+        "returningFrames": 0,
+        "observedAttackPatterns": [
+          "loop",
+          "double",
+          "curve",
+          "dive",
+          "side"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 3,
+          "arrivalPatterns": [
+            "cascade",
+            "figureEight",
+            "diamond"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": false,
+        "pausePreservesTimers": false,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    },
+    {
+      "scenario": "block499-to-final-boss-intro",
+      "profile": "intermittent",
+      "result": {
+        "passed": true,
+        "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+        "normal": [
+          499
+        ],
+        "bosses": [],
+        "snapshots": [
+          {
+            "attackers": 0,
+            "returning": 0,
+            "patterns": [],
+            "sector": 500,
+            "encounter": "boss-fight",
+            "phase": "ATTACK_CYCLE",
+            "status": "playing",
+            "score": 150,
+            "shards": 18,
+            "hearts": 99,
+            "paid": 0,
+            "rapid": 0,
+            "enemies": 0,
+            "shots": 4,
+            "hostile": 0,
+            "effects": 0,
+            "heapBytes": 42443456,
+            "raf": 1,
+            "timers": 1
+          }
+        ],
+        "peaks": {
+          "enemies": 6,
+          "shots": 4,
+          "hostile": 3,
+          "effects": 1,
+          "attackers": 3,
+          "returning": 0
+        },
+        "simulatedSeconds": 122.13112195121951,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "randomSeed": 20261012,
+        "directStartSector": 499,
+        "frameProfile": {
+          "name": "intermittent",
+          "steps": [
+            16,
+            16,
+            16,
+            100
+          ]
+        },
+        "nominalWaitToInjectedWallScale": 1.8048780487804879,
+        "sustainedRuns": [],
+        "gameplayHash": "6bea06b12b512460a80a1b6ecd341a138753d7654913cb6c5693452554b3cc5d",
+        "cpu": {
+          "transition": {
+            "count": 212,
+            "meanMs": 0.03481358490566034,
+            "p50Ms": 0.015,
+            "p95Ms": 0.07,
+            "maxMs": 2.340185
+          },
+          "formation": {
+            "count": 651,
+            "meanMs": 0.06651161751152077,
+            "p50Ms": 0.045,
+            "p95Ms": 0.17,
+            "maxMs": 0.989504
+          },
+          "attack": {
+            "count": 432,
+            "meanMs": 0.0806053564814815,
+            "p50Ms": 0.055,
+            "p95Ms": 0.18,
+            "maxMs": 1.049455
+          },
+          "boss-intro": {
+            "count": 239,
+            "meanMs": 0.01122273640167364,
+            "p50Ms": 0.01,
+            "p95Ms": 0.02,
+            "maxMs": 0.147363
+          },
+          "boss-fight": {
+            "count": 98,
+            "meanMs": 0.051208683673469396,
+            "p50Ms": 0.025,
+            "p95Ms": 0.16,
+            "maxMs": 0.519195
+          },
+          "paused": {
+            "count": 54,
+            "meanMs": 0.0019543703703703698,
+            "p50Ms": 0.005,
+            "p95Ms": 0.01,
+            "maxMs": 0.042955
+          }
+        },
+        "activeAttackFrames": 435,
+        "returningFrames": 0,
+        "observedAttackPatterns": [
+          "loop",
+          "double",
+          "curve",
+          "dive",
+          "side"
+        ],
+        "developerTrace": null,
+        "approvedTestnetPresentation": {
+          "checkedGroups": 3,
+          "arrivalPatterns": [
+            "cascade",
+            "figureEight",
+            "diamond"
+          ],
+          "positioningMarkers": 0,
+          "hudOrder": "home hearts level shards-over-score block pause",
+          "arrivalMsFirst29": 1430,
+          "heavyExtraMs": 660,
+          "settleMs": 180,
+          "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+        },
+        "stressObjectsReleased": false,
+        "pausePreservesTimers": false,
+        "backgroundPreservesTimers": true,
+        "faultPreservesRun": true,
+        "checkpointRestoresState": true,
+        "cleanup": {
+          "raf": 0,
+          "timers": 0,
+          "listeners": 0
+        }
+      }
+    }
+  ]
+}
