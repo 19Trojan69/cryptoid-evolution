@@ -60,9 +60,9 @@ offener Gerätebefund; diese Korrektur ändert keine Schusszeit oder Bewegung.
 
 ## Veröffentlichung und Rückfall
 
-Die Korrektur wird im vorhandenen, für automatische Deployments gesperrten
-Branch `codex/testnet-stability-20261016` vorbereitet. Ausgangspunkt und direkter
-Elterncommit des neuen Release-Stands ist die derzeit öffentlich geprüfte
+Die Korrektur wurde im vorhandenen, für automatische Deployments gesperrten
+Branch `codex/testnet-stability-20261016` veröffentlicht. Ausgangspunkt und direkter
+Elterncommit des neuen Release-Stands ist die vorherige öffentlich geprüfte
 Testnet-Version `5f025e92b6eafd9523512e7b5b048e6777bd923e`. Dieser unveränderliche
 Commit und das bestehende Deployment erlauben einen Rückfall ohne neue Branches.
 
@@ -72,17 +72,37 @@ bleibt exakt erhalten: private Diagnostik ausgeschaltet, beide Arbeitsbranches
 ohne automatische Git-Deployments. Es gibt keine Änderung an `main` oder am
 separaten Haupt-App-Projekt.
 
-Vorbereitungsstand: noch nicht öffentlich bereitgestellt. Vor dem Branch-Update
-wurden die Aliase erneut gelesen: Testnet zeigt auf
-`dpl_EHy1xmbgB8GqNs9azTYacqEVSg3k` (Commit `5f025e9`), die Haupt-App weiterhin auf
-`dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe` (Commit `907d2a7`).
+Am 16. Oktober 2026 nach der Bestätigung des Nutzers erneut geprüft:
+
+- Release-Commit `aab7267960fb9b92a40d318dd59b4a89251a4957`.
+- Vorschau `dpl_ik1iQHr4qqSSxb9H3pfBqyRaNcRy`, anschließend durch den Nutzer
+  im Testnet-Projekt als Production-Deployment neu gebaut.
+- Neues Deployment `dpl_GcYgxExuTiT8XUDqkdWdcQx1A5pr`, Status `READY`,
+  Target `production`, Projekt `prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF`.
+- Fester Alias `https://cryptoid-evolution-testnet.vercel.app` zeigt nachweislich
+  auf dieses neue Deployment. Vorheriges Deployment für Rückfall:
+  `dpl_EHy1xmbgB8GqNs9azTYacqEVSg3k` (Commit `5f025e9`).
+- Separater Haupt-App-Alias zeigt unverändert auf
+  `dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe` (Commit `907d2a7`).
+- Öffentlicher HTTP-Abruf: `/` und `/game` jeweils 200, HTML mit 1.465 Bytes;
+  `/api/hangar/catalog` 200, JSON mit 12.772 Bytes, Header
+  `x-cryptoid-backend: testnet-catalog`; `/api/progress/me` erwartetes 401 ohne
+  Anmeldung (`not_authenticated`). Keine Anmeldung, Käufe oder Spielstände
+  wurden bei dieser Auslieferungsprüfung verändert.
+- Alle elf lokal referenzierten JavaScript-Dateien der öffentlichen App liefern
+  HTTP 200. Der neue Aufruf `.unlock()` ist im ausgelieferten Spielcode vorhanden;
+  keine der geprüften privaten Diagnose-/Isolationsmarkierungen ist enthalten.
+  Die Klartextsuche nach dem gekürzten Release-Commit ist kein positiver Nachweis;
+  die Commit-Zuordnung wurde über Vercel-Metadaten und den Alias bestätigt.
+  Einzelheiten: `audio-resume-published-assets.json`.
 
 Die Vercel-Verbindung dieses Chats verweigerte zuvor Production-Deployments im
 Testnet-Projekt mit HTTP 403; der CLI-Fallback war durch die Netzwerksperre zu
 `api.vercel.com` blockiert. Diese Einschränkungen sind nicht durch eine erneute
-Anmeldung behoben. Die Veröffentlichung muss über das Dashboard des Nutzers im
-Projekt `cryptoid-evolution-testnet` erfolgen. Nach der Veröffentlichung sind
-Commit, READY-Status und fester Testnet-Alias erneut zu prüfen.
+Anmeldung behoben. Die Veröffentlichung erfolgte über das Dashboard des Nutzers
+im Projekt `cryptoid-evolution-testnet`. Commit, READY-Status und fester
+Testnet-Alias wurden danach unabhängig bestätigt. Der eigentliche Audiotest auf
+dem Gerät steht weiterhin aus.
 
 ## Anschließender Gerätetest
 

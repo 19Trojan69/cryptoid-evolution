@@ -1,0 +1,64 @@
+{
+  "at": "2026-10-16T18:34:24.155319+00:00",
+  "base": "https://cryptoid-evolution-testnet.vercel.app",
+  "files": [
+    {
+      "path": "/assets/index-iFDWDoNl.js",
+      "status": 200,
+      "bytes": 1886139
+    },
+    {
+      "path": "/assets/AdminPage-Dscvivp6.js",
+      "status": 200,
+      "bytes": 32648
+    },
+    {
+      "path": "/assets/GalaxyMap-Cbn2Gpfd.js",
+      "status": 200,
+      "bytes": 16839
+    },
+    {
+      "path": "/assets/GamePage-DqO4yPzu.js",
+      "status": 200,
+      "bytes": 204632
+    },
+    {
+      "path": "/assets/Shop-D64YAtd9.js",
+      "status": 200,
+      "bytes": 118684
+    },
+    {
+      "path": "/assets/displaySettings-d3VZZ2lg.js",
+      "status": 200,
+      "bytes": 3296
+    },
+    {
+      "path": "/assets/musicPlayback-CsQuDqtN.js",
+      "status": 200,
+      "bytes": 35657
+    },
+    {
+      "path": "/assets/powerUps-Phf5yOU4.js",
+      "status": 200,
+      "bytes": 147304
+    },
+    {
+      "path": "/assets/rewardProgress-BWmjF55c.js",
+      "status": 200,
+      "bytes": 3216
+    },
+    {
+      "path": "/assets/shipEvolution-BqyBL_R2.js",
+      "status": 200,
+      "bytes": 227858
+    },
+    {
+      "path": "/assets/collectionExport-BNiiVgDO.js",
+      "status": 200,
+      "bytes": 3876
+    }
+  ],
+  "releaseMarker": false,
+  "resumeUnlockCall": true,
+  "privateMarkers": []
+}
