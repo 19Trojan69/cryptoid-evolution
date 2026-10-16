@@ -12,7 +12,12 @@ const scene=x=>x.nodes.get('GamePage').body.statements.findLast(ts.isReturnState
 // The boss view now owns both live and falling presentation. Its exact host
 // trees and retained image/canvas are checked for all 50 bosses separately.
 const bossScene=x=>{let bossNode;const visit=n=>{if(ts.isJsxExpression(n)&&n.expression?.getText(x.ast).startsWith('game.boss && game.encounter === "boss-fight" &&'))bossNode=n; if(ts.isJsxSelfClosingElement(n)&&n.tagName.getText(x.ast)==='BossHullView')bossNode=n;ts.forEachChild(n,visit);};visit(x.ast);assert.ok(bossNode);return scene(x).replace(bossNode.getText(x.ast),'<BOSS_HANDOFF />').replace('.filter(effect => effect !== fallingBossHull)','');};
-assert.equal(bossScene(b),bossScene(a),'all other game JSX unchanged');
+// Only the saved mission's Resume callback changed. Keep its button, text,
+// classes and every other event handler in the exact JSX comparison.
+const resumeScene=source=>source
+  .replace('onClick={() => { saveChoiceRef.current = "resume"; setResumeOffer(null); void activateLoadout(); }}','onClick={APPROVED_RESUME_HANDLER}')
+  .replace('onClick={resumeSavedMission}','onClick={APPROVED_RESUME_HANDLER}');
+assert.equal(resumeScene(bossScene(b)),resumeScene(bossScene(a)),'all other game JSX unchanged');
 const stripProbe=s=>s.replace(/^[ \t]*performanceProbeRef\.current\?\.(?:mark|volley|hit|sceneRequested|checkpoint)\([^\n]*\);\n/gm,'').replace(/^[ \t]*performanceProbeRef\.current\?\.lifecycle\('boss-final-blast'\);\n/gm,'');
 let baseSimulation=stripProbe(a.nodes.get('simulate').getText(a.ast)),currentSimulation=stripProbe(b.nodes.get('simulate').getText(b.ast));
 const timedStart=baseSimulation.indexOf('        if (variety && !intro.weaponIssued && intro.clock >= intro.weaponDue');
@@ -25,5 +30,5 @@ assert.equal(currentSimulation,baseSimulation,'simulation unchanged except boss 
 const ordinary=node=>{let found;const visit=n=>{if(ts.isCallExpression(n)&&n.expression.getText(node.ast)==='createPowerUpDrop')found=n.getText(node.ast);ts.forEachChild(n,visit);};visit(node.ast);return found;};assert.equal(ordinary(b),ordinary(a),'ordinary drop probabilities and safety arguments unchanged');
 const trackedChanges=cp.execFileSync('git',['diff','--name-only',baseline],{encoding:'utf8'}).trim().split('\n');
 assert.ok(!trackedChanges.some(p=>p!=='frontend/src/pages/hullArrival.css'&&/\.(?:css|png|webp|svg|mp3|woff2|ttf)$/.test(p)),'no styles or assets changed');
-const result={passed:true,baseline,unchangedFunctions:names,gameJSXUnchangedExceptBossHandoff:true,bossHostParityVerifiedBy:'verifyBossHandoff.cjs',simulationUnchangedExceptAuthorizedFixes:true,existingStylesAndAssetsUnchanged:true,ordinaryDropChanceUnchanged:true,authorizedChanges:['boss contact extents','kill-origin opening benefit','unloaded-hull flame guard','bounded hull preparation','retained boss hull/canvas on defeat','developer diagnostics/export/independent backup']};
+const result={passed:true,baseline,unchangedFunctions:names,gameJSXUnchangedExceptBossHandoffAndResumeHandler:true,bossHostParityVerifiedBy:'verifyBossHandoff.cjs',simulationUnchangedExceptAuthorizedFixes:true,existingStylesAndAssetsUnchanged:true,ordinaryDropChanceUnchanged:true,authorizedChanges:['boss contact extents','kill-origin opening benefit','unloaded-hull flame guard','bounded hull preparation','retained boss hull/canvas on defeat','developer diagnostics/export/independent backup','gesture-bound audio unlock on Resume']};
 console.log(JSON.stringify(result,null,2));

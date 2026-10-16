@@ -1123,6 +1123,20 @@ const GamePage = () => {
   startEffectsRef.current = startEffects;
   useEffect(() => { if (hasPrimedGameAudio()) void startEffects(); }, [startEffects]);
 
+  const unlockAudioForResume = () => {
+    if (document.visibilityState === "hidden") return;
+    // Capture the actual Resume gesture before loading or the 3–2–1 countdown.
+    // Keep both audio players paused until the mission becomes playable again.
+    void startEffects().catch(() => {});
+    if (musicEnabled) void musicRef.current?.unlock();
+  };
+  const resumeSavedMission = () => {
+    unlockAudioForResume();
+    saveChoiceRef.current = "resume";
+    setResumeOffer(null);
+    void activateLoadout();
+  };
+
   const retryAudio = () => {
     // Menu taps must not restart the soundtrack while the simulation is paused.
     if (document.visibilityState === "hidden" || !["playing", "game-over", "victory"].includes(stateRef.current.status)) return;
@@ -1966,7 +1980,7 @@ const GamePage = () => {
   };
   const weaponNames = ["", t("Standard"), t("Twin"), t("Rapid"), t("Triple"), t("Plasma")];
   const weaponGlyphs = ["", "I", "II", "III", "IV", "V"];
-  const resumeWeaponSelection = () => { clearControls(); setTechnicalPause(false); setWeaponMenuOpen(false); setWeaponCountdown(3); };
+  const resumeWeaponSelection = () => { unlockAudioForResume(); clearControls(); setTechnicalPause(false); setWeaponMenuOpen(false); setWeaponCountdown(3); };
   const closeHomePrompt = () => {
     setHomePrompt(false);
     if (homePromptWasPlayingRef.current) resumeWeaponSelection();
@@ -2255,7 +2269,7 @@ const GamePage = () => {
             {resumeOffer.mission && <><p className="desktop-menu-only">{t("Resume at section {section} · {phase} · {lives} · {score} points.", { section: resumeOffer.mission.sector, phase: t(resumeOffer.mission.phase === "normal" ? "Block" : resumeOffer.mission.phase === "boss" ? "Boss" : "Bonus round"), lives: lives(resumeOffer.mission.snapshot.hearts), score: resumeOffer.mission.snapshot.score })}</p><div className="mobile-menu-only mission-resume-summary"><strong>{sectorName(resumeOffer.mission.sector)}</strong><p>{t("Level")} {campaignLevel(resumeOffer.mission.sector)} · {resumeOffer.mission.phase === "normal" ? `${t("Block")} ${sectorInChapter(resumeOffer.mission.sector)}/9` : resumeOffer.mission.phase === "boss" ? t("Boss") : t("Bonus round")} · {lives(resumeOffer.mission.snapshot.hearts)}</p><p>{resumeOffer.mission.snapshot.score} {t("Score")} · {resumeOffer.mission.snapshot.shards} {t("Shards")}</p></div></>}
             {resumeOffer.version === 0 && <p>{t("You can import local Shards and Standard ships once, before your first account game. Pi purchases and records are excluded. Otherwise, local items stay on this device.")}</p>}
             <div className="modal-actions">
-              {resumeOffer.mission && <button type="button" className="button button-primary" onClick={() => { saveChoiceRef.current = "resume"; setResumeOffer(null); void activateLoadout(); }}>{t("Resume")}</button>}
+              {resumeOffer.mission && <button type="button" className="button button-primary" onClick={resumeSavedMission}>{t("Resume")}</button>}
               <button type="button" className="button button-secondary" onClick={() => { if (resumeOffer.mission && window.matchMedia("(max-width: 600px)").matches) { setConfirmNewRun(true); return; } saveChoiceRef.current = "new"; setResumeOffer(null); void activateLoadout(); }}>{resumeOffer.mission ? <><span className="desktop-menu-only">{t("New game – replace saved run")}</span><span className="mobile-menu-only">{t("New game")}</span></> : t("Start with account inventory")}</button>
               {resumeOffer.version === 0 && <button type="button" className="button button-secondary" onClick={() => { startRequestRef.current = true; void mutateAccountInventory(resumeOffer, { action: "import", confirm: true, ...localInventory() }).then(() => { startRequestRef.current = false; saveChoiceRef.current = "new"; setResumeOffer(null); void activateLoadout(); }).catch(() => { startRequestRef.current = false; setStartError("Import not confirmed. Check your account inventory in the hangar."); }); }}>{t("Import local inventory and start")}</button>}
             </div>

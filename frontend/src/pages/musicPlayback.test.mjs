@@ -214,3 +214,55 @@ test('asynchronous context-close failures are consumed during cleanup', async ()
   } finally { h.restore(); }
 });
 
+test('Resume gesture recovers interrupted music without playing during its countdown', async () => {
+  const h = lifecycleAudio();
+  const Base = globalThis.AudioContext;
+  let gesture = false, context, resumes = 0;
+  globalThis.AudioContext = class extends Base {
+    state = 'suspended';
+    constructor() { super(); context = this; }
+    resume() {
+      resumes++;
+      if (!gesture) return Promise.reject(new Error('gesture required'));
+      this.state = 'running'; return Promise.resolve();
+    }
+  };
+  try {
+    const player = new MusicPlayer('/audio/battle-orbit.mp3', 25);
+    gesture = true; const initial = player.play(); gesture = false;
+    assert.equal(await initial, true);
+    player.pause(); player.audio.currentTime = 42; context.state = 'interrupted';
+    assert.equal(await player.unlock(), false, 'a timer alone cannot unlock the interrupted host');
+    gesture = true; const resume = player.unlock(); gesture = false;
+    assert.equal(await resume, true);
+    assert.equal(player.audio.paused, true, 'countdown remains silent');
+    assert.equal(player.playing, false);
+    assert.equal(player.audio.currentTime, 42);
+    assert.equal(h.graph.gains[0].gain.value, .25);
+    assert.equal(h.graph.sources.length, 1);
+    assert.equal(await player.play(), true, 'previously unlocked element can play after the countdown');
+    assert.equal(resumes, 3);
+    player.close();
+  } finally { h.restore(); }
+});
+
+test('a pending Resume unlock cannot revive a music player after navigation closes it', async () => {
+  const h = lifecycleAudio();
+  const Base = globalThis.AudioContext;
+  let finish;
+  globalThis.AudioContext = class extends Base {
+    state = 'interrupted';
+    resume() { return new Promise(resolve => { finish = () => { this.state = 'running'; resolve(); }; }); }
+  };
+  try {
+    const player = new MusicPlayer('/audio/battle-orbit.mp3', 50);
+    const pending = player.unlock();
+    assert.equal(player.audio.paused, true);
+    player.close(); finish();
+    assert.equal(await pending, false);
+    assert.equal(player.playing, false);
+    assert.equal(player.audio.paused, true);
+    assert.equal(h.graph.closes, 1);
+  } finally { h.restore(); }
+});
+
