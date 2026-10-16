@@ -29,6 +29,13 @@ assert.equal(currentSimulation,baseSimulation,'simulation unchanged except boss 
 // Keep the established ordinary chance function, all arguments and existing safety limits verbatim.
 const ordinary=node=>{let found;const visit=n=>{if(ts.isCallExpression(n)&&n.expression.getText(node.ast)==='createPowerUpDrop')found=n.getText(node.ast);ts.forEachChild(n,visit);};visit(node.ast);return found;};assert.equal(ordinary(b),ordinary(a),'ordinary drop probabilities and safety arguments unchanged');
 const trackedChanges=cp.execFileSync('git',['diff','--name-only',baseline],{encoding:'utf8'}).trim().split('\n');
-assert.ok(!trackedChanges.some(p=>p!=='frontend/src/pages/hullArrival.css'&&/\.(?:css|png|webp|svg|mp3|woff2|ttf)$/.test(p)),'no styles or assets changed');
-const result={passed:true,baseline,unchangedFunctions:names,gameJSXUnchangedExceptBossHandoffAndResumeHandler:true,bossHostParityVerifiedBy:'verifyBossHandoff.cjs',simulationUnchangedExceptAuthorizedFixes:true,existingStylesAndAssetsUnchanged:true,ordinaryDropChanceUnchanged:true,authorizedChanges:['boss contact extents','kill-origin opening benefit','unloaded-hull flame guard','bounded hull preparation','retained boss hull/canvas on defeat','developer diagnostics/export/independent backup','gesture-bound audio unlock on Resume']};
+// Explicit request on 16 October: bring only the two shield rings closer.
+const baselineCss=cp.execFileSync('git',['show',`${baseline}:frontend/src/index.css`],{encoding:'utf8'});
+const fittedShieldCss=baselineCss
+  .replace('.player-ship-shield-active::before { inset: -13px -16px;', '.player-ship-shield-active::before { inset: 0;')
+  .replace('.player-ship-shield-active::after { inset: -9px -12px;', '.player-ship-shield-active::after { inset: 4px;');
+assert.notEqual(fittedShieldCss,baselineCss,'original shield ring rules found');
+assert.equal(fs.readFileSync('src/index.css','utf8'),fittedShieldCss,'all CSS unchanged except requested shield ring insets');
+assert.ok(!trackedChanges.some(p=>!['frontend/src/pages/hullArrival.css','frontend/src/index.css'].includes(p)&&/\.(?:css|png|webp|svg|mp3|woff2|ttf)$/.test(p)),'no other styles or assets changed');
+const result={passed:true,baseline,unchangedFunctions:names,gameJSXUnchangedExceptBossHandoffAndResumeHandler:true,bossHostParityVerifiedBy:'verifyBossHandoff.cjs',simulationUnchangedExceptAuthorizedFixes:true,existingStylesUnchangedExceptRequestedShieldInsets:true,existingAssetsUnchanged:true,ordinaryDropChanceUnchanged:true,authorizedChanges:['boss contact extents','kill-origin opening benefit','unloaded-hull flame guard','bounded hull preparation','retained boss hull/canvas on defeat','developer diagnostics/export/independent backup','gesture-bound audio unlock on Resume','closer shield ring insets requested by user']};
 console.log(JSON.stringify(result,null,2));
