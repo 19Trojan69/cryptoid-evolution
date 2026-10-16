@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "installCommand": "npm install --prefix frontend && npm install --include=optional --prefix backend",
-  "buildCommand": "npm run build --prefix frontend",
+  "buildCommand": "VITE_CRYPTOID_DIAGNOSTICS=0 npm run build --prefix frontend",
   "outputDirectory": "frontend/dist",
   "functions": {
     "api/index.ts": {
@@ -21,7 +21,8 @@
   ],
   "git": {
     "deploymentEnabled": {
-      "codex/crash-diagnosis-20261015": false
+      "codex/crash-diagnosis-20261015": false,
+      "codex/testnet-stability-20261016": false
     }
   }
 }
