@@ -44,17 +44,55 @@ Bonusrunde und Fortschritt bis 42; Ende Pause → Home. Nutzer bestätigt den
 vollständigen HUD in Safari. Dieser kurze Lauf beweist keine dauerhafte
 Absturzfreiheit nach längerer Nutzung.
 
-## Veröffentlichung blockiert
+## Veröffentlichung erfolgreich
 
-Ein einzelner ausdrücklich auf Testnet-Projekt und Release-SHA begrenzter
-`create_deployment`-Aufruf mit dessen fester öffentlicher Adresse wurde von
-Vercel mit HTTP 403 abgelehnt: „You don't have permission to create a Production
-Deployment for this project.“ Vercels Target `production` bezeichnet in diesem
-Fall die feste Testnet-Adresse, nicht das separate Haupt-App-Projekt.
+Am 16. Oktober 2026 um 19:43 Uhr Europe/Vienna wurde der öffentliche Alias
+`https://cryptoid-evolution-testnet.vercel.app` auf die freigegebene Version
+`5f025e92b6eafd9523512e7b5b048e6777bd923e` geprüft.
 
-Der angebotene CLI-Fallback ist hier nicht verfügbar: kein Vercel-CLI, keine
-eigene CLI-Anmeldung und kein vorhandenes VERCEL_TOKEN. Keine erneute identische
-Anfrage, keine Umgehung über Alias-/Git-Änderungen und keine Veröffentlichung
-im Hauptprojekt. Der Release ist vorbereitet, aber noch nicht öffentlich live.
-Nächster Schritt: diesen exakten Commit im bestehenden Testnet-Projekt über
-einen berechtigten Vercel-Zugang bereitstellen.
+- Der Nutzer erstellte im vorhandenen Testnet-Projekt über sein Vercel-Dashboard
+  die Vorschau `dpl_5tAmjxyH47BuzqypowAR563mnr5R`; Status `READY`, korrekter
+  Release-Branch und Commit bestätigt.
+- Anschließend veröffentlichte er dieselbe Version für die feste Testnet-Adresse.
+  Das neu gebaute Deployment `dpl_EHy1xmbgB8GqNs9azTYacqEVSg3k` ist `READY`,
+  Target `production`, Projekt `prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF`.
+  Der öffentliche Testnet-Alias zeigt nachweislich auf dieses Deployment.
+- Die separate Haupt-App `https://cryptoid-evolution.vercel.app` zeigt weiterhin
+  auf `dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe`. Keine Änderung im Hauptprojekt.
+- Rückfall bleiben das oben genannte vorherige Testnet-Deployment sowie der
+  bestätigte GitHub-Backupbranch auf dem Baseline-Commit.
+
+### Prüfung der öffentlichen Bereitstellung
+
+HTTP-Prüfung ab `2026-10-16T17:43:52Z` direkt an der festen Testnet-Adresse:
+
+- `/` und `/game`: HTTP 200, HTML-App-Einstieg, identischer JavaScript-Einstieg.
+- `/api/hangar/catalog`: HTTP 200, JSON mit 51 Angeboten,
+  `x-cryptoid-backend: testnet-catalog`.
+- `/api/progress/me`: erwartetes HTTP 401 ohne Anmeldung;
+  `x-cryptoid-backend: production-proxy`, wie beim bisherigen Testnet.
+  Der bestehende Konto-Proxy wurde nicht geändert.
+- `/assets/index-Ddn4GwQ_.js`: HTTP 200, JavaScript, 1.886.139 Bytes.
+  Keine der geprüften privaten Diagnose-/Isolationsmarkierungen
+  (`__cryptoidProbeOptOut`, `Absturzdiagnose V5`, `/api/diagnostics`,
+  `Serverzugriff in der Testvorschau deaktiviert`, `__previewLevel`).
+- `/assets/index-jaywVuOe.css`: HTTP 200, CSS, 356.857 Bytes.
+
+Diese Prüfung bestätigt Veröffentlichung, App-/Asset-Auslieferung und die
+genannten lesenden API-Antworten. Ein Pi-Login, Kauf oder gespeicherter
+Spielstand wurde dabei nicht verändert. Ein neuer längerer Lauf im echten
+Pi Browser steht noch aus; dauerhafte Absturzfreiheit ist weiterhin nicht
+nachgewiesen.
+
+### Zugangsgrenze der automatischen Veröffentlichung
+
+Die Vercel-Verbindung dieses Chats lehnte das Erstellen eines Production-
+Deployments im Testnet-Projekt auch nach der gemeldeten Berechtigungsänderung
+mit HTTP 403 ab. Der angebotene offizielle CLI-Fallback wurde mit Vercel CLI
+64.3.1 und einer vom Nutzer bestätigten Geräteanmeldung versucht; eine
+Netzwerksperre zu `api.vercel.com` verhinderte dessen Abschluss.
+Geschützte Vorschau-HTTP-Anfragen und Build-Log-Abrufe waren ebenfalls über
+die Verbindung nicht zugänglich. Es wurden keine Schutzregeln, Kontorechte,
+Produktionsbranches oder Haupt-App-Aliase geändert. Die Veröffentlichung
+erfolgte durch den Nutzer in seinem Vercel-Dashboard; der Agent bestätigte
+danach Commit, Status, Alias und die öffentliche Auslieferung unabhängig.
