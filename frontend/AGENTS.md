@@ -1,5 +1,14 @@
 # Preserve the officially approved game
 
+## Additional explicit scope, 16 October 2026
+
+The user authorized releases only to the existing public Testnet project, not
+the separate main app. At 20:44 Europe/Vienna the user confirmed restored music
+and sound effects, requested a visually closer shield ring, then continuation
+of the slowdown tests. Only the two shield-ring insets may change for that
+visual request; shield protection, timers, hitboxes, hull size and all other
+appearance stay unchanged. Continued slowdown remains an open device finding.
+
 ## Explicit feedback scope, 15 October 2026, 20:26–20:29 Vienna
 
 The user authorizes isolated fixes for flame-before-hull/late hull appearance,

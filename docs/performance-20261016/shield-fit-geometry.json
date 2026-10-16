@@ -1,0 +1,317 @@
+{
+  "assets": 60,
+  "sourceAlphaThreshold": 32,
+  "playerContainerSizesCssPx": [
+    94,
+    104,
+    132,
+    160
+  ],
+  "outerRingMinimumScale": 0.96,
+  "outerRingBorderCssPx": 1,
+  "allSourceHullsWithinOuterRingAtMinimumPulse": true,
+  "minimumClearanceCssPx": 2.241,
+  "limitation": "PNG alpha geometry; does not measure browser paint, GPU cost, or real-device FPS",
+  "rows": [
+    {
+      "asset": "ship_01_stage_1.png",
+      "visibleHullRadiusFraction": 0.28091,
+      "minimumOuterRingClearanceCssPx": 17.755
+    },
+    {
+      "asset": "ship_01_stage_2.png",
+      "visibleHullRadiusFraction": 0.31116,
+      "minimumOuterRingClearanceCssPx": 14.911
+    },
+    {
+      "asset": "ship_01_stage_3.png",
+      "visibleHullRadiusFraction": 0.33599,
+      "minimumOuterRingClearanceCssPx": 12.577
+    },
+    {
+      "asset": "ship_02_stage_1.png",
+      "visibleHullRadiusFraction": 0.31611,
+      "minimumOuterRingClearanceCssPx": 14.446
+    },
+    {
+      "asset": "ship_02_stage_2.png",
+      "visibleHullRadiusFraction": 0.36196,
+      "minimumOuterRingClearanceCssPx": 10.136
+    },
+    {
+      "asset": "ship_02_stage_3.png",
+      "visibleHullRadiusFraction": 0.38725,
+      "minimumOuterRingClearanceCssPx": 7.758
+    },
+    {
+      "asset": "ship_03_stage_1.png",
+      "visibleHullRadiusFraction": 0.30323,
+      "minimumOuterRingClearanceCssPx": 15.656
+    },
+    {
+      "asset": "ship_03_stage_2.png",
+      "visibleHullRadiusFraction": 0.33106,
+      "minimumOuterRingClearanceCssPx": 13.04
+    },
+    {
+      "asset": "ship_03_stage_3.png",
+      "visibleHullRadiusFraction": 0.32275,
+      "minimumOuterRingClearanceCssPx": 13.822
+    },
+    {
+      "asset": "ship_04_stage_1.png",
+      "visibleHullRadiusFraction": 0.30789,
+      "minimumOuterRingClearanceCssPx": 15.219
+    },
+    {
+      "asset": "ship_04_stage_2.png",
+      "visibleHullRadiusFraction": 0.3539,
+      "minimumOuterRingClearanceCssPx": 10.894
+    },
+    {
+      "asset": "ship_04_stage_3.png",
+      "visibleHullRadiusFraction": 0.36823,
+      "minimumOuterRingClearanceCssPx": 9.546
+    },
+    {
+      "asset": "ship_05_stage_1.png",
+      "visibleHullRadiusFraction": 0.31457,
+      "minimumOuterRingClearanceCssPx": 14.59
+    },
+    {
+      "asset": "ship_05_stage_2.png",
+      "visibleHullRadiusFraction": 0.34078,
+      "minimumOuterRingClearanceCssPx": 12.127
+    },
+    {
+      "asset": "ship_05_stage_3.png",
+      "visibleHullRadiusFraction": 0.35034,
+      "minimumOuterRingClearanceCssPx": 11.228
+    },
+    {
+      "asset": "ship_06_stage_1.png",
+      "visibleHullRadiusFraction": 0.32416,
+      "minimumOuterRingClearanceCssPx": 13.689
+    },
+    {
+      "asset": "ship_06_stage_2.png",
+      "visibleHullRadiusFraction": 0.36827,
+      "minimumOuterRingClearanceCssPx": 9.542
+    },
+    {
+      "asset": "ship_06_stage_3.png",
+      "visibleHullRadiusFraction": 0.39436,
+      "minimumOuterRingClearanceCssPx": 7.09
+    },
+    {
+      "asset": "ship_07_stage_1.png",
+      "visibleHullRadiusFraction": 0.32346,
+      "minimumOuterRingClearanceCssPx": 13.754
+    },
+    {
+      "asset": "ship_07_stage_2.png",
+      "visibleHullRadiusFraction": 0.35301,
+      "minimumOuterRingClearanceCssPx": 10.977
+    },
+    {
+      "asset": "ship_07_stage_3.png",
+      "visibleHullRadiusFraction": 0.3654,
+      "minimumOuterRingClearanceCssPx": 9.812
+    },
+    {
+      "asset": "ship_08_stage_1.png",
+      "visibleHullRadiusFraction": 0.31858,
+      "minimumOuterRingClearanceCssPx": 14.213
+    },
+    {
+      "asset": "ship_08_stage_2.png",
+      "visibleHullRadiusFraction": 0.35815,
+      "minimumOuterRingClearanceCssPx": 10.494
+    },
+    {
+      "asset": "ship_08_stage_3.png",
+      "visibleHullRadiusFraction": 0.38692,
+      "minimumOuterRingClearanceCssPx": 7.79
+    },
+    {
+      "asset": "ship_09_stage_1.png",
+      "visibleHullRadiusFraction": 0.34169,
+      "minimumOuterRingClearanceCssPx": 12.042
+    },
+    {
+      "asset": "ship_09_stage_2.png",
+      "visibleHullRadiusFraction": 0.38652,
+      "minimumOuterRingClearanceCssPx": 7.827
+    },
+    {
+      "asset": "ship_09_stage_3.png",
+      "visibleHullRadiusFraction": 0.40937,
+      "minimumOuterRingClearanceCssPx": 5.679
+    },
+    {
+      "asset": "ship_10_stage_1.png",
+      "visibleHullRadiusFraction": 0.31844,
+      "minimumOuterRingClearanceCssPx": 14.227
+    },
+    {
+      "asset": "ship_10_stage_2.png",
+      "visibleHullRadiusFraction": 0.34775,
+      "minimumOuterRingClearanceCssPx": 11.472
+    },
+    {
+      "asset": "ship_10_stage_3.png",
+      "visibleHullRadiusFraction": 0.37357,
+      "minimumOuterRingClearanceCssPx": 9.045
+    },
+    {
+      "asset": "ship_11_stage_1.png",
+      "visibleHullRadiusFraction": 0.3241,
+      "minimumOuterRingClearanceCssPx": 13.695
+    },
+    {
+      "asset": "ship_11_stage_2.png",
+      "visibleHullRadiusFraction": 0.36862,
+      "minimumOuterRingClearanceCssPx": 9.51
+    },
+    {
+      "asset": "ship_11_stage_3.png",
+      "visibleHullRadiusFraction": 0.38905,
+      "minimumOuterRingClearanceCssPx": 7.589
+    },
+    {
+      "asset": "ship_12_stage_1.png",
+      "visibleHullRadiusFraction": 0.28985,
+      "minimumOuterRingClearanceCssPx": 16.914
+    },
+    {
+      "asset": "ship_12_stage_2.png",
+      "visibleHullRadiusFraction": 0.32372,
+      "minimumOuterRingClearanceCssPx": 13.731
+    },
+    {
+      "asset": "ship_12_stage_3.png",
+      "visibleHullRadiusFraction": 0.34795,
+      "minimumOuterRingClearanceCssPx": 11.453
+    },
+    {
+      "asset": "ship_13_stage_1.png",
+      "visibleHullRadiusFraction": 0.32241,
+      "minimumOuterRingClearanceCssPx": 13.854
+    },
+    {
+      "asset": "ship_13_stage_2.png",
+      "visibleHullRadiusFraction": 0.35358,
+      "minimumOuterRingClearanceCssPx": 10.924
+    },
+    {
+      "asset": "ship_13_stage_3.png",
+      "visibleHullRadiusFraction": 0.37685,
+      "minimumOuterRingClearanceCssPx": 8.736
+    },
+    {
+      "asset": "ship_14_stage_1.png",
+      "visibleHullRadiusFraction": 0.32242,
+      "minimumOuterRingClearanceCssPx": 13.853
+    },
+    {
+      "asset": "ship_14_stage_2.png",
+      "visibleHullRadiusFraction": 0.36674,
+      "minimumOuterRingClearanceCssPx": 9.686
+    },
+    {
+      "asset": "ship_14_stage_3.png",
+      "visibleHullRadiusFraction": 0.38165,
+      "minimumOuterRingClearanceCssPx": 8.285
+    },
+    {
+      "asset": "ship_15_stage_1.png",
+      "visibleHullRadiusFraction": 0.36222,
+      "minimumOuterRingClearanceCssPx": 10.111
+    },
+    {
+      "asset": "ship_15_stage_2.png",
+      "visibleHullRadiusFraction": 0.41443,
+      "minimumOuterRingClearanceCssPx": 5.203
+    },
+    {
+      "asset": "ship_15_stage_3.png",
+      "visibleHullRadiusFraction": 0.39883,
+      "minimumOuterRingClearanceCssPx": 6.67
+    },
+    {
+      "asset": "ship_16_stage_1.png",
+      "visibleHullRadiusFraction": 0.32596,
+      "minimumOuterRingClearanceCssPx": 13.52
+    },
+    {
+      "asset": "ship_16_stage_2.png",
+      "visibleHullRadiusFraction": 0.37097,
+      "minimumOuterRingClearanceCssPx": 9.288
+    },
+    {
+      "asset": "ship_16_stage_3.png",
+      "visibleHullRadiusFraction": 0.39314,
+      "minimumOuterRingClearanceCssPx": 7.205
+    },
+    {
+      "asset": "ship_17_stage_1.png",
+      "visibleHullRadiusFraction": 0.35993,
+      "minimumOuterRingClearanceCssPx": 10.326
+    },
+    {
+      "asset": "ship_17_stage_2.png",
+      "visibleHullRadiusFraction": 0.4034,
+      "minimumOuterRingClearanceCssPx": 6.24
+    },
+    {
+      "asset": "ship_17_stage_3.png",
+      "visibleHullRadiusFraction": 0.40612,
+      "minimumOuterRingClearanceCssPx": 5.985
+    },
+    {
+      "asset": "ship_18_stage_1.png",
+      "visibleHullRadiusFraction": 0.33443,
+      "minimumOuterRingClearanceCssPx": 12.723
+    },
+    {
+      "asset": "ship_18_stage_2.png",
+      "visibleHullRadiusFraction": 0.35852,
+      "minimumOuterRingClearanceCssPx": 10.459
+    },
+    {
+      "asset": "ship_18_stage_3.png",
+      "visibleHullRadiusFraction": 0.39155,
+      "minimumOuterRingClearanceCssPx": 7.354
+    },
+    {
+      "asset": "ship_19_stage_1.png",
+      "visibleHullRadiusFraction": 0.34222,
+      "minimumOuterRingClearanceCssPx": 11.992
+    },
+    {
+      "asset": "ship_19_stage_2.png",
+      "visibleHullRadiusFraction": 0.37388,
+      "minimumOuterRingClearanceCssPx": 9.015
+    },
+    {
+      "asset": "ship_19_stage_3.png",
+      "visibleHullRadiusFraction": 0.41218,
+      "minimumOuterRingClearanceCssPx": 5.416
+    },
+    {
+      "asset": "ship_20_stage_1.png",
+      "visibleHullRadiusFraction": 0.39437,
+      "minimumOuterRingClearanceCssPx": 7.089
+    },
+    {
+      "asset": "ship_20_stage_2.png",
+      "visibleHullRadiusFraction": 0.42495,
+      "minimumOuterRingClearanceCssPx": 4.215
+    },
+    {
+      "asset": "ship_20_stage_3.png",
+      "visibleHullRadiusFraction": 0.44595,
+      "minimumOuterRingClearanceCssPx": 2.241
+    }
+  ]
+}
