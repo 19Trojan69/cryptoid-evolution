@@ -89,7 +89,7 @@ The final deployed preview completes in 124,046.4 ms on visible Chrome 154,
 milestones are checked from the exported report; issues, blocked requests,
 emergency fixture resets and renderer failures are all zero.
 
-| Phase | Delivered FPS | Accepted time | Frame p95 / max | Salvos |
+| Phase | Delivered FPS | Accepted time | Retained frame p95 / max | Salvos |
 | --- | ---: | ---: | ---: | ---: |
 | Refills before | 59.55 | 99.76% | 16.7 / 49.9 ms | 20 |
 | Complete boss/bonus/return cycle | 59.34 | 99.28% | 16.8 / 183.3 ms | 136 |
@@ -98,7 +98,7 @@ emergency fixture resets and renderer failures are all zero.
 The middle FPS is an aggregate across the full hundred-second cycle,
 including normal combat, boss phases and bonus play. It does not establish
 that the boss's final explosion itself renders at that FPS. The 183.3 ms
-maximum is retained as a real observed long frame; this report does not
+retained-sample maximum is a real observed long frame; this report does not
 attribute it to a specific scene or claim all stalls are gone.
 
 The trace observes normal sector 19, boss warning/entry and fight at sector 20,
@@ -131,7 +131,68 @@ Final candidate scheduler, registrations, source images, texture entries,
 cache bytes and backing-store bytes are zero. The downloaded JSON exactly
 matches the application's report textarea; the copy control shows success.
 The raw report and final completion screenshot are preserved in this
-directory. No equivalent Pi v11 run is available yet.
+directory.
+
+## Completed iPhone Pi Browser run
+
+The user supplied a completed v11 report on 18 October 2026. It finishes in
+124,076 ms on iPhone OS 18.7 / Pi Browser 1.17.1, 430 × 825, DPR 3, visible,
+with sound enabled. The selected fields are retained in
+`device-replay-v11-pi-phase-summary.json`; that file is explicitly a summary,
+not a raw export. Issues, blocked requests, fixture resets and renderer
+failures are all zero.
+
+| Phase | Delivered FPS | Accepted time | Retained frame p95 / max | Salvos |
+| --- | ---: | ---: | ---: | ---: |
+| Refills before | 46.82 | 98.46% | 36 / 45 ms | 20 |
+| Complete boss/bonus/return cycle | 56.82 | 99.23% | 28 / 76 ms | 122 |
+| Refills after | 46.93 | 98.47% | 36 / 45 ms | 20 |
+
+Before/after refill stress is practically unchanged in this run, including
+identical 20-salvo counts. Volley-gap medians are 322 / 317 / 326 ms. The
+middle phase covers the full story, not only boss combat or its final blast.
+Its 4651 ms volley-gap p95 includes ordinary noncombat transitions. Both
+expected paused intervals are excluded from frame/work/cadence measurements.
+
+The controller retains at most the last 4096 frame/work values for quantiles.
+Consequently `frameMaxMs` is a retained-sample maximum, not a guaranteed
+whole-phase maximum when more than 4096 frames are measured. The Pi middle
+phase measures 5083 frames and retains 4096; the Chrome middle phase also
+exceeds that limit. FPS, frame counts and accepted-time totals cover all
+measured active intervals. These reports do not establish an upper bound of
+76 ms (Pi) or 183.3 ms (Chrome) over the entire cycle.
+
+The Pi trace observes normal sector 19, original boss intro/fight/clear at
+sector 20, bonus and normal sector 21, then continues to sector 24 with 1527
+post-boss frames. Three turret bursts, one boss fall and one final boss
+explosion are observed. The boss fires up to eight turret shots and one
+reactor volley, and heart collection succeeds. There are five sector changes
+and no injected phase reset.
+
+| Original-control pause | Total hold + countdown | Timers/positions frozen | Canvas draw counter frozen | Active Canvas effects |
+| --- | ---: | --- | --- | ---: |
+| During boss combat | 4526 ms | yes | yes | 0 |
+| After normal play returns | 4521 ms | yes | yes | 1 |
+
+Both controls resume through the original countdown. The second pause
+establishes counter freezing with an active normal Canvas effect. The pilot
+still owns movement, so this does not reproduce or establish a fix for the
+previous manual-input freeze after a boss.
+
+Retained hull entries are five/eight/eight, with cumulative loads 5 / 49 / 54
+and unused evictions 0 / 41 / 46. The final decoded-hull cache is 2,544,768
+bytes. Textures grow from four to six and remain at 10,067,560 bytes in the
+latter phases. Original-display preparation fallback mounts are 0 / 44 / 6;
+these preserve display while cold resources prepare. Sparse samples with
+zero original DOM effects do not mean fallback duration was zero.
+
+All candidate scheduler, registration, source-image, texture-entry, cache-byte
+and surface-byte cleanup counters reach zero. The separate ordinary painted
+hull cache ends at 48 entries and 17,656,990 estimated bytes; this is not a
+whole-process memory measurement. No new visual or audible confirmation
+accompanies the report. The earlier v9 full-visibility confirmation remains
+separate. This controlled two-minute story does not establish all-boss,
+normal-difficulty, manual-input, background-return or long-session coverage.
 
 Final public aliases still identify their initial deployments:
 
