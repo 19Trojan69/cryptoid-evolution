@@ -47,4 +47,7 @@ export class ResourceCache<T> {
   retained(key: string) { return this.pins.has(key); }
   get size() { return this.entries.size; }
   get bytes() { let bytes = 0; for (const entry of this.entries.values()) bytes += entry.bytes; return bytes; }
+  // Read-only counters for owner diagnostics. They do not expose cache keys or values.
+  get retainedEntries() { return this.pins.size; }
+  get retainCount() { let total = 0; for (const count of this.pins.values()) total += count; return total; }
 }
