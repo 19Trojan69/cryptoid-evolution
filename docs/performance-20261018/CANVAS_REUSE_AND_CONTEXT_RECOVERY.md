@@ -57,6 +57,20 @@ run do not establish WebKit/GPU process stability. The shipped game already has
 bounded local session/interruption records, but these are not available to this
 workspace from the user's phone.
 
-Keep this change on the review branch until the normal-app preview is verified.
+The Git preview dpl_ApSBHNpTZ7kxDxAr7k4MAtXf5BWG built READY from
+bb23a8b48bce4a19c707170458e3ed94e3e4cdfc. Ordinary Chrome guest smoke check:
+normal start, original shooting/collisions (2 destroyed / 50 points), manual
+pause, original 3-2-1 resume, normal game over and restart with three lives.
+The four stylesheet hashes match the released game. The companion screenshot
+shows the restarted original HUD, not evidence of long-run device stability.
+Browser extension metadata errors and the pre-existing Router hydration warning
+were visible; no renderer exception was observed in this short check.
+
+User clarification at 15:59 Europe/Vienna: the screen was initially white;
+by then the start screen was visible again. They did not observe whether it
+reloaded automatically. Do not classify this as a definite persistent blank
+screen, process crash, or automatic reload without a recorded event.
+
+Keep this change on the review branch; do not replace the public game yet.
 Do not describe the game as stable or the Whitescreen as resolved on the basis
 of this resource correction.
