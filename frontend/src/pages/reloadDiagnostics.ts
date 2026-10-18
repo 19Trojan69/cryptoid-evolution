@@ -34,7 +34,15 @@ export type ReloadDiagnosticKind =
   | 'saved-exit-intent'
   | 'boss-defeat-start'
   | 'boss-defeat-complete'
-  | 'boss-victory-start';
+  | 'boss-victory-start'
+  | 'resource-boss-clear'
+  | 'resource-boss-clear-ready'
+  | 'resource-bonus-start'
+  | 'resource-bonus-first-spawn'
+  | 'resource-bonus-clear'
+  | 'resource-normal-start'
+  | 'resource-normal-first-spawn'
+  | 'resource-formation-ready';
 
 type TechnicalContext = {
   sector?: number; block?: number; phase?: string; encounter?: string; status?: string;
@@ -44,6 +52,14 @@ type TechnicalContext = {
   coreElapsedMs?: number; bossVolley?: number; coreVolley?: number; bossEscortWave?: number;
   bossEscortSpawned?: number; bossEscortTimerMs?: number; attackCooldownMs?: number;
   spawnTimerMs?: number; clearTimerMs?: number; elapsedMs?: number;
+  jsHeapBytes?: number; domNodes?: number; runningAnimations?: number; canvasNodes?: number; imageNodes?: number;
+  paintedEntries?: number; paintedBytes?: number; paintedSources?: number; paintedPending?: number;
+  paintedRetained?: number; paintedRetainCount?: number; paintedSourceRetained?: number; paintedSourceRetainCount?: number;
+  canvasRegisteredEffects?: number; canvasSourceImages?: number; canvasTextureEntries?: number;
+  canvasCacheBytes?: number; canvasSurfaceBytes?: number; canvasRetainedHullUsers?: number; canvasFailureCount?: number;
+  audioVoices?: number; audioWeaponVoices?: number; audioBossVoices?: number; audioEffectVoices?: number;
+  audioSampleBuffers?: number; audioRockBuffers?: number; audioBufferBytes?: number; estimatedResourceBytes?: number;
+  audioState?: string;
 };
 
 export type ReloadTraceEvent = {
@@ -75,6 +91,12 @@ const numericContextKeys = [
   'bossId', 'bossHealth', 'bossMaxHealth', 'liveTurrets', 'totalTurrets', 'bossElapsedMs', 'coreElapsedMs',
   'bossVolley', 'coreVolley', 'bossEscortWave', 'bossEscortSpawned', 'bossEscortTimerMs',
   'attackCooldownMs', 'spawnTimerMs', 'clearTimerMs', 'elapsedMs',
+  'jsHeapBytes', 'domNodes', 'runningAnimations', 'canvasNodes', 'imageNodes',
+  'paintedEntries', 'paintedBytes', 'paintedSources', 'paintedPending', 'paintedRetained', 'paintedRetainCount',
+  'paintedSourceRetained', 'paintedSourceRetainCount', 'canvasRegisteredEffects', 'canvasSourceImages',
+  'canvasTextureEntries', 'canvasCacheBytes', 'canvasSurfaceBytes', 'canvasRetainedHullUsers', 'canvasFailureCount',
+  'audioVoices', 'audioWeaponVoices', 'audioBossVoices', 'audioEffectVoices', 'audioSampleBuffers',
+  'audioRockBuffers', 'audioBufferBytes', 'estimatedResourceBytes',
 ] as const;
 
 export function reloadTechnicalContext(input: GameDiagnostic | null | undefined): TechnicalContext | undefined {
@@ -89,6 +111,8 @@ export function reloadTechnicalContext(input: GameDiagnostic | null | undefined)
     if (finite(value)) result[key] = value;
   }
   if (typeof input.reactorOpen === 'boolean') result.reactorOpen = input.reactorOpen;
+  if (typeof input.audioState === 'string' && ['none', 'suspended', 'running', 'closed', 'interrupted'].includes(input.audioState))
+    result.audioState = input.audioState;
   return Object.keys(result).length ? result : undefined;
 }
 
@@ -235,6 +259,11 @@ export function recordApplicationBoot(host: ReloadHost = window as ReloadHost, o
 export function recordReloadEvent(kind: ReloadDiagnosticKind, error?: unknown) {
   if (typeof window === 'undefined') return null;
   return appendReloadEvent(window as ReloadHost, kind, undefined, {}, error);
+}
+
+export function recordReloadSnapshot(kind: ReloadDiagnosticKind, context: GameDiagnostic) {
+  if (typeof window === 'undefined') return null;
+  return appendReloadEvent(window as ReloadHost, kind, context);
 }
 
 export function freezeGap(previous: number, current: number, active: boolean, visible: boolean) {
