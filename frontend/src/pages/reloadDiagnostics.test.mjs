@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { RELOAD_TRACE_KEY, freezeGap, recordApplicationBoot, reloadErrorName } from './reloadDiagnostics.ts';
+import { RELOAD_TRACE_KEY, appendReloadEvent, freezeGap, recordApplicationBoot, reloadErrorName } from './reloadDiagnostics.ts';
 
 const store = () => {
   const values = new Map();
@@ -39,4 +39,26 @@ test('v2 runtime collection is wired only to the verified owner game entry',()=>
   assert.ok(game.includes('if (ownerDiagnostics) installReloadDiagnostics();'));
   assert.ok(game.includes('ownerDiagnostics ? createReloadGameMonitor(diagnosticContext) : null'));
   assert.ok(game.includes("if (ownerDiagnostics) recordReloadEvent(reason, error)"));
+});
+
+test('resource snapshots retain only typed technical counters in the local trace',()=>{
+  const localStorage=store(),sessionStorage=store();
+  const host={localStorage,sessionStorage,crypto:{randomUUID:()=> 'boot-v3'}};
+  appendReloadEvent(host,'resource-bonus-start',{...context,phase:'SECTOR_INTRO',encounter:'bonus',
+    jsHeapBytes:1000000,domNodes:800,paintedEntries:12,paintedBytes:4000000,canvasCacheBytes:2000000,
+    audioState:'running',audioVoices:4,audioBufferBytes:3000000,estimatedResourceBytes:9000000,
+    username:'private-user',stack:'private-stack'});
+  const event=JSON.parse(localStorage.getItem(RELOAD_TRACE_KEY))[0];
+  assert.equal(event.kind,'resource-bonus-start');assert.equal(event.context.paintedEntries,12);
+  assert.equal(event.context.audioState,'running');assert.equal(event.context.estimatedResourceBytes,9000000);
+  assert.ok(!JSON.stringify(event).includes('private-user'));assert.ok(!JSON.stringify(event).includes('private-stack'));
+});
+
+test('v3 transition snapshots remain wired only inside verified owner gameplay',()=>{
+  const game=fs.readFileSync(new URL('./GamePage.tsx',import.meta.url),'utf8');
+  assert.ok(game.includes("recordOwnerResourceSnapshot('resource-boss-clear')"));
+  assert.ok(game.includes("recordOwnerResourceSnapshot('resource-bonus-start')"));
+  assert.ok(game.includes("recordOwnerResourceSnapshot('resource-normal-start')"));
+  assert.ok(game.includes("recordOwnerResourceSnapshot('resource-formation-ready')"));
+  assert.ok(game.includes('if (ownerDiagnostics) recordReloadSnapshot(kind, ownerResourceContext())'));
 });
