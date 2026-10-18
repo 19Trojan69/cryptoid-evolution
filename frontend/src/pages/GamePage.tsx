@@ -31,6 +31,7 @@ import { gameHaptics } from "./gameHaptics";
 import { bindGameInput } from './gameInput';
 import { startGuardedGameLoop, type GameInterruption } from './gameLoop';
 import { recordGameDiagnostic, createGameSessionDiagnostics } from './gameDiagnostics';
+import { createReloadGameMonitor, recordReloadEvent } from './reloadDiagnostics';
 import { browserProbeRuntime, createPerformanceProbe, developerProbeEnabled } from './performanceDiagnostics';
 import { renderWorkStats } from './renderWork';
 import GameSceneBoundary from './GameSceneBoundary';
@@ -424,6 +425,7 @@ const GamePage = () => {
   const lastMeasuredFrameRef = useRef(0);
   const lastSavedAtRef = useRef(0);
   const diagnosticsRef = useRef<ReturnType<typeof createGameSessionDiagnostics> | null>(null);
+  const reloadDiagnosticsRef = useRef<ReturnType<typeof createReloadGameMonitor> | null>(null);
   const performanceProbeRef = useRef<ReturnType<typeof createPerformanceProbe> | null>(null);
   const sceneRenderStarted = performanceProbeRef.current?.sceneRenderBegin();
   useLayoutEffect(() => { performanceProbeRef.current?.sceneCommitted(sceneRenderStarted); });
@@ -603,6 +605,7 @@ const GamePage = () => {
   useEffect(() => {
     interruptionRef.current = (reason, error) => {
       performanceProbeRef.current?.lifecycle(reason, error);
+      recordReloadEvent(reason, error);
       const state = stateRef.current;
       clearControls();
       lastFrameRef.current = 0;
@@ -626,10 +629,23 @@ const GamePage = () => {
   }, [clearControls]);
   const diagnosticContext = useCallback(() => {
     const state = stateRef.current;
+    const boss = state.boss;
+    const turrets = boss?.turrets ?? [];
     return { reason: 'performance' as const, errorName: '', sector: state.sector, block: sectorInChapter(state.sector),
       phase: state.phase, encounter: state.encounter, status: state.status, width: fieldSizeRef.current.width,
       height: fieldSizeRef.current.height, browser: navigator.userAgent, enemies: state.asteroids.length,
-      projectiles: state.shots.length + state.enemyShots.length, effects: state.effects.length, lastSavedAt: lastSavedAtRef.current };
+      projectiles: state.shots.length + state.enemyShots.length, effects: state.effects.length, lastSavedAt: lastSavedAtRef.current,
+      frameMs: Math.round(lastMeasuredFrameRef.current),
+      bossId: boss?.config.id, bossHealth: boss?.health, bossMaxHealth: boss?.maxHealth,
+      liveTurrets: boss ? turrets.filter(gun => gun.health > 0).length : undefined,
+      totalTurrets: boss ? turrets.length : undefined,
+      reactorOpen: boss ? turrets.length > 0 && turrets.every(gun => gun.health <= 0) : undefined,
+      bossElapsedMs: boss?.elapsed, coreElapsedMs: boss?.core?.elapsed, bossVolley: boss?.volley, coreVolley: boss?.core?.volley,
+      bossEscortWave: boss ? bossEscortWaveRef.current : undefined,
+      bossEscortSpawned: boss ? bossEscortSpawnedRef.current : undefined,
+      bossEscortTimerMs: boss ? bossEscortTimerRef.current : undefined,
+      attackCooldownMs: attackCooldownRef.current, spawnTimerMs: spawnTimerRef.current,
+      clearTimerMs: clearTimerRef.current, elapsedMs: elapsedRef.current };
   }, []);
   useEffect(() => {
     const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
@@ -641,7 +657,7 @@ const GamePage = () => {
       audioBufferBytes: soundRef.current?.diagnosticBufferBytes ?? 0,
       longTasksSupported,
       knownTimers: 1 + Number(gameOverTimerRef.current !== null) + Number(reloadNoticeTimerRef.current !== null),
-      knownListeners: 5,
+      knownListeners: 15,
     }) }) : null;
     performanceProbeRef.current = probe;
     const stopBossObservation = probe ? observeBossResources((kind, details) => {
@@ -659,6 +675,8 @@ const GamePage = () => {
     }
     const monitor = createGameSessionDiagnostics(undefined, recordGameDiagnostic, Date.now, navigation?.type);
     diagnosticsRef.current = monitor;
+    const reloadMonitor = createReloadGameMonitor(diagnosticContext);
+    reloadDiagnosticsRef.current = reloadMonitor;
     const update = () => monitor.update(diagnosticContext(), stateRef.current.status === 'playing', document.hidden, true);
     const hidden = () => { probe?.lifecycle('pagehide'); probe?.suspend(performance.now()); monitor.pagehide(); update(); };
     const shown = () => { probe?.lifecycle('pageshow'); monitor.pageshow(); update(); };
@@ -681,6 +699,7 @@ const GamePage = () => {
       if (probeApi && probeHost.__cryptoidDiagnostics === probeApi) {
         if (previousProbe) probeHost.__cryptoidDiagnostics = previousProbe; else delete probeHost.__cryptoidDiagnostics;
       }
+      reloadMonitor.finish(); reloadDiagnosticsRef.current = null;
       monitor.finish(); diagnosticsRef.current = null;
       window.removeEventListener('error', onError); window.removeEventListener('unhandledrejection', onRejection);
       window.removeEventListener('pagehide', hidden); window.removeEventListener('pageshow', shown);
@@ -1024,6 +1043,7 @@ const GamePage = () => {
   }, [musicVolume, game.encounter, game.status]);
   const startBossVictory = () => {
     performanceProbeRef.current?.lifecycle('boss-victory-start');
+    recordReloadEvent('boss-victory-start');
     bossVictoryPendingRef.current = false;
     const track = musicRef.current;
     if (!track) return;
@@ -1048,6 +1068,7 @@ const GamePage = () => {
   };
   const destroyBoss = (state: GameState, time: number) => {
     performanceProbeRef.current?.lifecycle('boss-defeat-start');
+    recordReloadEvent('boss-defeat-start');
     soundRef.current?.stopBossWeapons();
     const boss = state.boss;
     if (!boss) return;
@@ -1084,6 +1105,7 @@ const GamePage = () => {
     if (!combatVarietyEnabled) state.powerUps = [];
     state.boss = null;
     performanceProbeRef.current?.lifecycle('boss-defeat-complete');
+    recordReloadEvent('boss-defeat-complete');
     void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
   };
   const destroyBossRef = useRef(destroyBoss);
@@ -2148,6 +2170,7 @@ const GamePage = () => {
     }
     leaveGameFullscreen();
     performanceProbeRef.current?.lifecycle('home-intent');
+    recordReloadEvent('home-intent');
     navigate(adminRunRef.current ? "/admin" : "/");
   };
 
@@ -2170,6 +2193,7 @@ const GamePage = () => {
       await loadAccountSave();
       leaveGameFullscreen();
       performanceProbeRef.current?.lifecycle('saved-exit-intent');
+      recordReloadEvent('saved-exit-intent');
       navigate("/");
     } catch {
       setSaveNotice("Save failed. The game stays paused. Please retry.");
