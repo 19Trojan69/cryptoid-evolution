@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import { RELOAD_TRACE_KEY, freezeGap, recordApplicationBoot, reloadErrorName } from './reloadDiagnostics.ts';
 
 const store = () => {
@@ -28,4 +29,14 @@ test('error names are allowlisted and raw custom names are not retained',()=>{
   assert.equal(reloadErrorName(new TypeError('private message')),'TypeError');
   const error=new Error('private message');error.name='SecretAccountError';
   assert.equal(reloadErrorName(error),'UnknownError');
+});
+
+test('v2 runtime collection is wired only to the verified owner game entry',()=>{
+  const main=fs.readFileSync(new URL('../main.tsx',import.meta.url),'utf8');
+  const game=fs.readFileSync(new URL('./GamePage.tsx',import.meta.url),'utf8');
+  assert.ok(!main.includes('installReloadDiagnostics'));
+  assert.ok(game.includes('return <GamePage ownerDiagnostics={canAdmin} />'));
+  assert.ok(game.includes('if (ownerDiagnostics) installReloadDiagnostics();'));
+  assert.ok(game.includes('ownerDiagnostics ? createReloadGameMonitor(diagnosticContext) : null'));
+  assert.ok(game.includes("if (ownerDiagnostics) recordReloadEvent(reason, error)"));
 });
