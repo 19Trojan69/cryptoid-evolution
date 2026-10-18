@@ -12,7 +12,7 @@ test('reads previous interruption and current session without touching account o
   const report=readStabilityReport(host(JSON.stringify([{...context,reason:'unexpected-restart',restartHint:'page-reload',at:'2026-10-18T14:29:00.000Z'}]),JSON.stringify({context,active:true,hidden:false,pageHidden:false,at:10000})),12000);
   assert.equal(report.available,true);assert.equal(report.events[0].sector,19);assert.equal(report.events[0].restartHint,'page-reload');
   assert.deepEqual(report.lastSession,{context,active:true,hidden:false,pageHidden:false,at:10000,ageMs:2000});
-  assert.equal(report.reloadTrace,null);assert.equal(report.version,2);
+  assert.equal(report.reloadTrace,null);assert.equal(report.version,3);
 });
 test('absent, denied, corrupt or oversized storage explicitly reports missing evidence',()=>{
   for(const h of [{},host(null,null),host('{bad','{bad','{bad','{bad'),host('x'.repeat(131073),null)]) assert.equal(readStabilityReport(h).available,false);
@@ -37,6 +37,20 @@ test('reload trace returns the final sixty-second technical window with boss and
   assert.equal(report.reloadTrace.events[0].kind,'main-thread-gap');assert.equal(report.reloadTrace.events[0].gapMs,1730);
   assert.equal(report.reloadTrace.events[0].context.bossHealth,300);assert.equal(report.reloadTrace.events[2].source,'reload-trace');
   assert.ok(!JSON.stringify(report).includes('private-'));
+});
+test('v3 exports bounded transition resource counters without private payloads',()=>{
+  const resource={kind:'resource-normal-start',at:80000,bootId:'boot-c',context:{...context,sector:21,phase:'SECTOR_INTRO',
+    jsHeapBytes:123456789,domNodes:742,runningAnimations:6,canvasNodes:3,imageNodes:28,
+    paintedEntries:19,paintedBytes:12000000,paintedSources:8,paintedPending:2,paintedRetained:7,paintedRetainCount:9,
+    canvasRegisteredEffects:1,canvasSourceImages:4,canvasTextureEntries:8,canvasCacheBytes:6000000,canvasSurfaceBytes:1400000,
+    canvasRetainedHullUsers:2,canvasFailureCount:0,audioState:'running',audioVoices:3,audioWeaponVoices:2,audioBossVoices:0,
+    audioEffectVoices:1,audioSampleBuffers:37,audioRockBuffers:2,audioBufferBytes:9000000,estimatedResourceBytes:28400000,
+    username:'private-user',stack:'private-stack',rawCacheKeys:['secret']}};
+  const report=readStabilityReport(host(null,null,JSON.stringify([resource]),JSON.stringify([resource])));
+  const event=report.reloadTrace.events[0];
+  assert.equal(event.kind,'resource-normal-start');assert.equal(event.context.paintedEntries,19);
+  assert.equal(event.context.canvasCacheBytes,6000000);assert.equal(event.context.audioState,'running');
+  assert.equal(event.context.estimatedResourceBytes,28400000);assert.ok(!JSON.stringify(report).includes('private-'));assert.ok(!JSON.stringify(report).includes('rawCacheKeys'));
 });
 test('exports only allowed technical fields, never raw messages, stacks, user or saved progress',()=>{
   const input={...context,username:'private-user',uid:'private-id',accessToken:'private-token',score:9132,shards:428,message:'private-message',stack:'private-stack',browser:'private-browser',checkpoint:{password:'private-password'}};
