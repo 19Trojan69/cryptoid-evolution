@@ -1,0 +1,20 @@
+{
+  "mode": "Actual candidate module; browser allocation and decoding mocked, not pixel rendering",
+  "before": {
+    "passed": false,
+    "reproduction": "Ninth distinct decoded hull rejected after eight unused hulls had filled the cache",
+    "error": "Hull image cache limit; retain original display"
+  },
+  "after": {
+    "passed": true,
+    "checks": [
+      "abort during pending hull/SVG decoding",
+      "stale preparation cannot refill cleared caches",
+      "completed texture backing stores released",
+      "draw scheduler/registrations/caches cleared",
+      "24 changing hulls reuse eight retained slots",
+      "active hull stays decoded during eviction",
+      "capacity fallback recovers after active users release"
+    ]
+  }
+}

@@ -180,6 +180,7 @@
     "fixture": "Controlled sector-12 one-hit enemies and automatic aiming with real shot collisions and repeated refills; no block transitions in this report",
     "presentation": "Same complete Canvas effects at DPR 3; only backing-store bounds change in the middle phase",
     "account": "No Pi login or real account/API access; separate private preview origin",
-    "limitations": "One short A/B/A run. No pixel readback or user confirmation of visible fire/smoke/debris supplied with this report; no scored campaign, bosses, pause/resume or cross-sector renderer cache validation"
+    "visualConfirmation": "At 14:08 Europe/Vienna the user separately confirmed complete visible fire, smoke and debris",
+    "limitations": "One short A/B/A run. No pixel readback supplied with this report; no scored campaign, bosses, pause/resume or cross-sector renderer cache validation"
   }
 }

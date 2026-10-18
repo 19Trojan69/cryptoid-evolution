@@ -11,7 +11,7 @@ import { EFFECT_PHASES, EFFECT_PRESENTATION_CSS, createEffectPresentationProbe }
 import { FRAGMENT_PHASES, FRAGMENT_CROP_CSS } from './fragmentCrop.mjs';
 import { WORKLOAD_PHASES, createEffectWorkload } from './effectWorkload.mjs';
 import { LAYER_PHASES, LAYER_CSS, createEffectLayersProbe } from './effectLayers.mjs';
-import { RASTER_PHASES, BOUNDED_PHASES, RASTER_CSS } from './rasterPhases.mjs';
+import { RASTER_PHASES, BOUNDED_PHASES, CAMPAIGN_PHASES, RASTER_CSS } from './rasterPhases.mjs';
 import { createCanvasPresentation, ReplayCanvasImpact } from './CanvasImpact';
 import { compareSurfacePixels } from './effectBounds.mjs';
 
@@ -25,7 +25,8 @@ const workload = __CRYPTOID_WORKLOAD__;
 const layers = __CRYPTOID_LAYERS__;
 const raster = __CRYPTOID_RASTER__;
 const bounded = __CRYPTOID_BOUNDED__;
-const totalSeconds = raster||layers ? 53 : workload ? 58 : effects ? 68 : lifecycle ? 118 : 88;
+const campaign = __CRYPTOID_CAMPAIGN__;
+const totalSeconds = campaign ? 73 : raster||layers ? 53 : workload ? 58 : effects ? 68 : lifecycle ? 118 : 88;
 window.__cryptoidBlockedRequests = [];
 const nativeFetch = window.fetch.bind(window);
 const assetRoots = /^\/(?:ships|audio|effects|planets|fonts|cards|home|badges|emblems|galaxy|pilots|ranks|assets)\//;
@@ -130,7 +131,7 @@ function App() {
     const paths=workload?createEffectWorkload({document}):null;
     const layerProbe=layers?createEffectLayersProbe({document}):null;
     const renderer=raster?createCanvasPresentation():null;
-    window.__cryptoidDeviceReplay=createDeviceReplay({...(lifecycle?{phases:bounded?BOUNDED_PHASES:raster?RASTER_PHASES:layers?LAYER_PHASES:workload?WORKLOAD_PHASES:fragments?FRAGMENT_PHASES:effects?EFFECT_PHASES:LIFECYCLE_PHASES}:{}),onProgress:setProgress,onFinish:result=>{
+    window.__cryptoidDeviceReplay=createDeviceReplay({...(lifecycle?{phases:campaign?CAMPAIGN_PHASES:bounded?BOUNDED_PHASES:raster?RASTER_PHASES:layers?LAYER_PHASES:workload?WORKLOAD_PHASES:fragments?FRAGMENT_PHASES:effects?EFFECT_PHASES:LIFECYCLE_PHASES}:{}),onProgress:setProgress,onFinish:result=>{
       clearTimeout(mountWatchdog);
       presentation?.stop();
       paths?.stop();
@@ -142,6 +143,7 @@ function App() {
       if(layers)result.coverage.presentation='Layer cause-isolation only: normal explosion/shatter fire/smoke pseudo-elements and fragment subtrees are omitted independently in designated phases. Original effect wrappers, simulation effects, hull illumination, all original audio, other graphics, haptics, mobile paint cadence and 34 ms cap continue. First 1500 ms of each phase settle prior work and are excluded; only full frame intervals after that cutoff are measured. DOM/CSS samples do not prove pixel presentation. No omissions are proposed for the game.';
       if(raster)result.coverage.presentation='Renderer candidate only, no omissions: original CSS display versus shared DPR Canvas. Full-resolution original hulls, same original seeded fragment polygon/flight props, piece count, effect lifetime, fire/smoke CSS artwork and animation keys, original audio/haptics/hull illumination/mobile paint and 34 ms cap. First 1500 ms excluded. Static SVG textures approximate CSS premultiplied gradients with dense stops; visual comparison is required, not assumed pixel-identical. Account/API isolation remains.';
       if(bounded)result.coverage.presentation='Surface bounds candidate: identical v8 Canvas drawing, resolution, textures, original hulls, piece count, polygons, trajectories, timing, audio, haptics, illumination and 34 ms cap. Only the middle phase bounds the backing store to conservative whole-lifetime effect extents, growing until the active set empties. Existing game-field clipping remains; no source or visible effect is cropped. First 1500 ms excluded. Frozen full/bounded pixel proof is available separately.';
+      if(campaign)result.coverage.presentation='Complete bounded Canvas candidate before, during and after ordinary block transitions. Same original full-resolution hulls, fire/smoke artwork, fragments, trajectories, timing, audio, illumination, mobile paint cadence and 34 ms cap. Mounted effects retain hull resources; only unused decoded hulls may be evicted from the eight-entry cache. Reference phases refill defeated enemies; transition phase uses ordinary clear/intro/entry without refills. Controlled lives, one-hit enemies and automatic aiming; not a scored campaign or boss test. First 1500 ms of every phase excluded. Visual confirmation is separate from counters.';
       setReport({...result,build,device,blockedRequests:[...window.__cryptoidBlockedRequests]});setRunning(false);
     }});
     if(presentation)window.__cryptoidDeviceReplay.presentation=presentation;
@@ -168,8 +170,8 @@ function App() {
     <small>CRYPTOID EVOLUTION · GERÄTETEST</small>
     <h1>{report?'Messung beendet':'Kurzer automatischer Test'}</h1>
     {!report ? <>
-      <p>Der Test läuft {raster||layers?'rund 55 Sekunden':workload?'rund eine Minute':effects?'rund 70 Sekunden':lifecycle?'rund zwei Minuten':'rund 90 Sekunden'} selbstständig. Bitte das Fenster geöffnet lassen.</p>
-      <p>{raster?'Drei gleiche Zerstörungsphasen vergleichen die bisherige und die neue Darstellung. Feuer, Rauch, Trümmer und Klang bleiben in allen Phasen an. Bitte achte auf die sichtbaren Effekte und das Spieltempo. Du brauchst nichts zu steuern.':layers?'Feuer/Rauch und Trümmer werden kurz einzeln und zusammen ausgeblendet. Das ist für diesen Vergleich beabsichtigt. Am Anfang und Ende erscheint die vollständige Explosion, der Klang bleibt durchgehend an. Bitte achte auf die sichtbaren Effekte und das Spieltempo. Du brauchst nichts zu steuern.':workload?'Explosionsbild und Explosionsklang werden einzeln kurz ausgeschaltet. Fehlende Explosionen oder ein fehlender Explosionsklang sind in diesen Testphasen beabsichtigt. Am Anfang und Ende läuft beides. Du brauchst nichts zu steuern.':fragments?'Drei gleiche Zerstörungsphasen vergleichen die Darstellung der Trümmer. In der mittleren Phase werden ihre Zeichenflächen enger begrenzt. Bitte achte auf Feuer, Trümmer und das Spieltempo. Du brauchst nichts zu steuern.':effects?'Drei gleiche Zerstörungsphasen vergleichen die Explosionsdarstellung. Die mittlere Phase prüft eine andere Verarbeitung der Animationsebenen. Bitte achte darauf, ob Feuer und Trümmer sichtbar sind. Du brauchst nichts zu steuern.':lifecycle?'Gegnerzerstörungen, Explosionen und Blockwechsel werden automatisch geprüft. Du brauchst nichts zu steuern.':'Einzel- und Doppelschüsse sowie das Schild werden in festen Situationen verglichen.'}</p>
+      <p>Der Test läuft {campaign?'rund 75 Sekunden':raster||layers?'rund 55 Sekunden':workload?'rund eine Minute':effects?'rund 70 Sekunden':lifecycle?'rund zwei Minuten':'rund 90 Sekunden'} selbstständig. Bitte das Fenster geöffnet lassen.</p>
+      <p>{campaign?'Mehrere Blockwechsel werden mit der vollständigen Explosionsdarstellung automatisch durchgespielt. Bitte achte darauf, ob Feuer, Rauch und Trümmer auch nach den Wechseln sichtbar bleiben und das Spieltempo stabil bleibt. Du brauchst nichts zu steuern.':raster?'Drei gleiche Zerstörungsphasen vergleichen die bisherige und die neue Darstellung. Feuer, Rauch, Trümmer und Klang bleiben in allen Phasen an. Bitte achte auf die sichtbaren Effekte und das Spieltempo. Du brauchst nichts zu steuern.':layers?'Feuer/Rauch und Trümmer werden kurz einzeln und zusammen ausgeblendet. Das ist für diesen Vergleich beabsichtigt. Am Anfang und Ende erscheint die vollständige Explosion, der Klang bleibt durchgehend an. Bitte achte auf die sichtbaren Effekte und das Spieltempo. Du brauchst nichts zu steuern.':workload?'Explosionsbild und Explosionsklang werden einzeln kurz ausgeschaltet. Fehlende Explosionen oder ein fehlender Explosionsklang sind in diesen Testphasen beabsichtigt. Am Anfang und Ende läuft beides. Du brauchst nichts zu steuern.':fragments?'Drei gleiche Zerstörungsphasen vergleichen die Darstellung der Trümmer. In der mittleren Phase werden ihre Zeichenflächen enger begrenzt. Bitte achte auf Feuer, Trümmer und das Spieltempo. Du brauchst nichts zu steuern.':effects?'Drei gleiche Zerstörungsphasen vergleichen die Explosionsdarstellung. Die mittlere Phase prüft eine andere Verarbeitung der Animationsebenen. Bitte achte darauf, ob Feuer und Trümmer sichtbar sind. Du brauchst nichts zu steuern.':lifecycle?'Gegnerzerstörungen, Explosionen und Blockwechsel werden automatisch geprüft. Du brauchst nichts zu steuern.':'Einzel- und Doppelschüsse sowie das Schild werden in festen Situationen verglichen.'}</p>
       <p>Es ist kein Spielkonto nötig. Dein normaler Spielstand wird nicht geladen.</p>
       <label><input type="checkbox" checked={sound} disabled={workload||layers||raster} onChange={e=>setSound(e.target.checked)}/> Mit Musik und Soundeffekten</label>
       <button onClick={start}>Test starten</button>

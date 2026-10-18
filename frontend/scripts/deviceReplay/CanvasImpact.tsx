@@ -8,20 +8,36 @@ const art=__CRYPTOID_EXPLOSION_ART__;
 const images=new Map<string,Promise<HTMLImageElement>>();
 const textures=new Map<string,Promise<any>>();
 const readyImages=new Map<string,HTMLImageElement>(),readyTextures=new Map<string,any>();
-let imageBytes=0,textureBytes=0,failures:string[]=[],preparationCount=0,resourceGeneration=0;
+const hullUsers=new Map<string,number>();
+let imageBytes=0,textureBytes=0,failures:string[]=[],preparationCount=0,resourceGeneration=0,hullEvictions=0,hullLoads=0;
+export function retainCanvasImpactHull(url:string){
+  const generation=resourceGeneration;hullUsers.set(url,(hullUsers.get(url)??0)+1);
+  return ()=>{if(generation!==resourceGeneration)return;const remaining=(hullUsers.get(url)??1)-1;if(remaining)hullUsers.set(url,remaining);else hullUsers.delete(url);};
+}
+function evictUnusedHull(){
+  // Map insertion order is refreshed on use. Pending decoding and every mounted
+  // effect (including frozen proofs) retain their hull until their own cleanup.
+  for(const url of images.keys()){
+    const hull=readyImages.get(url);if(!hull||hullUsers.has(url))continue;
+    imageBytes-=hull.naturalWidth*hull.naturalHeight*4;
+    readyImages.delete(url);images.delete(url);hullEvictions++;return true;
+  }
+  return false;
+}
 const image=(url:string)=>{
-  let pending=images.get(url);if(pending)return pending;
-  if(images.size>=8)return Promise.reject(new Error('Hull image cache limit; retain original display'));
+  let pending=images.get(url);if(pending){images.delete(url);images.set(url,pending);return pending;}
+  if(images.size>=8&&!evictUnusedHull())return Promise.reject(new Error('Active hull image cache limit; retain original display'));
   const generation=resourceGeneration;
   pending=new Promise<HTMLImageElement>((resolve,reject)=>{
     const img=new Image();img.onload=()=>{
       img.onload=img.onerror=null;
       if(generation!==resourceGeneration){reject(new Error('Stale hull preparation cancelled'));return;}
       const bytes=img.naturalWidth*img.naturalHeight*4;
+      while(imageBytes+bytes>32*1024*1024&&evictUnusedHull()){}
       if(imageBytes+bytes>32*1024*1024){reject(new Error('Hull image byte limit; retain original display'));return;}
-      imageBytes+=bytes;readyImages.set(url,img);resolve(img);
+      imageBytes+=bytes;hullLoads++;readyImages.set(url,img);resolve(img);
     };img.onerror=()=>{img.onload=img.onerror=null;reject(new Error('Hull image unavailable'));};img.src=url;
-  });images.set(url,pending);return pending;
+  }).catch(error=>{if(generation===resourceGeneration&&images.get(url)===pending)images.delete(url);throw error;});images.set(url,pending);return pending;
 };
 const texture=(kind:'fire'|'smoke',diameter:number,dpr:number)=>{
   const key=`${kind}:${diameter}:${dpr}`;let pending=textures.get(key);if(pending)return pending;
@@ -117,11 +133,12 @@ export function createCanvasPresentation(){
       samples.push({atMs:Math.round(time),registeredEffects:records.size,surfaceBox:{...surfaceBox},surfaceBytes:surface?surface.width*surface.height*4:0,dpr:dpr(),proxyEffects:document.querySelectorAll('.replay-canvas-proxy').length,
         originalEffects:document.querySelectorAll('.impact-effect.explosion:not(.replay-canvas-proxy),.impact-effect.shatter:not(.replay-canvas-proxy)').length});},
     read(){const sorted=[...drawSamples].sort((a,b)=>a-b);return {mode,draws,fragmentDraws,fallbacks,registered:records.size,sourceImages:images.size,imageBytes,textures:textures.size,textureBytes,preparationCount,
+      hullLoads,hullEvictions,retainedHullUsers:hullUsers.size,
       surfaceBytes:surface?surface.width*surface.height*4:0,surfaceBox:{...surfaceBox},fieldWidth,fieldHeight,surfaceResizes,maxSurfaceBytes,dpr:dpr(),drawWorkP95Ms:sorted.length?+sorted[Math.ceil(sorted.length*.95)-1].toFixed(3):null,
       failures:[...failures],samples,coverage:'Original full-resolution hull images, original seeded polygon/flight props, original fire/smoke CSS artwork and timing. One shared DPR-sized Canvas; no effect, piece, audio or simulation omission. SVG prepares static fire/smoke textures only; animation and clipping are Canvas draws. DOM samples do not prove pixel visibility.'};},
     stop(){resourceGeneration++;if(frameId)cancelAnimationFrame(frameId);frameId=0;records.clear();for(const t of readyTextures.values())t.canvas.width=t.canvas.height=0;
       if(surface)surface.width=surface.height=0;
-      textures.clear();readyTextures.clear();images.clear();readyImages.clear();imageBytes=textureBytes=preparationCount=0;failures=[];mode='original';pausedAt=pauseTotal=0;grownBounds=null;
+      textures.clear();readyTextures.clear();images.clear();readyImages.clear();hullUsers.clear();imageBytes=textureBytes=preparationCount=hullLoads=hullEvictions=0;failures=[];mode='original';pausedAt=pauseTotal=0;grownBounds=null;
       return {activeDrawFrame:!!frameId,registeredEffects:records.size,sourceImages:images.size,textureEntries:textures.size,cacheBytes:imageBytes+textureBytes,surfaceBytes:surface?surface.width*surface.height*4:0};},
   };
 }
@@ -144,9 +161,9 @@ export function ReplayCanvasImpact({effect,debris,original,frozenMs,boundedProof
   const pieces=useMemo(()=>piecesFrom(debris),[debris]);
   const selected=frozenMs!==undefined?'canvas':mode;
   useEffect(()=>{
-    let active=true;
+    let active=true;const release=retainCanvasImpactHull(url);
     void prepareCanvasImpactResources(url,diameter).then(([hull,fire,smoke])=>{if(active)setLoaded({hull,fire,smoke});},error=>{if(active)recordFailure(error);});
-    return()=>{active=false;};
+    return()=>{active=false;release();};
   },[url,diameter]);
   const canvasSelected=selected==='canvas'||selected==='bounded';
   const available=loaded?.hull?.src===url&&canvasSelected;

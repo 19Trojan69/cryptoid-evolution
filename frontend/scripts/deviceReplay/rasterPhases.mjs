@@ -11,3 +11,9 @@ export const BOUNDED_PHASES=['canvas','bounded','canvas'].map((presentation,inde
   label:['Canvas · Vergleich am Anfang','Canvas · begrenzte Zeichenfläche','Canvas · Rückvergleich'][index],
   enemies:6,double:true,shield:true,durationMs:15000,settleMs:1500,fixture:'destruction',presentation,
 }));
+// Refills occur only in the reference stress phases, never at block changes.
+export const CAMPAIGN_PHASES=[
+  {name:'bounded-before-blocks',label:'Explosionen vor den Blockwechseln',fixture:'destruction',durationMs:10000},
+  {name:'bounded-block-transitions',label:'Mehrere automatische Blockwechsel',fixture:'transitions',durationMs:45000},
+  {name:'bounded-after-blocks',label:'Explosionen nach den Blockwechseln',fixture:'destruction',durationMs:10000},
+].map(phase=>({...phase,enemies:6,double:true,shield:true,settleMs:1500,presentation:'bounded'}));

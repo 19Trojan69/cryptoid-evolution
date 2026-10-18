@@ -139,7 +139,8 @@ cleanup are all zero.
 The report does not establish actual visible pixel presentation, a normal
 scored campaign or behavior across block transitions: all three phases use
 the destruction/refill fixture and report zero sector changes. User
-confirmation of visible fire, smoke and debris is still outstanding. The
+confirmation of visible fire, smoke and debris was received at 14:08
+Europe/Vienna: the user confirmed they were fully visible. The
 separate frozen Chrome pixel comparison retains its documented one-channel
 differences; no strict pixel-identity claim is made for Pi Browser.
 
