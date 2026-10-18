@@ -121,3 +121,25 @@ release gate pass. Normal gameplay source, artwork, styles, sounds, timing,
 account and save handlers are unchanged from bb23a8b. This is not a fix or proof
 of the phone's Whitescreen. Actual owner login on the affected Pi Browser remains
 the device check; the cloud browser has no owner session.
+
+## Owner-only Testnet release result
+
+Source d2352fa2e04c8c1f361c10e2427e6ecb9cb711df passed the Git preview build
+dpl_CCEgPGX3Efp55zbM1qLxVqMdsaoo, then its production rebuild
+dpl_8TpL2pjNyzLZ9P2GewHmtPmDRSDw. After the rollback, the official alias
+required an explicit promotion of that production deployment. The official
+cryptoid-evolution-testnet.vercel.app alias now resolves to that READY source.
+
+Verified live: /stability-report.html and /stability-report.mjs both redirect
+to the home page; anonymous /api/admin/status returns HTTP 401 with
+not_authenticated. Direct /admin?view=diagnostics in the cloud browser shows
+only the existing owner sign-in wall and no report controls or records. The
+screenshot stability-export-owner-gate.jpg records that denial state. The old
+withdrawn deployment hostname is behind Vercel sign-in; its preview share
+bypass has already been revoked. The affected iPhone owner session is required
+to verify report availability on that device, in the same origin/tab if possible.
+
+Mainnet remains dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe / 907d2a7, unchanged.
+No new runtime-error scan is available from the connector (its earlier runtime
+log requests were denied); the checks above establish deployment and access
+behavior, not absence of device crashes. The Whitescreen remains unresolved.
