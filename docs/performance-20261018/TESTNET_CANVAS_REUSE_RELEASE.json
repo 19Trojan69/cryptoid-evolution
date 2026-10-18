@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "release": "Testnet Canvas resource follow-up",
+  "authorization": {
+    "localTime": "2026-10-18T16:03:49+02:00",
+    "request": "aktualisieren bitte"
+  },
+  "deployment": {
+    "id": "dpl_J6HabPZCGHYRDAEE6nfVTtr23pWV",
+    "url": "https://cryptoid-evolution-testnet.vercel.app/",
+    "target": "production",
+    "state": "READY",
+    "commit": "bb23a8b48bce4a19c707170458e3ed94e3e4cdfc",
+    "buildMs": 42659,
+    "project": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF"
+  },
+  "officialPiNet": "https://cryptoidevo3025.pinet.com/",
+  "embeddedTestnet": "https://cryptoid-evolution-testnet.vercel.app/",
+  "backup": {
+    "branch": "backup/testnet-before-canvas-reuse-20261018",
+    "commit": "b71d368d5bdd6735225771a101cbba8beefebed7",
+    "deployment": "dpl_DDru7oekVxdkxj4AgoBEUE2FSm5k"
+  },
+  "mainnet": {
+    "unchanged": true,
+    "id": "dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe",
+    "commit": "907d2a7363345d00f0f90c54402bf04e887b64d9"
+  },
+  "verification": {
+    "productionEntry": "/assets/index-BlinpJa-.js",
+    "matchesTestedPreview": true,
+    "styleSheets": [
+      "/assets/index-CLY2nAhm.css",
+      "/assets/powerUps-Bp4oAZoc.css",
+      "/assets/Shop-BkuKP0aD.css",
+      "/assets/GamePage-Doazl5ia.css"
+    ],
+    "normalGuestStart": true,
+    "normalShotCollisionScore25": true,
+    "canvasSurfaceMounted": true,
+    "piNetIframeDestinationVerified": true
+  },
+  "limits": [
+    "Whitescreen before the second boss is not reproduced or proved fixed.",
+    "Chrome guest smoke check is not iPhone WebKit or full-campaign proof.",
+    "Server runtime log access remained unavailable (prior 403); no clean-server-error claim."
+  ]
+}

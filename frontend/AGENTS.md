@@ -1,5 +1,15 @@
 # Preserve the officially approved game
 
+## Explicit Testnet follow-up release, 18 October 2026, 16:03 Vienna
+
+After the known Canvas allocation correction and original-display recovery were
+tested in preview, the user explicitly requested "aktualisieren bitte". Release
+the tested commit bb23a8b48bce4a19c707170458e3ed94e3e4cdfc only to the existing
+official Testnet project. Keep all artwork, draw geometry, source resolution,
+timing, audio, balance, input and account behavior. The complete Whitescreen
+before boss 2 remains unproven and must not be described as fixed. Mainnet is
+not authorized. Backup: backup/testnet-before-canvas-reuse-20261018 at b71d368.
+
 ## Explicit Testnet renderer release, 18 October 2026
 
 After completed Pi v9/v10/v11 device tests, the user authorized applying the

@@ -26,7 +26,8 @@ canvases and are removed from the pending cache, allowing a later attempt.
 
 No changes to drawImpact, source artwork, effects, fragments, trajectories,
 resolution, audio, balance, game timing, input, saves or accounts. Mainnet and the
-public Testnet deployment were not updated by this investigation.
+public Testnet deployment were not updated during the initial investigation;
+see the subsequent authorized Testnet release below.
 
 ## Verification
 
@@ -71,6 +72,23 @@ by then the start screen was visible again. They did not observe whether it
 reloaded automatically. Do not classify this as a definite persistent blank
 screen, process crash, or automatic reload without a recorded event.
 
-Keep this change on the review branch; do not replace the public game yet.
+At 16:03 Europe/Vienna the user explicitly requested "aktualisieren bitte".
+This supersedes the initial review-only status for the existing official Testnet.
+The exact tested source bb23a8b48bce4a19c707170458e3ed94e3e4cdfc is used for
+that release, without later source changes. Previous public source b71d368 is
+retained at backup/testnet-before-canvas-reuse-20261018. Mainnet is excluded.
 Do not describe the game as stable or the Whitescreen as resolved on the basis
 of this resource correction.
+
+
+## Authorized Testnet release result
+
+Deployment dpl_J6HabPZCGHYRDAEE6nfVTtr23pWV is READY on the official
+Testnet alias, source bb23a8b. Build duration: 42.659 seconds. Normal Chrome
+guest start, real shot collision and 25-point defeat, Canvas surface and the
+four unchanged stylesheets were verified after release. The official PiNet
+page still embeds https://cryptoid-evolution-testnet.vercel.app/. Mainnet
+remains dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe / 907d2a7. See the companion JSON
+and live PiNet screenshot. Server runtime logs are not accessible (prior 403);
+this check cannot establish a clean server error scan or fix the reported
+iPhone Whitescreen.
