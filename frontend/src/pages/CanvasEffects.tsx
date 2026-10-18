@@ -48,22 +48,23 @@ const texture=(kind:'fire'|'smoke',diameter:number,dpr:number)=>{
     if(textureBytes+geometry.pixels**2*4>16*1024*1024)throw new Error('Texture byte limit; retain original display');
     const bytes=geometry.pixels**2*4;textureBytes+=bytes;
     let retained=false;
+    let canvas:HTMLCanvasElement|undefined;
     const url=URL.createObjectURL(new Blob([geometry.svg],{type:'image/svg+xml'}));
     try{
       const svg=new Image();await new Promise<void>((resolve,reject)=>{svg.onload=()=>{svg.onload=svg.onerror=null;resolve();};svg.onerror=()=>{svg.onload=svg.onerror=null;reject(new Error('Effect texture unavailable'));};svg.src=url;});
       if(generation!==resourceGeneration)throw new Error('Stale texture preparation cancelled');
-      const canvas=document.createElement('canvas');canvas.width=canvas.height=geometry.pixels;
+      canvas=document.createElement('canvas');canvas.width=canvas.height=geometry.pixels;
       const context=canvas.getContext('2d');if(!context)throw new Error('Texture canvas unavailable');
       context.drawImage(svg,0,0);preparationCount++;
       const result={...geometry,canvas};readyTextures.set(key,result);retained=true;return result;
-    }finally{URL.revokeObjectURL(url);if(!retained&&generation===resourceGeneration)textureBytes-=bytes;}
-  })();textures.set(key,pending);return pending;
+    }finally{URL.revokeObjectURL(url);if(!retained){if(canvas)canvas.width=canvas.height=0;if(generation===resourceGeneration)textureBytes-=bytes;}}
+  })().catch(error=>{if(generation===resourceGeneration&&textures.get(key)===pending)textures.delete(key);throw error;});textures.set(key,pending);return pending;
 };
 const recordFailure=(error:any)=>{if(failures.length<8)failures.push(String(error?.message??error));};
 const dpr=()=>window.devicePixelRatio||1;
 const resources=(url:string,diameter:number)=>{
   const scale=dpr(),hull=readyImages.get(url),fire=readyTextures.get(`fire:${diameter}:${scale}`),smoke=readyTextures.get(`smoke:${diameter}:${scale}`);
-  return hull&&fire&&smoke?{hull,fire,smoke}:null;
+  return hull&&fire&&smoke?{hull,fire,smoke,scale,generation:resourceGeneration}:null;
 };
 export const prepareCanvasImpactResources=(url:string,diameter:number)=>Promise.all([image(url),texture('fire',diameter,dpr()),texture('smoke',diameter,dpr())]);
 function piecesFrom(debris:any) {
@@ -116,10 +117,10 @@ function frame(time:number){
   const paused=surface.parentElement?.closest('.game-shell')?.getAttribute('data-effects-paused')==='true';
   if(paused){if(!pausedAt)pausedAt=time;frameId=requestAnimationFrame(frame);return;}
   if(pausedAt){pauseTotal+=time-pausedAt;pausedAt=0;}
-  const ctx=surface.getContext('2d');if(!ctx)return;
-  const scale=dpr();ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,surface.width,surface.height);
-  ctx.setTransform(scale,0,0,scale,-surfaceBox.left*scale,-surfaceBox.top*scale);
   try {
+    const ctx=surface.getContext('2d');if(!ctx)throw new Error('Effect surface context unavailable');
+    const scale=dpr();ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,surface.width,surface.height);
+    ctx.setTransform(scale,0,0,scale,-surfaceBox.left*scale,-surfaceBox.top*scale);
     for(const record of records.values()){drawImpact(ctx,record,Math.max(0,time-record.started-(pauseTotal-record.pauseStart)));draws++;fragmentDraws+=record.pieces.length;}
   } catch(error) { recordFailure(error); const disable=disableSurface;clearCanvasEffects();disable?.();return; }
   frameId=requestAnimationFrame(frame);
@@ -158,8 +159,18 @@ export function CanvasEffectLayer({children,enabled}:{children:React.ReactNode;e
     const canvas=ref.current!;
     if(!canvas.getContext('2d'))return;
     surface=canvas;failures=[];surfaceResizes=maxSurfaceBytes=0;
-    disableSurface=()=>setAvailable(value=>({...value,enabled:false}));
+    let failed=false;
+    disableSurface=()=>{failed=true;setAvailable(value=>({...value,enabled:false}));};
+    const lost=()=>{
+      if(failed)return;
+      recordFailure(new Error('Effect surface context lost'));
+      const disable=disableSurface;clearCanvasEffects();disable?.();
+    };
+    canvas.addEventListener('contextlost',lost);
     const resize=()=>{
+      // A failed surface stays on the original display for this mounted game;
+      // a viewport notification must not re-enable released texture canvases.
+      if(failed)return;
       const parent=canvas.parentElement!;
       fieldWidth=parent.clientWidth;fieldHeight=parent.clientHeight;grownBounds=null;
       fitSurface();schedule();
@@ -169,7 +180,7 @@ export function CanvasEffectLayer({children,enabled}:{children:React.ReactNode;e
     resize();
     const observer=new ResizeObserver(resize);observer.observe(canvas.parentElement!);
     return()=>{
-      observer.disconnect();clearCanvasEffects();
+      observer.disconnect();canvas.removeEventListener('contextlost',lost);clearCanvasEffects();
       if(surface===canvas)surface=null;
       disableSurface=null;
     };
@@ -185,20 +196,24 @@ export function CanvasImpact({effect,debris,original}:{effect:any;debris:any;ori
   const style=usePaintedShipStyle(effect.sprite,effect.debrisColor,effect.shipStage??1);
   const url=String(style.backgroundImage).replace(/^url\(["']?|["']?\)$/g,'');
   const diameter=explosionDiameter(effect.debrisSize??58);
-  const [loaded,setLoaded]=useState<any>(()=>resources(url,diameter));
+  const [loaded,setLoaded]=useState(()=>resources(url,diameter));
   const started=useRef(performance.now());
   const pauseStart=useRef(pauseTotal);
   const pieces=useMemo(()=>piecesFrom(debris),[debris]);
   useEffect(()=>{
     if(!availability.enabled)return;
     let active=true;const release=retainCanvasImpactHull(url);
+    const generation=resourceGeneration;
     void prepareCanvasImpactResources(url,diameter).then(([hull,fire,smoke])=>{
-      if(active)setLoaded({hull,fire,smoke,scale:availability.scale});
+      if(active&&generation===resourceGeneration)setLoaded(previous=>
+        previous?.hull===hull&&previous.fire===fire&&previous.smoke===smoke
+          &&previous.scale===availability.scale&&previous.generation===generation
+          ?previous:{hull,fire,smoke,scale:availability.scale,generation});
     },error=>{if(active)recordFailure(error);});
     return()=>{active=false;release();};
   },[url,diameter,availability.enabled,availability.scale]);
   const available=availability.enabled&&loaded?.hull?.src===url
-    &&(loaded.scale===undefined||loaded.scale===availability.scale);
+    &&loaded.scale===availability.scale&&loaded.generation===resourceGeneration;
   useLayoutEffect(()=>{
     if(!available)return;
     const record={effect,pieces,assets:loaded,started:started.current,pauseStart:pauseStart.current,bounds:null as any};

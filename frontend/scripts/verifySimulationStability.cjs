@@ -37,7 +37,7 @@ globalThis.__campaignQA = {
 };
 `;
 const presentation =
-  /(?:CardReveal|HullDamage|BlockchainProgress|SectorBackdrop|Starfield|PaintedShip|SystemSettings|MissionWeaponShop|BossWeaponsView|BossHealthView|BossReactorView|BossHullView|GameSceneBoundary|BonusRockLayer)$/;
+  /(?:CardReveal|HullDamage|BlockchainProgress|SectorBackdrop|Starfield|PaintedShip|SystemSettings|MissionWeaponShop|BossWeaponsView|BossHealthView|BossReactorView|BossHullView|GameSceneBoundary|BonusRockLayer|CanvasEffects)$/;
 (async () => {
   const compiled = await build({
     absWorkingDir: root,
@@ -72,7 +72,7 @@ const presentation =
             (a) => ({ path: a.path, namespace: "host" }),
           );
           b.onLoad({ filter: /.*/, namespace: "presentation" }, () => ({
-            contents: "export default function Presentation(){return null;}",
+            contents: "export default function Presentation(){return null;}export const CanvasEffectLayer=({children})=>children,CanvasImpact=({original})=>original;",
             loader: "js",
           }));
           b.onLoad({ filter: /.*/, namespace: "host" }, (a) => {

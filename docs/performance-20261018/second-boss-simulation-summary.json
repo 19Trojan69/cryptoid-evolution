@@ -1,0 +1,54 @@
+{
+  "passed": true,
+  "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+  "normal": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    21,
+    22
+  ],
+  "bosses": [
+    10,
+    20
+  ],
+  "peaks": {
+    "enemies": 6,
+    "shots": 8,
+    "hostile": 3,
+    "effects": 3,
+    "attackers": 2,
+    "returning": 1
+  },
+  "simulatedSeconds": 505.968,
+  "viewport": {
+    "width": 430,
+    "height": 825
+  },
+  "gameplayHash": "2d6f3916111850ef39520dda0d1752776a90d5df371f6cfb7dab5e991ff3c7b7",
+  "backgroundPreservesTimers": true,
+  "faultPreservesRun": true,
+  "checkpointRestoresState": true,
+  "cleanup": {
+    "raf": 0,
+    "timers": 0,
+    "listeners": 0
+  },
+  "rawReportSha256": "f0838871e22e102af4bc2e583b8cd4049ff296438f39157c6faac3c783607b59",
+  "limits": "Node simulation with forced group clears and boss defeat, extra lives and stubbed graphics/audio/API. Crosses sectors 19/20 after the first boss, but cannot reproduce or exclude iPhone WebKit/GPU termination."
+}

@@ -39,4 +39,11 @@ assert.equal(probe.read().sourceImages,8);
 for(const drop of releases)drop();
 await prepare('blob:later');assert.equal(probe.read().sourceImages,8,'a capacity fallback does not poison future requests');
 probe.stop();
-console.log(JSON.stringify({passed:true,checks:['abort during pending hull/SVG decoding','stale preparation cannot refill cleared caches','completed texture backing stores released','draw scheduler/registrations/caches cleared','24 changing hulls reuse eight retained slots','active hull stays decoded during eviction','capacity fallback recovers after active users release']}));
+// A temporary SVG decode failure must not poison the same texture key for the
+// rest of the game. Its successful sibling may stay cached and be reused.
+const failing=prepareCanvasImpactResources('blob:retry',62.5),failed=assert.rejects(failing,/Effect texture unavailable/);
+const batch=pendingImages.splice(0);batch[0].onload();batch[1].onerror();batch[2].onload();await failed;
+assert.equal(probe.read().textures,1,'only the successful texture stays cached');
+await prepare('blob:retry');assert.equal(probe.read().textures,2,'same texture can prepare after transient failure');
+probe.stop();
+console.log(JSON.stringify({passed:true,checks:['abort during pending hull/SVG decoding','stale preparation cannot refill cleared caches','completed texture backing stores released','draw scheduler/registrations/caches cleared','24 changing hulls reuse eight retained slots','active hull stays decoded during eviction','capacity fallback recovers after active users release','transient texture decode failure can retry']}));
