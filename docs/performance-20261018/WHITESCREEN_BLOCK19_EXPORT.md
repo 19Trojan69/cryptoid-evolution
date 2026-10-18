@@ -52,3 +52,15 @@ link while only deployed to preview. Mainnet remains excluded.
 
 The Whitescreen is NOT reproduced in this workspace and NOT proved fixed.
 No new full-game replay is needed merely to request the already stored report.
+
+## Preview verification
+
+Preview dpl_HadruRNBobgWkZTExdoVa58Uwi82 is READY from f67ad68. The standalone
+page opens directly without loading the game. Empty preview-origin storage is
+reported explicitly, as expected. Clicking Copy reaches the successful
+clipboard-write status. The cloud browser clipboard bridge returned an empty
+string, so the copied bytes were not independently verified through that bridge.
+Only browser-extension metadata errors appeared in the inspected console. The
+actual sanitizer/content cases passed the six Node tests above. Screenshot
+stability-export-preview.jpg records the reviewable page. Public Testnet remains
+dpl_J6HabPZCGHYRDAEE6nfVTtr23pWV / bb23a8b; no public endpoint has been released.
