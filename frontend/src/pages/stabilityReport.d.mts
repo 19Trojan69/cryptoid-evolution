@@ -2,7 +2,9 @@ type TechnicalStorage = { localStorage?: Pick<Storage, 'getItem'>; sessionStorag
 export type StabilityReport = {
   version: number; format: string; generatedAt: string | null; available: boolean;
   storage: Record<string, string>; events: Record<string, unknown>[];
-  lastSession: Record<string, unknown> | null; limits: string;
+  lastSession: Record<string, unknown> | null;
+  reloadTrace: { windowMs: number; latestAt: number; events: Record<string, unknown>[] } | null;
+  limits: string;
 };
 export function technicalContext(value: unknown): Record<string, unknown> | null;
 export function readStabilityReport(host: TechnicalStorage, now?: number): StabilityReport;
