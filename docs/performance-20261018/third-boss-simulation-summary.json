@@ -1,0 +1,67 @@
+{
+  "passed": true,
+  "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+  "normal": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    31,
+    32,
+    33
+  ],
+  "bosses": [
+    10,
+    20,
+    30
+  ],
+  "simulatedSeconds": 1311.764,
+  "viewport": {
+    "width": 430,
+    "height": 825
+  },
+  "peaks": {
+    "enemies": 6,
+    "shots": 82,
+    "hostile": 80,
+    "effects": 13,
+    "attackers": 3,
+    "returning": 2
+  },
+  "gameplayHash": "f0425e4624d11f6ad07ea2fa0961bb3274b89b6d3ebd2c1457870c106c8eed1e",
+  "backgroundPreservesTimers": true,
+  "faultPreservesRun": true,
+  "checkpointRestoresState": true,
+  "cleanup": {
+    "raf": 0,
+    "timers": 0,
+    "listeners": 0
+  },
+  "heldBossFightMsPerBoss": 180000,
+  "sourceGameSha256": "f46bc79bcda085a7148e996e0f35ae41d7b6c80b63308ddbac1cd5c22b1b33f5",
+  "rawSha256": "aa134e257d56894831f3fec2adabb7b95e55a684fab49b9eeeb90f7e2953850d",
+  "limits": "Forced ordinary group clears and boss defeat, extra lives, graphics/audio hardware/API stubs. No WebKit process, real campaign difficulty, GPU or device-memory inference. No public deployment."
+}
