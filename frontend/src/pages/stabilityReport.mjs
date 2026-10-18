@@ -18,6 +18,8 @@ const reloadKinds = new Set([
   'beforeunload','pagehide','pageshow','visibility-hidden','visibility-visible','webgl-context-lost','webgl-context-restored',
   'canvas-context-lost','canvas-context-restored','frame-error','loop-stall','input-error','javascript-error',
   'unhandled-rejection','render-error','home-intent','saved-exit-intent','boss-defeat-start','boss-defeat-complete','boss-victory-start',
+  'resource-boss-clear','resource-boss-clear-ready','resource-bonus-start','resource-bonus-first-spawn','resource-bonus-clear',
+  'resource-normal-start','resource-normal-first-spawn','resource-formation-ready',
 ]);
 const numberLimits = {
   sector: 500, block: 10, width: 16384, height: 16384, enemies: 1000, projectiles: 10000, effects: 10000,
@@ -26,6 +28,13 @@ const numberLimits = {
   bossElapsedMs: 3600000, coreElapsedMs: 3600000, bossVolley: 100000, coreVolley: 100000,
   bossEscortWave: 100000, bossEscortSpawned: 100000, bossEscortTimerMs: 3600000,
   attackCooldownMs: 3600000, spawnTimerMs: 3600000, clearTimerMs: 3600000, elapsedMs: 24 * 60 * 60 * 1000,
+  jsHeapBytes: 16e9, domNodes: 200000, runningAnimations: 100000, canvasNodes: 10000, imageNodes: 100000,
+  paintedEntries: 1000, paintedBytes: 2e9, paintedSources: 1000, paintedPending: 1000,
+  paintedRetained: 1000, paintedRetainCount: 10000, paintedSourceRetained: 1000, paintedSourceRetainCount: 10000,
+  canvasRegisteredEffects: 10000, canvasSourceImages: 1000, canvasTextureEntries: 1000,
+  canvasCacheBytes: 2e9, canvasSurfaceBytes: 2e9, canvasRetainedHullUsers: 1000, canvasFailureCount: 1000,
+  audioVoices: 10000, audioWeaponVoices: 10000, audioBossVoices: 10000, audioEffectVoices: 10000,
+  audioSampleBuffers: 10000, audioRockBuffers: 10000, audioBufferBytes: 2e9, estimatedResourceBytes: 8e9,
 };
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const finite = (value, max = 1e15) => typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= max;
@@ -38,6 +47,7 @@ export function technicalContext(value) {
   }
   for (const [key, max] of Object.entries(numberLimits)) if (finite(value[key], max)) result[key] = value[key];
   if (typeof value.reactorOpen === 'boolean') result.reactorOpen = value.reactorOpen;
+  if (typeof value.audioState === 'string' && ['none','suspended','running','closed','interrupted'].includes(value.audioState)) result.audioState = value.audioState;
   if (time(value.at)) result.at = value.at;
   return Object.keys(result).length ? result : null;
 }
@@ -101,7 +111,7 @@ export function readStabilityReport(host, now = Date.now()) {
   }
   const reloadTrace = mergeReload(reloadLocal.value, reloadSession.value);
   return {
-    version: 2,
+    version: 3,
     format: 'cryptoid-local-stability-report',
     generatedAt: finite(now) ? new Date(now).toISOString() : null,
     available: events.length > 0 || lastSession !== null || reloadTrace !== null,
@@ -112,7 +122,7 @@ export function readStabilityReport(host, now = Date.now()) {
     events,
     lastSession,
     reloadTrace,
-    limits: 'Lokale Unterbrechungs-, Reload-, Lifecycle- und Freeze-Hinweise. Kein Beweis für einen Speicher-, Browserprozess- oder Betriebssystem-Absturz. Keine Konto-, Kauf- oder Spielstanddaten.',
+    limits: 'Lokale Unterbrechungs-, Reload-, Lifecycle-, Freeze- und Übergangs-Ressourcenhinweise. Speicherwerte sind nur bekannte/geschätzte Teilmengen; GPU/WebKit-Speicher kann fehlen. Kein Beweis für einen Speicher-, Browserprozess- oder Betriebssystem-Absturz. Keine Konto-, Kauf- oder Spielstanddaten.',
   };
 }
 
