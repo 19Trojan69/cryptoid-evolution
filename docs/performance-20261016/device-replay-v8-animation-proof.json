@@ -1,0 +1,144 @@
+{
+  "passed": true,
+  "framesMs": [
+    180,
+    650,
+    1600
+  ],
+  "alphaMaxError": 4.986275530249884e-7,
+  "matrixMaxError": 0.00007195333613907451,
+  "errors": [
+    {
+      "stage": "0-original",
+      "pseudo": "::before",
+      "alphaError": 0,
+      "matrixMaxError": 4.2954575152354124e-7
+    },
+    {
+      "stage": "0-original",
+      "pseudo": "::after",
+      "alphaError": 0,
+      "matrixMaxError": 0
+    },
+    {
+      "stage": "0-original",
+      "fragment": 0,
+      "alphaError": 3.3123332188189636e-7,
+      "matrixMaxError": 0.00004755072642659286
+    },
+    {
+      "stage": "0-original",
+      "fragment": 1,
+      "alphaError": 1.0431468078220263e-7,
+      "matrixMaxError": 0.00003386377323266743
+    },
+    {
+      "stage": "0-original",
+      "fragment": 2,
+      "alphaError": 2.3827111439445048e-7,
+      "matrixMaxError": 0.0000011272724522726207
+    },
+    {
+      "stage": "0-original",
+      "fragment": 3,
+      "alphaError": 2.9353332331449877e-7,
+      "matrixMaxError": 0.000024605036275104908
+    },
+    {
+      "stage": "1-original",
+      "pseudo": "::before",
+      "alphaError": 2.319263382455361e-7,
+      "matrixMaxError": 0.00002037890397765807
+    },
+    {
+      "stage": "1-original",
+      "pseudo": "::after",
+      "alphaError": 1.5724061763755515e-7,
+      "matrixMaxError": 0.00007195333613907451
+    },
+    {
+      "stage": "1-original",
+      "fragment": 0,
+      "alphaError": 4.210150610362007e-7,
+      "matrixMaxError": 0.00003083770062417557
+    },
+    {
+      "stage": "1-original",
+      "fragment": 1,
+      "alphaError": 4.386308600778932e-7,
+      "matrixMaxError": 0.00003099180037935412
+    },
+    {
+      "stage": "1-original",
+      "fragment": 2,
+      "alphaError": 1.097384845216709e-7,
+      "matrixMaxError": 0.00004547267251808762
+    },
+    {
+      "stage": "1-original",
+      "fragment": 3,
+      "alphaError": 4.7367788025276525e-8,
+      "matrixMaxError": 0.00004545576301850929
+    },
+    {
+      "stage": "1-original",
+      "fragment": 4,
+      "alphaError": 2.8444768074287197e-7,
+      "matrixMaxError": 0.00002177123559832239
+    },
+    {
+      "stage": "1-original",
+      "fragment": 5,
+      "alphaError": 2.4159329892192716e-7,
+      "matrixMaxError": 0.00002357849125900202
+    },
+    {
+      "stage": "1-original",
+      "fragment": 6,
+      "alphaError": 1.2850798158936527e-7,
+      "matrixMaxError": 0.0000037650147755030616
+    },
+    {
+      "stage": "1-original",
+      "fragment": 7,
+      "alphaError": 3.3612612604372316e-7,
+      "matrixMaxError": 0.00003103895040368343
+    },
+    {
+      "stage": "2-original",
+      "pseudo": "::before",
+      "alphaError": 0,
+      "matrixMaxError": 1.7763568394002505e-15
+    },
+    {
+      "stage": "2-original",
+      "pseudo": "::after",
+      "alphaError": 0,
+      "matrixMaxError": 4.440892098500626e-16
+    },
+    {
+      "stage": "2-original",
+      "fragment": 0,
+      "alphaError": 2.564324852460942e-8,
+      "matrixMaxError": 0.00004647697009829699
+    },
+    {
+      "stage": "2-original",
+      "fragment": 1,
+      "alphaError": 4.1731245592480093e-7,
+      "matrixMaxError": 0.000037967502057867364
+    },
+    {
+      "stage": "2-original",
+      "fragment": 2,
+      "alphaError": 3.5075393522987497e-7,
+      "matrixMaxError": 0.000024977803985137825
+    },
+    {
+      "stage": "2-original",
+      "fragment": 3,
+      "alphaError": 4.986275530249884e-7,
+      "matrixMaxError": 0.000027139729596115103
+    }
+  ]
+}

@@ -4,8 +4,9 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const fragments=process.env.CRYPTOID_REPLAY_PROFILE==='fragments';
 const workload=process.env.CRYPTOID_REPLAY_PROFILE==='workload';
 const layers=process.env.CRYPTOID_REPLAY_PROFILE==='layers';
+const raster=process.env.CRYPTOID_REPLAY_PROFILE==='raster';
 const effects=fragments||process.env.CRYPTOID_REPLAY_PROFILE==='effects';
-const lifecycle=layers||workload||effects||process.env.CRYPTOID_REPLAY_PROFILE==='lifecycle';
+const lifecycle=raster||layers||workload||effects||process.env.CRYPTOID_REPLAY_PROFILE==='lifecycle';
 const file=path.join(__dirname,'verifySimulationStability.cjs');
 let source=fs.readFileSync(file,'utf8');
 const once=(before,after)=>{assert.equal(source.split(before).length,2,before);source=source.replace(before,after);};
@@ -16,8 +17,9 @@ once('  const document = {',`  const {createDeviceReplay}=await import(path.join
   const {FRAGMENT_PHASES}=await import(path.join(__dirname,'deviceReplay/fragmentCrop.mjs'));
   const {WORKLOAD_PHASES}=await import(path.join(__dirname,'deviceReplay/effectWorkload.mjs'));
   const {LAYER_PHASES}=await import(path.join(__dirname,'deviceReplay/effectLayers.mjs'));
+  const {RASTER_PHASES}=await import(path.join(__dirname,'deviceReplay/rasterPhases.mjs'));
   let deviceReport;
-  host.__cryptoidDeviceReplay=createDeviceReplay({now:()=>clock,...${lifecycle?'{phases:'+(layers?'LAYER_PHASES':workload?'WORKLOAD_PHASES':fragments?'FRAGMENT_PHASES':effects?'EFFECT_PHASES':'LIFECYCLE_PHASES')+'}':'{}'},onFinish:r=>{deviceReport=r;}});
+  host.__cryptoidDeviceReplay=createDeviceReplay({now:()=>clock,...${lifecycle?'{phases:'+(raster?'RASTER_PHASES':layers?'LAYER_PHASES':workload?'WORKLOAD_PHASES':fragments?'FRAGMENT_PHASES':effects?'EFFECT_PHASES':'LIFECYCLE_PHASES')+'}':'{}'},onFinish:r=>{deviceReport=r;}});
   const document = {`);
 once('  context.__GamePageFactory();',`  const entry=context.module.exports.default();
   assert.equal(entry.type,context.__GamePageFactory,'real GameEntry mounts the game');
@@ -36,16 +38,16 @@ once('source.replace("useRef({ width: 800, height: 600 })",',`source.replace('  
 // End after a full 88-second fixture instead of continuing campaign QA.
 const cut=source.indexOf('  const emit = (type) => {');assert.ok(cut>0);
 source=source.slice(0,cut)+`
-  await advance(${layers||workload?60000:effects?70000:lifecycle?120000:90000});
+  await advance(${raster||layers||workload?60000:effects?70000:lifecycle?120000:90000});
   assert.ok(deviceReport,'controller finished');
   assert.equal(deviceReport.completed,true,JSON.stringify(deviceReport));
-  assert.equal(deviceReport.phases.length,${layers||workload?5:effects?3:4});
+  assert.equal(deviceReport.phases.length,${layers||workload?5:raster||effects?3:4});
   for(const phase of deviceReport.phases){
     assert.equal(phase.end.status,'playing');assert.ok(phase.frames>0);assert.ok(phase.volleys>0);
     assert.equal(phase.fixtureResets,0,'no emergency fixture reset');
     ${lifecycle?'assert.ok(phase.end.lifecycle.samples.length<=128);assert.ok(phase.wallMs>=phase.durationMs);assert.ok(phase.wallMs<phase.durationMs+100);':"assert.equal(phase.end.sector,12);assert.equal(phase.end.enemies,phase.enemies);"}
   }
-  ${effects||workload||layers?`for(const phase of deviceReport.phases){
+  ${effects||workload||layers||raster?`for(const phase of deviceReport.phases){
     assert.ok(phase.end.destroyed>=10);assert.ok(phase.end.lifecycle.refills>=10);
     assert.ok(phase.end.lifecycle.maxEffects>0);assert.equal(phase.end.sector,12);
     // Phase snapshot precedes sustain/refill on the boundary frame.

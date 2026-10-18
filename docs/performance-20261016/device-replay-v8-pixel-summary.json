@@ -1,0 +1,20 @@
+[
+  {
+    "time": 0.18,
+    "meanChannelError": 0.3074030501089325,
+    "pixelsOver15": 0.00522875816993464,
+    "foregroundMeanError": 5.796543032048974
+  },
+  {
+    "time": 0.65,
+    "meanChannelError": 0.28095424836601307,
+    "pixelsOver15": 0.0030457516339869282,
+    "foregroundMeanError": 1.8747227503168569
+  },
+  {
+    "time": 1.6,
+    "meanChannelError": 0.043899782135076254,
+    "pixelsOver15": 0.0007320261437908497,
+    "foregroundMeanError": 15.22316384180791
+  }
+]

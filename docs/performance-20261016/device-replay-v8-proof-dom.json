@@ -1,0 +1,244 @@
+[
+  {
+    "fragments": [
+      {
+        "clipPath": "polygon(0.947431% 0%, 48.9677% 0%, 50% 4.03518%, 50% 45.4244%, 45.1057% 50%, 4.2107% 50%, 0% 46.6153%, 0% 3.11357%)",
+        "delay": "-0.139s",
+        "inlineStyle": "clip-path: polygon(0.947431% 0%, 48.9677% 0%, 50% 4.03518%, 50% 45.4244%, 45.1057% 50%, 4.2107% 50%, 0% 46.6153%, 0% 3.11357%); transform-origin: 25% 25%; --fragment-x: -49.4px; --fragment-y: -8.0px; --fragment-spin: 321.4deg; --fragment-delay: 41ms;",
+        "opacity": "0.974842",
+        "origin": "12.5px 12.5px",
+        "transform": "matrix(-0.00908368, 0.873107, -0.873107, -0.00908368, -13.9248, -2.25504)"
+      },
+      {
+        "clipPath": "polygon(53.0413% 0%, 94.9389% 0%, 100% 2.76646%, 100% 47.2815%, 97.1899% 50%, 51.6443% 50%, 50% 46.7391%, 50% 6.59575%)",
+        "delay": "-0.173s",
+        "inlineStyle": "clip-path: polygon(53.0413% 0%, 94.9389% 0%, 100% 2.76646%, 100% 47.2815%, 97.1899% 50%, 51.6443% 50%, 50% 46.7391%, 50% 6.59575%); transform-origin: 75% 25%; --fragment-x: 46.5px; --fragment-y: -12.8px; --fragment-spin: -167.7deg; --fragment-delay: 7ms;",
+        "opacity": "0.997363",
+        "origin": "37.5px 12.5px",
+        "transform": "matrix(0.46995, -0.706732, 0.706732, 0.46995, 15.6324, -4.30312)"
+      },
+      {
+        "clipPath": "polygon(6.61288% 50%, 44.1181% 50%, 50% 51.4283%, 50% 97.2458%, 47.6263% 100%, 4.62147% 100%, 0% 96.1977%, 0% 52.05%)",
+        "delay": "-0.144s",
+        "inlineStyle": "clip-path: polygon(6.61288% 50%, 44.1181% 50%, 50% 51.4283%, 50% 97.2458%, 47.6263% 100%, 4.62147% 100%, 0% 96.1977%, 0% 52.05%); transform-origin: 25% 75%; --fragment-x: -14.7px; --fragment-y: 32.2px; --fragment-spin: -186.6deg; --fragment-delay: 36ms;",
+        "opacity": "0.979848",
+        "origin": "12.5px 37.5px",
+        "transform": "matrix(0.509129, -0.704734, 0.704734, 0.509129, -4.26616, 9.34492)"
+      },
+      {
+        "clipPath": "polygon(53.9498% 50%, 96.9656% 50%, 100% 52.412%, 100% 94.8494%, 96.9808% 100%, 52.5128% 100%, 50% 97.3837%, 50% 53.0025%)",
+        "delay": "-0.162s",
+        "inlineStyle": "clip-path: polygon(53.9498% 50%, 96.9656% 50%, 100% 52.412%, 100% 94.8494%, 96.9808% 100%, 52.5128% 100%, 50% 97.3837%, 50% 53.0025%); transform-origin: 75% 75%; --fragment-x: 21.1px; --fragment-y: 39.4px; --fragment-spin: -213.2deg; --fragment-delay: 18ms;",
+        "opacity": "0.992841",
+        "origin": "37.5px 37.5px",
+        "transform": "matrix(0.320018, -0.794312, 0.794312, 0.320018, 6.73538, 12.577)"
+      }
+    ],
+    "layers": [
+      {
+        "height": "77.5px",
+        "opacity": "1",
+        "pseudo": "::before",
+        "transform": "matrix(0.959405, 0, 0, 0.879455, -1.54808, -2.32212)",
+        "width": "77.5px"
+      },
+      {
+        "height": "90px",
+        "opacity": "0",
+        "pseudo": "::after",
+        "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+        "width": "90px"
+      }
+    ],
+    "rect": {
+      "height": 225,
+      "width": 340,
+      "x": 24,
+      "y": 295.1875
+    },
+    "stage": "0-original"
+  },
+  {
+    "fragments": null,
+    "layers": null,
+    "rect": {
+      "height": 225,
+      "width": 340,
+      "x": 376,
+      "y": 295.1875
+    },
+    "stage": "0-canvas"
+  },
+  {
+    "fragments": [
+      {
+        "clipPath": "polygon(0.609063% 0%, 24.3364% 0%, 25% 2.59405%, 25% 47.0585%, 21.8537% 50%, 2.70688% 50%, 0% 47.8241%, 0% 2.00158%)",
+        "delay": "-0.609s",
+        "inlineStyle": "clip-path: polygon(0.609063% 0%, 24.3364% 0%, 25% 2.59405%, 25% 47.0585%, 21.8537% 50%, 2.70688% 50%, 0% 47.8241%, 0% 2.00158%); transform-origin: 12.5% 25%; --fragment-x: -72.6px; --fragment-y: -22.1px; --fragment-spin: 321.4deg; --fragment-delay: 41ms;",
+        "opacity": "0.962043",
+        "origin": "9px 18px",
+        "transform": "matrix(-0.38466, -0.54973, 0.54973, -0.38466, -53.0876, -16.1603)"
+      },
+      {
+        "clipPath": "polygon(26.9551% 0%, 46.7465% 0%, 50% 1.77844%, 50% 48.2524%, 48.1935% 50%, 26.0571% 50%, 25% 47.9037%, 25% 4.24013%)",
+        "delay": "-0.643s",
+        "inlineStyle": "clip-path: polygon(26.9551% 0%, 46.7465% 0%, 50% 1.77844%, 50% 48.2524%, 48.1935% 50%, 26.0571% 50%, 25% 47.9037%, 25% 4.24013%); transform-origin: 37.5% 25%; --fragment-x: -48.7px; --fragment-y: -16.1px; --fragment-spin: -167.7deg; --fragment-delay: 7ms;",
+        "opacity": "0.960801",
+        "origin": "27px 18px",
+        "transform": "matrix(-0.38584, -0.539163, 0.539163, -0.38584, -36.4709, -12.0571)"
+      },
+      {
+        "clipPath": "polygon(54.2511% 0%, 71.2188% 0%, 75% 0.918179%, 75% 48.2295%, 73.474% 50%, 52.9709% 50%, 50% 47.5556%, 50% 1.31786%)",
+        "delay": "-0.614s",
+        "inlineStyle": "clip-path: polygon(54.2511% 0%, 71.2188% 0%, 75% 0.918179%, 75% 48.2295%, 73.474% 50%, 52.9709% 50%, 50% 47.5556%, 50% 1.31786%); transform-origin: 62.5% 25%; --fragment-x: 19.9px; --fragment-y: -63.0px; --fragment-spin: -186.6deg; --fragment-delay: 36ms;",
+        "opacity": "0.961852",
+        "origin": "45px 18px",
+        "transform": "matrix(-0.489391, -0.457224, 0.457224, -0.489391, 14.6047, -46.2359)"
+      },
+      {
+        "clipPath": "polygon(77.5392% 0%, 98.0493% 0%, 100% 1.55055%, 100% 46.6889%, 98.0591% 50%, 76.6154% 50%, 75% 48.3181%, 75% 1.93018%)",
+        "delay": "-0.632s",
+        "inlineStyle": "clip-path: polygon(77.5392% 0%, 98.0493% 0%, 100% 1.55055%, 100% 46.6889%, 98.0591% 50%, 76.6154% 50%, 75% 48.3181%, 75% 1.93018%); transform-origin: 87.5% 25%; --fragment-x: 68.0px; --fragment-y: -27.4px; --fragment-spin: -213.2deg; --fragment-delay: 18ms;",
+        "opacity": "0.961189",
+        "origin": "63px 18px",
+        "transform": "matrix(-0.619086, -0.244217, 0.244217, -0.619086, 50.5445, -20.3664)"
+      },
+      {
+        "clipPath": "polygon(3.29644% 50%, 21.0973% 50%, 25% 50.9255%, 25% 99.8119%, 20.6295% 100%, 2.41576% 100%, 0% 97.5234%, 0% 51.1975%)",
+        "delay": "-0.641s",
+        "inlineStyle": "clip-path: polygon(3.29644% 50%, 21.0973% 50%, 25% 50.9255%, 25% 99.8119%, 20.6295% 100%, 2.41576% 100%, 0% 97.5234%, 0% 51.1975%); transform-origin: 12.5% 75%; --fragment-x: -41.9px; --fragment-y: 44.7px; --fragment-spin: -239.6deg; --fragment-delay: 9ms;",
+        "opacity": "0.96087",
+        "origin": "9px 54px",
+        "transform": "matrix(-0.663388, -0.00935204, 0.00935204, -0.663388, -31.3362, 33.4303)"
+      },
+      {
+        "clipPath": "polygon(25.6819% 50%, 49.4977% 50%, 50% 51.5579%, 50% 97.3009%, 49.7925% 100%, 26.0815% 100%, 25% 99.3845%, 25% 51.8838%)",
+        "delay": "-0.645s",
+        "inlineStyle": "clip-path: polygon(25.6819% 50%, 49.4977% 50%, 50% 51.5579%, 50% 97.3009%, 49.7925% 100%, 26.0815% 100%, 25% 99.3845%, 25% 51.8838%); transform-origin: 37.5% 75%; --fragment-x: -17.8px; --fragment-y: 55.8px; --fragment-spin: -211.0deg; --fragment-delay: 5ms;",
+        "opacity": "0.960731",
+        "origin": "27px 54px",
+        "transform": "matrix(-0.615284, -0.245757, 0.245757, -0.615284, -13.3481, 41.844)"
+      },
+      {
+        "clipPath": "polygon(52.0753% 50%, 73.8912% 50%, 75% 54.4271%, 75% 98.4779%, 71.1048% 100%, 50.3799% 100%, 50% 97.2783%, 50% 50.5074%)",
+        "delay": "-0.635s",
+        "inlineStyle": "clip-path: polygon(52.0753% 50%, 73.8912% 50%, 75% 54.4271%, 75% 98.4779%, 71.1048% 100%, 50.3799% 100%, 50% 97.2783%, 50% 50.5074%); transform-origin: 62.5% 75%; --fragment-x: 5.4px; --fragment-y: 83.7px; --fragment-spin: 353.2deg; --fragment-delay: 15ms;",
+        "opacity": "0.961082",
+        "origin": "45px 54px",
+        "transform": "matrix(-0.080144, -0.659975, 0.659975, -0.080144, 4.02212, 62.3428)"
+      },
+      {
+        "clipPath": "polygon(79.4729% 50%, 96.1068% 50%, 100% 52.038%, 100% 95.689%, 98.6255% 100%, 77.3507% 100%, 75% 97.8756%, 75% 52.8865%)",
+        "delay": "-0.65s",
+        "inlineStyle": "clip-path: polygon(79.4729% 50%, 96.1068% 50%, 100% 52.038%, 100% 95.689%, 98.6255% 100%, 77.3507% 100%, 75% 97.8756%, 75% 52.8865%); transform-origin: 87.5% 75%; --fragment-x: 49.5px; --fragment-y: 59.9px; --fragment-spin: 283.3deg; --fragment-delay: 0ms;",
+        "opacity": "0.96056",
+        "origin": "63px 54px",
+        "transform": "matrix(-0.553771, -0.361695, 0.361695, -0.553771, 37.243, 45.0678)"
+      }
+    ],
+    "layers": [
+      {
+        "height": "111.594px",
+        "opacity": "0.338753",
+        "pseudo": "::before",
+        "transform": "matrix(1.27543, 0, 0, 1.18651, -0.873678, -9.41202)",
+        "width": "111.594px"
+      },
+      {
+        "height": "129.594px",
+        "opacity": "0.513601",
+        "pseudo": "::after",
+        "transform": "matrix(1.07581, 0, 0, 0.974668, -2.45367, -13.5434)",
+        "width": "129.594px"
+      }
+    ],
+    "rect": {
+      "height": 225,
+      "width": 340,
+      "x": 24,
+      "y": 596.1875
+    },
+    "stage": "1-original"
+  },
+  {
+    "fragments": null,
+    "layers": null,
+    "rect": {
+      "height": 225,
+      "width": 340,
+      "x": 376,
+      "y": 596.1875
+    },
+    "stage": "1-canvas"
+  },
+  {
+    "fragments": [
+      {
+        "clipPath": "polygon(0.947431% 0%, 48.9677% 0%, 50% 4.03518%, 50% 45.4244%, 45.1057% 50%, 4.2107% 50%, 0% 46.6153%, 0% 3.11357%)",
+        "delay": "-1.559s",
+        "inlineStyle": "clip-path: polygon(0.947431% 0%, 48.9677% 0%, 50% 4.03518%, 50% 45.4244%, 45.1057% 50%, 4.2107% 50%, 0% 46.6153%, 0% 3.11357%); transform-origin: 25% 25%; --fragment-x: -49.4px; --fragment-y: -8.0px; --fragment-spin: 321.4deg; --fragment-delay: 41ms;",
+        "opacity": "0.71946",
+        "origin": "12.5px 12.5px",
+        "transform": "matrix(0.387777, -0.404988, 0.404988, 0.387777, -48.2251, -7.80974)"
+      },
+      {
+        "clipPath": "polygon(53.0413% 0%, 94.9389% 0%, 100% 2.76646%, 100% 47.2815%, 97.1899% 50%, 51.6443% 50%, 50% 46.7391%, 50% 6.59575%)",
+        "delay": "-1.593s",
+        "inlineStyle": "clip-path: polygon(53.0413% 0%, 94.9389% 0%, 100% 2.76646%, 100% 47.2815%, 97.1899% 50%, 51.6443% 50%, 50% 46.7391%, 50% 6.59575%); transform-origin: 75% 25%; --fragment-x: 46.5px; --fragment-y: -12.8px; --fragment-spin: -167.7deg; --fragment-delay: 7ms;",
+        "opacity": "0.54548",
+        "origin": "37.5px 12.5px",
+        "transform": "matrix(-0.538258, -0.152102, 0.152102, -0.538258, 45.5353, -12.5344)"
+      },
+      {
+        "clipPath": "polygon(6.61288% 50%, 44.1181% 50%, 50% 51.4283%, 50% 97.2458%, 47.6263% 100%, 4.62147% 100%, 0% 96.1977%, 0% 52.05%)",
+        "delay": "-1.564s",
+        "inlineStyle": "clip-path: polygon(6.61288% 50%, 44.1181% 50%, 50% 51.4283%, 50% 97.2458%, 47.6263% 100%, 4.62147% 100%, 0% 96.1977%, 0% 52.05%); transform-origin: 25% 75%; --fragment-x: -14.7px; --fragment-y: 32.2px; --fragment-spin: -186.6deg; --fragment-delay: 36ms;",
+        "opacity": "0.689789",
+        "origin": "12.5px 37.5px",
+        "transform": "matrix(-0.560063, 0.0219889, -0.0219889, -0.560063, -14.3572, 31.4491)"
+      },
+      {
+        "clipPath": "polygon(53.9498% 50%, 96.9656% 50%, 100% 52.412%, 100% 94.8494%, 96.9808% 100%, 52.5128% 100%, 50% 97.3837%, 50% 53.0025%)",
+        "delay": "-1.582s",
+        "inlineStyle": "clip-path: polygon(53.9498% 50%, 96.9656% 50%, 100% 52.412%, 100% 94.8494%, 96.9808% 100%, 52.5128% 100%, 50% 97.3837%, 50% 53.0025%); transform-origin: 75% 75%; --fragment-x: 21.1px; --fragment-y: 39.4px; --fragment-spin: -213.2deg; --fragment-delay: 18ms;",
+        "opacity": "0.595125",
+        "origin": "37.5px 37.5px",
+        "transform": "matrix(-0.491591, 0.267724, -0.267724, -0.491591, 20.6421, 38.5449)"
+      }
+    ],
+    "layers": [
+      {
+        "height": "77.5px",
+        "opacity": "0",
+        "pseudo": "::before",
+        "transform": "matrix(1.32, 0, 0, 1.24, 0.775, -9.3)",
+        "width": "77.5px"
+      },
+      {
+        "height": "90px",
+        "opacity": "0",
+        "pseudo": "::after",
+        "transform": "matrix(1.5, 0, 0, 1.3, 2.7, -22.5)",
+        "width": "90px"
+      }
+    ],
+    "rect": {
+      "height": 225,
+      "width": 340,
+      "x": 24,
+      "y": 897.1875
+    },
+    "stage": "2-original"
+  },
+  {
+    "fragments": null,
+    "layers": null,
+    "rect": {
+      "height": 225,
+      "width": 340,
+      "x": 376,
+      "y": 897.1875
+    },
+    "stage": "2-canvas"
+  }
+]

@@ -14,14 +14,29 @@ assert.equal(createHash('sha256').update(original).digest('hex'),expectedGameHas
 const fragments=process.env.CRYPTOID_REPLAY_PROFILE==='fragments';
 const workload=process.env.CRYPTOID_REPLAY_PROFILE==='workload';
 const layers=process.env.CRYPTOID_REPLAY_PROFILE==='layers';
+const raster=process.env.CRYPTOID_REPLAY_PROFILE==='raster';
 const effects=fragments||process.env.CRYPTOID_REPLAY_PROFILE==='effects';
-const lifecycle=layers||workload||effects||process.env.CRYPTOID_REPLAY_PROFILE==='lifecycle';
+const lifecycle=raster||layers||workload||effects||process.env.CRYPTOID_REPLAY_PROFILE==='lifecycle';
 const audioOriginal=fs.readFileSync(path.join(root,'src/pages/gameAudio.ts'),'utf8');
-const buildInfo={id:layers?'device-replay-20261018-v7-layers':workload?'device-replay-20261018-v6-cause':fragments?'device-replay-20261018-v5-fragments':effects?'device-replay-20261018-v4-effects':lifecycle?'device-replay-20261018-v3-lifecycle':'device-replay-20261018-v2',gameCommit:'27d174788327c3423f04ace32be61af67a2004cc',gameSourceSha256:expectedGameHash,...(workload||layers?{audioSourceSha256:createHash('sha256').update(audioOriginal).digest('hex')}: {})};
+const buildInfo={id:raster?'device-replay-20261018-v8-canvas':layers?'device-replay-20261018-v7-layers':workload?'device-replay-20261018-v6-cause':fragments?'device-replay-20261018-v5-fragments':effects?'device-replay-20261018-v4-effects':lifecycle?'device-replay-20261018-v3-lifecycle':'device-replay-20261018-v2',gameCommit:'27d174788327c3423f04ace32be61af67a2004cc',gameSourceSha256:expectedGameHash,...(workload||layers||raster?{audioSourceSha256:createHash('sha256').update(audioOriginal).digest('hex')}: {})};
+const originalCss=fs.readFileSync(path.join(root,'src/index.css'),'utf8');
+if(raster)buildInfo.stylesSourceSha256=createHash('sha256').update(originalCss).digest('hex');
+const explosionArt=Object.fromEntries(['fire','smoke'].map((kind,index)=>{
+ const line=originalCss.split('\n').find(l=>l.includes(`.impact-effect.explosion::${index?'after':'before'},`) && l.includes('{ position: absolute; z-index: 0;'));
+ assert.ok(line,'original '+kind+' artwork');
+ const declarations=Object.fromEntries([...line.slice(line.indexOf('{')+1,line.lastIndexOf('}')).matchAll(/([\w-]+):\s*([^;]+);/g)].map(m=>[m[1],m[2]]));
+ return [kind,Object.fromEntries(['inset','border-radius','background','filter'].map(key=>[key,declarations[key]]))];
+}));
 const hooks=fs.readFileSync(path.join(root,'scripts/deviceReplay',lifecycle?'lifecycleHooks.ts.txt':'gameHooks.ts.txt'),'utf8');
 const instrument=source=>{
  const once=(before,after)=>{assert.equal(source.split(before).length,2,'unique insertion '+before.slice(0,70));source=source.replace(before,after);};
  once('const shipDebris =','export const shipDebris =');
+ if(raster){
+   source='import { ReplayCanvasImpact, ReplayCanvasSurface } from "../../scripts/deviceReplay/CanvasImpact";\n'+source;
+   once('const ImpactEffectView = memo(', 'const OriginalImpactEffectView = memo(');
+   once('const GamePage = () => {', 'const ImpactEffectView = memo(({effect}:{effect:Effect}) => (effect.kind==="explosion"||effect.kind==="shatter")&&effect.sprite!==undefined&&effect.debrisColor ? <ReplayCanvasImpact effect={effect} debris={shipDebris(effect)} original={<OriginalImpactEffectView effect={effect}/>}/> : <OriginalImpactEffectView effect={effect}/>);\n\nconst GamePage = () => {');
+   once('{game.effects.filter(bossExplosionReady)', '<ReplayCanvasSurface/>{game.effects.filter(bossExplosionReady)');
+ }
  if(layers)once('export const shipDebris = (effect: Effect) => {',
    'export const shipDebris = (effect: Effect) => {\n  if((effect.kind==="explosion"||effect.kind==="shatter")&&(window as any).__cryptoidDeviceReplay?.layers?.allowDebris()===false)return null;');
  if(fragments){
@@ -43,11 +58,11 @@ fs.mkdirSync(path.join(destination,'public'),{recursive:true});
 const bundled=await build({absWorkingDir:root,entryPoints:['scripts/deviceReplay/entry.tsx'],bundle:true,write:false,
  platform:'browser',format:'esm',target:['safari16'],jsx:'automatic',minify:true,metafile:true,
  define:{'import.meta.env':'{"VITE_CRYPTOID_DIAGNOSTICS":"0"}','process.env.NODE_ENV':'"production"',
-   __CRYPTOID_RELEASE__:'"DEVICE REPLAY"',__CRYPTOID_REPLAY_BUILD__:JSON.stringify(buildInfo),__CRYPTOID_LIFECYCLE__:JSON.stringify(lifecycle),__CRYPTOID_EFFECTS__:JSON.stringify(effects),__CRYPTOID_FRAGMENTS__:JSON.stringify(fragments),__CRYPTOID_WORKLOAD__:JSON.stringify(workload),__CRYPTOID_LAYERS__:JSON.stringify(layers)},
+   __CRYPTOID_RELEASE__:'"DEVICE REPLAY"',__CRYPTOID_REPLAY_BUILD__:JSON.stringify(buildInfo),__CRYPTOID_LIFECYCLE__:JSON.stringify(lifecycle),__CRYPTOID_EFFECTS__:JSON.stringify(effects),__CRYPTOID_FRAGMENTS__:JSON.stringify(fragments),__CRYPTOID_WORKLOAD__:JSON.stringify(workload),__CRYPTOID_LAYERS__:JSON.stringify(layers),__CRYPTOID_RASTER__:JSON.stringify(raster),__CRYPTOID_EXPLOSION_ART__:JSON.stringify(explosionArt)},
  plugins:[{name:'isolated-device-replay',setup(b){
    // These two real modules differ only by their initial letter. Match the
    // resource module exactly rather than esbuild's TSX-first fallback.
-   b.onResolve({filter:/(?:^|\/)paintedShip(?:\.ts)?$/},args=>({path:path.resolve(args.resolveDir,'paintedShip.ts')}));
+   b.onResolve({filter:/(?:^|\/)paintedShip(?:\.ts)?$/},args=>({path:path.resolve(args.resolveDir,args.path.replace(/\.ts$/,'')+'.ts')}));
    b.onResolve({filter:/(?:hooks\/useAuth|hooks\/useModalNavigation|axiosClient)(?:\.ts)?$/},args=>({path:args.path,namespace:'isolated'}));
    b.onLoad({filter:/.*/,namespace:'isolated'},args=>({loader:'js',contents:args.path.includes('useAuth')?
      ISOLATED_AUTH_SOURCE:

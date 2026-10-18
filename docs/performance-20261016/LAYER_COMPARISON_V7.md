@@ -65,7 +65,7 @@ detailed render-work counters are not interpreted as measured zero work.
 Preview dpl_8gErA9jJ5JEynPGDpXCiNTpXrmPy is READY, target null, aliases empty.
 Host: cryptoid-evolution-testnet-c8nn84hjb-19-trojan69.vercel.app.
 The deployment-scoped share expires 2026-10-19T10:59:09Z; its token is not saved
-in Git. The actual Pi v7 result remains pending.
+in Git.
 
 Read-only alias checks retain Testnet deployment dpl_BX7ZeCr9Qr6anBa3AZnzLERubpQM
 (27d1747) and main deployment dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe (907d2a7).
@@ -79,3 +79,18 @@ remains plausible. A slow empty wrapper would require investigating common
 work and differences from v6 rather than claiming a particular GPU cause.
 
 No particle, texture, audio or explosion reduction is proposed for publication.
+
+## Completed Pi result
+
+The user's completed Pi report is summarized in device-replay-v7-pi-phase-summary.json.
+Original before/after deliver 23.77 / 22.55 FPS, fire/smoke alone 38.22,
+debris alone 36.22 and the empty wrapper 55.32. Accepted time is 68.66 / 88.40 /
+86.36 / 99.63 / 66.35%, with 16 / 21 / 20 / 23 / 15 measured salvos.
+DOM counts and pseudo content confirm both intended independent omissions.
+Simulation work p95 stays 1 ms, observation cost at most 1 ms, prepared hull
+cache 13 / 4,804,555 bytes, no issues/blocked requests/emergency resets.
+
+Both visual subtrees contribute; neither alone restores the control cadence.
+This is not proof of a particular GPU bug. The next candidate retains all
+original pieces and timing while flattening their display into Canvas, using
+prepared static fire/smoke artwork and the existing full-resolution hulls.

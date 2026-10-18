@@ -1,0 +1,17 @@
+{
+  "source":"Phase summary transcribed from the user's complete pasted Pi v7 report; raw data remains in conversation",
+  "build":"device-replay-20261018-v7-layers",
+  "device":"PiBrowser/1.17.1, iPhone OS 18_7, 430x825, DPR 3, visible, sound on",
+  "completed":true,"elapsedWallMs":53148,
+  "phases":[
+    {"name":"original-before","fireSmoke":true,"debris":true,"frames":178,"measuredFrameMs":7490,"acceptedSimulationMs":5143,"clippedSimulationMs":2347,"acceptedTimeRatio":0.6866,"meanDeliveredFps":23.77,"frameP95Ms":83,"frameMaxMs":116,"volleys":16,"volleyGapP50Ms":461,"volleyGapP95Ms":562,"destroyed":36,"domExplosionSamples":[6,10,10],"domFragmentSamples":[24,40,40]},
+    {"name":"fire-smoke-only","fireSmoke":true,"debris":false,"frames":286,"measuredFrameMs":7483,"acceptedSimulationMs":6615,"clippedSimulationMs":868,"acceptedTimeRatio":0.884,"meanDeliveredFps":38.22,"frameP95Ms":54,"frameMaxMs":65,"volleys":21,"volleyGapP50Ms":356,"volleyGapP95Ms":407,"destroyed":44,"domExplosionSamples":[6,12,12],"domFragmentSamples":[0,0,0]},
+    {"name":"debris-only","fireSmoke":false,"debris":true,"frames":272,"measuredFrameMs":7509,"acceptedSimulationMs":6485,"clippedSimulationMs":1024,"acceptedTimeRatio":0.8636,"meanDeliveredFps":36.22,"frameP95Ms":56,"frameMaxMs":74,"volleys":20,"volleyGapP50Ms":365,"volleyGapP95Ms":440,"destroyed":44,"domExplosionSamples":[6,12,12],"domFragmentSamples":[24,48,48]},
+    {"name":"empty-wrapper","fireSmoke":false,"debris":false,"frames":415,"measuredFrameMs":7502,"acceptedSimulationMs":7474,"clippedSimulationMs":28,"acceptedTimeRatio":0.9963,"meanDeliveredFps":55.32,"frameP95Ms":32,"frameMaxMs":41,"volleys":23,"volleyGapP50Ms":317,"volleyGapP95Ms":336,"destroyed":50,"domExplosionSamples":[8,14,15],"domFragmentSamples":[0,0,0]},
+    {"name":"original-after","fireSmoke":true,"debris":true,"frames":169,"measuredFrameMs":7494,"acceptedSimulationMs":4972,"clippedSimulationMs":2522,"acceptedTimeRatio":0.6635,"meanDeliveredFps":22.55,"frameP95Ms":84,"frameMaxMs":117,"volleys":15,"volleyGapP50Ms":484,"volleyGapP95Ms":594,"destroyed":36,"domExplosionSamples":[6,11,10],"domFragmentSamples":[24,44,40]}
+  ],
+  "commonEvidence":{"simulationWorkP95Ms":1,"fixtureResets":0,"maxSampleMs":1,"painted":13,"estimatedBytes":4804555,"sources":8,"pending":0,"audioAndSimulationRetained":true},
+  "issues":[],"blockedRequests":[],
+  "conclusion":"Both visual subtrees contribute: either alone improves frame delivery but remains below the empty-wrapper control. The complete path is 22.55-23.77 FPS versus 55.32 without both. Individual mounting/style/paint/GPU mechanisms remain unproven.",
+  "visualObservationForThisRun":"No separate pixel-visibility statement accompanied the JSON"
+}
