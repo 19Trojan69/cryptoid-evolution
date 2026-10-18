@@ -13,11 +13,9 @@ import './selectionControls.css'
 import './fleetMenus.css'
 import App from './App.tsx'
 import { startAggregateUsage } from './lib/aggregateUsage'
-import { installReloadDiagnostics } from './pages/reloadDiagnostics'
 import './smartphoneUi.css'
 import './pages/feedbackCompact.css'
 
-installReloadDiagnostics();
 void startAggregateUsage();
 
 createRoot(document.getElementById('root')!).render(
