@@ -101,5 +101,49 @@ The public aliases were checked after deployment and remain unchanged:
 - Main: `dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe`, commit
   `907d2a7363345d00f0f90c54402bf04e887b64d9`.
 
-This is an isolated renderer candidate. The next evidence needed is the same
-completed report and visible-effect check from the original iPhone/Pi Browser.
+## Completed iPhone / Pi Browser run
+
+The user supplied the completed v9 report at 14:03 Europe/Vienna on
+18 October 2026. It completed in 53,028 ms on iPhone OS 18_7 / Pi Browser
+1.17.1, field 430 × 825, DPR 3, visible and with sound enabled. Selected
+reported fields are preserved in `device-replay-v9-pi-phase-summary.json`;
+that file is explicitly a summary rather than a raw report export.
+
+| Phase | Delivered FPS | Accepted time | Frame p95 | Salvos | Volley median / p95 | Backing bytes |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Full field before | 44.46 | 97.73% | 39 ms | 41 | 325 / 350 ms | 12,771,000 |
+| Bounded | 45.57 | 98.23% | 37 ms | 42 | 323 / 348 ms | 6,410,880 |
+| Full field after | 43.80 | 97.59% | 39 ms | 41 | 327 / 349 ms | 12,771,000 |
+
+The final bounded store is 424 × 420 CSS pixels at DPR 3: 49.80% fewer
+backing bytes than the full field. It grows from 4,023,288 bytes at the first
+periodic sample to a maximum of 6,410,880, with twenty resizes over fifteen
+seconds. The unweighted mean of the two reference FPS readings is 44.13;
+45.57 is 3.26% higher. This is a modest observed difference in a single
+A/B/A run, not a statistically established performance gain. The earlier
+v8 DOM-to-Canvas comparison provides the much larger observed improvement;
+cross-run differences between v8 and v9 are not attributed to bounds alone.
+
+Clipped simulation time is 306 / 239 / 325 ms, with the existing cap
+unchanged. Simulation work p95 and Canvas draw work p95 both remain 1 ms
+in all phases. The middle phase performs 33,008 fragment draws for 8,252
+effect draws, retains all four pieces, and has no fallback mounts. The first
+reference phase has three preparation fallback mounts; the last has none.
+Every periodic sample has active Canvas proxies and zero original effect
+DOM. Six source images, 1,908,576 decoded hull bytes, four textures,
+4,619,364 texture bytes and four preparations remain stable across phases.
+All renderer failures, issues, blocked requests and fixture resets are zero;
+final scheduler, registrations, images, textures, cache and backing-store
+cleanup are all zero.
+
+The report does not establish actual visible pixel presentation, a normal
+scored campaign or behavior across block transitions: all three phases use
+the destruction/refill fixture and report zero sector changes. User
+confirmation of visible fire, smoke and debris is still outstanding. The
+separate frozen Chrome pixel comparison retains its documented one-channel
+differences; no strict pixel-identity claim is made for Pi Browser.
+
+This is still an isolated renderer candidate, with no public promotion. The
+next validation boundary is complete effects through ordinary block changes,
+pause/resume and the associated new hull-resource lifecycle; that has not
+been proved by the fixed sector-12 stress fixture.
