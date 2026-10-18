@@ -13,7 +13,7 @@ const q = (values, p) => {
 
 export function createDeviceReplay({ now = () => performance.now(), phases = REPLAY_PHASES,
   warmupMs = 8000, phaseMs = 20000, onProgress = () => {}, onFinish = () => {} } = {}) {
-  let api, started = 0, phaseStarted = 0, index = -1, active = false, finished = false, bucket, lastProgress = -Infinity;
+  let api, started = now(), phaseStarted = 0, index = -1, active = false, finished = false, bucket, lastProgress = -Infinity;
   const results = [], issues = [];
   const fresh = () => ({ frames: 0, rawMs: 0, acceptedMs: 0, clippedMs: 0, over34: 0,
     gaps: [], work: [], volleyGaps: [], volleys: 0, lastVolley: null, fixtureResets: 0 });
@@ -85,7 +85,7 @@ export function createDeviceReplay({ now = () => performance.now(), phases = REP
       if (api.sustain(mode)) { if (bucket) bucket.fixtureResets++; }
       if (time-lastProgress >= 1000) emit(time);
     },
-    abort(reason = 'stopped') { if (active) finish(reason); },
+    abort(reason = 'stopped') { if (!finished) finish(reason); },
     get active() { return active; },
   };
 }

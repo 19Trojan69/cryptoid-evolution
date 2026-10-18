@@ -4,13 +4,14 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
+import { ISOLATED_AUTH_SOURCE } from './deviceReplay/authFixture.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const destination=process.env.CRYPTOID_DEVICE_REPLAY_OUT||'/tmp/cryptoid-device-replay';
 const sourcePath=path.join(root,'src/pages/GamePage.tsx');
 const original=fs.readFileSync(sourcePath,'utf8');
 const expectedGameHash='eb628a5d73247ea64ec5443d2ff4efdab071a97228634f16f2aa915cdc832607';
 assert.equal(createHash('sha256').update(original).digest('hex'),expectedGameHash,'review a changed GamePage before updating device-test hooks');
-const buildInfo={id:'device-replay-20261016-v1',gameCommit:'27d174788327c3423f04ace32be61af67a2004cc',gameSourceSha256:expectedGameHash};
+const buildInfo={id:'device-replay-20261018-v2',gameCommit:'27d174788327c3423f04ace32be61af67a2004cc',gameSourceSha256:expectedGameHash};
 const hooks=fs.readFileSync(path.join(root,'scripts/deviceReplay/gameHooks.ts.txt'),'utf8');
 const instrument=source=>{
  const once=(before,after)=>{assert.equal(source.split(before).length,2,'unique insertion '+before.slice(0,70));source=source.replace(before,after);};
@@ -34,7 +35,7 @@ const bundled=await build({absWorkingDir:root,entryPoints:['scripts/deviceReplay
    b.onResolve({filter:/(?:^|\/)paintedShip(?:\.ts)?$/},args=>({path:path.resolve(args.resolveDir,'paintedShip.ts')}));
    b.onResolve({filter:/(?:hooks\/useAuth|hooks\/useModalNavigation|axiosClient)(?:\.ts)?$/},args=>({path:args.path,namespace:'isolated'}));
    b.onLoad({filter:/.*/,namespace:'isolated'},args=>({loader:'js',contents:args.path.includes('useAuth')?
-     'export const useAuth=()=>({authReady:false,isLoading:false,isAuthenticated:false,user:null,authError:"",signIn:async()=>{throw new Error("No account in device test")}});':
+     ISOLATED_AUTH_SOURCE:
      args.path.includes('useModalNavigation')?'export default ()=>{};':
      'const denied=()=>{window.__cryptoidBlockedRequests?.push("application API blocked");throw new Error("Account API disabled in device replay")};export const axiosClient={get:denied,post:denied,put:denied,delete:denied};export const getBaseURL=()=>"";export const PI_ACCESS_TOKEN_KEY="unused-device-replay";'}));
    b.onResolve({filter:/^axios$/},()=>({path:'axios',namespace:'isolated-axios'}));

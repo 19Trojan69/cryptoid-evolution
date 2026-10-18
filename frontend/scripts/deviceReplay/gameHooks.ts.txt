@@ -25,6 +25,9 @@
       sectionSlotsRef.current=slots;sectionElapsedRef.current=20000;clearTimerRef.current=0;
       spawnTimerRef.current=0;attackCooldownRef.current=0;fireTimerRef.current=0;
       elapsedRef.current=0;dropsCreatedRef.current=4;lastFrameRef.current=0;
+      // Fixed test workload: contact must not destroy an enemy mid-comparison.
+      // Only this fixture changes the initial cooldown; game rules are untouched.
+      impactCooldownRef.current=120000;
       varietyRef.current=createCombatVariety(true);lastPlayerRef.current={...s.player};
       waveCompleteRef.current=false;
       setGame({ ...s });

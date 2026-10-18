@@ -24,7 +24,9 @@ window.fetch = (input,init) => {
     window.__cryptoidBlockedRequests.push('fetch request blocked');
     return Promise.reject(new Error('Kontozugriff im Gerätetest gesperrt'));
   }
-  return nativeFetch(input,{...init,credentials:'omit'});
+  // The isolated preview's Vercel protection cookie is needed for static assets.
+  // No cross-origin or account/API request is permitted by allowAsset above.
+  return nativeFetch(input,{...init,credentials:'same-origin'});
 };
 // The application API is also removed by the bundler. This denies any stray
 // browser-level XHR before it can make a request.
@@ -49,8 +51,12 @@ function App() {
       pixelRatio:devicePixelRatio,visibility:document.visibilityState,sound};
     window.__cryptoidBlockedRequests.length=0;
     window.__cryptoidDeviceReplay=createDeviceReplay({onProgress:setProgress,onFinish:result=>{
+      clearTimeout(mountWatchdog);
       setReport({...result,build,device,blockedRequests:[...window.__cryptoidBlockedRequests]});setRunning(false);
     }});
+    const mountWatchdog=setTimeout(()=>{
+      if(!window.__cryptoidDeviceReplay.active)window.__cryptoidDeviceReplay.abort('fixture-not-started');
+    },5000);
     setRunning(true);
   };
   const copy = async () => {
