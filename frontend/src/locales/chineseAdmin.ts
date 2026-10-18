@@ -151,5 +151,16 @@ export const chineseAdminTranslations: Record<string, string> = {
   "Zugriffsstatistik – ohne persönliche Nutzungsverläufe": "访问统计，不记录个人使用轨迹",
   "Zum normalen Spiel": "进入正常游戏",
   "Zur Bestätigung deinen Pi-Namen eingeben:": "请输入你的 Pi 用户名以确认：",
-  "Zur Liste": "返回列表"
+  "Zur Liste": "返回列表",
+  "Technischer Bericht": "技术报告",
+  "Nur für dein verifiziertes Eigentümerkonto. Gelesen werden vorhandene technische Einträge aus diesem Browser. Der Bericht wird nicht automatisch versendet.": "仅供已验证的所有者账户使用。读取此浏览器中已有的技术记录。报告不会自动发送。",
+  "Öffne diesen Bereich möglichst im bisherigen Pi-Browser-Tab des betroffenen Spiels.": "请尽可能在受影响游戏原有的 Pi Browser 标签页中打开此区域。",
+  "Berechtigung wird geprüft …": "正在检查权限…",
+  "Lokaler Bericht": "本地报告",
+  "Erneut lesen": "重新读取",
+  "Bericht kopieren": "复制报告",
+  "Vorhandene technische Einträge wurden gelesen.": "已读取现有技术记录。",
+  "In diesem Browser sind keine auswertbaren Einträge vorhanden.": "此浏览器中没有可用的记录。",
+  "Bericht kopiert. Du kannst ihn jetzt hier im Chat einfügen.": "报告已复制。现在可以将其粘贴到聊天中。",
+  "Bitte den markierten Bericht über das Kopiermenü kopieren.": "请使用复制菜单复制选中的报告。",
 };

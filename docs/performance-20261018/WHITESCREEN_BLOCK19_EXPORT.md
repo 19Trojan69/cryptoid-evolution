@@ -64,3 +64,60 @@ Only browser-extension metadata errors appeared in the inspected console. The
 actual sanitizer/content cases passed the six Node tests above. Screenshot
 stability-export-preview.jpg records the reviewable page. Public Testnet remains
 dpl_J6HabPZCGHYRDAEE6nfVTtr23pWV / bb23a8b; no public endpoint has been released.
+
+## Subsequent release authorization
+
+18 October 2026, 16:50 Europe/Vienna: user replied "okay" to the explicit
+request to publish only this standalone export on the existing official Testnet.
+This supersedes the preview-only release boundary above for the tested export.
+The exact tested source f67ad68 is redeployed to Testnet; game source is unchanged
+from bb23a8b. Backup/testnet-before-stability-export-20261018 retains bb23a8b.
+Do not treat this export publication as a Whitescreen correction.
+
+## Withdrawn public export release result
+
+The initial authorized read-only export was READY on the official Testnet origin:
+https://cryptoid-evolution-testnet.vercel.app/stability-report.html
+Deployment: dpl_A44PERfDNvoYKR8ZWQnBUHnUeTdJ, source f67ad68. Direct public
+page load and the successful Copy status were verified in Chrome. That browser
+had no stored interruption data; it is not the affected iPhone browser and does
+not establish that the iPhone records are absent. The endpoint is public, with
+no login gate. Each visitor reads only technical data already stored in their
+own browser. The page has no server-side collection or cross-user report API;
+reports are shared only by the visitor's separate copy/paste action.
+
+Use the same Pi Browser origin and existing tab for the affected session when
+possible. The user asked whether everyone could access it; clarified that the
+page is public but another visitor cannot retrieve this user's local records.
+The game source, styles, cadence, audio and account/save handling are unchanged.
+Mainnet remains dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe / 907d2a7. The original
+Whitescreen remains unresolved pending the user's actual report.
+
+## Owner-only correction
+
+At 16:52 Europe/Vienna the user specified that the feature must be visible only
+to their account, with no indication for other players. The official alias was
+immediately rolled back to dpl_J6HabPZCGHYRDAEE6nfVTtr23pWV / bb23a8b. The
+temporary preview sharing bypass was revoked. The screenshots of the standalone
+page above document the withdrawn release, not the current owner-only interface.
+
+The standalone HTML/module are deleted. Their old routes redirect home. The
+report is now /admin?view=diagnostics inside the existing owner-only branch of
+AdminPage. Before reading local records, and again before copying the displayed
+report, /admin/status must confirm canAdmin === true. The existing backend checks
+the verified Pi session against its bound owner UID; no username-only client
+allowlist or new backend privilege is added. Denied verification cannot read
+records. Denied copy clears the displayed report. Unmount cancels pending reads.
+Clipboard denial leaves the report selectable for manual copying. No report
+is uploaded; the status request carries only the existing session credentials.
+
+Verification: 8 sanitizer/permission/boundary tests and 5 tests executing the
+actual panel source pass, including owner acceptance, non-owner rejection,
+expired permission before copy, exact clipboard payload, manual-copy fallback
+and pending-request cancellation. Existing backend adminAccess/adminDashboard
+tests: 14 pass, including independent Testnet/Mainnet UID bindings and HTTP
+401/403 on protected routes. Frontend/backend TypeScript and the localization
+release gate pass. Normal gameplay source, artwork, styles, sounds, timing,
+account and save handlers are unchanged from bb23a8b. This is not a fix or proof
+of the phone's Whitescreen. Actual owner login on the affected Pi Browser remains
+the device check; the cloud browser has no owner session.

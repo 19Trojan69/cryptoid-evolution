@@ -1,5 +1,27 @@
 # Preserve the officially approved game
 
+## Privacy correction, 18 October 2026, 16:52 Vienna
+
+The user clarified: "es soll nur für mich sichtbar sein, ohne dass andere
+spieler es mitbekommen". This supersedes the standalone public-export scope
+below. The public alias was rolled back to bb23a8b immediately. Remove the
+standalone export files and redirect their old routes home. Put the read-only
+report inside the existing owner-only AdminPage, using the existing verified
+server UID binding and a fresh /admin/status check before reading or copying.
+No new menu, hint, telemetry or behavior for ordinary players. Release this
+privacy correction to the existing official Testnet only; no Mainnet release.
+The underlying Whitescreen remains unresolved pending actual device evidence.
+
+## Explicit diagnostic-export release, 18 October 2026, 16:50 Vienna
+
+The user approved the prepared read-only stability export with "okay" after
+reviewing its preview and scope. Release tested source f67ad68c243f95762c96c3e9fa1f87c1019d7376
+to the existing official Testnet only. This adds /stability-report.html and its
+standalone module; game source, visuals, cadence, audio, accounts and saves stay
+unchanged. Read existing technical records only; no automatic transmission or
+storage mutation. The Whitescreen remains unproved and unresolved. Mainnet is
+excluded. Backup: backup/testnet-before-stability-export-20261018 at bb23a8b.
+
 ## Explicit Testnet follow-up release, 18 October 2026, 16:03 Vienna
 
 After the known Canvas allocation correction and original-display recovery were

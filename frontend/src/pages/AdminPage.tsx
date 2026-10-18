@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
@@ -28,6 +28,7 @@ import "./admin.css";
 import AdminUsage from "./AdminUsage";
 import { paymentEvidenceLinks } from "./paymentEvidenceLinks";
 import { useAdminLocale } from "../adminLocale";
+import { readOwnerStabilityReport } from './stabilityReport.mjs';
 
 const tabs = [
   ["overview", "Übersicht"],
@@ -37,6 +38,7 @@ const tabs = [
   ["scores", "Eigene Rekorde"],
   ["usage", "Zugriffsstatistik"],
   ["checks", "Audio & Prüfung"],
+  ["diagnostics", "Technischer Bericht"],
 ] as const;
 type AdminView = (typeof tabs)[number][0];
 type Network = "mainnet" | "testnet" | "unknown";
@@ -121,6 +123,88 @@ const audioTests = [
   ["Spielmusik", "battle-orbit"],
   ["Boss-Musik", "dreadnought-duel"],
 ] as const;
+
+async function verifyReportOwner() {
+  const { data } = await axiosClient.get<{ canAdmin?: boolean }>("/admin/status");
+  if (data.canAdmin !== true) throw new Error("owner_access_required");
+  return data;
+}
+
+function OwnerStabilityReport() {
+  const { t } = useAdminLocale();
+  const [report, setReport] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [notice, setNotice] = useState("");
+  const [error, setError] = useState("");
+  const request = useRef(0);
+  const field = useRef<HTMLTextAreaElement>(null);
+  const load = useCallback(async () => {
+    const id = ++request.current;
+    setBusy(true);
+    setReport("");
+    setNotice("");
+    setError("");
+    try {
+      const result = await readOwnerStabilityReport(verifyReportOwner, () => window, () => request.current === id);
+      if (result && request.current === id) {
+        setReport(JSON.stringify(result, null, 2));
+        setNotice(t(result.available ? "Vorhandene technische Einträge wurden gelesen." : "In diesem Browser sind keine auswertbaren Einträge vorhanden."));
+      }
+    } catch (err) {
+      if (request.current === id) setError(errorMessage(err));
+    } finally {
+      if (request.current === id) setBusy(false);
+    }
+  }, [t]);
+  useEffect(() => {
+    void load();
+    return () => { request.current += 1; };
+  }, [load]);
+  const copy = async () => {
+    const id = ++request.current;
+    setBusy(true);
+    setError("");
+    setNotice("");
+    try {
+      await verifyReportOwner();
+    } catch (err) {
+      if (request.current === id) {
+        setReport("");
+        setError(errorMessage(err));
+        setBusy(false);
+      }
+      return;
+    }
+    if (request.current !== id) return;
+    try {
+      await navigator.clipboard.writeText(report);
+      if (request.current === id) setNotice(t("Bericht kopiert. Du kannst ihn jetzt hier im Chat einfügen."));
+    } catch {
+      if (request.current === id) {
+        field.current?.focus();
+        field.current?.select();
+        field.current?.setSelectionRange(0, report.length);
+        setNotice(t("Bitte den markierten Bericht über das Kopiermenü kopieren."));
+      }
+    } finally {
+      if (request.current === id) setBusy(false);
+    }
+  };
+  return <section className="admin-panel">
+    <h2>{t("Technischer Bericht")}</h2>
+    <p>{t("Nur für dein verifiziertes Eigentümerkonto. Gelesen werden vorhandene technische Einträge aus diesem Browser. Der Bericht wird nicht automatisch versendet.")}</p>
+    <p>{t("Öffne diesen Bereich möglichst im bisherigen Pi-Browser-Tab des betroffenen Spiels.")}</p>
+    {error && <p className="admin-error" role="alert">{error}</p>}
+    <p role="status">{busy ? t("Berechtigung wird geprüft …") : notice}</p>
+    {report && <label>{t("Lokaler Bericht")}
+      <textarea ref={field} readOnly value={report} spellCheck={false} style={{ display: "block", width: "100%", minHeight: 300, boxSizing: "border-box", marginTop: 8, padding: 12, background: "#091923", color: "#eaf7fa", border: "1px solid #3d6471", borderRadius: 8, fontFamily: "monospace", fontSize: 13 }} />
+    </label>}
+    <div className="admin-actions">
+      <button className="admin-button" disabled={busy} onClick={() => { void load(); }}>{t("Erneut lesen")}</button>
+      <button className="admin-button" disabled={busy || !report} onClick={() => { void copy(); }}>{t("Bericht kopieren")}</button>
+    </div>
+  </section>;
+}
 
 export default function AdminPage() {
   const { t } = useAdminLocale();
@@ -461,6 +545,7 @@ export default function AdminPage() {
             </p>
           )}
           {view === "usage" && <AdminUsage />}
+          {view === "diagnostics" && <OwnerStabilityReport />}
           {view === "overview" && (
             <>
               <section className="admin-shortcuts" aria-label={t("Schnellzugriff")}>

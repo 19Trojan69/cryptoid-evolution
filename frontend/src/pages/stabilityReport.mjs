@@ -60,27 +60,11 @@ export function readStabilityReport(host, now = Date.now()) {
     limits: 'Vorhandene lokale Unterbrechungsdaten. Kein Beweis für einen Speicher- oder Browserprozess-Absturz. Keine Konto-, Kauf- oder Spielstanddaten.' };
 }
 
-if (typeof document !== 'undefined') {
-  const output = document.getElementById('report');
-  const status = document.getElementById('status');
-  const notice = document.getElementById('notice');
-  const refresh = () => {
-    const report = readStabilityReport(window);
-    output.value = JSON.stringify(report, null, 2);
-    status.textContent = report.available
-      ? `${report.events.length} gespeicherte Ereignisse${report.lastSession ? ' und ein letzter Sitzungsstand' : ''} gefunden.`
-      : 'Keine auswertbaren Protokolle gefunden. Der Bericht zeigt, ob Daten fehlen oder der Speicherzugriff gesperrt ist.';
-    notice.textContent = '';
-  };
-  document.getElementById('refresh').addEventListener('click', refresh);
-  document.getElementById('copy').addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(output.value);
-      notice.textContent = 'Kopiert. Füge den Bericht im Chat ein.';
-    } catch {
-      output.focus(); output.select(); output.setSelectionRange(0, output.value.length);
-      notice.textContent = 'Bitte den markierten Text über das Kopiermenü kopieren und im Chat einfügen.';
-    }
-  });
-  refresh();
+// Always confirm the existing server-side owner binding before accessing local
+// evidence. A stale/unmounted admin view must not read the browser records.
+export async function readOwnerStabilityReport(verifyOwner, getHost, active = () => true, now = Date.now()) {
+  const owner = await verifyOwner();
+  if (owner?.canAdmin !== true) throw new Error('owner_access_required');
+  if (!active()) return null;
+  return readStabilityReport(getHost(), now);
 }

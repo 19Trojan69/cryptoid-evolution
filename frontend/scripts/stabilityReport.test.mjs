@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {readStabilityReport, technicalContext} from '../public/stability-report.mjs';
+import {readStabilityReport, technicalContext, readOwnerStabilityReport} from '../src/pages/stabilityReport.mjs';
 const context={reason:'performance',sector:19,block:9,phase:'ATTACK_CYCLE',encounter:'normal',status:'playing',width:430,height:825,enemies:4,projectiles:9,effects:2};
 const keys=['cryptoid_game_diagnostics_v1','cryptoid_game_session_v1'];
 const host=(events,session)=>({localStorage:{getItem:key=>{assert.equal(key,keys[0]);return events;}},sessionStorage:{getItem:key=>{assert.equal(key,keys[1]);return session;}}});
@@ -29,9 +29,27 @@ test('exports only allowed technical fields, never raw messages, stacks, user or
 test('out-of-range timestamp cannot break export',()=>{
   assert.equal(readStabilityReport(host(null,null),Infinity).generatedAt,null);
 });
-test('standalone page cannot make network requests or import the game',()=>{
-  const html=fs.readFileSync(new URL('../public/stability-report.html',import.meta.url),'utf8');
-  const js=fs.readFileSync(new URL('../public/stability-report.mjs',import.meta.url),'utf8');
-  assert.ok(html.includes("connect-src 'none'"));assert.ok(html.includes('readonly'));
-  assert.ok(!/\b(?:fetch|XMLHttpRequest|WebSocket|setItem|removeItem|clear)\s*\(/.test(js));assert.ok(!/\bimport\s/.test(js));
+test('server owner approval is required before storage is touched',async()=>{
+  let reads=0,verified=false;
+  const getHost=()=>{assert.equal(verified,true);reads++;return host(JSON.stringify([context]),null);};
+  for(const value of [null,{}, {canAdmin:false},{canAdmin:'true'}]) await assert.rejects(readOwnerStabilityReport(async()=>value,getHost),/owner_access_required/);
+  await assert.rejects(readOwnerStabilityReport(async()=>{throw Error('401');},getHost),/401/);
+  assert.equal(reads,0);
+  const report=await readOwnerStabilityReport(async()=>{verified=true;return {canAdmin:true};},getHost);
+  assert.equal(reads,1);assert.equal(report.events[0].sector,19);
+});
+test('a dismissed owner view cannot read data after a pending permission check',async()=>{
+  let finish;const status=new Promise(resolve=>{finish=resolve;});let active=true;
+  const request=readOwnerStabilityReport(()=>status,()=>{throw Error('late storage access');},()=>active);
+  active=false;finish({canAdmin:true});assert.equal(await request,null);
+});
+test('public standalone files are absent and the export lives inside the owner branch',()=>{
+  assert.equal(fs.existsSync(new URL('../public/stability-report.html',import.meta.url)),false);
+  assert.equal(fs.existsSync(new URL('../public/stability-report.mjs',import.meta.url)),false);
+  const admin=fs.readFileSync(new URL('../src/pages/AdminPage.tsx',import.meta.url),'utf8');
+  assert.ok(admin.includes('view === "diagnostics" && <OwnerStabilityReport />'));
+  assert.ok(admin.includes('const allowed = auth.authReady && auth.canAdmin;'));
+  assert.ok(admin.indexOf('<OwnerStabilityReport />')>admin.indexOf('<div className="admin-owner">'));
+  const report=fs.readFileSync(new URL('../src/pages/stabilityReport.mjs',import.meta.url),'utf8');
+  assert.ok(!/\b(?:fetch|XMLHttpRequest|WebSocket|setItem|removeItem|clear)\s*\(/.test(report));
 });
