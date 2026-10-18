@@ -632,12 +632,11 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     const base = { reason: 'performance' as const, errorName: '', sector: state.sector, block: sectorInChapter(state.sector),
       phase: state.phase, encounter: state.encounter, status: state.status, width: fieldSizeRef.current.width,
       height: fieldSizeRef.current.height, browser: navigator.userAgent, enemies: state.asteroids.length,
-      projectiles: state.shots.length + state.enemyShots.length, effects: state.effects.length, lastSavedAt: lastSavedAtRef.current,
-      frameMs: Math.round(lastMeasuredFrameRef.current) };
+      projectiles: state.shots.length + state.enemyShots.length, effects: state.effects.length, lastSavedAt: lastSavedAtRef.current };
     if (!ownerDiagnostics) return base;
     const boss = state.boss;
     const turrets = boss?.turrets ?? [];
-    return { ...base,
+    return { ...base, frameMs: Math.round(lastMeasuredFrameRef.current),
       bossId: boss?.config.id, bossHealth: boss?.health, bossMaxHealth: boss?.maxHealth,
       liveTurrets: boss ? turrets.filter(gun => gun.health > 0).length : undefined,
       totalTurrets: boss ? turrets.length : undefined,
