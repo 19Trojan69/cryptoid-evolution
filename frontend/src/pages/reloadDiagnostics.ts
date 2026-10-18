@@ -295,15 +295,26 @@ export function installReloadDiagnostics(host: ReloadHost = window as ReloadHost
   const add = (target: EventTarget | undefined, type: string, listener: EventListener, capture = false) => {
     try { target?.addEventListener(type, listener, capture); } catch { /* Optional diagnostics only. */ }
   };
-  add(host, 'error', ((event: ErrorEvent) => appendReloadEvent(host, 'javascript-error', undefined, {}, event.error)) as EventListener);
-  add(host, 'unhandledrejection', ((event: PromiseRejectionEvent) => appendReloadEvent(host, 'unhandled-rejection', undefined, {}, event.reason)) as EventListener);
-  add(host, 'beforeunload', (() => appendReloadEvent(host, 'beforeunload')) as EventListener);
-  add(host, 'pagehide', ((event: PageTransitionEvent) => appendReloadEvent(host, 'pagehide', undefined, { persisted: !!event.persisted })) as EventListener);
-  add(host, 'pageshow', ((event: PageTransitionEvent) => appendReloadEvent(host, 'pageshow', undefined, { persisted: !!event.persisted })) as EventListener);
-  add(host.document, 'visibilitychange', (() => appendReloadEvent(host, host.document?.hidden ? 'visibility-hidden' : 'visibility-visible')) as EventListener);
-  add(host.document, 'webglcontextlost', (() => appendReloadEvent(host, 'webgl-context-lost')) as EventListener, true);
-  add(host.document, 'webglcontextrestored', (() => appendReloadEvent(host, 'webgl-context-restored')) as EventListener, true);
-  add(host.document, 'contextlost', (() => appendReloadEvent(host, 'canvas-context-lost')) as EventListener, true);
-  add(host.document, 'contextrestored', (() => appendReloadEvent(host, 'canvas-context-restored')) as EventListener, true);
-  add(host, 'load', (() => appendReloadEvent(host, 'app-load', null, { navigationType: navigationType(host), route: routeKind(host) })) as EventListener);
+  const onError: EventListener = event => { appendReloadEvent(host, 'javascript-error', undefined, {}, (event as ErrorEvent).error); };
+  const onRejection: EventListener = event => { appendReloadEvent(host, 'unhandled-rejection', undefined, {}, (event as PromiseRejectionEvent).reason); };
+  const onBeforeUnload: EventListener = () => { appendReloadEvent(host, 'beforeunload'); };
+  const onPageHide: EventListener = event => { appendReloadEvent(host, 'pagehide', undefined, { persisted: !!(event as PageTransitionEvent).persisted }); };
+  const onPageShow: EventListener = event => { appendReloadEvent(host, 'pageshow', undefined, { persisted: !!(event as PageTransitionEvent).persisted }); };
+  const onVisibility: EventListener = () => { appendReloadEvent(host, host.document?.hidden ? 'visibility-hidden' : 'visibility-visible'); };
+  const onWebglLost: EventListener = () => { appendReloadEvent(host, 'webgl-context-lost'); };
+  const onWebglRestored: EventListener = () => { appendReloadEvent(host, 'webgl-context-restored'); };
+  const onCanvasLost: EventListener = () => { appendReloadEvent(host, 'canvas-context-lost'); };
+  const onCanvasRestored: EventListener = () => { appendReloadEvent(host, 'canvas-context-restored'); };
+  const onLoad: EventListener = () => { appendReloadEvent(host, 'app-load', null, { navigationType: navigationType(host), route: routeKind(host) }); };
+  add(host, 'error', onError);
+  add(host, 'unhandledrejection', onRejection);
+  add(host, 'beforeunload', onBeforeUnload);
+  add(host, 'pagehide', onPageHide);
+  add(host, 'pageshow', onPageShow);
+  add(host.document, 'visibilitychange', onVisibility);
+  add(host.document, 'webglcontextlost', onWebglLost, true);
+  add(host.document, 'webglcontextrestored', onWebglRestored, true);
+  add(host.document, 'contextlost', onCanvasLost, true);
+  add(host.document, 'contextrestored', onCanvasRestored, true);
+  add(host, 'load', onLoad);
 }
