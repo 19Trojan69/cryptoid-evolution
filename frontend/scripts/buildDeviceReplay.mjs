@@ -12,9 +12,11 @@ const original=fs.readFileSync(sourcePath,'utf8');
 const expectedGameHash='eb628a5d73247ea64ec5443d2ff4efdab071a97228634f16f2aa915cdc832607';
 assert.equal(createHash('sha256').update(original).digest('hex'),expectedGameHash,'review a changed GamePage before updating device-test hooks');
 const fragments=process.env.CRYPTOID_REPLAY_PROFILE==='fragments';
+const workload=process.env.CRYPTOID_REPLAY_PROFILE==='workload';
 const effects=fragments||process.env.CRYPTOID_REPLAY_PROFILE==='effects';
-const lifecycle=effects||process.env.CRYPTOID_REPLAY_PROFILE==='lifecycle';
-const buildInfo={id:fragments?'device-replay-20261018-v5-fragments':effects?'device-replay-20261018-v4-effects':lifecycle?'device-replay-20261018-v3-lifecycle':'device-replay-20261018-v2',gameCommit:'27d174788327c3423f04ace32be61af67a2004cc',gameSourceSha256:expectedGameHash};
+const lifecycle=workload||effects||process.env.CRYPTOID_REPLAY_PROFILE==='lifecycle';
+const audioOriginal=fs.readFileSync(path.join(root,'src/pages/gameAudio.ts'),'utf8');
+const buildInfo={id:workload?'device-replay-20261018-v6-cause':fragments?'device-replay-20261018-v5-fragments':effects?'device-replay-20261018-v4-effects':lifecycle?'device-replay-20261018-v3-lifecycle':'device-replay-20261018-v2',gameCommit:'27d174788327c3423f04ace32be61af67a2004cc',gameSourceSha256:expectedGameHash,...(workload?{audioSourceSha256:createHash('sha256').update(audioOriginal).digest('hex')}: {})};
 const hooks=fs.readFileSync(path.join(root,'scripts/deviceReplay',lifecycle?'lifecycleHooks.ts.txt':'gameHooks.ts.txt'),'utf8');
 const instrument=source=>{
  const once=(before,after)=>{assert.equal(source.split(before).length,2,'unique insertion '+before.slice(0,70));source=source.replace(before,after);};
@@ -23,6 +25,8 @@ const instrument=source=>{
    source='import { fragmentCropStyle } from "../../scripts/deviceReplay/fragmentCrop.mjs";\n'+source;
    once('    const pieceStyle = {','    const pieceStyle = {\n      ...fragmentCropStyle(shape,columns,rows,x,y),');
  }
+ if(workload)once('{game.effects.filter(bossExplosionReady)',
+   '{game.effects.filter(effect=>(window as any).__cryptoidDeviceReplay?.workload?.allowImage(effect.kind)??true).filter(bossExplosionReady)');
  once('  const levelLabel =',hooks+'\n  const levelLabel =');
  once('      const delta = Math.min(34, frameGap);','      const delta = Math.min(34, frameGap);\n      if(state.status===\'playing\')(window as any).__cryptoidDeviceReplay?.clock(time,frameGap,delta);');
  once('            state.shots.push(...volley.slice(0, MAX_PLAYER_SHOTS - state.shots.length));',
@@ -36,7 +40,7 @@ fs.mkdirSync(path.join(destination,'public'),{recursive:true});
 const bundled=await build({absWorkingDir:root,entryPoints:['scripts/deviceReplay/entry.tsx'],bundle:true,write:false,
  platform:'browser',format:'esm',target:['safari16'],jsx:'automatic',minify:true,metafile:true,
  define:{'import.meta.env':'{"VITE_CRYPTOID_DIAGNOSTICS":"0"}','process.env.NODE_ENV':'"production"',
-   __CRYPTOID_RELEASE__:'"DEVICE REPLAY"',__CRYPTOID_REPLAY_BUILD__:JSON.stringify(buildInfo),__CRYPTOID_LIFECYCLE__:JSON.stringify(lifecycle),__CRYPTOID_EFFECTS__:JSON.stringify(effects),__CRYPTOID_FRAGMENTS__:JSON.stringify(fragments)},
+   __CRYPTOID_RELEASE__:'"DEVICE REPLAY"',__CRYPTOID_REPLAY_BUILD__:JSON.stringify(buildInfo),__CRYPTOID_LIFECYCLE__:JSON.stringify(lifecycle),__CRYPTOID_EFFECTS__:JSON.stringify(effects),__CRYPTOID_FRAGMENTS__:JSON.stringify(fragments),__CRYPTOID_WORKLOAD__:JSON.stringify(workload)},
  plugins:[{name:'isolated-device-replay',setup(b){
    // These two real modules differ only by their initial letter. Match the
    // resource module exactly rather than esbuild's TSX-first fallback.
@@ -50,6 +54,11 @@ const bundled=await build({absWorkingDir:root,entryPoints:['scripts/deviceReplay
    b.onLoad({filter:/.*/,namespace:'isolated-axios'},()=>({loader:'js',contents:'export default {isAxiosError:()=>false};'}));
    b.onLoad({filter:/\.css$/},()=>({loader:'js',contents:'export {};'}));
    b.onLoad({filter:/GamePage\.tsx$/},()=>({loader:'tsx',contents:instrument(original)}));
+   if(workload)b.onLoad({filter:/\/gameAudio\.ts$/},()=>{
+     const marker='  play(sound: GameSound, weaponLevel = 1) {';
+     assert.equal(audioOriginal.split(marker).length,2,'unique explosion audio guard');
+     return {loader:'ts',contents:audioOriginal.replace(marker,marker+`\n    if(sound==='explosion'&&(window as any).__cryptoidDeviceReplay?.workload?.allowAudio()===false){this.destroyCount++;return;}`)};
+   });
  }}]});
 const inputs=Object.keys(bundled.metafile.inputs);
 assert.ok(!inputs.some(x=>/src\/(?:lib\/axiosClient|hooks\/useAuth)\.ts$/.test(x)),'real auth/API module must be absent');

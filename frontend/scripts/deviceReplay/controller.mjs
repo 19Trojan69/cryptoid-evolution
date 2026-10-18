@@ -15,6 +15,7 @@ export function createDeviceReplay({ now = () => performance.now(), phases = REP
   warmupMs = 8000, phaseMs = 20000, onProgress = () => {}, onFinish = () => {} } = {}) {
   let api, started = now(), phaseStarted = 0, index = -1, active = false, finished = false, bucket, lastProgress = -Infinity;
   const results = [], issues = [];
+  const measuring=time=>index>=0&&time-phaseStarted>=(phases[index].settleMs??0);
   const fresh = () => ({ frames: 0, rawMs: 0, acceptedMs: 0, clippedMs: 0, over34: 0,
     gaps: [], work: [], volleyGaps: [], volleys: 0, lastVolley: null, fixtureResets: 0 });
   const emit = time => {
@@ -61,13 +62,13 @@ export function createDeviceReplay({ now = () => performance.now(), phases = REP
         issues.push('Invalid measured frame clock'); finish('invalid-clock',time); return;
       }
       // First frame after a controlled fixture reset has zero elapsed time.
-      if (frameGap === 0) return;
+      if (frameGap === 0 || !measuring(time-frameGap)) return;
       bucket.frames++; bucket.rawMs += frameGap; bucket.acceptedMs += delta;
       bucket.clippedMs += frameGap-delta; bucket.over34 += Number(frameGap > 34);
       append(bucket.gaps,frameGap,4096);
     },
     volley(time) {
-      if (!active || index < 0) return;
+      if (!active || !measuring(time)) return;
       bucket.volleys++;
       if (bucket.lastVolley !== null) append(bucket.volleyGaps,time-bucket.lastVolley,256);
       bucket.lastVolley = time;
@@ -75,7 +76,7 @@ export function createDeviceReplay({ now = () => performance.now(), phases = REP
     afterFrame(time, simulationWorkMs) {
       if (!active || !api) return;
       if (api.read().status !== 'playing') { finish('game-interrupted',time); return; }
-      if (index >= 0) append(bucket.work,simulationWorkMs,4096);
+      if (measuring(time)) append(bucket.work,simulationWorkMs,4096);
       if (index < 0 ? time-started >= warmupMs : time-phaseStarted >= (phases[index].durationMs??phaseMs)) {
         closePhase(time); bucket = null; index++;
         if (index === phases.length) { finish('completed',time); return; }

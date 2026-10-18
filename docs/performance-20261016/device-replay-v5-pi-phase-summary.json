@@ -1,0 +1,17 @@
+{
+  "source": "Phase summary transcribed from the user's complete pasted v5 report; raw CSS samples are not duplicated",
+  "build": "device-replay-20261018-v5-fragments",
+  "device": "PiBrowser/1.17.1, iPhone OS 18_7, 430x825, DPR 3, visible, sound enabled",
+  "completed": true,
+  "elapsedWallMs": 68062,
+  "phases": [
+    {"name":"destruction-original-1","wallMs":20012,"frames":517,"measuredFrameMs":19953,"acceptedSimulationMs":14105,"clippedSimulationMs":5848,"acceptedTimeRatio":0.7069,"meanDeliveredFps":25.91,"frameP95Ms":81,"frameMaxMs":101,"volleys":44,"volleyGapP50Ms":456,"volleyGapP95Ms":575,"simulationWorkP95Ms":1,"destroyed":84,"maxEffects":12,"diagnosticMaxSampleMs":4},
+    {"name":"destruction-crop-2","wallMs":20004,"frames":509,"measuredFrameMs":19918,"acceptedSimulationMs":14114,"clippedSimulationMs":5804,"acceptedTimeRatio":0.7086,"meanDeliveredFps":25.55,"frameP95Ms":77,"frameMaxMs":100,"volleys":44,"volleyGapP50Ms":456,"volleyGapP95Ms":567,"simulationWorkP95Ms":1,"destroyed":83,"maxEffects":12,"diagnosticMaxSampleMs":2},
+    {"name":"destruction-original-3","wallMs":20037,"frames":515,"measuredFrameMs":19917,"acceptedSimulationMs":14228,"clippedSimulationMs":5689,"acceptedTimeRatio":0.7144,"meanDeliveredFps":25.86,"frameP95Ms":78,"frameMaxMs":120,"volleys":44,"volleyGapP50Ms":448,"volleyGapP95Ms":591,"simulationWorkP95Ms":1,"destroyed":83,"maxEffects":12,"diagnosticMaxSampleMs":2}
+  ],
+  "commonEvidence": {"painted":13,"estimatedBytes":4804555,"pending":0,"sampledEffectsOnscreen":true,"animationsRunning":true,"originalFragmentWidthsPx":[50,72],"croppedFragmentWidthsPx":[25,36],"samePivotsPx":[12.5,18]},
+  "issues": [],
+  "blockedRequests": [],
+  "conclusion": "Bounding the fragment elements is correctly applied but does not remove the reproduced slowdown. This does not establish that all fragment rendering work is inexpensive.",
+  "visualObservationForThisRun": "No separate visual observation supplied"
+}

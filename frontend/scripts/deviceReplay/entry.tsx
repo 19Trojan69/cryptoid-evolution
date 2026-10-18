@@ -9,6 +9,7 @@ import { createDeviceReplay } from './controller.mjs';
 import { LIFECYCLE_PHASES } from './lifecyclePhases.mjs';
 import { EFFECT_PHASES, EFFECT_PRESENTATION_CSS, createEffectPresentationProbe } from './effectPresentation.mjs';
 import { FRAGMENT_PHASES, FRAGMENT_CROP_CSS } from './fragmentCrop.mjs';
+import { WORKLOAD_PHASES, createEffectWorkload } from './effectWorkload.mjs';
 
 declare global { interface Window { __cryptoidDeviceReplay: any; __cryptoidBlockedRequests: string[]; } }
 const StableGame = memo(GamePage);
@@ -16,7 +17,8 @@ const build = __CRYPTOID_REPLAY_BUILD__;
 const lifecycle = __CRYPTOID_LIFECYCLE__;
 const effects = __CRYPTOID_EFFECTS__;
 const fragments = __CRYPTOID_FRAGMENTS__;
-const totalSeconds = effects ? 68 : lifecycle ? 118 : 88;
+const workload = __CRYPTOID_WORKLOAD__;
+const totalSeconds = workload ? 58 : effects ? 68 : lifecycle ? 118 : 88;
 window.__cryptoidBlockedRequests = [];
 const nativeFetch = window.fetch.bind(window);
 const assetRoots = /^\/(?:ships|audio|effects|planets|fonts|cards|home|badges|emblems|galaxy|pilots|ranks|assets)\//;
@@ -84,21 +86,25 @@ function App() {
       pixelRatio:devicePixelRatio,visibility:document.visibilityState,sound};
     window.__cryptoidBlockedRequests.length=0;
     const presentation=effects?createEffectPresentationProbe({document}):null;
-    window.__cryptoidDeviceReplay=createDeviceReplay({...(lifecycle?{phases:fragments?FRAGMENT_PHASES:effects?EFFECT_PHASES:LIFECYCLE_PHASES}:{}),onProgress:setProgress,onFinish:result=>{
+    const paths=workload?createEffectWorkload({document}):null;
+    window.__cryptoidDeviceReplay=createDeviceReplay({...(lifecycle?{phases:workload?WORKLOAD_PHASES:fragments?FRAGMENT_PHASES:effects?EFFECT_PHASES:LIFECYCLE_PHASES}:{}),onProgress:setProgress,onFinish:result=>{
       clearTimeout(mountWatchdog);
       presentation?.stop();
+      paths?.stop();
       if(lifecycle)result.coverage.fixtures='Controlled lives/one-hit enemies and automatic aiming; real shot collisions, explosions and normal block transitions; no scored/account run';
       if(effects)result.coverage.presentation=fragments?'Same real collision/refill workload. Middle phase bounds each fragment to its original polygon cell with the full-resolution hull offset inside it; same polygon, pivot, trajectory, count, fire, smoke, audio and timing. DOM samples do not prove pixel presentation.':'Same real collision/refill workload in all three phases. Middle phase adds will-change hints only; original CSS artwork, filters, fragments and timings remain. DOM samples do not prove pixel presentation.';
+      if(workload)result.coverage.presentation='Cause-isolation only: normal explosion/shatter DOM and explosion sound requests are omitted independently in designated phases. Simulation effects, hull illumination, original other visuals, music, shot sounds, haptics and 34 ms cap continue. First 1500 ms of each phase settle prior work and are excluded from measurements; clock counts only full frame intervals after that cutoff. No omissions are proposed for the game.';
       setReport({...result,build,device,blockedRequests:[...window.__cryptoidBlockedRequests]});setRunning(false);
     }});
     if(presentation)window.__cryptoidDeviceReplay.presentation=presentation;
+    if(paths)window.__cryptoidDeviceReplay.workload=paths;
     const mountWatchdog=setTimeout(()=>{
       if(!window.__cryptoidDeviceReplay.active)window.__cryptoidDeviceReplay.abort('fixture-not-started');
     },5000);
     setRunning(true);
   };
   const copy = async () => {
-    try{await navigator.clipboard.writeText(JSON.stringify(report,null,effects?0:2));setCopied(true);}
+    try{await navigator.clipboard.writeText(JSON.stringify(report,null,effects||workload?0:2));setCopied(true);}
     catch{setCopyFallback(true);}
   };
   return proof ? <FragmentProof close={()=>setProof(false)}/> : running ? <>
@@ -110,10 +116,10 @@ function App() {
     <small>CRYPTOID EVOLUTION · GERÄTETEST</small>
     <h1>{report?'Messung beendet':'Kurzer automatischer Test'}</h1>
     {!report ? <>
-      <p>Der Test läuft {effects?'rund 70 Sekunden':lifecycle?'rund zwei Minuten':'rund 90 Sekunden'} selbstständig. Bitte das Fenster geöffnet lassen.</p>
-      <p>{fragments?'Drei gleiche Zerstörungsphasen vergleichen die Darstellung der Trümmer. In der mittleren Phase werden ihre Zeichenflächen enger begrenzt. Bitte achte auf Feuer, Trümmer und das Spieltempo. Du brauchst nichts zu steuern.':effects?'Drei gleiche Zerstörungsphasen vergleichen die Explosionsdarstellung. Die mittlere Phase prüft eine andere Verarbeitung der Animationsebenen. Bitte achte darauf, ob Feuer und Trümmer sichtbar sind. Du brauchst nichts zu steuern.':lifecycle?'Gegnerzerstörungen, Explosionen und Blockwechsel werden automatisch geprüft. Du brauchst nichts zu steuern.':'Einzel- und Doppelschüsse sowie das Schild werden in festen Situationen verglichen.'}</p>
+      <p>Der Test läuft {workload?'rund eine Minute':effects?'rund 70 Sekunden':lifecycle?'rund zwei Minuten':'rund 90 Sekunden'} selbstständig. Bitte das Fenster geöffnet lassen.</p>
+      <p>{workload?'Explosionsbild und Explosionsklang werden einzeln kurz ausgeschaltet. Fehlende Explosionen oder ein fehlender Explosionsklang sind in diesen Testphasen beabsichtigt. Am Anfang und Ende läuft beides. Du brauchst nichts zu steuern.':fragments?'Drei gleiche Zerstörungsphasen vergleichen die Darstellung der Trümmer. In der mittleren Phase werden ihre Zeichenflächen enger begrenzt. Bitte achte auf Feuer, Trümmer und das Spieltempo. Du brauchst nichts zu steuern.':effects?'Drei gleiche Zerstörungsphasen vergleichen die Explosionsdarstellung. Die mittlere Phase prüft eine andere Verarbeitung der Animationsebenen. Bitte achte darauf, ob Feuer und Trümmer sichtbar sind. Du brauchst nichts zu steuern.':lifecycle?'Gegnerzerstörungen, Explosionen und Blockwechsel werden automatisch geprüft. Du brauchst nichts zu steuern.':'Einzel- und Doppelschüsse sowie das Schild werden in festen Situationen verglichen.'}</p>
       <p>Es ist kein Spielkonto nötig. Dein normaler Spielstand wird nicht geladen.</p>
-      <label><input type="checkbox" checked={sound} onChange={e=>setSound(e.target.checked)}/> Mit Musik und Soundeffekten</label>
+      <label><input type="checkbox" checked={sound} disabled={workload} onChange={e=>setSound(e.target.checked)}/> Mit Musik und Soundeffekten</label>
       <button onClick={start}>Test starten</button>
       {fragments&&<button onClick={()=>setProof(true)}>Darstellung vergleichen</button>}
     </> : <>

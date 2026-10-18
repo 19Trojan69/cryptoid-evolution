@@ -56,3 +56,12 @@ test('sample memory stays bounded while totals keep counting',()=>{
   assert.equal(p.frameQuantileSamples,4096);assert.equal(p.frames,5000);
   assert.equal(p.measuredFrameMs,50000);assert.equal(p.volleys,5000);assert.equal(p.fixtureResets,1);
 });
+
+test('per-phase settling is excluded from clock, work and volley statistics',()=>{
+  const f=fixture({phases:[{name:'settle',durationMs:200,settleMs:100}]});
+  f.frame(100);f.volley();f.frame(50);f.volley();
+  f.frame(50);f.volley();f.frame(50);f.volley();f.frame(50);
+  const p=f.reports[0].phases[0];assert.equal(p.wallMs,200);
+  assert.equal(p.frames,2);assert.equal(p.measuredFrameMs,100);assert.equal(p.volleys,2);
+  assert.equal(p.clippedSimulationMs,32);assert.equal(p.volleyGapP95Ms,50);
+});

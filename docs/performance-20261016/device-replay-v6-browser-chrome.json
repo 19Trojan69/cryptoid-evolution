@@ -1,0 +1,697 @@
+{
+  "version": 1,
+  "mode": "isolated real-renderer replay",
+  "completed": true,
+  "reason": "completed",
+  "elapsedWallMs": 58084.7,
+  "warmupMs": 8000,
+  "phaseMs": 20000,
+  "phases": [
+    {
+      "name": "original-before",
+      "label": "Bild und Klang · Ausgangszustand",
+      "explosionImages": true,
+      "explosionAudio": true,
+      "enemies": 6,
+      "double": true,
+      "shield": true,
+      "durationMs": 10000,
+      "settleMs": 1500,
+      "fixture": "destruction",
+      "wallMs": 10014.5,
+      "frames": 493,
+      "measuredFrameMs": 8498.1,
+      "acceptedSimulationMs": 8450.3,
+      "clippedSimulationMs": 47.8,
+      "over34Frames": 3,
+      "acceptedTimeRatio": 0.9944,
+      "meanDeliveredFps": 58.01,
+      "frameP50Ms": 16.7,
+      "frameP95Ms": 16.8,
+      "frameMaxMs": 50,
+      "frameQuantileSamples": 493,
+      "volleys": 27,
+      "volleyGapP50Ms": 316.6,
+      "volleyGapP95Ms": 333.3,
+      "simulationWorkP95Ms": 0.3,
+      "fixtureResets": 0,
+      "end": {
+        "sector": 12,
+        "phase": "FORMATION",
+        "status": "playing",
+        "enemies": 6,
+        "shots": 6,
+        "enemyShots": 1,
+        "effects": 12,
+        "shield": true,
+        "weaponLevel": 2,
+        "pickupWeaponMs": 110050.00000000058,
+        "fieldWidth": 1363,
+        "fieldHeight": 936,
+        "audioVoices": 7,
+        "destroyed": 56,
+        "lifecycle": {
+          "refills": 56,
+          "maxEffects": 16,
+          "effectEvents": 56,
+          "sectorChanges": 0,
+          "phaseFrames": {
+            "ATTACK_CYCLE": 225,
+            "FORMATION": 359
+          },
+          "samples": [
+            {
+              "atMs": 16458.200000001118,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 0,
+              "audioVoices": 7,
+              "painted": 13,
+              "estimatedBytes": 4838022,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            },
+            {
+              "atMs": 25520.300000000745,
+              "sector": 12,
+              "phase": "FORMATION",
+              "enemies": 6,
+              "effects": 12,
+              "audioVoices": 6,
+              "painted": 13,
+              "estimatedBytes": 4838022,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            }
+          ]
+        },
+        "workload": {
+          "explosionImages": true,
+          "explosionAudio": true,
+          "allowedAudioCalls": 56,
+          "omittedAudioCalls": 0,
+          "samples": [
+            {
+              "atMs": 18473,
+              "domExplosions": 8
+            },
+            {
+              "atMs": 20473,
+              "domExplosions": 16
+            },
+            {
+              "atMs": 22473,
+              "domExplosions": 14
+            },
+            {
+              "atMs": 24488,
+              "domExplosions": 14
+            }
+          ],
+          "coverage": "Only normal explosion/shatter DOM is omitted in designated phases. Simulation effects, hull illumination, other graphics, music, shots and haptics continue. Audio calls count requests, not audible output."
+        }
+      }
+    },
+    {
+      "name": "without-explosion-audio",
+      "label": "Explosionsbild an · Explosionsklang aus",
+      "explosionImages": true,
+      "explosionAudio": false,
+      "enemies": 6,
+      "double": true,
+      "shield": true,
+      "durationMs": 10000,
+      "settleMs": 1500,
+      "fixture": "destruction",
+      "wallMs": 10014.5,
+      "frames": 502,
+      "measuredFrameMs": 8498.1,
+      "acceptedSimulationMs": 8482.1,
+      "clippedSimulationMs": 16,
+      "over34Frames": 1,
+      "acceptedTimeRatio": 0.9981,
+      "meanDeliveredFps": 59.07,
+      "frameP50Ms": 16.7,
+      "frameP95Ms": 16.8,
+      "frameMaxMs": 50,
+      "frameQuantileSamples": 502,
+      "volleys": 27,
+      "volleyGapP50Ms": 316.6,
+      "volleyGapP95Ms": 333.3,
+      "simulationWorkP95Ms": 0.3,
+      "fixtureResets": 0,
+      "end": {
+        "sector": 12,
+        "phase": "FORMATION",
+        "status": "playing",
+        "enemies": 6,
+        "shots": 4,
+        "enemyShots": 0,
+        "effects": 16,
+        "shield": true,
+        "weaponLevel": 2,
+        "pickupWeaponMs": 110018.2000000002,
+        "fieldWidth": 1363,
+        "fieldHeight": 936,
+        "audioVoices": 1,
+        "destroyed": 55,
+        "lifecycle": {
+          "refills": 55,
+          "maxEffects": 16,
+          "effectEvents": 55,
+          "sectorChanges": 0,
+          "phaseFrames": {
+            "ATTACK_CYCLE": 211,
+            "FORMATION": 382
+          },
+          "samples": [
+            {
+              "atMs": 26472.400000000373,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 0,
+              "audioVoices": 7,
+              "painted": 13,
+              "estimatedBytes": 4838022,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            },
+            {
+              "atMs": 35551.90000000037,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 10,
+              "audioVoices": 1,
+              "painted": 13,
+              "estimatedBytes": 4838022,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            }
+          ]
+        },
+        "workload": {
+          "explosionImages": true,
+          "explosionAudio": false,
+          "allowedAudioCalls": 0,
+          "omittedAudioCalls": 55,
+          "samples": [
+            {
+              "atMs": 28491,
+              "domExplosions": 8
+            },
+            {
+              "atMs": 30503,
+              "domExplosions": 16
+            },
+            {
+              "atMs": 32503,
+              "domExplosions": 14
+            },
+            {
+              "atMs": 34520,
+              "domExplosions": 9
+            }
+          ],
+          "coverage": "Only normal explosion/shatter DOM is omitted in designated phases. Simulation effects, hull illumination, other graphics, music, shots and haptics continue. Audio calls count requests, not audible output."
+        }
+      }
+    },
+    {
+      "name": "without-explosion-image-or-audio",
+      "label": "Explosionsbild und Explosionsklang aus",
+      "explosionImages": false,
+      "explosionAudio": false,
+      "enemies": 6,
+      "double": true,
+      "shield": true,
+      "durationMs": 10000,
+      "settleMs": 1500,
+      "fixture": "destruction",
+      "wallMs": 10014.5,
+      "frames": 509,
+      "measuredFrameMs": 8498.2,
+      "acceptedSimulationMs": 8498.2,
+      "clippedSimulationMs": 0,
+      "over34Frames": 0,
+      "acceptedTimeRatio": 1,
+      "meanDeliveredFps": 59.9,
+      "frameP50Ms": 16.7,
+      "frameP95Ms": 16.7,
+      "frameMaxMs": 33.3,
+      "frameQuantileSamples": 509,
+      "volleys": 27,
+      "volleyGapP50Ms": 316.6,
+      "volleyGapP95Ms": 333.3,
+      "simulationWorkP95Ms": 0.2,
+      "fixtureResets": 0,
+      "end": {
+        "sector": 12,
+        "phase": "FORMATION",
+        "status": "playing",
+        "enemies": 6,
+        "shots": 6,
+        "enemyShots": 1,
+        "effects": 12,
+        "shield": true,
+        "weaponLevel": 2,
+        "pickupWeaponMs": 110002.19999999962,
+        "fieldWidth": 1363,
+        "fieldHeight": 936,
+        "audioVoices": 1,
+        "destroyed": 56,
+        "lifecycle": {
+          "refills": 56,
+          "maxEffects": 16,
+          "effectEvents": 56,
+          "sectorChanges": 0,
+          "phaseFrames": {
+            "ATTACK_CYCLE": 224,
+            "FORMATION": 376
+          },
+          "samples": [
+            {
+              "atMs": 36484.800000000745,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 0,
+              "audioVoices": 1,
+              "painted": 13,
+              "estimatedBytes": 4838022,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            },
+            {
+              "atMs": 45565.70000000112,
+              "sector": 12,
+              "phase": "FORMATION",
+              "enemies": 6,
+              "effects": 12,
+              "audioVoices": 1,
+              "painted": 13,
+              "estimatedBytes": 4838022,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            }
+          ]
+        },
+        "workload": {
+          "explosionImages": false,
+          "explosionAudio": false,
+          "allowedAudioCalls": 0,
+          "omittedAudioCalls": 56,
+          "samples": [
+            {
+              "atMs": 38501,
+              "domExplosions": 0
+            },
+            {
+              "atMs": 40505,
+              "domExplosions": 0
+            },
+            {
+              "atMs": 42515,
+              "domExplosions": 0
+            },
+            {
+              "atMs": 44515,
+              "domExplosions": 0
+            }
+          ],
+          "coverage": "Only normal explosion/shatter DOM is omitted in designated phases. Simulation effects, hull illumination, other graphics, music, shots and haptics continue. Audio calls count requests, not audible output."
+        }
+      }
+    },
+    {
+      "name": "without-explosion-image",
+      "label": "Explosionsbild aus · Explosionsklang an",
+      "explosionImages": false,
+      "explosionAudio": true,
+      "enemies": 6,
+      "double": true,
+      "shield": true,
+      "durationMs": 10000,
+      "settleMs": 1500,
+      "fixture": "destruction",
+      "wallMs": 10014.4,
+      "frames": 508,
+      "measuredFrameMs": 8498.1,
+      "acceptedSimulationMs": 8482.2,
+      "clippedSimulationMs": 15.9,
+      "over34Frames": 1,
+      "acceptedTimeRatio": 0.9981,
+      "meanDeliveredFps": 59.78,
+      "frameP50Ms": 16.7,
+      "frameP95Ms": 16.7,
+      "frameMaxMs": 49.9,
+      "frameQuantileSamples": 508,
+      "volleys": 27,
+      "volleyGapP50Ms": 316.6,
+      "volleyGapP95Ms": 333.4,
+      "simulationWorkP95Ms": 0.3,
+      "fixtureResets": 0,
+      "end": {
+        "sector": 12,
+        "phase": "FORMATION",
+        "status": "playing",
+        "enemies": 6,
+        "shots": 4,
+        "enemyShots": 0,
+        "effects": 16,
+        "shield": true,
+        "weaponLevel": 2,
+        "pickupWeaponMs": 110018.09999999964,
+        "fieldWidth": 1363,
+        "fieldHeight": 936,
+        "audioVoices": 9,
+        "destroyed": 55,
+        "lifecycle": {
+          "refills": 55,
+          "maxEffects": 16,
+          "effectEvents": 55,
+          "sectorChanges": 0,
+          "phaseFrames": {
+            "ATTACK_CYCLE": 213,
+            "FORMATION": 386
+          },
+          "samples": [
+            {
+              "atMs": 46499.20000000112,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 0,
+              "audioVoices": 1,
+              "painted": 13,
+              "estimatedBytes": 4838022,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            },
+            {
+              "atMs": 55596.20000000112,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 10,
+              "audioVoices": 7,
+              "painted": 13,
+              "estimatedBytes": 4838022,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            }
+          ]
+        },
+        "workload": {
+          "explosionImages": false,
+          "explosionAudio": true,
+          "allowedAudioCalls": 55,
+          "omittedAudioCalls": 0,
+          "samples": [
+            {
+              "atMs": 48515,
+              "domExplosions": 0
+            },
+            {
+              "atMs": 50516,
+              "domExplosions": 0
+            },
+            {
+              "atMs": 52532,
+              "domExplosions": 0
+            },
+            {
+              "atMs": 54547,
+              "domExplosions": 0
+            }
+          ],
+          "coverage": "Only normal explosion/shatter DOM is omitted in designated phases. Simulation effects, hull illumination, other graphics, music, shots and haptics continue. Audio calls count requests, not audible output."
+        }
+      }
+    },
+    {
+      "name": "original-after",
+      "label": "Bild und Klang · Rückvergleich",
+      "explosionImages": true,
+      "explosionAudio": true,
+      "enemies": 6,
+      "double": true,
+      "shield": true,
+      "durationMs": 10000,
+      "settleMs": 1500,
+      "fixture": "destruction",
+      "wallMs": 10014.5,
+      "frames": 477,
+      "measuredFrameMs": 8498.1,
+      "acceptedSimulationMs": 8401.1,
+      "clippedSimulationMs": 97,
+      "over34Frames": 4,
+      "acceptedTimeRatio": 0.9886,
+      "meanDeliveredFps": 56.13,
+      "frameP50Ms": 16.7,
+      "frameP95Ms": 33.3,
+      "frameMaxMs": 66.6,
+      "frameQuantileSamples": 477,
+      "volleys": 26,
+      "volleyGapP50Ms": 316.6,
+      "volleyGapP95Ms": 349.9,
+      "simulationWorkP95Ms": 0.4,
+      "fixtureResets": 0,
+      "end": {
+        "sector": 12,
+        "phase": "FORMATION",
+        "status": "playing",
+        "enemies": 6,
+        "shots": 4,
+        "enemyShots": 1,
+        "effects": 12,
+        "shield": true,
+        "weaponLevel": 2,
+        "pickupWeaponMs": 110099.19999999974,
+        "fieldWidth": 1363,
+        "fieldHeight": 936,
+        "audioVoices": 7,
+        "destroyed": 56,
+        "lifecycle": {
+          "refills": 56,
+          "maxEffects": 16,
+          "effectEvents": 56,
+          "sectorChanges": 0,
+          "phaseFrames": {
+            "ATTACK_CYCLE": 215,
+            "FORMATION": 353
+          },
+          "samples": [
+            {
+              "atMs": 56513.09999999963,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 0,
+              "audioVoices": 9,
+              "painted": 13,
+              "estimatedBytes": 4838022,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            },
+            {
+              "atMs": 65579.20000000112,
+              "sector": 12,
+              "phase": "FORMATION",
+              "enemies": 6,
+              "effects": 12,
+              "audioVoices": 5,
+              "painted": 13,
+              "estimatedBytes": 4838022,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            }
+          ]
+        },
+        "workload": {
+          "explosionImages": true,
+          "explosionAudio": true,
+          "allowedAudioCalls": 56,
+          "omittedAudioCalls": 0,
+          "samples": [
+            {
+              "atMs": 58515,
+              "domExplosions": 8
+            },
+            {
+              "atMs": 60515,
+              "domExplosions": 15
+            },
+            {
+              "atMs": 62516,
+              "domExplosions": 14
+            },
+            {
+              "atMs": 64519,
+              "domExplosions": 14
+            }
+          ],
+          "coverage": "Only normal explosion/shatter DOM is omitted in designated phases. Simulation effects, hull illumination, other graphics, music, shots and haptics continue. Audio calls count requests, not audible output."
+        }
+      }
+    }
+  ],
+  "issues": [],
+  "coverage": {
+    "clock": "Actual GamePage frameGap and delta; its 34 ms cap is unchanged",
+    "rendering": "Real React/DOM/CSS/canvas, hull preparation and original assets",
+    "fixtures": "Controlled lives/one-hit enemies and automatic aiming; real shot collisions, explosions and normal block transitions; no scored/account run",
+    "samples": "Frame and work quantiles retain at most 4096 values per phase",
+    "account": "No Pi login or real account/API access; separate preview origin",
+    "presentation": "Cause-isolation only: normal explosion/shatter DOM and explosion sound requests are omitted independently in designated phases. Simulation effects, hull illumination, original other visuals, music, shot sounds, haptics and 34 ms cap continue. First 1500 ms of each phase settle prior work and are excluded from measurements; clock counts only full frame intervals after that cutoff. No omissions are proposed for the game."
+  },
+  "build": {
+    "id": "device-replay-20261018-v6-cause",
+    "gameCommit": "27d174788327c3423f04ace32be61af67a2004cc",
+    "gameSourceSha256": "eb628a5d73247ea64ec5443d2ff4efdab071a97228634f16f2aa915cdc832607",
+    "audioSourceSha256": "e6720dc0abc59d75a56bf10118c6b86ada07d77bf45abb9b4717356f34dab7ac"
+  },
+  "device": {
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+    "viewport": {
+      "width": 1363,
+      "height": 936
+    },
+    "pixelRatio": 1,
+    "visibility": "visible",
+    "sound": true
+  },
+  "blockedRequests": []
+}
