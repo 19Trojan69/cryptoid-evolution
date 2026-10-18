@@ -1,7 +1,7 @@
 import { combatCryptoid, combatTiming, combatEntryStage, combatAttackPattern, createCombatVariety, readCombatVariety, type CombatVarietyRuntime } from './combatVariety';
 import { advanceBonusRock, spawnBonusRock, hitBonusRock, rockHitsShot, rockInField, nextRockEventMs, MAX_ROCKS, MAX_ROCK_EFFECTS, type BonusRock, type RockEffect } from './bonusRocks';
 import BonusRockLayer from './BonusRockLayer';
-import {CanvasEffectLayer,CanvasImpact} from './CanvasEffects';
+import {CanvasEffectLayer,CanvasImpact,canvasEffectResources} from './CanvasEffects';
 import './combatVariety.css';
 import { useAuth } from '../hooks/useAuth';
 import { enemyVisualDiameter } from './shipDisplayScale';
@@ -31,7 +31,7 @@ import { gameHaptics } from "./gameHaptics";
 import { bindGameInput } from './gameInput';
 import { startGuardedGameLoop, type GameInterruption } from './gameLoop';
 import { recordGameDiagnostic, createGameSessionDiagnostics } from './gameDiagnostics';
-import { createReloadGameMonitor, installReloadDiagnostics, recordReloadEvent } from './reloadDiagnostics';
+import { createReloadGameMonitor, installReloadDiagnostics, recordReloadEvent, recordReloadSnapshot } from './reloadDiagnostics';
 import { browserProbeRuntime, createPerformanceProbe, developerProbeEnabled } from './performanceDiagnostics';
 import { renderWorkStats } from './renderWork';
 import GameSceneBoundary from './GameSceneBoundary';
@@ -626,7 +626,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
       setGame({ ...state });
       void saveCombatRef.current().catch(() => setSaveNotice('Save not confirmed. Pending data will be retried.'));
     };
-  }, [clearControls]);
+  }, [clearControls, ownerDiagnostics]);
   const diagnosticContext = useCallback(() => {
     const state = stateRef.current;
     const base = { reason: 'performance' as const, errorName: '', sector: state.sector, block: sectorInChapter(state.sector),
@@ -648,6 +648,34 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
       attackCooldownMs: attackCooldownRef.current, spawnTimerMs: spawnTimerRef.current,
       clearTimerMs: clearTimerRef.current, elapsedMs: elapsedRef.current };
   }, [ownerDiagnostics]);
+  const ownerResourceContext = useCallback(() => {
+    const base = diagnosticContext();
+    if (!ownerDiagnostics) return base;
+    const browser = browserProbeRuntime();
+    const painted = paintedShipResourceStats();
+    const canvas = canvasEffectResources();
+    const audio = soundRef.current?.diagnosticResourceStats;
+    let canvasNodes: number | undefined, imageNodes: number | undefined;
+    try {
+      canvasNodes = document.getElementsByTagName('canvas').length;
+      imageNodes = document.images.length;
+    } catch { /* Optional browser counters only. */ }
+    const estimatedResourceBytes = (painted.estimatedBytes ?? 0) + (canvas.cacheBytes ?? 0) + (canvas.surfaceBytes ?? 0) + (audio?.audioBufferBytes ?? 0);
+    return { ...base,
+      jsHeapBytes: browser.heapBytes, domNodes: browser.domNodes, runningAnimations: browser.animations, canvasNodes, imageNodes,
+      paintedEntries: painted.painted, paintedBytes: painted.estimatedBytes, paintedSources: painted.sources, paintedPending: painted.pending,
+      paintedRetained: painted.retained, paintedRetainCount: painted.retainCount,
+      paintedSourceRetained: painted.sourceRetained, paintedSourceRetainCount: painted.sourceRetainCount,
+      canvasRegisteredEffects: canvas.registeredEffects, canvasSourceImages: canvas.sourceImages, canvasTextureEntries: canvas.textureEntries,
+      canvasCacheBytes: canvas.cacheBytes, canvasSurfaceBytes: canvas.surfaceBytes, canvasRetainedHullUsers: canvas.retainedHullUsers,
+      canvasFailureCount: canvas.failures.length,
+      audioState: audio?.audioState, audioVoices: audio?.audioVoices, audioWeaponVoices: audio?.audioWeaponVoices,
+      audioBossVoices: audio?.audioBossVoices, audioEffectVoices: audio?.audioEffectVoices, audioSampleBuffers: audio?.audioSampleBuffers,
+      audioRockBuffers: audio?.audioRockBuffers, audioBufferBytes: audio?.audioBufferBytes, estimatedResourceBytes };
+  }, [diagnosticContext, ownerDiagnostics]);
+  const recordOwnerResourceSnapshot = useCallback((kind: Parameters<typeof recordReloadSnapshot>[0]) => {
+    if (ownerDiagnostics) recordReloadSnapshot(kind, ownerResourceContext());
+  }, [ownerDiagnostics, ownerResourceContext]);
   useEffect(() => {
     const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
     let longTasksSupported = false;
@@ -1107,7 +1135,10 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     if (!combatVarietyEnabled) state.powerUps = [];
     state.boss = null;
     performanceProbeRef.current?.lifecycle('boss-defeat-complete');
-    if (ownerDiagnostics) recordReloadEvent('boss-defeat-complete');
+    if (ownerDiagnostics) {
+      recordReloadEvent('boss-defeat-complete');
+      recordOwnerResourceSnapshot('resource-boss-clear');
+    }
     void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
   };
   const destroyBossRef = useRef(destroyBoss);
@@ -1303,7 +1334,10 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         let readyCount = 0;
         for (const asteroid of state.asteroids) if (asteroid.entryElapsed >= asteroid.entryDuration && asteroid.formationElapsed >= asteroid.formationDuration) readyCount++;
         const formationIsReady = normal && formationReady({ spawned: formationIndexRef.current, total: slots.length, alive: state.asteroids.length, ready: readyCount });
-        if (formationIsReady) formationStartedRef.current = true;
+        if (formationIsReady && !formationStartedRef.current) {
+          formationStartedRef.current = true;
+          if (ownerDiagnostics && flightRef.current === 0) recordOwnerResourceSnapshot('resource-formation-ready');
+        }
         const transitionPaused = state.phase === "SECTOR_INTRO" || state.phase === "SECTOR_CLEAR" || state.encounter === "boss-intro" || state.encounter === "boss-clear" || (normal && !formationStartedRef.current);
         const keys = keysRef.current;
         const horizontal = Number(keys.has("ArrowRight") || keys.has("KeyD")) - Number(keys.has("ArrowLeft") || keys.has("KeyA"));
@@ -1404,6 +1438,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
             showRewardCards([card]);return;
           }
           if (clearFinished && (state.encounter !== 'boss-clear' || state.bossHeartCollected&&bossLifeRemainingRef.current===0)) {
+            if (ownerDiagnostics && state.encounter === 'boss-clear') recordOwnerResourceSnapshot('resource-boss-clear-ready');
             if (state.encounter === "bonus" && state.sector === MAX_DIFFICULTY_LEVEL) {
               if (!recordsSavedRef.current) {
                 if (!adminRunRef.current && !scoreRunRef.current) saveRecords(state);
@@ -1466,6 +1501,10 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
             sectionElapsedRef.current = 0;
             clearTimerRef.current = 0;
             attackCooldownRef.current = 0;
+            if (ownerDiagnostics) {
+              if (state.encounter === 'bonus') recordOwnerResourceSnapshot('resource-bonus-start');
+              else if (state.encounter === 'normal') recordOwnerResourceSnapshot('resource-normal-start');
+            }
             setGame({ ...state });
             return;
           }
@@ -1476,16 +1515,20 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
           const entryGap = bonusEntryGap(bonusIndexRef.current);
           if (spawnTimerRef.current >= entryGap) {
             spawnTimerRef.current -= entryGap;
+            const firstBonusTarget = bonusIndexRef.current === 0;
             const index = bonusIndexRef.current++;
             state.bonusTargets.push({ id: nextIdRef.current++, index, elapsed: 0, ...bonusPosition(index, 0, width, height), radius: 22, ...bonusShowcaseShip(index, state.sector) });
+            if (firstBonusTarget && ownerDiagnostics) recordOwnerResourceSnapshot('resource-bonus-first-spawn');
           }
         }
         if (normal && sectionElapsedRef.current >= timing.introMs && state.phase !== "SECTOR_CLEAR" && formationIndexRef.current < slots.length) {
           spawnTimerRef.current += delta;
           if (spawnTimerRef.current >= timing.gapMs) {
             spawnTimerRef.current -= timing.gapMs;
+            const firstNormalSpawn = formationIndexRef.current === 0 && flightRef.current === 0;
             if (variety && formationIndexRef.current === 0) { intro.notice = chooseCryptoid(state.sector, formationOffsetRef.current).shipClass === "heavy" ? "Heavy attacker incoming" : [5, 8].includes((state.sector - 1) % 10 + 1) ? "Finish this wave without a hit" : (state.sector - 1) % 10 + 1 === 7 ? "Hold your combo" : "Clear the formation"; intro.noticeMs = 2000; }
             state.asteroids.push(spawnAsteroid(nextIdRef.current++, width, visibleTop, formationIndexRef.current++, state.sector, slots, formationOffsetRef.current, rulesVersionRef.current));
+            if (firstNormalSpawn && ownerDiagnostics) recordOwnerResourceSnapshot('resource-normal-first-spawn');
           }
         }
         if (state.encounter === "boss-fight" && state.boss && state.boss.elapsed >= BOSS_ENTRY_MS + 1_500) {
@@ -1859,6 +1902,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
           }, { kind: "chain", level: campaignLevel(state.sector), stage: state.sector });
         }
         if (bonus && state.phase === "SECTOR_CLEAR" && previousPhase !== "SECTOR_CLEAR") {
+          if (ownerDiagnostics) recordOwnerResourceSnapshot('resource-bonus-clear');
           const reward = bonusReward(state.bonusHits, state.sector);
           const chainShards = bonusChainReward(state.chainBlocks, state.bonusHits, state.sector);
           const recoveredHeart = bonusHeartReward(state.bonusHits, state.hearts, state.maxHearts);
