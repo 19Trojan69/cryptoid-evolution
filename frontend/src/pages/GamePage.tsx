@@ -31,7 +31,7 @@ import { gameHaptics } from "./gameHaptics";
 import { bindGameInput } from './gameInput';
 import { startGuardedGameLoop, type GameInterruption } from './gameLoop';
 import { recordGameDiagnostic, createGameSessionDiagnostics } from './gameDiagnostics';
-import { createReloadGameMonitor, recordReloadEvent } from './reloadDiagnostics';
+import { createReloadGameMonitor, installReloadDiagnostics, recordReloadEvent } from './reloadDiagnostics';
 import { browserProbeRuntime, createPerformanceProbe, developerProbeEnabled } from './performanceDiagnostics';
 import { renderWorkStats } from './renderWork';
 import GameSceneBoundary from './GameSceneBoundary';
@@ -389,7 +389,7 @@ const ImpactEffectView = memo(({effect}:{effect:Effect}) => combatVarietyEnabled
   ? <CanvasImpact effect={effect} debris={shipDebris(effect)} original={<OriginalImpactEffectView effect={effect}/>} />
   : <OriginalImpactEffectView effect={effect}/>);
 
-const GamePage = () => {
+const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) => {
   const { t, lives, locale } = useLocale();
   const compactNumber = useMemo(() => new Intl.NumberFormat(locale, { notation: "compact", maximumFractionDigits: 1 }), [locale]);
   const hudNumber = (value: number) => value < 1_000_000 ? String(value) : compactNumber.format(value);
@@ -472,7 +472,7 @@ const GamePage = () => {
     setRewardCards([...rewardCardsRef.current]);
     stateRef.current.status='paused'; clearControls();
     setGame({...stateRef.current});
-  }, [clearControls]);
+  }, [clearControls, ownerDiagnostics]);
   const continueRewardCard=()=>{
     rewardCardsRef.current=rewardCardsRef.current.slice(1);setRewardCards([...rewardCardsRef.current]);
     clearControls();
@@ -605,7 +605,7 @@ const GamePage = () => {
   useEffect(() => {
     interruptionRef.current = (reason, error) => {
       performanceProbeRef.current?.lifecycle(reason, error);
-      recordReloadEvent(reason, error);
+      if (ownerDiagnostics) recordReloadEvent(reason, error);
       const state = stateRef.current;
       clearControls();
       lastFrameRef.current = 0;
@@ -629,13 +629,15 @@ const GamePage = () => {
   }, [clearControls]);
   const diagnosticContext = useCallback(() => {
     const state = stateRef.current;
-    const boss = state.boss;
-    const turrets = boss?.turrets ?? [];
-    return { reason: 'performance' as const, errorName: '', sector: state.sector, block: sectorInChapter(state.sector),
+    const base = { reason: 'performance' as const, errorName: '', sector: state.sector, block: sectorInChapter(state.sector),
       phase: state.phase, encounter: state.encounter, status: state.status, width: fieldSizeRef.current.width,
       height: fieldSizeRef.current.height, browser: navigator.userAgent, enemies: state.asteroids.length,
       projectiles: state.shots.length + state.enemyShots.length, effects: state.effects.length, lastSavedAt: lastSavedAtRef.current,
-      frameMs: Math.round(lastMeasuredFrameRef.current),
+      frameMs: Math.round(lastMeasuredFrameRef.current) };
+    if (!ownerDiagnostics) return base;
+    const boss = state.boss;
+    const turrets = boss?.turrets ?? [];
+    return { ...base,
       bossId: boss?.config.id, bossHealth: boss?.health, bossMaxHealth: boss?.maxHealth,
       liveTurrets: boss ? turrets.filter(gun => gun.health > 0).length : undefined,
       totalTurrets: boss ? turrets.length : undefined,
@@ -646,7 +648,7 @@ const GamePage = () => {
       bossEscortTimerMs: boss ? bossEscortTimerRef.current : undefined,
       attackCooldownMs: attackCooldownRef.current, spawnTimerMs: spawnTimerRef.current,
       clearTimerMs: clearTimerRef.current, elapsedMs: elapsedRef.current };
-  }, []);
+  }, [ownerDiagnostics]);
   useEffect(() => {
     const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
     let longTasksSupported = false;
@@ -657,7 +659,7 @@ const GamePage = () => {
       audioBufferBytes: soundRef.current?.diagnosticBufferBytes ?? 0,
       longTasksSupported,
       knownTimers: 1 + Number(gameOverTimerRef.current !== null) + Number(reloadNoticeTimerRef.current !== null),
-      knownListeners: 15,
+      knownListeners: ownerDiagnostics ? 15 : 5,
     }) }) : null;
     performanceProbeRef.current = probe;
     const stopBossObservation = probe ? observeBossResources((kind, details) => {
@@ -675,7 +677,8 @@ const GamePage = () => {
     }
     const monitor = createGameSessionDiagnostics(undefined, recordGameDiagnostic, Date.now, navigation?.type);
     diagnosticsRef.current = monitor;
-    const reloadMonitor = createReloadGameMonitor(diagnosticContext);
+    if (ownerDiagnostics) installReloadDiagnostics();
+    const reloadMonitor = ownerDiagnostics ? createReloadGameMonitor(diagnosticContext) : null;
     reloadDiagnosticsRef.current = reloadMonitor;
     const update = () => monitor.update(diagnosticContext(), stateRef.current.status === 'playing', document.hidden, true);
     const hidden = () => { probe?.lifecycle('pagehide'); probe?.suspend(performance.now()); monitor.pagehide(); update(); };
@@ -699,7 +702,7 @@ const GamePage = () => {
       if (probeApi && probeHost.__cryptoidDiagnostics === probeApi) {
         if (previousProbe) probeHost.__cryptoidDiagnostics = previousProbe; else delete probeHost.__cryptoidDiagnostics;
       }
-      reloadMonitor.finish(); reloadDiagnosticsRef.current = null;
+      reloadMonitor?.finish(); reloadDiagnosticsRef.current = null;
       monitor.finish(); diagnosticsRef.current = null;
       window.removeEventListener('error', onError); window.removeEventListener('unhandledrejection', onRejection);
       window.removeEventListener('pagehide', hidden); window.removeEventListener('pageshow', shown);
@@ -1043,7 +1046,7 @@ const GamePage = () => {
   }, [musicVolume, game.encounter, game.status]);
   const startBossVictory = () => {
     performanceProbeRef.current?.lifecycle('boss-victory-start');
-    recordReloadEvent('boss-victory-start');
+    if (ownerDiagnostics) recordReloadEvent('boss-victory-start');
     bossVictoryPendingRef.current = false;
     const track = musicRef.current;
     if (!track) return;
@@ -1068,7 +1071,7 @@ const GamePage = () => {
   };
   const destroyBoss = (state: GameState, time: number) => {
     performanceProbeRef.current?.lifecycle('boss-defeat-start');
-    recordReloadEvent('boss-defeat-start');
+    if (ownerDiagnostics) recordReloadEvent('boss-defeat-start');
     soundRef.current?.stopBossWeapons();
     const boss = state.boss;
     if (!boss) return;
@@ -1105,7 +1108,7 @@ const GamePage = () => {
     if (!combatVarietyEnabled) state.powerUps = [];
     state.boss = null;
     performanceProbeRef.current?.lifecycle('boss-defeat-complete');
-    recordReloadEvent('boss-defeat-complete');
+    if (ownerDiagnostics) recordReloadEvent('boss-defeat-complete');
     void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
   };
   const destroyBossRef = useRef(destroyBoss);
@@ -2170,7 +2173,7 @@ const GamePage = () => {
     }
     leaveGameFullscreen();
     performanceProbeRef.current?.lifecycle('home-intent');
-    recordReloadEvent('home-intent');
+    if (ownerDiagnostics) recordReloadEvent('home-intent');
     navigate(adminRunRef.current ? "/admin" : "/");
   };
 
@@ -2193,7 +2196,7 @@ const GamePage = () => {
       await loadAccountSave();
       leaveGameFullscreen();
       performanceProbeRef.current?.lifecycle('saved-exit-intent');
-      recordReloadEvent('saved-exit-intent');
+      if (ownerDiagnostics) recordReloadEvent('saved-exit-intent');
       navigate("/");
     } catch {
       setSaveNotice("Save failed. The game stays paused. Please retry.");
@@ -2402,11 +2405,11 @@ const GamePage = () => {
 
 export { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY };
 function GameEntry() {
-  const { authReady, isLoading, authError, signIn } = useAuth();
+  const { authReady, isLoading, authError, signIn, canAdmin } = useAuth();
   const { t } = useLocale();
   // Decide guest/account ownership only after authentication has settled.
   // Once mounted, the mission retains its original owner until it is left.
-  if (authReady && !isLoading && !authError) return <GamePage />;
+  if (authReady && !isLoading && !authError) return <GamePage ownerDiagnostics={canAdmin} />;
   return <div className="game-overlay"><div className="game-modal">
     <p role="status">{t(!authReady || isLoading ? 'Signing in…' : authError)}</p>
     {authReady && !isLoading && <div className="modal-actions">
