@@ -107,3 +107,32 @@ This static diagnostic intentionally has no application API/data boundary.
 Next evidence: one foreground ~90-second run of this same v2 preview in the
 user's actual Pi Browser, with its resulting report. No campaign playthrough
 is required. A successful diagnostic run is not a fix for the reported slowdown.
+
+## iPhone comparison and refreshed access
+
+The user supplied a completed v2 report and explicitly identified that run as
+Safari. Phase FPS were 58.08 / 56.64 / 59.95 / 57.92, each with 62 volleys,
+zero fixture resets and accepted time ratios 0.9954 / 0.9932 / 0.9998 / 0.9958.
+Elapsed time was 88022 ms; the viewport was 430×775 at pixel ratio 3 with sound
+enabled. This is Safari evidence, not a completed Pi Browser measurement.
+
+The subsequent Pi Browser screenshots showed first a stuck login gate with
+88 s remaining (full deployment URL/version not visible), then Vercel's login
+page. The user also reported that GitHub sign-in did not work there. These are
+access/startup findings; they do not measure combat performance.
+
+The project read confirmed Vercel Authentication enabled with deploymentType
+all_except_custom_domains. Password protection and trusted IP restrictions
+were not active. A native request to create a deployment-scoped, 86400-second
+share link returned 409 protection_bypass_conflict because a link existed.
+The supported revoke-and-regenerate operation then succeeded using the exact
+user-supplied existing share token, scope shareable-link, and that same TTL.
+Only deployment dpl_BE8XtQxPZ4znyRekdt1URgxFL5Dk was targeted. The old share
+link was replaced. The new link expires 2026-10-19T09:09:54Z; tokens are not
+stored in this repository. Project protection settings were not changed.
+
+Opening the new link in the cloud browser reached the v2 ready screen directly.
+Screenshot: device-replay-v2-refreshed-access.jpg. That browser has previously
+accessed this origin, so this does not prove access in a fresh Pi Browser session
+or establish why the earlier link failed there. The actual Pi Browser run is
+still pending. No new game build was needed for this access-only operation.
