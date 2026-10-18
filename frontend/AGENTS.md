@@ -1,5 +1,16 @@
 # Preserve the officially approved game
 
+## Explicit owner-only Testnet diagnosis release, 18 October 2026
+
+The user explicitly authorized "ins testnet, nur in meinen Admin bereich".
+Release the tested reload-diagnosis v2 only to the existing official Testnet.
+The extended collector must run only for a server-verified canAdmin owner
+session; ordinary players keep the previous runtime path and receive no new
+diagnostic listeners, UI, hints or export access. The report remains only under
+the existing owner-only Admin diagnostics view. Do not change Pi login,
+payments, gameplay, visuals, audio, progression, saves or Mainnet. Create a
+rollback reference to the current official Testnet source before promotion.
+
 ## Reload diagnosis v2, 18 October 2026, 18:41 Vienna
 
 The user explicitly authorized the next isolated diagnostic step with "mach das bitte"
