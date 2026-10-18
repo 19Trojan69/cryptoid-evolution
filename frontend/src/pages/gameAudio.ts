@@ -346,6 +346,18 @@ export class GameAudio {
       for (const buffer of cache.values()) bytes += (buffer.length || 0) * (buffer.numberOfChannels || 0) * 4;
     return bytes;
   }
+  get diagnosticResourceStats() {
+    return {
+      audioState: this.context?.state ?? "none",
+      audioVoices: this.activeVoiceCount,
+      audioWeaponVoices: this.weaponMixVoices.size,
+      audioBossVoices: this.bossVoices.length,
+      audioEffectVoices: this.effectVoices.size,
+      audioSampleBuffers: this.samples.size + this.bossSamples.size + this.enemyShotSamples.size + this.enemyDoubleSamples.size,
+      audioRockBuffers: this.rockBuffers.size,
+      audioBufferBytes: this.diagnosticBufferBytes,
+    };
+  }
 
   close() {
     this.setPaused(true);
