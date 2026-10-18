@@ -25,7 +25,7 @@ export function recordGameDiagnostic(diagnostic: GameDiagnostic, storage?: Pick<
   return entry;
 }
 
-export const GAME_GAME_SESSION_KEY = 'cryptoid_game_session_v1';
+export const GAME_SESSION_KEY = 'cryptoid_game_session_v1';
 type SessionMarker = { context: GameDiagnostic; active: boolean; hidden: boolean; pageHidden: boolean; at: number };
 
 // The marker is per-tab session storage, avoiding false crashes from another
@@ -38,7 +38,7 @@ export function createGameSessionDiagnostics(storage?: Pick<Storage, 'getItem' |
   let target = storage;
   if (!target) { try { target = window.sessionStorage; } catch { /* Optional. */ } }
   let lastWrite = 0;
-  let context: Diagnostic | null = null;
+  let context: GameDiagnostic | null = null;
   let pageHidden = false;
   try {
     const previous = JSON.parse(target?.getItem(GAME_SESSION_KEY) ?? 'null') as SessionMarker | null;
@@ -50,7 +50,7 @@ export function createGameSessionDiagnostics(storage?: Pick<Storage, 'getItem' |
   } catch { /* Missing, malformed or denied storage is harmless. */ }
   return {
     due() { return now() - lastWrite >= 10_000; },
-    update(next: Diagnostic, active: boolean, hidden: boolean, force = false) {
+    update(next: GameDiagnostic, active: boolean, hidden: boolean, force = false) {
       context = next;
       if (!force && now() - lastWrite < 10_000) return;
       lastWrite = now();
