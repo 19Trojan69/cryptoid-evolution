@@ -59,10 +59,51 @@ The original 34 ms delta cap, weapons, styles and renderer remain intact.
 - Preview: https://cryptoid-evolution-testnet-ochp5xi48-19-trojan69.vercel.app
 - Independent deployment read: READY, target null, aliases empty, aliasError null.
 - The native share-link operation returned 403 at read_protection_bypass. It was
-  not retried unchanged, and project protection was not altered. A user-created
-  share link for this specific v2 preview is required before browser verification.
+  not retried unchanged, and project protection was not altered. The user then
+  supplied a share link for this specific v2 preview on 18 October; it opened
+  the ready screen without a Vercel login. The share token is not retained here.
 - The v1 share link must not be described as serving v2. Deployments are separate.
-- Full v2 browser run, rendered assets, audio behavior and report copy/download
-  remain UNVERIFIED. The slowdown in the actual Pi Browser remains unresolved.
+- The v2 real-renderer Chrome run and report download are now verified below.
+  The slowdown in the actual Pi Browser remains unresolved.
 - Fixed Testnet/main aliases are checked independently; neither is promoted or
   reassigned as part of this diagnostic work.
+
+## Actual browser verification — 18 October 2026
+
+Story: open the user-shared isolated preview, start without an account, render
+the real game through all four comparison phases, and export its report.
+This static diagnostic intentionally has no application API/data boundary.
+
+- Browser: Linux Chrome 154, viewport 1363×936, device pixel ratio 1. This is
+  not the user's iPhone or Pi Browser, and is not mobile emulation.
+- Test starten mounted the real game immediately rather than remaining at
+  Anmeldung läuft. Visual inspection showed prepared hulls, projectiles, the
+  original field/HUD and shield; the test advanced through all four phases.
+- Completed after 88063.6 ms, with no issues, blocked requests or fixture resets.
+  Enemy counts were 6/6/1/6, weapon levels 1/2/2/1; all phases ended playing.
+- Delivered FPS by phase: 59.31 / 59.36 / 59.91 / 59.86. Accepted simulation
+  time ratios: 0.9984 / 0.9968 / 0.9992 / 1. Each phase produced 62 volleys.
+  This run did not reproduce sustained slowdown. It does not rule it out on
+  the actual device or during a longer ordinary campaign.
+- Sound was enabled and the report recorded one active audio voice at each
+  phase end. Audible output was not independently assessed by this browser tool.
+- The final UI displayed Messung beendet and fully completed. Bericht ansehen
+  exposed its report. Bericht herunterladen produced a valid JSON file exactly
+  matching the displayed report. Its SHA-256 is
+  bc730a0e161145add5e54fb161a073c214ce73160cddf216ca73cb238d879bed.
+- Bericht kopieren displayed Bericht kopiert, but the cloud clipboard reader
+  returned an empty string twice. Actual clipboard contents are not verified;
+  use the tested JSON download or visible report if paste is empty on a device.
+  This observation alone does not establish a Pi Browser clipboard defect.
+- Console errors were browser-extension metadata failures only; no application
+  error was observed during this run. No server/function logs are expected for
+  the static client-only diagnostic.
+- Raw report: device-replay-v2-browser-chrome.json. Final screenshot:
+  device-replay-v2-browser-finished.jpg. Neither contains the share token.
+- The public Testnet alias still points to dpl_BX7ZeCr9Qr6anBa3AZnzLERubpQM
+  (27d1747); the main app alias still points to dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe
+  (907d2a7). No normal application source or deployment was changed.
+
+Next evidence: one foreground ~90-second run of this same v2 preview in the
+user's actual Pi Browser, with its resulting report. No campaign playthrough
+is required. A successful diagnostic run is not a fix for the reported slowdown.
