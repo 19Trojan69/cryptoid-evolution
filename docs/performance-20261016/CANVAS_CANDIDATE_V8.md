@@ -107,3 +107,20 @@ The scoped share expires 2026-10-19T11:32:52Z. Its token is not stored in Git.
 
 Read-only checks retain public Testnet dpl_BX7ZeCr9Qr6anBa3AZnzLERubpQM
 (27d1747) and main dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe (907d2a7).
+
+## Completed Pi result
+
+The user's complete Pi v8 report is transcribed in device-replay-v8-pi-phase-summary.json.
+Original / Canvas / original deliver 23.17 / 41.08 / 23.43 FPS with 68.82 /
+96.53 / 67.58% accepted time and 29 / 41 / 29 measured salvos. Median volley
+gaps are 467 / 330 / 457 ms. Canvas frame p95 is 40 ms versus 77 / 83 in the
+original phases. This substantially improves both frame delivery and simulation
+pace, but does not reach the previous approximately 55–57 FPS image-off control.
+
+Canvas records 7,135 effect draws / 28,540 piece draws, no original DOM fallback,
+no renderer failures, stable texture/hull caches and complete zero-resource
+cleanup. CPU simulation and Canvas draw p95 are each 1 ms. These timings do not
+measure GPU completion. The DPR-3 surface is 12,771,000 bytes (430×825×9×4).
+Reducing only transparent backing-store area is the next hypothesis, with DPR,
+source art, every piece and all timing preserved. It needs a separate comparison;
+the Pi report alone does not prove that surface presentation is the residual cause.

@@ -14,11 +14,12 @@ assert.equal(createHash('sha256').update(original).digest('hex'),expectedGameHas
 const fragments=process.env.CRYPTOID_REPLAY_PROFILE==='fragments';
 const workload=process.env.CRYPTOID_REPLAY_PROFILE==='workload';
 const layers=process.env.CRYPTOID_REPLAY_PROFILE==='layers';
-const raster=process.env.CRYPTOID_REPLAY_PROFILE==='raster';
+const bounded=process.env.CRYPTOID_REPLAY_PROFILE==='bounded';
+const raster=bounded||process.env.CRYPTOID_REPLAY_PROFILE==='raster';
 const effects=fragments||process.env.CRYPTOID_REPLAY_PROFILE==='effects';
 const lifecycle=raster||layers||workload||effects||process.env.CRYPTOID_REPLAY_PROFILE==='lifecycle';
 const audioOriginal=fs.readFileSync(path.join(root,'src/pages/gameAudio.ts'),'utf8');
-const buildInfo={id:raster?'device-replay-20261018-v8-canvas':layers?'device-replay-20261018-v7-layers':workload?'device-replay-20261018-v6-cause':fragments?'device-replay-20261018-v5-fragments':effects?'device-replay-20261018-v4-effects':lifecycle?'device-replay-20261018-v3-lifecycle':'device-replay-20261018-v2',gameCommit:'27d174788327c3423f04ace32be61af67a2004cc',gameSourceSha256:expectedGameHash,...(workload||layers||raster?{audioSourceSha256:createHash('sha256').update(audioOriginal).digest('hex')}: {})};
+const buildInfo={id:bounded?'device-replay-20261018-v9-bounds':raster?'device-replay-20261018-v8-canvas':layers?'device-replay-20261018-v7-layers':workload?'device-replay-20261018-v6-cause':fragments?'device-replay-20261018-v5-fragments':effects?'device-replay-20261018-v4-effects':lifecycle?'device-replay-20261018-v3-lifecycle':'device-replay-20261018-v2',gameCommit:'27d174788327c3423f04ace32be61af67a2004cc',gameSourceSha256:expectedGameHash,...(workload||layers||raster?{audioSourceSha256:createHash('sha256').update(audioOriginal).digest('hex')}: {})};
 const originalCss=fs.readFileSync(path.join(root,'src/index.css'),'utf8');
 if(raster)buildInfo.stylesSourceSha256=createHash('sha256').update(originalCss).digest('hex');
 const explosionArt=Object.fromEntries(['fire','smoke'].map((kind,index)=>{
@@ -58,7 +59,7 @@ fs.mkdirSync(path.join(destination,'public'),{recursive:true});
 const bundled=await build({absWorkingDir:root,entryPoints:['scripts/deviceReplay/entry.tsx'],bundle:true,write:false,
  platform:'browser',format:'esm',target:['safari16'],jsx:'automatic',minify:true,metafile:true,
  define:{'import.meta.env':'{"VITE_CRYPTOID_DIAGNOSTICS":"0"}','process.env.NODE_ENV':'"production"',
-   __CRYPTOID_RELEASE__:'"DEVICE REPLAY"',__CRYPTOID_REPLAY_BUILD__:JSON.stringify(buildInfo),__CRYPTOID_LIFECYCLE__:JSON.stringify(lifecycle),__CRYPTOID_EFFECTS__:JSON.stringify(effects),__CRYPTOID_FRAGMENTS__:JSON.stringify(fragments),__CRYPTOID_WORKLOAD__:JSON.stringify(workload),__CRYPTOID_LAYERS__:JSON.stringify(layers),__CRYPTOID_RASTER__:JSON.stringify(raster),__CRYPTOID_EXPLOSION_ART__:JSON.stringify(explosionArt)},
+   __CRYPTOID_RELEASE__:'"DEVICE REPLAY"',__CRYPTOID_REPLAY_BUILD__:JSON.stringify(buildInfo),__CRYPTOID_LIFECYCLE__:JSON.stringify(lifecycle),__CRYPTOID_EFFECTS__:JSON.stringify(effects),__CRYPTOID_FRAGMENTS__:JSON.stringify(fragments),__CRYPTOID_WORKLOAD__:JSON.stringify(workload),__CRYPTOID_LAYERS__:JSON.stringify(layers),__CRYPTOID_RASTER__:JSON.stringify(raster),__CRYPTOID_BOUNDED__:JSON.stringify(bounded),__CRYPTOID_EXPLOSION_ART__:JSON.stringify(explosionArt)},
  plugins:[{name:'isolated-device-replay',setup(b){
    // These two real modules differ only by their initial letter. Match the
    // resource module exactly rather than esbuild's TSX-first fallback.

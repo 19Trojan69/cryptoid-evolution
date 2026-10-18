@@ -4,7 +4,8 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const fragments=process.env.CRYPTOID_REPLAY_PROFILE==='fragments';
 const workload=process.env.CRYPTOID_REPLAY_PROFILE==='workload';
 const layers=process.env.CRYPTOID_REPLAY_PROFILE==='layers';
-const raster=process.env.CRYPTOID_REPLAY_PROFILE==='raster';
+const bounded=process.env.CRYPTOID_REPLAY_PROFILE==='bounded';
+const raster=bounded||process.env.CRYPTOID_REPLAY_PROFILE==='raster';
 const effects=fragments||process.env.CRYPTOID_REPLAY_PROFILE==='effects';
 const lifecycle=raster||layers||workload||effects||process.env.CRYPTOID_REPLAY_PROFILE==='lifecycle';
 const file=path.join(__dirname,'verifySimulationStability.cjs');
@@ -17,9 +18,9 @@ once('  const document = {',`  const {createDeviceReplay}=await import(path.join
   const {FRAGMENT_PHASES}=await import(path.join(__dirname,'deviceReplay/fragmentCrop.mjs'));
   const {WORKLOAD_PHASES}=await import(path.join(__dirname,'deviceReplay/effectWorkload.mjs'));
   const {LAYER_PHASES}=await import(path.join(__dirname,'deviceReplay/effectLayers.mjs'));
-  const {RASTER_PHASES}=await import(path.join(__dirname,'deviceReplay/rasterPhases.mjs'));
+  const {RASTER_PHASES,BOUNDED_PHASES}=await import(path.join(__dirname,'deviceReplay/rasterPhases.mjs'));
   let deviceReport;
-  host.__cryptoidDeviceReplay=createDeviceReplay({now:()=>clock,...${lifecycle?'{phases:'+(raster?'RASTER_PHASES':layers?'LAYER_PHASES':workload?'WORKLOAD_PHASES':fragments?'FRAGMENT_PHASES':effects?'EFFECT_PHASES':'LIFECYCLE_PHASES')+'}':'{}'},onFinish:r=>{deviceReport=r;}});
+  host.__cryptoidDeviceReplay=createDeviceReplay({now:()=>clock,...${lifecycle?'{phases:'+(bounded?'BOUNDED_PHASES':raster?'RASTER_PHASES':layers?'LAYER_PHASES':workload?'WORKLOAD_PHASES':fragments?'FRAGMENT_PHASES':effects?'EFFECT_PHASES':'LIFECYCLE_PHASES')+'}':'{}'},onFinish:r=>{deviceReport=r;}});
   const document = {`);
 once('  context.__GamePageFactory();',`  const entry=context.module.exports.default();
   assert.equal(entry.type,context.__GamePageFactory,'real GameEntry mounts the game');

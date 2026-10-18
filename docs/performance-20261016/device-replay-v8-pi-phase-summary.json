@@ -1,0 +1,16 @@
+{
+  "source":"Phase summary transcribed from the user's complete pasted Pi v8 report; raw data remains in conversation",
+  "build":"device-replay-20261018-v8-canvas",
+  "device":"PiBrowser/1.17.1, iPhone OS 18_7, 430x825, DPR 3, visible, sound on",
+  "completed":true,"elapsedWallMs":53121,
+  "phases":[
+    {"name":"destruction-original-1","frames":313,"measuredFrameMs":13511,"acceptedSimulationMs":9298,"clippedSimulationMs":4213,"acceptedTimeRatio":0.6882,"meanDeliveredFps":23.17,"frameP95Ms":77,"frameMaxMs":95,"volleys":29,"volleyGapP50Ms":467,"volleyGapP95Ms":592,"destroyed":61,"rendererDraws":0},
+    {"name":"destruction-canvas-2","frames":556,"measuredFrameMs":13535,"acceptedSimulationMs":13066,"clippedSimulationMs":469,"acceptedTimeRatio":0.9653,"meanDeliveredFps":41.08,"frameP95Ms":40,"frameMaxMs":52,"volleys":41,"volleyGapP50Ms":330,"volleyGapP95Ms":356,"destroyed":84,"rendererDraws":7135,"fragmentDraws":28540,"registeredEffectSamples":[12,14,11,14],"originalEffectSamples":[0,0,0,0],"drawWorkP95Ms":1},
+    {"name":"destruction-original-3","frames":317,"measuredFrameMs":13530,"acceptedSimulationMs":9143,"clippedSimulationMs":4387,"acceptedTimeRatio":0.6758,"meanDeliveredFps":23.43,"frameP95Ms":83,"frameMaxMs":118,"volleys":29,"volleyGapP50Ms":457,"volleyGapP95Ms":600,"destroyed":61,"rendererDraws":13}
+  ],
+  "commonEvidence":{"simulationWorkP95Ms":1,"fixtureResets":0,"rendererFailures":[],"fallbacks":0,"painted":13,"estimatedBytes":4804555,"sources":8,"pending":0,"rendererImages":7,"rendererImageBytes":2226672,"textures":4,"textureBytes":4619364,"preparationCount":4,"surfaceBytes":12771000},
+  "rendererCleanup":{"activeDrawFrame":false,"registeredEffects":0,"sourceImages":0,"textureEntries":0,"cacheBytes":0,"surfaceBytes":0},
+  "issues":[],"blockedRequests":[],
+  "conclusion":"Full-effects Canvas improves Pi frame delivery from about 23 to 41 FPS, accepted simulation time from about 68% to 96.53%, and volley median from about 460 ms to 330 ms. No display fallback, cache growth or cleanup fault is reported. Residual frame delivery cost remains; full-surface raster/presentation cost is a hypothesis to test, not established by the CPU draw timer.",
+  "visualObservationForThisRun":"No separate pixel-visibility statement accompanied the JSON"
+}

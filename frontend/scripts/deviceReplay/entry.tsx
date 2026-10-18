@@ -11,8 +11,9 @@ import { EFFECT_PHASES, EFFECT_PRESENTATION_CSS, createEffectPresentationProbe }
 import { FRAGMENT_PHASES, FRAGMENT_CROP_CSS } from './fragmentCrop.mjs';
 import { WORKLOAD_PHASES, createEffectWorkload } from './effectWorkload.mjs';
 import { LAYER_PHASES, LAYER_CSS, createEffectLayersProbe } from './effectLayers.mjs';
-import { RASTER_PHASES, RASTER_CSS } from './rasterPhases.mjs';
+import { RASTER_PHASES, BOUNDED_PHASES, RASTER_CSS } from './rasterPhases.mjs';
 import { createCanvasPresentation, ReplayCanvasImpact } from './CanvasImpact';
+import { compareSurfacePixels } from './effectBounds.mjs';
 
 declare global { interface Window { __cryptoidDeviceReplay: any; __cryptoidBlockedRequests: string[]; } }
 const StableGame = memo(GamePage);
@@ -23,6 +24,7 @@ const fragments = __CRYPTOID_FRAGMENTS__;
 const workload = __CRYPTOID_WORKLOAD__;
 const layers = __CRYPTOID_LAYERS__;
 const raster = __CRYPTOID_RASTER__;
+const bounded = __CRYPTOID_BOUNDED__;
 const totalSeconds = raster||layers ? 53 : workload ? 58 : effects ? 68 : lifecycle ? 118 : 88;
 window.__cryptoidBlockedRequests = [];
 const nativeFetch = window.fetch.bind(window);
@@ -75,12 +77,26 @@ function FragmentProof({close}:{close:()=>void}) {
 }
 
 function RasterProof({close}:{close:()=>void}) {
+  const [pixelResult,setPixelResult]=useState('');
+  const comparePixels=()=>{
+    const results=[];
+    for(let i=0;i<3;i++){
+      const full=document.querySelector(`[data-raster-stage="${i}-canvas"] canvas`) as HTMLCanvasElement|null;
+      const crop=document.querySelector(`[data-raster-stage="${i}-bounded"] canvas`) as HTMLCanvasElement|null;
+      if(!full||!crop||!full.hasAttribute('data-proof-origin-x')||!crop.hasAttribute('data-proof-origin-x')){setPixelResult('Bilder werden noch vorbereitet.');return;}
+      const a=full.getContext('2d')!.getImageData(0,0,full.width,full.height).data,b=crop.getContext('2d')!.getImageData(0,0,crop.width,crop.height).data;
+      const difference=compareSurfacePixels(a,full.width,full.height,b,crop.width,crop.height,Math.round(Number(crop.getAttribute('data-proof-origin-x'))*devicePixelRatio),Math.round(Number(crop.getAttribute('data-proof-origin-y'))*devicePixelRatio));
+      results.push({frame:i,...difference});
+    }
+    setPixelResult(JSON.stringify({passed:results.every(r=>r.differentPixels===0),dpr:devicePixelRatio,frames:results}));
+  };
   return <main className="raster-proof"><style>{RASTER_CSS+`
     .raster-proof{padding:24px;background:#081e31;color:#eefaff;font-family:system-ui}
     .raster-proof-pair{display:flex;gap:12px}.raster-proof-cell{width:340px;text-align:center}
     .raster-proof-stage{height:225px;width:340px;position:relative;overflow:hidden;background:#081e31}
     .raster-proof .impact-effect *,.raster-proof .impact-effect::before,.raster-proof .impact-effect::after{animation-delay:calc(var(--fragment-delay,0s) - var(--proof-time))!important;animation-play-state:paused!important}
   `}</style><h1>Original und Canvas · Sichtvergleich</h1><button onClick={close}>Zurück zum Gerätetest</button>
+    {bounded&&<><button onClick={comparePixels}>Zeichenflächen vergleichen</button><output aria-label="Pixelvergleich">{pixelResult}</output></>}
     {[.18,.65,1.6].map((time,index)=>{
       const effect={id:87,x:170,y:112,kind:'explosion',startedAt:0,sprite:0,debrisSize:index===1?72:50,debrisColor:'green',shipClass:index===1?'heavy':'light',debrisRotation:21,impactX:7,impactY:-12,velocityX:42,velocityY:-20};
       const diameter=Math.min(480,Math.max(24,effect.debrisSize*1.25));
@@ -88,6 +104,7 @@ function RasterProof({close}:{close:()=>void}) {
       return <section key={time}><p>{time} s · {index===1?'acht':'vier'} Teile</p><div className="raster-proof-pair">
         <div className="raster-proof-cell"><b>Original</b><div className="raster-proof-stage" data-raster-stage={`${index}-original`} style={{'--proof-time':`${time}s`} as React.CSSProperties}>{original}</div></div>
         <div className="raster-proof-cell"><b>Canvas</b><div className="raster-proof-stage" data-raster-stage={`${index}-canvas`}><ReplayCanvasImpact effect={effect} debris={shipDebris(effect as any)} original={null} frozenMs={time*1000}/></div></div>
+        {bounded&&<div className="raster-proof-cell"><b>Begrenzte Fläche</b><div className="raster-proof-stage" data-raster-stage={`${index}-bounded`}><ReplayCanvasImpact effect={effect} debris={shipDebris(effect as any)} original={null} frozenMs={time*1000} boundedProof/></div></div>}
       </div></section>;
     })}
   </main>;
@@ -113,7 +130,7 @@ function App() {
     const paths=workload?createEffectWorkload({document}):null;
     const layerProbe=layers?createEffectLayersProbe({document}):null;
     const renderer=raster?createCanvasPresentation():null;
-    window.__cryptoidDeviceReplay=createDeviceReplay({...(lifecycle?{phases:raster?RASTER_PHASES:layers?LAYER_PHASES:workload?WORKLOAD_PHASES:fragments?FRAGMENT_PHASES:effects?EFFECT_PHASES:LIFECYCLE_PHASES}:{}),onProgress:setProgress,onFinish:result=>{
+    window.__cryptoidDeviceReplay=createDeviceReplay({...(lifecycle?{phases:bounded?BOUNDED_PHASES:raster?RASTER_PHASES:layers?LAYER_PHASES:workload?WORKLOAD_PHASES:fragments?FRAGMENT_PHASES:effects?EFFECT_PHASES:LIFECYCLE_PHASES}:{}),onProgress:setProgress,onFinish:result=>{
       clearTimeout(mountWatchdog);
       presentation?.stop();
       paths?.stop();
@@ -124,6 +141,7 @@ function App() {
       if(workload)result.coverage.presentation='Cause-isolation only: normal explosion/shatter DOM and explosion sound requests are omitted independently in designated phases. Simulation effects, hull illumination, original other visuals, music, shot sounds, haptics and 34 ms cap continue. First 1500 ms of each phase settle prior work and are excluded from measurements; clock counts only full frame intervals after that cutoff. No omissions are proposed for the game.';
       if(layers)result.coverage.presentation='Layer cause-isolation only: normal explosion/shatter fire/smoke pseudo-elements and fragment subtrees are omitted independently in designated phases. Original effect wrappers, simulation effects, hull illumination, all original audio, other graphics, haptics, mobile paint cadence and 34 ms cap continue. First 1500 ms of each phase settle prior work and are excluded; only full frame intervals after that cutoff are measured. DOM/CSS samples do not prove pixel presentation. No omissions are proposed for the game.';
       if(raster)result.coverage.presentation='Renderer candidate only, no omissions: original CSS display versus shared DPR Canvas. Full-resolution original hulls, same original seeded fragment polygon/flight props, piece count, effect lifetime, fire/smoke CSS artwork and animation keys, original audio/haptics/hull illumination/mobile paint and 34 ms cap. First 1500 ms excluded. Static SVG textures approximate CSS premultiplied gradients with dense stops; visual comparison is required, not assumed pixel-identical. Account/API isolation remains.';
+      if(bounded)result.coverage.presentation='Surface bounds candidate: identical v8 Canvas drawing, resolution, textures, original hulls, piece count, polygons, trajectories, timing, audio, haptics, illumination and 34 ms cap. Only the middle phase bounds the backing store to conservative whole-lifetime effect extents, growing until the active set empties. Existing game-field clipping remains; no source or visible effect is cropped. First 1500 ms excluded. Frozen full/bounded pixel proof is available separately.';
       setReport({...result,build,device,blockedRequests:[...window.__cryptoidBlockedRequests]});setRunning(false);
     }});
     if(presentation)window.__cryptoidDeviceReplay.presentation=presentation;

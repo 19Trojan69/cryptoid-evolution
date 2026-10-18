@@ -1,0 +1,619 @@
+{
+  "version": 1,
+  "mode": "isolated real-renderer replay",
+  "completed": true,
+  "reason": "completed",
+  "elapsedWallMs": 53047.4,
+  "warmupMs": 8000,
+  "phaseMs": 20000,
+  "phases": [
+    {
+      "name": "surface-canvas-1",
+      "label": "Canvas · Vergleich am Anfang",
+      "enemies": 6,
+      "double": true,
+      "shield": true,
+      "durationMs": 15000,
+      "settleMs": 1500,
+      "fixture": "destruction",
+      "presentation": "canvas",
+      "wallMs": 15013.4,
+      "frames": 805,
+      "measuredFrameMs": 13497,
+      "acceptedSimulationMs": 13497,
+      "clippedSimulationMs": 0,
+      "over34Frames": 0,
+      "acceptedTimeRatio": 1,
+      "meanDeliveredFps": 59.64,
+      "frameP50Ms": 16.7,
+      "frameP95Ms": 16.7,
+      "frameMaxMs": 33.4,
+      "frameQuantileSamples": 805,
+      "volleys": 42,
+      "volleyGapP50Ms": 316.6,
+      "volleyGapP95Ms": 333.3,
+      "simulationWorkP95Ms": 0.3,
+      "fixtureResets": 0,
+      "end": {
+        "sector": 12,
+        "phase": "FORMATION",
+        "status": "playing",
+        "enemies": 6,
+        "shots": 2,
+        "enemyShots": 1,
+        "effects": 14,
+        "shield": true,
+        "weaponLevel": 2,
+        "pickupWeaponMs": 105003.29999999967,
+        "fieldWidth": 1363,
+        "fieldHeight": 936,
+        "audioVoices": 6,
+        "destroyed": 90,
+        "lifecycle": {
+          "refills": 90,
+          "maxEffects": 18,
+          "effectEvents": 90,
+          "sectorChanges": 0,
+          "phaseFrames": {
+            "ATTACK_CYCLE": 408,
+            "FORMATION": 488
+          },
+          "samples": [
+            {
+              "atMs": 54309.79999999888,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 0,
+              "audioVoices": 8,
+              "painted": 14,
+              "estimatedBytes": 5194886,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            },
+            {
+              "atMs": 68440.29999999888,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 16,
+              "audioVoices": 7,
+              "painted": 14,
+              "estimatedBytes": 5194886,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            }
+          ]
+        },
+        "renderer": {
+          "mode": "canvas",
+          "draws": 11200,
+          "fragmentDraws": 44800,
+          "fallbacks": 2,
+          "registered": 14,
+          "sourceImages": 8,
+          "imageBytes": 2544768,
+          "textures": 4,
+          "textureBytes": 515052,
+          "preparationCount": 4,
+          "surfaceBytes": 5103072,
+          "surfaceBox": {
+            "left": 0,
+            "top": 0,
+            "right": 1363,
+            "bottom": 936
+          },
+          "fieldWidth": 1363,
+          "fieldHeight": 936,
+          "surfaceResizes": 0,
+          "maxSurfaceBytes": 5103072,
+          "dpr": 1,
+          "drawWorkP95Ms": 0.5,
+          "failures": [],
+          "samples": [
+            {
+              "atMs": 57311,
+              "registeredEffects": 14,
+              "surfaceBox": {
+                "left": 0,
+                "top": 0,
+                "right": 1363,
+                "bottom": 936
+              },
+              "surfaceBytes": 5103072,
+              "dpr": 1,
+              "proxyEffects": 14,
+              "originalEffects": 0
+            },
+            {
+              "atMs": 60325,
+              "registeredEffects": 14,
+              "surfaceBox": {
+                "left": 0,
+                "top": 0,
+                "right": 1363,
+                "bottom": 936
+              },
+              "surfaceBytes": 5103072,
+              "dpr": 1,
+              "proxyEffects": 14,
+              "originalEffects": 0
+            },
+            {
+              "atMs": 63326,
+              "registeredEffects": 12,
+              "surfaceBox": {
+                "left": 0,
+                "top": 0,
+                "right": 1363,
+                "bottom": 936
+              },
+              "surfaceBytes": 5103072,
+              "dpr": 1,
+              "proxyEffects": 12,
+              "originalEffects": 0
+            },
+            {
+              "atMs": 66340,
+              "registeredEffects": 18,
+              "surfaceBox": {
+                "left": 0,
+                "top": 0,
+                "right": 1363,
+                "bottom": 936
+              },
+              "surfaceBytes": 5103072,
+              "dpr": 1,
+              "proxyEffects": 18,
+              "originalEffects": 0
+            }
+          ],
+          "coverage": "Original full-resolution hull images, original seeded polygon/flight props, original fire/smoke CSS artwork and timing. One shared DPR-sized Canvas; no effect, piece, audio or simulation omission. SVG prepares static fire/smoke textures only; animation and clipping are Canvas draws. DOM samples do not prove pixel visibility."
+        }
+      }
+    },
+    {
+      "name": "surface-bounded-2",
+      "label": "Canvas · begrenzte Zeichenfläche",
+      "enemies": 6,
+      "double": true,
+      "shield": true,
+      "durationMs": 15000,
+      "settleMs": 1500,
+      "fixture": "destruction",
+      "presentation": "bounded",
+      "wallMs": 15013.4,
+      "frames": 801,
+      "measuredFrameMs": 13497.1,
+      "acceptedSimulationMs": 13481,
+      "clippedSimulationMs": 16.1,
+      "over34Frames": 1,
+      "acceptedTimeRatio": 0.9988,
+      "meanDeliveredFps": 59.35,
+      "frameP50Ms": 16.7,
+      "frameP95Ms": 16.7,
+      "frameMaxMs": 50.1,
+      "frameQuantileSamples": 801,
+      "volleys": 42,
+      "volleyGapP50Ms": 316.6,
+      "volleyGapP95Ms": 333.3,
+      "simulationWorkP95Ms": 0.3,
+      "fixtureResets": 0,
+      "end": {
+        "sector": 12,
+        "phase": "FORMATION",
+        "status": "playing",
+        "enemies": 6,
+        "shots": 2,
+        "enemyShots": 1,
+        "effects": 14,
+        "shield": true,
+        "weaponLevel": 2,
+        "pickupWeaponMs": 105019.40000000001,
+        "fieldWidth": 1363,
+        "fieldHeight": 936,
+        "audioVoices": 7,
+        "destroyed": 90,
+        "lifecycle": {
+          "refills": 90,
+          "maxEffects": 18,
+          "effectEvents": 90,
+          "sectorChanges": 0,
+          "phaseFrames": {
+            "ATTACK_CYCLE": 404,
+            "FORMATION": 488
+          },
+          "samples": [
+            {
+              "atMs": 69324.59999999963,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 0,
+              "audioVoices": 6,
+              "painted": 14,
+              "estimatedBytes": 5194886,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            },
+            {
+              "atMs": 83436.79999999888,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 16,
+              "audioVoices": 7,
+              "painted": 14,
+              "estimatedBytes": 5194886,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            }
+          ]
+        },
+        "renderer": {
+          "mode": "bounded",
+          "draws": 11125,
+          "fragmentDraws": 44500,
+          "fallbacks": 0,
+          "registered": 14,
+          "sourceImages": 8,
+          "imageBytes": 2544768,
+          "textures": 4,
+          "textureBytes": 515052,
+          "preparationCount": 4,
+          "surfaceBytes": 1318724,
+          "surfaceBox": {
+            "left": 339,
+            "top": 130,
+            "right": 1036,
+            "bottom": 603
+          },
+          "fieldWidth": 1363,
+          "fieldHeight": 936,
+          "surfaceResizes": 22,
+          "maxSurfaceBytes": 1318724,
+          "dpr": 1,
+          "drawWorkP95Ms": 0.8,
+          "failures": [],
+          "samples": [
+            {
+              "atMs": 72341,
+              "registeredEffects": 14,
+              "surfaceBox": {
+                "left": 414,
+                "top": 242,
+                "right": 964,
+                "bottom": 539
+              },
+              "surfaceBytes": 653400,
+              "dpr": 1,
+              "proxyEffects": 14,
+              "originalEffects": 0
+            },
+            {
+              "atMs": 75355,
+              "registeredEffects": 14,
+              "surfaceBox": {
+                "left": 414,
+                "top": 242,
+                "right": 964,
+                "bottom": 603
+              },
+              "surfaceBytes": 794200,
+              "dpr": 1,
+              "proxyEffects": 14,
+              "originalEffects": 0
+            },
+            {
+              "atMs": 78357,
+              "registeredEffects": 12,
+              "surfaceBox": {
+                "left": 349,
+                "top": 132,
+                "right": 964,
+                "bottom": 603
+              },
+              "surfaceBytes": 1158660,
+              "dpr": 1,
+              "proxyEffects": 12,
+              "originalEffects": 0
+            },
+            {
+              "atMs": 81372,
+              "registeredEffects": 18,
+              "surfaceBox": {
+                "left": 339,
+                "top": 130,
+                "right": 1036,
+                "bottom": 603
+              },
+              "surfaceBytes": 1318724,
+              "dpr": 1,
+              "proxyEffects": 18,
+              "originalEffects": 0
+            }
+          ],
+          "coverage": "Original full-resolution hull images, original seeded polygon/flight props, original fire/smoke CSS artwork and timing. One shared DPR-sized Canvas; no effect, piece, audio or simulation omission. SVG prepares static fire/smoke textures only; animation and clipping are Canvas draws. DOM samples do not prove pixel visibility."
+        }
+      }
+    },
+    {
+      "name": "surface-canvas-3",
+      "label": "Canvas · Rückvergleich",
+      "enemies": 6,
+      "double": true,
+      "shield": true,
+      "durationMs": 15000,
+      "settleMs": 1500,
+      "fixture": "destruction",
+      "presentation": "canvas",
+      "wallMs": 15013.4,
+      "frames": 806,
+      "measuredFrameMs": 13497.1,
+      "acceptedSimulationMs": 13497.1,
+      "clippedSimulationMs": 0,
+      "over34Frames": 0,
+      "acceptedTimeRatio": 1,
+      "meanDeliveredFps": 59.72,
+      "frameP50Ms": 16.7,
+      "frameP95Ms": 16.8,
+      "frameMaxMs": 33.4,
+      "frameQuantileSamples": 806,
+      "volleys": 42,
+      "volleyGapP50Ms": 316.6,
+      "volleyGapP95Ms": 333.3,
+      "simulationWorkP95Ms": 0.3,
+      "fixtureResets": 0,
+      "end": {
+        "sector": 12,
+        "phase": "FORMATION",
+        "status": "playing",
+        "enemies": 6,
+        "shots": 2,
+        "enemyShots": 1,
+        "effects": 14,
+        "shield": true,
+        "weaponLevel": 2,
+        "pickupWeaponMs": 105019.9,
+        "fieldWidth": 1363,
+        "fieldHeight": 936,
+        "audioVoices": 6,
+        "destroyed": 90,
+        "lifecycle": {
+          "refills": 90,
+          "maxEffects": 18,
+          "effectEvents": 90,
+          "sectorChanges": 0,
+          "phaseFrames": {
+            "ATTACK_CYCLE": 407,
+            "FORMATION": 489
+          },
+          "samples": [
+            {
+              "atMs": 84338,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 0,
+              "audioVoices": 7,
+              "painted": 14,
+              "estimatedBytes": 5194886,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            },
+            {
+              "atMs": 98484.5,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 16,
+              "audioVoices": 7,
+              "painted": 14,
+              "estimatedBytes": 5194886,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            }
+          ]
+        },
+        "renderer": {
+          "mode": "canvas",
+          "draws": 11199,
+          "fragmentDraws": 44796,
+          "fallbacks": 0,
+          "registered": 14,
+          "sourceImages": 8,
+          "imageBytes": 2544768,
+          "textures": 4,
+          "textureBytes": 515052,
+          "preparationCount": 4,
+          "surfaceBytes": 5103072,
+          "surfaceBox": {
+            "left": 0,
+            "top": 0,
+            "right": 1363,
+            "bottom": 936
+          },
+          "fieldWidth": 1363,
+          "fieldHeight": 936,
+          "surfaceResizes": 1,
+          "maxSurfaceBytes": 5103072,
+          "dpr": 1,
+          "drawWorkP95Ms": 0.6,
+          "failures": [],
+          "samples": [
+            {
+              "atMs": 87354,
+              "registeredEffects": 14,
+              "surfaceBox": {
+                "left": 0,
+                "top": 0,
+                "right": 1363,
+                "bottom": 936
+              },
+              "surfaceBytes": 5103072,
+              "dpr": 1,
+              "proxyEffects": 14,
+              "originalEffects": 0
+            },
+            {
+              "atMs": 90357,
+              "registeredEffects": 14,
+              "surfaceBox": {
+                "left": 0,
+                "top": 0,
+                "right": 1363,
+                "bottom": 936
+              },
+              "surfaceBytes": 5103072,
+              "dpr": 1,
+              "proxyEffects": 14,
+              "originalEffects": 0
+            },
+            {
+              "atMs": 93368,
+              "registeredEffects": 12,
+              "surfaceBox": {
+                "left": 0,
+                "top": 0,
+                "right": 1363,
+                "bottom": 936
+              },
+              "surfaceBytes": 5103072,
+              "dpr": 1,
+              "proxyEffects": 12,
+              "originalEffects": 0
+            },
+            {
+              "atMs": 96369,
+              "registeredEffects": 18,
+              "surfaceBox": {
+                "left": 0,
+                "top": 0,
+                "right": 1363,
+                "bottom": 936
+              },
+              "surfaceBytes": 5103072,
+              "dpr": 1,
+              "proxyEffects": 18,
+              "originalEffects": 0
+            }
+          ],
+          "coverage": "Original full-resolution hull images, original seeded polygon/flight props, original fire/smoke CSS artwork and timing. One shared DPR-sized Canvas; no effect, piece, audio or simulation omission. SVG prepares static fire/smoke textures only; animation and clipping are Canvas draws. DOM samples do not prove pixel visibility."
+        }
+      }
+    }
+  ],
+  "issues": [],
+  "coverage": {
+    "clock": "Actual GamePage frameGap and delta; its 34 ms cap is unchanged",
+    "rendering": "Real React/DOM/CSS/canvas, hull preparation and original assets",
+    "fixtures": "Controlled lives/one-hit enemies and automatic aiming; real shot collisions, explosions and normal block transitions; no scored/account run",
+    "samples": "Frame and work quantiles retain at most 4096 values per phase",
+    "account": "No Pi login or real account/API access; separate preview origin",
+    "presentation": "Surface bounds candidate: identical v8 Canvas drawing, resolution, textures, original hulls, piece count, polygons, trajectories, timing, audio, haptics, illumination and 34 ms cap. Only the middle phase bounds the backing store to conservative whole-lifetime effect extents, growing until the active set empties. Existing game-field clipping remains; no source or visible effect is cropped. First 1500 ms excluded. Frozen full/bounded pixel proof is available separately."
+  },
+  "rendererCleanup": {
+    "activeDrawFrame": false,
+    "registeredEffects": 0,
+    "sourceImages": 0,
+    "textureEntries": 0,
+    "cacheBytes": 0,
+    "surfaceBytes": 0
+  },
+  "build": {
+    "id": "device-replay-20261018-v9-bounds",
+    "gameCommit": "27d174788327c3423f04ace32be61af67a2004cc",
+    "gameSourceSha256": "eb628a5d73247ea64ec5443d2ff4efdab071a97228634f16f2aa915cdc832607",
+    "audioSourceSha256": "e6720dc0abc59d75a56bf10118c6b86ada07d77bf45abb9b4717356f34dab7ac",
+    "stylesSourceSha256": "2236b2143e8cdc5b6045cda16266ddfe774d957d89b4969193f9265ad141f0a7"
+  },
+  "device": {
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+    "viewport": {
+      "width": 1363,
+      "height": 936
+    },
+    "pixelRatio": 1,
+    "visibility": "visible",
+    "sound": true
+  },
+  "blockedRequests": []
+}

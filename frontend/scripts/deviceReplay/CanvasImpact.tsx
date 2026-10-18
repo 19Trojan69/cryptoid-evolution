@@ -2,6 +2,7 @@ import React,{useEffect,useLayoutEffect,useMemo,useRef,useState} from 'react';
 import {usePaintedShipStyle} from '../../src/pages/paintedShip';
 import {explosionDiameter} from '../../src/pages/shipRealism';
 import {FIRE_KEYS,SMOKE_KEYS,layerFrame,fragmentFrame,polygonPoints,layerSvg} from './rasterMath.mjs';
+import {impactBounds,unionBounds,fieldBounds} from './effectBounds.mjs';
 
 const art=__CRYPTOID_EXPLOSION_ART__;
 const images=new Map<string,Promise<HTMLImageElement>>();
@@ -82,34 +83,45 @@ export function drawImpact(ctx:CanvasRenderingContext2D,record:any,age:number) {
 
 const records=new Map<number,any>();
 let surface:HTMLCanvasElement|null=null,frameId=0,pausedAt=0,pauseTotal=0;
+let fieldWidth=1,fieldHeight=1,grownBounds:any=null,surfaceBox={left:0,top:0,right:1,bottom:1},surfaceResizes=0,maxSurfaceBytes=0;
 let mode='original',draws=0,fragmentDraws=0,fallbacks=0,drawSamples:number[]=[],samples:any[]=[],lastSample=0;
+function fitSurface(){
+  if(!surface)return;
+  if(mode==='bounded')for(const record of records.values())grownBounds=unionBounds(grownBounds,record.bounds);
+  const box=mode==='bounded'?fieldBounds(grownBounds,fieldWidth,fieldHeight):{left:0,top:0,right:fieldWidth,bottom:fieldHeight};
+  const width=box.right-box.left,height=box.bottom-box.top,scale=dpr(),pixelsX=Math.ceil(width*scale),pixelsY=Math.ceil(height*scale);
+  if(surface.width!==pixelsX||surface.height!==pixelsY){surface.width=pixelsX;surface.height=pixelsY;surfaceResizes++;}
+  surfaceBox=box;surface.style.left=`${box.left}px`;surface.style.top=`${box.top}px`;surface.style.width=`${width}px`;surface.style.height=`${height}px`;
+  maxSurfaceBytes=Math.max(maxSurfaceBytes,pixelsX*pixelsY*4);
+}
 function frame(time:number){
   frameId=0;if(!surface||!records.size)return;
   const paused=surface.parentElement?.closest('.game-shell')?.getAttribute('data-effects-paused')==='true';
   if(paused){if(!pausedAt)pausedAt=time;frameId=requestAnimationFrame(frame);return;}
   if(pausedAt){pauseTotal+=time-pausedAt;pausedAt=0;}
   const ctx=surface.getContext('2d');if(!ctx)return;
-  const started=performance.now(),scale=dpr();ctx.setTransform(scale,0,0,scale,0,0);ctx.clearRect(0,0,surface.width/scale,surface.height/scale);
+  const started=performance.now(),scale=dpr();ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,surface.width,surface.height);
+  ctx.setTransform(scale,0,0,scale,-surfaceBox.left*scale,-surfaceBox.top*scale);
   for(const record of records.values()){drawImpact(ctx,record,Math.max(0,time-record.started-(pauseTotal-record.pauseStart)));draws++;fragmentDraws+=record.pieces.length;}
   if(drawSamples.length===512)drawSamples.shift();drawSamples.push(performance.now()-started);
   frameId=requestAnimationFrame(frame);
 }
 const schedule=()=>{if(!frameId&&surface&&records.size)frameId=requestAnimationFrame(frame);};
-const remove=(id:number)=>{records.delete(id);if(!records.size&&surface){if(frameId)cancelAnimationFrame(frameId);frameId=0;surface.getContext('2d')?.clearRect(0,0,surface.width,surface.height);}};
+const remove=(id:number)=>{records.delete(id);if(!records.size&&surface){if(frameId)cancelAnimationFrame(frameId);frameId=0;surface.getContext('2d')?.clearRect(0,0,surface.width,surface.height);grownBounds=null;fitSurface();}};
 
 export function createCanvasPresentation(){
   return {
-    start(phase:any){mode=phase.presentation;draws=fragmentDraws=fallbacks=0;drawSamples=[];samples=[];lastSample=performance.now();},
+    start(phase:any){mode=phase.presentation;draws=fragmentDraws=fallbacks=surfaceResizes=maxSurfaceBytes=0;grownBounds=null;fitSurface();drawSamples=[];samples=[];lastSample=performance.now();},
     get mode(){return mode;},
     sample(){const time=performance.now();if(time-lastSample<3000||samples.length>=4)return;lastSample=time;
-      samples.push({atMs:Math.round(time),registeredEffects:records.size,proxyEffects:document.querySelectorAll('.replay-canvas-proxy').length,
+      samples.push({atMs:Math.round(time),registeredEffects:records.size,surfaceBox:{...surfaceBox},surfaceBytes:surface?surface.width*surface.height*4:0,dpr:dpr(),proxyEffects:document.querySelectorAll('.replay-canvas-proxy').length,
         originalEffects:document.querySelectorAll('.impact-effect.explosion:not(.replay-canvas-proxy),.impact-effect.shatter:not(.replay-canvas-proxy)').length});},
     read(){const sorted=[...drawSamples].sort((a,b)=>a-b);return {mode,draws,fragmentDraws,fallbacks,registered:records.size,sourceImages:images.size,imageBytes,textures:textures.size,textureBytes,preparationCount,
-      surfaceBytes:surface?surface.width*surface.height*4:0,drawWorkP95Ms:sorted.length?+sorted[Math.ceil(sorted.length*.95)-1].toFixed(3):null,
+      surfaceBytes:surface?surface.width*surface.height*4:0,surfaceBox:{...surfaceBox},fieldWidth,fieldHeight,surfaceResizes,maxSurfaceBytes,dpr:dpr(),drawWorkP95Ms:sorted.length?+sorted[Math.ceil(sorted.length*.95)-1].toFixed(3):null,
       failures:[...failures],samples,coverage:'Original full-resolution hull images, original seeded polygon/flight props, original fire/smoke CSS artwork and timing. One shared DPR-sized Canvas; no effect, piece, audio or simulation omission. SVG prepares static fire/smoke textures only; animation and clipping are Canvas draws. DOM samples do not prove pixel visibility.'};},
     stop(){resourceGeneration++;if(frameId)cancelAnimationFrame(frameId);frameId=0;records.clear();for(const t of readyTextures.values())t.canvas.width=t.canvas.height=0;
       if(surface)surface.width=surface.height=0;
-      textures.clear();readyTextures.clear();images.clear();readyImages.clear();imageBytes=textureBytes=preparationCount=0;failures=[];mode='original';pausedAt=pauseTotal=0;
+      textures.clear();readyTextures.clear();images.clear();readyImages.clear();imageBytes=textureBytes=preparationCount=0;failures=[];mode='original';pausedAt=pauseTotal=0;grownBounds=null;
       return {activeDrawFrame:!!frameId,registeredEffects:records.size,sourceImages:images.size,textureEntries:textures.size,cacheBytes:imageBytes+textureBytes,surfaceBytes:surface?surface.width*surface.height*4:0};},
   };
 }
@@ -117,14 +129,14 @@ export function ReplayCanvasSurface(){
   const ref=useRef<HTMLCanvasElement>(null);
   useLayoutEffect(()=>{
     const canvas=ref.current!;surface=canvas;
-    const resize=()=>{const parent=canvas.parentElement!;canvas.width=Math.ceil(parent.clientWidth*dpr());canvas.height=Math.ceil(parent.clientHeight*dpr());schedule();};
+    const resize=()=>{const parent=canvas.parentElement!;fieldWidth=parent.clientWidth;fieldHeight=parent.clientHeight;grownBounds=null;fitSurface();schedule();};
     resize();const observer=new ResizeObserver(resize);observer.observe(canvas.parentElement!);
     return()=>{observer.disconnect();if(frameId)cancelAnimationFrame(frameId);frameId=0;if(surface===canvas)surface=null;canvas.width=canvas.height=0;records.clear();};
   },[]);
-  return <canvas ref={ref} className="replay-effects-surface" aria-hidden="true" style={{position:'absolute',inset:0,width:'100%',height:'100%',pointerEvents:'none',zIndex:2}}/>;
+  return <canvas ref={ref} className="replay-effects-surface" aria-hidden="true" style={{position:'absolute',left:0,top:0,width:'100%',height:'100%',pointerEvents:'none',zIndex:2}}/>;
 }
 
-export function ReplayCanvasImpact({effect,debris,original,frozenMs}:{effect:any;debris:any;original:React.ReactNode;frozenMs?:number}){
+export function ReplayCanvasImpact({effect,debris,original,frozenMs,boundedProof=false}:{effect:any;debris:any;original:React.ReactNode;frozenMs?:number;boundedProof?:boolean}){
   const style=usePaintedShipStyle(effect.sprite,effect.debrisColor,effect.shipStage??1);
   const url=String(style.backgroundImage).replace(/^url\(["']?|["']?\)$/g,''),diameter=explosionDiameter(effect.debrisSize??58);
   const [loaded,setLoaded]=useState<any>(()=>resources(url,diameter));
@@ -136,14 +148,21 @@ export function ReplayCanvasImpact({effect,debris,original,frozenMs}:{effect:any
     void prepareCanvasImpactResources(url,diameter).then(([hull,fire,smoke])=>{if(active)setLoaded({hull,fire,smoke});},error=>{if(active)recordFailure(error);});
     return()=>{active=false;};
   },[url,diameter]);
-  const available=loaded?.hull?.src===url&&selected==='canvas';
+  const canvasSelected=selected==='canvas'||selected==='bounded';
+  const available=loaded?.hull?.src===url&&canvasSelected;
   useLayoutEffect(()=>{
     if(!available)return;
-    const record={effect,pieces,assets:loaded,started:started.current,pauseStart:pauseTotal};
-    if(frozenMs!==undefined){const canvas=proof.current!;canvas.width=340*dpr();canvas.height=225*dpr();const ctx=canvas.getContext('2d')!;ctx.scale(dpr(),dpr());drawImpact(ctx,{...record,effect:{...effect,x:170,y:112}},frozenMs);return;}
-    records.set(effect.id,record);schedule();return()=>remove(effect.id);
-  },[available,loaded,effect,pieces,frozenMs]);
-  useEffect(()=>{if(selected==='canvas'&&!available)fallbacks++;},[selected,available]);
+    const record={effect,pieces,assets:loaded,started:started.current,pauseStart:pauseTotal,bounds:null as any};
+    record.bounds=impactBounds(record);
+    if(frozenMs!==undefined){const canvas=proof.current!,local={...record,effect:{...effect,x:170,y:112}};
+      const box=boundedProof?fieldBounds(impactBounds(local),340,225):{left:0,top:0,right:340,bottom:225};
+      const width=box.right-box.left,height=box.bottom-box.top,scale=dpr();canvas.width=width*scale;canvas.height=height*scale;
+      canvas.style.position='absolute';canvas.style.left=`${box.left}px`;canvas.style.top=`${box.top}px`;canvas.style.width=`${width}px`;canvas.style.height=`${height}px`;
+      canvas.setAttribute('data-proof-origin-x',String(box.left));canvas.setAttribute('data-proof-origin-y',String(box.top));
+      const ctx=canvas.getContext('2d')!;ctx.setTransform(scale,0,0,scale,-box.left*scale,-box.top*scale);drawImpact(ctx,local,frozenMs);return;}
+    records.set(effect.id,record);fitSurface();schedule();return()=>remove(effect.id);
+  },[available,loaded,effect,pieces,frozenMs,boundedProof]);
+  useEffect(()=>{if(canvasSelected&&!available)fallbacks++;},[canvasSelected,available]);
   if(frozenMs!==undefined)return <canvas ref={proof} data-raster-proof={frozenMs} style={{width:340,height:225}}/>;
   return available?<div className={`impact-effect ${effect.kind} replay-canvas-proxy`} style={{left:effect.x,top:effect.y,width:diameter,height:diameter,marginLeft:-diameter/2,marginTop:-diameter/2}} aria-hidden="true"/>:<>{original}</>;
 }
