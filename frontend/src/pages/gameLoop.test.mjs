@@ -72,7 +72,7 @@ test('actual GamePage recovery preserves run, lives, rewards and paid timers eve
   const original = structuredClone(state); const reports = [], updates = [], flags = [], saved = [];
   let notice = '', resets = 0;
   const context = {
-    Error, performanceProbeRef: {current:null}, recordReloadEvent:()=>{}, interruptionRef: { current: null }, stateRef: { current: state }, lastFrameRef: { current: 200 },
+    Error, ownerDiagnostics:false, performanceProbeRef: {current:null}, recordReloadEvent:()=>{}, interruptionRef: { current: null }, stateRef: { current: state }, lastFrameRef: { current: 200 },
     clearControls: () => resets++, setTechnicalPause: value => flags.push(value),
     setWeaponCountdown: value => assert.equal(value, null), setWeaponMenuOpen: value => assert.equal(value, false),
     soundRef: { current: { setPaused: () => { throw new Error('audio host unavailable'); } } }, musicRef: { current: null },
@@ -115,8 +115,8 @@ test('denied sessionStorage cannot fail GamePage diagnostics setup or remove its
   Object.defineProperty(host,'sessionStorage',{get(){throw new Error('SecurityError: storage denied');}});
   const previousWindow = globalThis.window; globalThis.window = host;
   const context = {window:host,document:{hidden:false,addEventListener:host.addEventListener,removeEventListener:host.removeEventListener},
-    performance:{getEntriesByType:()=>[]}, Date, developerProbeEnabled:()=>false, performanceProbeRef:{current:null}, diagnosticsRef:{current:null}, reloadDiagnosticsRef:{current:null},
-    createReloadGameMonitor:()=>({finish(){}}),
+    performance:{getEntriesByType:()=>[]}, Date, ownerDiagnostics:false, developerProbeEnabled:()=>false, performanceProbeRef:{current:null}, diagnosticsRef:{current:null}, reloadDiagnosticsRef:{current:null},
+    installReloadDiagnostics:()=>{throw new Error('non-owner diagnostics must stay disabled');}, createReloadGameMonitor:()=>({finish(){}}),
     stateRef:{current:state}, interruptionRef:{current:(reason,error)=>faults.push({reason,error})},
     recordGameDiagnostic:entry=>reports.push(entry), createGameSessionDiagnostics,
     diagnosticContext:()=>({reason:'performance',errorName:'',sector:25,phase:'FORMATION',encounter:'normal',status:'playing',width:390,height:760,browser:'test'}),
