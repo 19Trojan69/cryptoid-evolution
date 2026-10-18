@@ -10,6 +10,14 @@ export type GameDiagnostic = {
   reactorOpen?: boolean; bossElapsedMs?: number; coreElapsedMs?: number; bossVolley?: number; coreVolley?: number;
   bossEscortWave?: number; bossEscortSpawned?: number; bossEscortTimerMs?: number; attackCooldownMs?: number;
   spawnTimerMs?: number; clearTimerMs?: number; elapsedMs?: number;
+  jsHeapBytes?: number; domNodes?: number; runningAnimations?: number; canvasNodes?: number; imageNodes?: number;
+  paintedEntries?: number; paintedBytes?: number; paintedSources?: number; paintedPending?: number;
+  paintedRetained?: number; paintedRetainCount?: number; paintedSourceRetained?: number; paintedSourceRetainCount?: number;
+  canvasRegisteredEffects?: number; canvasSourceImages?: number; canvasTextureEntries?: number;
+  canvasCacheBytes?: number; canvasSurfaceBytes?: number; canvasRetainedHullUsers?: number; canvasFailureCount?: number;
+  audioVoices?: number; audioWeaponVoices?: number; audioBossVoices?: number; audioEffectVoices?: number;
+  audioSampleBuffers?: number; audioRockBuffers?: number; audioBufferBytes?: number; estimatedResourceBytes?: number;
+  audioState?: string;
   restartHint?: 'foreground-interrupted' | 'background-interrupted' | 'page-reload';
 };
 // Local bounded technical records only: no account identifiers, raw exception
