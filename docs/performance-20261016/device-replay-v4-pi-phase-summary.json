@@ -1,0 +1,33 @@
+{
+  "source": "Summary transcribed from the user's complete pasted v4 Pi Browser report; not every CSS sample is reproduced here",
+  "build": "device-replay-20261018-v4-effects",
+  "device": "PiBrowser/1.17.1, iPhone OS 18_7, viewport 430x825, DPR 3, visible, sound enabled",
+  "completed": true,
+  "elapsedWallMs": 68124,
+  "phases": [
+    {"name":"destruction-original-1","wallMs":20054,"frames":521,"measuredFrameMs":19994,"acceptedSimulationMs":14074,"clippedSimulationMs":5920,"acceptedTimeRatio":0.7039,"meanDeliveredFps":26.06,"frameP95Ms":81,"frameMaxMs":110,"volleys":43,"volleyGapP50Ms":457,"volleyGapP95Ms":536,"simulationWorkP95Ms":1,"destroyed":84,"maxEffects":12,"refills":84},
+    {"name":"destruction-hint-2","wallMs":20040,"frames":537,"measuredFrameMs":20014,"acceptedSimulationMs":14175,"clippedSimulationMs":5839,"acceptedTimeRatio":0.7083,"meanDeliveredFps":26.83,"frameP95Ms":83,"frameMaxMs":110,"volleys":44,"volleyGapP50Ms":449,"volleyGapP95Ms":585,"simulationWorkP95Ms":1,"destroyed":83,"maxEffects":12,"refills":83},
+    {"name":"destruction-original-3","wallMs":20011,"frames":520,"measuredFrameMs":19945,"acceptedSimulationMs":14091,"clippedSimulationMs":5854,"acceptedTimeRatio":0.7065,"meanDeliveredFps":26.07,"frameP95Ms":80,"frameMaxMs":99,"volleys":44,"volleyGapP50Ms":453,"volleyGapP95Ms":565,"simulationWorkP95Ms":1,"destroyed":83,"maxEffects":12,"refills":83}
+  ],
+  "commonEvidence": {
+    "cachePainted": 13,
+    "cacheEstimatedBytes": 4804555,
+    "pendingPaints": 0,
+    "domSamplesPerPhase": 6,
+    "effectExamplesPerSample": 2,
+    "allSampledEffectsIntersectViewport": true,
+    "allSampledEffectsPaused": false,
+    "allSampledFireOpacityPositive": true,
+    "fireAnimation": "enemy-destruction-fire, running, 0.88s",
+    "fireFilter": "blur(0.7px)",
+    "smokeAnimation": "destruction-smoke, running, 1.45s",
+    "smokeFilter": "blur(2px)",
+    "fragmentAnimation": "scatter-ship-piece, running, 2.12s",
+    "hintAppliedOnlyInMiddlePhase": true,
+    "maxDiagnosticSampleMs": 2
+  },
+  "issues": [],
+  "blockedRequests": [],
+  "conclusion": "will-change hints do not materially remove the reproduced slowdown; styled onscreen running animations do not prove actual presented pixels",
+  "visualObservationForThisRun": "No separate statement supplied by the user"
+}

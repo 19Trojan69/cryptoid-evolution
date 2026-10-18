@@ -23,7 +23,7 @@ export function createEffectPresentationProbe({document,now=()=>performance.now(
     willChange:s.willChange,hasBackground:s.backgroundImage!=='none'});
   return {
     start(next='original') {
-      if(!['original','hint'].includes(next))throw new Error('Unknown effect presentation');
+      if(!['original','hint','crop'].includes(next))throw new Error('Unknown effect presentation');
       mode=next;last=now();samples=[];maxSampleMs=0;
       document.documentElement.setAttribute('data-replay-compositor',mode);
     },
@@ -39,7 +39,9 @@ export function createEffectPresentationProbe({document,now=()=>performance.now(
           return {kind:el.className,rect:box,
             intersectsViewport:box.x<viewport.width&&box.y<viewport.height&&box.x+box.width>0&&box.y+box.height>0,
             root:layer(style(el)),fire:layer(pseudo(el,'::before')),smoke:layer(pseudo(el,'::after')),
-            fragment:fragment?layer(style(fragment)):null};
+            fragment:fragment?{...layer(style(fragment)),layoutWidth:style(fragment).width,
+              layoutHeight:style(fragment).height,clipPath:style(fragment).clipPath,
+              transformOrigin:style(fragment).transformOrigin}:null};
         })});
       maxSampleMs=Math.max(maxSampleMs,now()-started);
     },

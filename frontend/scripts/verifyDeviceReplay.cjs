@@ -1,7 +1,8 @@
 // Integration of the exact device hooks and controller with the existing real
 // GamePage simulation host. Presentation/audio/API remain stubs, not a browser test.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
-const effects=process.env.CRYPTOID_REPLAY_PROFILE==='effects';
+const fragments=process.env.CRYPTOID_REPLAY_PROFILE==='fragments';
+const effects=fragments||process.env.CRYPTOID_REPLAY_PROFILE==='effects';
 const lifecycle=effects||process.env.CRYPTOID_REPLAY_PROFILE==='lifecycle';
 const file=path.join(__dirname,'verifySimulationStability.cjs');
 let source=fs.readFileSync(file,'utf8');
@@ -10,8 +11,9 @@ once('const hooks = `','const hooks = fs.readFileSync(path.join(__dirname,"devic
 once('  const document = {',`  const {createDeviceReplay}=await import(path.join(__dirname,'deviceReplay/controller.mjs'));
   const {LIFECYCLE_PHASES}=await import(path.join(__dirname,'deviceReplay/lifecyclePhases.mjs'));
   const {EFFECT_PHASES}=await import(path.join(__dirname,'deviceReplay/effectPresentation.mjs'));
+  const {FRAGMENT_PHASES}=await import(path.join(__dirname,'deviceReplay/fragmentCrop.mjs'));
   let deviceReport;
-  host.__cryptoidDeviceReplay=createDeviceReplay({now:()=>clock,...${lifecycle?'{phases:'+(effects?'EFFECT_PHASES':'LIFECYCLE_PHASES')+'}':'{}'},onFinish:r=>{deviceReport=r;}});
+  host.__cryptoidDeviceReplay=createDeviceReplay({now:()=>clock,...${lifecycle?'{phases:'+(fragments?'FRAGMENT_PHASES':effects?'EFFECT_PHASES':'LIFECYCLE_PHASES')+'}':'{}'},onFinish:r=>{deviceReport=r;}});
   const document = {`);
 once('  context.__GamePageFactory();',`  const entry=context.module.exports.default();
   assert.equal(entry.type,context.__GamePageFactory,'real GameEntry mounts the game');
