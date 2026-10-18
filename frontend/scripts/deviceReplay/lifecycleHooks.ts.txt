@@ -16,6 +16,7 @@
       clearControls();
       host.presentation?.start(mode.presentation);
       host.workload?.start(mode);
+      host.layers?.start(mode);
       refills=maxEffects=effectEvents=sectorChanges=0;lastSector=12;
       previousEffects=new Set();phaseFrames={};samples=[];lastSample=0;
       const {width,height}=fieldSizeRef.current,s=createInitialState();
@@ -46,12 +47,14 @@
         audioVoices:soundRef.current?.activeVoiceCount??0,destroyed:s.destroyed,
         lifecycle:{refills,maxEffects,effectEvents,sectorChanges,phaseFrames,samples},
         ...(host.presentation?{presentation:host.presentation.read()}: {}),
-        ...(host.workload?{workload:host.workload.read()}: {})};
+        ...(host.workload?{workload:host.workload.read()}: {}),
+        ...(host.layers?{layers:host.layers.read()}: {})};
     };
     const sustain=(mode:any)=>{
       const s=stateRef.current,{width}=fieldSizeRef.current,time=performance.now();
       host.presentation?.sample();
       host.workload?.sample();
+      host.layers?.sample();
       maxEffects=Math.max(maxEffects,s.effects.length);
       effectEvents+=s.effects.filter(e=>!previousEffects.has(e.id)).length;
       previousEffects=new Set(s.effects.map(e=>e.id));
@@ -63,7 +66,7 @@
           ...paintedShipResourceStats(),...renderWorkStats()});lastSample=time;
         // The focused effect profile needs only the initial/latest cache
         // readings; keep its share/copy report small on the phone.
-        if((host.presentation||host.workload)&&samples.length>2)samples.splice(1,samples.length-2);
+        if((host.presentation||host.workload||host.layers)&&samples.length>2)samples.splice(1,samples.length-2);
       }
       s.hearts=s.maxHearts=3;s.projectileGuard=100000;
       s.shieldActive=true;s.shieldCharges=1;s.shieldMs=120000;

@@ -13,14 +13,17 @@ const expectedGameHash='eb628a5d73247ea64ec5443d2ff4efdab071a97228634f16f2aa915c
 assert.equal(createHash('sha256').update(original).digest('hex'),expectedGameHash,'review a changed GamePage before updating device-test hooks');
 const fragments=process.env.CRYPTOID_REPLAY_PROFILE==='fragments';
 const workload=process.env.CRYPTOID_REPLAY_PROFILE==='workload';
+const layers=process.env.CRYPTOID_REPLAY_PROFILE==='layers';
 const effects=fragments||process.env.CRYPTOID_REPLAY_PROFILE==='effects';
-const lifecycle=workload||effects||process.env.CRYPTOID_REPLAY_PROFILE==='lifecycle';
+const lifecycle=layers||workload||effects||process.env.CRYPTOID_REPLAY_PROFILE==='lifecycle';
 const audioOriginal=fs.readFileSync(path.join(root,'src/pages/gameAudio.ts'),'utf8');
-const buildInfo={id:workload?'device-replay-20261018-v6-cause':fragments?'device-replay-20261018-v5-fragments':effects?'device-replay-20261018-v4-effects':lifecycle?'device-replay-20261018-v3-lifecycle':'device-replay-20261018-v2',gameCommit:'27d174788327c3423f04ace32be61af67a2004cc',gameSourceSha256:expectedGameHash,...(workload?{audioSourceSha256:createHash('sha256').update(audioOriginal).digest('hex')}: {})};
+const buildInfo={id:layers?'device-replay-20261018-v7-layers':workload?'device-replay-20261018-v6-cause':fragments?'device-replay-20261018-v5-fragments':effects?'device-replay-20261018-v4-effects':lifecycle?'device-replay-20261018-v3-lifecycle':'device-replay-20261018-v2',gameCommit:'27d174788327c3423f04ace32be61af67a2004cc',gameSourceSha256:expectedGameHash,...(workload||layers?{audioSourceSha256:createHash('sha256').update(audioOriginal).digest('hex')}: {})};
 const hooks=fs.readFileSync(path.join(root,'scripts/deviceReplay',lifecycle?'lifecycleHooks.ts.txt':'gameHooks.ts.txt'),'utf8');
 const instrument=source=>{
  const once=(before,after)=>{assert.equal(source.split(before).length,2,'unique insertion '+before.slice(0,70));source=source.replace(before,after);};
  once('const shipDebris =','export const shipDebris =');
+ if(layers)once('export const shipDebris = (effect: Effect) => {',
+   'export const shipDebris = (effect: Effect) => {\n  if((effect.kind==="explosion"||effect.kind==="shatter")&&(window as any).__cryptoidDeviceReplay?.layers?.allowDebris()===false)return null;');
  if(fragments){
    source='import { fragmentCropStyle } from "../../scripts/deviceReplay/fragmentCrop.mjs";\n'+source;
    once('    const pieceStyle = {','    const pieceStyle = {\n      ...fragmentCropStyle(shape,columns,rows,x,y),');
@@ -40,7 +43,7 @@ fs.mkdirSync(path.join(destination,'public'),{recursive:true});
 const bundled=await build({absWorkingDir:root,entryPoints:['scripts/deviceReplay/entry.tsx'],bundle:true,write:false,
  platform:'browser',format:'esm',target:['safari16'],jsx:'automatic',minify:true,metafile:true,
  define:{'import.meta.env':'{"VITE_CRYPTOID_DIAGNOSTICS":"0"}','process.env.NODE_ENV':'"production"',
-   __CRYPTOID_RELEASE__:'"DEVICE REPLAY"',__CRYPTOID_REPLAY_BUILD__:JSON.stringify(buildInfo),__CRYPTOID_LIFECYCLE__:JSON.stringify(lifecycle),__CRYPTOID_EFFECTS__:JSON.stringify(effects),__CRYPTOID_FRAGMENTS__:JSON.stringify(fragments),__CRYPTOID_WORKLOAD__:JSON.stringify(workload)},
+   __CRYPTOID_RELEASE__:'"DEVICE REPLAY"',__CRYPTOID_REPLAY_BUILD__:JSON.stringify(buildInfo),__CRYPTOID_LIFECYCLE__:JSON.stringify(lifecycle),__CRYPTOID_EFFECTS__:JSON.stringify(effects),__CRYPTOID_FRAGMENTS__:JSON.stringify(fragments),__CRYPTOID_WORKLOAD__:JSON.stringify(workload),__CRYPTOID_LAYERS__:JSON.stringify(layers)},
  plugins:[{name:'isolated-device-replay',setup(b){
    // These two real modules differ only by their initial letter. Match the
    // resource module exactly rather than esbuild's TSX-first fallback.

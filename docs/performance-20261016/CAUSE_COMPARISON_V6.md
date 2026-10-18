@@ -77,4 +77,36 @@ Preview dpl_3hbksG4uRzMmCE5abzAUE2GqMhuK is READY, target null, aliases empty.
 Host: cryptoid-evolution-testnet-47nyegb7h-19-trojan69.vercel.app.
 The single deployment-scoped share expires 2026-10-19T10:37:19Z; its token is
 not saved in Git. Account/API isolation is the same as previous replays.
-The actual Pi v6 run remains pending. Public aliases are not reassigned.
+Public aliases are not reassigned.
+
+## Completed Pi result
+
+The user's completed Pi Browser 1.17.1 report (430×825, DPR 3, sound on)
+isolates the normal explosion display path. Summary values are transcribed in
+device-replay-v6-pi-phase-summary.json; raw data remains in the conversation.
+
+| Phase | FPS | Accepted time | Measured salvos | Volley median / p95 ms |
+| --- | ---: | ---: | ---: | ---: |
+| Original before | 23.77 | 69.09% | 18 | 475 / 585 |
+| No explosion audio | 22.34 | 66.16% | 17 | 467 / 777 |
+| Neither | 56.57 | 99.73% | 27 | 317 / 334 |
+| No explosion image | 57.39 | 99.87% | 27 | 317 / 334 |
+| Original after | 23.37 | 69.37% | 18 | 459 / 550 |
+
+Every image-off DOM sample is zero, while original simulation effects remain
+(15–16 at phase end). The image-off/audio-on phase ends with nine active audio
+voices, makes all 57 explosion sound requests and reaches 57.39 FPS. Removing
+explosion sound alone does not improve performance. The common autopilot,
+simulation, hull illumination, haptics and audio cannot explain this large
+contrast by themselves in this fixture. It does not rule out interactions.
+
+Original-before/after are similarly slow, simulation work p95 stays 1 ms, and
+the prepared hull cache remains 13 entries / 4,804,555 estimated bytes. Issues,
+blocked requests and emergency resets are empty/zero. Detailed disabled
+diagnostic work counters are not interpreted as zero actual rendering work.
+
+The dominant implicated path is the complete omitted normal explosion subtree;
+the report does not distinguish mounting, style, painting or compositing, and
+does not establish actual pixel visibility. The next private experiment splits
+fire/smoke pseudo-elements from the original uncropped fragments. No omissions
+or visual quality reductions are proposed as a game fix.

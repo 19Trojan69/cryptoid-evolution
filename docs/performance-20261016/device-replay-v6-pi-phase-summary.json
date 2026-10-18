@@ -1,0 +1,19 @@
+{
+  "source": "Phase summary transcribed from the user's complete pasted v6 report; not a replacement raw report",
+  "build": "device-replay-20261018-v6-cause",
+  "device": "PiBrowser/1.17.1, iPhone OS 18_7, 430x825, DPR 3, visible, sound enabled",
+  "completed": true,
+  "elapsedWallMs": 58121,
+  "phases": [
+    {"name":"original-before","explosionImages":true,"explosionAudio":true,"frames":202,"measuredFrameMs":8498,"acceptedSimulationMs":5871,"clippedSimulationMs":2627,"acceptedTimeRatio":0.6909,"meanDeliveredFps":23.77,"frameP95Ms":82,"frameMaxMs":100,"volleys":18,"volleyGapP50Ms":475,"volleyGapP95Ms":585,"simulationWorkP95Ms":1,"destroyed":42,"effects":10,"audioVoices":6,"allowedAudioCalls":42,"omittedAudioCalls":0,"domExplosionSamples":[6,10,10,10]},
+    {"name":"without-explosion-audio","explosionImages":true,"explosionAudio":false,"frames":190,"measuredFrameMs":8505,"acceptedSimulationMs":5627,"clippedSimulationMs":2878,"acceptedTimeRatio":0.6616,"meanDeliveredFps":22.34,"frameP95Ms":88,"frameMaxMs":140,"volleys":17,"volleyGapP50Ms":467,"volleyGapP95Ms":777,"simulationWorkP95Ms":1,"destroyed":40,"effects":10,"audioVoices":0,"allowedAudioCalls":0,"omittedAudioCalls":40,"domExplosionSamples":[6,8,10,10]},
+    {"name":"without-explosion-image-or-audio","explosionImages":false,"explosionAudio":false,"frames":481,"measuredFrameMs":8503,"acceptedSimulationMs":8480,"clippedSimulationMs":23,"acceptedTimeRatio":0.9973,"meanDeliveredFps":56.57,"frameP95Ms":29,"frameMaxMs":43,"volleys":27,"volleyGapP50Ms":317,"volleyGapP95Ms":334,"simulationWorkP95Ms":1,"destroyed":58,"effects":16,"audioVoices":1,"allowedAudioCalls":0,"omittedAudioCalls":58,"domExplosionSamples":[0,0,0,0]},
+    {"name":"without-explosion-image","explosionImages":false,"explosionAudio":true,"frames":489,"measuredFrameMs":8521,"acceptedSimulationMs":8510,"clippedSimulationMs":11,"acceptedTimeRatio":0.9987,"meanDeliveredFps":57.39,"frameP95Ms":30,"frameMaxMs":38,"volleys":27,"volleyGapP50Ms":317,"volleyGapP95Ms":334,"simulationWorkP95Ms":1,"destroyed":57,"effects":15,"audioVoices":9,"allowedAudioCalls":57,"omittedAudioCalls":0,"domExplosionSamples":[0,0,0,0]},
+    {"name":"original-after","explosionImages":true,"explosionAudio":true,"frames":198,"measuredFrameMs":8471,"acceptedSimulationMs":5876,"clippedSimulationMs":2595,"acceptedTimeRatio":0.6937,"meanDeliveredFps":23.37,"frameP95Ms":86,"frameMaxMs":98,"volleys":18,"volleyGapP50Ms":459,"volleyGapP95Ms":550,"simulationWorkP95Ms":1,"destroyed":42,"effects":10,"audioVoices":5,"allowedAudioCalls":42,"omittedAudioCalls":0,"domExplosionSamples":[6,10,10,10]}
+  ],
+  "commonEvidence": {"settleMs":1500,"fixtureResets":0,"painted":13,"estimatedBytes":4804555,"sources":8,"pending":0,"simulationEffectsRetained":true,"hullIlluminationRetained":true,"hapticsRetained":true,"original34msCapRetained":true},
+  "issues": [],
+  "blockedRequests": [],
+  "conclusion": "Omitting the normal explosion/shatter DOM restores roughly 57 FPS and 99.7-99.9% accepted time with explosion sound either on or off. Omitting explosion sound alone does not restore performance. This implicates the whole omitted display subtree, not a proven individual CSS, mounting, paint or GPU mechanism.",
+  "visualObservationForThisRun": "No separate pixel-visibility observation supplied"
+}
