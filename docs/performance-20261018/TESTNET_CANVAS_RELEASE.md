@@ -45,3 +45,54 @@ freeze or establish all fifty bosses/long-session/account recovery coverage.
   No dependency/lockfile change is made for that environment deficiency.
 - Hosted build, ordinary guest input, visual effects, pause/resume and return
   checks are required before assigning the official Testnet alias.
+
+## Hosted checks and release
+
+The Git integration built preview `dpl_3LRYcGCzxpQvofXLRUGSy5WmUrRV` from
+`b71d368d5bdd6735225771a101cbba8beefebed7` successfully (READY). The normal
+application starts through its real guest GameEntry, with ordinary enemy
+health, lives, controls and collisions. A run scores two kills before normal
+game-over, then the original restart control starts another three-heart run.
+Keyboard movement changes player left from 50% to 84.918%; after original
+Pause/Resume and countdown it moves back from 84.918% to 49.1718%. A real
+pointer drag then moves to 67.4982% left / 74.7863% top. Ordinary enemy kills
+and a collected double-weapon pickup advance the HUD to 70 points. These are
+manual UI actions, without a pilot or simulation mutation.
+
+The original pause dialog, three-second countdown, Home confirmation and
+return to the normal home screen work. The effect surface is absent after
+exit. Source images and colors remain the original full-resolution assets;
+the shared surface is present during ordinary play and shrinks to 1 × 1
+when no normal effects remain. The existing v9/v10/v11 full-artwork/lifecycle
+evidence remains in `codex/crash-diagnosis-20261015`.
+
+Both the prior official application and candidate load these identical CSS
+asset names: `index-CLY2nAhm.css`, `powerUps-Bp4oAZoc.css`,
+`Shop-BkuKP0aD.css`, `GamePage-Doazl5ia.css`. Original source comparison also
+confirms unchanged index.css, hudDepth.css, gameAudio.ts, gameInput.ts,
+shipFleet.ts, combatVariety.ts, playerCombat.ts and sectorBoss.ts. GamePage
+has exactly the three renderer integration regions; its 34 ms cap is intact.
+
+The preview-to-production promotion endpoint returned 422. Redeploying that
+exact existing deployment with `target: production` and
+`withLatestCommit: false` succeeded. Production deployment
+`dpl_DDru7oekVxdkxj4AgoBEUE2FSm5k` is READY at the exact source commit above,
+and `cryptoid-evolution-testnet.vercel.app` resolves to it. The Mainnet alias
+still identifies `dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe` and commit
+`907d2a7363345d00f0f90c54402bf04e887b64d9`.
+
+The public alias was opened directly after release. Its application entry
+bundle is `/assets/index-CDSCQ-fM.js`, exactly the same hash-named bundle as
+the tested preview. Its ordinary guest GameEntry reaches `/game`, renders
+the shared surface and completes a normal run with two kills, followed by a
+successful original restart. `testnet-canvas-live.jpg` records the public
+restart with the original three-heart HUD and unchanged first-level scene.
+
+The connector's build-event endpoint returned 404 and runtime-log endpoint
+returned 403; the local Vercel CLI is unavailable. These are observability
+gaps, not clean-log results. Build completion is verified through deployment
+READY state and the live normal application. Browser extension errors and
+the existing Pi SDK host timeout in ordinary Chrome are not renderer errors;
+the same baseline browser also reports them. Signed-in Pi account flows,
+purchases, audible hardware output and post-boss manual recovery were not
+retested by this browser session.
