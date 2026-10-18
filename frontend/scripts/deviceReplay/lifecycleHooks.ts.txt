@@ -1,0 +1,81 @@
+  // Generated diagnostic only: the ordinary GamePage source is never edited.
+  useEffect(() => {
+    const host=(window as any).__cryptoidDeviceReplay;
+    if(!host)return;
+    let refills=0,maxEffects=0,effectEvents=0,sectorChanges=0,lastSector=12;
+    let previousEffects=new Set<number>(),phaseFrames:Record<string,number>={},samples:any[]=[],lastSample=0;
+    const readyEnemy=(index:number,slots:any[],fragile:boolean)=>{
+      const {width}=fieldSizeRef.current;
+      const enemy=spawnAsteroid(nextIdRef.current++,width,visibleTopRef.current,index,12,slots);
+      enemy.entryElapsed=enemy.entryDuration;enemy.formationElapsed=enemy.formationDuration;
+      enemy.x=slots[index].x;enemy.y=slots[index].y;
+      enemy.health=enemy.maxHealth=fragile?1:1000000;
+      return enemy;
+    };
+    const start=(mode:any)=>{
+      clearControls();
+      refills=maxEffects=effectEvents=sectorChanges=0;lastSector=12;
+      previousEffects=new Set();phaseFrames={};samples=[];lastSample=0;
+      const {width,height}=fieldSizeRef.current,s=createInitialState();
+      const slots=createFormationSlots(12,12,width,height,visibleTopRef.current,playerDiameterRef.current);
+      Object.assign(s,{sector:12,section:12,chainBlocks:1,status:'playing',phase:'ATTACK_CYCLE',
+        encounter:'normal',hearts:3,maxHearts:3,projectileGuard:100000,player:{x:.25,y:.86},
+        weaponLevel:2,weaponSource:'pickup',weaponCap:2,pickupWeaponLevel:2,pickupWeaponMs:120000,
+        shieldActive:true,shieldCharges:1,shieldMs:120000,
+        powerUpTypes:['shield','overdrive','weapon','rapid']});
+      s.asteroids=Array.from({length:6},(_,i)=>readyEnemy(i,slots,mode.fixture!=='fixed'));
+      stateRef.current=s;adminRunRef.current=true;scoreRunRef.current=null;
+      formationIndexRef.current=blockFlights(12,rulesVersionRef.current)[0];
+      formationOffsetRef.current=0;flightRef.current=0;formationStartedRef.current=true;
+      sectionSlotsRef.current=slots;sectionElapsedRef.current=20000;clearTimerRef.current=0;
+      spawnTimerRef.current=0;attackCooldownRef.current=0;fireTimerRef.current=0;
+      elapsedRef.current=0;dropsCreatedRef.current=4;lastFrameRef.current=0;
+      impactCooldownRef.current=120000;
+      varietyRef.current=createCombatVariety(true);varietyRef.current.weaponIssued=true;
+      lastPlayerRef.current={...s.player};waveCompleteRef.current=false;
+      setGame({...s});
+    };
+    const read=()=>{
+      const s=stateRef.current;
+      return {sector:s.sector,phase:s.phase,status:s.status,enemies:s.asteroids.length,
+        shots:s.shots.length,enemyShots:s.enemyShots.length,effects:s.effects.length,
+        shield:s.shieldActive&&s.shieldMs>0,weaponLevel:s.weaponLevel,pickupWeaponMs:s.pickupWeaponMs,
+        fieldWidth:fieldSizeRef.current.width,fieldHeight:fieldSizeRef.current.height,
+        audioVoices:soundRef.current?.activeVoiceCount??0,destroyed:s.destroyed,
+        lifecycle:{refills,maxEffects,effectEvents,sectorChanges,phaseFrames,samples}};
+    };
+    const sustain=(mode:any)=>{
+      const s=stateRef.current,{width}=fieldSizeRef.current,time=performance.now();
+      maxEffects=Math.max(maxEffects,s.effects.length);
+      effectEvents+=s.effects.filter(e=>!previousEffects.has(e.id)).length;
+      previousEffects=new Set(s.effects.map(e=>e.id));
+      phaseFrames[s.phase]=(phaseFrames[s.phase]??0)+1;
+      if(s.sector!==lastSector){sectorChanges++;lastSector=s.sector;}
+      if(time-lastSample>=1000&&samples.length<128){
+        samples.push({atMs:time,sector:s.sector,phase:s.phase,enemies:s.asteroids.length,
+          effects:s.effects.length,audioVoices:soundRef.current?.activeVoiceCount??0,
+          ...paintedShipResourceStats(),...renderWorkStats()});lastSample=time;
+      }
+      s.hearts=s.maxHearts=3;s.projectileGuard=100000;
+      s.shieldActive=true;s.shieldCharges=1;s.shieldMs=120000;
+      if(mode.fixture==='fixed'){
+        for(const enemy of s.asteroids)enemy.health=enemy.maxHealth=1000000;
+      }else{
+        // The pilot aims ordinary emitted shots; the real collision/destruction
+        // path creates every explosion. No effect or projectile is injected.
+        for(const enemy of s.asteroids)enemy.health=Math.min(enemy.health,1);
+        const target=s.asteroids.find(e=>e.entryElapsed>=e.entryDuration&&e.formationElapsed>=e.formationDuration);
+        if(target){s.player.x=Math.max(.1,Math.min(.9,target.x/width));
+          playerShipRef.current?.style.setProperty('left',`${s.player.x*100}%`);}
+        if(mode.fixture==='destruction'&&s.asteroids.length<6&&s.phase!=='SECTOR_CLEAR'){
+          const slots=sectionSlotsRef.current!;
+          const occupied=new Set(s.asteroids.map(e=>e.formationSlot));
+          for(let i=0;i<6;i++)if(!occupied.has(slots[i].index)){
+            s.asteroids.push(readyEnemy(i,slots,true));refills++;
+          }
+        }
+      }
+      return false;
+    };
+    return host.install({start,read,sustain});
+  },[]);

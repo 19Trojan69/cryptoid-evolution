@@ -11,8 +11,9 @@ const sourcePath=path.join(root,'src/pages/GamePage.tsx');
 const original=fs.readFileSync(sourcePath,'utf8');
 const expectedGameHash='eb628a5d73247ea64ec5443d2ff4efdab071a97228634f16f2aa915cdc832607';
 assert.equal(createHash('sha256').update(original).digest('hex'),expectedGameHash,'review a changed GamePage before updating device-test hooks');
-const buildInfo={id:'device-replay-20261018-v2',gameCommit:'27d174788327c3423f04ace32be61af67a2004cc',gameSourceSha256:expectedGameHash};
-const hooks=fs.readFileSync(path.join(root,'scripts/deviceReplay/gameHooks.ts.txt'),'utf8');
+const lifecycle=process.env.CRYPTOID_REPLAY_PROFILE==='lifecycle';
+const buildInfo={id:lifecycle?'device-replay-20261018-v3-lifecycle':'device-replay-20261018-v2',gameCommit:'27d174788327c3423f04ace32be61af67a2004cc',gameSourceSha256:expectedGameHash};
+const hooks=fs.readFileSync(path.join(root,'scripts/deviceReplay',lifecycle?'lifecycleHooks.ts.txt':'gameHooks.ts.txt'),'utf8');
 const instrument=source=>{
  const once=(before,after)=>{assert.equal(source.split(before).length,2,'unique insertion '+before.slice(0,70));source=source.replace(before,after);};
  once('  const levelLabel =',hooks+'\n  const levelLabel =');
@@ -28,7 +29,7 @@ fs.mkdirSync(path.join(destination,'public'),{recursive:true});
 const bundled=await build({absWorkingDir:root,entryPoints:['scripts/deviceReplay/entry.tsx'],bundle:true,write:false,
  platform:'browser',format:'esm',target:['safari16'],jsx:'automatic',minify:true,metafile:true,
  define:{'import.meta.env':'{"VITE_CRYPTOID_DIAGNOSTICS":"0"}','process.env.NODE_ENV':'"production"',
-   __CRYPTOID_RELEASE__:'"DEVICE REPLAY"',__CRYPTOID_REPLAY_BUILD__:JSON.stringify(buildInfo)},
+   __CRYPTOID_RELEASE__:'"DEVICE REPLAY"',__CRYPTOID_REPLAY_BUILD__:JSON.stringify(buildInfo),__CRYPTOID_LIFECYCLE__:JSON.stringify(lifecycle)},
  plugins:[{name:'isolated-device-replay',setup(b){
    // These two real modules differ only by their initial letter. Match the
    // resource module exactly rather than esbuild's TSX-first fallback.

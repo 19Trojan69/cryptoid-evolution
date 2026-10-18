@@ -6,10 +6,13 @@ import { primeGameAudio } from '../../src/pages/gameAudio';
 import { MusicPlayer, handoffGameMusic } from '../../src/pages/musicPlayback';
 import { readMusicVolume } from '../../src/pages/musicPreferences';
 import { createDeviceReplay } from './controller.mjs';
+import { LIFECYCLE_PHASES } from './lifecyclePhases.mjs';
 
 declare global { interface Window { __cryptoidDeviceReplay: any; __cryptoidBlockedRequests: string[]; } }
 const StableGame = memo(GamePage);
 const build = __CRYPTOID_REPLAY_BUILD__;
+const lifecycle = __CRYPTOID_LIFECYCLE__;
+const totalSeconds = lifecycle ? 118 : 88;
 window.__cryptoidBlockedRequests = [];
 const nativeFetch = window.fetch.bind(window);
 const assetRoots = /^\/(?:ships|audio|effects|planets|fonts|cards|home|badges|emblems|galaxy|pilots|ranks|assets)\//;
@@ -37,7 +40,7 @@ XMLHttpRequest.prototype.open = function() {
 
 function App() {
   const [running,setRunning] = useState(false);
-  const [progress,setProgress] = useState({label:'',remainingSeconds:88});
+  const [progress,setProgress] = useState({label:'',remainingSeconds:totalSeconds});
   const [report,setReport] = useState<any>(null);
   const [copied,setCopied] = useState(false);
   const [copyFallback,setCopyFallback] = useState(false);
@@ -50,8 +53,9 @@ function App() {
     const device={userAgent:navigator.userAgent,viewport:{width:innerWidth,height:innerHeight},
       pixelRatio:devicePixelRatio,visibility:document.visibilityState,sound};
     window.__cryptoidBlockedRequests.length=0;
-    window.__cryptoidDeviceReplay=createDeviceReplay({onProgress:setProgress,onFinish:result=>{
+    window.__cryptoidDeviceReplay=createDeviceReplay({...(lifecycle?{phases:LIFECYCLE_PHASES}:{}),onProgress:setProgress,onFinish:result=>{
       clearTimeout(mountWatchdog);
+      if(lifecycle)result.coverage.fixtures='Controlled lives/one-hit enemies and automatic aiming; real shot collisions, explosions and normal block transitions; no scored/account run';
       setReport({...result,build,device,blockedRequests:[...window.__cryptoidBlockedRequests]});setRunning(false);
     }});
     const mountWatchdog=setTimeout(()=>{
@@ -71,8 +75,8 @@ function App() {
     <small>CRYPTOID EVOLUTION · GERÄTETEST</small>
     <h1>{report?'Messung beendet':'Kurzer automatischer Test'}</h1>
     {!report ? <>
-      <p>Der Test läuft rund 90 Sekunden selbstständig. Bitte das Fenster geöffnet lassen.</p>
-      <p>Einzel- und Doppelschüsse sowie das Schild werden in festen Situationen verglichen.</p>
+      <p>Der Test läuft {lifecycle?'rund zwei Minuten':'rund 90 Sekunden'} selbstständig. Bitte das Fenster geöffnet lassen.</p>
+      <p>{lifecycle?'Gegnerzerstörungen, Explosionen und Blockwechsel werden automatisch geprüft. Du brauchst nichts zu steuern.':'Einzel- und Doppelschüsse sowie das Schild werden in festen Situationen verglichen.'}</p>
       <p>Es ist kein Spielkonto nötig. Dein normaler Spielstand wird nicht geladen.</p>
       <label><input type="checkbox" checked={sound} onChange={e=>setSound(e.target.checked)}/> Mit Musik und Soundeffekten</label>
       <button onClick={start}>Test starten</button>

@@ -18,7 +18,7 @@ export function createDeviceReplay({ now = () => performance.now(), phases = REP
   const fresh = () => ({ frames: 0, rawMs: 0, acceptedMs: 0, clippedMs: 0, over34: 0,
     gaps: [], work: [], volleyGaps: [], volleys: 0, lastVolley: null, fixtureResets: 0 });
   const emit = time => {
-    const total = warmupMs + phaseMs*phases.length;
+    const total = warmupMs + phases.reduce((sum,phase)=>sum+(phase.durationMs??phaseMs),0);
     onProgress({ label: index < 0 ? 'Grafiken werden vorbereitet' : phases[index].label,
       remainingSeconds: Math.max(0,Math.ceil((total-(time-started))/1000)), phase: index+1 });
     lastProgress = time;
@@ -76,7 +76,7 @@ export function createDeviceReplay({ now = () => performance.now(), phases = REP
       if (!active || !api) return;
       if (api.read().status !== 'playing') { finish('game-interrupted',time); return; }
       if (index >= 0) append(bucket.work,simulationWorkMs,4096);
-      if (index < 0 ? time-started >= warmupMs : time-phaseStarted >= phaseMs) {
+      if (index < 0 ? time-started >= warmupMs : time-phaseStarted >= (phases[index].durationMs??phaseMs)) {
         closePhase(time); bucket = null; index++;
         if (index === phases.length) { finish('completed',time); return; }
         phaseStarted = time; bucket = fresh(); api.start(phases[index]);
