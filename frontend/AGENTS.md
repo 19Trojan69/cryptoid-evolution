@@ -1,5 +1,17 @@
 # Preserve the officially approved game
 
+## Explicit Testnet renderer release, 18 October 2026
+
+After completed Pi v9/v10/v11 device tests, the user authorized applying the
+tested ordinary-explosion Canvas renderer to the official Testnet, conditional
+on preserving the game's appearance. Release only this renderer integration
+from public Testnet commit 27d174788327c3423f04ace32be61af67a2004cc.
+Keep original fire/smoke artwork, full-resolution hulls, fragment counts and
+trajectories, timing, HUD, input, sound, balance and account behavior. Retain
+the original DOM fallback. Diagnostic pilots, weakened enemies, controlled
+lives and automatic boss transitions are excluded. Mainnet is not authorized.
+Backup: backup/testnet-before-canvas-20261018 at the preceding Testnet commit.
+
 ## Additional explicit scope, 16 October 2026
 
 The user authorized releases only to the existing public Testnet project, not
