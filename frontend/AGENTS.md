@@ -1,5 +1,19 @@
 # Preserve the officially approved game
 
+## Reload diagnosis v2, 18 October 2026, 18:41 Vienna
+
+The user explicitly authorized the next isolated diagnostic step with "mach das bitte"
+after clarifying that the short Loading screen completes normally and returns to Home.
+Treat the symptom as an unexpected app/WebView reload during active play, especially
+boss fights and transitions; do not describe Loading itself as hung. Add bounded local
+evidence for app boot/reload, JavaScript and promise faults, foreground main-thread
+gaps, page lifecycle, WebGL/Canvas context loss, and the final boss/turret/reactor/timer
+state. Keep only a roughly 60-second owner-exportable technical window and do not
+store account, purchase, score, shard, raw error-message or stack data. Preserve all
+gameplay, visuals, audio, Pi/login/purchase behavior and recovery semantics. This work
+is authorized only on the isolated branch/preview; do not move the public Testnet
+alias or Mainnet without a separate explicit release instruction.
+
 ## Privacy correction, 18 October 2026, 16:52 Vienna
 
 The user clarified: "es soll nur für mich sichtbar sein, ohne dass andere
