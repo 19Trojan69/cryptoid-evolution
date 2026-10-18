@@ -1,0 +1,153 @@
+{
+  "source": "Completed JSON pasted by user on 18 October 2026 at 14:21 Europe/Vienna; selected fields, not a raw-report export",
+  "build": {
+    "id": "device-replay-20261018-v10-blocks",
+    "gameCommit": "27d174788327c3423f04ace32be61af67a2004cc",
+    "gameSourceSha256": "eb628a5d73247ea64ec5443d2ff4efdab071a97228634f16f2aa915cdc832607",
+    "audioSourceSha256": "e6720dc0abc59d75a56bf10118c6b86ada07d77bf45abb9b4717356f34dab7ac",
+    "stylesSourceSha256": "2236b2143e8cdc5b6045cda16266ddfe774d957d89b4969193f9265ad141f0a7"
+  },
+  "device": {
+    "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 PiBrowser/1.17.1",
+    "viewport": {"width": 430, "height": 825},
+    "pixelRatio": 3,
+    "visibility": "visible",
+    "sound": true
+  },
+  "completed": true,
+  "reason": "completed",
+  "elapsedWallMs": 73040,
+  "warmupMs": 8000,
+  "phases": [
+    {
+      "name": "bounded-before-blocks",
+      "fixture": "destruction",
+      "durationMs": 10000,
+      "settleMs": 1500,
+      "wallMs": 10010,
+      "frames": 393,
+      "measuredFrameMs": 8499,
+      "acceptedSimulationMs": 8292,
+      "clippedSimulationMs": 207,
+      "over34Frames": 37,
+      "acceptedTimeRatio": 0.9756,
+      "meanDeliveredFps": 46.24,
+      "frameP50Ms": 19,
+      "frameP95Ms": 39,
+      "frameMaxMs": 47,
+      "volleys": 26,
+      "volleyGapP50Ms": 323,
+      "volleyGapP95Ms": 351,
+      "simulationWorkP95Ms": 1,
+      "fixtureResets": 0,
+      "end": {
+        "sector": 12, "phase": "FORMATION", "status": "playing", "enemies": 5,
+        "weaponLevel": 2, "effects": 15, "audioVoices": 9, "destroyed": 57,
+        "refills": 56, "maxEffects": 16, "effectEvents": 56, "sectorChanges": 0,
+        "phaseFrames": {"ATTACK_CYCLE": 182, "FORMATION": 295},
+        "paintedCache": {"initialEntries": 13, "initialEstimatedBytes": 4804555, "lastEntries": 13, "lastEstimatedBytes": 4804555, "lastSources": 8, "lastPending": 0}
+      },
+      "renderer": {
+        "mode": "bounded", "draws": 5005, "fragmentDraws": 20020,
+        "fallbacks": 2, "registered": 14, "sourceImages": 6, "imageBytes": 1908576,
+        "textures": 4, "textureBytes": 4619364, "preparationCount": 4,
+        "hullLoads": 6, "hullEvictions": 0, "retainedHullUsers": 3,
+        "surfaceBytes": 6034248, "maxSurfaceBytes": 6034248, "surfaceResizes": 18,
+        "surfaceBox": {"left": 12, "top": 77, "right": 430, "bottom": 478},
+        "dpr": 3, "drawWorkP95Ms": 1, "failures": [],
+        "sampledRegisteredEffects": [14, 14, 12],
+        "sampledProxyEffects": [14, 14, 12], "sampledOriginalEffects": [0, 0, 0]
+      }
+    },
+    {
+      "name": "bounded-block-transitions",
+      "fixture": "transitions",
+      "durationMs": 45000,
+      "settleMs": 1500,
+      "wallMs": 45013,
+      "frames": 2584,
+      "measuredFrameMs": 43510,
+      "acceptedSimulationMs": 43290,
+      "clippedSimulationMs": 220,
+      "over34Frames": 18,
+      "acceptedTimeRatio": 0.9949,
+      "meanDeliveredFps": 59.39,
+      "frameP50Ms": 17,
+      "frameP95Ms": 20,
+      "frameMaxMs": 70,
+      "volleys": 60,
+      "volleyGapP50Ms": 317,
+      "volleyGapP95Ms": 4684,
+      "simulationWorkP95Ms": 1,
+      "fixtureResets": 0,
+      "end": {
+        "sector": 16, "phase": "ATTACK_CYCLE", "status": "playing", "enemies": 3,
+        "weaponLevel": 2, "effects": 3, "audioVoices": 2, "destroyed": 39,
+        "refills": 0, "maxEffects": 6, "effectEvents": 39, "sectorChanges": 4,
+        "phaseFrames": {"ATTACK_CYCLE": 282, "FORMATION": 1028, "SECTOR_CLEAR": 271, "SECTOR_INTRO": 198, "ENTRY": 894},
+        "paintedCache": {"initialEntries": 13, "initialEstimatedBytes": 4804555, "lastEntries": 48, "lastEstimatedBytes": 17648799, "lastSources": 8, "lastPending": 0}
+      },
+      "renderer": {
+        "mode": "bounded", "draws": 4459, "fragmentDraws": 18920,
+        "fallbacks": 33, "registered": 3, "sourceImages": 8, "imageBytes": 2544768,
+        "textures": 6, "textureBytes": 10067560, "preparationCount": 6,
+        "hullLoads": 39, "hullEvictions": 31, "retainedHullUsers": 3,
+        "surfaceBytes": 3843000, "maxSurfaceBytes": 5555808, "surfaceResizes": 42,
+        "surfaceBox": {"left": 20, "top": 77, "right": 325, "bottom": 427},
+        "dpr": 3, "drawWorkP95Ms": 1, "failures": [],
+        "sampledRegisteredEffects": [4, 0, 2, 0],
+        "sampledProxyEffects": [4, 0, 2, 0], "sampledOriginalEffects": [0, 0, 0, 0]
+      }
+    },
+    {
+      "name": "bounded-after-blocks",
+      "fixture": "destruction",
+      "durationMs": 10000,
+      "settleMs": 1500,
+      "wallMs": 10007,
+      "frames": 408,
+      "measuredFrameMs": 8506,
+      "acceptedSimulationMs": 8384,
+      "clippedSimulationMs": 122,
+      "over34Frames": 26,
+      "acceptedTimeRatio": 0.9857,
+      "meanDeliveredFps": 47.97,
+      "frameP50Ms": 18,
+      "frameP95Ms": 35,
+      "frameMaxMs": 43,
+      "volleys": 26,
+      "volleyGapP50Ms": 328,
+      "volleyGapP95Ms": 340,
+      "simulationWorkP95Ms": 1,
+      "fixtureResets": 0,
+      "end": {
+        "sector": 12, "phase": "FORMATION", "status": "playing", "enemies": 6,
+        "weaponLevel": 2, "effects": 12, "audioVoices": 8, "destroyed": 56,
+        "refills": 56, "maxEffects": 16, "effectEvents": 56, "sectorChanges": 0,
+        "phaseFrames": {"ATTACK_CYCLE": 179, "FORMATION": 313},
+        "paintedCache": {"initialEntries": 48, "initialEstimatedBytes": 17648799, "lastEntries": 48, "lastEstimatedBytes": 17637945, "lastSources": 8, "lastPending": 0}
+      },
+      "renderer": {
+        "mode": "bounded", "draws": 5229, "fragmentDraws": 20916,
+        "fallbacks": 7, "registered": 12, "sourceImages": 8, "imageBytes": 2544768,
+        "textures": 6, "textureBytes": 10067560, "preparationCount": 6,
+        "hullLoads": 45, "hullEvictions": 37, "retainedHullUsers": 3,
+        "surfaceBytes": 6060744, "maxSurfaceBytes": 6060744, "surfaceResizes": 16,
+        "surfaceBox": {"left": 7, "top": 74, "right": 430, "bottom": 472},
+        "dpr": 3, "drawWorkP95Ms": 1, "failures": [],
+        "sampledRegisteredEffects": [14, 13, 12],
+        "sampledProxyEffects": [14, 13, 12], "sampledOriginalEffects": [0, 0, 0]
+      }
+    }
+  ],
+  "issues": [],
+  "blockedRequests": [],
+  "rendererCleanup": {"activeDrawFrame": false, "registeredEffects": 0, "sourceImages": 0, "textureEntries": 0, "cacheBytes": 0, "surfaceBytes": 0},
+  "coverage": {
+    "clock": "Actual GamePage clock, unchanged 34 ms cap; first 1500 ms per phase excluded",
+    "fixture": "Controlled lives, one-hit enemies, automatic aiming; real collisions and ordinary block clear/intro/entry in the middle phase; no scored campaign or bosses",
+    "account": "No Pi login or real account/API access; separate preview origin",
+    "presentation": "Complete bounded Canvas candidate with original resolution, artwork, fragment counts, timing, illumination and audio; original full DOM display retained while new assets prepare",
+    "limitations": "One 73-second device run. Frame/cadence and resource counters do not prove pixel identity, GPU completion or long-session crash recovery. Cleanup covers the candidate renderer; the ordinary painted-hull cache is reported separately. User confirmed full v9 visibility before this run, but no separate v10 visual comment accompanied this JSON."
+  }
+}

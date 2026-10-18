@@ -102,8 +102,9 @@ All fixture resets, issues and blocked requests are zero. Final scheduler,
 registrations, source images, texture entries, cache bytes and surface bytes
 are zero. The download exactly matches the JSON shown in the report textarea;
 the copy button reports success. Both the exported report and completion
-screenshot are preserved in this directory. A matching Pi Browser run remains
-necessary; the Chrome measurements do not establish iPhone performance.
+screenshot are preserved in this directory. The corresponding Pi Browser
+result is recorded separately below; the Chrome measurements alone do not
+establish iPhone performance.
 
 Final public alias checks match the initial deployments:
 
@@ -113,3 +114,66 @@ Final public alias checks match the initial deployments:
   `907d2a7363345d00f0f90c54402bf04e887b64d9`.
 
 No public game alias, original source or account path was changed.
+
+## Completed iPhone / Pi Browser run
+
+At 14:21 Europe/Vienna the user supplied the completed v10 report from
+iPhone OS 18_7 / Pi Browser 1.17.1, viewport 430 × 825, DPR 3, visible,
+with sound enabled. The run completes in 73,040 ms. Selected fields are
+preserved in `device-replay-v10-pi-phase-summary.json`, explicitly labeled
+as a summary rather than a raw-report export.
+
+| Phase | Delivered FPS | Accepted time | Frame p95 / max | Salvos | Volley median / p95 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Destruction before | 46.24 | 97.56% | 39 / 47 ms | 26 | 323 / 351 ms |
+| Ordinary transitions | 59.39 | 99.49% | 20 / 70 ms | 60 | 317 / 4684 ms |
+| Destruction after | 47.97 | 98.57% | 35 / 43 ms | 26 | 328 / 340 ms |
+
+The transition phase reaches sector 16 through four ordinary sector changes,
+without injected refills or emergency resets. It creates 39 effects and has
+clear/intro/entry all observed. The 4684 ms volley-gap p95 is a whole-phase
+metric, including ordinary noncombat transitions. The unchanged source resets
+the fire timer and suppresses volleys during clear/intro and until a normal
+formation is ready. This provides an expected cause of long transition gaps;
+individual gap timestamps are not labeled in this report. It is not a
+combat-only firing-cadence metric. The median remains 317 ms, and the reference
+phases each emit 26 measured salvos.
+
+There is no observed sustained degradation in the post-transition reference
+phase: its FPS is slightly higher than before. That is a within-run observation,
+not a statistically established speed gain or long-session crash guarantee.
+The unlimited-refill stress phases keep up to sixteen effects active; their
+46–48 FPS is reported separately from the ordinary-transition phase's near
+60 FPS. The test does not establish 60 FPS for a whole normal campaign.
+
+Cumulative decoded hull loads are 6 / 39 / 45 and unused hull evictions are
+0 / 31 / 37. Retained hull entries are 6 / 8 / 8, ending at 2,544,768 bytes,
+with no renderer failure. Fire/smoke textures grow from four to six when a
+new original size is encountered, then remain at six / 10,067,560 bytes /
+six preparations. Peak backing stores are 6,034,248 / 5,555,808 / 6,060,744
+bytes. DPR and source resolution remain unchanged.
+
+Fallback mounts are 2 / 33 / 7 while new hulls or textures prepare, retaining
+the original complete display. All ten sparse periodic samples contain zero
+original effect DOM; two transition samples correctly contain no active
+effect at all. Samples do not exclude temporary original-display fallbacks
+between observations. Heavy enemies keep eight pieces: the transition phase
+contains 18,920 piece draws for 4,459 effect draws. Both stress phases keep
+four pieces per effect draw.
+
+The separate, unchanged painted-hull cache grows from thirteen to its
+configured forty-eight-entry limit as new hull variants appear. Its latest
+estimated bytes are 17,648,799 after transitions and 17,637,945 after the final
+stress phase, with eight sources and zero pending jobs. This is distinct from
+the candidate renderer's eight decoded-hull cache; its growth is not hidden
+by the renderer cleanup counters. The source's existing painted-cache budget
+is forty-eight entries / 24 MiB. Four transitions do not prove long-session
+memory behavior beyond the reported bounds.
+
+Issues, blocked requests, renderer failures and fixture resets are zero.
+Candidate renderer cleanup has no active frame, registrations, source images,
+textures, cache bytes or backing-store bytes. No account, scored boss run,
+pause/resume or crash recovery was tested. The user's full visual confirmation
+belongs to v9; no separate v10 visual comment was included with this JSON.
+This completes the current isolated ordinary-block transition measurement;
+it does not promote the candidate into the public game.
