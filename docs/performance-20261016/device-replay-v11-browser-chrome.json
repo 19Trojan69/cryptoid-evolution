@@ -1,0 +1,663 @@
+{
+  "version": 1,
+  "mode": "isolated real-renderer replay",
+  "completed": true,
+  "reason": "completed",
+  "elapsedWallMs": 124046.4,
+  "warmupMs": 8000,
+  "phaseMs": 20000,
+  "phases": [
+    {
+      "name": "bounded-before-boss",
+      "label": "Explosionen vor dem Boss",
+      "fixture": "destruction",
+      "durationMs": 8000,
+      "enemies": 6,
+      "double": true,
+      "shield": true,
+      "settleMs": 1500,
+      "presentation": "bounded",
+      "wallMs": 8014.9,
+      "frames": 387,
+      "measuredFrameMs": 6498.6,
+      "acceptedSimulationMs": 6482.7,
+      "clippedSimulationMs": 15.9,
+      "over34Frames": 1,
+      "acceptedTimeRatio": 0.9976,
+      "meanDeliveredFps": 59.55,
+      "frameP50Ms": 16.7,
+      "frameP95Ms": 16.7,
+      "frameMaxMs": 49.9,
+      "frameQuantileSamples": 387,
+      "volleys": 20,
+      "volleyGapP50Ms": 316.6,
+      "volleyGapP95Ms": 333.3,
+      "simulationWorkP95Ms": 0.3,
+      "fixtureResets": 0,
+      "end": {
+        "sector": 12,
+        "phase": "FORMATION",
+        "status": "playing",
+        "enemies": 6,
+        "encounter": "normal",
+        "shots": 2,
+        "enemyShots": 1,
+        "effects": 14,
+        "shield": true,
+        "weaponLevel": 2,
+        "pickupWeaponMs": 112017.70000000056,
+        "fieldWidth": 1363,
+        "fieldHeight": 936,
+        "audioVoices": 6,
+        "destroyed": 46,
+        "lifecycle": {
+          "refills": 46,
+          "maxEffects": 16,
+          "effectEvents": 46,
+          "sectorChanges": 0,
+          "phaseFrames": {
+            "ATTACK_CYCLE": 218,
+            "FORMATION": 260
+          },
+          "samples": [
+            {
+              "atMs": 15300.699999999255,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 0,
+              "audioVoices": 8,
+              "painted": 13,
+              "estimatedBytes": 4838022,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            },
+            {
+              "atMs": 22377.60000000149,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 14,
+              "audioVoices": 7,
+              "painted": 13,
+              "estimatedBytes": 4838022,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            }
+          ]
+        },
+        "renderer": {
+          "mode": "bounded",
+          "draws": 5272,
+          "fragmentDraws": 21088,
+          "fallbacks": 0,
+          "registered": 14,
+          "sourceImages": 4,
+          "imageBytes": 1272384,
+          "textures": 4,
+          "textureBytes": 515052,
+          "preparationCount": 4,
+          "hullLoads": 4,
+          "hullEvictions": 0,
+          "retainedHullUsers": 2,
+          "surfaceBytes": 800052,
+          "surfaceBox": {
+            "left": 412,
+            "top": 238,
+            "right": 963,
+            "bottom": 601
+          },
+          "fieldWidth": 1363,
+          "fieldHeight": 936,
+          "surfaceResizes": 17,
+          "maxSurfaceBytes": 800052,
+          "dpr": 1,
+          "drawWorkP95Ms": 0.8,
+          "failures": [],
+          "samples": [
+            {
+              "atMs": 18312,
+              "registeredEffects": 14,
+              "surfaceBox": {
+                "left": 412,
+                "top": 238,
+                "right": 963,
+                "bottom": 555
+              },
+              "surfaceBytes": 698668,
+              "dpr": 1,
+              "proxyEffects": 14,
+              "originalEffects": 0
+            },
+            {
+              "atMs": 21316,
+              "registeredEffects": 14,
+              "surfaceBox": {
+                "left": 412,
+                "top": 238,
+                "right": 963,
+                "bottom": 601
+              },
+              "surfaceBytes": 800052,
+              "dpr": 1,
+              "proxyEffects": 14,
+              "originalEffects": 0
+            }
+          ],
+          "coverage": "Original full-resolution hull images, original seeded polygon/flight props, original fire/smoke CSS artwork and timing. One shared DPR-sized Canvas; no effect, piece, audio or simulation omission. SVG prepares static fire/smoke textures only; animation and clipping are Canvas draws. DOM samples do not prove pixel visibility."
+        }
+      }
+    },
+    {
+      "name": "bounded-boss-cycle",
+      "label": "Boss, Pause und Rückkehr ins Spiel",
+      "fixture": "boss-cycle",
+      "durationMs": 100000,
+      "enemies": 6,
+      "double": true,
+      "shield": true,
+      "settleMs": 1500,
+      "presentation": "bounded",
+      "wallMs": 100011.3,
+      "frames": 5307,
+      "measuredFrameMs": 89430.3,
+      "acceptedSimulationMs": 88788.7,
+      "clippedSimulationMs": 641.6,
+      "over34Frames": 12,
+      "acceptedTimeRatio": 0.9928,
+      "meanDeliveredFps": 59.34,
+      "frameP50Ms": 16.7,
+      "frameP95Ms": 16.8,
+      "frameMaxMs": 183.3,
+      "frameQuantileSamples": 4096,
+      "volleys": 136,
+      "volleyGapP50Ms": 316.6,
+      "volleyGapP95Ms": 333.3,
+      "simulationWorkP95Ms": 0.3,
+      "fixtureResets": 0,
+      "end": {
+        "sector": 23,
+        "phase": "ATTACK_CYCLE",
+        "status": "playing",
+        "enemies": 2,
+        "encounter": "normal",
+        "shots": 6,
+        "enemyShots": 0,
+        "effects": 4,
+        "shield": true,
+        "weaponLevel": 2,
+        "pickupWeaponMs": 74192.69999999994,
+        "fieldWidth": 1363,
+        "fieldHeight": 936,
+        "audioVoices": 2,
+        "destroyed": 36,
+        "lifecycle": {
+          "refills": 0,
+          "maxEffects": 6,
+          "effectEvents": 62,
+          "sectorChanges": 4,
+          "phaseFrames": {
+            "ATTACK_CYCLE": 886,
+            "FORMATION": 1181,
+            "SECTOR_INTRO": 616,
+            "ENTRY": 1272,
+            "SECTOR_CLEAR": 1442
+          },
+          "samples": [
+            {
+              "atMs": 23313,
+              "sector": 19,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 0,
+              "audioVoices": 6,
+              "painted": 13,
+              "estimatedBytes": 4838022,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            },
+            {
+              "atMs": 122888.69999999925,
+              "sector": 23,
+              "phase": "FORMATION",
+              "enemies": 2,
+              "effects": 4,
+              "audioVoices": 4,
+              "painted": 48,
+              "estimatedBytes": 17703937,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            }
+          ]
+        },
+        "bossCycle": {
+          "encounterFrames": {
+            "normal": 1991,
+            "boss-intro": 294,
+            "boss-fight": 789,
+            "boss-clear": 729,
+            "bonus": 1594
+          },
+          "trace": [
+            {
+              "atMs": 23313,
+              "encounter": "normal",
+              "sector": 19
+            },
+            {
+              "atMs": 35356,
+              "encounter": "boss-intro",
+              "sector": 20
+            },
+            {
+              "atMs": 40304,
+              "encounter": "boss-fight",
+              "sector": 20
+            },
+            {
+              "atMs": 58073,
+              "encounter": "boss-clear",
+              "sector": 20
+            },
+            {
+              "atMs": 70264,
+              "encounter": "bonus",
+              "sector": 20
+            },
+            {
+              "atMs": 97058,
+              "encounter": "normal",
+              "sector": 21
+            }
+          ],
+          "effectKinds": {
+            "explosion": 29,
+            "shatter": 6,
+            "turret-hit": 22,
+            "turret-burst": 3,
+            "boss-fall": 1,
+            "boss-explosion": 1
+          },
+          "turretShotsMax": 9,
+          "coreVolleysMax": 1,
+          "heartCollected": true,
+          "postBossFrames": 1278,
+          "pause": {
+            "supported": true,
+            "history": [
+              {
+                "kind": "boss",
+                "startedAt": 44206,
+                "resumeRequestedAt": 45717.8,
+                "resumedAt": 48735.300000000745,
+                "timersFrozen": true,
+                "canvasFrozen": true,
+                "activeEffects": 0
+              },
+              {
+                "kind": "post-boss-effects",
+                "startedAt": 101166.10000000149,
+                "resumeRequestedAt": 102672,
+                "resumedAt": 105689.30000000075,
+                "timersFrozen": true,
+                "canvasFrozen": true,
+                "activeEffects": 1
+              }
+            ],
+            "kind": "post-boss-effects",
+            "requested": true,
+            "resumed": true,
+            "timersFrozen": true,
+            "canvasFrozen": true,
+            "startedAt": 101166.10000000149,
+            "activeEffects": 1,
+            "resumeRequestedAt": 102672,
+            "resumedAt": 105689.30000000075
+          }
+        },
+        "renderer": {
+          "mode": "bounded",
+          "draws": 4131,
+          "fragmentDraws": 17600,
+          "fallbacks": 35,
+          "registered": 4,
+          "sourceImages": 8,
+          "imageBytes": 2544768,
+          "textures": 6,
+          "textureBytes": 1121068,
+          "preparationCount": 6,
+          "hullLoads": 39,
+          "hullEvictions": 31,
+          "retainedHullUsers": 4,
+          "surfaceBytes": 772992,
+          "surfaceBox": {
+            "left": 345,
+            "top": 116,
+            "right": 833,
+            "bottom": 512
+          },
+          "fieldWidth": 1363,
+          "fieldHeight": 936,
+          "surfaceResizes": 43,
+          "maxSurfaceBytes": 1207808,
+          "dpr": 1,
+          "drawWorkP95Ms": 0.5,
+          "failures": [],
+          "samples": [
+            {
+              "atMs": 26325,
+              "registeredEffects": 5,
+              "surfaceBox": {
+                "left": 352,
+                "top": 94,
+                "right": 1006,
+                "bottom": 542
+              },
+              "surfaceBytes": 1171968,
+              "dpr": 1,
+              "proxyEffects": 5,
+              "originalEffects": 0
+            },
+            {
+              "atMs": 29326,
+              "registeredEffects": 1,
+              "surfaceBox": {
+                "left": 352,
+                "top": 94,
+                "right": 1026,
+                "bottom": 542
+              },
+              "surfaceBytes": 1207808,
+              "dpr": 1,
+              "proxyEffects": 1,
+              "originalEffects": 0
+            },
+            {
+              "atMs": 32342,
+              "registeredEffects": 4,
+              "surfaceBox": {
+                "left": 398,
+                "top": 84,
+                "right": 992,
+                "bottom": 534
+              },
+              "surfaceBytes": 1069200,
+              "dpr": 1,
+              "proxyEffects": 4,
+              "originalEffects": 0
+            },
+            {
+              "atMs": 35357,
+              "registeredEffects": 2,
+              "surfaceBox": {
+                "left": 349,
+                "top": 84,
+                "right": 1015,
+                "bottom": 534
+              },
+              "surfaceBytes": 1198800,
+              "dpr": 1,
+              "proxyEffects": 2,
+              "originalEffects": 0
+            }
+          ],
+          "coverage": "Original full-resolution hull images, original seeded polygon/flight props, original fire/smoke CSS artwork and timing. One shared DPR-sized Canvas; no effect, piece, audio or simulation omission. SVG prepares static fire/smoke textures only; animation and clipping are Canvas draws. DOM samples do not prove pixel visibility."
+        }
+      }
+    },
+    {
+      "name": "bounded-after-boss",
+      "label": "Explosionen nach dem Boss",
+      "fixture": "destruction",
+      "durationMs": 8000,
+      "enemies": 6,
+      "double": true,
+      "shield": true,
+      "settleMs": 1500,
+      "presentation": "bounded",
+      "wallMs": 8014.9,
+      "frames": 388,
+      "measuredFrameMs": 6498.6,
+      "acceptedSimulationMs": 6498.6,
+      "clippedSimulationMs": 0,
+      "over34Frames": 0,
+      "acceptedTimeRatio": 1,
+      "meanDeliveredFps": 59.71,
+      "frameP50Ms": 16.7,
+      "frameP95Ms": 16.8,
+      "frameMaxMs": 33.3,
+      "frameQuantileSamples": 388,
+      "volleys": 20,
+      "volleyGapP50Ms": 316.6,
+      "volleyGapP95Ms": 333.4,
+      "simulationWorkP95Ms": 0.3,
+      "fixtureResets": 0,
+      "end": {
+        "sector": 12,
+        "phase": "FORMATION",
+        "status": "playing",
+        "enemies": 6,
+        "encounter": "normal",
+        "shots": 2,
+        "enemyShots": 1,
+        "effects": 14,
+        "shield": true,
+        "weaponLevel": 2,
+        "pickupWeaponMs": 112101,
+        "fieldWidth": 1363,
+        "fieldHeight": 936,
+        "audioVoices": 8,
+        "destroyed": 46,
+        "lifecycle": {
+          "refills": 46,
+          "maxEffects": 16,
+          "effectEvents": 46,
+          "sectorChanges": 0,
+          "phaseFrames": {
+            "ATTACK_CYCLE": 221,
+            "FORMATION": 251
+          },
+          "samples": [
+            {
+              "atMs": 123324.39999999851,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 0,
+              "audioVoices": 2,
+              "painted": 48,
+              "estimatedBytes": 17703937,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            },
+            {
+              "atMs": 130422.30000000075,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 14,
+              "audioVoices": 7,
+              "painted": 48,
+              "estimatedBytes": 17737261,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            }
+          ]
+        },
+        "renderer": {
+          "mode": "bounded",
+          "draws": 5192,
+          "fragmentDraws": 20768,
+          "fallbacks": 4,
+          "registered": 14,
+          "sourceImages": 8,
+          "imageBytes": 2544768,
+          "textures": 6,
+          "textureBytes": 1121068,
+          "preparationCount": 6,
+          "hullLoads": 43,
+          "hullEvictions": 35,
+          "retainedHullUsers": 2,
+          "surfaceBytes": 796980,
+          "surfaceBox": {
+            "left": 408,
+            "top": 238,
+            "right": 963,
+            "bottom": 597
+          },
+          "fieldWidth": 1363,
+          "fieldHeight": 936,
+          "surfaceResizes": 14,
+          "maxSurfaceBytes": 796980,
+          "dpr": 1,
+          "drawWorkP95Ms": 0.6,
+          "failures": [],
+          "samples": [
+            {
+              "atMs": 126340,
+              "registeredEffects": 12,
+              "surfaceBox": {
+                "left": 408,
+                "top": 238,
+                "right": 956,
+                "bottom": 554
+              },
+              "surfaceBytes": 692672,
+              "dpr": 1,
+              "proxyEffects": 12,
+              "originalEffects": 0
+            },
+            {
+              "atMs": 129355,
+              "registeredEffects": 15,
+              "surfaceBox": {
+                "left": 408,
+                "top": 238,
+                "right": 963,
+                "bottom": 597
+              },
+              "surfaceBytes": 796980,
+              "dpr": 1,
+              "proxyEffects": 15,
+              "originalEffects": 0
+            }
+          ],
+          "coverage": "Original full-resolution hull images, original seeded polygon/flight props, original fire/smoke CSS artwork and timing. One shared DPR-sized Canvas; no effect, piece, audio or simulation omission. SVG prepares static fire/smoke textures only; animation and clipping are Canvas draws. DOM samples do not prove pixel visibility."
+        }
+      }
+    }
+  ],
+  "issues": [],
+  "coverage": {
+    "clock": "Actual GamePage frameGap and delta; its 34 ms cap is unchanged",
+    "rendering": "Real React/DOM/CSS/canvas, hull preparation and original assets",
+    "fixtures": "Controlled lives/one-hit enemies and automatic aiming; real shot collisions, explosions and normal block transitions; no scored/account run",
+    "samples": "Frame and work quantiles retain at most 4096 values per phase",
+    "account": "No Pi login or real account/API access; separate preview origin",
+    "presentation": "Complete bounded normal-effect renderer around the original sector-20 boss display. Starts at sector 19; real shots destroy guns and exposed hull, ordinary fall/blast/victory/heart/bonus/normal transitions continue. Controlled lives, one-hit normal enemies, weakened remaining boss health after eight seconds of firing, automatic aiming/heart collection. No forced boss defeat, skipped bonus, account, score or reward API. Original pause/resume controls are clicked twice by test scaffolding, during the boss fight and with active normal Canvas effects after returning; 1500 ms hold plus original three-second countdown, frozen simulation timers and Canvas draw counter checked. Paused intervals are excluded from frame/work/cadence samples. Not a normal difficulty, manual input recovery or full-campaign test; original special boss artwork/audio/timing unchanged."
+  },
+  "rendererCleanup": {
+    "activeDrawFrame": false,
+    "registeredEffects": 0,
+    "sourceImages": 0,
+    "textureEntries": 0,
+    "cacheBytes": 0,
+    "surfaceBytes": 0
+  },
+  "build": {
+    "id": "device-replay-20261018-v11-boss",
+    "gameCommit": "27d174788327c3423f04ace32be61af67a2004cc",
+    "gameSourceSha256": "eb628a5d73247ea64ec5443d2ff4efdab071a97228634f16f2aa915cdc832607",
+    "audioSourceSha256": "e6720dc0abc59d75a56bf10118c6b86ada07d77bf45abb9b4717356f34dab7ac",
+    "stylesSourceSha256": "2236b2143e8cdc5b6045cda16266ddfe774d957d89b4969193f9265ad141f0a7"
+  },
+  "device": {
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+    "viewport": {
+      "width": 1363,
+      "height": 936
+    },
+    "pixelRatio": 1,
+    "visibility": "visible",
+    "sound": true
+  },
+  "blockedRequests": []
+}

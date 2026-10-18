@@ -17,3 +17,8 @@ export const CAMPAIGN_PHASES=[
   {name:'bounded-block-transitions',label:'Mehrere automatische Blockwechsel',fixture:'transitions',durationMs:45000},
   {name:'bounded-after-blocks',label:'Explosionen nach den Blockwechseln',fixture:'destruction',durationMs:10000},
 ].map(phase=>({...phase,enemies:6,double:true,shield:true,settleMs:1500,presentation:'bounded'}));
+export const BOSS_PHASES=[
+  {name:'bounded-before-boss',label:'Explosionen vor dem Boss',fixture:'destruction',durationMs:8000},
+  {name:'bounded-boss-cycle',label:'Boss, Pause und Rückkehr ins Spiel',fixture:'boss-cycle',durationMs:100000},
+  {name:'bounded-after-boss',label:'Explosionen nach dem Boss',fixture:'destruction',durationMs:8000},
+].map(phase=>({...phase,enemies:6,double:true,shield:true,settleMs:1500,presentation:'bounded'}));

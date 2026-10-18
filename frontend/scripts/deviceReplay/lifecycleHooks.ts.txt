@@ -2,11 +2,12 @@
   useEffect(() => {
     const host=(window as any).__cryptoidDeviceReplay;
     if(!host)return;
-    let refills=0,maxEffects=0,effectEvents=0,sectorChanges=0,lastSector=12;
+    let refills=0,maxEffects=0,effectEvents=0,sectorChanges=0,lastSector=12,fixtureSector=12;
+    let bossCycle:any=null,pauseCheck:any=null,lastEncounter='',previousEffectKinds=new Set<number>();
     let previousEffects=new Set<number>(),phaseFrames:Record<string,number>={},samples:any[]=[],lastSample=0;
     const readyEnemy=(index:number,slots:any[],fragile:boolean)=>{
       const {width}=fieldSizeRef.current;
-      const enemy=spawnAsteroid(nextIdRef.current++,width,visibleTopRef.current,index,12,slots);
+      const enemy=spawnAsteroid(nextIdRef.current++,width,visibleTopRef.current,index,fixtureSector,slots);
       enemy.entryElapsed=enemy.entryDuration;enemy.formationElapsed=enemy.formationDuration;
       enemy.x=slots[index].x;enemy.y=slots[index].y;
       enemy.health=enemy.maxHealth=fragile?1:1000000;
@@ -18,18 +19,22 @@
       host.workload?.start(mode);
       host.layers?.start(mode);
       host.renderer?.start(mode);
-      refills=maxEffects=effectEvents=sectorChanges=0;lastSector=12;
+      fixtureSector=mode.fixture==='boss-cycle'?19:12;
+      refills=maxEffects=effectEvents=sectorChanges=0;lastSector=fixtureSector;
+      bossCycle=mode.fixture==='boss-cycle'?{encounterFrames:{},trace:[],effectKinds:{},turretShotsMax:0,coreVolleysMax:0,heartCollected:false,postBossFrames:0}:null;
+      pauseCheck=bossCycle?{supported:typeof document.querySelector==='function',history:[],requested:false,resumed:false,timersFrozen:null,canvasFrozen:null}:null;
+      lastEncounter='';previousEffectKinds=new Set();
       previousEffects=new Set();phaseFrames={};samples=[];lastSample=0;
       const {width,height}=fieldSizeRef.current,s=createInitialState();
-      const slots=createFormationSlots(12,12,width,height,visibleTopRef.current,playerDiameterRef.current);
-      Object.assign(s,{sector:12,section:12,chainBlocks:1,status:'playing',phase:'ATTACK_CYCLE',
+      const slots=createFormationSlots(fixtureSector,fixtureSector,width,height,visibleTopRef.current,playerDiameterRef.current);
+      Object.assign(s,{sector:fixtureSector,section:fixtureSector,chainBlocks:bossCycle?8:1,status:'playing',phase:'ATTACK_CYCLE',
         encounter:'normal',hearts:3,maxHearts:3,projectileGuard:100000,player:{x:.25,y:.86},
         weaponLevel:2,weaponSource:'pickup',weaponCap:2,pickupWeaponLevel:2,pickupWeaponMs:120000,
         shieldActive:true,shieldCharges:1,shieldMs:120000,
         powerUpTypes:['shield','overdrive','weapon','rapid']});
       s.asteroids=Array.from({length:6},(_,i)=>readyEnemy(i,slots,mode.fixture!=='fixed'));
       stateRef.current=s;adminRunRef.current=true;scoreRunRef.current=null;
-      formationIndexRef.current=blockFlights(12,rulesVersionRef.current)[0];
+      formationIndexRef.current=blockFlights(fixtureSector,rulesVersionRef.current)[0];
       formationOffsetRef.current=0;flightRef.current=0;formationStartedRef.current=true;
       sectionSlotsRef.current=slots;sectionElapsedRef.current=20000;clearTimerRef.current=0;
       spawnTimerRef.current=0;attackCooldownRef.current=0;fireTimerRef.current=0;
@@ -42,18 +47,65 @@
     const read=()=>{
       const s=stateRef.current;
       return {sector:s.sector,phase:s.phase,status:s.status,enemies:s.asteroids.length,
+        encounter:s.encounter,
         shots:s.shots.length,enemyShots:s.enemyShots.length,effects:s.effects.length,
         shield:s.shieldActive&&s.shieldMs>0,weaponLevel:s.weaponLevel,pickupWeaponMs:s.pickupWeaponMs,
         fieldWidth:fieldSizeRef.current.width,fieldHeight:fieldSizeRef.current.height,
         audioVoices:soundRef.current?.activeVoiceCount??0,destroyed:s.destroyed,
         lifecycle:{refills,maxEffects,effectEvents,sectorChanges,phaseFrames,samples},
+        ...(bossCycle?{bossCycle:{...bossCycle,pause:{...pauseCheck,before:undefined,pausedDraws:undefined}}}:{}),
         ...(host.presentation?{presentation:host.presentation.read()}: {}),
         ...(host.workload?{workload:host.workload.read()}: {}),
         ...(host.layers?{layers:host.layers.read()}: {}),
         ...(host.renderer?{renderer:host.renderer.read()}: {})};
     };
+    const pauseFingerprint=()=>JSON.stringify({sector:stateRef.current.sector,encounter:stateRef.current.encounter,phase:stateRef.current.phase,
+      player:stateRef.current.player,weapon:stateRef.current.pickupWeaponMs,shield:stateRef.current.shieldMs,
+      bossElapsed:stateRef.current.boss?.elapsed,bossHealth:stateRef.current.boss?.health,
+      turrets:stateRef.current.boss?.turrets.map(g=>g.health),shots:stateRef.current.shots.map(s=>[s.x,s.y])});
+    const expectedPause=(time:number)=>!!pauseCheck?.requested&&!pauseCheck.resumed&&time-pauseCheck.startedAt<8000;
+    const requestPause=(kind:string,time:number)=>{
+      if(!pauseCheck?.supported||pauseCheck.requested&&!pauseCheck.resumed)return false;
+      const button=document.querySelector('.pause-control') as HTMLButtonElement|null;
+      if(!button||button.disabled)return false;
+      pauseCheck={supported:true,history:pauseCheck.history,kind,requested:true,resumed:false,timersFrozen:null,canvasFrozen:null,startedAt:time,before:pauseFingerprint()};
+      button.click();return true;
+    };
+    const pauseTick=(time:number)=>{
+      if(!pauseCheck||!expectedPause(time))return;
+      if(pauseCheck.pausedDraws===undefined){const render=host.renderer?.read();pauseCheck.pausedDraws=render?.draws;pauseCheck.activeEffects=render?.registered??0;}
+      if(time-pauseCheck.startedAt>=1500&&!pauseCheck.resumeRequestedAt){
+        pauseCheck.timersFrozen=pauseFingerprint()===pauseCheck.before;
+        pauseCheck.canvasFrozen=host.renderer?.read().draws===pauseCheck.pausedDraws;
+        const resume=document.querySelector('.pause-resume-button') as HTMLButtonElement|null;
+        if(resume&&!resume.disabled){pauseCheck.resumeRequestedAt=time;resume.click();}
+      }
+    };
+    const validatePhase=(mode:any)=>{
+      if(mode.fixture!=='boss-cycle')return [];
+      const missing=[];
+      for(const encounter of ['boss-intro','boss-fight','boss-clear','bonus'])if(!bossCycle.encounterFrames[encounter])missing.push('Missing boss encounter: '+encounter);
+      for(const kind of ['turret-burst','boss-fall','boss-explosion'])if(!bossCycle.effectKinds[kind])missing.push('Missing real boss effect: '+kind);
+      if(!bossCycle.turretShotsMax||!bossCycle.coreVolleysMax)missing.push('Boss turret/core firing not observed');
+      if(!bossCycle.heartCollected||bossCycle.postBossFrames<60)missing.push('Boss reward/bonus/normal return incomplete');
+      if(pauseCheck.supported&&(!pauseCheck.resumed||pauseCheck.history.length!==2||pauseCheck.history.some(p=>!p.timersFrozen||!p.canvasFrozen)||!pauseCheck.history.find(p=>p.kind==='post-boss-effects'&&p.activeEffects>0)))missing.push('Expected boss/active-effect pause-resume verification incomplete');
+      return missing;
+    };
     const sustain=(mode:any)=>{
-      const s=stateRef.current,{width}=fieldSizeRef.current,time=performance.now();
+      const s=stateRef.current,{width,height}=fieldSizeRef.current,time=performance.now();
+      if(bossCycle){
+        bossCycle.encounterFrames[s.encounter]=(bossCycle.encounterFrames[s.encounter]??0)+1;
+        if(s.encounter!==lastEncounter&&bossCycle.trace.length<24){bossCycle.trace.push({atMs:Math.round(time),encounter:s.encounter,sector:s.sector});lastEncounter=s.encounter;}
+        for(const e of s.effects)if(!previousEffectKinds.has(e.id))bossCycle.effectKinds[e.kind]=(bossCycle.effectKinds[e.kind]??0)+1;
+        previousEffectKinds=new Set(s.effects.map(e=>e.id));
+        if(s.bossHeartCollected)bossCycle.heartCollected=true;
+        if(s.encounter==='normal'&&s.sector>20)bossCycle.postBossFrames++;
+        if(pauseCheck.requested&&!pauseCheck.resumed){pauseCheck.resumed=true;pauseCheck.resumedAt=time;pauseCheck.history.push({kind:pauseCheck.kind,startedAt:pauseCheck.startedAt,resumeRequestedAt:pauseCheck.resumeRequestedAt,resumedAt:time,timersFrozen:pauseCheck.timersFrozen,canvasFrozen:pauseCheck.canvasFrozen,activeEffects:pauseCheck.activeEffects});}
+        if(s.boss){
+          bossCycle.turretShotsMax=Math.max(bossCycle.turretShotsMax,s.boss.turrets.reduce((n,g)=>n+g.shots,0));
+          bossCycle.coreVolleysMax=Math.max(bossCycle.coreVolleysMax,s.boss.core?.volley??0);
+        }
+      }
       host.presentation?.sample();
       host.workload?.sample();
       host.layers?.sample();
@@ -73,6 +125,9 @@
       }
       s.hearts=s.maxHearts=3;s.projectileGuard=100000;
       s.shieldActive=true;s.shieldCharges=1;s.shieldMs=120000;
+      if(bossCycle&&s.encounter==='normal'&&s.sector>20&&pauseCheck.supported&&pauseCheck.history.length===1&&host.renderer?.read().registered>0){
+        if(requestPause('post-boss-effects',time))return false;
+      }
       if(mode.fixture==='fixed'){
         for(const enemy of s.asteroids)enemy.health=enemy.maxHealth=1000000;
       }else{
@@ -82,6 +137,27 @@
         const target=s.asteroids.find(e=>e.entryElapsed>=e.entryDuration&&e.formationElapsed>=e.formationDuration);
         if(target){s.player.x=Math.max(.1,Math.min(.9,target.x/width));
           playerShipRef.current?.style.setProperty('left',`${s.player.x*100}%`);}
+        if(bossCycle&&s.encounter==='boss-fight'&&s.boss){
+          const b=s.boss;
+          if(b.elapsed>=BOSS_ENTRY_MS+2000&&pauseCheck.supported&&!pauseCheck.requested){
+            if(requestPause('boss',time))return false;
+          }
+          // Leave eight seconds of ordinary boss firing, then lower remaining
+          // health only. Real emitted shots must still collide with every gun.
+          if(b.elapsed>=BOSS_ENTRY_MS+8000)for(const gun of b.turrets)gun.health=Math.min(gun.health,1);
+          if((b.core?.volley??0)>0)b.health=Math.min(b.health,1);
+          const index=b.turrets.findIndex(g=>g.health>0);
+          const travelMs=Math.max(0,(s.player.y*height-23-b.y)/.64);
+          const predicted=moveSectorBoss(b,travelMs,width,height);
+          const point=index>=0?gunPosition(predicted,bossWeapons[b.config.id-1][index]):{x:predicted.x,y:predicted.y};
+          const first=makeShipVolley(shipSelectionRef.current.skin.id,shipStageRef.current,s.weaponLevel,0,0,false,()=>0)[0];
+          s.player.x=Math.max(.1,Math.min(.9,(point.x-(first?.x??0))/width));
+          playerShipRef.current?.style.setProperty('left',`${s.player.x*100}%`);
+        }
+        if(bossCycle&&s.encounter==='boss-clear'){
+          s.player={...BOSS_HEART_POSITION};lastPlayerRef.current={...s.player};
+          playerShipRef.current?.style.setProperty('left',`${s.player.x*100}%`);playerShipRef.current?.style.setProperty('top',`${s.player.y*100}%`);
+        }else if(bossCycle&&s.player.y!==.86){s.player.y=.86;playerShipRef.current?.style.setProperty('top','86%');}
         if(mode.fixture==='destruction'&&s.asteroids.length<6&&s.phase!=='SECTOR_CLEAR'){
           const slots=sectionSlotsRef.current!;
           const occupied=new Set(s.asteroids.map(e=>e.formationSlot));
@@ -92,5 +168,5 @@
       }
       return false;
     };
-    return host.install({start,read,sustain});
+    return host.install({start,read,sustain,expectedPause,pauseTick,validatePhase});
   },[]);

@@ -26,6 +26,7 @@ export function createDeviceReplay({ now = () => performance.now(), phases = REP
   };
   const closePhase = time => {
     if (index < 0 || !bucket) return;
+    for(const issue of (api?.validatePhase?.(phases[index])??[]).slice(0,8))issues.push(String(issue));
     const raw = bucket.rawMs;
     results.push({ ...phases[index], wallMs: +(time-phaseStarted).toFixed(3), frames: bucket.frames,
       measuredFrameMs: +raw.toFixed(3), acceptedSimulationMs: +bucket.acceptedMs.toFixed(3),
@@ -75,11 +76,17 @@ export function createDeviceReplay({ now = () => performance.now(), phases = REP
     },
     afterFrame(time, simulationWorkMs) {
       if (!active || !api) return;
-      if (api.read().status !== 'playing') { finish('game-interrupted',time); return; }
+      if (api.read().status !== 'playing') {
+        if(api.read().status==='paused'&&api.expectedPause?.(time)){
+          api.pauseTick?.(time);if(bucket)bucket.lastVolley=null;
+          if(time-lastProgress>=1000)emit(time);return;
+        }
+        finish('game-interrupted',time); return;
+      }
       if (measuring(time)) append(bucket.work,simulationWorkMs,4096);
       if (index < 0 ? time-started >= warmupMs : time-phaseStarted >= (phases[index].durationMs??phaseMs)) {
         closePhase(time); bucket = null; index++;
-        if (index === phases.length) { finish('completed',time); return; }
+        if (index === phases.length) { finish(issues.length?'coverage-incomplete':'completed',time); return; }
         phaseStarted = time; bucket = fresh(); api.start(phases[index]);
       }
       const mode = phases[Math.max(0,index)];

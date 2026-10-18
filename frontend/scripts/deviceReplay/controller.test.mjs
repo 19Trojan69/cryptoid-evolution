@@ -65,3 +65,23 @@ test('per-phase settling is excluded from clock, work and volley statistics',()=
   assert.equal(p.frames,2);assert.equal(p.measuredFrameMs,100);assert.equal(p.volleys,2);
   assert.equal(p.clippedSimulationMs,32);assert.equal(p.volleyGapP95Ms,50);
 });
+
+test('only an explicitly expected pause is tolerated; paused frames are excluded',()=>{
+  let status='playing',time=0,ticks=0;const reports=[];
+  const r=createDeviceReplay({now:()=>time,warmupMs:0,phases:[{name:'pause',durationMs:1000}],onFinish:x=>reports.push(x)});
+  r.install({start(){},read:()=>({status}),sustain:()=>false,expectedPause:()=>time<150,pauseTick:()=>ticks++});
+  time=10;r.afterFrame(time,0);time=30;r.clock(time,20,20);r.afterFrame(time,0);
+  status='paused';time=80;r.afterFrame(time,0);assert.equal(reports.length,0);assert.equal(ticks,1);
+  status='playing';time=100;r.clock(time,0,0);r.afterFrame(time,0);
+  status='paused';time=160;r.afterFrame(time,0);
+  assert.equal(reports[0].reason,'game-interrupted');assert.equal(reports[0].phases[0].measuredFrameMs,20);
+});
+
+test('elapsed test duration cannot claim completed boss coverage when milestones are missing',()=>{
+  let time=0;const reports=[];
+  const r=createDeviceReplay({now:()=>time,warmupMs:0,phases:[{name:'boss',durationMs:100}],onFinish:x=>reports.push(x)});
+  r.install({start(){},read:()=>({status:'playing'}),sustain:()=>false,validatePhase:()=>['Boss return not reached']});
+  time=10;r.afterFrame(time,0);time=110;r.afterFrame(time,0);
+  assert.equal(reports[0].completed,false);assert.equal(reports[0].reason,'coverage-incomplete');
+  assert.deepEqual(reports[0].issues,['Boss return not reached']);
+});

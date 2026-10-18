@@ -4,7 +4,8 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const fragments=process.env.CRYPTOID_REPLAY_PROFILE==='fragments';
 const workload=process.env.CRYPTOID_REPLAY_PROFILE==='workload';
 const layers=process.env.CRYPTOID_REPLAY_PROFILE==='layers';
-const campaign=process.env.CRYPTOID_REPLAY_PROFILE==='campaign';
+const bossCycle=process.env.CRYPTOID_REPLAY_PROFILE==='boss';
+const campaign=bossCycle||process.env.CRYPTOID_REPLAY_PROFILE==='campaign';
 const bounded=campaign||process.env.CRYPTOID_REPLAY_PROFILE==='bounded';
 const raster=bounded||process.env.CRYPTOID_REPLAY_PROFILE==='raster';
 const effects=fragments||process.env.CRYPTOID_REPLAY_PROFILE==='effects';
@@ -19,15 +20,16 @@ once('  const document = {',`  const {createDeviceReplay}=await import(path.join
   const {FRAGMENT_PHASES}=await import(path.join(__dirname,'deviceReplay/fragmentCrop.mjs'));
   const {WORKLOAD_PHASES}=await import(path.join(__dirname,'deviceReplay/effectWorkload.mjs'));
   const {LAYER_PHASES}=await import(path.join(__dirname,'deviceReplay/effectLayers.mjs'));
-  const {RASTER_PHASES,BOUNDED_PHASES,CAMPAIGN_PHASES}=await import(path.join(__dirname,'deviceReplay/rasterPhases.mjs'));
+  const {RASTER_PHASES,BOUNDED_PHASES,CAMPAIGN_PHASES,BOSS_PHASES}=await import(path.join(__dirname,'deviceReplay/rasterPhases.mjs'));
   let deviceReport;
-  host.__cryptoidDeviceReplay=createDeviceReplay({now:()=>clock,...${lifecycle?'{phases:'+(campaign?'CAMPAIGN_PHASES':bounded?'BOUNDED_PHASES':raster?'RASTER_PHASES':layers?'LAYER_PHASES':workload?'WORKLOAD_PHASES':fragments?'FRAGMENT_PHASES':effects?'EFFECT_PHASES':'LIFECYCLE_PHASES')+'}':'{}'},onFinish:r=>{deviceReport=r;}});
+  host.__cryptoidDeviceReplay=createDeviceReplay({now:()=>clock,...${lifecycle?'{phases:'+(bossCycle?'BOSS_PHASES':campaign?'CAMPAIGN_PHASES':bounded?'BOUNDED_PHASES':raster?'RASTER_PHASES':layers?'LAYER_PHASES':workload?'WORKLOAD_PHASES':fragments?'FRAGMENT_PHASES':effects?'EFFECT_PHASES':'LIFECYCLE_PHASES')+'}':'{}'},onFinish:r=>{deviceReport=r;}});
   const document = {`);
 once('  context.__GamePageFactory();',`  const entry=context.module.exports.default();
   assert.equal(entry.type,context.__GamePageFactory,'real GameEntry mounts the game');
   entry.type();`);
 once('  qa.cards();\n  qa.protect();','  // Device fixture installed by the exact effect hook; do not replace it.');
 once('      qa.protect();','      // Device fixture maintains controlled lives itself.');
+once('    crypto: webcrypto,','    crypto: webcrypto, atob, btoa,');
 once('clock = Math.min(end, clock + 16);',`clock = Math.min(end, clock + Number(process.env.CRYPTOID_REPLAY_FRAME_MS||16));`);
 // Use the same three instrumentation positions as buildDeviceReplay.mjs.
 once('source.replace("useRef({ width: 800, height: 600 })",',`source.replace('      const delta = Math.min(34, frameGap);',
@@ -36,11 +38,12 @@ once('source.replace("useRef({ width: 800, height: 600 })",',`source.replace('  
                 '            state.shots.push(...volley.slice(0, MAX_PLAYER_SHOTS - state.shots.length));\\n            (window as any).__cryptoidDeviceReplay?.volley(time);')
                 .replace("      finally { probe?.mark('phase-save-and-paint'); probe?.end(time); }",
                 "      finally { probe?.mark('phase-save-and-paint'); probe?.end(time); (window as any).__cryptoidDeviceReplay?.afterFrame(time,0); }")
+                .replace('      performanceProbeRef.current?.lifecycle(reason, error);','      console.error("Device integration interruption",reason,error); performanceProbeRef.current?.lifecycle(reason,error);')
                 .replace("useRef({ width: 800, height: 600 })",`);
 // End after a full 88-second fixture instead of continuing campaign QA.
 const cut=source.indexOf('  const emit = (type) => {');assert.ok(cut>0);
 source=source.slice(0,cut)+`
-  await advance(${campaign?75000:raster||layers||workload?60000:effects?70000:lifecycle?120000:90000});
+  await advance(${bossCycle?126000:campaign?75000:raster||layers||workload?60000:effects?70000:lifecycle?120000:90000});
   assert.ok(deviceReport,'controller finished');
   assert.equal(deviceReport.completed,true,JSON.stringify(deviceReport));
   assert.equal(deviceReport.phases.length,${layers||workload?5:raster||effects?3:4});
@@ -49,7 +52,13 @@ source=source.slice(0,cut)+`
     assert.equal(phase.fixtureResets,0,'no emergency fixture reset');
     ${lifecycle?'assert.ok(phase.end.lifecycle.samples.length<=128);assert.ok(phase.wallMs>=phase.durationMs);assert.ok(phase.wallMs<phase.durationMs+100);':"assert.equal(phase.end.sector,12);assert.equal(phase.end.enemies,phase.enemies);"}
   }
-  ${campaign?`const [before,transitions,after]=deviceReport.phases;
+  ${bossCycle?`const cycle=deviceReport.phases[1].end.bossCycle;
+  assert.ok(cycle.heartCollected&&cycle.postBossFrames>=60);
+  assert.ok(cycle.turretShotsMax>0&&cycle.coreVolleysMax>0);
+  for(const name of ['boss-intro','boss-fight','boss-clear','bonus'])assert.ok(cycle.encounterFrames[name]>0);
+  for(const kind of ['turret-burst','boss-fall','boss-explosion'])assert.ok(cycle.effectKinds[kind]>0);
+  assert.equal(cycle.pause.supported,false,'DOM controls are not available in the Node host');
+  `:campaign?`const [before,transitions,after]=deviceReport.phases;
   for(const phase of [before,after]){
     assert.ok(phase.end.destroyed>=10);assert.ok(phase.end.lifecycle.refills>=10);
     assert.equal(phase.end.sector,12);assert.equal(phase.end.lifecycle.sectorChanges,0);
