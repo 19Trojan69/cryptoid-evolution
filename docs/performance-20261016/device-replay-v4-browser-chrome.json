@@ -1,0 +1,2658 @@
+{
+  "version": 1,
+  "mode": "isolated real-renderer replay",
+  "completed": true,
+  "reason": "completed",
+  "elapsedWallMs": 68049.5,
+  "warmupMs": 8000,
+  "phaseMs": 20000,
+  "phases": [
+    {
+      "name": "destruction-original-1",
+      "label": "Explosionen · Ausgangszustand",
+      "enemies": 6,
+      "double": true,
+      "shield": true,
+      "durationMs": 20000,
+      "fixture": "destruction",
+      "presentation": "original",
+      "wallMs": 20012.2,
+      "frames": 1188,
+      "measuredFrameMs": 19995.6,
+      "acceptedSimulationMs": 19962.9,
+      "clippedSimulationMs": 32.7,
+      "over34Frames": 1,
+      "acceptedTimeRatio": 0.9984,
+      "meanDeliveredFps": 59.41,
+      "frameP50Ms": 16.7,
+      "frameP95Ms": 16.7,
+      "frameMaxMs": 66.7,
+      "frameQuantileSamples": 1188,
+      "volleys": 62,
+      "volleyGapP50Ms": 316.6,
+      "volleyGapP95Ms": 333.3,
+      "simulationWorkP95Ms": 0.3,
+      "fixtureResets": 0,
+      "end": {
+        "sector": 12,
+        "phase": "ATTACK_CYCLE",
+        "status": "playing",
+        "enemies": 5,
+        "shots": 3,
+        "enemyShots": 0,
+        "effects": 15,
+        "shield": true,
+        "weaponLevel": 2,
+        "pickupWeaponMs": 100037.10000000073,
+        "fieldWidth": 1363,
+        "fieldHeight": 936,
+        "audioVoices": 8,
+        "destroyed": 121,
+        "lifecycle": {
+          "refills": 120,
+          "maxEffects": 18,
+          "effectEvents": 120,
+          "sectorChanges": 0,
+          "phaseFrames": {
+            "ATTACK_CYCLE": 506,
+            "FORMATION": 683
+          },
+          "samples": [
+            {
+              "atMs": 15885.700000000186,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 0,
+              "audioVoices": 8,
+              "painted": 13,
+              "estimatedBytes": 4838022,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            },
+            {
+              "atMs": 35065.299999999814,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 16,
+              "audioVoices": 8,
+              "painted": 13,
+              "estimatedBytes": 4838022,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            }
+          ]
+        },
+        "presentation": {
+          "mode": "original",
+          "samples": [
+            {
+              "atMs": 18901.2,
+              "domEffects": 14,
+              "paused": "false",
+              "viewport": {
+                "width": 1363,
+                "height": 936
+              },
+              "examples": [
+                {
+                  "kind": "impact-effect explosion",
+                  "rect": {
+                    "x": 828.44,
+                    "y": 310.81,
+                    "width": 62.5,
+                    "height": 62.5
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.730831, 0, 0, 0.669928, -0.809974, -1.21496)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.705071",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.799309, 0.511737, -0.511737, 0.799309, -2.47768, -5.41921)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                },
+                {
+                  "kind": "impact-effect explosion",
+                  "rect": {
+                    "x": 825.42,
+                    "y": 310.81,
+                    "width": 62.5,
+                    "height": 62.5
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.674733, 0, 0, 0.618505, -0.628826, -0.943238)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.342582",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.979356, -0.0906088, 0.0906088, 0.979356, -1.2474, -0.365805)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                }
+              ]
+            },
+            {
+              "atMs": 21915.9,
+              "domEffects": 14,
+              "paused": "false",
+              "viewport": {
+                "width": 1363,
+                "height": 936
+              },
+              "examples": [
+                {
+                  "kind": "impact-effect shatter",
+                  "rect": {
+                    "x": 639.69,
+                    "y": 422.06,
+                    "width": 90,
+                    "height": 90
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.829384, 0, 0, 0.760269, -1.62454, -2.43682)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.821796",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.326794, 0.868654, -0.868654, 0.326794, 0.974755, -16.0115)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                },
+                {
+                  "kind": "impact-effect shatter",
+                  "rect": {
+                    "x": 636.67,
+                    "y": 422.06,
+                    "width": 90,
+                    "height": 90
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.782711, 0, 0, 0.717485, -1.40753, -2.11129)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.621424",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.864448, 0.417573, -0.417573, 0.864448, -3.88255, -5.53507)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                }
+              ]
+            },
+            {
+              "atMs": 24917.9,
+              "domEffects": 12,
+              "paused": "false",
+              "viewport": {
+                "width": 1363,
+                "height": 936
+              },
+              "examples": [
+                {
+                  "kind": "impact-effect explosion",
+                  "rect": {
+                    "x": 403.61,
+                    "y": 198.31,
+                    "width": 62.5,
+                    "height": 62.5
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.933217, 0, 0, 0.855449, -1.46351, -2.19527)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.922477",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.677902, -0.591016, 0.591016, 0.677902, -3.60062, -8.43127)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                },
+                {
+                  "kind": "impact-effect explosion",
+                  "rect": {
+                    "x": 400.42,
+                    "y": 198.31,
+                    "width": 62.5,
+                    "height": 62.5
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.905514, 0, 0, 0.830055, -1.37406, -2.06109)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.944716",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(-0.118309, 0.882177, -0.882177, -0.118309, -11.1636, -11.0903)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                }
+              ]
+            },
+            {
+              "atMs": 27923.4,
+              "domEffects": 18,
+              "paused": "false",
+              "viewport": {
+                "width": 1363,
+                "height": 936
+              },
+              "examples": [
+                {
+                  "kind": "impact-effect shatter",
+                  "rect": {
+                    "x": 629.64,
+                    "y": 422.06,
+                    "width": 90,
+                    "height": 90
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.48, 0, 0, 0.44, 0, 0)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                },
+                {
+                  "kind": "impact-effect shatter",
+                  "rect": {
+                    "x": 636.67,
+                    "y": 422.06,
+                    "width": 90,
+                    "height": 90
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.48, 0, 0, 0.44, 0, 0)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                }
+              ]
+            },
+            {
+              "atMs": 30932.9,
+              "domEffects": 14,
+              "paused": "false",
+              "viewport": {
+                "width": 1363,
+                "height": 936
+              },
+              "examples": [
+                {
+                  "kind": "impact-effect shatter",
+                  "rect": {
+                    "x": 640.03,
+                    "y": 422.06,
+                    "width": 90,
+                    "height": 90
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.933156, 0, 0, 0.855393, -2.10706, -3.16059)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.959904",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(-0.369399, 0.801392, -0.801392, -0.369399, 1.95948, -26.3615)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                },
+                {
+                  "kind": "impact-effect shatter",
+                  "rect": {
+                    "x": 636.67,
+                    "y": 422.06,
+                    "width": 90,
+                    "height": 90
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.905433, 0, 0, 0.82998, -1.97815, -2.96723)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.890914",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.469134, 0.779909, -0.779909, 0.469134, -8.74696, -12.6212)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                }
+              ]
+            },
+            {
+              "atMs": 33947.7,
+              "domEffects": 16,
+              "paused": "false",
+              "viewport": {
+                "width": 1363,
+                "height": 936
+              },
+              "examples": [
+                {
+                  "kind": "impact-effect explosion",
+                  "rect": {
+                    "x": 478.61,
+                    "y": 310.81,
+                    "width": 62.5,
+                    "height": 62.5
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.730866, 0, 0, 0.669961, -0.810089, -1.21513)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.705143",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.708128, 0.631906, -0.631906, 0.708128, 2.35371, -6.72166)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                },
+                {
+                  "kind": "impact-effect explosion",
+                  "rect": {
+                    "x": 475.42,
+                    "y": 310.81,
+                    "width": 62.5,
+                    "height": 62.5
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.674772, 0, 0, 0.618541, -0.62895, -0.943425)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.359138",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.971089, -0.149347, 0.149347, 0.971089, -1.23237, -1.24014)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                }
+              ]
+            }
+          ],
+          "maxSampleMs": 2.2,
+          "coverage": "Bounded DOM/layout/computed-CSS samples; does not measure actual pixel visibility, paint or GPU presentation"
+        }
+      }
+    },
+    {
+      "name": "destruction-hint-2",
+      "label": "Explosionen · Ebenenvergleich",
+      "enemies": 6,
+      "double": true,
+      "shield": true,
+      "durationMs": 20000,
+      "fixture": "destruction",
+      "presentation": "hint",
+      "wallMs": 20012.2,
+      "frames": 1177,
+      "measuredFrameMs": 19995.6,
+      "acceptedSimulationMs": 19915,
+      "clippedSimulationMs": 80.6,
+      "over34Frames": 4,
+      "acceptedTimeRatio": 0.996,
+      "meanDeliveredFps": 58.86,
+      "frameP50Ms": 16.7,
+      "frameP95Ms": 16.8,
+      "frameMaxMs": 66.7,
+      "frameQuantileSamples": 1177,
+      "volleys": 62,
+      "volleyGapP50Ms": 316.6,
+      "volleyGapP95Ms": 333.3,
+      "simulationWorkP95Ms": 0.3,
+      "fixtureResets": 0,
+      "end": {
+        "sector": 12,
+        "phase": "ATTACK_CYCLE",
+        "status": "playing",
+        "enemies": 6,
+        "shots": 4,
+        "enemyShots": 0,
+        "effects": 14,
+        "shield": true,
+        "weaponLevel": 2,
+        "pickupWeaponMs": 100084.99999999919,
+        "fieldWidth": 1363,
+        "fieldHeight": 936,
+        "audioVoices": 7,
+        "destroyed": 120,
+        "lifecycle": {
+          "refills": 120,
+          "maxEffects": 18,
+          "effectEvents": 120,
+          "sectorChanges": 0,
+          "phaseFrames": {
+            "ATTACK_CYCLE": 498,
+            "FORMATION": 680
+          },
+          "samples": [
+            {
+              "atMs": 35898,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 0,
+              "audioVoices": 8,
+              "painted": 13,
+              "estimatedBytes": 4838022,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            },
+            {
+              "atMs": 55061.09999999963,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 18,
+              "audioVoices": 9,
+              "painted": 13,
+              "estimatedBytes": 4838022,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            }
+          ]
+        },
+        "presentation": {
+          "mode": "hint",
+          "samples": [
+            {
+              "atMs": 38912.6,
+              "domEffects": 14,
+              "paused": "false",
+              "viewport": {
+                "width": 1363,
+                "height": 936
+              },
+              "examples": [
+                {
+                  "kind": "impact-effect explosion",
+                  "rect": {
+                    "x": 828.44,
+                    "y": 310.81,
+                    "width": 62.5,
+                    "height": 62.5
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.73095, 0, 0, 0.670038, -0.81036, -1.21554)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.77432",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.753824, -0.557664, 0.557664, 0.753824, -3.06073, -6.17685)",
+                    "filter": "none",
+                    "willChange": "transform, opacity",
+                    "hasBackground": false
+                  }
+                },
+                {
+                  "kind": "impact-effect explosion",
+                  "rect": {
+                    "x": 825.42,
+                    "y": 310.81,
+                    "width": 62.5,
+                    "height": 62.5
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.674862, 0, 0, 0.618624, -0.629243, -0.943865)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.520436",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.961163, -0.133103, 0.133103, 0.961163, -2.08973, -0.540561)",
+                    "filter": "none",
+                    "willChange": "transform, opacity",
+                    "hasBackground": false
+                  }
+                }
+              ]
+            },
+            {
+              "atMs": 41919.6,
+              "domEffects": 14,
+              "paused": "false",
+              "viewport": {
+                "width": 1363,
+                "height": 936
+              },
+              "examples": [
+                {
+                  "kind": "impact-effect shatter",
+                  "rect": {
+                    "x": 639.69,
+                    "y": 422.06,
+                    "width": 90,
+                    "height": 90
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.782415, 0, 0, 0.717214, -1.40615, -2.10923)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.80571",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.433646, 0.824446, -0.824446, 0.433646, 0.456425, -14.6512)",
+                    "filter": "none",
+                    "willChange": "transform, opacity",
+                    "hasBackground": false
+                  }
+                },
+                {
+                  "kind": "impact-effect shatter",
+                  "rect": {
+                    "x": 636.67,
+                    "y": 422.06,
+                    "width": 90,
+                    "height": 90
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.730821, 0, 0, 0.669919, -1.16625, -1.74938)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.578518",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.901874, -0.342518, 0.342518, 0.901874, -3.37847, -4.52292)",
+                    "filter": "none",
+                    "willChange": "transform, opacity",
+                    "hasBackground": false
+                  }
+                }
+              ]
+            },
+            {
+              "atMs": 44927.8,
+              "domEffects": 12,
+              "paused": "false",
+              "viewport": {
+                "width": 1363,
+                "height": 936
+              },
+              "examples": [
+                {
+                  "kind": "impact-effect explosion",
+                  "rect": {
+                    "x": 403.61,
+                    "y": 198.31,
+                    "width": 62.5,
+                    "height": 62.5
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.905584, 0, 0, 0.830119, -1.37428, -2.06142)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.914243",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.744387, -0.510104, 0.510104, 0.744387, -3.47035, -7.52633)",
+                    "filter": "none",
+                    "willChange": "transform, opacity",
+                    "hasBackground": false
+                  }
+                },
+                {
+                  "kind": "impact-effect explosion",
+                  "rect": {
+                    "x": 400.42,
+                    "y": 198.31,
+                    "width": 62.5,
+                    "height": 62.5
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.870596, 0, 0, 0.798046, -1.2613, -1.89195)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.936249",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.0244861, 0.893492, -0.893492, 0.0244861, -10.5937, -9.93306)",
+                    "filter": "none",
+                    "willChange": "transform, opacity",
+                    "hasBackground": false
+                  }
+                }
+              ]
+            },
+            {
+              "atMs": 47929.2,
+              "domEffects": 16,
+              "paused": "false",
+              "viewport": {
+                "width": 1363,
+                "height": 936
+              },
+              "examples": [
+                {
+                  "kind": "impact-effect explosion",
+                  "rect": {
+                    "x": 828.61,
+                    "y": 310.81,
+                    "width": 62.5,
+                    "height": 62.5
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.674922, 0, 0, 0.618678, -0.629435, -0.944153)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.591619",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.938373, -0.217916, 0.217916, 0.938373, -1.47438, -2.75326)",
+                    "filter": "none",
+                    "willChange": "transform, opacity",
+                    "hasBackground": false
+                  }
+                },
+                {
+                  "kind": "impact-effect explosion",
+                  "rect": {
+                    "x": 825.42,
+                    "y": 310.81,
+                    "width": 62.5,
+                    "height": 62.5
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.614551, 0, 0, 0.563338, -0.434486, -0.65173)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.0342393",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.998396, 0.0203618, -0.0203618, 0.998396, -0.15667, -0.109824)",
+                    "filter": "none",
+                    "willChange": "transform, opacity",
+                    "hasBackground": false
+                  }
+                }
+              ]
+            },
+            {
+              "atMs": 50943.6,
+              "domEffects": 14,
+              "paused": "false",
+              "viewport": {
+                "width": 1363,
+                "height": 936
+              },
+              "examples": [
+                {
+                  "kind": "impact-effect shatter",
+                  "rect": {
+                    "x": 640.03,
+                    "y": 422.06,
+                    "width": 90,
+                    "height": 90
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.730995, 0, 0, 0.670079, -1.16706, -1.7506)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.736288",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.590186, 0.737097, -0.737097, 0.590186, 0.532607, -12.027)",
+                    "filter": "none",
+                    "willChange": "transform, opacity",
+                    "hasBackground": false
+                  }
+                },
+                {
+                  "kind": "impact-effect shatter",
+                  "rect": {
+                    "x": 636.67,
+                    "y": 422.06,
+                    "width": 90,
+                    "height": 90
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.674911, 0, 0, 0.618669, -0.906287, -1.35943)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.434056",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.950021, -0.229628, 0.229628, 0.950021, -2.17673, -2.94588)",
+                    "filter": "none",
+                    "willChange": "transform, opacity",
+                    "hasBackground": false
+                  }
+                }
+              ]
+            },
+            {
+              "atMs": 53944,
+              "domEffects": 15,
+              "paused": "false",
+              "viewport": {
+                "width": 1363,
+                "height": 936
+              },
+              "examples": [
+                {
+                  "kind": "impact-effect explosion",
+                  "rect": {
+                    "x": 475.42,
+                    "y": 310.81,
+                    "width": 62.5,
+                    "height": 62.5
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "0.912297",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(1.08529, 0, 0, 1.00529, 0.391991, -3.296)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0.141197",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.636839, 0, 0, 0.60154, 0.907698, -2.26924)",
+                    "filter": "blur(2px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.987149",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(-0.465214, -0.640205, 0.640205, -0.465214, 7.83472, -22.9015)",
+                    "filter": "none",
+                    "willChange": "transform, opacity",
+                    "hasBackground": false
+                  }
+                },
+                {
+                  "kind": "impact-effect explosion",
+                  "rect": {
+                    "x": 478.44,
+                    "y": 310.81,
+                    "width": 62.5,
+                    "height": 62.5
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.48, 0, 0, 0.44, 0, 0)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "transform, opacity",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "filter": "none",
+                    "willChange": "transform, opacity",
+                    "hasBackground": false
+                  }
+                }
+              ]
+            }
+          ],
+          "maxSampleMs": 1.9,
+          "coverage": "Bounded DOM/layout/computed-CSS samples; does not measure actual pixel visibility, paint or GPU presentation"
+        }
+      }
+    },
+    {
+      "name": "destruction-original-3",
+      "label": "Explosionen · Rückvergleich",
+      "enemies": 6,
+      "double": true,
+      "shield": true,
+      "durationMs": 20000,
+      "fixture": "destruction",
+      "presentation": "original",
+      "wallMs": 20012.4,
+      "frames": 1183,
+      "measuredFrameMs": 19995.7,
+      "acceptedSimulationMs": 19979.7,
+      "clippedSimulationMs": 16,
+      "over34Frames": 1,
+      "acceptedTimeRatio": 0.9992,
+      "meanDeliveredFps": 59.16,
+      "frameP50Ms": 16.7,
+      "frameP95Ms": 16.8,
+      "frameMaxMs": 50,
+      "frameQuantileSamples": 1183,
+      "volleys": 62,
+      "volleyGapP50Ms": 316.6,
+      "volleyGapP95Ms": 333.3,
+      "simulationWorkP95Ms": 0.4,
+      "fixtureResets": 0,
+      "end": {
+        "sector": 12,
+        "phase": "ATTACK_CYCLE",
+        "status": "playing",
+        "enemies": 5,
+        "shots": 2,
+        "enemyShots": 0,
+        "effects": 16,
+        "shield": true,
+        "weaponLevel": 2,
+        "pickupWeaponMs": 100020.29999999971,
+        "fieldWidth": 1363,
+        "fieldHeight": 936,
+        "audioVoices": 9,
+        "destroyed": 122,
+        "lifecycle": {
+          "refills": 121,
+          "maxEffects": 18,
+          "effectEvents": 121,
+          "sectorChanges": 0,
+          "phaseFrames": {
+            "ATTACK_CYCLE": 498,
+            "FORMATION": 686
+          },
+          "samples": [
+            {
+              "atMs": 55912,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 0,
+              "audioVoices": 7,
+              "painted": 13,
+              "estimatedBytes": 4838022,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            },
+            {
+              "atMs": 75073.09999999963,
+              "sector": 12,
+              "phase": "ATTACK_CYCLE",
+              "enemies": 6,
+              "effects": 16,
+              "audioVoices": 9,
+              "painted": 13,
+              "estimatedBytes": 4838022,
+              "sources": 8,
+              "pending": 0,
+              "jobsStarted": 0,
+              "jobsFinished": 0,
+              "queueWaitMaxMs": 0,
+              "materialTotalMs": 0,
+              "materialMaxMs": 0,
+              "encodeTotalMs": 0,
+              "decodeTotalMs": 0,
+              "sourceWorkTotalMs": 0,
+              "sourceWorkMaxMs": 0,
+              "rockPaints": 0,
+              "rockPaintTotalMs": 0,
+              "rockPaintMaxMs": 0,
+              "blockchainRenders": 0
+            }
+          ]
+        },
+        "presentation": {
+          "mode": "original",
+          "samples": [
+            {
+              "atMs": 58924.8,
+              "domEffects": 14,
+              "paused": "false",
+              "viewport": {
+                "width": 1363,
+                "height": 936
+              },
+              "examples": [
+                {
+                  "kind": "impact-effect explosion",
+                  "rect": {
+                    "x": 828.44,
+                    "y": 310.81,
+                    "width": 62.5,
+                    "height": 62.5
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.73107, 0, 0, 0.670147, -0.810746, -1.21612)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.769398",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.893587, -0.287109, 0.287109, 0.893587, -2.74349, -3.87637)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                },
+                {
+                  "kind": "impact-effect explosion",
+                  "rect": {
+                    "x": 825.42,
+                    "y": 310.81,
+                    "width": 62.5,
+                    "height": 62.5
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.674992, 0, 0, 0.618742, -0.629661, -0.944491)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.497929",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.905701, 0.353673, -0.353673, 0.905701, -3.07095, -1.84626)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                }
+              ]
+            },
+            {
+              "atMs": 61925.1,
+              "domEffects": 14,
+              "paused": "false",
+              "viewport": {
+                "width": 1363,
+                "height": 936
+              },
+              "examples": [
+                {
+                  "kind": "impact-effect shatter",
+                  "rect": {
+                    "x": 639.69,
+                    "y": 422.06,
+                    "width": 90,
+                    "height": 90
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.782525, 0, 0, 0.717314, -1.40666, -2.10999)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.796835",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.705201, -0.611413, 0.611413, 0.705201, -1.43676, -10.9757)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                },
+                {
+                  "kind": "impact-effect shatter",
+                  "rect": {
+                    "x": 636.67,
+                    "y": 422.06,
+                    "width": 90,
+                    "height": 90
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.730941, 0, 0, 0.670029, -1.16681, -1.75021)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.569184",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.950749, -0.169171, 0.169171, 0.950749, -2.7759, -2.67676)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                }
+              ]
+            },
+            {
+              "atMs": 64939.8,
+              "domEffects": 12,
+              "paused": "false",
+              "viewport": {
+                "width": 1363,
+                "height": 936
+              },
+              "examples": [
+                {
+                  "kind": "impact-effect explosion",
+                  "rect": {
+                    "x": 403.61,
+                    "y": 198.31,
+                    "width": 62.5,
+                    "height": 62.5
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.905465, 0, 0, 0.83001, -1.3739, -2.06085)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.909294",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.122916, 0.895743, -0.895743, 0.122916, -2.2155, -13.4421)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                },
+                {
+                  "kind": "impact-effect explosion",
+                  "rect": {
+                    "x": 400.42,
+                    "y": 198.31,
+                    "width": 62.5,
+                    "height": 62.5
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.870451, 0, 0, 0.797914, -1.26083, -1.89125)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.934188",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.492735, -0.74679, 0.74679, 0.492735, -9.05609, -6.06079)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                }
+              ]
+            },
+            {
+              "atMs": 67941.6,
+              "domEffects": 18,
+              "paused": "false",
+              "viewport": {
+                "width": 1363,
+                "height": 936
+              },
+              "examples": [
+                {
+                  "kind": "impact-effect shatter",
+                  "rect": {
+                    "x": 629.8,
+                    "y": 422.06,
+                    "width": 90,
+                    "height": 90
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.550019, 0, 0, 0.504184, -0.325569, -0.488354)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.266885",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.964906, 0.211813, -0.211813, 0.964906, -0.188529, -2.80639)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                },
+                {
+                  "kind": "impact-effect shatter",
+                  "rect": {
+                    "x": 636.67,
+                    "y": 422.06,
+                    "width": 90,
+                    "height": 90
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.48, 0, 0, 0.44, 0, 0)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                }
+              ]
+            },
+            {
+              "atMs": 70942.7,
+              "domEffects": 14,
+              "paused": "false",
+              "viewport": {
+                "width": 1363,
+                "height": 936
+              },
+              "examples": [
+                {
+                  "kind": "impact-effect shatter",
+                  "rect": {
+                    "x": 640.03,
+                    "y": 422.06,
+                    "width": 90,
+                    "height": 90
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.905503, 0, 0, 0.830044, -1.97848, -2.96772)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.951403",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.292894, 0.837114, -0.837114, 0.292894, -2.21223, -18.8793)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                },
+                {
+                  "kind": "impact-effect shatter",
+                  "rect": {
+                    "x": 636.67,
+                    "y": 422.06,
+                    "width": 90,
+                    "height": 90
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.870497, 0, 0, 0.797956, -1.81571, -2.72356)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.871152",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.82546, -0.39686, 0.39686, 0.82546, -6.87711, -6.70892)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                }
+              ]
+            },
+            {
+              "atMs": 73956.8,
+              "domEffects": 16,
+              "paused": "false",
+              "viewport": {
+                "width": 1363,
+                "height": 936
+              },
+              "examples": [
+                {
+                  "kind": "impact-effect explosion",
+                  "rect": {
+                    "x": 478.61,
+                    "y": 310.81,
+                    "width": 62.5,
+                    "height": 62.5
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.674901, 0, 0, 0.618659, -0.629367, -0.944051)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.666016",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.889157, -0.347137, 0.347137, 0.889157, 0.697398, -4.49771)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                },
+                {
+                  "kind": "impact-effect explosion",
+                  "rect": {
+                    "x": 475.42,
+                    "y": 310.81,
+                    "width": 62.5,
+                    "height": 62.5
+                  },
+                  "intersectsViewport": true,
+                  "root": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "none",
+                    "animationPlayState": "running",
+                    "animationDuration": "0s",
+                    "transform": "none",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  },
+                  "fire": {
+                    "opacity": "1",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "enemy-destruction-fire",
+                    "animationPlayState": "running",
+                    "animationDuration": "0.88s",
+                    "transform": "matrix(0.614528, 0, 0, 0.563317, -0.434414, -0.651621)",
+                    "filter": "blur(0.7px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "smoke": {
+                    "opacity": "0",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "destruction-smoke",
+                    "animationPlayState": "running",
+                    "animationDuration": "1.45s",
+                    "transform": "matrix(0.42, 0, 0, 0.42, 0, 0)",
+                    "filter": "blur(2px)",
+                    "willChange": "auto",
+                    "hasBackground": true
+                  },
+                  "fragment": {
+                    "opacity": "0.239843",
+                    "display": "block",
+                    "visibility": "visible",
+                    "animationName": "scatter-ship-piece",
+                    "animationPlayState": "running",
+                    "animationDuration": "2.12s",
+                    "transform": "matrix(0.973807, 0.174394, -0.174394, 0.973807, -0.829851, -1.38388)",
+                    "filter": "none",
+                    "willChange": "auto",
+                    "hasBackground": false
+                  }
+                }
+              ]
+            }
+          ],
+          "maxSampleMs": 2,
+          "coverage": "Bounded DOM/layout/computed-CSS samples; does not measure actual pixel visibility, paint or GPU presentation"
+        }
+      }
+    }
+  ],
+  "issues": [],
+  "coverage": {
+    "clock": "Actual GamePage frameGap and delta; its 34 ms cap is unchanged",
+    "rendering": "Real React/DOM/CSS/canvas, hull preparation and original assets",
+    "fixtures": "Controlled lives/one-hit enemies and automatic aiming; real shot collisions, explosions and normal block transitions; no scored/account run",
+    "samples": "Frame and work quantiles retain at most 4096 values per phase",
+    "account": "No Pi login or real account/API access; separate preview origin",
+    "presentation": "Same real collision/refill workload in all three phases. Middle phase adds will-change hints only; original CSS artwork, filters, fragments and timings remain. DOM samples do not prove pixel presentation."
+  },
+  "build": {
+    "id": "device-replay-20261018-v4-effects",
+    "gameCommit": "27d174788327c3423f04ace32be61af67a2004cc",
+    "gameSourceSha256": "eb628a5d73247ea64ec5443d2ff4efdab071a97228634f16f2aa915cdc832607"
+  },
+  "device": {
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+    "viewport": {
+      "width": 1363,
+      "height": 936
+    },
+    "pixelRatio": 1,
+    "visibility": "visible",
+    "sound": true
+  },
+  "blockedRequests": []
+}

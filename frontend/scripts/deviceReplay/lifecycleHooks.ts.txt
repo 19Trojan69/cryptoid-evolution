@@ -14,6 +14,7 @@
     };
     const start=(mode:any)=>{
       clearControls();
+      host.presentation?.start(mode.presentation);
       refills=maxEffects=effectEvents=sectorChanges=0;lastSector=12;
       previousEffects=new Set();phaseFrames={};samples=[];lastSample=0;
       const {width,height}=fieldSizeRef.current,s=createInitialState();
@@ -42,10 +43,12 @@
         shield:s.shieldActive&&s.shieldMs>0,weaponLevel:s.weaponLevel,pickupWeaponMs:s.pickupWeaponMs,
         fieldWidth:fieldSizeRef.current.width,fieldHeight:fieldSizeRef.current.height,
         audioVoices:soundRef.current?.activeVoiceCount??0,destroyed:s.destroyed,
-        lifecycle:{refills,maxEffects,effectEvents,sectorChanges,phaseFrames,samples}};
+        lifecycle:{refills,maxEffects,effectEvents,sectorChanges,phaseFrames,samples},
+        ...(host.presentation?{presentation:host.presentation.read()}: {})};
     };
     const sustain=(mode:any)=>{
       const s=stateRef.current,{width}=fieldSizeRef.current,time=performance.now();
+      host.presentation?.sample();
       maxEffects=Math.max(maxEffects,s.effects.length);
       effectEvents+=s.effects.filter(e=>!previousEffects.has(e.id)).length;
       previousEffects=new Set(s.effects.map(e=>e.id));
@@ -55,6 +58,9 @@
         samples.push({atMs:time,sector:s.sector,phase:s.phase,enemies:s.asteroids.length,
           effects:s.effects.length,audioVoices:soundRef.current?.activeVoiceCount??0,
           ...paintedShipResourceStats(),...renderWorkStats()});lastSample=time;
+        // The focused effect profile needs only the initial/latest cache
+        // readings; keep its share/copy report small on the phone.
+        if(host.presentation&&samples.length>2)samples.splice(1,samples.length-2);
       }
       s.hearts=s.maxHearts=3;s.projectileGuard=100000;
       s.shieldActive=true;s.shieldCharges=1;s.shieldMs=120000;

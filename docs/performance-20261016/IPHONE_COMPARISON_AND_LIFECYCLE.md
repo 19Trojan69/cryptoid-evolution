@@ -105,3 +105,79 @@ The fixed Testnet alias still resolves to dpl_BX7ZeCr9Qr6anBa3AZnzLERubpQM;
 the main app alias still resolves to dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe.
 The unchanged GamePage source hash was checked again. The isolated test is
 ready for a foreground ~2-minute Pi Browser run using its new share link.
+
+## Pi lifecycle result and missing visual effects
+
+The user supplied a completed Pi Browser v3 report and explicitly said that
+explosions were not visible. The retained phase summary is
+device-replay-v3-pi-phase-summary.json; it does not reproduce every raw sample.
+
+| Phase | FPS | Accepted simulation time | Salvos | Deaths | Max effects |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Fixed before, 20 s | 56.74 | 99.34% | 62 | 0 | 0 |
+| Destruction/refill, 30 s | 25.48 | 70.04% | 65 | 128 | 12 |
+| Normal transitions, 40 s | 58.64 | 99.18% | 58 | 35 | 6 |
+| Fixed after, 20 s | 56.58 | 99.06% | 61 | 0 | 0 |
+
+The 34 ms cap discarded 9007 of 30060 measured milliseconds in the destruction
+phase. Its median salvo gap increased to 457 ms, p95 575 ms. Hull cache count
+and retained bytes stayed at 13 / 4804555 throughout that phase, then grew
+during transitions. The final reference recovered despite the larger cache.
+This reproduces slowdown in the destruction workload; it does not yet isolate
+audio, DOM/compositing, filter rasterization or another rendering subsystem.
+
+A fresh actual Chrome run was inspected during destruction, rather than only
+after completion. The screenshot device-replay-v3-visible-explosion.jpg shows
+orange fire and scattered hull fragments. DOM inspection showed running
+enemy-destruction-fire and scatter-ship-piece animations, nonzero opacity,
+onscreen rectangles and data-effects-paused=false. That proves visibility in
+this Chrome capture, not in the user's Pi Browser. The earlier effect-counter
+evidence alone was insufficient to claim visible explosions on the iPhone.
+
+## v4 focused effect comparison
+
+An isolated 68-second profile repeats the same real destruction/refill
+workload for three 20-second phases after 8 seconds of warmup. All phases
+retain original artwork, gradients, blur filters, fragment counts, durations,
+audio and the 34 ms cap. Only the middle phase supplies `will-change: transform,
+opacity` hints to normal explosion pseudo-elements and fragment elements.
+This is a bounded rendering experiment, not a production fix or quality cut.
+The original GamePage file remains byte-identical to the public Testnet source.
+
+Every three seconds, at most six times per phase, the new diagnostic records up to
+two actual effect elements' rectangles and computed fire/smoke/fragment CSS.
+It includes opacity, animation state, background/filter presence and viewport
+intersection. These checks can distinguish absent/offscreen/paused styling;
+they still cannot prove GPU presentation. The diagnostic reports its own
+maximum sampling cost. Its temporary attribute is removed on completion.
+
+Ten startup/controller/bounded-sampling tests pass. Real simulation integration
+at 16 ms yields identical results in all three phases: 122 deaths, 62 salvos,
+max 16 effects. At 50 ms all three yield 80 deaths, 42 salvos, max 12 effects,
+68% accepted time. Those integrations stub presentation/audio and establish
+equivalent fixtures, not an improvement on a real device.
+
+The final focused Preview is dpl_DMCGHHek9ToKVKxUrLL7n5hWz2wZ, host
+cryptoid-evolution-testnet-mpyauudjz-19-trojan69.vercel.app. It is READY,
+target null, aliases empty. Its deployment-scoped 24-hour share expires
+2026-10-19T09:51:16Z; no token is retained in Git. An earlier intermediate v4
+Preview was superseded only to reduce report size and skip pre-commit samples.
+The original Testnet and main aliases retain their deployment IDs above.
+
+The final actual Chrome run completed in 68049.5 ms with no issues or blocked
+requests. Each phase had 62 salvos, 18 maximum effects and 120–122 destructions.
+FPS was 59.41 / 58.86 / 59.16; accepted ratios were .9984 / .9960 / .9992.
+Each phase retained six DOM samples with two effect examples and only the
+initial/latest resource readings. All 12 sampled rectangles per phase
+intersected the viewport. The middle phase alone computed the requested
+`transform, opacity` hint, with original gradients, .7 px fire blur and .88 s
+fire animation retained. The phase attribute was removed after completion.
+Maximum synchronous DOM sampling cost was 2.2 / 1.9 / 2.0 ms, outside reported
+simulation work. This cost is included in ordinary frame delivery.
+
+device-replay-v4-visible-explosions.jpg captures visible fire and hull fragments
+in the final middle phase. device-replay-v4-browser-chrome.json is the exact
+download, verified equal to the UI report. The copy control reached “Bericht
+kopiert”; compact copy output is 52720 characters versus 104634 formatted.
+The real Pi Browser comparison is still pending; these Chrome values do not
+establish a fix on the iPhone.

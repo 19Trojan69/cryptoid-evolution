@@ -1,0 +1,17 @@
+{
+  "source": "Phase summaries transcribed from the user's pasted v3 report; not a copy of every lifecycle sample",
+  "build": "device-replay-20261018-v3-lifecycle",
+  "device": "PiBrowser/1.17.1, iPhone OS 18_7, 430x825, DPR 3, visible, sound enabled",
+  "completed": true,
+  "elapsedWallMs": 118111,
+  "userObservation": "aber ohne sichtbare explosionen",
+  "phases": [
+    {"name":"double-six-reference","wallMs":20018,"frames":1135,"measuredFrameMs":20005,"acceptedSimulationMs":19872,"clippedSimulationMs":133,"meanDeliveredFps":56.74,"acceptedTimeRatio":0.9934,"frameP95Ms":33,"frameMaxMs":43,"volleys":62,"volleyGapP50Ms":319,"volleyGapP95Ms":338,"simulationWorkP95Ms":1,"destroyed":0,"maxEffects":0,"painted":13,"estimatedBytes":4804555},
+    {"name":"destruction-refill","wallMs":30076,"frames":766,"measuredFrameMs":30060,"acceptedSimulationMs":21053,"clippedSimulationMs":9007,"meanDeliveredFps":25.48,"acceptedTimeRatio":0.7004,"frameP95Ms":78,"frameMaxMs":111,"volleys":65,"volleyGapP50Ms":457,"volleyGapP95Ms":575,"simulationWorkP95Ms":1,"destroyed":128,"refills":128,"effectEvents":128,"maxEffects":12,"painted":13,"estimatedBytes":4804555},
+    {"name":"normal-block-transitions","wallMs":40007,"frames":2344,"measuredFrameMs":39973,"acceptedSimulationMs":39646,"clippedSimulationMs":327,"meanDeliveredFps":58.64,"acceptedTimeRatio":0.9918,"frameP95Ms":22,"frameMaxMs":71,"volleys":58,"volleyGapP50Ms":317,"volleyGapP95Ms":4702,"simulationWorkP95Ms":1,"destroyed":35,"effectEvents":35,"maxEffects":6,"sectorChanges":4,"endSector":16,"painted":43,"estimatedBytes":15809863},
+    {"name":"double-six-after","wallMs":20006,"frames":1131,"measuredFrameMs":19990,"acceptedSimulationMs":19803,"clippedSimulationMs":187,"meanDeliveredFps":56.58,"acceptedTimeRatio":0.9906,"frameP95Ms":33,"frameMaxMs":55,"volleys":61,"volleyGapP50Ms":318,"volleyGapP95Ms":336,"simulationWorkP95Ms":1,"destroyed":0,"maxEffects":0,"painted":43,"estimatedBytes":15809863}
+  ],
+  "issues": [],
+  "blockedRequests": [],
+  "limitations": ["Effect counters do not establish visible pixel presentation", "Simulation timing excludes browser paint/compositing/GPU and some audio/fixture work", "Legacy detailed resource-work counters were disabled", "Different workloads between fixed/destruction/transition phases prevent identifying a single renderer subsystem"]
+}
