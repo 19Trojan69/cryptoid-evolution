@@ -1,0 +1,51 @@
+{
+  "releasedSource": "66eb357cc08a6b5f9b32a9242d6875ed475532fa",
+  "testedLocalSource": "92f392e2efe5608a7d589e2d14c2593a2626c5bb",
+  "sourceTree": "cec8743f06146e3b2e1d292219917e9ff24dae8d",
+  "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+  "deploymentId": "dpl_8h9mgxiRDUerhJr4PyCPTiaPQgR4",
+  "deploymentState": "READY",
+  "deploymentTarget": "production",
+  "scope": "Existing Testnet project only; not Mainnet",
+  "rollback": {
+    "source": "f24ca60cb87d9442edf683f04b34b73670b56f45",
+    "branch": "backup/testnet-before-canvas-surface-reuse-20261019",
+    "branchMatchesSource": true,
+    "deploymentId": "dpl_Dx7LdXMRd1YJ4CnxfrfW8Q2fzFPw",
+    "deploymentStateAfterRelease": "READY",
+    "url": "https://cryptoid-evolution-testnet-kezmn3ka3-19-trojan69.vercel.app",
+    "redeployWithLatestCommit": false
+  },
+  "mainnet": {
+    "alias": "cryptoid-evolution.vercel.app",
+    "beforeDeploymentId": "dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe",
+    "afterDeploymentId": "dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe",
+    "unchanged": true
+  },
+  "http": {
+    "verifiedAt": "2026-10-19T14:10:36.807850+00:00",
+    "url": "https://cryptoid-evolution-testnet.vercel.app",
+    "http": 200,
+    "entry": "/assets/index-CRZL0C7u.js",
+    "gameBundle": "GamePage-1u8fv_Xg.js",
+    "stylesheet": "/assets/index-CLY2nAhm.css",
+    "stylesheetSha256": "4d01d528d5eed0ada0ff4f5af17a2f0052457b5e5525e5e4e64fc8fb996fd25f",
+    "gameBundleMatchesProductionConfiguredBuildAfterAssetHashNormalization": true,
+    "liveGameBundleSha256": "0cefbc1bd3f5429bf82c11751db7ca02f5ea8a291b1303785b7861a3cc6067ce",
+    "stylesheetMatchesTestedBuild": true,
+    "canvasIdleTimeoutInLiveBundle": true,
+    "catalog": {
+      "status": 200,
+      "backend": "testnet-catalog"
+    },
+    "anonymousAdmin": {
+      "status": 401,
+      "canAdmin": false
+    },
+    "standaloneExport": {
+      "status": 307,
+      "location": "/"
+    },
+    "physicalIphoneVerification": false
+  }
+}
