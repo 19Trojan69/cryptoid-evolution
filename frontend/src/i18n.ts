@@ -20,6 +20,30 @@ Object.assign(localeCatalog.es ??= {}, { "Technical report": "Informe técnico" 
 Object.assign(localeCatalog.zh ??= {}, { "Technical report": "技术报告" });
 Object.assign(localeCatalog.vi ??= {}, { "Technical report": "Báo cáo kỹ thuật" });
 
+const diagnosticAdminTranslations = {
+  en: {
+    "Für dieses Pi-Konto ist kein Diagnosezugriff freigeschaltet.": "This Pi account is not authorized for diagnostic access.",
+    "Nur für freigeschaltete Diagnosekonten. Gelesen werden vorhandene technische Einträge aus diesem Browser. Der Bericht wird nicht automatisch versendet.": "Only for authorized diagnostic accounts. Existing technical records are read from this browser. The report is not sent automatically.",
+    "Freigeschalteter Diagnosezugriff": "Authorized diagnostic access",
+  },
+  es: {
+    "Für dieses Pi-Konto ist kein Diagnosezugriff freigeschaltet.": "Esta cuenta Pi no tiene acceso de diagnóstico autorizado.",
+    "Nur für freigeschaltete Diagnosekonten. Gelesen werden vorhandene technische Einträge aus diesem Browser. Der Bericht wird nicht automatisch versendet.": "Solo para cuentas de diagnóstico autorizadas. Se leen los registros técnicos existentes de este navegador. El informe no se envía automáticamente.",
+    "Freigeschalteter Diagnosezugriff": "Acceso de diagnóstico autorizado",
+  },
+  zh: {
+    "Für dieses Pi-Konto ist kein Diagnosezugriff freigeschaltet.": "此 Pi 账户未获授权访问诊断功能。",
+    "Nur für freigeschaltete Diagnosekonten. Gelesen werden vorhandene technische Einträge aus diesem Browser. Der Bericht wird nicht automatisch versendet.": "仅限已授权的诊断账户。系统会读取此浏览器中已有的技术记录。报告不会自动发送。",
+    "Freigeschalteter Diagnosezugriff": "已授权的诊断访问",
+  },
+  vi: {
+    "Für dieses Pi-Konto ist kein Diagnosezugriff freigeschaltet.": "Tài khoản Pi này chưa được cấp quyền truy cập chẩn đoán.",
+    "Nur für freigeschaltete Diagnosekonten. Gelesen werden vorhandene technische Einträge aus diesem Browser. Der Bericht wird nicht automatisch versendet.": "Chỉ dành cho các tài khoản chẩn đoán đã được cấp quyền. Các bản ghi kỹ thuật hiện có được đọc từ trình duyệt này. Báo cáo không được gửi tự động.",
+    "Freigeschalteter Diagnosezugriff": "Quyền truy cập chẩn đoán đã được cấp",
+  },
+} as const;
+for (const [locale, entries] of Object.entries(diagnosticAdminTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
+
 import { languageLabels, supportedLanguages, resolveLocale, documentLanguage, localeDirection, complexScript, type Locale } from './locales/config.ts';
 import { languagePreferences, deviceLanguages, LANGUAGE_STORAGE_KEY } from './locales/preferences.ts';
 export type { Locale } from './locales/config.ts';
