@@ -15,6 +15,11 @@ for (const [locale, entries] of Object.entries(galaxyMapTranslations)) Object.as
 for (const [locale, entries] of Object.entries(smartphoneTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(shipAttributeTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 
+Object.assign(localeCatalog.de ??= {}, { "Technical report": "Technischer Bericht" });
+Object.assign(localeCatalog.es ??= {}, { "Technical report": "Informe técnico" });
+Object.assign(localeCatalog.zh ??= {}, { "Technical report": "技术报告" });
+Object.assign(localeCatalog.vi ??= {}, { "Technical report": "Báo cáo kỹ thuật" });
+
 import { languageLabels, supportedLanguages, resolveLocale, documentLanguage, localeDirection, complexScript, type Locale } from './locales/config.ts';
 import { languagePreferences, deviceLanguages, LANGUAGE_STORAGE_KEY } from './locales/preferences.ts';
 export type { Locale } from './locales/config.ts';
