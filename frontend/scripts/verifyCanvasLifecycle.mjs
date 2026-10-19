@@ -2,6 +2,7 @@
 // mocked browser allocations. This is not a Safari/GPU or pixel test.
 import assert from 'node:assert/strict';
 import Module from 'node:module';
+import {Host} from './canvasHookHost.mjs';
 import {build} from 'esbuild';
 
 const root=new URL('../',import.meta.url).pathname;
@@ -14,7 +15,7 @@ const bundle=await build({absWorkingDir:root,entryPoints:[source],bundle:true,wr
   b.onResolve({filter:/\/paintedShip$/},()=>({path:'painted-hook',namespace:'hull'}));
   b.onLoad({filter:/.*/,namespace:'hull'},()=>({loader:'js',contents:'export const usePaintedShipStyle=()=>({backgroundImage:"url(blob:hull)"});'}));
 }}]});
-const images=[],canvases=[],frames=new Map();let nextFrame=0;
+const images=[],canvases=[],frames=new Map(),timers=new Map();let nextFrame=0,nextTimer=0,timerClock=0;
 const context={drawImage(){},clearRect(){},setTransform(){}};
 const makeCanvas=()=>{
   const listeners=new Map();let width=0,height=0,writes=0;
@@ -25,7 +26,8 @@ const makeCanvas=()=>{
     addEventListener:(name,fn)=>listeners.set(name,fn),removeEventListener:name=>listeners.delete(name)};
   canvases.push(canvas);return canvas;
 };
-globalThis.window={devicePixelRatio:3};
+globalThis.window={devicePixelRatio:3,setTimeout(callback,delay){const id=++nextTimer;timers.set(id,{callback,at:timerClock+delay});return id;},clearTimeout:id=>timers.delete(id)};
+const advanceTimers=ms=>{timerClock+=ms;for(const [id,timer] of [...timers])if(timer.at<=timerClock){timers.delete(id);timer.callback();}};
 globalThis.Image=class{naturalWidth=282;naturalHeight=282;constructor(){images.push(this);}};
 globalThis.document={createElement:makeCanvas};
 const observers=[];
@@ -34,18 +36,6 @@ globalThis.requestAnimationFrame=callback=>{frames.set(++nextFrame,callback);ret
 globalThis.cancelAnimationFrame=id=>frames.delete(id);
 const mod=new Module(import.meta.filename);mod.filename=import.meta.filename;mod.paths=Module._nodeModulePaths(import.meta.dirname);mod._compile(bundle.outputFiles[0].text,import.meta.filename);
 const runtime=mod.exports;
-const equalDeps=(a,b)=>a&&b&&a.length===b.length&&a.every((v,i)=>Object.is(v,b[i]));
-class Host{
-  slots=[];index=0;dirty=true;layouts=[];effects=[];output=null;
-  constructor(component,props,canvas=null){this.component=component;this.props=props;this.canvas=canvas;}
-  state(initial){const i=this.index++;if(!this.slots[i])this.slots[i]={value:typeof initial==='function'?initial():initial};return [this.slots[i].value,value=>{const next=typeof value==='function'?value(this.slots[i].value):value;if(!Object.is(next,this.slots[i].value)){this.slots[i].value=next;this.dirty=true;}}];}
-  ref(value){const i=this.index++;return this.slots[i]??(this.slots[i]={current:value===null&&this.canvas?this.canvas:value});}
-  memo(fn,deps){const i=this.index++;if(!equalDeps(this.slots[i]?.deps,deps))this.slots[i]={value:fn(),deps};return this.slots[i].value;}
-  effect(layout,fn,deps){const i=this.index++,old=this.slots[i];if(equalDeps(old?.deps,deps))return;this.slots[i]={deps,cleanup:old?.cleanup};(layout?this.layouts:this.effects).push(()=>{this.slots[i].cleanup?.();this.slots[i].cleanup=fn();});}
-  render(){for(let guard=0;this.dirty;guard++){assert.ok(guard<20,'hooks settle');this.dirty=false;this.index=0;globalThis.__hookHost=this;this.output=this.component(this.props);for(const run of this.layouts.splice(0))run();}return this.output;}
-  passive(){for(const run of this.effects.splice(0))run();}
-  unmount(){for(const slot of this.slots)slot?.cleanup?.();}
-}
 const flush=async()=>{await new Promise(resolve=>setImmediate(resolve));};
 const decode=()=>{for(const img of images.splice(0))img.onload?.();};
 const effect={id:1,kind:'explosion',x:215,y:240,debrisSize:50,sprite:0,debrisColor:'steel'};
@@ -64,31 +54,57 @@ const afterWarm=s.writes-before;
 assert.equal(afterWarm,initial,'cached preparation must not remove/re-register an already visible explosion');
 assert.equal(initial,2,'one surface growth, width and height assigned once');
 view.unmount();
+assert.ok(s.width>3&&s.height>3,'a brief idle gap must reuse the transparent backing store, not immediately shrink it');
 let warmImpacts=0;
 for(let i=0;i<2000;i++){
   const next=new Host(runtime.CanvasImpact,{effect:{...effect,id:i+10},debris:null,original});
   const before=s.writes;next.render();next.passive();await flush();next.render();
-  assert.equal(s.writes-before,2,'repeated warm impacts retain one registration');
-  next.unmount();warmImpacts++;
+  assert.equal(s.writes-before,0,'same-size warm impacts reuse the existing backing store');
+  next.unmount();advanceTimers(250);warmImpacts++;
 }
 assert.equal(runtime.canvasEffectResources().sourceImages,1);
 assert.equal(runtime.canvasEffectResources().textureEntries,2);
 assert.equal(runtime.canvasEffectResources().registeredEffects,0);
+assert.equal(frames.size,0,'an idle reusable surface does not keep drawing');
+assert.equal(timers.size,1,'only one bounded idle-release timer exists');
+const burstWrites=s.writes;
+for(let i=0;i<400;i++){
+  const next=new Host(runtime.CanvasImpact,{effect:{...effect,id:i+2200,x:i%2?410:20,y:i%4<2?25:800},debris:null,original});
+  next.render();next.passive();await flush();next.render();next.unmount();advanceTimers(250);
+  assert.ok(runtime.canvasEffectResources().surfaceBytes<=430*825*3*3*4,'reused surface remains bounded by the playfield at original DPR');
+}
+const movingBurstWrites=s.writes-burstWrites;
+assert.ok(movingBurstWrites<=800,'moving explosions need at most one width/height update per impact, with no idle shrink/grow cycle');
+const retainedBytes=runtime.canvasEffectResources().surfaceBytes;
+advanceTimers(1749);
+assert.equal(runtime.canvasEffectResources().surfaceBytes,retainedBytes,'release is not early');
+advanceTimers(1);
+assert.equal(runtime.canvasEffectResources().surfaceBytes,36,'two seconds without effects return the idle surface to its original tiny size');
+assert.equal(timers.size,0);
 const active=new Host(runtime.CanvasImpact,{effect:{...effect,id:3000},debris:null,original});
 active.render();active.passive();await flush();active.render();
+active.unmount();assert.equal(timers.size,1);
+const resumed=new Host(runtime.CanvasImpact,{effect:{...effect,id:3001},debris:null,original});
+resumed.render();resumed.passive();await flush();resumed.render();
+const resumedBytes=runtime.canvasEffectResources().surfaceBytes;
+advanceTimers(2000);
+assert.equal(timers.size,0,'a new burst cancels the prior deferred release');
+assert.equal(runtime.canvasEffectResources().surfaceBytes,resumedBytes,'an expired prior idle deadline cannot shrink an active surface');
+assert.equal(runtime.canvasEffectResources().registeredEffects,1);
 
 // Context loss must release this optional layer and retain the original DOM,
 // rather than leaving an active effect registered on an unavailable surface.
 assert.ok(s.listeners.has('contextlost'));
 s.listeners.get('contextlost')();
-globalThis.__availability=owner.render().props.value;active.dirty=true;
-assert.equal(active.render().props.children,original);
+globalThis.__availability=owner.render().props.value;resumed.dirty=true;
+assert.equal(resumed.render().props.children,original);
 assert.equal(runtime.canvasEffectResources().registeredEffects,0);
 assert.equal(runtime.canvasEffectResources().cacheBytes,0);
 assert.equal(runtime.canvasEffectResources().activeDrawFrame,false);
 observers.at(-1).callback();
 assert.equal(owner.render().props.value.enabled,false,'resize must not re-enable a failed surface');
-active.unmount();owner.unmount();
+resumed.unmount();owner.unmount();
+assert.equal(timers.size,0,'context loss/unmount cancel deferred release');
 assert.equal(s.listeners.size,0,'context listener removed on unmount');
 assert.ok(canvases.every(canvas=>canvas.width===0&&canvas.height===0));
 // WebKit may return null before/without a contextlost event.
@@ -102,4 +118,18 @@ globalThis.__availability=lostOwner.render().props.value;missingContext.dirty=tr
 assert.equal(missingContext.render().props.children,original);
 assert.equal(runtime.canvasEffectResources().activeDrawFrame,false);
 missingContext.unmount();lostOwner.unmount();
-console.log(JSON.stringify({passed:true,warmImpacts,warmSurfaceDimensionWrites:{initial,afterPreparation:afterWarm},checks:['warm assets retain registration and surface','2000 warm impacts keep fixed cache counts','context loss releases caches/scheduler','original DOM fallback survives context loss or null context','resize cannot revive released textures','context listener and backing stores released'],limits:'Actual component with hook/allocation host; no WebKit pixel, memory-pressure or complete-campaign proof.'}));
+assert.equal(timers.size,0);
+for(const shutdown of ['contextloss','unmount']){
+  const idleSurface=makeCanvas(),idleOwner=new Host(runtime.CanvasEffectLayer,{enabled:true,children:null},idleSurface);
+  globalThis.__availability=idleOwner.render().props.value;idleOwner.passive();globalThis.__availability=idleOwner.render().props.value;
+  const idleEffect=new Host(runtime.CanvasImpact,{effect,debris:null,original});
+  idleEffect.render();idleEffect.passive();decode();await flush();idleEffect.render();idleEffect.unmount();
+  assert.equal(timers.size,1,'a pending idle release exists before shutdown');
+  if(shutdown==='contextloss')idleSurface.listeners.get('contextlost')();
+  idleOwner.unmount();
+  assert.equal(timers.size,0,shutdown+' cancels the pending idle release');
+  assert.equal(frames.size,0);
+  assert.equal(idleSurface.width,0);assert.equal(idleSurface.height,0);
+  advanceTimers(2000);assert.equal(runtime.canvasEffectResources().surfaceBytes,0,'released surfaces cannot be revived by deferred cleanup');
+}
+console.log(JSON.stringify({passed:true,warmImpacts,movingBurstWrites,warmSurfaceDimensionWrites:{initial,afterPreparation:afterWarm,repeatedImpact:0},checks:['warm assets retain registration and surface','2000 warm impacts reuse the backing store','400 moving impacts preserve per-burst bounds without idle shrink/grow cycles','idle drawing stops immediately; backing store releases after two seconds','new burst cancels the previous idle deadline','context loss releases caches/scheduler/timers','original DOM fallback survives context loss or null context','resize cannot revive released textures','context loss and unmount cancel a pending idle release'],limits:'Actual component with hook/allocation host; no WebKit pixel, memory-pressure or complete-campaign proof.'}));

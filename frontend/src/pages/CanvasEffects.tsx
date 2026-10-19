@@ -102,13 +102,20 @@ const records=new Map<number,any>();
 let surface:HTMLCanvasElement|null=null,frameId=0,pausedAt=0,pauseTotal=0;
 let fieldWidth=1,fieldHeight=1,grownBounds:any=null,surfaceBox={left:0,top:0,right:1,bottom:1},surfaceResizes=0,maxSurfaceBytes=0;
 let draws=0,fragmentDraws=0;
+let idleReleaseTimer:number|null=null;
+const cancelSurfaceRelease=()=>{if(idleReleaseTimer!==null)window.clearTimeout(idleReleaseTimer);idleReleaseTimer=null;};
 let disableSurface:(()=>void)|null=null;
 function fitSurface(){
   if(!surface)return;
+  if(records.size)cancelSurfaceRelease();
   for(const record of records.values())grownBounds=unionBounds(grownBounds,record.bounds);
   const box=fieldBounds(grownBounds,fieldWidth,fieldHeight);
   const width=box.right-box.left,height=box.bottom-box.top,scale=dpr(),pixelsX=Math.ceil(width*scale),pixelsY=Math.ceil(height*scale);
-  if(surface.width!==pixelsX||surface.height!==pixelsY){surface.width=pixelsX;surface.height=pixelsY;surfaceResizes++;}
+  if(surface.width!==pixelsX||surface.height!==pixelsY){
+    if(surface.width!==pixelsX)surface.width=pixelsX;
+    if(surface.height!==pixelsY)surface.height=pixelsY;
+    surfaceResizes++;
+  }
   surfaceBox=box;surface.style.left=`${box.left}px`;surface.style.top=`${box.top}px`;surface.style.width=`${width}px`;surface.style.height=`${height}px`;
   maxSurfaceBytes=Math.max(maxSurfaceBytes,pixelsX*pixelsY*4);
 }
@@ -126,7 +133,24 @@ function frame(time:number){
   frameId=requestAnimationFrame(frame);
 }
 const schedule=()=>{if(!frameId&&surface&&records.size)frameId=requestAnimationFrame(frame);};
-const remove=(id:number)=>{records.delete(id);if(!records.size&&surface){if(frameId)cancelAnimationFrame(frameId);frameId=0;surface.getContext('2d')?.clearRect(0,0,surface.width,surface.height);grownBounds=null;fitSurface();}};
+const remove=(id:number)=>{
+  if(!records.delete(id))return;
+  if(!records.size&&surface){
+    if(frameId)cancelAnimationFrame(frameId);frameId=0;
+    const ctx=surface.getContext('2d');
+    ctx?.setTransform(1,0,0,1,0,0);
+    ctx?.clearRect(0,0,surface.width,surface.height);
+    // Retain the transparent backing store, but reset logical bounds exactly as
+    // before. Carrying an old origin into the next burst changes raster rounding.
+    // The next burst resizes only if its own original bounds require it.
+    grownBounds=null;
+    cancelSurfaceRelease();
+    idleReleaseTimer=window.setTimeout(()=>{
+      idleReleaseTimer=null;
+      if(!records.size&&surface){grownBounds=null;fitSurface();}
+    },2000);
+  }
+};
 
 
 /** One surface for the ordinary effects of one mounted game. Original DOM is
@@ -135,6 +159,7 @@ const CanvasAvailability=createContext({enabled:false,scale:1});
 
 export function clearCanvasEffects(){
   resourceGeneration++;
+  cancelSurfaceRelease();
   if(frameId)cancelAnimationFrame(frameId);
   frameId=0;records.clear();
   for(const t of readyTextures.values())t.canvas.width=t.canvas.height=0;
