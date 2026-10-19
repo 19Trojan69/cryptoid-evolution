@@ -31,11 +31,11 @@ test('error names are allowlisted and raw custom names are not retained',()=>{
   assert.equal(reloadErrorName(error),'UnknownError');
 });
 
-test('owner runtime collection is wired only to the verified owner game entry',()=>{
+test('runtime collection is wired only to a verified diagnostic-capable game entry',()=>{
   const main=fs.readFileSync(new URL('../main.tsx',import.meta.url),'utf8');
   const game=fs.readFileSync(new URL('./GamePage.tsx',import.meta.url),'utf8');
   assert.ok(!main.includes('installReloadDiagnostics'));
-  assert.ok(game.includes('return <GamePage ownerDiagnostics={canAdmin} />'));
+  assert.ok(game.includes('return <GamePage ownerDiagnostics={canAdmin || canDiagnostics} />'));
   assert.ok(game.includes('if (ownerDiagnostics) installReloadDiagnostics();'));
   assert.ok(game.includes('ownerDiagnostics ? createReloadGameMonitor(diagnosticContext) : null'));
   assert.ok(game.includes('ownerDiagnostics ? createResourceTrendMonitor(ownerResourceContext) : null'));
@@ -64,7 +64,7 @@ test('v3 transition snapshots remain wired only inside verified owner gameplay',
   assert.ok(game.includes('if (ownerDiagnostics) recordReloadSnapshot(kind, ownerResourceContext())'));
 });
 
-test('v4 resource trend stores only sanitized owner resource context and stays bounded',()=>{
+test('v4 resource trend stores only sanitized authorized diagnostic context and stays bounded',()=>{
   const localStorage=store(),sessionStorage=store();
   const host={localStorage,sessionStorage,crypto:{randomUUID:()=> 'boot-v4'}};
   for(let i=0;i<100;i++) appendResourceTrendSample(host,{...context,sector:Math.min(500,i+1),
