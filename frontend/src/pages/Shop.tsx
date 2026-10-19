@@ -88,7 +88,7 @@ const Shop = () => {
   const { locale, t } = useLocale();
   const number = (value: number) => new Intl.NumberFormat(locale).format(value);
   const {
-    user, canAdmin, adminMode, setAdminPreview, isAuthenticated, showSignIn, signIn, signOut,
+    user, canAdmin, canDiagnostics, adminMode, setAdminPreview, isAuthenticated, showSignIn, signIn, signOut,
     closeSignIn, requireAuth, isLoading: isAuthLoading, authReady, authError,
   } = useAuth();
   const piPrice = (amount: number, testnet = false) => <PiPrice amount={amount} locale={locale} testnet={testnet} />;
@@ -475,6 +475,7 @@ const Shop = () => {
     if (action === "play") enterGame();
     else if (action === "signin") signIn();
     else if (action === "signout") { setInventory(null); void signOut(); }
+    else if (action === "diagnostics") navigate("/admin?view=diagnostics");
     else if (action === "admin") navigate("/admin");
     else if (action === "exit-admin") void toggleAdmin();
     else if (action === "privacy") navigate("/privacy");
@@ -538,7 +539,7 @@ const Shop = () => {
 
       {feedbackOpen && <FeedbackHub key={user?.uid ?? "guest"} signedIn={!!user} onSignIn={()=>{setFeedbackOpen(false);requireAuth();}} onProfile={username => setPilotOpen(username)} onClose={()=>{setFeedbackOpen(false);returnToMenu();}}/>}
       {pilotOpen !== null && <PilotProfile key={`${user?.uid}-${pilotOpen}`} username={pilotOpen || undefined} onClose={()=>setPilotOpen(null)} onSaved={()=>setLeaderRefresh(n=>n+1)}/>}
-      {quickGroup !== null && <QuickAccessMenu onClose={closeQuickMenu} onAction={openQuickAction} signedIn={Boolean(user)} canAdmin={Boolean(canAdmin)} adminMode={adminMode} username={user?.username} busy={isAuthLoading || !authReady} />}
+      {quickGroup !== null && <QuickAccessMenu onClose={closeQuickMenu} onAction={openQuickAction} signedIn={Boolean(user)} canAdmin={Boolean(canAdmin)} canDiagnostics={Boolean(canDiagnostics)} adminMode={adminMode} username={user?.username} busy={isAuthLoading || !authReady} />}
 
       {systemMenuOpen && <div className="system-menu-overlay" role="dialog" aria-modal="true" aria-labelledby="system-menu-title">
         <section className="system-menu-panel">
