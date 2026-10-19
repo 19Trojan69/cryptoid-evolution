@@ -1,0 +1,25 @@
+name: iPhone resource trend v4 validation
+
+on:
+  push:
+    branches:
+      - codex/iphone-resource-trend-v4-20261019
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm install --no-audit --no-fund
+      - run: npm run build
+      - name: Resource trend diagnostics tests
+        run: node --experimental-strip-types --test src/pages/reloadDiagnostics.test.mjs
+      - name: Stability and owner tests
+        run: node --experimental-strip-types --test scripts/stabilityReport.test.mjs scripts/ownerStabilityReport.test.mjs src/pages/gameLoop.test.mjs src/pages/diagnosticExport.test.mjs src/pages/resourceCacheDiagnostics.test.mjs
