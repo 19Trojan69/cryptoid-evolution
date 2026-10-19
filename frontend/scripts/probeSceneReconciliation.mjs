@@ -140,6 +140,8 @@ function preservedSource(before, after) {
 const candidateRef = process.env.CRYPTOID_SCENE_CANDIDATE_REF || null;
 preservedSource(sourceAt(base), sourceAt(candidateRef));
 const frameCount = 600;
+const fixture = process.env.CRYPTOID_SCENE_FIXTURE || "normal";
+assert.ok(["normal", "boss7-turrets", "boss7-core"].includes(fixture), "known official scene fixture");
 const injection = `
   if (!(globalThis as any).__sceneQA.seeded) {
     const s=stateRef.current,qa=(globalThis as any).__sceneQA;
@@ -147,6 +149,17 @@ const injection = `
     s.phase='FORMATION';s.status='playing';
     s.asteroids=slots.map((slot,i)=>({...spawnAsteroid(i+1,430,96,i,1,slots),x:slot.x,y:slot.y,entryElapsed:10000,formationElapsed:10000}));
     s.shots=Array.from({length:8},(_,i)=>({id:100+i,x:80+i*30,y:400+i*20,speedX:0,damage:1,empowered:false}));
+    if(qa.fixture!=='normal'){
+      s.sector=70;s.section=70;s.phase='ATTACK_CYCLE';s.encounter='boss-fight';s.chainBlocks=9;s.hearts=s.maxHearts=6;
+      s.boss=moveSectorBoss(createSectorBoss(70,430,96,825),10000,430,825);
+      if(qa.fixture==='boss7-core'){
+        s.boss.turrets=s.boss.turrets.map(t=>({...t,health:0}));
+        s.boss.core={elapsed:0,volley:1};
+      }
+      const escorts=bossEscortSlots(70,430,825,s.boss,qa.fixture==='boss7-core'?reactorEscortCount(70):bossEscortCount(70));
+      s.asteroids=escorts.map((slot,i)=>({...spawnBossEscort(i+1,430,i,70,escorts,qa.fixture==='boss7-core'?1:0),x:slot.x,y:slot.y,entryElapsed:10000,formationElapsed:10000}));
+      setShipStage(2);
+    }
     qa.seeded=true;
     setGame({...s});
   }
@@ -154,6 +167,14 @@ const injection = `
     const s=stateRef.current;
     s.asteroids=s.asteroids.map((a,i)=>({...a,x:a.entryTargetX+Math.sin(frame/60+i)*5,y:a.entryTargetY+Math.cos(frame/80+i)*2}));
     s.shots=s.shots.map((shot,i)=>({...shot,y:100+(frame*3+i*20)%600}));
+    if(s.boss){
+      s.boss.weaponClock=frame*33.333;
+      s.boss.turrets=s.boss.turrets.map((t,i)=>({...t,a:Math.sin(frame/50+i)*.3}));
+      if((globalThis as any).__sceneQA.fixture==='boss7-core'){
+        s.enemyShots=s.enemyShots.map(shot=>({...shot,x:shot.x+shot.vx*33.333,y:shot.y+shot.vy*33.333})).filter(shot=>shot.y<825);
+        s.enemyShots.push(...advanceBossCore(s.boss,s.player,430,825,33.333,16-s.enemyShots.length,1000+frame*10));
+      }
+    }
     s.score=Math.floor(frame/120)*250;s.shards=Math.floor(frame/120)*3;
     setGame({...s});
   };
@@ -199,7 +220,7 @@ async function scenario(ref) {
     setItem: (k, v) => values.set(k, String(v)),
     removeItem: k => values.delete(k),
   };
-  const qa = { seeded: false },
+  const qa = { seeded: false, fixture },
     errors = [];
   qa.reportError = error => errors.push(String(error));
   const scope = {
@@ -431,6 +452,7 @@ async function scenario(ref) {
   assert.deepEqual(errors, [], "no render errors or warnings were hidden by the scene boundary");
   await Renderer.act(() => tree.unmount());
   return {
+    fixture,
     ref: ref ?? "working-tree",
     frames: frameCount,
     frameCalls,
@@ -531,6 +553,7 @@ assert.ok(after.frameCalls.jsx < before.frameCalls.jsx, "moving scenes construct
 const report = {
   passed: true,
   officialCommit,
+  fixture,
   fullGamePagePreservation: true,
   initialRefLifecycle,
   baseline: before,

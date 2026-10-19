@@ -15,7 +15,11 @@ The user found no visible benefit in the HUD-blur comparison; do not describe
 blur removal as the solution. Preserve the official HUD, visuals, timing,
 simulation, input, audio, login, accounts, rewards and owner-only Admin access.
 Limit this candidate to demonstrably redundant per-render initialization and
-unchanged presentation reconstruction. No further full campaign replay should
+unchanged presentation reconstruction. The supplied 20:09 iPhone video also
+authorizes investigating the ongoing boss-7 fight: preserve the existing weapon
+canvas pixels after every turret is destroyed, invalidating on geometry,
+texture/config changes, context loss/restoration and any failed draw. Keep live
+guns, heat, recoil, reactor, escorts and every combat rule unchanged. No further full campaign replay should
 be required merely to collect the same known counters. The iPhone restart and
 slowdown remain unresolved device findings; host tests cannot prove iPhone FPS
 or native/GPU/process memory behavior. Prepare and preserve a reviewed isolated

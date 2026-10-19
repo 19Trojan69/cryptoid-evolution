@@ -1,0 +1,37 @@
+{
+  "format": "cryptoid-supplied-video-observation-v1",
+  "source": {
+    "filename": "ScreenRecording_10-19-2026 20-09-24_1.mp4",
+    "sha256": "65c84ae8c5c6957a809d91a668594d84be33f600de89ebe1979bbae0bf6f49bd",
+    "bytes": 33282812,
+    "durationSeconds": 66.6,
+    "width": 512,
+    "height": 1108,
+    "recordingFramesPerSecond": 30,
+    "frames": 1998
+  },
+  "officialSource": "66eb357cc08a6b5f9b32a9242d6875ed475532fa",
+  "userReportedStartLevel": 5,
+  "videoStartsAtDisplayedLevel": 7,
+  "lastGameplay": {
+    "frame": 1719,
+    "seconds": 57.3,
+    "displayedLevel": 7,
+    "encounter": "boss fight",
+    "bossDefeated": false,
+    "turretsDestroyed": true,
+    "reactorExposed": true,
+    "escortsVisible": true,
+    "heartsVisible": 6
+  },
+  "firstWhite": {
+    "frame": 1720,
+    "seconds": 57.333333333333336
+  },
+  "homeContent": {
+    "frame": 1971,
+    "seconds": 65.7
+  },
+  "motionObservation": "Repeated projectile positions across adjacent recorded frames, including frames 0 through 8; clearly uneven movement. This does not identify browser RAF rate or establish a device FPS value.",
+  "limits": "Visual observations and a 30 fps screen recording. No native process memory, GPU pressure, WebKit crash reason or exact browser frame-rate measurement. Video does not show levels 5 or 6, and cannot distinguish a browser-initiated document reload from every possible native/host reset."
+}

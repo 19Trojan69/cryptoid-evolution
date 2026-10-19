@@ -18,7 +18,7 @@ export const weaponCanvasSize=(boss:SectorBoss)=>({width:boss.width*1.44,height:
 const tile=(c:CanvasRenderingContext2D,image:CanvasImageSource,r:AtlasRect,x:number,y:number,scale:number)=>c.drawImage(image,r.x,r.y,r.width,r.height,x,y,r.width*scale/2,r.height*scale/2);
 
 export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:CanvasImageSource,frozen=false,make:CanvasFactory=factory)=>{
- const c=canvas.getContext('2d');if(!c)return;
+ const c=canvas.getContext('2d');if(!c)return false;
  const size=weaponCanvasSize(boss),sx=canvas.width/size.width,sy=canvas.height/size.height,scale=boss.width/boss.config.sourceWidth;
  const guns=bossWeapons[boss.config.id-1];
  let cached=bases.get(canvas);
@@ -27,7 +27,7 @@ export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:Can
    cached.layer.width = cached.layer.height = 0;
    for (const hot of cached.heated.values()) hot.width = hot.height = 0;
   }
-  const layer=make(canvas.width,canvas.height),base=layer.getContext('2d');if(!base)return;
+  const layer=make(canvas.width,canvas.height),base=layer.getContext('2d');if(!base){layer.width=layer.height=0;return false;}
   base.setTransform(sx,0,0,sy,0,0);
   for(const g of guns){const x=size.padX+g.sourceX/boss.config.sourceWidth*boss.width,y=size.padY+g.sourceY/boss.config.sourceHeight*boss.height;tile(base,image,g.socket,x-g.socket.width*scale/4,y-g.socket.height*scale/4,scale);}
   cached={id:boss.config.id,width:canvas.width,height:canvas.height,layer,heated:new Map()};bases.set(canvas,cached);
@@ -63,4 +63,5 @@ export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:Can
    for(const b of state.firedBarrels){c.beginPath();c.ellipse(g.barrels[b]*scale,(g.muzzle-g.recoil)*scale,Math.max(1.5,g.visualShotWidth*scale*1.4),Math.max(3,g.visualShotWidth*scale*2.4),0,0,Math.PI*2);c.fill();}c.restore();
   }
  }
+ return true;
 };

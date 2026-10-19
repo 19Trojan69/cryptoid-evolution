@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "officialCommit": "66eb357cc08a6b5f9b32a9242d6875ed475532fa",
+  "bosses": 50,
+  "DPR": [
+    1,
+    1.5,
+    2,
+    3
+  ],
+  "cases": 200,
+  "exactPixelComparisons": 3201,
+  "staticPhase": {
+    "updates": 600,
+    "baselineRedraws": 601,
+    "candidateRedraws": 1
+  },
+  "checks": [
+    "real React effects and original atlases",
+    "live/heat/recoil, partial and full destruction",
+    "static and frozen output retained without another surface",
+    "fractional geometry and DPR invalidation",
+    "context lost/restored retries",
+    "null main/temporary context retries",
+    "live/config/texture changes invalidate static output",
+    "listeners and every candidate canvas released on unmount"
+  ],
+  "limits": "Native raster and React host; not Safari/Pi Browser, physical iPhone FPS, GPU/process memory or proof of the whitescreen cause."
+}

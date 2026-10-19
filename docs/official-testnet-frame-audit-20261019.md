@@ -1,5 +1,9 @@
 # Official Testnet frame audit, 19 October 2026
 
+This initial report describes source 0501e10. The supplied-video follow-up adds
+a guarded static weapon-canvas optimization; see
+[the boss-7 video investigation](official-testnet-video-boss7-20261019.md).
+
 The user requires the current official Testnet as the only source. Verified
 deployment: `dpl_8h9mgxiRDUerhJr4PyCPTiaPQgR4`, source
 `66eb357cc08a6b5f9b32a9242d6875ed475532fa`, complete tree
