@@ -1,5 +1,18 @@
 # Preserve the officially approved game
 
+## Isolated boss stability and playability preview, 19 October 2026
+
+The user requests larger minimum turret bodies and matching hit areas while
+keeping small barrels, calibre, muzzle positions and ammunition unchanged. The
+user also requests closer investigation of shooting stars/background flares and
+the repeated iPhone interruption. Prepare a login-free playable preview first,
+with independently selectable original turret bodies and ambient events for
+comparison. The preview grants no Admin role or account/API access. The normal
+Starfield keeps ambient events enabled by default. Continue verified redundant
+rendering/resource-lifetime corrections; do not claim a proved native crash
+cause or a complete fix. Preserve all other combat, audio, HUD and progression.
+No new official Testnet or Mainnet release is authorized by this request.
+
 ## Explicit owner-only V4 Testnet release, 19 October 2026
 
 The user explicitly authorized "V4 ins Testnet, nur Admin." Release the tested

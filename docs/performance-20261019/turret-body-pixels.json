@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "comparisons": 400,
+  "changedBodiesAcrossDPRs": 350,
+  "exactUnchangedChannelsOutsideBodyAndSocket": 763021228,
+  "checks": [
+    "50 atlases at DPR 1 and 2",
+    "normal, heated, firing and destroyed",
+    "exact RGBA outside the intended body/socket region",
+    "no new sprite textures or per-frame body canvases"
+  ],
+  "limits": "Intentional body artwork change, not an assertion of globally identical images or a physical iPhone test."
+}

@@ -1,0 +1,22 @@
+// The owner chose the English mission label for both EN and DE.
+export const missionNavigationTranslations: Record<string, Record<string,string>> = {
+ en:{'Next Mission':'Next Mission'},
+ de:{'Next Mission':'Next Mission'},
+ es:{'Next Mission':'Siguiente misión'},
+ fr:{'Next Mission':'Mission suivante'},
+ pt:{'Next Mission':'Próxima missão'},
+ it:{'Next Mission':'Prossima missione'},
+ pl:{'Next Mission':'Następna misja'},
+ tr:{'Next Mission':'Sonraki görev'},
+ ru:{'Next Mission':'Следующая миссия'},
+ hr:{'Next Mission':'Sljedeća misija'},
+ cs:{'Next Mission':'Další mise'},
+ sk:{'Next Mission':'Ďalšia misia'},
+ hu:{'Next Mission':'Következő küldetés'},
+ ro:{'Next Mission':'Misiunea următoare'},
+ sr:{'Next Mission':'Следећа мисија'},
+ uk:{'Next Mission':'Наступна місія'},
+ th:{'Next Mission':'ภารกิจถัดไป'},
+ zh:{'Next Mission':'下一任务'},
+ vi:{'Next Mission':'Nhiệm vụ tiếp theo'},
+};

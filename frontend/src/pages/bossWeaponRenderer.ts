@@ -1,9 +1,10 @@
 import { bossWeapons, type AtlasRect } from './bossWeapons.ts';
 import type { SectorBoss } from './sectorBoss.ts';
 import { turretHeatStep, paintTurretHeat } from './bossTurretHeat.ts';
+import { turretBodyScale } from './bossTurretBody.ts';
 
 type CanvasFactory = (width:number,height:number)=>HTMLCanvasElement;
-const bases=new WeakMap<HTMLCanvasElement,{id:number;width:number;height:number;layer:HTMLCanvasElement;heated:Map<string,HTMLCanvasElement>}>();
+const bases=new WeakMap<HTMLCanvasElement,{id:number;width:number;height:number;logicalWidth:number;logicalHeight:number;image:CanvasImageSource;layer:HTMLCanvasElement;heated:Map<string,HTMLCanvasElement>}>();
 export const disposeBossWeapons = (canvas: HTMLCanvasElement) => {
  const cached = bases.get(canvas);
  if (cached) {
@@ -18,19 +19,19 @@ export const weaponCanvasSize=(boss:SectorBoss)=>({width:boss.width*1.44,height:
 const tile=(c:CanvasRenderingContext2D,image:CanvasImageSource,r:AtlasRect,x:number,y:number,scale:number)=>c.drawImage(image,r.x,r.y,r.width,r.height,x,y,r.width*scale/2,r.height*scale/2);
 
 export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:CanvasImageSource,frozen=false,make:CanvasFactory=factory)=>{
- const c=canvas.getContext('2d');if(!c)return;
+ const c=canvas.getContext('2d');if(!c)return false;
  const size=weaponCanvasSize(boss),sx=canvas.width/size.width,sy=canvas.height/size.height,scale=boss.width/boss.config.sourceWidth;
  const guns=bossWeapons[boss.config.id-1];
  let cached=bases.get(canvas);
- if(!cached||cached.id!==boss.config.id||cached.width!==canvas.width||cached.height!==canvas.height){
+ if(!cached||cached.id!==boss.config.id||cached.width!==canvas.width||cached.height!==canvas.height||cached.logicalWidth!==boss.width||cached.logicalHeight!==boss.height||cached.image!==image){
   if (cached) {
    cached.layer.width = cached.layer.height = 0;
    for (const hot of cached.heated.values()) hot.width = hot.height = 0;
   }
-  const layer=make(canvas.width,canvas.height),base=layer.getContext('2d');if(!base)return;
+  const layer=make(canvas.width,canvas.height),base=layer.getContext('2d');if(!base){layer.width=layer.height=0;return false;}
   base.setTransform(sx,0,0,sy,0,0);
-  for(const g of guns){const x=size.padX+g.sourceX/boss.config.sourceWidth*boss.width,y=size.padY+g.sourceY/boss.config.sourceHeight*boss.height;tile(base,image,g.socket,x-g.socket.width*scale/4,y-g.socket.height*scale/4,scale);}
-  cached={id:boss.config.id,width:canvas.width,height:canvas.height,layer,heated:new Map()};bases.set(canvas,cached);
+  for(const g of guns){const x=size.padX+g.sourceX/boss.config.sourceWidth*boss.width,y=size.padY+g.sourceY/boss.config.sourceHeight*boss.height,bodyScale=scale*turretBodyScale(g,scale);tile(base,image,g.socket,x-g.socket.width*bodyScale/4,y-g.socket.height*bodyScale/4,bodyScale);}
+  cached={id:boss.config.id,width:canvas.width,height:canvas.height,logicalWidth:boss.width,logicalHeight:boss.height,image,layer,heated:new Map()};bases.set(canvas,cached);
  }
  c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,canvas.width,canvas.height);c.drawImage(cached.layer,0,0);c.setTransform(sx,0,0,sy,0,0);
  for(let i=0;i<guns.length;i++){
@@ -45,6 +46,7 @@ export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:Can
   c.globalAlpha=.64;tile(c,image,g.shadow,-g.spritePivot.x*scale-12*scale+3*scale,-g.spritePivot.y*scale-12*scale+6*scale,scale);
   c.globalAlpha=1;
   const heat=frozen?0:turretHeatStep(state);
+  let spriteImage:CanvasImageSource=image,spriteRect=g.sprite;
   if(heat){
    const key=`${i}:${heat}`;let hot=cached.heated.get(key);
    if(!hot){
@@ -53,9 +55,18 @@ export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:Can
     for (const [previous, tile] of cached.heated) if (previous.startsWith(`${i}:`)) { tile.width = tile.height = 0; cached.heated.delete(previous); }
     hot=make(g.sprite.width,g.sprite.height);const hc=hot.getContext('2d');
     if(hc){hc.drawImage(image,g.sprite.x,g.sprite.y,g.sprite.width,g.sprite.height,0,0,g.sprite.width,g.sprite.height);paintTurretHeat(hc,g.sprite.width,g.sprite.height,heat);cached.heated.set(key,hot);}
+    else {hot.width=hot.height=0;hot=undefined;}
    }
-   tile(c,hot,{x:0,y:0,width:g.sprite.width,height:g.sprite.height},-g.spritePivot.x*scale,-g.spritePivot.y*scale,scale);
-  }else tile(c,image,g.sprite,-g.spritePivot.x*scale,-g.spritePivot.y*scale,scale);
+   if(hot){spriteImage=hot;spriteRect={x:0,y:0,width:g.sprite.width,height:g.sprite.height};}
+  }
+  tile(c,spriteImage,spriteRect,-g.spritePivot.x*scale,-g.spritePivot.y*scale,scale);
+  const bodyFactor=turretBodyScale(g,scale);
+  if(bodyFactor>1){
+   // Overlay only the original armoured ellipse. Scaling the entire sprite
+   // would also enlarge its barrel and move the apparent muzzle.
+   c.save();c.scale(bodyFactor,bodyFactor);c.beginPath();c.ellipse(0,-3*scale,g.halfWidth*scale,g.back*.85*scale,0,0,Math.PI*2);c.clip();
+   tile(c,spriteImage,spriteRect,-g.spritePivot.x*scale,-g.spritePivot.y*scale,scale);c.restore();
+  }
   c.restore();
   const r=g.halfWidth*scale;c.fillStyle=state.lock>=160?'#c8f0db':'#d5934f';c.beginPath();c.ellipse(x-r*.45,y-r*.31,Math.max(.7,1.5*scale),Math.max(.5,scale),0,0,Math.PI*2);c.fill();
   if(!frozen&&age>=0&&age<.08){
@@ -63,4 +74,5 @@ export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:Can
    for(const b of state.firedBarrels){c.beginPath();c.ellipse(g.barrels[b]*scale,(g.muzzle-g.recoil)*scale,Math.max(1.5,g.visualShotWidth*scale*1.4),Math.max(3,g.visualShotWidth*scale*2.4),0,0,Math.PI*2);c.fill();}c.restore();
   }
  }
+ return true;
 };

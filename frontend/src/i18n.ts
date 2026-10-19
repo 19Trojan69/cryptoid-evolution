@@ -7,7 +7,9 @@ import { homeScreenTranslations } from "./locales/homeScreen.ts";
 import { seriesTranslations } from "./locales/seriesAE.ts";
 import { formatLives } from "./locales/quantities.ts";
 import { localeAliases, localeCatalog } from "./locales/catalog.ts";
+import { missionNavigationTranslations } from "./locales/missionNavigation.ts";
 
+for (const [locale, entries] of Object.entries(missionNavigationTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(sevenPackageTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(homeScreenTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(seriesTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);

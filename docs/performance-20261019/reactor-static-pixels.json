@@ -1,0 +1,47 @@
+{
+  "passed": true,
+  "baselineComponent": "f5e8a47",
+  "artwork": "same current renderer in both components",
+  "candidateRef": "working tree",
+  "exactPixelComparisons": 3000,
+  "drawCounts": [
+    {
+      "dpr": 1,
+      "frames": 2000,
+      "baselineClears": 2005,
+      "candidateClears": 5
+    },
+    {
+      "dpr": 1.5,
+      "frames": 2000,
+      "baselineClears": 2005,
+      "candidateClears": 5
+    },
+    {
+      "dpr": 2,
+      "frames": 2000,
+      "baselineClears": 2005,
+      "candidateClears": 5
+    },
+    {
+      "dpr": 2.625,
+      "frames": 2000,
+      "baselineClears": 2005,
+      "candidateClears": 5
+    },
+    {
+      "dpr": 3,
+      "frames": 2000,
+      "baselineClears": 2005,
+      "candidateClears": 5
+    }
+  ],
+  "checks": [
+    "all 50 bosses, five DPRs",
+    "live, heat, flash, last turret and reactor phase",
+    "parent movement, frozen hull, logical/pixel resize",
+    "context loss, restoration, null-context retry, config identity",
+    "all canvas surfaces and context listeners released"
+  ],
+  "limits": "Native raster and actual hook component host; no physical iPhone/WebKit memory or crash verification."
+}

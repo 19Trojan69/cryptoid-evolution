@@ -61,7 +61,7 @@ function StarFlare({ stars }: { stars: Star[] }) {
   return flare && <i className="distant-star-flare" style={{ left: `${flare.x}%`, top: `${flare.y}%`, "--flare-color": flare.color, "--flare-strength": flare.strength, "--flare-size": flare.size, "--flare-duration": `${flare.duration}ms` } as CSSProperties} />;
 }
 
-const Starfield = ({ sector, paused, showNebula = false }: { sector: number; player: PlayerPosition; paused: boolean; showNebula?: boolean }) => {
+const Starfield = ({ sector, paused, showNebula = false, ambientEvents = true }: { sector: number; player: PlayerPosition; paused: boolean; showNebula?: boolean; ambientEvents?: boolean }) => {
   const palette = ((sector - 1) % 6) + 1;
   const stars = useMemo(() => {
     const seed = Math.imul(sector, 0x9e3779b1) >>> 0;
@@ -82,7 +82,7 @@ const Starfield = ({ sector, paused, showNebula = false }: { sector: number; pla
   return <div className={`starfield starfield-sector-${palette}${paused ? " starfield-paused" : ""}`} aria-hidden="true">
     {showNebula && <div className="nebula-field"><span className="nebula-cloud" style={stars.cloud} /></div>}
     <div className="milky-band" />
-    {!paused && <StarFlare stars={stars.distant} />}
+    {ambientEvents && !paused && <StarFlare stars={stars.distant} />}
     <svg className="starfield-stars starfield-distant" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice">
       {stars.distant.map((star, index) => <circle key={index} cx={star.x} cy={star.y} r={star.radius} fill={star.color} opacity={star.opacity} />)}
     </svg>
@@ -96,9 +96,9 @@ const Starfield = ({ sector, paused, showNebula = false }: { sector: number; pla
         <circle cx={star.x} cy={star.y} r={star.radius} fill={star.color} />
       </g>)}
     </svg>
-    <i className="shooting-star shooting-star-one"><span /></i>
+    {ambientEvents && <i className="shooting-star shooting-star-one"><span /></i>}
   </div>;
 };
 
-export default memo(Starfield, (previous, next) => previous.sector === next.sector && previous.paused === next.paused && previous.showNebula === next.showNebula);
+export default memo(Starfield, (previous, next) => previous.sector === next.sector && previous.paused === next.paused && previous.showNebula === next.showNebula && previous.ambientEvents === next.ambientEvents);
 

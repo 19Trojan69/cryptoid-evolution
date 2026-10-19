@@ -3,6 +3,27 @@ import { gunPosition } from './bossTurrets.ts';
 import { bossHullContains } from './bossCombat.ts';
 import type { SectorBoss } from './sectorBoss.ts';
 import { bossHullExposed } from './sectorBoss.ts';
+import { turretBodyScale } from './bossTurretBody.ts';
+
+const rectangleEntry=(x:number,y:number,vx:number,vy:number,halfWidth:number,back:number,muzzle:number)=>{
+ let enter=0,leave=1;
+ if(Math.abs(vx)<1e-8){if(Math.abs(x)>halfWidth)return Infinity;}
+ else{const a=(-halfWidth-x)/vx,b=(halfWidth-x)/vx;enter=Math.max(enter,Math.min(a,b));leave=Math.min(leave,Math.max(a,b));}
+ if(enter>leave)return Infinity;
+ if(Math.abs(vy)<1e-8){if(y < -back||y > muzzle)return Infinity;}
+ else{const a=(-back-y)/vy,b=(muzzle-y)/vy;enter=Math.max(enter,Math.min(a,b));leave=Math.min(leave,Math.max(a,b));}
+ if(enter>leave)return Infinity;
+ return enter;
+};
+const ellipseEntry=(x:number,y:number,vx:number,vy:number,rx:number,ry:number,centerY:number)=>{
+ const px=x/rx,py=(y-centerY)/ry,dx=vx/rx,dy=vy/ry;
+ const a=dx*dx+dy*dy,b=2*(px*dx+py*dy),c=px*px+py*py-1;
+ if(c<=0)return 0;
+ if(a<1e-12)return Infinity;
+ const discriminant=b*b-4*a*c;if(discriminant<0)return Infinity;
+ const enter=(-b-Math.sqrt(discriminant))/(2*a);
+ return enter>=0&&enter<=1?enter:Infinity;
+};
 
 // Sweep the projectile path so small barrels cannot be skipped between frames.
 // While protected, the hull lets shots reach rear-mounted guns. Only live guns
@@ -22,14 +43,14 @@ export function bossHitTarget(boss:SectorBoss,from:{x:number;y:number},to:{x:num
    const gun=guns[index],pos=gunPosition(boss,gun),c=Math.cos(state.a),s=Math.sin(state.a);
    const x=c*(from.x-pos.x)+s*(from.y-pos.y),y=-s*(from.x-pos.x)+c*(from.y-pos.y);
    const vx=c*dx+s*dy,vy=-s*dx+c*dy,halfWidth=Math.max(3,gun.halfWidth*scale);
-   let enter=0,leave=1;
-   if(Math.abs(vx)<1e-8){if(Math.abs(x)>halfWidth)continue;}
-   else {const a=(-halfWidth-x)/vx,b=(halfWidth-x)/vx;enter=Math.max(enter,Math.min(a,b));leave=Math.min(leave,Math.max(a,b));}
-   if(enter>leave)continue;
    const back=gun.back*scale+2,muzzle=gun.muzzle*scale+2;
-   if(Math.abs(vy)<1e-8){if(y < -back||y > muzzle)continue;}
-   else {const a=(-back-y)/vy,b=(muzzle-y)/vy;enter=Math.max(enter,Math.min(a,b));leave=Math.min(leave,Math.max(a,b));}
-   if(enter<=leave&&enter<earliest){earliest=enter;hitIndex=index;}
+   let enter=rectangleEntry(x,y,vx,vy,halfWidth,back,muzzle);
+   const bodyFactor=turretBodyScale(gun,scale);
+   if(bodyFactor>1){
+    const recoil=Math.max(0,1-(boss.weaponClock-state.lastFired)/250)*gun.recoil*scale;
+    enter=Math.min(enter,ellipseEntry(x,y,vx,vy,gun.halfWidth*scale*bodyFactor,gun.back*.85*scale*bodyFactor,-3*scale*bodyFactor-recoil));
+   }
+   if(enter<earliest){earliest=enter;hitIndex=index;}
   }
   if(hitIndex>=0)return {kind:'turret' as const,index:hitIndex,x:from.x+dx*earliest,y:from.y+dy*earliest};
   return null;

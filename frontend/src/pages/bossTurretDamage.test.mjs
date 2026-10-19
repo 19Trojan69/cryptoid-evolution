@@ -94,9 +94,9 @@ test('rotated barrels outside the hull intercept a swept shot; destroyed barrels
 test('renderer omits destroyed gun sprite and flash, leaving the socket and wreck mark',()=>{
  const boss=createSectorBoss(10,390,90,760);boss.elapsed=2000;const calls=[];
  const c=new Proxy({drawImage:(...args)=>calls.push(args)}, {get:(o,k)=>k in o?o[k]:()=>{}});
- const make=()=>({width:600,height:500,getContext:()=>c});const canvas=make();
- drawBossWeapons(canvas,boss,{},false,make);const live=calls.length;calls.length=0;
- damageBossTurret(boss,0,1000);drawBossWeapons(canvas,boss,{},false,make);
+ const make=()=>({width:600,height:500,getContext:()=>c});const canvas=make(),atlas={};
+ drawBossWeapons(canvas,boss,atlas,false,make);const live=calls.length;calls.length=0;
+ damageBossTurret(boss,0,1000);drawBossWeapons(canvas,boss,atlas,false,make);
  // Cached base layer plus the surviving gun's shadow and sprite only.
  assert.equal(calls.length,3);assert(live>calls.length);
 });
