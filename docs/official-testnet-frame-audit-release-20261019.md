@@ -1,9 +1,61 @@
-# Official Testnet release attempt, 19 October 2026
+# Official Testnet release, 19 October 2026
 
-Status checked at 2026-10-19T18:37:40Z: **blocked before deployment**.
+Status: **live**, deployed at 2026-10-19T20:11:37Z (22:11:37 Europe/Vienna).
 The owner explicitly authorized the reviewed patch with "Ja bitte mach das."
 The authorization remains valid; no further approval for the same release is
 needed. This note changes no application code or deployment configuration.
+
+## Completed release
+
+- Project: `cryptoid-evolution-testnet`, `prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF`.
+- READY production deployment: `dpl_6B1LLYF2VvuhwwjPBPhccPfQfTUM`.
+- Public URL: https://cryptoid-evolution-testnet.vercel.app/.
+- Immutable host: `cryptoid-evolution-testnet-9t3cacrhk-19-trojan69.vercel.app`.
+- Dashboard receipt: https://vercel.com/19-trojan69/cryptoid-evolution-testnet/6B1LLYF2VvuhwwjPBPhccPfQfTUM.
+- Exact source: `7cdad95400becf690175af0698292a24fb0a6c21`, reviewed tree below.
+- Fixed release branch: `codex/testnet-frame-audit-release-20261019`.
+- Production build duration: 53 seconds; framework preset remains unset, using
+  the existing Vite/frontend build and API configuration.
+
+The user explicitly authorized the browser fallback after the integration's
+403 response, and chose GitHub sign-in. The dashboard resolved the fixed release
+branch to the exact reviewed commit. Preview `dpl_HPqNo4aPkomuoJGX5VNvVrFDsySt`
+completed first; the dashboard then rebuilt that commit using the project's
+existing production environment and assigned the official Testnet domain after
+the production build succeeded. No source was merged to main. No project,
+environment-variable, domain-configuration or Admin-permission setting changed.
+The original audit branch remains excluded from automatic deployments.
+
+## Checks after release
+
+- Independent deployment reads confirm official Testnet is READY production at
+  the exact commit above; Mainnet remains at the deployment/source below.
+- Public Home returned HTTP 200 and rendered the existing login/Home screen.
+- Public entry assets match the production build log:
+  `index-Cglu-3l1.js`, `index-CLY2nAhm.css`; the build includes
+  `GamePage-DhQ1rrAt.js`.
+- `/api/` returned HTTP 200 and the existing Hello World JSON response.
+- Anonymous `/api/admin/status` returned HTTP 401, `not_authenticated`.
+- Dashboard requests to `/api/hangar/catalog` returned HTTP 200 and the existing
+  automatic usage requests returned HTTP 204.
+- Browser inspection showed a nonfatal missing `HydrateFallback` warning;
+  a Chrome-extension metadata error was outside the application source.
+- Production build finished successfully. The language gate reported release
+  ready; the existing chunk-size advisory remained. No complete Pi sign-in or
+  physical iPhone gameplay/FPS/memory check was performed here.
+
+### Open server finding
+
+The integration's runtime-log endpoint returned HTTP 403; this is not a clean
+error scan. The authenticated dashboard fallback did expose a concrete issue:
+at 20:15:20 UTC (`GET /api/`, HTTP 200) and 20:16:17 UTC
+(`POST /api/usage/collect`, HTTP 204), logs included a MongoDB selection failure
+connecting to `127.0.0.1:27017` and Node.js exit status 128. The selected API-root
+request shows a successful proxy response through the established backend.
+The API/backend source is unchanged from the preceding official Testnet tree.
+Whether the same server finding occurred before this release is unverified;
+no link to the iPhone document restart is established. Do not call runtime logs
+clean or describe this frontend release as fixing that server issue.
 
 ## Reviewed source and verification
 
@@ -32,13 +84,20 @@ needed. This note changes no application code or deployment configuration.
   `cryptoid-evolution-testnet-hgwzbvatt-19-trojan69.vercel.app`.
 - Official host: `cryptoid-evolution-testnet.vercel.app`.
 
-After a successful future release, return the official Testnet to the existing
-deployment above using the Vercel rollback operation for project
+To undo this release, return the official Testnet to the existing deployment
+above using the Vercel rollback operation for project
 `prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF`. This requires no rebuild. Verify the
 official hostname resolves to that deployment and source afterward. Do not
 roll back or promote the separate Mainnet project.
 
-## Deployment access blocker
+Dashboard route: open this Testnet project's Deployments list, select deployment
+`8h9mgxiRDUerhJr4PyCPTiaPQgR4`, verify source `66eb357`, and use Instant Rollback
+(or promote this existing production deployment). Confirm the target is the
+official Testnet domain before applying. This restores the existing build,
+without rebuilding or changing player saves. Afterward verify the official
+hostname points to `dpl_8h9mgxiRDUerhJr4PyCPTiaPQgR4` and Mainnet is unchanged.
+
+## Earlier integration blocker (release completed via dashboard)
 
 The authenticated Vercel integration rejected `POST /v13/deployments` for the
 explicit Testnet project and team `team_KzJmtl0QyoYZAOu5RQKsAR2i`:
@@ -51,22 +110,16 @@ domains. No deployment ID was returned. The tool's advertised CLI fallback
 was unavailable: no `vercel` executable was installed. No credentials were
 requested, retrieved or exposed, and the rejected request was not retried.
 
-The project owner must make production deployment access available to the
-connected integration, or perform the reviewed deployment in Vercel themselves.
-User approval is already present; the blocker is Vercel deployment access.
+The user subsequently authorized the dashboard fallback, which completed the
+release described above. The failed integration call itself created no build.
 
-## Verified public state after the rejection
+## Verified current public state
 
 | Site | Deployment | Source | State |
 | --- | --- | --- | --- |
-| Official Testnet | `dpl_8h9mgxiRDUerhJr4PyCPTiaPQgR4` | `66eb357cc08a6b5f9b32a9242d6875ed475532fa` | READY, unchanged |
+| Official Testnet | `dpl_6B1LLYF2VvuhwwjPBPhccPfQfTUM` | `7cdad95400becf690175af0698292a24fb0a6c21` | READY, released |
 | Mainnet | `dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe` | `907d2a7363345d00f0f90c54402bf04e887b64d9` | READY, unchanged |
 
 No new login or Admin access was granted. No deployment, promotion or rollback
-was performed against Mainnet. The new patch is **not live**.
-
-Before resuming, independently verify both current public aliases, the rollback
-deployment and the reviewed commit/tree. Build only in the Testnet project with
-its existing production environment; prefer staging without domain assignment
-when the available interface supports it. Check the finished build before
-promotion, then verify the official hostname and confirm Mainnet is unchanged.
+was performed against Mainnet. The new patch is **live on official Testnet**.
+The complete Whitescreen fix remains unproved.

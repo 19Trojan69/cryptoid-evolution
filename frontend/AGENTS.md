@@ -13,13 +13,21 @@ the same release authorization again. The rollback branch
 backup/testnet-before-frame-audit-20261019 was created and verified at
 66eb357cc08a6b5f9b32a9242d6875ed475532fa before attempting deployment.
 Its existing READY deployment is dpl_8h9mgxiRDUerhJr4PyCPTiaPQgR4.
-The Vercel production-deployment request was rejected with HTTP 403 on
-19 October at approximately 18:37 UTC; no new deployment or alias movement
-occurred. No authenticated local Vercel CLI was available as the advertised
-fallback. See docs/official-testnet-frame-audit-release-20261019.md. Resume the
-already authorized release after deployment access is available; first verify
-the official aliases and the reviewed source again. Do not claim this patch is
-live, an iPhone FPS gain, or a complete Whitescreen fix.
+Released on 19 October at 20:11:37 UTC (22:11:37 Vienna) through the explicitly
+authorized Vercel dashboard fallback after GitHub sign-in. The official Testnet
+alias now resolves to READY production deployment
+dpl_6B1LLYF2VvuhwwjPBPhccPfQfTUM, exact source 7cdad95400becf690175af0698292a24fb0a6c21.
+The fixed release branch codex/testnet-frame-audit-release-20261019 points to that
+exact commit; keep it fixed. Continue records on the audit branch, whose automatic
+deployment stays disabled. Mainnet remains dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe at
+907d2a7363345d00f0f90c54402bf04e887b64d9. The previous 403 integration blocker
+remains an integration limitation, but no longer blocks this completed release.
+Post-release smoke checks passed for Home, API root and anonymous Admin denial.
+Dashboard runtime logs additionally showed a MongoDB connection refusal and
+Node.js exit 128 after successful proxy responses; preserve this unresolved
+server finding separately, without claiming a link to the iPhone Whitescreen.
+See docs/official-testnet-frame-audit-release-20261019.md for receipt and rollback.
+Do not claim an iPhone FPS gain or a complete Whitescreen fix.
 
 
 ## Official Testnet source only, 19 October 2026, continued frame audit
