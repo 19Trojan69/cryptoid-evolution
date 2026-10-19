@@ -1,5 +1,18 @@
 # Preserve the officially approved game
 
+## iPhone resource trend diagnosis v4 preparation, 19 October 2026
+
+The user authorized preparation with "Gut dann bereite das vor bitte" after a new iPhone
+run again ended abruptly during boss 20 while the last visible frame remained healthy.
+Prepare an isolated owner-only diagnostic extension that samples the already bounded
+resource counters during active visible play, including normal levels and boss fights,
+so a full run from level 1 can reveal cumulative growth before a hard WebView exit.
+Use a low-frequency interval (about 10 seconds), a separate bounded local ring buffer,
+and an owner-only Admin export. Do not change gameplay, visuals, audio, Pi login,
+payments, saves, difficulty or recovery semantics. Do not enable the new sampler for
+ordinary players. This message authorizes preparation and validation only; do not move
+the official Testnet alias or Mainnet without a separate explicit release instruction.
+
 ## Explicit owner-only Testnet diagnosis release, 18 October 2026
 
 The user explicitly authorized "ins testnet, nur in meinen Admin bereich".
