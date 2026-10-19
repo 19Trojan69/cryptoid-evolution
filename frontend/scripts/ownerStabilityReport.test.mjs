@@ -50,3 +50,19 @@ test('clipboard denial leaves a selectable report for manual copying',async()=>{
 test('closing the panel cancels a pending permission check before storage access',async()=>{
   let finish;const permission=new Promise(resolve=>{finish=resolve;});const p=panel(()=>permission);p.unmount();finish({canDiagnostics:true});await p.flush();assert.equal(p.reads,0);assert.equal(p.text(),'');
 });
+
+test('diagnostic-only accounts are structurally limited to the technical report, not owner admin tools',()=>{
+  const admin=source;
+  const start=admin.indexOf(') : !allowed && diagnosticAllowed ? (');
+  const end=admin.indexOf(') : !allowed ? (',start+1);
+  assert.ok(start>0&&end>start);
+  const restricted=admin.slice(start,end);
+  assert.ok(restricted.includes('<OwnerStabilityReport />'));
+  assert.ok(restricted.includes('Freigeschalteter Diagnosezugriff'));
+  assert.ok(!restricted.includes('admin-nav'));
+  assert.ok(!restricted.includes('Zahlungseingänge'));
+  assert.ok(!restricted.includes('startTest('));
+  const quick=fs.readFileSync(new URL('../src/components/QuickAccessMenu.tsx',import.meta.url),'utf8');
+  assert.ok(quick.includes('action === "diagnostics" ? canDiagnostics'));
+  assert.ok(quick.includes('action === "admin" ? canAdmin'));
+});
