@@ -1,5 +1,17 @@
 # Preserve the officially approved game
 
+## Explicit owner-only V4 Testnet release, 19 October 2026
+
+The user explicitly authorized "V4 ins Testnet, nur Admin." Release the tested
+iPhone resource-trend diagnosis v4 only to the existing official Testnet alias.
+The periodic resource sampler must run only for a server-verified canAdmin owner
+session and remain visible/exportable only inside the existing owner Admin
+diagnostics view. Ordinary players must not receive the new sampler, UI, hints
+or export access. Preserve gameplay, visuals, audio, Pi login, payments, saves,
+difficulty and recovery semantics. Mainnet is excluded. Create a rollback branch
+to the current official Testnet source before moving the Testnet alias.
+
+
 ## Secondary diagnostic account preparation, 19 October 2026
 
 The user requested a second Testnet account for Android comparison and supplied the
