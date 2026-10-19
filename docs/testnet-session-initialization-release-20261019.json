@@ -1,0 +1,96 @@
+{
+  "releaseCommit": "f5be06d594f70f21fe9b6b6235015b819b57bb34",
+  "reviewedTree": "2e030b6e43f0fe71e5cd2de410d5eb71230d7e71",
+  "deployment": "dpl_7CGcYyrnLNXwkU8ychnkxfjqR198",
+  "readyAt": "2026-10-19T20:34:14Z",
+  "rollbackDeployment": "dpl_6B1LLYF2VvuhwwjPBPhccPfQfTUM",
+  "rollbackSource": "7cdad95400becf690175af0698292a24fb0a6c21",
+  "beforeHighscores": {
+    "/api/leaderboard/top?rules=1": {
+      "status": 200,
+      "sha256": "633cb74060cc3e49bec6e694759dbb3a8ba151be5bba2773dee209d4741c5119",
+      "entries": 2,
+      "network": "testnet"
+    },
+    "/api/leaderboard/top?rules=2": {
+      "status": 200,
+      "sha256": "273fcbce20f75f02d6f725bc809354fcda3abf4aa8e078e31643b6af2e217a3c",
+      "entries": 17,
+      "network": "testnet"
+    },
+    "/api/leaderboard/top?sort=career": {
+      "status": 200,
+      "sha256": "3a64eef475bdb60d244c6e76b17210842472ed24c22beb5c9795000eab966d36",
+      "entries": 8,
+      "network": "testnet"
+    }
+  },
+  "afterSmoke": [
+    {
+      "path": "/",
+      "status": 200,
+      "at": "2026-10-19T20:34:48.544773+00:00",
+      "assets": [
+        "https://sdk.minepi.com/pi-sdk.js",
+        "/assets/index-Cglu-3l1.js",
+        "/assets/index-CLY2nAhm.css"
+      ]
+    },
+    {
+      "path": "/api/",
+      "status": 200,
+      "at": "2026-10-19T20:34:48.693477+00:00",
+      "body": "{\"message\":\"Hello, World!\"}"
+    },
+    {
+      "path": "/api/hangar/catalog",
+      "status": 200,
+      "at": "2026-10-19T20:34:48.754692+00:00"
+    },
+    {
+      "path": "/api/admin/status",
+      "status": 401,
+      "at": "2026-10-19T20:34:50.115061+00:00",
+      "body": "{\"error\":\"not_authenticated\"}"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=1",
+      "status": 200,
+      "at": "2026-10-19T20:34:53.780092+00:00",
+      "sha256": "633cb74060cc3e49bec6e694759dbb3a8ba151be5bba2773dee209d4741c5119",
+      "entries": 2,
+      "network": "testnet",
+      "identicalBefore": true
+    },
+    {
+      "path": "/api/leaderboard/top?rules=2",
+      "status": 200,
+      "at": "2026-10-19T20:34:53.793623+00:00",
+      "sha256": "273fcbce20f75f02d6f725bc809354fcda3abf4aa8e078e31643b6af2e217a3c",
+      "entries": 17,
+      "network": "testnet",
+      "identicalBefore": true
+    },
+    {
+      "path": "/api/leaderboard/top?sort=career",
+      "status": 200,
+      "at": "2026-10-19T20:34:53.278780+00:00",
+      "sha256": "3a64eef475bdb60d244c6e76b17210842472ed24c22beb5c9795000eab966d36",
+      "entries": 8,
+      "network": "testnet",
+      "identicalBefore": true
+    }
+  ],
+  "runtimeCheck": {
+    "at": "2026-10-19T20:36:26Z",
+    "requestRecords": 17,
+    "usageRequests": 2,
+    "mongoErrorExit128Or5xxRows": 0,
+    "scope": "new deployment request-log window; no unlimited uptime or iPhone fix claim"
+  },
+  "dataOperations": "read-only public Highscore comparison; no deletion, schema migration, reset or account/score mutation",
+  "mainnetUnchanged": {
+    "deployment": "dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe",
+    "source": "907d2a7363345d00f0f90c54402bf04e887b64d9"
+  }
+}

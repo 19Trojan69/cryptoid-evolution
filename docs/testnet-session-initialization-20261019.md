@@ -1,10 +1,53 @@
 # Testnet session-store initialization correction, 19 October 2026
 
-Status: prepared and locally verified; not published.
+Status: live on official Testnet since 20:34:14 UTC (22:34:14 Europe/Vienna).
+
+## Release receipt and checks
+
+- Exact release source: `f5be06d594f70f21fe9b6b6235015b819b57bb34`.
+- Complete reviewed tree: `2e030b6e43f0fe71e5cd2de410d5eb71230d7e71`.
+- READY production deployment: `dpl_7CGcYyrnLNXwkU8ychnkxfjqR198`.
+- Official URL: https://cryptoid-evolution-testnet.vercel.app/.
+- Immutable host: `cryptoid-evolution-testnet-e29vjvwzf-19-trojan69.vercel.app`.
+- Dashboard: https://vercel.com/19-trojan69/cryptoid-evolution-testnet/7CGcYyrnLNXwkU8ychnkxfjqR198.
+- Production build: 48 seconds, existing Vite/frontend and API settings.
+- Staging preview: `dpl_3pkDokaYvM2UkUW15Cn2tWBjnCJL`, 43 seconds.
+
+The user-authorized dashboard fallback remained signed in through GitHub.
+Vercel resolved the fixed release branch reference to the preparation branch
+containing the same exact commit; the SHA was verified before promotion.
+The production environment rebuilt that exact SHA and then assigned the
+official Testnet hostname. No project settings, credentials or database settings
+were changed. Fixed release branch `codex/testnet-session-store-release-20261019`
+remains at this source; documentation continues on the disabled preparation
+branch. No source merge or deployment occurred against Mainnet.
+
+Public post-release checks at 20:34:48–20:34:54 UTC:
+
+- Home rendered normally and returned 200. Entry JS/CSS filenames are identical
+  to the preceding official release, including `index-Cglu-3l1.js` and
+  `index-CLY2nAhm.css`; the build retains `GamePage-DhQ1rrAt.js`.
+- API root and public hangar catalog returned 200.
+- Anonymous Admin status returned 401, `not_authenticated`.
+- Legacy, V2 and career Highscore responses returned 200 with exact before/after
+  equality of their complete canonical JSON hashes. Entry counts remain 2, 17,
+  and 8. No score/account records were altered to perform these read-only checks.
+- At 20:36:26 UTC, the new deployment's dashboard request-log view contained 17
+  request records, including two usage requests (204), catalog/proxy/Highscore
+  requests (200) and the expected anonymous Admin denial (401). No MongoDB
+  connection-refusal, unhandled rejection, exit 128 or 5xx appeared. Only the
+  existing `NODE_ENV: production` informational messages were present. The
+  observed window exceeds the former connection failure delay. This establishes
+  no recurrence in the checked window, not an unlimited uptime guarantee.
+- Independent deployment reads confirm the official alias and exact SHA.
+  Mainnet remains the preceding deployment/source documented below.
+- Machine-readable public comparison evidence is in
+  `testnet-session-initialization-release-20261019.json`; it contains counts,
+  response hashes and technical status only, with no account or score values.
 
 ## Observed failure and cause
 
-The official Testnet production release is
+The preceding official Testnet production release was
 `7cdad95400becf690175af0698292a24fb0a6c21`, deployment
 `dpl_6B1LLYF2VvuhwwjPBPhccPfQfTUM`. Its dashboard logs showed a MongoDB
 connection refusal to `127.0.0.1:27017` and Node.js exit 128 after successful
@@ -64,19 +107,27 @@ network access rules, data, frontend code or dependencies are changed.
 
 ## Release boundary and rollback
 
-The official Testnet and Mainnet deployments are unchanged by preparation.
-The previous Testnet release instruction covered `7cdad95`; publication of
-this additional backend correction remains to be authorized.
+At 22:28 Europe/Vienna the user explicitly authorized this additional Testnet
+release provided saved data and Highscore lists are not deleted. The patch
+contains no deletion or schema/data migration and retains all session settings.
+The user clarified that Highscore lists were meant. No separate Mainnet release
+or account/data mutation is authorized. Do not ask for the same authorization
+again.
 
 The immediate rollback point is the existing READY production build
 `dpl_6B1LLYF2VvuhwwjPBPhccPfQfTUM` at `7cdad95`, preserved by fixed branch
-`codex/testnet-frame-audit-release-20261019`. The earlier `66eb357` rollback
+`codex/testnet-frame-audit-release-20261019` and the independently verified
+`backup/testnet-before-session-store-20261019`. The earlier `66eb357` rollback
 is also retained. Mainnet remains `dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe` at
 `907d2a7363345d00f0f90c54402bf04e887b64d9`.
 
-After an authorized Testnet-only release, inspect actual Vercel function logs
-after catalog/proxy/usage requests and confirm the localhost connection error
-and associated exit do not recur. Repeat anonymous Admin denial and public
-API smoke checks. Do not call the server error fixed in production before
-that check; physical iPhone FPS/native memory and the Whitescreen cause remain
-unverified.
+To undo this correction without rebuilding, use Instant Rollback in the existing
+Testnet project to `dpl_6B1LLYF2VvuhwwjPBPhccPfQfTUM` (source `7cdad95`). Verify
+the official Testnet domain is the target before applying, and verify that alias
+and unchanged Mainnet afterward. This restores application code without resetting
+player data. The older `66eb357` rollback remains available as well.
+
+The unwanted connection trigger is corrected and did not recur in the checked
+live window. Physical iPhone FPS/native memory and the Whitescreen cause remain
+unverified. No full campaign replay is required merely to gather the same known
+resource counters.

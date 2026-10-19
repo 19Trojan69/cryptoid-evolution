@@ -1,5 +1,31 @@
 # Preserve the officially approved game
 
+## Explicit Testnet Mongo session-store release, 19 October 2026
+
+At 22:28 Europe/Vienna the user explicitly approved the additional MongoDB
+session-store correction provided saved data and Highscore lists are not deleted.
+This release is complete: official Testnet is READY production deployment
+dpl_7CGcYyrnLNXwkU8ychnkxfjqR198 at f5be06d594f70f21fe9b6b6235015b819b57bb34,
+reviewed tree 2e030b6e43f0fe71e5cd2de410d5eb71230d7e71. Released at 20:34:14 UTC
+(22:34:14 Vienna). Only local Express session-store creation is delayed until
+the app is used; session options, authentication, owner Admin rules, frontend,
+data/schema, saves, Highscores and payments are unchanged. Do not ask for this
+same release authorization again. No deletion, migration or data reset occurred.
+
+The before/after public legacy, V2 and career Highscore responses match exactly
+(2, 17 and 8 entries respectively). Home/API/catalog checks and anonymous Admin
+denial pass. A 20:36 UTC dashboard scan of 17 new-deployment request records,
+including usage calls, shows no recurrence of the localhost Mongo error or
+associated exit 128. This is bounded post-release verification, not an iPhone
+Whitescreen or native-memory/FPS proof. Backend TypeScript and 109 tests pass.
+
+Immediate rollback: dpl_6B1LLYF2VvuhwwjPBPhccPfQfTUM at 7cdad95, independently
+preserved by backup/testnet-before-session-store-20261019 and the preceding fixed
+release branch. Keep codex/testnet-session-store-release-20261019 fixed at f5be06d;
+automatic deployment remains disabled on the preparation branch. Mainnet remains
+dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe at 907d2a7363345d00f0f90c54402bf04e887b64d9.
+See docs/testnet-session-initialization-20261019.md for release and rollback.
+
 ## Explicit official Testnet frame-audit release, 19 October 2026
 
 The user explicitly approved publishing the reviewed frame-audit and static
@@ -14,8 +40,8 @@ backup/testnet-before-frame-audit-20261019 was created and verified at
 66eb357cc08a6b5f9b32a9242d6875ed475532fa before attempting deployment.
 Its existing READY deployment is dpl_8h9mgxiRDUerhJr4PyCPTiaPQgR4.
 Released on 19 October at 20:11:37 UTC (22:11:37 Vienna) through the explicitly
-authorized Vercel dashboard fallback after GitHub sign-in. The official Testnet
-alias now resolves to READY production deployment
+authorized Vercel dashboard fallback after GitHub sign-in. At that release the
+official Testnet alias resolved to READY production deployment
 dpl_6B1LLYF2VvuhwwjPBPhccPfQfTUM, exact source 7cdad95400becf690175af0698292a24fb0a6c21.
 The fixed release branch codex/testnet-frame-audit-release-20261019 points to that
 exact commit; keep it fixed. Continue records on the audit branch, whose automatic

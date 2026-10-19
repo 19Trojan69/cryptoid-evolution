@@ -44,7 +44,16 @@ The original audit branch remains excluded from automatic deployments.
   ready; the existing chunk-size advisory remained. No complete Pi sign-in or
   physical iPhone gameplay/FPS/memory check was performed here.
 
-### Open server finding
+### Server finding and subsequent correction
+
+This finding was subsequently addressed by the separate, explicitly authorized
+Testnet-only release `f5be06d`, deployment `dpl_7CGcYyrnLNXwkU8ychnkxfjqR198`,
+at 20:34:14 UTC. The new actual-entry regression reproduces the eager session
+store connection in this older source. The correction delays that store until
+local Express use. The connection error and associated exit did not recur in
+the checked post-release request window; Highscore responses match exactly.
+See [session correction](testnet-session-initialization-20261019.md). The account
+below records the observations from this earlier frame-audit release.
 
 The integration's runtime-log endpoint returned HTTP 403; this is not a clean
 error scan. The authenticated dashboard fallback did expose a concrete issue:
@@ -113,7 +122,7 @@ requested, retrieved or exposed, and the rejected request was not retried.
 The user subsequently authorized the dashboard fallback, which completed the
 release described above. The failed integration call itself created no build.
 
-## Verified current public state
+## Verified public state at the frame-audit release (20:11 UTC)
 
 | Site | Deployment | Source | State |
 | --- | --- | --- | --- |
@@ -121,5 +130,6 @@ release described above. The failed integration call itself created no build.
 | Mainnet | `dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe` | `907d2a7363345d00f0f90c54402bf04e887b64d9` | READY, unchanged |
 
 No new login or Admin access was granted. No deployment, promotion or rollback
-was performed against Mainnet. The new patch is **live on official Testnet**.
+was performed against Mainnet. This patch is included in the subsequent official
+Testnet session-store release documented above.
 The complete Whitescreen fix remains unproved.
