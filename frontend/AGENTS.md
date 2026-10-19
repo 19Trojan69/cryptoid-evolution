@@ -1,5 +1,29 @@
 # Preserve the officially approved game
 
+## Explicit owner-only V4 Testnet release, 19 October 2026
+
+The user explicitly authorized "V4 ins Testnet, nur Admin." Release the tested
+iPhone resource-trend diagnosis v4 only to the existing official Testnet alias.
+The periodic resource sampler must run only for a server-verified canAdmin owner
+session and remain visible/exportable only inside the existing owner Admin
+diagnostics view. Ordinary players must not receive the new sampler, UI, hints
+or export access. Preserve gameplay, visuals, audio, Pi login, payments, saves,
+difficulty and recovery semantics. Mainnet is excluded. Create a rollback branch
+to the current official Testnet source before moving the Testnet alias.
+
+## iPhone resource trend diagnosis v4 preparation, 19 October 2026
+
+The user authorized preparation with "Gut dann bereite das vor bitte" after a new iPhone
+run again ended abruptly during boss 20 while the last visible frame remained healthy.
+Prepare an isolated owner-only diagnostic extension that samples the already bounded
+resource counters during active visible play, including normal levels and boss fights,
+so a full run from level 1 can reveal cumulative growth before a hard WebView exit.
+Use a low-frequency interval (about 10 seconds), a separate bounded local ring buffer,
+and an owner-only Admin export. Do not change gameplay, visuals, audio, Pi login,
+payments, saves, difficulty or recovery semantics. Do not enable the new sampler for
+ordinary players.
+
+
 ## Explicit owner-only Testnet diagnosis release, 18 October 2026
 
 The user explicitly authorized "ins testnet, nur in meinen Admin bereich".
