@@ -31,7 +31,7 @@ import { gameHaptics } from "./gameHaptics";
 import { bindGameInput } from './gameInput';
 import { startGuardedGameLoop, type GameInterruption } from './gameLoop';
 import { recordGameDiagnostic, createGameSessionDiagnostics } from './gameDiagnostics';
-import { createReloadGameMonitor, installReloadDiagnostics, recordReloadEvent, recordReloadSnapshot } from './reloadDiagnostics';
+import { createReloadGameMonitor, createResourceTrendMonitor, installReloadDiagnostics, recordReloadEvent, recordReloadSnapshot } from './reloadDiagnostics';
 import { browserProbeRuntime, createPerformanceProbe, developerProbeEnabled } from './performanceDiagnostics';
 import { renderWorkStats } from './renderWork';
 import GameSceneBoundary from './GameSceneBoundary';
@@ -706,6 +706,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     diagnosticsRef.current = monitor;
     if (ownerDiagnostics) installReloadDiagnostics();
     const reloadMonitor = ownerDiagnostics ? createReloadGameMonitor(diagnosticContext) : null;
+    const resourceTrendMonitor = ownerDiagnostics ? createResourceTrendMonitor(ownerResourceContext) : null;
     reloadDiagnosticsRef.current = reloadMonitor;
     const update = () => monitor.update(diagnosticContext(), stateRef.current.status === 'playing', document.hidden, true);
     const hidden = () => { probe?.lifecycle('pagehide'); probe?.suspend(performance.now()); monitor.pagehide(); update(); };
@@ -729,13 +730,14 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
       if (probeApi && probeHost.__cryptoidDiagnostics === probeApi) {
         if (previousProbe) probeHost.__cryptoidDiagnostics = previousProbe; else delete probeHost.__cryptoidDiagnostics;
       }
+      resourceTrendMonitor?.finish();
       reloadMonitor?.finish(); reloadDiagnosticsRef.current = null;
       monitor.finish(); diagnosticsRef.current = null;
       window.removeEventListener('error', onError); window.removeEventListener('unhandledrejection', onRejection);
       window.removeEventListener('pagehide', hidden); window.removeEventListener('pageshow', shown);
       document.removeEventListener('visibilitychange', update);
     };
-  }, [diagnosticContext]);
+  }, [diagnosticContext, ownerDiagnostics, ownerResourceContext]);
   const restoreCombat = (input: CombatCheckpoint) => {
     const saved = readCombatCheckpoint(input);
     if (!saved) throw new Error("Invalid saved combat checkpoint");
