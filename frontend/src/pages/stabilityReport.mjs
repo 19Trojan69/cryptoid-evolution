@@ -25,6 +25,8 @@ const reloadKinds = new Set([
   'unhandled-rejection','render-error','home-intent','saved-exit-intent','boss-defeat-start','boss-defeat-complete','boss-victory-start',
   'resource-boss-clear','resource-boss-clear-ready','resource-bonus-start','resource-bonus-first-spawn','resource-bonus-clear',
   'resource-normal-start','resource-normal-first-spawn','resource-formation-ready',
+  'reactor-open-observed','reactor-first-shot-before','reactor-first-shot-created',
+  'reactor-first-shot-audio-returned','reactor-first-shot-scene-committed',
 ]);
 const numberLimits = {
   sector: 500, block: 10, width: 16384, height: 16384, enemies: 1000, projectiles: 10000, effects: 10000,
@@ -122,6 +124,23 @@ function mergeResourceTrend(localValue, sessionValue) {
     samples: all.filter(sample => sample.at >= latestAt - RESOURCE_WINDOW_MS).slice(-RESOURCE_LIMIT),
   };
 }
+function activeDocument(host, now) {
+  const result = {};
+  try {
+    const startedAt = host.performance?.timeOrigin;
+    if (finite(startedAt) && startedAt > 0 && finite(now) && startedAt <= now) {
+      result.startedAt = startedAt;
+      result.ageMs = now - startedAt;
+    }
+    const type = host.performance?.getEntriesByType?.('navigation')?.[0]?.type;
+    if (['navigate','reload','back_forward','prerender'].includes(type)) result.navigationType = type;
+  } catch { /* Metadata may be unavailable in an embedded browser. */ }
+  try {
+    const path = host.location?.pathname;
+    if (typeof path === 'string') result.route = path === '/' ? 'home' : /^\/game(?:\/|$)/.test(path) ? 'game' : /^\/admin(?:\/|$)/.test(path) ? 'admin' : 'other';
+  } catch { /* Never include a URL, query string or account identifier. */ }
+  return Object.keys(result).length ? result : null;
+}
 export function readStabilityReport(host, now = Date.now()) {
   const saved = read(host, 'localStorage', EVENT_KEY);
   const session = read(host, 'sessionStorage', SESSION_KEY);
@@ -149,6 +168,7 @@ export function readStabilityReport(host, now = Date.now()) {
     version: 4,
     format: 'cryptoid-local-stability-report',
     generatedAt: finite(now) ? new Date(now).toISOString() : null,
+    activeDocument: activeDocument(host, now),
     available: events.length > 0 || lastSession !== null || reloadTrace !== null || resourceTrend !== null,
     storage: {
       events: saved.status, session: session.status,

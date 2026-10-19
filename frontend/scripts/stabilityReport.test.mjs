@@ -70,6 +70,31 @@ test('exports only allowed technical fields, never raw messages, stacks, user or
 test('out-of-range timestamp cannot break export',()=>{
   assert.equal(readStabilityReport(host(null,null),Infinity).generatedAt,null);
 });
+test('exports current document metadata read-only even when the owner never re-enters the game after a reload',()=>{
+  const h=host(null,null,JSON.stringify([{kind:'reactor-first-shot-before',at:10000,bootId:'old-document',context}]),null);
+  h.performance={timeOrigin:12000,getEntriesByType:()=>[{type:'reload',name:'private-url'}]};
+  h.location={pathname:'/admin',href:'private-url',search:'private-token'};
+  const result=readStabilityReport(h,14000);
+  assert.deepEqual(result.activeDocument,{startedAt:12000,ageMs:2000,navigationType:'reload',route:'admin'});
+  assert.equal(result.reloadTrace.events[0].kind,'reactor-first-shot-before');
+  assert.ok(!JSON.stringify(result).includes('private-'));
+});
+test('unavailable, throwing or future document metadata cannot prevent recovery of saved evidence',()=>{
+  for(const metadata of [{}, {performance:{timeOrigin:Infinity}}, {performance:{timeOrigin:9999999999}}]) {
+    const result=readStabilityReport({...host(JSON.stringify([context]),null),...metadata},14000);
+    assert.equal(result.events.length,1); assert.equal(result.activeDocument,null);
+  }
+  const h=host(JSON.stringify([context]),null);
+  Object.defineProperty(h,'performance',{get(){throw Error('denied');}});
+  Object.defineProperty(h,'location',{get(){throw Error('denied');}});
+  assert.equal(readStabilityReport(h).activeDocument,null);
+});
+test('all first-reactor-shot checkpoints survive the sanitized local export',()=>{
+  const kinds=['reactor-open-observed','reactor-first-shot-before','reactor-first-shot-created',
+    'reactor-first-shot-audio-returned','reactor-first-shot-scene-committed'];
+  const events=kinds.map((kind,i)=>({kind,at:1000+i,bootId:'reactor',context:{...context,coreVolley:i<2?0:1}}));
+  assert.deepEqual(readStabilityReport(host(null,null,JSON.stringify(events))).reloadTrace.events.map(e=>e.kind),kinds);
+});
 test('server owner approval is required before storage is touched',async()=>{
   let reads=0,verified=false;
   const getHost=()=>{assert.equal(verified,true);reads++;return host(JSON.stringify([context]),null);};

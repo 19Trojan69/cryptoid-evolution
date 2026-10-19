@@ -1,4 +1,5 @@
 import { GAME_SESSION_KEY, type GameDiagnostic } from './gameDiagnostics.ts';
+import type { BossBoundaryKind } from './bossBoundaryDiagnostics.ts';
 
 export const RELOAD_TRACE_KEY = 'cryptoid_reload_trace_v2';
 export const RELOAD_TRACE_LIMIT = 96;
@@ -13,6 +14,7 @@ const MAX_RAW_BYTES = 128 * 1024;
 const MAX_RESOURCE_RAW_BYTES = 256 * 1024;
 
 export type ReloadDiagnosticKind =
+  | BossBoundaryKind
   | 'app-boot'
   | 'app-load'
   | 'boot-after-active-session'

@@ -17,6 +17,7 @@ import { availableShipCards, firstMissionStarterCards, type CardReward } from '.
 import { mergeCardReveals, rememberCard, hasSeenCard, syncCardReveals } from './cardRevealMemory';
 import { primeCardSound } from './cardSound';
 import { advanceBossCore } from './bossCore';
+import { createBossBoundaryDiagnostics } from './bossBoundaryDiagnostics';
 import { bossName } from './bossNames';
 import { collectBossHeart, BOSS_HEART_POSITION, BOSS_EXTRA_LIFE_MS, type BossRewardState } from './bossReward';
 import { activateBossExplosion, bossExplosionBudget, bossExplosionReady } from './bossExplosionBudget';
@@ -425,6 +426,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   const lastMeasuredFrameRef = useRef(0);
   const lastSavedAtRef = useRef(0);
   const diagnosticsRef = useRef<ReturnType<typeof createGameSessionDiagnostics> | null>(null);
+  const bossBoundaryRef = useRef<ReturnType<typeof createBossBoundaryDiagnostics> | null>(null);
   const reloadDiagnosticsRef = useRef<ReturnType<typeof createReloadGameMonitor> | null>(null);
   const performanceProbeRef = useRef<ReturnType<typeof createPerformanceProbe> | null>(null);
   const sceneRenderStarted = performanceProbeRef.current?.sceneRenderBegin();
@@ -464,6 +466,9 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   const pendingBossCardRef=useRef<CardReward|null>(null);
   const [extraLifeVisible,setExtraLifeVisible]=useState(false);
   const [game, setGame] = useState<GameState>(createInitialState);
+  useLayoutEffect(() => {
+    bossBoundaryRef.current?.sceneCommitted(game.boss, game.sector);
+  }, [game]);
   const [technicalPause, setTechnicalPause] = useState(false);
   const showRewardCards=useCallback((cards:CardReward[])=>{
     cards=cards.filter(card=>!hasSeenCard(cardOwnerRef.current,card.key)&&!rewardCardsRef.current.some(queued=>queued.key===card.key));
@@ -707,6 +712,8 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     if (ownerDiagnostics) installReloadDiagnostics();
     const reloadMonitor = ownerDiagnostics ? createReloadGameMonitor(diagnosticContext) : null;
     const resourceTrendMonitor = ownerDiagnostics ? createResourceTrendMonitor(ownerResourceContext) : null;
+    const bossBoundary = ownerDiagnostics ? createBossBoundaryDiagnostics(recordOwnerResourceSnapshot) : null;
+    bossBoundaryRef.current = bossBoundary;
     reloadDiagnosticsRef.current = reloadMonitor;
     const update = () => monitor.update(diagnosticContext(), stateRef.current.status === 'playing', document.hidden, true);
     const hidden = () => { probe?.lifecycle('pagehide'); probe?.suspend(performance.now()); monitor.pagehide(); update(); };
@@ -731,13 +738,14 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         if (previousProbe) probeHost.__cryptoidDiagnostics = previousProbe; else delete probeHost.__cryptoidDiagnostics;
       }
       resourceTrendMonitor?.finish();
+      if (bossBoundaryRef.current === bossBoundary) bossBoundaryRef.current = null;
       reloadMonitor?.finish(); reloadDiagnosticsRef.current = null;
       monitor.finish(); diagnosticsRef.current = null;
       window.removeEventListener('error', onError); window.removeEventListener('unhandledrejection', onRejection);
       window.removeEventListener('pagehide', hidden); window.removeEventListener('pageshow', shown);
       document.removeEventListener('visibilitychange', update);
     };
-  }, [diagnosticContext, ownerDiagnostics, ownerResourceContext]);
+  }, [diagnosticContext, ownerDiagnostics, ownerResourceContext, recordOwnerResourceSnapshot]);
   const restoreCombat = (input: CombatCheckpoint) => {
     const saved = readCombatCheckpoint(input);
     if (!saved) throw new Error("Invalid saved combat checkpoint");
@@ -1681,10 +1689,14 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
             nextIdRef.current += fired.shots.length;state.enemyShots.push(...fired.shots);
             if (fired.events.length) bossMuzzleRef.current = time;
             for(const event of fired.events)soundRef.current?.playBossWeapon(event.kind,event.radius,event.barrels,event.pan);
-            const pulses = advanceBossCore(state.boss, state.player, width, height, delta, enemyShotLimit(width, elapsedRef.current, state.sector) - state.enemyShots.length, nextIdRef.current);
+            const coreCapacity = enemyShotLimit(width, elapsedRef.current, state.sector) - state.enemyShots.length;
+            bossBoundaryRef.current?.beforeCore(state.boss, state.sector, delta, coreCapacity);
+            const pulses = advanceBossCore(state.boss, state.player, width, height, delta, coreCapacity, nextIdRef.current);
             nextIdRef.current += pulses.length;
             state.enemyShots.push(...pulses);
+            const firstCoreShot = bossBoundaryRef.current?.afterCore(pulses.length) ?? false;
             if (pulses.length) { bossMuzzleRef.current = time; soundRef.current?.playBossWeapon("pulse", 8, pulses.length, 0); }
+            bossBoundaryRef.current?.afterAudio(firstCoreShot);
           }
         }
         performanceProbeRef.current?.mark('boss-motion-and-weapons');

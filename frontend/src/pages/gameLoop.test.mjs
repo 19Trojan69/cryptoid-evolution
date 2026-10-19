@@ -115,7 +115,8 @@ test('denied sessionStorage cannot fail GamePage diagnostics setup or remove its
   Object.defineProperty(host,'sessionStorage',{get(){throw new Error('SecurityError: storage denied');}});
   const previousWindow = globalThis.window; globalThis.window = host;
   const context = {window:host,document:{hidden:false,addEventListener:host.addEventListener,removeEventListener:host.removeEventListener},
-    performance:{getEntriesByType:()=>[]}, Date, ownerDiagnostics:false, developerProbeEnabled:()=>false, performanceProbeRef:{current:null}, diagnosticsRef:{current:null}, reloadDiagnosticsRef:{current:null},
+    performance:{getEntriesByType:()=>[]}, Date, ownerDiagnostics:false, developerProbeEnabled:()=>false, performanceProbeRef:{current:null}, diagnosticsRef:{current:null}, reloadDiagnosticsRef:{current:null}, bossBoundaryRef:{current:null},
+    createBossBoundaryDiagnostics:()=>{throw new Error('non-owner reactor diagnostics must stay disabled');},
     installReloadDiagnostics:()=>{throw new Error('non-owner diagnostics must stay disabled');}, createReloadGameMonitor:()=>({finish(){}}),
     stateRef:{current:state}, interruptionRef:{current:(reason,error)=>faults.push({reason,error})},
     recordGameDiagnostic:entry=>reports.push(entry), createGameSessionDiagnostics,

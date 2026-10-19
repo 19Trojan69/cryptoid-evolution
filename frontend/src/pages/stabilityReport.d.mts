@@ -1,6 +1,7 @@
 type TechnicalStorage = { localStorage?: Pick<Storage, 'getItem'>; sessionStorage?: Pick<Storage, 'getItem'> };
 export type StabilityReport = {
   version: number; format: string; generatedAt: string | null; available: boolean;
+  activeDocument: { startedAt?: number; ageMs?: number; navigationType?: string; route?: string } | null;
   storage: Record<string, string>; events: Record<string, unknown>[];
   lastSession: Record<string, unknown> | null;
   reloadTrace: { windowMs: number; latestAt: number; events: Record<string, unknown>[] } | null;
