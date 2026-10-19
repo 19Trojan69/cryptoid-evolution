@@ -1,0 +1,919 @@
+{
+  "passed": true,
+  "officialCommit": "66eb357cc08a6b5f9b32a9242d6875ed475532fa",
+  "fullGamePagePreservation": true,
+  "initialRefLifecycle": {
+    "initializedOncePerMount": true,
+    "assignedNullAndUndefinedPreserved": true,
+    "freshOnRemount": true
+  },
+  "baseline": {
+    "ref": "92f392e2efe5608a7d589e2d14c2593a2626c5bb",
+    "frames": 600,
+    "frameCalls": {
+      "jsx": 90600,
+      "uuid": 600,
+      "storageReads": 1200,
+      "bestReads": 600
+    },
+    "initialCalls": {
+      "jsx": 623,
+      "uuid": 2,
+      "storageReads": 49,
+      "bestReads": 2
+    },
+    "hostElapsedMs": 1518.334662,
+    "reactP50Ms": 0.9314100000010512,
+    "reactP95Ms": 7.620402999998305,
+    "retainedHostInstances": 32,
+    "hashes": [
+      "2bd1c8617774de09eb53e5b64d0fc3dbd50cd8df4dc8bd76e46e031577e6cf5e",
+      "d3489590e2782c4aaeb20ac4e30eec8429c045651c7653a309479fa0a7577f0e",
+      "c4d25f15607e67837bcffac7401b87df993a3dcdc3b762f766f55d8d8b4dabb8",
+      "95cdc31c5daca6963001e9c9ec33364a55696c868175e9067bed126a4612ed91",
+      "9b96c3ca71fe47258e0cc05dd2602daa596dcc122a5ae43d5e3c05767408bff3",
+      "7fdd56f0c9dea9806a47ac0e2b045f27599b91edb131f90b11bda32cf9e73c31"
+    ],
+    "updates": [
+      {
+        "name": "hud-de-0",
+        "hash": "6a85a3f9c43f22905e1f3869eaff2211b11ff3de02881b23f0c6a336daead7c6"
+      },
+      {
+        "name": "hud-de-999999",
+        "hash": "92539093dcb459ccbd8a8b90c39f7963feb14694ff9e29e3486792401cbe8ec1"
+      },
+      {
+        "name": "hud-de-1000000",
+        "hash": "cd0f75f4582edc911f6d4c137776ac4478405c64fd0156cbb8a9ab07f61f3994"
+      },
+      {
+        "name": "hud-de-123456789",
+        "hash": "f51dbe075a52eef693ce69e127330f61dbb407c0f2f51eaf7a89accaf645d98b"
+      },
+      {
+        "name": "hud-en-0",
+        "hash": "11fcc6ea2cbb77adabe4036e1b49c40701a7be8bef7e1f8c4c0b2af5f3595837"
+      },
+      {
+        "name": "hud-en-999999",
+        "hash": "675b9dd71343d6a9a943edb8dabcd2a3f3edb13538c7dd631141501bc2c4e8d0"
+      },
+      {
+        "name": "hud-en-1000000",
+        "hash": "0445e97e1d297600a9993869436e4c714af23d15a2ef296e9846b121c7097429"
+      },
+      {
+        "name": "hud-en-123456789",
+        "hash": "d3274aeda7216d06cdf48f947783b6965ed46d3d5f6c70db0bc9a2e3a187faf3"
+      },
+      {
+        "name": "hud-es-0",
+        "hash": "0161b685df3633f90fb98e8a4dad5c558703cb3306f3520278a493a015928be3"
+      },
+      {
+        "name": "hud-es-999999",
+        "hash": "0cefe723f7f9c4922663f8ecfec1c832447c1f122b4c6f785712252dff2781b5"
+      },
+      {
+        "name": "hud-es-1000000",
+        "hash": "0f4e5a7f24b6e17fee6583e2b3782a322748d3d6e658f750b55655790b5c81e7"
+      },
+      {
+        "name": "hud-es-123456789",
+        "hash": "f353b8e9d2b71a3a404656872d463a752b537893b872e7722b6d74ae04800b5e"
+      },
+      {
+        "name": "hud-zh-0",
+        "hash": "33945cdb79ddcd56f29c19a620094508dddd3be917936ca110db04bab93515ed"
+      },
+      {
+        "name": "hud-zh-999999",
+        "hash": "8862cf5dc1db428c9ae2c54a4023196342873fbe674168974242adf10ce393e0"
+      },
+      {
+        "name": "hud-zh-1000000",
+        "hash": "27d8e325bf2ffd8a55f01f1f6b046c3ef18d45058b9482e02ea2256fbd0452dc"
+      },
+      {
+        "name": "hud-zh-123456789",
+        "hash": "7cf7908c0ecabc6679f4cff70e83663a5c76a2e70e3ada3fa071296a2c583f51"
+      },
+      {
+        "name": "hud-vi-0",
+        "hash": "880f6b33f5c9363682983ffea376135761c70468a9f8ef5f3a14a4e5cb3604df"
+      },
+      {
+        "name": "hud-vi-999999",
+        "hash": "90c2d075408aa1dcc475566fd056c3d15dade4f420baaff100a56276486cb67f"
+      },
+      {
+        "name": "hud-vi-1000000",
+        "hash": "56f49cacbe51740a03f7481f07c9d5f709fc718804dd47acac93ac896b7e0f06"
+      },
+      {
+        "name": "hud-vi-123456789",
+        "hash": "e0f7045642e7ae9d1b2eea6c1ac93a9ea282ac7a392ea1e4a262830f99a5a3bc"
+      },
+      {
+        "name": "hud-ar-0",
+        "hash": "6a85a3f9c43f22905e1f3869eaff2211b11ff3de02881b23f0c6a336daead7c6"
+      },
+      {
+        "name": "hud-ar-999999",
+        "hash": "92539093dcb459ccbd8a8b90c39f7963feb14694ff9e29e3486792401cbe8ec1"
+      },
+      {
+        "name": "hud-ar-1000000",
+        "hash": "cd0f75f4582edc911f6d4c137776ac4478405c64fd0156cbb8a9ab07f61f3994"
+      },
+      {
+        "name": "hud-ar-123456789",
+        "hash": "f51dbe075a52eef693ce69e127330f61dbb407c0f2f51eaf7a89accaf645d98b"
+      },
+      {
+        "name": "hull-0-1",
+        "hash": "2a33154840b004428c6b69285876b08d619636053e2637a277c0d64bdc3ecec4"
+      },
+      {
+        "name": "hull-0-2",
+        "hash": "72c1a5d9cdf88bbc77354c223874110c42dd9cf9bf8dae783b89c6a37f0f5e91"
+      },
+      {
+        "name": "hull-0-3",
+        "hash": "24bb34dc2af7607239fa4941749a6383afcce2274644e11598e12f1706467fd1"
+      },
+      {
+        "name": "hull-1-1",
+        "hash": "9e508920d9ee85168d8cd454558857b1e4269997d01e0836884174e08ff38973"
+      },
+      {
+        "name": "hull-1-2",
+        "hash": "5f7a729fa2171412da89e484fea00053231523f57993b66d4a7b42121f491f46"
+      },
+      {
+        "name": "hull-1-3",
+        "hash": "621f663caaa179e3e5d623571e233e01b9956801f2f02ff1ad8d4fdcd2aee0d2"
+      },
+      {
+        "name": "hull-2-1",
+        "hash": "9beec748597bc391b3a0e825d88c5c3111a4d73dd439368ce9a4f26ebf954b46"
+      },
+      {
+        "name": "hull-2-2",
+        "hash": "60fb4a89a52058aa7b55539ac4bb377152b7a5c5314a4b0a1260df332a458684"
+      },
+      {
+        "name": "hull-2-3",
+        "hash": "67a87611e97a47746a31549f86f869ed84764fe060165d656e0d15e6e73a5568"
+      },
+      {
+        "name": "hull-3-1",
+        "hash": "26e14713af60ab097240970844571a55869a8b4c6ecf3eeefd45b331383c3a18"
+      },
+      {
+        "name": "hull-3-2",
+        "hash": "9f8cab5df14805e645cdb1aa0fd1b2f3a620e1045a852fd3c0fdea74efe0b2a9"
+      },
+      {
+        "name": "hull-3-3",
+        "hash": "dc4395f76fc2c1474c9974e75d46d742641d28f0e0e98028dd9bbb900bce9ecf"
+      },
+      {
+        "name": "hull-4-1",
+        "hash": "a3056d30e3fde6c8f00c246dc926336745607712cb4bb4627de85c5ae19b4017"
+      },
+      {
+        "name": "hull-4-2",
+        "hash": "6f366d1fa62a947f5bc1291a9c8eb65cd49ced1a809ba2da93ff2d7389f2dceb"
+      },
+      {
+        "name": "hull-4-3",
+        "hash": "b05eb1e09d17c2694b591546e298e083075b7a14a4cc3c0097b57e20fab72acb"
+      },
+      {
+        "name": "hull-5-1",
+        "hash": "9914c8b95daf1a1af76309bfa61e733fa9a8cd711fbdce56b1bede701dd1fd1e"
+      },
+      {
+        "name": "hull-5-2",
+        "hash": "77ba9b6e38b392a1961fc2dde826bcd5f0c7a2867d8a416e47b7cd276ccbe90b"
+      },
+      {
+        "name": "hull-5-3",
+        "hash": "f259fc670cce5c58a78688b9503b7f4a590898a50076dd7f90e70976d2342626"
+      },
+      {
+        "name": "hull-6-1",
+        "hash": "17a6645dd53b17faa0ccf36fa8932dd9d0fc966576442187dcf58b1e68a04fd9"
+      },
+      {
+        "name": "hull-6-2",
+        "hash": "c46473be46d23681ed87758cc7dc9d90d8594adebddf730569cf9e8b26c2bee7"
+      },
+      {
+        "name": "hull-6-3",
+        "hash": "3ec080afa5553b2306a9c4ee8818ec46ee50a23c8bed2ef16b6e79c8d063e65d"
+      },
+      {
+        "name": "hull-7-1",
+        "hash": "941f4e1a25147d888190dd2a68ce59c7c9d5e882485987405ad1d7e23a59954b"
+      },
+      {
+        "name": "hull-7-2",
+        "hash": "ede4903c179479d3e663e27523e6b8f2d757eee87494152ece236f7be008e30e"
+      },
+      {
+        "name": "hull-7-3",
+        "hash": "8815f005dfc63a09782d1e6a7bd9d2e644c8ebd6ce2a57c2fa266487be649956"
+      },
+      {
+        "name": "hull-8-1",
+        "hash": "32930db88c4790af42e6fb639b24bc3f872a1fc92b8390ac0baec25b4d7ca1c6"
+      },
+      {
+        "name": "hull-8-2",
+        "hash": "04f876990c54b11a8761dbf74b7c1b89d02eda00672ffcfb7ff36124c5b4d6b2"
+      },
+      {
+        "name": "hull-8-3",
+        "hash": "e695d05bc0224504b3d3eeb27f9787cecc67b59fd43f9a232d6e5787b4283ea0"
+      },
+      {
+        "name": "hull-9-1",
+        "hash": "9a813f73519cf4073d3c4b62997724666dca72cac8c78a00f727aa1ac084fa5e"
+      },
+      {
+        "name": "hull-9-2",
+        "hash": "9898ac050574cc52ed7a18177c8765455f5a52a198ece561e8589f79e25ed163"
+      },
+      {
+        "name": "hull-9-3",
+        "hash": "500d499c8e904cae7c6aa168768219f530144fb256bba6de0333a43c17151834"
+      },
+      {
+        "name": "hull-10-1",
+        "hash": "b0aed77db012def4b9b580b9f3f6ccbc5308721f302f7b061364cfb524468f54"
+      },
+      {
+        "name": "hull-10-2",
+        "hash": "18d7037d368349e11551758c9800ecc1897ee30658ece9b2bc3a02ce7871f991"
+      },
+      {
+        "name": "hull-10-3",
+        "hash": "4349b4ace9ad87275a20732c56ef9e0c0e889dcae8da275ae2d2313452c9a511"
+      },
+      {
+        "name": "hull-11-1",
+        "hash": "d12dcf4ab27103a95bf7e5bce976583cc8f0a98717783c7e33f32deffd37c984"
+      },
+      {
+        "name": "hull-11-2",
+        "hash": "263182926bf0d59fb87ee03d4e949f951277128b181750058d426b2619552f8b"
+      },
+      {
+        "name": "hull-11-3",
+        "hash": "c6653c41f77389702f01107a92d2c1141d09f97bbc61d5ad529363cca2ae0be4"
+      },
+      {
+        "name": "hull-12-1",
+        "hash": "ee5b688c6eba4a8e19377a8e5868a3c8ae9eff8093c83a384abb0077e871fc17"
+      },
+      {
+        "name": "hull-12-2",
+        "hash": "6fce0ec50649a5a69c945fa9f2d214e37ac8a827cd0f7289906ed6c81e632b04"
+      },
+      {
+        "name": "hull-12-3",
+        "hash": "715432ee9f07575ef2f5d410d304dcd830df26a5764a4775fdf1c8c180ec074f"
+      },
+      {
+        "name": "hull-13-1",
+        "hash": "15e2e2e8220e63649f00e1a40e8c50fe8c666265182c7b315b9a2b44355a505c"
+      },
+      {
+        "name": "hull-13-2",
+        "hash": "49d6adca1b7a31254c4df40f9cb888d7ab359959901aa4a72582df6f13db3640"
+      },
+      {
+        "name": "hull-13-3",
+        "hash": "764c4b6aaef6d4047a946dabfec009dcff584bfbf26acad5b73f0c6cd98d109c"
+      },
+      {
+        "name": "hull-14-1",
+        "hash": "9ab607262d23035e9827d728e5d952b16e54e96dc82676d0b5e388a8023e35cd"
+      },
+      {
+        "name": "hull-14-2",
+        "hash": "4cc3305fa4521388d03b0252ce246491ff89947f55a609a1e7ee705cac8b742c"
+      },
+      {
+        "name": "hull-14-3",
+        "hash": "5d9da7ee232d4d9547664e5e9fc8a07f7bd2608d8ff1df80e0fbce42aa5515bb"
+      },
+      {
+        "name": "hull-15-1",
+        "hash": "a97aa698f851b7053a42bfdcda200a0d34192835128774148140fe2412633815"
+      },
+      {
+        "name": "hull-15-2",
+        "hash": "1a873958d46d4a5a376fd50c9a8d4794ae35483e86fcd708d92ab17a73027767"
+      },
+      {
+        "name": "hull-15-3",
+        "hash": "5aa561496a2d1039ca3d0ab44a1d3e15f707883ffa34cae7aced4a5dd6ce59a7"
+      },
+      {
+        "name": "hull-16-1",
+        "hash": "310897fbec2ea78f3dbb8225e49e59161bd45fc7e6dfca2f1bee6956b9988126"
+      },
+      {
+        "name": "hull-16-2",
+        "hash": "506d47afbde3bbcfe25e26aed82490eae95f0fea4409cb4e38ea0f7ea9024ce4"
+      },
+      {
+        "name": "hull-16-3",
+        "hash": "30510af44ac717e93e5321f1a9cad411dcb73cd936e5e0b554cadf9ee80f6993"
+      },
+      {
+        "name": "hull-17-1",
+        "hash": "17b73fcdfd352d4e1739d7a5455e39c70f98f0704be9f7b4a121a24ea8c4a2ba"
+      },
+      {
+        "name": "hull-17-2",
+        "hash": "0ce0a994d143abd8d6d5ec888ebf1ace7929cb3c5a70e2e333c4e9f5cbc76974"
+      },
+      {
+        "name": "hull-17-3",
+        "hash": "61acb7b27cd7c79c2e0ca321b474ad289e3f81a4a86bbe93c414a92980717acb"
+      },
+      {
+        "name": "hull-18-1",
+        "hash": "84f062b7afa0f2575f8a5f908868b8a63d356d6dd6b0bf49ce37423307562f80"
+      },
+      {
+        "name": "hull-18-2",
+        "hash": "88d72846ccb22c9f4d43faffda7c618f8a83420c063af195c7dfa60a67c32fce"
+      },
+      {
+        "name": "hull-18-3",
+        "hash": "8bc19c13d58d185ad2a74a041dd817f7178f0fcc058f01d0a7cce333ad1ad49a"
+      },
+      {
+        "name": "hull-19-1",
+        "hash": "650921273176a09f4d8a8e30c11de44b7e3f2e4f97ec64c808b303aba1a76261"
+      },
+      {
+        "name": "hull-19-2",
+        "hash": "ca64513fac3e7f56b0c94e137866958f2478bdc8e4dceae00632b480511cc345"
+      },
+      {
+        "name": "hull-19-3",
+        "hash": "4787d7a428011c005775b713a7b90b01a976ff0ef88932c6dd3afa026858a33c"
+      },
+      {
+        "name": "clear-damage",
+        "hash": "9f0e5ad6228f3a970fad170c0de72951e43db6501e8413502bd973f8d0090f3a"
+      },
+      {
+        "name": "player-hit",
+        "hash": "a17bd5e54a7e53c0a0135eaa1f7ef1c7d0be17ac1773e4911edbef73fe948928"
+      },
+      {
+        "name": "player-hit-end",
+        "hash": "ef425df95b938dd8441f8cc93aa4c92d62d922fbc905abf8dfd30b12c14639a2"
+      },
+      {
+        "name": "boss-10",
+        "hash": "fbbb91c2fb1270d91b1b39d4d4ae5a8b0a03f36267bfa1fdd4029d3842c6a518"
+      },
+      {
+        "name": "boss-core-10",
+        "hash": "fbbb91c2fb1270d91b1b39d4d4ae5a8b0a03f36267bfa1fdd4029d3842c6a518"
+      },
+      {
+        "name": "boss-20",
+        "hash": "64e10e444de60b0ba545a82fd705a29077dc198a28a246dc6a1ccbcbbc73667a"
+      },
+      {
+        "name": "boss-core-20",
+        "hash": "64e10e444de60b0ba545a82fd705a29077dc198a28a246dc6a1ccbcbbc73667a"
+      },
+      {
+        "name": "boss-40",
+        "hash": "a59e89eaa3962ca2c1d0cd7a76a1d41a5d2766b218c3b4c19a89d0afe868a83a"
+      },
+      {
+        "name": "boss-core-40",
+        "hash": "a59e89eaa3962ca2c1d0cd7a76a1d41a5d2766b218c3b4c19a89d0afe868a83a"
+      },
+      {
+        "name": "boss-500",
+        "hash": "c798edbc188360384626169e5cd2d4b81063a294e034267c99c53889e50f5414"
+      },
+      {
+        "name": "boss-core-500",
+        "hash": "c798edbc188360384626169e5cd2d4b81063a294e034267c99c53889e50f5414"
+      },
+      {
+        "name": "normal-SECTOR_CLEAR",
+        "hash": "4b93798d0195428fe5810e4a427bf37b9443edb87b4918eaae7225504343e696"
+      },
+      {
+        "name": "boss-intro-SECTOR_INTRO",
+        "hash": "6e35c09186223599d31e7e5b2144fa4d860525d75f8092c6210bee01f64f3860"
+      },
+      {
+        "name": "boss-clear-SECTOR_CLEAR",
+        "hash": "ee125b354f9a2ed283916642be5b4c2ffb6110cbd5d188bf436d6225b6bbd37f"
+      },
+      {
+        "name": "bonus-ENTRY",
+        "hash": "4a09ad0e9431ab6d33f57097281b4a2b2cf5cca1facaaeed11359e6a0171a28c"
+      },
+      {
+        "name": "bonus-SECTOR_CLEAR",
+        "hash": "706b7a7338ea7b1de652274880bf00786863ffdda098b327da03bd8517172282"
+      },
+      {
+        "name": "normal-FORMATION",
+        "hash": "254fd4cad4d79deae28b6b83d4293dfa1d9de85176e72ada719c5d6216ff0b41"
+      },
+      {
+        "name": "status-paused",
+        "hash": "27083d1a7fee2281c4bb3255d0aa385ae7b8ec10ff8f055e99159c4d5ee86cc9"
+      },
+      {
+        "name": "status-playing",
+        "hash": "254fd4cad4d79deae28b6b83d4293dfa1d9de85176e72ada719c5d6216ff0b41"
+      },
+      {
+        "name": "status-destroying",
+        "hash": "c931a6c31690b964d4752f57ab9f2d06b94fb9b429cd6513b30de19917e368db"
+      },
+      {
+        "name": "status-game-over",
+        "hash": "b5cd706cceb828ce99198fd9dfc6758d5d4b1d97ecc103153f04ed2f39b9af3a"
+      },
+      {
+        "name": "status-victory",
+        "hash": "18cd19c3443350f07ebbe28dd88582fcf61b1ce4c819a4d474f9c647b48e45cd"
+      }
+    ]
+  },
+  "candidate": {
+    "ref": "working-tree",
+    "frames": 600,
+    "frameCalls": {
+      "jsx": 58300,
+      "uuid": 0,
+      "storageReads": 600,
+      "bestReads": 0
+    },
+    "initialCalls": {
+      "jsx": 578,
+      "uuid": 1,
+      "storageReads": 48,
+      "bestReads": 1
+    },
+    "hostElapsedMs": 1265.037406,
+    "reactP50Ms": 0.6791289999994206,
+    "reactP95Ms": 5.190793000004305,
+    "retainedHostInstances": 32,
+    "hashes": [
+      "2bd1c8617774de09eb53e5b64d0fc3dbd50cd8df4dc8bd76e46e031577e6cf5e",
+      "d3489590e2782c4aaeb20ac4e30eec8429c045651c7653a309479fa0a7577f0e",
+      "c4d25f15607e67837bcffac7401b87df993a3dcdc3b762f766f55d8d8b4dabb8",
+      "95cdc31c5daca6963001e9c9ec33364a55696c868175e9067bed126a4612ed91",
+      "9b96c3ca71fe47258e0cc05dd2602daa596dcc122a5ae43d5e3c05767408bff3",
+      "7fdd56f0c9dea9806a47ac0e2b045f27599b91edb131f90b11bda32cf9e73c31"
+    ],
+    "updates": [
+      {
+        "name": "hud-de-0",
+        "hash": "6a85a3f9c43f22905e1f3869eaff2211b11ff3de02881b23f0c6a336daead7c6"
+      },
+      {
+        "name": "hud-de-999999",
+        "hash": "92539093dcb459ccbd8a8b90c39f7963feb14694ff9e29e3486792401cbe8ec1"
+      },
+      {
+        "name": "hud-de-1000000",
+        "hash": "cd0f75f4582edc911f6d4c137776ac4478405c64fd0156cbb8a9ab07f61f3994"
+      },
+      {
+        "name": "hud-de-123456789",
+        "hash": "f51dbe075a52eef693ce69e127330f61dbb407c0f2f51eaf7a89accaf645d98b"
+      },
+      {
+        "name": "hud-en-0",
+        "hash": "11fcc6ea2cbb77adabe4036e1b49c40701a7be8bef7e1f8c4c0b2af5f3595837"
+      },
+      {
+        "name": "hud-en-999999",
+        "hash": "675b9dd71343d6a9a943edb8dabcd2a3f3edb13538c7dd631141501bc2c4e8d0"
+      },
+      {
+        "name": "hud-en-1000000",
+        "hash": "0445e97e1d297600a9993869436e4c714af23d15a2ef296e9846b121c7097429"
+      },
+      {
+        "name": "hud-en-123456789",
+        "hash": "d3274aeda7216d06cdf48f947783b6965ed46d3d5f6c70db0bc9a2e3a187faf3"
+      },
+      {
+        "name": "hud-es-0",
+        "hash": "0161b685df3633f90fb98e8a4dad5c558703cb3306f3520278a493a015928be3"
+      },
+      {
+        "name": "hud-es-999999",
+        "hash": "0cefe723f7f9c4922663f8ecfec1c832447c1f122b4c6f785712252dff2781b5"
+      },
+      {
+        "name": "hud-es-1000000",
+        "hash": "0f4e5a7f24b6e17fee6583e2b3782a322748d3d6e658f750b55655790b5c81e7"
+      },
+      {
+        "name": "hud-es-123456789",
+        "hash": "f353b8e9d2b71a3a404656872d463a752b537893b872e7722b6d74ae04800b5e"
+      },
+      {
+        "name": "hud-zh-0",
+        "hash": "33945cdb79ddcd56f29c19a620094508dddd3be917936ca110db04bab93515ed"
+      },
+      {
+        "name": "hud-zh-999999",
+        "hash": "8862cf5dc1db428c9ae2c54a4023196342873fbe674168974242adf10ce393e0"
+      },
+      {
+        "name": "hud-zh-1000000",
+        "hash": "27d8e325bf2ffd8a55f01f1f6b046c3ef18d45058b9482e02ea2256fbd0452dc"
+      },
+      {
+        "name": "hud-zh-123456789",
+        "hash": "7cf7908c0ecabc6679f4cff70e83663a5c76a2e70e3ada3fa071296a2c583f51"
+      },
+      {
+        "name": "hud-vi-0",
+        "hash": "880f6b33f5c9363682983ffea376135761c70468a9f8ef5f3a14a4e5cb3604df"
+      },
+      {
+        "name": "hud-vi-999999",
+        "hash": "90c2d075408aa1dcc475566fd056c3d15dade4f420baaff100a56276486cb67f"
+      },
+      {
+        "name": "hud-vi-1000000",
+        "hash": "56f49cacbe51740a03f7481f07c9d5f709fc718804dd47acac93ac896b7e0f06"
+      },
+      {
+        "name": "hud-vi-123456789",
+        "hash": "e0f7045642e7ae9d1b2eea6c1ac93a9ea282ac7a392ea1e4a262830f99a5a3bc"
+      },
+      {
+        "name": "hud-ar-0",
+        "hash": "6a85a3f9c43f22905e1f3869eaff2211b11ff3de02881b23f0c6a336daead7c6"
+      },
+      {
+        "name": "hud-ar-999999",
+        "hash": "92539093dcb459ccbd8a8b90c39f7963feb14694ff9e29e3486792401cbe8ec1"
+      },
+      {
+        "name": "hud-ar-1000000",
+        "hash": "cd0f75f4582edc911f6d4c137776ac4478405c64fd0156cbb8a9ab07f61f3994"
+      },
+      {
+        "name": "hud-ar-123456789",
+        "hash": "f51dbe075a52eef693ce69e127330f61dbb407c0f2f51eaf7a89accaf645d98b"
+      },
+      {
+        "name": "hull-0-1",
+        "hash": "2a33154840b004428c6b69285876b08d619636053e2637a277c0d64bdc3ecec4"
+      },
+      {
+        "name": "hull-0-2",
+        "hash": "72c1a5d9cdf88bbc77354c223874110c42dd9cf9bf8dae783b89c6a37f0f5e91"
+      },
+      {
+        "name": "hull-0-3",
+        "hash": "24bb34dc2af7607239fa4941749a6383afcce2274644e11598e12f1706467fd1"
+      },
+      {
+        "name": "hull-1-1",
+        "hash": "9e508920d9ee85168d8cd454558857b1e4269997d01e0836884174e08ff38973"
+      },
+      {
+        "name": "hull-1-2",
+        "hash": "5f7a729fa2171412da89e484fea00053231523f57993b66d4a7b42121f491f46"
+      },
+      {
+        "name": "hull-1-3",
+        "hash": "621f663caaa179e3e5d623571e233e01b9956801f2f02ff1ad8d4fdcd2aee0d2"
+      },
+      {
+        "name": "hull-2-1",
+        "hash": "9beec748597bc391b3a0e825d88c5c3111a4d73dd439368ce9a4f26ebf954b46"
+      },
+      {
+        "name": "hull-2-2",
+        "hash": "60fb4a89a52058aa7b55539ac4bb377152b7a5c5314a4b0a1260df332a458684"
+      },
+      {
+        "name": "hull-2-3",
+        "hash": "67a87611e97a47746a31549f86f869ed84764fe060165d656e0d15e6e73a5568"
+      },
+      {
+        "name": "hull-3-1",
+        "hash": "26e14713af60ab097240970844571a55869a8b4c6ecf3eeefd45b331383c3a18"
+      },
+      {
+        "name": "hull-3-2",
+        "hash": "9f8cab5df14805e645cdb1aa0fd1b2f3a620e1045a852fd3c0fdea74efe0b2a9"
+      },
+      {
+        "name": "hull-3-3",
+        "hash": "dc4395f76fc2c1474c9974e75d46d742641d28f0e0e98028dd9bbb900bce9ecf"
+      },
+      {
+        "name": "hull-4-1",
+        "hash": "a3056d30e3fde6c8f00c246dc926336745607712cb4bb4627de85c5ae19b4017"
+      },
+      {
+        "name": "hull-4-2",
+        "hash": "6f366d1fa62a947f5bc1291a9c8eb65cd49ced1a809ba2da93ff2d7389f2dceb"
+      },
+      {
+        "name": "hull-4-3",
+        "hash": "b05eb1e09d17c2694b591546e298e083075b7a14a4cc3c0097b57e20fab72acb"
+      },
+      {
+        "name": "hull-5-1",
+        "hash": "9914c8b95daf1a1af76309bfa61e733fa9a8cd711fbdce56b1bede701dd1fd1e"
+      },
+      {
+        "name": "hull-5-2",
+        "hash": "77ba9b6e38b392a1961fc2dde826bcd5f0c7a2867d8a416e47b7cd276ccbe90b"
+      },
+      {
+        "name": "hull-5-3",
+        "hash": "f259fc670cce5c58a78688b9503b7f4a590898a50076dd7f90e70976d2342626"
+      },
+      {
+        "name": "hull-6-1",
+        "hash": "17a6645dd53b17faa0ccf36fa8932dd9d0fc966576442187dcf58b1e68a04fd9"
+      },
+      {
+        "name": "hull-6-2",
+        "hash": "c46473be46d23681ed87758cc7dc9d90d8594adebddf730569cf9e8b26c2bee7"
+      },
+      {
+        "name": "hull-6-3",
+        "hash": "3ec080afa5553b2306a9c4ee8818ec46ee50a23c8bed2ef16b6e79c8d063e65d"
+      },
+      {
+        "name": "hull-7-1",
+        "hash": "941f4e1a25147d888190dd2a68ce59c7c9d5e882485987405ad1d7e23a59954b"
+      },
+      {
+        "name": "hull-7-2",
+        "hash": "ede4903c179479d3e663e27523e6b8f2d757eee87494152ece236f7be008e30e"
+      },
+      {
+        "name": "hull-7-3",
+        "hash": "8815f005dfc63a09782d1e6a7bd9d2e644c8ebd6ce2a57c2fa266487be649956"
+      },
+      {
+        "name": "hull-8-1",
+        "hash": "32930db88c4790af42e6fb639b24bc3f872a1fc92b8390ac0baec25b4d7ca1c6"
+      },
+      {
+        "name": "hull-8-2",
+        "hash": "04f876990c54b11a8761dbf74b7c1b89d02eda00672ffcfb7ff36124c5b4d6b2"
+      },
+      {
+        "name": "hull-8-3",
+        "hash": "e695d05bc0224504b3d3eeb27f9787cecc67b59fd43f9a232d6e5787b4283ea0"
+      },
+      {
+        "name": "hull-9-1",
+        "hash": "9a813f73519cf4073d3c4b62997724666dca72cac8c78a00f727aa1ac084fa5e"
+      },
+      {
+        "name": "hull-9-2",
+        "hash": "9898ac050574cc52ed7a18177c8765455f5a52a198ece561e8589f79e25ed163"
+      },
+      {
+        "name": "hull-9-3",
+        "hash": "500d499c8e904cae7c6aa168768219f530144fb256bba6de0333a43c17151834"
+      },
+      {
+        "name": "hull-10-1",
+        "hash": "b0aed77db012def4b9b580b9f3f6ccbc5308721f302f7b061364cfb524468f54"
+      },
+      {
+        "name": "hull-10-2",
+        "hash": "18d7037d368349e11551758c9800ecc1897ee30658ece9b2bc3a02ce7871f991"
+      },
+      {
+        "name": "hull-10-3",
+        "hash": "4349b4ace9ad87275a20732c56ef9e0c0e889dcae8da275ae2d2313452c9a511"
+      },
+      {
+        "name": "hull-11-1",
+        "hash": "d12dcf4ab27103a95bf7e5bce976583cc8f0a98717783c7e33f32deffd37c984"
+      },
+      {
+        "name": "hull-11-2",
+        "hash": "263182926bf0d59fb87ee03d4e949f951277128b181750058d426b2619552f8b"
+      },
+      {
+        "name": "hull-11-3",
+        "hash": "c6653c41f77389702f01107a92d2c1141d09f97bbc61d5ad529363cca2ae0be4"
+      },
+      {
+        "name": "hull-12-1",
+        "hash": "ee5b688c6eba4a8e19377a8e5868a3c8ae9eff8093c83a384abb0077e871fc17"
+      },
+      {
+        "name": "hull-12-2",
+        "hash": "6fce0ec50649a5a69c945fa9f2d214e37ac8a827cd0f7289906ed6c81e632b04"
+      },
+      {
+        "name": "hull-12-3",
+        "hash": "715432ee9f07575ef2f5d410d304dcd830df26a5764a4775fdf1c8c180ec074f"
+      },
+      {
+        "name": "hull-13-1",
+        "hash": "15e2e2e8220e63649f00e1a40e8c50fe8c666265182c7b315b9a2b44355a505c"
+      },
+      {
+        "name": "hull-13-2",
+        "hash": "49d6adca1b7a31254c4df40f9cb888d7ab359959901aa4a72582df6f13db3640"
+      },
+      {
+        "name": "hull-13-3",
+        "hash": "764c4b6aaef6d4047a946dabfec009dcff584bfbf26acad5b73f0c6cd98d109c"
+      },
+      {
+        "name": "hull-14-1",
+        "hash": "9ab607262d23035e9827d728e5d952b16e54e96dc82676d0b5e388a8023e35cd"
+      },
+      {
+        "name": "hull-14-2",
+        "hash": "4cc3305fa4521388d03b0252ce246491ff89947f55a609a1e7ee705cac8b742c"
+      },
+      {
+        "name": "hull-14-3",
+        "hash": "5d9da7ee232d4d9547664e5e9fc8a07f7bd2608d8ff1df80e0fbce42aa5515bb"
+      },
+      {
+        "name": "hull-15-1",
+        "hash": "a97aa698f851b7053a42bfdcda200a0d34192835128774148140fe2412633815"
+      },
+      {
+        "name": "hull-15-2",
+        "hash": "1a873958d46d4a5a376fd50c9a8d4794ae35483e86fcd708d92ab17a73027767"
+      },
+      {
+        "name": "hull-15-3",
+        "hash": "5aa561496a2d1039ca3d0ab44a1d3e15f707883ffa34cae7aced4a5dd6ce59a7"
+      },
+      {
+        "name": "hull-16-1",
+        "hash": "310897fbec2ea78f3dbb8225e49e59161bd45fc7e6dfca2f1bee6956b9988126"
+      },
+      {
+        "name": "hull-16-2",
+        "hash": "506d47afbde3bbcfe25e26aed82490eae95f0fea4409cb4e38ea0f7ea9024ce4"
+      },
+      {
+        "name": "hull-16-3",
+        "hash": "30510af44ac717e93e5321f1a9cad411dcb73cd936e5e0b554cadf9ee80f6993"
+      },
+      {
+        "name": "hull-17-1",
+        "hash": "17b73fcdfd352d4e1739d7a5455e39c70f98f0704be9f7b4a121a24ea8c4a2ba"
+      },
+      {
+        "name": "hull-17-2",
+        "hash": "0ce0a994d143abd8d6d5ec888ebf1ace7929cb3c5a70e2e333c4e9f5cbc76974"
+      },
+      {
+        "name": "hull-17-3",
+        "hash": "61acb7b27cd7c79c2e0ca321b474ad289e3f81a4a86bbe93c414a92980717acb"
+      },
+      {
+        "name": "hull-18-1",
+        "hash": "84f062b7afa0f2575f8a5f908868b8a63d356d6dd6b0bf49ce37423307562f80"
+      },
+      {
+        "name": "hull-18-2",
+        "hash": "88d72846ccb22c9f4d43faffda7c618f8a83420c063af195c7dfa60a67c32fce"
+      },
+      {
+        "name": "hull-18-3",
+        "hash": "8bc19c13d58d185ad2a74a041dd817f7178f0fcc058f01d0a7cce333ad1ad49a"
+      },
+      {
+        "name": "hull-19-1",
+        "hash": "650921273176a09f4d8a8e30c11de44b7e3f2e4f97ec64c808b303aba1a76261"
+      },
+      {
+        "name": "hull-19-2",
+        "hash": "ca64513fac3e7f56b0c94e137866958f2478bdc8e4dceae00632b480511cc345"
+      },
+      {
+        "name": "hull-19-3",
+        "hash": "4787d7a428011c005775b713a7b90b01a976ff0ef88932c6dd3afa026858a33c"
+      },
+      {
+        "name": "clear-damage",
+        "hash": "9f0e5ad6228f3a970fad170c0de72951e43db6501e8413502bd973f8d0090f3a"
+      },
+      {
+        "name": "player-hit",
+        "hash": "a17bd5e54a7e53c0a0135eaa1f7ef1c7d0be17ac1773e4911edbef73fe948928"
+      },
+      {
+        "name": "player-hit-end",
+        "hash": "ef425df95b938dd8441f8cc93aa4c92d62d922fbc905abf8dfd30b12c14639a2"
+      },
+      {
+        "name": "boss-10",
+        "hash": "fbbb91c2fb1270d91b1b39d4d4ae5a8b0a03f36267bfa1fdd4029d3842c6a518"
+      },
+      {
+        "name": "boss-core-10",
+        "hash": "fbbb91c2fb1270d91b1b39d4d4ae5a8b0a03f36267bfa1fdd4029d3842c6a518"
+      },
+      {
+        "name": "boss-20",
+        "hash": "64e10e444de60b0ba545a82fd705a29077dc198a28a246dc6a1ccbcbbc73667a"
+      },
+      {
+        "name": "boss-core-20",
+        "hash": "64e10e444de60b0ba545a82fd705a29077dc198a28a246dc6a1ccbcbbc73667a"
+      },
+      {
+        "name": "boss-40",
+        "hash": "a59e89eaa3962ca2c1d0cd7a76a1d41a5d2766b218c3b4c19a89d0afe868a83a"
+      },
+      {
+        "name": "boss-core-40",
+        "hash": "a59e89eaa3962ca2c1d0cd7a76a1d41a5d2766b218c3b4c19a89d0afe868a83a"
+      },
+      {
+        "name": "boss-500",
+        "hash": "c798edbc188360384626169e5cd2d4b81063a294e034267c99c53889e50f5414"
+      },
+      {
+        "name": "boss-core-500",
+        "hash": "c798edbc188360384626169e5cd2d4b81063a294e034267c99c53889e50f5414"
+      },
+      {
+        "name": "normal-SECTOR_CLEAR",
+        "hash": "4b93798d0195428fe5810e4a427bf37b9443edb87b4918eaae7225504343e696"
+      },
+      {
+        "name": "boss-intro-SECTOR_INTRO",
+        "hash": "6e35c09186223599d31e7e5b2144fa4d860525d75f8092c6210bee01f64f3860"
+      },
+      {
+        "name": "boss-clear-SECTOR_CLEAR",
+        "hash": "ee125b354f9a2ed283916642be5b4c2ffb6110cbd5d188bf436d6225b6bbd37f"
+      },
+      {
+        "name": "bonus-ENTRY",
+        "hash": "4a09ad0e9431ab6d33f57097281b4a2b2cf5cca1facaaeed11359e6a0171a28c"
+      },
+      {
+        "name": "bonus-SECTOR_CLEAR",
+        "hash": "706b7a7338ea7b1de652274880bf00786863ffdda098b327da03bd8517172282"
+      },
+      {
+        "name": "normal-FORMATION",
+        "hash": "254fd4cad4d79deae28b6b83d4293dfa1d9de85176e72ada719c5d6216ff0b41"
+      },
+      {
+        "name": "status-paused",
+        "hash": "27083d1a7fee2281c4bb3255d0aa385ae7b8ec10ff8f055e99159c4d5ee86cc9"
+      },
+      {
+        "name": "status-playing",
+        "hash": "254fd4cad4d79deae28b6b83d4293dfa1d9de85176e72ada719c5d6216ff0b41"
+      },
+      {
+        "name": "status-destroying",
+        "hash": "c931a6c31690b964d4752f57ab9f2d06b94fb9b429cd6513b30de19917e368db"
+      },
+      {
+        "name": "status-game-over",
+        "hash": "b5cd706cceb828ce99198fd9dfc6758d5d4b1d97ecc103153f04ed2f39b9af3a"
+      },
+      {
+        "name": "status-victory",
+        "hash": "18cd19c3443350f07ebbe28dd88582fcf61b1ce4c819a4d474f9c647b48e45cd"
+      }
+    ]
+  },
+  "limits": "Actual React 19.3.1 and official GamePage presentation with effects disabled. CPU/JSX/host trees only; no DOM style/layout/paint/GPU, iPhone FPS, audio or native-crash inference."
+}

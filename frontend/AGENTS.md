@@ -1,5 +1,28 @@
 # Preserve the officially approved game
 
+
+## Official Testnet source only, 19 October 2026, continued frame audit
+
+The user explicitly required using only the currently official Testnet and
+excluding the unofficial test games. The verified official deployment is
+dpl_8h9mgxiRDUerhJr4PyCPTiaPQgR4, source
+66eb357cc08a6b5f9b32a9242d6875ed475532fa, tree
+cec8743f06146e3b2e1d292219917e9ff24dae8d. This supersedes older
+baseline pointers below for this continuation. Local transfer 92f392e has
+the same complete tree. Start the isolated frame audit directly from that tree;
+do not import unofficial preview commits, gameplay/UI changes or test scaffolds.
+The user found no visible benefit in the HUD-blur comparison; do not describe
+blur removal as the solution. Preserve the official HUD, visuals, timing,
+simulation, input, audio, login, accounts, rewards and owner-only Admin access.
+Limit this candidate to demonstrably redundant per-render initialization and
+unchanged presentation reconstruction. No further full campaign replay should
+be required merely to collect the same known counters. The iPhone restart and
+slowdown remain unresolved device findings; host tests cannot prove iPhone FPS
+or native/GPU/process memory behavior. Prepare and preserve a reviewed isolated
+result; this continuation does not authorize another preview game or a public
+Testnet/Mainnet alias change. Keep automatic Vercel deployment disabled for the
+candidate branch while preserving its source.
+
 ## Explicit owner-only V4 Testnet release, 19 October 2026
 
 The user explicitly authorized "V4 ins Testnet, nur Admin." Release the tested
