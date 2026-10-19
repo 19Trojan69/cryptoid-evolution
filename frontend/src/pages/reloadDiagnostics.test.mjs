@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { RELOAD_TRACE_KEY, appendReloadEvent, freezeGap, recordApplicationBoot, reloadErrorName } from './reloadDiagnostics.ts';
+import { RELOAD_TRACE_KEY, RESOURCE_TREND_KEY, RESOURCE_TREND_INTERVAL_MS, appendReloadEvent, appendResourceTrendSample, createResourceTrendMonitor, freezeGap, recordApplicationBoot, reloadErrorName } from './reloadDiagnostics.ts';
 
 const store = () => {
   const values = new Map();
@@ -31,13 +31,14 @@ test('error names are allowlisted and raw custom names are not retained',()=>{
   assert.equal(reloadErrorName(error),'UnknownError');
 });
 
-test('v2 runtime collection is wired only to the verified owner game entry',()=>{
+test('owner runtime collection is wired only to the verified owner game entry',()=>{
   const main=fs.readFileSync(new URL('../main.tsx',import.meta.url),'utf8');
   const game=fs.readFileSync(new URL('./GamePage.tsx',import.meta.url),'utf8');
   assert.ok(!main.includes('installReloadDiagnostics'));
   assert.ok(game.includes('return <GamePage ownerDiagnostics={canAdmin} />'));
   assert.ok(game.includes('if (ownerDiagnostics) installReloadDiagnostics();'));
   assert.ok(game.includes('ownerDiagnostics ? createReloadGameMonitor(diagnosticContext) : null'));
+  assert.ok(game.includes('ownerDiagnostics ? createResourceTrendMonitor(ownerResourceContext) : null'));
   assert.ok(game.includes("if (ownerDiagnostics) recordReloadEvent(reason, error)"));
 });
 
@@ -61,4 +62,30 @@ test('v3 transition snapshots remain wired only inside verified owner gameplay',
   assert.ok(game.includes("recordOwnerResourceSnapshot('resource-normal-start')"));
   assert.ok(game.includes("recordOwnerResourceSnapshot('resource-formation-ready')"));
   assert.ok(game.includes('if (ownerDiagnostics) recordReloadSnapshot(kind, ownerResourceContext())'));
+});
+
+test('v4 resource trend stores only sanitized owner resource context and stays bounded',()=>{
+  const localStorage=store(),sessionStorage=store();
+  const host={localStorage,sessionStorage,crypto:{randomUUID:()=> 'boot-v4'}};
+  for(let i=0;i<100;i++) appendResourceTrendSample(host,{...context,sector:Math.min(500,i+1),
+    jsHeapBytes:1000000+i,paintedBytes:4000000,canvasCacheBytes:2000000,audioBufferBytes:3000000,
+    estimatedResourceBytes:9000000,username:'private-user',stack:'private-stack'},()=>1000+i*10000);
+  const samples=JSON.parse(localStorage.getItem(RESOURCE_TREND_KEY));
+  assert.equal(samples.length,90);assert.equal(samples.at(-1).context.sector,100);
+  assert.equal(samples.at(-1).context.estimatedResourceBytes,9000000);
+  assert.ok(!JSON.stringify(samples).includes('private-user'));assert.ok(!JSON.stringify(samples).includes('private-stack'));
+});
+
+test('v4 resource trend monitor samples active visible play every ten seconds and stops cleanly',()=>{
+  const localStorage=store(),sessionStorage=store();let timer,interval,cleared=false,now=1000;
+  const host={localStorage,sessionStorage,crypto:{randomUUID:()=> 'boot-v4-monitor'},document:{hidden:false},
+    location:{pathname:'/game'},performance:{getEntriesByType:()=>[{type:'navigate'}]},
+    setInterval:(fn,ms)=>{timer=fn;interval=ms;return 7;},clearInterval:id=>{assert.equal(id,7);cleared=true;}};
+  let status='playing';
+  const monitor=createResourceTrendMonitor(()=>({...context,status,jsHeapBytes:1200000,estimatedResourceBytes:7000000}),host,{now:()=>now,setInterval:host.setInterval,clearInterval:host.clearInterval});
+  assert.equal(interval,RESOURCE_TREND_INTERVAL_MS);
+  assert.equal(JSON.parse(localStorage.getItem(RESOURCE_TREND_KEY)).length,1);
+  now+=10000;timer();assert.equal(JSON.parse(localStorage.getItem(RESOURCE_TREND_KEY)).length,2);
+  status='paused';now+=10000;timer();assert.equal(JSON.parse(localStorage.getItem(RESOURCE_TREND_KEY)).length,2);
+  monitor.finish();assert.equal(cleared,true);
 });
