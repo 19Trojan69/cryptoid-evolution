@@ -18,15 +18,19 @@ const authResult = token => ({ accessToken: token, user: { uid: 'auth-test', use
 
 // Run the actual hook and deadline helper with an isolated SDK, API and clock.
 // No Pi account, real session or network writes are used in these regressions.
-function harness(authenticate, restore) {
-  const states = [], refs = [], effects = [], timers = new Map(), posts = [];
+function harness(authenticate, restore, diagnostics = false) {
+  const states = [], refs = [], effects = [], timers = new Map(), posts = [], gets = [];
   let stateIndex = 0, refIndex = 0, nextTimer = 0, mounted = false;
   const setTimeout = (fn, delay) => { const id = ++nextTimer; timers.set(id, { fn, delay }); return id; };
   const clearTimeout = id => timers.delete(id);
   const localStorage = storage(), sessionStorage = storage();
   const user = { uid: 'auth-test', username: 'auth-test', roles: [] };
   const axiosClient = {
-    get: async () => restore ?? { data: { user, canAdmin: false, adminMode: false } },
+    get: async url => {
+      gets.push(url);
+      if (url === '/diagnostics/access') return { data: { canDiagnostics: diagnostics } };
+      return restore ?? { data: { user, canAdmin: false, adminMode: false } };
+    },
     post: async (url, body) => { posts.push({ url, body }); return { data: { user, canAdmin: false, adminMode: false } }; },
   };
   const react = {
@@ -58,7 +62,7 @@ function harness(authenticate, restore) {
   });
   const render = () => { stateIndex = refIndex = 0; const auth = useAuth(); mounted = true; return auth; };
   render();
-  return { render, boot: () => effects.forEach(fn => fn()), timers, posts, localStorage, sessionStorage, timeout: () => { const pending = [...timers.values()].find(timer => timer.delay === 60_000); assert.ok(pending, 'Authentication has a bounded deadline'); pending.fn(); } };
+  return { render, boot: () => effects.forEach(fn => fn()), timers, posts, gets, localStorage, sessionStorage, timeout: () => { const pending = [...timers.values()].find(timer => timer.delay === 60_000); assert.ok(pending, 'Authentication has a bounded deadline'); pending.fn(); } };
 }
 
 test('a stalled Pi Browser no longer holds the startup and retry controls forever', async () => {
@@ -109,4 +113,22 @@ test('an existing Web App session is restored without replacing it with native a
   assert.equal(h.render().user.username, 'auth-test');
   assert.equal(h.render().authReady, true);
   assert.equal(h.posts.length, 0);
+});
+
+test('a configured diagnostic-only account gains diagnostics without admin mode', async () => {
+  const h = harness(() => Promise.resolve(authResult('diag-token')), undefined, true);
+  h.boot(); await flush();
+  const auth = h.render();
+  assert.equal(auth.canAdmin, false);
+  assert.equal(auth.canDiagnostics, true);
+  assert.equal(auth.adminMode, false);
+  assert.ok(h.gets.includes('/diagnostics/access'));
+});
+
+test('ordinary accounts remain outside diagnostics', async () => {
+  const h = harness(() => Promise.resolve(authResult('normal-token')), undefined, false);
+  h.boot(); await flush();
+  const auth = h.render();
+  assert.equal(auth.canAdmin, false);
+  assert.equal(auth.canDiagnostics, false);
 });
