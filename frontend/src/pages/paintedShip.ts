@@ -37,15 +37,19 @@ const loadSource = (url: string) => new Promise<HTMLImageElement>((resolve, reje
     const sourceStarted = timed ? performance.now() : 0;
     let canvas: HTMLCanvasElement | undefined;
     try {
-      canvas = document.createElement("canvas");
-      canvas.width = canvas.height = 240;
-      const context = canvas.getContext("2d", { willReadFrequently: true });
-      try {
-        if (context && !visualCenters.has(url)) {
-          context.drawImage(image, 0, 0, 240, 240);
-          visualCenters.set(url, shipVisualCenter(context.getImageData(0, 0, 240, 240).data, 240, 240));
-        }
-      } catch { /* Preserve the optional visual offset fallback for a tainted image. */ }
+      // The raw-image LRU may reload a hull; its immutable visual center is
+      // already known. Do not allocate another backing/context just to skip it.
+      if (!visualCenters.has(url)) {
+        canvas = document.createElement("canvas");
+        canvas.width = canvas.height = 240;
+        const context = canvas.getContext("2d", { willReadFrequently: true });
+        try {
+          if (context) {
+            context.drawImage(image, 0, 0, 240, 240);
+            visualCenters.set(url, shipVisualCenter(context.getImageData(0, 0, 240, 240).data, 240, 240));
+          }
+        } catch { /* Preserve the optional visual offset fallback for a tainted image. */ }
+      }
       resolve(image);
     } catch (error) { reject(error); }
     finally { if (canvas) canvas.width = canvas.height = 0; if (timed) { const work = performance.now() - sourceStarted; preparationProbe.sourceWorkTotalMs += work; preparationProbe.sourceWorkMaxMs = Math.max(preparationProbe.sourceWorkMaxMs, work); } }
@@ -126,6 +130,9 @@ const renderPaintedSprite = async (index: number, colorId: PlayerColorId, stage:
   if (cached) return cached;
   const url = shipEvolutionAsset(index, stage);
   const image = await shipImage(url, foreground);
+  // A group or mission may disappear while its source is loading. Recheck
+  // before starting the synchronous material pass and Blob encode/decode.
+  if (!cache.retained(key)) throw new Error('Ship preparation cancelled');
   const timed = isCombatProbeEnabled();
   const materialStarted = timed ? performance.now() : 0;
   const canvas = document.createElement("canvas");

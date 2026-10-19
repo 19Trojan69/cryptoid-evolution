@@ -64,7 +64,7 @@ test('failed loads free their slot and pin, allow retry and do not poison other 
  assert.ok(f.images.every(i=>i.onload===null&&i.onerror===null),'completed image handlers are detached');
 });
 
-test('completed normal/boss/bonus plans across all 500 stages leave no source jobs or pins behind',async()=>{
+test('completed normal/boss/bonus plans across all 500 stages leave no source jobs or pins behind',async t=>{
  const f=await fixture();
  for(let stage=1;stage<=500;stage++)for(const encounter of stage%10?['normal']:['boss-intro','boss-fight','boss-clear','bonus']){
   const plan=hullSourcePlan(stage,encounter,0,1);f.api.preloadHullSources(plan);
@@ -73,6 +73,9 @@ test('completed normal/boss/bonus plans across all 500 stages leave no source jo
   const stats=f.api.paintedShipResourceStats();assert.equal(stats.sourceActive,0);assert.equal(stats.sourceQueued,0);assert.equal(stats.sourceRetainCount,0);assert.ok(stats.sources<=8);
  }
  assert.equal(f.peak(),3);
+ const uniqueSources=new Set(f.images.map(image=>image.url)).size;
+ assert.equal(f.canvases.length,uniqueSources,'each immutable source center is measured at most once across every stage');
+ t.diagnostic(JSON.stringify({sourceLoads:f.images.length,uniqueSources,centerCanvases:f.canvases.length}));
 });
 
 test('full speculative capacity defers a paint job; the same mounted variant retries and finishes',async()=>{

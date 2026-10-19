@@ -1,5 +1,16 @@
 # Preserve the officially approved game
 
+## Slowdown after shared-resource preview, 19 October 2026
+
+The user reports marked slowdowns after playing preview 342f255. Treat that
+preview as insufficient for stable device performance. Investigate shared
+rendering/preparation costs; remove only demonstrated redundant preparation.
+Preserve material pixels, simulation delta and mobile paint cadence, combat,
+audio, controls, HUD and Next Mission. In particular, bounded cache tests do not
+establish iPhone FPS or explain the physical frame-rate drop. No new sampler,
+Admin privilege or public alias update. Do not present another small allocation
+correction as a proved slowdown/crash fix or require another full campaign.
+
 ## Shared-resource follow-up after preview interruption, 19 October 2026
 
 The user confirms the latest account-free preview also interrupted outside a
