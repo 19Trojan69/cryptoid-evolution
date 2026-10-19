@@ -5,7 +5,12 @@ export const RELOAD_TRACE_LIMIT = 96;
 export const RELOAD_WINDOW_MS = 60_000;
 export const RELOAD_HEARTBEAT_MS = 5_000;
 export const RELOAD_FREEZE_MS = 500;
+export const RESOURCE_TREND_KEY = 'cryptoid_resource_trend_v4';
+export const RESOURCE_TREND_LIMIT = 90;
+export const RESOURCE_TREND_WINDOW_MS = 15 * 60_000;
+export const RESOURCE_TREND_INTERVAL_MS = 10_000;
 const MAX_RAW_BYTES = 128 * 1024;
+const MAX_RESOURCE_RAW_BYTES = 256 * 1024;
 
 export type ReloadDiagnosticKind =
   | 'app-boot'
@@ -75,12 +80,19 @@ export type ReloadTraceEvent = {
   persisted?: boolean;
 };
 
+export type ResourceTrendSample = {
+  at: number;
+  bootId: string;
+  context: TechnicalContext;
+};
+
 type StorageLike = Pick<Storage, 'getItem' | 'setItem'>;
 type ReloadHost = Window & {
   __cryptoidBootId?: string;
   __cryptoidReloadInstalled?: boolean;
   __cryptoidReloadContext?: () => GameDiagnostic;
   __cryptoidReloadState?: { events: ReloadTraceEvent[] };
+  __cryptoidResourceTrendState?: { samples: ResourceTrendSample[] };
 };
 
 const finite = (value: unknown, max = 1e15): value is number =>
@@ -140,6 +152,16 @@ function parseEvents(value: string | null | undefined): ReloadTraceEvent[] {
 function storedEvents(target?: StorageLike) {
   try { return parseEvents(target?.getItem(RELOAD_TRACE_KEY)); } catch { return []; }
 }
+function parseResourceSamples(value: string | null | undefined): ResourceTrendSample[] {
+  if (!value || typeof value !== 'string' || value.length > MAX_RESOURCE_RAW_BYTES) return [];
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed.slice(-RESOURCE_TREND_LIMIT) : [];
+  } catch { return []; }
+}
+function storedResourceSamples(target?: StorageLike) {
+  try { return parseResourceSamples(target?.getItem(RESOURCE_TREND_KEY)); } catch { return []; }
+}
 function eventKey(event: ReloadTraceEvent) {
   return `${event.bootId}|${event.at}|${event.kind}`;
 }
@@ -163,6 +185,34 @@ function persist(host: ReloadHost) {
   const raw = JSON.stringify(stateFor(host).events.slice(-RELOAD_TRACE_LIMIT));
   for (const name of ['localStorage', 'sessionStorage'] as const) {
     try { storage(host, name)?.setItem(RELOAD_TRACE_KEY, raw); } catch { /* Optional local diagnostics. */ }
+  }
+}
+
+function mergeResourceSamples(...sets: ResourceTrendSample[][]) {
+  const merged = new Map<string, ResourceTrendSample>();
+  for (const sample of sets.flat()) {
+    if (!sample || typeof sample !== 'object' || !finite(sample.at) || typeof sample.bootId !== 'string') continue;
+    const context = reloadTechnicalContext(sample.context as GameDiagnostic);
+    if (!context) continue;
+    merged.set(`${sample.bootId}|${sample.at}`, { at: sample.at, bootId: sample.bootId, context });
+  }
+  return [...merged.values()].sort((a, b) => a.at - b.at).slice(-RESOURCE_TREND_LIMIT);
+}
+function resourceStateFor(host: ReloadHost) {
+  if (!host.__cryptoidResourceTrendState) {
+    host.__cryptoidResourceTrendState = {
+      samples: mergeResourceSamples(
+        storedResourceSamples(storage(host, 'localStorage')),
+        storedResourceSamples(storage(host, 'sessionStorage')),
+      ),
+    };
+  }
+  return host.__cryptoidResourceTrendState;
+}
+function persistResourceTrend(host: ReloadHost) {
+  const raw = JSON.stringify(resourceStateFor(host).samples.slice(-RESOURCE_TREND_LIMIT));
+  for (const name of ['localStorage', 'sessionStorage'] as const) {
+    try { storage(host, name)?.setItem(RESOURCE_TREND_KEY, raw); } catch { /* Optional local diagnostics. */ }
   }
 }
 
@@ -264,6 +314,53 @@ export function recordReloadEvent(kind: ReloadDiagnosticKind, error?: unknown) {
 export function recordReloadSnapshot(kind: ReloadDiagnosticKind, context: GameDiagnostic) {
   if (typeof window === 'undefined') return null;
   return appendReloadEvent(window as ReloadHost, kind, context);
+}
+
+export function appendResourceTrendSample(
+  host: ReloadHost,
+  context: GameDiagnostic,
+  now = Date.now,
+) {
+  const safeContext = reloadTechnicalContext(context);
+  if (!safeContext) return null;
+  const at = now();
+  const bootId = host.__cryptoidBootId ??= newBootId(host, at);
+  const sample: ResourceTrendSample = { at, bootId, context: safeContext };
+  const state = resourceStateFor(host);
+  state.samples = mergeResourceSamples(state.samples, [sample]);
+  persistResourceTrend(host);
+  return sample;
+}
+
+export function createResourceTrendMonitor(
+  context: () => GameDiagnostic,
+  host: ReloadHost = window as ReloadHost,
+  options: {
+    now?: () => number;
+    setInterval?: typeof window.setInterval;
+    clearInterval?: typeof window.clearInterval;
+  } = {},
+) {
+  recordApplicationBoot(host);
+  const now = options.now ?? Date.now;
+  const setTimer = options.setInterval ?? host.setInterval.bind(host);
+  const clearTimer = options.clearInterval ?? host.clearInterval.bind(host);
+  let finished = false;
+  const sample = () => {
+    let current: GameDiagnostic;
+    try { current = context(); } catch { return; }
+    const visible = (() => { try { return !host.document?.hidden; } catch { return true; } })();
+    if (current.status === 'playing' && visible) appendResourceTrendSample(host, current, now);
+  };
+  sample();
+  const timer = setTimer(sample, RESOURCE_TREND_INTERVAL_MS);
+  return {
+    finish() {
+      if (finished) return;
+      finished = true;
+      clearTimer(timer);
+    },
+  };
 }
 
 export function freezeGap(previous: number, current: number, active: boolean, visible: boolean) {
