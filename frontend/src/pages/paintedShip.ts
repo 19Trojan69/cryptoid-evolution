@@ -15,44 +15,77 @@ const preparationProbe = { jobsStarted: 0, jobsFinished: 0, queueWaitMaxMs: 0,
 const sourceImages = new ResourceCache<Promise<HTMLImageElement>>(8, Infinity);
 const readySources = new WeakSet<Promise<HTMLImageElement>>();
 const visualCenters = new Map<string, { x: number; y: number }>();
-const shipImage = (url: string) => {
-  let pending = sourceImages.get(url);
-  if (!pending) {
-    pending = new Promise<HTMLImageElement>((resolve, reject) => {
-      const image = new Image();
-      image.onload = () => {
-        image.onload = image.onerror = null;
-        const timed = isCombatProbeEnabled();
-        const sourceStarted = timed ? performance.now() : 0;
-        let canvas: HTMLCanvasElement | undefined;
-        try {
-          canvas = document.createElement("canvas");
-          canvas.width = canvas.height = 240;
-          const context = canvas.getContext("2d", { willReadFrequently: true });
-          try {
-            if (context && !visualCenters.has(url)) {
-              context.drawImage(image, 0, 0, 240, 240);
-              visualCenters.set(url, shipVisualCenter(context.getImageData(0, 0, 240, 240).data, 240, 240));
-            }
-          } catch { /* Preserve the optional visual offset fallback for a tainted image. */ }
-          resolve(image);
-        } catch (error) { reject(error); }
-        finally { if (canvas) canvas.width = canvas.height = 0; if (timed) { const work = performance.now() - sourceStarted; preparationProbe.sourceWorkTotalMs += work; preparationProbe.sourceWorkMaxMs = Math.max(preparationProbe.sourceWorkMaxMs, work); } }
-      };
-      image.onerror = () => { image.onload = image.onerror = null; reject(new Error('Ship image unavailable')); };
-      image.src = url;
-    });
-    sourceImages.set(url, pending);
-    const current = pending;
-    void current.then(() => readySources.add(current), () => {});
-    void current.catch(() => { if (sourceImages.get(url) === current) sourceImages.delete(url); });
+const activeSources = new Set<string>();
+const sourceQueue: {url: string; foreground: boolean; start: () => void}[] = [];
+const MAX_ACTIVE_SOURCES = 3, MAX_WARM_SOURCES = 8;
+const drainSources = () => {
+  while (activeSources.size < MAX_ACTIVE_SOURCES && sourceQueue.length) {
+    const foreground = sourceQueue.findIndex(job => job.foreground);
+    // Warming cannot occupy the final slot needed by a newly mounted hull,
+    // even when the speculative network requests have not completed.
+    if (foreground < 0 && activeSources.size >= MAX_ACTIVE_SOURCES - 1) break;
+    const job = sourceQueue.splice(Math.max(0, foreground), 1)[0];
+    activeSources.add(job.url);
+    job.start();
   }
+};
+const loadSource = (url: string) => new Promise<HTMLImageElement>((resolve, reject) => {
+  const image = new Image();
+  image.onload = () => {
+    image.onload = image.onerror = null;
+    const timed = isCombatProbeEnabled();
+    const sourceStarted = timed ? performance.now() : 0;
+    let canvas: HTMLCanvasElement | undefined;
+    try {
+      canvas = document.createElement("canvas");
+      canvas.width = canvas.height = 240;
+      const context = canvas.getContext("2d", { willReadFrequently: true });
+      try {
+        if (context && !visualCenters.has(url)) {
+          context.drawImage(image, 0, 0, 240, 240);
+          visualCenters.set(url, shipVisualCenter(context.getImageData(0, 0, 240, 240).data, 240, 240));
+        }
+      } catch { /* Preserve the optional visual offset fallback for a tainted image. */ }
+      resolve(image);
+    } catch (error) { reject(error); }
+    finally { if (canvas) canvas.width = canvas.height = 0; if (timed) { const work = performance.now() - sourceStarted; preparationProbe.sourceWorkTotalMs += work; preparationProbe.sourceWorkMaxMs = Math.max(preparationProbe.sourceWorkMaxMs, work); } }
+  };
+  image.onerror = () => { image.onload = image.onerror = null; reject(new Error('Ship image unavailable')); };
+  image.src = url;
+});
+const shipImage = (url: string, foreground = true) => {
+  let pending = sourceImages.get(url);
+  if (pending) {
+    // A mounted hull takes precedence over queued speculative warming.
+    const index = foreground ? sourceQueue.findIndex(job => job.url === url) : -1;
+    if (index >= 0) { sourceQueue[index].foreground = true; if(index>0)sourceQueue.unshift(sourceQueue.splice(index, 1)[0]); drainSources(); }
+    return pending;
+  }
+  let resolveSource!: (image: HTMLImageElement) => void, rejectSource!: (error: unknown) => void;
+  pending = new Promise<HTMLImageElement>((resolve, reject) => { resolveSource = resolve; rejectSource = reject; });
+  const current = pending;
+  // Pending work must not be evicted and recreated while its Image is still
+  // loading. The LRU limit alone cannot bound those orphaned native loads.
+  const release = sourceImages.retain(url);
+  sourceImages.set(url, current);
+  void current.then(() => { readySources.add(current); release(); }, () => {
+    release();
+    if (sourceImages.get(url) === current) sourceImages.delete(url);
+  });
+  const job = {url, foreground, start() {
+    void loadSource(url).then(image => { resolveSource(image); activeSources.delete(url); drainSources(); }, error => { rejectSource(error); activeSources.delete(url); drainSources(); });
+  }};
+  if (foreground) sourceQueue.unshift(job); else sourceQueue.push(job);
+  drainSources();
   return pending;
 };
 
 // Use the existing eight-source cache, not an additional preload cache/queue.
 export const preloadHullSources = (urls: readonly string[]) => {
-  for (const url of [...new Set(urls)].slice(0, 7)) void shipImage(url).catch(() => {});
+  for (const url of [...new Set(urls)].slice(0, 7)) {
+    if (activeSources.size + sourceQueue.length >= MAX_WARM_SOURCES) break;
+    void shipImage(url, false).catch(() => {});
+  }
 };
 
 export const useHullSourceReady = (url: string | undefined) => {
@@ -87,12 +120,12 @@ export const useShipVisualOffset = (index: number, stage: ShipStage): CSSPropert
   } as CSSProperties;
 };
 
-const renderPaintedSprite = async (index: number, colorId: PlayerColorId, stage: ShipStage) => {
+const renderPaintedSprite = async (index: number, colorId: PlayerColorId, stage: ShipStage, foreground: boolean) => {
   const key = `${index}:${stage}:${colorId}`;
   const cached = cache.get(key);
   if (cached) return cached;
   const url = shipEvolutionAsset(index, stage);
-  const image = await shipImage(url);
+  const image = await shipImage(url, foreground);
   const timed = isCombatProbeEnabled();
   const materialStarted = timed ? performance.now() : 0;
   const canvas = document.createElement("canvas");
@@ -135,12 +168,15 @@ const renderPaintedSprite = async (index: number, colorId: PlayerColorId, stage:
 // one microtask burst. No rendering quality or source resolution is reduced.
 let paintTail: Promise<unknown> = Promise.resolve();
 
-const createPaintedSprite = (index: number, colorId: PlayerColorId, stage: ShipStage): Promise<string> => {
+const createPaintedSprite = (index: number, colorId: PlayerColorId, stage: ShipStage, foreground = true): Promise<string> => {
   const key = `${index}:${stage}:${colorId}`;
   const cached = cache.get(key);
   if (cached) return Promise.resolve(cached);
   const existing = pendingPaints.get(key);
-  if (existing) return existing;
+  if (existing) {
+    if (foreground) void shipImage(shipEvolutionAsset(index, stage)).catch(() => {});
+    return existing;
+  }
   const timed = isCombatProbeEnabled();
   const queuedAt = timed ? performance.now() : 0;
   let started = false;
@@ -153,8 +189,14 @@ const createPaintedSprite = (index: number, colorId: PlayerColorId, stage: ShipS
         if (pendingPaints.get(key) === pending) pendingPaints.delete(key);
         throw new Error('Ship preparation cancelled');
       }
+      if (!foreground && !sourceImages.get(shipEvolutionAsset(index, stage)) && activeSources.size + sourceQueue.length >= MAX_WARM_SOURCES) {
+        // Defer obsolete/speculative work at capacity. A mounted consumer may
+        // immediately request a fresh foreground job, never this rejected one.
+        if (pendingPaints.get(key) === pending) pendingPaints.delete(key);
+        throw new Error('Ship source warming deferred');
+      }
       if (timed) { started = true; preparationProbe.jobsStarted++; preparationProbe.queueWaitMaxMs = Math.max(preparationProbe.queueWaitMaxMs, performance.now() - queuedAt); }
-      return renderPaintedSprite(index, colorId, stage);
+      return renderPaintedSprite(index, colorId, stage, foreground);
     }).finally(() => { if (timed && started) preparationProbe.jobsFinished++; if (pendingPaints.get(key) === pending) pendingPaints.delete(key); });
   paintTail = pending.catch(() => {});
   pendingPaints.set(key, pending);
@@ -170,7 +212,7 @@ export const retainPreparedHulls = (hulls: readonly PreparedHull[]) => {
   // The existing serial queue, shader, Blob decoder and cache do all work.
   // Cancellation releases only preparation pins; mounted consumers keep theirs.
   const settled = Promise.all(selected.map(([, hull]) =>
-    createPaintedSprite(hull.sprite, hull.color, hull.stage ?? 1).then(() => true, () => false)));
+    createPaintedSprite(hull.sprite, hull.color, hull.stage ?? 1, false).then(() => true, () => false)));
   let released = false;
   return { settled, release() { if (released) return; released = true; releases.forEach(release => release()); } };
 };
@@ -199,4 +241,4 @@ export const usePaintedShipStyle = (index: number, colorId: PlayerColorId, stage
     : { backgroundImage: `url(${shipEvolutionAsset(index, stage)})`, "--ship-surface-mask": `url(${shipEvolutionAsset(index, stage)})`, backgroundPosition: "center", backgroundSize: "100% 100%", filter: "none" } as CSSProperties;
 };
 
-export const paintedShipResourceStats = () => ({ painted: cache.size, estimatedBytes: cache.bytes, sources: sourceImages.size, pending: pendingPaints.size, retained: cache.retainedEntries, retainCount: cache.retainCount, sourceRetained: sourceImages.retainedEntries, sourceRetainCount: sourceImages.retainCount, ...preparationProbe });
+export const paintedShipResourceStats = () => ({ painted: cache.size, estimatedBytes: cache.bytes, sources: sourceImages.size, sourceActive: activeSources.size, sourceQueued: sourceQueue.length, pending: pendingPaints.size, retained: cache.retainedEntries, retainCount: cache.retainCount, sourceRetained: sourceImages.retainedEntries, sourceRetainCount: sourceImages.retainCount, ...preparationProbe });

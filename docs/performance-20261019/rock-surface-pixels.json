@@ -1,0 +1,158 @@
+{
+  "passed": true,
+  "baseline": "6a559c304bbfc5091b900ce1f414fe096d9974af",
+  "exactPixelComparisons": 680,
+  "idleFrameChecks": 40000,
+  "footprints": [
+    {
+      "width": 320,
+      "height": 568,
+      "dpr": 1,
+      "baselineIdleBytes": 727040,
+      "candidateIdleBytes": 4
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "dpr": 1.5,
+      "baselineIdleBytes": 1635840,
+      "candidateIdleBytes": 4
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "dpr": 2,
+      "baselineIdleBytes": 1635840,
+      "candidateIdleBytes": 4
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "dpr": 2.625,
+      "baselineIdleBytes": 1635840,
+      "candidateIdleBytes": 4
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "dpr": 3,
+      "baselineIdleBytes": 1635840,
+      "candidateIdleBytes": 4
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "dpr": 1,
+      "baselineIdleBytes": 1316640,
+      "candidateIdleBytes": 4
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "dpr": 1.5,
+      "baselineIdleBytes": 2962440,
+      "candidateIdleBytes": 4
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "dpr": 2,
+      "baselineIdleBytes": 2962440,
+      "candidateIdleBytes": 4
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "dpr": 2.625,
+      "baselineIdleBytes": 2962440,
+      "candidateIdleBytes": 4
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "dpr": 3,
+      "baselineIdleBytes": 2962440,
+      "candidateIdleBytes": 4
+    },
+    {
+      "width": 430,
+      "height": 825,
+      "dpr": 1,
+      "baselineIdleBytes": 1419000,
+      "candidateIdleBytes": 4
+    },
+    {
+      "width": 430,
+      "height": 825,
+      "dpr": 1.5,
+      "baselineIdleBytes": 3194040,
+      "candidateIdleBytes": 4
+    },
+    {
+      "width": 430,
+      "height": 825,
+      "dpr": 2,
+      "baselineIdleBytes": 3194040,
+      "candidateIdleBytes": 4
+    },
+    {
+      "width": 430,
+      "height": 825,
+      "dpr": 2.625,
+      "baselineIdleBytes": 3194040,
+      "candidateIdleBytes": 4
+    },
+    {
+      "width": 430,
+      "height": 825,
+      "dpr": 3,
+      "baselineIdleBytes": 3194040,
+      "candidateIdleBytes": 4
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "dpr": 1,
+      "baselineIdleBytes": 3145728,
+      "candidateIdleBytes": 4
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "dpr": 1.5,
+      "baselineIdleBytes": 7077888,
+      "candidateIdleBytes": 4
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "dpr": 2,
+      "baselineIdleBytes": 7077888,
+      "candidateIdleBytes": 4
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "dpr": 2.625,
+      "baselineIdleBytes": 7077888,
+      "candidateIdleBytes": 4
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "dpr": 3,
+      "baselineIdleBytes": 7077888,
+      "candidateIdleBytes": 4
+    }
+  ],
+  "checks": [
+    "unchanged original material and drawing loops",
+    "cold empty backing is 1x1",
+    "one idle timer, zero idle RAF/draws/dimension writes",
+    "reuse inside gap, release at 2000 ms",
+    "restart, viewport and DPR cases",
+    "null-context retry and unmount cancellation",
+    "material cache remains seven textures"
+  ],
+  "limits": "Backing-byte estimates and native raster host, not actual WebKit/GPU/process memory or a verified iPhone crash fix."
+}

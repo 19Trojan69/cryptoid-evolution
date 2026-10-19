@@ -1,0 +1,11 @@
+{
+  "baselineRef": null,
+  "allocationAttempts": 2,
+  "uniqueImageURLs": 2,
+  "reportedSources": 8,
+  "active": 2,
+  "queued": 6,
+  "stages": 500,
+  "scenario": "Actual normal-block source plans, callbacks deliberately pending",
+  "limits": "Code-level pending-load pressure probe, not evidence of actual iPhone network stalls or crash cause."
+}

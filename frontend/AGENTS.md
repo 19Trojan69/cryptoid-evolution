@@ -1,5 +1,16 @@
 # Preserve the officially approved game
 
+## Shared-resource follow-up after preview interruption, 19 October 2026
+
+The user confirms the latest account-free preview also interrupted outside a
+boss and requests checking this class of errors across every level. Prepare an
+isolated correction for bounded in-flight hull/atlas loading, pending-request
+deduplication and idle/unmounted rock-canvas backing lifetime. Cover all 500
+internal stages and all 50 boss models with applicable automated invariants.
+Keep original pixels/material, sizes, combat, audio, HUD, controls and Next Mission
+semantics. No new Admin access, ordinary-player sampler or public alias release.
+Do not describe automated resource checks as proof of a complete iPhone fix.
+
 ## Isolated boss stability and playability preview, 19 October 2026
 
 The user requests larger minimum turret bodies and matching hit areas while

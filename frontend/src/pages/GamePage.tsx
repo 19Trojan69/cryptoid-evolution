@@ -543,7 +543,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   const regularMusicPositionRef = useRef(0);
   const soundRef = useRef<GameAudio | null>(null);
   const bossConfig = game.boss?.config;
-  useEffect(()=>{if(bossConfig)void preloadBossWeapons(bossConfig).catch(()=>{});},[bossConfig]);
+  useEffect(()=>{if(bossConfig)void preloadBossWeapons(bossConfig,false).catch(()=>{});},[bossConfig]);
   const bossVictoryPendingRef = useRef(false);
   const bossVictoryFinishedRef = useRef(false);
   const bossDestroyPlayedRef = useRef(false);

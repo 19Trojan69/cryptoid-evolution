@@ -1,0 +1,11 @@
+{
+  "baselineRef": "6a559c304bbfc5091b900ce1f414fe096d9974af",
+  "allocationAttempts": 7806,
+  "uniqueImageURLs": 20,
+  "reportedSources": 8,
+  "active": null,
+  "queued": null,
+  "stages": 500,
+  "scenario": "Actual normal-block source plans, callbacks deliberately pending",
+  "limits": "Code-level pending-load pressure probe, not evidence of actual iPhone network stalls or crash cause."
+}

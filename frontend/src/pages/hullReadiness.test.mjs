@@ -42,10 +42,12 @@ test('decoded prepared hull does not wait for an evicted raw source or hide its 
   f.effects.pop()();assert.equal(f.images.length,0,'prepared hull must not reload raw source to release flames');
 });
 
-test('source warming is deduplicated, capped at seven and does not wait or paint variants',async()=>{
+test('source warming deduplicates seven requests, limits native loads to three and does not paint variants',async()=>{
   const f=await fixture(),urls=Array.from({length:20},(_,i)=>`/ship-${i}.png`);
   assert.equal(f.api.preloadHullSources([...urls,urls[0]]),undefined);
-  assert.equal(f.images.length,7);f.api.preloadHullSources(urls);assert.equal(f.images.length,7);
+  assert.equal(f.images.length,2);assert.equal(f.api.paintedShipResourceStats().sourceQueued,5);
+  assert.equal(f.api.paintedShipResourceStats().sources,7);
+  f.api.preloadHullSources(urls);assert.equal(f.images.length,2);assert.equal(f.api.paintedShipResourceStats().sourceQueued,5);
   for(const image of f.images)image.onload();await new Promise(resolve=>setImmediate(resolve));
   assert.equal(f.api.useHullSourceReady(urls[0]),true,'warmed source is ready on the first component render');
   assert.equal(f.api.paintedShipResourceStats().painted,0);
