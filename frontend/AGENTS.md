@@ -1,5 +1,18 @@
 # Preserve the officially approved game
 
+## Small turret bodies, 19 October 2026, preparation only
+
+The user explicitly requests larger bodies on every small boss turret, with
+unchanged barrels, to make them easier to hit. Start from official Testnet
+f5be06d594f70f21fe9b6b6235015b819b57bb34 (local bf13968 includes its runtime
+and release documentation). Enlarge only small bodies/sockets and their matching
+body hit regions across all 50 bosses. Keep barrel dimensions, mount positions,
+muzzles, caliber, fire/recoil/tracking, HP, points, audio, HUD and other gameplay.
+Pre-bake the artwork rather than adding runtime surfaces or per-frame layers.
+Do not import unofficial previews. Testnet/Mainnet aliases and Admin/data/saves/
+Highscores are not authorized to change for this new preparation. Preserve the
+official f5be06d release as rollback; disable automatic deployment on this branch.
+
 ## Explicit Testnet Mongo session-store release, 19 October 2026
 
 At 22:28 Europe/Vienna the user explicitly approved the additional MongoDB

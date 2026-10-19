@@ -21,15 +21,22 @@ export function bossHitTarget(boss:SectorBoss,from:{x:number;y:number},to:{x:num
    const state=boss.turrets[index];if(state.health<=0)continue;
    const gun=guns[index],pos=gunPosition(boss,gun),c=Math.cos(state.a),s=Math.sin(state.a);
    const x=c*(from.x-pos.x)+s*(from.y-pos.y),y=-s*(from.x-pos.x)+c*(from.y-pos.y);
-   const vx=c*dx+s*dy,vy=-s*dx+c*dy,halfWidth=Math.max(3,gun.halfWidth*scale);
-   let enter=0,leave=1;
-   if(Math.abs(vx)<1e-8){if(Math.abs(x)>halfWidth)continue;}
-   else {const a=(-halfWidth-x)/vx,b=(halfWidth-x)/vx;enter=Math.max(enter,Math.min(a,b));leave=Math.min(leave,Math.max(a,b));}
-   if(enter>leave)continue;
-   const back=gun.back*scale+2,muzzle=gun.muzzle*scale+2;
-   if(Math.abs(vy)<1e-8){if(y < -back||y > muzzle)continue;}
-   else {const a=(-back-y)/vy,b=(muzzle-y)/vy;enter=Math.max(enter,Math.min(a,b));leave=Math.min(leave,Math.max(a,b));}
-   if(enter<=leave&&enter<earliest){earliest=enter;hitIndex=index;}
+   const vx=c*dx+s*dy,vy=-s*dx+c*dy;
+   // Keep the existing barrel envelope. Only the enlarged body gains width;
+   // widening the complete muzzle-length rectangle would create phantom barrels.
+   for(let region=0;region<(gun.body?2:1);region++){
+    const body=region===1?gun.body:undefined;
+    const halfWidth=Math.max(3,(body?.halfWidth??gun.halfWidth)*scale);
+    let enter=0,leave=1;
+    if(Math.abs(vx)<1e-8){if(Math.abs(x)>halfWidth)continue;}
+    else {const a=(-halfWidth-x)/vx,b=(halfWidth-x)/vx;enter=Math.max(enter,Math.min(a,b));leave=Math.min(leave,Math.max(a,b));}
+    if(enter>leave)continue;
+    const back=(body?.back??gun.back)*scale+2;
+    const front=(body?body.back*.88+3:gun.muzzle)*scale+2;
+    if(Math.abs(vy)<1e-8){if(y < -back||y > front)continue;}
+    else {const a=(-back-y)/vy,b=(front-y)/vy;enter=Math.max(enter,Math.min(a,b));leave=Math.min(leave,Math.max(a,b));}
+    if(enter<=leave&&enter<earliest){earliest=enter;hitIndex=index;}
+   }
   }
   if(hitIndex>=0)return {kind:'turret' as const,index:hitIndex,x:from.x+dx*earliest,y:from.y+dy*earliest};
   return null;
