@@ -3,8 +3,13 @@
 const EVENT_KEY = 'cryptoid_game_diagnostics_v1';
 const SESSION_KEY = 'cryptoid_game_session_v1';
 const RELOAD_KEY = 'cryptoid_reload_trace_v2';
+const RESOURCE_KEY = 'cryptoid_resource_trend_v4';
 const MAX_INPUT = 128 * 1024;
+const MAX_RESOURCE_INPUT = 256 * 1024;
 const RELOAD_WINDOW_MS = 60_000;
+const RESOURCE_WINDOW_MS = 15 * 60_000;
+const RESOURCE_SAMPLE_INTERVAL_MS = 10_000;
+const RESOURCE_LIMIT = 90;
 const enums = {
   reason: ['frame-error', 'loop-stall', 'input-error', 'javascript-error', 'unhandled-rejection', 'render-error', 'performance', 'unexpected-restart'],
   phase: ['SECTOR_INTRO', 'ENTRY', 'FORMATION', 'ATTACK_CYCLE', 'REFORM', 'SECTOR_CLEAR'],
@@ -51,13 +56,13 @@ export function technicalContext(value) {
   if (time(value.at)) result.at = value.at;
   return Object.keys(result).length ? result : null;
 }
-function read(host, storageName, key) {
+function read(host, storageName, key, maxInput = MAX_INPUT) {
   try {
     const storage = host[storageName];
     if (!storage) return { status: 'unavailable', value: null };
     const raw = storage.getItem(key);
     if (raw === null || raw === undefined) return { status: 'absent', value: null };
-    if (typeof raw !== 'string' || raw.length > MAX_INPUT) return { status: 'oversized', value: null };
+    if (typeof raw !== 'string' || raw.length > maxInput) return { status: 'oversized', value: null };
     return { status: 'read', value: JSON.parse(raw) };
   } catch { return { status: 'unavailable-or-invalid', value: null }; }
 }
@@ -90,11 +95,40 @@ function mergeReload(localValue, sessionValue) {
   const latestAt = all[all.length - 1].at;
   return { windowMs: RELOAD_WINDOW_MS, latestAt, events: all.filter(event => event.at >= latestAt - RELOAD_WINDOW_MS).slice(-64) };
 }
+
+function resourceSample(value) {
+  if (!object(value) || !finite(value.at) || typeof value.bootId !== 'string' || !/^[A-Za-z0-9-]{1,80}$/.test(value.bootId)) return null;
+  const context = technicalContext(value.context);
+  if (!context) return null;
+  return { at: value.at, bootId: value.bootId, context };
+}
+function mergeResourceTrend(localValue, sessionValue) {
+  const map = new Map();
+  for (const list of [localValue, sessionValue]) {
+    if (!Array.isArray(list)) continue;
+    for (const raw of list.slice(-RESOURCE_LIMIT)) {
+      const sample = resourceSample(raw);
+      if (!sample) continue;
+      map.set(`${sample.bootId}|${sample.at}`, sample);
+    }
+  }
+  const all = [...map.values()].sort((a, b) => a.at - b.at);
+  if (!all.length) return null;
+  const latestAt = all[all.length - 1].at;
+  return {
+    windowMs: RESOURCE_WINDOW_MS,
+    sampleIntervalMs: RESOURCE_SAMPLE_INTERVAL_MS,
+    latestAt,
+    samples: all.filter(sample => sample.at >= latestAt - RESOURCE_WINDOW_MS).slice(-RESOURCE_LIMIT),
+  };
+}
 export function readStabilityReport(host, now = Date.now()) {
   const saved = read(host, 'localStorage', EVENT_KEY);
   const session = read(host, 'sessionStorage', SESSION_KEY);
   const reloadLocal = read(host, 'localStorage', RELOAD_KEY);
   const reloadSession = read(host, 'sessionStorage', RELOAD_KEY);
+  const resourceLocal = read(host, 'localStorage', RESOURCE_KEY, MAX_RESOURCE_INPUT);
+  const resourceSession = read(host, 'sessionStorage', RESOURCE_KEY, MAX_RESOURCE_INPUT);
   const events = Array.isArray(saved.value) ? saved.value.slice(-20).map(technicalContext).filter(Boolean) : [];
   const marker = session.value;
   let lastSession = null;
@@ -110,19 +144,22 @@ export function readStabilityReport(host, now = Date.now()) {
     }
   }
   const reloadTrace = mergeReload(reloadLocal.value, reloadSession.value);
+  const resourceTrend = mergeResourceTrend(resourceLocal.value, resourceSession.value);
   return {
-    version: 3,
+    version: 4,
     format: 'cryptoid-local-stability-report',
     generatedAt: finite(now) ? new Date(now).toISOString() : null,
-    available: events.length > 0 || lastSession !== null || reloadTrace !== null,
+    available: events.length > 0 || lastSession !== null || reloadTrace !== null || resourceTrend !== null,
     storage: {
       events: saved.status, session: session.status,
       reloadLocal: reloadLocal.status, reloadSession: reloadSession.status,
+      resourceLocal: resourceLocal.status, resourceSession: resourceSession.status,
     },
     events,
     lastSession,
     reloadTrace,
-    limits: 'Lokale Unterbrechungs-, Reload-, Lifecycle-, Freeze- und Übergangs-Ressourcenhinweise. Speicherwerte sind nur bekannte/geschätzte Teilmengen; GPU/WebKit-Speicher kann fehlen. Kein Beweis für einen Speicher-, Browserprozess- oder Betriebssystem-Absturz. Keine Konto-, Kauf- oder Spielstanddaten.',
+    resourceTrend,
+    limits: 'Lokale Unterbrechungs-, Reload-, Lifecycle-, Freeze-, Übergangs- und periodische Ressourcenhinweise. Ressourcen werden für den verifizierten Owner während aktivem sichtbarem Spiel ungefähr alle 10 Sekunden lokal erfasst und auf etwa 15 Minuten begrenzt. Speicherwerte sind nur bekannte/geschätzte Teilmengen; GPU/WebKit-Speicher kann fehlen. Kein Beweis für einen Speicher-, Browserprozess- oder Betriebssystem-Absturz. Keine Konto-, Kauf- oder Spielstanddaten.',
   };
 }
 
