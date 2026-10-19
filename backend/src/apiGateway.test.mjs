@@ -62,6 +62,46 @@ test('preview opt-in cannot change the production network or archive query', asy
   assert.deepEqual(calls.at(-1), { url: '/leaderboard/top?rules=2', network: 'mainnet' });
 });
 
+test('Testnet diagnostic access verifies the upstream Pi session and grants only the configured diagnostic account', async t => {
+  const seen=[];
+  t.mock.method(globalThis,'fetch',async(url,init)=>{
+    seen.push({url:String(url),headers:new Headers(init?.headers)});
+    return Response.json({user:{username:'diagnostic-pilot'},canAdmin:false},{headers:{'set-cookie':'connect.sid=diag; HttpOnly'}});
+  });
+  const env={VERCEL_ENV:'preview',VERCEL_PROJECT_PRODUCTION_URL:'cryptoid-evolution-testnet.vercel.app',DIAGNOSTIC_PI_TESTNET_USERNAMES:'other-user, Diagnostic-Pilot '};
+  const gateway=createApiGateway(async()=>{throw Error('diagnostic access must not start local backend');},()=>env);
+  const res=response();
+  await gateway({method:'GET',url:'/api/index?path=diagnostics%2Faccess',headers:{host:'preview.vercel.app',authorization:'Bearer verified-token',cookie:'connect.sid=client'}},res);
+  assert.equal(res.code,200);assert.deepEqual(res.body,{canDiagnostics:true});
+  assert.equal(res.headers['Cache-Control'],'no-store');assert.equal(res.headers['x-cryptoid-backend'],'testnet-diagnostics-access');
+  assert.deepEqual(res.headers['set-cookie'],['connect.sid=diag; HttpOnly']);
+  assert.equal(seen.length,1);assert.equal(seen[0].url,'https://cryptoid-evolution.vercel.app/api/user/me');
+  assert.equal(seen[0].headers.get('authorization'),'Bearer verified-token');
+  assert.equal(seen[0].headers.get('cookie'),'connect.sid=client');
+  assert.equal(seen[0].headers.get('x-cryptoid-app-network'),'testnet');
+});
+
+test('Testnet diagnostic access denies ordinary accounts but always permits the verified owner', async t => {
+  let reply={user:{username:'ordinary-pilot'},canAdmin:false};
+  t.mock.method(globalThis,'fetch',async()=>Response.json(reply));
+  const env={VERCEL_ENV:'preview',VERCEL_PROJECT_PRODUCTION_URL:'cryptoid-evolution-testnet.vercel.app',DIAGNOSTIC_PI_TESTNET_USERNAMES:'diagnostic-pilot'};
+  const gateway=createApiGateway(async()=>{throw Error('must not load backend');},()=>env);
+  const denied=response();await gateway({method:'GET',url:'/api/index?path=diagnostics%2Faccess',headers:{host:'preview.vercel.app'}},denied);
+  assert.deepEqual(denied.body,{canDiagnostics:false});
+  reply={user:{username:'owner-renamed'},canAdmin:true};
+  const owner=response();await gateway({method:'GET',url:'/api/index?path=diagnostics%2Faccess',headers:{host:'preview.vercel.app'}},owner);
+  assert.deepEqual(owner.body,{canDiagnostics:true});
+});
+
+test('diagnostic access is not introduced on Mainnet by the Testnet gateway branch', async () => {
+  const {backend,calls}=backendFixture();
+  const gateway=createApiGateway(async()=>backend,()=>({VERCEL_ENV:'production',DIAGNOSTIC_PI_TESTNET_USERNAMES:'diagnostic-pilot'}));
+  const res=response();
+  await gateway({method:'GET',url:'/api/index?path=diagnostics%2Faccess',headers:{host:'cryptoid-evolution.vercel.app'}},res);
+  assert.equal(res.code,200);assert.equal(calls.at(-1).url,'/diagnostics/access');
+  assert.equal(res.headers['x-cryptoid-backend'],'local');
+});
+
 test('default Testnet proxy does not start the local backend and keeps authentication, body and response cookies', async t => {
   let sent;
   t.mock.method(globalThis, 'fetch', async (url, init) => {
