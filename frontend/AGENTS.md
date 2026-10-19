@@ -1,5 +1,26 @@
 # Preserve the officially approved game
 
+## Explicit official Testnet frame-audit release, 19 October 2026
+
+The user explicitly approved publishing the reviewed frame-audit and static
+destroyed-boss-weapon patch with "Ja bitte mach das." This supersedes the
+preparation-only alias restriction in the following section for this release.
+Release candidate: 7cdad95400becf690175af0698292a24fb0a6c21, tree
+37ad25a8540d84ef862aca90f7ef7cc82f82eef2. Only the existing official
+cryptoid-evolution-testnet project and its official Testnet aliases are authorized.
+Mainnet and owner-only Admin authorization must remain unchanged. Do not ask for
+the same release authorization again. The rollback branch
+backup/testnet-before-frame-audit-20261019 was created and verified at
+66eb357cc08a6b5f9b32a9242d6875ed475532fa before attempting deployment.
+Its existing READY deployment is dpl_8h9mgxiRDUerhJr4PyCPTiaPQgR4.
+The Vercel production-deployment request was rejected with HTTP 403 on
+19 October at approximately 18:37 UTC; no new deployment or alias movement
+occurred. No authenticated local Vercel CLI was available as the advertised
+fallback. See docs/official-testnet-frame-audit-release-20261019.md. Resume the
+already authorized release after deployment access is available; first verify
+the official aliases and the reviewed source again. Do not claim this patch is
+live, an iPhone FPS gain, or a complete Whitescreen fix.
+
 
 ## Official Testnet source only, 19 October 2026, continued frame audit
 
