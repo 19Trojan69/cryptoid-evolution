@@ -1,5 +1,16 @@
 # Preserve the officially approved game
 
+## Secondary diagnostic account preparation, 19 October 2026
+
+The user requested a second Testnet account for Android comparison and supplied the
+account identity privately. Do not commit that identity to this public repository.
+Authorize it only through a Testnet/preview environment allowlist. The secondary
+account may collect V4 diagnostics during play and open/copy only the technical
+report. It must not gain owner/admin navigation, payments, score reset, level jump,
+test inventory, admin mode, or any other privileged route. Owner access remains
+unchanged. Preparation and validation are authorized; do not move the official
+Testnet alias or Mainnet without a separate explicit release instruction.
+
 ## iPhone resource trend diagnosis v4 preparation, 19 October 2026
 
 The user authorized preparation with "Gut dann bereite das vor bitte" after a new iPhone
