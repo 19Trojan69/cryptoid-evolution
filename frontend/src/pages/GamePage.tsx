@@ -2450,11 +2450,11 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
 
 export { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY };
 function GameEntry() {
-  const { authReady, isLoading, authError, signIn, canAdmin } = useAuth();
+  const { authReady, isLoading, authError, signIn, canAdmin, canDiagnostics } = useAuth();
   const { t } = useLocale();
   // Decide guest/account ownership only after authentication has settled.
   // Once mounted, the mission retains its original owner until it is left.
-  if (authReady && !isLoading && !authError) return <GamePage ownerDiagnostics={canAdmin} />;
+  if (authReady && !isLoading && !authError) return <GamePage ownerDiagnostics={canAdmin || canDiagnostics} />;
   return <div className="game-overlay"><div className="game-modal">
     <p role="status">{t(!authReady || isLoading ? 'Signing in…' : authError)}</p>
     {authReady && !isLoading && <div className="modal-actions">
