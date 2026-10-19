@@ -96,6 +96,7 @@ const date = (value: string | null) =>
 const amount = (value: number | null) =>
   value === null ? "Nicht dokumentiert" : value.toLocaleString("de-AT", { maximumFractionDigits: 7 });
 const errorMessage = (error: unknown) => {
+  if (error instanceof Error && error.message === "diagnostic_access_required") return "Für dieses Pi-Konto ist kein Diagnosezugriff freigeschaltet.";
   const status = axios.isAxiosError(error) ? error.response?.status : undefined;
   if (status === 401) return "Die Pi-Anmeldung ist abgelaufen. Bitte erneut anmelden.";
   if (status === 403) return "Für dieses Pi-Konto ist kein Admin-Zugriff freigeschaltet.";
@@ -124,10 +125,11 @@ const audioTests = [
   ["Boss-Musik", "dreadnought-duel"],
 ] as const;
 
-async function verifyReportOwner() {
-  const { data } = await axiosClient.get<{ canAdmin?: boolean }>("/admin/status");
-  if (data.canAdmin !== true) throw new Error("owner_access_required");
-  return data;
+async function verifyReportAccess() {
+  const { data } = await axiosClient.get<{ canDiagnostics?: boolean }>("/diagnostics/access");
+  if (data.canDiagnostics !== true) throw new Error("diagnostic_access_required");
+  // The local reader accepts the existing owner-shaped verifier contract.
+  return { canAdmin: true };
 }
 
 function OwnerStabilityReport() {
@@ -145,7 +147,7 @@ function OwnerStabilityReport() {
     setNotice("");
     setError("");
     try {
-      const result = await readOwnerStabilityReport(verifyReportOwner, () => window, () => request.current === id);
+      const result = await readOwnerStabilityReport(verifyReportAccess, () => window, () => request.current === id);
       if (result && request.current === id) {
         setReport(JSON.stringify(result, null, 2));
         setNotice(t(result.available ? "Vorhandene technische Einträge wurden gelesen." : "In diesem Browser sind keine auswertbaren Einträge vorhanden."));
@@ -166,7 +168,7 @@ function OwnerStabilityReport() {
     setError("");
     setNotice("");
     try {
-      await verifyReportOwner();
+      await verifyReportAccess();
     } catch (err) {
       if (request.current === id) {
         setReport("");
@@ -192,7 +194,7 @@ function OwnerStabilityReport() {
   };
   return <section className="admin-panel">
     <h2>{t("Technischer Bericht")}</h2>
-    <p>{t("Nur für dein verifiziertes Eigentümerkonto. Gelesen werden vorhandene technische Einträge aus diesem Browser. Der Bericht wird nicht automatisch versendet.")}</p>
+    <p>{t("Nur für freigeschaltete Diagnosekonten. Gelesen werden vorhandene technische Einträge aus diesem Browser. Der Bericht wird nicht automatisch versendet.")}</p>
     <p>{t("Öffne diesen Bereich möglichst im bisherigen Pi-Browser-Tab des betroffenen Spiels.")}</p>
     {error && <p className="admin-error" role="alert">{error}</p>}
     <p role="status">{busy ? t("Berechtigung wird geprüft …") : notice}</p>
@@ -249,6 +251,7 @@ export default function AdminPage() {
   const evidenceLinks = selectedPayment ? paymentEvidenceLinks(selectedPayment) : null;
   const selectedSkin = playerSkins.find(skin => skin.id === skinId)!;
   const allowed = auth.authReady && auth.canAdmin;
+  const diagnosticAllowed = auth.authReady && auth.canDiagnostics;
 
   useEffect(() => {
     if (!allowed) return;
@@ -452,7 +455,7 @@ export default function AdminPage() {
         </Link>
         <div>
           <span className="admin-kicker">{t("CRYPTOID EVOLUTION")}</span>
-          <h1>{t("Admin-Zentrale")}</h1>
+          <h1>{t(!allowed && diagnosticAllowed ? "Technischer Bericht" : "Admin-Zentrale")}</h1>
         </div>
         <Link className="admin-button" to="/" state={{ openQuickMenu: true }}>{t("← Schnellzugriff")}</Link>
         {allowed ? (
@@ -467,6 +470,14 @@ export default function AdminPage() {
         <section className="admin-panel" role="status">
           <h2>{t("Pi-Zugriff wird geprüft …")}</h2>
         </section>
+      ) : !allowed && diagnosticAllowed ? (
+        <>
+          <div className="admin-owner">
+            <span>@{auth.user?.username}</span>
+            <span>{t("Freigeschalteter Diagnosezugriff")}</span>
+          </div>
+          <OwnerStabilityReport />
+        </>
       ) : !allowed ? (
         <section className="admin-panel admin-access">
           <h2>{auth.user ? t("Kein Admin-Zugriff") : t("Mit deinem Pi-Konto anmelden")}</h2>
