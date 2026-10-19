@@ -18,6 +18,7 @@ import { mergeCardReveals, rememberCard, hasSeenCard, syncCardReveals } from './
 import { primeCardSound } from './cardSound';
 import { advanceBossCore } from './bossCore';
 import { createBossBoundaryDiagnostics } from './bossBoundaryDiagnostics';
+import { createLevelSummaryGate } from './levelSummaryGate';
 import { bossName } from './bossNames';
 import { collectBossHeart, BOSS_HEART_POSITION, BOSS_EXTRA_LIFE_MS, type BossRewardState } from './bossReward';
 import { activateBossExplosion, bossExplosionBudget, bossExplosionReady } from './bossExplosionBudget';
@@ -435,6 +436,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   const spawnTimerRef = useRef(0);
   const sectionElapsedRef = useRef(0);
   const clearTimerRef = useRef(0);
+  const [levelSummaryGate] = useState(createLevelSummaryGate);
   const attackCooldownRef = useRef(0);
   const elapsedRef = useRef(0);
   const varietyRef = useRef(createCombatVariety());
@@ -738,6 +740,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         if (previousProbe) probeHost.__cryptoidDiagnostics = previousProbe; else delete probeHost.__cryptoidDiagnostics;
       }
       resourceTrendMonitor?.finish();
+      bossBoundary?.finish();
       if (bossBoundaryRef.current === bossBoundary) bossBoundaryRef.current = null;
       reloadMonitor?.finish(); reloadDiagnosticsRef.current = null;
       monitor.finish(); diagnosticsRef.current = null;
@@ -1023,11 +1026,20 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     musicRef.current = track;
     const finishVictoryMusic = () => {
       if (stateRef.current.encounter !== "boss-clear" || track.currentSource !== "/audio/boss-victory-v2.mp3") return;
+      const boundary = bossBoundaryRef.current;
+      boundary?.clearMark(stateRef.current.sector, 'boss-victory-ended');
       bossVictoryFinishedRef.current = true;
       track.setSource("/audio/battle-orbit.mp3", regularMusicPositionRef.current);
+      boundary?.clearMark(stateRef.current.sector, 'boss-music-return-source-set');
       track.audio.loop = true;
       track.setVolume(readMusicVolume());
-      if (stateRef.current.status === "playing") void track.play();
+      if (stateRef.current.status === "playing") {
+        const playback = track.play();
+        if (boundary) {
+          boundary.clearMark(stateRef.current.sector, 'boss-music-return-play-returned');
+          boundary.clearPlayback(stateRef.current.sector, 'boss-music-return-play-settled', playback);
+        }
+      }
     };
     track.audio.addEventListener("ended", finishVictoryMusic);
     const resume = () => {
@@ -1086,10 +1098,18 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     if (ownerDiagnostics) recordReloadEvent('boss-victory-start');
     bossVictoryPendingRef.current = false;
     const track = musicRef.current;
-    if (!track) return;
+    if (!track) {
+      if (ownerDiagnostics) bossBoundaryRef.current?.clearMark(stateRef.current.sector, 'boss-victory-no-track');
+      return;
+    }
     track.audio.loop = false;
     track.setSource("/audio/boss-victory-v2.mp3");
-    void track.play();
+    if (ownerDiagnostics) bossBoundaryRef.current?.clearMark(stateRef.current.sector, 'boss-victory-source-set');
+    const playback = track.play();
+    if (ownerDiagnostics) {
+      bossBoundaryRef.current?.clearMark(stateRef.current.sector, 'boss-victory-play-returned');
+      bossBoundaryRef.current?.clearPlayback(stateRef.current.sector, 'boss-victory-play-settled', playback);
+    }
   };
   const saveReward = (award: (progress: RewardProgress) => { progress: RewardProgress; notice: string }, event: { kind: "block" | "boss" | "chain" | "bonus"; level: number; stage: number; hits?: number }) => {
     if (adminRunRef.current) return "";
@@ -1112,6 +1132,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     soundRef.current?.stopBossWeapons();
     const boss = state.boss;
     if (!boss) return;
+    if (ownerDiagnostics) bossBoundaryRef.current?.clearStart(state.sector);
     state.bossHeartCollected = false;
     state.bossHeartShards = 0;
     const finalDelayMs = BOSS_FALL_DURATION_MS;
@@ -1221,7 +1242,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     if (!field) return;
     const input = bindGameInput(field, {
       pointer: pointerRef, origin: touchOriginRef,
-      playing: () => stateRef.current.status === 'playing',
+      playing: () => stateRef.current.status === 'playing' && !levelSummaryGate.waiting(stateRef.current),
       aboveFinger: () => readShipStart() !== 'touch',
       sensitivity: () => sensitivityMultiplier[readControlSensitivity()],
       area: readControlZone,
@@ -1236,12 +1257,12 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     });
     inputRef.current = input;
     return () => { input.dispose(); inputRef.current = null; };
-  }, []);
+  }, [levelSummaryGate]);
 
   useEffect(() => {
     const controls = new Set(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "KeyA", "KeyD", "KeyW", "KeyS"]);
     const keyDown = (event: KeyboardEvent) => {
-      if (stateRef.current.status !== 'playing' || rewardCardsRef.current.length || !controls.has(event.code) || (event.target as HTMLElement)?.closest("input, textarea, select")) return;
+      if (stateRef.current.status !== 'playing' || levelSummaryGate.waiting(stateRef.current) || rewardCardsRef.current.length || !controls.has(event.code) || (event.target as HTMLElement)?.closest("input, textarea, select")) return;
       event.preventDefault();
       void startEffectsRef.current();
       keysRef.current.add(event.code);
@@ -1306,7 +1327,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     window.addEventListener("keyup", keyUp);
     window.addEventListener("blur", blur);
     return () => { window.removeEventListener("keydown", keyDown); window.removeEventListener("keyup", keyUp); window.removeEventListener("blur", blur); document.removeEventListener("pointerup", resumeAudio, true); document.removeEventListener("touchend", resumeAudio, true); document.removeEventListener("visibilitychange", resumeAudio); document.removeEventListener("visibilitychange", pauseAfterBackground); window.removeEventListener("pagehide", markPageHidden); window.removeEventListener("pageshow", resumeAudio); window.removeEventListener("pageshow", pauseAfterBackground); window.removeEventListener("focus", resumeAudio); };
-  }, [clearControls]);
+  }, [clearControls, levelSummaryGate]);
 
   useEffect(() => {
     const simulate = (time: number) => {
@@ -1321,6 +1342,9 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         }
       }
       if (state.status === "playing") {
+        // Keep the guarded scheduler alive, but do no simulation, array copies,
+        // pickup movement or React scene commits during an unbounded read pause.
+        if (levelSummaryGate.waiting(state)) return;
         if(bossLifeRemainingRef.current>0){
           bossLifeRemainingRef.current=Math.max(0,bossLifeRemainingRef.current-delta);
           if(bossLifeRemainingRef.current===0)setExtraLifeVisible(false);
@@ -1426,8 +1450,11 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
           }
           const victoryStillPlaying = state.encounter === "boss-clear" && musicRef.current?.currentSource === "/audio/boss-victory-v2.mp3" && musicRef.current.playing && !musicRef.current.audio.ended;
           const clearFinished = clearTimerRef.current >= (state.encounter === "boss-clear" ? BOSS_CLEAR_DURATION_MS : timing.clearMs) && !victoryStillPlaying;
+          if (ownerDiagnostics && clearFinished && state.encounter === 'boss-clear') bossBoundaryRef.current?.clearMark(state.sector, 'boss-clear-timer-ready');
           if (clearFinished && state.encounter === 'boss-clear' && collectBossHeart(state, state.player, width, height)) {
+            if (ownerDiagnostics) bossBoundaryRef.current?.clearMark(state.sector, 'boss-heart-collected');
             soundRef.current?.play('extraLife');
+            if (ownerDiagnostics) bossBoundaryRef.current?.clearMark(state.sector, 'boss-extra-life-audio-returned');
             bossLifeRemainingRef.current=BOSS_EXTRA_LIFE_MS;
             setExtraLifeVisible(true);
             const bossId = Math.floor(state.sector / 10);
@@ -1447,7 +1474,23 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
             const card=pendingBossCardRef.current;pendingBossCardRef.current=null;
             showRewardCards([card]);return;
           }
-          if (clearFinished && (state.encounter !== 'boss-clear' || state.bossHeartCollected&&bossLifeRemainingRef.current===0)) {
+          // Keep running the normal lifetime filtering below until every
+          // destruction has finished. Never freeze a mounted effect in place.
+          if (clearFinished && state.encounter === 'bonus' && !state.effects.length && !state.rockEffects.length) {
+            if (levelSummaryGate.settle(state)) {
+              // Perform the existing encounter disposal now, rather than
+              // retaining dead scene objects until the player presses Continue.
+              // Carried pickups, loadout, rewards and the summary stay intact.
+              state.asteroids = []; state.bonusTargets = []; state.rocks = [];
+              state.shots = []; state.enemyShots = []; state.boss = null;
+              sectionSlotsRef.current = null; bossEscortSlotsRef.current = null;
+              clearControls();
+              setGame({ ...state });
+            }
+            if (levelSummaryGate.waiting(state)) return;
+          }
+          if (clearFinished && (state.encounter !== 'bonus' || levelSummaryGate.ready(state)) && (state.encounter !== 'boss-clear' || state.bossHeartCollected&&bossLifeRemainingRef.current===0)) {
+            levelSummaryGate.reset();
             if (ownerDiagnostics && state.encounter === 'boss-clear') recordOwnerResourceSnapshot('resource-boss-clear-ready');
             if (state.encounter === "bonus" && state.sector === MAX_DIFFICULTY_LEVEL) {
               if (!recordsSavedRef.current) {
@@ -1462,6 +1505,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
               return;
             }
             const clearEncounter = state.encounter === "boss-clear" ? "boss-clear" : state.encounter === "bonus" ? "bonus" : "normal";
+            if (ownerDiagnostics && state.encounter === 'boss-clear') bossBoundaryRef.current?.clearStop();
             const next = advanceAfterClear(state.section, clearEncounter);
             state.section = next.section;
             state.sector = next.sector;
@@ -2016,7 +2060,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
       if (gameOverTimerRef.current !== null) window.clearTimeout(gameOverTimerRef.current);
       gameOverTimerRef.current = null;
     };
-  }, [showRewardCards, diagnosticContext]);
+  }, [showRewardCards, diagnosticContext, levelSummaryGate]);
 
   const activateStartPower = () => {
     const state = stateRef.current;
@@ -2155,6 +2199,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   };
 
   const restart = () => {
+    levelSummaryGate.reset();
     bossDestroyPlayedRef.current = false;
     bossVictoryPendingRef.current = false;
     bossVictoryFinishedRef.current = false;
@@ -2367,7 +2412,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
           {startError && <div className="modal-actions"><button className="button button-primary" type="button" onClick={() => { setStartError(""); setRecoveryError(false); void activateLoadout(); }}>{t("Try again")}</button>{recoveryError && <button className="button button-secondary" type="button" onClick={() => { saveQueueRef.current?.archive(); saveQueueReadyRef.current = true; setRecoveryError(false); setStartError(""); setSaveNotice("Pending data set aside. Using the confirmed account save."); void activateLoadout(); }}>{t("Use confirmed save")}</button>}</div>}
           {(startError || resumeOffer) && <button className="button button-secondary mission-back-button" type="button" onClick={() => { leaveGameFullscreen(); navigate(sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "/admin" : "/"); }}>{t("Back")}</button>}
         </div></div>}
-        {game.status === "playing" && !extraLifeVisible && !bossDestructionActive && !reinforcementIntro && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${game.encounter === "boss-intro" ? " boss-intro-banner" : ""}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite">
+        {game.status === "playing" && !extraLifeVisible && !bossDestructionActive && !reinforcementIntro && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${game.encounter === "boss-intro" ? " boss-intro-banner" : ""}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite" onPointerDown={event => { if (levelComplete) event.stopPropagation(); }}>
           <span>{levelComplete || levelIntro ? sectorName(game.sector) : game.encounter === "bonus" ? game.phase === "SECTOR_CLEAR" ? t("BONUS COMPLETE") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.encounter !== "normal" ? `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.phase === "SECTOR_CLEAR" ? t("BLOCK LINKED") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}`}</span>
           <strong>{transitionHeadline}</strong>
           {game.encounter === 'boss-intro' && <small className="boss-callsign">{bossName(Math.ceil(game.sector / 10))}</small>}
@@ -2377,6 +2422,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
           {game.phase === "SECTOR_CLEAR" && game.encounter === "bonus" && <><small className="chain-result">{`${game.bonusHits}/${BONUS_TARGET_COUNT} ${t("BONUS TARGETS")} · ${translateBonusResult(game.bonusResult)}`}</small><small className="crypto-explainer">{t("1 Shard per target. Completion bonus added immediately.")}</small></>}
           {game.phase === "SECTOR_CLEAR" && game.encounter === "bonus" && <small className="combo-summary">{t("Level combo bonus")}: {game.combo.level} × · +{game.combo.level * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.level * DOUBLE_KILL_SHARDS} {t("Shards")}</small>}
           {game.phase === "SECTOR_CLEAR" && game.rewardNotice && <small className="reward-unlock" role="status">✦ {game.rewardNotice.split(" · ").map(part => t(part)).join(" · ")}</small>}
+          {levelComplete && <button type="button" className="button button-primary level-summary-continue" disabled={!levelSummaryGate.ready(game)} onPointerDown={event => event.stopPropagation()} onClick={event => { event.stopPropagation(); if (levelSummaryGate.request(stateRef.current)) clearControls(); }}>{t("Continue")}</button>}
         </div>}
         {game.status === "playing" && game.encounter === "normal" && !formationStartedRef.current && (game.phase === "SECTOR_INTRO" || game.phase === "ENTRY" || game.phase === "FORMATION") && <div className="formation-data-stream" aria-hidden="true">{FORMATION_DATA_ROWS.map((row, index) => <div className="formation-data-row" key={index}><span>{row.repeat(4)}</span><span>{row.repeat(4)}</span></div>)}</div>}
         {!combatVarietyEnabled && game.asteroids.filter(asteroid => game.encounter === "normal"

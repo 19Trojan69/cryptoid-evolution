@@ -27,6 +27,9 @@ const reloadKinds = new Set([
   'resource-normal-start','resource-normal-first-spawn','resource-formation-ready',
   'reactor-open-observed','reactor-first-shot-before','reactor-first-shot-created',
   'reactor-first-shot-audio-returned','reactor-first-shot-scene-committed',
+  'boss-victory-no-track','boss-victory-source-set','boss-victory-play-returned','boss-victory-play-settled',
+  'boss-victory-ended','boss-music-return-source-set','boss-music-return-play-returned','boss-music-return-play-settled',
+  'boss-clear-timer-ready','boss-heart-collected','boss-extra-life-audio-returned',
 ]);
 const numberLimits = {
   sector: 500, block: 10, width: 16384, height: 16384, enemies: 1000, projectiles: 10000, effects: 10000,
