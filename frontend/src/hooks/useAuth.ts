@@ -6,6 +6,16 @@ import { createPiOAuthState, PI_OAUTH_CLIENT_ID, PI_OAUTH_ORIGIN, PI_OAUTH_REDIR
 import axios from "axios";
 import { withPiAuthTimeout } from "../lib/piAuthTimeout";
 
+const diagnosticAccess = async (canAdmin: boolean) => {
+  if (canAdmin) return true;
+  try {
+    const { data } = await axiosClient.get<{ canDiagnostics?: boolean }>("/diagnostics/access");
+    return data.canDiagnostics === true;
+  } catch {
+    return false;
+  }
+};
+
 const detectPiBrowser = async () => {
   const ua = navigator.userAgent.toLowerCase();
   // Native identification should not wait for a potentially slow SDK host query.
@@ -33,6 +43,7 @@ export const useAuth = () => {
   const confirmedPiBrowser = useRef(false);
   const [user, setUser] = useState<User | null>(null);
   const [canAdmin, setCanAdmin] = useState(false);
+  const [canDiagnostics, setCanDiagnostics] = useState(false);
   const [adminMode, setAdminMode] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -45,6 +56,7 @@ export const useAuth = () => {
       const { data } = await axiosClient.get<SessionUser>("/user/me");
       setUser(data.user);
       setCanAdmin(data.canAdmin);
+      setCanDiagnostics(await diagnosticAccess(data.canAdmin));
       setAdminMode(data.adminMode);
       sessionStorage.setItem(ADMIN_MODE_KEY, data.adminMode ? "1" : "0");
     } catch (error) {
@@ -52,7 +64,7 @@ export const useAuth = () => {
         localStorage.removeItem("cryptoid_pi_session");
         sessionStorage.removeItem(PI_ACCESS_TOKEN_KEY);
         sessionStorage.removeItem(ADMIN_MODE_KEY);
-        setUser(null); setCanAdmin(false); setAdminMode(false);
+        setUser(null); setCanAdmin(false); setCanDiagnostics(false); setAdminMode(false);
         setAuthError("Pi session expired. Sign in again.");
       } else {
         setAuthError("Could not verify the Pi session. Please retry.");
@@ -73,6 +85,7 @@ export const useAuth = () => {
       sessionStorage.removeItem("cryptoid_pi_auto_signed_out");
       setUser(data.user);
       setCanAdmin(data.canAdmin);
+      setCanDiagnostics(await diagnosticAccess(data.canAdmin));
       setAdminMode(false);
       sessionStorage.removeItem(ADMIN_MODE_KEY);
       setShowSignIn(false);
@@ -149,7 +162,7 @@ export const useAuth = () => {
           try {
             const { data } = await axiosClient.get<SessionUser>("/user/me");
             if (!active) return;
-            setUser(data.user); setCanAdmin(data.canAdmin); setAdminMode(data.adminMode);
+            setUser(data.user); setCanAdmin(data.canAdmin); setCanDiagnostics(await diagnosticAccess(data.canAdmin)); setAdminMode(data.adminMode);
             sessionStorage.setItem(ADMIN_MODE_KEY, data.adminMode ? "1" : "0");
             return;
           } catch (error) {
@@ -182,6 +195,7 @@ export const useAuth = () => {
       sessionStorage.setItem("cryptoid_pi_auto_signed_out", "1");
       setUser(null);
       setCanAdmin(false);
+      setCanDiagnostics(false);
       setAdminMode(false);
       sessionStorage.removeItem(ADMIN_MODE_KEY);
       sessionStorage.removeItem(PI_ACCESS_TOKEN_KEY);
@@ -207,6 +221,7 @@ export const useAuth = () => {
   return {
     user,
     canAdmin,
+    canDiagnostics,
     adminMode,
     setAdminPreview,
     isAuthenticated: Boolean(user),
