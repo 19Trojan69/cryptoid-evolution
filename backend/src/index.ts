@@ -78,9 +78,13 @@ app.use(
 app.post("/usage/collect", collectUsage);
 app.use(cookieParser());
 
-// Use sessions:
-app.use(
-  session({
+// connect-mongo connects as soon as its store is created. The statically
+// imported backend is also loaded by Testnet proxy/catalog requests, which do
+// not use this Express app or have a local database. Create sessions only when
+// the local app is actually reached, and reuse the middleware thereafter.
+let sessionMiddleware: express.RequestHandler | undefined;
+app.use((req, res, next) => {
+  sessionMiddleware ??= session({
     secret: env.session_secret,
     resave: false,
     saveUninitialized: false,
@@ -91,8 +95,9 @@ app.use(
       dbName,
       collectionName: "user_sessions",
     }),
-  }) as unknown as express.RequestHandler,
-);
+  }) as unknown as express.RequestHandler;
+  return sessionMiddleware(req, res, next);
+});
 
 
 // If a proxied Pi Browser request loses its session cookie, recover the
