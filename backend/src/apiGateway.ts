@@ -11,6 +11,7 @@ type GatewayEnvironment = {
   VERCEL_ENV?: string;
   VERCEL_PROJECT_PRODUCTION_URL?: string;
   CRYPTOID_TESTNET_BACKEND?: string;
+  DIAGNOSTIC_PI_TESTNET_USERNAMES?: string;
 };
 
 const localTestnetEnabled = (env: GatewayEnvironment) =>
@@ -36,6 +37,46 @@ const needsPiApplicationKey = (path: string) =>
   /^(?:payments|notifications)(?:\/|$)/.test(path) ||
   /^admin\/payments\/[^/]+\/refresh$/.test(path) ||
   path === "admin/status";
+
+const diagnosticUsernames = (env: GatewayEnvironment) =>
+  new Set(String(env.DIAGNOSTIC_PI_TESTNET_USERNAMES || "")
+    .split(",").map(value => value.trim().toLowerCase()).filter(Boolean));
+
+const copyRequestIdentity = (req: any) => {
+  const headers = new Headers({ "x-cryptoid-app-network": "testnet" });
+  for (const name of ["authorization", "cookie"] as const) {
+    const value = req.headers?.[name];
+    if (value != null) headers.set(name, Array.isArray(value) ? value.join(", ") : String(value));
+  }
+  return headers;
+};
+
+const copySetCookie = (upstream: Response, res: any) => {
+  const setCookies = (upstream.headers as Headers & { getSetCookie?: () => string[] }).getSetCookie?.();
+  if (setCookies?.length) res.setHeader("set-cookie", setCookies);
+  else if (upstream.headers.get("set-cookie")) res.setHeader("set-cookie", upstream.headers.get("set-cookie"));
+};
+
+const testnetDiagnosticAccess = async (req: any, res: any, env: GatewayEnvironment) => {
+  res.setHeader("Cache-Control", "no-store");
+  try {
+    const upstream = await fetch(new URL("/api/user/me", productionBackendOrigin), {
+      headers: copyRequestIdentity(req),
+      redirect: "manual",
+      signal: AbortSignal.timeout(8000),
+    });
+    copySetCookie(upstream, res);
+    if (upstream.status === 401) return res.status(401).json({ error: "not_authenticated" });
+    if (!upstream.ok) return res.status(503).json({ error: "diagnostic_access_unavailable" });
+    const data = await upstream.json() as any;
+    const username = typeof data?.user?.username === "string" ? data.user.username.trim().toLowerCase() : "";
+    const canDiagnostics = data?.canAdmin === true || (!!username && diagnosticUsernames(env).has(username));
+    res.setHeader("x-cryptoid-backend", "testnet-diagnostics-access");
+    return res.status(200).json({ canDiagnostics });
+  } catch {
+    return res.status(503).json({ error: "diagnostic_access_unavailable" });
+  }
+};
 
 const proxyToProduction = async (
   req: any,
@@ -115,6 +156,7 @@ export const createApiGateway = (
     VERCEL_ENV: process.env.VERCEL_ENV,
     VERCEL_PROJECT_PRODUCTION_URL: process.env.VERCEL_PROJECT_PRODUCTION_URL,
     CRYPTOID_TESTNET_BACKEND: process.env.CRYPTOID_TESTNET_BACKEND,
+    DIAGNOSTIC_PI_TESTNET_USERNAMES: process.env.DIAGNOSTIC_PI_TESTNET_USERNAMES,
   }),
 ) => {
   let ready: Promise<Backend> | undefined;
@@ -126,6 +168,9 @@ export const createApiGateway = (
       const env = environment();
       const testnet = isTestnetDeployment(req, env);
       const localTestnet = localTestnetEnabled(env);
+      if (testnet && path === "diagnostics/access" && ["GET", "HEAD"].includes(req.method || "GET")) {
+        return await testnetDiagnosticAccess(req, res, env);
+      }
       // The public catalog must match this deployment's Shop, even while
       // account and payment requests use the established Pi service.
       if (
