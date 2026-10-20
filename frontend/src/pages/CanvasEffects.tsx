@@ -101,6 +101,8 @@ export function drawImpact(ctx:CanvasRenderingContext2D,record:any,age:number) {
 
 const records=new Map<number,any>();
 let surface:HTMLCanvasElement|null=null,frameId=0,pausedAt=0,pauseTotal=0;
+const EFFECT_PAINT_INTERVAL_MS=1000/60;
+let nextPaintAt:number|null=null;
 let fieldWidth=1,fieldHeight=1,grownBounds:any=null,surfaceBox={left:0,top:0,right:1,bottom:1},surfaceResizes=0,maxSurfaceBytes=0;
 let draws=0,fragmentDraws=0;
 let idleReleaseTimer:number|null=null;
@@ -124,7 +126,14 @@ function frame(time:number){
   frameId=0;if(!surface||!records.size)return;
   const paused=surface.parentElement?.closest('.game-shell')?.getAttribute('data-effects-paused')==='true';
   if(paused){if(!pausedAt)pausedAt=time;frameId=requestAnimationFrame(frame);return;}
-  if(pausedAt){pauseTotal+=time-pausedAt;pausedAt=0;}
+  if(pausedAt){pauseTotal+=time-pausedAt;pausedAt=0;nextPaintAt=null;}
+  // Keep wall-clock animation ages, but avoid redrawing the same effects at
+  // 90/120/144 Hz. Advance the deadline past missed slots without catch-up draws.
+  // Preserve the deadline phase and allow 1 ms timestamp rounding so an
+  // ordinary 60 Hz browser does not accidentally lose every third frame.
+  if(nextPaintAt!==null&&time+1<nextPaintAt){frameId=requestAnimationFrame(frame);return;}
+  const deadline=nextPaintAt??time;
+  nextPaintAt=deadline+(Math.floor(Math.max(0,time-deadline)/EFFECT_PAINT_INTERVAL_MS)+1)*EFFECT_PAINT_INTERVAL_MS;
   const paintStarted=beginVisualPaint();
   try {
     const ctx=surface.getContext('2d');if(!ctx)throw new Error('Effect surface context unavailable');
@@ -169,7 +178,7 @@ export function clearCanvasEffects(){
   if(surface)surface.width=surface.height=0;
   textures.clear();readyTextures.clear();images.clear();readyImages.clear();hullUsers.clear();
   imageBytes=textureBytes=preparationCount=hullLoads=hullEvictions=0;
-  pausedAt=pauseTotal=0;grownBounds=null;draws=fragmentDraws=0;
+  pausedAt=pauseTotal=0;nextPaintAt=null;grownBounds=null;draws=fragmentDraws=0;
 }
 // Bounded counters for resource verification; no global/browser debug API.
 export function canvasEffectResources(){

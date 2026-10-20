@@ -1,0 +1,178 @@
+{
+  "version": 1,
+  "preparedAt": "2026-10-20",
+  "authorization": "Owner requested implementing the proposed 60 Hz Canvas-effect paint limit at 17:42:41 Europe/Vienna.",
+  "baselineCommit": "a20f6465fc59ef321a660835186005cb859e97c9",
+  "officialRuntimeBefore": "927dc5ab50941e66709f8c0dfc09a50625edba7f",
+  "cadence": {
+    "passed": true,
+    "baseline": "a20f6465fc59ef321a660835186005cb859e97c9",
+    "rates": [
+      {
+        "rafHz": 30,
+        "seconds": 2,
+        "before": 60,
+        "after": 60
+      },
+      {
+        "rafHz": 59.94,
+        "seconds": 2,
+        "before": 120,
+        "after": 120
+      },
+      {
+        "rafHz": 60,
+        "seconds": 2,
+        "before": 120,
+        "after": 120
+      },
+      {
+        "rafHz": 90,
+        "seconds": 2,
+        "before": 180,
+        "after": 120
+      },
+      {
+        "rafHz": 120,
+        "seconds": 2,
+        "before": 240,
+        "after": 120
+      },
+      {
+        "rafHz": 144,
+        "seconds": 2,
+        "before": 288,
+        "after": 120
+      },
+      {
+        "rafHz": 240,
+        "seconds": 2,
+        "before": 480,
+        "after": 120
+      }
+    ],
+    "rounded60Hz": {
+      "before": 120,
+      "after": 120
+    },
+    "checks": [
+      "identical drawing/interpolation source",
+      "negative-control paints at every RAF",
+      "30/59.94/60 Hz retained",
+      "90/120/144/240 Hz use 60 paint slots per second",
+      "rounded 60 Hz timestamps",
+      "wall-clock drawing commands at every selected frame",
+      "pause clock and first resume frame",
+      "React re-registration preserves paint budget",
+      "long gap skips catch-up drawing",
+      "idle cancels RAF; later burst draws immediately",
+      "context loss clears the scheduler/cache",
+      "unmount/remount resets deadline"
+    ],
+    "limits": "Controlled callback clocks and drawing commands, not physical iPhone temperature, GPU load or proof of the Whitescreen cause."
+  },
+  "pixels": {
+    "passed": true,
+    "baseline": "a20f6465fc59ef321a660835186005cb859e97c9",
+    "exactPixelComparisons": 275,
+    "surfaceDimensionWrites": [
+      {
+        "scale": 1,
+        "baseline": 26,
+        "candidate": 26
+      },
+      {
+        "scale": 1.5,
+        "baseline": 28,
+        "candidate": 28
+      },
+      {
+        "scale": 2,
+        "baseline": 28,
+        "candidate": 28
+      },
+      {
+        "scale": 2.625,
+        "baseline": 28,
+        "candidate": 28
+      },
+      {
+        "scale": 3,
+        "baseline": 28,
+        "candidate": 28
+      }
+    ],
+    "checks": [
+      "unchanged drawImpact source",
+      "real hull, fire, smoke and four fragments",
+      "centre, edges, fractional positions and concurrent impacts",
+      "retained idle surfaces are completely transparent",
+      "reused surfaces and idle-release expiry",
+      "five animation ages at DPR 1, 1.5, 2, 2.625 and 3",
+      "timers/frames released on unmount"
+    ],
+    "limits": "Native raster/hook host, not Safari/Pi Browser, iPhone GPU, physical memory or a whitescreen reproduction."
+  },
+  "lifecycle": {
+    "passed": true,
+    "warmImpacts": 2000,
+    "movingBurstWrites": 600,
+    "warmSurfaceDimensionWrites": {
+      "initial": 2,
+      "afterPreparation": 2,
+      "repeatedImpact": 0
+    },
+    "checks": [
+      "warm assets retain registration and surface",
+      "2000 warm impacts reuse the backing store",
+      "400 moving impacts preserve per-burst bounds without idle shrink/grow cycles",
+      "idle drawing stops immediately; backing store releases after two seconds",
+      "new burst cancels the previous idle deadline",
+      "context loss releases caches/scheduler/timers",
+      "original DOM fallback survives context loss or null context",
+      "resize cannot revive released textures",
+      "context loss and unmount cancel a pending idle release"
+    ],
+    "limits": "Actual component with hook/allocation host; no WebKit pixel, memory-pressure or complete-campaign proof."
+  },
+  "resources": {
+    "passed": true,
+    "checks": [
+      "abort during pending hull/SVG decoding",
+      "stale preparation cannot refill cleared caches",
+      "completed texture backing stores released",
+      "draw scheduler/registrations/caches cleared",
+      "24 changing hulls reuse eight retained slots",
+      "active hull stays decoded during eviction",
+      "capacity fallback recovers after active users release",
+      "transient texture decode failure can retry"
+    ]
+  },
+  "build": {
+    "passed": true,
+    "localeTests": 12,
+    "localeReleaseGate": true,
+    "typescript": true,
+    "vite": true,
+    "knownWarnings": [
+      "npm http-proxy configuration",
+      "existing Vite chunk-size warning"
+    ],
+    "note": "The existing controlled CJS effect fixtures also print the import.meta warning."
+  },
+  "scope": {
+    "runtimeFiles": [
+      "frontend/src/pages/CanvasEffects.tsx"
+    ],
+    "intervalMs": 16.666666666666668,
+    "timestampToleranceMs": 1,
+    "changesSimulation": false,
+    "changesArtwork": false,
+    "changesAudio": false,
+    "changesAccountOrSave": false,
+    "newTimers": false,
+    "newRafChain": false,
+    "deployed": false
+  },
+  "limits": "Controlled drawing frequency and CPU-raster comparisons; no iPhone temperature/energy/GPU measurement and no proof that heat caused the Whitescreen."
+}

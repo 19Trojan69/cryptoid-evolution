@@ -1,5 +1,30 @@
 # Preserve the officially approved game
 
+## Canvas effect 60 Hz preparation, 20 October 2026
+
+At 17:42:41 Europe/Vienna the owner authorized the proposed 60 Hz Canvas-effect
+paint limit after confirming device heating. Limit only the existing ordinary
+explosion/debris surface; retain wall-clock ages, geometry, source resolution,
+effect counts, simulation/input, audio, HUD, saves and accounts. Keep one RAF
+chain, use a phase-preserving deadline with 1 ms timestamp tolerance, skip
+catch-up frames, and reset the deadline on release/resume. Do not reset it for
+transient React effect re-registration. No global CSS or game-loop governor.
+Controlled 120 Hz drawing falls from 240 to 120 paints over two seconds;
+30/59.94/60 Hz drawing is retained. Tests cover 90/120/144/240 Hz, rounded and
+jittery clocks, pause/resume, remount, long gaps and context loss. 275 exact
+native RGBA comparisons, existing lifecycle/resource checks and the release
+build (12 locale tests, locale gate, TypeScript/Vite) pass. Heat reduction and
+the Whitescreen cause are not physically verified. This is preparation only;
+no new deployment was requested or performed. Preserve fixed release/rollback
+refs and keep automatic audit-branch deployment off. See
+docs/canvas-effect-60fps-20261020.md and its JSON results.
+
+The old local .git pointer targets a missing parent. The source is intact and
+was checked against a fresh bare copy of audit HEAD a20f6465fc59ef321a660835186005cb859e97c9.
+For this preparation use GIT_DIR=/workspace/scratch/cryptoid-canvas-60fps-2IPc5r/repository.git
+and GIT_WORK_TREE=/workspace/scratch/cryptoid-iphone-lifetime-audit explicitly;
+do not overwrite the old pointer or create unrelated runtime changes.
+
 ## Completed card preparation Testnet release, 20 October 2026
 
 The owner's 14:12:49 Europe/Vienna instruction explicitly authorized Testnet

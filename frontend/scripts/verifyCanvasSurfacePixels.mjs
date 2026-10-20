@@ -102,8 +102,8 @@ let compared=0;const surfaceDimensionWrites=[];
 for(const scale of [1,1.5,2,2.625,3]){
   const control=await capture(baseline,scale),reused=await capture(candidate,scale),before=control.pixels,after=reused.pixels;
   surfaceDimensionWrites.push({scale,baseline:control.writes,candidate:reused.writes});
-  if(base==='51e59c3373a8dd4ba4985d5a9559acdcf2d6755a')
-    assert.equal(reused.writes,control.writes,'timing instrumentation preserves the official surface dimension assignments');
+  if(base==='51e59c3373a8dd4ba4985d5a9559acdcf2d6755a'||process.env.CRYPTOID_CANVAS_PIXEL_SAME_SURFACE_LIFETIME==='1')
+    assert.equal(reused.writes,control.writes,'the official surface lifetime and dimension assignments are preserved');
   else assert.ok(reused.writes<control.writes,'the preserved raster fixture also avoids redundant surface dimension assignments');
   for(let i=0;i<before.length;i++){
     const expected=inflateSync(before[i]),actual=inflateSync(after[i]);
