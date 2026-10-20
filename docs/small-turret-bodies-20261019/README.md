@@ -1,5 +1,11 @@
 # Small turret bodies — isolated preparation
 
+Released on official Testnet on 20 October 2026 at 07:21:32 Europe/Vienna:
+READY `dpl_DssUzk9j8fruG7HY7BNPUMfYZjmW`, exact source `a889d22`.
+The user explicitly authorized this release. Preparation-only statements below
+are historical. Release receipt: `release-20261020.json`; proof:
+`testnet-release-20261020.jpg`. Mainnet remains unchanged; f5be06d is rollback.
+
 User request: enlarge all small turret bodies so they are easier to hit; keep
 the barrels/nozzles their existing size. No publication of this new change has
 been performed or inferred from prior, already completed release approvals.

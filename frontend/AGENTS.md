@@ -1,5 +1,37 @@
 # Preserve the officially approved game
 
+## Explicit small-turret Testnet release, 20 October 2026
+
+The user explicitly requested "veröffentliche auf testnet", stopped the first
+inspection before any deployment, then renewed that exact request at 07:16
+Europe/Vienna. This release is complete: official Testnet is READY production
+deployment dpl_DssUzk9j8fruG7HY7BNPUMfYZjmW at
+a889d22cc9c1142f51773e073c41b0a7c8aa13d8, reviewed tree 4836157c730cf5f056f693bbb1664b815fd46932.
+Released 2026-10-20T05:21:32.372Z (07:21:32 Europe/Vienna). The Vercel dashboard
+rebuilt the successful preview using the existing Testnet Production environment;
+preview took 42 seconds and the Production build displayed 43 seconds.
+
+177 small turret bodies/sockets and their matching body hit regions are larger;
+barrels/muzzles, other weapons, combat rules, HUD/audio, owner-only Admin,
+backend, accounts, saves and Highscores retain the preceding official behavior.
+Automatic deployment stays disabled on this preparation branch. Do not ask again
+for authorization for this completed release. Preserve the exact released source
+a889d22; subsequent changes on this branch are release documentation only.
+
+Startpage/API and boss-7 texture checks pass; anonymous /api/admin/status returns
+401/not_authenticated. The first 11 new-deployment request records, from
+05:21:34.084Z to 05:23:04.466Z, show 0 warning/error/fatal console records, including
+catalog and usage requests. This is a bounded post-release scan, not an iPhone
+FPS, memory-pressure, Pi login or complete Whitescreen verification.
+
+Immediate rollback remains READY dpl_7CGcYyrnLNXwkU8ychnkxfjqR198 at
+f5be06d594f70f21fe9b6b6235015b819b57bb34, independently preserved by fixed branch
+codex/testnet-session-store-release-20261019. Mainnet remains
+dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe at 907d2a7363345d00f0f90c54402bf04e887b64d9.
+See docs/small-turret-bodies-20261019/release-20261020.json and the saved
+testnet-release-20261020.jpg proof. The preparation measurements, known baseline
+test-harness failure and compressed-download trade-off below remain applicable.
+
 ## Small turret bodies, 19 October 2026, preparation only
 
 The user explicitly requests larger bodies on every small boss turret, with

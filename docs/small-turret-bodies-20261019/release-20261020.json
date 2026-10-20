@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "releasedAt": "2026-10-20T05:21:32.372Z",
+  "releasedAtVienna": "2026-10-20T07:21:32.372+02:00",
+  "authorization": "User renewed explicit Testnet release request after stop, 20 October 2026, 07:16 Europe/Vienna.",
+  "project": {
+    "name": "cryptoid-evolution-testnet",
+    "id": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+    "teamId": "team_KzJmtl0QyoYZAOu5RQKsAR2i"
+  },
+  "deployment": {
+    "name": "testnet",
+    "id": "dpl_DssUzk9j8fruG7HY7BNPUMfYZjmW",
+    "state": "READY",
+    "sha": "a889d22cc9c1142f51773e073c41b0a7c8aa13d8",
+    "target": "production",
+    "url": "cryptoid-evolution-testnet-l2eqjfi22-19-trojan69.vercel.app",
+    "aliases": [
+      "cryptoid-evolution-testnet.vercel.app",
+      "cryptoid-evolution-testnet-19-trojan69.vercel.app",
+      "cryptoid-evolution-testnet-git-codex-testnet-df276b-19-trojan69.vercel.app"
+    ],
+    "reviewedTree": "4836157c730cf5f056f693bbb1664b815fd46932",
+    "buildDurationDisplayedSeconds": 43
+  },
+  "preview": {
+    "id": "dpl_3R8ZZ5c5Ye15s3bVvnjMywd5HaUh",
+    "buildDurationDisplayedSeconds": 42
+  },
+  "rollback": {
+    "id": "dpl_7CGcYyrnLNXwkU8ychnkxfjqR198",
+    "sha": "f5be06d594f70f21fe9b6b6235015b819b57bb34",
+    "fixedBranch": "codex/testnet-session-store-release-20261019",
+    "stateVerified": "READY"
+  },
+  "mainnetVerifiedUnchanged": {
+    "name": "mainnet",
+    "id": "dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe",
+    "state": "READY",
+    "sha": "907d2a7363345d00f0f90c54402bf04e887b64d9",
+    "target": "production",
+    "url": "cryptoid-evolution-4nc1k8cmc-19-trojan69.vercel.app",
+    "aliases": [
+      "cryptoid-evolution.vercel.app",
+      "cryptoid-evolution-19-trojan69.vercel.app",
+      "cryptoid-evolution-git-main-19-trojan69.vercel.app"
+    ]
+  },
+  "checks": {
+    "home": "Loaded, normal Pi sign-in UI",
+    "api": "GET /api 200, Hello World",
+    "anonymousAdmin": "GET /api/admin/status 401, not_authenticated",
+    "boss7Atlas": {
+      "loaded": true,
+      "width": 2048,
+      "height": 368
+    },
+    "requestLogs": {
+      "records": 11,
+      "from": "2026-10-20T05:21:34.084Z",
+      "through": "2026-10-20T05:23:04.466Z",
+      "warning": 0,
+      "error": 0,
+      "fatal": 0,
+      "expected401AdminDenial": true
+    }
+  },
+  "scope": {
+    "largerSmallBodies": 177,
+    "affectedBosses": 38,
+    "allBossesReviewed": 50,
+    "unchangedLargeGuns": 215,
+    "barrelsPreserved": true,
+    "newRuntimeLayers": 0,
+    "atlasDimensionsPreserved": true
+  },
+  "sourceBranch": "codex/testnet-small-turret-bodies-20261019",
+  "automaticDeploymentDisabled": true,
+  "proof": {
+    "file": "testnet-release-20261020.jpg",
+    "blobSha": "01a4e9c18e07c02a40d7ba45dc69f0702ebe1ba1"
+  },
+  "limitations": "No physical iPhone/WebKit FPS, native/GPU/process memory, Pi sign-in or complete Whitescreen verification. Existing baseline test-harness failure and 8,406,548-byte aggregate atlas download increase are recorded in README. No data deletion, migration, save/Highscore reset or Admin expansion."
+}
