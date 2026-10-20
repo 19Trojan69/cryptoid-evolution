@@ -30,6 +30,7 @@ import BlockchainProgress from "./BlockchainProgress";
 import { gameHaptics } from "./gameHaptics";
 import { bindGameInput } from './gameInput';
 import { startGuardedGameLoop, type GameInterruption } from './gameLoop';
+import { requestGameFrame, cancelGameFrame } from '../lib/frameScheduler';
 import { recordGameDiagnostic, createGameSessionDiagnostics } from './gameDiagnostics';
 import { createReloadGameMonitor, createResourceTrendMonitor, installReloadDiagnostics, recordReloadEvent, recordReloadSnapshot } from './reloadDiagnostics';
 import { browserProbeRuntime, createPerformanceProbe, developerProbeEnabled } from './performanceDiagnostics';
@@ -1256,10 +1257,6 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
       area: readControlZone,
       position: player => {
         stateRef.current.player = player;
-        if (playerShipRef.current) {
-          playerShipRef.current.style.left = `${player.x * 100}%`;
-          playerShipRef.current.style.top = `${player.y * 100}%`;
-        }
       },
       fault: error => interruptionRef.current('input-error', error),
     });
@@ -1386,11 +1383,12 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         const vertical = Number(keys.has("ArrowDown") || keys.has("KeyS")) - Number(keys.has("ArrowUp") || keys.has("KeyW"));
         if (horizontal || vertical) {
           state.player = movePlayer(state.player, horizontal, vertical, delta, width, height);
-          // Keep the ship at display cadence without re-rendering every projectile on mobile.
-          if (playerShipRef.current) {
-            playerShipRef.current.style.left = `${state.player.x * 100}%`;
-            playerShipRef.current.style.top = `${state.player.y * 100}%`;
-          }
+        }
+        // Input retains the newest position immediately. Present both touch and
+        // keyboard motion once per shared tick, including high-rate touch input.
+        if (playerShipRef.current) {
+          playerShipRef.current.style.left = `${state.player.x * 100}%`;
+          playerShipRef.current.style.top = `${state.player.y * 100}%`;
         }
         const previousPlayer = lastPlayerRef.current ?? state.player;
         playerMotionRef.current = advanceShipMotion(playerMotionRef.current, (state.player.x - previousPlayer.x) * width, (state.player.y - previousPlayer.y) * height, delta);
@@ -2044,8 +2042,8 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
       active: () => stateRef.current.status === 'playing',
       visible: () => document.visibilityState !== 'hidden',
       now: () => performance.now(),
-      requestFrame: callback => window.requestAnimationFrame(callback),
-      cancelFrame: id => window.cancelAnimationFrame(id),
+      requestFrame: requestGameFrame,
+      cancelFrame: cancelGameFrame,
       watch: callback => window.setInterval(callback, 500),
       unwatch: id => window.clearInterval(id),
     });

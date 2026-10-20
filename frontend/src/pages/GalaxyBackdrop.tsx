@@ -1,3 +1,4 @@
+import { requestGameFrame, cancelGameFrame } from '../lib/frameScheduler';
 import { memo, useEffect, useRef, useState } from 'react';
 import { GALAXY_REGION_HEIGHT } from './galaxyModel';
 import { galaxyScenery, galaxySceneryAsset } from './galaxyScenery';
@@ -10,8 +11,8 @@ const Scene = memo(function Scene({ id, index }: { id: string; index: number }) 
   useEffect(() => {
     if (!node.current) return;
     if (typeof IntersectionObserver === 'undefined') {
-      const frame = requestAnimationFrame(() => setNear(true));
-      return () => cancelAnimationFrame(frame);
+      const frame = requestGameFrame(() => setNear(true));
+      return () => cancelGameFrame(frame);
     }
     const observer = new IntersectionObserver(entries => setNear(entries.some(entry => entry.isIntersecting)), { rootMargin: '300px' });
     observer.observe(node.current);

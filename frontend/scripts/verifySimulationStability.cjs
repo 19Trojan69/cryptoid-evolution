@@ -49,6 +49,7 @@ const presentation =
     jsx: "automatic",
     target: ["es2022"],
     define: {
+      __CRYPTOID_BUILD__: '{"sourceCommit":"controlled-simulation","sourceTree":"controlled-simulation","workingTreeDirty":true}',
       "import.meta.env": process.env.CRYPTOID_PROBE === "1" ? '{"VITE_CRYPTOID_DIAGNOSTICS":"1"}' : "{}",
       __CRYPTOID_RELEASE__: '"SIMULATION QA"',
     },
@@ -72,14 +73,14 @@ const presentation =
             (a) => ({ path: a.path, namespace: "host" }),
           );
           b.onLoad({ filter: /.*/, namespace: "presentation" }, () => ({
-            contents: "export default function Presentation(){return null;}export const CanvasEffectLayer=({children})=>children,CanvasImpact=({original})=>original;",
+            contents: "export default function Presentation(){return null;}export const CanvasEffectLayer=({children})=>children,CanvasImpact=({original})=>original,canvasEffectResources=()=>({});",
             loader: "js",
           }));
           b.onLoad({ filter: /.*/, namespace: "host" }, (a) => {
             let contents;
             if (a.path === "react")
               contents =
-                "export const {useState,useRef,useEffect,useMemo,useCallback,memo}=globalThis.__reactHost;export const useLayoutEffect=()=>{};";
+                "export const {useState,useRef,useEffect,useMemo,useCallback,memo}=globalThis.__reactHost;export const createRef=()=>({current:null});export const useLayoutEffect=()=>{};";
             else if (a.path === "react/jsx-runtime")
               contents =
                 'export const jsx=(type,props)=>({type,props}),jsxs=jsx,Fragment="fragment";';
@@ -278,7 +279,7 @@ const presentation =
     ).text,
     context,
   );
-  context.__GamePageFactory();
+  context.__GamePageFactory({ ownerDiagnostics: false });
   for (const effect of effects) {
     const cleanup = effect();
     if (typeof cleanup === "function") cleanups.push(cleanup);
@@ -302,7 +303,7 @@ const presentation =
   const advance = async (ms) => {
     const end = clock + ms;
     while (clock < end) {
-      clock = Math.min(end, clock + 16);
+      clock = Math.min(end, clock + Number(process.env.CRYPTOID_FRAME_MS || 16));
       for (const [id, t] of [...timers])
         if (t.at <= clock) {
           if (t.repeat) t.at = clock + t.repeat;
@@ -368,7 +369,7 @@ const presentation =
             assert.equal(nodes.filter(n => /\bformation-target\b/.test(n.props.className || "")).length, 0, "no Testnet positioning-marker DOM");
             const hud = nodes.find(n => n.props.className === "game-hud");
             assert.ok(hud);
-            const hudNodes = hud.props.children;
+            const hudNodes = hud.props.children.flatMap(node => node?.type?.name === 'GameHudStats' ? node.type(node.props).props.children : node);
             assert.deepEqual(Array.from(hudNodes, n => n.props.className.replace(" hearts-stat-hit", "")), ["hud-actions", "hud-stat hearts-stat", "hud-stat game-level-hud", "hud-stat score-hud", "hud-stat round-hud chain-hud", "game-control pause-control"]);
             assert.deepEqual(Array.from(hudNodes[3].props.children, n => n.props.className), ["shard-line", "score-line"]);
             presentationChecks++;
@@ -478,7 +479,8 @@ const presentation =
     qa.restore(combat);
     qa.restore(combat);
     for (const key of ["score", "shards", "hearts", "paid"])
-      assert.equal(qa.info()[key], saved[key]);
+      // Checkpoints deliberately serialize timer values as integer milliseconds.
+      assert.equal(qa.info()[key], key === 'paid' ? Math.floor(saved[key]) : saved[key]);
     for (const cleanup of cleanups.reverse()) cleanup();
     assert.equal(frames.size, 0); // Audio close is deliberately deferred one task for Strict Mode remounts.
     for (const [id, t] of [...timers])

@@ -1,3 +1,4 @@
+import { requestGameFrame, cancelGameFrame } from '../lib/frameScheduler';
 import { useEffect, useState } from "react";
 import LanguagePicker from "../components/LanguagePicker";
 import { languages, useLocale } from "../i18n";
@@ -29,7 +30,7 @@ export default function SystemSettings({ musicVolume, effectsVolume, changeMusic
   const [mobileSection, setMobileSection] = useState<SettingsSection | null>(initialSection ?? null);
   const openMobileSection = (section: SettingsSection | null) => {
     setMobileSection(section);
-    requestAnimationFrame(() => {
+    requestGameFrame(() => {
       const target = document.getElementById(section ? `${idPrefix}-settings-${section}` : `${idPrefix}-settings-overview`);
       target?.scrollIntoView({ block: "nearest" });
       if (section) target?.focus({ preventScroll: true });
@@ -38,8 +39,8 @@ export default function SystemSettings({ musicVolume, effectsVolume, changeMusic
   };
   useEffect(() => {
     if (!initialSection) return;
-    const frame = requestAnimationFrame(() => { const section = document.getElementById(`${idPrefix}-settings-${initialSection}`); section?.scrollIntoView({ block: "start" }); section?.focus({ preventScroll: true }); });
-    return () => cancelAnimationFrame(frame);
+    const frame = requestGameFrame(() => { const section = document.getElementById(`${idPrefix}-settings-${initialSection}`); section?.scrollIntoView({ block: "start" }); section?.focus({ preventScroll: true }); });
+    return () => cancelGameFrame(frame);
   }, [idPrefix, initialSection]);
   return <>
           {compactMobile && <nav className="mobile-settings-nav" id={`${idPrefix}-settings-overview`} aria-label={t("System menu")}>

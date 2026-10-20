@@ -15,10 +15,15 @@ import App from './App.tsx'
 import { startAggregateUsage } from './lib/aggregateUsage'
 import './smartphoneUi.css'
 import './pages/feedbackCompact.css'
+import { startCssFramePacing } from './lib/cssFramePacing'
 
 void startAggregateUsage();
 
-createRoot(document.getElementById('root')!).render(
+const root = document.getElementById('root')!;
+// Dialogs/cards rendered through React portals are children of body, too.
+const stopFramePacing = startCssFramePacing(document.body);
+if (import.meta.hot) import.meta.hot.dispose(stopFramePacing);
+createRoot(root).render(
   <StrictMode>
     <App />
   </StrictMode>,

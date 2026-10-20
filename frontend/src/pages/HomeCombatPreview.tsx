@@ -1,3 +1,4 @@
+import { requestGameFrame, cancelGameFrame } from '../lib/frameScheduler';
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import PaintedShip from "./PaintedShip";
 import HullDamage from "./HullDamage";
@@ -103,13 +104,13 @@ export default function HomeCombatPreview({ defender, paused = false }: { defend
         node.style.opacity = "1"; node.style.setProperty("--shot-color", shot.enemy ? "#ffc476" : "#79efff");
         node.style.transform = `translate3d(${shot.x}px,${shot.y}px,0) rotate(${Math.atan2(shot.vy, shot.vx) * 180 / Math.PI + 90}deg)`;
       });
-      frame = requestAnimationFrame(tick);
+      frame = requestGameFrame(tick);
     };
     const resume = () => {
-      cancelAnimationFrame(frame);
+      cancelGameFrame(frame);
       frame = 0;
       last = 0;
-      if (!pauseRef.current && !document.hidden) frame = requestAnimationFrame(tick);
+      if (!pauseRef.current && !document.hidden) frame = requestGameFrame(tick);
     };
     resumeRef.current = resume;
     const wake = () => { if (!frame && !pauseRef.current) resume(); };
@@ -118,7 +119,7 @@ export default function HomeCombatPreview({ defender, paused = false }: { defend
     document.addEventListener("pointerdown", wake, { passive: true });
     resume();
     return () => {
-      cancelAnimationFrame(frame);
+      cancelGameFrame(frame);
       observer.disconnect();
       document.removeEventListener("visibilitychange", resume);
       window.removeEventListener("pageshow", resume);

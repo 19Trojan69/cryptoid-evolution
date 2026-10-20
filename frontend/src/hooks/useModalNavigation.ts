@@ -1,3 +1,4 @@
+import { requestGameFrame, cancelGameFrame } from '../lib/frameScheduler';
 import { useCallback, useEffect, useRef } from "react";
 import { useBlocker, useLocation, useNavigate } from "react-router-dom";
 
@@ -59,7 +60,7 @@ export default function useModalNavigation(layer: string | null, onBack: () => v
     previousFocus.current ??= document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const topPanel = () => Array.from(document.querySelectorAll<HTMLElement>('[role="dialog"][aria-modal="true"]')).filter(element => element.getClientRects().length > 0).at(-1);
     const controls = (panel?: HTMLElement) => Array.from(panel?.querySelectorAll<HTMLElement>('button:not(:disabled), a[href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex="0"]') ?? []).filter(element => element.getClientRects().length > 0 && !element.closest("[hidden]"));
-    const frame = requestAnimationFrame(() => {
+    const frame = requestGameFrame(() => {
       if (document.querySelector("dialog[open]")) return;
       const panel = topPanel();
       if (panel && !panel.contains(document.activeElement)) controls(panel)[0]?.focus({ preventScroll: true });
@@ -75,6 +76,6 @@ export default function useModalNavigation(layer: string | null, onBack: () => v
       else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
     };
     document.addEventListener("keydown", key, true);
-    return () => { cancelAnimationFrame(frame); document.removeEventListener("keydown", key, true); };
+    return () => { cancelGameFrame(frame); document.removeEventListener("keydown", key, true); };
   }, [layer, closeTop]);
 }

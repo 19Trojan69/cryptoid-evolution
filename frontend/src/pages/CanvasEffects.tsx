@@ -1,3 +1,4 @@
+import { requestGameFrame, cancelGameFrame } from '../lib/frameScheduler';
 import React,{createContext,useContext,useEffect,useLayoutEffect,useMemo,useRef,useState} from 'react';
 import {usePaintedShipStyle} from './paintedShip';
 import {explosionDiameter} from './shipRealism';
@@ -125,13 +126,13 @@ function fitSurface(){
 function frame(time:number){
   frameId=0;if(!surface||!records.size)return;
   const paused=surface.parentElement?.closest('.game-shell')?.getAttribute('data-effects-paused')==='true';
-  if(paused){if(!pausedAt)pausedAt=time;frameId=requestAnimationFrame(frame);return;}
+  if(paused){if(!pausedAt)pausedAt=time;frameId=requestGameFrame(frame);return;}
   if(pausedAt){pauseTotal+=time-pausedAt;pausedAt=0;nextPaintAt=null;}
   // Keep wall-clock animation ages, but avoid redrawing the same effects at
   // 90/120/144 Hz. Advance the deadline past missed slots without catch-up draws.
   // Preserve the deadline phase and allow 1 ms timestamp rounding so an
   // ordinary 60 Hz browser does not accidentally lose every third frame.
-  if(nextPaintAt!==null&&time+1<nextPaintAt){frameId=requestAnimationFrame(frame);return;}
+  if(nextPaintAt!==null&&time+1<nextPaintAt){frameId=requestGameFrame(frame);return;}
   const deadline=nextPaintAt??time;
   nextPaintAt=deadline+(Math.floor(Math.max(0,time-deadline)/EFFECT_PAINT_INTERVAL_MS)+1)*EFFECT_PAINT_INTERVAL_MS;
   const paintStarted=beginVisualPaint();
@@ -142,13 +143,13 @@ function frame(time:number){
     for(const record of records.values()){drawImpact(ctx,record,Math.max(0,time-record.started-(pauseTotal-record.pauseStart)));draws++;fragmentDraws+=record.pieces.length;}
   } catch(error) { recordFailure(error); const disable=disableSurface;clearCanvasEffects();disable?.();return; }
   finally { endVisualPaint('effect',paintStarted); }
-  frameId=requestAnimationFrame(frame);
+  frameId=requestGameFrame(frame);
 }
-const schedule=()=>{if(!frameId&&surface&&records.size)frameId=requestAnimationFrame(frame);};
+const schedule=()=>{if(!frameId&&surface&&records.size)frameId=requestGameFrame(frame);};
 const remove=(id:number)=>{
   if(!records.delete(id))return;
   if(!records.size&&surface){
-    if(frameId)cancelAnimationFrame(frameId);frameId=0;
+    if(frameId)cancelGameFrame(frameId);frameId=0;
     const ctx=surface.getContext('2d');
     ctx?.setTransform(1,0,0,1,0,0);
     ctx?.clearRect(0,0,surface.width,surface.height);
@@ -172,7 +173,7 @@ const CanvasAvailability=createContext({enabled:false,scale:1});
 export function clearCanvasEffects(){
   resourceGeneration++;
   cancelSurfaceRelease();
-  if(frameId)cancelAnimationFrame(frameId);
+  if(frameId)cancelGameFrame(frameId);
   frameId=0;records.clear();
   for(const t of readyTextures.values())t.canvas.width=t.canvas.height=0;
   if(surface)surface.width=surface.height=0;

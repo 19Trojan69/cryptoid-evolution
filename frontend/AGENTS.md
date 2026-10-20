@@ -1,5 +1,32 @@
 # Preserve the officially approved game
 
+## Global 60 Hz preparation requested 20 October 2026, 18:44:07 Vienna
+
+The owner explicitly expanded the previous effect-only cap to the whole game.
+All own RAF call sites now use lib/frameScheduler.ts: one shared native chain,
+60 Hz target with original timestamps, 1 ms rounding tolerance and no catch-up
+burst. Main-loop guard, 34 ms delta clamp, slower mobile React/24 Hz Earth-network
+cadences remain. Touch accepts state immediately but publishes ship DOM position
+on the same capped tick. CSS/SVG/transitions and the Galaxy Web Animation use
+lib/cssFramePacing.ts; body scope includes React portals. Keep authored artwork,
+keyframes, durations, easing, resolution, sounds, rewards, accounts and saves.
+This explicit request supersedes older no-global-governor/cadence restrictions
+only for the 60 Hz work. No removal or quality reduction is authorized here.
+120 targeted tests, 12 locale tests/release build, Canvas cadence/lifecycle and
+275 exact native RGBA comparisons pass. Actual GamePage host at 120 Hz passes
+25 normal sectors/two bosses, stress/pause/recovery and complete cleanup.
+Native browser CSS/end-event verification remains OPEN: remote browser could not
+reach localhost, then blocked a local-file URL by policy. Do not circumvent this
+restriction or claim that the browser fixture or iPhone heat/crash was verified.
+The CSS controller shifts sampling work to JS; thermal savings are unmeasured.
+Unsupported/failed Web Animations fall back to native playback and are therefore
+not guaranteed capped. See docs/global-60fps-20261020.md and its results JSON;
+frontend/scripts/fixtures/frame-pacing.html contains the native-browser checks.
+Preparation only: official Testnet remains runtime 30b8b23; no publication was
+requested in this step. Preserve all fixed release/rollback refs and Mainnet.
+Automatic audit-branch deployment stays off. Native browser acceptance is still
+needed before public release; do not present this as a confirmed Whitescreen fix.
+
 ## Completed Canvas effect 60 Hz Testnet release, 20 October 2026
 
 The owner's 17:54:30 Europe/Vienna instruction explicitly authorized publication.

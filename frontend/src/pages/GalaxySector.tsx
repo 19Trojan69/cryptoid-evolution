@@ -1,3 +1,4 @@
+import { requestGameFrame, cancelGameFrame } from '../lib/frameScheduler';
 import { memo, useEffect, useRef, useState, type CSSProperties } from 'react';
 import { useLocale } from '../i18n';
 import BlockchainIcon from '../components/BlockchainIcon';
@@ -13,8 +14,8 @@ export default memo(function GalaxySector({ region, progress, onSelect }: Props)
   useEffect(() => {
     if (!root.current) return;
     if (typeof IntersectionObserver === 'undefined') {
-      const frame = requestAnimationFrame(() => setVisible(true));
-      return () => cancelAnimationFrame(frame);
+      const frame = requestGameFrame(() => setVisible(true));
+      return () => cancelGameFrame(frame);
     }
     const observer = new IntersectionObserver(entries => setVisible(entries.some(entry => entry.isIntersecting)), { rootMargin: '500px' });
     observer.observe(root.current);

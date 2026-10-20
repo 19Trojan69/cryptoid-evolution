@@ -1,3 +1,4 @@
+import { requestGameFrame, cancelGameFrame } from '../lib/frameScheduler';
 import { memo, useEffect, useId, useRef } from "react";
 import { advanceHomeNetwork, createHomeNetwork, HOME_ART, makeHomeNetworkMesh, pointOnEdge, type NetworkState } from "./homeNetworkModel";
 
@@ -75,18 +76,18 @@ function HomeEarthNetwork({paused}: {paused: boolean}) {
     const motion=window.matchMedia("(prefers-reduced-motion: reduce)");
     let raf=0,last=0,lastPaint=0,visible=true;
     const allowed=()=>!paused&&!document.hidden&&visible&&!motion.matches&&document.documentElement.dataset.motion!=="reduced";
-    const stop=()=>{if(raf)cancelAnimationFrame(raf);raf=0;last=0;lastPaint=0;};
+    const stop=()=>{if(raf)cancelGameFrame(raf);raf=0;last=0;lastPaint=0;};
     const frame=(now:number)=>{
       raf=0;if(!allowed())return;
       if(!lastPaint||now-lastPaint>=1000/24) {
         advanceHomeNetwork(state,mesh,last?Math.min(.1,(now-last)/1000):0);
         last=now;lastPaint=now;paint(ctx,state);
       }
-      raf=requestAnimationFrame(frame);
+      raf=requestGameFrame(frame);
     };
     const resume=()=>{
       stop();ctx.clearRect(0,0,HOME_ART.width,HOME_ART.height);
-      if(allowed()){paint(ctx,state);raf=requestAnimationFrame(frame);}
+      if(allowed()){paint(ctx,state);raf=requestGameFrame(frame);}
     };
     const resize=()=>{
       const size=Math.min(1024,Math.max(320,canvas.clientWidth*Math.min(window.devicePixelRatio||1,2)));

@@ -115,6 +115,8 @@ function component(file,imports,globals={}) {
   const code=ts.transpileModule(readFileSync(new URL(file,import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX}}).outputText;
   const exports={};vm.runInNewContext(code,{exports,require:name=>{
     if(name==='react/jsx-runtime')return jsx;
+    if(name==='../lib/frameScheduler')return {requestGameFrame:globals.requestAnimationFrame,cancelGameFrame:globals.cancelAnimationFrame};
+    if(name==='../lib/cssFramePacing')return {paceAnimation:animation=>animation};
     if(name==='react'&&!imports.react)return {memo:fn=>fn,useRef:value=>({current:value}),useEffect:()=>{},useState:value=>[typeof value==='function'?value():value,()=>{}]};
     if(name.endsWith('.css'))return {};
     assert.ok(name in imports,`Unmapped dependency: ${name}`);return imports[name];

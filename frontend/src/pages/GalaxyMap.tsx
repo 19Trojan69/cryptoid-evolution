@@ -12,6 +12,7 @@ import { emptyGalaxyProgress, galaxyPoint, galaxyShipPoint, galaxyRegions, type 
 import { MOTION_STORAGE_KEY } from './displaySettings';
 import './galaxyMap.css';
 import './galaxyArt.css';
+import { paceAnimation } from '../lib/cssFramePacing';
 
 export default function GalaxyMap() {
   const { t } = useLocale();
@@ -56,7 +57,7 @@ export default function GalaxyMap() {
     // Animate only a newly confirmed adjacent stage; never replay an entire career.
     if (progress.currentLevel - before !== 1) return;
     const width = ship.current.parentElement?.clientWidth ?? 0;
-    const animation = ship.current.animate([{ transform: `translate(calc(-50% + ${(a.x - b.x) / 100 * width + a.dx - b.dx}px), calc(-50% + ${a.mapY + a.dy - b.mapY - b.dy}px))` }, { transform: 'translate(-50%, -50%)' }], { duration: 850, easing: 'ease-in-out' });
+    const animation = paceAnimation(ship.current.animate([{ transform: `translate(calc(-50% + ${(a.x - b.x) / 100 * width + a.dx - b.dx}px), calc(-50% + ${a.mapY + a.dy - b.mapY - b.dy}px))` }, { transform: 'translate(-50%, -50%)' }], { duration: 850, easing: 'ease-in-out' }));
     return () => animation.cancel();
   }, [status, progress.currentLevel]);
   const home = (state: object = {}) => navigate('/', { state });

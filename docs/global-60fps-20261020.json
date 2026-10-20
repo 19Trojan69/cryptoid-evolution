@@ -1,0 +1,134 @@
+{
+  "requestedAt": "2026-10-20T18:44:07+02:00",
+  "baselineAudit": "dc01e1034a3cbd29e6d0896a8220cb22e07dd945",
+  "officialRuntimeUnchanged": "30b8b2326b9514c066edbdf23c4f5dc61f15a14c",
+  "status": "implementation verified in controlled hosts; native CSS/browser acceptance open; not deployed",
+  "targetHz": 60,
+  "timestampToleranceMs": 1,
+  "nativeRAFAdapters": 1,
+  "scope": [
+    "guarded game simulation",
+    "touch presentation",
+    "ordinary Canvas effects",
+    "home JavaScript animations",
+    "menu and scene RAFs",
+    "CSS and SVG animations",
+    "CSS transitions",
+    "Galaxy Web Animation",
+    "body-level React portals"
+  ],
+  "checks": {
+    "targetedTests": {
+      "passed": 120,
+      "failed": 0,
+      "newPacingTests": 22
+    },
+    "releaseBuild": true,
+    "localeTests": 12,
+    "rgbaComparisons": 275,
+    "canvasCadence": true,
+    "canvasLifecycle": {
+      "warmImpacts": 2000,
+      "movingImpacts": 400
+    },
+    "simulation120Hz": {
+      "passed": true,
+      "mode": "actual GamePage simulation; forced clears and extra lives; presentation/audio hardware/API stubs; no browser or FPS inference",
+      "normal": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "bosses": [
+        10,
+        20
+      ],
+      "simulatedSeconds": 641.88,
+      "viewport": {
+        "width": 800,
+        "height": 600
+      },
+      "gameplayHash": "3490bfc971cfe9fc8cde7bfc6b5b6853633de9e0273459b02b5515cda1531635",
+      "approvedTestnetPresentation": {
+        "checkedGroups": 31,
+        "arrivalPatterns": [
+          "zigzag",
+          "figureEight",
+          "cross",
+          "spiral",
+          "pincer",
+          "sweep",
+          "cascade",
+          "diamond",
+          "doubleLoop"
+        ],
+        "positioningMarkers": 0,
+        "hudOrder": "home hearts level shards-over-score block pause",
+        "arrivalMsFirst29": 1430,
+        "heavyExtraMs": 660,
+        "settleMs": 180,
+        "restingSway": "all normal Testnet enemies; original amplitude and rhythm"
+      },
+      "stressObjectsReleased": true,
+      "pausePreservesTimers": true,
+      "backgroundPreservesTimers": true,
+      "faultPreservesRun": true,
+      "checkpointRestoresState": true,
+      "cleanup": {
+        "raf": 0,
+        "timers": 0,
+        "listeners": 0
+      }
+    }
+  },
+  "browser": {
+    "verified": false,
+    "fixture": "frontend/scripts/fixtures/frame-pacing.html",
+    "blockers": [
+      "Remote browser cannot reach local Vite server (ERR_CONNECTION_REFUSED).",
+      "Browser URL policy rejects local file protocol; no bypass attempted."
+    ],
+    "unverified": [
+      "native CSS animationend/transitionend delivery",
+      "native Web Animation finished promises and pause behavior",
+      "WebKit compatibility and controller overhead"
+    ]
+  },
+  "preserved": [
+    "auth/account and API code",
+    "artwork and CSS keyframes",
+    "sound, gains and audio buffers",
+    "reward and save logic",
+    "34 ms simulation delta cap",
+    "lower mobile scene and 24 Hz network cadence"
+  ],
+  "limits": [
+    "Not a physical iPhone heat/energy measurement or proof of the Whitescreen cause.",
+    "A web application cannot force the operating-system/display refresh rate.",
+    "Native RAF callbacks still follow browser cadence; application work is limited by the shared adapter.",
+    "CSS playbackRate=0 and manual currentTime move animation sampling to the main thread; energy savings are unmeasured.",
+    "Unsupported/failed Web Animations keep native playback rather than freeze, so their rate is not guaranteed capped."
+  ]
+}

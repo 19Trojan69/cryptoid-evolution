@@ -1,3 +1,4 @@
+import { requestGameFrame, cancelGameFrame } from '../lib/frameScheduler';
 import ServiceBadge from "../components/ServiceBadge";
 import useModalNavigation from "../hooks/useModalNavigation";
 import CareerDashboard from "./CareerDashboard";
@@ -322,8 +323,8 @@ const Shop = () => {
   }, [adminMode, user?.uid]);
   useEffect(() => {
     if (shopView !== "shop" || !shopTarget) return;
-    const frame = requestAnimationFrame(() => document.getElementById(`fleet-${shopTarget.skin}`)?.scrollIntoView({ block: "start" }));
-    return () => cancelAnimationFrame(frame);
+    const frame = requestGameFrame(() => document.getElementById(`fleet-${shopTarget.skin}`)?.scrollIntoView({ block: "start" }));
+    return () => cancelGameFrame(frame);
   }, [shopView, shopTarget]);
   const enterGame = () => {
     if (!authReady || isAuthLoading) return;
@@ -449,8 +450,8 @@ const Shop = () => {
 
   useEffect(() => {
     if (!shopView || !quickTarget) return;
-    const frame = requestAnimationFrame(() => { const target = document.querySelector<HTMLElement>(`.shop-modal ${quickTarget}`); if (target) { target.scrollIntoView({ behavior: "instant", block: "start" }); target.setAttribute("tabindex", "-1"); target.focus({ preventScroll: true }); } });
-    return () => cancelAnimationFrame(frame);
+    const frame = requestGameFrame(() => { const target = document.querySelector<HTMLElement>(`.shop-modal ${quickTarget}`); if (target) { target.scrollIntoView({ behavior: "instant", block: "start" }); target.setAttribute("tabindex", "-1"); target.focus({ preventScroll: true }); } });
+    return () => cancelGameFrame(frame);
   }, [shopView, quickTarget, rewardStatus]);
 
   const openQuickAction = (action: QuickAction) => {
