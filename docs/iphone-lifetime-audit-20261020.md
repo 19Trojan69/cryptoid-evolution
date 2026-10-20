@@ -177,3 +177,39 @@ immediate rollback. The older rollback `dpl_7CGcYyrnLNXwkU8ychnkxfjqR198` at
 `f5be06d` must also remain available. Record the exact new runtime commit, build,
 post-release checks and proof separately; this document alone is not evidence
 that a new version has been published.
+
+## First owner feedback after release, 20 October 2026
+
+At 08:46 Europe/Vienna the owner confirmed that he chose the exit himself and
+that slowdown was less severe than before. This clarifies the V4 report generated
+at 06:37:48.618 UTC: do not classify its final Home return as another unexpected
+restart. The report has one boot ID, both boss fights complete, and `home-intent`
+at 06:36:59.969 UTC followed by `game-monitor-stop` five milliseconds later.
+There is no recorded unexpected document restart in this supplied run. This is
+one successful observed run, not proof of permanent Whitescreen resolution.
+
+The report was collected after official Testnet release `51e59c3`; V4 contains no
+runtime commit or deployment ID, so the JSON alone cannot independently attest
+which bundle was running. Known resource estimates settle around 39–45 MB after
+warmup and return to 38,912,959 bytes after boss 2. Painted entries plateau at 48,
+source/texture entries at eight, and the idle effect surface returns to 36 bytes.
+The counters show no sustained accumulation in this run; native/GPU/process
+memory remains unmeasured. Sparse frame snapshots include 51–65 ms gaps and
+cannot establish average FPS, percentile frame pacing or the cost responsible.
+
+Read-only follow-up inspection of the released GamePage code confirms an existing
+compact-screen presentation limit: width <=700 uses a minimum 32 ms scene-request
+interval, increasing to 50 ms when `slowFramesRef` reaches six. RAF quantization,
+commit scheduling and paint time mean these are request thresholds, not a promise
+of exactly 31.25 or 20 presented FPS. Simulation and direct player movement keep
+their existing RAF path. The simulation also caps each delta at 34 ms; sustained
+long frame gaps can therefore reduce simulated progress relative to wall time.
+These are pre-existing timing rules, not introduced by the image-lifetime patch.
+The V4 export does not include the slow-frame counter, selected scene interval,
+scene-commit timing or simulation-section costs, so it cannot attribute the
+remaining subjective slowdown to one of these paths.
+
+Keep the distinction between fewer abrupt exits, remaining frame delays, scene
+presentation cadence and simulation timing explicit. Do not remove the existing
+load limit, alter combat timing or reduce visual/audio quality on the strength of
+this report. This follow-up changed documentation only and made no deployment.
