@@ -110,7 +110,11 @@ const renderPaintedSprite = async (index: number, colorId: PlayerColorId, stage:
     const encodingStarted = timed ? performance.now() : 0;
     if (timed) { const work = encodingStarted - materialStarted; preparationProbe.materialTotalMs += work; preparationProbe.materialMaxMs = Math.max(preparationProbe.materialMaxMs, work); }
     // Blob encoding can run off the main thread; large base64 strings are avoided.
+    const decodedBytes = canvas.width * canvas.height * 4;
     const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(value => value ? resolve(value) : reject(new Error('Ship encoding failed')), 'image/png'));
+    // The completed Blob owns its pixels. Do not retain a second full painting
+    // surface while the replacement image waits for load/decode.
+    canvas.width = canvas.height = 0;
     const decodingStarted = timed ? performance.now() : 0;
     if (timed) preparationProbe.encodeTotalMs += decodingStarted - encodingStarted;
     const paintedUrl = URL.createObjectURL(blob);
@@ -126,9 +130,9 @@ const renderPaintedSprite = async (index: number, colorId: PlayerColorId, stage:
       if (typeof decoded.decode === 'function') await decoded.decode();
       if (timed) preparationProbe.decodeTotalMs += performance.now() - decodingStarted;
     } catch (error) { URL.revokeObjectURL(paintedUrl); throw error; }
-    cache.set(key, paintedUrl, blob.size + canvas.width * canvas.height * 4);
+    cache.set(key, paintedUrl, blob.size + decodedBytes);
     return paintedUrl;
-  } finally { canvas.width = canvas.height = 0; }
+  } finally { if (canvas.width || canvas.height) canvas.width = canvas.height = 0; }
 };
 
 // Yield between variants so a new formation cannot start many pixel jobs in

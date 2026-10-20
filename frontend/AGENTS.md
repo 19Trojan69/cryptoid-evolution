@@ -1,5 +1,20 @@
 # Preserve the officially approved game
 
+## Official Testnet lifetime audit, 20 October 2026
+
+The owner no longer has a Mac. Continue the authorized stability investigation
+on exact official Testnet a889d22cc9c1142f51773e073c41b0a7c8aa13d8,
+READY deployment dpl_DssUzk9j8fruG7HY7BNPUMfYZjmW, freshly verified on 20 October.
+Do not import unofficial preview code or require a further full manual campaign
+for the same counters. This isolated candidate releases only the painted-hull
+working canvas after its PNG Blob is complete, before image load/decode. Keep
+the original full decoded-byte cache accounting and exact artwork. Native RGBA,
+controlled failure/cancellation and repeated-preparation checks pass; this is
+not an iPhone memory/FPS result, proved crash cause or complete Whitescreen fix.
+See docs/iphone-lifetime-audit-20261020.md. Keep automatic deployment disabled on
+codex/iphone-lifetime-audit-20261020. No public alias/Mainnet change is authorized
+for this new preparation. Preserve Admin exclusivity, saves and Highscores.
+
 ## Small turret bodies, 19 October 2026, preparation only
 
 The user explicitly requests larger bodies on every small boss turret, with
