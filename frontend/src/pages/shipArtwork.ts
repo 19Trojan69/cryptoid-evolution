@@ -11,6 +11,9 @@ export function loadShipArtwork(src: string, color?: PlayerColorId): Promise<HTM
   if (existing) return existing;
   const task = loadCardImage(src).then(image => {
     const source = document.createElement('canvas');
+    let output: HTMLCanvasElement | undefined;
+    let retained = false;
+    try {
     source.width = image.width; source.height = image.height;
     const context = source.getContext('2d', { willReadFrequently: true });
     if (!context) throw new Error('Canvas unavailable');
@@ -31,13 +34,17 @@ export function loadShipArtwork(src: string, color?: PlayerColorId): Promise<HTM
     if (right < left) throw new Error('Empty ship artwork');
     const width = right - left + 1, height = bottom - top + 1;
     const margin = Math.max(4, Math.ceil(Math.max(width, height) * .035));
-    const output = document.createElement('canvas');
+    output = document.createElement('canvas');
     output.width = width + margin * 2; output.height = height + margin * 2;
     const target = output.getContext('2d');
     if (!target) throw new Error('Canvas unavailable');
     target.drawImage(source, left, top, width, height, margin, margin, width, height);
-    source.width = 0; source.height = 0;
+    retained = true;
     return output;
+    } finally {
+      source.width = source.height = 0;
+      if (output && !retained) output.width = output.height = 0;
+    }
   });
   cache.set(key, task);
   while (cache.size > 20) cache.delete(cache.keys().next().value!);

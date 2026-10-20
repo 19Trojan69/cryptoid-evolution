@@ -1,5 +1,28 @@
 # Preserve the officially approved game
 
+## Approved correction of all five resource findings, 20 October 2026
+
+At 13:12 Europe/Vienna the owner requested fixing all five named findings. Correct
+only those resource paths: dispose an uncommitted boss base layer on exceptions;
+return unavailable/release failed rock textures without an uncaught prewarm error,
+skip unavailable texture draws and retry through existing later draws; dispose
+all boss-card working surfaces and check weapon draw success; retire ship-card
+working/failed-output surfaces in finally; share pending boss-texture loads across
+completed-cache eviction, retaining the existing two-entry cache limit.
+Preserve successful pixels, timing, gameplay, sound, HUD, accounts, saves, purchases
+and Mainnet. Continue the established official Testnet release workflow with the
+current b15306f / dpl_4ckqHNmsXh7NnQiYK79aHcsYeAZK as immediate rollback; keep all
+older fixed refs unchanged and automatic deployment disabled on the audit branch.
+44 before/after failure/cache cases and seven real TSX effect/timer cases pass.
+1,803 exact RGBA comparisons cover all 50 boss renderers, all 50 boss cards,
+60 ship editions, 29 paint IDs, seven rock textures and seven full rock/effect
+frames. 68 targeted gameplay/audio/card/resource checks and the release build
+(12 locale tests, locale gate, TypeScript/Vite) pass. The existing chunk-size
+warning remains. The historical audit script is now pinned to its b15306f source
+so it still reproduces the original 15 findings without misreading fixed code.
+No physical iPhone/native/GPU memory or Whitescreen-cause proof is claimed.
+See docs/resource-fixes-20261020 and the two new verification scripts.
+
 ## Completed audio/heat Testnet release and further resource audit, 20 October 2026
 
 The owner's 12:55 Europe/Vienna instruction explicitly authorized publishing the

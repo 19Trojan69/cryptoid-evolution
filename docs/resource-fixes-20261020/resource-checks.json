@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "baseline": "b15306f2d22d2196275091c904d068829879efc7",
+  "controlledCasesIncludingNegativeControls": 44,
+  "baselineUnreleasedBaseSurfaces": {
+    "base-context-throws": 1,
+    "base-transform-throws": 1,
+    "base-draw-throws": 1,
+    "base-null": 0
+  },
+  "bossCards": 50,
+  "shipCards": 60,
+  "paintComparisons": 29,
+  "rockTextures": 7,
+  "exactPixelComparisons": 146,
+  "limits": "Controlled Canvas/Image failure injection and native CPU raster. No physical WebKit, audible output, GPU/process memory, permanent leak or Whitescreen-cause proof."
+}

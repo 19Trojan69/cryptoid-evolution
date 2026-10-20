@@ -3,9 +3,12 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import { execFileSync } from 'node:child_process';
 import { build } from 'esbuild';
 
 const root = new URL('../', import.meta.url).pathname;
+const baseline = 'b15306f2d22d2196275091c904d068829879efc7';
+const baselineSource = name => execFileSync('git', ['show', `${baseline}:frontend/src/pages/${name}`], { cwd: root, encoding: 'utf8' });
 const bundle = await build({ absWorkingDir: root, stdin: { contents: `
 export {loadBossArtwork} from './bossArtwork.ts';
 export {loadShipArtwork} from './shipArtwork.ts';
@@ -13,7 +16,11 @@ export {drawBossWeapons,disposeBossWeapons} from './bossWeaponRenderer.ts';
 export {createSectorBoss} from './sectorBoss.ts';
 export {preloadBossWeapons} from './bossWeaponTextures.ts';`,
   resolveDir: root + 'src/pages', loader: 'ts' }, bundle: true, write: false,
-  platform: 'node', format: 'cjs', logLevel: 'silent' });
+  platform: 'node', format: 'cjs', logLevel: 'silent',
+  plugins: [{ name: 'historical-audit-source', setup(builder) {
+    builder.onLoad({ filter: /\/(bossWeaponRenderer|bossWeaponTextures|bossArtwork|shipArtwork)\.ts$/ }, args =>
+      ({ contents: baselineSource(args.path.split('/').at(-1)), loader: 'ts' }));
+  } }] });
 
 function runtime({ mode = 'healthy', deferredImages = false } = {}) {
   const surfaces = [], images = [];
@@ -112,7 +119,7 @@ for (const mode of ['healthy', 'ship-source-null', 'ship-output-null', 'readback
 
 {
   // Execute the unchanged private texture function, without React or diagnostics.
-  const source = fs.readFileSync(root + 'src/pages/BonusRockLayer.tsx', 'utf8');
+  const source = baselineSource('BonusRockLayer.tsx');
   const textureSource = source.slice(source.indexOf('const textures ='), source.indexOf('const BonusRockLayer ='));
   assert.ok(textureSource.includes('function rockTexture('));
   const rockBundle = await build({ stdin: { contents: textureSource + '\nexport {rockTexture};', loader: 'ts' },

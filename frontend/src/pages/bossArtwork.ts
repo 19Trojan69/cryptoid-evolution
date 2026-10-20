@@ -1,6 +1,6 @@
 import { createSectorBoss } from './sectorBoss';
 import { preloadBossWeapons } from './bossWeaponTextures';
-import { drawBossWeapons, weaponCanvasSize } from './bossWeaponRenderer';
+import { disposeBossWeapons, drawBossWeapons, weaponCanvasSize } from './bossWeaponRenderer';
 
 /** One source of truth for cards and PNGs: current game hull + current mounted weapons.
  * Crop empty padding and near-transparent encoding specks only; preserve hull and weapons.
@@ -24,9 +24,12 @@ export function loadBossArtwork(id: number, resolution = 1200): Promise<HTMLCanv
     const size = weaponCanvasSize(boss);
     const scale = pixels / Math.max(size.width, size.height);
     const guns = document.createElement('canvas');
+    let combined: HTMLCanvasElement | undefined, result: HTMLCanvasElement | undefined;
+    let retained = false;
+    try {
     guns.width = Math.ceil(size.width * scale); guns.height = Math.ceil(size.height * scale);
-    drawBossWeapons(guns, boss, texture, true);
-    const combined = document.createElement('canvas');
+    if (!drawBossWeapons(guns, boss, texture, true)) throw new Error('Canvas unavailable');
+    combined = document.createElement('canvas');
     combined.width = guns.width; combined.height = guns.height;
     const context = combined.getContext('2d', { willReadFrequently: true });
     if (!context) throw new Error('Canvas unavailable');
@@ -43,17 +46,22 @@ export function loadBossArtwork(id: number, resolution = 1200): Promise<HTMLCanv
     if (right < left || bottom < top) throw new Error('Empty boss artwork');
     const width = right - left + 1, height = bottom - top + 1;
     const margin = Math.max(8, Math.ceil(Math.max(width, height) * .035));
-    const result = document.createElement('canvas');
+    result = document.createElement('canvas');
     result.width = width + margin * 2; result.height = height + margin * 2;
     const output = result.getContext('2d');
     if (!output) throw new Error('Canvas unavailable');
     output.drawImage(combined, left, top, width, height, margin, margin, width, height);
-    combined.width = 0; combined.height = 0; guns.width = 0; guns.height = 0;
     result.dataset.bossId = String(id);
     result.dataset.turretCount = String(boss.turrets.length);
     result.dataset.hullSource = boss.config.image;
     result.dataset.weaponSource = boss.config.weaponImage;
+    retained = true;
     return result;
+    } finally {
+      disposeBossWeapons(guns);
+      if (combined) combined.width = combined.height = 0;
+      if (result && !retained) result.width = result.height = 0;
+    }
   })();
   cache.set(key, task);
   // Bound retained canvases on mobile. Mounted views retain their own small copy.

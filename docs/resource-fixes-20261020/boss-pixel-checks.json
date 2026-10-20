@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "base": "f34456a11b7faa64365fadd57dbbcd569f4eca28",
+  "negativeControl": {
+    "attempts": 2000,
+    "failedHeatSurfacesNotExplicitlyReleased": 8000
+  },
+  "corrected": {
+    "attempts": 2000,
+    "failedHeatSurfacesNotExplicitlyReleased": 0
+  },
+  "exceptionCases": 2,
+  "retryAfterNull": true,
+  "bosses": 50,
+  "backingRatios": [
+    1,
+    1.5,
+    2
+  ],
+  "heatLevels": 9,
+  "exactPixelComparisons": 1650,
+  "limits": "Controlled null/exception injection and native CPU raster. Baseline surfaces may be reclaimed by real browser garbage collection; counts show missing explicit release, not permanent device retention. No WebKit/GPU/process memory, physical iPhone FPS or proof of the Whitescreen cause."
+}
