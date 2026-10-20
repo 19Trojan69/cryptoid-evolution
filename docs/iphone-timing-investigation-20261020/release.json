@@ -1,0 +1,188 @@
+{
+  "version": 1,
+  "scope": "Existing official Testnet only",
+  "project": "cryptoid-evolution-testnet",
+  "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+  "source": "53640c01a16c921645d05502d9e5b34f6dc6eeec",
+  "reviewedTree": "91f1dee117d67232485a38e9e9d9d985c16338b4",
+  "fixedReleaseBranch": "codex/testnet-owner-timing-release-20261020",
+  "production": {
+    "id": "dpl_EKngjGTb8FFBnWE3k9eXF4xsQeZt",
+    "state": "READY",
+    "target": "production",
+    "source": "53640c01a16c921645d05502d9e5b34f6dc6eeec",
+    "url": "cryptoid-evolution-testnet-96eqciimt-19-trojan69.vercel.app",
+    "alias": [
+      "cryptoid-evolution-testnet.vercel.app",
+      "cryptoid-evolution-testnet-19-trojan69.vercel.app",
+      "cryptoid-evolution-testnet-git-codex-iphone-20e099-19-trojan69.vercel.app"
+    ],
+    "buildingAt": 1792481692100,
+    "ready": 1792481735578
+  },
+  "preview": {
+    "id": "dpl_ER9LVaxFfUpccSfuW3kMzxkARXQe",
+    "state": "READY",
+    "target": null,
+    "source": "53640c01a16c921645d05502d9e5b34f6dc6eeec",
+    "url": "cryptoid-evolution-testnet-7dtw9vh5m-19-trojan69.vercel.app",
+    "alias": [
+      "cryptoid-evolution-testnet-git-codex-iphone-20e099-19-trojan69.vercel.app"
+    ],
+    "buildingAt": 1792481560517,
+    "ready": 1792481602758
+  },
+  "readyAtUTC": "2026-10-20T07:35:35.578Z",
+  "readyAtVienna": "2026-10-20T09:35:35.578+02:00",
+  "method": "User-approved Dashboard Create Preview Deployment, then Promote to Production rebuilding the exact source in the existing Testnet Production environment. Connector production create returned 403. No CLI was installed.",
+  "proof": "testnet-ready.jpg",
+  "rollback": {
+    "branch": "backup/testnet-before-owner-timing-20261020",
+    "source": "51e59c3373a8dd4ba4985d5a9559acdcf2d6755a",
+    "deployment": "dpl_BvFoZifj5ZFqEqCTEBixwfoUPpcH"
+  },
+  "olderRollback": {
+    "branch": "backup/testnet-before-image-lifetime-20261020",
+    "source": "a889d22cc9c1142f51773e073c41b0a7c8aa13d8",
+    "deployment": "dpl_DssUzk9j8fruG7HY7BNPUMfYZjmW"
+  },
+  "mainnet": {
+    "id": "dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe",
+    "state": "READY",
+    "target": "production",
+    "source": "907d2a7363345d00f0f90c54402bf04e887b64d9",
+    "url": "cryptoid-evolution-4nc1k8cmc-19-trojan69.vercel.app",
+    "alias": [
+      "cryptoid-evolution.vercel.app",
+      "cryptoid-evolution-19-trojan69.vercel.app",
+      "cryptoid-evolution-git-main-19-trojan69.vercel.app"
+    ],
+    "buildingAt": 1791724671120,
+    "ready": 1791724711543
+  },
+  "checks": {
+    "before": {
+      "at": "2026-10-20T07:34:33.642017+00:00",
+      "results": [
+        {
+          "path": "/api",
+          "status": 200,
+          "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a"
+        },
+        {
+          "path": "/api/admin/status",
+          "status": 401,
+          "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771"
+        },
+        {
+          "path": "/api/leaderboard/top?rules=1",
+          "status": 200,
+          "sha256": "9cbe90a3686312972b4a117e300a2bc2e15ce07a8eebd15b51f12d81181451ad"
+        },
+        {
+          "path": "/api/leaderboard/top?rules=2",
+          "status": 200,
+          "sha256": "3024b06040e8082bce5d1897392d770de54d0821aadb05ad9a1f1f2eb4e2f0a9"
+        },
+        {
+          "path": "/api/leaderboard/top?sort=career",
+          "status": 200,
+          "sha256": "627c09cc866ac0373173c888541907057d3fb086a25288bd979f8a51bb92a86d"
+        }
+      ]
+    },
+    "after": {
+      "at": "2026-10-20T07:36:41.368671+00:00",
+      "results": [
+        {
+          "path": "/",
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "sha256": "9f71e290eba5ec2b5041cd2355d29bdf708b29d25e0ff449dc3e593280ab7020"
+        },
+        {
+          "path": "/api",
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a",
+          "matchesBefore": true
+        },
+        {
+          "path": "/api/admin/status",
+          "status": 401,
+          "contentType": "application/json; charset=utf-8",
+          "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771",
+          "matchesBefore": true
+        },
+        {
+          "path": "/api/leaderboard/top?rules=1",
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "sha256": "9cbe90a3686312972b4a117e300a2bc2e15ce07a8eebd15b51f12d81181451ad",
+          "matchesBefore": true
+        },
+        {
+          "path": "/api/leaderboard/top?rules=2",
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "sha256": "3024b06040e8082bce5d1897392d770de54d0821aadb05ad9a1f1f2eb4e2f0a9",
+          "matchesBefore": true
+        },
+        {
+          "path": "/api/leaderboard/top?sort=career",
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "sha256": "627c09cc866ac0373173c888541907057d3fb086a25288bd979f8a51bb92a86d",
+          "matchesBefore": true
+        },
+        {
+          "path": "/ships/bosses/evolved/boss-07-guns.webp",
+          "status": 200,
+          "contentType": "image/webp",
+          "sha256": "a3ea823eec9b0cc7dd6d2de43c73f07fa2f17b80c7cfaa3ff7ec90ecc4ea2585"
+        }
+      ],
+      "assets": {
+        "AdminPage": {
+          "path": "/assets/AdminPage-CfYzBjSP.js",
+          "status": 200
+        },
+        "GamePage": {
+          "path": "/assets/GamePage-W-9wtH5r.js",
+          "status": 200
+        },
+        "ownerTimingCapture": {
+          "path": "/assets/ownerTimingCapture-DyAy3xMM.js",
+          "status": 200
+        }
+      },
+      "bundleChecks": {
+        "adminButtonPresent": true,
+        "exactCommitInGameBundle": true,
+        "exactTreeInGameBundle": true,
+        "cleanBuildIdentity": false,
+        "ownerCaptureKeyPresent": true,
+        "ownerArmKeyPresent": true
+      },
+      "assetVerifiedAt": "2026-10-20T07:37:41.386311+00:00",
+      "buildIdentity": {
+        "sourceCommit": "53640c01a16c921645d05502d9e5b34f6dc6eeec",
+        "sourceTree": "91f1dee117d67232485a38e9e9d9d985c16338b4",
+        "workingTreeDirty": true,
+        "note": "Observed actual deployed bundle. Exact Git source and tree match. The aggregate build-checkout dirty flag is true; its cause is not established and no clean-working-tree claim is made."
+      }
+    }
+  },
+  "boundedRuntimeScan": {
+    "source": "Dashboard Request Logs, new deployment filter only; connector runtime logs returned 403",
+    "requestRecords": 11,
+    "fromUTC": "2026-10-20T07:35:37.087Z",
+    "throughUTC": "2026-10-20T07:36:32.282Z",
+    "warning": 0,
+    "error": 0,
+    "fatal": 0
+  },
+  "limits": "No physical iPhone/Pi Browser capture, native/GPU/process memory or FPS verification. No proof of permanent stability or original Whitescreen cause. Owner button and gating verified by source/tests and delivered bundle; no authenticated owner device interaction was simulated.",
+  "dataOperations": "Read-only public API/highscore checks; all three public highscore responses match immediate pre-release hashes. No account, purchase, save, reward, score, data reset or migration action.",
+  "authorization": "User explicitly requested publication and approved the additional preview-then-production sequence on 20 October 2026 at 09:32 Europe/Vienna."
+}

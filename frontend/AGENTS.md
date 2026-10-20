@@ -1,5 +1,27 @@
 # Preserve the officially approved game
 
+## Completed owner timing Testnet release, 20 October 2026
+
+The user explicitly requested publication and separately approved the Dashboard
+preview-then-production sequence. It is complete: official Testnet is READY
+production deployment dpl_EKngjGTb8FFBnWE3k9eXF4xsQeZt, exact runtime commit
+53640c01a16c921645d05502d9e5b34f6dc6eeec, reviewed Git tree
+91f1dee117d67232485a38e9e9d9d985c16338b4, released at 09:35:35.578 Europe/Vienna.
+Keep codex/testnet-owner-timing-release-20261020 fixed at that runtime. Immediate
+rollback is backup/testnet-before-owner-timing-20261020 at 51e59c3 and READY
+dpl_BvFoZifj5ZFqEqCTEBixwfoUPpcH; both older fixed release/backup refs also remain.
+The public alias, served button/capture keys and exact commit/tree identity are
+verified. The build's aggregate workingTreeDirty flag is true; do not silently
+reinterpret it as a clean checkout. The three public Highscore responses match
+their immediate pre-release hashes, anonymous Admin remains 401, and a bounded
+11-request post-release Dashboard scan shows zero warning/error/fatal records.
+Mainnet remains 907d2a7 / dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe. No data reset or
+account/save/payment/security mutation occurred. Continue documentation only on
+this audit branch, whose automatic deployment stays disabled. Do not ask again
+for this completed release approval. Device FPS/native memory and a complete
+Whitescreen fix remain unproven. See the release receipt under
+docs/iphone-timing-investigation-20261020/release.json.
+
 ## Remaining iPhone slowdown investigation, 20 October 2026, preparation only
 
 The continuation explicitly forbids new Testnet/Mainnet deployments. Fresh reads

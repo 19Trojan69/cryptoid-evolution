@@ -1,6 +1,66 @@
 # Remaining official Testnet iPhone slowdown: isolated investigation
 
-20 October 2026. **Preparation only; nothing deployed.**
+20 October 2026. **Released to official Testnet at 09:35 Europe/Vienna.**
+
+## Completed authorized release
+
+After this investigation was prepared, the owner requested publication and then
+explicitly approved building a preview of exact `53640c0` in the existing Testnet
+project and promoting the same source into its Production environment. This
+supersedes the preparation-only boundary in the historical investigation below.
+No further approval for this completed release is needed.
+
+Official Testnet now serves READY production deployment
+`dpl_EKngjGTb8FFBnWE3k9eXF4xsQeZt`, exact runtime commit
+`53640c01a16c921645d05502d9e5b34f6dc6eeec`, reviewed Git tree
+`91f1dee117d67232485a38e9e9d9d985c16338b4`. Production finished at
+07:35:35.578 UTC / 09:35:35.578 Europe/Vienna after a roughly 43-second build.
+The preceding READY preview `dpl_ER9LVaxFfUpccSfuW3kMzxkARXQe` built that same
+commit in roughly 42 seconds. Promotion rebuilt with the existing Production
+environment; it did not claim the preview binary itself was promoted unchanged.
+The connector could not create Production deployments (403), so the authorized
+Dashboard path was used. The two earlier auto-review rejections were resolved
+by the owner's specific preview-then-production approval; neither rejected
+action had executed before that approval.
+
+Preserve fixed `codex/testnet-owner-timing-release-20261020` at `53640c0`.
+The immediate rollback is `backup/testnet-before-owner-timing-20261020` at
+`51e59c3`, READY deployment `dpl_BvFoZifj5ZFqEqCTEBixwfoUPpcH`. The prior image
+lifetime release and `a889d22` rollback references are unchanged. Mainnet remains
+`907d2a7` / `dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe`.
+
+Post-release Home/API/atlas checks pass. All three public Highscore responses
+match hashes captured at 07:34:33 UTC immediately before promotion. Anonymous
+Admin status remains 401. The actual served Admin/Game/capture bundles contain
+the new button, both owner capture keys and the full approved commit/tree.
+The deployed aggregate `workingTreeDirty` flag is **true**, which is preserved
+in the record. Its underlying build-checkout cause is not established; a clean
+working tree is not attested. An initial verifier's clean-tree expectation was
+therefore rejected, rather than rewriting this observed flag. Source commit,
+reviewed Git tree and delivered diagnostic markers are independently confirmed.
+
+The connector's runtime-log endpoint also returned 403. A Dashboard Request Logs
+scan filtered to this new deployment covered eleven request records from
+07:35:37.087 through 07:36:32.282 UTC, with zero warning/error/fatal console records.
+This bounded observation is not a whole-session iPhone stability test. No
+account/save/purchase/reward/score reset, migration, database or security change
+was performed. Authenticated owner device interaction and device FPS/native/GPU
+memory remain unverified.
+
+See [release receipt](iphone-timing-investigation-20261020/release.json) and
+[READY proof](iphone-timing-investigation-20261020/testnet-ready.jpg).
+The remaining sections retain the investigation and its pre-release boundaries
+as a dated record.
+
+### Owner's next bounded measurement
+
+Reload the official Testnet in the existing Pi Browser tab, open
+**Admin-Zentrale → Technischer Bericht**, scroll to the action buttons and select
+**90-Sekunden-Messung vorbereiten**. Start the desired short run within ten
+minutes, then return to the same Admin report to read/copy V5. One short normal
+block is enough for the first capture; a separately armed boss-2 capture can
+target the last turret/reactor opening without another complete campaign.
+The capture stops at 90 seconds or earlier on leaving. No automatic transmission.
 
 ## Fresh reference check
 
