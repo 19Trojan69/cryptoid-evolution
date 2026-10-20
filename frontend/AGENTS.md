@@ -1,5 +1,20 @@
 # Preserve the officially approved game
 
+## Card preparation deduplication, 20 October 2026, preparation complete
+
+At 14:05 Europe/Vienna the owner requested correcting the two newly named
+card-loader findings. Boss/ship artwork preparations now remain shared while
+unfinished, even after eviction from the existing eight/twenty-entry result
+caches. Success/failure removes pending entries by identity; failure remains
+retryable. Preserve all compositing, pixels, resolution/color keys and cache
+capacities. Eighteen controlled before/after, churn, failure/retry and key checks
+pass against official 23b9f83, as do 110 native CPU RGBA comparisons (50 bosses,
+60 ships), twelve existing card tests and the frontend release build including
+twelve locale tests. No physical iPhone memory or Whitescreen-cause proof.
+See docs/card-artwork-pending-fix-20261020.md and its results JSON.
+This step contains no deployment. Keep official Testnet 23b9f83 and all fixed
+release/rollback refs unchanged; automatic audit-branch deployment remains off.
+
 ## Completed correction/release of all five resource findings, 20 October 2026
 
 Publication is complete: official Testnet READY production

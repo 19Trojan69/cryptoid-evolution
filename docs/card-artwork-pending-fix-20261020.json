@@ -1,0 +1,64 @@
+{
+  "baseline": "23b9f83f2639ba836eea0e94e45ba310c9ab97d0",
+  "controlledCases": 18,
+  "cases": [
+    {
+      "kind": "boss",
+      "fixed": false,
+      "uniqueKeys": 9,
+      "completedJobs": 10,
+      "imageObjectsBeforeReload": 19
+    },
+    {
+      "kind": "boss",
+      "fixed": true,
+      "uniqueKeys": 9,
+      "completedJobs": 9,
+      "imageObjectsBeforeReload": 18
+    },
+    {
+      "kind": "boss",
+      "fixed": false,
+      "passes": 3,
+      "uniqueKeys": 9,
+      "completedJobs": 27
+    },
+    {
+      "kind": "boss",
+      "fixed": true,
+      "passes": 3,
+      "uniqueKeys": 9,
+      "completedJobs": 9
+    },
+    {
+      "kind": "ship",
+      "fixed": false,
+      "uniqueKeys": 21,
+      "completedJobs": 22,
+      "imageObjectsBeforeReload": 22
+    },
+    {
+      "kind": "ship",
+      "fixed": true,
+      "uniqueKeys": 21,
+      "completedJobs": 21,
+      "imageObjectsBeforeReload": 21
+    },
+    {
+      "kind": "ship",
+      "fixed": false,
+      "passes": 3,
+      "uniqueKeys": 21,
+      "completedJobs": 63
+    },
+    {
+      "kind": "ship",
+      "fixed": true,
+      "passes": 3,
+      "uniqueKeys": 21,
+      "completedJobs": 21
+    }
+  ],
+  "exactRgbaComparisons": 110,
+  "limits": "Actual source under controlled delayed-image/failure hosts and native CPU raster; no iPhone/WebKit/process-memory, permanent-leak or Whitescreen-cause proof."
+}

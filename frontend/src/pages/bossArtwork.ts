@@ -6,6 +6,9 @@ import { disposeBossWeapons, drawBossWeapons, weaponCanvasSize } from './bossWea
  * Crop empty padding and near-transparent encoding specks only; preserve hull and weapons.
  */
 const cache = new Map<string, Promise<HTMLCanvasElement>>();
+// Cache eviction must not start a second copy of an unfinished preparation.
+// Settled tasks live only in the existing bounded cache.
+const pending = new Map<string, Promise<HTMLCanvasElement>>();
 export const loadCardImage = (src: string) => new Promise<HTMLImageElement>((resolve, reject) => {
   const image = new Image();
   image.onload = () => resolve(image);
@@ -16,7 +19,7 @@ export function loadBossArtwork(id: number, resolution = 1200): Promise<HTMLCanv
   if (!Number.isInteger(id) || id < 1 || id > 50) return Promise.reject(new Error('Invalid boss id'));
   const pixels = Math.max(256, Math.min(2400, Math.round(resolution)));
   const key = `${id}:${pixels}`;
-  const found = cache.get(key);
+  const found = pending.get(key) ?? cache.get(key);
   if (found) return found;
   const task = (async () => {
     const boss = createSectorBoss(id * 10, 768, 0, 1200);
@@ -63,9 +66,16 @@ export function loadBossArtwork(id: number, resolution = 1200): Promise<HTMLCanv
       if (result && !retained) result.width = result.height = 0;
     }
   })();
+  pending.set(key, task);
   cache.set(key, task);
   // Bound retained canvases on mobile. Mounted views retain their own small copy.
   while (cache.size > 8) cache.delete(cache.keys().next().value!);
-  void task.catch(() => { if (cache.get(key) === task) cache.delete(key); });
+  void task.then(
+    () => { if (pending.get(key) === task) pending.delete(key); },
+    () => {
+      if (pending.get(key) === task) pending.delete(key);
+      if (cache.get(key) === task) cache.delete(key);
+    },
+  );
   return task;
 }

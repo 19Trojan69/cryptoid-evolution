@@ -4,10 +4,12 @@ import { namedShipAccent, namedShipColor } from './shipIdentityColor';
 import { loadCardImage } from './bossArtwork';
 
 const cache = new Map<string, Promise<HTMLCanvasElement>>();
+// Share unfinished work even after the bounded result cache evicts its key.
+const pending = new Map<string, Promise<HTMLCanvasElement>>();
 /** Centre the visible hull, ignoring near-transparent encoding specks outside it. */
 export function loadShipArtwork(src: string, color?: PlayerColorId): Promise<HTMLCanvasElement> {
   const key = `${src}:${color ?? "identity"}`;
-  const existing = cache.get(key);
+  const existing = pending.get(key) ?? cache.get(key);
   if (existing) return existing;
   const task = loadCardImage(src).then(image => {
     const source = document.createElement('canvas');
@@ -46,8 +48,15 @@ export function loadShipArtwork(src: string, color?: PlayerColorId): Promise<HTM
       if (output && !retained) output.width = output.height = 0;
     }
   });
+  pending.set(key, task);
   cache.set(key, task);
   while (cache.size > 20) cache.delete(cache.keys().next().value!);
-  void task.catch(() => { if (cache.get(key) === task) cache.delete(key); });
+  void task.then(
+    () => { if (pending.get(key) === task) pending.delete(key); },
+    () => {
+      if (pending.get(key) === task) pending.delete(key);
+      if (cache.get(key) === task) cache.delete(key);
+    },
+  );
   return task;
 }
