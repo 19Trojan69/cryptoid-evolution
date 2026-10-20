@@ -1,50 +1,74 @@
 <!doctype html>
-<html lang="de"><meta charset="utf-8"><title>Cryptoid · 60-Hz-Animationsprüfung</title>
+<html lang="de"><meta charset="utf-8"><title>Cryptoid · Native 60-Hz-Animationsprüfung</title>
 <style>
-body{background:#071622;color:#edf7fb;font:16px system-ui;padding:24px} .box{width:24px;height:24px;background:#d8c18a;margin:8px}
+body{background:#071622;color:#edf7fb;font:16px system-ui;padding:24px}.box{width:24px;height:24px;background:#d8c18a;margin:8px}
 @keyframes travel{from{transform:translateX(0)}to{transform:translateX(100px)}}
-.finite{animation:travel .25s linear forwards}.infinite{animation:travel 1s linear infinite alternate}.pause{animation-play-state:paused}
-.pseudo::after{content:"";display:block;width:12px;height:12px;background:cyan;animation:travel 1s linear infinite}.transition{transition:margin-left .25s linear}
+.finite{animation:travel .25s ease-in-out forwards}.infinite{animation:travel 1s ease-in-out infinite alternate}.pause{animation-play-state:paused}
+.pseudo::after{content:"";display:block;width:12px;height:12px;background:cyan;animation:travel 1s linear infinite}.transition{transition:margin-left .25s ease-in-out}
 pre{white-space:pre-wrap}li{margin:8px}
 </style>
-<h1>Cryptoid · Gemeinsamer 60-Hz-Takt</h1><p>Kontrollierte Browserprüfung der echten Animationssteuerung. Keine Aussage über iPhone-Temperatur.</p>
-<div id="fixture"><div class="box infinite" id="infinite"></div><div class="box finite" id="finite"></div><div class="box pseudo" id="pseudo"></div><div class="box" id="late-pseudo"></div><div class="box transition" id="transition"></div><div class="box" id="web"></div></div>
+<h1>Cryptoid · Native Animationen mit 60-Hz-Fortschritt</h1><p>Browserprüfung der echten Steuerung. Keine Messung von iPhone-Temperatur oder Prozessspeicher.</p>
+<div id="fixture"><div class="box infinite" id="infinite"></div><div class="box finite" id="finite"></div><div class="box pseudo" id="pseudo"></div><div class="box" id="late-pseudo"></div><div class="box transition" id="transition"></div><div class="box" id="web"></div><div class="box" id="curve"></div></div>
 <ol id="checks"></ol><pre id="result">Prüfung läuft …</pre>
 <script type="module">
-import {startCssFramePacing,paceAnimation} from '/src/lib/cssFramePacing.ts';
-const root=document.querySelector('#fixture'), output=document.querySelector('#result'), checks=[];
+import {startCssFramePacing,paceAnimation,cssFramePacingStats} from '/src/lib/cssFramePacing.ts';
+const root=document.querySelector('#fixture'),output=document.querySelector('#result'),checks=[];
 const check=(name,passed,detail={})=>{checks.push({name,passed,...detail});const row=document.createElement('li');row.textContent=`${passed?'PASS':'FAIL'} · ${name} · ${JSON.stringify(detail)}`;document.querySelector('#checks').append(row);};
 const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 let animationEnds=0,transitionEnds=0;
 root.addEventListener('animationend',event=>{if(event.target.id==='finite')animationEnds++;});
 root.addEventListener('transitionend',()=>transitionEnds++);
+const initial=document.querySelector('#infinite').getAnimations()[0],keyframes=JSON.stringify(initial.effect.getKeyframes());
 const stop=startCssFramePacing(root);
-try {
+try{
  await wait(70);
- const infinite=document.querySelector('#infinite'), anim=infinite.getAnimations()[0];
- check('CSS-Animationen am gemeinsamen Takt',anim.playbackRate===0);
+ const infinite=document.querySelector('#infinite'),anim=infinite.getAnimations()[0];
+ check('CSS läuft nativ mit unveränderter Abspielrate',anim.playbackRate===1&&/^steps\(60/.test(anim.effect.getTiming().easing),{rate:anim.playbackRate,easing:anim.effect.getTiming().easing});
+ check('Autorisierte Keyframes und ihre Easing-Kurven bleiben erhalten',JSON.stringify(anim.effect.getKeyframes())===keyframes);
  const pseudo=document.querySelector('#pseudo').getAnimations({subtree:true})[0];
- check('Pseudoelemente erfasst',pseudo?.playbackRate===0,{count:document.querySelector('#pseudo').getAnimations({subtree:true}).length,rate:pseudo?.playbackRate});
+ check('Pseudoelemente erfasst',pseudo?.playbackRate===1&&/^steps\(/.test(pseudo.effect.getTiming().easing));
  document.querySelector('#late-pseudo').classList.add('pseudo');await wait(70);
  const latePseudo=document.querySelector('#late-pseudo').getAnimations({subtree:true})[0];
- check('Neue Pseudoelemente nach Start erfasst',latePseudo?.playbackRate===0,{rate:latePseudo?.playbackRate});
- const points=[];let sampling=true;
- const sample=()=>{points.push(Number(anim.currentTime));if(sampling)requestAnimationFrame(sample);};requestAnimationFrame(sample);
- const web=paceAnimation(document.querySelector('#web').animate([{opacity:0},{opacity:1}],{duration:180,fill:'forwards'}));
+ check('Neue Pseudoelemente nach Start erfasst',latePseudo?.playbackRate===1&&/^steps\(/.test(latePseudo.effect.getTiming().easing));
+ const web=paceAnimation(document.querySelector('#web').animate([{opacity:0},{opacity:1}],{duration:180,easing:'ease-in-out',fill:'forwards'}));
  let webFinished=false;web.finished.then(()=>{webFinished=true;});
+ check('Nichtlineare Web Animation erhält eine native Treppenkurve',web.playbackRate===1&&web.effect.getTiming().easing.startsWith('linear('));
  document.querySelector('#transition').style.marginLeft='100px';
- await wait(450);sampling=false;
- check('Endliche CSS-Animation beendet und animationend genau einmal',animationEnds===1&&document.querySelector('#finite').getAnimations()[0]?.playState==='finished',{animationEnds});
- check('Transition beendet und transitionend genau einmal',transitionEnds===1,{transitionEnds});
- check('Web-Animation beendet und Promise erfüllt',webFinished&&web.playState==='finished',{webFinished});
+ await wait(450);
+ check('CSS beendet sich mit genau einem animationend',animationEnds===1&&document.querySelector('#finite').getAnimations()[0]?.playState==='finished',{animationEnds});
+ check('Transition beendet sich mit genau einem transitionend',transitionEnds===1,{transitionEnds});
+ check('Web Animation beendet sich mit erfülltem Promise',webFinished&&web.playState==='finished',{webFinished});
  infinite.classList.add('pause');await wait(60);const paused=Number(anim.currentTime);await wait(180);
- check('CSS-Pause bleibt stehen',Math.abs(Number(anim.currentTime)-paused)<1,{paused,current:Number(anim.currentTime)});
+ check('CSS-Pause bleibt stehen',Math.abs(Number(anim.currentTime)-paused)<1);
  infinite.classList.remove('pause');await wait(140);
  check('CSS-Wiederaufnahme bewegt sich weiter',Number(anim.currentTime)>paused+70,{delta:Number(anim.currentTime)-paused});
- const changes=points.filter((value,i)=>i===0||value!==points[i-1]).length;
- check('CSS-Zeit wird fortgeschrieben',changes>10,{samples:points.length,changes});
- infinite.remove();document.querySelector('#pseudo').remove();document.querySelector('#late-pseudo').remove();await wait(50);
- stop();check('Aufräumen stellt ursprüngliche Abspielrate wieder her',anim.playbackRate===1,{rate:anim.playbackRate});
+ // Seek only test animations. Compare against the browser's own original curve
+ // at the previous 60-Hz sample, including reverse and alternating directions.
+ let compared=0,maxError=0,shapeError=0;
+ for(const direction of ['normal','reverse','alternate','alternate-reverse']){
+  const options={duration:1000,iterations:3,direction,easing:'cubic-bezier(.2,-.3,.7,1.3)',fill:'both'};
+  const a=document.querySelector('#curve').animate([{opacity:0},{opacity:1}],options);a.pause();paceAnimation(a);
+  const original=new Animation(new KeyframeEffect(null,[],options),null);
+  const authored=new Animation(new KeyframeEffect(null,[],{...options,easing:'linear'}),null);
+  for(let i=0;i<360;i++){
+   const t=i*1000/120+.9;a.currentTime=t;authored.currentTime=t;
+   const progress=authored.effect.getComputedTiming().progress;
+   const quantized=Math.floor(progress*60+1e-8)/60;
+   // Build a normal-direction original probe to evaluate eased quantized progress.
+   original.effect.updateTiming({direction:'normal',iterations:1});original.currentTime=quantized*1000;
+   maxError=Math.max(maxError,Math.abs(a.effect.getComputedTiming().progress-original.effect.getComputedTiming().progress));compared++;
+  }
+  a.cancel();original.cancel();authored.cancel();
+ }
+ check('1440 Kurvenproben entsprechen dem Original am 60-Hz-Abtastpunkt',maxError<1e-6,{compared,maxError});
+ // At synthetic 120 Hz, native progress should repeat on alternate samples.
+ const sample=document.querySelector('#curve').animate([{transform:'translateX(0)'},{transform:'translateX(100px)'}],{duration:1000,fill:'both'});sample.pause();paceAnimation(sample);
+ let previous=null,changes=0;
+ for(let i=0;i<120;i++){sample.currentTime=i*1000/120+.1;const value=getComputedStyle(document.querySelector('#curve')).transform;if(value!==previous){changes++;previous=value;}}
+ sample.cancel();check('120 Zeitpunkte ergeben höchstens 60 sichtbare Fortschrittswerte',changes<=60&&changes>50,{changes});
+ infinite.remove();document.querySelector('#pseudo').remove();document.querySelector('#late-pseudo').remove();await wait(70);
+ check('Entfernte und beendete Animationen geben alle Referenzen frei',cssFramePacingStats().active===0,{...cssFramePacingStats()});
+ stop();check('Aufräumen erhält native Abspielrate und entfernt die eigene Timing-Kurve',anim.playbackRate===1&&anim.effect.getTiming().easing==='linear');
  output.textContent=JSON.stringify({passed:checks.every(check=>check.passed),checks},null,2);
 }catch(error){stop();output.textContent=JSON.stringify({passed:false,error:String(error),checks},null,2);}
 </script></html>

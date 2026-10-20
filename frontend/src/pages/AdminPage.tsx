@@ -33,6 +33,8 @@ import { useAdminLocale } from "../adminLocale";
 import { readOwnerStabilityReport } from './stabilityReport.mjs';
 import { armOwnerTimingCapture } from './ownerTimingCapture';
 import { armOwnerAudioAudit } from './ownerAudioAudit';
+import { installReloadDiagnostics } from './reloadDiagnostics';
+import { cssFramePacingStats } from '../lib/cssFramePacing';
 
 const tabs = [
   ["overview", "Übersicht"],
@@ -149,9 +151,14 @@ function OwnerStabilityReport() {
     setNotice("");
     setError("");
     try {
-      const result = await readOwnerStabilityReport(verifyReportOwner, () => window, () => request.current === id);
+      const result = await readOwnerStabilityReport(verifyReportOwner, () => {
+        // A process reload can land on Home/Admin without mounting GamePage.
+        // Install only after fresh owner verification and the active-view check.
+        installReloadDiagnostics();
+        return window;
+      }, () => request.current === id);
       if (result && request.current === id) {
-        setReport(JSON.stringify(result, null, 2));
+        setReport(JSON.stringify({ ...result, reportingRuntime: { ...__CRYPTOID_BUILD__, cssPacing: cssFramePacingStats() } }, null, 2));
         setNotice(t(result.available ? "Vorhandene technische Einträge wurden gelesen." : "In diesem Browser sind keine auswertbaren Einträge vorhanden."));
         if (result.audioCaptures?.at(-1)?.finished) setNotice(t("Audiomessung abgeschlossen. Das Spiel wurde nicht automatisch beendet."));
       }

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { RELOAD_TRACE_KEY, RESOURCE_TREND_KEY, RESOURCE_TREND_INTERVAL_MS, appendReloadEvent, appendResourceTrendSample, createResourceTrendMonitor, freezeGap, recordApplicationBoot, reloadErrorName } from './reloadDiagnostics.ts';
+import { RELOAD_TRACE_KEY, RESOURCE_TREND_KEY, RESOURCE_TREND_INTERVAL_MS, appendReloadEvent, appendResourceTrendSample, createResourceTrendMonitor, freezeGap, recordApplicationBoot, reloadErrorName, installReloadDiagnostics } from './reloadDiagnostics.ts';
 
 const store = () => {
   const values = new Map();
@@ -24,6 +24,16 @@ test('freeze detector reports only visible active gaps at or above threshold',()
   assert.equal(freezeGap(1000,2400,true,true),1400);
   assert.equal(freezeGap(1000,2400,false,true),0);
   assert.equal(freezeGap(1000,2400,true,false),0);
+});
+test('verified Admin-only installation captures the interrupted build and creates no timer or navigation',()=>{
+  const localStorage=store(),sessionStorage=store(),sourceCommit='a'.repeat(40);
+  sessionStorage.setItem('cryptoid_game_session_v1',JSON.stringify({context:{...context,sourceCommit,targetHz:60,cssPacingMode:'native-easing'},active:true,at:Date.now()-5000}));
+  const host={localStorage,sessionStorage,location:{pathname:'/admin'},performance:{getEntriesByType:()=>[{type:'navigate'}]},crypto:{randomUUID:()=> 'admin-boot'},
+    setInterval:()=>assert.fail('unexpected timer'),setTimeout:()=>assert.fail('unexpected timer')};
+  installReloadDiagnostics(host);installReloadDiagnostics(host);
+  const events=JSON.parse(localStorage.getItem(RELOAD_TRACE_KEY));
+  assert.deepEqual(events.map(e=>e.kind),['app-boot','boot-after-active-session']);
+  assert.equal(events[1].context.sourceCommit,sourceCommit);assert.equal(events[1].context.cssPacingMode,'native-easing');
 });
 test('error names are allowlisted and raw custom names are not retained',()=>{
   assert.equal(reloadErrorName(new TypeError('private message')),'TypeError');

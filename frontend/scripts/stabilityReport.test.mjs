@@ -1,5 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+
+test('run build and pacing metadata are bounded and never inferred from the current document',()=>{
+  const sourceCommit='a'.repeat(40),sourceTree='b'.repeat(40);
+  assert.deepEqual(technicalContext({sourceCommit,sourceTree,workingTreeDirty:false,targetHz:60,cssPacingMode:'native-easing',cssPacedActive:24,cssPacingFallbacks:0,username:'private'}),
+    {targetHz:60,cssPacedActive:24,cssPacingFallbacks:0,sourceCommit,sourceTree,workingTreeDirty:false,cssPacingMode:'native-easing'});
+  assert.equal(technicalContext({sourceCommit:'private-build-text',sourceTree:'https://private',cssPacingMode:'private',targetHz:Infinity}),null);
+});
 import fs from 'node:fs';
 import {readStabilityReport, technicalContext, readOwnerStabilityReport} from '../src/pages/stabilityReport.mjs';
 const context={reason:'performance',sector:19,block:9,phase:'ATTACK_CYCLE',encounter:'normal',status:'playing',width:430,height:825,enemies:4,projectiles:9,effects:2};

@@ -44,6 +44,7 @@ const numberLimits = {
   canvasCacheBytes: 2e9, canvasSurfaceBytes: 2e9, canvasRetainedHullUsers: 1000, canvasFailureCount: 1000,
   audioVoices: 10000, audioWeaponVoices: 10000, audioBossVoices: 10000, audioEffectVoices: 10000,
   audioSampleBuffers: 10000, audioRockBuffers: 10000, audioBufferBytes: 2e9, estimatedResourceBytes: 8e9,
+  targetHz: 1000, cssPacedActive: 100000, cssPacingFallbacks: 1e9,
 };
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const finite = (value, max = 1e15) => typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= max;
@@ -56,6 +57,9 @@ export function technicalContext(value) {
   }
   for (const [key, max] of Object.entries(numberLimits)) if (finite(value[key], max)) result[key] = value[key];
   if (typeof value.reactorOpen === 'boolean') result.reactorOpen = value.reactorOpen;
+  for (const key of ['sourceCommit', 'sourceTree']) if (typeof value[key] === 'string' && /^[a-f0-9]{40}$/.test(value[key])) result[key] = value[key];
+  if (typeof value.workingTreeDirty === 'boolean') result.workingTreeDirty = value.workingTreeDirty;
+  if (['native-easing', 'native-unavailable', 'native-stopped'].includes(value.cssPacingMode)) result.cssPacingMode = value.cssPacingMode;
   if (typeof value.audioState === 'string' && ['none','suspended','running','closed','interrupted'].includes(value.audioState)) result.audioState = value.audioState;
   if (time(value.at)) result.at = value.at;
   return Object.keys(result).length ? result : null;

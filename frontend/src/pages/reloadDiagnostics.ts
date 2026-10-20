@@ -67,6 +67,8 @@ type TechnicalContext = {
   audioVoices?: number; audioWeaponVoices?: number; audioBossVoices?: number; audioEffectVoices?: number;
   audioSampleBuffers?: number; audioRockBuffers?: number; audioBufferBytes?: number; estimatedResourceBytes?: number;
   audioState?: string;
+  sourceCommit?: string; sourceTree?: string; workingTreeDirty?: boolean;
+  targetHz?: number; cssPacingMode?: string; cssPacedActive?: number; cssPacingFallbacks?: number;
 };
 
 export type ReloadTraceEvent = {
@@ -111,6 +113,7 @@ const numericContextKeys = [
   'canvasTextureEntries', 'canvasCacheBytes', 'canvasSurfaceBytes', 'canvasRetainedHullUsers', 'canvasFailureCount',
   'audioVoices', 'audioWeaponVoices', 'audioBossVoices', 'audioEffectVoices', 'audioSampleBuffers',
   'audioRockBuffers', 'audioBufferBytes', 'estimatedResourceBytes',
+  'targetHz', 'cssPacedActive', 'cssPacingFallbacks',
 ] as const;
 
 export function reloadTechnicalContext(input: GameDiagnostic | null | undefined): TechnicalContext | undefined {
@@ -125,6 +128,10 @@ export function reloadTechnicalContext(input: GameDiagnostic | null | undefined)
     if (finite(value)) result[key] = value;
   }
   if (typeof input.reactorOpen === 'boolean') result.reactorOpen = input.reactorOpen;
+  for (const key of ['sourceCommit', 'sourceTree'] as const)
+    if (typeof input[key] === 'string' && /^[a-f0-9]{40}$/.test(input[key])) result[key] = input[key];
+  if (typeof input.workingTreeDirty === 'boolean') result.workingTreeDirty = input.workingTreeDirty;
+  if (['native-easing', 'native-unavailable', 'native-stopped'].includes(input.cssPacingMode ?? '')) result.cssPacingMode = input.cssPacingMode;
   if (typeof input.audioState === 'string' && ['none', 'suspended', 'running', 'closed', 'interrupted'].includes(input.audioState))
     result.audioState = input.audioState;
   return Object.keys(result).length ? result : undefined;

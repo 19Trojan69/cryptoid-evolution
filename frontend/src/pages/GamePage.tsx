@@ -31,6 +31,7 @@ import { gameHaptics } from "./gameHaptics";
 import { bindGameInput } from './gameInput';
 import { startGuardedGameLoop, type GameInterruption } from './gameLoop';
 import { requestGameFrame, cancelGameFrame } from '../lib/frameScheduler';
+import { cssFramePacingStats } from '../lib/cssFramePacing';
 import { recordGameDiagnostic, createGameSessionDiagnostics } from './gameDiagnostics';
 import { createReloadGameMonitor, createResourceTrendMonitor, installReloadDiagnostics, recordReloadEvent, recordReloadSnapshot } from './reloadDiagnostics';
 import { browserProbeRuntime, createPerformanceProbe, developerProbeEnabled } from './performanceDiagnostics';
@@ -665,7 +666,10 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     if (!ownerDiagnostics) return base;
     const boss = state.boss;
     const turrets = boss?.turrets ?? [];
+    const pacing = cssFramePacingStats();
     return { ...base, frameMs: Math.round(lastMeasuredFrameRef.current),
+      ...__CRYPTOID_BUILD__, targetHz: pacing.targetHz, cssPacingMode: pacing.mode,
+      cssPacedActive: pacing.active, cssPacingFallbacks: pacing.fallbacks,
       bossId: boss?.config.id, bossHealth: boss?.health, bossMaxHealth: boss?.maxHealth,
       liveTurrets: boss ? turrets.filter(gun => gun.health > 0).length : undefined,
       totalTurrets: boss ? turrets.length : undefined,

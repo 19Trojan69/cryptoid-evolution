@@ -18,6 +18,8 @@ export type GameDiagnostic = {
   audioVoices?: number; audioWeaponVoices?: number; audioBossVoices?: number; audioEffectVoices?: number;
   audioSampleBuffers?: number; audioRockBuffers?: number; audioBufferBytes?: number; estimatedResourceBytes?: number;
   audioState?: string;
+  sourceCommit?: string; sourceTree?: string; workingTreeDirty?: boolean;
+  targetHz?: number; cssPacingMode?: string; cssPacedActive?: number; cssPacingFallbacks?: number;
   restartHint?: 'foreground-interrupted' | 'background-interrupted' | 'page-reload';
 };
 // Local bounded technical records only: no account identifiers, raw exception

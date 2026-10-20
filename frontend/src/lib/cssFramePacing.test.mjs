@@ -1,80 +1,124 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { startCssFramePacing, paceAnimation } from './cssFramePacing.ts';
+import { readFileSync } from 'node:fs';
+import { startCssFramePacing, paceAnimation, cssFramePacingStats } from './cssFramePacing.ts';
+import { frameEasing, nativeFrameEasing } from './nativeFrameEasing.ts';
 
-// Controlled Web Animations host, not native browser event/compositor proof.
-let now = 100, serial = 0;
-const frames = new Map();
-globalThis.requestAnimationFrame = callback => {frames.set(++serial, callback); return serial;};
-globalThis.cancelAnimationFrame = id => frames.delete(id);
-globalThis.performance = {now: () => now};
-const tick = (ms = 1000 / 60) => {
-  now += ms;
-  for (const [id, callback] of [...frames]) {frames.delete(id); callback(now);}
-  assert.ok(frames.size <= 1);
-};
+// Controlled host: lifecycle/ownership proof, not native compositor/iPhone proof.
 function host() {
-  now += 1000;
-  const doc = new EventTarget(); doc.hidden = false;
-  const root = new EventTarget(); root.ownerDocument = doc; root.contains = target => target.isConnected;
+  const root = new EventTarget();
+  const probes = [];
+  const view = {
+    CSS: { supports: () => true },
+    KeyframeEffect: class {
+      constructor(target, keyframes, timing) { this.target = target; this.timing = timing; }
+      getComputedTiming() { return { progress: this.time ** 2 }; }
+    },
+    Animation: class {
+      constructor(effect, timeline) { assert.equal(effect.target, null); assert.equal(timeline, null); this.effect = effect; probes.push(this); }
+      set currentTime(value) { this.effect.time = value; }
+      cancel() { this.canceled = true; }
+    },
+  };
+  root.ownerDocument = { defaultView: view };
+  root.contains = target => target.isConnected;
   const animations = [];
   root.getAnimations = () => animations;
-  const animation = ({duration = Infinity, rate = 1, current = 0} = {}) => {
-    const target = {isConnected: true};
-    const a = {currentTime: current, playbackRate: rate, pending: false, playState: 'running', effect: {target, getComputedTiming: () => ({endTime: duration})}, ends: 0,
-      finish() {assert.notEqual(this.playbackRate, 0); this.currentTime = this.playbackRate > 0 ? duration : 0; this.playState = 'finished'; this.ends++;}};
-    animations.push(a); return a;
-  };
-  return {root, doc, animations, animation};
+  function animation({ duration = 1000, rate = 1, easing = 'linear', ...options } = {}) {
+    const a = new EventTarget();
+    const timing = { duration, easing, delay: 70, endDelay: 20, iterations: Infinity, direction: 'alternate', fill: 'both', ...options };
+    const updates = [];
+    a.playState = 'running'; a.playbackRate = rate;
+    // Any visible clock/rate write is a regression. Native owns both.
+    Object.defineProperty(a, 'currentTime', { get: () => 123, set: () => assert.fail('visible animation clock sought') });
+    Object.defineProperty(a, 'playbackRate', { get: () => rate, set: () => assert.fail('visible animation rate changed') });
+    a.finish = a.pause = a.play = () => assert.fail('native playback overridden');
+    a.effect = {
+      target: { isConnected: true },
+      getTiming: () => ({ ...timing }),
+      getComputedTiming: () => ({ duration }),
+      updateTiming: change => { updates.push(change); Object.assign(timing, change); },
+    };
+    animations.push(a);
+    return Object.assign(a, { timing, updates });
+  }
+  return { root, view, animation, animations, probes };
 }
-test('CSS/SVG keeps real time and original effect timing', () => {
-  const h = host(), a = h.animation(), effect = a.effect, stop = startCssFramePacing(h.root);
-  assert.equal(a.playbackRate, 0); const start = now;
-  for (let i = 0; i < 120; i++) tick(1000 / 120);
-  assert.ok(Math.abs(a.currentTime - (now - start)) < 9); assert.equal(a.effect, effect);
-  stop(); assert.equal(a.playbackRate, 1); assert.equal(frames.size, 0);
+
+test('all visible clocks stay native; duration, easing inside keyframes and playback controls are preserved', () => {
+  const h = host(), a = h.animation(), before = { ...a.timing }, stop = startCssFramePacing(h.root);
+  assert.deepEqual(a.timing, { ...before, easing: 'steps(60, end)' });
+  assert.equal(a.playbackRate, 1);
+  assert.equal(a.currentTime, 123);
+  assert.deepEqual(cssFramePacingStats(), { mode: 'native-easing', targetHz: 60, active: 1, configured: 1, fallbacks: 0, jsFrameWrites: 0 });
+  stop(); assert.deepEqual(a.timing, before); assert.equal(cssFramePacingStats().active, 0);
 });
-test('CSS pause/resume does not accumulate paused time', () => {
-  const h = host(), a = h.animation(), stop = startCssFramePacing(h.root);
-  tick(); a.playState = 'paused'; const before = a.currentTime;
-  for (let i = 0; i < 60; i++) tick(); assert.equal(a.currentTime, before);
-  a.playState = 'running'; tick(); assert.ok(a.currentTime - before < 18); stop();
+
+test('configured progress spacing never exceeds 60 steps per real second at positive/negative authored rates', () => {
+  for (const duration of [17, 23, 180, 250, 1100, 3300, 42000]) {
+    for (const rate of [0.5, 1, 2, -1]) {
+      const h = host(), a = h.animation({ duration, rate });
+      const result = nativeFrameEasing(a, h.view);
+      if (duration / Math.abs(rate) < 1000 / 60) { assert.equal(result, null); continue; }
+      const count = Number(result.paced.match(/^steps\((\d+), end\)$/)[1]);
+      assert.ok(count / (duration / Math.abs(rate) / 1000) <= 60 + 1e-9);
+      assert.equal(a.updates.length, 0);
+    }
+  }
 });
-test('finite forward/reverse effects finish once at the original boundary', () => {
-  const h = host(), a = h.animation({duration:250}), b = h.animation({duration:250,rate:-1,current:250}), stop = startCssFramePacing(h.root);
-  for (let i = 0; i < 25; i++) tick();
-  assert.equal(a.ends,1); assert.equal(b.ends,1); assert.equal(a.currentTime,250); assert.equal(b.currentTime,0);
-  assert.equal(a.playbackRate,1); assert.equal(b.playbackRate,-1); assert.equal(frames.size,0); stop();
+
+test('nonlinear curve samples the original easing before quantization, including overshoot', () => {
+  const samples = [];
+  const curve = frameEasing(4, 'authored-ease', p => { samples.push(p); return p * 2 - .3; });
+  assert.deepEqual(samples, [0, .25, .5, .75, 1]);
+  assert.equal(curve, 'linear(-0.3 0% 25%,0.2 25% 50%,0.7 50% 75%,1.2 75% 100%,1.7 100%)');
+  assert.equal(frameEasing(5000, 'ease', () => assert.fail('unbounded sampling')), null);
+  assert.equal(frameEasing(2, 'ease', () => NaN), null);
 });
-test('CSS and transition events discover new effects and portal descendants', () => {
-  const h = host(), stop = startCssFramePacing(h.root);
-  const css = h.animation(); h.root.dispatchEvent(new Event('animationstart')); assert.equal(css.playbackRate,0);
-  const transition = h.animation({duration:180}); h.root.dispatchEvent(new Event('transitionrun')); assert.equal(transition.playbackRate,0);
-  tick(); assert.ok(css.currentTime>0); assert.ok(transition.currentTime>0); stop();
+
+test('nonlinear native sampling uses only a detached, timeline-free temporary probe, then cancels it', () => {
+  const h = host(), a = h.animation({ duration: 150, easing: 'cubic-bezier(.2,.4,.6,.8)' });
+  const stop = startCssFramePacing(h.root);
+  assert.match(a.timing.easing, /^linear\(/);
+  assert.equal(h.probes.length, 1); assert.equal(h.probes[0].canceled, true);
+  stop(); assert.equal(a.timing.easing, 'cubic-bezier(.2,.4,.6,.8)');
 });
-test('explicit Web Animations share the clock and retain authored playback rates', () => {
-  const h = host(), stop = startCssFramePacing(h.root), a = h.animation({rate:2});
-  assert.equal(paceAnimation(a),a); assert.equal(a.playbackRate,0); tick(); assert.ok(a.currentTime>30&&a.currentTime<35);
-  stop(); assert.equal(a.playbackRate,2);
+
+test('native finish/cancel releases references once and restores only owned timing', () => {
+  const h = host(), a = h.animation(), b = h.animation(), stop = startCssFramePacing(h.root);
+  a.dispatchEvent(new Event('finish')); a.dispatchEvent(new Event('finish'));
+  assert.equal(a.updates.length, 2); assert.equal(a.timing.easing, 'linear');
+  b.effect.updateTiming({ easing: 'ease-in' }); b.dispatchEvent(new Event('cancel'));
+  assert.equal(b.timing.easing, 'ease-in'); assert.equal(cssFramePacingStats().active, 0);
+  stop(); assert.equal(a.updates.length, 2);
 });
-test('animation events discover pseudo-elements added after startup', () => {
-  const h = host(), stop = startCssFramePacing(h.root), pseudo = h.animation();
-  h.root.getAnimations = options => options?.subtree ? [pseudo] : [];
-  h.root.dispatchEvent(new Event('animationstart'));
-  assert.equal(pseudo.playbackRate, 0); tick(); assert.ok(pseudo.currentTime > 0);
-  stop(); assert.equal(pseudo.playbackRate, 1);
+
+test('CSS, transition and late pseudo-element events register only once, including portal descendants', () => {
+  const h = host(), stop = startCssFramePacing(h.root), a = h.animation();
+  h.root.getAnimations = options => { assert.equal(options.subtree, true); return [a]; };
+  h.root.dispatchEvent(new Event('animationstart')); h.root.dispatchEvent(new Event('transitionrun'));
+  assert.equal(a.updates.length, 1); assert.equal(cssFramePacingStats().active, 1);
+  stop(); assert.equal(a.timing.easing, 'linear');
 });
-test('hidden document stops work and resumes without replaying hidden time', () => {
-  const h = host(), a = h.animation(), stop = startCssFramePacing(h.root);
-  tick(); const before=a.currentTime; h.doc.hidden=true; h.doc.dispatchEvent(new Event('visibilitychange')); assert.equal(frames.size,0);
-  now+=10000; h.doc.hidden=false; h.doc.dispatchEvent(new Event('visibilitychange')); tick(); assert.ok(a.currentTime-before<18); stop();
+
+test('explicit Web Animations and paused effects retain native playback ownership', () => {
+  const h = host(), stop = startCssFramePacing(h.root), a = h.animation({ rate: -2 });
+  a.playState = 'paused'; assert.equal(paceAnimation(a), a);
+  assert.equal(a.playState, 'paused'); assert.equal(a.playbackRate, -2);
+  assert.equal(a.timing.easing, 'steps(30, end)'); stop();
 });
-test('removed/canceled effects release references and stop the idle scheduler', () => {
-  const h = host(), a=h.animation(), b=h.animation(), stop=startCssFramePacing(h.root);
-  a.effect.target.isConnected=false; b.playState='idle'; tick(); assert.equal(a.playbackRate,1); assert.equal(b.playbackRate,1); assert.equal(frames.size,0); stop();
+
+test('unavailable/invalid timing APIs retain native playback and do not strand content', () => {
+  assert.doesNotThrow(() => startCssFramePacing({})());
+  for (const duration of [0, Infinity, NaN]) {
+    const h = host(), a = h.animation({ duration }), stop = startCssFramePacing(h.root);
+    assert.equal(a.updates.length, 0); assert.equal(a.playbackRate, 1); assert.equal(cssFramePacingStats().fallbacks, 1); stop();
+  }
+  const h = host(), a = h.animation(); a.effect.updateTiming = () => { throw new Error('unsupported'); };
+  const stop = startCssFramePacing(h.root); assert.equal(a.playbackRate, 1); assert.equal(cssFramePacingStats().active, 0); stop();
 });
-test('unsupported/failed animation APIs preserve native playback instead of freezing content', () => {
-  assert.doesNotThrow(()=>startCssFramePacing({getAnimations:undefined})());
-  const h=host(), a=h.animation(), stop=startCssFramePacing(h.root); a.effect.getComputedTiming=()=>{throw new Error('removed');}; tick();
-  assert.equal(a.playbackRate,1); assert.equal(frames.size,0); stop();
+
+test('native pacing schedules no JavaScript frame, interval, visibility polling or visible time/rate writes', () => {
+  const source = readFileSync(new URL('./cssFramePacing.ts', import.meta.url), 'utf8');
+  assert.doesNotMatch(source, /request(?:Animation|Game)Frame|setInterval|setTimeout|visibilitychange|\.currentTime\s*=|\.playbackRate\s*=/);
 });
