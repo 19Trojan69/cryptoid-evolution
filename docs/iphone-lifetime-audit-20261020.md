@@ -1,5 +1,34 @@
 # Official Testnet resource-lifetime audit, 20 October 2026
 
+## Released result
+
+Official Testnet now serves READY production deployment
+`dpl_BvFoZifj5ZFqEqCTEBixwfoUPpcH`, exact source
+`51e59c3373a8dd4ba4985d5a9559acdcf2d6755a`, reviewed tree
+`9a614fc69e88f6c8a55954c72131bb6df16a5798`.
+Released at 08:17:44.097 Europe/Vienna on 20 October. The fixed branch
+`codex/testnet-image-lifetime-release-20261020` preserves that runtime.
+
+Home, API root, boss-7 atlas and anonymous Admin rejection checks pass. All
+three public Highscore responses match the immediate before-release responses
+exactly (2 legacy, 17 V2 and 7 career entries). Fourteen new-deployment request
+records between 06:17:45.725Z and 06:19:34.103Z contain no warning/error/fatal
+console records. This bounded scan is not device stability verification.
+
+Immediate rollback is still READY `dpl_DssUzk9j8fruG7HY7BNPUMfYZjmW` at `a889d22`,
+preserved by `backup/testnet-before-image-lifetime-20261020`. Mainnet remains
+`dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe` at `907d2a7`. No account, save or Highscore
+data was reset. See [release receipt](image-lifetime-release-20261020/release.json)
+and [dashboard proof](image-lifetime-release-20261020/testnet-ready.jpg).
+
+The following source diagnosis and host-test limits remain applicable. The
+next physical iPhone check should use the official Pi Browser game: a direct
+normal-block test followed by boss 2 through destroyed turrets/reactor opening.
+Use the existing owner Admin direct-start controls; no full campaign is needed.
+If an interruption occurs, the existing owner-only Technical Report can be
+copied from that same Pi Browser tab. A successful short test is not proof that
+all possible iOS terminations have been eliminated.
+
 The owner no longer has a Mac. Continue the authorized investigation without
 requiring another full manual campaign to collect the same existing counters.
 The user subsequently accepted the proposed sequence with "Und dann machen wir

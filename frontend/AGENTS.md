@@ -1,5 +1,31 @@
 # Preserve the officially approved game
 
+## Completed Testnet image-lifetime release, 20 October 2026
+
+The approved sequence below is complete. Official Testnet is READY production
+deployment dpl_BvFoZifj5ZFqEqCTEBixwfoUPpcH, exact runtime source
+51e59c3373a8dd4ba4985d5a9559acdcf2d6755a, reviewed tree
+9a614fc69e88f6c8a55954c72131bb6df16a5798. Released at
+2026-10-20T06:17:44.097Z (08:17:44 Europe/Vienna). The dashboard built the
+same reviewed source in the existing Testnet Production environment (45s),
+after the 47s preview build. Preserve fixed release branch
+codex/testnet-image-lifetime-release-20261020 at that exact source.
+Continue documentation only on the audit branch, whose automatic deployment
+remains disabled. Do not ask again for this completed release authorization.
+
+Immediate rollback is preserved by backup/testnet-before-image-lifetime-20261020
+at a889d22cc9c1142f51773e073c41b0a7c8aa13d8 and READY deployment
+dpl_DssUzk9j8fruG7HY7BNPUMfYZjmW. Mainnet remains dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe
+at 907d2a7363345d00f0f90c54402bf04e887b64d9. Home/API/artwork checks pass;
+anonymous Admin status remains 401/not_authenticated. All three public Highscore
+responses match their immediate before-release hashes (2, 17 and 7 entries).
+A bounded scan of 14 request records from 06:17:45.725Z to 06:19:34.103Z shows
+zero warning/error/fatal console records. No account/data/save reset occurred.
+See docs/image-lifetime-release-20261020/release.json and testnet-ready.jpg.
+Physical iPhone native/GPU/process memory, FPS, Pi login and Whitescreen
+resolution remain unverified. The next user check is targeted, not a demand
+for another full manual campaign or the same already-known counters.
+
 ## Approved Testnet image-lifetime sequence, 20 October 2026
 
 After the assistant proposed automated delayed-image checks, resource analysis,

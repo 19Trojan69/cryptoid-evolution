@@ -1,0 +1,170 @@
+{
+  "version": 1,
+  "scope": "Existing official Testnet only",
+  "project": "cryptoid-evolution-testnet",
+  "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+  "teamId": "team_KzJmtl0QyoYZAOu5RQKsAR2i",
+  "source": "51e59c3373a8dd4ba4985d5a9559acdcf2d6755a",
+  "reviewedTree": "9a614fc69e88f6c8a55954c72131bb6df16a5798",
+  "fixedReleaseBranch": "codex/testnet-image-lifetime-release-20261020",
+  "preview": {
+    "id": "dpl_BTJfw3YkEV7njvzKCWwoZfWg9txU",
+    "state": "READY",
+    "source": "51e59c3373a8dd4ba4985d5a9559acdcf2d6755a",
+    "url": "cryptoid-evolution-testnet-1xrve3mgl-19-trojan69.vercel.app",
+    "ready": 1792476863538,
+    "buildingAt": 1792476816680
+  },
+  "production": {
+    "id": "dpl_BvFoZifj5ZFqEqCTEBixwfoUPpcH",
+    "state": "READY",
+    "source": "51e59c3373a8dd4ba4985d5a9559acdcf2d6755a",
+    "target": "production",
+    "url": "cryptoid-evolution-testnet-j5otrxj82-19-trojan69.vercel.app",
+    "alias": [
+      "cryptoid-evolution-testnet.vercel.app",
+      "cryptoid-evolution-testnet-19-trojan69.vercel.app",
+      "cryptoid-evolution-testnet-git-codex-iphone-20e099-19-trojan69.vercel.app"
+    ],
+    "ready": 1792477064097,
+    "buildingAt": 1792477019027
+  },
+  "readyAtUTC": "2026-10-20T06:17:44.097Z",
+  "readyAtVienna": "2026-10-20T08:17:44.097+02:00",
+  "dashboard": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/BvFoZifj5ZFqEqCTEBixwfoUPpcH",
+  "proof": "testnet-ready.jpg",
+  "rollback": {
+    "branch": "backup/testnet-before-image-lifetime-20261020",
+    "source": "a889d22cc9c1142f51773e073c41b0a7c8aa13d8",
+    "deploymentId": "dpl_DssUzk9j8fruG7HY7BNPUMfYZjmW"
+  },
+  "mainnet": {
+    "id": "dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe",
+    "state": "READY",
+    "source": "907d2a7363345d00f0f90c54402bf04e887b64d9",
+    "target": "production",
+    "url": "cryptoid-evolution-4nc1k8cmc-19-trojan69.vercel.app",
+    "alias": [
+      "cryptoid-evolution.vercel.app",
+      "cryptoid-evolution-19-trojan69.vercel.app",
+      "cryptoid-evolution-git-main-19-trojan69.vercel.app"
+    ],
+    "ready": 1791724711543,
+    "buildingAt": 1791724671120
+  },
+  "runtimeScope": [
+    "Earlier release of completed PNG working canvas",
+    "Cancel unneeded preparation after asynchronous waits",
+    "Share one pending source Image per URL across cache eviction"
+  ],
+  "checks": {
+    "before": {
+      "at": "2026-10-20T06:15:47.744Z",
+      "results": [
+        {
+          "path": "/api",
+          "status": 200,
+          "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a"
+        },
+        {
+          "path": "/api/admin/status",
+          "status": 401,
+          "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771",
+          "error": "not_authenticated"
+        },
+        {
+          "path": "/api/leaderboard/top?rules=1",
+          "status": 200,
+          "sha256": "9cbe90a3686312972b4a117e300a2bc2e15ce07a8eebd15b51f12d81181451ad",
+          "entries": 2
+        },
+        {
+          "path": "/api/leaderboard/top?rules=2",
+          "status": 200,
+          "sha256": "3024b06040e8082bce5d1897392d770de54d0821aadb05ad9a1f1f2eb4e2f0a9",
+          "entries": 17
+        },
+        {
+          "path": "/api/leaderboard/top?sort=career",
+          "status": 200,
+          "sha256": "627c09cc866ac0373173c888541907057d3fb086a25288bd979f8a51bb92a86d",
+          "entries": 7
+        }
+      ]
+    },
+    "after": {
+      "at": "2026-10-20T06:18:41.326Z",
+      "results": [
+        {
+          "path": "/api",
+          "status": 200,
+          "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a",
+          "matchesBefore": true
+        },
+        {
+          "path": "/api/admin/status",
+          "status": 401,
+          "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771",
+          "error": "not_authenticated",
+          "matchesBefore": true
+        },
+        {
+          "path": "/api/leaderboard/top?rules=1",
+          "status": 200,
+          "sha256": "9cbe90a3686312972b4a117e300a2bc2e15ce07a8eebd15b51f12d81181451ad",
+          "entries": 2,
+          "matchesBefore": true
+        },
+        {
+          "path": "/api/leaderboard/top?rules=2",
+          "status": 200,
+          "sha256": "3024b06040e8082bce5d1897392d770de54d0821aadb05ad9a1f1f2eb4e2f0a9",
+          "entries": 17,
+          "matchesBefore": true
+        },
+        {
+          "path": "/api/leaderboard/top?sort=career",
+          "status": 200,
+          "sha256": "627c09cc866ac0373173c888541907057d3fb086a25288bd979f8a51bb92a86d",
+          "entries": 7,
+          "matchesBefore": true
+        },
+        {
+          "path": "/",
+          "status": 200,
+          "contentType": "text/html; charset=utf-8"
+        },
+        {
+          "path": "/ships/bosses/evolved/boss-07-guns.webp",
+          "status": 200,
+          "contentType": "image/webp"
+        }
+      ]
+    }
+  },
+  "boundedRuntimeScan": {
+    "deploymentId": "dpl_BvFoZifj5ZFqEqCTEBixwfoUPpcH",
+    "requestRecords": 14,
+    "fromUTC": "2026-10-20T06:17:45.725Z",
+    "throughUTC": "2026-10-20T06:19:34.103Z",
+    "warning": 0,
+    "error": 0,
+    "fatal": 0,
+    "drains": "not audited"
+  },
+  "build": {
+    "previewSeconds": 47,
+    "productionSeconds": 45,
+    "method": "Dashboard Redeploy of exact preview source into existing Testnet Production environment; production build and resulting public alias independently verified"
+  },
+  "hostTests": {
+    "pipeline": 13,
+    "rapidPreparationPlanChanges": 1100,
+    "sectorsInPlan": 500,
+    "bossesInPlan": 50,
+    "existingRelevantHullTests": 8,
+    "exactNativePixelVariants": 3
+  },
+  "limits": "No physical iPhone/Pi Browser login, native/GPU/process memory, thermal or FPS verification; no proven native crash cause or complete Whitescreen fix. Plan changes are image preparation tests, not a full gameplay replay.",
+  "dataOperations": "Read-only public Highscore comparison; all three responses match their immediate pre-release hashes. No deletion, migration, account/save/reward/score/security mutation."
+}
