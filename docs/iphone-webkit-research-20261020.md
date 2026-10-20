@@ -71,12 +71,16 @@ phases are not a global hardware refresh lock.
 
 ## Verification and remaining proof
 
-- 155 targeted scheduler, CSS, gameplay, input, audio and owner-report checks,
+- 156 targeted scheduler, CSS, gameplay, input, audio and owner-report checks,
   plus the 12 locale tests and production TypeScript/Vite build.
 - Native HTTPS preview acceptance checks include pseudo-elements, transitions,
   CSS pause/resume, completion events/promises, reverse/alternate/overshooting
   curves, actual computed-style progress and cancellation reference release.
 - Native browser and deployment outcomes are recorded separately after execution.
+- First protected native preview passed 13/14 checks. It exposed canonical easing
+  serialization (`steps(n,end)` becomes `steps(n)`) preventing cleanup restoration.
+  The controller now remembers the browser's installed canonical value; a focused
+  regression covers it. No public release used the failing prototype.
 - Artwork, audio assets, simulation, collision rules, rewards, purchase/save/account
   flows and Mainnet are outside this change.
 

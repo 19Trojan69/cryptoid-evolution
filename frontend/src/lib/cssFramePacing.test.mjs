@@ -5,7 +5,7 @@ import { startCssFramePacing, paceAnimation, cssFramePacingStats } from './cssFr
 import { frameEasing, nativeFrameEasing } from './nativeFrameEasing.ts';
 
 // Controlled host: lifecycle/ownership proof, not native compositor/iPhone proof.
-function host() {
+function host(normalize = false) {
   const root = new EventTarget();
   const probes = [];
   const view = {
@@ -37,7 +37,7 @@ function host() {
       target: { isConnected: true },
       getTiming: () => ({ ...timing }),
       getComputedTiming: () => ({ duration }),
-      updateTiming: change => { updates.push(change); Object.assign(timing, change); },
+      updateTiming: change => { updates.push(change); Object.assign(timing, change); if (normalize) timing.easing = timing.easing.replace(/, end\)/, ')'); },
     };
     animations.push(a);
     return Object.assign(a, { timing, updates });
@@ -91,6 +91,10 @@ test('native finish/cancel releases references once and restores only owned timi
   b.effect.updateTiming({ easing: 'ease-in' }); b.dispatchEvent(new Event('cancel'));
   assert.equal(b.timing.easing, 'ease-in'); assert.equal(cssFramePacingStats().active, 0);
   stop(); assert.equal(a.updates.length, 2);
+});
+test('cleanup compares the browser canonical easing, including steps(n,end) serialized as steps(n)', () => {
+  const h = host(true), a = h.animation(), stop = startCssFramePacing(h.root);
+  assert.equal(a.timing.easing, 'steps(60)'); stop(); assert.equal(a.timing.easing, 'linear');
 });
 
 test('CSS, transition and late pseudo-element events register only once, including portal descendants', () => {

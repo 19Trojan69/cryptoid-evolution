@@ -38,6 +38,9 @@ export function startCssFramePacing(root: HTMLElement) {
       if (!curve) { fallbacks++; return; }
       const state: ControlledAnimation = { ...curve, done: () => release(animation, state) };
       animation.effect!.updateTiming({ easing: state.paced });
+      // Browsers serialize equivalent easing syntax differently (steps(n,end)
+      // becomes steps(n)). Compare against the installed canonical value later.
+      state.paced = animation.effect!.getTiming().easing ?? state.paced;
       controlled.set(animation, state);
       animation.addEventListener('finish', state.done);
       animation.addEventListener('cancel', state.done);
