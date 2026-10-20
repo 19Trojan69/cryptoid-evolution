@@ -12,7 +12,7 @@ test('reads previous interruption and current session without touching account o
   const report=readStabilityReport(host(JSON.stringify([{...context,reason:'unexpected-restart',restartHint:'page-reload',at:'2026-10-18T14:29:00.000Z'}]),JSON.stringify({context,active:true,hidden:false,pageHidden:false,at:10000})),12000);
   assert.equal(report.available,true);assert.equal(report.events[0].sector,19);assert.equal(report.events[0].restartHint,'page-reload');
   assert.deepEqual(report.lastSession,{context,active:true,hidden:false,pageHidden:false,at:10000,ageMs:2000});
-  assert.equal(report.reloadTrace,null);assert.equal(report.resourceTrend,null);assert.equal(report.version,4);
+  assert.equal(report.reloadTrace,null);assert.equal(report.resourceTrend,null);assert.equal(report.version,5);
 });
 test('absent, denied, corrupt or oversized storage explicitly reports missing evidence',()=>{
   for(const h of [{},host(null,null),host('{bad','{bad','{bad','{bad'),host('x'.repeat(131073),null)]) assert.equal(readStabilityReport(h).available,false);
@@ -58,7 +58,7 @@ test('v4 exports a sanitized fifteen-minute resource trend independent of the si
     canvasCacheBytes:12000000,audioBufferBytes:7500000,estimatedResourceBytes:37500000,
     username:'private-user',stack:'private-stack'}}));
   const report=readStabilityReport(host(null,null,null,null,JSON.stringify(samples),JSON.stringify(samples)));
-  assert.equal(report.version,4);assert.equal(report.resourceTrend.windowMs,900000);assert.equal(report.resourceTrend.sampleIntervalMs,10000);
+  assert.equal(report.version,5);assert.equal(report.resourceTrend.windowMs,900000);assert.equal(report.resourceTrend.sampleIntervalMs,10000);
   assert.equal(report.resourceTrend.samples.length,90);assert.equal(report.resourceTrend.samples.at(-1).context.sector,100);
   assert.ok(!JSON.stringify(report).includes('private-user'));assert.ok(!JSON.stringify(report).includes('private-stack'));
 });

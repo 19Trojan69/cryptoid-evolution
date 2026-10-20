@@ -163,4 +163,6 @@ export const chineseAdminTranslations: Record<string, string> = {
   "In diesem Browser sind keine auswertbaren Einträge vorhanden.": "此浏览器中没有可用的记录。",
   "Bericht kopiert. Du kannst ihn jetzt hier im Chat einfügen.": "报告已复制。现在可以将其粘贴到聊天中。",
   "Bitte den markierten Bericht über das Kopiermenü kopieren.": "请使用复制菜单复制选中的报告。",
+  "90-Sekunden-Messung vorbereiten": "准备90秒测量",
+  "Die nächste Spielrunde wird einmalig bis zu 90 Sekunden gemessen. Starte sie innerhalb von 10 Minuten und lies danach hier den Bericht.": "下一局游戏将仅测量一次，最长90秒。请在10分钟内开始，之后返回此处读取报告。",
 };

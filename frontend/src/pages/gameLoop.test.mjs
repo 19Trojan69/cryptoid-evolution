@@ -5,6 +5,7 @@ import vm from 'node:vm';
 import ts from 'typescript';
 import { startGuardedGameLoop, GAME_STALL_MS } from './gameLoop.ts';
 import { recordGameDiagnostic, GAME_DIAGNOSTICS_KEY, createGameSessionDiagnostics } from './gameDiagnostics.ts';
+import { createOwnerTimingCapture } from './ownerTimingCapture.ts';
 
 function harness(step = () => {}, onFault = () => {}) {
   let clock = 0, next = 0, active = true, visible = true;
@@ -115,6 +116,7 @@ test('denied sessionStorage cannot fail GamePage diagnostics setup or remove its
   Object.defineProperty(host,'sessionStorage',{get(){throw new Error('SecurityError: storage denied');}});
   const previousWindow = globalThis.window; globalThis.window = host;
   const context = {window:host,document:{hidden:false,addEventListener:host.addEventListener,removeEventListener:host.removeEventListener},
+    createOwnerTimingCapture, __CRYPTOID_BUILD__:{sourceCommit:'test',sourceTree:'test',workingTreeDirty:true},
     performance:{getEntriesByType:()=>[]}, Date, ownerDiagnostics:false, developerProbeEnabled:()=>false, performanceProbeRef:{current:null}, diagnosticsRef:{current:null}, reloadDiagnosticsRef:{current:null}, bossBoundaryRef:{current:null},
     createBossBoundaryDiagnostics:()=>{throw new Error('non-owner reactor diagnostics must stay disabled');},
     installReloadDiagnostics:()=>{throw new Error('non-owner diagnostics must stay disabled');}, createReloadGameMonitor:()=>({finish(){}}),

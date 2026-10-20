@@ -29,6 +29,7 @@ import AdminUsage from "./AdminUsage";
 import { paymentEvidenceLinks } from "./paymentEvidenceLinks";
 import { useAdminLocale } from "../adminLocale";
 import { readOwnerStabilityReport } from './stabilityReport.mjs';
+import { armOwnerTimingCapture } from './ownerTimingCapture';
 
 const tabs = [
   ["overview", "Übersicht"],
@@ -190,6 +191,15 @@ function OwnerStabilityReport() {
       if (request.current === id) setBusy(false);
     }
   };
+  const armTiming = async () => {
+    const id = ++request.current;
+    setBusy(true); setError(""); setNotice("");
+    try {
+      const armed = await armOwnerTimingCapture(verifyReportOwner, () => window, () => request.current === id);
+      if (armed) setNotice(t("Die nächste Spielrunde wird einmalig bis zu 90 Sekunden gemessen. Starte sie innerhalb von 10 Minuten und lies danach hier den Bericht."));
+    } catch (err) { if (request.current === id) setError(errorMessage(err)); }
+    finally { if (request.current === id) setBusy(false); }
+  };
   return <section className="admin-panel">
     <h2>{t("Technischer Bericht")}</h2>
     <p>{t("Nur für dein verifiziertes Eigentümerkonto. Gelesen werden vorhandene technische Einträge aus diesem Browser. Der Bericht wird nicht automatisch versendet.")}</p>
@@ -200,6 +210,7 @@ function OwnerStabilityReport() {
       <textarea ref={field} readOnly value={report} spellCheck={false} style={{ display: "block", width: "100%", minHeight: 300, boxSizing: "border-box", marginTop: 8, padding: 12, background: "#091923", color: "#eaf7fa", border: "1px solid #3d6471", borderRadius: 8, fontFamily: "monospace", fontSize: 13 }} />
     </label>}
     <div className="admin-actions">
+      <button className="admin-button" disabled={busy} onClick={() => { void armTiming(); }}>{t("90-Sekunden-Messung vorbereiten")}</button>
       <button className="admin-button" disabled={busy} onClick={() => { void load(); }}>{t("Erneut lesen")}</button>
       <button className="admin-button" disabled={busy || !report} onClick={() => { void copy(); }}>{t("Bericht kopieren")}</button>
     </div>

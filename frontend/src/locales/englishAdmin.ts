@@ -167,4 +167,6 @@ export const englishAdminTranslations: Record<string, string> = {
   "In diesem Browser sind keine auswertbaren Einträge vorhanden.": "This browser contains no usable records.",
   "Bericht kopiert. Du kannst ihn jetzt hier im Chat einfügen.": "Report copied. You can now paste it here in the chat.",
   "Bitte den markierten Bericht über das Kopiermenü kopieren.": "Please copy the selected report using the copy menu.",
+  "90-Sekunden-Messung vorbereiten": "Prepare 90-second capture",
+  "Die nächste Spielrunde wird einmalig bis zu 90 Sekunden gemessen. Starte sie innerhalb von 10 Minuten und lies danach hier den Bericht.": "The next game will be measured once for up to 90 seconds. Start within 10 minutes, then read the report here.",
 };

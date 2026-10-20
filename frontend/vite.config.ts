@@ -11,8 +11,14 @@ export default defineConfig(({ mode }) => {
   const version = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8")).version;
   let commit = env.VERCEL_GIT_COMMIT_SHA;
   if (!commit) { try { commit = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(); } catch { commit = "local"; } }
+  let sourceTree = '', workingTreeDirty = true;
+  try {
+    sourceTree = execFileSync('git', ['rev-parse', 'HEAD^{tree}'], { encoding: 'utf8' }).trim();
+    workingTreeDirty = execFileSync('git', ['status', '--porcelain', '--untracked-files=normal'], { encoding: 'utf8' }).trim().length > 0;
+  } catch { /* Unknown identity is explicit; do not invent a clean release. */ }
   return {
-    define: { __CRYPTOID_RELEASE__: JSON.stringify(`${version} · ${commit.slice(0, 8)}`) },
+    define: { __CRYPTOID_RELEASE__: JSON.stringify(`${version} · ${commit.slice(0, 8)}`),
+      __CRYPTOID_BUILD__: JSON.stringify({ sourceCommit: commit, sourceTree, workingTreeDirty }) },
     plugins: [
       react(),
       {

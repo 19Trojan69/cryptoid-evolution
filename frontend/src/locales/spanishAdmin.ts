@@ -166,4 +166,6 @@ export const spanishAdminTranslations: Record<string, string> = {
   "In diesem Browser sind keine auswertbaren Einträge vorhanden.": "Este navegador no contiene registros utilizables.",
   "Bericht kopiert. Du kannst ihn jetzt hier im Chat einfügen.": "Informe copiado. Ahora puedes pegarlo aquí en el chat.",
   "Bitte den markierten Bericht über das Kopiermenü kopieren.": "Copia el informe seleccionado mediante el menú de copiar.",
+  "90-Sekunden-Messung vorbereiten": "Preparar medición de 90 segundos",
+  "Die nächste Spielrunde wird einmalig bis zu 90 Sekunden gemessen. Starte sie innerhalb von 10 Minuten und lies danach hier den Bericht.": "La próxima partida se medirá una sola vez durante un máximo de 90 segundos. Iníciala en los próximos 10 minutos y después lee aquí el informe.",
 };

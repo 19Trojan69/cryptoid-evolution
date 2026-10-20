@@ -6,6 +6,7 @@ export type StabilityReport = {
   lastSession: Record<string, unknown> | null;
   reloadTrace: { windowMs: number; latestAt: number; events: Record<string, unknown>[] } | null;
   resourceTrend: { windowMs: number; sampleIntervalMs: number; latestAt: number; samples: Record<string, unknown>[] } | null;
+  timingCapture: import('./timingReport.mjs').TimingCapture | null;
   limits: string;
 };
 export function technicalContext(value: unknown): Record<string, unknown> | null;

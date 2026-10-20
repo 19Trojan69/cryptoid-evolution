@@ -1,0 +1,92 @@
+{
+  "source": "51e59c3373a8dd4ba4985d5a9559acdcf2d6755a",
+  "simulationParity": true,
+  "ownerGateParity": true,
+  "limits": "Synthetic timing-rule replay only. No workload, browser paint, GPU, iPhone FPS, thermal behavior or full campaign is simulated.",
+  "cases": [
+    {
+      "label": "steady 60-Hz input",
+      "width": 430,
+      "inputCallbacks": 600,
+      "inputWallMs": 10000,
+      "sceneRequests": 300,
+      "sceneRequestsPerSecond": 30,
+      "interval50Decisions": 0,
+      "skippedRequests": 300,
+      "simulatedProgressPercent": 100,
+      "discardedSimulationMs": 0
+    },
+    {
+      "label": "steady 30-Hz input",
+      "width": 430,
+      "inputCallbacks": 300,
+      "inputWallMs": 10000,
+      "sceneRequests": 300,
+      "sceneRequestsPerSecond": 30,
+      "interval50Decisions": 0,
+      "skippedRequests": 0,
+      "simulatedProgressPercent": 100,
+      "discardedSimulationMs": 0
+    },
+    {
+      "label": "steady 25-Hz input",
+      "width": 430,
+      "inputCallbacks": 250,
+      "inputWallMs": 10000,
+      "sceneRequests": 250,
+      "sceneRequestsPerSecond": 25,
+      "interval50Decisions": 0,
+      "skippedRequests": 0,
+      "simulatedProgressPercent": 85,
+      "discardedSimulationMs": 1500
+    },
+    {
+      "label": "steady 20-Hz input",
+      "width": 430,
+      "inputCallbacks": 200,
+      "inputWallMs": 10000,
+      "sceneRequests": 200,
+      "sceneRequestsPerSecond": 20,
+      "interval50Decisions": 198,
+      "skippedRequests": 0,
+      "simulatedProgressPercent": 68,
+      "discardedSimulationMs": 3200
+    },
+    {
+      "label": "alternating 16.7/50-ms input",
+      "width": 430,
+      "inputCallbacks": 300,
+      "inputWallMs": 10000,
+      "sceneRequests": 150,
+      "sceneRequestsPerSecond": 15,
+      "interval50Decisions": 290,
+      "skippedRequests": 150,
+      "simulatedProgressPercent": 76,
+      "discardedSimulationMs": 2400
+    },
+    {
+      "label": "desktop 60-Hz input",
+      "width": 800,
+      "inputCallbacks": 600,
+      "inputWallMs": 10000,
+      "sceneRequests": 600,
+      "sceneRequestsPerSecond": 60,
+      "interval50Decisions": 0,
+      "skippedRequests": 0,
+      "simulatedProgressPercent": 100,
+      "discardedSimulationMs": 0
+    },
+    {
+      "label": "forced damage requests at 60-Hz input",
+      "width": 430,
+      "inputCallbacks": 600,
+      "inputWallMs": 10000,
+      "sceneRequests": 600,
+      "sceneRequestsPerSecond": 60,
+      "interval50Decisions": 0,
+      "skippedRequests": 0,
+      "simulatedProgressPercent": 100,
+      "discardedSimulationMs": 0
+    }
+  ]
+}

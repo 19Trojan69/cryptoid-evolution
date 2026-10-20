@@ -1,0 +1,51 @@
+{
+  "checkedAtUTC": "2026-10-20T07:15:56.501Z",
+  "scope": "Preparation only. No deployment or data mutation.",
+  "testnet": {
+    "id": "dpl_BvFoZifj5ZFqEqCTEBixwfoUPpcH",
+    "state": "READY",
+    "source": "51e59c3373a8dd4ba4985d5a9559acdcf2d6755a",
+    "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+    "alias": [
+      "cryptoid-evolution-testnet.vercel.app",
+      "cryptoid-evolution-testnet-19-trojan69.vercel.app",
+      "cryptoid-evolution-testnet-git-codex-iphone-20e099-19-trojan69.vercel.app"
+    ]
+  },
+  "mainnet": {
+    "id": "dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe",
+    "state": "READY",
+    "source": "907d2a7363345d00f0f90c54402bf04e887b64d9",
+    "projectId": "prj_BAIJH4BzLLwun36kWVEnTdx69j0q",
+    "alias": [
+      "cryptoid-evolution.vercel.app",
+      "cryptoid-evolution-19-trojan69.vercel.app",
+      "cryptoid-evolution-git-main-19-trojan69.vercel.app"
+    ]
+  },
+  "releaseBranch": "codex/testnet-image-lifetime-release-20261020",
+  "rollback": {
+    "source": "a889d22cc9c1142f51773e073c41b0a7c8aa13d8",
+    "branch": "backup/testnet-before-image-lifetime-20261020",
+    "deployment": "dpl_DssUzk9j8fruG7HY7BNPUMfYZjmW",
+    "state": "READY",
+    "verification": "Fresh connector read at start of this continuation"
+  },
+  "auditParent": "3785bba59436aab89d97436d6a43f07b437bd721",
+  "verification": {
+    "regressionTests": 114,
+    "paintedPipelineTests": 14,
+    "preparationPlanChanges": 1100,
+    "bossPixelComparisons": 500,
+    "explosionPixelComparisons": 275,
+    "canvasLifecycleWarmImpacts": 2000,
+    "canvasLifecycleMovingImpacts": 400,
+    "frontendBuild": "PASS",
+    "simulationASTParity": "PASS",
+    "ownerEntryASTParity": "PASS",
+    "negativeControl": "Official 51e59c3 fails only the new expected no-second-readback-surface assertion",
+    "localBrowser": "not run: Chromium executable absent",
+    "physicalIphone": "not measured"
+  },
+  "limits": "Synthetic cadence inputs are not device FPS. Native raster/hook tests do not measure browser scheduling, GPU/process memory, thermal state or establish the Whitescreen cause."
+}

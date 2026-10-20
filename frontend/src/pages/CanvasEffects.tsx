@@ -3,6 +3,7 @@ import {usePaintedShipStyle} from './paintedShip';
 import {explosionDiameter} from './shipRealism';
 import {FIRE_KEYS,SMOKE_KEYS,layerFrame,fragmentFrame,polygonPoints,layerSvg} from './normalEffectMath.mjs';
 import {impactBounds,unionBounds,fieldBounds} from './normalEffectBounds.mjs';
+import {beginVisualPaint,endVisualPaint} from './renderWork';
 
 import {normalExplosionArt as art} from './normalEffectArtwork';
 const images=new Map<string,Promise<HTMLImageElement>>();
@@ -124,12 +125,14 @@ function frame(time:number){
   const paused=surface.parentElement?.closest('.game-shell')?.getAttribute('data-effects-paused')==='true';
   if(paused){if(!pausedAt)pausedAt=time;frameId=requestAnimationFrame(frame);return;}
   if(pausedAt){pauseTotal+=time-pausedAt;pausedAt=0;}
+  const paintStarted=beginVisualPaint();
   try {
     const ctx=surface.getContext('2d');if(!ctx)throw new Error('Effect surface context unavailable');
     const scale=dpr();ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,surface.width,surface.height);
     ctx.setTransform(scale,0,0,scale,-surfaceBox.left*scale,-surfaceBox.top*scale);
     for(const record of records.values()){drawImpact(ctx,record,Math.max(0,time-record.started-(pauseTotal-record.pauseStart)));draws++;fragmentDraws+=record.pieces.length;}
   } catch(error) { recordFailure(error); const disable=disableSurface;clearCanvasEffects();disable?.();return; }
+  finally { endVisualPaint('effect',paintStarted); }
   frameId=requestAnimationFrame(frame);
 }
 const schedule=()=>{if(!frameId&&surface&&records.size)frameId=requestAnimationFrame(frame);};

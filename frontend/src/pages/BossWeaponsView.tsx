@@ -3,6 +3,7 @@ import type { SectorBoss } from "./sectorBoss";
 import { drawBossWeapons, weaponCanvasSize, disposeBossWeapons } from "./bossWeaponRenderer";
 import { preloadBossWeapons } from "./bossWeaponTextures";
 import { reportBossResource } from "./bossResourceDiagnostics";
+import { beginVisualPaint, endVisualPaint } from './renderWork';
 
 type StaticDraw = {
   config: SectorBoss["config"];
@@ -75,7 +76,11 @@ export default memo(function BossWeaponsView({ boss, frozen = false }: { boss: S
       previous.turrets === boss.turrets.length
     )
       return;
-    if (!drawBossWeapons(c, boss, texture.image, frozen)) {
+    const paintStarted = beginVisualPaint();
+    let success: boolean;
+    try { success = drawBossWeapons(c, boss, texture.image, frozen); }
+    finally { endVisualPaint('boss', paintStarted); }
+    if (!success) {
       staticDraw.current = null;
       return;
     }

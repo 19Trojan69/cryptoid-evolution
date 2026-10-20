@@ -1,5 +1,6 @@
 // Read only bounded local technical records. This module never imports the
 // application, starts a game, writes storage or sends a request.
+import { readTimingCapture } from './timingReport.mjs';
 const EVENT_KEY = 'cryptoid_game_diagnostics_v1';
 const SESSION_KEY = 'cryptoid_game_session_v1';
 const RELOAD_KEY = 'cryptoid_reload_trace_v2';
@@ -164,12 +165,13 @@ export function readStabilityReport(host, now = Date.now()) {
   }
   const reloadTrace = mergeReload(reloadLocal.value, reloadSession.value);
   const resourceTrend = mergeResourceTrend(resourceLocal.value, resourceSession.value);
+  const timingCapture = readTimingCapture(host);
   return {
-    version: 4,
+    version: 5,
     format: 'cryptoid-local-stability-report',
     generatedAt: finite(now) ? new Date(now).toISOString() : null,
     activeDocument: activeDocument(host, now),
-    available: events.length > 0 || lastSession !== null || reloadTrace !== null || resourceTrend !== null,
+    available: events.length > 0 || lastSession !== null || reloadTrace !== null || resourceTrend !== null || timingCapture !== null,
     storage: {
       events: saved.status, session: session.status,
       reloadLocal: reloadLocal.status, reloadSession: reloadSession.status,
@@ -179,6 +181,7 @@ export function readStabilityReport(host, now = Date.now()) {
     lastSession,
     reloadTrace,
     resourceTrend,
+    timingCapture,
     limits: 'Lokale Unterbrechungs-, Reload-, Lifecycle-, Freeze-, Übergangs- und periodische Ressourcenhinweise. Ressourcen werden für den verifizierten Owner während aktivem sichtbarem Spiel ungefähr alle 10 Sekunden lokal erfasst und auf etwa 15 Minuten begrenzt. Speicherwerte sind nur bekannte/geschätzte Teilmengen; GPU/WebKit-Speicher kann fehlen. Kein Beweis für einen Speicher-, Browserprozess- oder Betriebssystem-Absturz. Keine Konto-, Kauf- oder Spielstanddaten.',
   };
 }

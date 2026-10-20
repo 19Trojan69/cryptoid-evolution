@@ -12,7 +12,7 @@ import { hullSourcePlan, preparedHullPlan } from '../src/pages/hullSourcePlan.ts
 const require = createRequire(import.meta.url);
 const { createCanvas, loadImage } = require(process.env.CRYPTOID_NATIVE_CANVAS_MODULE || '@napi-rs/canvas');
 const root = new URL('../', import.meta.url).pathname;
-const official = 'a889d22cc9c1142f51773e073c41b0a7c8aa13d8';
+const official = '51e59c3373a8dd4ba4985d5a9559acdcf2d6755a';
 const sourceAt = ref => ref
   ? execFileSync('git', ['show', `${ref}:frontend/src/pages/paintedShip.ts`], { cwd: root, encoding: 'utf8' })
   : fs.readFileSync(root + 'src/pages/paintedShip.ts', 'utf8');
@@ -253,6 +253,20 @@ test('successful source requests leave only the existing bounded ready cache', a
   f.api.preloadHullSources([urls[0]]);
   assert.equal(f.sources.length, 21, 'resolved evicted sources are not held in a second completed-image cache');
   await f.sources.at(-1).loadSource(); await turn(); assert.equal(f.liveBytes(), 0);
+});
+
+test('reloaded sources with known visual centers allocate no second readback canvas', async () => {
+  const f = await fixture(candidate, { holdSources: true });
+  const urls = Array.from({ length: 9 }, (_, i) => `/ships/evolution/ship_${String(i + 1).padStart(2, '0')}_stage_1.png`);
+  for (const url of urls) { f.api.preloadHullSources([url]); await f.sources.at(-1).loadSource(); await turn(); }
+  assert.equal(f.canvases.length, 9, 'each unknown center is measured once');
+  const before = f.canvases.length;
+  f.api.preloadHullSources([urls[0]]);
+  assert.equal(f.sources.length, 10, 'the first source really left the eight-entry cache');
+  await f.sources.at(-1).loadSource(); await turn();
+  assert.equal(f.canvases.length, before, 'a known center does not allocate another 240x240 surface');
+  assert.equal(f.liveBytes(), 0);
+  assert.equal(f.errors.length, 0);
 });
 
 test('a remount between cancellation and finally receives a fresh preparation', async () => {

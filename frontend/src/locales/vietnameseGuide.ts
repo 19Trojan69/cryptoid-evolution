@@ -876,4 +876,6 @@ export const vietnameseGuideTranslations: Record<string, string> = {
   "In diesem Browser sind keine auswertbaren Einträge vorhanden.": "Trình duyệt này không có bản ghi có thể sử dụng.",
   "Bericht kopiert. Du kannst ihn jetzt hier im Chat einfügen.": "Đã sao chép báo cáo. Bạn có thể dán vào cuộc trò chuyện tại đây.",
   "Bitte den markierten Bericht über das Kopiermenü kopieren.": "Hãy sao chép báo cáo đã chọn bằng menu sao chép.",
+  "90-Sekunden-Messung vorbereiten": "Chuẩn bị đo 90 giây",
+  "Die nächste Spielrunde wird einmalig bis zu 90 Sekunden gemessen. Starte sie innerhalb von 10 Minuten und lies danach hier den Bericht.": "Lượt chơi tiếp theo sẽ được đo một lần trong tối đa 90 giây. Hãy bắt đầu trong vòng 10 phút rồi quay lại đây đọc báo cáo.",
 };

@@ -1,10 +1,11 @@
-// This probe is compiled in only for an explicitly enabled developer build.
-// It owns no game timer, RAF or input handler. Only the private preview can
-// supply the optional independent checkpoint sink.
+// The developer probe stays disabled in ordinary builds. A separately armed,
+// server-verified owner capture can use these existing hooks for 90 seconds.
+// Neither mode owns a game timer, RAF or input handler.
 import type { BossResourceKind, BossResourceDetails } from './bossResourceDiagnostics';
 export const PERFORMANCE_TRACE_KEY = "cryptoid_developer_trace_v1";
 export const PERFORMANCE_SAMPLE_LIMIT = 90;
 export type ProbeContext = {
+  width?: number; height?: number;
   sector: number;
   flight: number;
   phase: string;
@@ -40,7 +41,16 @@ type Runtime = {
   knownTimers?: number;
   knownListeners?: number;
   longTasksSupported?: boolean;
+  jobsStarted?: number; jobsFinished?: number; queueWaitMaxMs?: number;
+  materialTotalMs?: number; materialMaxMs?: number; encodeTotalMs?: number; decodeTotalMs?: number;
+  sourceWorkTotalMs?: number; sourceWorkMaxMs?: number;
+  rockPaints?: number; rockPaintTotalMs?: number; rockPaintMaxMs?: number; blockchainRenders?: number;
+  effectPaints?: number; effectPaintTotalMs?: number; effectPaintMaxMs?: number;
+  bossPaints?: number; bossPaintTotalMs?: number; bossPaintMaxMs?: number;
 };
+export type Pacing = { frameGap: number; delta: number; slowFrames: number; paintInterval: number; requested: boolean; forced: boolean };
+const emptyPacing = () => ({ frames: 0, wallMs: 0, simulatedMs: 0, discardedMs: 0, interval16: 0, interval32: 0, interval50: 0,
+  decisionFrames: 0, slowFramesMax: 0, skippedRequests: 0, forcedRequests: 0 });
 type Sample = ProbeContext &
   Runtime & {
     atMs: number;
@@ -64,6 +74,7 @@ type Sample = ProbeContext &
     sceneRenderToCommitP95Ms: number;
     runtimeAgeMs: number;
     runtimeSampleMs: number;
+    pacing: ReturnType<typeof emptyPacing>;
   };
 type Event = Partial<BossResourceDetails> & {
   atMs: number;
@@ -84,6 +95,12 @@ type Options = {
   runtime?: () => Runtime;
   persist?: (serialized: string) => void;
   backup?: (trace: unknown) => void;
+  environment?: 'developer-only' | 'owner-admin';
+  publishGlobal?: boolean;
+  maxDurationMs?: number;
+  metadata?: Record<string, unknown>;
+  onFinish?: (started: boolean) => void;
+  onStart?: () => void;
 };
 const bounded = <T>(items: T[], item: T, limit: number) => {
   if (items.length >= limit) items.shift();
@@ -98,6 +115,14 @@ const percentile = (items: number[], p: number) => {
 export const developerProbeEnabled = () =>
   import.meta.env?.VITE_CRYPTOID_DIAGNOSTICS === "1" &&
   (window as Window & { __cryptoidProbeOptOut?: boolean }).__cryptoidProbeOptOut !== true;
+// Module-scoped lease, never enabled by a URL, local flag or ordinary player.
+let ownerResourceUntil = 0;
+export const retainOwnerResourceTiming = (until: number) => {
+  ownerResourceUntil = until;
+  return () => { if (ownerResourceUntil === until) ownerResourceUntil = 0; };
+};
+export const resourceTimingEnabled = () => developerProbeEnabled() ||
+  ownerResourceUntil > 0 && performance.now() < ownerResourceUntil;
 
 export function errorSite(error: unknown) {
   try {
@@ -138,6 +163,9 @@ export function createPerformanceProbe(options: Options = {}) {
   let pendingSceneAt: number | undefined;
   let cachedRuntime: Runtime = {}, runtimeAt = -Infinity, runtimeSampleMs = 0;
   let persistence = "not-yet-written";
+  let captureStartedAt: number | undefined;
+  let pacing = emptyPacing();
+  const diagnosticWork = { completedWrites: 0, persistTotalMs: 0, persistMaxMs: 0 };
   const event = (kind: string, at: number, extra: Partial<Event> = {}) => {
     if (!context) return;
     bounded(
@@ -158,7 +186,10 @@ export function createPerformanceProbe(options: Options = {}) {
   };
   const exportTrace = () => ({
     version: 2,
-    environment: "developer-only",
+    environment: options.environment ?? "developer-only",
+    ...(options.metadata ? { metadata: options.metadata } : {}),
+    finished,
+    diagnosticWork: { ...diagnosticWork },
     persistence,
     samples: samples.slice(),
     events: events.slice(),
@@ -169,6 +200,9 @@ export function createPerformanceProbe(options: Options = {}) {
       heap: "JS heap only when supported; excludes GPU/WebView memory",
       cpu: "instrumented simulation sections; rendering and audio work may occur outside them",
       scene: "GamePage render start to layout effect and request-to-commit; includes reconciliation/scheduling, excludes browser paint/GPU",
+      pacing: "Observed existing request thresholds and capped simulation delta; RAF callbacks and scene commits are not presented FPS",
+      preparation: "Cumulative synchronous source/material work and asynchronous encode/decode elapsed waits; waits are not CPU time",
+      diagnosticWork: "Completed persistence costs before this snapshot, including serialization/storage; the write of this snapshot is not included",
       longTasks: "zero counts are meaningful only when longTasksSupported is true",
       runtime: "DOM/animation/cache/audio counters sampled at most once per 2 seconds; runtimeAgeMs indicates age, runtimeSampleMs measures that diagnostic work",
       boss: "model/texture/first Canvas-call milestones; first draw means drawing routine returned, not GPU presentation",
@@ -178,9 +212,10 @@ export function createPerformanceProbe(options: Options = {}) {
   const persist = (force = false) => {
     const time = now();
     if (!force && time - lastPersist < 10_000) return;
+    if (force && options.environment === 'owner-admin' && !finished && time - lastPersist < 2_000) return;
     lastPersist = time;
     const trace = exportTrace();
-    if (typeof window !== "undefined")
+    if (options.publishGlobal !== false && typeof window !== "undefined")
       (window as Window & { __cryptoidLatestTrace?: unknown }).__cryptoidLatestTrace = trace;
     try {
       if (options.persist) {
@@ -198,9 +233,13 @@ export function createPerformanceProbe(options: Options = {}) {
         persistence = "memory-only";
       }
     }
-    if (typeof window !== "undefined")
+    if (options.publishGlobal !== false && typeof window !== "undefined")
       (window as Window & { __cryptoidLatestTrace?: unknown }).__cryptoidLatestTrace = exportTrace();
     try { options.backup?.(exportTrace()); } catch { /* Backup cannot interrupt play. */ }
+    const elapsed = Math.max(0, now() - time);
+    diagnosticWork.completedWrites++;
+    diagnosticWork.persistTotalMs += elapsed;
+    diagnosticWork.persistMaxMs = Math.max(diagnosticWork.persistMaxMs, elapsed);
   };
   const flush = (at: number) => {
     if (!context || !frames) return;
@@ -235,6 +274,7 @@ export function createPerformanceProbe(options: Options = {}) {
         sceneRequests, sceneCommits,
         sceneCommitWaitP95Ms: percentile(sceneCommitWaits, 0.95),
         sceneRenderToCommitP95Ms: percentile(sceneRenderTimes, 0.95),
+        pacing,
       },
       PERFORMANCE_SAMPLE_LIMIT
     );
@@ -245,12 +285,16 @@ export function createPerformanceProbe(options: Options = {}) {
     frames = volleys = capBlocked = longTasks = longTaskMaxMs = 0;
     sceneRequests = sceneCommits = 0;
     sceneCommitWaits = []; sceneRenderTimes = [];
+    pacing = emptyPacing();
     windowStart = at;
     persist();
   };
   return {
     begin(at: number, next: ProbeContext) {
       if (finished) return;
+      if (captureStartedAt !== undefined && options.maxDurationMs !== undefined && now() - captureStartedAt >= options.maxDurationMs) {
+        this.finish(); return;
+      }
       if (next.status !== "playing") {
         this.suspend(at);
         const changed = context?.status !== next.status;
@@ -258,6 +302,7 @@ export function createPerformanceProbe(options: Options = {}) {
         if (changed) { event("status-change", at); persist(true); }
         return;
       }
+      if (captureStartedAt === undefined) { captureStartedAt = now(); options.onStart?.(); }
       if (context && context.status !== next.status) {
         context = next; event("status-change", at); persist(true);
       }
@@ -302,6 +347,7 @@ export function createPerformanceProbe(options: Options = {}) {
       if (at - windowStart >= 2_000) flush(at);
     },
     volley(at: number, blocked: boolean) {
+      if (finished) return;
       if (blocked) {
         capBlocked++;
         return;
@@ -322,6 +368,23 @@ export function createPerformanceProbe(options: Options = {}) {
       pendingSceneAt ??= now();
     },
     sceneRenderBegin() { return finished ? undefined : now(); },
+    simulationStep(frameGap: number, delta: number) {
+      if (finished || !frameStart) return;
+      pacing.frames++;
+      pacing.wallMs += Math.max(0, frameGap);
+      pacing.simulatedMs += Math.max(0, delta);
+      pacing.discardedMs += Math.max(0, frameGap - delta);
+    },
+    pacing(value: Pacing) {
+      if (finished || !frameStart) return;
+      pacing.decisionFrames++;
+      if (value.paintInterval === 16) pacing.interval16++;
+      if (value.paintInterval === 32) pacing.interval32++;
+      if (value.paintInterval === 50) pacing.interval50++;
+      pacing.slowFramesMax = Math.max(pacing.slowFramesMax, value.slowFrames);
+      if (!value.requested) pacing.skippedRequests++;
+      if (value.requested && value.forced) pacing.forcedRequests++;
+    },
     sceneCommitted(started: number | undefined) {
       if (finished || started === undefined) return;
       const at = now(); sceneCommits++;
@@ -330,6 +393,7 @@ export function createPerformanceProbe(options: Options = {}) {
       pendingSceneAt = undefined;
     },
     hit(source: "boss-hull" | "enemy-hull" | "projectile") {
+      if (finished) return;
       event("damage-" + source, now());
       persist(true);
     },
@@ -355,10 +419,12 @@ export function createPerformanceProbe(options: Options = {}) {
         | "boss-victory-start",
       error?: unknown
     ) {
+      if (finished) return;
       event(kind, now(), errorSite(error));
       persist(true);
     },
     suspend(at: number) {
+      if (finished) return;
       flush(at);
       previousFrame = frameStart = lastVolley = 0;
       signature = "";
@@ -369,6 +435,8 @@ export function createPerformanceProbe(options: Options = {}) {
       this.suspend(now());
       this.lifecycle("unmount");
       finished = true;
+      persist(true);
+      options.onFinish?.(captureStartedAt !== undefined);
     },
     export: exportTrace,
   };

@@ -1,5 +1,20 @@
 # Preserve the officially approved game
 
+## Remaining iPhone slowdown investigation, 20 October 2026, preparation only
+
+The continuation explicitly forbids new Testnet/Mainnet deployments. Fresh reads
+confirm official Testnet remains 51e59c3 / dpl_BvFoZifj5ZFqEqCTEBixwfoUPpcH;
+the fixed release and a889d22 rollback branches must not move. The audit branch
+has the same runtime plus reviewable preparation: skip an unnecessary 240x240
+readback surface when a reloaded source URL already has its visual center; add
+a one-shot, server-owner-gated 90-second timing capture armed/exported only in
+the existing Admin report. No URL flag, public overlay, new game scheduler or
+automatic ordinary-player collection. Preserve 32/50-ms request thresholds,
+34-ms simulation cap, artwork, audio and all combat/account behavior. Keep
+automatic deployment disabled on this branch. The owner chose the latest exit;
+that run is not another unexpected crash. See
+docs/iphone-timing-investigation-20261020.md for results and measurement limits.
+
 ## Completed Testnet image-lifetime release, 20 October 2026
 
 The approved sequence below is complete. Official Testnet is READY production

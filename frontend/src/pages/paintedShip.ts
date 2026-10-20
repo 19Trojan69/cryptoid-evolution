@@ -5,7 +5,7 @@ import { shipVisualCenter } from "./shipVisualCenter";
 import { namedShipAccent } from './shipIdentityColor';
 import { paintShipMaterial } from './shipMaterial';
 import { ResourceCache } from './resourceCache';
-import { developerProbeEnabled as isCombatProbeEnabled } from './performanceDiagnostics';
+import { resourceTimingEnabled as isCombatProbeEnabled } from './performanceDiagnostics';
 
 const cache = new ResourceCache<string>(48, 24 * 1024 * 1024, url => URL.revokeObjectURL(url));
 const pendingPaints = new Map<string, Promise<string>>();
@@ -33,15 +33,19 @@ const shipImage = (url: string) => {
         const sourceStarted = timed ? performance.now() : 0;
         let canvas: HTMLCanvasElement | undefined;
         try {
-          canvas = document.createElement("canvas");
-          canvas.width = canvas.height = 240;
-          const context = canvas.getContext("2d", { willReadFrequently: true });
-          try {
-            if (context && !visualCenters.has(url)) {
-              context.drawImage(image, 0, 0, 240, 240);
-              visualCenters.set(url, shipVisualCenter(context.getImageData(0, 0, 240, 240).data, 240, 240));
-            }
-          } catch { /* Preserve the optional visual offset fallback for a tainted image. */ }
+          // The center belongs to the source URL, not its evictable Image.
+          // An already known center needs no second readback surface.
+          if (!visualCenters.has(url)) {
+            canvas = document.createElement("canvas");
+            canvas.width = canvas.height = 240;
+            const context = canvas.getContext("2d", { willReadFrequently: true });
+            try {
+              if (context) {
+                context.drawImage(image, 0, 0, 240, 240);
+                visualCenters.set(url, shipVisualCenter(context.getImageData(0, 0, 240, 240).data, 240, 240));
+              }
+            } catch { /* Preserve the optional visual offset fallback for a tainted image. */ }
+          }
           resolve(image);
         } catch (error) { reject(error); }
         finally { if (canvas) canvas.width = canvas.height = 0; if (timed) { const work = performance.now() - sourceStarted; preparationProbe.sourceWorkTotalMs += work; preparationProbe.sourceWorkMaxMs = Math.max(preparationProbe.sourceWorkMaxMs, work); } }

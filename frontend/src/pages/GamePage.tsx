@@ -33,6 +33,7 @@ import { startGuardedGameLoop, type GameInterruption } from './gameLoop';
 import { recordGameDiagnostic, createGameSessionDiagnostics } from './gameDiagnostics';
 import { createReloadGameMonitor, createResourceTrendMonitor, installReloadDiagnostics, recordReloadEvent, recordReloadSnapshot } from './reloadDiagnostics';
 import { browserProbeRuntime, createPerformanceProbe, developerProbeEnabled } from './performanceDiagnostics';
+import { createOwnerTimingCapture } from './ownerTimingCapture';
 import { renderWorkStats } from './renderWork';
 import GameSceneBoundary from './GameSceneBoundary';
 import { advanceShipMotion, idleShipMotion, engineFlamePercent, explosionDiameter, fragmentFlight, hullIllumination, type ShipMotion } from "./shipRealism";
@@ -681,15 +682,18 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   useEffect(() => {
     const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
     let longTasksSupported = false;
-    const probe = developerProbeEnabled() ? createPerformanceProbe({
-      backup: trace => (window as Window & { __cryptoidTraceSink?: (trace: unknown) => void }).__cryptoidTraceSink?.(trace),
-      runtime: () => ({
+    const runtime = () => ({
       ...browserProbeRuntime(), ...paintedShipResourceStats(), ...renderWorkStats(), audioVoices: soundRef.current?.activeVoiceCount ?? 0,
       audioBufferBytes: soundRef.current?.diagnosticBufferBytes ?? 0,
       longTasksSupported,
       knownTimers: 1 + Number(gameOverTimerRef.current !== null) + Number(reloadNoticeTimerRef.current !== null),
       knownListeners: ownerDiagnostics ? 15 : 5,
-    }) }) : null;
+    });
+    const developer = developerProbeEnabled();
+    const probe = developer ? createPerformanceProbe({
+      backup: trace => (window as Window & { __cryptoidTraceSink?: (trace: unknown) => void }).__cryptoidTraceSink?.(trace),
+      runtime }) : createOwnerTimingCapture(ownerDiagnostics, () => window, { runtime, build: __CRYPTOID_BUILD__,
+        onFinish: () => { if (performanceProbeRef.current === probe) performanceProbeRef.current = null; stopBossObservation?.(); } });
     performanceProbeRef.current = probe;
     const stopBossObservation = probe ? observeBossResources((kind, details) => {
       const state = stateRef.current;
@@ -697,10 +701,10 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     }) : undefined;
     const probeHost = window as Window & { __cryptoidDiagnostics?: { export: () => unknown } };
     const previousProbe = probeHost.__cryptoidDiagnostics;
-    const probeApi = probe ? { export: probe.export } : undefined;
+    const probeApi = developer && probe ? { export: probe.export } : undefined;
     if (probeApi) probeHost.__cryptoidDiagnostics = probeApi;
     let observer: PerformanceObserver | undefined;
-    if (probe && typeof PerformanceObserver !== 'undefined' && PerformanceObserver.supportedEntryTypes?.includes('longtask')) {
+    if (developer && probe && typeof PerformanceObserver !== 'undefined' && PerformanceObserver.supportedEntryTypes?.includes('longtask')) {
       try { observer = new PerformanceObserver(list => { for (const entry of list.getEntries()) probe.longTask(entry.duration); }); observer.observe({ type: 'longtask', buffered: false }); longTasksSupported = true; }
       catch { observer?.disconnect(); } // Long Tasks is absent in WebKit.
     }
@@ -712,7 +716,10 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     const bossBoundary = ownerDiagnostics ? createBossBoundaryDiagnostics(recordOwnerResourceSnapshot) : null;
     bossBoundaryRef.current = bossBoundary;
     reloadDiagnosticsRef.current = reloadMonitor;
-    const update = () => monitor.update(diagnosticContext(), stateRef.current.status === 'playing', document.hidden, true);
+    const update = () => {
+      if (document.hidden) probe?.suspend(performance.now());
+      monitor.update(diagnosticContext(), stateRef.current.status === 'playing', document.hidden, true);
+    };
     const hidden = () => { probe?.lifecycle('pagehide'); probe?.suspend(performance.now()); monitor.pagehide(); update(); };
     const shown = () => { probe?.lifecycle('pageshow'); monitor.pageshow(); update(); };
     const onError = (event: ErrorEvent) => {
@@ -1318,6 +1325,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         }
       }
       if (state.status === "playing") {
+        performanceProbeRef.current?.simulationStep(frameGap, delta);
         if(bossLifeRemainingRef.current>0){
           bossLifeRemainingRef.current=Math.max(0,bossLifeRemainingRef.current-delta);
           if(bossLifeRemainingRef.current===0)setExtraLifeVisible(false);
@@ -1455,6 +1463,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
               state.status = "victory";
               state.enemyShots = [];
               state.shots = [];
+              performanceProbeRef.current?.sceneRequested();
               setGame({ ...state });
               return;
             }
@@ -1512,6 +1521,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
               if (state.encounter === 'bonus') recordOwnerResourceSnapshot('resource-bonus-start');
               else if (state.encounter === 'normal') recordOwnerResourceSnapshot('resource-normal-start');
             }
+            performanceProbeRef.current?.sceneRequested();
             setGame({ ...state });
             return;
           }
@@ -1973,6 +1983,9 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
           ? Math.min(12, slowFramesRef.current + 2)
           : Math.max(0, slowFramesRef.current - 1);
         const paintInterval = width > 700 ? 16 : slowFramesRef.current >= 6 ? 50 : 32;
+        performanceProbeRef.current?.pacing({ frameGap, delta, slowFrames: slowFramesRef.current, paintInterval,
+          requested: !!(damageTaken || time - lastPaintRef.current >= paintInterval || state.phase !== previousPhase || state.status !== "playing"),
+          forced: !!(damageTaken || state.phase !== previousPhase || state.status !== "playing") });
         if (damageTaken || time - lastPaintRef.current >= paintInterval || state.phase !== previousPhase || state.status !== "playing") {
           lastPaintRef.current = time;
           performanceProbeRef.current?.sceneRequested();
@@ -1986,6 +1999,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
       // Preserve the official single-step timing and mobile paint behavior.
       const probe = performanceProbeRef.current;
       probe?.begin(time, { sector: stateRef.current.sector, flight: flightRef.current, phase: stateRef.current.phase,
+        width: fieldSizeRef.current.width, height: fieldSizeRef.current.height,
         encounter: stateRef.current.encounter, status: stateRef.current.status, enemies: stateRef.current.asteroids.length,
         attackers: stateRef.current.asteroids.filter(a => a.attackPattern !== null && a.attackDelay === 0 && a.returnElapsed === 0).length,
         returning: stateRef.current.asteroids.filter(a => a.returnElapsed > 0).length,
