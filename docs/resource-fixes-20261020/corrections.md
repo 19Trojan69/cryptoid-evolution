@@ -72,6 +72,11 @@ physische iPhone-/WebKit-/GPU-/Prozessspeichermenge und beweisen weiterhin nicht
 die Ursache des Whitescreens. Erfolgreiche Bilder sind pixelgleich; Spielregeln,
 HUD, Sounds, Konten, Käufe, Spielstände und Ranglisten wurden nicht geändert.
 
-Veröffentlichung erfolgt im bestehenden offiziellen Testnet mit `b15306f` /
-`dpl_4ckqHNmsXh7NnQiYK79aHcsYeAZK` als unmittelbarer Rückfallversion.
-Der endgültige Bereitstellungsnachweis wird in `release.json` dokumentiert.
+Die Veröffentlichung im bestehenden offiziellen Testnet ist um 13:25:37.836
+Europe/Vienna abgeschlossen: `23b9f83` /
+`dpl_whZtejzMwRDZEDs71ohk3GGDaWHn`, Status READY. `b15306f` /
+`dpl_4ckqHNmsXh7NnQiYK79aHcsYeAZK` bleibt als unmittelbare Rückfallversion
+gesichert. API, alle drei Highscore-Antworten und Originalgrafik sind unverändert
+geprüft; Mainnet bleibt unverändert. Elf neue Server-Anfragen enthalten keine
+Warnungs-/Fehler-/Fatal-Protokolle. Details und ausgelieferte Versionskennung
+stehen in `release.json`, der sichtbare Nachweis in `testnet-ready.jpg`.

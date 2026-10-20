@@ -1,6 +1,21 @@
 # Preserve the officially approved game
 
-## Approved correction of all five resource findings, 20 October 2026
+## Completed correction/release of all five resource findings, 20 October 2026
+
+Publication is complete: official Testnet READY production
+dpl_whZtejzMwRDZEDs71ohk3GGDaWHn, exact runtime
+23b9f83f2639ba836eea0e94e45ba310c9ab97d0, tree
+fd7acbdf411984cb6005351c719480a014ed0e29, ready 13:25:37.836 Vienna.
+Keep codex/testnet-five-resource-fixes-release-20261020 fixed at that source.
+Immediate rollback: backup/testnet-before-five-resource-fixes-20261020 at
+b15306f / dpl_4ckqHNmsXh7NnQiYK79aHcsYeAZK. Older fixed refs remain fixed.
+All five fixes and exact source/tree are verified in delivered bundles; observed
+build workingTreeDirty is true. API, anonymous Admin denial, all three Highscore
+hashes and artwork match before; Mainnet stays 907d2a7 / its original deployment
+and public entry. A bounded scan of 11 new-deployment requests has zero
+warning/error/fatal records. See docs/resource-fixes-20261020/release.json and
+testnet-ready.jpg. Continue documentation only on the audit branch with automatic
+deployment disabled. Do not request this completed release approval again.
 
 At 13:12 Europe/Vienna the owner requested fixing all five named findings. Correct
 only those resource paths: dispose an uncommitted boss base layer on exceptions;
