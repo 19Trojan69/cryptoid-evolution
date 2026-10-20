@@ -1,5 +1,33 @@
 # Preserve the officially approved game
 
+## Completed global 60 Hz Testnet release, 20 October 2026
+
+The owner's 19:04:04 Europe/Vienna instruction authorized completing the prepared
+global-cap release. Official Testnet is READY dpl_2L5un3yvfZ5YiVYP8DEeHYMZKii1,
+runtime d6419c5946a660173a7b59e5d6edc63e6322ee7a, reviewed tree
+5360d798e8fc301bfcc27a600a0fd0a81c8c261c, ready 19:17:51.804 Vienna (40s).
+Keep codex/testnet-global-60fps-release-20261020 fixed there. Immediate rollback
+is backup/testnet-before-global-60fps-20261020 at 30b8b23 / READY
+dpl_5s1S5thJ7ps83dy4ZXkeiS7JWcGr; preserve every older fixed release/backup.
+Native browser acceptance is now complete in a normally deployed protected HTTPS
+preview, without bypassing the earlier local-file/browser restriction. The initial
+pseudo check needed subtree inspection; dynamically started pseudo animations also
+needed event-target subtree discovery. Both are corrected, with a new regression.
+All ten native checks and 121 targeted code tests pass. Preview-only multi-page
+build input excludes the QA page from production; its official URL serves the
+ordinary app fallback. Delivered source/tree, 60 Hz deadline, CSS/manual clock,
+event/pseudo/portal discovery and cleanup are independently verified after rebuild.
+API, anonymous Admin denial, all three Highscore response hashes and artwork match
+the fresh baseline. Mainnet remains 907d2a7 with identical HTML and entry. A bounded
+ten-request Dashboard scan shows zero warning/error/fatal records. Preview Chrome
+still reports extension metadata errors and Pi SDK messaging timeouts; do not call
+the browser console entirely clean or claim Pi authentication was tested.
+No account, save, payment, security or Mainnet mutation. Continue documentation on
+the audit branch with automatic deployment off; do not deploy later docs commits.
+Physical iPhone heat/presented FPS/Whitescreen cause remain unproved; manual CSS
+sampling has unmeasured main-thread cost and unsupported APIs retain native fallback.
+See docs/global-60fps-release-20261020/release.json and testnet-ready.jpg.
+
 ## Global 60 Hz preparation requested 20 October 2026, 18:44:07 Vienna
 
 The owner explicitly expanded the previous effect-only cap to the whole game.
