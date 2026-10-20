@@ -1,0 +1,266 @@
+{
+  "version": 1,
+  "scope": "Existing official Testnet only",
+  "authorization": "Owner approved publishing the two prepared corrections, then auditing further resource defects and naming them before fixes, 20 October 2026 at 12:55 Europe/Vienna.",
+  "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+  "project": "cryptoid-evolution-testnet",
+  "source": "b15306f2d22d2196275091c904d068829879efc7",
+  "reviewedTree": "9d39cd64724ac92b17a805cdc321e52ad43de638",
+  "fixedReleaseBranch": "codex/testnet-audio-heat-release-20261020",
+  "production": {
+    "id": "dpl_4ckqHNmsXh7NnQiYK79aHcsYeAZK",
+    "url": "cryptoid-evolution-testnet-k1f3byp69-19-trojan69.vercel.app",
+    "state": "READY",
+    "target": "production",
+    "source": "b15306f2d22d2196275091c904d068829879efc7",
+    "alias": [
+      "cryptoid-evolution-testnet.vercel.app",
+      "cryptoid-evolution-testnet-19-trojan69.vercel.app",
+      "cryptoid-evolution-testnet-git-codex-iphone-20e099-19-trojan69.vercel.app"
+    ],
+    "buildingAt": 1792494114605,
+    "ready": 1792494155446
+  },
+  "preview": {
+    "id": "dpl_9jiGXCqyg9MXCD8fQhVTWyByMo4B",
+    "url": "cryptoid-evolution-testnet-8j1nq4v2a-19-trojan69.vercel.app",
+    "state": "READY",
+    "target": null,
+    "source": "b15306f2d22d2196275091c904d068829879efc7",
+    "alias": [
+      "cryptoid-evolution-testnet-git-codex-iphone-20e099-19-trojan69.vercel.app"
+    ],
+    "buildingAt": 1792494029209,
+    "ready": 1792494068817
+  },
+  "readyAtUTC": "2026-10-20T11:02:35.446Z",
+  "officialAlias": "https://cryptoid-evolution-testnet.vercel.app/",
+  "piEntry": "https://cryptoidevo3025.pinet.com/",
+  "method": "Existing signed-in Vercel Dashboard: exact-SHA Preview, followed by production rebuild of the same SHA. MCP get_deployment without team succeeds; scoped project/log tools return 404/403. Existing authorized Dashboard fallback used; no credentials or protection settings changed.",
+  "rollback": {
+    "branch": "backup/testnet-before-audio-heat-fixes-20261020",
+    "source": "613b3c7ebaf235d75aab4fdc33eb58897e111e2f",
+    "deployment": "dpl_9SDKyLLDyvoT4Ni3yyzr6ojA8xxK"
+  },
+  "mainnet": {
+    "id": "dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe",
+    "url": "cryptoid-evolution-4nc1k8cmc-19-trojan69.vercel.app",
+    "state": "READY",
+    "target": "production",
+    "source": "907d2a7363345d00f0f90c54402bf04e887b64d9",
+    "alias": [
+      "cryptoid-evolution.vercel.app",
+      "cryptoid-evolution-19-trojan69.vercel.app",
+      "cryptoid-evolution-git-main-19-trojan69.vercel.app"
+    ],
+    "buildingAt": 1791724671120,
+    "ready": 1791724711543,
+    "publicEntryAndHTMLHashUnchanged": true
+  },
+  "patches": [
+    "Prime Admin music/card audio synchronously before the existing async launch and retire unclaimed music.",
+    "Release failed boss heat tiles; false result on null context; balance main Canvas save/restore through finally."
+  ],
+  "proof": "testnet-ready.jpg",
+  "checks": {
+    "before": {
+      "at": "2026-10-20T10:59:02.802218+00:00",
+      "results": [
+        {
+          "path": "/",
+          "status": 200,
+          "sha256": "540a2bdb958b7a464d3b177734dedbb05a2d01e898f9b46c9287da75bcba60dd",
+          "bytes": 1465
+        },
+        {
+          "path": "/api",
+          "status": 200,
+          "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a",
+          "bytes": 27
+        },
+        {
+          "path": "/api/admin/status",
+          "status": 401,
+          "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771",
+          "bytes": 29
+        },
+        {
+          "path": "/api/leaderboard/top?rules=1",
+          "status": 200,
+          "sha256": "9cbe90a3686312972b4a117e300a2bc2e15ce07a8eebd15b51f12d81181451ad",
+          "bytes": 7440
+        },
+        {
+          "path": "/api/leaderboard/top?rules=2",
+          "status": 200,
+          "sha256": "3024b06040e8082bce5d1897392d770de54d0821aadb05ad9a1f1f2eb4e2f0a9",
+          "bytes": 9733
+        },
+        {
+          "path": "/api/leaderboard/top?sort=career",
+          "status": 200,
+          "sha256": "627c09cc866ac0373173c888541907057d3fb086a25288bd979f8a51bb92a86d",
+          "bytes": 1505
+        },
+        {
+          "path": "/ships/bosses/evolved/boss-07-guns.webp",
+          "status": 200,
+          "sha256": "a3ea823eec9b0cc7dd6d2de43c73f07fa2f17b80c7cfaa3ff7ec90ecc4ea2585",
+          "bytes": 121298
+        }
+      ],
+      "entry": {
+        "path": "/assets/index-N-bYkJCy.js",
+        "status": 200,
+        "sha256": "85fed632e597929144c3600444ecc329709316997daf5109ceadaab6bd23a0df",
+        "bytes": 1896253
+      },
+      "mainnetHTMLsha256": "6d2e52983bfe9100d77130335528435c8d5f5f8a2c34011388714eac3099791c",
+      "mainnetEntry": [
+        "/assets/index-DB9vrZWh.js"
+      ]
+    },
+    "after": {
+      "at": "2026-10-20T11:02:51.853936+00:00",
+      "results": [
+        {
+          "path": "/",
+          "status": 200,
+          "sha256": "a6ba7805656204bfdc1acb38613ea3286284f925be3733d9fb1b55f556e248cd",
+          "bytes": 1465
+        },
+        {
+          "path": "/api",
+          "status": 200,
+          "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a",
+          "bytes": 27,
+          "matchesBefore": true
+        },
+        {
+          "path": "/api/admin/status",
+          "status": 401,
+          "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771",
+          "bytes": 29,
+          "matchesBefore": true
+        },
+        {
+          "path": "/api/leaderboard/top?rules=1",
+          "status": 200,
+          "sha256": "9cbe90a3686312972b4a117e300a2bc2e15ce07a8eebd15b51f12d81181451ad",
+          "bytes": 7440,
+          "matchesBefore": true
+        },
+        {
+          "path": "/api/leaderboard/top?rules=2",
+          "status": 200,
+          "sha256": "3024b06040e8082bce5d1897392d770de54d0821aadb05ad9a1f1f2eb4e2f0a9",
+          "bytes": 9733,
+          "matchesBefore": true
+        },
+        {
+          "path": "/api/leaderboard/top?sort=career",
+          "status": 200,
+          "sha256": "627c09cc866ac0373173c888541907057d3fb086a25288bd979f8a51bb92a86d",
+          "bytes": 1505,
+          "matchesBefore": true
+        },
+        {
+          "path": "/ships/bosses/evolved/boss-07-guns.webp",
+          "status": 200,
+          "sha256": "a3ea823eec9b0cc7dd6d2de43c73f07fa2f17b80c7cfaa3ff7ec90ecc4ea2585",
+          "bytes": 121298,
+          "matchesBefore": true
+        }
+      ],
+      "entry": {
+        "path": "/assets/index-DvrzZAyR.js",
+        "status": 200,
+        "sha256": "ed0adf9f3f6d9b997a8e939cb075af276f8ebe906621a2648fb2214300a6325b",
+        "bytes": 1896253
+      },
+      "mainnetHTMLsha256": "6d2e52983bfe9100d77130335528435c8d5f5f8a2c34011388714eac3099791c",
+      "mainnetEntry": [
+        "/assets/index-DB9vrZWh.js"
+      ]
+    },
+    "bundles": {
+      "assets": [
+        {
+          "path": "/assets/index-DvrzZAyR.js",
+          "status": 200,
+          "sha256": "ed0adf9f3f6d9b997a8e939cb075af276f8ebe906621a2648fb2214300a6325b",
+          "bytes": 1896253
+        },
+        {
+          "path": "/assets/AdminPage-DB8HrsCd.js",
+          "status": 200,
+          "sha256": "10676dd80e78863d7c81512ed60dcc7fee7b548acfd654636449a1b16110c41d",
+          "bytes": 44118
+        },
+        {
+          "path": "/assets/GamePage-B-AvD-H9.js",
+          "status": 200,
+          "sha256": "a94461bbe73f36bf8ed030a5bec9c13d41d2b3869a1775718c6f478aa2654ba7",
+          "bytes": 233407
+        },
+        {
+          "path": "/assets/ownerTimingCapture-dNG1xWOU.js",
+          "status": 200,
+          "sha256": "99dd6155f0d80afb82cdac9916de3f5d56435f383963f0b25d680de1f28da759",
+          "bytes": 1205
+        },
+        {
+          "path": "/assets/performanceDiagnostics-BAULXd2M.js",
+          "status": 200,
+          "sha256": "0c815b13b9d0cace5b9fe81731f14d5514f9d011db9fd593b53106b7cfe9b0a7",
+          "bytes": 58288
+        },
+        {
+          "path": "/assets/shipEvolution-CfcqEVz2.js",
+          "status": 200,
+          "sha256": "3532f109768b9be2ff776f8f032671cfca4df458810d4764581d60d2bd42dcfe",
+          "bytes": 233234
+        }
+      ],
+      "buildIdentities": [
+        [
+          "b15306f2d22d2196275091c904d068829879efc7",
+          "9d39cd64724ac92b17a805cdc321e52ad43de638",
+          "!0"
+        ]
+      ],
+      "newSource": true,
+      "newTree": true,
+      "hasPrimeMethod": true,
+      "failureZeroPattern": true,
+      "failedHeatTileCleanupVerified": true,
+      "adminGesturePrimingBeforeRequestVerified": true,
+      "silentMusicPrimeAndIdentityGuardedCancellationVerified": true,
+      "mainCanvasStateRestoredOnFailureVerified": true
+    },
+    "boundedRuntimeScan": {
+      "source": "Vercel Dashboard request logs filtered to the new deployment only",
+      "requestRecords": 10,
+      "fromUTC": "2026-10-20T11:02:37.380Z",
+      "throughUTC": "2026-10-20T11:02:50.156Z",
+      "warning": 0,
+      "error": 0,
+      "fatal": 0
+    }
+  },
+  "buildIdentity": {
+    "sourceCommit": "b15306f2d22d2196275091c904d068829879efc7",
+    "sourceTree": "9d39cd64724ac92b17a805cdc321e52ad43de638",
+    "workingTreeDirty": true
+  },
+  "priorValidation": {
+    "adminLaunchTests": 6,
+    "targetedAudioChecks": 80,
+    "targetedHeatAndGameplayChecks": 62,
+    "exactBossPixelComparisons": 1650,
+    "frontendReleaseBuild": "passed; existing chunk-size warning",
+    "backendFullBuild": "not performed; backend-local tsc absent; unchanged test fixture modules transpiled with frontend TypeScript"
+  },
+  "additionalResourceAudit": "additional-resource-audit.json; demonstration only, no further runtime fixes.",
+  "limits": "Controlled-host and native CPU checks plus delivered-source identity. No physical iPhone, audible output, native/GPU/process-memory or Whitescreen-cause proof. Highscore/API checks read-only. No account/save/purchase/reward/security mutation. Additional audit findings remain unfixed."
+}

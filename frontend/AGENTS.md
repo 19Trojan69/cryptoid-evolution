@@ -1,5 +1,37 @@
 # Preserve the officially approved game
 
+## Completed audio/heat Testnet release and further resource audit, 20 October 2026
+
+The owner's 12:55 Europe/Vienna instruction explicitly authorized publishing the
+two prepared corrections, then investigating and naming further resource defects
+before fixing them. Publication is complete: official Testnet READY production
+dpl_4ckqHNmsXh7NnQiYK79aHcsYeAZK, runtime b15306f2d22d2196275091c904d068829879efc7,
+tree 9d39cd64724ac92b17a805cdc321e52ad43de638, ready 13:02:35.446 Vienna.
+Keep codex/testnet-audio-heat-release-20261020 fixed at that exact source.
+Immediate rollback is backup/testnet-before-audio-heat-fixes-20261020 at 613b3c7,
+READY dpl_9SDKyLLDyvoT4Ni3yyzr6ojA8xxK. All older fixed refs stay fixed.
+Delivered identity, Admin synchronous silent priming/cancellation and heat-tile
+failure cleanup are verified. Build workingTreeDirty is observed true. API,
+anonymous Admin denial, three Highscore hashes and artwork hash match before;
+Mainnet remains 907d2a7 / dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe. A bounded scan of
+10 request records on the new deployment has zero warning/error/fatal records.
+No physical iPhone/audio/process-memory or Whitescreen-cause proof is claimed.
+
+The subsequent read-only source/controlled-host audit demonstrates five further
+areas: failed boss base-layer exceptions lack explicit release; BonusRock texture
+null contexts throw, including from uncaught timer prewarm; boss-card temporary
+layers/failure paths lack full disposal and ignore an unavailable weapon draw;
+ship-card failure paths lack temporary-surface cleanup; pending boss texture loads
+can be duplicated after two-entry cache eviction. Do not silently implement these
+new findings: the owner requested naming them first. No new runtime change has
+been made. GC may reclaim unreferenced surfaces; these are not permanent-leak or
+device-crash proofs. Prioritize the two in-game failure paths over card helpers.
+See docs/testnet-audio-heat-release-20261020/{release.json,resource-findings.md,
+additional-resource-audit.json,testnet-ready.jpg} and
+frontend/scripts/auditAdditionalResourceFailures.mjs. Continue audit documentation
+on this branch with automatic deployment disabled. Do not ask again for the
+completed two-patch release authorization; Mainnet/accounts/saves stay excluded.
+
 ## Boss heat-canvas failure cleanup, 20 October 2026, preparation only
 
 The owner requested continuing the abort investigation at 12:39 Vienna. Inspection

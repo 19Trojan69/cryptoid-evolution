@@ -1,0 +1,169 @@
+{
+  "sourceCommit": "b15306f2d22d2196275091c904d068829879efc7",
+  "runtimeFilesModified": false,
+  "demonstratedExistingPaths": {
+    "base-context-throws": {
+      "failedBaseSurfacesNotExplicitlyReleasedAfterDispose": 1,
+      "nominalRGBABytes": 2880000
+    },
+    "base-draw-throws": {
+      "failedBaseSurfacesNotExplicitlyReleasedAfterDispose": 1,
+      "nominalRGBABytes": 2880000
+    },
+    "boss-artwork-healthy": {
+      "temporarySurfacesNotExplicitlyReleased": [
+        {
+          "index": 2,
+          "width": 256,
+          "height": 160
+        }
+      ],
+      "returnsArtworkDespiteUnavailableWeapons": false
+    },
+    "boss-artwork-boss-combined-null": {
+      "failedSurfacesNotExplicitlyReleased": [
+        {
+          "index": 1,
+          "width": 256,
+          "height": 160
+        },
+        {
+          "index": 2,
+          "width": 256,
+          "height": 160
+        },
+        {
+          "index": 3,
+          "width": 256,
+          "height": 160
+        }
+      ]
+    },
+    "boss-artwork-boss-output-null": {
+      "failedSurfacesNotExplicitlyReleased": [
+        {
+          "index": 1,
+          "width": 256,
+          "height": 160
+        },
+        {
+          "index": 2,
+          "width": 256,
+          "height": 160
+        },
+        {
+          "index": 3,
+          "width": 256,
+          "height": 160
+        },
+        {
+          "index": 4,
+          "width": 274,
+          "height": 178
+        }
+      ]
+    },
+    "boss-artwork-readback-throws": {
+      "failedSurfacesNotExplicitlyReleased": [
+        {
+          "index": 1,
+          "width": 256,
+          "height": 160
+        },
+        {
+          "index": 2,
+          "width": 256,
+          "height": 160
+        },
+        {
+          "index": 3,
+          "width": 256,
+          "height": 160
+        }
+      ]
+    },
+    "boss-artwork-empty": {
+      "failedSurfacesNotExplicitlyReleased": [
+        {
+          "index": 1,
+          "width": 256,
+          "height": 160
+        },
+        {
+          "index": 2,
+          "width": 256,
+          "height": 160
+        },
+        {
+          "index": 3,
+          "width": 256,
+          "height": 160
+        }
+      ]
+    },
+    "boss-artwork-boss-guns-null": {
+      "temporarySurfacesNotExplicitlyReleased": [],
+      "returnsArtworkDespiteUnavailableWeapons": true
+    },
+    "ship-artwork-healthy": {
+      "outputRetainedAsExpected": true
+    },
+    "ship-artwork-ship-source-null": {
+      "failedSurfacesNotExplicitlyReleased": [
+        {
+          "index": 1,
+          "width": 64,
+          "height": 96
+        }
+      ]
+    },
+    "ship-artwork-ship-output-null": {
+      "failedSurfacesNotExplicitlyReleased": [
+        {
+          "index": 1,
+          "width": 64,
+          "height": 96
+        },
+        {
+          "index": 2,
+          "width": 72,
+          "height": 104
+        }
+      ]
+    },
+    "ship-artwork-readback-throws": {
+      "failedSurfacesNotExplicitlyReleased": [
+        {
+          "index": 1,
+          "width": 64,
+          "height": 96
+        }
+      ]
+    },
+    "ship-artwork-empty": {
+      "failedSurfacesNotExplicitlyReleased": [
+        {
+          "index": 1,
+          "width": 64,
+          "height": 96
+        }
+      ]
+    },
+    "pendingBossTextures": {
+      "uniqueURLs": 3,
+      "imageObjects": 4,
+      "samePendingRequestShared": false
+    },
+    "bonusRockNullContext": {
+      "throwsInsteadOfReportingUnavailable": true,
+      "failedSurfaceNotExplicitlyReleased": {
+        "index": 1,
+        "width": 192,
+        "height": 192
+      },
+      "nominalRGBABytes": 147456,
+      "caller": "Also called by the uncaught setTimeout prewarm callback in BonusRockLayer."
+    }
+  },
+  "limits": "Actual source in a controlled Canvas/Image host. Surfaces are deliberately tracked to inspect explicit cleanup; a browser may reclaim them via GC. No observed iPhone allocation denial, permanent leak, native/GPU/process-memory or Whitescreen-cause proof. Duplicate Image objects need not cause duplicate network transfers due to browser caching."
+}
