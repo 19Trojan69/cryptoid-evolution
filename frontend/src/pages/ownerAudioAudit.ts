@@ -237,7 +237,7 @@ export function createOwnerAudioAudit(
       const total = (suffix: string) =>
         ["effects", "music", "card"].reduce((sum, kind) => sum + (recorder.counts[`${kind}-close-${suffix}`] ?? 0), 0);
       row.offCleanupFailed = total("failed") > 0;
-      row.offCleanupComplete = total("request") === total("ok") && !row.offCleanupFailed;
+      row.offCleanupComplete = startedClock !== undefined && total("request") === total("ok") && !row.offCleanupFailed;
     }
     const before = samples.at(-1);
     for (const key of ["effectsClock", "musicClock", "musicMedia", "cardClock"]) {

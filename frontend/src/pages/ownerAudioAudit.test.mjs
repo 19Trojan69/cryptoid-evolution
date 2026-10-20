@@ -167,6 +167,7 @@ test("90 seconds finishes only the recording; off remains selected until route c
   const f = fixture("off"),
     audit = f.create(() => ({ musicState: "none", effectsState: "none" }));
   try {
+    assert.equal(audit.export().samples[0].offCleanupComplete, false, "startup baseline precedes retirement acknowledgements");
     assert.equal(ownerAudioDisabled(), true);
     assert.equal(f.create(), null);
     audit.tick(playing, 16);
