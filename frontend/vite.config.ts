@@ -19,6 +19,14 @@ export default defineConfig(({ mode }) => {
   return {
     define: { __CRYPTOID_RELEASE__: JSON.stringify(`${version} · ${commit.slice(0, 8)}`),
       __CRYPTOID_BUILD__: JSON.stringify({ sourceCommit: commit, sourceTree, workingTreeDirty }) },
+    // Bundle the native animation acceptance page only in protected previews.
+    // Production keeps the ordinary single-page app and no public QA route.
+    build: env.VERCEL_ENV === "preview" ? {
+      rollupOptions: { input: {
+        app: path.resolve(__dirname, "index.html"),
+        framePacing: path.resolve(__dirname, "scripts/fixtures/frame-pacing.html"),
+      } },
+    } : undefined,
     plugins: [
       react(),
       {
