@@ -1,5 +1,27 @@
 # Preserve the officially approved game
 
+## Completed owner audio Testnet release, 20 October 2026
+
+The user explicitly requested publication at 11:31:50 Europe/Vienna. It is
+complete: official Testnet is READY production dpl_9SDKyLLDyvoT4Ni3yyzr6ojA8xxK,
+runtime 613b3c7ebaf235d75aab4fdc33eb58897e111e2f, reviewed tree
+00080accf510eaed98d0e11480dc94ab3646ff71, released at 11:37:37.703 Vienna.
+Keep codex/testnet-owner-audio-release-20261020 fixed at that exact runtime.
+Immediate rollback: backup/testnet-before-owner-audio-20261020 at 53640c0,
+READY deployment dpl_EKngjGTb8FFBnWE3k9eXF4xsQeZt. Older fixed refs stay fixed.
+The owner-only Original/off controls and audio capture/arm/shutdown fields are
+verified in delivered bundles. Detail sampling ends after 90 seconds; off stays
+until route exit. No sparse extended audio capture was added. Mainnet remains
+907d2a7 / dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe. API, anonymous Admin denial and all
+three public Highscore hashes match the immediate pre-release check. No data,
+save, account, payment or protection change occurred. A bounded new-deployment
+Dashboard scan of 10 requests reports zero warning/error/fatal records. Build
+identity matches exact source/tree; its aggregate workingTreeDirty flag is true.
+No physical iPhone/audio-output or Whitescreen fix is proved. See the release
+receipt and screenshot in docs/iphone-audio-transition-20261020. Continue records
+only on the audit branch with automatic deployment disabled. Do not request
+the same publication approval again; further runtime changes need their own scope.
+
 ## Owner audio diagnosis preparation, 20 October 2026, no publication
 
 The user explicitly approved preparing the owner audio diagnosis and original/off

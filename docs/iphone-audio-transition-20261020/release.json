@@ -1,0 +1,211 @@
+{
+  "version": 1,
+  "scope": "Existing official Testnet only",
+  "authorization": "User explicitly requested publication of the prepared owner-only audio diagnosis on 20 October 2026 at 11:31:50 Europe/Vienna.",
+  "project": "cryptoid-evolution-testnet",
+  "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+  "teamId": "team_KzJmtl0QyoYZAOu5RQKsAR2i",
+  "source": "613b3c7ebaf235d75aab4fdc33eb58897e111e2f",
+  "reviewedTree": "00080accf510eaed98d0e11480dc94ab3646ff71",
+  "fixedReleaseBranch": "codex/testnet-owner-audio-release-20261020",
+  "production": {
+    "id": "dpl_9SDKyLLDyvoT4Ni3yyzr6ojA8xxK",
+    "state": "READY",
+    "target": "production",
+    "source": "613b3c7ebaf235d75aab4fdc33eb58897e111e2f",
+    "url": "cryptoid-evolution-testnet-assm1wmox-19-trojan69.vercel.app",
+    "alias": [
+      "cryptoid-evolution-testnet.vercel.app",
+      "cryptoid-evolution-testnet-19-trojan69.vercel.app",
+      "cryptoid-evolution-testnet-git-codex-iphone-20e099-19-trojan69.vercel.app"
+    ],
+    "buildingAt": 1792489009468,
+    "ready": 1792489057703
+  },
+  "preview": {
+    "id": "dpl_FLW1uN4mD6CrLTKYGsvyVTdkdNgN",
+    "state": "READY",
+    "target": null,
+    "source": "613b3c7ebaf235d75aab4fdc33eb58897e111e2f",
+    "url": "cryptoid-evolution-testnet-36yuyyw1v-19-trojan69.vercel.app",
+    "alias": [
+      "cryptoid-evolution-testnet-git-codex-iphone-20e099-19-trojan69.vercel.app"
+    ],
+    "buildingAt": 1792488914096,
+    "ready": 1792488956475
+  },
+  "readyAtUTC": "2026-10-20T09:37:37.703Z",
+  "readyAtVienna": "2026-10-20T11:37:37.703+02:00",
+  "officialAlias": "https://cryptoid-evolution-testnet.vercel.app/",
+  "piEntry": "https://cryptoidevo3025.pinet.com/",
+  "piEntryVerification": "Browser-rendered PiNet Cryptoid Evolution listing embeds official Testnet. This is not a physical Pi Browser session test.",
+  "method": "Vercel Dashboard Create Preview Deployment, then Promote to Production rebuilding the exact reviewed source in the existing Testnet production environment. Direct connector production create returned 403; no CLI available. No protection/security setting was changed.",
+  "proof": "testnet-audio-ready-20261020.jpg",
+  "rollback": {
+    "branch": "backup/testnet-before-owner-audio-20261020",
+    "source": "53640c01a16c921645d05502d9e5b34f6dc6eeec",
+    "deployment": "dpl_EKngjGTb8FFBnWE3k9eXF4xsQeZt"
+  },
+  "mainnet": {
+    "id": "dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe",
+    "state": "READY",
+    "target": "production",
+    "source": "907d2a7363345d00f0f90c54402bf04e887b64d9",
+    "url": "cryptoid-evolution-4nc1k8cmc-19-trojan69.vercel.app",
+    "alias": [
+      "cryptoid-evolution.vercel.app",
+      "cryptoid-evolution-19-trojan69.vercel.app",
+      "cryptoid-evolution-git-main-19-trojan69.vercel.app"
+    ],
+    "buildingAt": 1791724671120,
+    "ready": 1791724711543,
+    "verifiedUnchangedAfterPublication": true
+  },
+  "functionality": {
+    "ownerOnly": true,
+    "serverVerification": true,
+    "modes": [
+      "original",
+      "off"
+    ],
+    "detailDurationMs": 90000,
+    "offUntilRouteExit": true,
+    "sparseAudioExtensionAfter90Seconds": false,
+    "notes": "Original mode observes existing playback. Off retires primed effects, music and card contexts and blocks their game starts. Close acknowledgements determine whether shutdown was confirmed. Ordinary players and Mainnet receive no audio comparison controls or capture."
+  },
+  "checks": {
+    "before": {
+      "at": "2026-10-20T09:33:13.732538+00:00",
+      "hashes": {
+        "/api": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a",
+        "/api/admin/status": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771",
+        "/api/leaderboard/top?rules=1": "9cbe90a3686312972b4a117e300a2bc2e15ce07a8eebd15b51f12d81181451ad",
+        "/api/leaderboard/top?rules=2": "3024b06040e8082bce5d1897392d770de54d0821aadb05ad9a1f1f2eb4e2f0a9",
+        "/api/leaderboard/top?sort=career": "627c09cc866ac0373173c888541907057d3fb086a25288bd979f8a51bb92a86d"
+      }
+    },
+    "after": {
+      "at": "2026-10-20T09:40:58.729656+00:00",
+      "results": [
+        {
+          "path": "/",
+          "status": 200,
+          "contentType": "text/html; charset=utf-8",
+          "sha256": "540a2bdb958b7a464d3b177734dedbb05a2d01e898f9b46c9287da75bcba60dd"
+        },
+        {
+          "path": "/api",
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a",
+          "matchesBefore": true
+        },
+        {
+          "path": "/api/admin/status",
+          "status": 401,
+          "contentType": "application/json; charset=utf-8",
+          "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771",
+          "matchesBefore": true
+        },
+        {
+          "path": "/api/leaderboard/top?rules=1",
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "sha256": "9cbe90a3686312972b4a117e300a2bc2e15ce07a8eebd15b51f12d81181451ad",
+          "matchesBefore": true
+        },
+        {
+          "path": "/api/leaderboard/top?rules=2",
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "sha256": "3024b06040e8082bce5d1897392d770de54d0821aadb05ad9a1f1f2eb4e2f0a9",
+          "matchesBefore": true
+        },
+        {
+          "path": "/api/leaderboard/top?sort=career",
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "sha256": "627c09cc866ac0373173c888541907057d3fb086a25288bd979f8a51bb92a86d",
+          "matchesBefore": true
+        },
+        {
+          "path": "/ships/bosses/evolved/boss-07-guns.webp",
+          "status": 200,
+          "contentType": "image/webp",
+          "sha256": "a3ea823eec9b0cc7dd6d2de43c73f07fa2f17b80c7cfaa3ff7ec90ecc4ea2585"
+        }
+      ],
+      "assets": [
+        {
+          "path": "/assets/index-N-bYkJCy.js",
+          "status": 200,
+          "contentType": "application/javascript; charset=utf-8",
+          "sha256": "85fed632e597929144c3600444ecc329709316997daf5109ceadaab6bd23a0df"
+        },
+        {
+          "path": "/assets/AdminPage-CjFdycaC.js",
+          "status": 200,
+          "contentType": "application/javascript; charset=utf-8",
+          "sha256": "b6b9668b68d5aba6285a053507f8b57de21bb277fb390afd4b50dc3264126acc"
+        },
+        {
+          "path": "/assets/GamePage-CuZEQ0gg.js",
+          "status": 200,
+          "contentType": "application/javascript; charset=utf-8",
+          "sha256": "93af29f4e32f0376fa88ff6a82c102f72613451367e4788a1f27d63eb34b285f"
+        },
+        {
+          "path": "/assets/ownerTimingCapture--sCcGapz.js",
+          "status": 200,
+          "contentType": "application/javascript; charset=utf-8",
+          "sha256": "3ade7298c6061870da8cbcef56f7a4ff73878a96ad5b0ebb194925bee7c69d3f"
+        },
+        {
+          "path": "/assets/performanceDiagnostics-kYEkG3qD.js",
+          "status": 200,
+          "sha256": "cbdb12c944629e08e0f3ea2d3e93a0419dcea8ef25df27e2faf618f6a54e4c4d"
+        }
+      ],
+      "checks": {
+        "exactCommit": true,
+        "exactTree": true,
+        "offButton": true,
+        "originalButton": true,
+        "audioCaptureKey": true,
+        "audioArmKey": true,
+        "shutdownVerification": true,
+        "allAssets200": true,
+        "clockAndOverdueFieldsPresent": true
+      },
+      "buildIdentity": {
+        "sourceCommit": "613b3c7ebaf235d75aab4fdc33eb58897e111e2f",
+        "sourceTree": "00080accf510eaed98d0e11480dc94ab3646ff71",
+        "workingTreeDirty": true,
+        "note": "Exact deployed commit/tree verified. Aggregate checkout-dirty flag observed true, cause not established."
+      }
+    },
+    "sharedModuleFields": {
+      "cryptoid_owner_audio_v1": true,
+      "cryptoid_owner_audio_arm_v1": true,
+      "offCleanupComplete": true,
+      "effectsClockDeltaMs": true,
+      "musicClockDeltaMs": true,
+      "cardClockDeltaMs": true,
+      "effectsOverdue": true,
+      "weaponsOverdue": true
+    },
+    "boundedRuntimeScan": {
+      "source": "Vercel Dashboard Request Logs filtered to the new deployment only",
+      "deploymentId": "dpl_9SDKyLLDyvoT4Ni3yyzr6ojA8xxK",
+      "requestRecords": 10,
+      "fromUTC": "2026-10-20T09:37:39.332Z",
+      "throughUTC": "2026-10-20T09:38:18.970Z",
+      "warning": 0,
+      "error": 0,
+      "fatal": 0
+    }
+  },
+  "dataOperations": "Read-only API/highscore checks only. All three public highscore responses match immediate pre-release hashes. No account, save, score, purchase, reward, migration or reset action.",
+  "verificationCorrection": "Initial post-check selected the page's external Pi SDK script as the app entry. Automatic review blocked a malformed concatenated URL. A host guard then rejected the external URL before a request. The corrected check selects only the app's /assets/ module on the approved Testnet host and passed.",
+  "limits": "No physical iPhone, native audio hardware, audible-output, GPU/process memory or crash-cause proof. Authenticated Admin behavior was verified in prior controlled component/audio tests and the delivered bundle; no owner account was impersonated. The 90-second detail capture ends without stopping the game; fully off mode persists until route exit. Existing periodic resource trend remains separate."
+}
