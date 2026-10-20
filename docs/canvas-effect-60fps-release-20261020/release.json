@@ -1,0 +1,250 @@
+{
+  "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+  "deploymentId": "dpl_5s1S5thJ7ps83dy4ZXkeiS7JWcGr",
+  "url": "https://cryptoid-evolution-testnet-m6wy6bss0-19-trojan69.vercel.app",
+  "readyAt": "2026-10-20T16:04:25.539Z",
+  "buildDurationMs": 44905,
+  "target": "production",
+  "sourceCommit": "30b8b2326b9514c066edbdf23c4f5dc61f15a14c",
+  "sourceTree": "f43ffb18477b1d6055793b4f6ec46e58b6ecdb17",
+  "aliases": [
+    "cryptoid-evolution-testnet.vercel.app",
+    "cryptoid-evolution-testnet-19-trojan69.vercel.app",
+    "cryptoid-evolution-testnet-git-codex-iphone-20e099-19-trojan69.vercel.app"
+  ],
+  "preview": {
+    "id": "dpl_EsQ8EBTqQeoG52XRYW8UioaJxGhM",
+    "url": "https://cryptoid-evolution-testnet-r5sosk814-19-trojan69.vercel.app",
+    "readyAt": "2026-10-20T15:59:40.658Z"
+  },
+  "rollback": {
+    "commit": "927dc5ab50941e66709f8c0dfc09a50625edba7f",
+    "deploymentId": "dpl_3St55QU618jXYuGGVMCWAYmgex5c",
+    "branch": "backup/testnet-before-canvas-60fps-20261020"
+  },
+  "releaseBranch": "codex/testnet-canvas-60fps-release-20261020",
+  "authorization": "Owner requested publication on 2026-10-20 at 17:54:30 Europe/Vienna; existing official Testnet only.",
+  "officialUrl": "https://cryptoid-evolution-testnet.vercel.app/",
+  "recordedAt": "2026-10-20T16:06:45.832Z",
+  "proof": {
+    "before": {
+      "at": "2026-10-20T15:55:44.205213+00:00",
+      "results": [
+        {
+          "path": "/",
+          "status": 200,
+          "sha256": "31db2a6f6b8d358784d900ce6c19d808b71406fb25cd3adb0e20cb05e09e1a9b",
+          "bytes": 1465
+        },
+        {
+          "path": "/api",
+          "status": 200,
+          "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a",
+          "bytes": 27
+        },
+        {
+          "path": "/api/admin/status",
+          "status": 401,
+          "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771",
+          "bytes": 29
+        },
+        {
+          "path": "/api/leaderboard/top?rules=1",
+          "status": 200,
+          "sha256": "9cbe90a3686312972b4a117e300a2bc2e15ce07a8eebd15b51f12d81181451ad",
+          "bytes": 7440
+        },
+        {
+          "path": "/api/leaderboard/top?rules=2",
+          "status": 200,
+          "sha256": "7b3af7b446c33c74d7c8523a57fbb5e0eeea0acd3ad473e13a5d4d1741583c67",
+          "bytes": 9733
+        },
+        {
+          "path": "/api/leaderboard/top?sort=career",
+          "status": 200,
+          "sha256": "627c09cc866ac0373173c888541907057d3fb086a25288bd979f8a51bb92a86d",
+          "bytes": 1505
+        },
+        {
+          "path": "/ships/bosses/evolved/boss-07-guns.webp",
+          "status": 200,
+          "sha256": "a3ea823eec9b0cc7dd6d2de43c73f07fa2f17b80c7cfaa3ff7ec90ecc4ea2585",
+          "bytes": 121298
+        }
+      ],
+      "entry": {
+        "path": "/assets/index-CiIZLDTO.js",
+        "status": 200,
+        "sha256": "1341a0eacdcd1e399d0eb6a0a8eb7e7e0b24d8d29056bb151da7a4a3d07d8f70",
+        "bytes": 1896253
+      },
+      "mainnetHTMLsha256": "6d2e52983bfe9100d77130335528435c8d5f5f8a2c34011388714eac3099791c",
+      "mainnetEntry": [
+        "/assets/index-DB9vrZWh.js"
+      ]
+    },
+    "after": {
+      "at": "2026-10-20T16:04:39.150952+00:00",
+      "results": [
+        {
+          "path": "/",
+          "status": 200,
+          "sha256": "e250a3c0d7c4ec6fe5af6cd6fbebaa19e83881f81f86736ad18af0c59aee095e",
+          "bytes": 1465
+        },
+        {
+          "path": "/api",
+          "status": 200,
+          "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a",
+          "bytes": 27
+        },
+        {
+          "path": "/api/admin/status",
+          "status": 401,
+          "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771",
+          "bytes": 29
+        },
+        {
+          "path": "/api/leaderboard/top?rules=1",
+          "status": 200,
+          "sha256": "9cbe90a3686312972b4a117e300a2bc2e15ce07a8eebd15b51f12d81181451ad",
+          "bytes": 7440
+        },
+        {
+          "path": "/api/leaderboard/top?rules=2",
+          "status": 200,
+          "sha256": "7b3af7b446c33c74d7c8523a57fbb5e0eeea0acd3ad473e13a5d4d1741583c67",
+          "bytes": 9733
+        },
+        {
+          "path": "/api/leaderboard/top?sort=career",
+          "status": 200,
+          "sha256": "627c09cc866ac0373173c888541907057d3fb086a25288bd979f8a51bb92a86d",
+          "bytes": 1505
+        },
+        {
+          "path": "/ships/bosses/evolved/boss-07-guns.webp",
+          "status": 200,
+          "sha256": "a3ea823eec9b0cc7dd6d2de43c73f07fa2f17b80c7cfaa3ff7ec90ecc4ea2585",
+          "bytes": 121298
+        }
+      ],
+      "entry": {
+        "path": "/assets/index-BbJ8sz2B.js",
+        "status": 200,
+        "sha256": "3c6dcf7524a1f4b8ce755a6d041191007f4fca8fb727fbacea1db5642e878d5e",
+        "bytes": 1896253
+      },
+      "mainnetHTMLsha256": "6d2e52983bfe9100d77130335528435c8d5f5f8a2c34011388714eac3099791c",
+      "mainnetEntry": [
+        "/assets/index-DB9vrZWh.js"
+      ]
+    },
+    "delivered": {
+      "base": "https://cryptoid-evolution-testnet.vercel.app",
+      "entry": "/assets/index-BbJ8sz2B.js",
+      "assets": [
+        {
+          "path": "/",
+          "status": 200,
+          "sha256": "e250a3c0d7c4ec6fe5af6cd6fbebaa19e83881f81f86736ad18af0c59aee095e",
+          "bytes": 1465
+        },
+        {
+          "path": "/assets/index-BbJ8sz2B.js",
+          "status": 200,
+          "sha256": "3c6dcf7524a1f4b8ce755a6d041191007f4fca8fb727fbacea1db5642e878d5e",
+          "bytes": 1896253
+        },
+        {
+          "path": "/assets/AdminPage-CmQLHi9r.js",
+          "status": 200,
+          "sha256": "f86c50d12e7f930fd4bc7358db28de10d6734bcfa0f88c2e1552f5f98383a5e7",
+          "bytes": 44118
+        },
+        {
+          "path": "/assets/GamePage-D55p9sR4.js",
+          "status": 200,
+          "sha256": "14c696714eace5b4fa9ed41fe37b380a67bc978b926dcc94c4351b88a223eeba",
+          "bytes": 233694
+        },
+        {
+          "path": "/assets/Shop-0H9a7j2z.js",
+          "status": 200,
+          "sha256": "5e7895fc7b2c6dfd051db202ad766fa1b21ea6c201ebf8f74a999b82515918d7",
+          "bytes": 118702
+        },
+        {
+          "path": "/assets/ownerTimingCapture-klciN1uP.js",
+          "status": 200,
+          "sha256": "d784a0a8677dd49ecbcaefb047f013041ed0d16a23b8e4534535d7bd6da30dc1",
+          "bytes": 1205
+        },
+        {
+          "path": "/assets/performanceDiagnostics-Ckjcy9w5.js",
+          "status": 200,
+          "sha256": "f177f215455c75012b13e2717a4a11b8c0ac0a2d75786bc9e8a7481c2d3f2ece",
+          "bytes": 58288
+        },
+        {
+          "path": "/assets/powerUps-CYeIlI7U.js",
+          "status": 200,
+          "sha256": "74faa31ad5fbb5adf487ad30b95fa0eb464a77ce466bfbeb233903823c8fbc75",
+          "bytes": 148012
+        },
+        {
+          "path": "/assets/shipEvolution-Bjamk0R8.js",
+          "status": 200,
+          "sha256": "167db03a5d0460bfe9a9552c4f38abc713c72505755c233fc803e0996bc6c17a",
+          "bytes": 233759
+        }
+      ],
+      "buildIdentities": [
+        [
+          "30b8b2326b9514c066edbdf23c4f5dc61f15a14c",
+          "f43ffb18477b1d6055793b4f6ec46e58b6ecdb17",
+          "!0"
+        ]
+      ],
+      "canvasCadence": {
+        "canvasAsset": "/assets/GamePage-D55p9sR4.js",
+        "skipOverHighRefreshPaints": true,
+        "oneMillisecondTolerance": true,
+        "wallClockDeadline": true,
+        "phasePreservingDeadline": true,
+        "interval60Hz": true,
+        "resumeResetsBudget": true,
+        "budgetClearedOnCleanup": true
+      }
+    }
+  },
+  "browser": {
+    "previewHomeLoaded": true,
+    "officialHomeLoaded": true,
+    "officialEntry": "/assets/index-BbJ8sz2B.js",
+    "warnings": [
+      "Existing No HydrateFallback warning after hydration",
+      "Unrelated Chrome extension browser-metadata error"
+    ],
+    "historicalLogsExcluded": "Older Pi SDK messaging timeouts on the reused tab predate this release."
+  },
+  "runtimeLogs": {
+    "deploymentId": "dpl_5s1S5thJ7ps83dy4ZXkeiS7JWcGr",
+    "visibleRequestRecords": 12,
+    "warning": 0,
+    "error": 0,
+    "fatal": 0,
+    "from": "2026-10-20T16:04:27.805Z",
+    "to": "2026-10-20T16:05:16.235Z",
+    "limit": "Bounded post-release request scan; no continuous monitoring or physical device validation."
+  },
+  "mainnet": {
+    "deploymentId": "dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe",
+    "commit": "907d2a7363345d00f0f90c54402bf04e887b64d9",
+    "publicHTMLAndEntryUnchanged": true
+  },
+  "screenshot": "testnet-ready.jpg",
+  "scope": "Ordinary explosion/debris Canvas surface paint target of 60 Hz. Original wall-clock animation, game loop, simulation, artwork resolution and sound retained.",
+  "limits": "Controlled cadence/lifecycle tests and 275 exact native RGBA comparisons passed before release. Physical iPhone temperature reduction and Whitescreen cause remain unproven. Known resource estimates omit native/GPU memory. Delivered build reports workingTreeDirty true."
+}

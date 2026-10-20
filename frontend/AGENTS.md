@@ -1,5 +1,26 @@
 # Preserve the officially approved game
 
+## Completed Canvas effect 60 Hz Testnet release, 20 October 2026
+
+The owner's 17:54:30 Europe/Vienna instruction explicitly authorized publication.
+It is complete: official Testnet READY production dpl_5s1S5thJ7ps83dy4ZXkeiS7JWcGr,
+runtime 30b8b2326b9514c066edbdf23c4f5dc61f15a14c, reviewed tree
+f43ffb18477b1d6055793b4f6ec46e58b6ecdb17, ready 18:04:25.539 Vienna (45s).
+Keep codex/testnet-canvas-60fps-release-20261020 fixed at that source.
+Immediate rollback: backup/testnet-before-canvas-60fps-20261020 at 927dc5a /
+READY dpl_3St55QU618jXYuGGVMCWAYmgex5c. All older fixed refs stay fixed.
+Delivered source/tree, 60 Hz interval, phase-preserving deadline, 1 ms timestamp
+tolerance and resume/cleanup reset are verified. Observed build dirty flag is true.
+Preview and official guest home load. API, anonymous Admin denial, all three
+Highscore response hashes and artwork match the fresh pre-release baseline;
+Mainnet stays 907d2a7 with the same public HTML and entry. A bounded scan of twelve
+new-deployment requests shows zero warning/error/fatal records. Existing hydration
+warnings and extension errors are not presented as a clean browser console.
+Physical iPhone heating and the Whitescreen cause remain unproved. See
+docs/canvas-effect-60fps-release-20261020/{release.json,testnet-ready.jpg}.
+Continue documentation on this audit branch with automatic deployment off; do not
+deploy later docs SHAs or ask again for this completed publication authorization.
+
 ## Canvas effect 60 Hz preparation, 20 October 2026
 
 At 17:42:41 Europe/Vienna the owner authorized the proposed 60 Hz Canvas-effect

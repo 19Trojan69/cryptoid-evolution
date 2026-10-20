@@ -103,3 +103,29 @@ Die 50 % weniger Zeichnungen bei 120 Hz gelten ausschließlich für diese
 Effektfläche. Sie sind weder 50 % weniger Gesamtstrom noch eine gemessene
 Temperatursenkung. Ein physischer iPhone-Vergleich und die tatsächliche
 Whitescreen-Ursache bleiben offen.
+
+## Veröffentlichung im offiziellen Testnet
+
+Am 20. Oktober 2026 um 17:54:30 Uhr (Europe/Vienna) beauftragte der Owner
+anschließend die Veröffentlichung. Runtime `30b8b2326b9514c066edbdf23c4f5dc61f15a14c`
+mit geprüftem Tree `f43ffb18477b1d6055793b4f6ec46e58b6ecdb17` ist seit
+18:04:25.539 Uhr als Production-Deployment
+`dpl_5s1S5thJ7ps83dy4ZXkeiS7JWcGr` unter der offiziellen Testnet-Adresse bereit.
+Die vorherige Runtime `927dc5a` bleibt zusätzlich unter
+`backup/testnet-before-canvas-60fps-20261020` als unmittelbarer Rückfallstand
+gesichert. Die feste neue Release-Referenz lautet
+`codex/testnet-canvas-60fps-release-20261020`.
+
+Die geschützte Vorschau und die offizielle Startseite laden. Öffentlich
+ausgelieferte Build-Identität und 60-Hz-Zeichenlogik wurden geprüft. API,
+anonyme Admin-Abweisung, alle drei Ranglistenantworten und das Kontroll-Artwork
+stimmen mit dem unmittelbar vorher erfassten Stand überein. Mainnet behält
+seine bisherige HTML-Datei und seinen Einstiegspunkt. Zwölf neue
+Deployment-Anfragen zeigen keine Warning-/Error-/Fatal-Einträge; dies ist
+eine begrenzte Abschlusskontrolle. Die bekannte Hydration-Warnung und
+Browser-Erweiterungsfehler bleiben separat dokumentiert. Die ausgelieferte
+Build-Metadatenkennung `workingTreeDirty` ist wie zuvor `true`.
+
+Der Freigabenachweis mit Hashes, Grenzen und Screenshot steht in
+`canvas-effect-60fps-release-20261020/release.json`. Die Freigabe ersetzt
+keinen physischen Temperatur- oder Abbruchvergleich auf dem iPhone.
