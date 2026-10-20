@@ -1,0 +1,67 @@
+{
+  "at": "2026-10-20T18:02:57.493794+00:00",
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "sha256": "a89d9d84668152d6cc78c75a150ae2e2672b5a71fc6132dee88cf7ed79781fb4",
+      "bytes": 1465
+    },
+    {
+      "path": "/api",
+      "status": 200,
+      "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a",
+      "bytes": 27
+    },
+    {
+      "path": "/api/admin/status",
+      "status": 401,
+      "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771",
+      "bytes": 29
+    },
+    {
+      "path": "/api/leaderboard/top?rules=1",
+      "status": 200,
+      "sha256": "9cbe90a3686312972b4a117e300a2bc2e15ce07a8eebd15b51f12d81181451ad",
+      "bytes": 7440
+    },
+    {
+      "path": "/api/leaderboard/top?rules=2",
+      "status": 200,
+      "sha256": "7b3af7b446c33c74d7c8523a57fbb5e0eeea0acd3ad473e13a5d4d1741583c67",
+      "bytes": 9733
+    },
+    {
+      "path": "/api/leaderboard/top?rules=3",
+      "status": 200,
+      "sha256": "7b3af7b446c33c74d7c8523a57fbb5e0eeea0acd3ad473e13a5d4d1741583c67",
+      "bytes": 9733
+    }
+  ],
+  "mainnetHtmlSha256": "6d2e52983bfe9100d77130335528435c8d5f5f8a2c34011388714eac3099791c",
+  "entry": "/assets/index-D7Rze0iN.js",
+  "nativeMode": true,
+  "manualClockAbsent": true,
+  "nativeSteps": true,
+  "nativeCurve": true,
+  "bundleIdentities": {
+    "assets/AdminPage-Qdy0EQAq.js": [
+      "e0bc53f3ea73bc127aab8ad4bc67c463c0a92464",
+      "78e2f71b106c5c62e91d6aeaf9deb3e30118a1a0",
+      "!0"
+    ],
+    "assets/GamePage-C73sAjFY.js": [
+      "e0bc53f3ea73bc127aab8ad4bc67c463c0a92464",
+      "78e2f71b106c5c62e91d6aeaf9deb3e30118a1a0",
+      "!0"
+    ]
+  },
+  "apiAndLeaderboardsUnchanged": true,
+  "mainnetUnchanged": true,
+  "productionQaPath": {
+    "status": 200,
+    "sha256": "a89d9d84668152d6cc78c75a150ae2e2672b5a71fc6132dee88cf7ed79781fb4",
+    "bytes": 1465,
+    "ordinaryAppFallback": true
+  }
+}

@@ -1,5 +1,39 @@
 # Preserve the officially approved game
 
+## Native animation timing / iPhone research, 20 October 2026
+
+The owner's broad investigation/fix instruction and continuation are complete for
+the demonstrable CSS-clock overhead and report-evidence gaps. Official Testnet is
+READY dpl_3uJJPe98c6KMK7K7jpU3z8fHPDH8, runtime e0bc53f3ea73bc127aab8ad4bc67c463c0a92464,
+tree 78e2f71b106c5c62e91d6aeaf9deb3e30118a1a0, ready 20:02:13.712 Vienna.
+Keep codex/testnet-native-animations-release-20261020 fixed. Immediate rollback:
+backup/testnet-before-native-animations-20261020 at d6419c5 / prior READY
+dpl_2L5un3yvfZ5YiVYP8DEeHYMZKii1. Preserve every older fixed ref and Mainnet.
+Replace the prior manual CSS currentTime/playbackRate=0 pump with native stepped
+effect timing: keyframes/easing inside keyframes and native clocks/durations/
+pause/end semantics remain. Nonlinear outer timing uses a detached timeline-free
+one-time probe and a bounded native staircase cache. Keep the shared 60-Hz own RAF
+scheduler; do not restore per-frame CSS seeks. Unsupported cases fall back to
+ordinary native playback, so do not promise a hardware-wide hard refresh lock.
+Remember the installed canonical easing string when restoring it (Chrome rewrites
+steps(n,end) to steps(n)); initial preview caught this, corrected preview passes
+14/14 native checks including 1440 curve comparisons, pseudo/transition/pause/end
+and cancel cleanup. 156 targeted code tests, 12 locale tests and release build pass.
+Owner run contexts now include sanitized build/pacing identity, and verified active
+Admin report loading installs the bounded boot diagnostics. Reporting runtime is
+separate from old-run identity. Keep permission/active-view guards before storage.
+Actual old/new controller comparison: 24 running + 24 paused effects, 2 seconds at
+120-Hz host: 2880 -> 0 visible clock writes; this is not thermal/memory proof.
+Existing October 19 Jetsam log proves a WebContent per-process-limit kill near
+2.01 GiB but no site attribution or relationship to today's failure. Latest game
+report ends mid-boss 1, no Home intent/error, new document 2.388 sec later.
+Physical iPhone native memory/heat/Whitescreen cause remains OPEN. Do not claim a
+complete crash fix. Next useful controlled device step is direct boss 1 with the
+existing 90-second owner timing capture, not nine normal blocks. Preserve artwork,
+audio, gameplay, saves, accounts and Mainnet. Automatic audit-branch deploy stays
+off; do not deploy later evidence/docs commits. See
+docs/iphone-webkit-research-20261020.md and native-animations-release-20261020/.
+
 ## Completed global 60 Hz Testnet release, 20 October 2026
 
 The owner's 19:04:04 Europe/Vienna instruction authorized completing the prepared

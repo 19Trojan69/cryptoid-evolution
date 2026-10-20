@@ -84,6 +84,34 @@ phases are not a global hardware refresh lock.
 - Artwork, audio assets, simulation, collision rules, rewards, purchase/save/account
   flows and Mainnet are outside this change.
 
+The corrected protected preview passes **14/14 native browser checks**, including
+1440 original-versus-paced curve comparisons (maximum progress error at the
+selected sample points 3.33e-16). At 120 synthetic sampling points, computed style
+has 60 distinct progress states. Finished/removed animation references return to
+zero. This is Chrome browser acceptance, not a WebKit/iPhone result.
+
+A controlled comparison runs the actual old and new controllers with 24 running
+and 24 paused animations for two seconds at a 120-Hz host clock. Visible animation
+time writes fall from 2880 to 0; computed timing reads fall from 2880 to 48 at
+registration. With this controller as the only RAF client, native RAF callbacks
+fall from 240 to 0. The actual game still uses its shared RAF scheduler. These are
+operation counts, not an energy, temperature or whole-browser memory benchmark.
+
+**Published to existing official Testnet** at 18:02:13.712 UTC / 20:02:13.712
+Europe/Vienna: READY `dpl_3uJJPe98c6KMK7K7jpU3z8fHPDH8`, runtime
+`e0bc53f3ea73bc127aab8ad4bc67c463c0a92464`, reviewed tree
+`78e2f71b106c5c62e91d6aeaf9deb3e30118a1a0`. Source identities in the delivered
+GamePage and AdminPage chunks and the native pacing code are verified. Testnet
+API/anonymous Admin denial/all three leaderboard response hashes match before;
+Mainnet remains `907d2a7` with identical public HTML/entry. Guest start and
+pause/resume passed in the preview, and official Home loads after a fresh reload.
+The production build excludes the preview-only acceptance page.
+
+Keep `codex/testnet-native-animations-release-20261020` fixed at the runtime.
+Immediate rollback is `backup/testnet-before-native-animations-20261020` at
+`d6419c5` / READY `dpl_2L5un3yvfZ5YiVYP8DEeHYMZKii1`. Older refs stay fixed.
+Evidence is in `native-animations-release-20261020/`.
+
 **Still open:** reproduce on the same physical iPhone with the exact new build,
 start directly at boss 1 using existing Admin controls, and collect the existing
 90-second timing capture. A contemporaneous Jetsam/termination record and a

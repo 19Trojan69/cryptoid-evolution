@@ -1,0 +1,24 @@
+[
+  {
+    "version": "manual",
+    "animations": 48,
+    "running": 24,
+    "paused": 24,
+    "durationSeconds": 2,
+    "visibleTimeWrites": 2880,
+    "rateWrites": 96,
+    "timingReads": 2880,
+    "frames": 240
+  },
+  {
+    "version": "native",
+    "animations": 48,
+    "running": 24,
+    "paused": 24,
+    "durationSeconds": 2,
+    "visibleTimeWrites": 0,
+    "rateWrites": 0,
+    "timingReads": 48,
+    "frames": 0
+  }
+]

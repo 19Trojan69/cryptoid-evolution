@@ -1,0 +1,49 @@
+{
+  "releasedAt": "2026-10-20T18:02:13.712Z",
+  "url": "https://cryptoid-evolution-testnet.vercel.app/",
+  "environment": "existing Testnet Production only",
+  "deployment": "dpl_3uJJPe98c6KMK7K7jpU3z8fHPDH8",
+  "project": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+  "sourceCommit": "e0bc53f3ea73bc127aab8ad4bc67c463c0a92464",
+  "sourceTree": "78e2f71b106c5c62e91d6aeaf9deb3e30118a1a0",
+  "readyState": "READY",
+  "buildSeconds": 36.442,
+  "preview": {
+    "deployment": "dpl_A7ZDNeti8ToNLpT5REKHRz57izfW",
+    "url": "https://cryptoid-evolution-testnet-4v1d9vhyv-19-trojan69.vercel.app/",
+    "passedNativeChecks": 14
+  },
+  "refs": {
+    "release": "codex/testnet-native-animations-release-20261020",
+    "backup": "backup/testnet-before-native-animations-20261020",
+    "backupSource": "d6419c5946a660173a7b59e5d6edc63e6322ee7a",
+    "rollbackDeployment": "dpl_2L5un3yvfZ5YiVYP8DEeHYMZKii1"
+  },
+  "targetHz": 60,
+  "cssMode": "native-easing",
+  "targetedTests": 156,
+  "localeTests": 12,
+  "buildPassed": true,
+  "unchanged": [
+    "artwork and audio assets",
+    "simulation, collision, rewards and equipment",
+    "purchase, save and account flows",
+    "Mainnet 907d2a7363345d00f0f90c54402bf04e887b64d9"
+  ],
+  "limitations": [
+    "No physical iPhone/WebKit memory or thermal measurement",
+    "No proof that the Whitescreen is eliminated",
+    "October 19 Jetsam file lacks site attribution and is not today's incident",
+    "Unsupported native timing cases retain ordinary native playback; not a hardware-wide refresh lock",
+    "Chrome extension metadata/Pi SDK messaging timeouts are not represented as a clean browser console"
+  ],
+  "evidence": [
+    "native-browser.json",
+    "native-browser-pass.jpg",
+    "clock-comparison.json",
+    "before.json",
+    "after.json",
+    "log-summary.json",
+    "testnet-ready.jpg"
+  ]
+}

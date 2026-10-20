@@ -1,0 +1,76 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "CSS läuft nativ mit unveränderter Abspielrate",
+      "passed": true,
+      "rate": 1,
+      "easing": "steps(60)"
+    },
+    {
+      "name": "Autorisierte Keyframes und ihre Easing-Kurven bleiben erhalten",
+      "passed": true
+    },
+    {
+      "name": "Pseudoelemente erfasst",
+      "passed": true
+    },
+    {
+      "name": "Neue Pseudoelemente nach Start erfasst",
+      "passed": true
+    },
+    {
+      "name": "Nichtlineare Web Animation erhält eine native Treppenkurve",
+      "passed": true
+    },
+    {
+      "name": "CSS beendet sich mit genau einem animationend",
+      "passed": true,
+      "animationEnds": 1
+    },
+    {
+      "name": "Transition beendet sich mit genau einem transitionend",
+      "passed": true,
+      "transitionEnds": 1
+    },
+    {
+      "name": "Web Animation beendet sich mit erfülltem Promise",
+      "passed": true,
+      "webFinished": true
+    },
+    {
+      "name": "CSS-Pause bleibt stehen",
+      "passed": true
+    },
+    {
+      "name": "CSS-Wiederaufnahme bewegt sich weiter",
+      "passed": true,
+      "delta": 116.6539999979417
+    },
+    {
+      "name": "1440 Kurvenproben entsprechen dem Original am 60-Hz-Abtastpunkt",
+      "passed": true,
+      "compared": 1440,
+      "maxError": 3.3306690738754696e-16
+    },
+    {
+      "name": "120 Zeitpunkte ergeben höchstens 60 sichtbare Fortschrittswerte",
+      "passed": true,
+      "changes": 60
+    },
+    {
+      "name": "Entfernte und beendete Animationen geben alle Referenzen frei",
+      "passed": true,
+      "mode": "native-easing",
+      "targetHz": 60,
+      "active": 0,
+      "configured": 11,
+      "fallbacks": 0,
+      "jsFrameWrites": 0
+    },
+    {
+      "name": "Aufräumen erhält native Abspielrate und entfernt die eigene Timing-Kurve",
+      "passed": true
+    }
+  ]
+}
