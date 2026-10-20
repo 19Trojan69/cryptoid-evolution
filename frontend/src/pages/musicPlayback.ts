@@ -102,6 +102,16 @@ export class MusicPlayer {
     }
   }
 
+  prime(): Promise<boolean> {
+    if (ownerAudioDisabled()) { noteAudioEvent('music-blocked'); return Promise.resolve(false); }
+    if (this.closed) return Promise.resolve(false);
+    // The Admin launch awaits a server request before mounting the game. Load
+    // this same media element and unlock its graph while the click is active;
+    // neither operation starts the soundtrack during that request.
+    try { this.audio.load(); } catch { return Promise.resolve(false); }
+    return this.unlock();
+  }
+
   // Resume the existing graph during the Resume gesture without starting the
   // paused media element. The countdown/account request can finish afterwards.
   async unlock(): Promise<boolean> {
@@ -166,6 +176,25 @@ export class MusicPlayer {
 // Preserve the media element and its unlocked AudioContext across the route
 // transition. Mobile Safari may reject a brand-new player's autoplay.
 let primedGameMusic: MusicPlayer | null = null;
+export const primeGameMusic = (volume: number) => {
+  if (ownerAudioDisabled()) { noteAudioEvent('music-blocked'); return null; }
+  try {
+    const player = primedGameMusic ?? new MusicPlayer('/audio/battle-orbit.mp3', volume);
+    primedGameMusic = player;
+    player.setVolume(volume);
+    void player.prime();
+    return player;
+  } catch {
+    // An unavailable audio host must not prevent the existing game request.
+    cancelPrimedGameMusic(primedGameMusic);
+    return null;
+  }
+};
+export const cancelPrimedGameMusic = (player: MusicPlayer | null) => {
+  if (!player || primedGameMusic !== player) return;
+  primedGameMusic = null;
+  player.close();
+};
 export const handoffGameMusic = (player: MusicPlayer) => {
   if (primedGameMusic && primedGameMusic !== player) primedGameMusic.close();
   primedGameMusic = player;

@@ -1,5 +1,22 @@
 # Preserve the officially approved game
 
+## Confirmed Admin audio-start correction, 20 October 2026, preparation only
+
+The owner requested correcting demonstrated faults while continuing the Whitescreen
+investigation at 12:29 Europe/Vienna. Correct the Admin launch that primed effects
+but created music/card graphs only after asynchronous server work. Prime the same
+music element/graph silently and the card context in the existing start click;
+transfer that player to GamePage. Failed or abandoned requests retire unclaimed
+music, and saved music-off is respected. No waveform, gain, clipping, timing,
+simulation, HUD, account, save or reward change. Six controlled launch tests include
+an official-613b3c7 negative control; 80 targeted checks and the release build pass.
+This is not physical iPhone verification or proof of the Whitescreen cause.
+Do not move fixed release/rollback refs. No new deployment was requested for this
+preparation; automatic deployment stays disabled. See
+docs/iphone-audio-start-correction-20261020.md. The next crash evidence is an iPhone
+system log matched to the last actual unexpected exit, not another identical
+90-second comparison. Jetsam/WebKit termination and its cause remain unconfirmed.
+
 ## Completed owner audio Testnet release, 20 October 2026
 
 The user explicitly requested publication at 11:31:50 Europe/Vienna. It is

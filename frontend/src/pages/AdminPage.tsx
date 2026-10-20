@@ -23,8 +23,9 @@ import ShipPreview from "./ShipPreview";
 import { hangarCatalog } from "../../../backend/src/hangarCatalog";
 import { primeGameAudio } from "./gameAudio";
 import { requestGameFullscreen } from "./gameFullscreen";
-import { readEffectsVolume, readMusicVolume } from "./musicPreferences";
-import { MusicPlayer } from "./musicPlayback";
+import { MUSIC_STORAGE_KEY, readEffectsVolume, readMusicVolume } from "./musicPreferences";
+import { cancelPrimedGameMusic, primeGameMusic, MusicPlayer } from "./musicPlayback";
+import { primeCardSound } from "./cardSound";
 import "./admin.css";
 import AdminUsage from "./AdminUsage";
 import { paymentEvidenceLinks } from "./paymentEvidenceLinks";
@@ -275,6 +276,7 @@ export default function AdminPage() {
   useEffect(() => () => { if (csvFile) URL.revokeObjectURL(csvFile.url); }, [csvFile]);
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   const audioRef = useRef<MusicPlayer | null>(null);
+  const pendingGameMusicRef = useRef<MusicPlayer | null>(null);
   const audioRequest = useRef(0);
   const [playingAudio, setPlayingAudio] = useState("");
   const evidenceLinks = selectedPayment ? paymentEvidenceLinks(selectedPayment) : null;
@@ -334,6 +336,8 @@ export default function AdminPage() {
       audioRequest.current += 1;
       audioRef.current?.close();
       audioRef.current = null;
+      cancelPrimedGameMusic(pendingGameMusicRef.current);
+      pendingGameMusicRef.current = null;
     },
     []
   );
@@ -359,6 +363,9 @@ export default function AdminPage() {
   const startTest = (phase: Phase, chosenLevel = level) => {
     if (busy) return;
     primeGameAudio();
+    primeCardSound();
+    const preparedMusic = localStorage.getItem(MUSIC_STORAGE_KEY) === 'off' ? null : primeGameMusic(readMusicVolume());
+    pendingGameMusicRef.current = preparedMusic;
     const configuration = {
       sector: phase === "normal" ? (chosenLevel - 1) * 10 + block : chosenLevel * 10,
       shipStage: stage,
@@ -367,17 +374,25 @@ export default function AdminPage() {
       phase,
     };
     void perform(async () => {
-      await axiosClient.post("/admin/start", configuration);
-      sessionStorage.setItem(ADMIN_MODE_KEY, "1");
-      sessionStorage.setItem(ADMIN_TEST_CONFIG_KEY, JSON.stringify(configuration));
-      sessionStorage.setItem(ADMIN_SHIP_SKIN_KEY, skinId);
-      sessionStorage.setItem(ADMIN_SHIP_COLOR_KEY, colorId);
-      sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage));
-      sessionStorage.setItem(ADMIN_START_SECTOR_KEY, String(configuration.sector));
-      audioRequest.current += 1;
-      audioRef.current?.pause();
-      requestGameFullscreen();
-      navigate("/game");
+      try {
+        await axiosClient.post("/admin/start", configuration);
+        sessionStorage.setItem(ADMIN_MODE_KEY, "1");
+        sessionStorage.setItem(ADMIN_TEST_CONFIG_KEY, JSON.stringify(configuration));
+        sessionStorage.setItem(ADMIN_SHIP_SKIN_KEY, skinId);
+        sessionStorage.setItem(ADMIN_SHIP_COLOR_KEY, colorId);
+        sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage));
+        sessionStorage.setItem(ADMIN_START_SECTOR_KEY, String(configuration.sector));
+        audioRequest.current += 1;
+        audioRef.current?.pause();
+        requestGameFullscreen();
+        // The game takes the prepared player. Admin cleanup must not close it.
+        pendingGameMusicRef.current = null;
+        navigate("/game");
+      } catch (error) {
+        cancelPrimedGameMusic(preparedMusic);
+        if (pendingGameMusicRef.current === preparedMusic) pendingGameMusicRef.current = null;
+        throw error;
+      }
     });
   };
 
