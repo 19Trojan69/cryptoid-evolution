@@ -2,7 +2,13 @@
 
 The owner no longer has a Mac. Continue the authorized investigation without
 requiring another full manual campaign to collect the same existing counters.
-This is an isolated preparation, not a new preview game or public release.
+The user subsequently accepted the proposed sequence with "Und dann machen wir
+das. Sag mir step by step, was ich tun muss oder ob du das allein machen kannst."
+The sequence explicitly includes publishing tested corrections to the existing
+Testnet with a rollback point, followed by a targeted iPhone check. This approval
+is applied only to the reviewed image-lifetime changes described here. Mainnet
+and all account/data/security behavior are excluded. The actual release receipt
+must distinguish preparation from a completed public deployment.
 
 ## Baseline and boundaries
 
@@ -12,7 +18,8 @@ READY production deployment `dpl_DssUzk9j8fruG7HY7BNPUMfYZjmW`, source
 `4836157c730cf5f056f693bbb1664b815fd46932`.
 The isolated branch starts at that exact commit. No unofficial preview is used.
 Automatic Vercel deployment is disabled for `codex/iphone-lifetime-audit-20261020`.
-Public Testnet and Mainnet are unchanged by this audit.
+At the pre-release read, public Testnet remains on the source above; Mainnet
+remains READY `dpl_4hwbUd5xYqetnh5VHfFZ7H6pxwhe`, source `907d2a7`.
 
 ## Confirmed finding and limited correction
 
@@ -26,6 +33,26 @@ original decoded byte size first so the existing cache limit and diagnostic
 accounting remain correct. Failed encoding retains its existing final cleanup.
 The same original hull, material calculation, full resolution, PNG, image
 readiness gate, serialized queue, cache limits and URL ownership remain in use.
+
+The delayed-response continuation identified two additional issues in that same
+resource module:
+
+1. A preparation lost its last consumer while waiting for a source image,
+   encoder, replacement load or decoder, but resumed obsolete work afterwards.
+   Recheck the existing consumer pins at those four asynchronous boundaries.
+   Cancel only when no consumer needs the variant. Retire its rejected promise
+   before another consumer can inherit it, and revoke unused output URLs.
+2. Evicting an unfinished source from the eight-entry cache did not cancel its
+   Image operation. Repeated real block plans with responses held back created
+   162 Image objects for 20 URLs, while the reported cache stayed at eight.
+   Share one pending promise per URL until success/failure. Delete pending
+   entries when settled; completed images still use only the existing cache.
+   Loading concurrency and image quality are not reduced.
+
+Those Image counts come from the controlled host, not network-transfer counts
+or decoded iPhone memory. Browsers may share network/image resources themselves.
+The correction does not impose an eight-request concurrency limit: twenty
+different still-pending URLs can legitimately have twenty different operations.
 
 The first real hull fixture has a 282 by 282 working surface: 318,096 logical
 RGBA bytes were unnecessarily retained across the decoder wait before this
@@ -46,16 +73,26 @@ encoding/decoding with controllable browser load/decode waits.
 
 - The negative control against exact official `a889d22` fails the new lifetime
   assertion: 318,096 bytes remain when the decoder wait begins.
-- Four candidate tests pass. The canvas remains intact until encoding returns,
+- Thirteen candidate tests pass. The canvas remains intact until encoding returns,
   then releases before both image load and decode. A not-yet-ready image is not
   exposed. Cache accounting retains the original full decoded byte size.
 - Three real hull/color/stage variants have exact RGBA equality before encoding
   and after PNG decoding versus official `a889d22`.
 - Encode failure, image load failure and decode failure release the surface;
   failed output URLs are revoked, pending entries and preparation pins cleared.
-- Sixty distinct hull preparations, including cancellation during encoding on
-  alternate iterations, leave no working canvases or pins. The existing painted
+- Sixty distinct live hull preparations leave no working canvases or pins.
+  Separate cancellation cases test every asynchronous boundary, a shared live
+  consumer and a remount during cancellation/finally microtasks. The painted
   cache remains within 48 entries/24 MiB and its source cache within eight entries.
+- All four obsolete-work assertions fail against exact official `a889d22`.
+  The delayed source-sharing assertion also fails there: 162 objects versus the
+  required 20. The candidate creates 20, supports ordinary retry after failure
+  and drops completed pending entries rather than retaining an extra image cache.
+- 1,100 rapid preparation-plan changes use the real plans for all 500 sectors
+  and 50 bosses, covering normal groups, boss intro/fight/escorts and both bonus
+  groups behind a delayed first source. Obsolete work settles; only variants
+  needed by the final scene are painted, and its required variants all complete.
+  This is not a 500-sector gameplay replay, combat simulation or device FPS test.
 - Seventy existing input, guarded-loop, audio, music, hull-readiness, cache and
   boss-resource tests pass.
 - The actual-component Canvas lifecycle host passes 2,000 warm impacts,
@@ -63,18 +100,21 @@ encoding/decoding with controllable browser load/decode waits.
 - Frontend build passes, including 12 i18n tests, the release gate and TypeScript.
   Vite reports its existing large-chunk warning. The repository has no frontend
   npm lockfile; dependency installation did not add one or edit package metadata.
+  After the delayed-source changes, the eight directly relevant existing hull/
+  readiness/cache tests and the complete frontend build were rerun and pass.
 
 Commands from `frontend`:
 
 ```sh
 node --experimental-strip-types --test scripts/verifyPaintedShipLifetime.mjs
 CRYPTOID_PAINTED_SOURCE_REF=a889d22cc9c1142f51773e073c41b0a7c8aa13d8 node --experimental-strip-types --test --test-name-pattern='painting surface is needed' scripts/verifyPaintedShipLifetime.mjs
+CRYPTOID_PAINTED_SOURCE_REF=a889d22cc9c1142f51773e073c41b0a7c8aa13d8 node --experimental-strip-types --test --test-name-pattern='cancellation during|delayed source requests' scripts/verifyPaintedShipLifetime.mjs
 node --experimental-strip-types --test src/pages/gameLoop.test.mjs src/pages/gameInput.test.mjs src/pages/gameAudio.test.mjs src/pages/gameAudioResume.test.mjs src/pages/musicPlayback.test.mjs src/pages/hullReadiness.test.mjs src/pages/resourceCacheDiagnostics.test.mjs src/pages/bossResourceDiagnostics.test.mjs
 node scripts/verifyCanvasLifecycle.mjs
 npm run build
 ```
 
-The second command is expected to fail. Native raster QA uses `@napi-rs/canvas`
+Both baseline assertion commands are expected to fail. Native raster QA uses `@napi-rs/canvas`
 from the QA environment (or `CRYPTOID_NATIVE_CANVAS_MODULE`); it is not added to
 application dependencies. No pixel assertion is bypassed or relaxed.
 
@@ -92,7 +132,8 @@ application dependencies. No pixel assertion is bypassed or relaxed.
 - Existing painted/source caches are bounded in the tested preparations.
   These counts do not measure CSS compositing surfaces, browser image caches,
   GPU/native allocations, whole-process memory or OS memory pressure. Arbitrary
-  slow-network pending-request growth was not measured in this audit.
+  slow-network native memory behavior was not measured. The controlled pending
+  Image duplication finding and its limits are described above.
 - Physical iPhone/Pi Browser memory, frame pacing, thermal behavior and native
   process termination remain unverified. Neither a native crash cause nor a
   complete Whitescreen fix is established. Desktop/native host results cannot
@@ -101,7 +142,9 @@ application dependencies. No pixel assertion is bypassed or relaxed.
   cumulative retention and cold-start work. Keep any experiment isolated and
   retain the official game appearance; a pause alone does not prove cleanup.
 
-There is no new public deployment to roll back. The official deployment and its
-existing prior-release rollback `dpl_7CGcYyrnLNXwkU8ychnkxfjqR198` at `f5be06d`
-remain the established references. Any later public release needs a separate
-explicit release instruction for the reviewed candidate.
+Before releasing this candidate, preserve the freshly verified current Testnet
+source `a889d22` and READY deployment `dpl_DssUzk9j8fruG7HY7BNPUMfYZjmW` as its
+immediate rollback. The older rollback `dpl_7CGcYyrnLNXwkU8ychnkxfjqR198` at
+`f5be06d` must also remain available. Record the exact new runtime commit, build,
+post-release checks and proof separately; this document alone is not evidence
+that a new version has been published.

@@ -5,6 +5,7 @@ import vm from 'node:vm';
 import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { build } from 'esbuild';
+import { hullSourcePlan, preparedHullPlan } from '../src/pages/hullSourcePlan.ts';
 
 // Execute the real painting, encoding and cache path. Native raster QA is not
 // Safari/iPhone memory measurement. Browser Image load/decode can be held apart.
@@ -21,7 +22,7 @@ async function until(check) {
   for (let i = 0; i < 2000; i++) { if (check()) return; await turn(); }
   assert.fail('controlled image pipeline did not reach the expected stage');
 }
-async function fixture(ref = candidate) {
+async function fixture(ref = candidate, { holdSources = false } = {}) {
   const bundle = await build({ absWorkingDir: root,
     stdin: { contents: sourceAt(ref), resolveDir: root + 'src/pages', loader: 'ts' },
     bundle: true, write: false, platform: 'node', format: 'cjs', logLevel: 'silent',
@@ -31,7 +32,7 @@ async function fixture(ref = candidate) {
         contents: 'export const useState=()=>{};export const useEffect=()=>{};' }));
     } }],
   });
-  const canvases = [], encodes = [], painted = [], urls = new Map(), revoked = [];
+  const canvases = [], encodes = [], sources = [], painted = [], urls = new Map(), revoked = [];
   const errors = [];
   let serial = 0;
   class Image {
@@ -41,10 +42,10 @@ async function fixture(ref = candidate) {
     set src(url) {
       this.url = url;
       if (url.startsWith('blob:')) { painted.push(this); return; }
-      void loadImage(fs.readFileSync(root + 'public' + url)).then(image => {
-        this.native = image; this.onload?.();
-      }).catch(error => { errors.push(error); this.onerror?.(); });
+      sources.push(this);
+      if (!holdSources) void this.loadSource().catch(error => { errors.push(error); this.onerror?.(); });
     }
+    async loadSource() { this.native = await loadImage(fs.readFileSync(root + 'public' + this.url)); this.onload?.(); }
     decode() { return new Promise((resolve, reject) => { this.finishDecode = resolve; this.failDecode = reject; }); }
     async load() { this.native = await loadImage(Buffer.from(await urls.get(this.url).arrayBuffer())); this.onload?.(); }
   }
@@ -75,7 +76,7 @@ async function fixture(ref = candidate) {
     document: { createElement: makeCanvas }, exports: {}, module: { exports: {} },
   };
   scope.module.exports = scope.exports; vm.runInNewContext(bundle.outputFiles[0].text, scope);
-  return { api: scope.module.exports, canvases, encodes, painted, revoked, urls, errors,
+  return { api: scope.module.exports, canvases, encodes, sources, painted, revoked, urls, errors,
     liveBytes: () => canvases.reduce((bytes, c) => bytes + c.width * c.height * 4, 0) };
 }
 const hull = { sprite: 0, color: 'gold', stage: 1 };
@@ -144,12 +145,11 @@ test('failed encoding, image load and decode release surfaces and revoke failed 
   }
 });
 
-test('repeated preparation and cancellation leave bounded caches without working canvases or pins', async () => {
+test('repeated live preparation leaves bounded caches without working canvases or pins', async () => {
   const f = await fixture();
   for (let i = 0; i < 60; i++) {
     const selected = { sprite: i % 20, stage: Math.floor(i / 20) + 1, color: 'gold' };
     const { preparation, encode } = await encoded(f, selected);
-    if (i % 2) preparation.release(); // Unmount while its encoder is pending.
     encode.finish(); await until(() => f.painted.length > i);
     assert.equal(f.liveBytes(), 0);
     const image = f.painted[i]; await image.load(); await until(() => image.finishDecode);
@@ -161,4 +161,151 @@ test('repeated preparation and cancellation leave bounded caches without working
     assert.equal(f.liveBytes(), 0);
   }
   assert.equal(f.revoked.length, 60 - f.api.paintedShipResourceStats().painted);
+});
+
+test('cancellation during a delayed source response prevents obsolete painting and allows a fresh request', async () => {
+  const f = await fixture(candidate, { holdSources: true });
+  const preparation = f.api.retainPreparedHulls([hull]);
+  await until(() => f.sources.length === 1);
+  preparation.release(); await f.sources[0].loadSource();
+  await until(() => f.encodes.length || !f.api.paintedShipResourceStats().pending);
+  assert.equal(f.encodes.length, 0, 'unmounted hull must not start material work after its late image arrives');
+  assert.deepEqual([...await preparation.settled], [false]);
+  assert.equal(f.liveBytes(), 0);
+  const fresh = await encoded(f);
+  fresh.encode.finish(); await until(() => f.painted.length);
+  await f.painted[0].load(); await until(() => f.painted[0].finishDecode);
+  f.painted[0].finishDecode(); assert.deepEqual([...await fresh.preparation.settled], [true]);
+  fresh.preparation.release();
+});
+
+test('cancellation during encoding skips the obsolete replacement load', async () => {
+  const f = await fixture(), { preparation, encode } = await encoded(f);
+  preparation.release(); encode.finish();
+  await until(() => f.painted.length || !f.api.paintedShipResourceStats().pending);
+  assert.equal(f.painted.length, 0, 'unmounted output does not start an image load/decode');
+  assert.deepEqual([...await preparation.settled], [false]);
+  assert.equal(f.liveBytes(), 0); assert.equal(f.urls.size, 0);
+  assert.equal(f.api.paintedShipResourceStats().painted, 0);
+});
+
+test('cancellation during replacement image loading skips decode and revokes the output', async () => {
+  const f = await fixture(), { preparation, encode } = await encoded(f);
+  encode.finish(); await until(() => f.painted.length);
+  preparation.release(); await f.painted[0].load();
+  await until(() => f.painted[0].finishDecode || !f.api.paintedShipResourceStats().pending);
+  assert.equal(f.painted[0].finishDecode, undefined, 'unmounted image does not request a further decode');
+  assert.deepEqual([...await preparation.settled], [false]);
+  assert.equal(f.urls.size, 0); assert.equal(f.revoked.length, 1);
+});
+
+test('cancellation during decode does not populate the cache with obsolete output', async () => {
+  const f = await fixture(), { preparation, encode } = await encoded(f);
+  encode.finish(); await until(() => f.painted.length);
+  await f.painted[0].load(); await until(() => f.painted[0].finishDecode);
+  preparation.release(); f.painted[0].finishDecode();
+  assert.deepEqual([...await preparation.settled], [false]);
+  assert.equal(f.api.paintedShipResourceStats().painted, 0);
+  assert.equal(f.urls.size, 0); assert.equal(f.revoked.length, 1);
+});
+
+test('a second current consumer keeps a shared hull preparation alive', async () => {
+  const f = await fixture(candidate, { holdSources: true });
+  const first = f.api.retainPreparedHulls([hull]);
+  await until(() => f.sources.length === 1);
+  const second = f.api.retainPreparedHulls([hull]); first.release();
+  await f.sources[0].loadSource(); await until(() => f.encodes.length);
+  f.encodes[0].finish(); await until(() => f.painted.length);
+  await f.painted[0].load(); await until(() => f.painted[0].finishDecode);
+  f.painted[0].finishDecode();
+  assert.deepEqual([...await second.settled], [true]);
+  assert.equal(f.sources.length, 1); assert.equal(f.encodes.length, 1);
+  assert.equal(f.api.paintedShipResourceStats().retainCount, 1);
+  second.release(); assert.equal(f.api.paintedShipResourceStats().retainCount, 0);
+});
+
+test('delayed source requests remain shared across real block plans and cache eviction', async () => {
+  const f = await fixture(candidate, { holdSources: true });
+  const requested = new Set();
+  for (let repeat = 0; repeat < 3; repeat++) for (let sector = 1; sector <= 9; sector++) {
+    const plan = hullSourcePlan(sector, 'normal', 0, 0);
+    plan.forEach(url => requested.add(url)); f.api.preloadHullSources(plan);
+    assert.ok(f.api.paintedShipResourceStats().sources <= 8);
+  }
+  assert.equal(f.sources.length, requested.size, 'each unresolved URL owns only one Image even after leaving the eight-entry cache');
+  // Failure must retire deduplication too, allowing an ordinary retry.
+  for (const image of f.sources) image.onerror(); await turn();
+  const count = f.sources.length;
+  f.api.preloadHullSources([f.sources[0].url]);
+  assert.equal(f.sources.length, count + 1, 'a failed request can be retried');
+  f.sources.at(-1).onerror(); await turn();
+});
+
+test('successful source requests leave only the existing bounded ready cache', async () => {
+  const f = await fixture(candidate, { holdSources: true });
+  const urls = Array.from({ length: 20 }, (_, i) => `/ships/evolution/ship_${String(i + 1).padStart(2, '0')}_stage_1.png`);
+  for (let i = 0; i < urls.length; i += 7) f.api.preloadHullSources(urls.slice(i, i + 7));
+  assert.equal(f.sources.length, 20);
+  for (const image of f.sources) await image.loadSource(); await turn();
+  assert.equal(f.api.paintedShipResourceStats().sources, 8);
+  f.api.preloadHullSources([urls.at(-1)]);
+  assert.equal(f.sources.length, 20, 'ready recent sources remain cached');
+  f.api.preloadHullSources([urls[0]]);
+  assert.equal(f.sources.length, 21, 'resolved evicted sources are not held in a second completed-image cache');
+  await f.sources.at(-1).loadSource(); await turn(); assert.equal(f.liveBytes(), 0);
+});
+
+test('a remount between cancellation and finally receives a fresh preparation', async () => {
+  const f = await fixture(candidate, { holdSources: true });
+  const first = f.api.retainPreparedHulls([hull]);
+  await until(() => f.sources.length);
+  first.release(); let replacement;
+  const loaded = f.sources[0].onload;
+  f.sources[0].onload = () => {
+    loaded(); queueMicrotask(() => { replacement = f.api.retainPreparedHulls([hull]); });
+  };
+  await f.sources[0].loadSource(); await until(() => replacement && f.encodes.length);
+  assert.deepEqual([...await first.settled], [false]);
+  f.encodes[0].finish(); await until(() => f.painted.length);
+  await f.painted[0].load(); await until(() => f.painted[0].finishDecode);
+  f.painted[0].finishDecode(); assert.deepEqual([...await replacement.settled], [true]);
+  replacement.release(); assert.equal(f.api.paintedShipResourceStats().pending, 0);
+});
+
+test('rapid preparation-plan changes cover all 500 sectors and 50 bosses behind a delayed first image', async () => {
+  const f = await fixture(candidate, { holdSources: true });
+  const all = []; let current, lastPlan;
+  const change = async (sector, encounter, offset = 0, wave = 0, group = 0) => {
+    current?.release(); lastPlan = preparedHullPlan(sector, encounter, offset, wave, group, 2);
+    current = f.api.retainPreparedHulls(lastPlan); all.push(current);
+    await turn(); // Let the real serial queue start, while its first image stays delayed.
+  };
+  for (let sector = 1; sector <= 500; sector++) {
+    if (sector % 10) { await change(sector, 'normal'); await change(sector, 'normal', 6); }
+    else {
+      await change(sector, 'boss-intro'); await change(sector, 'boss-fight', 0, 1);
+      await change(sector, 'bonus'); await change(sector, 'bonus', 0, 0, 1);
+    }
+  }
+  assert.equal(all.length, 1100);
+  assert.equal(f.encodes.length, 0, 'source delay has not spawned painting canvases');
+  const handledSources = new Set(), handledEncodes = new Set(), handledImages = new Set(), handledDecodes = new Set();
+  let finished = false;
+  const completed = Promise.all(all.map(preparation => preparation.settled)).then(() => { finished = true; });
+  for (let round = 0; round < 2000 && !finished; round++) {
+    for (const image of f.sources) if (!handledSources.has(image)) { handledSources.add(image); await image.loadSource(); }
+    for (const encode of f.encodes) if (!handledEncodes.has(encode)) { handledEncodes.add(encode); encode.finish(); }
+    await turn();
+    for (const image of f.painted) if (!handledImages.has(image)) { handledImages.add(image); await image.load(); }
+    await turn();
+    for (const image of f.painted) if (image.finishDecode && !handledDecodes.has(image)) { handledDecodes.add(image); image.finishDecode(); }
+    await turn();
+  }
+  assert.equal(finished, true, 'all obsolete queued jobs settle once the held source returns'); await completed;
+  assert.ok([...await current.settled].every(Boolean), 'latest scene still gets every required hull');
+  const latestKeys = new Set(lastPlan.map(h => `${h.sprite}:${h.stage ?? 1}:${h.color}`));
+  assert.equal(f.encodes.length, latestKeys.size, 'only variants required by the final scene do material work');
+  assert.equal(f.api.paintedShipResourceStats().pending, 0);
+  current.release(); assert.equal(f.api.paintedShipResourceStats().retainCount, 0);
+  assert.equal(f.liveBytes(), 0); assert.equal(f.errors.length, 0);
 });

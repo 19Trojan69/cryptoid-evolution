@@ -13,10 +13,17 @@ const preparationProbe = { jobsStarted: 0, jobsFinished: 0, queueWaitMaxMs: 0,
   materialTotalMs: 0, materialMaxMs: 0, encodeTotalMs: 0, decodeTotalMs: 0,
   sourceWorkTotalMs: 0, sourceWorkMaxMs: 0 };
 const sourceImages = new ResourceCache<Promise<HTMLImageElement>>(8, Infinity);
+// Eviction from the ready-source LRU does not stop an unresolved Image load.
+// Share that load until it settles; do not keep a second completed-image cache.
+const pendingSources = new Map<string, Promise<HTMLImageElement>>();
 const readySources = new WeakSet<Promise<HTMLImageElement>>();
 const visualCenters = new Map<string, { x: number; y: number }>();
 const shipImage = (url: string) => {
   let pending = sourceImages.get(url);
+  if (!pending) {
+    pending = pendingSources.get(url);
+    if (pending) sourceImages.set(url, pending);
+  }
   if (!pending) {
     pending = new Promise<HTMLImageElement>((resolve, reject) => {
       const image = new Image();
@@ -43,14 +50,16 @@ const shipImage = (url: string) => {
       image.src = url;
     });
     sourceImages.set(url, pending);
+    pendingSources.set(url, pending);
     const current = pending;
-    void current.then(() => readySources.add(current), () => {});
+    const settled = () => { if (pendingSources.get(url) === current) pendingSources.delete(url); };
+    void current.then(() => { readySources.add(current); settled(); }, settled);
     void current.catch(() => { if (sourceImages.get(url) === current) sourceImages.delete(url); });
   }
   return pending;
 };
 
-// Use the existing eight-source cache, not an additional preload cache/queue.
+// Ready images use the existing eight-source cache; pending URLs share one load.
 export const preloadHullSources = (urls: readonly string[]) => {
   for (const url of [...new Set(urls)].slice(0, 7)) void shipImage(url).catch(() => {});
 };
@@ -91,8 +100,16 @@ const renderPaintedSprite = async (index: number, colorId: PlayerColorId, stage:
   const key = `${index}:${stage}:${colorId}`;
   const cached = cache.get(key);
   if (cached) return cached;
+  const checkRetained = () => {
+    if (cache.retained(key)) return;
+    // Remove the cancelled promise before rejecting so a new consumer cannot
+    // inherit it during the rejection/finally microtasks.
+    pendingPaints.delete(key);
+    throw new Error('Ship preparation cancelled');
+  };
   const url = shipEvolutionAsset(index, stage);
   const image = await shipImage(url);
+  checkRetained();
   const timed = isCombatProbeEnabled();
   const materialStarted = timed ? performance.now() : 0;
   const canvas = document.createElement("canvas");
@@ -115,6 +132,7 @@ const renderPaintedSprite = async (index: number, colorId: PlayerColorId, stage:
     // The completed Blob owns its pixels. Do not retain a second full painting
     // surface while the replacement image waits for load/decode.
     canvas.width = canvas.height = 0;
+    checkRetained();
     const decodingStarted = timed ? performance.now() : 0;
     if (timed) preparationProbe.encodeTotalMs += decodingStarted - encodingStarted;
     const paintedUrl = URL.createObjectURL(blob);
@@ -127,7 +145,9 @@ const renderPaintedSprite = async (index: number, colorId: PlayerColorId, stage:
         decoded.onerror = () => { decoded.onload = decoded.onerror = null; reject(new Error('Painted ship image unavailable')); };
         decoded.src = paintedUrl;
       });
+      checkRetained();
       if (typeof decoded.decode === 'function') await decoded.decode();
+      checkRetained();
       if (timed) preparationProbe.decodeTotalMs += performance.now() - decodingStarted;
     } catch (error) { URL.revokeObjectURL(paintedUrl); throw error; }
     cache.set(key, paintedUrl, blob.size + decodedBytes);

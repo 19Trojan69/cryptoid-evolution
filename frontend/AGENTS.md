@@ -1,5 +1,23 @@
 # Preserve the officially approved game
 
+## Approved Testnet image-lifetime sequence, 20 October 2026
+
+After the assistant proposed automated delayed-image checks, resource analysis,
+then publishing tested corrections to Testnet with a rollback point, the user
+accepted: "Und dann machen wir das. Sag mir step by step, was ich tun muss oder
+ob du das allein machen kannst." Apply this approval to the reviewed changes
+in paintedShip.ts only: early working-canvas release, cancellation of obsolete
+preparations at asynchronous boundaries, and sharing pending source loads across
+cache eviction. Thirteen native/controlled-host checks pass, including exact
+RGBA preservation, failure/retry/remount cases and 1,100 preparation-plan changes.
+Those are not physical iPhone memory/FPS results or a complete Whitescreen fix.
+Publish only through the existing official Testnet project after preserving
+a889d22 / dpl_DssUzk9j8fruG7HY7BNPUMfYZjmW as immediate rollback. Mainnet, Admin
+exclusivity, accounts, saves and Highscores remain outside this change. Keep
+automatic deployment disabled on the audit branch and record the actual release
+receipt separately. This approval supersedes the earlier preparation-only
+restriction below for this specific correction set.
+
 ## Official Testnet lifetime audit, 20 October 2026
 
 The owner no longer has a Mac. Continue the authorized stability investigation
