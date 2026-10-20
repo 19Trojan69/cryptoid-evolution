@@ -8,7 +8,7 @@ body{background:#071622;color:#edf7fb;font:16px system-ui;padding:24px} .box{wid
 pre{white-space:pre-wrap}li{margin:8px}
 </style>
 <h1>Cryptoid · Gemeinsamer 60-Hz-Takt</h1><p>Kontrollierte Browserprüfung der echten Animationssteuerung. Keine Aussage über iPhone-Temperatur.</p>
-<div id="fixture"><div class="box infinite" id="infinite"></div><div class="box finite" id="finite"></div><div class="box pseudo" id="pseudo"></div><div class="box transition" id="transition"></div><div class="box" id="web"></div></div>
+<div id="fixture"><div class="box infinite" id="infinite"></div><div class="box finite" id="finite"></div><div class="box pseudo" id="pseudo"></div><div class="box" id="late-pseudo"></div><div class="box transition" id="transition"></div><div class="box" id="web"></div></div>
 <ol id="checks"></ol><pre id="result">Prüfung läuft …</pre>
 <script type="module">
 import {startCssFramePacing,paceAnimation} from '/src/lib/cssFramePacing.ts';
@@ -23,8 +23,11 @@ try {
  await wait(70);
  const infinite=document.querySelector('#infinite'), anim=infinite.getAnimations()[0];
  check('CSS-Animationen am gemeinsamen Takt',anim.playbackRate===0);
- const pseudo=document.querySelector('#pseudo').getAnimations()[0];
- check('Pseudoelemente erfasst',pseudo?.playbackRate===0);
+ const pseudo=document.querySelector('#pseudo').getAnimations({subtree:true})[0];
+ check('Pseudoelemente erfasst',pseudo?.playbackRate===0,{count:document.querySelector('#pseudo').getAnimations({subtree:true}).length,rate:pseudo?.playbackRate});
+ document.querySelector('#late-pseudo').classList.add('pseudo');await wait(70);
+ const latePseudo=document.querySelector('#late-pseudo').getAnimations({subtree:true})[0];
+ check('Neue Pseudoelemente nach Start erfasst',latePseudo?.playbackRate===0,{rate:latePseudo?.playbackRate});
  const points=[];let sampling=true;
  const sample=()=>{points.push(Number(anim.currentTime));if(sampling)requestAnimationFrame(sample);};requestAnimationFrame(sample);
  const web=paceAnimation(document.querySelector('#web').animate([{opacity:0},{opacity:1}],{duration:180,fill:'forwards'}));
@@ -40,7 +43,7 @@ try {
  check('CSS-Wiederaufnahme bewegt sich weiter',Number(anim.currentTime)>paused+70,{delta:Number(anim.currentTime)-paused});
  const changes=points.filter((value,i)=>i===0||value!==points[i-1]).length;
  check('CSS-Zeit wird fortgeschrieben',changes>10,{samples:points.length,changes});
- infinite.remove();document.querySelector('#pseudo').remove();await wait(50);
+ infinite.remove();document.querySelector('#pseudo').remove();document.querySelector('#late-pseudo').remove();await wait(50);
  stop();check('Aufräumen stellt ursprüngliche Abspielrate wieder her',anim.playbackRate===1,{rate:anim.playbackRate});
  output.textContent=JSON.stringify({passed:checks.every(check=>check.passed),checks},null,2);
 }catch(error){stop();output.textContent=JSON.stringify({passed:false,error:String(error),checks},null,2);}

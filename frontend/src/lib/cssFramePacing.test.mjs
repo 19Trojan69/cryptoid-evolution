@@ -57,6 +57,13 @@ test('explicit Web Animations share the clock and retain authored playback rates
   assert.equal(paceAnimation(a),a); assert.equal(a.playbackRate,0); tick(); assert.ok(a.currentTime>30&&a.currentTime<35);
   stop(); assert.equal(a.playbackRate,2);
 });
+test('animation events discover pseudo-elements added after startup', () => {
+  const h = host(), stop = startCssFramePacing(h.root), pseudo = h.animation();
+  h.root.getAnimations = options => options?.subtree ? [pseudo] : [];
+  h.root.dispatchEvent(new Event('animationstart'));
+  assert.equal(pseudo.playbackRate, 0); tick(); assert.ok(pseudo.currentTime > 0);
+  stop(); assert.equal(pseudo.playbackRate, 1);
+});
 test('hidden document stops work and resumes without replaying hidden time', () => {
   const h = host(), a = h.animation(), stop = startCssFramePacing(h.root);
   tick(); const before=a.currentTime; h.doc.hidden=true; h.doc.dispatchEvent(new Event('visibilitychange')); assert.equal(frames.size,0);

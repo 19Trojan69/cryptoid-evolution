@@ -67,7 +67,9 @@ export function startCssFramePacing(root: HTMLElement) {
   const discover = (event: Event) => {
     const target = event.target as Element | null;
     if (!target || typeof target.getAnimations !== 'function') return;
-    try { for (const animation of target.getAnimations()) register(animation); }
+    // Pseudo-element animations are included only with subtree discovery.
+    // Inspect just the event target, never the whole document on every frame.
+    try { for (const animation of target.getAnimations({ subtree: true })) register(animation); }
     catch { /* A disappearing/unsupported target keeps native playback. */ }
   };
   const visibility = () => {
