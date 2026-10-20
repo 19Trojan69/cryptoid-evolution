@@ -72,7 +72,26 @@ SafariViewService-Jetsam-Einzelbericht noch die Ursache des Cryptoid-Whitescreen
 Die betroffene Webseite bleibt im Einzelbericht unbenannt; der Nutzer konnte
 den Zeitpunkt keinem bestimmten Browser oder Spiel sicher zuordnen.
 
-Die Korrektur ist auf dem isolierten Audit-Zweig vorbereitet und getestet.
-In diesem Schritt erfolgt keine Veröffentlichung. Die vorhandene Testnet-
-Freigabe `23b9f83` und sämtliche festen Release-/Rollback-Referenzen bleiben
-erhalten; automatische Deployments des Audit-Zweigs bleiben deaktiviert.
+Die anschließende Veröffentlichung wurde vom Owner um 14:12:49 Uhr ausdrücklich
+beauftragt und ist abgeschlossen: Das offizielle Testnet ist seit
+14:21:09.252 Uhr (Europe/Vienna) auf Commit `927dc5a`, Tree
+`e294a19875e5216059062d1ef6a49a6466363175`, READY Deployment
+`dpl_3St55QU618jXYuGGVMCWAYmgex5c`. Der Produktionsbuild dauerte 36 Sekunden.
+Die beobachtete Build-Kennung meldet `workingTreeDirty: true`.
+
+Die ausgelieferten Module enthalten beide Pending-Lookups, die Bereinigung
+nach Erfolg/Fehler und die ursprünglichen acht/zwanzig Ergebnis-Einträge.
+Die Gast-Sammlung stellt über die offizielle Adresse sechs sichtbare Boss-
+Silhouetten und alle zwanzig Standard-Schiffsporträts fertig dar. API, anonyme
+Admin-Abweisung, alle drei Ranglisten-Antworten und die geprüfte Boss-Atlasdatei
+stimmen mit den Hashes unmittelbar vor Veröffentlichung überein. Mainnet ist
+unverändert. Ein begrenzter Scan von zwölf Anfragen zeigt null Warnungen,
+Fehler oder fatale Einträge. Die Browserprüfung beobachtet eine Hydrationswarnung
+sowie separate Erweiterungsfehler; sie belegt keine vollständig leere Konsole.
+
+Die feste Release-Referenz ist `codex/testnet-card-pending-release-20261020`.
+Rückfallstand: `backup/testnet-before-card-pending-20261020` auf `23b9f83`,
+vorheriges READY Deployment `dpl_whZtejzMwRDZEDs71ohk3GGDaWHn`.
+Alle älteren festen Referenzen und die abgeschalteten automatischen Deployments
+des Audit-Zweigs bleiben erhalten. Freigabebeleg und Prüfdaten stehen unter
+`docs/card-artwork-pending-release-20261020/`.

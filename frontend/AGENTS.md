@@ -1,5 +1,27 @@
 # Preserve the officially approved game
 
+## Completed card preparation Testnet release, 20 October 2026
+
+The owner's 14:12:49 Europe/Vienna instruction explicitly authorized Testnet
+publication. It is complete: READY production dpl_3St55QU618jXYuGGVMCWAYmgex5c,
+exact runtime 927dc5ab50941e66709f8c0dfc09a50625edba7f, reviewed tree
+e294a19875e5216059062d1ef6a49a6466363175, ready 14:21:09.252 Vienna (36s).
+Keep codex/testnet-card-pending-release-20261020 fixed at that source.
+Immediate rollback: backup/testnet-before-card-pending-20261020 at 23b9f83 /
+READY dpl_whZtejzMwRDZEDs71ohk3GGDaWHn; all older fixed refs stay fixed.
+Delivered source/tree and both shared-pending paths, settlement cleanup and
+eight/twenty-entry result-cache limits are verified. Observed build dirty flag
+is true. Preview and official guest collection render six visible boss portraits
+and all twenty Standard ship portraits. API, anonymous Admin denial, three
+Highscore response hashes and boss atlas match before; Mainnet remains 907d2a7
+and its prior deployment/public entry. A bounded twelve-request scan reports
+zero warning/error/fatal records. A browser hydration warning and unrelated
+extension metadata errors were observed; do not claim an entirely clean browser
+console. Native iPhone memory/Whitescreen cause remains unproved.
+See docs/card-artwork-pending-release-20261020/release.json and testnet-ready.jpg.
+Continue documentation on this audit branch with automatic deployment off;
+do not request this completed release approval again or deploy later docs SHAs.
+
 ## Card preparation deduplication, 20 October 2026, preparation complete
 
 At 14:05 Europe/Vienna the owner requested correcting the two newly named
