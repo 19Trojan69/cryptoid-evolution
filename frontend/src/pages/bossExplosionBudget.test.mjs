@@ -63,7 +63,7 @@ test('actual GamePage boss destruction saves the waiting reward and installs the
   for(let id=1;id<=50;id++) for(const combatVarietyEnabled of [false,true]) {
     let saved; const lifecycle=[];
     const state={boss:createSectorBoss(id*10,390,40,760),sector:id*10,hearts:2,maxHearts:3,score:0,shards:0,destroyed:0,combo:createDoubleKillCombo(),effects:[],asteroids:[],enemyShots:[{}],shots:[{}],powerUps:[{}]};
-    const context={combatVarietyEnabled,performanceProbeRef:{current:{lifecycle:kind=>lifecycle.push(kind)}},Image:class {},bossExplosionBudget,bossExplosionSize,bossFallTargetY,bossPoints,bossShardReward,creditComboDefeat,
+    const context={ownerDiagnostics:false,combatVarietyEnabled,performanceProbeRef:{current:{lifecycle:kind=>lifecycle.push(kind)}},Image:class {},bossExplosionBudget,bossExplosionSize,bossFallTargetY,bossPoints,bossShardReward,creditComboDefeat,
       BOSS_FALL_DURATION_MS:5000,soundRef:{current:null},fieldSizeRef:{current:{width:390,height:760}},
       window:{devicePixelRatio:3,matchMedia:()=>({matches:false})},document:{documentElement:{dataset:{}}},nextIdRef:{current:1},
       gameHaptics:{explosion(){},boss(){}},bossDestroyPlayedRef:{current:true},bossVictoryPendingRef:{current:false},bossVictoryFinishedRef:{current:true},

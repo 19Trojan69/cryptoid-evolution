@@ -1,0 +1,12 @@
+{
+  "id": "dpl_3qTkPi1D9KZ2fksDQ1amXXvF5eMJ",
+  "url": "https://cryptoid-evolution-testnet-dge92hq0a-19-trojan69.vercel.app",
+  "sourceCommit": "7bf0e9b755cdbcd4cb41bb8cdaa70a4686174996",
+  "readyAt": "2026-10-20T18:34:04.452Z",
+  "checks": {
+    "guestStart": true,
+    "pause": true,
+    "resumeWithoutNavigation": true
+  },
+  "limits": "Remote Chrome guest check, not Pi account login, iPhone FPS, memory or crash verification"
+}

@@ -21,5 +21,7 @@
     "presentationAudioAndApiStubs": true,
     "baseline60HzTraceEqual": true
   },
-  "limits": "Node host verification is not device FPS, GPU/native memory or thermal/crash proof."
+  "limits": "Node host verification is not device FPS, GPU/native memory or thermal/crash proof.",
+  "additionalBossAndInputTests": 62,
+  "testHarnessRepair": "Existing isolated destroyBoss context lacked ownerDiagnostics=false; production destroyBoss unchanged."
 }

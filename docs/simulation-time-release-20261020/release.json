@@ -1,0 +1,30 @@
+{
+  "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+  "officialUrl": "https://cryptoid-evolution-testnet.vercel.app/",
+  "deploymentId": "dpl_HE3FFtbQEhAVwGx7Qn2mFr5wLU35",
+  "sourceCommit": "7bf0e9b755cdbcd4cb41bb8cdaa70a4686174996",
+  "sourceTree": "cd5aa604ee210ed3382ee6176f69c26b7ea27603",
+  "state": "READY",
+  "readyAt": "2026-10-20T18:37:21.381Z",
+  "readyAtVienna": "2026-10-20T20:37:21.381+02:00",
+  "buildDurationMs": 54823,
+  "previewId": "dpl_3qTkPi1D9KZ2fksDQ1amXXvF5eMJ",
+  "releaseRef": "codex/testnet-simulation-time-release-20261020",
+  "rollback": {
+    "branch": "backup/testnet-before-simulation-time-20261020",
+    "sourceCommit": "e0bc53f3ea73bc127aab8ad4bc67c463c0a92464",
+    "deploymentId": "dpl_3uJJPe98c6KMK7K7jpU3z8fHPDH8"
+  },
+  "verification": {
+    "focusedTests": 66,
+    "additionalBossAndInputTests": 62,
+    "localeTests": 12,
+    "build": true,
+    "actualGamePageCampaigns": true,
+    "guestPreviewStartPauseResume": true,
+    "deliveredSourceAndTree": true,
+    "apiAndLeaderboardsUnchanged": true,
+    "mainnetUnchanged": true
+  },
+  "open": "Physical iPhone heat, native memory and Whitescreen cause are unproved. Runtime release fixes demonstrated simulation-time loss, with a bounded 136-ms frame budget."
+}

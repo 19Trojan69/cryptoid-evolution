@@ -47,6 +47,9 @@ je ursprünglichem RAF, damit Unterteilungen die Messung nicht verfälschen.
   `b77d2ff029222b3f4e24f06d6d4db1b2d025300a90718c639d481f9afcae593f`.
 - TypeScript, Vite-Produktionsbuild und 12 Sprachtests bestehen. Der bekannte
   Hinweis auf große Build-Chunks bleibt bestehen.
+- Weitere 62 Boss-, Waffen- und Eingabetests bestehen. Ein älterer isolierter
+  Boss-Test hatte den bestehenden Hostwert `ownerDiagnostics=false` nicht gesetzt;
+  dieser Testkontext wurde ergänzt. Die Produktionsfunktion blieb unverändert.
 
 Die Untersuchungen von Boss-Reaktor, Rumpfschäden, Waffen-Canvas, bemalten
 Schiffen, Quellen-/Textur-Caches und Effektbereinigung fanden in den geprüften
@@ -80,3 +83,19 @@ Zeitpunkt gehörender WebContent-/GPU-/Jetsam-Befund. Die entfernte Chrome-Prüf
 kann diese Hardware- und Host-Browser-Daten nicht liefern. Diese Korrektur wird
 deshalb als nachgewiesene Zeitlupen-Korrektur veröffentlicht, nicht als bewiesene
 vollständige Beseitigung des Whitescreens.
+
+## Veröffentlichter Stand
+
+Testnet ist seit **20:37:21 Uhr Wien** mit Quellstand
+`7bf0e9b755cdbcd4cb41bb8cdaa70a4686174996` bereit:
+https://cryptoid-evolution-testnet.vercel.app/
+
+Die geschützte Vorschau besteht den tatsächlichen Gast-Spielstart, Pause und
+Fortsetzen. Die offizielle Startseite wurde anschließend frisch geladen. Die
+ausgelieferten GamePage-/Admin-Dateien enthalten die erwartete Commit-/Baum-ID;
+der begrenzte Simulationshelfer ist im ausgelieferten JavaScript vorhanden.
+API, anonyme Admin-Sperre und alle drei Highscore-Antworten stimmen mit den
+vorherigen Hashes überein. Mainnet ist unverändert.
+
+Bereitstellungsdaten, Testergebnisse und Screenshot stehen in
+[simulation-time-release-20261020](simulation-time-release-20261020/release.json).

@@ -1,0 +1,18 @@
+{
+  "browser": "Remote Chrome",
+  "previewUrl": "https://cryptoid-evolution-testnet-dge92hq0a-19-trojan69.vercel.app/game",
+  "checks": {
+    "guestGameStarted": true,
+    "pauseDialog": true,
+    "resumedInSameGameRoute": true,
+    "officialHomeFreshlyLoaded": true
+  },
+  "console": {
+    "inspectedErrors": 10,
+    "piMessagingTimeoutPattern": 3,
+    "extensionOrMetadataPattern": 7,
+    "limits": "Existing SDK/extension-pattern errors remain; this is not a clean-console claim or evidence about iPhone failures."
+  },
+  "piAuthenticationTested": false,
+  "physicalIPhoneTested": false
+}

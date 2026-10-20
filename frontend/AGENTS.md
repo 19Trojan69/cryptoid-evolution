@@ -1,6 +1,6 @@
 # Preserve the officially approved game
 
-## Projectile slowdown correction, 20 October 2026, preparation
+## Projectile slowdown correction, 20 October 2026, completed Testnet release
 
 The owner explicitly reported repeatedly slowing shots and requested correction
 as part of the continuing iPhone investigation. This supersedes the historical
@@ -12,13 +12,23 @@ compact-phone paint backpressure. No backlog after extreme >136-ms frames; the
 existing foreground-stall pause remains. Paused/background time must not consume
 movement or equipment timers. Probe totals are once per original RAF, not per
 substep. The actual GamePage host checks movement of both shot types and timers
-at 60/30/20 Hz, 88-ms and jittered delivery. 66 focused tests and release build
-pass; two 25-normal-sector/two-boss host runs pass. The 60-Hz gameplay trace hash
+at 60/30/20 Hz, 88-ms and jittered delivery. 66 focused + 62 boss/input tests and
+release build pass; two 25-normal-sector/two-boss host runs pass. One old isolated
+boss test needed ownerDiagnostics=false in its host; runtime destroyBoss is unchanged.
+The 60-Hz gameplay trace hash
 exactly matches the preceding source. Hardware/presentation/audio/API are stubs
 in these host tests; none proves an iPhone heat or Whitescreen fix. The resource
 audit found bounded boss/image/canvas lifetimes; do not invent a proven native
-leak. See docs/simulation-time-20261020.md. Publication evidence will be recorded
-separately; preserve all prior fixed release/rollback refs and Mainnet.
+leak. Official Testnet is READY dpl_HE3FFtbQEhAVwGx7Qn2mFr5wLU35, runtime
+7bf0e9b755cdbcd4cb41bb8cdaa70a4686174996, tree cd5aa604ee210ed3382ee6176f69c26b7ea27603,
+ready 20:37:21.381 Vienna. Keep codex/testnet-simulation-time-release-20261020 fixed.
+Immediate rollback: backup/testnet-before-simulation-time-20261020 at e0bc53f /
+dpl_3uJJPe98c6KMK7K7jpU3z8fHPDH8. Delivered source/tree and bounded helper match;
+anonymous API/admin denial/three leaderboard hashes and Mainnet HTML match baseline.
+Preview guest start/pause/resume and fresh official Home pass in remote Chrome.
+No physical iPhone or Pi authentication proof. Preserve all prior fixed refs;
+do not deploy later evidence/test-only commits. See docs/simulation-time-20261020.md
+and docs/simulation-time-release-20261020/release.json, testnet-ready.jpg.
 
 ## Native animation timing / iPhone research, 20 October 2026
 
