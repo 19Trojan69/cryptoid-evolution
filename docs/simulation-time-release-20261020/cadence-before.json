@@ -1,0 +1,58 @@
+[
+  {
+    "mode": "actual GamePage, hardware/API/presentation stubs",
+    "frameMs": 16.666666666666668,
+    "wallMs": 1000,
+    "simulatedMs": 999.9999999999636,
+    "playerDistance": 639.9999999999636,
+    "playerHorizontal": 99.99999999999616,
+    "enemyDistance": 199.99999999999545,
+    "enemyHorizontal": 99.99999999999608,
+    "paidConsumedMs": 999.9999999998545,
+    "rapidConsumedMs": 999.9999999999636,
+    "sceneRequests": 30,
+    "pausePreservesMovementAndTimers": true
+  },
+  {
+    "mode": "actual GamePage, hardware/API/presentation stubs",
+    "frameMs": 33.333333333333336,
+    "wallMs": 1000,
+    "simulatedMs": 1000,
+    "playerDistance": 640.0000000000064,
+    "playerHorizontal": 100.00000000000009,
+    "enemyDistance": 199.99999999999864,
+    "enemyHorizontal": 100.00000000000014,
+    "paidConsumedMs": 1000.0000000000509,
+    "rapidConsumedMs": 1000,
+    "sceneRequests": 30,
+    "pausePreservesMovementAndTimers": true
+  },
+  {
+    "mode": "actual GamePage, hardware/API/presentation stubs",
+    "frameMs": 50,
+    "wallMs": 1000,
+    "simulatedMs": 680,
+    "playerDistance": 435.20000000000437,
+    "playerHorizontal": 68.00000000000004,
+    "enemyDistance": 135.9999999999991,
+    "enemyHorizontal": 68.00000000000009,
+    "paidConsumedMs": 680,
+    "rapidConsumedMs": 680,
+    "sceneRequests": 20,
+    "pausePreservesMovementAndTimers": true
+  },
+  {
+    "mode": "actual GamePage, hardware/API/presentation stubs",
+    "frameMs": 88,
+    "wallMs": 1000,
+    "simulatedMs": 406,
+    "playerDistance": 259.84000000000196,
+    "playerHorizontal": 40.599999999999994,
+    "enemyDistance": 81.19999999999959,
+    "enemyHorizontal": 40.60000000000004,
+    "paidConsumedMs": 406,
+    "rapidConsumedMs": 406,
+    "sceneRequests": 11,
+    "pausePreservesMovementAndTimers": true
+  }
+]

@@ -1,5 +1,25 @@
 # Preserve the officially approved game
 
+## Projectile slowdown correction, 20 October 2026, preparation
+
+The owner explicitly reported repeatedly slowing shots and requested correction
+as part of the continuing iPhone investigation. This supersedes the historical
+single-step/34-ms-total-frame preservation requirement only for the proven time
+loss: the previous loop simulated 680 ms per 1000 ms at 20 Hz. Keep each collision
+step <=34 ms, consume frames in at most four bounded substeps, publish only the
+final scene/direct ship styles per RAF, and retain the shared 60-Hz scheduler and
+compact-phone paint backpressure. No backlog after extreme >136-ms frames; the
+existing foreground-stall pause remains. Paused/background time must not consume
+movement or equipment timers. Probe totals are once per original RAF, not per
+substep. The actual GamePage host checks movement of both shot types and timers
+at 60/30/20 Hz, 88-ms and jittered delivery. 66 focused tests and release build
+pass; two 25-normal-sector/two-boss host runs pass. The 60-Hz gameplay trace hash
+exactly matches the preceding source. Hardware/presentation/audio/API are stubs
+in these host tests; none proves an iPhone heat or Whitescreen fix. The resource
+audit found bounded boss/image/canvas lifetimes; do not invent a proven native
+leak. See docs/simulation-time-20261020.md. Publication evidence will be recorded
+separately; preserve all prior fixed release/rollback refs and Mainnet.
+
 ## Native animation timing / iPhone research, 20 October 2026
 
 The owner's broad investigation/fix instruction and continuation are complete for

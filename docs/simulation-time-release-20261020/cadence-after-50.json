@@ -1,0 +1,14 @@
+{
+  "mode": "actual GamePage, hardware/API/presentation stubs",
+  "frameMs": 50,
+  "wallMs": 1000,
+  "simulatedMs": 1000,
+  "playerDistance": 640,
+  "playerHorizontal": 100,
+  "enemyDistance": 200,
+  "enemyHorizontal": 100,
+  "paidConsumedMs": 1000,
+  "rapidConsumedMs": 1000,
+  "sceneRequests": 20,
+  "pausePreservesMovementAndTimers": true
+}

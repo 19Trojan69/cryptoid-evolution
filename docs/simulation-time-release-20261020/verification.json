@@ -1,0 +1,25 @@
+{
+  "focusedTests": 66,
+  "failedTests": 0,
+  "localeTests": 12,
+  "releaseBuild": "passed",
+  "cadenceScenarios": [
+    "60Hz",
+    "30Hz",
+    "20Hz",
+    "88ms",
+    "irregular 16/17/50/88/33/64ms"
+  ],
+  "campaigns": {
+    "normalSectorsEach": 25,
+    "bossesEach": 2,
+    "frameIntervalsMs": [
+      16.666666666666668,
+      50
+    ],
+    "forcedClears": true,
+    "presentationAudioAndApiStubs": true,
+    "baseline60HzTraceEqual": true
+  },
+  "limits": "Node host verification is not device FPS, GPU/native memory or thermal/crash proof."
+}

@@ -27,6 +27,8 @@ globalThis.__campaignQA = {
  pause:()=>{stateRef.current.status='paused';setGame({...stateRef.current});},
  resume:()=>{stateRef.current.status='playing';lastFrameRef.current=0;setGame({...stateRef.current});},
  timers:()=>{Object.assign(stateRef.current,{paidWeaponLevel:2,paidWeaponMs:60000,weaponSource:'paid',weaponTimers:[0,0,60000,0,0,0],unlockedWeapons:[1,2],weaponCap:2,rapidFireMs:15000});},
+ seedCadence:()=>{const s=stateRef.current;fieldSizeRef.current.height=10000;s.player={x:.8,y:.9};lastPlayerRef.current={...s.player};s.phase='ATTACK_CYCLE';formationStartedRef.current=true;for(const e of s.asteroids)e.health=e.maxHealth=1000000;s.shots=[{id:-1,x:30,y:5000,speedX:.1,damage:1,empowered:false}];s.enemyShots=[{id:-2,x:50,y:1000,vx:.1,vy:.2,radius:3}];s.effects=[];lastFrameRef.current=performance.now();},
+ cadence:()=>({shot:stateRef.current.shots.find(s=>s.id===-1),enemyShot:stateRef.current.enemyShots.find(s=>s.id===-2),elapsed:elapsedRef.current,paid:stateRef.current.paidWeaponMs,rapid:stateRef.current.rapidFireMs,status:stateRef.current.status}),
  stress:()=>{const s=stateRef.current,{width,height}=fieldSizeRef.current;const ids=[];for(let i=0;i<80;i++){ids.push(nextIdRef.current);s.shots.push({id:nextIdRef.current++,x:i/80*width,y:height*.4,speedX:0,damage:1,empowered:false});ids.push(nextIdRef.current);s.enemyShots.push({id:nextIdRef.current++,x:i/80*width,y:height*.1,vx:0,vy:-.1,radius:3});}for(let i=0;i<12;i++){ids.push(nextIdRef.current);s.effects.push({id:nextIdRef.current++,kind:'explosion',x:(i%4+.5)*width/4,y:(Math.floor(i/4)+.5)*height/5,startedAt:performance.now(),sprite:i%20,debrisColor:'gold',debrisSize:72});}return ids;},
  remaining:ids=>[...stateRef.current.shots,...stateRef.current.enemyShots,...stateRef.current.effects].filter(x=>ids.includes(x.id)).length,
  finite:()=>[...stateRef.current.asteroids,...stateRef.current.shots,...stateRef.current.enemyShots,...stateRef.current.effects].every(x=>Number.isFinite(x.x)&&Number.isFinite(x.y)),
@@ -157,7 +159,10 @@ const presentation =
     ],
   });
   let clock = 1000,
-    nextId = 0;
+    nextId = 0,
+    sceneRequests = 0, sceneRequestsPerFrameMax = 0, frameIndex = 0,
+    frameInterval = Number(process.env.CRYPTOID_FRAME_MS || 16);
+  const jitter = process.env.CRYPTOID_FRAME_PATTERN ? process.env.CRYPTOID_FRAME_PATTERN.split(',').map(Number) : null;
   const frames = new Map(),
     timers = new Map(),
     effects = [],
@@ -261,6 +266,7 @@ const presentation =
           current,
           (next) => {
             current = typeof next === "function" ? next(current) : next;
+            if (current?.shots && current?.enemyShots) sceneRequests++;
           },
         ];
       },
@@ -303,7 +309,7 @@ const presentation =
   const advance = async (ms) => {
     const end = clock + ms;
     while (clock < end) {
-      clock = Math.min(end, clock + Number(process.env.CRYPTOID_FRAME_MS || 16));
+      clock = Math.min(end, clock + (jitter ? jitter[frameIndex++ % jitter.length] : frameInterval));
       for (const [id, t] of [...timers])
         if (t.at <= clock) {
           if (t.repeat) t.at = clock + t.repeat;
@@ -315,7 +321,9 @@ const presentation =
       const before = qa.info();
       if (sustaining) qa.sustain();
       const cpuStart = process.hrtime.bigint();
+      const publishedBeforeFrame = sceneRequests;
       for (const [, fn] of ready) fn(clock);
+      sceneRequestsPerFrameMax = Math.max(sceneRequestsPerFrameMax, sceneRequests - publishedBeforeFrame);
       histSample(before.status !== 'playing' ? 'paused' : before.encounter.startsWith('boss') ? before.encounter : before.phase === 'SECTOR_CLEAR' || before.phase === 'SECTOR_INTRO' ? 'transition' : before.attackers ? 'attack' : before.returning ? 'return' : 'formation', Number(process.hrtime.bigint() - cpuStart) / 1e6);
       assert.equal(frames.size, 1, "one RAF owner");
       assert.ok(qa.finite(), "finite coordinates");
@@ -333,6 +341,40 @@ const presentation =
   const emit = (type) => {
     for (const fn of listeners.get(type) || []) fn({});
   };
+  if (process.env.CRYPTOID_CADENCE_ONLY === "1") {
+    try {
+      await advance(8200);
+      qa.seedCadence(); qa.timers();
+      sceneRequestsPerFrameMax=0;
+      const before = qa.cadence(), publishedBefore = sceneRequests, started = clock;
+      await advance(1000);
+      const after = qa.cadence();
+      const result = { mode: "actual GamePage, hardware/API/presentation stubs", frameMs: frameInterval,
+        wallMs: clock-started, simulatedMs: after.elapsed-before.elapsed,
+        playerDistance: before.shot.y-after.shot.y, playerHorizontal: after.shot.x-before.shot.x,
+        enemyDistance: after.enemyShot.y-before.enemyShot.y, enemyHorizontal: after.enemyShot.x-before.enemyShot.x,
+        paidConsumedMs: before.paid-after.paid, rapidConsumedMs: before.rapid-after.rapid,
+        sceneRequests: sceneRequests-publishedBefore, sceneRequestsPerFrameMax, framePattern: jitter || null };
+      if (process.env.CRYPTOID_EXPECT_REALTIME === "1") {
+        for (const [key, expected] of Object.entries({simulatedMs:1000,playerDistance:640,playerHorizontal:100,enemyDistance:200,enemyHorizontal:100,paidConsumedMs:1000,rapidConsumedMs:1000}))
+          assert.ok(Math.abs(result[key]-expected)<1e-7, `${key}: ${result[key]} !== ${expected}`);
+      }
+      assert.ok(result.sceneRequestsPerFrameMax <= 1, "at most one scene request per host frame");
+      qa.pause(); const paused=qa.cadence(); await advance(5000);
+      assert.equal(qa.cadence().shot.y,paused.shot.y); assert.equal(qa.cadence().paid,paused.paid);
+      qa.resume(); await advance(frameInterval);
+      assert.equal(qa.cadence().paid,paused.paid,"resume does not consume paused time");
+      result.pausePreservesMovementAndTimers=true;
+      assert.equal(context.__navigation.length,0); assert.equal(errors.length,0);
+      fs.mkdirSync(path.dirname(output),{recursive:true}); fs.writeFileSync(output,JSON.stringify(result,null,2));
+      console.log(JSON.stringify(result));
+    } finally {
+      process.removeListener("unhandledRejection",unhandled);
+      for(const cleanup of cleanups.reverse())cleanup();
+      assert.equal(frames.size,0);
+    }
+    return;
+  }
   const normal = [],
     bosses = [],
     snapshots = [];

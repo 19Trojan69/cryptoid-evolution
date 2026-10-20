@@ -30,6 +30,7 @@ import BlockchainProgress from "./BlockchainProgress";
 import { gameHaptics } from "./gameHaptics";
 import { bindGameInput } from './gameInput';
 import { startGuardedGameLoop, type GameInterruption } from './gameLoop';
+import { simulationFrame } from './simulationFrame';
 import { requestGameFrame, cancelGameFrame } from '../lib/frameScheduler';
 import { cssFramePacingStats } from '../lib/cssFramePacing';
 import { recordGameDiagnostic, createGameSessionDiagnostics } from './gameDiagnostics';
@@ -1339,21 +1340,17 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   }, [clearControls]);
 
   useEffect(() => {
-    const simulate = (time: number) => {
+    let frameGap = 0, simulatedMs = 0, forceScene = false, requestScene = false;
+    const simulate = (time: number, delta: number, present: boolean) => {
       const state = stateRef.current;
-      const frameGap = time - (lastFrameRef.current || time);
-      const delta = Math.min(34, frameGap);
-      lastFrameRef.current = time;
-      ownerAudioAuditRef.current?.tick({ status: state.status, sector: state.sector, phase: state.phase, encounter: state.encounter,
-        adminPreview: adminRunRef.current, documentHidden: document.hidden }, frameGap);
       // Preserve destruction effects through a user pause or a backgrounded tab.
       if (state.status !== "playing") {
         for (const effect of state.effects) {
-          effect.startedAt += frameGap;
+          effect.startedAt += delta;
         }
       }
       if (state.status === "playing") {
-        performanceProbeRef.current?.simulationStep(frameGap, delta);
+        simulatedMs += delta;
         if(bossLifeRemainingRef.current>0){
           bossLifeRemainingRef.current=Math.max(0,bossLifeRemainingRef.current-delta);
           if(bossLifeRemainingRef.current===0)setExtraLifeVisible(false);
@@ -1390,18 +1387,20 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         }
         // Input retains the newest position immediately. Present both touch and
         // keyboard motion once per shared tick, including high-rate touch input.
-        if (playerShipRef.current) {
+        if (present && playerShipRef.current) {
           playerShipRef.current.style.left = `${state.player.x * 100}%`;
           playerShipRef.current.style.top = `${state.player.y * 100}%`;
         }
         const previousPlayer = lastPlayerRef.current ?? state.player;
         playerMotionRef.current = advanceShipMotion(playerMotionRef.current, (state.player.x - previousPlayer.x) * width, (state.player.y - previousPlayer.y) * height, delta);
         state.thrust = playerMotionRef.current.thrust;
-        playerShipRef.current?.style.setProperty("--flame-length", `${engineFlamePercent(state.thrust)}%`);
-        playerShipRef.current?.style.setProperty("--visual-bank", `${playerMotionRef.current.bank}deg`);
-        // Muzzle light belongs at the gun, not across the entire ship skin.
-        playerShipRef.current?.style.setProperty("--hull-light", String(hullIllumination(state.player.x * width, state.player.y * height, time, 0, state.effects)));
-        playerShipRef.current?.style.setProperty("--muzzle-light", String(playerMuzzleRef.current > 0 ? Math.max(0, 1 - (time - playerMuzzleRef.current) / 95) * .75 : 0));
+        if (present) {
+          playerShipRef.current?.style.setProperty("--flame-length", `${engineFlamePercent(state.thrust)}%`);
+          playerShipRef.current?.style.setProperty("--visual-bank", `${playerMotionRef.current.bank}deg`);
+          // Muzzle light belongs at the gun, not across the entire ship skin.
+          playerShipRef.current?.style.setProperty("--hull-light", String(hullIllumination(state.player.x * width, state.player.y * height, time, 0, state.effects)));
+          playerShipRef.current?.style.setProperty("--muzzle-light", String(playerMuzzleRef.current > 0 ? Math.max(0, 1 - (time - playerMuzzleRef.current) / 95) * .75 : 0));
+        }
         lastPlayerRef.current = state.player;
         if (!transitionPaused) elapsedRef.current += delta;
         impactCooldownRef.current = Math.max(0, impactCooldownRef.current - delta);
@@ -1492,8 +1491,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
               state.status = "victory";
               state.enemyShots = [];
               state.shots = [];
-              performanceProbeRef.current?.sceneRequested();
-              setGame({ ...state });
+              forceScene = true;
               return;
             }
             const clearEncounter = state.encounter === "boss-clear" ? "boss-clear" : state.encounter === "bonus" ? "bonus" : "normal";
@@ -1550,8 +1548,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
               if (state.encounter === 'bonus') recordOwnerResourceSnapshot('resource-bonus-start');
               else if (state.encounter === 'normal') recordOwnerResourceSnapshot('resource-normal-start');
             }
-            performanceProbeRef.current?.sceneRequested();
-            setGame({ ...state });
+            forceScene = true;
             return;
           }
         }
@@ -2005,27 +2002,29 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
             setGame({ ...stateRef.current, effects: [...stateRef.current.effects] });
           }, GAME_OVER_REVEAL_MS);
         }
-        // Desktop/tablet motion stays at display cadence; compact phones limit paints.
-        // When a compact phone is falling behind, reduce React scene paints
-        // while keeping simulation and direct ship movement at RAF cadence.
-        slowFramesRef.current = width > 700 ? 0 : frameGap > 48
-          ? Math.min(12, slowFramesRef.current + 2)
-          : Math.max(0, slowFramesRef.current - 1);
-        const paintInterval = width > 700 ? 16 : slowFramesRef.current >= 6 ? 50 : 32;
-        performanceProbeRef.current?.pacing({ frameGap, delta, slowFrames: slowFramesRef.current, paintInterval,
-          requested: !!(damageTaken || time - lastPaintRef.current >= paintInterval || state.phase !== previousPhase || state.status !== "playing"),
-          forced: !!(damageTaken || state.phase !== previousPhase || state.status !== "playing") });
-        if (damageTaken || time - lastPaintRef.current >= paintInterval || state.phase !== previousPhase || state.status !== "playing") {
-          lastPaintRef.current = time;
-          performanceProbeRef.current?.sceneRequested();
-          setGame({ ...state, boss: state.boss ? { ...state.boss } : null, asteroids: [...state.asteroids], bonusTargets: [...state.bonusTargets], shots: [...state.shots], enemyShots: [...state.enemyShots], effects: [...state.effects], powerUps: [...state.powerUps] });
+        forceScene ||= !!(damageTaken || state.phase !== previousPhase || state.status !== "playing");
+        if (present) {
+          // Keep compact-phone paint backpressure. Substeps never publish
+          // intermediate scenes or multiply direct ship DOM writes.
+          slowFramesRef.current = width > 700 ? 0 : frameGap > 48
+            ? Math.min(12, slowFramesRef.current + 2)
+            : Math.max(0, slowFramesRef.current - 1);
+          const paintInterval = width > 700 ? 16 : slowFramesRef.current >= 6 ? 50 : 32;
+          requestScene = forceScene || time - lastPaintRef.current >= paintInterval;
+          performanceProbeRef.current?.pacing({ frameGap, delta: simulatedMs, slowFrames: slowFramesRef.current, paintInterval,
+            requested: requestScene, forced: forceScene });
         }
       }
     };
     const step = (time: number) => {
       lastMeasuredFrameRef.current = lastFrameRef.current ? Math.max(0, time - lastFrameRef.current) : 0;
       if (document.hidden) return;
-      // Preserve the official single-step timing and mobile paint behavior.
+      const state = stateRef.current, wasPlaying = state.status === 'playing';
+      const frame = simulationFrame(lastMeasuredFrameRef.current, wasPlaying);
+      frameGap = frame.wallMs; simulatedMs = 0; forceScene = false; requestScene = false;
+      lastFrameRef.current = time;
+      ownerAudioAuditRef.current?.tick({ status: state.status, sector: state.sector, phase: state.phase, encounter: state.encounter,
+        adminPreview: adminRunRef.current, documentHidden: document.hidden }, frameGap);
       const probe = performanceProbeRef.current;
       probe?.begin(time, { sector: stateRef.current.sector, flight: flightRef.current, phase: stateRef.current.phase,
         width: fieldSizeRef.current.width, height: fieldSizeRef.current.height,
@@ -2037,8 +2036,21 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         rockEffects: stateRef.current.rockEffects.length, pickups: stateRef.current.powerUps.length,
         bossHealth: stateRef.current.boss?.health, liveTurrets: stateRef.current.boss?.turrets.filter(g => g.health > 0).length,
         bossHeartCollected: stateRef.current.bossHeartCollected, clearMs: clearTimerRef.current, hearts: stateRef.current.hearts });
-      try { simulate(time); }
-      finally { probe?.mark('phase-save-and-paint'); probe?.end(time); }
+      try {
+        for (let index = 0; index < frame.steps; index++) {
+          const present = index === frame.steps - 1;
+          simulate(present ? time : time - frame.simulatedMs + frame.stepMs * (index + 1), frame.stepMs, present);
+        }
+        if (forceScene || requestScene) {
+          const current = stateRef.current;
+          lastPaintRef.current = time;
+          probe?.sceneRequested();
+          setGame({ ...current, boss: current.boss ? { ...current.boss } : null, asteroids: [...current.asteroids], bonusTargets: [...current.bonusTargets], shots: [...current.shots], enemyShots: [...current.enemyShots], effects: [...current.effects], powerUps: [...current.powerUps] });
+        }
+      } finally {
+        if (wasPlaying) probe?.simulationStep(frameGap, simulatedMs);
+        probe?.mark('phase-save-and-paint'); probe?.end(time);
+      }
       if (diagnosticsRef.current?.due()) diagnosticsRef.current.update(diagnosticContext(), stateRef.current.status === 'playing', false);
     };
     const stop = startGuardedGameLoop({ step,

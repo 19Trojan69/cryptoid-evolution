@@ -200,7 +200,7 @@ export function createPerformanceProbe(options: Options = {}) {
       heap: "JS heap only when supported; excludes GPU/WebView memory",
       cpu: "instrumented simulation sections; rendering and audio work may occur outside them",
       scene: "GamePage render start to layout effect and request-to-commit; includes reconciliation/scheduling, excludes browser paint/GPU",
-      pacing: "Observed existing request thresholds and capped simulation delta; RAF callbacks and scene commits are not presented FPS",
+      pacing: "One wall/simulation total per RAF; bounded substeps and existing paint thresholds; RAF callbacks and scene commits are not presented FPS",
       preparation: "Cumulative synchronous source/material work and asynchronous encode/decode elapsed waits; waits are not CPU time",
       diagnosticWork: "Completed persistence costs before this snapshot, including serialization/storage; the write of this snapshot is not included",
       longTasks: "zero counts are meaningful only when longTasksSupported is true",
