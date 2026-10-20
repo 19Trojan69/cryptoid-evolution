@@ -29,6 +29,7 @@ globalThis.__campaignQA = {
  timers:()=>{Object.assign(stateRef.current,{paidWeaponLevel:2,paidWeaponMs:60000,weaponSource:'paid',weaponTimers:[0,0,60000,0,0,0],unlockedWeapons:[1,2],weaponCap:2,rapidFireMs:15000});},
  seedCadence:()=>{const s=stateRef.current;fieldSizeRef.current.height=10000;s.player={x:.8,y:.9};lastPlayerRef.current={...s.player};s.phase='ATTACK_CYCLE';formationStartedRef.current=true;for(const e of s.asteroids)e.health=e.maxHealth=1000000;s.shots=[{id:-1,x:30,y:5000,speedX:.1,damage:1,empowered:false}];s.enemyShots=[{id:-2,x:50,y:1000,vx:.1,vy:.2,radius:3}];s.effects=[];lastFrameRef.current=performance.now();},
  cadence:()=>({shot:stateRef.current.shots.find(s=>s.id===-1),enemyShot:stateRef.current.enemyShots.find(s=>s.id===-2),elapsed:elapsedRef.current,paid:stateRef.current.paidWeaponMs,rapid:stateRef.current.rapidFireMs,status:stateRef.current.status}),
+ mountShots:mount=>mountProjectiles(mount),
  stress:()=>{const s=stateRef.current,{width,height}=fieldSizeRef.current;const ids=[];for(let i=0;i<80;i++){ids.push(nextIdRef.current);s.shots.push({id:nextIdRef.current++,x:i/80*width,y:height*.4,speedX:0,damage:1,empowered:false});ids.push(nextIdRef.current);s.enemyShots.push({id:nextIdRef.current++,x:i/80*width,y:height*.1,vx:0,vy:-.1,radius:3});}for(let i=0;i<12;i++){ids.push(nextIdRef.current);s.effects.push({id:nextIdRef.current++,kind:'explosion',x:(i%4+.5)*width/4,y:(Math.floor(i/4)+.5)*height/5,startedAt:performance.now(),sprite:i%20,debrisColor:'gold',debrisSize:72});}return ids;},
  remaining:ids=>[...stateRef.current.shots,...stateRef.current.enemyShots,...stateRef.current.effects].filter(x=>ids.includes(x.id)).length,
  finite:()=>[...stateRef.current.asteroids,...stateRef.current.shots,...stateRef.current.enemyShots,...stateRef.current.effects].every(x=>Number.isFinite(x.x)&&Number.isFinite(x.y)),
@@ -345,6 +346,22 @@ const presentation =
     try {
       await advance(8200);
       qa.seedCadence(); qa.timers();
+      let shotMount, playerNode, enemyNode;
+      if (process.env.CRYPTOID_PRESENTATION_QA === '1') {
+        const doc = { createElement() {
+          const node = { ownerDocument: doc, children: [], moves: [], className: '',
+            appendChild(child) { this.children.push(child); child.parent = this; },
+            remove() { const list=this.parent?.children; if(list)list.splice(list.indexOf(this),1); },
+          };
+          let position='';
+          node.style = { setProperty() {}, get translate() { return position; },
+            set translate(value) { position=value; node.moves.push({at:clock,value}); } };
+          return node;
+        } };
+        shotMount=doc.createElement(); qa.mountShots(shotMount);
+        playerNode=shotMount.children[0].children[0]; enemyNode=shotMount.children[1].children[0];
+        playerNode.moves.length=0;enemyNode.moves.length=0;
+      }
       sceneRequestsPerFrameMax=0;
       const before = qa.cadence(), publishedBefore = sceneRequests, started = clock;
       await advance(1000);
@@ -355,6 +372,15 @@ const presentation =
         enemyDistance: after.enemyShot.y-before.enemyShot.y, enemyHorizontal: after.enemyShot.x-before.enemyShot.x,
         paidConsumedMs: before.paid-after.paid, rapidConsumedMs: before.rapid-after.rapid,
         sceneRequests: sceneRequests-publishedBefore, sceneRequestsPerFrameMax, framePattern: jitter || null };
+      if (shotMount) {
+        assert.equal(playerNode.style.translate, `${after.shot.x}px ${after.shot.y}px`);
+        assert.equal(enemyNode.style.translate, `${after.enemyShot.x}px ${after.enemyShot.y}px`);
+        for(const node of [playerNode,enemyNode])assert.equal(new Set(node.moves.map(move=>move.at)).size,node.moves.length,'substeps must not multiply presentation writes');
+        assert.ok(playerNode.moves.length>=result.sceneRequests,'projectile presentation must not wait for the scene');
+        result.projectilePresentations=playerNode.moves.length;
+        result.presentationUsesFinalSimulationPosition=true;
+        result.presentationWritesPerFrameMax=1;
+      }
       if (process.env.CRYPTOID_EXPECT_REALTIME === "1") {
         for (const [key, expected] of Object.entries({simulatedMs:1000,playerDistance:640,playerHorizontal:100,enemyDistance:200,enemyHorizontal:100,paidConsumedMs:1000,rapidConsumedMs:1000}))
           assert.ok(Math.abs(result[key]-expected)<1e-7, `${key}: ${result[key]} !== ${expected}`);
@@ -362,9 +388,11 @@ const presentation =
       assert.ok(result.sceneRequestsPerFrameMax <= 1, "at most one scene request per host frame");
       qa.pause(); const paused=qa.cadence(); await advance(5000);
       assert.equal(qa.cadence().shot.y,paused.shot.y); assert.equal(qa.cadence().paid,paused.paid);
+      if(playerNode)assert.equal(playerNode.style.translate, `${paused.shot.x}px ${paused.shot.y}px`,'paused presentation does not extrapolate');
       qa.resume(); await advance(frameInterval);
       assert.equal(qa.cadence().paid,paused.paid,"resume does not consume paused time");
       result.pausePreservesMovementAndTimers=true;
+      if(shotMount){qa.mountShots(null);assert.equal(shotMount.children.length,0);}
       assert.equal(context.__navigation.length,0); assert.equal(errors.length,0);
       fs.mkdirSync(path.dirname(output),{recursive:true}); fs.writeFileSync(output,JSON.stringify(result,null,2));
       console.log(JSON.stringify(result));

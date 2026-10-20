@@ -34,6 +34,7 @@ for (const [label, interval, pattern] of [
     const stdout = execFileSync(process.execPath, ['scripts/verifySimulationStability.cjs'], {
       cwd: fileURLToPath(new URL('../../', import.meta.url)), encoding: 'utf8',
       env: { ...process.env, CRYPTOID_CADENCE_ONLY:'1', CRYPTOID_EXPECT_REALTIME:'1',
+        CRYPTOID_PRESENTATION_QA:'1',
         CRYPTOID_FRAME_MS:String(interval), CRYPTOID_FRAME_PATTERN:pattern || '',
         CRYPTOID_WIDTH:'430', CRYPTOID_HEIGHT:'825', CRYPTOID_SIMULATION_OUT:join(directory,'result.json') },
     });
@@ -42,5 +43,8 @@ for (const [label, interval, pattern] of [
     assert.ok(Math.abs(result.enemyDistance-200)<1e-7);
     assert.equal(result.pausePreservesMovementAndTimers,true);
     assert.equal(result.sceneRequestsPerFrameMax,1);
+    assert.equal(result.presentationUsesFinalSimulationPosition,true);
+    assert.equal(result.presentationWritesPerFrameMax,1);
+    if(label==='60 Hz') assert.ok(result.projectilePresentations>=result.sceneRequests*1.9);
   } finally { rmSync(directory,{recursive:true,force:true}); }
 });

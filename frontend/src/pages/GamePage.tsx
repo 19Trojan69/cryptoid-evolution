@@ -31,6 +31,7 @@ import { gameHaptics } from "./gameHaptics";
 import { bindGameInput } from './gameInput';
 import { startGuardedGameLoop, type GameInterruption } from './gameLoop';
 import { simulationFrame } from './simulationFrame';
+import { createProjectilePresentation } from './projectilePresentation';
 import { requestGameFrame, cancelGameFrame } from '../lib/frameScheduler';
 import { cssFramePacingStats } from '../lib/cssFramePacing';
 import { recordGameDiagnostic, createGameSessionDiagnostics } from './gameDiagnostics';
@@ -51,7 +52,7 @@ import { chooseCryptoid as originalCryptoid, cryptoidDisplayName, isGhostCloaked
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, POWER_UP_DURATION_MS, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp, type PowerUpType } from "./powerUps";
 import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, shipStartHeight } from "./controlPreferences";
 import { advanceShot, contactWithEnemy, enemyMotionVisible, MAX_PLAYER_SHOTS, movePlayer, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, retainContactLatch, shipCollisionOutcome, shipContactPoint, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
-import { advanceEnemyShot, advanceEnemyFire, enemyVolleyKind, enemyAttackFireTime, enemyProjectileProfiles, enemyMuzzleOffsets, enemyShotHitsPlayer, enemyShotOutsideField, enemyShotLimit, type EnemyShot, type EnemyFireProgress } from "./enemyFire";
+import { advanceEnemyShot, advanceEnemyFire, enemyVolleyKind, enemyAttackFireTime, enemyMuzzleOffsets, enemyShotHitsPlayer, enemyShotOutsideField, enemyShotLimit, type EnemyShot, type EnemyFireProgress } from "./enemyFire";
 import { attackPressure, attackSlots } from "./attackPressure";
 import SectorBackdrop from "./SectorBackdrop";
 import Starfield from "./Starfield";
@@ -407,6 +408,12 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   const [playerDisplayDiameter, setPlayerDisplayDiameter] = useState(94);
   const stateRef = useRef<GameState>(null!);
   if (!stateRef.current) stateRef.current = createInitialState();
+  const projectilesRef = useRef<ReturnType<typeof createProjectilePresentation> | null>(null);
+  const mountProjectiles = useCallback((node: HTMLDivElement | null) => {
+    projectilesRef.current?.dispose();
+    projectilesRef.current = node ? createProjectilePresentation(node) : null;
+    projectilesRef.current?.present(stateRef.current);
+  }, []);
   const guestCreditedShardsRef = useRef(0);
   const nextIdRef = useRef(1);
   const formationIndexRef = useRef(0);
@@ -2041,6 +2048,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
           const present = index === frame.steps - 1;
           simulate(present ? time : time - frame.simulatedMs + frame.stepMs * (index + 1), frame.stepMs, present);
         }
+        projectilesRef.current?.present(stateRef.current);
         if (forceScene || requestScene) {
           const current = stateRef.current;
           lastPaintRef.current = time;
@@ -2441,8 +2449,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         })}
         {game.combo.remainingMs > 0 && game.status === "playing" && <div key={`combo-${game.combo.total}`} className={`combo-notice${game.pickupNotice ? " combo-with-pickup" : ""}`} role="status"><b>{t("DOUBLE KILL")}</b><span>+{DOUBLE_KILL_SCORE} {t("Score")} · +{DOUBLE_KILL_SHARDS} {t("Shards")}</span></div>}
         {game.pickupNotice && game.status === "playing" && <div key={game.pickupNotice.id} className={`pickup-notice pickup-notice-${game.pickupNotice.type}`} role="status"><b>{powerUpSymbols[game.pickupNotice.type]} {game.pickupNotice.type === "weapon" ? weaponNames[game.pickupNotice.level] : t(powerUpNames[game.pickupNotice.type])}</b><span>{game.pickupNotice.type === "weapon" ? `${t(pickupEffectLabels.weapon)} ${game.pickupNotice.level} · ${weaponNames[game.pickupNotice.level]} · ${PICKUP_WEAPON_DURATION_MS / 1000}s` : t(pickupEffectLabels[game.pickupNotice.type])}</span></div>}
-        {game.shots.map(shot => <div key={shot.id} className={`player-laser player-laser-tier-${shot.visualLevel ?? 1}${shot.empowered && shot.visualLevel !== 5 ? " player-laser-overdrive" : ""}`} style={{ left: shot.x, top: shot.y }} aria-hidden="true" />)}
-        {game.enemyShots.map(shot => <div key={shot.id} className={`enemy-laser${shot.enemyClass ? ` enemy-projectile-${shot.enemyClass}` : ""}${shot.bossKind ? ` boss-projectile boss-projectile-${shot.bossKind}` : ""}${shot.weaponKind ? ` boss-evolved-shot boss-evolved-${shot.weaponKind}` : ""}`} style={{ left: shot.x, top: shot.y, ...(shot.enemyClass ? { width: shot.radius * 2, ...(shot.enemyClass === "medium" || shot.enemyClass === "heavy" ? { height: shot.radius * 2 } : {}), "--enemy-shot-color": enemyProjectileProfiles[shot.enemyClass].color } : {}), "--shot-angle": `${-Math.atan2(shot.vx, shot.vy) * 180 / Math.PI}deg`,...(shot.weaponKind?{"--boss-shot-color":shot.weaponColor,"--boss-shot-width":`${shot.weaponWidth}px`,"--boss-shot-diameter":`${shot.radius*2}px`}:{}) } as CSSProperties} aria-hidden="true" />)}
+        <div ref={mountProjectiles} className="projectile-layer" style={{ display: 'contents' }} aria-hidden="true" />
         <CanvasEffectLayer enabled={combatVarietyEnabled}>{game.effects.filter(bossExplosionReady).filter(effect => effect !== fallingBossHull).map(effect => <ImpactEffectView key={effect.id} effect={effect} />)}</CanvasEffectLayer>
         {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship shielded-ship${game.status === "paused" && weaponCountdown === null ? " player-ship-dialog-hidden" : ""}${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.purchasedShieldMs > 0 || (game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0) ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${engineFlamePercent(game.thrust)}%`, ...shipVisualOffset } as CSSProperties} aria-label={t('Your Cryptoid ship')}><GameShipVisual sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} variant="player" sites={game.playerHullFires} hit={game.playerHit}/></div>}
         {weaponMenuOpen && <div className={`game-overlay weapon-selection-overlay${readControlHand() === 'right' ? ' weapon-drawer-left' : ' weapon-drawer-right'}`} onPointerDown={event => event.stopPropagation()}>

@@ -1,5 +1,29 @@
 # Preserve the officially approved game
 
+## Owner capture and projectile presentation, 20 October 2026
+
+The owner's 19:17 UTC v5 capture is current bdf8b0a, has zero discarded time in
+every pacing sample, and ends through pause/home-intent/monitor-stop. Do not call
+it a reproduced abrupt crash or proof of an intentional human tap. The exposed
+boss loses RAF cadence while measured simulation stays cheap; native/GPU cause
+is unproven. Cumulative CSS configured=15034 is not active animation count.
+Projectile DOM now reads the final simulation state once per existing <=60-Hz
+game RAF, independent of the compact-phone 32/50-ms scene interval. The empty
+React mount reserves its children for this presenter: retain live nodes only,
+remove hits/clears immediately, dispose on unmount, and do not add a second RAF,
+extrapolation, account state or collision rules. Preserve authored CSS artwork,
+rotation and player-before-enemy order with independent translation. Live
+engine thrust is already smoothed in advanceShipMotion; suppress its redundant
+140/160-ms height transitions only inside the game field. Preserve flame art,
+glow and original 110-ms response, accepting removal of the second response lag.
+89 focused tests and three 30-normal-section/three-boss host campaigns pass.
+60-Hz gameplay hash matches bdf8b0a exactly. New module lint/typecheck pass;
+GamePage retains its 63 pre-existing hook compiler errors/four warnings. Native
+comparison fixture is preview-only and must pass before Testnet promotion.
+Keep every existing fixed release/backup ref. Mainnet read comparison was denied
+by automatic review; public HTTP checks are Testnet-only. No Mainnet operation.
+See docs/iphone-capture-projectiles-20261020.md and projectile-presentation-release-20261020/.
+
 ## Continuing boss render investigation, 20 October 2026, completed Testnet release
 
 The owner asked to continue after the simulation-time release. The closed
