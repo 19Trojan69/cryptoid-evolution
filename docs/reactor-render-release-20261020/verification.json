@@ -1,0 +1,13 @@
+{
+  "focusedTests": 33,
+  "localeTests": 12,
+  "productionBuild": true,
+  "previewBuild": true,
+  "fixtureTypes": true,
+  "reactorHooksLintWarnings": 0,
+  "reactHostTreeComparisons": 4201,
+  "allBosses": 50,
+  "productionFixturePagesExcludedInCleanArtifact": true,
+  "reactReview": "Derived primitive memo dependencies, explicit muzzle opacity; one cached SVG tree per mounted instance; no custom mutable-object comparator, extra timers, effects or global state in production.",
+  "limits": "These checks do not prove physical iPhone thermal savings or a resolved native WebKit/GPU abort."
+}

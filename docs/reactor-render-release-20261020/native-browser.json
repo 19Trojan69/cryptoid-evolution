@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "comparisons": 135,
+  "bosses": [
+    1,
+    2,
+    10,
+    25,
+    50
+  ],
+  "widths": [
+    320,
+    430,
+    820
+  ],
+  "svgHostRetained": true,
+  "build": {
+    "sourceCommit": "bdf8b0a9edda1d878c47fddb59ab3ec3b20c7e26",
+    "sourceTree": "b321345f44d9e03c5d6e38af8805b5cd2dfd2de0",
+    "workingTreeDirty": true
+  },
+  "limits": "Native Chrome DOM/SVG comparison; no physical iPhone crash, GPU/native memory, heat or FPS proof."
+}

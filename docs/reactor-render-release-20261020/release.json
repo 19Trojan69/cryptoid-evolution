@@ -1,0 +1,34 @@
+{
+  "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+  "officialUrl": "https://cryptoid-evolution-testnet.vercel.app/",
+  "deploymentId": "dpl_Ai2j6jAyoxvC5mWESvKKBK1bMAKU",
+  "state": "READY",
+  "sourceCommit": "bdf8b0a9edda1d878c47fddb59ab3ec3b20c7e26",
+  "sourceTree": "b321345f44d9e03c5d6e38af8805b5cd2dfd2de0",
+  "readyAt": "2026-10-20T19:05:27.714Z",
+  "readyAtVienna": "2026-10-20T21:05:27.714+02:00",
+  "buildDurationMs": 49047,
+  "previewId": "dpl_BrDaXGx6crbzCXtPbBgebKa63GyU",
+  "fixedReleaseRef": "codex/testnet-reactor-render-release-20261020",
+  "rollback": {
+    "ref": "backup/testnet-before-reactor-render-20261020",
+    "source": "7bf0e9b755cdbcd4cb41bb8cdaa70a4686174996",
+    "deploymentId": "dpl_HE3FFtbQEhAVwGx7Qn2mFr5wLU35"
+  },
+  "verification": {
+    "exactReactHostComparisons": 4201,
+    "nativeSvgComparisons": 135,
+    "focusedTests": 33,
+    "localeTests": 12,
+    "build": true,
+    "hookLintWarnings": 0,
+    "fixtureTypeCheck": true,
+    "deliveredReactorMemoDependencies": 16,
+    "deliveredCommitAndTree": true,
+    "apiAndScoresEqual": true,
+    "mainnetEqual": true,
+    "productionQaExcluded": true,
+    "freshOfficialHome": true
+  },
+  "open": "No physical iPhone/Pi authentication test, GPU/native memory measurement or proof that the Whitescreen cause has been removed."
+}

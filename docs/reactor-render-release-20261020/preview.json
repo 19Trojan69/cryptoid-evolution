@@ -1,0 +1,20 @@
+{
+  "id": "dpl_BrDaXGx6crbzCXtPbBgebKa63GyU",
+  "url": "https://cryptoid-evolution-testnet-f3l7qg9bp-19-trojan69.vercel.app",
+  "source": "bdf8b0a9edda1d878c47fddb59ab3ec3b20c7e26",
+  "state": "READY",
+  "readyAt": "2026-10-20T19:03:07.854Z",
+  "nativeComparisons": 135,
+  "nativeBosses": [
+    1,
+    2,
+    10,
+    25,
+    50
+  ],
+  "widths": [
+    320,
+    430,
+    820
+  ]
+}

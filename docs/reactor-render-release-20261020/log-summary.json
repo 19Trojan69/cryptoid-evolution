@@ -1,0 +1,9 @@
+{
+  "deploymentId": "dpl_Ai2j6jAyoxvC5mWESvKKBK1bMAKU",
+  "view": "Vercel Dashboard, deployment-filtered, last 30 minutes, one bounded scan",
+  "visibleRequestRows": 13,
+  "warnings": 0,
+  "errors": 0,
+  "fatal": 0,
+  "limits": "Server request/console view only. Not continuous monitoring or evidence against a client-side iPhone/WebKit/GPU kill. Drains and device telemetry were not configured or changed."
+}

@@ -1,6 +1,6 @@
 # Preserve the officially approved game
 
-## Continuing boss render investigation, 20 October 2026, preparation
+## Continuing boss render investigation, 20 October 2026, completed Testnet release
 
 The owner asked to continue after the simulation-time release. The closed
 BossReactorView recreated 85,200 JSX elements in 1,200 unchanged scene frames.
@@ -13,8 +13,17 @@ Keep the actual SVG markup/artwork, native animations, simulation, shot timing,
 audio, accounts and Mainnet unchanged. A protected-preview-only reactor comparison
 is bundled alongside the existing animation fixture; neither belongs in production.
 Do not infer iPhone memory/heat/Whitescreen resolution from JSX operation counts.
-Publication/native-browser results will be recorded separately. Preserve all
-previous fixed release/rollback refs. See docs/reactor-render-work-20261020.md.
+Protected Chrome preview passes 135 direct SVG/DOM comparisons on five bosses and
+three widths. Official Testnet READY dpl_Ai2j6jAyoxvC5mWESvKKBK1bMAKU, runtime
+bdf8b0a9edda1d878c47fddb59ab3ec3b20c7e26, tree b321345f44d9e03c5d6e38af8805b5cd2dfd2de0,
+ready 21:05:27.714 Vienna (49.047 s). Keep codex/testnet-reactor-render-release-20261020
+fixed. Immediate rollback: backup/testnet-before-reactor-render-20261020 at 7bf0e9b /
+dpl_HE3FFtbQEhAVwGx7Qn2mFr5wLU35. Delivered GamePage/Admin identity and the actual
+powerUps chunk's 16-dependency reactor useMemo are verified. API/admin denial/
+leaderboard hashes and Mainnet HTML match the fresh baseline. Official Home reload
+passes, and both QA URLs are excluded from production. Preserve all previous
+fixed release/rollback refs. Evidence/test-only commits must not be deployed.
+See docs/reactor-render-work-20261020.md and reactor-render-release-20261020/.
 
 ## Projectile slowdown correction, 20 October 2026, completed Testnet release
 

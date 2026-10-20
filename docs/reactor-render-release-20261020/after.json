@@ -1,0 +1,79 @@
+{
+  "at": "2026-10-20T19:05:45.072573+00:00",
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 1465,
+      "sha256": "ca3fca213d58f92197a95168508fd30407dc6a01a1837cf3e1e1fe920e7b753d"
+    },
+    {
+      "path": "/api",
+      "status": 200,
+      "bytes": 27,
+      "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a"
+    },
+    {
+      "path": "/api/admin/status",
+      "status": 401,
+      "bytes": 29,
+      "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=1",
+      "status": 200,
+      "bytes": 7440,
+      "sha256": "9cbe90a3686312972b4a117e300a2bc2e15ce07a8eebd15b51f12d81181451ad"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=2",
+      "status": 200,
+      "bytes": 9733,
+      "sha256": "7b3af7b446c33c74d7c8523a57fbb5e0eeea0acd3ad473e13a5d4d1741583c67"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=3",
+      "status": 200,
+      "bytes": 9733,
+      "sha256": "7b3af7b446c33c74d7c8523a57fbb5e0eeea0acd3ad473e13a5d4d1741583c67"
+    }
+  ],
+  "entry": "/assets/index-DoQeJXEL.js",
+  "mainnet": {
+    "status": 200,
+    "bytes": 1465,
+    "sha256": "6d2e52983bfe9100d77130335528435c8d5f5f8a2c34011388714eac3099791c"
+  },
+  "apiAndScoresEqual": true,
+  "mainnetEqual": true,
+  "chunks": [
+    {
+      "path": "assets/AdminPage-Bu9lR3SD.js",
+      "status": 200,
+      "sha256": "d8379fea140bdfee397ca049003d7b4d5746b699dea044080730817f664225aa",
+      "sourceIdentity": true,
+      "treeIdentity": true
+    },
+    {
+      "path": "assets/GamePage-Bad31y0I.js",
+      "status": 200,
+      "sha256": "7a9be91dc3aa7b9cfe9c37c82ade14cfa757c51e04ab01c0a39cc5223e242067",
+      "sourceIdentity": true,
+      "treeIdentity": true
+    },
+    {
+      "path": "assets/powerUps-B0TWjbVk.js",
+      "status": 200,
+      "sha256": "24624cac2e96f0c636dd80dbd3af88fc4d3acec5be2aac6f913a6c2dd78ddbb5",
+      "sourceIdentity": false,
+      "treeIdentity": false
+    }
+  ],
+  "productionQaExcluded": true,
+  "reactorMemo": {
+    "path": "assets/powerUps-B0TWjbVk.js",
+    "reactorRenderMemo": true,
+    "dependencyCount": 16,
+    "functionSha256": "7a8a9efa1ad85762d791f1a80b53bb0bace078c9a4a3b5b2ad3c8745c8362652"
+  }
+}

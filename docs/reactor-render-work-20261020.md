@@ -36,8 +36,12 @@ Prüfdateien vor dieser Kontrolle aus dem generierten Ausgabeordner entfernt.
 
 Eine zusätzliche Seite wird nur in geschützten Vorschauen gebündelt. Sie stellt
 die unveränderte Reaktorquelle aus `61d0a53` und die Korrektur im tatsächlichen
-Browser nebeneinander dar. Der Browservergleich und seine Ergebnisse werden nach
-der Bereitstellung separat festgehalten.
+Browser nebeneinander dar. Dort bestehen 135 direkte SVG-/DOM-Vergleiche für die
+Bosse 1, 2, 10, 25 und 50 bei drei Feldbreiten. Das bestehende SVG-Hostelement
+bleibt erhalten. Ergebnisse und Screenshot stehen in
+`reactor-render-release-20261020/native-browser.json` und `native-browser.jpg`.
+Das sind native Chrome-Vergleiche der Darstellung, keine iPhone-Pixel-,
+Temperatur-, GPU-Speicher- oder Absturzmessungen.
 
 Reproduktion:
 
@@ -57,3 +61,23 @@ Die [Whitescreen-Untersuchung](iphone-webkit-research-20261020.md) und die
 Diese Änderung beseitigt nachgewiesene unnötige JavaScript-Arbeit. Ein konkreter
 WebKit-/GPU-Abbruch auf dem betroffenen iPhone ist weiterhin nicht reproduziert
 und dadurch nicht als behoben nachgewiesen.
+
+## Veröffentlichter Stand
+
+Die Korrektur ist seit **21:05:27 Uhr Wien** auf Testnet READY:
+https://cryptoid-evolution-testnet.vercel.app/
+
+Quellstand `bdf8b0a9edda1d878c47fddb59ab3ec3b20c7e26`, Deployment
+`dpl_Ai2j6jAyoxvC5mWESvKKBK1bMAKU`. Die tatsächlich ausgelieferten GamePage- und
+Admin-Dateien enthalten die erwarteten Commit-/Baum-Kennungen. Im ausgelieferten
+`powerUps`-Chunk ist der neue Reaktor-Cache mit seinen 16 Abhängigkeiten geprüft.
+API, anonyme Admin-Sperre und drei Highscore-Antworten stimmen mit der frischen
+Basis überein. Mainnet ist unverändert. Die offizielle Startseite wurde frisch
+geladen; beide Vorschau-Prüfseiten sind in Produktion ausgeschlossen.
+
+Eine begrenzte, nach Deployment gefilterte Laufzeit-Logansicht zeigt 13 Requests
+und jeweils null Warning-/Error-/Fatal-Einträge. Das sind Serverdaten aus diesem
+Ausschnitt; sie schließen einen nativen Abbruch des iPhone-Browsers nicht aus.
+
+Die feste Rückfallversion ist der unmittelbar vorherige Simulationszeit-Stand
+`7bf0e9b` / `dpl_HE3FFtbQEhAVwGx7Qn2mFr5wLU35`.
