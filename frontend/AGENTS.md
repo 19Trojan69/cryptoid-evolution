@@ -1,5 +1,26 @@
 # Preserve the officially approved game
 
+## Boss heat-canvas failure cleanup, 20 October 2026, preparation only
+
+The owner requested continuing the abort investigation at 12:39 Vienna. Inspection
+found that drawBossWeapons did not zero a newly allocated heat tile when its 2D
+context was null or its preparation threw. Failed tiles were left to GC, and a
+null context incorrectly reported a successful draw. Release only unsuccessful
+temporary tiles, return false for null contexts and restore the main Canvas save
+state through finally; preserve successful drawing and original exception flow.
+The controlled negative control sees 8,000 unreleased failed tiles over 2,000
+attempts; the candidate sees zero. This is missing explicit release, not proof
+that a real browser permanently retained those tiles. All 50 bosses, nine heat
+levels, recoil/destruction/frozen cases and three backing ratios give 1,650 exact
+RGBA matches. 62 targeted checks and the frontend release build pass. There is
+no physical WebKit/process-memory or Whitescreen-cause proof. Keep the earlier
+audio-start fix and this correction isolated and unreleased until explicit
+Testnet publication is requested. Preserve official runtime 613b3c7, all rollback
+refs, Mainnet, artwork, gameplay, saves, accounts and owner-only diagnostics.
+See docs/iphone-boss-heat-cleanup-20261020.md and
+frontend/scripts/verifyBossHeatLifetime.mjs. Native iPhone incident evidence is
+still missing; do not claim this fault was observed on the device.
+
 ## Confirmed Admin audio-start correction, 20 October 2026, preparation only
 
 The owner requested correcting demonstrated faults while continuing the Whitescreen

@@ -41,7 +41,7 @@ export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:Can
    c.strokeStyle='#bf7446';c.lineWidth=Math.max(1,scale*2);c.beginPath();c.moveTo(x-radius*.6,y-radius*.35);c.lineTo(x+radius*.5,y+radius*.25);c.stroke();continue;
   }
   const age=(boss.weaponClock-state.lastFired)/1000,recoil=frozen?0:Math.max(0,1-age/.25)*g.recoil*scale;
-  c.save();c.translate(x,y);c.rotate(state.a);c.translate(0,-recoil);
+  c.save();try{c.translate(x,y);c.rotate(state.a);c.translate(0,-recoil);
   c.globalAlpha=.64;tile(c,image,g.shadow,-g.spritePivot.x*scale-12*scale+3*scale,-g.spritePivot.y*scale-12*scale+6*scale,scale);
   c.globalAlpha=1;
   const heat=frozen?0:turretHeatStep(state);
@@ -51,12 +51,18 @@ export const drawBossWeapons=(canvas:HTMLCanvasElement,boss:SectorBoss,image:Can
     // Only the current heat tile for a gun is useful. Past damage stages
     // otherwise retain large canvas surfaces until the entire boss unmounts.
     for (const [previous, tile] of cached.heated) if (previous.startsWith(`${i}:`)) { tile.width = tile.height = 0; cached.heated.delete(previous); }
-    hot=make(g.sprite.width,g.sprite.height);const hc=hot.getContext('2d');
-    if(hc){hc.drawImage(image,g.sprite.x,g.sprite.y,g.sprite.width,g.sprite.height,0,0,g.sprite.width,g.sprite.height);paintTurretHeat(hc,g.sprite.width,g.sprite.height,heat);cached.heated.set(key,hot);}
+    // A denied context or failed paint must release its backing store before
+    // the next frame retries, while preserving the caller's failure handling.
+    hot=make(g.sprite.width,g.sprite.height);let retained=false;
+    try{
+     const hc=hot.getContext('2d');if(!hc)return false;
+     hc.drawImage(image,g.sprite.x,g.sprite.y,g.sprite.width,g.sprite.height,0,0,g.sprite.width,g.sprite.height);
+     paintTurretHeat(hc,g.sprite.width,g.sprite.height,heat);cached.heated.set(key,hot);retained=true;
+    }finally{if(!retained)hot.width=hot.height=0;}
    }
    tile(c,hot,{x:0,y:0,width:g.sprite.width,height:g.sprite.height},-g.spritePivot.x*scale,-g.spritePivot.y*scale,scale);
   }else tile(c,image,g.sprite,-g.spritePivot.x*scale,-g.spritePivot.y*scale,scale);
-  c.restore();
+  }finally{c.restore();}
   const r=g.halfWidth*scale;c.fillStyle=state.lock>=160?'#c8f0db':'#d5934f';c.beginPath();c.ellipse(x-r*.45,y-r*.31,Math.max(.7,1.5*scale),Math.max(.5,scale),0,0,Math.PI*2);c.fill();
   if(!frozen&&age>=0&&age<.08){
    c.save();c.translate(x,y);c.rotate(state.a);c.globalAlpha=1-age/.08;c.fillStyle=g.shotColor;
