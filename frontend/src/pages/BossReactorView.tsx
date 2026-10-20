@@ -1,4 +1,4 @@
-import { useId, type CSSProperties } from 'react';
+import { useId, useMemo, type CSSProperties } from 'react';
 import type { SectorBoss } from './sectorBoss';
 import { coreActive, coreInterval } from './bossCore';
 import { specialWeaponMount, specialWeaponBox, specialWeaponBarrels } from './bossSpecialWeapon';
@@ -15,11 +15,18 @@ export default function BossReactorView({ boss }: { boss: SectorBoss }) {
   const charge = exposed ? Math.min(1, elapsed / coreInterval(boss)) : 0;
   const firing = exposed && (boss.core?.volley ?? 0) > 0 && elapsed < 180;
   const recoil = firing ? (1 - elapsed / 180) * 7 : 0;
+  const muzzleOpacity = firing ? 1 - elapsed / 180 : 0;
+  const image = boss.config.image, width = boss.width, height = boss.height;
+  const { left, top, width: boxWidth, height: boxHeight } = box;
+  // The simulation mutates nested boss state. Cache by the actual rendered
+  // values, never by the boss/core object identities. A closed, unchanged bay
+  // then retains its SVG tree while the enclosing hull keeps moving normally.
+  return useMemo(() => {
   const url = (part: string) => `url(#${id}-${part})`;
   const barrels = specialWeaponBarrels(mount.shape);
   const hatch = 'M22 9H78L93 28V125L73 151H27L7 125V28Z';
-  const texture = <image href={boss.config.image} x={-box.left / box.width * 100} y={-box.top / box.height * 160} width={boss.width / box.width * 100} height={boss.height / box.height * 160} preserveAspectRatio="none" />;
-  return <svg className={`boss-special-weapon${firing ? ' boss-special-weapon-firing' : ''}`} viewBox="0 0 100 160" preserveAspectRatio="none" style={{zIndex:exposed ? 6 : 1,left:box.left,top:box.top,width:box.width,height:box.height,'--weapon-energy':energy,'--weapon-charge':charge} as CSSProperties} aria-hidden="true">
+  const texture = <image href={image} x={-left / boxWidth * 100} y={-top / boxHeight * 160} width={width / boxWidth * 100} height={height / boxHeight * 160} preserveAspectRatio="none" />;
+  return <svg className={`boss-special-weapon${firing ? ' boss-special-weapon-firing' : ''}`} viewBox="0 0 100 160" preserveAspectRatio="none" style={{zIndex:exposed ? 6 : 1,left,top,width:boxWidth,height:boxHeight,'--weapon-energy':energy,'--weapon-charge':charge} as CSSProperties} aria-hidden="true">
     <defs>
       <linearGradient id={`${id}-steel`} x1="0" x2="1" y1="0" y2="0">
         <stop offset="0" stopColor="#121b24"/><stop offset=".22" stopColor={mount.metal}/><stop offset=".4" stopColor="#ccd0c5"/><stop offset=".55" stopColor={mount.metal}/><stop offset=".8" stopColor="#35414b"/><stop offset="1" stopColor="#131d27"/>
@@ -81,6 +88,7 @@ export default function BossReactorView({ boss }: { boss: SectorBoss }) {
       <path d={i ? 'M50 10H78L93 28V125L73 151H50' : 'M50 10H22L7 28V125L27 151H50'} fill="none" stroke="#10151a" strokeWidth="1.3" opacity={.35+open*.65}/>
       <path d={i ? 'M56 19H75L85 33' : 'M44 19H25L15 33'} fill="none" stroke="#d8d4ba" strokeWidth="1" opacity={open*.65}/>
     </g>)}
-    {firing && barrels.map(x=><path key={x} d={`M${x-5} 148L${x-10} 157L${x-3} 155L${x} 177L${x+3} 155L${x+10} 157L${x+5} 148Z`} fill={mount.energy} opacity={1-elapsed/180}/>)}
+    {firing && barrels.map(x=><path key={x} d={`M${x-5} 148L${x-10} 157L${x-3} 155L${x} 177L${x+3} 155L${x+10} 157L${x+5} 148Z`} fill={mount.energy} opacity={muzzleOpacity}/>)}
   </svg>;
+  }, [id, mount, image, width, height, left, top, boxWidth, boxHeight, energy, exposed, open, charge, firing, recoil, muzzleOpacity]);
 }

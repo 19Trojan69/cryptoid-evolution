@@ -25,6 +25,7 @@ export default defineConfig(({ mode }) => {
       rollupOptions: { input: {
         app: path.resolve(__dirname, "index.html"),
         framePacing: path.resolve(__dirname, "scripts/fixtures/frame-pacing.html"),
+        reactorWork: path.resolve(__dirname, "scripts/fixtures/reactor-work.html"),
       } },
     } : undefined,
     plugins: [

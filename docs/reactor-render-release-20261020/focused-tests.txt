@@ -1,0 +1,41 @@
+✔ all visible clocks stay native; duration, easing inside keyframes and playback controls are preserved (2.946504ms)
+✔ configured progress spacing never exceeds 60 steps per real second at positive/negative authored rates (1.144847ms)
+✔ nonlinear curve samples the original easing before quantization, including overshoot (0.29148ms)
+✔ nonlinear native sampling uses only a detached, timeline-free temporary probe, then cancels it (0.625954ms)
+✔ native finish/cancel releases references once and restores only owned timing (0.414404ms)
+✔ cleanup compares the browser canonical easing, including steps(n,end) serialized as steps(n) (0.244899ms)
+✔ CSS, transition and late pseudo-element events register only once, including portal descendants (1.679843ms)
+✔ explicit Web Animations and paused effects retain native playback ownership (0.264239ms)
+✔ unavailable/invalid timing APIs retain native playback and do not strand content (0.632274ms)
+✔ native pacing schedules no JavaScript frame, interval, visibility polling or visible time/rate writes (0.56393ms)
+✔ records the reported 1669-to-1800 warning boundary, creation, audio return and React commit once (3.497524ms)
+✔ all 50 real boss models produce identical shots and states with observation enabled (445.659211ms)
+✔ full projectile capacity and resumed prior volleys cannot invent a first shot (0.468497ms)
+✔ diagnostic/storage failures do not change core simulation or exception handling (0.860187ms)
+✔ an interrupted audio call leaves the scene/audio stages unconfirmed and restarting resets observation (0.39794ms)
+✔ production only creates the boundary observer for the verified owner (1.323125ms)
+✔ all 50 bosses warn before pulsing, keep destroyed guns and respect shared capacity (22.382095ms)
+✔ armed, entering, dead and paused bosses cannot advance the core (0.399082ms)
+✔ later fans have a central escape gap; restored warning produces identical next volley (2.486684ms)
+✔ all 50 special weapons sit on the centreline and solid hull (11.547563ms)
+✔ shots emerge from the actual muzzle and match weapon illumination (1.741025ms)
+✔ turret damage steadily heats living weapons and preserves heat on resume (0.260613ms)
+✔ all exposed bosses need half the previous hits including resumed hulls (11.810214ms)
+✔ escort pauses reach zero at displayed level 50; live escorts, pause, protection and death block respawning (3.813756ms)
+✔ a saved partially elapsed wave delay resumes without restart or skipped warning (0.773647ms)
+✔ recurring escorts fit below all bosses even near defeat on phone and desktop (25.472812ms)
+✔ late frames consume real time with collision steps at most 34 ms (1.044365ms)
+✔ long stalls stay bounded without a backlog; pause keeps the full wall-time shift (0.198178ms)
+✔ actual GamePage: player/enemy shots and timers retain speed at 60 Hz (619.241797ms)
+✔ actual GamePage: player/enemy shots and timers retain speed at 30 Hz (515.524803ms)
+✔ actual GamePage: player/enemy shots and timers retain speed at 20 Hz (514.445421ms)
+✔ actual GamePage: player/enemy shots and timers retain speed at 88 ms stalls (522.206238ms)
+✔ actual GamePage: player/enemy shots and timers retain speed at irregular delivery (515.869925ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2855.329186

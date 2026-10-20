@@ -1,5 +1,21 @@
 # Preserve the officially approved game
 
+## Continuing boss render investigation, 20 October 2026, preparation
+
+The owner asked to continue after the simulation-time release. The closed
+BossReactorView recreated 85,200 JSX elements in 1,200 unchanged scene frames.
+Reuse the last SVG tree by its actual rendered primitive values, not mutable
+boss/core object identity. Include muzzle opacity explicitly in dependencies;
+hooks lint is clean. All 4,201 actual React host-tree comparisons match across
+50 bosses, three widths, opening/recoil/color/resize/replacement/death/restoration.
+33 focused tests, 12 locales, release build and preview-fixture typecheck pass.
+Keep the actual SVG markup/artwork, native animations, simulation, shot timing,
+audio, accounts and Mainnet unchanged. A protected-preview-only reactor comparison
+is bundled alongside the existing animation fixture; neither belongs in production.
+Do not infer iPhone memory/heat/Whitescreen resolution from JSX operation counts.
+Publication/native-browser results will be recorded separately. Preserve all
+previous fixed release/rollback refs. See docs/reactor-render-work-20261020.md.
+
 ## Projectile slowdown correction, 20 October 2026, completed Testnet release
 
 The owner explicitly reported repeatedly slowing shots and requested correction

@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "corrected": true,
+  "baseline": "61d0a53e733c62c3dbd64a9fcbe7480967b316fa",
+  "stable": {
+    "frames": 1200,
+    "beforeElements": 85200,
+    "afterElements": 0
+  },
+  "exactHostTreeComparisons": 4201,
+  "bosses": 50,
+  "widths": [
+    320,
+    430,
+    820
+  ],
+  "sameSvgHostDuringStableUpdates": true,
+  "limits": "Actual React + JSX operation counts. No browser raster, GPU/native memory, physical iPhone heat, FPS or Whitescreen-cause proof."
+}
