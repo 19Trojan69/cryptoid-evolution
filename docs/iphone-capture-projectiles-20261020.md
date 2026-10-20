@@ -112,3 +112,48 @@ Diese Änderung behebt die nachgewiesene gröbere Schussdarstellung und vermeide
 iPhone-WebContent-Abbruch, Überhitzung oder jeder Whitescreen vollständig
 beseitigt ist. Dafür liefert auch eine erfolgreiche entfernte Chrome-Prüfung
 keine native Speicher-/GPU-/Temperaturmessung.
+
+## Nativer Browservergleich
+
+Die geschützte Vorschau `dpl_DsTY4ahomNJqvUq5oCcJKhL2K7cj` mit dem
+geprüften Laufzeitstand `e7b49fed4c29baf021d9f0af56fead66ff7d02b7` besteht
+sechs native Prüfungen: 58 Schussdarstellungen einschließlich Pseudoelementen,
+Farben und Rotation, maximaler Bounds-Abweichung 0,0000611 px; sofortige
+Entfernung; 120 statt 60 Positionsänderungen in 120 Spieltakten; 476 vorherige
+gegen null neue Triebwerks-Höhenübergänge bei vier Flammen; identische endgültige
+Flammengrafik/-höhe; stabile Pausenpositionen. Das sind keine präsentierten
+iPhone-FPS oder Temperaturmessungen.
+
+Der echte Chrome-Gastlauf startet und erzeugt Schüsse im reservierten Mount.
+Pause friert ihre Position ein; der Fortsetzen-Countdown lässt sie unverändert,
+danach laufen sie weiter. Im Spielfeld haben die sechs beobachteten Flammen
+`transition-property: none`. Ein unbedienter erster Gastlauf endete regulär mit
+null Leben; der kurze Wiederholungs-/Pausenlauf besteht. Eine Pi-Anmeldung
+oder Kontomodifikation wurde nicht getestet.
+
+Der lokale Produktionsbuild erhält keine QA-Einstiegsseiten. Alte erzeugte
+Preview-HTML-Dateien mussten vor der abschließenden Kontrolle explizit aus dem
+lokalen Build-Verzeichnis entfernt werden; die Quellen bleiben erhalten. Dies
+ist kein Nachweis einer öffentlichen QA-Seite auf der Bereitstellung.
+
+## Veröffentlichung
+
+Der geprüfte Stand `e7b49fed4c29baf021d9f0af56fead66ff7d02b7` ist seit
+**21:36:37.965 Uhr Wien** auf der offiziellen Testnet-Adresse bereit:
+https://cryptoid-evolution-testnet.vercel.app/
+
+Bereitstellung `dpl_6uZ96rZE714sudgnFuzsjYTSxtcF`, Baum
+`2106d405572faf19a8ced7606f13dca31be65910`, Produktionsbuild 44,174 Sekunden.
+Der feste Quellstand bleibt unter
+`codex/testnet-projectile-presentation-release-20261020` erhalten. Der unmittelbare
+Rücksetzpunkt ist `backup/testnet-before-projectile-presentation-20261020` am
+bisherigen `bdf8b0a`, Bereitstellung `dpl_Ai2j6jAyoxvC5mWESvKKBK1bMAKU`.
+
+Die tatsächlich ausgelieferten GamePage-/Admin-Dateien enthalten den erwarteten
+Commit und Baum. Der GamePage-Code enthält den Projektil-Mount, die unabhängige
+Translation, den begrenzten Live-Cache und die Bereinigung. Die drei QA-Seiten
+sind im Produktionsauftritt nicht enthalten. API, anonyme Admin-Sperre und drei
+Highscore-Antworten stimmen mit der frischen Testnet-Referenz überein. Die
+offizielle Startseite lädt nach der Authentifizierungsinitialisierung mit aktivem
+Spielen-Button. Der Ready-Screenshot und sämtliche Prüfbelege liegen unter
+[projectile-presentation-release-20261020](projectile-presentation-release-20261020/release.json).

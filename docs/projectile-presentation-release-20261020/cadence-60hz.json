@@ -1,0 +1,19 @@
+{
+  "mode": "actual GamePage, hardware/API/presentation stubs",
+  "frameMs": 16.666666666666668,
+  "wallMs": 1000,
+  "simulatedMs": 999.9999999999636,
+  "playerDistance": 639.9999999999636,
+  "playerHorizontal": 99.99999999999616,
+  "enemyDistance": 199.99999999999545,
+  "enemyHorizontal": 99.99999999999608,
+  "paidConsumedMs": 999.9999999998545,
+  "rapidConsumedMs": 999.9999999999636,
+  "sceneRequests": 30,
+  "sceneRequestsPerFrameMax": 1,
+  "framePattern": null,
+  "projectilePresentations": 60,
+  "presentationUsesFinalSimulationPosition": true,
+  "presentationWritesPerFrameMax": 1,
+  "pausePreservesMovementAndTimers": true
+}

@@ -1,0 +1,17 @@
+{
+  "guestStart": true,
+  "restartedAfterStationaryGameOver": true,
+  "pausedPositionStable": true,
+  "pausedPositions": [
+    "681.5px 595.112px"
+  ],
+  "resume": {
+    "paused": "false",
+    "positions": [
+      "681.5px 195.208px",
+      "681.5px 403.144px",
+      "681.5px 611.144px"
+    ]
+  },
+  "limits": "Native desktop Chrome guest run. No account modification or Pi authentication test; no physical iPhone or energy proof. Existing guest analytics may run."
+}

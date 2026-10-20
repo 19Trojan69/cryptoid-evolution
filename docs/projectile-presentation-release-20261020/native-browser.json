@@ -1,0 +1,49 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "label": "Alle Schussformen, Farben, Rotation und Pseudoelemente entsprechen dem Original",
+      "passed": true,
+      "detail": {
+        "comparisons": 58,
+        "maxBoundsError": 0.00006103515625
+      }
+    },
+    {
+      "label": "Treffer-/Phasenentfernung leert beide Schussgruppen",
+      "passed": true
+    },
+    {
+      "label": "Bewegte Schüsse nutzen jeden Spieltakt bei weiterhin halbem Szenentakt",
+      "passed": true,
+      "detail": {
+        "frames": 120,
+        "oldMoves": 60,
+        "newMoves": 120
+      }
+    },
+    {
+      "label": "Bereits geglätteter Schub erzeugt keine neuen Höhen-Transitions",
+      "passed": true,
+      "detail": {
+        "oldTransitions": 476,
+        "newTransitions": 0,
+        "configuredDelta": 476
+      }
+    },
+    {
+      "label": "Triebwerksgrafik und endgültige Schubhöhe bleiben erhalten",
+      "passed": true
+    },
+    {
+      "label": "Unveränderte Pausenposition bleibt stabil",
+      "passed": true
+    }
+  ],
+  "build": {
+    "sourceCommit": "e7b49fed4c29baf021d9f0af56fead66ff7d02b7",
+    "sourceTree": "2106d405572faf19a8ced7606f13dca31be65910",
+    "workingTreeDirty": true
+  },
+  "limits": "Native Chrome DOM/style/bounds and transition counts; no physical iPhone heat, native/GPU memory, presented FPS or crash proof."
+}

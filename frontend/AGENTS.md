@@ -1,6 +1,6 @@
 # Preserve the officially approved game
 
-## Owner capture and projectile presentation, 20 October 2026
+## Owner capture and projectile presentation, 20 October 2026, completed Testnet release
 
 The owner's 19:17 UTC v5 capture is current bdf8b0a, has zero discarded time in
 every pacing sample, and ends through pause/home-intent/monitor-stop. Do not call
@@ -19,7 +19,17 @@ glow and original 110-ms response, accepting removal of the second response lag.
 89 focused tests and three 30-normal-section/three-boss host campaigns pass.
 60-Hz gameplay hash matches bdf8b0a exactly. New module lint/typecheck pass;
 GamePage retains its 63 pre-existing hook compiler errors/four warnings. Native
-comparison fixture is preview-only and must pass before Testnet promotion.
+comparison passes 58 native style/bounds cases, 120 versus 60 position updates
+in 120 ticks, and 476 versus zero thrust-height transitions with four flames.
+Guest start/pause/resume and freshly loaded official Home pass. Production QA
+pages are excluded. Testnet READY dpl_6uZ96rZE714sudgnFuzsjYTSxtcF, source
+e7b49fed4c29baf021d9f0af56fead66ff7d02b7, tree 2106d405572faf19a8ced7606f13dca31be65910,
+ready 21:36:37.965 Vienna (44.174 s). Keep the fixed release ref
+codex/testnet-projectile-presentation-release-20261020. Immediate rollback:
+backup/testnet-before-projectile-presentation-20261020 at bdf8b0a /
+dpl_Ai2j6jAyoxvC5mWESvKKBK1bMAKU. Delivered GamePage/Admin identity and actual
+presenter code match. Anonymous API/admin denial/three leaderboard hashes match
+the fresh Testnet baseline. Do not deploy subsequent evidence-only commits.
 Keep every existing fixed release/backup ref. Mainnet read comparison was denied
 by automatic review; public HTTP checks are Testnet-only. No Mainnet operation.
 See docs/iphone-capture-projectiles-20261020.md and projectile-presentation-release-20261020/.

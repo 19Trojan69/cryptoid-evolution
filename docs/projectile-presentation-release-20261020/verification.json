@@ -1,0 +1,124 @@
+{
+  "baseline": "bdf8b0a9edda1d878c47fddb59ab3ec3b20c7e26",
+  "sourceCommit": "e7b49fed4c29baf021d9f0af56fead66ff7d02b7",
+  "sourceTree": "2106d405572faf19a8ced7606f13dca31be65910",
+  "focusedTests": 89,
+  "localeTests": 12,
+  "gameplayHash60Hz": "4a43cdd9c602dfcd30b76edfe2ea930f5ad62d5440e585f9610d1cd9e7bc9e1b",
+  "sameGameplayTrace60Hz": true,
+  "campaigns": [
+    {
+      "label": "before60Hz",
+      "normalSections": 30,
+      "bosses": 3,
+      "cleanup": {
+        "raf": 0,
+        "timers": 0,
+        "listeners": 0
+      }
+    },
+    {
+      "label": "after60Hz",
+      "normalSections": 30,
+      "bosses": 3,
+      "cleanup": {
+        "raf": 0,
+        "timers": 0,
+        "listeners": 0
+      }
+    },
+    {
+      "label": "after20Hz",
+      "normalSections": 30,
+      "bosses": 3,
+      "cleanup": {
+        "raf": 0,
+        "timers": 0,
+        "listeners": 0
+      }
+    }
+  ],
+  "typescript": "passed",
+  "fixtureTypecheck": "passed with dom.iterable and buildIdentity declaration",
+  "newModuleLint": "passed",
+  "fullGamePageLint": "63 pre-existing errors / 4 warnings remain; same rule counts",
+  "nativeBrowser": {
+    "passed": true,
+    "checks": [
+      {
+        "label": "Alle Schussformen, Farben, Rotation und Pseudoelemente entsprechen dem Original",
+        "passed": true,
+        "detail": {
+          "comparisons": 58,
+          "maxBoundsError": 6.103515625e-05
+        }
+      },
+      {
+        "label": "Treffer-/Phasenentfernung leert beide Schussgruppen",
+        "passed": true
+      },
+      {
+        "label": "Bewegte Sch\u00fcsse nutzen jeden Spieltakt bei weiterhin halbem Szenentakt",
+        "passed": true,
+        "detail": {
+          "frames": 120,
+          "oldMoves": 60,
+          "newMoves": 120
+        }
+      },
+      {
+        "label": "Bereits gegl\u00e4tteter Schub erzeugt keine neuen H\u00f6hen-Transitions",
+        "passed": true,
+        "detail": {
+          "oldTransitions": 476,
+          "newTransitions": 0,
+          "configuredDelta": 476
+        }
+      },
+      {
+        "label": "Triebwerksgrafik und endg\u00fcltige Schubh\u00f6he bleiben erhalten",
+        "passed": true
+      },
+      {
+        "label": "Unver\u00e4nderte Pausenposition bleibt stabil",
+        "passed": true
+      }
+    ],
+    "build": {
+      "sourceCommit": "e7b49fed4c29baf021d9f0af56fead66ff7d02b7",
+      "sourceTree": "2106d405572faf19a8ced7606f13dca31be65910",
+      "workingTreeDirty": true
+    },
+    "limits": "Native Chrome DOM/style/bounds and transition counts; no physical iPhone heat, native/GPU memory, presented FPS or crash proof."
+  },
+  "physicalIPhone": "not measured",
+  "mainnet": "not accessed; extra read comparison denied by automatic review, checks scoped to Testnet",
+  "productionFixturePagesExcluded": true,
+  "guestFlow": {
+    "guestStart": true,
+    "restartedAfterStationaryGameOver": true,
+    "pausedPositionStable": true,
+    "pausedPositions": [
+      "681.5px 595.112px"
+    ],
+    "resume": {
+      "paused": "false",
+      "positions": [
+        "681.5px 195.208px",
+        "681.5px 403.144px",
+        "681.5px 611.144px"
+      ]
+    },
+    "limits": "Native desktop Chrome guest run. No account modification or Pi authentication test; no physical iPhone or energy proof. Existing guest analytics may run."
+  },
+  "deliveredGamePage": {
+    "mount": true,
+    "translation": true,
+    "liveCache": true,
+    "dispose": true
+  },
+  "apiAndScoresEqual": true,
+  "productionQaExcluded": true,
+  "sourceIdentityVerified": true,
+  "officialHomeReload": "passed; initialization completed, anonymous Home with enabled Play button"
+}

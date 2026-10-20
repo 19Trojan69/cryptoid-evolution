@@ -1,0 +1,30 @@
+{
+  "format": "cryptoid-testnet-release",
+  "sourceCommit": "e7b49fed4c29baf021d9f0af56fead66ff7d02b7",
+  "sourceTree": "2106d405572faf19a8ced7606f13dca31be65910",
+  "releaseRef": "codex/testnet-projectile-presentation-release-20261020",
+  "preview": {
+    "id": "dpl_DsTY4ahomNJqvUq5oCcJKhL2K7cj",
+    "url": "cryptoid-evolution-testnet-p32ulyxm0-19-trojan69.vercel.app",
+    "state": "READY",
+    "readyAt": "2026-10-20T19:31:40.144Z"
+  },
+  "production": {
+    "id": "dpl_6uZ96rZE714sudgnFuzsjYTSxtcF",
+    "url": "cryptoid-evolution-testnet-nmra1nrez-19-trojan69.vercel.app",
+    "state": "READY",
+    "readyAt": "2026-10-20T19:36:37.965Z",
+    "buildMs": 44174,
+    "aliases": [
+      "cryptoid-evolution-testnet.vercel.app",
+      "cryptoid-evolution-testnet-19-trojan69.vercel.app",
+      "cryptoid-evolution-testnet-git-codex-iphone-20e099-19-trojan69.vercel.app"
+    ]
+  },
+  "rollback": {
+    "ref": "backup/testnet-before-projectile-presentation-20261020",
+    "sourceCommit": "bdf8b0a9edda1d878c47fddb59ab3ec3b20c7e26",
+    "deployment": "dpl_Ai2j6jAyoxvC5mWESvKKBK1bMAKU"
+  },
+  "limits": "Native Chrome and bounded simulation tests are not physical iPhone, GPU/native memory, heat or crash proof. Mainnet comparison omitted after automatic review denied that extra read; no Mainnet changes."
+}

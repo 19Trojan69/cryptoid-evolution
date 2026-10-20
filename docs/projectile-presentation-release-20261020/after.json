@@ -1,0 +1,67 @@
+{
+  "at": "2026-10-20T19:37:27.229638+00:00",
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 1465,
+      "sha256": "058d6dc788ee3948cda8436ac86178bbfdf956a01924a9c71758de7ff0cd6be4"
+    },
+    {
+      "path": "/api",
+      "status": 200,
+      "bytes": 27,
+      "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a"
+    },
+    {
+      "path": "/api/admin/status",
+      "status": 401,
+      "bytes": 29,
+      "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=1",
+      "status": 200,
+      "bytes": 7440,
+      "sha256": "9cbe90a3686312972b4a117e300a2bc2e15ce07a8eebd15b51f12d81181451ad"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=2",
+      "status": 200,
+      "bytes": 9733,
+      "sha256": "7b3af7b446c33c74d7c8523a57fbb5e0eeea0acd3ad473e13a5d4d1741583c67"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=3",
+      "status": 200,
+      "bytes": 9733,
+      "sha256": "7b3af7b446c33c74d7c8523a57fbb5e0eeea0acd3ad473e13a5d4d1741583c67"
+    }
+  ],
+  "entry": "/assets/index-DBN7xj7E.js",
+  "apiAndScoresEqual": true,
+  "chunks": [
+    {
+      "path": "assets/AdminPage-BoU8Hva0.js",
+      "status": 200,
+      "sha256": "6d0a3fde9d1dd60c6b771afadff1b2f4fc6fe6e2a163c239c8c0de64d6e95483",
+      "sourceIdentity": true,
+      "treeIdentity": true
+    },
+    {
+      "path": "assets/GamePage-4BTKLkI9.js",
+      "status": 200,
+      "sha256": "bf8a7451008077db8ce317c855c8e5f291ab446e2d999aae5af270a17b77311d",
+      "sourceIdentity": true,
+      "treeIdentity": true
+    },
+    {
+      "path": "assets/powerUps-Bd8a29sm.js",
+      "status": 200,
+      "sha256": "a3d7dc7cd84cc0ff57409c4981a4125ca35df73b503594ff921f9a644eef19fa",
+      "sourceIdentity": false,
+      "treeIdentity": false
+    }
+  ],
+  "productionQaExcluded": true
+}

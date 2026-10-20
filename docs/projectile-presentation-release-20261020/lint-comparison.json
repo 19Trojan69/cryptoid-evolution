@@ -1,0 +1,23 @@
+{
+  "baseline": {
+    "errors": 63,
+    "warnings": 4,
+    "byRule": {
+      "react-hooks/refs": 49,
+      "react-hooks/exhaustive-deps": 4,
+      "react-hooks/purity": 6,
+      "react-hooks/immutability": 8
+    }
+  },
+  "current": {
+    "errors": 63,
+    "warnings": 4,
+    "byRule": {
+      "react-hooks/refs": 49,
+      "react-hooks/exhaustive-deps": 4,
+      "react-hooks/purity": 6,
+      "react-hooks/immutability": 8
+    }
+  },
+  "sameCounts": true
+}
