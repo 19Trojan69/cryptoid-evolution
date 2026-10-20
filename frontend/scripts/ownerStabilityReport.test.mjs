@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import ts from 'typescript';
 import { armOwnerTimingCapture } from '../src/pages/ownerTimingCapture.ts';
+import { armOwnerAudioAudit } from '../src/pages/ownerAudioAudit.ts';
 import { readOwnerStabilityReport } from '../src/pages/stabilityReport.mjs';
 
 // Run the actual owner-panel source with controlled hooks, API and local storage.
@@ -12,8 +13,8 @@ const source = fs.readFileSync(new URL('../src/pages/AdminPage.tsx', import.meta
 const component = source.slice(source.indexOf('async function verifyReportOwner()'), source.indexOf('export default function AdminPage()'));
 const compiled = ts.transpileModule(component + '\nmodule.exports = OwnerStabilityReport;', { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX } }).outputText;
 const same = (a,b) => a && b && a.length === b.length && a.every((v,i)=>Object.is(v,b[i]));
-function panel(verify, clipboard = async () => {}) {
-  const slots=[]; let index=0, dirty=true, output, reads=0, copies=0, selected=0, writes=0;
+function panel(verify, clipboard = async () => {}, network = 'testnet') {
+  const slots=[]; let index=0, dirty=true, output, reads=0, copies=0, selected=0, writes=0, audioMode=null;
   const pending=[];
   const state = initial => { const i=index++; slots[i] ??= { value: typeof initial==='function'?initial():initial }; return [slots[i].value, value => { slots[i].value=value; dirty=true; }]; };
   const ref = initial => { const i=index++; slots[i] ??= { current:initial }; return slots[i]; };
@@ -22,7 +23,7 @@ function panel(verify, clipboard = async () => {}) {
   const jsx=(type,props)=>({type,props});
   const t=value=>value;
   const sandbox={ module:{exports:{}}, exports:{}, require:()=>({jsx,jsxs:jsx}), useState:state,useRef:ref,useCallback:callback,useEffect:effect,
-    useAdminLocale:()=>({t}), errorMessage:()=> 'denied', readOwnerStabilityReport, armOwnerTimingCapture,
+    useAdminLocale:()=>({t}), errorMessage:()=> 'denied', readOwnerStabilityReport, armOwnerTimingCapture, armOwnerAudioAudit, shipSaveNetwork:network,
     axiosClient:{get:async path=>{assert.equal(path,'/admin/status');return {data:await verify()};}},
     window:{localStorage:{getItem:key=>{reads++;if(key==='cryptoid_game_diagnostics_v1')return JSON.stringify([{reason:'performance',sector:19,phase:'ATTACK_CYCLE',username:'excluded'}]);if(key==='cryptoid_reload_trace_v2'||key==='cryptoid_resource_trend_v4'||key==='cryptoid_owner_timing_v1')return null;throw Error('unexpected key');}},sessionStorage:{getItem:key=>{reads++;if(key==='cryptoid_game_session_v1'||key==='cryptoid_reload_trace_v2'||key==='cryptoid_resource_trend_v4'||key==='cryptoid_owner_timing_v1')return null;throw Error('unexpected key');}}},
     navigator:{clipboard:{writeText:async text=>{copies++;await clipboard(text);}}},
@@ -32,15 +33,16 @@ function panel(verify, clipboard = async () => {}) {
   const render=()=>{while(dirty){dirty=false;index=0;output=sandbox.module.exports();walk(output,node=>{if(node.type==='textarea')node.props.ref.current={focus(){selected++;},select(){selected++;},setSelectionRange(){selected++;}};});while(pending.length)pending.shift()();}};
   const flush=async()=>{for(let i=0;i<12;i++){await Promise.resolve();render();}};
   render();
-  sandbox.window.sessionStorage.setItem=(key,value)=>{assert.equal(key,'cryptoid_owner_timing_arm_v1');assert.ok(Number(value)>0);writes++;};
-  return {flush,unmount:()=>slots.forEach(slot=>slot.cleanup?.()),button:label=>{let found;walk(output,node=>{if(node.type==='button'&&node.props.children===label)found=node.props;});return found;},text:()=>{let value='';walk(output,node=>{if(node.type==='textarea')value=node.props.value;});return value;},get reads(){return reads;},get copies(){return copies;},get selected(){return selected;},get writes(){return writes;}};
+  sandbox.window.sessionStorage.setItem=(key,value)=>{if(key==='cryptoid_owner_audio_arm_v1'){audioMode=JSON.parse(value).mode;assert.ok(['original','off'].includes(audioMode));}else{assert.equal(key,'cryptoid_owner_timing_arm_v1');assert.ok(Number(value)>0);}writes++;};
+  sandbox.window.sessionStorage.removeItem=key=>{assert.ok(['cryptoid_owner_audio_arm_v1','cryptoid_owner_timing_arm_v1'].includes(key));if(key==='cryptoid_owner_audio_arm_v1')audioMode=null;};
+  return {flush,unmount:()=>slots.forEach(slot=>slot.cleanup?.()),button:label=>{let found;walk(output,node=>{if(node.type==='button'&&node.props.children===label)found=node.props;});return found;},text:()=>{let value='';walk(output,node=>{if(node.type==='textarea')value=node.props.value;});return value;},get reads(){return reads;},get copies(){return copies;},get selected(){return selected;},get writes(){return writes;},get audioMode(){return audioMode;}};
 }
 test('denied owner verification renders no report and never reads local records',async()=>{
   const p=panel(async()=>({canAdmin:false}));await p.flush();assert.equal(p.reads,0);assert.equal(p.text(),'');assert.equal(p.button('Bericht kopieren').disabled,true);
 });
 test('verified owner reads sanitized local report, and denied copy clears it',async()=>{
   let calls=0;const p=panel(async()=>{if(++calls>1)throw Error('401');return {canAdmin:true};});
-  await p.flush();assert.equal(p.reads,8);assert.equal(JSON.parse(p.text()).events[0].sector,19);assert.ok(!p.text().includes('excluded'));
+  await p.flush();assert.equal(p.reads,10);assert.equal(JSON.parse(p.text()).events[0].sector,19);assert.ok(!p.text().includes('excluded'));
   await p.button('Bericht kopieren').onClick();await p.flush();assert.equal(p.copies,0);assert.equal(p.text(),'');
 });
 test('copy rechecks owner permission and copies exactly the displayed report',async()=>{
@@ -59,4 +61,15 @@ test('arming from the actual owner panel rechecks permission and writes only its
 test('revoked permission cannot arm measurement from an already open panel',async()=>{
   let calls=0;const p=panel(async()=>({canAdmin:++calls===1}));await p.flush();
   p.button('90-Sekunden-Messung vorbereiten').onClick();await p.flush();assert.equal(calls,2);assert.equal(p.writes,0);
+});
+test('actual audio buttons verify permission, distinguish modes and clear stale displayed evidence',async()=>{
+  let calls=0;const p=panel(async()=>{calls++;return {canAdmin:true};});await p.flush();assert.ok(p.text());
+  p.button('Audio: vollständig aus · 90 Sekunden').onClick();await p.flush();assert.equal(calls,2);assert.equal(p.audioMode,'off');assert.equal(p.text(),'');
+  p.button('Audio: Original · 90 Sekunden').onClick();await p.flush();assert.equal(calls,3);assert.equal(p.audioMode,'original');
+  p.button('Audio-Vorbereitung aufheben').onClick();await p.flush();assert.equal(calls,4);assert.equal(p.audioMode,null);
+});
+test('revoked permission blocks the off-mode arm; Mainnet has no comparison controls',async()=>{
+  let calls=0;const p=panel(async()=>({canAdmin:++calls===1}));await p.flush();
+  p.button('Audio: vollständig aus · 90 Sekunden').onClick();await p.flush();assert.equal(p.writes,0);
+  const main=panel(async()=>({canAdmin:true}),async()=>{},'mainnet');await main.flush();assert.equal(main.button('Audio: vollständig aus · 90 Sekunden'),undefined);
 });

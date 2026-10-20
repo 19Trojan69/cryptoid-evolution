@@ -1,0 +1,36 @@
+{
+  "status": "prepared-not-deployed",
+  "baselineRuntimeCommit": "53640c01a16c921645d05502d9e5b34f6dc6eeec",
+  "baselineDocumentationCommit": "24383761bd6a96a313177f09db734197ed2cf7f9",
+  "branch": "codex/iphone-lifetime-audit-20261020",
+  "localBackup": "backup/owner-audio-audit-base-20261020",
+  "automaticDeploymentEnabled": false,
+  "deploymentsPerformed": false,
+  "modes": {
+    "original": "Original playback with passive context/media clocks, activation evidence, start/end/release counters and overdue voice observations. No automatic cleanup fix, voice truncation or waveform changes.",
+    "off": "Only the armed verified Testnet owner admin preview retires primed effects, music and card contexts and prevents new game-audio starts. Off persists until leaving the route, including after recording ends. Incomplete/rejected close acknowledgements mark the comparison as not cleanly shut down."
+  },
+  "arming": "Fresh /admin/status verification, tab-local one-shot arm, 10-minute expiry. Existing server-derived GameEntry canAdmin gate unchanged. No URL flag; no consumption by normal account rounds or Mainnet.",
+  "capture": "90 seconds from the first playing frame. Existing RAF polls; at most 47 snapshots and 32 events. At most two local captures, bounded by 128 KiB. No new timer, RAF, listener, microphone or automatic upload. Startup events retained; old async completions cannot enter a later capture.",
+  "export": "Additive audioCaptures field in the existing owner-only report, with independent source/boot/time/mode identity. An old timingCapture is not attributed to a newer audio run. Unknown fields, raw URLs, error messages, account and save data are excluded.",
+  "checks": {
+    "targetedRegressionTests": 132,
+    "targetedRegressionFailures": 0,
+    "paintedImageLifetimeTests": 14,
+    "paintedImageLifetimeFailures": 0,
+    "canvasLifecyclePassed": true,
+    "canvasWarmImpacts": 2000,
+    "canvasMovingImpacts": 400,
+    "i18nTests": 12,
+    "localizationReleaseGate": "passed",
+    "typeScript": "passed",
+    "productionBuild": "passed",
+    "simulationParity": "Whole simulate AST matches approved runtime after removing only the new optional audio tick hook.",
+    "serverOwnerGateParity": "GameEntry AST matches approved runtime.",
+    "mainnetControls": "No audio comparison controls in the Mainnet owner panel.",
+    "offLifecycle": "Retires the real primed engines in a controlled layout-effect host; prevents effects/music/card starts through expiry; normal starts return after route cleanup."
+  },
+  "unchanged": ["frontend/public", "backend", "vercel.json", "dependency manifests and lockfiles", "HUD", "combat timing and rules", "account/save/reward/payment behavior", "fixed release and rollback refs"],
+  "knownWarnings": ["Existing Vite large-chunk warning", "CJS controlled Canvas host import.meta warning"],
+  "limits": "No native browser binary is installed in this host. Component/audio hosts are controlled tests, not a physical iPhone WebKit/audio-hardware, native-memory, thermal, audible-output or crash-cause proof. The historical audit in results.json deliberately predates the diagnostic preparation. The user must separately approve any Testnet publication."
+}

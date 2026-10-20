@@ -1,0 +1,112 @@
+{
+  "sourceCommit": "24383761bd6a96a313177f09db734197ed2cf7f9",
+  "limits": "Controlled hosts execute actual source. Dropped ended events are injected faults, not observed WebKit behavior. No native/GPU memory, presented FPS, heat, or crash cause is measured.",
+  "healthyEnded": {
+    "sounds": 3300,
+    "simulatedSeconds": 630,
+    "maxRegisteredVoices": 7,
+    "retainedAfterCompletion": 0,
+    "retainedAfterMute": 0,
+    "retainedAfterPause": 0,
+    "retainedAfterClose": 0
+  },
+  "injectedMissingEnded": {
+    "sounds": 3300,
+    "simulatedSeconds": 630,
+    "maxRegisteredVoices": 3300,
+    "retainedAfterCompletion": 3300,
+    "retainedAfterMute": 3300,
+    "retainedAfterPause": 300,
+    "retainedAfterClose": 0
+  },
+  "effectsMutedFromStart": {
+    "contexts": 1,
+    "state": "running",
+    "cachedBuffers": 46,
+    "sourceNodes": 0
+  },
+  "music": {
+    "zeroVolumeStillPlaying": true,
+    "suspendedAtZero": 0,
+    "trackSwitches": 2000,
+    "additionalContexts": 0
+  },
+  "cardContext": {
+    "contextsAdded": 1,
+    "resumeCalls": 1000,
+    "diagnosticCoverage": false,
+    "closeOrSuspendExport": false
+  },
+  "normalMusicTransition": {
+    "actualMusicEffectExecutions": 4,
+    "sectors": [
+      71,
+      72,
+      73,
+      74
+    ],
+    "sourceLoads": 0,
+    "dependencies": "[game.status, game.encounter, musicEnabled]"
+  },
+  "transitions": {
+    "actualClearBodyExecutions": 5000,
+    "sectors": [
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78
+    ],
+    "target": "73 -> 74 included",
+    "newSoundCalls": 0,
+    "finiteFormationSlots": true,
+    "limits": "State/formation body only; excludes React mount, native image decode, browser Canvas, audio hardware and rendering."
+  },
+  "mediaFiles": {
+    "decodedWithoutError": 27,
+    "decoder": "ffmpeg host, not WebKit"
+  },
+  "runtimeParity": {
+    "approvedRuntime": "53640c01a16c921645d05502d9e5b34f6dc6eeec",
+    "sourceAndAssetsUnchanged": true
+  },
+  "existingChecks": {
+    "audioResumeMusicSectorTests": 37,
+    "paintedImageLifetimeTests": 14,
+    "canvasLifecycle": {
+      "warmImpacts": 2000,
+      "movingImpacts": 400,
+      "passed": true
+    }
+  },
+  "deviceEvidence": {
+    "laterRun": {
+      "latestTraceSector": 74,
+      "reportedAutomaticWhitescreen": true,
+      "sampledAudioVoicesRange": [
+        0,
+        7
+      ]
+    },
+    "earlierRun": {
+      "maxReportedAudioVoices": 2340
+    },
+    "warning": "The timingCapture section is an older completed recording, not a new build identity or timing measurement for the later run."
+  },
+  "conclusions": {
+    "confirmed": [
+      "Normal clear->intro state/formation replay passes; source and artwork unchanged.",
+      "Missing-ended fault injection retains voices until explicit cleanup; mute alone does not clear them.",
+      "Zero music volume leaves playback/context active; GameAudio counters exclude music and card audio."
+    ],
+    "notProven": [
+      "Missing native ended events caused either report.",
+      "Audio is the cause of the iPhone process restart.",
+      "73 -> 74 itself is defective; last checkpoint need not be crash origin."
+    ],
+    "next": "Prepare separate owner-only original/muted/fully-disabled audio diagnostics, with context-clock progression, start/end/overdue voice counters and music/card lifecycle coverage. No deployment or sound alteration performed."
+  }
+}

@@ -1,5 +1,21 @@
 # Preserve the officially approved game
 
+## Owner audio diagnosis preparation, 20 October 2026, no publication
+
+The user explicitly approved preparing the owner audio diagnosis and original/off
+comparison. Keep this work isolated on the audit branch with automatic deployment
+disabled. Only a server-verified Testnet owner with an armed, next-admin-preview
+request may collect it or disable game audio. Original mode observes, never fixes
+or truncates sounds. Off mode retires primed effects/music/card contexts and stays
+off until route exit, even after the 90-second capture finishes. No HUD, artwork,
+combat timing, account, purchase, reward or save change is authorized. Preserve
+53640c0 and all existing release/rollback refs. The latest user-confirmed automatic
+Whitescreen followed the last recorded 73-to-74 transition; that is not proof of
+the initiating crash site. Missing-ended fault injection reproduces voice retention,
+not an observed iPhone cause. Device sound output/native memory remain unproven.
+See docs/iphone-audio-transition-20261020 for the pre-change audit and preparation
+verification. Testnet/Mainnet deployment requires a separate explicit approval.
+
 ## Completed owner timing Testnet release, 20 October 2026
 
 The user explicitly requested publication and separately approved the Dashboard

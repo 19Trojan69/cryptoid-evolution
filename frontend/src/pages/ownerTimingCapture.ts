@@ -1,6 +1,7 @@
 import { createPerformanceProbe, retainOwnerResourceTiming } from './performanceDiagnostics.ts';
 import { cleanTimingCapture, OWNER_TIMING_ARM_KEY, OWNER_TIMING_ARM_TTL_MS, OWNER_TIMING_DURATION_MS,
   OWNER_TIMING_KEY, OWNER_TIMING_MAX_BYTES } from './timingReport.mjs';
+import { AUDIO_AUDIT_ARM_KEY } from './audioAuditReport.mjs';
 
 type Host = { sessionStorage: Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
   localStorage?: Pick<Storage, 'setItem'>; __cryptoidBootId?: string };
@@ -11,6 +12,7 @@ export async function armOwnerTimingCapture(verify: () => Promise<{ canAdmin?: b
   if (owner?.canAdmin !== true) throw new Error('owner_access_required');
   if (!active()) return false;
   getHost().sessionStorage.setItem(OWNER_TIMING_ARM_KEY, String(now));
+  getHost().sessionStorage.removeItem(AUDIO_AUDIT_ARM_KEY);
   return true;
 }
 type ProbeOptions = Parameters<typeof createPerformanceProbe>[0];

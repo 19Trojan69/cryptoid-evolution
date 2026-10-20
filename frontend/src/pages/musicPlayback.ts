@@ -1,7 +1,11 @@
 import { musicGain } from "./musicPreferences.ts";
+import { ownerAudioDisabled, noteAudioEvent, captureAudioAuditEvents, audioClockMs } from './ownerAudioAudit.ts';
 
 const closeContext = (context: AudioContext | null) => {
-  try { void context?.close().catch(() => {}); } catch { /* A retired audio host cannot interrupt cleanup. */ }
+  const auditEvent = captureAudioAuditEvents();
+  if (context) auditEvent('music-close-request');
+  try { void context?.close().then(() => auditEvent('music-close-ok')).catch(() => auditEvent('music-close-failed')); }
+  catch { auditEvent('music-close-failed'); /* A retired audio host cannot interrupt cleanup. */ }
 };
 
 // A GainNode controls music on iOS, where HTMLMediaElement.volume can be ignored.
@@ -58,11 +62,20 @@ export class MusicPlayer {
 
   get currentSource() { return this.source; }
   get playing() { return !this.closed && !this.audio.paused && (!this.context || this.context.state === "running"); }
+  get audioAuditSnapshot() {
+    const musicTrack = this.source === '/audio/battle-orbit.mp3' ? 'normal' : this.source === '/audio/dreadnought-duel.mp3' ? 'boss'
+      : this.source === '/audio/boss-victory-v2.mp3' ? 'victory' : 'other';
+    return { musicState: this.context?.state ?? 'none', musicClockMs: audioClockMs(this.context),
+      musicMediaMs: Math.round(this.audio.currentTime * 1000), musicVolume: this.volume,
+      musicGain: this.gain?.gain.value ?? this.audio.volume, musicPaused: this.audio.paused,
+      musicEnded: this.audio.ended, musicMuted: this.audio.muted, musicTrack };
+  }
 
   // Switching sources on the unlocked media element retains its iOS playback permission
   // and the existing AudioContext/GainNode. A new Audio() here would need a fresh gesture.
   setSource(src: string, resumeAt = 0) {
     if (this.closed || this.source === src) return;
+    noteAudioEvent('music-source-switch');
     this.clearMetadataListener();
     this.audio.pause();
     this.source = src;
@@ -92,17 +105,26 @@ export class MusicPlayer {
   // Resume the existing graph during the Resume gesture without starting the
   // paused media element. The countdown/account request can finish afterwards.
   async unlock(): Promise<boolean> {
+    const auditEvent = captureAudioAuditEvents();
+    if (ownerAudioDisabled()) { noteAudioEvent('music-blocked'); return false; }
+    auditEvent('music-unlock-request');
     if (this.closed) return false;
     this.prepare();
     try {
       if (this.context && this.context.state !== "running") await this.context.resume();
-      return !this.closed && (!this.context || this.context.state === "running");
+      const ready = !this.closed && (!this.context || this.context.state === "running");
+      auditEvent(ready ? 'music-unlock-ok' : 'music-unlock-failed');
+      return ready;
     } catch {
+      auditEvent('music-unlock-failed');
       return false;
     }
   }
 
   async play(): Promise<boolean> {
+    const auditEvent = captureAudioAuditEvents();
+    if (ownerAudioDisabled()) { this.pause(); noteAudioEvent('music-blocked'); return false; }
+    auditEvent('music-play-request');
     if (this.closed) return false;
     this.wantsPlayback = true;
     this.prepare();
@@ -113,8 +135,11 @@ export class MusicPlayer {
       await Promise.all([resume, playback]);
       // A pending play may resolve after mute, pause, route change or a track switch.
       if (this.closed || !this.wantsPlayback) { this.audio.pause(); return false; }
-      return this.playing;
+      const playing = this.playing;
+      auditEvent(playing ? 'music-play-ok' : 'music-play-failed');
+      return playing;
     } catch {
+      auditEvent('music-play-failed');
       return false;
     }
   }

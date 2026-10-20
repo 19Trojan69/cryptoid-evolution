@@ -12,6 +12,7 @@ import {
   ADMIN_SHIP_COLOR_KEY,
   ADMIN_SHIP_STAGE_KEY,
   ADMIN_START_SECTOR_KEY,
+  shipSaveNetwork,
   type PlayerSkinId,
   type PlayerColorId,
 } from "./shipFleet";
@@ -30,6 +31,7 @@ import { paymentEvidenceLinks } from "./paymentEvidenceLinks";
 import { useAdminLocale } from "../adminLocale";
 import { readOwnerStabilityReport } from './stabilityReport.mjs';
 import { armOwnerTimingCapture } from './ownerTimingCapture';
+import { armOwnerAudioAudit } from './ownerAudioAudit';
 
 const tabs = [
   ["overview", "Übersicht"],
@@ -150,6 +152,7 @@ function OwnerStabilityReport() {
       if (result && request.current === id) {
         setReport(JSON.stringify(result, null, 2));
         setNotice(t(result.available ? "Vorhandene technische Einträge wurden gelesen." : "In diesem Browser sind keine auswertbaren Einträge vorhanden."));
+        if (result.audioCaptures?.at(-1)?.finished) setNotice(t("Audiomessung abgeschlossen. Das Spiel wurde nicht automatisch beendet."));
       }
     } catch (err) {
       if (request.current === id) setError(errorMessage(err));
@@ -200,6 +203,18 @@ function OwnerStabilityReport() {
     } catch (err) { if (request.current === id) setError(errorMessage(err)); }
     finally { if (request.current === id) setBusy(false); }
   };
+  const armAudio = async (mode: 'original' | 'off' | 'cancel') => {
+    const id = ++request.current;
+    setBusy(true); setError(''); setNotice(''); setReport('');
+    try {
+      const armed = await armOwnerAudioAudit(verifyReportOwner, () => window, mode, () => request.current === id);
+      if (armed) setNotice(mode === 'original'
+        ? t("Bereit: Original-Audio. Starte innerhalb von 10 Minuten einen Admin-Testlauf. Nach 90 Sekunden endet nur die Messung.")
+        : mode === 'off' ? t("Bereit: Spielaudio vollständig aus. Starte innerhalb von 10 Minuten einen Admin-Testlauf. Audio bleibt bis zum Verlassen aus; nur die Messung endet nach 90 Sekunden.")
+        : t("Audio-Vorbereitung aufgehoben."));
+    } catch (err) { if (request.current === id) setError(errorMessage(err)); }
+    finally { if (request.current === id) setBusy(false); }
+  };
   return <section className="admin-panel">
     <h2>{t("Technischer Bericht")}</h2>
     <p>{t("Nur für dein verifiziertes Eigentümerkonto. Gelesen werden vorhandene technische Einträge aus diesem Browser. Der Bericht wird nicht automatisch versendet.")}</p>
@@ -211,6 +226,11 @@ function OwnerStabilityReport() {
     </label>}
     <div className="admin-actions">
       <button className="admin-button" disabled={busy} onClick={() => { void armTiming(); }}>{t("90-Sekunden-Messung vorbereiten")}</button>
+      {shipSaveNetwork === 'testnet' && <>
+        <button className="admin-button" disabled={busy} onClick={() => { void armAudio('original'); }}>{t("Audio: Original · 90 Sekunden")}</button>
+        <button className="admin-button" disabled={busy} onClick={() => { void armAudio('off'); }}>{t("Audio: vollständig aus · 90 Sekunden")}</button>
+        <button className="admin-button" disabled={busy} onClick={() => { void armAudio('cancel'); }}>{t("Audio-Vorbereitung aufheben")}</button>
+      </>}
       <button className="admin-button" disabled={busy} onClick={() => { void load(); }}>{t("Erneut lesen")}</button>
       <button className="admin-button" disabled={busy || !report} onClick={() => { void copy(); }}>{t("Bericht kopieren")}</button>
     </div>

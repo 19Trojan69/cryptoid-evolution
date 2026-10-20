@@ -15,7 +15,7 @@ import { introGroupBreathingMs } from './introDifficulty';
 import CardReveal from './CardReveal';
 import { availableShipCards, firstMissionStarterCards, type CardReward } from './cardRevealRules';
 import { mergeCardReveals, rememberCard, hasSeenCard, syncCardReveals } from './cardRevealMemory';
-import { primeCardSound } from './cardSound';
+import { primeCardSound, cardAudioAuditSnapshot, closeCardAudioForAudit } from './cardSound';
 import { advanceBossCore } from './bossCore';
 import { createBossBoundaryDiagnostics } from './bossBoundaryDiagnostics';
 import { bossName } from './bossNames';
@@ -34,6 +34,7 @@ import { recordGameDiagnostic, createGameSessionDiagnostics } from './gameDiagno
 import { createReloadGameMonitor, createResourceTrendMonitor, installReloadDiagnostics, recordReloadEvent, recordReloadSnapshot } from './reloadDiagnostics';
 import { browserProbeRuntime, createPerformanceProbe, developerProbeEnabled } from './performanceDiagnostics';
 import { createOwnerTimingCapture } from './ownerTimingCapture';
+import { createOwnerAudioAudit, ownerAudioDisabled, noteAudioEvent } from './ownerAudioAudit';
 import { renderWorkStats } from './renderWork';
 import GameSceneBoundary from './GameSceneBoundary';
 import { advanceShipMotion, idleShipMotion, engineFlamePercent, explosionDiameter, fragmentFlight, hullIllumination, type ShipMotion } from "./shipRealism";
@@ -538,6 +539,30 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   const musicRef = useRef<MusicPlayer | null>(null);
   const regularMusicPositionRef = useRef(0);
   const soundRef = useRef<GameAudio | null>(null);
+  const ownerAudioAuditRef = useRef<ReturnType<typeof createOwnerAudioAudit>>(null);
+  useLayoutEffect(() => {
+    const audit = createOwnerAudioAudit(ownerDiagnostics && shipSaveNetwork === 'testnet', () => window, {
+      build: __CRYPTOID_BUILD__,
+      read: () => ({ effectsState: 'none', musicState: 'none', musicTrack: 'none', musicPaused: true,
+        effectsVolume: readEffectsVolume(), musicVolume: readMusicVolume(),
+        ...soundRef.current?.audioAuditSnapshot, ...musicRef.current?.audioAuditSnapshot, ...cardAudioAuditSnapshot(),
+        width: fieldSizeRef.current.width, height: fieldSizeRef.current.height, shipStage: shipStageRef.current,
+        playerShots: stateRef.current.shots.length, enemyShots: stateRef.current.enemyShots.length, enemies: stateRef.current.asteroids.length,
+        gestureActive: navigator.userActivation?.isActive, gestureSeen: navigator.userActivation?.hasBeenActive }),
+    });
+    ownerAudioAuditRef.current = audit;
+    if (audit?.mode === 'off') {
+      // Retire audio primed on the previous route before the first playing RAF.
+      for (const audio of [takePrimedGameAudio(), soundRef.current]) {
+        try { audio?.close(); } catch { noteAudioEvent('effects-close-failed'); }
+      }
+      for (const music of [takeHandoffGameMusic(), musicRef.current]) {
+        try { music?.close(); } catch { noteAudioEvent('music-close-failed'); }
+      }
+      try { closeCardAudioForAudit(); } catch { noteAudioEvent('card-close-failed'); }
+    }
+    return () => { audit?.dispose(); if (ownerAudioAuditRef.current === audit) ownerAudioAuditRef.current = null; };
+  }, [ownerDiagnostics]);
   const bossConfig = game.boss?.config;
   useEffect(()=>{if(bossConfig)void preloadBossWeapons(bossConfig).catch(()=>{});},[bossConfig]);
   const bossVictoryPendingRef = useRef(false);
@@ -1021,7 +1046,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   };
 
   useEffect(() => {
-    if (!musicEnabled) return;
+    if (!musicEnabled || ownerAudioDisabled()) return;
     void fetch("/audio/boss-victory-v2.mp3").catch(() => {});
     const track = takeHandoffGameMusic() ?? new MusicPlayer("/audio/battle-orbit.mp3", readMusicVolume());
     musicRef.current = track;
@@ -1318,6 +1343,8 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
       const frameGap = time - (lastFrameRef.current || time);
       const delta = Math.min(34, frameGap);
       lastFrameRef.current = time;
+      ownerAudioAuditRef.current?.tick({ status: state.status, sector: state.sector, phase: state.phase, encounter: state.encounter,
+        adminPreview: adminRunRef.current, documentHidden: document.hidden }, frameGap);
       // Preserve destruction effects through a user pause or a backgrounded tab.
       if (state.status !== "playing") {
         for (const effect of state.effects) {
