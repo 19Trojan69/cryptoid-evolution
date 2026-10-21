@@ -1,0 +1,27 @@
+{
+  "runtime": "a51ce39e3199aeafc1101e30bb6f8aa53bf7cbab",
+  "tree": "531e9810982382cf2b8ba846e67e69a47e907890",
+  "official": "https://cryptoid-evolution-testnet.vercel.app/",
+  "production": {
+    "id": "dpl_33bDNneTxC4RVXRWFYnrexuqFp9X",
+    "url": "https://cryptoid-evolution-testnet-jrfq4f3y6-19-trojan69.vercel.app",
+    "status": "READY",
+    "readyLocal": "2026-10-21 10:57:31 Europe/Vienna",
+    "buildRoundedSeconds": 39
+  },
+  "preview": {
+    "id": "dpl_BXV3PYwhsDJikkpekJemVtgWAGUT",
+    "url": "https://cryptoid-evolution-testnet-klm93bcv1-19-trojan69.vercel.app",
+    "status": "READY",
+    "buildRoundedSeconds": 38
+  },
+  "rollback": {
+    "branch": "backup/testnet-before-static-boss-glow-20261021",
+    "runtime": "8a603e553845507245c99851dea0408bbb74be40",
+    "deployment": "dpl_Evkpd5iquBkxudsqWCvibU4nTkXG"
+  },
+  "guestPreviewStartPauseResume": true,
+  "officialHomePlayEnabled": true,
+  "runtimeLogs": "Not scanned; previous permission denial was not bypassed.",
+  "physicalIphoneFixProven": false
+}

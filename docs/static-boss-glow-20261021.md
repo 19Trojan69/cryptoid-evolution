@@ -45,5 +45,27 @@ steady appearance deliberately change.
 
 Rendering still costs some resources. No measured whole-process memory/FPS
 improvement, physical iPhone/Safari validation or crash-cause proof is claimed.
-No deployment was performed. Automatic deployment is disabled on the candidate
-branch; current official Testnet and fixed rollback/release refs are preserved.
+
+## Completed Testnet publication
+
+The owner subsequently instructed: "Dann bitte veröffentlichen."
+Official Testnet is READY on `a51ce39e3199aeafc1101e30bb6f8aa53bf7cbab`, tree
+`531e9810982382cf2b8ba846e67e69a47e907890`, production deployment
+`dpl_33bDNneTxC4RVXRWFYnrexuqFp9X` (39s, ready 21 October at 10:57:31
+Europe/Vienna). Protected preview `dpl_BXV3PYwhsDJikkpekJemVtgWAGUT` (38s)
+passed guest start, pause and resume. Fresh official Home loads with Spielen
+available. This flow did not test Pi authentication or a physical iPhone boss.
+
+The exact candidate branch remains fixed. Immediate rollback is
+`backup/testnet-before-static-boss-glow-20261021` at `8a603e5` /
+`dpl_Evkpd5iquBkxudsqWCvibU4nTkXG`. Mainnet and all older fixed refs stay unchanged.
+The production rebuild uses the same exact source, with Production environment
+values. Later release-record changes are documentation-only and must not be
+deployed. Runtime logs were not scanned; the earlier permission denial was not
+bypassed. The six dashboard build warnings are separate from runtime logs.
+
+
+Public post-release checks confirm exact source/tree in GamePage and Admin, all
+five static-glow features in delivered code/CSS, all four QA pages excluded,
+and identical API/Admin-denial/all three Highscore response hashes versus the
+fresh baseline. Evidence: `before.json`, `after.json` and `release.json`.

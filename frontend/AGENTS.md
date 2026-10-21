@@ -1,21 +1,26 @@
 # Preserve the officially approved game
 
-## Static boss glow, 21 October 2026, tested preparation
+## Static boss glow, 21 October 2026, completed Testnet release
 
-The owner requested unanimated boss damage glow visible by half turret armour.
-This candidate starts at official runtime 8a603e553845507245c99851dea0408bbb74be40
-(previous completed open-reactor receipt: 26c0035). Living guns use one fixed
-orange sprite from <=50% armour until destruction; retain actual aim/recoil/fire
-and sprite clipping. Boss hull ember marks have stable React keys/profile and no
-cool/flicker/speck animation; ordinary ships and short hit bursts stay unchanged.
-All fifty bosses/392 guns pass threshold, fractional HP/resume, allocation/reuse
-and release checks. Native Chromium passes 150 boss/width cases and 500 further
-hit replacements with zero persistent glow animations, stable nodes and complete
-unmount cleanup; focused 25 tests, component lint and release build pass. This is
-not zero rendering cost or proof of an iPhone Whitescreen fix. Keep automatic
-deployment disabled on codex/static-boss-glow-20261021. This task has no new
-publication request: preserve current Testnet 8a603e5 and fixed release/rollback
-refs. See docs/static-boss-glow-20261021.md for evidence and limits.
+The owner explicitly requested publication: "Dann bitte veröffentlichen."
+Official Testnet is READY dpl_33bDNneTxC4RVXRWFYnrexuqFp9X, source
+`a51ce39e3199aeafc1101e30bb6f8aa53bf7cbab`, tree
+`531e9810982382cf2b8ba846e67e69a47e907890`. Keep
+codex/static-boss-glow-20261021 fixed at this runtime. Immediate rollback:
+backup/testnet-before-static-boss-glow-20261021 at 8a603e5, READY
+dpl_Evkpd5iquBkxudsqWCvibU4nTkXG. The protected preview is READY
+dpl_BXV3PYwhsDJikkpekJemVtgWAGUT. Preview guest start/pause/resume and fresh
+official Home/Spielen pass. Living guns use a single fixed orange texture from
+<=50% armour; persistent boss hull embers are static. Keep aim/fire/recoil,
+short hit bursts, other ships and reactor charge feedback. All fifty bosses /
+392 guns pass threshold/resume/allocation/release checks; native Chromium
+passes 150 boss-width cases and 500 further hits with zero persistent glow
+animations and complete cleanup. Focused 25 tests, lint and release build pass.
+This is neither zero rendering cost nor proof of an iPhone Whitescreen fix.
+Documentation-only release-record changes must not replace this runtime;
+disable automatic deployment on codex/static-boss-glow-release-record-20261021.
+Mainnet and all older fixed refs remain unchanged. See
+docs/static-boss-glow-20261021.md and its matching evidence directory.
 
 ## Open-reactor effect audit, 21 October 2026, isolated preparation
 
