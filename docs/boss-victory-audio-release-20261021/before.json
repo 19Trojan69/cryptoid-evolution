@@ -1,0 +1,42 @@
+{
+  "at": "2026-10-21T19:38:19.168Z",
+  "entry": "/assets/index-Dv5_IzRg.js",
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 1465,
+      "sha256": "b29cc8b945feefa3f3a39de030ebabc8e8bb9ea3ed8fa9890da956048388a1ca"
+    },
+    {
+      "path": "/api",
+      "status": 200,
+      "bytes": 27,
+      "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a"
+    },
+    {
+      "path": "/api/admin/status",
+      "status": 401,
+      "bytes": 29,
+      "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=1",
+      "status": 200,
+      "bytes": 7444,
+      "sha256": "ca8956d86c54d585585a76021dd0678dfaec6776ee50ee6fe64eb2784331741b"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=2",
+      "status": 200,
+      "bytes": 9737,
+      "sha256": "97e4ef2b07503253eaef1d4a09013580fe284d4d76ccc1b612e9f37ab3543c78"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=3",
+      "status": 200,
+      "bytes": 9737,
+      "sha256": "97e4ef2b07503253eaef1d4a09013580fe284d4d76ccc1b612e9f37ab3543c78"
+    }
+  ]
+}

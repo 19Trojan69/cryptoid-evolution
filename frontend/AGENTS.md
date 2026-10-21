@@ -1,5 +1,23 @@
 # Preserve the officially approved game
 
+## Boss-victory progress guard published, 21 October 2026
+
+Official Testnet READY source 9b5f07c55a1f440ca925ee49b002bb223241793a, tree
+d92cd586d6257357de893c2357960e6c2cd116bc, fixed branch
+codex/boss-victory-audio-progress-20261021. Production
+dpl_7dCdyJ8A78QqiKU6oXzuZbBQqg6j builds in 45.030 seconds; preview in 42.967.
+132 focused tests/build/types/locales/lint, exact delivered identities, all 19
+audio/progress probes and previous memory/cleanup/recorder/handoff probes pass.
+API/three leaderboard status-length-hashes equal baseline; anonymous Admin is
+401. Preview guest start/Pause/Resume/countdown/resumed second Pause pass;
+official Home freshly loads with Spielen enabled. Native iPhone output and
+White Screen cause remain unresolved. Do not repeat a full campaign to confirm
+the already observed b92 zero-clock failure. Keep physical heart collection.
+Previous fixed b92 source/deployment is immediate rollback. Receipt branch
+codex/boss-victory-audio-release-record-20261021 is auto-deploy-disabled and must
+not be deployed. Preserve Mainnet, fixed refs and prior log/protection denials.
+See docs/boss-victory-audio-release-20261021.md and its sibling evidence directory.
+
 ## Bounded boss-victory audio wait, 21 October 2026
 
 The owner's 19:29:39Z v5 report is actual b92 gameplay: effects currentTime stays

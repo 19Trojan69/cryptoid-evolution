@@ -1,0 +1,58 @@
+{
+  "sourceCommit": "9b5f07c55a1f440ca925ee49b002bb223241793a",
+  "sourceTree": "d92cd586d6257357de893c2357960e6c2cd116bc",
+  "localSourceCommit": "759b63e853023a1c9bf44e91c69d6872cef9b029",
+  "branch": "codex/boss-victory-audio-progress-20261021",
+  "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+  "teamId": "team_KzJmtl0QyoYZAOu5RQKsAR2i",
+  "previousSource": "b92ab45bc1e493fb86c36da4f01bd88d15a5f498",
+  "previousDeployment": "dpl_EZAwgBRrVpRXGwfEAZXW9bDz5GP5",
+  "preview": {
+    "id": "dpl_Gdqs39QW21hxz2fjY7aBJ4z5CGUe",
+    "url": "cryptoid-evolution-testnet-ramlg0i4h-19-trojan69.vercel.app",
+    "target": "staging",
+    "state": "READY",
+    "createdAt": 1792611657269,
+    "buildingAt": 1792611658706,
+    "ready": 1792611701673,
+    "sourceCommit": "9b5f07c55a1f440ca925ee49b002bb223241793a",
+    "sourceBranch": "codex/boss-victory-audio-progress-20261021"
+  },
+  "production": {
+    "id": "dpl_7dCdyJ8A78QqiKU6oXzuZbBQqg6j",
+    "url": "cryptoid-evolution-testnet-jtzlaaitz-19-trojan69.vercel.app",
+    "target": "production",
+    "state": "READY",
+    "createdAt": 1792611811234,
+    "buildingAt": 1792611812306,
+    "ready": 1792611857336,
+    "sourceCommit": "9b5f07c55a1f440ca925ee49b002bb223241793a",
+    "sourceBranch": "codex/boss-victory-audio-progress-20261021"
+  },
+  "browserQa": {
+    "guestStart": true,
+    "pause": true,
+    "resumeCountdown3": true,
+    "resumedPlayAndSecondPause": true,
+    "ownerBossOnDevice": false,
+    "initialRoleSelectorAttempt": "No match for uppercase transformed label; fresh AX index starts the game successfully",
+    "officialHomeFreshAndEnabled": true
+  },
+  "verification": {
+    "focusedTests": 132,
+    "newTests": 7,
+    "locales": 12,
+    "types": true,
+    "build": true,
+    "utilityLint": true,
+    "whiteScreenFixProven": false,
+    "nativeAudioRecoveryProven": false
+  },
+  "officialUrl": "https://cryptoid-evolution-testnet.vercel.app/",
+  "verifiedDeploymentReady": true,
+  "deliveredIdentityVerified": true,
+  "deliveredAudioFeatures": 19,
+  "apiAndScoresEqual": true,
+  "anonymousAdminStatus": 401,
+  "screenshot": "testnet-ready.jpg"
+}

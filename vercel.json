@@ -49,7 +49,8 @@
       "codex/audio-gesture-release-record-20261021": false,
       "codex/post-interruption-audio-retry-20261021": false,
       "codex/post-interruption-audio-release-record-20261021": false,
-      "codex/boss-victory-audio-progress-20261021": false
+      "codex/boss-victory-audio-progress-20261021": false,
+      "codex/boss-victory-audio-release-record-20261021": false
     }
   }
 }
