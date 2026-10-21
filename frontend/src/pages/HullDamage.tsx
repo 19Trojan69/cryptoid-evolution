@@ -1,5 +1,6 @@
 import { memo, type CSSProperties } from "react";
 import { hullImpactProfile, type HullFire } from "./hullFires";
+import FinishedEffect from './FinishedEffect';
 
 type Props = { sites?: readonly HullFire[]; hit?: { id?: number; x: number; y: number; impactPower?: number }; maskImage: string; mirrored?: boolean; bossDamage?: number };
 
@@ -18,7 +19,7 @@ const HullDamage = memo(({ sites = [], hit, maskImage, mirrored = false, bossDam
     <div className={`hull-heat-layer${boss ? ' boss-static-heat' : ''}`} style={{ maskImage, WebkitMaskImage: maskImage }} aria-hidden="true">
       {sites.map(site => <i key={boss ? site.id : `${site.id}:${site.revision ?? 0}`} className="hull-hotspot" style={{ ...position(site), ...appearance(boss ? site.id : site.revision ?? site.id, boss ? undefined : site.impactPower) }}><b /></i>)}
     </div>
-    {hit && burst && <i key={hit.id} className="hull-mini-explosion" style={{ ...position(hit), ...appearance(hit.id ?? 0, hit.impactPower) }} aria-hidden="true">{burst.sparks.map((spark, index) => <span key={index} style={{ "--spark-x": `${spark.x}px`, "--spark-y": `${spark.y}px`, animationDuration: `${spark.duration}s` } as CSSProperties} />)}</i>}
+    {hit && burst && <FinishedEffect key={hit.id} tag="i" className="hull-mini-explosion" style={{ ...position(hit), ...appearance(hit.id ?? 0, hit.impactPower) }} aria-hidden="true">{burst.sparks.map((spark, index) => <span key={index} style={{ "--spark-x": `${spark.x}px`, "--spark-y": `${spark.y}px`, animationDuration: `${spark.duration}s` } as CSSProperties} />)}</FinishedEffect>}
   </>;
 });
 export default HullDamage;

@@ -156,7 +156,15 @@ function frame(time:number){
     const ctx=surface.getContext('2d');if(!ctx)throw new Error('Effect surface context unavailable');
     const scale=dpr();ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,surface.width,surface.height);
     ctx.setTransform(scale,0,0,scale,-surfaceBox.left*scale,-surfaceBox.top*scale);
-    for(const record of records.values()){drawImpact(ctx,record,Math.max(0,time-record.started-(pauseTotal-record.pauseStart)));draws++;fragmentDraws+=record.pieces.length;}
+    let visible=false;
+    for(const record of records.values()){
+      const age=Math.max(0,time-record.started-(pauseTotal-record.pauseStart));
+      if(age>=record.visibleUntil)continue;
+      visible=true;drawImpact(ctx,record,age);draws++;fragmentDraws+=record.pieces.length;
+    }
+    // Clear the last frame once, then sleep until a new record is registered.
+    // Keep ownership, bounds and the existing idle-release grace unchanged.
+    if(!visible)return;
   } catch(error) { recordFailure(error); const disable=disableSurface;clearCanvasEffects();disable?.();return; }
   finally { endVisualPaint('effect',paintStarted); }
   frameId=requestGameFrame(frame);
@@ -271,7 +279,8 @@ export function CanvasImpact({effect,debris,original}:{effect:any;debris:any;ori
     &&loaded.scale===availability.scale&&loaded.generation===resourceGeneration;
   useLayoutEffect(()=>{
     if(!available)return;
-    const record={effect,pieces,assets:loaded,started:started.current,pauseStart:pauseStart.current,bounds:null as any};
+    const visibleUntil=Math.max(1450,...pieces.map(piece=>2120+piece.delay));
+    const record={effect,pieces,assets:loaded,started:started.current,pauseStart:pauseStart.current,visibleUntil,bounds:null as any};
     record.bounds=impactBounds(record);
     records.set(effect.id,record);fitSurface();schedule();
     return()=>remove(effect.id);

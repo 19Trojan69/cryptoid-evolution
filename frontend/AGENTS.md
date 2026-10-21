@@ -1,5 +1,43 @@
 # Preserve the officially approved game
 
+## Finished hit/debris cleanup, 21 October 2026, tested preparation
+
+The owner requests combining finished-hit cleanup with inspection of long-lived
+debris/flames, slowly and without optical downgrades. Base this candidate on exact
+official runtime 171cb5c4507a1530a9bbb080d61805be0da545f7, tree
+490b444be6bb87e8a4438c06b3c4bc86114a486f. Step 2 has now been published:
+READY dpl_729MdmJke7jMhhX28Ukh8EqbXo8T, ready 13:28:11 Vienna; completed
+receipt 65e05fd340febf8d04cb4e9d95cfc4571abd10b5 is on
+codex/reactor-door-reuse-release-record-20261021. Preserve fixed source
+codex/reactor-door-reuse-20261021 and rollback
+backup/testnet-before-reactor-door-reuse-20261021 at 540d73e. This supersedes
+the historical Step 2 preparation-only baseline below.
+The intervening reflection prototype was rejected: strict pixels differ and
+native resource measurement is unavailable. Audit e1d163e is on
+codex/boss-reflection-audit-20261021; do not ship its display:none prototype.
+
+FinishedEffect releases transient DOM only after all native child/pseudo
+animations finish; paused/running/delayed/infinite children prevent retirement.
+Missing/throwing native inspection retains original parent ownership. Keep
+existing keys for replacement hits, permanent heat masks and the falling boss.
+Canvas draws unchanged visible ages, clears once after the last fragment and
+sleeps until new registration; retain bounds, resource pins, surface dimensions,
+original parent lifetime and two-second idle grace. No new timer or RAF chain.
+GamePage's entire component body, all CSS/artwork and drawImpact remain byte
+identical. Visible times stay: normal fire 880 ms, smoke 1450 ms, debris
+2120+0..44 ms; boss final debris 2550+0..44 ms. Logical 2250/3400-ms ownership
+still controls gameplay/recovery. Do not shorten live effects in this cleanup.
+600 native DOM/120 strict software-rendered PNG pairs, 275 Canvas RGBA pairs,
+native pause/new-hit/delayed/infinite/fallback/final-cleanup checks, 5000 React
+hits, Canvas cadence/sleep/wake/max-delay/lifecycle checks, 26 focused tests and
+release build/12 locale tests pass. New helper/HullDamage lint is clean; baseline
+GamePage four warnings and CanvasEffects twenty errors remain unchanged.
+No physical iPhone/WebKit GPU, memory, heat, FPS or interruption-fix proof.
+This is preparation only. Disable automatic deployment on
+codex/finished-hit-debris-cleanup-20261021; keep official Testnet at 171cb5c,
+Mainnet and all fixed refs. No new publication instruction accompanies this step.
+See docs/finished-hit-debris-cleanup-20261021.md and its evidence directory.
+
 ## Step 2: reactor door reuse, 21 October 2026, tested preparation
 
 The owner requests the next small stability step without optical downgrades.

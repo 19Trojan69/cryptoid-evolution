@@ -1,0 +1,72 @@
+{
+  "passed": true,
+  "baseline": "171cb5c4507a1530a9bbb080d61805be0da545f7",
+  "rates": [
+    {
+      "rafHz": 30,
+      "seconds": 2,
+      "before": 60,
+      "after": 60
+    },
+    {
+      "rafHz": 59.94,
+      "seconds": 2,
+      "before": 120,
+      "after": 120
+    },
+    {
+      "rafHz": 60,
+      "seconds": 2,
+      "before": 120,
+      "after": 120
+    },
+    {
+      "rafHz": 90,
+      "seconds": 2,
+      "before": 120,
+      "after": 120
+    },
+    {
+      "rafHz": 120,
+      "seconds": 2,
+      "before": 120,
+      "after": 120
+    },
+    {
+      "rafHz": 144,
+      "seconds": 2,
+      "before": 120,
+      "after": 120
+    },
+    {
+      "rafHz": 240,
+      "seconds": 2,
+      "before": 120,
+      "after": 120
+    }
+  ],
+  "rounded60Hz": {
+    "before": 120,
+    "after": 120
+  },
+  "completedCanvasSleeps": true,
+  "checks": [
+    "identical drawing/interpolation source",
+    "current official frame cadence retained",
+    "30/59.94/60 Hz retained",
+    "90/120/144/240 Hz use 60 paint slots per second",
+    "rounded 60 Hz timestamps",
+    "wall-clock drawing commands at every selected frame",
+    "pause clock and first resume frame",
+    "React re-registration preserves paint budget",
+    "long gap skips catch-up drawing",
+    "idle cancels RAF; later burst draws immediately",
+    "context loss clears the scheduler/cache",
+    "unmount/remount resets deadline",
+    "last visible fragment is drawn and final image cleared once",
+    "expired mounted records do not keep a blank draw loop running",
+    "bounds and owner lifetime remain intact while sleeping",
+    "new bursts wake the same chain and retain pause handling"
+  ],
+  "limits": "Controlled callback clocks and drawing commands, not physical iPhone temperature, GPU load or proof of the Whitescreen cause."
+}

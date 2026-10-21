@@ -1,0 +1,72 @@
+{
+  "passed": true,
+  "baseline": "171cb5c4507a1530a9bbb080d61805be0da545f7",
+  "browser": "153.0.8010.0",
+  "softwareFlags": true,
+  "domComparisons": 600,
+  "pixelComparisons": 120,
+  "nativeHitReplacements": 100,
+  "maxControllerEntries": 14,
+  "hitIdle": {
+    "afterBursts": 0,
+    "afterImpacts": 0,
+    "afterHeat": 2,
+    "beforeBursts": 1,
+    "beforeImpacts": 0,
+    "nativeAnimations": 7,
+    "pacing": {
+      "mode": "native-easing",
+      "targetHz": 60,
+      "active": 0,
+      "configured": 1204,
+      "fallbacks": 0,
+      "jsFrameWrites": 0
+    }
+  },
+  "nativeLifetimes": [
+    {
+      "kind": "explosion",
+      "delay": 0,
+      "afterImpacts": 0,
+      "beforeImpacts": 1
+    },
+    {
+      "kind": "player-explosion",
+      "delay": 0,
+      "afterImpacts": 0,
+      "beforeImpacts": 1
+    },
+    {
+      "kind": "boss-explosion",
+      "delay": 0,
+      "afterImpacts": 0,
+      "beforeImpacts": 1
+    },
+    {
+      "kind": "boss-explosion",
+      "delay": 500,
+      "afterImpacts": 0,
+      "beforeImpacts": 1
+    }
+  ],
+  "pausedHitPreserved": true,
+  "infiniteChildPreserved": true,
+  "cleanup": {
+    "afterBursts": 0,
+    "afterImpacts": 0,
+    "afterHeat": 0,
+    "beforeBursts": 0,
+    "beforeImpacts": 0,
+    "nativeAnimations": 0,
+    "pacing": {
+      "mode": "native-easing",
+      "targetHz": 60,
+      "active": 0,
+      "configured": 1287,
+      "fallbacks": 0,
+      "jsFrameWrites": 0
+    }
+  },
+  "pageErrors": [],
+  "limits": "Linux Chromium, actual effect declarations/HullDamage/production CSS; native event lifetime tests separate from paused phase snapshots. PaintedShip colour generation is unchanged; normal pixel effects use the atlas fallback while Canvas pixels cover painted hulls. No physical iPhone/WebKit GPU/memory/FPS or interruption-fix proof."
+}

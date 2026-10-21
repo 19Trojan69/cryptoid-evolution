@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "baseline": "171cb5c4507a1530a9bbb080d61805be0da545f7",
+  "comparisons": [
+    {
+      "file": "src/pages/GamePage.tsx",
+      "beforeErrors": 0,
+      "afterErrors": 0,
+      "beforeWarnings": 4,
+      "afterWarnings": 4
+    },
+    {
+      "file": "src/pages/CanvasEffects.tsx",
+      "beforeErrors": 20,
+      "afterErrors": 20,
+      "beforeWarnings": 0,
+      "afterWarnings": 0
+    },
+    {
+      "file": "src/pages/FinishedEffect.tsx",
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "file": "src/pages/HullDamage.tsx",
+      "errors": 0,
+      "warnings": 0
+    }
+  ],
+  "note": "Existing diagnostics matched by rule, severity and message; compiler source-frame line offsets are normalized. Existing lint debt is not repaired in this scope."
+}

@@ -8,7 +8,7 @@ import {build} from 'esbuild';
 import {Host} from './canvasHookHost.mjs';
 
 const root=new URL('../',import.meta.url).pathname;
-const baseline=process.env.CRYPTOID_CANVAS_CADENCE_BASE||'a20f6465fc59ef321a660835186005cb859e97c9';
+const baseline=process.env.CRYPTOID_CANVAS_CADENCE_BASE||'171cb5c4507a1530a9bbb080d61805be0da545f7';
 const originalBefore=execFileSync('git',['show',`${baseline}:frontend/src/pages/CanvasEffects.tsx`],{cwd:root,encoding:'utf8'});
 const before=process.env.CRYPTOID_CANVAS_CADENCE_NORMAL_SCALE==='1'
   ?originalBefore.replace('const dpr=()=>window.devicePixelRatio||1;','const dpr=()=>Math.min(1.5,window.devicePixelRatio||1);'):originalBefore;
@@ -52,9 +52,10 @@ async function host(source){
   const surface=makeCanvas(),owner=new Host(runtime.CanvasEffectLayer,{enabled:true,children:null},surface);
   globalThis.__availability=owner.render().props.value;owner.passive();globalThis.__availability=owner.render().props.value;
   const views=new Set();
-  const mount=(id=1)=>{
+  const mount=(id=1,fragmentDelay=0)=>{
     const effect={id,kind:'explosion',x:215,y:240,debrisSize:50,sprite:0,debrisColor:'steel'};
-    const view=new Host(runtime.CanvasImpact,{effect,debris,original});view.render();views.add(view);return view;
+    const delayedDebris={...debris,props:{children:debris.props.children.map(piece=>({...piece,props:{style:{...piece.props.style,'--fragment-delay':`${fragmentDelay}ms`}}}))}};
+    const view=new Host(runtime.CanvasImpact,{effect,debris:delayedDebris,original});view.render();views.add(view);return view;
   };
   const tick=at=>{
     clock=at;surface.commands.length=0;
@@ -85,7 +86,7 @@ const rates=[];
 for(const hz of [30,59.94,60,90,120,144,240]){
   const times=Array.from({length:Math.ceil(hz*2)},(_,i)=>100+i*1000/hz).filter(t=>t<2100-0.001);
   const control=await capture(before,times),candidate=await capture(after,times);matchFrames(control,candidate);
-  assert.equal(control.length,times.length,'negative control paints every RAF');
+  assert.equal(control.length,candidate.length,'visible drawing retains the current official frame cadence');
   assert.ok(candidate.length<=120,'at most 120 paint slots in two seconds');
   if(hz<=60)assert.equal(candidate.length,control.length,'ordinary 30/60 Hz drawing is retained');
   else assert.equal(candidate.length,120,'high-refresh drawing uses all 60 Hz paint slots');
@@ -122,4 +123,22 @@ h.tick(508);h.surface.listeners.get('contextlost')();
 assert.equal(h.frames.size,0);assert.equal(h.runtime.canvasEffectResources().cacheBytes,0);
 h.unmount(next);h.close();
 const remounted=await host(after);remounted.mount(3);assert.equal(remounted.tick(100).draws,1,'a new layer has no deadline from the old layer');remounted.close();
-console.log(JSON.stringify({passed:true,baseline,rates,rounded60Hz:{before:roundedControl.length,after:roundedCandidate.length},checks:['identical drawing/interpolation source','negative-control paints at every RAF','30/59.94/60 Hz retained','90/120/144/240 Hz use 60 paint slots per second','rounded 60 Hz timestamps','wall-clock drawing commands at every selected frame','pause clock and first resume frame','React re-registration preserves paint budget','long gap skips catch-up drawing','idle cancels RAF; later burst draws immediately','context loss clears the scheduler/cache','unmount/remount resets deadline'],limits:'Controlled callback clocks and drawing commands, not physical iPhone temperature, GPU load or proof of the Whitescreen cause.'},null,2));
+const sleeping=await host(after),spent=sleeping.mount(4);
+assert.equal(sleeping.tick(100).draws,1);
+assert.equal(sleeping.tick(2210).draws,1,'last visible fragments retain their original drawing');
+sleeping.tick(2230);
+assert.equal(sleeping.frames.size,0,'the frame chain sleeps after the last visible fragment');
+assert.ok(sleeping.surface.commands.some(command=>command[0]==='clearRect'),'clear the final image before sleeping');
+assert.equal(sleeping.runtime.canvasEffectResources().registeredEffects,1,'keep the existing owner lifetime and bounds');
+const sleepingDimensions=[sleeping.surface.width,sleeping.surface.height];
+sleeping.tick(2300);assert.equal(sleeping.surface.commands.length,0,'no blank redraw while an expired record is still mounted');
+assert.deepEqual([sleeping.surface.width,sleeping.surface.height],sleepingDimensions);
+const awakened=sleeping.mount(5);assert.equal(sleeping.tick(2300).draws,1,'a new burst wakes the existing frame chain');
+sleeping.setPaused(true);sleeping.tick(2350);sleeping.tick(10000);assert.equal(sleeping.surface.commands.length,0);
+sleeping.setPaused(false);assert.equal(sleeping.tick(10020).draws,1,'the awakened burst still respects pause time');
+sleeping.unmount(spent);sleeping.unmount(awakened);sleeping.close();
+const delayed=await host(after);delayed.mount(6,44);
+assert.equal(delayed.tick(2260).draws,1,'a fragment with the maximum authored delay remains visible at age 2160 ms');
+delayed.tick(2280);assert.equal(delayed.frames.size,0,'sleep only after the delayed final fragment ends');
+assert.ok(delayed.surface.commands.some(command=>command[0]==='clearRect'));delayed.close();
+console.log(JSON.stringify({passed:true,baseline,rates,rounded60Hz:{before:roundedControl.length,after:roundedCandidate.length},completedCanvasSleeps:true,checks:['identical drawing/interpolation source','current official frame cadence retained','30/59.94/60 Hz retained','90/120/144/240 Hz use 60 paint slots per second','rounded 60 Hz timestamps','wall-clock drawing commands at every selected frame','pause clock and first resume frame','React re-registration preserves paint budget','long gap skips catch-up drawing','idle cancels RAF; later burst draws immediately','context loss clears the scheduler/cache','unmount/remount resets deadline','last visible fragment is drawn and final image cleared once','expired mounted records do not keep a blank draw loop running','bounds and owner lifetime remain intact while sleeping','new bursts wake the same chain and retain pause handling'],limits:'Controlled callback clocks and drawing commands, not physical iPhone temperature, GPU load or proof of the Whitescreen cause.'},null,2));

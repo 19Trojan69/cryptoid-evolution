@@ -95,6 +95,7 @@ import BossWeaponsView from './BossWeaponsView';
 import { preloadBossWeapons } from './bossWeaponTextures';
 import { observeBossResources } from './bossResourceDiagnostics';
 import BossHullView from './BossHullView';
+import FinishedEffect from './FinishedEffect';
 import { advanceBossTurrets, damageBossTurret, gunPosition } from './bossTurrets';
 import { detonateBossBomb, disableEnemyWeapons } from './specialPowers';
 import { bossWeapons } from './bossWeapons';
@@ -389,7 +390,7 @@ const fallingBoss = (effect: Effect) => <div className="boss-falling-hull" style
 
 // Effects keep their object identity until they expire. Keep the fragments and
 // their animations mounted instead of rebuilding the entire debris tree on every paint.
-const OriginalImpactEffectView = memo(({ effect }: { effect: Effect }) => effect.kind === "boss-fall" ? fallingBoss(effect) : <div className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y, ...(["explosion", "shatter", "player-explosion"].includes(effect.kind) ? { width: explosionDiameter(effect.debrisSize ?? 58), height: explosionDiameter(effect.debrisSize ?? 58), marginLeft: -explosionDiameter(effect.debrisSize ?? 58) / 2, marginTop: -explosionDiameter(effect.debrisSize ?? 58) / 2 } : {}), ...(effect.kind === "boss-explosion" ? { "--boss-explosion-size": `${effect.debrisSize ?? 240}px`, "--boss-image": `url('${effect.bossImage}')`, "--boss-final-delay": `${effect.finalDelayMs ?? 1_450}ms` } : {}) } as CSSProperties} data-bounded-impact={effect.boundedBossImpact ? "true" : undefined} aria-hidden="true">{effect.kind !== "boss-explosion" && <span />}{shipDebris(effect)}</div>);
+const OriginalImpactEffectView = memo(({ effect }: { effect: Effect }) => effect.kind === "boss-fall" ? fallingBoss(effect) : <FinishedEffect tag="div" className={`impact-effect ${effect.kind}`} style={{ left: effect.x, top: effect.y, ...(["explosion", "shatter", "player-explosion"].includes(effect.kind) ? { width: explosionDiameter(effect.debrisSize ?? 58), height: explosionDiameter(effect.debrisSize ?? 58), marginLeft: -explosionDiameter(effect.debrisSize ?? 58) / 2, marginTop: -explosionDiameter(effect.debrisSize ?? 58) / 2 } : {}), ...(effect.kind === "boss-explosion" ? { "--boss-explosion-size": `${effect.debrisSize ?? 240}px`, "--boss-image": `url('${effect.bossImage}')`, "--boss-final-delay": `${effect.finalDelayMs ?? 1_450}ms` } : {}) } as CSSProperties} data-bounded-impact={effect.boundedBossImpact ? "true" : undefined} aria-hidden="true">{effect.kind !== "boss-explosion" && <span />}{shipDebris(effect)}</FinishedEffect>);
 
 const ImpactEffectView = memo(({effect}:{effect:Effect}) => combatVarietyEnabled && (effect.kind === "explosion" || effect.kind === "shatter") && effect.sprite !== undefined && effect.debrisColor
   ? <CanvasImpact effect={effect} debris={shipDebris(effect)} original={<OriginalImpactEffectView effect={effect}/>} />
