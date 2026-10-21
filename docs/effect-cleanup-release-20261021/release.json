@@ -1,0 +1,34 @@
+{
+  "status": "READY",
+  "officialUrl": "https://cryptoid-evolution-testnet.vercel.app/",
+  "production": {
+    "id": "dpl_8zBFheLX2x4hLUMTYUxChv4exrts",
+    "url": "https://cryptoid-evolution-testnet-g9yoazs0v-19-trojan69.vercel.app",
+    "readyAtUTC": "2026-10-21T14:49:47.764Z",
+    "readyAtVienna": "2026-10-21 16:49:47",
+    "durationSeconds": 43.571
+  },
+  "preview": {
+    "id": "dpl_BWpVwDbYX5p39i5DDUBwm1KyqCyn",
+    "url": "https://cryptoid-evolution-testnet-eddl3fvgx-19-trojan69.vercel.app",
+    "readyAtUTC": "2026-10-21T14:45:55.895Z",
+    "durationSeconds": 45.652,
+    "guestStartPauseResume": true
+  },
+  "sourceCommit": "cc5ef2276feb651edcf0681222865e8c957f8a4e",
+  "sourceTree": "5d2a7002beedd357d17e68a4f46e33bc01204b64",
+  "fixedSourceBranch": "codex/testnet-effect-cleanup-release-20261021",
+  "rollbackBranch": "backup/testnet-before-effect-cleanup-20261021",
+  "rollbackCommit": "171cb5c4507a1530a9bbb080d61805be0da545f7",
+  "oldProduction": "dpl_729MdmJke7jMhhX28Ukh8EqbXo8T",
+  "mainnetContacted": false,
+  "deliveredFeatures": 6,
+  "priorMemoryFeatures": 8,
+  "apiAndScoresEqual": true,
+  "productionQaExcluded": true,
+  "freshOfficialHome": true,
+  "screenshotDownloadAvailable": true,
+  "runtimeLogScan": "Not performed after the earlier permission denial; no zero-error claim.",
+  "buildLogs": "The build-event endpoint returned 404; READY metadata and delivered build verification succeed.",
+  "browserLimits": "Remote Chrome guest UI acceptance, no Pi authentication or physical iPhone test. Unattended first guest run reached ordinary Game Over after resume; second fresh run verifies pause/countdown/resumed gameplay. A second-pause automation action timed out and is not counted as a pass."
+}

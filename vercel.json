@@ -25,6 +25,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/effect-cleanup-release-record-20261021": false,
       "codex/testnet-effect-cleanup-release-20261021": false,
       "codex/spent-boss-weapon-cache-20261021": false,
       "codex/finished-hit-debris-cleanup-20261021": false,

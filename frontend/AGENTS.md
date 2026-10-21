@@ -1,5 +1,31 @@
 # Preserve the officially approved game
 
+## Completed combined cleanup Testnet release, 21 October 2026
+
+The owner's explicit publication request is complete. Official Testnet READY
+dpl_8zBFheLX2x4hLUMTYUxChv4exrts, runtime
+cc5ef2276feb651edcf0681222865e8c957f8a4e, tree
+5d2a7002beedd357d17e68a4f46e33bc01204b64, ready 16:49:47 Vienna,
+build 43.571 seconds. Both finished-hit/debris and spent boss source cleanup are
+now included. Keep codex/testnet-effect-cleanup-release-20261021 fixed there.
+Immediate rollback: backup/testnet-before-effect-cleanup-20261021 at 171cb5c,
+old READY dpl_729MdmJke7jMhhX28Ukh8EqbXo8T. Preserve all older fixed refs.
+Combined 44 focused tests, 12 locales/build, 3300 native CPU weapon RGBA pairs,
+600 DOM/120 PNG finished-effect pairs, 120 native browser weapon RGBA pairs and
+Canvas cadence/lifecycle pass. Preview guest start/pause/countdown/resumed play
+is observed; an automation second-pause deadline is not a passing second pause.
+Production rebuilt the same source with production settings; it is not the
+identical preview binary. Delivered GamePage/Admin commit/tree, six cleanup and
+eight previous memory features pass. API/anonymous Admin denial/three leaderboard
+status-length-hashes equal the fresh baseline. Four production QA exclusions and
+fresh enabled official Home pass; saved screenshot is available. Runtime logs
+were not rescanned after the prior permission denial; build-log endpoint 404 is
+not zero errors. No Pi authentication, physical iPhone heat/GPU memory/Whitescreen
+fix proof, account mutation or Mainnet contact. Do not deploy subsequent receipts;
+disable automatic deployment on codex/effect-cleanup-release-record-20261021.
+The earlier preparation-only notes are historical. See
+docs/effect-cleanup-release-20261021.md and its release.json/after.json evidence.
+
 ## Combined effect cleanup release approved, 21 October 2026
 
 The owner explicitly requests "bitte veröffentlichen" after both prepared
