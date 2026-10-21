@@ -22,7 +22,7 @@ const features = {
   scheduledEndFallback: runtime.includes('.endsAt+1') && runtime.includes('this.reapedVoices'),
   pauseReleasesFadingWeapons: /this\.clockHealth\.pause\(\);for\(const (\w+) of\[\.\.\.this\.weaponMixVoices\]\)\{try\{\1\.source\.stop\(\)\}catch\{\}this\.releaseWeaponVoice\(\1\)/.test(runtime),
   silentMusicPause: runtime.includes('this.pauseMuted=!0') && runtime.includes('.gain.value=0'),
-  pendingMusicRecoveryShared: runtime.includes('if(this.playRequest&&this.clockHealth.blocked)return this.playRequest'),
+  pendingMusicRecoveryShared: runtime.includes('this.playRequest&&this.clockHealth.blocked)return this.playRequest'),
   staleMusicEpoch: runtime.includes('!==this.playbackEpoch') && runtime.includes('this.playbackEpoch++'),
   ownerFieldsDeliveredAndSanitized: fields.every(f => [runtime, game, admin, reload].every(s => s.includes(f)))
 };

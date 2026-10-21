@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-21T18:13:13.696Z",
+  "features": {
+    "foregroundClockWindow": true,
+    "coalescedSameContextRecovery": true,
+    "scheduledEndFallback": true,
+    "pauseReleasesFadingWeapons": true,
+    "silentMusicPause": true,
+    "pendingMusicRecoveryShared": true,
+    "staleMusicEpoch": true,
+    "ownerFieldsDeliveredAndSanitized": true,
+    "freshGraphDirectResume": true,
+    "orderedNativeCallsBeforePromiseWait": true,
+    "clockProgressReleasesPromiseGate": true,
+    "lateCompletionIdentityGuard": true,
+    "musicRefreshesBlockedClock": true
+  },
+  "moduleHashesMatchRelease": true
+}

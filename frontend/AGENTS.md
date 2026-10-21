@@ -1,5 +1,23 @@
 # Preserve the officially approved game
 
+## Audio gesture correction published, 21 October 2026
+
+Official Testnet is READY at source 25d80d4fea43bd18b9c3ce643a1766cde537114e,
+tree 36c1887d871364b8721c9db8a7c19cd940d67b83, fixed branch
+codex/audio-gesture-recovery-20261021. Production deployment is
+dpl_5C28c1QDmujcvKSMWBMUbidpK5N6 (36.987-second build). Rollback branch
+backup/testnet-before-audio-gesture-recovery-20261021 retains b026a194.
+Preview guest start/Pause/Resume/countdown/resumed play pass; freshly reloaded
+official Home is enabled. Delivered source/tree, all 13 audio features, prior
+memory/cleanup/owner/handoff features, unchanged API/three score hashes and
+anonymous Admin denial pass. The receipt-only QA probe accepts the new clock
+observation before the same existing music-coalescing guard. See
+docs/audio-gesture-release-20261021.md and sibling evidence. Receipt branch
+codex/audio-gesture-release-record-20261021 is auto-deploy-disabled; never deploy
+it or advance the fixed source branch with documentation. Physical iPhone
+audibility and white-screen fix remain unproven; preserve Mainnet and earlier
+runtime-log/protection-bypass denials.
+
 ## Audio Resume gesture correction, 21 October 2026
 
 The owner's follow-up after b026a194 publication confirms silence after leaving
