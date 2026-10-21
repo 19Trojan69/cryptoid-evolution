@@ -1,0 +1,13 @@
+✔ engine flames retain launch, attack and return floors and respond to acceleration (1.225483ms)
+✔ bank follows direction, remains subtle and settles after stopping (0.200419ms)
+✔ explosions scale with hull size (0.133308ms)
+✔ fragments move away from impact, inherit bounded momentum and spin differently (0.261049ms)
+✔ light fades quickly, is local and respects delayed boss burst (0.260548ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 125.800403

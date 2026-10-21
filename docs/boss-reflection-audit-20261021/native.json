@@ -1,0 +1,722 @@
+{
+  "passed": false,
+  "structuralChecksPassed": true,
+  "status": "inconclusive",
+  "browser": "153.0.8010.0",
+  "baseline": "171cb5c4507a1530a9bbb080d61805be0da545f7",
+  "isolated": true,
+  "bosses": [
+    1,
+    2,
+    50
+  ],
+  "widths": [
+    320,
+    430,
+    820
+  ],
+  "exactZeroHiddenComparisons": 0,
+  "visibleGlintControls": 9,
+  "pixelMismatches": [
+    {
+      "id": 1,
+      "width": 320,
+      "differentPixels": 3394,
+      "maxChannels": [
+        1,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "id": 1,
+      "width": 430,
+      "differentPixels": 3997,
+      "maxChannels": [
+        1,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "id": 1,
+      "width": 820,
+      "differentPixels": 4007,
+      "maxChannels": [
+        1,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "id": 2,
+      "width": 320,
+      "differentPixels": 1513,
+      "maxChannels": [
+        1,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "id": 2,
+      "width": 430,
+      "differentPixels": 36066,
+      "maxChannels": [
+        3,
+        3,
+        3,
+        0
+      ]
+    },
+    {
+      "id": 2,
+      "width": 820,
+      "differentPixels": 1789,
+      "maxChannels": [
+        1,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "id": 50,
+      "width": 320,
+      "differentPixels": 2888,
+      "maxChannels": [
+        2,
+        2,
+        2,
+        0
+      ]
+    },
+    {
+      "id": 50,
+      "width": 430,
+      "differentPixels": 3562,
+      "maxChannels": [
+        2,
+        2,
+        2,
+        0
+      ]
+    },
+    {
+      "id": 50,
+      "width": 820,
+      "differentPixels": 4312,
+      "maxChannels": [
+        1,
+        2,
+        2,
+        0
+      ]
+    }
+  ],
+  "layerEvents": 0,
+  "resourceMeasurementAvailable": false,
+  "cases": [
+    {
+      "id": 1,
+      "width": 320,
+      "mode": "zero",
+      "state": {
+        "opacity": "0",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-01-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "431657211b16093067bed60d7719791672f5b7a8806e78f0a9e39aa3431ed895",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 1,
+      "width": 320,
+      "mode": "hidden",
+      "state": {
+        "opacity": "0",
+        "display": "none",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-01-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "6cc91d6ec225ea1e0ac3dd8fdd32dfc4beb18e5a9247fdb4aa79712b1163c226",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 1,
+      "width": 320,
+      "mode": "lit",
+      "state": {
+        "opacity": "0.65",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-01-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "28f102b0b66abaf75fc9021855a2cbd2f721aec3f5fcc308286444985184d9cc",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 1,
+      "width": 430,
+      "mode": "zero",
+      "state": {
+        "opacity": "0",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-01-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "dccf65df46962eaad0a9064815b805c545eb10469113efcc2fdd5b145b507dcb",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 1,
+      "width": 430,
+      "mode": "hidden",
+      "state": {
+        "opacity": "0",
+        "display": "none",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-01-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "f89ed931405f2cebcabbb48281ba458ba91ac3a6a694aa9b920b59ea74d89b57",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 1,
+      "width": 430,
+      "mode": "lit",
+      "state": {
+        "opacity": "0.65",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-01-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "92c1ff94305d48a8920113e5618e514e3004e0dbe1fad4c1415ecf0a56435147",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 1,
+      "width": 820,
+      "mode": "zero",
+      "state": {
+        "opacity": "0",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-01-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "385e1007a9db2a800eabc7fce2f56bf1dfacf56fe3426933c7b96472f19bdcf8",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 1,
+      "width": 820,
+      "mode": "hidden",
+      "state": {
+        "opacity": "0",
+        "display": "none",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-01-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "a210a3a225747251c814b45a704fc1efd74bbf10b2d25e390958abf62e78264d",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 1,
+      "width": 820,
+      "mode": "lit",
+      "state": {
+        "opacity": "0.65",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-01-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "519f52e80ffc92d90c3a10e00dcced164e01eb7102fc54fe77d64d708410ad6c",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 2,
+      "width": 320,
+      "mode": "zero",
+      "state": {
+        "opacity": "0",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-02-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "37d769299624b77df428b68dbc4a5c57e731fc5f6cc7db6e2162aad001e333ed",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 2,
+      "width": 320,
+      "mode": "hidden",
+      "state": {
+        "opacity": "0",
+        "display": "none",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-02-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "31cb0d965d4d8d8c01d1b7327abf68b7b9b4ec189f7f061a189377a00fe0ff79",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 2,
+      "width": 320,
+      "mode": "lit",
+      "state": {
+        "opacity": "0.65",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-02-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "353e62e95dcac825d0d1e21fa2e57739752a6ac2da5a56e09f0cde6b74cddcce",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 2,
+      "width": 430,
+      "mode": "zero",
+      "state": {
+        "opacity": "0",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-02-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "c9b4869e70ef2bb53d69c49f8856fc16fa1caa2c94eef8b26ab9a8fee224dcac",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 2,
+      "width": 430,
+      "mode": "hidden",
+      "state": {
+        "opacity": "0",
+        "display": "none",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-02-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "e9323fd6c01d2c09bd484a78447bc6b6afc178e16b52d136d84016d4b6711d63",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 2,
+      "width": 430,
+      "mode": "lit",
+      "state": {
+        "opacity": "0.65",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-02-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "5d41e6ede9ce71f2b3fc5bc7615857c222cda746047ea8e00985f83475a31eef",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 2,
+      "width": 820,
+      "mode": "zero",
+      "state": {
+        "opacity": "0",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-02-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "da744063420c59a1a53c029b85fac4137ba22a046f3855945d7d00cdbd43fc49",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 2,
+      "width": 820,
+      "mode": "hidden",
+      "state": {
+        "opacity": "0",
+        "display": "none",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-02-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "d9aad95902aeb1cd3fa6ec4cd55fa59da8329d88648ccc70a39ac17d84786a0d",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 2,
+      "width": 820,
+      "mode": "lit",
+      "state": {
+        "opacity": "0.65",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-02-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "7d9a261cfb802bbe0a91b752dc9ae9fb6d049f68d5aad39db3800ff1d4e2d1ab",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 50,
+      "width": 320,
+      "mode": "zero",
+      "state": {
+        "opacity": "0",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-50-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "43a4da7e2f82add6805356cfcf523c8bf5e9b9cb51b1bf640bd1fc638b5ea6d7",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 50,
+      "width": 320,
+      "mode": "hidden",
+      "state": {
+        "opacity": "0",
+        "display": "none",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-50-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "e3f06db82d4c0f2489906befc88d2f4097484062a98f54fb6e1754da44f9e59d",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 50,
+      "width": 320,
+      "mode": "lit",
+      "state": {
+        "opacity": "0.65",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-50-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "c634d9ea9545bc835d446c18255427d201a13cfa1b574d2d3bf4a9fbf4772b38",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 50,
+      "width": 430,
+      "mode": "zero",
+      "state": {
+        "opacity": "0",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-50-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "c68cdae68672b14ec2c251c96cd49df8d1f08710d556b8de23b0c6e499e08465",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 50,
+      "width": 430,
+      "mode": "hidden",
+      "state": {
+        "opacity": "0",
+        "display": "none",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-50-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "8f2677cd2d7c9c71227bac139235e04db0314e27de4e81f24cf25d9bc9c61240",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 50,
+      "width": 430,
+      "mode": "lit",
+      "state": {
+        "opacity": "0.65",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-50-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "c78ca15592bee81a56bb12d7fbd3e2cab73ce8bba7f249513eba53030f038381",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 50,
+      "width": 820,
+      "mode": "zero",
+      "state": {
+        "opacity": "0",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-50-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "0853f4dbe82120d91691050db09f5dab236e5dcbdd110adcace69be73b913f02",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 50,
+      "width": 820,
+      "mode": "hidden",
+      "state": {
+        "opacity": "0",
+        "display": "none",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-50-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "ec95f6a8f18eaee8914487c5acbcc98eb2ce111c3a55cd03d339c19df5a7f1a9",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 50,
+      "width": 820,
+      "mode": "lit",
+      "state": {
+        "opacity": "0.65",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:43877/ships/bosses/evolved/boss-50-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "pixelHash": "1231e2813aa63b685af56960c1ecbc0ffcf24bb6c2721c40674d3296ee8c53df",
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    }
+  ],
+  "reflectionNodesAfterUnmount": 0,
+  "pageErrors": [],
+  "limits": "Linux Chromium/SwiftShader CDP layer observations in an isolated fixture. Other boss children and engine animation excluded. Layer count/paint events do not measure GPU bytes, total page cost, WebKit resource retirement or iPhone interruption cause. Hidden mode is a QA prototype, not a production change."
+}

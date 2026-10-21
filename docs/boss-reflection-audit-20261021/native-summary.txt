@@ -1,0 +1,328 @@
+{
+  "passed": false,
+  "exactZeroHiddenComparisons": 0,
+  "visibleGlintControls": 9,
+  "layerEvents": 0,
+  "resourceMeasurementAvailable": false,
+  "pixelMismatches": [
+    {
+      "id": 1,
+      "width": 320,
+      "differentPixels": 3394,
+      "maxChannels": [
+        1,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "id": 1,
+      "width": 430,
+      "differentPixels": 3997,
+      "maxChannels": [
+        1,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "id": 1,
+      "width": 820,
+      "differentPixels": 4007,
+      "maxChannels": [
+        1,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "id": 2,
+      "width": 320,
+      "differentPixels": 1513,
+      "maxChannels": [
+        1,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "id": 2,
+      "width": 430,
+      "differentPixels": 36066,
+      "maxChannels": [
+        3,
+        3,
+        3,
+        0
+      ]
+    },
+    {
+      "id": 2,
+      "width": 820,
+      "differentPixels": 1789,
+      "maxChannels": [
+        1,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "id": 50,
+      "width": 320,
+      "differentPixels": 2888,
+      "maxChannels": [
+        2,
+        2,
+        2,
+        0
+      ]
+    },
+    {
+      "id": 50,
+      "width": 430,
+      "differentPixels": 3562,
+      "maxChannels": [
+        2,
+        2,
+        2,
+        0
+      ]
+    },
+    {
+      "id": 50,
+      "width": 820,
+      "differentPixels": 4312,
+      "maxChannels": [
+        1,
+        2,
+        2,
+        0
+      ]
+    }
+  ],
+  "cases": 27,
+  "summary": [
+    {
+      "id": 1,
+      "width": 320,
+      "mode": "zero",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 1,
+      "width": 320,
+      "mode": "hidden",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 1,
+      "width": 320,
+      "mode": "lit",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 1,
+      "width": 430,
+      "mode": "zero",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 1,
+      "width": 430,
+      "mode": "hidden",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 1,
+      "width": 430,
+      "mode": "lit",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 1,
+      "width": 820,
+      "mode": "zero",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 1,
+      "width": 820,
+      "mode": "hidden",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 1,
+      "width": 820,
+      "mode": "lit",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 2,
+      "width": 320,
+      "mode": "zero",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 2,
+      "width": 320,
+      "mode": "hidden",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 2,
+      "width": 320,
+      "mode": "lit",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 2,
+      "width": 430,
+      "mode": "zero",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 2,
+      "width": 430,
+      "mode": "hidden",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 2,
+      "width": 430,
+      "mode": "lit",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 2,
+      "width": 820,
+      "mode": "zero",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 2,
+      "width": 820,
+      "mode": "hidden",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 2,
+      "width": 820,
+      "mode": "lit",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 50,
+      "width": 320,
+      "mode": "zero",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 50,
+      "width": 320,
+      "mode": "hidden",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 50,
+      "width": 320,
+      "mode": "lit",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 50,
+      "width": 430,
+      "mode": "zero",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 50,
+      "width": 430,
+      "mode": "hidden",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 50,
+      "width": 430,
+      "mode": "lit",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 50,
+      "width": 820,
+      "mode": "zero",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 50,
+      "width": 820,
+      "mode": "hidden",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    },
+    {
+      "id": 50,
+      "width": 820,
+      "mode": "lit",
+      "layers": 0,
+      "reflectionLayers": 0,
+      "paintEvents": 0
+    }
+  ],
+  "cleanup": 0
+}

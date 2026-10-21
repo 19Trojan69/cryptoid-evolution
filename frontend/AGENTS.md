@@ -1,5 +1,29 @@
 # Preserve the officially approved game
 
+## Boss reflection resource audit after completed Step 2 release, 21 October 2026
+
+Official Testnet is READY production dpl_729MdmJke7jMhhX28Ukh8EqbXo8T,
+runtime 171cb5c4507a1530a9bbb080d61805be0da545f7, tree
+490b444be6bb87e8a4438c06b3c4bc86114a486f, ready 13:28:11 Europe/Vienna.
+Completed receipt 65e05fd340febf8d04cb4e9d95cfc4571abd10b5 is on
+codex/reactor-door-reuse-release-record-20261021. Keep the fixed source branch
+and backup/testnet-before-reactor-door-reuse-20261021 at 540d73e unchanged.
+The owner's "mach das bitte" also authorizes this separate reflection audit.
+The one zero-opacity mask remains mounted; its own CSS has no animation or
+transition duration and its light comes from existing short shot/explosion
+illumination. Do not infer GPU allocation or a leak from that node alone.
+The local native diagnostic uses the actual BossHullView/CSS, isolates unrelated
+children and engine animation, and compares zero opacity/display:none/lit states
+for bosses 1/2/50 at three widths. A silent LayerTree stream, including for the
+visible positive control, is unavailable evidence, never a zero-cost result.
+Keep any failed pixel comparison and do not relax tolerance or claim a measured
+resource saving. No reflection optimisation has been selected or released;
+glints, masks, damage and every game runtime file stay unchanged. Five existing
+illumination/motion tests pass. Disable automatic deployment on this audit
+branch. Do not publish it, move existing fixed refs or contact Mainnet. Native
+Chromium cannot establish WebKit resource retirement or an iPhone crash fix.
+See docs/boss-reflection-audit-20261021.md and its evidence directory.
+
 ## Step 2: reactor door reuse, 21 October 2026, tested preparation
 
 The owner requests the next small stability step without optical downgrades.

@@ -1,0 +1,14 @@
+AssertionError [ERR_ASSERTION]: zero light and hidden prototype pixels
++ actual - expected
+
++ '431657211b16093067bed60d7719791672f5b7a8806e78f0a9e39aa3431ed895'
+- '6cc91d6ec225ea1e0ac3dd8fdd32dfc4beb18e5a9247fdb4aa79712b1163c226'
+
+    at /workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/scripts/auditBossReflection.cjs:81:11 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '431657211b16093067bed60d7719791672f5b7a8806e78f0a9e39aa3431ed895',
+  expected: '6cc91d6ec225ea1e0ac3dd8fdd32dfc4beb18e5a9247fdb4aa79712b1163c226',
+  operator: 'strictEqual',
+  diff: 'simple'
+}

@@ -1,0 +1,591 @@
+{
+  "passed": false,
+  "browser": "153.0.8010.0",
+  "baseline": "171cb5c4507a1530a9bbb080d61805be0da545f7",
+  "isolated": true,
+  "bosses": [
+    1,
+    2,
+    50
+  ],
+  "widths": [
+    320,
+    430,
+    820
+  ],
+  "cases": [
+    {
+      "id": 1,
+      "width": 320,
+      "mode": "zero",
+      "state": {
+        "opacity": "0",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-01-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 1,
+      "width": 320,
+      "mode": "hidden",
+      "state": {
+        "opacity": "0",
+        "display": "none",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-01-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 1,
+      "width": 320,
+      "mode": "lit",
+      "state": {
+        "opacity": "0.65",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-01-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 1,
+      "width": 430,
+      "mode": "zero",
+      "state": {
+        "opacity": "0",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-01-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 1,
+      "width": 430,
+      "mode": "hidden",
+      "state": {
+        "opacity": "0",
+        "display": "none",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-01-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 1,
+      "width": 430,
+      "mode": "lit",
+      "state": {
+        "opacity": "0.65",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-01-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 1,
+      "width": 820,
+      "mode": "zero",
+      "state": {
+        "opacity": "0",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-01-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 1,
+      "width": 820,
+      "mode": "hidden",
+      "state": {
+        "opacity": "0",
+        "display": "none",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-01-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 1,
+      "width": 820,
+      "mode": "lit",
+      "state": {
+        "opacity": "0.65",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-01-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 2,
+      "width": 320,
+      "mode": "zero",
+      "state": {
+        "opacity": "0",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-02-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 2,
+      "width": 320,
+      "mode": "hidden",
+      "state": {
+        "opacity": "0",
+        "display": "none",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-02-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 2,
+      "width": 320,
+      "mode": "lit",
+      "state": {
+        "opacity": "0.65",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-02-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 2,
+      "width": 430,
+      "mode": "zero",
+      "state": {
+        "opacity": "0",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-02-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 2,
+      "width": 430,
+      "mode": "hidden",
+      "state": {
+        "opacity": "0",
+        "display": "none",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-02-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 2,
+      "width": 430,
+      "mode": "lit",
+      "state": {
+        "opacity": "0.65",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-02-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 2,
+      "width": 820,
+      "mode": "zero",
+      "state": {
+        "opacity": "0",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-02-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 2,
+      "width": 820,
+      "mode": "hidden",
+      "state": {
+        "opacity": "0",
+        "display": "none",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-02-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 2,
+      "width": 820,
+      "mode": "lit",
+      "state": {
+        "opacity": "0.65",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-02-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 50,
+      "width": 320,
+      "mode": "zero",
+      "state": {
+        "opacity": "0",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-50-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 50,
+      "width": 320,
+      "mode": "hidden",
+      "state": {
+        "opacity": "0",
+        "display": "none",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-50-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 50,
+      "width": 320,
+      "mode": "lit",
+      "state": {
+        "opacity": "0.65",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-50-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 50,
+      "width": 430,
+      "mode": "zero",
+      "state": {
+        "opacity": "0",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-50-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 50,
+      "width": 430,
+      "mode": "hidden",
+      "state": {
+        "opacity": "0",
+        "display": "none",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-50-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 50,
+      "width": 430,
+      "mode": "lit",
+      "state": {
+        "opacity": "0.65",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-50-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 50,
+      "width": 820,
+      "mode": "zero",
+      "state": {
+        "opacity": "0",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-50-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 50,
+      "width": 820,
+      "mode": "hidden",
+      "state": {
+        "opacity": "0",
+        "display": "none",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-50-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    },
+    {
+      "id": 50,
+      "width": 820,
+      "mode": "lit",
+      "state": {
+        "opacity": "0.65",
+        "display": "block",
+        "mask": "url(\"http://127.0.0.1:36527/ships/bosses/evolved/boss-50-hull.webp\")",
+        "blend": "screen",
+        "animation": "none",
+        "transition": "all",
+        "willChange": "auto",
+        "nodes": 1
+      },
+      "totalLayers": 0,
+      "drawingLayers": 0,
+      "reflectionLayers": 0,
+      "reflectionReasons": [],
+      "initialPaints": 0,
+      "layerPaintEventsDuring30MovingUpdates": 0
+    }
+  ],
+  "reflectionNodesAfterUnmount": 0,
+  "pageErrors": [],
+  "limits": "Linux Chromium/SwiftShader CDP layer observations in an isolated fixture. Other boss children and engine animation excluded. Layer count/paint events do not measure GPU bytes, total page cost, WebKit resource retirement or iPhone interruption cause. Hidden mode is a QA prototype, not a production change.",
+  "status": "inconclusive",
+  "resourceMeasurementAvailable": false,
+  "interpretation": "No LayerTree events or layers were observed, including visible content; zero counters cannot be interpreted as zero work. Initial structural and unmount checks only."
+}
