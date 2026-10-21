@@ -1,0 +1,204 @@
+{
+  "passed": false,
+  "structuralAndLifetimePassed": true,
+  "browser": "153.0.8010.0",
+  "baseline": "540d73e7b5a89a3098a6c6404bd3deac8f269cd3",
+  "baselineSelfControl": true,
+  "domComparisons": 1050,
+  "pixelComparisons": 90,
+  "pixelMismatches": [
+    {
+      "id": 2,
+      "width": 820,
+      "elapsed": 450,
+      "pulseTime": 0,
+      "differentPixels": 141,
+      "maxChannels": [
+        1,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "id": 3,
+      "width": 430,
+      "elapsed": 450,
+      "pulseTime": 0,
+      "differentPixels": 2,
+      "maxChannels": [
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "id": 3,
+      "width": 430,
+      "elapsed": 450,
+      "pulseTime": 550,
+      "differentPixels": 2,
+      "maxChannels": [
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "id": 3,
+      "width": 430,
+      "elapsed": 1000,
+      "pulseTime": 0,
+      "differentPixels": 2,
+      "maxChannels": [
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "id": 3,
+      "width": 430,
+      "elapsed": 1000,
+      "pulseTime": 550,
+      "differentPixels": 2,
+      "maxChannels": [
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "id": 3,
+      "width": 430,
+      "elapsed": 50,
+      "pulseTime": 0,
+      "differentPixels": 2,
+      "maxChannels": [
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "id": 3,
+      "width": 430,
+      "elapsed": 50,
+      "pulseTime": 550,
+      "differentPixels": 2,
+      "maxChannels": [
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "id": 7,
+      "width": 430,
+      "elapsed": 450,
+      "pulseTime": 0,
+      "differentPixels": 37,
+      "maxChannels": [
+        1,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "id": 7,
+      "width": 430,
+      "elapsed": 450,
+      "pulseTime": 550,
+      "differentPixels": 37,
+      "maxChannels": [
+        1,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "id": 7,
+      "width": 430,
+      "elapsed": 1000,
+      "pulseTime": 0,
+      "differentPixels": 188,
+      "maxChannels": [
+        1,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "id": 7,
+      "width": 430,
+      "elapsed": 1000,
+      "pulseTime": 550,
+      "differentPixels": 188,
+      "maxChannels": [
+        1,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "id": 7,
+      "width": 430,
+      "elapsed": 50,
+      "pulseTime": 0,
+      "differentPixels": 246,
+      "maxChannels": [
+        1,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "id": 7,
+      "width": 430,
+      "elapsed": 50,
+      "pulseTime": 550,
+      "differentPixels": 246,
+      "maxChannels": [
+        1,
+        1,
+        1,
+        0
+      ]
+    }
+  ],
+  "pixelCapture": "Exact PNG hashes, same physical origin, paused native pulse at 0/550 ms; no tolerance",
+  "bosses": 50,
+  "widths": [
+    320,
+    430,
+    820
+  ],
+  "nativeChargeUpdates": 120,
+  "samePulseImagesAndAnimation": true,
+  "nativePulseClockProgressed": true,
+  "cleanup": {
+    "pacing": {
+      "mode": "native-easing",
+      "targetHz": 60,
+      "active": 0,
+      "configured": 2,
+      "fallbacks": 0,
+      "jsFrameWrites": 0
+    },
+    "nativeAnimations": 0,
+    "reactors": 0
+  },
+  "pageErrors": [],
+  "limits": "Isolated React reactor/hull with unchanged production CSS in Linux Chromium. Controlled raster comparisons; no Safari/WebKit, physical iPhone memory/heat/FPS or Whitescreen-fix proof."
+}

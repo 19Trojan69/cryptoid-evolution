@@ -25,6 +25,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/reactor-door-reuse-20261021": false,
       "codex/static-boss-glow-20261021": false,
       "codex/idle-rock-surface-20261021": false,
       "codex/boss-effect-audit-20261021": false,

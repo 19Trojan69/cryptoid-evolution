@@ -1,5 +1,32 @@
 # Preserve the officially approved game
 
+## Step 2: reactor door reuse, 21 October 2026, tested preparation
+
+The owner requests the next small stability step without optical downgrades.
+Base this candidate on official runtime 540d73e7b5a89a3098a6c6404bd3deac8f269cd3,
+tree e2530e7824a44992e41b612153a48b9df2174345, READY production
+dpl_NnTPP38Gm8UZUaAUzj7q4uCUq4U8. Step 1 was published and verified; completed
+receipt f68eca3 is on codex/idle-rock-surface-release-record-20261021. This
+supersedes the historical Step 1 preparation-only baseline below.
+Reuse the two exact textured reactor-door React subtrees by primitive rendered
+opening/image/layout/metal/ID values. Keep pulse CSS, filter, phase, colour,
+opening/recoil/muzzle, resolution and all simulation/audio/account code.
+7,804 exact React host trees pass across all fifty bosses/three widths. Per
+1,200 updates, charge JSX allocations fall from 21,600 to 3,600 and recoil from
+22,800 to 4,800; opening stays 21,600 and closed stays zero. These are component
+element counts, not GPU/process-memory or FPS improvement percentages.
+Native Chromium passes 1,050 exact DOM comparisons, 120 native-clock updates
+with the same pulse/images/animation, and complete cleanup. All 90 strict PNG
+comparisons pass with GPU/accelerated-2D disabled. The initial default renderer
+has 7/90 one-RGB-level mismatches; the identical-baseline control also has
+13/90 one-level mismatches. Preserve these failed evidence files and do not
+claim default-renderer/GPU equivalence or a physical iPhone interruption fix.
+Fourteen boss/core/weapon tests, hooks lint and build/12 locale tests pass.
+Disable automatic deployment on codex/reactor-door-reuse-20261021. This is
+preparation only: preserve official 540d73e, Mainnet and all fixed source/rollback
+refs. Publication of this new step needs an explicit owner release instruction.
+See docs/reactor-door-reuse-20261021.md and its evidence directory.
+
 ## Step 1: idle rock surface, 21 October 2026, tested preparation
 
 The owner requests a slow, step-by-step audit with no optical downgrade. This

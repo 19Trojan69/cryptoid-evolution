@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "closedArtworkReused": true,
+  "openArtworkReused": false,
+  "doorArtworkReused": true,
+  "baseline": "540d73e7b5a89a3098a6c6404bd3deac8f269cd3",
+  "stable": {
+    "frames": 1200,
+    "beforeElements": 0,
+    "afterElements": 0
+  },
+  "openCore": [
+    {
+      "phase": "opening",
+      "frames": 1200,
+      "beforeElements": 21600,
+      "afterElements": 21600
+    },
+    {
+      "phase": "charge",
+      "frames": 1200,
+      "beforeElements": 21600,
+      "afterElements": 3600
+    },
+    {
+      "phase": "recoil",
+      "frames": 1200,
+      "beforeElements": 22800,
+      "afterElements": 4800
+    }
+  ],
+  "exactHostTreeComparisons": 7804,
+  "bosses": 50,
+  "widths": [
+    320,
+    430,
+    820
+  ],
+  "sameSvgHostDuringStableUpdates": true,
+  "limits": "Actual React + JSX operation counts. No browser raster, GPU/native memory, physical iPhone heat, FPS or Whitescreen-cause proof."
+}

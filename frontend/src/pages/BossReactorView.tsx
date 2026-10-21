@@ -79,23 +79,13 @@ export default function BossReactorView({ boss }: { boss: SectorBoss }) {
       </>,
     };
   }, [id, mount, energy]);
-  // The simulation mutates nested boss state. Cache by the actual rendered
-  // values, never by the boss/core object identities. A closed, unchanged bay
-  // then retains its SVG tree while the enclosing hull keeps moving normally.
-  return useMemo(() => {
-  const url = (part: string) => `url(#${id}-${part})`;
-  const barrels = specialWeaponBarrels(mount.shape);
-  const hatch = 'M22 9H78L93 28V125L73 151H27L7 125V28Z';
-  const texture = <image href={image} x={-left / boxWidth * 100} y={-top / boxHeight * 160} width={width / boxWidth * 100} height={height / boxHeight * 160} preserveAspectRatio="none" />;
-  return <svg className={`boss-special-weapon${firing ? ' boss-special-weapon-firing' : ''}`} viewBox="0 0 100 160" preserveAspectRatio="none" style={{zIndex:exposed ? 6 : 1,left,top,width:boxWidth,height:boxHeight,'--weapon-energy':energy,'--weapon-charge':charge} as CSSProperties} aria-hidden="true">
-    {artwork.definitions}
-    <g opacity={open}>
-      {artwork.bay}
-    </g>
-    <g className="boss-special-assembly" opacity={open} transform={`translate(0 ${-12 * (1-open) - recoil})`}>
-      {artwork.assembly}
-    </g>
-    {(['left','right'] as const).map((side,i)=><g key={side} transform={`translate(${(i ? 1 : -1)*open*32} ${-open*4})`}>
+  // Door artwork only changes with its opening/layout/paint. Retain the exact
+  // image and SVG children while charge and weapon recoil continue separately.
+  const doors = useMemo(() => {
+    const url = (part: string) => `url(#${id}-${part})`;
+    const hatch = 'M22 9H78L93 28V125L73 151H27L7 125V28Z';
+    const texture = <image href={image} x={-left / boxWidth * 100} y={-top / boxHeight * 160} width={width / boxWidth * 100} height={height / boxHeight * 160} preserveAspectRatio="none" />;
+    return (['left','right'] as const).map((side,i)=><g key={side} transform={`translate(${(i ? 1 : -1)*open*32} ${-open*4})`}>
       <g clipPath={url(side)}>
         {texture}
         <path d={hatch} fill="#030a10" opacity={open*.1}/>
@@ -104,8 +94,23 @@ export default function BossReactorView({ boss }: { boss: SectorBoss }) {
       </g>
       <path d={i ? 'M50 10H78L93 28V125L73 151H50' : 'M50 10H22L7 28V125L27 151H50'} fill="none" stroke="#10151a" strokeWidth="1.3" opacity={.35+open*.65}/>
       <path d={i ? 'M56 19H75L85 33' : 'M44 19H25L15 33'} fill="none" stroke="#d8d4ba" strokeWidth="1" opacity={open*.65}/>
-    </g>)}
+    </g>);
+  }, [id, image, width, height, left, top, boxWidth, boxHeight, open, mount.metal]);
+  // The simulation mutates nested boss state. Cache by the actual rendered
+  // values, never by the boss/core object identities. A closed, unchanged bay
+  // then retains its SVG tree while the enclosing hull keeps moving normally.
+  return useMemo(() => {
+  const barrels = specialWeaponBarrels(mount.shape);
+  return <svg className={`boss-special-weapon${firing ? ' boss-special-weapon-firing' : ''}`} viewBox="0 0 100 160" preserveAspectRatio="none" style={{zIndex:exposed ? 6 : 1,left,top,width:boxWidth,height:boxHeight,'--weapon-energy':energy,'--weapon-charge':charge} as CSSProperties} aria-hidden="true">
+    {artwork.definitions}
+    <g opacity={open}>
+      {artwork.bay}
+    </g>
+    <g className="boss-special-assembly" opacity={open} transform={`translate(0 ${-12 * (1-open) - recoil})`}>
+      {artwork.assembly}
+    </g>
+    {doors}
     {firing && barrels.map(x=><path key={x} d={`M${x-5} 148L${x-10} 157L${x-3} 155L${x} 177L${x+3} 155L${x+10} 157L${x+5} 148Z`} fill={mount.energy} opacity={muzzleOpacity}/>)}
   </svg>;
-  }, [id, mount, image, width, height, left, top, boxWidth, boxHeight, energy, exposed, open, charge, firing, recoil, muzzleOpacity, artwork]);
+  }, [mount, left, top, boxWidth, boxHeight, energy, exposed, open, charge, firing, recoil, muzzleOpacity, artwork, doors]);
 }

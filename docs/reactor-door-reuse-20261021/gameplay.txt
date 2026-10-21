@@ -1,0 +1,22 @@
+✔ fifty distinct art files, assigned to the fifty levels with per-hull coordinates (1.692709ms)
+✔ pixel mask excludes transparent wings and gaps while burns stay on the hull (18.865501ms)
+✔ phone and desktop bosses remain inside their safe region (18.200054ms)
+✔ boss salvos originate at listed weapon muzzles and rotate predictable kinds (0.651962ms)
+✔ all 50 bosses warn before pulsing, keep destroyed guns and respect shared capacity (15.07489ms)
+✔ armed, entering, dead and paused bosses cannot advance the core (0.499377ms)
+✔ later fans have a central escape gap; restored warning produces identical next volley (5.217137ms)
+✔ all 50 special weapons sit on the centreline and solid hull (17.21901ms)
+✔ shots emerge from the actual muzzle and match weapon illumination (1.971921ms)
+✔ living turrets use one fixed glow at half armour, including fractional HP and resume (6.95653ms)
+✔ all exposed bosses need half the previous hits including resumed hulls (14.451885ms)
+✔ escort pauses reach zero at displayed level 50; live escorts, pause, protection and death block respawning (1.61945ms)
+✔ a saved partially elapsed wave delay resumes without restart or skipped warning (0.563021ms)
+✔ recurring escorts fit below all bosses even near defeat on phone and desktop (20.313669ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 284.016485

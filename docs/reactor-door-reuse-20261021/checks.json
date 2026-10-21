@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "componentLint": {
+    "command": "node_modules/.bin/eslint src/pages/BossReactorView.tsx",
+    "exitCode": 0
+  },
+  "focusedGameplay": {
+    "tests": 14,
+    "passed": 14,
+    "failed": 0,
+    "output": "gameplay.txt"
+  },
+  "productionBuild": {
+    "command": "npm run build",
+    "exitCode": 0,
+    "localeTests": 12,
+    "translationReleaseGate": true,
+    "output": "build.txt"
+  },
+  "scope": "Reactor door reuse only; unchanged CSS and gameplay. Native renderer limits are recorded separately."
+}

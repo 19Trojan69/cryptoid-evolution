@@ -83,9 +83,13 @@ async function runtime(ref) {
     boss.turrets[0].health=1;compare({...boss},`boss ${id}, closed/restored`);
   }
   before.unmount();after.unmount();
+  const doorArtworkReused=stable.afterElements===0&&openCore.every(work=>work.phase==='opening'
+    ?work.afterElements<=work.beforeElements:work.afterElements<work.beforeElements*.5);
+  if(process.env.CRYPTOID_REQUIRE_REACTOR_DOOR_FIX==='1')assert.ok(doorArtworkReused,
+    'door reuse must reduce charge/recoil JSX work and preserve opening/closed work');
   const corrected=stable.afterElements===0&&stable.beforeElements>10000;
   if(process.env.CRYPTOID_REQUIRE_REACTOR_FIX==='1')assert.ok(corrected,'unchanged SVG must reuse its previous element tree');
-  const result={passed:true,closedArtworkReused:stable.afterElements===0,openArtworkReused:openCore.every(work=>work.afterElements<work.beforeElements*.5),baseline,stable,openCore,exactHostTreeComparisons:comparisons,bosses:50,widths:[320,430,820],sameSvgHostDuringStableUpdates:true,
+  const result={passed:true,closedArtworkReused:stable.afterElements===0,openArtworkReused:openCore.every(work=>work.afterElements<work.beforeElements*.5),doorArtworkReused,baseline,stable,openCore,exactHostTreeComparisons:comparisons,bosses:50,widths:[320,430,820],sameSvgHostDuringStableUpdates:true,
     limits:'Actual React + JSX operation counts. No browser raster, GPU/native memory, physical iPhone heat, FPS or Whitescreen-cause proof.'};
   if(process.env.CRYPTOID_REACTOR_REPORT)fs.writeFileSync(process.env.CRYPTOID_REACTOR_REPORT,JSON.stringify(result,null,2));
   console.log(JSON.stringify(result,null,2));
