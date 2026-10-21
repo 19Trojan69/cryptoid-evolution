@@ -1,5 +1,30 @@
 # Preserve the officially approved game
 
+## Open-reactor Testnet release completed, 21 October 2026
+
+The owner explicitly approved GitHub upload and subsequent Testnet publication
+with "Freigabe genehmigt." This release is complete; do not request it again.
+Official Testnet is READY dpl_Evkpd5iquBkxudsqWCvibU4nTkXG, runtime
+8a603e553845507245c99851dea0408bbb74be40, reviewed tree
+17805facb3e1a58c0dd8d82e20f81b7c8f872968 (identical to local 9faeccc).
+Ready 21 October 09:50:08 Vienna / 07:50:08 UTC; observed build duration 38s.
+Preserve fixed codex/testnet-open-reactor-release-20261021 and the deployed
+codex/boss-effect-audit-20261021 at 8a603e5. Immediate rollback:
+backup/testnet-before-open-reactor-20261021 at a210180, previous READY
+dpl_FNcYt4WQLGefzmbrEhp7Qow6bS5C. All older fixed refs stay fixed.
+Protected preview ENU4c6GiRrWzWj1rxHwiWF1NXhN8 passes guest start/pause/resume
+and re-pause. Delivered GamePage/Admin source/tree and actual definitions/bay/
+assembly reuse are verified in official bundles. API, anonymous Admin 401 and
+all three leaderboard hashes match the fresh before-release baseline. Four QA
+pages stay excluded from production; fresh official Home has Spielen enabled.
+The Vercel connector cannot see the existing project (404/empty list); the
+previously authorized Dashboard fallback completed the release. No new runtime
+log scan is available; no zero-error or physical iPhone memory/heat/Whitescreen
+fix claim. No Mainnet contact or account/save/payment mutation. Continue receipts
+on codex/open-reactor-release-record-20261021 with automatic deployment disabled;
+never deploy later evidence commits. See docs/boss-open-effects-20261021.md and
+its before/after/release evidence.
+
 ## Open-reactor effect audit, 21 October 2026, isolated preparation
 
 The owner explicitly resumed the hit/ember/reactor investigation. Base this

@@ -1,0 +1,73 @@
+{
+  "at": "2026-10-21T07:50:57.100Z",
+  "sourceCommit": "8a603e553845507245c99851dea0408bbb74be40",
+  "sourceTree": "17805facb3e1a58c0dd8d82e20f81b7c8f872968",
+  "entry": "/assets/index-2Yez3fxa.js",
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 1465,
+      "sha256": "254b9b096e379fc96dc3bf5f1c7c07d6fd3daccdab2bc355b5da6bd58e02d9d9"
+    },
+    {
+      "path": "/api",
+      "status": 200,
+      "bytes": 27,
+      "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a"
+    },
+    {
+      "path": "/api/admin/status",
+      "status": 401,
+      "bytes": 29,
+      "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=1",
+      "status": 200,
+      "bytes": 7440,
+      "sha256": "9cbe90a3686312972b4a117e300a2bc2e15ce07a8eebd15b51f12d81181451ad"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=2",
+      "status": 200,
+      "bytes": 9733,
+      "sha256": "f18f97ee5a48ee471b9f64c0aae3edfabba5365c3f6c9c7ec2127d6439db4894"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=3",
+      "status": 200,
+      "bytes": 9733,
+      "sha256": "f18f97ee5a48ee471b9f64c0aae3edfabba5365c3f6c9c7ec2127d6439db4894"
+    }
+  ],
+  "chunks": [
+    {
+      "path": "/assets/AdminPage-Bnas-V0S.js",
+      "status": 200,
+      "bytes": 44682,
+      "sha256": "8d4ce5e4cee497c886fb06801d868b3198fcb0e1e327ecca2463f8725b6a9a5b"
+    },
+    {
+      "path": "/assets/powerUps-BxcYEYkG.js",
+      "status": 200,
+      "bytes": 148287,
+      "sha256": "c4511f2555b649f9ec87a5abbb81f54397ee113946c4735e708af7d5d487e74f"
+    },
+    {
+      "path": "/assets/GamePage-CHq6Z7F4.js",
+      "status": 200,
+      "bytes": 226692,
+      "sha256": "d59fc90887cbfebb44d04a4b32e98da311bb22b41fedfe8189f7672d006a256c"
+    }
+  ],
+  "reactorFeatures": {
+    "definitions": true,
+    "bay": true,
+    "assembly": true,
+    "usesChildren": true
+  },
+  "apiAndThreeLeaderboardHashesEqual": true,
+  "anonymousAdminDenied401": true,
+  "productionQaExcluded": true
+}

@@ -91,3 +91,35 @@ boss phase. Do not demand another full campaign merely for the same counters,
 remove artwork speculatively or describe this as a confirmed Whitescreen fix.
 Publication still needs the owner's explicit instruction under frontend/AGENTS.md.
 Automatic deployment is disabled for codex/boss-effect-audit-20261021.
+
+## Completed publication after explicit approval
+
+The owner's subsequent "Freigabe genehmigt" authorizes the GitHub upload and
+Testnet release. The approved source is now on GitHub as 8a603e5; its complete
+tree 17805facb3e1a58c0dd8d82e20f81b7c8f872968 is identical to the locally reviewed
+9faeccc tree. The differing commit id reflects the authenticated GitHub commit
+creation, not an additional source change. Terminal Git lacked credentials;
+the connected GitHub tools saved and verified the source instead.
+
+The Vercel connector returned project/deployment 404 and an empty project list
+for the verified team. The previously authorized signed-in Dashboard fallback
+therefore built protected preview dpl_ENU4c6GiRrWzWj1rxHwiWF1NXhN8 (45s).
+Guest start, original HUD, pause, resume countdown, resumed play and re-pause pass.
+No Pi account login was tested. The same commit was rebuilt in the existing
+Testnet Production environment, producing READY
+dpl_Evkpd5iquBkxudsqWCvibU4nTkXG at 07:50:08 UTC / 09:50:08 Vienna, 21 October.
+The observed build duration is 38s. No Mainnet project was contacted.
+
+Fresh public checks verify exact source/tree identity in GamePage/Admin bundles
+and actual fixed definitions/bay/assembly reuse in the reactor code. API root,
+anonymous Admin denial and all three leaderboard response hashes match the
+immediate pre-release baseline. All four existing QA fixtures remain excluded
+from production. A fresh official Home has Spielen enabled.
+
+Keep codex/testnet-open-reactor-release-20261021 and the deployed candidate ref
+fixed at 8a603e5. Rollback is backup/testnet-before-open-reactor-20261021 at a210180
+and previous READY deployment dpl_FNcYt4WQLGefzmbrEhp7Qow6bS5C. Subsequent evidence
+commits belong only on codex/open-reactor-release-record-20261021, whose automatic
+deployment is disabled. No new server runtime-log scan was completed; do not
+represent the release as having zero runtime errors. Native iPhone/process/GPU
+memory, heat, presented FPS and Whitescreen resolution remain unverified.
