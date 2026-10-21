@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "bosses": 50,
+  "hullHits": 5000,
+  "maxLiveHeatSites": 8,
+  "maxLiveHullHostNodes": 23,
+  "controllerAnimationsCreated": 16025,
+  "maxControllerEntries": 33,
+  "controllerEntriesAfterCleanup": 0,
+  "limits": "Actual React host reconciliation and synthetic finish/cancel delivery. No native event-delivery, native/GPU memory, physical iPhone FPS, heat or Whitescreen-cause proof."
+}

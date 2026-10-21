@@ -25,6 +25,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/boss-effect-audit-20261021": false,
       "codex/crash-diagnosis-20261015": false,
       "codex/testnet-stability-20261016": false,
       "codex/official-testnet-frame-audit-20261019": false,

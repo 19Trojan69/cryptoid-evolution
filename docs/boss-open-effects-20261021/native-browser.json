@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "browser": "153.0.8010.0",
+  "baseline": "a21018085b9ea522a6e5fd7b13f26251ff5a9823",
+  "baselineSelfControl": false,
+  "domComparisons": 250,
+  "pixelComparisons": 15,
+  "pixelCapture": "Identical physical origin, CSS animations disabled only during snapshots; no tolerance",
+  "actualHitReplacements": 500,
+  "maxControllerEntries": 64,
+  "cleanup": {
+    "pacing": {
+      "mode": "native-easing",
+      "targetHz": 60,
+      "active": 0,
+      "configured": 3516,
+      "fallbacks": 0,
+      "jsFrameWrites": 0
+    },
+    "nativeAnimations": 0,
+    "hotspots": 0,
+    "bursts": 0
+  },
+  "pageErrors": [],
+  "limits": "Native Linux Chromium with software rendering. No Safari/WebKit, physical iPhone memory/heat/FPS or Whitescreen-cause proof."
+}

@@ -1,0 +1,38 @@
+✔ all visible clocks stay native; duration, easing inside keyframes and playback controls are preserved (2.703959ms)
+✔ configured progress spacing never exceeds 60 steps per real second at positive/negative authored rates (1.041797ms)
+✔ nonlinear curve samples the original easing before quantization, including overshoot (0.269317ms)
+✔ nonlinear native sampling uses only a detached, timeline-free temporary probe, then cancels it (0.612363ms)
+✔ native finish/cancel releases references once and restores only owned timing (0.321464ms)
+✔ cleanup compares the browser canonical easing, including steps(n,end) serialized as steps(n) (0.244641ms)
+✔ CSS, transition and late pseudo-element events register only once, including portal descendants (1.438953ms)
+✔ explicit Web Animations and paused effects retain native playback ownership (0.246754ms)
+✔ unavailable/invalid timing APIs retain native playback and do not strand content (1.81694ms)
+✔ native pacing schedules no JavaScript frame, interval, visibility polling or visible time/rate writes (4.773973ms)
+✔ fifty distinct art files, assigned to the fifty levels with per-hull coordinates (4.096292ms)
+✔ pixel mask excludes transparent wings and gaps while burns stay on the hull (15.999363ms)
+✔ phone and desktop bosses remain inside their safe region (16.337821ms)
+✔ boss salvos originate at listed weapon muzzles and rotate predictable kinds (1.194222ms)
+✔ all 50 bosses warn before pulsing, keep destroyed guns and respect shared capacity (17.963744ms)
+✔ armed, entering, dead and paused bosses cannot advance the core (0.851126ms)
+✔ later fans have a central escape gap; restored warning produces identical next volley (2.693514ms)
+✔ all 50 special weapons sit on the centreline and solid hull (10.58119ms)
+✔ shots emerge from the actual muzzle and match weapon illumination (2.203621ms)
+✔ turret damage steadily heats living weapons and preserves heat on resume (0.286533ms)
+✔ all exposed bosses need half the previous hits including resumed hulls (10.595339ms)
+✔ escort pauses reach zero at displayed level 50; live escorts, pause, protection and death block respawning (2.425858ms)
+✔ a saved partially elapsed wave delay resumes without restart or skipped warning (0.604953ms)
+✔ recurring escorts fit below all bosses even near defeat on phone and desktop (31.993065ms)
+✔ rotating and aligned ships ignite their painted hull, not a world-space ring (1.919572ms)
+✔ repeated impacts stay local instead of spreading into a grid (0.558584ms)
+✔ the first flame survives every later hit until the ship is removed (0.301424ms)
+✔ damage permits progressively more sites while keeping bosses and small ships bounded (0.344118ms)
+✔ nearby hits reheat one bounded patch without duplicating it (0.2305ms)
+✔ effect variation stays deterministic and bounded across weapon strengths (3.053364ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 269.130202

@@ -1,5 +1,27 @@
 # Preserve the officially approved game
 
+## Open-reactor effect audit, 21 October 2026, isolated preparation
+
+The owner explicitly resumed the hit/ember/reactor investigation. Base this
+candidate on official a210180 plus its 5569c4b release receipt. Retain fixed
+reactor SVG children across changing charge/open/recoil values; preserve actual
+host markup, native pulse/filter, doors, muzzle, clipping, image, simulation and
+all account/audio/HUD behavior. Actual React checks pass 7,804 exact host trees
+across fifty bosses/three widths. Opening/charge creates 21,600 instead of 85,200
+JSX objects per 1,200 steps; recoil 22,800 instead of 86,400. This is not a 74%
+GPU/process-memory/FPS improvement or a demonstrated Whitescreen fix. Five
+thousand actual HullDamage hit updates keep eight sites/23 host nodes; controlled
+native finish/cancel delivery releases all pacing entries after 16,025 creations.
+Native Chromium passes 250 exact SVG comparisons and fifteen exact screenshots
+at a controlled snapshot state (CSS animation disabled only during capture).
+Five hundred further native hit replacements on a fresh document keep at most
+64 controller entries and return all entries/native animations/nodes to zero.
+This does not prove Safari event delivery or browser-owned surface retirement.
+Thirty focused tests, component lint and release build (12 locales) pass.
+Keep automatic deployment disabled on codex/boss-effect-audit-20261021; do not
+move Testnet/Mainnet or any fixed refs without an explicit publication request.
+See docs/boss-open-effects-20261021.md and its evidence directory.
+
 ## Normal-resolution memory reduction authorized, 21 October 2026
 
 The owner explicitly approved cleanup plus lower resolution and clarified:

@@ -18,16 +18,15 @@ export default function BossReactorView({ boss }: { boss: SectorBoss }) {
   const muzzleOpacity = firing ? 1 - elapsed / 180 : 0;
   const image = boss.config.image, width = boss.width, height = boss.height;
   const { left, top, width: boxWidth, height: boxHeight } = box;
-  // The simulation mutates nested boss state. Cache by the actual rendered
-  // values, never by the boss/core object identities. A closed, unchanged bay
-  // then retains its SVG tree while the enclosing hull keeps moving normally.
-  return useMemo(() => {
-  const url = (part: string) => `url(#${id}-${part})`;
-  const barrels = specialWeaponBarrels(mount.shape);
-  const hatch = 'M22 9H78L93 28V125L73 151H27L7 125V28Z';
-  const texture = <image href={image} x={-left / boxWidth * 100} y={-top / boxHeight * 160} width={width / boxWidth * 100} height={height / boxHeight * 160} preserveAspectRatio="none" />;
-  return <svg className={`boss-special-weapon${firing ? ' boss-special-weapon-firing' : ''}`} viewBox="0 0 100 160" preserveAspectRatio="none" style={{zIndex:exposed ? 6 : 1,left,top,width:boxWidth,height:boxHeight,'--weapon-energy':energy,'--weapon-charge':charge} as CSSProperties} aria-hidden="true">
-    <defs>
+  // Charge and recoil change on the game clock; the bay's fixed metalwork,
+  // gradients and barrel geometry do not. Retain those exact React children
+  // through open-core frames instead of reconstructing them with every charge.
+  const artwork = useMemo(() => {
+    const url = (part: string) => `url(#${id}-${part})`;
+    const barrels = specialWeaponBarrels(mount.shape);
+    const hatch = 'M22 9H78L93 28V125L73 151H27L7 125V28Z';
+    return {
+      definitions: <defs>
       <linearGradient id={`${id}-steel`} x1="0" x2="1" y1="0" y2="0">
         <stop offset="0" stopColor="#121b24"/><stop offset=".22" stopColor={mount.metal}/><stop offset=".4" stopColor="#ccd0c5"/><stop offset=".55" stopColor={mount.metal}/><stop offset=".8" stopColor="#35414b"/><stop offset="1" stopColor="#131d27"/>
       </linearGradient>
@@ -35,15 +34,15 @@ export default function BossReactorView({ boss }: { boss: SectorBoss }) {
       <linearGradient id={`${id}-bore`} x2="0" y2="1"><stop stopColor="#03080d"/><stop offset=".8" stopColor="#152a33"/><stop offset="1" stopColor={mount.energy}/></linearGradient>
       <clipPath id={`${id}-left`}><path d="M22 9H50V151H27L7 125V28Z"/></clipPath>
       <clipPath id={`${id}-right`}><path d="M50 9H78L93 28V125L73 151H50Z"/></clipPath>
-    </defs>
-    <g opacity={open}>
+    </defs>,
+      bay: <>
       <path d={hatch} fill="#050b10" stroke="#06090d" strokeWidth="7"/>
       <path d={hatch} fill="none" stroke={mount.metal} strokeWidth="2"/>
       <path d="M14 34V119M86 34V119" stroke="#677680" strokeWidth="4"/>
       <path d="M18 34V119M82 34V119" stroke="#17202a" strokeWidth="2"/>
       <path d="M22 29H78M22 45H78M22 61H78M22 77H78M22 93H78M22 109H78" stroke="#45515b" strokeWidth="2" opacity=".65"/>
-    </g>
-    <g className="boss-special-assembly" opacity={open} transform={`translate(0 ${-12 * (1-open) - recoil})`}>
+      </>,
+      assembly: <>
       <path d="M28 20H72L83 41V86L70 113H30L17 86V41Z" fill="#060d13" transform="translate(3 5)"/>
       <path d="M28 20H72L83 41V86L70 113H30L17 86V41Z" fill={url('armor')} stroke="#a0aaa7" strokeWidth="1.2"/>
       <path d="M29 26H42V70L30 88H23V43ZM71 26H58V70L70 88H77V43Z" fill={mount.trim} stroke="#171f28" strokeWidth="2"/>
@@ -77,6 +76,24 @@ export default function BossReactorView({ boss }: { boss: SectorBoss }) {
       </>}
       {[27,73].map(x=><g key={x}><path d={`M${x-2} 29H${x+2}V33H${x-2}Z`} fill="#e1d3ac"/><path d={`M${x-2} 81H${x+2}V85H${x-2}Z`} fill="#d1c099"/></g>)}
       {barrels.map(x=><path key={x} className="boss-special-muzzle" d={`M${x-4} 146H${x+4}V150H${x-4}Z`}/>)}
+      </>,
+    };
+  }, [id, mount, energy]);
+  // The simulation mutates nested boss state. Cache by the actual rendered
+  // values, never by the boss/core object identities. A closed, unchanged bay
+  // then retains its SVG tree while the enclosing hull keeps moving normally.
+  return useMemo(() => {
+  const url = (part: string) => `url(#${id}-${part})`;
+  const barrels = specialWeaponBarrels(mount.shape);
+  const hatch = 'M22 9H78L93 28V125L73 151H27L7 125V28Z';
+  const texture = <image href={image} x={-left / boxWidth * 100} y={-top / boxHeight * 160} width={width / boxWidth * 100} height={height / boxHeight * 160} preserveAspectRatio="none" />;
+  return <svg className={`boss-special-weapon${firing ? ' boss-special-weapon-firing' : ''}`} viewBox="0 0 100 160" preserveAspectRatio="none" style={{zIndex:exposed ? 6 : 1,left,top,width:boxWidth,height:boxHeight,'--weapon-energy':energy,'--weapon-charge':charge} as CSSProperties} aria-hidden="true">
+    {artwork.definitions}
+    <g opacity={open}>
+      {artwork.bay}
+    </g>
+    <g className="boss-special-assembly" opacity={open} transform={`translate(0 ${-12 * (1-open) - recoil})`}>
+      {artwork.assembly}
     </g>
     {(['left','right'] as const).map((side,i)=><g key={side} transform={`translate(${(i ? 1 : -1)*open*32} ${-open*4})`}>
       <g clipPath={url(side)}>
@@ -90,5 +107,5 @@ export default function BossReactorView({ boss }: { boss: SectorBoss }) {
     </g>)}
     {firing && barrels.map(x=><path key={x} d={`M${x-5} 148L${x-10} 157L${x-3} 155L${x} 177L${x+3} 155L${x+10} 157L${x+5} 148Z`} fill={mount.energy} opacity={muzzleOpacity}/>)}
   </svg>;
-  }, [id, mount, image, width, height, left, top, boxWidth, boxHeight, energy, exposed, open, charge, firing, recoil, muzzleOpacity]);
+  }, [id, mount, image, width, height, left, top, boxWidth, boxHeight, energy, exposed, open, charge, firing, recoil, muzzleOpacity, artwork]);
 }

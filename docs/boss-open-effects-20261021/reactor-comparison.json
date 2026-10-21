@@ -1,0 +1,40 @@
+{
+  "passed": true,
+  "closedArtworkReused": true,
+  "openArtworkReused": true,
+  "baseline": "a21018085b9ea522a6e5fd7b13f26251ff5a9823",
+  "stable": {
+    "frames": 1200,
+    "beforeElements": 0,
+    "afterElements": 0
+  },
+  "openCore": [
+    {
+      "phase": "opening",
+      "frames": 1200,
+      "beforeElements": 85200,
+      "afterElements": 21600
+    },
+    {
+      "phase": "charge",
+      "frames": 1200,
+      "beforeElements": 85200,
+      "afterElements": 21600
+    },
+    {
+      "phase": "recoil",
+      "frames": 1200,
+      "beforeElements": 86400,
+      "afterElements": 22800
+    }
+  ],
+  "exactHostTreeComparisons": 7804,
+  "bosses": 50,
+  "widths": [
+    320,
+    430,
+    820
+  ],
+  "sameSvgHostDuringStableUpdates": true,
+  "limits": "Actual React + JSX operation counts. No browser raster, GPU/native memory, physical iPhone heat, FPS or Whitescreen-cause proof."
+}

@@ -13,7 +13,7 @@ const originalError = console.error;
 console.error = (...args) => {
   if (!String(args[0]).startsWith('react-test-renderer is deprecated')) originalError(...args);
 };
-const baseline = process.env.CRYPTOID_REACTOR_BASE || '61d0a53e733c62c3dbd64a9fcbe7480967b316fa';
+const baseline = process.env.CRYPTOID_REACTOR_BASE || 'a21018085b9ea522a6e5fd7b13f26251ff5a9823';
 async function runtime(ref) {
   const source = ref ? execFileSync('git', ['show', `${ref}:frontend/src/pages/BossReactorView.tsx`], {cwd:root,encoding:'utf8'})
     : fs.readFileSync(path.join(root,'src/pages/BossReactorView.tsx'),'utf8');
@@ -36,7 +36,7 @@ async function runtime(ref) {
   };
 }
 (async()=>{
-  const before=await runtime(baseline),after=await runtime(null);
+  const before=await runtime(baseline),after=await runtime(process.env.CRYPTOID_REACTOR_CANDIDATE_REF || null);
   const model=before.moveSectorBoss(before.createSectorBoss(10,430,96,825),10000,430,825);
   let comparisons=0;
   const compare=(boss,label)=>{assert.equal(after.update(boss),before.update(boss),label);comparisons++;};
@@ -50,6 +50,20 @@ async function runtime(ref) {
   }
   const stable={frames,beforeElements:before.counts.elements-initial.before,afterElements:after.counts.elements-initial.after};
   assert.equal(before.host(),beforeHost);assert.equal(after.host(),afterHost);
+  const openCore=[];
+  model.turrets.forEach(g=>{g.health=0;});
+  for(const phase of ['opening','charge','recoil']) {
+    model.core={elapsed:0,volley:phase==='opening'?0:1};
+    compare({...model},`prime ${phase}`);
+    const start={before:before.counts.elements,after:after.counts.elements};
+    for(let frame=1;frame<=frames;frame++) {
+      model.core.elapsed=phase==='opening'?frame%900:phase==='charge'?180+frame%1600:frame%180;
+      compare({...model},`${phase} frame ${frame}`);
+    }
+    const work={phase,frames,beforeElements:before.counts.elements-start.before,afterElements:after.counts.elements-start.after};
+    if(process.env.CRYPTOID_REQUIRE_OPEN_REACTOR_FIX==='1')assert.ok(work.afterElements<work.beforeElements*.5,`${phase}: fixed artwork should not be reconstructed each frame`);
+    openCore.push(work);
+  }
   for(let id=1;id<=50;id++) for(const width of [320,430,820]) {
     const boss=before.moveSectorBoss(before.createSectorBoss(id*10,width,96,825),10000,width,825);
     compare(boss,`boss ${id}, width ${width}, closed`);
@@ -71,7 +85,7 @@ async function runtime(ref) {
   before.unmount();after.unmount();
   const corrected=stable.afterElements===0&&stable.beforeElements>10000;
   if(process.env.CRYPTOID_REQUIRE_REACTOR_FIX==='1')assert.ok(corrected,'unchanged SVG must reuse its previous element tree');
-  const result={passed:true,corrected,baseline,stable,exactHostTreeComparisons:comparisons,bosses:50,widths:[320,430,820],sameSvgHostDuringStableUpdates:true,
+  const result={passed:true,closedArtworkReused:stable.afterElements===0,openArtworkReused:openCore.every(work=>work.afterElements<work.beforeElements*.5),baseline,stable,openCore,exactHostTreeComparisons:comparisons,bosses:50,widths:[320,430,820],sameSvgHostDuringStableUpdates:true,
     limits:'Actual React + JSX operation counts. No browser raster, GPU/native memory, physical iPhone heat, FPS or Whitescreen-cause proof.'};
   if(process.env.CRYPTOID_REACTOR_REPORT)fs.writeFileSync(process.env.CRYPTOID_REACTOR_REPORT,JSON.stringify(result,null,2));
   console.log(JSON.stringify(result,null,2));
