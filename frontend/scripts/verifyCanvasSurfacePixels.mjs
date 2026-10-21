@@ -14,7 +14,12 @@ const root=new URL('../',import.meta.url).pathname;
 const base=process.env.CRYPTOID_CANVAS_PIXEL_BASE||'f24ca60cb87d9442edf683f04b34b73670b56f45';
 const hull='/ships/evolution/ship_01_stage_1.png';
 const sourceAt=ref=>ref?execFileSync('git',['show',`${ref}:frontend/src/pages/CanvasEffects.tsx`],{cwd:root,encoding:'utf8'}):readFileSync(root+'src/pages/CanvasEffects.tsx','utf8');
-const beforeSource=sourceAt(base),afterSource=sourceAt(process.env.CRYPTOID_CANVAS_PIXEL_CANDIDATE_REF);
+const originalBeforeSource=sourceAt(base),afterSource=sourceAt(process.env.CRYPTOID_CANVAS_PIXEL_CANDIDATE_REF);
+// A normal-resolution candidate intentionally changes raster density. Compare
+// against the unchanged official drawing at that same density, not 3x pixels.
+const normalScale=process.env.CRYPTOID_CANVAS_PIXEL_NORMAL_SCALE==='1';
+const beforeSource=normalScale?originalBeforeSource.replace('const dpr=()=>window.devicePixelRatio||1;','const dpr=()=>Math.min(1.5,window.devicePixelRatio||1);'):originalBeforeSource;
+if(normalScale)assert.notEqual(beforeSource,originalBeforeSource,'normal-scale reference changes only the density selector');
 const drawing=source=>source.slice(source.indexOf('export function drawImpact('),source.indexOf('\nconst records='));
 assert.equal(drawing(afterSource),drawing(beforeSource),'artwork drawing code is byte-for-byte unchanged');
 const frames=new Map(),timers=new Map();let serial=0,clock=100;

@@ -5,9 +5,11 @@ export class ResourceCache<T> {
   private pins = new Map<string, number>();
   private maxEntries: number;
   private maxBytes: number;
+  private maxUnusedEntries: number;
   private dispose: (value: T) => void;
-  constructor(maxEntries: number, maxBytes: number, dispose: (value: T) => void = () => {}) {
+  constructor(maxEntries: number, maxBytes: number, dispose: (value: T) => void = () => {}, maxUnusedEntries = Infinity) {
     this.maxEntries = maxEntries; this.maxBytes = maxBytes; this.dispose = dispose;
+    this.maxUnusedEntries = maxUnusedEntries;
   }
   get(key: string) {
     const entry = this.entries.get(key);
@@ -38,10 +40,12 @@ export class ResourceCache<T> {
   }
   trim() {
     let bytes = this.bytes;
+    let unused = 0;
+    for (const key of this.entries.keys()) if (!this.pins.has(key)) unused++;
     for (const [key, entry] of this.entries) {
-      if (this.entries.size <= this.maxEntries && bytes <= this.maxBytes) break;
+      if (this.entries.size <= this.maxEntries && bytes <= this.maxBytes && unused <= this.maxUnusedEntries) break;
       if (this.pins.has(key)) continue;
-      this.entries.delete(key); bytes -= entry.bytes; this.dispose(entry.value);
+      this.entries.delete(key); bytes -= entry.bytes; unused--; this.dispose(entry.value);
     }
   }
   retained(key: string) { return this.pins.has(key); }

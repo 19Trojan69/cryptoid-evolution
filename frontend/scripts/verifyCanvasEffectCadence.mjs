@@ -9,7 +9,9 @@ import {Host} from './canvasHookHost.mjs';
 
 const root=new URL('../',import.meta.url).pathname;
 const baseline=process.env.CRYPTOID_CANVAS_CADENCE_BASE||'a20f6465fc59ef321a660835186005cb859e97c9';
-const before=execFileSync('git',['show',`${baseline}:frontend/src/pages/CanvasEffects.tsx`],{cwd:root,encoding:'utf8'});
+const originalBefore=execFileSync('git',['show',`${baseline}:frontend/src/pages/CanvasEffects.tsx`],{cwd:root,encoding:'utf8'});
+const before=process.env.CRYPTOID_CANVAS_CADENCE_NORMAL_SCALE==='1'
+  ?originalBefore.replace('const dpr=()=>window.devicePixelRatio||1;','const dpr=()=>Math.min(1.5,window.devicePixelRatio||1);'):originalBefore;
 const after=readFileSync(root+'src/pages/CanvasEffects.tsx','utf8');
 const drawing=source=>source.slice(source.indexOf('export function drawImpact('),source.indexOf('\nconst records='));
 assert.equal(drawing(after),drawing(before),'drawing, artwork and animation interpolation stay unchanged');

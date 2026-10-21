@@ -5,6 +5,7 @@ import {explosionDiameter} from './shipRealism';
 import {FIRE_KEYS,SMOKE_KEYS,layerFrame,fragmentFrame,polygonPoints,layerSvg} from './normalEffectMath.mjs';
 import {impactBounds,unionBounds,fieldBounds} from './normalEffectBounds.mjs';
 import {beginVisualPaint,endVisualPaint} from './renderWork';
+import {gameRenderScale} from './renderResolution';
 
 import {normalExplosionArt as art} from './normalEffectArtwork';
 const images=new Map<string,Promise<HTMLImageElement>>();
@@ -14,7 +15,8 @@ const hullUsers=new Map<string,number>();
 let imageBytes=0,textureBytes=0,failures:string[]=[],preparationCount=0,resourceGeneration=0,hullEvictions=0,hullLoads=0;
 export function retainCanvasImpactHull(url:string){
   const generation=resourceGeneration;hullUsers.set(url,(hullUsers.get(url)??0)+1);
-  return ()=>{if(generation!==resourceGeneration)return;const remaining=(hullUsers.get(url)??1)-1;if(remaining)hullUsers.set(url,remaining);else hullUsers.delete(url);};
+  let released=false;
+  return ()=>{if(released||generation!==resourceGeneration)return;released=true;const remaining=(hullUsers.get(url)??1)-1;if(remaining)hullUsers.set(url,remaining);else hullUsers.delete(url);trimUnusedResources();};
 }
 function evictUnusedHull(){
   // Map insertion order is refreshed on use. Pending decoding and every mounted
@@ -25,6 +27,20 @@ function evictUnusedHull(){
     readyImages.delete(url);images.delete(url);hullEvictions++;return true;
   }
   return false;
+}
+function trimUnusedResources(){
+  let unused=0;for(const url of readyImages.keys())if(!hullUsers.has(url))unused++;
+  while(unused>2&&evictUnusedHull())unused--;
+  // Every preparing/mounted effect pins its hull before requesting textures.
+  // Do not retire a texture while any such consumer or draw record can use it.
+  if(hullUsers.size||records.size)return;
+  for(const key of textures.keys()){
+    if(readyTextures.size<=4)break;
+    const t=readyTextures.get(key);if(!t)continue;
+    textureBytes-=t.canvas.width*t.canvas.height*4;
+    t.canvas.width=t.canvas.height=0;
+    readyTextures.delete(key);textures.delete(key);
+  }
 }
 const image=(url:string)=>{
   let pending=images.get(url);if(pending){images.delete(url);images.set(url,pending);return pending;}
@@ -37,12 +53,12 @@ const image=(url:string)=>{
       const bytes=img.naturalWidth*img.naturalHeight*4;
       while(imageBytes+bytes>32*1024*1024&&evictUnusedHull()){}
       if(imageBytes+bytes>32*1024*1024){reject(new Error('Hull image byte limit; retain original display'));return;}
-      imageBytes+=bytes;hullLoads++;readyImages.set(url,img);resolve(img);
+      imageBytes+=bytes;hullLoads++;readyImages.set(url,img);resolve(img);trimUnusedResources();
     };img.onerror=()=>{img.onload=img.onerror=null;reject(new Error('Hull image unavailable'));};img.src=url;
   }).catch(error=>{if(generation===resourceGeneration&&images.get(url)===pending)images.delete(url);throw error;});images.set(url,pending);return pending;
 };
 const texture=(kind:'fire'|'smoke',diameter:number,dpr:number)=>{
-  const key=`${kind}:${diameter}:${dpr}`;let pending=textures.get(key);if(pending)return pending;
+  const key=`${kind}:${diameter}:${dpr}`;let pending=textures.get(key);if(pending){textures.delete(key);textures.set(key,pending);return pending;}
   if(textures.size>=16)return Promise.reject(new Error('Texture count limit; retain original display'));
   const generation=resourceGeneration;
   pending=(async()=>{
@@ -58,12 +74,12 @@ const texture=(kind:'fire'|'smoke',diameter:number,dpr:number)=>{
       canvas=document.createElement('canvas');canvas.width=canvas.height=geometry.pixels;
       const context=canvas.getContext('2d');if(!context)throw new Error('Texture canvas unavailable');
       context.drawImage(svg,0,0);preparationCount++;
-      const result={...geometry,canvas};readyTextures.set(key,result);retained=true;return result;
+      const result={...geometry,canvas};readyTextures.set(key,result);retained=true;trimUnusedResources();return result;
     }finally{URL.revokeObjectURL(url);if(!retained){if(canvas)canvas.width=canvas.height=0;if(generation===resourceGeneration)textureBytes-=bytes;}}
   })().catch(error=>{if(generation===resourceGeneration&&textures.get(key)===pending)textures.delete(key);throw error;});textures.set(key,pending);return pending;
 };
 const recordFailure=(error:any)=>{if(failures.length<8)failures.push(String(error?.message??error));};
-const dpr=()=>window.devicePixelRatio||1;
+const dpr=()=>gameRenderScale(window.devicePixelRatio);
 const resources=(url:string,diameter:number)=>{
   const scale=dpr(),hull=readyImages.get(url),fire=readyTextures.get(`fire:${diameter}:${scale}`),smoke=readyTextures.get(`smoke:${diameter}:${scale}`);
   return hull&&fire&&smoke?{hull,fire,smoke,scale,generation:resourceGeneration}:null;
@@ -148,6 +164,7 @@ function frame(time:number){
 const schedule=()=>{if(!frameId&&surface&&records.size)frameId=requestGameFrame(frame);};
 const remove=(id:number)=>{
   if(!records.delete(id))return;
+  trimUnusedResources();
   if(!records.size&&surface){
     if(frameId)cancelGameFrame(frameId);frameId=0;
     const ctx=surface.getContext('2d');

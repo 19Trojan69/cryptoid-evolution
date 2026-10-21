@@ -1,5 +1,27 @@
 # Preserve the officially approved game
 
+## Normal-resolution memory reduction authorized, 21 October 2026
+
+The owner explicitly approved cleanup plus lower resolution and clarified:
+"es ist kein high end game, es genügen normale auflösungen!!!!" This supersedes
+the historical full-resolution prohibition only for this reduction. Normal
+explosion/debris and boss weapon raster density now cap at 1.5; rocks already
+do. Preserve CSS sizes, drawing/timing, HUD/text, hits, sounds, saves and accounts.
+Painted hulls keep six unused variants with 24-entry/12-MiB soft budgets; all
+mounted/preparing pins are protected. Canvas keeps two unused hulls and four
+texture entries after every consumer/draw record releases them; zero retired
+texture canvases, retain the two-second surface reuse grace and original fallback.
+Do not purge live/preparing resources, force reloads, add timers/RAF chains or
+claim whole-process memory is down 75%: that ratio applies only to 3x -> 1.5x
+effect backing stores. Baseline/rollback is e7b49fe / dpl_6uZ96rZE714sudgnFuzsjYTSxtcF.
+33 focused + 14 painting lifetime checks, 275 normal-density effect pixel and
+500 boss pixel comparisons pass. Unchanged-density comparisons are NOT equality
+to the former high-density output. New helper/cache/BossWeapons lint passes;
+paintedShip retains its pre-existing set-state-in-effect error. New memory-work
+QA page is protected-preview-only and must be absent from production. Keep
+automatic audit-branch deploy off, all fixed release/rollback refs and Mainnet.
+See docs/normal-memory-release-20261021.md for current verification/release state.
+
 ## Owner second-boss interruption report, 21 October 2026
 
 New v5 report on e7b49fe ends with a visible active sector-20/boss-2 session,

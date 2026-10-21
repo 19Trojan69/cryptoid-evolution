@@ -1,0 +1,42 @@
+{
+  "at": "2026-10-21T03:00:16.697Z",
+  "entry": "/assets/index-DBN7xj7E.js",
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 1465,
+      "sha256": "058d6dc788ee3948cda8436ac86178bbfdf956a01924a9c71758de7ff0cd6be4"
+    },
+    {
+      "path": "/api",
+      "status": 200,
+      "bytes": 27,
+      "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a"
+    },
+    {
+      "path": "/api/admin/status",
+      "status": 401,
+      "bytes": 29,
+      "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=1",
+      "status": 200,
+      "bytes": 7440,
+      "sha256": "9cbe90a3686312972b4a117e300a2bc2e15ce07a8eebd15b51f12d81181451ad"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=2",
+      "status": 200,
+      "bytes": 9733,
+      "sha256": "f18f97ee5a48ee471b9f64c0aae3edfabba5365c3f6c9c7ec2127d6439db4894"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=3",
+      "status": 200,
+      "bytes": 9733,
+      "sha256": "f18f97ee5a48ee471b9f64c0aae3edfabba5365c3f6c9c7ec2127d6439db4894"
+    }
+  ]
+}

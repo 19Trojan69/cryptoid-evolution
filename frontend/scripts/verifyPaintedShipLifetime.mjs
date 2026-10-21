@@ -161,6 +161,7 @@ test('repeated live preparation leaves bounded caches without working canvases o
     assert.equal(f.liveBytes(), 0);
   }
   assert.equal(f.revoked.length, 60 - f.api.paintedShipResourceStats().painted);
+  if (!candidate) assert.equal(f.api.paintedShipResourceStats().painted, 6, 'normal-memory release retains six unused recent variants only');
 });
 
 test('cancellation during a delayed source response prevents obsolete painting and allows a fresh request', async () => {

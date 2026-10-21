@@ -27,6 +27,7 @@ export default defineConfig(({ mode }) => {
         framePacing: path.resolve(__dirname, "scripts/fixtures/frame-pacing.html"),
         reactorWork: path.resolve(__dirname, "scripts/fixtures/reactor-work.html"),
         projectileWork: path.resolve(__dirname, "scripts/fixtures/projectile-work.html"),
+        memoryWork: path.resolve(__dirname, "scripts/fixtures/memory-work.html"),
       } },
     } : undefined,
     plugins: [

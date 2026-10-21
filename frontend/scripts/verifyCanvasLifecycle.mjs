@@ -71,7 +71,7 @@ const burstWrites=s.writes;
 for(let i=0;i<400;i++){
   const next=new Host(runtime.CanvasImpact,{effect:{...effect,id:i+2200,x:i%2?410:20,y:i%4<2?25:800},debris:null,original});
   next.render();next.passive();await flush();next.render();next.unmount();advanceTimers(250);
-  assert.ok(runtime.canvasEffectResources().surfaceBytes<=430*825*3*3*4,'reused surface remains bounded by the playfield at original DPR');
+  assert.ok(runtime.canvasEffectResources().surfaceBytes<=430*825*1.5*1.5*4,'reused surface remains bounded by the playfield at normal raster scale');
 }
 const movingBurstWrites=s.writes-burstWrites;
 assert.ok(movingBurstWrites<=800,'moving explosions need at most one width/height update per impact, with no idle shrink/grow cycle');
@@ -79,7 +79,7 @@ const retainedBytes=runtime.canvasEffectResources().surfaceBytes;
 advanceTimers(1749);
 assert.equal(runtime.canvasEffectResources().surfaceBytes,retainedBytes,'release is not early');
 advanceTimers(1);
-assert.equal(runtime.canvasEffectResources().surfaceBytes,36,'two seconds without effects return the idle surface to its original tiny size');
+assert.equal(runtime.canvasEffectResources().surfaceBytes,16,'two seconds without effects return the idle surface to its tiny normal-resolution size');
 assert.equal(timers.size,0);
 const active=new Host(runtime.CanvasImpact,{effect:{...effect,id:3000},debris:null,original});
 active.render();active.passive();await flush();active.render();

@@ -7,7 +7,9 @@ import { paintShipMaterial } from './shipMaterial';
 import { ResourceCache } from './resourceCache';
 import { resourceTimingEnabled as isCombatProbeEnabled } from './performanceDiagnostics';
 
-const cache = new ResourceCache<string>(48, 24 * 1024 * 1024, url => URL.revokeObjectURL(url));
+// Mounted/prepared hulls stay pinned. Keep only six recently used spare variants
+// after consumers leave, rather than carrying the last 48 variants through play.
+const cache = new ResourceCache<string>(24, 12 * 1024 * 1024, url => URL.revokeObjectURL(url), 6);
 const pendingPaints = new Map<string, Promise<string>>();
 const preparationProbe = { jobsStarted: 0, jobsFinished: 0, queueWaitMaxMs: 0,
   materialTotalMs: 0, materialMaxMs: 0, encodeTotalMs: 0, decodeTotalMs: 0,

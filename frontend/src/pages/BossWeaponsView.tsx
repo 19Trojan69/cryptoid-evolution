@@ -4,6 +4,7 @@ import { drawBossWeapons, weaponCanvasSize, disposeBossWeapons } from "./bossWea
 import { preloadBossWeapons } from "./bossWeaponTextures";
 import { reportBossResource } from "./bossResourceDiagnostics";
 import { beginVisualPaint, endVisualPaint } from './renderWork';
+import { gameRenderScale } from './renderResolution';
 
 type StaticDraw = {
   config: SectorBoss["config"];
@@ -53,7 +54,7 @@ export default memo(function BossWeaponsView({ boss, frozen = false }: { boss: S
     const c = canvas.current;
     if (!c || !ready) return;
     const size = weaponCanvasSize(boss),
-      dpr = Math.min(2, window.devicePixelRatio || 1);
+      dpr = gameRenderScale(window.devicePixelRatio);
     const w = Math.ceil(size.width * dpr),
       h = Math.ceil(size.height * dpr);
     if (c.width !== w || c.height !== h) {

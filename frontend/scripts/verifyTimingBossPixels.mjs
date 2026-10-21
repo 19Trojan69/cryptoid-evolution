@@ -7,9 +7,12 @@ import {execFileSync} from 'node:child_process';
 import {createRequire} from 'node:module';
 import {build} from 'esbuild';
 import {Host} from './canvasHookHost.mjs';
-const require=createRequire(import.meta.url),{createCanvas,loadImage}=require('@napi-rs/canvas');
-const root=new URL('../',import.meta.url).pathname,official='51e59c3373a8dd4ba4985d5a9559acdcf2d6755a';
-const beforeSource=execFileSync('git',['show',`${official}:frontend/src/pages/BossWeaponsView.tsx`],{cwd:root,encoding:'utf8'});
+const require=createRequire(import.meta.url),{createCanvas,loadImage}=require(process.env.CRYPTOID_NATIVE_CANVAS_MODULE||'@napi-rs/canvas');
+const root=new URL('../',import.meta.url).pathname,official=process.env.CRYPTOID_TIMING_BOSS_BASE||'51e59c3373a8dd4ba4985d5a9559acdcf2d6755a';
+const originalBeforeSource=execFileSync('git',['show',`${official}:frontend/src/pages/BossWeaponsView.tsx`],{cwd:root,encoding:'utf8'});
+const normalScale=process.env.CRYPTOID_TIMING_BOSS_NORMAL_SCALE==='1';
+const beforeSource=normalScale?originalBeforeSource.replace('Math.min(2, window.devicePixelRatio || 1)','Math.min(1.5, window.devicePixelRatio || 1)'):originalBeforeSource;
+if(normalScale)assert.notEqual(beforeSource,originalBeforeSource,'normal-scale reference changes only the density selector');
 assert.equal(fs.readFileSync(root+'src/pages/bossWeaponRenderer.ts','utf8'),
   execFileSync('git',['show',`${official}:frontend/src/pages/bossWeaponRenderer.ts`],{cwd:root,encoding:'utf8'}));
 const hooks={ref:(...a)=>globalThis.__hookHost.ref(...a),state:(...a)=>globalThis.__hookHost.state(...a),

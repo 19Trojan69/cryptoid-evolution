@@ -37,7 +37,7 @@ for(let i=0;i<8;i++){const url=`blob:pinned-${i}`;releases.push(retainCanvasImpa
 await assert.rejects(prepare('blob:later'),/Active hull image cache limit/,'all actively used hulls retain original-display fallback');
 assert.equal(probe.read().sourceImages,8);
 for(const drop of releases)drop();
-await prepare('blob:later');assert.equal(probe.read().sourceImages,8,'a capacity fallback does not poison future requests');
+await prepare('blob:later');assert.equal(probe.read().sourceImages,2,'released effects leave only two spare hulls; capacity fallback remains retryable');
 probe.stop();
 // A temporary SVG decode failure must not poison the same texture key for the
 // rest of the game. Its successful sibling may stay cached and be reused.
@@ -45,5 +45,22 @@ const failing=prepareCanvasImpactResources('blob:retry',62.5),failed=assert.reje
 const batch=pendingImages.splice(0);batch[0].onload();batch[1].onerror();batch[2].onload();await failed;
 assert.equal(probe.read().textures,1,'only the successful texture stays cached');
 await prepare('blob:retry');assert.equal(probe.read().textures,2,'same texture can prepare after transient failure');
+probe.stop();
+// Keep two warm fire/smoke pairs only after every effect has released its hull.
+// Pending and mounted consumers protect their textures even across new sizes.
+const keep=retainCanvasImpactHull('blob:texture-live');
+const liveCanvases=[];
+for(const size of [40,50,60,70]){
+  const p=prepareCanvasImpactResources('blob:texture-live',size);
+  for(const img of pendingImages.splice(0))img.onload();
+  const [,fire,smoke]=await p;liveCanvases.push(fire.canvas,smoke.canvas);
+}
+assert.equal(probe.read().textures,8,'a preparing/mounted consumer protects every texture');
+assert.ok(liveCanvases.every(c=>c.width>0));
+keep();keep();
+assert.equal(probe.read().textures,4,'last release trims to two recent texture pairs');
+assert.ok(liveCanvases.slice(0,4).every(c=>c.width===0&&c.height===0),'retired backing stores are explicitly released');
+assert.ok(liveCanvases.slice(4).every(c=>c.width>0),'recent pairs remain warm');
+assert.equal(probe.read().retainedHullUsers,0,'release is idempotent');
 probe.stop();
 console.log(JSON.stringify({passed:true,checks:['abort during pending hull/SVG decoding','stale preparation cannot refill cleared caches','completed texture backing stores released','draw scheduler/registrations/caches cleared','24 changing hulls reuse eight retained slots','active hull stays decoded during eviction','capacity fallback recovers after active users release','transient texture decode failure can retry']}));
