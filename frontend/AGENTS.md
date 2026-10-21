@@ -1,5 +1,33 @@
 # Preserve the officially approved game
 
+## Bounded boss-victory audio wait, 21 October 2026
+
+The owner's 19:29:39Z v5 report is actual b92 gameplay: effects currentTime stays
+zero with one stall/recovery and 462 blocked starts, so native audible recovery
+remains unproven/unsuccessful for this observed clock. It passes core volleys,
+boss defeat and the defeat scene, then records paused saved-exit/unmount and
+finished=true. The 25d80d4f unexpected-restart record is historical, detected when
+this monitor starts. Do not describe the current saved exit as another crash.
+
+The actual previous GamePage can wait forever for a playing/non-ended victory
+element with frozen media time. Three negative cases fail before the fix.
+MusicPlayer.waitingForEnd now uses existing active simulation time and media
+position; two active seconds without progress stop blocking the existing normal
+clear deadline. Advancing media still keeps its complete jingle. Pause/source/
+close reset it, with no new timer/listener/RAF/context/element/node or healthy
+sound parameter change. Physical heart pickup remains required exactly once.
+Seven bounded owner-only music/heart fields distinguish a future media wait
+from an uncollected heart; this specific report has neither and cannot prove
+which held its final clear. Whole-GamePage parity outside these exact additions
+passes, along with 132 focused tests/build/types/locales and utility lint.
+See docs/boss-victory-audio-progress-20261021.md. This is an indefinite-wait
+correction, not a native audio or White Screen fix. Continue authorized Testnet
+scope; keep Mainnet, fixed refs and prior log/protection denials unchanged.
+Candidate codex/boss-victory-audio-progress-20261021 has automatic deployment off.
+Preserve the fixed b92 source/deployment as immediate rollback. Check the separate
+release receipt for publication status. Never require another full campaign or
+replacement level-one run to verify these already observed counters.
+
 ## Explicit retry correction published, 21 October 2026
 
 Official Testnet READY source b92ab45bc1e493fb86c36da4f01bd88d15a5f498, tree

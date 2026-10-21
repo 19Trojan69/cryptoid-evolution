@@ -173,7 +173,7 @@ test('a fault in the first playing frame is retained before any complete sample 
   assert.ok(capture.events.some(e => e.kind === 'render-error'));
   probe.finish();
 });
-test('all GamePage simulation, input, audio, scene markup and recovery match the current official source exactly', () => {
+test('all GamePage behavior matches the approved source outside the individually tested audio/resource corrections', () => {
   const cwd = new URL('../../../', import.meta.url).pathname;
   const ref = ['cc5ef2276feb651edcf0681222865e8c957f8a4e', 'bcdff3e4d104e5c125eb5e8320fed4f6c54d68d2'].find(ref => {
     try { execFileSync('git', ['cat-file', '-e', `${ref}:frontend/src/pages/GamePage.tsx`], {cwd, stdio:'ignore'}); return true; }
@@ -190,6 +190,9 @@ test('all GamePage simulation, input, audio, scene markup and recovery match the
   // The subsequently verified hull-plan handoff changes only the resource hook.
   // Normalize that isolated substitution before checking the simulation/scene.
   const actual = readFileSync(new URL('./GamePage.tsx', import.meta.url),'utf8')
+    .replace('    const music = musicRef.current?.audioAuditSnapshot;\n', '')
+    .replace(',\n      musicState: music?.musicState, musicClockMs: music?.musicClockMs, musicMediaMs: music?.musicMediaMs,\n      musicPaused: music?.musicPaused, musicEnded: music?.musicEnded, musicTrack: music?.musicTrack,\n      bossHeartCollected: stateRef.current.encounter === \'boss-clear\' ? !!stateRef.current.bossHeartCollected : undefined', '')
+    .replace('musicRef.current.waitingForEnd(clearTimerRef.current)', 'musicRef.current.playing && !musicRef.current.audio.ended')
     .replace('const startEffects = useCallback((restartPausedGraph = false) => {', 'const startEffects = useCallback(() => {')
     .replace('return soundRef.current.start(restartPausedGraph);', 'return soundRef.current.start();')
     .replace('void startEffects(true).catch(() => {});', 'void startEffects().catch(() => {});')

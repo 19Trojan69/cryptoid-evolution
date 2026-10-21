@@ -697,6 +697,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     const painted = paintedShipResourceStats();
     const canvas = canvasEffectResources();
     const audio = soundRef.current?.diagnosticResourceStats;
+    const music = musicRef.current?.audioAuditSnapshot;
     let canvasNodes: number | undefined, imageNodes: number | undefined;
     try {
       canvasNodes = document.getElementsByTagName('canvas').length;
@@ -715,7 +716,10 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
       audioClockMs: audio?.audioClockMs, audioClockStalls: audio?.audioClockStalls, audioRecoveries: audio?.audioRecoveries,
       audioBlockedSounds: audio?.audioBlockedSounds, audioReapedVoices: audio?.audioReapedVoices,
       audioBossVoices: audio?.audioBossVoices, audioEffectVoices: audio?.audioEffectVoices, audioSampleBuffers: audio?.audioSampleBuffers,
-      audioRockBuffers: audio?.audioRockBuffers, audioBufferBytes: audio?.audioBufferBytes, estimatedResourceBytes };
+      audioRockBuffers: audio?.audioRockBuffers, audioBufferBytes: audio?.audioBufferBytes, estimatedResourceBytes,
+      musicState: music?.musicState, musicClockMs: music?.musicClockMs, musicMediaMs: music?.musicMediaMs,
+      musicPaused: music?.musicPaused, musicEnded: music?.musicEnded, musicTrack: music?.musicTrack,
+      bossHeartCollected: stateRef.current.encounter === 'boss-clear' ? !!stateRef.current.bossHeartCollected : undefined };
   }, [diagnosticContext, ownerDiagnostics]);
   const recordOwnerResourceSnapshot = useCallback((kind: Parameters<typeof recordReloadSnapshot>[0]) => {
     if (ownerDiagnostics) recordReloadSnapshot(kind, ownerResourceContext());
@@ -1467,7 +1471,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
             }
             if (bossVictoryPendingRef.current && clearTimerRef.current >= BOSS_VICTORY_START_MS) startBossVictory();
           }
-          const victoryStillPlaying = state.encounter === "boss-clear" && musicRef.current?.currentSource === "/audio/boss-victory-v2.mp3" && musicRef.current.playing && !musicRef.current.audio.ended;
+          const victoryStillPlaying = state.encounter === "boss-clear" && musicRef.current?.currentSource === "/audio/boss-victory-v2.mp3" && musicRef.current.waitingForEnd(clearTimerRef.current);
           const clearFinished = clearTimerRef.current >= (state.encounter === "boss-clear" ? BOSS_CLEAR_DURATION_MS : timing.clearMs) && !victoryStillPlaying;
           if (clearFinished && state.encounter === 'boss-clear' && collectBossHeart(state, state.player, width, height)) {
             soundRef.current?.play('extraLife');

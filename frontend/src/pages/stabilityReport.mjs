@@ -46,6 +46,7 @@ const numberLimits = {
   audioVoices: 10000, audioWeaponVoices: 10000, audioBossVoices: 10000, audioEffectVoices: 10000,
   audioSampleBuffers: 10000, audioRockBuffers: 10000, audioBufferBytes: 2e9, estimatedResourceBytes: 8e9,
   audioClockMs: 1e12, audioClockStalls: 1e9, audioRecoveries: 1e9, audioBlockedSounds: 1e12, audioReapedVoices: 1e12,
+  musicClockMs: 1e12, musicMediaMs: 1e12,
   targetHz: 1000, cssPacedActive: 100000, cssPacingFallbacks: 1e9,
 };
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -63,6 +64,9 @@ export function technicalContext(value) {
   if (typeof value.workingTreeDirty === 'boolean') result.workingTreeDirty = value.workingTreeDirty;
   if (['native-easing', 'native-unavailable', 'native-stopped'].includes(value.cssPacingMode)) result.cssPacingMode = value.cssPacingMode;
   if (typeof value.audioState === 'string' && ['none','suspended','running','closed','interrupted'].includes(value.audioState)) result.audioState = value.audioState;
+  if (typeof value.musicState === 'string' && ['none','suspended','running','closed','interrupted'].includes(value.musicState)) result.musicState = value.musicState;
+  if (typeof value.musicTrack === 'string' && ['normal','boss','victory','other'].includes(value.musicTrack)) result.musicTrack = value.musicTrack;
+  for (const key of ['musicPaused', 'musicEnded', 'bossHeartCollected']) if (typeof value[key] === 'boolean') result[key] = value[key];
   if (time(value.at)) result.at = value.at;
   return Object.keys(result).length ? result : null;
 }

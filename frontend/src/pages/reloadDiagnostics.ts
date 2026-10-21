@@ -68,6 +68,8 @@ type TechnicalContext = {
   audioSampleBuffers?: number; audioRockBuffers?: number; audioBufferBytes?: number; estimatedResourceBytes?: number;
   audioState?: string;
   audioClockMs?: number; audioClockStalls?: number; audioRecoveries?: number; audioBlockedSounds?: number; audioReapedVoices?: number;
+  musicState?: string; musicClockMs?: number; musicMediaMs?: number; musicPaused?: boolean; musicEnded?: boolean;
+  musicTrack?: string; bossHeartCollected?: boolean;
   sourceCommit?: string; sourceTree?: string; workingTreeDirty?: boolean;
   targetHz?: number; cssPacingMode?: string; cssPacedActive?: number; cssPacingFallbacks?: number;
 };
@@ -115,6 +117,7 @@ const numericContextKeys = [
   'audioVoices', 'audioWeaponVoices', 'audioBossVoices', 'audioEffectVoices', 'audioSampleBuffers',
   'audioRockBuffers', 'audioBufferBytes', 'estimatedResourceBytes',
   'audioClockMs', 'audioClockStalls', 'audioRecoveries', 'audioBlockedSounds', 'audioReapedVoices',
+  'musicClockMs', 'musicMediaMs',
   'targetHz', 'cssPacedActive', 'cssPacingFallbacks',
 ] as const;
 
@@ -136,6 +139,11 @@ export function reloadTechnicalContext(input: GameDiagnostic | null | undefined)
   if (['native-easing', 'native-unavailable', 'native-stopped'].includes(input.cssPacingMode ?? '')) result.cssPacingMode = input.cssPacingMode;
   if (typeof input.audioState === 'string' && ['none', 'suspended', 'running', 'closed', 'interrupted'].includes(input.audioState))
     result.audioState = input.audioState;
+  if (typeof input.musicState === 'string' && ['none', 'suspended', 'running', 'closed', 'interrupted'].includes(input.musicState))
+    result.musicState = input.musicState;
+  if (typeof input.musicTrack === 'string' && ['normal', 'boss', 'victory', 'other'].includes(input.musicTrack)) result.musicTrack = input.musicTrack;
+  for (const key of ['musicPaused', 'musicEnded', 'bossHeartCollected'] as const)
+    if (typeof input[key] === 'boolean') result[key] = input[key];
   return Object.keys(result).length ? result : undefined;
 }
 

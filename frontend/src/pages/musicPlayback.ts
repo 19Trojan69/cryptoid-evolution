@@ -24,6 +24,7 @@ export class MusicPlayer {
   private pauseMuted = false;
   private playRequest: Promise<boolean> | null = null;
   private playbackEpoch = 0;
+  private endProgress: { position: number; atMs: number } | null = null;
 
   constructor(src: string, volume: number) {
     this.audio = new Audio(src);
@@ -67,6 +68,19 @@ export class MusicPlayer {
 
   get currentSource() { return this.source; }
   get playing() { return !this.closed && !this.audio.paused && (!this.context || this.context.state === "running"); }
+  // The caller supplies active simulation time, so a menu/background pause
+  // never consumes the grace period. A host can report playing forever while
+  // media time is frozen; that must not hold a completed game transition open.
+  waitingForEnd(activeMs: number) {
+    if (!this.playing || this.audio.ended) { this.endProgress = null; return false; }
+    const position = this.audio.currentTime;
+    if (!Number.isFinite(position) || !Number.isFinite(activeMs)) return false;
+    if (!this.endProgress) this.endProgress = { position, atMs: activeMs };
+    else if (activeMs < this.endProgress.atMs || position !== this.endProgress.position) {
+      this.endProgress.position = position; this.endProgress.atMs = activeMs;
+    }
+    return activeMs - this.endProgress.atMs < 2000;
+  }
   get audioAuditSnapshot() {
     const musicTrack = this.source === '/audio/battle-orbit.mp3' ? 'normal' : this.source === '/audio/dreadnought-duel.mp3' ? 'boss'
       : this.source === '/audio/boss-victory-v2.mp3' ? 'victory' : 'other';
@@ -82,6 +96,7 @@ export class MusicPlayer {
     if (this.closed || this.source === src) return;
     noteAudioEvent('music-source-switch');
     this.playbackEpoch++; this.playRequest = null;
+    this.endProgress = null;
     this.clearMetadataListener();
     this.audio.pause();
     this.source = src;
@@ -180,6 +195,7 @@ export class MusicPlayer {
 
   pause() {
     this.playbackEpoch++; this.playRequest = null;
+    this.endProgress = null;
     this.wantsPlayback = false; this.audio.pause(); this.clockHealth.pause();
     // Also silence the existing graph while a native play() promise is pending.
     // Unlocking during the countdown must not restore this gain until play().
@@ -193,6 +209,7 @@ export class MusicPlayer {
   close() {
     if (this.closed) return;
     this.closed = true;
+    this.endProgress = null;
     this.playbackEpoch++; this.playRequest = null;
     this.clockHealth.reset();
     this.wantsPlayback = false;

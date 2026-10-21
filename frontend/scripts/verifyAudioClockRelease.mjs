@@ -38,6 +38,12 @@ if (process.env.CRYPTOID_VERIFY_EXPLICIT_RETRY === '1') Object.assign(features, 
   zeroClockStallDirectRetry: /\w+=\w+&&\w+\.currentTime===0;if\(\(!this\.stalled\|\|\w+\)&&!\w+\)/.test(runtime),
   directRetryKeepsGenerationAndPendingIdentity: /this\.attempted=!0,this\.recoveries\+\+;const \w+=this\.generation;try\{const \w+=\w+\.resume\(\)\.then/.test(runtime) && (runtime.match(/this\.pending===\w+&&\(this\.pending=null\)/g) ?? []).length >= 2
 });
+if (process.env.CRYPTOID_VERIFY_VICTORY_PROGRESS === '1') Object.assign(features, {
+  victoryWaitUsesMediaProgress: runtime.includes('waitingForEnd(') && runtime.includes('this.endProgress.position') && runtime.includes('this.endProgress.atMs<2e3'),
+  bossGateUsesProgressGuard: /\.waitingForEnd\(\w+\.current\)/.test(game),
+  ownerMusicAndHeartEvidence: ['musicState', 'musicClockMs', 'musicMediaMs', 'musicPaused', 'musicEnded', 'musicTrack', 'bossHeartCollected']
+    .every(f => [game, admin, reload].every(s => s.includes(f)))
+});
 for (const [feature, passed] of Object.entries(features)) assert.ok(passed, 'delivered audio feature ' + feature);
 const result = { at: new Date().toISOString(), features, moduleHashesMatchRelease: true };
 fs.writeFileSync(new URL('audio-features.json', dir), JSON.stringify(result, null, 2) + '\n');
