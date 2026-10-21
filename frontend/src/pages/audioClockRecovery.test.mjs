@@ -25,9 +25,17 @@ function baselineGameAudio() {
   return exports.GameAudio;
 }
 
-function host(t, recovery = 'works') {
+function precedingClock() {
+  const source = execFileSync('git', ['show', 'adb330660a6dbee5fd5e08d06ed65ebfcf976923'], { encoding: 'utf8' });
+  const exports = {};
+  const js = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS } }).outputText;
+  vm.runInNewContext(js, { exports, performance, document: globalThis.document });
+  return exports.AudioClockRecovery;
+}
+
+function host(t, recovery = 'works', gestureGated = false) {
   const previous = { AudioContext: globalThis.AudioContext, Audio: globalThis.Audio, fetch: globalThis.fetch, document: globalThis.document };
-  let now = 0, frozen = false, finishSuspend;
+  let now = 0, frozen = gestureGated, gesture = false, finishSuspend;
   const contexts = [], sources = [], gains = [], elements = [];
   t.mock.method(performance, 'now', () => now);
   globalThis.document = { visibilityState: 'visible' };
@@ -35,11 +43,16 @@ function host(t, recovery = 'works') {
     exponentialRampToValueAtTime() {}, cancelScheduledValues() {}, setTargetAtTime(v) { this.value = v; } });
   globalThis.fetch = async () => ({ ok: true, arrayBuffer: async () => new ArrayBuffer(0) });
   globalThis.AudioContext = class {
-    currentTime = 0; state = 'running'; sampleRate = 48000; destination = {}; suspends = 0; resumes = 0;
+    currentTime = 0; state = 'running'; sampleRate = 48000; destination = {}; suspends = 0; resumes = 0; nativeCalls = [];
     constructor() { contexts.push(this); }
-    resume() { this.resumes++; this.state = 'running'; if (recovery === 'works') frozen = false; return Promise.resolve(); }
+    resume() {
+      this.resumes++; this.nativeCalls.push({ kind: 'resume', gesture });
+      if (gestureGated && !gesture) return new Promise(() => {});
+      this.state = 'running'; if (recovery === 'works') frozen = false; return Promise.resolve();
+    }
     suspend() {
-      this.suspends++;
+      this.suspends++; this.nativeCalls.push({ kind: 'suspend', gesture });
+      if (gestureGated) frozen = true;
       if (recovery === 'reject') return Promise.reject(Error('host unavailable'));
       if (recovery === 'throw') throw Error('host unavailable');
       if (recovery !== 'pending-running') this.state = 'suspended';
@@ -73,8 +86,10 @@ function host(t, recovery = 'works') {
   };
   t.after(() => { Object.assign(globalThis, previous); t.mock.restoreAll(); });
   return { contexts, sources, gains, elements,
+    tap(action) { gesture = true; try { return action(); } finally { gesture = false; } },
     tick(ms) { now += ms; for (const c of contexts) if (!frozen && c.state === 'running') c.currentTime += ms / 1000; },
     freeze() { frozen = true; }, finishSuspend() { finishSuspend?.(); },
+    thaw() { frozen = false; },
     async ready() { await new Promise(resolve => setImmediate(resolve)); } };
 }
 
@@ -96,6 +111,77 @@ test('negative control retains 2086 silent sources; frozen-clock candidate stops
   old.close(); current.close(); const resumes = c.resumes;
   h.finishSuspend(); await h.ready();
   assert.equal(c.resumes, resumes, 'late suspend completion cannot revive a closed graph');
+});
+
+test('preceding zero-clock Resume loses native activation; fresh graph now resumes directly in the click', async t => {
+  const h = host(t, 'works', true), Before = precedingClock();
+  const old = new Before(), oldContext = new AudioContext();
+  h.tap(() => { void old.resume(oldContext, true); });
+  await h.ready(); h.tick(5000);
+  assert.equal(oldContext.currentTime, 0);
+  assert.deepEqual(oldContext.nativeCalls, [{ kind: 'suspend', gesture: true }, { kind: 'resume', gesture: false }]);
+  old.reset(); await oldContext.close();
+
+  const clock = new AudioClockRecovery(), context = new AudioContext();
+  assert.equal(await h.tap(() => clock.resume(context, true)), true);
+  assert.deepEqual(context.nativeCalls, [{ kind: 'resume', gesture: true }]);
+  h.tick(5000); assert.equal(context.currentTime, 5);
+  assert.equal(clock.recoveries, 0); assert.equal(clock.stalls, 0);
+});
+
+test('saved continuation unlocks actual effects and music before the account boundary without suspending fresh graphs', async t => {
+  const h = host(t, 'works', true), effects = new GameAudio(), music = new MusicPlayer('/audio/battle-orbit.mp3', 25);
+  effects.setPaused(true); music.pause();
+  const effectUnlock = h.tap(() => effects.start(true));
+  const musicUnlock = h.tap(() => music.unlock(true));
+  assert.deepEqual(h.contexts.map(c => c.nativeCalls), [[{ kind: 'resume', gesture: true }], [{ kind: 'resume', gesture: true }]]);
+  await Promise.all([effectUnlock, musicUnlock]); await h.ready();
+  h.tick(8000); // Account request and countdown do not consume another gesture.
+  assert.ok(h.contexts.every(c => c.currentTime === 8 && c.suspends === 0));
+  assert.equal(effects.activeVoiceCount, 0); assert.equal(music.audio.paused, true);
+  assert.equal(h.gains[1].gain.value, 0); assert.equal(h.elements.length, 1);
+  effects.setPaused(false); effects.play('enemyHit'); await music.play();
+  assert.equal(effects.activeVoiceCount, 1); assert.equal(h.gains[1].gain.value, .25);
+  assert.equal(music.audio.currentTime, 42); assert.equal(h.contexts.length, 2);
+  effects.close(); music.close();
+});
+
+test('previously rendered paused graphs queue suspend and resume within the same actual gesture', async t => {
+  const h = host(t, 'works', true), effects = new GameAudio(), music = new MusicPlayer('/audio/battle-orbit.mp3', 25);
+  await h.tap(() => effects.start(true)); await h.tap(() => music.unlock(true)); await h.ready();
+  h.tick(500); effects.setPaused(true); music.pause(); h.freeze();
+  const a = h.tap(() => effects.start(true)), b = h.tap(() => music.unlock(true));
+  assert.ok(h.contexts.every(c => c.nativeCalls.slice(-2).every(call => call.gesture)));
+  assert.ok(h.contexts.every(c => c.suspends === 1));
+  await Promise.all([a, b]); h.tick(500);
+  assert.ok(h.contexts.every(c => c.currentTime === 1));
+  assert.equal(h.gains[1].gain.value, 0); assert.equal(music.audio.paused, true);
+  effects.close(); music.close();
+});
+
+test('primed never-rendered graphs can retry native resume in the later real Resume gesture', async t => {
+  const h = host(t, 'works', true), effects = new GameAudio(), music = new MusicPlayer('/audio/battle-orbit.mp3', 25);
+  void effects.start(); void music.unlock(); await h.ready(); h.tick(3000);
+  assert.ok(h.contexts.every(c => c.currentTime === 0));
+  effects.setPaused(true); music.pause();
+  assert.deepEqual(await Promise.all([h.tap(() => effects.start(true)), h.tap(() => music.unlock(true))]), [true, true]);
+  h.tick(1000); assert.ok(h.contexts.every(c => c.currentTime === 1 && c.suspends === 0));
+  effects.close(); music.close();
+});
+
+test('rendering progress releases a stale native recovery promise for effects and music', async t => {
+  const h = host(t, 'pending-running'), effects = new GameAudio(), music = new MusicPlayer('/audio/battle-orbit.mp3', 25);
+  await effects.start(); await music.play(); await h.ready(); h.freeze();
+  let pendingMusic;
+  for (let i = 0; i < 23; i++) { h.tick(100); effects.play('enemyHit'); pendingMusic = music.play(); }
+  assert.ok(h.contexts.every(c => c.suspends === 1 && c.resumes === 2), 'native resume is queued before suspend settles');
+  assert.equal(effects.activeVoiceCount, 0);
+  h.thaw(); h.tick(100); effects.play('enemyHit');
+  assert.equal(effects.activeVoiceCount, 1);
+  const resumedMusic = music.play(); assert.notStrictEqual(resumedMusic, pendingMusic);
+  assert.equal(await resumedMusic, true); assert.equal(h.elements.length, 1);
+  effects.close(); music.close(); const calls = h.contexts.map(c => c.resumes);
+  h.finishSuspend(); await h.ready(); assert.deepEqual(h.contexts.map(c => c.resumes), calls);
 });
 
 test('advancing audio clock reaps missing-ended effects and fading weapons without cutting live sounds', async t => {
@@ -120,7 +206,9 @@ test('successful same-context recovery resumes new sounds without replaying queu
   for (let i = 0; i < 22; i++) { h.tick(100); audio.play('enemyHit'); }
   await h.ready(); h.tick(100); audio.play('enemyHit'); h.tick(100); audio.play('enemyHit');
   assert.equal(h.contexts.length, 1); assert.equal(h.contexts[0].suspends, 1);
-  assert.ok(audio.activeVoiceCount > 0 && audio.activeVoiceCount < 4);
+  // Clock progress can admit the two loop requests before the native promise
+  // settles, plus the two explicit requests below; no frozen queue is replayed.
+  assert.ok(audio.activeVoiceCount > 0 && audio.activeVoiceCount <= 4);
   assert.ok(h.sources.filter(s => s.startedAt === 0).every(s => s.disconnected)); audio.close();
 });
 
@@ -190,6 +278,7 @@ test('owner resource export preserves only bounded audio-clock evidence', () => 
 test('explicit Resume restarts both paused running graphs before delayed gameplay without replacing their resources', async t => {
   const h = host(t), effects = new GameAudio(), music = new MusicPlayer('/audio/battle-orbit.mp3', 25);
   await effects.start(); await music.play(); await h.ready();
+  h.tick(100); // Both graphs have actually rendered before this interruption.
   effects.setPaused(true); music.pause(); h.freeze();
   const buffers = effects.diagnosticResourceStats.audioSampleBuffers;
   const effectUnlock = effects.start(true), musicUnlock = music.unlock(true);

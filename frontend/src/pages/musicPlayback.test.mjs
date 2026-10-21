@@ -142,6 +142,7 @@ function lifecycleAudio() {
   };
   globalThis.AudioContext = class {
     state = 'running';
+    currentTime = 0;
     destination = {};
     createMediaElementSource() {
       const source = { disconnected: 0, connect: gain => gain, disconnect() { this.disconnected++; } };
@@ -151,6 +152,7 @@ function lifecycleAudio() {
       const gain = { gain: { value: 0 }, connect() { return this; }, disconnected: 0, disconnect() { this.disconnected++; } };
       graph.gains.push(gain); return gain;
     }
+    resume() { return Promise.resolve(); }
     close() { graph.closes++; return Promise.resolve(); }
   };
   return { graph, restore() { globalThis.Audio = previous.Audio; globalThis.AudioContext = previous.AudioContext; } };

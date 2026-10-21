@@ -1,5 +1,36 @@
 # Preserve the officially approved game
 
+## Audio Resume gesture correction, 21 October 2026
+
+The owner's follow-up after b026a194 publication confirms silence after leaving
+to paste a report and pressing Resume again. Effects clock stays exactly zero
+despite running; one clock stall and 25 then 135 blocked starts are recorded.
+The current continuation ends with saved-exit-intent/unmount and finished=true.
+The unexpected-restart sector-48 record is detected when this monitor starts,
+referring to the preceding run; it is not a new crash in this continuation.
+
+An actual preceding AudioClockRecovery blob under a gesture-gated host shows
+its forced fresh-graph suspend calls native resume only after the click ends.
+Fresh/never-rendered graphs now request native resume directly in Resume;
+existing rendered paused graphs enqueue suspend and resume in order inside
+the same gesture. Actual clock progress releases a stale promise gate, with
+identity guarding its late completion. Keep frozen queue blocking and cleanup.
+No replacement context/media element, new timer/RAF/listener, sound parameter,
+artwork/debris/gameplay/account change. GamePage and GameAudio remain identical.
+
+91 focused tests plus TypeScript, 12 locales/build and audio lint pass. Five new
+fault/gesture cases cover the demonstrated path. Two historical comparisons
+are explicitly excluded because old Git objects lack their source files; the
+newer whole-GamePage guard and actual current Admin callbacks pass. Lifecycle
+fixture now supplies the native resume API; an earlier recovery assertion was
+updated to include sounds admitted on measured progress before promise settle.
+The new pending-native test also caught a music coalescing order issue, fixed
+before the final passing run. See docs/audio-gesture-recovery-20261021.md.
+Continue the owner's authorized Testnet audio correction only; keep Mainnet,
+all fixed published/rollback refs and earlier log/protection denials intact.
+Candidate branch codex/audio-gesture-recovery-20261021 has auto deployment off.
+No actual iPhone audible recovery or Whitescreen-cause proof is established.
+
 ## Audio correction Testnet release, 21 October 2026
 
 The owner's "Okay, dann machen wir das mal" authorizes the prepared audio

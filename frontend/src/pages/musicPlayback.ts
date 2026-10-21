@@ -138,6 +138,7 @@ export class MusicPlayer {
   }
 
   play(): Promise<boolean> {
+    if (this.context && this.clockHealth.blocked) this.clockHealth.observe(this.context);
     // A later genuine gesture must still retry an initial autoplay request.
     // Coalesce only the diagnosed/pending frozen-graph recovery path.
     if (this.playRequest && this.clockHealth.blocked) return this.playRequest;
