@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "browser": "153.0.8010.0",
+  "bossWidthCases": 150,
+  "staticBossGlow": {
+    "animations": 0,
+    "stableSites": true
+  },
+  "actualHitReplacements": 500,
+  "maxControllerEntries": 16,
+  "cleanup": {
+    "pacing": {
+      "mode": "native-easing",
+      "targetHz": 60,
+      "active": 0,
+      "configured": 482,
+      "fallbacks": 0,
+      "jsFrameWrites": 0
+    },
+    "nativeAnimations": 0,
+    "hotspots": 0,
+    "bursts": 0
+  },
+  "pageErrors": [],
+  "limits": "Native Linux Chromium with software rendering. No Safari/WebKit, physical iPhone memory/heat/FPS or Whitescreen-cause proof."
+}

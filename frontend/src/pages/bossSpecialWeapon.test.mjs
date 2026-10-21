@@ -25,10 +25,15 @@ test('shots emerge from the actual muzzle and match weapon illumination',()=>{
   assert.equal(shots[0].weaponColor,specialWeaponMount(b).energy);
  }
 });
-test('turret damage steadily heats living weapons and preserves heat on resume',()=>{
- let previous=0;
- for(let health=20;health>0;health--){const gun={health,maxHealth:20},step=turretHeatStep(gun);assert.ok(step>=previous&&step<=8);previous=step;assert.equal(step,turretHeatStep(JSON.parse(JSON.stringify(gun))));}
- assert.equal(turretHeatStep({health:20,maxHealth:20}),0);assert.equal(turretHeatStep({health:0,maxHealth:20}),0);assert.equal(turretHeatStep({health:1,maxHealth:20}),8);
+test('living turrets use one fixed glow at half armour, including fractional HP and resume',()=>{
+ for(let id=1;id<=50;id++)for(const turret of createSectorBoss(id*10,390,90,760).turrets){
+  for(const fraction of [1,.75,.500001,.5,.499999,.25,.01,0]){
+   const gun={health:turret.maxHealth*fraction,maxHealth:turret.maxHealth},step=turretHeatStep(gun);
+   assert.equal(step,fraction>0&&fraction<=.5?4:0);
+   assert.equal(step,turretHeatStep(JSON.parse(JSON.stringify(gun))));
+  }
+ }
+ assert.equal(turretHeatStep({health:1,maxHealth:0}),0);
 });
 test('all exposed bosses need half the previous hits including resumed hulls',()=>{
  for(let id=1;id<=50;id++)for(const remaining of [1,.63]){

@@ -47,7 +47,7 @@ test('each of 50 bosses has strictly increasing bounded attack pressure', () => 
     before=now;
   }
 });
-test('orange heat is visible from first damage and remains clipped to metal', () => {
+test('the orange heat painter remains clipped to metal', () => {
   for(let step=1;step<=8;step++) {
     const colors=[];
     const ctx={save(){},restore(){},createLinearGradient(){return {addColorStop(_,color){colors.push(color)}}},fillRect(){}};

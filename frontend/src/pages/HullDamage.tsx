@@ -3,8 +3,8 @@ import { hullImpactProfile, type HullFire } from "./hullFires";
 
 type Props = { sites?: readonly HullFire[]; hit?: { id?: number; x: number; y: number; impactPower?: number }; maskImage: string; mirrored?: boolean; bossDamage?: number };
 
-// Local alpha-masked patches cool to tiny embers. Nearby hits reheat a patch;
-// damage never scales all patches up to cover the ship's skin.
+// Alpha-masked damage stays local. Boss embers use stable static marks;
+// other ships retain their cooling/reheating animation.
 const HullDamage = memo(({ sites = [], hit, maskImage, mirrored = false, bossDamage }: Props) => {
   if (!sites.length && !hit) return null;
   const boss = bossDamage !== undefined;
@@ -15,8 +15,8 @@ const HullDamage = memo(({ sites = [], hit, maskImage, mirrored = false, bossDam
   };
   const burst = hit && hullImpactProfile(hit.id ?? 0, hit.impactPower);
   return <>
-    <div className="hull-heat-layer" style={{ maskImage, WebkitMaskImage: maskImage }} aria-hidden="true">
-      {sites.map(site => <i key={`${site.id}:${site.revision ?? 0}`} className="hull-hotspot" style={{ ...position(site), ...appearance(site.revision ?? site.id, site.impactPower) }}><b /></i>)}
+    <div className={`hull-heat-layer${boss ? ' boss-static-heat' : ''}`} style={{ maskImage, WebkitMaskImage: maskImage }} aria-hidden="true">
+      {sites.map(site => <i key={boss ? site.id : `${site.id}:${site.revision ?? 0}`} className="hull-hotspot" style={{ ...position(site), ...appearance(boss ? site.id : site.revision ?? site.id, boss ? undefined : site.impactPower) }}><b /></i>)}
     </div>
     {hit && burst && <i key={hit.id} className="hull-mini-explosion" style={{ ...position(hit), ...appearance(hit.id ?? 0, hit.impactPower) }} aria-hidden="true">{burst.sparks.map((spark, index) => <span key={index} style={{ "--spark-x": `${spark.x}px`, "--spark-y": `${spark.y}px`, animationDuration: `${spark.duration}s` } as CSSProperties} />)}</i>}
   </>;

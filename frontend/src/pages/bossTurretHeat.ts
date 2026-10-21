@@ -1,8 +1,9 @@
 import type { BossTurretState } from './bossTurrets.ts';
 
 export const turretHeatStep = (gun: Pick<BossTurretState, 'health' | 'maxHealth'>) => {
-  if (gun.health <= 0 || gun.maxHealth <= 0) return 0;
-  return Math.max(0, Math.min(8, Math.ceil((1 - gun.health / gun.maxHealth) * 8)));
+  // One fixed orange texture from half armour onward. The renderer prepares
+  // it once per living gun and reuses it through every subsequent hit.
+  return gun.health > 0 && gun.maxHealth > 0 && gun.health <= gun.maxHealth * .5 ? 4 : 0;
 };
 
 /** Paint only existing sprite pixels. No blur, shadow, halo or outside glow. */
