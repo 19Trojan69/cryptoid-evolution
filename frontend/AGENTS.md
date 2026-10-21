@@ -1,5 +1,25 @@
 # Preserve the officially approved game
 
+## Owner second-boss interruption report, 21 October 2026
+
+New v5 report on e7b49fe ends with a visible active sector-20/boss-2 session,
+then a new document; no Home intent/normal stop is present in the available
+window. This is an unclosed-session/document-replacement signal, not proof of
+a browser kill or its cause. First core shot creation/audio/scene commit finished
+within 4 ms; the final heartbeat is 7.452 seconds later. Actual new-document
+start is 4.954 seconds after that heartbeat. Lazy verified Admin diagnostics
+record boot 19.091 seconds after document start; do not call that the reload gap.
+Known caches plateau (48 painted, 8 Canvas textures, 46 audio buffers); final
+estimate 39,428,372 bytes excludes native/GPU/process allocations. Do not infer
+no native leak or sustained FPS from those counts/sparse frame samples. Latest
+timingCapture is null; the earlier targeted capture remains valid for its own
+run. No new runtime fix/deployment is supported by this evidence-only review.
+25 diagnostic tests pass. Missing boundary is the physical event and matching
+iOS termination record around 04:25:43–04:25:48 Vienna, 21 October. Do not assign
+older unattributed Jetsam logs to this run or demand the same 90-second test
+again by default. See docs/iphone-boss2-interruption-20261021.md. Keep Testnet at
+the fixed e7b49fe release and Mainnet untouched; do not deploy this audit entry.
+
 ## Owner capture and projectile presentation, 20 October 2026, completed Testnet release
 
 The owner's 19:17 UTC v5 capture is current bdf8b0a, has zero discarded time in
