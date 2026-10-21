@@ -4,7 +4,10 @@
 
 New v5 report on e7b49fe ends with a visible active sector-20/boss-2 session,
 then a new document; no Home intent/normal stop is present in the available
-window. This is an unclosed-session/document-replacement signal, not proof of
+window. The owner subsequently confirmed "wieder von allein": this run returned
+spontaneously, not by menu exit. Do not ask that question again. Uploaded-file
+search found only the older 19 October Jetsam log, not a matching 21 October file.
+This is an unclosed-session/document-replacement signal, not proof of
 a browser kill or its cause. First core shot creation/audio/scene commit finished
 within 4 ms; the final heartbeat is 7.452 seconds later. Actual new-document
 start is 4.954 seconds after that heartbeat. Lazy verified Admin diagnostics

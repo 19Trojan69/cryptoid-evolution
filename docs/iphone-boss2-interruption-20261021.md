@@ -3,6 +3,15 @@
 Evidence-only continuation of the iPhone investigation. No new runtime release,
 graphics change, account/save operation or Mainnet operation is made here.
 
+Owner clarification after this review: **"wieder von allein"**. The owner
+confirms that this run returned by itself, not through a chosen menu exit. Treat
+this as a reported spontaneous interruption correlated with the unclosed
+session/new document, while retaining the distinction from a proven native
+process termination and its cause. A targeted search of the uploaded diagnostic
+filenames found the existing 19 October Jetsam file, but no matching 21 October
+Jetsam/WebContent file. A matching device record is still needed; do not ask
+again whether the owner intentionally left this run.
+
 ## Report identity and scope
 
 The owner supplied a v5 `cryptoid-local-stability-report`, generated at
@@ -88,10 +97,9 @@ diagnostic tests pass: 25/25, using
 `node --experimental-strip-types --test scripts/stabilityReport.test.mjs src/pages/reloadDiagnostics.test.mjs src/pages/resourceCacheDiagnostics.test.mjs`.
 These are diagnostic tests, not a physical-iPhone crash reproduction.
 
-The decisive missing evidence is the physical device lifecycle at approximately
-04:25:43–04:25:48 Vienna on 21 October: whether the white screen/new document
-occurred spontaneously, and, if so, a matching iOS Jetsam/WebContent termination
-record. An older Jetsam record from another date without URL attribution cannot
+The decisive missing evidence is a matching iOS Jetsam/WebContent termination
+record for the reported spontaneous interruption at approximately
+04:25:43–04:25:48 Vienna on 21 October. An older Jetsam record from another date without URL attribution cannot
 be assigned to this interruption. Do not publish speculative visual/audio cuts,
 repeat the earlier timing test by default, or call this a proven crash fix.
 
