@@ -1,5 +1,26 @@
 # Preserve the officially approved game
 
+## Owner flight recorder, 21 October 2026, preparation only
+
+The owner asks for additional evidence if the iPhone interruption recurs, then
+"setze fort". Add only a verified-owner Testnet rolling timing recorder using
+the existing simulation/scene/resource hooks. Ordinary players must not obtain
+storage or a timing lease. Keep 30 aggregate windows (~60 active seconds), save
+about every two seconds and sample expensive runtime counters at most every
+ten seconds. Preserve the previous run before the first substantive new write;
+loading/StrictMode cleanup must not overwrite it. Separate keys from the armed
+90-second capture; its expiry must not stop the ring. Preserve compiled asset
+basename/line/column for faults, never raw messages/stacks/URLs or account data.
+First fault bypasses the normal write throttle once; repeat faults remain bounded.
+No new timer, RAF, listener, UI or network. Preserve all simulation, visuals,
+audio, account and recovery code exactly. No physical temperature/brightness,
+GPU/process-memory or OS termination-cause measurement is available here.
+This preparation is NOT published. Keep official Testnet cc5ef227 and fixed
+source/rollback refs, Mainnet and runtime-log permission denial unchanged.
+Automatic deployment is disabled on codex/owner-flight-recorder-20261021.
+See docs/owner-flight-recorder-20261021.md for tests, limits and the historical
+test blocked by an unavailable old Git source object.
+
 ## Completed combined cleanup Testnet release, 21 October 2026
 
 The owner's explicit publication request is complete. Official Testnet READY

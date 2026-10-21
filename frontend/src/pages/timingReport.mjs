@@ -43,6 +43,11 @@ export function cleanTimingCapture(input) {
   const events = (Array.isArray(input.events) ? input.events : []).slice(-64).filter(value => object(value) && kinds.has(value.kind)).map(value => {
     const event = { ...numbers(value, ['atMs','durationMs','sector','flight','bossId','bossTextureWidth','bossTextureHeight','bossCanvasWidth','bossCanvasHeight']), kind: value.kind };
     for (const key of ['phase','encounter','status']) if (states[key].includes(value[key])) event[key] = value[key];
+    // Only a compiled asset basename and coordinates, never a URL or raw stack.
+    if (typeof value.file === 'string' && /^[\w.-]{1,128}\.m?js$/.test(value.file)) {
+      event.file = value.file;
+      Object.assign(event, numbers(value, ['line', 'column']));
+    }
     return event;
   });
   return { version: 1, environment: 'owner-admin', metadata, finished: input.finished === true, samples, events,

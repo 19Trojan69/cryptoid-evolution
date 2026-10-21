@@ -8,6 +8,7 @@ export type StabilityReport = {
   resourceTrend: { windowMs: number; sampleIntervalMs: number; latestAt: number; samples: Record<string, unknown>[] } | null;
   timingCapture: import('./timingReport.mjs').TimingCapture | null;
   audioCaptures: import('./audioAuditReport.mjs').AudioAuditReport[];
+  flightRecorders: import('./flightRecorderReport.mjs').FlightRecorder[];
   limits: string;
 };
 export function technicalContext(value: unknown): Record<string, unknown> | null;

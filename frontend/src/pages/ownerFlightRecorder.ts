@@ -1,0 +1,73 @@
+import { createPerformanceProbe, retainOwnerResourceTiming } from './performanceDiagnostics.ts';
+import { createOwnerTimingCapture } from './ownerTimingCapture.ts';
+import { cleanFlightRecorder, readFlightRecorders, FLIGHT_RECORDER_KEY,
+  PREVIOUS_FLIGHT_RECORDER_KEY, FLIGHT_RECORDER_MAX_CHARS } from './flightRecorderReport.mjs';
+
+type Host = { localStorage?: Pick<Storage, 'getItem' | 'setItem'>;
+  sessionStorage: Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>; __cryptoidBootId?: string };
+type Options = Parameters<typeof createOwnerTimingCapture>[2];
+
+// Called only after server owner verification. No listeners, timer, RAF, network,
+// UI: reuse the existing instrumented simulation and resource-timing hooks.
+export function createOwnerFlightRecorder(verifiedOwner: boolean, getHost: () => Host, options: Options) {
+  if (!verifiedOwner) return null;
+  const host = getHost(), wallNow = options.wallNow ?? Date.now;
+  let archived = false;
+  let release = () => {};
+  const write = (key: string, raw: string) => {
+    for (const name of ['localStorage', 'sessionStorage'] as const) {
+      try { host[name]?.setItem(key, raw); } catch { /* Never interrupt play. */ }
+    }
+  };
+  return createPerformanceProbe({ now: options.now, runtime: options.runtime,
+    environment: 'owner-admin', publishGlobal: false, sampleLimit: 30,
+    persistIntervalMs: 2_000, runtimeIntervalMs: 10_000,
+    onStart: () => { release = retainOwnerResourceTiming(Infinity); },
+    onFinish: () => { release(); },
+    metadata: { ...options.build, bootId: host.__cryptoidBootId, recordedAt: wallNow() },
+    persist: raw => {
+      const capture = cleanFlightRecorder({ ...JSON.parse(raw), mode: 'rolling-owner', savedAt: wallNow() });
+      // StrictMode/loading setup must not overwrite the preceding real run.
+      if (!capture || !capture.samples.length && !capture.events.some(event =>
+        ['error', 'rejection', 'frame-error', 'loop-stall', 'input-error', 'javascript-error',
+          'unhandled-rejection', 'render-error'].includes(String(event.kind)))) return;
+      if (!archived) {
+        const previous = readFlightRecorders(host)[0];
+        if (previous) write(PREVIOUS_FLIGHT_RECORDER_KEY, JSON.stringify(previous));
+        archived = true;
+      }
+      let serialized = JSON.stringify(capture);
+      while (serialized.length > FLIGHT_RECORDER_MAX_CHARS && capture.samples.length > 1) {
+        capture.samples.shift(); serialized = JSON.stringify(capture);
+      }
+      if (serialized.length <= FLIGHT_RECORDER_MAX_CHARS) write(FLIGHT_RECORDER_KEY, serialized);
+    },
+  });
+}
+
+// Keep an explicitly armed 90-second capture independent of the automatic ring.
+// Its expiry must not stop the rolling recorder or discard its subscriptions.
+export function createOwnerDiagnosticProbe(verifiedOwner: boolean, getHost: () => Host, options: Options) {
+  const rolling = createOwnerFlightRecorder(verifiedOwner, getHost, options);
+  if (!rolling) return null;
+  const manual = createOwnerTimingCapture(verifiedOwner, getHost, options);
+  if (!manual) return rolling;
+  return {
+    begin(at, context) { rolling.begin(at, context); manual.begin(at, context); },
+    checkpoint(kind, details) { rolling.checkpoint(kind, details); manual.checkpoint(kind, details); },
+    mark(label) { rolling.mark(label); manual.mark(label); },
+    end(at) { rolling.end(at); manual.end(at); },
+    volley(at, blocked) { rolling.volley(at, blocked); manual.volley(at, blocked); },
+    longTask(duration) { rolling.longTask(duration); manual.longTask(duration); },
+    sceneRequested() { rolling.sceneRequested(); manual.sceneRequested(); },
+    sceneRenderBegin() { return rolling.sceneRenderBegin(); },
+    sceneCommitted(started) { rolling.sceneCommitted(started); manual.sceneCommitted(started); },
+    simulationStep(gap, delta) { rolling.simulationStep(gap, delta); manual.simulationStep(gap, delta); },
+    pacing(value) { rolling.pacing(value); manual.pacing(value); },
+    hit(source) { rolling.hit(source); manual.hit(source); },
+    lifecycle(kind, error) { rolling.lifecycle(kind, error); manual.lifecycle(kind, error); },
+    suspend(at) { rolling.suspend(at); manual.suspend(at); },
+    finish() { rolling.finish(); manual.finish(); },
+    export: rolling.export,
+  } satisfies ReturnType<typeof createPerformanceProbe>;
+}

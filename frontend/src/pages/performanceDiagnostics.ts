@@ -1,5 +1,5 @@
 // The developer probe stays disabled in ordinary builds. A separately armed,
-// server-verified owner capture can use these existing hooks for 90 seconds.
+// server-verified owner capture and bounded rolling recorder reuse these hooks.
 // Neither mode owns a game timer, RAF or input handler.
 import type { BossResourceKind, BossResourceDetails } from './bossResourceDiagnostics';
 export const PERFORMANCE_TRACE_KEY = "cryptoid_developer_trace_v1";
@@ -98,6 +98,9 @@ type Options = {
   environment?: 'developer-only' | 'owner-admin';
   publishGlobal?: boolean;
   maxDurationMs?: number;
+  sampleLimit?: number;
+  persistIntervalMs?: number;
+  runtimeIntervalMs?: number;
   metadata?: Record<string, unknown>;
   onFinish?: (started: boolean) => void;
   onStart?: () => void;
@@ -116,13 +119,19 @@ export const developerProbeEnabled = () =>
   import.meta.env?.VITE_CRYPTOID_DIAGNOSTICS === "1" &&
   (window as Window & { __cryptoidProbeOptOut?: boolean }).__cryptoidProbeOptOut !== true;
 // Module-scoped lease, never enabled by a URL, local flag or ordinary player.
-let ownerResourceUntil = 0;
+const ownerResourceLeases = new Set<{ until: number }>();
 export const retainOwnerResourceTiming = (until: number) => {
-  ownerResourceUntil = until;
-  return () => { if (ownerResourceUntil === until) ownerResourceUntil = 0; };
+  const lease = { until };
+  ownerResourceLeases.add(lease);
+  return () => { ownerResourceLeases.delete(lease); };
 };
-export const resourceTimingEnabled = () => developerProbeEnabled() ||
-  ownerResourceUntil > 0 && performance.now() < ownerResourceUntil;
+export const resourceTimingEnabled = () => {
+  if (developerProbeEnabled()) return true;
+  if (!ownerResourceLeases.size) return false;
+  const at = performance.now();
+  for (const lease of ownerResourceLeases) if (at < lease.until) return true;
+  return false;
+};
 
 export function errorSite(error: unknown) {
   try {
@@ -140,6 +149,7 @@ export function createPerformanceProbe(options: Options = {}) {
   const samples: Sample[] = [],
     events: Event[] = [];
   let context: ProbeContext | null = null;
+  let faultPersisted = false;
   let gaps: number[] = [],
     workTimes: number[] = [],
     volleyGaps: number[] = [];
@@ -209,10 +219,10 @@ export function createPerformanceProbe(options: Options = {}) {
       audio: "audioBufferBytes estimates retained effect PCM data; excludes streamed music and internal browser audio memory",
     },
   });
-  const persist = (force = false) => {
+  const persist = (force = false, firstFault = false) => {
     const time = now();
-    if (!force && time - lastPersist < 10_000) return;
-    if (force && options.environment === 'owner-admin' && !finished && time - lastPersist < 2_000) return;
+    if (!force && time - lastPersist < (options.persistIntervalMs ?? 10_000)) return;
+    if (force && !firstFault && options.environment === 'owner-admin' && !finished && time - lastPersist < 2_000) return;
     lastPersist = time;
     const trace = exportTrace();
     if (options.publishGlobal !== false && typeof window !== "undefined")
@@ -243,7 +253,7 @@ export function createPerformanceProbe(options: Options = {}) {
   };
   const flush = (at: number) => {
     if (!context || !frames) return;
-    if (at - runtimeAt >= 2_000) {
+    if (at - runtimeAt >= (options.runtimeIntervalMs ?? 2_000)) {
       const started = now();
       try { cachedRuntime = options.runtime?.() ?? {}; }
       catch { cachedRuntime = {}; } // Optional browser APIs.
@@ -276,7 +286,7 @@ export function createPerformanceProbe(options: Options = {}) {
         sceneRenderToCommitP95Ms: percentile(sceneRenderTimes, 0.95),
         pacing,
       },
-      PERFORMANCE_SAMPLE_LIMIT
+      Math.max(1, Math.min(PERFORMANCE_SAMPLE_LIMIT, options.sampleLimit ?? PERFORMANCE_SAMPLE_LIMIT))
     );
     gaps = [];
     workTimes = [];
@@ -421,7 +431,10 @@ export function createPerformanceProbe(options: Options = {}) {
     ) {
       if (finished) return;
       event(kind, now(), errorSite(error));
-      persist(true);
+      const firstFault = !faultPersisted && ['error', 'rejection', 'frame-error', 'loop-stall', 'input-error',
+        'javascript-error', 'unhandled-rejection', 'render-error'].includes(kind);
+      if (firstFault) faultPersisted = true;
+      persist(true, firstFault);
     },
     suspend(at: number) {
       if (finished) return;

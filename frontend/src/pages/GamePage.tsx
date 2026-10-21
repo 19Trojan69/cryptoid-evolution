@@ -37,7 +37,7 @@ import { cssFramePacingStats } from '../lib/cssFramePacing';
 import { recordGameDiagnostic, createGameSessionDiagnostics } from './gameDiagnostics';
 import { createReloadGameMonitor, createResourceTrendMonitor, installReloadDiagnostics, recordReloadEvent, recordReloadSnapshot } from './reloadDiagnostics';
 import { browserProbeRuntime, createPerformanceProbe, developerProbeEnabled } from './performanceDiagnostics';
-import { createOwnerTimingCapture } from './ownerTimingCapture';
+import { createOwnerDiagnosticProbe } from './ownerFlightRecorder';
 import { createOwnerAudioAudit, ownerAudioDisabled, noteAudioEvent } from './ownerAudioAudit';
 import { renderWorkStats } from './renderWork';
 import GameSceneBoundary from './GameSceneBoundary';
@@ -731,8 +731,8 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     const developer = developerProbeEnabled();
     const probe = developer ? createPerformanceProbe({
       backup: trace => (window as Window & { __cryptoidTraceSink?: (trace: unknown) => void }).__cryptoidTraceSink?.(trace),
-      runtime }) : createOwnerTimingCapture(ownerDiagnostics, () => window, { runtime, build: __CRYPTOID_BUILD__,
-        onFinish: () => { if (performanceProbeRef.current === probe) performanceProbeRef.current = null; stopBossObservation?.(); } });
+      runtime }) : createOwnerDiagnosticProbe(ownerDiagnostics && shipSaveNetwork === 'testnet', () => window,
+        { runtime, build: __CRYPTOID_BUILD__ });
     performanceProbeRef.current = probe;
     const stopBossObservation = probe ? observeBossResources((kind, details) => {
       const state = stateRef.current;
