@@ -42,14 +42,33 @@ export class AudioClockRecovery {
 
   resume(context: AudioContext, restartPausedGraph = false): Promise<boolean> {
     this.observe(context);
+    // Automatic repair is bounded to one attempt, but an explicit Resume is a
+    // new activation opportunity. Retire its stale promise without chaining
+    // native work to it; keep the frozen-queue guard until the clock advances.
+    if (restartPausedGraph && (this.pending || this.attempted)) {
+      this.generation++; this.pending = null; this.attempted = false;
+    }
     if (this.pending) return this.pending;
     // A fresh/never-rendered graph needs its native resume in the actual click,
     // even if the host already claims running. Suspending it first can consume
     // that click and leave its rendering clock at zero throughout the mission.
     const restart = restartPausedGraph && context.state === 'running' && context.currentTime > 0;
-    if (!this.stalled && !restart) {
+    const freshRestart = restartPausedGraph && context.currentTime === 0;
+    if ((!this.stalled || freshRestart) && !restart) {
       if (context.state === 'running' && this.resumeRequested && !restartPausedGraph) return Promise.resolve(true);
       this.resumeRequested = true;
+      if (this.stalled) {
+        this.attempted = true; this.recoveries++;
+        const generation = this.generation;
+        try {
+          const pending = context.resume().then(() => generation === this.generation && context.state === 'running')
+            .catch(() => false).finally(() => {
+              if (generation === this.generation && this.pending === pending) this.pending = null;
+            });
+          this.pending = pending;
+          return pending;
+        } catch { return Promise.resolve(false); }
+      }
       return context.resume().then(() => context.state === 'running');
     }
     if ((this.stalled && this.attempted) || typeof context.suspend !== 'function') return Promise.resolve(false);

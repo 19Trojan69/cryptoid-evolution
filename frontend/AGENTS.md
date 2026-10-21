@@ -1,5 +1,29 @@
 # Preserve the officially approved game
 
+## Post-interruption explicit audio retry, 21 October 2026
+
+Owner's 25d80d4f report reaches boss-70 victory, then White Screen/Home; immediately
+choosing Resume is fully silent again. Effects clock advanced with zero stalls,
+one voice and bounded known resources at the last sample. The last heartbeat
+continues 1.683 seconds after the victory request; canvas-release is recorded.
+Do not assign the White Screen to the jingle, sound queue, GPU/OS or saved game.
+Boss 50/60 pass in the same recording. See
+docs/post-interruption-audio-retry-20261021.md for the measured timeline/limits.
+
+Actual preceding-source counterexample demonstrates that an old pending or
+failed automatic recovery blocks a later genuine Resume. Explicit Resume now
+retires the pending generation and permits a new in-gesture native attempt;
+frozen allocation blocking remains until measured clock progress. Automatic
+requests remain bounded; old completions cannot clear later attempts or revive
+closed contexts. Only AudioClockRecovery.ts changes runtime behavior. 95 focused
+tests, build/types/locales and clock lint pass; two historical comparisons remain
+explicitly excluded. Same samples/media/context/seek/gains, graphics, saves and
+gameplay. No new timers/listeners/telemetry. Continue the ongoing authorized
+Testnet audio correction only, preserving Mainnet and fixed refs and earlier
+log/protection denials. Candidate codex/post-interruption-audio-retry-20261021
+has automatic deployment off. Device audible recovery and White Screen cause
+remain unproven. Never recommend replacing the run with level one for this test.
+
 ## Audio gesture correction published, 21 October 2026
 
 Official Testnet is READY at source 25d80d4fea43bd18b9c3ce643a1766cde537114e,

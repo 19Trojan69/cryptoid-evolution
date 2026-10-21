@@ -33,6 +33,14 @@ function precedingClock() {
   return exports.AudioClockRecovery;
 }
 
+function gestureReleaseClock() {
+  const source = execFileSync('git', ['show', '1dc329f210346eedfeea0f40ca80b66dc54b7601:frontend/src/pages/audioClockRecovery.ts'], { encoding: 'utf8' });
+  const exports = {};
+  vm.runInNewContext(ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS } }).outputText,
+    { exports, performance, document: globalThis.document });
+  return exports.AudioClockRecovery;
+}
+
 function host(t, recovery = 'works', gestureGated = false) {
   const previous = { AudioContext: globalThis.AudioContext, Audio: globalThis.Audio, fetch: globalThis.fetch, document: globalThis.document };
   let now = 0, frozen = gestureGated, gesture = false, finishSuspend;
@@ -167,6 +175,82 @@ test('primed never-rendered graphs can retry native resume in the later real Res
   assert.deepEqual(await Promise.all([h.tap(() => effects.start(true)), h.tap(() => music.unlock(true))]), [true, true]);
   h.tick(1000); assert.ok(h.contexts.every(c => c.currentTime === 1 && c.suspends === 0));
   effects.close(); music.close();
+});
+
+test('a genuine Resume can replace a stalled automatic attempt that never settled, unlike the published gesture release', async t => {
+  const h = host(t, 'works', true);
+  for (const [Clock, fixed] of [[gestureReleaseClock(), false], [AudioClockRecovery, true]]) {
+    const clock = new Clock(), context = new AudioContext();
+    void clock.resume(context); // No gesture after the native interruption.
+    for (let i = 0; i < 22; i++) { h.tick(100); clock.observe(context); }
+    assert.equal(clock.stalls, 1);
+    void clock.resume(context); // Automatic repair loses activation and stays pending.
+    const calls = context.nativeCalls.length;
+    clock.pause();
+    void h.tap(() => clock.resume(context, true));
+    assert.equal(context.nativeCalls.length, calls + Number(fixed));
+    h.tick(100);
+    assert.equal(context.currentTime > 0, fixed);
+    clock.observe(context); h.tick(100); // Re-establish observation after the native suspended state.
+    assert.equal(clock.observe(context), fixed);
+    clock.reset(); await context.close();
+  }
+});
+
+test('actual effects and music recover in Resume after a pending zero-clock repair while queued effects stay discarded', async t => {
+  const h = host(t, 'works', true), effects = new GameAudio(), music = new MusicPlayer('/audio/battle-orbit.mp3', 25);
+  void effects.start(); void music.play(); await h.ready();
+  for (let i = 0; i < 24; i++) { h.tick(100); effects.play('enemyHit'); void music.play(); }
+  assert.equal(effects.diagnosticResourceStats.audioClockStalls, 1);
+  assert.equal(effects.activeVoiceCount, 0);
+  effects.setPaused(true); music.pause();
+  const sourceCount = h.sources.length;
+  const a = h.tap(() => effects.start(true)), b = h.tap(() => music.unlock(true));
+  await Promise.all([a, b]);
+  assert.ok(h.contexts.every(c => c.nativeCalls.at(-1).kind === 'resume' && c.nativeCalls.at(-1).gesture));
+  assert.ok(h.contexts.every(c => c.suspends === 1), 'zero-clock explicit retry does not suspend again');
+  assert.equal(h.gains[1].gain.value, 0); assert.equal(music.audio.paused, true);
+  effects.setPaused(false); effects.play('enemyHit');
+  assert.equal(h.sources.length, sourceCount, 'known frozen queue stays blocked until measured progress');
+  h.tick(100); effects.play('enemyHit');
+  assert.equal(effects.activeVoiceCount, 1); assert.equal(await music.play(), true);
+  assert.equal(music.audio.currentTime, 42); assert.equal(h.elements.length, 1); assert.equal(h.contexts.length, 2);
+  assert.ok(h.sources.slice(0, sourceCount).every(s => s.disconnected));
+  effects.close(); music.close();
+});
+
+test('a settled failed automatic repair permits one new explicit attempt while background retries remain bounded', async t => {
+  const h = host(t, 'reject'), clock = new AudioClockRecovery(), context = new AudioContext();
+  await clock.resume(context); h.freeze();
+  for (let i = 0; i < 22; i++) { h.tick(100); clock.observe(context); }
+  assert.equal(await clock.resume(context), false);
+  const before = context.resumes;
+  for (let i = 0; i < 100; i++) await clock.resume(context);
+  assert.equal(context.resumes, before);
+  void h.tap(() => clock.resume(context, true));
+  assert.equal(context.resumes, before + 1);
+  assert.equal(context.nativeCalls.at(-1).gesture, true);
+  clock.reset(); await context.close();
+});
+
+test('rendered stalled graph retries both native operations inside Resume and ignores late automatic completion', async t => {
+  const h = host(t, 'pending-running', true), clock = new AudioClockRecovery(), context = new AudioContext();
+  await h.tap(() => clock.resume(context)); h.thaw(); h.tick(1000); clock.observe(context); h.freeze();
+  const complete = [], suspend = context.suspend.bind(context);
+  context.suspend = () => { void suspend(); return new Promise(resolve => complete.push(resolve)); };
+  for (let i = 0; i < 22; i++) { h.tick(100); clock.observe(context); }
+  void clock.resume(context);
+  assert.equal(complete.length, 1);
+  clock.pause(); void h.tap(() => clock.resume(context, true));
+  assert.equal(complete.length, 2);
+  assert.deepEqual(context.nativeCalls.slice(-2), [{ kind: 'suspend', gesture: true }, { kind: 'resume', gesture: true }]);
+  complete[0](); await h.ready();
+  assert.equal(clock.blocked, true, 'retired native completion cannot remove the later recovery gate');
+  for (let i = 0; i < 100; i++) void clock.resume(context);
+  assert.equal(complete.length, 2, 'automatic calls still coalesce');
+  const calls = context.nativeCalls.length;
+  clock.reset(); await context.close(); complete[1](); await h.ready();
+  assert.equal(context.nativeCalls.length, calls);
 });
 
 test('rendering progress releases a stale native recovery promise for effects and music', async t => {

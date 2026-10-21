@@ -46,7 +46,8 @@
       "codex/iphone-lifetime-audit-20261020": false,
       "codex/audio-clock-release-record-20261021": false,
       "codex/audio-gesture-recovery-20261021": false,
-      "codex/audio-gesture-release-record-20261021": false
+      "codex/audio-gesture-release-record-20261021": false,
+      "codex/post-interruption-audio-retry-20261021": false
     }
   }
 }
