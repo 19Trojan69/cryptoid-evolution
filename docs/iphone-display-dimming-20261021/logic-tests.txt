@@ -1,0 +1,20 @@
+✔ app boot records an active prior combat without retaining account or browser fields (2.227452ms)
+✔ freeze detector reports only visible active gaps at or above threshold (0.189921ms)
+✔ verified Admin-only installation captures the interrupted build and creates no timer or navigation (0.812932ms)
+✔ error names are allowlisted and raw custom names are not retained (0.129171ms)
+✔ owner runtime collection is wired only to the verified owner game entry (0.930555ms)
+✔ resource snapshots retain only typed technical counters in the local trace (0.396476ms)
+✔ v3 transition snapshots remain wired only inside verified owner gameplay (0.88009ms)
+✔ v4 resource trend stores only sanitized owner resource context and stays bounded (33.037021ms)
+✔ v4 resource trend monitor samples active visible play every ten seconds and stops cleanly (0.861332ms)
+✔ active play acquires once, releases while hidden and reacquires when visible (5.94465ms)
+✔ unsupported or denied wake locks do not interrupt the game (1.321323ms)
+✔ an in-flight lock is released when play ends before the promise resolves (0.734575ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 233.439782

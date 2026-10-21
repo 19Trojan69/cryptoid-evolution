@@ -1,5 +1,40 @@
 # Preserve the officially approved game
 
+## Owner whole-display dimming, 21 October 2026, evidence only
+
+The owner confirmed the whole iPhone display dimmed, the phone felt warm/hot,
+and it was charging during this attempt. Do not ask these three questions again.
+Apple documents heat-related dimming and performance reduction; this supports a
+thermal hypothesis, not a demonstrated cause of the later document replacement.
+Official runtime is now 171cb5c4507a1530a9bbb080d61805be0da545f7, tree
+490b444be6bb87e8a4438c06b3c4bc86114a486f, READY
+dpl_729MdmJke7jMhhX28Ukh8EqbXo8T; completed reactor-door release receipt
+65e05fd340febf8d04cb4e9d95cfc4571abd10b5. Preserve fixed source
+codex/reactor-door-reuse-20261021 and rollback
+backup/testnet-before-reactor-door-reuse-20261021 at 540d73e.
+This supersedes the historical preparation-only Step 2 state below.
+
+Latest supplied v5 run includes static glow, idle rock surface and reactor doors,
+but not finished-hit/debris cleanup. That tested candidate is separately fixed
+at 5c6cc88bde5f4eaf48f28f5e5915c4b3b81ebbbc on
+codex/finished-hit-debris-cleanup-20261021, with deployment off and no publication.
+The reflection-mask prototype was rejected (audit e1d163e); do not introduce it.
+The last heartbeat, newer than the session marker, is boss 2 at 45.51% health,
+open reactor, still playing; document timeOrigin follows 4.558 seconds later.
+Do not use the later lazy Admin boot timestamp as the restart interval. The last
+resource sample has 12 running animations and 15,918,707 known bytes; these do
+not measure total native/GPU memory, temperature, presented FPS or prove a leak.
+The game already uses best-effort Screen Wake Lock only while playing; it changes
+no device brightness. API denial/release is caught, not a navigation trigger.
+Dark game overlays affect only the playfield and cannot explain system UI dimming.
+12 unchanged wake-lock/reload tests pass; no hardware proof. Continue with a
+cooled, unplugged same-build comparison and native timing/termination evidence
+as needed; preserve optical quality, all rules/audio/account flows and Mainnet.
+Do not override OS thermal protection or add wake-lock polling. This is an
+evidence-only branch; disable automatic deployment on
+codex/iphone-display-dimming-audit-20261021 and deploy none of these audit commits.
+See docs/iphone-display-dimming-20261021.md and its selected-observation evidence.
+
 ## Step 2: reactor door reuse, 21 October 2026, tested preparation
 
 The owner requests the next small stability step without optical downgrades.

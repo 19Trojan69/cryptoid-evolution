@@ -1,0 +1,44 @@
+{
+  "kind": "selected-values-transcribed-from-owner-report-and-followup",
+  "reportGeneratedAt": "2026-10-21T12:15:54.858Z",
+  "reportedSourceCommit": "171cb5c4507a1530a9bbb080d61805be0da545f7",
+  "reportedSourceTree": "490b444be6bb87e8a4438c06b3c4bc86114a486f",
+  "reportedWorkingTreeDirty": true,
+  "ownerConfirmed": {
+    "wholeDisplayDimmed": true,
+    "noticeablyWarmOrHot": true,
+    "chargingDuringPlay": true
+  },
+  "unknown": ["charging method", "exact temperature", "dimming timestamp", "ambient conditions", "brightness setting", "wake lock acceptance/release", "native memory/termination cause"],
+  "reactorOpenedAt": 1792584917756,
+  "firstCoreShotAt": 1792584919501,
+  "firstCoreShotSceneAt": 1792584919505,
+  "lastResourceSample": {
+    "at": 1792584936892,
+    "runningAnimations": 12,
+    "cssPacedActive": 13,
+    "canvasRegisteredEffects": 0,
+    "canvasSurfaceBytes": 16,
+    "estimatedResourceBytes": 15918707
+  },
+  "sessionMarkerAt": 1792584936938,
+  "latestHeartbeat": {
+    "at": 1792584939191,
+    "status": "playing",
+    "bossId": 2,
+    "reactorOpen": true,
+    "bossHealth": 116.41355065620988,
+    "bossMaxHealth": 255.77355065621063,
+    "enemies": 1,
+    "projectiles": 4,
+    "effects": 0,
+    "cssPacedActive": 12
+  },
+  "newDocumentStartedAt": 1792584943749,
+  "lazyAdminBootAt": 1792584956008,
+  "heartbeatToNewDocumentMs": 4558,
+  "timingCapture": null,
+  "runtimeChanged": false,
+  "deployed": false,
+  "limits": "Owner observations support thermal regulation as a hypothesis. No measured thermal state, whole-process/GPU memory or proven cause of document replacement."
+}
