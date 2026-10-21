@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "baseline": "171cb5c4507a1530a9bbb080d61805be0da545f7",
+  "browser": "153.0.8010.0",
+  "softwareFlags": true,
+  "bosses": [
+    1,
+    2,
+    7,
+    25,
+    50
+  ],
+  "fieldWidths": [
+    320,
+    430,
+    820
+  ],
+  "devicePixelRatio": 1.5,
+  "exactRgbaComparisons": 120,
+  "checks": [
+    "native React commit/effect lifetime",
+    "offscreen source canvases zero after final copied frame",
+    "visible canvas exact after source release and repeated static updates",
+    "resize and restored live guns rebuild",
+    "native unmount zeroes every owned canvas"
+  ],
+  "pageErrors": [],
+  "limits": "Actual Linux Chromium with accelerated rendering disabled; loader is deterministic QA scaffolding. No physical iPhone/WebKit GPU retirement, thermal state, whole-process memory, FPS or interruption-fix proof."
+}

@@ -1,5 +1,44 @@
 # Preserve the officially approved game
 
+## Spent boss weapon source release, 21 October 2026, tested preparation
+
+Owner requests continued stability work with no optical downgrade. Base this
+candidate on exact official runtime 171cb5c4507a1530a9bbb080d61805be0da545f7,
+tree 490b444be6bb87e8a4438c06b3c4bc86114a486f, READY
+dpl_729MdmJke7jMhhX28Ukh8EqbXo8T. Reactor-door release is complete (receipt
+65e05fd340febf8d04cb4e9d95cfc4571abd10b5), superseding the historical
+Step 2 preparation-only status below. Preserve fixed source
+codex/reactor-door-reuse-20261021 and rollback
+backup/testnet-before-reactor-door-reuse-20261021 at 540d73e.
+
+The destroyed-gun drawing guard already works. After the successful final copy,
+release the offscreen socket base/remaining heat sources, never the visible
+destination canvas or original atlas. Extract releaseBossWeaponSources from
+existing disposal, call only after successful all-destroyed draw, retain the
+static guard. Failed draw retains sources for retry; resize/context invalidation
+or restored live guns rebuild them using the byte-identical drawBossWeapons.
+No CSS, artwork, destination resolution, simulation, audio or account changes.
+Boss 2 at phone width 430 retires 818x511x4 = 1,671,992 nominal source bytes;
+this is not measured process/GPU memory, a growing leak or an iPhone crash fix.
+3300 exact native CPU raster pairs over fifty bosses/three widths/two input DPRs,
+120 actual Chromium RGBA pairs, failure/retry/idle/fall/resize/restoration/unmount
+checks, eighteen focused tests, component/renderer lint and release build/twelve
+locale tests pass. Initial focused setup missed the built backend playerSave;
+the unchanged prerequisite was compiled and all tests then pass. Preserve the
+initial failure log and do not count it as a successful run.
+
+The owner already confirmed whole-display dimming, hot/warm phone and charging;
+do not ask those again. Evidence-only thermal audit is 4d01d09e on
+codex/iphone-display-dimming-audit-20261021; dimming is a thermal clue, not proof
+of the later interruption cause. The rejected reflection prototype remains out.
+The independent tested finished-hit/debris candidate remains
+5c6cc88bde5f4eaf48f28f5e5915c4b3b81ebbbc on
+codex/finished-hit-debris-cleanup-20261021, not included or published here.
+This new branch is preparation only. Disable automatic deployment on
+codex/spent-boss-weapon-cache-20261021. Keep Testnet, Mainnet and every fixed ref;
+no new publication instruction accompanies this continuation. See
+docs/spent-boss-weapon-cache-20261021.md and its evidence directory.
+
 ## Step 2: reactor door reuse, 21 October 2026, tested preparation
 
 The owner requests the next small stability step without optical downgrades.

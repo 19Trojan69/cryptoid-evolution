@@ -1,6 +1,6 @@
 import { memo, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { SectorBoss } from "./sectorBoss";
-import { drawBossWeapons, weaponCanvasSize, disposeBossWeapons } from "./bossWeaponRenderer";
+import { drawBossWeapons, weaponCanvasSize, disposeBossWeapons, releaseBossWeaponSources } from "./bossWeaponRenderer";
 import { preloadBossWeapons } from "./bossWeaponTextures";
 import { reportBossResource } from "./bossResourceDiagnostics";
 import { beginVisualPaint, endVisualPaint } from './renderWork';
@@ -85,6 +85,7 @@ export default memo(function BossWeaponsView({ boss, frozen = false }: { boss: S
       staticDraw.current = null;
       return;
     }
+    if (allDestroyed) releaseBossWeaponSources(c);
     staticDraw.current = allDestroyed
       ? {
           config: boss.config,

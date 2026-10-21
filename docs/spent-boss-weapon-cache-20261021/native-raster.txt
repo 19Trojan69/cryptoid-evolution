@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "baseline": "171cb5c4507a1530a9bbb080d61805be0da545f7",
+  "bosses": 50,
+  "widths": [
+    320,
+    430,
+    820
+  ],
+  "devicePixelRatios": [
+    1,
+    3
+  ],
+  "renderDensityCap": 1.5,
+  "cases": 300,
+  "exactPixelComparisons": 3300,
+  "boss2Phone": {
+    "boss": 2,
+    "width": 430,
+    "dpr": 3,
+    "baselineBytes": 1671992,
+    "candidateBytes": 0
+  },
+  "retiredSourceByteRange": [
+    412496,
+    3236472
+  ],
+  "checks": [
+    "identical renderer drawing source",
+    "live and partial source ownership unchanged",
+    "zero offscreen backing dimensions after last turret",
+    "no blank repeated draws/allocations during open core",
+    "exact copied pixels through fall",
+    "resize/context recovery/live restoration rebuild on demand",
+    "complete unmount release"
+  ],
+  "limits": "Native CPU raster with actual component/renderer and controlled hook/API lifecycle. Nominal width*height*4 accounting is not measured WebKit/GPU/process memory or proof of iPhone heat, FPS or interruption improvement."
+}

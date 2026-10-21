@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "baseline": "171cb5c4507a1530a9bbb080d61805be0da545f7",
+  "checks": [
+    {
+      "file": "frontend/src/pages/GamePage.tsx",
+      "sha256": "c76833504912a21665e410dffb2536f313aa971e353cb08c6aa8cf9e12f39bc9"
+    },
+    {
+      "file": "frontend/src/index.css",
+      "sha256": "3bb3a9ffee260e16e60b728b0aa086fd8f31ad094dd43c986bf57301a6e39d58"
+    },
+    {
+      "file": "frontend/src/fleetMenus.css",
+      "sha256": "75318cdea23a1f02fb744a96ddb4488cd8c4c9a8b778ddbb033198304af6bf6b"
+    },
+    {
+      "file": "frontend/src/pages/bossExplosionBudget.css",
+      "sha256": "4f1ff1e671e5b0355d1dd62de1b7412fcb268f40bb15fece365cd46830f2aa36"
+    },
+    {
+      "file": "frontend/src/pages/BossHullView.tsx",
+      "sha256": "e96b6c8dfc37243a1474c0d67ec6792bc648830bc1a8c4891d29be15c6775911"
+    },
+    {
+      "file": "frontend/src/pages/BossReactorView.tsx",
+      "sha256": "0ce9eaa9047aec8b71dafa3207b82ae59a6a218aac67d4178dead6bc134cb1da"
+    },
+    {
+      "file": "frontend/src/pages/bossWeaponTextures.ts",
+      "sha256": "4c7b35ba5ed92ca1e8694562929fe9b9bd2d588f9fe937a555e120c55ed8dec0"
+    },
+    {
+      "file": "frontend/src/pages/bossTurretHeat.ts",
+      "sha256": "4a898ef10dd4aed525932059f5b23be36e4963ea5e897f51ca688f648aaa5408"
+    },
+    {
+      "file": "frontend/src/pages/bossTurrets.ts",
+      "sha256": "dbb304fe1218e774b0287a58d7f2ed2860a291eda8007087372903299d58147d"
+    }
+  ],
+  "note": "Only BossWeaponsView final-success cleanup and renderer source disposal helper change. Entire simulation, CSS, artwork, texture loader, heat and turret rules stay unchanged."
+}
