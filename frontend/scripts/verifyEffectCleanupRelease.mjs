@@ -66,6 +66,13 @@ if(phase==='after'){
     };
     for(const [name,passed] of Object.entries(result.deliveredFlightFeatures))assert.ok(passed,'delivered owner recorder '+name);
   }
+  if(process.env.CRYPTOID_VERIFY_HANDOFF==='1'){
+    result.deliveredHandoffFeatures={
+      acquireThenAssignThenRelease:/const (\w+)=\w+\(\w+\([^)]*\)\),(\w+)=(\w+)\.current;\3\.current=\1,\2\?\.release\(\)/.test(game),
+      unmountReleasesLastPlan:/useEffect\(\(\)=>\(\)=>\{(\w+)\.current\?\.release\(\),\1\.current=null\},\[\]\)/.test(game)
+    };
+    for(const [name,passed] of Object.entries(result.deliveredHandoffFeatures))assert.ok(passed,'delivered hull handoff '+name);
+  }
   result.productionQaExcluded=true;result.apiAndScoresEqual=true;
 }
 fs.writeFileSync(new URL(phase+'.json',out),JSON.stringify(result,null,2)+'\n');

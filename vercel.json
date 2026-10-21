@@ -25,6 +25,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/hull-handoff-release-record-20261021": false,
       "codex/hull-preparation-handoff-20261021": false,
       "codex/owner-flight-release-record-20261021": false,
       "codex/owner-flight-recorder-20261021": false,

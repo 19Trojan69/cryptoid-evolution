@@ -1,5 +1,23 @@
 # Preserve the officially approved game
 
+## Hull handoff Testnet publication, 21 October 2026
+
+The owner's subsequent instruction explicitly authorizes publication to Testnet
+with all other outstanding uploads. It supersedes preparation-only status below.
+Source is fixed at 4c25790a8b7173edda9f2ef9370f0251e716f668 / tree
+88063f617e2321705b19af0dfb3dcb22b6bce491. Official Testnet READY deployment
+dpl_EaTGHQkt3sRPmYY5ifvLK8bwvnfj built in 42.299 seconds. Delivered handoff,
+memory, cleanup, owner recorder, anonymous Admin denial and unchanged API/three
+score hashes pass; public Home has Spielen enabled. Rollback branch is
+backup/testnet-before-hull-handoff-20261021 at f85360ed. All completed glow,
+reactor, cleanup, memory and owner recorder work was already live in that base;
+the handoff is the only outstanding runtime patch. Historical small-turret work
+was already published on 20 October. Do not reintroduce older branches or the
+rejected reflection prototype. See docs/hull-handoff-release-20261021.md and
+the before/after/release evidence in its sibling directory. Receipt branch
+codex/hull-handoff-release-record-20261021 has auto deployment disabled and
+must not be deployed. Mainnet and runtime-log permission denial remain intact.
+
 ## Hull preparation handoff, 21 October 2026, tested preparation
 
 The owner requests investigating graphics preparation/release after the new
