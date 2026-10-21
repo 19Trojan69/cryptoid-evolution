@@ -1,27 +1,28 @@
 # Preserve the officially approved game
 
-## Step 1: idle rock surface, 21 October 2026, tested preparation
+## Step 1: idle rock surface, 21 October 2026, completed Testnet release
 
-The owner requests a slow, step-by-step audit with no optical downgrade. This
-candidate changes only idle BonusRockLayer backing-store lifetime, based on exact
-official Testnet a51ce39e3199aeafc1101e30bb6f8aa53bf7cbab (READY production
-dpl_33bDNneTxC4RVXRWFYnrexuqFp9X; completed receipt 879d0a8). Start its canvas
-at 1x1; retain the original active resolution/drawing/CSS/textures. Clear the
-last visible frame once. After >=2000 ms empty, shrink on the next existing
-scene update; do not add timers/RAF/polling. Pausing may defer idle shrink until
-the next scene update. Explicitly zero the surface on unmount. Keep the seven
-shared rock textures and all simulation/account/audio/rendering elsewhere.
-Native Chromium with accelerated 2D disabled passes 936 exact RGBA comparisons
-and 72 reuse/release cycles over three viewports/DPRs, including first frames
-after growth, brief gaps, dust/chips/final fragments, no stale content and
-unmount. Timing diagnostics are stubbed and idle time controlled in this QA.
-Initial accelerated exact comparisons had small RGB differences; a baseline-
-versus-baseline self-control reproduces the same 99-pixel/max-channel pattern.
-Do not claim accelerated WebKit/GPU equivalence or an iPhone crash fix. Twelve focused
-gameplay tests, component lint and release build/12 locale tests pass. Disable
-automatic deployment on codex/idle-rock-surface-20261021. This is preparation:
-keep Testnet at a51ce39 and all existing fixed refs; publication of this new
-step needs an explicit owner request. See docs/idle-rock-surface-20261021.md.
+The owner explicitly requested publication: "veröffentlichung bitte". Official
+Testnet is READY dpl_NnTPP38Gm8UZUaAUzj7q4uCUq4U8, source
+`540d73e7b5a89a3098a6c6404bd3deac8f269cd3`, tree
+`e2530e7824a44992e41b612153a48b9df2174345`, ready at 12:35:00 Europe/Vienna.
+Keep codex/idle-rock-surface-20261021 fixed at this exact runtime. Immediate
+rollback is backup/testnet-before-idle-rock-surface-20261021 at a51ce39 /
+dpl_33bDNneTxC4RVXRWFYnrexuqFp9X. Protected preview is READY
+dpl_3FaenCtwAZs6AGXWq9xotgdanvbR (36s); Production rebuild took 35s. Guest
+start/pause/resume passes. Empty bonus-rock and normal-effect canvases are
+both 1x1 in the observed preview; fresh official Home/Spielen passes.
+Scope remains only idle BonusRockLayer backing-store lifetime; active drawing,
+raster scale, textures, simulation, audio and other components remain intact.
+Public source/tree, all ten delivered features, QA exclusion and unchanged
+API/Highscore hashes are verified. 936 exact controlled software-RGBA comparisons, 72 reuse/release cycles,
+12 focused gameplay tests, lint and release build/12 locale tests pass.
+Accelerated baseline-vs-baseline control reproduces the earlier 99-pixel RGB
+mismatch; do not claim accelerated WebKit/GPU equivalence or an iPhone fix.
+Zero resource cost, total RAM savings and physical iPhone stability are unproved.
+This documentation-only receipt must not replace the runtime. Disable automatic
+deployment on codex/idle-rock-surface-release-record-20261021; preserve Mainnet
+and all older fixed refs. See docs/idle-rock-surface-20261021.md and evidence.
 
 ## Static boss glow, 21 October 2026, tested preparation
 

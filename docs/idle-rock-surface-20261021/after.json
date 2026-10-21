@@ -1,0 +1,113 @@
+{
+  "at": "2026-10-21T10:36:06.205874+00:00",
+  "sourceCommit": "540d73e7b5a89a3098a6c6404bd3deac8f269cd3",
+  "sourceTree": "e2530e7824a44992e41b612153a48b9df2174345",
+  "entry": "/assets/index-DAPK-gVv.js",
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 1465,
+      "sha256": "7c6619be0cd9ea8df780b29e932e5c7cb04b87be69a7f6adf8c5bfbed5bf5d56"
+    },
+    {
+      "path": "/api",
+      "status": 200,
+      "bytes": 27,
+      "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a"
+    },
+    {
+      "path": "/api/admin/status",
+      "status": 401,
+      "bytes": 29,
+      "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=1",
+      "status": 200,
+      "bytes": 7440,
+      "sha256": "9cbe90a3686312972b4a117e300a2bc2e15ce07a8eebd15b51f12d81181451ad"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=2",
+      "status": 200,
+      "bytes": 9733,
+      "sha256": "f18f97ee5a48ee471b9f64c0aae3edfabba5365c3f6c9c7ec2127d6439db4894"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=3",
+      "status": 200,
+      "bytes": 9733,
+      "sha256": "f18f97ee5a48ee471b9f64c0aae3edfabba5365c3f6c9c7ec2127d6439db4894"
+    }
+  ],
+  "chunks": [
+    {
+      "path": "/assets/AdminPage-CgKtfRmd.js",
+      "status": 200,
+      "bytes": 44682,
+      "sha256": "36489e149929cc1567e8860d74dcd6c457b1ed0d1d726dbe43bc96e045278a36",
+      "sourceIdentity": true,
+      "treeIdentity": true
+    },
+    {
+      "path": "/assets/GamePage-BunDZGTY.js",
+      "status": 200,
+      "bytes": 227092,
+      "sha256": "a5a7ed96a2f55366f292514362708f48723eae3fad4004441626a17b04358460",
+      "sourceIdentity": true,
+      "treeIdentity": true
+    },
+    {
+      "path": "/assets/powerUps-BzdIFaLk.js",
+      "status": 200,
+      "bytes": 148287,
+      "sha256": "eb33add54c05f0bba44c0eaf81cafdbdc832f93763a33fd016ae6eb61be298ef",
+      "sourceIdentity": false,
+      "treeIdentity": false
+    },
+    {
+      "path": "/assets/shipEvolution-LCnnssKb.js",
+      "status": 200,
+      "bytes": 233723,
+      "sha256": "0742535075bd1f9e7d1f4754ea8bcc579f91e2c816f50c5e7f20d18ddfaa2087",
+      "sourceIdentity": false,
+      "treeIdentity": false
+    }
+  ],
+  "deliveredFeatures": {
+    "bossStaticHeatClass": true,
+    "fixedThreshold": true,
+    "noBossHeatAnimation": true,
+    "noBossHeatFlicker": true,
+    "noBossHeatSpecks": true,
+    "rockCanvasStartsSmall": true,
+    "rockIdleGrace": true,
+    "rockShrinks": true,
+    "rockRetainsScale": true,
+    "rockRegrows": true
+  },
+  "qa": [
+    {
+      "path": "/scripts/fixtures/frame-pacing.html",
+      "status": 200,
+      "excluded": true
+    },
+    {
+      "path": "/scripts/fixtures/reactor-work.html",
+      "status": 200,
+      "excluded": true
+    },
+    {
+      "path": "/scripts/fixtures/projectile-work.html",
+      "status": 200,
+      "excluded": true
+    },
+    {
+      "path": "/scripts/fixtures/memory-work.html",
+      "status": 200,
+      "excluded": true
+    }
+  ],
+  "apiAndScoresEqual": true
+}

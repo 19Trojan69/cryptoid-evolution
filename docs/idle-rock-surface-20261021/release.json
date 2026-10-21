@@ -1,0 +1,31 @@
+{
+  "runtime": "540d73e7b5a89a3098a6c6404bd3deac8f269cd3",
+  "tree": "e2530e7824a44992e41b612153a48b9df2174345",
+  "official": "https://cryptoid-evolution-testnet.vercel.app/",
+  "production": {
+    "id": "dpl_NnTPP38Gm8UZUaAUzj7q4uCUq4U8",
+    "url": "https://cryptoid-evolution-testnet-b96dt268y-19-trojan69.vercel.app",
+    "status": "READY",
+    "readyLocal": "2026-10-21 12:35:00 Europe/Vienna",
+    "buildRoundedSeconds": 35
+  },
+  "preview": {
+    "id": "dpl_3FaenCtwAZs6AGXWq9xotgdanvbR",
+    "url": "https://cryptoid-evolution-testnet-gr9chd86x-19-trojan69.vercel.app",
+    "status": "READY",
+    "buildRoundedSeconds": 36
+  },
+  "rollback": {
+    "branch": "backup/testnet-before-idle-rock-surface-20261021",
+    "runtime": "a51ce39e3199aeafc1101e30bb6f8aa53bf7cbab",
+    "deployment": "dpl_33bDNneTxC4RVXRWFYnrexuqFp9X"
+  },
+  "guestPreviewStartPauseResume": true,
+  "previewEmptyRockCanvas": [
+    1,
+    1
+  ],
+  "officialHomePlayEnabled": true,
+  "runtimeLogs": "Not scanned; earlier permission denial was not bypassed.",
+  "physicalIphoneFixProven": false
+}

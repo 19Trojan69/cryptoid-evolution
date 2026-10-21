@@ -52,7 +52,28 @@ Evidence is in `idle-rock-surface-20261021/native.json` and
 `CRYPTOID_IDLE_ROCK_REPORT=/tmp/idle-rock-result.json node scripts/verifyIdleRockSurface.cjs`
 from frontend, with esbuild, Playwright and native Chromium dependencies available.
 
-This candidate is not deployed. Automatic deployment is disabled on
-`codex/idle-rock-surface-20261021`; Testnet stays at a51ce39 and Mainnet and all
-fixed release/rollback refs remain untouched. Review/publication is a separate
-step after the owner sees this result.
+## Completed Testnet publication
+
+The owner explicitly requested publication: "veröffentlichung bitte".
+Official Testnet is READY on `540d73e7b5a89a3098a6c6404bd3deac8f269cd3`, tree
+`e2530e7824a44992e41b612153a48b9df2174345`, Production deployment
+`dpl_NnTPP38Gm8UZUaAUzj7q4uCUq4U8` (35s; ready 21 October at 12:35:00
+Europe/Vienna). Protected preview `dpl_3FaenCtwAZs6AGXWq9xotgdanvbR` (36s)
+passes guest start/pause/resume. The observed empty bonus-rock canvas is 1×1.
+Fresh official Home loads with Spielen available. Pi authentication and physical
+iPhone boss stability were not tested in this release flow.
+
+Candidate branch `codex/idle-rock-surface-20261021` remains fixed at this exact
+runtime. Immediate rollback is `backup/testnet-before-idle-rock-surface-20261021`
+at `a51ce39` / `dpl_33bDNneTxC4RVXRWFYnrexuqFp9X`. Mainnet and all older fixed
+refs remain unchanged. The production rebuild uses the same source with existing
+Production environment values. Later documentation-only receipt changes must
+not be deployed. Runtime logs were not scanned; the earlier denial was not
+bypassed. The six dashboard build warnings are separate from runtime logs.
+
+
+Public post-release verification confirms the exact source/tree in delivered
+GamePage/Admin, all five idle-surface features and the five earlier static-glow
+features. Four QA fixtures are excluded from Production. API, anonymous Admin
+denial and all three Highscore response hashes match the fresh baseline exactly.
+See `before.json`, `after.json` and `release.json` in the evidence directory.
