@@ -1,0 +1,21 @@
+{
+  "baselineSelfControl": true,
+  "source": "a51ce39e3199aeafc1101e30bb6f8aa53bf7cbab",
+  "accelerated2dDisabled": false,
+  "browser": "153.0.8010.0",
+  "pixels": {
+    "dimensions": [
+      320,
+      700
+    ],
+    "differentPixels": 99,
+    "maxChannels": [
+      3,
+      3,
+      6,
+      0
+    ],
+    "exactEqual": false
+  },
+  "limits": "Two independent mounts of the exact same unmodified component. A non-equal result limits accelerated cross-canvas pixel comparisons; it is not a candidate pass."
+}

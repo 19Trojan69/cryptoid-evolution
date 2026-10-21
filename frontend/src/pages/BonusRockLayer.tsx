@@ -29,18 +29,33 @@ function rockTexture(seed: number) {
 const BonusRockLayer = ({ rocks, effects, width, height }: { rocks: BonusRock[];effects: RockEffect[];width:number;height:number }) => {
   const ref=useRef<HTMLCanvasElement>(null);
   const occupied=useRef(false);
+  const emptySince=useRef<number|null>(null);
   useEffect(()=>{
+    const surface=ref.current;
     let canceled=false,next=0;
     let timer=window.setTimeout(prepare,80);
     function prepare(){if(canceled)return;rockTexture(next++);if(next<7)timer=window.setTimeout(prepare,80);}
-    return ()=>{canceled=true;window.clearTimeout(timer);};
+    return ()=>{canceled=true;window.clearTimeout(timer);if(surface)surface.width=surface.height=0;};
   },[]);
   useEffect(()=>{
-    const c=ref.current;if(!c)return;const dpr=Math.min(1.5,window.devicePixelRatio||1);
+    const c=ref.current;if(!c)return;
+    if(!rocks.length&&!effects.length){
+      const now=performance.now();
+      if(emptySince.current===null)emptySince.current=now;
+      // Clear the last visible frame once, then leave the warm surface alone.
+      if(occupied.current){
+        const g=c.getContext('2d');
+        if(g){const started=beginRockPaint();g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,c.width,c.height);endRockPaint(started);}
+        occupied.current=false;
+      }
+      // Reuse the existing scene updates: no new timer or animation loop. A
+      // paused scene may retain the empty surface until its next update.
+      if(now-emptySince.current>=2000&&(c.width!==1||c.height!==1))c.width=c.height=1;
+      return;
+    }
+    emptySince.current=null;
+    const dpr=Math.min(1.5,window.devicePixelRatio||1);
     if(c.width!==Math.round(width*dpr)||c.height!==Math.round(height*dpr)){c.width=Math.round(width*dpr);c.height=Math.round(height*dpr);occupied.current=false;}
-    // Resizing already clears the surface. Once empty, leave its transparent
-    // pixels untouched until something is drawn; clear the last visible frame once.
-    if(!rocks.length&&!effects.length&&!occupied.current)return;
     const g=c.getContext('2d');if(!g)return;
     const paintStarted=beginRockPaint();
     g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,width,height);
@@ -53,6 +68,6 @@ const BonusRockLayer = ({ rocks, effects, width, height }: { rocks: BonusRock[];
     occupied.current=rocks.length>0||effects.length>0;
     endRockPaint(paintStarted);
   },[rocks,effects,width,height]);
-  return <canvas ref={ref} className="bonus-rock-layer" style={{position:'absolute',inset:0,width:'100%',height:'100%',zIndex:2,pointerEvents:'none'}} aria-hidden="true"/>;
+  return <canvas ref={ref} width={1} height={1} className="bonus-rock-layer" style={{position:'absolute',inset:0,width:'100%',height:'100%',zIndex:2,pointerEvents:'none'}} aria-hidden="true"/>;
 };
 export default memo(BonusRockLayer);

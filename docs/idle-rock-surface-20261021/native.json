@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "baseline": "a51ce39e3199aeafc1101e30bb6f8aa53bf7cbab",
+  "browser": "153.0.8010.0",
+  "accelerated2dDisabled": true,
+  "pixelComparisons": 936,
+  "reuseReleaseCycles": 72,
+  "viewports": 3,
+  "deviceScales": [
+    1,
+    1.5,
+    3
+  ],
+  "rasterCap": 1.5,
+  "startsAtOnePixel": true,
+  "graceMs": 2000,
+  "unmountPixels": 0,
+  "pageErrors": [],
+  "samplePhoneSurface": {
+    "width": 430,
+    "height": 825,
+    "dpr": 3,
+    "pixels": [
+      645,
+      1238
+    ]
+  },
+  "limits": "Native Linux Chromium/serverless SwiftShader setup. Exact RGBA comparisons without tolerance; diagnostic timing stubbed and idle time controlled. No measured Safari/GPU/process memory or iPhone crash-fix proof."
+}
