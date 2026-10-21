@@ -1,0 +1,9 @@
+▲ [WARNING] "import.meta" is not available with the "cjs" output format and will be empty [empty-import-meta]
+
+    src/pages/performanceDiagnostics.ts:116:2:
+      116 │   import.meta.env?.VITE_CRYPTOID_DIAGNOSTICS === "1" &&
+          ╵   ~~~~~~~~~~~
+
+  You need to set the output format to "esm" for "import.meta" to work correctly.
+
+{"passed":true,"warmImpacts":2000,"movingBurstWrites":600,"warmSurfaceDimensionWrites":{"initial":2,"afterPreparation":2,"repeatedImpact":0},"checks":["warm assets retain registration and surface","2000 warm impacts reuse the backing store","400 moving impacts preserve per-burst bounds without idle shrink/grow cycles","idle drawing stops immediately; backing store releases after two seconds","new burst cancels the previous idle deadline","context loss releases caches/scheduler/timers","original DOM fallback survives context loss or null context","resize cannot revive released textures","context loss and unmount cancel a pending idle release"],"limits":"Actual component with hook/allocation host; no WebKit pixel, memory-pressure or complete-campaign proof."}

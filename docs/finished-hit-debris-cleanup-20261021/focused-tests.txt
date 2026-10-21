@@ -1,0 +1,38 @@
+(node:12) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/backend/src/lifeRules.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/16f4e8c933c8/cryptoid-evolution/backend/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ all 50 bosses stay within the raster estimate on phone, tablet and desktop layouts (20.180275ms)
+✔ invalid geometry remains finite and bounded (0.238502ms)
+✔ the final blast is not mounted during descent and activates once at the existing deadline (0.294395ms)
+✔ pausing during descent shifts the blast timeline without adding a second delay (0.200797ms)
+✔ presentation changes do not alter boss pickups or boss-to-bonus progression across all levels (1.506494ms)
+✔ actual GamePage boss destruction saves the waiting reward and installs the bounded delayed blast (665.675006ms)
+✔ rotating and aligned ships ignite their painted hull, not a world-space ring (1.947304ms)
+✔ repeated impacts stay local instead of spreading into a grid (0.525035ms)
+✔ the first flame survives every later hit until the ship is removed (3.396534ms)
+✔ damage permits progressively more sites while keeping bosses and small ships bounded (0.603991ms)
+✔ nearby hits reheat one bounded patch without duplicating it (0.194667ms)
+✔ effect variation stays deterministic and bounded across weapon strengths (2.845ms)
+✔ bounds contain all original fire/smoke rectangles and rotating fragment vertices across full lifetime (148.831987ms)
+✔ growing bounds never exclude prior effects; only the existing field clips outside content (0.915622ms)
+✔ original keyframe endpoints, easing and separate fragment property tracks are preserved (2.601145ms)
+✔ original gradient layers, rounded clipping and premultiplied fades survive texture preparation (7.500523ms)
+✔ promoted fire and smoke artwork exactly match the original stylesheet (101.053184ms)
+✔ cache remains bounded across 500 sectors and protects mounted variants (5.888052ms)
+✔ boss blast mounts after the original fall delay and keeps its timeline (0.188588ms)
+✔ outbox coalesces only unsent consecutive checkpoints without crossing reward barriers (5.501602ms)
+✔ restart markers distinguish foreground, hidden, manual reload and orderly exit (2.881404ms)
+✔ engine flames retain launch, attack and return floors and respond to acceleration (1.446646ms)
+✔ bank follows direction, remains subtle and settles after stopping (0.52855ms)
+✔ explosions scale with hull size (0.205193ms)
+✔ fragments move away from impact, inherit bounded momentum and spin differently (0.310008ms)
+✔ light fades quickly, is local and respects delayed boss burst (0.350888ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1192.384482

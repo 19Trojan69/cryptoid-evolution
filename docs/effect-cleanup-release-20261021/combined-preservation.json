@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "file": "frontend/src/pages/GamePage.tsx",
+      "preparation": "d664cdd",
+      "sha256": "822f5205be719c6d4933daf191bf0b3777424179a69f227203e8e25e495cfe0e"
+    },
+    {
+      "file": "frontend/src/pages/CanvasEffects.tsx",
+      "preparation": "d664cdd",
+      "sha256": "f9f862bad6cc19968c46b13c6045e3317c7a4e10b9080dea7083be8c579fbbd1"
+    },
+    {
+      "file": "frontend/src/pages/HullDamage.tsx",
+      "preparation": "d664cdd",
+      "sha256": "3b160ffb5419ba27fbd0cb3e893a8995ecdd6d5aca97e29755366e29ca9537fe"
+    },
+    {
+      "file": "frontend/src/pages/FinishedEffect.tsx",
+      "preparation": "d664cdd",
+      "sha256": "bad939eb533cf6df7ec201cd393f456078c3016d30f0e59faf2d90227a410d7f"
+    },
+    {
+      "file": "frontend/src/pages/BossWeaponsView.tsx",
+      "preparation": "bef2a40",
+      "sha256": "1b1ddbbaa33d400804a1f4e12e4413a08fdcc6e6e49699a0824c1e8cfcaf511c"
+    },
+    {
+      "file": "frontend/src/pages/bossWeaponRenderer.ts",
+      "preparation": "bef2a40",
+      "sha256": "fe9a3004aa0125f04f1f442e73e4cd087ab3edaf9312a6fc2e7c8c5ff03be579"
+    }
+  ],
+  "note": "Exact previously tested runtime files; no adaptations or new runtime changes during combination."
+}

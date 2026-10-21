@@ -4,13 +4,18 @@ import { turretHeatStep, paintTurretHeat } from './bossTurretHeat.ts';
 
 type CanvasFactory = (width:number,height:number)=>HTMLCanvasElement;
 const bases=new WeakMap<HTMLCanvasElement,{id:number;width:number;height:number;layer:HTMLCanvasElement;heated:Map<string,HTMLCanvasElement>}>();
-export const disposeBossWeapons = (canvas: HTMLCanvasElement) => {
+// The destination already owns copied socket/scar pixels after its final draw.
+// Release only source layers; a later redraw rebuilds them if needed.
+export const releaseBossWeaponSources = (canvas: HTMLCanvasElement) => {
  const cached = bases.get(canvas);
  if (cached) {
   cached.layer.width = cached.layer.height = 0;
   for (const tile of cached.heated.values()) tile.width = tile.height = 0;
   cached.heated.clear(); bases.delete(canvas);
  }
+};
+export const disposeBossWeapons = (canvas: HTMLCanvasElement) => {
+ releaseBossWeaponSources(canvas);
  canvas.width = canvas.height = 0;
 };
 const factory:CanvasFactory=(w,h)=>{const c=document.createElement('canvas');c.width=w;c.height=h;return c;};

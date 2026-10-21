@@ -34,7 +34,7 @@ console.error = (...args) => {
       const hit={id,x,y,impactPower:1+index%5};
       render({sites,hit,maskImage:`url('/boss-${boss}.webp')`,bossDamage:.72});
       const spots=tree.root.findAll(n=>n.props.className==='hull-hotspot');
-      const bursts=tree.root.findAll(n=>n.props.className==='hull-mini-explosion');
+      const bursts=tree.root.findAll(n=>typeof n.type==='string'&&n.props.className==='hull-mini-explosion');
       const nodes=tree.root.findAll(n=>typeof n.type==='string').length;
       maxSites=Math.max(maxSites,spots.length);maxNodes=Math.max(maxNodes,nodes);
       assert.equal(spots.length,sites.length);
@@ -43,7 +43,7 @@ console.error = (...args) => {
       const firstSpot=spots[0],burst=bursts[0];
       render({sites,hit,maskImage:`url('/boss-${boss}.webp')`,bossDamage:.72});
       assert.equal(tree.root.findAll(n=>n.props.className==='hull-hotspot')[0],firstSpot);
-      assert.equal(tree.root.findAll(n=>n.props.className==='hull-mini-explosion')[0],burst);
+      assert.equal(tree.root.findAll(n=>typeof n.type==='string'&&n.props.className==='hull-mini-explosion')[0],burst);
     }
     render({sites:[],maskImage:`url('/boss-${boss}.webp')`,bossDamage:0});
     assert.equal(tree.toJSON(),null,'removing the boss removes every heat/burst host node');

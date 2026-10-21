@@ -1,0 +1,59 @@
+{
+  "passed": true,
+  "baseline": "171cb5c4507a1530a9bbb080d61805be0da545f7",
+  "checks": [
+    {
+      "declaration": "GamePage",
+      "sha256": "b6caa1fa6f7a799d8a52a0d1e3154fe8bf955d725ddef7a751c82d881ff3d7b2"
+    },
+    {
+      "declaration": "scatteredPieces",
+      "sha256": "911e4b37d93916f934baa2c1c4ed1c1690c68fd3a27280397072ff9b99f65d08"
+    },
+    {
+      "declaration": "shipDebris",
+      "sha256": "bb8807b7f68e82a8b0ef578fcbe196d42bb18e56ecb284d70eac2975142a3813"
+    },
+    {
+      "declaration": "fallingBoss",
+      "sha256": "01dfbdb52b76c68388e7f2ac1c1a7a9320faf57e6f85afee3f9a24c96d17b3d2"
+    },
+    {
+      "file": "src/index.css",
+      "sha256": "3bb3a9ffee260e16e60b728b0aa086fd8f31ad094dd43c986bf57301a6e39d58"
+    },
+    {
+      "file": "src/fleetMenus.css",
+      "sha256": "75318cdea23a1f02fb744a96ddb4488cd8c4c9a8b778ddbb033198304af6bf6b"
+    },
+    {
+      "file": "src/pages/bossExplosionBudget.css",
+      "sha256": "4f1ff1e671e5b0355d1dd62de1b7412fcb268f40bb15fece365cd46830f2aa36"
+    },
+    {
+      "file": "src/pages/BossHullView.tsx",
+      "sha256": "e96b6c8dfc37243a1474c0d67ec6792bc648830bc1a8c4891d29be15c6775911"
+    },
+    {
+      "file": "src/pages/BossWeaponsView.tsx",
+      "sha256": "52cc9295e03bec08c8bcee70e78e239d85a37e95a2ff64b8bc015a5582565618"
+    },
+    {
+      "file": "src/pages/BossReactorView.tsx",
+      "sha256": "0ce9eaa9047aec8b71dafa3207b82ae59a6a218aac67d4178dead6bc134cb1da"
+    },
+    {
+      "file": "src/pages/bossWeaponRenderer.ts",
+      "sha256": "24ae47c47964ad19e83e4ded23e759ec63c9d2ec99b631cb9376bd3843b6fa92"
+    },
+    {
+      "file": "src/pages/normalEffectMath.mjs",
+      "sha256": "7133bb1b8fc0fbf90a35203cca0484ca92e1b15f3fd66b16b038cabcb5616ca8"
+    },
+    {
+      "file": "src/pages/normalEffectBounds.mjs",
+      "sha256": "2c5bcc62416268ca9d6ac8d07378105f0c2f8b41cbb76a49780a7863ab5ed2c7"
+    }
+  ],
+  "note": "Entire GamePage component declaration remains byte identical, including effect state lifetimes, pause shifts, simulation, input, rewards, audio and rendering call sites. Only the external transient effect host changes. No CSS/artwork or boss-fall changes."
+}

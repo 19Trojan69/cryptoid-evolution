@@ -1,0 +1,30 @@
+✔ real texture loader reports load dimensions while sharing the same image promise (2.707949ms)
+✔ a faulty diagnostic subscriber cannot interrupt texture loading and unsubscribe releases it (0.450876ms)
+✔ all 50 special weapons sit on the centreline and solid hull (11.175032ms)
+✔ shots emerge from the actual muzzle and match weapon illumination (1.815841ms)
+✔ living turrets use one fixed glow at half armour, including fractional HP and resume (3.619845ms)
+✔ all exposed bosses need half the previous hits including resumed hulls (10.519915ms)
+✔ escort pauses reach zero at displayed level 50; live escorts, pause, protection and death block respawning (1.67265ms)
+✔ a saved partially elapsed wave delay resumes without restart or skipped warning (0.75834ms)
+✔ recurring escorts fit below all bosses even near defeat on phone and desktop (37.52452ms)
+(node:23) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/backend/src/leaderboardRules.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/16f4e8c933c8/cryptoid-evolution/backend/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ every reactor and battery use bounded campaign budgets instead of multiplying legacy HP (4.025935ms)
+✔ all 392 turrets have independent HP, award once, cancel queued fire and leave hull HP unchanged (4.185341ms)
+✔ all bosses block hull shots and bombs until every turret is destroyed, including after resume (16.669114ms)
+✔ every remaining rear or front turret is reachable from below the protected hull (6.760284ms)
+✔ rotated barrels outside the hull intercept a swept shot; destroyed barrels no longer block it (0.55535ms)
+✔ renderer omits destroyed gun sprite and flash, leaving the socket and wreck mark (1.268003ms)
+✔ all 392 stations and every barrel fire after alignment under the phone projectile cap (752.257674ms)
+✔ entry, pause, death and loss of alignment prevent firing including queued salvos (0.411197ms)
+✔ all eighteen caliber sound buffers are finite, bounded and distinct (119.806256ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1104.648405
