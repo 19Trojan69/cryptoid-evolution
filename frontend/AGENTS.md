@@ -1,5 +1,25 @@
 # Preserve the officially approved game
 
+## Audio correction Testnet release, 21 October 2026
+
+The owner's "Okay, dann machen wir das mal" authorizes the prepared audio
+correction on Testnet, superseding preparation-only status below. Keep debris,
+artwork, sound parameters, gameplay, accounts and Mainnet unchanged. Fixed
+source is b026a194cdb596349b041c910d22b115eeb1560b, tree
+4257adb659718cce79af3558bcef4b9d2f4c74bd, branch
+codex/audio-clock-recovery-20261021. Rollback is
+backup/testnet-before-audio-clock-recovery-20261021 at 4c25790a.
+The separate codex/audio-clock-release-record-20261021 branch is evidence only,
+automatic deployment disabled; do not deploy it. See
+docs/audio-clock-release-20261021.md and its sibling evidence directory for
+final status, delivered checks and limits. Official READY production is
+dpl_BVG5yfJDSWjS3ETXK5xS1MAUDtti (44.787-second build). Preview guest start,
+Pause, countdown and resumed play pass. Delivered source/tree, eight new audio
+features, prior memory/cleanup/owner/handoff features, unchanged API/score hashes,
+anonymous Admin denial and fresh enabled official Home pass. Preserve the earlier runtime-log and
+protection-bypass denials. Device audibility and Whitescreen recovery still
+require the owner's actual iPhone test.
+
 ## Audio clock/voice recovery, 21 October 2026, preparation
 
 New owner report: continuation from level 21 has no music/effects; pause can

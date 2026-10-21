@@ -1,0 +1,126 @@
+{
+  "at": "2026-10-21T17:39:57.776Z",
+  "entry": "/assets/index-DDOR3G7V.js",
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 1465,
+      "sha256": "3f1733061ecfacdcd07064268ac95f3c453a99383336f541b6ebb465c8e679b8"
+    },
+    {
+      "path": "/api",
+      "status": 200,
+      "bytes": 27,
+      "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a"
+    },
+    {
+      "path": "/api/admin/status",
+      "status": 401,
+      "bytes": 29,
+      "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=1",
+      "status": 200,
+      "bytes": 7440,
+      "sha256": "9cbe90a3686312972b4a117e300a2bc2e15ce07a8eebd15b51f12d81181451ad"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=2",
+      "status": 200,
+      "bytes": 9733,
+      "sha256": "107ce96a19be1ddc23172d5168f1377f2fa63c1cfa644f64a18c0488729125fb"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=3",
+      "status": 200,
+      "bytes": 9733,
+      "sha256": "107ce96a19be1ddc23172d5168f1377f2fa63c1cfa644f64a18c0488729125fb"
+    }
+  ],
+  "chunks": [
+    {
+      "path": "/assets/shipEvolution-BW2CvebG.js",
+      "status": 200,
+      "bytes": 233747,
+      "sha256": "101da3e71593f4e9cf303b17dcda43a99b401e3ae9e2aa23058413179d343f1c",
+      "sourceIdentity": false,
+      "treeIdentity": false
+    },
+    {
+      "path": "/assets/AdminPage-Dju_veu0.js",
+      "status": 200,
+      "bytes": 44834,
+      "sha256": "73769cd76bdd9ac265dafc3a508c70974cabc21934ef954d2a48006a94c88a4e",
+      "sourceIdentity": true,
+      "treeIdentity": true
+    },
+    {
+      "path": "/assets/performanceDiagnostics-zW9wDxOh.js",
+      "status": 200,
+      "bytes": 62368,
+      "sha256": "3513f0c7d8c2bd9697373e0a4499cd183d2b15050e2027f1af94720acad8e292",
+      "sourceIdentity": false,
+      "treeIdentity": false
+    },
+    {
+      "path": "/assets/reloadDiagnostics-CM6VMsXs.js",
+      "status": 200,
+      "bytes": 11669,
+      "sha256": "83e89f54ff17845aa5b43976affa7f705a8c296573bdeaa1d8b8c4216f0b138b",
+      "sourceIdentity": false,
+      "treeIdentity": false
+    },
+    {
+      "path": "/assets/powerUps-vPkxFGKr.js",
+      "status": 200,
+      "bytes": 148360,
+      "sha256": "a70de66a9945647b5b6cc345012b446d4fcede5393c4227b1ddf3ee5279d5aab",
+      "sourceIdentity": false,
+      "treeIdentity": false
+    },
+    {
+      "path": "/assets/GamePage-Bhq-2rO5.js",
+      "status": 200,
+      "bytes": 229459,
+      "sha256": "4c46ed91a6f0bef949645aa40905caefe2a35f6992ce6c9158c090e45db606a0",
+      "sourceIdentity": true,
+      "treeIdentity": true
+    }
+  ],
+  "deliveredMemoryFeatures": {
+    "normalRasterCap": true,
+    "bossUsesNormalCap": true,
+    "effectUsesSharedCap": true,
+    "paintedCache24Entries12MiB6Unused": true,
+    "twoUnusedHulls": true,
+    "textureTrimProtectsConsumers": true,
+    "fourWarmTextures": true,
+    "retiredCanvasZeroed": true
+  },
+  "deliveredCleanupFeatures": {
+    "finishedSubtreeInspection": true,
+    "finishedAndIdleGuard": true,
+    "hitBurstRetirement": true,
+    "impactRetirement": true,
+    "canvasFinalVisibleAge": true,
+    "finalBossSourceRelease": true
+  },
+  "deliveredFlightFeatures": {
+    "independentCurrentAndPreviousKeys": true,
+    "rollingThirtyWindows": true,
+    "twoSecondWritesTenSecondRuntime": true,
+    "verifiedOwnerTestnetFactory": true,
+    "factoryStopsBeforeHost": true,
+    "adminExportIncludesRing": true,
+    "ownerExportPermissionGuard": true,
+    "noGlobalProbe": true
+  },
+  "deliveredHandoffFeatures": {
+    "acquireThenAssignThenRelease": true,
+    "unmountReleasesLastPlan": true
+  },
+  "productionQaExcluded": true,
+  "apiAndScoresEqual": true
+}

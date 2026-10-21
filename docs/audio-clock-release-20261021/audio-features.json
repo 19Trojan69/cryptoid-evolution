@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-21T17:41:20.587Z",
+  "features": {
+    "foregroundClockWindow": true,
+    "coalescedSameContextRecovery": true,
+    "scheduledEndFallback": true,
+    "pauseReleasesFadingWeapons": true,
+    "silentMusicPause": true,
+    "pendingMusicRecoveryShared": true,
+    "staleMusicEpoch": true,
+    "ownerFieldsDeliveredAndSanitized": true
+  },
+  "moduleHashesMatchRelease": true
+}

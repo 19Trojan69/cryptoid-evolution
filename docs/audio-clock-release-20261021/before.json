@@ -1,0 +1,42 @@
+{
+  "at": "2026-10-21T17:35:48.896Z",
+  "entry": "/assets/index-BP5J7jhM.js",
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 1465,
+      "sha256": "7aac76941e48e48fca422946e26436f79d2b6c4ae15b51b23e6e000719006cac"
+    },
+    {
+      "path": "/api",
+      "status": 200,
+      "bytes": 27,
+      "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a"
+    },
+    {
+      "path": "/api/admin/status",
+      "status": 401,
+      "bytes": 29,
+      "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=1",
+      "status": 200,
+      "bytes": 7440,
+      "sha256": "9cbe90a3686312972b4a117e300a2bc2e15ce07a8eebd15b51f12d81181451ad"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=2",
+      "status": 200,
+      "bytes": 9733,
+      "sha256": "107ce96a19be1ddc23172d5168f1377f2fa63c1cfa644f64a18c0488729125fb"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=3",
+      "status": 200,
+      "bytes": 9733,
+      "sha256": "107ce96a19be1ddc23172d5168f1377f2fa63c1cfa644f64a18c0488729125fb"
+    }
+  ]
+}

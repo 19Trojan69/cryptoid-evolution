@@ -43,7 +43,8 @@
       "codex/official-testnet-frame-audit-20261019": false,
       "codex/testnet-lazy-session-store-20261019": false,
       "codex/testnet-small-turret-bodies-20261019": false,
-      "codex/iphone-lifetime-audit-20261020": false
+      "codex/iphone-lifetime-audit-20261020": false,
+      "codex/audio-clock-release-record-20261021": false
     }
   }
 }
