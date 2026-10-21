@@ -64,8 +64,8 @@ import PaintedShip from "./PaintedShip";
 import GameShipVisual from "./GameShipVisual";
 import GameHudStats from "./GameHudStats";
 import { useInitialRef } from "./useInitialRef";
-import { useShipVisualOffset, paintedShipResourceStats, preloadHullSources, retainPreparedHulls, useHullSourceReady } from "./paintedShip";
-import { hullSourcePlan, preparedHullPlan } from "./hullSourcePlan";
+import { useShipVisualOffset, paintedShipResourceStats, useHullSourceReady } from "./paintedShip";
+import { usePreparedGameHulls } from './usePreparedGameHulls';
 import { contactWithBoss } from "./bossContact";
 import { openingKillPickup } from "./pickupOrigin";
 import { ownedShipStage, projectileGuardForStage, projectileImpact, stageWeaponLevel, type ShipStage } from "./shipEvolution";
@@ -2334,11 +2334,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   const hullBonusGroup = Math.floor(bonusIndexRef.current / 6), hullRules = rulesVersionRef.current;
   const fallingBossHull = game.effects.find(effect => effect.kind === "boss-fall" && effect.bossModel);
   const bossHullReady = useHullSourceReady(game.boss?.config.image ?? fallingBossHull?.bossImage);
-  useEffect(() => {
-    preloadHullSources(hullSourcePlan(game.sector, game.encounter, hullOffset, hullWave));
-    const prepared = retainPreparedHulls(preparedHullPlan(game.sector, game.encounter, hullOffset, hullWave, hullBonusGroup, hullRules));
-    return prepared.release;
-  }, [game.sector, game.encounter, hullOffset, hullWave, hullBonusGroup, hullRules]);
+  usePreparedGameHulls(game.sector, game.encounter, hullOffset, hullWave, hullBonusGroup, hullRules);
   const levelComplete = game.encounter === "bonus" && game.phase === "SECTOR_CLEAR";
   const reinforcementIntro = game.encounter === "normal" && game.phase === "SECTOR_INTRO" && flightRef.current > 0;
   const sectorIntro = game.encounter === "normal" && game.phase === "SECTOR_INTRO" && round === 1 && !reinforcementIntro;

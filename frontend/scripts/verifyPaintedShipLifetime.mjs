@@ -24,7 +24,7 @@ async function until(check) {
 }
 async function fixture(ref = candidate, { holdSources = false } = {}) {
   const bundle = await build({ absWorkingDir: root,
-    stdin: { contents: sourceAt(ref), resolveDir: root + 'src/pages', loader: 'ts' },
+    stdin: { contents: sourceAt(ref) + '\nexport const __qaTouchHull = hull => cache.get(`${hull.sprite}:${hull.stage ?? 1}:${hull.color}`);', resolveDir: root + 'src/pages', loader: 'ts' },
     bundle: true, write: false, platform: 'node', format: 'cjs', logLevel: 'silent',
     plugins: [{ name: 'painting-host', setup(b) {
       b.onResolve({ filter: /^react$/ }, () => ({ path: 'hooks', namespace: 'host' }));
@@ -80,6 +80,52 @@ async function fixture(ref = candidate, { holdSources = false } = {}) {
     liveBytes: () => canvases.reduce((bytes, c) => bytes + c.width * c.height * 4, 0) };
 }
 const hull = { sprite: 0, color: 'gold', stage: 1 };
+async function finishAllPaints(f) {
+  const encodes = f.finishedEncodes ??= new Set(), loaded = f.loadedPaints ??= new Set();
+  for (let tick = 0; tick < 10000; tick++) {
+    for (const e of f.encodes) if (!encodes.has(e)) { encodes.add(e); e.finish(); }
+    for (const image of f.painted) {
+      if (!loaded.has(image)) { loaded.add(image); await image.load(); }
+      if (image.finishDecode) image.finishDecode();
+    }
+    await turn();
+    if (f.api.paintedShipResourceStats().pending === 0) return;
+  }
+  assert.fail('painting queue did not settle');
+}
+test('level transition audit: release-before-retain discards six already prepared next-level hulls', async () => {
+  const f = await fixture();
+  const oldPlan = preparedHullPlan(18, 'normal', 0, 0, 0, 2);
+  const nextPlan = preparedHullPlan(19, 'normal', 0, 0, 0, 2);
+  const old = f.api.retainPreparedHulls(oldPlan); await finishAllPaints(f); await old.settled;
+  const future = nextPlan.slice(0,6).map(h => f.api.__qaTouchHull(h));
+  assert.ok(future.every(Boolean), 'all six next-level hulls were fully prepared');
+  // Mounted current ships repeatedly read their styles after prewarming ends.
+  for (const h of oldPlan.slice(0,6)) assert.ok(f.api.__qaTouchHull(h));
+  old.release();
+  assert.equal(future.filter(url => f.revoked.includes(url)).length, 6);
+  const before = f.encodes.length;
+  const next = f.api.retainPreparedHulls(nextPlan); await finishAllPaints(f); await next.settled;
+  assert.equal(f.encodes.length - before, 12, 'six repeat paints plus six genuinely new ones');
+  next.release();
+  assert.equal(f.liveBytes(), 0); assert.equal(f.api.paintedShipResourceStats().retainCount,0);
+});
+test('level transition audit: retain-before-release preserves prepared pixels and only paints six new hulls', async () => {
+  const f = await fixture();
+  const oldPlan = preparedHullPlan(18, 'normal', 0, 0, 0, 2);
+  const nextPlan = preparedHullPlan(19, 'normal', 0, 0, 0, 2);
+  const old = f.api.retainPreparedHulls(oldPlan); await finishAllPaints(f); await old.settled;
+  const future = nextPlan.slice(0,6).map(h => f.api.__qaTouchHull(h));
+  for(const h of oldPlan.slice(0,6)) f.api.__qaTouchHull(h);
+  const before = f.encodes.length;
+  const next = f.api.retainPreparedHulls(nextPlan); old.release();
+  await finishAllPaints(f); await next.settled;
+  assert.equal(future.filter(url => f.revoked.includes(url)).length, 0);
+  assert.equal(f.encodes.length - before, 6);
+  nextPlan.slice(0,6).forEach((h,i)=>assert.equal(f.api.__qaTouchHull(h),future[i]));
+  next.release();
+  assert.equal(f.liveBytes(),0); assert.equal(f.api.paintedShipResourceStats().retainCount,0);
+});
 async function encoded(f, selected = hull) {
   const previous = f.encodes.length;
   const preparation = f.api.retainPreparedHulls([selected]);

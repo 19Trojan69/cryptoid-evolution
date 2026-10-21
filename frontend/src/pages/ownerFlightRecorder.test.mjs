@@ -187,5 +187,12 @@ test('all GamePage simulation, input, audio, scene markup and recovery match the
     "import { createOwnerDiagnosticProbe } from './ownerFlightRecorder';")
     .replace("runtime }) : createOwnerTimingCapture(ownerDiagnostics, () => window, { runtime, build: __CRYPTOID_BUILD__,\n        onFinish: () => { if (performanceProbeRef.current === probe) performanceProbeRef.current = null; stopBossObservation?.(); } });",
       "runtime }) : createOwnerDiagnosticProbe(ownerDiagnostics && shipSaveNetwork === 'testnet', () => window,\n        { runtime, build: __CRYPTOID_BUILD__ });");
-  assert.equal(readFileSync(new URL('./GamePage.tsx', import.meta.url),'utf8'), expected);
+  // The subsequently verified hull-plan handoff changes only the resource hook.
+  // Normalize that isolated substitution before checking the simulation/scene.
+  const actual = readFileSync(new URL('./GamePage.tsx', import.meta.url),'utf8')
+    .replace('import { useShipVisualOffset, paintedShipResourceStats, useHullSourceReady } from "./paintedShip";\nimport { usePreparedGameHulls } from \'./usePreparedGameHulls\';',
+      'import { useShipVisualOffset, paintedShipResourceStats, preloadHullSources, retainPreparedHulls, useHullSourceReady } from "./paintedShip";\nimport { hullSourcePlan, preparedHullPlan } from "./hullSourcePlan";')
+    .replace('  usePreparedGameHulls(game.sector, game.encounter, hullOffset, hullWave, hullBonusGroup, hullRules);',
+      '  useEffect(() => {\n    preloadHullSources(hullSourcePlan(game.sector, game.encounter, hullOffset, hullWave));\n    const prepared = retainPreparedHulls(preparedHullPlan(game.sector, game.encounter, hullOffset, hullWave, hullBonusGroup, hullRules));\n    return prepared.release;\n  }, [game.sector, game.encounter, hullOffset, hullWave, hullBonusGroup, hullRules]);');
+  assert.equal(actual, expected);
 });

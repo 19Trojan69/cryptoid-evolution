@@ -1,0 +1,36 @@
+{
+  "baseRuntime": "f85360ed464fb75944ada0c3f1d22776c4df31ca",
+  "baseTree": "2aac1e929e8992b9d93b5de0ffaf8675effc6f00",
+  "published": false,
+  "transition": {
+    "fromSector": 18,
+    "toSector": 19,
+    "beforeConditionalRepaints": 12,
+    "afterConditionalRepaints": 6,
+    "beforeDiscardedIncomingHulls": 6,
+    "afterDiscardedIncomingHulls": 0,
+    "ordinaryWarmNextOrderBothRepaints": 6,
+    "condition": "Current hull cache reads make incoming prewarmed entries older in the LRU before releasing the preceding plan."
+  },
+  "checks": {
+    "actualReactVersion": "19.2.4",
+    "reactHookTests": 7,
+    "ownerRecorderAndCacheTests": 15,
+    "nativeTransitionControls": 2,
+    "nativeExistingLifetimeCases": 11,
+    "planChanges": 1100,
+    "sectors": 500,
+    "peakTemporaryPreparationOwners": 2,
+    "finalPreparationPins": 0,
+    "finalWorkingCanvasBytes": 0,
+    "simulationNormalSections": 30,
+    "simulationBosses": 3,
+    "finalRafTimersListeners": [0, 0, 0],
+    "hookLint": "pass",
+    "typecheckAndBuild": "pass",
+    "localeTests": 12,
+    "unchangedGamePageOutsideHook": true,
+    "productionDependenciesChanged": false
+  },
+  "limits": "Controlled native raster and actual React lifetime checks. No physical iPhone/WebKit process/GPU memory, presented FPS or interruption-cause proof. Conditional duplicate work, not a permanent leak or universal 50-percent performance improvement."
+}

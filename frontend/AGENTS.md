@@ -1,5 +1,38 @@
 # Preserve the officially approved game
 
+## Hull preparation handoff, 21 October 2026, tested preparation
+
+The owner requests investigating graphics preparation/release after the new
+f85360ed report reaches normal level 19 then starts a new document. Exact last
+resource-normal-start is 17:26:09.359 Vienna; saved ring 09.381; document origin
+10.981. The final phase-complete-only ring does not locate a synchronous throw:
+the probe flushes the old phase before recording the next phase and throttles
+the subsequent write. No JavaScript fault is present; Long Tasks is unsupported.
+Do not assign an OS/GPU/thermal cause or claim the new failure is boss-only.
+
+Real native painting/cache and actual React tests demonstrate a conditional
+handoff fault: if current hull reads make the prewarmed next hulls older in the
+LRU, cleanup of the old plan unpins everything before the next setup and evicts
+six fully prepared incoming hulls. Level 18→19 then paints twelve instead of six.
+Acquire the next plan before releasing the preceding plan; release the last plan
+on unmount/StrictMode cleanup. Keep all plan keys, raster/shader/artwork/pixels,
+source preloads, cache budgets, mounted pins, cancellation and simulation rules.
+No new timer, RAF, extra forward prewarm or cache-budget increase. Savings depend
+on LRU order; normal warm-next order needs six jobs in both versions.
+
+22 hook/owner/cache tests, two native painting transition controls, eleven
+existing native lifetime cases, hook lint, build/12 locales and actual GamePage
+30-section/three-boss host pass. The latter stubs presentation/audio/accounts.
+Full GamePage matches official f85360ed after the isolated hook substitution;
+paintedShip.ts/resourceCache.ts/asset/CSS contents are unchanged. React renderer
+QA uses matching installed 19.2.4; no production dependency change. Test renderer
+deprecation and existing large-bundle warnings remain. No physical iPhone/native
+memory, universal FPS/50% savings or interruption-fix proof.
+Preparation only: keep official Testnet f85360ed and every fixed ref/Mainnet.
+Automatic deployment is off on codex/hull-preparation-handoff-20261021. Do not
+deploy this preparation without a separate release instruction. See
+docs/hull-preparation-handoff-20261021.md and its evidence JSON.
+
 ## Completed owner flight recorder Testnet release, 21 October 2026
 
 The owner's explicit Admin-only publication request is complete: official
