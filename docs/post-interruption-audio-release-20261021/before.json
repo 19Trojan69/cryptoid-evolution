@@ -1,0 +1,42 @@
+{
+  "at": "2026-10-21T18:46:24.444Z",
+  "entry": "/assets/index-BsiV4vu8.js",
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 1465,
+      "sha256": "43ef6551abed66841d4929fcb30dc655894b7da3856d411c82f52ab22f140040"
+    },
+    {
+      "path": "/api",
+      "status": 200,
+      "bytes": 27,
+      "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a"
+    },
+    {
+      "path": "/api/admin/status",
+      "status": 401,
+      "bytes": 29,
+      "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=1",
+      "status": 200,
+      "bytes": 7440,
+      "sha256": "9cbe90a3686312972b4a117e300a2bc2e15ce07a8eebd15b51f12d81181451ad"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=2",
+      "status": 200,
+      "bytes": 9730,
+      "sha256": "6388e718b4af500455caef2f59533e094009fee6880832f5102f1d01dd88b281"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=3",
+      "status": 200,
+      "bytes": 9730,
+      "sha256": "6388e718b4af500455caef2f59533e094009fee6880832f5102f1d01dd88b281"
+    }
+  ]
+}

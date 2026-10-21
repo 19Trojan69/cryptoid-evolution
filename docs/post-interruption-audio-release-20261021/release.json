@@ -1,0 +1,134 @@
+{
+  "at": "2026-10-21T18:51:58.650Z",
+  "officialUrl": "https://cryptoid-evolution-testnet.vercel.app/",
+  "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+  "accountId": "team_KzJmtl0QyoYZAOu5RQKsAR2i",
+  "sourceCommit": "b92ab45bc1e493fb86c36da4f01bd88d15a5f498",
+  "sourceTree": "9f68861ff277ef7a4b92da7392d82611333c6a29",
+  "sourceBranch": "codex/post-interruption-audio-retry-20261021",
+  "production": {
+    "id": "dpl_EZAwgBRrVpRXGwfEAZXW9bDz5GP5",
+    "name": "cryptoid-evolution-testnet",
+    "url": "cryptoid-evolution-testnet-j3tiq8cyt-19-trojan69.vercel.app",
+    "type": "LAMBDAS",
+    "state": "READY",
+    "createdAt": 1792608574179,
+    "creator": {
+      "uid": "aXjt6kHM3O35eeCwsgVUkU5T",
+      "username": "19trojan69"
+    },
+    "project": {
+      "id": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+      "name": "cryptoid-evolution-testnet",
+      "framework": null
+    },
+    "meta": {
+      "githubCommitRef": "codex/post-interruption-audio-retry-20261021",
+      "githubCommitSha": "b92ab45bc1e493fb86c36da4f01bd88d15a5f498",
+      "githubCommitMessage": "Allow genuine Resume to replace a failed automatic audio recovery",
+      "githubRepo": "cryptoid-evolution",
+      "githubOrg": "19Trojan69"
+    },
+    "alias": [
+      "cryptoid-evolution-testnet.vercel.app",
+      "cryptoid-evolution-testnet-19-trojan69.vercel.app",
+      "cryptoid-evolution-testnet-git-codex-post-in-3d2eff-19-trojan69.vercel.app"
+    ],
+    "target": "production",
+    "regions": [
+      "iad1"
+    ],
+    "buildingAt": 1792608575207,
+    "ready": 1792608617523,
+    "readyState": "READY",
+    "aliasError": null
+  },
+  "productionBuildSeconds": 42.316,
+  "preview": {
+    "id": "dpl_AC3pd3Run2D1besfB8HZtqDYqa9M",
+    "name": "cryptoid-evolution-testnet",
+    "url": "cryptoid-evolution-testnet-pvn8yqabz-19-trojan69.vercel.app",
+    "type": "LAMBDAS",
+    "state": "READY",
+    "createdAt": 1792608412316,
+    "creator": {
+      "uid": "aXjt6kHM3O35eeCwsgVUkU5T",
+      "username": "19trojan69"
+    },
+    "project": {
+      "id": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+      "name": "cryptoid-evolution-testnet",
+      "framework": null
+    },
+    "meta": {
+      "githubCommitRef": "codex/post-interruption-audio-retry-20261021",
+      "githubCommitSha": "b92ab45bc1e493fb86c36da4f01bd88d15a5f498",
+      "githubCommitMessage": "Allow genuine Resume to replace a failed automatic audio recovery",
+      "githubRepo": "cryptoid-evolution",
+      "githubOrg": "19Trojan69"
+    },
+    "alias": [
+      "cryptoid-evolution-testnet-19-trojan69.vercel.app",
+      "cryptoid-evolution-testnet-git-codex-post-in-3d2eff-19-trojan69.vercel.app"
+    ],
+    "target": "staging",
+    "regions": [
+      "iad1"
+    ],
+    "buildingAt": 1792608413757,
+    "ready": 1792608450795,
+    "readyState": "READY",
+    "aliasError": null
+  },
+  "previewBuildSeconds": 37.038,
+  "previewBrowser": {
+    "guestStart": true,
+    "pause": true,
+    "countdownObserved": true,
+    "resumedSimulation": true,
+    "resumedActivePlayObserved": false,
+    "terminalState": "game-over",
+    "note": "The resumed guest run reaches Game Over before the next observation; countdown disappears and combat/lives progress. Physical audio is unverified.",
+    "audibleOutputVerified": false,
+    "physicalIphone": false
+  },
+  "rollback": {
+    "branch": "backup/testnet-before-post-interruption-audio-20261021",
+    "source": "25d80d4fea43bd18b9c3ce643a1766cde537114e",
+    "deploymentId": "dpl_5C28c1QDmujcvKSMWBMUbidpK5N6"
+  },
+  "verification": {
+    "focusedTests": 95,
+    "deliveredAudioFeatures": 16,
+    "sourceAndTree": true,
+    "priorMemoryCleanupOwnerHandoffFeatures": true,
+    "apiAndThreeScoreHashesUnchanged": true,
+    "anonymousAdminDenied": true,
+    "officialHomePlayEnabled": true
+  },
+  "limits": {
+    "physicalIphoneTested": false,
+    "ownerAuthenticatedTested": false,
+    "audibleRecoveryAfterWhiteScreenProven": false,
+    "whiteScreenCauseOrFixProven": false,
+    "musicClockInOwnerReport": false,
+    "nativeGpuProcessMemoryMeasured": false,
+    "runtimeLogsQueried": false,
+    "protectionBypassAttempted": false,
+    "drainsInspected": false,
+    "sameSourceSeparatelyBuilt": true
+  },
+  "scope": {
+    "runtimeFiles": [
+      "frontend/src/pages/audioClockRecovery.ts"
+    ],
+    "newTimersOrListeners": false,
+    "newTelemetry": false,
+    "artworkOrDebrisChanged": false,
+    "soundParametersChanged": false,
+    "gameplayOrSaveSemanticsChanged": false,
+    "mainnetTouched": false
+  },
+  "evidenceBranch": "codex/post-interruption-audio-release-record-20261021",
+  "screenshot": "testnet-ready.jpg"
+}

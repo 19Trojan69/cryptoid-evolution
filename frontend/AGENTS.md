@@ -1,5 +1,24 @@
 # Preserve the officially approved game
 
+## Explicit retry correction published, 21 October 2026
+
+Official Testnet READY source b92ab45bc1e493fb86c36da4f01bd88d15a5f498, tree
+9f68861ff277ef7a4b92da7392d82611333c6a29, fixed branch
+codex/post-interruption-audio-retry-20261021. Production
+dpl_EZAwgBRrVpRXGwfEAZXW9bDz5GP5 built in 42.316 seconds. Rollback branch
+backup/testnet-before-post-interruption-audio-20261021 retains 25d80d4f.
+95 focused tests/build/types/locales/lint pass. Delivered source/tree, all 16
+audio features and prior resource/owner/handoff checks pass; API/three score
+hashes match baseline and anonymous Admin is denied. Preview start/Pause/Resume
+countdown pass; the resumed guest simulation reaches Game Over before the next
+observation, not a separately observed active-Pause state. Official Home freshly
+reloads with Spielen enabled. See docs/post-interruption-audio-release-20261021.md.
+Receipt branch codex/post-interruption-audio-release-record-20261021 is disabled
+for auto-deploy and must not be deployed. Preserve fixed refs, Mainnet and prior
+log/protection denials. Device audible recovery and White Screen cause/fix remain
+unproven. Ask only for reload/Resume of the existing mission, not a new level-one
+run or another full campaign for the same counters.
+
 ## Post-interruption explicit audio retry, 21 October 2026
 
 Owner's 25d80d4f report reaches boss-70 victory, then White Screen/Home; immediately
