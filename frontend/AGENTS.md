@@ -1,5 +1,36 @@
 # Preserve the officially approved game
 
+## Completed reactor-door Testnet release and reflection audit, 21 October 2026
+
+The owner explicitly approved publishing Step 2 and then checking boss hull
+reflections with "mach das bitte". Publication is complete: READY production
+dpl_729MdmJke7jMhhX28Ukh8EqbXo8T, runtime
+171cb5c4507a1530a9bbb080d61805be0da545f7, tree
+490b444be6bb87e8a4438c06b3c4bc86114a486f, ready 13:28:11 Europe/Vienna,
+51-second build. Keep codex/reactor-door-reuse-20261021 fixed. Immediate
+rollback: backup/testnet-before-reactor-door-reuse-20261021 at 540d73e, old
+READY dpl_NnTPP38Gm8UZUaAUzj7q4uCUq4U8. Preview dpl_3CpnekXqj483XUcyE3spUSro9P9P
+passed guest start/pause/resume; production rebuilt the same exact source.
+Delivered Game/Admin identity, separate door memo and retained static glow,
+all eight earlier memory features, unchanged API/admin denial/three leaderboard
+hashes and four production QA exclusions pass. Fresh official Home is ready.
+Runtime logs remain unscanned after the earlier permission denial; do not
+represent that as zero runtime errors or bypass it. No physical iPhone fix is
+proved, and Mainnet was not contacted. Do not deploy this evidence-only receipt;
+disable automatic deployment on codex/reactor-door-reuse-release-record-20261021.
+
+Read-only reflection audit: one boss hull-reflection element remains mounted at
+zero opacity; its authored gradient/alpha mask/screen blend has no own animation,
+transition, filter, will-change or animation loop. Light comes from <=115-ms
+muzzle flashes and <=360-ms nearby explosion illumination; actual core shots
+also update the same source. The node is removed with the live-only branch
+on defeat/fall. Mask presence at opacity zero does not establish browser paint,
+GPU surface allocation, memory leakage or an interruption cause. Keep visible
+glints and damage masks unchanged. Five existing shipRealism tests pass. No
+third runtime change or release was made; a separate native resource/first-lit-
+frame comparison is needed before selecting a reflection optimisation.
+See docs/reactor-door-reuse-release-20261021.md and docs/boss-reflection-audit-20261021.md.
+
 ## Step 2: reactor door reuse, 21 October 2026, tested preparation
 
 The owner requests the next small stability step without optical downgrades.

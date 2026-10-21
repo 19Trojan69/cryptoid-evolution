@@ -1,0 +1,29 @@
+{
+  "status": "READY",
+  "officialUrl": "https://cryptoid-evolution-testnet.vercel.app/",
+  "production": {
+    "id": "dpl_729MdmJke7jMhhX28Ukh8EqbXo8T",
+    "url": "https://cryptoid-evolution-testnet-kwa4rruhn-19-trojan69.vercel.app/",
+    "readyAtVienna": "2026-10-21T13:28:11+02:00",
+    "durationSeconds": 51
+  },
+  "preview": {
+    "id": "dpl_3CpnekXqj483XUcyE3spUSro9P9P",
+    "url": "https://cryptoid-evolution-testnet-epkaipcsa-19-trojan69.vercel.app/",
+    "readyAtVienna": "2026-10-21T13:25:35+02:00",
+    "durationSeconds": 45,
+    "guestStartPauseResume": true
+  },
+  "sourceCommit": "171cb5c4507a1530a9bbb080d61805be0da545f7",
+  "sourceTree": "490b444be6bb87e8a4438c06b3c4bc86114a486f",
+  "fixedSourceBranch": "codex/reactor-door-reuse-20261021",
+  "rollbackBranch": "backup/testnet-before-reactor-door-reuse-20261021",
+  "rollbackCommit": "540d73e7b5a89a3098a6c6404bd3deac8f269cd3",
+  "oldProduction": "dpl_NnTPP38Gm8UZUaAUzj7q4uCUq4U8",
+  "mainnetContacted": false,
+  "freshOfficialHome": true,
+  "runtimeLogScan": "Not performed after earlier permission denial; no zero-error claim.",
+  "screenshotBrowserSaved": true,
+  "screenshotDownloadAvailable": false,
+  "reflectionAudit": "Read-only; no third runtime change or deployment."
+}
