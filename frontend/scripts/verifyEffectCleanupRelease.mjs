@@ -5,7 +5,7 @@ import { createHash } from 'node:crypto';
 const phase=process.argv[2],commit=process.argv[3],tree=process.argv[4];
 assert.ok(['before','after'].includes(phase));
 const base='https://cryptoid-evolution-testnet.vercel.app';
-const out=new URL('../../docs/effect-cleanup-release-20261021/',import.meta.url);
+const out=new URL(process.env.CRYPTOID_RELEASE_EVIDENCE ?? '../../docs/effect-cleanup-release-20261021/',import.meta.url);
 fs.mkdirSync(out,{recursive:true});
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 async function get(path){const r=await fetch(base+path,{signal:AbortSignal.timeout(20000)});const bytes=Buffer.from(await r.arrayBuffer());return {path,status:r.status,bytes:bytes.length,sha256:sha(bytes),text:bytes.toString('utf8')};}
@@ -18,7 +18,7 @@ if(phase==='after'){
   const before=JSON.parse(fs.readFileSync(new URL('before.json',out),'utf8'));
   assert.deepEqual(result.results.slice(1),before.results.slice(1),'API and leaderboard responses preserved');
   assert.match(commit,/^[a-f0-9]{40}$/);assert.match(tree,/^[a-f0-9]{40}$/);
-  const main=await get(entry),chunks=[...new Set(main.text.match(/assets\/(?:GamePage|AdminPage|powerUps|shipEvolution)-[A-Za-z0-9_-]+\.js/g)??[])];
+  const main=await get(entry),chunks=[...new Set(main.text.match(/assets\/(?:GamePage|AdminPage|powerUps|shipEvolution|reloadDiagnostics|performanceDiagnostics)-[A-Za-z0-9_-]+\.js/g)??[])];
   assert.ok(chunks.length>=2);const modules=await Promise.all(chunks.map(p=>get('/'+p)));
   result.chunks=modules.map(({text,...item})=>({...item,sourceIdentity:text.includes(commit),treeIdentity:text.includes(tree)}));
   for(const r of result.chunks.filter(r=>/GamePage|AdminPage/.test(r.path)))assert.ok(r.sourceIdentity&&r.treeIdentity,`delivered identity ${r.path}`);
@@ -51,6 +51,21 @@ if(phase==='after'){
     finalBossSourceRelease:!!releaseImport&&consumerModule.includes('&&'+releaseImport+'(')
   };
   for(const [name,passed] of Object.entries(result.deliveredCleanupFeatures))assert.ok(passed,'delivered cleanup '+name);
+  if(process.env.CRYPTOID_VERIFY_FLIGHT==='1'){
+    const report=modules.find(r=>/reloadDiagnostics-/.test(r.path))?.text??'';
+    const admin=modules.find(r=>/AdminPage-/.test(r.path))?.text??'';
+    result.deliveredFlightFeatures={
+      independentCurrentAndPreviousKeys:report.includes('cryptoid_owner_flight_v1')&&report.includes('cryptoid_owner_previous_flight_v1'),
+      rollingThirtyWindows:game.includes('sampleLimit:30')&&report.includes('slice(-30)'),
+      twoSecondWritesTenSecondRuntime:game.includes('persistIntervalMs:2e3,runtimeIntervalMs:1e4'),
+      verifiedOwnerTestnetFactory:/\w+\(\w+&&\w+==="testnet",\(\)=>window,\{runtime:/.test(game),
+      factoryStopsBeforeHost:/function \w+\((\w+),\w+,\w+\)\{if\(!\1\)return null;const \w+=\w+\(\),\w+=\w+\.wallNow/.test(game),
+      adminExportIncludesRing:admin.includes('flightRecorders:'),
+      ownerExportPermissionGuard:admin.includes('owner_access_required')&&admin.includes('canAdmin!==!0'),
+      noGlobalProbe:game.includes('environment:"owner-admin",publishGlobal:!1,sampleLimit:30')
+    };
+    for(const [name,passed] of Object.entries(result.deliveredFlightFeatures))assert.ok(passed,'delivered owner recorder '+name);
+  }
   result.productionQaExcluded=true;result.apiAndScoresEqual=true;
 }
 fs.writeFileSync(new URL(phase+'.json',out),JSON.stringify(result,null,2)+'\n');

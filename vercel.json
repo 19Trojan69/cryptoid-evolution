@@ -25,6 +25,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/owner-flight-release-record-20261021": false,
       "codex/owner-flight-recorder-20261021": false,
       "codex/effect-cleanup-release-record-20261021": false,
       "codex/testnet-effect-cleanup-release-20261021": false,

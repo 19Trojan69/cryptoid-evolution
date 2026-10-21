@@ -1,5 +1,30 @@
 # Preserve the officially approved game
 
+## Completed owner flight recorder Testnet release, 21 October 2026
+
+The owner's explicit Admin-only publication request is complete: official
+Testnet READY dpl_5yuZonhFwMq5WXLgVTYmtrMGnMyW at
+f85360ed464fb75944ada0c3f1d22776c4df31ca / tree
+2aac1e929e8992b9d93b5de0ffaf8675effc6f00. Ready 17:14:42.139 Vienna,
+build 43.259 seconds. Keep codex/owner-flight-recorder-20261021 fixed there.
+Immediate rollback: backup/testnet-before-owner-flight-recorder-20261021 at
+cc5ef227 / old READY dpl_8zBFheLX2x4hLUMTYUxChv4exrts. Preserve all older refs.
+Preview guest start/pause/countdown/resumed play pass. Protected-preview HTTP
+helper returned 403 read_protection_bypass; no retry or bypass. Existing authorized
+browser UI rendered normally. Production separately rebuilt the same exact source;
+it is not the identical preview binary. Delivered GamePage/Admin source/tree,
+eight owner recorder features, previous six cleanup/eight memory features, four
+production QA exclusions, anonymous Admin denial and unchanged API/three score
+hashes pass. Fresh public Home loads with Spielen enabled; screenshot saved.
+29 focused diagnostics re-run and 72,000 synthetic native recorder frames plus
+document reload/archive/cleanup pass. No authenticated owner/Pi login or physical
+iPhone/heat/GPU/termination-cause proof. Runtime logs remain unqueried after the
+earlier permission denial; drains not inspected. No account or Mainnet mutation.
+Subsequent receipt branch codex/owner-flight-release-record-20261021 is evidence
+only with automatic deployment disabled. Do not deploy it. See
+docs/owner-flight-release-20261021/{release.json,before.json,after.json,testnet-ready.jpg}.
+The preparation-only status below is historical and superseded for this release.
+
 ## Owner flight recorder, 21 October 2026, preparation only
 
 The owner asks for additional evidence if the iPhone interruption recurs, then

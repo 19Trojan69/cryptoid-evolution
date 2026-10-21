@@ -1,0 +1,107 @@
+{
+  "sourceCommit": "f85360ed464fb75944ada0c3f1d22776c4df31ca",
+  "sourceTree": "2aac1e929e8992b9d93b5de0ffaf8675effc6f00",
+  "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+  "teamId": "team_KzJmtl0QyoYZAOu5RQKsAR2i",
+  "officialUrl": "https://cryptoid-evolution-testnet.vercel.app/",
+  "production": {
+    "id": "dpl_5yuZonhFwMq5WXLgVTYmtrMGnMyW",
+    "name": "cryptoid-evolution-testnet",
+    "url": "cryptoid-evolution-testnet-r0fwancjw-19-trojan69.vercel.app",
+    "type": "LAMBDAS",
+    "state": "READY",
+    "createdAt": 1792595637856,
+    "creator": {
+      "uid": "aXjt6kHM3O35eeCwsgVUkU5T",
+      "username": "19trojan69"
+    },
+    "project": {
+      "id": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+      "name": "cryptoid-evolution-testnet",
+      "framework": null
+    },
+    "meta": {
+      "githubCommitRef": "codex/owner-flight-recorder-20261021",
+      "githubCommitSha": "f85360ed464fb75944ada0c3f1d22776c4df31ca",
+      "githubCommitMessage": "Prepare bounded owner flight recorder without publishing",
+      "githubRepo": "cryptoid-evolution",
+      "githubOrg": "19Trojan69"
+    },
+    "alias": [
+      "cryptoid-evolution-testnet.vercel.app",
+      "cryptoid-evolution-testnet-19-trojan69.vercel.app",
+      "cryptoid-evolution-testnet-git-codex-owner-f-35c5e2-19-trojan69.vercel.app"
+    ],
+    "target": "production",
+    "regions": [
+      "iad1"
+    ],
+    "buildingAt": 1792595638880,
+    "ready": 1792595682139,
+    "readyState": "READY",
+    "aliasError": null
+  },
+  "productionBuildDurationMs": 43259,
+  "preview": {
+    "id": "dpl_Ertmq1oafJbxsyUbzcgzGP9B8DXd",
+    "name": "cryptoid-evolution-testnet",
+    "url": "cryptoid-evolution-testnet-h6yamunt2-19-trojan69.vercel.app",
+    "type": "LAMBDAS",
+    "state": "READY",
+    "createdAt": 1792595466452,
+    "creator": {
+      "uid": "aXjt6kHM3O35eeCwsgVUkU5T",
+      "username": "19trojan69"
+    },
+    "project": {
+      "id": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+      "name": "cryptoid-evolution-testnet",
+      "framework": null
+    },
+    "meta": {
+      "githubCommitRef": "codex/owner-flight-recorder-20261021",
+      "githubCommitSha": "f85360ed464fb75944ada0c3f1d22776c4df31ca",
+      "githubCommitMessage": "Prepare bounded owner flight recorder without publishing",
+      "githubRepo": "cryptoid-evolution",
+      "githubOrg": "19Trojan69"
+    },
+    "alias": [
+      "cryptoid-evolution-testnet-19-trojan69.vercel.app",
+      "cryptoid-evolution-testnet-git-codex-owner-f-35c5e2-19-trojan69.vercel.app"
+    ],
+    "target": "staging",
+    "regions": [
+      "iad1"
+    ],
+    "buildingAt": 1792595467838,
+    "ready": 1792595512044,
+    "readyState": "READY",
+    "aliasError": null
+  },
+  "previewBuildDurationMs": 44206,
+  "rollback": {
+    "branch": "backup/testnet-before-owner-flight-recorder-20261021",
+    "commit": "cc5ef2276feb651edcf0681222865e8c957f8a4e",
+    "deployment": "dpl_8zBFheLX2x4hLUMTYUxChv4exrts"
+  },
+  "verification": {
+    "deliveredSourceTreeAndEightOwnerFeatures": true,
+    "previousSixCleanupAndEightMemoryFeatures": true,
+    "anonymousAdminDenied": true,
+    "apiAndThreeScoreHashesUnchanged": true,
+    "productionQaExcluded": true,
+    "previewGuestStartPauseCountdownResume": true,
+    "repeatFocusedTests": 29,
+    "nativeRecorderControlledFrames": 72000,
+    "nativeRecorderReloadArchiveCleanup": true,
+    "physicalIphoneOrAuthenticatedOwnerSessionTested": false,
+    "mainnetContacted": false
+  },
+  "limitations": {
+    "previewProtectedFetch": "403 read_protection_bypass; not retried or bypassed; existing authorized browser UI renders",
+    "runtimeLogs": "Not queried after prior permission denial",
+    "previewAndProductionBinaryIdentical": false,
+    "iosTerminationCauseProven": false,
+    "drains": "not inspected"
+  }
+}
