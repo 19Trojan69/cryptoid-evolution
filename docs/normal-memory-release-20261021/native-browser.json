@@ -1,0 +1,32 @@
+{
+  "previewDeployment": "dpl_BH6L2HF15AwyMg9GepXV77zd5W71",
+  "sourceCommit": "a21018085b9ea522a6e5fd7b13f26251ff5a9823",
+  "sourceTree": "40d8ac846830d7670bdd9a26ec498ef06ff42a46",
+  "workingTreeDirtyObserved": true,
+  "nativeRaster": {
+    "passed": true,
+    "checks": 10,
+    "renderScale": 1.5,
+    "bosses": [1, 2],
+    "bossBackingBytesBeforeEach": 2321312,
+    "bossBackingBytesAfterEach": 1307184,
+    "effectAgesMs": [120, 500, 1000],
+    "effectBackingBytesBeforeEach": 2462400,
+    "effectBackingBytesAfterEach": 615600,
+    "visualReview": "Actual artwork compared side-by-side in native Chrome; normal raster looks clean at the displayed size. Not guaranteed imperceptible on every display.",
+    "screenshot": "native-raster.jpg"
+  },
+  "guestSmoke": {
+    "home": true,
+    "start": true,
+    "hudAndHull": true,
+    "pause": true,
+    "resumeCountdown": true,
+    "resumed": true,
+    "pausedAgain": true,
+    "piAuthenticationTested": false,
+    "accountOrSaveMutationRequested": false,
+    "browserConsole": "Unrelated extension metadata errors observed; not an entirely clean console claim."
+  },
+  "limits": "Native Chrome and controlled-host verification, not physical iPhone native/GPU/process memory, temperature, presented FPS or proof that spontaneous Whitescreen is fixed."
+}

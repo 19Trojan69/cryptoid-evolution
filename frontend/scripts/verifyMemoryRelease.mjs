@@ -22,6 +22,19 @@ if(phase==='after'){
   assert.ok(chunks.length>=2);const modules=await Promise.all(chunks.map(p=>get('/'+p)));
   result.chunks=modules.map(({text,...item})=>({...item,sourceIdentity:text.includes(commit),treeIdentity:text.includes(tree)}));
   for(const r of result.chunks.filter(r=>/GamePage|AdminPage/.test(r.path)))assert.ok(r.sourceIdentity&&r.treeIdentity,`delivered identity ${r.path}`);
+  const game=modules.find(r=>/GamePage-/.test(r.path))?.text??'';
+  const weapons=modules.find(r=>/powerUps-/.test(r.path))?.text??'';
+  result.deliveredMemoryFeatures={
+    normalRasterCap:/Number\.isFinite\(\w+\)&&\w+>0\?Math\.min\(1\.5,\w+\):1/.test(weapons),
+    bossUsesNormalCap:/\w+\(window\.devicePixelRatio\),\w+=Math\.ceil\(\w+\.width\*\w+\)/.test(weapons),
+    effectUsesSharedCap:/\w+=\(\)=>\w+\(window\.devicePixelRatio\)/.test(game),
+    paintedCache24Entries12MiB6Unused:/new \w+\(24,12\*1024\*1024,\w+=>URL\.revokeObjectURL\(\w+\),6\)/.test(game),
+    twoUnusedHulls:/for\(;\w+>2&&\w+\(\);\)\w+--/.test(game),
+    textureTrimProtectsConsumers:/if\(!\(\w+\.size\|\|\w+\.size\)\)for/.test(game),
+    fourWarmTextures:/if\(\w+\.size<=4\)break/.test(game),
+    retiredCanvasZeroed:/\w+\.canvas\.width=\w+\.canvas\.height=0/.test(game)
+  };
+  for(const [name,passed] of Object.entries(result.deliveredMemoryFeatures))assert.ok(passed,`delivered feature ${name}`);
   const qa=await Promise.all(['memory-work','reactor-work','projectile-work','frame-pacing'].map(p=>get('/scripts/fixtures/'+p+'.html')));
   for(const r of qa)assert.ok(!/id="(?:memory|reactor|projectile)-qa"|Native 60-Hz-Animationspr/.test(r.text),`production excludes ${r.path}`);
   result.productionQaExcluded=true;result.apiAndScoresEqual=true;

@@ -71,3 +71,37 @@ normal-memory-release-20261021/. None of these tests measures physical iPhone
 native/GPU/process memory, temperature, presented FPS or a complete Whitescreen
 fix. Preserve every fixed release and rollback ref; do not deploy later
 evidence-only commits.
+
+## Completed official Testnet release
+
+The protected preview dpl_BH6L2HF15AwyMg9GepXV77zd5W71 passed ten native Chrome
+checks and the visible old/normal raster comparison. Guest Home/start, original
+HUD/hull, pause, resume countdown, resumed play and re-pause passed. An intentional
+fresh load of official Home also passed with Spielen enabled. Pi authentication
+was not tested; extension metadata errors prevent a clean-browser-console claim.
+
+Official Testnet production is READY dpl_FNcYt4WQLGefzmbrEhp7Qow6bS5C at
+https://cryptoid-evolution-testnet.vercel.app/, source
+a21018085b9ea522a6e5fd7b13f26251ff5a9823, tree
+40d8ac846830d7670bdd9a26ec498ef06ff42a46. It became ready on 21 October at
+03:09:01.536Z / 05:09:01.536 Europe/Vienna; production build took 39.032 seconds.
+The observed aggregate build dirty flag is true. Fixed release branch:
+codex/testnet-normal-memory-release-20261021. Immediate rollback branch:
+backup/testnet-before-normal-memory-20261021, exact old e7b49fe runtime and
+dpl_6uZ96rZE714sudgnFuzsjYTSxtcF. All previous release/backup refs remain fixed.
+
+Read-only public verification after the production rebuild confirms exact source
+and tree in delivered GamePage/Admin bundles and all eight actual memory features
+in delivered GamePage/powerUps code. Anonymous API, Admin 401 denial and all three
+Highscore response hashes match the fresh pre-release baseline exactly. All four
+QA pages are excluded from production. Mainnet was not contacted or modified.
+No account, purchase, save, sound or gameplay mutation is part of this patch.
+
+The additional bounded runtime-log query failed with 403 before returning results;
+it is not a zero-error scan. Do not bypass that denial. The six build-log warnings
+shown in the dashboard are separate from runtime logs. Physical iPhone process
+memory, heat and spontaneous Whitescreen resolution remain unproved. No further
+identical 90-second manual replay is required merely to re-collect known counters.
+
+Receipt, public hashes and native acceptance are in the matching evidence folder.
+Later documentation/test evidence commits must not replace this fixed runtime.

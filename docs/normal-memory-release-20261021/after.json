@@ -1,0 +1,80 @@
+{
+  "at": "2026-10-21T03:11:06.531Z",
+  "entry": "/assets/index-D5NhBFSU.js",
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 1465,
+      "sha256": "c918ae2931069e10c541bc079de75f9d0b86aba27e77baa39d8cfaa7a16f395e"
+    },
+    {
+      "path": "/api",
+      "status": 200,
+      "bytes": 27,
+      "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a"
+    },
+    {
+      "path": "/api/admin/status",
+      "status": 401,
+      "bytes": 29,
+      "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=1",
+      "status": 200,
+      "bytes": 7440,
+      "sha256": "9cbe90a3686312972b4a117e300a2bc2e15ce07a8eebd15b51f12d81181451ad"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=2",
+      "status": 200,
+      "bytes": 9733,
+      "sha256": "f18f97ee5a48ee471b9f64c0aae3edfabba5365c3f6c9c7ec2127d6439db4894"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=3",
+      "status": 200,
+      "bytes": 9733,
+      "sha256": "f18f97ee5a48ee471b9f64c0aae3edfabba5365c3f6c9c7ec2127d6439db4894"
+    }
+  ],
+  "chunks": [
+    {
+      "path": "/assets/AdminPage-Vn4dftMj.js",
+      "status": 200,
+      "bytes": 44682,
+      "sha256": "b093c2a4ed9ebb26ce36105645143cdf28669bc509cfb888f92befb09c770468",
+      "sourceIdentity": true,
+      "treeIdentity": true
+    },
+    {
+      "path": "/assets/powerUps-CxBDzuVE.js",
+      "status": 200,
+      "bytes": 148050,
+      "sha256": "20e0586283cd79cf11d0e1534da7ecca4618857be404f38effea1804eab82f28",
+      "sourceIdentity": false,
+      "treeIdentity": false
+    },
+    {
+      "path": "/assets/GamePage-DdI8dvXa.js",
+      "status": 200,
+      "bytes": 226692,
+      "sha256": "2a1da8e07b9d6b9527e5d14ea44495a832d91ff6f623d85cb9a06e33adbb9fd9",
+      "sourceIdentity": true,
+      "treeIdentity": true
+    }
+  ],
+  "deliveredMemoryFeatures": {
+    "normalRasterCap": true,
+    "bossUsesNormalCap": true,
+    "effectUsesSharedCap": true,
+    "paintedCache24Entries12MiB6Unused": true,
+    "twoUnusedHulls": true,
+    "textureTrimProtectsConsumers": true,
+    "fourWarmTextures": true,
+    "retiredCanvasZeroed": true
+  },
+  "productionQaExcluded": true,
+  "apiAndScoresEqual": true
+}

@@ -22,6 +22,21 @@ QA page is protected-preview-only and must be absent from production. Keep
 automatic audit-branch deploy off, all fixed release/rollback refs and Mainnet.
 See docs/normal-memory-release-20261021.md for current verification/release state.
 
+Completed Testnet release: READY dpl_FNcYt4WQLGefzmbrEhp7Qow6bS5C, source
+a21018085b9ea522a6e5fd7b13f26251ff5a9823, tree 40d8ac846830d7670bdd9a26ec498ef06ff42a46,
+ready 21 October 2026 05:09:01.536 Vienna (03:09:01.536Z), build 39.032 seconds.
+Keep codex/testnet-normal-memory-release-20261021 fixed at that runtime. Immediate
+rollback: backup/testnet-before-normal-memory-20261021 at e7b49fe / old READY
+dpl_6uZ96rZE714sudgnFuzsjYTSxtcF. Delivered source/tree plus all eight memory
+features, unchanged API/admin denial/three leaderboard hashes, four production
+QA exclusions and fresh official Home pass. Protected native Chrome comparison
+passes ten checks; guest start/pause/resume passes. Runtime log API returned 403;
+do not represent that as zero errors or work around the denied operation. This
+is not physical iPhone memory/heat/presented-FPS or Whitescreen-fix proof. Mainnet
+was not contacted. Subsequent receipts/tests/docs are evidence-only: do not
+deploy those commits or move any fixed refs. The older preparation-only baseline
+instructions below are historical and superseded by this completed scoped release.
+
 ## Owner second-boss interruption report, 21 October 2026
 
 New v5 report on e7b49fe ends with a visible active sector-20/boss-2 session,
