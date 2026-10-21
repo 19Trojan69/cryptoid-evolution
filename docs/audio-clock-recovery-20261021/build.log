@@ -1,0 +1,86 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 build
+> npm run test:i18n && npm run check:i18n:release && node_modules/.bin/tsc -b && vite build
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 test:i18n
+> node --experimental-strip-types --test src/i18n.test.mjs
+
+✔ en: every player UI key has a translation and preserves its placeholders (6.10995ms)
+✔ de: every player UI key has a translation and preserves its placeholders (2.620783ms)
+✔ es: every player UI key has a translation and preserves its placeholders (2.215565ms)
+✔ zh: every player UI key has a translation and preserves its placeholders (2.118531ms)
+✔ vi: every player UI key has a translation and preserves its placeholders (1.850475ms)
+✔ legacy locales remain selectable and use existing translations with English fallback (0.718371ms)
+✔ English mission resume contains no German source text (0.316458ms)
+✔ interpolation handles all repeated values and a locale change preserves life count (0.511096ms)
+✔ automatic language choice and manual override resolve supported locales (0.299062ms)
+✔ the picker includes the original 17 languages plus Chinese and Vietnamese (0.221057ms)
+✔ remaining lives use the correct singular and plural forms (0.800032ms)
+✔ player components contain no unwrapped static UI copy (0.091806ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 922.330573
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 check:i18n:release
+> node --experimental-strip-types scripts/localization-inventory.mjs --check
+
+Static copy: 1245; unwrapped UI fragments: 0
+en: 1245/1245
+de: 1245/1245
+es: 1245/1245
+fr: 839/1245 (draft)
+pt: 838/1245 (draft)
+it: 838/1245 (draft)
+pl: 586/1245 (draft)
+tr: 586/1245 (draft)
+ru: 838/1245 (draft)
+hr: 586/1245 (draft)
+cs: 586/1245 (draft)
+sk: 586/1245 (draft)
+hu: 586/1245 (draft)
+ro: 586/1245 (draft)
+sr: 586/1245 (draft)
+uk: 586/1245 (draft)
+th: 586/1245 (draft)
+zh: 1245/1245
+vi: 1245/1245
+Complete language gate: en, de, es, zh, vi; release ready: true
+vite v7.3.1 building client environment for production...
+transforming...
+✓ 373 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                     1.47 kB │ gzip:   0.77 kB
+dist/assets/AdminPage-BVHazyxQ.css                 10.28 kB │ gzip:   2.68 kB
+dist/assets/GalaxyMap-ByhGHt12.css                 16.63 kB │ gzip:   4.75 kB
+dist/assets/powerUps-Bp4oAZoc.css                  19.99 kB │ gzip:   5.17 kB
+dist/assets/GamePage-Doazl5ia.css                  21.19 kB │ gzip:   4.97 kB
+dist/assets/Shop-BkuKP0aD.css                      25.93 kB │ gzip:   6.41 kB
+dist/assets/index-BcSGTHO_.css                    357.19 kB │ gzip:  75.30 kB
+dist/assets/rewardProgress-C6pZLNnw.js              3.22 kB │ gzip:   1.26 kB
+dist/assets/displaySettings-d3VZZ2lg.js             3.30 kB │ gzip:   1.47 kB
+dist/assets/collectionExport-CE9GFnZO.js            3.89 kB │ gzip:   2.10 kB
+dist/assets/reloadDiagnostics-DbtuCWCK.js          11.66 kB │ gzip:   4.59 kB
+dist/assets/GalaxyMap-Dh9JP-TM.js                  16.79 kB │ gzip:   6.24 kB
+dist/assets/AdminPage-vvXviXa4.js                  44.83 kB │ gzip:  14.51 kB
+dist/assets/performanceDiagnostics-C2oOc8Q7.js     62.48 kB │ gzip:  18.70 kB
+dist/assets/Shop-BSkke8eG.js                      118.59 kB │ gzip:  39.23 kB
+dist/assets/powerUps-BLBYYJVD.js                  148.36 kB │ gzip:  56.42 kB
+dist/assets/GamePage-BlkdAk7n.js                  230.04 kB │ gzip:  72.19 kB
+dist/assets/shipEvolution-CSJAkexC.js             233.75 kB │ gzip:  36.53 kB
+dist/assets/index-Con3GwRy.js                   1,899.56 kB │ gzip: 614.15 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 3.27s

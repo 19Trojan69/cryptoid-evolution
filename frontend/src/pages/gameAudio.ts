@@ -5,6 +5,7 @@ import type { BossWeaponKind } from './bossWeapons.ts';
 import { effectsGain, readEffectsVolume } from "./musicPreferences.ts";
 import type { PowerUpType } from "./powerUps.ts";
 import { ownerAudioDisabled, audioAuditRecording, noteAudioEvent, captureAudioAuditEvents, noteAudioVoiceStart, noteAudioVoiceEnd, noteAudioVoiceRelease, audioVoiceOverdue, audioClockMs } from './ownerAudioAudit.ts';
+import { AudioClockRecovery } from './audioClockRecovery.ts';
 
 export type GameSound = "laser" | "enemyHit" | "explosion" | "collision" | "playerDestroy" | "shield" | "pickup" | "extraLife" | "boost" | "boss" | "bossDestroy" | "nova" | "emp" | "reload";
 
@@ -41,8 +42,10 @@ const sampleGains: Record<SampleName, number> = {
   "pickup-emp": .8,
 };
 
-type WeaponVoice = { source: AudioBufferSourceNode; gain: GainNode; pan: StereoPannerNode | null; volume: number };
-type EffectVoice = { source: AudioBufferSourceNode | OscillatorNode; gain: GainNode };
+type WeaponVoice = { source: AudioBufferSourceNode; gain: GainNode; pan: StereoPannerNode | null; volume: number; endsAt: number };
+type EffectVoice = { source: AudioBufferSourceNode | OscillatorNode; gain: GainNode; endsAt: number };
+const bufferDuration = (buffer: AudioBuffer) => Number.isFinite(buffer.duration) ? buffer.duration
+  : Number.isFinite(buffer.length / buffer.sampleRate) ? buffer.length / buffer.sampleRate : Infinity;
 
 // Game effects only; audio starts after a player gesture on browsers that require one.
 export class GameAudio {
@@ -64,10 +67,13 @@ export class GameAudio {
   private destroyCount = 0;
   private effectVoices = new Set<EffectVoice>();
   private loadController: AbortController | null = null;
+  private clockHealth = new AudioClockRecovery();
+  private reapedVoices = 0;
+  private blockedSounds = 0;
 
   get running() { return this.context?.state === "running"; }
 
-  async start() {
+  async start(restartPausedGraph = false) {
     const auditEvent = captureAudioAuditEvents();
     if (ownerAudioDisabled()) { noteAudioEvent('effects-blocked'); return false; }
     auditEvent('effects-start-request');
@@ -95,7 +101,7 @@ export class GameAudio {
       this.sampleRequest = this.loadSamples(context, this.loadController.signal);
     }
     auditEvent('effects-resume-request');
-    try { const resumed=context.resume();this.prepareBossSounds(context);this.prepareEnemySound(context);await resumed; }
+    try { const resumed=this.clockHealth.resume(context, restartPausedGraph && this.paused);this.prepareBossSounds(context);this.prepareEnemySound(context);await resumed; }
     catch { auditEvent('effects-resume-failed'); return false; }
     if (this.context !== context) return false;
     const running = context.state === "running";
@@ -163,7 +169,7 @@ export class GameAudio {
   }
   private retireBossVoice(voice: WeaponVoice){
     const index=this.bossVoices.indexOf(voice);if(index>=0)this.bossVoices.splice(index,1);
-    try{const at=this.context!.currentTime;voice.gain.gain.cancelScheduledValues(at);voice.gain.gain.setTargetAtTime(0,at,.003);voice.source.stop(at+.018);}catch{/* Already ended. */}
+    try{const at=this.context!.currentTime;voice.gain.gain.cancelScheduledValues(at);voice.gain.gain.setTargetAtTime(0,at,.003);voice.source.stop(at+.018);voice.endsAt=Math.min(voice.endsAt,at+.018);}catch{/* Already ended. */}
   }
   playBossWeapon(kind:BossWeaponKind,radius:number,barrels=1,pan=0){
     const context=this.context;if(!context||context.state!=="running"||this.paused||this.effectsVolume===0||!this.effectsBus)return false;
@@ -175,9 +181,9 @@ export class GameAudio {
   }
 
   private releaseWeaponVoice(voice: WeaponVoice) {
+    if (!this.weaponMixVoices.delete(voice)) return;
     noteAudioVoiceRelease(voice.source);
     voice.source.onended = null;
-    this.weaponMixVoices.delete(voice);
     const index = this.bossVoices.indexOf(voice);
     if (index >= 0) this.bossVoices.splice(index, 1);
     voice.source.disconnect?.();
@@ -189,6 +195,7 @@ export class GameAudio {
   private playWeaponBuffer(buffer: AudioBuffer, rate: number, volume: number, pan: number) {
     const context = this.context;
     if (!context || context.state !== "running" || this.paused || this.effectsVolume === 0 || !this.effectsBus) return false;
+    if (!this.canSchedule(context)) return false;
     let voice: WeaponVoice | null = null;
     try {
       if (!this.weaponBus) {
@@ -198,7 +205,7 @@ export class GameAudio {
       while (this.bossVoices.length >= 20) this.retireBossVoice(this.bossVoices[0]);
       const source = context.createBufferSource(), gain = context.createGain();
       const panner = typeof context.createStereoPanner === 'function' ? context.createStereoPanner() : null;
-      voice = { source, gain, pan: panner, volume };
+      voice = { source, gain, pan: panner, volume, endsAt: context.currentTime + bufferDuration(buffer) / rate };
       source.buffer = buffer;
       source.playbackRate.value = rate;
       gain.gain.value = volume;
@@ -242,14 +249,15 @@ export class GameAudio {
   }
 
   private releaseEffectVoice(voice: EffectVoice) {
+    if (!this.effectVoices.delete(voice)) return;
     noteAudioVoiceRelease(voice.source);
-    this.effectVoices.delete(voice); voice.source.onended = null;
+    voice.source.onended = null;
     voice.source.disconnect?.(); voice.gain.disconnect?.();
   }
 
-  private trackEffect(source: EffectVoice['source'], gain: GainNode) {
+  private trackEffect(source: EffectVoice['source'], gain: GainNode, endsAt: number) {
     // Track all original sounds; cleanup on ended/pause without truncating voices.
-    const voice = { source, gain }; this.effectVoices.add(voice);
+    const voice = { source, gain, endsAt }; this.effectVoices.add(voice);
     source.onended = () => { noteAudioVoiceEnd(source); this.releaseEffectVoice(voice); };
     return voice;
   }
@@ -258,13 +266,14 @@ export class GameAudio {
     const context = this.context;
     const buffer = this.samples.get(name);
     if (!context || context.state !== "running" || this.paused || this.effectsVolume === 0 || !buffer || !this.effectsBus || typeof context.createBufferSource !== "function") return false;
+    if (!this.canSchedule(context)) return false;
     const source = context.createBufferSource();
     const gain = context.createGain();
     source.buffer = buffer;
     source.playbackRate.value = rate;
     gain.gain.value = sampleGains[name];
     source.connect(gain).connect(this.effectsBus);
-    const voice = this.trackEffect(source, gain);
+    const voice = this.trackEffect(source, gain, context.currentTime + bufferDuration(buffer) / rate);
     try { source.start(); } catch { this.releaseEffectVoice(voice); return false; }
     if (audioAuditRecording()) noteAudioVoiceStart(source, context, context.currentTime + buffer.duration / rate, 'effects');
     return true;
@@ -273,6 +282,7 @@ export class GameAudio {
   private tone(frequency: number, end: number, duration: number, gain: number, type: OscillatorType = "sine", delay = 0) {
     const context = this.context;
     if (!context || context.state !== "running" || this.paused || this.effectsVolume === 0) return;
+    if (!this.canSchedule(context)) return;
     const at = context.currentTime + delay;
     const oscillator = context.createOscillator();
     const envelope = context.createGain();
@@ -283,7 +293,7 @@ export class GameAudio {
     envelope.gain.exponentialRampToValueAtTime(Math.min(.5, gain * 3), at + .008);
     envelope.gain.exponentialRampToValueAtTime(.0001, at + duration);
     oscillator.connect(envelope).connect(this.effectsBus!);
-    const voice = this.trackEffect(oscillator, envelope);
+    const voice = this.trackEffect(oscillator, envelope, at + duration + .01);
     try { oscillator.start(at); oscillator.stop(at + duration + .01); if (audioAuditRecording()) noteAudioVoiceStart(oscillator, context, at + duration + .01, 'effects'); }
     catch { this.releaseEffectVoice(voice); }
   }
@@ -341,10 +351,41 @@ export class GameAudio {
 
   setSector(sector: number) { void sector; /* Reserved for future sector-specific effects. */ }
 
+  private canSchedule(context: AudioContext) {
+    const wasBlocked = this.clockHealth.blocked;
+    if (!this.clockHealth.observe(context)) {
+      this.blockedSounds++;
+      // A frozen graph must not accumulate sounds that all start on recovery.
+      for (const voice of [...this.effectVoices]) {
+        try { voice.source.stop(); } catch { /* Host already stopped. */ }
+        this.releaseEffectVoice(voice);
+      }
+      for (const voice of [...this.weaponMixVoices]) {
+        try { voice.source.stop(); } catch { /* Host already stopped. */ }
+        this.releaseWeaponVoice(voice);
+      }
+      if (!wasBlocked) void this.clockHealth.resume(context).catch(() => {});
+      return false;
+    }
+    // A missing ended callback is not permission to cut off a live sound. Only
+    // reap after its actual audio-clock deadline plus a full second of grace.
+    for (const voice of [...this.effectVoices]) if (context.currentTime > voice.endsAt + 1) {
+      this.reapedVoices++; this.releaseEffectVoice(voice);
+    }
+    for (const voice of [...this.weaponMixVoices]) if (context.currentTime > voice.endsAt + 1) {
+      this.reapedVoices++; this.releaseWeaponVoice(voice);
+    }
+    return true;
+  }
+
   setPaused(paused: boolean) {
     this.paused = paused;
     if(paused) {
-      this.stopBossWeapons();
+      this.clockHealth.pause();
+      for (const voice of [...this.weaponMixVoices]) {
+        try { voice.source.stop(); } catch { /* Already ended. */ }
+        this.releaseWeaponVoice(voice);
+      }
       for (const voice of [...this.effectVoices]) {
         try { voice.source.stop(); } catch { /* Already ended. */ }
         this.releaseEffectVoice(voice);
@@ -379,10 +420,14 @@ export class GameAudio {
       audioSampleBuffers: this.samples.size + this.bossSamples.size + this.enemyShotSamples.size + this.enemyDoubleSamples.size,
       audioRockBuffers: this.rockBuffers.size,
       audioBufferBytes: this.diagnosticBufferBytes,
+      audioClockMs: audioClockMs(this.context), audioClockStalls: this.clockHealth.stalls,
+      audioRecoveries: this.clockHealth.recoveries, audioBlockedSounds: this.blockedSounds,
+      audioReapedVoices: this.reapedVoices,
     };
   }
 
   close() {
+    this.clockHealth.reset();
     const auditEvent = captureAudioAuditEvents();
     if (this.context) auditEvent('effects-close-request');
     this.setPaused(true);

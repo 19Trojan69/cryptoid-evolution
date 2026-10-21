@@ -1,0 +1,55 @@
+{
+  "officialSource": "4c25790a8b7173edda9f2ef9370f0251e716f668",
+  "officialTree": "88063f617e2321705b19af0dfb3dcb22b6bce491",
+  "candidateBranch": "codex/audio-clock-recovery-20261021",
+  "published": false,
+  "ownerReport": {
+    "generatedAt": "2026-10-21T17:07:02.373Z",
+    "continuationStartSector": 21,
+    "lastRecordedSector": 36,
+    "lastEncounter": "normal",
+    "registeredVoicesStart": 0,
+    "registeredVoicesAtLastTransition": 2086,
+    "effectVoicesAtLastTransition": 2021,
+    "retainedPcmBytes": 7660648,
+    "lastTransitionAt": 1792602405128,
+    "newDocumentStartedAt": 1792602407432,
+    "audioClockFreezeProven": false,
+    "osTerminationCauseProven": false
+  },
+  "controlledVerification": {
+    "testsPassed": 81,
+    "newAudioFaultTests": 15,
+    "missingEndedEffectWeaponPairs": 10000,
+    "healthyParameterComparisonGroups": 500,
+    "baselineRetainedSources": 2086,
+    "candidateFrozenSourcePeakUpperBound": 21,
+    "candidateFrozenRetainedSourcesAfterBlock": 0,
+    "independentRecoveryAttemptsDuringPendingHost": 1,
+    "explicitPausedResumeSameContexts": true,
+    "allRegisteredSourcesReleasedOnPause": true,
+    "lateRecoveryAfterCloseCannotResume": true,
+    "ownerEvidenceSanitized": true
+  },
+  "build": {
+    "typescript": true,
+    "localeTests": 12,
+    "releaseLocaleGate": true,
+    "viteBuild": true,
+    "existingLargeChunkWarning": true,
+    "audioModuleLint": true
+  },
+  "excludedCheck": {
+    "name": "the whole simulation matches approved runtime after removing the single audio observation hook",
+    "reason": "Historical Git object 53640c01a16c921645d05502d9e5b34f6dc6eeec lacks GamePage.tsx; newer complete-GamePage parity guard passes with exact audio/diagnostic normalization"
+  },
+  "limits": {
+    "physicalIphoneTested": false,
+    "audibleOutputVerified": false,
+    "nativeMemoryMeasured": false,
+    "whiteScreenFixProven": false,
+    "newTimerRafListener": false,
+    "mainnetTouched": false,
+    "accountsSavesApiTouched": false
+  }
+}

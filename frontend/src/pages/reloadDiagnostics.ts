@@ -67,6 +67,7 @@ type TechnicalContext = {
   audioVoices?: number; audioWeaponVoices?: number; audioBossVoices?: number; audioEffectVoices?: number;
   audioSampleBuffers?: number; audioRockBuffers?: number; audioBufferBytes?: number; estimatedResourceBytes?: number;
   audioState?: string;
+  audioClockMs?: number; audioClockStalls?: number; audioRecoveries?: number; audioBlockedSounds?: number; audioReapedVoices?: number;
   sourceCommit?: string; sourceTree?: string; workingTreeDirty?: boolean;
   targetHz?: number; cssPacingMode?: string; cssPacedActive?: number; cssPacingFallbacks?: number;
 };
@@ -113,6 +114,7 @@ const numericContextKeys = [
   'canvasTextureEntries', 'canvasCacheBytes', 'canvasSurfaceBytes', 'canvasRetainedHullUsers', 'canvasFailureCount',
   'audioVoices', 'audioWeaponVoices', 'audioBossVoices', 'audioEffectVoices', 'audioSampleBuffers',
   'audioRockBuffers', 'audioBufferBytes', 'estimatedResourceBytes',
+  'audioClockMs', 'audioClockStalls', 'audioRecoveries', 'audioBlockedSounds', 'audioReapedVoices',
   'targetHz', 'cssPacedActive', 'cssPacingFallbacks',
 ] as const;
 

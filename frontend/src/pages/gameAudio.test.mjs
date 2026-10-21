@@ -219,7 +219,7 @@ test('boss voices reuse eighteen boss buffers plus eight enemy single/double buf
   audio.setEffectsVolume(0);assert.equal(audio.playBossWeapon('laser',6),false);
   audio.setEffectsVolume(35);for(let i=0;i<30;i++)assert.equal(audio.playBossWeapon('siege',28),true);
   assert.equal(started,30);assert.equal(stopped,10);
-  audio.setPaused(true);assert.equal(stopped,30);assert.equal(audio.playBossWeapon('plasma',12),false);
+  audio.setPaused(true);assert.equal(stopped,40);assert.equal(audio.activeVoiceCount,0);assert.equal(audio.playBossWeapon('plasma',12),false);
   audio.setPaused(false);assert.equal(audio.playBossWeapon('plasma',12),true);
  }finally{audio.close();globalThis.AudioContext=previous;}
 });
@@ -265,7 +265,8 @@ test('enemy shots use their own cached buffer and share the boss voice cap, slid
     assert.equal(sources.length, count);
     audio.setEffectsVolume(35);
     audio.setPaused(true);
-    assert.equal(stopped, 28); // Pausing also releases the player's active recording.
+    assert.equal(stopped, 35); // Pause stops all 28 registered sources, including seven previously fading voices.
+    assert.equal(audio.activeVoiceCount, 0);
     assert.equal(audio.playEnemyShot(), false);
     audio.setPaused(false);
     assert.equal(audio.playEnemyShot(), true);

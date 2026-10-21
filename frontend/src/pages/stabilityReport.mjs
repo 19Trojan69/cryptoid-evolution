@@ -45,6 +45,7 @@ const numberLimits = {
   canvasCacheBytes: 2e9, canvasSurfaceBytes: 2e9, canvasRetainedHullUsers: 1000, canvasFailureCount: 1000,
   audioVoices: 10000, audioWeaponVoices: 10000, audioBossVoices: 10000, audioEffectVoices: 10000,
   audioSampleBuffers: 10000, audioRockBuffers: 10000, audioBufferBytes: 2e9, estimatedResourceBytes: 8e9,
+  audioClockMs: 1e12, audioClockStalls: 1e9, audioRecoveries: 1e9, audioBlockedSounds: 1e12, audioReapedVoices: 1e12,
   targetHz: 1000, cssPacedActive: 100000, cssPacingFallbacks: 1e9,
 };
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);

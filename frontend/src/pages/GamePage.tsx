@@ -712,6 +712,8 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
       canvasCacheBytes: canvas.cacheBytes, canvasSurfaceBytes: canvas.surfaceBytes, canvasRetainedHullUsers: canvas.retainedHullUsers,
       canvasFailureCount: canvas.failures.length,
       audioState: audio?.audioState, audioVoices: audio?.audioVoices, audioWeaponVoices: audio?.audioWeaponVoices,
+      audioClockMs: audio?.audioClockMs, audioClockStalls: audio?.audioClockStalls, audioRecoveries: audio?.audioRecoveries,
+      audioBlockedSounds: audio?.audioBlockedSounds, audioReapedVoices: audio?.audioReapedVoices,
       audioBossVoices: audio?.audioBossVoices, audioEffectVoices: audio?.audioEffectVoices, audioSampleBuffers: audio?.audioSampleBuffers,
       audioRockBuffers: audio?.audioRockBuffers, audioBufferBytes: audio?.audioBufferBytes, estimatedResourceBytes };
   }, [diagnosticContext, ownerDiagnostics]);
@@ -1221,7 +1223,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     soundRef.current?.setPaused(game.status === "loading" || game.status === "paused" || game.status === "game-over" || game.status === "victory");
   }, [game.sector, game.status]);
 
-  const startEffects = useCallback(() => {
+  const startEffects = useCallback((restartPausedGraph = false) => {
     if (!soundRef.current) {
       const audio = takePrimedGameAudio() ?? new GameAudio();
       audio.setEffectsVolume(readEffectsVolume());
@@ -1230,7 +1232,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
       soundRef.current = audio;
     }
     // Retry inside each gesture: Safari can interrupt Web Audio after fullscreen.
-    return soundRef.current.start();
+    return soundRef.current.start(restartPausedGraph);
   }, []);
   const startEffectsRef = useRef(startEffects);
   startEffectsRef.current = startEffects;
@@ -1240,8 +1242,8 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     if (document.visibilityState === "hidden") return;
     // Capture the actual Resume gesture before loading or the 3–2–1 countdown.
     // Keep both audio players paused until the mission becomes playable again.
-    void startEffects().catch(() => {});
-    if (musicEnabled) void musicRef.current?.unlock();
+    void startEffects(true).catch(() => {});
+    if (musicEnabled) void musicRef.current?.unlock(true);
   };
   const resumeSavedMission = () => {
     unlockAudioForResume();

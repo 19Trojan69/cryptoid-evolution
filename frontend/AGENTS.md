@@ -1,5 +1,40 @@
 # Preserve the officially approved game
 
+## Audio clock/voice recovery, 21 October 2026, preparation
+
+New owner report: continuation from level 21 has no music/effects; pause can
+occasionally leave audio hanging. Registered sources grow 0→2060 (2086 at the
+last transition), unlike the preceding normally sounding run's small counts.
+The fresh trace passes boss 30/bonus and level 35, then records normal level 36
+at 19:06:45.128 Vienna, before the new document at 19:06:47.432. The old bonus-20
+unexpected-restart record is historical. Do not identify this latest exit as
+bonus-only, nor infer audio-clock freeze/native memory/OS cause from state=running.
+
+Prepare from fixed official 4c25790a / 88063f6 plus its receipt. Scheduled sources
+need independent audio-clock end deadlines (one-second grace), not only ended.
+Observe a running clock across frequent foreground playback requests; block
+further source allocation if it stops for two seconds. Clear the frozen queue
+and attempt one same-context suspend/resume per stall, coalescing pending work.
+Pause releases all registered sources including fading weapons and silences
+the music graph during pending play; explicit Resume restarts paused running
+graphs using the same unlocked context/element, before account/countdown work.
+Keep all buffers, samples, gains, envelopes, overlap, regular playback and seek
+position. No extra timer/RAF/listener, context recreation, waveform change or
+gameplay/UI modification. Five bounded evidence fields join existing owner-only
+resource snapshots; no new transmission or ordinary-player diagnostics.
+
+Controlled negative case retains 2086 sources in preceding runtime; candidate
+stays at <=21 before stopping further allocation and drains to zero. 10,000
+missing-ended pairs remain bounded; 500 healthy groups match old scheduling
+parameters. Focused tests/build and their limits are in
+docs/audio-clock-recovery-20261021.md. One historical source comparison cannot
+run because its old Git object lacks GamePage; exclude it explicitly and keep
+the newer whole-GamePage parity guard with exact audio/diagnostic normalization.
+No physical iPhone audio output, native memory or Whitescreen-fix proof.
+Keep codex/audio-clock-recovery-20261021 automatic deployment disabled. This
+new correction is prepared, not published; preserve official Testnet, Mainnet,
+fixed source/rollback refs and the runtime-log/protection-bypass denials.
+
 ## Hull handoff Testnet publication, 21 October 2026
 
 The owner's subsequent instruction explicitly authorizes publication to Testnet

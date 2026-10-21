@@ -1,5 +1,6 @@
 import { musicGain } from "./musicPreferences.ts";
 import { ownerAudioDisabled, noteAudioEvent, captureAudioAuditEvents, audioClockMs } from './ownerAudioAudit.ts';
+import { AudioClockRecovery } from './audioClockRecovery.ts';
 
 const closeContext = (context: AudioContext | null) => {
   const auditEvent = captureAudioAuditEvents();
@@ -19,6 +20,10 @@ export class MusicPlayer {
   private source: string;
   private closed = false;
   private wantsPlayback = false;
+  private clockHealth = new AudioClockRecovery();
+  private pauseMuted = false;
+  private playRequest: Promise<boolean> | null = null;
+  private playbackEpoch = 0;
 
   constructor(src: string, volume: number) {
     this.audio = new Audio(src);
@@ -39,7 +44,7 @@ export class MusicPlayer {
       context = new AudioContext();
       source = context.createMediaElementSource(this.audio);
       gain = context.createGain();
-      gain.gain.value = musicGain(this.volume);
+      gain.gain.value = this.pauseMuted ? 0 : musicGain(this.volume);
       source.connect(gain).connect(context.destination);
       this.context = context;
       this.gain = gain;
@@ -76,6 +81,7 @@ export class MusicPlayer {
   setSource(src: string, resumeAt = 0) {
     if (this.closed || this.source === src) return;
     noteAudioEvent('music-source-switch');
+    this.playbackEpoch++; this.playRequest = null;
     this.clearMetadataListener();
     this.audio.pause();
     this.source = src;
@@ -96,9 +102,9 @@ export class MusicPlayer {
     this.volume = percent;
     if (this.context && this.gain) {
       this.audio.volume = 1;
-      this.gain.gain.setTargetAtTime(musicGain(percent), this.context.currentTime, .015);
+      this.gain.gain.setTargetAtTime(this.pauseMuted ? 0 : musicGain(percent), this.context.currentTime, .015);
     } else {
-      this.audio.volume = musicGain(percent);
+      this.audio.volume = this.pauseMuted ? 0 : musicGain(percent);
     }
   }
 
@@ -114,14 +120,14 @@ export class MusicPlayer {
 
   // Resume the existing graph during the Resume gesture without starting the
   // paused media element. The countdown/account request can finish afterwards.
-  async unlock(): Promise<boolean> {
+  async unlock(restartPausedGraph = false): Promise<boolean> {
     const auditEvent = captureAudioAuditEvents();
     if (ownerAudioDisabled()) { noteAudioEvent('music-blocked'); return false; }
     auditEvent('music-unlock-request');
     if (this.closed) return false;
     this.prepare();
     try {
-      if (this.context && this.context.state !== "running") await this.context.resume();
+      if (this.context) await this.clockHealth.resume(this.context, restartPausedGraph && this.audio.paused);
       const ready = !this.closed && (!this.context || this.context.state === "running");
       auditEvent(ready ? 'music-unlock-ok' : 'music-unlock-failed');
       return ready;
@@ -131,20 +137,37 @@ export class MusicPlayer {
     }
   }
 
-  async play(): Promise<boolean> {
+  play(): Promise<boolean> {
+    // A later genuine gesture must still retry an initial autoplay request.
+    // Coalesce only the diagnosed/pending frozen-graph recovery path.
+    if (this.playRequest && this.clockHealth.blocked) return this.playRequest;
+    const request = this.beginPlay();
+    this.playRequest = request;
+    void request.then(() => { if (this.playRequest === request) this.playRequest = null; });
+    return request;
+  }
+
+  private async beginPlay(): Promise<boolean> {
     const auditEvent = captureAudioAuditEvents();
     if (ownerAudioDisabled()) { this.pause(); noteAudioEvent('music-blocked'); return false; }
     auditEvent('music-play-request');
     if (this.closed) return false;
+    const epoch = this.playbackEpoch;
     this.wantsPlayback = true;
     this.prepare();
+    if (this.pauseMuted) {
+      this.pauseMuted = false;
+      if (this.gain) this.gain.gain.value = musicGain(this.volume);
+      else this.audio.volume = musicGain(this.volume);
+    }
     try {
       // Start both while still inside the user gesture on mobile Safari.
-      const resume = this.context && this.context.state !== "running" ? this.context.resume() : Promise.resolve();
+      const resume = this.context ? this.clockHealth.resume(this.context) : Promise.resolve();
       const playback = this.audio.paused ? this.audio.play() : Promise.resolve();
       await Promise.all([resume, playback]);
       // A pending play may resolve after mute, pause, route change or a track switch.
       if (this.closed || !this.wantsPlayback) { this.audio.pause(); return false; }
+      if (epoch !== this.playbackEpoch) return false;
       const playing = this.playing;
       auditEvent(playing ? 'music-play-ok' : 'music-play-failed');
       return playing;
@@ -154,11 +177,23 @@ export class MusicPlayer {
     }
   }
 
-  pause() { this.wantsPlayback = false; this.audio.pause(); }
+  pause() {
+    this.playbackEpoch++; this.playRequest = null;
+    this.wantsPlayback = false; this.audio.pause(); this.clockHealth.pause();
+    // Also silence the existing graph while a native play() promise is pending.
+    // Unlocking during the countdown must not restore this gain until play().
+    this.pauseMuted = true;
+    if (this.gain) {
+      this.gain.gain.cancelScheduledValues?.(this.context!.currentTime);
+      this.gain.gain.value = 0;
+    } else this.audio.volume = 0;
+  }
 
   close() {
     if (this.closed) return;
     this.closed = true;
+    this.playbackEpoch++; this.playRequest = null;
+    this.clockHealth.reset();
     this.wantsPlayback = false;
     this.clearMetadataListener();
     this.audio.pause();

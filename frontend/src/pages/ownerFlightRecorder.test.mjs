@@ -190,6 +190,11 @@ test('all GamePage simulation, input, audio, scene markup and recovery match the
   // The subsequently verified hull-plan handoff changes only the resource hook.
   // Normalize that isolated substitution before checking the simulation/scene.
   const actual = readFileSync(new URL('./GamePage.tsx', import.meta.url),'utf8')
+    .replace('const startEffects = useCallback((restartPausedGraph = false) => {', 'const startEffects = useCallback(() => {')
+    .replace('return soundRef.current.start(restartPausedGraph);', 'return soundRef.current.start();')
+    .replace('void startEffects(true).catch(() => {});', 'void startEffects().catch(() => {});')
+    .replace('void musicRef.current?.unlock(true);', 'void musicRef.current?.unlock();')
+    .replace('      audioClockMs: audio?.audioClockMs, audioClockStalls: audio?.audioClockStalls, audioRecoveries: audio?.audioRecoveries,\n      audioBlockedSounds: audio?.audioBlockedSounds, audioReapedVoices: audio?.audioReapedVoices,\n', '')
     .replace('import { useShipVisualOffset, paintedShipResourceStats, useHullSourceReady } from "./paintedShip";\nimport { usePreparedGameHulls } from \'./usePreparedGameHulls\';',
       'import { useShipVisualOffset, paintedShipResourceStats, preloadHullSources, retainPreparedHulls, useHullSourceReady } from "./paintedShip";\nimport { hullSourcePlan, preparedHullPlan } from "./hullSourcePlan";')
     .replace('  usePreparedGameHulls(game.sector, game.encounter, hullOffset, hullWave, hullBonusGroup, hullRules);',

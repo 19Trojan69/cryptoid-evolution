@@ -18,6 +18,7 @@ export type GameDiagnostic = {
   audioVoices?: number; audioWeaponVoices?: number; audioBossVoices?: number; audioEffectVoices?: number;
   audioSampleBuffers?: number; audioRockBuffers?: number; audioBufferBytes?: number; estimatedResourceBytes?: number;
   audioState?: string;
+  audioClockMs?: number; audioClockStalls?: number; audioRecoveries?: number; audioBlockedSounds?: number; audioReapedVoices?: number;
   sourceCommit?: string; sourceTree?: string; workingTreeDirty?: boolean;
   targetHz?: number; cssPacingMode?: string; cssPacedActive?: number; cssPacingFallbacks?: number;
   restartHint?: 'foreground-interrupted' | 'background-interrupted' | 'page-reload';

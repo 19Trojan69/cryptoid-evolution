@@ -238,9 +238,10 @@ test('Resume gesture recovers interrupted music without playing during its count
     assert.equal(player.audio.paused, true, 'countdown remains silent');
     assert.equal(player.playing, false);
     assert.equal(player.audio.currentTime, 42);
-    assert.equal(h.graph.gains[0].gain.value, .25);
+    assert.equal(h.graph.gains[0].gain.value, 0, 'countdown keeps the graph silent');
     assert.equal(h.graph.sources.length, 1);
     assert.equal(await player.play(), true, 'previously unlocked element can play after the countdown');
+    assert.equal(h.graph.gains[0].gain.value, .25);
     assert.equal(resumes, 3);
     player.close();
   } finally { h.restore(); }
