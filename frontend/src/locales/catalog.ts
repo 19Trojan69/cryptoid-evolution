@@ -30,6 +30,7 @@ import { package2Translations } from './package2.ts';
 import { package3Translations } from './package3.ts';
 import { package5Translations } from './package5.ts';
 import { audioAuditTranslations } from './audioAudit.ts';
+import { fullSessionTranslations } from './fullSession.ts';
 // Shared localization catalog. Rows are kept explicit for coverage and placeholder checks.
 export const localeAliases: Record<string, string | string[]> = {
   "A short breather.": "MISSION PAUSED",
@@ -5632,3 +5633,4 @@ for (const [locale, row] of Object.entries(communityRows))
   Object.assign(localeCatalog[locale] ??= {}, Object.fromEntries(communityKeys.map((key, index) => [key,row[index]])));
 
 for (const [locale, entries] of Object.entries(combatVarietyTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
+for (const [locale, entries] of Object.entries(fullSessionTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);

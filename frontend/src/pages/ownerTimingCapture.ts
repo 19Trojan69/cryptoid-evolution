@@ -18,7 +18,8 @@ export async function armOwnerTimingCapture(verify: () => Promise<{ canAdmin?: b
 type ProbeOptions = Parameters<typeof createPerformanceProbe>[0];
 export function createOwnerTimingCapture(verifiedOwner: boolean, getHost: () => Host,
   options: { now?: () => number; wallNow?: () => number; runtime?: NonNullable<ProbeOptions>['runtime'];
-    build: { sourceCommit: string; sourceTree: string; workingTreeDirty: boolean }; onFinish?: () => void }) {
+    build: { sourceCommit: string; sourceTree: string; workingTreeDirty: boolean }; onFinish?: () => void;
+    fullContext?: () => Record<string, unknown> }) {
   if (!verifiedOwner) return null;
   const host = getHost(), wallNow = options.wallNow ?? Date.now, now = options.now ?? (() => performance.now());
   let armedAt: number;

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
+import { assertObservationOnly } from '../../scripts/fullSessionScope.mjs';
 import { createOwnerFlightRecorder, createOwnerDiagnosticProbe } from './ownerFlightRecorder.ts';
 import { resourceTimingEnabled, retainOwnerResourceTiming } from './performanceDiagnostics.ts';
 import { OWNER_TIMING_ARM_KEY, readTimingCapture } from './timingReport.mjs';
@@ -13,10 +13,10 @@ const build = { sourceCommit: 'a'.repeat(40), sourceTree: 'b'.repeat(40), workin
 const playing = { sector: 20, flight: 0, phase: 'ATTACK_CYCLE', encounter: 'boss-fight', status: 'playing',
   enemies: 1, attackers: 0, returning: 0, playerShots: 3, enemyShots: 4, effects: 0, rocks: 0, rockEffects: 0, pickups: 0 };
 function fixture() {
-  let now = 100, wall = 1000000, runtimeCalls = 0, writes = 0;
+  let now = 100, wall = 1000000, runtimeCalls = 0, writes = 0, fullWrites = 0;
   const local = new Map(), session = new Map();
   const storage = data => ({ getItem: k => data.get(k) ?? null,
-    setItem: (k, v) => { writes++; data.set(k, v); }, removeItem: k => data.delete(k) });
+    setItem: (k, v) => { if (k === 'cryptoid_owner_full_status_v1') fullWrites++; else writes++; data.set(k, v); }, removeItem: k => data.delete(k) });
   const host = { localStorage: storage(local), sessionStorage: storage(session), __cryptoidBootId: 'test-boot' };
   const options = { build, now: () => now, wallNow: () => wall,
     runtime: () => { runtimeCalls++; return { animations: 12, particles: 5, domNodes: 500, bossPaints: 100, username: 'private-user' }; } };
@@ -26,7 +26,7 @@ function fixture() {
     probe.sceneRequested(); const start = probe.sceneRenderBegin(); advance(2); probe.sceneCommitted(start);
     probe.simulationStep(16, 16); probe.end(now);
   };
-  return { host, local, session, options, advance, frame, stats: () => ({ now, wall, runtimeCalls, writes }) };
+  return { host, local, session, options, advance, frame, stats: () => ({ now, wall, runtimeCalls, writes, fullWrites }) };
 }
 
 test('ordinary player cannot obtain storage, create a manual probe or enable resource timing', () => {
@@ -158,11 +158,14 @@ test('first fault is persisted immediately even directly after a periodic write;
   const f = fixture(), probe = createOwnerFlightRecorder(true, () => f.host, f.options);
   f.frame(probe); f.advance(2100); f.frame(probe);
   const writes = f.stats().writes;
+  const fullWrites = f.stats().fullWrites;
   probe.lifecycle('frame-error', new Error('private-message'));
   assert.equal(f.stats().writes, writes + 2);
+  assert.equal(f.stats().fullWrites, fullWrites + 1);
   assert.ok(readFlightRecorders(f.host)[0].events.some(e => e.kind === 'frame-error'));
   for (let i=0; i<100; i++) probe.lifecycle('frame-error', new Error('private-message'));
   assert.equal(f.stats().writes, writes + 2);
+  assert.equal(f.stats().fullWrites, fullWrites + 1);
   probe.finish();
 });
 test('a fault in the first playing frame is retained before any complete sample exists', () => {
@@ -173,34 +176,6 @@ test('a fault in the first playing frame is retained before any complete sample 
   assert.ok(capture.events.some(e => e.kind === 'render-error'));
   probe.finish();
 });
-test('all GamePage behavior matches the approved source outside the individually tested audio/resource corrections', () => {
-  const cwd = new URL('../../../', import.meta.url).pathname;
-  const ref = ['cc5ef2276feb651edcf0681222865e8c957f8a4e', 'bcdff3e4d104e5c125eb5e8320fed4f6c54d68d2'].find(ref => {
-    try { execFileSync('git', ['cat-file', '-e', `${ref}:frontend/src/pages/GamePage.tsx`], {cwd, stdio:'ignore'}); return true; }
-    catch { return false; }
-  });
-  assert.ok(ref, 'official source or verified identical-tree local transfer is available');
-  assert.equal(execFileSync('git', ['rev-parse', `${ref}^{tree}`], {cwd, encoding:'utf8'}).trim(),
-    '5d2a7002beedd357d17e68a4f46e33bc01204b64');
-  const official = execFileSync('git', ['show', `${ref}:frontend/src/pages/GamePage.tsx`], {cwd, encoding:'utf8'});
-  const expected = official.replace("import { createOwnerTimingCapture } from './ownerTimingCapture';",
-    "import { createOwnerDiagnosticProbe } from './ownerFlightRecorder';")
-    .replace("runtime }) : createOwnerTimingCapture(ownerDiagnostics, () => window, { runtime, build: __CRYPTOID_BUILD__,\n        onFinish: () => { if (performanceProbeRef.current === probe) performanceProbeRef.current = null; stopBossObservation?.(); } });",
-      "runtime }) : createOwnerDiagnosticProbe(ownerDiagnostics && shipSaveNetwork === 'testnet', () => window,\n        { runtime, build: __CRYPTOID_BUILD__ });");
-  // The subsequently verified hull-plan handoff changes only the resource hook.
-  // Normalize that isolated substitution before checking the simulation/scene.
-  const actual = readFileSync(new URL('./GamePage.tsx', import.meta.url),'utf8')
-    .replace('    const music = musicRef.current?.audioAuditSnapshot;\n', '')
-    .replace(',\n      musicState: music?.musicState, musicClockMs: music?.musicClockMs, musicMediaMs: music?.musicMediaMs,\n      musicPaused: music?.musicPaused, musicEnded: music?.musicEnded, musicTrack: music?.musicTrack,\n      bossHeartCollected: stateRef.current.encounter === \'boss-clear\' ? !!stateRef.current.bossHeartCollected : undefined', '')
-    .replace('musicRef.current.waitingForEnd(clearTimerRef.current)', 'musicRef.current.playing && !musicRef.current.audio.ended')
-    .replace('const startEffects = useCallback((restartPausedGraph = false) => {', 'const startEffects = useCallback(() => {')
-    .replace('return soundRef.current.start(restartPausedGraph);', 'return soundRef.current.start();')
-    .replace('void startEffects(true).catch(() => {});', 'void startEffects().catch(() => {});')
-    .replace('void musicRef.current?.unlock(true);', 'void musicRef.current?.unlock();')
-    .replace('      audioClockMs: audio?.audioClockMs, audioClockStalls: audio?.audioClockStalls, audioRecoveries: audio?.audioRecoveries,\n      audioBlockedSounds: audio?.audioBlockedSounds, audioReapedVoices: audio?.audioReapedVoices,\n', '')
-    .replace('import { useShipVisualOffset, paintedShipResourceStats, useHullSourceReady } from "./paintedShip";\nimport { usePreparedGameHulls } from \'./usePreparedGameHulls\';',
-      'import { useShipVisualOffset, paintedShipResourceStats, preloadHullSources, retainPreparedHulls, useHullSourceReady } from "./paintedShip";\nimport { hullSourcePlan, preparedHullPlan } from "./hullSourcePlan";')
-    .replace('  usePreparedGameHulls(game.sector, game.encounter, hullOffset, hullWave, hullBonusGroup, hullRules);',
-      '  useEffect(() => {\n    preloadHullSources(hullSourcePlan(game.sector, game.encounter, hullOffset, hullWave));\n    const prepared = retainPreparedHulls(preparedHullPlan(game.sector, game.encounter, hullOffset, hullWave, hullBonusGroup, hullRules));\n    return prepared.release;\n  }, [game.sector, game.encounter, hullOffset, hullWave, hullBonusGroup, hullRules]);');
-  assert.equal(actual, expected);
+test('GamePage, hull handoff, transport and save queue preserve the current approved source outside exact observations', () => {
+  assertObservationOnly();
 });

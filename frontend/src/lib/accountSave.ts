@@ -4,6 +4,7 @@ import { allPlayerColors, playerSkins, readShipFleet, shardBalance, SHARD_BALANC
 import { shipSaveNetwork } from "../pages/shipFleet";
 import { BASE_MISSION_HEARTS, MAX_MISSION_HEARTS, cappedSnapshot } from "../../../backend/src/lifeRules";
 import { appendPendingSave, type PendingSave } from './saveOutbox';
+import { sessionDiagnostic } from './sessionDiagnosticEvents';
 export type AccountSave = Pick<PlayerSave, "cardReveals" | "usedShipSkins" | "version" | "balance" | "fleet" | "skin" | "color" | "mission" | "highestSector" | "totalDestroyed" | "totalShardsEarned" | "totalShardsSpent" | "legacyImported" | "updatedAt">;
 export type { Snapshot };
 export const loadAccountSave = async () => (await axiosClient.get<{ save: AccountSave }>("/progress/me")).data.save;
@@ -32,7 +33,8 @@ export function createSaveQueue(uid: string) {
   let inflight: Promise<void> | null = null;
   let uploading: PendingSave | null = null;
   let durable = true;
-  const persist = () => { try { localStorage.setItem(key, JSON.stringify(entries)); } catch { durable = false; } };
+  const persist = () => { try { localStorage.setItem(key, JSON.stringify(entries)); } catch { durable = false; }
+    sessionDiagnostic('queue', { operation: 'persist', depth: entries.length, success: durable }); };
   const drain = (): Promise<void> => {
     if (inflight) return inflight;
     inflight = (async () => {
@@ -41,15 +43,18 @@ export function createSaveQueue(uid: string) {
         uploading = entry;
         await retrySave(() => axiosClient.post(entry.path, entry.body));
         entries.shift(); persist();
+        sessionDiagnostic('queue', { operation: 'drain', depth: entries.length });
       }
     })().finally(() => { inflight = null; uploading = null; });
     return inflight;
   };
   return {
-    enqueue(entry: PendingSave) { appendPendingSave(entries, entry, uploading); persist(); return drain(); },
+    enqueue(entry: PendingSave) { appendPendingSave(entries, entry, uploading); persist();
+      sessionDiagnostic('queue', { operation: 'enqueue', depth: entries.length }); return drain(); },
     drain,
     get durable() { return durable; },
     async recover() {
+      sessionDiagnostic('queue', { operation: 'recover', depth: entries.length });
       // A pause-menu exit may occur while the current block is still uploading.
       // Let it finish before choosing the first pending run to recover.
       if (inflight) { try { await inflight; } catch { /* Recover the retained entry below. */ } }
@@ -75,6 +80,7 @@ export function createSaveQueue(uid: string) {
       }
       await drain();
     },
-    archive() { try { localStorage.setItem(`${key}_unconfirmed`, JSON.stringify(entries)); } catch { durable = false; } entries = []; persist(); },
+    archive() { try { localStorage.setItem(`${key}_unconfirmed`, JSON.stringify(entries)); } catch { durable = false; } entries = []; persist();
+      sessionDiagnostic('queue', { operation: 'archive', depth: entries.length }); },
   };
 }

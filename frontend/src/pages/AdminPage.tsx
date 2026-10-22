@@ -30,7 +30,7 @@ import "./admin.css";
 import AdminUsage from "./AdminUsage";
 import { paymentEvidenceLinks } from "./paymentEvidenceLinks";
 import { useAdminLocale } from "../adminLocale";
-import { readOwnerStabilityReport } from './stabilityReport.mjs';
+import { readOwnerStabilityReport, exportOwnerFullSession, type StabilityReport } from './stabilityReport.mjs';
 import { armOwnerTimingCapture } from './ownerTimingCapture';
 import { armOwnerAudioAudit } from './ownerAudioAudit';
 import { installReloadDiagnostics } from './reloadDiagnostics';
@@ -142,12 +142,22 @@ function OwnerStabilityReport() {
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
+  const [fullCapture, setFullCapture] = useState<StabilityReport['fullSessionRecording']>();
   const request = useRef(0);
   const field = useRef<HTMLTextAreaElement>(null);
+  const fullDownload = useRef<{ url: string; timer: number } | null>(null);
+  const releaseFullDownload = useCallback(() => {
+    if (!fullDownload.current) return;
+    URL.revokeObjectURL(fullDownload.current.url);
+    window.clearTimeout(fullDownload.current.timer);
+    fullDownload.current = null;
+  }, []);
+  useEffect(() => () => { releaseFullDownload(); }, [releaseFullDownload]);
   const load = useCallback(async () => {
     const id = ++request.current;
     setBusy(true);
     setReport("");
+    setFullCapture(undefined);
     setNotice("");
     setError("");
     try {
@@ -156,8 +166,9 @@ function OwnerStabilityReport() {
         // Install only after fresh owner verification and the active-view check.
         installReloadDiagnostics();
         return window;
-      }, () => request.current === id);
+      }, () => request.current === id, undefined, shipSaveNetwork === 'testnet');
       if (result && request.current === id) {
+        setFullCapture(result.fullSessionRecording);
         setReport(JSON.stringify({ ...result, reportingRuntime: { ...__CRYPTOID_BUILD__, cssPacing: cssFramePacingStats() } }, null, 2));
         setNotice(t(result.available ? "Vorhandene technische Einträge wurden gelesen." : "In diesem Browser sind keine auswertbaren Einträge vorhanden."));
         if (result.audioCaptures?.at(-1)?.finished) setNotice(t("Audiomessung abgeschlossen. Das Spiel wurde nicht automatisch beendet."));
@@ -182,6 +193,7 @@ function OwnerStabilityReport() {
     } catch (err) {
       if (request.current === id) {
         setReport("");
+        setFullCapture(undefined);
         setError(errorMessage(err));
         setBusy(false);
       }
@@ -202,6 +214,23 @@ function OwnerStabilityReport() {
       if (request.current === id) setBusy(false);
     }
   };
+  const downloadFull = async (sessionId: string) => {
+    const id = ++request.current;
+    setBusy(true); setError(''); setNotice('');
+    try {
+      const blob = await exportOwnerFullSession(verifyReportOwner, () => window, sessionId, () => request.current === id);
+      if (!blob || request.current !== id) return;
+      releaseFullDownload();
+      const url = URL.createObjectURL(blob);
+      fullDownload.current = { url, timer: window.setTimeout(() => {
+        if (fullDownload.current?.url === url) { URL.revokeObjectURL(url); fullDownload.current = null; }
+      }, 60_000) };
+      const link = document.createElement('a');
+      link.href = url; link.download = `cryptoid-full-session-${sessionId}.json`;
+      document.body.append(link); link.click(); link.remove();
+    } catch (err) { if (request.current === id) { setReport(''); setFullCapture(undefined); setError(errorMessage(err)); } }
+    finally { if (request.current === id) setBusy(false); }
+  };
   const armTiming = async () => {
     const id = ++request.current;
     setBusy(true); setError(""); setNotice("");
@@ -213,7 +242,7 @@ function OwnerStabilityReport() {
   };
   const armAudio = async (mode: 'original' | 'off' | 'cancel') => {
     const id = ++request.current;
-    setBusy(true); setError(''); setNotice(''); setReport('');
+    setBusy(true); setError(''); setNotice(''); setReport(''); setFullCapture(undefined);
     try {
       const armed = await armOwnerAudioAudit(verifyReportOwner, () => window, mode, () => request.current === id);
       if (armed) setNotice(mode === 'original'
@@ -227,6 +256,15 @@ function OwnerStabilityReport() {
     <h2>{t("Technischer Bericht")}</h2>
     <p>{t("Nur für dein verifiziertes Eigentümerkonto. Gelesen werden vorhandene technische Einträge aus diesem Browser. Der Bericht wird nicht automatisch versendet.")}</p>
     <p>{t("Öffne diesen Bereich möglichst im bisherigen Pi-Browser-Tab des betroffenen Spiels.")}</p>
+    {shipSaveNetwork === 'testnet' && <p>{t("Deine Testnet-Spielrunden werden vom Start an technisch aufgezeichnet. Die letzten zwei Läufe bleiben als Datei auslesbar. Es wird nichts automatisch versendet.")}</p>}
+    {shipSaveNetwork === 'testnet' && fullCapture && (fullCapture.storage !== 'available' || fullCapture.status?.state === 'storage-error')
+      && <p className="admin-error" role="alert">{t("Die vollständige Aufzeichnung konnte nicht gespeichert werden.")}</p>}
+    {shipSaveNetwork === 'testnet' && fullCapture?.sessions.map(session => <div key={session.id}>
+      <p>{new Date(session.startedAt).toLocaleString('de-AT')} · {t("{size} KiB", { size: Math.ceil(session.bytes / 1024) })}</p>
+      {session.state === 'limited' && <p role="alert">{t("Die Aufzeichnung wurde an einer Speicher- oder Zeitgrenze beendet.")}</p>}
+      {session.state === 'recording' && <p>{t("Für diesen Lauf wurde kein Abschluss gespeichert.")}</p>}
+      <button className="admin-button" disabled={busy} onClick={() => { void downloadFull(session.id); }}>{t("Gesamtlauf herunterladen")}</button>
+    </div>)}
     {error && <p className="admin-error" role="alert">{error}</p>}
     <p role="status">{busy ? t("Berechtigung wird geprüft …") : notice}</p>
     {report && <label>{t("Lokaler Bericht")}

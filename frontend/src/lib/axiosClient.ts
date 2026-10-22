@@ -1,4 +1,5 @@
 import axios from "axios";
+import { installSessionRequestDiagnostics } from './sessionRequestDiagnostics';
 
 export const PI_ACCESS_TOKEN_KEY = "cryptoid_pi_access_token";
 export const ADMIN_TEST_HEADER = "x-cryptoid-admin-test";
@@ -33,3 +34,4 @@ axiosClient.interceptors.request.use((config) => {
 
   return config;
 });
+installSessionRequestDiagnostics(axiosClient);

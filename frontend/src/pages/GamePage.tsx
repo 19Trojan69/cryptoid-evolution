@@ -66,6 +66,7 @@ import GameHudStats from "./GameHudStats";
 import { useInitialRef } from "./useInitialRef";
 import { useShipVisualOffset, paintedShipResourceStats, useHullSourceReady } from "./paintedShip";
 import { usePreparedGameHulls } from './usePreparedGameHulls';
+import { sessionDiagnostic } from '../lib/sessionDiagnosticEvents';
 import { contactWithBoss } from "./bossContact";
 import { openingKillPickup } from "./pickupOrigin";
 import { ownedShipStage, projectileGuardForStage, projectileImpact, stageWeaponLevel, type ShipStage } from "./shipEvolution";
@@ -440,6 +441,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   const reloadDiagnosticsRef = useRef<ReturnType<typeof createReloadGameMonitor> | null>(null);
   const performanceProbeRef = useRef<ReturnType<typeof createPerformanceProbe> | null>(null);
   const sceneRenderStarted = performanceProbeRef.current?.sceneRenderBegin();
+  const lastSessionSceneRef = useRef('');
   useLayoutEffect(() => { performanceProbeRef.current?.sceneCommitted(sceneRenderStarted); });
   const backgroundHiddenAtRef = useRef(0);
   const spawnTimerRef = useRef(0);
@@ -476,6 +478,15 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   const pendingBossCardRef=useRef<CardReward|null>(null);
   const [extraLifeVisible,setExtraLifeVisible]=useState(false);
   const [game, setGame] = useState<GameState>(createInitialState);
+  useLayoutEffect(() => {
+    if (!ownerDiagnostics || !performanceProbeRef.current) return;
+    const state = game;
+    const signature = `${state.sector}:${state.encounter}:${state.phase}:${state.status}`;
+    if (lastSessionSceneRef.current === signature) return;
+    lastSessionSceneRef.current = signature;
+    sessionDiagnostic('boundary', { operation: 'scene-committed', sector: state.sector, phase: state.phase,
+      encounter: state.encounter, status: state.status });
+  });
   useLayoutEffect(() => {
     bossBoundaryRef.current?.sceneCommitted(game.boss, game.sector);
   }, [game]);
@@ -738,7 +749,9 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     const probe = developer ? createPerformanceProbe({
       backup: trace => (window as Window & { __cryptoidTraceSink?: (trace: unknown) => void }).__cryptoidTraceSink?.(trace),
       runtime }) : createOwnerDiagnosticProbe(ownerDiagnostics && shipSaveNetwork === 'testnet', () => window,
-        { runtime, build: __CRYPTOID_BUILD__ });
+        { runtime, build: __CRYPTOID_BUILD__, fullContext: () => ({ ...diagnosticContext(),
+          weaponLevel: stateRef.current.weaponLevel, weaponSource: stateRef.current.weaponSource,
+          paidWeaponMs: stateRef.current.paidWeaponMs, pickupWeaponMs: stateRef.current.pickupWeaponMs }) });
     performanceProbeRef.current = probe;
     const stopBossObservation = probe ? observeBossResources((kind, details) => {
       const state = stateRef.current;
@@ -1442,6 +1455,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         const selectedExpired = (expiringSource === 'paid' && expiringMs > 0 && state.paidWeaponMs === 0)
           || (expiringSource === 'pickup' && state.pickupWeaponMs === 0 && pickupWeaponDelta > 0);
         if (selectedExpired) {
+          if (ownerDiagnostics) sessionDiagnostic('weapon', { operation: 'expired', level: expiringLevel, weaponSource: expiringSource });
           const next = nextActiveWeapon(state.weaponTimers, autoReloadRef.current, state.pickupWeaponLevel, state.pickupWeaponMs);
           state.weaponSource = next.source;
           if (next.source === 'paid') { state.paidWeaponLevel = next.level; state.paidWeaponMs = state.weaponTimers[next.level]; }
@@ -1509,6 +1523,8 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
               return;
             }
             const clearEncounter = state.encounter === "boss-clear" ? "boss-clear" : state.encounter === "bonus" ? "bonus" : "normal";
+            if (ownerDiagnostics) sessionDiagnostic('boundary', { operation: 'transition-before', sector: state.sector,
+              encounter: state.encounter, phase: state.phase });
             const next = advanceAfterClear(state.section, clearEncounter);
             state.section = next.section;
             state.sector = next.sector;
@@ -1558,6 +1574,8 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
             sectionElapsedRef.current = 0;
             clearTimerRef.current = 0;
             attackCooldownRef.current = 0;
+            if (ownerDiagnostics) sessionDiagnostic('boundary', { operation: 'transition-reset-done', sector: state.sector,
+              encounter: state.encounter, phase: state.phase });
             if (ownerDiagnostics) {
               if (state.encounter === 'bonus') recordOwnerResourceSnapshot('resource-bonus-start');
               else if (state.encounter === 'normal') recordOwnerResourceSnapshot('resource-normal-start');
@@ -1584,7 +1602,11 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
             spawnTimerRef.current -= timing.gapMs;
             const firstNormalSpawn = formationIndexRef.current === 0 && flightRef.current === 0;
             if (variety && formationIndexRef.current === 0) { intro.notice = chooseCryptoid(state.sector, formationOffsetRef.current).shipClass === "heavy" ? "Heavy attacker incoming" : [5, 8].includes((state.sector - 1) % 10 + 1) ? "Finish this wave without a hit" : (state.sector - 1) % 10 + 1 === 7 ? "Hold your combo" : "Clear the formation"; intro.noticeMs = 2000; }
+            if (firstNormalSpawn && ownerDiagnostics) sessionDiagnostic('boundary', { operation: 'first-spawn-before', sector: state.sector,
+              encounter: state.encounter, phase: state.phase });
             state.asteroids.push(spawnAsteroid(nextIdRef.current++, width, visibleTop, formationIndexRef.current++, state.sector, slots, formationOffsetRef.current, rulesVersionRef.current));
+            if (firstNormalSpawn && ownerDiagnostics) sessionDiagnostic('boundary', { operation: 'first-spawn-created', sector: state.sector,
+              encounter: state.encounter, phase: state.phase });
             if (firstNormalSpawn && ownerDiagnostics) recordOwnerResourceSnapshot('resource-normal-first-spawn');
           }
         }
@@ -2158,6 +2180,8 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     const current = () => weaponMountedRef.current && stateRef.current === state && scoreRunRef.current === runId;
     if ((!automatic && (state.status !== 'paused' || !weaponMenuOpen)) || (automatic && state.status !== 'playing') || weaponBusyRef.current || weaponCountdown !== null) { if (automatic) reloadPendingRef.current = false; return; }
     if (pickup && state.pickupWeaponMs <= 0) return;
+    if (ownerDiagnostics) sessionDiagnostic('weapon', { operation: automatic ? 'automatic-reload' : 'manual-selection', level,
+      weaponSource: state.weaponSource });
     if (!automatic && reloadNoticeTimerRef.current) {
       window.clearTimeout(reloadNoticeTimerRef.current); reloadNoticeTimerRef.current = null; setAutoReloading(null);
     }

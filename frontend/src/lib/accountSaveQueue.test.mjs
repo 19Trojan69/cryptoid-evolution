@@ -31,6 +31,7 @@ function fixture(entries, limit, rejectedRun) {
     if (id === '../pages/shipFleet') return {shipSaveNetwork:'testnet'};
     if (id === '../../../backend/src/lifeRules') return rules;
     if (id === './saveOutbox') return { appendPendingSave };
+    if (id === './sessionDiagnosticEvents') return { sessionDiagnostic() {} };
     throw Error(`Unexpected dependency: ${id}`);
   }, {localStorage});
   return {queue:exports.createSaveQueue('pilot-a'),stored,writes,sent,key};

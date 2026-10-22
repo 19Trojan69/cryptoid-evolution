@@ -104,6 +104,8 @@ type Options = {
   metadata?: Record<string, unknown>;
   onFinish?: (started: boolean) => void;
   onStart?: () => void;
+  onSample?: (sample: Sample) => void;
+  onEvent?: (event: Event) => void;
 };
 const bounded = <T>(items: T[], item: T, limit: number) => {
   if (items.length >= limit) items.shift();
@@ -193,6 +195,7 @@ export function createPerformanceProbe(options: Options = {}) {
       },
       64
     );
+    try { options.onEvent?.(events[events.length - 1]); } catch { /* Optional recorder. */ }
   };
   const exportTrace = () => ({
     version: 2,
@@ -288,6 +291,7 @@ export function createPerformanceProbe(options: Options = {}) {
       },
       Math.max(1, Math.min(PERFORMANCE_SAMPLE_LIMIT, options.sampleLimit ?? PERFORMANCE_SAMPLE_LIMIT))
     );
+    try { options.onSample?.(samples[samples.length - 1]); } catch { /* Optional recorder. */ }
     gaps = [];
     workTimes = [];
     volleyGaps = [];

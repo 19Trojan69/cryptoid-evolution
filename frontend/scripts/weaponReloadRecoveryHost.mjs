@@ -25,6 +25,7 @@ export function selectionHost() {
   const timers = new Map(), requests = [], receipts = new Map(), saves = [];
   const balances = { weapon_twin: 10, weapon_rapid_twin: 10 };
   const env = {
+    ownerDiagnostics: true, sessionDiagnostic() {},
     stateRef: ref(state), scoreRunRef: ref('isolated-run'), weaponMountedRef: ref(true),
     weaponBusyRef: ref(false), activationRef: ref(null), adminRunRef: ref(false),
     stockRef: ref({ ...balances }), reloadPendingRef: ref(false), reloadRequestRef: ref(null),

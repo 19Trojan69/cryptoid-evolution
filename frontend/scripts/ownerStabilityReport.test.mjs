@@ -44,8 +44,8 @@ test('denied owner verification renders no report and never reads local records'
 });
 test('verified owner reads sanitized local report, and denied copy clears it',async()=>{
   let calls=0;const p=panel(async()=>{if(++calls>1)throw Error('401');return {canAdmin:true};});
-  // v5 also reads the current and previous rolling recorders from both stores.
-  await p.flush();assert.equal(p.reads,14);assert.equal(JSON.parse(p.text()).events[0].sector,19);assert.ok(!p.text().includes('excluded'));
+  // v6 also reads the tiny full-session status marker; chunks stay outside the textarea.
+  await p.flush();assert.equal(p.reads,15);assert.equal(JSON.parse(p.text()).events[0].sector,19);assert.ok(!p.text().includes('excluded'));
   await p.button('Bericht kopieren').onClick();await p.flush();assert.equal(p.copies,0);assert.equal(p.text(),'');
 });
 test('copy rechecks owner permission and copies exactly the displayed report',async()=>{

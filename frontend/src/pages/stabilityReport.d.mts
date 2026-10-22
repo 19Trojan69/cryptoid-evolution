@@ -1,4 +1,4 @@
-type TechnicalStorage = { localStorage?: Pick<Storage, 'getItem'>; sessionStorage?: Pick<Storage, 'getItem'> };
+type TechnicalStorage = { localStorage?: Pick<Storage, 'getItem'>; sessionStorage?: Pick<Storage, 'getItem'>; indexedDB?: IDBFactory };
 export type StabilityReport = {
   version: number; format: string; generatedAt: string | null; available: boolean;
   activeDocument: { startedAt?: number; ageMs?: number; navigationType?: string; route?: string } | null;
@@ -9,8 +9,10 @@ export type StabilityReport = {
   timingCapture: import('./timingReport.mjs').TimingCapture | null;
   audioCaptures: import('./audioAuditReport.mjs').AudioAuditReport[];
   flightRecorders: import('./flightRecorderReport.mjs').FlightRecorder[];
+  fullSessionRecording?: Awaited<ReturnType<typeof import('./fullSessionStore.ts').readFullSessionSummaries>>;
   limits: string;
 };
 export function technicalContext(value: unknown): Record<string, unknown> | null;
 export function readStabilityReport(host: TechnicalStorage, now?: number): StabilityReport;
-export function readOwnerStabilityReport(verifyOwner: () => Promise<{ canAdmin?: boolean }>, getHost: () => TechnicalStorage, active?: () => boolean, now?: number): Promise<StabilityReport | null>;
+export function readOwnerStabilityReport(verifyOwner: () => Promise<{ canAdmin?: boolean }>, getHost: () => TechnicalStorage, active?: () => boolean, now?: number, includeFullSession?: boolean): Promise<StabilityReport | null>;
+export function exportOwnerFullSession(verifyOwner: () => Promise<{ canAdmin?: boolean }>, getHost: () => TechnicalStorage, id: string, active?: () => boolean): Promise<Blob | null>;

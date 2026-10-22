@@ -1,0 +1,152 @@
+import { FULL_SESSION_DB, FULL_SESSION_LIMITS as limits, FULL_SESSION_STATUS_KEY,
+  cleanFullRecord, cleanFullSummary, fullSessionLimitsText, type FullRecord, type FullSessionSummary } from './fullSessionFormat.ts';
+
+export type FullSessionHost = { indexedDB?: IDBFactory; localStorage?: Pick<Storage, 'getItem' | 'setItem'> };
+const connections = new WeakMap<IDBFactory, Promise<IDBDatabase>>();
+const pending = new Set<Promise<unknown>>();
+export function trackFullSessionWrite<T>(promise: Promise<T>) {
+  pending.add(promise);
+  void promise.then(() => pending.delete(promise), () => pending.delete(promise));
+  return promise;
+}
+export async function settleFullSessionWrites() { while (pending.size) await Promise.allSettled([...pending]); }
+function database(host: FullSessionHost) {
+  const factory = host.indexedDB;
+  if (!factory) return Promise.reject(new Error('diagnostic_storage_unavailable'));
+  const prior = connections.get(factory);
+  if (prior) return prior;
+  const opened = new Promise<IDBDatabase>((resolve, reject) => {
+    let settled = false;
+    const timer = setTimeout(() => fail(), limits.timeoutMs);
+    const fail = () => { if (settled) return; settled = true; clearTimeout(timer); reject(new Error('diagnostic_storage_unavailable')); };
+    let request: IDBOpenDBRequest;
+    try { request = factory.open(FULL_SESSION_DB, 1); } catch { fail(); return; }
+    request.onupgradeneeded = () => {
+      const db = request.result;
+      db.createObjectStore('sessions', { keyPath: 'id' });
+      db.createObjectStore('chunks', { keyPath: ['session', 'index'] }).createIndex('session', 'session');
+    };
+    request.onerror = request.onblocked = fail;
+    request.onsuccess = () => {
+      const db = request.result;
+      if (settled) { db.close(); return; }
+      settled = true; clearTimeout(timer);
+      db.onversionchange = () => { db.close(); connections.delete(factory); };
+      resolve(db);
+    };
+  });
+  connections.set(factory, opened);
+  void opened.catch(() => { if (connections.get(factory) === opened) connections.delete(factory); });
+  return opened;
+}
+function transaction(db: IDBDatabase, write: boolean) {
+  if (!write) return db.transaction(['sessions', 'chunks'], 'readonly');
+  try { return db.transaction(['sessions', 'chunks'], 'readwrite', { durability: 'strict' }); }
+  catch { return db.transaction(['sessions', 'chunks'], 'readwrite'); }
+}
+function done(tx: IDBTransaction) {
+  return new Promise<void>((resolve, reject) => {
+    const timer = setTimeout(() => { try { tx.abort(); } catch { /* Already complete. */ } reject(new Error('diagnostic_storage_timeout')); }, limits.timeoutMs);
+    tx.oncomplete = () => { clearTimeout(timer); resolve(); };
+    tx.onabort = tx.onerror = () => { clearTimeout(timer); reject(new Error('diagnostic_storage_write_failed')); };
+  });
+}
+export async function appendFullSessionChunk(host: FullSessionHost, summary: FullSessionSummary, index: number, records: FullRecord[]) {
+  const clean = cleanFullSummary(summary);
+  if (!clean || records.length < 1 || records.length > limits.chunkRecords || records.some(r => !cleanFullRecord(r))) throw new Error('invalid_diagnostic_chunk');
+  const db = await database(host), tx = transaction(db, true), completion = done(tx);
+  const sessions = tx.objectStore('sessions'), chunks = tx.objectStore('chunks');
+  const get = sessions.get(clean.id);
+  get.onsuccess = () => {
+    const previous = cleanFullSummary(get.result);
+    const expected = previous?.chunks ?? 0;
+    const lastSeq = previous?.lastSeq ?? 0;
+    if (expected !== index || records[0].seq !== lastSeq + 1 || records.some((r, i) => r.seq !== lastSeq + i + 1)
+      || clean.lastSeq !== records.at(-1)!.seq || clean.count !== clean.lastSeq || clean.chunks !== index + 1) { tx.abort(); return; }
+    chunks.add({ session: clean.id, index, records: records.map(cleanFullRecord) });
+    sessions.put(clean);
+    if (index === 0) {
+      const all = sessions.getAll();
+      all.onsuccess = () => {
+        const stale = all.result.map(cleanFullSummary).filter((s): s is FullSessionSummary => !!s)
+          .sort((a, b) => b.startedAt - a.startedAt || b.id.localeCompare(a.id)).slice(limits.sessions);
+        for (const old of stale) {
+          sessions.delete(old.id);
+          const cursor = chunks.index('session').openKeyCursor(old.id);
+          cursor.onsuccess = () => { const row = cursor.result; if (row) { chunks.delete(row.primaryKey); row.continue(); } };
+        }
+      };
+    }
+  };
+  await completion;
+  return { ...clean, durability: tx.durability ?? 'default' };
+}
+export function readFullSessionStatus(host: FullSessionHost) {
+  try {
+    const raw = host.localStorage?.getItem(FULL_SESSION_STATUS_KEY);
+    if (!raw || raw.length > 2048) return null;
+    const value = JSON.parse(raw);
+    const result: Record<string, unknown> = {};
+    if (['starting','recording','closed','limited','storage-error'].includes(value.state)) result.state = value.state;
+    if (typeof value.id === 'string' && /^[a-zA-Z0-9_-]{1,100}$/.test(value.id)) result.id = value.id;
+    for (const key of ['lastCommittedSeq','lastObservedSeq','at','queuePeak','serializeMaxMs','commitWaitMaxMs'])
+      if (typeof value[key] === 'number' && Number.isFinite(value[key]) && value[key] >= 0) result[key] = value[key];
+    if (['duration-limit','record-limit','byte-limit','queue-limit','storage-error'].includes(value.stopReason)) result.stopReason = value.stopReason;
+    // The synchronous breadcrumb is an observation, never proof of an IDB commit.
+    const observed = cleanFullRecord(value.lastObserved);
+    if (observed) result.lastObserved = observed;
+    return result;
+  } catch { return null; }
+}
+export async function readFullSessionSummaries(host: FullSessionHost) {
+  const status = readFullSessionStatus(host);
+  try {
+    const db = await database(host), tx = transaction(db, false), completion = done(tx);
+    const request = tx.objectStore('sessions').getAll();
+    let sessions: FullSessionSummary[] = [];
+    request.onsuccess = () => { sessions = request.result.map(cleanFullSummary).filter((s): s is FullSessionSummary => !!s)
+      .sort((a, b) => b.startedAt - a.startedAt || b.id.localeCompare(a.id)).slice(0, limits.sessions); };
+    await completion;
+    return { storage: 'available', sessions, status, limits: fullSessionLimitsText };
+  } catch { return { storage: 'unavailable-or-failed', sessions: [], status, limits: fullSessionLimitsText }; }
+}
+// Owner verification belongs to the calling Admin action, before obtaining host.
+// Read/export runs outside combat; chunks are streamed into Blob parts, not a giant UI textarea.
+export async function exportFullSession(host: FullSessionHost, id: string) {
+  if (!/^[a-zA-Z0-9_-]{1,100}$/.test(id)) throw new Error('invalid_diagnostic_id');
+  await settleFullSessionWrites();
+  const db = await database(host), tx = transaction(db, false), completion = done(tx);
+  const get = tx.objectStore('sessions').get(id);
+  const parts: BlobPart[] = [], errors: string[] = [];
+  let summary: FullSessionSummary | null = null, sequence = 0, chunkIndex = 0, bytes = 0;
+  get.onsuccess = () => {
+    summary = cleanFullSummary(get.result);
+    if (!summary) { errors.push('missing-summary'); return; }
+    parts.push(JSON.stringify({ version: 1, format: 'cryptoid-full-session-report', summary,
+      storageStatus: readFullSessionStatus(host), limits: fullSessionLimitsText }).slice(0, -1) + ',"records":[');
+    const cursor = tx.objectStore('chunks').index('session').openCursor(id);
+    cursor.onsuccess = () => {
+      const row = cursor.result;
+      if (row) {
+        const value = row.value;
+        if (chunkIndex >= limits.records || !Number.isSafeInteger(value.index) || !Array.isArray(value.records) || value.records.length > limits.chunkRecords) { tx.abort(); return; }
+        const records = value.records.map(cleanFullRecord);
+        if (records.some((r: FullRecord | null) => !r)) { tx.abort(); return; }
+        const raw = JSON.stringify(records); bytes += raw.length * 2;
+        if (bytes > limits.bytes) { tx.abort(); return; }
+        if (value.index !== chunkIndex++) errors.push('chunk-gap');
+        for (const record of records as FullRecord[]) {
+          if (record.seq !== ++sequence) errors.push('sequence-gap');
+          parts.push((sequence > 1 ? ',' : '') + JSON.stringify(record));
+        }
+        row.continue(); return;
+      }
+      if (sequence !== summary!.lastSeq || chunkIndex !== summary!.chunks) errors.push('summary-mismatch');
+      parts.push('],"integrity":' + JSON.stringify({ contiguous: errors.length === 0, records: sequence, chunks: chunkIndex,
+        errors: [...new Set(errors)] }) + '}');
+    };
+  };
+  await completion;
+  if (!summary || !parts.length) throw new Error('diagnostic_capture_not_found');
+  return new Blob(parts, { type: 'application/json' });
+}

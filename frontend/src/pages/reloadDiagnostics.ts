@@ -1,5 +1,6 @@
 import { GAME_SESSION_KEY, type GameDiagnostic } from './gameDiagnostics.ts';
 import type { BossBoundaryKind } from './bossBoundaryDiagnostics.ts';
+import { sessionDiagnostic } from '../lib/sessionDiagnosticEvents.ts';
 
 export const RELOAD_TRACE_KEY = 'cryptoid_reload_trace_v2';
 export const RELOAD_TRACE_LIMIT = 96;
@@ -284,6 +285,7 @@ export function appendReloadEvent(
   const state = stateFor(host);
   state.events = mergeEvents(state.events, [entry]);
   persist(host);
+  sessionDiagnostic('lifecycle', { ...safeContext, signal: kind, persisted: extra.persisted });
   return entry;
 }
 
@@ -348,6 +350,7 @@ export function appendResourceTrendSample(
   const state = resourceStateFor(host);
   state.samples = mergeResourceSamples(state.samples, [sample]);
   persistResourceTrend(host);
+  sessionDiagnostic('resource', safeContext);
   return sample;
 }
 

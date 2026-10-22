@@ -1,5 +1,6 @@
 import { createPerformanceProbe, retainOwnerResourceTiming } from './performanceDiagnostics.ts';
 import { createOwnerTimingCapture } from './ownerTimingCapture.ts';
+import { createFullSessionRecorder } from './fullSessionRecorder.ts';
 import { cleanFlightRecorder, readFlightRecorders, FLIGHT_RECORDER_KEY,
   PREVIOUS_FLIGHT_RECORDER_KEY, FLIGHT_RECORDER_MAX_CHARS } from './flightRecorderReport.mjs';
 
@@ -7,11 +8,13 @@ type Host = { localStorage?: Pick<Storage, 'getItem' | 'setItem'>;
   sessionStorage: Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>; __cryptoidBootId?: string };
 type Options = Parameters<typeof createOwnerTimingCapture>[2];
 
-// Called only after server owner verification. No listeners, timer, RAF, network,
-// UI: reuse the existing instrumented simulation and resource-timing hooks.
+// Called only after server owner verification; reuse existing simulation and
+// resource-timing hooks. The full-session store owns only pending-I/O watchdogs,
+// never a game timer/RAF, additional request or gameplay UI.
 export function createOwnerFlightRecorder(verifiedOwner: boolean, getHost: () => Host, options: Options) {
   if (!verifiedOwner) return null;
   const host = getHost(), wallNow = options.wallNow ?? Date.now;
+  const full = createFullSessionRecorder(verifiedOwner, () => host, options);
   let archived = false;
   let release = () => {};
   const write = (key: string, raw: string) => {
@@ -22,8 +25,10 @@ export function createOwnerFlightRecorder(verifiedOwner: boolean, getHost: () =>
   return createPerformanceProbe({ now: options.now, runtime: options.runtime,
     environment: 'owner-admin', publishGlobal: false, sampleLimit: 30,
     persistIntervalMs: 2_000, runtimeIntervalMs: 10_000,
-    onStart: () => { release = retainOwnerResourceTiming(Infinity); },
-    onFinish: () => { release(); },
+    onStart: () => { release = retainOwnerResourceTiming(Infinity); full?.start(); },
+    onFinish: () => { release(); full?.finish(); },
+    onSample: sample => full?.sample(sample),
+    onEvent: event => full?.event(event),
     metadata: { ...options.build, bootId: host.__cryptoidBootId, recordedAt: wallNow() },
     persist: raw => {
       const capture = cleanFlightRecorder({ ...JSON.parse(raw), mode: 'rolling-owner', savedAt: wallNow() });
