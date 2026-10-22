@@ -15,6 +15,7 @@ export class MusicPlayer {
   private context: AudioContext | null = null;
   private gain: GainNode | null = null;
   private mediaSource: MediaElementAudioSourceNode | null = null;
+  private graphReady = false;
   private metadataListener: (() => void) | null = null;
   private volume: number;
   private source: string;
@@ -37,26 +38,37 @@ export class MusicPlayer {
   }
 
   private prepare() {
-    if (this.context || typeof AudioContext === "undefined") return;
-    let context: AudioContext | null = null;
-    let source: MediaElementAudioSourceNode | null = null;
-    let gain: GainNode | null = null;
+    if (this.graphReady || typeof AudioContext === "undefined") return true;
+    if (!this.context) {
+      try { this.context = new AudioContext(); }
+      catch { return true; /* No media binding: the original HTML fallback is safe. */ }
+    }
+    const context = this.context;
+    let source = this.mediaSource;
+    let gain = this.gain;
     try {
-      context = new AudioContext();
-      source = context.createMediaElementSource(this.audio);
-      gain = context.createGain();
+      // Allocate/configure the gain before the irreversible media binding.
+      // A bound element cannot fall back to HTML output from a closed graph.
+      gain ??= context.createGain();
       gain.gain.value = this.pauseMuted ? 0 : musicGain(this.volume);
+      source ??= context.createMediaElementSource(this.audio);
       source.connect(gain).connect(context.destination);
-      this.context = context;
       this.gain = gain;
       this.mediaSource = source;
       // The media element is part of this Web Audio graph. Its own volume
       // would otherwise attenuate the signal a second time.
       this.audio.volume = 1;
+      this.graphReady = true;
+      return true;
     } catch {
       try { source?.disconnect(); } catch { /* Partially initialized graph. */ }
       try { gain?.disconnect(); } catch { /* Partially initialized graph. */ }
-      closeContext(context);
+      // Keep the same context/nodes so a later gesture can reconnect them
+      // without rebinding or replacing the existing unlocked media element.
+      this.mediaSource = source;
+      this.gain = gain;
+      this.audio.pause();
+      return false;
     }
   }
 
@@ -67,7 +79,7 @@ export class MusicPlayer {
   }
 
   get currentSource() { return this.source; }
-  get playing() { return !this.closed && !this.audio.paused && (!this.context || this.context.state === "running"); }
+  get playing() { return !this.closed && !this.audio.paused && (!this.context || (this.graphReady && this.context.state === "running")); }
   // The caller supplies active simulation time, so a menu/background pause
   // never consumes the grace period. A host can report playing forever while
   // media time is frozen; that must not hold a completed game transition open.
@@ -140,7 +152,7 @@ export class MusicPlayer {
     if (ownerAudioDisabled()) { noteAudioEvent('music-blocked'); return false; }
     auditEvent('music-unlock-request');
     if (this.closed) return false;
-    this.prepare();
+    if (!this.prepare()) { auditEvent('music-unlock-failed'); return false; }
     try {
       if (this.context) await this.clockHealth.resume(this.context, restartPausedGraph && this.audio.paused);
       const ready = !this.closed && (!this.context || this.context.state === "running");
@@ -170,7 +182,7 @@ export class MusicPlayer {
     if (this.closed) return false;
     const epoch = this.playbackEpoch;
     this.wantsPlayback = true;
-    this.prepare();
+    if (!this.prepare()) { auditEvent('music-play-failed'); return false; }
     if (this.pauseMuted) {
       this.pauseMuted = false;
       if (this.gain) this.gain.gain.value = musicGain(this.volume);
@@ -209,6 +221,7 @@ export class MusicPlayer {
   close() {
     if (this.closed) return;
     this.closed = true;
+    this.graphReady = false;
     this.endProgress = null;
     this.playbackEpoch++; this.playRequest = null;
     this.clockHealth.reset();

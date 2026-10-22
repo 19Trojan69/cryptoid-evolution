@@ -1,5 +1,35 @@
 # Preserve the officially approved game
 
+## Audio graph initialization, 22 October 2026, tested preparation only
+
+The owner accepted the isolated two-defect correction with "Dann beginnen wir";
+this does not authorize publication. Start from official 9b5f07c5 / d92cd586
+(local equivalent 759b63e plus its receipt). Keep Testnet, Mainnet and all fixed
+source/rollback refs unchanged. Automatic deployment is disabled on candidate
+codex/audio-graph-initialization-20261022; no deployment/log/protection action.
+
+GameAudio publishes its bus/limiter only after full connection; failed temporary
+nodes disconnect and later starts retry on the same context. MusicPlayer retains
+its same bound context/source/gain across connection failures, reports not ready
+and reconnects on a later attempt without replacing/rebinding its media element.
+Allocate gain before binding; retain HTML fallback only when the host is absent
+or its constructor is unavailable before binding. Close retires partial graphs.
+Keep healthy parameters, pause/countdown/seek, prior clock/allocation guards and
+physical heart collection. Graph readiness is not proof of audible output.
+
+22 new tests include four actual preceding-source negative controls, seven effects
+and five music failure points, 1,000 repeated failures of each engine and 100
+healthy music cycles. Before correction 16 cases fail; afterward all 22 pass.
+154 focused tests, 12 locale checks/release gate, build/types and both runtime
+modules' lint pass. Two unavailable historical-source comparisons remain excluded,
+not counted as passes. First build's nullable-context error was corrected and its
+log retained. Only gameAudio.ts/musicPlayback.ts change runtime behavior; GamePage,
+AudioClockRecovery, cardSound, Admin/owner diagnostics, CSS/assets, backend/API,
+accounts/saves/economy are unchanged. No new timer/RAF/listener/context on healthy
+playback, native audioSession workaround or device audibility/memory proof.
+White Screen and the reported zero clock remain unresolved. Do not request a
+full campaign for the same counters. See docs/audio-graph-initialization-20261022.md.
+
 ## Boss-victory progress guard published, 21 October 2026
 
 Official Testnet READY source 9b5f07c55a1f440ca925ee49b002bb223241793a, tree

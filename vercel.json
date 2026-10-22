@@ -25,6 +25,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/audio-graph-initialization-20261022": false,
       "codex/hull-handoff-release-record-20261021": false,
       "codex/audio-clock-recovery-20261021": false,
       "codex/hull-preparation-handoff-20261021": false,

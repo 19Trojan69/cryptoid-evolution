@@ -71,30 +71,44 @@ export class GameAudio {
   private reapedVoices = 0;
   private blockedSounds = 0;
 
-  get running() { return this.context?.state === "running"; }
+  get running() { return this.effectsBus !== null && this.context?.state === "running"; }
 
   async start(restartPausedGraph = false) {
     const auditEvent = captureAudioAuditEvents();
     if (ownerAudioDisabled()) { noteAudioEvent('effects-blocked'); return false; }
     auditEvent('effects-start-request');
     if (typeof AudioContext === "undefined") return false;
-    if (!this.context) {
-      this.context = new AudioContext();
-      this.effectsBus = this.context.createGain();
-      this.effectsBus.gain.value = effectsGain(this.effectsVolume);
-      if (typeof this.context.createDynamicsCompressor === "function") {
-        this.limiter = this.context.createDynamicsCompressor();
-        this.limiter.threshold.value = -12;
-        this.limiter.knee.value = 12;
-        this.limiter.ratio.value = 8;
-        this.limiter.attack.value = .003;
-        this.limiter.release.value = .2;
-        this.effectsBus.connect(this.limiter).connect(this.context.destination);
-      } else {
-        this.effectsBus.connect(this.context.destination);
+    if (!this.effectsBus) {
+      let effectsBus: GainNode | null = null;
+      let limiter: DynamicsCompressorNode | null = null;
+      try {
+        // Retain the same usable context after a node/connection failure, but
+        // publish its bus only when the entire output path is connected.
+        const context = this.context ??= new AudioContext();
+        effectsBus = context.createGain();
+        effectsBus.gain.value = effectsGain(this.effectsVolume);
+        if (typeof context.createDynamicsCompressor === "function") {
+          limiter = context.createDynamicsCompressor();
+          limiter.threshold.value = -12;
+          limiter.knee.value = 12;
+          limiter.ratio.value = 8;
+          limiter.attack.value = .003;
+          limiter.release.value = .2;
+          effectsBus.connect(limiter).connect(context.destination);
+        } else {
+          effectsBus.connect(context.destination);
+        }
+        this.effectsBus = effectsBus;
+        this.limiter = limiter;
+      } catch {
+        try { effectsBus?.disconnect(); } catch { /* Partially initialized host. */ }
+        try { limiter?.disconnect(); } catch { /* Partially initialized host. */ }
+        auditEvent('effects-resume-failed');
+        return false;
       }
     }
     const context = this.context;
+    if (!context) return false;
     // Start decoding immediately, even if iOS delays resume() until a gesture.
     if (!this.sampleRequest && typeof context.decodeAudioData === "function") {
       this.loadController = new AbortController();

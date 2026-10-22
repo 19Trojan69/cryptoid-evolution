@@ -1,0 +1,280 @@
+✔ initialization tests use the exact published source tree and preserve unrelated runtime (23.209763ms)
+✔ published effects negative control: gain-create leaves a false-success path (119.30329ms)
+✔ published effects negative control: limiter-connect leaves a false-success path (44.28949ms)
+✔ published music negative control: gain-create strands its bound media (25.089604ms)
+✔ published music negative control: gain-connect strands its bound media (22.662177ms)
+✖ effects context-create: no incomplete ready state; next gesture rebuilds on the same usable context (1.064688ms)
+✖ effects gain-create: no incomplete ready state; next gesture rebuilds on the same usable context (0.399229ms)
+✖ effects gain-value: no incomplete ready state; next gesture rebuilds on the same usable context (0.435513ms)
+✖ effects limiter-create: no incomplete ready state; next gesture rebuilds on the same usable context (0.274211ms)
+✖ effects limiter-config: no incomplete ready state; next gesture rebuilds on the same usable context (0.397647ms)
+✖ effects gain-connect: no incomplete ready state; next gesture rebuilds on the same usable context (0.218598ms)
+✖ effects limiter-connect: no incomplete ready state; next gesture rebuilds on the same usable context (0.238979ms)
+✖ music gain-create: failed unlock stays silent; retry preserves element, seek and one context (1.114833ms)
+✖ music gain-value: failed unlock stays silent; retry preserves element, seek and one context (0.313971ms)
+✖ music media-create: failed unlock stays silent; retry preserves element, seek and one context (0.432189ms)
+✖ music media-connect: failed unlock stays silent; retry preserves element, seek and one context (0.580541ms)
+✖ music gain-connect: failed unlock stays silent; retry preserves element, seek and one context (0.420671ms)
+✖ a failed music play does not call native play or report playing (0.530516ms)
+✖ repeated music connection failures retain at most the original three graph objects and retire all on close (0.286941ms)
+✖ repeated effects initialization failures retire temporary nodes without replacing the context or allocating voices (0.236095ms)
+✖ closing an incomplete music graph prevents retry from reviving it (0.443075ms)
+✔ healthy music uses the original single graph, exact gain and unchanged media through pause/resume and boss tracks (2.348735ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 6
+ℹ fail 16
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 586.193199
+
+✖ failing tests:
+
+test at src/pages/audioGraphInitialization.test.mjs:118:3
+✖ effects context-create: no incomplete ready state; next gesture rebuilds on the same usable context (1.064688ms)
+  Error: injected context-create
+      at fail (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:32:68)
+      at new globalThis.AudioContext (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:60:21)
+      at GameAudio.start (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/gameAudio.ts:82:22)
+      at TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:120:31)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at src/pages/audioGraphInitialization.test.mjs:118:3
+✖ effects gain-create: no incomplete ready state; next gesture rebuilds on the same usable context (0.399229ms)
+  Error: injected gain-create
+      at fail (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:32:68)
+      at globalThis.AudioContext.createGain (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:61:20)
+      at GameAudio.start (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/gameAudio.ts:83:38)
+      at TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:120:31)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at src/pages/audioGraphInitialization.test.mjs:118:3
+✖ effects gain-value: no incomplete ready state; next gesture rebuilds on the same usable context (0.435513ms)
+  Error: injected gain-value
+      at fail (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:32:68)
+      at set value (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:35:63)
+      at GameAudio.start (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/gameAudio.ts:84:34)
+      at TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:120:31)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at src/pages/audioGraphInitialization.test.mjs:118:3
+✖ effects limiter-create: no incomplete ready state; next gesture rebuilds on the same usable context (0.274211ms)
+  Error: injected limiter-create
+      at fail (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:32:68)
+      at globalThis.AudioContext.createDynamicsCompressor (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:68:7)
+      at GameAudio.start (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/gameAudio.ts:86:37)
+      at TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:120:31)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at src/pages/audioGraphInitialization.test.mjs:118:3
+✖ effects limiter-config: no incomplete ready state; next gesture rebuilds on the same usable context (0.397647ms)
+  Error: injected limiter-config
+      at fail (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:32:68)
+      at set value (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:35:63)
+      at GameAudio.start (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/gameAudio.ts:87:38)
+      at TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:120:31)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at src/pages/audioGraphInitialization.test.mjs:118:3
+✖ effects gain-connect: no incomplete ready state; next gesture rebuilds on the same usable context (0.218598ms)
+  Error: injected gain-connect
+      at fail (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:32:68)
+      at Object.connect (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:41:25)
+      at GameAudio.start (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/gameAudio.ts:92:25)
+      at TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:120:31)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at src/pages/audioGraphInitialization.test.mjs:118:3
+✖ effects limiter-connect: no incomplete ready state; next gesture rebuilds on the same usable context (0.238979ms)
+  Error: injected limiter-connect
+      at fail (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:32:68)
+      at Object.connect (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:41:25)
+      at GameAudio.start (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/gameAudio.ts:92:47)
+      at TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:120:31)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at src/pages/audioGraphInitialization.test.mjs:143:3
+✖ music gain-create: failed unlock stays silent; retry preserves element, seek and one context (1.114833ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:146:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at src/pages/audioGraphInitialization.test.mjs:143:3
+✖ music gain-value: failed unlock stays silent; retry preserves element, seek and one context (0.313971ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:146:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at src/pages/audioGraphInitialization.test.mjs:143:3
+✖ music media-create: failed unlock stays silent; retry preserves element, seek and one context (0.432189ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:146:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at src/pages/audioGraphInitialization.test.mjs:143:3
+✖ music media-connect: failed unlock stays silent; retry preserves element, seek and one context (0.580541ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:146:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at src/pages/audioGraphInitialization.test.mjs:143:3
+✖ music gain-connect: failed unlock stays silent; retry preserves element, seek and one context (0.420671ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:146:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at src/pages/audioGraphInitialization.test.mjs:176:1
+✖ a failed music play does not call native play or report playing (0.530516ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:178:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at src/pages/audioGraphInitialization.test.mjs:186:1
+✖ repeated music connection failures retain at most the original three graph objects and retire all on close (0.286941ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:188:41)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at src/pages/audioGraphInitialization.test.mjs:196:1
+✖ repeated effects initialization failures retire temporary nodes without replacing the context or allocating voices (0.236095ms)
+  Error: injected limiter-connect
+      at fail (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:32:68)
+      at Object.connect (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:41:25)
+      at GameAudio.start (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/gameAudio.ts:92:47)
+      at TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:198:60)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at src/pages/audioGraphInitialization.test.mjs:206:1
+✖ closing an incomplete music graph prevents retry from reviving it (0.443075ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/frontend/src/pages/audioGraphInitialization.test.mjs:208:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

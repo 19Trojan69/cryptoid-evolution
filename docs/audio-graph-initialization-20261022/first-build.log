@@ -1,0 +1,66 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 build
+> npm run test:i18n && npm run check:i18n:release && node_modules/.bin/tsc -b && vite build
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 test:i18n
+> node --experimental-strip-types --test src/i18n.test.mjs
+
+✔ en: every player UI key has a translation and preserves its placeholders (4.232312ms)
+✔ de: every player UI key has a translation and preserves its placeholders (1.677848ms)
+✔ es: every player UI key has a translation and preserves its placeholders (1.770618ms)
+✔ zh: every player UI key has a translation and preserves its placeholders (1.426352ms)
+✔ vi: every player UI key has a translation and preserves its placeholders (1.521624ms)
+✔ legacy locales remain selectable and use existing translations with English fallback (0.470015ms)
+✔ English mission resume contains no German source text (0.413891ms)
+✔ interpolation handles all repeated values and a locale change preserves life count (0.364908ms)
+✔ automatic language choice and manual override resolve supported locales (0.274943ms)
+✔ the picker includes the original 17 languages plus Chinese and Vietnamese (0.317025ms)
+✔ remaining lives use the correct singular and plural forms (2.250137ms)
+✔ player components contain no unwrapped static UI copy (0.091577ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1473.014303
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 check:i18n:release
+> node --experimental-strip-types scripts/localization-inventory.mjs --check
+
+Static copy: 1245; unwrapped UI fragments: 0
+en: 1245/1245
+de: 1245/1245
+es: 1245/1245
+fr: 839/1245 (draft)
+pt: 838/1245 (draft)
+it: 838/1245 (draft)
+pl: 586/1245 (draft)
+tr: 586/1245 (draft)
+ru: 838/1245 (draft)
+hr: 586/1245 (draft)
+cs: 586/1245 (draft)
+sk: 586/1245 (draft)
+hu: 586/1245 (draft)
+ro: 586/1245 (draft)
+sr: 586/1245 (draft)
+uk: 586/1245 (draft)
+th: 586/1245 (draft)
+zh: 1245/1245
+vi: 1245/1245
+Complete language gate: en, de, es, zh, vi; release ready: true
+src/pages/gameAudio.ts(112,39): error TS18047: 'context' is possibly 'null'.
+src/pages/gameAudio.ts(114,45): error TS2345: Argument of type 'AudioContext | null' is not assignable to parameter of type 'AudioContext'.
+  Type 'null' is not assignable to type 'AudioContext'.
+src/pages/gameAudio.ts(117,49): error TS2345: Argument of type 'AudioContext | null' is not assignable to parameter of type 'AudioContext'.
+  Type 'null' is not assignable to type 'AudioContext'.
+src/pages/gameAudio.ts(117,116): error TS2345: Argument of type 'AudioContext | null' is not assignable to parameter of type 'AudioContext'.
+  Type 'null' is not assignable to type 'AudioContext'.
+src/pages/gameAudio.ts(117,148): error TS2345: Argument of type 'AudioContext | null' is not assignable to parameter of type 'AudioContext'.
+  Type 'null' is not assignable to type 'AudioContext'.
+src/pages/gameAudio.ts(120,21): error TS18047: 'context' is possibly 'null'.
