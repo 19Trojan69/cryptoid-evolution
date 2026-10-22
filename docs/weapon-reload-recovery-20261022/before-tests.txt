@@ -1,0 +1,377 @@
+TAP version 13
+# (node:12) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/backend/src/hangarCatalog.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/backend/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: an expired automatic charge can be reconciled before choosing the standard weapon, with the same receipt
+not ok 1 - an expired automatic charge can be reconciled before choosing the standard weapon, with the same receipt
+  ---
+  duration_ms: 128.620487
+  type: 'test'
+  location: '/workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:15:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + {
+    +   id: 'isolated-request-1',
+    +   level: 2
+    + }
+    - null
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: ~
+  actual:
+    level: 2
+    id: 'isolated-request-1'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:18:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+  ...
+# Subtest: choosing an already running different weapon resolves the pending charge without refilling that timer
+not ok 2 - choosing an already running different weapon resolves the pending charge without refilling that timer
+  ---
+  duration_ms: 13.314639
+  type: 'test'
+  location: '/workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:25:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + {
+    +   id: 'isolated-request-1',
+    +   level: 2
+    + }
+    - null
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: ~
+  actual:
+    level: 2
+    id: 'isolated-request-1'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:28:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: choosing a new different charge confirms the old receipt before saving and issuing exactly one new receipt
+not ok 3 - choosing a new different charge confirms the old receipt before saving and issuing exactly one new receipt
+  ---
+  duration_ms: 16.615885
+  type: 'test'
+  location: '/workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:33:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+        2,
+    -   2,
+    -   3
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 2
+    1: 2
+    2: 3
+  actual:
+    0: 2
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:35:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: a picked-up weapon can be selected after pending confirmation without purchasing or refilling the pickup
+not ok 4 - a picked-up weapon can be selected after pending confirmation without purchasing or refilling the pickup
+  ---
+  duration_ms: 20.188969
+  type: 'test'
+  location: '/workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:43:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + {
+    +   id: 'isolated-request-1',
+    +   level: 2
+    + }
+    - null
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: ~
+  actual:
+    level: 2
+    id: 'isolated-request-1'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:47:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: the actual menu permits a new choice and makes the pending receipt retryable even if that weapon looks active
+not ok 5 - the actual menu permits a new choice and makes the pending receipt retryable even if that weapon looks active
+  ---
+  duration_ms: 10.662327
+  type: 'test'
+  location: '/workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:52:1'
+  failureType: 'testCodeFailure'
+  error: 'a confirmed or owned alternative remains selectable'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:59:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: successful free or cached manual selections clear the old rejection text
+not ok 6 - successful free or cached manual selections clear the old rejection text
+  ---
+  duration_ms: 12.552521
+  type: 'test'
+  location: '/workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:64:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'Not confirmed. Retry the same weapon.'
+    - ''
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: ''
+  actual: 'Not confirmed. Retry the same weapon.'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:68:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: a continuing connection failure retains the original receipt and cannot consume a different charge
+not ok 7 - a continuing connection failure retains the original receipt and cannot consume a different charge
+  ---
+  duration_ms: 11.514596
+  type: 'test'
+  location: '/workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:72:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+        2,
+    -   2
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 2
+    1: 2
+  actual:
+    0: 2
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:77:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: a retry of the original charge never allocates a new id or overwrites it with a checkpoint
+ok 8 - a retry of the original charge never allocates a new id or overwrites it with a checkpoint
+  ---
+  duration_ms: 14.35118
+  type: 'test'
+  ...
+# Subtest: a pickup obtained while automatic confirmation waits keeps the player selection and receives no free refill
+ok 9 - a pickup obtained while automatic confirmation waits keeps the player selection and receives no free refill
+  ---
+  duration_ms: 18.060159
+  type: 'test'
+  ...
+# Subtest: a late response after a replaced mission cannot mutate the new mission
+ok 10 - a late response after a replaced mission cannot mutate the new mission
+  ---
+  duration_ms: 27.45924
+  type: 'test'
+  ...
+# Subtest: automatic reload remains bounded over repeated cycles and rejected duplicate triggers
+ok 11 - automatic reload remains bounded over repeated cycles and rejected duplicate triggers
+  ---
+  duration_ms: 14.515993
+  type: 'test'
+  ...
+# Subtest: an already spent confirmed receipt does not silently allocate another charge on retry
+ok 12 - an already spent confirmed receipt does not silently allocate another charge on retry
+  ---
+  duration_ms: 12.398208
+  type: 'test'
+  ...
+# Subtest: an invalid confirmation retains the receipt and cannot introduce a non-finite timer
+not ok 13 - an invalid confirmation retains the receipt and cannot introduce a non-finite timer
+  ---
+  duration_ms: 13.334519
+  type: 'test'
+  location: '/workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:130:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    NaN !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: NaN
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:133:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: a definitive rejection releases the pending gate without starting a different activation
+not ok 14 - a definitive rejection releases the pending gate without starting a different activation
+  ---
+  duration_ms: 10.978328
+  type: 'test'
+  location: '/workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:137:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + {
+    +   id: 'isolated-request-1',
+    +   level: 2
+    + }
+    - null
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: ~
+  actual:
+    level: 2
+    id: 'isolated-request-1'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:141:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: an older automatic error timer cannot erase a newer manual failure
+not ok 15 - an older automatic error timer cannot erase a newer manual failure
+  ---
+  duration_ms: 17.526357
+  type: 'test'
+  location: '/workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:145:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + ''
+    - 'Not confirmed. Retry the same weapon.'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'Not confirmed. Retry the same weapon.'
+  actual: ''
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:149:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: actual account handlers reconcile a lost automatic response, then honor a new paid selection with no double consumption
+not ok 16 - actual account handlers reconcile a lost automatic response, then honor a new paid selection with no double consumption
+  ---
+  duration_ms: 54.388408
+  type: 'test'
+  location: '/workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:153:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+        2,
+    -   2,
+    -   3
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 2
+    1: 2
+    2: 3
+  actual:
+    0: 2
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:159:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: actual account handlers accept a completed charge cycle and repeat its lost response without another debit
+not ok 17 - actual account handlers accept a completed charge cycle and repeat its lost response without another debit
+  ---
+  duration_ms: 14.262882
+  type: 'test'
+  location: '/workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:169:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    2 !== 3
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 3
+  actual: 2
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/frontend/scripts/weaponReloadRecovery.test.mjs:178:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1389:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 5
+# fail 12
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 609.833378

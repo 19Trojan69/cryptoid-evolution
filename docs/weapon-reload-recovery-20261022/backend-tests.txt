@@ -1,0 +1,40 @@
+✔ seen cards persist as a union per player and network without changing inventory or save versions (9.964947ms)
+✔ full-heart boss Shards credit once, survive resume, and never increase maximum lives (62.856276ms)
+✔ legacy accumulated hearts are capped in the profile, resume, and repeated start response (3.0637ms)
+✔ campaign completion also rejects hearts beyond the purchased armor limit (1.334003ms)
+✔ cookie-less save requests restore only the authenticated active run and remain idempotent (1.170277ms)
+✔ save boundary requires authentication and separates users/networks (0.582715ms)
+✔ explicit import is one-time, strips paid ownership, and purchases use compare-and-swap (1.000111ms)
+✔ repeated and concurrent start keys consume at most one specific power-up (1.400663ms)
+✔ checkpoint, automatic chain, device resume, stale writes and final credit are idempotent (3.556259ms)
+✔ leaving preserves last completed section without crediting replayable partial shards (0.755895ms)
+✔ leaving with one life resumes with one, while unfinished rewards stay discarded (0.921463ms)
+✔ leaving before the first block saves only the remaining lives at the start (0.629605ms)
+✔ snapshot whitelist rejects invalid data and preserves only supported fields (0.25269ms)
+✔ new mission keeps inventory and career, closes import and resets only run keys (0.698368ms)
+✔ batch inventory and activation are atomic, retryable and survive resume without refilling (2.947195ms)
+✔ power-up history survives a checkpoint and legacy saves remain readable (0.75972ms)
+✔ defeated boss waits across save/resume; pickup commits one heart and then bonus (1.734704ms)
+✔ combat checkpoints credit once, restore timers and groups, and reject stale devices (1.493443ms)
+✔ completed block wins over late combat checkpoint without replaying rewards (0.651067ms)
+✔ ship damage bonuses preserve wounded enemies and projectiles across account save and resume (0.824057ms)
+✔ combat validation rejects forged positions, ownership, stages and overlarge payloads (1.510217ms)
+✔ new score rules preserve legacy high scores and separate network records (1.192831ms)
+✔ unfinished bonus restores hits and targets without paying the bonus twice (0.943326ms)
+✔ checkpoint rejects a skipped reinforcement and a fabricated pending power (0.540992ms)
+✔ badge proof survives checkpoints, rejects counter rollback and commits with the reward exactly once (1.701505ms)
+(node:33) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/backend/src/hangarCatalog.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/backend/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ only Twin and Rapid Twin can be purchased on Pi Testnet (1.052711ms)
+✔ quantity and catalog total are bounded and computed without floating point drift (1.744018ms)
+✔ confirmed orders credit quantity once, preserve legacy time and isolate networks (0.554864ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 221.885659

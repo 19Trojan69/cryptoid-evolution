@@ -1,0 +1,159 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 prebuild
+> npm run prepare:hulls
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 prepare:hulls
+> node --experimental-strip-types scripts/buildPaintedHulls.mjs
+
+{"revision":"91a72bc0c36be9407915","variants":1740,"totalBytes":95450326,"dimensions":"original","canvasVersion":"0.1.100"}
+
+> cryptoid-evolution@0.11.0 build
+> npm run test:i18n && npm run check:i18n:release && npm run test:canvas-static-url && npm run test:weapon-reload-recovery && node_modules/.bin/tsc -b && vite build
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 test:i18n
+> node --experimental-strip-types --test src/i18n.test.mjs
+
+✔ en: every player UI key has a translation and preserves its placeholders (5.557202ms)
+✔ de: every player UI key has a translation and preserves its placeholders (2.894605ms)
+✔ es: every player UI key has a translation and preserves its placeholders (2.100934ms)
+✔ zh: every player UI key has a translation and preserves its placeholders (1.695876ms)
+✔ vi: every player UI key has a translation and preserves its placeholders (2.596944ms)
+✔ legacy locales remain selectable and use existing translations with English fallback (0.661614ms)
+✔ English mission resume contains no German source text (0.556936ms)
+✔ interpolation handles all repeated values and a locale change preserves life count (0.630637ms)
+✔ automatic language choice and manual override resolve supported locales (0.343215ms)
+✔ the picker includes the original 17 languages plus Chinese and Vietnamese (0.220571ms)
+✔ remaining lives use the correct singular and plural forms (1.203016ms)
+✔ player components contain no unwrapped static UI copy (0.095383ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 862.564512
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 check:i18n:release
+> node --experimental-strip-types scripts/localization-inventory.mjs --check
+
+Static copy: 1245; unwrapped UI fragments: 0
+en: 1245/1245
+de: 1245/1245
+es: 1245/1245
+fr: 839/1245 (draft)
+pt: 838/1245 (draft)
+it: 838/1245 (draft)
+pl: 586/1245 (draft)
+tr: 586/1245 (draft)
+ru: 838/1245 (draft)
+hr: 586/1245 (draft)
+cs: 586/1245 (draft)
+sk: 586/1245 (draft)
+hu: 586/1245 (draft)
+ro: 586/1245 (draft)
+sr: 586/1245 (draft)
+uk: 586/1245 (draft)
+th: 586/1245 (draft)
+zh: 1245/1245
+vi: 1245/1245
+Complete language gate: en, de, es, zh, vi; release ready: true
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 test:canvas-static-url
+> node --experimental-strip-types --test scripts/canvasStaticUrl.test.mjs
+
+✔ negative control: released CanvasImpact refuses the real relative PNG despite prepared resources and no recorded failure (60.646718ms)
+✔ actual prepared-hull hook → root-relative PNG → reflected absolute image URL → Canvas registration and drawing (37.383367ms)
+✔ cold actual hook retains the original display until ready, then uses the static PNG in Canvas (14.96889ms)
+✔ relative, absolute, query/fragment and historical Blob address controls all activate the actual renderer (106.937917ms)
+✔ a changed hull address cannot display the previous ready hull while the new image is delayed (14.967689ms)
+✔ an unavailable hull retains the CSS display, records the failure and retries on remount (15.10226ms)
+✔ late image completion after unmount cannot register an effect or update its hook (13.135729ms)
+✔ a cleared resource generation rejects late completions and cannot revive the failed layer (15.05511ms)
+✔ correctly activated static effects retain pause/resume and context-loss fallback (14.16929ms)
+✔ a missing optional surface leaves the original display in place (3.336678ms)
+✔ render-scale changes cannot reuse a ready bundle with the previous scale (20.52436ms)
+✔ a null drawing context falls back without retaining registered effects or a frame chain (17.371225ms)
+✔ two mounted effects share the same image/textures and retain resources until both owners leave (17.503836ms)
+✔ 1000 warm static-hull impacts register once, reuse the existing resources and completely release (125.708569ms)
+{"exactNativeRasterComparisons":54,"limits":"Native Skia and actual hooks/resources; not Safari/PiBrowser pixels, native memory or proof of the White Screen cause."}
+✔ native raster output matches released working absolute-URL control at original effect ages and render scales (307.025517ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1193.807968
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 test:weapon-reload-recovery
+> node --experimental-strip-types --test scripts/weaponReloadRecovery.test.mjs
+
+(node:173) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/backend/src/hangarCatalog.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/backend/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ an expired automatic charge can be reconciled before choosing the standard weapon, with the same receipt (82.844837ms)
+✔ choosing an already running different weapon resolves the pending charge without refilling that timer (4.311142ms)
+✔ choosing a new different charge confirms the old receipt before saving and issuing exactly one new receipt (5.741679ms)
+✔ a picked-up weapon can be selected after pending confirmation without purchasing or refilling the pickup (4.848909ms)
+✔ the actual menu permits a new choice and makes the pending receipt retryable even if that weapon looks active (3.848527ms)
+✔ successful free or cached manual selections clear the old rejection text (5.892405ms)
+✔ a continuing connection failure retains the original receipt and cannot consume a different charge (8.357592ms)
+✔ a retry of the original charge never allocates a new id or overwrites it with a checkpoint (4.726069ms)
+✔ a pickup obtained while automatic confirmation waits keeps the player selection and receives no free refill (5.554888ms)
+✔ a late response after a replaced mission cannot mutate the new mission (4.633356ms)
+✔ automatic reload remains bounded over repeated cycles and rejected duplicate triggers (12.574382ms)
+✔ an already spent confirmed receipt does not silently allocate another charge on retry (3.840836ms)
+✔ an invalid confirmation retains the receipt and cannot introduce a non-finite timer (3.369518ms)
+✔ a definitive rejection releases the pending gate without starting a different activation (5.034813ms)
+✔ an older automatic error timer cannot erase a newer manual failure (3.6838ms)
+✔ actual account handlers reconcile a lost automatic response, then honor a new paid selection with no double consumption (41.883577ms)
+✔ actual account handlers accept a completed charge cycle and repeat its lost response without another debit (5.839346ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 364.070903
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 380 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                     1.47 kB │ gzip:   0.77 kB
+dist/assets/AdminPage-BVHazyxQ.css                 10.28 kB │ gzip:   2.68 kB
+dist/assets/GalaxyMap-ByhGHt12.css                 16.63 kB │ gzip:   4.75 kB
+dist/assets/powerUps-Bp4oAZoc.css                  19.99 kB │ gzip:   5.17 kB
+dist/assets/GamePage-Doazl5ia.css                  21.19 kB │ gzip:   4.97 kB
+dist/assets/Shop-BkuKP0aD.css                      25.93 kB │ gzip:   6.41 kB
+dist/assets/index-BcSGTHO_.css                    357.19 kB │ gzip:  75.30 kB
+dist/assets/rewardProgress-qj0MB0AL.js              3.22 kB │ gzip:   1.26 kB
+dist/assets/displaySettings-d3VZZ2lg.js             3.30 kB │ gzip:   1.47 kB
+dist/assets/collectionExport-C0DmGQvN.js            3.89 kB │ gzip:   2.10 kB
+dist/assets/reloadDiagnostics-CVU6ABEu.js          12.06 kB │ gzip:   4.69 kB
+dist/assets/GalaxyMap-CyueudiS.js                  16.79 kB │ gzip:   6.24 kB
+dist/assets/AdminPage-CL-9L9U7.js                  45.23 kB │ gzip:  14.59 kB
+dist/assets/performanceDiagnostics-CXBZy_zq.js     63.83 kB │ gzip:  18.99 kB
+dist/assets/Shop-Du_ws-lm.js                      118.59 kB │ gzip:  39.23 kB
+dist/assets/powerUps-DnkkDmGI.js                  148.36 kB │ gzip:  56.42 kB
+dist/assets/shipEvolution-BMDqU-yE.js             233.73 kB │ gzip:  36.52 kB
+dist/assets/GamePage-Cm46k1sK.js                  240.44 kB │ gzip:  77.96 kB
+dist/assets/index-DsjTbvyg.js                   1,947.33 kB │ gzip: 628.15 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 3.99s

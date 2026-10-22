@@ -1,0 +1,228 @@
+TAP version 13
+# (node:12) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/backend/src/hangarCatalog.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/backend/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: an expired automatic charge can be reconciled before choosing the standard weapon, with the same receipt
+ok 1 - an expired automatic charge can be reconciled before choosing the standard weapon, with the same receipt
+  ---
+  duration_ms: 102.870909
+  type: 'test'
+  ...
+# Subtest: choosing an already running different weapon resolves the pending charge without refilling that timer
+ok 2 - choosing an already running different weapon resolves the pending charge without refilling that timer
+  ---
+  duration_ms: 7.784647
+  type: 'test'
+  ...
+# Subtest: choosing a new different charge confirms the old receipt before saving and issuing exactly one new receipt
+ok 3 - choosing a new different charge confirms the old receipt before saving and issuing exactly one new receipt
+  ---
+  duration_ms: 9.871381
+  type: 'test'
+  ...
+# Subtest: a picked-up weapon can be selected after pending confirmation without purchasing or refilling the pickup
+ok 4 - a picked-up weapon can be selected after pending confirmation without purchasing or refilling the pickup
+  ---
+  duration_ms: 7.122854
+  type: 'test'
+  ...
+# Subtest: the actual menu permits a new choice and makes the pending receipt retryable even if that weapon looks active
+ok 5 - the actual menu permits a new choice and makes the pending receipt retryable even if that weapon looks active
+  ---
+  duration_ms: 6.446908
+  type: 'test'
+  ...
+# Subtest: successful free or cached manual selections clear the old rejection text
+ok 6 - successful free or cached manual selections clear the old rejection text
+  ---
+  duration_ms: 10.165301
+  type: 'test'
+  ...
+# Subtest: a continuing connection failure retains the original receipt and cannot consume a different charge
+ok 7 - a continuing connection failure retains the original receipt and cannot consume a different charge
+  ---
+  duration_ms: 8.11309
+  type: 'test'
+  ...
+# Subtest: a retry of the original charge never allocates a new id or overwrites it with a checkpoint
+ok 8 - a retry of the original charge never allocates a new id or overwrites it with a checkpoint
+  ---
+  duration_ms: 6.491346
+  type: 'test'
+  ...
+# Subtest: a pickup obtained while automatic confirmation waits keeps the player selection and receives no free refill
+ok 9 - a pickup obtained while automatic confirmation waits keeps the player selection and receives no free refill
+  ---
+  duration_ms: 8.858589
+  type: 'test'
+  ...
+# Subtest: a late response after a replaced mission cannot mutate the new mission
+ok 10 - a late response after a replaced mission cannot mutate the new mission
+  ---
+  duration_ms: 7.118298
+  type: 'test'
+  ...
+# Subtest: automatic reload remains bounded over repeated cycles and rejected duplicate triggers
+ok 11 - automatic reload remains bounded over repeated cycles and rejected duplicate triggers
+  ---
+  duration_ms: 22.03438
+  type: 'test'
+  ...
+# Subtest: an already spent confirmed receipt does not silently allocate another charge on retry
+ok 12 - an already spent confirmed receipt does not silently allocate another charge on retry
+  ---
+  duration_ms: 6.325095
+  type: 'test'
+  ...
+# Subtest: an invalid confirmation retains the receipt and cannot introduce a non-finite timer
+ok 13 - an invalid confirmation retains the receipt and cannot introduce a non-finite timer
+  ---
+  duration_ms: 4.132273
+  type: 'test'
+  ...
+# Subtest: a definitive rejection releases the pending gate without starting a different activation
+ok 14 - a definitive rejection releases the pending gate without starting a different activation
+  ---
+  duration_ms: 4.191724
+  type: 'test'
+  ...
+# Subtest: an older automatic error timer cannot erase a newer manual failure
+ok 15 - an older automatic error timer cannot erase a newer manual failure
+  ---
+  duration_ms: 9.474984
+  type: 'test'
+  ...
+# Subtest: actual account handlers reconcile a lost automatic response, then honor a new paid selection with no double consumption
+ok 16 - actual account handlers reconcile a lost automatic response, then honor a new paid selection with no double consumption
+  ---
+  duration_ms: 57.480094
+  type: 'test'
+  ...
+# Subtest: actual account handlers accept a completed charge cycle and repeat its lost response without another debit
+ok 17 - actual account handlers accept a completed charge cycle and repeat its lost response without another debit
+  ---
+  duration_ms: 8.354192
+  type: 'test'
+  ...
+# (node:13) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/backend/src/hangarCatalog.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /workspace/scratch/16f4e8c933c8/cryptoid-weapon-recovery/backend/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: confirmed new weapon is available but not automatically activated
+ok 18 - confirmed new weapon is available but not automatically activated
+  ---
+  duration_ms: 5.958936
+  type: 'test'
+  ...
+# Subtest: refresh and repeated shop visits never refill spent or running weapons
+ok 19 - refresh and repeated shop visits never refill spent or running weapons
+  ---
+  duration_ms: 0.504598
+  type: 'test'
+  ...
+# Subtest: non-weapons, unknown products and locked Testnet tiers cannot be granted
+ok 20 - non-weapons, unknown products and locked Testnet tiers cannot be granted
+  ---
+  duration_ms: 0.162044
+  type: 'test'
+  ...
+# Subtest: reconciliation does not mutate its inputs or remove existing weapons
+ok 21 - reconciliation does not mutate its inputs or remove existing weapons
+  ---
+  duration_ms: 0.517377
+  type: 'test'
+  ...
+# Subtest: weapon tiers fire multi-shot volleys and apply plasma damage
+ok 22 - weapon tiers fire multi-shot volleys and apply plasma damage
+  ---
+  duration_ms: 5.857383
+  type: 'test'
+  ...
+# Subtest: ship moves left, right and a limited distance upward without leaving the field
+ok 23 - ship moves left, right and a limited distance upward without leaving the field
+  ---
+  duration_ms: 0.283616
+  type: 'test'
+  ...
+# Subtest: touch control keeps the ship visibly above the thumb without delaying its position
+ok 24 - touch control keeps the ship visibly above the thumb without delaying its position
+  ---
+  duration_ms: 0.171387
+  type: 'test'
+  ...
+# Subtest: bought shots last one minute while pickups last twenty seconds
+ok 25 - bought shots last one minute while pickups last twenty seconds
+  ---
+  duration_ms: 0.14677
+  type: 'test'
+  ...
+# Subtest: shots travel upward, collide only with visible enemies; player hitbox remains compact
+ok 26 - shots travel upward, collide only with visible enemies; player hitbox remains compact
+  ---
+  duration_ms: 0.230847
+  type: 'test'
+  ...
+# Subtest: visible ships collide in every phase; cooldown and dive state prevent repeated damage
+ok 27 - visible ships collide in every phase; cooldown and dive state prevent repeated damage
+  ---
+  duration_ms: 0.55941
+  type: 'test'
+  ...
+# Subtest: a ship crossing the player between two frames causes one impact
+ok 28 - a ship crossing the player between two frames causes one impact
+  ---
+  duration_ms: 3.748768
+  type: 'test'
+  ...
+# Subtest: a shielded attacker can separate below the player and collide again on return
+ok 29 - a shielded attacker can separate below the player and collide again on return
+  ---
+  duration_ms: 0.37925
+  type: 'test'
+  ...
+# Subtest: relative ship movement catches a crossing without widening the hitbox
+ok 30 - relative ship movement catches a crossing without widening the hitbox
+  ---
+  duration_ms: 0.744203
+  type: 'test'
+  ...
+# Subtest: an active shield absorbs a ship collision; an inactive or expired shield does not
+ok 31 - an active shield absorbs a ship collision; an inactive or expired shield does not
+  ---
+  duration_ms: 0.432109
+  type: 'test'
+  ...
+# Subtest: one collision costs one heart, while an active shield absorbs it
+ok 32 - one collision costs one heart, while an active shield absorbs it
+  ---
+  duration_ms: 0.238718
+  type: 'test'
+  ...
+# Subtest: reload is off by default and isolates account and network preferences
+ok 33 - reload is off by default and isolates account and network preferences
+  ---
+  duration_ms: 1.719151
+  type: 'test'
+  ...
+# Subtest: an expiring weapon switches to the strongest enabled live timer or the standard shot
+ok 34 - an expiring weapon switches to the strongest enabled live timer or the standard shot
+  ---
+  duration_ms: 0.412319
+  type: 'test'
+  ...
+# Subtest: only the selected expired paid weapon with its own stock reloads
+ok 35 - only the selected expired paid weapon with its own stock reloads
+  ---
+  duration_ms: 0.244357
+  type: 'test'
+  ...
+1..35
+# tests 35
+# suites 0
+# pass 35
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 498.120575

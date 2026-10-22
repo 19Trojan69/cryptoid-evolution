@@ -1,0 +1,119 @@
+{
+  "format": "cryptoid-weapon-reload-recovery-validation",
+  "version": 1,
+  "baselineCommit": "94825bdcc78c7be27632a12340732a27088aebe2",
+  "branch": "codex/weapon-reload-recovery-20261022",
+  "newRegressionTests": {
+    "passed": 17,
+    "failed": 0,
+    "actualSource": "Actual selection handlers, syncSelectedWeapon and MissionWeaponShop JSX execute with replaced React scheduling/transport/clock; no physical browser.",
+    "realHandlerCases": 2,
+    "realHandlerIsolation": "Actual backend handlers compile in memory and operate on per-case in-memory profiles/stock. No real account, database, paid API or server is used.",
+    "buildGated": true
+  },
+  "negativeControl": {
+    "runtime": "Exact unchanged baseline GamePage/MissionWeaponShop, selected by CRYPTOID_WEAPON_BEFORE=1",
+    "passedControls": 5,
+    "failedRegressions": 12,
+    "evidence": "before-tests.txt"
+  },
+  "focusedTests": {
+    "passed": 35,
+    "failed": 0,
+    "excluded": 0,
+    "evidence": "focused-tests.txt"
+  },
+  "existingBackendTests": {
+    "passed": 28,
+    "failed": 0,
+    "evidence": "backend-tests.txt",
+    "prerequisite": "Actual unchanged handler/rule source compiled locally with existing esbuild; no live backend started."
+  },
+  "build": {
+    "command": "VITE_CRYPTOID_DIAGNOSTICS=0 npm run build",
+    "exitCode": 0,
+    "staticHullGenerationPassed": true,
+    "localeTestsPassed": 12,
+    "localeReleaseGatePassed": true,
+    "canvasIntegrationTestsPassed": 15,
+    "weaponRecoveryTestsPassed": 17,
+    "typescriptPassed": true,
+    "vitePassed": true,
+    "evidence": "build.txt",
+    "warnings": [
+      "Existing Vite large-chunk notice",
+      "Existing test-host import.meta/proxy and module-type notices"
+    ],
+    "recoveryTestHarnessExcludedFromProductionJavaScript": true
+  },
+  "lint": {
+    "comparison": "lint-comparison.json",
+    "addedFindings": 0,
+    "removedFindings": 0,
+    "results": [
+      {
+        "file": "frontend/src/pages/GamePage.tsx",
+        "beforeExitCode": 1,
+        "afterExitCode": 1,
+        "beforeErrors": 62,
+        "afterErrors": 62,
+        "beforeWarnings": 4,
+        "afterWarnings": 4
+      },
+      {
+        "file": "frontend/src/pages/MissionWeaponShop.tsx",
+        "beforeExitCode": 1,
+        "afterExitCode": 1,
+        "beforeErrors": 3,
+        "afterErrors": 3,
+        "beforeWarnings": 0,
+        "afterWarnings": 0
+      }
+    ],
+    "wholeProjectCleanClaim": false
+  },
+  "scope": "scope.json",
+  "dependencies": {
+    "trackedLockfile": false,
+    "dependencyRangesChanged": false,
+    "restore": "Reuse the declared-range dependency restoration from the recovered checkout; no added packages.",
+    "historicalResolutionIdenticalClaim": false,
+    "node": "v24.19.0",
+    "versions": {
+      "react": "19.3.1",
+      "typescript": "5.9.3",
+      "vite": "7.3.7",
+      "esbuild": "0.28.2",
+      "@napi-rs/canvas": "0.1.100",
+      "eslint": "9.39.5",
+      "eslint-plugin-react-hooks": "7.1.1"
+    }
+  },
+  "deployment": {
+    "performed": false,
+    "automaticBranchDeploymentEnabled": false,
+    "officialSourcePreserved": "5d6e7cb703ef114ee4626c1fbb0e34a45b1667d8",
+    "siblingBonusDiagnostics": "codex/bonus-clear-boundary-20261022 at c1e8688980b826d33e58c2a4300baa5ee38d65a1"
+  },
+  "limits": [
+    "The original device transport/server failure is not established.",
+    "A continuing network/server failure cannot be treated as successful confirmation.",
+    "No physical iPhone/PiBrowser/native memory proof or White Screen cause/fix is claimed."
+  ],
+  "evidenceSha256": {
+    "backend-tests.txt": "5aa75461b786445d0d6d507a386b4bf59a9d7d655a6707e10124a3309b7cb0d3",
+    "build.txt": "26c75e876b3541e1b5329f79af23353caee5dbf51622287e637c63763e51c5ec",
+    "before-tests.txt": "de3bec09e97b25138df67bea963281391cba0106c372835b52cee36847d27df6",
+    "focused-tests.txt": "8f561b373451edcd6a4c9d48e3ed774f443cade4b3081d86af10297002c59c66",
+    "scope.json": "935a833c954bc1dc60d7d86d6559c30aefa9e099056a5c40aec4cb70b72ca70d",
+    "lint-comparison.json": "365053465254d8168df060ea46012ddc41b7c42638343142468b667de25250d1"
+  },
+  "newTestScriptLint": {
+    "exitCode": 0,
+    "files": [
+      "frontend/scripts/weaponReloadRecoveryHost.mjs",
+      "frontend/scripts/weaponReloadRecovery.test.mjs",
+      "frontend/scripts/verifyWeaponRecoveryScope.mjs"
+    ]
+  }
+}

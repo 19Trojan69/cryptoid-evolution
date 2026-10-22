@@ -2153,52 +2153,61 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     setWeaponMenuOpen(true); setWeaponError(''); setGame({ ...stateRef.current });
 
   };
-  const selectWeaponLevel = async (level: number, automatic = false) => {
+  const selectWeaponLevel = async (level: number, automatic = false, pickup = false) => {
     const state = stateRef.current, runId = scoreRunRef.current;
     const current = () => weaponMountedRef.current && stateRef.current === state && scoreRunRef.current === runId;
     if ((!automatic && (state.status !== 'paused' || !weaponMenuOpen)) || (automatic && state.status !== 'playing') || weaponBusyRef.current || weaponCountdown !== null) { if (automatic) reloadPendingRef.current = false; return; }
+    if (pickup && state.pickupWeaponMs <= 0) return;
+    if (!automatic && reloadNoticeTimerRef.current) {
+      window.clearTimeout(reloadNoticeTimerRef.current); reloadNoticeTimerRef.current = null; setAutoReloading(null);
+    }
     const previousSelection = { source: state.weaponSource, level: state.weaponLevel };
     let remaining = level === 1 ? 0 : state.weaponTimers[level] ?? 0;
-    if (level !== 1) {
-      if (remaining <= 0) {
-        if (adminRunRef.current) remaining = PURCHASED_WEAPON_DURATION_MS;
-        else {
-          if (!accountRun || !scoreRunRef.current) return;
-          weaponBusyRef.current = true; setWeaponBusy(true); setWeaponError('');
-          try {
-            // A retry uses the original request id and must not overwrite a successful server grant.
-            if (!activationRef.current) {
-              await saveCombat();
-              if (!current()) return;
-              activationRef.current = { level, id: crypto.randomUUID() };
-            }
-            if (activationRef.current.level !== level) throw new Error('Finish pending activation first');
-            const { data } = await axiosClient.post<{ remainingMs: number; weaponStock: Record<string, number> }>('/hangar/weapon/activate', { runId, level, requestId: activationRef.current.id }, { timeout: 12000 });
-            if (!current()) return;
-            remaining = data.remainingMs;
-            stockRef.current = data.weaponStock; setWeaponStock(data.weaponStock);
-            if (!state.unlockedWeapons.includes(level)) state.unlockedWeapons.push(level);
-            activationRef.current = null;
-          } catch (error) {
-            if (!current()) return;
-            const status = (error as { response?: { status?: number } }).response?.status;
-            if (status && status >= 400 && status < 500) activationRef.current = null;
-            setWeaponError('Not confirmed. Retry the same weapon.');
-            if (automatic) {
-              if (reloadNoticeTimerRef.current) window.clearTimeout(reloadNoticeTimerRef.current);
-              setAutoReloading(null);
-              reloadNoticeTimerRef.current = window.setTimeout(() => setWeaponError(''), 2_500);
-            }
-            return;
-          } finally { if (current()) { weaponBusyRef.current = false; setWeaponBusy(false); reloadPendingRef.current = false; } }
+    if (activationRef.current || (!pickup && level > 1 && remaining <= 0 && !adminRunRef.current)) {
+      if (!accountRun || !scoreRunRef.current) return;
+      weaponBusyRef.current = true; setWeaponBusy(true); setWeaponError('');
+      try {
+        const confirm = async (activation: { level: number; id: string }) => {
+          const { data } = await axiosClient.post<{ remainingMs: number; weaponStock: Record<string, number> }>('/hangar/weapon/activate', { runId, level: activation.level, requestId: activation.id }, { timeout: 12000 });
+          if (!current()) return false;
+          if (!Number.isFinite(data.remainingMs) || data.remainingMs < 0 || !data.weaponStock || typeof data.weaponStock !== 'object') throw new Error('Invalid activation confirmation');
+          state.weaponTimers[activation.level] = data.remainingMs;
+          stockRef.current = data.weaponStock; setWeaponStock(data.weaponStock);
+          if (!state.unlockedWeapons.includes(activation.level)) state.unlockedWeapons.push(activation.level);
+          activationRef.current = null;
+          return true;
+        };
+        // Resolve the old receipt before honoring any new choice. No stale
+        // checkpoint or new request id may overwrite an uncertain grant.
+        const pending = activationRef.current;
+        if (pending && !await confirm(pending)) return;
+        if (!pickup && level > 1 && (state.weaponTimers[level] ?? 0) <= 0 && pending?.level !== level) {
+          await saveCombat();
+          if (!current()) return;
+          activationRef.current = { level, id: crypto.randomUUID() };
+          if (!await confirm(activationRef.current)) return;
         }
-        state.weaponTimers[level] = remaining;
-      }
+        remaining = level === 1 ? 0 : state.weaponTimers[level] ?? 0;
+      } catch (error) {
+        if (!current()) return;
+        const status = (error as { response?: { status?: number } }).response?.status;
+        if (status && status >= 400 && status < 500) activationRef.current = null;
+        setWeaponError('Not confirmed. Retry the same weapon.');
+        if (automatic) {
+          if (reloadNoticeTimerRef.current) window.clearTimeout(reloadNoticeTimerRef.current);
+          setAutoReloading(null);
+          reloadNoticeTimerRef.current = window.setTimeout(() => setWeaponError(''), 2_500);
+        }
+        return;
+      } finally { if (current()) { weaponBusyRef.current = false; setWeaponBusy(false); reloadPendingRef.current = false; } }
+    } else if (!pickup && level > 1 && remaining <= 0 && adminRunRef.current) {
+      remaining = PURCHASED_WEAPON_DURATION_MS; state.weaponTimers[level] = remaining;
     }
+    setWeaponError('');
     // A collected pickup or a manual selection can take over while the server confirms the charge.
     if (!automatic || (state.status === 'playing' && state.weaponSource === previousSelection.source && state.weaponLevel === previousSelection.level)) {
-      if (level > 1) { state.paidWeaponLevel = level; state.paidWeaponMs = remaining; }
-      state.weaponSource = level === 1 ? 'standard' : 'paid';
+      if (!pickup && level > 1) { state.paidWeaponLevel = level; state.paidWeaponMs = remaining; }
+      state.weaponSource = pickup ? 'pickup' : level === 1 ? 'standard' : 'paid';
     }
     syncSelectedWeapon(state);
     setGame({ ...state, weaponTimers: [...state.weaponTimers] });
@@ -2213,12 +2222,10 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     void selectWeaponLevel(level, true);
     return true;
   };
-  const selectPickupWeapon = () => {
+  const selectPickupWeapon = async () => {
     const state = stateRef.current;
-    if (state.status !== 'paused' || !weaponMenuOpen || weaponBusyRef.current || activationRef.current || state.pickupWeaponMs <= 0) return;
-    state.weaponSource = "pickup";
-    syncSelectedWeapon(state);
-    setGame({ ...state });
+    if (state.status !== 'paused' || !weaponMenuOpen || weaponBusyRef.current || state.pickupWeaponMs <= 0) return;
+    await selectWeaponLevel(state.pickupWeaponLevel, false, true);
   };
 
   const restart = () => {

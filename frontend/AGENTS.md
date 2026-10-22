@@ -1,5 +1,42 @@
 # Preserve the officially approved game
 
+## Weapon auto-reload confirmation recovery, 22 October 2026, preparation
+
+Marcus reports persistent "Not confirmed. Retry the same weapon." after an
+automatic charge cycle, with later weapon choices failing. This explicitly adds
+the client recovery defect to the current stability work. Isolated sibling
+branch codex/weapon-reload-recovery-20261022 starts at 94825bd; automatic deployment
+is disabled. Do not mix it with the separately prepared bonus-clear observation
+branch codex/bonus-clear-boundary-20261022 (remote c1e8688980b826d33e58c2a4300baa5ee38d65a1).
+
+Actual released selection/menu code reproduces a lost-response pending receipt
+that disables alternatives, ignores retry if that weapon appears selected, and
+leaves an old error after free/cached choices. New manual selection reconciles
+the original level/id first, then honors the requested standard/live/new/pickup
+choice. Never checkpoint over an uncertain grant, invent confirmation, refill a
+live/pickup timer, abandon the original request id, or allocate a second id for
+an already spent confirmed receipt. Continuing failure preserves that receipt;
+busy/run/mount/automatic-selection guards remain. Successful choice clears stale
+error; a newer manual attempt retires the older notification timer.
+
+Only the weapon selection/pickup handlers and two existing menu buttons change
+runtime behavior. The complete remaining GamePage, including the automatic
+trigger, is byte-identical to 94825bd. Preserve simulation, CSS/art/audio, timing,
+weapon rules/durations, prices/stock, checkout, account/save schemas and backend.
+Seventeen build-gated tests run actual handlers/menu/sync code. Two use actual
+unmodified account/checkpoint/activation handlers and isolated in-memory stock;
+same-id replay debits once. Released negative control fails twelve and passes
+five; current seventeen pass. Thirty-five focused cases, twenty-eight existing
+backend checks and full locales/Canvas/types/Vite build pass. Lint findings are
+identical before/after (GamePage 62 errors/four warnings, menu three errors under
+restored tooling); no clean whole-project lint claim. This is not physical
+PiBrowser/live-account proof or proof of the initial device transport error.
+
+No new deployment, live account mutation/purchase, Mainnet contact or runtime-log/
+protection retry. Keep official 5d6e7cb and every fixed source/rollback reference.
+The White Screen cause remains open; the bonus-clear diagnostic is separately
+prepared, not a proved crash fix. See docs/weapon-reload-recovery-20261022.md.
+
 ## Canvas static-URL correction published, 22 October 2026
 
 The approved release is complete. Official Testnet is READY at fixed source

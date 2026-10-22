@@ -1,0 +1,28 @@
+{
+  "baseline": "94825bdcc78c7be27632a12340732a27088aebe2",
+  "comparison": "ruleId, severity, first message line and source line; numeric line shifts excluded",
+  "results": [
+    {
+      "file": "frontend/src/pages/GamePage.tsx",
+      "beforeExitCode": 1,
+      "afterExitCode": 1,
+      "beforeErrors": 62,
+      "afterErrors": 62,
+      "beforeWarnings": 4,
+      "afterWarnings": 4,
+      "addedFindings": [],
+      "removedFindings": []
+    },
+    {
+      "file": "frontend/src/pages/MissionWeaponShop.tsx",
+      "beforeExitCode": 1,
+      "afterExitCode": 1,
+      "beforeErrors": 3,
+      "afterErrors": 3,
+      "beforeWarnings": 0,
+      "afterWarnings": 0,
+      "addedFindings": [],
+      "removedFindings": []
+    }
+  ]
+}

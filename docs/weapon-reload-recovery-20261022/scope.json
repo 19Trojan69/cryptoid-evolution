@@ -1,0 +1,13 @@
+{
+  "baseline": "94825bdcc78c7be27632a12340732a27088aebe2",
+  "passed": true,
+  "gameOutsideSelectionSha256": "0e30971bd329c40229d34a9ef45a6c0ca9e02639a4a91a9cdf358fa8ca557476",
+  "currentGameOutsideSelectionSha256": "0e30971bd329c40229d34a9ef45a6c0ca9e02639a4a91a9cdf358fa8ca557476",
+  "changedRuntimePaths": [
+    "frontend/src/pages/GamePage.tsx",
+    "frontend/src/pages/MissionWeaponShop.tsx"
+  ],
+  "menuChangedLines": 2,
+  "automaticDeploymentEnabled": false,
+  "limits": "Preserves all source outside the reviewed weapon selection handlers/two menu buttons. No physical PiBrowser or live account proof."
+}
