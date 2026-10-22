@@ -1,0 +1,67 @@
+{
+  "at": "2026-10-22T12:17:50.546Z",
+  "features": {
+    "matchingStaticRevision": true,
+    "removedOldHullEncoder": true,
+    "decodedByteAccounting": true,
+    "decodeBeforeCache": true,
+    "staticUrlCacheBudget": true,
+    "effectsPublishConnectedGraph": true,
+    "effectsFailedGraphDisconnects": true,
+    "musicReadinessGate": true,
+    "musicRetainsFailedBoundGraph": true,
+    "musicGainAllocatedBeforeBinding": true
+  },
+  "staticFiles": [
+    {
+      "path": "/ships/painted/91a72bc0c36be9407915/ship_01_stage_1_gold.png",
+      "status": 200,
+      "bytes": 34109,
+      "sha256": "1d351b74a599340ee8df66c258606e94edca9f7311740f1069b16fe4e364a1bc",
+      "width": 282,
+      "height": 282
+    },
+    {
+      "path": "/ships/painted/91a72bc0c36be9407915/ship_04_stage_2_silver.png",
+      "status": 200,
+      "bytes": 53270,
+      "sha256": "09230672cf2bb8fccaf69119bd6293db508a4d8b904b83d63b98cef237f82c9f",
+      "width": 282,
+      "height": 282
+    },
+    {
+      "path": "/ships/painted/91a72bc0c36be9407915/ship_08_stage_3_ruby.png",
+      "status": 200,
+      "bytes": 69518,
+      "sha256": "e9a93643b193f27891f740bd9a888229b60b7c3ea8019da68d7001ccc4f5efe3",
+      "width": 282,
+      "height": 282
+    },
+    {
+      "path": "/ships/painted/91a72bc0c36be9407915/ship_12_stage_1_metallic-blue.png",
+      "status": 200,
+      "bytes": 52127,
+      "sha256": "7b988dbea2a7183fabc75bd8adbd543daada8abb720552b5bcca2816f6696fe5",
+      "width": 282,
+      "height": 282
+    },
+    {
+      "path": "/ships/painted/91a72bc0c36be9407915/ship_16_stage_2_pink.png",
+      "status": 200,
+      "bytes": 61556,
+      "sha256": "72c69f813ce2e99cbcf1349f3cc4b952d66b0cf2cfc07b56e66c6c877040e230",
+      "width": 282,
+      "height": 282
+    },
+    {
+      "path": "/ships/painted/91a72bc0c36be9407915/ship_20_stage_3_white.png",
+      "status": 200,
+      "bytes": 83909,
+      "sha256": "ce69cdd43c98c7de2e415c00e34c27f5e1cbac4daa430ea2f4c414aef9d52617",
+      "width": 282,
+      "height": 282
+    }
+  ],
+  "moduleHashesMatchRelease": true,
+  "limits": "Six served PNGs, delivered features and source identity. Not iPhone audio, native memory, FPS or White Screen proof."
+}

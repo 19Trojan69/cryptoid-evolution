@@ -1,5 +1,43 @@
 # Preserve the officially approved game
 
+## Static hulls and audio initialization published, 22 October 2026
+
+The owner's explicit "Bitte veröffentlichen" supersedes preparation-only status
+below for this tested candidate. Official Testnet is READY at source
+0bb35e5aeac49557edb8fd7379422066971e47de, tree
+43af181e9990cc34501dd8ebb44367ce0cf219e1, fixed branch
+codex/static-hull-memory-20261022. Production
+dpl_AxeBWSTp1tKTYWWUe2ALcqcA6ktv reports 51 seconds total / 49-second deploy
+logs; preview dpl_FEMWyzgkPUybwZ5UVFGVBNrvqtp5 reports 70 / 69 seconds.
+Production rebuilt the same source with production settings, not the identical
+preview binary. The prior 9b5f07c5 READY deployment and newly verified
+backup/testnet-before-static-hulls-20261022 preserve immediate rollback.
+
+Delivered GamePage/Admin source/tree, ten new static/audio features, nineteen
+previous audio/progress, eight memory, six cleanup, eight owner-recorder, two
+handoff and four production-QA exclusion checks pass. Six served PNGs match the
+proven local production bytes at 282x282. All 1740 local files were separately
+verified; do not claim a full remote catalogue comparison. API/anonymous Admin
+denial/three leaderboard response hashes match the fresh baseline. Preview
+guest start/Pause/countdown/active Resume/second Pause pass, with seven ship styles
+using the matching static revision. Fresh official Home has Spielen enabled.
+
+The Vercel connector sees the team but returns exact-resource 404s; the previously
+authorized signed-in dashboard completes this release. No runtime logs, drains,
+protection bypass, Mainnet contact, accounts/saves/economy mutation or new auth.
+The receipt-only probe was corrected for Vite's equivalent typeof comparison
+and a valid $-containing minified identifier; no runtime patch or assertion
+removal followed these probe failures. Static hulls plus the two prepared audio
+initialization fixes are now live. Physical iPhone audio, native memory, FPS and
+a final White Screen fix remain unproved. Reload/Resume the existing mission
+near a transition or use direct boss testing; do not require a replacement
+level-one run or another full campaign merely for already established counters.
+
+Keep all fixed source/rollback refs and Mainnet unchanged. This later receipt
+branch codex/static-hull-memory-release-record-20261022 is auto-deploy-disabled;
+do not deploy it or advance the fixed runtime branch with documentation.
+See docs/static-hull-release-20261022.md and its sibling evidence directory.
+
 ## Static hull preparation, 22 October 2026, tested candidate
 
 The owner asks for internet-backed investigation and correction, then "setze fort".

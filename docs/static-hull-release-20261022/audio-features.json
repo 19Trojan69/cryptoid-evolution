@@ -1,0 +1,25 @@
+{
+  "at": "2026-10-22T12:17:44.991Z",
+  "features": {
+    "foregroundClockWindow": true,
+    "coalescedSameContextRecovery": true,
+    "scheduledEndFallback": true,
+    "pauseReleasesFadingWeapons": true,
+    "silentMusicPause": true,
+    "pendingMusicRecoveryShared": true,
+    "staleMusicEpoch": true,
+    "ownerFieldsDeliveredAndSanitized": true,
+    "freshGraphDirectResume": true,
+    "orderedNativeCallsBeforePromiseWait": true,
+    "clockProgressReleasesPromiseGate": true,
+    "lateCompletionIdentityGuard": true,
+    "musicRefreshesBlockedClock": true,
+    "explicitGestureRetiresAutomaticAttempt": true,
+    "zeroClockStallDirectRetry": true,
+    "directRetryKeepsGenerationAndPendingIdentity": true,
+    "victoryWaitUsesMediaProgress": true,
+    "bossGateUsesProgressGuard": true,
+    "ownerMusicAndHeartEvidence": true
+  },
+  "moduleHashesMatchRelease": true
+}

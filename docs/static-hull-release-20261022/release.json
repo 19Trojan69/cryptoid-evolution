@@ -1,0 +1,57 @@
+{
+  "status": "READY",
+  "officialUrl": "https://cryptoid-evolution-testnet.vercel.app/",
+  "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+  "teamId": "team_KzJmtl0QyoYZAOu5RQKsAR2i",
+  "runtimeCommit": "0bb35e5aeac49557edb8fd7379422066971e47de",
+  "runtimeTree": "43af181e9990cc34501dd8ebb44367ce0cf219e1",
+  "fixedSourceBranch": "codex/static-hull-memory-20261022",
+  "localIdenticalTreeCommit": "0f46cd2a64cd78b5bc69adcf25e1f47d364d490c",
+  "staticHullRevision": "91a72bc0c36be9407915",
+  "preview": {
+    "deploymentId": "dpl_FEMWyzgkPUybwZ5UVFGVBNrvqtp5",
+    "url": "https://cryptoid-evolution-testnet-dekvcjd37-19-trojan69.vercel.app/",
+    "status": "READY",
+    "displayedDurationSeconds": 70,
+    "displayedDeployLogSeconds": 69,
+    "guestStartPauseCountdownResumeSecondPause": true,
+    "visibleStaticHullStyles": 7
+  },
+  "production": {
+    "deploymentId": "dpl_AxeBWSTp1tKTYWWUe2ALcqcA6ktv",
+    "url": "https://cryptoid-evolution-testnet-minbq1xne-19-trojan69.vercel.app/",
+    "status": "READY",
+    "displayedDurationSeconds": 51,
+    "displayedDeployLogSeconds": 49,
+    "separateProductionRebuild": true,
+    "dashboardCompletionDisplayVienna": "2026-10-22 14:15:40",
+    "verificationCompletedAt": "2026-10-22T12:17:50.546Z",
+    "freshOfficialHomeEnabled": true
+  },
+  "rollback": {
+    "branch": "backup/testnet-before-static-hulls-20261022",
+    "commit": "9b5f07c55a1f440ca925ee49b002bb223241793a",
+    "deploymentId": "dpl_7dCdyJ8A78QqiKU6oXzuZbBQqg6j",
+    "independentlyResolved": true
+  },
+  "verification": {
+    "deliveredSourceAndTreeMatch": true,
+    "staticAndNewAudioFeatures": 10,
+    "previousAudioProgressFeatures": 19,
+    "memoryFeatures": 8,
+    "cleanupFeatures": 6,
+    "ownerRecorderFeatures": 8,
+    "handoffFeatures": 2,
+    "productionQaExclusions": 4,
+    "remotePngsMatchingLocalProductionBytes": 6,
+    "apiAndThreeLeaderboardResponsesMatchBaseline": true,
+    "anonymousAdminStatus": 401
+  },
+  "publicationMethod": "Previously authorized signed-in Vercel dashboard; connector recognizes team but returns exact-resource 404s.",
+  "mainnetContacted": false,
+  "runtimeLogsQueried": false,
+  "protectionBypassAttempted": false,
+  "screenshot": "testnet-ready-1792671418581.jpg",
+  "receiptBranchNotForDeployment": "codex/static-hull-memory-release-record-20261022",
+  "limits": "No physical iPhone audible output, native/GPU/process memory, displayed FPS or final White Screen fix proof. Remote PNG checks cover six representative files; all 1740 local outputs were separately verified. Existing warnings and baseline lint finding remain. Fixed runtime branch is not advanced by this receipt."
+}

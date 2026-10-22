@@ -28,9 +28,11 @@ if(phase==='after'){
     normalRasterCap:/Number\.isFinite\(\w+\)&&\w+>0\?Math\.min\(1\.5,\w+\):1/.test(weapons),
     bossUsesNormalCap:/\w+\(window\.devicePixelRatio\),\w+=Math\.ceil\(\w+\.width\*\w+\)/.test(weapons),
     effectUsesSharedCap:/\w+=\(\)=>\w+\(window\.devicePixelRatio\)/.test(game),
-    paintedCache24Entries12MiB6Unused:/new \w+\(24,12\*1024\*1024,\w+=>URL\.revokeObjectURL\(\w+\),6\)/.test(game),
+    paintedCache24Entries12MiB6Unused:process.env.CRYPTOID_VERIFY_STATIC_HULLS==='1'
+      ? /new \w+\(24,12\*1024\*1024,\(\)=>\{\},6\)/.test(game)
+      : /new \w+\(24,12\*1024\*1024,\w+=>URL\.revokeObjectURL\(\w+\),6\)/.test(game),
     twoUnusedHulls:/for\(;\w+>2&&\w+\(\);\)\w+--/.test(game),
-    textureTrimProtectsConsumers:/if\(!\(\w+\.size\|\|\w+\.size\)\)for/.test(game),
+    textureTrimProtectsConsumers:/if\(!\([\w$]+\.size\|\|[\w$]+\.size\)\)for/.test(game),
     fourWarmTextures:/if\(\w+\.size<=4\)break/.test(game),
     retiredCanvasZeroed:/\w+\.canvas\.width=\w+\.canvas\.height=0/.test(game)
   };
