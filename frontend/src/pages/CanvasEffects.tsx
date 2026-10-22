@@ -82,7 +82,7 @@ const recordFailure=(error:any)=>{if(failures.length<8)failures.push(String(erro
 const dpr=()=>gameRenderScale(window.devicePixelRatio);
 const resources=(url:string,diameter:number)=>{
   const scale=dpr(),hull=readyImages.get(url),fire=readyTextures.get(`fire:${diameter}:${scale}`),smoke=readyTextures.get(`smoke:${diameter}:${scale}`);
-  return hull&&fire&&smoke?{hull,fire,smoke,scale,generation:resourceGeneration}:null;
+  return hull&&fire&&smoke?{sourceUrl:url,hull,fire,smoke,scale,generation:resourceGeneration}:null;
 };
 export const prepareCanvasImpactResources=(url:string,diameter:number)=>Promise.all([image(url),texture('fire',diameter,dpr()),texture('smoke',diameter,dpr())]);
 function piecesFrom(debris:any) {
@@ -269,13 +269,15 @@ export function CanvasImpact({effect,debris,original}:{effect:any;debris:any;ori
     const generation=resourceGeneration;
     void prepareCanvasImpactResources(url,diameter).then(([hull,fire,smoke])=>{
       if(active&&generation===resourceGeneration)setLoaded(previous=>
-        previous?.hull===hull&&previous.fire===fire&&previous.smoke===smoke
+        previous?.sourceUrl===url&&previous.hull===hull&&previous.fire===fire&&previous.smoke===smoke
           &&previous.scale===availability.scale&&previous.generation===generation
-          ?previous:{hull,fire,smoke,scale:availability.scale,generation});
+          ?previous:{sourceUrl:url,hull,fire,smoke,scale:availability.scale,generation});
     },error=>{if(active)recordFailure(error);});
     return()=>{active=false;release();};
   },[url,diameter,availability.enabled,availability.scale]);
-  const available=availability.enabled&&loaded?.hull?.src===url
+  // Image.src reflects an absolute URL; the style/cache key can be relative.
+  // Keep the requested identity instead of comparing those different spellings.
+  const available=availability.enabled&&loaded?.sourceUrl===url
     &&loaded.scale===availability.scale&&loaded.generation===resourceGeneration;
   useLayoutEffect(()=>{
     if(!available)return;

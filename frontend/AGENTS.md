@@ -1,5 +1,60 @@
 # Preserve the officially approved game
 
+## Canvas static-URL Testnet release authorized, 22 October 2026
+
+The owner's latest "fortsetzen" answers the explicit question whether to publish
+the verified Canvas correction to Testnet. Proceed through the existing Testnet
+preview/production workflow without asking the same release permission again.
+Prepared local runtime is 115b0e5b9db6e3a35c60f96df73a086c342eadfc. Only readiness
+identity changes application behavior; fifteen new build-gated tests and prior
+regressions already pass. Do not broaden the patch or repeat unrelated tests.
+
+The signed-in dashboard confirms old READY dpl_AxeBWSTp1tKTYWWUe2ALcqcA6ktv at
+0bb35e5aeac49557edb8fd7379422066971e47de. Independently resolved rollback branch
+backup/testnet-before-canvas-static-url-20261022 points to that exact source.
+The Vercel connector's exact-resource 404 persists; the previously authorized
+dashboard fallback remains applicable. Earlier runtime-log/protection denials,
+Mainnet, accounts, saves/economy and every older fixed reference remain unchanged.
+Keep candidate auto deployment disabled, verify its full remote tree, preview
+and delivered source/guard, then record the actual release separately. Never move
+the fixed new runtime branch with later receipt-only documentation.
+
+## Canvas static-URL readiness, 22 October 2026, verified preparation only
+
+The owner accepted the isolated correction/integration tests with "fortsetzen".
+This does not authorize publication. Candidate
+codex/canvas-static-url-readiness-20261022 has automatic deployment disabled;
+preserve official Testnet 0bb35e5a, Mainnet and every fixed source/rollback ref.
+No preview, runtime-log/protection-bypass retry or account/data mutation.
+
+The new 22 October report ends in active boss 2 with open reactor and advancing
+audio clocks. Last flight persistence is 14:31:58.552 Vienna; new document starts
+14:32:05.098. No matching native log was found. Do not reuse the 21 October Jetsam
+as OS confirmation of this new event or blame first-shot creation/defeat audio.
+
+Actual released CanvasImpact compares a reflected absolute Image.src with the
+root-relative static PNG key and silently retains original CSS effects. The real
+style-hook/component/native-raster host reproduces that failure with prepared
+resources and zero failures. Keep sourceUrl in cached/async bundles and compare
+that exact requested key, retaining scale/generation guards. This is the only
+runtime change. No altered drawing, artwork, timing, resolution, cache budget,
+timer/RAF/listener, audio, boss rules, HUD, simulation, API or saved state.
+
+Fifteen new tests now gate every frontend build. Portable exact previous-source
+fixture SHA-256 is f9f862bad6cc19968c46b13c6045e3317c7a4e10b9080dea7083be8c579fbbd1.
+Before correction eight of the original twelve cases fail; afterward all fifteen
+pass, including actual hook/static PNG activation, failures, stale callbacks,
+scale/context loss/pause, shared ownership, 1000 warm impacts and 54 exact native
+RGBA pairs. 154 existing focused tests and eleven static-hull tests (all 1740 PNG
+byte pairs), Canvas resource/lifetime/cadence and full build/types/twelve locales
+pass. The same two historical-source cases remain excluded. CanvasEffects lint
+retains exactly its twenty preceding findings; no whole-project clean-lint claim.
+
+No physical iPhone/Safari memory, heat, output, FPS or White Screen fix is proved.
+The native raster/hook host is not browser/device verification. Keep prior browser
+and permission restrictions; never demand another full campaign for known counters.
+See docs/canvas-static-url-readiness-20261022.md for evidence and release boundary.
+
 ## Static hulls and audio initialization published, 22 October 2026
 
 The owner's explicit "Bitte veröffentlichen" supersedes preparation-only status
