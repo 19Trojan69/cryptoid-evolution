@@ -1,0 +1,26 @@
+(node:11) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/16f4e8c933c8/cryptoid-evolution/backend/src/blockFlights.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/16f4e8c933c8/cryptoid-evolution/backend/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ all current and saved legacy colours, twenty hulls and three stages have generated PNGs (8.676915ms)
+{"comparedPNG":1740,"baselineEncodingJobs":1740,"limits":"Native Skia equality; not an iPhone colour-management or memory measurement."}
+✔ all 1740 static PNGs equal the actual preceding runtime encoder output byte for byte (82676.365601ms)
+✔ a cold static hull loads individually without Canvas, readback, PNG encoding or Blob allocation (13.658229ms)
+✔ decoded readiness and the full encoded-plus-decoded estimate are retained (8.997947ms)
+✔ load/decode failures remain retryable without publishing an incomplete image (18.184619ms)
+✔ obsolete delayed loads and decodes cancel; a still mounted consumer protects the same request (24.262146ms)
+{"stableURLControl":[{"before":true,"encodes":11,"objectURLs":11},{"before":false,"encodes":0,"objectURLs":0}]}
+✔ cache eviction and route remount reuse a stable URL instead of minting another image identity (451.731439ms)
+{"plans":1100,"requestedVariants":269,"readinessRequests":7259,"images":7259,"canvases":0,"readbacks":0,"encodes":0,"objectURLs":0,"revoked":0,"liveCanvasBytes":0,"maxCanvasBytes":0}
+✔ 500 levels plus escort and bonus preparation stay bounded without runtime painting (5218.370396ms)
+✔ static hull PNGs remain ordinary Canvas image sources for original debris clipping (4.538749ms)
+✔ the actual style hook keeps the original source until decoded and preserves every style except the image URL (11.25296ms)
+✔ the actual hook retains the original visible fallback on unavailable PNG, then retries on remount (10.11205ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 88863.484634

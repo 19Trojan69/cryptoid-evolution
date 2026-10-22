@@ -1,5 +1,48 @@
 # Preserve the officially approved game
 
+## Static hull preparation, 22 October 2026, tested candidate
+
+The owner asks for internet-backed investigation and correction, then "setze fort".
+The newly matched Jetsam event is a PiBrowser-coalition active WebContent
+per-process-limit termination at 17:26:09.580 Vienna, 221 ms after the f853 level-19
+start and 1.401 s before the replacement document. Resident pages imply 2.01964 GiB.
+The raw file has no site URL; do not assign it to later evening reports or claim
+the latest b92 saved exit was a crash. The allocation responsible remains unproved.
+
+Candidate codex/static-hull-memory-20261022 starts at ab58793 / 344722ed (the two
+prepared audio initialization fixes), equivalent remote a765aab6. Automatic
+deployment is disabled. Keep official Testnet 9b5f07c5 and every fixed rollback/
+source reference, Mainnet and prior runtime-log/protection denials unchanged.
+No publication instruction accompanies this continuation.
+
+Generate all 1740 original-resolution ship/stage/current-or-legacy-colour PNGs at
+build time with the unchanged material/palette/accents and pinned build-only
+@napi-rs/canvas 0.1.100. The compact content-addressed manifest is tracked; PNGs
+are ignored and generated in predev/prebuild. Request only actual prepared/mounted
+variants, never preload the catalogue. Retain serial load/decode readiness, visible
+source fallback, cancellation/retry, twelve-item plans and the 24/12-MiB/6 cache.
+Eviction must reuse the static URL, without game-time hull Canvas/readback/PNG/Blob.
+Keep full decoded accounting; readiness jobs are not material/encoding work.
+
+All 1740 native encoder PNGs equal the preceding actual runtime byte-for-byte.
+Eleven tests cover loading, actual-hook fallback, failures, cancellation, mounted
+ownership, stable reuse and 1100 preparation changes through 500 sectors/escorts/
+bonus (269 unique URLs, 7259 requests, zero painting/Blob allocations). Existing
+154 audio/boss/diagnostic + four material/cache tests, Canvas resource/lifecycle
+hosts and build/types/twelve locales pass. Seventeen runtime files and the entire
+style hook match the preparation parent. The historical painting lifetime script
+is pinned to its old Canvas/Blob reference; the new suite covers current code.
+New-module lint passes; paintedShip retains its one unchanged set-state-in-effect
+finding. The old browser probe could not launch absent local Chromium and its
+server was stopped. No browser/iPhone memory, output, FPS or complete-fix proof.
+
+The generated catalogue is 95,450,326 bytes on the build server, loaded individually
+by the client. Keep only the current catalogue in the build; package verification
+checks every PNG and matching client revision. Original sources, effects Canvas,
+audio, gameplay/HUD, accounts/saves/economy and Admin privacy are unchanged.
+Do not claim all application Canvas/Blob use disappeared or that this path alone
+explains the 2 GiB footprint. See docs/static-hull-memory-20261022.md and its evidence.
+
 ## Audio graph initialization, 22 October 2026, tested preparation only
 
 The owner accepted the isolated two-defect correction with "Dann beginnen wir";

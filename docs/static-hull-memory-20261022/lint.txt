@@ -1,0 +1,1 @@
+{"sameExistingLint":[{"ruleId":"react-hooks/set-state-in-effect","severity":2,"column":17}],"currentExit":1,"baselineExit":1,"styleHookUnchanged":true}

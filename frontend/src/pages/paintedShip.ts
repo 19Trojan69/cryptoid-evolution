@@ -1,15 +1,14 @@
 import { useEffect, useState, type CSSProperties } from "react";
-import { allPlayerColors, type PlayerColorId } from "./shipFleet";
+import { type PlayerColorId } from "./shipFleet";
 import { shipEvolutionAsset, type ShipStage } from "./shipEvolution";
 import { shipVisualCenter } from "./shipVisualCenter";
-import { namedShipAccent } from './shipIdentityColor';
-import { paintShipMaterial } from './shipMaterial';
+import { staticHullAsset } from './staticHullAssets';
 import { ResourceCache } from './resourceCache';
 import { resourceTimingEnabled as isCombatProbeEnabled } from './performanceDiagnostics';
 
 // Mounted/prepared hulls stay pinned. Keep only six recently used spare variants
 // after consumers leave, rather than carrying the last 48 variants through play.
-const cache = new ResourceCache<string>(24, 12 * 1024 * 1024, url => URL.revokeObjectURL(url), 6);
+const cache = new ResourceCache<string>(24, 12 * 1024 * 1024, () => {}, 6);
 const pendingPaints = new Map<string, Promise<string>>();
 const preparationProbe = { jobsStarted: 0, jobsFinished: 0, queueWaitMaxMs: 0,
   materialTotalMs: 0, materialMaxMs: 0, encodeTotalMs: 0, decodeTotalMs: 0,
@@ -113,56 +112,28 @@ const renderPaintedSprite = async (index: number, colorId: PlayerColorId, stage:
     pendingPaints.delete(key);
     throw new Error('Ship preparation cancelled');
   };
-  const url = shipEvolutionAsset(index, stage);
-  const image = await shipImage(url);
-  checkRetained();
+  const asset = staticHullAsset(index, colorId, stage);
+  if (!asset) throw new Error('Prepared ship asset unavailable');
   const timed = isCombatProbeEnabled();
-  const materialStarted = timed ? performance.now() : 0;
-  const canvas = document.createElement("canvas");
-  try {
-    canvas.width = image.naturalWidth;
-    canvas.height = image.naturalHeight;
-    const context = canvas.getContext("2d", { willReadFrequently: true });
-    if (!context) throw new Error("Canvas unavailable");
-    context.drawImage(image, 0, 0);
-    const pixels = context.getImageData(0, 0, canvas.width, canvas.height);
-    const hex = allPlayerColors.find(color => color.id === colorId)?.glow ?? "#a8b3c2";
-    const target = [1, 3, 5].map(offset => parseInt(hex.slice(offset, offset + 2), 16));
-    paintShipMaterial(pixels.data, canvas.width, canvas.height, target, namedShipAccent(index));
-    context.putImageData(pixels, 0, 0);
-    const encodingStarted = timed ? performance.now() : 0;
-    if (timed) { const work = encodingStarted - materialStarted; preparationProbe.materialTotalMs += work; preparationProbe.materialMaxMs = Math.max(preparationProbe.materialMaxMs, work); }
-    // Blob encoding can run off the main thread; large base64 strings are avoided.
-    const decodedBytes = canvas.width * canvas.height * 4;
-    const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(value => value ? resolve(value) : reject(new Error('Ship encoding failed')), 'image/png'));
-    // The completed Blob owns its pixels. Do not retain a second full painting
-    // surface while the replacement image waits for load/decode.
-    canvas.width = canvas.height = 0;
-    checkRetained();
-    const decodingStarted = timed ? performance.now() : 0;
-    if (timed) preparationProbe.encodeTotalMs += decodingStarted - encodingStarted;
-    const paintedUrl = URL.createObjectURL(blob);
-    // A Blob URL is not decoded merely because encoding finished. Keep the
-    // already-loaded source hull until the replacement is ready for display.
-    try {
-      const decoded = new Image();
-      await new Promise<void>((resolve, reject) => {
-        decoded.onload = () => { decoded.onload = decoded.onerror = null; resolve(); };
-        decoded.onerror = () => { decoded.onload = decoded.onerror = null; reject(new Error('Painted ship image unavailable')); };
-        decoded.src = paintedUrl;
-      });
-      checkRetained();
-      if (typeof decoded.decode === 'function') await decoded.decode();
-      checkRetained();
-      if (timed) preparationProbe.decodeTotalMs += performance.now() - decodingStarted;
-    } catch (error) { URL.revokeObjectURL(paintedUrl); throw error; }
-    cache.set(key, paintedUrl, blob.size + decodedBytes);
-    return paintedUrl;
-  } finally { if (canvas.width || canvas.height) canvas.width = canvas.height = 0; }
+  const decodingStarted = timed ? performance.now() : 0;
+  const decoded = new Image();
+  await new Promise<void>((resolve, reject) => {
+    decoded.onload = () => { decoded.onload = decoded.onerror = null; resolve(); };
+    decoded.onerror = () => { decoded.onload = decoded.onerror = null; reject(new Error('Painted ship image unavailable')); };
+    decoded.src = asset.url;
+  });
+  checkRetained();
+  if (typeof decoded.decode === 'function') await decoded.decode();
+  checkRetained();
+  if (timed) preparationProbe.decodeTotalMs += performance.now() - decodingStarted;
+  // Count the full decoded pixels as before. Only the painting/encoding/unique
+  // Blob URL was removed; browser-owned image caches are not measured here.
+  cache.set(key, asset.url, asset.bytes + decoded.naturalWidth * decoded.naturalHeight * 4);
+  return asset.url;
 };
 
-// Yield between variants so a new formation cannot start many pixel jobs in
-// one microtask burst. No rendering quality or source resolution is reduced.
+// Retain the serial readiness queue: a formation cannot start all image
+// decoders in one microtask burst. Source pixels/resolution are unchanged.
 let paintTail: Promise<unknown> = Promise.resolve();
 
 const createPaintedSprite = (index: number, colorId: PlayerColorId, stage: ShipStage): Promise<string> => {
@@ -197,7 +168,7 @@ export const retainPreparedHulls = (hulls: readonly PreparedHull[]) => {
   for (const hull of hulls) unique.set(`${hull.sprite}:${hull.stage ?? 1}:${hull.color}`, hull);
   const selected = [...unique.entries()].slice(0, 12);
   const releases = selected.map(([key]) => cache.retain(key));
-  // The existing serial queue, shader, Blob decoder and cache do all work.
+  // The existing serial readiness queue and cache protect mounted consumers.
   // Cancellation releases only preparation pins; mounted consumers keep theirs.
   const settled = Promise.all(selected.map(([, hull]) =>
     createPaintedSprite(hull.sprite, hull.color, hull.stage ?? 1).then(() => true, () => false)));

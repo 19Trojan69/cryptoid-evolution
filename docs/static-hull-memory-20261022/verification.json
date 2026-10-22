@@ -1,0 +1,51 @@
+{
+  "preparedAt": "2026-10-22T11:58:33.696Z",
+  "branch": "codex/static-hull-memory-20261022",
+  "published": false,
+  "localParent": "ab587934596011a05294ead81490ee510efac8a0",
+  "remoteParent": "a765aab60841b4aa3cdc6a543529a36a91fd250f",
+  "parentTree": "344722edc99426ef63551d7f04ea7deb6c598819",
+  "catalogue": {
+    "revision": "91a72bc0c36be9407915",
+    "variants": 1740,
+    "bytes": 95450326,
+    "pngConcatenationSHA256": "174ad6e9a3d8515f1e8fbbe29ac9812089a1cf65e430585074a1fd5e8d468be8",
+    "originalPixels": true,
+    "requestedIndividually": true
+  },
+  "tests": {
+    "newTestsPassed": 11,
+    "existingFocusedPassed": 154,
+    "cacheMaterialPassed": 4,
+    "focusedTotal": 169,
+    "localeTests": 12,
+    "unavailableHistoricalComparisonsExcluded": 2,
+    "planTransitions": 1100,
+    "sectors": 500,
+    "readyImageRequests": 7259,
+    "uniqueURLs": 269,
+    "hullCanvases": 0,
+    "hullReadbacks": 0,
+    "hullEncodes": 0,
+    "hullBlobURLs": 0,
+    "unchangedRuntimeFiles": 17
+  },
+  "checks": {
+    "build": true,
+    "types": true,
+    "languageGate": true,
+    "assetBytes": true,
+    "clientAssetRevision": true,
+    "candidateAutoDeployDisabled": true,
+    "newModuleLint": true,
+    "existingStyleHookLintUnchanged": true
+  },
+  "limits": {
+    "browserTest": "Not run; local Playwright Chromium executable absent. Started server stopped.",
+    "physicalIPhoneTest": false,
+    "processMemoryMeasured": false,
+    "finalWhiteScreenResolutionProven": false,
+    "rawPrivateIPSCommitted": false,
+    "mainnetTouched": false
+  }
+}

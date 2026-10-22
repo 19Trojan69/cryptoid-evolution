@@ -1,0 +1,1 @@
+{"passed":true,"variants":1740,"bytes":95450326,"revision":"91a72bc0c36be9407915","unchangedRuntimeFiles":17,"staticFilesMatchSource":true,"limits":"Built artifact and source checks; no browser/iPhone/WebKit process-memory measurement."}

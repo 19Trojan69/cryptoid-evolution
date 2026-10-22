@@ -16,7 +16,10 @@ const official = '51e59c3373a8dd4ba4985d5a9559acdcf2d6755a';
 const sourceAt = ref => ref
   ? execFileSync('git', ['show', `${ref}:frontend/src/pages/paintedShip.ts`], { cwd: root, encoding: 'utf8' })
   : fs.readFileSync(root + 'src/pages/paintedShip.ts', 'utf8');
-const candidate = process.env.CRYPTOID_PAINTED_SOURCE_REF;
+// Historical regression reference: the game now loads build-time PNGs and no
+// longer owns this Canvas/Blob pipeline. Keep its old failure/lifetime controls
+// executable; staticHullAssets.test.mjs exercises the replacement runtime.
+const candidate = process.env.CRYPTOID_PAINTED_SOURCE_REF ?? 'ab587934596011a05294ead81490ee510efac8a0';
 const turn = () => new Promise(resolve => setImmediate(resolve));
 async function until(check) {
   for (let i = 0; i < 2000; i++) { if (check()) return; await turn(); }
@@ -207,7 +210,7 @@ test('repeated live preparation leaves bounded caches without working canvases o
     assert.equal(f.liveBytes(), 0);
   }
   assert.equal(f.revoked.length, 60 - f.api.paintedShipResourceStats().painted);
-  if (!candidate) assert.equal(f.api.paintedShipResourceStats().painted, 6, 'normal-memory release retains six unused recent variants only');
+  if (!process.env.CRYPTOID_PAINTED_SOURCE_REF) assert.equal(f.api.paintedShipResourceStats().painted, 6, 'normal-memory release retains six unused recent variants only');
 });
 
 test('cancellation during a delayed source response prevents obsolete painting and allows a fresh request', async () => {

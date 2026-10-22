@@ -4,7 +4,10 @@
   "version": "0.11.0",
   "type": "module",
   "scripts": {
+    "prepare:hulls": "node --experimental-strip-types scripts/buildPaintedHulls.mjs",
+    "predev": "npm run prepare:hulls",
     "dev": "node_modules/.bin/vite",
+    "prebuild": "npm run prepare:hulls",
     "build": "npm run test:i18n && npm run check:i18n:release && node_modules/.bin/tsc -b && vite build",
     "lint": "node_modules/.bin/eslint .",
     "preview": "node_modules/.bin/vite preview",
@@ -34,6 +37,7 @@
     "styled-components": "^6.3.12"
   },
   "devDependencies": {
+    "@napi-rs/canvas": "0.1.100",
     "@eslint/js": "^9.39.1",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",

@@ -25,6 +25,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/static-hull-memory-20261022": false,
       "codex/audio-graph-initialization-20261022": false,
       "codex/hull-handoff-release-record-20261021": false,
       "codex/audio-clock-recovery-20261021": false,
