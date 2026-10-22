@@ -25,6 +25,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/full-session-export-recovery-20261022": false,
       "codex/normal-transition-crash-audit-20261022": false,
       "codex/weapon-reload-recovery-20261022": false,
       "codex/canvas-static-url-release-record-20261022": false,

@@ -25,6 +25,7 @@ import { installReloadDiagnostics } from './src/pages/reloadDiagnostics.ts';
 import { createOwnerDiagnosticProbe } from './src/pages/ownerFlightRecorder.ts';
 import { sessionDiagnostic } from './src/lib/sessionDiagnosticEvents.ts';
 import { settleFullSessionWrites, readFullSessionSummaries } from './src/pages/fullSessionStore.ts';
+import { fullSessionFileName, fullSessionText, fullSessionTextPart, shareableFullSessionFile } from './src/pages/fullSessionTransfer.ts';
 const __CRYPTOID_BUILD__ = { sourceCommit: 'c62efe2a9e6f4bf249e83b1e3a7a2c997d27be89', sourceTree: 'f2f84ac11f4d86cecbbe9a0338095b96bce769b8', workingTreeDirty: true };
 const shipSaveNetwork = 'testnet';
 const t = (value, values = {}) => Object.entries(values).reduce((s, [k,v]) => s.replaceAll('{'+k+'}', String(v)), value);
@@ -38,6 +39,7 @@ const axiosClient = { get: async path => {
 }};
 ${panel}
 window.mountPanel = () => createRoot(document.getElementById('root')).render(<OwnerStabilityReport />);
+window.recordingSummary = () => readFullSessionSummaries(window);
 window.prepareRecording = async () => {
   let clock = 100, wall = Date.now();
   let state = { sector: 1, flight: 0, phase: 'FORMATION', encounter: 'normal', status: 'playing', enemies: 6,
@@ -118,17 +120,33 @@ try {
     window.releasedExports = 0;
     const revoke = URL.revokeObjectURL.bind(URL);
     URL.revokeObjectURL = url => { window.releasedExports++; revoke(url); };
+    window.shareCalls = 0;
+    Object.defineProperty(navigator, 'canShare', { configurable: true, value: data => data.files?.[0]?.type === 'text/plain' });
+    Object.defineProperty(navigator, 'share', { configurable: true, value: data => {
+      window.shareCalls++; window.shareHadActivation = navigator.userActivation.isActive; window.sharedFile = data.files[0];
+      return Promise.reject(new DOMException('user cancelled test picker', 'AbortError'));
+    } });
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async () => { throw new DOMException('blocked test clipboard', 'NotAllowedError'); } } });
   });
   await recovered.evaluate(() => window.mountPanel());
   const downloadButton = recovered.getByRole('button', { name: 'Gesamtlauf herunterladen', exact: true });
   await downloadButton.waitFor();
   assert.ok(await recovered.getByText('Für diesen Lauf wurde kein Abschluss gespeichert.', { exact: true }).isVisible());
   const checks = await recovered.evaluate(() => window.ownerChecks);
-  const downloadEvent = recovered.waitForEvent('download'); await downloadButton.click();
+  await downloadButton.click();
+  assert.equal(await recovered.evaluate(() => window.shareCalls), 0, 'preparing never launches a picker automatically');
+  await recovered.getByRole('button', { name: 'Datei teilen / sichern', exact: true }).click();
+  await recovered.getByText('Teilen wurde abgebrochen. Dein gespeicherter Lauf bleibt erhalten.', { exact: true }).waitFor();
+  assert.equal(await recovered.evaluate(() => window.shareHadActivation), true, 'native WebKit tap activation survives until share invocation');
+  assert.match(await recovered.evaluate(() => window.sharedFile.name), /\.json\.txt$/);
+  const fileLink = recovered.getByRole('link', { name: 'Datei herunterladen', exact: true });
+  await fileLink.waitFor();
+  const downloadEvent = recovered.waitForEvent('download'); await fileLink.click();
   const download = await downloadEvent, path = join(work, 'full-session.json'); await download.saveAs(path);
   assert.equal(await recovered.evaluate(() => window.ownerChecks), checks + 1, 'download re-verifies the owner');
   const raw = readFileSync(path, 'utf8'), data = JSON.parse(raw);
   assert.equal(data.format, 'cryptoid-full-session-report'); assert.equal(data.integrity.contiguous, true);
+  assert.equal(await recovered.evaluate(() => window.sharedFile.text()), raw, 'share file and download contain the exact same complete run');
   assert.equal(data.summary.lastSeq, summary.lastSeq); assert.equal(data.integrity.records, summary.count);
   assert.equal(data.records.filter(r => r.kind === 'start').length, 1);
   assert.equal(data.records[0].data.operation, 'transition-before', 'pre-first-frame observations are retained too');
@@ -136,8 +154,31 @@ try {
   assert.ok(data.records.some(r => r.kind === 'sample' && r.data.sector === 1));
   assert.ok(data.records.some(r => r.data.operation === 'first-spawn-before' && r.data.sector === 34));
   assert.ok(!raw.includes('excluded-private')); assert.deepEqual(errors, []);
-  const secondDownload = recovered.waitForEvent('download'); await downloadButton.click(); await secondDownload;
+  await downloadButton.click();
+  const secondDownload = recovered.waitForEvent('download'); await fileLink.click(); await secondDownload;
   assert.equal(await recovered.evaluate(() => window.releasedExports), 1, 'a second export releases the previous Blob URL');
+  // The failed-download fallback uses the same existing run, with no mutation.
+  await recovered.getByRole('button', { name: 'Gesamtlauf als Text anzeigen', exact: true }).click();
+  const textField = recovered.getByRole('textbox', { name: /Gesamtlauf · Teil/ });
+  await textField.waitFor();
+  const pieces = [];
+  for (;;) {
+    pieces.push(JSON.parse(await textField.inputValue()));
+    const next = recovered.getByRole('button', { name: 'Nächster Teil', exact: true });
+    if (!await next.isEnabled()) break;
+    await next.click();
+  }
+  assert.equal(pieces.map(part => part.data).join(''), raw, 'manual parts reconstruct every byte of the original run');
+  await recovered.getByRole('button', { name: 'Vorheriger Teil', exact: true }).click();
+  const checksBeforeCopy = await recovered.evaluate(() => window.ownerChecks);
+  await recovered.getByRole('button', { name: 'Diesen Teil kopieren', exact: true }).click();
+  await recovered.getByText('Bitte diesen markierten Teil über das Kopiermenü kopieren und im Chat einfügen.', { exact: true }).waitFor();
+  assert.equal(await recovered.evaluate(() => window.ownerChecks), checksBeforeCopy + 1);
+  assert.equal(await textField.evaluate(el => el.selectionEnd - el.selectionStart), (await textField.inputValue()).length);
+  const unchanged = await recovered.evaluate(() => window.recordingSummary());
+  assert.equal(unchanged.sessions[0].lastSeq, summary.lastSeq, 'transfer never changes the existing recording');
+  assert.equal(unchanged.sessions[0].bytes, summary.bytes);
+  assert.deepEqual(errors, []);
   await recovered.evaluate(() => { window.ownerAllowed = false; });
   await downloadButton.click();
   await recovered.getByText('owner_access_required', { exact: true }).waitFor();
@@ -147,6 +188,7 @@ try {
     committedRecords: data.integrity.records, committedChunks: data.integrity.chunks, bytes: Buffer.byteLength(raw),
     startRetained: true, lastCommittedBoundaryRetained: true, contiguous: true,
     actualOwnerPanelDownload: true, freshPermissionChecks: true, revokedPermissionBlocksDownload: true,
+    explicitNativeTap: true, textFallbackParts: pieces.length, exactTextReassembly: true, manualCopyFallback: true,
     repeatedExportReleasesPreviousBlob: true,
     pageErrors: errors.length, scope: 'synthetic probe, native IndexedDB/process loss, actual Admin export; no physical device or crash-cause proof' }));
 } finally {

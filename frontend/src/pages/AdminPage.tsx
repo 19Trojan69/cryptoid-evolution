@@ -31,6 +31,7 @@ import AdminUsage from "./AdminUsage";
 import { paymentEvidenceLinks } from "./paymentEvidenceLinks";
 import { useAdminLocale } from "../adminLocale";
 import { readOwnerStabilityReport, exportOwnerFullSession, type StabilityReport } from './stabilityReport.mjs';
+import { fullSessionFileName, fullSessionText, fullSessionTextPart, shareableFullSessionFile, type FullSessionText } from './fullSessionTransfer.ts';
 import { armOwnerTimingCapture } from './ownerTimingCapture';
 import { armOwnerAudioAudit } from './ownerAudioAudit';
 import { installReloadDiagnostics } from './reloadDiagnostics';
@@ -145,19 +146,27 @@ function OwnerStabilityReport() {
   const [fullCapture, setFullCapture] = useState<StabilityReport['fullSessionRecording']>();
   const request = useRef(0);
   const field = useRef<HTMLTextAreaElement>(null);
-  const fullDownload = useRef<{ url: string; timer: number } | null>(null);
+  const fullDownload = useRef<{ url: string; timer: number; file: File | null } | null>(null);
+  const [preparedFull, setPreparedFull] = useState<{ url: string; name: string; share: boolean } | null>(null);
+  const [fullText, setFullText] = useState<FullSessionText | null>(null);
+  const [fullPart, setFullPart] = useState(0);
+  const fullField = useRef<HTMLTextAreaElement>(null);
   const releaseFullDownload = useCallback(() => {
     if (!fullDownload.current) return;
     URL.revokeObjectURL(fullDownload.current.url);
     window.clearTimeout(fullDownload.current.timer);
     fullDownload.current = null;
   }, []);
+  const clearFullTransfer = useCallback(() => {
+    releaseFullDownload(); setPreparedFull(null); setFullText(null); setFullPart(0);
+  }, [releaseFullDownload]);
   useEffect(() => () => { releaseFullDownload(); }, [releaseFullDownload]);
   const load = useCallback(async () => {
     const id = ++request.current;
     setBusy(true);
     setReport("");
     setFullCapture(undefined);
+    clearFullTransfer();
     setNotice("");
     setError("");
     try {
@@ -178,7 +187,7 @@ function OwnerStabilityReport() {
     } finally {
       if (request.current === id) setBusy(false);
     }
-  }, [t]);
+  }, [t, clearFullTransfer]);
   useEffect(() => {
     void load();
     return () => { request.current += 1; };
@@ -194,6 +203,7 @@ function OwnerStabilityReport() {
       if (request.current === id) {
         setReport("");
         setFullCapture(undefined);
+        clearFullTransfer();
         setError(errorMessage(err));
         setBusy(false);
       }
@@ -214,22 +224,70 @@ function OwnerStabilityReport() {
       if (request.current === id) setBusy(false);
     }
   };
-  const downloadFull = async (sessionId: string) => {
+  const prepareFull = async (sessionId: string, asText = false) => {
     const id = ++request.current;
     setBusy(true); setError(''); setNotice('');
+    clearFullTransfer();
     try {
       const blob = await exportOwnerFullSession(verifyReportOwner, () => window, sessionId, () => request.current === id);
       if (!blob || request.current !== id) return;
-      releaseFullDownload();
+      if (asText) {
+        const value = await fullSessionText(blob, sessionId);
+        if (request.current !== id) return;
+        setFullText(value); setFullPart(0);
+        setNotice(t('Kopiere die nummerierten Teile der Reihe nach in den Chat. Jeder Teil gehört zum vollständigen Lauf.'));
+        return;
+      }
+      const file = shareableFullSessionFile(blob, sessionId, navigator);
       const url = URL.createObjectURL(blob);
-      fullDownload.current = { url, timer: window.setTimeout(() => {
-        if (fullDownload.current?.url === url) { URL.revokeObjectURL(url); fullDownload.current = null; }
+      fullDownload.current = { url, file, timer: window.setTimeout(() => {
+        if (fullDownload.current?.url === url) {
+          releaseFullDownload(); setPreparedFull(null);
+          setNotice(t('Die bereitgestellte Datei ist abgelaufen. Dein gespeicherter Lauf bleibt erhalten. Bereite die Datei erneut vor.'));
+        }
       }, 60_000) };
-      const link = document.createElement('a');
-      link.href = url; link.download = `cryptoid-full-session-${sessionId}.json`;
-      document.body.append(link); link.click(); link.remove();
-    } catch (err) { if (request.current === id) { setReport(''); setFullCapture(undefined); setError(errorMessage(err)); } }
+      setPreparedFull({ url, name: fullSessionFileName(sessionId), share: file !== null });
+      setNotice(t('Gesamtlauf bereit. Tippe jetzt auf Datei teilen / sichern oder Datei herunterladen. Falls nichts passiert, nutze Gesamtlauf als Text anzeigen.'));
+    } catch (err) { if (request.current === id) { clearFullTransfer(); setReport(''); setFullCapture(undefined); setError(errorMessage(err)); } }
     finally { if (request.current === id) setBusy(false); }
+  };
+  const shareFull = () => {
+    const ready = fullDownload.current;
+    if (!ready?.file || typeof navigator.share !== 'function') return;
+    const id = ++request.current;
+    // This is the prepared, owner-verified file. No await may precede the OS
+    // picker; refresh, expiry and unmount release the file and its URL.
+    let shared: Promise<void>;
+    try { shared = navigator.share({ files: [ready.file] }); }
+    catch { setNotice(t('Teilen ist in diesem Browser nicht verfügbar. Nutze Datei herunterladen oder Gesamtlauf als Text anzeigen.')); return; }
+    setBusy(true); setError(''); setNotice('');
+    void shared.then(() => {
+      if (request.current === id) setNotice(t('Die Datei wurde an das Teilen-Menü übergeben.'));
+    }, err => {
+      if (request.current === id) setNotice(t(err?.name === 'AbortError'
+        ? 'Teilen wurde abgebrochen. Dein gespeicherter Lauf bleibt erhalten.'
+        : 'Teilen ist in diesem Browser nicht verfügbar. Nutze Datei herunterladen oder Gesamtlauf als Text anzeigen.'));
+    }).finally(() => { if (request.current === id) setBusy(false); });
+  };
+  const copyFullPart = async () => {
+    if (!fullText) return;
+    const value = fullSessionTextPart(fullText, fullPart), id = ++request.current;
+    setBusy(true); setError(''); setNotice('');
+    try { await verifyReportOwner(); }
+    catch (err) {
+      if (request.current === id) { clearFullTransfer(); setReport(''); setFullCapture(undefined); setError(errorMessage(err)); setBusy(false); }
+      return;
+    }
+    if (request.current !== id) return;
+    try {
+      await navigator.clipboard.writeText(value);
+      if (request.current === id) setNotice(t('Teil {part} wurde kopiert. Füge ihn im Chat ein.', { part: fullPart + 1 }));
+    } catch {
+      if (request.current === id) {
+        fullField.current?.focus(); fullField.current?.select(); fullField.current?.setSelectionRange(0, value.length);
+        setNotice(t('Bitte diesen markierten Teil über das Kopiermenü kopieren und im Chat einfügen.'));
+      }
+    } finally { if (request.current === id) setBusy(false); }
   };
   const armTiming = async () => {
     const id = ++request.current;
@@ -243,6 +301,7 @@ function OwnerStabilityReport() {
   const armAudio = async (mode: 'original' | 'off' | 'cancel') => {
     const id = ++request.current;
     setBusy(true); setError(''); setNotice(''); setReport(''); setFullCapture(undefined);
+    clearFullTransfer();
     try {
       const armed = await armOwnerAudioAudit(verifyReportOwner, () => window, mode, () => request.current === id);
       if (armed) setNotice(mode === 'original'
@@ -263,8 +322,25 @@ function OwnerStabilityReport() {
       <p>{new Date(session.startedAt).toLocaleString('de-AT')} · {t("{size} KiB", { size: Math.ceil(session.bytes / 1024) })}</p>
       {session.state === 'limited' && <p role="alert">{t("Die Aufzeichnung wurde an einer Speicher- oder Zeitgrenze beendet.")}</p>}
       {session.state === 'recording' && <p>{t("Für diesen Lauf wurde kein Abschluss gespeichert.")}</p>}
-      <button className="admin-button" disabled={busy} onClick={() => { void downloadFull(session.id); }}>{t("Gesamtlauf herunterladen")}</button>
+      <button className="admin-button" disabled={busy} onClick={() => { void prepareFull(session.id); }}>{t("Gesamtlauf herunterladen")}</button>
+      <button className="admin-button" disabled={busy} onClick={() => { void prepareFull(session.id, true); }}>{t("Gesamtlauf als Text anzeigen")}</button>
     </div>)}
+    {shipSaveNetwork === 'testnet' && preparedFull && <div className="admin-actions">
+      {preparedFull.share && <button className="admin-button" disabled={busy} onClick={shareFull}>{t('Datei teilen / sichern')}</button>}
+      <a className="admin-button" href={preparedFull.url} download={preparedFull.name} onClick={() => {
+        setNotice(t('Download angefordert. Falls keine Datei erscheint, nutze Gesamtlauf als Text anzeigen.'));
+      }}>{t('Datei herunterladen')}</a>
+    </div>}
+    {shipSaveNetwork === 'testnet' && fullText && <div>
+      <label>{t('Gesamtlauf · Teil {part} von {total}', { part: fullPart + 1, total: fullText.offsets.length - 1 })}
+        <textarea ref={fullField} readOnly value={fullSessionTextPart(fullText, fullPart)} spellCheck={false} style={{ display: 'block', width: '100%', minHeight: 220, boxSizing: 'border-box' }} />
+      </label>
+      <div className="admin-actions">
+        <button className="admin-button" disabled={busy || fullPart === 0} onClick={() => { setFullPart(fullPart - 1); setNotice(''); }}>{t('Vorheriger Teil')}</button>
+        <button className="admin-button" disabled={busy} onClick={() => { void copyFullPart(); }}>{t('Diesen Teil kopieren')}</button>
+        <button className="admin-button" disabled={busy || fullPart >= fullText.offsets.length - 2} onClick={() => { setFullPart(fullPart + 1); setNotice(''); }}>{t('Nächster Teil')}</button>
+      </div>
+    </div>}
     {error && <p className="admin-error" role="alert">{error}</p>}
     <p role="status">{busy ? t("Berechtigung wird geprüft …") : notice}</p>
     {report && <label>{t("Lokaler Bericht")}
