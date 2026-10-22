@@ -1,0 +1,39 @@
+{
+  "baseline": "94825bdcc78c7be27632a12340732a27088aebe2",
+  "file": "frontend/src/pages/GamePage.tsx",
+  "comparison": "ruleId, severity, first message line, exact source line (line-number shifts excluded)",
+  "beforeExitCode": 1,
+  "afterExitCode": 1,
+  "beforeErrors": 62,
+  "afterErrors": 62,
+  "beforeWarnings": 4,
+  "afterWarnings": 4,
+  "ruleCounts": [
+    {
+      "rule": "react-hooks/exhaustive-deps",
+      "severity": 1,
+      "before": 4,
+      "after": 4
+    },
+    {
+      "rule": "react-hooks/immutability",
+      "severity": 2,
+      "before": 8,
+      "after": 8
+    },
+    {
+      "rule": "react-hooks/purity",
+      "severity": 2,
+      "before": 6,
+      "after": 6
+    },
+    {
+      "rule": "react-hooks/refs",
+      "severity": 2,
+      "before": 48,
+      "after": 48
+    }
+  ],
+  "addedFindings": [],
+  "removedFindings": []
+}

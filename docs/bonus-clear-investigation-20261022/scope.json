@@ -1,0 +1,15 @@
+{
+  "baseline": "94825bdcc78c7be27632a12340732a27088aebe2",
+  "passed": true,
+  "gamePageBaseSha256": "e137c55a06ea1b901516114a3105022ce2dceb19de1c55e0e0d020ea012d564a",
+  "normalizedGamePageSha256": "e137c55a06ea1b901516114a3105022ce2dceb19de1c55e0e0d020ea012d564a",
+  "reviewedGamePageAddedLines": 11,
+  "changedSourcePaths": [
+    "frontend/src/pages/GamePage.tsx",
+    "frontend/src/pages/bonusBoundaryDiagnostics.test.mjs",
+    "frontend/src/pages/bonusBoundaryDiagnostics.ts",
+    "frontend/src/pages/reloadDiagnostics.ts",
+    "frontend/src/pages/stabilityReport.mjs"
+  ],
+  "limits": "Exact source scope and unchanged simulation/rewards/rendering outside passive owner observations; no device/native crash-cause proof."
+}

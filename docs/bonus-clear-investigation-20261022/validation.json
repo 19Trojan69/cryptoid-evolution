@@ -1,0 +1,78 @@
+{
+  "format": "cryptoid-bonus-boundary-validation",
+  "version": 1,
+  "baselineCommit": "94825bdcc78c7be27632a12340732a27088aebe2",
+  "branch": "codex/bonus-clear-boundary-20261022",
+  "purpose": "Close the local observation gap at a new bonus-clear boundary; not a proved crash fix.",
+  "build": {
+    "command": "VITE_CRYPTOID_DIAGNOSTICS=0 npm run build",
+    "exitCode": 0,
+    "staticHulls": 1740,
+    "localeTestsPassed": 12,
+    "localeReleaseGatePassed": true,
+    "canvasStaticUrlTestsPassed": 15,
+    "bonusBoundaryTestsPassed": 11,
+    "typescriptPassed": true,
+    "vitePassed": true,
+    "evidence": "build.txt",
+    "sha256": "afca07d2863f6f57e1e30610d03473d582f938d3b0df660ac13fcc7e4bee32fe",
+    "warnings": [
+      "Existing Vite large-chunk notice",
+      "Existing proxy config and test-host CommonJS import.meta notices"
+    ]
+  },
+  "focusedTests": {
+    "selectedPassed": 93,
+    "failed": 0,
+    "excludedTest": "all GamePage behavior matches the approved source",
+    "exclusionReason": "Unchanged historical-source test needs Git objects absent from the recovered shallow checkout; explicitly filtered, not counted as a pass. Current-baseline exact scope verification runs separately.",
+    "selectionTiming": "Before the final owner-and-Testnet condition refinement; all eleven new tests and full build rerun after it.",
+    "evidence": "focused-tests.txt",
+    "sha256": "fc31bf4e1d403fa2134bfc2772fef2d5eb725d926c64a11a51bcd67892bdffe2"
+  },
+  "lint": {
+    "smallChangedFiles": [
+      "frontend/src/pages/bonusBoundaryDiagnostics.ts",
+      "frontend/src/pages/reloadDiagnostics.ts",
+      "frontend/src/pages/stabilityReport.mjs"
+    ],
+    "smallChangedFilesExitCode": 0,
+    "gamePageBaselineErrors": 62,
+    "gamePageCurrentErrors": 62,
+    "gamePageBaselineWarnings": 4,
+    "gamePageCurrentWarnings": 4,
+    "addedFindings": 0,
+    "removedFindings": 0,
+    "gamePageEvidence": "lint-comparison.json",
+    "sha256": "d23caaf577cd5ee2ea4db322b093114e75541b99f61037f32ce6eb941811e91e",
+    "wholeProjectCleanClaim": false
+  },
+  "dependencies": {
+    "restoreCommand": "npm install --no-audit --no-fund --package-lock=false",
+    "trackedLockfile": false,
+    "dependencyRangesChanged": false,
+    "historicalResolutionIdenticalClaim": false,
+    "node": "v24.19.0",
+    "versions": {
+      "react": "19.3.1",
+      "typescript": "5.9.3",
+      "vite": "7.3.7",
+      "esbuild": "0.28.2",
+      "@napi-rs/canvas": "0.1.100",
+      "eslint": "9.39.5",
+      "eslint-plugin-react-hooks": "7.1.1"
+    }
+  },
+  "scopeEvidence": "scope.json",
+  "deployment": {
+    "performed": false,
+    "automaticBranchDeploymentEnabled": false,
+    "officialFixedSourceUnchanged": "5d6e7cb703ef114ee4626c1fbb0e34a45b1667d8"
+  },
+  "limits": [
+    "No physical iPhone/PiBrowser/native/GPU memory or OS termination cause verified.",
+    "React commit and next game RAF do not prove GPU presentation.",
+    "Synchronous reward return does not prove durable account save.",
+    "No matching native report is available for this incident."
+  ]
+}

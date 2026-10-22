@@ -1,5 +1,53 @@
 # Preserve the officially approved game
 
+## Post-fix bonus-clear interruption, 22 October 2026, preparation
+
+The new owner report generated 14:21:56.862Z identifies actual 5d6e7cb / 7d0fa724
+gameplay. Canvas impacts are now registered and cumulative effect paints exceed
+23,000: the readiness correction is active but did not eliminate White Screens.
+Boss 4 defeat, wreck release, victory music, heart collection and bonus play all
+precede the interruption. Last observed bonus-clear entry is 16:21:33.513 Vienna;
+last flight write 33.536, new document 39.859 (6.323 seconds after that write).
+The normal bonus-clear wait is 8.5 seconds, so the regular level-41 advance was
+not due before the replacement document. Diagnostic Admin boot at 16:21:59.475
+is delayed 19.616 seconds after document start, not the crash/reload timestamp.
+
+The existing resource-bonus-clear snapshot precedes reward calculation and React
+publication. Actual recorder reproduction shows its persisted phase-complete
+FORMATION can omit the subsequent in-memory SECTOR_CLEAR phase-start; this is
+not proof that sectionPhase failed. No matching native report or exact native
+termination cause is established. Known 17.287-MB resources exclude native/GPU
+totals; advancing audio clocks and bounded known counters do not rule out native
+memory termination. Do not reuse the previous day's Jetsam as this event's proof.
+
+Continue preparation on codex/bonus-clear-boundary-20261022, automatic deployment
+disabled. Four compact local milestones distinguish synchronous reward-branch
+return, scene request, React layout commit and entry of the following playing
+game RAF. They neither confirm durable account saves nor GPU presentation.
+Instantiate only for server-verified owner AND Testnet; reuse existing setup,
+layout and game-frame calls, with no new timer/listener/RAF/network/UI or account
+fields. Callback/storage failure must never escape. Ordinary players/Mainnet
+receive no new observer. Retain existing render/reward/gameplay/audio/assets.
+
+The whole GamePage equals the exact released source after removing eleven reviewed
+observer-only added lines; all other existing runtime edits are only the type and
+export-kind allowlists. New eleven-case suite gates builds, including failure,
+pause/retry/old-commit guards, 10,000 repeated frames, fifty bonus boundaries,
+privacy/export and the actual recorder's incomplete last-phase persistence.
+Ninety-three selected existing/new focused cases pass; one old GamePage historical
+comparison lacks its old Git objects and remains explicitly excluded, not weakened
+or counted as a pass. This is an observation-gap correction, not a crash fix.
+Final build/locales/Canvas integration/types and the eleven new tests pass with
+the explicit owner-and-Testnet gate. New helper/type/export lint passes. Restored
+declared-range tooling reports the same 62 GamePage errors/four warnings before
+and after, with no added/removed finding by rule/message/source-line identity;
+do not claim clean whole-project lint or identical historical dependency versions.
+Keep official 5d6e7cb, all fixed source/rollback refs, prior runtime-log/protection
+denials, Mainnet and saves/economy untouched. No new deployment has been performed.
+Any device follow-up should use the existing mission or a direct bonus test;
+never demand another full campaign merely to recover known counters.
+See docs/bonus-clear-investigation-20261022.md and its evidence directory.
+
 ## Canvas static-URL correction published, 22 October 2026
 
 The approved release is complete. Official Testnet is READY at fixed source

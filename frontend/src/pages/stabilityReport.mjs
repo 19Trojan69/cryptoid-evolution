@@ -30,6 +30,8 @@ const reloadKinds = new Set([
   'resource-normal-start','resource-normal-first-spawn','resource-formation-ready',
   'reactor-open-observed','reactor-first-shot-before','reactor-first-shot-created',
   'reactor-first-shot-audio-returned','reactor-first-shot-scene-committed',
+  'bonus-clear-rewards-complete','bonus-clear-scene-requested',
+  'bonus-clear-scene-committed','bonus-clear-frame-after-commit',
 ]);
 const numberLimits = {
   sector: 500, block: 10, width: 16384, height: 16384, enemies: 1000, projectiles: 10000, effects: 10000,

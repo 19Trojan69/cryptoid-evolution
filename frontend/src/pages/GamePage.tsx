@@ -18,6 +18,7 @@ import { mergeCardReveals, rememberCard, hasSeenCard, syncCardReveals } from './
 import { primeCardSound, cardAudioAuditSnapshot, closeCardAudioForAudit } from './cardSound';
 import { advanceBossCore } from './bossCore';
 import { createBossBoundaryDiagnostics } from './bossBoundaryDiagnostics';
+import { createBonusBoundaryDiagnostics } from './bonusBoundaryDiagnostics';
 import { bossName } from './bossNames';
 import { collectBossHeart, BOSS_HEART_POSITION, BOSS_EXTRA_LIFE_MS, type BossRewardState } from './bossReward';
 import { activateBossExplosion, bossExplosionBudget, bossExplosionReady } from './bossExplosionBudget';
@@ -437,6 +438,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   const lastSavedAtRef = useRef(0);
   const diagnosticsRef = useRef<ReturnType<typeof createGameSessionDiagnostics> | null>(null);
   const bossBoundaryRef = useRef<ReturnType<typeof createBossBoundaryDiagnostics> | null>(null);
+  const bonusBoundaryRef = useRef<ReturnType<typeof createBonusBoundaryDiagnostics> | null>(null);
   const reloadDiagnosticsRef = useRef<ReturnType<typeof createReloadGameMonitor> | null>(null);
   const performanceProbeRef = useRef<ReturnType<typeof createPerformanceProbe> | null>(null);
   const sceneRenderStarted = performanceProbeRef.current?.sceneRenderBegin();
@@ -478,6 +480,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   const [game, setGame] = useState<GameState>(createInitialState);
   useLayoutEffect(() => {
     bossBoundaryRef.current?.sceneCommitted(game.boss, game.sector);
+    bonusBoundaryRef.current?.sceneCommitted(game);
   }, [game]);
   const [technicalPause, setTechnicalPause] = useState(false);
   const showRewardCards=useCallback((cards:CardReward[])=>{
@@ -760,6 +763,9 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     const resourceTrendMonitor = ownerDiagnostics ? createResourceTrendMonitor(ownerResourceContext) : null;
     const bossBoundary = ownerDiagnostics ? createBossBoundaryDiagnostics(recordOwnerResourceSnapshot) : null;
     bossBoundaryRef.current = bossBoundary;
+    const bonusBoundary = ownerDiagnostics && shipSaveNetwork === 'testnet' ? createBonusBoundaryDiagnostics((kind, context) =>
+      recordReloadSnapshot(kind, { ...diagnosticContext(), ...context })) : null;
+    bonusBoundaryRef.current = bonusBoundary;
     reloadDiagnosticsRef.current = reloadMonitor;
     const update = () => {
       if (document.hidden) probe?.suspend(performance.now());
@@ -788,6 +794,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
       }
       resourceTrendMonitor?.finish();
       if (bossBoundaryRef.current === bossBoundary) bossBoundaryRef.current = null;
+      if (bonusBoundaryRef.current === bonusBoundary) bonusBoundaryRef.current = null;
       reloadMonitor?.finish(); reloadDiagnosticsRef.current = null;
       monitor.finish(); diagnosticsRef.current = null;
       window.removeEventListener('error', onError); window.removeEventListener('unhandledrejection', onRejection);
@@ -1963,6 +1970,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
           }, { kind: "chain", level: campaignLevel(state.sector), stage: state.sector });
         }
         if (bonus && state.phase === "SECTOR_CLEAR" && previousPhase !== "SECTOR_CLEAR") {
+          bonusBoundaryRef.current?.observedClear(state);
           if (ownerDiagnostics) recordOwnerResourceSnapshot('resource-bonus-clear');
           const reward = bonusReward(state.bonusHits, state.sector);
           const chainShards = bonusChainReward(state.chainBlocks, state.bonusHits, state.sector);
@@ -1979,6 +1987,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
             const result = awardBonusMedal(progress, campaignLevel(state.sector), state.bonusHits);
             return { progress: result.progress, notice: result.improved && result.medal ? `Bonus medals · ${result.medal}` : "" };
           }, { kind: "bonus", level: campaignLevel(state.sector), stage: state.sector, hits: state.bonusHits });
+          bonusBoundaryRef.current?.rewardsCompleted(state);
         }
         if (!adminRunRef.current && !scoreRunRef.current && state.score > bestThisDeviceRef.current) {
           bestThisDeviceRef.current = state.score;
@@ -2034,6 +2043,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
       lastMeasuredFrameRef.current = lastFrameRef.current ? Math.max(0, time - lastFrameRef.current) : 0;
       if (document.hidden) return;
       const state = stateRef.current, wasPlaying = state.status === 'playing';
+      bonusBoundaryRef.current?.frame(state);
       const frame = simulationFrame(lastMeasuredFrameRef.current, wasPlaying);
       frameGap = frame.wallMs; simulatedMs = 0; forceScene = false; requestScene = false;
       lastFrameRef.current = time;
@@ -2060,6 +2070,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
           const current = stateRef.current;
           lastPaintRef.current = time;
           probe?.sceneRequested();
+          bonusBoundaryRef.current?.sceneRequested(current);
           setGame({ ...current, boss: current.boss ? { ...current.boss } : null, asteroids: [...current.asteroids], bonusTargets: [...current.bonusTargets], shots: [...current.shots], enemyShots: [...current.enemyShots], effects: [...current.effects], powerUps: [...current.powerUps] });
         }
       } finally {

@@ -1,0 +1,568 @@
+TAP version 13
+# Subtest: denied owner verification renders no report and never reads local records
+ok 1 - denied owner verification renders no report and never reads local records
+  ---
+  duration_ms: 4.483077
+  type: 'test'
+  ...
+# Subtest: verified owner reads sanitized local report, and denied copy clears it
+ok 2 - verified owner reads sanitized local report, and denied copy clears it
+  ---
+  duration_ms: 3.655033
+  type: 'test'
+  ...
+# Subtest: copy rechecks owner permission and copies exactly the displayed report
+ok 3 - copy rechecks owner permission and copies exactly the displayed report
+  ---
+  duration_ms: 1.786875
+  type: 'test'
+  ...
+# Subtest: clipboard denial leaves a selectable report for manual copying
+ok 4 - clipboard denial leaves a selectable report for manual copying
+  ---
+  duration_ms: 1.80277
+  type: 'test'
+  ...
+# Subtest: closing the panel cancels a pending permission check before storage access
+ok 5 - closing the panel cancels a pending permission check before storage access
+  ---
+  duration_ms: 1.264931
+  type: 'test'
+  ...
+# Subtest: owner report initializes new-document evidence after verification and labels the reporting build separately
+ok 6 - owner report initializes new-document evidence after verification and labels the reporting build separately
+  ---
+  duration_ms: 1.420866
+  type: 'test'
+  ...
+# Subtest: arming from the actual owner panel rechecks permission and writes only its one-shot request
+ok 7 - arming from the actual owner panel rechecks permission and writes only its one-shot request
+  ---
+  duration_ms: 1.723089
+  type: 'test'
+  ...
+# Subtest: revoked permission cannot arm measurement from an already open panel
+ok 8 - revoked permission cannot arm measurement from an already open panel
+  ---
+  duration_ms: 1.404481
+  type: 'test'
+  ...
+# Subtest: actual audio buttons verify permission, distinguish modes and clear stale displayed evidence
+ok 9 - actual audio buttons verify permission, distinguish modes and clear stale displayed evidence
+  ---
+  duration_ms: 2.195139
+  type: 'test'
+  ...
+# Subtest: revoked permission blocks the off-mode arm; Mainnet has no comparison controls
+ok 10 - revoked permission blocks the off-mode arm; Mainnet has no comparison controls
+  ---
+  duration_ms: 4.446122
+  type: 'test'
+  ...
+# Subtest: run build and pacing metadata are bounded and never inferred from the current document
+ok 11 - run build and pacing metadata are bounded and never inferred from the current document
+  ---
+  duration_ms: 2.744234
+  type: 'test'
+  ...
+# Subtest: reads previous interruption and current session without touching account or save keys
+ok 12 - reads previous interruption and current session without touching account or save keys
+  ---
+  duration_ms: 1.651362
+  type: 'test'
+  ...
+# Subtest: absent, denied, corrupt or oversized storage explicitly reports missing evidence
+ok 13 - absent, denied, corrupt or oversized storage explicitly reports missing evidence
+  ---
+  duration_ms: 0.773763
+  type: 'test'
+  ...
+# Subtest: keeps at most twenty interruption records and drops unknown or malformed values
+ok 14 - keeps at most twenty interruption records and drops unknown or malformed values
+  ---
+  duration_ms: 2.033636
+  type: 'test'
+  ...
+# Subtest: reload trace returns the final sixty-second technical window with boss and freeze evidence
+ok 15 - reload trace returns the final sixty-second technical window with boss and freeze evidence
+  ---
+  duration_ms: 1.168406
+  type: 'test'
+  ...
+# Subtest: v3 exports bounded transition resource counters without private payloads
+ok 16 - v3 exports bounded transition resource counters without private payloads
+  ---
+  duration_ms: 0.597868
+  type: 'test'
+  ...
+# Subtest: v4 exports a sanitized fifteen-minute resource trend independent of the sixty-second reload trace
+ok 17 - v4 exports a sanitized fifteen-minute resource trend independent of the sixty-second reload trace
+  ---
+  duration_ms: 9.410012
+  type: 'test'
+  ...
+# Subtest: exports only allowed technical fields, never raw messages, stacks, user or saved progress
+ok 18 - exports only allowed technical fields, never raw messages, stacks, user or saved progress
+  ---
+  duration_ms: 2.179465
+  type: 'test'
+  ...
+# Subtest: out-of-range timestamp cannot break export
+ok 19 - out-of-range timestamp cannot break export
+  ---
+  duration_ms: 0.205298
+  type: 'test'
+  ...
+# Subtest: exports current document metadata read-only even when the owner never re-enters the game after a reload
+ok 20 - exports current document metadata read-only even when the owner never re-enters the game after a reload
+  ---
+  duration_ms: 5.392785
+  type: 'test'
+  ...
+# Subtest: unavailable, throwing or future document metadata cannot prevent recovery of saved evidence
+ok 21 - unavailable, throwing or future document metadata cannot prevent recovery of saved evidence
+  ---
+  duration_ms: 0.970589
+  type: 'test'
+  ...
+# Subtest: all first-reactor-shot checkpoints survive the sanitized local export
+ok 22 - all first-reactor-shot checkpoints survive the sanitized local export
+  ---
+  duration_ms: 0.985411
+  type: 'test'
+  ...
+# Subtest: server owner approval is required before storage is touched
+ok 23 - server owner approval is required before storage is touched
+  ---
+  duration_ms: 6.529148
+  type: 'test'
+  ...
+# Subtest: a dismissed owner view cannot read data after a pending permission check
+ok 24 - a dismissed owner view cannot read data after a pending permission check
+  ---
+  duration_ms: 1.016378
+  type: 'test'
+  ...
+# Subtest: public standalone files are absent and the export lives inside the owner branch
+ok 25 - public standalone files are absent and the export lives inside the owner branch
+  ---
+  duration_ms: 0.997299
+  type: 'test'
+  ...
+# Subtest: four boundaries remain distinct, ordered and bounded over repeated playing frames
+ok 26 - four boundaries remain distinct, ordered and bounded over repeated playing frames
+  ---
+  duration_ms: 3.750627
+  type: 'test'
+  ...
+# Subtest: normal, boss and wrong-level scenes cannot stand in for a bonus completion
+ok 27 - normal, boss and wrong-level scenes cannot stand in for a bonus completion
+  ---
+  duration_ms: 0.317758
+  type: 'test'
+  ...
+# Subtest: paused and game-over callbacks do not claim an active following frame
+ok 28 - paused and game-over callbacks do not claim an active following frame
+  ---
+  duration_ms: 0.192139
+  type: 'test'
+  ...
+# Subtest: a new round retires old pending commits and the same sector can be retried
+ok 29 - a new round retires old pending commits and the same sector can be retried
+  ---
+  duration_ms: 0.151277
+  type: 'test'
+  ...
+# Subtest: diagnostic failures cannot throw into reward, request, layout or RAF work
+ok 30 - diagnostic failures cannot throw into reward, request, layout or RAF work
+  ---
+  duration_ms: 0.421974
+  type: 'test'
+  ...
+# Subtest: only copied technical primitives reach the callback and game state is never retained there
+ok 31 - only copied technical primitives reach the callback and game state is never retained there
+  ---
+  duration_ms: 0.499671
+  type: 'test'
+  ...
+# Subtest: all fifty bonus boundaries remain four small events and use no browser APIs
+ok 32 - all fifty bonus boundaries remain four small events and use no browser APIs
+  ---
+  duration_ms: 0.734234
+  type: 'test'
+  ...
+# Subtest: actual local trace and sanitized report preserve every milestone with no new storage key
+ok 33 - actual local trace and sanitized report preserve every milestone with no new storage key
+  ---
+  duration_ms: 3.090285
+  type: 'test'
+  ...
+# Subtest: current rolling recorder can persist phase-complete without the new phase-start
+ok 34 - current rolling recorder can persist phase-complete without the new phase-start
+  ---
+  duration_ms: 8.644953
+  type: 'test'
+  ...
+# Subtest: this report replaces the document before the earliest regular next-sector deadline
+ok 35 - this report replaces the document before the earliest regular next-sector deadline
+  ---
+  duration_ms: 3.873371
+  type: 'test'
+  ...
+# Subtest: wiring uses existing owner setup, layout hook, game frame and scene request
+ok 36 - wiring uses existing owner setup, layout hook, game frame and scene request
+  ---
+  duration_ms: 1.189238
+  type: 'test'
+  ...
+# Subtest: bonus ships enter from opposite sides, remain above player space, and leave the opposite edge
+ok 37 - bonus ships enter from opposite sides, remain above player space, and leave the opposite edge
+  ---
+  duration_ms: 1.500244
+  type: 'test'
+  ...
+# Subtest: bonus entries vary their timing and cross through distinct loops and spirals
+ok 38 - bonus entries vary their timing and cross through distinct loops and spirals
+  ---
+  duration_ms: 2.010461
+  type: 'test'
+  ...
+# Subtest: each bonus round previews twelve distinct non-boss hulls in varied paints
+ok 39 - each bonus round previews twelve distinct non-boss hulls in varied paints
+  ---
+  duration_ms: 0.483487
+  type: 'test'
+  ...
+# Subtest: bonus tiers include a perfect reward without requiring perfect hits for progression
+ok 40 - bonus tiers include a perfect reward without requiring perfect hits for progression
+  ---
+  duration_ms: 2.106085
+  type: 'test'
+  ...
+# Subtest: late-level bonus completion awards more Shards while each target still pays one
+ok 41 - late-level bonus completion awards more Shards while each target still pays one
+  ---
+  duration_ms: 0.218939
+  type: 'test'
+  ...
+# Subtest: only a perfect bonus restores one previously lost heart
+ok 42 - only a perfect bonus restores one previously lost heart
+  ---
+  duration_ms: 0.162484
+  type: 'test'
+  ...
+# Subtest: records the reported 1669-to-1800 warning boundary, creation, audio return and React commit once
+ok 43 - records the reported 1669-to-1800 warning boundary, creation, audio return and React commit once
+  ---
+  duration_ms: 3.450326
+  type: 'test'
+  ...
+# Subtest: all 50 real boss models produce identical shots and states with observation enabled
+ok 44 - all 50 real boss models produce identical shots and states with observation enabled
+  ---
+  duration_ms: 661.032375
+  type: 'test'
+  ...
+# Subtest: full projectile capacity and resumed prior volleys cannot invent a first shot
+ok 45 - full projectile capacity and resumed prior volleys cannot invent a first shot
+  ---
+  duration_ms: 0.588995
+  type: 'test'
+  ...
+# Subtest: diagnostic/storage failures do not change core simulation or exception handling
+ok 46 - diagnostic/storage failures do not change core simulation or exception handling
+  ---
+  duration_ms: 1.032412
+  type: 'test'
+  ...
+# Subtest: an interrupted audio call leaves the scene/audio stages unconfirmed and restarting resets observation
+ok 47 - an interrupted audio call leaves the scene/audio stages unconfirmed and restarting resets observation
+  ---
+  duration_ms: 1.907667
+  type: 'test'
+  ...
+# Subtest: production only creates the boundary observer for the verified owner
+ok 48 - production only creates the boundary observer for the verified owner
+  ---
+  duration_ms: 1.247004
+  type: 'test'
+  ...
+# Subtest: one block per cleared sector completes the chain at the ninth sector
+ok 49 - one block per cleared sector completes the chain at the ninth sector
+  ---
+  duration_ms: 1.451631
+  type: 'test'
+  ...
+# Subtest: excellent bonus hits pay their chain reward after the boss and only with a saved chain
+ok 50 - excellent bonus hits pay their chain reward after the boss and only with a saved chain
+  ---
+  duration_ms: 0.989057
+  type: 'test'
+  ...
+# Subtest: the chain reward grows with level and is paid only once
+ok 51 - the chain reward grows with level and is paid only once
+  ---
+  duration_ms: 0.194993
+  type: 'test'
+  ...
+# Subtest: ordinary player cannot obtain storage, create a manual probe or enable resource timing
+ok 52 - ordinary player cannot obtain storage, create a manual probe or enable resource timing
+  ---
+  duration_ms: 2.618656
+  type: 'test'
+  ...
+# Subtest: automatic ring survives beyond 90 seconds and is bounded through a 20-minute run
+ok 53 - automatic ring survives beyond 90 seconds and is bounded through a 20-minute run
+  ---
+  duration_ms: 620.214464
+  type: 'test'
+  ...
+# Subtest: new recording preserves the previous run, but loading/StrictMode cannot overwrite it
+ok 54 - new recording preserves the previous run, but loading/StrictMode cannot overwrite it
+  ---
+  duration_ms: 2.29537
+  type: 'test'
+  ...
+# Subtest: manual expiry does not stop automatic collection or release the other timing lease
+ok 55 - manual expiry does not stop automatic collection or release the other timing lease
+  ---
+  duration_ms: 53.973347
+  type: 'test'
+  ...
+# Subtest: background/pause time is not a foreground stall or simulated time
+ok 56 - background/pause time is not a foreground stall or simulated time
+  ---
+  duration_ms: 0.750728
+  type: 'test'
+  ...
+# Subtest: abrupt process loss needs no unload event; fresh report reads the last persisted evidence
+ok 57 - abrupt process loss needs no unload event; fresh report reads the last persisted evidence
+  ---
+  duration_ms: 1.859705
+  type: 'test'
+  ...
+# Subtest: owner verification and active-view check precede even reading the added report storage
+ok 58 - owner verification and active-view check precede even reading the added report storage
+  ---
+  duration_ms: 0.887043
+  type: 'test'
+  ...
+# Subtest: denied storage and optional runtime failure never escape into the simulation
+ok 59 - denied storage and optional runtime failure never escape into the simulation
+  ---
+  duration_ms: 1.646885
+  type: 'test'
+  ...
+# Subtest: only bounded compiled error coordinates survive, never private stack/message/URLs
+ok 60 - only bounded compiled error coordinates survive, never private stack/message/URLs
+  ---
+  duration_ms: 1.226283
+  type: 'test'
+  ...
+# Subtest: reader rejects oversized/corrupt records and prefers freshest independent storage snapshot
+ok 61 - reader rejects oversized/corrupt records and prefers freshest independent storage snapshot
+  ---
+  duration_ms: 1.125982
+  type: 'test'
+  ...
+# Subtest: new collector has no scheduling/network/UI path; runtime wiring is verified-owner Testnet only
+ok 62 - new collector has no scheduling/network/UI path; runtime wiring is verified-owner Testnet only
+  ---
+  duration_ms: 1.425112
+  type: 'test'
+  ...
+# Subtest: first fault is persisted immediately even directly after a periodic write; repeat faults stay throttled
+ok 63 - first fault is persisted immediately even directly after a periodic write; repeat faults stay throttled
+  ---
+  duration_ms: 4.355707
+  type: 'test'
+  ...
+# Subtest: a fault in the first playing frame is retained before any complete sample exists
+ok 64 - a fault in the first playing frame is retained before any complete sample exists
+  ---
+  duration_ms: 0.448023
+  type: 'test'
+  ...
+# Subtest: ordinary builds cannot enable diagnostics via a URL; sampling owns no timers or RAF
+ok 65 - ordinary builds cannot enable diagnostics via a URL; sampling owns no timers or RAF
+  ---
+  duration_ms: 73.613265
+  type: 'test'
+  ...
+# Subtest: phase durations describe the previous phase and paused time is excluded from frame and volley gaps
+ok 66 - phase durations describe the previous phase and paused time is excluded from frame and volley gaps
+  ---
+  duration_ms: 0.892402
+  type: 'test'
+  ...
+# Subtest: unavailable browser metrics and denied storage cannot throw into a game frame
+ok 67 - unavailable browser metrics and denied storage cannot throw into a game frame
+  ---
+  duration_ms: 1.110209
+  type: 'test'
+  ...
+# Subtest: forensic events exclude exception text, origins, query tokens, accounts and raw stacks
+ok 68 - forensic events exclude exception text, origins, query tokens, accounts and raw stacks
+  ---
+  duration_ms: 1.13132
+  type: 'test'
+  ...
+# Subtest: game over and exit report the real status and remaining hearts
+ok 69 - game over and exit report the real status and remaining hearts
+  ---
+  duration_ms: 0.623728
+  type: 'test'
+  ...
+# Subtest: short phase windows calculate FPS from measured frame intervals
+ok 70 - short phase windows calculate FPS from measured frame intervals
+  ---
+  duration_ms: 0.483597
+  type: 'test'
+  ...
+# Subtest: rapid phase changes do not repeatedly enumerate DOM animations
+ok 71 - rapid phase changes do not repeatedly enumerate DOM animations
+  ---
+  duration_ms: 13.801097
+  type: 'test'
+  ...
+# Subtest: scene measurements distinguish render-to-commit work and scheduling wait without new loops
+ok 72 - scene measurements distinguish render-to-commit work and scheduling wait without new loops
+  ---
+  duration_ms: 0.669446
+  type: 'test'
+  ...
+# Subtest: boss checkpoints persist immediately with fresh context without changing the frame context
+ok 73 - boss checkpoints persist immediately with fresh context without changing the frame context
+  ---
+  duration_ms: 1.270129
+  type: 'test'
+  ...
+# Subtest: app boot records an active prior combat without retaining account or browser fields
+ok 74 - app boot records an active prior combat without retaining account or browser fields
+  ---
+  duration_ms: 5.002629
+  type: 'test'
+  ...
+# Subtest: freeze detector reports only visible active gaps at or above threshold
+ok 75 - freeze detector reports only visible active gaps at or above threshold
+  ---
+  duration_ms: 0.295224
+  type: 'test'
+  ...
+# Subtest: verified Admin-only installation captures the interrupted build and creates no timer or navigation
+ok 76 - verified Admin-only installation captures the interrupted build and creates no timer or navigation
+  ---
+  duration_ms: 5.116144
+  type: 'test'
+  ...
+# Subtest: error names are allowlisted and raw custom names are not retained
+ok 77 - error names are allowlisted and raw custom names are not retained
+  ---
+  duration_ms: 0.233501
+  type: 'test'
+  ...
+# Subtest: owner runtime collection is wired only to the verified owner game entry
+ok 78 - owner runtime collection is wired only to the verified owner game entry
+  ---
+  duration_ms: 7.534985
+  type: 'test'
+  ...
+# Subtest: resource snapshots retain only typed technical counters in the local trace
+ok 79 - resource snapshots retain only typed technical counters in the local trace
+  ---
+  duration_ms: 0.583097
+  type: 'test'
+  ...
+# Subtest: v3 transition snapshots remain wired only inside verified owner gameplay
+ok 80 - v3 transition snapshots remain wired only inside verified owner gameplay
+  ---
+  duration_ms: 1.059462
+  type: 'test'
+  ...
+# Subtest: v4 resource trend stores only sanitized owner resource context and stays bounded
+ok 81 - v4 resource trend stores only sanitized owner resource context and stays bounded
+  ---
+  duration_ms: 68.075312
+  type: 'test'
+  ...
+# Subtest: v4 resource trend monitor samples active visible play every ten seconds and stops cleanly
+ok 82 - v4 resource trend monitor samples active visible play every ten seconds and stops cleanly
+  ---
+  duration_ms: 1.967127
+  type: 'test'
+  ...
+# Subtest: the boss appears after the complete recorded three-signal warning
+ok 83 - the boss appears after the complete recorded three-signal warning
+  ---
+  duration_ms: 1.125812
+  type: 'test'
+  ...
+# Subtest: one combat encounter links a block, with the boss after block nine
+ok 84 - one combat encounter links a block, with the boss after block nine
+  ---
+  duration_ms: 0.213881
+  type: 'test'
+  ...
+# Subtest: level ten retains its level through boss and bonus
+ok 85 - level ten retains its level through boss and bonus
+  ---
+  duration_ms: 0.89171
+  type: 'test'
+  ...
+# Subtest: a complete campaign level has nine blocks, one boss and one bonus
+ok 86 - a complete campaign level has nine blocks, one boss and one bonus
+  ---
+  duration_ms: 0.375845
+  type: 'test'
+  ...
+# Subtest: the boss enters visibly, stays in the upper field and remains reachable on phone and desktop
+ok 87 - the boss enters visibly, stays in the upper field and remains reachable on phone and desktop
+  ---
+  duration_ms: 8.438136
+  type: 'test'
+  ...
+# Subtest: health grows within a cap and a damaged boss fires with a bounded interval
+ok 88 - health grows within a cap and a damaged boss fires with a bounded interval
+  ---
+  duration_ms: 1.019863
+  type: 'test'
+  ...
+# Subtest: boss engine thrust follows movement for every boss size
+ok 89 - boss engine thrust follows movement for every boss size
+  ---
+  duration_ms: 24.883433
+  type: 'test'
+  ...
+# Subtest: the boss descends smoothly only during its final 20 percent of health
+ok 90 - the boss descends smoothly only during its final 20 percent of health
+  ---
+  duration_ms: 0.619591
+  type: 'test'
+  ...
+# Subtest: the exposed opening boss takes half its former number of hits
+ok 91 - the exposed opening boss takes half its former number of hits
+  ---
+  duration_ms: 0.41297
+  type: 'test'
+  ...
+# Subtest: boss entry can begin below the measured HUD instead of behind it
+ok 92 - boss entry can begin below the measured HUD instead of behind it
+  ---
+  duration_ms: 0.232269
+  type: 'test'
+  ...
+# Subtest: the exposed reactor accepts every connected twin/triple projectile, including simultaneous hits
+ok 93 - the exposed reactor accepts every connected twin/triple projectile, including simultaneous hits
+  ---
+  duration_ms: 0.143465
+  type: 'test'
+  ...
+1..93
+# tests 93
+# suites 0
+# pass 93
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 967.499507

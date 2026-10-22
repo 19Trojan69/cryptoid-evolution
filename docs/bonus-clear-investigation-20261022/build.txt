@@ -1,0 +1,149 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 prebuild
+> npm run prepare:hulls
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 prepare:hulls
+> node --experimental-strip-types scripts/buildPaintedHulls.mjs
+
+{"revision":"91a72bc0c36be9407915","variants":1740,"totalBytes":95450326,"dimensions":"original","canvasVersion":"0.1.100"}
+
+> cryptoid-evolution@0.11.0 build
+> npm run test:i18n && npm run check:i18n:release && npm run test:canvas-static-url && npm run test:bonus-boundary && node_modules/.bin/tsc -b && vite build
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 test:i18n
+> node --experimental-strip-types --test src/i18n.test.mjs
+
+✔ en: every player UI key has a translation and preserves its placeholders (6.43992ms)
+✔ de: every player UI key has a translation and preserves its placeholders (2.946999ms)
+✔ es: every player UI key has a translation and preserves its placeholders (2.275741ms)
+✔ zh: every player UI key has a translation and preserves its placeholders (2.512306ms)
+✔ vi: every player UI key has a translation and preserves its placeholders (3.495049ms)
+✔ legacy locales remain selectable and use existing translations with English fallback (0.645601ms)
+✔ English mission resume contains no German source text (0.34616ms)
+✔ interpolation handles all repeated values and a locale change preserves life count (0.657678ms)
+✔ automatic language choice and manual override resolve supported locales (0.554934ms)
+✔ the picker includes the original 17 languages plus Chinese and Vietnamese (0.270126ms)
+✔ remaining lives use the correct singular and plural forms (0.793022ms)
+✔ player components contain no unwrapped static UI copy (0.230267ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 974.798658
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 check:i18n:release
+> node --experimental-strip-types scripts/localization-inventory.mjs --check
+
+Static copy: 1245; unwrapped UI fragments: 0
+en: 1245/1245
+de: 1245/1245
+es: 1245/1245
+fr: 839/1245 (draft)
+pt: 838/1245 (draft)
+it: 838/1245 (draft)
+pl: 586/1245 (draft)
+tr: 586/1245 (draft)
+ru: 838/1245 (draft)
+hr: 586/1245 (draft)
+cs: 586/1245 (draft)
+sk: 586/1245 (draft)
+hu: 586/1245 (draft)
+ro: 586/1245 (draft)
+sr: 586/1245 (draft)
+uk: 586/1245 (draft)
+th: 586/1245 (draft)
+zh: 1245/1245
+vi: 1245/1245
+Complete language gate: en, de, es, zh, vi; release ready: true
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 test:canvas-static-url
+> node --experimental-strip-types --test scripts/canvasStaticUrl.test.mjs
+
+✔ negative control: released CanvasImpact refuses the real relative PNG despite prepared resources and no recorded failure (58.731215ms)
+✔ actual prepared-hull hook → root-relative PNG → reflected absolute image URL → Canvas registration and drawing (38.847302ms)
+✔ cold actual hook retains the original display until ready, then uses the static PNG in Canvas (15.98017ms)
+✔ relative, absolute, query/fragment and historical Blob address controls all activate the actual renderer (87.919762ms)
+✔ a changed hull address cannot display the previous ready hull while the new image is delayed (17.704219ms)
+✔ an unavailable hull retains the CSS display, records the failure and retries on remount (19.051645ms)
+✔ late image completion after unmount cannot register an effect or update its hook (12.971097ms)
+✔ a cleared resource generation rejects late completions and cannot revive the failed layer (19.912709ms)
+✔ correctly activated static effects retain pause/resume and context-loss fallback (25.251504ms)
+✔ a missing optional surface leaves the original display in place (2.823283ms)
+✔ render-scale changes cannot reuse a ready bundle with the previous scale (21.498112ms)
+✔ a null drawing context falls back without retaining registered effects or a frame chain (20.296476ms)
+✔ two mounted effects share the same image/textures and retain resources until both owners leave (33.152279ms)
+✔ 1000 warm static-hull impacts register once, reuse the existing resources and completely release (123.595973ms)
+{"exactNativeRasterComparisons":54,"limits":"Native Skia and actual hooks/resources; not Safari/PiBrowser pixels, native memory or proof of the White Screen cause."}
+✔ native raster output matches released working absolute-URL control at original effect ages and render scales (345.322914ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1235.214636
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 test:bonus-boundary
+> node --experimental-strip-types --test src/pages/bonusBoundaryDiagnostics.test.mjs
+
+✔ four boundaries remain distinct, ordered and bounded over repeated playing frames (3.31273ms)
+✔ normal, boss and wrong-level scenes cannot stand in for a bonus completion (0.476967ms)
+✔ paused and game-over callbacks do not claim an active following frame (0.231909ms)
+✔ a new round retires old pending commits and the same sector can be retried (0.155324ms)
+✔ diagnostic failures cannot throw into reward, request, layout or RAF work (0.355565ms)
+✔ only copied technical primitives reach the callback and game state is never retained there (0.31931ms)
+✔ all fifty bonus boundaries remain four small events and use no browser APIs (0.816357ms)
+✔ actual local trace and sanitized report preserve every milestone with no new storage key (2.523723ms)
+✔ current rolling recorder can persist phase-complete without the new phase-start (2.66152ms)
+✔ this report replaces the document before the earliest regular next-sector deadline (0.326821ms)
+✔ wiring uses existing owner setup, layout hook, game frame and scene request (0.915817ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 171.218681
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 381 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                     1.47 kB │ gzip:   0.77 kB
+dist/assets/AdminPage-BVHazyxQ.css                 10.28 kB │ gzip:   2.68 kB
+dist/assets/GalaxyMap-ByhGHt12.css                 16.63 kB │ gzip:   4.75 kB
+dist/assets/powerUps-Bp4oAZoc.css                  19.99 kB │ gzip:   5.17 kB
+dist/assets/GamePage-Doazl5ia.css                  21.19 kB │ gzip:   4.97 kB
+dist/assets/Shop-BkuKP0aD.css                      25.93 kB │ gzip:   6.41 kB
+dist/assets/index-BcSGTHO_.css                    357.19 kB │ gzip:  75.30 kB
+dist/assets/rewardProgress-Ctlqr-IG.js              3.22 kB │ gzip:   1.26 kB
+dist/assets/displaySettings-d3VZZ2lg.js             3.30 kB │ gzip:   1.47 kB
+dist/assets/collectionExport-BcKB8Kos.js            3.89 kB │ gzip:   2.10 kB
+dist/assets/reloadDiagnostics-trKgNMHp.js          12.06 kB │ gzip:   4.68 kB
+dist/assets/GalaxyMap-CLTYgPX7.js                  16.79 kB │ gzip:   6.23 kB
+dist/assets/AdminPage-DakBL6sS.js                  45.35 kB │ gzip:  14.62 kB
+dist/assets/performanceDiagnostics-CgHe5Nry.js     63.83 kB │ gzip:  18.99 kB
+dist/assets/Shop-BvamKbgZ.js                      118.59 kB │ gzip:  39.23 kB
+dist/assets/powerUps-BZx_2_3h.js                  148.36 kB │ gzip:  56.42 kB
+dist/assets/shipEvolution-c5kHXiPy.js             233.73 kB │ gzip:  36.52 kB
+dist/assets/GamePage-B2i8j_95.js                  240.94 kB │ gzip:  78.10 kB
+dist/assets/index-B-0VQDcm.js                   1,947.33 kB │ gzip: 628.16 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 4.27s

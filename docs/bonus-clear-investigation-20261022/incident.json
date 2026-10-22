@@ -1,0 +1,73 @@
+{
+  "format": "cryptoid-bonus-clear-incident-extract",
+  "version": 1,
+  "evidence": "Selected technical fields copied from the owner-supplied v5 report generated at 2026-10-22T14:21:56.862Z; not the complete original report",
+  "runtime": {
+    "sourceCommit": "5d6e7cb703ef114ee4626c1fbb0e34a45b1667d8",
+    "sourceTree": "7d0fa724da3840b378d8de1e5723b24bfce19a89"
+  },
+  "timezone": "Europe/Vienna",
+  "sector": 40,
+  "timeline": {
+    "bossDefeatAt": 1792678864180,
+    "victoryStartAt": 1792678869840,
+    "bonusStartAt": 1792678877480,
+    "bonusFirstSpawnAt": 1792678881395,
+    "lastResourceSampleAt": 1792678892950,
+    "lastSessionAt": 1792678893112,
+    "bonusClearObservedAt": 1792678893513,
+    "lastFlightWriteAt": 1792678893536,
+    "newDocumentAt": 1792678899859,
+    "adminDiagnosticBootAt": 1792678919475
+  },
+  "derived": {
+    "lastWriteToNewDocumentMs": 6323,
+    "bonusClearToNewDocumentMs": 6346,
+    "newDocumentToDiagnosticBootMs": 19616,
+    "regularBonusClearDurationMs": 8500,
+    "regularNextSectorDueBeforeNewDocument": false
+  },
+  "bonusClearSnapshot": {
+    "phase": "SECTOR_CLEAR",
+    "encounter": "bonus",
+    "status": "playing",
+    "clearTimerMs": 0,
+    "domNodes": 414,
+    "runningAnimations": 6,
+    "canvasRegisteredEffects": 2,
+    "canvasSourceImages": 4,
+    "canvasTextureEntries": 4,
+    "canvasCacheBytes": 1908364,
+    "canvasSurfaceBytes": 820380,
+    "canvasFailureCount": 0,
+    "paintedEntries": 19,
+    "paintedBytes": 6897515,
+    "paintedPending": 0,
+    "audioBufferBytes": 7660648,
+    "estimatedResourceBytes": 17286907,
+    "audioClockMs": 1092837,
+    "audioClockStalls": 0,
+    "audioRecoveries": 3,
+    "audioBlockedSounds": 0,
+    "musicClockMs": 1092885,
+    "musicMediaMs": 16577,
+    "audioState": "running",
+    "musicState": "running",
+    "musicTrack": "normal"
+  },
+  "flightEvidence": {
+    "firstRetainedEffectPaints": 22913,
+    "lastRetainedEffectPaints": 23553,
+    "lastBonusRafRate": 59.36,
+    "lastBonusFrameP95Ms": 18,
+    "lastBonusSimulationP95Ms": 1,
+    "lastBonusFrameMaxMs": 31,
+    "longTasksSupported": false,
+    "persistMaxMs": 6,
+    "lastPersistedEvent": "phase-complete",
+    "lastPersistedEventPhase": "FORMATION"
+  },
+  "matchingNativeTerminationReportAvailable": false,
+  "causeProved": false,
+  "limits": "Known-resource estimates exclude native/GPU/WebContent totals. RAF and React commit are not presented FPS. No JS exception, OS memory cause, bonus reward completion or bonus banner commit is established by these final records."
+}
