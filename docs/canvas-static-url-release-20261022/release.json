@@ -1,0 +1,77 @@
+{
+  "format": "cryptoid-testnet-canvas-static-url-release",
+  "version": 1,
+  "date": "2026-10-22",
+  "timezone": "Europe/Vienna",
+  "officialUrl": "https://cryptoid-evolution-testnet.vercel.app/",
+  "source": {
+    "commit": "5d6e7cb703ef114ee4626c1fbb0e34a45b1667d8",
+    "tree": "7d0fa724da3840b378d8de1e5723b24bfce19a89",
+    "branch": "codex/canvas-static-url-readiness-20261022",
+    "equivalentLocalCandidate": "b1334d3eca87f940c31fb2f35051adeb8e9dd728",
+    "completeTreeMatched": true,
+    "automaticDeployment": false
+  },
+  "preview": {
+    "id": "dpl_HvG3kARjrKwSLS54JS1hNR42iWN2",
+    "url": "https://cryptoid-evolution-testnet-8b3tnzpro-19-trojan69.vercel.app/",
+    "status": "READY",
+    "completedAt": "2026-10-22T15:34:02+02:00",
+    "durationSeconds": 87
+  },
+  "production": {
+    "id": "dpl_G6q1Ni4Lgc3XZfvRbDTB7mk4rw5k",
+    "url": "https://cryptoid-evolution-testnet-4guquci4s-19-trojan69.vercel.app/",
+    "status": "READY",
+    "completedAt": "2026-10-22T15:40:08+02:00",
+    "durationSeconds": 82,
+    "deployLogsDurationSeconds": 81,
+    "sameSourceAsPreview": true,
+    "rebuiltWithProductionSettings": true
+  },
+  "rollback": {
+    "branch": "backup/testnet-before-canvas-static-url-20261022",
+    "commit": "0bb35e5aeac49557edb8fd7379422066971e47de",
+    "deployment": "dpl_AxeBWSTp1tKTYWWUe2ALcqcA6ktv",
+    "independentlyResolved": true,
+    "preserved": true
+  },
+  "browserQa": {
+    "mode": "guest-preview",
+    "start": true,
+    "pause": true,
+    "resumeCountdownObserved": "3",
+    "activeResume": true,
+    "secondPause": true,
+    "normalKillScoreBefore": 25,
+    "normalKillScoreAfter": 50,
+    "lives": 3,
+    "initialStaticShipStyles": 6,
+    "normalEffectsSurfaceIdle": [1, 1],
+    "normalEffectsSurfaceActive": [280, 200],
+    "browserPixelEqualityMeasured": false,
+    "pixelProbeLimit": "DOM adapter does not expose canvas.getContext; one read-only attempt failed before pixel inspection; no bypass",
+    "freshOfficialHomeSpielenEnabled": true
+  },
+  "deliveredChecks": {
+    "probeExitCode": 0,
+    "evidence": "after.json",
+    "baseline": "before.json",
+    "sourceAndTree": true,
+    "requestedKeyGuard": true,
+    "requestedKeyBundles": 2,
+    "brokenReflectedSourceGuardAbsent": true,
+    "staticRevision": "91a72bc0c36be9407915",
+    "matchingServedPngs": 6,
+    "pngDimensions": [282, 282],
+    "apiAndThreeLeaderboardHashesEqual": true,
+    "productionQaExcluded": true
+  },
+  "receiptBranch": "codex/canvas-static-url-release-record-20261022",
+  "receiptAutomaticDeployment": false,
+  "screenshot": "canvas-url-testnet-ready-1792676467748.jpg",
+  "mainnetContacted": false,
+  "runtimeLogsOrProtectionBypass": false,
+  "accountSaveOrEconomyMutation": false,
+  "limits": "Confirmed readiness correction and delivered/browser activation verified. No physical iPhone native memory, heat, audibility, presented FPS, OS termination-cause or final White Screen elimination proof."
+}

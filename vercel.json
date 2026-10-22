@@ -25,6 +25,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/canvas-static-url-release-record-20261022": false,
       "codex/canvas-static-url-readiness-20261022": false,
       "codex/static-hull-memory-release-record-20261022": false,
       "codex/static-hull-memory-20261022": false,

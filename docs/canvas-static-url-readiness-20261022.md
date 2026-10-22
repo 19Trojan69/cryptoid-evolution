@@ -1,10 +1,13 @@
 # Canvas static-URL readiness — 22 October 2026
 
-Status: corrected and locally verified preparation; not published.
-Candidate: `codex/canvas-static-url-readiness-20261022`; automatic deployment disabled.
+Status: published to official Testnet after explicit approval; see
+[release receipt](canvas-static-url-release-20261022.md).
+Fixed source: `5d6e7cb703ef114ee4626c1fbb0e34a45b1667d8` on
+`codex/canvas-static-url-readiness-20261022`; automatic deployment disabled.
 Parent: local `4a9941b623225cbc6d66719604122106aa57f17a`, with the runtime
 published as official Testnet `0bb35e5aeac49557edb8fd7379422066971e47de`.
-Keep that official release, every fixed source/rollback ref and Mainnet unchanged.
+The previous official release is preserved as the rollback source. Keep every
+fixed source/rollback ref and Mainnet unchanged.
 
 ## Confirmed defect and incident limits
 
@@ -137,7 +140,11 @@ Do not weaken its assertions and present it as a passing scope check for this
 new change. Check this candidate's four readiness substitutions and unchanged
 runtime/assets directly instead.
 
-## Release and proof boundary
+## Preparation boundary (historical)
+
+The following records the boundary at the end of local preparation. The later
+explicitly approved Testnet preview and production release are documented in
+[the release receipt](canvas-static-url-release-20261022.md).
 
 No preview, Testnet or Mainnet deployment was performed. No runtime logs, drains,
 protection bypass, credentials or new account permissions were requested. Earlier

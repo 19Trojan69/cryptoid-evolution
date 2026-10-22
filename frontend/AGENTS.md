@@ -1,5 +1,40 @@
 # Preserve the officially approved game
 
+## Canvas static-URL correction published, 22 October 2026
+
+The approved release is complete. Official Testnet is READY at fixed source
+5d6e7cb703ef114ee4626c1fbb0e34a45b1667d8, tree
+7d0fa724da3840b378d8de1e5723b24bfce19a89, source branch
+codex/canvas-static-url-readiness-20261022. Production
+dpl_G6q1Ni4Lgc3XZfvRbDTB7mk4rw5k completed at 15:40:08 Vienna, 82 seconds total /
+81-second Deploy Logs. Preview dpl_HvG3kARjrKwSLS54JS1hNR42iWN2 completed at
+15:34:02, 87 seconds. Production rebuilt the same source with Production settings;
+do not claim identical preview and production binaries.
+
+Rollback branch backup/testnet-before-canvas-static-url-20261022 resolves to
+0bb35e5aeac49557edb8fd7379422066971e47de; its previous READY deployment
+dpl_AxeBWSTp1tKTYWWUe2ALcqcA6ktv remains preserved. Keep every fixed ref and Mainnet
+unchanged. Receipt branch codex/canvas-static-url-release-record-20261022 has
+automatic deployment disabled. Do not deploy this receipt or advance the fixed
+runtime branch with later documentation.
+
+Fresh delivered GamePage/Admin source/tree, requested-source guard/two resource
+bundles, absence of the reflected Image.src guard, static revision and four QA
+exclusions pass. Six served 282x282 PNGs equal the locally proven bytes. API root,
+anonymous Admin denial and all three leaderboard hashes equal the fresh baseline.
+Preview guest Start/Pause/3-countdown/active Resume/second Pause pass; a normal kill
+raised score 25 to 50 and activated normal-effects-surface from 1x1 to 280x200.
+Fresh official Home finishes loading with Spielen enabled. No Pi/owner login,
+account/save/economy mutation, runtime-log/drain/protection retry or Mainnet contact.
+
+The browser DOM adapter cannot call canvas.getContext; one read-only pixel probe
+failed at that adapter boundary, not in the app. No bypass was attempted. Actual
+browser surface activation and the 54 local native RGBA pairs are separate proof.
+Physical iPhone/WebKit native memory, heat, audio output, presented FPS and final
+White Screen elimination remain unproved. Reload/Resume the existing mission;
+do not demand another full campaign for already established counters.
+See docs/canvas-static-url-release-20261022.md and its evidence directory.
+
 ## Canvas static-URL Testnet release authorized, 22 October 2026
 
 The owner's latest "fortsetzen" answers the explicit question whether to publish

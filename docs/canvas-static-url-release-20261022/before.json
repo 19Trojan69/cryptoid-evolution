@@ -1,0 +1,103 @@
+{
+  "at": "2026-10-22T13:29:07.532Z",
+  "phase": "before",
+  "expectedSource": "0bb35e5aeac49557edb8fd7379422066971e47de",
+  "expectedTree": "43af181e9990cc34501dd8ebb44367ce0cf219e1",
+  "entry": "/assets/index-DTUBvSNE.js",
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 1465,
+      "sha256": "96dfdac048aa775e0db8303590c7270061285c499f6829e2f9c3de164be8d70d"
+    },
+    {
+      "path": "/api",
+      "status": 200,
+      "bytes": 27,
+      "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a"
+    },
+    {
+      "path": "/api/admin/status",
+      "status": 401,
+      "bytes": 29,
+      "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=1",
+      "status": 200,
+      "bytes": 7444,
+      "sha256": "ca8956d86c54d585585a76021dd0678dfaec6776ee50ee6fe64eb2784331741b"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=2",
+      "status": 200,
+      "bytes": 9737,
+      "sha256": "97e4ef2b07503253eaef1d4a09013580fe284d4d76ccc1b612e9f37ab3543c78"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=3",
+      "status": 200,
+      "bytes": 9737,
+      "sha256": "97e4ef2b07503253eaef1d4a09013580fe284d4d76ccc1b612e9f37ab3543c78"
+    }
+  ],
+  "chunks": [
+    {
+      "path": "/assets/shipEvolution-D1APySgf.js",
+      "status": 200,
+      "bytes": 233729,
+      "sha256": "d6497668b3afbe03a045724d92d48682f046cb27983999358a7ef63511bb09b2",
+      "sourceIdentity": false,
+      "treeIdentity": false
+    },
+    {
+      "path": "/assets/AdminPage--qiDMhIC.js",
+      "status": 200,
+      "bytes": 45226,
+      "sha256": "c24328d0b70af5e73aa1febe7d21dc76ef2c4eddfdf92b9fa1475e6db8dc9454",
+      "sourceIdentity": true,
+      "treeIdentity": true
+    },
+    {
+      "path": "/assets/performanceDiagnostics-CrSnCOXN.js",
+      "status": 200,
+      "bytes": 63828,
+      "sha256": "bd3572829567d72ad8d989196d5f506d30910f85eb8a0a84cc92040278a07561",
+      "sourceIdentity": false,
+      "treeIdentity": false
+    },
+    {
+      "path": "/assets/reloadDiagnostics-qushuHu7.js",
+      "status": 200,
+      "bytes": 12055,
+      "sha256": "01f91d8d6c0a0df0a35e0de8069eba2e0e6461b68be202d106a99323854583eb",
+      "sourceIdentity": false,
+      "treeIdentity": false
+    },
+    {
+      "path": "/assets/powerUps-DsiBds1X.js",
+      "status": 200,
+      "bytes": 148360,
+      "sha256": "2d080b62a47969e0142507b43fdf574f786ed341ee29d12ea830ac27d16b67ac",
+      "sourceIdentity": false,
+      "treeIdentity": false
+    },
+    {
+      "path": "/assets/GamePage-gxLVpFOn.js",
+      "status": 200,
+      "bytes": 239959,
+      "sha256": "eb3d937d3ea9e6d5863b1b8158ea7f5c8f3ea25c0fc83c322931093e84a67788",
+      "sourceIdentity": true,
+      "treeIdentity": true
+    }
+  ],
+  "canvasReadiness": {
+    "requestedKeyGuard": false,
+    "reflectedSourceGuard": true,
+    "requestedKeyBundles": 0,
+    "matchingStaticRevision": true,
+    "noTestHost": true
+  },
+  "limits": "Delivered source/guard, six PNG responses and API hashes. No physical iPhone memory, audio, FPS or final White Screen proof."
+}
