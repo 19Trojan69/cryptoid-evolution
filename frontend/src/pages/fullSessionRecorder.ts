@@ -32,13 +32,19 @@ export function createFullSessionRecorder(verifiedOwner: boolean, getHost: () =>
   let sequence = 0, acceptedBytes = 0, queueBytes = 0, queuePeak = 0, serializeMaxMs = 0, commitWaitMaxMs = 0;
   const queue: { record: FullRecord; bytes: number }[] = [];
   let observed: FullRecord | undefined;
+  let lastGraphics: FullRecord | undefined;
+  let markerWrites = 0, markerWriteMaxMs = 0, markerWriteTotalMs = 0;
   let observedKey = '', observedAt = -Infinity;
   const marker = () => {
+    const markerStartedAt = now();
     try { host.localStorage?.setItem(FULL_SESSION_STATUS_KEY, JSON.stringify({ id,
       state: failed ? 'storage-error' : !started ? 'starting' : summary.state,
       at: wall(), lastCommittedSeq: summary.lastSeq, lastObservedSeq: observed?.seq ?? 0,
-      lastObserved: observed, stopReason: summary.stopReason, queuePeak, serializeMaxMs, commitWaitMaxMs })); }
+      lastObserved: observed, lastGraphics, stopReason: summary.stopReason, queuePeak, serializeMaxMs, commitWaitMaxMs,
+      markerWrites, markerWriteMaxMs, markerWriteTotalMs })); }
     catch { /* IndexedDB may still work; never fail gameplay because a marker is denied. */ }
+    finally { const elapsed = now() - markerStartedAt; markerWrites++; markerWriteTotalMs += elapsed;
+      markerWriteMaxMs = Math.max(markerWriteMaxMs, elapsed); }
   };
   const storageFailure = () => {
     failed = stopped = true; summary.stopReason = 'storage-error'; release();
@@ -80,7 +86,7 @@ export function createFullSessionRecorder(verifiedOwner: boolean, getHost: () =>
     // Reserve an end marker whenever the queue has space. No eviction of earlier evidence.
     stopped = true; release();
     if (queue.length < limits.queueRecords && queueBytes + 512 < limits.queueBytes && sequence < limits.records && acceptedBytes + 512 < limits.bytes)
-      add('end', { operation: 'finish' }, false, true);
+      add('end', { operation: 'finish' }, true, true);
     flush(); marker();
   };
   const add = (kind: FullRecordKind, input: unknown, critical = false, ending = false) => {
@@ -96,6 +102,12 @@ export function createFullSessionRecorder(verifiedOwner: boolean, getHost: () =>
     if (queue.length >= limits.queueRecords || queueBytes + bytes > limits.queueBytes) { if (!ending) stop('queue-limit'); return; }
     sequence++; acceptedBytes += bytes; queueBytes += bytes; queue.push({ record, bytes });
     queuePeak = Math.max(queuePeak, queue.length);
+    // Keep the latest graphics observation separate from a later phase event.
+    // Update only the bounded synchronous marker; use existing aggregate/critical
+    // flushes for these records rather than one IDB transaction per image step.
+    if (kind === 'boundary' && data.operation === 'hull-plan-progress' && data.step) {
+      lastGraphics = record; marker();
+    }
     const criticalKey = `${kind}:${data.operation ?? data.signal ?? data.kind}:${data.sector}:${data.phase}:${data.status}`;
     if (critical && (criticalKey !== observedKey || at - observedAt >= 2000)) {
       observedKey = criticalKey; observedAt = at;
@@ -105,7 +117,7 @@ export function createFullSessionRecorder(verifiedOwner: boolean, getHost: () =>
     }
   };
   const release = observeSessionDiagnostics((kind, details) => {
-    add(kind, details, kind === 'boundary' || kind === 'lifecycle');
+    add(kind, details, kind === 'boundary' && details.operation !== 'hull-plan-progress' || kind === 'lifecycle');
     // Requests/queues are batched with the next aggregate window, not written per shot.
   });
   return {
@@ -120,6 +132,7 @@ export function createFullSessionRecorder(verifiedOwner: boolean, getHost: () =>
         'unhandled-rejection','home-intent','saved-exit-intent'].includes(String(value.kind)));
     },
     finish() { stop(); },
-    stats() { return { started, stopped, failed, sequence, queued: queue.length, queueBytes, queuePeak, committed: summary.lastSeq }; },
+    stats() { return { started, stopped, failed, sequence, queued: queue.length, queueBytes, queuePeak, committed: summary.lastSeq,
+      markerWrites, markerWriteMaxMs, markerWriteTotalMs }; },
   };
 }

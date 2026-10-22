@@ -47,6 +47,37 @@ const additions = {
       if (current.current === next) sessionDiagnostic('boundary', { operation: 'hull-plan-settled', sector, encounter,
         requested: results.length, prepared: results.filter(Boolean).length, readinessFailures: results.filter(value => !value).length });
     });`,
+    "import { hullPreparationStep } from './hullPreparationDiagnostics';",
+    "hullPreparationStep('plan-preloaded', { sector, encounter });",
+    "hullPreparationStep('plan-retain-before', { sector, encounter });",
+    "hullPreparationStep('plan-retained', { sector, encounter });",
+    "if (previous) hullPreparationStep('plan-release-before', { sector, encounter });",
+    "if (previous) hullPreparationStep('plan-released', { sector, encounter });",
+  ],
+  'src/pages/paintedShip.ts': [
+    "import { hullSourceJob, hullVariantJob, hullPreparationStep } from './hullPreparationDiagnostics';",
+    'const diagnostic = hullSourceJob(url);',
+    'const diagnostic = hullVariantJob(index, colorId, stage);',
+    "hullPreparationStep('source-create-before', diagnostic);",
+    "hullPreparationStep('source-loaded', diagnostic);",
+    "hullPreparationStep('source-center-before', diagnostic);",
+    "hullPreparationStep('source-center-failed', diagnostic);",
+    "hullPreparationStep('source-center-after', diagnostic);",
+    "hullPreparationStep('source-ready', diagnostic);",
+    "hullPreparationStep('source-work-failed', diagnostic);",
+    "if (canvas) hullPreparationStep('source-surface-release-before', diagnostic);",
+    "if (canvas) hullPreparationStep('source-surface-released', diagnostic);",
+    "hullPreparationStep('source-load-failed', diagnostic);",
+    "hullPreparationStep('source-load-start', diagnostic);",
+    "hullPreparationStep('variant-cancelled', diagnostic);",
+    "if (!asset) hullPreparationStep('variant-unavailable', diagnostic);",
+    "hullPreparationStep('variant-create-before', diagnostic);",
+    "hullPreparationStep('variant-loaded', diagnostic);",
+    "hullPreparationStep('variant-load-failed', diagnostic);",
+    "hullPreparationStep('variant-load-start', diagnostic);",
+    "hullPreparationStep('variant-decode-before', diagnostic);",
+    "hullPreparationStep('variant-decode-after', diagnostic);",
+    "hullPreparationStep('variant-ready', diagnostic);",
   ],
 };
 const compact = text => text.replace(/\s+/g, '');
@@ -57,7 +88,7 @@ function structure(node) {
   // comments and multiline printer flags do not change game behavior.
   return [node.kind, node.flags & (ts.NodeFlags.Let | ts.NodeFlags.Const | ts.NodeFlags.Using | ts.NodeFlags.AwaitUsing),
     node.operator ?? null, node.isTypeOnly ?? null, node.isExportEquals ?? null,
-    children.length ? null : node.text ?? node.getText(), children];
+    children.length ? null : node.kind === ts.SyntaxKind.Block ? '{}' : node.text ?? node.getText(), children];
 }
 export function canonicalScopeSource(source, path, strip = false) {
   const ast = ts.createSourceFile(path, source, ts.ScriptTarget.Latest, true,
@@ -82,10 +113,12 @@ export function assertObservationOnly(overrides = {}) {
   // f2f84ac11f4d86cecbbe9a0338095b96bce769b8, using TypeScript 5.9.3.
   // Portable fingerprints keep the build gate usable in shallow/Git-free builds.
   const baseline = {
-    'src/pages/GamePage.tsx': '4e32ac6081d4b1fd773d70f78e1fc78d32c15c6a45c984136213c19c2a3e8d62',
-    'src/lib/accountSave.ts': '9f2aae9ee49b64336e767e4b51ef01455ffedd18b0ffc4b07e3a22a702c67b64',
+    'src/pages/GamePage.tsx': '1408a79b01f7ab76fd5f2d8552f9649cba73c9c5c5101051420937f2f31aaa2e',
+    'src/lib/accountSave.ts': '47e2d1637635a4e099c9a52548973e7295be5d33491579d4f8226cb632c226da',
     'src/lib/axiosClient.ts': '44db97150678cc301a3873c793d64771a1d0693cdf85520816a62a7a32843e66',
     'src/pages/usePreparedGameHulls.ts': 'ae6ccd40a7d89daa63bdf596c0aa86f5da0a0947b6f6ad149dc8ae49666402f0',
+    // Same prepared-image implementation in c62efe2a and the supplied 73dfffee run.
+    'src/pages/paintedShip.ts': '2cc827e10679a5cc117f839aeeb78a2e84697c834a002199c1716d5c70e2c7a8',
   };
   for (const path of Object.keys(additions)) {
     const after = overrides[path] ?? readFileSync(new URL('../' + path, import.meta.url), 'utf8');

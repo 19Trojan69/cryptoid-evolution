@@ -1,6 +1,7 @@
 import { cleanTimingCapture } from './timingReport.mjs';
 import { technicalContext, reloadKinds } from './technicalReportContext.mjs';
 import type { SessionSignal } from '../lib/sessionDiagnosticEvents';
+import { HULL_DIAGNOSTIC_STEPS } from './hullPreparationDiagnostics.ts';
 
 export const FULL_SESSION_DB = 'cryptoid_owner_full_session_v1';
 export const FULL_SESSION_STATUS_KEY = 'cryptoid_owner_full_status_v1';
@@ -15,7 +16,7 @@ export type FullSessionSummary = { id: string; startedAt: number; lastAt: number
 const numeric = (n: unknown, max = 1e15): n is number => typeof n === 'number' && Number.isFinite(n) && n >= 0 && n <= max;
 const enumKeys: Record<string, readonly string[]> = {
   operation: ['transition-before', 'transition-reset-done', 'first-spawn-before', 'first-spawn-created', 'scene-committed',
-    'hull-plan-start', 'hull-plan-settled', 'start', 'response', 'failure', 'enqueue', 'drain', 'recover', 'archive',
+    'hull-plan-start', 'hull-plan-settled', 'hull-plan-progress', 'start', 'response', 'failure', 'enqueue', 'drain', 'recover', 'archive',
     'manual-selection', 'automatic-reload', 'expired', 'online', 'offline', 'visibility-hidden', 'visibility-visible',
     'beforeunload', 'pagehide', 'pageshow', 'contextlost', 'contextrestored', 'finish', 'persist'],
   signal: [...reloadKinds],
@@ -23,6 +24,7 @@ const enumKeys: Record<string, readonly string[]> = {
   method: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OTHER'],
   outcome: ['http', 'network', 'timeout', 'cancelled', 'success'],
   weaponSource: ['standard', 'paid', 'pickup'],
+  step: HULL_DIAGNOSTIC_STEPS,
 };
 export function cleanFullData(kind: FullRecordKind, input: unknown): Record<string, unknown> | null {
   if (!input || typeof input !== 'object' || Array.isArray(input)) return null;
@@ -36,6 +38,8 @@ export function cleanFullData(kind: FullRecordKind, input: unknown): Record<stri
   for (const [key, allowed] of Object.entries(enumKeys)) if (typeof value[key] === 'string' && allowed.includes(value[key])) result[key] = value[key];
   for (const key of ['request', 'durationMs', 'httpStatus', 'depth', 'requested', 'prepared', 'level', 'weaponLevel',
     'paidWeaponMs', 'pickupWeaponMs', 'readinessFailures']) if (numeric(value[key], 1e9)) result[key] = value[key];
+  for (const [key, min, max] of [['imageJob', 1, 1e9], ['sprite', 0, 19], ['hullStage', 1, 3], ['paintIndex', 0, 28]] as const)
+    if (numeric(value[key], max) && Number.isSafeInteger(value[key]) && value[key] >= min) result[key] = value[key];
   for (const key of ['success', 'persisted', 'online']) if (typeof value[key] === 'boolean') result[key] = value[key];
   return result;
 }

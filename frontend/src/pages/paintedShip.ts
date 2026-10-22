@@ -5,6 +5,7 @@ import { shipVisualCenter } from "./shipVisualCenter";
 import { staticHullAsset } from './staticHullAssets';
 import { ResourceCache } from './resourceCache';
 import { resourceTimingEnabled as isCombatProbeEnabled } from './performanceDiagnostics';
+import { hullSourceJob, hullVariantJob, hullPreparationStep } from './hullPreparationDiagnostics';
 
 // Mounted/prepared hulls stay pinned. Keep only six recently used spare variants
 // after consumers leave, rather than carrying the last 48 variants through play.
@@ -27,8 +28,11 @@ const shipImage = (url: string) => {
   }
   if (!pending) {
     pending = new Promise<HTMLImageElement>((resolve, reject) => {
+      const diagnostic = hullSourceJob(url);
+      hullPreparationStep('source-create-before', diagnostic);
       const image = new Image();
       image.onload = () => {
+        hullPreparationStep('source-loaded', diagnostic);
         image.onload = image.onerror = null;
         const timed = isCombatProbeEnabled();
         const sourceStarted = timed ? performance.now() : 0;
@@ -37,6 +41,7 @@ const shipImage = (url: string) => {
           // The center belongs to the source URL, not its evictable Image.
           // An already known center needs no second readback surface.
           if (!visualCenters.has(url)) {
+            hullPreparationStep('source-center-before', diagnostic);
             canvas = document.createElement("canvas");
             canvas.width = canvas.height = 240;
             const context = canvas.getContext("2d", { willReadFrequently: true });
@@ -45,13 +50,16 @@ const shipImage = (url: string) => {
                 context.drawImage(image, 0, 0, 240, 240);
                 visualCenters.set(url, shipVisualCenter(context.getImageData(0, 0, 240, 240).data, 240, 240));
               }
-            } catch { /* Preserve the optional visual offset fallback for a tainted image. */ }
+            } catch { hullPreparationStep('source-center-failed', diagnostic); /* Preserve the optional visual offset fallback for a tainted image. */ }
+            hullPreparationStep('source-center-after', diagnostic);
           }
+          hullPreparationStep('source-ready', diagnostic);
           resolve(image);
-        } catch (error) { reject(error); }
-        finally { if (canvas) canvas.width = canvas.height = 0; if (timed) { const work = performance.now() - sourceStarted; preparationProbe.sourceWorkTotalMs += work; preparationProbe.sourceWorkMaxMs = Math.max(preparationProbe.sourceWorkMaxMs, work); } }
+        } catch (error) { hullPreparationStep('source-work-failed', diagnostic); reject(error); }
+        finally { if (canvas) hullPreparationStep('source-surface-release-before', diagnostic); if (canvas) canvas.width = canvas.height = 0; if (canvas) hullPreparationStep('source-surface-released', diagnostic); if (timed) { const work = performance.now() - sourceStarted; preparationProbe.sourceWorkTotalMs += work; preparationProbe.sourceWorkMaxMs = Math.max(preparationProbe.sourceWorkMaxMs, work); } }
       };
-      image.onerror = () => { image.onload = image.onerror = null; reject(new Error('Ship image unavailable')); };
+      image.onerror = () => { hullPreparationStep('source-load-failed', diagnostic); image.onload = image.onerror = null; reject(new Error('Ship image unavailable')); };
+      hullPreparationStep('source-load-start', diagnostic);
       image.src = url;
     });
     sourceImages.set(url, pending);
@@ -105,30 +113,38 @@ const renderPaintedSprite = async (index: number, colorId: PlayerColorId, stage:
   const key = `${index}:${stage}:${colorId}`;
   const cached = cache.get(key);
   if (cached) return cached;
+  const diagnostic = hullVariantJob(index, colorId, stage);
   const checkRetained = () => {
     if (cache.retained(key)) return;
     // Remove the cancelled promise before rejecting so a new consumer cannot
     // inherit it during the rejection/finally microtasks.
     pendingPaints.delete(key);
+    hullPreparationStep('variant-cancelled', diagnostic);
     throw new Error('Ship preparation cancelled');
   };
   const asset = staticHullAsset(index, colorId, stage);
+  if (!asset) hullPreparationStep('variant-unavailable', diagnostic);
   if (!asset) throw new Error('Prepared ship asset unavailable');
   const timed = isCombatProbeEnabled();
   const decodingStarted = timed ? performance.now() : 0;
+  hullPreparationStep('variant-create-before', diagnostic);
   const decoded = new Image();
   await new Promise<void>((resolve, reject) => {
-    decoded.onload = () => { decoded.onload = decoded.onerror = null; resolve(); };
-    decoded.onerror = () => { decoded.onload = decoded.onerror = null; reject(new Error('Painted ship image unavailable')); };
+    decoded.onload = () => { hullPreparationStep('variant-loaded', diagnostic); decoded.onload = decoded.onerror = null; resolve(); };
+    decoded.onerror = () => { hullPreparationStep('variant-load-failed', diagnostic); decoded.onload = decoded.onerror = null; reject(new Error('Painted ship image unavailable')); };
+    hullPreparationStep('variant-load-start', diagnostic);
     decoded.src = asset.url;
   });
   checkRetained();
+  hullPreparationStep('variant-decode-before', diagnostic);
   if (typeof decoded.decode === 'function') await decoded.decode();
+  hullPreparationStep('variant-decode-after', diagnostic);
   checkRetained();
   if (timed) preparationProbe.decodeTotalMs += performance.now() - decodingStarted;
   // Count the full decoded pixels as before. Only the painting/encoding/unique
   // Blob URL was removed; browser-owned image caches are not measured here.
   cache.set(key, asset.url, asset.bytes + decoded.naturalWidth * decoded.naturalHeight * 4);
+  hullPreparationStep('variant-ready', diagnostic);
   return asset.url;
 };
 

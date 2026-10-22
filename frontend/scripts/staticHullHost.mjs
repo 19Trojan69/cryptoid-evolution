@@ -18,7 +18,8 @@ export async function staticHullHost({ before = false, holdLoads = false, holdDe
   const source = before ? execFileSync('git', ['show', `${previousHullSource}:frontend/src/pages/paintedShip.ts`], { cwd: root, encoding: 'utf8' })
     : fs.readFileSync(root + 'src/pages/paintedShip.ts', 'utf8');
   const bundle = await build({ absWorkingDir: root, stdin: {
-    contents: source + '\nexport const __qaTouchHull = h => cache.get(`${h.sprite}:${h.stage ?? 1}:${h.color}`);',
+    contents: source + '\nexport const __qaTouchHull = h => cache.get(`${h.sprite}:${h.stage ?? 1}:${h.color}`);'
+      + '\nexport { observeSessionDiagnostics as __qaObserve } from "../lib/sessionDiagnosticEvents.ts";',
     resolveDir: root + 'src/pages', loader: 'ts',
   }, bundle: true, write: false, platform: 'node', format: 'cjs', logLevel: 'silent', plugins: [{ name: 'bounded-image-host', setup(b) {
     b.onResolve({ filter: /^react$/ }, () => ({ path: 'hooks', namespace: 'host' }));

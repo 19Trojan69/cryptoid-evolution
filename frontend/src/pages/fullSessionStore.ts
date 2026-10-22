@@ -89,12 +89,16 @@ export function readFullSessionStatus(host: FullSessionHost) {
     const result: Record<string, unknown> = {};
     if (['starting','recording','closed','limited','storage-error'].includes(value.state)) result.state = value.state;
     if (typeof value.id === 'string' && /^[a-zA-Z0-9_-]{1,100}$/.test(value.id)) result.id = value.id;
-    for (const key of ['lastCommittedSeq','lastObservedSeq','at','queuePeak','serializeMaxMs','commitWaitMaxMs'])
+    for (const key of ['lastCommittedSeq','lastObservedSeq','at','queuePeak','serializeMaxMs','commitWaitMaxMs',
+      'markerWrites','markerWriteMaxMs','markerWriteTotalMs'])
       if (typeof value[key] === 'number' && Number.isFinite(value[key]) && value[key] >= 0) result[key] = value[key];
     if (['duration-limit','record-limit','byte-limit','queue-limit','storage-error'].includes(value.stopReason)) result.stopReason = value.stopReason;
     // The synchronous breadcrumb is an observation, never proof of an IDB commit.
     const observed = cleanFullRecord(value.lastObserved);
     if (observed) result.lastObserved = observed;
+    const graphics = cleanFullRecord(value.lastGraphics);
+    if (graphics?.kind === 'boundary' && graphics.data.operation === 'hull-plan-progress' && graphics.data.step)
+      result.lastGraphics = graphics;
     return result;
   } catch { return null; }
 }
