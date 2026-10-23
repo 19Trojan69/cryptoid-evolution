@@ -160,3 +160,14 @@ kein iPhone-/PiBrowser-Nachweis. Keine neue Anwendungskorrektur oder
 Veröffentlichung folgt allein aus diesen Zeitwerten. Der nächste gezielte
 Prüfpunkt ist die Zuordnung der wiederholten Paint-Arbeit zu den konkreten
 Darstellungsebenen, bei unveränderter Originaldarstellung.
+
+## Renderer layer follow-up, no rendering correction accepted
+
+The bounded comparisons in [renderer-layer-attribution-20261023.md](renderer-layer-attribution-20261023.md)
+narrow the local Paint lead to the filtered milky band. Hiding formation text
+does not remove that cost. Cache experiments move work into software graphics
+and lack complete unchanged-output/sustained-benefit acceptance; none is integrated.
+A separate-static probe interrupts527ms after capture startup and is excluded
+from steady-state timing. No iPhone White Screen cause or whole-game fix follows.
+Only notes and isolated audit tooling are added; runtime4c384 and its prior
+94-test production build remain unchanged, with no deployment.

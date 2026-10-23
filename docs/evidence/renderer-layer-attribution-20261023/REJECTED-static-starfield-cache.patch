@@ -1,0 +1,30 @@
+--- a/frontend/src/pages/Starfield.tsx
++++ b/frontend/src/pages/Starfield.tsx
+@@ -79,9 +79,14 @@
+       })(),
+     };
+   }, [sector]);
+-  return <div className={`starfield starfield-sector-${palette}${paused ? " starfield-paused" : ""}`} aria-hidden="true">
+-    {showNebula && <div className="nebula-field"><span className="nebula-cloud" style={stars.cloud} /></div>}
+-    <div className="milky-band" />
++  return <>
++    <div className="static-starfield-cache" aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none", background: "inherit", willChange: "transform" }}>
++      <div className={`starfield starfield-sector-${palette}${paused ? " starfield-paused" : ""}`}>
++        {showNebula && <div className="nebula-field"><span className="nebula-cloud" style={stars.cloud} /></div>}
++        <div className="milky-band" />
++      </div>
++    </div>
++    <div className={`starfield starfield-sector-${palette}${paused ? " starfield-paused" : ""}`} aria-hidden="true">
+     {!paused && <StarFlare stars={stars.distant} />}
+     <svg className="starfield-stars starfield-distant" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice">
+       {stars.distant.map((star, index) => <circle key={index} cx={star.x} cy={star.y} r={star.radius} fill={star.color} opacity={star.opacity} />)}
+@@ -97,7 +102,8 @@
+       </g>)}
+     </svg>
+     <i className="shooting-star shooting-star-one"><span /></i>
+-  </div>;
++    </div>
++  </>;
+ };
+ 
+ export default memo(Starfield, (previous, next) => previous.sector === next.sector && previous.paused === next.paused && previous.showNebula === next.showNebula);

@@ -2,6 +2,17 @@
 
 ## Diagnostic IDB callback guard, 23 October 2026, prepared, not published
 
+Renderer follow-up: native layer/timing comparisons identify the filtered milky
+band as a substantial local Paint contributor. Hiding formation text does not
+remove that cost. Individual/parent/opaque cache hints have no complete unchanged-
+output and sustained-benefit acceptance and are NOT integrated. Their lower Paint
+shifts work into software graphics; do not claim improved game FPS or an iPhone
+fix. The separate-static probe interrupts527ms after capture startup and is
+excluded from steady-state timing. Some WebKit unchanged/reversion image controls
+are invalid; Chromium controlled captures retain small colour differences.
+See docs/renderer-layer-attribution-20261023.md/.json. Do not repeat rejected
+experiments or a full owner campaign. No new rendering runtime/deployment change.
+
 The owner asks to continue and needs a substantiated stability conclusion before
 expanding the game. Runtime candidate 4c384023a4fae3d84403ade7beae7934e22e39fd
 on codex/diagnostic-idb-callback-guard-20261023 starts at recorded source19de3e6.

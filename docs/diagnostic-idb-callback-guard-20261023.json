@@ -228,5 +228,13 @@
       "Not a campaign acceptance pass and not evidence of resolved iOS memory termination."
     ],
     "runtimeFilesChanged": false
+  },
+  "rendererLayerFollowup": {
+    "report": "docs/renderer-layer-attribution-20261023.json",
+    "localContributor": "filtered milky-band",
+    "acceptedRenderingCorrection": false,
+    "whiteScreenCauseEstablished": false,
+    "runtimeChanged": false,
+    "published": false
   }
 }

@@ -1,0 +1,1467 @@
+{
+  "sourceCommit": "19de3e692f75a1c3e2eddf3438acc937c9dcac19",
+  "runtimeGuard": "4c384023a4fae3d84403ade7beae7934e22e39fd",
+  "localOnly": true,
+  "engine": "Linux WPE-WebKit26.5 software rendering",
+  "viewport": {
+    "width": 430,
+    "height": 825,
+    "dpr": 3
+  },
+  "renderThreads": 2,
+  "originalFontsServedLocally": true,
+  "productionRuntimeChanged": false,
+  "published": false,
+  "physicalDeviceVerified": false,
+  "historicalWhiteScreenFixProven": false,
+  "method": "Native Timeline/ScriptProfiler/CPUProfiler after audio warmup; same-type nested/overlapping intervals merged and clipped from active-start to first pre-handler fault or active-end. Categories overlap and must not be added. Controlled inputs and nondeterministic gameplay mean these are exploratory comparisons, not identical-frame benchmarks.",
+  "cases": [
+    {
+      "tag": "layers-sector57-original",
+      "scenario": "original appearance; warmed control",
+      "traceSha256": "9ca6dbde3188b261320bd1518684f5903d6e26b05bdc35d06d463ffbde792617",
+      "resultSha256": "53fee0c483546550a91973d68aff3b872fb4454a7db2c1b37681513c1707f2a5",
+      "runtimePackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "axios": "1.13.6"
+      },
+      "activeWindowMs": 19096.18,
+      "steadyStateTimingEligible": true,
+      "excludedTimingReason": null,
+      "terminalSignal": null,
+      "timeline": {
+        "Paint": {
+          "events": 374,
+          "intervalUnionMs": 6890.349,
+          "longestClippedEventMs": 820.536
+        },
+        "RecalculateStyles": {
+          "events": 106,
+          "intervalUnionMs": 278.365,
+          "longestClippedEventMs": 25.879
+        },
+        "Layout": {
+          "events": 41,
+          "intervalUnionMs": 47.68,
+          "longestClippedEventMs": 14.02
+        },
+        "FireAnimationFrame": {
+          "events": 70,
+          "intervalUnionMs": 122.042,
+          "longestClippedEventMs": 23.781
+        },
+        "FunctionCall": {
+          "events": 412,
+          "intervalUnionMs": 408.427,
+          "longestClippedEventMs": 32.112
+        }
+      },
+      "scriptEvaluationIntervalUnionMs": 391.394,
+      "cpu": {
+        "samples": 38,
+        "meanUsagePercent": 156.004,
+        "meanLlvmpipeThreadUsagePercent": 88.4,
+        "exclusiveToTimelineCategories": false
+      },
+      "contentProcessLifetimePeakRssMiB": 977.656,
+      "peakIncludesFrozenPixelAudit": false,
+      "layerSnapshots": [
+        {
+          "label": "before-profile",
+          "count": 33,
+          "estimatedBackingBytes": 15440401,
+          "paintCounts": [
+            0
+          ],
+          "namedCacheLayers": []
+        },
+        {
+          "label": "after-profile",
+          "count": 46,
+          "estimatedBackingBytes": 15388607,
+          "paintCounts": [
+            0
+          ],
+          "namedCacheLayers": []
+        }
+      ],
+      "unhandledJavaScriptErrors": 0,
+      "consoleErrors": 0,
+      "canvasContextLosses": 0,
+      "failure": null,
+      "unsupported": [],
+      "overflow": false
+    },
+    {
+      "tag": "layer-milky-sector57",
+      "scenario": "diagnostic exclusion: milky-band visibility:hidden",
+      "traceSha256": "4c52f86f549b423a8e2edaf2059370f65c79031e4369ec074e664a0eed659f77",
+      "resultSha256": "9703e24e9a3b61968045d8eadb4f54dae3e0c2f4a9fd0c1cab3ca59d1dd35ea2",
+      "runtimePackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "axios": "1.13.6"
+      },
+      "activeWindowMs": 18328.187,
+      "steadyStateTimingEligible": true,
+      "excludedTimingReason": null,
+      "terminalSignal": null,
+      "timeline": {
+        "Paint": {
+          "events": 506,
+          "intervalUnionMs": 410.946,
+          "longestClippedEventMs": 29.534
+        },
+        "RecalculateStyles": {
+          "events": 161,
+          "intervalUnionMs": 629.74,
+          "longestClippedEventMs": 98.647
+        },
+        "Layout": {
+          "events": 75,
+          "intervalUnionMs": 214.021,
+          "longestClippedEventMs": 88.033
+        },
+        "FireAnimationFrame": {
+          "events": 108,
+          "intervalUnionMs": 257.487,
+          "longestClippedEventMs": 43.066
+        },
+        "FunctionCall": {
+          "events": 654,
+          "intervalUnionMs": 1384.346,
+          "longestClippedEventMs": 306.576
+        }
+      },
+      "scriptEvaluationIntervalUnionMs": 1336.038,
+      "cpu": {
+        "samples": 36,
+        "meanUsagePercent": 178.242,
+        "meanLlvmpipeThreadUsagePercent": 117.496,
+        "exclusiveToTimelineCategories": false
+      },
+      "contentProcessLifetimePeakRssMiB": 838.809,
+      "peakIncludesFrozenPixelAudit": false,
+      "layerSnapshots": [
+        {
+          "label": "before-profile",
+          "count": 33,
+          "estimatedBackingBytes": 15440401,
+          "paintCounts": [
+            0
+          ],
+          "namedCacheLayers": []
+        },
+        {
+          "label": "after-profile",
+          "count": 55,
+          "estimatedBackingBytes": 15534902,
+          "paintCounts": [
+            0
+          ],
+          "namedCacheLayers": []
+        }
+      ],
+      "unhandledJavaScriptErrors": 0,
+      "consoleErrors": 0,
+      "canvasContextLosses": 0,
+      "failure": null,
+      "unsupported": [],
+      "overflow": false
+    },
+    {
+      "tag": "layer-formation-sector57",
+      "scenario": "diagnostic exclusion: formation-data-stream visibility:hidden",
+      "traceSha256": "214f88b5865f590f5c64620e281eff967c058ec4a1141bf54a4f406bf2f3a76b",
+      "resultSha256": "ca6f748480fddba22fd59a652046607d98dc379f5a1805327fdb5b3d5e448cff",
+      "runtimePackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "axios": "1.13.6"
+      },
+      "activeWindowMs": 18037.605,
+      "steadyStateTimingEligible": true,
+      "excludedTimingReason": null,
+      "terminalSignal": null,
+      "timeline": {
+        "Paint": {
+          "events": 355,
+          "intervalUnionMs": 7688.687,
+          "longestClippedEventMs": 737.329
+        },
+        "RecalculateStyles": {
+          "events": 151,
+          "intervalUnionMs": 333.704,
+          "longestClippedEventMs": 36.788
+        },
+        "Layout": {
+          "events": 55,
+          "intervalUnionMs": 112.984,
+          "longestClippedEventMs": 16.812
+        },
+        "FireAnimationFrame": {
+          "events": 62,
+          "intervalUnionMs": 158.771,
+          "longestClippedEventMs": 30.753
+        },
+        "FunctionCall": {
+          "events": 661,
+          "intervalUnionMs": 663.767,
+          "longestClippedEventMs": 30.747
+        }
+      },
+      "scriptEvaluationIntervalUnionMs": 639.989,
+      "cpu": {
+        "samples": 35,
+        "meanUsagePercent": 148.975,
+        "meanLlvmpipeThreadUsagePercent": 69.793,
+        "exclusiveToTimelineCategories": false
+      },
+      "contentProcessLifetimePeakRssMiB": 951.348,
+      "peakIncludesFrozenPixelAudit": false,
+      "layerSnapshots": [
+        {
+          "label": "before-profile",
+          "count": 44,
+          "estimatedBackingBytes": 12719472,
+          "paintCounts": [
+            0
+          ],
+          "namedCacheLayers": []
+        },
+        {
+          "label": "after-profile",
+          "count": 33,
+          "estimatedBackingBytes": 12935830,
+          "paintCounts": [
+            0
+          ],
+          "namedCacheLayers": []
+        }
+      ],
+      "unhandledJavaScriptErrors": 0,
+      "consoleErrors": 0,
+      "canvasContextLosses": 0,
+      "failure": null,
+      "unsupported": [],
+      "overflow": false
+    },
+    {
+      "tag": "layer-milky-cache-sector57",
+      "scenario": "unaccepted milky-band will-change:transform",
+      "traceSha256": "ce1726902f247a19159bc2e11347505833f7dd2fbb04915fbd23236112292ff1",
+      "resultSha256": "7cad32acdb8e7b82e084bd767b10de6d35817ab0216137314d750710d76e6d5e",
+      "runtimePackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "axios": "1.13.6"
+      },
+      "activeWindowMs": 18171.805,
+      "steadyStateTimingEligible": true,
+      "excludedTimingReason": null,
+      "terminalSignal": null,
+      "timeline": {
+        "Paint": {
+          "events": 409,
+          "intervalUnionMs": 330.494,
+          "longestClippedEventMs": 28.321
+        },
+        "RecalculateStyles": {
+          "events": 139,
+          "intervalUnionMs": 404.564,
+          "longestClippedEventMs": 50.288
+        },
+        "Layout": {
+          "events": 63,
+          "intervalUnionMs": 109.874,
+          "longestClippedEventMs": 16.831
+        },
+        "FireAnimationFrame": {
+          "events": 70,
+          "intervalUnionMs": 129.71,
+          "longestClippedEventMs": 20.543
+        },
+        "FunctionCall": {
+          "events": 624,
+          "intervalUnionMs": 688.55,
+          "longestClippedEventMs": 42.641
+        }
+      },
+      "scriptEvaluationIntervalUnionMs": 659.408,
+      "cpu": {
+        "samples": 36,
+        "meanUsagePercent": 175.94,
+        "meanLlvmpipeThreadUsagePercent": 133.824,
+        "exclusiveToTimelineCategories": false
+      },
+      "contentProcessLifetimePeakRssMiB": 953.867,
+      "peakIncludesFrozenPixelAudit": false,
+      "layerSnapshots": [
+        {
+          "label": "before-profile",
+          "count": 33,
+          "estimatedBackingBytes": 20317514,
+          "paintCounts": [
+            0
+          ],
+          "namedCacheLayers": [
+            {
+              "layerId": "4.9",
+              "bounds": {
+                "x": -542,
+                "y": -474,
+                "width": 1514,
+                "height": 1773
+              },
+              "compositedBounds": {
+                "x": 0,
+                "y": 0,
+                "width": 821,
+                "height": 1575
+              },
+              "memory": 5167928,
+              "reasons": {
+                "willChange": true
+              },
+              "attributes": [
+                "class",
+                "milky-band"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "after-profile",
+          "count": 37,
+          "estimatedBackingBytes": 20577448,
+          "paintCounts": [
+            0
+          ],
+          "namedCacheLayers": [
+            {
+              "layerId": "4.9",
+              "bounds": {
+                "x": -542,
+                "y": -474,
+                "width": 1514,
+                "height": 1773
+              },
+              "compositedBounds": {
+                "x": 0,
+                "y": 0,
+                "width": 821,
+                "height": 1575
+              },
+              "memory": 5167928,
+              "reasons": {
+                "willChange": true
+              },
+              "attributes": [
+                "class",
+                "milky-band"
+              ]
+            }
+          ]
+        }
+      ],
+      "unhandledJavaScriptErrors": 0,
+      "consoleErrors": 0,
+      "canvasContextLosses": 0,
+      "failure": null,
+      "unsupported": [],
+      "overflow": false
+    },
+    {
+      "tag": "layer-starfield-cache-sector57",
+      "scenario": "unaccepted starfield will-change:transform",
+      "traceSha256": "acd3ee4a79ed59ce75f478815f2ec98abac999fe2eb8f74eb6e5350bb43d1040",
+      "resultSha256": "4dffbfdcaa8d4e2fdefaef75ed1865b690ba8b7fb6eb23e14240606b686cc3cb",
+      "runtimePackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "axios": "1.13.6"
+      },
+      "activeWindowMs": 18229.85,
+      "steadyStateTimingEligible": true,
+      "excludedTimingReason": null,
+      "terminalSignal": null,
+      "timeline": {
+        "Paint": {
+          "events": 466,
+          "intervalUnionMs": 3497.874,
+          "longestClippedEventMs": 750.206
+        },
+        "RecalculateStyles": {
+          "events": 168,
+          "intervalUnionMs": 400.04,
+          "longestClippedEventMs": 45.496
+        },
+        "Layout": {
+          "events": 68,
+          "intervalUnionMs": 133.136,
+          "longestClippedEventMs": 17.655
+        },
+        "FireAnimationFrame": {
+          "events": 82,
+          "intervalUnionMs": 167.226,
+          "longestClippedEventMs": 15.027
+        },
+        "FunctionCall": {
+          "events": 709,
+          "intervalUnionMs": 715.232,
+          "longestClippedEventMs": 36.857
+        }
+      },
+      "scriptEvaluationIntervalUnionMs": 685.162,
+      "cpu": {
+        "samples": 36,
+        "meanUsagePercent": 170.237,
+        "meanLlvmpipeThreadUsagePercent": 115.536,
+        "exclusiveToTimelineCategories": false
+      },
+      "contentProcessLifetimePeakRssMiB": 973.746,
+      "peakIncludesFrozenPixelAudit": false,
+      "layerSnapshots": [
+        {
+          "label": "before-profile",
+          "count": 40,
+          "estimatedBackingBytes": 16666417,
+          "paintCounts": [
+            0
+          ],
+          "namedCacheLayers": [
+            {
+              "layerId": "4.8",
+              "bounds": {
+                "x": -13,
+                "y": -25,
+                "width": 456,
+                "height": 875
+              },
+              "compositedBounds": {
+                "x": 12,
+                "y": 24,
+                "width": 431,
+                "height": 826
+              },
+              "memory": 1419000,
+              "reasons": {
+                "willChange": true
+              },
+              "attributes": [
+                "class",
+                "starfield starfield-sector-3",
+                "aria-hidden",
+                "true"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "after-profile",
+          "count": 49,
+          "estimatedBackingBytes": 16810523,
+          "paintCounts": [
+            0
+          ],
+          "namedCacheLayers": [
+            {
+              "layerId": "4.8",
+              "bounds": {
+                "x": -13,
+                "y": -25,
+                "width": 456,
+                "height": 875
+              },
+              "compositedBounds": {
+                "x": 12,
+                "y": 24,
+                "width": 431,
+                "height": 826
+              },
+              "memory": 1419000,
+              "reasons": {
+                "willChange": true
+              },
+              "attributes": [
+                "class",
+                "starfield starfield-sector-3",
+                "aria-hidden",
+                "true"
+              ]
+            }
+          ]
+        }
+      ],
+      "unhandledJavaScriptErrors": 0,
+      "consoleErrors": 0,
+      "canvasContextLosses": 0,
+      "failure": null,
+      "unsupported": [],
+      "overflow": false
+    },
+    {
+      "tag": "layer-opaque-background-sector57",
+      "scenario": "unaccepted opaque wrapper around both backgrounds",
+      "traceSha256": "43ae63120ec07fa38a2817bc71126fa5cdc8ed0bd44992f4124ae505a2aa0ab3",
+      "resultSha256": "605a4601ea45c1663a23318f6b126338679415e5fc828b9f30acfe90fa9a69c3",
+      "runtimePackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "axios": "1.13.6"
+      },
+      "activeWindowMs": 18239.378,
+      "steadyStateTimingEligible": true,
+      "excludedTimingReason": null,
+      "terminalSignal": null,
+      "timeline": {
+        "Paint": {
+          "events": 296,
+          "intervalUnionMs": 4141.495,
+          "longestClippedEventMs": 626.873
+        },
+        "RecalculateStyles": {
+          "events": 74,
+          "intervalUnionMs": 263.253,
+          "longestClippedEventMs": 55.619
+        },
+        "Layout": {
+          "events": 32,
+          "intervalUnionMs": 51.427,
+          "longestClippedEventMs": 14.938
+        },
+        "FireAnimationFrame": {
+          "events": 60,
+          "intervalUnionMs": 200.185,
+          "longestClippedEventMs": 46.701
+        },
+        "FunctionCall": {
+          "events": 358,
+          "intervalUnionMs": 602.18,
+          "longestClippedEventMs": 61.683
+        }
+      },
+      "scriptEvaluationIntervalUnionMs": 581.689,
+      "cpu": {
+        "samples": 36,
+        "meanUsagePercent": 165.228,
+        "meanLlvmpipeThreadUsagePercent": 104.214,
+        "exclusiveToTimelineCategories": false
+      },
+      "contentProcessLifetimePeakRssMiB": 979.734,
+      "peakIncludesFrozenPixelAudit": true,
+      "layerSnapshots": [
+        {
+          "label": "before-profile",
+          "count": 28,
+          "estimatedBackingBytes": 16703717,
+          "paintCounts": [
+            0
+          ],
+          "namedCacheLayers": [
+            {
+              "layerId": "4.8",
+              "bounds": {
+                "x": 0,
+                "y": 0,
+                "width": 430,
+                "height": 825
+              },
+              "compositedBounds": {
+                "x": 0,
+                "y": 0,
+                "width": 430,
+                "height": 825
+              },
+              "memory": 1419000,
+              "reasons": {
+                "willChange": true
+              },
+              "attributes": [
+                "class",
+                "game-background-cache",
+                "aria-hidden",
+                "true",
+                "style",
+                "position: absolute; inset: 0px; z-index: 0; pointer-events: none; background: inherit; will-change: transform;"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "after-profile",
+          "count": 54,
+          "estimatedBackingBytes": 16784112,
+          "paintCounts": [
+            0
+          ],
+          "namedCacheLayers": [
+            {
+              "layerId": "4.8",
+              "bounds": {
+                "x": 0,
+                "y": 0,
+                "width": 430,
+                "height": 825
+              },
+              "compositedBounds": {
+                "x": 0,
+                "y": 0,
+                "width": 430,
+                "height": 825
+              },
+              "memory": 1419000,
+              "reasons": {
+                "willChange": true
+              },
+              "attributes": [
+                "class",
+                "game-background-cache",
+                "aria-hidden",
+                "true",
+                "style",
+                "position: absolute; inset: 0px; z-index: 0; pointer-events: none; background: inherit; will-change: transform;"
+              ]
+            }
+          ]
+        }
+      ],
+      "unhandledJavaScriptErrors": 0,
+      "consoleErrors": 0,
+      "canvasContextLosses": 0,
+      "failure": null,
+      "unsupported": [],
+      "overflow": false
+    },
+    {
+      "tag": "layer-static-background-sector57",
+      "scenario": "unaccepted separate opaque static-starfield cache",
+      "traceSha256": "d7b2096bab5758204c795fdc862b50e07623c9ba695b3dbe9f3b22709484a17e",
+      "resultSha256": "82da24a5cf0417352c47c63dba4196204fb2e44d3a84295c03a75dec8cf6117e",
+      "runtimePackages": {
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "react-router-dom": "7.13.2",
+        "axios": "1.13.6"
+      },
+      "activeWindowMs": 527.3,
+      "steadyStateTimingEligible": false,
+      "excludedTimingReason": "Interrupted near capture startup; no useful sustained active window",
+      "terminalSignal": "loop-stall",
+      "timeline": {
+        "Paint": {
+          "events": 0,
+          "intervalUnionMs": 0,
+          "longestClippedEventMs": 0
+        },
+        "RecalculateStyles": {
+          "events": 0,
+          "intervalUnionMs": 0,
+          "longestClippedEventMs": 0
+        },
+        "Layout": {
+          "events": 0,
+          "intervalUnionMs": 0,
+          "longestClippedEventMs": 0
+        },
+        "FireAnimationFrame": {
+          "events": 2,
+          "intervalUnionMs": 0.284,
+          "longestClippedEventMs": 0.241
+        },
+        "FunctionCall": {
+          "events": 8,
+          "intervalUnionMs": 2.272,
+          "longestClippedEventMs": 1.347
+        }
+      },
+      "scriptEvaluationIntervalUnionMs": 2.003,
+      "cpu": {
+        "samples": 1,
+        "meanUsagePercent": 145.283,
+        "meanLlvmpipeThreadUsagePercent": 122.642,
+        "exclusiveToTimelineCategories": false
+      },
+      "contentProcessLifetimePeakRssMiB": 902.43,
+      "peakIncludesFrozenPixelAudit": false,
+      "layerSnapshots": [
+        {
+          "label": "before-profile",
+          "count": 32,
+          "estimatedBackingBytes": 16568634,
+          "paintCounts": [
+            0
+          ],
+          "namedCacheLayers": [
+            {
+              "layerId": "4.8",
+              "bounds": {
+                "x": 0,
+                "y": 0,
+                "width": 430,
+                "height": 825
+              },
+              "compositedBounds": {
+                "x": 0,
+                "y": 0,
+                "width": 430,
+                "height": 825
+              },
+              "memory": 1419000,
+              "reasons": {
+                "willChange": true
+              },
+              "attributes": [
+                "class",
+                "static-starfield-cache",
+                "aria-hidden",
+                "true",
+                "style",
+                "position: absolute; inset: 0px; z-index: 0; pointer-events: none; background: inherit; will-change: transform;"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "after-profile",
+          "count": 27,
+          "estimatedBackingBytes": 15156736,
+          "paintCounts": [
+            0
+          ],
+          "namedCacheLayers": [
+            {
+              "layerId": "4.8",
+              "bounds": {
+                "x": 0,
+                "y": 0,
+                "width": 430,
+                "height": 825
+              },
+              "compositedBounds": {
+                "x": 0,
+                "y": 0,
+                "width": 430,
+                "height": 825
+              },
+              "memory": 1419000,
+              "reasons": {
+                "willChange": true
+              },
+              "attributes": [
+                "class",
+                "static-starfield-cache",
+                "aria-hidden",
+                "true",
+                "style",
+                "position: absolute; inset: 0px; z-index: 0; pointer-events: none; background: inherit; will-change: transform;"
+              ]
+            }
+          ]
+        }
+      ],
+      "unhandledJavaScriptErrors": 0,
+      "consoleErrors": 0,
+      "canvasContextLosses": 0,
+      "failure": "Error: Full scene interrupted",
+      "unsupported": [],
+      "overflow": false
+    }
+  ],
+  "pixelComparisons": [
+    {
+      "tag": "layer-cache-frozen-pixels",
+      "resultSha256": "85d94fd34dfbbba7d2151dd66cc5342bc2998e21d91eb96585fea87a95627d34",
+      "engines": [
+        {
+          "engine": "webkit",
+          "dpr": 3,
+          "comparison": {
+            "synthetic": true,
+            "liveGameplay": false,
+            "layer": "milky-band",
+            "candidate": "will-change:transform",
+            "pairs": [
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 1,
+                "width": 1290,
+                "height": 2475,
+                "differentPixels": 46,
+                "maxChannelDelta": 1,
+                "absoluteChannelDelta": 49,
+                "exact": false
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "width": 1290,
+                "height": 2475,
+                "differentPixels": 70,
+                "maxChannelDelta": 1,
+                "absoluteChannelDelta": 76,
+                "exact": false
+              },
+              {
+                "viewport": {
+                  "width": 1024,
+                  "height": 768
+                },
+                "palette": 1,
+                "width": 3072,
+                "height": 2304,
+                "differentPixels": 0,
+                "maxChannelDelta": 0,
+                "absoluteChannelDelta": 0,
+                "exact": true
+              },
+              {
+                "viewport": {
+                  "width": 1024,
+                  "height": 768
+                },
+                "palette": 2,
+                "width": 3072,
+                "height": 2304,
+                "differentPixels": 0,
+                "maxChannelDelta": 0,
+                "absoluteChannelDelta": 0,
+                "exact": true
+              }
+            ]
+          },
+          "eligible": false,
+          "exclusion": "No unchanged-image controls; exploratory only"
+        },
+        {
+          "engine": "chromium",
+          "dpr": 2,
+          "comparison": {
+            "synthetic": true,
+            "liveGameplay": false,
+            "layer": "milky-band",
+            "candidate": "will-change:transform",
+            "pairs": [
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 1,
+                "width": 860,
+                "height": 1650,
+                "differentPixels": 748925,
+                "maxChannelDelta": 3,
+                "absoluteChannelDelta": 2500920,
+                "exact": false
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "width": 860,
+                "height": 1650,
+                "differentPixels": 747874,
+                "maxChannelDelta": 3,
+                "absoluteChannelDelta": 2449458,
+                "exact": false
+              },
+              {
+                "viewport": {
+                  "width": 1024,
+                  "height": 768
+                },
+                "palette": 1,
+                "width": 2048,
+                "height": 1536,
+                "differentPixels": 1699785,
+                "maxChannelDelta": 3,
+                "absoluteChannelDelta": 5567595,
+                "exact": false
+              },
+              {
+                "viewport": {
+                  "width": 1024,
+                  "height": 768
+                },
+                "palette": 2,
+                "width": 2048,
+                "height": 1536,
+                "differentPixels": 1710325,
+                "maxChannelDelta": 3,
+                "absoluteChannelDelta": 5454487,
+                "exact": false
+              }
+            ]
+          },
+          "eligible": false,
+          "exclusion": "No unchanged-image controls; exploratory only"
+        }
+      ]
+    },
+    {
+      "tag": "layer-cache-pixel-controls",
+      "resultSha256": "4d7baafe7903f549db9045be6e83640e94e798a17e28f00ef99b30db8498a53b",
+      "engines": [
+        {
+          "engine": "webkit",
+          "dpr": 3,
+          "comparison": {
+            "synthetic": true,
+            "liveGameplay": false,
+            "layer": "milky-band",
+            "candidate": "will-change:transform",
+            "pairs": [
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "unchanged-control",
+                "width": 1290,
+                "height": 2475,
+                "differentPixels": 0,
+                "maxChannelDelta": 0,
+                "absoluteChannelDelta": 0,
+                "exact": true
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "transform",
+                "width": 1290,
+                "height": 2475,
+                "differentPixels": 1421,
+                "maxChannelDelta": 1,
+                "absoluteChannelDelta": 1445,
+                "exact": false
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "reverted-transform",
+                "width": 1290,
+                "height": 2475,
+                "differentPixels": 1352,
+                "maxChannelDelta": 1,
+                "absoluteChannelDelta": 1371,
+                "exact": false
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "opacity",
+                "width": 1290,
+                "height": 2475,
+                "differentPixels": 1421,
+                "maxChannelDelta": 1,
+                "absoluteChannelDelta": 1445,
+                "exact": false
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "reverted-opacity",
+                "width": 1290,
+                "height": 2475,
+                "differentPixels": 0,
+                "maxChannelDelta": 0,
+                "absoluteChannelDelta": 0,
+                "exact": true
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "filter",
+                "width": 1290,
+                "height": 2475,
+                "differentPixels": 69,
+                "maxChannelDelta": 1,
+                "absoluteChannelDelta": 74,
+                "exact": false
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "reverted-filter",
+                "width": 1290,
+                "height": 2475,
+                "differentPixels": 0,
+                "maxChannelDelta": 0,
+                "absoluteChannelDelta": 0,
+                "exact": true
+              }
+            ]
+          },
+          "eligible": false,
+          "exclusion": "Reversion did not restore the reference exactly; no complete unchanged-output proof"
+        },
+        {
+          "engine": "chromium",
+          "dpr": 2,
+          "comparison": {
+            "synthetic": true,
+            "liveGameplay": false,
+            "layer": "milky-band",
+            "candidate": "will-change:transform",
+            "pairs": [
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "unchanged-control",
+                "width": 860,
+                "height": 1650,
+                "differentPixels": 0,
+                "maxChannelDelta": 0,
+                "absoluteChannelDelta": 0,
+                "exact": true
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "transform",
+                "width": 860,
+                "height": 1650,
+                "differentPixels": 747894,
+                "maxChannelDelta": 3,
+                "absoluteChannelDelta": 2449332,
+                "exact": false
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "reverted-transform",
+                "width": 860,
+                "height": 1650,
+                "differentPixels": 0,
+                "maxChannelDelta": 0,
+                "absoluteChannelDelta": 0,
+                "exact": true
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "opacity",
+                "width": 860,
+                "height": 1650,
+                "differentPixels": 747887,
+                "maxChannelDelta": 3,
+                "absoluteChannelDelta": 2449276,
+                "exact": false
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "reverted-opacity",
+                "width": 860,
+                "height": 1650,
+                "differentPixels": 0,
+                "maxChannelDelta": 0,
+                "absoluteChannelDelta": 0,
+                "exact": true
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "filter",
+                "width": 860,
+                "height": 1650,
+                "differentPixels": 747894,
+                "maxChannelDelta": 3,
+                "absoluteChannelDelta": 2449332,
+                "exact": false
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "reverted-filter",
+                "width": 860,
+                "height": 1650,
+                "differentPixels": 0,
+                "maxChannelDelta": 0,
+                "absoluteChannelDelta": 0,
+                "exact": true
+              }
+            ]
+          },
+          "eligible": true,
+          "exclusion": null
+        }
+      ]
+    },
+    {
+      "tag": "layer-starfield-pixel-controls",
+      "resultSha256": "9dca8c8554d22dd993bd3cfaac7e06c20a5aeb64d159c43de98d8d277ac7d85d",
+      "engines": [
+        {
+          "engine": "webkit",
+          "dpr": 3,
+          "comparison": {
+            "synthetic": true,
+            "liveGameplay": false,
+            "layer": ".starfield",
+            "candidate": "will-change hints",
+            "pairs": [
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "unchanged-control",
+                "width": 1290,
+                "height": 2475,
+                "differentPixels": 280559,
+                "maxChannelDelta": 244,
+                "absoluteChannelDelta": 93386250,
+                "exact": false
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "transform",
+                "width": 1290,
+                "height": 2475,
+                "differentPixels": 280559,
+                "maxChannelDelta": 244,
+                "absoluteChannelDelta": 93386250,
+                "exact": false
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "reverted-transform",
+                "width": 1290,
+                "height": 2475,
+                "differentPixels": 280559,
+                "maxChannelDelta": 244,
+                "absoluteChannelDelta": 93386250,
+                "exact": false
+              }
+            ]
+          },
+          "eligible": false,
+          "exclusion": "Unchanged-control images differed; do not attribute this difference to the candidate"
+        },
+        {
+          "engine": "chromium",
+          "dpr": 2,
+          "comparison": {
+            "synthetic": true,
+            "liveGameplay": false,
+            "layer": ".starfield",
+            "candidate": "will-change hints",
+            "pairs": [
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "unchanged-control",
+                "width": 860,
+                "height": 1650,
+                "differentPixels": 0,
+                "maxChannelDelta": 0,
+                "absoluteChannelDelta": 0,
+                "exact": true
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "transform",
+                "width": 860,
+                "height": 1650,
+                "differentPixels": 635132,
+                "maxChannelDelta": 2,
+                "absoluteChannelDelta": 1112657,
+                "exact": false
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "reverted-transform",
+                "width": 860,
+                "height": 1650,
+                "differentPixels": 0,
+                "maxChannelDelta": 0,
+                "absoluteChannelDelta": 0,
+                "exact": true
+              }
+            ]
+          },
+          "eligible": true,
+          "exclusion": null
+        }
+      ]
+    },
+    {
+      "tag": "layer-opaque-background-sector57",
+      "resultSha256": "605a4601ea45c1663a23318f6b126338679415e5fc828b9f30acfe90fa9a69c3",
+      "engines": [
+        {
+          "engine": "webkit",
+          "dpr": 3,
+          "comparison": {
+            "synthetic": true,
+            "liveGameplay": false,
+            "layer": ".game-background-cache",
+            "candidate": "will-change hints",
+            "pairs": [
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "unchanged-control",
+                "width": 1290,
+                "height": 2475,
+                "differentPixels": 0,
+                "maxChannelDelta": 0,
+                "absoluteChannelDelta": 0,
+                "exact": true
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "transform",
+                "width": 1290,
+                "height": 2475,
+                "differentPixels": 0,
+                "maxChannelDelta": 0,
+                "absoluteChannelDelta": 0,
+                "exact": true
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "reverted-transform",
+                "width": 1290,
+                "height": 2475,
+                "differentPixels": 1508,
+                "maxChannelDelta": 1,
+                "absoluteChannelDelta": 1532,
+                "exact": false
+              }
+            ]
+          },
+          "eligible": false,
+          "exclusion": "Reversion did not restore the reference exactly; no complete unchanged-output proof"
+        },
+        {
+          "engine": "chromium",
+          "dpr": 2,
+          "comparison": {
+            "synthetic": true,
+            "liveGameplay": false,
+            "layer": ".game-background-cache",
+            "candidate": "will-change hints",
+            "pairs": [
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "unchanged-control",
+                "width": 860,
+                "height": 1650,
+                "differentPixels": 0,
+                "maxChannelDelta": 0,
+                "absoluteChannelDelta": 0,
+                "exact": true
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "transform",
+                "width": 860,
+                "height": 1650,
+                "differentPixels": 256187,
+                "maxChannelDelta": 3,
+                "absoluteChannelDelta": 292159,
+                "exact": false
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "reverted-transform",
+                "width": 860,
+                "height": 1650,
+                "differentPixels": 0,
+                "maxChannelDelta": 0,
+                "absoluteChannelDelta": 0,
+                "exact": true
+              }
+            ]
+          },
+          "eligible": true,
+          "exclusion": null
+        }
+      ]
+    },
+    {
+      "tag": "layer-static-background-sector57",
+      "resultSha256": "82da24a5cf0417352c47c63dba4196204fb2e44d3a84295c03a75dec8cf6117e",
+      "engines": [
+        {
+          "engine": "webkit",
+          "dpr": 3,
+          "comparison": null,
+          "eligible": false,
+          "exclusion": "Did not reach pixel audit after technical interruption"
+        },
+        {
+          "engine": "chromium",
+          "dpr": 2,
+          "comparison": {
+            "synthetic": true,
+            "liveGameplay": false,
+            "layer": ".static-starfield-cache",
+            "candidate": "will-change hints",
+            "pairs": [
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "unchanged-control",
+                "width": 860,
+                "height": 1650,
+                "differentPixels": 0,
+                "maxChannelDelta": 0,
+                "absoluteChannelDelta": 0,
+                "exact": true
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "transform",
+                "width": 860,
+                "height": 1650,
+                "differentPixels": 253608,
+                "maxChannelDelta": 3,
+                "absoluteChannelDelta": 289182,
+                "exact": false
+              },
+              {
+                "viewport": {
+                  "width": 430,
+                  "height": 825
+                },
+                "palette": 2,
+                "hint": "reverted-transform",
+                "width": 860,
+                "height": 1650,
+                "differentPixels": 0,
+                "maxChannelDelta": 0,
+                "absoluteChannelDelta": 0,
+                "exact": true
+              }
+            ]
+          },
+          "eligible": true,
+          "exclusion": null
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Software driver and profiler affect timing; no iOS/PiBrowser or mobile-memory attribution.",
+    "LayerTree paintCount remained zero in every snapshot and cannot attribute individual repaints.",
+    "LayerTree memory is a CSS-sized backing estimate, not resident process memory or a portable DPR-scaled total.",
+    "Native RAF dispatch counts are callbacks, not presented-frame counts/FPS.",
+    "Short smoke completion is not campaign acceptance.",
+    "Synthetic frozen DOM images are compared within each engine only; Canvas snapshots replace the corresponding Canvas nodes. Native animations are held at1000ms. Invalid unchanged controls are explicitly excluded."
+  ],
+  "conclusion": {
+    "localContributor": "The oversized filtered milky-band is a substantial contributor to native Paint in this software-rendered fixture; hiding the formation-data stream does not remove that Paint cost.",
+    "acceptedRenderingCorrection": false,
+    "reason": "Cache hints shift work to software graphics, do not establish better presented-frame rate or sustained stability, and fail complete unchanged-output acceptance. The separate-static probe reaches loop-stall527ms after recording starts; it is excluded as a useful steady-state timing comparison and is not proof that the candidate caused that pause.",
+    "nextBoundary": "Do not integrate or deploy these rendering experiments, reduce artwork, disable the stall guard, or repeat a full owner campaign to validate these local counters. The independently tested recorder callback guard remains the only runtime correction on the candidate branch."
+  }
+}
