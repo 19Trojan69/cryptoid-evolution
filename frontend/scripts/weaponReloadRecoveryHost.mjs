@@ -64,13 +64,13 @@ export function selectionHost() {
   };
 }
 
-export function weaponMenu(props) {
+export function weaponMenu(props, { ready = true } = {}) {
   const source = sourceOf('src/pages/MissionWeaponShop.tsx');
   const code = transformSync(source.replace(/^import .*;\r?\n/gm, '')
     .replace('export default function', 'function'), { loader: 'tsx', jsxFactory: 'element', jsxFragment: 'fragment' }).code;
   let hook = 0;
   const env = {
-    useState(initial) { const index = hook++; return [index === 2 ? true : typeof initial === 'function' ? initial() : initial, () => {}]; },
+    useState(initial) { const index = hook++; return [index === 2 ? ready : typeof initial === 'function' ? initial() : initial, () => {}]; },
     useRef: value => ({ current: value }), useCallback: fn => fn, useEffect() {},
     useLocale: () => ({ t: value => value, locale: 'en' }),
     selectedShip: () => ({ skin: { sprite: 0 }, color: { id: 'grey' } }),

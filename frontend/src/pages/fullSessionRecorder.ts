@@ -1,7 +1,7 @@
 import { observeSessionDiagnostics } from '../lib/sessionDiagnosticEvents.ts';
 import { cleanFullData, FULL_SESSION_LIMITS as limits, FULL_SESSION_STATUS_KEY,
   type FullRecord, type FullRecordKind, type FullSessionSummary } from './fullSessionFormat.ts';
-import { appendFullSessionChunk, trackFullSessionWrite, type FullSessionHost } from './fullSessionStore.ts';
+import { appendFullSessionChunk, trackFullSessionWrite, fullSessionStorageFailureCode, type FullSessionHost } from './fullSessionStore.ts';
 
 type Host = FullSessionHost & { navigator?: { userAgent?: string; maxTouchPoints?: number };
   innerWidth?: number; innerHeight?: number; devicePixelRatio?: number };
@@ -34,19 +34,21 @@ export function createFullSessionRecorder(verifiedOwner: boolean, getHost: () =>
   let observed: FullRecord | undefined;
   let lastGraphics: FullRecord | undefined;
   let markerWrites = 0, markerWriteMaxMs = 0, markerWriteTotalMs = 0;
+  let storageFailureCode: ReturnType<typeof fullSessionStorageFailureCode> | undefined;
   let observedKey = '', observedAt = -Infinity;
   const marker = () => {
     const markerStartedAt = now();
     try { host.localStorage?.setItem(FULL_SESSION_STATUS_KEY, JSON.stringify({ id,
       state: failed ? 'storage-error' : !started ? 'starting' : summary.state,
       at: wall(), lastCommittedSeq: summary.lastSeq, lastObservedSeq: observed?.seq ?? 0,
-      lastObserved: observed, lastGraphics, stopReason: summary.stopReason, queuePeak, serializeMaxMs, commitWaitMaxMs,
+      lastObserved: observed, lastGraphics, stopReason: summary.stopReason, storageFailureCode, queuePeak, serializeMaxMs, commitWaitMaxMs,
       markerWrites, markerWriteMaxMs, markerWriteTotalMs })); }
     catch { /* IndexedDB may still work; never fail gameplay because a marker is denied. */ }
     finally { const elapsed = now() - markerStartedAt; markerWrites++; markerWriteTotalMs += elapsed;
       markerWriteMaxMs = Math.max(markerWriteMaxMs, elapsed); }
   };
-  const storageFailure = () => {
+  const storageFailure = (error: unknown) => {
+    storageFailureCode = fullSessionStorageFailureCode(error);
     failed = stopped = true; summary.stopReason = 'storage-error'; release();
     queue.length = 0; queueBytes = 0; marker();
   };
@@ -68,7 +70,7 @@ export function createFullSessionRecorder(verifiedOwner: boolean, getHost: () =>
         marker();
         if (queue.length && (stopped || wanted || queue.length >= limits.chunkRecords)) wanted = true;
       }
-    } catch { storageFailure(); }
+    } catch (error) { storageFailure(error); }
     finally { writing = false; }
   };
   const flush = () => {

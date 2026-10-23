@@ -1,12 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { IDBFactory, IDBObjectStore } from 'fake-indexeddb';
+import { IDBFactory, IDBObjectStore, forceCloseDatabase } from 'fake-indexeddb';
 import axios from 'axios';
 import { readFileSync } from 'node:fs';
 import { assertObservationOnly } from '../../scripts/fullSessionScope.mjs';
 import { createFullSessionRecorder } from './fullSessionRecorder.ts';
 import { appendFullSessionChunk, exportFullSession, readFullSessionSummaries, settleFullSessionWrites } from './fullSessionStore.ts';
-import { cleanFullData, cleanFullRecord, FULL_SESSION_LIMITS, FULL_SESSION_STATUS_KEY } from './fullSessionFormat.ts';
+import { cleanFullData, cleanFullRecord, FULL_SESSION_DB, FULL_SESSION_LIMITS, FULL_SESSION_STATUS_KEY } from './fullSessionFormat.ts';
 import { readOwnerStabilityReport, exportOwnerFullSession } from './stabilityReport.mjs';
 import { createOwnerFlightRecorder } from './ownerFlightRecorder.ts';
 import { observeSessionDiagnostics, sessionDiagnostic, sessionDiagnosticsActive } from '../lib/sessionDiagnosticEvents.ts';
@@ -212,4 +212,57 @@ test('real rolling-probe integration streams samples/phase/work data throughout 
   assert.ok(data.records.some(r => r.kind === 'sample' && r.data.sector === 1));
   assert.ok(data.records.some(r => r.kind === 'sample' && r.data.work.transitions?.count > 0));
   assert.ok(data.records.some(r => r.data.weaponLevel === 3)); assert.equal(data.integrity.contiguous, true);
+});
+
+test('an abnormally closed cached database reopens for the next read and write after a long pause', async () => {
+  const f = fixture(), opened = [], factory = f.host.indexedDB, original = factory.open.bind(factory);
+  factory.open = (...args) => { const request = original(...args);
+    request.addEventListener('success', () => opened.push(request.result)); return request; };
+  const recorder = f.recorder(); recorder.start(); recorder.sample(sample(50));
+  try {
+    const [before] = await captures(f);
+    f.advance(15 * 60_000);
+    const closed = new Promise(resolve => opened[0].addEventListener('close', resolve, { once: true }));
+    forceCloseDatabase(opened[0]); await closed;
+    const report = await readFullSessionSummaries(f.host);
+    assert.equal(report.storage, 'available'); assert.equal(report.sessions[0].id, before.id);
+    recorder.sample(sample(51)); await settleFullSessionWrites();
+    assert.equal(recorder.stats().failed, false);
+    const data = await contents(f, before.id);
+    assert.equal(data.integrity.contiguous, true);
+    assert.ok(data.records.some(r => r.kind === 'sample' && r.data.sector === 51));
+    assert.equal(opened.length, 2, 'only one fresh connection is opened');
+  } finally { recorder.finish(); await settleFullSessionWrites(); }
+});
+
+test('storage loss during a run stops the capture without inventing its missing committed beginning', async () => {
+  const f = fixture(), recorder = f.recorder(); recorder.start(); recorder.sample(sample(50));
+  const [before] = await captures(f);
+  const db = await new Promise((resolve, reject) => {
+    const request = f.host.indexedDB.open(FULL_SESSION_DB, 1);
+    request.onsuccess = () => resolve(request.result); request.onerror = () => reject(request.error);
+  });
+  try {
+    const tx = db.transaction(['sessions', 'chunks'], 'readwrite');
+    const cleared = new Promise((resolve, reject) => { tx.oncomplete = resolve; tx.onabort = () => reject(tx.error); });
+    tx.objectStore('sessions').clear(); tx.objectStore('chunks').clear(); await cleared;
+    recorder.event(phase(51)); await settleFullSessionWrites();
+    const report = await readFullSessionSummaries(f.host);
+    assert.equal(report.storage, 'available'); assert.deepEqual(report.sessions, []);
+    assert.equal(report.status.state, 'storage-error');
+    assert.equal(report.status.storageFailureCode, 'history-missing');
+    assert.equal(report.status.lastCommittedSeq, before.lastSeq);
+    assert.equal(recorder.stats().failed, true); assert.equal(recorder.stats().queued, 0);
+    assert.equal(sessionDiagnosticsActive(), false);
+  } finally { db.close(); recorder.finish(); await settleFullSessionWrites(); }
+});
+
+test('quota and denied storage have bounded failure categories without persisting raw exceptions', async () => {
+  for (const [name, expected] of [['QuotaExceededError', 'quota-exceeded'], ['SecurityError', 'storage-denied'], ['InvalidStateError', 'connection-closed'], ['OtherError', 'unknown']]) {
+    const f = fixture(); f.host.indexedDB = { open() { throw new DOMException('private-token-and-url', name); } };
+    const recorder = f.recorder(); recorder.start(); await settleFullSessionWrites();
+    const status = JSON.parse(f.values.get(FULL_SESSION_STATUS_KEY));
+    assert.equal(status.storageFailureCode, expected); assert.equal(status.state, 'storage-error');
+    assert.ok(!JSON.stringify(status).includes('private-')); assert.equal(sessionDiagnosticsActive(), false);
+  }
 });

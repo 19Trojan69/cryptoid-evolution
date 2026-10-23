@@ -1,0 +1,48 @@
+{
+  "officialBase": "38002f07f9c8c20cb68e4416492ab7749944b104",
+  "officialTree": "551e089627f048c5899b3dc902771585cb50b06f",
+  "localPreparationBase": "5559923eab50e9abca9c2ef36feddcb609bab5fd",
+  "runtimePaths": [
+    "frontend/src/hooks/usePayments.ts",
+    "frontend/src/pages/MissionWeaponShop.tsx",
+    "frontend/src/pages/fullSessionFormat.ts",
+    "frontend/src/pages/fullSessionRecorder.ts",
+    "frontend/src/pages/fullSessionStore.ts"
+  ],
+  "sourceHashes": {
+    "frontend/src/hooks/usePayments.ts": "74eba9cb3a0eb88c49a0c6b7b0b66e3f158d9a77e0931ad926f7b942d386f04c",
+    "frontend/src/pages/MissionWeaponShop.tsx": "5d1a07e372f931d07c2ff122fff0743f9c5795a1e2fcddb9dc3794ce6eb600de",
+    "frontend/src/pages/fullSessionFormat.ts": "e67cede4e23c69226438630cf7ed51e87d9ebbe84cc29287655249dd9b30b4d3",
+    "frontend/src/pages/fullSessionRecorder.ts": "86dddb3b22aa1d79f5e7c7319a67767cbbf12b1a5a59bb85c6759620f9a39981",
+    "frontend/src/pages/fullSessionStore.ts": "c2337e7cfcd7eed34058e79b8e12b6ec2d5b8bbbd18a55b0c3c896b505f37073"
+  },
+  "buildGates": {
+    "i18n": 12,
+    "fullSessionTransferAndHull": 36,
+    "canvasStaticUrl": 15,
+    "weaponAndPayment": 24,
+    "total": 87
+  },
+  "typecheck": true,
+  "viteBuild": true,
+  "lintChangedUtilities": true,
+  "negativeControls": {
+    "menu": {
+      "pass": 17,
+      "fail": 1
+    },
+    "payments": {
+      "pass": 1,
+      "fail": 5
+    },
+    "fullSessionRecorder": {
+      "pass": 15,
+      "fail": 3
+    }
+  },
+  "automaticDeploymentEnabled": false,
+  "published": false,
+  "physicalIPhoneVerified": false,
+  "livePaymentsMade": false,
+  "originalDeviceStorageCauseKnown": false
+}

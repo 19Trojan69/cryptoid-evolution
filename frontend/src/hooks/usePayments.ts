@@ -55,15 +55,22 @@ export const usePayments = ({ isAuthenticated, onRequireAuth }: UsePaymentsArgs)
   const paymentPending = useRef(false);
   // A saved server login does not authenticate a freshly loaded Pi SDK.
   const sdkToken = useRef<string | null>(null);
-  const [paymentDiagnostic, setPaymentDiagnostic] = useState(() => sessionStorage.getItem(PAYMENT_DIAGNOSTIC_KEY) || "");
+  const [paymentDiagnostic, setPaymentDiagnostic] = useState(() => {
+    try { return sessionStorage.getItem(PAYMENT_DIAGNOSTIC_KEY) || ""; }
+    catch { return ""; }
+  });
+  const diagnosticRef = useRef(paymentDiagnostic);
   const confirmedCallback = useRef<(() => void | Promise<void>) | undefined>(undefined);
   const incomplete = useRef(new Map<string, PaymentDTO>());
   const recovering = useRef(new Map<string, Promise<void>>());
 
   const rememberDiagnostic = useCallback((message: string) => {
+    diagnosticRef.current = message;
     setPaymentDiagnostic(message);
-    if (message) sessionStorage.setItem(PAYMENT_DIAGNOSTIC_KEY, message);
-    else sessionStorage.removeItem(PAYMENT_DIAGNOSTIC_KEY);
+    try {
+      if (message) sessionStorage.setItem(PAYMENT_DIAGNOSTIC_KEY, message);
+      else sessionStorage.removeItem(PAYMENT_DIAGNOSTIC_KEY);
+    } catch { /* An optional error backup must never hold checkout or its busy state. */ }
   }, []);
   const finish = useCallback(() => {
     paymentPending.current = false;
@@ -159,7 +166,7 @@ export const usePayments = ({ isAuthenticated, onRequireAuth }: UsePaymentsArgs)
           catch { /* Pi cancellation is authoritative; no purchase is credited here. */ }
         },
         onError: error => {
-          if (!sessionStorage.getItem(PAYMENT_DIAGNOSTIC_KEY)) fail("Pi SDK", error);
+          if (!diagnosticRef.current) fail("Pi SDK", error);
           else finish();
         },
       });

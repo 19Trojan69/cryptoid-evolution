@@ -69,6 +69,21 @@ test('successful free or cached manual selections clear the old rejection text',
   }
 });
 
+test('failed inventory loading cannot disable replay of an uncertain activation or inventory refresh', () => {
+  const calls = [];
+  const menu = weaponMenu({ pendingLevel: 2, initialStock: {},
+    onSelect: level => calls.push(level) }, { ready: false });
+  const retry = menu.nodes.find(n => n.props?.className === 'mission-select'
+    && n.props.children.includes('Retry'));
+  assert.ok(retry, 'the original receipt has a retry control even with no inventory');
+  assert.equal(retry.props.disabled, false);
+  retry.props.onClick();
+  assert.deepEqual(calls, [2]);
+  assert.equal(menu.nodes.find(n => n.props?.className === 'mission-refresh').props.disabled, false);
+  assert.ok(menu.nodes.filter(n => n.type === 'WeaponPurchase').every(n => n.props.disabled),
+    'an uncertain grant still blocks new purchases');
+});
+
 test('a continuing connection failure retains the original receipt and cannot consume a different charge', async () => {
   const f = await lostAutomaticReply(); f.openWeaponSelection();
   f.env.beforePost = async () => { throw networkFailure(); };

@@ -1,9 +1,24 @@
-import { FULL_SESSION_DB, FULL_SESSION_LIMITS as limits, FULL_SESSION_STATUS_KEY,
+import { FULL_SESSION_DB, FULL_SESSION_LIMITS as limits, FULL_SESSION_STATUS_KEY, FULL_SESSION_STORAGE_FAILURE_CODES,
   cleanFullRecord, cleanFullSummary, fullSessionLimitsText, type FullRecord, type FullSessionSummary } from './fullSessionFormat.ts';
 
 export type FullSessionHost = { indexedDB?: IDBFactory; localStorage?: Pick<Storage, 'getItem' | 'setItem'> };
 const connections = new WeakMap<IDBFactory, Promise<IDBDatabase>>();
 const pending = new Set<Promise<unknown>>();
+export function fullSessionStorageFailureCode(error: unknown): typeof FULL_SESSION_STORAGE_FAILURE_CODES[number] {
+  // Fixed categories only. Never persist a browser exception's message, URL,
+  // stack or arbitrary name, even when storage itself is no longer available.
+  const value = error as { name?: unknown; message?: unknown } | null;
+  if (value?.name === 'QuotaExceededError') return 'quota-exceeded';
+  if (value?.name === 'SecurityError' || value?.name === 'NotAllowedError') return 'storage-denied';
+  if (value?.name === 'InvalidStateError') return 'connection-closed';
+  if (value?.message === 'diagnostic_storage_timeout') return 'timeout';
+  if (value?.message === 'diagnostic_storage_blocked') return 'blocked';
+  if (value?.message === 'diagnostic_history_missing') return 'history-missing';
+  if (value?.message === 'diagnostic_sequence_conflict') return 'sequence-conflict';
+  if (value?.message === 'diagnostic_storage_unavailable') return 'storage-unavailable';
+  if (value?.message === 'diagnostic_storage_write_failed' || value?.name === 'AbortError') return 'write-failed';
+  return 'unknown';
+}
 export function trackFullSessionWrite<T>(promise: Promise<T>) {
   pending.add(promise);
   void promise.then(() => pending.delete(promise), () => pending.delete(promise));
@@ -17,21 +32,24 @@ function database(host: FullSessionHost) {
   if (prior) return prior;
   const opened = new Promise<IDBDatabase>((resolve, reject) => {
     let settled = false;
-    const timer = setTimeout(() => fail(), limits.timeoutMs);
-    const fail = () => { if (settled) return; settled = true; clearTimeout(timer); reject(new Error('diagnostic_storage_unavailable')); };
+    const timer = setTimeout(() => fail(new Error('diagnostic_storage_timeout')), limits.timeoutMs);
+    const fail = (error: unknown) => { if (settled) return; settled = true; clearTimeout(timer); reject(error); };
     let request: IDBOpenDBRequest;
-    try { request = factory.open(FULL_SESSION_DB, 1); } catch { fail(); return; }
+    try { request = factory.open(FULL_SESSION_DB, 1); } catch (error) { fail(error); return; }
     request.onupgradeneeded = () => {
       const db = request.result;
       db.createObjectStore('sessions', { keyPath: 'id' });
       db.createObjectStore('chunks', { keyPath: ['session', 'index'] }).createIndex('session', 'session');
     };
-    request.onerror = request.onblocked = fail;
+    request.onerror = () => fail(request.error ?? new Error('diagnostic_storage_unavailable'));
+    request.onblocked = () => fail(new Error('diagnostic_storage_blocked'));
     request.onsuccess = () => {
       const db = request.result;
       if (settled) { db.close(); return; }
       settled = true; clearTimeout(timer);
-      db.onversionchange = () => { db.close(); connections.delete(factory); };
+      const invalidate = () => { if (connections.get(factory) === opened) connections.delete(factory); };
+      db.onclose = invalidate;
+      db.onversionchange = () => { db.close(); invalidate(); };
       resolve(db);
     };
   });
@@ -48,7 +66,7 @@ function done(tx: IDBTransaction) {
   return new Promise<void>((resolve, reject) => {
     const timer = setTimeout(() => { try { tx.abort(); } catch { /* Already complete. */ } reject(new Error('diagnostic_storage_timeout')); }, limits.timeoutMs);
     tx.oncomplete = () => { clearTimeout(timer); resolve(); };
-    tx.onabort = tx.onerror = () => { clearTimeout(timer); reject(new Error('diagnostic_storage_write_failed')); };
+    tx.onabort = tx.onerror = () => { clearTimeout(timer); reject(tx.error ?? new Error('diagnostic_storage_write_failed')); };
   });
 }
 export async function appendFullSessionChunk(host: FullSessionHost, summary: FullSessionSummary, index: number, records: FullRecord[]) {
@@ -56,13 +74,17 @@ export async function appendFullSessionChunk(host: FullSessionHost, summary: Ful
   if (!clean || records.length < 1 || records.length > limits.chunkRecords || records.some(r => !cleanFullRecord(r))) throw new Error('invalid_diagnostic_chunk');
   const db = await database(host), tx = transaction(db, true), completion = done(tx);
   const sessions = tx.objectStore('sessions'), chunks = tx.objectStore('chunks');
+  let integrityFailure: Error | undefined;
   const get = sessions.get(clean.id);
   get.onsuccess = () => {
     const previous = cleanFullSummary(get.result);
+    if (!previous && index > 0) { integrityFailure = new Error('diagnostic_history_missing'); tx.abort(); return; }
     const expected = previous?.chunks ?? 0;
     const lastSeq = previous?.lastSeq ?? 0;
     if (expected !== index || records[0].seq !== lastSeq + 1 || records.some((r, i) => r.seq !== lastSeq + i + 1)
-      || clean.lastSeq !== records.at(-1)!.seq || clean.count !== clean.lastSeq || clean.chunks !== index + 1) { tx.abort(); return; }
+      || clean.lastSeq !== records.at(-1)!.seq || clean.count !== clean.lastSeq || clean.chunks !== index + 1) {
+      integrityFailure = new Error('diagnostic_sequence_conflict'); tx.abort(); return;
+    }
     chunks.add({ session: clean.id, index, records: records.map(cleanFullRecord) });
     sessions.put(clean);
     if (index === 0) {
@@ -78,7 +100,7 @@ export async function appendFullSessionChunk(host: FullSessionHost, summary: Ful
       };
     }
   };
-  await completion;
+  try { await completion; } catch (error) { throw integrityFailure ?? error; }
   return { ...clean, durability: tx.durability ?? 'default' };
 }
 export function readFullSessionStatus(host: FullSessionHost) {
@@ -93,6 +115,7 @@ export function readFullSessionStatus(host: FullSessionHost) {
       'markerWrites','markerWriteMaxMs','markerWriteTotalMs'])
       if (typeof value[key] === 'number' && Number.isFinite(value[key]) && value[key] >= 0) result[key] = value[key];
     if (['duration-limit','record-limit','byte-limit','queue-limit','storage-error'].includes(value.stopReason)) result.stopReason = value.stopReason;
+    if (FULL_SESSION_STORAGE_FAILURE_CODES.includes(value.storageFailureCode)) result.storageFailureCode = value.storageFailureCode;
     // The synchronous breadcrumb is an observation, never proof of an IDB commit.
     const observed = cleanFullRecord(value.lastObserved);
     if (observed) result.lastObserved = observed;

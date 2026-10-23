@@ -5,6 +5,8 @@ import { HULL_DIAGNOSTIC_STEPS } from './hullPreparationDiagnostics.ts';
 
 export const FULL_SESSION_DB = 'cryptoid_owner_full_session_v1';
 export const FULL_SESSION_STATUS_KEY = 'cryptoid_owner_full_status_v1';
+export const FULL_SESSION_STORAGE_FAILURE_CODES = ['quota-exceeded', 'storage-denied', 'connection-closed',
+  'timeout', 'blocked', 'history-missing', 'sequence-conflict', 'storage-unavailable', 'write-failed', 'unknown'] as const;
 export const FULL_SESSION_LIMITS = { bytes: 32 * 1024 * 1024, records: 60_000, durationMs: 8 * 60 * 60_000,
   queueRecords: 256, queueBytes: 256 * 1024, sessions: 2, chunkRecords: 64, timeoutMs: 5_000 } as const;
 export const fullSessionLimitsText = 'Technical timeline from the start of an owner Testnet game, not video or deterministic replay. Aggregate frame/work windows normally every 2 seconds; heavy resource/audio counters at most every 10 seconds. Last two runs, at most 8 hours, 32 MiB and 60000 records per run; reaching a limit or storage failure stops capture explicitly, without overwriting its beginning. IndexedDB chunks and summary commit atomically; the last unsaved interval may be lost. Browser storage may be denied, cleared or evicted. Observed breadcrumb is separate from committed data. No native/GPU/process memory or OS termination-cause measurement. No identity, wallet, token, purchase/save payload, input coordinates, raw URL/message/stack or automatic transmission.';

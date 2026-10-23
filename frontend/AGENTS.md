@@ -1,5 +1,132 @@
 # Preserve the officially approved game
 
+## Shop/storage recovery prepared, 23 October 2026, not published
+
+The owner's follow-up reports failed purchases/paid-weapon activation and about
+15 minutes paused without a crash, then asks to continue. The supplied v6 report
+is actual 38002f0 gameplay: normal projectile damage, destroying/game-over,
+home-intent and finished recorder at sector68. Do not call that exit a crash.
+The document spans about44 minutes including pauses. Last confirmed save remains
+05:38:19.878 Vienna; full recording stops05:38:27.224 at sector51 after3550
+committed records, with readable IDB but no returned summaries. Neither shared
+cause nor a quota/OS/connection cause is established. Do not demand another long
+campaign, clear browser data, reset saves or repeat a purchase for diagnosis.
+
+Isolated codex/shop-storage-audit-20261023 starts at local5559923, with the
+seven directly compared runtime blobs equal to fixed official38002f0. Automatic
+deployment is disabled. Two additional client failures are reproduced: failed
+inventory readiness disables replay of the original pending receipt, and an
+optional payment diagnostic storage exception can hold checkout busy. Keep
+same-id server confirmation and purchase gates; allow pending replay/inventory
+refresh and keep optional payment diagnostics in memory if persistence fails.
+Never alter token requirements, SDK payment metadata, backend/economy or saves.
+
+Retire an abnormally closed cached IDB connection by identity so the next existing
+operation can reopen it. No automatic write retry or reconstruction of deleted
+history. Fixed sanitized storage categories distinguish a missing committed
+history from quota/denial/closure/timeout; no raw exception is persisted.
+GamePage, image loader/explicit-decode comparison, CSS/art/audio, account/save
+queue and all backend/API code remain unchanged.87 build-gated tests, full
+types/Vite build and four changed utility/hook modules' lint pass. Fault tests
+use actual source with isolated transports/fake IDB, not physical PiBrowser or
+live-payment proof. No installed native browser engine is available here.
+See docs/shop-storage-recovery-20261023.md and its verification JSON. This is
+preparation only; retain official38002f0, Mainnet and every fixed reference.
+
+## Image-load comparison published to Testnet, 23 October 2026
+
+The authorized comparison is READY at fixed runtime38002f07f9c8c20cb68e4416492ab7749944b104,
+tree551e089627f048c5899b3dc902771585cb50b06f, branch
+codex/hull-load-readiness-20261023. New rollback
+backup/testnet-before-hull-load-readiness-20261023 ->d783b01 is independently
+verified. Preserve all fixed refs and Mainnet. PreviewGCMiHuc4tLDuAAoaR5g7Km56Mv8w
+READY05:09:56 Vienna81s; Testnet ProductionFMakKRfBYkQFgY9yGLXtrtmbkcMk
+READY05:12:29 Vienna73s. Exact ten remote runtime/test/config paths were verified;
+no local notes, private run or evidence uploaded. Do not advance the runtime
+branch with this receipt. Local codex/hull-load-release-record-20261023 is
+auto-deploy-disabled and must not itself be deployed.
+
+Both build suites pass12+33+15+17 and types/Vite.22 delivered feature checks,
+syntax-tree proof of the load/error gate and zero explicit decode calls in the
+target loader,6 original PNG pairs, globalCSS, API root200/anonymousAdmin401 and
+all3 fresh leaderboard hashes pass. Official Home SPIELEN enabled. Keep the
+distinction: native synthetic held decode control and equal WebKit pixels are
+not a natural White Screen reproduction or proof of an iPhone fix. Next device
+comparison continues the existing mission after reload; no new long campaign
+or native OS report requirement. See docs/hull-load-release-20261023.md.
+
+## Explicit image-load comparison, 23 October 2026
+
+The owner's “mach das bitte” accepts the proposed isolated removal of the extra
+Image.decode call, internal visibility checks and subsequent Testnet comparison
+availability. Candidate codex/hull-load-readiness-20261023 starts at9606951,
+with application source matching officiald783b01/tree598bbf5. Auto-deploy is off.
+Only the conditional explicit decode after successful onload is removed;
+variant-decode-skipped replaces the paired execution markers. Preserve the
+original load/error gate, serial queue, both retain checks, caches, bytes, styles,
+gameplay, timing, audio and every account/save/economy boundary.
+
+The new private run has6526 valid contiguous records; lastGraphics6534 is
+variant-decode-before/imageJob596/sprite17/stage1/paint2,112ms beyond last commit.
+62 prior plans succeed,131 server replies HTTP200, no normal end or JS error.
+This does not prove a hung decoder, native-memory cause or crash fix. Do not
+upload private archives or demand another campaign/native report.
+
+Full build passes12+33+15+17 tests/gates and TypeScript/Vite.16 current resource
+cases include1100 plans/7259 readiness requests across500 sectors. Two old
+encoder controls lack historical Git source and remain excluded, not passes.
+WebKit26.5 actual PaintedShip A/B: nine rendered pixel pairs equal;12/12 hulls
+per plan and six visible hulls;66 explicit control decodes versus0 candidate;
+held-decode control stalls and candidate finishes; delayed-source flame guard
+remains, cleanup zero pins, zero page/image HTTP errors. Linux-only acceptance,
+not a physical PiBrowser or natural crash reproduction. Both private archives
+read unchanged;1740 original PNG digest unchanged; one preceding lint finding.
+See docs/hull-load-readiness-20261023.md. Fixed official/runtime/rollback refs
+and Mainnet stay unchanged until the scoped Testnet release and receipt.
+
+## Fine hull-stage observations prepared, 22 October 2026, not published
+
+The owner continued after supplying the complete run and asked whether to test
+again. The answer was to wait for the additional observations to be available.
+Local preparation is on codex/hull-stage-diagnostics-20261022, based on local
+90a9b0975549fefa197f1b2d2fb5672fb4702b54 with the exact application tree deployed
+as 175e407622444ebe2dce7bfdb31e8037e25c1c97. Candidate auto deployment is disabled;
+no new Testnet/Mainnet release, account mutation or remote log/protection access.
+
+The supplied run's seq2327 is hull-plan-start55; separate observed seq2331 is
+phase-start55. Last stored step is not the cause of interruption: 47 earlier
+plans complete12/12, sometimes taking1853ms. The full private original and
+derived analysis remain local; full analysis is on sibling audit commit3684f71.
+
+New fixed-enum progress observations distinguish preload, retain/release,
+source loading/readback/surface release and variant load/optional decode/ready.
+Only bounded catalogue/job numbers are recorded, never raw URLs/messages/data.
+They batch with existing IDB flushes; a separate synchronous lastGraphics marker
+survives later phase breadcrumbs. Marker write cost is measured. Normal finish
+now leaves an immediate observed end marker before the existing async commit.
+No timers, RAF, retries or network requests were added. Existing owner/Testnet
+guards, record/storage/queue limits and export paths remain. All2327 existing
+records/summary/status compare unchanged under the extended reader.
+
+32 build-gated full-session/transfer/hull cases, full locales/Canvas/weapon/
+TypeScript/Vite build and16 additional current resource tests pass. Two old
+encoder comparisons lack the historical ab587934 object; the old extra React
+handoff host lacks its local dependency. Do not count these as passes or retry
+the missing-source fetch. Five changed TS modules lint clean; paintedShip retains
+its single preceding set-state-in-effect finding. Original1740 PNG digest matches.
+Portable AST scope proof now includes paintedShip and rejects cache/argument
+mutations; its empty-block normalization is pinned to actual c62efe2a source.
+
+Native Linux WebKit26.5 430x825 DPR3 passes actual53->54flight0->54flight1->55,
+then intentionally held decode and task-owned content-process SIGKILL.356 committed
+records/14 chunks recover contiguously; uncommitted seq360 lastGraphics survives
+without inventing a commit. Regular finish is synchronously observed and then
+commits closed.0 page/imageHTTP errors;373 marker writes total17ms/max8ms locally.
+This is synthetic, not physical PiBrowser, natural crash or native-memory proof.
+Do not claim Whitescreen fixed or demand another full campaign/native22Octlog.
+See docs/hull-stage-diagnostics-20261022.md. Publication remains a separate
+explicit release action under the existing project rule at the end of this file.
+
 ## Weapon auto-reload confirmation recovery, 22 October 2026, preparation
 
 Marcus reports persistent "Not confirmed. Retry the same weapon." after an
