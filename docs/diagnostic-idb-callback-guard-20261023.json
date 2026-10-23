@@ -53,7 +53,7 @@
   "bundle": {
     "gamePageInputs": 283,
     "success": true,
-    "fullProjectBuild": false
+    "fullProjectBuild": true
   },
   "longOriginalControl": {
     "secondsBeforeFailure": 587.2,
@@ -66,5 +66,121 @@
   "automaticDeploymentEnabled": false,
   "published": false,
   "physicalDeviceVerified": false,
-  "historicalWhiteScreenFixProven": false
+  "historicalWhiteScreenFixProven": false,
+  "verifiedRuntimeCommit": "4c384023a4fae3d84403ade7beae7934e22e39fd",
+  "fullFrontendBuild": {
+    "sourceCommit": "4c384023a4fae3d84403ade7beae7934e22e39fd",
+    "passed": true,
+    "testGroups": {
+      "i18n": 12,
+      "fullSession": 43,
+      "canvasStaticUrl": 15,
+      "weaponReloadAndPayment": 24
+    },
+    "tests": 94,
+    "failed": 0,
+    "skipped": 0,
+    "localizationReleaseCheck": true,
+    "projectTypeScript": true,
+    "productionViteBundle": true,
+    "generatedHullVariants": 1740,
+    "generatedHullEncodedBytes": 95450326,
+    "trackedWorkingTreeUnchangedAfterBuild": true,
+    "runtimeVersions": {
+      "typescript": "5.9.3",
+      "vite": "7.3.7",
+      "react": "19.3.1",
+      "react-dom": "19.3.1",
+      "react-router-dom": "7.18.4",
+      "axios": "1.20.0",
+      "fake-indexeddb": "6.2.5",
+      "@napi-rs/canvas": "0.1.100"
+    },
+    "changedApplicationModuleLint": "passed",
+    "wholeProjectLint": "not run",
+    "warning": "Existing large-chunk warning; no performance improvement inferred.",
+    "installCommand": "npm install --ignore-scripts --no-audit --no-fund --package-lock=false",
+    "buildCommand": "VITE_CRYPTOID_DIAGNOSTICS=0 npm run build"
+  },
+  "productionBundleRoutes": {
+    "sourceCommit": "4c384023a4fae3d84403ade7beae7934e22e39fd",
+    "passed": [
+      {
+        "engine": "chromium",
+        "version": "141.0.7390.37",
+        "steps": [
+          "home-ready",
+          "game-started",
+          "paused",
+          "resumed",
+          "home-returned"
+        ],
+        "pageErrors": 0,
+        "consoleErrors": 0,
+        "httpErrors": 0,
+        "viewport": {
+          "width": 430,
+          "height": 825,
+          "dpr": 3
+        },
+        "audioRequestsCancelledOnLifecycle": 1
+      },
+      {
+        "engine": "webkit",
+        "version": "26.5",
+        "steps": [
+          "home-ready",
+          "game-started",
+          "paused",
+          "resumed",
+          "home-returned"
+        ],
+        "pageErrors": 0,
+        "consoleErrors": 0,
+        "httpErrors": 0,
+        "viewport": {
+          "width": 430,
+          "height": 825,
+          "dpr": 3
+        },
+        "audioRequestsCancelledOnLifecycle": 2
+      }
+    ],
+    "gameplayHooks": false,
+    "isolation": "Local guest routes, original font files served locally, synthetic Pi SDK and transport. No live authentication/account/payment validation.",
+    "globalCardAudioContextIntentionallyStillOpen": true,
+    "parallelWebkitRun": "Technical loop-stall pause; not counted as a pass. Subsequent standalone WebKit route run passed without recovery."
+  },
+  "additionalLongRuns": {
+    "parallelRun": {
+      "startSector": 51,
+      "lastSector": 59,
+      "seconds": 345.684,
+      "recoveredLoopStalls": 1,
+      "terminalSignal": "loop-stall",
+      "unhandledJavaScriptErrors": 0,
+      "diagnosticStorageStatus": "recording",
+      "peakContentProcessRssMiB": 1100.5,
+      "acceptance": "not passed"
+    },
+    "earlierSparseProgressRun": "Interrupted before completion; not counted as a pass.",
+    "soloRun": {
+      "startSector": 51,
+      "lastSector": 57,
+      "seconds": 260.945,
+      "recoveredLoopStalls": 1,
+      "terminalSignal": "loop-stall",
+      "unhandledJavaScriptErrors": 0,
+      "consoleErrors": 0,
+      "failedRequests": 0,
+      "missingAssets": 0,
+      "diagnosticStorageStatus": "recording",
+      "lastCommittedSequence": 1300,
+      "canvasContextLosses": 0,
+      "peakContentProcessRssMiB": 1135.5,
+      "acceptance": "not passed",
+      "originalFontsServedLocally": true
+    },
+    "conclusion": "The complete long-run acceptance has not passed. Parallel browsers alone do not explain the loop-stall result. The existing stall guard and original Resume semantics are preserved. No new memory-termination/White-Screen cause is established by Linux software rendering."
+  }
 }

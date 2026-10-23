@@ -1,5 +1,43 @@
 # Preserve the officially approved game
 
+## Diagnostic IDB callback guard, 23 October 2026, prepared, not published
+
+The owner asks to continue and needs a substantiated stability conclusion before
+expanding the game. Runtime candidate 4c384023a4fae3d84403ade7beae7934e22e39fd
+on codex/diagnostic-idb-callback-guard-20261023 starts at recorded source19de3e6.
+Automatic deployment is disabled. Original starfield clipping experiments are
+excluded; no graphics, CSS, HUD, audio, gameplay, account/save/economy or backend
+runtime changes are part of this correction.
+
+A real original-source Linux-WPE full scene reaches sector64 after587.2 seconds,
+then chunks.add inside an IDB get-success callback throws TransactionInactiveError
+globally and opens technical pause. This is not a White Screen. The store now
+guards synchronous setup and later transaction callbacks, rejects the exact
+operation, aborts safely, and reaches the existing recorder storage-error path.
+No automatic write retry or reconstructed history. Seven regressions join the
+existing full-session build gate:43 cases pass.24 additional browser cases
+separate failing original controls from clean candidate callbacks.
+
+Candidate4c384 passes the full frontend production build:94 tests, localization
+release check, project TypeScript and Vite; changed store-module lint passes.
+The unchanged production Router flow Home/Play/Pause/Resume/Home passes in
+Chromium141 and standalone WPE-WebKit26.5 with original fonts and local SDK/API
+fixtures. No actual Pi authentication/payment or physical-device proof is implied.
+
+The extended campaign acceptance is NOT passed. A parallel run ends at sector59
+after345.684s; a standalone original-font run ends at sector57 after260.945s.
+Both reach the existing loop-stall pause after one original-Resume recovery.
+No uncaught JS exception, Canvas loss or diagnostic storage failure occurs;
+the standalone run still confirms1300 records. Preserve the stall guard and
+Resume semantics. Parallel browsers alone do not explain the finding. Linux
+software rendering does not establish an iOS memory-termination cause.
+Historical White Screens remain unresolved; do not call the whole game fixed.
+
+See docs/diagnostic-idb-callback-guard-20261023.md and .json for the evidence and
+test boundaries. No new owner long campaign, purchase, data clearing or native OS
+report is required to review this correction. Preserve fixed official release/
+rollback refs and Mainnet. No new publication instruction accompanies this work.
+
 ## Shop/storage recovery prepared, 23 October 2026, not published
 
 The owner's follow-up reports failed purchases/paid-weapon activation and about
