@@ -16,7 +16,7 @@ export function fullSessionStorageFailureCode(error: unknown): typeof FULL_SESSI
   if (value?.message === 'diagnostic_history_missing') return 'history-missing';
   if (value?.message === 'diagnostic_sequence_conflict') return 'sequence-conflict';
   if (value?.message === 'diagnostic_storage_unavailable') return 'storage-unavailable';
-  if (value?.message === 'diagnostic_storage_write_failed' || value?.name === 'AbortError') return 'write-failed';
+  if (value?.message === 'diagnostic_storage_write_failed' || value?.name === 'AbortError' || value?.name === 'TransactionInactiveError') return 'write-failed';
   return 'unknown';
 }
 export function trackFullSessionWrite<T>(promise: Promise<T>) {
@@ -63,44 +63,57 @@ function transaction(db: IDBDatabase, write: boolean) {
   catch { return db.transaction(['sessions', 'chunks'], 'readwrite'); }
 }
 function done(tx: IDBTransaction) {
-  return new Promise<void>((resolve, reject) => {
-    const timer = setTimeout(() => { try { tx.abort(); } catch { /* Already complete. */ } reject(new Error('diagnostic_storage_timeout')); }, limits.timeoutMs);
-    tx.oncomplete = () => { clearTimeout(timer); resolve(); };
-    tx.onabort = tx.onerror = () => { clearTimeout(timer); reject(tx.error ?? new Error('diagnostic_storage_write_failed')); };
+  let fail!: (error: unknown) => void;
+  const completion = new Promise<void>((resolve, reject) => {
+    let settled = false;
+    const timer = setTimeout(() => fail(new Error('diagnostic_storage_timeout')), limits.timeoutMs);
+    fail = error => {
+      if (settled) return;
+      settled = true; clearTimeout(timer); reject(error);
+      try { tx.abort(); } catch { /* Inactive/finished transactions cannot abort again. */ }
+    };
+    tx.oncomplete = () => { if (settled) return; settled = true; clearTimeout(timer); resolve(); };
+    tx.onabort = tx.onerror = () => fail(tx.error ?? new Error('diagnostic_storage_write_failed'));
   });
+  // IDB event callbacks execute after their creating async function returns.
+  // A throw here must reject this operation, never escape into gameplay.
+  const guard = (work: () => void) => () => { try { work(); } catch (error) { fail(error); } };
+  return { completion, guard };
 }
 export async function appendFullSessionChunk(host: FullSessionHost, summary: FullSessionSummary, index: number, records: FullRecord[]) {
   const clean = cleanFullSummary(summary);
   if (!clean || records.length < 1 || records.length > limits.chunkRecords || records.some(r => !cleanFullRecord(r))) throw new Error('invalid_diagnostic_chunk');
-  const db = await database(host), tx = transaction(db, true), completion = done(tx);
-  const sessions = tx.objectStore('sessions'), chunks = tx.objectStore('chunks');
+  const db = await database(host), tx = transaction(db, true), operation = done(tx);
   let integrityFailure: Error | undefined;
-  const get = sessions.get(clean.id);
-  get.onsuccess = () => {
-    const previous = cleanFullSummary(get.result);
-    if (!previous && index > 0) { integrityFailure = new Error('diagnostic_history_missing'); tx.abort(); return; }
-    const expected = previous?.chunks ?? 0;
-    const lastSeq = previous?.lastSeq ?? 0;
-    if (expected !== index || records[0].seq !== lastSeq + 1 || records.some((r, i) => r.seq !== lastSeq + i + 1)
-      || clean.lastSeq !== records.at(-1)!.seq || clean.count !== clean.lastSeq || clean.chunks !== index + 1) {
-      integrityFailure = new Error('diagnostic_sequence_conflict'); tx.abort(); return;
-    }
-    chunks.add({ session: clean.id, index, records: records.map(cleanFullRecord) });
-    sessions.put(clean);
-    if (index === 0) {
-      const all = sessions.getAll();
-      all.onsuccess = () => {
-        const stale = all.result.map(cleanFullSummary).filter((s): s is FullSessionSummary => !!s)
-          .sort((a, b) => b.startedAt - a.startedAt || b.id.localeCompare(a.id)).slice(limits.sessions);
-        for (const old of stale) {
-          sessions.delete(old.id);
-          const cursor = chunks.index('session').openKeyCursor(old.id);
-          cursor.onsuccess = () => { const row = cursor.result; if (row) { chunks.delete(row.primaryKey); row.continue(); } };
-        }
-      };
-    }
-  };
-  try { await completion; } catch (error) { throw integrityFailure ?? error; }
+  operation.guard(() => {
+    const sessions = tx.objectStore('sessions'), chunks = tx.objectStore('chunks');
+    const get = sessions.get(clean.id);
+    get.onsuccess = operation.guard(() => {
+      const previous = cleanFullSummary(get.result);
+      if (!previous && index > 0) { integrityFailure = new Error('diagnostic_history_missing'); tx.abort(); return; }
+      const expected = previous?.chunks ?? 0;
+      const lastSeq = previous?.lastSeq ?? 0;
+      if (expected !== index || records[0].seq !== lastSeq + 1 || records.some((r, i) => r.seq !== lastSeq + i + 1)
+        || clean.lastSeq !== records.at(-1)!.seq || clean.count !== clean.lastSeq || clean.chunks !== index + 1) {
+        integrityFailure = new Error('diagnostic_sequence_conflict'); tx.abort(); return;
+      }
+      chunks.add({ session: clean.id, index, records: records.map(cleanFullRecord) });
+      sessions.put(clean);
+      if (index === 0) {
+        const all = sessions.getAll();
+        all.onsuccess = operation.guard(() => {
+          const stale = all.result.map(cleanFullSummary).filter((s): s is FullSessionSummary => !!s)
+            .sort((a, b) => b.startedAt - a.startedAt || b.id.localeCompare(a.id)).slice(limits.sessions);
+          for (const old of stale) {
+            sessions.delete(old.id);
+            const cursor = chunks.index('session').openKeyCursor(old.id);
+            cursor.onsuccess = operation.guard(() => { const row = cursor.result; if (row) { chunks.delete(row.primaryKey); row.continue(); } });
+          }
+        });
+      }
+    });
+  })();
+  try { await operation.completion; } catch (error) { throw integrityFailure ?? error; }
   return { ...clean, durability: tx.durability ?? 'default' };
 }
 export function readFullSessionStatus(host: FullSessionHost) {
@@ -128,12 +141,14 @@ export function readFullSessionStatus(host: FullSessionHost) {
 export async function readFullSessionSummaries(host: FullSessionHost) {
   const status = readFullSessionStatus(host);
   try {
-    const db = await database(host), tx = transaction(db, false), completion = done(tx);
-    const request = tx.objectStore('sessions').getAll();
+    const db = await database(host), tx = transaction(db, false), operation = done(tx);
     let sessions: FullSessionSummary[] = [];
-    request.onsuccess = () => { sessions = request.result.map(cleanFullSummary).filter((s): s is FullSessionSummary => !!s)
-      .sort((a, b) => b.startedAt - a.startedAt || b.id.localeCompare(a.id)).slice(0, limits.sessions); };
-    await completion;
+    operation.guard(() => {
+      const request = tx.objectStore('sessions').getAll();
+      request.onsuccess = operation.guard(() => { sessions = request.result.map(cleanFullSummary).filter((s): s is FullSessionSummary => !!s)
+        .sort((a, b) => b.startedAt - a.startedAt || b.id.localeCompare(a.id)).slice(0, limits.sessions); });
+    })();
+    await operation.completion;
     return { storage: 'available', sessions, status, limits: fullSessionLimitsText };
   } catch { return { storage: 'unavailable-or-failed', sessions: [], status, limits: fullSessionLimitsText }; }
 }
@@ -142,38 +157,40 @@ export async function readFullSessionSummaries(host: FullSessionHost) {
 export async function exportFullSession(host: FullSessionHost, id: string) {
   if (!/^[a-zA-Z0-9_-]{1,100}$/.test(id)) throw new Error('invalid_diagnostic_id');
   await settleFullSessionWrites();
-  const db = await database(host), tx = transaction(db, false), completion = done(tx);
-  const get = tx.objectStore('sessions').get(id);
+  const db = await database(host), tx = transaction(db, false), operation = done(tx);
   const parts: BlobPart[] = [], errors: string[] = [];
   let summary: FullSessionSummary | null = null, sequence = 0, chunkIndex = 0, bytes = 0;
-  get.onsuccess = () => {
-    summary = cleanFullSummary(get.result);
-    if (!summary) { errors.push('missing-summary'); return; }
-    parts.push(JSON.stringify({ version: 1, format: 'cryptoid-full-session-report', summary,
-      storageStatus: readFullSessionStatus(host), limits: fullSessionLimitsText }).slice(0, -1) + ',"records":[');
-    const cursor = tx.objectStore('chunks').index('session').openCursor(id);
-    cursor.onsuccess = () => {
-      const row = cursor.result;
-      if (row) {
-        const value = row.value;
-        if (chunkIndex >= limits.records || !Number.isSafeInteger(value.index) || !Array.isArray(value.records) || value.records.length > limits.chunkRecords) { tx.abort(); return; }
-        const records = value.records.map(cleanFullRecord);
-        if (records.some((r: FullRecord | null) => !r)) { tx.abort(); return; }
-        const raw = JSON.stringify(records); bytes += raw.length * 2;
-        if (bytes > limits.bytes) { tx.abort(); return; }
-        if (value.index !== chunkIndex++) errors.push('chunk-gap');
-        for (const record of records as FullRecord[]) {
-          if (record.seq !== ++sequence) errors.push('sequence-gap');
-          parts.push((sequence > 1 ? ',' : '') + JSON.stringify(record));
+  operation.guard(() => {
+    const get = tx.objectStore('sessions').get(id);
+    get.onsuccess = operation.guard(() => {
+      summary = cleanFullSummary(get.result);
+      if (!summary) { errors.push('missing-summary'); return; }
+      parts.push(JSON.stringify({ version: 1, format: 'cryptoid-full-session-report', summary,
+        storageStatus: readFullSessionStatus(host), limits: fullSessionLimitsText }).slice(0, -1) + ',"records":[');
+      const cursor = tx.objectStore('chunks').index('session').openCursor(id);
+      cursor.onsuccess = operation.guard(() => {
+        const row = cursor.result;
+        if (row) {
+          const value = row.value;
+          if (chunkIndex >= limits.records || !Number.isSafeInteger(value.index) || !Array.isArray(value.records) || value.records.length > limits.chunkRecords) { tx.abort(); return; }
+          const records = value.records.map(cleanFullRecord);
+          if (records.some((r: FullRecord | null) => !r)) { tx.abort(); return; }
+          const raw = JSON.stringify(records); bytes += raw.length * 2;
+          if (bytes > limits.bytes) { tx.abort(); return; }
+          if (value.index !== chunkIndex++) errors.push('chunk-gap');
+          for (const record of records as FullRecord[]) {
+            if (record.seq !== ++sequence) errors.push('sequence-gap');
+            parts.push((sequence > 1 ? ',' : '') + JSON.stringify(record));
+          }
+          row.continue(); return;
         }
-        row.continue(); return;
-      }
-      if (sequence !== summary!.lastSeq || chunkIndex !== summary!.chunks) errors.push('summary-mismatch');
-      parts.push('],"integrity":' + JSON.stringify({ contiguous: errors.length === 0, records: sequence, chunks: chunkIndex,
-        errors: [...new Set(errors)] }) + '}');
-    };
-  };
-  await completion;
+        if (sequence !== summary!.lastSeq || chunkIndex !== summary!.chunks) errors.push('summary-mismatch');
+        parts.push('],"integrity":' + JSON.stringify({ contiguous: errors.length === 0, records: sequence, chunks: chunkIndex,
+          errors: [...new Set(errors)] }) + '}');
+      });
+    });
+  })();
+  await operation.completion;
   if (!summary || !parts.length) throw new Error('diagnostic_capture_not_found');
   return new Blob(parts, { type: 'application/json' });
 }

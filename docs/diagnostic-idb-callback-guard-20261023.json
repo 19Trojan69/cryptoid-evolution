@@ -1,0 +1,70 @@
+{
+  "sourceCommit": "19de3e692f75a1c3e2eddf3438acc937c9dcac19",
+  "sourceTree": "e7be9574df3dbf443c65ac4dea027f82499df766",
+  "candidateSha256": "dd9ccf2f10d92532aa497d931955a29cc2ac01445d169533ecab1f6c6e28ce31",
+  "nodeTests": {
+    "existing": 36,
+    "newCallbackRegressions": 7,
+    "total": 43,
+    "failed": 0
+  },
+  "nativeBrowserCases": {
+    "total": 24,
+    "engines": [
+      "chromium",
+      "webkit"
+    ],
+    "fixedCases": 12,
+    "fixedGlobalFailures": 0,
+    "originalInjectedFailureCases": 10
+  },
+  "fullScene": {
+    "engine": "Linux WPE WebKit",
+    "startSector": 69,
+    "lastSector": 70,
+    "lastEncounter": "boss-clear",
+    "status": "playing",
+    "technicalPause": false,
+    "nativePageErrors": [],
+    "canvasContextLosses": 0,
+    "injectedDiagnosticFailure": true,
+    "diagnosticStorageStatus": "storage-error",
+    "reloadFixture": {
+      "controlledExpiry": true,
+      "initialPaidMs": 1,
+      "activationMs": 60000,
+      "initialStock": 12,
+      "remainingStock": 8,
+      "uniqueActivations": 4,
+      "delayMs": 1400
+    },
+    "checkpointValidation": {
+      "snapshots": 13,
+      "combat": 10,
+      "rejected": 0
+    }
+  },
+  "typecheck": {
+    "target": "fullSessionStore.ts and transitive types",
+    "strict": true,
+    "baselineErrors": 0,
+    "candidateErrors": 0
+  },
+  "bundle": {
+    "gamePageInputs": 283,
+    "success": true,
+    "fullProjectBuild": false
+  },
+  "longOriginalControl": {
+    "secondsBeforeFailure": 587.2,
+    "sector": 64,
+    "errorName": "TransactionInactiveError",
+    "observedUI": "technical pause",
+    "whiteScreen": false,
+    "processPeakRssMiB": 1138.8
+  },
+  "automaticDeploymentEnabled": false,
+  "published": false,
+  "physicalDeviceVerified": false,
+  "historicalWhiteScreenFixProven": false
+}
