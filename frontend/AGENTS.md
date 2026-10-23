@@ -1,5 +1,33 @@
 # Preserve the officially approved game
 
+## Native memory review and bounded star layers prepared, 23 October 2026
+
+The owner asks to continue reducing runtime memory on all devices. This is an
+isolated audit based on recorded source19de3e692f75a1c3e2eddf3438acc937c9dcac19
+/treee7be9574df3dbf443c65ac4dea027f82499df766. The device's dirty-tree marker means
+the exact private deployment modifications are unknown. Do not call this a
+reproduced natural White Screen or a proved fix. No new Testnet/Mainnet release,
+account mutation, upload of private archives or further long owner campaign.
+
+Only Starfield changes application behavior: preserve both original animated
+SVGs and their viewBoxes/content/timing; clip their overflow only when measured
+overscan covers the complete original 11px horizontal /8px vertical sway.
+ResizeObserver is disconnected at unmount; small fields and missing API keep
+the original overflow. No per-frame observer, reduced resolution or quality gate.
+
+Native Linux WebKit26.5 estimates the two star backings at7,360,500->3,192,000
+bytes at430x825. This is a partial layer estimate, not measured whole-process
+RAM saving on an iPhone.36 WebKit raster pairs are identical. Chromium141 has
+raster differences despite identical vectors and screen matrices; cross-engine
+pixel identity and release acceptance remain open. Both engines pass responsive,
+pause/motion/fallback/cleanup checks and the short actual boss70 scene with
+original audio/effects. One Linux WPE loop-stall recovery is recorded, not hidden.
+Changed-module strict TS5.9.3 and the283-input local scene bundle pass; no full
+project Vite/build-gate or lint pass is claimed. See docs/starfield-bounds-20261023.md.
+
+The branch codex/starfield-bounds-audit-20261023 has automatic deployment disabled
+in its first commit. Preserve existing fixed source/rollback refs and Mainnet.
+
 ## Shop/storage recovery prepared, 23 October 2026, not published
 
 The owner's follow-up reports failed purchases/paid-weapon activation and about

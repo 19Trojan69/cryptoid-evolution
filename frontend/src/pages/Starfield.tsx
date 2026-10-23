@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useState, type CSSProperties } from "react";
+import { memo, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import type { PlayerPosition } from "./playerCombat";
 
 type Star = { x: number; y: number; radius: number; color: string; opacity: number; glint: boolean };
@@ -62,6 +62,25 @@ function StarFlare({ stars }: { stars: Star[] }) {
 }
 
 const Starfield = ({ sector, paused, showNebula = false }: { sector: number; player: PlayerPosition; paused: boolean; showNebula?: boolean }) => {
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const [clipStars, setClipStars] = useState(false);
+  useEffect(() => {
+    const node = viewportRef.current;
+    const field = node?.parentElement;
+    if (!node || !field || typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(() => {
+      const bounds = node.getBoundingClientRect();
+      const visible = field.getBoundingClientRect();
+      // Keep the complete visible field inside both SVG viewports throughout
+      // the original 7/-11px horizontal and -5/8px vertical sway.
+      setClipStars(bounds.width > 0 && bounds.height > 0
+        && visible.left - bounds.left >= 11 && bounds.right - visible.right >= 11
+        && visible.top - bounds.top >= 8 && bounds.bottom - visible.bottom >= 8);
+    });
+    observer.observe(node);
+    observer.observe(field);
+    return () => observer.disconnect();
+  }, []);
   const palette = ((sector - 1) % 6) + 1;
   const stars = useMemo(() => {
     const seed = Math.imul(sector, 0x9e3779b1) >>> 0;
@@ -79,14 +98,14 @@ const Starfield = ({ sector, paused, showNebula = false }: { sector: number; pla
       })(),
     };
   }, [sector]);
-  return <div className={`starfield starfield-sector-${palette}${paused ? " starfield-paused" : ""}`} aria-hidden="true">
+  return <div ref={viewportRef} className={`starfield starfield-sector-${palette}${paused ? " starfield-paused" : ""}`} aria-hidden="true">
     {showNebula && <div className="nebula-field"><span className="nebula-cloud" style={stars.cloud} /></div>}
     <div className="milky-band" />
     {!paused && <StarFlare stars={stars.distant} />}
-    <svg className="starfield-stars starfield-distant" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice">
+    <svg className="starfield-stars starfield-distant" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice" style={clipStars ? { overflow: "hidden" } : undefined}>
       {stars.distant.map((star, index) => <circle key={index} cx={star.x} cy={star.y} r={star.radius} fill={star.color} opacity={star.opacity} />)}
     </svg>
-    <svg className="starfield-stars starfield-nearby" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice">
+    <svg className="starfield-stars starfield-nearby" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice" style={clipStars ? { overflow: "hidden" } : undefined}>
       {stars.nearby.map((star, index) => <g key={index} opacity={star.opacity}>
         {star.glint && <>
           <circle cx={star.x} cy={star.y} r={star.radius * 5} fill={star.color} opacity=".08" />
