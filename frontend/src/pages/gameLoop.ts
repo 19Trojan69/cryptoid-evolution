@@ -19,11 +19,19 @@ export function startGuardedGameLoop(options: LoopOptions) {
   let pending: number | null = null;
   let generation = 0;
   let heartbeat = options.now();
+  let monitoring = options.active() && options.visible();
   let faulted = false;
   const signal = (reason: GameInterruption, error?: unknown) => {
     if (faulted) return;
     faulted = true;
     try { options.fault(reason, error); } catch { /* Keep the scheduler alive even if reporting fails. */ }
+  };
+  const stalled = (now: number) => {
+    const active = options.active() && options.visible();
+    // A loading, paused or hidden interval is not a foreground stall. Start a
+    // fresh measured interval when playback is first observed active again.
+    if (!active || !monitoring) { monitoring = active; heartbeat = now; return false; }
+    return now - heartbeat > GAME_STALL_MS;
   };
   const schedule = () => {
     if (!running || pending !== null) return;
@@ -32,7 +40,7 @@ export function startGuardedGameLoop(options: LoopOptions) {
       if (!running || token !== generation) return;
       pending = null;
       const now = options.now();
-      if (options.active() && options.visible() && now - heartbeat > GAME_STALL_MS) signal('loop-stall');
+      if (stalled(now)) signal('loop-stall');
       heartbeat = now;
       try { options.step(time); faulted = false; }
       catch (error) { signal('frame-error', error); }
@@ -41,10 +49,10 @@ export function startGuardedGameLoop(options: LoopOptions) {
   };
   const watcher = options.watch(() => {
     if (!running) return;
-    if (!options.active() || !options.visible()) { heartbeat = options.now(); return; }
-    if (options.now() - heartbeat <= GAME_STALL_MS) return;
+    const now = options.now();
+    if (!stalled(now)) return;
     signal('loop-stall');
-    heartbeat = options.now();
+    heartbeat = now;
     if (pending !== null) options.cancelFrame(pending);
     pending = null;
     generation++;

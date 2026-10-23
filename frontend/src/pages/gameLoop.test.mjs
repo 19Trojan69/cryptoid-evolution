@@ -7,8 +7,8 @@ import { startGuardedGameLoop, GAME_STALL_MS } from './gameLoop.ts';
 import { recordGameDiagnostic, GAME_DIAGNOSTICS_KEY, createGameSessionDiagnostics } from './gameDiagnostics.ts';
 import { createOwnerDiagnosticProbe } from './ownerFlightRecorder.ts';
 
-function harness(step = () => {}, onFault = () => {}) {
-  let clock = 0, next = 0, active = true, visible = true;
+function harness(step = () => {}, onFault = () => {}, initial = {}) {
+  let clock = 0, next = 0, active = initial.active ?? true, visible = initial.visible ?? true;
   const frames = new Map(), canceled = [], faults = [];
   let watch;
   const stop = startGuardedGameLoop({ step, fault: (...args) => { faults.push(args); onFault(...args); },
@@ -52,6 +52,45 @@ test('intentional pause and hidden tabs are never treated as a foreground stall'
   const h = harness(); h.active(false); h.advance(10000); h.check(); h.frame();
   h.active(true); h.visible(false); h.advance(10000); h.check(); h.frame();
   assert.equal(h.faults.length, 0); h.stop();
+});
+test('the first active RAF does not count an observed paused interval as a foreground stall', () => {
+  const h = harness(); h.active(false); h.frame(); h.advance(GAME_STALL_MS * 2);
+  h.active(true); h.frame(); assert.deepEqual(h.faults, []); assert.equal(h.frames.size, 1);
+  h.advance(16); h.frame(); assert.deepEqual(h.faults, []); h.stop();
+});
+test('the monitoring timer rearms after pause without replacing the pending RAF', () => {
+  const h = harness(); h.active(false); h.check(); h.advance(GAME_STALL_MS * 2);
+  const pending = [...h.frames.keys()]; h.active(true); h.check();
+  assert.deepEqual(h.faults, []); assert.deepEqual([...h.frames.keys()], pending); assert.deepEqual(h.canceled, []);
+  h.frame(); assert.equal(h.frames.size, 1); h.stop();
+});
+test('the first visible RAF excludes the observed hidden interval', () => {
+  const h = harness(); h.visible(false); h.frame(); h.advance(60_000);
+  h.visible(true); h.frame(); assert.deepEqual(h.faults, []); assert.equal(h.frames.size, 1); h.stop();
+});
+test('an initially loading loop starts its foreground heartbeat on first observation of play', () => {
+  for (const next of ['frame', 'check']) {
+    const h = harness(() => {}, () => {}, { active: false });
+    h.advance(10_000); h.active(true); h[next](); assert.deepEqual(h.faults, []);
+    h.advance(16); h.frame(); assert.deepEqual(h.faults, []); h.stop();
+  }
+});
+test('a genuine foreground stall after rearming still uses the exact original threshold and replacement', () => {
+  const h = harness(); h.active(false); h.check(); h.advance(10_000); h.active(true); h.check();
+  assert.deepEqual(h.faults, []); h.advance(GAME_STALL_MS); h.check(); assert.deepEqual(h.faults, []);
+  const stale = [...h.frames.values()][0]; h.advance(1); h.check();
+  assert.equal(h.faults.length, 1); assert.equal(h.faults[0][0], 'loop-stall'); assert.equal(h.frames.size, 1);
+  assert.equal(h.canceled.length, 1); stale(30_000); assert.equal(h.frames.size, 1); h.stop();
+});
+test('a delayed RAF after rearming still detects a subsequent active stall before the watcher', () => {
+  const h = harness(); h.active(false); h.frame(); h.advance(10_000); h.active(true); h.frame();
+  assert.deepEqual(h.faults, []); h.advance(GAME_STALL_MS + 1); h.frame();
+  assert.equal(h.faults.length, 1); assert.equal(h.faults[0][0], 'loop-stall'); h.stop();
+});
+test('rearming never suppresses a simulation exception on the first resumed frame', () => {
+  let fail = false; const h = harness(() => { if (fail) throw new TypeError('resumed simulation failed'); });
+  h.active(false); h.frame(); h.advance(10_000); h.active(true); fail = true; h.frame();
+  assert.equal(h.faults.length, 1); assert.equal(h.faults[0][0], 'frame-error'); assert.equal(h.frames.size, 1); h.stop();
 });
 test('cleanup invalidates callbacks and monitoring, including Strict Mode remounts', () => {
   let steps = 0; const h = harness(() => steps++), stale = [...h.frames.values()][0];

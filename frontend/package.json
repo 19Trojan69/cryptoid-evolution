@@ -8,7 +8,7 @@
     "predev": "npm run prepare:hulls",
     "dev": "node_modules/.bin/vite",
     "prebuild": "npm run prepare:hulls",
-    "build": "npm run test:i18n && npm run check:i18n:release && npm run test:full-session && npm run test:canvas-static-url && npm run test:weapon-reload-recovery && node_modules/.bin/tsc -b && vite build",
+    "build": "npm run test:i18n && npm run check:i18n:release && npm run test:full-session && npm run test:canvas-static-url && npm run test:weapon-reload-recovery && npm run test:rock-display-bounds && npm run test:game-loop && node_modules/.bin/tsc -b && vite build",
     "lint": "node_modules/.bin/eslint .",
     "preview": "node_modules/.bin/vite preview",
     "format": "prettier --write .",
@@ -27,7 +27,9 @@
     "test:full-session": "node --experimental-strip-types --test src/pages/fullSessionRecorder.test.mjs src/pages/fullSessionTransfer.test.mjs src/pages/hullPreparationDiagnostics.test.mjs src/pages/fullSessionStoreCallbacks.test.mjs",
     "test:i18n": "node --experimental-strip-types --test src/i18n.test.mjs",
     "audit:i18n": "node --experimental-strip-types scripts/localization-inventory.mjs",
-    "check:i18n:release": "node --experimental-strip-types scripts/localization-inventory.mjs --check"
+    "check:i18n:release": "node --experimental-strip-types scripts/localization-inventory.mjs --check",
+    "test:rock-display-bounds": "node --test src/pages/BonusRockLayerDisplay.test.mjs",
+    "test:game-loop": "node --experimental-strip-types --test src/pages/gameLoop.test.mjs"
   },
   "dependencies": {
     "@mui/icons-material": "^7.3.8",

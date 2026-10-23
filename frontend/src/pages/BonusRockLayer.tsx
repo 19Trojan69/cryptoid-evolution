@@ -50,10 +50,17 @@ const BonusRockLayer = ({ rocks, effects, width, height }: { rocks: BonusRock[];
       }
       // Reuse the existing scene updates: no new timer or animation loop. A
       // paused scene may retain the empty surface until its next update.
-      if(now-emptySince.current>=2000&&(c.width!==1||c.height!==1))c.width=c.height=1;
+      if(now-emptySince.current>=2000){
+        if(c.width!==1||c.height!==1)c.width=c.height=1;
+        // An empty one-pixel backing must not retain a full-field display layer.
+        if(c.style.width!=='1px')c.style.width='1px';
+        if(c.style.height!=='1px')c.style.height='1px';
+      }
       return;
     }
     emptySince.current=null;
+    if(c.style.width!=='100%')c.style.width='100%';
+    if(c.style.height!=='100%')c.style.height='100%';
     const dpr=Math.min(1.5,window.devicePixelRatio||1);
     if(c.width!==Math.round(width*dpr)||c.height!==Math.round(height*dpr)){c.width=Math.round(width*dpr);c.height=Math.round(height*dpr);occupied.current=false;}
     const g=c.getContext('2d');if(!g)return;
@@ -68,6 +75,6 @@ const BonusRockLayer = ({ rocks, effects, width, height }: { rocks: BonusRock[];
     occupied.current=rocks.length>0||effects.length>0;
     endRockPaint(paintStarted);
   },[rocks,effects,width,height]);
-  return <canvas ref={ref} width={1} height={1} className="bonus-rock-layer" style={{position:'absolute',inset:0,width:'100%',height:'100%',zIndex:2,pointerEvents:'none'}} aria-hidden="true"/>;
+  return <canvas ref={ref} width={1} height={1} className="bonus-rock-layer" style={{position:'absolute',inset:0,width:1,height:1,zIndex:2,pointerEvents:'none'}} aria-hidden="true"/>;
 };
 export default memo(BonusRockLayer);

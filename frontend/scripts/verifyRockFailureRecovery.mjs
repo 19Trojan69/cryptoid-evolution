@@ -22,9 +22,10 @@ async function compile(before) {
 const [beforeCode, afterCode] = await Promise.all([compile(true), compile(false)]);
 function component(code, createCanvas) {
   const main = createCanvas(true), refs = [], slots = [], timers = new Map();
+  main.style ??= {};
   let refIndex = 0, effectIndex = 0, timerId = 0, queue = [];
   const hooks = {
-    ref(value) { const index = refIndex++; return refs[index] ??= { current: value === null ? main : value }; },
+    ref(value) { const index = refIndex++; return refs[index] ??= { current: index === 0 ? main : value }; },
     effect(fn, deps) {
       const index = effectIndex++, previous = slots[index];
       if (!previous || deps.some((value, i) => value !== previous.deps[i])) queue.push(() => {
@@ -32,7 +33,7 @@ function component(code, createCanvas) {
       });
     },
   };
-  const scope = { module: { exports: {} }, exports: {}, __hooks: hooks,
+  const scope = { module: { exports: {} }, exports: {}, __hooks: hooks, performance: { now: () => 0 },
     document: { createElement: () => createCanvas(false) },
     window: { devicePixelRatio: 1.5, setTimeout(fn) { timers.set(++timerId, fn); return timerId; }, clearTimeout(id) { timers.delete(id); } } };
   scope.exports = scope.module.exports; vm.runInNewContext(code, scope);
@@ -52,7 +53,7 @@ for (const mode of ['null', 'context-throws', 'paint-throws']) {
   for (const [code, fixed] of [[beforeCode, false], [afterCode, true]]) {
     let failure = mode, mainDraws = 0; const surfaces = [];
     const create = main => {
-      const c = { width: 300, height: 150, getContext() {
+      const c = { width: 300, height: 150, style: {}, getContext() {
         if (!main && failure === 'null') return null;
         if (!main && failure === 'context-throws') throw Error('controlled context failure');
         return context;
