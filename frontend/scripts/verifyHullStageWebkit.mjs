@@ -7,7 +7,7 @@ import { resolve } from 'node:path';
 import { build } from 'esbuild';
 
 // Local acceptance host. Uses actual React/image/recorder/owner-export code;
-// only the final decode pause and subsequent process termination are injected.
+// only the final image-load pause and subsequent process termination are injected.
 const require = createRequire(import.meta.url);
 const { webkit } = require(process.env.CRYPTOID_PLAYWRIGHT_PATH
   || process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES + '/playwright');
@@ -40,11 +40,11 @@ window.phase=sector=>window.recorder.event({kind:'phase-start',sector,phase:'SEC
 window.save=()=>{window.recorder.sample({sector:55,phase:'SECTOR_INTRO',encounter:'normal',status:'playing',atMs:performance.now(),frames:1});return settleFullSessionWrites();};
 window.graphicsStatus=()=>readFullSessionStatus(window);
 window.stats=()=>({images:paintedShipResourceStats(),recorder:window.recorder.stats()});
-window.armHeldDecode=()=>{
-  const original=HTMLImageElement.prototype.decode;
-  HTMLImageElement.prototype.decode=function(...args){
-    if(this.src.endsWith('ship_20_stage_3_white.png'))return new Promise(()=>{});
-    return original.apply(this,args);
+window.armHeldLoad=()=>{
+  const Original=window.Image;
+  window.Image=class extends Original{
+    set src(value){if(!value.endsWith('ship_20_stage_3_white.png'))super.src=value;}
+    get src(){return super.src;}
   };
   window.held=retainPreparedHulls([{sprite:19,color:'white',stage:3}]);
 };
@@ -110,12 +110,12 @@ try{
   }
   await page.evaluate(()=>window.save());
   const committed=await page.evaluate(()=>window.graphicsStatus().lastCommittedSeq);
-  await page.evaluate(()=>window.armHeldDecode());
-  await page.waitForFunction(()=>{const d=window.graphicsStatus()?.lastGraphics?.data;return d?.step==='variant-decode-before'&&d.sprite===19&&d.hullStage===3;});
+  await page.evaluate(()=>window.armHeldLoad());
+  await page.waitForFunction(()=>{const d=window.graphicsStatus()?.lastGraphics?.data;return d?.step==='variant-load-start'&&d.sprite===19&&d.hullStage===3;});
   const final=await page.evaluate(()=>({status:window.graphicsStatus(),stats:window.stats()}));
   assert.equal(final.status.lastCommittedSeq,committed);
   assert.ok(final.status.lastGraphics.seq>committed,'the final graphics step is an uncommitted synchronous observation');
-  assert.ok(final.stats.recorder.queued>=4);
+  assert.ok(final.stats.recorder.queued>=2);
   const rows=processRows(),roots=new Set(rows.filter(x=>!before.has(x.pid)&&/\/bin\/MiniBrowser\b/.test(x.args)).map(x=>x.pid));
   const ours=pid=>{for(let i=0;i<10&&pid;i++){if(roots.has(pid))return true;pid=rows.find(x=>x.pid===pid)?.parent;}return false;};
   const children=rows.filter(x=>!before.has(x.pid)&&/(?:WebKit|WPE)WebProcess/.test(x.args)&&ours(x.pid));
@@ -125,7 +125,7 @@ try{
   await recovered.goto(url);await recovered.waitForFunction(()=>window.ready);
   const data=await recovered.evaluate(()=>window.recover());
   assert.equal(data.capture.integrity.contiguous,true);assert.equal(data.summary.state,'recording');
-  assert.equal(data.summary.lastSeq,committed);assert.equal(data.status.lastGraphics.data.step,'variant-decode-before');
+  assert.equal(data.summary.lastSeq,committed);assert.equal(data.status.lastGraphics.data.step,'variant-load-start');
   assert.equal(data.status.lastGraphics.data.sprite,19);assert.equal(data.status.lastGraphics.data.hullStage,3);
   assert.equal(data.capture.storageStatus.lastGraphics.seq,final.status.lastGraphics.seq);
   assert.equal(data.capture.records.some(x=>x.seq===final.status.lastGraphics.seq),false,'export does not invent a commit for the marker');
@@ -142,7 +142,7 @@ try{
     committedRecords:committed,committedChunks:data.summary.chunks,tailGraphicsSeq:final.status.lastGraphics.seq,
     lastStep:data.status.lastGraphics.data,recorderWork:final.stats.recorder,integrity:data.capture.integrity,
     pageErrors:errors.length,imageHttpErrors:failures.length,
-    limits:'Actual local Linux WebKit/React/image loading/IndexedDB and verified export functions. Final decode is deliberately held and only the task-owned content process is killed. No physical PiBrowser, iPhone timing/native memory, natural crash reproduction or crash-cause proof.'};
+    limits:'Actual local Linux WebKit/React/image loading/IndexedDB and verified export functions. Final source assignment is deliberately withheld and only the task-owned content process is killed. No physical PiBrowser, iPhone timing/native memory, natural crash reproduction or crash-cause proof.'};
   if(process.argv[2])writeFileSync(process.argv[2],JSON.stringify(result,null,2)+'\n');
   console.log(JSON.stringify(result));
 }finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}

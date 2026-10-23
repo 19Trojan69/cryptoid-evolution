@@ -54,18 +54,19 @@ test('a cold static hull loads individually without Canvas, readback, PNG encodi
   plan.release(); assert.equal(f.api.paintedShipResourceStats().retainCount, 0);
 });
 
-test('decoded readiness and the full encoded-plus-decoded estimate are retained', async () => {
-  const f = await staticHullHost({ holdDecode: true }), plan = f.api.retainPreparedHulls([selected]);
-  await until(() => f.decodes.length === 1);
+test('successful load gates readiness and retains the full encoded-plus-pixel estimate without explicit decode', async () => {
+  const f = await staticHullHost({ holdLoads: true, holdDecode: true }), plan = f.api.retainPreparedHulls([selected]);
+  await until(() => f.loads.length === 1);
   assert.equal(f.api.__qaTouchHull(selected), undefined);
-  f.decodes.shift().resolve(); assert.deepEqual([...await plan.settled], [true]);
+  await f.loads.shift().load(); assert.deepEqual([...await plan.settled], [true]);
+  assert.equal(f.counters.decodeCalls,0);
   const asset = staticHullAsset(0, 'gold', 1), image = await loadImage(fs.readFileSync(publicRoot + asset.url.slice(1)));
   assert.equal(f.api.paintedShipResourceStats().estimatedBytes, asset.bytes + image.width * image.height * 4);
   assert.equal(image.width, 282); assert.equal(image.height, 282); plan.release();
 });
 
-test('load/decode failures remain retryable without publishing an incomplete image', async () => {
-  for (const failure of ['failLoad', 'failDecode']) {
+test('load failure remains retryable without publishing an incomplete image', async () => {
+  for (const failure of ['failLoad']) {
     const f = await staticHullHost({ [failure]: 1 }), plan = f.api.retainPreparedHulls([selected]);
     assert.deepEqual([...await plan.settled], [false]); plan.release();
     assert.equal(f.api.__qaTouchHull(selected), undefined); assert.equal(f.api.paintedShipResourceStats().pending, 0);
@@ -74,19 +75,19 @@ test('load/decode failures remain retryable without publishing an incomplete ima
   }
 });
 
-test('obsolete delayed loads and decodes cancel; a still mounted consumer protects the same request', async () => {
-  for (const stage of ['load', 'decode']) {
-    const f = await staticHullHost({ holdLoads: stage === 'load', holdDecode: stage === 'decode' });
+test('obsolete delayed loads cancel; a still mounted consumer protects the same request', async () => {
+  for (const stage of ['load']) {
+    const f = await staticHullHost({ holdLoads: true });
     const plan = f.api.retainPreparedHulls([selected]);
-    await until(() => stage === 'load' ? f.loads.length : f.decodes.length);
+    await until(() => f.loads.length);
     plan.release();
-    if (stage === 'load') await f.loads.shift().load(); else f.decodes.shift().resolve();
+    await f.loads.shift().load();
     assert.deepEqual([...await plan.settled], [false]);
     assert.equal(f.api.paintedShipResourceStats().pending, 0); assert.equal(f.api.__qaTouchHull(selected), undefined);
   }
-  const f = await staticHullHost({ holdDecode: true });
+  const f = await staticHullHost({ holdLoads: true });
   const first = f.api.retainPreparedHulls([selected]), second = f.api.retainPreparedHulls([selected]);
-  await until(() => f.decodes.length === 1); first.release(); f.decodes.shift().resolve();
+  await until(() => f.loads.length === 1); first.release(); await f.loads.shift().load();
   assert.deepEqual([...await second.settled], [true]); assert.equal(f.counters.images, 1);
   second.release(); assert.equal(f.api.paintedShipResourceStats().retainCount, 0);
 });
@@ -139,8 +140,8 @@ test('static hull PNGs remain ordinary Canvas image sources for original debris 
   }
 });
 
-test('the actual style hook keeps the original source until decoded and preserves every style except the image URL', async () => {
-  const f = await staticHullHost({ holdDecode: true });
+test('the actual style hook keeps the original source until loaded and preserves every style except the image URL', async () => {
+  const f = await staticHullHost({ holdLoads: true, holdDecode: true });
   const probe = new Host(() => {
     f.setHooks(globalThis.__hookHost);
     return f.api.usePaintedShipStyle(0, 'gold', 1);
@@ -148,9 +149,9 @@ test('the actual style hook keeps the original source until decoded and preserve
   const source = '/ships/evolution/ship_01_stage_1.png';
   const original = { backgroundImage: `url(${source})`, '--ship-surface-mask': `url(${source})`, backgroundPosition: 'center', backgroundSize: '100% 100%', filter: 'none' };
   assert.deepEqual({ ...probe.render() }, original); probe.passive();
-  await until(() => f.decodes.length === 1);
+  await until(() => f.loads.length === 1);
   assert.deepEqual({ ...probe.render() }, original);
-  f.decodes.shift().resolve(); await until(() => probe.dirty);
+  await f.loads.shift().load(); await until(() => probe.dirty); assert.equal(f.counters.decodeCalls,0);
   const url = staticHullAsset(0, 'gold', 1).url;
   assert.deepEqual({ ...probe.render() }, { ...original, backgroundImage: `url(${url})`, '--ship-surface-mask': `url(${url})` });
   probe.unmount(); assert.equal(f.api.paintedShipResourceStats().retainCount, 0);

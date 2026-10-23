@@ -7,7 +7,7 @@ export const HULL_DIAGNOSTIC_STEPS = [
   'source-center-before', 'source-center-after', 'source-center-failed', 'source-ready', 'source-work-failed',
   'source-surface-release-before', 'source-surface-released',
   'variant-create-before', 'variant-load-start', 'variant-loaded', 'variant-load-failed',
-  'variant-decode-before', 'variant-decode-after', 'variant-ready', 'variant-cancelled', 'variant-unavailable',
+  'variant-decode-before', 'variant-decode-after', 'variant-decode-skipped', 'variant-ready', 'variant-cancelled', 'variant-unavailable',
 ] as const;
 type HullStep = typeof HULL_DIAGNOSTIC_STEPS[number];
 type HullObservation = { imageJob?: number; sprite?: number; hullStage?: number; paintIndex?: number;

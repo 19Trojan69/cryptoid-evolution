@@ -136,9 +136,9 @@ const renderPaintedSprite = async (index: number, colorId: PlayerColorId, stage:
     decoded.src = asset.url;
   });
   checkRetained();
-  hullPreparationStep('variant-decode-before', diagnostic);
-  if (typeof decoded.decode === 'function') await decoded.decode();
-  hullPreparationStep('variant-decode-after', diagnostic);
+  // Comparison: keep the successful load gate and serial queue, but do not
+  // request another explicit decode. Rendering still uses the original PNG.
+  hullPreparationStep('variant-decode-skipped', diagnostic);
   checkRetained();
   if (timed) preparationProbe.decodeTotalMs += performance.now() - decodingStarted;
   // Count the full decoded pixels as before. Only the painting/encoding/unique

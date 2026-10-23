@@ -17,18 +17,17 @@ test('ordinary players allocate no graphics job or breadcrumb', () => {
   assert.doesNotThrow(()=>hullPreparationStep('variant-ready',undefined));
 });
 
-test('actual image callbacks distinguish loading, optional decode and readiness with a stable numeric job', async t => {
+test('actual image callbacks wait for load and explicitly record skipped decode with a stable numeric job', async t => {
   const f=await staticHullHost({holdLoads:true,holdDecode:true}),events=[];
   const stop=f.api.__qaObserve((kind,data)=>events.push({kind,data}));t.after(stop);
   const plan=f.api.retainPreparedHulls([{sprite:7,color:'gold',stage:1}]);t.after(()=>plan.release());
   await until(()=>f.loads.length===1);
   assert.deepEqual(events.map(x=>x.data.step),['variant-create-before','variant-load-start']);
-  await f.loads.shift().load();await until(()=>f.decodes.length===1);
-  assert.equal(events.at(-1).data.step,'variant-decode-before');
   assert.equal(f.api.paintedShipResourceStats().painted,0);
-  f.decodes.shift().resolve();assert.deepEqual([...await plan.settled],[true]);
+  await f.loads.shift().load();assert.deepEqual([...await plan.settled],[true]);
+  assert.equal(f.counters.decodeCalls,0);assert.equal(f.decodes.length,0);
   assert.deepEqual(events.map(x=>x.data.step),['variant-create-before','variant-load-start','variant-loaded',
-    'variant-decode-before','variant-decode-after','variant-ready']);
+    'variant-decode-skipped','variant-ready']);
   assert.equal(new Set(events.map(x=>x.data.imageJob)).size,1);
   assert.ok(events.every(x=>x.kind==='boundary'&&x.data.sprite===7&&x.data.hullStage===1&&Number.isSafeInteger(x.data.paintIndex)));
   assert.equal(JSON.stringify(events).includes('/ships/'),false);
@@ -46,8 +45,8 @@ test('actual raw-source readback and temporary-surface release are individually 
   assert.ok(events.every(x=>x.sprite===7&&x.hullStage===1));
 });
 
-test('load and decode failures preserve retry/fallback behavior and cannot publish a ready image', async t => {
-  for(const failure of ['failLoad','failDecode']){
+test('load failure preserves retry/fallback behavior and cannot publish a ready image', async t => {
+  for(const failure of ['failLoad']){
     const f=await staticHullHost({[failure]:1}),events=[];
     t.after(f.api.__qaObserve((kind,data)=>events.push(data)));
     const hull={sprite:7,color:'gold',stage:1},plan=f.api.retainPreparedHulls([hull]);
@@ -60,6 +59,17 @@ test('load and decode failures preserve retry/fallback behavior and cannot publi
   }
 });
 
+test('putting back the released decode call stalls a held decode; comparison reaches readiness without calling it', async t => {
+  const control=await staticHullHost({holdDecode:true,explicitDecodeControl:true});
+  const original=control.api.retainPreparedHulls([{sprite:17,color:'anthracite',stage:1}]);t.after(()=>original.release());
+  await until(()=>control.decodes.length===1);
+  assert.equal(control.api.paintedShipResourceStats().painted,0);
+  const candidate=await staticHullHost({holdDecode:true});
+  const changed=candidate.api.retainPreparedHulls([{sprite:17,color:'anthracite',stage:1}]);t.after(()=>changed.release());
+  assert.deepEqual([...await changed.settled],[true]);assert.equal(candidate.counters.decodeCalls,0);
+  control.decodes.shift().resolve();assert.deepEqual([...await original.settled],[true]);
+});
+
 test('scope proof rejects hidden cache mutations and side effects in a diagnostic argument', () => {
   const source=readFileSync(new URL('./paintedShip.ts',import.meta.url),'utf8');
   const changed=source.replace('new ResourceCache<string>(24,','new ResourceCache<string>(23,');
@@ -67,6 +77,9 @@ test('scope proof rejects hidden cache mutations and side effects in a diagnosti
   assert.throws(()=>assertObservationOnly({'src/pages/paintedShip.ts':changed}),/only exact observation/);
   const hidden=source.replace('hullVariantJob(index, colorId, stage)','hullVariantJob(++index, colorId, stage)');
   assert.throws(()=>assertObservationOnly({'src/pages/paintedShip.ts':hidden}),/one exact diagnostic addition/);
+  const restored=source.replace("hullPreparationStep('variant-decode-skipped', diagnostic);",
+    "hullPreparationStep('variant-decode-skipped', diagnostic); if (typeof decoded.decode === 'function') await decoded.decode();");
+  assert.throws(()=>assertObservationOnly({'src/pages/paintedShip.ts':restored}),/only exact observation/);
 });
 
 function fixture(t) {

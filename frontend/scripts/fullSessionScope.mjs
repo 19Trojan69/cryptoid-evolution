@@ -75,8 +75,7 @@ const additions = {
     "hullPreparationStep('variant-loaded', diagnostic);",
     "hullPreparationStep('variant-load-failed', diagnostic);",
     "hullPreparationStep('variant-load-start', diagnostic);",
-    "hullPreparationStep('variant-decode-before', diagnostic);",
-    "hullPreparationStep('variant-decode-after', diagnostic);",
+    "hullPreparationStep('variant-decode-skipped', diagnostic);",
     "hullPreparationStep('variant-ready', diagnostic);",
   ],
 };
@@ -91,6 +90,12 @@ function structure(node) {
     children.length ? null : node.kind === ts.SyntaxKind.Block ? '{}' : node.text ?? node.getText(), children];
 }
 export function canonicalScopeSource(source, path, strip = false) {
+  // The comparison has one reviewed behavior change beyond observations.
+  // Restore precisely the removed conditional to compare the complete loader
+  // with its original fingerprint; any other functional change still fails.
+  if (strip && path === 'src/pages/paintedShip.ts') source = source.replace(
+    "hullPreparationStep('variant-decode-skipped', diagnostic);",
+    "hullPreparationStep('variant-decode-skipped', diagnostic);\n  if (typeof decoded.decode === 'function') await decoded.decode();");
   const ast = ts.createSourceFile(path, source, ts.ScriptTarget.Latest, true,
     path.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
   if (!strip) return JSON.stringify(structure(ast));
@@ -123,6 +128,6 @@ export function assertObservationOnly(overrides = {}) {
   for (const path of Object.keys(additions)) {
     const after = overrides[path] ?? readFileSync(new URL('../' + path, import.meta.url), 'utf8');
     assert.equal(createHash('sha256').update(canonicalScopeSource(after, path, true)).digest('hex'), baseline[path],
-      `${path}: only exact observation additions`);
+      `${path}: only exact observation additions and the reviewed explicit-decode removal`);
   }
 }

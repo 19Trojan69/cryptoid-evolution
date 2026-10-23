@@ -14,9 +14,11 @@ export async function until(check) {
   throw new Error('Image readiness host did not settle');
 }
 
-export async function staticHullHost({ before = false, holdLoads = false, holdDecode = false, failLoad = 0, failDecode = 0 } = {}) {
-  const source = before ? execFileSync('git', ['show', `${previousHullSource}:frontend/src/pages/paintedShip.ts`], { cwd: root, encoding: 'utf8' })
+export async function staticHullHost({ before = false, holdLoads = false, holdDecode = false, failLoad = 0, failDecode = 0, explicitDecodeControl = false } = {}) {
+  let source = before ? execFileSync('git', ['show', `${previousHullSource}:frontend/src/pages/paintedShip.ts`], { cwd: root, encoding: 'utf8' })
     : fs.readFileSync(root + 'src/pages/paintedShip.ts', 'utf8');
+  if (explicitDecodeControl) source = source.replace("hullPreparationStep('variant-decode-skipped', diagnostic);",
+    "hullPreparationStep('variant-decode-before', diagnostic);\n  if (typeof decoded.decode === 'function') await decoded.decode();\n  hullPreparationStep('variant-decode-after', diagnostic);");
   const bundle = await build({ absWorkingDir: root, stdin: {
     contents: source + '\nexport const __qaTouchHull = h => cache.get(`${h.sprite}:${h.stage ?? 1}:${h.color}`);'
       + '\nexport { observeSessionDiagnostics as __qaObserve } from "../lib/sessionDiagnosticEvents.ts";',
@@ -26,7 +28,7 @@ export async function staticHullHost({ before = false, holdLoads = false, holdDe
     b.onLoad({ filter: /.*/, namespace: 'host' }, () => ({ loader: 'js', contents: 'export const useState=(...a)=>globalThis.__hooks.state(...a);export const useEffect=(...a)=>globalThis.__hooks.effect(false,...a);' }));
   } }] });
   const urls = new Map(), requested = new Set(), loads = [], decodes = [];
-  const counters = { images: 0, canvases: 0, readbacks: 0, encodes: 0, objectURLs: 0, revoked: 0, liveCanvasBytes: 0, maxCanvasBytes: 0 };
+  const counters = { images: 0, decodeCalls: 0, canvases: 0, readbacks: 0, encodes: 0, objectURLs: 0, revoked: 0, liveCanvasBytes: 0, maxCanvasBytes: 0 };
   let lastPNG;
   class Image {
     onload = null; onerror = null; native = null;
@@ -47,6 +49,7 @@ export async function staticHullHost({ before = false, holdLoads = false, holdDe
       } catch { this.onerror?.(); }
     }
     decode() {
+      counters.decodeCalls++;
       if (failDecode > 0) { failDecode--; return Promise.reject(new Error('Controlled decode failure')); }
       return holdDecode ? new Promise((resolve, reject) => decodes.push({ resolve, reject })) : Promise.resolve();
     }

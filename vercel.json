@@ -25,6 +25,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/hull-load-readiness-20261023": false,
       "codex/hull-stage-diagnostics-20261022": false,
       "codex/full-session-export-recovery-20261022": false,
       "codex/normal-transition-crash-audit-20261022": false,
