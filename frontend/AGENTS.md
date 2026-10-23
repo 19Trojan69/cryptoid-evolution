@@ -1,5 +1,46 @@
 # Preserve the officially approved game
 
+## Empty display bounds and resume watchdog, 23 October 2026, prepared
+
+Runtime 494f7b7181befe42654f2d9e965a00f77e768c23,
+tree ce2ee28b9719b14161177c0493f660480eafc3b0, on
+codex/idle-display-resume-guard-20261023 inherits 9fd9c9d and the IDB callback guard.
+Automatic deployment is disabled in the first branch commit. Nine remote
+runtime/config/test blobs match the checked local files. No publication or main
+merge; preserve every fixed release/rollback reference and Mainnet.
+
+An empty BonusRockLayer used a 1x1 raster but full-field display bounds. Start its
+empty display at 1x1 and shrink it after the same original 2000ms grace on an
+existing update; restore 100% bounds before the next active draw. Material and
+active draw source are byte-identical; DPR cap 1.5, prewarm, timing, gameplay and
+all art remain unchanged. No new RAF/timer. Eight regressions plus 312/312 exact
+native RGBA comparisons and 312 valid twin-baseline controls pass across two field
+sizes, three DPR values, two cycles in Chromium 141/WPE 26.5. WebKit bounds/estimated
+memory snapshots support only a display-layer finding, not RSS/FPS/iPhone proof.
+
+A separate loop defect is reproduced: the first callback after observed paused,
+loading or hidden time could report that gap as active stall. Rearm measurement
+on first observed active/visible callback. Original 10 pass/7 fail becomes 17 pass.
+Preserve strict >2500ms real-stall detection, 500ms watcher, pending generation,
+one RAF, original explicit Resume and GamePage state/save/audio recovery.
+Unobserved transitions cannot be inferred; genuine active stalls remain guarded.
+
+Full build: 119 tests, localization release check, TypeScript/Vite and changed-file
+lint pass. Original 1740 hulls/95,450,326 bytes/revision 91a72bc0c36be9407915 retained.
+The final actual production Router Home/Play/Pause/Resume/Home passes in each
+native browser with original fonts and local guest SDK/API fixtures, no gameplay
+hooks or recovery bypass. Both game audio contexts close on Home; shared card/
+new Home music remain. Earlier rock-only WebKit UI pause is preserved as failed;
+its exact cause is not established by the separate deterministic watchdog fix.
+
+Build reports retain parent 9fd+dirty provenance; both module SHA256s match 494f.
+Seven failure/lifecycle cases, seven CPU pixel comparisons and four bonus-rock
+logic tests also pass. These are not physical PiBrowser, live-payment, sustained
+campaign or historical White-Screen acceptance. Keep sector 57/59 active-stall
+and historical device findings open. Do not repeat rejected renderer-cache/clip
+experiments, demand an owner campaign/purchase/OS report, or declare the whole
+game fixed. See docs/idle-display-resume-guard-20261023.md/.json and evidence.
+
 ## Diagnostic IDB callback guard, 23 October 2026, prepared, not published
 
 Renderer follow-up: native layer/timing comparisons identify the filtered milky

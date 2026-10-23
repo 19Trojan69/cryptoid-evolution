@@ -1,0 +1,393 @@
+{
+  "sourceCommit": "9fd9c9d10216a9373ddfd8b22e579e8edbc29c95",
+  "workingTreeDirty": true,
+  "rockSourceSha256": "88534a8553ccfee658ce29197717aec24bddd53c8e512dbef8629dd6875b6576",
+  "localOnly": true,
+  "productionBundle": true,
+  "gameplayHooks": false,
+  "results": [
+    {
+      "engine": "chromium",
+      "errors": [],
+      "consoleErrors": [],
+      "failed": [],
+      "lifecycleCancellations": [
+        {
+          "url": "/audio/light-the-void.mp3",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "httpErrors": [],
+      "unexpectedExternal": [],
+      "steps": [
+        {
+          "step": "home-ready",
+          "state": {
+            "rock": null,
+            "audio": [
+              {
+                "state": "running",
+                "time": 0.23219954648526078
+              }
+            ],
+            "root": 1,
+            "technicalPause": false
+          }
+        },
+        {
+          "step": "game-started",
+          "state": {
+            "rock": {
+              "pixels": [
+                1,
+                1
+              ],
+              "display": [
+                1,
+                1
+              ],
+              "css": [
+                "1px",
+                "1px"
+              ]
+            },
+            "audio": [
+              {
+                "state": "running",
+                "time": 2.6615873015873017
+              },
+              {
+                "state": "running",
+                "time": 2.380045351473923
+              },
+              {
+                "state": "running",
+                "time": 2.3626303854875284
+              }
+            ],
+            "root": 1,
+            "paused": "false",
+            "technicalPause": false
+          }
+        },
+        {
+          "step": "paused",
+          "state": {
+            "rock": {
+              "pixels": [
+                1,
+                1
+              ],
+              "display": [
+                1,
+                1
+              ],
+              "css": [
+                "1px",
+                "1px"
+              ]
+            },
+            "audio": [
+              {
+                "state": "running",
+                "time": 2.75156462585034
+              },
+              {
+                "state": "running",
+                "time": 2.4700226757369617
+              },
+              {
+                "state": "running",
+                "time": 2.461315192743764
+              }
+            ],
+            "root": 1,
+            "paused": "true",
+            "technicalPause": false
+          }
+        },
+        {
+          "step": "resumed",
+          "state": {
+            "rock": {
+              "pixels": [
+                1,
+                1
+              ],
+              "display": [
+                1,
+                1
+              ],
+              "css": [
+                "1px",
+                "1px"
+              ]
+            },
+            "audio": [
+              {
+                "state": "running",
+                "time": 5.520544217687075
+              },
+              {
+                "state": "running",
+                "time": 5.221587301587301
+              },
+              {
+                "state": "running",
+                "time": 5.241904761904762
+              }
+            ],
+            "root": 1,
+            "paused": "false",
+            "technicalPause": false
+          }
+        },
+        {
+          "step": "home-returned",
+          "state": {
+            "rock": null,
+            "audio": [
+              {
+                "state": "closed",
+                "time": 5.732426303854876
+              },
+              {
+                "state": "running",
+                "time": 6.112653061224489
+              },
+              {
+                "state": "closed",
+                "time": 5.48281179138322
+              },
+              {
+                "state": "running",
+                "time": 0.6820861678004535
+              }
+            ],
+            "root": 1,
+            "technicalPause": false
+          }
+        }
+      ],
+      "version": "141.0.7390.37",
+      "passed": true
+    },
+    {
+      "engine": "webkit",
+      "errors": [],
+      "consoleErrors": [],
+      "failed": [],
+      "lifecycleCancellations": [],
+      "httpErrors": [],
+      "unexpectedExternal": [],
+      "steps": [
+        {
+          "step": "home-ready",
+          "state": {
+            "rock": null,
+            "audio": [
+              {
+                "state": "running",
+                "time": 0.18285714285714286
+              }
+            ],
+            "root": 1,
+            "technicalPause": false
+          }
+        },
+        {
+          "step": "game-started",
+          "state": {
+            "rock": {
+              "pixels": [
+                1,
+                1
+              ],
+              "display": [
+                1,
+                1
+              ],
+              "css": [
+                "1px",
+                "1px"
+              ]
+            },
+            "audio": [
+              {
+                "state": "running",
+                "time": 3.5787755102040815
+              },
+              {
+                "state": "running",
+                "time": 2.6296598639455784
+              },
+              {
+                "state": "running",
+                "time": 2.609342403628118
+              }
+            ],
+            "root": 1,
+            "paused": "false",
+            "technicalPause": false
+          }
+        },
+        {
+          "step": "paused",
+          "state": {
+            "rock": {
+              "pixels": [
+                1,
+                1
+              ],
+              "display": [
+                1,
+                1
+              ],
+              "css": [
+                "1px",
+                "1px"
+              ]
+            },
+            "audio": [
+              {
+                "state": "running",
+                "time": 4.4524263038548755
+              },
+              {
+                "state": "running",
+                "time": 3.5062131519274375
+              },
+              {
+                "state": "running",
+                "time": 3.4829931972789114
+              }
+            ],
+            "root": 1,
+            "paused": "true",
+            "technicalPause": false
+          }
+        },
+        {
+          "step": "resumed",
+          "state": {
+            "rock": {
+              "pixels": [
+                1,
+                1
+              ],
+              "display": [
+                1,
+                1
+              ],
+              "css": [
+                "1px",
+                "1px"
+              ]
+            },
+            "audio": [
+              {
+                "state": "running",
+                "time": 9.830748299319728
+              },
+              {
+                "state": "running",
+                "time": 8.870022675736962
+              },
+              {
+                "state": "running",
+                "time": 8.861315192743763
+              }
+            ],
+            "root": 1,
+            "paused": "false",
+            "technicalPause": false
+          }
+        }
+      ],
+      "version": "26.5",
+      "failure": "TimeoutError: locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.home-control')\u001b[22m\n\u001b[2m    - locator resolved to <button type=\"button\" aria-label=\"Go home\" class=\"game-control home-control\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"pause-settings-title\" class=\"game-overlay pause-settings-overlay\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"pause-settings-title\" class=\"game-overlay pause-settings-overlay\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    28 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"pause-settings-title\" class=\"game-overlay pause-settings-overlay\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+      "body": "/3\nLEVEL\n1\n◆ 0\nSHARDS\n0\nSCORE\nBLOCK\n1/9\nLEVEL 1 · GENESIS BELT · Block 1/9Group 1/1\nWeapons\nStandard\n\nMISSION PAUSED\n\nA short breather.\n\nLevel 1 · Block 1/9 · GENESIS BELT\n\nThe mission was paused after a technical interruption. Try Resume to continue.\n\nShop & weapons\nMusic & effects\n50%\n›\nControls\nRight-handed\n›\nLanguage\nEnglish\n›\nDisplay\n›\nResume"
+    }
+  ],
+  "api": [
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    }
+  ],
+  "missing": [],
+  "originalFontsServedLocally": [
+    {
+      "bytes": 44784,
+      "sha256": "c97fcd822f825e9e731867b650a39ee678b609bead29385e320171b573ec0910"
+    },
+    {
+      "bytes": 45308,
+      "sha256": "dd60d0861a3efd540efc3f2f85e7a7fd69a7ece7eadf44aaffa5fc5c86adda0e"
+    },
+    {
+      "bytes": 28420,
+      "sha256": "109f93e40ad9112766699347a94955300c5944b9b087f878ed8581e6ae33644d"
+    },
+    {
+      "bytes": 28416,
+      "sha256": "b12b8cda10619f3ff7bf4c658110818d4fd90d0abd0882b026e3550462a77fbc"
+    },
+    {
+      "bytes": 28332,
+      "sha256": "ac6e97ef18247a69a70454c7a1032239b75a2d39a6f6a901583cc83bf5855cb9"
+    },
+    {
+      "bytes": 28396,
+      "sha256": "6ef2725f9d4d38498b5af157dd8a1fc1c542eea9d87807d1ae54d2c4d5dcd5a6"
+    },
+    {
+      "bytes": 357212,
+      "sha256": "7377b0a3421b01dae185fc1262ea34a45f6ba226155f531e9e72f5262b56d802"
+    },
+    {
+      "bytes": 362824,
+      "sha256": "bcffd70c330f38f97f49fbb41cad34a1628a7852c0e6d1d1418ebc162add3144"
+    },
+    {
+      "bytes": 372568,
+      "sha256": "8b2fbb04ed3af38ea941d7351fc5bcf917d239d0bfb64c9bb8916510d8774495"
+    },
+    {
+      "bytes": 69360,
+      "sha256": "ec926d5065eaca49a48f96e312bbae0bbc5733c24215cf5dfabbdccee926fef7"
+    },
+    {
+      "bytes": 69416,
+      "sha256": "3e699ead1876244fa392243054ddefe7cf631b488438828a8a100731a22ab995"
+    },
+    {
+      "bytes": 69356,
+      "sha256": "6c0346b8d297ebdc225832833e03e884a26ad99d265ecd3924d46e1ba285ea87"
+    },
+    {
+      "bytes": 69308,
+      "sha256": "3e756954468ff1cb302dae0414262e72f76a67d87bef3fa1f3226cd0fb9b2d85"
+    }
+  ]
+}

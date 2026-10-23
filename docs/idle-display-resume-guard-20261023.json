@@ -1,0 +1,327 @@
+{
+  "date": "2026-10-23",
+  "status": "prepared_not_deployed",
+  "branch": "codex/idle-display-resume-guard-20261023",
+  "runtimeCommit": "494f7b7181befe42654f2d9e965a00f77e768c23",
+  "runtimeTree": "ce2ee28b9719b14161177c0493f660480eafc3b0",
+  "parentCommit": "9fd9c9d10216a9373ddfd8b22e579e8edbc29c95",
+  "remoteRuntimeBlobsVerified": 9,
+  "automaticDeploymentEnabled": false,
+  "runtimePaths": [
+    {
+      "path": "frontend/package.json",
+      "gitBlob": "d989591b0df72eb04d36d6fae3375e4ee62733c0",
+      "sha256": "3434fb81795c1c58b5dcc35edc98b839019b6f9741c30724b1e9f0f70d67387d"
+    },
+    {
+      "path": "frontend/scripts/fixtures/bonus-rock-display-before-20261023.txt",
+      "gitBlob": "74ad7118985d768fb56020e69df669e5e64e516f",
+      "sha256": "171b02c034e2fbc25069c0d45889fd71b8f335816feb4dbac74bcd57f7bcc9b2"
+    },
+    {
+      "path": "frontend/scripts/verifyIdleRockDisplay.mjs",
+      "gitBlob": "dcd6c2d09dd38f8cc600170f3be1b141bc6d39c4",
+      "sha256": "03e4e3ecbd4c89d6b69f2ce073c27f2ee518af97841a990de1371202389cd7c3"
+    },
+    {
+      "path": "frontend/scripts/verifyRockFailureRecovery.mjs",
+      "gitBlob": "0d965e3162b72b59922bb44c886b1ad0cfc9ec01",
+      "sha256": "fb135e04b13b435d851b033c400905533d3778c6268dd1d5cac15786647833b0"
+    },
+    {
+      "path": "frontend/src/pages/BonusRockLayer.tsx",
+      "gitBlob": "bd4b796c8b64ed8952d3952e5683118953c6e780",
+      "sha256": "88534a8553ccfee658ce29197717aec24bddd53c8e512dbef8629dd6875b6576"
+    },
+    {
+      "path": "frontend/src/pages/BonusRockLayerDisplay.test.mjs",
+      "gitBlob": "3adadf561d0298d3719412d7f3f3a1028cbf4d80",
+      "sha256": "36e9e8119acb2d96aa984946080c4f662aecfb2dcd2c45687c037c6c26211a40"
+    },
+    {
+      "path": "frontend/src/pages/gameLoop.test.mjs",
+      "gitBlob": "ff961f21d30d13988d5cfbabeaf579a302c8246d",
+      "sha256": "fa452b2c14d469e8133bd845cf7471f86840450548992429b8bbcf7dbf3626e7"
+    },
+    {
+      "path": "frontend/src/pages/gameLoop.ts",
+      "gitBlob": "82de6c8d266987067841c9e34f23409dd8ed8bc6",
+      "sha256": "deab7eb60d3e2f6c464d1efbc21dd8d8e2eba43b7f8f7193417d528b2f8953b7"
+    },
+    {
+      "path": "vercel.json",
+      "gitBlob": "12eff4536cc105ec4bcac4a7d1cbb02f88fd6a9f",
+      "sha256": "f0f230251188769fd9095fa61bf95032cde3d744b2a8799fb5661f7e79c221b8"
+    }
+  ],
+  "sourcePreservation": {
+    "rockBaselineBlob": "74ad7118985d768fb56020e69df669e5e64e516f",
+    "materialGenerationByteIdentical": true,
+    "activeDrawBlockByteIdentical": true,
+    "materialSourceSha256": "08350e4eb9cec582390ae26bcd5015893ef3a7300dc5f92424b5c8905fef3a42",
+    "activeDrawSourceSha256": "95598b4dd14a07caadb37dd563c5b38fda41c18cc34c68956886d102eb125338",
+    "newRafCalls": 0,
+    "additionalTimeoutSites": 0,
+    "prewarmCallbacksRetained": 7,
+    "emptyGraceMs": 2000,
+    "rasterDprCap": 1.5,
+    "loopStallMs": 2500,
+    "loopStallStrictGreaterThan": true,
+    "newGamePageChanges": false,
+    "artCssAudioPhysicsAccountSaveEconomyBackendPathsChanged": false
+  },
+  "build": {
+    "command": "VITE_CRYPTOID_DIAGNOSTICS=0 npm run build",
+    "passed": true,
+    "tests": 119,
+    "testGroups": {
+      "localization": 12,
+      "sessionAndStore": 43,
+      "canvasStaticUrl": 15,
+      "weaponPurchaseRecovery": 24,
+      "rockDisplayBounds": 8,
+      "gameLoop": 17
+    },
+    "failures": 0,
+    "skips": 0,
+    "localizationReleaseCheckPassed": true,
+    "projectTypeScriptPassed": true,
+    "vitePassed": true,
+    "paintedHulls": {
+      "variants": 1740,
+      "totalBytes": 95450326,
+      "dimensions": "original",
+      "revision": "91a72bc0c36be9407915"
+    },
+    "existingLargeChunkWarning": true,
+    "evidence": "idle-display-resume-guard-20261023/production-build.log"
+  },
+  "lint": {
+    "scope": "changed source/test/helper files only",
+    "passed": true,
+    "files": [
+      "src/pages/BonusRockLayer.tsx",
+      "src/pages/gameLoop.ts",
+      "src/pages/BonusRockLayerDisplay.test.mjs",
+      "src/pages/gameLoop.test.mjs",
+      "scripts/verifyIdleRockDisplay.mjs",
+      "scripts/verifyRockFailureRecovery.mjs"
+    ],
+    "evidence": "idle-display-resume-guard-20261023/changed-file-lint.log"
+  },
+  "loopNegativeControl": {
+    "originalPasses": 10,
+    "originalFailures": 7,
+    "candidatePasses": 17,
+    "candidateFailures": 0,
+    "originalEvidence": "idle-display-resume-guard-20261023/loop-original-control.log",
+    "candidateEvidence": "idle-display-resume-guard-20261023/loop-fixed.log",
+    "originalSourceSha256": "b3a806d89f8d6675a9657e9e68f4549dfbf9f6d82c8340cb0ebafb02833affa7",
+    "originalSourceGitBlob": "f2d8ce995486f78aa52540fefd3744c4a01a6c90"
+  },
+  "nativeComponentComparisons": [
+    {
+      "engine": "chromium",
+      "version": "141.0.7390.37",
+      "cycles": 12,
+      "candidateComparisons": 156,
+      "exactCandidateComparisons": 156,
+      "validTwinControls": 156,
+      "geometryAndLifecyclePassed": true,
+      "errors": 0,
+      "evidence": "idle-display-resume-guard-20261023/rock-display-chromium.json"
+    },
+    {
+      "engine": "webkit",
+      "version": "26.5",
+      "cycles": 12,
+      "candidateComparisons": 156,
+      "exactCandidateComparisons": 156,
+      "validTwinControls": 156,
+      "geometryAndLifecyclePassed": true,
+      "errors": 0,
+      "evidence": "idle-display-resume-guard-20261023/rock-display-webkit.json"
+    }
+  ],
+  "nativeComparisonsTotal": 312,
+  "validTwinControlsTotal": 312,
+  "nativeFixtureConditions": {
+    "actualReact": true,
+    "actualDrawCode": true,
+    "idleClockControlled": true,
+    "diagnosticTimingStubbed": true,
+    "chromiumAccelerated2dDisabled": true,
+    "webkitSoftwareRendering": true,
+    "physicalDevice": false
+  },
+  "layerSnapshotLimits": {
+    "initialDpr1OriginalBytesEstimate": 1419000,
+    "initialDpr1CandidateBytesEstimate": 4,
+    "threeReleasedDpr1SnapshotsEstimateZeroForBoth": true,
+    "initialDpr1Point5And3HaveNoLayers": true,
+    "otherReleasedSnapshotsShowSmallerCandidateEstimates": true,
+    "residentMemoryMeasured": false,
+    "gameFpsMeasured": false,
+    "evidence": "idle-display-resume-guard-20261023/rock-display-webkit.json"
+  },
+  "existingRockFailureRecovery": {
+    "passed": true,
+    "baseline": "b15306f2d22d2196275091c904d068829879efc7",
+    "controlledLifecycleCases": 7,
+    "exactFullLayerPixelComparisons": 7,
+    "limits": "Actual TSX effect/timer callbacks with controlled hooks and CPU raster. Not physical React/WebKit/process-memory or crash-cause proof.",
+    "evidence": "idle-display-resume-guard-20261023/rock-failure-recovery.json"
+  },
+  "bonusRockLogic": {
+    "command": "node --experimental-strip-types --test src/pages/bonusRocks.test.mjs",
+    "passed": true,
+    "tests": 4,
+    "includes500Sectors": true,
+    "partOf119BuildCount": false
+  },
+  "finalProductionRoute": [
+    {
+      "engine": "chromium",
+      "version": "141.0.7390.37",
+      "passed": true,
+      "steps": [
+        "home-ready",
+        "game-started",
+        "paused",
+        "resumed",
+        "home-returned"
+      ],
+      "technicalPauses": 0,
+      "productionBundle": true,
+      "localSdkAndApiFixtures": true,
+      "gameplayHooks": false,
+      "sourceMetadata": {
+        "parent": "9fd9c9d10216a9373ddfd8b22e579e8edbc29c95",
+        "dirtyAtBuild": true,
+        "rockSha256": "88534a8553ccfee658ce29197717aec24bddd53c8e512dbef8629dd6875b6576",
+        "loopSha256": "deab7eb60d3e2f6c464d1efbc21dd8d8e2eba43b7f8f7193417d528b2f8953b7",
+        "matchesRuntimeCommit": "494f7b7181befe42654f2d9e965a00f77e768c23"
+      },
+      "gameAudioContextsClosedOnHome": 2,
+      "expectedMusicLifecycleCancellations": [
+        {
+          "url": "/audio/light-the-void.mp3",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "evidence": "idle-display-resume-guard-20261023/production-route-chromium.json"
+    },
+    {
+      "engine": "webkit",
+      "version": "26.5",
+      "passed": true,
+      "steps": [
+        "home-ready",
+        "game-started",
+        "paused",
+        "resumed",
+        "home-returned"
+      ],
+      "technicalPauses": 0,
+      "productionBundle": true,
+      "localSdkAndApiFixtures": true,
+      "gameplayHooks": false,
+      "sourceMetadata": {
+        "parent": "9fd9c9d10216a9373ddfd8b22e579e8edbc29c95",
+        "dirtyAtBuild": true,
+        "rockSha256": "88534a8553ccfee658ce29197717aec24bddd53c8e512dbef8629dd6875b6576",
+        "loopSha256": "deab7eb60d3e2f6c464d1efbc21dd8d8e2eba43b7f8f7193417d528b2f8953b7",
+        "matchesRuntimeCommit": "494f7b7181befe42654f2d9e965a00f77e768c23"
+      },
+      "gameAudioContextsClosedOnHome": 2,
+      "expectedMusicLifecycleCancellations": [
+        {
+          "url": "/audio/battle-orbit.mp3",
+          "error": "Load request cancelled"
+        }
+      ],
+      "evidence": "idle-display-resume-guard-20261023/production-route-webkit.json"
+    }
+  ],
+  "earlierProductionRoute": {
+    "rockOnlyChromiumPassed": true,
+    "rockOnlyWebkitPassed": false,
+    "observed": "Technical pause after Resume prevented Home; no uncaught JS or HTTP error",
+    "causeEstablished": false,
+    "notReclassifiedAsPassing": true,
+    "evidence": "idle-display-resume-guard-20261023/production-route-rock-only-before-loop-fix.json"
+  },
+  "limits": [
+    "No sustained campaign acceptance",
+    "No physical iPhone or PiBrowser proof",
+    "No live Pi authentication or purchase acceptance",
+    "No native resident-memory or game-FPS improvement measured",
+    "Older sector57/59 active stalls remain open",
+    "Historical White Screens remain unresolved",
+    "No Testnet/main/Mainnet release performed",
+    "Rejected renderer/cache/clip changes excluded",
+    "No additional owner campaign, purchase, data clearing or OS report required for review"
+  ],
+  "evidenceFiles": [
+    {
+      "path": "idle-display-resume-guard-20261023/changed-file-lint.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "idle-display-resume-guard-20261023/loop-fixed.log",
+      "bytes": 1799,
+      "sha256": "72bfd1927c9dd12f3624ab0a6b038695bd002a3acebbaab2308579fd531c8c94"
+    },
+    {
+      "path": "idle-display-resume-guard-20261023/loop-original-control.log",
+      "bytes": 9145,
+      "sha256": "83e5ebf08d3f598f17e4aa1ba48dd835f1e5ee46f4ff4fa5f449031360f412de"
+    },
+    {
+      "path": "idle-display-resume-guard-20261023/production-build.log",
+      "bytes": 18776,
+      "sha256": "6dab040931ab066e826057e4212e907601bba0fb8ad46297c889d83fa3144b0a"
+    },
+    {
+      "path": "idle-display-resume-guard-20261023/production-route-audit-source.mjs.txt",
+      "bytes": 8837,
+      "sha256": "b5851822342b63742973c11e5bfc5e4d10fe786cb304e905b06302f54374ffde"
+    },
+    {
+      "path": "idle-display-resume-guard-20261023/production-route-chromium.json",
+      "bytes": 6037,
+      "sha256": "207e682f8c7d667ded67b239562ee059a341138d2d27e87357b572d56401f365"
+    },
+    {
+      "path": "idle-display-resume-guard-20261023/production-route-rock-only-before-loop-fix.json",
+      "bytes": 11567,
+      "sha256": "76cbbb0789167f337280c109c8d4f0d7e994b0fa948211cc07997b09edf0e4b6"
+    },
+    {
+      "path": "idle-display-resume-guard-20261023/production-route-webkit.json",
+      "bytes": 6031,
+      "sha256": "64ad8a821e027ea7848a913446378c2f89b42773ddc596aeebe78d8e44807a5e"
+    },
+    {
+      "path": "idle-display-resume-guard-20261023/rock-display-chromium.json",
+      "bytes": 14665,
+      "sha256": "c727379977157faf5904af1ec37ce8b1c545c612bde0620d4fc1ca70d2be0c9a"
+    },
+    {
+      "path": "idle-display-resume-guard-20261023/rock-display-webkit.json",
+      "bytes": 33711,
+      "sha256": "f332710937eb5f15d22b537933af8e3dd1f72b4048e6945cf9529272188d6502"
+    },
+    {
+      "path": "idle-display-resume-guard-20261023/rock-failure-recovery.json",
+      "bytes": 301,
+      "sha256": "d35068a0afce158ccd9022f1308a2adf57d52e1db2726ef3178aea4b11d1dfd5"
+    },
+    {
+      "path": "idle-display-resume-guard-20261023/runtime-remote-tree.json",
+      "bytes": 1193,
+      "sha256": "a2d3866c32daa60308b56d7316bd826d2635def6344deec4b73af02e877d8d5d"
+    }
+  ]
+}

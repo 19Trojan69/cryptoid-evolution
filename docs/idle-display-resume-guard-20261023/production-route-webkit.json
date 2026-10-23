@@ -1,0 +1,246 @@
+{
+  "sourceCommit": "9fd9c9d10216a9373ddfd8b22e579e8edbc29c95",
+  "workingTreeDirty": true,
+  "rockSourceSha256": "88534a8553ccfee658ce29197717aec24bddd53c8e512dbef8629dd6875b6576",
+  "loopSourceSha256": "deab7eb60d3e2f6c464d1efbc21dd8d8e2eba43b7f8f7193417d528b2f8953b7",
+  "localOnly": true,
+  "productionBundle": true,
+  "gameplayHooks": false,
+  "results": [
+    {
+      "engine": "webkit",
+      "errors": [],
+      "consoleErrors": [],
+      "failed": [],
+      "lifecycleCancellations": [
+        {
+          "url": "/audio/battle-orbit.mp3",
+          "error": "Load request cancelled"
+        }
+      ],
+      "httpErrors": [],
+      "unexpectedExternal": [],
+      "steps": [
+        {
+          "step": "home-ready",
+          "state": {
+            "rock": null,
+            "audio": [
+              {
+                "state": "running",
+                "time": 0.17414965986394557
+              }
+            ],
+            "root": 1,
+            "technicalPause": false
+          }
+        },
+        {
+          "step": "game-started",
+          "state": {
+            "rock": {
+              "pixels": [
+                1,
+                1
+              ],
+              "display": [
+                1,
+                1
+              ],
+              "css": [
+                "1px",
+                "1px"
+              ]
+            },
+            "audio": [
+              {
+                "state": "running",
+                "time": 3.3030385487528346
+              },
+              {
+                "state": "running",
+                "time": 2.345215419501134
+              },
+              {
+                "state": "running",
+                "time": 2.3278004535147394
+              }
+            ],
+            "root": 1,
+            "paused": "false",
+            "technicalPause": false
+          }
+        },
+        {
+          "step": "paused",
+          "state": {
+            "rock": {
+              "pixels": [
+                1,
+                1
+              ],
+              "display": [
+                1,
+                1
+              ],
+              "css": [
+                "1px",
+                "1px"
+              ]
+            },
+            "audio": [
+              {
+                "state": "running",
+                "time": 5.360907029478458
+              },
+              {
+                "state": "running",
+                "time": 4.403083900226758
+              },
+              {
+                "state": "running",
+                "time": 4.385668934240363
+              }
+            ],
+            "root": 1,
+            "paused": "true",
+            "technicalPause": false
+          }
+        },
+        {
+          "step": "resumed",
+          "state": {
+            "rock": {
+              "pixels": [
+                1,
+                1
+              ],
+              "display": [
+                1,
+                1
+              ],
+              "css": [
+                "1px",
+                "1px"
+              ]
+            },
+            "audio": [
+              {
+                "state": "running",
+                "time": 10.649251700680272
+              },
+              {
+                "state": "running",
+                "time": 9.679818594104308
+              },
+              {
+                "state": "running",
+                "time": 9.676916099773242
+              }
+            ],
+            "root": 1,
+            "paused": "false",
+            "technicalPause": false
+          }
+        },
+        {
+          "step": "home-returned",
+          "state": {
+            "rock": null,
+            "audio": [
+              {
+                "state": "closed",
+                "time": 12.858049886621314
+              },
+              {
+                "state": "running",
+                "time": 12.625850340136054
+              },
+              {
+                "state": "closed",
+                "time": 11.914739229024944
+              },
+              {
+                "state": "running",
+                "time": 0.737233560090703
+              }
+            ],
+            "root": 1,
+            "technicalPause": false
+          }
+        }
+      ],
+      "version": "26.5",
+      "passed": true
+    }
+  ],
+  "api": [
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    }
+  ],
+  "missing": [],
+  "originalFontsServedLocally": [
+    {
+      "bytes": 44784,
+      "sha256": "c97fcd822f825e9e731867b650a39ee678b609bead29385e320171b573ec0910"
+    },
+    {
+      "bytes": 45308,
+      "sha256": "dd60d0861a3efd540efc3f2f85e7a7fd69a7ece7eadf44aaffa5fc5c86adda0e"
+    },
+    {
+      "bytes": 28420,
+      "sha256": "109f93e40ad9112766699347a94955300c5944b9b087f878ed8581e6ae33644d"
+    },
+    {
+      "bytes": 28416,
+      "sha256": "b12b8cda10619f3ff7bf4c658110818d4fd90d0abd0882b026e3550462a77fbc"
+    },
+    {
+      "bytes": 28332,
+      "sha256": "ac6e97ef18247a69a70454c7a1032239b75a2d39a6f6a901583cc83bf5855cb9"
+    },
+    {
+      "bytes": 28396,
+      "sha256": "6ef2725f9d4d38498b5af157dd8a1fc1c542eea9d87807d1ae54d2c4d5dcd5a6"
+    },
+    {
+      "bytes": 357212,
+      "sha256": "7377b0a3421b01dae185fc1262ea34a45f6ba226155f531e9e72f5262b56d802"
+    },
+    {
+      "bytes": 362824,
+      "sha256": "bcffd70c330f38f97f49fbb41cad34a1628a7852c0e6d1d1418ebc162add3144"
+    },
+    {
+      "bytes": 372568,
+      "sha256": "8b2fbb04ed3af38ea941d7351fc5bcf917d239d0bfb64c9bb8916510d8774495"
+    },
+    {
+      "bytes": 69360,
+      "sha256": "ec926d5065eaca49a48f96e312bbae0bbc5733c24215cf5dfabbdccee926fef7"
+    },
+    {
+      "bytes": 69416,
+      "sha256": "3e699ead1876244fa392243054ddefe7cf631b488438828a8a100731a22ab995"
+    },
+    {
+      "bytes": 69356,
+      "sha256": "6c0346b8d297ebdc225832833e03e884a26ad99d265ecd3924d46e1ba285ea87"
+    },
+    {
+      "bytes": 69308,
+      "sha256": "3e756954468ff1cb302dae0414262e72f76a67d87bef3fa1f3226cd0fb9b2d85"
+    }
+  ]
+}

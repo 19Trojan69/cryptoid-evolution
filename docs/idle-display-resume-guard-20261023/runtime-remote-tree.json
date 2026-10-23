@@ -1,0 +1,41 @@
+{
+  "tree": "ce2ee28b9719b14161177c0493f660480eafc3b0",
+  "blobs": [
+    {
+      "path": "frontend/package.json",
+      "sha": "d989591b0df72eb04d36d6fae3375e4ee62733c0"
+    },
+    {
+      "path": "frontend/scripts/fixtures/bonus-rock-display-before-20261023.txt",
+      "sha": "74ad7118985d768fb56020e69df669e5e64e516f"
+    },
+    {
+      "path": "frontend/scripts/verifyIdleRockDisplay.mjs",
+      "sha": "dcd6c2d09dd38f8cc600170f3be1b141bc6d39c4"
+    },
+    {
+      "path": "frontend/scripts/verifyRockFailureRecovery.mjs",
+      "sha": "0d965e3162b72b59922bb44c886b1ad0cfc9ec01"
+    },
+    {
+      "path": "frontend/src/pages/BonusRockLayer.tsx",
+      "sha": "bd4b796c8b64ed8952d3952e5683118953c6e780"
+    },
+    {
+      "path": "frontend/src/pages/BonusRockLayerDisplay.test.mjs",
+      "sha": "3adadf561d0298d3719412d7f3f3a1028cbf4d80"
+    },
+    {
+      "path": "frontend/src/pages/gameLoop.test.mjs",
+      "sha": "ff961f21d30d13988d5cfbabeaf579a302c8246d"
+    },
+    {
+      "path": "frontend/src/pages/gameLoop.ts",
+      "sha": "82de6c8d266987067841c9e34f23409dd8ed8bc6"
+    },
+    {
+      "path": "vercel.json",
+      "sha": "12eff4536cc105ec4bcac4a7d1cbb02f88fd6a9f"
+    }
+  ]
+}

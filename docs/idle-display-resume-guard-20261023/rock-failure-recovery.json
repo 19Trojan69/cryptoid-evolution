@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "baseline": "b15306f2d22d2196275091c904d068829879efc7",
+  "controlledLifecycleCases": 7,
+  "exactFullLayerPixelComparisons": 7,
+  "limits": "Actual TSX effect/timer callbacks with controlled hooks and CPU raster. Not physical React/WebKit/process-memory or crash-cause proof."
+}

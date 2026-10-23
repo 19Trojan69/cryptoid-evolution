@@ -1,0 +1,218 @@
+✔ early returns always schedule exactly one following frame (1.60888ms)
+✔ a frame exception pauses through the fault callback and leaves the loop usable (0.306082ms)
+✔ repeated failure is reported once until a frame succeeds; reporting errors cannot kill RAF (0.193028ms)
+✔ stalled foreground loop is replaced; a late canceled callback cannot create a second loop (0.32067ms)
+✔ a delayed RAF is detected even when it runs before the monitoring timer (0.205123ms)
+✔ intentional pause and hidden tabs are never treated as a foreground stall (0.135134ms)
+✖ the first active RAF does not count an observed paused interval as a foreground stall (1.74501ms)
+✖ the monitoring timer rearms after pause without replacing the pending RAF (0.524738ms)
+✖ the first visible RAF excludes the observed hidden interval (0.510117ms)
+✖ an initially loading loop starts its foreground heartbeat on first observation of play (0.561451ms)
+✖ a genuine foreground stall after rearming still uses the exact original threshold and replacement (0.318385ms)
+✖ a delayed RAF after rearming still detects a subsequent active stall before the watcher (0.567388ms)
+✖ rearming never suppresses a simulation exception on the first resumed frame (0.472968ms)
+✔ cleanup invalidates callbacks and monitoring, including Strict Mode remounts (0.154349ms)
+✔ actual GamePage recovery preserves run, lives, rewards and paid timers even if audio/save fails (191.517004ms)
+✔ diagnostics stay local and bounded and malformed/unavailable storage cannot break recovery (2.342099ms)
+✔ denied sessionStorage cannot fail GamePage diagnostics setup or remove its error protection (119.517619ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 10
+ℹ fail 7
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 857.625753
+
+✖ failing tests:
+
+test at src/pages/gameLoop.test.mjs:56:1
+✖ the first active RAF does not count an observed paused interval as a foreground stall (1.74501ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   [
+  +     'loop-stall',
+  +     undefined
+  +   ]
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/45d593033c50/cryptoid-boss-audit-20261023/release-checkout/frontend/src/pages/gameLoop.test.mjs:58:37)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ [ 'loop-stall', undefined ] ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at src/pages/gameLoop.test.mjs:61:1
+✖ the monitoring timer rearms after pause without replacing the pending RAF (0.524738ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   [
+  +     'loop-stall',
+  +     undefined
+  +   ]
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/45d593033c50/cryptoid-boss-audit-20261023/release-checkout/frontend/src/pages/gameLoop.test.mjs:64:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ [ 'loop-stall', undefined ] ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at src/pages/gameLoop.test.mjs:67:1
+✖ the first visible RAF excludes the observed hidden interval (0.510117ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   [
+  +     'loop-stall',
+  +     undefined
+  +   ]
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/45d593033c50/cryptoid-boss-audit-20261023/release-checkout/frontend/src/pages/gameLoop.test.mjs:69:38)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ [ 'loop-stall', undefined ] ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at src/pages/gameLoop.test.mjs:71:1
+✖ an initially loading loop starts its foreground heartbeat on first observation of play (0.561451ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   [
+  +     'loop-stall',
+  +     undefined
+  +   ]
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/45d593033c50/cryptoid-boss-audit-20261023/release-checkout/frontend/src/pages/gameLoop.test.mjs:74:58)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ [ 'loop-stall', undefined ] ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at src/pages/gameLoop.test.mjs:78:1
+✖ a genuine foreground stall after rearming still uses the exact original threshold and replacement (0.318385ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   [
+  +     'loop-stall',
+  +     undefined
+  +   ]
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/45d593033c50/cryptoid-boss-audit-20261023/release-checkout/frontend/src/pages/gameLoop.test.mjs:80:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ [ 'loop-stall', undefined ] ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at src/pages/gameLoop.test.mjs:85:1
+✖ a delayed RAF after rearming still detects a subsequent active stall before the watcher (0.567388ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   [
+  +     'loop-stall',
+  +     undefined
+  +   ]
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/45d593033c50/cryptoid-boss-audit-20261023/release-checkout/frontend/src/pages/gameLoop.test.mjs:87:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ [ 'loop-stall', undefined ] ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at src/pages/gameLoop.test.mjs:90:1
+✖ rearming never suppresses a simulation exception on the first resumed frame (0.472968ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'loop-stall'
+  - 'frame-error'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/45d593033c50/cryptoid-boss-audit-20261023/release-checkout/frontend/src/pages/gameLoop.test.mjs:93:44)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'loop-stall',
+    expected: 'frame-error',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

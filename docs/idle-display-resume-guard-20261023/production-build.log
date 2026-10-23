@@ -1,0 +1,273 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 prebuild
+> npm run prepare:hulls
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 prepare:hulls
+> node --experimental-strip-types scripts/buildPaintedHulls.mjs
+
+{"revision":"91a72bc0c36be9407915","variants":1740,"totalBytes":95450326,"dimensions":"original","canvasVersion":"0.1.100"}
+
+> cryptoid-evolution@0.11.0 build
+> npm run test:i18n && npm run check:i18n:release && npm run test:full-session && npm run test:canvas-static-url && npm run test:weapon-reload-recovery && npm run test:rock-display-bounds && npm run test:game-loop && node_modules/.bin/tsc -b && vite build
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 test:i18n
+> node --experimental-strip-types --test src/i18n.test.mjs
+
+✔ en: every player UI key has a translation and preserves its placeholders (6.45956ms)
+✔ de: every player UI key has a translation and preserves its placeholders (2.68299ms)
+✔ es: every player UI key has a translation and preserves its placeholders (2.695552ms)
+✔ zh: every player UI key has a translation and preserves its placeholders (2.020847ms)
+✔ vi: every player UI key has a translation and preserves its placeholders (2.192943ms)
+✔ legacy locales remain selectable and use existing translations with English fallback (0.572962ms)
+✔ English mission resume contains no German source text (0.766518ms)
+✔ interpolation handles all repeated values and a locale change preserves life count (0.835836ms)
+✔ automatic language choice and manual override resolve supported locales (0.80217ms)
+✔ the picker includes the original 17 languages plus Chinese and Vietnamese (0.414521ms)
+✔ remaining lives use the correct singular and plural forms (1.083645ms)
+✔ player components contain no unwrapped static UI copy (0.118041ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1065.751423
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 check:i18n:release
+> node --experimental-strip-types scripts/localization-inventory.mjs --check
+
+Static copy: 1267; unwrapped UI fragments: 0
+en: 1267/1267
+de: 1267/1267
+es: 1267/1267
+fr: 839/1267 (draft)
+pt: 838/1267 (draft)
+it: 838/1267 (draft)
+pl: 586/1267 (draft)
+tr: 586/1267 (draft)
+ru: 838/1267 (draft)
+hr: 586/1267 (draft)
+cs: 586/1267 (draft)
+sk: 586/1267 (draft)
+hu: 586/1267 (draft)
+ro: 586/1267 (draft)
+sr: 586/1267 (draft)
+uk: 586/1267 (draft)
+th: 586/1267 (draft)
+zh: 1267/1267
+vi: 1267/1267
+Complete language gate: en, de, es, zh, vi; release ready: true
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 test:full-session
+> node --experimental-strip-types --test src/pages/fullSessionRecorder.test.mjs src/pages/fullSessionTransfer.test.mjs src/pages/hullPreparationDiagnostics.test.mjs src/pages/fullSessionStoreCallbacks.test.mjs
+
+✔ scope guard accepts only reviewed observations and rejects gameplay or hidden argument mutations (1187.844454ms)
+✔ non-owner creation, reading and download never obtain a storage host (1.537732ms)
+✔ a whole 500-stage timeline retains its start and all intermediate phases beyond the old rolling window (497.654732ms)
+✔ a replacement document recovers the committed run without unload or recorder finish (13.464427ms)
+✔ two runs survive and StrictMode/empty loading does not overwrite them; only a third real run retires the oldest (8.350675ms)
+✔ chunk and summary are atomic; an aborted write cannot erase or invent committed evidence (4.382262ms)
+✔ sequence conflicts abort without partially adding a chunk (3.291617ms)
+✔ denied storage cannot throw into gameplay; report declares the failure (1.357584ms)
+✔ a blocked writer has bounded RAM and stops explicitly instead of silently dropping the start (37.668104ms)
+✔ duration limit closes capture explicitly without truncating prior committed data (3.54192ms)
+✔ byte and record limits retain a contiguous beginning and declare their stopping reason (22.63431ms)
+✔ legacy/Mainnet report path never opens the full-session database or marker (0.656411ms)
+✔ request observer preserves actual Axios success/error identity and excludes private request/response data (8.396071ms)
+✔ schema strips private content, raw URLs/stacks, unknown kinds and poisoned records (0.417962ms)
+✔ real rolling-probe integration streams samples/phase/work data throughout play (311.346538ms)
+✔ an abnormally closed cached database reopens for the next read and write after a long pause (3.358325ms)
+✔ storage loss during a run stops the capture without inventing its missing committed beginning (2.282462ms)
+✔ quota and denied storage have bounded failure categories without persisting raw exceptions (0.865463ms)
+✔ inactive chunk writes remain recorder failures, with no committed partial session (13.266978ms)
+✔ a synchronous request setup exception is consumed by the same operation (3.074465ms)
+✔ a summary write failure rolls back the already queued chunk (2.813251ms)
+✔ pruning callback failure preserves previously committed sessions atomically (8.981388ms)
+✔ export cursor failures reject without damaging the stored run or returning a partial Blob (7.994984ms)
+✔ read callback failures report unavailable storage and remain recoverable (4.645847ms)
+✔ successful recording still exports a complete contiguous run and closed marker (3.230432ms)
+✔ all numbered text parts reconstruct the exact complete recording, including Unicode boundaries and the last record (43.725279ms)
+✔ surrogate pairs are not split between manually copied parts (2.695951ms)
+✔ file preparation never opens the OS picker and preserves the original bytes (0.861573ms)
+✔ plain text file sharing retains the complete JSON when JSON files are unsupported (0.394012ms)
+✔ missing, denied and throwing share capabilities leave the local alternatives available (0.438301ms)
+✔ export names and oversized text are rejected before reading any data (0.284723ms)
+✔ ordinary players allocate no graphics job or breadcrumb (2.882779ms)
+✔ actual image callbacks wait for load and explicitly record skipped decode with a stable numeric job (107.196058ms)
+✔ actual raw-source readback and temporary-surface release are individually observable (233.491885ms)
+✔ load failure preserves retry/fallback behavior and cannot publish a ready image (27.110778ms)
+✔ putting back the released decode call stalls a held decode; comparison reaches readiness without calling it (70.863837ms)
+✔ scope proof rejects hidden cache mutations and side effects in a diagnostic argument (1067.873425ms)
+✔ the last graphics step survives a later phase breadcrumb and is explicitly separate from committed records (38.917671ms)
+✔ graphics observations batch with existing flushes instead of creating one database transaction per image step (9.171977ms)
+✔ graphics schema admits only known steps and bounded numeric artwork identifiers, including its status marker (3.491985ms)
+✔ denied breadcrumb storage and late image notifications cannot interrupt gameplay or resurrect a finished recorder (3.693309ms)
+✔ normal recorder cleanup leaves an immediate finish observation before its asynchronous database commit (4.218903ms)
+✔ marker timing at clock zero cannot change starting versus recording state (3.880003ms)
+ℹ tests 43
+ℹ suites 0
+ℹ pass 43
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3105.978727
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 test:canvas-static-url
+> node --experimental-strip-types --test scripts/canvasStaticUrl.test.mjs
+
+✔ negative control: released CanvasImpact refuses the real relative PNG despite prepared resources and no recorded failure (86.723142ms)
+✔ actual prepared-hull hook → root-relative PNG → reflected absolute image URL → Canvas registration and drawing (98.412796ms)
+✔ cold actual hook retains the original display until ready, then uses the static PNG in Canvas (18.920284ms)
+✔ relative, absolute, query/fragment and historical Blob address controls all activate the actual renderer (158.883721ms)
+✔ a changed hull address cannot display the previous ready hull while the new image is delayed (15.733168ms)
+✔ an unavailable hull retains the CSS display, records the failure and retries on remount (20.836744ms)
+✔ late image completion after unmount cannot register an effect or update its hook (14.731909ms)
+✔ a cleared resource generation rejects late completions and cannot revive the failed layer (26.542144ms)
+✔ correctly activated static effects retain pause/resume and context-loss fallback (26.10492ms)
+✔ a missing optional surface leaves the original display in place (4.284304ms)
+✔ render-scale changes cannot reuse a ready bundle with the previous scale (22.556537ms)
+✔ a null drawing context falls back without retaining registered effects or a frame chain (14.759674ms)
+✔ two mounted effects share the same image/textures and retain resources until both owners leave (15.663123ms)
+✔ 1000 warm static-hull impacts register once, reuse the existing resources and completely release (317.864882ms)
+{"exactNativeRasterComparisons":54,"limits":"Native Skia and actual hooks/resources; not Safari/PiBrowser pixels, native memory or proof of the White Screen cause."}
+✔ native raster output matches released working absolute-URL control at original effect ages and render scales (455.898969ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1795.776439
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 test:weapon-reload-recovery
+> node --experimental-strip-types --test scripts/weaponReloadRecovery.test.mjs src/hooks/usePayments.test.mjs
+
+(node:250) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/45d593033c50/cryptoid-boss-audit-20261023/release-checkout/backend/src/hangarCatalog.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/45d593033c50/cryptoid-boss-audit-20261023/release-checkout/backend/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ an expired automatic charge can be reconciled before choosing the standard weapon, with the same receipt (130.731937ms)
+✔ choosing an already running different weapon resolves the pending charge without refilling that timer (6.295428ms)
+✔ choosing a new different charge confirms the old receipt before saving and issuing exactly one new receipt (16.516834ms)
+✔ a picked-up weapon can be selected after pending confirmation without purchasing or refilling the pickup (8.033145ms)
+✔ the actual menu permits a new choice and makes the pending receipt retryable even if that weapon looks active (15.045827ms)
+✔ successful free or cached manual selections clear the old rejection text (9.408138ms)
+✔ failed inventory loading cannot disable replay of an uncertain activation or inventory refresh (5.97189ms)
+✔ a continuing connection failure retains the original receipt and cannot consume a different charge (20.499502ms)
+✔ a retry of the original charge never allocates a new id or overwrites it with a checkpoint (15.727428ms)
+✔ a pickup obtained while automatic confirmation waits keeps the player selection and receives no free refill (32.747198ms)
+✔ a late response after a replaced mission cannot mutate the new mission (20.294112ms)
+✔ automatic reload remains bounded over repeated cycles and rejected duplicate triggers (46.594171ms)
+✔ an already spent confirmed receipt does not silently allocate another charge on retry (32.286962ms)
+✔ an invalid confirmation retains the receipt and cannot introduce a non-finite timer (13.744598ms)
+✔ a definitive rejection releases the pending gate without starting a different activation (26.358771ms)
+✔ an older automatic error timer cannot erase a newer manual failure (11.414631ms)
+✔ actual account handlers reconcile a lost automatic response, then honor a new paid selection with no double consumption (173.043933ms)
+✔ actual account handlers accept a completed charge cycle and repeat its lost response without another debit (11.64661ms)
+✔ unavailable optional diagnostic storage does not prevent the purchase hook from mounting (2.049999ms)
+✔ quota failure while recording an approval error releases busy state and allows an explicit retry (1.857601ms)
+✔ a denied diagnostic removal cannot stop checkout or its successful confirmation (0.984089ms)
+✔ SDK failures use the current in-memory diagnostic even when a stale persisted message cannot be removed (0.368056ms)
+✔ a later SDK error preserves the specific approval failure without requiring a successful storage write (2.197424ms)
+✔ healthy checkout keeps the existing metadata, confirmation request and single callback (0.71567ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 797.461366
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 test:rock-display-bounds
+> node --test src/pages/BonusRockLayerDisplay.test.mjs
+
+✔ an initially empty canvas has one-pixel display bounds; the preceding source exposes the defect (37.017353ms)
+✔ first active drawing restores the original display/raster sizes before painting (9.732779ms)
+✔ short empty gaps retain warm bounds and the existing two-second grace is exact (12.257468ms)
+✔ regrowth after idle release uses a changed field size on its first visible frame (4.243604ms)
+✔ effect-only dust, debris and points keep the original complete draw operations (56.118233ms)
+✔ stable active and released scenes add no repeated display-size writes or canvas resizes (8.427007ms)
+✔ paused/no-update gaps add no release timer; the next existing update releases display bounds (26.389392ms)
+✔ an unavailable main context can recover and unmount still clears the original prewarm timer and surface (5.101545ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 356.932719
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 test:game-loop
+> node --experimental-strip-types --test src/pages/gameLoop.test.mjs
+
+✔ early returns always schedule exactly one following frame (2.002027ms)
+✔ a frame exception pauses through the fault callback and leaves the loop usable (0.366211ms)
+✔ repeated failure is reported once until a frame succeeds; reporting errors cannot kill RAF (0.176363ms)
+✔ stalled foreground loop is replaced; a late canceled callback cannot create a second loop (0.254939ms)
+✔ a delayed RAF is detected even when it runs before the monitoring timer (0.142896ms)
+✔ intentional pause and hidden tabs are never treated as a foreground stall (0.229412ms)
+✔ the first active RAF does not count an observed paused interval as a foreground stall (0.78878ms)
+✔ the monitoring timer rearms after pause without replacing the pending RAF (0.215896ms)
+✔ the first visible RAF excludes the observed hidden interval (0.126478ms)
+✔ an initially loading loop starts its foreground heartbeat on first observation of play (0.231206ms)
+✔ a genuine foreground stall after rearming still uses the exact original threshold and replacement (0.185507ms)
+✔ a delayed RAF after rearming still detects a subsequent active stall before the watcher (0.246421ms)
+✔ rearming never suppresses a simulation exception on the first resumed frame (0.318738ms)
+✔ cleanup invalidates callbacks and monitoring, including Strict Mode remounts (0.144019ms)
+✔ actual GamePage recovery preserves run, lives, rewards and paid timers even if audio/save fails (186.577312ms)
+✔ diagnostics stay local and bounded and malformed/unavailable storage cannot break recovery (11.780912ms)
+✔ denied sessionStorage cannot fail GamePage diagnostics setup or remove its error protection (86.197911ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1205.478804
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 389 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                     1.47 kB │ gzip:   0.77 kB
+dist/assets/AdminPage-BVHazyxQ.css                 10.28 kB │ gzip:   2.68 kB
+dist/assets/GalaxyMap-ByhGHt12.css                 16.63 kB │ gzip:   4.75 kB
+dist/assets/powerUps-Bp4oAZoc.css                  19.99 kB │ gzip:   5.17 kB
+dist/assets/GamePage-Doazl5ia.css                  21.19 kB │ gzip:   4.97 kB
+dist/assets/Shop-BkuKP0aD.css                      25.93 kB │ gzip:   6.41 kB
+dist/assets/index-BcSGTHO_.css                    357.19 kB │ gzip:  75.30 kB
+dist/assets/rewardProgress-DU6Yaowv.js              3.22 kB │ gzip:   1.26 kB
+dist/assets/displaySettings-d3VZZ2lg.js             3.30 kB │ gzip:   1.47 kB
+dist/assets/collectionExport-BtIHwNcQ.js            3.89 kB │ gzip:   2.10 kB
+dist/assets/GalaxyMap-BtQdCE8R.js                  16.79 kB │ gzip:   6.24 kB
+dist/assets/reloadDiagnostics-BUyN-bUI.js          38.20 kB │ gzip:  15.30 kB
+dist/assets/AdminPage-0013KyAG.js                  47.43 kB │ gzip:  15.00 kB
+dist/assets/performanceDiagnostics-CuXL5_V8.js     63.91 kB │ gzip:  19.02 kB
+dist/assets/Shop-KvVBr2Jj.js                      118.59 kB │ gzip:  39.23 kB
+dist/assets/powerUps-B_mFl6xQ.js                  148.67 kB │ gzip:  56.50 kB
+dist/assets/shipEvolution-BEjRDfYF.js             233.73 kB │ gzip:  36.52 kB
+dist/assets/GamePage-B7Wj7zWu.js                  235.82 kB │ gzip:  74.35 kB
+dist/assets/index-D2xZiSyG.js                   1,959.59 kB │ gzip: 631.26 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 5.51s

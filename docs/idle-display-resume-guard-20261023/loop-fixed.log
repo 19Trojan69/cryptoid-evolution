@@ -1,0 +1,25 @@
+✔ early returns always schedule exactly one following frame (1.878769ms)
+✔ a frame exception pauses through the fault callback and leaves the loop usable (0.245352ms)
+✔ repeated failure is reported once until a frame succeeds; reporting errors cannot kill RAF (0.189216ms)
+✔ stalled foreground loop is replaced; a late canceled callback cannot create a second loop (0.18101ms)
+✔ a delayed RAF is detected even when it runs before the monitoring timer (0.115746ms)
+✔ intentional pause and hidden tabs are never treated as a foreground stall (0.138317ms)
+✔ the first active RAF does not count an observed paused interval as a foreground stall (0.702395ms)
+✔ the monitoring timer rearms after pause without replacing the pending RAF (0.624901ms)
+✔ the first visible RAF excludes the observed hidden interval (0.397766ms)
+✔ an initially loading loop starts its foreground heartbeat on first observation of play (0.383519ms)
+✔ a genuine foreground stall after rearming still uses the exact original threshold and replacement (0.194245ms)
+✔ a delayed RAF after rearming still detects a subsequent active stall before the watcher (0.136095ms)
+✔ rearming never suppresses a simulation exception on the first resumed frame (0.186214ms)
+✔ cleanup invalidates callbacks and monitoring, including Strict Mode remounts (0.077506ms)
+✔ actual GamePage recovery preserves run, lives, rewards and paid timers even if audio/save fails (390.380792ms)
+✔ diagnostics stay local and bounded and malformed/unavailable storage cannot break recovery (2.801346ms)
+✔ denied sessionStorage cannot fail GamePage diagnostics setup or remove its error protection (102.031613ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1111.953758

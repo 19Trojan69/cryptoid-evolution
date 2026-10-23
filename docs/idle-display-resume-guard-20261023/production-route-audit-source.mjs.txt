@@ -1,0 +1,95 @@
+// Local verification only: serve the unchanged production bundle with synthetic
+// SDK/transport boundaries. No account, payment, live host or runtime override.
+import {createServer} from 'node:http';
+import {once} from 'node:events';
+import {readFileSync,writeFileSync,existsSync,statSync} from 'node:fs';
+import {resolve,extname,sep} from 'node:path';
+import {createRequire} from 'node:module';
+import {createHash} from 'node:crypto';
+const root=new URL('.',import.meta.url).pathname;
+const dist=resolve(root,'release-checkout/frontend/dist');
+const report={sourceCommit:'9fd9c9d10216a9373ddfd8b22e579e8edbc29c95',workingTreeDirty:true,rockSourceSha256:createHash('sha256').update(readFileSync(root+'release-checkout/frontend/src/pages/BonusRockLayer.tsx')).digest('hex'),loopSourceSha256:createHash('sha256').update(readFileSync(root+'release-checkout/frontend/src/pages/gameLoop.ts')).digest('hex'),localOnly:true,productionBundle:true,gameplayHooks:false,results:[],api:[],missing:[]};
+const fontCss=readFileSync(root+'route-fonts.css','utf8');
+const fontManifest=JSON.parse(readFileSync(root+'route-font-manifest.json','utf8'));
+const fontFiles=new Map(fontManifest.map(row=>[row.url,readFileSync(root+row.path)]));
+report.originalFontsServedLocally=fontManifest.map(({bytes,sha256})=>({bytes,sha256}));
+const types={'.js':'text/javascript','.css':'text/css','.html':'text/html','.png':'image/png','.svg':'image/svg+xml','.webp':'image/webp','.mp3':'audio/mpeg','.webmanifest':'application/manifest+json'};
+const server=createServer(async(req,res)=>{
+  const url=new URL(req.url,'http://local');
+  if(url.pathname.startsWith('/api/')){
+    for await(const chunk of req){}
+    report.api.push({method:req.method,path:url.pathname});
+    res.setHeader('Content-Type','application/json');
+    const body=url.pathname==='/api/usage/collect'?{ok:true}:url.pathname==='/api/leaderboard/top'?{leaders:[],network:'testnet'}:url.pathname==='/api/hangar/catalog'?{offers:[]}:null;
+    if(body){res.end(JSON.stringify(body));return;}
+    res.writeHead(501);res.end(JSON.stringify({error:'Unimplemented local transport'}));return;
+  }
+  const file=resolve(dist,url.pathname==='/'||url.pathname==='/game'?'index.html':'.'+decodeURIComponent(url.pathname));
+  if(!file.startsWith(dist+sep)||!existsSync(file)||!statSync(file).isFile()){report.missing.push(url.pathname);res.writeHead(404);res.end();return;}
+  res.setHeader('Content-Type',types[extname(file)]||'application/octet-stream');
+  const bytes=readFileSync(file);
+  if(file.endsWith('/index.html')){
+    const html=bytes.toString().replaceAll('$$BACKEND_URL$$','/api').replace(/appNetwork:\s*""/,'appNetwork: "testnet"');
+    if(!/appNetwork:\s*"testnet"/.test(html))throw Error('Local runtime configuration anchor changed');
+    res.end(html);return;
+  }
+  res.end(bytes);
+});
+server.listen(0,'127.0.0.1');await once(server,'listening');
+const origin='http://127.0.0.1:'+server.address().port;
+const require=createRequire(import.meta.url),current=require(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES+'/playwright'),compat=require(root+'pw-compat/node_modules/playwright-core');
+const webkitRoot='/root/.cache/ms-playwright/webkit-2336/minibrowser-wpe';
+const libs=root+'native-libs/usr/lib/x86_64-linux-gnu';
+const bounded=(promise,ms=15000)=>{let timer;return Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('Local route audit timeout')),ms);})]).finally(()=>clearTimeout(timer));};
+try{
+  for(const engine of process.argv.slice(2).length?process.argv.slice(2):['chromium','webkit']){
+    const result={engine,errors:[],consoleErrors:[],failed:[],lifecycleCancellations:[],httpErrors:[],unexpectedExternal:[],steps:[]};report.results.push(result);
+    let browser,context,page;
+    try{
+      browser=engine==='chromium'?await compat.chromium.launch({headless:true}):await current.webkit.launch({headless:true,executablePath:webkitRoot+'/bin/MiniBrowser',env:{...process.env,PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS:'1',WEBKIT_EXEC_PATH:webkitRoot+'/bin',WEBKIT_INJECTED_BUNDLE_PATH:webkitRoot+'/lib',WEBKIT_INSPECTOR_RESOURCES_PATH:webkitRoot+'/share',LD_LIBRARY_PATH:webkitRoot+'/lib:'+webkitRoot+'/sys/lib:'+libs,LIBGL_ALWAYS_SOFTWARE:'1',LP_NUM_THREADS:'2',GST_PLUGIN_SYSTEM_PATH:libs+'/gstreamer-1.0'}});
+      result.version=browser.version();
+      context=await browser.newContext({viewport:{width:430,height:825},deviceScaleFactor:3,locale:'en-US'});
+      await context.addInitScript(()=>{
+        const contexts=[],Native=window.AudioContext;
+        if(Native)window.AudioContext=new Proxy(Native,{construct(target,args){const value=Reflect.construct(target,args);contexts.push(new WeakRef(value));return value;}});
+        window.__routeAudit={read:()=>({rock:(()=>{const c=document.querySelector('.bonus-rock-layer');if(!c)return null;const box=c.getBoundingClientRect();return {pixels:[c.width,c.height],display:[box.width,box.height],css:[c.style.width,c.style.height]};})(),audio:contexts.map(x=>x.deref()).filter(Boolean).map(x=>({state:x.state,time:x.currentTime})),root:document.getElementById('root')?.childElementCount,paused:document.querySelector('.game-shell')?.getAttribute('data-effects-paused'),technicalPause:!!document.querySelector('.pause-settings-overlay [role="alert"]')})};
+      });
+      await context.route('**/*',route=>{
+        const url=route.request().url();
+        if(url==='https://sdk.minepi.com/pi-sdk.js')return route.fulfill({contentType:'text/javascript',body:'window.Pi={init(){},getPiHostAppInfo:async()=>({hostApp:"web"})};'});
+        if(url.startsWith('https://fonts.googleapis.com/'))return route.fulfill({contentType:'text/css',body:fontCss});
+        if(fontFiles.has(url))return route.fulfill({contentType:'font/ttf',body:fontFiles.get(url)});
+        if(url.startsWith(origin+'/')||url.startsWith('blob:')||url.startsWith('data:'))return route.continue();
+        result.unexpectedExternal.push(url);return route.abort();
+      });
+      page=await context.newPage();page.setDefaultTimeout(20000);
+      page.on('pageerror',error=>result.errors.push({message:error.message,stack:error.stack}));
+      page.on('console',message=>{if(message.type()==='error')result.consoleErrors.push(message.text());});
+      page.on('response',response=>{if(response.status()>=400)result.httpErrors.push({url:response.url().replace(origin,''),status:response.status()});});
+      page.on('requestfailed',request=>{
+        const row={url:request.url().replace(origin,''),error:request.failure()?.errorText};
+        if(row.url.startsWith('/audio/')&&row.url.endsWith('.mp3')&&['net::ERR_ABORTED','Load request cancelled'].includes(row.error))result.lifecycleCancellations.push(row);
+        else result.failed.push(row);
+      });
+      const record=async step=>{const state=await bounded(page.evaluate(()=>window.__routeAudit.read()));result.steps.push({step,state});if(!state.root||state.technicalPause)throw Error('Production route interrupted at '+step);console.log(JSON.stringify({engine,step,state}));};
+      await page.goto(origin,{waitUntil:'load'});
+      await page.locator('.cinematic-play:not([disabled])').waitFor();await record('home-ready');
+      await page.locator('.cinematic-play').click();
+      await page.locator('.game-shell[data-effects-paused="false"]').waitFor();
+      await page.locator('.pause-control:not([disabled])').waitFor();
+      await page.waitForTimeout(1800);await record('game-started');
+      await page.locator('.pause-control').click();
+      await page.locator('.pause-settings-overlay').waitFor();await record('paused');
+      await page.locator('.pause-resume-button').click();
+      await page.locator('.game-shell[data-effects-paused="false"]').waitFor();
+      await page.locator('.home-control:not([disabled])').waitFor();await record('resumed');
+      await page.locator('.home-control').click();
+      await page.locator('.game-overlay:has(#leave-mission-title) .button-primary').click();
+      await page.locator('.cinematic-play:not([disabled])').waitFor();
+      await page.waitForTimeout(600);await record('home-returned');
+      if(result.errors.length||result.consoleErrors.length||result.failed.length||result.httpErrors.length||result.unexpectedExternal.length)throw Error('Production route reported errors');
+      result.passed=true;
+    }catch(error){result.failure=String(error);process.exitCode=1;try{result.body=await bounded(page.locator('body').innerText(),3000);}catch{}console.error(JSON.stringify({engine,failure:result.failure}));}
+    finally{await bounded(context?.close()).catch(()=>{});await bounded(browser?.close()).catch(()=>{});}
+  }
+}finally{server.closeAllConnections();server.close();writeFileSync(root+'production-route-idle-resume-'+process.argv.slice(2).join('-')+'-results.json',JSON.stringify(report,null,2));}
