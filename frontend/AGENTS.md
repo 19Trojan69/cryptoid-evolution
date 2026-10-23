@@ -33,6 +33,17 @@ Resume semantics. Parallel browsers alone do not explain the finding. Linux
 software rendering does not establish an iOS memory-termination cause.
 Historical White Screens remain unresolved; do not call the whole game fixed.
 
+A bounded native timing follow-up after warmup captures27.212s of active
+sector57 before the original loop-stall handler. Overlapping Paint intervals
+cover12.506s (largest1.211s), while native ScriptProfiler evaluation covers1.086s.
+This points to local browser rendering as a major cost; it does not identify a
+particular source element or prove iPhone memory/White-Screen causation.
+Profiler overhead applies. A first cold-start-paused trace is excluded from the
+active-play comparison. No new runtime correction or acceptance pass follows.
+Next narrow investigation: attribute repeated native paints to concrete display
+layers while preserving original visuals. See the nativeTimingFollowup field
+and native-timing section in the existing evidence files.
+
 See docs/diagnostic-idb-callback-guard-20261023.md and .json for the evidence and
 test boundaries. No new owner long campaign, purchase, data clearing or native OS
 report is required to review this correction. Preserve fixed official release/

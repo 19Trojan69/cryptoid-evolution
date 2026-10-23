@@ -134,3 +134,29 @@ und die Resume-Semantik bleiben unverändert. Linux-Softwaredarstellung belegt
 weder die Ursache einer iOS-Prozessbeendigung noch die Behebung des historischen
 White Screens. Die bestätigte Diagnose-Fehlergrenze ist separat überprüfbar;
 eine vollständige Spiel-Stabilitätsfreigabe wird daraus nicht abgeleitet.
+
+
+## Native Zeitmessung vor dem Stillstand, weitere Eingrenzung
+
+Eine kurze native Timeline-Messung beginnt nach dem Aufwärmen in Sektor 57.
+Das Spiel läuft im erfassten Fenster 27,212 Sekunden bis zum `loop-stall`.
+Ein rein lokaler Zeitstempel liegt vor dem unveränderten Unterbrechungshandler;
+die anschließend gezeichnete Pause-Oberfläche gehört nicht zu diesem Fenster.
+Überlappende/verschachtelte Ereignisse derselben Kategorie werden als Intervall-
+vereinigung gezählt, damit derselbe Paint nicht doppelt summiert wird.
+
+WebKit zeichnet im Fenster 12,506 Sekunden lang; der längste einzelne Paint
+belegt 1,211 Sekunden. Die native ScriptProfiler-Auswertung umfasst etwa
+1,086 Sekunden JavaScript. Style-Neuberechnung umfasst 434 ms, Layout 99 ms.
+Kategorien können sich gegenseitig überlappen und werden nicht addiert.
+Die vorherigen direkten Canvas-Effektmessungen lagen bei höchstens 21 ms.
+Das spricht für einen Schwerpunkt in der lokalen Browserdarstellung; eine
+bestimmte Quelle oder überflüssige Rasterisierung ist damit noch nicht belegt.
+
+Die Instrumentierung beeinflusst die Laufzeit. Eine erste, schon beim Start
+pausierende Aufnahme wird nicht als aktiver Spielvergleich gewertet. Der
+anschließende aktive Mitschnitt ist ebenfalls kein bestandener Langlauf und
+kein iPhone-/PiBrowser-Nachweis. Keine neue Anwendungskorrektur oder
+Veröffentlichung folgt allein aus diesen Zeitwerten. Der nächste gezielte
+Prüfpunkt ist die Zuordnung der wiederholten Paint-Arbeit zu den konkreten
+Darstellungsebenen, bei unveränderter Originaldarstellung.

@@ -182,5 +182,51 @@
       "originalFontsServedLocally": true
     },
     "conclusion": "The complete long-run acceptance has not passed. Parallel browsers alone do not explain the loop-stall result. The existing stall guard and original Resume semantics are preserved. No new memory-termination/White-Screen cause is established by Linux software rendering."
+  },
+  "nativeTimingFollowup": {
+    "runtimeCandidate": "4c384023a4fae3d84403ade7beae7934e22e39fd",
+    "scene": "original GamePage at sector57, local controlled pilot",
+    "engine": "Linux WPE WebKit26.5 software rendering",
+    "capture": "After warmup; bounded native Timeline/ScriptProfiler; local fault timestamp precedes original interruption handler.",
+    "activeWindowMs": 27212.215,
+    "terminalSignal": "loop-stall",
+    "timeline": {
+      "Paint": {
+        "events": 376,
+        "intervalUnionMs": 12506.019,
+        "longestClippedEventMs": 1210.863
+      },
+      "RecalculateStyles": {
+        "events": 118,
+        "intervalUnionMs": 434.413,
+        "longestClippedEventMs": 128.256
+      },
+      "Layout": {
+        "events": 47,
+        "intervalUnionMs": 98.682,
+        "longestClippedEventMs": 18.932
+      },
+      "FireAnimationFrame": {
+        "events": 56,
+        "intervalUnionMs": 159.266,
+        "longestClippedEventMs": 38.572
+      },
+      "FunctionCall": {
+        "events": 608,
+        "intervalUnionMs": 1146.065,
+        "longestClippedEventMs": 261.982
+      }
+    },
+    "scriptEvaluationIntervalUnionMs": 1085.637,
+    "recordLimitReached": false,
+    "unsupportedCommands": [],
+    "method": "Overlapping and nested events of each category are merged as interval unions. Different categories can overlap; do not sum them. Window ends before the original fault handler paints the pause dialog.",
+    "limits": [
+      "Profiler changes timing.",
+      "Cold-start-only capture is excluded from active-play measurements.",
+      "No source element, redundant paint, physical-device cause or fix is yet established.",
+      "Not a campaign acceptance pass and not evidence of resolved iOS memory termination."
+    ],
+    "runtimeFilesChanged": false
   }
 }
