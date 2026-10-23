@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <!-- Vite does not use %PUBLIC_URL% -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#071b2b" />
+    <meta name="description" content="Pilot your ship through 9-block chains, defeat bosses, collect power-ups and earn Testnet rewards in this evolving space shooter." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!--
+    Runtime environment variables
+    These values are:
+    - replaced in DEV by Vite (via import.meta.env if needed)
+    - replaced in PROD by Docker entrypoint (string replace)
+  -->
+    <script>
+      window.__ENV = {
+        backendURL: "$$BACKEND_URL$$",
+        appNetwork: "$$APP_NETWORK$$",
+      };
+    </script>
+
+    <!-- Pi Network SDK -->
+    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+
+    <script>
+      Pi.init({ version: "2.0" });
+    </script>
+
+    <title>Cryptoid Evolution</title>
+  </head>
+
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <div id="root"></div>
+
+    <!-- Vite entry -->
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

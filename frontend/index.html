@@ -25,11 +25,76 @@
       };
     </script>
 
-    <!-- Pi Network SDK -->
-    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-
-    <script>
-      Pi.init({ version: "2.0" });
+    <!-- Independent of the SDK, entry module and route chunks: an unsuccessful
+         start must offer manual recovery before React can render. -->
+    <script id="cryptoid-startup-recovery">
+      (() => {
+        const copy = {
+          en: ["This page could not be loaded.", "Reload to open the current version. Your saved data is preserved.", "Reload page", "Return to home"],
+          de: ["Diese Seite konnte nicht geladen werden.", "Lade die aktuelle Version neu. Deine gespeicherten Daten bleiben erhalten.", "Seite neu laden", "Zur Startseite"],
+          es: ["No se pudo cargar esta página.", "Recarga para abrir la versión actual. Tus datos guardados se conservan.", "Recargar página", "Volver al inicio"],
+          zh: ["无法加载此页面。", "请重新加载以打开当前版本。已保存的数据会保留。", "重新加载页面", "返回首页"],
+          vi: ["Không thể tải trang này.", "Tải lại để mở phiên bản hiện tại. Dữ liệu đã lưu của bạn được giữ nguyên.", "Tải lại trang", "Về trang chủ"],
+        };
+        const supported = "en de es fr pt it pl tr ru hr cs sk hu ro sr uk th zh vi".split(" ");
+        const normalize = value => {
+          if (typeof value !== "string") return null;
+          const [code, ...subtags] = value.trim().toLowerCase().replaceAll("_", "-").split("-");
+          if (code === "zh" && subtags.some(part => ["hant", "tw", "hk", "mo"].includes(part))) return null;
+          return supported.includes(code) ? code : null;
+        };
+        let panel, timer, stopped = false;
+        const ready = () => {
+          if (!document.getElementById("root")?.childElementCount) return false;
+          stopped = true;
+          window.clearTimeout(timer);
+          observer.disconnect();
+          window.removeEventListener("error", failed, true);
+          panel?.remove();
+          return true;
+        };
+        const show = () => {
+          if (stopped || ready() || panel) return;
+          window.clearTimeout(timer);
+          let stored;
+          try { stored = window.localStorage.getItem("cryptoid_language"); } catch { /* Storage is optional. */ }
+          const devices = navigator.languages?.length ? navigator.languages : [navigator.language];
+          const locale = normalize(stored) || devices.map(normalize).find(Boolean) || "en";
+          const language = Object.hasOwn(copy, locale) ? locale : "en";
+          const text = copy[language];
+          panel = document.createElement("section");
+          panel.id = "cryptoid-startup-recovery-panel";
+          panel.lang = language === "zh" ? "zh-Hans" : language;
+          panel.setAttribute("role", "alert");
+          panel.setAttribute("aria-labelledby", "cryptoid-startup-recovery-title");
+          panel.style.cssText = "position:fixed;inset:0;z-index:2147483647;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;margin:0;padding:24px;background:#071b2b;color:#e9f5ff;font:16px/1.5 system-ui,sans-serif;text-align:center;overflow:auto";
+          const title = document.createElement("h1");
+          title.id = "cryptoid-startup-recovery-title";
+          title.textContent = text[0];
+          title.style.cssText = "max-width:38rem;margin:0;font-size:1.5em;line-height:1.3";
+          const message = document.createElement("p");
+          message.textContent = text[1];
+          message.style.cssText = "max-width:38rem;margin:0";
+          const reload = document.createElement("button");
+          reload.type = "button";
+          reload.textContent = text[2];
+          reload.style.cssText = "padding:12px 20px;border:1px solid #8fcfff;border-radius:10px;background:#123a55;color:#fff;font:inherit;cursor:pointer";
+          reload.addEventListener("click", () => window.location.reload());
+          const home = document.createElement("a");
+          home.href = "/";
+          home.textContent = text[3];
+          home.style.cssText = "color:#b9e8ff;font:inherit";
+          panel.append(title, message, reload, home);
+          document.documentElement.append(panel);
+        };
+        const failed = event => {
+          if (event.target?.tagName === "SCRIPT" && event.target.type === "module") show();
+        };
+        const observer = new MutationObserver(ready);
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+        window.addEventListener("error", failed, true);
+        timer = window.setTimeout(show, 8000);
+      })();
     </script>
 
     <title>Cryptoid Evolution</title>
@@ -39,6 +104,13 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
 
     <div id="root"></div>
+
+    <!-- Pi Network SDK -->
+    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+
+    <script>
+      Pi.init({ version: "2.0" });
+    </script>
 
     <!-- Vite entry -->
     <script type="module" src="/src/main.tsx"></script>

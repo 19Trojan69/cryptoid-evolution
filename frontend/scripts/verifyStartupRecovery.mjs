@@ -1,0 +1,158 @@
+// Real built HTML/Router with local SDK, API and original-font transport fixtures.
+// Entry/route requests are held or failed; no real account or payment is used.
+import assert from 'node:assert/strict';
+import { createServer } from 'node:http';
+import { once } from 'node:events';
+import { readFileSync, writeFileSync, existsSync, statSync } from 'node:fs';
+import { resolve, extname, sep } from 'node:path';
+import { createRequire } from 'node:module';
+import { createHash } from 'node:crypto';
+
+const root = new URL('../', import.meta.url).pathname;
+const dist = resolve(process.env.CRYPTOID_STARTUP_DIST || root + 'dist');
+const fixture = process.env.CRYPTOID_STARTUP_FIXTURE_ROOT;
+assert.ok(fixture, 'Original-font fixture directory is required');
+const originalHtml = readFileSync(dist + '/index.html', 'utf8');
+const html = originalHtml.replaceAll('$$BACKEND_URL$$', '/api').replace(/appNetwork:\s*""/, 'appNetwork: "testnet"');
+const entry = /<script\b[^>]*type="module"[^>]*src="([^"]+)"/.exec(html)?.[1];
+assert.ok(entry); assert.ok(html.includes('id="cryptoid-startup-recovery"'));
+const fontCss = readFileSync(resolve(fixture, 'route-fonts.css'), 'utf8');
+const fontFiles = new Map(JSON.parse(readFileSync(resolve(fixture, 'route-font-manifest.json'))).map(row => [row.url, readFileSync(resolve(fixture, row.path))]));
+const sdkUrl = 'https://sdk.minepi.com/pi-sdk.js';
+const sdk = 'window.Pi={init(options){window.__localSdkInitializations=(window.__localSdkInitializations||[]).concat(options);},getPiHostAppInfo:async()=>({hostApp:"web"})};';
+const types = { '.js': 'text/javascript', '.css': 'text/css', '.html': 'text/html', '.png': 'image/png', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.mp3': 'audio/mpeg', '.webmanifest': 'application/manifest+json' };
+const report = { localOnly: true, productionBundle: true, gameplayHooks: false,
+  includesGameLifecycle: process.env.CRYPTOID_STARTUP_ROUTE_FLOW === '1',
+  htmlSha256: createHash('sha256').update(originalHtml).digest('hex'),
+  sourceHtmlSha256: createHash('sha256').update(readFileSync(root + 'index.html')).digest('hex'),
+  moduleEntry: entry, api: [], missing: [], results: [] };
+const server = createServer(async (req, res) => {
+  const pathname = new URL(req.url, 'http://local').pathname;
+  if (pathname.startsWith('/api/')) {
+    for await (const chunk of req) { void chunk; }
+    report.api.push({ method: req.method, path: pathname });
+    const body = pathname === '/api/usage/collect' ? { ok: true } : pathname === '/api/hangar/catalog' ? { offers: [] } : pathname === '/api/leaderboard/top' ? { leaders: [], network: 'testnet' } : null;
+    res.setHeader('Content-Type', 'application/json'); res.statusCode = body ? 200 : 501; res.end(JSON.stringify(body)); return;
+  }
+  if (pathname === '/') { res.setHeader('Content-Type', 'text/html'); res.end(html); return; }
+  const path = resolve(dist, '.' + decodeURIComponent(pathname));
+  if (!path.startsWith(dist + sep) || !existsSync(path) || !statSync(path).isFile()) { report.missing.push(pathname); res.statusCode = 404; res.end(); return; }
+  res.setHeader('Content-Type', types[extname(path)] || 'application/octet-stream'); res.end(readFileSync(path));
+});
+server.listen(0, '127.0.0.1'); await once(server, 'listening');
+const origin = 'http://127.0.0.1:' + server.address().port;
+const require = createRequire(import.meta.url);
+const playwright = require(process.env.CRYPTOID_PLAYWRIGHT_PACKAGE || process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES + '/playwright');
+const engine = process.env.CRYPTOID_STARTUP_ENGINE || 'chromium';
+assert.ok(['chromium', 'webkit'].includes(engine));
+let browser;
+try {
+  browser = await playwright[engine].launch({ headless: true,
+    ...(process.env.CRYPTOID_BROWSER_EXECUTABLE ? { executablePath: process.env.CRYPTOID_BROWSER_EXECUTABLE } : {}) });
+  report.engine = engine; report.version = browser.version();
+  for (const fault of ['healthy', 'sdk-held', 'entry-failed', 'entry-held', 'shop-held', 'entry-throws', 'entry-offline']) {
+    const context = await browser.newContext({ viewport: { width: 430, height: 825 }, deviceScaleFactor: 3, locale: 'de-AT' });
+    let faultActive = true, navigations = 0;
+    const held = [], row = { fault, errors: [], consoleErrors: [], failed: [], httpErrors: [], unexpected: [], samples: [] }; report.results.push(row);
+    let acknowledge;
+    const faultRequested = new Promise(resolve => { acknowledge = resolve; });
+    try {
+      await context.addInitScript(() => {
+        localStorage.setItem('cryptoid_startup_fixture_save', '{"hearts":3,"score":173,"sector":19}');
+        sessionStorage.setItem('cryptoid_startup_fixture_pending', 'keep-pending');
+      });
+      await context.route('**/*', route => {
+        const url = route.request().url();
+        if (faultActive && ((fault === 'sdk-held' && url === sdkUrl) || (fault === 'entry-held' && url === origin + entry) || (fault === 'shop-held' && /\/assets\/Shop-[\w-]+\.js$/.test(url)))) { held.push(route); acknowledge(); return; }
+        if (faultActive && url === origin + entry) {
+          if (fault === 'entry-failed') { acknowledge(); return route.fulfill({ status: 404, contentType: 'text/javascript', body: '' }); }
+          if (fault === 'entry-offline') { acknowledge(); return route.abort('internetdisconnected'); }
+          if (fault === 'entry-throws') { acknowledge(); return route.fulfill({ contentType: 'text/javascript', body: 'throw new Error("Controlled startup module exception");' }); }
+        }
+        if (url === sdkUrl) return route.fulfill({ contentType: 'text/javascript', body: sdk });
+        if (url.startsWith('https://fonts.googleapis.com/')) return route.fulfill({ contentType: 'text/css', body: fontCss });
+        if (fontFiles.has(url)) return route.fulfill({ contentType: 'font/ttf', body: fontFiles.get(url) });
+        if (url.startsWith(origin + '/') || url.startsWith('blob:') || url.startsWith('data:')) return route.continue();
+        row.unexpected.push(url); return route.abort();
+      });
+      const page = await context.newPage(); page.setDefaultTimeout(20000);
+      page.on('request', req => { if (req.isNavigationRequest() && req.frame() === page.mainFrame()) navigations++; });
+      page.on('pageerror', error => row.errors.push(error.message));
+      page.on('console', message => { if (message.type() === 'error') row.consoleErrors.push({ text: message.text(), path: message.location().url.replace(origin, '') }); });
+      page.on('requestfailed', req => row.failed.push({ path: req.url().replace(origin, ''), error: req.failure()?.errorText }));
+      page.on('response', res => { if (res.status() >= 400) row.httpErrors.push({ path: res.url().replace(origin, ''), status: res.status() }); });
+      const sample = async label => {
+        const state = await page.evaluate(() => {
+          const panel = document.getElementById('cryptoid-startup-recovery-panel');
+          const box = panel?.getBoundingClientRect();
+          return { readyState: document.readyState, bodyPresent: !!document.body,
+            rootChildren: document.getElementById('root')?.childElementCount ?? 0,
+            panel: panel ? { language: panel.lang, text: panel.innerText, role: panel.getAttribute('role'), box: [box.x, box.y, box.width, box.height] } : null,
+            saveSentinel: localStorage.getItem('cryptoid_startup_fixture_save'), pendingSentinel: sessionStorage.getItem('cryptoid_startup_fixture_pending'), sdkInitializations: window.__localSdkInitializations || [] };
+        });
+        row.samples.push({ label, navigations, ...state }); return state;
+      };
+      await page.goto(origin, { waitUntil: 'commit' });
+      if (fault !== 'healthy') {
+        await Promise.race([faultRequested, page.waitForTimeout(15000).then(() => { throw Error('Fault request did not occur'); })]);
+        await page.locator('#cryptoid-startup-recovery-panel').waitFor({ state: 'visible', timeout: 15000 });
+        const state = await sample('recovery-visible');
+        assert.equal(state.rootChildren, 0); assert.equal(state.panel.role, 'alert'); assert.equal(state.panel.language, 'de');
+        assert.deepEqual(state.panel.box, [0, 0, 430, 825]); assert.equal(navigations, 1);
+        assert.equal(state.saveSentinel, '{"hearts":3,"score":173,"sector":19}'); assert.equal(state.pendingSentinel, 'keep-pending');
+        assert.ok(state.panel.text.includes('Seite neu laden'));
+        if (fault === 'sdk-held') {
+          // The deliberately blocked parser also holds document.fonts.ready.
+          // Capture the already visible system-font panel, without that wait.
+          process.env.PW_TEST_SCREENSHOT_NO_FONTS_READY = '1';
+          await page.screenshot({ path: resolve(fixture, 'startup-recovery-' + engine + '-sdk-held.png'), timeout: 10000 });
+        }
+        faultActive = false;
+        if (held.length) {
+          for (const route of held.splice(0)) {
+            if (route.request().url() === sdkUrl) await route.fulfill({ contentType: 'text/javascript', body: sdk });
+            else await route.continue();
+          }
+        } else {
+          await page.getByRole('button', { name: 'Seite neu laden', exact: true }).click();
+          await page.waitForLoadState('domcontentloaded');
+          assert.equal(navigations, 2);
+        }
+      }
+      await page.locator('.cinematic-play:not([disabled])').waitFor();
+      await page.locator('#cryptoid-startup-recovery-panel').waitFor({ state: 'detached' });
+      const final = await sample('home-ready');
+      assert.ok(final.rootChildren > 0); assert.equal(final.panel, null);
+      assert.deepEqual(final.sdkInitializations, [{ version: '2.0' }]);
+      assert.equal(final.saveSentinel, '{"hearts":3,"score":173,"sector":19}'); assert.equal(final.pendingSentinel, 'keep-pending');
+      if (fault === 'healthy' && report.includesGameLifecycle) {
+        row.routeSteps = ['home'];
+        await page.locator('.cinematic-play').click();
+        await page.locator('.game-shell[data-effects-paused="false"]').waitFor();
+        await page.locator('.pause-control:not([disabled])').waitFor(); row.routeSteps.push('play');
+        await page.locator('.pause-control').click();
+        await page.locator('.pause-settings-overlay').waitFor(); row.routeSteps.push('pause');
+        await page.locator('.pause-resume-button').click();
+        await page.locator('.game-shell[data-effects-paused="false"]').waitFor(); row.routeSteps.push('resume');
+        await page.locator('.home-control:not([disabled])').click();
+        await page.locator('.game-overlay:has(#leave-mission-title) .button-primary').click();
+        await page.locator('.cinematic-play:not([disabled])').waitFor(); row.routeSteps.push('home');
+        assert.equal(await page.locator('#cryptoid-startup-recovery-panel').count(), 0);
+        const end = await sample('home-after-play'); assert.equal(end.rootChildren, 1);
+      }
+      if (held.length) throw Error('Unreleased local request');
+      assert.deepEqual(row.unexpected, []);
+      assert.deepEqual(row.errors, fault === 'entry-throws' ? ['Controlled startup module exception'] : []);
+      if (['healthy', 'sdk-held', 'entry-held', 'shop-held'].includes(fault)) assert.deepEqual(row.consoleErrors, []);
+      assert.ok(row.httpErrors.every(x => fault === 'entry-failed' && x.path === entry && x.status === 404));
+      assert.ok(row.failed.every(x => (x.path === entry && ['entry-failed', 'entry-offline'].includes(fault))
+        || (fault === 'healthy' && /^\/audio\/.*\.mp3$/.test(x.path) && ['net::ERR_ABORTED', 'Load request cancelled'].includes(x.error))));
+      row.passed = true; console.log(JSON.stringify({ engine, fault, passed: true, navigations, bodyExistedAtRecovery: row.samples[0].bodyPresent }));
+    } finally { await Promise.allSettled(held.map(route => route.abort())); await context.close(); }
+  }
+  assert.deepEqual(report.missing, []); report.passed = true;
+  report.limitations = 'Linux native browsers with controlled transport faults. Storage sentinels are synthetic, not real account saves. No OS process kill, iPhone memory-limit recovery or historical White Screen cause established.';
+} finally {
+  await browser?.close(); server.closeAllConnections(); server.close();
+  if (process.env.CRYPTOID_STARTUP_REPORT) writeFileSync(process.env.CRYPTOID_STARTUP_REPORT, JSON.stringify(report, null, 2) + '\n');
+}
