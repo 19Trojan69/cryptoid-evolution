@@ -275,8 +275,10 @@
     },
     {
       "path": "idle-display-resume-guard-20261023/loop-original-control.log",
-      "bytes": 9145,
-      "sha256": "83e5ebf08d3f598f17e4aa1ba48dd835f1e5ee46f4ff4fa5f449031360f412de"
+      "bytes": 9117,
+      "sha256": "720edd0c4c3316e79562528787104aca4b4f7ad98e926ce6ea99979d91a46cb4",
+      "originalSha256": "83e5ebf08d3f598f17e4aa1ba48dd835f1e5ee46f4ff4fa5f449031360f412de",
+      "normalization": "Trailing whitespace removed from log lines; test results/error details unchanged."
     },
     {
       "path": "idle-display-resume-guard-20261023/production-build.log",

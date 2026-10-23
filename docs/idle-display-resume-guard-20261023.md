@@ -6,10 +6,10 @@ watchdog could count an observed loading, paused or hidden interval as an active
 stall on the first callback after resuming. The scoped checks pass. Historical
 White Screens and sustained campaign acceptance remain open.
 
-Runtime commit: `494f7b7181befe42654f2d9e965a00f77e768c23`  
-Runtime tree: `ce2ee28b9719b14161177c0493f660480eafc3b0`  
-Parent: `9fd9c9d10216a9373ddfd8b22e579e8edbc29c95`  
-Branch: `codex/idle-display-resume-guard-20261023`
+- Runtime commit: `494f7b7181befe42654f2d9e965a00f77e768c23`
+- Runtime tree: `ce2ee28b9719b14161177c0493f660480eafc3b0`
+- Parent: `9fd9c9d10216a9373ddfd8b22e579e8edbc29c95`
+- Branch: `codex/idle-display-resume-guard-20261023`
 
 The new branch disables automatic deployment in its first commit. Nine changed
 runtime/config/test paths were independently read from the remote Git tree and
@@ -151,3 +151,5 @@ the failed earlier UI run, final UI reports, build/negative-control logs and the
 exact production-route audit helper. That audit helper documents the original
 scratch fixture layout; fonts, native browser installation and compatibility
 package must be prepared before replaying it. It is verification scaffolding.
+The original-control log copy removes trailing whitespace; the JSON records its
+original and normalized digests. Test outcomes and error details are preserved.
