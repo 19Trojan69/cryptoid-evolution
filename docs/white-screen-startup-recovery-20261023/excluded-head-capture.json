@@ -1,0 +1,109 @@
+{
+  "localOnly": true,
+  "productionBundle": true,
+  "gameplayHooks": false,
+  "htmlSha256": "5158ac63cb50e8e12a1335640d35ccf083205c1edd85e9a71d65d1ba16df27d3",
+  "sourceHtmlSha256": "6ee716588236b9148c268c483864b290f81fc4599b4a6e0761cc64ecba5c904e",
+  "moduleEntry": "/assets/index-CwTQM3Z2.js",
+  "api": [
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    }
+  ],
+  "missing": [],
+  "results": [
+    {
+      "fault": "healthy",
+      "errors": [],
+      "failed": [
+        {
+          "path": "/audio/light-the-void.mp3",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "home-ready",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        },
+        {
+          "label": "home-after-play",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "routeSteps": [
+        "home",
+        "play",
+        "pause",
+        "resume",
+        "home"
+      ],
+      "passed": true
+    },
+    {
+      "fault": "sdk-held",
+      "errors": [],
+      "failed": [],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "recovery-visible",
+          "navigations": 1,
+          "readyState": "loading",
+          "bodyPresent": false,
+          "rootChildren": 0,
+          "panel": {
+            "language": "de",
+            "text": "Diese Seite konnte nicht geladen werden.\n\nLade die aktuelle Version neu. Deine gespeicherten Daten bleiben erhalten.\n\nSeite neu laden\nZur Startseite",
+            "role": "alert",
+            "box": [
+              0,
+              0,
+              430,
+              825
+            ]
+          },
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": []
+        }
+      ]
+    }
+  ],
+  "engine": "chromium",
+  "version": "141.0.7390.37"
+}

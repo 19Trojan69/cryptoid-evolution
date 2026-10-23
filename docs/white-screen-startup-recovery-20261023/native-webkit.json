@@ -1,0 +1,429 @@
+{
+  "localOnly": true,
+  "productionBundle": true,
+  "gameplayHooks": false,
+  "includesGameLifecycle": false,
+  "htmlSha256": "6d5a8f3a5b314f3bf7dc0ef0b508492d528d6cc976e476584aaf4a9b782b6ab3",
+  "sourceHtmlSha256": "6b82adfec544fcbbfd064f49064b4b90b370291ce412e0e2a9ee13f66ccd7acf",
+  "moduleEntry": "/assets/index-CwTQM3Z2.js",
+  "api": [
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    }
+  ],
+  "missing": [],
+  "results": [
+    {
+      "fault": "healthy",
+      "errors": [],
+      "consoleErrors": [],
+      "failed": [],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "home-ready",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "fault": "sdk-held",
+      "errors": [],
+      "consoleErrors": [],
+      "failed": [],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "recovery-visible",
+          "navigations": 1,
+          "readyState": "loading",
+          "bodyPresent": true,
+          "rootChildren": 0,
+          "panel": {
+            "language": "de",
+            "text": "Diese Seite konnte nicht geladen werden.\n\nLade die aktuelle Version neu. Deine gespeicherten Daten bleiben erhalten.\n\nSeite neu laden\nZur Startseite",
+            "role": "alert",
+            "box": [
+              0,
+              0,
+              430,
+              825
+            ]
+          },
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": []
+        },
+        {
+          "label": "home-ready",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "fault": "entry-failed",
+      "errors": [],
+      "consoleErrors": [
+        {
+          "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "path": "/assets/index-CwTQM3Z2.js"
+        }
+      ],
+      "failed": [
+        {
+          "path": "/assets/index-CwTQM3Z2.js",
+          "error": "Load request cancelled"
+        }
+      ],
+      "httpErrors": [
+        {
+          "path": "/assets/index-CwTQM3Z2.js",
+          "status": 404
+        }
+      ],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "recovery-visible",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 0,
+          "panel": {
+            "language": "de",
+            "text": "Diese Seite konnte nicht geladen werden.\n\nLade die aktuelle Version neu. Deine gespeicherten Daten bleiben erhalten.\n\nSeite neu laden\nZur Startseite",
+            "role": "alert",
+            "box": [
+              0,
+              0,
+              430,
+              825
+            ]
+          },
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        },
+        {
+          "label": "home-ready",
+          "navigations": 2,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "fault": "entry-held",
+      "errors": [],
+      "consoleErrors": [],
+      "failed": [],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "recovery-visible",
+          "navigations": 1,
+          "readyState": "interactive",
+          "bodyPresent": true,
+          "rootChildren": 0,
+          "panel": {
+            "language": "de",
+            "text": "Diese Seite konnte nicht geladen werden.\n\nLade die aktuelle Version neu. Deine gespeicherten Daten bleiben erhalten.\n\nSeite neu laden\nZur Startseite",
+            "role": "alert",
+            "box": [
+              0,
+              0,
+              430,
+              825
+            ]
+          },
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        },
+        {
+          "label": "home-ready",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "fault": "shop-held",
+      "errors": [],
+      "consoleErrors": [],
+      "failed": [],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "recovery-visible",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 0,
+          "panel": {
+            "language": "de",
+            "text": "Diese Seite konnte nicht geladen werden.\n\nLade die aktuelle Version neu. Deine gespeicherten Daten bleiben erhalten.\n\nSeite neu laden\nZur Startseite",
+            "role": "alert",
+            "box": [
+              0,
+              0,
+              430,
+              825
+            ]
+          },
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        },
+        {
+          "label": "home-ready",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "fault": "entry-throws",
+      "errors": [
+        "Controlled startup module exception"
+      ],
+      "consoleErrors": [],
+      "failed": [
+        {
+          "path": "/audio/light-the-void.mp3",
+          "error": "Load request cancelled"
+        }
+      ],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "recovery-visible",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 0,
+          "panel": {
+            "language": "de",
+            "text": "Diese Seite konnte nicht geladen werden.\n\nLade die aktuelle Version neu. Deine gespeicherten Daten bleiben erhalten.\n\nSeite neu laden\nZur Startseite",
+            "role": "alert",
+            "box": [
+              0,
+              0,
+              430,
+              825
+            ]
+          },
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        },
+        {
+          "label": "home-ready",
+          "navigations": 2,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "fault": "entry-offline",
+      "errors": [],
+      "consoleErrors": [],
+      "failed": [
+        {
+          "path": "/assets/index-CwTQM3Z2.js",
+          "error": "Blocked by Web Inspector"
+        }
+      ],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "recovery-visible",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 0,
+          "panel": {
+            "language": "de",
+            "text": "Diese Seite konnte nicht geladen werden.\n\nLade die aktuelle Version neu. Deine gespeicherten Daten bleiben erhalten.\n\nSeite neu laden\nZur Startseite",
+            "role": "alert",
+            "box": [
+              0,
+              0,
+              430,
+              825
+            ]
+          },
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        },
+        {
+          "label": "home-ready",
+          "navigations": 2,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "engine": "webkit",
+  "version": "26.5",
+  "passed": true,
+  "limitations": "Linux native browsers with controlled transport faults. Storage sentinels are synthetic, not real account saves. No OS process kill, iPhone memory-limit recovery or historical White Screen cause established."
+}

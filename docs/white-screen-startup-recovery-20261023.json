@@ -1,0 +1,356 @@
+{
+  "date": "2026-10-23",
+  "priority": "White Screen highest priority per owner",
+  "status": "prepared_not_deployed",
+  "runtimeCommit": "d84a4447e3318f06d4f28ccf7178adee28224295",
+  "runtimeTree": "4acca9df81e7af3cf4a33685f563638a84fdce1f",
+  "parentCommit": "acd96687eaa9ba1a6e6da39e49f9e644717af34f",
+  "branch": "codex/white-screen-startup-recovery-20261023",
+  "automaticDeploymentEnabled": false,
+  "remoteRuntimeBlobsVerified": 6,
+  "runtimePaths": [
+    {
+      "path": "frontend/index.html",
+      "gitBlob": "e8bc2150e82e0ecb3745f78b8c33d5855851bec8",
+      "sha256": "6b82adfec544fcbbfd064f49064b4b90b370291ce412e0e2a9ee13f66ccd7acf"
+    },
+    {
+      "path": "frontend/package.json",
+      "gitBlob": "fba8e4d2c465b1234ba3525040267f0d50f23c50",
+      "sha256": "1ff3fc78d417cccf8449307ec8e3efe691c549af091658861abcc9ae2b5b8f4f"
+    },
+    {
+      "path": "frontend/scripts/fixtures/startup-before-20261023.html.txt",
+      "gitBlob": "c9f7cc2058c56c35f1a4d470f0451c8371c97b09",
+      "sha256": "13dc0d1b1aa65d0819c6ecab0d140d1a1872952f0a34c3c06faeb55c03c93ab3"
+    },
+    {
+      "path": "frontend/scripts/startupRecovery.test.mjs",
+      "gitBlob": "b33494f01536227070e4c31724dfd69b79200aa2",
+      "sha256": "39e96ad9c2b798f554ba7620c3910f4006a855c46decac6d5e8058efae02167c"
+    },
+    {
+      "path": "frontend/scripts/verifyStartupRecovery.mjs",
+      "gitBlob": "ca2b0da6291df64d5cb0272fb7e46c2b47b28eb5",
+      "sha256": "34bda9b19643c3d30f088999e84a2f55a5bdc6c3387c6725f74388f765b606cd"
+    },
+    {
+      "path": "vercel.json",
+      "gitBlob": "0a79c1585e3a4a3babf9ba28ff4413f10e715868",
+      "sha256": "16c619f6119ac0de0dbc1a7e1ac75bf1f6e796fc1e24990e40ec4fff629564ca"
+    }
+  ],
+  "newFinding": {
+    "scope": "Blank initial document/startup, not an established cause of historical in-game OS terminations",
+    "originalSdkBlocksBodyCreation": true,
+    "originalNormalControlsPassed": 2,
+    "originalBlankControls": 8,
+    "originalNativeProbes": 10,
+    "pinnedOriginalHtmlBlob": "c9f7cc2058c56c35f1a4d470f0451c8371c97b09"
+  },
+  "sourcePreservation": {
+    "sdkAndInitBytesIdentical": true,
+    "sdkVersion": "2.0",
+    "sdkStillSynchronous": true,
+    "sdkAndInitMovedAfterBodyAndRootBeforeEntry": true,
+    "remainingHtmlByteIdenticalAfterRemovingGuardAndSdkBlock": true,
+    "frontendSrcChangedPaths": [],
+    "authPaymentSaveEconomyBackendChanged": false,
+    "normalGameArtStylesAudioGameplayChanged": false
+  },
+  "recovery": {
+    "timeoutMs": 8000,
+    "moduleLoadErrorCanShowEarlier": true,
+    "automaticReload": false,
+    "automaticNavigation": false,
+    "automaticSdkRetry": false,
+    "readOnlyStorageKey": "cryptoid_language",
+    "storageWrites": 0,
+    "additionalNetworkRequests": 0,
+    "additionalRafChains": 0,
+    "startupOnly": true,
+    "timerObserverAndErrorListenerRemovedOnFirstUiCommit": true,
+    "lateSuccessfulLoadRemovesPanel": true,
+    "selectableLocaleCoverage": 19,
+    "existingCopyLocales": [
+      "en",
+      "de",
+      "es",
+      "zh",
+      "vi"
+    ],
+    "otherSelectableLocalesUseExistingEnglishFallbacks": true
+  },
+  "build": {
+    "command": "VITE_CRYPTOID_DIAGNOSTICS=0 npm run build -- --outDir <fresh-local-output> --emptyOutDir",
+    "passed": true,
+    "tests": 131,
+    "groups": {
+      "localization": 12,
+      "sessionAndStore": 43,
+      "canvasStaticUrl": 15,
+      "weaponAndPurchaseRecovery": 24,
+      "rockDisplay": 8,
+      "gameLoop": 17,
+      "startupRecovery": 12
+    },
+    "failures": 0,
+    "skipped": 0,
+    "localizationReleaseCheck": true,
+    "projectTypeScript": true,
+    "vite": true,
+    "sourceParentAtBuild": "acd96687eaa9ba1a6e6da39e49f9e644717af34f",
+    "workingTreeDirtyAtBuild": true,
+    "sourceHtmlSha256": "6b82adfec544fcbbfd064f49064b4b90b370291ce412e0e2a9ee13f66ccd7acf",
+    "paintedHulls": {
+      "variants": 1740,
+      "bytes": 95450326,
+      "revision": "91a72bc0c36be9407915",
+      "dimensions": "original"
+    },
+    "existingLargeChunkWarning": true,
+    "evidence": "white-screen-startup-recovery-20261023/production-build.log"
+  },
+  "lint": {
+    "passed": true,
+    "scope": [
+      "frontend/scripts/startupRecovery.test.mjs",
+      "frontend/scripts/verifyStartupRecovery.mjs"
+    ],
+    "wholeProjectLintClaimed": false,
+    "evidence": "white-screen-startup-recovery-20261023/changed-file-lint.log"
+  },
+  "nativeStartup": [
+    {
+      "engine": "chromium",
+      "version": "141.0.7390.37",
+      "passedStartupCases": 7,
+      "faultRecoveries": 6,
+      "normalStartupPassed": true,
+      "additionalGameLifecyclePassed": true,
+      "sourceHtmlSha256": "6b82adfec544fcbbfd064f49064b4b90b370291ce412e0e2a9ee13f66ccd7acf",
+      "builtHtmlSha256": "6d5a8f3a5b314f3bf7dc0ef0b508492d528d6cc976e476584aaf4a9b782b6ab3",
+      "faults": [
+        "healthy",
+        "sdk-held",
+        "entry-failed",
+        "entry-held",
+        "shop-held",
+        "entry-throws",
+        "entry-offline"
+      ],
+      "recoveryNavigationCounts": {
+        "sdk-held": 1,
+        "entry-failed": 2,
+        "entry-held": 1,
+        "shop-held": 1,
+        "entry-throws": 2,
+        "entry-offline": 2
+      },
+      "evidence": "white-screen-startup-recovery-20261023/native-chromium.json"
+    },
+    {
+      "engine": "webkit",
+      "version": "26.5",
+      "passedStartupCases": 7,
+      "faultRecoveries": 6,
+      "normalStartupPassed": true,
+      "additionalGameLifecyclePassed": false,
+      "sourceHtmlSha256": "6b82adfec544fcbbfd064f49064b4b90b370291ce412e0e2a9ee13f66ccd7acf",
+      "builtHtmlSha256": "6d5a8f3a5b314f3bf7dc0ef0b508492d528d6cc976e476584aaf4a9b782b6ab3",
+      "faults": [
+        "healthy",
+        "sdk-held",
+        "entry-failed",
+        "entry-held",
+        "shop-held",
+        "entry-throws",
+        "entry-offline"
+      ],
+      "recoveryNavigationCounts": {
+        "sdk-held": 1,
+        "entry-failed": 2,
+        "entry-held": 1,
+        "shop-held": 1,
+        "entry-throws": 2,
+        "entry-offline": 2
+      },
+      "evidence": "white-screen-startup-recovery-20261023/native-webkit.json"
+    }
+  ],
+  "nativeStartupCasesPassed": 14,
+  "nativeFaultRecoveriesPassed": 12,
+  "nativeViewport": {
+    "cssWidth": 430,
+    "cssHeight": 825,
+    "dpr": 3
+  },
+  "nativePixelCaptures": [
+    {
+      "path": "white-screen-startup-recovery-20261023/sdk-held-chromium.png",
+      "width": 1290,
+      "height": 2475,
+      "colors": 2687,
+      "sha256": "895d372f139e7b17658836e54a5a6fd07ccc44c01b77db9044068938f529f191",
+      "nativeCaptureCompleted": true,
+      "visuallyInspected": true
+    },
+    {
+      "path": "white-screen-startup-recovery-20261023/sdk-held-webkit.png",
+      "width": 1290,
+      "height": 2475,
+      "colors": 1221,
+      "sha256": "a98fec6c8395e09487d4db3099135c2573346a20caf0aa408fed0ee268291389",
+      "nativeCaptureCompleted": true,
+      "visuallyInspected": true
+    }
+  ],
+  "additionalLifecycle": {
+    "chromiumPassed": true,
+    "chromiumSteps": [
+      "home",
+      "play",
+      "pause",
+      "resume",
+      "home"
+    ],
+    "webkitPassed": false,
+    "webkitCompletedSteps": [
+      "home",
+      "play"
+    ],
+    "webkitObserved": "A pause overlay intercepts the requested Pause click. Exact pause reason not captured.",
+    "webkitUncaughtJsErrors": 0,
+    "webkitHttpErrors": 0,
+    "historicalWhiteScreenReproduced": false,
+    "failedRunNotReclassified": true,
+    "evidence": "white-screen-startup-recovery-20261023/webkit-cold-lifecycle-failed.json",
+    "log": "white-screen-startup-recovery-20261023/webkit-cold-lifecycle-failed.log",
+    "executedAuditSource": "white-screen-startup-recovery-20261023/full-lifecycle-audit-source.mjs.txt"
+  },
+  "exclusions": [
+    {
+      "evidence": "white-screen-startup-recovery-20261023/excluded-head-font-wait.json",
+      "reason": "Head-only prototype had DOM geometry but screenshot waited on fonts.ready while parser was deliberately blocked; not native-pixel acceptance."
+    },
+    {
+      "evidence": "white-screen-startup-recovery-20261023/excluded-head-capture.json",
+      "reason": "Head-only capture still did not complete after optional font wait bypass; not accepted. Final runtime moves the original SDK behind body/root and captures actual pixels."
+    },
+    {
+      "evidence": "white-screen-startup-recovery-20261023/excluded-incomplete-build.log",
+      "reason": "Earlier default-output run has no final Vite summary; not counted as a completed build."
+    },
+    {
+      "evidence": "white-screen-startup-recovery-20261023/excluded-output-directory-build.log",
+      "reason": "Local reuse of default output fails with ENOTEMPTY; excluded. Final full pipeline succeeds in a fresh output directory."
+    }
+  ],
+  "limits": [
+    "Synthetic local SDK/API boundaries, no real Pi authentication/payment or account mutations verified",
+    "Storage sentinels are controlled fixtures, not real account saves",
+    "Linux browsers, not physical iPhone/PiBrowser",
+    "No new native resident-memory measurement or process-limit termination test",
+    "No historical White-Screen cause established or elimination proved",
+    "The older f85360ed matched Jetsam event does not identify a current source resource",
+    "A terminated browser process cannot execute this guard",
+    "The guard retires after the first UI commit; it does not repair a later rendered-game stall",
+    "The additional WebKit cold game lifecycle remains failed/open",
+    "Earlier active stalls and sustained campaign acceptance remain open",
+    "No new owner campaign, repeated purchase, storage clearing or OS report required",
+    "No Testnet/main/Mainnet deployment or fixed reference change",
+    "Native storage sentinels are seeded on each test document; real save preservation is not established by their post-reload value. The guard is separately tested as read-only and all application/save source is unchanged."
+  ],
+  "evidenceFiles": [
+    {
+      "path": "white-screen-startup-recovery-20261023/changed-file-lint.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "white-screen-startup-recovery-20261023/excluded-head-capture.json",
+      "bytes": 2740,
+      "sha256": "34b6aa28d3fe30f5e7165bf659d1073d7c448a2e9c13ea9008fc547362a5a744"
+    },
+    {
+      "path": "white-screen-startup-recovery-20261023/excluded-head-capture.log",
+      "bytes": 441,
+      "sha256": "ecffb1d7185b55fa115572b3d6738198e1a1778d9c5fa9de9143771e7126cbb9"
+    },
+    {
+      "path": "white-screen-startup-recovery-20261023/excluded-head-font-wait.json",
+      "bytes": 2131,
+      "sha256": "ca739142149fae534e45d6654a4ade950272ef16357db2237fb760bc2515556b"
+    },
+    {
+      "path": "white-screen-startup-recovery-20261023/excluded-head-font-wait.log",
+      "bytes": 483,
+      "sha256": "25f23933523f14d3a888e397a2d5f91e4adf5f65db283e4e7e16c32b9aa69da3"
+    },
+    {
+      "path": "white-screen-startup-recovery-20261023/excluded-incomplete-build.log",
+      "bytes": 18573,
+      "sha256": "09cfb1def69877376285b4d38648fe8088f8ba6185c43d292d90f60c356545c8"
+    },
+    {
+      "path": "white-screen-startup-recovery-20261023/excluded-output-directory-build.log",
+      "bytes": 1854,
+      "sha256": "241de87f1310ed73a54ed9cb0f982073f351089f4cd8fc11d76d5759fa79a0e0"
+    },
+    {
+      "path": "white-screen-startup-recovery-20261023/full-lifecycle-audit-source.mjs.txt",
+      "bytes": 12274,
+      "sha256": "c6728a85e7608725e637d1c182f062e383656637469c4e23bde8d4eba5487f04"
+    },
+    {
+      "path": "white-screen-startup-recovery-20261023/native-chromium.json",
+      "bytes": 12131,
+      "sha256": "d83d76a23fa91362b660d0b550fa098614d6bb500ac52bb8f1ddf0465543a866"
+    },
+    {
+      "path": "white-screen-startup-recovery-20261023/native-webkit.json",
+      "bytes": 11395,
+      "sha256": "ac6f6ee022b5207e934d55244c6a40fe465e56f43350ddf6cfe6784058d422fd"
+    },
+    {
+      "path": "white-screen-startup-recovery-20261023/original-browser-controls.json",
+      "bytes": 5818,
+      "sha256": "e6f7d9898a3fd689b05ee7784b1d728d4ee4be5a1253e186f1890bbf63905e79"
+    },
+    {
+      "path": "white-screen-startup-recovery-20261023/original-control-audit-source.mjs.txt",
+      "bytes": 6390,
+      "sha256": "b667517ddb754c18895eab4ec79c0c0f780d3d4dfad5934358ff42871d284d3c"
+    },
+    {
+      "path": "white-screen-startup-recovery-20261023/production-build.log",
+      "bytes": 21089,
+      "sha256": "9f43de9532e404780bd630671ddec6ae1707e054b3b558fac9d705388d6af52e"
+    },
+    {
+      "path": "white-screen-startup-recovery-20261023/runtime-remote-tree.json",
+      "bytes": 788,
+      "sha256": "c654d56c05359461a0778a4b002001c0dbf4a45b506596d5fd441279aafa5cc4"
+    },
+    {
+      "path": "white-screen-startup-recovery-20261023/sdk-held-chromium.png",
+      "bytes": 78938,
+      "sha256": "895d372f139e7b17658836e54a5a6fd07ccc44c01b77db9044068938f529f191"
+    },
+    {
+      "path": "white-screen-startup-recovery-20261023/sdk-held-webkit.png",
+      "bytes": 91236,
+      "sha256": "a98fec6c8395e09487d4db3099135c2573346a20caf0aa408fed0ee268291389"
+    },
+    {
+      "path": "white-screen-startup-recovery-20261023/webkit-cold-lifecycle-failed.json",
+      "bytes": 1203,
+      "sha256": "7d71c88cfc044990697188353fc6ad130ce5e2c05809196559dfe757df16e7f0"
+    },
+    {
+      "path": "white-screen-startup-recovery-20261023/webkit-cold-lifecycle-failed.log",
+      "bytes": 3389,
+      "sha256": "57ba72bf720eefc7fe3ce6cc1ca8e1b53092f455248a264ac11b05716448ecdf"
+    }
+  ]
+}

@@ -1,5 +1,52 @@
 # Preserve the officially approved game
 
+## White-Screen priority and startup recovery, 23 October 2026, prepared
+
+The owner again asks to continue and explicitly gives White Screens highest
+priority. Runtime d84a4447e3318f06d4f28ccf7178adee28224295, tree
+4acca9df81e7af3cf4a33685f563638a84fdce1f, on
+codex/white-screen-startup-recovery-20261023 inherits acd9668/494f7b7. The first
+commit disables automatic deployment. No publication, main merge or fixed
+release/rollback/Mainnet change is authorized by this continuation alone.
+
+A distinct startup blank is reproduced in Chromium 141 and WPE-WebKit 26.5:
+held synchronous head SDK prevents even body/root creation; held/failed entry
+and first-route modules leave an empty UI. Original probes have 2 healthy starts
+and 8 empty controls. Keep SDK/init bytes, version 2.0 and synchronous order before
+entry, but place them after body/root. A pre-SDK inline guard offers manual
+recovery for an empty start after 8000ms, earlier on a module resource error.
+Late success removes it; first UI commit releases timer/observer/error listener.
+Only the language key is read. No automatic reload, SDK retry, navigation or
+account/save mutation. It does not monitor a running game or survive an OS kill.
+
+Final full build: 131 tests, localization release check, project TypeScript and
+Vite pass using a fresh local output directory. Original 1740 hulls and 95,450,326
+bytes remain. New tests/helpers pass lint. All frontend/src files remain exact;
+runtime changes are confined to index.html. Both native browsers pass 7 startup
+cases each, including actual SDK-held pixel captures and 6 fault-to-Home recoveries.
+19 locale choices match existing translations/fallbacks. SDK init is once per
+successful document. Transport/storage fixtures are local synthetic data.
+
+Keep the additional lifecycle finding separate: Chromium Home/Play/Pause/Resume/
+Home passes. A WebKit cold lifecycle attempt stops after Home/Play when a pause
+overlay intercepts the requested Pause click. No uncaught JS/HTTP error; its exact
+pause reason was not captured. It is NOT passed. Default startup-only checks to
+Home do not establish campaign or full-game lifecycle acceptance. Optional
+CRYPTOID_STARTUP_ROUTE_FLOW=1 retains the additional test. Do not loosen the guard.
+
+Two head-only capture attempts are excluded; DOM bounds were insufficient proof
+and a blocked parser also prevents fonts.ready. Final body placement has completed
+native captures; only the test host bypasses the optional screenshot font wait.
+Earlier incomplete/default-output and ENOTEMPTY build attempts are excluded; the
+fresh final output has the complete successful build. Do not repeat old renderer
+cache/clip experiments or require an owner campaign, purchase, clearing or OS log.
+
+The older f85360ed Jetsam event proves that particular WebContent process-limit
+kill near 2.02 GiB, not a current source allocation or every later White Screen.
+No new physical iPhone memory measurement or White-Screen elimination is proved.
+Historical device White Screens and active stalls remain open. See
+docs/white-screen-startup-recovery-20261023.md/.json and retained evidence.
+
 ## Empty display bounds and resume watchdog, 23 October 2026, prepared
 
 Runtime 494f7b7181befe42654f2d9e965a00f77e768c23,

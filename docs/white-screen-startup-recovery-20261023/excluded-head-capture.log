@@ -1,0 +1,14 @@
+{"engine":"chromium","fault":"healthy","passed":true,"navigations":1,"bodyExistedAtRecovery":true}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.screenshot: Timeout 10000ms exceeded.
+Call log:
+[2m  - taking page screenshot[22m
+
+    at /workspace/scratch/45d593033c50/cryptoid-boss-audit-20261023/release-checkout/frontend/scripts/verifyStartupRecovery.mjs:106:22 {
+  name: 'TimeoutError'
+}
+
+Node.js v24.19.0

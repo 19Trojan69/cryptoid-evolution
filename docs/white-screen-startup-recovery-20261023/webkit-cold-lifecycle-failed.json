@@ -1,0 +1,52 @@
+{
+  "localOnly": true,
+  "productionBundle": true,
+  "gameplayHooks": false,
+  "htmlSha256": "6d5a8f3a5b314f3bf7dc0ef0b508492d528d6cc976e476584aaf4a9b782b6ab3",
+  "sourceHtmlSha256": "6b82adfec544fcbbfd064f49064b4b90b370291ce412e0e2a9ee13f66ccd7acf",
+  "moduleEntry": "/assets/index-CwTQM3Z2.js",
+  "api": [
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    }
+  ],
+  "missing": [],
+  "results": [
+    {
+      "fault": "healthy",
+      "errors": [],
+      "consoleErrors": [],
+      "failed": [],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "home-ready",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "routeSteps": [
+        "home",
+        "play"
+      ]
+    }
+  ],
+  "engine": "webkit",
+  "version": "26.5"
+}

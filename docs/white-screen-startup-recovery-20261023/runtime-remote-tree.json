@@ -1,0 +1,29 @@
+{
+  "tree": "4acca9df81e7af3cf4a33685f563638a84fdce1f",
+  "blobs": [
+    {
+      "path": "frontend/index.html",
+      "sha": "e8bc2150e82e0ecb3745f78b8c33d5855851bec8"
+    },
+    {
+      "path": "frontend/package.json",
+      "sha": "fba8e4d2c465b1234ba3525040267f0d50f23c50"
+    },
+    {
+      "path": "frontend/scripts/fixtures/startup-before-20261023.html.txt",
+      "sha": "c9f7cc2058c56c35f1a4d470f0451c8371c97b09"
+    },
+    {
+      "path": "frontend/scripts/startupRecovery.test.mjs",
+      "sha": "b33494f01536227070e4c31724dfd69b79200aa2"
+    },
+    {
+      "path": "frontend/scripts/verifyStartupRecovery.mjs",
+      "sha": "ca2b0da6291df64d5cb0272fb7e46c2b47b28eb5"
+    },
+    {
+      "path": "vercel.json",
+      "sha": "0a79c1585e3a4a3babf9ba28ff4413f10e715868"
+    }
+  ]
+}

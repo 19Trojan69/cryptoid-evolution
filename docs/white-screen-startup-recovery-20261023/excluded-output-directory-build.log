@@ -1,0 +1,16 @@
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 389 modules transformed.
+✗ Build failed in 4.06s
+error during build:
+[vite:prepare-out-dir] ENOTEMPTY, Directory not empty: /workspace/scratch/45d593033c50/cryptoid-boss-audit-20261023/release-checkout/frontend/dist/ships '/workspace/scratch/45d593033c50/cryptoid-boss-audit-20261023/release-checkout/frontend/dist/ships'
+    at Object.rmSync (node:fs:1283:18)
+    at emptyDir (file:///workspace/scratch/45d593033c50/cryptoid-boss-audit-20261023/release-checkout/frontend/node_modules/vite/dist/node/chunks/config.js:2167:11)
+    at prepareOutDir (file:///workspace/scratch/45d593033c50/cryptoid-boss-audit-20261023/release-checkout/frontend/node_modules/vite/dist/node/chunks/config.js:33576:55)
+    at Object.handler (file:///workspace/scratch/45d593033c50/cryptoid-boss-audit-20261023/release-checkout/frontend/node_modules/vite/dist/node/chunks/config.js:33566:6)
+    at Object.handler (file:///workspace/scratch/45d593033c50/cryptoid-boss-audit-20261023/release-checkout/frontend/node_modules/vite/dist/node/chunks/config.js:33994:13)
+    at file:///workspace/scratch/45d593033c50/cryptoid-boss-audit-20261023/release-checkout/frontend/node_modules/rollup/dist/es/shared/node-entry.js:23700:40
+    at async Promise.all (index 0)
+    at async PluginDriver.hookParallel (file:///workspace/scratch/45d593033c50/cryptoid-boss-audit-20261023/release-checkout/frontend/node_modules/rollup/dist/es/shared/node-entry.js:23610:9)
+    at async Bundle.generate (file:///workspace/scratch/45d593033c50/cryptoid-boss-audit-20261023/release-checkout/frontend/node_modules/rollup/dist/es/shared/node-entry.js:21726:13)
+    at async file:///workspace/scratch/45d593033c50/cryptoid-boss-audit-20261023/release-checkout/frontend/node_modules/rollup/dist/es/shared/node-entry.js:24690:27

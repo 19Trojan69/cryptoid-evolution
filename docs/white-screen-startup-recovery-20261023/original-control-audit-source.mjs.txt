@@ -1,0 +1,71 @@
+// Synthetic localhost transport faults. Never uses a real SDK/account/API.
+import assert from 'node:assert/strict';
+import { createServer } from 'node:http';
+import { once } from 'node:events';
+import { readFileSync, existsSync, statSync, writeFileSync } from 'node:fs';
+import { resolve, extname, sep } from 'node:path';
+import { createRequire } from 'node:module';
+import { createHash } from 'node:crypto';
+const root = new URL('.', import.meta.url).pathname;
+const dist = resolve(root, 'release-checkout/frontend/dist');
+const html = readFileSync(dist + '/index.html', 'utf8').replaceAll('$$BACKEND_URL$$', '/api').replace(/appNetwork:\s*""/, 'appNetwork: "testnet"');
+const entry = /<script\b[^>]*type="module"[^>]*src="([^"]+)"/.exec(html)?.[1];
+assert.ok(entry);
+const fontCss = readFileSync(root + 'route-fonts.css', 'utf8');
+const fontFiles = new Map(JSON.parse(readFileSync(root + 'route-font-manifest.json')).map(row => [row.url, readFileSync(root + row.path)]));
+const types = { '.js': 'text/javascript', '.css': 'text/css', '.html': 'text/html', '.png': 'image/png', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.mp3': 'audio/mpeg' };
+const server = createServer(async (req, res) => {
+  const pathname = new URL(req.url, 'http://local').pathname;
+  if (pathname.startsWith('/api/')) {
+    for await (const chunk of req) { void chunk; }
+    res.setHeader('Content-Type', 'application/json');
+    const body = pathname === '/api/hangar/catalog' ? { offers: [] } : pathname === '/api/leaderboard/top' ? { leaders: [], network: 'testnet' } : pathname === '/api/usage/collect' ? { ok: true } : null;
+    res.statusCode = body ? 200 : 501; res.end(JSON.stringify(body)); return;
+  }
+  if (pathname === '/') { res.setHeader('Content-Type', 'text/html'); res.end(html); return; }
+  const path = resolve(dist, '.' + decodeURIComponent(pathname));
+  if (!path.startsWith(dist + sep) || !existsSync(path) || !statSync(path).isFile()) { res.statusCode = 404; res.end(); return; }
+  res.setHeader('Content-Type', types[extname(path)] || 'application/octet-stream'); res.end(readFileSync(path));
+});
+server.listen(0, '127.0.0.1'); await once(server, 'listening');
+const origin = 'http://127.0.0.1:' + server.address().port;
+const require = createRequire(import.meta.url);
+const current = require(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES + '/playwright');
+const compat = require(root + 'pw-compat/node_modules/playwright-core');
+const wk = '/root/.cache/ms-playwright/webkit-2336/minibrowser-wpe', libs = root + 'native-libs/usr/lib/x86_64-linux-gnu';
+const report = { localOnly: true, sourceRuntime: '494f7b7181befe42654f2d9e965a00f77e768c23', htmlSha256: createHash('sha256').update(html).digest('hex'), moduleEntry: entry, results: [] };
+try {
+  for (const engine of process.argv.slice(2).length ? process.argv.slice(2) : ['chromium', 'webkit']) {
+    const browser = engine === 'chromium' ? await compat.chromium.launch({ headless: true }) : await current.webkit.launch({ headless: true, executablePath: wk + '/bin/MiniBrowser', env: { ...process.env, PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS: '1', WEBKIT_EXEC_PATH: wk + '/bin', WEBKIT_INJECTED_BUNDLE_PATH: wk + '/lib', WEBKIT_INSPECTOR_RESOURCES_PATH: wk + '/share', LD_LIBRARY_PATH: wk + '/lib:' + wk + '/sys/lib:' + libs, LIBGL_ALWAYS_SOFTWARE: '1', LP_NUM_THREADS: '2', GST_PLUGIN_SYSTEM_PATH: libs + '/gstreamer-1.0' } });
+    try {
+      for (const fault of ['healthy', 'sdk-held', 'entry-failed', 'entry-held', 'shop-held']) {
+        const context = await browser.newContext({ viewport: { width: 430, height: 825 }, deviceScaleFactor: 3 });
+        const held = [], row = { engine, version: browser.version(), fault, errors: [], failed: [], unexpected: [] }; report.results.push(row);
+        try {
+          await context.route('**/*', route => {
+            const url = route.request().url();
+            if ((fault === 'sdk-held' && url === 'https://sdk.minepi.com/pi-sdk.js') || (fault === 'entry-held' && url === origin + entry) || (fault === 'shop-held' && /\/assets\/Shop-[\w-]+\.js$/.test(url))) { held.push(route); return; }
+            if (fault === 'entry-failed' && url === origin + entry) return route.fulfill({ status: 404, contentType: 'text/javascript', body: '' });
+            if (url === 'https://sdk.minepi.com/pi-sdk.js') return route.fulfill({ contentType: 'text/javascript', body: 'window.Pi={init(){},getPiHostAppInfo:async()=>({hostApp:"web"})};' });
+            if (url.startsWith('https://fonts.googleapis.com/')) return route.fulfill({ contentType: 'text/css', body: fontCss });
+            if (fontFiles.has(url)) return route.fulfill({ contentType: 'font/ttf', body: fontFiles.get(url) });
+            if (url.startsWith(origin + '/') || url.startsWith('blob:') || url.startsWith('data:')) return route.continue();
+            row.unexpected.push(url); return route.abort();
+          });
+          const page = await context.newPage();
+          page.on('pageerror', error => row.errors.push(error.message));
+          page.on('requestfailed', req => row.failed.push({ path: req.url().replace(origin, ''), error: req.failure()?.errorText }));
+          await page.goto(origin, { waitUntil: 'commit' });
+          if (fault === 'healthy') await page.locator('.cinematic-play:not([disabled])').waitFor({ timeout: 20000 });
+          else await page.waitForTimeout(2000);
+          row.state = await page.evaluate(() => ({ readyState: document.readyState, bodyPresent: !!document.body, rootChildren: document.getElementById('root')?.childElementCount ?? 0, visibleText: document.body?.innerText.trim() ?? '', background: document.body && getComputedStyle(document.body).backgroundColor, loadingOrRecovery: !!document.querySelector('[role="alert"], [role="status"]') }));
+          row.heldRequests = held.length;
+          if (fault === 'healthy') assert.ok(row.state.rootChildren > 0 && row.state.visibleText.length > 0);
+          else assert.equal(row.state.rootChildren, 0);
+          assert.deepEqual(row.unexpected, []);
+          console.log(JSON.stringify(row));
+        } finally { await Promise.allSettled(held.map(route => route.abort())); await context.close(); }
+      }
+    } finally { await browser.close(); }
+  }
+} finally { server.closeAllConnections(); server.close(); writeFileSync(root + 'blank-startup-original-probe.json', JSON.stringify(report, null, 2) + '\n'); }

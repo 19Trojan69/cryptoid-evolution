@@ -1,0 +1,62 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 20000ms exceeded.
+Call log:
+[2m  - waiting for locator('.pause-control')[22m
+[2m    - locator resolved to <button type="button" aria-label="Pause" class="game-control pause-control">…</button>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <div role="dialog" aria-modal="true" aria-labelledby="pause-settings-title" class="game-overlay pause-settings-overlay">…</div> intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <div role="dialog" aria-modal="true" aria-labelledby="pause-settings-title" class="game-overlay pause-settings-overlay">…</div> intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m      - waiting 100ms[22m
+[2m    24 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <div role="dialog" aria-modal="true" aria-labelledby="pause-settings-title" class="game-overlay pause-settings-overlay">…</div> intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+
+    at /workspace/scratch/45d593033c50/cryptoid-boss-audit-20261023/release-checkout/frontend/scripts/verifyStartupRecovery.mjs:132:46 {
+  log: [
+    "  - waiting for locator('.pause-control')",
+    '    - locator resolved to <button type="button" aria-label="Pause" class="game-control pause-control">…</button>',
+    '  - attempting click action',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <div role="dialog" aria-modal="true" aria-labelledby="pause-settings-title" class="game-overlay pause-settings-overlay">…</div> intercepts pointer events',
+    '    - retrying click action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <div role="dialog" aria-modal="true" aria-labelledby="pause-settings-title" class="game-overlay pause-settings-overlay">…</div> intercepts pointer events',
+    '    - retrying click action',
+    '      - waiting 100ms',
+    '    24 × waiting for element to be visible, enabled and stable',
+    '       - element is visible, enabled and stable',
+    '       - scrolling into view if needed',
+    '       - done scrolling',
+    '       - <div role="dialog" aria-modal="true" aria-labelledby="pause-settings-title" class="game-overlay pause-settings-overlay">…</div> intercepts pointer events',
+    '     - retrying click action',
+    '       - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.19.0
