@@ -1,0 +1,43 @@
+{
+  "at": "2026-10-23T06:02:37.277922+00:00",
+  "source": "38002f07f9c8c20cb68e4416492ab7749944b104",
+  "deployment": "dpl_FMakKRfBYkQFgY9yGLXtrtmbkcMk",
+  "responses": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 1465,
+      "sha256": "5d970d8de7fef1eee22942435ba3ac8056ad65ab0c7dbfeed47157386cd1184c"
+    },
+    {
+      "path": "/api",
+      "status": 200,
+      "bytes": 27,
+      "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a"
+    },
+    {
+      "path": "/api/admin/status",
+      "status": 401,
+      "bytes": 29,
+      "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=1",
+      "status": 200,
+      "bytes": 7444,
+      "sha256": "ca8956d86c54d585585a76021dd0678dfaec6776ee50ee6fe64eb2784331741b"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=2",
+      "status": 200,
+      "bytes": 9737,
+      "sha256": "fc0a73e2b6a0d916e778ab58c00fd99abed574c78245a2d1569efee3c07aed22"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=3",
+      "status": 200,
+      "bytes": 9737,
+      "sha256": "fc0a73e2b6a0d916e778ab58c00fd99abed574c78245a2d1569efee3c07aed22"
+    }
+  ]
+}

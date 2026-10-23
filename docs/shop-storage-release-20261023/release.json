@@ -1,0 +1,70 @@
+{
+  "recordedAt": "2026-10-23T06:16:50.288905+00:00",
+  "authorization": "stelle sie bitte ins testnet",
+  "project": {
+    "id": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+    "name": "cryptoid-evolution-testnet",
+    "team": "19-trojan69"
+  },
+  "source": {
+    "commit": "19de3e692f75a1c3e2eddf3438acc937c9dcac19",
+    "tree": "e7be9574df3dbf443c65ac4dea027f82499df766",
+    "branch": "codex/shop-storage-audit-20261023",
+    "fixed": true
+  },
+  "rollback": {
+    "branch": "backup/testnet-before-shop-storage-20261023",
+    "commit": "38002f07f9c8c20cb68e4416492ab7749944b104",
+    "tree": "551e089627f048c5899b3dc902771585cb50b06f",
+    "deployment": "dpl_FMakKRfBYkQFgY9yGLXtrtmbkcMk",
+    "independentlyVerified": true
+  },
+  "preview": {
+    "id": "dpl_3GTYU8MC9MJCYjseK5G99U7eXrTv",
+    "url": "https://cryptoid-evolution-testnet-lqesszjcl-19-trojan69.vercel.app/",
+    "state": "READY",
+    "createdAt": 1792735464874,
+    "readyAt": 1792735517152,
+    "dashboardDurationSeconds": 51
+  },
+  "testnet": {
+    "id": "dpl_AsXUruYAuKRboZWFymr2cD3FkLCJ",
+    "url": "https://cryptoid-evolution-testnet.vercel.app/",
+    "uniqueUrl": "https://cryptoid-evolution-testnet-himk4ehki-19-trojan69.vercel.app/",
+    "target": "production",
+    "state": "READY",
+    "createdAt": 1792735670902,
+    "readyAt": 1792735726387,
+    "dashboardDurationSeconds": 55,
+    "sourceVerifiedByConnector": true,
+    "rebuiltWithProductionEnvironment": true
+  },
+  "localVerification": {
+    "buildGatedTests": 87,
+    "typescript": "PASS",
+    "vite": "PASS",
+    "changedUtilityHookLint": "PASS",
+    "see": "docs/shop-storage-recovery-20261023.verification.json"
+  },
+  "publicVerification": {
+    "see": "docs/shop-storage-release-20261023/after.json",
+    "sourceAndTreeInGameAndAdminModules": true,
+    "features": 10,
+    "originalPngBytePairs": 6,
+    "apiAndLeaderboardHashesEqualToBefore": true,
+    "httpStatuses": [
+      200,
+      200,
+      401,
+      200,
+      200,
+      200
+    ],
+    "homePlayEnabled": true,
+    "homeCardsEnabled": true
+  },
+  "deliveryMethod": "Vercel connector create returned ordinary permission 403. CLI not installed. Existing authorized dashboard fallback created preview, then Promote to Production rebuilt in the existing Testnet project. Connector independently verified official alias and exact source.",
+  "scope": "No Mainnet, main merge, runtime-log scan, deployment-protection bypass, account/save mutation, wallet/purchase or live activation performed.",
+  "limits": "Read-only delivery and local fault regression proof; not a physical Pi Browser/live purchase test or proof of permanent crash recovery. Original device failure cause remains unproved.",
+  "receiptBranch": "codex/shop-storage-release-record-20261023"
+}

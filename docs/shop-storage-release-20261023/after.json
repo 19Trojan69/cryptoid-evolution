@@ -1,0 +1,171 @@
+{
+  "at": "2026-10-23T06:14:36.068243+00:00",
+  "source": "19de3e692f75a1c3e2eddf3438acc937c9dcac19",
+  "tree": "e7be9574df3dbf443c65ac4dea027f82499df766",
+  "deployment": "dpl_AsXUruYAuKRboZWFymr2cD3FkLCJ",
+  "url": "https://cryptoid-evolution-testnet.vercel.app/",
+  "responses": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 1465,
+      "sha256": "b541a5ad5329f5914c77a2a0eb8778ac02e199256c4c893296e9b93e203ecb1b"
+    },
+    {
+      "path": "/api",
+      "status": 200,
+      "bytes": 27,
+      "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a"
+    },
+    {
+      "path": "/api/admin/status",
+      "status": 401,
+      "bytes": 29,
+      "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=1",
+      "status": 200,
+      "bytes": 7444,
+      "sha256": "ca8956d86c54d585585a76021dd0678dfaec6776ee50ee6fe64eb2784331741b"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=2",
+      "status": 200,
+      "bytes": 9737,
+      "sha256": "fc0a73e2b6a0d916e778ab58c00fd99abed574c78245a2d1569efee3c07aed22"
+    },
+    {
+      "path": "/api/leaderboard/top?rules=3",
+      "status": 200,
+      "bytes": 9737,
+      "sha256": "fc0a73e2b6a0d916e778ab58c00fd99abed574c78245a2d1569efee3c07aed22"
+    }
+  ],
+  "modules": [
+    {
+      "path": "/assets/index-UUgbYFLQ.js",
+      "status": 200,
+      "bytes": 1911828,
+      "sha256": "320dae8b5e72abd944c9d52cc0c301156b341ba9d02a18471441f3a77549b640"
+    },
+    {
+      "path": "/assets/performanceDiagnostics-Ce29IQ3v.js",
+      "status": 200,
+      "bytes": 63910,
+      "sha256": "5274439d9a4ca5d94e75815822127871b08cf55f2fe64720ee3343a92c5c309e"
+    },
+    {
+      "path": "/assets/displaySettings-d3VZZ2lg.js",
+      "status": 200,
+      "bytes": 3296,
+      "sha256": "f82dbbcc5adf1ca810425a90831b806751e19f774276856f0ec2d2e62849091c"
+    },
+    {
+      "path": "/assets/shipEvolution-D1eoSSrE.js",
+      "status": 200,
+      "bytes": 233729,
+      "sha256": "1df82022c885cfbc0bfad5b17f1384bfbec9611422fb83fa0ffc51e553de9140"
+    },
+    {
+      "path": "/assets/AdminPage-BkuhUpDy.js",
+      "status": 200,
+      "bytes": 47428,
+      "sha256": "e4df6cdcf7b43520dac4db9dfb89ab47569e0c290573598999f76c73df178798"
+    },
+    {
+      "path": "/assets/powerUps-0mbXsnZ4.js",
+      "status": 200,
+      "bytes": 148670,
+      "sha256": "37fc93768a8e917d6fbe86b9eb5ae768696add87dbf2269ad78f37d4c0217206"
+    },
+    {
+      "path": "/assets/reloadDiagnostics-jACOSAiF.js",
+      "status": 200,
+      "bytes": 37911,
+      "sha256": "2509f373dd0318a887ab845332a4e7cb7694534c7ec603467dc8ea761a405671"
+    },
+    {
+      "path": "/assets/GalaxyMap-DB998Wo2.js",
+      "status": 200,
+      "bytes": 16791,
+      "sha256": "9e9c579817fbda57904799dd73b697dfa0cbc80c29e226bbc5b35713a4293307"
+    },
+    {
+      "path": "/assets/Shop-MdzfHQYL.js",
+      "status": 200,
+      "bytes": 118588,
+      "sha256": "6e16a7e2054e0d3b139692fdf4fa0863ae7acf1241e9254dce557b33b584a70d"
+    },
+    {
+      "path": "/assets/rewardProgress-B7NPPDvd.js",
+      "status": 200,
+      "bytes": 3216,
+      "sha256": "95e15b6e90df1c2661920697cf947153ea8e0ddbad0a4ac7ea416dfc5e2bb3f0"
+    },
+    {
+      "path": "/assets/GamePage-CKF0yvHh.js",
+      "status": 200,
+      "bytes": 235604,
+      "sha256": "8190ba89e4b9d98b2610e3721b5772ce96f81d8fc88a7c955fb288a5254f90ec"
+    },
+    {
+      "path": "/assets/collectionExport-HHxkVH8r.js",
+      "status": 200,
+      "bytes": 3886,
+      "sha256": "b6aec9e45a4834937833b2a0a046b2357873fe18898372b120fe8f1a28734d6a"
+    }
+  ],
+  "features": {
+    "pendingActivationRetry": true,
+    "inventoryRefreshWhilePending": true,
+    "paymentDiagnosticReadGuard": true,
+    "paymentDiagnosticWriteGuard": true,
+    "paymentDiagnosticMemoryFallback": true,
+    "closedDatabaseInvalidation": true,
+    "sanitizedStorageFailureCodes": true,
+    "storageFailureExport": true,
+    "originalDecodeComparison": true,
+    "originalStaticHullRevision": true
+  },
+  "apiAndScoreHashesEqual": true,
+  "originalImages": [
+    {
+      "path": "/ships/painted/91a72bc0c36be9407915/ship_01_stage_1_gold.png",
+      "status": 200,
+      "bytes": 34109,
+      "sha256": "1d351b74a599340ee8df66c258606e94edca9f7311740f1069b16fe4e364a1bc"
+    },
+    {
+      "path": "/ships/painted/91a72bc0c36be9407915/ship_04_stage_2_silver.png",
+      "status": 200,
+      "bytes": 53270,
+      "sha256": "09230672cf2bb8fccaf69119bd6293db508a4d8b904b83d63b98cef237f82c9f"
+    },
+    {
+      "path": "/ships/painted/91a72bc0c36be9407915/ship_08_stage_3_ruby.png",
+      "status": 200,
+      "bytes": 69518,
+      "sha256": "e9a93643b193f27891f740bd9a888229b60b7c3ea8019da68d7001ccc4f5efe3"
+    },
+    {
+      "path": "/ships/painted/91a72bc0c36be9407915/ship_12_stage_1_metallic-blue.png",
+      "status": 200,
+      "bytes": 52127,
+      "sha256": "7b988dbea2a7183fabc75bd8adbd543daada8abb720552b5bcca2816f6696fe5"
+    },
+    {
+      "path": "/ships/painted/91a72bc0c36be9407915/ship_16_stage_2_pink.png",
+      "status": 200,
+      "bytes": 61556,
+      "sha256": "72c69f813ce2e99cbcf1349f3cc4b952d66b0cf2cfc07b56e66c6c877040e230"
+    },
+    {
+      "path": "/ships/painted/91a72bc0c36be9407915/ship_20_stage_3_white.png",
+      "status": 200,
+      "bytes": 83909,
+      "sha256": "ce69cdd43c98c7de2e415c00e34c27f5e1cbac4daa430ea2f4c414aef9d52617"
+    }
+  ],
+  "limits": "Read-only public delivery checks. No account, save, wallet, purchase, live weapon activation, physical iPhone or native crash-cause verification."
+}

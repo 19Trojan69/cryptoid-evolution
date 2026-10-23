@@ -1,5 +1,28 @@
 # Preserve the officially approved game
 
+## Shop/storage recovery published to Testnet, 23 October 2026
+
+The owner explicitly authorized "stelle sie bitte ins testnet". Fixed runtime
+19de3e692f75a1c3e2eddf3438acc937c9dcac19, tree
+e7be9574df3dbf443c65ac4dea027f82499df766, is READY at the official existing
+Testnet alias. Preview3GTYU8MC9MJCYjseK5G99U7eXrTv READY08:05:17 Vienna51s;
+Testnet ProductionAsXUruYAuKRboZWFymr2cD3FkLCJ READY08:08:46 Vienna55s.
+Dashboard promotion rebuilt with the Production environment; connector confirms
+project, alias and exact source. New independently verified rollback
+backup/testnet-before-shop-storage-20261023 ->38002f0. Keep all fixed refs.
+
+87 local build-gated tests, types/Vite and targeted utility/hook lint pass.
+Official delivery confirms source/tree in Game/Admin, ten compiled feature
+checks, six original PNG byte pairs, unchanged API/admin denial and all three
+leaderboard hashes. Home SPIELEN and cards enabled. No live account/payment or
+physical PiBrowser verification. Original device purchase/storage cause and
+permanent crash recovery remain unproved. No new long campaign or repeat buy
+required. No Mainnet, main merge, account/save mutation, runtime-log access or
+protection bypass. Receipt-only branch codex/shop-storage-release-record-20261023
+is auto-deploy-disabled; never advance fixed runtime branch with these notes.
+See docs/shop-storage-release-20261023.md and its three JSON receipts. This
+completed release supersedes the preparation-only status directly below.
+
 ## Shop/storage recovery prepared, 23 October 2026, not published
 
 The owner's follow-up reports failed purchases/paid-weapon activation and about

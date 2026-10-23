@@ -25,6 +25,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/shop-storage-release-record-20261023": false,
       "codex/shop-storage-audit-20261023": false,
       "codex/hull-load-release-record-20261023": false,
       "codex/hull-load-readiness-20261023": false,
