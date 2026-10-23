@@ -5,8 +5,16 @@
   "buildCommand": "VITE_CRYPTOID_DIAGNOSTICS=0 npm run build --prefix frontend",
   "outputDirectory": "frontend/dist",
   "redirects": [
-    { "source": "/stability-report.html", "destination": "/", "permanent": false },
-    { "source": "/stability-report.mjs", "destination": "/", "permanent": false }
+    {
+      "source": "/stability-report.html",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/stability-report.mjs",
+      "destination": "/",
+      "permanent": false
+    }
   ],
   "functions": {
     "api/index.ts": {
@@ -25,6 +33,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/starfield-bounds-audit-20261023": false,
       "codex/shop-storage-audit-20261023": false,
       "codex/hull-load-release-record-20261023": false,
       "codex/hull-load-readiness-20261023": false,

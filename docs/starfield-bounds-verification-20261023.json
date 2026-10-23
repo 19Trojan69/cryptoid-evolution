@@ -1,0 +1,223 @@
+{
+  "version": 1,
+  "baseCommit": "19de3e692f75a1c3e2eddf3438acc937c9dcac19",
+  "baseTree": "e7be9574df3dbf443c65ac4dea027f82499df766",
+  "baselineStarfieldBlob": "1b2715d4ee1dc6c5e93c19695d728ea9134b6631",
+  "candidateStarfieldBlob": "6b94af4461f4cc39c4a6d1c6481cab9be4d3162f",
+  "runtimePaths": [
+    "frontend/src/pages/Starfield.tsx"
+  ],
+  "platform": "Native Linux WPE WebKit 26.5 and Chromium 141, software rendering",
+  "rasterComparisons": [
+    {
+      "engine": "webkit",
+      "viewport": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3
+      },
+      "cases": 12,
+      "pixelIdentical": 12,
+      "maxChangedPixels": 0,
+      "maxChannelDifference": 0,
+      "pageErrors": 0
+    },
+    {
+      "engine": "webkit",
+      "viewport": {
+        "width": 1024,
+        "height": 768,
+        "dpr": 2
+      },
+      "cases": 12,
+      "pixelIdentical": 12,
+      "maxChangedPixels": 0,
+      "maxChannelDifference": 0,
+      "pageErrors": 0
+    },
+    {
+      "engine": "webkit",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1
+      },
+      "cases": 12,
+      "pixelIdentical": 12,
+      "maxChangedPixels": 0,
+      "maxChannelDifference": 0,
+      "pageErrors": 0
+    },
+    {
+      "engine": "chromium",
+      "viewport": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3
+      },
+      "cases": 12,
+      "pixelIdentical": 0,
+      "maxChangedPixels": 5238,
+      "maxChannelDifference": 86,
+      "pageErrors": 0
+    },
+    {
+      "engine": "chromium",
+      "viewport": {
+        "width": 1024,
+        "height": 768,
+        "dpr": 2
+      },
+      "cases": 12,
+      "pixelIdentical": 0,
+      "maxChangedPixels": 49,
+      "maxChannelDifference": 25,
+      "pageErrors": 0
+    },
+    {
+      "engine": "chromium",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1
+      },
+      "cases": 12,
+      "pixelIdentical": 0,
+      "maxChangedPixels": 530,
+      "maxChannelDifference": 65,
+      "pageErrors": 0
+    }
+  ],
+  "nativeStarLayerEstimates": [
+    {
+      "viewport": {
+        "width": 430,
+        "height": 825,
+        "dpr": 3
+      },
+      "beforeBytes": 7360500,
+      "afterBytes": 3192000,
+      "reductionPercent": 56.63
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768,
+        "dpr": 2
+      },
+      "beforeBytes": 7237104,
+      "afterBytes": 7080720,
+      "reductionPercent": 2.16
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1
+      },
+      "beforeBytes": 14326528,
+      "afterBytes": 11661696,
+      "reductionPercent": 18.6
+    }
+  ],
+  "behavior": [
+    {
+      "engine": "webkit",
+      "passed": true,
+      "checks": [
+        "same artwork, SVG coordinate mapping and timing across resize; small-window fallback",
+        "measures the actual field rather than assuming window width",
+        "original running, pause and resume behavior",
+        "two cached native star layers persist without repainting each sway frame",
+        "system reduced-motion setting",
+        "existing application reduced-motion setting",
+        "ResizeObserver and star DOM released on unmount",
+        "original rendering retained when ResizeObserver is absent"
+      ],
+      "pageErrors": []
+    },
+    {
+      "engine": "chromium",
+      "passed": true,
+      "checks": [
+        "same artwork, SVG coordinate mapping and timing across resize; small-window fallback",
+        "measures the actual field rather than assuming window width",
+        "original running, pause and resume behavior",
+        "system reduced-motion setting",
+        "existing application reduced-motion setting",
+        "ResizeObserver and star DOM released on unmount",
+        "original rendering retained when ResizeObserver is absent"
+      ],
+      "pageErrors": []
+    }
+  ],
+  "gamePageSmoke": [
+    {
+      "engine": "webkit",
+      "version": "26.5",
+      "mode": "smoke",
+      "completed": true,
+      "durationMs": 35000,
+      "startSector": 70,
+      "lastEncounter": "boss-clear",
+      "pageErrors": 0,
+      "resizes": 4,
+      "pauseResume": true,
+      "loopStallRecoveries": 1,
+      "canvasContextLosses": 0,
+      "effectCacheBytesAfterUnmount": 0,
+      "cancelledMediaRequests": 1,
+      "consoleErrorCount": 0,
+      "consoleWarningCount": 0,
+      "audibleOutputVerified": false
+    },
+    {
+      "engine": "chromium",
+      "version": "141.0.7390.37",
+      "mode": "smoke",
+      "completed": true,
+      "durationMs": 35000,
+      "startSector": 70,
+      "lastEncounter": "bonus",
+      "pageErrors": 0,
+      "resizes": 4,
+      "pauseResume": true,
+      "loopStallRecoveries": 0,
+      "canvasContextLosses": 0,
+      "effectCacheBytesAfterUnmount": 0,
+      "cancelledMediaRequests": 2,
+      "consoleErrorCount": 2,
+      "consoleWarningCount": 4,
+      "audibleOutputVerified": false
+    }
+  ],
+  "sourceVerification": {
+    "originalFiles": 231,
+    "hashMismatches": 0
+  },
+  "compile": {
+    "changedModuleStrictTypeScript": "5.9.3: pass",
+    "sceneBundleInputs": 283,
+    "sceneBundle": "pass",
+    "fullProjectBuild": "not run",
+    "lint": "not run: offline dependency cache lacks @humanfs/types"
+  },
+  "published": false,
+  "automaticDeploymentEnabled": false,
+  "naturalWhiteScreenReproduced": false,
+  "wholeProcessRamReductionProven": false,
+  "physicalDeviceVerified": false,
+  "crossEnginePixelIdentityProven": false,
+  "portableAuditExitCodes": [
+    {
+      "script": "starfieldRenderingAudit.mjs",
+      "exitCode": 0
+    },
+    {
+      "script": "starfieldBehaviorAudit.mjs",
+      "exitCode": 0
+    }
+  ],
+  "candidateClippingConfirmedBeforeCapture": true,
+  "confirmedPortableRenderingExitCode": 0
+}
