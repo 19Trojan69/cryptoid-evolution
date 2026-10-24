@@ -1,5 +1,25 @@
 # Preserve the officially approved game
 
+## Protected Preview lifecycle capture, 24 October 2026
+
+After the clarified same-route white-display report and repeated continuation,
+prepare a new isolated protected Preview with local lifecycle evidence. Keep
+all real frontend/src/index/art/audio/gameplay/watchdog/backend/account code
+unchanged. Only Preview packaging adds48 bounded sanitized events and a separate
+read-only report page. Existing native RAF is forwarded, not rescheduled;
+no new RAF/timer/poll loop, time modification or automatic Resume. Observation
+of gaps>250ms is diagnostic only; game watchdog stays strict>2500ms/500ms.
+No auto transmission/account/save/token/score/shard payloads. Report starts no
+game/recorder and writes no storage. Tab evidence is preferred; origin fallback
+is labelled, and another immutable deployment origin is not retrospectively read.
+168 build tests and3 actual app/report cases per Chromium/WPE pass locally.
+No natural device White Screen cause/fix or physical Pi Browser/long-run proof.
+See docs/private-preview-lifecycle-capture-20261024.md/.json. Keep new branch
+codex/private-preview-lifecycle-capture-20261024 auto-deploy-disabled. Manual
+protected Preview is authorized by the owner; no Production/main/Testnet/Mainnet,
+protection change, live data, purchase, data deletion or repeat owner campaign.
+
+
 ## Same-route White Screen report investigated, 24 October 2026
 
 The owner clarifies that the white display returned directly to the game with

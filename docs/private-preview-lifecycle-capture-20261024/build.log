@@ -1,0 +1,369 @@
+✔ guest fixture cannot access a stored session or redirect to OAuth (1.37167ms)
+✔ every preview fixture is disabled outside Preview (0.250259ms)
+✔ allowed reads never manufacture a user, inventory, rewards or leaderboard (0.603068ms)
+✔ account/payment/game mutations and admin routes are denied (0.2038ms)
+✔ Vercel rewrite handler returns guest response without cookies (0.346691ms)
+✔ SDK denies authentication and payment without contacting Pi (1.959585ms)
+✔ production packaging aborts before touching output (1.098538ms)
+✔ packaged original entry/init/startup guard survive with isolated transport (4.636117ms)
+✔ installation schedules no RAF/timer and repeated installation does not wrap twice (3.977858ms)
+✔ native IDs, cancellation, receiver, timestamp, return value and thrown errors are preserved (1.505618ms)
+✔ measured active gap records existing callbacks without pausing or changing their clock (1.784699ms)
+✔ observed pause, visibility and page restoration rearm observation without false active gaps (1.618072ms)
+✔ denied storage or observation failure never prevents the native callback (1.124897ms)
+✔ the next document preserves the preceding document ID; ordinary navigation is not called an OS kill (3.623166ms)
+✔ stored events remain bounded and noisy viewport writes are rate limited (3.621594ms)
+✔ report reading never writes and rejects private/malformed/out-of-range fields (0.983088ms)
+✔ normal missing evidence and blocked storage are explicit, never fabricated history (0.978611ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 133.03729
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 prebuild
+> npm run prepare:hulls
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 prepare:hulls
+> node --experimental-strip-types scripts/buildPaintedHulls.mjs
+
+{"revision":"91a72bc0c36be9407915","variants":1740,"totalBytes":95450326,"dimensions":"original","canvasVersion":"0.1.100"}
+
+> cryptoid-evolution@0.11.0 build
+> npm run test:i18n && npm run check:i18n:release && npm run test:full-session && npm run test:canvas-static-url && npm run test:weapon-reload-recovery && npm run test:rock-display-bounds && npm run test:game-loop && npm run test:startup-recovery && node_modules/.bin/tsc -b && vite build --outDir /workspace/scratch/fb7073945978/lifecycle-preview-dist --emptyOutDir
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 test:i18n
+> node --experimental-strip-types --test src/i18n.test.mjs
+
+✔ en: every player UI key has a translation and preserves its placeholders (5.616172ms)
+✔ de: every player UI key has a translation and preserves its placeholders (2.375789ms)
+✔ es: every player UI key has a translation and preserves its placeholders (2.583745ms)
+✔ zh: every player UI key has a translation and preserves its placeholders (1.798989ms)
+✔ vi: every player UI key has a translation and preserves its placeholders (2.585678ms)
+✔ legacy locales remain selectable and use existing translations with English fallback (0.501298ms)
+✔ English mission resume contains no German source text (0.400029ms)
+✔ interpolation handles all repeated values and a locale change preserves life count (0.368904ms)
+✔ automatic language choice and manual override resolve supported locales (0.293422ms)
+✔ the picker includes the original 17 languages plus Chinese and Vietnamese (0.222878ms)
+✔ remaining lives use the correct singular and plural forms (0.867097ms)
+✔ player components contain no unwrapped static UI copy (0.093247ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 808.857888
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 check:i18n:release
+> node --experimental-strip-types scripts/localization-inventory.mjs --check
+
+Static copy: 1267; unwrapped UI fragments: 0
+en: 1267/1267
+de: 1267/1267
+es: 1267/1267
+fr: 839/1267 (draft)
+pt: 838/1267 (draft)
+it: 838/1267 (draft)
+pl: 586/1267 (draft)
+tr: 586/1267 (draft)
+ru: 838/1267 (draft)
+hr: 586/1267 (draft)
+cs: 586/1267 (draft)
+sk: 586/1267 (draft)
+hu: 586/1267 (draft)
+ro: 586/1267 (draft)
+sr: 586/1267 (draft)
+uk: 586/1267 (draft)
+th: 586/1267 (draft)
+zh: 1267/1267
+vi: 1267/1267
+Complete language gate: en, de, es, zh, vi; release ready: true
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 test:full-session
+> node --experimental-strip-types --test src/pages/fullSessionRecorder.test.mjs src/pages/fullSessionTransfer.test.mjs src/pages/hullPreparationDiagnostics.test.mjs src/pages/fullSessionStoreCallbacks.test.mjs
+
+✔ scope guard accepts only reviewed observations and rejects gameplay or hidden argument mutations (495.035895ms)
+✔ non-owner creation, reading and download never obtain a storage host (0.594025ms)
+✔ a whole 500-stage timeline retains its start and all intermediate phases beyond the old rolling window (228.285243ms)
+✔ a replacement document recovers the committed run without unload or recorder finish (4.676387ms)
+✔ two runs survive and StrictMode/empty loading does not overwrite them; only a third real run retires the oldest (3.874776ms)
+✔ chunk and summary are atomic; an aborted write cannot erase or invent committed evidence (2.346565ms)
+✔ sequence conflicts abort without partially adding a chunk (1.321797ms)
+✔ denied storage cannot throw into gameplay; report declares the failure (0.58395ms)
+✔ a blocked writer has bounded RAM and stops explicitly instead of silently dropping the start (15.463828ms)
+✔ duration limit closes capture explicitly without truncating prior committed data (2.63474ms)
+✔ byte and record limits retain a contiguous beginning and declare their stopping reason (10.609915ms)
+✔ legacy/Mainnet report path never opens the full-session database or marker (0.366299ms)
+✔ request observer preserves actual Axios success/error identity and excludes private request/response data (3.475879ms)
+✔ schema strips private content, raw URLs/stacks, unknown kinds and poisoned records (0.182008ms)
+✔ real rolling-probe integration streams samples/phase/work data throughout play (175.990788ms)
+✔ an abnormally closed cached database reopens for the next read and write after a long pause (3.11646ms)
+✔ storage loss during a run stops the capture without inventing its missing committed beginning (1.389747ms)
+✔ quota and denied storage have bounded failure categories without persisting raw exceptions (0.731498ms)
+✔ inactive chunk writes remain recorder failures, with no committed partial session (13.118891ms)
+✔ a synchronous request setup exception is consumed by the same operation (2.454956ms)
+✔ a summary write failure rolls back the already queued chunk (2.372504ms)
+✔ pruning callback failure preserves previously committed sessions atomically (7.461759ms)
+✔ export cursor failures reject without damaging the stored run or returning a partial Blob (6.553832ms)
+✔ read callback failures report unavailable storage and remain recoverable (2.260219ms)
+✔ successful recording still exports a complete contiguous run and closed marker (3.661252ms)
+✔ all numbered text parts reconstruct the exact complete recording, including Unicode boundaries and the last record (29.390425ms)
+✔ surrogate pairs are not split between manually copied parts (1.318622ms)
+✔ file preparation never opens the OS picker and preserves the original bytes (0.478876ms)
+✔ plain text file sharing retains the complete JSON when JSON files are unsupported (0.336506ms)
+✔ missing, denied and throwing share capabilities leave the local alternatives available (0.424936ms)
+✔ export names and oversized text are rejected before reading any data (0.361042ms)
+✔ ordinary players allocate no graphics job or breadcrumb (1.158145ms)
+✔ actual image callbacks wait for load and explicitly record skipped decode with a stable numeric job (32.886509ms)
+✔ actual raw-source readback and temporary-surface release are individually observable (21.017541ms)
+✔ load failure preserves retry/fallback behavior and cannot publish a ready image (16.044918ms)
+✔ putting back the released decode call stalls a held decode; comparison reaches readiness without calling it (27.353968ms)
+✔ scope proof rejects hidden cache mutations and side effects in a diagnostic argument (533.013477ms)
+✔ the last graphics step survives a later phase breadcrumb and is explicitly separate from committed records (22.732586ms)
+✔ graphics observations batch with existing flushes instead of creating one database transaction per image step (5.046983ms)
+✔ graphics schema admits only known steps and bounded numeric artwork identifiers, including its status marker (3.084772ms)
+✔ denied breadcrumb storage and late image notifications cannot interrupt gameplay or resurrect a finished recorder (1.759371ms)
+✔ normal recorder cleanup leaves an immediate finish observation before its asynchronous database commit (1.368526ms)
+✔ marker timing at clock zero cannot change starting versus recording state (1.179216ms)
+ℹ tests 43
+ℹ suites 0
+ℹ pass 43
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1386.550702
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 test:canvas-static-url
+> node --experimental-strip-types --test scripts/canvasStaticUrl.test.mjs
+
+✔ negative control: released CanvasImpact refuses the real relative PNG despite prepared resources and no recorded failure (47.623983ms)
+✔ actual prepared-hull hook → root-relative PNG → reflected absolute image URL → Canvas registration and drawing (31.86202ms)
+✔ cold actual hook retains the original display until ready, then uses the static PNG in Canvas (13.09905ms)
+✔ relative, absolute, query/fragment and historical Blob address controls all activate the actual renderer (76.692609ms)
+✔ a changed hull address cannot display the previous ready hull while the new image is delayed (14.053085ms)
+✔ an unavailable hull retains the CSS display, records the failure and retries on remount (12.81371ms)
+✔ late image completion after unmount cannot register an effect or update its hook (12.248307ms)
+✔ a cleared resource generation rejects late completions and cannot revive the failed layer (11.434109ms)
+✔ correctly activated static effects retain pause/resume and context-loss fallback (13.839981ms)
+✔ a missing optional surface leaves the original display in place (2.348278ms)
+✔ render-scale changes cannot reuse a ready bundle with the previous scale (17.192909ms)
+✔ a null drawing context falls back without retaining registered effects or a frame chain (12.041713ms)
+✔ two mounted effects share the same image/textures and retain resources until both owners leave (13.13326ms)
+✔ 1000 warm static-hull impacts register once, reuse the existing resources and completely release (93.52022ms)
+{"exactNativeRasterComparisons":54,"limits":"Native Skia and actual hooks/resources; not Safari/PiBrowser pixels, native memory or proof of the White Screen cause."}
+✔ native raster output matches released working absolute-URL control at original effect ages and render scales (252.319531ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 976.631908
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 test:weapon-reload-recovery
+> node --experimental-strip-types --test scripts/weaponReloadRecovery.test.mjs src/hooks/usePayments.test.mjs
+
+(node:281) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/scratch/fb7073945978/cryptoid-evolution/backend/src/hangarCatalog.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/scratch/fb7073945978/cryptoid-evolution/backend/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ an expired automatic charge can be reconciled before choosing the standard weapon, with the same receipt (66.635579ms)
+✔ choosing an already running different weapon resolves the pending charge without refilling that timer (4.053259ms)
+✔ choosing a new different charge confirms the old receipt before saving and issuing exactly one new receipt (3.539042ms)
+✔ a picked-up weapon can be selected after pending confirmation without purchasing or refilling the pickup (4.146026ms)
+✔ the actual menu permits a new choice and makes the pending receipt retryable even if that weapon looks active (3.656805ms)
+✔ successful free or cached manual selections clear the old rejection text (5.335597ms)
+✔ failed inventory loading cannot disable replay of an uncertain activation or inventory refresh (2.846892ms)
+✔ a continuing connection failure retains the original receipt and cannot consume a different charge (5.956673ms)
+✔ a retry of the original charge never allocates a new id or overwrites it with a checkpoint (3.093845ms)
+✔ a pickup obtained while automatic confirmation waits keeps the player selection and receives no free refill (4.220875ms)
+✔ a late response after a replaced mission cannot mutate the new mission (8.949134ms)
+✔ automatic reload remains bounded over repeated cycles and rejected duplicate triggers (4.88912ms)
+✔ an already spent confirmed receipt does not silently allocate another charge on retry (2.455196ms)
+✔ an invalid confirmation retains the receipt and cannot introduce a non-finite timer (6.22388ms)
+✔ a definitive rejection releases the pending gate without starting a different activation (4.748913ms)
+✔ an older automatic error timer cannot erase a newer manual failure (2.881253ms)
+✔ actual account handlers reconcile a lost automatic response, then honor a new paid selection with no double consumption (34.540385ms)
+✔ actual account handlers accept a completed charge cycle and repeat its lost response without another debit (4.694432ms)
+✔ unavailable optional diagnostic storage does not prevent the purchase hook from mounting (1.269509ms)
+✔ quota failure while recording an approval error releases busy state and allows an explicit retry (1.785309ms)
+✔ a denied diagnostic removal cannot stop checkout or its successful confirmation (0.99848ms)
+✔ SDK failures use the current in-memory diagnostic even when a stale persisted message cannot be removed (0.297959ms)
+✔ a later SDK error preserves the specific approval failure without requiring a successful storage write (0.995516ms)
+✔ healthy checkout keeps the existing metadata, confirmation request and single callback (0.435471ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 299.975721
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 test:rock-display-bounds
+> node --test src/pages/BonusRockLayerDisplay.test.mjs
+
+✔ an initially empty canvas has one-pixel display bounds; the preceding source exposes the defect (27.969499ms)
+✔ first active drawing restores the original display/raster sizes before painting (9.490966ms)
+✔ short empty gaps retain warm bounds and the existing two-second grace is exact (8.431146ms)
+✔ regrowth after idle release uses a changed field size on its first visible frame (3.683525ms)
+✔ effect-only dust, debris and points keep the original complete draw operations (41.887064ms)
+✔ stable active and released scenes add no repeated display-size writes or canvas resizes (8.579304ms)
+✔ paused/no-update gaps add no release timer; the next existing update releases display bounds (19.741762ms)
+✔ an unavailable main context can recover and unmount still clears the original prewarm timer and surface (5.22206ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 240.042808
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 test:game-loop
+> node --experimental-strip-types --test src/pages/gameLoop.test.mjs
+
+✔ early returns always schedule exactly one following frame (1.227368ms)
+✔ a frame exception pauses through the fault callback and leaves the loop usable (0.192473ms)
+✔ repeated failure is reported once until a frame succeeds; reporting errors cannot kill RAF (0.171723ms)
+✔ stalled foreground loop is replaced; a late canceled callback cannot create a second loop (0.158794ms)
+✔ a delayed RAF is detected even when it runs before the monitoring timer (0.150001ms)
+✔ intentional pause and hidden tabs are never treated as a foreground stall (0.117904ms)
+✔ the first active RAF does not count an observed paused interval as a foreground stall (0.566845ms)
+✔ the monitoring timer rearms after pause without replacing the pending RAF (0.258671ms)
+✔ the first visible RAF excludes the observed hidden interval (0.127387ms)
+✔ an initially loading loop starts its foreground heartbeat on first observation of play (0.302546ms)
+✔ a genuine foreground stall after rearming still uses the exact original threshold and replacement (0.154147ms)
+✔ a delayed RAF after rearming still detects a subsequent active stall before the watcher (0.158514ms)
+✔ rearming never suppresses a simulation exception on the first resumed frame (0.126947ms)
+✔ cleanup invalidates callbacks and monitoring, including Strict Mode remounts (0.107839ms)
+✔ actual GamePage recovery preserves run, lives, rewards and paid timers even if audio/save fails (137.570094ms)
+✔ diagnostics stay local and bounded and malformed/unavailable storage cannot break recovery (1.918926ms)
+✔ denied sessionStorage cannot fail GamePage diagnostics setup or remove its error protection (73.508881ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 556.744896
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 test:startup-recovery
+> node --experimental-strip-types --test scripts/startupRecovery.test.mjs scripts/startupLifecycleEvidence.test.mjs
+
+✔ captures the existing key, exact recorded reason, visible overlay and hit interceptor (3.770854ms)
+✔ does not invent a pause reason when the ring is absent (1.640837ms)
+✔ excludes old-document, pre-flow, future, performance and restart events from interruptions (0.964861ms)
+✔ no pre-flow baseline falsely assigns a recorded pause to the current flow (1.979616ms)
+✔ denied storage is explicit and raw exception text is not copied (0.924112ms)
+✔ malformed, wrong-shaped and oversized storage are distinct from an empty ring (3.937019ms)
+✔ bounds the ring and fields and discards account, raw exception and unknown fields (1.266015ms)
+✔ rejects invalid diagnostic entries without aborting the snapshot (0.683557ms)
+✔ does not report a display:none overlay as visible (0.832516ms)
+✔ captures before teardown without changing storage, navigation or gameplay (1.222181ms)
+✔ retains a bounded audit sample ring (20.850153ms)
+✔ captures evaluation rejection as unavailable evidence, never as an empty diagnostic pass (0.263989ms)
+✔ bounds a nonresponsive page evaluation and still attempts a screenshot (9.680259ms)
+✔ failure capture preserves stage and original error and takes pixels after the state (1.626376ms)
+✔ screenshot failure does not erase the state or replace the original error (0.956589ms)
+✔ an unexpected pause with no diagnostic cause still fails, without automatic Resume (2.076448ms)
+✔ a recorded technical interruption cannot pass as the requested manual Pause (1.226587ms)
+✔ unexpected document replacement and missing capture cannot pass (0.9234ms)
+✔ ordinary Home, active and explicit paused states pass their own assertions (1.925226ms)
+✔ the verifier integrates failure capture before closing the context and saves before browser teardown (0.716004ms)
+✔ startup adds recovery and moves the identical SDK/init after root while preserving their order before entry (1.349959ms)
+✔ normal startup adds no visible nodes and releases its timer, observer and listener after the first UI commit (2.074686ms)
+✔ a blocked parser or empty lazy route gets one recovery panel at the exact eight-second boundary (1.102073ms)
+✔ a module resource error gives immediate manual recovery without waiting for the timeout (0.821169ms)
+✔ unrelated image, SDK and runtime error events do not create a premature recovery panel (0.641004ms)
+✔ a late successful start removes recovery without automatic reload or replacing any app nodes (0.680542ms)
+✔ only an explicit retry click reloads; Home uses the existing origin and storage is read-only (0.704398ms)
+✔ denied storage still produces a usable panel in the device language (0.830143ms)
+✔ startup copy matches the existing translations and English fallbacks for every selectable language (9.749442ms)
+✔ override, device list, aliases and Traditional-Chinese fallback match normal locale resolution (3.01427ms)
+✔ a UI already committed before the first timeout is never covered (0.6726ms)
+✔ successful startup retires observation permanently, including later route or game changes (0.618041ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 244.585932
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 399 modules transformed.
+rendering chunks...
+computing gzip size...
+../../lifecycle-preview-dist/scripts/fixtures/projectile-work.html              0.88 kB │ gzip:   0.38 kB
+../../lifecycle-preview-dist/scripts/fixtures/reactor-work.html                 0.92 kB │ gzip:   0.37 kB
+../../lifecycle-preview-dist/scripts/fixtures/memory-work.html                  1.22 kB │ gzip:   0.47 kB
+../../lifecycle-preview-dist/scripts/fixtures/frame-pacing.html                 1.50 kB │ gzip:   0.76 kB
+../../lifecycle-preview-dist/index.html                                         6.59 kB │ gzip:   2.85 kB
+../../lifecycle-preview-dist/assets/AdminPage-BVHazyxQ.css                     10.28 kB │ gzip:   2.68 kB
+../../lifecycle-preview-dist/assets/GalaxyMap-ByhGHt12.css                     16.63 kB │ gzip:   4.75 kB
+../../lifecycle-preview-dist/assets/powerUps-Bp4oAZoc.css                      19.99 kB │ gzip:   5.17 kB
+../../lifecycle-preview-dist/assets/GamePage-Doazl5ia.css                      21.19 kB │ gzip:   4.97 kB
+../../lifecycle-preview-dist/assets/Shop-BkuKP0aD.css                          25.93 kB │ gzip:   6.41 kB
+../../lifecycle-preview-dist/assets/app-CC8H_EKH.css                           63.86 kB │ gzip:  12.55 kB
+../../lifecycle-preview-dist/assets/index-D7Kve3sL.css                        293.33 kB │ gzip:  63.90 kB
+../../lifecycle-preview-dist/assets/index-u3p4t7sl.js                           0.58 kB │ gzip:   0.39 kB
+../../lifecycle-preview-dist/assets/modulepreload-polyfill-B5Qt9EMX.js          0.71 kB │ gzip:   0.40 kB
+../../lifecycle-preview-dist/assets/renderResolution-B4Rs8Bgf.js                0.88 kB │ gzip:   0.39 kB
+../../lifecycle-preview-dist/assets/playerCombat-BVFrvaF4.js                    1.71 kB │ gzip:   0.86 kB
+../../lifecycle-preview-dist/assets/shipRealism-BFIRtjhe.js                     1.83 kB │ gzip:   0.98 kB
+../../lifecycle-preview-dist/assets/cssFramePacing-D93Ue7a1.js                  2.62 kB │ gzip:   1.21 kB
+../../lifecycle-preview-dist/assets/rewardProgress-DCeY7K6t.js                  3.26 kB │ gzip:   1.28 kB
+../../lifecycle-preview-dist/assets/displaySettings-d3VZZ2lg.js                 3.30 kB │ gzip:   1.47 kB
+../../lifecycle-preview-dist/assets/memoryWork-Bf714wyn.js                      3.62 kB │ gzip:   2.00 kB
+../../lifecycle-preview-dist/assets/shipEvolution-CUGAoXob.js                   4.12 kB │ gzip:   1.79 kB
+../../lifecycle-preview-dist/assets/framePacing-CImi5ke0.js                     4.25 kB │ gzip:   1.80 kB
+../../lifecycle-preview-dist/assets/collectionExport-rP2XZfSl.js                4.33 kB │ gzip:   2.31 kB
+../../lifecycle-preview-dist/assets/projectilePresentation-DQmVa2aK.js          4.99 kB │ gzip:   2.23 kB
+../../lifecycle-preview-dist/assets/ShipPortrait-BZvPPl4r.js                    6.60 kB │ gzip:   2.94 kB
+../../lifecycle-preview-dist/assets/performanceDiagnostics-W-heAZm3.js          6.73 kB │ gzip:   3.25 kB
+../../lifecycle-preview-dist/assets/projectileWork-bo2-2bzi.js                  7.67 kB │ gzip:   3.34 kB
+../../lifecycle-preview-dist/assets/shipFleet-C7r38ZKr.js                       8.77 kB │ gzip:   3.62 kB
+../../lifecycle-preview-dist/assets/BossReactorView-D9M0hkNh.js                 9.00 kB │ gzip:   3.38 kB
+../../lifecycle-preview-dist/assets/frameScheduler-D82f8MsG.js                  9.11 kB │ gzip:   3.52 kB
+../../lifecycle-preview-dist/assets/reactorWork-D6cSSofv.js                     9.77 kB │ gzip:   3.97 kB
+../../lifecycle-preview-dist/assets/hullPreparationDiagnostics-CyrxeAFW.js     11.80 kB │ gzip:   5.48 kB
+../../lifecycle-preview-dist/assets/GalaxyMap-CB05QA_l.js                      17.13 kB │ gzip:   6.40 kB
+../../lifecycle-preview-dist/assets/CanvasEffects-CajxyM5G.js                  20.49 kB │ gzip:   8.50 kB
+../../lifecycle-preview-dist/assets/reloadDiagnostics-D_qNuH32.js              26.53 kB │ gzip:   9.20 kB
+../../lifecycle-preview-dist/assets/AdminPage-2I_Rwr4m.js                      47.84 kB │ gzip:  15.18 kB
+../../lifecycle-preview-dist/assets/cardSound-3qlJb-vw.js                      52.98 kB │ gzip:  14.91 kB
+../../lifecycle-preview-dist/assets/Shop-DI7s-cfz.js                          119.38 kB │ gzip:  39.53 kB
+../../lifecycle-preview-dist/assets/powerUps-BiGaIaZd.js                      137.55 kB │ gzip:  52.38 kB
+../../lifecycle-preview-dist/assets/GamePage-Kq-OTqTV.js                      211.44 kB │ gzip:  64.89 kB
+../../lifecycle-preview-dist/assets/index-bUe7i7Yx.js                         213.00 kB │ gzip:  66.20 kB
+../../lifecycle-preview-dist/assets/sectorBoss-DhfI2Yic.js                    221.38 kB │ gzip:  31.10 kB
+../../lifecycle-preview-dist/assets/app-DOIEfKXm.js                         1,723.49 kB │ gzip: 556.63 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 3.15s
+Private guest Preview packaged: {"sourceCommit":"160d674ca055d3407bfe04c1e30d5c239cbcb529","sourceTree":"aba12aca13d97080ca2ec58b224b7850dbcae418","appSourceTree":"66f458f157bb4d52b6ebe57f92d51b52a51451b2","workingTreeDirty":true}

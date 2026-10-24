@@ -5,7 +5,7 @@ import { packagePreview } from './packagePreview.mjs';
 
 assert.equal(process.env.VERCEL_ENV, 'preview', 'Private preview only');
 const root = new URL('../', import.meta.url).pathname;
-execFileSync(process.execPath, ['--test', 'private-preview/isolation.test.mjs'], { cwd: root, stdio: 'inherit' });
+execFileSync(process.execPath, ['--test', 'private-preview/isolation.test.mjs', 'private-preview/lifecycle.test.mjs'], { cwd: root, stdio: 'inherit' });
 const output = resolve(process.env.CRYPTOID_PRIVATE_OUTPUT || resolve(root, 'frontend/dist'));
 execFileSync('npm', ['run', 'build', '--', '--outDir', output, '--emptyOutDir'], {
   cwd: resolve(root, 'frontend'), stdio: 'inherit',

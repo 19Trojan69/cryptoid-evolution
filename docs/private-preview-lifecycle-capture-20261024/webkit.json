@@ -1,0 +1,4273 @@
+{
+  "engine": "webkit",
+  "passed": true,
+  "gameplayHooks": false,
+  "automaticResume": false,
+  "preflight": {
+    "browserStarted": true,
+    "status": 200,
+    "text": "local-server-ok"
+  },
+  "results": [
+    {
+      "mode": "pause-resume",
+      "passed": true,
+      "errors": [],
+      "unexpected": [],
+      "httpErrors": [],
+      "navigations": [
+        "/",
+        "/",
+        "/game",
+        "/game",
+        "/game",
+        "/game",
+        "/private-preview-report.html"
+      ],
+      "samples": [
+        {
+          "label": "entry-before-action",
+          "at": 1792847882282,
+          "documentStartedAt": 1792847877352,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.329574,
+              "y": 129.482369,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019362,
+              "y": 114.439861,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792847878727,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "paused",
+          "at": 1792847883193,
+          "documentStartedAt": 1792847877352,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.329574,
+              "y": 149.999839,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019362,
+              "y": 134.709205,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 4,
+              "title": "SolFlare · light · X",
+              "x": 71.562979,
+              "y": 143.447319,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 5,
+              "title": "SolFlare · light · X",
+              "x": 319.06383,
+              "y": 148.989326,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 6,
+              "title": "Ether Crystal · medium · Z",
+              "x": 200.092647,
+              "y": 116.300005,
+              "className": "asteroid asteroid-medium cryptoid cryptoid-etherCrystal cryptoid-medium cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792847878727,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "still-paused",
+          "at": 1792847883899,
+          "documentStartedAt": 1792847877352,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.329574,
+              "y": 149.999839,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019362,
+              "y": 134.709205,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 4,
+              "title": "SolFlare · light · X",
+              "x": 71.562979,
+              "y": 143.447319,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 5,
+              "title": "SolFlare · light · X",
+              "x": 319.06383,
+              "y": 148.989326,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 6,
+              "title": "Ether Crystal · medium · Z",
+              "x": 200.092647,
+              "y": 116.300005,
+              "className": "asteroid asteroid-medium cryptoid cryptoid-etherCrystal cryptoid-medium cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792847878727,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "resumed",
+          "at": 1792847888254,
+          "documentStartedAt": 1792847877352,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.329574,
+              "y": 149.999839,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019362,
+              "y": 134.709205,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 4,
+              "title": "SolFlare · light · X",
+              "x": 71.562979,
+              "y": 143.447319,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 5,
+              "title": "SolFlare · light · X",
+              "x": 319.06383,
+              "y": 148.989326,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 6,
+              "title": "Ether Crystal · medium · Z",
+              "x": 200.092647,
+              "y": 116.300005,
+              "className": "asteroid asteroid-medium cryptoid cryptoid-etherCrystal cryptoid-medium cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792847878727,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "after-active-wait",
+          "at": 1792847890062,
+          "documentStartedAt": 1792847877352,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.329574,
+              "y": 183.67234,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019362,
+              "y": 175.09234,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light"
+            },
+            {
+              "node": 4,
+              "title": "SolFlare · light · X",
+              "x": 71.562979,
+              "y": 273.083553,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 5,
+              "title": "SolFlare · light · X",
+              "x": 319.06383,
+              "y": 280.880263,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 6,
+              "title": "Ether Crystal · medium · Z",
+              "x": 200.092647,
+              "y": 154.765956,
+              "className": "asteroid asteroid-medium cryptoid cryptoid-etherCrystal cryptoid-medium cryptoid-launch"
+            },
+            {
+              "node": 7,
+              "title": "Ether Crystal · medium · Z",
+              "x": 190.716715,
+              "y": 220.343764,
+              "className": "asteroid asteroid-medium cryptoid cryptoid-etherCrystal cryptoid-medium cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792847888924,
+            "active": true,
+            "hidden": false,
+            "phase": "ENTRY",
+            "sector": 1
+          }
+        }
+      ],
+      "lifecycleStage": "read-only-report-page",
+      "lifecycleSamples": [
+        {
+          "label": "home",
+          "captured": true,
+          "observedAtEpochMs": 1792847877863,
+          "documentStartedAt": 1792847877352,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/",
+          "rootChildren": 1,
+          "shell": null,
+          "pauseControl": null,
+          "pauseHitTarget": null,
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "entry-active",
+          "captured": true,
+          "observedAtEpochMs": 1792847882289,
+          "documentStartedAt": 1792847877352,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              352.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "requested-pause",
+          "captured": true,
+          "observedAtEpochMs": 1792847883188,
+          "documentStartedAt": 1792847877352,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "true"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              352.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "div",
+            "id": "",
+            "className": "game-overlay pause-settings-overlay",
+            "insidePauseControl": false
+          },
+          "pauseOverlay": {
+            "tag": "div",
+            "id": "",
+            "className": "game-overlay pause-settings-overlay",
+            "role": "dialog",
+            "visible": true,
+            "box": [
+              0,
+              0,
+              393,
+              744
+            ],
+            "pointerEvents": "auto",
+            "text": "MISSION PAUSIERTHalte die Stellung.Eine kurze Verschnaufpause.Die Cryptoids warten.Level 1 · Block 1/9 · GENESIS BELTShop & WaffenSYSTEM / EINSTELLUNGENMusik & Effekte50%›SteuerungRechtshändig›SpracheDeutsch›Anzeige›SpracheAktuelle Sprache: Deutsch◎Automatisch (Gerätesprache)⌄SteuerungMit einem Daumen steuern, mit dem anderen Power-ups aktivieren.◁Rechtshänder-Steuerung▷Linkshänder-SteuerungBerührungsempfindlichkeitSanftNormalSchnellSteuerbereichDer Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.KompaktNormalBreitStartposition des SchiffsÜber dem FingerDirekt unter dem FingerMusiklautstärkeMusiklautstärke50%0%25%50%75%100%Effektlautstärke35%0%25%50%75%100%Anzeige⛶Vollbild≋Vibration nicht verfügbar◌StandardeffekteFortsetzen",
+            "disabled": false
+          },
+          "overlays": [
+            {
+              "tag": "div",
+              "id": "",
+              "className": "game-overlay pause-settings-overlay",
+              "role": "dialog",
+              "visible": true,
+              "box": [
+                0,
+                0,
+                393,
+                744
+              ],
+              "pointerEvents": "auto",
+              "text": "MISSION PAUSIERTHalte die Stellung.Eine kurze Verschnaufpause.Die Cryptoids warten.Level 1 · Block 1/9 · GENESIS BELTShop & WaffenSYSTEM / EINSTELLUNGENMusik & Effekte50%›SteuerungRechtshändig›SpracheDeutsch›Anzeige›SpracheAktuelle Sprache: Deutsch◎Automatisch (Gerätesprache)⌄SteuerungMit einem Daumen steuern, mit dem anderen Power-ups aktivieren.◁Rechtshänder-Steuerung▷Linkshänder-SteuerungBerührungsempfindlichkeitSanftNormalSchnellSteuerbereichDer Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.KompaktNormalBreitStartposition des SchiffsÜber dem FingerDirekt unter dem FingerMusiklautstärkeMusiklautstärke50%0%25%50%75%100%Effektlautstärke35%0%25%50%75%100%Anzeige⛶Vollbild≋Vibration nicht verfügbar◌StandardeffekteFortsetzen",
+              "disabled": false
+            }
+          ],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "resumed-active",
+          "captured": true,
+          "observedAtEpochMs": 1792847888251,
+          "documentStartedAt": 1792847877352,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              352.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-active-wait",
+          "captured": true,
+          "observedAtEpochMs": 1792847890059,
+          "documentStartedAt": 1792847877352,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              352.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-pixels",
+          "captured": true,
+          "observedAtEpochMs": 1792847891291,
+          "documentStartedAt": 1792847877352,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              352.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "final-explicit-pause",
+          "captured": true,
+          "observedAtEpochMs": 1792847892131,
+          "documentStartedAt": 1792847877352,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "true"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              352.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "div",
+            "id": "",
+            "className": "game-overlay pause-settings-overlay",
+            "insidePauseControl": false
+          },
+          "pauseOverlay": {
+            "tag": "div",
+            "id": "",
+            "className": "game-overlay pause-settings-overlay",
+            "role": "dialog",
+            "visible": true,
+            "box": [
+              0,
+              0,
+              393,
+              744
+            ],
+            "pointerEvents": "auto",
+            "text": "MISSION PAUSIERTHalte die Stellung.Eine kurze Verschnaufpause.Die Cryptoids warten.Level 1 · Block 1/9 · GENESIS BELTShop & WaffenSYSTEM / EINSTELLUNGENMusik & Effekte50%›SteuerungRechtshändig›SpracheDeutsch›Anzeige›SpracheAktuelle Sprache: Deutsch◎Automatisch (Gerätesprache)⌄SteuerungMit einem Daumen steuern, mit dem anderen Power-ups aktivieren.◁Rechtshänder-Steuerung▷Linkshänder-SteuerungBerührungsempfindlichkeitSanftNormalSchnellSteuerbereichDer Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.KompaktNormalBreitStartposition des SchiffsÜber dem FingerDirekt unter dem FingerMusiklautstärkeMusiklautstärke50%0%25%50%75%100%Effektlautstärke35%0%25%50%75%100%Anzeige⛶Vollbild≋Vibration nicht verfügbar◌StandardeffekteFortsetzen",
+            "disabled": false
+          },
+          "overlays": [
+            {
+              "tag": "div",
+              "id": "",
+              "className": "game-overlay pause-settings-overlay",
+              "role": "dialog",
+              "visible": true,
+              "box": [
+                0,
+                0,
+                393,
+                744
+              ],
+              "pointerEvents": "auto",
+              "text": "MISSION PAUSIERTHalte die Stellung.Eine kurze Verschnaufpause.Die Cryptoids warten.Level 1 · Block 1/9 · GENESIS BELTShop & WaffenSYSTEM / EINSTELLUNGENMusik & Effekte50%›SteuerungRechtshändig›SpracheDeutsch›Anzeige›SpracheAktuelle Sprache: Deutsch◎Automatisch (Gerätesprache)⌄SteuerungMit einem Daumen steuern, mit dem anderen Power-ups aktivieren.◁Rechtshänder-Steuerung▷Linkshänder-SteuerungBerührungsempfindlichkeitSanftNormalSchnellSteuerbereichDer Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.KompaktNormalBreitStartposition des SchiffsÜber dem FingerDirekt unter dem FingerMusiklautstärkeMusiklautstärke50%0%25%50%75%100%Effektlautstärke35%0%25%50%75%100%Anzeige⛶Vollbild≋Vibration nicht verfügbar◌StandardeffekteFortsetzen",
+              "disabled": false
+            }
+          ],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        }
+      ],
+      "lifecycleStartedAt": 1792847877863,
+      "playNavigationIndex": 3,
+      "screenshot": "webkit-pause-resume.png",
+      "previewCapture": {
+        "version": 1,
+        "format": "cryptoid-private-preview-lifecycle-report",
+        "generatedAt": "2026-10-24T13:18:12.135Z",
+        "evidenceSource": "current-tab",
+        "storage": {
+          "previewTab": "read",
+          "previewOrigin": "read",
+          "diagnostics": "absent",
+          "session": "read"
+        },
+        "events": [
+          {
+            "kind": "document-start",
+            "at": 1792847877442,
+            "sequence": 1,
+            "documentStartedAt": 1792847877352,
+            "active": false,
+            "hidden": false,
+            "rafObserved": true,
+            "resizeObserved": true,
+            "route": "home",
+            "navigationType": "navigate",
+            "viewport": [
+              393,
+              744
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529"
+          },
+          {
+            "kind": "pageshow",
+            "at": 1792847877524,
+            "sequence": 2,
+            "documentStartedAt": 1792847877352,
+            "active": false,
+            "hidden": false,
+            "persisted": false,
+            "route": "home",
+            "viewport": [
+              393,
+              744
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529"
+          },
+          {
+            "kind": "scene-mounted",
+            "at": 1792847878738,
+            "sequence": 3,
+            "documentStartedAt": 1792847877352,
+            "contextAt": 1792847878727,
+            "enemyCount": 0,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "enemies": [],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "field-size",
+            "at": 1792847878748,
+            "sequence": 4,
+            "documentStartedAt": 1792847877352,
+            "contextAt": 1792847878727,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847879766,
+            "sequence": 5,
+            "documentStartedAt": 1792847877352,
+            "frameGapMs": 1024,
+            "previousCallbackMs": 5,
+            "callbackMs": 0,
+            "contextAt": 1792847878727,
+            "enemyCount": 0,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847880879,
+            "sequence": 6,
+            "documentStartedAt": 1792847877352,
+            "frameGapMs": 1112,
+            "previousCallbackMs": 0,
+            "callbackMs": 1,
+            "contextAt": 1792847878727,
+            "enemyCount": 0,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847881916,
+            "sequence": 7,
+            "documentStartedAt": 1792847877352,
+            "frameGapMs": 375,
+            "previousCallbackMs": 2,
+            "callbackMs": 0,
+            "contextAt": 1792847878727,
+            "enemyCount": 1,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [
+              [
+                81.329574,
+                123.019861
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847882338,
+            "sequence": 8,
+            "documentStartedAt": 1792847877352,
+            "frameGapMs": 421,
+            "previousCallbackMs": 0,
+            "callbackMs": 1,
+            "contextAt": 1792847878727,
+            "enemyCount": 2,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [
+              [
+                81.329574,
+                129.482369
+              ],
+              [
+                308.019362,
+                114.439861
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847882795,
+            "sequence": 9,
+            "documentStartedAt": 1792847877352,
+            "frameGapMs": 457,
+            "previousCallbackMs": 1,
+            "callbackMs": 2,
+            "contextAt": 1792847878727,
+            "enemyCount": 3,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [
+              [
+                81.329574,
+                136.097198
+              ],
+              [
+                308.019362,
+                120.902369
+              ],
+              [
+                71.562979,
+                104.560027
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847883062,
+            "sequence": 10,
+            "documentStartedAt": 1792847877352,
+            "frameGapMs": 268,
+            "previousCallbackMs": 2,
+            "callbackMs": 0,
+            "contextAt": 1792847878727,
+            "enemyCount": 3,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [
+              [
+                81.329574,
+                136.097198
+              ],
+              [
+                308.019362,
+                120.902369
+              ],
+              [
+                71.562979,
+                104.560027
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "pause-state",
+            "at": 1792847883108,
+            "sequence": 11,
+            "documentStartedAt": 1792847877352,
+            "contextAt": 1792847878727,
+            "enemyCount": 5,
+            "active": false,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [
+              [
+                81.329574,
+                149.999839
+              ],
+              [
+                308.019362,
+                134.709205
+              ],
+              [
+                71.562979,
+                143.447319
+              ],
+              [
+                319.06383,
+                148.989326
+              ],
+              [
+                200.092647,
+                116.300005
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "pause-state",
+            "at": 1792847887984,
+            "sequence": 12,
+            "documentStartedAt": 1792847877352,
+            "contextAt": 1792847878727,
+            "enemyCount": 5,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [
+              [
+                81.329574,
+                149.999839
+              ],
+              [
+                308.019362,
+                134.709205
+              ],
+              [
+                71.562979,
+                143.447319
+              ],
+              [
+                319.06383,
+                148.989326
+              ],
+              [
+                200.092647,
+                116.300005
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847888679,
+            "sequence": 13,
+            "documentStartedAt": 1792847877352,
+            "frameGapMs": 688,
+            "previousCallbackMs": 1,
+            "callbackMs": 0,
+            "contextAt": 1792847878727,
+            "enemyCount": 5,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [
+              [
+                81.329574,
+                149.999839
+              ],
+              [
+                308.019362,
+                134.709205
+              ],
+              [
+                71.562979,
+                143.447319
+              ],
+              [
+                319.06383,
+                148.989326
+              ],
+              [
+                200.092647,
+                116.300005
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847889395,
+            "sequence": 14,
+            "documentStartedAt": 1792847877352,
+            "frameGapMs": 471,
+            "previousCallbackMs": 1,
+            "callbackMs": 0,
+            "contextAt": 1792847888924,
+            "enemyCount": 6,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [
+              [
+                81.329574,
+                163.172317
+              ],
+              [
+                308.019362,
+                148.07056
+              ],
+              [
+                71.562979,
+                182.096746
+              ],
+              [
+                319.06383,
+                187.28737
+              ],
+              [
+                200.092647,
+                127.107853
+              ],
+              [
+                190.716715,
+                130.003008
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 393,
+              "height": 744,
+              "enemies": 6,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "ENTRY",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847891035,
+            "sequence": 15,
+            "documentStartedAt": 1792847877352,
+            "frameGapMs": 1012,
+            "previousCallbackMs": 0,
+            "callbackMs": 1,
+            "contextAt": 1792847888924,
+            "enemyCount": 6,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [
+              [
+                81.329574,
+                183.67234
+              ],
+              [
+                308.019362,
+                175.09234
+              ],
+              [
+                71.562979,
+                273.083553
+              ],
+              [
+                319.06383,
+                280.880263
+              ],
+              [
+                200.092647,
+                154.765956
+              ],
+              [
+                190.716715,
+                220.343764
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 393,
+              "height": 744,
+              "enemies": 6,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "ENTRY",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847891936,
+            "sequence": 16,
+            "documentStartedAt": 1792847877352,
+            "frameGapMs": 900,
+            "previousCallbackMs": 1,
+            "callbackMs": 1,
+            "contextAt": 1792847888924,
+            "enemyCount": 6,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [
+              [
+                82.529154,
+                183.67234
+              ],
+              [
+                308.019362,
+                175.09234
+              ],
+              [
+                71.562979,
+                284.023617
+              ],
+              [
+                319.06383,
+                297.636957
+              ],
+              [
+                200.092647,
+                159.945456
+              ],
+              [
+                190.716715,
+                237.87072
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 393,
+              "height": 744,
+              "enemies": 6,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "ENTRY",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "pause-state",
+            "at": 1792847892125,
+            "sequence": 17,
+            "documentStartedAt": 1792847877352,
+            "contextAt": 1792847888924,
+            "enemyCount": 6,
+            "active": false,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [
+              [
+                84.856784,
+                183.67234
+              ],
+              [
+                310.400571,
+                175.09234
+              ],
+              [
+                72.463647,
+                284.023617
+              ],
+              [
+                319.06383,
+                308.577021
+              ],
+              [
+                200.092647,
+                169.228732
+              ],
+              [
+                190.716715,
+                270.88134
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 393,
+              "height": 744,
+              "enemies": 6,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "ENTRY",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          }
+        ],
+        "recordedInterruptions": [],
+        "lastSession": {
+          "context": {
+            "sector": 1,
+            "block": 1,
+            "width": 393,
+            "height": 744,
+            "enemies": 6,
+            "projectiles": 0,
+            "effects": 0,
+            "lastSavedAt": 0,
+            "phase": "ENTRY",
+            "status": "playing",
+            "encounter": "normal",
+            "reason": "performance"
+          },
+          "active": true,
+          "hidden": false,
+          "pageHidden": false,
+          "at": 1792847888924
+        },
+        "limits": [
+          "Local technical events only; no account, payment or saved-progress payloads.",
+          "A new document does not establish an OS or memory cause.",
+          "White pixels and native compositor/GPU failure are not directly observed.",
+          "Active means visible, unpaused game DOM; saved context has its own timestamp and can be stale.",
+          "RAF observation adds overhead; no new RAF/timer or automatic Resume.",
+          "Origin fallback may describe a different tab. Previous deployment origins are inaccessible."
+        ]
+      },
+      "reportPage": {
+        "readOnly": true,
+        "gameMounted": false,
+        "captureInstalled": false,
+        "source": "current-tab",
+        "events": 19
+      }
+    },
+    {
+      "mode": "pause-resume-resize",
+      "passed": true,
+      "errors": [],
+      "unexpected": [],
+      "httpErrors": [],
+      "navigations": [
+        "/",
+        "/",
+        "/game",
+        "/game",
+        "/game",
+        "/game",
+        "/private-preview-report.html"
+      ],
+      "samples": [
+        {
+          "label": "entry-before-action",
+          "at": 1792847897357,
+          "documentStartedAt": 1792847892510,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.329574,
+              "y": 129.482369,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019362,
+              "y": 114.439861,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792847893785,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "paused",
+          "at": 1792847898566,
+          "documentStartedAt": 1792847892510,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.329574,
+              "y": 156.65056,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019362,
+              "y": 141.419839,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 4,
+              "title": "SolFlare · light · X",
+              "x": 71.562979,
+              "y": 162.733966,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 5,
+              "title": "SolFlare · light · X",
+              "x": 319.06383,
+              "y": 168.000723,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 6,
+              "title": "Ether Crystal · medium · Z",
+              "x": 200.092647,
+              "y": 121.627989,
+              "className": "asteroid asteroid-medium cryptoid cryptoid-etherCrystal cryptoid-medium cryptoid-launch"
+            },
+            {
+              "node": 7,
+              "title": "Ether Crystal · medium · Z",
+              "x": 190.716715,
+              "y": 113.958274,
+              "className": "asteroid asteroid-medium cryptoid cryptoid-etherCrystal cryptoid-medium cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792847893785,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "paused-with-smaller-viewport",
+          "at": 1792847898591,
+          "documentStartedAt": 1792847892510,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            628
+          ],
+          "viewport": [
+            393,
+            628
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.329574,
+              "y": 156.65056,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019362,
+              "y": 141.419839,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 4,
+              "title": "SolFlare · light · X",
+              "x": 71.562979,
+              "y": 162.733966,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 5,
+              "title": "SolFlare · light · X",
+              "x": 319.06383,
+              "y": 168.000723,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 6,
+              "title": "Ether Crystal · medium · Z",
+              "x": 200.092647,
+              "y": 121.627989,
+              "className": "asteroid asteroid-medium cryptoid cryptoid-etherCrystal cryptoid-medium cryptoid-launch"
+            },
+            {
+              "node": 7,
+              "title": "Ether Crystal · medium · Z",
+              "x": 190.716715,
+              "y": 113.958274,
+              "className": "asteroid asteroid-medium cryptoid cryptoid-etherCrystal cryptoid-medium cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792847893785,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "still-paused",
+          "at": 1792847899298,
+          "documentStartedAt": 1792847892510,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.329574,
+              "y": 156.65056,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019362,
+              "y": 141.419839,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 4,
+              "title": "SolFlare · light · X",
+              "x": 71.562979,
+              "y": 162.733966,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 5,
+              "title": "SolFlare · light · X",
+              "x": 319.06383,
+              "y": 168.000723,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 6,
+              "title": "Ether Crystal · medium · Z",
+              "x": 200.092647,
+              "y": 121.627989,
+              "className": "asteroid asteroid-medium cryptoid cryptoid-etherCrystal cryptoid-medium cryptoid-launch"
+            },
+            {
+              "node": 7,
+              "title": "Ether Crystal · medium · Z",
+              "x": 190.716715,
+              "y": 113.958274,
+              "className": "asteroid asteroid-medium cryptoid cryptoid-etherCrystal cryptoid-medium cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792847893785,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "resumed",
+          "at": 1792847903503,
+          "documentStartedAt": 1792847892510,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.329574,
+              "y": 156.65056,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019362,
+              "y": 141.419839,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 4,
+              "title": "SolFlare · light · X",
+              "x": 71.562979,
+              "y": 162.733966,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 5,
+              "title": "SolFlare · light · X",
+              "x": 319.06383,
+              "y": 168.000723,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 6,
+              "title": "Ether Crystal · medium · Z",
+              "x": 200.092647,
+              "y": 121.627989,
+              "className": "asteroid asteroid-medium cryptoid cryptoid-etherCrystal cryptoid-medium cryptoid-launch"
+            },
+            {
+              "node": 7,
+              "title": "Ether Crystal · medium · Z",
+              "x": 190.716715,
+              "y": 113.958274,
+              "className": "asteroid asteroid-medium cryptoid cryptoid-etherCrystal cryptoid-medium cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792847893785,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "active-with-smaller-viewport",
+          "at": 1792847903525,
+          "documentStartedAt": 1792847892510,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            628
+          ],
+          "viewport": [
+            393,
+            628
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.329574,
+              "y": 156.65056,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019362,
+              "y": 141.419839,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 4,
+              "title": "SolFlare · light · X",
+              "x": 71.562979,
+              "y": 162.733966,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 5,
+              "title": "SolFlare · light · X",
+              "x": 319.06383,
+              "y": 168.000723,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 6,
+              "title": "Ether Crystal · medium · Z",
+              "x": 200.092647,
+              "y": 121.627989,
+              "className": "asteroid asteroid-medium cryptoid cryptoid-etherCrystal cryptoid-medium cryptoid-launch"
+            },
+            {
+              "node": 7,
+              "title": "Ether Crystal · medium · Z",
+              "x": 190.716715,
+              "y": 113.958274,
+              "className": "asteroid asteroid-medium cryptoid cryptoid-etherCrystal cryptoid-medium cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792847893785,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "after-active-wait",
+          "at": 1792847905334,
+          "documentStartedAt": 1792847892510,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            628
+          ],
+          "viewport": [
+            393,
+            628
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.0575,
+              "y": 174.324007,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.6425,
+              "y": 160.512334,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 4,
+              "title": "SolFlare · light · X",
+              "x": 72.23,
+              "y": 221.491737,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 5,
+              "title": "SolFlare · light · X",
+              "x": 318.625,
+              "y": 224.766541,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 6,
+              "title": "Ether Crystal · medium · Z",
+              "x": 199.7472,
+              "y": 138.452512,
+              "className": "asteroid asteroid-medium cryptoid cryptoid-etherCrystal cryptoid-medium cryptoid-launch"
+            },
+            {
+              "node": 7,
+              "title": "Ether Crystal · medium · Z",
+              "x": 191.2728,
+              "y": 168.297495,
+              "className": "asteroid asteroid-medium cryptoid cryptoid-etherCrystal cryptoid-medium cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792847904001,
+            "active": true,
+            "hidden": false,
+            "phase": "ENTRY",
+            "sector": 1
+          }
+        }
+      ],
+      "lifecycleStage": "read-only-report-page",
+      "lifecycleSamples": [
+        {
+          "label": "home",
+          "captured": true,
+          "observedAtEpochMs": 1792847892880,
+          "documentStartedAt": 1792847892510,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/",
+          "rootChildren": 1,
+          "shell": null,
+          "pauseControl": null,
+          "pauseHitTarget": null,
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "entry-active",
+          "captured": true,
+          "observedAtEpochMs": 1792847897360,
+          "documentStartedAt": 1792847892510,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              352.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "requested-pause",
+          "captured": true,
+          "observedAtEpochMs": 1792847898562,
+          "documentStartedAt": 1792847892510,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "true"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              352.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "div",
+            "id": "",
+            "className": "game-overlay pause-settings-overlay",
+            "insidePauseControl": false
+          },
+          "pauseOverlay": {
+            "tag": "div",
+            "id": "",
+            "className": "game-overlay pause-settings-overlay",
+            "role": "dialog",
+            "visible": true,
+            "box": [
+              0,
+              0,
+              393,
+              744
+            ],
+            "pointerEvents": "auto",
+            "text": "MISSION PAUSIERTHalte die Stellung.Eine kurze Verschnaufpause.Die Cryptoids warten.Level 1 · Block 1/9 · GENESIS BELTShop & WaffenSYSTEM / EINSTELLUNGENMusik & Effekte50%›SteuerungRechtshändig›SpracheDeutsch›Anzeige›SpracheAktuelle Sprache: Deutsch◎Automatisch (Gerätesprache)⌄SteuerungMit einem Daumen steuern, mit dem anderen Power-ups aktivieren.◁Rechtshänder-Steuerung▷Linkshänder-SteuerungBerührungsempfindlichkeitSanftNormalSchnellSteuerbereichDer Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.KompaktNormalBreitStartposition des SchiffsÜber dem FingerDirekt unter dem FingerMusiklautstärkeMusiklautstärke50%0%25%50%75%100%Effektlautstärke35%0%25%50%75%100%Anzeige⛶Vollbild≋Vibration nicht verfügbar◌StandardeffekteFortsetzen",
+            "disabled": false
+          },
+          "overlays": [
+            {
+              "tag": "div",
+              "id": "",
+              "className": "game-overlay pause-settings-overlay",
+              "role": "dialog",
+              "visible": true,
+              "box": [
+                0,
+                0,
+                393,
+                744
+              ],
+              "pointerEvents": "auto",
+              "text": "MISSION PAUSIERTHalte die Stellung.Eine kurze Verschnaufpause.Die Cryptoids warten.Level 1 · Block 1/9 · GENESIS BELTShop & WaffenSYSTEM / EINSTELLUNGENMusik & Effekte50%›SteuerungRechtshändig›SpracheDeutsch›Anzeige›SpracheAktuelle Sprache: Deutsch◎Automatisch (Gerätesprache)⌄SteuerungMit einem Daumen steuern, mit dem anderen Power-ups aktivieren.◁Rechtshänder-Steuerung▷Linkshänder-SteuerungBerührungsempfindlichkeitSanftNormalSchnellSteuerbereichDer Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.KompaktNormalBreitStartposition des SchiffsÜber dem FingerDirekt unter dem FingerMusiklautstärkeMusiklautstärke50%0%25%50%75%100%Effektlautstärke35%0%25%50%75%100%Anzeige⛶Vollbild≋Vibration nicht verfügbar◌StandardeffekteFortsetzen",
+              "disabled": false
+            }
+          ],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "resumed-active",
+          "captured": true,
+          "observedAtEpochMs": 1792847903501,
+          "documentStartedAt": 1792847892510,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              352.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-active-wait",
+          "captured": true,
+          "observedAtEpochMs": 1792847905331,
+          "documentStartedAt": 1792847892510,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              352.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-pixels",
+          "captured": true,
+          "observedAtEpochMs": 1792847906756,
+          "documentStartedAt": 1792847892510,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              352.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "final-explicit-pause",
+          "captured": true,
+          "observedAtEpochMs": 1792847907439,
+          "documentStartedAt": 1792847892510,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "true"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              352.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "div",
+            "id": "",
+            "className": "game-modal pause-settings-modal",
+            "insidePauseControl": false
+          },
+          "pauseOverlay": {
+            "tag": "div",
+            "id": "",
+            "className": "game-overlay pause-settings-overlay",
+            "role": "dialog",
+            "visible": true,
+            "box": [
+              0,
+              0,
+              393,
+              628
+            ],
+            "pointerEvents": "auto",
+            "text": "MISSION PAUSIERTHalte die Stellung.Eine kurze Verschnaufpause.Die Cryptoids warten.Level 1 · Block 1/9 · GENESIS BELTShop & WaffenSYSTEM / EINSTELLUNGENMusik & Effekte50%›SteuerungRechtshändig›SpracheDeutsch›Anzeige›SpracheAktuelle Sprache: Deutsch◎Automatisch (Gerätesprache)⌄SteuerungMit einem Daumen steuern, mit dem anderen Power-ups aktivieren.◁Rechtshänder-Steuerung▷Linkshänder-SteuerungBerührungsempfindlichkeitSanftNormalSchnellSteuerbereichDer Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.KompaktNormalBreitStartposition des SchiffsÜber dem FingerDirekt unter dem FingerMusiklautstärkeMusiklautstärke50%0%25%50%75%100%Effektlautstärke35%0%25%50%75%100%Anzeige⛶Vollbild≋Vibration nicht verfügbar◌StandardeffekteFortsetzen",
+            "disabled": false
+          },
+          "overlays": [
+            {
+              "tag": "div",
+              "id": "",
+              "className": "game-overlay pause-settings-overlay",
+              "role": "dialog",
+              "visible": true,
+              "box": [
+                0,
+                0,
+                393,
+                628
+              ],
+              "pointerEvents": "auto",
+              "text": "MISSION PAUSIERTHalte die Stellung.Eine kurze Verschnaufpause.Die Cryptoids warten.Level 1 · Block 1/9 · GENESIS BELTShop & WaffenSYSTEM / EINSTELLUNGENMusik & Effekte50%›SteuerungRechtshändig›SpracheDeutsch›Anzeige›SpracheAktuelle Sprache: Deutsch◎Automatisch (Gerätesprache)⌄SteuerungMit einem Daumen steuern, mit dem anderen Power-ups aktivieren.◁Rechtshänder-Steuerung▷Linkshänder-SteuerungBerührungsempfindlichkeitSanftNormalSchnellSteuerbereichDer Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.KompaktNormalBreitStartposition des SchiffsÜber dem FingerDirekt unter dem FingerMusiklautstärkeMusiklautstärke50%0%25%50%75%100%Effektlautstärke35%0%25%50%75%100%Anzeige⛶Vollbild≋Vibration nicht verfügbar◌StandardeffekteFortsetzen",
+              "disabled": false
+            }
+          ],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        }
+      ],
+      "lifecycleStartedAt": 1792847892880,
+      "playNavigationIndex": 3,
+      "screenshot": "webkit-pause-resume-resize.png",
+      "previewCapture": {
+        "version": 1,
+        "format": "cryptoid-private-preview-lifecycle-report",
+        "generatedAt": "2026-10-24T13:18:27.443Z",
+        "evidenceSource": "current-tab",
+        "storage": {
+          "previewTab": "read",
+          "previewOrigin": "read",
+          "diagnostics": "absent",
+          "session": "read"
+        },
+        "events": [
+          {
+            "kind": "document-start",
+            "at": 1792847892565,
+            "sequence": 1,
+            "documentStartedAt": 1792847892510,
+            "active": false,
+            "hidden": false,
+            "rafObserved": true,
+            "resizeObserved": true,
+            "route": "home",
+            "navigationType": "navigate",
+            "viewport": [
+              393,
+              744
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529"
+          },
+          {
+            "kind": "pageshow",
+            "at": 1792847892667,
+            "sequence": 2,
+            "documentStartedAt": 1792847892510,
+            "active": false,
+            "hidden": false,
+            "persisted": false,
+            "route": "home",
+            "viewport": [
+              393,
+              744
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529"
+          },
+          {
+            "kind": "scene-mounted",
+            "at": 1792847893796,
+            "sequence": 3,
+            "documentStartedAt": 1792847892510,
+            "contextAt": 1792847893785,
+            "enemyCount": 0,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "enemies": [],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "field-size",
+            "at": 1792847893805,
+            "sequence": 4,
+            "documentStartedAt": 1792847892510,
+            "contextAt": 1792847893785,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847894871,
+            "sequence": 5,
+            "documentStartedAt": 1792847892510,
+            "frameGapMs": 1072,
+            "previousCallbackMs": 5,
+            "callbackMs": 1,
+            "contextAt": 1792847893785,
+            "enemyCount": 0,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847895947,
+            "sequence": 6,
+            "documentStartedAt": 1792847892510,
+            "frameGapMs": 1076,
+            "previousCallbackMs": 1,
+            "callbackMs": 0,
+            "contextAt": 1792847893785,
+            "enemyCount": 0,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847896990,
+            "sequence": 7,
+            "documentStartedAt": 1792847892510,
+            "frameGapMs": 348,
+            "previousCallbackMs": 2,
+            "callbackMs": 0,
+            "contextAt": 1792847893785,
+            "enemyCount": 1,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [
+              [
+                81.329574,
+                123.019861
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847897368,
+            "sequence": 8,
+            "documentStartedAt": 1792847892510,
+            "frameGapMs": 378,
+            "previousCallbackMs": 0,
+            "callbackMs": 1,
+            "contextAt": 1792847893785,
+            "enemyCount": 2,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [
+              [
+                81.329574,
+                129.482369
+              ],
+              [
+                308.019362,
+                114.439861
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847897799,
+            "sequence": 9,
+            "documentStartedAt": 1792847892510,
+            "frameGapMs": 430,
+            "previousCallbackMs": 1,
+            "callbackMs": 2,
+            "contextAt": 1792847893785,
+            "enemyCount": 3,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [
+              [
+                81.329574,
+                136.097198
+              ],
+              [
+                308.019362,
+                120.902369
+              ],
+              [
+                71.562979,
+                104.560027
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847898226,
+            "sequence": 10,
+            "documentStartedAt": 1792847892510,
+            "frameGapMs": 428,
+            "previousCallbackMs": 2,
+            "callbackMs": 1,
+            "contextAt": 1792847893785,
+            "enemyCount": 4,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [
+              [
+                81.329574,
+                142.795295
+              ],
+              [
+                308.019362,
+                127.517198
+              ],
+              [
+                71.562979,
+                123.05432
+              ],
+              [
+                319.06383,
+                129.113431
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "pause-state",
+            "at": 1792847898494,
+            "sequence": 11,
+            "documentStartedAt": 1792847892510,
+            "contextAt": 1792847893785,
+            "enemyCount": 6,
+            "active": false,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [
+              [
+                81.329574,
+                156.65056
+              ],
+              [
+                308.019362,
+                141.419839
+              ],
+              [
+                71.562979,
+                162.733966
+              ],
+              [
+                319.06383,
+                168.000723
+              ],
+              [
+                200.092647,
+                121.627989
+              ],
+              [
+                190.716715,
+                113.958274
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "pause-state",
+            "at": 1792847903248,
+            "sequence": 12,
+            "documentStartedAt": 1792847892510,
+            "contextAt": 1792847893785,
+            "enemyCount": 6,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [
+              [
+                81.329574,
+                156.65056
+              ],
+              [
+                308.019362,
+                141.419839
+              ],
+              [
+                71.562979,
+                162.733966
+              ],
+              [
+                319.06383,
+                168.000723
+              ],
+              [
+                200.092647,
+                121.627989
+              ],
+              [
+                190.716715,
+                113.958274
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847904010,
+            "sequence": 13,
+            "documentStartedAt": 1792847892510,
+            "frameGapMs": 740,
+            "previousCallbackMs": 1,
+            "callbackMs": 9,
+            "contextAt": 1792847904001,
+            "enemyCount": 6,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              628
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [
+              [
+                81.329574,
+                156.65056
+              ],
+              [
+                308.019362,
+                141.419839
+              ],
+              [
+                71.562979,
+                162.733966
+              ],
+              [
+                319.06383,
+                168.000723
+              ],
+              [
+                200.092647,
+                121.627989
+              ],
+              [
+                190.716715,
+                113.958274
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 393,
+              "height": 744,
+              "enemies": 6,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "ENTRY",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "field-size",
+            "at": 1792847904010,
+            "sequence": 14,
+            "documentStartedAt": 1792847892510,
+            "contextAt": 1792847904001,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              628
+            ],
+            "fieldSize": [
+              393,
+              628
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 393,
+              "height": 744,
+              "enemies": 6,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "ENTRY",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847904935,
+            "sequence": 15,
+            "documentStartedAt": 1792847892510,
+            "frameGapMs": 934,
+            "previousCallbackMs": 9,
+            "callbackMs": 1,
+            "contextAt": 1792847904001,
+            "enemyCount": 6,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              628
+            ],
+            "fieldSize": [
+              393,
+              628
+            ],
+            "enemies": [
+              [
+                81.0575,
+                161.943593
+              ],
+              [
+                308.6425,
+                147.666836
+              ],
+              [
+                72.23,
+                183.334246
+              ],
+              [
+                318.625,
+                186.163966
+              ],
+              [
+                199.7472,
+                127.267938
+              ],
+              [
+                191.2728,
+                132.324956
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 393,
+              "height": 744,
+              "enemies": 6,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "ENTRY",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847905207,
+            "sequence": 16,
+            "documentStartedAt": 1792847892510,
+            "frameGapMs": 272,
+            "previousCallbackMs": 1,
+            "callbackMs": 0,
+            "contextAt": 1792847904001,
+            "enemyCount": 6,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              628
+            ],
+            "fieldSize": [
+              393,
+              628
+            ],
+            "enemies": [
+              [
+                81.0575,
+                168.267334
+              ],
+              [
+                308.6425,
+                154.188593
+              ],
+              [
+                72.23,
+                202.574041
+              ],
+              [
+                318.625,
+                205.526746
+              ],
+              [
+                199.7472,
+                132.841982
+              ],
+              [
+                191.2728,
+                150.157978
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 393,
+              "height": 744,
+              "enemies": 6,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "ENTRY",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847906706,
+            "sequence": 17,
+            "documentStartedAt": 1792847892510,
+            "frameGapMs": 1351,
+            "previousCallbackMs": 1,
+            "callbackMs": 0,
+            "contextAt": 1792847904001,
+            "enemyCount": 6,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              628
+            ],
+            "fieldSize": [
+              393,
+              628
+            ],
+            "enemies": [
+              [
+                81.0575,
+                180.044561
+              ],
+              [
+                308.6425,
+                166.569007
+              ],
+              [
+                72.23,
+                239.888215
+              ],
+              [
+                318.625,
+                243.684237
+              ],
+              [
+                199.7472,
+                144.041829
+              ],
+              [
+                191.2728,
+                186.555742
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 393,
+              "height": 744,
+              "enemies": 6,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "ENTRY",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847907217,
+            "sequence": 18,
+            "documentStartedAt": 1792847892510,
+            "frameGapMs": 368,
+            "previousCallbackMs": 0,
+            "callbackMs": 1,
+            "contextAt": 1792847904001,
+            "enemyCount": 6,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              628
+            ],
+            "fieldSize": [
+              393,
+              628
+            ],
+            "enemies": [
+              [
+                81.0575,
+                182.443617
+              ],
+              [
+                308.6425,
+                174.688617
+              ],
+              [
+                72.23,
+                274.321053
+              ],
+              [
+                318.625,
+                279.756859
+              ],
+              [
+                199.7472,
+                154.926041
+              ],
+              [
+                191.2728,
+                222.677386
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 393,
+              "height": 744,
+              "enemies": 6,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "ENTRY",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "pause-state",
+            "at": 1792847907431,
+            "sequence": 19,
+            "documentStartedAt": 1792847892510,
+            "contextAt": 1792847904001,
+            "enemyCount": 6,
+            "active": false,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              628
+            ],
+            "fieldSize": [
+              393,
+              628
+            ],
+            "enemies": [
+              [
+                83.43871,
+                182.443617
+              ],
+              [
+                309.842079,
+                174.688617
+              ],
+              [
+                72.23,
+                285.261117
+              ],
+              [
+                318.625,
+                307.453617
+              ],
+              [
+                199.7472,
+                165.033042
+              ],
+              [
+                191.2728,
+                257.020815
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 393,
+              "height": 744,
+              "enemies": 6,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "ENTRY",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          }
+        ],
+        "recordedInterruptions": [],
+        "lastSession": {
+          "context": {
+            "sector": 1,
+            "block": 1,
+            "width": 393,
+            "height": 744,
+            "enemies": 6,
+            "projectiles": 0,
+            "effects": 0,
+            "lastSavedAt": 0,
+            "phase": "ENTRY",
+            "status": "playing",
+            "encounter": "normal",
+            "reason": "performance"
+          },
+          "active": true,
+          "hidden": false,
+          "pageHidden": false,
+          "at": 1792847904001
+        },
+        "limits": [
+          "Local technical events only; no account, payment or saved-progress payloads.",
+          "A new document does not establish an OS or memory cause.",
+          "White pixels and native compositor/GPU failure are not directly observed.",
+          "Active means visible, unpaused game DOM; saved context has its own timestamp and can be stale.",
+          "RAF observation adds overhead; no new RAF/timer or automatic Resume.",
+          "Origin fallback may describe a different tab. Previous deployment origins are inaccessible."
+        ]
+      },
+      "reportPage": {
+        "readOnly": true,
+        "gameMounted": false,
+        "captureInstalled": false,
+        "source": "current-tab",
+        "events": 21
+      }
+    },
+    {
+      "mode": "explicit-current-route-reload-control",
+      "passed": true,
+      "errors": [],
+      "unexpected": [],
+      "httpErrors": [],
+      "navigations": [
+        "/",
+        "/",
+        "/game",
+        "/game",
+        "/private-preview-report.html"
+      ],
+      "samples": [
+        {
+          "label": "entry-before-action",
+          "at": 1792847912688,
+          "documentStartedAt": 1792847907876,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.329574,
+              "y": 129.482369,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019362,
+              "y": 114.439861,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792847909208,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "before-controlled-reload",
+          "at": 1792847912717,
+          "documentStartedAt": 1792847907876,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.329574,
+              "y": 129.482369,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019362,
+              "y": 114.439861,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792847909208,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "after-controlled-reload",
+          "at": 1792847915767,
+          "documentStartedAt": 1792847912719,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.329574,
+              "y": 121.436125,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792847912942,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        }
+      ],
+      "lifecycleStage": "read-only-report-page",
+      "lifecycleSamples": [
+        {
+          "label": "home",
+          "captured": true,
+          "observedAtEpochMs": 1792847908344,
+          "documentStartedAt": 1792847907876,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/",
+          "rootChildren": 1,
+          "shell": null,
+          "pauseControl": null,
+          "pauseHitTarget": null,
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "entry-active",
+          "captured": true,
+          "observedAtEpochMs": 1792847912692,
+          "documentStartedAt": 1792847907876,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              352.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "before-controlled-reload",
+          "captured": true,
+          "observedAtEpochMs": 1792847912715,
+          "documentStartedAt": 1792847907876,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              352.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-controlled-reload",
+          "captured": true,
+          "observedAtEpochMs": 1792847915770,
+          "documentStartedAt": 1792847912719,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              352.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "read",
+            "totalEntries": 1,
+            "entries": [
+              {
+                "reason": "unexpected-restart",
+                "errorName": "",
+                "phase": "ENTRY",
+                "encounter": "normal",
+                "status": "playing",
+                "at": "2026-10-24T13:18:32.942Z",
+                "restartHint": "page-reload",
+                "sector": 1,
+                "block": 1,
+                "width": 393,
+                "height": 744,
+                "enemies": 2,
+                "projectiles": 0,
+                "effects": 0,
+                "lastSavedAt": 0,
+                "inObservedFlow": true
+              }
+            ]
+          },
+          "recordedInterruptions": []
+        }
+      ],
+      "lifecycleStartedAt": 1792847908344,
+      "playNavigationIndex": 3,
+      "controlledReload": {
+        "currentRouteStartsGameWithoutHome": true,
+        "restartMarker": [
+          {
+            "reason": "unexpected-restart",
+            "errorName": "",
+            "phase": "ENTRY",
+            "encounter": "normal",
+            "status": "playing",
+            "at": "2026-10-24T13:18:32.942Z",
+            "restartHint": "page-reload",
+            "sector": 1,
+            "block": 1,
+            "width": 393,
+            "height": 744,
+            "enemies": 2,
+            "projectiles": 0,
+            "effects": 0,
+            "lastSavedAt": 0,
+            "inObservedFlow": true
+          }
+        ],
+        "notNaturalWhiteScreenReproduction": true
+      },
+      "previewCapture": {
+        "version": 1,
+        "format": "cryptoid-private-preview-lifecycle-report",
+        "generatedAt": "2026-10-24T13:18:35.774Z",
+        "evidenceSource": "current-tab",
+        "storage": {
+          "previewTab": "read",
+          "previewOrigin": "read",
+          "diagnostics": "read",
+          "session": "read"
+        },
+        "events": [
+          {
+            "kind": "document-start",
+            "at": 1792847908000,
+            "sequence": 1,
+            "documentStartedAt": 1792847907876,
+            "active": false,
+            "hidden": false,
+            "rafObserved": true,
+            "resizeObserved": true,
+            "route": "home",
+            "navigationType": "navigate",
+            "viewport": [
+              393,
+              744
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529"
+          },
+          {
+            "kind": "pageshow",
+            "at": 1792847908085,
+            "sequence": 2,
+            "documentStartedAt": 1792847907876,
+            "active": false,
+            "hidden": false,
+            "persisted": false,
+            "route": "home",
+            "viewport": [
+              393,
+              744
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529"
+          },
+          {
+            "kind": "scene-mounted",
+            "at": 1792847909221,
+            "sequence": 3,
+            "documentStartedAt": 1792847907876,
+            "contextAt": 1792847909208,
+            "enemyCount": 0,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "enemies": [],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "field-size",
+            "at": 1792847909230,
+            "sequence": 4,
+            "documentStartedAt": 1792847907876,
+            "contextAt": 1792847909208,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847910289,
+            "sequence": 5,
+            "documentStartedAt": 1792847907876,
+            "frameGapMs": 1063,
+            "previousCallbackMs": 4,
+            "callbackMs": 1,
+            "contextAt": 1792847909208,
+            "enemyCount": 0,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847911321,
+            "sequence": 6,
+            "documentStartedAt": 1792847907876,
+            "frameGapMs": 1033,
+            "previousCallbackMs": 1,
+            "callbackMs": 0,
+            "contextAt": 1792847909208,
+            "enemyCount": 0,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847912360,
+            "sequence": 7,
+            "documentStartedAt": 1792847907876,
+            "frameGapMs": 390,
+            "previousCallbackMs": 2,
+            "callbackMs": 1,
+            "contextAt": 1792847909208,
+            "enemyCount": 1,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [
+              [
+                81.329574,
+                123.019861
+              ]
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "pagehide",
+            "at": 1792847912722,
+            "sequence": 8,
+            "documentStartedAt": 1792847907876,
+            "contextAt": 1792847909208,
+            "active": true,
+            "hidden": false,
+            "persisted": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "visibility",
+            "at": 1792847912723,
+            "sequence": 9,
+            "documentStartedAt": 1792847907876,
+            "contextAt": 1792847912722,
+            "active": false,
+            "hidden": true,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 393,
+              "height": 744,
+              "enemies": 2,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "ENTRY",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "document-start",
+            "at": 1792847912792,
+            "sequence": 1,
+            "documentStartedAt": 1792847912719,
+            "previousDocumentStartedAt": 1792847907876,
+            "contextAt": 1792847912723,
+            "active": false,
+            "hidden": false,
+            "rafObserved": true,
+            "resizeObserved": true,
+            "route": "game",
+            "navigationType": "reload",
+            "viewport": [
+              393,
+              744
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 393,
+              "height": 744,
+              "enemies": 2,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "ENTRY",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "pageshow",
+            "at": 1792847912826,
+            "sequence": 2,
+            "documentStartedAt": 1792847912719,
+            "contextAt": 1792847912723,
+            "active": false,
+            "hidden": false,
+            "persisted": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 393,
+              "height": 744,
+              "enemies": 2,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "ENTRY",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "scene-mounted",
+            "at": 1792847912984,
+            "sequence": 3,
+            "documentStartedAt": 1792847912719,
+            "contextAt": 1792847912942,
+            "enemyCount": 0,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "enemies": [],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "field-size",
+            "at": 1792847912995,
+            "sequence": 4,
+            "documentStartedAt": 1792847912719,
+            "contextAt": 1792847912942,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847913876,
+            "sequence": 5,
+            "documentStartedAt": 1792847912719,
+            "frameGapMs": 881,
+            "previousCallbackMs": 2,
+            "callbackMs": 2,
+            "contextAt": 1792847912942,
+            "enemyCount": 0,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          },
+          {
+            "kind": "frame-gap",
+            "at": 1792847914841,
+            "sequence": 6,
+            "documentStartedAt": 1792847912719,
+            "frameGapMs": 968,
+            "previousCallbackMs": 2,
+            "callbackMs": 0,
+            "contextAt": 1792847912942,
+            "enemyCount": 0,
+            "active": true,
+            "hidden": false,
+            "route": "game",
+            "viewport": [
+              393,
+              744
+            ],
+            "fieldSize": [
+              393,
+              744
+            ],
+            "enemies": [],
+            "sourceCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+            "context": {
+              "sector": 1,
+              "block": 1,
+              "width": 800,
+              "height": 600,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "lastSavedAt": 0,
+              "phase": "SECTOR_INTRO",
+              "status": "playing",
+              "encounter": "normal",
+              "reason": "performance"
+            }
+          }
+        ],
+        "recordedInterruptions": [
+          {
+            "sector": 1,
+            "block": 1,
+            "width": 393,
+            "height": 744,
+            "enemies": 2,
+            "projectiles": 0,
+            "effects": 0,
+            "lastSavedAt": 0,
+            "phase": "ENTRY",
+            "status": "playing",
+            "encounter": "normal",
+            "reason": "unexpected-restart",
+            "restartHint": "page-reload",
+            "at": "2026-10-24T13:18:32.942Z"
+          }
+        ],
+        "lastSession": {
+          "context": {
+            "sector": 1,
+            "block": 1,
+            "width": 800,
+            "height": 600,
+            "enemies": 0,
+            "projectiles": 0,
+            "effects": 0,
+            "lastSavedAt": 0,
+            "phase": "SECTOR_INTRO",
+            "status": "playing",
+            "encounter": "normal",
+            "reason": "performance"
+          },
+          "active": true,
+          "hidden": false,
+          "pageHidden": false,
+          "at": 1792847912942
+        },
+        "limits": [
+          "Local technical events only; no account, payment or saved-progress payloads.",
+          "A new document does not establish an OS or memory cause.",
+          "White pixels and native compositor/GPU failure are not directly observed.",
+          "Active means visible, unpaused game DOM; saved context has its own timestamp and can be stale.",
+          "RAF observation adds overhead; no new RAF/timer or automatic Resume.",
+          "Origin fallback may describe a different tab. Previous deployment origins are inaccessible."
+        ]
+      },
+      "reportPage": {
+        "readOnly": true,
+        "gameMounted": false,
+        "captureInstalled": false,
+        "source": "current-tab",
+        "events": 18
+      }
+    }
+  ],
+  "limits": "Controlled Linux native browsers, original fonts, synthetic guest transports. DOM observations and screenshots add overhead. Viewport resizing does not reproduce native browser translation, OS process termination or physical iPhone painting.",
+  "version": "26.5"
+}

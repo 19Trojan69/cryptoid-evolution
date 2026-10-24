@@ -1,0 +1,25 @@
+✔ guest fixture cannot access a stored session or redirect to OAuth (1.001395ms)
+✔ every preview fixture is disabled outside Preview (0.186294ms)
+✔ allowed reads never manufacture a user, inventory, rewards or leaderboard (0.607294ms)
+✔ account/payment/game mutations and admin routes are denied (0.186775ms)
+✔ Vercel rewrite handler returns guest response without cookies (0.56395ms)
+✔ SDK denies authentication and payment without contacting Pi (1.467141ms)
+✔ production packaging aborts before touching output (1.10063ms)
+✔ packaged original entry/init/startup guard survive with isolated transport (2.450197ms)
+✔ installation schedules no RAF/timer and repeated installation does not wrap twice (4.688924ms)
+✔ native IDs, cancellation, receiver, timestamp, return value and thrown errors are preserved (1.456344ms)
+✔ measured active gap records existing callbacks without pausing or changing their clock (2.101804ms)
+✔ observed pause, visibility and page restoration rearm observation without false active gaps (1.733402ms)
+✔ denied storage or observation failure never prevents the native callback (1.030056ms)
+✔ the next document preserves the preceding document ID; ordinary navigation is not called an OS kill (3.241022ms)
+✔ stored events remain bounded and noisy viewport writes are rate limited (3.512842ms)
+✔ report reading never writes and rejects private/malformed/out-of-range fields (0.948827ms)
+✔ normal missing evidence and blocked storage are explicit, never fabricated history (0.865805ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 121.943392

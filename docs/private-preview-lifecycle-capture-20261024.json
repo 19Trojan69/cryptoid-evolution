@@ -1,0 +1,239 @@
+{
+  "date": "2026-10-24",
+  "status": "prepared_protected_preview_capture_not_yet_deployed",
+  "branch": "codex/private-preview-lifecycle-capture-20261024",
+  "baseCommit": "160d674ca055d3407bfe04c1e30d5c239cbcb529",
+  "unchangedGameSourceTree": "66f458f157bb4d52b6ebe57f92d51b52a51451b2",
+  "originalTests": 151,
+  "previewIsolationAndCaptureTests": 17,
+  "totalTests": 168,
+  "typesLocalesVitePassed": true,
+  "purpose": "Distinguish an observed new document from same-document events after owner-reported white display without Home. No natural White Screen cause/fix established.",
+  "captured": {
+    "limitEvents": 48,
+    "newPollingTimers": 0,
+    "newAnimationFrameRequests": 0,
+    "wrapsExistingNativeFrameCallbacks": true,
+    "callbackReceiverTimestampReturnAndExceptionPreservedByTests": true,
+    "noisePersistenceThrottleMs": 1000,
+    "gapObservationStrictGreaterThanMs": 250,
+    "gapThresholdIsNotGameWatchdog": true,
+    "automaticNetworkTransmission": false,
+    "accountPaymentSaveKeysRead": false,
+    "reportPageWritesStorage": false,
+    "reportPageStartsGame": false
+  },
+  "watchdog": {
+    "strictGreaterThanMs": 2500,
+    "intervalMs": 500,
+    "automaticResume": false
+  },
+  "browsers": {
+    "chromium": {
+      "version": "141.0.7390.37",
+      "preflight": {
+        "browserStarted": true,
+        "status": 200,
+        "text": "local-server-ok"
+      },
+      "passed": true,
+      "cases": [
+        {
+          "mode": "pause-resume",
+          "passed": true,
+          "reportPage": {
+            "readOnly": true,
+            "gameMounted": false,
+            "captureInstalled": false,
+            "source": "current-tab",
+            "events": 10
+          },
+          "capturedKinds": [
+            "document-start",
+            "pageshow",
+            "scene-mounted",
+            "field-size",
+            "pause-state",
+            "frame-gap"
+          ]
+        },
+        {
+          "mode": "pause-resume-resize",
+          "passed": true,
+          "reportPage": {
+            "readOnly": true,
+            "gameMounted": false,
+            "captureInstalled": false,
+            "source": "current-tab",
+            "events": 13
+          },
+          "capturedKinds": [
+            "document-start",
+            "pageshow",
+            "scene-mounted",
+            "field-size",
+            "pause-state",
+            "frame-gap"
+          ]
+        },
+        {
+          "mode": "explicit-current-route-reload-control",
+          "passed": true,
+          "reportPage": {
+            "readOnly": true,
+            "gameMounted": false,
+            "captureInstalled": false,
+            "source": "current-tab",
+            "events": 12
+          },
+          "capturedKinds": [
+            "document-start",
+            "pageshow",
+            "scene-mounted",
+            "field-size",
+            "pagehide",
+            "visibility"
+          ]
+        }
+      ]
+    },
+    "webkit": {
+      "version": "26.5",
+      "preflight": {
+        "browserStarted": true,
+        "status": 200,
+        "text": "local-server-ok"
+      },
+      "passed": true,
+      "cases": [
+        {
+          "mode": "pause-resume",
+          "passed": true,
+          "reportPage": {
+            "readOnly": true,
+            "gameMounted": false,
+            "captureInstalled": false,
+            "source": "current-tab",
+            "events": 19
+          },
+          "capturedKinds": [
+            "document-start",
+            "pageshow",
+            "scene-mounted",
+            "field-size",
+            "frame-gap",
+            "pause-state"
+          ]
+        },
+        {
+          "mode": "pause-resume-resize",
+          "passed": true,
+          "reportPage": {
+            "readOnly": true,
+            "gameMounted": false,
+            "captureInstalled": false,
+            "source": "current-tab",
+            "events": 21
+          },
+          "capturedKinds": [
+            "document-start",
+            "pageshow",
+            "scene-mounted",
+            "field-size",
+            "frame-gap",
+            "pause-state"
+          ]
+        },
+        {
+          "mode": "explicit-current-route-reload-control",
+          "passed": true,
+          "reportPage": {
+            "readOnly": true,
+            "gameMounted": false,
+            "captureInstalled": false,
+            "source": "current-tab",
+            "events": 18
+          },
+          "capturedKinds": [
+            "document-start",
+            "pageshow",
+            "scene-mounted",
+            "field-size",
+            "frame-gap",
+            "pagehide",
+            "visibility"
+          ]
+        }
+      ]
+    }
+  },
+  "officialBefore": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 1465,
+      "sha256": "b541a5ad5329f5914c77a2a0eb8778ac02e199256c4c893296e9b93e203ecb1b"
+    },
+    {
+      "path": "/api/",
+      "status": 200,
+      "bytes": 27,
+      "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a"
+    },
+    {
+      "path": "/api/admin/status",
+      "status": 401,
+      "bytes": 29,
+      "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771"
+    }
+  ],
+  "automaticDeploymentEnabled": false,
+  "productionDeploymentAuthorized": false,
+  "mainnetChanged": false,
+  "testnetChanged": false,
+  "historicalWhiteScreensFixed": false,
+  "physicalIphoneAccepted": false,
+  "fullCampaignAccepted": false,
+  "limits": [
+    "No direct observation of white pixels, GPU/compositor or OS termination",
+    "Measurements and synchronous local storage add overhead; capture may influence timing",
+    "Active denotes visible unpaused game DOM, not internal simulation state",
+    "Saved context includes its separate timestamp and may be stale",
+    "No recordings from an earlier immutable deployment origin can be recovered by this new version",
+    "Origin-copy report can come from another tab; source is explicit",
+    "Earlier failed WPE cold-start/extended-flow results remain unresolved",
+    "Owner photo remains private, no repeat campaign/purchase/data deletion requested"
+  ],
+  "evidence": [
+    {
+      "path": "official-before.json",
+      "bytes": 454,
+      "sha256": "4428f8676d9d58b6374a549781a6669ffc171ca3977cb7a25a673fae5e3d6ecd"
+    },
+    {
+      "path": "webkit.json",
+      "bytes": 127794,
+      "sha256": "ffcf686b740b0bef4f362c01a26be4e599d4d2c29743b4f4d26f1819c0cac5a0"
+    },
+    {
+      "path": "build.log",
+      "bytes": 27413,
+      "sha256": "e82e460863c7cf9535880bfb23e79407f14caee250b9c5496f7ea7e82cc75bfb"
+    },
+    {
+      "path": "chromium.json",
+      "bytes": 89171,
+      "sha256": "c94ca255d262da04eafc105c5cdcadd3dabf61c72d6e239a408daeaacf2a0cc5"
+    },
+    {
+      "path": "webkit.log",
+      "bytes": 672,
+      "sha256": "880cb8bb4879aa43db2c91a2d8de661f283e5cabbb8097b70bb4ffcbc336f179"
+    },
+    {
+      "path": "chromium.log",
+      "bytes": 674,
+      "sha256": "9cbd4520efaa337fd56a93aec67e5de15c72bdbda8e3e65431a40edc26bb63f8"
+    }
+  ]
+}

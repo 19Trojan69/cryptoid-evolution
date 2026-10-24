@@ -11,7 +11,7 @@ import { captureLifecycleState, assertLifecycleState, captureLifecycleFailure } 
 const root = new URL('../', import.meta.url).pathname;
 const dist = resolve(process.env.CRYPTOID_PRIVATE_OUTPUT);
 const fixture = resolve(process.env.CRYPTOID_STARTUP_FIXTURE_ROOT);
-const output = resolve(root, 'docs/preview-resume-investigation-20261024'); mkdirSync(output, { recursive: true });
+const output = resolve(process.env.CRYPTOID_RESUME_REPORT_DIR || resolve(root, 'docs/preview-resume-investigation-20261024')); mkdirSync(output, { recursive: true });
 const engine = process.env.CRYPTOID_STARTUP_ENGINE || 'chromium';
 const report = { engine, passed: false, gameplayHooks: false, automaticResume: false, preflight: {}, results: [],
   limits: 'Controlled Linux native browsers, original fonts, synthetic guest transports. DOM observations and screenshots add overhead. Viewport resizing does not reproduce native browser translation, OS process termination or physical iPhone painting.' };
@@ -119,6 +119,29 @@ try {
         await page.screenshot({ path: resolve(output, row.screenshot), timeout: 10000, animations: 'allow' });
         await observe('after-pixels');
         await page.locator('.pause-control').click(); await observe('final-explicit-pause', 'paused');
+      }
+      if (process.env.CRYPTOID_PREVIEW_CAPTURE_CHECK === '1') {
+        row.lifecycleStage = 'preview-capture';
+        row.previewCapture = await page.evaluate(() => window.CryptoidPrivatePreviewEvidence?.report());
+        assert.ok(row.previewCapture?.events.some(e => e.kind === 'document-start'));
+        assert.ok(row.previewCapture.events.some(e => e.kind === 'scene-mounted'));
+        if (mode === 'explicit-current-route-reload-control') {
+          const boots = row.previewCapture.events.filter(e => e.kind === 'document-start');
+          assert.equal(boots.length, 2);
+          assert.equal(boots[1].previousDocumentStartedAt, boots[0].documentStartedAt);
+          assert.notEqual(boots[1].documentStartedAt, boots[0].documentStartedAt);
+        } else assert.ok(row.previewCapture.events.some(e => e.kind === 'pause-state'));
+        row.lifecycleStage = 'read-only-report-page';
+        await page.goto(origin + '/private-preview-report.html');
+        await page.waitForFunction(() => document.getElementById('report')?.value?.includes('cryptoid-private-preview-lifecycle-report'));
+        const storageBefore = await page.evaluate(() => [sessionStorage.getItem('cryptoid_private_preview_lifecycle_v1'), localStorage.getItem('cryptoid_private_preview_lifecycle_v1')]);
+        await page.getByRole('button', { name: 'Bericht aktualisieren', exact: true }).click();
+        const readBack = await page.evaluate(() => ({ raw: [sessionStorage.getItem('cryptoid_private_preview_lifecycle_v1'), localStorage.getItem('cryptoid_private_preview_lifecycle_v1')],
+          report: JSON.parse(document.getElementById('report').value), gameMounted: !!document.querySelector('.game-shell'), captureInstalled: window.__cryptoidPrivateLifecycleInstalled === true }));
+        assert.deepEqual(readBack.raw, storageBefore);
+        assert.equal(readBack.gameMounted, false); assert.equal(readBack.captureInstalled, false);
+        assert.equal(readBack.report.evidenceSource, 'current-tab');
+        row.reportPage = { readOnly: true, gameMounted: false, captureInstalled: false, source: readBack.report.evidenceSource, events: readBack.report.events.length };
       }
       assert.deepEqual(row.errors, []); assert.deepEqual(row.unexpected, []); assert.deepEqual(row.httpErrors, []); row.passed = true;
     } catch (error) {
