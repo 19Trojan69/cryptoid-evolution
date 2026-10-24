@@ -1,0 +1,112 @@
+{
+  "version": "0.11.0",
+  "name": "cryptoid-evolution",
+  "dependencies": {
+    "@eslint/js": {
+      "version": "9.39.5",
+      "overridden": false
+    },
+    "@mui/icons-material": {
+      "version": "7.3.11",
+      "overridden": false
+    },
+    "@mui/material": {
+      "version": "7.3.11",
+      "overridden": false
+    },
+    "@mui/styled-engine-sc": {
+      "version": "7.3.10",
+      "overridden": false
+    },
+    "@napi-rs/canvas": {
+      "version": "0.1.100",
+      "overridden": false
+    },
+    "@types/node": {
+      "version": "24.19.2",
+      "overridden": false
+    },
+    "@types/react-dom": {
+      "version": "19.3.0",
+      "overridden": false
+    },
+    "@types/react": {
+      "version": "19.3.0",
+      "overridden": false
+    },
+    "@vitejs/plugin-react": {
+      "version": "5.2.0",
+      "resolved": "https://registry.npmjs.org/@vitejs/plugin-react/-/plugin-react-5.2.0.tgz",
+      "overridden": false
+    },
+    "axios": {
+      "version": "1.20.0",
+      "overridden": false
+    },
+    "eslint-config-prettier": {
+      "version": "10.1.8",
+      "resolved": "https://registry.npmjs.org/eslint-config-prettier/-/eslint-config-prettier-10.1.8.tgz",
+      "overridden": false
+    },
+    "eslint-plugin-prettier": {
+      "version": "5.5.7",
+      "overridden": false
+    },
+    "eslint-plugin-react-hooks": {
+      "version": "7.1.1",
+      "overridden": false
+    },
+    "eslint-plugin-react-refresh": {
+      "version": "0.4.26",
+      "resolved": "https://registry.npmjs.org/eslint-plugin-react-refresh/-/eslint-plugin-react-refresh-0.4.26.tgz",
+      "overridden": false
+    },
+    "eslint": {
+      "version": "9.39.5",
+      "overridden": false
+    },
+    "fake-indexeddb": {
+      "version": "6.2.5",
+      "resolved": "https://registry.npmjs.org/fake-indexeddb/-/fake-indexeddb-6.2.5.tgz",
+      "overridden": false
+    },
+    "globals": {
+      "version": "16.5.0",
+      "resolved": "https://registry.npmjs.org/globals/-/globals-16.5.0.tgz",
+      "overridden": false
+    },
+    "prettier": {
+      "version": "3.9.10",
+      "overridden": false
+    },
+    "react-dom": {
+      "version": "19.3.1",
+      "overridden": false
+    },
+    "react-router-dom": {
+      "version": "7.18.4",
+      "overridden": false
+    },
+    "react": {
+      "version": "19.3.1",
+      "overridden": false
+    },
+    "styled-components": {
+      "version": "6.6.0",
+      "overridden": false
+    },
+    "typescript-eslint": {
+      "version": "8.72.0",
+      "overridden": false
+    },
+    "typescript": {
+      "version": "5.9.3",
+      "resolved": "https://registry.npmjs.org/typescript/-/typescript-5.9.3.tgz",
+      "overridden": false
+    },
+    "vite": {
+      "version": "7.3.7",
+      "overridden": false
+    }
+  }
+}

@@ -1,0 +1,122 @@
+[
+  {
+    "package": "libgstreamer1.0-0",
+    "version": "1.24.2-1",
+    "sha256": "90252639430f75720aa5d7e1d961053212130b1df6835a2eec54387fc8e12b75",
+    "path": "/workspace/scratch/fb7073945978/native-libraries/libgstreamer1.0-0_1.24.2-1_amd64.deb"
+  },
+  {
+    "package": "libgstreamer-plugins-base1.0-0",
+    "version": "1.24.2-1",
+    "sha256": "e265685c7506306c59982b6289f9088b21084485b1a64d9a26a90a3b6b94cf64",
+    "path": "/workspace/scratch/fb7073945978/native-libraries/libgstreamer-plugins-base1.0-0_1.24.2-1_amd64.deb"
+  },
+  {
+    "package": "libgstreamer-plugins-bad1.0-0",
+    "version": "1.24.2-1ubuntu4",
+    "sha256": "6e8da41c0cbb2070f3477cf02360c2ce2eb55e825ba09e12b4270b3254e04f45",
+    "path": "/workspace/scratch/fb7073945978/native-libraries/libgstreamer-plugins-bad1.0-0_1.24.2-1ubuntu4_amd64.deb"
+  },
+  {
+    "package": "libevent-2.1-7t64",
+    "version": "2.1.12-stable-9ubuntu2",
+    "sha256": "f95eddfc9e9028567a21b8162a1cb8aae96b2fb168f149c0a5b01d72bfd42471",
+    "path": "/workspace/scratch/fb7073945978/native-libraries/libevent-2.1-7t64_2.1.12-stable-9ubuntu2_amd64.deb"
+  },
+  {
+    "package": "libavif16",
+    "version": "1.0.4-1ubuntu3",
+    "sha256": "b295a9954a4b756af05ff381d9808f3c0c582a111b7e4c7678cfe13de9ae8818",
+    "path": "/workspace/scratch/fb7073945978/native-libraries/libavif16_1.0.4-1ubuntu3_amd64.deb"
+  },
+  {
+    "package": "libharfbuzz-icu0",
+    "version": "8.3.0-2build2",
+    "sha256": "9098670758e60b190d7edf367ad57e954bfc1b2a616def3f4e281062e036a843",
+    "path": "/workspace/scratch/fb7073945978/native-libraries/libharfbuzz-icu0_8.3.0-2build2_amd64.deb"
+  },
+  {
+    "package": "libwayland-server0",
+    "version": "1.22.0-2.1build1",
+    "sha256": "edbfa4b6857691ae922cc768a753fab230eee9e956aa2ce4f2eaa8d9ad777dca",
+    "path": "/workspace/scratch/fb7073945978/native-libraries/libwayland-server0_1.22.0-2.1build1_amd64.deb"
+  },
+  {
+    "package": "libhyphen0",
+    "version": "2.8.8-7build3",
+    "sha256": "b508d3a5da168ddb2ae6e79ea0521ba64cd121285db0ece438d0bd56ba628556",
+    "path": "/workspace/scratch/fb7073945978/native-libraries/libhyphen0_2.8.8-7build3_amd64.deb"
+  },
+  {
+    "package": "libegl1",
+    "version": "1.7.0-1build1",
+    "sha256": "e549f7776216f7bd3b1c216729fb40a97a562e2eb7c563cde632b4931f9a4e57",
+    "path": "/workspace/scratch/fb7073945978/native-libraries/libegl1_1.7.0-1build1_amd64.deb"
+  },
+  {
+    "package": "libgles2",
+    "version": "1.7.0-1build1",
+    "sha256": "9dec2d79a2eebb80522f7cce77995f7a8ded22f0e3916f13353d066c62f97fac",
+    "path": "/workspace/scratch/fb7073945978/native-libraries/libgles2_1.7.0-1build1_amd64.deb"
+  },
+  {
+    "package": "libopengl0",
+    "version": "1.7.0-1build1",
+    "sha256": "da36bd4d30c13b40b697fa8b72cc09d309ff36a5bd9750341ef78492bf3f3966",
+    "path": "/workspace/scratch/fb7073945978/native-libraries/libopengl0_1.7.0-1build1_amd64.deb"
+  },
+  {
+    "package": "libdw1t64",
+    "version": "0.190-1.1build4",
+    "sha256": "cdf86260db73ae9f61915fdb898d74a74654ff4b84deeac1c9fe9e5ab2ad83c6",
+    "path": "/workspace/scratch/fb7073945978/native-libraries/libdw1t64_0.190-1.1build4_amd64.deb"
+  },
+  {
+    "package": "libgav1-1",
+    "version": "0.18.0-1build3",
+    "sha256": "428f353f449e6b15cdcf5823215416e36adcfba75fe9f0fedc1cd132d68e6b3f",
+    "path": "/workspace/scratch/fb7073945978/native-libraries/libgav1-1_0.18.0-1build3_amd64.deb"
+  },
+  {
+    "package": "libgstreamer-gl1.0-0",
+    "version": "1.24.2-1",
+    "sha256": "f63c53c578aff2504da2c81a430047215ed8e73e3a2ca812b1fe84ec48b6b9ff",
+    "path": "/workspace/scratch/fb7073945978/native-libraries/libgstreamer-gl1.0-0_1.24.2-1_amd64.deb"
+  },
+  {
+    "package": "liborc-0.4-0t64",
+    "version": "1:0.4.38-1build1",
+    "sha256": "facde0deeeae78041d4b5ad9cea5d076ce6264a26d1ef927c6befe2d9eb3d6fb",
+    "path": "/workspace/scratch/fb7073945978/native-libraries/liborc-0.4-0t64_0.4.38-1build1_amd64.deb"
+  },
+  {
+    "package": "libyuv0",
+    "version": "0.0~git202401110.af6ac82-1",
+    "sha256": "88bd472e50a7e45469e31f8e0ba232b4d8ed30322f5badb285c58cc1ba0d2176",
+    "path": "/workspace/scratch/fb7073945978/native-libraries/libyuv0_0.0~git202401110.af6ac82-1_amd64.deb"
+  },
+  {
+    "package": "libabsl20220623t64",
+    "version": "20220623.1-3.1ubuntu3",
+    "sha256": "eafc5f26ba910468a6d5d5f154ed8fcf4beed2d5bc45619907ea9f517cdaf401",
+    "path": "/workspace/scratch/fb7073945978/native-libraries/libabsl20220623t64_20220623.1-3.1ubuntu3_amd64.deb"
+  },
+  {
+    "package": "gstreamer1.0-plugins-base",
+    "version": "1.24.2-1",
+    "sha256": "d69e0d248d072a988581fd9db1af9eddf32c5701df7d84d04b69fd94c9a57a46",
+    "path": "/workspace/scratch/fb7073945978/native-libraries/gstreamer1.0-plugins-base_1.24.2-1_amd64.deb"
+  },
+  {
+    "package": "gstreamer1.0-plugins-good",
+    "version": "1.24.2-1ubuntu1",
+    "sha256": "a181570b326418b3ffa136239f86bc6298457a90115f90450d04a2124c2bd485",
+    "path": "/workspace/scratch/fb7073945978/native-libraries/gstreamer1.0-plugins-good_1.24.2-1ubuntu1_amd64.deb"
+  },
+  {
+    "package": "libmpg123-0t64",
+    "version": "1.32.5-1ubuntu1",
+    "sha256": "5c297ac68cecdab93a7bcf694d769e553234999c446e019257d7df0d4be4bbc2",
+    "path": "/workspace/scratch/fb7073945978/native-libraries/libmpg123-0t64_1.32.5-1ubuntu1_amd64.deb"
+  }
+]

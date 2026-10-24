@@ -1,0 +1,54 @@
+import concurrent.futures
+import hashlib
+import json
+import lzma
+import os
+from pathlib import Path
+import subprocess
+import urllib.request
+
+ROOT = Path('/workspace/scratch/fb7073945978/native-libraries')
+ROOT.mkdir(exist_ok=True)
+BASE = 'https://snapshot.ubuntu.com/ubuntu/20260828T000000Z/'
+release = Path('/workspace/scratch/fb7073945978/ubuntu-noble-InRelease')
+subprocess.run(['gpgv', '--keyring', '/usr/share/keyrings/ubuntu-archive-keyring.gpg', str(release)], check=True)
+release_text = release.read_text()
+
+def download(url, target):
+    if not target.exists():
+        with urllib.request.urlopen(url, timeout=60) as response:
+            target.write_bytes(response.read())
+    return target.read_bytes()
+
+def index(component):
+    relative = component + '/binary-amd64/Packages.xz'
+    expected = next(line.split()[0] for line in release_text.split('SHA256:\n')[1].split('SHA512:')[0].splitlines() if line.strip().endswith(' ' + relative))
+    data = download(BASE + 'dists/noble/' + relative, ROOT / (component + '-Packages.xz'))
+    assert hashlib.sha256(data).hexdigest() == expected
+    packages = {}
+    for block in lzma.decompress(data).decode().split('\n\n'):
+        fields = dict(line.split(': ', 1) for line in block.splitlines() if ': ' in line and not line.startswith(' '))
+        if fields.get('Package'):
+            packages[fields['Package']] = fields
+    return packages
+
+with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
+    indexes = list(pool.map(index, ['main', 'universe']))
+packages = {key: value for group in indexes for key, value in group.items()}
+requested = os.environ['NATIVE_PACKAGES'].split()
+
+def get_package(name):
+    package = packages[name]
+    path = ROOT / Path(package['Filename']).name
+    data = download(BASE + package['Filename'], path)
+    assert hashlib.sha256(data).hexdigest() == package['SHA256'], name
+    return {'package': name, 'version': package['Version'], 'sha256': package['SHA256'], 'path': str(path)}
+
+with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool:
+    rows = list(pool.map(get_package, requested))
+for row in rows:
+    subprocess.run(['dpkg-deb', '-x', row['path'], str(ROOT / 'extracted')], check=True)
+manifest = ROOT / 'manifest.json'
+previous = json.loads(manifest.read_text()) if manifest.exists() else []
+manifest.write_text(json.dumps(list({row['package']: row for row in previous + rows}.values()), indent=2) + '\n')
+print(json.dumps({'installedUserSpacePackages': rows}), flush=True)

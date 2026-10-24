@@ -1,0 +1,9 @@
+{
+  "engine": "wpe-webkit",
+  "browserStarted": true,
+  "localPageLoaded": true,
+  "policyBypassAttempted": false,
+  "version": "26.5",
+  "status": 200,
+  "text": "local-server-ok"
+}

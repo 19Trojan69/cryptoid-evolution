@@ -1,5 +1,33 @@
 # Preserve the officially approved game
 
+## Native cold-start pause evidence, 24 October 2026, no runtime correction
+
+Continuation on codex/white-screen-startup-recovery-20261023 verifies exact
+remote/local base33b137256eae06407985244499cc61cd0f3ef119. The complete checkout,
+frontend NPM dependencies, compatible Chromium141 and WPE-WebKit26.5, local native
+libraries and all13 byte-matching original fonts are restored. Both native
+browsers start and reach localhost HTTP200; no browser/network/sandbox bypass.
+Full original production build passes151 tests, localization release gate,
+project TypeScript and Vite. Original1740 hulls/95,450,326bytes are retained.
+
+The unchanged verifier with CRYPTOID_STARTUP_ROUTE_FLOW=1 passes Chromium's
+seven startup cases and Home/Play/Pause/Resume/Home. The first WPE route fails
+after Home/Play. New collector now actually captures reason=loop-stall,
+phase=SECTOR_INTRO, sector1/block1, diagnostics.state=read and native pause pixels.
+No JS/console/HTTP errors or document replacement. This is a visible technical
+pause, not a White Screen or OS memory-kill reproduction. Do not retroactively
+assign this reason to the older unobserved pause or infer its blocking source.
+
+A separate original WPE startup-only run passes7/7. A separate native-profiler
+route also passes, without a technical interruption. The profiler trace does
+not contain the failed interval and cannot identify its cause or supersede the
+first failed route. No rejected renderer/cache/clip experiment is repeated.
+No new runtime correction follows. Keep strict >2500ms and500ms watcher, explicit
+Resume and all original game/account/audio behavior. No automatic continuation,
+publication, main merge, fixed-ref movement, owner campaign/purchase/data-clear
+request or claim of full-game/iPhone acceptance. Automatic deployment stays off.
+See docs/webkit-cold-start-investigation-20261024.md/.json and retained evidence.
+
 ## White-Screen priority and startup recovery, 23 October 2026, prepared
 
 The owner again asks to continue and explicitly gives White Screens highest

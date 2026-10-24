@@ -1,0 +1,80 @@
+[
+  {
+    "url": "https://fonts.gstatic.com/s/dmmono/v16/aFTU7PB1QTsUX8KYhh0.ttf",
+    "path": "font-00.ttf",
+    "bytes": 44784,
+    "sha256": "c97fcd822f825e9e731867b650a39ee678b609bead29385e320171b573ec0910"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/dmmono/v16/aFTR7PB1QTsUX8KYvumzIYQ.ttf",
+    "path": "font-01.ttf",
+    "bytes": 45308,
+    "sha256": "dd60d0861a3efd540efc3f2f85e7a7fd69a7ece7eadf44aaffa5fc5c86adda0e"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/oxanium/v21/RrQPboN_4yJ0JmiMUW7sIGjd1IA9G817fniM.ttf",
+    "path": "font-02.ttf",
+    "bytes": 28420,
+    "sha256": "109f93e40ad9112766699347a94955300c5944b9b087f878ed8581e6ae33644d"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/oxanium/v21/RrQPboN_4yJ0JmiMUW7sIGjd1IA9G82XeXiM.ttf",
+    "path": "font-03.ttf",
+    "bytes": 28416,
+    "sha256": "b12b8cda10619f3ff7bf4c658110818d4fd90d0abd0882b026e3550462a77fbc"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/oxanium/v21/RrQPboN_4yJ0JmiMUW7sIGjd1IA9G82ueXiM.ttf",
+    "path": "font-04.ttf",
+    "bytes": 28332,
+    "sha256": "ac6e97ef18247a69a70454c7a1032239b75a2d39a6f6a901583cc83bf5855cb9"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/oxanium/v21/RrQPboN_4yJ0JmiMUW7sIGjd1IA9G83JeXiM.ttf",
+    "path": "font-05.ttf",
+    "bytes": 28396,
+    "sha256": "6ef2725f9d4d38498b5af157dd8a1fc1c542eea9d87807d1ae54d2c4d5dcd5a6"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/rajdhani/v17/LDI2apCSOBg7S-QT7pb0EMOs.ttf",
+    "path": "font-06.ttf",
+    "bytes": 357212,
+    "sha256": "7377b0a3421b01dae185fc1262ea34a45f6ba226155f531e9e72f5262b56d802"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/rajdhani/v17/LDI2apCSOBg7S-QT7pbYF8Os.ttf",
+    "path": "font-07.ttf",
+    "bytes": 362824,
+    "sha256": "bcffd70c330f38f97f49fbb41cad34a1628a7852c0e6d1d1418ebc162add3144"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/rajdhani/v17/LDI2apCSOBg7S-QT7pa8FsOs.ttf",
+    "path": "font-08.ttf",
+    "bytes": 372568,
+    "sha256": "8b2fbb04ed3af38ea941d7351fc5bcf917d239d0bfb64c9bb8916510d8774495"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf",
+    "path": "font-09.ttf",
+    "bytes": 69360,
+    "sha256": "ec926d5065eaca49a48f96e312bbae0bbc5733c24215cf5dfabbdccee926fef7"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf",
+    "path": "font-10.ttf",
+    "bytes": 69416,
+    "sha256": "3e699ead1876244fa392243054ddefe7cf631b488438828a8a100731a22ab995"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf",
+    "path": "font-11.ttf",
+    "bytes": 69356,
+    "sha256": "6c0346b8d297ebdc225832833e03e884a26ad99d265ecd3924d46e1ba285ea87"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf",
+    "path": "font-12.ttf",
+    "bytes": 69308,
+    "sha256": "3e756954468ff1cb302dae0414262e72f76a67d87bef3fa1f3226cd0fb9b2d85"
+  }
+]

@@ -1,0 +1,23 @@
+const {webkit}=require(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES+'/playwright');
+const {createServer}=require('node:http');
+const fs=require('node:fs');
+(async()=>{
+  const report={engine:'wpe-webkit',browserStarted:false,localPageLoaded:false,policyBypassAttempted:false};
+  const server=createServer((req,res)=>res.end('<!doctype html><meta charset="utf-8"><title>Cryptoid local preflight</title><p id="preflight">local-server-ok</p>'));
+  await new Promise(r=>server.listen(0,'127.0.0.1',r));
+  let browser;
+  try{
+    browser=await webkit.launch({headless:true,executablePath:process.env.CRYPTOID_BROWSER_EXECUTABLE});
+    report.browserStarted=true;report.version=browser.version();
+    const page=await browser.newPage();
+    const response=await page.goto('http://127.0.0.1:'+server.address().port,{timeout:10000});
+    report.status=response.status();report.text=await page.locator('#preflight').textContent();
+    report.localPageLoaded=report.text==='local-server-ok';
+    await page.screenshot({path:'/workspace/scratch/fb7073945978/preflight-webkit.png'});
+  }catch(e){report.error={name:e.name,message:e.message};process.exitCode=1;}
+  finally{
+    console.log(JSON.stringify(report));
+    fs.writeFileSync('/workspace/scratch/fb7073945978/preflight-webkit.json',JSON.stringify(report,null,2)+'\n');
+    await browser?.close();server.closeAllConnections();server.close();
+  }
+})();

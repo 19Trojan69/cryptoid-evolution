@@ -1,0 +1,325 @@
+{
+  "date": "2026-10-24",
+  "status": "native_environment_restored_cold_webkit_loop_stall_captured_no_runtime_fix",
+  "branch": "codex/white-screen-startup-recovery-20261023",
+  "baseCommit": "33b137256eae06407985244499cc61cd0f3ef119",
+  "baseTree": "7a13be79f2f0f2a4864a92db33bfda272f5b72c3",
+  "runtimeCommit": "d84a4447e3318f06d4f28ccf7178adee28224295",
+  "runtimeFilesChanged": [],
+  "unchangedGitObjects": {
+    "frontend/src": "66f458f157bb4d52b6ebe57f92d51b52a51451b2",
+    "frontend/public": "c950106de800e1b8fbbad4e596fb62625e5baa7e",
+    "frontend/index.html": "e8bc2150e82e0ecb3745f78b8c33d5855851bec8",
+    "frontend/package.json": "4df0d43ea3c6032ca6d0152b0775d5182369d47f",
+    "frontend/yarn.lock": "9be81e73f00bc6d84e6aa584073a99d17cb6e7ac",
+    "backend": "4beb4c09147ed9e02b57e999cc6c8894c0d44653",
+    "api": "2b664582e2f6b734d2bb0cb918bb55899bdf1906",
+    "vercel.json": "0a79c1585e3a4a3babf9ba28ff4413f10e715868"
+  },
+  "watchdog": {
+    "thresholdMs": 2500,
+    "comparison": "strictly greater",
+    "watchIntervalMs": 500,
+    "unchanged": true
+  },
+  "environment": {
+    "node": "24.19.0",
+    "npm": "11.9.0",
+    "os": "Ubuntu 24.04",
+    "chromiumPlaywright": "1.56.0",
+    "webkitPlaywright": "1.62.1",
+    "nativeLibraries": "signed Ubuntu noble archives, SHA256 verified and extracted in workspace; no privileged install",
+    "policyBypassAttempted": false,
+    "preflight": {
+      "chromium": {
+        "engine": "chromium",
+        "browserStarted": true,
+        "localPageLoaded": true,
+        "policyBypassAttempted": false,
+        "version": "141.0.7390.37",
+        "status": 200,
+        "text": "local-server-ok"
+      },
+      "webkit": {
+        "engine": "wpe-webkit",
+        "browserStarted": true,
+        "localPageLoaded": true,
+        "policyBypassAttempted": false,
+        "version": "26.5",
+        "status": 200,
+        "text": "local-server-ok"
+      }
+    },
+    "originalFonts": {
+      "files": 13,
+      "bytes": 1573700,
+      "allHistoricalSha256AndSizesMatch": true
+    }
+  },
+  "build": {
+    "tests": 151,
+    "pass": 151,
+    "fail": 0,
+    "skipped": 0,
+    "typeScriptPassed": true,
+    "localizationReleaseCheckPassed": true,
+    "vitePassed": true,
+    "sourceCommit": "33b137256eae06407985244499cc61cd0f3ef119",
+    "workingTreeDirtyReported": true,
+    "paintedHullVariants": 1740,
+    "paintedHullBytes": 95450326,
+    "paintedHullRevision": "91a72bc0c36be9407915",
+    "completeLog": "production-build.log"
+  },
+  "existingToolingLint": {
+    "files": 4,
+    "passed": true,
+    "wholeProjectLintClaimed": false
+  },
+  "unmodifiedVerifier": {
+    "chromium": {
+      "startupPassed": 7,
+      "routeSteps": [
+        "home",
+        "play",
+        "pause",
+        "resume",
+        "home"
+      ],
+      "gameLifecyclePassed": true
+    },
+    "webkit": {
+      "firstRoutePassed": false,
+      "startupPassedBeforeRouteFailure": 1,
+      "routeSteps": [
+        "home",
+        "play"
+      ],
+      "failureStage": "pause-click",
+      "diagnosticsState": "read",
+      "recordedInterruptions": [
+        {
+          "reason": "loop-stall",
+          "errorName": "",
+          "phase": "SECTOR_INTRO",
+          "encounter": "normal",
+          "status": "paused",
+          "at": "2026-10-24T05:38:35.992Z",
+          "sector": 1,
+          "block": 1,
+          "width": 430,
+          "height": 825,
+          "enemies": 0,
+          "projectiles": 0,
+          "effects": 0,
+          "frameMs": 0,
+          "lastSavedAt": 0,
+          "inObservedFlow": true
+        }
+      ],
+      "failureScreenshotCaptured": true,
+      "failureScreenshotRetainedAs": "webkit-cold-pause.png",
+      "sameDocument": true,
+      "javascriptErrors": 0,
+      "consoleErrors": 0,
+      "httpErrors": 0,
+      "failedRequests": 0,
+      "missingAssets": 0,
+      "separateStartupOnlyPassed": 7
+    }
+  },
+  "additionalProfilerRun": {
+    "passed": true,
+    "scope": "instrumented short Router flow, not capture of the failed interval",
+    "routeSteps": [
+      "home",
+      "play",
+      "pause",
+      "resume",
+      "home"
+    ],
+    "timeline": {
+      "localOnly": true,
+      "platform": "Linux WPE software rendering",
+      "limit": 20000,
+      "unsupported": [],
+      "overflow": false,
+      "start": {
+        "startTime": 1.0298270000002958
+      },
+      "end": {
+        "endTime": 11.432071000001088
+      },
+      "tracePath": "/workspace/scratch/fb7073945978/timeline-cold-start.json",
+      "recordCount": 3173,
+      "scriptCount": 1184,
+      "cpuCount": 21
+    },
+    "doesNotSupersedeFirstFailure": true,
+    "applicationBundleChanged": false
+  },
+  "automaticDeploymentEnabled": false,
+  "deploymentPerformed": false,
+  "mergePerformed": false,
+  "mainnetChanged": false,
+  "testnetChanged": false,
+  "ownerCampaignRequested": false,
+  "purchasesPerformed": false,
+  "ownerBrowserDataDeleted": false,
+  "automaticResumePerformed": false,
+  "limits": [
+    "The source of the delayed callback interval is not established.",
+    "The profiler route passed and does not capture the failing interval.",
+    "The complete game/campaign acceptance is not passed.",
+    "Historical iPhone White Screens and current memory cause remain open.",
+    "No physical iPhone, Pi authentication, real payments, durable game-save or long-term native memory proof.",
+    "The new pause reason is evidence for this run; the older unobserved pause remains unattributed."
+  ],
+  "evidenceFiles": [
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/browser-system-dependencies.log",
+      "bytes": 1137,
+      "sha256": "dae30932e726f356963c1184317759081d77dc5c148e6ede053830a04f19d89a"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/chromium-sdk-held.png",
+      "bytes": 78938,
+      "sha256": "895d372f139e7b17658836e54a5a6fd07ccc44c01b77db9044068938f529f191"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/frontend-dependencies.log",
+      "bytes": 471,
+      "sha256": "95f4d2b650d3e4541d8d7f266f2bf083de96215086da93491447fa409390589a"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/frontend-installed-dependencies.json",
+      "bytes": 2745,
+      "sha256": "c387e556c102cd314489c32a9e4ffbae80998195433ece27676ba53af2c170c1"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/native-libraries.json",
+      "bytes": 5279,
+      "sha256": "fd73cf7c0784ae6f9ddccb6f82f5efae70c4d82b2b7f8804aaa3bf1cd84e3f6a"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/preflight-chromium.json",
+      "bytes": 190,
+      "sha256": "28cfa5c9d1541c9adfaf29891125680fe43d10841514bc4bb29fce2b6a3b7ba3"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/preflight-chromium.png",
+      "bytes": 5857,
+      "sha256": "ef46437e856f7ee84d860cf4dd8915061876757f2f8d27dddcbbb381bfd4cdd9"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/preflight-webkit.cjs.txt",
+      "bytes": 1400,
+      "sha256": "ae507d6707a6e1eb3cd04751ab53f29c12ba1aef9b14620c14dcc3d6c35c76e8"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/preflight-webkit.json",
+      "bytes": 183,
+      "sha256": "07fe3afc7eb51ebff40004735c0213d4fc038c1fd727a9da4c4103fc9b140e86"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/preflight-webkit.png",
+      "bytes": 7909,
+      "sha256": "824028fef271fff7766d2d2eb65460fe92663ce0ec88625f76269e341b1fd4fe"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/prepare-native-libraries.py.txt",
+      "bytes": 2503,
+      "sha256": "cdfc8f62cb4dd83166792cfa42cd30fbf349d219df5034b07d534a73fd2d5a17"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/production-build.log",
+      "bytes": 22781,
+      "sha256": "9f3e2ba63b12e8e2b6894c020fded0f512fa04b69c61f9532381eb80fe7360b5"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/profile-host.mjs.txt",
+      "bytes": 14883,
+      "sha256": "2458e82f9608201d2ff14114afcd349a2a42a66185c529c00d1f4e72a3b6d98b"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/profile-route-webkit.json",
+      "bytes": 20888,
+      "sha256": "fc3b5552f8276806e13c3e68d986717caab139bb1722ba8c2c60bd67d561f47d"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/profile-route-webkit.log",
+      "bytes": 701,
+      "sha256": "70eedacb9dd3f3f3f268250b886a85eebafae0e06d4133b37ebbcab129d0c86b"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/route-font-manifest.json",
+      "bytes": 3009,
+      "sha256": "8c15171ebeeaf79be3ac504b2926ad3d601647512378f994083c0d5ecae7c04c"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/route-fonts.css",
+      "bytes": 2848,
+      "sha256": "59a51d8a378fb916a3178c7d3667acb2b6535ff804f062eac5ac1a27b87c60d5"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/startup-only-webkit.json",
+      "bytes": 11833,
+      "sha256": "3effdc3bf0e67b733f5c8c23ab9d03f8dd2f41a487f2d982b808216d6e0c6024"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/startup-only-webkit.log",
+      "bytes": 701,
+      "sha256": "70eedacb9dd3f3f3f268250b886a85eebafae0e06d4133b37ebbcab129d0c86b"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/startup-route-chromium.json",
+      "bytes": 20527,
+      "sha256": "d858f1518df3358121a877025b67ac48dfc95a3c6084cfacb16afa41e49906df"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/startup-route-chromium.log",
+      "bytes": 715,
+      "sha256": "890d5cb06d563b467d8246ef5c1dd15abeacb70b433baf71c3ba5ccd9f922420"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/startup-route-webkit.json",
+      "bytes": 11192,
+      "sha256": "e3bc08e06cf24fe9c055748a7d0bac3dec6a9455cdbaf5f7a32cbf9e021e754c"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/startup-route-webkit.log",
+      "bytes": 3362,
+      "sha256": "1c4aa3cc1546386b5a298202bf6768965cd52c04361615ffb0cf01bb368e6f89"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/startup-tooling-lint.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/timeline-cold-start.json",
+      "bytes": 1233961,
+      "sha256": "43e86c1b6d5b1453affd07a68471ff51068eb246a334b543e8917618a6450113"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/ubuntu-noble-InRelease.txt",
+      "bytes": 255850,
+      "sha256": "cdb2f31d809f589719a53c6ad15f255b27569c4059542ada282aaa21b8e164b0"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/webkit-cold-pause.png",
+      "bytes": 353931,
+      "sha256": "b7699d2966296575eb7f741bb749e0ff31dbafcc173c7724d1ddfa342eb29af2"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/webkit-sdk-held.png",
+      "bytes": 91236,
+      "sha256": "a98fec6c8395e09487d4db3099135c2573346a20caf0aa408fed0ee268291389"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024.md",
+      "bytes": 10577,
+      "sha256": "e250f5c00f4278dfacadc5476a6192e5320cc17ab019b872faf926c516f4ab13"
+    }
+  ]
+}

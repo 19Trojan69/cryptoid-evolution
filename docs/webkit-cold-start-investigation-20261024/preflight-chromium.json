@@ -1,0 +1,9 @@
+{
+  "engine": "chromium",
+  "browserStarted": true,
+  "localPageLoaded": true,
+  "policyBypassAttempted": false,
+  "version": "141.0.7390.37",
+  "status": 200,
+  "text": "local-server-ok"
+}

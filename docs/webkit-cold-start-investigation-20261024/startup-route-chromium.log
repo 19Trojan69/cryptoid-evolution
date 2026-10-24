@@ -1,0 +1,7 @@
+{"engine":"chromium","fault":"healthy","passed":true,"navigations":1,"bodyExistedAtRecovery":true}
+{"engine":"chromium","fault":"sdk-held","passed":true,"navigations":1,"bodyExistedAtRecovery":true}
+{"engine":"chromium","fault":"entry-failed","passed":true,"navigations":2,"bodyExistedAtRecovery":true}
+{"engine":"chromium","fault":"entry-held","passed":true,"navigations":1,"bodyExistedAtRecovery":true}
+{"engine":"chromium","fault":"shop-held","passed":true,"navigations":1,"bodyExistedAtRecovery":true}
+{"engine":"chromium","fault":"entry-throws","passed":true,"navigations":2,"bodyExistedAtRecovery":true}
+{"engine":"chromium","fault":"entry-offline","passed":true,"navigations":2,"bodyExistedAtRecovery":true}

@@ -1,0 +1,438 @@
+{
+  "passed": true,
+  "localOnly": true,
+  "productionBundle": true,
+  "gameplayHooks": false,
+  "limitations": "Linux native browsers with controlled transport faults. Storage sentinels are synthetic, not real account saves. No OS process kill, iPhone memory-limit recovery or historical White Screen cause established. Lifecycle snapshots add measurement overhead; a missing diagnostic record does not establish a pause cause.",
+  "includesGameLifecycle": false,
+  "htmlSha256": "79a1e79c6ad4673a24394a94ad169ed7c6ca3418d4906f6dd6217b6b5a1ed082",
+  "sourceHtmlSha256": "6b82adfec544fcbbfd064f49064b4b90b370291ce412e0e2a9ee13f66ccd7acf",
+  "moduleEntry": "/assets/index-CjIeegmj.js",
+  "api": [
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    }
+  ],
+  "missing": [],
+  "results": [
+    {
+      "fault": "healthy",
+      "startupPassed": true,
+      "gameLifecyclePassed": null,
+      "errors": [],
+      "consoleErrors": [],
+      "failed": [],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "home-ready",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "fault": "sdk-held",
+      "startupPassed": true,
+      "gameLifecyclePassed": null,
+      "errors": [],
+      "consoleErrors": [],
+      "failed": [],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "recovery-visible",
+          "navigations": 1,
+          "readyState": "loading",
+          "bodyPresent": true,
+          "rootChildren": 0,
+          "panel": {
+            "language": "de",
+            "text": "Diese Seite konnte nicht geladen werden.\n\nLade die aktuelle Version neu. Deine gespeicherten Daten bleiben erhalten.\n\nSeite neu laden\nZur Startseite",
+            "role": "alert",
+            "box": [
+              0,
+              0,
+              430,
+              825
+            ]
+          },
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": []
+        },
+        {
+          "label": "home-ready",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "fault": "entry-failed",
+      "startupPassed": true,
+      "gameLifecyclePassed": null,
+      "errors": [],
+      "consoleErrors": [
+        {
+          "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "path": "/assets/index-CjIeegmj.js"
+        }
+      ],
+      "failed": [
+        {
+          "path": "/assets/index-CjIeegmj.js",
+          "error": "Load request cancelled"
+        }
+      ],
+      "httpErrors": [
+        {
+          "path": "/assets/index-CjIeegmj.js",
+          "status": 404
+        }
+      ],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "recovery-visible",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 0,
+          "panel": {
+            "language": "de",
+            "text": "Diese Seite konnte nicht geladen werden.\n\nLade die aktuelle Version neu. Deine gespeicherten Daten bleiben erhalten.\n\nSeite neu laden\nZur Startseite",
+            "role": "alert",
+            "box": [
+              0,
+              0,
+              430,
+              825
+            ]
+          },
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        },
+        {
+          "label": "home-ready",
+          "navigations": 2,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "fault": "entry-held",
+      "startupPassed": true,
+      "gameLifecyclePassed": null,
+      "errors": [],
+      "consoleErrors": [],
+      "failed": [],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "recovery-visible",
+          "navigations": 1,
+          "readyState": "interactive",
+          "bodyPresent": true,
+          "rootChildren": 0,
+          "panel": {
+            "language": "de",
+            "text": "Diese Seite konnte nicht geladen werden.\n\nLade die aktuelle Version neu. Deine gespeicherten Daten bleiben erhalten.\n\nSeite neu laden\nZur Startseite",
+            "role": "alert",
+            "box": [
+              0,
+              0,
+              430,
+              825
+            ]
+          },
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        },
+        {
+          "label": "home-ready",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "fault": "shop-held",
+      "startupPassed": true,
+      "gameLifecyclePassed": null,
+      "errors": [],
+      "consoleErrors": [],
+      "failed": [],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "recovery-visible",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 0,
+          "panel": {
+            "language": "de",
+            "text": "Diese Seite konnte nicht geladen werden.\n\nLade die aktuelle Version neu. Deine gespeicherten Daten bleiben erhalten.\n\nSeite neu laden\nZur Startseite",
+            "role": "alert",
+            "box": [
+              0,
+              0,
+              430,
+              825
+            ]
+          },
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        },
+        {
+          "label": "home-ready",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "fault": "entry-throws",
+      "startupPassed": true,
+      "gameLifecyclePassed": null,
+      "errors": [
+        "Controlled startup module exception"
+      ],
+      "consoleErrors": [],
+      "failed": [],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "recovery-visible",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 0,
+          "panel": {
+            "language": "de",
+            "text": "Diese Seite konnte nicht geladen werden.\n\nLade die aktuelle Version neu. Deine gespeicherten Daten bleiben erhalten.\n\nSeite neu laden\nZur Startseite",
+            "role": "alert",
+            "box": [
+              0,
+              0,
+              430,
+              825
+            ]
+          },
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        },
+        {
+          "label": "home-ready",
+          "navigations": 2,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "fault": "entry-offline",
+      "startupPassed": true,
+      "gameLifecyclePassed": null,
+      "errors": [],
+      "consoleErrors": [],
+      "failed": [
+        {
+          "path": "/assets/index-CjIeegmj.js",
+          "error": "Blocked by Web Inspector"
+        }
+      ],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "recovery-visible",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 0,
+          "panel": {
+            "language": "de",
+            "text": "Diese Seite konnte nicht geladen werden.\n\nLade die aktuelle Version neu. Deine gespeicherten Daten bleiben erhalten.\n\nSeite neu laden\nZur Startseite",
+            "role": "alert",
+            "box": [
+              0,
+              0,
+              430,
+              825
+            ]
+          },
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        },
+        {
+          "label": "home-ready",
+          "navigations": 2,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "engine": "webkit",
+  "version": "26.5"
+}
