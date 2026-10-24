@@ -1,0 +1,16 @@
+✔ guest fixture cannot access a stored session or redirect to OAuth (1.129623ms)
+✔ every preview fixture is disabled outside Preview (0.23775ms)
+✔ allowed reads never manufacture a user, inventory, rewards or leaderboard (0.827388ms)
+✔ account/payment/game mutations and admin routes are denied (0.225032ms)
+✔ Vercel rewrite handler returns guest response without cookies (0.353441ms)
+✔ SDK denies authentication and payment without contacting Pi (1.55506ms)
+✔ production packaging aborts before touching output (1.144726ms)
+✔ packaged original entry/init/startup guard survive with isolated transport (1.885906ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 134.941388
