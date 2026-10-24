@@ -1,0 +1,13 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.goto: net::ERR_BLOCKED_BY_ADMINISTRATOR at http://127.0.0.1:46331/
+Call log:
+  - navigating to "http://127.0.0.1:46331/", waiting until "load"
+
+    at /mnt/data/cryptoid-lifecycle-work/frontend/scripts/verifyStartupLifecycleEvidence.mjs:35:18 {
+  name: 'Error'
+}
+
+Node.js v22.16.0

@@ -7,6 +7,7 @@ import { readFileSync, writeFileSync, existsSync, statSync } from 'node:fs';
 import { resolve, extname, sep } from 'node:path';
 import { createRequire } from 'node:module';
 import { createHash } from 'node:crypto';
+import { captureLifecycleState, captureLifecycleFailure, assertLifecycleState } from './startupLifecycleEvidence.mjs';
 
 const root = new URL('../', import.meta.url).pathname;
 const dist = resolve(process.env.CRYPTOID_STARTUP_DIST || root + 'dist');
@@ -21,7 +22,8 @@ const fontFiles = new Map(JSON.parse(readFileSync(resolve(fixture, 'route-font-m
 const sdkUrl = 'https://sdk.minepi.com/pi-sdk.js';
 const sdk = 'window.Pi={init(options){window.__localSdkInitializations=(window.__localSdkInitializations||[]).concat(options);},getPiHostAppInfo:async()=>({hostApp:"web"})};';
 const types = { '.js': 'text/javascript', '.css': 'text/css', '.html': 'text/html', '.png': 'image/png', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.mp3': 'audio/mpeg', '.webmanifest': 'application/manifest+json' };
-const report = { localOnly: true, productionBundle: true, gameplayHooks: false,
+const report = { passed: false, localOnly: true, productionBundle: true, gameplayHooks: false,
+  limitations: 'Linux native browsers with controlled transport faults. Storage sentinels are synthetic, not real account saves. No OS process kill, iPhone memory-limit recovery or historical White Screen cause established. Lifecycle snapshots add measurement overhead; a missing diagnostic record does not establish a pause cause.',
   includesGameLifecycle: process.env.CRYPTOID_STARTUP_ROUTE_FLOW === '1',
   htmlSha256: createHash('sha256').update(originalHtml).digest('hex'),
   sourceHtmlSha256: createHash('sha256').update(readFileSync(root + 'index.html')).digest('hex'),
@@ -53,7 +55,8 @@ try {
   for (const fault of ['healthy', 'sdk-held', 'entry-failed', 'entry-held', 'shop-held', 'entry-throws', 'entry-offline']) {
     const context = await browser.newContext({ viewport: { width: 430, height: 825 }, deviceScaleFactor: 3, locale: 'de-AT' });
     let faultActive = true, navigations = 0;
-    const held = [], row = { fault, errors: [], consoleErrors: [], failed: [], httpErrors: [], unexpected: [], samples: [] }; report.results.push(row);
+    const held = [], row = { fault, startupPassed: false, gameLifecyclePassed: null, errors: [], consoleErrors: [], failed: [], httpErrors: [], unexpected: [], samples: [] }; report.results.push(row);
+    let page;
     let acknowledge;
     const faultRequested = new Promise(resolve => { acknowledge = resolve; });
     try {
@@ -75,7 +78,7 @@ try {
         if (url.startsWith(origin + '/') || url.startsWith('blob:') || url.startsWith('data:')) return route.continue();
         row.unexpected.push(url); return route.abort();
       });
-      const page = await context.newPage(); page.setDefaultTimeout(20000);
+      page = await context.newPage(); page.setDefaultTimeout(20000);
       page.on('request', req => { if (req.isNavigationRequest() && req.frame() === page.mainFrame()) navigations++; });
       page.on('pageerror', error => row.errors.push(error.message));
       page.on('console', message => { if (message.type() === 'error') row.consoleErrors.push({ text: message.text(), path: message.location().url.replace(origin, '') }); });
@@ -125,34 +128,69 @@ try {
       assert.ok(final.rootChildren > 0); assert.equal(final.panel, null);
       assert.deepEqual(final.sdkInitializations, [{ version: '2.0' }]);
       assert.equal(final.saveSentinel, '{"hearts":3,"score":173,"sector":19}'); assert.equal(final.pendingSentinel, 'keep-pending');
+      const verifyCaseErrors = () => {
+        if (held.length) throw Error('Unreleased local request');
+        assert.deepEqual(row.unexpected, []);
+        assert.deepEqual(row.errors, fault === 'entry-throws' ? ['Controlled startup module exception'] : []);
+        if (['healthy', 'sdk-held', 'entry-held', 'shop-held'].includes(fault)) assert.deepEqual(row.consoleErrors, []);
+        assert.ok(row.httpErrors.every(x => fault === 'entry-failed' && x.path === entry && x.status === 404));
+        assert.ok(row.failed.every(x => (x.path === entry && ['entry-failed', 'entry-offline'].includes(fault))
+          || (fault === 'healthy' && /^\/audio\/.*\.mp3$/.test(x.path) && ['net::ERR_ABORTED', 'Load request cancelled'].includes(x.error))));
+      };
+      verifyCaseErrors();
+      row.startupPassed = true;
       if (fault === 'healthy' && report.includesGameLifecycle) {
+        row.gameLifecyclePassed = false;
         row.routeSteps = ['home'];
+        row.lifecycleStage = 'before-play';
+        const initial = await captureLifecycleState(page, row, 'before-play');
+        assertLifecycleState(initial, 'home');
+        row.lifecycleStartedAt = initial.observedAtEpochMs;
+        row.lifecycleDocumentStartedAt = initial.documentStartedAt;
+        const observe = async (label, expected) => {
+          row.lifecycleStage = label;
+          const state = await captureLifecycleState(page, row, label);
+          assertLifecycleState(state, expected, row.lifecycleDocumentStartedAt);
+        };
+        row.lifecycleStage = 'play';
         await page.locator('.cinematic-play').click();
         await page.locator('.game-shell[data-effects-paused="false"]').waitFor();
         await page.locator('.pause-control:not([disabled])').waitFor(); row.routeSteps.push('play');
+        await observe('before-pause', 'active');
+        row.lifecycleStage = 'pause-click';
         await page.locator('.pause-control').click();
-        await page.locator('.pause-settings-overlay').waitFor(); row.routeSteps.push('pause');
+        await page.locator('.pause-settings-overlay').waitFor();
+        await observe('after-pause', 'paused'); row.routeSteps.push('pause');
+        row.lifecycleStage = 'resume-click';
         await page.locator('.pause-resume-button').click();
-        await page.locator('.game-shell[data-effects-paused="false"]').waitFor(); row.routeSteps.push('resume');
+        await page.locator('.game-shell[data-effects-paused="false"]').waitFor();
+        await observe('after-resume', 'active'); row.routeSteps.push('resume');
+        row.lifecycleStage = 'home-click';
         await page.locator('.home-control:not([disabled])').click();
         await page.locator('.game-overlay:has(#leave-mission-title) .button-primary').click();
-        await page.locator('.cinematic-play:not([disabled])').waitFor(); row.routeSteps.push('home');
+        await page.locator('.cinematic-play:not([disabled])').waitFor();
+        await observe('home-after-play', 'home'); row.routeSteps.push('home');
         assert.equal(await page.locator('#cryptoid-startup-recovery-panel').count(), 0);
         const end = await sample('home-after-play'); assert.equal(end.rootChildren, 1);
+        row.gameLifecyclePassed = true;
       }
-      if (held.length) throw Error('Unreleased local request');
-      assert.deepEqual(row.unexpected, []);
-      assert.deepEqual(row.errors, fault === 'entry-throws' ? ['Controlled startup module exception'] : []);
-      if (['healthy', 'sdk-held', 'entry-held', 'shop-held'].includes(fault)) assert.deepEqual(row.consoleErrors, []);
-      assert.ok(row.httpErrors.every(x => fault === 'entry-failed' && x.path === entry && x.status === 404));
-      assert.ok(row.failed.every(x => (x.path === entry && ['entry-failed', 'entry-offline'].includes(fault))
-        || (fault === 'healthy' && /^\/audio\/.*\.mp3$/.test(x.path) && ['net::ERR_ABORTED', 'Load request cancelled'].includes(x.error))));
+      verifyCaseErrors();
       row.passed = true; console.log(JSON.stringify({ engine, fault, passed: true, navigations, bodyExistedAtRecovery: row.samples[0].bodyPresent }));
+    } catch (error) {
+      row.passed = false;
+      if (page) await captureLifecycleFailure(page, row, error, {
+        screenshotPath: resolve(fixture, 'startup-lifecycle-' + engine + '-' + fault + '-failed.png'),
+      });
+      throw error;
     } finally { await Promise.allSettled(held.map(route => route.abort())); await context.close(); }
   }
   assert.deepEqual(report.missing, []); report.passed = true;
-  report.limitations = 'Linux native browsers with controlled transport faults. Storage sentinels are synthetic, not real account saves. No OS process kill, iPhone memory-limit recovery or historical White Screen cause established.';
 } finally {
-  await browser?.close(); server.closeAllConnections(); server.close();
-  if (process.env.CRYPTOID_STARTUP_REPORT) writeFileSync(process.env.CRYPTOID_STARTUP_REPORT, JSON.stringify(report, null, 2) + '\n');
+  // Preserve the failure evidence even if browser teardown itself rejects.
+  try {
+    if (process.env.CRYPTOID_STARTUP_REPORT) writeFileSync(process.env.CRYPTOID_STARTUP_REPORT, JSON.stringify(report, null, 2) + '\n');
+  } finally {
+    try { await browser?.close(); }
+    finally { server.closeAllConnections(); server.close(); }
+  }
 }

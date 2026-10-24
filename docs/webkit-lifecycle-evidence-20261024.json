@@ -1,0 +1,112 @@
+{
+  "date": "2026-10-24",
+  "status": "test_tooling_prepared_no_runtime_fix_no_deployment",
+  "branch": "codex/white-screen-startup-recovery-20261023",
+  "baseCommit": "23bb102c672bae89d7514a1b2e920a9a7cffea8e",
+  "baseTree": "a5b762d1f4fcd6387987a644ea71e2c38a766489",
+  "unchangedRuntimeCommit": "d84a4447e3318f06d4f28ccf7178adee28224295",
+  "unchangedFrontendSrcTree": "66f458f157bb4d52b6ebe57f92d51b52a51451b2",
+  "unchangedIndexHtmlBlob": "e8bc2150e82e0ecb3745f78b8c33d5855851bec8",
+  "unchangedVercelConfigurationBlob": "0a79c1585e3a4a3babf9ba28ff4413f10e715868",
+  "scope": "read-only failure evidence in local browser verifier, not application behavior",
+  "historicalWebkitPauseReasonCaptured": false,
+  "historicalWhiteScreenFixed": false,
+  "nodeTests": {
+    "passed": 20,
+    "failed": 0,
+    "skipped": 0,
+    "host": "controlled DOM and Page objects; actual helper source"
+  },
+  "javascriptSyntaxChecks": {
+    "passed": 4
+  },
+  "newFullBuild": false,
+  "newProjectTypecheck": false,
+  "newEslintPass": false,
+  "nativeAttempt": {
+    "engine": "chromium",
+    "version": "144.0.7559.96",
+    "scope": "synthetic audit-helper fixture only",
+    "completedCases": 0,
+    "passed": false,
+    "testPageLoaded": false,
+    "failure": "net::ERR_BLOCKED_BY_ADMINISTRATOR at local HTTP navigation",
+    "screenshots": 0,
+    "policyBypassAttempted": false
+  },
+  "webKitExecutableAvailableToInstalledPlaywright": false,
+  "workspace": {
+    "fullCheckoutRestored": false,
+    "gitFailure": "Could not resolve host: github.com",
+    "readMethod": "GitHub connector; exact base verifier and package.json blob hashes checked locally"
+  },
+  "automaticDeploymentEnabled": false,
+  "deploymentPerformed": false,
+  "mergePerformed": false,
+  "runtimeFilesChanged": [],
+  "limits": [
+    "No new actual-game browser flow",
+    "No new native WebKit acceptance",
+    "No iPhone or native memory measurement",
+    "Historical cold WebKit reason remains unknown",
+    "Read-only samples introduce measurement overhead",
+    "Native pixels unavailable because test navigation was blocked",
+    "Prior 131 build / 14 startup results remain historical, not rerun"
+  ],
+  "files": [
+    {
+      "path": "frontend/scripts/startupLifecycleEvidence.mjs",
+      "bytes": 7684,
+      "sha256": "48353f0e89e6c8fe32f312b7e9b69054a043343b13b0e0e2d20972c05a0deb68",
+      "gitBlob": "78262bd1f72405f924fe8bc6a0c8611eece82d81"
+    },
+    {
+      "path": "frontend/scripts/startupLifecycleEvidence.test.mjs",
+      "bytes": 11407,
+      "sha256": "178a4a7dbdecc5dcfece9c65768575c2f4803e41238ea146f3c4443b329846f2",
+      "gitBlob": "cfa8adecf95441ba82c40312ea13c8c00a1dbf08"
+    },
+    {
+      "path": "frontend/scripts/verifyStartupRecovery.mjs",
+      "bytes": 14191,
+      "sha256": "4dd5dbf6b2a81a6a676751ee8e55bde348abed56a86ca0eeab12e60c4eaa3c94",
+      "gitBlob": "a200da845ff366a19dc8d251f589fd85c174f9ef"
+    },
+    {
+      "path": "frontend/scripts/verifyStartupLifecycleEvidence.mjs",
+      "bytes": 6237,
+      "sha256": "8a72800fd98a32c7ccc6e0cf8d55fe0ec45698c024e98404e75f4a53bdccb0d8",
+      "gitBlob": "b05049fa5b2dfb6098a121e75fa46287cb1b36b2"
+    },
+    {
+      "path": "frontend/package.json",
+      "bytes": 3746,
+      "sha256": "05ebeccc257965a7ba6cb3cd4a0fda40300e0f1106db1347d87ea82356cb3bf8",
+      "gitBlob": "4df0d43ea3c6032ca6d0152b0775d5182369d47f"
+    },
+    {
+      "path": "docs/webkit-lifecycle-evidence-20261024.md",
+      "bytes": 5765,
+      "sha256": "ee0e0caa8984626dda73c4782357962c118ed344cdd12aab1992d9f6101b8fb1",
+      "gitBlob": "5e5535133835a1657033b6cd4dd5803c30543c27"
+    },
+    {
+      "path": "docs/webkit-lifecycle-evidence-20261024/node-tests.log",
+      "bytes": 4455,
+      "sha256": "b92b98dcfbe25192af3b62859af9f8e9dae518447945ee4e1d17be682387f756",
+      "gitBlob": "730c363bb8233cc778cee01bb785c7f31f545726"
+    },
+    {
+      "path": "docs/webkit-lifecycle-evidence-20261024/native-chromium.json",
+      "bytes": 477,
+      "sha256": "3e2977b530bc191448f6ab96254040b5731fa5d32c9f2d7e7aa87f66d70437e5",
+      "gitBlob": "feee34299c067c9a52e577f29658d9db0d5b43d9"
+    },
+    {
+      "path": "docs/webkit-lifecycle-evidence-20261024/native-chromium.log",
+      "bytes": 358,
+      "sha256": "29902aa136d28833b50d9ae558a5ddde93539a0053a04c55a972d3c4a7312f75",
+      "gitBlob": "303d02d0827857b79f13a3d045b3f0e878845fa0"
+    }
+  ]
+}

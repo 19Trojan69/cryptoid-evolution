@@ -1,0 +1,130 @@
+TAP version 13
+# Subtest: captures the existing key, exact recorded reason, visible overlay and hit interceptor
+ok 1 - captures the existing key, exact recorded reason, visible overlay and hit interceptor
+  ---
+  duration_ms: 2.719411
+  type: 'test'
+  ...
+# Subtest: does not invent a pause reason when the ring is absent
+ok 2 - does not invent a pause reason when the ring is absent
+  ---
+  duration_ms: 0.635277
+  type: 'test'
+  ...
+# Subtest: excludes old-document, pre-flow, future, performance and restart events from interruptions
+ok 3 - excludes old-document, pre-flow, future, performance and restart events from interruptions
+  ---
+  duration_ms: 0.692311
+  type: 'test'
+  ...
+# Subtest: no pre-flow baseline falsely assigns a recorded pause to the current flow
+ok 4 - no pre-flow baseline falsely assigns a recorded pause to the current flow
+  ---
+  duration_ms: 1.611477
+  type: 'test'
+  ...
+# Subtest: denied storage is explicit and raw exception text is not copied
+ok 5 - denied storage is explicit and raw exception text is not copied
+  ---
+  duration_ms: 0.689187
+  type: 'test'
+  ...
+# Subtest: malformed, wrong-shaped and oversized storage are distinct from an empty ring
+ok 6 - malformed, wrong-shaped and oversized storage are distinct from an empty ring
+  ---
+  duration_ms: 1.928745
+  type: 'test'
+  ...
+# Subtest: bounds the ring and fields and discards account, raw exception and unknown fields
+ok 7 - bounds the ring and fields and discards account, raw exception and unknown fields
+  ---
+  duration_ms: 0.908971
+  type: 'test'
+  ...
+# Subtest: rejects invalid diagnostic entries without aborting the snapshot
+ok 8 - rejects invalid diagnostic entries without aborting the snapshot
+  ---
+  duration_ms: 0.533667
+  type: 'test'
+  ...
+# Subtest: does not report a display:none overlay as visible
+ok 9 - does not report a display:none overlay as visible
+  ---
+  duration_ms: 0.972194
+  type: 'test'
+  ...
+# Subtest: captures before teardown without changing storage, navigation or gameplay
+ok 10 - captures before teardown without changing storage, navigation or gameplay
+  ---
+  duration_ms: 1.849278
+  type: 'test'
+  ...
+# Subtest: retains a bounded audit sample ring
+ok 11 - retains a bounded audit sample ring
+  ---
+  duration_ms: 16.411405
+  type: 'test'
+  ...
+# Subtest: captures evaluation rejection as unavailable evidence, never as an empty diagnostic pass
+ok 12 - captures evaluation rejection as unavailable evidence, never as an empty diagnostic pass
+  ---
+  duration_ms: 0.248035
+  type: 'test'
+  ...
+# Subtest: bounds a nonresponsive page evaluation and still attempts a screenshot
+ok 13 - bounds a nonresponsive page evaluation and still attempts a screenshot
+  ---
+  duration_ms: 7.053383
+  type: 'test'
+  ...
+# Subtest: failure capture preserves stage and original error and takes pixels after the state
+ok 14 - failure capture preserves stage and original error and takes pixels after the state
+  ---
+  duration_ms: 0.92898
+  type: 'test'
+  ...
+# Subtest: screenshot failure does not erase the state or replace the original error
+ok 15 - screenshot failure does not erase the state or replace the original error
+  ---
+  duration_ms: 0.81381
+  type: 'test'
+  ...
+# Subtest: an unexpected pause with no diagnostic cause still fails, without automatic Resume
+ok 16 - an unexpected pause with no diagnostic cause still fails, without automatic Resume
+  ---
+  duration_ms: 1.334749
+  type: 'test'
+  ...
+# Subtest: a recorded technical interruption cannot pass as the requested manual Pause
+ok 17 - a recorded technical interruption cannot pass as the requested manual Pause
+  ---
+  duration_ms: 0.857154
+  type: 'test'
+  ...
+# Subtest: unexpected document replacement and missing capture cannot pass
+ok 18 - unexpected document replacement and missing capture cannot pass
+  ---
+  duration_ms: 0.678451
+  type: 'test'
+  ...
+# Subtest: ordinary Home, active and explicit paused states pass their own assertions
+ok 19 - ordinary Home, active and explicit paused states pass their own assertions
+  ---
+  duration_ms: 1.371693
+  type: 'test'
+  ...
+# Subtest: the verifier integrates failure capture before closing the context and saves before browser teardown
+ok 20 - the verifier integrates failure capture before closing the context and saves before browser teardown
+  ---
+  duration_ms: 0.558544
+  type: 'test'
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 97.631106

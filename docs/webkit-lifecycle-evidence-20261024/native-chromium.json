@@ -1,0 +1,15 @@
+{
+  "passed": false,
+  "scope": "synthetic audit-helper fixture; NOT actual game lifecycle",
+  "engine": "chromium",
+  "actualGameTested": false,
+  "iPhoneTested": false,
+  "automaticResume": false,
+  "cases": [],
+  "pageErrors": [],
+  "version": "144.0.7559.96",
+  "error": {
+    "name": "Error",
+    "message": "page.goto: net::ERR_BLOCKED_BY_ADMINISTRATOR at http://127.0.0.1:46331/\nCall log:\n  - navigating to \"http://127.0.0.1:46331/\", waiting until \"load\"\n"
+  }
+}
