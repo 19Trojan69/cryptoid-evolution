@@ -1,0 +1,2559 @@
+{
+  "passed": true,
+  "localOnly": true,
+  "productionBundle": true,
+  "gameplayHooks": false,
+  "browserFunctionWrappers": true,
+  "limitations": "Local forwarding wrappers observe native RAF and existing 500ms intervals; measurement overhead applies. Linux native browsers with controlled transport faults. Storage sentinels are synthetic, not real account saves. No OS process kill, iPhone memory-limit recovery or historical White Screen cause established. Lifecycle snapshots add measurement overhead; a missing diagnostic record does not establish a pause cause.",
+  "includesGameLifecycle": true,
+  "htmlSha256": "79a1e79c6ad4673a24394a94ad169ed7c6ca3418d4906f6dd6217b6b5a1ed082",
+  "sourceHtmlSha256": "6b82adfec544fcbbfd064f49064b4b90b370291ce412e0e2a9ee13f66ccd7acf",
+  "moduleEntry": "/assets/index-CjIeegmj.js",
+  "api": [
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    }
+  ],
+  "missing": [],
+  "results": [
+    {
+      "fault": "healthy",
+      "startupPassed": true,
+      "gameLifecyclePassed": true,
+      "errors": [],
+      "consoleErrors": [],
+      "failed": [],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "home-ready",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        },
+        {
+          "label": "home-after-play",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "routeSteps": [
+        "home",
+        "play",
+        "pause",
+        "resume",
+        "home"
+      ],
+      "lifecycleStage": "home-after-play",
+      "lifecycleSamples": [
+        {
+          "label": "before-play",
+          "captured": true,
+          "observedAtEpochMs": 1792820897043,
+          "documentStartedAt": 1792820896612,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/",
+          "rootChildren": 1,
+          "shell": null,
+          "pauseControl": null,
+          "pauseHitTarget": null,
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "before-pause",
+          "captured": true,
+          "observedAtEpochMs": 1792820898085,
+          "documentStartedAt": 1792820896612,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              389.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-pause",
+          "captured": true,
+          "observedAtEpochMs": 1792820900285,
+          "documentStartedAt": 1792820896612,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "true"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              389.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "div",
+            "id": "",
+            "className": "game-overlay pause-settings-overlay",
+            "insidePauseControl": false
+          },
+          "pauseOverlay": {
+            "tag": "div",
+            "id": "",
+            "className": "game-overlay pause-settings-overlay",
+            "role": "dialog",
+            "visible": true,
+            "box": [
+              0,
+              0,
+              430,
+              825
+            ],
+            "pointerEvents": "auto",
+            "text": "MISSION PAUSIERTHalte die Stellung.Eine kurze Verschnaufpause.Die Cryptoids warten.Level 1 · Block 1/9 · GENESIS BELTShop & WaffenSYSTEM / EINSTELLUNGENMusik & Effekte50%›SteuerungRechtshändig›SpracheDeutsch›Anzeige›SpracheAktuelle Sprache: Deutsch◎Automatisch (Gerätesprache)⌄SteuerungMit einem Daumen steuern, mit dem anderen Power-ups aktivieren.◁Rechtshänder-Steuerung▷Linkshänder-SteuerungBerührungsempfindlichkeitSanftNormalSchnellSteuerbereichDer Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.KompaktNormalBreitStartposition des SchiffsÜber dem FingerDirekt unter dem FingerMusiklautstärkeMusiklautstärke50%0%25%50%75%100%Effektlautstärke35%0%25%50%75%100%Anzeige⛶Vollbild≋Vibration nicht verfügbar◌StandardeffekteFortsetzen",
+            "disabled": false
+          },
+          "overlays": [
+            {
+              "tag": "div",
+              "id": "",
+              "className": "game-overlay pause-settings-overlay",
+              "role": "dialog",
+              "visible": true,
+              "box": [
+                0,
+                0,
+                430,
+                825
+              ],
+              "pointerEvents": "auto",
+              "text": "MISSION PAUSIERTHalte die Stellung.Eine kurze Verschnaufpause.Die Cryptoids warten.Level 1 · Block 1/9 · GENESIS BELTShop & WaffenSYSTEM / EINSTELLUNGENMusik & Effekte50%›SteuerungRechtshändig›SpracheDeutsch›Anzeige›SpracheAktuelle Sprache: Deutsch◎Automatisch (Gerätesprache)⌄SteuerungMit einem Daumen steuern, mit dem anderen Power-ups aktivieren.◁Rechtshänder-Steuerung▷Linkshänder-SteuerungBerührungsempfindlichkeitSanftNormalSchnellSteuerbereichDer Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.KompaktNormalBreitStartposition des SchiffsÜber dem FingerDirekt unter dem FingerMusiklautstärkeMusiklautstärke50%0%25%50%75%100%Effektlautstärke35%0%25%50%75%100%Anzeige⛶Vollbild≋Vibration nicht verfügbar◌StandardeffekteFortsetzen",
+              "disabled": false
+            }
+          ],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-resume",
+          "captured": true,
+          "observedAtEpochMs": 1792820904605,
+          "documentStartedAt": 1792820896612,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              389.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "home-after-play",
+          "captured": true,
+          "observedAtEpochMs": 1792820906306,
+          "documentStartedAt": 1792820896612,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/",
+          "rootChildren": 1,
+          "shell": null,
+          "pauseControl": null,
+          "pauseHitTarget": null,
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        }
+      ],
+      "lifecycleStartedAt": 1792820897043,
+      "lifecycleDocumentStartedAt": 1792820896612,
+      "passed": true,
+      "callbackAudit": {
+        "localOnly": true,
+        "browserFunctionWrappers": true,
+        "newTimers": 0,
+        "newRafChains": 0,
+        "clockChanged": false,
+        "automaticResume": false,
+        "limit": 512,
+        "dropped": 0,
+        "fault": null,
+        "documentStartedAt": 1792820896612,
+        "observedAtEpochMs": 1792820906312,
+        "events": [
+          {
+            "nowMs": 135,
+            "kind": "raf-request",
+            "id": 1,
+            "requestedAtMs": 135
+          },
+          {
+            "nowMs": 135,
+            "kind": "raf-start",
+            "id": 1,
+            "requestedAtMs": 135,
+            "timestamp": 134
+          },
+          {
+            "nowMs": 135,
+            "kind": "raf-end",
+            "id": 1,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 353,
+            "kind": "raf-request",
+            "id": 2,
+            "requestedAtMs": 353
+          },
+          {
+            "nowMs": 374,
+            "kind": "interval-500-scheduled",
+            "id": 6,
+            "scheduledAtMs": 374,
+            "sourceStack": "@web-inspector://bootstrap.js:53:34\n@http://127.0.0.1:35643/assets/Shop-tIXpZ6Qi.js:2:84515\njs@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:96159\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119563\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119543\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119584\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119543\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119543\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119543\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119543\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119543\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119609\nzd@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:134382\n@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:131288\nUe@http://127.0.0.1:35643/assets/index-CjIeegmj.js:2:11605"
+          },
+          {
+            "nowMs": 377,
+            "kind": "raf-request",
+            "id": 3,
+            "requestedAtMs": 377
+          },
+          {
+            "nowMs": 537,
+            "kind": "raf-start",
+            "id": 3,
+            "requestedAtMs": 377,
+            "timestamp": 535
+          },
+          {
+            "nowMs": 538,
+            "kind": "raf-request",
+            "id": 5,
+            "requestedAtMs": 538
+          },
+          {
+            "nowMs": 538,
+            "kind": "raf-end",
+            "id": 3,
+            "durationMs": 1
+          },
+          {
+            "nowMs": 539,
+            "kind": "raf-request",
+            "id": 7,
+            "requestedAtMs": 539
+          },
+          {
+            "nowMs": 539,
+            "kind": "raf-request",
+            "id": 8,
+            "requestedAtMs": 539
+          },
+          {
+            "nowMs": 786,
+            "kind": "raf-start",
+            "id": 8,
+            "requestedAtMs": 539,
+            "timestamp": 785
+          },
+          {
+            "nowMs": 787,
+            "kind": "raf-request",
+            "id": 9,
+            "requestedAtMs": 787
+          },
+          {
+            "nowMs": 787,
+            "kind": "raf-end",
+            "id": 8,
+            "durationMs": 1
+          },
+          {
+            "nowMs": 795,
+            "kind": "raf-start",
+            "id": 9,
+            "requestedAtMs": 787,
+            "timestamp": 794
+          },
+          {
+            "nowMs": 795,
+            "kind": "raf-request",
+            "id": 10,
+            "requestedAtMs": 795
+          },
+          {
+            "nowMs": 795,
+            "kind": "raf-end",
+            "id": 9,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 798,
+            "kind": "raf-start",
+            "id": 10,
+            "requestedAtMs": 795,
+            "timestamp": 798
+          },
+          {
+            "nowMs": 798,
+            "kind": "raf-request",
+            "id": 11,
+            "requestedAtMs": 798
+          },
+          {
+            "nowMs": 798,
+            "kind": "raf-end",
+            "id": 10,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 991,
+            "kind": "raf-start",
+            "id": 11,
+            "requestedAtMs": 798,
+            "timestamp": 991
+          },
+          {
+            "nowMs": 991,
+            "kind": "raf-request",
+            "id": 12,
+            "requestedAtMs": 991
+          },
+          {
+            "nowMs": 991,
+            "kind": "raf-end",
+            "id": 11,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 1005,
+            "kind": "interval-500-start",
+            "id": 6
+          },
+          {
+            "nowMs": 1005,
+            "kind": "interval-500-end",
+            "id": 6,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 1112,
+            "kind": "interval-500-scheduled",
+            "id": 11,
+            "scheduledAtMs": 1112,
+            "sourceStack": "@web-inspector://bootstrap.js:53:34\nwd@http://127.0.0.1:35643/assets/GamePage-Cb7ozM88.js:1:43449\n@http://127.0.0.1:35643/assets/GamePage-Cb7ozM88.js:1:197737\njs@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:96159\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119563\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119543\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119543\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119584\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119543\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119543\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119543\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119543\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119543\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119609\nzd@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:134382\nkf@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:137765\nIs@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:136330\nSd@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:133971\nxw@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:131552\npf@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:131016\nrf@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:126365\nnf@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:125648\nyf@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:137661\nUe@http://127.0.0.1:35643/assets/index-CjIeegmj.js:2:11605"
+          },
+          {
+            "nowMs": 1112,
+            "kind": "raf-request",
+            "id": 13,
+            "requestedAtMs": 1112
+          },
+          {
+            "nowMs": 1118,
+            "kind": "raf-start",
+            "id": 13,
+            "requestedAtMs": 1112,
+            "timestamp": 1116
+          },
+          {
+            "nowMs": 1122,
+            "kind": "raf-request",
+            "id": 14,
+            "requestedAtMs": 1122
+          },
+          {
+            "nowMs": 1122,
+            "kind": "raf-end",
+            "id": 13,
+            "durationMs": 4
+          },
+          {
+            "nowMs": 1612,
+            "kind": "interval-500-start",
+            "id": 11
+          },
+          {
+            "nowMs": 1612,
+            "kind": "interval-500-end",
+            "id": 11,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 2112,
+            "kind": "interval-500-start",
+            "id": 11
+          },
+          {
+            "nowMs": 2112,
+            "kind": "interval-500-end",
+            "id": 11,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 2419,
+            "kind": "raf-start",
+            "id": 14,
+            "requestedAtMs": 1122,
+            "timestamp": 2419
+          },
+          {
+            "nowMs": 2419,
+            "kind": "raf-request",
+            "id": 16,
+            "requestedAtMs": 2419
+          },
+          {
+            "nowMs": 2419,
+            "kind": "raf-end",
+            "id": 14,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 2771,
+            "kind": "interval-500-start",
+            "id": 11
+          },
+          {
+            "nowMs": 2771,
+            "kind": "interval-500-end",
+            "id": 11,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 3271,
+            "kind": "interval-500-start",
+            "id": 11
+          },
+          {
+            "nowMs": 3271,
+            "kind": "interval-500-end",
+            "id": 11,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 3377,
+            "kind": "raf-start",
+            "id": 16,
+            "requestedAtMs": 2419,
+            "timestamp": 3376
+          },
+          {
+            "nowMs": 3378,
+            "kind": "raf-request",
+            "id": 18,
+            "requestedAtMs": 3377
+          },
+          {
+            "nowMs": 3378,
+            "kind": "raf-end",
+            "id": 16,
+            "durationMs": 1
+          },
+          {
+            "nowMs": 3593,
+            "kind": "raf-start",
+            "id": 18,
+            "requestedAtMs": 3377,
+            "timestamp": 3593
+          },
+          {
+            "nowMs": 3594,
+            "kind": "raf-request",
+            "id": 19,
+            "requestedAtMs": 3594
+          },
+          {
+            "nowMs": 3594,
+            "kind": "raf-end",
+            "id": 18,
+            "durationMs": 1
+          },
+          {
+            "nowMs": 3597,
+            "kind": "raf-start",
+            "id": 19,
+            "requestedAtMs": 3594,
+            "timestamp": 3597
+          },
+          {
+            "nowMs": 3597,
+            "kind": "raf-request",
+            "id": 20,
+            "requestedAtMs": 3597
+          },
+          {
+            "nowMs": 3597,
+            "kind": "raf-end",
+            "id": 19,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 3771,
+            "kind": "interval-500-start",
+            "id": 11
+          },
+          {
+            "nowMs": 3771,
+            "kind": "interval-500-end",
+            "id": 11,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 3925,
+            "kind": "raf-start",
+            "id": 20,
+            "requestedAtMs": 3597,
+            "timestamp": 3923
+          },
+          {
+            "nowMs": 3927,
+            "kind": "raf-request",
+            "id": 22,
+            "requestedAtMs": 3927
+          },
+          {
+            "nowMs": 3927,
+            "kind": "raf-end",
+            "id": 20,
+            "durationMs": 2
+          },
+          {
+            "nowMs": 4271,
+            "kind": "interval-500-start",
+            "id": 11
+          },
+          {
+            "nowMs": 4272,
+            "kind": "interval-500-end",
+            "id": 11,
+            "durationMs": 1
+          },
+          {
+            "nowMs": 4666,
+            "kind": "raf-start",
+            "id": 22,
+            "requestedAtMs": 3927,
+            "timestamp": 4665
+          },
+          {
+            "nowMs": 4666,
+            "kind": "raf-request",
+            "id": 24,
+            "requestedAtMs": 4666
+          },
+          {
+            "nowMs": 4666,
+            "kind": "raf-end",
+            "id": 22,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 4671,
+            "kind": "raf-start",
+            "id": 24,
+            "requestedAtMs": 4666,
+            "timestamp": 4670
+          },
+          {
+            "nowMs": 4671,
+            "kind": "raf-request",
+            "id": 25,
+            "requestedAtMs": 4671
+          },
+          {
+            "nowMs": 4671,
+            "kind": "raf-end",
+            "id": 24,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 4673,
+            "kind": "raf-start",
+            "id": 25,
+            "requestedAtMs": 4671,
+            "timestamp": 4673
+          },
+          {
+            "nowMs": 4673,
+            "kind": "raf-request",
+            "id": 26,
+            "requestedAtMs": 4673
+          },
+          {
+            "nowMs": 4673,
+            "kind": "raf-end",
+            "id": 25,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 4774,
+            "kind": "interval-500-start",
+            "id": 11
+          },
+          {
+            "nowMs": 4774,
+            "kind": "interval-500-end",
+            "id": 11,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 5055,
+            "kind": "raf-start",
+            "id": 26,
+            "requestedAtMs": 4673,
+            "timestamp": 5053
+          },
+          {
+            "nowMs": 5055,
+            "kind": "raf-request",
+            "id": 27,
+            "requestedAtMs": 5055
+          },
+          {
+            "nowMs": 5055,
+            "kind": "raf-end",
+            "id": 26,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 5278,
+            "kind": "interval-500-start",
+            "id": 11
+          },
+          {
+            "nowMs": 5278,
+            "kind": "interval-500-end",
+            "id": 11,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 5782,
+            "kind": "interval-500-start",
+            "id": 11
+          },
+          {
+            "nowMs": 5782,
+            "kind": "interval-500-end",
+            "id": 11,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 5802,
+            "kind": "raf-start",
+            "id": 27,
+            "requestedAtMs": 5055,
+            "timestamp": 5801
+          },
+          {
+            "nowMs": 5802,
+            "kind": "raf-request",
+            "id": 28,
+            "requestedAtMs": 5802
+          },
+          {
+            "nowMs": 5802,
+            "kind": "raf-end",
+            "id": 27,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6171,
+            "kind": "raf-start",
+            "id": 28,
+            "requestedAtMs": 5802,
+            "timestamp": 6171
+          },
+          {
+            "nowMs": 6171,
+            "kind": "raf-request",
+            "id": 29,
+            "requestedAtMs": 6171
+          },
+          {
+            "nowMs": 6171,
+            "kind": "raf-end",
+            "id": 28,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6188,
+            "kind": "raf-start",
+            "id": 29,
+            "requestedAtMs": 6171,
+            "timestamp": 6188
+          },
+          {
+            "nowMs": 6188,
+            "kind": "raf-request",
+            "id": 30,
+            "requestedAtMs": 6188
+          },
+          {
+            "nowMs": 6188,
+            "kind": "raf-end",
+            "id": 29,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6204,
+            "kind": "raf-start",
+            "id": 30,
+            "requestedAtMs": 6188,
+            "timestamp": 6204
+          },
+          {
+            "nowMs": 6204,
+            "kind": "raf-request",
+            "id": 31,
+            "requestedAtMs": 6204
+          },
+          {
+            "nowMs": 6204,
+            "kind": "raf-end",
+            "id": 30,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6220,
+            "kind": "raf-start",
+            "id": 31,
+            "requestedAtMs": 6204,
+            "timestamp": 6220
+          },
+          {
+            "nowMs": 6220,
+            "kind": "raf-request",
+            "id": 32,
+            "requestedAtMs": 6220
+          },
+          {
+            "nowMs": 6220,
+            "kind": "raf-end",
+            "id": 31,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6236,
+            "kind": "raf-start",
+            "id": 32,
+            "requestedAtMs": 6220,
+            "timestamp": 6236
+          },
+          {
+            "nowMs": 6236,
+            "kind": "raf-request",
+            "id": 33,
+            "requestedAtMs": 6236
+          },
+          {
+            "nowMs": 6236,
+            "kind": "raf-end",
+            "id": 32,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6252,
+            "kind": "raf-start",
+            "id": 33,
+            "requestedAtMs": 6236,
+            "timestamp": 6252
+          },
+          {
+            "nowMs": 6252,
+            "kind": "raf-request",
+            "id": 34,
+            "requestedAtMs": 6252
+          },
+          {
+            "nowMs": 6252,
+            "kind": "raf-end",
+            "id": 33,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6269,
+            "kind": "raf-start",
+            "id": 34,
+            "requestedAtMs": 6252,
+            "timestamp": 6268
+          },
+          {
+            "nowMs": 6269,
+            "kind": "raf-request",
+            "id": 35,
+            "requestedAtMs": 6269
+          },
+          {
+            "nowMs": 6269,
+            "kind": "raf-end",
+            "id": 34,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6285,
+            "kind": "raf-start",
+            "id": 35,
+            "requestedAtMs": 6269,
+            "timestamp": 6285
+          },
+          {
+            "nowMs": 6285,
+            "kind": "raf-request",
+            "id": 36,
+            "requestedAtMs": 6285
+          },
+          {
+            "nowMs": 6285,
+            "kind": "raf-end",
+            "id": 35,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6286,
+            "kind": "interval-500-start",
+            "id": 11
+          },
+          {
+            "nowMs": 6286,
+            "kind": "interval-500-end",
+            "id": 11,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6301,
+            "kind": "raf-start",
+            "id": 36,
+            "requestedAtMs": 6285,
+            "timestamp": 6301
+          },
+          {
+            "nowMs": 6301,
+            "kind": "raf-request",
+            "id": 37,
+            "requestedAtMs": 6301
+          },
+          {
+            "nowMs": 6301,
+            "kind": "raf-end",
+            "id": 36,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6317,
+            "kind": "raf-start",
+            "id": 37,
+            "requestedAtMs": 6301,
+            "timestamp": 6317
+          },
+          {
+            "nowMs": 6317,
+            "kind": "raf-request",
+            "id": 38,
+            "requestedAtMs": 6317
+          },
+          {
+            "nowMs": 6317,
+            "kind": "raf-end",
+            "id": 37,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6333,
+            "kind": "raf-start",
+            "id": 38,
+            "requestedAtMs": 6317,
+            "timestamp": 6333
+          },
+          {
+            "nowMs": 6333,
+            "kind": "raf-request",
+            "id": 39,
+            "requestedAtMs": 6333
+          },
+          {
+            "nowMs": 6333,
+            "kind": "raf-end",
+            "id": 38,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6349,
+            "kind": "raf-start",
+            "id": 39,
+            "requestedAtMs": 6333,
+            "timestamp": 6349
+          },
+          {
+            "nowMs": 6349,
+            "kind": "raf-request",
+            "id": 40,
+            "requestedAtMs": 6349
+          },
+          {
+            "nowMs": 6349,
+            "kind": "raf-end",
+            "id": 39,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6365,
+            "kind": "raf-start",
+            "id": 40,
+            "requestedAtMs": 6349,
+            "timestamp": 6365
+          },
+          {
+            "nowMs": 6365,
+            "kind": "raf-request",
+            "id": 41,
+            "requestedAtMs": 6365
+          },
+          {
+            "nowMs": 6365,
+            "kind": "raf-end",
+            "id": 40,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6381,
+            "kind": "raf-start",
+            "id": 41,
+            "requestedAtMs": 6365,
+            "timestamp": 6381
+          },
+          {
+            "nowMs": 6381,
+            "kind": "raf-request",
+            "id": 42,
+            "requestedAtMs": 6381
+          },
+          {
+            "nowMs": 6381,
+            "kind": "raf-end",
+            "id": 41,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6397,
+            "kind": "raf-start",
+            "id": 42,
+            "requestedAtMs": 6381,
+            "timestamp": 6397
+          },
+          {
+            "nowMs": 6397,
+            "kind": "raf-request",
+            "id": 43,
+            "requestedAtMs": 6397
+          },
+          {
+            "nowMs": 6397,
+            "kind": "raf-end",
+            "id": 42,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6413,
+            "kind": "raf-start",
+            "id": 43,
+            "requestedAtMs": 6397,
+            "timestamp": 6413
+          },
+          {
+            "nowMs": 6413,
+            "kind": "raf-request",
+            "id": 44,
+            "requestedAtMs": 6413
+          },
+          {
+            "nowMs": 6413,
+            "kind": "raf-end",
+            "id": 43,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6429,
+            "kind": "raf-start",
+            "id": 44,
+            "requestedAtMs": 6413,
+            "timestamp": 6429
+          },
+          {
+            "nowMs": 6429,
+            "kind": "raf-request",
+            "id": 45,
+            "requestedAtMs": 6429
+          },
+          {
+            "nowMs": 6429,
+            "kind": "raf-end",
+            "id": 44,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6446,
+            "kind": "raf-start",
+            "id": 45,
+            "requestedAtMs": 6429,
+            "timestamp": 6445
+          },
+          {
+            "nowMs": 6446,
+            "kind": "raf-request",
+            "id": 46,
+            "requestedAtMs": 6446
+          },
+          {
+            "nowMs": 6446,
+            "kind": "raf-end",
+            "id": 45,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6462,
+            "kind": "raf-start",
+            "id": 46,
+            "requestedAtMs": 6446,
+            "timestamp": 6462
+          },
+          {
+            "nowMs": 6462,
+            "kind": "raf-request",
+            "id": 47,
+            "requestedAtMs": 6462
+          },
+          {
+            "nowMs": 6462,
+            "kind": "raf-end",
+            "id": 46,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6478,
+            "kind": "raf-start",
+            "id": 47,
+            "requestedAtMs": 6462,
+            "timestamp": 6478
+          },
+          {
+            "nowMs": 6478,
+            "kind": "raf-request",
+            "id": 48,
+            "requestedAtMs": 6478
+          },
+          {
+            "nowMs": 6478,
+            "kind": "raf-end",
+            "id": 47,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6494,
+            "kind": "raf-start",
+            "id": 48,
+            "requestedAtMs": 6478,
+            "timestamp": 6494
+          },
+          {
+            "nowMs": 6494,
+            "kind": "raf-request",
+            "id": 49,
+            "requestedAtMs": 6494
+          },
+          {
+            "nowMs": 6494,
+            "kind": "raf-end",
+            "id": 48,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6510,
+            "kind": "raf-start",
+            "id": 49,
+            "requestedAtMs": 6494,
+            "timestamp": 6510
+          },
+          {
+            "nowMs": 6510,
+            "kind": "raf-request",
+            "id": 50,
+            "requestedAtMs": 6510
+          },
+          {
+            "nowMs": 6510,
+            "kind": "raf-end",
+            "id": 49,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6526,
+            "kind": "raf-start",
+            "id": 50,
+            "requestedAtMs": 6510,
+            "timestamp": 6526
+          },
+          {
+            "nowMs": 6526,
+            "kind": "raf-request",
+            "id": 51,
+            "requestedAtMs": 6526
+          },
+          {
+            "nowMs": 6526,
+            "kind": "raf-end",
+            "id": 50,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6542,
+            "kind": "raf-start",
+            "id": 51,
+            "requestedAtMs": 6526,
+            "timestamp": 6542
+          },
+          {
+            "nowMs": 6542,
+            "kind": "raf-request",
+            "id": 52,
+            "requestedAtMs": 6542
+          },
+          {
+            "nowMs": 6542,
+            "kind": "raf-end",
+            "id": 51,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6558,
+            "kind": "raf-start",
+            "id": 52,
+            "requestedAtMs": 6542,
+            "timestamp": 6558
+          },
+          {
+            "nowMs": 6559,
+            "kind": "raf-request",
+            "id": 53,
+            "requestedAtMs": 6559
+          },
+          {
+            "nowMs": 6559,
+            "kind": "raf-end",
+            "id": 52,
+            "durationMs": 1
+          },
+          {
+            "nowMs": 6575,
+            "kind": "raf-start",
+            "id": 53,
+            "requestedAtMs": 6559,
+            "timestamp": 6575
+          },
+          {
+            "nowMs": 6575,
+            "kind": "raf-request",
+            "id": 54,
+            "requestedAtMs": 6575
+          },
+          {
+            "nowMs": 6575,
+            "kind": "raf-end",
+            "id": 53,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6591,
+            "kind": "raf-start",
+            "id": 54,
+            "requestedAtMs": 6575,
+            "timestamp": 6590
+          },
+          {
+            "nowMs": 6591,
+            "kind": "raf-request",
+            "id": 55,
+            "requestedAtMs": 6591
+          },
+          {
+            "nowMs": 6591,
+            "kind": "raf-end",
+            "id": 54,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6607,
+            "kind": "raf-start",
+            "id": 55,
+            "requestedAtMs": 6591,
+            "timestamp": 6607
+          },
+          {
+            "nowMs": 6607,
+            "kind": "raf-request",
+            "id": 56,
+            "requestedAtMs": 6607
+          },
+          {
+            "nowMs": 6607,
+            "kind": "raf-end",
+            "id": 55,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6623,
+            "kind": "raf-start",
+            "id": 56,
+            "requestedAtMs": 6607,
+            "timestamp": 6623
+          },
+          {
+            "nowMs": 6623,
+            "kind": "raf-request",
+            "id": 57,
+            "requestedAtMs": 6623
+          },
+          {
+            "nowMs": 6623,
+            "kind": "raf-end",
+            "id": 56,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6639,
+            "kind": "raf-start",
+            "id": 57,
+            "requestedAtMs": 6623,
+            "timestamp": 6639
+          },
+          {
+            "nowMs": 6639,
+            "kind": "raf-request",
+            "id": 58,
+            "requestedAtMs": 6639
+          },
+          {
+            "nowMs": 6639,
+            "kind": "raf-end",
+            "id": 57,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6655,
+            "kind": "raf-start",
+            "id": 58,
+            "requestedAtMs": 6639,
+            "timestamp": 6655
+          },
+          {
+            "nowMs": 6655,
+            "kind": "raf-request",
+            "id": 59,
+            "requestedAtMs": 6655
+          },
+          {
+            "nowMs": 6655,
+            "kind": "raf-end",
+            "id": 58,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6671,
+            "kind": "raf-start",
+            "id": 59,
+            "requestedAtMs": 6655,
+            "timestamp": 6671
+          },
+          {
+            "nowMs": 6671,
+            "kind": "raf-request",
+            "id": 60,
+            "requestedAtMs": 6671
+          },
+          {
+            "nowMs": 6671,
+            "kind": "raf-end",
+            "id": 59,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6688,
+            "kind": "raf-start",
+            "id": 60,
+            "requestedAtMs": 6671,
+            "timestamp": 6688
+          },
+          {
+            "nowMs": 6688,
+            "kind": "raf-request",
+            "id": 61,
+            "requestedAtMs": 6688
+          },
+          {
+            "nowMs": 6688,
+            "kind": "raf-end",
+            "id": 60,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6790,
+            "kind": "interval-500-start",
+            "id": 11
+          },
+          {
+            "nowMs": 6790,
+            "kind": "interval-500-end",
+            "id": 11,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6973,
+            "kind": "raf-start",
+            "id": 61,
+            "requestedAtMs": 6688,
+            "timestamp": 6973
+          },
+          {
+            "nowMs": 6973,
+            "kind": "raf-request",
+            "id": 62,
+            "requestedAtMs": 6973
+          },
+          {
+            "nowMs": 6973,
+            "kind": "raf-end",
+            "id": 61,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6977,
+            "kind": "raf-start",
+            "id": 62,
+            "requestedAtMs": 6973,
+            "timestamp": 6977
+          },
+          {
+            "nowMs": 6977,
+            "kind": "raf-request",
+            "id": 63,
+            "requestedAtMs": 6977
+          },
+          {
+            "nowMs": 6977,
+            "kind": "raf-end",
+            "id": 62,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 6993,
+            "kind": "raf-start",
+            "id": 63,
+            "requestedAtMs": 6977,
+            "timestamp": 6993
+          },
+          {
+            "nowMs": 6993,
+            "kind": "raf-request",
+            "id": 64,
+            "requestedAtMs": 6993
+          },
+          {
+            "nowMs": 6993,
+            "kind": "raf-end",
+            "id": 63,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7009,
+            "kind": "raf-start",
+            "id": 64,
+            "requestedAtMs": 6993,
+            "timestamp": 7009
+          },
+          {
+            "nowMs": 7009,
+            "kind": "raf-request",
+            "id": 65,
+            "requestedAtMs": 7009
+          },
+          {
+            "nowMs": 7009,
+            "kind": "raf-end",
+            "id": 64,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7025,
+            "kind": "raf-start",
+            "id": 65,
+            "requestedAtMs": 7009,
+            "timestamp": 7025
+          },
+          {
+            "nowMs": 7025,
+            "kind": "raf-request",
+            "id": 66,
+            "requestedAtMs": 7025
+          },
+          {
+            "nowMs": 7025,
+            "kind": "raf-end",
+            "id": 65,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7041,
+            "kind": "raf-start",
+            "id": 66,
+            "requestedAtMs": 7025,
+            "timestamp": 7041
+          },
+          {
+            "nowMs": 7041,
+            "kind": "raf-request",
+            "id": 67,
+            "requestedAtMs": 7041
+          },
+          {
+            "nowMs": 7041,
+            "kind": "raf-end",
+            "id": 66,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7058,
+            "kind": "raf-start",
+            "id": 67,
+            "requestedAtMs": 7041,
+            "timestamp": 7058
+          },
+          {
+            "nowMs": 7058,
+            "kind": "raf-request",
+            "id": 68,
+            "requestedAtMs": 7058
+          },
+          {
+            "nowMs": 7058,
+            "kind": "raf-end",
+            "id": 67,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7074,
+            "kind": "raf-start",
+            "id": 68,
+            "requestedAtMs": 7058,
+            "timestamp": 7074
+          },
+          {
+            "nowMs": 7074,
+            "kind": "raf-request",
+            "id": 69,
+            "requestedAtMs": 7074
+          },
+          {
+            "nowMs": 7074,
+            "kind": "raf-end",
+            "id": 68,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7090,
+            "kind": "raf-start",
+            "id": 69,
+            "requestedAtMs": 7074,
+            "timestamp": 7090
+          },
+          {
+            "nowMs": 7090,
+            "kind": "raf-request",
+            "id": 70,
+            "requestedAtMs": 7090
+          },
+          {
+            "nowMs": 7090,
+            "kind": "raf-end",
+            "id": 69,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7106,
+            "kind": "raf-start",
+            "id": 70,
+            "requestedAtMs": 7090,
+            "timestamp": 7106
+          },
+          {
+            "nowMs": 7106,
+            "kind": "raf-request",
+            "id": 71,
+            "requestedAtMs": 7106
+          },
+          {
+            "nowMs": 7106,
+            "kind": "raf-end",
+            "id": 70,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7122,
+            "kind": "raf-start",
+            "id": 71,
+            "requestedAtMs": 7106,
+            "timestamp": 7122
+          },
+          {
+            "nowMs": 7122,
+            "kind": "raf-request",
+            "id": 72,
+            "requestedAtMs": 7122
+          },
+          {
+            "nowMs": 7122,
+            "kind": "raf-end",
+            "id": 71,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7138,
+            "kind": "raf-start",
+            "id": 72,
+            "requestedAtMs": 7122,
+            "timestamp": 7138
+          },
+          {
+            "nowMs": 7138,
+            "kind": "raf-request",
+            "id": 73,
+            "requestedAtMs": 7138
+          },
+          {
+            "nowMs": 7138,
+            "kind": "raf-end",
+            "id": 72,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7154,
+            "kind": "raf-start",
+            "id": 73,
+            "requestedAtMs": 7138,
+            "timestamp": 7154
+          },
+          {
+            "nowMs": 7154,
+            "kind": "raf-request",
+            "id": 74,
+            "requestedAtMs": 7154
+          },
+          {
+            "nowMs": 7154,
+            "kind": "raf-end",
+            "id": 73,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7170,
+            "kind": "raf-start",
+            "id": 74,
+            "requestedAtMs": 7154,
+            "timestamp": 7170
+          },
+          {
+            "nowMs": 7170,
+            "kind": "raf-request",
+            "id": 75,
+            "requestedAtMs": 7170
+          },
+          {
+            "nowMs": 7170,
+            "kind": "raf-end",
+            "id": 74,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7186,
+            "kind": "raf-start",
+            "id": 75,
+            "requestedAtMs": 7170,
+            "timestamp": 7186
+          },
+          {
+            "nowMs": 7187,
+            "kind": "raf-request",
+            "id": 76,
+            "requestedAtMs": 7187
+          },
+          {
+            "nowMs": 7187,
+            "kind": "raf-end",
+            "id": 75,
+            "durationMs": 1
+          },
+          {
+            "nowMs": 7203,
+            "kind": "raf-start",
+            "id": 76,
+            "requestedAtMs": 7187,
+            "timestamp": 7202
+          },
+          {
+            "nowMs": 7203,
+            "kind": "raf-request",
+            "id": 77,
+            "requestedAtMs": 7203
+          },
+          {
+            "nowMs": 7203,
+            "kind": "raf-end",
+            "id": 76,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7219,
+            "kind": "raf-start",
+            "id": 77,
+            "requestedAtMs": 7203,
+            "timestamp": 7219
+          },
+          {
+            "nowMs": 7219,
+            "kind": "raf-request",
+            "id": 78,
+            "requestedAtMs": 7219
+          },
+          {
+            "nowMs": 7219,
+            "kind": "raf-end",
+            "id": 77,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7235,
+            "kind": "raf-start",
+            "id": 78,
+            "requestedAtMs": 7219,
+            "timestamp": 7235
+          },
+          {
+            "nowMs": 7235,
+            "kind": "raf-request",
+            "id": 79,
+            "requestedAtMs": 7235
+          },
+          {
+            "nowMs": 7235,
+            "kind": "raf-end",
+            "id": 78,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7251,
+            "kind": "raf-start",
+            "id": 79,
+            "requestedAtMs": 7235,
+            "timestamp": 7251
+          },
+          {
+            "nowMs": 7251,
+            "kind": "raf-request",
+            "id": 80,
+            "requestedAtMs": 7251
+          },
+          {
+            "nowMs": 7251,
+            "kind": "raf-end",
+            "id": 79,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7267,
+            "kind": "raf-start",
+            "id": 80,
+            "requestedAtMs": 7251,
+            "timestamp": 7267
+          },
+          {
+            "nowMs": 7267,
+            "kind": "raf-request",
+            "id": 81,
+            "requestedAtMs": 7267
+          },
+          {
+            "nowMs": 7267,
+            "kind": "raf-end",
+            "id": 80,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7283,
+            "kind": "raf-start",
+            "id": 81,
+            "requestedAtMs": 7267,
+            "timestamp": 7283
+          },
+          {
+            "nowMs": 7283,
+            "kind": "raf-request",
+            "id": 82,
+            "requestedAtMs": 7283
+          },
+          {
+            "nowMs": 7283,
+            "kind": "raf-end",
+            "id": 81,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7294,
+            "kind": "interval-500-start",
+            "id": 11
+          },
+          {
+            "nowMs": 7294,
+            "kind": "interval-500-end",
+            "id": 11,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7299,
+            "kind": "raf-start",
+            "id": 82,
+            "requestedAtMs": 7283,
+            "timestamp": 7299
+          },
+          {
+            "nowMs": 7299,
+            "kind": "raf-request",
+            "id": 83,
+            "requestedAtMs": 7299
+          },
+          {
+            "nowMs": 7299,
+            "kind": "raf-end",
+            "id": 82,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7315,
+            "kind": "raf-start",
+            "id": 83,
+            "requestedAtMs": 7299,
+            "timestamp": 7315
+          },
+          {
+            "nowMs": 7315,
+            "kind": "raf-request",
+            "id": 84,
+            "requestedAtMs": 7315
+          },
+          {
+            "nowMs": 7315,
+            "kind": "raf-end",
+            "id": 83,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7331,
+            "kind": "raf-start",
+            "id": 84,
+            "requestedAtMs": 7315,
+            "timestamp": 7331
+          },
+          {
+            "nowMs": 7331,
+            "kind": "raf-request",
+            "id": 85,
+            "requestedAtMs": 7331
+          },
+          {
+            "nowMs": 7331,
+            "kind": "raf-end",
+            "id": 84,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7347,
+            "kind": "raf-start",
+            "id": 85,
+            "requestedAtMs": 7331,
+            "timestamp": 7347
+          },
+          {
+            "nowMs": 7347,
+            "kind": "raf-request",
+            "id": 86,
+            "requestedAtMs": 7347
+          },
+          {
+            "nowMs": 7347,
+            "kind": "raf-end",
+            "id": 85,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7363,
+            "kind": "raf-start",
+            "id": 86,
+            "requestedAtMs": 7347,
+            "timestamp": 7363
+          },
+          {
+            "nowMs": 7364,
+            "kind": "raf-request",
+            "id": 87,
+            "requestedAtMs": 7363
+          },
+          {
+            "nowMs": 7364,
+            "kind": "raf-end",
+            "id": 86,
+            "durationMs": 1
+          },
+          {
+            "nowMs": 7380,
+            "kind": "raf-start",
+            "id": 87,
+            "requestedAtMs": 7363,
+            "timestamp": 7379
+          },
+          {
+            "nowMs": 7380,
+            "kind": "raf-request",
+            "id": 88,
+            "requestedAtMs": 7380
+          },
+          {
+            "nowMs": 7380,
+            "kind": "raf-end",
+            "id": 87,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7396,
+            "kind": "raf-start",
+            "id": 88,
+            "requestedAtMs": 7380,
+            "timestamp": 7396
+          },
+          {
+            "nowMs": 7396,
+            "kind": "raf-request",
+            "id": 89,
+            "requestedAtMs": 7396
+          },
+          {
+            "nowMs": 7396,
+            "kind": "raf-end",
+            "id": 88,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7412,
+            "kind": "raf-start",
+            "id": 89,
+            "requestedAtMs": 7396,
+            "timestamp": 7412
+          },
+          {
+            "nowMs": 7412,
+            "kind": "raf-request",
+            "id": 90,
+            "requestedAtMs": 7412
+          },
+          {
+            "nowMs": 7412,
+            "kind": "raf-end",
+            "id": 89,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7428,
+            "kind": "raf-start",
+            "id": 90,
+            "requestedAtMs": 7412,
+            "timestamp": 7428
+          },
+          {
+            "nowMs": 7428,
+            "kind": "raf-request",
+            "id": 91,
+            "requestedAtMs": 7428
+          },
+          {
+            "nowMs": 7428,
+            "kind": "raf-end",
+            "id": 90,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7444,
+            "kind": "raf-start",
+            "id": 91,
+            "requestedAtMs": 7428,
+            "timestamp": 7444
+          },
+          {
+            "nowMs": 7444,
+            "kind": "raf-request",
+            "id": 92,
+            "requestedAtMs": 7444
+          },
+          {
+            "nowMs": 7444,
+            "kind": "raf-end",
+            "id": 91,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7460,
+            "kind": "raf-start",
+            "id": 92,
+            "requestedAtMs": 7444,
+            "timestamp": 7460
+          },
+          {
+            "nowMs": 7460,
+            "kind": "raf-request",
+            "id": 93,
+            "requestedAtMs": 7460
+          },
+          {
+            "nowMs": 7460,
+            "kind": "raf-end",
+            "id": 92,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7476,
+            "kind": "raf-start",
+            "id": 93,
+            "requestedAtMs": 7460,
+            "timestamp": 7476
+          },
+          {
+            "nowMs": 7476,
+            "kind": "raf-request",
+            "id": 94,
+            "requestedAtMs": 7476
+          },
+          {
+            "nowMs": 7476,
+            "kind": "raf-end",
+            "id": 93,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7492,
+            "kind": "raf-start",
+            "id": 94,
+            "requestedAtMs": 7476,
+            "timestamp": 7492
+          },
+          {
+            "nowMs": 7493,
+            "kind": "raf-request",
+            "id": 95,
+            "requestedAtMs": 7493
+          },
+          {
+            "nowMs": 7493,
+            "kind": "raf-end",
+            "id": 94,
+            "durationMs": 1
+          },
+          {
+            "nowMs": 7508,
+            "kind": "raf-start",
+            "id": 95,
+            "requestedAtMs": 7493,
+            "timestamp": 7508
+          },
+          {
+            "nowMs": 7509,
+            "kind": "raf-request",
+            "id": 96,
+            "requestedAtMs": 7509
+          },
+          {
+            "nowMs": 7509,
+            "kind": "raf-end",
+            "id": 95,
+            "durationMs": 1
+          },
+          {
+            "nowMs": 7525,
+            "kind": "raf-start",
+            "id": 96,
+            "requestedAtMs": 7509,
+            "timestamp": 7524
+          },
+          {
+            "nowMs": 7525,
+            "kind": "raf-request",
+            "id": 97,
+            "requestedAtMs": 7525
+          },
+          {
+            "nowMs": 7525,
+            "kind": "raf-end",
+            "id": 96,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7541,
+            "kind": "raf-start",
+            "id": 97,
+            "requestedAtMs": 7525,
+            "timestamp": 7541
+          },
+          {
+            "nowMs": 7541,
+            "kind": "raf-request",
+            "id": 98,
+            "requestedAtMs": 7541
+          },
+          {
+            "nowMs": 7541,
+            "kind": "raf-end",
+            "id": 97,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7557,
+            "kind": "raf-start",
+            "id": 98,
+            "requestedAtMs": 7541,
+            "timestamp": 7557
+          },
+          {
+            "nowMs": 7557,
+            "kind": "raf-request",
+            "id": 99,
+            "requestedAtMs": 7557
+          },
+          {
+            "nowMs": 7557,
+            "kind": "raf-end",
+            "id": 98,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7573,
+            "kind": "raf-start",
+            "id": 99,
+            "requestedAtMs": 7557,
+            "timestamp": 7573
+          },
+          {
+            "nowMs": 7573,
+            "kind": "raf-request",
+            "id": 100,
+            "requestedAtMs": 7573
+          },
+          {
+            "nowMs": 7573,
+            "kind": "raf-end",
+            "id": 99,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7589,
+            "kind": "raf-start",
+            "id": 100,
+            "requestedAtMs": 7573,
+            "timestamp": 7589
+          },
+          {
+            "nowMs": 7589,
+            "kind": "raf-request",
+            "id": 101,
+            "requestedAtMs": 7589
+          },
+          {
+            "nowMs": 7589,
+            "kind": "raf-end",
+            "id": 100,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7605,
+            "kind": "raf-start",
+            "id": 101,
+            "requestedAtMs": 7589,
+            "timestamp": 7605
+          },
+          {
+            "nowMs": 7605,
+            "kind": "raf-request",
+            "id": 102,
+            "requestedAtMs": 7605
+          },
+          {
+            "nowMs": 7605,
+            "kind": "raf-end",
+            "id": 101,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7621,
+            "kind": "raf-start",
+            "id": 102,
+            "requestedAtMs": 7605,
+            "timestamp": 7621
+          },
+          {
+            "nowMs": 7621,
+            "kind": "raf-request",
+            "id": 103,
+            "requestedAtMs": 7621
+          },
+          {
+            "nowMs": 7621,
+            "kind": "raf-end",
+            "id": 102,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7637,
+            "kind": "raf-start",
+            "id": 103,
+            "requestedAtMs": 7621,
+            "timestamp": 7637
+          },
+          {
+            "nowMs": 7637,
+            "kind": "raf-request",
+            "id": 104,
+            "requestedAtMs": 7637
+          },
+          {
+            "nowMs": 7637,
+            "kind": "raf-end",
+            "id": 103,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7653,
+            "kind": "raf-start",
+            "id": 104,
+            "requestedAtMs": 7637,
+            "timestamp": 7653
+          },
+          {
+            "nowMs": 7653,
+            "kind": "raf-request",
+            "id": 105,
+            "requestedAtMs": 7653
+          },
+          {
+            "nowMs": 7653,
+            "kind": "raf-end",
+            "id": 104,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7670,
+            "kind": "raf-start",
+            "id": 105,
+            "requestedAtMs": 7653,
+            "timestamp": 7669
+          },
+          {
+            "nowMs": 7670,
+            "kind": "raf-request",
+            "id": 106,
+            "requestedAtMs": 7670
+          },
+          {
+            "nowMs": 7670,
+            "kind": "raf-end",
+            "id": 105,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7686,
+            "kind": "raf-start",
+            "id": 106,
+            "requestedAtMs": 7670,
+            "timestamp": 7686
+          },
+          {
+            "nowMs": 7686,
+            "kind": "raf-request",
+            "id": 107,
+            "requestedAtMs": 7686
+          },
+          {
+            "nowMs": 7686,
+            "kind": "raf-end",
+            "id": 106,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 7704,
+            "kind": "raf-start",
+            "id": 107,
+            "requestedAtMs": 7686,
+            "timestamp": 7702
+          },
+          {
+            "nowMs": 7705,
+            "kind": "raf-request",
+            "id": 108,
+            "requestedAtMs": 7705
+          },
+          {
+            "nowMs": 7705,
+            "kind": "raf-end",
+            "id": 107,
+            "durationMs": 1
+          },
+          {
+            "nowMs": 7932,
+            "kind": "interval-500-start",
+            "id": 11
+          },
+          {
+            "nowMs": 7932,
+            "kind": "interval-500-end",
+            "id": 11,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 8363,
+            "kind": "raf-start",
+            "id": 108,
+            "requestedAtMs": 7705,
+            "timestamp": 8362
+          },
+          {
+            "nowMs": 8364,
+            "kind": "raf-request",
+            "id": 110,
+            "requestedAtMs": 8364
+          },
+          {
+            "nowMs": 8364,
+            "kind": "raf-end",
+            "id": 108,
+            "durationMs": 1
+          },
+          {
+            "nowMs": 8434,
+            "kind": "interval-500-start",
+            "id": 11
+          },
+          {
+            "nowMs": 8434,
+            "kind": "interval-500-end",
+            "id": 11,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 8644,
+            "kind": "raf-start",
+            "id": 110,
+            "requestedAtMs": 8364,
+            "timestamp": 8643
+          },
+          {
+            "nowMs": 8644,
+            "kind": "raf-request",
+            "id": 112,
+            "requestedAtMs": 8644
+          },
+          {
+            "nowMs": 8644,
+            "kind": "raf-end",
+            "id": 110,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 8648,
+            "kind": "raf-start",
+            "id": 112,
+            "requestedAtMs": 8644,
+            "timestamp": 8648
+          },
+          {
+            "nowMs": 8648,
+            "kind": "raf-request",
+            "id": 113,
+            "requestedAtMs": 8648
+          },
+          {
+            "nowMs": 8648,
+            "kind": "raf-end",
+            "id": 112,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 8649,
+            "kind": "raf-start",
+            "id": 113,
+            "requestedAtMs": 8648,
+            "timestamp": 8649
+          },
+          {
+            "nowMs": 8649,
+            "kind": "raf-request",
+            "id": 114,
+            "requestedAtMs": 8649
+          },
+          {
+            "nowMs": 8649,
+            "kind": "raf-end",
+            "id": 113,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 8803,
+            "kind": "raf-start",
+            "id": 114,
+            "requestedAtMs": 8649,
+            "timestamp": 8800
+          },
+          {
+            "nowMs": 8803,
+            "kind": "raf-request",
+            "id": 116,
+            "requestedAtMs": 8803
+          },
+          {
+            "nowMs": 8803,
+            "kind": "raf-end",
+            "id": 114,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 9013,
+            "kind": "interval-500-start",
+            "id": 11
+          },
+          {
+            "nowMs": 9013,
+            "kind": "interval-500-end",
+            "id": 11,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 9514,
+            "kind": "interval-500-start",
+            "id": 11
+          },
+          {
+            "nowMs": 9514,
+            "kind": "interval-500-end",
+            "id": 11,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 9567,
+            "kind": "raf-start",
+            "id": 116,
+            "requestedAtMs": 8803,
+            "timestamp": 9565
+          },
+          {
+            "nowMs": 9567,
+            "kind": "raf-request",
+            "id": 118,
+            "requestedAtMs": 9567
+          },
+          {
+            "nowMs": 9567,
+            "kind": "raf-end",
+            "id": 116,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 9572,
+            "kind": "raf-start",
+            "id": 118,
+            "requestedAtMs": 9567,
+            "timestamp": 9572
+          },
+          {
+            "nowMs": 9572,
+            "kind": "raf-request",
+            "id": 119,
+            "requestedAtMs": 9572
+          },
+          {
+            "nowMs": 9572,
+            "kind": "raf-end",
+            "id": 118,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 9574,
+            "kind": "raf-start",
+            "id": 119,
+            "requestedAtMs": 9572,
+            "timestamp": 9574
+          },
+          {
+            "nowMs": 9574,
+            "kind": "raf-request",
+            "id": 120,
+            "requestedAtMs": 9574
+          },
+          {
+            "nowMs": 9574,
+            "kind": "raf-end",
+            "id": 119,
+            "durationMs": 0
+          },
+          {
+            "nowMs": 9621,
+            "kind": "raf-request",
+            "id": 121,
+            "requestedAtMs": 9621
+          },
+          {
+            "nowMs": 9629,
+            "kind": "interval-500-scheduled",
+            "id": 41,
+            "scheduledAtMs": 9629,
+            "sourceStack": "@web-inspector://bootstrap.js:53:34\n@http://127.0.0.1:35643/assets/Shop-tIXpZ6Qi.js:2:84515\njs@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:96159\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119563\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119543\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119584\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119543\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119543\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119543\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119543\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119543\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:120782\nBt@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119336\nWg@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:119609\nzd@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:134382\n@http://127.0.0.1:35643/assets/index-CjIeegmj.js:9:131288\nUe@http://127.0.0.1:35643/assets/index-CjIeegmj.js:2:11605"
+          },
+          {
+            "nowMs": 9631,
+            "kind": "raf-request",
+            "id": 122,
+            "requestedAtMs": 9631
+          }
+        ]
+      }
+    }
+  ],
+  "engine": "webkit",
+  "version": "26.5"
+}

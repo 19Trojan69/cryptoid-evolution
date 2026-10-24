@@ -1,0 +1,20 @@
+{
+  "shortRoutePassed": true,
+  "technicalFault": null,
+  "retainedEvents": 359,
+  "droppedEvents": 0,
+  "newTimers": 0,
+  "newRafChains": 0,
+  "newStorageWrites": 0,
+  "clockChanged": false,
+  "maxNativeRafGapMs": 1301,
+  "rafCallbackCount": 105,
+  "maxRafCallbackDurationMs": 4,
+  "watchCallbackCount": 17,
+  "maxWatchCallbackDurationMs": 1,
+  "includesIntentionalPause": true,
+  "capturesOriginalFailedInterval": false,
+  "applicationRuntimeChanged": false,
+  "measurementOverheadApplies": true,
+  "activeGameFpsClaimed": false
+}

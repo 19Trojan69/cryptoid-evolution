@@ -1,0 +1,72 @@
+// Local browser observation only. Forward original calls; add no timers/RAF.
+(() => {
+  const events = [];
+  const limit = 512;
+  let fault = null;
+  let inCallback = null;
+  let dropped = 0;
+  const record = event => {
+    if (fault) return;
+    events.push({ nowMs: performance.now(), ...event });
+    if (events.length > limit) { events.shift(); dropped++; }
+  };
+  const originalRaf = window.requestAnimationFrame;
+  window.requestAnimationFrame = function(callback) {
+    if (typeof callback !== 'function') return Reflect.apply(originalRaf, this, arguments);
+    const requestedAtMs = performance.now();
+    let id;
+    id = Reflect.apply(originalRaf, this, [function(timestamp) {
+      const previous = inCallback;
+      const startedAtMs = performance.now();
+      inCallback = { kind: 'raf', id, requestedAtMs, startedAtMs, timestamp };
+      record({ kind: 'raf-start', id, requestedAtMs, timestamp });
+      try { return Reflect.apply(callback, this, arguments); }
+      finally {
+        record({ kind: 'raf-end', id, durationMs: performance.now() - startedAtMs });
+        inCallback = previous;
+      }
+    }]);
+    record({ kind: 'raf-request', id, requestedAtMs });
+    return id;
+  };
+  const originalInterval = window.setInterval;
+  window.setInterval = function(callback, delay, ...args) {
+    if (typeof callback !== 'function' || delay !== 500) return Reflect.apply(originalInterval, this, arguments);
+    const scheduledAtMs = performance.now();
+    const sourceStack = new Error().stack;
+    let id;
+    id = Reflect.apply(originalInterval, this, [function() {
+      const previous = inCallback;
+      const startedAtMs = performance.now();
+      inCallback = { kind: 'interval-500', id, scheduledAtMs, startedAtMs, sourceStack };
+      record({ kind: 'interval-500-start', id });
+      try { return Reflect.apply(callback, this, arguments); }
+      finally {
+        record({ kind: 'interval-500-end', id, durationMs: performance.now() - startedAtMs });
+        inCallback = previous;
+      }
+    }, delay, ...args]);
+    record({ kind: 'interval-500-scheduled', id, scheduledAtMs, sourceStack });
+    return id;
+  };
+  const originalSetItem = Storage.prototype.setItem;
+  Storage.prototype.setItem = function(key, value) {
+    const result = Reflect.apply(originalSetItem, this, arguments);
+    if (!fault && key === 'cryptoid_game_diagnostics_v1') {
+      try {
+        const entry = JSON.parse(value).at(-1);
+        if (['loop-stall', 'frame-error', 'input-error', 'javascript-error', 'unhandled-rejection', 'render-error'].includes(entry?.reason)) {
+          record({ kind: 'game-interruption-recorded', reason: entry.reason });
+          fault = { reason: entry.reason, at: entry.at, nowMs: performance.now(), inCallback };
+        }
+      } catch { /* Observation cannot fail the original write. */ }
+    }
+    return result;
+  };
+  window.__localCallbackAudit = () => ({
+    localOnly: true, browserFunctionWrappers: true, newTimers: 0, newRafChains: 0,
+    clockChanged: false, automaticResume: false, limit, dropped, fault,
+    documentStartedAt: performance.timeOrigin, observedAtEpochMs: Date.now(),
+    events: events.slice(),
+  });
+})();

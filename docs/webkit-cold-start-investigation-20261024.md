@@ -148,6 +148,24 @@ WebKit-Abnahme ausgegeben. Die frueher verworfenen Renderer-/Cache-/Zuschnitt-
 Experimente wurden nicht wieder aufgenommen. Es gibt keinen belegten sicheren
 Quellcodeeingriff, der aus diesen beiden Beobachtungen folgt.
 
+Nach der erneuten Fortsetzungsanweisung beobachtet eine weitere lokale Hostkopie
+nur die originalen Browser-RAF-Aufrufe und den bestehenden 500-ms-Intervall.
+Weiterleitende Browser-API-Wrapper protokollieren Aufruf-/Liefer-/Endzeiten in
+einen auf 512 Eintraege begrenzten Arbeitsspeicher. Der originale Diagnose-
+Schreibaufruf wird unveraendert weitergereicht; ein technischer Eintrag wuerde
+die Beobachtung einfrieren. Keine zusaetzlichen Timer, RAF-Ketten, Speicher-
+Schreibzugriffe oder Uhrveraenderungen. Das ist Testinstrumentierung, keine
+Anwendungsintegration; auch diese Beobachtung kann die Ausfuehrung beeinflussen.
+
+Dieser kurze Ablauf besteht ebenfalls ohne technischen Eintrag. Alle 359
+Beobachtungen sind erhalten, null verworfen: 105 beendete RAF-Callbacks mit
+hoechstens 4 ms, 17 beendete Intervall-Callbacks mit hoechstens 1 ms und maximal
+1301 ms Abstand zwischen beobachteten nativen RAF-Lieferungen. Diese Werte
+umfassen den kurzen Bedienablauf einschliesslich seiner gewollten Pause; sie
+sind weder aktive Spiel-FPS noch eine Messung des urspruenglichen Stall-
+Intervalls. Die Quelltexte, Rohdaten und berechneten Werte stehen separat unter
+`callback-observation-*`. Auch dieser Erfolg ersetzt den ersten Fehllauf nicht.
+
 Deshalb keine spekulative Runtime-Aenderung: `GAME_STALL_MS` bleibt 2500 und
 beide Vergleiche bleiben strikt `>`; `GamePage` behaelt `setInterval(..., 500)`.
 Es gibt kein automatisches Resume und keinen erzwungenen Klick. Nach der
@@ -175,3 +193,18 @@ Anwendungskorrektur oder deren Erfolg behauptet werden kann.
 
 Alle maschinenlesbaren Ergebnisse, Quellen- und Evidenzpruefsummen stehen in
 `webkit-cold-start-investigation-20261024.json` und im gleichnamigen Ordner.
+
+## Sicherung nach automatischer Ablehnung des GitHub-Pushs
+
+Der erste lokale Evidenzcommit ist `7bc2361`. Die automatische Freigabe lehnt
+seinen Push auf den bestehenden GitHub-Arbeitsbranch mit der Begruendung ab,
+der Nutzer habe Veroeffentlichung untersagt und ein Remote-Upload dieser
+Diagnose-/Umgebungsdateien sei nicht autorisiert. Es erfolgt kein erneuter
+Schreibversuch ueber einen anderen Zugang. Die anschliessende Nur-Lese-Pruefung
+bestaetigt den Remote-Head weiterhin bei `33b137256eae06407985244499cc61cd0f3ef119`.
+
+Die neuen Commits und Ergebnisse bleiben lokal gesichert. Ein eigenes privates
+Diagnosepaket enthaelt die Nachweise und einen binaerfaehigen Git-Patch der
+ungesendeten Dokumentationscommits, damit sie nach dem bekannten Ausgangsstand
+wiederherstellbar sind. Es enthaelt keinen gesamten Repository-Klon und keine
+Abhaengigkeiten, Zugangsdaten oder echten Benutzer-/Kauf-/Spielstanddaten.

@@ -21,12 +21,21 @@ assign this reason to the older unobserved pause or infer its blocking source.
 A separate original WPE startup-only run passes7/7. A separate native-profiler
 route also passes, without a technical interruption. The profiler trace does
 not contain the failed interval and cannot identify its cause or supersede the
-first failed route. No rejected renderer/cache/clip experiment is repeated.
+first failed route. A further local browser-API forwarding audit passes the
+short flow with359 retained observations, no extra timers/RAF/storage writes,
+max native-RAF gap1301ms, max RAF callback4ms and500ms interval callback1ms.
+It too does not capture the failed interval or prove active FPS/device stability.
+No rejected renderer/cache/clip experiment is repeated.
 No new runtime correction follows. Keep strict >2500ms and500ms watcher, explicit
 Resume and all original game/account/audio behavior. No automatic continuation,
 publication, main merge, fixed-ref movement, owner campaign/purchase/data-clear
 request or claim of full-game/iPhone acceptance. Automatic deployment stays off.
 See docs/webkit-cold-start-investigation-20261024.md/.json and retained evidence.
+Automatic review rejects pushing local evidence commit7bc2361 to GitHub because
+it treats the user's no-publication scope as excluding this remote upload.
+Read-only remote verification still returns33b1372. Do not work around this
+rejection through another write path. Preserve new work locally/private archive;
+do not claim these new commits are on GitHub.
 
 ## White-Screen priority and startup recovery, 23 October 2026, prepared
 

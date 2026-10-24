@@ -182,6 +182,31 @@
       "sha256": "dae30932e726f356963c1184317759081d77dc5c148e6ede053830a04f19d89a"
     },
     {
+      "path": "docs/webkit-cold-start-investigation-20261024/callback-observation-host.mjs.txt",
+      "bytes": 14617,
+      "sha256": "ea953edb4d540679447970bacdbeb75187c141d81e3ed401317becfe254af9e5"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/callback-observation-init.js.txt",
+      "bytes": 3178,
+      "sha256": "fb0404b444385c9c72195e73c56933fb9ac9b0a2cd749e9ae8eac57987a6eb7b"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/callback-observation-summary.json",
+      "bytes": 533,
+      "sha256": "6ff72ee938c0aeb65e2a03c069b23ae3645cb3b71ed3bb26dd6025e98b31beb7"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/callback-observation-webkit.json",
+      "bytes": 71200,
+      "sha256": "0f027fb673aa3fa088946cbf8f9583e4afd242c282a3b8b5799fb76443874d70"
+    },
+    {
+      "path": "docs/webkit-cold-start-investigation-20261024/callback-observation-webkit.log",
+      "bytes": 97,
+      "sha256": "a60f2a9591fb59e88d0e4e7028a15572519e07859f4ac678cc55940278a2f56f"
+    },
+    {
       "path": "docs/webkit-cold-start-investigation-20261024/chromium-sdk-held.png",
       "bytes": 78938,
       "sha256": "895d372f139e7b17658836e54a5a6fd07ccc44c01b77db9044068938f529f191"
@@ -318,8 +343,36 @@
     },
     {
       "path": "docs/webkit-cold-start-investigation-20261024.md",
-      "bytes": 10577,
-      "sha256": "e250f5c00f4278dfacadc5476a6192e5320cc17ab019b872faf926c516f4ab13"
+      "bytes": 12737,
+      "sha256": "44f7eb4ba13428a282eb4d33513e28f4003c9a89dc7631bb8ff3d7a3795c4a6d"
     }
-  ]
+  ],
+  "callbackObservationFollowup": {
+    "shortRoutePassed": true,
+    "technicalFault": null,
+    "retainedEvents": 359,
+    "droppedEvents": 0,
+    "newTimers": 0,
+    "newRafChains": 0,
+    "newStorageWrites": 0,
+    "clockChanged": false,
+    "maxNativeRafGapMs": 1301,
+    "rafCallbackCount": 105,
+    "maxRafCallbackDurationMs": 4,
+    "watchCallbackCount": 17,
+    "maxWatchCallbackDurationMs": 1,
+    "includesIntentionalPause": true,
+    "capturesOriginalFailedInterval": false,
+    "applicationRuntimeChanged": false,
+    "measurementOverheadApplies": true,
+    "activeGameFpsClaimed": false
+  },
+  "remoteSave": {
+    "pushBlockedByAutomaticReview": true,
+    "reason": "No-publication scope interpreted as not authorizing remote upload of new diagnostic/environment artifacts.",
+    "retriedThroughAnotherWritePath": false,
+    "readOnlyVerifiedRemoteHead": "33b137256eae06407985244499cc61cd0f3ef119",
+    "localEvidenceCommit": "7bc2361",
+    "privateRecoveryArchivePlanned": true
+  }
 }
