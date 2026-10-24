@@ -1,0 +1,1 @@
+{"engine":"chromium","preflight":{"browserStarted":true,"status":200,"text":"local-server-ok"},"passed":true,"cases":[{"label":"phone","passed":true},{"label":"phone-bars","passed":true},{"label":"tablet","passed":true},{"label":"tablet-landscape","passed":true},{"label":"pc","passed":true}]}

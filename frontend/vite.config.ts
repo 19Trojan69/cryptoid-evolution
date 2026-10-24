@@ -8,6 +8,7 @@ import * as path from "node:path";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const localTestnet = env.VERCEL_ENV === "preview" && env.CRYPTOID_TESTNET_BACKEND === "local";
+  const privatePlayablePreview = env.VERCEL_ENV === "preview" && env.CRYPTOID_PRIVATE_PREVIEW === "1";
   const version = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8")).version;
   let commit = env.VERCEL_GIT_COMMIT_SHA;
   if (!commit) { try { commit = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(); } catch { commit = "local"; } }
@@ -40,9 +41,10 @@ export default defineConfig(({ mode }) => {
       },
     ],
     resolve: {
-      alias: {
-        "@mui/styled-engine": path.resolve(__dirname, "node_modules/@mui/styled-engine-sc"),
-      },
+      alias: [
+        ...(privatePlayablePreview ? [{ find: /^(?:\.\.\/)+hooks\/useAuth(?:\.ts)?$/, replacement: path.resolve(__dirname, "../private-preview/auth.mjs") }] : []),
+        { find: "@mui/styled-engine", replacement: path.resolve(__dirname, "node_modules/@mui/styled-engine-sc") },
+      ],
     },
     server: {
       port: parseInt(env.PORT) || 3314,

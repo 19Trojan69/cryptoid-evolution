@@ -1,0 +1,1431 @@
+{
+  "engine": "webkit",
+  "passed": true,
+  "preflight": {
+    "browserStarted": true,
+    "status": 200,
+    "text": "local-server-ok"
+  },
+  "originalFonts": true,
+  "gameplayHooks": false,
+  "automaticResume": false,
+  "limitations": "Native Linux viewport and input checks. Not physical Pi Browser/iPhone, audible device output or full-campaign acceptance. Samples and screenshots add overhead.",
+  "results": [
+    {
+      "label": "phone",
+      "width": 430,
+      "height": 825,
+      "dpr": 3,
+      "passed": true,
+      "unexpected": [],
+      "errors": [],
+      "httpErrors": [],
+      "lifecycleStage": "screenshot",
+      "homeFullscreen": false,
+      "lifecycleSamples": [
+        {
+          "label": "home",
+          "captured": true,
+          "observedAtEpochMs": 1792838660172,
+          "documentStartedAt": 1792838659734,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/",
+          "rootChildren": 1,
+          "shell": null,
+          "pauseControl": null,
+          "pauseHitTarget": null,
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "before-input",
+          "captured": true,
+          "observedAtEpochMs": 1792838661315,
+          "documentStartedAt": 1792838659734,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              389.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-input",
+          "captured": true,
+          "observedAtEpochMs": 1792838661349,
+          "documentStartedAt": 1792838659734,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              389.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-screenshot",
+          "captured": true,
+          "observedAtEpochMs": 1792838663067,
+          "documentStartedAt": 1792838659734,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              389.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        }
+      ],
+      "lifecycleStartedAt": 1792838660172,
+      "beforeInput": {
+        "viewport": [
+          430,
+          825
+        ],
+        "scroll": [
+          0,
+          0
+        ],
+        "document": [
+          430,
+          825
+        ],
+        "fullscreen": false,
+        "nativeFullscreenAvailable": false,
+        "shell": [
+          0,
+          0,
+          430,
+          825
+        ],
+        "hud": [
+          0,
+          0,
+          430,
+          71
+        ],
+        "player": [
+          161.1666717529297,
+          589.6666870117188,
+          107.50001525878906,
+          107.5
+        ],
+        "controls": [
+          {
+            "text": "Zur Startseite",
+            "box": [
+              4,
+              10,
+              36,
+              44
+            ]
+          },
+          {
+            "text": "Pause",
+            "box": [
+              389.984375,
+              4,
+              36,
+              44
+            ]
+          }
+        ]
+      },
+      "input": "native tap and PageDown; no iPhone swipe claim",
+      "afterInput": {
+        "viewport": [
+          430,
+          825
+        ],
+        "scroll": [
+          0,
+          0
+        ],
+        "document": [
+          430,
+          825
+        ],
+        "fullscreen": false,
+        "nativeFullscreenAvailable": false,
+        "shell": [
+          0,
+          0,
+          430,
+          825
+        ],
+        "hud": [
+          0,
+          0,
+          430,
+          71
+        ],
+        "player": [
+          161.1666717529297,
+          589.6666870117188,
+          107.50001525878906,
+          107.5
+        ],
+        "controls": [
+          {
+            "text": "Zur Startseite",
+            "box": [
+              4,
+              10,
+              36,
+              44
+            ]
+          },
+          {
+            "text": "Pause",
+            "box": [
+              389.984375,
+              4,
+              36,
+              44
+            ]
+          }
+        ]
+      },
+      "screenshot": "phone-webkit.png"
+    },
+    {
+      "label": "phone-bars",
+      "width": 390,
+      "height": 650,
+      "dpr": 3,
+      "passed": true,
+      "unexpected": [],
+      "errors": [],
+      "httpErrors": [],
+      "lifecycleStage": "screenshot",
+      "homeFullscreen": false,
+      "lifecycleSamples": [
+        {
+          "label": "home",
+          "captured": true,
+          "observedAtEpochMs": 1792838663740,
+          "documentStartedAt": 1792838663234,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/",
+          "rootChildren": 1,
+          "shell": null,
+          "pauseControl": null,
+          "pauseHitTarget": null,
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "before-input",
+          "captured": true,
+          "observedAtEpochMs": 1792838664782,
+          "documentStartedAt": 1792838663234,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              349.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-input",
+          "captured": true,
+          "observedAtEpochMs": 1792838664800,
+          "documentStartedAt": 1792838663234,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              349.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-screenshot",
+          "captured": true,
+          "observedAtEpochMs": 1792838666346,
+          "documentStartedAt": 1792838663234,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              349.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        }
+      ],
+      "lifecycleStartedAt": 1792838663740,
+      "beforeInput": {
+        "viewport": [
+          390,
+          650
+        ],
+        "scroll": [
+          0,
+          0
+        ],
+        "document": [
+          390,
+          650
+        ],
+        "fullscreen": false,
+        "nativeFullscreenAvailable": false,
+        "shell": [
+          0,
+          0,
+          390,
+          650
+        ],
+        "hud": [
+          0,
+          0,
+          390,
+          71
+        ],
+        "player": [
+          148,
+          460,
+          94,
+          94
+        ],
+        "controls": [
+          {
+            "text": "Zur Startseite",
+            "box": [
+              4,
+              10,
+              36,
+              44
+            ]
+          },
+          {
+            "text": "Pause",
+            "box": [
+              349.984375,
+              4,
+              36,
+              44
+            ]
+          }
+        ]
+      },
+      "input": "native tap and PageDown; no iPhone swipe claim",
+      "afterInput": {
+        "viewport": [
+          390,
+          650
+        ],
+        "scroll": [
+          0,
+          0
+        ],
+        "document": [
+          390,
+          650
+        ],
+        "fullscreen": false,
+        "nativeFullscreenAvailable": false,
+        "shell": [
+          0,
+          0,
+          390,
+          650
+        ],
+        "hud": [
+          0,
+          0,
+          390,
+          71
+        ],
+        "player": [
+          148,
+          460,
+          94,
+          94
+        ],
+        "controls": [
+          {
+            "text": "Zur Startseite",
+            "box": [
+              4,
+              10,
+              36,
+              44
+            ]
+          },
+          {
+            "text": "Pause",
+            "box": [
+              349.984375,
+              4,
+              36,
+              44
+            ]
+          }
+        ]
+      },
+      "screenshot": "phone-bars-webkit.png"
+    },
+    {
+      "label": "tablet",
+      "width": 820,
+      "height": 1180,
+      "dpr": 2,
+      "passed": true,
+      "unexpected": [],
+      "errors": [],
+      "httpErrors": [],
+      "lifecycleStage": "screenshot",
+      "homeFullscreen": false,
+      "lifecycleSamples": [
+        {
+          "label": "home",
+          "captured": true,
+          "observedAtEpochMs": 1792838666927,
+          "documentStartedAt": 1792838666524,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/",
+          "rootChildren": 1,
+          "shell": null,
+          "pauseControl": null,
+          "pauseHitTarget": null,
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "before-input",
+          "captured": true,
+          "observedAtEpochMs": 1792838668294,
+          "documentStartedAt": 1792838666524,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              740,
+              19.5,
+              56,
+              56
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-input",
+          "captured": true,
+          "observedAtEpochMs": 1792838670504,
+          "documentStartedAt": 1792838666524,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              740,
+              19.5,
+              56,
+              56
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-screenshot",
+          "captured": true,
+          "observedAtEpochMs": 1792838672055,
+          "documentStartedAt": 1792838666524,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              740,
+              19.5,
+              56,
+              56
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        }
+      ],
+      "lifecycleStartedAt": 1792838666927,
+      "beforeInput": {
+        "viewport": [
+          820,
+          1180
+        ],
+        "scroll": [
+          0,
+          0
+        ],
+        "document": [
+          820,
+          1180
+        ],
+        "fullscreen": true,
+        "nativeFullscreenAvailable": true,
+        "shell": [
+          0,
+          0,
+          820,
+          1180
+        ],
+        "hud": [
+          0,
+          0,
+          820,
+          118
+        ],
+        "player": [
+          354,
+          864.390625,
+          112,
+          112
+        ],
+        "controls": [
+          {
+            "text": "Zur Startseite",
+            "box": [
+              24,
+              19.5,
+              89,
+              56
+            ]
+          },
+          {
+            "text": "Pause",
+            "box": [
+              740,
+              19.5,
+              56,
+              56
+            ]
+          }
+        ]
+      },
+      "input": "native wheel",
+      "afterInput": {
+        "viewport": [
+          820,
+          1180
+        ],
+        "scroll": [
+          0,
+          0
+        ],
+        "document": [
+          820,
+          1180
+        ],
+        "fullscreen": true,
+        "nativeFullscreenAvailable": true,
+        "shell": [
+          0,
+          0,
+          820,
+          1180
+        ],
+        "hud": [
+          0,
+          0,
+          820,
+          118
+        ],
+        "player": [
+          354,
+          864.390625,
+          112,
+          112
+        ],
+        "controls": [
+          {
+            "text": "Zur Startseite",
+            "box": [
+              24,
+              19.5,
+              89,
+              56
+            ]
+          },
+          {
+            "text": "Pause",
+            "box": [
+              740,
+              19.5,
+              56,
+              56
+            ]
+          }
+        ]
+      },
+      "screenshot": "tablet-webkit.png"
+    },
+    {
+      "label": "tablet-landscape",
+      "width": 1180,
+      "height": 820,
+      "dpr": 2,
+      "passed": true,
+      "unexpected": [],
+      "errors": [],
+      "httpErrors": [],
+      "lifecycleStage": "screenshot",
+      "homeFullscreen": false,
+      "lifecycleSamples": [
+        {
+          "label": "home",
+          "captured": true,
+          "observedAtEpochMs": 1792838672626,
+          "documentStartedAt": 1792838672204,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/",
+          "rootChildren": 1,
+          "shell": null,
+          "pauseControl": null,
+          "pauseHitTarget": null,
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "before-input",
+          "captured": true,
+          "observedAtEpochMs": 1792838674139,
+          "documentStartedAt": 1792838672204,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              1100,
+              19.5,
+              56,
+              56
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-input",
+          "captured": true,
+          "observedAtEpochMs": 1792838676517,
+          "documentStartedAt": 1792838672204,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              1100,
+              19.5,
+              56,
+              56
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-screenshot",
+          "captured": true,
+          "observedAtEpochMs": 1792838678212,
+          "documentStartedAt": 1792838672204,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              1100,
+              19.5,
+              56,
+              56
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        }
+      ],
+      "lifecycleStartedAt": 1792838672626,
+      "beforeInput": {
+        "viewport": [
+          1180,
+          820
+        ],
+        "scroll": [
+          0,
+          0
+        ],
+        "document": [
+          1180,
+          820
+        ],
+        "fullscreen": true,
+        "nativeFullscreenAvailable": true,
+        "shell": [
+          0,
+          0,
+          1180,
+          820
+        ],
+        "hud": [
+          0,
+          0,
+          1180,
+          118
+        ],
+        "player": [
+          534,
+          583.59375,
+          112,
+          112
+        ],
+        "controls": [
+          {
+            "text": "Zur Startseite",
+            "box": [
+              24,
+              19.5,
+              134,
+              56
+            ]
+          },
+          {
+            "text": "Pause",
+            "box": [
+              1100,
+              19.5,
+              56,
+              56
+            ]
+          }
+        ]
+      },
+      "input": "native wheel",
+      "afterInput": {
+        "viewport": [
+          1180,
+          820
+        ],
+        "scroll": [
+          0,
+          0
+        ],
+        "document": [
+          1180,
+          820
+        ],
+        "fullscreen": true,
+        "nativeFullscreenAvailable": true,
+        "shell": [
+          0,
+          0,
+          1180,
+          820
+        ],
+        "hud": [
+          0,
+          0,
+          1180,
+          118
+        ],
+        "player": [
+          534,
+          583.59375,
+          112,
+          112
+        ],
+        "controls": [
+          {
+            "text": "Zur Startseite",
+            "box": [
+              24,
+              19.5,
+              134,
+              56
+            ]
+          },
+          {
+            "text": "Pause",
+            "box": [
+              1100,
+              19.5,
+              56,
+              56
+            ]
+          }
+        ]
+      },
+      "screenshot": "tablet-landscape-webkit.png"
+    },
+    {
+      "label": "pc",
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "passed": true,
+      "unexpected": [],
+      "errors": [],
+      "httpErrors": [],
+      "lifecycleStage": "screenshot",
+      "homeFullscreen": false,
+      "lifecycleSamples": [
+        {
+          "label": "home",
+          "captured": true,
+          "observedAtEpochMs": 1792838678827,
+          "documentStartedAt": 1792838678372,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/",
+          "rootChildren": 1,
+          "shell": null,
+          "pauseControl": null,
+          "pauseHitTarget": null,
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "before-input",
+          "captured": true,
+          "observedAtEpochMs": 1792838679735,
+          "documentStartedAt": 1792838678372,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              1360,
+              19.5,
+              56,
+              56
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-input",
+          "captured": true,
+          "observedAtEpochMs": 1792838682154,
+          "documentStartedAt": 1792838678372,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              1360,
+              19.5,
+              56,
+              56
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-screenshot",
+          "captured": true,
+          "observedAtEpochMs": 1792838682714,
+          "documentStartedAt": 1792838678372,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              1360,
+              19.5,
+              56,
+              56
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        }
+      ],
+      "lifecycleStartedAt": 1792838678827,
+      "beforeInput": {
+        "viewport": [
+          1440,
+          900
+        ],
+        "scroll": [
+          0,
+          0
+        ],
+        "document": [
+          1440,
+          900
+        ],
+        "fullscreen": true,
+        "nativeFullscreenAvailable": true,
+        "shell": [
+          0,
+          0,
+          1440,
+          900
+        ],
+        "hud": [
+          0,
+          0,
+          1440,
+          118
+        ],
+        "player": [
+          655,
+          637,
+          129.59375,
+          129.59375
+        ],
+        "controls": [
+          {
+            "text": "Zur Startseite",
+            "box": [
+              24,
+              19.5,
+              166.5,
+              56
+            ]
+          },
+          {
+            "text": "Pause",
+            "box": [
+              1360,
+              19.5,
+              56,
+              56
+            ]
+          }
+        ]
+      },
+      "input": "native wheel",
+      "afterInput": {
+        "viewport": [
+          1440,
+          900
+        ],
+        "scroll": [
+          0,
+          0
+        ],
+        "document": [
+          1440,
+          900
+        ],
+        "fullscreen": true,
+        "nativeFullscreenAvailable": true,
+        "shell": [
+          0,
+          0,
+          1440,
+          900
+        ],
+        "hud": [
+          0,
+          0,
+          1440,
+          118
+        ],
+        "player": [
+          655,
+          637,
+          129.59375,
+          129.59375
+        ],
+        "controls": [
+          {
+            "text": "Zur Startseite",
+            "box": [
+              24,
+              19.5,
+              166.5,
+              56
+            ]
+          },
+          {
+            "text": "Pause",
+            "box": [
+              1360,
+              19.5,
+              56,
+              56
+            ]
+          }
+        ]
+      },
+      "screenshot": "pc-webkit.png"
+    }
+  ],
+  "version": "26.5"
+}

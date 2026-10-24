@@ -1,0 +1,134 @@
+{
+  "date": "2026-10-24",
+  "status": "prepared_manual_protected_preview_pending",
+  "baseCommit": "ce1fb59d9d6318cd0f18b78c51825485601af460",
+  "branch": "codex/private-playable-preview-20261024",
+  "automaticDeploymentEnabled": false,
+  "frontendSrcTree": "66f458f157bb4d52b6ebe57f92d51b52a51451b2",
+  "originalTestsPassed": 151,
+  "isolationTestsPassed": 8,
+  "fullscreenUnitTestsPassed": 9,
+  "chromiumViewportCasesPassed": 5,
+  "webkitViewportCasesPassed": 5,
+  "historicalWhiteScreensFixed": false,
+  "fullCampaignAccepted": false,
+  "physicalIphoneAccepted": false,
+  "automaticResume": false,
+  "watchdog": {
+    "strictGreaterThanMs": 2500,
+    "intervalMs": 500
+  },
+  "priorPreparation": {
+    "localCommit": "022797b33e2f45d512ac878435e3e51b93b35de8",
+    "tree": "cfbbad8799f6e274f1416fa4ffbcd02a8000bcbe",
+    "lostBeforeRemoteCommit": true,
+    "reconstructedAndRetested": true,
+    "earlierWpeTabletLoopStallRemainsOpen": true
+  },
+  "officialBefore": {
+    "productionDeploymentId": "AsXUruYAuKRboZWFymr2cD3FkLCJ",
+    "source": "19de3e692f75a1c3e2eddf3438acc937c9dcac19",
+    "publicResponses": [
+      {
+        "path": "/",
+        "status": 200,
+        "bytes": 1465,
+        "sha256": "b541a5ad5329f5914c77a2a0eb8778ac02e199256c4c893296e9b93e203ecb1b"
+      },
+      {
+        "path": "/api/",
+        "status": 200,
+        "bytes": 27,
+        "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a"
+      },
+      {
+        "path": "/api/admin/status",
+        "status": 401,
+        "bytes": 29,
+        "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771"
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "path": "tablet-landscape-chromium.png",
+      "bytes": 2392212,
+      "sha256": "f24442728dccc5c8eb3bf74b09e4fe4f4a1988d6b535b549a888139b1aa0e822"
+    },
+    {
+      "path": "viewports-chromium.json",
+      "bytes": 34114,
+      "sha256": "b13d466556f0b0c82bc3cd8dd2286ec78a62237bc1e552035e408b2e4a66e359"
+    },
+    {
+      "path": "phone-bars-chromium.png",
+      "bytes": 1696299,
+      "sha256": "11e8ddb2138df9520495244cbcfa2e6ba6b081e8ed33c7177c6e57527899e6eb"
+    },
+    {
+      "path": "pc-chromium.png",
+      "bytes": 915881,
+      "sha256": "14f9dedcb97ebfe5499cead927511ca0cc668171f01427740ae21877dea3afb7"
+    },
+    {
+      "path": "tablet-landscape-webkit.png",
+      "bytes": 2146779,
+      "sha256": "965144e18882fc7dda5813547076b39803cd47c7b9cf3df1b17f82543919576b"
+    },
+    {
+      "path": "tablet-chromium.png",
+      "bytes": 2056722,
+      "sha256": "32c2e4fc9e97dca8f5f15c5fe6f91b740b6a7891898a3ab41c65333003621667"
+    },
+    {
+      "path": "phone-chromium.png",
+      "bytes": 2073536,
+      "sha256": "a7ca99a691e9a45e88208c7fcc1a53a914fb5b6cfbee73989dcea730a1749296"
+    },
+    {
+      "path": "build.log",
+      "bytes": 26397,
+      "sha256": "3d6a455042134a36f6ba0fa6a4c1340d6ea882cffdf2a1b7a113eb97ddc92779"
+    },
+    {
+      "path": "viewports-webkit.json",
+      "bytes": 34194,
+      "sha256": "9b272ddca78613d8b6fcd825634be01100eda0e7048654901ca3b3c624663616"
+    },
+    {
+      "path": "pc-webkit.png",
+      "bytes": 855328,
+      "sha256": "06aa9779ab175e71094ec57bfc3e9e9f6c6cbacfa1dc60585950a7367f3819c1"
+    },
+    {
+      "path": "viewports-chromium.log",
+      "bytes": 294,
+      "sha256": "b215faa95ca4214a4756717b2cbebf8b54d8ea5edf6dffc9c142c24af7a63723"
+    },
+    {
+      "path": "tablet-webkit.png",
+      "bytes": 1711367,
+      "sha256": "471d164ba33c59a96636b6d4fd1849e0e5100359ab48a076076268caeea30ae7"
+    },
+    {
+      "path": "viewports-webkit.log",
+      "bytes": 292,
+      "sha256": "e6ab6d06ddb6e0b0900e3c2d2f9524058d41fd44a74dfc107a1ff62080e3d14b"
+    },
+    {
+      "path": "fullscreen-tests.log",
+      "bytes": 927,
+      "sha256": "bae5595d85dcc01bfd33831f1bb67e5feb9a02345283ae46b8eea7c0a9b1385c"
+    },
+    {
+      "path": "phone-webkit.png",
+      "bytes": 1789916,
+      "sha256": "b442ccc9ee56e54262ff55009a5d368748ac7bd190f81c935e8010ad780c7ee9"
+    },
+    {
+      "path": "phone-bars-webkit.png",
+      "bytes": 1508550,
+      "sha256": "a171a92f23077380f0b118eab761f79984179b9a47c18e7c1826e1c97ad9dd25"
+    }
+  ]
+}

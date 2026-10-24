@@ -1,0 +1,17 @@
+✔ the standard request runs during the gesture, confirms fullscreen and avoids duplicate entry (1.395187ms)
+✔ the home toggle enters and exits real fullscreen (0.265602ms)
+✔ void-returning WebKit API confirms events and exits (0.494759ms)
+✔ void-returning WebKit older spelling confirms events and exits (0.313842ms)
+✔ old hosts rejecting the optional argument retry synchronously without options (0.303758ms)
+✔ unsupported browsers and an installed app return distinct, truthful results (0.551262ms)
+✔ native sync and async rejections never block navigation or leak listeners (0.533857ms)
+✔ a bridge that never resolves or emits a transition releases controls within three seconds (1.290823ms)
+✔ a resolved host response without an actual transition is not reported as fullscreen (0.376224ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 137.182749

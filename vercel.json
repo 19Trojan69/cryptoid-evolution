@@ -1,18 +1,21 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "installCommand": "npm install --prefix frontend && npm install --include=optional --prefix backend",
-  "buildCommand": "VITE_CRYPTOID_DIAGNOSTICS=0 npm run build --prefix frontend",
+  "installCommand": "node -e \"if(process.env.VERCEL_ENV!=='preview')throw Error('Private preview only')\" && npm install --prefix frontend",
+  "buildCommand": "node private-preview/build.mjs",
   "outputDirectory": "frontend/dist",
   "redirects": [
-    { "source": "/stability-report.html", "destination": "/", "permanent": false },
-    { "source": "/stability-report.mjs", "destination": "/", "permanent": false }
-  ],
-  "functions": {
-    "api/index.ts": {
-      "includeFiles": "backend/node_modules/@img/**"
+    {
+      "source": "/stability-report.html",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/stability-report.mjs",
+      "destination": "/",
+      "permanent": false
     }
-  },
+  ],
   "rewrites": [
     {
       "source": "/api/:path*",
@@ -65,7 +68,19 @@
       "codex/post-interruption-audio-retry-20261021": false,
       "codex/post-interruption-audio-release-record-20261021": false,
       "codex/boss-victory-audio-progress-20261021": false,
-      "codex/boss-victory-audio-release-record-20261021": false
+      "codex/boss-victory-audio-release-record-20261021": false,
+      "codex/private-playable-preview-20261024": false
     }
-  }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
+      ]
+    }
+  ]
 }

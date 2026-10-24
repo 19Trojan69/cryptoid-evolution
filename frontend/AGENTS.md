@@ -1,5 +1,31 @@
 # Preserve the officially approved game
 
+## Protected playable Preview authorized, 24 October 2026
+
+The owner explicitly requests a protected playable Preview, fullscreen on Play,
+without viewport scrolling or cropping. This supersedes the earlier no-Preview
+scope only for this isolated guest Preview. Start from ce1fb59 on the existing
+stability branch; do not restart on main. New branch
+codex/private-playable-preview-20261024 has automatic deployment disabled.
+Manual Preview deployment is authorized; Production, aliases, main merge,
+Mainnet and Testnet runtime remain excluded. Existing Vercel Authentication
+must remain enabled. No bypass links/secrets, purchases or browser-data deletion.
+
+The Preview uses the original app source/assets with build-only guest auth,
+local SDK, no-database API fixtures and a fixed game host viewport. No real
+backend imports or durable account/reward mutations. Keep original HUD, art,
+audio, simulation and strict >2500ms /500ms watchdog; no automatic Resume.
+The existing Play gesture requests native fullscreen, including tablet/PC;
+Home may retain browser bars there. Unsupported hosts cannot be forced into
+native fullscreen. Physical Pi Browser/iPhone and full-campaign acceptance remain
+open, including the retained cold WPE loop-stall. Never call this a crash fix.
+
+The connector could not access this existing project; the owner-approved
+signed Dashboard fallback may create a manual Preview under existing protection.
+No project/protection/billing setting change is authorized. Before deployment,
+verify current Production ID/source and after deployment verify they remain.
+
+
 ## Native cold-start pause evidence, 24 October 2026, no runtime correction
 
 Continuation on codex/white-screen-startup-recovery-20261023 verifies exact
