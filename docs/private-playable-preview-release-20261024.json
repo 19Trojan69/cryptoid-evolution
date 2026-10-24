@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-24",
+  "status": "READY",
+  "target": "protected Preview",
+  "url": "https://cryptoid-evolution-testnet-c0fy5yqe7-19-trojan69.vercel.app/",
+  "deploymentId": "FfR1LHgN4cjf7T7ELRCYWxtuGhoN",
+  "durationSeconds": 68,
+  "sourceCommit": "ba5d12d52545304932cbffb1b04b846abe9e2a09",
+  "sourceTree": "31b165ee025490463d0a759c8365201b34e6adb3",
+  "guestEndpoint": {
+    "user": null,
+    "canAdmin": false,
+    "adminMode": false
+  },
+  "adminEndpoint": "private_preview_test_data_only",
+  "anonymousProtection": {
+    "status": 302,
+    "redirectToVercelAuthentication": true
+  },
+  "cloudGame": {
+    "started": true,
+    "scroll": [
+      0,
+      0
+    ],
+    "shell": [
+      0,
+      0,
+      1363,
+      936
+    ],
+    "viewport": [
+      1363,
+      936
+    ],
+    "nativeFullscreen": false,
+    "unexpectedPause": false,
+    "explicitPauseSucceeded": true
+  },
+  "nativeChecks": {
+    "chromiumViewportsPassed": 5,
+    "webkitViewportsPassed": 5,
+    "chromiumFullscreen": true,
+    "webkitFullscreenApiAvailable": false
+  },
+  "officialProduction": {
+    "deploymentId": "AsXUruYAuKRboZWFymr2cD3FkLCJ",
+    "source": "19de3e692f75a1c3e2eddf3438acc937c9dcac19",
+    "publicRootApiAndAdminHashesUnchanged": true
+  },
+  "firstDeployment": {
+    "id": "4kJGUVEMGoHRwkKv4CG8bZ6w6B9x",
+    "source": "958649fe65837ab36297fa111600685aeb5ef96b",
+    "api500": true,
+    "excludedFromFinalAcceptance": true
+  },
+  "correction": "Self-contained Preview function; no external handler module import",
+  "automaticDeployment": false,
+  "automaticResume": false,
+  "watchdog": {
+    "strictGreaterThanMs": 2500,
+    "intervalMs": 500
+  },
+  "fullCampaignAccepted": false,
+  "physicalPiBrowserAccepted": false,
+  "iphoneLongTermAccepted": false,
+  "historicalWhiteScreensFixed": false
+}
