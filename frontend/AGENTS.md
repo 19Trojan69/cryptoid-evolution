@@ -1,5 +1,25 @@
 # Preserve the officially approved game
 
+## Same-route White Screen report investigated, 24 October 2026
+
+The owner clarifies that the white display returned directly to the game with
+ships entering from above, never Home in between, followed by normal death.
+Whether points/lives reset is unknown. Screenshot does not capture white pixels
+or establish the full hostname/browser. Do not blame its translation/browser bars.
+From protected Preview ba5d12d, unchanged real app passes normal early-flight
+Pause/Resume and393x744/628 viewport changes in native Chromium141/WPE26.5.
+Explicit /game reload separately starts a new guest scene without Home, changes
+timeOrigin and records page-reload. That controlled result is not a natural
+White Screen, OS kill or fast-motion reproduction. Device finding remains open.
+Only the old Node simulation host's missing settled Promise is corrected;27
+scheduler/cadence/formation tests pass after22pass/5host-fail controls. No game,
+audio, art, HUD, timing, saves or backend change. Existing strict>2500ms/500ms
+watchdog, explicit Resume, private photo and earlier WPE failures remain intact.
+See docs/preview-resume-investigation-20261024.md/.json. This investigation
+branch is auto-deploy-disabled; no new deployment or main/Testnet/Mainnet change.
+Do not demand a repeat campaign, purchase or data clearing.
+
+
 ## Protected playable Preview authorized, 24 October 2026
 
 The owner explicitly requests a protected playable Preview, fullscreen on Play,

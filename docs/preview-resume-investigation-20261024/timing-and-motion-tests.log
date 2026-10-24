@@ -1,0 +1,187 @@
+✔ resting Testnet enemies sway slowly in both directions, including legacy checkpoint entry identifiers (56.023034ms)
+✔ sway is time-based; Mainnet and boss escorts retain their existing stationary formation behavior (3.676984ms)
+✔ normal Testnet arrivals take ten percent longer across all stages without changing profiles or docking (34.52811ms)
+✔ early returns always schedule exactly one following frame (1.604442ms)
+✔ a frame exception pauses through the fault callback and leaves the loop usable (0.200064ms)
+✔ repeated failure is reported once until a frame succeeds; reporting errors cannot kill RAF (0.178963ms)
+✔ stalled foreground loop is replaced; a late canceled callback cannot create a second loop (0.281284ms)
+✔ a delayed RAF is detected even when it runs before the monitoring timer (0.219123ms)
+✔ intentional pause and hidden tabs are never treated as a foreground stall (0.238861ms)
+✔ the first active RAF does not count an observed paused interval as a foreground stall (0.832245ms)
+✔ the monitoring timer rearms after pause without replacing the pending RAF (0.246423ms)
+✔ the first visible RAF excludes the observed hidden interval (0.178303ms)
+✔ an initially loading loop starts its foreground heartbeat on first observation of play (0.239453ms)
+✔ a genuine foreground stall after rearming still uses the exact original threshold and replacement (0.128048ms)
+✔ a delayed RAF after rearming still detects a subsequent active stall before the watcher (0.172194ms)
+✔ rearming never suppresses a simulation exception on the first resumed frame (0.132174ms)
+✔ cleanup invalidates callbacks and monitoring, including Strict Mode remounts (0.077724ms)
+✔ actual GamePage recovery preserves run, lives, rewards and paid timers even if audio/save fails (137.573834ms)
+✔ diagnostics stay local and bounded and malformed/unavailable storage cannot break recovery (2.429897ms)
+✔ denied sessionStorage cannot fail GamePage diagnostics setup or remove its error protection (67.273487ms)
+TypeError: Cannot read properties of undefined (reading 'then')
+    at evalmachine.<anonymous>:18858:23
+    at /workspace/scratch/fb7073945978/cryptoid-evolution/frontend/scripts/verifySimulationStability.cjs:291:21
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+TypeError: Cannot read properties of undefined (reading 'then')
+    at evalmachine.<anonymous>:18858:23
+    at /workspace/scratch/fb7073945978/cryptoid-evolution/frontend/scripts/verifySimulationStability.cjs:291:21
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+TypeError: Cannot read properties of undefined (reading 'then')
+    at evalmachine.<anonymous>:18858:23
+    at /workspace/scratch/fb7073945978/cryptoid-evolution/frontend/scripts/verifySimulationStability.cjs:291:21
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+TypeError: Cannot read properties of undefined (reading 'then')
+    at evalmachine.<anonymous>:18858:23
+    at /workspace/scratch/fb7073945978/cryptoid-evolution/frontend/scripts/verifySimulationStability.cjs:291:21
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+TypeError: Cannot read properties of undefined (reading 'then')
+    at evalmachine.<anonymous>:18858:23
+    at /workspace/scratch/fb7073945978/cryptoid-evolution/frontend/scripts/verifySimulationStability.cjs:291:21
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+✔ late frames consume real time with collision steps at most 34 ms (1.213779ms)
+✔ long stalls stay bounded without a backlog; pause keeps the full wall-time shift (0.189519ms)
+✖ actual GamePage: player/enemy shots and timers retain speed at 60 Hz (594.538457ms)
+✖ actual GamePage: player/enemy shots and timers retain speed at 30 Hz (519.705248ms)
+✖ actual GamePage: player/enemy shots and timers retain speed at 20 Hz (479.609315ms)
+✖ actual GamePage: player/enemy shots and timers retain speed at 88 ms stalls (521.462019ms)
+✖ actual GamePage: player/enemy shots and timers retain speed at irregular delivery (472.313085ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 22
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2730.999384
+
+✖ failing tests:
+
+test at src/pages/simulationFrame.test.mjs:31:4
+✖ actual GamePage: player/enemy shots and timers retain speed at 60 Hz (594.538457ms)
+  Error: Command failed: /opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node scripts/verifySimulationStability.cjs
+  TypeError: Cannot read properties of undefined (reading 'then')
+      at evalmachine.<anonymous>:18858:23
+      at /workspace/scratch/fb7073945978/cryptoid-evolution/frontend/scripts/verifySimulationStability.cjs:291:21
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+  
+      at genericNodeError (node:internal/errors:985:15)
+      at wrappedFn (node:internal/errors:539:14)
+      at checkExecSyncError (node:child_process:942:11)
+      at execFileSync (node:child_process:978:15)
+      at TestContext.<anonymous> (file:///workspace/scratch/fb7073945978/cryptoid-evolution/frontend/src/pages/simulationFrame.test.mjs:34:20)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12) {
+    status: 1,
+    signal: null,
+    output: [ null, '', "TypeError: Cannot read properties of undefined (reading 'then')\n    at evalmachine.<anonymous>:18858:23\n    at /workspace/scratch/fb7073945978/cryptoid-evolution/frontend/scripts/verifySimulationStability.cjs:291:21\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n" ],
+    pid: 36,
+    stdout: '',
+    stderr: "TypeError: Cannot read properties of undefined (reading 'then')\n    at evalmachine.<anonymous>:18858:23\n    at /workspace/scratch/fb7073945978/cryptoid-evolution/frontend/scripts/verifySimulationStability.cjs:291:21\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n"
+  }
+
+test at src/pages/simulationFrame.test.mjs:31:4
+✖ actual GamePage: player/enemy shots and timers retain speed at 30 Hz (519.705248ms)
+  Error: Command failed: /opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node scripts/verifySimulationStability.cjs
+  TypeError: Cannot read properties of undefined (reading 'then')
+      at evalmachine.<anonymous>:18858:23
+      at /workspace/scratch/fb7073945978/cryptoid-evolution/frontend/scripts/verifySimulationStability.cjs:291:21
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+  
+      at genericNodeError (node:internal/errors:985:15)
+      at wrappedFn (node:internal/errors:539:14)
+      at checkExecSyncError (node:child_process:942:11)
+      at execFileSync (node:child_process:978:15)
+      at TestContext.<anonymous> (file:///workspace/scratch/fb7073945978/cryptoid-evolution/frontend/src/pages/simulationFrame.test.mjs:34:20)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12) {
+    status: 1,
+    signal: null,
+    output: [ null, '', "TypeError: Cannot read properties of undefined (reading 'then')\n    at evalmachine.<anonymous>:18858:23\n    at /workspace/scratch/fb7073945978/cryptoid-evolution/frontend/scripts/verifySimulationStability.cjs:291:21\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n" ],
+    pid: 57,
+    stdout: '',
+    stderr: "TypeError: Cannot read properties of undefined (reading 'then')\n    at evalmachine.<anonymous>:18858:23\n    at /workspace/scratch/fb7073945978/cryptoid-evolution/frontend/scripts/verifySimulationStability.cjs:291:21\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n"
+  }
+
+test at src/pages/simulationFrame.test.mjs:31:4
+✖ actual GamePage: player/enemy shots and timers retain speed at 20 Hz (479.609315ms)
+  Error: Command failed: /opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node scripts/verifySimulationStability.cjs
+  TypeError: Cannot read properties of undefined (reading 'then')
+      at evalmachine.<anonymous>:18858:23
+      at /workspace/scratch/fb7073945978/cryptoid-evolution/frontend/scripts/verifySimulationStability.cjs:291:21
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+  
+      at genericNodeError (node:internal/errors:985:15)
+      at wrappedFn (node:internal/errors:539:14)
+      at checkExecSyncError (node:child_process:942:11)
+      at execFileSync (node:child_process:978:15)
+      at TestContext.<anonymous> (file:///workspace/scratch/fb7073945978/cryptoid-evolution/frontend/src/pages/simulationFrame.test.mjs:34:20)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12) {
+    status: 1,
+    signal: null,
+    output: [ null, '', "TypeError: Cannot read properties of undefined (reading 'then')\n    at evalmachine.<anonymous>:18858:23\n    at /workspace/scratch/fb7073945978/cryptoid-evolution/frontend/scripts/verifySimulationStability.cjs:291:21\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n" ],
+    pid: 78,
+    stdout: '',
+    stderr: "TypeError: Cannot read properties of undefined (reading 'then')\n    at evalmachine.<anonymous>:18858:23\n    at /workspace/scratch/fb7073945978/cryptoid-evolution/frontend/scripts/verifySimulationStability.cjs:291:21\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n"
+  }
+
+test at src/pages/simulationFrame.test.mjs:31:4
+✖ actual GamePage: player/enemy shots and timers retain speed at 88 ms stalls (521.462019ms)
+  Error: Command failed: /opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node scripts/verifySimulationStability.cjs
+  TypeError: Cannot read properties of undefined (reading 'then')
+      at evalmachine.<anonymous>:18858:23
+      at /workspace/scratch/fb7073945978/cryptoid-evolution/frontend/scripts/verifySimulationStability.cjs:291:21
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+  
+      at genericNodeError (node:internal/errors:985:15)
+      at wrappedFn (node:internal/errors:539:14)
+      at checkExecSyncError (node:child_process:942:11)
+      at execFileSync (node:child_process:978:15)
+      at TestContext.<anonymous> (file:///workspace/scratch/fb7073945978/cryptoid-evolution/frontend/src/pages/simulationFrame.test.mjs:34:20)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12) {
+    status: 1,
+    signal: null,
+    output: [ null, '', "TypeError: Cannot read properties of undefined (reading 'then')\n    at evalmachine.<anonymous>:18858:23\n    at /workspace/scratch/fb7073945978/cryptoid-evolution/frontend/scripts/verifySimulationStability.cjs:291:21\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n" ],
+    pid: 99,
+    stdout: '',
+    stderr: "TypeError: Cannot read properties of undefined (reading 'then')\n    at evalmachine.<anonymous>:18858:23\n    at /workspace/scratch/fb7073945978/cryptoid-evolution/frontend/scripts/verifySimulationStability.cjs:291:21\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n"
+  }
+
+test at src/pages/simulationFrame.test.mjs:31:4
+✖ actual GamePage: player/enemy shots and timers retain speed at irregular delivery (472.313085ms)
+  Error: Command failed: /opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node scripts/verifySimulationStability.cjs
+  TypeError: Cannot read properties of undefined (reading 'then')
+      at evalmachine.<anonymous>:18858:23
+      at /workspace/scratch/fb7073945978/cryptoid-evolution/frontend/scripts/verifySimulationStability.cjs:291:21
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+  
+      at genericNodeError (node:internal/errors:985:15)
+      at wrappedFn (node:internal/errors:539:14)
+      at checkExecSyncError (node:child_process:942:11)
+      at execFileSync (node:child_process:978:15)
+      at TestContext.<anonymous> (file:///workspace/scratch/fb7073945978/cryptoid-evolution/frontend/src/pages/simulationFrame.test.mjs:34:20)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12) {
+    status: 1,
+    signal: null,
+    output: [ null, '', "TypeError: Cannot read properties of undefined (reading 'then')\n    at evalmachine.<anonymous>:18858:23\n    at /workspace/scratch/fb7073945978/cryptoid-evolution/frontend/scripts/verifySimulationStability.cjs:291:21\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n" ],
+    pid: 119,
+    stdout: '',
+    stderr: "TypeError: Cannot read properties of undefined (reading 'then')\n    at evalmachine.<anonymous>:18858:23\n    at /workspace/scratch/fb7073945978/cryptoid-evolution/frontend/scripts/verifySimulationStability.cjs:291:21\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n"
+  }

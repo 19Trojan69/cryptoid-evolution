@@ -1,0 +1,214 @@
+{
+  "date": "2026-10-24",
+  "status": "investigated_no_runtime_correction_no_new_deployment",
+  "baseCommit": "ba5d12d52545304932cbffb1b04b846abe9e2a09",
+  "branch": "codex/preview-resume-investigation-20261024",
+  "unchangedAppSourceTree": "66f458f157bb4d52b6ebe57f92d51b52a51451b2",
+  "ownerReport": {
+    "sequence": [
+      "played",
+      "briefly paused",
+      "resumed play",
+      "white display",
+      "direct return to game with ships entering from above and reported fast movement",
+      "later ordinary death"
+    ],
+    "homeBetweenWhiteAndGame": false,
+    "progressResetKnown": false,
+    "whiteDisplayCaptured": false,
+    "screenshotShowsGameSurfaceAndBrowserTranslationBars": true,
+    "browserIdentityAndFullHostnameEstablished": false,
+    "causeEstablished": false
+  },
+  "build": {
+    "originalTestsPassed": 151,
+    "isolationTestsPassed": 8,
+    "typesLocalesVitePassed": true
+  },
+  "sourceTests": {
+    "beforeHostFix": {
+      "passed": 22,
+      "failed": 5,
+      "cause": "simulation-only retainPreparedHulls stub omits settled Promise, unlike actual API"
+    },
+    "afterHostFix": {
+      "passed": 27,
+      "failed": 0
+    },
+    "gameRuntimeChanged": false
+  },
+  "browsers": {
+    "chromium": {
+      "version": "141.0.7390.37",
+      "preflight": {
+        "browserStarted": true,
+        "status": 200,
+        "text": "local-server-ok"
+      },
+      "passed": true,
+      "cases": [
+        {
+          "mode": "pause-resume",
+          "passed": true,
+          "controlledReload": null
+        },
+        {
+          "mode": "pause-resume-resize",
+          "passed": true,
+          "controlledReload": null
+        },
+        {
+          "mode": "explicit-current-route-reload-control",
+          "passed": true,
+          "controlledReload": {
+            "currentRouteStartsGameWithoutHome": true,
+            "restartMarker": [
+              {
+                "reason": "unexpected-restart",
+                "errorName": "",
+                "phase": "ENTRY",
+                "encounter": "normal",
+                "status": "playing",
+                "at": "2026-10-24T12:50:26.815Z",
+                "restartHint": "page-reload",
+                "sector": 1,
+                "block": 1,
+                "width": 393,
+                "height": 744,
+                "enemies": 2,
+                "projectiles": 0,
+                "effects": 0,
+                "lastSavedAt": 0,
+                "inObservedFlow": true
+              }
+            ],
+            "notNaturalWhiteScreenReproduction": true
+          }
+        }
+      ]
+    },
+    "webkit": {
+      "version": "26.5",
+      "preflight": {
+        "browserStarted": true,
+        "status": 200,
+        "text": "local-server-ok"
+      },
+      "passed": true,
+      "cases": [
+        {
+          "mode": "pause-resume",
+          "passed": true,
+          "controlledReload": null
+        },
+        {
+          "mode": "pause-resume-resize",
+          "passed": true,
+          "controlledReload": null
+        },
+        {
+          "mode": "explicit-current-route-reload-control",
+          "passed": true,
+          "controlledReload": {
+            "currentRouteStartsGameWithoutHome": true,
+            "restartMarker": [
+              {
+                "reason": "unexpected-restart",
+                "errorName": "",
+                "phase": "ENTRY",
+                "encounter": "normal",
+                "status": "playing",
+                "at": "2026-10-24T12:51:21.422Z",
+                "restartHint": "page-reload",
+                "sector": 1,
+                "block": 1,
+                "width": 393,
+                "height": 744,
+                "enemies": 1,
+                "projectiles": 0,
+                "effects": 0,
+                "lastSavedAt": 0,
+                "inObservedFlow": true
+              }
+            ],
+            "notNaturalWhiteScreenReproduction": true
+          }
+        }
+      ]
+    }
+  },
+  "automaticDeploymentEnabled": false,
+  "deploymentPerformed": false,
+  "mainMergePerformed": false,
+  "testnetChanged": false,
+  "mainnetChanged": false,
+  "watchdog": {
+    "thresholdMs": 2500,
+    "comparison": "strictly greater than",
+    "intervalMs": 500,
+    "automaticResume": false
+  },
+  "historicalWhiteScreensFixed": false,
+  "reportedDeviceFailureReproduced": false,
+  "physicalIphoneAcceptance": false,
+  "excludedAttempt": {
+    "file": "excluded-initial-navigation-assertion.json",
+    "reason": "Test assertion counted a second initial Home history notification before Play as post-entry Home. Source never navigated Home after Play. Final assertion scopes notifications after observed game entry; retained original failure is not an application failure."
+  },
+  "limits": [
+    "Native Linux engines and controlled guest transports, not physical iPhone",
+    "Viewport resize does not reproduce browser translation or OS termination",
+    "Explicit reload control is not natural White Screen reproduction",
+    "Retained prior WPE loop-stall failure is not superseded",
+    "Guest auth has no live save restoration; account/start/save/economy unchanged",
+    "DOM snapshots/pixels have overhead; no natural fast-motion interval measured",
+    "User photo remains private and is not uploaded to GitHub"
+  ],
+  "files": [
+    {
+      "path": "timing-and-motion-tests-after-host-fix.log",
+      "bytes": 2791,
+      "sha256": "72f1d2641d8a6eedda2fc88588b2843651af3cde574dc15d867c5b302b02203f"
+    },
+    {
+      "path": "excluded-initial-navigation-assertion.log",
+      "bytes": 225,
+      "sha256": "44292190fb8641c586625029455d9520cb88c06178355c6a3f8443c8db02f93c"
+    },
+    {
+      "path": "webkit.json",
+      "bytes": 61106,
+      "sha256": "2151ac7295f99c2c0276ad766011d8edd2499b8377b3bece606c67c7ea583a05"
+    },
+    {
+      "path": "build.log",
+      "bytes": 26638,
+      "sha256": "0c6f5cb1f17995210269b5dd9d5c40a2f470377051973533c99f2b31f97e9de0"
+    },
+    {
+      "path": "chromium.json",
+      "bytes": 56359,
+      "sha256": "cd7feef4c22e9f425ae496a936dd99a48483fcb1e22dd3a019287d4f138faf46"
+    },
+    {
+      "path": "webkit.log",
+      "bytes": 672,
+      "sha256": "8b58eb88479c695b3f07d568df1cf81ce96a850c3edabce012efe03a6fa3321b"
+    },
+    {
+      "path": "chromium.log",
+      "bytes": 674,
+      "sha256": "05432b7d5a8f0412b4b86e18df984578d106a7e2d8743c46cf25b5e71c64708a"
+    },
+    {
+      "path": "excluded-initial-navigation-assertion.json",
+      "bytes": 18631,
+      "sha256": "563ea19b3655332acc4ccd370e6dc7a161bc37a1cbd0dff5a44e2f94966f6631"
+    },
+    {
+      "path": "timing-and-motion-tests.log",
+      "bytes": 14159,
+      "sha256": "b6db2d1688bdd9db9258e62408e259391cdb512c1cca467bc94e4d700854d644"
+    }
+  ]
+}

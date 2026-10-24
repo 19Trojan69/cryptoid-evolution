@@ -1,0 +1,1784 @@
+{
+  "engine": "chromium",
+  "passed": true,
+  "gameplayHooks": false,
+  "automaticResume": false,
+  "preflight": {
+    "browserStarted": true,
+    "status": 200,
+    "text": "local-server-ok"
+  },
+  "results": [
+    {
+      "mode": "pause-resume",
+      "passed": true,
+      "errors": [],
+      "unexpected": [],
+      "httpErrors": [],
+      "navigations": [
+        "/",
+        "/",
+        "/game",
+        "/game",
+        "/game",
+        "/game"
+      ],
+      "samples": [
+        {
+          "label": "entry-before-action",
+          "at": 1792846209795,
+          "documentStartedAt": 1792846208351.2,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.3296,
+              "y": 126.828,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019,
+              "y": 111.228,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792846208897,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "paused",
+          "at": 1792846209868,
+          "documentStartedAt": 1792846208351.2,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.3296,
+              "y": 130.027,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019,
+              "y": 114.318,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792846208897,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "still-paused",
+          "at": 1792846210571,
+          "documentStartedAt": 1792846208351.2,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.3296,
+              "y": 130.027,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019,
+              "y": 114.318,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792846208897,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "resumed",
+          "at": 1792846213921,
+          "documentStartedAt": 1792846208351.2,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.3296,
+              "y": 144.741,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019,
+              "y": 128.769,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 4,
+              "title": "SolFlare · light · X",
+              "x": 71.563,
+              "y": 129.347,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 5,
+              "title": "SolFlare · light · X",
+              "x": 319.064,
+              "y": 133.33,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792846208897,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "after-active-wait",
+          "at": 1792846215728,
+          "documentStartedAt": 1792846208351.2,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 87.5831,
+              "y": 183.672,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 313.196,
+              "y": 175.092,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light"
+            },
+            {
+              "node": 4,
+              "title": "SolFlare · light · X",
+              "x": 75.5695,
+              "y": 284.024,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light"
+            },
+            {
+              "node": 5,
+              "title": "SolFlare · light · X",
+              "x": 321.826,
+              "y": 308.577,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light"
+            },
+            {
+              "node": 6,
+              "title": "Ether Crystal · medium · Z",
+              "x": 201.561,
+              "y": 169.229,
+              "className": "asteroid asteroid-medium cryptoid cryptoid-etherCrystal cryptoid-medium"
+            },
+            {
+              "node": 7,
+              "title": "Ether Crystal · medium · Z",
+              "x": 190.717,
+              "y": 286.203,
+              "className": "asteroid asteroid-medium cryptoid cryptoid-etherCrystal cryptoid-medium"
+            }
+          ],
+          "marker": {
+            "at": 1792846208897,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        }
+      ],
+      "lifecycleStage": "final-explicit-pause",
+      "lifecycleSamples": [
+        {
+          "label": "home",
+          "captured": true,
+          "observedAtEpochMs": 1792846208667,
+          "documentStartedAt": 1792846208351.2,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/",
+          "rootChildren": 1,
+          "shell": null,
+          "pauseControl": null,
+          "pauseHitTarget": null,
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "entry-active",
+          "captured": true,
+          "observedAtEpochMs": 1792846209798,
+          "documentStartedAt": 1792846208351.2,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              353,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "requested-pause",
+          "captured": true,
+          "observedAtEpochMs": 1792846209863,
+          "documentStartedAt": 1792846208351.2,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "true"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              353,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "div",
+            "id": "",
+            "className": "game-overlay pause-settings-overlay",
+            "insidePauseControl": false
+          },
+          "pauseOverlay": {
+            "tag": "div",
+            "id": "",
+            "className": "game-overlay pause-settings-overlay",
+            "role": "dialog",
+            "visible": true,
+            "box": [
+              0,
+              0,
+              393,
+              744
+            ],
+            "pointerEvents": "auto",
+            "text": "MISSION PAUSIERTHalte die Stellung.Eine kurze Verschnaufpause.Die Cryptoids warten.Level 1 · Block 1/9 · GENESIS BELTShop & WaffenSYSTEM / EINSTELLUNGENMusik & Effekte50%›SteuerungRechtshändig›SpracheDeutsch›Anzeige›SpracheAktuelle Sprache: Deutsch◎Automatisch (Gerätesprache)⌄SteuerungMit einem Daumen steuern, mit dem anderen Power-ups aktivieren.◁Rechtshänder-Steuerung▷Linkshänder-SteuerungBerührungsempfindlichkeitSanftNormalSchnellSteuerbereichDer Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.KompaktNormalBreitStartposition des SchiffsÜber dem FingerDirekt unter dem FingerMusiklautstärkeMusiklautstärke50%0%25%50%75%100%Effektlautstärke35%0%25%50%75%100%Anzeige⛶Vollbild≋Vibration an◌StandardeffekteFortsetzen",
+            "disabled": false
+          },
+          "overlays": [
+            {
+              "tag": "div",
+              "id": "",
+              "className": "game-overlay pause-settings-overlay",
+              "role": "dialog",
+              "visible": true,
+              "box": [
+                0,
+                0,
+                393,
+                744
+              ],
+              "pointerEvents": "auto",
+              "text": "MISSION PAUSIERTHalte die Stellung.Eine kurze Verschnaufpause.Die Cryptoids warten.Level 1 · Block 1/9 · GENESIS BELTShop & WaffenSYSTEM / EINSTELLUNGENMusik & Effekte50%›SteuerungRechtshändig›SpracheDeutsch›Anzeige›SpracheAktuelle Sprache: Deutsch◎Automatisch (Gerätesprache)⌄SteuerungMit einem Daumen steuern, mit dem anderen Power-ups aktivieren.◁Rechtshänder-Steuerung▷Linkshänder-SteuerungBerührungsempfindlichkeitSanftNormalSchnellSteuerbereichDer Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.KompaktNormalBreitStartposition des SchiffsÜber dem FingerDirekt unter dem FingerMusiklautstärkeMusiklautstärke50%0%25%50%75%100%Effektlautstärke35%0%25%50%75%100%Anzeige⛶Vollbild≋Vibration an◌StandardeffekteFortsetzen",
+              "disabled": false
+            }
+          ],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "resumed-active",
+          "captured": true,
+          "observedAtEpochMs": 1792846213919,
+          "documentStartedAt": 1792846208351.2,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              353,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-active-wait",
+          "captured": true,
+          "observedAtEpochMs": 1792846215724,
+          "documentStartedAt": 1792846208351.2,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              353,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-pixels",
+          "captured": true,
+          "observedAtEpochMs": 1792846216688,
+          "documentStartedAt": 1792846208351.2,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              353,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "final-explicit-pause",
+          "captured": true,
+          "observedAtEpochMs": 1792846216758,
+          "documentStartedAt": 1792846208351.2,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "true"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              353,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "div",
+            "id": "",
+            "className": "game-overlay pause-settings-overlay",
+            "insidePauseControl": false
+          },
+          "pauseOverlay": {
+            "tag": "div",
+            "id": "",
+            "className": "game-overlay pause-settings-overlay",
+            "role": "dialog",
+            "visible": true,
+            "box": [
+              0,
+              0,
+              393,
+              744
+            ],
+            "pointerEvents": "auto",
+            "text": "MISSION PAUSIERTHalte die Stellung.Eine kurze Verschnaufpause.Die Cryptoids warten.Level 1 · Block 1/9 · GENESIS BELTShop & WaffenSYSTEM / EINSTELLUNGENMusik & Effekte50%›SteuerungRechtshändig›SpracheDeutsch›Anzeige›SpracheAktuelle Sprache: Deutsch◎Automatisch (Gerätesprache)⌄SteuerungMit einem Daumen steuern, mit dem anderen Power-ups aktivieren.◁Rechtshänder-Steuerung▷Linkshänder-SteuerungBerührungsempfindlichkeitSanftNormalSchnellSteuerbereichDer Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.KompaktNormalBreitStartposition des SchiffsÜber dem FingerDirekt unter dem FingerMusiklautstärkeMusiklautstärke50%0%25%50%75%100%Effektlautstärke35%0%25%50%75%100%Anzeige⛶Vollbild≋Vibration an◌StandardeffekteFortsetzen",
+            "disabled": false
+          },
+          "overlays": [
+            {
+              "tag": "div",
+              "id": "",
+              "className": "game-overlay pause-settings-overlay",
+              "role": "dialog",
+              "visible": true,
+              "box": [
+                0,
+                0,
+                393,
+                744
+              ],
+              "pointerEvents": "auto",
+              "text": "MISSION PAUSIERTHalte die Stellung.Eine kurze Verschnaufpause.Die Cryptoids warten.Level 1 · Block 1/9 · GENESIS BELTShop & WaffenSYSTEM / EINSTELLUNGENMusik & Effekte50%›SteuerungRechtshändig›SpracheDeutsch›Anzeige›SpracheAktuelle Sprache: Deutsch◎Automatisch (Gerätesprache)⌄SteuerungMit einem Daumen steuern, mit dem anderen Power-ups aktivieren.◁Rechtshänder-Steuerung▷Linkshänder-SteuerungBerührungsempfindlichkeitSanftNormalSchnellSteuerbereichDer Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.KompaktNormalBreitStartposition des SchiffsÜber dem FingerDirekt unter dem FingerMusiklautstärkeMusiklautstärke50%0%25%50%75%100%Effektlautstärke35%0%25%50%75%100%Anzeige⛶Vollbild≋Vibration an◌StandardeffekteFortsetzen",
+              "disabled": false
+            }
+          ],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        }
+      ],
+      "lifecycleStartedAt": 1792846208667,
+      "playNavigationIndex": 3,
+      "screenshot": "chromium-pause-resume.png"
+    },
+    {
+      "mode": "pause-resume-resize",
+      "passed": true,
+      "errors": [],
+      "unexpected": [],
+      "httpErrors": [],
+      "navigations": [
+        "/",
+        "/",
+        "/game",
+        "/game",
+        "/game",
+        "/game"
+      ],
+      "samples": [
+        {
+          "label": "entry-before-action",
+          "at": 1792846218300,
+          "documentStartedAt": 1792846216787.4,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.3296,
+              "y": 128.425,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019,
+              "y": 112.763,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792846217396,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "paused",
+          "at": 1792846218365,
+          "documentStartedAt": 1792846216787.4,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.3296,
+              "y": 130.032,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019,
+              "y": 114.318,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792846217396,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "paused-with-smaller-viewport",
+          "at": 1792846218387,
+          "documentStartedAt": 1792846216787.4,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            628
+          ],
+          "viewport": [
+            393,
+            628
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.3296,
+              "y": 130.032,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019,
+              "y": 114.318,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792846217396,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "still-paused",
+          "at": 1792846219112,
+          "documentStartedAt": 1792846216787.4,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.3296,
+              "y": 130.032,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019,
+              "y": 114.318,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792846217396,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "resumed",
+          "at": 1792846222461,
+          "documentStartedAt": 1792846216787.4,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.3296,
+              "y": 143.092,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019,
+              "y": 127.125,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 4,
+              "title": "SolFlare · light · X",
+              "x": 71.563,
+              "y": 124.713,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 5,
+              "title": "SolFlare · light · X",
+              "x": 319.064,
+              "y": 126.633,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792846217396,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "active-with-smaller-viewport",
+          "at": 1792846222473,
+          "documentStartedAt": 1792846216787.4,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            628
+          ],
+          "viewport": [
+            393,
+            628
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.3296,
+              "y": 144.737,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019,
+              "y": 128.759,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 4,
+              "title": "SolFlare · light · X",
+              "x": 71.563,
+              "y": 129.333,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 5,
+              "title": "SolFlare · light · X",
+              "x": 319.064,
+              "y": 131.083,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792846217396,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "after-active-wait",
+          "at": 1792846224280,
+          "documentStartedAt": 1792846216787.4,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            628
+          ],
+          "viewport": [
+            393,
+            628
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 87.1971,
+              "y": 182.444,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 313.694,
+              "y": 174.689,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light"
+            },
+            {
+              "node": 4,
+              "title": "SolFlare · light · X",
+              "x": 76.1012,
+              "y": 285.261,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light"
+            },
+            {
+              "node": 5,
+              "title": "SolFlare · light · X",
+              "x": 321.104,
+              "y": 307.454,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light"
+            },
+            {
+              "node": 6,
+              "title": "Ether Crystal · medium · Z",
+              "x": 201.07,
+              "y": 169.389,
+              "className": "asteroid asteroid-medium cryptoid cryptoid-etherCrystal cryptoid-medium"
+            },
+            {
+              "node": 7,
+              "title": "Ether Crystal · medium · Z",
+              "x": 191.273,
+              "y": 287.231,
+              "className": "asteroid asteroid-medium cryptoid cryptoid-etherCrystal cryptoid-medium"
+            }
+          ],
+          "marker": {
+            "at": 1792846217396,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        }
+      ],
+      "lifecycleStage": "final-explicit-pause",
+      "lifecycleSamples": [
+        {
+          "label": "home",
+          "captured": true,
+          "observedAtEpochMs": 1792846217187,
+          "documentStartedAt": 1792846216787.4,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/",
+          "rootChildren": 1,
+          "shell": null,
+          "pauseControl": null,
+          "pauseHitTarget": null,
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "entry-active",
+          "captured": true,
+          "observedAtEpochMs": 1792846218302,
+          "documentStartedAt": 1792846216787.4,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              353,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "requested-pause",
+          "captured": true,
+          "observedAtEpochMs": 1792846218363,
+          "documentStartedAt": 1792846216787.4,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "true"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              353,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "div",
+            "id": "",
+            "className": "game-overlay pause-settings-overlay",
+            "insidePauseControl": false
+          },
+          "pauseOverlay": {
+            "tag": "div",
+            "id": "",
+            "className": "game-overlay pause-settings-overlay",
+            "role": "dialog",
+            "visible": true,
+            "box": [
+              0,
+              0,
+              393,
+              744
+            ],
+            "pointerEvents": "auto",
+            "text": "MISSION PAUSIERTHalte die Stellung.Eine kurze Verschnaufpause.Die Cryptoids warten.Level 1 · Block 1/9 · GENESIS BELTShop & WaffenSYSTEM / EINSTELLUNGENMusik & Effekte50%›SteuerungRechtshändig›SpracheDeutsch›Anzeige›SpracheAktuelle Sprache: Deutsch◎Automatisch (Gerätesprache)⌄SteuerungMit einem Daumen steuern, mit dem anderen Power-ups aktivieren.◁Rechtshänder-Steuerung▷Linkshänder-SteuerungBerührungsempfindlichkeitSanftNormalSchnellSteuerbereichDer Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.KompaktNormalBreitStartposition des SchiffsÜber dem FingerDirekt unter dem FingerMusiklautstärkeMusiklautstärke50%0%25%50%75%100%Effektlautstärke35%0%25%50%75%100%Anzeige⛶Vollbild≋Vibration an◌StandardeffekteFortsetzen",
+            "disabled": false
+          },
+          "overlays": [
+            {
+              "tag": "div",
+              "id": "",
+              "className": "game-overlay pause-settings-overlay",
+              "role": "dialog",
+              "visible": true,
+              "box": [
+                0,
+                0,
+                393,
+                744
+              ],
+              "pointerEvents": "auto",
+              "text": "MISSION PAUSIERTHalte die Stellung.Eine kurze Verschnaufpause.Die Cryptoids warten.Level 1 · Block 1/9 · GENESIS BELTShop & WaffenSYSTEM / EINSTELLUNGENMusik & Effekte50%›SteuerungRechtshändig›SpracheDeutsch›Anzeige›SpracheAktuelle Sprache: Deutsch◎Automatisch (Gerätesprache)⌄SteuerungMit einem Daumen steuern, mit dem anderen Power-ups aktivieren.◁Rechtshänder-Steuerung▷Linkshänder-SteuerungBerührungsempfindlichkeitSanftNormalSchnellSteuerbereichDer Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.KompaktNormalBreitStartposition des SchiffsÜber dem FingerDirekt unter dem FingerMusiklautstärkeMusiklautstärke50%0%25%50%75%100%Effektlautstärke35%0%25%50%75%100%Anzeige⛶Vollbild≋Vibration an◌StandardeffekteFortsetzen",
+              "disabled": false
+            }
+          ],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "resumed-active",
+          "captured": true,
+          "observedAtEpochMs": 1792846222459,
+          "documentStartedAt": 1792846216787.4,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              353,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-active-wait",
+          "captured": true,
+          "observedAtEpochMs": 1792846224277,
+          "documentStartedAt": 1792846216787.4,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              353,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-pixels",
+          "captured": true,
+          "observedAtEpochMs": 1792846225136,
+          "documentStartedAt": 1792846216787.4,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              353,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "final-explicit-pause",
+          "captured": true,
+          "observedAtEpochMs": 1792846225192,
+          "documentStartedAt": 1792846216787.4,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "true"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              353,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "div",
+            "id": "",
+            "className": "game-modal pause-settings-modal",
+            "insidePauseControl": false
+          },
+          "pauseOverlay": {
+            "tag": "div",
+            "id": "",
+            "className": "game-overlay pause-settings-overlay",
+            "role": "dialog",
+            "visible": true,
+            "box": [
+              0,
+              0,
+              393,
+              628
+            ],
+            "pointerEvents": "auto",
+            "text": "MISSION PAUSIERTHalte die Stellung.Eine kurze Verschnaufpause.Die Cryptoids warten.Level 1 · Block 1/9 · GENESIS BELTShop & WaffenSYSTEM / EINSTELLUNGENMusik & Effekte50%›SteuerungRechtshändig›SpracheDeutsch›Anzeige›SpracheAktuelle Sprache: Deutsch◎Automatisch (Gerätesprache)⌄SteuerungMit einem Daumen steuern, mit dem anderen Power-ups aktivieren.◁Rechtshänder-Steuerung▷Linkshänder-SteuerungBerührungsempfindlichkeitSanftNormalSchnellSteuerbereichDer Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.KompaktNormalBreitStartposition des SchiffsÜber dem FingerDirekt unter dem FingerMusiklautstärkeMusiklautstärke50%0%25%50%75%100%Effektlautstärke35%0%25%50%75%100%Anzeige⛶Vollbild≋Vibration an◌StandardeffekteFortsetzen",
+            "disabled": false
+          },
+          "overlays": [
+            {
+              "tag": "div",
+              "id": "",
+              "className": "game-overlay pause-settings-overlay",
+              "role": "dialog",
+              "visible": true,
+              "box": [
+                0,
+                0,
+                393,
+                628
+              ],
+              "pointerEvents": "auto",
+              "text": "MISSION PAUSIERTHalte die Stellung.Eine kurze Verschnaufpause.Die Cryptoids warten.Level 1 · Block 1/9 · GENESIS BELTShop & WaffenSYSTEM / EINSTELLUNGENMusik & Effekte50%›SteuerungRechtshändig›SpracheDeutsch›Anzeige›SpracheAktuelle Sprache: Deutsch◎Automatisch (Gerätesprache)⌄SteuerungMit einem Daumen steuern, mit dem anderen Power-ups aktivieren.◁Rechtshänder-Steuerung▷Linkshänder-SteuerungBerührungsempfindlichkeitSanftNormalSchnellSteuerbereichDer Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.KompaktNormalBreitStartposition des SchiffsÜber dem FingerDirekt unter dem FingerMusiklautstärkeMusiklautstärke50%0%25%50%75%100%Effektlautstärke35%0%25%50%75%100%Anzeige⛶Vollbild≋Vibration an◌StandardeffekteFortsetzen",
+              "disabled": false
+            }
+          ],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        }
+      ],
+      "lifecycleStartedAt": 1792846217187,
+      "playNavigationIndex": 3,
+      "screenshot": "chromium-pause-resume-resize.png"
+    },
+    {
+      "mode": "explicit-current-route-reload-control",
+      "passed": true,
+      "errors": [],
+      "unexpected": [],
+      "httpErrors": [],
+      "navigations": [
+        "/",
+        "/",
+        "/game",
+        "/game"
+      ],
+      "samples": [
+        {
+          "label": "entry-before-action",
+          "at": 1792846226644,
+          "documentStartedAt": 1792846225223.3,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.3296,
+              "y": 126.038,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019,
+              "y": 111.228,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792846225742,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "before-controlled-reload",
+          "at": 1792846226666,
+          "documentStartedAt": 1792846225223.3,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.3296,
+              "y": 127.63,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019,
+              "y": 112.768,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792846225742,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        },
+        {
+          "label": "after-controlled-reload",
+          "at": 1792846227727,
+          "documentStartedAt": 1792846226671.9,
+          "path": "/game",
+          "shellId": 1,
+          "shell": [
+            0,
+            0,
+            393,
+            744
+          ],
+          "viewport": [
+            393,
+            744
+          ],
+          "scroll": [
+            0,
+            0
+          ],
+          "hearts": "/3",
+          "score": "◆ 0Shards0Punkte",
+          "enemies": [
+            {
+              "node": 2,
+              "title": "SolFlare · light · X",
+              "x": 81.3296,
+              "y": 126.832,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            },
+            {
+              "node": 3,
+              "title": "SolFlare · light · X",
+              "x": 308.019,
+              "y": 111.223,
+              "className": "asteroid asteroid-small cryptoid cryptoid-solflare cryptoid-light cryptoid-launch"
+            }
+          ],
+          "marker": {
+            "at": 1792846226816,
+            "active": true,
+            "hidden": false,
+            "phase": "SECTOR_INTRO",
+            "sector": 1
+          }
+        }
+      ],
+      "lifecycleStage": "explicit-reload",
+      "lifecycleSamples": [
+        {
+          "label": "home",
+          "captured": true,
+          "observedAtEpochMs": 1792846225520,
+          "documentStartedAt": 1792846225223.3,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/",
+          "rootChildren": 1,
+          "shell": null,
+          "pauseControl": null,
+          "pauseHitTarget": null,
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "entry-active",
+          "captured": true,
+          "observedAtEpochMs": 1792846226646,
+          "documentStartedAt": 1792846225223.3,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              353,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "before-controlled-reload",
+          "captured": true,
+          "observedAtEpochMs": 1792846226664,
+          "documentStartedAt": 1792846225223.3,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              353,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-controlled-reload",
+          "captured": true,
+          "observedAtEpochMs": 1792846227730,
+          "documentStartedAt": 1792846226671.9,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              353,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "read",
+            "totalEntries": 1,
+            "entries": [
+              {
+                "reason": "unexpected-restart",
+                "errorName": "",
+                "phase": "ENTRY",
+                "encounter": "normal",
+                "status": "playing",
+                "at": "2026-10-24T12:50:26.815Z",
+                "restartHint": "page-reload",
+                "sector": 1,
+                "block": 1,
+                "width": 393,
+                "height": 744,
+                "enemies": 2,
+                "projectiles": 0,
+                "effects": 0,
+                "lastSavedAt": 0,
+                "inObservedFlow": true
+              }
+            ]
+          },
+          "recordedInterruptions": []
+        }
+      ],
+      "lifecycleStartedAt": 1792846225520,
+      "playNavigationIndex": 3,
+      "controlledReload": {
+        "currentRouteStartsGameWithoutHome": true,
+        "restartMarker": [
+          {
+            "reason": "unexpected-restart",
+            "errorName": "",
+            "phase": "ENTRY",
+            "encounter": "normal",
+            "status": "playing",
+            "at": "2026-10-24T12:50:26.815Z",
+            "restartHint": "page-reload",
+            "sector": 1,
+            "block": 1,
+            "width": 393,
+            "height": 744,
+            "enemies": 2,
+            "projectiles": 0,
+            "effects": 0,
+            "lastSavedAt": 0,
+            "inObservedFlow": true
+          }
+        ],
+        "notNaturalWhiteScreenReproduction": true
+      }
+    }
+  ],
+  "limits": "Controlled Linux native browsers, original fonts, synthetic guest transports. DOM observations and screenshots add overhead. Viewport resizing does not reproduce native browser translation, OS process termination or physical iPhone painting.",
+  "version": "141.0.7390.37"
+}

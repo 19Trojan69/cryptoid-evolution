@@ -1,0 +1,35 @@
+✔ resting Testnet enemies sway slowly in both directions, including legacy checkpoint entry identifiers (63.934672ms)
+✔ sway is time-based; Mainnet and boss escorts retain their existing stationary formation behavior (4.416314ms)
+✔ normal Testnet arrivals take ten percent longer across all stages without changing profiles or docking (34.152885ms)
+✔ early returns always schedule exactly one following frame (1.878136ms)
+✔ a frame exception pauses through the fault callback and leaves the loop usable (0.277558ms)
+✔ repeated failure is reported once until a frame succeeds; reporting errors cannot kill RAF (0.243248ms)
+✔ stalled foreground loop is replaced; a late canceled callback cannot create a second loop (0.269928ms)
+✔ a delayed RAF is detected even when it runs before the monitoring timer (0.238341ms)
+✔ intentional pause and hidden tabs are never treated as a foreground stall (0.195438ms)
+✔ the first active RAF does not count an observed paused interval as a foreground stall (0.87582ms)
+✔ the monitoring timer rearms after pause without replacing the pending RAF (0.321283ms)
+✔ the first visible RAF excludes the observed hidden interval (0.229679ms)
+✔ an initially loading loop starts its foreground heartbeat on first observation of play (0.288916ms)
+✔ a genuine foreground stall after rearming still uses the exact original threshold and replacement (0.13545ms)
+✔ a delayed RAF after rearming still detects a subsequent active stall before the watcher (0.162229ms)
+✔ rearming never suppresses a simulation exception on the first resumed frame (0.144864ms)
+✔ cleanup invalidates callbacks and monitoring, including Strict Mode remounts (0.14894ms)
+✔ actual GamePage recovery preserves run, lives, rewards and paid timers even if audio/save fails (159.531341ms)
+✔ diagnostics stay local and bounded and malformed/unavailable storage cannot break recovery (1.933126ms)
+✔ denied sessionStorage cannot fail GamePage diagnostics setup or remove its error protection (104.176364ms)
+✔ late frames consume real time with collision steps at most 34 ms (0.836602ms)
+✔ long stalls stay bounded without a backlog; pause keeps the full wall-time shift (0.144503ms)
+✔ actual GamePage: player/enemy shots and timers retain speed at 60 Hz (684.662399ms)
+✔ actual GamePage: player/enemy shots and timers retain speed at 30 Hz (499.724964ms)
+✔ actual GamePage: player/enemy shots and timers retain speed at 20 Hz (572.48091ms)
+✔ actual GamePage: player/enemy shots and timers retain speed at 88 ms stalls (525.693716ms)
+✔ actual GamePage: player/enemy shots and timers retain speed at irregular delivery (509.049971ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2907.282106
