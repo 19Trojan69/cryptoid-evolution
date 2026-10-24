@@ -1,0 +1,95 @@
+{
+  "date": "2026-10-24",
+  "status": "READY",
+  "environment": "Preview",
+  "url": "https://cryptoid-evolution-testnet-19n1k5xht-19-trojan69.vercel.app/",
+  "reportUrl": "https://cryptoid-evolution-testnet-19n1k5xht-19-trojan69.vercel.app/private-preview-report.html",
+  "deploymentId": "BngQpj2ERy7QAS7nz5T9TAQ5f6n4",
+  "durationSeconds": 59,
+  "sourceCommit": "9dfed31ed5b407327874fa0647aa2feee0b6d45b",
+  "sourceTree": "b5563e0b553e00f641287f8819fab40c95043e94",
+  "unchangedAppSourceTree": "66f458f157bb4d52b6ebe57f92d51b52a51451b2",
+  "deployedMetadataVerified": true,
+  "sourceBuildWorkingTreeDirty": true,
+  "guestEndpoint": {
+    "user": null,
+    "canAdmin": false,
+    "adminMode": false
+  },
+  "anonymousProtection": [
+    {
+      "path": "/",
+      "status": 302,
+      "redirectToVercelAuthentication": true
+    },
+    {
+      "path": "/private-preview-report.html",
+      "status": 302,
+      "redirectToVercelAuthentication": true
+    }
+  ],
+  "cloudVerification": {
+    "gameStarted": true,
+    "viewport": [
+      1363,
+      936
+    ],
+    "shell": [
+      0,
+      0,
+      1363,
+      936
+    ],
+    "scroll": [
+      0,
+      0
+    ],
+    "unexpectedPauseBeforeExplicitPause": false,
+    "explicitPauseSucceeded": true,
+    "reportSource": "current-tab",
+    "reportEventCount": 46,
+    "actualDocumentIdentityCaptured": true,
+    "reportRefreshPreservedEvents": true,
+    "manualDownloadMatchesReportEvents": true,
+    "recordedInterruptions": [],
+    "limits": "Remote cloud session includes roughly one-second native delivery gaps. It is not an active FPS, natural White Screen or physical-device acceptance; source of these gaps is not established."
+  },
+  "officialProduction": {
+    "deploymentId": "AsXUruYAuKRboZWFymr2cD3FkLCJ",
+    "sourceCommit": "19de3e692f75a1c3e2eddf3438acc937c9dcac19",
+    "rootApiAdminHashesUnchanged": true,
+    "responses": [
+      {
+        "path": "/",
+        "status": 200,
+        "bytes": 1465,
+        "sha256": "b541a5ad5329f5914c77a2a0eb8778ac02e199256c4c893296e9b93e203ecb1b"
+      },
+      {
+        "path": "/api/",
+        "status": 200,
+        "bytes": 27,
+        "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a"
+      },
+      {
+        "path": "/api/admin/status",
+        "status": 401,
+        "bytes": 29,
+        "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771"
+      }
+    ]
+  },
+  "automaticDeploymentEnabled": false,
+  "guard": {
+    "strictGreaterThanMs": 2500,
+    "intervalMs": 500,
+    "automaticResume": false
+  },
+  "testnetChanged": false,
+  "mainnetChanged": false,
+  "mainMergePerformed": false,
+  "historicalWhiteScreenFixed": false,
+  "fullCampaignAccepted": false,
+  "physicalIphoneAccepted": false,
+  "receiptBranchMustNotBeDeployed": true
+}
