@@ -1,5 +1,5 @@
 import mountFeedbackEndpoints from "./handlers/feedback";
-import { deletedAccessToken, deletedProxyToken } from './playerAdministration';
+import { deletedAccessToken, deletedProxyToken, testnetAccountDeletionEnabled } from './playerAdministration';
 import mountPilotEndpoints from "./handlers/pilots";
 import fs from "fs";
 import path from "path";
@@ -228,8 +228,9 @@ app.get("/", async (_, res) => {
 
 // III. Connect to MongoDB and optionally start the local HTTP server:
 export const start = async (listen = true): Promise<void> => {
+  let client: MongoClient | undefined;
   try {
-    const client = await MongoClient.connect(mongoUri, mongoClientOptions);
+    client = await MongoClient.connect(mongoUri, mongoClientOptions);
     const db = client.db(dbName);
     app.locals.orderCollection = db.collection("orders");
     app.locals.userCollection = db.collection("users");
@@ -255,6 +256,23 @@ export const start = async (listen = true): Promise<void> => {
     await app.locals.userCollection.createIndex({ "bestScoreV2.mainnet": -1, uid: 1 });
     await app.locals.userCollection.createIndex({ "careerScoreByNetwork.testnet": -1, uid: 1 });
     await app.locals.userCollection.createIndex({ "careerScoreByNetwork.mainnet": -1, uid: 1 });
+    if (testnetAccountDeletionEnabled()) {
+      // Prove transaction support with this deployment's actual credential
+      // before enabling deletion or its proxy guard. The impossible filter
+      // reads no player data and performs no writes.
+      const verificationSession = client.startSession();
+      try {
+        await verificationSession.withTransaction(async () => {
+          await app.locals.userCollection.findOne(
+            { _id: { $exists: false } },
+            { session: verificationSession, projection: { _id: 1 } },
+          );
+        }, { readConcern: { level: "snapshot" }, writeConcern: { w: "majority" } });
+        console.log("Account deletion transaction preflight passed (read-only)");
+      } finally {
+        await verificationSession.endSession();
+      }
+    }
     console.log("Connected to MongoDB");
 
     if (listen) {
@@ -264,6 +282,7 @@ export const start = async (listen = true): Promise<void> => {
       });
     }
   } catch (err) {
+    try { await client?.close(); } catch { /* Preserve the initialization error. */ }
     console.error("Connection to MongoDB failed: ", err);
     if (process.env.VERCEL) throw err;
     process.exit(1);

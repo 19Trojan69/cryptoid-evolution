@@ -15,6 +15,9 @@ async function runFixture(mode) {
   process.env.SESSION_SECRET = 'session-initialization-test-only';
   process.env.MONGODB_URI = 'mongodb://fixture.invalid/session-initialization';
   process.env.MONGODB_DATABASE_NAME = 'session-initialization';
+  const verifyTransactions = mode === 'transaction-ready' || mode === 'transaction-failure';
+  if (verifyTransactions) process.env.CRYPTOID_TESTNET_ACCOUNT_DELETION = 'enabled';
+  else delete process.env.CRYPTOID_TESTNET_ACCOUNT_DELETION;
   if (mode === 'split-auth') {
     process.env.MONGODB_USERNAME = 'scoped-testnet-fixture';
     process.env.MONGODB_PASSWORD = 'synthetic-p@ss/word';
@@ -35,7 +38,9 @@ async function runFixture(mode) {
   const mongoStoreModule = require('connect-mongo');
   const MongoStore = mongoStoreModule.default ?? mongoStoreModule;
   const originalCreate = MongoStore.create;
-  const stores = [], connections = [], collections = new Map();
+  const stores = [], connections = [], collections = new Map(), transactionOptions = [];
+  let transactionReads = 0, transactionEnds = 0, closedClients = 0, inVerification = false;
+  let failTransaction = mode === 'transaction-failure';
   let failConnection = mode === 'retry';
   const client = {
     db(name) {
@@ -45,18 +50,48 @@ async function runFixture(mode) {
           const documents = new Map();
           collections.set(collectionName, {
             async createIndex() { return 'fixture-index'; },
-            async findOne(query) { return documents.get(query._id) ?? null; },
+            async findOne(query, options) {
+              if (inVerification) {
+                assert.equal(collectionName, 'users');
+                assert.deepEqual(query, { _id: { $exists: false } });
+                assert.deepEqual(options.projection, { _id: 1 });
+                assert.ok(options.session);
+                transactionReads++;
+                if (failTransaction) {
+                  failTransaction = false;
+                  throw new Error('synthetic transaction unavailable');
+                }
+                return null;
+              }
+              return documents.get(query._id) ?? null;
+            },
             async updateOne(query, update) {
+              assert.equal(inVerification, false, 'transaction preflight must not write');
               documents.set(query._id, { _id: query._id, ...documents.get(query._id), ...update.$set });
               return { matchedCount: 1, modifiedCount: 1, upsertedCount: 0 };
             },
-            async deleteOne(query) { documents.delete(query._id); return { deletedCount: 1 }; },
+            async deleteOne(query) {
+              assert.equal(inVerification, false, 'transaction preflight must not delete');
+              documents.delete(query._id); return { deletedCount: 1 };
+            },
           });
         }
         return collections.get(collectionName);
       } };
     },
-    async close() {},
+    startSession() {
+      assert.ok(verifyTransactions, 'ordinary startup must not open a transaction');
+      return {
+        async withTransaction(callback, options) {
+          transactionOptions.push(options);
+          inVerification = true;
+          try { return await callback(); }
+          finally { inVerification = false; }
+        },
+        async endSession() { transactionEnds++; },
+      };
+    },
+    async close() { closedClients++; },
   };
   MongoClient.connect = (uri, options) => {
     connections.push({ uri, options });
@@ -150,6 +185,12 @@ async function runFixture(mode) {
       assert.equal((await get()).code, 500);
       assert.equal(stores.length, 0, 'failed database startup must not start a separate session connection');
     }
+    if (mode === 'transaction-failure') {
+      assert.equal((await get()).code, 500, 'failed transaction verification must prevent backend readiness');
+      assert.equal(stores.length, 0, 'failed transaction verification must not initialize a session store');
+      assert.equal(transactionEnds, 1, 'failed verification must release its session');
+      assert.equal(closedClients, 1, 'failed startup must close its database connection');
+    }
     const oldProxyCookie = 'connect.sid=synthetic-upstream-session';
     const first = await get(mode === 'isolated' ? oldProxyCookie : undefined);
     assert.equal(first.code, 200);
@@ -164,7 +205,7 @@ async function runFixture(mode) {
     assert.equal(second.code, 200);
     assert.equal(JSON.parse(second.body).count, 2, 'existing Mongo-backed session must persist across warm requests');
     assert.equal(stores.length, 1, 'warm requests reuse the same session store');
-    assert.equal(connections.length, mode === 'retry' ? 3 : 2, 'only the established backend and session connections are created');
+    assert.equal(connections.length, mode === 'retry' || mode === 'transaction-failure' ? 3 : 2, 'only the established backend and session connections are created');
     assert.equal(stores[0].collectionName, 'user_sessions');
     assert.equal(stores[0].dbName, 'session-initialization');
     assert.equal(stores[0].mongoUrl, process.env.MONGODB_URI);
@@ -175,6 +216,14 @@ async function runFixture(mode) {
       assert.deepEqual(connections[0].options, authOptions, 'application uses the separate credential without URI encoding');
       assert.deepEqual(stores[0].mongoOptions, authOptions, 'session storage uses the same separate credential');
       assert.ok(!stores[0].mongoUrl.includes(process.env.MONGODB_PASSWORD), 'password stays outside the URI');
+    }
+    if (verifyTransactions) {
+      const attempts = mode === 'transaction-failure' ? 2 : 1;
+      assert.equal(transactionReads, attempts, 'read-only transaction runs at startup, not again on warm requests');
+      assert.equal(transactionEnds, attempts, 'all verification sessions must be released');
+      assert.deepEqual(transactionOptions, Array.from({ length: attempts }, () => ({
+        readConcern: { level: 'snapshot' }, writeConcern: { w: 'majority' },
+      })), 'preflight uses the deletion transaction concerns');
     }
     await new Promise(resolve => setImmediate(resolve));
     assert.deepEqual(unhandled, []);
@@ -197,6 +246,8 @@ if (fixture >= 0) {
     ['native', 'native backend retains Mongo sessions, secure cookies and warm reuse'],
     ['isolated', 'local Testnet session coexists with the established proxy cookie and retains its stored state'],
     ['split-auth', 'actual backend and Mongo sessions accept a separate raw password with URI-special characters'],
+    ['transaction-ready', 'actual backend verifies enabled account deletion with a read-only transaction and releases the session'],
+    ['transaction-failure', 'actual backend fails closed on an unavailable transaction and safely retries startup'],
     ['retry', 'native database failure returns a controlled error and retries without an unhandled rejection'],
   ]) {
     test(name, () => {
