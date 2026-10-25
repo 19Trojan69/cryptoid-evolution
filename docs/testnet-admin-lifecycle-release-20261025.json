@@ -1,0 +1,40 @@
+{
+  "status": "preview-ready-official-testnet-release-blocked-by-auto-review",
+  "sourceCommit": "d615e86f8f1e4bc02b98200d2ba8e3ef2e0ab895",
+  "sourceTree": "4ba6309b5c33d336d69e31b8b82fd29e360bb92a",
+  "branch": "codex/testnet-admin-lifecycle-20261025",
+  "preview": {
+    "deployment": "6WxyFX79UNnuMB4RvDSuAWfDJpQR",
+    "status": "READY",
+    "durationSeconds": 57,
+    "url": "https://cryptoid-evolution-testnet-px35egu7g-19-trojan69.vercel.app/"
+  },
+  "officialTestnet": {
+    "url": "https://cryptoid-evolution-testnet.vercel.app/",
+    "unchanged": true,
+    "deployment": "AsXUruYAuKRboZWFymr2cD3FkLCJ",
+    "source": "19de3e692f75a1c3e2eddf3438acc937c9dcac19"
+  },
+  "review": {
+    "action": "Dashboard Promote to Production; rebuild exact d615e86 using production environment of existing cryptoid-evolution-testnet project, alias only cryptoid-evolution-testnet.vercel.app",
+    "outcome": "REJECTED; no alternate path attempted",
+    "reason": "Reviewer treats Vercel Production release to the Testnet hostname as violating prior Testnet/Preview-only, no-Production restriction.",
+    "dialogCancelled": true,
+    "needsExplicitClarification": "Authorize Vercel Production only within cryptoid-evolution-testnet, excluding separate Mainnet app."
+  },
+  "observedPreviewChecks": [
+    "Real API /api/admin/status returns not_authenticated without Pi session.",
+    "Home and Play render the real original game, real SDK/auth/backend, no guest fixture packaging.",
+    "/admin?view=diagnostics requires verified owner Pi login and exposes no report anonymously.",
+    "Old /private-preview-report.html redirects Home in owner-signed Vercel browser.",
+    "Anonymous root and old report path each302 to Vercel Authentication; no protection changes."
+  ],
+  "mainMerge": false,
+  "mainnetChange": false,
+  "automaticDeployment": false,
+  "limitations": [
+    "Cold WPE loop-stall remains; no auto Resume/guard weakening.",
+    "No historical White Screen cure/full-campaign/physical iPhone long-run claim.",
+    "Live owner Pi report not read; native synthetic owner integration and actual backend authorization tests are separate evidence."
+  ]
+}

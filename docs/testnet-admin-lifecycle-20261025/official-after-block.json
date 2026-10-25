@@ -1,0 +1,17 @@
+{
+  "/": {
+    "status": 200,
+    "bytes": 1465,
+    "sha256": "b541a5ad5329f5914c77a2a0eb8778ac02e199256c4c893296e9b93e203ecb1b"
+  },
+  "/api/": {
+    "status": 200,
+    "bytes": 27,
+    "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a"
+  },
+  "/api/admin/status": {
+    "status": 401,
+    "bytes": 29,
+    "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771"
+  }
+}
