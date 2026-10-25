@@ -21,6 +21,15 @@ Implemented so far:
   are admitted before allocation; a complete back buffer is committed only
   after drawing succeeds. The fixture deliberately has no account/save/payment
   authority and is not an appearance-complete game.
+- A pure boss-statistics gate requiring confirmed save, cleanup and bonus
+  preparation, ten prepared visible seconds and explicit confirmed Continue.
+  Its backend/UI/bonus adapters are still pending.
+
+The renderer currently has **no accepted default decoder**. Its API requires an
+explicit choice; the local fixture defaults to the original direct-image
+reference. Controlled alternatives exposed native memory growth and Chromium
+pixel differences. They are experiments, not approved optimizations. See
+[memory-investigation.md](memory-investigation.md) before extending the renderer.
 
 From this directory, with the repository's frontend dependencies installed:
 

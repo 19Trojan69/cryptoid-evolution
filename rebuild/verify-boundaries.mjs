@@ -4,7 +4,7 @@ import { createRequire } from 'node:module';
 import { resolve } from 'node:path';
 const directory = new URL('.', import.meta.url).pathname, root = resolve(directory, '..');
 const require = createRequire(resolve(root, 'frontend/package.json')), { build, transform } = require('esbuild');
-const graph = await build({ entryPoints: ['battle', 'session', 'resources'].map(name => directory + 'core/' + name + '.ts'),
+const graph = await build({ entryPoints: ['battle', 'session', 'resources', 'bossStop'].map(name => directory + 'core/' + name + '.ts'),
   absWorkingDir: root, outdir: 'unused-isolated-core', platform: 'node', format: 'esm', bundle: true, write: false, metafile: true, logLevel: 'silent' });
 const forbiddenFiles = /(?:GamePage|shipFleet|paintedShip|useAuth|usePayments|axios|react(?:-dom)?|saveOutbox|ownerFlightRecorder)/i;
 const effects = /\b(?:window|document|localStorage|sessionStorage)\s*(?:\.|\[)|(?<![\w.])(?:fetch|requestAnimationFrame|setInterval|setTimeout)\s*\(/;

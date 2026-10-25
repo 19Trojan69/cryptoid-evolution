@@ -2,10 +2,10 @@
   "referenceCommit": "20843b5501387dca8bb5616303934ece2ae6d581",
   "baseCommit": "8c4f17164daf625a4c9610b5d2d88946010c8496",
   "isolated": true,
-  "unitContractCases": 36,
+  "unitContractCases": 43,
   "typecheck": "passed",
   "simulationBoundary": {
-    "modules": 39,
+    "modules": 41,
     "forbiddenRuntimeImports": 0,
     "browserNetworkStorageEffects": 0
   },
@@ -64,6 +64,223 @@
     "Native cases use Linux Chromium and WPE WebKit; physical affected devices and full campaign acceptance remain open.",
     "Managed resource accounting is not browser-process or GPU memory.",
     "Original full-resolution assets are reused; complete original HUD/visual parity is not yet accepted.",
-    "No real account, wallet, inventory, save or payment mutation."
-  ]
+    "No real account, wallet, inventory, save or payment mutation.",
+    "Decoder, bitmap alpha/colour/sampling, padded allocation and fresh-context probes are not accepted fixes; required decoder choice remains open."
+  ],
+  "pureBossStopGate": {
+    "contracts": 7,
+    "realAdaptersIntegrated": false
+  },
+  "rendererAcceptance": {
+    "status": "blocked",
+    "acceptedDefaultDecoder": false,
+    "sameRunVisibleSurfaceCorrection": "native control passes both engines",
+    "exactBossTextureMetadata": {
+      "images": 100,
+      "originalFilesGitVerified": 150
+    },
+    "allBossModelsRender": 50,
+    "historicalWhiteScreenFixed": false
+  },
+  "additionalFunctionalEvidence": [
+    {
+      "engine": "chromium",
+      "version": "141.0.7390.37",
+      "decoder": "blob-image",
+      "cycles": 50,
+      "uniqueBossModels": 50,
+      "functionalCases": 8,
+      "complete": true,
+      "memoryAccepted": false,
+      "decoderPixels": {
+        "bitmapVsOriginalImage": {
+          "channels": 110288,
+          "maxDelta": 255
+        },
+        "blobVsOriginalImage": {
+          "channels": 0,
+          "maxDelta": 0
+        },
+        "originalImageControl": {
+          "channels": 0,
+          "maxDelta": 0
+        },
+        "managedBytes": 0
+      },
+      "lastClosedCheckpointPssMiB": 758.681640625,
+      "managedClosedBytes": [
+        0
+      ]
+    },
+    {
+      "engine": "webkit",
+      "version": "26.5",
+      "decoder": "blob-image",
+      "cycles": 100,
+      "uniqueBossModels": 50,
+      "functionalCases": 8,
+      "complete": true,
+      "memoryAccepted": false,
+      "decoderPixels": {
+        "bitmapVsOriginalImage": {
+          "channels": 0,
+          "maxDelta": 0
+        },
+        "blobVsOriginalImage": {
+          "channels": 0,
+          "maxDelta": 0
+        },
+        "originalImageControl": {
+          "channels": 0,
+          "maxDelta": 0
+        },
+        "managedBytes": 0
+      },
+      "lastClosedCheckpointPssMiB": 857.4443359375,
+      "managedClosedBytes": [
+        0
+      ]
+    },
+    {
+      "engine": "webkit",
+      "version": "26.5",
+      "decoder": "bitmap",
+      "cycles": 100,
+      "uniqueBossModels": 50,
+      "functionalCases": 8,
+      "complete": true,
+      "memoryAccepted": false,
+      "decoderPixels": {
+        "bitmapVsOriginalImage": {
+          "channels": 0,
+          "maxDelta": 0,
+          "opaqueDifferences": 0
+        },
+        "blobVsOriginalImage": {
+          "channels": 0,
+          "maxDelta": 0,
+          "opaqueDifferences": 0
+        },
+        "originalImageControl": {
+          "channels": 0,
+          "maxDelta": 0,
+          "opaqueDifferences": 0
+        },
+        "variants": [
+          {
+            "name": "bitmap",
+            "channels": 0,
+            "maxDelta": 0,
+            "opaqueDifferences": 0
+          },
+          {
+            "name": "image",
+            "channels": 0,
+            "maxDelta": 0,
+            "opaqueDifferences": 0
+          },
+          {
+            "name": "blob-image",
+            "channels": 0,
+            "maxDelta": 0,
+            "opaqueDifferences": 0
+          },
+          {
+            "name": "image-control",
+            "channels": 0,
+            "maxDelta": 0,
+            "opaqueDifferences": 0
+          },
+          {
+            "name": "bitmap-none",
+            "channels": 0,
+            "maxDelta": 0,
+            "opaqueDifferences": 0
+          },
+          {
+            "name": "bitmap-premultiply",
+            "channels": 0,
+            "maxDelta": 0,
+            "opaqueDifferences": 0
+          },
+          {
+            "name": "bitmap-color-none",
+            "channels": 0,
+            "maxDelta": 0,
+            "opaqueDifferences": 0
+          },
+          {
+            "name": "bitmap-both-none",
+            "channels": 0,
+            "maxDelta": 0,
+            "opaqueDifferences": 0
+          },
+          {
+            "name": "bitmap-medium",
+            "channels": 0,
+            "maxDelta": 0,
+            "opaqueDifferences": 0
+          },
+          {
+            "name": "bitmap-high",
+            "channels": 89664,
+            "maxDelta": 255,
+            "opaqueDifferences": 70817
+          }
+        ],
+        "managedBytes": 0
+      },
+      "lastClosedCheckpointPssMiB": 882.2529296875,
+      "managedClosedBytes": [
+        0
+      ]
+    }
+  ],
+  "nativeAttribution": {
+    "engine": "WPE26.5",
+    "cycles": 100,
+    "idleSeconds": 20,
+    "afterIdle": {
+      "pssMiB": 1042.7763671875,
+      "readable": 3,
+      "unavailable": 0,
+      "inspector": {
+        "patched": true,
+        "errors": [],
+        "latest": {
+          "timestamp": 57.538016999998945,
+          "categories": [
+            {
+              "type": "javascript",
+              "size": 6152492
+            },
+            {
+              "type": "jit",
+              "size": 0
+            },
+            {
+              "type": "images",
+              "size": 0
+            },
+            {
+              "type": "layers",
+              "size": 0
+            },
+            {
+              "type": "page",
+              "size": 0
+            },
+            {
+              "type": "other",
+              "size": 804044500
+            }
+          ]
+        },
+        "canvasCount": 1,
+        "canvasBytes": 0
+      }
+    },
+    "interpretation": "Broad other category remains unattributed. No complete native memory or historical White Screen fix is accepted."
+  },
+  "nextStep": "Matched fetch-only, decode-only and draw/dispose attribution using identical original assets and viewport."
 }
