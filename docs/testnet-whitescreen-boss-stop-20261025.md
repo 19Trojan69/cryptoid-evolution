@@ -1,6 +1,9 @@
 # White-screen evidence, saved boss intermission and owner player tools
 
-Prepared official Testnet source, 25 October 2026. Not deployed.
+Released to the existing official Testnet, 25 October 2026.
+Deployed source: 20843b5501387dca8bb5616303934ece2ae6d581.
+Production deployment: JA3UqZt1CvRqr44GLMBB9gSCqvxf.
+Official URL: https://cryptoid-evolution-testnet.vercel.app/.
 
 Original base: d615e86f8f1e4bc02b98200d2ba8e3ef2e0ab895.
 Branch: codex/testnet-whitescreen-boss-stop-20261025; automatic deployment disabled.
@@ -47,7 +50,7 @@ options. This avoids manual password insertion or URI escaping, including for
 passwords containing URI-special characters. URI-only authentication is retained
 when no explicit username is configured. Pool and timeout defaults are unchanged.
 
-## Validation and release gate
+## Validation and release record
 
 The reviewed frontend build and its 230 tests, plus three controlled Chromium
 browser checks, passed before these backend integration changes. The latest
@@ -64,13 +67,23 @@ path. All fixtures use synthetic credentials and controlled storage.
 The historical iOS/Pi Browser White Screen cause remains unresolved. Controlled
 renderer recovery is not proof that the original device failure is fixed.
 
-Before publication: verify the real connection and authorization gates, capture
-the exact current Testnet rollback deployment, and build the complete Git tree
-with original assets. Rollback deployment: EnU4fLgtc81qUEdB1YFGLBWcS1Mn.
-Do not use the partial local compiled output as a deployment archive.
-Enable CRYPTOID_TESTNET_ACCOUNT_DELETION only after the configuration, guard and
-transaction-capability checks pass together; no real deletion is a smoke test.
-A protected Preview of the earlier separate-credential commit was built for the
-first connection check. The final transaction-verification source must also pass
-its live Preview check before the Production environment of the Testnet project
-is published. No Mainnet release is included.
+Vercel built the complete Git source tree with its original assets. Protected
+Preview 7jBKrXq6BR9PtXhM8iLFgtyfiexX used the deployed source above and passed
+the real MongoDB connection and read-only snapshot transaction checks. Guest
+game start and pause also worked. No partial local build archive was deployed.
+
+The final Production rebuild was created from that Preview in the existing
+cryptoid-evolution-testnet project and reached Ready with the official alias.
+CRYPTOID_TESTNET_ACCOUNT_DELETION=enabled is saved for Preview and Production
+only in that Testnet project. The final deployment's runtime confirmed both
+Connected to MongoDB and Account deletion transaction preflight passed (read-only).
+Official unauthenticated requests to /api/admin/players/find and
+/api/progress/boss-summary/prepare returned 401 not_authenticated. No player
+was reset or deleted. A real owner Pi Browser sign-in, boss intermission and
+device White Screen run remain user-device checks; these were not simulated
+with a real account or represented as completed.
+
+Rollback deployment: EnU4fLgtc81qUEdB1YFGLBWcS1Mn, from the original base above.
+Main was not merged and the separate Mainnet project was not published or edited.
+This post-release record is documentation only; the deployed code source remains
+the exact commit named at the top.
