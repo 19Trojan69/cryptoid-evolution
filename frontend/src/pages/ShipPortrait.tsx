@@ -31,7 +31,11 @@ function ShipPortraitCanvas({ src, name, color, silhouette, loadingLabel, errorL
       target.dataset.renderedSource = src;
       setReady(true);
     }, () => { if (current) setFailed(true); });
-    return () => { current = false; };
+    return () => {
+      current = false;
+      // A detached portrait must not leave its backing store to deferred GC.
+      if (previous) previous.width = previous.height = 0;
+    };
   }, [src, color, silhouette]);
   return <><canvas ref={canvas} className="collection-ship-portrait" role="img" aria-label={name}
     aria-busy={!ready && !failed} data-ready={ready} data-silhouette={silhouette} style={{ visibility: ready ? 'visible' : 'hidden' }} />

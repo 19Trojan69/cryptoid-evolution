@@ -28,8 +28,7 @@ function BossPortraitCanvas({ id, silhouette }: { id: number; silhouette: boolea
     // Clear previous pixels immediately when browsing from an unlocked to a locked card.
     const output = canvas.current;
     output?.getContext('2d')?.clearRect(0, 0, output.width, output.height);
-    if (!visible) return;
-    void loadBossArtwork(id, 1200).then(art => {
+    if (visible) void loadBossArtwork(id, 1200).then(art => {
       if (!current || !canvas.current) return;
       const target = canvas.current;
       target.width = art.width; target.height = art.height;
@@ -45,7 +44,11 @@ function BossPortraitCanvas({ id, silhouette }: { id: number; silhouette: boolea
       Object.assign(target.dataset, art.dataset);
       setReady(true);
     }, () => { /* No old model or hull-only fallback may expose incorrect artwork. */ });
-    return () => { current = false; };
+    return () => {
+      current = false;
+      // Retire this view's copy, never the shared artwork returned by the loader.
+      if (output) output.width = output.height = 0;
+    };
   }, [id, silhouette, visible]);
   return <div ref={root} className="boss-portrait" role="img" aria-label={bossName(id)} aria-busy={!ready}
     data-boss-id={id} data-silhouette={silhouette} data-ready={ready}>

@@ -7,11 +7,11 @@ import { requestErrorCode, providerRequestId } from '../lib/requestDiagnosticCod
 const build = { sourceCommit: 'a'.repeat(40), sourceTree: 'b'.repeat(40), workingTreeDirty: false };
 const playing = { sector: 90, phase: 'ATTACK_CYCLE', encounter: 'boss-fight', status: 'playing', enemies: 2, projectiles: 8 };
 function fixture() {
-  let clock = 0, wall = 1000000, count = 0;
+  let clock = 0, wall = 1000000, count = 0, reads = 0;
   const local = new Map(), tab = new Map();
-  const storage = values => ({ getItem: k => values.get(k) ?? null, setItem: (k, v) => { values.set(k, v); } });
+  const storage = values => ({ getItem: k => { reads++; return values.get(k) ?? null; }, setItem: (k, v) => { values.set(k, v); } });
   const host = { localStorage: storage(local), sessionStorage: storage(tab), performance: { timeOrigin: 999000 } };
-  return { host, local, tab, advance(ms) { clock += ms; wall += ms; },
+  return { host, local, tab, reads: () => reads, advance(ms) { clock += ms; wall += ms; },
     create(id = `run-test-${++count}`) { return createCrashTail(true, () => host, { id, build, now: () => clock, wallNow: () => wall }); } };
 }
 test('non-owner creation never obtains a storage host and loading does not overwrite previous evidence', () => {
@@ -40,6 +40,26 @@ test('head snapshots are paced at 250 ms while frame history has independent one
   assert.ok(capture.frames.length >= 6 && capture.frames.length <= 7);
   assert.ok(capture.head.at >= 1006000);
   assert.ok(tail.stats().writes < 40);
+});
+test('frames between snapshot deadlines perform no synchronous storage reads', () => {
+  const f = fixture(), tail = f.create(); tail.frame(playing);
+  const reads = f.reads();
+  for (let frame = 1; frame <= 14; frame++) {
+    f.advance(16); tail.frame({ ...playing, liveTurrets: frame });
+  }
+  assert.equal(f.reads(), reads, 'snapshot pacing must also pace the ownership reads');
+  f.advance(26); tail.frame({ ...playing, liveTurrets: 2 });
+  assert.equal(f.reads(), reads + 2, 'the due snapshot verifies both storage generations before writing');
+  assert.equal(readCrashTails(f.host).sessions[0].head.data.liveTurrets, 2);
+});
+test('a critical request between snapshot deadlines preserves the latest frame state', () => {
+  const f = fixture(), tail = f.create(); tail.frame({ ...playing, liveTurrets: 3 });
+  f.advance(17); tail.frame({ ...playing, liveTurrets: 2 });
+  f.advance(1); tail.record('request', { operation: 'failure', endpoint: 'checkpoint', httpStatus: 503 });
+  const capture = readCrashTails(f.host).sessions[0];
+  assert.equal(capture.head.at, 1000018);
+  assert.equal(capture.head.data.liveTurrets, 2);
+  assert.equal(capture.errors.at(-1).data.httpStatus, 503);
 });
 test('graphics or request bursts cannot evict the independently retained last 32 frame snapshots', () => {
   const f = fixture(), tail = f.create();
