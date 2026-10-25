@@ -1,0 +1,69 @@
+{
+  "referenceCommit": "20843b5501387dca8bb5616303934ece2ae6d581",
+  "baseCommit": "8c4f17164daf625a4c9610b5d2d88946010c8496",
+  "isolated": true,
+  "unitContractCases": 36,
+  "typecheck": "passed",
+  "simulationBoundary": {
+    "modules": 39,
+    "forbiddenRuntimeImports": 0,
+    "browserNetworkStorageEffects": 0
+  },
+  "native": [
+    {
+      "engine": "chromium",
+      "version": "141.0.7390.37",
+      "cases": [
+        "original ships, live input, projectiles, explicit pause/resume",
+        "controlled renderer failure retains last frame and same run",
+        "12 actual normal/boss scene mount-close cycles return managed resources to zero",
+        "boss 4 original hull, live mounted guns and original projectile presentation",
+        "desktop geometry starts with original image resolution",
+        "canceled real asset loading cannot revive a closed scene"
+      ],
+      "sceneCycles": 12,
+      "closedDomCounts": [
+        19
+      ],
+      "errors": 0,
+      "missingAssets": 0,
+      "crashes": 0,
+      "closedManagedBytes": [
+        0
+      ]
+    },
+    {
+      "engine": "webkit",
+      "version": "26.5",
+      "cases": [
+        "original ships, live input, projectiles, explicit pause/resume",
+        "controlled renderer failure retains last frame and same run",
+        "12 actual normal/boss scene mount-close cycles return managed resources to zero",
+        "boss 4 original hull, live mounted guns and original projectile presentation",
+        "desktop geometry starts with original image resolution",
+        "canceled real asset loading cannot revive a closed scene"
+      ],
+      "sceneCycles": 12,
+      "closedDomCounts": [
+        19
+      ],
+      "errors": 0,
+      "missingAssets": 0,
+      "crashes": 0,
+      "closedManagedBytes": [
+        0
+      ]
+    }
+  ],
+  "historicalWhiteScreenFixed": false,
+  "fullFeatureMigration": false,
+  "deployed": false,
+  "limitations": [
+    "Incomplete single-encounter fixture; dynamic scene handoff, complete loadouts/powers/effects/audio and durable boss/bonus/save ports pending.",
+    "All 50 boss rule contracts are short deterministic simulations, not complete fights.",
+    "Native cases use Linux Chromium and WPE WebKit; physical affected devices and full campaign acceptance remain open.",
+    "Managed resource accounting is not browser-process or GPU memory.",
+    "Original full-resolution assets are reused; complete original HUD/visual parity is not yet accepted.",
+    "No real account, wallet, inventory, save or payment mutation."
+  ]
+}

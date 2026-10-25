@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "lib": ["ES2022", "DOM"],
+    "types": [],
+    "erasableSyntaxOnly": true
+  },
+  "include": ["core/**/*.ts", "browser/**/*.ts", "fixture/**/*.ts", "../frontend/src/types/window.d.ts", "../frontend/src/buildIdentity.d.ts"]
+}
