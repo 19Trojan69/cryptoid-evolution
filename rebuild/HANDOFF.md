@@ -47,7 +47,7 @@ draft PR 166 is not part of this rebuild and is not deployed.
   bonus preparation, ten prepared visible seconds, explicit confirmed Continue,
   stale receipt rejection and explicit retry. Real adapters remain pending.
 
-## Blocking result
+## Earlier blocking result
 
 The historical White Screen is still NOT proved fixed. The renderer's native
 memory/visual acceptance is also blocked. Decoder selection is required explicitly;
@@ -72,12 +72,55 @@ survive, fresh raw JSON does not. Do not fabricate the missing raw record.
 
 ## Next concrete step
 
-Keep focus on the native growth. Run matched fetch-only, decode-only and draw/
-dispose controls with the same original assets, viewport and decode mode. This
-distinguishes decoding/allocator retention from drawing/backend retention before
-changing architecture again. Use existing bounded native attribution. Do not
-repeat rejected old starfield/cache/clip experiments, lower artwork resolution,
-silently mute sound, force GC or hide the failure with automatic navigation.
+The requested fetch/decode/draw controls are NOW COMPLETE. Do not restart this
+matrix from zero. Read `evidence/memory-stages-20261025/README.md` and `summary.json`
+along with `memory-investigation.md`; raw failures and exact main-control sources
+are preserved in that evidence directory's hashed archive.
+
+Eight complete native controls cover fetch-only, explicit decode-only,
+prepare-renderer-without-presentation and draw/dispose, each with 100 cycles,
+identical 50 original hull/gun pairs twice, the same generated player PNG, a
+fixed 393 × 744 / DPR 3 viewport and 20 natural idle seconds. Main controls have
+no prior warm-up scene, desktop resize, screenshots or pixel readback. Original
+renderer/decoder code is unchanged. Closed managed resources are zero in all
+800 cycles. 43 contracts, TypeScript and the 41-module boundary audit still pass.
+
+Retained browser-only PSS increments after idle, relative to each fresh baseline:
+
+| Mode | Chromium 141 | WPE WebKit 26.5 |
+| --- | ---: | ---: |
+| Fetch only | 63.7 MiB | 59.4 MiB |
+| Decode, no Canvas context/draw | 570.6 MiB | 80.4 MiB |
+| Prepare renderer, no present | 570.7 MiB | 92.3 MiB |
+| Draw/dispose | 589.0 MiB | 452.0 MiB |
+
+Chromium's major occupancy is triggered BEFORE drawing; decode-only adds about
+492.2 MiB in Chromium shared-file mappings. WPE's additional major occupancy is
+triggered by DRAWING: about 359.7 MiB baseline-adjusted excess over prepare-only,
+with about 387.5 MiB added native `[heap]` PSS across browser processes (mostly
+WPEWebProcess). Its final Inspector image and Canvas backing categories are
+zero, while `other` remains about 535.5 MiB. This narrows the previous broad
+`other` observation to a draw-triggered native heap-region increase; it does not
+identify exact allocation stacks, live cache contents versus reusable allocator
+pages, a permanent leak, phone/GPU memory or the historical White Screen cause.
+
+Keep focus on those two triggering paths. Next identify decoded-image/raster
+cache and allocator ownership, for example through a focused same-model versus
+50-model reuse control and read-only native cache/heap attribution. First verify
+the available native attribution can distinguish live objects from allocator
+retention. Do not adopt a decoder or integrate further game functions merely
+because owner counters are zero. Do not repeat rejected old starfield/cache/clip
+experiments, lower artwork resolution, silently mute sound, force GC or hide
+the failure with automatic navigation.
+
+Eight preliminary failed controls are preserved. `matched-a` stopped at a
+source guard because the generated player PNG is not a Git-tree file; its bytes
+are now separately pinned, without mislabelling them as a Git original. The
+first WPE `matched-b` image controls were blocked by the runner rejecting its
+own local Blob URLs; this was corrected and retested. Earlier `matched-b` PSS
+included the separately identifiable esbuild child; the final matrix explicitly
+excludes the bundler before browser launch. Do not reinterpret these tooling
+failures as actual browser image-decoder failures or count them as passes.
 
 Only after this gate, finish dynamic scene preparation, boss fall/reward/bonus,
 all powers/effects/audio, the original HUD/visual parity and existing save/account/
@@ -96,6 +139,11 @@ From `rebuild`: `npm test`, `npm run typecheck`, `npm run verify:boundaries`.
 `CRYPTOID_SCENE_CYCLES=100`, `CRYPTOID_TEXTURE_DECODER=bitmap`,
 `CRYPTOID_NATIVE_PROFILE=1`, `CRYPTOID_PROFILE_IDLE_SECONDS=20`,
 `CRYPTOID_DECODER_ONLY=1`, `CRYPTOID_NATIVE_OUTPUT_TAG=<unique-tag>`.
+The isolated stage controls use `npm run verify:memory-stages` with
+`CRYPTOID_MEMORY_STAGE=fetch-only|decode-only|prepare-only|draw-dispose`,
+`CRYPTOID_TEXTURE_DECODER=blob-image`, `CRYPTOID_SCENE_CYCLES=100`,
+`CRYPTOID_PROFILE_IDLE_SECONDS=20` and a required unique output tag. Each stage
+launches its own browser. Existing output files are refused, never overwritten.
 Use `CRYPTOID_PLAYWRIGHT_PATH` for a matching installed driver as needed.
 The task environment has Chromium1.56.1/141 under verification/browser-tools and
 primary Playwright1.62.1/WPE26.5 with task-local native libraries. Never mix the

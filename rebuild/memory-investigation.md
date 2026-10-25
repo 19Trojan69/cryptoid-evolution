@@ -62,9 +62,8 @@ the managed counters or a forced GC as sufficient acceptance.
 A transparent padded-bitmap allocation-shape probe preserves the frozen WPE
 reference pixels but still differs in Chromium. It does not resize or reduce the
 original artwork. Its native-memory behavior is not yet tested, and it is not
-an accepted decoder. The next high-information control is matched fetch-only,
-decode-only and draw/dispose sequences with identical assets and viewports, to
-separate decoding/allocator retention from drawing/backend retention.
+an accepted decoder. Matched fetch-only, decode-only and draw/dispose controls
+have now separated the triggering operations; their results follow below.
 
 Earlier failed controls remain under private `verification/rebuild`. One paired
 fresh/shared 100-cycle comparison used a colliding output filename: the shared
@@ -72,9 +71,55 @@ raw JSON and both complete console logs survive; the fresh raw JSON does not.
 That fresh-context result is not treated as a complete acceptance record.
 Output names now include engine, decoder, cycle count, canvas lifetime and tag.
 
+## Matched stage attribution (2026-10-25)
+
+The requested three controls now complete in Chromium 141 and WPE 26.5. An
+additional prepare-only control separates preparation of the existing renderer
+from its first presentation. Every arm uses a fresh process, identical original
+full-resolution files and the fixed 393 × 744 / DPR 3 viewport throughout; there
+is no desktop resize, pixel-readback warm-up or prior scene/pixel experiment.
+The same 50 hull/gun pairs are visited twice (100 cycles), with five frames per
+model and 20 seconds natural idle. HTMLImageElement `decode()` is explicitly
+awaited in both decoding and drawing arms. No forced GC is used.
+
+| Retained PSS increment after disposal/idle | Chromium | WPE WebKit |
+| --- | ---: | ---: |
+| Encoded fetch only | 63.7 MiB | 59.4 MiB |
+| Decode, no context or drawing | 570.6 MiB | 80.4 MiB |
+| Prepare renderer, no presentation | 570.7 MiB | 92.3 MiB |
+| Draw and dispose | 589.0 MiB | 452.0 MiB |
+
+Chromium's major remaining occupancy is already triggered by decode-only,
+including about 492.2 MiB additional PSS in Chromium shared-file mappings. It
+cannot be explained solely by retained Canvas objects. WPE's major additional
+occupancy is triggered by drawing: its baseline-adjusted draw increment is
+about 359.7 MiB above prepare-only. The native heap-region increase is about
+387.5 MiB across browser processes, mostly in WPEWebProcess. Inspector `other`
+remains about 535.5 MiB with JavaScript about 3.1 MiB and zero image-category and
+reported Canvas backing bytes. These mapping regions and operation contrasts
+are narrower evidence than the previously unattributed `other` total, but do
+not identify individual live allocations versus reusable allocator pages.
+
+All 800 closed-cycle receipts return managed resources and visible canvas
+dimensions to zero. The request guard initially blocked WPE's local Blob URLs;
+those failed controls are retained and excluded from the final comparison. A
+separate original-file guard initially rejected the generated player PNG, which
+is now pinned separately from the 100 Git-verified original boss images. Earlier
+process totals including the separately recorded bundler are also retained;
+the final matrix excludes that child before browser launch.
+
+Exact results, eight preserved preliminary failures, logs, archive/member hashes
+and exact main-control sources are in
+[evidence/memory-stages-20261025](evidence/memory-stages-20261025/README.md).
+The local runner is `verify-memory-stages.mjs`; it refuses output collisions.
+No renderer/decoder behavior or original gameplay implementation was changed.
+
 ## Next acceptance
 
-Attribute the native growth before adopting a decoder. Require original pixel
+Identify decoded-image/raster cache and allocator ownership on the Chromium
+decode path and WPE draw path before adopting a decoder. The triggering stages
+are now separated; exact allocation lifetime and bounded memory are still open.
+Require original pixel
 fidelity, bounded native behavior, real cancellation and complete disposal, then
 connect the dynamic scene, boss-stop and bonus handoff through the same clock.
 Complete powers/effects/audio/HUD/account/save migration and affected-device

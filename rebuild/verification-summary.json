@@ -282,5 +282,86 @@
     },
     "interpretation": "Broad other category remains unattributed. No complete native memory or historical White Screen fix is accepted."
   },
-  "nextStep": "Matched fetch-only, decode-only and draw/dispose attribution using identical original assets and viewport."
+  "nextStep": "Investigate decoded-image/raster cache and allocator ownership on the isolated Chromium decode path and WPE drawing path; distinguish retained live data from reusable allocator pages before choosing a decoder. Do not integrate further game features yet.",
+  "nativeStageAttribution": {
+    "status": "triggering-stages-separated-exact-allocation-lifetime-open",
+    "evidence": "evidence/memory-stages-20261025/summary.json",
+    "completeControls": 8,
+    "cyclesPerControl": 100,
+    "totalClosedCycles": 800,
+    "failedControlsPreserved": 8,
+    "decoder": "blob-image",
+    "fixedViewport": {
+      "width": 393,
+      "height": 744,
+      "deviceScaleFactor": 3
+    },
+    "idleSeconds": 20,
+    "results": [
+      {
+        "engine": "chromium",
+        "mode": "fetch-only",
+        "baselineMiB": 165.2431640625,
+        "idle20MiB": 228.94140625,
+        "idleDeltaMiB": 63.6982421875
+      },
+      {
+        "engine": "chromium",
+        "mode": "decode-only",
+        "baselineMiB": 166.189453125,
+        "idle20MiB": 736.7568359375,
+        "idleDeltaMiB": 570.5673828125
+      },
+      {
+        "engine": "chromium",
+        "mode": "prepare-only",
+        "baselineMiB": 165.0126953125,
+        "idle20MiB": 735.6630859375,
+        "idleDeltaMiB": 570.650390625
+      },
+      {
+        "engine": "chromium",
+        "mode": "draw-dispose",
+        "baselineMiB": 163.5322265625,
+        "idle20MiB": 752.56640625,
+        "idleDeltaMiB": 589.0341796875
+      },
+      {
+        "engine": "webkit",
+        "mode": "fetch-only",
+        "baselineMiB": 292.5166015625,
+        "idle20MiB": 351.939453125,
+        "idleDeltaMiB": 59.4228515625
+      },
+      {
+        "engine": "webkit",
+        "mode": "decode-only",
+        "baselineMiB": 291.728515625,
+        "idle20MiB": 372.140625,
+        "idleDeltaMiB": 80.412109375
+      },
+      {
+        "engine": "webkit",
+        "mode": "prepare-only",
+        "baselineMiB": 292.044921875,
+        "idle20MiB": 384.36328125,
+        "idleDeltaMiB": 92.318359375
+      },
+      {
+        "engine": "webkit",
+        "mode": "draw-dispose",
+        "baselineMiB": 291.2626953125,
+        "idle20MiB": 743.3046875,
+        "idleDeltaMiB": 452.0419921875
+      }
+    ],
+    "chromium": "Large retention already triggered by decode-only; approximately 492.2 MiB additional PSS in Chromium shared-file mappings.",
+    "webkit": "Large additional retention triggered by drawing, approximately 359.7 MiB baseline-adjusted excess above prepare-only, mostly native heap region.",
+    "exactAllocationOwnershipProven": false,
+    "boundedNativeMemoryAccepted": false,
+    "historicalWhiteScreenFixed": false,
+    "forcedGC": false,
+    "pixelReadback": false,
+    "rendererOrDecoderBehaviorChanged": false
+  }
 }

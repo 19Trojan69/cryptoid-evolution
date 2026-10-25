@@ -31,6 +31,14 @@ reference. Controlled alternatives exposed native memory growth and Chromium
 pixel differences. They are experiments, not approved optimizations. See
 [memory-investigation.md](memory-investigation.md) before extending the renderer.
 
+Matched native-memory controls now distinguish encoded fetching, explicit
+decoding without drawing, renderer preparation without presentation and original
+drawing/disposal. Eight complete 100-cycle controls show Chromium's main retained
+increment already in decoding, while WPE's additional large increment appears
+in the draw path/native heap. Both acceptance gates remain open. Exact results
+and preserved failed controls are in
+[the stage evidence](evidence/memory-stages-20261025/README.md).
+
 From this directory, with the repository's frontend dependencies installed:
 
 ```sh

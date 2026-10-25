@@ -72,6 +72,7 @@ the replacement can be treated as ready. Missing features are tracked below.
 | Pure lifecycle/campaign/ownership foundation | 43 unit/contract cases and TypeScript pass; 41-module simulation boundary audit passes. |
 | New playable core and renderer | Internal single-encounter fixture; functional native controls cover all 50 original boss models. Decoder/native-memory acceptance is blocked. |
 | Pure boss-stop gate | Seven contracts pass; real backend/UI/bonus integration remains pending. |
+| Native memory stage attribution | Eight matched 100-cycle controls complete: large Chromium retention begins in decode; WPE's additional retention is triggered by drawing/native heap allocation. Exact allocation lifetime and bounded memory remain unaccepted. |
 | Dynamic scene/bonus/durable boss-stop handoff | Pending; the fixture stops at encounter completion. |
 | Full feature migration | Pending. |
 | Original White Screen reproduced/fixed | Open. |
