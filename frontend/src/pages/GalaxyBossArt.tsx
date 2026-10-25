@@ -7,6 +7,10 @@ export default function GalaxyBossArt({ id, defeated, large = false }: { id: num
   const canvas = useRef<HTMLCanvasElement>(null);
   const [ready, setReady] = useState(false);
   useEffect(() => {
+    const output = canvas.current;
+    return () => { if (output) output.width = output.height = 0; };
+  }, []);
+  useEffect(() => {
     let active = true;
     void loadBossArtwork(id, large ? 800 : 256).then(art => {
       if (!active || !canvas.current) return;

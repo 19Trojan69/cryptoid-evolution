@@ -1,0 +1,193 @@
+{
+  "status": "prepared-not-deployed",
+  "repository": "19Trojan69/cryptoid-evolution",
+  "parentCommit": "8c4f17164daf625a4c9610b5d2d88946010c8496",
+  "releasedRuntimeCommit": "20843b5501387dca8bb5616303934ece2ae6d581",
+  "candidateBranch": "codex/testnet-resource-retirement-20261025",
+  "originalControlSourcesVerifiedAgainstParent": true,
+  "frontendBuild": {
+    "passed": true,
+    "tests": 232,
+    "typecheck": true,
+    "vite": true,
+    "existingChunkSizeWarning": true
+  },
+  "changedRuntimeLint": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "diagnosticStorageAB": {
+    "chromium": {
+      "passed": true,
+      "engine": "chromium",
+      "version": "141.0.7390.37",
+      "syntheticFramesPerCase": 36000,
+      "before": {
+        "reads": 72004,
+        "writes": 6002,
+        "elapsedMs": 606.2000000029802
+      },
+      "after": {
+        "reads": 4804,
+        "writes": 6002,
+        "elapsedMs": 260.1000000014901
+      },
+      "identicalRecoveredEvidence": true,
+      "criticalStatePreserved": true,
+      "limits": "Actual local browser Storage and current recorder. Ten minutes of synthetic frame callbacks run as a synchronous workload. Timing is diagnostic-work timing, not game FPS, native/iPhone memory, a natural White Screen reproduction, or proof of its cause."
+    },
+    "webkit": {
+      "passed": true,
+      "engine": "webkit",
+      "version": "26.5",
+      "syntheticFramesPerCase": 36000,
+      "before": {
+        "reads": 72004,
+        "writes": 6002,
+        "elapsedMs": 638
+      },
+      "after": {
+        "reads": 4804,
+        "writes": 6002,
+        "elapsedMs": 241
+      },
+      "identicalRecoveredEvidence": true,
+      "criticalStatePreserved": true,
+      "limits": "Actual local browser Storage and current recorder. Ten minutes of synthetic frame callbacks run as a synchronous workload. Timing is diagnostic-work timing, not game FPS, native/iPhone memory, a natural White Screen reproduction, or proof of its cause."
+    }
+  },
+  "portraitAB": {
+    "chromium": {
+      "passed": true,
+      "version": "141.0.7390.37",
+      "identicalNativePngPairs": 6,
+      "retiredViewBytesBefore": 3516960,
+      "retiredViewBytesAfter": 0,
+      "lateAsyncCompletionPassed": true,
+      "sharedArtworkPreserved": true
+    },
+    "webkit": {
+      "passed": true,
+      "version": "26.5",
+      "identicalNativePngPairs": 6,
+      "retiredViewBytesBefore": 3413396,
+      "retiredViewBytesAfter": 0,
+      "lateAsyncCompletionPassed": true,
+      "sharedArtworkPreserved": true
+    }
+  },
+  "bossAndCardSoak": {
+    "chromium": {
+      "passed": true,
+      "version": "141.0.7390.37",
+      "arms": [
+        {
+          "diagnostics": false,
+          "encounters": 36,
+          "bossIds": [
+            2,
+            3,
+            4
+          ],
+          "firstDraws": 36,
+          "releases": 36,
+          "retiredCanvasBytesExcludingSharedArtwork": 0,
+          "animationOwnersAfterEachUnmount": 0,
+          "nativeAnimationsAfterEachUnmount": 0,
+          "sharedArtworkBytesAfterWarmup": 4195976,
+          "sharedArtworkResults": 3,
+          "errors": [],
+          "assetFailures": []
+        },
+        {
+          "diagnostics": true,
+          "encounters": 36,
+          "bossIds": [
+            2,
+            3,
+            4
+          ],
+          "firstDraws": 36,
+          "releases": 36,
+          "retiredCanvasBytesExcludingSharedArtwork": 0,
+          "animationOwnersAfterEachUnmount": 0,
+          "nativeAnimationsAfterEachUnmount": 0,
+          "sharedArtworkBytesAfterWarmup": 4195976,
+          "sharedArtworkResults": 3,
+          "errors": [],
+          "assetFailures": []
+        }
+      ],
+      "finalRunnerSmokePassed": true,
+      "finalRunnerSmokeEncounters": 6
+    },
+    "webkit": {
+      "passed": true,
+      "version": "26.5",
+      "arms": [
+        {
+          "diagnostics": false,
+          "encounters": 36,
+          "bossIds": [
+            2,
+            3,
+            4
+          ],
+          "firstDraws": 36,
+          "releases": 36,
+          "retiredCanvasBytesExcludingSharedArtwork": 0,
+          "animationOwnersAfterEachUnmount": 0,
+          "nativeAnimationsAfterEachUnmount": 0,
+          "sharedArtworkBytesAfterWarmup": 4199544,
+          "sharedArtworkResults": 3,
+          "errors": [],
+          "assetFailures": []
+        },
+        {
+          "diagnostics": true,
+          "encounters": 36,
+          "bossIds": [
+            2,
+            3,
+            4
+          ],
+          "firstDraws": 36,
+          "releases": 36,
+          "retiredCanvasBytesExcludingSharedArtwork": 0,
+          "animationOwnersAfterEachUnmount": 0,
+          "nativeAnimationsAfterEachUnmount": 0,
+          "sharedArtworkBytesAfterWarmup": 4199544,
+          "sharedArtworkResults": 3,
+          "errors": [],
+          "assetFailures": []
+        }
+      ],
+      "finalRunnerSmokePassed": true,
+      "finalRunnerSmokeEncounters": 6
+    }
+  },
+  "controlledBossAndCardEncounters": 144,
+  "nativeProcessOrGpuMemoryMeasured": false,
+  "historicalWhiteScreenReproduced": false,
+  "physicalIphoneValidated": false,
+  "runtimeAndVerifierSha256": {
+    "frontend/src/pages/crashTail.ts": "cc6dbbedfb64727bae46fbd6435b3f65cace67037d4da825a5ca9a112fdd0d43",
+    "frontend/src/pages/crashTail.test.mjs": "9362c7a1b5c4e3722a934c88955745f9f6ba51adbce6e5f5d1de9dbb91c9330f",
+    "frontend/src/pages/BossPortrait.tsx": "242accaa0c073b2cad4bc2e981ec759af9e39c592b5abc141136d6ac48cd3bce",
+    "frontend/src/pages/ShipPortrait.tsx": "437a3518564194691ca7611e5ae463ecc397d13f2c984b5d315d6bcb4fdfd686",
+    "frontend/src/pages/GalaxyBossArt.tsx": "e0b89a64508ffc8935e9178d2131123491be4848515338233908685c06ea8e27",
+    "frontend/scripts/verifyCrashTailStorage.mjs": "4e39cb2570752be015ad5fcc0e06effea1056898d9633939564263d63fd2dd0f",
+    "frontend/scripts/verifyPortraitRetirement.mjs": "d12c10544e64084d38945ec5479166914320dbfce381a26cefd4a8e278a6094f",
+    "frontend/scripts/verifyBossResourceSoak.mjs": "c4b2c05e54dee662b688aa563f71b87b9d5652c69fd277a4b4acc5dee36020a8",
+    "frontend/scripts/fixtures/portrait-retirement.tsx": "c494976a6a33497dc869903de4b0c41d777c2ceb4b656b51a99fb5a9bf1f7c15",
+    "frontend/scripts/fixtures/boss-resource-soak.tsx": "a4ae0aeabe0eb03fd79199cd9598057de7aff5e3d065802d0e094b4e9ad12f8b"
+  },
+  "limitations": [
+    "Native Linux Chromium/WebKit, not physical iOS/Pi Browser.",
+    "Synthetic aim/damage and 1.8-second encounters; no full game campaign, account, payment or save acceptance.",
+    "Canvas dimensions estimate pixel backing bytes; no process, GPU or iPhone memory measurement.",
+    "Detached portrait elements are deliberately retained in the A/B test so garbage collection cannot hide deferred retirement.",
+    "Storage callback timing is not game FPS, presented FPS or a demonstrated White Screen cause.",
+    "No runtime publication or main/Mainnet change."
+  ]
+}

@@ -1,3 +1,21 @@
+# Resource retirement and diagnostic I/O, 25 October 2026
+
+The owner explicitly rejects depending on missing iOS/WebKit/Pi Browser analytics
+and requests continuation through another approach. Use automated local native
+browser controls; do not ask for more OS logs or another owner campaign.
+This candidate continues the released source 20843b5 / receipt 8c4f171.
+Pace crash-tail ownership reads with the existing snapshot deadline; retain every
+due/critical ownership check and identical persisted evidence. Explicitly zero
+only the closed BossPortrait, ShipPortrait and GalaxyBossArt view canvases;
+never zero shared artwork or alter active pixels, cache budgets or art resolution.
+Keep all game/account/audio/backend behavior, owner-only Admin access, strict
+>2500 ms / 500 ms watchdog and explicit Continue/Resume unchanged. Local harnesses
+are synthetic controlled tests, never a physical iPhone crash reproduction.
+Preserve earlier failed evidence; do not label these savings a White Screen fix.
+Candidate branch codex/testnet-resource-retirement-20261025 is auto-deploy-disabled.
+No deployment or main/Mainnet merge is included in this preparation.
+See docs/resource-retirement-20261025.md and its sanitized verification summary.
+
 # Authorized Testnet integration, 25 October 2026
 
 The owner now explicitly authorizes the official Testnet release and clarifies

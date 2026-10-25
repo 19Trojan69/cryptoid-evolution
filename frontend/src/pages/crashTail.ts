@@ -110,7 +110,9 @@ export function createCrashTail(verifiedOwner: boolean, getHost: () => Host, opt
     return value;
   };
   const head = (force = false) => {
-    if (!ownsSlot() || !force && options.now() - lastHead < CRASH_TAIL_LIMITS.headIntervalMs) return;
+    // Frames that cannot write must not cross the synchronous Storage boundary.
+    // Every due or critical write still verifies ownership before touching a slot.
+    if (!force && options.now() - lastHead < CRASH_TAIL_LIMITS.headIntervalMs || !ownsSlot()) return;
     lastHead = options.now();
     try { if (options.fullContext) context = technicalContext(options.fullContext()) || context; } catch { /* Optional state only. */ }
     const value = make('resource', context);
