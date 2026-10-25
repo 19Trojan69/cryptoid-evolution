@@ -15,6 +15,13 @@ async function runFixture(mode) {
   process.env.SESSION_SECRET = 'session-initialization-test-only';
   process.env.MONGODB_URI = 'mongodb://fixture.invalid/session-initialization';
   process.env.MONGODB_DATABASE_NAME = 'session-initialization';
+  if (mode === 'split-auth') {
+    process.env.MONGODB_USERNAME = 'scoped-testnet-fixture';
+    process.env.MONGODB_PASSWORD = 'synthetic-p@ss/word';
+  } else {
+    delete process.env.MONGODB_USERNAME;
+    delete process.env.MONGODB_PASSWORD;
+  }
   if (mode === 'isolated') process.env.CRYPTOID_SESSION_COOKIE_NAME = 'cryptoid.testnet.local.sid';
   else delete process.env.CRYPTOID_SESSION_COOKIE_NAME;
   delete process.env.CRYPTOID_TESTNET_BACKEND;
@@ -161,6 +168,14 @@ async function runFixture(mode) {
     assert.equal(stores[0].collectionName, 'user_sessions');
     assert.equal(stores[0].dbName, 'session-initialization');
     assert.equal(stores[0].mongoUrl, process.env.MONGODB_URI);
+    if (mode === 'split-auth') {
+      const authOptions = { authSource: 'admin', auth: {
+        username: process.env.MONGODB_USERNAME, password: process.env.MONGODB_PASSWORD,
+      } };
+      assert.deepEqual(connections[0].options, authOptions, 'application uses the separate credential without URI encoding');
+      assert.deepEqual(stores[0].mongoOptions, authOptions, 'session storage uses the same separate credential');
+      assert.ok(!stores[0].mongoUrl.includes(process.env.MONGODB_PASSWORD), 'password stays outside the URI');
+    }
     await new Promise(resolve => setImmediate(resolve));
     assert.deepEqual(unhandled, []);
     return { mode, sessionStores: stores.length, mongoConnections: connections.length, sessionCount: 2 };
@@ -181,6 +196,7 @@ if (fixture >= 0) {
     ['proxy', 'actual Vercel import and Testnet proxy requests never start MongoDB'],
     ['native', 'native backend retains Mongo sessions, secure cookies and warm reuse'],
     ['isolated', 'local Testnet session coexists with the established proxy cookie and retains its stored state'],
+    ['split-auth', 'actual backend and Mongo sessions accept a separate raw password with URI-special characters'],
     ['retry', 'native database failure returns a controlled error and retries without an unhandled rejection'],
   ]) {
     test(name, () => {

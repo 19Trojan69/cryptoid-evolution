@@ -30,7 +30,10 @@ import mountNotificationEndpoints from "./handlers/notifications";
 
 const dbName = env.mongo_db_name;
 const mongoUri = env.mongo_uri || `mongodb://${env.mongo_host}/${dbName}`;
-const mongoClientOptions = env.mongo_uri
+// A scoped Testnet credential can be stored in separate protected variables.
+// Pass it directly to both Mongo clients, avoiding password editing/encoding in
+// the URI. URI-only deployments retain their existing authentication options.
+const mongoClientOptions = env.mongo_uri && !env.mongo_user
   ? {}
   : {
       authSource: "admin",
