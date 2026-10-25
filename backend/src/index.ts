@@ -1,4 +1,5 @@
 import mountFeedbackEndpoints from "./handlers/feedback";
+import { deletedAccessToken, deletedProxyToken } from './playerAdministration';
 import mountPilotEndpoints from "./handlers/pilots";
 import fs from "fs";
 import path from "path";
@@ -104,7 +105,16 @@ app.use((req, res, next) => {
 // authenticated user from the short-lived Pi access token sent by the client.
 // The token is verified with Pi before any user is attached to the request.
 app.use(async (req, _res, next) => {
-  if (req.session.currentUser) return next();
+  if (req.session.currentUser) {
+    const user = req.session.currentUser;
+    try {
+      if (await deletedAccessToken(req.app.locals.adminCollection, user.uid, user.accessToken || '')) {
+        req.session.currentUser = null; req.session.scoreRun = null;
+        return _res.status(410).json({ error: 'account_deleted' });
+      }
+    } catch { return _res.status(503).json({ error: 'session_verification_unavailable' }); }
+    return next();
+  }
 
   const authorization = req.get("authorization") || "";
   const match = authorization.match(/^Bearer\s+(.+)$/i);
@@ -121,6 +131,10 @@ app.use(async (req, _res, next) => {
     const uid = me.data?.uid;
     const username = me.data?.username;
     if (!uid || typeof uid !== "string" || !username || typeof username !== "string") return next();
+    if (await deletedAccessToken(req.app.locals.adminCollection, uid, accessToken)) {
+      req.session.currentUser = null; req.session.scoreRun = null;
+      return _res.status(410).json({ error: 'account_deleted' });
+    }
 
     let currentUser = await userCollection.findOne({ uid });
     if (currentUser) {
@@ -213,6 +227,9 @@ export const start = async (listen = true): Promise<void> => {
     const db = client.db(dbName);
     app.locals.orderCollection = db.collection("orders");
     app.locals.userCollection = db.collection("users");
+    app.locals.database = db;
+    app.locals.databaseClient = client;
+    app.locals.sessionCollection = db.collection('user_sessions');
     app.locals.feedbackCollection = db.collection("feedback_posts");
     app.locals.feedbackVotesCollection = db.collection("feedback_votes");
     app.locals.feedbackTranslationsCollection = db.collection("feedback_translations");
@@ -221,6 +238,7 @@ export const start = async (listen = true): Promise<void> => {
     await app.locals.feedbackVotesCollection.createIndex({network:1,postId:1,value:1});
     await app.locals.feedbackVotesCollection.createIndex({network:1,postId:1,uid:1},{unique:true});
     app.locals.adminCollection = db.collection("admin_access");
+    await app.locals.adminCollection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
     app.locals.usageCollection = db.collection("usage_hourly");
     await app.locals.usageCollection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
     await app.locals.usageCollection.createIndex({ network: 1, hour: -1 });
@@ -246,4 +264,18 @@ export const start = async (listen = true): Promise<void> => {
   }
 };
 
+export async function proxyAccountAllowed(req: any) {
+  const bearer = String(req.headers?.authorization || '').match(/^Bearer\s+(.+)$/i)?.[1]?.trim();
+  let body = req.body;
+  if (typeof body === 'string' || Buffer.isBuffer(body)) {
+    try { body = JSON.parse(String(body)); } catch { return false; }
+  }
+  const tokens = [bearer, body?.authResult?.accessToken].filter((token): token is string => typeof token === 'string' && token.length > 0);
+  if (!tokens.length) return false;
+  if (!app.locals.adminCollection) throw Error('account_deletion_guard_unavailable');
+  for (const token of new Set(tokens)) if (await deletedProxyToken(app.locals.adminCollection, token)) return false;
+  return true;
+}
+
 if (!process.env.VERCEL) void start();
+

@@ -1,11 +1,13 @@
 import { hangarCatalog } from "./hangarCatalog";
 import { communityLocale, translateCommunity } from "./communityTranslation";
+import { testnetAccountDeletionEnabled } from './playerAdministration';
 
 const productionBackendOrigin = "https://cryptoid-evolution.vercel.app";
 
 type Backend = {
   app: (req: any, res: any) => unknown;
   start: (listen: boolean) => Promise<void>;
+  proxyAccountAllowed?: (req: any) => Promise<boolean>;
 };
 type GatewayEnvironment = {
   VERCEL_ENV?: string;
@@ -104,6 +106,9 @@ const proxyToProduction = async (
   else if (upstream.headers.get("set-cookie"))
     res.setHeader("set-cookie", upstream.headers.get("set-cookie"));
   res.setHeader("x-cryptoid-backend", "production-proxy");
+  const upstreamId = upstream.headers.get('x-vercel-id');
+  if (upstreamId && upstreamId.length <= 200 && /^[a-z0-9:_-]+$/.test(upstreamId))
+    res.setHeader('x-cryptoid-upstream-request-id', upstreamId);
   return res
     .status(upstream.status)
     .send(Buffer.from(await upstream.arrayBuffer()));
@@ -126,6 +131,10 @@ export const createApiGateway = (
       const env = environment();
       const testnet = isTestnetDeployment(req, env);
       const localTestnet = localTestnetEnabled(env);
+      // Add only the new, network-scoped features locally. Existing Testnet
+      // accounts/payments keep their established proxy; no Mainnet deployment.
+      const localFeature = testnet && (/^progress\/boss-summary\/(?:prepare|continue)$/.test(path)
+        || /^admin\/players(?:\/|$)/.test(path));
       // The public catalog must match this deployment's Shop, even while
       // account and payment requests use the established Pi service.
       if (
@@ -199,10 +208,18 @@ export const createApiGateway = (
           return res.status(503).json({ error: "translation_unavailable" });
         }
       }
-      if (testnet && (!localTestnet || needsPiApplicationKey(path))) {
+      if (testnet && !localFeature && (!localTestnet || needsPiApplicationKey(path))) {
+        // A deleted account's previous token must not recreate it through the
+        // established proxy. This guard is enabled together with deletion.
+        if (testnetAccountDeletionEnabled() && (req.headers?.authorization || path === 'user/signin')) {
+          ready ??= loadBackend().then(async backend => { await backend.start(false); return backend; });
+          const backend = await ready;
+          if (!backend.proxyAccountAllowed) return res.status(503).json({ error: 'account_deletion_guard_unavailable' });
+          if (!await backend.proxyAccountAllowed(req)) return res.status(410).json({ error: 'account_deleted' });
+        }
         return await proxyToProduction(req, res, path, url);
       }
-      if (localTestnet) {
+      if (localTestnet || localFeature) {
         req.headers ??= {};
         req.headers["x-cryptoid-app-network"] = "testnet";
       }
@@ -215,7 +232,7 @@ export const createApiGateway = (
       req.url = "/" + path + (query ? "?" + query : "");
       res.setHeader(
         "x-cryptoid-backend",
-        localTestnet ? "testnet-local" : "local",
+        localTestnet || localFeature ? "testnet-local" : "local",
       );
       res.setHeader("x-cryptoid-score-api", "5");
       return backend.app(req, res);
@@ -226,3 +243,4 @@ export const createApiGateway = (
     }
   };
 };
+

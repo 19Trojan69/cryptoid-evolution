@@ -1,5 +1,6 @@
 type TechnicalStorage = { localStorage?: Pick<Storage, 'getItem'>; sessionStorage?: Pick<Storage, 'getItem'>; indexedDB?: IDBFactory };
 export type StabilityReport = {
+  crashTail?: ReturnType<typeof import('./crashTail.ts').readCrashTails>;
   ownerLifecycle?: ReturnType<typeof import('../lib/ownerLifecycleEvidence.mjs').ownerLifecycleEvidence.report>;
   version: number; format: string; generatedAt: string | null; available: boolean;
   activeDocument: { startedAt?: number; ageMs?: number; navigationType?: string; route?: string } | null;
@@ -17,3 +18,4 @@ export function technicalContext(value: unknown): Record<string, unknown> | null
 export function readStabilityReport(host: TechnicalStorage, now?: number): StabilityReport;
 export function readOwnerStabilityReport(verifyOwner: () => Promise<{ canAdmin?: boolean }>, getHost: () => TechnicalStorage, active?: () => boolean, now?: number, includeFullSession?: boolean): Promise<StabilityReport | null>;
 export function exportOwnerFullSession(verifyOwner: () => Promise<{ canAdmin?: boolean }>, getHost: () => TechnicalStorage, id: string, active?: () => boolean): Promise<Blob | null>;
+

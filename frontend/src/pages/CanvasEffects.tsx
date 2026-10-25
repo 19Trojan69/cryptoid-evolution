@@ -206,6 +206,10 @@ export function clearCanvasEffects(){
   imageBytes=textureBytes=preparationCount=hullLoads=hullEvictions=0;
   pausedAt=pauseTotal=0;nextPaintAt=null;grownBounds=null;draws=fragmentDraws=0;
 }
+export function releaseIdleCanvasEffects(){
+  if(records.size||hullUsers.size)return false;
+  clearCanvasEffects();return true;
+}
 // Bounded counters for resource verification; no global/browser debug API.
 export function canvasEffectResources(){
   return {activeDrawFrame:!!frameId,registeredEffects:records.size,sourceImages:images.size,
@@ -289,3 +293,4 @@ export function CanvasImpact({effect,debris,original}:{effect:any;debris:any;ori
   },[available,loaded,effect,pieces]);
   return available?null:<>{original}</>;
 }
+

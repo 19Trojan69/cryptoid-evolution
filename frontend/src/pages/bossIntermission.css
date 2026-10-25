@@ -1,0 +1,8 @@
+.boss-summary-overlay{z-index:44;background:rgba(3,9,22,.94);backdrop-filter:none}
+.boss-summary-dialog{width:min(90vw,420px);max-height:88dvh;overflow:auto;text-align:center;border:1px solid #a48c56;padding:22px;border-radius:18px;background:#091326;color:#f5ecda}
+.boss-summary-dialog h1{font-size:clamp(1.3rem,5vw,1.8rem);margin:8px 0 18px}
+.boss-summary-kicker{color:#d5b975;font-weight:700;letter-spacing:.09em}
+.boss-summary-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 18px}
+.boss-summary-stats>div{background:#111f35;padding:10px;border-radius:9px}
+.boss-summary-stats dt{color:#adb8cd;font-size:.8rem}.boss-summary-stats dd{margin:5px 0 0;font-size:1.25rem;font-weight:700}
+.boss-summary-countdown{color:#d5b975;min-height:36px}.boss-summary-dialog .button{min-height:46px;margin:6px}

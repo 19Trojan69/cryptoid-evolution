@@ -27,7 +27,7 @@ export function selectionHost() {
   const env = {
     ownerDiagnostics: true, sessionDiagnostic() {},
     stateRef: ref(state), scoreRunRef: ref('isolated-run'), weaponMountedRef: ref(true),
-    weaponBusyRef: ref(false), activationRef: ref(null), adminRunRef: ref(false),
+    weaponBusyRef: ref(false), activationRef: ref(null), adminRunRef: ref(false), bossSummaryRef: ref(null),
     stockRef: ref({ ...balances }), reloadPendingRef: ref(false), reloadRequestRef: ref(null),
     reloadNoticeTimerRef: ref(null), soundRef: ref({ play() {} }), musicRef: ref({ pause() {} }),
     accountRun: true, weaponMenuOpen: false, weaponCountdown: null, weaponError: '', weaponBusy: false,
@@ -139,7 +139,7 @@ export async function handlerSelectionHost() {
     const snapshot = firstMissionSnapshot(3);
     for (const key of ['weaponSource', 'paidWeaponLevel', 'paidWeaponMs', 'pickupWeaponLevel', 'pickupWeaponMs', 'weaponTimers']) snapshot[key] = structuredClone(f.state[key]);
     check(await h.call('progress', '/checkpoint', { runId: h.session.scoreRun.id,
-      combat: combat({ sequence: ++sequence }), save: snapshot }));
+      combat: combat({ sequence: ++sequence, stage: f.state.sector || 1 }), save: snapshot }));
   };
   f.env.axiosClient.post = async (path, body) => {
     if (path !== '/hangar/weapon/activate') throw Error('Unexpected live-looking path');
@@ -150,3 +150,4 @@ export async function handlerSelectionHost() {
   };
   return { ...f, h, loseNextReply() { loseReply = true; } };
 }
+

@@ -217,3 +217,5 @@ export const usePaintedShipStyle = (index: number, colorId: PlayerColorId, stage
 };
 
 export const paintedShipResourceStats = () => ({ painted: cache.size, estimatedBytes: cache.bytes, sources: sourceImages.size, pending: pendingPaints.size, retained: cache.retainedEntries, retainCount: cache.retainCount, sourceRetained: sourceImages.retainedEntries, sourceRetainCount: sourceImages.retainCount, ...preparationProbe });
+export const releaseUnusedPaintedShips = () => { cache.clearUnused(); sourceImages.clearUnused(); };
+

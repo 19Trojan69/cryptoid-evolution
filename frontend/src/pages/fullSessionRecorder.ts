@@ -119,10 +119,14 @@ export function createFullSessionRecorder(verifiedOwner: boolean, getHost: () =>
     }
   };
   const release = observeSessionDiagnostics((kind, details) => {
+    if (!started && !stopped && kind === 'boundary' && details.operation === 'boss-summary-open') {
+      started = true; add('start', options.build, true); flush();
+    }
     add(kind, details, kind === 'boundary' && details.operation !== 'hull-plan-progress' || kind === 'lifecycle');
     // Requests/queues are batched with the next aggregate window, not written per shot.
   });
   return {
+    id,
     start() { if (started || stopped) return; started = true; add('start', options.build, true); flush(); },
     sample(value: unknown) {
       add('sample', value);
@@ -138,3 +142,4 @@ export function createFullSessionRecorder(verifiedOwner: boolean, getHost: () =>
       markerWrites, markerWriteMaxMs, markerWriteTotalMs }; },
   };
 }
+

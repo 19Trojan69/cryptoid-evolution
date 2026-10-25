@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import platformAPIClient from "../services/platformAPIClient";
 import { canAdmin, isAdminMode } from "../adminAccess";
+import { deletedAccessToken } from '../playerAdministration';
 
 export default function mountUserEndpoints(router: Router) {
   const publicUser = (user: { uid: string; username: string; roles?: string[] }) => ({
@@ -32,6 +33,7 @@ export default function mountUserEndpoints(router: Router) {
       if (!verifiedUid || (auth.user?.uid && verifiedUid !== auth.user.uid)) return res.status(401).json({ error: "invalid_token" });
       verifiedUsername = me.data.username;
       if (!verifiedUsername || typeof verifiedUsername !== "string") return res.status(401).json({ error: "invalid_token" });
+      if (await deletedAccessToken(req.app.locals.adminCollection, verifiedUid, auth.accessToken)) return res.status(410).json({ error: 'account_deleted' });
       verifiedRoles = Array.isArray(auth.user?.roles) ? auth.user.roles : Array.isArray(me.data.roles) ? me.data.roles : [];
     } catch (err) {
       console.error("Error verifying access token:", err);
@@ -107,3 +109,4 @@ export default function mountUserEndpoints(router: Router) {
     return res.status(200).json({ message: "User signed out" });
   });
 }
+

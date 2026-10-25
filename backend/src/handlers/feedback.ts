@@ -191,7 +191,7 @@ export default function mountFeedbackEndpoints(router: Router) {
       if (cache)
         await cache.updateOne(
           { _id },
-          { $set: { result, expiresAt: new Date(Date.now() + 7 * 86400_000) } },
+          { $set: { result, network, postId: id, expiresAt: new Date(Date.now() + 7 * 86400_000) } },
           { upsert: true },
         );
       return res.json(result);
@@ -385,3 +385,4 @@ export default function mountFeedbackEndpoints(router: Router) {
     }
   });
 }
+

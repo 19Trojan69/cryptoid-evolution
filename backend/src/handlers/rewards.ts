@@ -8,6 +8,7 @@ import { missionAfter, publicSave, readSnapshot } from "../playerSave";
 import { validRunScore } from "../leaderboardRules";
 import { restoreScoreRun } from "../restoreScoreRun";
 import { maxMissionHearts } from "../lifeRules";
+import { bossIntermissionPending } from '../bossIntermission';
 
 type RewardEvent = { runId: string; kind: "block" | "chain" | "boss" | "bonus"; level: number; stage: number; hits?: number; save?: unknown };
 
@@ -53,6 +54,7 @@ export default function mountRewardEndpoints(router: Router) {
         const player = user.playerByNetwork?.[network];
         if (snapshot && player?.activeRunId !== run.id) return res.status(409).json({ error: "run_replaced" });
         if (completed.includes(key)) return res.json({ progress, awarded: false, ...(player ? { save: publicSave(player) } : {}) });
+        if (event.kind === 'bonus' && bossIntermissionPending(player?.mission?.bossIntermission)) return res.status(409).json({ error: 'boss_summary_pending' });
         const prerequisite = event.kind === "block" ? event.stage % 10 === 1 ? event.level > 1 ? `bonus:${event.level - 1}` : null : `block:${event.stage - 1}`
           : event.kind === "chain" ? `block:${event.stage}` : event.kind === "boss" ? `chain:${event.level}` : `boss:${event.level}`;
         if (prerequisite && !completed.includes(prerequisite)) return res.status(409).json({ error: "Finish the previous stage first" });
@@ -90,3 +92,4 @@ export default function mountRewardEndpoints(router: Router) {
     } catch { return res.status(503).json({ error: "Could not save reward" }); }
   });
 }
+

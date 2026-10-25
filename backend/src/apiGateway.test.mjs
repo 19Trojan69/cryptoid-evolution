@@ -1,9 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
+import { readFileSync } from 'node:fs';
+import { runInNewContext } from 'node:vm';
 const require = createRequire(import.meta.url);
 const { createApiGateway } = require('../build/apiGateway.js');
 const { hangarCatalog } = require('../build/hangarCatalog.js');
+const ts = require('typescript');
 
 const response = () => ({
   code: 200, headers: {},
@@ -20,6 +23,45 @@ const backendFixture = () => {
     app(req, res) { calls.push({ url: req.url, network: req.headers['x-cryptoid-app-network'] }); return res.json({ ok: true }); },
   } };
 };
+
+test('real Vercel entry forwards the deletion guard without blocking an active Testnet login', async t => {
+  const keys = ['VERCEL_ENV', 'VERCEL_PROJECT_PRODUCTION_URL', 'CRYPTOID_TESTNET_ACCOUNT_DELETION'];
+  const previous = keys.map(key => process.env[key]);
+  Object.assign(process.env, {
+    VERCEL_ENV: 'production',
+    VERCEL_PROJECT_PRODUCTION_URL: 'cryptoid-evolution-testnet.vercel.app',
+    CRYPTOID_TESTNET_ACCOUNT_DELETION: 'enabled',
+  });
+  t.after(() => keys.forEach((key, index) => {
+    if (previous[index] === undefined) delete process.env[key];
+    else process.env[key] = previous[index];
+  }));
+  let forwarded = 0;
+  t.mock.method(globalThis, 'fetch', async () => {
+    forwarded++;
+    return Response.json({ ok: true });
+  });
+  const { backend, calls } = backendFixture();
+  backend.proxyAccountAllowed = async req => req.headers.authorization !== 'Bearer deleted';
+  const entrySource = readFileSync(new URL('../../api/index.ts', import.meta.url), 'utf8');
+  const compiled = ts.transpileModule(entrySource, {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+  }).outputText;
+  const exports = {};
+  runInNewContext(compiled, { exports, require(moduleName) {
+    if (moduleName === '../backend/src/apiGateway') return { createApiGateway };
+    if (moduleName === '../backend/src/index') return backend;
+    throw Error(`Unexpected entry dependency: ${moduleName}`);
+  } });
+  for (const [token, expected] of [['fresh', 200], ['deleted', 410]]) {
+    const res = response();
+    await exports.default({ method: 'GET', url: '/api/index?path=progress/me',
+      headers: { host: 'cryptoid-evolution-testnet.vercel.app', authorization: `Bearer ${token}` } }, res);
+    assert.equal(res.code, expected);
+  }
+  assert.equal(forwarded, 1);
+  assert.equal(calls.filter(call => 'start' in call).length, 1);
+});
 
 test('Testnet serves its own public catalog without the production proxy or database startup', async t => {
   t.mock.method(globalThis, 'fetch', async () => { throw new Error('catalog must not use production'); });
@@ -66,7 +108,7 @@ test('default Testnet proxy does not start the local backend and keeps authentic
   let sent;
   t.mock.method(globalThis, 'fetch', async (url, init) => {
     sent = { url: String(url), init };
-    return new Response('{"network":"testnet"}', { status: 201, headers: { 'content-type': 'application/json', 'set-cookie': 'connect.sid=test; HttpOnly' } });
+    return new Response('{"network":"testnet"}', { status: 201, headers: { 'content-type': 'application/json', 'set-cookie': 'connect.sid=test; HttpOnly', 'x-vercel-id': 'fra1::upstream-123' } });
   });
   const gateway = createApiGateway(async () => { throw new Error('must not import backend'); }, () => ({ VERCEL_ENV: 'preview', VERCEL_PROJECT_PRODUCTION_URL: 'cryptoid-evolution-testnet.vercel.app' }));
   const res = response();
@@ -80,6 +122,7 @@ test('default Testnet proxy does not start the local backend and keeps authentic
   assert.equal(sent.init.redirect, 'manual');
   assert.equal(res.code, 201);
   assert.equal(res.headers['x-cryptoid-backend'], 'production-proxy');
+  assert.equal(res.headers['x-cryptoid-upstream-request-id'], 'fra1::upstream-123');
   assert.deepEqual(res.headers['set-cookie'], ['connect.sid=test; HttpOnly']);
 });
 
@@ -184,4 +227,34 @@ test('Mainnet and opted-in local Testnet keep the native translation handler', a
     const res=response();await gateway(req,res);assert.equal(res.code,200);
     assert.equal(calls.at(-1).url,`/feedback/posts/${translationId}/translation?locale=de`);
   }
+});
+
+
+test('official Testnet routes only the new summary and owner player tools locally and forces Testnet', async t => {
+  const proxied=[];
+  t.mock.method(globalThis,'fetch',async url=>{proxied.push(String(url));return Response.json({});});
+  const {backend,calls}=backendFixture();
+  const gateway=createApiGateway(async()=>backend,()=>({VERCEL_ENV:'production',VERCEL_PROJECT_PRODUCTION_URL:'cryptoid-evolution-testnet.vercel.app'}));
+  for(const path of ['progress/boss-summary/prepare','progress/boss-summary/continue','admin/players/find','admin/players/prepare','admin/players/execute']) {
+    const res=response();await gateway({method:'POST',url:`/api/index?path=${path}`,body:{},headers:{host:'cryptoid-evolution-testnet.vercel.app','x-cryptoid-app-network':'mainnet'}},res);
+    assert.equal(res.headers['x-cryptoid-backend'],'testnet-local'); assert.equal(calls.at(-1).network,'testnet');
+  }
+  assert.equal(calls.filter(c=>'start' in c).length,1);
+  for(const path of ['progress/me','progress/checkpoint','hangar/start','hangar/weapon/activate','rewards/event','admin/status','payments/approve','admin/players-extra/find','progress/boss-summary/arbitrary']) {
+    const res=response();await gateway({method:'POST',url:`/api/index?path=${path}`,body:{},headers:{host:'cryptoid-evolution-testnet.vercel.app'}},res);
+    assert.equal(res.headers['x-cryptoid-backend'],'production-proxy');
+  }
+  assert.equal(proxied.length,9);
+});
+
+test('enabled account deletion blocks previous tokens before proxying and keeps Mainnet outside this guard', async t=>{
+ const prior=process.env.CRYPTOID_TESTNET_ACCOUNT_DELETION;process.env.CRYPTOID_TESTNET_ACCOUNT_DELETION='enabled';t.after(()=>{if(prior===undefined)delete process.env.CRYPTOID_TESTNET_ACCOUNT_DELETION;else process.env.CRYPTOID_TESTNET_ACCOUNT_DELETION=prior;});
+ let forwarded=0,checked=0;t.mock.method(globalThis,'fetch',async()=>{forwarded++;return Response.json({});});
+ const {backend,calls}=backendFixture();backend.proxyAccountAllowed=async req=>{checked++;return req.headers.authorization!=='Bearer deleted'&&req.body?.authResult?.accessToken!=='deleted';};
+ const gateway=createApiGateway(async()=>backend,()=>({VERCEL_ENV:'production',VERCEL_PROJECT_PRODUCTION_URL:'cryptoid-evolution-testnet.vercel.app'}));
+ for(const [path,authorization,body,expected]of [['hangar/start','Bearer deleted',{},410],['user/signin',undefined,{authResult:{accessToken:'deleted'}},410],['user/signin','Bearer new',{authResult:{accessToken:'deleted'}},410],['progress/me','Bearer fresh',{},200]]){
+  const res=response();await gateway({method:'POST',url:`/api/index?path=${path}`,headers:{host:'cryptoid-evolution-testnet.vercel.app',authorization},body},res);assert.equal(res.code,expected);
+ }
+ assert.equal(checked,4);assert.equal(forwarded,1);assert.equal(calls.filter(c=>'start'in c).length,1);
+ const main=createApiGateway(async()=>backend,()=>({VERCEL_ENV:'production'}));await main({url:'/api/index?path=progress/me',headers:{host:'cryptoid-evolution.vercel.app',authorization:'Bearer deleted'}},response());assert.equal(checked,4);
 });

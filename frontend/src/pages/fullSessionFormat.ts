@@ -2,6 +2,7 @@ import { cleanTimingCapture } from './timingReport.mjs';
 import { technicalContext, reloadKinds } from './technicalReportContext.mjs';
 import type { SessionSignal } from '../lib/sessionDiagnosticEvents';
 import { HULL_DIAGNOSTIC_STEPS } from './hullPreparationDiagnostics.ts';
+import { REQUEST_DIAGNOSTIC_CODES, providerRequestId } from '../lib/requestDiagnosticCodes.ts';
 
 export const FULL_SESSION_DB = 'cryptoid_owner_full_session_v1';
 export const FULL_SESSION_STATUS_KEY = 'cryptoid_owner_full_status_v1';
@@ -18,13 +19,14 @@ export type FullSessionSummary = { id: string; startedAt: number; lastAt: number
 const numeric = (n: unknown, max = 1e15): n is number => typeof n === 'number' && Number.isFinite(n) && n >= 0 && n <= max;
 const enumKeys: Record<string, readonly string[]> = {
   operation: ['transition-before', 'transition-reset-done', 'first-spawn-before', 'first-spawn-created', 'scene-committed',
-    'hull-plan-start', 'hull-plan-settled', 'hull-plan-progress', 'start', 'response', 'failure', 'enqueue', 'drain', 'recover', 'archive',
+    'hull-plan-start', 'hull-plan-settled', 'hull-plan-progress', 'boss-summary-open', 'boss-summary-save-before', 'boss-summary-save-after', 'boss-summary-cleanup-before', 'boss-summary-cleanup-after', 'boss-summary-failed', 'boss-summary-continue', 'start', 'response', 'failure', 'enqueue', 'drain', 'recover', 'archive',
     'manual-selection', 'automatic-reload', 'expired', 'online', 'offline', 'visibility-hidden', 'visibility-visible',
     'beforeunload', 'pagehide', 'pageshow', 'contextlost', 'contextrestored', 'finish', 'persist'],
   signal: [...reloadKinds],
-  endpoint: ['loadout', 'weapon', 'checkpoint', 'recover', 'reward', 'score', 'session', 'other'],
+  endpoint: ['loadout', 'weapon', 'checkpoint', 'recover', 'reward', 'score', 'session', 'boss-summary-prepare', 'boss-summary-continue', 'other'],
   method: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OTHER'],
   outcome: ['http', 'network', 'timeout', 'cancelled', 'success'],
+  errorCode: REQUEST_DIAGNOSTIC_CODES,
   weaponSource: ['standard', 'paid', 'pickup'],
   step: HULL_DIAGNOSTIC_STEPS,
 };
@@ -37,6 +39,10 @@ export function cleanFullData(kind: FullRecordKind, input: unknown): Record<stri
     return (kind === 'sample' ? capture?.samples[0] : capture?.events[0]) ?? null;
   }
   const result: Record<string, unknown> = { ...technicalContext(value) };
+  const requestId = providerRequestId(value.providerRequestId);
+  if (requestId) result.providerRequestId = requestId;
+  const upstreamId = providerRequestId(value.upstreamRequestId);
+  if (upstreamId) result.upstreamRequestId = upstreamId;
   for (const [key, allowed] of Object.entries(enumKeys)) if (typeof value[key] === 'string' && allowed.includes(value[key])) result[key] = value[key];
   for (const key of ['request', 'durationMs', 'httpStatus', 'depth', 'requested', 'prepared', 'level', 'weaponLevel',
     'paidWeaponMs', 'pickupWeaponMs', 'readinessFailures']) if (numeric(value[key], 1e9)) result[key] = value[key];
@@ -72,3 +78,4 @@ export function cleanFullSummary(value: unknown): FullSessionSummary | null {
   if (['duration-limit','byte-limit','record-limit','queue-limit','storage-error'].includes(String(v.stopReason))) result.stopReason = v.stopReason;
   return result;
 }
+

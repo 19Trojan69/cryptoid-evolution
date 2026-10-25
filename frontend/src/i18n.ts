@@ -1,3 +1,4 @@
+import { stabilityAndPlayersTranslations } from "./locales/stabilityAndPlayers.ts";
 import { useEffect, useState } from "react";
 import { galaxyMapTranslations } from "./locales/galaxyMap.ts";
 import { smartphoneTranslations } from "./locales/smartphonePackages.ts";
@@ -8,6 +9,7 @@ import { seriesTranslations } from "./locales/seriesAE.ts";
 import { formatLives } from "./locales/quantities.ts";
 import { localeAliases, localeCatalog } from "./locales/catalog.ts";
 
+for (const [locale, entries] of Object.entries(stabilityAndPlayersTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(sevenPackageTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(homeScreenTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(seriesTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
@@ -414,3 +416,4 @@ export const useLocale = () => {
   };
   return { locale, automatic, choose, lives: (count: number) => formatLives(locale, count), t: (source: string, params?: TranslationParams) => translate(locale, source, params) };
 };
+

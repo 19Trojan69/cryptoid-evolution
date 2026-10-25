@@ -1,7 +1,9 @@
 import { combatCryptoid, combatTiming, combatEntryStage, combatAttackPattern, createCombatVariety, readCombatVariety, type CombatVarietyRuntime } from './combatVariety';
 import { advanceBonusRock, spawnBonusRock, hitBonusRock, rockHitsShot, rockInField, nextRockEventMs, MAX_ROCKS, MAX_ROCK_EFFECTS, type BonusRock, type RockEffect } from './bonusRocks';
 import BonusRockLayer from './BonusRockLayer';
-import {CanvasEffectLayer,CanvasImpact,canvasEffectResources} from './CanvasEffects';
+import {CanvasEffectLayer,CanvasImpact,canvasEffectResources,releaseIdleCanvasEffects} from './CanvasEffects';
+import BossIntermission from './BossIntermission';
+import type { BossSummary } from './bossSummaryTiming';
 import './combatVariety.css';
 import { useAuth } from '../hooks/useAuth';
 import { enemyVisualDiameter } from './shipDisplayScale';
@@ -64,7 +66,7 @@ import PaintedShip from "./PaintedShip";
 import GameShipVisual from "./GameShipVisual";
 import GameHudStats from "./GameHudStats";
 import { useInitialRef } from "./useInitialRef";
-import { useShipVisualOffset, paintedShipResourceStats, useHullSourceReady } from "./paintedShip";
+import { useShipVisualOffset, paintedShipResourceStats, useHullSourceReady, releaseUnusedPaintedShips } from "./paintedShip";
 import { usePreparedGameHulls } from './usePreparedGameHulls';
 import { sessionDiagnostic } from '../lib/sessionDiagnosticEvents';
 import { contactWithBoss } from "./bossContact";
@@ -478,6 +480,15 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   const pendingBossCardRef=useRef<CardReward|null>(null);
   const [extraLifeVisible,setExtraLifeVisible]=useState(false);
   const [game, setGame] = useState<GameState>(createInitialState);
+  const [bossSummary, setBossSummary] = useState<BossSummary | null>(null);
+  const bossSummaryRef = useRef<{ summary: BossSummary; accepted: boolean; restored: boolean } | null>(null);
+  const [bossSummaryPrepared, setBossSummaryPrepared] = useState(false);
+  const [bossSummarySaving, setBossSummarySaving] = useState(false);
+  const [bossSummaryFailed, setBossSummaryFailed] = useState(false);
+  const [bossSummaryContinuing, setBossSummaryContinuing] = useState(false);
+  const [bossSummaryContinueFailed, setBossSummaryContinueFailed] = useState(false);
+  const bossPreparationRef = useRef(0);
+  useEffect(() => () => { bossPreparationRef.current++; }, []);
   useLayoutEffect(() => {
     if (!ownerDiagnostics || !performanceProbeRef.current) return;
     const state = game;
@@ -502,7 +513,10 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   const continueRewardCard=()=>{
     rewardCardsRef.current=rewardCardsRef.current.slice(1);setRewardCards([...rewardCardsRef.current]);
     clearControls();
-    if(!rewardCardsRef.current.length){stateRef.current.status='playing';lastFrameRef.current=performance.now();setGame({...stateRef.current});}
+    if(!rewardCardsRef.current.length){
+      if (!bossSummaryRef.current || bossSummaryRef.current.accepted) { stateRef.current.status='playing';lastFrameRef.current=performance.now(); }
+      setGame({...stateRef.current});
+    }
   };
   useEffect(()=>{
     if(game.status==='playing')return keepScreenAwake(navigator,document);
@@ -620,6 +634,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   useEffect(() => {
     if (weaponCountdown === null) return;
     const timer = window.setInterval(() => {
+      if (bossSummaryRef.current && !bossSummaryRef.current.accepted) { setWeaponCountdown(null); return; }
       if (document.visibilityState === 'hidden') { setWeaponCountdown(3); return; }
       if (weaponCountdown > 1) setWeaponCountdown(weaponCountdown - 1);
       else { clearControls(); lastFrameRef.current = 0; setWeaponCountdown(null); stateRef.current.status = 'playing'; setGame({ ...stateRef.current }); }
@@ -629,6 +644,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
 
   const combatRefs = { nextId: nextIdRef, formationIndex: formationIndexRef, formationOffset: formationOffsetRef, flight: flightRef, bonusIndex: bonusIndexRef, bossEscortWave: bossEscortWaveRef, bossEscortSpawned: bossEscortSpawnedRef, bossEscortTimer: bossEscortTimerRef, spawnTimer: spawnTimerRef, sectionElapsed: sectionElapsedRef, clearTimer: clearTimerRef, attackCooldown: attackCooldownRef, elapsed: elapsedRef, attackNumber: attackNumberRef, dropsCreated: dropsCreatedRef, impactCooldown: impactCooldownRef, fireTimer: fireTimerRef };
   const saveCombat = async () => {
+    if (bossSummaryRef.current && !bossSummaryRef.current.accepted) return; // Preserve the confirmed boss checkpoint during this stop.
     if (activationRef.current) return; // An uncertain activation must not be overwritten with stale local timers.
     const state = stateRef.current, runId = scoreRunRef.current, queue = saveQueueRef.current;
     // The boss reward already saves the extra life and the next bonus phase.
@@ -983,6 +999,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         else varietyRef.current = createCombatVariety(true);
         setSaveNotice(data.combat ? "Combat restored." : "Last completed section loaded.");
       }
+      if (data.profile?.mission?.bossIntermission) beginBossSummary(true);
     } catch (error) {
       console.error("Could not load paid loadout", error);
       if (sessionStorage.getItem(ADMIN_MODE_KEY) === "1") {
@@ -999,7 +1016,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
       startRequestRef.current = false;
       return;
     }
-    stateRef.current.status = rewardCardsRef.current.length ? "paused" : "playing";
+    stateRef.current.status = rewardCardsRef.current.length || bossSummaryRef.current ? "paused" : "playing";
     setGame({ ...stateRef.current });
   };
   const initialActivateLoadoutRef = useRef(activateLoadout);
@@ -1262,6 +1279,102 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     void startEffects(true).catch(() => {});
     if (musicEnabled) void musicRef.current?.unlock(true);
   };
+  const beginBossSummary = useCallback((restored = false) => {
+    if (bossSummaryRef.current) return;
+    const state = stateRef.current;
+    const summary: BossSummary = { stage: state.sector, score: state.score, shards: state.shards,
+      destroyed: state.destroyed, hearts: state.hearts, combos: state.combo.total };
+    bossSummaryRef.current = { summary, accepted: false, restored };
+    state.status = 'paused'; clearControls();
+    soundRef.current?.setPaused(true); musicRef.current?.pause();
+    // The defeat animation and reward pickup have completed before this stop.
+    state.effects = []; state.shots = []; state.enemyShots = []; state.asteroids = [];
+    state.rocks = []; state.rockEffects = []; state.bonusTargets = [];
+    setBossSummaryPrepared(false); setBossSummaryFailed(false); setBossSummaryContinueFailed(false); setBossSummary(summary);
+    setGame({ ...state });
+    if (ownerDiagnostics) sessionDiagnostic('boundary', { operation: 'boss-summary-open', sector: state.sector, status: state.status });
+  }, [clearControls, ownerDiagnostics, setGame]);
+  const prepareBossSummary = useCallback(async () => {
+    const pending = bossSummaryRef.current, runId = scoreRunRef.current;
+    if (!pending || pending.accepted) return;
+    const generation = ++bossPreparationRef.current;
+    const current = () => weaponMountedRef.current && generation === bossPreparationRef.current && bossSummaryRef.current === pending && scoreRunRef.current === runId;
+    setBossSummarySaving(true); setBossSummaryFailed(false); setBossSummaryPrepared(false);
+    try {
+      if (ownerDiagnostics) sessionDiagnostic('boundary', { operation: 'boss-summary-save-before', sector: pending.summary.stage });
+      if (runId && !adminRunRef.current) {
+        if (weaponBusyRef.current) throw Error('Activation confirmation still in progress');
+        await saveQueueRef.current?.drain();
+        if (!current()) return;
+        const activation = activationRef.current;
+        if (activation) {
+          // Resolve only the original receipt after all stage rewards settle.
+          // No new charge, combat checkpoint or request id is created here.
+          try {
+            const { data } = await axiosClient.post<{ remainingMs: number; weaponStock: Record<string, number> }>('/hangar/weapon/activate', {
+              runId, level: activation.level, requestId: activation.id,
+            }, { timeout: 12000 });
+            if (!current()) return;
+            if (!Number.isFinite(data.remainingMs) || data.remainingMs < 0 || !data.weaponStock || typeof data.weaponStock !== 'object') throw Error('Invalid activation confirmation');
+            stateRef.current.weaponTimers[activation.level] = data.remainingMs;
+            stockRef.current = data.weaponStock; setWeaponStock(data.weaponStock);
+            if (!stateRef.current.unlockedWeapons.includes(activation.level)) stateRef.current.unlockedWeapons.push(activation.level);
+            syncSelectedWeapon(stateRef.current);
+            activationRef.current = null;
+          } catch (error) {
+            const response = (error as { response?: { status?: number; data?: { error?: string } } }).response;
+            if (!current()) return;
+            if (response?.status !== 409 || response.data?.error !== 'save_before_activation') throw error;
+            activationRef.current = null; // Explicit rejection: no charge was granted.
+          }
+        }
+        await axiosClient.post('/progress/boss-summary/prepare', { runId, stage: pending.summary.stage });
+        const saved = await loadAccountSave();
+        if (!current()) return;
+        if (saved.mission?.sector !== pending.summary.stage || saved.mission.phase !== 'bonus'
+          || saved.mission.bossIntermission?.stage !== pending.summary.stage) throw Error('Boss checkpoint not confirmed');
+        lastSavedAtRef.current = Date.parse(saved.mission.savedAt);
+      }
+      if (!current()) return;
+      if (ownerDiagnostics) {
+        sessionDiagnostic('boundary', { operation: 'boss-summary-save-after', sector: pending.summary.stage });
+        try { sessionDiagnostic('resource', ownerResourceContext()); } catch { /* Optional counters must not block continuation. */ }
+        sessionDiagnostic('boundary', { operation: 'boss-summary-cleanup-before', sector: pending.summary.stage });
+      }
+      if (!releaseIdleCanvasEffects()) throw Error('Effect cleanup still pending');
+      releaseUnusedPaintedShips();
+      if (ownerDiagnostics) {
+        try { sessionDiagnostic('resource', ownerResourceContext()); } catch { /* Optional counters must not block continuation. */ }
+        sessionDiagnostic('boundary', { operation: 'boss-summary-cleanup-after', sector: pending.summary.stage });
+      }
+      if (current()) setBossSummaryPrepared(true);
+    } catch {
+      if (current()) {
+        setBossSummaryFailed(true);
+        if (ownerDiagnostics) sessionDiagnostic('boundary', { operation: 'boss-summary-failed', sector: pending.summary.stage });
+      }
+    } finally { if (current()) setBossSummarySaving(false); }
+  }, [ownerDiagnostics, ownerResourceContext]);
+  useEffect(() => { if (bossSummary) void prepareBossSummary(); }, [bossSummary, prepareBossSummary]);
+  const continueBossSummary = async (retry = false) => {
+    const pending = bossSummaryRef.current, runId = scoreRunRef.current;
+    if (!pending || !bossSummaryPrepared || bossSummarySaving || (bossSummaryFailed && !retry) || bossSummaryContinuing) return;
+    const generation = bossPreparationRef.current;
+    const current = () => weaponMountedRef.current && generation === bossPreparationRef.current && bossSummaryRef.current === pending && scoreRunRef.current === runId;
+    unlockAudioForResume(); setBossSummaryContinuing(true); setBossSummaryFailed(false); setBossSummaryContinueFailed(false);
+    try {
+      if (runId && !adminRunRef.current) await retrySave(() => axiosClient.post('/progress/boss-summary/continue', {
+        runId, stage: pending.summary.stage, confirm: true,
+      }));
+      if (!current()) return;
+      pending.accepted = true;
+      if (pending.restored) bossSummaryRef.current = null;
+      setBossSummary(null); clearControls(); lastFrameRef.current = 0;
+      stateRef.current.status = 'playing'; setGame({ ...stateRef.current });
+      if (ownerDiagnostics) sessionDiagnostic('boundary', { operation: 'boss-summary-continue', sector: pending.summary.stage });
+    } catch { if (current()) { setBossSummaryFailed(true); setBossSummaryContinueFailed(true); } }
+    finally { if (weaponMountedRef.current && generation === bossPreparationRef.current && scoreRunRef.current === runId) setBossSummaryContinuing(false); }
+  };
   const resumeSavedMission = () => {
     unlockAudioForResume();
     saveChoiceRef.current = "resume";
@@ -1509,6 +1622,9 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
             showRewardCards([card]);return;
           }
           if (clearFinished && (state.encounter !== 'boss-clear' || state.bossHeartCollected&&bossLifeRemainingRef.current===0)) {
+            if (state.encounter === 'boss-clear' && !bossSummaryRef.current?.accepted) {
+              beginBossSummary(); forceScene = true; return;
+            }
             if (ownerDiagnostics && state.encounter === 'boss-clear') recordOwnerResourceSnapshot('resource-boss-clear-ready');
             if (state.encounter === "bonus" && state.sector === MAX_DIFFICULTY_LEVEL) {
               if (!recordsSavedRef.current) {
@@ -1529,6 +1645,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
             state.section = next.section;
             state.sector = next.sector;
             state.encounter = next.encounter;
+            if (clearEncounter === 'boss-clear') bossSummaryRef.current = null;
             state.bossHeartCollected = undefined;
             if (next.encounter === "boss-intro") {
               performanceProbeRef.current?.checkpoint('boss-model-start', { sector: state.sector, encounter: 'boss-intro', phase: 'SECTOR_INTRO', hearts: state.hearts });
@@ -2105,7 +2222,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
       if (gameOverTimerRef.current !== null) window.clearTimeout(gameOverTimerRef.current);
       gameOverTimerRef.current = null;
     };
-  }, [showRewardCards, diagnosticContext]);
+  }, [showRewardCards, diagnosticContext, beginBossSummary]);
 
   const activateStartPower = () => {
     const state = stateRef.current;
@@ -2156,18 +2273,19 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   };
   const weaponNames = ["", t("Standard"), t("Twin"), t("Rapid"), t("Triple"), t("Plasma")];
   const weaponGlyphs = ["", "I", "II", "III", "IV", "V"];
-  const resumeWeaponSelection = () => { unlockAudioForResume(); clearControls(); setTechnicalPause(false); setWeaponMenuOpen(false); setWeaponCountdown(3); };
+  const resumeWeaponSelection = () => { if (bossSummaryRef.current && !bossSummaryRef.current.accepted) return; unlockAudioForResume(); clearControls(); setTechnicalPause(false); setWeaponMenuOpen(false); setWeaponCountdown(3); };
   const closeHomePrompt = () => {
     setHomePrompt(false);
     if (homePromptWasPlayingRef.current) resumeWeaponSelection();
   };
-  const pauseVisible = game.status === "paused" && !rewardCards.length && !weaponMenuOpen && weaponCountdown === null;
+  const pauseVisible = game.status === "paused" && !bossSummary && !rewardCards.length && !weaponMenuOpen && weaponCountdown === null;
   useModalNavigation(homePrompt ? "leave" : weaponMenuOpen ? "weapons" : pauseVisible ? "pause" : null, () => {
     if (pauseLeaving || saveRetrying || weaponBusy || activationRef.current) return;
     if (homePrompt) closeHomePrompt();
     else resumeWeaponSelection();
   });
   const openWeaponSelection = () => {
+    if (bossSummaryRef.current && !bossSummaryRef.current.accepted) return;
     if (stateRef.current.status !== 'playing' && stateRef.current.status !== 'paused') return;
     stateRef.current.status = 'paused';
     musicRef.current?.pause();
@@ -2192,7 +2310,24 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
       weaponBusyRef.current = true; setWeaponBusy(true); setWeaponError('');
       try {
         const confirm = async (activation: { level: number; id: string }) => {
-          const { data } = await axiosClient.post<{ remainingMs: number; weaponStock: Record<string, number> }>('/hangar/weapon/activate', { runId, level: activation.level, requestId: activation.id }, { timeout: 12000 });
+          const request = () => axiosClient.post<{ remainingMs: number; weaponStock: Record<string, number> }>('/hangar/weapon/activate', { runId, level: activation.level, requestId: activation.id }, { timeout: 12000 });
+          let confirmation;
+          try { confirmation = await request(); }
+          catch (error) {
+            if (!current()) return false;
+            const response = (error as { response?: { status?: number; data?: { error?: string } } }).response;
+            if (response?.status !== 409 || response.data?.error !== 'save_before_activation'
+              || !['playing', 'paused'].includes(state.status) || state.phase === 'SECTOR_CLEAR' || state.hearts === 0) throw error;
+            // A queued stage reward can replace the checkpoint while the first
+            // save drains. This explicit rejection confirms no charge was granted.
+            // Save the current stage, then retry once with the same receipt.
+            activationRef.current = null;
+            await saveCombat();
+            if (!current()) return false;
+            activationRef.current = activation;
+            confirmation = await request();
+          }
+          const { data } = confirmation;
           if (!current()) return false;
           if (!Number.isFinite(data.remainingMs) || data.remainingMs < 0 || !data.weaponStock || typeof data.weaponStock !== 'object') throw new Error('Invalid activation confirmation');
           state.weaponTimers[activation.level] = data.remainingMs;
@@ -2253,6 +2388,8 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   };
 
   const restart = () => {
+    bossPreparationRef.current++; bossSummaryRef.current = null; setBossSummary(null);
+    setBossSummaryPrepared(false); setBossSummaryFailed(false); setBossSummarySaving(false); setBossSummaryContinuing(false);
     bossDestroyPlayedRef.current = false;
     bossVictoryPendingRef.current = false;
     bossVictoryFinishedRef.current = false;
@@ -2419,6 +2556,9 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   return (
     <main className="game-shell" data-effects-paused={game.status === "paused" || game.status === "loading"} onPointerDownCapture={event => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
       {rewardCards[0] && <CardReveal reward={rewardCards[0]} remaining={rewardCards.length} onContinue={continueRewardCard}/>}
+      {bossSummary && !rewardCards.length && !homePrompt && <BossIntermission key={bossSummary.stage} summary={bossSummary} prepared={bossSummaryPrepared}
+        saving={bossSummarySaving} failed={bossSummaryFailed} continuing={bossSummaryContinuing}
+        onRetry={() => { if (bossSummaryContinueFailed) void continueBossSummary(true); else void prepareBossSummary(); }} onContinue={() => { void continueBossSummary(); }} />}
       {extraLifeVisible&&<div className={`boss-extra-life${game.bossHeartShards ? " boss-shard-reward" : ""}`} role="status" aria-live="polite"><strong>{t(game.bossHeartShards ? 'FULL HEARTS' : 'HEART RESTORED')}</strong><span>{game.bossHeartShards ? `+${game.bossHeartShards} ◆` : '+1 ♥'}</span></div>}
       <div ref={fieldRef} className="game-field" onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()}>
         <GameSceneBoundary onError={error => interruptionRef.current('render-error', error)} fallback={retry => <div className="game-overlay"><div className="game-modal" role="alert"><h1>{t('MISSION PAUSED')}</h1><p>{t("The mission was paused after a technical interruption. Try Resume to continue.")}</p><button type="button" className="button button-primary" onClick={retry}>{t('Try again')}</button></div></div>}>
@@ -2431,7 +2571,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
           <div className="hud-actions"><button className="game-control home-control" type="button" disabled={weaponBusy || rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || game.status === "loading" || game.status === "destroying"} onClick={() => { if (game.status === "game-over" || game.status === "victory") { goHome(); return; } homePromptWasPlayingRef.current = stateRef.current.status === "playing"; stateRef.current.status = "paused"; clearControls();
         musicRef.current?.pause(); void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); setHomePrompt(true); }} aria-label={t("Go home")}><CockpitIcon kind="home" /></button></div>
           <GameHudStats hearts={game.hearts} heartsHit={game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash")} levelLabel={levelLabel} shards={totalShards} score={game.score} block={hudBlock} locale={locale}/>
-          <button className="game-control pause-control" type="button" disabled={weaponBusy || rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || pauseLeaving || game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { if (pauseLeaveRef.current) return; if (game.status === "paused") { resumeWeaponSelection(); return; } stateRef.current.status = "paused"; clearControls(); musicRef.current?.pause(); void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
+          <button className="game-control pause-control" type="button" disabled={Boolean(bossSummary) || weaponBusy || rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || pauseLeaving || game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { if (pauseLeaveRef.current) return; if (game.status === "paused") { resumeWeaponSelection(); return; } stateRef.current.status = "paused"; clearControls(); musicRef.current?.pause(); void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
         </header>
         <div className="game-label">{adminRunRef.current && <strong>{t("Admin center")} · </strong>}{t("LEVEL")} {levelLabel} <span>· <strong className="game-region-name">{sectorName(game.sector)}</strong> · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/${BLOCKS_PER_CHAIN}` : game.encounter === "bonus" ? t("BONUS CHALLENGE") : t("CORE WARDEN")}</span></div>
         {game.encounter === "normal" && <span className="flight-indicator" style={{ top: visibleTopRef.current + 25 }}>{t("Group {current}/{total}", { current: flightRef.current + 1, total: blockFlights(game.sector, rulesVersionRef.current).length })}</span>}
@@ -2566,4 +2706,5 @@ function GameEntry() {
   </div></div>;
 }
 export default GameEntry;
+
 

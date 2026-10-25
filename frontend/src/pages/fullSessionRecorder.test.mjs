@@ -78,7 +78,7 @@ test('a replacement document recovers the committed run without unload or record
   const host = { indexedDB: f.host.indexedDB, localStorage: f.host.localStorage };
   const report = await readOwnerStabilityReport(async () => ({ canAdmin: true }), () => host);
   const summary = report.fullSessionRecording.sessions[0];
-  assert.equal(report.version, 6); assert.equal(summary.state, 'recording');
+  assert.equal(report.version, 7); assert.equal(summary.state, 'recording');
   const data = JSON.parse(await (await exportOwnerFullSession(async () => ({ canAdmin: true }), () => host, summary.id)).text());
   assert.equal(data.integrity.contiguous, true);
   assert.ok(data.records.some(r => r.data.operation === 'first-spawn-before' && r.data.sector === 34));
@@ -266,3 +266,4 @@ test('quota and denied storage have bounded failure categories without persistin
     assert.ok(!JSON.stringify(status).includes('private-')); assert.equal(sessionDiagnosticsActive(), false);
   }
 });
+

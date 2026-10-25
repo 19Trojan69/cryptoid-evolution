@@ -1,4 +1,5 @@
 import { ownerLifecycleEvidence } from '../lib/ownerLifecycleEvidence.mjs';
+import { readCrashTails } from './crashTail.ts';
 import { technicalContext, contextEnums, reloadKinds } from './technicalReportContext.mjs';
 export { technicalContext } from './technicalReportContext.mjs';
 // Read only bounded local technical records. This module never imports the
@@ -162,14 +163,16 @@ export async function readOwnerStabilityReport(verifyOwner, getHost, active = ()
   const report = readStabilityReport(host, now);
   if (includeFullSession) {
     report.ownerLifecycle = ownerLifecycleEvidence.report(host);
+    report.crashTail = readCrashTails(host);
     report.available ||= report.ownerLifecycle.events.length > 0;
+    report.available ||= report.crashTail.sessions.length > 0;
   }
   if (!includeFullSession) return report;
   await settleFullSessionWrites();
   if (!active()) return null;
   const fullSessionRecording = await readFullSessionSummaries(host);
   if (!active()) return null;
-  return { ...report, version: 6, available: report.available || fullSessionRecording.sessions.length > 0,
+  return { ...report, version: 7, available: report.available || fullSessionRecording.sessions.length > 0,
     storage: { ...report.storage, fullSessions: fullSessionRecording.storage }, fullSessionRecording };
 }
 
@@ -177,6 +180,29 @@ export async function exportOwnerFullSession(verifyOwner, getHost, id, active = 
   const owner = await verifyOwner();
   if (owner?.canAdmin !== true) throw new Error('owner_access_required');
   if (!active()) return null;
-  const blob = await exportFullSession(getHost(), id);
-  return active() ? blob : null;
+  const host = getHost();
+  // Read the independent synchronous evidence before awaiting the database.
+  // Keep observed tail data separate: never fabricate committed session rows.
+  const technical = readStabilityReport(host);
+  const lifecycle = ownerLifecycleEvidence.report(host);
+  const tails = readCrashTails(host);
+  const matching = tails.sessions.find(session => session.id === id) ?? null;
+  let full;
+  try { full = JSON.parse(await (await exportFullSession(host, id)).text()); }
+  catch (error) {
+    if (!matching) throw error;
+    full = { version: 1, format: 'cryptoid-crash-report', fullSessionUnavailable: true,
+      summary: { id }, records: null };
+  }
+  if (!active()) return null;
+  return new Blob([JSON.stringify({ ...full, supplementaryEvidenceVersion: 1, crashEvidence: {
+    technical, lifecycle, tail: matching, tailStorage: tails.storage,
+    latestCommittedAt: full.summary?.lastAt ?? null,
+    latestObservedAt: matching?.lastObservedAt ?? null,
+    observedTailIsNotCommittedHistory: true,
+    limits: ['Synchronous browser observations; not video or native-process/GPU tracing.',
+      'The final interval before any successful browser-storage write can be lost.',
+      'A last operation or a new document alone does not prove the cause of a White Screen.'],
+  } })], { type: 'application/json' });
 }
+

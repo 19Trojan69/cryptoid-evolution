@@ -196,3 +196,106 @@ test('actual account handlers accept a completed charge cycle and repeat its los
   assert.equal(Object.keys(f.h.docs[0].weaponStockByNetwork.testnet.activations).length, 2);
   assert.equal(f.state.weaponLevel, 1); assert.equal(f.env.activationRef.current, null);
 });
+
+const missingCombat = () => ({ response: { status: 409, data: { error: 'save_before_activation' } } });
+
+test('a stage reward between checkpoint and activation is repaired using the actual account handlers', async () => {
+  const f = await handlerSelectionHost();
+  const post = f.env.axiosClient.post;
+  let completed = false;
+  f.env.axiosClient.post = async (path, body) => {
+    if (!completed) {
+      completed = true;
+      const result = await f.h.call('rewards', '/event', { runId: body.runId, kind: 'block', level: 1, stage: 1,
+        save: structuredClone(f.h.profile().mission.snapshot) });
+      assert.equal(result.code, 200);
+      assert.equal(f.h.profile().mission.combat, undefined);
+      f.state.sector = 2;
+    }
+    return post(path, body);
+  };
+  f.env.reloadRequestRef.current(2); await f.flush();
+  assert.equal(f.requests.length, 2);
+  assert.equal(f.requests[0].requestId, f.requests[1].requestId);
+  assert.equal(f.saves.length, 2);
+  assert.equal(f.h.profile().mission.sector, 2);
+  assert.equal(f.h.profile().mission.combat.stage, 2);
+  assert.equal(f.h.docs[0].weaponStockByNetwork.testnet.balances.weapon_twin, 2);
+  assert.equal(Object.keys(f.h.docs[0].weaponStockByNetwork.testnet.activations).length, 1);
+  assert.equal(f.state.weaponSource, 'paid');
+  assert.equal(f.state.weaponLevel, 2);
+  assert.equal(f.env.weaponError, '');
+});
+
+test('only the explicit missing-combat rejection permits one checkpoint repair with the same receipt', async () => {
+  const f = selectionHost(); let denied = false;
+  f.env.beforePost = async () => { if (!denied) { denied = true; throw missingCombat(); } };
+  f.env.reloadRequestRef.current(2); await f.flush();
+  assert.equal(f.saves.length, 2); assert.equal(f.requests.length, 2);
+  assert.equal(f.requests[0].requestId, f.requests[1].requestId);
+  assert.equal(f.balances.weapon_twin, 9); assert.equal(f.receipts.size, 1);
+  assert.equal(f.state.weaponTimers[2], 60000); assert.equal(f.state.weaponLevel, 2);
+  assert.equal(f.env.activationRef.current, null); assert.equal(f.env.weaponBusyRef.current, false);
+});
+
+test('a repeated missing-combat rejection stops after one repair and never consumes a charge', async () => {
+  const f = selectionHost(); f.env.beforePost = async () => { throw missingCombat(); };
+  f.env.reloadRequestRef.current(2); await f.flush();
+  assert.equal(f.requests.length, 2); assert.equal(f.saves.length, 2);
+  assert.equal(f.receipts.size, 0); assert.equal(f.balances.weapon_twin, 10);
+  assert.equal(f.env.activationRef.current, null); assert.equal(f.env.weaponBusyRef.current, false);
+  assert.equal(f.state.weaponLevel, 1);
+});
+
+test('an uncertain reply after checkpoint repair remains retryable without another stock debit', async () => {
+  const f = selectionHost(); let denied = false, lost = false;
+  f.env.beforePost = async () => { if (!denied) { denied = true; throw missingCombat(); } };
+  f.env.afterGrant = async () => { if (!lost) { lost = true; throw networkFailure(); } };
+  f.env.reloadRequestRef.current(2); await f.flush();
+  assert.equal(f.env.activationRef.current?.id, f.requests[0].requestId);
+  assert.equal(f.receipts.size, 1); assert.equal(f.balances.weapon_twin, 9);
+  f.openWeaponSelection(); await f.selectWeaponLevel(2);
+  assert.equal(f.requests.length, 3);
+  assert.ok(f.requests.every(r => r.requestId === f.requests[0].requestId));
+  assert.equal(f.saves.length, 2); assert.equal(f.balances.weapon_twin, 9);
+  assert.equal(f.state.weaponLevel, 2); assert.equal(f.env.activationRef.current, null);
+});
+
+test('other activation conflicts never checkpoint or retry automatically', async () => {
+  for (const code of ['run_replaced', 'activation_conflict', 'weapon_already_active', 'weapon_stock_empty', 'inventory_changed', undefined]) {
+    const f = selectionHost();
+    f.env.beforePost = async () => { throw { response: { status: 409, data: { error: code } } }; };
+    f.env.reloadRequestRef.current(2); await f.flush();
+    assert.equal(f.requests.length, 1); assert.equal(f.saves.length, 1);
+    assert.equal(f.receipts.size, 0); assert.equal(f.env.weaponBusyRef.current, false);
+  }
+});
+
+test('a missing-combat rejection during a clear phase remains available for a later manual selection', async () => {
+  const f = selectionHost(); let denied = false;
+  f.state.phase = 'SECTOR_CLEAR';
+  f.env.beforePost = async () => { if (!denied) { denied = true; throw missingCombat(); } };
+  f.env.reloadRequestRef.current(2); await f.flush();
+  assert.equal(f.requests.length, 1); assert.equal(f.saves.length, 1);
+  assert.equal(f.receipts.size, 0); assert.equal(f.env.weaponBusyRef.current, false);
+  f.state.phase = 'ENTRY'; f.openWeaponSelection(); await f.selectWeaponLevel(2);
+  assert.equal(f.state.weaponLevel, 2); assert.equal(f.receipts.size, 1);
+});
+
+test('a mission replaced while repairing a rejected activation receives no late grant', async () => {
+  const f = selectionHost();
+  f.env.beforePost = async () => { throw missingCombat(); };
+  const save = f.env.saveCombat;
+  f.env.saveCombat = async () => {
+    await save();
+    if (f.saves.length === 2) {
+      f.env.scoreRunRef.current = 'replacement-run';
+      f.env.activationRef.current = null; f.env.weaponBusyRef.current = false;
+    }
+  };
+  f.env.reloadRequestRef.current(2); await f.flush();
+  assert.equal(f.saves.length, 2); assert.equal(f.requests.length, 1);
+  assert.equal(f.receipts.size, 0); assert.equal(f.state.weaponLevel, 1);
+  assert.equal(f.env.activationRef.current, null);
+});
+

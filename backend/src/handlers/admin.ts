@@ -15,6 +15,7 @@ import { readPaymentReceipt } from "../paymentReceipt";
 import { platformAPIClientForRequest } from "../services/platformAPIClient";
 import { rewardNetwork } from "../rewardNetwork";
 import { bestRunField, careerField } from "../scoreRules";
+import { mountAdminPlayerEndpoints } from '../playerAdministration';
 
 const networks = ["all", "mainnet", "testnet", "unknown"] as const;
 const statuses = ["all", "confirmed", "pending", "cancelled"] as const;
@@ -34,6 +35,7 @@ const requireOwner: RequestHandler = async (req, res, next) => {
 export default function mountAdminEndpoints(router: Router) {
   // Authenticate every admin route independently of the optional gameplay mode.
   router.use(requireOwner);
+  mountAdminPlayerEndpoints(router);
 
   router.get("/usage", async (req, res) => {
     const days = Number(req.query.days || 7);
@@ -350,3 +352,4 @@ export default function mountAdminEndpoints(router: Router) {
     }
   });
 }
+

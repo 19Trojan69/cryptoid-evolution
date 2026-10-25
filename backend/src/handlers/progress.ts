@@ -1,4 +1,5 @@
 import { blockFlights } from "../blockFlights";
+import { BOSS_INTERMISSION_MIN_MS, bossIntermissionPending } from '../bossIntermission';
 import { readCombatCheckpoint } from "../combatCheckpoint";
 import { validRunScore } from "../leaderboardRules";
 import { restoreScoreRun } from "../restoreScoreRun";
@@ -25,6 +26,54 @@ export default function mountProgressEndpoints(router: Router) {
   router.get("/me", async (req, res) => {
     try { return res.json({ save: publicSave(await loadPlayerSave(req.app.locals.userCollection, req.session.currentUser!.uid, rewardNetwork(req))) }); }
     catch { return res.status(503).json({ error: "save_unavailable" }); }
+  });
+  router.post('/boss-summary/continue', async (req, res) => {
+    try {
+      const run = await restoreScoreRun(req);
+      const { runId, stage, confirm } = req.body || {};
+      if (!run || run.id !== runId || confirm !== true || !Number.isInteger(stage) || stage < 10 || stage > 500 || stage % 10 !== 0)
+        return res.status(400).json({ error: 'invalid_boss_summary_confirmation' });
+      const uid = req.session.currentUser!.uid, network = rewardNetwork(req), key = `playerByNetwork.${network}`, users = req.app.locals.userCollection;
+      for (let attempt = 0; attempt < 5; attempt++) {
+        const save = await loadPlayerSave(users, uid, network);
+        if (save.activeRunId !== runId) return res.status(409).json({ error: 'run_replaced' });
+        if (!save.mission || save.mission.sector !== stage || save.mission.phase !== 'bonus')
+          return res.status(409).json({ error: 'boss_summary_stage_changed' });
+        const pending = save.mission.bossIntermission;
+        if (!pending) return res.json({ saved: true, continued: true });
+        if (!bossIntermissionPending(pending) || pending.stage !== stage) return res.status(409).json({ error: 'invalid_boss_summary' });
+        if (Date.now() - pending.createdAt < BOSS_INTERMISSION_MIN_MS) return res.status(409).json({ error: 'boss_summary_wait' });
+        const updated = await users.updateOne({ uid, [`${key}.activeRunId`]: runId, [`${key}.version`]: save.version,
+          [`${key}.mission.bossIntermission.stage`]: stage }, {
+          $unset: { [`${key}.mission.bossIntermission`]: '' },
+          $set: { [`${key}.updatedAt`]: new Date().toISOString() }, $inc: { [`${key}.version`]: 1 },
+        });
+        if (updated.modifiedCount) return res.json({ saved: true, continued: true });
+      }
+      return res.status(409).json({ error: 'save_changed' });
+    } catch { return res.status(503).json({ error: 'save_unavailable' }); }
+  });
+  router.post('/boss-summary/prepare', async (req, res) => {
+    try {
+      const run = await restoreScoreRun(req);
+      const { runId, stage } = req.body || {};
+      if (!run || run.id !== runId || !Number.isInteger(stage) || stage < 10 || stage > 500 || stage % 10 !== 0)
+        return res.status(400).json({ error: 'invalid_boss_summary_confirmation' });
+      const uid = req.session.currentUser!.uid, network = rewardNetwork(req), key = `playerByNetwork.${network}`, users = req.app.locals.userCollection;
+      for (let attempt = 0; attempt < 5; attempt++) {
+        const save = await loadPlayerSave(users, uid, network);
+        if (save.activeRunId !== runId) return res.status(409).json({ error: 'run_replaced' });
+        if (!save.mission || save.mission.sector !== stage || save.mission.phase !== 'bonus')
+          return res.status(409).json({ error: 'boss_summary_stage_changed' });
+        const prior = save.mission.bossIntermission;
+        if (bossIntermissionPending(prior) && prior.stage === stage) return res.json({ saved: true });
+        const result = await users.updateOne({ uid, [`${key}.activeRunId`]: runId, [`${key}.version`]: save.version }, {
+          $set: { [`${key}.mission.bossIntermission`]: { stage, createdAt: Date.now() } }, $inc: { [`${key}.version`]: 1 },
+        });
+        if (result.modifiedCount) return res.json({ saved: true });
+      }
+      return res.status(409).json({ error: 'save_changed' });
+    } catch { return res.status(503).json({ error: 'save_unavailable' }); }
   });
   router.post("/recover", async (req, res) => {
     try {
@@ -69,6 +118,7 @@ export default function mountProgressEndpoints(router: Router) {
       for (let attempt = 0; attempt < 5; attempt++) {
         const save = await loadPlayerSave(users, uid, network);
         if (save.activeRunId !== run.id) return res.status(409).json({ error: "run_replaced" });
+        if (bossIntermissionPending(save.mission?.bossIntermission)) return res.status(409).json({ error: 'boss_summary_pending' });
         if (combat.sequence <= ((save as any).combatSequence || 0)) return res.json({ saved: true, stale: true });
         const phase = combat.encounter === "normal" ? "normal" : combat.encounter === "bonus" ? "bonus" : "boss";
         // Completed events are authoritative for the next stage. A late request
@@ -140,3 +190,4 @@ export default function mountProgressEndpoints(router: Router) {
     } catch { return res.status(503).json({ error: "save_unavailable" }); }
   });
 }
+

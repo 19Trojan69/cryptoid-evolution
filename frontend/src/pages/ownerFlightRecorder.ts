@@ -1,6 +1,8 @@
 import { createPerformanceProbe, retainOwnerResourceTiming } from './performanceDiagnostics.ts';
 import { createOwnerTimingCapture } from './ownerTimingCapture.ts';
 import { createFullSessionRecorder } from './fullSessionRecorder.ts';
+import { createCrashTail } from './crashTail.ts';
+import { observeSessionDiagnostics } from '../lib/sessionDiagnosticEvents.ts';
 import { cleanFlightRecorder, readFlightRecorders, FLIGHT_RECORDER_KEY,
   PREVIOUS_FLIGHT_RECORDER_KEY, FLIGHT_RECORDER_MAX_CHARS } from './flightRecorderReport.mjs';
 
@@ -15,6 +17,11 @@ export function createOwnerFlightRecorder(verifiedOwner: boolean, getHost: () =>
   if (!verifiedOwner) return null;
   const host = getHost(), wallNow = options.wallNow ?? Date.now;
   const full = createFullSessionRecorder(verifiedOwner, () => host, options);
+  const optional = (operation: () => void) => { try { operation(); } catch { /* Diagnostics must never interrupt play. */ } };
+  let tail: ReturnType<typeof createCrashTail> = null;
+  optional(() => { tail = full ? createCrashTail(verifiedOwner, () => host, { ...options, id: full.id,
+    now: options.now ?? (() => performance.now()), wallNow }) : null; });
+  const releaseTail = tail ? observeSessionDiagnostics((kind, details) => optional(() => tail?.record(kind, details))) : () => {};
   let archived = false;
   let release = () => {};
   const write = (key: string, raw: string) => {
@@ -22,13 +29,13 @@ export function createOwnerFlightRecorder(verifiedOwner: boolean, getHost: () =>
       try { host[name]?.setItem(key, raw); } catch { /* Never interrupt play. */ }
     }
   };
-  return createPerformanceProbe({ now: options.now, runtime: options.runtime,
+  const probe = createPerformanceProbe({ now: options.now, runtime: options.runtime,
     environment: 'owner-admin', publishGlobal: false, sampleLimit: 30,
     persistIntervalMs: 2_000, runtimeIntervalMs: 10_000,
     onStart: () => { release = retainOwnerResourceTiming(Infinity); full?.start(); },
     onFinish: () => { release(); full?.finish(); },
-    onSample: sample => full?.sample(sample),
-    onEvent: event => full?.event(event),
+    onSample: sample => { optional(() => tail?.record('sample', sample)); full?.sample(sample); },
+    onEvent: event => { optional(() => tail?.record('event', event)); full?.event(event); },
     metadata: { ...options.build, bootId: host.__cryptoidBootId, recordedAt: wallNow() },
     persist: raw => {
       const capture = cleanFlightRecorder({ ...JSON.parse(raw), mode: 'rolling-owner', savedAt: wallNow() });
@@ -48,6 +55,14 @@ export function createOwnerFlightRecorder(verifiedOwner: boolean, getHost: () =>
       if (serialized.length <= FLIGHT_RECORDER_MAX_CHARS) write(FLIGHT_RECORDER_KEY, serialized);
     },
   });
+  return {
+    ...probe,
+    begin(at, context) { optional(() => tail?.frame(context)); probe.begin(at, context); },
+    finish() {
+      try { probe.finish(); }
+      finally { optional(() => { tail?.record('end', { operation: 'finish' }); tail?.finish(); }); releaseTail(); }
+    },
+  } satisfies ReturnType<typeof createPerformanceProbe>;
 }
 
 // Keep an explicitly armed 90-second capture independent of the automatic ring.
@@ -76,3 +91,4 @@ export function createOwnerDiagnosticProbe(verifiedOwner: boolean, getHost: () =
     export: rolling.export,
   } satisfies ReturnType<typeof createPerformanceProbe>;
 }
+

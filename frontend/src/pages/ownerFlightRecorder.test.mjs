@@ -16,7 +16,7 @@ function fixture() {
   let now = 100, wall = 1000000, runtimeCalls = 0, writes = 0, fullWrites = 0;
   const local = new Map(), session = new Map();
   const storage = data => ({ getItem: k => data.get(k) ?? null,
-    setItem: (k, v) => { if (k === 'cryptoid_owner_full_status_v1') fullWrites++; else writes++; data.set(k, v); }, removeItem: k => data.delete(k) });
+    setItem: (k, v) => { if (k === 'cryptoid_owner_full_status_v1') fullWrites++; else if (!k.startsWith('cryptoid_owner_crash_tail_v1_')) writes++; data.set(k, v); }, removeItem: k => data.delete(k) });
   const host = { localStorage: storage(local), sessionStorage: storage(session), __cryptoidBootId: 'test-boot' };
   const options = { build, now: () => now, wallNow: () => wall,
     runtime: () => { runtimeCalls++; return { animations: 12, particles: 5, domNodes: 500, bossPaints: 100, username: 'private-user' }; } };
@@ -179,3 +179,4 @@ test('a fault in the first playing frame is retained before any complete sample 
 test('GamePage, hull handoff, transport and save queue preserve the current approved source outside exact observations', () => {
   assertObservationOnly();
 });
+

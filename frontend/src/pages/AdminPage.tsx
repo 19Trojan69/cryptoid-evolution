@@ -28,12 +28,11 @@ import { cancelPrimedGameMusic, primeGameMusic, MusicPlayer } from "./musicPlayb
 import { primeCardSound } from "./cardSound";
 import "./admin.css";
 import AdminUsage from "./AdminUsage";
+import AdminPlayers from './AdminPlayers';
 import { paymentEvidenceLinks } from "./paymentEvidenceLinks";
 import { useAdminLocale } from "../adminLocale";
 import { readOwnerStabilityReport, exportOwnerFullSession, type StabilityReport } from './stabilityReport.mjs';
 import { fullSessionFileName, fullSessionText, fullSessionTextPart, shareableFullSessionFile, type FullSessionText } from './fullSessionTransfer.ts';
-import { armOwnerTimingCapture } from './ownerTimingCapture';
-import { armOwnerAudioAudit } from './ownerAudioAudit';
 import { installReloadDiagnostics } from './reloadDiagnostics';
 import { updateOwnerLifecycleAccess } from '../lib/ownerLifecycle';
 import { cssFramePacingStats } from '../lib/cssFramePacing';
@@ -44,6 +43,7 @@ const tabs = [
   ["levels", "Levels & Bosse"],
   ["payments", "Zahlungseingänge"],
   ["scores", "Eigene Rekorde"],
+  ["players", "Spieler verwalten"],
   ["usage", "Zugriffsstatistik"],
   ["checks", "Audio & Prüfung"],
   ["diagnostics", "Technischer Bericht"],
@@ -151,6 +151,7 @@ function OwnerStabilityReport() {
   const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
   const [fullCapture, setFullCapture] = useState<StabilityReport['fullSessionRecording']>();
+  const [tailRuns, setTailRuns] = useState<Array<{ id: string; startedAt: number; state: string }>>([]);
   const request = useRef(0);
   const field = useRef<HTMLTextAreaElement>(null);
   const fullDownload = useRef<{ url: string; timer: number; file: File | null } | null>(null);
@@ -172,7 +173,7 @@ function OwnerStabilityReport() {
     const id = ++request.current;
     setBusy(true);
     setReport("");
-    setFullCapture(undefined);
+    setFullCapture(undefined); setTailRuns([]);
     clearFullTransfer();
     setNotice("");
     setError("");
@@ -185,9 +186,10 @@ function OwnerStabilityReport() {
       }, () => request.current === id, undefined, shipSaveNetwork === 'testnet');
       if (result && request.current === id) {
         setFullCapture(result.fullSessionRecording);
+        setTailRuns((result.crashTail?.sessions || []).map(session => ({ id: session.id, startedAt: session.startedAt,
+          state: typeof session.state === 'string' ? session.state : 'recording' })));
         setReport(JSON.stringify({ ...result, reportingRuntime: { ...__CRYPTOID_BUILD__, cssPacing: cssFramePacingStats() } }, null, 2));
         setNotice(t(result.available ? "Vorhandene technische Einträge wurden gelesen." : "In diesem Browser sind keine auswertbaren Einträge vorhanden."));
-        if (result.audioCaptures?.at(-1)?.finished) setNotice(t("Audiomessung abgeschlossen. Das Spiel wurde nicht automatisch beendet."));
       }
     } catch (err) {
       if (request.current === id) setError(errorMessage(err));
@@ -209,7 +211,7 @@ function OwnerStabilityReport() {
     } catch (err) {
       if (request.current === id) {
         setReport("");
-        setFullCapture(undefined);
+        setFullCapture(undefined); setTailRuns([]);
         clearFullTransfer();
         setError(errorMessage(err));
         setBusy(false);
@@ -255,7 +257,7 @@ function OwnerStabilityReport() {
       }, 60_000) };
       setPreparedFull({ url, name: fullSessionFileName(sessionId), share: file !== null });
       setNotice(t('Gesamtlauf bereit. Tippe jetzt auf Datei teilen / sichern oder Datei herunterladen. Falls nichts passiert, nutze Gesamtlauf als Text anzeigen.'));
-    } catch (err) { if (request.current === id) { clearFullTransfer(); setReport(''); setFullCapture(undefined); setError(errorMessage(err)); } }
+    } catch (err) { if (request.current === id) { clearFullTransfer(); setReport(''); setFullCapture(undefined); setTailRuns([]); setError(errorMessage(err)); } }
     finally { if (request.current === id) setBusy(false); }
   };
   const shareFull = () => {
@@ -282,7 +284,7 @@ function OwnerStabilityReport() {
     setBusy(true); setError(''); setNotice('');
     try { await verifyReportOwner(); }
     catch (err) {
-      if (request.current === id) { clearFullTransfer(); setReport(''); setFullCapture(undefined); setError(errorMessage(err)); setBusy(false); }
+      if (request.current === id) { clearFullTransfer(); setReport(''); setFullCapture(undefined); setTailRuns([]); setError(errorMessage(err)); setBusy(false); }
       return;
     }
     if (request.current !== id) return;
@@ -296,41 +298,28 @@ function OwnerStabilityReport() {
       }
     } finally { if (request.current === id) setBusy(false); }
   };
-  const armTiming = async () => {
-    const id = ++request.current;
-    setBusy(true); setError(""); setNotice("");
-    try {
-      const armed = await armOwnerTimingCapture(verifyReportOwner, () => window, () => request.current === id);
-      if (armed) setNotice(t("Die nächste Spielrunde wird einmalig bis zu 90 Sekunden gemessen. Starte sie innerhalb von 10 Minuten und lies danach hier den Bericht."));
-    } catch (err) { if (request.current === id) setError(errorMessage(err)); }
-    finally { if (request.current === id) setBusy(false); }
-  };
-  const armAudio = async (mode: 'original' | 'off' | 'cancel') => {
-    const id = ++request.current;
-    setBusy(true); setError(''); setNotice(''); setReport(''); setFullCapture(undefined);
-    clearFullTransfer();
-    try {
-      const armed = await armOwnerAudioAudit(verifyReportOwner, () => window, mode, () => request.current === id);
-      if (armed) setNotice(mode === 'original'
-        ? t("Bereit: Original-Audio. Starte innerhalb von 10 Minuten einen Admin-Testlauf. Nach 90 Sekunden endet nur die Messung.")
-        : mode === 'off' ? t("Bereit: Spielaudio vollständig aus. Starte innerhalb von 10 Minuten einen Admin-Testlauf. Audio bleibt bis zum Verlassen aus; nur die Messung endet nach 90 Sekunden.")
-        : t("Audio-Vorbereitung aufgehoben."));
-    } catch (err) { if (request.current === id) setError(errorMessage(err)); }
-    finally { if (request.current === id) setBusy(false); }
-  };
+  const runs = [...(fullCapture?.sessions || [])];
+  const tailOnly = tailRuns.filter(tail => !runs.some(run => run.id === tail.id));
   return <section className="admin-panel">
-    <h2>{t("Technischer Bericht")}</h2>
+    <h2>{t("White-Screen-Diagnose")}</h2>
     <p>{t("Nur für dein verifiziertes Eigentümerkonto. Gelesen werden vorhandene technische Einträge aus diesem Browser. Der Bericht wird nicht automatisch versendet.")}</p>
     <p>{t("Öffne diesen Bereich möglichst im bisherigen Pi-Browser-Tab des betroffenen Spiels.")}</p>
     {shipSaveNetwork === 'testnet' && <p>{t("Deine Testnet-Spielrunden werden vom Start an technisch aufgezeichnet. Die letzten zwei Läufe bleiben als Datei auslesbar. Es wird nichts automatisch versendet.")}</p>}
     {shipSaveNetwork === 'testnet' && fullCapture && (fullCapture.storage !== 'available' || fullCapture.status?.state === 'storage-error')
       && <p className="admin-error" role="alert">{t("Die vollständige Aufzeichnung konnte nicht gespeichert werden.")}</p>}
+    {shipSaveNetwork === 'testnet' && <p>{t("Ein Download enthält den Gesamtlauf, die gesicherten letzten Ereignisse sowie Fehler- und Neustartdaten. Bei einem harten Prozessabbruch kann der letzte noch nicht geschriebene Moment fehlen.")}</p>}
     {shipSaveNetwork === 'testnet' && fullCapture?.sessions.map(session => <div key={session.id}>
       <p>{new Date(session.startedAt).toLocaleString('de-AT')} · {t("{size} KiB", { size: Math.ceil(session.bytes / 1024) })}</p>
       {session.state === 'limited' && <p role="alert">{t("Die Aufzeichnung wurde an einer Speicher- oder Zeitgrenze beendet.")}</p>}
       {session.state === 'recording' && <p>{t("Für diesen Lauf wurde kein Abschluss gespeichert.")}</p>}
-      <button className="admin-button" disabled={busy} onClick={() => { void prepareFull(session.id); }}>{t("Gesamtlauf herunterladen")}</button>
-      <button className="admin-button" disabled={busy} onClick={() => { void prepareFull(session.id, true); }}>{t("Gesamtlauf als Text anzeigen")}</button>
+      <button className="admin-button" disabled={busy} onClick={() => { void prepareFull(session.id); }}>{t("White-Screen-Bericht herunterladen")}</button>
+      <button className="admin-button" disabled={busy} onClick={() => { void prepareFull(session.id, true); }}>{t("Bericht als Text anzeigen")}</button>
+    </div>)}
+    {shipSaveNetwork === 'testnet' && tailOnly.map(session => <div key={session.id}>
+      <p>{new Date(session.startedAt).toLocaleString('de-AT')}</p>
+      <p>{t("Für diesen Lauf ist nur die unabhängige Sicherung der letzten Ereignisse verfügbar.")}</p>
+      <button className="admin-button" disabled={busy} onClick={() => { void prepareFull(session.id); }}>{t("White-Screen-Bericht herunterladen")}</button>
+      <button className="admin-button" disabled={busy} onClick={() => { void prepareFull(session.id, true); }}>{t("Bericht als Text anzeigen")}</button>
     </div>)}
     {shipSaveNetwork === 'testnet' && preparedFull && <div className="admin-actions">
       {preparedFull.share && <button className="admin-button" disabled={busy} onClick={shareFull}>{t('Datei teilen / sichern')}</button>}
@@ -350,16 +339,10 @@ function OwnerStabilityReport() {
     </div>}
     {error && <p className="admin-error" role="alert">{error}</p>}
     <p role="status">{busy ? t("Berechtigung wird geprüft …") : notice}</p>
-    {report && <label>{t("Lokaler Bericht")}
+    {report && <details><summary>{t("Technische Details anzeigen")}</summary><label>{t("Lokaler Bericht")}
       <textarea ref={field} readOnly value={report} spellCheck={false} style={{ display: "block", width: "100%", minHeight: 300, boxSizing: "border-box", marginTop: 8, padding: 12, background: "#091923", color: "#eaf7fa", border: "1px solid #3d6471", borderRadius: 8, fontFamily: "monospace", fontSize: 13 }} />
-    </label>}
+    </label></details>}
     <div className="admin-actions">
-      <button className="admin-button" disabled={busy} onClick={() => { void armTiming(); }}>{t("90-Sekunden-Messung vorbereiten")}</button>
-      {shipSaveNetwork === 'testnet' && <>
-        <button className="admin-button" disabled={busy} onClick={() => { void armAudio('original'); }}>{t("Audio: Original · 90 Sekunden")}</button>
-        <button className="admin-button" disabled={busy} onClick={() => { void armAudio('off'); }}>{t("Audio: vollständig aus · 90 Sekunden")}</button>
-        <button className="admin-button" disabled={busy} onClick={() => { void armAudio('cancel'); }}>{t("Audio-Vorbereitung aufheben")}</button>
-      </>}
       <button className="admin-button" disabled={busy} onClick={() => { void load(); }}>{t("Erneut lesen")}</button>
       <button className="admin-button" disabled={busy || !report} onClick={() => { void copy(); }}>{t("Bericht kopieren")}</button>
     </div>
@@ -720,6 +703,7 @@ export default function AdminPage() {
           )}
           {view === "usage" && <AdminUsage />}
           {view === "diagnostics" && <OwnerStabilityReport />}
+          {view === 'players' && <AdminPlayers />}
           {view === "overview" && (
             <>
               <section className="admin-shortcuts" aria-label={t("Schnellzugriff")}>
@@ -1288,3 +1272,4 @@ export default function AdminPage() {
     </main>
   );
 }
+

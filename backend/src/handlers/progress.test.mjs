@@ -11,11 +11,13 @@ const matches = (doc, query) => Object.entries(query).every(([path, expected]) =
     if ('$exists' in expected) return (actual !== undefined) === expected.$exists;
     if ('$ne' in expected) return Array.isArray(actual) ? !actual.includes(expected.$ne) : actual !== expected.$ne;
     if ('$in' in expected) return expected.$in.includes(actual);
+    if ('$regex' in expected) return typeof actual === 'string' && new RegExp(expected.$regex, expected.$options || '').test(actual);
   }
   return expected === null ? actual == null : actual === expected;
 });
 function collection(docs) {
   const apply = (doc, update) => {
+    for (const path of Object.keys(update.$unset || {})) { const keys = path.split('.'); const last = keys.pop(); const parent = get(doc, keys.join('.')); if (parent) delete parent[last]; }
     for (const [path, value] of Object.entries(update.$set || {})) set(doc, path, value);
     for (const [path, value] of Object.entries(update.$inc || {})) set(doc, path, (get(doc, path) || 0) + value);
     for (const [path, value] of Object.entries(update.$max || {})) set(doc, path, Math.max(get(doc, path) || 0, value));
@@ -25,7 +27,7 @@ function collection(docs) {
     async findOne(query) { return structuredClone(docs.find(doc => matches(doc, query)) || null); },
     async updateOne(query, update) { const doc = docs.find(doc => matches(doc, query)); if (!doc) return { matchedCount: 0, modifiedCount: 0 }; apply(doc, update); return { matchedCount: 1, modifiedCount: 1 }; },
     async findOneAndUpdate(query, update) { const doc = docs.find(doc => matches(doc, query)); if (!doc) return null; const before = structuredClone(doc); apply(doc, update); return before; },
-    find(query) { return { project() { return this; }, async toArray() { return structuredClone(docs.filter(doc => matches(doc, query))); } }; },
+    find(query) { return { project() { return this; }, limit(n) { this.maximum = n; return this; }, async toArray() { return structuredClone(docs.filter(doc => matches(doc, query)).slice(0, this.maximum)); } }; },
   };
 }
 function harness() {
@@ -46,7 +48,7 @@ function harness() {
     await routes[`${options.method || 'POST'} ${name}${path}`](req, res);
     return done;
   }
-  return { docs, orders, session, call, profile: () => docs[0].playerByNetwork.testnet };
+  return { docs, orders, session, locals, call, profile: () => docs[0].playerByNetwork.testnet };
 }
 const snapshot = (overrides = {}) => ({ score: 0, shards: 0, destroyed: 0, hearts: 3, weaponSource: 'standard', paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, weaponTimers: [0, -1, 0, 0, 0, 0], shieldCharges: 0, shieldMs: 0, purchasedShieldMs: 0, shieldActive: false, overdriveMs: 0, overdriveTotalMs: 20000, rapidFireMs: 0, rapidFireTotalMs: 20000, empMs: 0, ...overrides });
 const start = async (h, action = 'new', startKey = 'start-key-0000000001') => {
@@ -94,6 +96,8 @@ test('full-heart boss Shards credit once, survive resume, and never increase max
       assert.equal(resumed.code,200);
       assert.equal(resumed.body.checkpoint.hearts,maxHearts);
       runId=resumed.body.scoreRunId;
+      h.profile().mission.bossIntermission.createdAt -= 10_000;
+      assert.equal((await h.call('progress','/boss-summary/continue',{runId,stage:level*10,confirm:true})).code,200);
       assert.equal((await h.call('rewards','/event',{runId,kind:'bonus',level,stage:level*10,hits:0,save:snapshot({hearts:maxHearts,shards:5*level})})).code,200);
     }
     assert.equal((await h.call('progress','/checkpoint',{runId,combat:combat({stage:51}),save:snapshot({hearts:maxHearts,shards:25})})).code,200);
@@ -236,6 +240,8 @@ test('checkpoint, automatic chain, device resume, stale writes and final credit 
   assert.equal((await h.call('rewards', '/event', { runId, kind: 'boss', stage: 10, level: 1, save: snapshot({ score: 100, shards: 12, destroyed: 10 }) })).code, 200);
   assert.equal(h.profile().mission.phase, 'bonus');
   assert.equal(h.profile().balance, 12);
+  h.profile().mission.bossIntermission.createdAt -= 10_000;
+  assert.equal((await h.call('progress','/boss-summary/continue',{runId,stage:10,confirm:true})).code,200);
   assert.equal((await h.call('rewards', '/event', { runId, kind: 'bonus', stage: 10, level: 1, hits: 12, save: snapshot({ score: 110, shards: 14, destroyed: 10 }) })).code, 200);
   assert.equal(h.profile().mission.sector, 11);
   assert.equal(h.profile().mission.phase, 'normal');
@@ -501,4 +507,49 @@ test('badge proof survives checkpoints, rejects counter rollback and commits wit
  await h2.call('progress','/leave',{runId:run2,hearts:2});
  assert.equal((await h2.call('rewards','/event',{...event,runId:run2,save:snapshot({damageCount:0,comboTotal:0,destroyed:20,score:500,hearts:2})})).code,200);
  assert.equal(h2.docs[0].badgeEvidenceByNetwork?.testnet?.perfectFormation,undefined);
+});
+
+
+test('boss summary is saved once, blocks the bonus, survives resume and requires ten seconds plus explicit confirmation', async () => {
+  const h=harness(); await init(h); await start(h); let runId=h.session.scoreRun.id;
+  for(let stage=1;stage<=9;stage++) assert.equal((await h.call('rewards','/event',{runId,kind:'block',level:1,stage,save:snapshot()})).code,200);
+  const boss={runId,kind:'boss',level:1,stage:10,save:snapshot()};
+  assert.equal((await h.call('rewards','/event',boss)).code,200);
+  const before=structuredClone(h.profile()), marker=before.mission.bossIntermission;
+  assert.equal(marker.stage,10);
+  assert.equal((await h.call('progress','/boss-summary/prepare',{runId,stage:10})).code,200);
+  assert.deepEqual(h.profile(),before,'preparation retries never award or write again');
+  assert.equal((await h.call('rewards','/event',boss)).body.awarded,false);
+  const bonus={runId,kind:'bonus',level:1,stage:10,hits:0,save:snapshot()};
+  assert.equal((await h.call('rewards','/event',bonus)).body.error,'boss_summary_pending');
+  assert.equal((await h.call('progress','/checkpoint',{runId,combat:combat({stage:10,encounter:'bonus'}),save:snapshot()})).code,409);
+  assert.equal((await h.call('progress','/boss-summary/continue',{runId,stage:10,confirm:false})).code,400);
+  assert.equal((await h.call('progress','/boss-summary/continue',{runId,stage:10,confirm:true})).body.error,'boss_summary_wait');
+  const resumed=await start(h,'resume','boss-summary-resume-0001'); runId=resumed.body.scoreRunId;
+  assert.equal((await init(h)).body.save.mission.bossIntermission.stage,10);
+  assert.equal((await h.call('progress','/boss-summary/continue',{runId,stage:20,confirm:true})).code,409);
+  h.profile().mission.bossIntermission.createdAt-=10_000;
+  assert.equal((await h.call('progress','/boss-summary/continue',{runId,stage:10,confirm:true})).body.continued,true);
+  const confirmed=structuredClone(h.profile());
+  assert.equal((await h.call('progress','/boss-summary/continue',{runId,stage:10,confirm:true})).code,200);
+  assert.deepEqual(h.profile(),confirmed,'lost continuation replies can be replayed without another save or reward');
+  assert.equal((await h.call('rewards','/event',{...bonus,runId})).code,200);
+});
+
+test('new summary preparation upgrades the established backend checkpoint and isolates identity/network without cookies', async () => {
+  const h=harness(); await init(h); await start(h); const runId=h.session.scoreRun.id;
+  h.profile().mission={sector:10,phase:'bonus',snapshot:snapshot({score:100}),savedAt:new Date().toISOString()};
+  const before=structuredClone(h.profile());
+  const body={runId,stage:10};
+  assert.equal((await h.call('progress','/boss-summary/prepare',body,{session:{}})).code,401);
+  assert.equal((await h.call('progress','/boss-summary/prepare',body,{session:{currentUser:{uid:'pilot-b'}}})).code,400);
+  assert.equal((await h.call('progress','/boss-summary/prepare',body,{network:'mainnet',session:{currentUser:{uid:'pilot-a'}}})).code,400);
+  assert.equal((await h.call('progress','/boss-summary/prepare',{...body,stage:11})).code,400);
+  assert.equal((await h.call('progress','/boss-summary/prepare',body,{session:{currentUser:{uid:'pilot-a'}}})).code,200);
+  assert.deepEqual(h.profile().mission.snapshot,before.mission.snapshot);
+  assert.equal(h.profile().balance,before.balance); assert.equal(h.profile().mission.bossIntermission.stage,10);
+  const version=h.profile().version;
+  assert.equal((await h.call('progress','/boss-summary/prepare',body)).code,200);
+  assert.equal(h.profile().version,version);
+  assert.equal((await h.call('progress','/boss-summary/prepare',body,{session:{currentUser:{uid:'pilot-a'},adminMode:true,adminUid:'pilot-a'}})).code,403);
 });
