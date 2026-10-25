@@ -86,6 +86,9 @@ app.use(cookieParser());
 let sessionMiddleware: express.RequestHandler | undefined;
 app.use((req, res, next) => {
   sessionMiddleware ??= session({
+    // The Testnet's local tools use their own signing key and cookie alongside
+    // the established proxy session; neither backend replaces the other's cookie.
+    name: process.env.CRYPTOID_SESSION_COOKIE_NAME || "connect.sid",
     secret: env.session_secret,
     resave: false,
     saveUninitialized: false,

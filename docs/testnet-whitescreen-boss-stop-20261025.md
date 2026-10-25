@@ -47,3 +47,32 @@ Current status: source prepared; no deployment or environment setting changed.
 The existing official Testnet is the rollback point. Capture its exact current
 deployment before any release. Original artwork/audio/fonts remain in the base
 Git tree and must be retained by the deployment build.
+
+## Authorized connection preparation
+
+The owner explicitly approved the direct Testnet database/session connection
+and subsequent full Testnet publication. Atlas read-only metadata confirms the
+existing cryptoid-testnet cluster and demo-app database with users, orders,
+admin_access, user_sessions and the established community collections.
+The existing backend uses the default database name. Its saved Production
+MongoDB value is a write-only Secret and was not read or copied.
+
+A narrow readWrite user restricted to this database and cluster was requested
+through the Atlas connector. The connector returned: User did not confirm the
+execution of atlas-create-db-user; operation not performed. No new database
+user was created; this rejection must not be bypassed through another write path.
+
+The Vercel API still returns project-not-found for the dashboard-verified project
+ID. The already authorized Dashboard route saved MONGODB_DATABASE_NAME=demo-app
+and CRYPTOID_SESSION_COOKIE_NAME=cryptoid.testnet.local.sid for Production and
+Preview. An independent generated SESSION_SECRET was saved as a write-only Secret
+in those environments; no value was printed, committed or retained in an artifact.
+Local Testnet sessions use an independent signing key and cookie so
+that the established proxy's connect.sid remains compatible. A regression test
+using the actual Vercel entry verifies stored state with both cookies present.
+The complete backend build and all 121 backend tests pass.
+
+Publication remains blocked until MONGODB_URI has been supplied through a secure
+provider form and the database connection is verified. The account-deletion
+flag remains disabled until this configuration and transaction gate is satisfied.
+No new deployment, player reset or account deletion has been performed.

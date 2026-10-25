@@ -15,6 +15,8 @@ async function runFixture(mode) {
   process.env.SESSION_SECRET = 'session-initialization-test-only';
   process.env.MONGODB_URI = 'mongodb://fixture.invalid/session-initialization';
   process.env.MONGODB_DATABASE_NAME = 'session-initialization';
+  if (mode === 'isolated') process.env.CRYPTOID_SESSION_COOKIE_NAME = 'cryptoid.testnet.local.sid';
+  else delete process.env.CRYPTOID_SESSION_COOKIE_NAME;
   delete process.env.CRYPTOID_TESTNET_BACKEND;
   delete process.env.VERCEL_PROJECT_PRODUCTION_URL;
   require('ts-node').register({
@@ -141,14 +143,17 @@ async function runFixture(mode) {
       assert.equal((await get()).code, 500);
       assert.equal(stores.length, 0, 'failed database startup must not start a separate session connection');
     }
-    const first = await get();
+    const oldProxyCookie = 'connect.sid=synthetic-upstream-session';
+    const first = await get(mode === 'isolated' ? oldProxyCookie : undefined);
     assert.equal(first.code, 200);
     assert.equal(JSON.parse(first.body).count, 1);
     const cookie = first.cookies[0];
+    assert.ok(cookie.startsWith(mode === 'isolated' ? 'cryptoid.testnet.local.sid=' : 'connect.sid='));
     assert.match(cookie, /HttpOnly/);
     assert.match(cookie, /Secure/);
     assert.match(cookie, /SameSite=Lax/);
-    const second = await get(cookie.split(';')[0]);
+    const localCookie = cookie.split(';')[0];
+    const second = await get(mode === 'isolated' ? `${oldProxyCookie}; ${localCookie}` : localCookie);
     assert.equal(second.code, 200);
     assert.equal(JSON.parse(second.body).count, 2, 'existing Mongo-backed session must persist across warm requests');
     assert.equal(stores.length, 1, 'warm requests reuse the same session store');
@@ -175,6 +180,7 @@ if (fixture >= 0) {
   for (const [mode, name] of [
     ['proxy', 'actual Vercel import and Testnet proxy requests never start MongoDB'],
     ['native', 'native backend retains Mongo sessions, secure cookies and warm reuse'],
+    ['isolated', 'local Testnet session coexists with the established proxy cookie and retains its stored state'],
     ['retry', 'native database failure returns a controlled error and retries without an unhandled rejection'],
   ]) {
     test(name, () => {
