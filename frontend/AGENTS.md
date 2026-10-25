@@ -1,3 +1,18 @@
+# Authorized Testnet integration, 25 October 2026
+
+The owner now explicitly authorizes the official Testnet release and clarifies
+that diagnostics must be accessible only through Admin. This supersedes earlier
+no-Testnet scope for this release only; no main merge/Mainnet/automatic deployment.
+Restore real api/index.ts and normal build/install configuration from ce1fb59d;
+never promote the isolated guest/private-preview build. Keep the existing fresh
+server-side /admin/status owner check for reading/copying/downloading reports.
+New bounded lifecycle capture runs only after a server-verified Testnet owner
+session, stops recording on signout/revocation, has no public report page/global,
+no automatic transmission, no new frames/timers and no automatic Resume.
+Watchdog remains strictly >2500 ms with 500 ms polling. Preserve all gameplay,
+art, sound, economy, saves and backend. New branch is auto-deploy-disabled.
+Physical iPhone long-run/White Screen cause and full campaign remain open.
+
 # Preserve the officially approved game
 
 ## Protected Preview lifecycle capture, 24 October 2026

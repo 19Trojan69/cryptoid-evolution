@@ -1,0 +1,692 @@
+{
+  "passed": true,
+  "localOnly": true,
+  "productionBundle": true,
+  "gameplayHooks": false,
+  "limitations": "Linux native browsers with controlled transport faults. Storage sentinels are synthetic, not real account saves. No OS process kill, iPhone memory-limit recovery or historical White Screen cause established. Lifecycle snapshots add measurement overhead; a missing diagnostic record does not establish a pause cause.",
+  "includesGameLifecycle": true,
+  "htmlSha256": "2ea86fbfd558d4cff219082cb58aeb8eb0109fd3d684f034158134a780c4b692",
+  "sourceHtmlSha256": "6b82adfec544fcbbfd064f49064b4b90b370291ce412e0e2a9ee13f66ccd7acf",
+  "moduleEntry": "/assets/index-BuVlq-q4.js",
+  "api": [
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    },
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    }
+  ],
+  "missing": [],
+  "results": [
+    {
+      "fault": "healthy",
+      "startupPassed": true,
+      "gameLifecyclePassed": true,
+      "errors": [],
+      "consoleErrors": [],
+      "failed": [
+        {
+          "path": "/audio/light-the-void.mp3",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "home-ready",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        },
+        {
+          "label": "home-after-play",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "routeSteps": [
+        "home",
+        "play",
+        "pause",
+        "resume",
+        "home"
+      ],
+      "lifecycleStage": "home-after-play",
+      "lifecycleSamples": [
+        {
+          "label": "before-play",
+          "captured": true,
+          "observedAtEpochMs": 1792899024291,
+          "documentStartedAt": 1792899023885.8,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/",
+          "rootChildren": 1,
+          "shell": null,
+          "pauseControl": null,
+          "pauseHitTarget": null,
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "before-pause",
+          "captured": true,
+          "observedAtEpochMs": 1792899024583,
+          "documentStartedAt": 1792899023885.8,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              389.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-pause",
+          "captured": true,
+          "observedAtEpochMs": 1792899024673,
+          "documentStartedAt": 1792899023885.8,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "true"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              389.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "div",
+            "id": "",
+            "className": "game-overlay pause-settings-overlay",
+            "insidePauseControl": false
+          },
+          "pauseOverlay": {
+            "tag": "div",
+            "id": "",
+            "className": "game-overlay pause-settings-overlay",
+            "role": "dialog",
+            "visible": true,
+            "box": [
+              0,
+              0,
+              430,
+              825
+            ],
+            "pointerEvents": "auto",
+            "text": "MISSION PAUSIERTHalte die Stellung.Eine kurze Verschnaufpause.Die Cryptoids warten.Level 1 · Block 1/9 · GENESIS BELTShop & WaffenSYSTEM / EINSTELLUNGENMusik & Effekte50%›SteuerungRechtshändig›SpracheDeutsch›Anzeige›SpracheAktuelle Sprache: Deutsch◎Automatisch (Gerätesprache)⌄SteuerungMit einem Daumen steuern, mit dem anderen Power-ups aktivieren.◁Rechtshänder-Steuerung▷Linkshänder-SteuerungBerührungsempfindlichkeitSanftNormalSchnellSteuerbereichDer Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.KompaktNormalBreitStartposition des SchiffsÜber dem FingerDirekt unter dem FingerMusiklautstärkeMusiklautstärke50%0%25%50%75%100%Effektlautstärke35%0%25%50%75%100%Anzeige⛶Vollbild≋Vibration an◌StandardeffekteFortsetzen",
+            "disabled": false
+          },
+          "overlays": [
+            {
+              "tag": "div",
+              "id": "",
+              "className": "game-overlay pause-settings-overlay",
+              "role": "dialog",
+              "visible": true,
+              "box": [
+                0,
+                0,
+                430,
+                825
+              ],
+              "pointerEvents": "auto",
+              "text": "MISSION PAUSIERTHalte die Stellung.Eine kurze Verschnaufpause.Die Cryptoids warten.Level 1 · Block 1/9 · GENESIS BELTShop & WaffenSYSTEM / EINSTELLUNGENMusik & Effekte50%›SteuerungRechtshändig›SpracheDeutsch›Anzeige›SpracheAktuelle Sprache: Deutsch◎Automatisch (Gerätesprache)⌄SteuerungMit einem Daumen steuern, mit dem anderen Power-ups aktivieren.◁Rechtshänder-Steuerung▷Linkshänder-SteuerungBerührungsempfindlichkeitSanftNormalSchnellSteuerbereichDer Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.KompaktNormalBreitStartposition des SchiffsÜber dem FingerDirekt unter dem FingerMusiklautstärkeMusiklautstärke50%0%25%50%75%100%Effektlautstärke35%0%25%50%75%100%Anzeige⛶Vollbild≋Vibration an◌StandardeffekteFortsetzen",
+              "disabled": false
+            }
+          ],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "after-resume",
+          "captured": true,
+          "observedAtEpochMs": 1792899028015,
+          "documentStartedAt": 1792899023885.8,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              389.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "home-after-play",
+          "captured": true,
+          "observedAtEpochMs": 1792899028237,
+          "documentStartedAt": 1792899023885.8,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/",
+          "rootChildren": 1,
+          "shell": null,
+          "pauseControl": null,
+          "pauseHitTarget": null,
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        }
+      ],
+      "lifecycleStartedAt": 1792899024291,
+      "lifecycleDocumentStartedAt": 1792899023885.8,
+      "passed": true
+    },
+    {
+      "fault": "sdk-held",
+      "startupPassed": true,
+      "gameLifecyclePassed": null,
+      "errors": [],
+      "consoleErrors": [],
+      "failed": [],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "recovery-visible",
+          "navigations": 1,
+          "readyState": "loading",
+          "bodyPresent": true,
+          "rootChildren": 0,
+          "panel": {
+            "language": "de",
+            "text": "Diese Seite konnte nicht geladen werden.\n\nLade die aktuelle Version neu. Deine gespeicherten Daten bleiben erhalten.\n\nSeite neu laden\nZur Startseite",
+            "role": "alert",
+            "box": [
+              0,
+              0,
+              430,
+              825
+            ]
+          },
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": []
+        },
+        {
+          "label": "home-ready",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "fault": "entry-failed",
+      "startupPassed": true,
+      "gameLifecyclePassed": null,
+      "errors": [],
+      "consoleErrors": [
+        {
+          "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "path": "/assets/index-BuVlq-q4.js"
+        }
+      ],
+      "failed": [
+        {
+          "path": "/assets/index-BuVlq-q4.js",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "httpErrors": [
+        {
+          "path": "/assets/index-BuVlq-q4.js",
+          "status": 404
+        }
+      ],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "recovery-visible",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 0,
+          "panel": {
+            "language": "de",
+            "text": "Diese Seite konnte nicht geladen werden.\n\nLade die aktuelle Version neu. Deine gespeicherten Daten bleiben erhalten.\n\nSeite neu laden\nZur Startseite",
+            "role": "alert",
+            "box": [
+              0,
+              0,
+              430,
+              825
+            ]
+          },
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        },
+        {
+          "label": "home-ready",
+          "navigations": 2,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "fault": "entry-held",
+      "startupPassed": true,
+      "gameLifecyclePassed": null,
+      "errors": [],
+      "consoleErrors": [],
+      "failed": [],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "recovery-visible",
+          "navigations": 1,
+          "readyState": "interactive",
+          "bodyPresent": true,
+          "rootChildren": 0,
+          "panel": {
+            "language": "de",
+            "text": "Diese Seite konnte nicht geladen werden.\n\nLade die aktuelle Version neu. Deine gespeicherten Daten bleiben erhalten.\n\nSeite neu laden\nZur Startseite",
+            "role": "alert",
+            "box": [
+              0,
+              0,
+              430,
+              825
+            ]
+          },
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        },
+        {
+          "label": "home-ready",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "fault": "shop-held",
+      "startupPassed": true,
+      "gameLifecyclePassed": null,
+      "errors": [],
+      "consoleErrors": [],
+      "failed": [],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "recovery-visible",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 0,
+          "panel": {
+            "language": "de",
+            "text": "Diese Seite konnte nicht geladen werden.\n\nLade die aktuelle Version neu. Deine gespeicherten Daten bleiben erhalten.\n\nSeite neu laden\nZur Startseite",
+            "role": "alert",
+            "box": [
+              0,
+              0,
+              430,
+              825
+            ]
+          },
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        },
+        {
+          "label": "home-ready",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "fault": "entry-throws",
+      "startupPassed": true,
+      "gameLifecyclePassed": null,
+      "errors": [
+        "Controlled startup module exception"
+      ],
+      "consoleErrors": [],
+      "failed": [],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "recovery-visible",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 0,
+          "panel": {
+            "language": "de",
+            "text": "Diese Seite konnte nicht geladen werden.\n\nLade die aktuelle Version neu. Deine gespeicherten Daten bleiben erhalten.\n\nSeite neu laden\nZur Startseite",
+            "role": "alert",
+            "box": [
+              0,
+              0,
+              430,
+              825
+            ]
+          },
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        },
+        {
+          "label": "home-ready",
+          "navigations": 2,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "fault": "entry-offline",
+      "startupPassed": true,
+      "gameLifecyclePassed": null,
+      "errors": [],
+      "consoleErrors": [
+        {
+          "text": "Failed to load resource: net::ERR_INTERNET_DISCONNECTED",
+          "path": "/assets/index-BuVlq-q4.js"
+        }
+      ],
+      "failed": [
+        {
+          "path": "/assets/index-BuVlq-q4.js",
+          "error": "net::ERR_INTERNET_DISCONNECTED"
+        }
+      ],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "recovery-visible",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 0,
+          "panel": {
+            "language": "de",
+            "text": "Diese Seite konnte nicht geladen werden.\n\nLade die aktuelle Version neu. Deine gespeicherten Daten bleiben erhalten.\n\nSeite neu laden\nZur Startseite",
+            "role": "alert",
+            "box": [
+              0,
+              0,
+              430,
+              825
+            ]
+          },
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        },
+        {
+          "label": "home-ready",
+          "navigations": 2,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "engine": "chromium",
+  "version": "141.0.7390.37"
+}

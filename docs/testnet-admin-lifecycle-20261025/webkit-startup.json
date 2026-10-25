@@ -1,0 +1,257 @@
+{
+  "passed": false,
+  "localOnly": true,
+  "productionBundle": true,
+  "gameplayHooks": false,
+  "limitations": "Linux native browsers with controlled transport faults. Storage sentinels are synthetic, not real account saves. No OS process kill, iPhone memory-limit recovery or historical White Screen cause established. Lifecycle snapshots add measurement overhead; a missing diagnostic record does not establish a pause cause.",
+  "includesGameLifecycle": true,
+  "htmlSha256": "2ea86fbfd558d4cff219082cb58aeb8eb0109fd3d684f034158134a780c4b692",
+  "sourceHtmlSha256": "6b82adfec544fcbbfd064f49064b4b90b370291ce412e0e2a9ee13f66ccd7acf",
+  "moduleEntry": "/assets/index-BuVlq-q4.js",
+  "api": [
+    {
+      "method": "POST",
+      "path": "/api/usage/collect"
+    },
+    {
+      "method": "GET",
+      "path": "/api/hangar/catalog"
+    }
+  ],
+  "missing": [],
+  "results": [
+    {
+      "fault": "healthy",
+      "startupPassed": true,
+      "gameLifecyclePassed": false,
+      "errors": [],
+      "consoleErrors": [],
+      "failed": [],
+      "httpErrors": [],
+      "unexpected": [],
+      "samples": [
+        {
+          "label": "home-ready",
+          "navigations": 1,
+          "readyState": "complete",
+          "bodyPresent": true,
+          "rootChildren": 1,
+          "panel": null,
+          "saveSentinel": "{\"hearts\":3,\"score\":173,\"sector\":19}",
+          "pendingSentinel": "keep-pending",
+          "sdkInitializations": [
+            {
+              "version": "2.0"
+            }
+          ]
+        }
+      ],
+      "routeSteps": [
+        "home",
+        "play"
+      ],
+      "lifecycleStage": "pause-click",
+      "lifecycleSamples": [
+        {
+          "label": "before-play",
+          "captured": true,
+          "observedAtEpochMs": 1792899025976,
+          "documentStartedAt": 1792899025395,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/",
+          "rootChildren": 1,
+          "shell": null,
+          "pauseControl": null,
+          "pauseHitTarget": null,
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "before-pause",
+          "captured": true,
+          "observedAtEpochMs": 1792899030877,
+          "documentStartedAt": 1792899025395,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "false"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              389.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "svg",
+            "id": "",
+            "className": "game-control-icon",
+            "insidePauseControl": true
+          },
+          "pauseOverlay": null,
+          "overlays": [],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "absent",
+            "totalEntries": 0,
+            "entries": []
+          },
+          "recordedInterruptions": []
+        },
+        {
+          "label": "failure:pause-click",
+          "captured": true,
+          "observedAtEpochMs": 1792899050884,
+          "documentStartedAt": 1792899025395,
+          "readyState": "complete",
+          "visibilityState": "visible",
+          "focused": true,
+          "route": "/game",
+          "rootChildren": 1,
+          "shell": {
+            "effectsPaused": "true"
+          },
+          "pauseControl": {
+            "tag": "button",
+            "id": "",
+            "className": "game-control pause-control",
+            "role": null,
+            "visible": true,
+            "box": [
+              389.984375,
+              4,
+              36,
+              44
+            ],
+            "pointerEvents": "auto",
+            "text": "",
+            "disabled": false
+          },
+          "pauseHitTarget": {
+            "tag": "div",
+            "id": "",
+            "className": "game-overlay pause-settings-overlay",
+            "insidePauseControl": false
+          },
+          "pauseOverlay": {
+            "tag": "div",
+            "id": "",
+            "className": "game-overlay pause-settings-overlay",
+            "role": "dialog",
+            "visible": true,
+            "box": [
+              0,
+              0,
+              430,
+              825
+            ],
+            "pointerEvents": "auto",
+            "text": "MISSION PAUSIERTHalte die Stellung.Eine kurze Verschnaufpause.Die Cryptoids warten.Level 1 · Block 1/9 · GENESIS BELTDie Mission wurde wegen einer technischen Unterbrechung pausiert. Versuche, mit Fortsetzen weiterzuspielen.Shop & WaffenSYSTEM / EINSTELLUNGENMusik & Effekte50%›SteuerungRechtshändig›SpracheDeutsch›Anzeige›SpracheAktuelle Sprache: Deutsch◎Automatisch (Gerätesprache)⌄SteuerungMit einem Daumen steuern, mit dem anderen Power-ups aktivieren.◁Rechtshänder-Steuerung▷Linkshänder-SteuerungBerührungsempfindlichkeitSanftNormalSchnellSteuerbereichDer Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.KompaktNormalBreitStartposition des SchiffsÜber dem FingerDirekt unter dem FingerMusiklautstärkeMusiklautstärke50%0%25%50%75%100%Effektlautstärke35%0%25%50%75%100%Anzeige⛶Vollbild≋Vibration nicht verfügbar◌StandardeffekteFortsetzen",
+            "disabled": false
+          },
+          "overlays": [
+            {
+              "tag": "div",
+              "id": "",
+              "className": "game-overlay pause-settings-overlay",
+              "role": "dialog",
+              "visible": true,
+              "box": [
+                0,
+                0,
+                430,
+                825
+              ],
+              "pointerEvents": "auto",
+              "text": "MISSION PAUSIERTHalte die Stellung.Eine kurze Verschnaufpause.Die Cryptoids warten.Level 1 · Block 1/9 · GENESIS BELTDie Mission wurde wegen einer technischen Unterbrechung pausiert. Versuche, mit Fortsetzen weiterzuspielen.Shop & WaffenSYSTEM / EINSTELLUNGENMusik & Effekte50%›SteuerungRechtshändig›SpracheDeutsch›Anzeige›SpracheAktuelle Sprache: Deutsch◎Automatisch (Gerätesprache)⌄SteuerungMit einem Daumen steuern, mit dem anderen Power-ups aktivieren.◁Rechtshänder-Steuerung▷Linkshänder-SteuerungBerührungsempfindlichkeitSanftNormalSchnellSteuerbereichDer Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.KompaktNormalBreitStartposition des SchiffsÜber dem FingerDirekt unter dem FingerMusiklautstärkeMusiklautstärke50%0%25%50%75%100%Effektlautstärke35%0%25%50%75%100%Anzeige⛶Vollbild≋Vibration nicht verfügbar◌StandardeffekteFortsetzen",
+              "disabled": false
+            }
+          ],
+          "diagnostics": {
+            "key": "cryptoid_game_diagnostics_v1",
+            "state": "read",
+            "totalEntries": 1,
+            "entries": [
+              {
+                "reason": "loop-stall",
+                "errorName": "",
+                "phase": "SECTOR_INTRO",
+                "encounter": "normal",
+                "status": "paused",
+                "at": "2026-10-25T03:30:33.854Z",
+                "sector": 1,
+                "block": 1,
+                "width": 430,
+                "height": 825,
+                "enemies": 0,
+                "projectiles": 0,
+                "effects": 0,
+                "frameMs": 0,
+                "lastSavedAt": 0,
+                "inObservedFlow": true
+              }
+            ]
+          },
+          "recordedInterruptions": [
+            {
+              "reason": "loop-stall",
+              "errorName": "",
+              "phase": "SECTOR_INTRO",
+              "encounter": "normal",
+              "status": "paused",
+              "at": "2026-10-25T03:30:33.854Z",
+              "sector": 1,
+              "block": 1,
+              "width": 430,
+              "height": 825,
+              "enemies": 0,
+              "projectiles": 0,
+              "effects": 0,
+              "frameMs": 0,
+              "lastSavedAt": 0,
+              "inObservedFlow": true
+            }
+          ]
+        }
+      ],
+      "lifecycleStartedAt": 1792899025976,
+      "lifecycleDocumentStartedAt": 1792899025395,
+      "passed": false,
+      "failure": {
+        "stage": "pause-click",
+        "name": "TimeoutError",
+        "message": "locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.pause-control')\u001b[22m\n\u001b[2m    - locator resolved to <button type=\"button\" aria-label=\"Pause\" class=\"game-control pause-control\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"pause-settings-title\" class=\"game-overlay pause-settings-overlay\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"pause-settings-title\" class=\"game-overlay pause-settings-overlay\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    24 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"pause-settings-title\" class=\"game-overlay pause-settings-overlay\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
+      },
+      "failureScreenshot": {
+        "captured": true,
+        "path": "/workspace/scratch/fb7073945978/font-fixture/startup-lifecycle-webkit-healthy-failed.png",
+        "startedAtEpochMs": 1792899050887,
+        "completedAtEpochMs": 1792899051724
+      }
+    }
+  ],
+  "engine": "webkit",
+  "version": "26.5"
+}

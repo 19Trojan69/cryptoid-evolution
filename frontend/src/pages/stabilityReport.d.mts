@@ -1,5 +1,6 @@
 type TechnicalStorage = { localStorage?: Pick<Storage, 'getItem'>; sessionStorage?: Pick<Storage, 'getItem'>; indexedDB?: IDBFactory };
 export type StabilityReport = {
+  ownerLifecycle?: ReturnType<typeof import('../lib/ownerLifecycleEvidence.mjs').ownerLifecycleEvidence.report>;
   version: number; format: string; generatedAt: string | null; available: boolean;
   activeDocument: { startedAt?: number; ageMs?: number; navigationType?: string; route?: string } | null;
   storage: Record<string, string>; events: Record<string, unknown>[];

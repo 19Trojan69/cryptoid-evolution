@@ -1,0 +1,14 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('textarea') to be visible[22m
+
+    at /workspace/scratch/fb7073945978/cryptoid-evolution/frontend/scripts/verifyAdminLifecycle.mjs:67:38 {
+  log: [ "  - waiting for locator('textarea') to be visible" ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.22.1

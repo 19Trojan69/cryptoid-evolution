@@ -35,6 +35,7 @@ import { fullSessionFileName, fullSessionText, fullSessionTextPart, shareableFul
 import { armOwnerTimingCapture } from './ownerTimingCapture';
 import { armOwnerAudioAudit } from './ownerAudioAudit';
 import { installReloadDiagnostics } from './reloadDiagnostics';
+import { updateOwnerLifecycleAccess } from '../lib/ownerLifecycle';
 import { cssFramePacingStats } from '../lib/cssFramePacing';
 
 const tabs = [
@@ -132,9 +133,15 @@ const audioTests = [
 ] as const;
 
 async function verifyReportOwner() {
-  const { data } = await axiosClient.get<{ canAdmin?: boolean }>("/admin/status");
-  if (data.canAdmin !== true) throw new Error("owner_access_required");
-  return data;
+  try {
+    const { data } = await axiosClient.get<{ canAdmin?: boolean }>("/admin/status");
+    updateOwnerLifecycleAccess(data.canAdmin === true);
+    if (data.canAdmin !== true) throw new Error("owner_access_required");
+    return data;
+  } catch (error) {
+    updateOwnerLifecycleAccess(false);
+    throw error;
+  }
 }
 
 function OwnerStabilityReport() {

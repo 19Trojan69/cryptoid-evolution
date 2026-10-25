@@ -6,6 +6,8 @@ import { createPiOAuthState, PI_OAUTH_CLIENT_ID, PI_OAUTH_ORIGIN, PI_OAUTH_REDIR
 import axios from "axios";
 import { withPiAuthTimeout } from "../lib/piAuthTimeout";
 
+import { updateOwnerLifecycleAccess } from '../lib/ownerLifecycle';
+
 const detectPiBrowser = async () => {
   const ua = navigator.userAgent.toLowerCase();
   // Native identification should not wait for a potentially slow SDK host query.
@@ -45,14 +47,16 @@ export const useAuth = () => {
       const { data } = await axiosClient.get<SessionUser>("/user/me");
       setUser(data.user);
       setCanAdmin(data.canAdmin);
+      updateOwnerLifecycleAccess(data.canAdmin === true);
       setAdminMode(data.adminMode);
       sessionStorage.setItem(ADMIN_MODE_KEY, data.adminMode ? "1" : "0");
     } catch (error) {
+      updateOwnerLifecycleAccess(false);
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         localStorage.removeItem("cryptoid_pi_session");
         sessionStorage.removeItem(PI_ACCESS_TOKEN_KEY);
         sessionStorage.removeItem(ADMIN_MODE_KEY);
-        setUser(null); setCanAdmin(false); setAdminMode(false);
+        setUser(null); setCanAdmin(false); updateOwnerLifecycleAccess(false); setAdminMode(false);
         setAuthError("Pi session expired. Sign in again.");
       } else {
         setAuthError("Could not verify the Pi session. Please retry.");
@@ -73,6 +77,7 @@ export const useAuth = () => {
       sessionStorage.removeItem("cryptoid_pi_auto_signed_out");
       setUser(data.user);
       setCanAdmin(data.canAdmin);
+      updateOwnerLifecycleAccess(data.canAdmin === true);
       setAdminMode(false);
       sessionStorage.removeItem(ADMIN_MODE_KEY);
       setShowSignIn(false);
@@ -150,9 +155,11 @@ export const useAuth = () => {
             const { data } = await axiosClient.get<SessionUser>("/user/me");
             if (!active) return;
             setUser(data.user); setCanAdmin(data.canAdmin); setAdminMode(data.adminMode);
+            updateOwnerLifecycleAccess(data.canAdmin === true);
             sessionStorage.setItem(ADMIN_MODE_KEY, data.adminMode ? "1" : "0");
             return;
           } catch (error) {
+            updateOwnerLifecycleAccess(false);
             if (!active) return;
             if (!axios.isAxiosError(error) || error.response?.status !== 401) {
               setAuthError("Could not verify the Pi session. Please retry.");
@@ -176,12 +183,13 @@ export const useAuth = () => {
   }, [signIn]);
 
   const signOut = useCallback(async () => {
+    updateOwnerLifecycleAccess(false);
     setIsLoading(true);
     try {
       await axiosClient.get("/user/signout");
       sessionStorage.setItem("cryptoid_pi_auto_signed_out", "1");
       setUser(null);
-      setCanAdmin(false);
+      setCanAdmin(false); updateOwnerLifecycleAccess(false);
       setAdminMode(false);
       sessionStorage.removeItem(ADMIN_MODE_KEY);
       sessionStorage.removeItem(PI_ACCESS_TOKEN_KEY);
@@ -196,6 +204,7 @@ export const useAuth = () => {
   const setAdminPreview = useCallback(async (enabled: boolean) => {
     const { data } = await axiosClient.post<{ canAdmin: boolean; adminMode: boolean }>("/user/admin-mode", { enabled });
     setCanAdmin(data.canAdmin);
+      updateOwnerLifecycleAccess(data.canAdmin === true);
     setAdminMode(data.adminMode);
     sessionStorage.setItem(ADMIN_MODE_KEY, data.adminMode ? "1" : "0");
   }, []);

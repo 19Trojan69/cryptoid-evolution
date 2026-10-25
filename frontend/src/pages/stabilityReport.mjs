@@ -1,3 +1,4 @@
+import { ownerLifecycleEvidence } from '../lib/ownerLifecycleEvidence.mjs';
 import { technicalContext, contextEnums, reloadKinds } from './technicalReportContext.mjs';
 export { technicalContext } from './technicalReportContext.mjs';
 // Read only bounded local technical records. This module never imports the
@@ -159,6 +160,10 @@ export async function readOwnerStabilityReport(verifyOwner, getHost, active = ()
   if (!active()) return null;
   const host = getHost();
   const report = readStabilityReport(host, now);
+  if (includeFullSession) {
+    report.ownerLifecycle = ownerLifecycleEvidence.report(host);
+    report.available ||= report.ownerLifecycle.events.length > 0;
+  }
   if (!includeFullSession) return report;
   await settleFullSessionWrites();
   if (!active()) return null;

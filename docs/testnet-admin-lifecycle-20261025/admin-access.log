@@ -1,0 +1,35 @@
+NODE_ENV: undefined
+✔ only the configured verified UID is allowed (0.916301ms)
+✔ first verified owner login binds the UID and rejects another account (1.687647ms)
+✔ admin toggle rejects another Pi account and clears an active run (0.993066ms)
+✔ admin previews all inventory and starts a selected level without orders or score run (1.414681ms)
+✔ normal mode cannot jump to a level or claim admin inventory (0.221368ms)
+✔ admin mode does not approve real Pi purchases (0.527443ms)
+NODE_ENV: undefined
+✔ all dashboard routes require verified ownership, including downloads and writes (78.153196ms)
+✔ owner statistics are bounded hourly aggregates, with no visitor joins (10.852833ms)
+✔ boss and bonus tests expose the full fleet without creating orders, rewards or score runs (16.054321ms)
+✔ EUR valuation requires a confirmed Mainnet receipt and uses its actual timestamp (6.726393ms)
+✔ cookie-free admin intent restores privileges only after checking the verified owner (0.392833ms)
+✔ Mainnet and Testnet bind independent verified owner UIDs (0.573582ms)
+✔ receipt timestamp comes from the matching successful blockchain transaction (0.977763ms)
+✔ payment refresh verifies identity, network and completion before backfilling evidence (7.507984ms)
+✔ Testnet serves its own public catalog without the production proxy or database startup (3.218792ms)
+✔ local Testnet preview overrides a Mainnet header, preserves queries and starts once (0.831395ms)
+✔ preview opt-in cannot change the production network or archive query (0.380976ms)
+✔ default Testnet proxy does not start the local backend and keeps authentication, body and response cookies (4.687784ms)
+✔ local preview retains the existing Pi-key service for payments and payment administration (2.74612ms)
+✔ local score and reset routes stay Testnet and a failed startup can recover (0.661643ms)
+✔ local Testnet ledger and CSV do not require application API keys (0.352013ms)
+✔ Testnet translation gateway validates language, reference and public-list context before fetching (0.742053ms)
+✔ Testnet translation gateway reads public Testnet posts without credentials and translates posts/replies (14.96319ms)
+✔ Testnet translation gateway excludes hidden and Mainnet posts and handles upstream failures (1.397165ms)
+✔ Mainnet and opted-in local Testnet keep the native translation handler (0.417129ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 302.0598

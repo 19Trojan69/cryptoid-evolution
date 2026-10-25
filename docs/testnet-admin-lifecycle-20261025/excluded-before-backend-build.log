@@ -1,0 +1,89 @@
+node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/scratch/fb7073945978/cryptoid-evolution/backend/build/adminAccess.js' imported from /workspace/scratch/fb7073945978/cryptoid-evolution/backend/src/adminAccess.test.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:763:56)
+    at #resolve (node:internal/modules/esm/loader:687:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:607:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:276:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:381:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///workspace/scratch/fb7073945978/cryptoid-evolution/backend/build/adminAccess.js'
+}
+
+Node.js v24.22.1
+✖ backend/src/adminAccess.test.mjs (76.214273ms)
+node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/scratch/fb7073945978/cryptoid-evolution/backend/build/handlers/admin.js' imported from /workspace/scratch/fb7073945978/cryptoid-evolution/backend/src/adminDashboard.test.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:763:56)
+    at #resolve (node:internal/modules/esm/loader:687:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:607:35)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:276:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:381:17) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///workspace/scratch/fb7073945978/cryptoid-evolution/backend/build/handlers/admin.js'
+}
+
+Node.js v24.22.1
+✖ backend/src/adminDashboard.test.mjs (106.293058ms)
+node:internal/modules/cjs/loader:1564
+  const err = new Error(message);
+              ^
+
+Error: Cannot find module '../build/apiGateway.js'
+Require stack:
+- /workspace/scratch/fb7073945978/cryptoid-evolution/backend/src/apiGateway.test.mjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at file:///workspace/scratch/fb7073945978/cryptoid-evolution/backend/src/apiGateway.test.mjs:5:30
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspace/scratch/fb7073945978/cryptoid-evolution/backend/src/apiGateway.test.mjs'
+  ]
+}
+
+Node.js v24.22.1
+✖ backend/src/apiGateway.test.mjs (60.488236ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 0
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 119.675323
+
+✖ failing tests:
+
+test at backend/src/adminAccess.test.mjs:1:1
+✖ backend/src/adminAccess.test.mjs (76.214273ms)
+  'test failed'
+
+test at backend/src/adminDashboard.test.mjs:1:1
+✖ backend/src/adminDashboard.test.mjs (106.293058ms)
+  'test failed'
+
+test at backend/src/apiGateway.test.mjs:1:1
+✖ backend/src/apiGateway.test.mjs (60.488236ms)
+  'test failed'

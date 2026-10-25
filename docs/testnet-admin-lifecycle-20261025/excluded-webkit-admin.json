@@ -1,0 +1,33 @@
+{
+  "engine": "webkit",
+  "passed": false,
+  "syntheticAuthentication": true,
+  "noLiveAccounts": true,
+  "results": [
+    {
+      "mode": "owner",
+      "passed": true,
+      "pageErrors": [],
+      "statusRequests": 2,
+      "unexpected": [],
+      "lifecycleEvents": 1,
+      "noPublicGlobal": true
+    },
+    {
+      "mode": "non-owner",
+      "passed": true,
+      "pageErrors": [],
+      "statusRequests": 0,
+      "unexpected": [],
+      "evidenceReads": 0
+    },
+    {
+      "mode": "server-revoked",
+      "passed": false,
+      "pageErrors": [],
+      "statusRequests": 2,
+      "unexpected": []
+    }
+  ],
+  "version": "26.5"
+}

@@ -1,0 +1,34 @@
+{
+  "status": "prepared-not-released",
+  "branch": "codex/testnet-admin-lifecycle-20261025",
+  "base": "9dfed31ed5b407327874fa0647aa2feee0b6d45b",
+  "officialBefore": {
+    "deployment": "AsXUruYAuKRboZWFymr2cD3FkLCJ",
+    "source": "19de3e692f75a1c3e2eddf3438acc937c9dcac19"
+  },
+  "authorization": "Owner explicitly requests official Testnet integration; diagnosis accessible only in Admin.",
+  "backendUnchangedFromOfficial": true,
+  "mainMerge": false,
+  "mainnet": false,
+  "automaticDeployment": false,
+  "guestFixturesReleased": false,
+  "adminReport": "existing fresh /api/admin/status authorization; only AdminPage reads new report",
+  "capture": "server-confirmed Testnet owner only; revoked on signout/failed session/report verification",
+  "watchdog": {
+    "strictlyGreaterThanMs": 2500,
+    "intervalMs": 500,
+    "automaticResume": false
+  },
+  "limits": [
+    "Cold WPE loop-stall remains reproducible.",
+    "No historical White Screen cause established.",
+    "No physical iPhone long-run/full-campaign acceptance."
+  ],
+  "tests": {
+    "build": "175 tests, locale gate, TypeScript, Vite",
+    "backend": "build +25 admin/gateway tests pass",
+    "chromiumStartup": "7/7 startup + short Home/Play/Pause/Resume/Home pass",
+    "webkitLifecycle": "FAIL: loop-stall SECTOR_INTRO sector1/block1; diagnostic state read + screenshot retained; no automatic resume",
+    "adminBrowsers": "Chromium/WPE each: owner reads bounded evidence; non-owner has no report/storage reads; fresh server403 omits report/disables copy. 6/6 pass."
+  }
+}
