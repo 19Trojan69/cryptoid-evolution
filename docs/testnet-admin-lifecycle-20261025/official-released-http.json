@@ -1,0 +1,57 @@
+{
+  "/": {
+    "status": 200,
+    "bytes": 6030,
+    "sha256": "ed70973bc246dec6c36eb8d76bb35ecf527adf6b32f9c7bb94b337039ee1032f",
+    "realSdk": true,
+    "startupRecovery": true
+  },
+  "/api/": {
+    "status": 200,
+    "bytes": 27,
+    "sha256": "8811a6f55cb434d10921bccf7108016db61792083bb929eef0e592e376a0db9a"
+  },
+  "/api/admin/status": {
+    "status": 401,
+    "bytes": 29,
+    "sha256": "3dd506e8d648544a35a11e95fa6e3b9e9709ee99f5665ce4177e883db0479771"
+  },
+  "/private-preview-report.html": {
+    "status": 307,
+    "bytes": 15,
+    "sha256": "7c040f8633b8823d72ed63da9b3b2dfe9846e912c66a64c9433ec9c4815d76c2",
+    "location": "/"
+  },
+  "/private-preview-report.js": {
+    "status": 307,
+    "bytes": 15,
+    "sha256": "7c040f8633b8823d72ed63da9b3b2dfe9846e912c66a64c9433ec9c4815d76c2",
+    "location": "/"
+  },
+  "entryBundle": {
+    "path": "/assets/index-DyNzmHhs.js",
+    "bytes": 1911828,
+    "sha256": "a554fa1fa136e9c4bbf18108ac80af77fef5db27644d5a73dd2224d90dc05151",
+    "containsBuildIdentity": false
+  },
+  "buildIdentityChunks": [
+    {
+      "path": "/assets/AdminPage-CvzqHUUP.js",
+      "bytes": 47575,
+      "sha256": "0aea644917bfa1f64f736a97cb7fbfaed713e75ad3c26206e852c7bde9ae9697",
+      "containsExpectedSourceCommit": true
+    },
+    {
+      "path": "/assets/GamePage-DLGwNxwH.js",
+      "bytes": 235815,
+      "sha256": "0b44f82201f31b3dddc11177b8dd8161abbc0430d1ddbf845c6c53b91f1b9f3d",
+      "containsExpectedSourceCommit": true
+    },
+    {
+      "path": "/assets/performanceDiagnostics-DeU_pyGO.js",
+      "bytes": 71647,
+      "sha256": "3be4ec7d857ccbfcc20e7133adef8346bf934a3e6190f13f2c0588ce0a525a42",
+      "containsExpectedSourceCommit": true
+    }
+  ]
+}

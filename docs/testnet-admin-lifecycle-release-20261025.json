@@ -1,5 +1,5 @@
 {
-  "status": "preview-ready-official-testnet-release-blocked-by-auto-review",
+  "status": "official-testnet-released",
   "sourceCommit": "d615e86f8f1e4bc02b98200d2ba8e3ef2e0ab895",
   "sourceTree": "4ba6309b5c33d336d69e31b8b82fd29e360bb92a",
   "branch": "codex/testnet-admin-lifecycle-20261025",
@@ -11,16 +11,22 @@
   },
   "officialTestnet": {
     "url": "https://cryptoid-evolution-testnet.vercel.app/",
-    "unchanged": true,
-    "deployment": "AsXUruYAuKRboZWFymr2cD3FkLCJ",
-    "source": "19de3e692f75a1c3e2eddf3438acc937c9dcac19"
+    "unchanged": false,
+    "deployment": "EnU4fLgtc81qUEdB1YFGLBWcS1Mn",
+    "source": "d615e86f8f1e4bc02b98200d2ba8e3ef2e0ab895",
+    "sourceTree": "4ba6309b5c33d336d69e31b8b82fd29e360bb92a",
+    "status": "READY",
+    "durationSeconds": 71,
+    "uniqueUrl": "https://cryptoid-evolution-testnet-2a6fg6a6k-19-trojan69.vercel.app/",
+    "environment": "Vercel Production of existing Testnet project only"
   },
   "review": {
     "action": "Dashboard Promote to Production; rebuild exact d615e86 using production environment of existing cryptoid-evolution-testnet project, alias only cryptoid-evolution-testnet.vercel.app",
-    "outcome": "REJECTED; no alternate path attempted",
     "reason": "Reviewer treats Vercel Production release to the Testnet hostname as violating prior Testnet/Preview-only, no-Production restriction.",
     "dialogCancelled": true,
-    "needsExplicitClarification": "Authorize Vercel Production only within cryptoid-evolution-testnet, excluding separate Mainnet app."
+    "historicalOutcome": "REJECTED; no alternate path attempted",
+    "resolvedBy": "User explicitly replied ver\u00f6ffentliche bitte to the exact Vercel Production/Testnet-only approval request.",
+    "finalOutcome": "Approved; same Dashboard action accepted after explicit clarification; no workaround."
   },
   "observedPreviewChecks": [
     "Real API /api/admin/status returns not_authenticated without Pi session.",
@@ -36,5 +42,47 @@
     "Cold WPE loop-stall remains; no auto Resume/guard weakening.",
     "No historical White Screen cure/full-campaign/physical iPhone long-run claim.",
     "Live owner Pi report not read; native synthetic owner integration and actual backend authorization tests are separate evidence."
-  ]
+  ],
+  "previousOfficialRollback": {
+    "deployment": "AsXUruYAuKRboZWFymr2cD3FkLCJ",
+    "source": "19de3e692f75a1c3e2eddf3438acc937c9dcac19"
+  },
+  "releasedChecks": {
+    "httpEvidence": "testnet-admin-lifecycle-20261025/official-released-http.json",
+    "root": 200,
+    "api": 200,
+    "adminStatusWithoutPiAuth": 401,
+    "oldStandaloneReportHtml": {
+      "status": 307,
+      "location": "/"
+    },
+    "oldStandaloneReportJs": {
+      "status": 307,
+      "location": "/"
+    },
+    "browserHome": "ready, Play enabled, normal Pi sign-in button",
+    "browserGame": {
+      "route": "/game",
+      "paused": false,
+      "hud": true,
+      "scroll": [
+        0,
+        0
+      ],
+      "shellBounds": [
+        0,
+        0,
+        1363,
+        936
+      ],
+      "viewport": [
+        1363,
+        936
+      ]
+    },
+    "browserAdmin": "direct /admin?view=diagnostics shows verified-owner login only; no report without Pi auth",
+    "runtimeLogs": "not accessed; no claim of a complete runtime error scan",
+    "scope": "short smoke/start, not full campaign or physical iPhone long-run",
+    "servedBuildChunksContainExactCommit": true
+  }
 }
