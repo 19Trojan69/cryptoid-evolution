@@ -1,3 +1,19 @@
+# Explicit Testnet and production publication, 26 October 2026
+
+The owner now explicitly requests publication and the same code version in
+Testnet and production. This supersedes the older no-Mainnet/no-main-release
+scope only for the reviewed release based on2435ee0 and its merged PR169.
+Publish the verified existing Testnet runtime plus bounded reward-save recovery
+to both existing Vercel projects. Preserve separate network/account/payment
+configuration and data. The unfinished core rebuild (PR167), mouse-steering
+draft (PR168) and unmerged experiments remain outside this release.
+
+Frontend release gates244, backend checks124, TypeScript, Vite, changed-module
+lint and the native same-payload400-to200 recovery controls pass. Releasing this
+version does not prove the historical White Screen fixed. Keep the exact
+rollback sources and verify both live deployments, public URLs and code version.
+No database reset, account migration, purchase or new pool tuning is included.
+
 # Bounded invalid_save reward recovery, 26 October 2026
 
 The owner explicitly asks to continue the White Screen investigation, obtain

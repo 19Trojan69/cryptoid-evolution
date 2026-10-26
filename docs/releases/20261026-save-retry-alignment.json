@@ -1,0 +1,39 @@
+{
+  "authorizedBy": "Owner request: publish and bring Testnet and production to the same version",
+  "date": "2026-10-26",
+  "testedSource": "2435ee05eb547a459a996df34ac92fab84082c1f",
+  "mergedSource": "fe74a7c5bfe7ded2891a80de5ebb585af7d9cbdf",
+  "testedTree": "597f79104c756288462d1b8170814be838214819",
+  "targets": [
+    {
+      "project": "cryptoid-evolution-testnet",
+      "url": "https://cryptoid-evolution-testnet.vercel.app",
+      "previousSource": "20843b5501387dca8bb5616303934ece2ae6d581",
+      "previousDeployment": "dpl_JA3UqZt1CvRqr44GLMBB9gSCqvxf"
+    },
+    {
+      "project": "cryptoid-evolution",
+      "url": "https://cryptoid-evolution.vercel.app",
+      "previousSource": "907d2a7363345d00f0f90c54402bf04e887b64d9",
+      "previousStatusTarget": "https://vercel.com/19-trojan69/cryptoid-evolution/4hwbUd5xYqetnh5VHfFZ7H6pxwhe"
+    }
+  ],
+  "verification": {
+    "frontendReleaseGateTests": 244,
+    "backendTests": 124,
+    "typescript": true,
+    "vite": true,
+    "changedRuntimeModuleLint": true,
+    "nativeImmutableRetry": true
+  },
+  "runtimeChangesBeyondTestedSource": false,
+  "releaseMetadataOnly": [
+    "frontend/AGENTS.md",
+    "docs/releases/20261026-save-retry-alignment.json"
+  ],
+  "dataReset": false,
+  "accountMigration": false,
+  "networkSeparationPreserved": true,
+  "historicalWhiteScreenFixed": false,
+  "resultLocation": "PR169 release result; verify Vercel production status and both delivered code identities after publication"
+}
