@@ -109,7 +109,8 @@
       "codex/white-screen-runtime-audit-20261026": false,
       "codex/overlay-control-center-20261026": false,
       "codex/owner-crash-boundary-20261026": false,
-      "codex/level-completion-confirmation-20261026": false
+      "codex/level-completion-confirmation-20261026": false,
+      "codex/completion-recovery-release-record-20261026": false
     }
   }
 }
