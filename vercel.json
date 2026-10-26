@@ -108,7 +108,8 @@
       "codex/mobile-cockpit-level-completion-20261026": false,
       "codex/white-screen-runtime-audit-20261026": false,
       "codex/overlay-control-center-20261026": false,
-      "codex/owner-crash-boundary-20261026": false
+      "codex/owner-crash-boundary-20261026": false,
+      "codex/crash-boundary-release-record-20261026": false
     }
   }
 }
