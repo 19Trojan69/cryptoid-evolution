@@ -1,0 +1,86 @@
+{
+  "baseline": "bd23bd4babe0a2a14ee7d8ac1ad7f749d843abd5",
+  "normalBuild": {
+    "cases": 348,
+    "failed": 0,
+    "typescript": true,
+    "vite": true
+  },
+  "exploratoryHistoricalSuite": {
+    "releaseGate": false,
+    "tests": 46,
+    "pass": 28,
+    "fail": 18,
+    "failedNames": [
+      "initialization tests use the exact published source tree and preserve unrelated runtime",
+      "published effects negative control: gain-create leaves a false-success path",
+      "published effects negative control: limiter-connect leaves a false-success path",
+      "published music negative control: gain-create strands its bound media",
+      "published music negative control: gain-connect strands its bound media",
+      "the actual boss-clear gate releases a running but motionless jingle after its normal clear duration",
+      "a jingle with measured media progress keeps its complete playback even after the nominal clear duration",
+      "an advancing Web Audio clock cannot disguise a frozen media position",
+      "a native play promise that never settles cannot hold the boss transition open",
+      "a media stall after initial playback is bounded while pause and source changes reset observation",
+      "the whole GamePage retains published b92 behavior outside the exact audio wait and owner-counter additions",
+      "actual ship source settles and retries after Canvas create failure",
+      "actual ship source settles and retries after Canvas allocation failure",
+      "actual ship source settles and retries after Canvas context failure",
+      "unused queued paints allocate nothing, while a new live consumer can request the same variant",
+      "failed painted Blob decoding never publishes an unready hull and releases its URL",
+      "complete colored decoded hull is cached before its future consumer mounts",
+      "opt-in paint measurement keeps output/cache allocation unchanged and is silent by default"
+    ],
+    "notClaimedAsPassed": true,
+    "staticPngBaselineComparison": {
+      "tests": 8,
+      "pass": 1,
+      "fail": 7,
+      "sameFailedNames": true
+    }
+  },
+  "unchangedRuntime": [
+    {
+      "path": "frontend/src/pages/GamePage.tsx",
+      "sha256": "e835ec4c470bc0a967013c1d3a4015f65546b63fae9c3a8eb6b9766cad657f91"
+    },
+    {
+      "path": "frontend/src/pages/shipArtwork.ts",
+      "sha256": "afc05266b859e044b732e00cadb5e15349aa79e4ab573497f09c42aa35aac64f"
+    },
+    {
+      "path": "frontend/src/pages/gameAudio.ts",
+      "sha256": "3aeb4ca63260573b38d2b753bda61461eb2d4191beae2aac072ce722657077a8"
+    },
+    {
+      "path": "frontend/src/pages/musicPlayback.ts",
+      "sha256": "adfd371b7afff15c45ceefd71a71d993a4f5d5dc30f7ab43de001e0168b813eb"
+    },
+    {
+      "path": "frontend/src/pages/CanvasEffects.tsx",
+      "sha256": "2e373e02ae4eba3c21c6340a4c803294849f52d96ce6de711f7bcb608bfbae54"
+    },
+    {
+      "path": "frontend/src/pages/BonusRockLayer.tsx",
+      "sha256": "88534a8553ccfee658ce29197717aec24bddd53c8e512dbef8629dd6875b6576"
+    },
+    {
+      "path": "frontend/src/pages/BossHealthView.tsx",
+      "sha256": "daf937b8ada1cc5fee307b0addbf195c249d79a43219efbed615889bd1c9d7f1"
+    },
+    {
+      "path": "frontend/src/pages/bossHealthLayout.ts",
+      "sha256": "0cb788992f91d2ecac8476ea5456a577e947e8b6931440ed1f338422e167d358"
+    },
+    {
+      "path": "frontend/src/pages/bossWeaponTextures.ts",
+      "sha256": "4c7b35ba5ed92ca1e8694562929fe9b9bd2d588f9fe937a555e120c55ed8dec0"
+    },
+    {
+      "path": "frontend/src/pages/bossWeaponRenderer.ts",
+      "sha256": "fe9a3004aa0125f04f1f442e73e4cd087ab3edaf9312a6fc2e7c8c5ff03be579"
+    }
+  ],
+  "physicalDevice": false,
+  "historicalWhiteScreenFixed": false
+}

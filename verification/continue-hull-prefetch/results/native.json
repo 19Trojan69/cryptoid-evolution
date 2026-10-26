@@ -1,0 +1,122 @@
+{
+  "localOnly": true,
+  "physicalDevice": false,
+  "baseline": false,
+  "checks": [
+    "bonus/next group preparation settles with every visible original hull ready",
+    "completion cleanup evicts raw sources while prepared hulls stay retained",
+    "known player center avoids original-image reload on re-entry",
+    "player offset stays identical after remount",
+    "prepared transition creates no redundant raw Image jobs",
+    "all seven visible hulls remain ready after the transition",
+    "incoming prepared pins remain active",
+    "eight-color gallery shares one pending original-image job",
+    "all eight artwork outputs have visible pixels",
+    "cached artwork is reused without further source work",
+    "all gallery dimensions and original painted pixels match published control",
+    "boss map/card resolutions share one pending original-image job",
+    "both boss resolutions retain their distinct composed output and turrets",
+    "both boss dimensions and composed pixels match published control",
+    "no page errors"
+  ],
+  "errors": [],
+  "engine": "26.5",
+  "frames": [],
+  "evidence": {
+    "rawImages": [],
+    "centeringCanvases": 0,
+    "ready": 7,
+    "stats": {
+      "painted": 19,
+      "estimatedBytes": 6909206,
+      "sources": 0,
+      "pending": 0,
+      "retained": 13,
+      "retainCount": 19,
+      "sourceRetained": 0,
+      "sourceRetainCount": 0,
+      "jobsStarted": 0,
+      "jobsFinished": 0,
+      "queueWaitMaxMs": 0,
+      "materialTotalMs": 0,
+      "materialMaxMs": 0,
+      "encodeTotalMs": 0,
+      "decodeTotalMs": 0,
+      "sourceWorkTotalMs": 0,
+      "sourceWorkMaxMs": 0
+    }
+  },
+  "playerRemount": {
+    "jobs": [],
+    "centers": 0
+  },
+  "artwork": {
+    "jobs": [
+      "/ships/evolution/ship_20_stage_3.png"
+    ],
+    "outputs": [
+      {
+        "width": 261,
+        "height": 215,
+        "pixelHash": 2536838996
+      },
+      {
+        "width": 261,
+        "height": 215,
+        "pixelHash": 1807602554
+      },
+      {
+        "width": 261,
+        "height": 215,
+        "pixelHash": 2011613552
+      },
+      {
+        "width": 261,
+        "height": 215,
+        "pixelHash": 2215792729
+      },
+      {
+        "width": 261,
+        "height": 215,
+        "pixelHash": 1815197611
+      },
+      {
+        "width": 261,
+        "height": 215,
+        "pixelHash": 817416663
+      },
+      {
+        "width": 261,
+        "height": 215,
+        "pixelHash": 3494821309
+      },
+      {
+        "width": 261,
+        "height": 215,
+        "pixelHash": 3025000611
+      }
+    ],
+    "cachedSame": true,
+    "jobsAfterCache": 1
+  },
+  "bossArtwork": {
+    "jobs": [
+      "/ships/bosses/evolved/boss-01-hull.webp"
+    ],
+    "outputs": [
+      {
+        "width": 193,
+        "height": 82,
+        "pixelHash": 4253554651,
+        "turrets": "2"
+      },
+      {
+        "width": 594,
+        "height": 246,
+        "pixelHash": 3479434829,
+        "turrets": "2"
+      }
+    ]
+  },
+  "complete": true
+}

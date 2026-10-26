@@ -1,0 +1,29 @@
+{
+  "baseline": "bd23bd4babe0a2a14ee7d8ac1ad7f749d843abd5",
+  "modules": [
+    {
+      "path": "src/pages/paintedShip.ts",
+      "baselineErrors": 1,
+      "currentErrors": 1,
+      "baselineWarnings": 0,
+      "currentWarnings": 0,
+      "addedFindings": []
+    },
+    {
+      "path": "src/pages/usePreparedGameHulls.ts",
+      "baselineErrors": 0,
+      "currentErrors": 0,
+      "baselineWarnings": 0,
+      "currentWarnings": 0,
+      "addedFindings": []
+    },
+    {
+      "path": "src/pages/bossArtwork.ts",
+      "baselineErrors": 0,
+      "currentErrors": 0,
+      "baselineWarnings": 0,
+      "currentWarnings": 0,
+      "addedFindings": []
+    }
+  ]
+}
