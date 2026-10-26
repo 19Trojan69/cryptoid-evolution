@@ -1,0 +1,397 @@
+{
+  "archive": "raw-controls.tar.xz",
+  "archiveBytes": 8491488,
+  "archiveSha256": "b723d844a1fb1b4a16d6b45187eb153fb65e291e4c0d8ae84440e759b7d3868a",
+  "members": [
+    {
+      "path": "raw/account-flow-chromium-login-20261026-a.log",
+      "bytes": 653,
+      "sha256": "cd54bb250a7e36031f4174b1d10e022e952de722f36b64ef8e287d328bb9e94f"
+    },
+    {
+      "path": "raw/account-flow-chromium-login-20261026-b.json",
+      "bytes": 52890,
+      "sha256": "b070b5cc5fe1a3ca603492670077b40a95658e0d29a2b9c18010cd2c2d663f05"
+    },
+    {
+      "path": "raw/account-flow-chromium-login-20261026-b.log",
+      "bytes": 400,
+      "sha256": "c1a2e4218afac15335bcf688c459dd3a5c9e19b4541b97a8413ef369e7efd4a5"
+    },
+    {
+      "path": "raw/account-flow-chromium-login-20261026-c.json",
+      "bytes": 54564,
+      "sha256": "f74da2c7ec9a4f7578df06aa37b018c82d438ddf2ce4ea0ed0bab0defd2eb408"
+    },
+    {
+      "path": "raw/account-flow-chromium-login-20261026-c.log",
+      "bytes": 525,
+      "sha256": "d21727b4335db0c846fe743baee07b88ddb9b5f1f927422b048c7cf78c121ed5"
+    },
+    {
+      "path": "raw/account-flow-chromium-login-20261026-d-phone-pi-signin-expired-save.png",
+      "bytes": 623337,
+      "sha256": "0a50838498e56a28ea582c27ab4d79695ca00a4ceba40475d7b0b8bea0c24a9c"
+    },
+    {
+      "path": "raw/account-flow-chromium-login-20261026-d.json",
+      "bytes": 55000,
+      "sha256": "a01ab77998f21ecf295732939d7df30eb5ab1720d5e7d9124d58ac0126162073"
+    },
+    {
+      "path": "raw/account-flow-chromium-login-20261026-d.log",
+      "bytes": 435,
+      "sha256": "8fa4d6ef94acd30a7f864251d5b3a7bd3f3b063ea16751ee04627c446104f0db"
+    },
+    {
+      "path": "raw/account-flow-chromium-login-20261026-e-phone-pi-signin-expired-save.png",
+      "bytes": 623333,
+      "sha256": "fb858bcc3d2a484bd92950ae0c98970d6fd03cac4ddaa46479cf1d74a8be84bb"
+    },
+    {
+      "path": "raw/account-flow-chromium-login-20261026-e-phone-pi-signin-rejected.png",
+      "bytes": 44054,
+      "sha256": "c666cdf212d29319440159590dae17b0ab3fa0d10ac13411068661e0216d73ed"
+    },
+    {
+      "path": "raw/account-flow-chromium-login-20261026-e-tablet-restored-owner-expired-save.png",
+      "bytes": 1057950,
+      "sha256": "82163cb37f0a974a25819fe3765f3e206156bf58502ab8dab01fcafc53d6e1d7"
+    },
+    {
+      "path": "raw/account-flow-chromium-login-20261026-e-tablet-session-unavailable.png",
+      "bytes": 58701,
+      "sha256": "6420ddbde5c59b047f1264ab1fc5897d3b4b56185853cce37f161508cb441136"
+    },
+    {
+      "path": "raw/account-flow-chromium-login-20261026-e.json",
+      "bytes": 61616,
+      "sha256": "3f4ba88c09df21c7e472035cd43025a63055678af6de87eadf5509b06503ba0d"
+    },
+    {
+      "path": "raw/account-flow-chromium-login-20261026-e.log",
+      "bytes": 1123,
+      "sha256": "edfe56779b6761abc641a0478d10c6016cca070b09b6e66696b6f889ba7a0df0"
+    },
+    {
+      "path": "raw/account-flow-chromium-login-20261026-f-phone-no-session.png",
+      "bytes": 1869625,
+      "sha256": "782b286f828df18946bf617ff4eaaca41643f403f98f976c7385fc4218346421"
+    },
+    {
+      "path": "raw/account-flow-chromium-login-20261026-f-phone-pi-signin-expired-save.png",
+      "bytes": 623333,
+      "sha256": "fb858bcc3d2a484bd92950ae0c98970d6fd03cac4ddaa46479cf1d74a8be84bb"
+    },
+    {
+      "path": "raw/account-flow-chromium-login-20261026-f-phone-pi-signin-rejected.png",
+      "bytes": 44054,
+      "sha256": "c666cdf212d29319440159590dae17b0ab3fa0d10ac13411068661e0216d73ed"
+    },
+    {
+      "path": "raw/account-flow-chromium-login-20261026-f-tablet-restored-owner-expired-save.png",
+      "bytes": 1057952,
+      "sha256": "371bdd597b8638d181adf12e6a83c33559e1c115e2eb12c64bf903603b8702b7"
+    },
+    {
+      "path": "raw/account-flow-chromium-login-20261026-f-tablet-session-unavailable.png",
+      "bytes": 58701,
+      "sha256": "6420ddbde5c59b047f1264ab1fc5897d3b4b56185853cce37f161508cb441136"
+    },
+    {
+      "path": "raw/account-flow-chromium-login-20261026-f.json",
+      "bytes": 61702,
+      "sha256": "e1f3271207d10c8cad983d72f49dd3e6bcd1a2ca0dfc07c4ebdbc696da320425"
+    },
+    {
+      "path": "raw/account-flow-chromium-login-20261026-f.log",
+      "bytes": 896,
+      "sha256": "3321e08b206bfdc18bef7aa14008d5349ecbc1194c53795482d0644b2024b6b5"
+    },
+    {
+      "path": "raw/account-flow-v1.mjs",
+      "bytes": 18795,
+      "sha256": "bb754dd91b1bbe1c161dd207795c22a6b3aad300e683d9b56e180d9da59bff54"
+    },
+    {
+      "path": "raw/account-flow-v2.mjs",
+      "bytes": 18853,
+      "sha256": "77a8e8cc693cb417bdb98c2ea5da4683d1d9e151c402dc3eccfeb959b9aee814"
+    },
+    {
+      "path": "raw/account-flow-v3.mjs",
+      "bytes": 19217,
+      "sha256": "8b06e0d520ba9a1f733a0b9cab80780a18f59d46107f04d386b359ed83c558b6"
+    },
+    {
+      "path": "raw/account-flow-v4.mjs",
+      "bytes": 19589,
+      "sha256": "98250deddf7ef7c96f326a7d49c68df2d986f611fb9f391873a4b14161eabb06"
+    },
+    {
+      "path": "raw/account-flow-v5.mjs",
+      "bytes": 20477,
+      "sha256": "ca72a57a004758cef87f9b6364de19b88f9f9cf9f7f22e3cd509c7a03ecf48e4"
+    },
+    {
+      "path": "raw/account-flow-v6.mjs",
+      "bytes": 20915,
+      "sha256": "58ee20a6be1f44e89f1788f582892860139ead248ced9df3ed9b911357828002"
+    },
+    {
+      "path": "raw/account-flow-webkit-login-20261026-e.json",
+      "bytes": 53436,
+      "sha256": "783b5ab2d904af81e7ca20aa73589bf8a49d3dfa64ad256d8051facf6d9fa186"
+    },
+    {
+      "path": "raw/account-flow-webkit-login-20261026-e.log",
+      "bytes": 396,
+      "sha256": "7f1e1a9f1569ad620297ea0e6c2ebea4aac50766561665e4cafe67240f131106"
+    },
+    {
+      "path": "raw/account-flow-webkit-login-20261026-g-phone-no-session.png",
+      "bytes": 1633964,
+      "sha256": "9302e73b16c60a30886498dd3e4c598d24f26db1dfd3e69929fa2c08a568d097"
+    },
+    {
+      "path": "raw/account-flow-webkit-login-20261026-g-phone-pi-signin-expired-save.png",
+      "bytes": 278163,
+      "sha256": "679cc23d7ed308ef5ec9fb87cf5bbbda09c8341072b1b53c0de69512dd531147"
+    },
+    {
+      "path": "raw/account-flow-webkit-login-20261026-g-phone-pi-signin-rejected.png",
+      "bytes": 50753,
+      "sha256": "cac8d0a38314cc62c82bc1d209286f6a92a040f20afcb57eb7893e9fbc62e192"
+    },
+    {
+      "path": "raw/account-flow-webkit-login-20261026-g-tablet-restored-owner-expired-save-failed.png",
+      "bytes": 547467,
+      "sha256": "b90129d7f636a47eecd7f1cafafd0a7f907e49e07f4e06b8542d0bb1cf6f63bf"
+    },
+    {
+      "path": "raw/account-flow-webkit-login-20261026-g-tablet-session-unavailable.png",
+      "bytes": 61190,
+      "sha256": "a4309db1cb1b7b07724ccc03a84a2b77bb190d2199ac3f33a57e45fcf7fe1e90"
+    },
+    {
+      "path": "raw/account-flow-webkit-login-20261026-g.json",
+      "bytes": 61967,
+      "sha256": "2e1d472a2f3ff8c9910ead3dff824d764ca20fcdeac6c39f2e1772ba8a852a7c"
+    },
+    {
+      "path": "raw/account-flow-webkit-login-20261026-g.log",
+      "bytes": 1149,
+      "sha256": "698f9db135415f62740310fac8ba53bbd2db37844adb8260183140878a3c8038"
+    },
+    {
+      "path": "raw/account-flow-webkit-login-pair-account-20261026-h-tablet-restored-account-expired-save.png",
+      "bytes": 531450,
+      "sha256": "03f2591320783e25c5fa887517f044ffd4375150a6f02b257f56e2c792c04d3b"
+    },
+    {
+      "path": "raw/account-flow-webkit-login-pair-account-20261026-h.json",
+      "bytes": 54753,
+      "sha256": "162a441476de4a5bccca986ca7416e865a99f101257fa625c71df58b43fba388"
+    },
+    {
+      "path": "raw/account-flow-webkit-login-pair-account-20261026-h.log",
+      "bytes": 363,
+      "sha256": "acd17e3aa0d7bdb1d9752ec81da75c86e8f816ab3c73fb4a80db7427d3441488"
+    },
+    {
+      "path": "raw/account-flow-webkit-login-pair-owner-20261026-h-tablet-restored-owner-expired-save.png",
+      "bytes": 532259,
+      "sha256": "644b1237f87806f363f9a06bd0c6655fe21eb2f57b796ea84a42747d3aa0a069"
+    },
+    {
+      "path": "raw/account-flow-webkit-login-pair-owner-20261026-h.json",
+      "bytes": 54713,
+      "sha256": "e06a82822d8f43ef46f547dc80560d1459204d831f676b875e37260f4473e848"
+    },
+    {
+      "path": "raw/account-flow-webkit-login-pair-owner-20261026-h.log",
+      "bytes": 357,
+      "sha256": "456b404fb03247132fc82d0ac59ec4d472e4f8fd4265635f8e0637b8f92f7401"
+    },
+    {
+      "path": "raw/chromium-141-source-manifest.json",
+      "bytes": 7960,
+      "sha256": "632308ebf3fff8b11590bb4e6bc48ef3c74834f4010f4715cc59910f366e0405"
+    },
+    {
+      "path": "raw/chromium-sampling-source-20261026.json",
+      "bytes": 8570,
+      "sha256": "cb072bce23a6fc5e1ad137619d0eb4f46fea0acae612d531e4c177c0a0bca57c"
+    },
+    {
+      "path": "raw/chromium-unlocked-cache-20261026.json",
+      "bytes": 1837,
+      "sha256": "506de68a204d9e40811a001193a4ad60ef3c81dec04e1ffe2646c9a0ca98df40"
+    },
+    {
+      "path": "raw/login-followup-boundaries-20261026.log",
+      "bytes": 236,
+      "sha256": "c21d125de4e76b0981a6009d4a56019f0b16a76119a4f38054de40305c1f9d53"
+    },
+    {
+      "path": "raw/source-pixels-chromium-cache-native-mip-20261026-a.json",
+      "bytes": 7751,
+      "sha256": "84298d9f53bd265b6a21554912a1b87422ada03af9f706c2abd74dc190e1593b"
+    },
+    {
+      "path": "raw/source-pixels-chromium-cache-native-mip-20261026-a.log",
+      "bytes": 4427,
+      "sha256": "b20c2ebec71f28e41aa466f38767e93579a171f2152194ace969da6a4073f3e6"
+    },
+    {
+      "path": "raw/source-pixels-chromium-cache-source-20261026-a.json",
+      "bytes": 272784,
+      "sha256": "47356bbd9dbac2a168f898498ea0ec64eb59c75bb36ffa312930c03ce4c6126c"
+    },
+    {
+      "path": "raw/source-pixels-chromium-cache-source-20261026-a.log",
+      "bytes": 3463,
+      "sha256": "bfc189748157e78f7631d2c8a550fac9fe9bcaffa140d7e4ca4a796aada409f2"
+    },
+    {
+      "path": "raw/source-pixels-trace-v1.mjs",
+      "bytes": 11293,
+      "sha256": "1646fd717558103cff28ac5dfa00ecf42e113c233a9d9da6c4ad299716619a27"
+    },
+    {
+      "path": "sources/chromium-141/LICENSE",
+      "bytes": 1536,
+      "sha256": "368cca1106be99d39ecd32a38d8305585d802a475effb66380b91ffc9bcf709b"
+    },
+    {
+      "path": "sources/chromium-141/cc__paint__image_provider.cc",
+      "bytes": 1481,
+      "sha256": "0e8505c3bcf7ac06de3fb822dce35ee720c294a0d1c14093f0b4ba3e44f3fda6"
+    },
+    {
+      "path": "sources/chromium-141/cc__paint__image_provider.h",
+      "bytes": 2104,
+      "sha256": "a57eca0abf53c206dfa17a2343ef38df2e5dfa0d14779b388150d41fab0582cd"
+    },
+    {
+      "path": "sources/chromium-141/cc__paint__paint_flags.cc",
+      "bytes": 8765,
+      "sha256": "c1a51e1f90dada45fb54baf378f0a472c9e1649fdd8a9e70e57f584e0019b1d5"
+    },
+    {
+      "path": "sources/chromium-141/cc__paint__paint_image.cc",
+      "bytes": 17899,
+      "sha256": "acd94c42e81696f65dd6edd6fb622ae33b65f70b5ebfbfa92d2dc5b2730afca7"
+    },
+    {
+      "path": "sources/chromium-141/cc__paint__paint_op_buffer.cc",
+      "bytes": 22848,
+      "sha256": "125bed289767f9abf37ffac6c250287feadd2dfc8ea7f1d511496253fbb91d56"
+    },
+    {
+      "path": "sources/chromium-141/cc__paint__skia_paint_canvas.cc",
+      "bytes": 17572,
+      "sha256": "bf2ed04f3342c357e64bcc528fd0ea6c212f2f53a23ae03fca07644c628170bd"
+    },
+    {
+      "path": "sources/chromium-141/cc__tiles__image_decode_cache.h",
+      "bytes": 8593,
+      "sha256": "61586503f38c663daf7080bf3d9c8b85e4f52fed09f53cda0428706c1437b3fe"
+    },
+    {
+      "path": "sources/chromium-141/cc__tiles__software_image_decode_cache.cc",
+      "bytes": 31393,
+      "sha256": "377eeb087d659afb23f35291e9344eba73638b02b8e963a1298491473a6a95a6"
+    },
+    {
+      "path": "sources/chromium-141/cc__tiles__software_image_decode_cache.h",
+      "bytes": 6496,
+      "sha256": "139e5d5fb298302110870adc96538d433402d7884f5e59b7fabb1c8acca0c505"
+    },
+    {
+      "path": "sources/chromium-141/cc__tiles__software_image_decode_cache_utils.cc",
+      "bytes": 21076,
+      "sha256": "51f994b39c7ee78da840cea3b7d055dac90af4c906faab55526a98cb997f6316"
+    },
+    {
+      "path": "sources/chromium-141/third_party__blink__renderer__core__imagebitmap__image_bitmap.cc",
+      "bytes": 30184,
+      "sha256": "c81dc1c92ed1c59020088483a60b4a546c825a9ce0564e19309ce861d41fe78e"
+    },
+    {
+      "path": "sources/chromium-141/third_party__blink__renderer__modules__canvas__canvas2d__base_rendering_context_2d.cc",
+      "bytes": 65340,
+      "sha256": "4e9eedefe0822e250c0ec6063edfc0716beec797845affa2b661fed89cdd7c47"
+    },
+    {
+      "path": "sources/chromium-141/third_party__blink__renderer__modules__canvas__canvas2d__canvas_2d_recorder_context.cc",
+      "bytes": 108880,
+      "sha256": "cda6cb5660965e4d9bff0f766a9487335d47bc2708d860a4156bacdd0718acc1"
+    },
+    {
+      "path": "sources/chromium-141/third_party__blink__renderer__modules__canvas__canvas2d__canvas_rendering_context_2d_state.cc",
+      "bytes": 36618,
+      "sha256": "6c8203178638a48b66939bbd43675c4094c967ae9813595b083d140d94765fca"
+    },
+    {
+      "path": "sources/chromium-141/third_party__blink__renderer__platform__graphics__bitmap_image.cc",
+      "bytes": 17283,
+      "sha256": "183ddef75bec472d52773b16bad7af8bf76b678d47dc57826925bf9c79cbaf7d"
+    },
+    {
+      "path": "sources/chromium-141/third_party__blink__renderer__platform__graphics__decoding_image_generator.cc",
+      "bytes": 13412,
+      "sha256": "653a18822be66d87e4e5256ce78ac956bcf249442e3470e43bc83d250aee01b5"
+    },
+    {
+      "path": "sources/chromium-141/third_party__blink__renderer__platform__graphics__graphics_context.cc",
+      "bytes": 33144,
+      "sha256": "ac546ec93903154b0a771f2445c0ac70c4d9a15ba9774945ee865fc3af8346a1"
+    },
+    {
+      "path": "sources/chromium-141/third_party__blink__renderer__platform__graphics__image.cc",
+      "bytes": 17048,
+      "sha256": "8b67c5400045a7284a2ec87c18419658c94439ff7790dffd066aa531cbad7327"
+    },
+    {
+      "path": "sources/chromium-141/third_party__blink__renderer__platform__graphics__image_decoding_store.cc",
+      "bytes": 12083,
+      "sha256": "dc2dc5a65ccf01744e2068a55dde7b3f5439abe1030ec8ed95b5a9a646d018c0"
+    },
+    {
+      "path": "sources/chromium-141/third_party__blink__renderer__platform__graphics__image_frame_generator.cc",
+      "bytes": 13370,
+      "sha256": "f353ccdbfe9f6236b61497155d33baea357250bd11889c6ecb68424854451f49"
+    },
+    {
+      "path": "sources/chromium-141/third_party__blink__renderer__platform__graphics__static_bitmap_image.cc",
+      "bytes": 4648,
+      "sha256": "652696d9f2d19d6bcaf98c0967d61d4815762dd1453c96f64c5c260a7c4aec4d"
+    },
+    {
+      "path": "sources/chromium-141/third_party__blink__renderer__platform__graphics__unaccelerated_static_bitmap_image.cc",
+      "bytes": 6148,
+      "sha256": "670b7f06edb292e5bc2048cd6d600e712bb5dea79802afcfa050729d5e06cf0a"
+    },
+    {
+      "path": "sources/chromium-141/third_party__blink__renderer__platform__image-decoders__webp__webp_image_decoder.cc",
+      "bytes": 30701,
+      "sha256": "4ad254c0101db4604591ab2c7a290fa8451b7f88079f16aa71b03eb0a5d892cc"
+    },
+    {
+      "path": "sources/final/accountSourceManifest.json",
+      "bytes": 61857,
+      "sha256": "a33416556de973638e9afb2b418c89f42d7ffa179ceedf228769f185baa28f36"
+    },
+    {
+      "path": "sources/final/verify-account-flow.mjs",
+      "bytes": 21432,
+      "sha256": "f2ed665f7470f06549469f9aae576212fc5aa0eb783490fbd6738fd5f52fe492"
+    },
+    {
+      "path": "sources/final/verify-texture-pixels.mjs",
+      "bytes": 11709,
+      "sha256": "033dccd185c3d760080d0afd53b0d2b45f487be76c6c2d2df0d36c25af5d146b"
+    }
+  ]
+}

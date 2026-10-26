@@ -103,7 +103,8 @@
       "codex/preview-resume-investigation-20261024": false,
       "codex/private-preview-lifecycle-capture-20261024": false,
       "codex/testnet-admin-lifecycle-20261025": false,
-      "codex/testnet-whitescreen-boss-stop-20261025": false
+      "codex/testnet-whitescreen-boss-stop-20261025": false,
+      "codex/core-rebuild-whitescreen-20261025": false
     }
   }
 }

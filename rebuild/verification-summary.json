@@ -1,0 +1,427 @@
+{
+  "referenceCommit": "20843b5501387dca8bb5616303934ece2ae6d581",
+  "baseCommit": "8c4f17164daf625a4c9610b5d2d88946010c8496",
+  "isolated": true,
+  "unitContractCases": 43,
+  "typecheck": "passed",
+  "simulationBoundary": {
+    "modules": 41,
+    "forbiddenRuntimeImports": 0,
+    "browserNetworkStorageEffects": 0
+  },
+  "native": [
+    {
+      "engine": "chromium",
+      "version": "141.0.7390.37",
+      "cases": [
+        "original ships, live input, projectiles, explicit pause/resume",
+        "controlled renderer failure retains last frame and same run",
+        "12 actual normal/boss scene mount-close cycles return managed resources to zero",
+        "boss 4 original hull, live mounted guns and original projectile presentation",
+        "desktop geometry starts with original image resolution",
+        "canceled real asset loading cannot revive a closed scene"
+      ],
+      "sceneCycles": 12,
+      "closedDomCounts": [
+        19
+      ],
+      "errors": 0,
+      "missingAssets": 0,
+      "crashes": 0,
+      "closedManagedBytes": [
+        0
+      ]
+    },
+    {
+      "engine": "webkit",
+      "version": "26.5",
+      "cases": [
+        "original ships, live input, projectiles, explicit pause/resume",
+        "controlled renderer failure retains last frame and same run",
+        "12 actual normal/boss scene mount-close cycles return managed resources to zero",
+        "boss 4 original hull, live mounted guns and original projectile presentation",
+        "desktop geometry starts with original image resolution",
+        "canceled real asset loading cannot revive a closed scene"
+      ],
+      "sceneCycles": 12,
+      "closedDomCounts": [
+        19
+      ],
+      "errors": 0,
+      "missingAssets": 0,
+      "crashes": 0,
+      "closedManagedBytes": [
+        0
+      ]
+    }
+  ],
+  "historicalWhiteScreenFixed": false,
+  "fullFeatureMigration": false,
+  "deployed": false,
+  "limitations": [
+    "Incomplete single-encounter fixture; dynamic scene handoff, complete loadouts/powers/effects/audio and durable boss/bonus/save ports pending.",
+    "All 50 boss rule contracts are short deterministic simulations, not complete fights.",
+    "Native cases use Linux Chromium and WPE WebKit; physical affected devices and full campaign acceptance remain open.",
+    "Managed resource accounting is not browser-process or GPU memory.",
+    "Original full-resolution assets are reused; complete original HUD/visual parity is not yet accepted.",
+    "No real account, wallet, inventory, save or payment mutation.",
+    "Decoder, bitmap alpha/colour/sampling, padded allocation and fresh-context probes are not accepted fixes; required decoder choice remains open."
+  ],
+  "pureBossStopGate": {
+    "contracts": 7,
+    "realAdaptersIntegrated": false
+  },
+  "rendererAcceptance": {
+    "status": "blocked",
+    "acceptedDefaultDecoder": false,
+    "sameRunVisibleSurfaceCorrection": "native control passes both engines",
+    "exactBossTextureMetadata": {
+      "images": 100,
+      "originalFilesGitVerified": 150
+    },
+    "allBossModelsRender": 50,
+    "historicalWhiteScreenFixed": false
+  },
+  "additionalFunctionalEvidence": [
+    {
+      "engine": "chromium",
+      "version": "141.0.7390.37",
+      "decoder": "blob-image",
+      "cycles": 50,
+      "uniqueBossModels": 50,
+      "functionalCases": 8,
+      "complete": true,
+      "memoryAccepted": false,
+      "decoderPixels": {
+        "bitmapVsOriginalImage": {
+          "channels": 110288,
+          "maxDelta": 255
+        },
+        "blobVsOriginalImage": {
+          "channels": 0,
+          "maxDelta": 0
+        },
+        "originalImageControl": {
+          "channels": 0,
+          "maxDelta": 0
+        },
+        "managedBytes": 0
+      },
+      "lastClosedCheckpointPssMiB": 758.681640625,
+      "managedClosedBytes": [
+        0
+      ]
+    },
+    {
+      "engine": "webkit",
+      "version": "26.5",
+      "decoder": "blob-image",
+      "cycles": 100,
+      "uniqueBossModels": 50,
+      "functionalCases": 8,
+      "complete": true,
+      "memoryAccepted": false,
+      "decoderPixels": {
+        "bitmapVsOriginalImage": {
+          "channels": 0,
+          "maxDelta": 0
+        },
+        "blobVsOriginalImage": {
+          "channels": 0,
+          "maxDelta": 0
+        },
+        "originalImageControl": {
+          "channels": 0,
+          "maxDelta": 0
+        },
+        "managedBytes": 0
+      },
+      "lastClosedCheckpointPssMiB": 857.4443359375,
+      "managedClosedBytes": [
+        0
+      ]
+    },
+    {
+      "engine": "webkit",
+      "version": "26.5",
+      "decoder": "bitmap",
+      "cycles": 100,
+      "uniqueBossModels": 50,
+      "functionalCases": 8,
+      "complete": true,
+      "memoryAccepted": false,
+      "decoderPixels": {
+        "bitmapVsOriginalImage": {
+          "channels": 0,
+          "maxDelta": 0,
+          "opaqueDifferences": 0
+        },
+        "blobVsOriginalImage": {
+          "channels": 0,
+          "maxDelta": 0,
+          "opaqueDifferences": 0
+        },
+        "originalImageControl": {
+          "channels": 0,
+          "maxDelta": 0,
+          "opaqueDifferences": 0
+        },
+        "variants": [
+          {
+            "name": "bitmap",
+            "channels": 0,
+            "maxDelta": 0,
+            "opaqueDifferences": 0
+          },
+          {
+            "name": "image",
+            "channels": 0,
+            "maxDelta": 0,
+            "opaqueDifferences": 0
+          },
+          {
+            "name": "blob-image",
+            "channels": 0,
+            "maxDelta": 0,
+            "opaqueDifferences": 0
+          },
+          {
+            "name": "image-control",
+            "channels": 0,
+            "maxDelta": 0,
+            "opaqueDifferences": 0
+          },
+          {
+            "name": "bitmap-none",
+            "channels": 0,
+            "maxDelta": 0,
+            "opaqueDifferences": 0
+          },
+          {
+            "name": "bitmap-premultiply",
+            "channels": 0,
+            "maxDelta": 0,
+            "opaqueDifferences": 0
+          },
+          {
+            "name": "bitmap-color-none",
+            "channels": 0,
+            "maxDelta": 0,
+            "opaqueDifferences": 0
+          },
+          {
+            "name": "bitmap-both-none",
+            "channels": 0,
+            "maxDelta": 0,
+            "opaqueDifferences": 0
+          },
+          {
+            "name": "bitmap-medium",
+            "channels": 0,
+            "maxDelta": 0,
+            "opaqueDifferences": 0
+          },
+          {
+            "name": "bitmap-high",
+            "channels": 89664,
+            "maxDelta": 255,
+            "opaqueDifferences": 70817
+          }
+        ],
+        "managedBytes": 0
+      },
+      "lastClosedCheckpointPssMiB": 882.2529296875,
+      "managedClosedBytes": [
+        0
+      ]
+    }
+  ],
+  "nativeAttribution": {
+    "engine": "WPE26.5",
+    "cycles": 100,
+    "idleSeconds": 20,
+    "afterIdle": {
+      "pssMiB": 1042.7763671875,
+      "readable": 3,
+      "unavailable": 0,
+      "inspector": {
+        "patched": true,
+        "errors": [],
+        "latest": {
+          "timestamp": 57.538016999998945,
+          "categories": [
+            {
+              "type": "javascript",
+              "size": 6152492
+            },
+            {
+              "type": "jit",
+              "size": 0
+            },
+            {
+              "type": "images",
+              "size": 0
+            },
+            {
+              "type": "layers",
+              "size": 0
+            },
+            {
+              "type": "page",
+              "size": 0
+            },
+            {
+              "type": "other",
+              "size": 804044500
+            }
+          ]
+        },
+        "canvasCount": 1,
+        "canvasBytes": 0
+      }
+    },
+    "interpretation": "Broad other category remains unattributed. No complete native memory or historical White Screen fix is accepted."
+  },
+  "nextStep": "Resolve the Chromium scaling path for explicitly disposable full-resolution sources without changing original output quality. Treat WPE Mesa/Gallium retention as a distinct local driver path; establish a bounded driver/scene baseline before adopting a loader or integrating game functions. Do not repeat the completed stage/replay matrix.",
+  "nativeStageAttribution": {
+    "status": "triggering-stages-separated-exact-allocation-lifetime-open",
+    "evidence": "evidence/memory-stages-20261025/summary.json",
+    "completeControls": 8,
+    "cyclesPerControl": 100,
+    "totalClosedCycles": 800,
+    "failedControlsPreserved": 8,
+    "decoder": "blob-image",
+    "fixedViewport": {
+      "width": 393,
+      "height": 744,
+      "deviceScaleFactor": 3
+    },
+    "idleSeconds": 20,
+    "results": [
+      {
+        "engine": "chromium",
+        "mode": "fetch-only",
+        "baselineMiB": 165.2431640625,
+        "idle20MiB": 228.94140625,
+        "idleDeltaMiB": 63.6982421875
+      },
+      {
+        "engine": "chromium",
+        "mode": "decode-only",
+        "baselineMiB": 166.189453125,
+        "idle20MiB": 736.7568359375,
+        "idleDeltaMiB": 570.5673828125
+      },
+      {
+        "engine": "chromium",
+        "mode": "prepare-only",
+        "baselineMiB": 165.0126953125,
+        "idle20MiB": 735.6630859375,
+        "idleDeltaMiB": 570.650390625
+      },
+      {
+        "engine": "chromium",
+        "mode": "draw-dispose",
+        "baselineMiB": 163.5322265625,
+        "idle20MiB": 752.56640625,
+        "idleDeltaMiB": 589.0341796875
+      },
+      {
+        "engine": "webkit",
+        "mode": "fetch-only",
+        "baselineMiB": 292.5166015625,
+        "idle20MiB": 351.939453125,
+        "idleDeltaMiB": 59.4228515625
+      },
+      {
+        "engine": "webkit",
+        "mode": "decode-only",
+        "baselineMiB": 291.728515625,
+        "idle20MiB": 372.140625,
+        "idleDeltaMiB": 80.412109375
+      },
+      {
+        "engine": "webkit",
+        "mode": "prepare-only",
+        "baselineMiB": 292.044921875,
+        "idle20MiB": 384.36328125,
+        "idleDeltaMiB": 92.318359375
+      },
+      {
+        "engine": "webkit",
+        "mode": "draw-dispose",
+        "baselineMiB": 291.2626953125,
+        "idle20MiB": 743.3046875,
+        "idleDeltaMiB": 452.0419921875
+      }
+    ],
+    "chromium": "Large retention already triggered by decode-only; approximately 492.2 MiB additional PSS in Chromium shared-file mappings.",
+    "webkit": "Large additional retention triggered by drawing, approximately 359.7 MiB baseline-adjusted excess above prepare-only, mostly native heap region.",
+    "exactAllocationOwnershipProven": false,
+    "boundedNativeMemoryAccepted": false,
+    "historicalWhiteScreenFixed": false,
+    "forcedGC": false,
+    "pixelReadback": false,
+    "rendererOrDecoderBehaviorChanged": false
+  },
+  "nativeAllocationOwnership": {
+    "status": "specific-native-paths-identified-loader-and-historical-crash-still-open",
+    "evidence": "evidence/memory-ownership-20261026/summary.json",
+    "primaryCases": 8,
+    "primaryClosedCycles": 4000,
+    "historicalWhiteScreenFixed": false,
+    "nativeMemoryAccepted": false,
+    "acceptedDefaultDecoder": false,
+    "chromium": {
+      "provider": "cc/image_memory",
+      "idleBytes": 519782400,
+      "globalDumpSuccess": false,
+      "partialDiagnosticsRemainFailed": true
+    },
+    "webkit": {
+      "nativeCallChain": "Linux Mesa/Gallium",
+      "pairedObservedLiveMallocIncrementBytes": 291012989,
+      "profileStoppedBeforeBrowserExit": true,
+      "notPhoneGPUMemory": true,
+      "notPermanentLeakProof": true
+    },
+    "sourcePixels": {
+      "testedImages": 3,
+      "fullResolutionImageVsBitmap": "identical",
+      "chromiumScaledPixels": "differ",
+      "universalSamplingCorrection": "not accepted"
+    },
+    "forcedGC": false,
+    "runtimeRendererOrLoaderChanged": false
+  },
+  "loginAndCacheFollowup": {
+    "evidence": "evidence/login-cache-followup-20261026/README.md",
+    "ownerObservation": "evidence/owner-observations-20261026/observation.json",
+    "question": "PC Sandbox without deliberate Pi login versus affected smartphone/tablet account runs",
+    "pinnedOriginalRuntimeSources": 239,
+    "chromiumFiveCasesComplete": true,
+    "webkitFullSuiteComplete": false,
+    "webkitRetainedFailure": "Restored-owner tablet loop-stall at initial elapsed0, same document/run; earlier phone timeout lacks final-state capture",
+    "freshWebkitOrdinaryAndOwnerTabletControlsComplete": true,
+    "realPiAuthentication": false,
+    "physicalMobileAcceptance": false,
+    "historicalWhiteScreenFixed": false,
+    "nativeImageCacheIdleReportedBytes": 519782400,
+    "nativeImageCacheIdleLockedBytes": 0,
+    "nativeGlobalDumpAccepted": false,
+    "nativeSamplingTrace": {
+      "imageDrawsWithCache": 27,
+      "bitmapDrawsWithCache": 0,
+      "draws": 36,
+      "forcedGC": false
+    },
+    "mediumConstructorResizeAccepted": false,
+    "runtimeGraphicsAudioClockChanged": false,
+    "simulationBoundaryAudit": {
+      "modules": 41,
+      "forbiddenImports": 0,
+      "runtimeEffects": 0
+    },
+    "deployed": false
+  }
+}

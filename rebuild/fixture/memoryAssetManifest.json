@@ -1,0 +1,612 @@
+{
+  "sourceCommit": "3741cbb4d0bb15595950c2c97c01addaa2156393",
+  "assets": [
+    {
+      "url": "/ships/bosses/evolved/boss-01-guns.webp",
+      "bytes": 29720,
+      "sha": "7c4ccfd27d0d03f1654e52267ba937e903efb514",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-01-hull.webp",
+      "bytes": 80784,
+      "sha": "7805c660ff396510acd57457a9e00ddb7a95916c",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-02-guns.webp",
+      "bytes": 72216,
+      "sha": "b66ef7fbd3b30f65cc7fcf272eae445e05859550",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-02-hull.webp",
+      "bytes": 75408,
+      "sha": "7271491611e671c9070801672dff1408bd06458c",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-03-guns.webp",
+      "bytes": 95858,
+      "sha": "ccaf9ddc0ab57659bec994b081ecd1d715552378",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-03-hull.webp",
+      "bytes": 93760,
+      "sha": "7b509d02c38fe3c19489d17efee29aa0fa067ea4",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-04-guns.webp",
+      "bytes": 46594,
+      "sha": "63d3043953c6ad2c00a7931118912eb8a5918d57",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-04-hull.webp",
+      "bytes": 79186,
+      "sha": "58c0a40a1afeabb1c7ce1cc54947cc442f99e4b5",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-05-guns.webp",
+      "bytes": 87772,
+      "sha": "ef675a4d4e8b3861ce4b02691d8679a3e5df1321",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-05-hull.webp",
+      "bytes": 107992,
+      "sha": "90fec5f4632b33105c9c72209bd93a8db8d0399a",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-06-guns.webp",
+      "bytes": 147390,
+      "sha": "047b2e3e5b94b5a0e70ef419a138bf58df4e019c",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-06-hull.webp",
+      "bytes": 97276,
+      "sha": "6384dddbc74bfe7b5c54a2355e89ce3e225a6be7",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-07-guns.webp",
+      "bytes": 121298,
+      "sha": "f2e1560e869ed30b84842a600aa78993c7260052",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-07-hull.webp",
+      "bytes": 88580,
+      "sha": "e9ea96d23b073785410da91f1766cd29911b9565",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-08-guns.webp",
+      "bytes": 43158,
+      "sha": "208117634ab02e515602ca8fb881879100a7b232",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-08-hull.webp",
+      "bytes": 72770,
+      "sha": "899a5c186bade8e985e9f41c4f922a334f295b62",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-09-guns.webp",
+      "bytes": 50316,
+      "sha": "157d1350b8d1165adf293ffbee91be3852f0bd20",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-09-hull.webp",
+      "bytes": 91578,
+      "sha": "cc7ceea368c6788a32bfc46479501d08fd43693b",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-10-guns.webp",
+      "bytes": 146850,
+      "sha": "5a5910335ff29ff042323c93dbf879fc123e8a61",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-10-hull.webp",
+      "bytes": 80164,
+      "sha": "070099a13aa87d1e74f10eb0680207f333ac78d2",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-11-guns.webp",
+      "bytes": 58414,
+      "sha": "c22dc9111eb3fdcf2db4eb650cc72f222bef68a3",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-11-hull.webp",
+      "bytes": 119866,
+      "sha": "365142e0c881cd25e85d2c7a59aa48de77cde983",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-12-guns.webp",
+      "bytes": 45204,
+      "sha": "001136e0f47f9027ca78369912332e515b031a7b",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-12-hull.webp",
+      "bytes": 90922,
+      "sha": "a357f79ddaffca60d4de87d23d2d1c9e6d19faae",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-13-guns.webp",
+      "bytes": 51946,
+      "sha": "b20eb185bec9a7700bc05569ffc15498a0b05211",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-13-hull.webp",
+      "bytes": 100710,
+      "sha": "364da85868c35d35dac2306df3ef7d37c9f6a803",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-14-guns.webp",
+      "bytes": 153068,
+      "sha": "f723acea442a8ee8ed87b81e1a137d932a5e4098",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-14-hull.webp",
+      "bytes": 109624,
+      "sha": "1afbd5a2f4817c3ac54cee3d5753f9e01f2c8f8a",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-15-guns.webp",
+      "bytes": 57674,
+      "sha": "8ed602f073dc9d6fdf2d156b5dc9a40a92bb18d8",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-15-hull.webp",
+      "bytes": 92198,
+      "sha": "6cb79214d2d62fad54eb676f4171e62b8f8a7312",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-16-guns.webp",
+      "bytes": 81088,
+      "sha": "d3759c4518e38094d10225314ceb96a4dd07d2f7",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-16-hull.webp",
+      "bytes": 96912,
+      "sha": "9d82b8cf661400a103675e6765e81834ca916211",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-17-guns.webp",
+      "bytes": 59592,
+      "sha": "8488139c76fe2eeb2fd6205323c9e5b9ab80804f",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-17-hull.webp",
+      "bytes": 104374,
+      "sha": "6d13c5b242340bf0268b26daa32e0a36cce582ac",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-18-guns.webp",
+      "bytes": 229314,
+      "sha": "113df9711da322e81f399506ab83c7a199d670c3",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-18-hull.webp",
+      "bytes": 99532,
+      "sha": "20316ef1aaaf63b6a2af6f6fe1634e212563dcfc",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-19-guns.webp",
+      "bytes": 273954,
+      "sha": "9d47b643ea9838cc86b15bc161695d8a442b1511",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-19-hull.webp",
+      "bytes": 108826,
+      "sha": "501da8ba4f7d2781f96a76fc8dcfe2de11c75ceb",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-20-guns.webp",
+      "bytes": 203908,
+      "sha": "176dce9cedafd73f38e51d53fa1f2044f7569619",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-20-hull.webp",
+      "bytes": 85902,
+      "sha": "d4166c5a4ce8c6f834b6ac01b92a611159137b0f",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-21-guns.webp",
+      "bytes": 196872,
+      "sha": "87febf1011d6d16ea614deeed35a68b33516419b",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-21-hull.webp",
+      "bytes": 105462,
+      "sha": "0d7a0c903089d1a21616dc21340f12c280957d8f",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-22-guns.webp",
+      "bytes": 64750,
+      "sha": "df57606b3444496ad67237d0a222b51fdaa9e67d",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-22-hull.webp",
+      "bytes": 75522,
+      "sha": "628d0c65a29b582fb21cc67cffe2ca18d808b06e",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-23-guns.webp",
+      "bytes": 217750,
+      "sha": "f3f0be554eb5073aa7d380ddbab22b4377646441",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-23-hull.webp",
+      "bytes": 90898,
+      "sha": "d310c08f327716dc07b53c0c5962f4c97b8e5da3",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-24-guns.webp",
+      "bytes": 233436,
+      "sha": "144d0e50b79eb92bce7fa89be8cf504de7486c63",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-24-hull.webp",
+      "bytes": 87316,
+      "sha": "6622e3ccb0d22d2df25ac05d331ef98a02540764",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-25-guns.webp",
+      "bytes": 254050,
+      "sha": "6de8f143e89620fa342408ec54cd26cc9657f782",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-25-hull.webp",
+      "bytes": 80958,
+      "sha": "515f2c1e4259ae0390a7f35901dc48221538f373",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-26-guns.webp",
+      "bytes": 261308,
+      "sha": "b18d47409b86cb336c356e2ae003fb0486edcc43",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-26-hull.webp",
+      "bytes": 79964,
+      "sha": "8d1ee995f20622cef803acaa10700718459f86a1",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-27-guns.webp",
+      "bytes": 222504,
+      "sha": "ad30eaf67ae62cc7fcd16fb74e9909ad9351a0d1",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-27-hull.webp",
+      "bytes": 93010,
+      "sha": "5d3f969b48492d0e686731a2b096fc7f49b4445c",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-28-guns.webp",
+      "bytes": 277822,
+      "sha": "420ddef9fc5eb82c4833cdc98218e3fce8b151f0",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-28-hull.webp",
+      "bytes": 82918,
+      "sha": "65f59e3aa76fa66b1a6b0a0d0b9237baeb2d8265",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-29-guns.webp",
+      "bytes": 371556,
+      "sha": "41377c4d27a1afbee59564b103fe908b3107ccdd",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-29-hull.webp",
+      "bytes": 98232,
+      "sha": "4295b33fbbeba2bd90a1c1c8bc57819b012401d1",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-30-guns.webp",
+      "bytes": 332328,
+      "sha": "8c214f619ddd2543d5cee1e74b20e2e26dc2ec72",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-30-hull.webp",
+      "bytes": 79352,
+      "sha": "f41b8776efa5c6db3610f689f8747ccda220417a",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-31-guns.webp",
+      "bytes": 272334,
+      "sha": "82738cd86e692cb6f21bc7fed26d72793925fd33",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-31-hull.webp",
+      "bytes": 76350,
+      "sha": "11668128a437e258e011a5a23dfc80c6b2a6516c",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-32-guns.webp",
+      "bytes": 299118,
+      "sha": "a645d6457b0eb571809e42a0510bba68f9cef068",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-32-hull.webp",
+      "bytes": 94844,
+      "sha": "ef1117959e4e20b3e89bf0ae3755932f458dc51a",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-33-guns.webp",
+      "bytes": 234570,
+      "sha": "a5f85666de2fb901e68d831d473a2344c404021d",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-33-hull.webp",
+      "bytes": 85998,
+      "sha": "9ac70f51232c2446a989106a0a5931f7b45f6835",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-34-guns.webp",
+      "bytes": 330264,
+      "sha": "083371ee51c1c2d34790ed253cf39fd99aa11271",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-34-hull.webp",
+      "bytes": 89316,
+      "sha": "5add907bd533f13863b613025071f1e9ef97895e",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-35-guns.webp",
+      "bytes": 389354,
+      "sha": "680ece1d9cf28ddaec8ee01bea2bca6d478d2384",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-35-hull.webp",
+      "bytes": 105862,
+      "sha": "952e84c2cdd9095aa7383fe06f909f1900796cf3",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-36-guns.webp",
+      "bytes": 306236,
+      "sha": "b6ef43655678259643155d2b4ffa10a740415386",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-36-hull.webp",
+      "bytes": 95504,
+      "sha": "a68017b261d39be35c0ecf32b9409186338259d6",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-37-guns.webp",
+      "bytes": 272906,
+      "sha": "bd17f6d591bf3433da8d0d84677b650ae196bf6d",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-37-hull.webp",
+      "bytes": 95202,
+      "sha": "48a63f63087e0efff47aa0c1ea6765b03d27f548",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-38-guns.webp",
+      "bytes": 285990,
+      "sha": "7ca3396c3f28c86004128321d0810fe1544f9a60",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-38-hull.webp",
+      "bytes": 91292,
+      "sha": "3d0d595b4500965789f2537b667d482dc58859b0",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-39-guns.webp",
+      "bytes": 114504,
+      "sha": "772e1f98c75bcbbe0c8425cfccd333a90cd2a923",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-39-hull.webp",
+      "bytes": 84246,
+      "sha": "a5d82158c2054650b7777d7d410c9921c52561fe",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-40-guns.webp",
+      "bytes": 342230,
+      "sha": "aca7d909f80434236dff644f05862a5f11c7376d",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-40-hull.webp",
+      "bytes": 79452,
+      "sha": "1b7fbee8d1f87def488a07c2ae4cf87ab586adde",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-41-guns.webp",
+      "bytes": 344786,
+      "sha": "031b8b0cdda6d5808f60324d3e46c3366fc9daed",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-41-hull.webp",
+      "bytes": 105474,
+      "sha": "25ee6b4aaa2e16300ad0ac2fdfcc5131709ef125",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-42-guns.webp",
+      "bytes": 417962,
+      "sha": "feb61e74b0cf022110075f5e256b74f259393900",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-42-hull.webp",
+      "bytes": 102284,
+      "sha": "1ee4b5a0a5a67f2af37c69d4430316cd3410906e",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-43-guns.webp",
+      "bytes": 394006,
+      "sha": "53ec4c1bb97d52e1e4f1911bac9c66533719c3a3",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-43-hull.webp",
+      "bytes": 99612,
+      "sha": "1f7d21bab9289bf0f32b542c06bea46c83bee43a",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-44-guns.webp",
+      "bytes": 401266,
+      "sha": "076f32618c5de6c811ddf141de7ffdd5a0d89791",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-44-hull.webp",
+      "bytes": 93042,
+      "sha": "f1ee2bc3bc5b22be1df74181fb4eceb5c7fedeb0",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-45-guns.webp",
+      "bytes": 459110,
+      "sha": "c407c523cbb9c690fb5295acdb618f78e143963b",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-45-hull.webp",
+      "bytes": 88264,
+      "sha": "cfd92dbc62ab41b1250a2ef5d4a2e3d3c0955641",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-46-guns.webp",
+      "bytes": 397850,
+      "sha": "a5607b9b147c089967b3c9375ff0ac7e3d10619d",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-46-hull.webp",
+      "bytes": 96780,
+      "sha": "47ec1798736f0ae1865f87b30900a733abdb63e6",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-47-guns.webp",
+      "bytes": 454106,
+      "sha": "51a8d83b6920f0d78fbadabaa8700afcb4509751",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-47-hull.webp",
+      "bytes": 77282,
+      "sha": "bfb3edcc825ea8d1661c16e83058bfcbfa164f70",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-48-guns.webp",
+      "bytes": 361698,
+      "sha": "f1d109aa9200b585062095a504515655538c8f2e",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-48-hull.webp",
+      "bytes": 83634,
+      "sha": "98e58a9b39c806462c724846f85bed770564a4a1",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-49-guns.webp",
+      "bytes": 611596,
+      "sha": "872570cad9e8303e1de089739e47deee69533662",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-49-hull.webp",
+      "bytes": 91738,
+      "sha": "c441a02a48a15a394284ae66c3cc87c4587993e8",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-50-guns.webp",
+      "bytes": 511252,
+      "sha": "d1fe2ae400ebffdfb9317169b6cb0eec2eb0e33d",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/bosses/evolved/boss-50-hull.webp",
+      "bytes": 106004,
+      "sha": "126d4a3d0be6d6365e5339b90010f0b6102e1a31",
+      "provenance": "git-blob"
+    },
+    {
+      "url": "/ships/painted/91a72bc0c36be9407915/ship_02_stage_1_silver.png",
+      "bytes": 40051,
+      "sha": "37c7365d0a6a4bf99694ff0a1e36b92021b5cfd7",
+      "provenance": "local-generated-released-catalog",
+      "catalogBlob": "650195d174bd1191fe3d7cf214d885c3705a0af8"
+    }
+  ]
+}

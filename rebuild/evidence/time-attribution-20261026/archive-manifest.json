@@ -1,0 +1,72 @@
+{
+  "archive": "raw-controls.tar.xz",
+  "bytes": 21776,
+  "sha256": "1ef0d3f1d63697c4c61aa8a6d5de1d3ea4b35721d393604f5248e9fa5f88b9d7",
+  "members": [
+    {
+      "path": "scene-time-chromium-image-motion-3-smoke-20261026-a.json",
+      "bytes": 3903,
+      "sha256": "1b631203309d81b424af4f0bb88bd3e3d542c35298df1b3bb86d7037d8401e42"
+    },
+    {
+      "path": "scene-time-contracts-20261026-a.log",
+      "bytes": 4791,
+      "sha256": "f3762ba76833ee3fe94f0bc456a101f8898ab4553d3dc3c80393d25a0907ba4a"
+    },
+    {
+      "path": "scene-time-held-smoke-20261026-a.log",
+      "bytes": 505,
+      "sha256": "eb176c6f85353c3d68bf74c13e6e2a5a76deefd21b6dd8d06f0a398ba91cd76b"
+    },
+    {
+      "path": "scene-time-static-smoke-20261026-a.log",
+      "bytes": 515,
+      "sha256": "1f0371ec1a873f6b7e752448d66fe39eb51688bd56922c89b6bf033f777bcf2b"
+    },
+    {
+      "path": "scene-time-webkit-fixed-boss4-20261026-a.log",
+      "bytes": 12022,
+      "sha256": "3e4507bf39ec566352620cf10557c593d3ecf4d407a7530f6d1431b8acb18d58"
+    },
+    {
+      "path": "scene-time-webkit-image-held-1-smoke-20261026-a.json",
+      "bytes": 11502,
+      "sha256": "bf74ee62b6b931b0841b532fc44421c43d9c8c0ceeb8c5384f973a3ae61d4105"
+    },
+    {
+      "path": "scene-time-webkit-image-motion-3-smoke-20261026-a.json",
+      "bytes": 11545,
+      "sha256": "db1bbf44ebdefe7b096a64924cb52634536f7fdf338c2ecdb4fb781e935ad15f"
+    },
+    {
+      "path": "scene-time-webkit-image-motion-780-fixed-boss4-20261026-a.json",
+      "bytes": 181102,
+      "sha256": "83db451e3ca031507a20f49d22100777093bcdcd1679faf27c9ab626445a9261"
+    },
+    {
+      "path": "scene-time-webkit-image-static-1-smoke-20261026-a.json",
+      "bytes": 11529,
+      "sha256": "937305bcb314ae78f8b5c38ed1ba5fbcd319d425736c3f375a90bbfc547bf8cc"
+    },
+    {
+      "path": "source/browser__renderer.ts",
+      "bytes": 9363,
+      "sha256": "65a3a71f0bef172b3d833e0bdadc0acd2337a6cbf697875ba3298e3bdcc1bd63"
+    },
+    {
+      "path": "source/browser__textures.ts",
+      "bytes": 4127,
+      "sha256": "a82f48f986a94b6271d19086ccde5bab0d517f77f0f49918820346767be1caef"
+    },
+    {
+      "path": "source/fixture__sceneTime.ts",
+      "bytes": 4773,
+      "sha256": "86b84ac09965de2df2a1d9f8566a171345adda8bbcced1237dbf93bbebe0aa47"
+    },
+    {
+      "path": "source/verify-scene-time.mjs",
+      "bytes": 11384,
+      "sha256": "3f513fcc87bd4eb08c072db62a84162f1cb7d713b7e8b34c4338668f36400f89"
+    }
+  ]
+}

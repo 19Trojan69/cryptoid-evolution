@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-26",
+  "source": "owner report and IMG_5580.jpeg in the current conversation",
+  "device": "laptop / PC",
+  "browser": "Microsoft Edge UI visible in photo; version unconfirmed",
+  "durationMinutesApprox": 20,
+  "ending": "normal death at fifth boss after life loss",
+  "whiteScreenObserved": false,
+  "buildCommit": null,
+  "buildIdentityVerified": false,
+  "fullscreenBlocked": true,
+  "screenshotSha256": "e41fc998ae2f555dbf2f76f7409e2499603331ee6004f1ec8f7c8ee76e78009a",
+  "visibleDiagnostics": [
+    "Permissions policy violation: fullscreen is not allowed in this document",
+    "Permissions policy violation: screen-wake-lock is not allowed in this document",
+    "AudioContext not allowed to start before a user gesture",
+    "Sandbox: true; iframe message exchange"
+  ],
+  "limits": [
+    "Owner observation; not an automated full-campaign or current-build acceptance result",
+    "No original White Screen cause or fix follows from this successful run",
+    "Source of inherited/response permissions policy cannot be determined from photo alone",
+    "No sign-in prompt does not independently establish whether a server session or sandbox identity existed"
+  ],
+  "ownerDirection": "Prioritize smartphones and tablets and continue the White Screen procedure; fullscreen deferred",
+  "liveChanges": false,
+  "piLoginReported": false,
+  "modeReported": "Sandbox, without a Pi sign-in prompt or deliberate login",
+  "serverSessionVerified": false,
+  "ownerHypothesis": "Difference between sandbox without deliberate login and affected logged-in smartphone/tablet sessions could involve Pi authentication or account/save adapters"
+}

@@ -1,0 +1,107 @@
+{
+  "date": "2026-10-26",
+  "baseCommit": "8ec922899b228dc8baa15675dff2c025262e8d3b",
+  "question": "Does real elapsed time with the same original actor textures and ongoing drawing reproduce strong growth or document loss independently of stage/source changes?",
+  "historicalWhiteScreenFixed": false,
+  "productionChanged": false,
+  "deployed": false,
+  "acceptedDefaultDecoder": false,
+  "fullGameAcceptance": false,
+  "physicalDeviceAcceptance": false,
+  "primary": {
+    "receipt": "scene-time-webkit-image-motion-780-fixed-boss4-20261026-a.json",
+    "engine": "webkit",
+    "version": "26.5",
+    "decoder": "image",
+    "mode": "motion",
+    "realSeconds": 780.012,
+    "frames": 47290,
+    "draws": 47291,
+    "maximumFrameGapMs": 174,
+    "sourceImageRequests": 3,
+    "uniqueOriginalImages": 3,
+    "closedManaged": {
+      "entries": 0,
+      "bytes": 0,
+      "active": 0,
+      "queued": 0,
+      "scopes": 0,
+      "disposalFailures": 0,
+      "closed": false
+    },
+    "closedCanvas": {
+      "width": 0,
+      "height": 0
+    },
+    "crashes": 0,
+    "errors": [],
+    "mainDocumentRequests": 1,
+    "ownedBytesThroughout": 17154696,
+    "nativePssMiB": {
+      "first2MinutesMean": 353.9437662760417,
+      "last2MinutesMean": 362.7668269230769,
+      "afterMinute5Minimum": 350.3427734375,
+      "afterMinute5Maximum": 372.1630859375,
+      "lastActive": 362.1162109375,
+      "closedIdle20": 372.0771484375
+    },
+    "sourceHashes": {
+      "verify-scene-time.mjs": "3f513fcc87bd4eb08c072db62a84162f1cb7d713b7e8b34c4338668f36400f89",
+      "fixture/sceneTime.ts": "86b84ac09965de2df2a1d9f8566a171345adda8bbcced1237dbf93bbebe0aa47",
+      "browser/renderer.ts": "65a3a71f0bef172b3d833e0bdadc0acd2337a6cbf697875ba3298e3bdcc1bd63",
+      "browser/textures.ts": "a82f48f986a94b6271d19086ccde5bab0d517f77f0f49918820346767be1caef",
+      "../frontend/src/pages/bossWeaponRenderer.ts": "fe9a3004aa0125f04f1f442e73e4cd087ab3edaf9312a6fc2e7c8c5ff03be579",
+      "fixture/nativeProfile.mjs": "902ceef1fd1cf89632d4dbfdaf0769c4ab29798ee425c49041d14036d3829886"
+    }
+  },
+  "smokes": [
+    {
+      "receipt": "scene-time-webkit-image-motion-3-smoke-20261026-a.json",
+      "mode": "motion",
+      "realSeconds": 3.004,
+      "draws": 183,
+      "frames": 182,
+      "complete": true
+    },
+    {
+      "receipt": "scene-time-webkit-image-held-1-smoke-20261026-a.json",
+      "mode": "held",
+      "realSeconds": 1.009,
+      "draws": 1,
+      "frames": 62,
+      "complete": true
+    },
+    {
+      "receipt": "scene-time-webkit-image-static-1-smoke-20261026-a.json",
+      "mode": "static",
+      "realSeconds": 1.011,
+      "draws": 63,
+      "frames": 62,
+      "complete": true
+    }
+  ],
+  "chromium": {
+    "receipt": "scene-time-chromium-image-motion-3-smoke-20261026-a.json",
+    "complete": false,
+    "blockedBeforePageLoad": true,
+    "reason": "Sandboxed Chromium cannot run as root; runuser cannot set groups in this environment. Sandboxing was not disabled.",
+    "nonRootCapabilityCheck": "runuser: cannot set groups: Operation not permitted"
+  },
+  "verification": {
+    "contractsPassed": 43,
+    "typecheckPassed": true,
+    "boundaryModules": 41,
+    "forbiddenRuntimeImports": 0,
+    "nodeSyntaxPassed": true
+  },
+  "conclusion": "This one-scene WPE actor path completed 13 minutes with fixed ownership, no new image requests, document replacement or reported context loss, and no strong sustained native-memory climb. This does not rule out a time-dependent complete-game failure, silent visual corruption or reclaim/driver behavior on affected devices.",
+  "limits": [
+    "The scene contains original player/boss hull/gun art and mounted weapon rendering, not the full released HUD/background/effects/audio/account/storage/SDK flows.",
+    "Only one boss model, geometry and decoder are observed for 13 minutes; this is not a global memory bound or accepted loader.",
+    "PSS is local Linux browser-process proportional memory, not phone/GPU or locked/non-discardable allocation classification.",
+    "No pixels or screenshots are read during the memory control; no actual historical White Screen is reproduced.",
+    "Fixed-scene time and the recording durations are different measurements. Existing recorded simulation time includes resumed state and pauses.",
+    "The short held/static smokes were run concurrently after the primary browser closed; their memory numbers are not comparative acceptance.",
+    "All previous failed or partial controls remain failed."
+  ]
+}

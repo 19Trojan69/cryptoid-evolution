@@ -1,0 +1,164 @@
+{
+  "historicalWhiteScreenFixed": false,
+  "interpretation": "Capture duration is not time since original game creation. Reports use different builds and include resumed simulation time; export ending is not independently classified as a crash.",
+  "runs": [
+    {
+      "sourceSha256": "238bd979344b03119f096ffb5d1354d7096736c17dab9b63fc1376dac6caaa58",
+      "sourceCommit": "d615e86f8f1e4bc02b98200d2ba8e3ef2e0ab895",
+      "captureSeconds": 645.256,
+      "captureClosed": false,
+      "counters": {
+        "domNodes": {
+          "first": 531,
+          "last": 515,
+          "minimum": 417,
+          "maximum": 702
+        },
+        "animations": {
+          "first": 9,
+          "last": 15,
+          "minimum": 5,
+          "maximum": 54
+        },
+        "estimatedBytes": {
+          "first": 6905454,
+          "last": 6901152,
+          "minimum": 4706630,
+          "maximum": 7315154
+        },
+        "sources": {
+          "first": 8,
+          "last": 8,
+          "minimum": 8,
+          "maximum": 8
+        },
+        "pending": {
+          "first": 0,
+          "last": 0,
+          "minimum": 0,
+          "maximum": 6
+        },
+        "audioVoices": {
+          "first": 3,
+          "last": 6,
+          "minimum": 0,
+          "maximum": 12
+        },
+        "audioBufferBytes": {
+          "first": 7660648,
+          "last": 7660648,
+          "minimum": 7660648,
+          "maximum": 7660648
+        },
+        "knownTimers": {
+          "first": 1,
+          "last": 2,
+          "minimum": 1,
+          "maximum": 2
+        },
+        "knownListeners": {
+          "first": 15,
+          "last": 15,
+          "minimum": 15,
+          "maximum": 15
+        },
+        "jobsStarted": {
+          "first": 13,
+          "last": 230,
+          "minimum": 13,
+          "maximum": 230
+        },
+        "jobsFinished": {
+          "first": 13,
+          "last": 230,
+          "minimum": 13,
+          "maximum": 230
+        }
+      },
+      "recordedCriticalFaults": [],
+      "firstSampleStage": 70,
+      "lastSampleStage": 90,
+      "firstRecordedSimulationMs": 256247.49999999994,
+      "lastRecordedSimulationMs": 630543.5
+    },
+    {
+      "sourceSha256": "30b6a84a24eaf2f850d9fd4138e1be8ac4fac04854c17e3a447952de8e6e7284",
+      "sourceCommit": "20843b5501387dca8bb5616303934ece2ae6d581",
+      "captureSeconds": 696.602,
+      "captureClosed": false,
+      "counters": {
+        "domNodes": {
+          "first": 469,
+          "last": 413,
+          "minimum": 411,
+          "maximum": 537
+        },
+        "animations": {
+          "first": 3,
+          "last": 5,
+          "minimum": 3,
+          "maximum": 35
+        },
+        "estimatedBytes": {
+          "first": 6934979,
+          "last": 6903649,
+          "minimum": 2572682,
+          "maximum": 7625615
+        },
+        "sources": {
+          "first": 8,
+          "last": 8,
+          "minimum": 6,
+          "maximum": 8
+        },
+        "pending": {
+          "first": 0,
+          "last": 0,
+          "minimum": 0,
+          "maximum": 12
+        },
+        "audioVoices": {
+          "first": 2,
+          "last": 1,
+          "minimum": 0,
+          "maximum": 10
+        },
+        "audioBufferBytes": {
+          "first": 7660648,
+          "last": 7660648,
+          "minimum": 7660648,
+          "maximum": 7660648
+        },
+        "knownTimers": {
+          "first": 1,
+          "last": 2,
+          "minimum": 1,
+          "maximum": 2
+        },
+        "knownListeners": {
+          "first": 15,
+          "last": 15,
+          "minimum": 15,
+          "maximum": 15
+        },
+        "jobsStarted": {
+          "first": 13,
+          "last": 262,
+          "minimum": 13,
+          "maximum": 262
+        },
+        "jobsFinished": {
+          "first": 13,
+          "last": 262,
+          "minimum": 13,
+          "maximum": 262
+        }
+      },
+      "recordedCriticalFaults": [],
+      "firstSampleStage": 15,
+      "lastSampleStage": 40,
+      "firstRecordedSimulationMs": 181564,
+      "lastRecordedSimulationMs": 480355
+    }
+  ]
+}

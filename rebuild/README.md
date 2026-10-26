@@ -1,0 +1,77 @@
+# Isolated game-core migration
+
+This is an incomplete parallel implementation addressing the reported White
+Screen across devices. The released Testnet source remains the comparison
+baseline. Nothing in `frontend` imports this directory. It is not ready for
+deployment, does not claim to cure the historical failure and must not replace
+the current game yet. See [requirements.md](requirements.md) for the full
+feature contract and outstanding gates.
+
+Implemented so far:
+
+- One run identity and clock lease, bounded substeps, the existing strict
+  >2500 ms interruption guard with a 500 ms watcher, explicit Resume and stale
+  callback protection.
+- Pure campaign and battle simulation using the released movement, roster,
+  formation, attack, weapon, collision, turret and exposed-reactor rule modules.
+- Explicit resource scopes, deduplicated pending loads, decode reservations,
+  bounded concurrency and disposal of late results. Failed cleanup stays charged.
+- An internal single-encounter fixture using original full-resolution painted
+  hulls, boss textures, mounted weapons and projectile CSS. Owned actor surfaces
+  are admitted before allocation; a complete back buffer is committed only
+  after drawing succeeds. The fixture deliberately has no account/save/payment
+  authority and is not an appearance-complete game.
+- A pure boss-statistics gate requiring confirmed save, cleanup and bonus
+  preparation, ten prepared visible seconds and explicit confirmed Continue.
+  Its backend/UI/bonus adapters are still pending.
+
+The renderer currently has **no accepted default decoder**. Its API requires an
+explicit choice; the local fixture defaults to the original direct-image
+reference. Controlled alternatives exposed native memory growth and Chromium
+pixel differences. They are experiments, not approved optimizations. See
+[memory-investigation.md](memory-investigation.md) before extending the renderer.
+
+Matched native-memory controls now distinguish encoded fetching, explicit
+decoding without drawing, renderer preparation without presentation and original
+drawing/disposal. Eight complete 100-cycle controls show Chromium's main retained
+increment already in decoding, while WPE's additional large increment appears
+in the draw path/native heap. Both acceptance gates remain open. Exact results
+and preserved failed controls are in
+[the stage evidence](evidence/memory-stages-20261025/README.md).
+
+The subsequent replay/ownership checkpoint adds 4000 primary closed cycles,
+identifies partial Chromium `cc/image_memory` records and WPE's local
+Mesa/Gallium allocation call chains, and separates identical full-resolution
+source RGBA from Chromium's scaling difference. This does not accept a decoder
+or fix the historical White Screen. Continue from
+[the ownership evidence](evidence/memory-ownership-20261026/README.md).
+
+The owner now distinguishes an unlogged Sandbox PC run from affected mobile
+account runs. A pinned original-game auth/save fault harness, retained WebKit
+loop-stall failure and native cache/sampling follow-up are documented in
+[the login/cache evidence](evidence/login-cache-followup-20261026/README.md).
+This comparison does not accept the account path or establish a White Screen fix.
+
+From this directory, with the repository's frontend dependencies installed:
+
+```sh
+npm test
+npm run typecheck
+npm run verify:boundaries
+```
+
+`npm run verify:native` needs Playwright and its matching native browser, plus
+the repository's original public assets. Supply a Playwright module directory
+with `CRYPTOID_PLAYWRIGHT_PATH` when necessary. `CRYPTOID_TEST_ENGINE=webkit`
+selects WebKit. The runner starts only a localhost fixture, performs controlled
+fault and lifecycle cases, and writes private working evidence under
+`verification/rebuild`. The task environment can reuse its previously prepared
+native dependencies and byte-verified font mirror. These are Linux Chromium/WPE
+runs, not physical phone/Pi Browser or full-campaign acceptance.
+
+Still required before replacement: complete loadout/power/effect/audio rules,
+boss fall/reward and durable intermission/bonus handoff, dynamic scene preparation,
+original visual parity, existing account/save/inventory/payment adapters, and
+sustained complete-game verification on the affected devices. Internal ledger
+rewards are not live wallet credits. Managed resource accounting is not native
+process/GPU memory measurement.
