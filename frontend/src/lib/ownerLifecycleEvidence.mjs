@@ -3,7 +3,8 @@
   const key = 'cryptoid_owner_lifecycle_v1';
   const limit = 48;
   const kinds = new Set(['document-start', 'pageshow', 'pagehide', 'visibility', 'scene-mounted',
-    'scene-removed', 'pause-state', 'field-size', 'frame-gap', 'javascript-error', 'unhandled-rejection', 'resource-error']);
+    'scene-removed', 'pause-state', 'field-size', 'frame-gap', 'javascript-error', 'unhandled-rejection', 'resource-error',
+    'route-change', 'view-state', 'focus', 'blur', 'freeze', 'resume', 'fullscreenchange']);
   const reasons = new Set(['frame-error', 'loop-stall', 'input-error', 'javascript-error',
     'unhandled-rejection', 'render-error', 'performance', 'unexpected-restart']);
   const phases = new Set(['SECTOR_INTRO', 'ENTRY', 'FORMATION', 'ATTACK_CYCLE', 'REFORM', 'SECTOR_CLEAR']);
@@ -32,8 +33,10 @@
     const result = { kind: input.kind, at: input.at };
     for (const field of ['sequence', 'documentStartedAt', 'previousDocumentStartedAt', 'frameGapMs', 'previousCallbackMs', 'callbackMs', 'contextAt', 'enemyCount'])
       if (finite(input[field])) result[field] = input[field];
-    for (const field of ['active', 'hidden', 'persisted', 'rafObserved', 'resizeObserved']) if (typeof input[field] === 'boolean') result[field] = input[field];
-    if (['home', 'game', 'other'].includes(input.route)) result.route = input.route;
+    for (const field of ['active', 'hidden', 'persisted', 'rafObserved', 'resizeObserved', 'documentWasDiscarded']) if (typeof input[field] === 'boolean') result[field] = input[field];
+    for (const field of ['route', 'previousRoute']) if (['home', 'game', 'admin', 'other'].includes(input[field])) result[field] = input[field];
+    if (['loading', 'interactive', 'complete'].includes(input.documentReadyState)) result.documentReadyState = input.documentReadyState;
+    if (['empty', 'game-access', 'game', 'home', 'recovery', 'other'].includes(input.view)) result.view = input.view;
     if (['navigate', 'reload', 'back_forward', 'prerender'].includes(input.navigationType)) result.navigationType = input.navigationType;
     for (const field of ['viewport', 'fieldSize']) { const value = pair(input[field], 2); if (value) result[field] = value; }
     if (Array.isArray(input.enemies)) result.enemies = input.enemies.slice(0, 6).map(v => pair(v, 2)).filter(Boolean);

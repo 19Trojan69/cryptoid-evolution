@@ -1,0 +1,25 @@
+{
+  "localOnly": true,
+  "syntheticFixtures": true,
+  "physicalDevice": false,
+  "historicalWhiteScreenFixed": false,
+  "checks": [
+    "released observer misses nested shell",
+    "control: independent quarter-second frames",
+    "control: callback progress",
+    "control: actual IDB history exported",
+    "control: replacement and Home linked",
+    "control: ordinary pagehide remains distinct",
+    "corrected observer sees active shell",
+    "candidate: independent quarter-second frames",
+    "candidate: callback progress",
+    "native pause-state observed without automatic Resume",
+    "candidate: actual IDB history exported",
+    "candidate: replacement and Home linked",
+    "candidate: ordinary pagehide remains distinct",
+    "no page errors"
+  ],
+  "errors": [],
+  "complete": true,
+  "engine": "26.5"
+}

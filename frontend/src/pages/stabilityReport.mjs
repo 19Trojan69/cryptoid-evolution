@@ -1,5 +1,6 @@
 import { ownerLifecycleEvidence } from '../lib/ownerLifecycleEvidence.mjs';
 import { readCrashTails } from './crashTail.ts';
+import { crashRecoveryBoundary } from './crashRecoveryBoundary.mjs';
 import { technicalContext, contextEnums, reloadKinds } from './technicalReportContext.mjs';
 export { technicalContext } from './technicalReportContext.mjs';
 // Read only bounded local technical records. This module never imports the
@@ -195,11 +196,12 @@ export async function exportOwnerFullSession(verifyOwner, getHost, id, active = 
       summary: { id }, records: null };
   }
   if (!active()) return null;
-  return new Blob([JSON.stringify({ ...full, supplementaryEvidenceVersion: 1, crashEvidence: {
+  return new Blob([JSON.stringify({ ...full, supplementaryEvidenceVersion: 2, crashEvidence: {
     technical, lifecycle, tail: matching, tailStorage: tails.storage,
     latestCommittedAt: full.summary?.lastAt ?? null,
     latestObservedAt: matching?.lastObservedAt ?? null,
     observedTailIsNotCommittedHistory: true,
+    recoveryBoundary: crashRecoveryBoundary(full.summary, matching, lifecycle),
     limits: ['Synchronous browser observations; not video or native-process/GPU tracing.',
       'The final interval before any successful browser-storage write can be lost.',
       'A last operation or a new document alone does not prove the cause of a White Screen.'],

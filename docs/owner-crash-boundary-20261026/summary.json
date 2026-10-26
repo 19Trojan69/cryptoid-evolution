@@ -1,0 +1,13 @@
+{
+  "baseline": "6fe93a5d8364e2dce900bfa4225457f8359e0abf",
+  "privateInputExcluded": true,
+  "baselineLifecycleSha256": "74b97a5aca4a82e9bcd68e25e8b2cf2d736f1de16d110785e4ffbe05515149bb",
+  "frontendTests": 271,
+  "nativeChecks": 14,
+  "newTimers": 0,
+  "newRafChains": 0,
+  "automaticTransmission": false,
+  "gamePageUnchanged": true,
+  "physicalDevice": false,
+  "historicalWhiteScreenFixed": false
+}

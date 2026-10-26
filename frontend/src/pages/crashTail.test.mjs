@@ -33,17 +33,17 @@ test('the last response and frame survive a fresh reader without an unload, fini
   assert.equal(fresh.sessions[0].errors[0].data.providerRequestId, 'cdg1::sample-123');
   assert.equal(fresh.sessions[0].limits.finalUnwrittenIntervalCanBeLost, true);
 });
-test('head snapshots are paced at 250 ms while frame history has independent one-second slots', () => {
+test('head and independent frame history retain quarter-second snapshots', () => {
   const f = fixture(), tail = f.create();
   for (let i = 0; i < 400; i++) { tail.frame(playing); f.advance(16); }
   const capture = readCrashTails(f.host).sessions[0];
-  assert.ok(capture.frames.length >= 6 && capture.frames.length <= 7);
+  assert.ok(capture.frames.length >= 24 && capture.frames.length <= 26);
   assert.ok(capture.head.at >= 1006000);
-  assert.ok(tail.stats().writes < 40);
+  assert.ok(tail.stats().writes < 55);
 });
-test('graphics or request bursts cannot evict the independently retained last 32 frame snapshots', () => {
+test('graphics or request bursts cannot evict the independently retained last 128 frame snapshots', () => {
   const f = fixture(), tail = f.create();
-  for (let i = 0; i < 45; i++) { tail.frame(playing); f.advance(1000); }
+  for (let i = 0; i < 180; i++) { tail.frame(playing); f.advance(250); }
   for (let i = 0; i < 10000; i++) tail.record('request', { operation: 'response', endpoint: 'checkpoint', request: i, httpStatus: 200 });
   const capture = readCrashTails(f.host).sessions[0];
   assert.equal(capture.frames.length, CRASH_TAIL_LIMITS.frames);
@@ -95,6 +95,15 @@ test('normal finish is explicit and later callbacks cannot resurrect the closed 
   tail.record('request', { operation: 'start' }); tail.frame(playing); tail.finish();
   assert.equal(readCrashTails(f.host).sessions[0].state, 'closed');
   assert.equal(JSON.stringify([...f.local]), before);
+});
+test('legacy frame metadata keeps its original cadence rather than inventing quarter-second history', () => {
+  const f = fixture(), tail = f.create('run-legacy'); tail.frame(playing);
+  for (const values of [f.local, f.tab]) {
+    const key = `${CRASH_TAIL_PREFIX}0_meta`, meta = JSON.parse(values.get(key));
+    delete meta.frameSlots; delete meta.frameIntervalMs; values.set(key, JSON.stringify(meta));
+  }
+  const capture = readCrashTails(f.host).sessions[0];
+  assert.equal(capture.limits.frames, 32); assert.equal(capture.limits.frameIntervalMs, 1000);
 });
 test('only fixed public error codes and a bounded platform request ID can leave the response observer', () => {
   assert.equal(requestErrorCode({ error: 'save_before_activation', token: 'PRIVATE' }, 409), 'save_before_activation');

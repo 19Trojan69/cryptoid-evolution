@@ -32,7 +32,7 @@
     "test:game-loop": "node --experimental-strip-types --test src/pages/gameLoop.test.mjs",
     "test:startup-recovery": "node --experimental-strip-types --test scripts/startupRecovery.test.mjs scripts/startupLifecycleEvidence.test.mjs",
     "test:owner-lifecycle": "node --experimental-strip-types --test src/lib/ownerLifecycleCapture.test.mjs src/pages/ownerFlightRecorder.test.mjs",
-    "test:white-screen": "node --experimental-strip-types --test src/pages/crashTail.test.mjs src/pages/whiteScreenReport.test.mjs scripts/ownerStabilityReport.test.mjs scripts/stabilityReport.test.mjs",
+    "test:white-screen": "node --experimental-strip-types --test src/pages/crashTail.test.mjs src/pages/whiteScreenReport.test.mjs scripts/ownerStabilityReport.test.mjs scripts/stabilityReport.test.mjs src/pages/crashRecoveryBoundary.test.mjs",
     "test:boss-intermission": "node --experimental-strip-types --test scripts/bossIntermission.test.mjs scripts/canvasIdleCleanup.test.mjs",
     "test:admin-players": "node --experimental-strip-types --test scripts/adminPlayers.test.mjs",
     "test:browser:white-screen": "node --experimental-strip-types scripts/whiteScreenBrowserVerification.mjs",
