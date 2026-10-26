@@ -134,6 +134,12 @@ test('automatic reload remains bounded over repeated cycles and rejected duplica
   assert.equal(f.env.weaponBusyRef.current, false); assert.equal(f.env.reloadPendingRef.current, false);
 });
 
+test('the actual reload notice remains for three seconds without another activation',async()=>{
+ const f=selectionHost();assert.equal(f.env.reloadRequestRef.current(2),true);await f.flush();
+ f.advance(2999);assert.equal(f.env.autoReloading,2);assert.equal(f.requests.length,1);
+ f.advance(1);assert.equal(f.env.autoReloading,null);assert.equal(f.requests.length,1);
+});
+
 test('an already spent confirmed receipt does not silently allocate another charge on retry', async () => {
   const f = await lostAutomaticReply(); f.openWeaponSelection(); f.env.confirmedMs = 0;
   await f.selectWeaponLevel(2);
@@ -176,8 +182,8 @@ test('actual account handlers reconcile a lost automatic response, then honor a 
   assert.equal(f.h.docs[0].weaponStockByNetwork.testnet.balances.weapon_twin, 2);
   assert.equal(f.h.docs[0].weaponStockByNetwork.testnet.balances.weapon_rapid_twin, 2);
   assert.equal(Object.keys(f.h.docs[0].weaponStockByNetwork.testnet.activations).length, 2);
-  assert.equal(f.h.profile().mission.snapshot.weaponTimers[2], 60000);
-  assert.equal(f.h.profile().mission.snapshot.weaponTimers[3], 60000);
+  assert.equal(f.h.profile().mission.snapshot.weaponTimers[2], 45000);
+  assert.equal(f.h.profile().mission.snapshot.weaponTimers[3], 45000);
   assert.equal(f.env.activationRef.current, null); assert.equal(f.state.weaponLevel, 3);
 });
 

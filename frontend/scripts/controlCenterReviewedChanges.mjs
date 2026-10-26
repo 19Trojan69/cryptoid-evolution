@@ -1,3 +1,4 @@
+import {restoreCockpitIndicatorGameChanges} from './cockpitIndicatorReviewedChanges.mjs';
 import {restoreCompletionAudioGameChanges} from './completionAudioReviewedChanges.mjs';
 import {restoreLevelEntranceGameChanges} from './levelEntranceReviewedChanges.mjs';
 import {restoreCompletionRecoveryChanges} from './completionRecoveryReviewedChanges.mjs';
@@ -13,6 +14,7 @@ export const reviewedControlCenterGameChanges = [
   }
 ];
 export function restoreControlCenterGameChanges(source) {
+  source = restoreCockpitIndicatorGameChanges(source);
   source = restoreCompletionAudioGameChanges(source);
   source = restoreLevelEntranceGameChanges(source);
   source = restoreCompletionRecoveryChanges(source, 'src/pages/GamePage.tsx');

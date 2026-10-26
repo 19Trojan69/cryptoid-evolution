@@ -1,3 +1,27 @@
+# Cockpit indicators and forty-five-second charges, 26 October 2026
+
+Continue from common public dbed249/PR178; retain its prepared-resource reuse.
+Owner requests visible-hull centering at secure access, ordinary bars beyond the
+longest plumes (all boss bars unchanged), sequential CSS preparation stripes,
+shorter armed weapon-menu return and longer red reload text without overlapping
+upper labels. New charges explicitly become 45 seconds, including descriptions.
+Auto-reload settings stay: off means one charge; on uses owned stock until off/
+empty. No automatic purchase, migration or reset. Older confirmed 60s timers stay
+valid across receipt replay/resume. Pickup/power-up durations/prices remain.
+Only armed non-technical weapon-menu return uses 500ms steps; ordinary/technical
+Resume stays 1000ms. Automatic server activation has no artificial delay to halve;
+confirmation and save guards remain mandatory. Reload feedback lasts 3000ms.
+No additional frame loop/timer/image work; temporary notice observer ends on exit.
+See docs/cockpit-indicator-spacing-20261026 and native/handler evidence. GamePage
+keeps its old 62 lint errors/four warnings; exact reviewed changes restore before
+strict fingerprints. Boss indicators, fleet/art, HUD, audio, rewards, strict
+>2500ms/500ms pauses/manual Resume and project separation stay intact. White Screen
+and physical Pi stability remain unproved; raw screenshots stay private. No PR167/
+168, secret/runtime-log/protection changes or repeat long owner campaign.
+Candidate auto-deploy is disabled; reviewed publication to both existing projects
+is still authorized. Preserve dbed249 and its READY Testnet CeVMgcLoAg69U4wNMFWWY4i3ni4h /
+production HPsKkS4ivMqst5rkRTheW9Jb6FSR at backup/shared-before-cockpit-feedback-20261026.
+
 # Prepared resource reuse and pending artwork sharing, 26 October 2026
 
 Continue from common public bd23bd4/PR177. The owner asks to fix the reproduced

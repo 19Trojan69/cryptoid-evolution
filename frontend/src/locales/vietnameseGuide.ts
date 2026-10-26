@@ -304,7 +304,7 @@ export const vietnameseGuideTranslations: Record<string, string> = {
   "{stars}/3 stars": "{stars}/3 sao",
   "@{value0} ist für diesen Admin-Bereich nicht freigeschaltet.": "@{value0} không có quyền truy cập khu vực quản trị này.",
   "← Schnellzugriff": "← Truy cập nhanh",
-  "1 minute per charge": "1 phút cho mỗi lượt sử dụng",
+  "45 seconds per charge": "45 giây cho mỗi lượt sử dụng",
   "1 Shard per target. Completion bonus added immediately.": "Mỗi mục tiêu mang lại 1 Mảnh vỡ. Thưởng hoàn thành được cộng ngay.",
   "2 minutes after activation": "Có hiệu lực 2 phút sau khi kích hoạt",
   "Abmelden": "Đăng xuất",

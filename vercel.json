@@ -113,7 +113,8 @@
       "codex/level-completion-entrance-20261026": false,
       "codex/completion-audio-resume-20261026": false,
       "codex/ship-overlay-alignment-20261026": false,
-      "codex/continue-hull-prefetch-20261026": false
+      "codex/continue-hull-prefetch-20261026": false,
+      "codex/cockpit-indicator-spacing-20261026": false
     }
   }
 }

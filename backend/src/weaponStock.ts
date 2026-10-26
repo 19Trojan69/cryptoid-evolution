@@ -1,7 +1,7 @@
 import { hangarCatalog } from './hangarCatalog';
 import { isTestnetWeaponPurchaseEnabled } from './paymentPolicy';
 
-export const WEAPON_CHARGE_MS = 60_000;
+export const WEAPON_CHARGE_MS = 45_000;
 export const MAX_WEAPON_QUANTITY = 99;
 export function weaponQuantity(value: unknown) {
   return Number.isSafeInteger(value) && Number(value) >= 1 && Number(value) <= MAX_WEAPON_QUANTITY ? Number(value) : null;
@@ -12,7 +12,7 @@ export function weaponPayment(offer: { kind: string; pricePi: number }, metadata
 }
 export type WeaponStock = { revision: number; balances: Record<string, number>; credited: string[]; activations: Record<string, { level: number; runId: string }> };
 export const emptyWeaponStock = (): WeaponStock => ({ revision: 0, balances: {}, credited: [], activations: {} });
-/** Paid orders are imported once. Old two-minute purchases become two one-minute charges. */
+/** Paid orders are imported once. Legacy purchases retain their existing two-charge credit. */
 export function creditWeaponOrders(stock: WeaponStock, orders: any[], network: string): WeaponStock {
   const next = structuredClone(stock);
   for (const order of orders) {

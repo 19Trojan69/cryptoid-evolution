@@ -33,7 +33,7 @@
     "test:startup-recovery": "node --experimental-strip-types --test scripts/startupRecovery.test.mjs scripts/startupLifecycleEvidence.test.mjs",
     "test:owner-lifecycle": "node --experimental-strip-types --test src/lib/ownerLifecycleCapture.test.mjs src/pages/ownerFlightRecorder.test.mjs",
     "test:white-screen": "node --experimental-strip-types --test src/pages/crashTail.test.mjs src/pages/whiteScreenReport.test.mjs scripts/ownerStabilityReport.test.mjs scripts/stabilityReport.test.mjs src/pages/crashRecoveryBoundary.test.mjs",
-    "test:hull-ready": "node --experimental-strip-types --test src/pages/hullReadiness.test.mjs src/pages/artworkSourceSharing.test.mjs",
+    "test:hull-ready": "node --experimental-strip-types --test src/pages/hullReadiness.test.mjs src/pages/artworkSourceSharing.test.mjs src/pages/enemyHealthClearance.test.mjs src/pages/weaponAutoReload.test.mjs",
     "test:ship-overlays": "node --experimental-strip-types --test src/pages/shipOverlayGeometry.test.mjs src/pages/shipFleet.test.mjs src/pages/bossHealthLayout.test.mjs",
     "test:audio-resume": "node --experimental-strip-types --test src/pages/completionAudioResume.test.mjs src/pages/gameAudioResume.test.mjs",
     "test:boss-intermission": "node --experimental-strip-types --test scripts/bossIntermission.test.mjs scripts/canvasIdleCleanup.test.mjs",

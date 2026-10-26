@@ -1,0 +1,77 @@
+{
+  "baseline": "dbed24977b8a3bc08cf2ed7c8dcae37d570135aa",
+  "modules": [
+    {
+      "path": "src/pages/GamePage.tsx",
+      "baselineErrors": 62,
+      "currentErrors": 62,
+      "baselineWarnings": 4,
+      "currentWarnings": 4,
+      "addedFindings": []
+    },
+    {
+      "path": "src/pages/MissionWeaponShop.tsx",
+      "baselineErrors": 3,
+      "currentErrors": 3,
+      "baselineWarnings": 0,
+      "currentWarnings": 0,
+      "addedFindings": []
+    },
+    {
+      "path": "src/pages/Shop.tsx",
+      "baselineErrors": 5,
+      "currentErrors": 5,
+      "baselineWarnings": 0,
+      "currentWarnings": 0,
+      "addedFindings": []
+    },
+    {
+      "path": "src/components/GameAccessGate.tsx",
+      "baselineErrors": 0,
+      "currentErrors": 0,
+      "baselineWarnings": 0,
+      "currentWarnings": 0,
+      "addedFindings": []
+    },
+    {
+      "path": "src/components/LoadingStripes.tsx",
+      "baselineErrors": 0,
+      "currentErrors": 0,
+      "baselineWarnings": 0,
+      "currentWarnings": 0,
+      "addedFindings": []
+    },
+    {
+      "path": "src/pages/WeaponReloadNotice.tsx",
+      "baselineErrors": 0,
+      "currentErrors": 0,
+      "baselineWarnings": 0,
+      "currentWarnings": 0,
+      "addedFindings": []
+    },
+    {
+      "path": "src/pages/enemyHealthClearance.ts",
+      "baselineErrors": 0,
+      "currentErrors": 0,
+      "baselineWarnings": 0,
+      "currentWarnings": 0,
+      "addedFindings": []
+    },
+    {
+      "path": "src/pages/weaponReloadTiming.ts",
+      "baselineErrors": 0,
+      "currentErrors": 0,
+      "baselineWarnings": 0,
+      "currentWarnings": 0,
+      "addedFindings": []
+    },
+    {
+      "path": "src/pages/playerCombat.ts",
+      "baselineErrors": 0,
+      "currentErrors": 0,
+      "baselineWarnings": 0,
+      "currentWarnings": 0,
+      "addedFindings": []
+    }
+  ]
+}

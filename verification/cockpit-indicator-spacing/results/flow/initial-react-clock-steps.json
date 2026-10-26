@@ -1,0 +1,25 @@
+{
+  "localOnly": true,
+  "syntheticSdk": true,
+  "realApiHandlers": true,
+  "isolatedData": true,
+  "testOnlyCombatCompletion": true,
+  "controlledNativeClock": true,
+  "physicalDevice": false,
+  "historicalWhiteScreenFixed": false,
+  "checks": [
+    "pending mission uses three activity stripes without extra requests",
+    "mission activity feedback is removed when play is ready",
+    "weapon menu states forty-five seconds per charge",
+    "actual authenticated activation grants exactly forty-five seconds",
+    "armed menu return stays paused until its half-length countdown finishes"
+  ],
+  "cases": [],
+  "errors": [],
+  "complete": false,
+  "engine": "26.5",
+  "failure": {
+    "message": "armed menu return is playing at fifteen hundred milliseconds",
+    "stack": "AssertionError [ERR_ASSERTION]: armed menu return is playing at fifteen hundred milliseconds\n    at check (file:///workspace/scratch/2533eb1496d4/cockpit-indicator-spacing/verification/cockpit-indicator-spacing/verify-flow.mjs:20:42)\n    at file:///workspace/scratch/2533eb1496d4/cockpit-indicator-spacing/verification/cockpit-indicator-spacing/verify-flow.mjs:127:34"
+  }
+}

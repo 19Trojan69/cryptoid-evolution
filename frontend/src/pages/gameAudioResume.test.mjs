@@ -1,3 +1,4 @@
+import {weaponResumeStepMs} from './weaponReloadTiming.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -35,6 +36,9 @@ function host(musicEnabled = true) {
   };
   const context = {
     document: { visibilityState: 'visible' },
+    weaponResumeStepMs, weaponMenuOpen:false, technicalPause:false,
+    stateRef:{current:{weaponSource:'standard',paidWeaponMs:0,pickupWeaponMs:0}},
+    setWeaponCountdownStep:value=>assert.equal(value,1000),
     bossSummaryRef: { current: null },
     musicEnabled,
     startEffects: () => attempt('effects'),
@@ -84,4 +88,16 @@ test('an effects-host rejection cannot cancel Resume or become an unhandled reje
   h.tap(evaluate(variables.get('resumeWeaponSelection'), h.context));
   assert.deepEqual(h.events, ['music', 'controls', 'countdown:3']);
   await new Promise(resolve => setImmediate(resolve));
+});
+
+test('the actual armed menu Resume halves its steps after the original audio gesture',()=>{
+ const h=host();let step;
+ Object.assign(h.context,{weaponMenuOpen:true,stateRef:{current:{weaponSource:'paid',paidWeaponMs:45000}},setWeaponCountdownStep:value=>{step=value;}});
+ h.tap(evaluate(variables.get('resumeWeaponSelection'),h.context));
+ assert.equal(step,500);assert.deepEqual(h.events,['effects','music','controls','countdown:3']);
+});
+test('a genuine technical pause keeps full Resume steps even when a timed weapon is selected',()=>{
+ const h=host();Object.assign(h.context,{technicalPause:true,weaponMenuOpen:true,stateRef:{current:{weaponSource:'paid',paidWeaponMs:45000}}});
+ h.tap(evaluate(variables.get('resumeWeaponSelection'),h.context));
+ assert.deepEqual(h.events,['effects','music','controls','countdown:3']);
 });

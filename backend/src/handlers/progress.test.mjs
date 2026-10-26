@@ -321,7 +321,7 @@ test('new mission keeps inventory and career, closes import and resets only run 
   assert.equal((await h.call('progress', '/inventory', { action: 'import', version: h.profile().version, confirm: true, balance: 999, fleet: {} })).code, 409);
 });
 
-test('batch inventory and activation are atomic, retryable and survive resume without refilling', async () => {
+test('forty-five-second inventory activation is atomic, retryable and survives resume without refilling', async () => {
   const h=harness(); await init(h); await start(h);
   h.orders.push({user:'pilot-a',paid:true,product_id:'weapon_twin',pi_payment_id:'ten-charges',quantity:10,weapon_model:2,payment_network:'Pi Testnet'});
   const inventory=await h.call('hangar','/inventory',null,{method:'GET'});
@@ -331,19 +331,36 @@ test('batch inventory and activation are atomic, retryable and survive resume wi
   const activation={runId,level:2,requestId:'activation-request-0001'};
   const results=await Promise.all([h.call('hangar','/weapon/activate',activation),h.call('hangar','/weapon/activate',activation)]);
   assert.deepEqual(results.map(r=>r.code),[200,200]);
-  assert.equal(results[0].body.remainingMs,60000);
+  assert.equal(results[0].body.remainingMs,45000);
   assert.equal(h.docs[0].weaponStockByNetwork.testnet.balances.weapon_twin,9);
-  assert.equal(h.profile().mission.snapshot.weaponTimers[2],60000);
+  assert.equal(h.profile().mission.snapshot.weaponTimers[2],45000);
   assert.equal((await h.call('hangar','/weapon/activate',{...activation,requestId:'activation-request-0002'})).code,409);
   assert.equal((await h.call('hangar','/weapon/activate',{...activation,level:3})).code,409);
   const resume=await start(h,'resume','resume-weapon-stock-0001');
-  assert.equal(resume.body.checkpoint.weaponTimers[2],60000);
+  assert.equal(resume.body.checkpoint.weaponTimers[2],45000);
   assert.equal((await h.call('hangar','/weapon/activate',activation)).code,409);
   const newRunId=h.session.scoreRun.id;
   assert.equal((await h.call('progress','/checkpoint',{runId:newRunId,combat:combat(),save:snapshot({paidWeaponLevel:2,weaponTimers:[0,0,0,0,0,0]})})).code,200);
   assert.equal((await h.call('hangar','/weapon/activate',{runId:newRunId,level:2,requestId:'activation-request-0003'})).code,200);
   assert.equal((await h.call('hangar','/inventory',null,{method:'GET'})).body.weaponStock.weapon_twin,8);
   assert.equal((await h.call('hangar','/weapon/activate',{runId:newRunId,level:4,requestId:'activation-request-0004'})).code,400);
+});
+
+test('an already confirmed legacy sixty-second charge keeps its remaining time across retry and resume',async()=>{
+ const h=harness();await init(h);await start(h);
+ h.orders.push({user:'pilot-a',paid:true,product_id:'weapon_twin',pi_payment_id:'legacy-confirmed-charge',quantity:2,weapon_model:2,payment_network:'Pi Testnet'});
+ const runId=h.session.scoreRun.id;
+ await h.call('progress','/checkpoint',{runId,combat:combat(),save:snapshot()});
+ const activation={runId,level:2,requestId:'legacy-charge-receipt-0001'};
+ assert.equal((await h.call('hangar','/weapon/activate',activation)).body.remainingMs,45000);
+ // Existing persisted pre-release grant, not a new activation or client refill.
+ h.profile().mission.snapshot.weaponTimers[2]=60000;h.profile().mission.snapshot.paidWeaponMs=60000;
+ assert.equal((await h.call('hangar','/weapon/activate',activation)).body.remainingMs,60000);
+ assert.equal(h.docs[0].weaponStockByNetwork.testnet.balances.weapon_twin,1);
+ const resumed=await start(h,'resume','resume-legacy-duration-0001');
+ assert.equal(resumed.body.checkpoint.weaponTimers[2],60000);
+ assert.equal(resumed.body.checkpoint.paidWeaponMs,60000);
+ assert.equal(h.docs[0].weaponStockByNetwork.testnet.balances.weapon_twin,1);
 });
 
 const combat = (changes = {}) => ({
