@@ -1,3 +1,30 @@
+# Mobile cockpit and unified level completion, 26 October 2026
+
+The owner explicitly requests a game-related login with a launching original
+ship, cockpit styling for plain overlays, a fixed mobile viewport without page
+pulls or accidental repeat pauses, automatic device language and right-handed
+controls on first use. Preserve deliberate saved language/hand choices and
+the ability to change them. Do not keep requesting fullscreen during steering;
+retain Play's native request and the explicit display control. Cover the entire
+game route, including authentication, while retaining scrollable inner settings.
+Real blur/hidden/stall pauses and explicit Resume remain unchanged.
+
+The owner clarifies that statistics belong in the existing level-complete scene
+AFTER the bonus round, together with actual completion rewards, an actually
+earned bonus heart, and Continue game. No separate boss-statistics page. Keep
+ten visible prepared seconds and manual Continue at this unified stop. Preserve
+all reward amounts, timing, validation, durable retries, account/network isolation,
+combat, HUD geometry, original art/audio and owner-only diagnostics. The new
+client flags only boss events with summaryPlacement=level-end; old clients keep
+their legacy stop. A restored legacy marker may move to the level end without
+changing its snapshot or rewards. Continue itself grants nothing.
+
+Implement from the common d0a0b81 release, test, and keep both authorized existing
+Testnet/production projects aligned. Prepare on the auto-deploy-disabled branch
+codex/mobile-cockpit-level-completion-20261026. The historical White Screen remains
+unproved. Preserve the release source d0a0b81 as rollback. No database reset,
+purchase, auth/protection change or inclusion of PR167/PR168 is authorized.
+
 # Explicit Testnet and production publication, 26 October 2026
 
 The owner now explicitly requests publication and the same code version in

@@ -10,15 +10,15 @@ const summary={stage:10,score:100,shards:12,destroyed:10,hearts:3,combos:2};
 const translate=(s,p={})=>s.replace(/\{(\w+)\}/g,(_,k)=>String(p[k]));
 test('the actual statistics component waits ten visible prepared seconds and then waits indefinitely for a click',()=>{
  let now=0,interval,continued=0;const doc={hidden:false,activeElement:null,addEventListener(){},removeEventListener(){}};
- const h=componentHost('src/pages/BossIntermission.tsx','BossIntermission',{summary,prepared:false,saving:true,failed:false,continuing:false,onRetry(){},onContinue(){continued++;}}, {
-  useLocale:()=>({t:translate,locale:'en'}),advanceSummaryVisibility,canContinueBossSummary,BOSS_SUMMARY_VISIBLE_MS,
+ const h=componentHost('src/pages/LevelCompletion.tsx','LevelCompletion',{summary,name:"GENESIS BELT",headline:"LEVEL 1 COMPLETE",bonusHits:12,bonusResult:"+18 SHARDS",bonusPoints:3000,bonusHeart:true,prepared:false,saving:true,failed:false,continuing:false,onRetry(){},onContinue(){continued++;}}, {
+  BlockchainProgress:()=>null,BLOCKS_PER_CHAIN:9,useLocale:()=>({t:translate,locale:'en'}),advanceSummaryVisibility,canContinueBossSummary,BOSS_SUMMARY_VISIBLE_MS,
   HTMLElement:class{},document:doc,performance:{now:()=>now},window:{setInterval(fn){interval=fn;return 1;},clearInterval(){interval=null;}},
  });
  const advance=ms=>{for(let t=0;t<ms;t+=250){now+=250;interval();h.render();}};
  const button=()=>h.nodes().find(n=>n.type==='button'&&n.props.children.includes('Continue game'));
- advance(10000);assert.equal(button(),undefined,'saving time cannot unlock Continue');
- h.update({prepared:true,saving:false});advance(5000);doc.hidden=true;advance(30000);assert.equal(button(),undefined);
- doc.hidden=false;advance(4750);assert.equal(button(),undefined);advance(250);assert.equal(button().props.disabled,false);
+ advance(10000);assert.equal(button().props.disabled,true,'saving time cannot unlock Continue');
+ h.update({prepared:true,saving:false});advance(5000);doc.hidden=true;advance(30000);assert.equal(button().props.disabled,true);
+ doc.hidden=false;advance(4750);assert.equal(button().props.disabled,true);advance(250);assert.equal(button().props.disabled,false);
  advance(60000);assert.equal(continued,0);button().props.onClick();assert.equal(continued,1);
  h.update({failed:true});assert.equal(button().props.disabled,true);h.unmount();assert.equal(interval,null);
 });
@@ -26,7 +26,7 @@ async function handlers(){
  const {harness,firstMissionSnapshot}=await actualBackend(),h=harness();await h.call('progress','/me',null,{method:'GET'});
  const started=await h.call('hangar','/start',{action:'new',rulesVersion:2,version:h.profile().version,startKey:'boss-intermission-actual-0001'});
  const runId=started.body.scoreRunId;
- h.profile().mission={sector:10,phase:'bonus',snapshot:firstMissionSnapshot(3),savedAt:new Date().toISOString()};
+ h.profile().mission={sector:11,phase:'normal',snapshot:{...firstMissionSnapshot(3),score:100,shards:12,destroyed:10},savedAt:new Date().toISOString()};
  const source=fs.readFileSync(new URL('../src/pages/GamePage.tsx',import.meta.url),'utf8');
  const block=source.slice(source.indexOf('  const beginBossSummary ='),source.indexOf('  const resumeSavedMission ='));
  const code=transformSync(block,{loader:'tsx'}).code,ref=current=>({current}),calls=[];
@@ -47,12 +47,11 @@ async function handlers(){
  const api=new Function('env','with(env){'+code+';return {beginBossSummary,prepareBossSummary,continueBossSummary};}')(env);
  return{...api,h,env,state,calls};
 }
-test('actual boss handlers persist and verify the next checkpoint before releasing unused resources; no auto continuation',async()=>{
+test('actual level-completion handlers verify and verify the next checkpoint before releasing unused resources; no auto continuation',async()=>{
  const f=await handlers();f.beginBossSummary();assert.equal(f.state.status,'paused');assert.equal(f.state.effects.length,0);assert.ok(!f.calls.includes('cleanup'));
  await f.prepareBossSummary();assert.equal(f.env.bossSummaryPrepared,true);assert.equal(f.state.status,'paused');
- assert.ok(f.calls.indexOf('read-save')<f.calls.indexOf('cleanup'));assert.ok(f.calls.indexOf('drain')<f.calls.indexOf('/progress/boss-summary/prepare'));
- assert.equal(f.h.profile().mission.bossIntermission.stage,10);assert.ok(!f.calls.includes('/progress/boss-summary/continue'));
- f.h.profile().mission.bossIntermission.createdAt-=10000;
+ assert.ok(f.calls.indexOf('read-save')<f.calls.indexOf('cleanup'));assert.ok(f.calls.indexOf('drain')<f.calls.indexOf('read-save'));
+ assert.equal(f.h.profile().mission.sector,11);assert.ok(!f.calls.includes('/progress/boss-summary/continue'));
  await f.continueBossSummary();assert.equal(f.state.status,'playing');assert.equal(f.env.bossSummary,null);assert.equal(f.env.lastFrameRef.current,0);
 });
 test('failed save or active effect consumer keeps the actual game paused and offers retry',async()=>{
@@ -67,11 +66,13 @@ test('uncertain activation replays only its original receipt and a definitive no
  assert.equal(f.env.activationRef.current,null);assert.equal(f.env.bossSummaryPrepared,true);assert.equal(f.state.status,'paused');
  assert.equal(f.calls.filter(c=>c==='/hangar/weapon/activate').length,1);assert.ok(!f.calls.includes('/progress/checkpoint'));
 });
-test('a lost continuation reply retries continuation idempotently without preparing a second stop',async()=>{
- const f=await handlers();f.beginBossSummary(true);await f.prepareBossSummary();f.h.profile().mission.bossIntermission.createdAt-=10000;
- f.env.loseContinue=true;await f.continueBossSummary();assert.equal(f.state.status,'paused');assert.equal(f.env.bossSummaryContinueFailed,true);assert.equal(f.h.profile().mission.bossIntermission,undefined);
- f.env.loseContinue=false;await f.continueBossSummary(true);assert.equal(f.state.status,'playing');assert.equal(f.env.bossSummaryRef.current,null);
- assert.equal(f.calls.filter(c=>c==='/progress/boss-summary/prepare').length,1);
+test('continuing a completed level changes no rewards and a repeated click is ignored',async()=>{
+ const f=await handlers();f.beginBossSummary();await f.prepareBossSummary();
+ const before=structuredClone(f.h.profile());
+ await f.continueBossSummary();assert.equal(f.state.status,'playing');
+ assert.deepEqual(f.h.profile(),before);const gestures=f.calls.filter(v=>v==='gesture').length;
+ await f.continueBossSummary();assert.equal(f.calls.filter(v=>v==='gesture').length,gestures);
+ assert.ok(!f.calls.includes('/progress/boss-summary/continue'));
 });
 test('late preparation and continuation replies cannot resume an unmounted game',async()=>{
  const f=await handlers();f.beginBossSummary();const load=f.env.loadAccountSave;f.env.loadAccountSave=async()=>{f.env.weaponMountedRef.current=false;return load();};await f.prepareBossSummary();assert.equal(f.env.bossSummaryPrepared,false);assert.equal(f.state.status,'paused');
@@ -98,5 +99,12 @@ test('closing a reward card cannot resume a pending boss summary or count time h
  const code=transformSync(source.slice(start,end),{loader:'tsx'}).code;
  const state={status:'paused'},env={rewardCardsRef:{current:[{}]},bossSummaryRef:{current:{accepted:false}},stateRef:{current:state},clearControls(){},setRewardCards(){},setGame(){},lastFrameRef:{current:0},performance:{now:()=>1000}};
  new Function('env','with(env){'+code+';return continueRewardCard;}')(env)();assert.equal(state.status,'paused');
- assert.match(source,/bossSummary && !rewardCards\.length && !homePrompt && <BossIntermission/);
+ assert.match(source,/bossSummary && !rewardCards\.length && !homePrompt && <LevelCompletion/);
+});
+
+test('an unconfirmed reward snapshot cannot enable Continue',async()=>{
+ const f=await handlers();f.beginBossSummary();const load=f.env.loadAccountSave;
+ f.env.loadAccountSave=async()=>{const save=await load();save.mission.snapshot.shards++;return save;};
+ await f.prepareBossSummary();assert.equal(f.env.bossSummaryPrepared,false);assert.equal(f.env.bossSummaryFailed,true);
+ await f.continueBossSummary();assert.equal(f.state.status,'paused');
 });

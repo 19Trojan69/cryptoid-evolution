@@ -1,0 +1,98 @@
+{
+  "localOnly": true,
+  "syntheticFixtures": true,
+  "physicalDevice": false,
+  "historicalWhiteScreenFixed": false,
+  "checks": [
+    "393x744 access lock",
+    "393x744 device locale",
+    "393x744 bonus heart present",
+    "393x744 all nine chain blocks fit",
+    {
+      "size": {
+        "width": 393,
+        "height": 744
+      },
+      "geometry": {
+        "scroll": 567,
+        "client": 567,
+        "top": 135.859375,
+        "bottom": 702.84375,
+        "buttonTop": 652.84375,
+        "buttonBottom": 700.84375,
+        "screen": 744,
+        "width": 393,
+        "overflow": false
+      }
+    },
+    "393x744 all statistics and Continue fit",
+    "Continue initially disabled",
+    "Continue callback once",
+    "393x744 no unearned heart",
+    "393x744 right default",
+    "393x744 saved manual hand",
+    "393x744 settings scroll without page motion",
+    "manual language survives reload",
+    "automatic choice returns to device language",
+    "393x628 access lock",
+    "393x628 device locale",
+    "393x628 bonus heart present",
+    "393x628 all nine chain blocks fit",
+    {
+      "size": {
+        "width": 393,
+        "height": 628
+      },
+      "geometry": {
+        "scroll": 513,
+        "client": 513,
+        "top": 98.125,
+        "bottom": 611.484375,
+        "buttonTop": 561.484375,
+        "buttonBottom": 609.484375,
+        "screen": 628,
+        "width": 393,
+        "overflow": false
+      }
+    },
+    "393x628 all statistics and Continue fit",
+    "393x628 no unearned heart",
+    "393x628 right default",
+    "393x628 saved manual hand",
+    "393x628 settings scroll without page motion",
+    "768x1024 access lock",
+    "768x1024 device locale",
+    "768x1024 bonus heart present",
+    "768x1024 all nine chain blocks fit",
+    {
+      "size": {
+        "width": 768,
+        "height": 1024
+      },
+      "geometry": {
+        "scroll": 594,
+        "client": 594,
+        "top": 268.96875,
+        "bottom": 863.015625,
+        "buttonTop": 813.015625,
+        "buttonBottom": 861.015625,
+        "screen": 1024,
+        "width": 768,
+        "overflow": false
+      }
+    },
+    "768x1024 all statistics and Continue fit",
+    "768x1024 no unearned heart",
+    "768x1024 right default",
+    "768x1024 saved manual hand",
+    "768x1024 settings scroll without page motion",
+    "steering does not request fullscreen repeatedly",
+    "native wheel does not scroll or pause the game",
+    "genuine blur still pauses",
+    "explicit Resume works",
+    "no page errors"
+  ],
+  "errors": [],
+  "complete": true,
+  "engine": "26.5"
+}

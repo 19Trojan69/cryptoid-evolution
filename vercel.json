@@ -104,7 +104,8 @@
       "codex/private-preview-lifecycle-capture-20261024": false,
       "codex/testnet-admin-lifecycle-20261025": false,
       "codex/testnet-whitescreen-boss-stop-20261025": false,
-      "codex/save-budget-retry-20261026": false
+      "codex/save-budget-retry-20261026": false,
+      "codex/mobile-cockpit-level-completion-20261026": false
     }
   }
 }

@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { CONTROL_HAND_KEY, readControlHand, readShipStart, SHIP_START_KEY, shipStartHeight } from "./controlPreferences.ts";
+import { CONTROL_HAND_KEY, readControlHand, saveControlHand, readShipStart, SHIP_START_KEY, shipStartHeight } from "./controlPreferences.ts";
 import { placePlayerFromPointer, TOUCH_SHIP_OFFSET_PX } from "./playerCombat.ts";
 
 test("the above-finger position remains the default and touch mode follows the finger", () => {
@@ -39,4 +39,14 @@ test("right-handed steering is the initial choice while an explicit left-handed 
   } finally {
     globalThis.localStorage = previous;
   }
+});
+
+test("blocked storage still starts right-handed and permits switching within this tab", () => {
+  const previous = globalThis.localStorage;
+  globalThis.localStorage = { getItem() { throw Error('denied'); }, setItem() { throw Error('denied'); } };
+  try {
+    assert.equal(readControlHand(), 'right');
+    saveControlHand('left'); assert.equal(readControlHand(), 'left');
+    saveControlHand('right'); assert.equal(readControlHand(), 'right');
+  } finally { globalThis.localStorage = previous; }
 });

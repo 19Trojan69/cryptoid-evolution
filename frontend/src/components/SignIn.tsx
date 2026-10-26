@@ -1,4 +1,5 @@
 import { useLocale } from "../i18n";
+import LaunchShip from './LaunchShip';
 interface SignInProps {
   onSignIn: () => void;
   onModalClose: () => void;
@@ -14,10 +15,11 @@ const SignIn = ({ onSignIn, onModalClose, disabled, onBack }: SignInProps) => {
         {onBack && <button className="text-button menu-return" type="button" onClick={onBack}>← {t("Back to quick access")}</button>}
         <button className="close-button" onClick={onModalClose} aria-label={t("Close")}>×</button>
         <p className="eyebrow">{t('SECURE ACCESS')}</p>
+        <LaunchShip />
         <h2 id="signin-title">{t('Connect your Pi wallet')}</h2>
         <p>{t('Sign in to save your progress and access the power lab.')}</p>
         <div className="modal-actions">
-          <button className="button button-primary" onClick={onSignIn} disabled={disabled}>{t('Sign in with Pi')}</button>
+          <button className="button button-primary" onClick={onSignIn} disabled={disabled}>{t('Sign in with Pi')} <span aria-hidden="true">↗</span></button>
           <button className="text-button" onClick={onModalClose}>{t('Maybe later')}</button>
         </div>
       </div>

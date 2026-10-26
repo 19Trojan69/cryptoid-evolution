@@ -2,10 +2,12 @@ import { combatCryptoid, combatTiming, combatEntryStage, combatAttackPattern, cr
 import { advanceBonusRock, spawnBonusRock, hitBonusRock, rockHitsShot, rockInField, nextRockEventMs, MAX_ROCKS, MAX_ROCK_EFFECTS, type BonusRock, type RockEffect } from './bonusRocks';
 import BonusRockLayer from './BonusRockLayer';
 import {CanvasEffectLayer,CanvasImpact,canvasEffectResources,releaseIdleCanvasEffects} from './CanvasEffects';
-import BossIntermission from './BossIntermission';
+import LevelCompletion from './LevelCompletion';
 import type { BossSummary } from './bossSummaryTiming';
 import './combatVariety.css';
 import { useAuth } from '../hooks/useAuth';
+import GameRoute from '../components/GameRoute';
+import GameAccessGate from '../components/GameAccessGate';
 import { enemyVisualDiameter } from './shipDisplayScale';
 import { autoReloadKey, nextActiveWeapon, parseAutoReload, shouldAutoReload, type AutoReloadPreferences } from './weaponAutoReload';
 import { shipSaveNetwork } from './shipFleet';
@@ -999,7 +1001,11 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         else varietyRef.current = createCombatVariety(true);
         setSaveNotice(data.combat ? "Combat restored." : "Last completed section loaded.");
       }
-      if (data.profile?.mission?.bossIntermission) beginBossSummary(true);
+      if (data.profile?.mission?.bossIntermission) {
+        const legacyStop = { runId: scoreRunRef.current, stage: data.profile.mission.bossIntermission.stage,
+          confirm: true, summaryPlacement: 'level-end' };
+        await retrySave(() => axiosClient.post('/progress/boss-summary/continue', legacyStop));
+      }
     } catch (error) {
       console.error("Could not load paid loadout", error);
       if (sessionStorage.getItem(ADMIN_MODE_KEY) === "1") {
@@ -1170,7 +1176,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     track.setSource("/audio/boss-victory-v2.mp3");
     void track.play();
   };
-  const saveReward = (award: (progress: RewardProgress) => { progress: RewardProgress; notice: string }, event: { kind: "block" | "boss" | "chain" | "bonus"; level: number; stage: number; hits?: number }) => {
+  const saveReward = (award: (progress: RewardProgress) => { progress: RewardProgress; notice: string }, event: { kind: "block" | "boss" | "chain" | "bonus"; level: number; stage: number; hits?: number; summaryPlacement?: 'level-end' }) => {
     if (adminRunRef.current) return "";
     const result = award(rewardProgressRef.current);
     rewardProgressRef.current = result.progress;
@@ -1287,7 +1293,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     bossSummaryRef.current = { summary, accepted: false, restored };
     state.status = 'paused'; clearControls();
     soundRef.current?.setPaused(true); musicRef.current?.pause();
-    // The defeat animation and reward pickup have completed before this stop.
+    // Bonus rewards have already been credited before this level-completion stop.
     state.effects = []; state.shots = []; state.enemyShots = []; state.asteroids = [];
     state.rocks = []; state.rockEffects = []; state.bonusTargets = [];
     setBossSummaryPrepared(false); setBossSummaryFailed(false); setBossSummaryContinueFailed(false); setBossSummary(summary);
@@ -1328,12 +1334,13 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
             activationRef.current = null; // Explicit rejection: no charge was granted.
           }
         }
-        await axiosClient.post('/progress/boss-summary/prepare', { runId, stage: pending.summary.stage });
         const saved = await loadAccountSave();
         if (!current()) return;
-        if (saved.mission?.sector !== pending.summary.stage || saved.mission.phase !== 'bonus'
-          || saved.mission.bossIntermission?.stage !== pending.summary.stage) throw Error('Boss checkpoint not confirmed');
-        lastSavedAtRef.current = Date.parse(saved.mission.savedAt);
+        if (pending.summary.stage === 500 ? saved.mission !== null
+          : saved.mission?.sector !== pending.summary.stage + 1 || saved.mission.phase !== 'normal') throw Error('Level checkpoint not confirmed');
+        if (saved.mission && (saved.mission.snapshot.score !== pending.summary.score
+          || saved.mission.snapshot.shards !== pending.summary.shards || saved.mission.snapshot.hearts !== pending.summary.hearts)) throw Error('Level rewards not confirmed');
+        lastSavedAtRef.current = Date.parse(saved.mission?.savedAt ?? saved.updatedAt);
       }
       if (!current()) return;
       if (ownerDiagnostics) {
@@ -1358,14 +1365,11 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   useEffect(() => { if (bossSummary) void prepareBossSummary(); }, [bossSummary, prepareBossSummary]);
   const continueBossSummary = async (retry = false) => {
     const pending = bossSummaryRef.current, runId = scoreRunRef.current;
-    if (!pending || !bossSummaryPrepared || bossSummarySaving || (bossSummaryFailed && !retry) || bossSummaryContinuing) return;
+    if (!pending || pending.accepted || !bossSummaryPrepared || bossSummarySaving || (bossSummaryFailed && !retry) || bossSummaryContinuing) return;
     const generation = bossPreparationRef.current;
     const current = () => weaponMountedRef.current && generation === bossPreparationRef.current && bossSummaryRef.current === pending && scoreRunRef.current === runId;
     unlockAudioForResume(); setBossSummaryContinuing(true); setBossSummaryFailed(false); setBossSummaryContinueFailed(false);
     try {
-      if (runId && !adminRunRef.current) await retrySave(() => axiosClient.post('/progress/boss-summary/continue', {
-        runId, stage: pending.summary.stage, confirm: true,
-      }));
       if (!current()) return;
       pending.accepted = true;
       if (pending.restored) bossSummaryRef.current = null;
@@ -1588,6 +1592,10 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         state.powerUps = movePowerUps(state.powerUps, delta, height);
         performanceProbeRef.current?.mark('setup-and-boosts');
         if (state.phase === "SECTOR_CLEAR") {
+          // One readable stop after the bonus rewards; no separate boss statistics.
+          if (state.encounter === 'bonus' && !bossSummaryRef.current?.accepted) {
+            beginBossSummary(); forceScene = true; return;
+          }
           clearTimerRef.current += delta;
           if (state.encounter === "boss-clear") {
             if (!bossDestroyPlayedRef.current && clearTimerRef.current >= BOSS_FALL_DURATION_MS) {
@@ -1599,7 +1607,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
             if (bossVictoryPendingRef.current && clearTimerRef.current >= BOSS_VICTORY_START_MS) startBossVictory();
           }
           const victoryStillPlaying = state.encounter === "boss-clear" && musicRef.current?.currentSource === "/audio/boss-victory-v2.mp3" && musicRef.current.waitingForEnd(clearTimerRef.current);
-          const clearFinished = clearTimerRef.current >= (state.encounter === "boss-clear" ? BOSS_CLEAR_DURATION_MS : timing.clearMs) && !victoryStillPlaying;
+          const clearFinished = state.encounter === 'bonus' && !!bossSummaryRef.current?.accepted || clearTimerRef.current >= (state.encounter === "boss-clear" ? BOSS_CLEAR_DURATION_MS : timing.clearMs) && !victoryStillPlaying;
           if (clearFinished && state.encounter === 'boss-clear' && collectBossHeart(state, state.player, width, height)) {
             soundRef.current?.play('extraLife');
             bossLifeRemainingRef.current=BOSS_EXTRA_LIFE_MS;
@@ -1612,7 +1620,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
               const next = reachLevel(result.progress, Math.min(500, state.sector + 1));
               const rank = rewardRank(next);
               return { progress: next, notice: `Boss stickers · ${bossId}/50 · ${result.stars}★${rank !== previousRank ? ` · New rank · ${rank}` : ''}` };
-            }, { kind: 'boss', level: bossId, stage: state.sector });
+            }, { kind: 'boss', level: bossId, stage: state.sector, summaryPlacement: 'level-end' });
             if(firstUnlock&&!adminRunRef.current&&bossCardAvailable(bossId)&&!hasSeenCard(cardOwnerRef.current,`boss-${bossId}`))
               pendingBossCardRef.current={key:`boss-${bossId}`,boss:bossId,stars:rewardProgressRef.current.bossWins[bossId]||1};
 
@@ -1622,9 +1630,6 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
             showRewardCards([card]);return;
           }
           if (clearFinished && (state.encounter !== 'boss-clear' || state.bossHeartCollected&&bossLifeRemainingRef.current===0)) {
-            if (state.encounter === 'boss-clear' && !bossSummaryRef.current?.accepted) {
-              beginBossSummary(); forceScene = true; return;
-            }
             if (ownerDiagnostics && state.encounter === 'boss-clear') recordOwnerResourceSnapshot('resource-boss-clear-ready');
             if (state.encounter === "bonus" && state.sector === MAX_DIFFICULTY_LEVEL) {
               if (!recordsSavedRef.current) {
@@ -1645,7 +1650,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
             state.section = next.section;
             state.sector = next.sector;
             state.encounter = next.encounter;
-            if (clearEncounter === 'boss-clear') bossSummaryRef.current = null;
+            if (clearEncounter === 'bonus') bossSummaryRef.current = null;
             state.bossHeartCollected = undefined;
             if (next.encounter === "boss-intro") {
               performanceProbeRef.current?.checkpoint('boss-model-start', { sector: state.sector, encounter: 'boss-intro', phase: 'SECTOR_INTRO', hearts: state.hearts });
@@ -2554,9 +2559,10 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     }}>{t("Retry save")}</button>}</p>;
 
   return (
-    <main className="game-shell" data-effects-paused={game.status === "paused" || game.status === "loading"} onPointerDownCapture={event => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); if (pointerRef.current === null && !(event.target as HTMLElement).closest("button, .touch-controls") && !document.fullscreenElement) requestGameFullscreen(); }}>
+    <main className="game-shell" data-effects-paused={game.status === "paused" || game.status === "loading"} onPointerDownCapture={() => { primeCardSound(); if(rewardCardsRef.current.length)return; retryAudio(); }}>
       {rewardCards[0] && <CardReveal reward={rewardCards[0]} remaining={rewardCards.length} onContinue={continueRewardCard}/>}
-      {bossSummary && !rewardCards.length && !homePrompt && <BossIntermission key={bossSummary.stage} summary={bossSummary} prepared={bossSummaryPrepared}
+      {bossSummary && !rewardCards.length && !homePrompt && <LevelCompletion key={bossSummary.stage} summary={bossSummary} name={sectorName(game.sector)} headline={transitionHeadline}
+        bonusHits={game.bonusHits} bonusResult={translateBonusResult(game.bonusResult.replace(' · +1 HEART', ''))} bonusPoints={bonusReward(game.bonusHits, game.sector).points} bonusHeart={game.bonusResult.includes(' · +1 HEART')} prepared={bossSummaryPrepared}
         saving={bossSummarySaving} failed={bossSummaryFailed} continuing={bossSummaryContinuing}
         onRetry={() => { if (bossSummaryContinueFailed) void continueBossSummary(true); else void prepareBossSummary(); }} onContinue={() => { void continueBossSummary(); }} />}
       {extraLifeVisible&&<div className={`boss-extra-life${game.bossHeartShards ? " boss-shard-reward" : ""}`} role="status" aria-live="polite"><strong>{t(game.bossHeartShards ? 'FULL HEARTS' : 'HEART RESTORED')}</strong><span>{game.bossHeartShards ? `+${game.bossHeartShards} ◆` : '+1 ♥'}</span></div>}
@@ -2598,7 +2604,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
           {startError && <div className="modal-actions"><button className="button button-primary" type="button" onClick={() => { setStartError(""); setRecoveryError(false); void activateLoadout(); }}>{t("Try again")}</button>{recoveryError && <button className="button button-secondary" type="button" onClick={() => { saveQueueRef.current?.archive(); saveQueueReadyRef.current = true; setRecoveryError(false); setStartError(""); setSaveNotice("Pending data set aside. Using the confirmed account save."); void activateLoadout(); }}>{t("Use confirmed save")}</button>}</div>}
           {(startError || resumeOffer) && <button className="button button-secondary mission-back-button" type="button" onClick={() => { leaveGameFullscreen(); navigate(sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "/admin" : "/"); }}>{t("Back")}</button>}
         </div></div>}
-        {game.status === "playing" && !extraLifeVisible && !bossDestructionActive && !reinforcementIntro && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${game.encounter === "boss-intro" ? " boss-intro-banner" : ""}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite">
+        {game.status === "playing" && !levelComplete && !extraLifeVisible && !bossDestructionActive && !reinforcementIntro && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${game.encounter === "boss-intro" ? " boss-intro-banner" : ""}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite">
           <span>{levelComplete || levelIntro ? sectorName(game.sector) : game.encounter === "bonus" ? game.phase === "SECTOR_CLEAR" ? t("BONUS COMPLETE") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.encounter !== "normal" ? `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.phase === "SECTOR_CLEAR" ? t("BLOCK LINKED") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}`}</span>
           <strong>{transitionHeadline}</strong>
           {game.encounter === 'boss-intro' && <small className="boss-callsign">{bossName(Math.ceil(game.sector / 10))}</small>}
@@ -2693,17 +2699,11 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
 export { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY };
 function GameEntry() {
   const { authReady, isLoading, authError, signIn, canAdmin } = useAuth();
-  const { t } = useLocale();
   // Decide guest/account ownership only after authentication has settled.
   // Once mounted, the mission retains its original owner until it is left.
-  if (authReady && !isLoading && !authError) return <GamePage ownerDiagnostics={canAdmin} />;
-  return <div className="game-overlay"><div className="game-modal">
-    <p role="status">{t(!authReady || isLoading ? 'Signing in…' : authError)}</p>
-    {authReady && !isLoading && <div className="modal-actions">
-      <button className="button button-primary" onClick={() => { void signIn(); }}>{t('Retry')}</button>
-      <button className="button button-secondary" onClick={() => { window.location.assign('/'); }}>{t('Home')}</button>
-    </div>}
-  </div></div>;
+  return <GameRoute>{authReady && !isLoading && !authError
+    ? <GamePage ownerDiagnostics={canAdmin} />
+    : <GameAccessGate pending={!authReady || isLoading} error={authError} onRetry={() => { void signIn(); }} />}</GameRoute>;
 }
 export default GameEntry;
 

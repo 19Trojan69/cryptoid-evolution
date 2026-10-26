@@ -10,7 +10,7 @@ import { restoreScoreRun } from "../restoreScoreRun";
 import { maxMissionHearts } from "../lifeRules";
 import { bossIntermissionPending } from '../bossIntermission';
 
-type RewardEvent = { runId: string; kind: "block" | "chain" | "boss" | "bonus"; level: number; stage: number; hits?: number; save?: unknown };
+type RewardEvent = { runId: string; kind: "block" | "chain" | "boss" | "bonus"; level: number; stage: number; hits?: number; save?: unknown; summaryPlacement?: 'level-end' };
 
 export default function mountRewardEndpoints(router: Router) {
   router.get("/me", async (req, res) => {
@@ -32,6 +32,7 @@ export default function mountRewardEndpoints(router: Router) {
     catch { return res.status(503).json({ error: "Could not restore active run" }); }
     const network = rewardNetwork(req);
     const event = req.body as RewardEvent;
+    if (event?.summaryPlacement !== undefined && (event.kind !== 'boss' || event.summaryPlacement !== 'level-end')) return res.status(400).json({ error: 'Invalid reward event' });
     if (!uid || !run || event?.runId !== run.id || Date.now() - run.startedAt > 8 * 60 * 60 * 1000) return res.status(403).json({ error: "No active signed-in run" });
     if (!Number.isInteger(event.level) || event.level < 1 || event.level > 50 || !["block", "chain", "boss", "bonus"].includes(event.kind) ||
       (event.kind === "block" ? !Number.isInteger(event.stage) || event.stage < (event.level - 1) * 10 + 1 || event.stage > event.level * 10 - 1 : event.stage !== (event.kind === "chain" ? event.level * 10 - 1 : event.level * 10)) ||

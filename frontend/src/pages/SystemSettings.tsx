@@ -2,7 +2,7 @@ import { requestGameFrame, cancelGameFrame } from '../lib/frameScheduler';
 import { useEffect, useState } from "react";
 import LanguagePicker from "../components/LanguagePicker";
 import { languages, useLocale } from "../i18n";
-import { CONTROL_HAND_KEY, CONTROL_SENSITIVITY_KEY, CONTROL_ZONE_KEY, SHIP_START_KEY, readControlHand, readControlSensitivity, readControlZone, readShipStart, type ControlHand, type ControlSensitivity, type ControlZone, type ShipStart } from "./controlPreferences";
+import { saveControlHand, CONTROL_SENSITIVITY_KEY, CONTROL_ZONE_KEY, SHIP_START_KEY, readControlHand, readControlSensitivity, readControlZone, readShipStart, type ControlHand, type ControlSensitivity, type ControlZone, type ShipStart } from "./controlPreferences";
 import { VIBRATION_KEY, readVibrationEnabled, supportsVibration, gameHaptics } from "./gameHaptics";
 import { requestGameFullscreen } from "./gameFullscreen";
 import MusicVolumeSlider from "./MusicVolumeSlider";
@@ -44,7 +44,7 @@ export default function SystemSettings({ musicVolume, effectsVolume, changeMusic
   }, [idPrefix, initialSection]);
   return <>
           {compactMobile && <nav className="mobile-settings-nav" id={`${idPrefix}-settings-overview`} aria-label={t("System menu")}>
-            {mobileSection ? <button type="button" className="mobile-settings-back" onClick={() => openMobileSection(null)}>← {t("All settings")}</button> : (["audio", "controls", "language", "display"] as const).map(section => <button key={section} type="button" className="mobile-settings-row" aria-controls={`${idPrefix}-settings-${section}`} aria-expanded={false} onClick={() => openMobileSection(section)}><b>{t(section === "audio" ? "Music & effects" : section === "controls" ? "Controls" : section === "language" ? "Language" : "Display")}</b><span>{section === "audio" ? `${musicVolume}%` : section === "controls" ? t(controlHand === "right" ? "Right-handed" : "Left-handed") : section === "language" ? languages[locale] : ""}<i aria-hidden="true">›</i></span></button>)}
+            {mobileSection ? <button type="button" className="mobile-settings-back" onClick={() => openMobileSection(null)}>← {t("All settings")}</button> : (["audio", "controls", "language", "display"] as const).map(section => <button key={section} type="button" className="mobile-settings-row" aria-controls={`${idPrefix}-settings-${section}`} aria-expanded={false} onClick={() => openMobileSection(section)}><b>{t(section === "audio" ? "Music & effects" : section === "controls" ? "Controls" : section === "language" ? "Language" : "Display")}</b><span>{section === "audio" ? `${musicVolume}%` : section === "controls" ? t(controlHand === "right" ? "Right-handed" : "Left-handed") : section === "language" ? automatic ? `${t("Automatic (device language)")} · ${languages[locale]}` : languages[locale] : ""}<i aria-hidden="true">›</i></span></button>)}
           </nav>}
           <div className={`system-menu-section${compactMobile ? " mobile-settings-section" : ""}`} data-mobile-active={mobileSection === "language"} id={`${idPrefix}-settings-language`} tabIndex={-1}>
             <div className="system-menu-heading"><strong>{t('Language')}</strong><small>{t('Current language')}: {languages[locale]}</small></div>
@@ -53,8 +53,8 @@ export default function SystemSettings({ musicVolume, effectsVolume, changeMusic
           </div>
           <div className={`system-menu-section system-quick-settings${compactMobile ? " mobile-settings-section" : ""}`} data-mobile-active={mobileSection === "controls"} id={`${idPrefix}-settings-controls`} tabIndex={-1}>
             <div className="system-menu-heading"><strong>{t('Controls')}</strong><small>{t('Move with one thumb; activate power-ups with the other.')}</small></div>
-            <button className="system-setting" type="button" aria-pressed={controlHand === "right"} onClick={() => { localStorage.setItem(CONTROL_HAND_KEY, "right"); setControlHand("right"); onChange?.(); }}><span aria-hidden="true">◁</span><b>{t('Right-handed controls')}</b></button>
-            <button className="system-setting" type="button" aria-pressed={controlHand === "left"} onClick={() => { localStorage.setItem(CONTROL_HAND_KEY, "left"); setControlHand("left"); onChange?.(); }}><span aria-hidden="true">▷</span><b>{t('Left-handed controls')}</b></button>
+            <button className="system-setting" type="button" aria-pressed={controlHand === "right"} onClick={() => { saveControlHand("right"); setControlHand("right"); onChange?.(); }}><span aria-hidden="true">◁</span><b>{t('Right-handed controls')}</b></button>
+            <button className="system-setting" type="button" aria-pressed={controlHand === "left"} onClick={() => { saveControlHand("left"); setControlHand("left"); onChange?.(); }}><span aria-hidden="true">▷</span><b>{t('Left-handed controls')}</b></button>
             <div className="control-choice-group" role="group" aria-label={t('Touch sensitivity')}>
               <strong>{t('Touch sensitivity')}</strong>
               {(["gentle", "normal", "fast"] as const).map(value => <button key={value} className="system-setting" type="button" aria-pressed={controlSensitivity === value} onClick={() => { localStorage.setItem(CONTROL_SENSITIVITY_KEY, value); setControlSensitivity(value); onChange?.(); }}><b>{t(value === "gentle" ? "Gentle" : value === "normal" ? "Normal" : "Fast")}</b></button>)}

@@ -27,11 +27,11 @@ export function readSnapshot(input: unknown): Snapshot | null {
   if ([s.damageCount,s.comboTotal].some(v=>v!==undefined&&!integer(v,1_000_000)) || s.comboTotal !== undefined && s.comboTotal > Math.floor(s.destroyed/2)) return null;
   return { ...(s.damageCount===undefined?{}:{damageCount:s.damageCount}), ...(s.comboTotal===undefined?{}:{comboTotal:s.comboTotal}), ...Object.fromEntries(Object.keys(limits).map(key => [key, (s as any)[key]])), weaponSource: s.weaponSource, shieldActive: s.shieldActive, weaponTimers: [...s.weaponTimers] } as Snapshot;
 }
-export const missionAfter = (event: { kind: string; stage: number }, snapshot: Snapshot): Mission | null => {
+export const missionAfter = (event: { kind: string; stage: number; summaryPlacement?: 'level-end' }, snapshot: Snapshot): Mission | null => {
   if (event.kind === "bonus" && event.stage === 500) return null;
   const phase = event.kind === "boss" ? "bonus" : (event.kind === "chain" || event.kind === "block" && event.stage % 10 === 9) ? "boss" : "normal";
   const sector = event.kind === "boss" ? event.stage : event.kind === "chain" ? event.stage + 1 : event.stage + 1;
-  return { sector, phase, snapshot, ...(event.kind === 'boss' ? { bossIntermission: { stage: event.stage, createdAt: Date.now() } } : {}), ...(snapshot.damageCount===undefined?{}:{damageAtStart:snapshot.damageCount,destroyedAtStart:snapshot.destroyed}), savedAt: new Date().toISOString() };
+  return { sector, phase, snapshot, ...(event.kind === 'boss' && event.summaryPlacement !== 'level-end' ? { bossIntermission: { stage: event.stage, createdAt: Date.now() } } : {}), ...(snapshot.damageCount===undefined?{}:{damageAtStart:snapshot.damageCount,destroyedAtStart:snapshot.destroyed}), savedAt: new Date().toISOString() };
 };
 
 // Existing browser data is explicitly imported once, never merged on login.

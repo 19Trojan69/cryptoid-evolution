@@ -1,0 +1,43 @@
+{
+  "localOnly": true,
+  "syntheticFixtures": true,
+  "physicalDevice": false,
+  "historicalWhiteScreenFixed": false,
+  "checks": [
+    "393x744 access lock",
+    "393x744 device locale",
+    "393x744 bonus heart present",
+    "393x744 all nine chain blocks fit",
+    {
+      "size": {
+        "width": 393,
+        "height": 744
+      },
+      "geometry": {
+        "scroll": 567,
+        "client": 567,
+        "top": 135.859375,
+        "bottom": 702.84375,
+        "buttonTop": 652.84375,
+        "buttonBottom": 700.84375,
+        "screen": 744,
+        "width": 393,
+        "overflow": false
+      }
+    },
+    "393x744 all statistics and Continue fit",
+    "Continue initially disabled",
+    "Continue callback once",
+    "393x744 no unearned heart",
+    "393x744 right default",
+    "393x744 saved manual hand",
+    "393x744 settings scroll without page motion"
+  ],
+  "errors": [],
+  "complete": false,
+  "engine": "26.5",
+  "failure": {
+    "message": "manual language survives reload",
+    "stack": "AssertionError [ERR_ASSERTION]: manual language survives reload\n    at check (file:///workspace/scratch/f0c1be48d22d/mobile-cockpit-fix/verification/mobile-cockpit/verify-native.mjs:11:36)\n    at file:///workspace/scratch/f0c1be48d22d/mobile-cockpit-fix/verification/mobile-cockpit/verify-native.mjs:53:94"
+  }
+}
