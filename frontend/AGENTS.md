@@ -1,3 +1,25 @@
+# Prepared resource reuse and pending artwork sharing, 26 October 2026
+
+Continue from common public bd23bd4/PR177. The owner asks to fix the reproduced
+six-original reload at Continue and find equivalent redundant preparation across
+the game. Reuse only exact ready color/stage plans, retaining missing/boss loads,
+seven-source cap, serial readiness and incoming pins before outgoing release.
+Known player centers need no original reload after eviction/remount. Share only
+pending card-image originals across colors/resolutions; no new completed-image
+cache, artwork/effect/audio budget or visual change. Failures must remain retryable.
+Other image/texture/audio caches were audited; existing coalescing is retained.
+See docs/continue-hull-prefetch-20261026 and verification/continue-hull-prefetch.
+348 normal release cases/types/Vite pass; native controls and candidate show
+6->0 Continue, 1->0 remount and 8->1 gallery source jobs with identical pixels.
+GamePage remains unchanged (62 lint errors/four warnings); paintedShip retains
+one old lint error. White Screen/native cause and physical Pi stability remain
+unproved. Raw owner reports stay private; no repeat long owner campaign.
+Preserve all save/economy/real-pause/manual-Resume and strict >2500ms/500ms rules,
+original art/audio/HUD/boss indicators, separate project environments; no reset,
+PR167/168, secrets/runtime logs or protection changes. Candidate auto-deploy is off.
+Same reviewed source publication to both projects stays authorized; preserve
+bd23bd4 at backup/shared-before-resource-reuse-20261026 and prior READY deployments.
+
 # Ship indicators and free manual completion, 26 October 2026
 
 Owner requests ordinary enemy bars at half width/height, closer and centered on

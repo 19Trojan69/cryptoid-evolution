@@ -1,0 +1,14 @@
+{
+  "localOnly": true,
+  "physicalDevice": false,
+  "baseline": true,
+  "checks": [
+    "bonus/next group preparation settles with every visible original hull ready",
+    "completion cleanup evicts raw sources while prepared hulls stay retained",
+    "published player remount reloads its known original",
+    "player offset stays identical after remount"
+  ],
+  "errors": [],
+  "engine": "26.5",
+  "frames": []
+}

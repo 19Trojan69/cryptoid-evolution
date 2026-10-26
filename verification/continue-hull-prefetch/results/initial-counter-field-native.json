@@ -1,0 +1,14 @@
+{
+  "localOnly": true,
+  "physicalDevice": false,
+  "baseline": false,
+  "checks": [
+    "bonus/next group preparation settles with every visible original hull ready",
+    "completion cleanup evicts raw sources while prepared hulls stay retained",
+    "prepared transition creates no redundant raw Image jobs",
+    "all seven visible hulls remain ready after the transition"
+  ],
+  "errors": [],
+  "engine": "26.5",
+  "frames": []
+}

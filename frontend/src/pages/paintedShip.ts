@@ -73,8 +73,19 @@ const shipImage = (url: string) => {
 };
 
 // Ready images use the existing eight-source cache; pending URLs share one load.
-export const preloadHullSources = (urls: readonly string[]) => {
-  for (const url of [...new Set(urls)].slice(0, 7)) void shipImage(url).catch(() => {});
+export const preloadHullSources = (urls: readonly string[], hulls: readonly PreparedHull[] = []) => {
+  // A prepared color/stage already supplies its visible hull and flame gate.
+  // Do not reload its raw original after completion cleanup evicted that LRU.
+  // Every planned variant sharing a source must be ready before skipping it.
+  const prepared = new Map<string, boolean>();
+  for (const hull of hulls) {
+    const stage = hull.stage ?? 1, url = shipEvolutionAsset(hull.sprite, stage);
+    const ready = Boolean(cache.get(`${hull.sprite}:${stage}:${hull.color}`));
+    prepared.set(url, (prepared.get(url) ?? true) && ready);
+  }
+  for (const url of [...new Set(urls)].slice(0, 7)) {
+    if (!prepared.get(url)) void shipImage(url).catch(() => {});
+  }
 };
 
 export const useHullSourceReady = (url: string | undefined) => {
@@ -97,6 +108,9 @@ export const useShipVisualOffset = (index: number, stage: ShipStage): CSSPropert
   const url = shipEvolutionAsset(index, stage);
   const [readyUrl, setReadyUrl] = useState<string | null>(null);
   useEffect(() => {
+    // The offset metadata outlives the evictable original Image. Re-entry only
+    // needs that known center; a new stage/source still uses the actual load.
+    if (visualCenters.has(url)) return;
     let active = true;
     void shipImage(url).then(() => { if (active) setReadyUrl(url); }).catch(() => {});
     return () => { active = false; };

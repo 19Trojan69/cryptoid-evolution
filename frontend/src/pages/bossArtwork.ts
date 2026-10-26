@@ -9,12 +9,23 @@ const cache = new Map<string, Promise<HTMLCanvasElement>>();
 // Cache eviction must not start a second copy of an unfinished preparation.
 // Settled tasks live only in the existing bounded cache.
 const pending = new Map<string, Promise<HTMLCanvasElement>>();
-export const loadCardImage = (src: string) => new Promise<HTMLImageElement>((resolve, reject) => {
-  const image = new Image();
-  image.onload = () => resolve(image);
-  image.onerror = () => reject(new Error(`Card asset unavailable: ${src}`));
-  image.src = src;
-});
+// Different colors/resolutions can request the same original concurrently.
+// Share only unfinished loads: no additional decoded-image cache is retained.
+const pendingImages = new Map<string, Promise<HTMLImageElement>>();
+export const loadCardImage = (src: string) => {
+  const existing = pendingImages.get(src);
+  if (existing) return existing;
+  const task = new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => { image.onload = image.onerror = null; resolve(image); };
+    image.onerror = () => { image.onload = image.onerror = null; reject(new Error(`Card asset unavailable: ${src}`)); };
+    image.src = src;
+  });
+  pendingImages.set(src, task);
+  const settled = () => { if (pendingImages.get(src) === task) pendingImages.delete(src); };
+  void task.then(settled, settled);
+  return task;
+};
 export function loadBossArtwork(id: number, resolution = 1200): Promise<HTMLCanvasElement> {
   if (!Number.isInteger(id) || id < 1 || id > 50) return Promise.reject(new Error('Invalid boss id'));
   const pixels = Math.max(256, Math.min(2400, Math.round(resolution)));
