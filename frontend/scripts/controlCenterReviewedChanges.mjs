@@ -1,3 +1,4 @@
+import {restoreCompletionAudioGameChanges} from './completionAudioReviewedChanges.mjs';
 import {restoreLevelEntranceGameChanges} from './levelEntranceReviewedChanges.mjs';
 import {restoreCompletionRecoveryChanges} from './completionRecoveryReviewedChanges.mjs';
 // Exact owner-requested removal of the tablet/desktop fullscreen shortcut.
@@ -12,6 +13,7 @@ export const reviewedControlCenterGameChanges = [
   }
 ];
 export function restoreControlCenterGameChanges(source) {
+  source = restoreCompletionAudioGameChanges(source);
   source = restoreLevelEntranceGameChanges(source);
   source = restoreCompletionRecoveryChanges(source, 'src/pages/GamePage.tsx');
   for (const {before, after} of [...reviewedControlCenterGameChanges].reverse()) {

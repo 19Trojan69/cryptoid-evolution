@@ -52,7 +52,9 @@ export class AudioClockRecovery {
     // A fresh/never-rendered graph needs its native resume in the actual click,
     // even if the host already claims running. Suspending it first can consume
     // that click and leave its rendering clock at zero throughout the mission.
-    const restart = restartPausedGraph && context.state === 'running' && context.currentTime > 0;
+    // A rendered interrupted/suspended graph can also resume as running with
+    // a frozen clock. Use the same ordered cycle in this explicit gesture.
+    const restart = restartPausedGraph && context.currentTime > 0 && context.state !== 'closed';
     const freshRestart = restartPausedGraph && context.currentTime === 0;
     if ((!this.stalled || freshRestart) && !restart) {
       if (context.state === 'running' && this.resumeRequested && !restartPausedGraph) return Promise.resolve(true);
