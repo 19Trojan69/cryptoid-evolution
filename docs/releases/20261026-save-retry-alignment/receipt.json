@@ -1,0 +1,61 @@
+{
+  "releaseCommit": "d0a0b81e175bbf955dfe06d9e693b08566aabfbb",
+  "releaseTree": "51404fc69ca7a1176c7a15edf617ee764acd9645",
+  "testedSource": "2435ee05eb547a459a996df34ac92fab84082c1f",
+  "date": "2026-10-26",
+  "approvedByOwner": true,
+  "gitBranches": {
+    "main": "d0a0b81e175bbf955dfe06d9e693b08566aabfbb",
+    "testnetStability": "d0a0b81e175bbf955dfe06d9e693b08566aabfbb"
+  },
+  "deployments": [
+    {
+      "project": "cryptoid-evolution-testnet",
+      "id": "dpl_65SLqpFEVhBWaSaArrmNgBM5vb8A",
+      "status": "READY",
+      "environment": "production",
+      "currentDomain": "https://cryptoid-evolution-testnet.vercel.app/",
+      "dashboardUrl": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/65SLqpFEVhBWaSaArrmNgBM5vb8A",
+      "buildDurationSeconds": 58
+    },
+    {
+      "project": "cryptoid-evolution",
+      "id": "dpl_94e3az5zdn1969RBi71bxf9jAEmK",
+      "status": "READY",
+      "environment": "production",
+      "currentDomain": "https://cryptoid-evolution.vercel.app/",
+      "dashboardUrl": "https://vercel.com/19-trojan69/cryptoid-evolution/94e3az5zdn1969RBi71bxf9jAEmK",
+      "buildDurationSeconds": 80
+    }
+  ],
+  "checks": {
+    "frontendTests": 244,
+    "backendTests": 124,
+    "matchingLocalBuildInputs": 621,
+    "localBuildInputMismatches": 0,
+    "liveHttpChecksPassed": true,
+    "sameApplicationBundles": true,
+    "anonymousAdminStatusBoth": 401,
+    "networkSeparation": "testnet/mainnet public leaderboard identities independently verified",
+    "publicDiagnostics": "redirect to Home"
+  },
+  "rollback": {
+    "mainSource": "907d2a7363345d00f0f90c54402bf04e887b64d9",
+    "testnetSource": "20843b5501387dca8bb5616303934ece2ae6d581",
+    "testnetDeployment": "dpl_JA3UqZt1CvRqr44GLMBB9gSCqvxf"
+  },
+  "screenshot": {
+    "file": "production-ready.jpg",
+    "sha256": "014a8fda01ac9fef89d133a45d280728f704990fc00c89a05eabd334c3e2806f",
+    "bytes": 115017
+  },
+  "historicalWhiteScreenFixed": false,
+  "realPiAuthenticationExercised": false,
+  "realPurchasesExercised": false,
+  "playerDataReset": false,
+  "playerDataMigration": false,
+  "completeRuntimeErrorScanClaimed": false,
+  "connectorAccess": "Direct Vercel project/deployment connector reads still denied; GitHub status and signed-in Dashboard verified readiness and domain assignment",
+  "recordBranchAutoDeployDisabled": true,
+  "recordChangesRuntime": false
+}

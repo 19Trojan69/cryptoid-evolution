@@ -1,0 +1,76 @@
+{
+  "expectedCommit": "d0a0b81e175bbf955dfe06d9e693b08566aabfbb",
+  "sameApplicationBundles": true,
+  "sites": [
+    {
+      "host": "cryptoid-evolution-testnet.vercel.app",
+      "sourceCommit": "d0a0b81e175bbf955dfe06d9e693b08566aabfbb",
+      "passed": false,
+      "bundles": [
+        {
+          "kind": "entry",
+          "url": "https://cryptoid-evolution-testnet.vercel.app/assets/index-RdVXfgxr.js",
+          "sha256": "24bdf7dbd8d7b008de791dd0ef50e4118e1528f7094c4891de6d0170a75124a3",
+          "bytes": 1944965,
+          "httpStatus": 200,
+          "milliseconds": 4441,
+          "hasExpectedSourceCommit": false,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "game",
+          "url": "https://cryptoid-evolution-testnet.vercel.app/assets/GamePage-D251A-aO.js",
+          "sha256": "7e3cb8fbaa7ad396fc7e0142f30ed4601e205d92521898a10561ff815fff79b6",
+          "bytes": 244000,
+          "httpStatus": 200,
+          "milliseconds": 3301,
+          "hasExpectedSourceCommit": true,
+          "hasBoundedRewardRetry": false
+        }
+      ],
+      "url": "https://cryptoid-evolution-testnet.vercel.app/",
+      "httpStatus": 200,
+      "htmlSha256": "d4b4ff81b86af1c17c278c557f169974c502cf98e5da54b7152ccb00ad5bd549",
+      "htmlBytes": 6030,
+      "htmlMilliseconds": 3722,
+      "error": "AssertionError()"
+    },
+    {
+      "host": "cryptoid-evolution.vercel.app",
+      "sourceCommit": "d0a0b81e175bbf955dfe06d9e693b08566aabfbb",
+      "passed": false,
+      "bundles": [
+        {
+          "kind": "entry",
+          "url": "https://cryptoid-evolution.vercel.app/assets/index-RdVXfgxr.js",
+          "sha256": "24bdf7dbd8d7b008de791dd0ef50e4118e1528f7094c4891de6d0170a75124a3",
+          "bytes": 1944965,
+          "httpStatus": 200,
+          "milliseconds": 6033,
+          "hasExpectedSourceCommit": false,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "game",
+          "url": "https://cryptoid-evolution.vercel.app/assets/GamePage-D251A-aO.js",
+          "sha256": "7e3cb8fbaa7ad396fc7e0142f30ed4601e205d92521898a10561ff815fff79b6",
+          "bytes": 244000,
+          "httpStatus": 200,
+          "milliseconds": 6143,
+          "hasExpectedSourceCommit": true,
+          "hasBoundedRewardRetry": false
+        }
+      ],
+      "url": "https://cryptoid-evolution.vercel.app/",
+      "httpStatus": 200,
+      "htmlSha256": "d4b4ff81b86af1c17c278c557f169974c502cf98e5da54b7152ccb00ad5bd549",
+      "htmlBytes": 6030,
+      "htmlMilliseconds": 6443,
+      "error": "AssertionError()"
+    }
+  ],
+  "readOnlyChecks": true,
+  "realPurchases": false,
+  "realGameStart": false,
+  "earlierVerifierIssue": "Initial entry-only check missed the separately lazy-loaded GamePage; no game or deployment change was made to correct the verifier."
+}
