@@ -1,3 +1,21 @@
+## Original-game account/time and server boundary, 26 October 2026
+
+The new device report ends at internal53→54 (Level6 Block3→4), followed by a
+new Home document. Authorized signed-in Vercel logs independently confirm that
+the unmatched final reward request was answered200, while the earlier recovered
+invalid_save really was400. No logged validation subreason or crash cause is
+available. Dashboard access works; the connector still returns403.
+
+Matched original-game WPE owner/account controls complete53→54 with12/12 hulls.
+A separate full-scene owner/account control retains one document/run for780.349
+real seconds (about438.5seconds on the original bounded simulation clock), with
+original sound and78 synthetic combat saves. This is neither an iPhone result
+nor full campaign/native-memory acceptance. Preserve the earlier startup stall.
+Read evidence/transition54-20261026/README.md and controls-summary.json; raw
+receipts and all preliminary failures are archived with hashes. No runtime or
+deployment change in this checkpoint. A separately prepared bounded reward
+retry must remain distinct from a White Screen fix.
+
 # Continuation checkpoint
 
 ## Elapsed-time checkpoint, 26 October 2026

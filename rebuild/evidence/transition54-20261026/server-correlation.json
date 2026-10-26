@@ -1,0 +1,47 @@
+{
+  "observedThrough": "User-authorized signed-in Vercel dashboard; connector logs API remains403",
+  "teamSlug": "19-trojan69",
+  "testnetProject": "cryptoid-evolution-testnet",
+  "testnetDeployment": "dpl_JA3UqZt1CvRqr44GLMBB9gSCqvxf",
+  "dashboardTimezone": "GMT+1; all below UTC",
+  "earlierRewardFailure": {
+    "testnetRequestStarted": "2026-10-26T09:41:07.857Z",
+    "testnetStatus": 400,
+    "testnetExecutionSeconds": 5.47,
+    "testnetResponseSecondsApprox": 5.6,
+    "upstreamHost": "cryptoid-evolution.vercel.app",
+    "upstreamRequestStarted": "2026-10-26T09:41:08.038Z",
+    "upstreamStatus": 400,
+    "upstreamAccessLogResponseAtSecond": "2026-10-26T09:41:13Z",
+    "responseBytes": 24,
+    "deviceObservedError": "invalid_save",
+    "validationSubreasonLogged": false
+  },
+  "lastRewardBeforeDocumentReplacement": {
+    "deviceRequestNumber": 84,
+    "testnetRequestStarted": "2026-10-26T09:46:32.678Z",
+    "testnetStatus": 200,
+    "testnetExecutionSeconds": 4.33,
+    "testnetResponseSecondsApprox": 4.5,
+    "upstreamRequestStarted": "2026-10-26T09:46:32.849Z",
+    "upstreamStatus": 200,
+    "upstreamAccessLogResponseAtSecond": "2026-10-26T09:46:37Z",
+    "responseBytes": 1405,
+    "deviceNewDocumentAt": "2026-10-26T09:46:36.416Z",
+    "responseMissingFromDeviceTail": true
+  },
+  "inferences": [
+    "The device-tail unmatched request84 was processed and answered200 by both Vercel projects.",
+    "That observation does not establish the cause of the new Home document.",
+    "The API intentionally forwards existing Testnet account/reward requests to the established service with a Testnet network header; this is not evidence of a Mainnet account write.",
+    "The earlier400 has no logged structural/score/shard subreason; wall-clock-budget attribution remains an inference for this individual device event."
+  ],
+  "excludedFromPublishedEvidence": [
+    "Raw uploaded player report",
+    "IP addresses",
+    "Tokens/cookies",
+    "Account identifiers",
+    "Request/response save payloads",
+    "Payment records"
+  ]
+}

@@ -1,0 +1,212 @@
+{
+  "sourceSha256": "88c8a5fb247107ce260607911e221e202c5e40373235a1166f86cd2bfb2ea718",
+  "sourceCommit": "20843b5501387dca8bb5616303934ece2ae6d581",
+  "recordCount": 3249,
+  "integrity": {
+    "contiguous": true,
+    "records": 3249,
+    "chunks": 666,
+    "errors": []
+  },
+  "platform": "ios",
+  "browser": "pi-browser",
+  "captureSeconds": 422.642,
+  "documentAgeAtReplacementSeconds": 485.69600024414063,
+  "lastObservedToNextDocumentMs": 1825.000244140625,
+  "lastState": {
+    "reason": "performance",
+    "phase": "SECTOR_INTRO",
+    "encounter": "normal",
+    "status": "playing",
+    "errorName": "",
+    "sector": 54,
+    "block": 4,
+    "width": 430,
+    "height": 825,
+    "enemies": 0,
+    "projectiles": 0,
+    "effects": 0,
+    "frameMs": 18,
+    "lastSavedAt": 1793007986931,
+    "attackCooldownMs": 0,
+    "spawnTimerMs": 0,
+    "clearTimerMs": 0,
+    "elapsedMs": 686896,
+    "targetHz": 60,
+    "cssPacedActive": 16,
+    "cssPacingFallbacks": 0,
+    "sourceCommit": "20843b5501387dca8bb5616303934ece2ae6d581",
+    "sourceTree": "0bf2b471b3e7558fe15ec0a03d226b75bc32f33f",
+    "workingTreeDirty": true,
+    "cssPacingMode": "native-easing"
+  },
+  "lastObservedGraphics": {
+    "operation": "hull-plan-progress",
+    "step": "variant-load-start",
+    "imageJob": 307,
+    "sprite": 9,
+    "hullStage": 1,
+    "paintIndex": 4
+  },
+  "observedTransition": {
+    "fromInternalStage": 53,
+    "toInternalStage": 54,
+    "visibleLevel": 6,
+    "fromBlock": 3,
+    "toBlock": 4
+  },
+  "newDocumentRoute": "home",
+  "recordedExitIntent": false,
+  "recordedJavascriptFault": false,
+  "requests": {
+    "started": 84,
+    "completedInAvailableEvidence": 83,
+    "completedStatuses": [
+      200,
+      400
+    ],
+    "unmatchedStartedEndpoints": [
+      "reward"
+    ]
+  },
+  "lastGraphicsJobs": [
+    {
+      "job": 304,
+      "sprite": 8,
+      "paintIndex": 7,
+      "step": "variant-create-before",
+      "millisecondsBeforeLastObservation": 201
+    },
+    {
+      "job": 304,
+      "sprite": 8,
+      "paintIndex": 7,
+      "step": "variant-load-start",
+      "millisecondsBeforeLastObservation": 201
+    },
+    {
+      "job": 304,
+      "sprite": 8,
+      "paintIndex": 7,
+      "step": "variant-loaded",
+      "millisecondsBeforeLastObservation": 131
+    },
+    {
+      "job": 304,
+      "sprite": 8,
+      "paintIndex": 7,
+      "step": "variant-decode-skipped",
+      "millisecondsBeforeLastObservation": 131
+    },
+    {
+      "job": 304,
+      "sprite": 8,
+      "paintIndex": 7,
+      "step": "variant-ready",
+      "millisecondsBeforeLastObservation": 131
+    },
+    {
+      "job": 305,
+      "sprite": 15,
+      "paintIndex": 2,
+      "step": "variant-create-before",
+      "millisecondsBeforeLastObservation": 131
+    },
+    {
+      "job": 305,
+      "sprite": 15,
+      "paintIndex": 2,
+      "step": "variant-load-start",
+      "millisecondsBeforeLastObservation": 131
+    },
+    {
+      "job": 305,
+      "sprite": 15,
+      "paintIndex": 2,
+      "step": "variant-loaded",
+      "millisecondsBeforeLastObservation": 71
+    },
+    {
+      "job": 305,
+      "sprite": 15,
+      "paintIndex": 2,
+      "step": "variant-decode-skipped",
+      "millisecondsBeforeLastObservation": 71
+    },
+    {
+      "job": 305,
+      "sprite": 15,
+      "paintIndex": 2,
+      "step": "variant-ready",
+      "millisecondsBeforeLastObservation": 71
+    },
+    {
+      "job": 306,
+      "sprite": 2,
+      "paintIndex": 10,
+      "step": "variant-create-before",
+      "millisecondsBeforeLastObservation": 71
+    },
+    {
+      "job": 306,
+      "sprite": 2,
+      "paintIndex": 10,
+      "step": "variant-load-start",
+      "millisecondsBeforeLastObservation": 71
+    },
+    {
+      "job": 306,
+      "sprite": 2,
+      "paintIndex": 10,
+      "step": "variant-loaded",
+      "millisecondsBeforeLastObservation": 0
+    },
+    {
+      "job": 306,
+      "sprite": 2,
+      "paintIndex": 10,
+      "step": "variant-decode-skipped",
+      "millisecondsBeforeLastObservation": 0
+    },
+    {
+      "job": 306,
+      "sprite": 2,
+      "paintIndex": 10,
+      "step": "variant-ready",
+      "millisecondsBeforeLastObservation": 0
+    },
+    {
+      "job": 307,
+      "sprite": 9,
+      "paintIndex": 4,
+      "step": "variant-create-before",
+      "millisecondsBeforeLastObservation": 0
+    },
+    {
+      "job": 307,
+      "sprite": 9,
+      "paintIndex": 4,
+      "step": "variant-load-start",
+      "millisecondsBeforeLastObservation": 0
+    }
+  ],
+  "rootCauseProven": false,
+  "historicalWhiteScreenFixed": false,
+  "limits": [
+    "A new Home document with no recorded exit is interruption evidence, not an OS/native-memory cause.",
+    "The final observed image load or unmatched request is not established as the cause.",
+    "Uncommitted tail events are separate from committed contiguous history.",
+    "Capture age, document age and resumed simulation elapsed time are distinct.",
+    "The final unwritten interval can contain missing events; no native or GPU memory is recorded."
+  ],
+  "recoveredEarlierHttpFailure": {
+    "endpoint": "reward",
+    "code": "invalid_save",
+    "httpStatus": 400,
+    "captureSeconds": 101.53,
+    "followingQueueDrainedToZero": true,
+    "playingContinuedAfterwards": true,
+    "notARecordedAuthenticationFailure": true,
+    "immediateCrashCauseProven": false
+  }
+}

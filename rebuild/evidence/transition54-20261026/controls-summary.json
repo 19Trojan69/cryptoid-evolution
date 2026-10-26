@@ -1,0 +1,190 @@
+{
+  "referenceRuntime": "20843b5501387dca8bb5616303934ece2ae6d581",
+  "runtimeChanged": false,
+  "deploymentChanged": false,
+  "controls": [
+    {
+      "file": "account-time-webkit-owner-transition-120-transition-owner-20261026-f.json",
+      "sha256": "54c0629cb1950d1faa70af2e3c98eec8a14ce5f5ac00afcdbcf069459bb9257b",
+      "engine": "webkit",
+      "version": "26.5",
+      "mode": "owner",
+      "scenario": "transition",
+      "complete": true,
+      "realSeconds": 33.764538353999995,
+      "initialSimulationMs": 0,
+      "finalSimulationMs": 11201.999999999998,
+      "ended": "targeted-transition-complete",
+      "sameRun": true,
+      "originalSourceModules": 239,
+      "documentRequests": 1,
+      "apiCounts": {
+        "/api/user/me": 2,
+        "/api/progress/me": 2,
+        "/api/hangar/start": 1,
+        "/api/rewards/me": 1,
+        "/api/progress/card-reveals": 1,
+        "/api/progress/checkpoint": 3,
+        "/api/rewards/event": 1
+      },
+      "apiStatuses": [
+        200
+      ],
+      "pageErrors": [],
+      "crashes": [],
+      "targetHullPlans": [
+        {
+          "clockMs": 35263,
+          "data": {
+            "operation": "hull-plan-settled",
+            "sector": 54,
+            "encounter": "normal",
+            "requested": 12,
+            "prepared": 12
+          }
+        }
+      ],
+      "localProcessPssMiB": {
+        "first": 971.6630859375,
+        "minimum": 948.6484375,
+        "maximum": 1044.732421875,
+        "last": 1029.2451171875
+      },
+      "realAuthentication": false,
+      "realPlayerDataChanged": false,
+      "physicalDeviceAcceptance": false,
+      "historicalWhiteScreenFixed": false
+    },
+    {
+      "file": "account-time-webkit-account-transition-120-transition-account-20261026-f.json",
+      "sha256": "2569cacef87650e6df0568c13a95bfb1a1f39fb9c939012f5aaf9d6ee4885db8",
+      "engine": "webkit",
+      "version": "26.5",
+      "mode": "account",
+      "scenario": "transition",
+      "complete": true,
+      "realSeconds": 28.990587385999998,
+      "initialSimulationMs": 0,
+      "finalSimulationMs": 9694,
+      "ended": "targeted-transition-complete",
+      "sameRun": true,
+      "originalSourceModules": 239,
+      "documentRequests": 1,
+      "apiCounts": {
+        "/api/user/me": 2,
+        "/api/progress/me": 2,
+        "/api/hangar/start": 1,
+        "/api/rewards/me": 1,
+        "/api/progress/card-reveals": 1,
+        "/api/progress/checkpoint": 4,
+        "/api/rewards/event": 1
+      },
+      "apiStatuses": [
+        200
+      ],
+      "pageErrors": [],
+      "crashes": [],
+      "targetHullPlans": [
+        {
+          "clockMs": 30978,
+          "data": {
+            "operation": "hull-plan-settled",
+            "sector": 54,
+            "encounter": "normal",
+            "requested": 12,
+            "prepared": 12
+          }
+        }
+      ],
+      "localProcessPssMiB": {
+        "first": 898.845703125,
+        "minimum": 898.845703125,
+        "maximum": 1064.185546875,
+        "last": 1064.185546875
+      },
+      "realAuthentication": false,
+      "realPlayerDataChanged": false,
+      "physicalDeviceAcceptance": false,
+      "historicalWhiteScreenFixed": false
+    },
+    {
+      "file": "account-time-webkit-owner-boss-time-780-owner-timed-20261026-g.json",
+      "sha256": "6913d3fdea7cc2de7e9854f7545b71e3a6252544f663aaee62f74c8c27848ad4",
+      "engine": "webkit",
+      "version": "26.5",
+      "mode": "owner",
+      "scenario": "boss-time",
+      "complete": true,
+      "realSeconds": 780.348828796,
+      "initialSimulationMs": 0,
+      "finalSimulationMs": 438505.9999999986,
+      "ended": "observation-window-complete",
+      "sameRun": true,
+      "originalSourceModules": 239,
+      "documentRequests": 1,
+      "apiCounts": {
+        "/api/user/me": 2,
+        "/api/progress/me": 2,
+        "/api/hangar/start": 1,
+        "/api/rewards/me": 1,
+        "/api/progress/card-reveals": 1,
+        "/api/progress/checkpoint": 78,
+        "/api/leaderboard/checkpoint": 2
+      },
+      "apiStatuses": [
+        200
+      ],
+      "pageErrors": [],
+      "crashes": [],
+      "targetHullPlans": null,
+      "localProcessPssMiB": {
+        "first": 968.3505859375,
+        "minimum": 905.861328125,
+        "maximum": 1130.677734375,
+        "last": 1043.4873046875
+      },
+      "realAuthentication": false,
+      "realPlayerDataChanged": false,
+      "physicalDeviceAcceptance": false,
+      "historicalWhiteScreenFixed": false
+    }
+  ],
+  "preservedFailures": [
+    {
+      "tag": "account-time-smoke-20261026-a",
+      "finding": "Invalid host resume fixture started stage1; assertion expected40. Host failure, not crash."
+    },
+    {
+      "tag": "transition-owner-20261026-a",
+      "finding": "Host omitted weaponTimers L3; normal death at stage53, not White Screen."
+    },
+    {
+      "tag": "transition-owner-20261026-b",
+      "finding": "Held host pointer lost capture at geometry start; normal death at stage53."
+    },
+    {
+      "tag": "transition-owner-20261026-c",
+      "finding": "Fresh gestures crossed54; overbroad55 target ended in normal death at54."
+    },
+    {
+      "tag": "transition-owner-20261026-d",
+      "finding": "Narrowed54 target passed; final matched pair additionally requires exact12/12 hull receipt."
+    },
+    {
+      "tag": "transition-owner-20261026-e",
+      "finding": "Actual54 plan settled12/12; host incorrectly demanded absent success:true field."
+    },
+    {
+      "tag": "transition-account-20261026-e",
+      "finding": "Host used owner-only pending counter; played through56 but missed target gate. Not counted as matched pass."
+    }
+  ],
+  "limits": [
+    "Pinned original scene/art/HUD/audio/input/simulation/auth restoration/save-queue code with synthetic local SDK/API responses.",
+    "A valid synthetic armor loadout grants6 lives within existing rules; transition uses a valid L3 timer. No invincibility, weakened combat or automatic Resume.",
+    "The 780-second real-time control advances about438.5 seconds on the original bounded simulation clock; wall time and game time are distinct.",
+    "One fixed boss encounter does not exercise an entire campaign or reproduce the physical iOS interruption.",
+    "Local Linux WPE process PSS is not an iPhone memory reading; original-quality native-memory gate remains open.",
+    "Earlier account-suite startup loop-stall remains preserved separately; later passes do not erase it."
+  ]
+}
