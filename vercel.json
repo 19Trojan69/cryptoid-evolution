@@ -111,7 +111,8 @@
       "codex/owner-crash-boundary-20261026": false,
       "codex/level-completion-confirmation-20261026": false,
       "codex/level-completion-entrance-20261026": false,
-      "codex/completion-audio-resume-20261026": false
+      "codex/completion-audio-resume-20261026": false,
+      "codex/completion-audio-release-record-20261026": false
     }
   }
 }

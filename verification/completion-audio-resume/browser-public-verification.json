@@ -1,0 +1,68 @@
+{
+  "sourceCommit": "4ec0683196177e5045f15ab1798b22ba21dfb8dd",
+  "reviewedCandidate": "fe36450c002f43b9cceecad910517b7ebf5c35e5",
+  "sourceTree": "cebab6ff471a08eef4e3b16aa87af971a0a93a15",
+  "candidateAndMainTreesEqual": true,
+  "method": "existing authorized signed-in Vercel dashboard and public Home pages",
+  "projects": [
+    {
+      "name": "cryptoid-evolution-testnet",
+      "deploymentId": "dpl_DSpHhHrn6bjfmWarpHx88n2JzZde",
+      "dashboardUrl": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/DSpHhHrn6bjfmWarpHx88n2JzZde",
+      "immutableUrl": "https://cryptoid-evolution-testnet-jr7wljuyu-19-trojan69.vercel.app/",
+      "publicUrl": "https://cryptoid-evolution-testnet.vercel.app/",
+      "source": "4ec0683196177e5045f15ab1798b22ba21dfb8dd",
+      "status": "READY",
+      "publicAliasObserved": true,
+      "durationSeconds": 71,
+      "publicHomeRendered": true,
+      "entryScript": "https://cryptoid-evolution-testnet.vercel.app/assets/index-CsAHS5sL.js",
+      "apiHealth": {
+        "message": "Hello, World!",
+        "readablePublicResponse": true
+      },
+      "publicLeaderboardNetwork": "testnet"
+    },
+    {
+      "name": "cryptoid-evolution",
+      "deploymentId": "dpl_DchewrncL4vJzY4KwKz8ALWTzVdy",
+      "dashboardUrl": "https://vercel.com/19-trojan69/cryptoid-evolution/DchewrncL4vJzY4KwKz8ALWTzVdy",
+      "immutableUrl": "https://cryptoid-evolution-31ktwobij-19-trojan69.vercel.app/",
+      "publicUrl": "https://cryptoid-evolution.vercel.app/",
+      "source": "4ec0683196177e5045f15ab1798b22ba21dfb8dd",
+      "status": "READY",
+      "publicAliasObserved": true,
+      "durationSeconds": 78,
+      "publicHomeRendered": true,
+      "entryScript": "https://cryptoid-evolution.vercel.app/assets/index-CsAHS5sL.js",
+      "apiHealth": {
+        "message": "Hello, World!",
+        "readablePublicResponse": true
+      },
+      "publicLeaderboardNetwork": "mainnet"
+    }
+  ],
+  "rollback": {
+    "sourceCommit": "57a60fdc10e08d6b133ea19f74a8695a8070d5d0",
+    "branch": "backup/shared-before-completion-audio-20261026",
+    "testnet": "dpl_8PpTq1mGmTu5tZcigEsiMW4kxsrx",
+    "production": "dpl_BeBc7AKz43K4ZP1jHcLjBQBy1UvL"
+  },
+  "connectorInspection": {
+    "status": 404,
+    "message": "Deployment not found for known current deployment; dashboard succeeds"
+  },
+  "initialAssetVerification": "root HTML 200 on both; direct entry fetch blocked by proxy tunnel 403; top-level browser asset navigation ERR_BLOCKED_BY_CLIENT",
+  "configurationChanges": false,
+  "runtimeLogsRead": false,
+  "secretsRead": false,
+  "temporaryShareLinkCreated": false,
+  "realAccountGameStarted": false,
+  "physicalDevice": false,
+  "historicalWhiteScreenFixed": false,
+  "networkSeparationObserved": true,
+  "finalIndependentVerifierPassed": true,
+  "sameApplicationBundleHashes": true,
+  "sameStyleHashes": true,
+  "initialAssetVerificationResolved": "one complete independent rerun passes; failed first attempt retained"
+}

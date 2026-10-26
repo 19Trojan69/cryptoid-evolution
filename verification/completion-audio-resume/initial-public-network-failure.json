@@ -1,0 +1,35 @@
+{
+  "expectedCommit": "4ec0683196177e5045f15ab1798b22ba21dfb8dd",
+  "sameApplicationBundles": false,
+  "sameStyles": false,
+  "sites": [
+    {
+      "host": "cryptoid-evolution-testnet.vercel.app",
+      "sourceCommit": "4ec0683196177e5045f15ab1798b22ba21dfb8dd",
+      "passed": false,
+      "bundles": [],
+      "url": "https://cryptoid-evolution-testnet.vercel.app/",
+      "httpStatus": 200,
+      "htmlSha256": "2c4b08599da70acdda7fc129bdef8015517e901676fb4d32628b440421e49d8c",
+      "htmlBytes": 6030,
+      "htmlMilliseconds": 3773,
+      "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))"
+    },
+    {
+      "host": "cryptoid-evolution.vercel.app",
+      "sourceCommit": "4ec0683196177e5045f15ab1798b22ba21dfb8dd",
+      "passed": false,
+      "bundles": [],
+      "url": "https://cryptoid-evolution.vercel.app/",
+      "httpStatus": 200,
+      "htmlSha256": "2c4b08599da70acdda7fc129bdef8015517e901676fb4d32628b440421e49d8c",
+      "htmlBytes": 6030,
+      "htmlMilliseconds": 6963,
+      "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))"
+    }
+  ],
+  "readOnlyChecks": true,
+  "realPurchases": false,
+  "realGameStart": false,
+  "limitations": "Read-only delivered code and API checks, not authenticated Pi gameplay, payment validation, physical-device or White Screen acceptance."
+}
