@@ -1,3 +1,29 @@
+# Bounded invalid_save reward recovery, 26 October 2026
+
+The owner explicitly asks to continue the White Screen investigation, obtain
+server-log access and concentrate on invalid_save. Prepare this correction
+separately on codex/save-budget-retry-20261026 with automatic deployment disabled.
+No new publication, main merge, account migration or live player mutation is
+included. Keep all original visuals, input, audio, timing, combat and economy.
+
+The established backend uses invalid_save both for malformed snapshots and for
+its time-dependent score bound. Only queued /rewards/event responses with
+status400 and that exact code may opt into two bounded retries after5s and10s.
+Keep the existing maximum of three attempts, immutable payload/order barriers
+and durable retained outbox on final failure. Other4xx and explicitly permanent
+subreasons fail immediately. Do not loosen server checks or discard saves.
+An unclassified permanently invalid legacy response can receive two additional
+requests; it still cannot pass server validation. This is limited save recovery,
+not a general invalid-save cause or historical White Screen fix.
+
+The exact accountSave scope fingerprint is updated with a new negative control
+rejecting an expanded attempt limit. Local validation passes244 release-gate
+tests, TypeScript, Vite, changed-module lint and a native WPE400-to200 same-payload
+control. Synthetic local SDK/API and legal armor/weapon fixtures are not real
+Pi login or physical iPhone acceptance. The independent latest device request
+completed200 at both Vercel projects; the later document replacement remains
+unexplained. Preserve prior failures; do not request another owner campaign.
+
 # Authorized Testnet integration, 25 October 2026
 
 The owner now explicitly authorizes the official Testnet release and clarifies
