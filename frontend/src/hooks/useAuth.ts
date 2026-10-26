@@ -33,6 +33,14 @@ export const useAuth = () => {
   const signingIn = useRef(false);
   const autoAttempted = useRef(false);
   const confirmedPiBrowser = useRef(false);
+  // An old native bridge/API reply must not change the session of a later route.
+  // Generation also distinguishes React's setup/cleanup/setup lifecycle replay.
+  const authLifecycle = useRef({ active: true, generation: 0 });
+  useEffect(() => {
+    const lifecycle = authLifecycle.current;
+    lifecycle.active = true;
+    return () => { lifecycle.active = false; lifecycle.generation++; };
+  }, []);
   const [user, setUser] = useState<User | null>(null);
   const [canAdmin, setCanAdmin] = useState(false);
   const [adminMode, setAdminMode] = useState(false);
@@ -69,10 +77,12 @@ export const useAuth = () => {
     pendingPayments.current.push(payment);
   }, []);
 
-  const signInUser = useCallback(async (authResult: AuthResult) => {
+  const signInUser = useCallback(async (authResult: AuthResult, current: () => boolean) => {
+    if (!current()) return;
     sessionStorage.setItem(PI_ACCESS_TOKEN_KEY, authResult.accessToken);
     try {
       const { data } = await axiosClient.post<SessionUser>("/user/signin", { authResult });
+      if (!current()) return;
       localStorage.setItem("cryptoid_pi_session", "1");
       sessionStorage.removeItem("cryptoid_pi_auto_signed_out");
       setUser(data.user);
@@ -88,6 +98,7 @@ export const useAuth = () => {
         catch (err) { console.error("Could not resume incomplete payment", err); }
       }
     } catch (err) {
+      if (!current()) return;
       sessionStorage.removeItem(PI_ACCESS_TOKEN_KEY);
       console.error("Error signing in:", err);
       throw err;
@@ -95,26 +106,31 @@ export const useAuth = () => {
   }, []);
 
   const signIn = useCallback(async () => {
-    if (signingIn.current) return;
+    const generation = authLifecycle.current.generation;
+    const current = () => authLifecycle.current.active && authLifecycle.current.generation === generation;
+    if (signingIn.current || !current()) return;
     signingIn.current = true;
     setIsLoading(true);
     setAuthError("");
     try {
       const isPiBrowser = confirmedPiBrowser.current || await detectPiBrowser();
+      if (!current()) return;
       if (window.location.pathname === "/admin") sessionStorage.setItem("cryptoid_pi_return_to", "/admin");
 
       // Pi Apps running inside Pi Browser must use the Browser SDK authentication
       // flow. Pi.signIn is the separate OAuth flow intended for ordinary browsers.
       if (isPiBrowser) {
-        for (let attempt = 0; typeof window.Pi?.authenticate !== 'function' && attempt < 25; attempt++) {
+        for (let attempt = 0; current() && typeof window.Pi?.authenticate !== 'function' && attempt < 25; attempt++) {
           await new Promise(resolve => window.setTimeout(resolve, 200));
         }
+        if (!current()) return;
         if (typeof window.Pi?.authenticate !== 'function') throw new Error('Pi SDK unavailable');
         const authResult = await withPiAuthTimeout(() => window.Pi.authenticate(
           ["username", "payments", "wallet_address"],
           onIncompletePaymentFound,
         ));
-        await signInUser(authResult);
+        if (!current()) return;
+        await signInUser(authResult, current);
         return;
       }
 
@@ -137,12 +153,15 @@ export const useAuth = () => {
 
       throw new Error("Pi sign-in is unavailable in this browser.");
     } catch (err) {
+      if (!current()) return;
       console.error("Error authenticating:", err);
       setAuthError("Could not sign in with Pi. Please retry.");
     } finally {
-      signingIn.current = false;
-      setIsLoading(false);
-      setAuthReady(true);
+      if (current()) {
+        signingIn.current = false;
+        setIsLoading(false);
+        setAuthReady(true);
+      }
     }
   }, [onIncompletePaymentFound, signInUser]);
 

@@ -1,0 +1,24 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> cryptoid-evolution@0.11.0 test:auth
+> node --experimental-strip-types --test src/hooks/useAuth.test.mjs
+
+✔ a stalled Pi Browser no longer holds the startup and retry controls forever (111.100204ms)
+✔ late native replies are ignored and a new attempt can sign in normally (36.265722ms)
+✔ SDK rejection unlocks manual sign-in without writing an invalid session (28.008419ms)
+✔ an existing Web App session is restored without replacing it with native authentication (27.928496ms)
+✔ a native sign-in response from an unmounted route cannot replace the current token or session (29.981669ms)
+✔ an old failed sign-in request cannot clear credentials belonging to a later route (21.395595ms)
+✔ an old successful sign-in response cannot change the new route admin/session flags (22.283455ms)
+✔ late host detection from a retired manual attempt cannot navigate the current document (19.871579ms)
+✔ StrictMode startup setup cleanup setup produces only one current native authentication (18.175623ms)
+✔ current native authentication retains the original permissions and incomplete-payment replay (19.613353ms)
+✔ the pinned released hook reproduces all four retired-attempt counterexamples (70.583551ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 748.726066

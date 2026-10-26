@@ -1,3 +1,38 @@
+# Retired sign-in callback correction prepared, 26 October 2026
+
+Continued investigation from fixed public 0ec94cf reproduces a distinct client
+lifecycle defect: old Pi SDK/API replies after route unmount can replace/delete
+new route credentials or clear its admin flag. Old external host detection can
+also perform a retired OAuth action. Only useAuth runtime changes: guard each
+async continuation by the mounted lifecycle generation; no timer, new request,
+permission, backend, payment metadata, gameplay, save or watchdog change.
+Published-source counterexamples fail before correction and pass afterward.
+11 auth cases now gate the normal build; 262 release cases, types/Vite and changed
+hook/test lint pass. Native WPE26.5 passes ten real-React controls (five released,
+five candidate), including healthy scopes/incomplete-payment parity. The initial
+localhost-versus-production-origin verifier error is retained, not called a pass.
+GamePage and all backend modules match public 0ec94cf. No physical Pi login,
+live account mutation, deployed correction or historical White Screen fix is
+proved. The latest raw report is older 20843b5, not the current release. Keep
+its full contents private. See docs/auth-lifecycle-20261026.md and its evidence.
+Public Testnet/production and rollback remain unchanged; candidate auto-deploy
+stays disabled and PR167/PR168 remain excluded.
+
+# Continue runtime White Screen audit, 26 October 2026
+
+The owner requests continuation after completed PR170 publication. Both existing
+public projects remain on 0ec94cf (reviewed b7ed7c0 tree); receipt c467586 is
+stored separately. Continue the unresolved runtime interruption investigation
+from that exact release on codex/white-screen-runtime-audit-20261026 with automatic
+deployment disabled. Do not reimplement the already released mobile cockpit or
+completion scene. Preserve real focus/background/technical pauses, strict
+>2500 ms/500 ms watchdog, explicit Resume, original HUD/art/audio/combat/economy,
+account separation and bounded invalid_save retries. No database reset, purchase,
+account migration, inclusion of PR167/PR168 or new owner manual campaign. This
+continuation prepares an isolated, reviewable result; it does not authorize
+shipping a new unreviewed runtime. Keep the current releases and rollback fixed.
+Raw user session input remains private and must not be uploaded to GitHub.
+
 # Mobile cockpit and unified level completion, 26 October 2026
 
 The owner explicitly requests a game-related login with a launching original
