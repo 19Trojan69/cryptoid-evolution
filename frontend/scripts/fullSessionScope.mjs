@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
+import { restoreControlCenterGameChanges } from './controlCenterReviewedChanges.mjs';
 
 // Exact, reviewable additions only. Removing a named call indiscriminately would
 // hide an accidental mutation in its arguments or enclosing branch.
@@ -90,6 +91,7 @@ function structure(node) {
     children.length ? null : node.kind === ts.SyntaxKind.Block ? '{}' : node.text ?? node.getText(), children];
 }
 export function canonicalScopeSource(source, path, strip = false) {
+  if (strip && path === 'src/pages/GamePage.tsx') source = restoreControlCenterGameChanges(source);
   // The comparison has one reviewed behavior change beyond observations.
   // Restore precisely the removed conditional to compare the complete loader
   // with its original fingerprint; any other functional change still fails.
