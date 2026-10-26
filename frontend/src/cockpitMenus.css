@@ -165,7 +165,7 @@ html[data-motion="reduced"] .launch-ship { animation: none; }
 .level-completion > .blockchain-progress { animation: completion-arrive 460ms ease-out 340ms backwards; }
 .level-completion > .level-completion-rewards { animation: completion-arrive 420ms ease-out 510ms backwards; }
 .level-completion > h2, .level-completion > .level-completion-stats { animation: completion-arrive 400ms ease-out 680ms backwards; }
-.level-completion > footer { animation: completion-arrive 320ms ease-out 880ms backwards; }
+.level-completion > footer { animation: completion-arrive 220ms ease-out backwards; }
 @keyframes completion-veil { from { opacity: 0; } to { opacity: 1; } }
 @keyframes completion-horizon {
   0% { opacity: 0; transform: scaleX(.04); }

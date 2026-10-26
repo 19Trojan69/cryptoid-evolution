@@ -69,7 +69,7 @@ export default memo(function BossHullView({ boss, fall, ready, light, now, fallD
         model.config.engineAnchors.map(([x, y], index) => (
           <i
             key={index}
-            className="boss-engine-flame"
+            className="boss-engine-flame ship-thruster"
             style={{ left: `${x * 100}%`, top: `${y * 100}%` }}
             aria-hidden="true"
           />

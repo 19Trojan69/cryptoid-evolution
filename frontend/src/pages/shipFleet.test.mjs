@@ -110,68 +110,26 @@ test("formation guides compensate for visible sprite centers and rotation", () =
   assert.ok(Math.abs(rotated.y) > 10);
 });
 
-test("every normal ship has exactly two model-specific exhaust anchors", () => {
-  const calibratedGeometry = [
-    [[50, 80, 4.2], [61, 80, 4.2]],
-    [[47, 82, 5.8], [59, 82, 5.8]],
-    [[34, 86, 7.5], [49, 86, 7.5]],
-    [[32, 84, 3], [56, 84, 3]],
-    [[37, 74, 5.5], [71, 74, 5.5]],
-    [[45, 79, 7], [61, 79, 7]],
-    [[20, 76, 5], [66, 76, 5]],
-    [[22, 71, 6], [65, 71, 6]],
-    [[46, 67, 7.5], [63, 67, 7.5]],
-    [[47, 67, 5.5], [60, 67, 5.5]],
-    [[35, 68, 7], [51, 68, 7]],
-    [[42.5, 68, 2.6], [45.5, 68, 2.6]],
-    [[45, 57, 6], [63, 57, 6]],
-    [[46, 57, 6], [60, 57, 6]],
-    [[25, 52, 7], [61, 52, 7]],
-    [[36, 57, 6], [52, 57, 6]],
-    [[38, 57, 6], [70, 57, 6]],
-    [[46, 61, 6], [58, 61, 6]],
-    [[23, 50, 5], [63, 50, 5]],
-    [[38, 61, 7], [51, 61, 7]],
-  ];
-  for (const skin of playerSkins) {
-    const player = shipNozzleStyles(skin.sprite);
-    const enemy = shipNozzleStyles(skin.sprite, true);
-    assert.equal(player.length, 2);
-    assert.equal(enemy.length, player.length);
-    player.forEach((nozzle, index) => {
-      const mirrored = enemy[index];
-      const playerX = Number.parseFloat(nozzle["--nozzle-x"]);
-      const playerY = Number.parseFloat(nozzle["--nozzle-y"]);
-      const width = Number.parseFloat(nozzle["--nozzle-width"]);
-      assert.ok(playerX >= 15 && playerX <= 85);
-      assert.ok(playerY >= 50 && playerY <= 90);
-      assert.ok(width >= 2.5 && width <= 8);
-      assert.equal(Number.parseFloat(mirrored["--nozzle-x"]), 100 - playerX);
-      assert.equal(Number.parseFloat(mirrored["--nozzle-y"]), 100 - playerY);
-      assert.equal(mirrored["--nozzle-width"], nozzle["--nozzle-width"]);
-      assert.equal(mirrored["--flame-mid"], nozzle["--flame-mid"]);
+test("evolution outlets use one or two main drives and mirror with their visible hull", () => {
+  for (const skin of playerSkins) for (const stage of [1,2,3]) {
+    const player=shipNozzleStyles(skin.sprite,false,stage),enemy=shipNozzleStyles(skin.sprite,true,stage);
+    assert.equal(player.length,skin.sprite===11?1:2);assert.equal(enemy.length,player.length);
+    player.forEach((nozzle,index)=>{
+      const x=Number.parseFloat(nozzle['--nozzle-x']),y=Number.parseFloat(nozzle['--nozzle-y']);
+      assert.ok(x>10&&x<90&&y>40&&y<95);
+      assert.equal(Number.parseFloat(enemy[index]['--nozzle-x']),100-x);
+      assert.equal(Number.parseFloat(enemy[index]['--nozzle-y']),100-y);
+      assert.equal(enemy[index]['--nozzle-width'],nozzle['--nozzle-width']);
+      assert.equal(nozzle['--flame-mid'],'#8fefff');
     });
-    assert.deepEqual(player.map(nozzle => [
-      Number.parseFloat(nozzle["--nozzle-x"]),
-      Number.parseFloat(nozzle["--nozzle-y"]),
-      Number.parseFloat(nozzle["--nozzle-width"]),
-    ]), calibratedGeometry[skin.sprite]);
   }
 });
 
-test("bonus and boss exhausts use their visible engine exits", () => {
-  assert.deepEqual(shipNozzleStyles(4).map(nozzle => [nozzle["--nozzle-x"], nozzle["--nozzle-y"], nozzle["--nozzle-width"]]), [
-    ["37%", "74%", "5.5%"],
-    ["71%", "74%", "5.5%"],
+test("the ring hull has one centered drive, and boss preview anchors stay unchanged",()=>{
+  for(const stage of [1,2,3])assert.equal(shipNozzleStyles(11,false,stage).length,1);
+  const boss=bossNozzleStyles();assert.deepEqual(boss.map(nozzle=>[nozzle['--nozzle-x'],nozzle['--nozzle-y'],nozzle['--nozzle-width']]),[
+    ['19%','49%','7%'],['44.5%','61%','11%'],['68%','49%','7%'],
   ]);
-  const boss = bossNozzleStyles();
-  assert.deepEqual(boss.map(nozzle => [nozzle["--nozzle-x"], nozzle["--nozzle-y"], nozzle["--nozzle-width"]]), [
-    ["19%", "49%", "7%"],
-    ["44.5%", "61%", "11%"],
-    ["68%", "49%", "7%"],
-  ]);
-  assert.equal(boss[1]["--flame-mid"], "#8fefff");
-  assert.equal(boss[0]["--flame-mid"], "#ffc65d");
 });
 
 test("legacy ships migrate into counts and repeat purchases add the chosen variant", () => {

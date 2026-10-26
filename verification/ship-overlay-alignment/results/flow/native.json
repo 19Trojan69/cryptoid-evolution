@@ -1,0 +1,339 @@
+{
+  "localOnly": true,
+  "syntheticSdk": true,
+  "realApiHandlers": true,
+  "isolatedData": true,
+  "testOnlyCombatCompletion": true,
+  "controlledNativeClock": true,
+  "physicalDevice": false,
+  "historicalWhiteScreenFixed": false,
+  "checks": [
+    "stage 30: no summary before heart and bonus",
+    "stage 30: actual boss event has no legacy stop",
+    "actual automatic reload starts while bonus combat is playable",
+    "original activation is confirmed by the real backend before the bonus",
+    "original activation response is held while the bonus ends",
+    "the real final shot creates the last explosion before any summary",
+    "the original explosion keeps its full lifetime",
+    "a quiet beat follows the expired explosion",
+    "the outro cannot change the already queued reward snapshot",
+    "stage 30: Continue follows save readiness without a countdown",
+    "completion waits without failure or retry while activation is still in flight",
+    "the original activation has consumed one charge",
+    "activation settlement triggers preparation without a Retry click",
+    "activation settlement consumes no second charge",
+    "only the original uncertain activation receipt can be replayed",
+    "reduced motion has no new entrance animation",
+    "stage 30: Continue is immediately enabled after confirmed preparation",
+    "stage 30: no reading countdown is rendered",
+    "stage 30: only an earned heart is displayed",
+    "next normal checkpoint includes exact score Shards and hearts",
+    "stage 30: Continue grants nothing",
+    "Continue reaches the next normal level",
+    "Continue leaves saved reward balances unchanged",
+    "no unexpected API failures",
+    "legacy marker moves before bonus without separate summary",
+    "stage 10: Continue follows save readiness without a countdown",
+    "reduced motion has no new entrance animation",
+    "stage 10: Continue is immediately enabled after confirmed preparation",
+    "stage 10: no reading countdown is rendered",
+    "stage 10: only an earned heart is displayed",
+    "next normal checkpoint includes exact score Shards and hearts",
+    "stage 10: Continue grants nothing",
+    "Continue reaches the next normal level",
+    "Continue leaves saved reward balances unchanged",
+    "no unexpected API failures",
+    "stage 500: no summary before heart and bonus",
+    "stage 500: actual boss event has no legacy stop",
+    "the real final shot creates the last explosion before any summary",
+    "the original explosion keeps its full lifetime",
+    "a quiet beat follows the expired explosion",
+    "the outro cannot change the already queued reward snapshot",
+    "stage 500: Continue follows save readiness without a countdown",
+    "campaign save failure retains bonus checkpoint and blocks Continue",
+    "failed bonus remains in durable outbox",
+    "reduced motion has no new entrance animation",
+    "stage 500: Continue is immediately enabled after confirmed preparation",
+    "stage 500: no reading countdown is rendered",
+    "stage 500: only an earned heart is displayed",
+    "final campaign checkpoint is null after acknowledged bonus",
+    "stage 500: Continue grants nothing",
+    "final Continue reaches victory",
+    "no unexpected API failures",
+    "no JavaScript page errors"
+  ],
+  "cases": [
+    {
+      "stage": 30,
+      "hits": 12,
+      "fullHearts": true,
+      "realFinal": true,
+      "activation": "success",
+      "before": {
+        "score": 33131,
+        "shards": 1659,
+        "hearts": 3
+      },
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "kind": "visit",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "boss",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 200
+        },
+        {
+          "path": "/api/usage/collect",
+          "kind": "active",
+          "status": 204
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "stage": 10,
+      "hits": 0,
+      "legacy": true,
+      "height": 628,
+      "before": {
+        "score": 27795,
+        "shards": 1613,
+        "hearts": 1
+      },
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "kind": "visit",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/boss-summary/continue",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "stage": 500,
+      "hits": 12,
+      "failSave": true,
+      "realFinal": true,
+      "before": {
+        "score": 34620,
+        "shards": 1674,
+        "hearts": 3
+      },
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "kind": "visit",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "boss",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 503,
+          "error": "isolated_save_failure"
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 503,
+          "error": "isolated_save_failure"
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 503,
+          "error": "isolated_save_failure"
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 503,
+          "error": "isolated_save_failure"
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 503,
+          "error": "isolated_save_failure"
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 503,
+          "error": "isolated_save_failure"
+        },
+        {
+          "path": "/api/progress/recover",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/leaderboard/score",
+          "status": 200
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "complete": true,
+  "engine": "26.5"
+}

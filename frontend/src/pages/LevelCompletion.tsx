@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import { useLocale } from '../i18n';
 import BlockchainProgress from './BlockchainProgress';
-import { advanceSummaryVisibility, BOSS_SUMMARY_VISIBLE_MS, canContinueBossSummary, type BossSummary } from './bossSummaryTiming';
+import { canContinueLevelCompletion, type BossSummary } from './bossSummaryTiming';
 import { BLOCKS_PER_CHAIN } from './networkChain';
-import { LEVEL_COMPLETION_REVEAL_MS } from './levelCompletionEntrance';
 
 export default function LevelCompletion({ summary, name, headline, bonusHits, bonusResult, bonusPoints, bonusHeart,
   prepared, saving, failed, continuing, failureMessage, onRetry, onContinue }: {
@@ -11,27 +10,13 @@ export default function LevelCompletion({ summary, name, headline, bonusHits, bo
   prepared: boolean; saving: boolean; failed: boolean; continuing: boolean; failureMessage?: string; onRetry: () => void; onContinue: () => void;
 }) {
   const { t, locale } = useLocale();
-  const [visibleMs, setVisibleMs] = useState(0);
-  const last = useRef(0), revealedAt = useRef(0), panel = useRef<HTMLElement>(null);
+  const panel = useRef<HTMLElement>(null);
   useEffect(() => {
     const previous = document.activeElement;
-    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? true;
-    revealedAt.current = performance.now() + (reduced ? 0 : LEVEL_COMPLETION_REVEAL_MS);
     panel.current?.focus({ preventScroll: true });
     return () => { if (previous instanceof HTMLElement && previous.isConnected) previous.focus({ preventScroll: true }); };
   }, []);
-  useEffect(() => {
-    last.current = performance.now();
-    const update = () => {
-      const now = performance.now(), elapsed = now - Math.max(last.current, revealedAt.current); last.current = now;
-      setVisibleMs(value => advanceSummaryVisibility(value, elapsed, !document.hidden && prepared));
-    };
-    const visible = () => { last.current = performance.now(); };
-    const timer = window.setInterval(update, 250);
-    document.addEventListener('visibilitychange', visible);
-    return () => { window.clearInterval(timer); document.removeEventListener('visibilitychange', visible); };
-  }, [prepared]);
-  const ready = canContinueBossSummary(visibleMs, prepared, saving || continuing, failed);
+  const ready = canContinueLevelCompletion(prepared, saving || continuing, failed);
   return <div className="game-overlay level-completion-overlay">
     <section ref={panel} className="level-completion" tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby="level-completion-title" data-game-scroll
       onKeyDown={event => {
@@ -56,7 +41,7 @@ export default function LevelCompletion({ summary, name, headline, bonusHits, bo
       </dl>
       <footer>
         <p className="level-completion-status" role={failed ? 'alert' : 'status'}>{failed ? t(failureMessage || 'Save not confirmed. Please retry.') : saving ? t('Saving progress…')
-          : visibleMs < BOSS_SUMMARY_VISIBLE_MS ? t('Continue available in {seconds}s', { seconds: Math.ceil((BOSS_SUMMARY_VISIBLE_MS - visibleMs) / 1000) }) : t('Game saved.')}</p>
+          : prepared ? t('Game saved.') : t('Saving progress…')}</p>
         {failed && <button className="button button-secondary" type="button" disabled={saving || continuing} onClick={onRetry}>{t('Retry save')}</button>}
         <button className="button button-primary" type="button" disabled={!ready} onClick={onContinue}>{t('Continue game')} <span aria-hidden="true">▶</span></button>
       </footer>

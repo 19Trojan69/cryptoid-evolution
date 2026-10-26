@@ -21,8 +21,8 @@ export default memo(function GameShipVisual({ sprite, color, stage = 1, variant,
   return (
     <div className="ship-visual">
       <PaintedShip className="fleet-sprite" sprite={sprite} color={color} stage={stage} />
-      {shipNozzleStyles(sprite).map((style, index) => (
-        <span key={`${className}-${index}`} className={className} style={style} />
+      {shipNozzleStyles(sprite, false, stage).map((style, index) => (
+        <span key={`${className}-${index}`} className={`${className} ship-thruster`} style={style} />
       ))}
       {variant !== "bonus" && (
         <i className="hull-reflection" style={{ maskImage, WebkitMaskImage: maskImage }} aria-hidden="true" />

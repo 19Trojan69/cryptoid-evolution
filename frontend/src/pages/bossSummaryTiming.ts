@@ -5,3 +5,7 @@ export function advanceSummaryVisibility(visibleMs: number, elapsedMs: number, v
 }
 export const canContinueBossSummary = (visibleMs: number, prepared: boolean, saving: boolean, failed: boolean) =>
   visibleMs >= BOSS_SUMMARY_VISIBLE_MS && prepared && !saving && !failed;
+
+// Unified level completion waits only for its confirmed save/effect barrier.
+export const canContinueLevelCompletion = (prepared: boolean, saving: boolean, failed: boolean) =>
+  prepared && !saving && !failed;
