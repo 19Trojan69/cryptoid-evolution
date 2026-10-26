@@ -5,7 +5,7 @@ export const chineseGameplayTranslations: Record<string, string> = {
   "ADVANCED": "进阶",
   "ELITE": "精英",
   "{stars}/3 stars": "{stars}/3 星",
-  "1 minute per charge": "每次充能可用 1 分钟",
+  "45 seconds per charge": "每次充能可用 45 秒",
   "1 Shard per target. Completion bonus added immediately.": "每击中一个目标获得 1 枚碎片。完成奖励立即发放。",
   "2 minutes after activation": "激活后持续 2 分钟",
   "A Block contains one to three planned groups. Defeat every group to link the Block. Each cleared group earns 50 points once.": "每个区块包含一至三组预设敌机。击败所有敌机组即可连接该区块。每清除一组，获得一次 50 分奖励。",

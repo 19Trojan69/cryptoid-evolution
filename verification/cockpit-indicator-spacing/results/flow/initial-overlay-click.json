@@ -1,0 +1,26 @@
+{
+  "localOnly": true,
+  "syntheticSdk": true,
+  "realApiHandlers": true,
+  "isolatedData": true,
+  "testOnlyCombatCompletion": true,
+  "controlledNativeClock": true,
+  "physicalDevice": false,
+  "historicalWhiteScreenFixed": false,
+  "checks": [
+    "pending mission uses three activity stripes without extra requests",
+    "mission activity feedback is removed when play is ready",
+    "weapon menu states forty-five seconds per charge",
+    "actual authenticated activation grants exactly forty-five seconds",
+    "armed menu return stays paused until its half-length countdown finishes",
+    "armed menu return is playing at fifteen hundred milliseconds"
+  ],
+  "cases": [],
+  "errors": [],
+  "complete": false,
+  "engine": "26.5",
+  "failure": {
+    "message": "locator.tap: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.pause-control')\u001b[22m\n\u001b[2m    - locator resolved to <button type=\"button\" aria-label=\"Fortsetzen\" class=\"game-control pause-control\">…</button>\u001b[22m\n\u001b[2m  - attempting tap action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"game-modal pause-settings-modal\">…</div> from <div role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"pause-settings-title\" class=\"game-overlay pause-settings-overlay\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying tap action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"game-modal pause-settings-modal\">…</div> from <div role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"pause-settings-title\" class=\"game-overlay pause-settings-overlay\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying tap action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    55 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"game-modal pause-settings-modal\">…</div> from <div role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"pause-settings-title\" class=\"game-overlay pause-settings-overlay\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying tap action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+    "stack": "locator.tap: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.pause-control')\u001b[22m\n\u001b[2m    - locator resolved to <button type=\"button\" aria-label=\"Fortsetzen\" class=\"game-control pause-control\">…</button>\u001b[22m\n\u001b[2m  - attempting tap action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"game-modal pause-settings-modal\">…</div> from <div role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"pause-settings-title\" class=\"game-overlay pause-settings-overlay\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying tap action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"game-modal pause-settings-modal\">…</div> from <div role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"pause-settings-title\" class=\"game-overlay pause-settings-overlay\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying tap action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    55 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"game-modal pause-settings-modal\">…</div> from <div role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"pause-settings-title\" class=\"game-overlay pause-settings-overlay\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying tap action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n    at /workspace/scratch/2533eb1496d4/cockpit-indicator-spacing/verification/cockpit-indicator-spacing/verify-flow.mjs:128:87"
+  }
+}

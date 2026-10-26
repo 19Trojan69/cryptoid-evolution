@@ -1,0 +1,69 @@
+{
+  "baseline": "dbed24977b8a3bc08cf2ed7c8dcae37d570135aa",
+  "frontend": {
+    "tests": 357,
+    "fail": 0,
+    "typescript": true,
+    "vite": true
+  },
+  "backend": {
+    "tests": 127,
+    "fail": 0,
+    "typescript": true
+  },
+  "native": {
+    "sourceControls": 10,
+    "visualChecks": 24,
+    "actualGameFlowChecks": 44,
+    "errors": [],
+    "localOnly": true,
+    "physicalDevice": false
+  },
+  "unchangedRuntime": [
+    {
+      "path": "frontend/src/pages/shipFleet.ts",
+      "sha256": "29211152beda053a133434158b555a0cfd669ac81b2faac437ded787ab5e7fa5"
+    },
+    {
+      "path": "frontend/src/pages/shipOverlayGeometry.ts",
+      "sha256": "9463a09f552db63a87de2dd64e526740b03362bf73664f0f5508fc551d66ca65"
+    },
+    {
+      "path": "frontend/src/pages/BossHealthView.tsx",
+      "sha256": "daf937b8ada1cc5fee307b0addbf195c249d79a43219efbed615889bd1c9d7f1"
+    },
+    {
+      "path": "frontend/src/pages/bossHealthLayout.ts",
+      "sha256": "0cb788992f91d2ecac8476ea5456a577e947e8b6931440ed1f338422e167d358"
+    },
+    {
+      "path": "frontend/src/pages/weaponAutoReload.ts",
+      "sha256": "212965a535975f2c894d3e120bb5a5fdc2d4b447b14fbddf1e481256b26a9ce9"
+    },
+    {
+      "path": "frontend/src/pages/gameLoop.ts",
+      "sha256": "deab7eb60d3e2f6c464d1efbc21dd8d8e2eba43b7f8f7193417d528b2f8953b7"
+    },
+    {
+      "path": "frontend/src/pages/gameAudio.ts",
+      "sha256": "3aeb4ca63260573b38d2b753bda61461eb2d4191beae2aac072ce722657077a8"
+    },
+    {
+      "path": "frontend/src/pages/musicPlayback.ts",
+      "sha256": "adfd371b7afff15c45ceefd71a71d993a4f5d5dc30f7ab43de001e0168b813eb"
+    },
+    {
+      "path": "frontend/src/lib/accountSave.ts",
+      "sha256": "eca17b62d128fa03b4974cd8c9d6ea815a33a44f224b47f8b8571120b781e741"
+    },
+    {
+      "path": "backend/src/paymentPolicy.ts",
+      "sha256": "7e1925ff06f3c3ef63c031994e2160800dd7430401a10e844ce0c45c1fa63c62"
+    },
+    {
+      "path": "backend/src/lifeRules.ts",
+      "sha256": "80b4039ee81af6105bb29f297773d65ce30f6092adb6114bf521601eec441214"
+    }
+  ],
+  "historicalWhiteScreenFixed": false
+}

@@ -64,9 +64,12 @@
 .game-route .game-access-modal { width: min(100%, 430px); max-height: calc(100dvh - 32px); text-align: center; padding: 25px; overflow-y: auto; }
 .game-access-modal h1 { font-size: clamp(20px, 5vw, 27px); margin: 0 0 12px; }
 .game-access-modal .modal-actions { display: grid; grid-template-columns: 1fr; }
-.game-access-modal .launch-status { display: flex; justify-content: center; gap: 7px; margin: 18px 0 4px; }
-.launch-status i { width: 30px; height: 3px; background: #e3d2aa; box-shadow: 0 0 9px #e3d2aa40; }
+.launch-status { display: flex; justify-content: center; gap: 7px; margin: 18px 0 4px; }
+.launch-status i { width: 30px; height: 3px; background: #e3d2aa; box-shadow: 0 0 9px #e3d2aa40; opacity: .2; animation: launch-status-step 1.2s steps(1, end) infinite; }
+.launch-status i:nth-child(2) { animation-delay: .4s; }
+.launch-status i:nth-child(3) { animation-delay: .8s; }
 .launch-status i:last-child { background: #81cddb; }
+@keyframes launch-status-step { 0%, 24.99% { opacity: 1; } 25%, 100% { opacity: .2; } }
 .launch-scene {
   position: relative; height: 192px; overflow: hidden; margin: 8px 0 16px;
   border-block: 1px solid #87b9d11c;
@@ -76,8 +79,9 @@
 .launch-scene::before { left: 50%; top: 12px; bottom: 12px; width: 1px; }
 .launch-scene::after { top: 50%; left: 12%; right: 12%; height: 1px; }
 .launch-orbit { position: absolute; left: 50%; top: 50%; width: 155px; height: 155px; transform: translate(-50%, -50%); border: 1px solid #b1ccdd36; border-radius: 50%; box-shadow: 0 0 0 10px #75cde507; }
-.launch-ship { position: absolute; z-index: 2; left: 50%; top: -26px; width: 235px; height: 235px; object-fit: contain; transform: translateX(-50%); animation: launch-lift 1.1s ease-out both; }
-.launch-trail { position: absolute; z-index: 1; top: 125px; left: calc(50% - 13px); width: 26px; height: 78px; background: linear-gradient(#e5faff, #7ce0f0a8 22%, #7775d549 65%, transparent); clip-path: polygon(25% 0, 75% 0, 100% 100%, 0 100%); }
+/* Center the visible original hull, including its asymmetric transparent padding. */
+.launch-ship { position: absolute; z-index: 2; left: 50%; top: 50%; width: 235px; height: 235px; object-fit: contain; transform: translate(-54.61%, -60.1065%); animation: launch-lift 1.1s ease-out both; }
+.launch-trail { position: absolute; z-index: 1; top: calc(50% + 39.23px); left: calc(50% - 12.32px); width: 26px; height: 78px; background: linear-gradient(#e5faff, #7ce0f0a8 22%, #7775d549 65%, transparent); clip-path: polygon(25% 0, 75% 0, 100% 100%, 0 100%); }
 .launch-coordinate { position: absolute; right: 8px; bottom: 10px; font: 10px 'DM Mono', monospace; letter-spacing: .1em; color: #a5bbc9; }
 .landing-shell .signin-modal { max-height: calc(100dvh - 28px); overflow-y: auto; }
 .landing-shell .signin-modal .launch-scene { height: 175px; }
@@ -91,10 +95,11 @@
 .game-route .boss-summary-stats dd { color: #e9d8b0; font: 600 25px/1.25 'Oxanium', sans-serif; font-variant-numeric: tabular-nums; }
 .game-route .boss-summary-dialog .boss-summary-countdown { margin-bottom: 4px; font-size: 12px; color: #cdbd98; }
 .game-route .game-over-stats > span { padding: 12px 6px; border: 1px solid #9dc8df36; border-radius: 7px; background: #24475e44; }
-@keyframes launch-lift { from { transform: translate(-50%, 18px); } to { transform: translate(-50%, 0); } }
-@media (max-height: 600px) { .launch-scene, .landing-shell .signin-modal .launch-scene { height: 120px; } .launch-ship { top: -50px; } .launch-trail { top: 95px; } }
-@media (prefers-reduced-motion: reduce) { .launch-ship { animation: none; } }
+@keyframes launch-lift { from { transform: translate(-54.61%, calc(-60.1065% + 18px)); } to { transform: translate(-54.61%, -60.1065%); } }
+@media (max-height: 600px) { .launch-scene, .landing-shell .signin-modal .launch-scene { height: 120px; } }
+@media (prefers-reduced-motion: reduce) { .launch-ship, .launch-status i { animation: none; } .launch-status i { opacity: 1; } }
 html[data-motion="reduced"] .launch-ship { animation: none; }
+html[data-motion="reduced"] .launch-status i { animation: none; opacity: 1; }
 
 /* The original level-clear scene now contains rewards, statistics and Continue. */
 .game-route .level-completion-overlay {

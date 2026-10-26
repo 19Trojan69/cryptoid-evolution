@@ -9,7 +9,7 @@ test('quantity and catalog total are bounded and computed without floating point
   assert.equal(weaponPayment({kind:'weapon',pricePi:.1},{weaponModel:2,quantity:100}),null);
   assert.equal(weaponPayment({kind:'armor',pricePi:1},{weaponModel:2,quantity:1}),null);
 });
-test('confirmed orders credit quantity once, preserve legacy time and isolate networks', () => {
+test('confirmed orders credit quantity once, retain legacy charge counts and isolate networks', () => {
   const order={paid:true, product_id:'weapon_twin',payment_network:'Pi Testnet'};
   const orders=[{...order,pi_payment_id:'legacy'}, {...order,pi_payment_id:'batch',weapon_model:2,quantity:10}, {...order,pi_payment_id:'unpaid',paid:false}, {...order,pi_payment_id:'main',payment_network:'Pi Network'}, {...order,pi_payment_id:'cancelled',cancelled:true}, {...order,pi_payment_id:'locked',product_id:'weapon_plasma'}];
   const stock=creditWeaponOrders(emptyWeaponStock(),orders,'testnet');
