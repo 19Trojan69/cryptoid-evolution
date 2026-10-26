@@ -120,10 +120,13 @@ export function assertObservationOnly(overrides = {}) {
   // for tested weapon recovery, manual boss intermission and unused-cache release.
   // The 2026-10-26 save correction permits exactly the bounded legacy reward
   // retry in accountSave; its server checks and queued payload stay unchanged.
+  // The reviewed mobile-cockpit revision changes entry/menu markup and moves the
+  // statistics stop after the bonus; ordinary steering no longer asks for fullscreen.
+  // mobileCockpitScope.test.mjs permits only the exact reviewed source hunks.
   // Other fingerprints and all diagnostic-argument negative controls remain unchanged.
   // Portable fingerprints keep the build gate usable in shallow/Git-free builds.
   const baseline = {
-    'src/pages/GamePage.tsx': '5cb2343834342ea35ec5ac4c6611a709238b1ff1868b1c779f257f63448e9c93',
+    'src/pages/GamePage.tsx': '9466013fff2ab03a82f0ce35a68628c6beb4447fd5c58ed8a46731f4cbbcc6c1',
     'src/lib/accountSave.ts': 'f21526dfa375b9f2699ea4a13b82e85fbf9ac8b61d60f06613ccf31de14e01e7',
     'src/lib/axiosClient.ts': '44db97150678cc301a3873c793d64771a1d0693cdf85520816a62a7a32843e66',
     'src/pages/usePreparedGameHulls.ts': 'ae6ccd40a7d89daa63bdf596c0aa86f5da0a0947b6f6ad149dc8ae49666402f0',

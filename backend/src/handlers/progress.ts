@@ -42,7 +42,9 @@ export default function mountProgressEndpoints(router: Router) {
         const pending = save.mission.bossIntermission;
         if (!pending) return res.json({ saved: true, continued: true });
         if (!bossIntermissionPending(pending) || pending.stage !== stage) return res.status(409).json({ error: 'invalid_boss_summary' });
-        if (Date.now() - pending.createdAt < BOSS_INTERMISSION_MIN_MS) return res.status(409).json({ error: 'boss_summary_wait' });
+        // A new client moves only this legacy UI stop to the completed bonus round.
+        // Run, network, stage and snapshot ownership checks above remain identical.
+        if (req.body?.summaryPlacement !== 'level-end' && Date.now() - pending.createdAt < BOSS_INTERMISSION_MIN_MS) return res.status(409).json({ error: 'boss_summary_wait' });
         const updated = await users.updateOne({ uid, [`${key}.activeRunId`]: runId, [`${key}.version`]: save.version,
           [`${key}.mission.bossIntermission.stage`]: stage }, {
           $unset: { [`${key}.mission.bossIntermission`]: '' },

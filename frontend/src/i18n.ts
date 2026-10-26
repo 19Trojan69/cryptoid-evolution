@@ -400,10 +400,14 @@ export const useLocale = () => {
     };
     window.addEventListener('cryptoid-language', update);
     window.addEventListener('languagechange', update);
+    window.addEventListener('pageshow', update);
+    window.addEventListener('focus', update);
     window.addEventListener('storage', storageUpdate);
     return () => {
       window.removeEventListener('cryptoid-language', update);
       window.removeEventListener('languagechange', update);
+      window.removeEventListener('pageshow', update);
+      window.removeEventListener('focus', update);
       window.removeEventListener('storage', storageUpdate);
     };
   }, []);

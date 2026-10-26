@@ -7,8 +7,17 @@ export type ControlZone = "compact" | "normal" | "wide";
 export const SHIP_START_KEY = "cryptoid_ship_start";
 export type ShipStart = "higher" | "touch";
 
+let handFallback: ControlHand = 'right';
+let handMemoryOnly = false;
 export const readControlHand = (): ControlHand => {
-  return localStorage.getItem(CONTROL_HAND_KEY) === "left" ? "left" : "right";
+  if (handMemoryOnly) return handFallback;
+  try { return localStorage.getItem(CONTROL_HAND_KEY) === "left" ? "left" : "right"; }
+  catch { return handFallback; }
+};
+export const saveControlHand = (hand: ControlHand) => {
+  handFallback = hand;
+  try { localStorage.setItem(CONTROL_HAND_KEY, hand); handMemoryOnly = false; }
+  catch { handMemoryOnly = true; }
 };
 export const readControlSensitivity = (): ControlSensitivity => {
   const value = localStorage.getItem(CONTROL_SENSITIVITY_KEY);

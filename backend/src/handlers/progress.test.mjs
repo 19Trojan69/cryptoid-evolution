@@ -553,3 +553,33 @@ test('new summary preparation upgrades the established backend checkpoint and is
   assert.equal(h.profile().version,version);
   assert.equal((await h.call('progress','/boss-summary/prepare',body,{session:{currentUser:{uid:'pilot-a'},adminMode:true,adminUid:'pilot-a'}})).code,403);
 });
+
+
+test('new clients complete the bonus before their summary without weakening reward order or duplicating credits', async () => {
+  const h=harness(); await init(h); await start(h); const runId=h.session.scoreRun.id;
+  for(let stage=1;stage<=9;stage++) assert.equal((await h.call('rewards','/event',{runId,kind:'block',level:1,stage,save:snapshot()})).code,200);
+  const boss={runId,kind:'boss',level:1,stage:10,summaryPlacement:'level-end',save:snapshot()};
+  assert.equal((await h.call('rewards','/event',boss)).code,200);
+  assert.equal(h.profile().mission.phase,'bonus'); assert.equal(h.profile().mission.bossIntermission,undefined);
+  const bossSaved=structuredClone(h.profile());
+  assert.equal((await h.call('rewards','/event',boss)).body.awarded,false); assert.deepEqual(h.profile(),bossSaved);
+  const bonus={runId,kind:'bonus',level:1,stage:10,hits:12,save:snapshot()};
+  assert.equal((await h.call('rewards','/event',bonus)).code,200);
+  assert.equal(h.profile().mission.sector,11); assert.equal(h.profile().mission.phase,'normal');
+  const completed=structuredClone(h.profile());
+  assert.equal((await h.call('rewards','/event',bonus)).body.awarded,false); assert.deepEqual(h.profile(),completed);
+  assert.equal((await h.call('rewards','/event',{...boss,stage:20,level:2})).code,409,'later bosses still require all preceding blocks');
+  assert.equal((await h.call('rewards','/event',{...boss,summaryPlacement:'other'})).code,400);
+});
+
+test('a saved legacy boss stop can move to the level end without changing its snapshot, balance or network', async () => {
+  const h=harness(); await init(h); await start(h); const runId=h.session.scoreRun.id;
+  h.profile().mission={sector:10,phase:'bonus',snapshot:snapshot(),savedAt:new Date().toISOString(),bossIntermission:{stage:10,createdAt:Date.now()}};
+  const before=structuredClone(h.profile()); const body={runId,stage:10,confirm:true,summaryPlacement:'level-end'};
+  assert.equal((await h.call('progress','/boss-summary/continue',body,{network:'mainnet'})).code,409);
+  assert.deepEqual(h.profile(),before);
+  assert.equal((await h.call('progress','/boss-summary/continue',{...body,stage:20})).code,409);
+  assert.equal((await h.call('progress','/boss-summary/continue',body)).code,200);
+  assert.equal(h.profile().mission.bossIntermission,undefined); assert.deepEqual(h.profile().mission.snapshot,before.mission.snapshot); assert.equal(h.profile().balance,before.balance);
+  const moved=structuredClone(h.profile());assert.equal((await h.call('progress','/boss-summary/continue',body)).code,200);assert.deepEqual(h.profile(),moved);
+});

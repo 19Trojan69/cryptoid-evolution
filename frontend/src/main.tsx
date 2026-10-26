@@ -16,6 +16,7 @@ import App from './App.tsx'
 import { startAggregateUsage } from './lib/aggregateUsage'
 import './smartphoneUi.css'
 import './pages/feedbackCompact.css'
+import './cockpitMenus.css'
 import { startCssFramePacing } from './lib/cssFramePacing'
 
 void startAggregateUsage();

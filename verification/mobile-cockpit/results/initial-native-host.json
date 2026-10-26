@@ -1,0 +1,14 @@
+{
+  "localOnly": true,
+  "syntheticFixtures": true,
+  "physicalDevice": false,
+  "historicalWhiteScreenFixed": false,
+  "checks": [],
+  "errors": [],
+  "complete": false,
+  "engine": "26.5",
+  "failure": {
+    "message": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('status').filter({ hasText: 'Anmeldung' }) to be visible\u001b[22m\n",
+    "stack": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('status').filter({ hasText: 'Anmeldung' }) to be visible\u001b[22m\n\n    at /workspace/scratch/f0c1be48d22d/mobile-cockpit-fix/verification/mobile-cockpit/verify-native.mjs:22:102"
+  }
+}
