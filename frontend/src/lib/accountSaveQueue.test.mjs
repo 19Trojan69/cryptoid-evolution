@@ -66,3 +66,32 @@ test('recovering one run never rewrites pending lives belonging to another run',
   assert.equal(h.sent[2].body.save.hearts,56);
   assert.equal(JSON.parse(h.stored.get(h.key))[0].body.runId,'other-run');
 });
+
+test('local level exit requires the exact retained bonus and a readable matching durable copy', () => {
+  const reward={...pending().body,kind:'bonus',stage:30,save:{score:30795,shards:1637,hearts:3}};
+  const h=fixture([{path:'/rewards/event',body:reward}],3);
+  const expected=reward.save;
+  assert.equal(h.queue.hasDurableReward('old-run',30,expected),true);
+  assert.equal(h.queue.hasDurableReward('different-run',30,expected),false);
+  assert.equal(h.queue.hasDurableReward('old-run',20,expected),false);
+  assert.equal(h.queue.hasDurableReward('old-run',30,{...expected,shards:1638}),false);
+  h.stored.set(h.key,'[]');
+  assert.equal(h.queue.hasDurableReward('old-run',30,expected),false,'a removed/replaced copy cannot authorize exit');
+  assert.equal(fixture([pending()],3).queue.hasDurableReward('old-run',30,expected),false,'a boss save is not a bonus save');
+});
+
+test('server-confirmed uploads cease to qualify as a pending local bonus backup', async () => {
+  const entry={path:'/rewards/event',body:{...pending().body,kind:'bonus',stage:30}};
+  const h=fixture([entry],3);
+  await h.queue.drain();
+  assert.equal(h.queue.hasDurableReward('old-run',30,entry.body.save),false);
+});
+
+test('a failed durable write cannot authorize leaving a retained bonus', async () => {
+  const h=fixture([],3,'old-run');
+  h.stored.set=()=>{throw Error('Synthetic full storage');};
+  const entry={path:'/rewards/event',body:{...pending().body,kind:'bonus',stage:30}};
+  await assert.rejects(h.queue.enqueue(entry));
+  assert.equal(h.queue.durable,false);
+  assert.equal(h.queue.hasDurableReward('old-run',30,entry.body.save),false);
+});

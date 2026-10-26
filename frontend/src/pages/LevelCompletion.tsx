@@ -5,9 +5,9 @@ import { advanceSummaryVisibility, BOSS_SUMMARY_VISIBLE_MS, canContinueBossSumma
 import { BLOCKS_PER_CHAIN } from './networkChain';
 
 export default function LevelCompletion({ summary, name, headline, bonusHits, bonusResult, bonusPoints, bonusHeart,
-  prepared, saving, failed, continuing, onRetry, onContinue }: {
+  prepared, saving, failed, continuing, failureMessage, onRetry, onContinue }: {
   summary: BossSummary; name: string; headline: ReactNode; bonusHits: number; bonusResult: string; bonusPoints: number; bonusHeart: boolean;
-  prepared: boolean; saving: boolean; failed: boolean; continuing: boolean; onRetry: () => void; onContinue: () => void;
+  prepared: boolean; saving: boolean; failed: boolean; continuing: boolean; failureMessage?: string; onRetry: () => void; onContinue: () => void;
 }) {
   const { t, locale } = useLocale();
   const [visibleMs, setVisibleMs] = useState(0);
@@ -52,7 +52,7 @@ export default function LevelCompletion({ summary, name, headline, bonusHits, bo
           <div key={label}><dt>{label}</dt><dd>{Number(value).toLocaleString(locale)}</dd></div>)}
       </dl>
       <footer>
-        <p className="level-completion-status" role={failed ? 'alert' : 'status'}>{failed ? t('Save not confirmed. Please retry.') : saving ? t('Saving progress…')
+        <p className="level-completion-status" role={failed ? 'alert' : 'status'}>{failed ? t(failureMessage || 'Save not confirmed. Please retry.') : saving ? t('Saving progress…')
           : visibleMs < BOSS_SUMMARY_VISIBLE_MS ? t('Continue available in {seconds}s', { seconds: Math.ceil((BOSS_SUMMARY_VISIBLE_MS - visibleMs) / 1000) }) : t('Game saved.')}</p>
         {failed && <button className="button button-secondary" type="button" disabled={saving || continuing} onClick={onRetry}>{t('Retry save')}</button>}
         <button className="button button-primary" type="button" disabled={!ready} onClick={onContinue}>{t('Continue game')} <span aria-hidden="true">▶</span></button>

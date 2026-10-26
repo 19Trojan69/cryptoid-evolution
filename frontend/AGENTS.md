@@ -1,3 +1,27 @@
+# Failed level-completion confirmation and Home exit, 26 October 2026
+
+Owner reports disabled Continue after the bonus round and Home / Leave doing
+nothing. Start from common public 220b199. Do not attribute the screenshot to an
+unseen server error. A native controlled counterexample reproduces stale session
+run metadata surviving normal upload retries; explicit Retry must recover the
+existing authenticated run before draining its unchanged outbox. Preserve exact
+next-checkpoint/reward verification, ten visible prepared seconds, manual Continue,
+bounded invalid_save retries and no duplicate reward/charge. Explain distinct save,
+checkpoint and effect-preparation failures without raw server details.
+At this failed bonus stop only, offer explicit Home with local backup when the
+exact pending bonus snapshot for this network/account/run/stage is readable in
+durable storage. Recheck at the click; retain active run/outbox, never submit or
+finish the mission. Re-entry recovers before offering the account save. No fallback
+when backup is absent/failed or activation is uncertain. Preserve ordinary exit,
+HUD/art/audio, combat/economy, settings, true technical pauses and strict >2500ms /
+500ms watchdog. No PR167/168, reset, migration, secrets or protection changes.
+Candidate codex/level-completion-confirmation-20261026 has auto-deploy disabled.
+Owner's reviewed same-source publication to both existing projects is authorized;
+rollback backup/shared-before-completion-recovery-20261026 preserves 220b199 and
+READY Testnet DZruUPJWis8Tm2CQggmvD9uJVhEk / production 12mKjdMLfo3xFG3jaR8tq6wcwTPP.
+The raw screenshot stays private; controlled native fixtures are not physical Pi
+acceptance or a historical White Screen fix. See docs/level-completion-recovery-20261026.
+
 # Owner crash-boundary evidence requested, 26 October 2026
 
 Owner reports another White Screen then Home on the current 6fe93a5 release and

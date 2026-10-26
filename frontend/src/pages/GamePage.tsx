@@ -3,6 +3,7 @@ import { advanceBonusRock, spawnBonusRock, hitBonusRock, rockHitsShot, rockInFie
 import BonusRockLayer from './BonusRockLayer';
 import {CanvasEffectLayer,CanvasImpact,canvasEffectResources,releaseIdleCanvasEffects} from './CanvasEffects';
 import LevelCompletion from './LevelCompletion';
+import { completionSaveFailure } from './completionSaveFailure';
 import type { BossSummary } from './bossSummaryTiming';
 import './combatVariety.css';
 import { useAuth } from '../hooks/useAuth';
@@ -485,6 +486,8 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   const [bossSummary, setBossSummary] = useState<BossSummary | null>(null);
   const bossSummaryRef = useRef<{ summary: BossSummary; accepted: boolean; restored: boolean } | null>(null);
   const [bossSummaryPrepared, setBossSummaryPrepared] = useState(false);
+  const [bossSummaryFailure, setBossSummaryFailure] = useState("");
+  const [localExitAvailable, setLocalExitAvailable] = useState(false);
   const [bossSummarySaving, setBossSummarySaving] = useState(false);
   const [bossSummaryFailed, setBossSummaryFailed] = useState(false);
   const [bossSummaryContinuing, setBossSummaryContinuing] = useState(false);
@@ -1285,6 +1288,11 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     void startEffects(true).catch(() => {});
     if (musicEnabled) void musicRef.current?.unlock(true);
   };
+  const hasLocalLevelBackup = useCallback(() => {
+    const pending = bossSummaryRef.current, runId = scoreRunRef.current;
+    return Boolean(pending && runId && !activationRef.current && !weaponBusyRef.current
+      && saveQueueRef.current?.hasDurableReward(runId, pending.summary.stage, pending.summary));
+  }, []);
   const beginBossSummary = useCallback((restored = false) => {
     if (bossSummaryRef.current) return;
     const state = stateRef.current;
@@ -1300,17 +1308,20 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     setGame({ ...state });
     if (ownerDiagnostics) sessionDiagnostic('boundary', { operation: 'boss-summary-open', sector: state.sector, status: state.status });
   }, [clearControls, ownerDiagnostics, setGame]);
-  const prepareBossSummary = useCallback(async () => {
+  const prepareBossSummary = useCallback(async (recover = false) => {
     const pending = bossSummaryRef.current, runId = scoreRunRef.current;
     if (!pending || pending.accepted) return;
     const generation = ++bossPreparationRef.current;
     const current = () => weaponMountedRef.current && generation === bossPreparationRef.current && bossSummaryRef.current === pending && scoreRunRef.current === runId;
     setBossSummarySaving(true); setBossSummaryFailed(false); setBossSummaryPrepared(false);
+    setBossSummaryFailure(""); setLocalExitAvailable(false);
+    let failurePhase: "save" | "confirmation" | "effects" = "save";
     try {
       if (ownerDiagnostics) sessionDiagnostic('boundary', { operation: 'boss-summary-save-before', sector: pending.summary.stage });
       if (runId && !adminRunRef.current) {
         if (weaponBusyRef.current) throw Error('Activation confirmation still in progress');
-        await saveQueueRef.current?.drain();
+        if (recover) await saveQueueRef.current?.recover();
+        else await saveQueueRef.current?.drain();
         if (!current()) return;
         const activation = activationRef.current;
         if (activation) {
@@ -1336,6 +1347,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         }
         const saved = await loadAccountSave();
         if (!current()) return;
+        failurePhase = "confirmation";
         if (pending.summary.stage === 500 ? saved.mission !== null
           : saved.mission?.sector !== pending.summary.stage + 1 || saved.mission.phase !== 'normal') throw Error('Level checkpoint not confirmed');
         if (saved.mission && (saved.mission.snapshot.score !== pending.summary.score
@@ -1348,6 +1360,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         try { sessionDiagnostic('resource', ownerResourceContext()); } catch { /* Optional counters must not block continuation. */ }
         sessionDiagnostic('boundary', { operation: 'boss-summary-cleanup-before', sector: pending.summary.stage });
       }
+      failurePhase = "effects";
       if (!releaseIdleCanvasEffects()) throw Error('Effect cleanup still pending');
       releaseUnusedPaintedShips();
       if (ownerDiagnostics) {
@@ -1355,13 +1368,15 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         sessionDiagnostic('boundary', { operation: 'boss-summary-cleanup-after', sector: pending.summary.stage });
       }
       if (current()) setBossSummaryPrepared(true);
-    } catch {
+    } catch (error) {
       if (current()) {
+        setBossSummaryFailure(completionSaveFailure(error, failurePhase));
+        setLocalExitAvailable(hasLocalLevelBackup());
         setBossSummaryFailed(true);
         if (ownerDiagnostics) sessionDiagnostic('boundary', { operation: 'boss-summary-failed', sector: pending.summary.stage });
       }
     } finally { if (current()) setBossSummarySaving(false); }
-  }, [ownerDiagnostics, ownerResourceContext]);
+  }, [hasLocalLevelBackup, ownerDiagnostics, ownerResourceContext]);
   useEffect(() => { if (bossSummary) void prepareBossSummary(); }, [bossSummary, prepareBossSummary]);
   const continueBossSummary = async (retry = false) => {
     const pending = bossSummaryRef.current, runId = scoreRunRef.current;
@@ -2496,11 +2511,27 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
       if (ownerDiagnostics) recordReloadEvent('saved-exit-intent');
       navigate("/");
     } catch {
+      setLocalExitAvailable(hasLocalLevelBackup());
       setSaveNotice("Save failed. The game stays paused. Please retry.");
     } finally {
       pauseLeaveRef.current = false;
       setPauseLeaving(false);
     }
+  };
+
+  const leaveWithLocalBackup = () => {
+    if (!localExitAvailable || pauseLeaveRef.current || saveRetrying) return;
+    if (!hasLocalLevelBackup()) {
+      setLocalExitAvailable(false);
+      setSaveNotice("Save failed. The game stays paused. Please retry.");
+      return;
+    }
+    // Keep the active run and every unconfirmed entry. Start recovers the queue
+    // before offering a saved mission; goHome would submit/finish this run.
+    leaveGameFullscreen();
+    performanceProbeRef.current?.lifecycle('home-intent');
+    if (ownerDiagnostics) recordReloadEvent('home-intent');
+    navigate("/");
   };
 
   const totalShards = missionShardTotal(game.shardBase, game.shards);
@@ -2563,8 +2594,8 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
       {rewardCards[0] && <CardReveal reward={rewardCards[0]} remaining={rewardCards.length} onContinue={continueRewardCard}/>}
       {bossSummary && !rewardCards.length && !homePrompt && <LevelCompletion key={bossSummary.stage} summary={bossSummary} name={sectorName(game.sector)} headline={transitionHeadline}
         bonusHits={game.bonusHits} bonusResult={translateBonusResult(game.bonusResult.replace(' · +1 HEART', ''))} bonusPoints={bonusReward(game.bonusHits, game.sector).points} bonusHeart={game.bonusResult.includes(' · +1 HEART')} prepared={bossSummaryPrepared}
-        saving={bossSummarySaving} failed={bossSummaryFailed} continuing={bossSummaryContinuing}
-        onRetry={() => { if (bossSummaryContinueFailed) void continueBossSummary(true); else void prepareBossSummary(); }} onContinue={() => { void continueBossSummary(); }} />}
+        saving={bossSummarySaving} failed={bossSummaryFailed} continuing={bossSummaryContinuing} failureMessage={bossSummaryFailure}
+        onRetry={() => { if (bossSummaryContinueFailed) void continueBossSummary(true); else void prepareBossSummary(true); }} onContinue={() => { void continueBossSummary(); }} />}
       {extraLifeVisible&&<div className={`boss-extra-life${game.bossHeartShards ? " boss-shard-reward" : ""}`} role="status" aria-live="polite"><strong>{t(game.bossHeartShards ? 'FULL HEARTS' : 'HEART RESTORED')}</strong><span>{game.bossHeartShards ? `+${game.bossHeartShards} ◆` : '+1 ♥'}</span></div>}
       <div ref={fieldRef} className="game-field" onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()}>
         <GameSceneBoundary onError={error => interruptionRef.current('render-error', error)} fallback={retry => <div className="game-overlay"><div className="game-modal" role="alert"><h1>{t('MISSION PAUSED')}</h1><p>{t("The mission was paused after a technical interruption. Try Resume to continue.")}</p><button type="button" className="button button-primary" onClick={retry}>{t('Try again')}</button></div></div>}>
@@ -2688,7 +2719,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         </div></div>}
         {game.status === "game-over" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><h1>{t("Game Over")}</h1><div className="game-over-details"><p className="eyebrow">{t("MISSION FAILED")}</p><p className="game-over-hearts">{t('Hearts')}: {game.hearts}</p><div className="game-over-stats"><span><b>{game.score}</b>{t('Score')}</span><span><b>{game.destroyed}</b>{t('Destroyed')}</span><span><b>{game.sector}</b>{t('Sector')}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSyncStatus}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t('Home')}</button></div></div></div></div>}
         {game.status === "victory" && <div className="game-overlay game-over-overlay"><div className="game-modal game-over-modal"><p className="eyebrow">{t("CAMPAIGN COMPLETE")}</p><h1>{t("Victory")}</h1><div className="game-over-details"><p>{t("You completed the final bonus challenge.")}</p><div className="game-over-stats"><span><b>{game.score}</b>{t("Score")}</span><span><b>{game.destroyed}</b>{t("Destroyed")}</span><span><b>{game.sector}</b>{t("Sector")}</span></div>{game.combo.total > 0 && <p className="combo-summary">{t("Combo bonus")}: {game.combo.total} × · +{game.combo.total * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.total * DOUBLE_KILL_SHARDS} {t("Shards")}</p>}{scoreSyncStatus}<div className="modal-actions"><button className="button button-primary" type="button" onClick={restart}>{t("Play Again")} <span className="resume-icon"><CockpitIcon kind="play" /></span></button><button className="button button-secondary" type="button" onClick={goHome}>{t("Home")}</button></div></div></div></div>}
-        {homePrompt && <div className="game-overlay" role="dialog" aria-modal="true" aria-labelledby="leave-mission-title"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2 id="leave-mission-title">{t('Return to base?')}</h2><p>{accountRun ? t("Your enemies, remaining groups, lives, weapons and earned rewards are saved so you can continue this fight.") : t('Your current mission will end. Your records will be saved locally.')}</p>{accountRun && <p role="status">{t(saveNotice)}</p>}<div className="modal-actions"><button className="button button-primary" type="button" disabled={pauseLeaving || saveRetrying} onClick={() => { if (accountRun) void leaveSavedMission(); else goHome(); }}>{pauseLeaving ? t("Saving game…") : t('Leave game')}</button><button className="button button-secondary" type="button" disabled={pauseLeaving} onClick={closeHomePrompt}>{t('Keep playing')}</button></div></div></div>}
+        {homePrompt && <div className="game-overlay" role="dialog" aria-modal="true" aria-labelledby="leave-mission-title"><div className="game-modal"><p className="eyebrow">{t('LEAVE MISSION?')}</p><h2 id="leave-mission-title">{t('Return to base?')}</h2><p>{accountRun ? localExitAvailable ? t("Server save not confirmed. Pending data stays on this device and will be retried at the next game start.") : t("Your enemies, remaining groups, lives, weapons and earned rewards are saved so you can continue this fight.") : t('Your current mission will end. Your records will be saved locally.')}</p>{accountRun && !localExitAvailable && <p role="status">{t(saveNotice)}</p>}<div className="modal-actions"><button className="button button-primary" type="button" disabled={pauseLeaving || saveRetrying} onClick={() => { if (localExitAvailable) leaveWithLocalBackup(); else if (accountRun) void leaveSavedMission(); else goHome(); }}>{pauseLeaving ? t("Saving game…") : localExitAvailable ? t('Return home with local backup') : t('Leave game')}</button><button className="button button-secondary" type="button" disabled={pauseLeaving} onClick={closeHomePrompt}>{t('Keep playing')}</button>{accountRun && localExitAvailable && <button className="button button-secondary" type="button" disabled={pauseLeaving || saveRetrying} onClick={() => { void leaveSavedMission(); }}>{t('Retry save')}</button>}</div></div></div>}
         </GameSceneBoundary>
       </div>
     </main>

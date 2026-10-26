@@ -1,0 +1,22 @@
+{
+  "frontendReleaseTests": 275,
+  "frontendReleaseTestsPassed": true,
+  "typeScript": true,
+  "vite": true,
+  "changedSmallModuleLint": true,
+  "gamePageLint": "game-lint-comparison.json",
+  "native": "native.json",
+  "publishedCounterexamples": "published-control.json",
+  "backendSourceUnchanged": true,
+  "previousBackendTestBaseline": 126,
+  "physicalDevice": false,
+  "historicalWhiteScreenFixed": false,
+  "reviewedRuntimeSha256": {
+    "frontend/src/pages/GamePage.tsx": "07356cc780256b514dcfa400eb6b0e76db55f4406c1babe9de21f8d4e89397af",
+    "frontend/src/pages/LevelCompletion.tsx": "33291cdbcf2ec1d84798a7d908e0b40cc93bfa5e8c4c49276c20bfad7a6e9a2c",
+    "frontend/src/pages/completionSaveFailure.ts": "faf723c64edf5fdb4d0ba4c5d99abe365f35a746bcbaba750c12493545bf3c86",
+    "frontend/src/lib/accountSave.ts": "eca17b62d128fa03b4974cd8c9d6ea815a33a44f224b47f8b8571120b781e741",
+    "frontend/src/locales/completionRecovery.ts": "f324ecec0c050b72f5bf2bb527278b0f3d383a09281c1a8bfc0c38043e872982",
+    "frontend/src/i18n.ts": "8765e5c4fc641f30c9d6baf0ed50e1be3780fe6cb931d8727dbe53a9d6966d41"
+  }
+}
