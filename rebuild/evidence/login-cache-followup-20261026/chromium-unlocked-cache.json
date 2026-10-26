@@ -1,0 +1,63 @@
+{
+  "sourceReceipt": "stages-chromium-blob-image-decode-only-all-100-ownership-20261026-partial.json",
+  "sourceReceiptSha256": "4e1255ce9ccb5ea804d87d86f3f20ea8ce5575411744a54d512f8ea5c0694619",
+  "method": "Match provider timestamps inside each request; sum only direct image_N cache nodes, excluding child allocation aliases",
+  "requests": [
+    {
+      "point": "baseline",
+      "globalDumpSuccess": false,
+      "providers": []
+    },
+    {
+      "point": "released-50",
+      "globalDumpSuccess": false,
+      "providers": [
+        {
+          "processOrdinal": 5,
+          "entries": 150,
+          "budgetedEntries": 6,
+          "bytes": {
+            "effective_size": 458231808,
+            "locked_size": 25738208,
+            "size": 458231808
+          }
+        }
+      ]
+    },
+    {
+      "point": "released-100",
+      "globalDumpSuccess": false,
+      "providers": [
+        {
+          "processOrdinal": 5,
+          "entries": 300,
+          "budgetedEntries": 11,
+          "bytes": {
+            "locked_size": 46619952,
+            "effective_size": 519782400,
+            "size": 519782400
+          }
+        }
+      ]
+    },
+    {
+      "point": "idle-20",
+      "globalDumpSuccess": false,
+      "providers": [
+        {
+          "processOrdinal": 5,
+          "entries": 300,
+          "budgetedEntries": 0,
+          "bytes": {
+            "locked_size": 0,
+            "effective_size": 519782400,
+            "size": 519782400
+          }
+        }
+      ]
+    }
+  ],
+  "globalAcceptance": false,
+  "historicalWhiteScreenFixed": false,
+  "interpretation": "Available closed-idle image-cache providers report zero locked bytes. Their nonzero retained size must not be described as all non-discardable live gameplay memory. This partial global dump cannot show whether or when pressure reclaims it."
+}

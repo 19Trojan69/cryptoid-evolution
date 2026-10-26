@@ -1,0 +1,834 @@
+{
+  "date": "2026-10-26",
+  "baseCommit": "8ec922899b228dc8baa15675dff2c025262e8d3b",
+  "question": "Does the owner's unlogged sandbox PC success implicate Pi authentication or account adapters in smartphone/tablet White Screens?",
+  "nativeControls": [
+    {
+      "receipt": "account-flow-chromium-login-20261026-f.json",
+      "sha256": "e1f3271207d10c8cad983d72f49dd3e6bcd1a2ca0dfc07c4ebdbc696da320425",
+      "engine": "chromium",
+      "version": "141.0.7390.37",
+      "complete": true,
+      "pinnedRuntimeSourceFiles": 239,
+      "pageErrors": [],
+      "crashes": [],
+      "controls": [
+        {
+          "name": "phone-pi-signin-expired-save",
+          "mode": "pi-valid",
+          "width": 393,
+          "height": 744,
+          "dpr": 3,
+          "live": true,
+          "complete": true,
+          "initial": {
+            "mount": 1,
+            "timeOrigin": 1793006506476.9,
+            "route": "/game",
+            "elapsed": 0,
+            "status": "playing",
+            "sector": 1,
+            "hasRun": true,
+            "admin": false
+          },
+          "afterFailure": {
+            "mount": 1,
+            "timeOrigin": 1793006506476.9,
+            "route": "/game",
+            "elapsed": 6583,
+            "status": "playing",
+            "sector": 1,
+            "hasRun": true,
+            "admin": false
+          },
+          "unconfirmedQueueRetained": true,
+          "afterExplicitPause": {
+            "mount": 1,
+            "timeOrigin": 1793006506476.9,
+            "route": "/game",
+            "elapsed": 6616.4,
+            "status": "paused",
+            "sector": 1,
+            "hasRun": true,
+            "admin": false
+          },
+          "surface": {
+            "timeOrigin": 1793006506476.9,
+            "route": "/game",
+            "sdkCalls": 1,
+            "gameMounts": 1,
+            "bodyTextLength": 451,
+            "modal": [
+              {
+                "width": 373,
+                "height": 724,
+                "display": "flex"
+              }
+            ]
+          },
+          "screenshot": "account-flow-chromium-login-20261026-f-phone-pi-signin-expired-save.png"
+        },
+        {
+          "name": "tablet-restored-owner-expired-save",
+          "mode": "owner-valid",
+          "width": 820,
+          "height": 1180,
+          "dpr": 2,
+          "live": true,
+          "complete": true,
+          "initial": {
+            "mount": 1,
+            "timeOrigin": 1793006517549.8,
+            "route": "/game",
+            "elapsed": 0,
+            "status": "playing",
+            "sector": 1,
+            "hasRun": true,
+            "admin": false
+          },
+          "afterFailure": {
+            "mount": 1,
+            "timeOrigin": 1793006517549.8,
+            "route": "/game",
+            "elapsed": 6982.999999999999,
+            "status": "playing",
+            "sector": 1,
+            "hasRun": true,
+            "admin": false
+          },
+          "unconfirmedQueueRetained": true,
+          "afterExplicitPause": {
+            "mount": 1,
+            "timeOrigin": 1793006517549.8,
+            "route": "/game",
+            "elapsed": 7016.400000000001,
+            "status": "paused",
+            "sector": 1,
+            "hasRun": true,
+            "admin": false
+          },
+          "surface": {
+            "timeOrigin": 1793006517549.8,
+            "route": "/game",
+            "sdkCalls": 0,
+            "gameMounts": 1,
+            "bodyTextLength": 910,
+            "modal": [
+              {
+                "width": 680,
+                "height": 1070,
+                "display": "block"
+              }
+            ]
+          },
+          "screenshot": "account-flow-chromium-login-20261026-f-tablet-restored-owner-expired-save.png"
+        },
+        {
+          "name": "phone-pi-signin-rejected",
+          "mode": "pi-reject",
+          "width": 393,
+          "height": 744,
+          "dpr": 3,
+          "expected": "Could not sign in with Pi. Please retry.",
+          "complete": true,
+          "surface": {
+            "timeOrigin": 1793006529551.4,
+            "route": "/game",
+            "sdkCalls": 1,
+            "gameMounts": 0,
+            "bodyTextLength": 52,
+            "modal": [
+              {
+                "width": 365,
+                "height": 213.6875,
+                "display": "block"
+              }
+            ]
+          },
+          "screenshot": "account-flow-chromium-login-20261026-f-phone-pi-signin-rejected.png"
+        },
+        {
+          "name": "tablet-session-unavailable",
+          "mode": "restore-503",
+          "width": 820,
+          "height": 1180,
+          "dpr": 2,
+          "expected": "Could not verify the Pi session. Please retry.",
+          "complete": true,
+          "surface": {
+            "timeOrigin": 1793006530145.9,
+            "route": "/game",
+            "sdkCalls": 0,
+            "gameMounts": 0,
+            "bodyTextLength": 58,
+            "modal": [
+              {
+                "width": 410,
+                "height": 178.796875,
+                "display": "block"
+              }
+            ]
+          },
+          "screenshot": "account-flow-chromium-login-20261026-f-tablet-session-unavailable.png"
+        },
+        {
+          "name": "phone-no-session",
+          "mode": "guest",
+          "width": 393,
+          "height": 744,
+          "dpr": 3,
+          "guest": true,
+          "complete": true,
+          "guestState": {
+            "mount": 1,
+            "timeOrigin": 1793006530786.2,
+            "route": "/game",
+            "elapsed": 5016.499999999999,
+            "status": "playing",
+            "sector": 1,
+            "hasRun": false,
+            "admin": false
+          },
+          "surface": {
+            "timeOrigin": 1793006530786.2,
+            "route": "/game",
+            "sdkCalls": 0,
+            "gameMounts": 1,
+            "bodyTextLength": 102,
+            "modal": []
+          },
+          "screenshot": "account-flow-chromium-login-20261026-f-phone-no-session.png"
+        }
+      ],
+      "failedStates": []
+    },
+    {
+      "receipt": "account-flow-webkit-login-20261026-g.json",
+      "sha256": "2e1d472a2f3ff8c9910ead3dff824d764ca20fcdeac6c39f2e1772ba8a852a7c",
+      "engine": "webkit",
+      "version": "26.5",
+      "complete": false,
+      "pinnedRuntimeSourceFiles": 239,
+      "pageErrors": [],
+      "crashes": [],
+      "controls": [
+        {
+          "name": "phone-pi-signin-expired-save",
+          "mode": "pi-valid",
+          "width": 393,
+          "height": 744,
+          "dpr": 3,
+          "live": true,
+          "complete": true,
+          "initial": {
+            "mount": 1,
+            "timeOrigin": 1793006561401,
+            "route": "/game",
+            "elapsed": 0,
+            "status": "playing",
+            "sector": 1,
+            "hasRun": true,
+            "admin": false
+          },
+          "afterFailure": {
+            "mount": 1,
+            "timeOrigin": 1793006561401,
+            "route": "/game",
+            "elapsed": 1165.25,
+            "status": "playing",
+            "sector": 1,
+            "hasRun": true,
+            "admin": false
+          },
+          "unconfirmedQueueRetained": true,
+          "afterExplicitPause": {
+            "mount": 1,
+            "timeOrigin": 1793006561401,
+            "route": "/game",
+            "elapsed": 1573.25,
+            "status": "paused",
+            "sector": 1,
+            "hasRun": true,
+            "admin": false
+          },
+          "surface": {
+            "timeOrigin": 1793006561401,
+            "route": "/game",
+            "sdkCalls": 1,
+            "gameMounts": 1,
+            "bodyTextLength": 449,
+            "modal": [
+              {
+                "width": 373,
+                "height": 724,
+                "display": "flex"
+              }
+            ]
+          },
+          "screenshot": "account-flow-webkit-login-20261026-g-phone-pi-signin-expired-save.png"
+        },
+        {
+          "name": "tablet-restored-owner-expired-save",
+          "mode": "owner-valid",
+          "width": 820,
+          "height": 1180,
+          "dpr": 2,
+          "live": true,
+          "complete": false,
+          "initial": {
+            "mount": 1,
+            "timeOrigin": 1793006574633,
+            "route": "/game",
+            "elapsed": 0,
+            "status": "playing",
+            "sector": 1,
+            "hasRun": true,
+            "admin": false
+          },
+          "failure": "TimeoutError: page.waitForFunction: Timeout 20000ms exceeded."
+        },
+        {
+          "name": "phone-pi-signin-rejected",
+          "mode": "pi-reject",
+          "width": 393,
+          "height": 744,
+          "dpr": 3,
+          "expected": "Could not sign in with Pi. Please retry.",
+          "complete": true,
+          "surface": {
+            "timeOrigin": 1793006600591,
+            "route": "/game",
+            "sdkCalls": 1,
+            "gameMounts": 0,
+            "bodyTextLength": 52,
+            "modal": [
+              {
+                "width": 365,
+                "height": 213.6875,
+                "display": "block"
+              }
+            ]
+          },
+          "screenshot": "account-flow-webkit-login-20261026-g-phone-pi-signin-rejected.png"
+        },
+        {
+          "name": "tablet-session-unavailable",
+          "mode": "restore-503",
+          "width": 820,
+          "height": 1180,
+          "dpr": 2,
+          "expected": "Could not verify the Pi session. Please retry.",
+          "complete": true,
+          "surface": {
+            "timeOrigin": 1793006601490,
+            "route": "/game",
+            "sdkCalls": 0,
+            "gameMounts": 0,
+            "bodyTextLength": 58,
+            "modal": [
+              {
+                "width": 410,
+                "height": 178.796875,
+                "display": "block"
+              }
+            ]
+          },
+          "screenshot": "account-flow-webkit-login-20261026-g-tablet-session-unavailable.png"
+        },
+        {
+          "name": "phone-no-session",
+          "mode": "guest",
+          "width": 393,
+          "height": 744,
+          "dpr": 3,
+          "guest": true,
+          "complete": true,
+          "guestState": {
+            "mount": 1,
+            "timeOrigin": 1793006602399,
+            "route": "/game",
+            "elapsed": 5029,
+            "status": "playing",
+            "sector": 1,
+            "hasRun": false,
+            "admin": false
+          },
+          "surface": {
+            "timeOrigin": 1793006602399,
+            "route": "/game",
+            "sdkCalls": 0,
+            "gameMounts": 1,
+            "bodyTextLength": 101,
+            "modal": []
+          },
+          "screenshot": "account-flow-webkit-login-20261026-g-phone-no-session.png"
+        }
+      ],
+      "failedStates": [
+        {
+          "route": "/game",
+          "timeOrigin": 1793006574633,
+          "game": {
+            "mount": 1,
+            "timeOrigin": 1793006574633,
+            "route": "/game",
+            "elapsed": 0,
+            "status": "paused",
+            "sector": 1,
+            "hasRun": true,
+            "admin": false
+          },
+          "diagnostics": [
+            {
+              "reason": "loop-stall",
+              "errorName": "",
+              "sector": 1,
+              "phase": "SECTOR_INTRO",
+              "status": "paused",
+              "frameMs": 0
+            }
+          ],
+          "text": "\u26f6\n/3\nLEVEL\n1\n\u25c6 0\nSHARDS\n0\nSCORE\nBLOCK\n1/9\nLEVEL 1 \u00b7 GENESIS BELT \u00b7 Block 1/9Group 1/1\nWeapons\nStandard\n\nMISSION PAUSED\n\nHold the line.\n\nThe asteroids are waiting.\n\nThe mission was paused after a technical interruption. Try Resume to continue.\n\nAccount save\n\nSave not confirmed. Pending data will be retried.\n\nRetry save\n\nYour enemies, remaining groups, lives, weapons and earned rewards are saved so you can continue this fight.\n\nGo home\nShop & weapons\nSYSTEM / SETTINGS\nLANGUAGE\nCurrent language: English\n\u25ce\nEnglish\n\u2304\nCONTROLS\nMove with one thumb; activate power-ups with the other.\n\u25c1\nRight-handed controls\n\u25b7\nLeft-handed controls\nTOUCH SENSITIVITY\nGentle\nNormal\nFast\nCONTROL AREA\n\nThe control area changes vertical reach. Steering is available across its full width.\n\nCompact\nNormal\nWide\nSHIP START POSITION\nAbove finger\nUnder finger\nMUSIC VOLUME\nMUSIC VOLUME\n50%\n0%\n25%\n50%\n75%\n100%\nEFFECTS VOLUME\n35%\n0%\n25%\n50%\n75%\n100%\nDISPLAY\n\u26f6\nFull screen\n\u224b\nVibration unavailable\n\u25cc\nStandard effects\nResume "
+        }
+      ]
+    },
+    {
+      "receipt": "account-flow-webkit-login-pair-account-20261026-h.json",
+      "sha256": "162a441476de4a5bccca986ca7416e865a99f101257fa625c71df58b43fba388",
+      "engine": "webkit",
+      "version": "26.5",
+      "complete": true,
+      "pinnedRuntimeSourceFiles": 239,
+      "pageErrors": [],
+      "crashes": [],
+      "controls": [
+        {
+          "name": "tablet-restored-account-expired-save",
+          "mode": "account-valid",
+          "width": 820,
+          "height": 1180,
+          "dpr": 2,
+          "live": true,
+          "complete": true,
+          "initial": {
+            "mount": 1,
+            "timeOrigin": 1793006953190,
+            "route": "/game",
+            "elapsed": 0,
+            "status": "playing",
+            "sector": 1,
+            "hasRun": true,
+            "admin": false
+          },
+          "afterFailure": {
+            "mount": 1,
+            "timeOrigin": 1793006953190,
+            "route": "/game",
+            "elapsed": 636,
+            "status": "playing",
+            "sector": 1,
+            "hasRun": true,
+            "admin": false
+          },
+          "unconfirmedQueueRetained": true,
+          "afterExplicitPause": {
+            "mount": 1,
+            "timeOrigin": 1793006953190,
+            "route": "/game",
+            "elapsed": 925,
+            "status": "paused",
+            "sector": 1,
+            "hasRun": true,
+            "admin": false
+          },
+          "surface": {
+            "timeOrigin": 1793006953190,
+            "route": "/game",
+            "sdkCalls": 0,
+            "gameMounts": 1,
+            "bodyTextLength": 915,
+            "modal": [
+              {
+                "width": 680,
+                "height": 1070,
+                "display": "block"
+              }
+            ]
+          },
+          "screenshot": "account-flow-webkit-login-pair-account-20261026-h-tablet-restored-account-expired-save.png"
+        }
+      ],
+      "failedStates": []
+    },
+    {
+      "receipt": "account-flow-webkit-login-pair-owner-20261026-h.json",
+      "sha256": "e06a82822d8f43ef46f547dc80560d1459204d831f676b875e37260f4473e848",
+      "engine": "webkit",
+      "version": "26.5",
+      "complete": true,
+      "pinnedRuntimeSourceFiles": 239,
+      "pageErrors": [],
+      "crashes": [],
+      "controls": [
+        {
+          "name": "tablet-restored-owner-expired-save",
+          "mode": "owner-valid",
+          "width": 820,
+          "height": 1180,
+          "dpr": 2,
+          "live": true,
+          "complete": true,
+          "initial": {
+            "mount": 1,
+            "timeOrigin": 1793007010169,
+            "route": "/game",
+            "elapsed": 0,
+            "status": "playing",
+            "sector": 1,
+            "hasRun": true,
+            "admin": false
+          },
+          "afterFailure": {
+            "mount": 1,
+            "timeOrigin": 1793007010169,
+            "route": "/game",
+            "elapsed": 680,
+            "status": "playing",
+            "sector": 1,
+            "hasRun": true,
+            "admin": false
+          },
+          "unconfirmedQueueRetained": true,
+          "afterExplicitPause": {
+            "mount": 1,
+            "timeOrigin": 1793007010169,
+            "route": "/game",
+            "elapsed": 966,
+            "status": "paused",
+            "sector": 1,
+            "hasRun": true,
+            "admin": false
+          },
+          "surface": {
+            "timeOrigin": 1793007010169,
+            "route": "/game",
+            "sdkCalls": 0,
+            "gameMounts": 1,
+            "bodyTextLength": 915,
+            "modal": [
+              {
+                "width": 680,
+                "height": 1070,
+                "display": "block"
+              }
+            ]
+          },
+          "screenshot": "account-flow-webkit-login-pair-owner-20261026-h-tablet-restored-owner-expired-save.png"
+        }
+      ],
+      "failedStates": []
+    }
+  ],
+  "sourcePixelNativeMip": {
+    "receipt": "source-pixels-chromium-cache-native-mip-20261026-a.json",
+    "executed": true,
+    "accepted": false,
+    "comparisons": [
+      {
+        "url": "/ships/painted/91a72bc0c36be9407915/ship_02_stage_1_silver.png",
+        "scale": 0.5,
+        "independentImageControl": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 79524
+        },
+        "blobVsImage": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 79524
+        },
+        "bitmapVsImage": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 79524
+        },
+        "candidates": [
+          {
+            "name": "bitmap-resized-medium",
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 79524
+          }
+        ]
+      },
+      {
+        "url": "/ships/painted/91a72bc0c36be9407915/ship_02_stage_1_silver.png",
+        "scale": 0.25,
+        "independentImageControl": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 20164
+        },
+        "blobVsImage": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 20164
+        },
+        "bitmapVsImage": {
+          "channels": 2470,
+          "maxDelta": 255,
+          "absoluteError": 37010,
+          "comparedChannels": 20164
+        },
+        "candidates": [
+          {
+            "name": "bitmap-resized-medium",
+            "channels": 2988,
+            "maxDelta": 149,
+            "absoluteError": 51000,
+            "comparedChannels": 20164
+          }
+        ]
+      },
+      {
+        "url": "/ships/painted/91a72bc0c36be9407915/ship_02_stage_1_silver.png",
+        "scale": 1,
+        "independentImageControl": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 318096
+        },
+        "blobVsImage": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 318096
+        },
+        "bitmapVsImage": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 318096
+        },
+        "candidates": [
+          {
+            "name": "bitmap-resized-medium",
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 318096
+          }
+        ]
+      },
+      {
+        "url": "/ships/bosses/evolved/boss-04-hull.webp",
+        "scale": 0.5,
+        "independentImageControl": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 376000
+        },
+        "blobVsImage": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 376000
+        },
+        "bitmapVsImage": {
+          "channels": 64323,
+          "maxDelta": 255,
+          "absoluteError": 110279,
+          "comparedChannels": 376000
+        },
+        "candidates": [
+          {
+            "name": "bitmap-resized-medium",
+            "channels": 98130,
+            "maxDelta": 255,
+            "absoluteError": 453369,
+            "comparedChannels": 376000
+          }
+        ]
+      },
+      {
+        "url": "/ships/bosses/evolved/boss-04-hull.webp",
+        "scale": 0.25,
+        "independentImageControl": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 94000
+        },
+        "blobVsImage": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 94000
+        },
+        "bitmapVsImage": {
+          "channels": 28258,
+          "maxDelta": 255,
+          "absoluteError": 275051,
+          "comparedChannels": 94000
+        },
+        "candidates": [
+          {
+            "name": "bitmap-resized-medium",
+            "channels": 28113,
+            "maxDelta": 170,
+            "absoluteError": 143990,
+            "comparedChannels": 94000
+          }
+        ]
+      },
+      {
+        "url": "/ships/bosses/evolved/boss-04-hull.webp",
+        "scale": 1,
+        "independentImageControl": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 1500000
+        },
+        "blobVsImage": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 1500000
+        },
+        "bitmapVsImage": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 1500000
+        },
+        "candidates": [
+          {
+            "name": "bitmap-resized-medium",
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1500000
+          }
+        ]
+      },
+      {
+        "url": "/ships/bosses/evolved/boss-04-guns.webp",
+        "scale": 0.5,
+        "independentImageControl": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 1978368
+        },
+        "blobVsImage": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 1978368
+        },
+        "bitmapVsImage": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 1978368
+        },
+        "candidates": [
+          {
+            "name": "bitmap-resized-medium",
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1978368
+          }
+        ]
+      },
+      {
+        "url": "/ships/bosses/evolved/boss-04-guns.webp",
+        "scale": 0.25,
+        "independentImageControl": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 495616
+        },
+        "blobVsImage": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 495616
+        },
+        "bitmapVsImage": {
+          "channels": 22350,
+          "maxDelta": 255,
+          "absoluteError": 199540,
+          "comparedChannels": 495616
+        },
+        "candidates": [
+          {
+            "name": "bitmap-resized-medium",
+            "channels": 26487,
+            "maxDelta": 255,
+            "absoluteError": 201065,
+            "comparedChannels": 495616
+          }
+        ]
+      },
+      {
+        "url": "/ships/bosses/evolved/boss-04-guns.webp",
+        "scale": 1,
+        "independentImageControl": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 7913472
+        },
+        "blobVsImage": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 7913472
+        },
+        "bitmapVsImage": {
+          "channels": 0,
+          "maxDelta": 0,
+          "absoluteError": 0,
+          "comparedChannels": 7913472
+        },
+        "candidates": [
+          {
+            "name": "bitmap-resized-medium",
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 7913472
+          }
+        ]
+      }
+    ]
+  },
+  "previousCompleteRebuildContracts": 43,
+  "boundaryAudit": "41 modules; zero forbidden dependencies or runtime effects",
+  "historicalWhiteScreenFixed": false,
+  "decoderAccepted": false,
+  "fullAccountDeviceAcceptance": false,
+  "physicalMobileMeasurement": false,
+  "productionChanged": false,
+  "deployed": false,
+  "automaticResume": false,
+  "forcedGC": false,
+  "guard": {
+    "strictGapMs": 2500,
+    "checkMs": 500,
+    "boundedSteps": true,
+    "explicitResume": true
+  }
+}

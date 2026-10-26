@@ -17,7 +17,13 @@ const result = { engine, tag, sourceCommit: '4681d224d3aa3d87e96611485666dc8c8bb
   historicalWhiteScreenFixed: false, forcedGC: false, pixelReadback: true, originalAssets: [], comparisons: [], errors: [], complete: false };
 result.probeSha256 = createHash('sha256').update(readFileSync(new URL(import.meta.url))).digest('hex');
 const candidates = process.env.CRYPTOID_PIXEL_CANDIDATES === '1'; result.candidates = candidates;
-let browser, server;
+// A single source-derived diagnostic: Chromium's traced lazy-image path uses
+// medium-quality native prefiltering at its cached mip dimensions. Do not adopt
+// this constructor path, change runtime sampling, or treat it as accepted art.
+const nativeMip = process.env.CRYPTOID_PIXEL_NATIVE_MIP === '1'; result.nativeMip = nativeMip;
+const traceSampling = process.env.CRYPTOID_PIXEL_TRACE === '1'; result.traceSampling = traceSampling;
+assert.ok(!traceSampling || engine === 'chromium', 'Native sampling traces require Chromium');
+let browser, server, tracing;
 try {
   const { build } = require('esbuild');
   const bundle = await build({ stdin: { contents: "export {loadTexture} from './browser/textures.ts'", resolveDir: directory, loader: 'ts' },
@@ -61,10 +67,29 @@ try {
       GST_PLUGIN_SCANNER: libs + '/gstreamer1.0/gstreamer-1.0/gst-plugin-scanner', GST_REGISTRY_1_0: resolve(root, 'verification/webkit-native-audio-registry.bin') };
   }
   browser = await playwright[engine].launch(options); result.version = browser.version();
+  if (traceSampling) {
+    const session = await browser.newBrowserCDPSession(), events = []; let truncated = false;
+    session.on('Tracing.dataCollected', ({ value }) => {
+      for (const event of value) if (event.cat?.includes('cc.debug') || event.cat?.includes('blink.user_timing')) {
+        if (events.length >= 12000) { truncated = true; continue; }
+        events.push({ name: event.name, phase: event.ph, timestampUs: event.ts, args: event.args });
+      }
+    });
+    await session.send('Tracing.start', { transferMode: 'ReportEvents', traceConfig: {
+      recordMode: 'recordUntilFull', traceBufferSizeInKb: 8192, enableSampling: false,
+      includedCategories: ['disabled-by-default-cc.debug', 'blink.user_timing'], excludedCategories: ['*'],
+    } });
+    tracing = { async finish() {
+      const complete = new Promise((resolve, reject) => { const timer = setTimeout(() => reject(new Error('Sampling trace completion timed out')), 10000);
+        session.once('Tracing.tracingComplete', () => { clearTimeout(timer); resolve(); }); });
+      await session.send('Tracing.end'); await complete; await session.detach();
+      return { events, truncated, forcedGC: false, memoryDumpRequested: false };
+    } };
+  }
   const context = await browser.newContext({ viewport: { width: 393, height: 744 }, deviceScaleFactor: 3 });
   const page = await context.newPage(); page.on('pageerror', error => result.errors.push(String(error))); page.setDefaultTimeout(20000);
   await page.goto(`http://127.0.0.1:${server.address().port}`, { waitUntil: 'load' });
-  result.comparisons = await page.evaluate(async ({ specs, candidates }) => {
+  result.comparisons = await page.evaluate(async ({ specs, candidates, traceSampling, nativeMip }) => {
     const compare = (a, b) => {
       let channels = 0, maxDelta = 0, absoluteError = 0;
       for (let i = 0; i < a.length; i++) { const d = Math.abs(a[i] - b[i]); if (d) channels++; maxDelta = Math.max(maxDelta, d); absoluteError += d; }
@@ -73,15 +98,17 @@ try {
     const rows = [];
     for (const spec of specs) for (const scale of [.5, .25, 1]) {
       const frames = [];
-      const variants = ['image', 'image', 'blob-image', 'bitmap', ...(candidates ? ['bitmap-canvas', 'bitmap-resized-low', 'bitmap-resized-high'] : [])];
+      const variants = ['image', 'image', 'blob-image', 'bitmap', ...(candidates ? ['bitmap-canvas', 'bitmap-resized-low', 'bitmap-resized-high'] : []), ...(nativeMip ? ['bitmap-resized-medium'] : [])];
       for (const decoder of variants) {
+        const marker = `pixel-probe:${rows.length}:${frames.length}:${decoder}`;
         const controller = new AbortController();
         let release = () => {}, source;
         const canvas = document.createElement('canvas'); canvas.width = Math.ceil(spec.maxWidth * scale); canvas.height = Math.ceil(spec.maxHeight * scale);
         try {
           if (decoder.startsWith('bitmap-resized-')) {
             const blob = await (await fetch(spec.url)).blob();
-            source = await createImageBitmap(blob, { resizeWidth: canvas.width, resizeHeight: canvas.height, resizeQuality: decoder.endsWith('-high') ? 'high' : 'low' });
+            source = await createImageBitmap(blob, { resizeWidth: canvas.width, resizeHeight: canvas.height,
+              resizeQuality: decoder.slice('bitmap-resized-'.length) });
             release = () => source.close();
           } else {
             const texture = await textureProbe.loadTexture(spec, controller.signal, decoder === 'bitmap-canvas' ? 'bitmap' : decoder);
@@ -94,8 +121,10 @@ try {
             }
           }
           const context = canvas.getContext('2d'); if (!context) throw new Error('Source pixel context unavailable');
+          if (traceSampling) performance.mark(marker + ':draw-start');
           context.imageSmoothingQuality = 'low'; context.drawImage(source, 0, 0, canvas.width, canvas.height);
           frames.push(context.getImageData(0, 0, canvas.width, canvas.height).data);
+          if (traceSampling) performance.mark(marker + ':draw-end');
         } finally { release(); controller.abort(); canvas.width = canvas.height = 0; }
       }
       rows.push({ url: spec.url, scale, independentImageControl: compare(frames[1], frames[0]),
@@ -103,11 +132,17 @@ try {
         candidates: variants.slice(4).map((name, index) => ({ name, ...compare(frames[index + 4], frames[0]) })) });
     }
     return rows;
-  }, { specs, candidates });
+  }, { specs, candidates, traceSampling, nativeMip });
+  if (tracing) { result.nativeSampling = await tracing.finish(); tracing = null;
+    assert.equal(result.nativeSampling.truncated, false);
+    assert.ok(result.nativeSampling.events.some(event => event.name.includes('SoftwareImageDecodeCache::')), 'Native decode-cache trace missing');
+    assert.ok(result.nativeSampling.events.some(event => event.name.startsWith('pixel-probe:')), 'Native probe markers missing');
+  }
   for (const row of result.comparisons) assert.equal(row.independentImageControl.channels, 0, 'Independent reference must be deterministic');
   assert.deepEqual(result.errors, []); result.complete = true;
 } catch (error) { result.failure = String(error?.stack || error); process.exitCode = 1; }
 finally {
+  if (tracing) { try { result.nativeSampling = await tracing.finish(); } catch (error) { result.traceFailure = String(error); } }
   writeFileSync(out, JSON.stringify(result, null, 2) + '\n');
   console.log(JSON.stringify({ engine, complete: result.complete, comparisons: result.comparisons, failure: result.failure ?? null, out }));
   await browser?.close();

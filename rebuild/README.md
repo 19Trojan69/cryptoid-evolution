@@ -46,6 +46,12 @@ source RGBA from Chromium's scaling difference. This does not accept a decoder
 or fix the historical White Screen. Continue from
 [the ownership evidence](evidence/memory-ownership-20261026/README.md).
 
+The owner now distinguishes an unlogged Sandbox PC run from affected mobile
+account runs. A pinned original-game auth/save fault harness, retained WebKit
+loop-stall failure and native cache/sampling follow-up are documented in
+[the login/cache evidence](evidence/login-cache-followup-20261026/README.md).
+This comparison does not accept the account path or establish a White Screen fix.
+
 From this directory, with the repository's frontend dependencies installed:
 
 ```sh

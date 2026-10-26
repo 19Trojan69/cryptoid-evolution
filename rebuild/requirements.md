@@ -74,6 +74,7 @@ the replacement can be treated as ready. Missing features are tracked below.
 | Pure boss-stop gate | Seven contracts pass; real backend/UI/bonus integration remains pending. |
 | Native memory stage attribution | Eight matched 100-cycle controls complete: large Chromium retention begins in decode; WPE's additional retention is triggered by drawing/native heap allocation. Exact allocation lifetime and bounded memory remain unaccepted. |
 | Native replay and allocation ownership | 4000 principal closed cycles plus separate allocator controls name partial Chromium cc/image_memory records and local WPE Mesa/Gallium allocation call chains. Full-resolution source pixels match in three-image controls; Chromium scaling parity and accepted loader remain open. |
+| Account-path fault attribution | Pinned original-game local controls compare guest, SDK sign-in, restored account/owner,401 saves and503 restoration. WPE loop-stall failure retained; real Pi/mobile/account acceptance remains open. |
 | Dynamic scene/bonus/durable boss-stop handoff | Pending; the fixture stops at encounter completion. |
 | Full feature migration | Pending. |
 | Original White Screen reproduced/fixed | Open. |

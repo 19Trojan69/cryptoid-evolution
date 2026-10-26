@@ -393,5 +393,35 @@
     },
     "forcedGC": false,
     "runtimeRendererOrLoaderChanged": false
+  },
+  "loginAndCacheFollowup": {
+    "evidence": "evidence/login-cache-followup-20261026/README.md",
+    "ownerObservation": "evidence/owner-observations-20261026/observation.json",
+    "question": "PC Sandbox without deliberate Pi login versus affected smartphone/tablet account runs",
+    "pinnedOriginalRuntimeSources": 239,
+    "chromiumFiveCasesComplete": true,
+    "webkitFullSuiteComplete": false,
+    "webkitRetainedFailure": "Restored-owner tablet loop-stall at initial elapsed0, same document/run; earlier phone timeout lacks final-state capture",
+    "freshWebkitOrdinaryAndOwnerTabletControlsComplete": true,
+    "realPiAuthentication": false,
+    "physicalMobileAcceptance": false,
+    "historicalWhiteScreenFixed": false,
+    "nativeImageCacheIdleReportedBytes": 519782400,
+    "nativeImageCacheIdleLockedBytes": 0,
+    "nativeGlobalDumpAccepted": false,
+    "nativeSamplingTrace": {
+      "imageDrawsWithCache": 27,
+      "bitmapDrawsWithCache": 0,
+      "draws": 36,
+      "forcedGC": false
+    },
+    "mediumConstructorResizeAccepted": false,
+    "runtimeGraphicsAudioClockChanged": false,
+    "simulationBoundaryAudit": {
+      "modules": 41,
+      "forbiddenImports": 0,
+      "runtimeEffects": 0
+    },
+    "deployed": false
   }
 }

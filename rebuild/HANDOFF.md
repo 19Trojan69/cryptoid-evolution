@@ -72,6 +72,39 @@ survive, fresh raw JSON does not. Do not fabricate the missing raw record.
 
 ## Next concrete step
 
+**Later 2026-10-26 continuation: the owner clarifies the unremarkable laptop run
+was Sandbox play without a deliberate Pi login and asks whether login matters.
+Prioritize smartphone/tablet failure paths; fullscreen is deferred.** Read
+`evidence/login-cache-followup-20261026/README.md` and `summary.json` first.
+Do not turn the PC observation into matched mobile/account acceptance.
+
+The actual guest path omits the account run/checkpoint queue. Local original
+GameEntry/GamePage controls pin 239 runtime source files, use synthetic SDK/API
+responses and preserve art/audio/clock. Chromium's five cases pass. WPE's latest
+full suite is NOT passed: four cases pass, but restored-owner tablet play stops
+at initial elapsed 0 with a captured loop-stall pause, same document/run and no
+White Screen. An earlier WPE timeout lacks final-state attribution. Two focused
+fresh WPE tablet ordinary-account/owner controls both preserve advancing play
+after checkpoint 401 and retained backup. These do not erase either failed run.
+SDK rejection and session503 yield visible error panels, without automatic Home.
+No physical Pi login, phone/tablet stability or historical fix is established.
+All failed controls and exact verifier source versions are archived.
+
+Further read-only Chromium work finds zero locked bytes and zero budgeted
+entries in the available 495.7MiB closed-idle image-cache provider records.
+Global dumps still fail, and growing anonymous mappings remain open. Do not
+label all cache bytes non-discardable gameplay memory. A native cc.debug trace
+confirms Image/Blob-Image draws take cached mip paths with rounded dimensions,
+whereas bitmap draws bypass that cached draw path in the tested cases. A single
+source-derived medium resize hint also fails exact parity and is rejected.
+Original renderer/loader, source quality and accepted-decoder flags are unchanged.
+
+Continue account/owner initialization and native allocation lifetime as controlled
+variables, without changing the game or repeating completed broad matrices.
+The auth/account branch remains a possible contributor; login is not necessary
+for the native occupancy already reproduced in the isolated image fixture.
+No new feature integration, forced GC, automatic Resume/restart/Home or deployment.
+
 **2026-10-26 update: the same-model/all-model replay and native ownership work
 below is COMPLETE.** Read `evidence/memory-ownership-20261026/README.md` and
 `summary.json` before extending anything. The original renderer/loader/clock and

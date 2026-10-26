@@ -21,3 +21,12 @@ Existing Testnet/Mainnet and fixed release/rollback references are the compariso
 baseline. No partial replacement, database migration, automatic deployment, real
 purchase or player-data mutation is included in this isolated preparation.
 Do not call a reduced prototype feature-complete or a White Screen cure.
+
+Later owner clarification: the successful PC run was Sandbox play without a
+deliberate Pi login. Prioritize smartphone/tablet failure paths and investigate
+auth/account ownership as a controlled variable; fullscreen is deferred. Read
+`evidence/login-cache-followup-20261026/README.md` before repeating controls.
+The latest WPE account suite includes an initial loop-stall failure, preserved
+with same document/run and no White Screen. Subsequent paired passes do not erase
+it. Closed-idle Chromium cache providers report zero locked bytes despite large
+reported size; global dump and original-quality native-memory gates remain open.

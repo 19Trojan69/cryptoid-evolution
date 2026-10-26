@@ -145,3 +145,29 @@ connect the dynamic scene, boss-stop and bonus handoff through the same clock.
 Complete powers/effects/audio/HUD/account/save migration and affected-device
 campaign acceptance remain subsequent gates. An automatic reload/Home fallback
 or forced garbage collection is not a deployed correction.
+
+## Account-path and cache follow-up (later 2026-10-26)
+
+The owner's successful PC/Sandbox run did not involve deliberate Pi login. The
+released guest path omits the account run and checkpoint outbox. Local controls
+use the real pinned GameEntry/GamePage at phone/tablet dimensions with synthetic
+SDK/API transport. Chromium's five cases pass, including checkpoint401 retaining
+the advancing run and backup. WPE's latest suite remains failed: the owner/tablet
+case captures a visible loop-stall pause at initial elapsed0, same document/run,
+no uncaught JS error or White Screen. Two focused fresh WPE ordinary/owner tablet
+controls both subsequently preserve play after401; they do not supersede failures.
+This is not actual Pi/mobile acceptance or proof that login is unrelated.
+
+The already available partial Chromium closed-idle cache provider reports
+519,782,400 bytes size/effective size but zero locked bytes/budgeted entries.
+Do not call all of it non-discardable gameplay memory. Global dumps still fail;
+pressure reclaim and anonymous-allocation ownership remain open. Native cc.debug
+sampling markers now confirm cached Image/Blob-Image mip draws, including rounded
+500x188/250x94 and512x242 intermediate dimensions, unlike the tested bitmap draw
+path. Source-motivated constructor medium resizing still fails exact output and
+is rejected. No original loader/renderer/default/quality change follows.
+
+Read [the full evidence](evidence/login-cache-followup-20261026/README.md) and its
+hashed raw archive before continuing. Preserve every failed diagnostic. The
+account/owner path and native graphics allocation remain controlled variables;
+the isolated native memory fixture itself imports no auth/account adapter.
