@@ -1,3 +1,18 @@
+# Overlay Control Center and tablet/PC shortcut removal, 26 October 2026
+
+Owner explicitly resumed work and requested existing overlay settings bundled
+as a Control Center, fullscreen symbol removed on tablet/PC, and the reviewed
+result published to both existing Testnet/production projects. Current common
+release 2d02098 is verified READY on both and preserved by
+backup/shared-before-control-center-20261026. Work from that main source;
+keep codex/overlay-control-center-20261026 auto-deploy disabled while preparing.
+Keep phone fullscreen, Play/Home automatic requests, original HUD/art/audio,
+gameplay/economy/saves, real pauses and strict >2500ms/500ms watchdog. Do not
+implement HUD customization: owner chose to bundle existing options only.
+Network/account/payment environments remain separate. No PR167/168, data reset,
+migration, secrets/protection changes or claim of historical White Screen fix.
+See docs/releases/20261026-control-center/README.md and native verification.
+
 # Retired sign-in callback correction prepared, 26 October 2026
 
 Continued investigation from fixed public 0ec94cf reproduces a distinct client

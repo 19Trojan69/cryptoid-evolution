@@ -89,7 +89,7 @@ import { accountSelection, createSaveQueue, loadAccountSave, localInventory, mut
 import axios from "axios";
 import { makeShipVolley, shipFireInterval } from "./shipAttributes";
 import { activateCollectedPower } from "./collectedPower";
-import { leaveGameFullscreen, requestGameFullscreen } from "./gameFullscreen";
+import { leaveGameFullscreen } from "./gameFullscreen";
 import { levelDifficulty, MAX_DIFFICULTY_LEVEL } from "./levelDifficulty";
 import { createDoubleKillCombo, creditComboDefeat, DOUBLE_KILL_SCORE, DOUBLE_KILL_SHARDS, type DoubleKillCombo } from "./doubleKillCombo";
 import { missionShardBase, missionShardTotal, uncreditedGuestShards, BONUS_TARGET_SHARD_REWARD, bossPoints, bossShardReward, creditReward } from "./shardEarnings";
@@ -2572,7 +2572,6 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         {combatVarietyEnabled && varietyRef.current.noticeMs > 0 && <div className="combat-variety-notice" role="status" style={{ top: visibleTopRef.current + 48 }}>{varietyRef.current.notice === "Perfect formation" ? t("Perfect formation") : varietyRef.current.notice === "FORMATION CLEARED" ? t("FORMATION CLEARED") : varietyRef.current.notice === "Clear the formation" ? t("Clear the formation") : varietyRef.current.notice === "Heavy attacker incoming" ? t("Heavy attacker incoming") : varietyRef.current.notice === "Finish this wave without a hit" ? t("Finish this wave without a hit") : varietyRef.current.notice === "Hold your combo" ? t("Hold your combo") : t(varietyRef.current.notice)}</div>}
         <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} showNebula={game.encounter === "boss-fight"} />
         <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
-        <button className="wide-fullscreen-control game-fullscreen-control" type="button" onClick={requestGameFullscreen} aria-label={t("Full screen")} title={t("Full screen")}>⛶</button>
         <header ref={hudRef} className="game-hud">
           <div className="hud-actions"><button className="game-control home-control" type="button" disabled={weaponBusy || rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || game.status === "loading" || game.status === "destroying"} onClick={() => { if (game.status === "game-over" || game.status === "victory") { goHome(); return; } homePromptWasPlayingRef.current = stateRef.current.status === "playing"; stateRef.current.status = "paused"; clearControls();
         musicRef.current?.pause(); void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); setHomePrompt(true); }} aria-label={t("Go home")}><CockpitIcon kind="home" /></button></div>
