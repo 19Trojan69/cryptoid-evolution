@@ -107,7 +107,8 @@
       "codex/save-budget-retry-20261026": false,
       "codex/mobile-cockpit-level-completion-20261026": false,
       "codex/white-screen-runtime-audit-20261026": false,
-      "codex/overlay-control-center-20261026": false
+      "codex/overlay-control-center-20261026": false,
+      "codex/control-center-release-record-20261026": false
     }
   }
 }
