@@ -21,14 +21,17 @@ export const canStartSteering = (x: number, y: number, bounds: Bounds, area: Con
   Number.isFinite(x) && Number.isFinite(y) && x >= bounds.left && x <= bounds.left + bounds.width &&
   y >= bounds.top + bounds.height * controlAreaTop[area] && y <= bounds.top + bounds.height;
 
-// One primary gesture owns steering. Ending anywhere, losing capture or losing
-// focus releases it. A fresh primary gesture can replace a missed old release;
-// a second finger on the weapons never steals the current gesture.
+// Touch/pen steering belongs to one held primary gesture. A mouse click toggles
+// following so steering never requires a held mouse button. Leaving the field,
+// Escape, cancellation or losing focus releases it; mouse following owns no
+// pointer capture. A second finger on the weapons never steals a touch gesture.
 export function bindGameInput(field: HTMLElement, options: Options) {
   const doc = field.ownerDocument;
   const win = doc.defaultView!;
+  let mouseFollowing = false;
   const reset = () => {
     const id = options.pointer.current;
+    mouseFollowing = false;
     options.pointer.current = null;
     options.origin.current = null;
     if (id !== null) {
@@ -40,9 +43,11 @@ export function bindGameInput(field: HTMLElement, options: Options) {
   };
   const move = (event: SteeringEvent) => {
     if (options.pointer.current !== event.pointerId) return;
-    if (!options.playing() || (event.pointerType === 'mouse' && event.buttons === 0)) { reset(); return; }
+    if (!options.playing() || (mouseFollowing && (event.target as Element | null)?.closest?.(controls))) { reset(); return; }
     const bounds = field.getBoundingClientRect();
     if (!validBounds(bounds) || !Number.isFinite(event.clientX) || !Number.isFinite(event.clientY)) { reset(); return; }
+    if (mouseFollowing && (event.clientX < bounds.left || event.clientX > bounds.left + bounds.width ||
+        event.clientY < bounds.top || event.clientY > bounds.top + bounds.height)) { reset(); return; }
     if (event.cancelable) event.preventDefault();
     const origin = event.pointerType === 'touch' ? options.origin.current : null;
     options.position(origin
@@ -50,22 +55,34 @@ export function bindGameInput(field: HTMLElement, options: Options) {
       : placePlayerFromPointer(event.clientX - bounds.left, event.clientY - bounds.top, bounds.width, bounds.height, false));
   };
   const start = (event: SteeringEvent) => {
+    // A second primary mouse click releases following even above the start zone
+    // or on a HUD button. The button's own click action remains available.
+    if (mouseFollowing && event.pointerType === 'mouse' && event.isPrimary !== false && event.buttons === 1) { reset(); return; }
     if (!options.playing() || (event.target as Element | null)?.closest?.(controls) ||
         event.isPrimary === false || (event.pointerType === 'mouse' && event.buttons !== 1)) return;
     const bounds = field.getBoundingClientRect();
     if (!canStartSteering(event.clientX, event.clientY, bounds, options.area())) return;
     reset();
+    mouseFollowing = event.pointerType === 'mouse';
     options.pointer.current = event.pointerId;
     options.origin.current = event.pointerType === 'touch' ? {
       x: event.clientX, y: event.clientY,
       player: placePlayerFromPointer(event.clientX - bounds.left, event.clientY - bounds.top, bounds.width, bounds.height, options.aboveFinger()),
     } : null;
-    try { field.setPointerCapture?.(event.pointerId); } catch { /* Global release handlers remain available in embedded browsers. */ }
+    if (!mouseFollowing) {
+      try { field.setPointerCapture?.(event.pointerId); } catch { /* Global release handlers remain available in embedded browsers. */ }
+    }
     move(event);
   };
   const down = (event: PointerEvent) => safely(() => start(event));
   const motion = (event: PointerEvent) => safely(() => move(event));
-  const end = (event: PointerEvent) => { if (options.pointer.current === event.pointerId) reset(); };
+  const end = (event: PointerEvent) => {
+    if (options.pointer.current !== event.pointerId) return;
+    if (mouseFollowing && event.pointerType === 'mouse' && event.type === 'pointerup') return;
+    reset();
+  };
+  const leave = (event: PointerEvent) => { if (mouseFollowing && event.pointerType === 'mouse') reset(); };
+  const escape = (event: KeyboardEvent) => { if (mouseFollowing && event.key === 'Escape') reset(); };
   const hidden = () => { if (doc.visibilityState === 'hidden') reset(); };
   const allTouchesEnded = (event: TouchEvent) => { if (event.touches.length === 0 && options.origin.current) reset(); };
   const listeners: Array<() => void> = [];
@@ -75,10 +92,12 @@ export function bindGameInput(field: HTMLElement, options: Options) {
   };
   on(field, 'pointerdown', down as EventListener, { passive: false });
   on(field, 'pointermove', motion as EventListener, { passive: false });
+  on(field, 'pointerleave', leave as EventListener);
   on(win, 'pointerup', end as EventListener, true);
   on(win, 'pointercancel', end as EventListener, true);
   on(field, 'lostpointercapture', end as EventListener);
   on(win, 'blur', reset);
+  on(win, 'keydown', escape as EventListener);
   on(win, 'pagehide', reset);
   on(win, 'resize', reset);
   on(doc, 'fullscreenchange', reset);

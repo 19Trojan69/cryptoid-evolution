@@ -118,9 +118,81 @@ test('an input geometry exception releases the old gesture and reports a recover
   h.field.getBoundingClientRect = measure; h.down({ pointerId: 2 });
   assert.equal(h.pointer.current, 2); h.input.dispose();
 });
-test('mouse motion with no held button cannot keep steering latched', () => {
-  const h = harness(); h.down({ pointerType: 'mouse' }); h.move({ pointerType: 'mouse', buttons: 0 });
-  assert.equal(h.pointer.current, null); h.input.dispose();
+test('a single mouse click follows motion after release; a second click turns it off', () => {
+  const h = harness(), mouse = { pointerType: 'mouse' };
+  h.move({ ...mouse, buttons: 0 }); assert.equal(h.moves.length, 0);
+  h.down(mouse); fire(h.win, 'pointerup', { ...mouse, buttons: 0 });
+  assert.equal(h.pointer.current, 1); assert.equal(h.captures.size, 0);
+  h.move({ ...mouse, buttons: 0, clientX: 100 });
+  assert.equal(h.moves.at(-1).x, 90 / 390);
+  const count = h.moves.length;
+  h.down(mouse); fire(h.win, 'pointerup', { ...mouse, buttons: 0 });
+  h.move({ ...mouse, buttons: 0, clientX: 200 });
+  assert.equal(h.pointer.current, null); assert.equal(h.moves.length, count);
+  h.down(mouse); assert.equal(h.pointer.current, 1); h.input.dispose();
+});
+test('mouse following can be released above the start zone or by clicking a HUD control', () => {
+  for (const data of [{ clientY: 100 }, { target: { closest: () => ({}) } }]) {
+    const h = harness(); h.down({ pointerType: 'mouse' });
+    h.down({ pointerType: 'mouse', ...data });
+    assert.equal(h.pointer.current, null); h.input.dispose();
+  }
+});
+test('mouse hovering over a control or outside the field releases following', () => {
+  for (const data of [{ target: { closest: () => ({}) } }, { clientX: 5 }, { clientY: 800 }]) {
+    const h = harness(); h.down({ pointerType: 'mouse' }); const count = h.moves.length;
+    h.move({ pointerType: 'mouse', buttons: 0, ...data });
+    assert.equal(h.pointer.current, null); assert.equal(h.moves.length, count); h.input.dispose();
+  }
+});
+test('leaving the field or Escape releases mouse following until another click', () => {
+  for (const stop of [h => fire(h.field, 'pointerleave', { pointerType: 'mouse' }),
+    h => fire(h.win, 'keydown', { key: 'Escape' })]) {
+    const h = harness(); h.down({ pointerType: 'mouse' });
+    fire(h.win, 'pointerup', { pointerType: 'mouse', buttons: 0 }); stop(h);
+    const count = h.moves.length; h.move({ pointerType: 'mouse', buttons: 0 });
+    assert.equal(h.pointer.current, null); assert.equal(h.moves.length, count);
+    h.down({ pointerType: 'mouse' }); assert.equal(h.pointer.current, 1); h.input.dispose();
+  }
+});
+for (const event of ['pointercancel', 'lostpointercapture', 'blur', 'pagehide', 'resize', 'fullscreenchange', 'webkitfullscreenchange']) {
+  test(`${event} releases mouse following without rearming on hover`, () => {
+    const h = harness(); h.down({ pointerType: 'mouse' });
+    fire(h.win, 'pointerup', { pointerType: 'mouse', buttons: 0 });
+    fire(event.includes('fullscreen') ? h.doc : event === 'lostpointercapture' ? h.field : h.win, event, { pointerType: 'mouse' });
+    const count = h.moves.length; h.move({ pointerType: 'mouse', buttons: 0, clientX: 100 });
+    assert.equal(h.pointer.current, null); assert.equal(h.moves.length, count); h.input.dispose();
+  });
+}
+test('pause, hidden page and explicit reset each release mouse following', () => {
+  for (const stop of [h => { h.setPlaying(false); h.move({ pointerType: 'mouse', buttons: 0 }); },
+    h => { h.doc.visibilityState = 'hidden'; fire(h.doc, 'visibilitychange'); }, h => h.input.reset()]) {
+    const h = harness(); h.down({ pointerType: 'mouse' }); stop(h);
+    h.setPlaying(true); h.doc.visibilityState = 'visible'; const count = h.moves.length;
+    h.move({ pointerType: 'mouse', buttons: 0 });
+    assert.equal(h.pointer.current, null); assert.equal(h.moves.length, count); h.input.dispose();
+  }
+});
+test('a touch can replace mouse following and still releases when the finger lifts', () => {
+  const h = harness(); h.down({ pointerType: 'mouse' });
+  fire(h.win, 'pointerup', { pointerType: 'mouse', buttons: 0 });
+  h.down({ pointerId: 9 }); assert.equal(h.pointer.current, 9); assert.equal(h.captures.has(9), true);
+  fire(h.win, 'pointerup', { pointerId: 9, buttons: 0 });
+  assert.equal(h.pointer.current, null); const count = h.moves.length;
+  h.move({ pointerType: 'mouse', buttons: 0 }); assert.equal(h.moves.length, count); h.input.dispose();
+});
+test('secondary mouse buttons and UI clicks cannot activate following', () => {
+  for (const data of [{ buttons: 2 }, { buttons: 4 }, { isPrimary: false }, { target: { closest: () => ({}) } }, { clientY: 100 }]) {
+    const h = harness(); h.down({ pointerType: 'mouse', ...data });
+    h.move({ pointerType: 'mouse', buttons: 0 });
+    assert.equal(h.pointer.current, null); assert.equal(h.moves.length, 0); h.input.dispose();
+  }
+});
+test('disposing active mouse following removes motion and toggle handlers', () => {
+  const h = harness(); h.down({ pointerType: 'mouse' }); h.input.dispose();
+  const count = h.moves.length; h.down({ pointerType: 'mouse' });
+  h.move({ pointerType: 'mouse', buttons: 0, clientX: 100 });
+  assert.equal(h.pointer.current, null); assert.equal(h.moves.length, count);
 });
 test('legacy touch-only WebView can steer, cancel and start again', () => {
   const h = harness({ legacy: true });
