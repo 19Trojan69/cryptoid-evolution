@@ -4,6 +4,7 @@ import BonusRockLayer from './BonusRockLayer';
 import {CanvasEffectLayer,CanvasImpact,canvasEffectResources,releaseIdleCanvasEffects} from './CanvasEffects';
 import LevelCompletion from './LevelCompletion';
 import { completionSaveFailure } from './completionSaveFailure';
+import { advanceCompletionQuiet, LEVEL_COMPLETION_QUIET_MS } from './levelCompletionEntrance';
 import type { BossSummary } from './bossSummaryTiming';
 import './combatVariety.css';
 import { useAuth } from '../hooks/useAuth';
@@ -220,6 +221,8 @@ type WeaponSource = "standard" | "paid" | "pickup";
 const combatVarietyEnabled = shipSaveNetwork === "testnet";
 const chooseCryptoid = (stage: number, index: number) => combatVarietyEnabled ? combatCryptoid(stage, index) : originalCryptoid(stage, index);
 type GameState = BossRewardState & { rocks: BonusRock[]; rockEffects: RockEffect[]; damageCount?: number; comboTotal?: number; playerHullFires?: HullFire[]; playerHit?: HullFire; bossHullLight: number; combo: DoubleKillCombo & { variety?: CombatVarietyRuntime }; asteroids: Asteroid[]; bonusTargets: BonusTarget[]; bonusHits: number; bonusResult: string; chainBlocks: number; chainResult: string; rewardNotice: string; boss: SectorBoss | null; encounter: "normal" | "boss-intro" | "boss-fight" | "boss-clear" | "bonus"; shots: PlayerShot[]; enemyShots: EnemyShot[]; player: PlayerPosition; thrust: number; effects: Effect[]; powerUps: PowerUp[]; powerUpTypes: PowerUpType[]; pickupNotice: { id: number; type: PowerUpType; remainingMs: number; level: number } | null; score: number; shardBase: number; shards: number; hearts: number; maxHearts: number; projectileGuard: number; shieldCharges: number; shieldMs: number; purchasedShieldMs: number; shieldActive: boolean; overdriveMs: number; overdriveTotalMs: number; rapidFireMs: number; rapidFireTotalMs: number; empMs: number; pendingStartPower: "shield" | "overdrive" | "rapid" | "bomb" | "emp" | null; weaponLevel: number; weaponSource: WeaponSource; weaponCap: number; paidWeaponLevel: number; paidWeaponMs: number; pickupWeaponLevel: number; pickupWeaponMs: number; unlockedWeapons: number[]; weaponTimers: number[]; destroyed: number; sector: number; section: number; phase: SectorPhase; status: GameStatus };
+
+const advanceGameEffects = (effects: Effect[], time: number) => effects.map(effect => activateBossExplosion(effect, time)).filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "turret-hit" ? 340 : effect.kind === "turret-burst" ? 720 : effect.kind === "boss-fall" ? BOSS_FALL_DURATION_MS + 100 : effect.kind === "boss-explosion" ? (effect.finalDelayMs ?? 0) + 3_400 : effect.kind === "player-explosion" ? 2_250 : effect.kind === "player-crash" ? 1_350 : effect.kind === "explosion" || effect.kind === "shatter" ? 2_250 : 390));
 
 const syncSelectedWeapon = (state: GameState) => {
   if (state.weaponSource === "pickup" && state.pickupWeaponMs <= 0) state.weaponSource = state.paidWeaponMs > 0 ? "paid" : "standard";
@@ -1510,6 +1513,17 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
       }
       if (state.status === "playing") {
         simulatedMs += delta;
+        // Keep the final bonus explosion alive, then a short quiet beat. Only
+        // visual lifetimes advance: the queued reward snapshot stays unchanged.
+        if (state.encounter === 'bonus' && state.phase === 'SECTOR_CLEAR' && !bossSummaryRef.current?.accepted) {
+          state.effects = advanceGameEffects(state.effects, time);
+          state.rockEffects = state.rockEffects.map(e => ({ ...e, age: e.age + delta })).filter(e => e.age < (e.final ? 750 : 250));
+          clearTimerRef.current = advanceCompletionQuiet(clearTimerRef.current, delta, state.effects.length + state.rockEffects.length);
+          if (clearTimerRef.current >= LEVEL_COMPLETION_QUIET_MS) {
+            beginBossSummary(); forceScene = true;
+          } else if (present && time - lastPaintRef.current >= (fieldSizeRef.current.width > 700 ? 16 : 32)) requestScene = true;
+          return;
+        }
         if(bossLifeRemainingRef.current>0){
           bossLifeRemainingRef.current=Math.max(0,bossLifeRemainingRef.current-delta);
           if(bossLifeRemainingRef.current===0)setExtraLifeVisible(false);
@@ -1607,10 +1621,6 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         state.powerUps = movePowerUps(state.powerUps, delta, height);
         performanceProbeRef.current?.mark('setup-and-boosts');
         if (state.phase === "SECTOR_CLEAR") {
-          // One readable stop after the bonus rewards; no separate boss statistics.
-          if (state.encounter === 'bonus' && !bossSummaryRef.current?.accepted) {
-            beginBossSummary(); forceScene = true; return;
-          }
           clearTimerRef.current += delta;
           if (state.encounter === "boss-clear") {
             if (!bossDestroyPlayedRef.current && clearTimerRef.current >= BOSS_FALL_DURATION_MS) {
@@ -1622,7 +1632,9 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
             if (bossVictoryPendingRef.current && clearTimerRef.current >= BOSS_VICTORY_START_MS) startBossVictory();
           }
           const victoryStillPlaying = state.encounter === "boss-clear" && musicRef.current?.currentSource === "/audio/boss-victory-v2.mp3" && musicRef.current.waitingForEnd(clearTimerRef.current);
-          const clearFinished = state.encounter === 'bonus' && !!bossSummaryRef.current?.accepted || clearTimerRef.current >= (state.encounter === "boss-clear" ? BOSS_CLEAR_DURATION_MS : timing.clearMs) && !victoryStillPlaying;
+          const clearFinished = state.encounter === 'bonus' ? !!bossSummaryRef.current?.accepted
+            : clearTimerRef.current >= (state.encounter === "boss-clear" ? BOSS_CLEAR_DURATION_MS : timing.clearMs) && !victoryStillPlaying
+              && state.effects.length === 0 && state.rockEffects.length === 0;
           if (clearFinished && state.encounter === 'boss-clear' && collectBossHeart(state, state.player, width, height)) {
             soundRef.current?.play('extraLife');
             bossLifeRemainingRef.current=BOSS_EXTRA_LIFE_MS;
@@ -2158,7 +2170,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         }
         if (state.phase === "SECTOR_CLEAR") { state.enemyShots = []; state.shots = []; }
         persistGuestShards();
-        state.effects = state.effects.map(effect => activateBossExplosion(effect, time)).filter(effect => time - effect.startedAt < (effect.kind === "bomb-wave" || effect.kind === "emp-wave" ? 850 : effect.kind === "turret-hit" ? 340 : effect.kind === "turret-burst" ? 720 : effect.kind === "boss-fall" ? BOSS_FALL_DURATION_MS + 100 : effect.kind === "boss-explosion" ? (effect.finalDelayMs ?? 0) + 3_400 : effect.kind === "player-explosion" ? 2_250 : effect.kind === "player-crash" ? 1_350 : effect.kind === "explosion" || effect.kind === "shatter" ? 2_250 : 390));
+        state.effects = advanceGameEffects(state.effects, time);
         if (state.hearts === 0) {
           state.status = "destroying";
           state.enemyShots = [];

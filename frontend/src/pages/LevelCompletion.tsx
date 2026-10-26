@@ -3,6 +3,7 @@ import { useLocale } from '../i18n';
 import BlockchainProgress from './BlockchainProgress';
 import { advanceSummaryVisibility, BOSS_SUMMARY_VISIBLE_MS, canContinueBossSummary, type BossSummary } from './bossSummaryTiming';
 import { BLOCKS_PER_CHAIN } from './networkChain';
+import { LEVEL_COMPLETION_REVEAL_MS } from './levelCompletionEntrance';
 
 export default function LevelCompletion({ summary, name, headline, bonusHits, bonusResult, bonusPoints, bonusHeart,
   prepared, saving, failed, continuing, failureMessage, onRetry, onContinue }: {
@@ -11,16 +12,18 @@ export default function LevelCompletion({ summary, name, headline, bonusHits, bo
 }) {
   const { t, locale } = useLocale();
   const [visibleMs, setVisibleMs] = useState(0);
-  const last = useRef(0), panel = useRef<HTMLElement>(null);
+  const last = useRef(0), revealedAt = useRef(0), panel = useRef<HTMLElement>(null);
   useEffect(() => {
     const previous = document.activeElement;
+    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? true;
+    revealedAt.current = performance.now() + (reduced ? 0 : LEVEL_COMPLETION_REVEAL_MS);
     panel.current?.focus({ preventScroll: true });
     return () => { if (previous instanceof HTMLElement && previous.isConnected) previous.focus({ preventScroll: true }); };
   }, []);
   useEffect(() => {
     last.current = performance.now();
     const update = () => {
-      const now = performance.now(), elapsed = now - last.current; last.current = now;
+      const now = performance.now(), elapsed = now - Math.max(last.current, revealedAt.current); last.current = now;
       setVisibleMs(value => advanceSummaryVisibility(value, elapsed, !document.hidden && prepared));
     };
     const visible = () => { last.current = performance.now(); };

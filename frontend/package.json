@@ -37,7 +37,7 @@
     "test:admin-players": "node --experimental-strip-types --test scripts/adminPlayers.test.mjs",
     "test:browser:white-screen": "node --experimental-strip-types scripts/whiteScreenBrowserVerification.mjs",
     "test:account-save": "node --experimental-strip-types --test src/lib/accountSaveRetry.test.mjs src/lib/accountSaveQueue.test.mjs src/pages/resourceStability.test.mjs",
-    "test:mobile-cockpit": "node --experimental-strip-types --test src/lib/gameViewport.test.mjs src/pages/completionSaveFailure.test.mjs src/pages/controlPreferences.test.mjs scripts/mobileCockpitScope.test.mjs",
+    "test:mobile-cockpit": "node --experimental-strip-types --test src/lib/gameViewport.test.mjs src/pages/completionSaveFailure.test.mjs src/pages/levelCompletionEntrance.test.mjs src/pages/controlPreferences.test.mjs scripts/mobileCockpitScope.test.mjs",
     "test:auth": "node --experimental-strip-types --test src/hooks/useAuth.test.mjs"
   },
   "dependencies": {

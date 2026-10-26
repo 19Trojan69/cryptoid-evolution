@@ -1,0 +1,89 @@
+{
+  "localOnly": true,
+  "syntheticSdk": true,
+  "realApiHandlers": true,
+  "isolatedData": true,
+  "testOnlyCombatCompletion": true,
+  "controlledNativeClock": true,
+  "physicalDevice": false,
+  "historicalWhiteScreenFixed": false,
+  "checks": [
+    "stage 30: no summary before heart and bonus",
+    "stage 30: actual boss event has no legacy stop",
+    "published source cuts the final bonus explosion and opens immediately",
+    "no JavaScript page errors"
+  ],
+  "cases": [
+    {
+      "stage": 30,
+      "hits": 12,
+      "fullHearts": true,
+      "realFinal": true,
+      "motion": "no-preference",
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "kind": "visit",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "boss",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "complete": true,
+  "engine": "26.5"
+}
