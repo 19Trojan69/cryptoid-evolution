@@ -1,0 +1,29 @@
+{
+  "localOnly": true,
+  "syntheticSdk": true,
+  "realApiHandlers": true,
+  "isolatedData": true,
+  "testOnlyCombatCompletion": true,
+  "controlledNativeClock": true,
+  "physicalDevice": false,
+  "historicalWhiteScreenFixed": false,
+  "checks": [
+    "stage 10: no summary before heart and bonus",
+    "stage 10: actual boss event has no legacy stop",
+    "stage 10: summary appears after bonus and Continue is locked",
+    "stage 10: ten prepared seconds required",
+    "stage 10: ready Continue",
+    "stage 10: only an earned heart is displayed",
+    "next normal checkpoint includes exact score Shards and hearts",
+    "stage 10: Continue grants nothing",
+    "Continue reaches the next normal level"
+  ],
+  "cases": [],
+  "errors": [],
+  "complete": false,
+  "engine": "26.5",
+  "failure": {
+    "message": "Continue leaves saved rewards unchanged",
+    "stack": "AssertionError [ERR_ASSERTION]: Continue leaves saved rewards unchanged\n    at check (file:///workspace/scratch/2533eb1496d4/cryptoid-evolution/verification/mobile-cockpit/verify-completion-flow.mjs:20:42)\n    at file:///workspace/scratch/2533eb1496d4/cryptoid-evolution/verification/mobile-cockpit/verify-completion-flow.mjs:133:33\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:541:9)"
+  }
+}

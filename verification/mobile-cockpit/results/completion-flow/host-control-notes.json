@@ -1,0 +1,9 @@
+{
+  "firstAttempt": {
+    "failure": "Compared entire profile after Continue, including normal next-stage checkpoint version/timestamp changes.",
+    "correction": "Assert the actual requirement: unchanged score, Shards, hearts and credited reward balances; no additional reward event."
+  },
+  "selectorReview": "Correct German Retry save text is Erneut speichern.",
+  "runtimeChanges": false,
+  "firstControl": "first-completion-control.json"
+}

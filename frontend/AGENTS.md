@@ -1,3 +1,23 @@
+# Completed mobile cockpit release, 26 October 2026
+
+PR #170 is merged and both existing public projects are READY at exact runtime
+0ec94cf7ef6d5313013e75a774744e6f8b8d977b (tree identical to reviewed b7ed7c0).
+Testnet deployment EMihBTqVcNgVNakk7iEr9i1ZBxNb and production
+72rJpLoFoh6cb9qFNzWCw1AVsUzN deliver identical application bundles; public API
+checks confirm separate testnet/mainnet networks and anonymous Admin denial.
+No further runtime change was needed. New isolated WPE full-flow verification
+passes 34 checks including legacy markers, failed bonus saves and final stage500.
+251 frontend/126 backend cases, types/build and changed leaf lint pass. The
+existing 39 native cases remain valid; GamePage retains 62 errors/four warnings.
+Physical Pi login/payments and historical White Screen resolution remain unproved.
+No live account/save/purchase/configuration change or repeated owner campaign.
+
+Verified rollback branch backup/shared-before-mobile-cockpit-20261026 preserves
+d0a0b81 and both preceding READY deployment IDs. Keep the released runtime and
+original workbranch fixed. This later receipt/test-only branch has automatic
+deployment disabled and must not be deployed. See
+`docs/releases/20261026-mobile-cockpit/PUBLISHED.md` and `release.json`.
+
 # Mobile cockpit and unified level completion, 26 October 2026
 
 The owner explicitly requests a game-related login with a launching original

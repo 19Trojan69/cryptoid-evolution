@@ -1,0 +1,216 @@
+{
+  "expectedCommit": "0ec94cf7ef6d5313013e75a774744e6f8b8d977b",
+  "sameApplicationBundles": true,
+  "sites": [
+    {
+      "host": "cryptoid-evolution-testnet.vercel.app",
+      "sourceCommit": "0ec94cf7ef6d5313013e75a774744e6f8b8d977b",
+      "passed": true,
+      "bundles": [
+        {
+          "kind": "entry",
+          "url": "https://cryptoid-evolution-testnet.vercel.app/assets/index-CILJGl_p.js",
+          "sha256": "f01de0c216abec9364e9336f35444b48d1b931d10383adf9bd67d3019493d8be",
+          "bytes": 1945117,
+          "httpStatus": 200,
+          "milliseconds": 6043,
+          "hasExpectedSourceCommit": false,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "game",
+          "url": "https://cryptoid-evolution-testnet.vercel.app/assets/GamePage-DnqjevVj.js",
+          "sha256": "5d7d20cb2039c4732d1a1ba00589a8cba98422fde5a969d91ea6828a0d1e3195",
+          "bytes": 246770,
+          "httpStatus": 200,
+          "milliseconds": 6025,
+          "hasExpectedSourceCommit": true,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "game-dependency",
+          "url": "https://cryptoid-evolution-testnet.vercel.app/assets/cardSound-DurcI59S.js",
+          "sha256": "25f6b512c119693949d58c4d337993d03a9052f8ddafbbba13efce1488772f39",
+          "bytes": 59914,
+          "httpStatus": 200,
+          "milliseconds": 6201,
+          "hasExpectedSourceCommit": true,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "game-dependency",
+          "url": "https://cryptoid-evolution-testnet.vercel.app/assets/displaySettings-d3VZZ2lg.js",
+          "sha256": "f82dbbcc5adf1ca810425a90831b806751e19f774276856f0ec2d2e62849091c",
+          "bytes": 3296,
+          "httpStatus": 200,
+          "milliseconds": 6083,
+          "hasExpectedSourceCommit": false,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "game-dependency",
+          "url": "https://cryptoid-evolution-testnet.vercel.app/assets/powerUps-OwnaWx_S.js",
+          "sha256": "ffcadcc06af920caa06597d0ee5e075f99c3a348b9b6f36d40a277849c723a5e",
+          "bytes": 156158,
+          "httpStatus": 200,
+          "milliseconds": 6134,
+          "hasExpectedSourceCommit": false,
+          "hasBoundedRewardRetry": true
+        },
+        {
+          "kind": "game-dependency",
+          "url": "https://cryptoid-evolution-testnet.vercel.app/assets/reloadDiagnostics-CTiWKCx3.js",
+          "sha256": "561164f20f1613332a345ba1305ffb0c590c0a0d4c6e5ea3782f533e440e7019",
+          "bytes": 46169,
+          "httpStatus": 200,
+          "milliseconds": 6197,
+          "hasExpectedSourceCommit": false,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "game-dependency",
+          "url": "https://cryptoid-evolution-testnet.vercel.app/assets/shipEvolution-B01Pl6zj.js",
+          "sha256": "ec1b6ee4a90a2efc15fa8ad68a6665f9de17dd9cbac1d24b5e7201c95235664d",
+          "bytes": 233729,
+          "httpStatus": 200,
+          "milliseconds": 6316,
+          "hasExpectedSourceCommit": false,
+          "hasBoundedRewardRetry": false
+        }
+      ],
+      "url": "https://cryptoid-evolution-testnet.vercel.app/",
+      "httpStatus": 200,
+      "htmlSha256": "2178eb40ebee996ef897ed97a02ad0462a69fcf52f3cbb278418662706912fc7",
+      "htmlBytes": 6030,
+      "htmlMilliseconds": 6005,
+      "completionFeatures": {
+        "levelEndMarker": true,
+        "unifiedCompletion": true,
+        "checkpointConfirmation": true,
+        "rewardConfirmation": true,
+        "gameRouteLock": true
+      },
+      "localTestHooksAbsent": true,
+      "apiHealth": {
+        "httpStatus": 200,
+        "message": "Hello, World!",
+        "backend": "production-proxy",
+        "milliseconds": 4101
+      },
+      "publicLeaderboard": {
+        "httpStatus": 200,
+        "network": "testnet",
+        "milliseconds": 2690
+      },
+      "anonymousAdminStatus": 401,
+      "publicDiagnosticRedirect": "https://cryptoid-evolution-testnet.vercel.app/"
+    },
+    {
+      "host": "cryptoid-evolution.vercel.app",
+      "sourceCommit": "0ec94cf7ef6d5313013e75a774744e6f8b8d977b",
+      "passed": true,
+      "bundles": [
+        {
+          "kind": "entry",
+          "url": "https://cryptoid-evolution.vercel.app/assets/index-CILJGl_p.js",
+          "sha256": "f01de0c216abec9364e9336f35444b48d1b931d10383adf9bd67d3019493d8be",
+          "bytes": 1945117,
+          "httpStatus": 200,
+          "milliseconds": 3863,
+          "hasExpectedSourceCommit": false,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "game",
+          "url": "https://cryptoid-evolution.vercel.app/assets/GamePage-DnqjevVj.js",
+          "sha256": "5d7d20cb2039c4732d1a1ba00589a8cba98422fde5a969d91ea6828a0d1e3195",
+          "bytes": 246770,
+          "httpStatus": 200,
+          "milliseconds": 3060,
+          "hasExpectedSourceCommit": true,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "game-dependency",
+          "url": "https://cryptoid-evolution.vercel.app/assets/cardSound-DurcI59S.js",
+          "sha256": "25f6b512c119693949d58c4d337993d03a9052f8ddafbbba13efce1488772f39",
+          "bytes": 59914,
+          "httpStatus": 200,
+          "milliseconds": 2865,
+          "hasExpectedSourceCommit": true,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "game-dependency",
+          "url": "https://cryptoid-evolution.vercel.app/assets/displaySettings-d3VZZ2lg.js",
+          "sha256": "f82dbbcc5adf1ca810425a90831b806751e19f774276856f0ec2d2e62849091c",
+          "bytes": 3296,
+          "httpStatus": 200,
+          "milliseconds": 2859,
+          "hasExpectedSourceCommit": false,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "game-dependency",
+          "url": "https://cryptoid-evolution.vercel.app/assets/powerUps-OwnaWx_S.js",
+          "sha256": "ffcadcc06af920caa06597d0ee5e075f99c3a348b9b6f36d40a277849c723a5e",
+          "bytes": 156158,
+          "httpStatus": 200,
+          "milliseconds": 2908,
+          "hasExpectedSourceCommit": false,
+          "hasBoundedRewardRetry": true
+        },
+        {
+          "kind": "game-dependency",
+          "url": "https://cryptoid-evolution.vercel.app/assets/reloadDiagnostics-CTiWKCx3.js",
+          "sha256": "561164f20f1613332a345ba1305ffb0c590c0a0d4c6e5ea3782f533e440e7019",
+          "bytes": 46169,
+          "httpStatus": 200,
+          "milliseconds": 2907,
+          "hasExpectedSourceCommit": false,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "game-dependency",
+          "url": "https://cryptoid-evolution.vercel.app/assets/shipEvolution-B01Pl6zj.js",
+          "sha256": "ec1b6ee4a90a2efc15fa8ad68a6665f9de17dd9cbac1d24b5e7201c95235664d",
+          "bytes": 233729,
+          "httpStatus": 200,
+          "milliseconds": 2910,
+          "hasExpectedSourceCommit": false,
+          "hasBoundedRewardRetry": false
+        }
+      ],
+      "url": "https://cryptoid-evolution.vercel.app/",
+      "httpStatus": 200,
+      "htmlSha256": "2178eb40ebee996ef897ed97a02ad0462a69fcf52f3cbb278418662706912fc7",
+      "htmlBytes": 6030,
+      "htmlMilliseconds": 3656,
+      "completionFeatures": {
+        "levelEndMarker": true,
+        "unifiedCompletion": true,
+        "checkpointConfirmation": true,
+        "rewardConfirmation": true,
+        "gameRouteLock": true
+      },
+      "localTestHooksAbsent": true,
+      "apiHealth": {
+        "httpStatus": 200,
+        "message": "Hello, World!",
+        "backend": "local",
+        "milliseconds": 3512
+      },
+      "publicLeaderboard": {
+        "httpStatus": 200,
+        "network": "mainnet",
+        "milliseconds": 7399
+      },
+      "anonymousAdminStatus": 401,
+      "publicDiagnosticRedirect": "https://cryptoid-evolution.vercel.app/"
+    }
+  ],
+  "readOnlyChecks": true,
+  "realPurchases": false,
+  "realGameStart": false,
+  "limitations": "Read-only delivered code and API checks, not authenticated Pi gameplay, payment validation, physical-device or White Screen acceptance."
+}
