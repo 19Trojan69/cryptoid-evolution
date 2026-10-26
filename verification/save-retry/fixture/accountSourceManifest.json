@@ -1,0 +1,2002 @@
+{
+  "sourceCommit": "8ec922899b228dc8baa15675dff2c025262e8d3b",
+  "files": [
+    {
+      "path": "backend/src/adminAccess.test.mjs",
+      "sha": "eae023cb3014324fdbac9950a54a6078953fd124"
+    },
+    {
+      "path": "backend/src/adminAccess.ts",
+      "sha": "4f71a3da880aae613892d13476bd77d096617fdb"
+    },
+    {
+      "path": "backend/src/adminDashboard.test.mjs",
+      "sha": "f98baa5de9f0fef9015bbcb5703eb30d1bdff98e"
+    },
+    {
+      "path": "backend/src/apiGateway.test.mjs",
+      "sha": "2e51d5096f41a5b5c00e570565084213772a5fe2"
+    },
+    {
+      "path": "backend/src/apiGateway.ts",
+      "sha": "455efe0363ff215f861e29a419297af488963c43"
+    },
+    {
+      "path": "backend/src/avatarImage.ts",
+      "sha": "8f4ac762a800953f819a00155c28d36972ac4fed"
+    },
+    {
+      "path": "backend/src/blockFlights.ts",
+      "sha": "6e594875b40763b0f04613fe6ce14a6c0d6303f2"
+    },
+    {
+      "path": "backend/src/bossIntermission.ts",
+      "sha": "87dcf79657eaf07244f24aa08f4aae133581de26"
+    },
+    {
+      "path": "backend/src/combatCheckpoint.test.mjs",
+      "sha": "d506333a472590509d3d15640885709a67046d00"
+    },
+    {
+      "path": "backend/src/combatCheckpoint.ts",
+      "sha": "66b4f6396cb37307f46396202b0348ea544ddd38"
+    },
+    {
+      "path": "backend/src/communityTranslation.test.mjs",
+      "sha": "d9603e986b129f5d14474c7b6c21f9786cb20e77"
+    },
+    {
+      "path": "backend/src/communityTranslation.ts",
+      "sha": "80fc03eee811b1b29c429f3278d2707798228fb3"
+    },
+    {
+      "path": "backend/src/countries.ts",
+      "sha": "d2c3c4af049ac1f89fa09f5236b36157dfa60dc1"
+    },
+    {
+      "path": "backend/src/environments.ts",
+      "sha": "585e3abe3a18c9fec6bcf98d0fde41955cee4a0f"
+    },
+    {
+      "path": "backend/src/handlers/admin.ts",
+      "sha": "747e90e0b005353ccc6a58491ac7080b090ebaf5"
+    },
+    {
+      "path": "backend/src/handlers/careerLeaderboard.test.mjs",
+      "sha": "95115d2c054bde9eb6891333741f8ba792b758fa"
+    },
+    {
+      "path": "backend/src/handlers/feedback.test.mjs",
+      "sha": "cf672a04bc0172d6987c74d406883a0dcd0dbbc7"
+    },
+    {
+      "path": "backend/src/handlers/feedback.ts",
+      "sha": "a9645ac33e7a881b1b2054c8439e9e8e18c6df3c"
+    },
+    {
+      "path": "backend/src/handlers/hangar.ts",
+      "sha": "293fc7d5a59110f6a1f6f69cf4a1e554544a2997"
+    },
+    {
+      "path": "backend/src/handlers/leaderboard.ts",
+      "sha": "82cfe8439ba248dd0263a667fe5309ca71049ad8"
+    },
+    {
+      "path": "backend/src/handlers/notifications.ts",
+      "sha": "1a463ba4dc3bc7e4c033d287e4c0bfbea9dfdd05"
+    },
+    {
+      "path": "backend/src/handlers/payments.test.mjs",
+      "sha": "1249ad96ee671d5d5c70084d02d475cb0ae7b4be"
+    },
+    {
+      "path": "backend/src/handlers/payments.ts",
+      "sha": "e47a0482bb76f226fcd3c44d7eb3ba71d74fc5ac"
+    },
+    {
+      "path": "backend/src/handlers/pilots.test.mjs",
+      "sha": "d1b7be8c695bdf93d768595cc9d548a94aeb5590"
+    },
+    {
+      "path": "backend/src/handlers/pilots.ts",
+      "sha": "62f8874ca0b2ce40100d3b7f7636b96254b3f872"
+    },
+    {
+      "path": "backend/src/handlers/progress.test.mjs",
+      "sha": "63cb64e9c24ee8d6d174a6cfe62f853a9fa647a5"
+    },
+    {
+      "path": "backend/src/handlers/progress.ts",
+      "sha": "661b43fcfa3903923fd7ff22d16b65318ece0d22"
+    },
+    {
+      "path": "backend/src/handlers/rewards.test.mjs",
+      "sha": "dfce1aa1bcb2132b4a2e827f41b31e3c857a06c9"
+    },
+    {
+      "path": "backend/src/handlers/rewards.ts",
+      "sha": "bab2528b8f4ed3926c50061e3d767ca3bc6a2406"
+    },
+    {
+      "path": "backend/src/handlers/scoreReset.test.mjs",
+      "sha": "652da60946bd8722d798925dc4ae9f9465b2bf20"
+    },
+    {
+      "path": "backend/src/handlers/usage.ts",
+      "sha": "c365b1e6dc3b723b287f4707320c1e1d9d4ce5c2"
+    },
+    {
+      "path": "backend/src/handlers/users.ts",
+      "sha": "75097bcf3b79f6baf97e1c443e1b1a702f05faf5"
+    },
+    {
+      "path": "backend/src/hangarCatalog.test.mjs",
+      "sha": "e74458608328cfb82b94a39dfe104a83daa93bd0"
+    },
+    {
+      "path": "backend/src/hangarCatalog.ts",
+      "sha": "8909bdd24a71547f5043dea79491fbc49907d890"
+    },
+    {
+      "path": "backend/src/index.ts",
+      "sha": "b55abdad80b82f6fcb7dc57f47e96b1e0505579a"
+    },
+    {
+      "path": "backend/src/leaderboardRules.test.mjs",
+      "sha": "7722d236936417755029b6f760157e6c535e606b"
+    },
+    {
+      "path": "backend/src/leaderboardRules.ts",
+      "sha": "7c64cfd00a6ebbcc9c423616b6a962348e187949"
+    },
+    {
+      "path": "backend/src/lifeRules.test.mjs",
+      "sha": "4ec1a8603ae17f4fc65d275b13929adb364a8c8a"
+    },
+    {
+      "path": "backend/src/lifeRules.ts",
+      "sha": "68cd5b7687d3bfe970c4ffcffdfa02c9d709a68c"
+    },
+    {
+      "path": "backend/src/paymentPolicy.test.mjs",
+      "sha": "480f1aa49751cbb9470d2c9a0327036433ebcfeb"
+    },
+    {
+      "path": "backend/src/paymentPolicy.ts",
+      "sha": "262f5c4200d0ae804511382ca0cecbc8c94192a3"
+    },
+    {
+      "path": "backend/src/paymentReceipt.ts",
+      "sha": "842773dd4f054eebbf95ec4d6379357f3e948176"
+    },
+    {
+      "path": "backend/src/paymentRecords.test.mjs",
+      "sha": "f92cb4d2afe5db49a8c3a46ce0b6feb9564a3177"
+    },
+    {
+      "path": "backend/src/paymentRecords.ts",
+      "sha": "7b6c6ad3597c0673adcccec5b85095a878683500"
+    },
+    {
+      "path": "backend/src/pilotRules.ts",
+      "sha": "6a6b26c90aaaa1f11e714a122921720935a520f0"
+    },
+    {
+      "path": "backend/src/playerAdministration.test.mjs",
+      "sha": "0b3dd0eec8a30d232d52bbec884ee0ee52e271f6"
+    },
+    {
+      "path": "backend/src/playerAdministration.ts",
+      "sha": "13bdd928591cc042afc20e11af683b9b583d8429"
+    },
+    {
+      "path": "backend/src/playerSave.ts",
+      "sha": "2c224a7a890cabbbe46b94286cf40cbcac209ccb"
+    },
+    {
+      "path": "backend/src/purchaseQuote.test.mjs",
+      "sha": "39d46bed7cebe68cb3f13fc211c7adb89942185a"
+    },
+    {
+      "path": "backend/src/purchaseQuote.ts",
+      "sha": "3a8cf66470d7f43f35fbd5aab262fe84dd253612"
+    },
+    {
+      "path": "backend/src/restoreScoreRun.ts",
+      "sha": "3eff4baaa88ae370f7c8c09c8d6e8bd5378e2408"
+    },
+    {
+      "path": "backend/src/rewardNetwork.ts",
+      "sha": "9c576c71498469434b20e14e04ff37b1f2728d4b"
+    },
+    {
+      "path": "backend/src/rewardRules.ts",
+      "sha": "f40aec9b8bca7b42d38e49f87e809d3cabc667e5"
+    },
+    {
+      "path": "backend/src/scoreRules.test.mjs",
+      "sha": "b4479ee77b71865c0a8996b81d867067b157fbc3"
+    },
+    {
+      "path": "backend/src/scoreRules.ts",
+      "sha": "171308a84d02ecf6bdaaa0a47aa5cf417e2d8f5a"
+    },
+    {
+      "path": "backend/src/services/platformAPIClient.ts",
+      "sha": "4859ed87e2ab5d46623c319cc56fa98da604b69b"
+    },
+    {
+      "path": "backend/src/sessionInitialization.test.mjs",
+      "sha": "1499d6a899dc744773673e57c837e367b30d9fd1"
+    },
+    {
+      "path": "backend/src/types/session.ts",
+      "sha": "f057190577c21e519e871d26cc5abaefcc22f84c"
+    },
+    {
+      "path": "backend/src/types/user.ts",
+      "sha": "92d7c1b7d9cfacc71851187d30d6ea73627469c2"
+    },
+    {
+      "path": "backend/src/usageStats.test.mjs",
+      "sha": "9a6e6df50e3c135dc1bd3c34a22df19c39ddb565"
+    },
+    {
+      "path": "backend/src/usageStats.ts",
+      "sha": "25ad614eca72b40585721db65eeacf2f34807b96"
+    },
+    {
+      "path": "backend/src/weaponStock.test.mjs",
+      "sha": "0dba2056b5fac1c3c4c3eb499c46184b7345a612"
+    },
+    {
+      "path": "backend/src/weaponStock.ts",
+      "sha": "95199715c92a70d8e9e5eea0709c8b039651bdfd"
+    },
+    {
+      "path": "frontend/src/AdminLoading.tsx",
+      "sha": "46bd0323dec9ba42d66e73a9bf831f001adb0cde"
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "sha": "2b4c6bf3a2c2ee9e78cbf10b296ea86e96a24d60"
+    },
+    {
+      "path": "frontend/src/RouteRecovery.tsx",
+      "sha": "80d796a133567d230941f9966284d6cbb3f1e76a"
+    },
+    {
+      "path": "frontend/src/Router.tsx",
+      "sha": "c77b6cca3fec1848e7417efd95ea6747810a9e86"
+    },
+    {
+      "path": "frontend/src/adminLocale.test.mjs",
+      "sha": "1ee09767db061bbfb9558abcaac5817a9b99cf2d"
+    },
+    {
+      "path": "frontend/src/adminLocale.ts",
+      "sha": "fff487dfb85990769f2f1dbcd14e6c978671c1cb"
+    },
+    {
+      "path": "frontend/src/buildIdentity.d.ts",
+      "sha": "bbf9ad9a238ad0cf8211a37ac29f14fdac383df1"
+    },
+    {
+      "path": "frontend/src/components/AvatarCropper.tsx",
+      "sha": "ea47705ddde63cbe329c2070aada2f335ca7f0c7"
+    },
+    {
+      "path": "frontend/src/components/BlockchainIcon.tsx",
+      "sha": "d1b6e4b03eef038656b75c1c690c0edb61ad7a3e"
+    },
+    {
+      "path": "frontend/src/components/Header.tsx",
+      "sha": "459aa6b2fa46243d1ecdf2ed017d120bd6733b58"
+    },
+    {
+      "path": "frontend/src/components/LanguagePicker.tsx",
+      "sha": "406165f263d80077548f9aa5a48129bdfacbe1da"
+    },
+    {
+      "path": "frontend/src/components/LegalDocument.tsx",
+      "sha": "4cef6097599bddce00471cee2a7a9b83a17a7719"
+    },
+    {
+      "path": "frontend/src/components/PiPrice.tsx",
+      "sha": "8b9569894ab71fb8ea7e2e5bda05acf91a7af6ee"
+    },
+    {
+      "path": "frontend/src/components/PilotAvatar.tsx",
+      "sha": "ea2704f75b01f52cf87cbd6fa1536d81af38500b"
+    },
+    {
+      "path": "frontend/src/components/ProductCard.tsx",
+      "sha": "5625d544fcb3f29ce33d61f0ecce2f6d362120ce"
+    },
+    {
+      "path": "frontend/src/components/QuickAccessMenu.tsx",
+      "sha": "51a65494ca66b451d580049988f9456cbab7a4a3"
+    },
+    {
+      "path": "frontend/src/components/ServiceBadge.tsx",
+      "sha": "9717f3d8e82de9c9dadb44c2632bfc27edb3b869"
+    },
+    {
+      "path": "frontend/src/components/SignIn.tsx",
+      "sha": "0fd732fd61500ae1fe30eb0d06553e005455993b"
+    },
+    {
+      "path": "frontend/src/components/TaskActionButton.tsx",
+      "sha": "a68b56fa29770344863162d2a47bdc17e4bed784"
+    },
+    {
+      "path": "frontend/src/components/TermsDialog.tsx",
+      "sha": "3ba2c317a81c0bcec922372a761f1966beb343e1"
+    },
+    {
+      "path": "frontend/src/components/WolfLogo.tsx",
+      "sha": "f4772d8a0b17e4192e171628faed29dd844f840a"
+    },
+    {
+      "path": "frontend/src/components/lib.ts",
+      "sha": "52b06f723b93bf9892a513454b744d64ac391b60"
+    },
+    {
+      "path": "frontend/src/config/piOAuth.ts",
+      "sha": "354ddaeb3777e16b2f592e2460604b60ea182237"
+    },
+    {
+      "path": "frontend/src/fleetMenus.css",
+      "sha": "9e89ceb9db8547776df68ad45708a2fb0bb29e8e"
+    },
+    {
+      "path": "frontend/src/floatingNotices.css",
+      "sha": "0651cd0312bed0c5f97e2f7f627768b74209c79e"
+    },
+    {
+      "path": "frontend/src/gameViewport.css",
+      "sha": "387925640ab1e6941d570c72872c9fb548e61505"
+    },
+    {
+      "path": "frontend/src/generated/paintedHullManifest.ts",
+      "sha": "650195d174bd1191fe3d7cf214d885c3705a0af8"
+    },
+    {
+      "path": "frontend/src/homeTypeMobile.css",
+      "sha": "d5cd0f255864036a6ce15b176a4a89a9121d0575"
+    },
+    {
+      "path": "frontend/src/hooks/modalScroll.test.mjs",
+      "sha": "911ae5ddfb89718f6680a4884bad1d3ec0b33c97"
+    },
+    {
+      "path": "frontend/src/hooks/useAuth.test.mjs",
+      "sha": "2b426dafdb6ca99888385dbb478530ddf0faacfb"
+    },
+    {
+      "path": "frontend/src/hooks/useAuth.ts",
+      "sha": "18ccf219bde14ac8a4ceb4d55889ac1492433867"
+    },
+    {
+      "path": "frontend/src/hooks/useModalNavigation.ts",
+      "sha": "305dcbd6f528152c51357b5d68064510b9e99971"
+    },
+    {
+      "path": "frontend/src/hooks/usePayments.test.mjs",
+      "sha": "92e9d7b48cd80fc75f59c4f90d45935d6727fa40"
+    },
+    {
+      "path": "frontend/src/hooks/usePayments.ts",
+      "sha": "e888c88597838ccf05d84dd24806137bb485ecc6"
+    },
+    {
+      "path": "frontend/src/hudDepth.css",
+      "sha": "6f8c37b40f315c3327aef7cb1c45c1a6b5d850fb"
+    },
+    {
+      "path": "frontend/src/i18n.test.mjs",
+      "sha": "67eea895d5ef0d9340fd87569cca6e8a88f29237"
+    },
+    {
+      "path": "frontend/src/i18n.ts",
+      "sha": "a4d60a7851161a5b9fc6dc92f5418cdc195d5e36"
+    },
+    {
+      "path": "frontend/src/index.css",
+      "sha": "284cf2532137faaf004c15c56f7fd0cde4236edb"
+    },
+    {
+      "path": "frontend/src/lib/accountSave.ts",
+      "sha": "304812a9cb9a4804b8cc47421c6ca0f098f2aab0"
+    },
+    {
+      "path": "frontend/src/lib/accountSaveQueue.test.mjs",
+      "sha": "6f201463ddf2e05312a48f3d8b93a61a13fff91e"
+    },
+    {
+      "path": "frontend/src/lib/aggregateUsage.ts",
+      "sha": "7118bd88a4bd1ac62e0e3366ddbc8da139e33288"
+    },
+    {
+      "path": "frontend/src/lib/axiosClient.ts",
+      "sha": "9755c22ed8b08375a14848d13546e647c285a758"
+    },
+    {
+      "path": "frontend/src/lib/cssFramePacing.test.mjs",
+      "sha": "dbe99e0ab7785fcf1a152492334e983acf304751"
+    },
+    {
+      "path": "frontend/src/lib/cssFramePacing.ts",
+      "sha": "5d9cc3e5b40792277d9813b2953196affbc0eaf3"
+    },
+    {
+      "path": "frontend/src/lib/frameScheduler.test.mjs",
+      "sha": "2863548cef93c763d138a9454b8b0493be201bf2"
+    },
+    {
+      "path": "frontend/src/lib/frameScheduler.ts",
+      "sha": "5de751102dd2f9c9adf640a9b24f8a83413f47f4"
+    },
+    {
+      "path": "frontend/src/lib/localRecordKeys.ts",
+      "sha": "3aa0ab83fdd241a3b24ab93248e453d58d972ddd"
+    },
+    {
+      "path": "frontend/src/lib/menuViewport.test.mjs",
+      "sha": "0f17d2d436e6f9be4a90870bcdc73da0871309f4"
+    },
+    {
+      "path": "frontend/src/lib/menuViewport.ts",
+      "sha": "61d71792388209cdf109b33f38735264b0278afe"
+    },
+    {
+      "path": "frontend/src/lib/nativeFrameEasing.ts",
+      "sha": "cb0b45871da02de5bf0bb02800dda10fb8193488"
+    },
+    {
+      "path": "frontend/src/lib/ownerLifecycle.ts",
+      "sha": "09ba17ae8e298e11a375ed0a90b786a393eb2060"
+    },
+    {
+      "path": "frontend/src/lib/ownerLifecycleCapture.d.mts",
+      "sha": "97cc4061b5432c01c49c47e3f9748991707aad34"
+    },
+    {
+      "path": "frontend/src/lib/ownerLifecycleCapture.mjs",
+      "sha": "c048a0c5ba4b8f7943771c96719373d98f635240"
+    },
+    {
+      "path": "frontend/src/lib/ownerLifecycleCapture.test.mjs",
+      "sha": "7fc8774ee7104cc731f5ebfca839ab5998d53395"
+    },
+    {
+      "path": "frontend/src/lib/ownerLifecycleEvidence.d.mts",
+      "sha": "7c3ac7cb79b43b1c69403c986456ee1067196605"
+    },
+    {
+      "path": "frontend/src/lib/ownerLifecycleEvidence.mjs",
+      "sha": "40b1431226fe26c547258bef95b3d69c82b6f7b9"
+    },
+    {
+      "path": "frontend/src/lib/piAuthTimeout.ts",
+      "sha": "1bc3ad202e8a4fa136ab1afdda928828f73d9d4f"
+    },
+    {
+      "path": "frontend/src/lib/pilotPresentation.ts",
+      "sha": "14a15c95b162a6d6d13b539d6458db8d3ba129fb"
+    },
+    {
+      "path": "frontend/src/lib/requestDiagnosticCodes.ts",
+      "sha": "435630b3bf38d3efda7c553415eb58bf25cabef8"
+    },
+    {
+      "path": "frontend/src/lib/saveOutbox.ts",
+      "sha": "fa7168357eabcdab175d853783acb355b037d91d"
+    },
+    {
+      "path": "frontend/src/lib/sessionDiagnosticEvents.ts",
+      "sha": "060d8fafb6669b7964eb9ee8e729920e0c98667b"
+    },
+    {
+      "path": "frontend/src/lib/sessionRequestDiagnostics.ts",
+      "sha": "b263a66bcd53a6733caf4e03e24e8eecd1d3ecf3"
+    },
+    {
+      "path": "frontend/src/locales/audioAudit.ts",
+      "sha": "7991449853d1339c1dddba20f620a9b072424e94"
+    },
+    {
+      "path": "frontend/src/locales/bossPhases.ts",
+      "sha": "2fc5fadafa042b24f873b27985ed73a73e982a9a"
+    },
+    {
+      "path": "frontend/src/locales/bossReward.ts",
+      "sha": "bd74b5aa8a1d3d3bad33127f5ff2dd692daf73fc"
+    },
+    {
+      "path": "frontend/src/locales/bossWeaponUpdate.ts",
+      "sha": "f705ea0d454130375be0f973621870b32340ec82"
+    },
+    {
+      "path": "frontend/src/locales/catalog.ts",
+      "sha": "d4d26fef00cf7ecf2f8dee08e89058b25ea53a0a"
+    },
+    {
+      "path": "frontend/src/locales/chineseAdmin.ts",
+      "sha": "f6a81eed97ddfad416e8fe43ca690fe1d479de3f"
+    },
+    {
+      "path": "frontend/src/locales/chineseCollection.ts",
+      "sha": "927298c7339b2bbc1658c6fa2413cd355a46dc99"
+    },
+    {
+      "path": "frontend/src/locales/chineseGameplay.ts",
+      "sha": "9858639cc8c64482ef9a47437a00573187dd8912"
+    },
+    {
+      "path": "frontend/src/locales/chineseLore.ts",
+      "sha": "0798a7459938dd6d099bc5a72f0b1cd2d8607692"
+    },
+    {
+      "path": "frontend/src/locales/collection.ts",
+      "sha": "178e6733b66e9fd4b865f6791a1562ac6cb718b4"
+    },
+    {
+      "path": "frontend/src/locales/collectionEquipment.test.mjs",
+      "sha": "be52b643a77576931829f1c29bd7e36262b323ac"
+    },
+    {
+      "path": "frontend/src/locales/collectionEquipment.ts",
+      "sha": "fe3f338ed4ebffc918d4abb91daa09293883c69a"
+    },
+    {
+      "path": "frontend/src/locales/combatVariety.ts",
+      "sha": "05cd6da736590b8ad47f614e5b996da4e84f1379"
+    },
+    {
+      "path": "frontend/src/locales/config.ts",
+      "sha": "893dc3589367a8c4d816785e923e0aef0cd7e6d1"
+    },
+    {
+      "path": "frontend/src/locales/englishAdmin.ts",
+      "sha": "697f91b3e45f2e19688b2d0062593868a8952bb2"
+    },
+    {
+      "path": "frontend/src/locales/frenchAdmin.ts",
+      "sha": "bf222889c40d5b98c5e3c53faf8ea09d567a48b3"
+    },
+    {
+      "path": "frontend/src/locales/frenchCompletion.ts",
+      "sha": "eb9feb509071e05f3b0c812009a82c7a178a31ee"
+    },
+    {
+      "path": "frontend/src/locales/fullSession.ts",
+      "sha": "047b537cf3e31eef6248dffc09475a4e6a4278e1"
+    },
+    {
+      "path": "frontend/src/locales/galaxyMap.ts",
+      "sha": "515a980409c73e410570d6d4dc32d6183f4ab322"
+    },
+    {
+      "path": "frontend/src/locales/germanCompletion.ts",
+      "sha": "313eb98c615b3672fcb1bdc47b6f04b9a58cdd78"
+    },
+    {
+      "path": "frontend/src/locales/germanLoreCompletion.ts",
+      "sha": "d711281187e630b05170928f53b86025eeeff44c"
+    },
+    {
+      "path": "frontend/src/locales/homeScreen.ts",
+      "sha": "505e14205216c7555a9d0716f50e9c151d24cfd0"
+    },
+    {
+      "path": "frontend/src/locales/indonesianInterface.ts",
+      "sha": "e26ce18d55a6d36c240b5d11b2b79f441fcdd61d"
+    },
+    {
+      "path": "frontend/src/locales/italianAdmin.ts",
+      "sha": "6b1649056000e8eb7768247b1caadfcfd0a42e5b"
+    },
+    {
+      "path": "frontend/src/locales/italianCompletion.ts",
+      "sha": "3df00a0f1c675524172ac309cc1f1258dd5e5eda"
+    },
+    {
+      "path": "frontend/src/locales/missionShop.ts",
+      "sha": "7c31b571ef31fc1c5eb21b1e69dfc440695fa5de"
+    },
+    {
+      "path": "frontend/src/locales/package2.ts",
+      "sha": "5b97be1697a7fd94e0d83cc041fa12604abdd433"
+    },
+    {
+      "path": "frontend/src/locales/package3.ts",
+      "sha": "72ef8e5e1d179c7e88b329f4610a672173c0d31f"
+    },
+    {
+      "path": "frontend/src/locales/package5.ts",
+      "sha": "7277dba603eac52a377c3fc358f5d8420504a5fc"
+    },
+    {
+      "path": "frontend/src/locales/portugueseAdmin.ts",
+      "sha": "a78695f967b248e4e7cbbfb8edcb621b96ae7a7f"
+    },
+    {
+      "path": "frontend/src/locales/portugueseCompletion.ts",
+      "sha": "6f48d672b5f92e2a1470285bd320d61baed68570"
+    },
+    {
+      "path": "frontend/src/locales/preferences.test.mjs",
+      "sha": "9f3e664751d55b02c9fc8ef309275739fea1a1d9"
+    },
+    {
+      "path": "frontend/src/locales/preferences.ts",
+      "sha": "151a663a708969344c071f99cc8ab7b4fd7c423f"
+    },
+    {
+      "path": "frontend/src/locales/quantities.ts",
+      "sha": "2013dcd9738a6e9cf36c7a9126d4b56cc46a1dd9"
+    },
+    {
+      "path": "frontend/src/locales/regional.ts",
+      "sha": "8e9e3d712970ddfd821f606b112571c710d7bf97"
+    },
+    {
+      "path": "frontend/src/locales/regionalCombat.ts",
+      "sha": "aa56b02990dd8e16b2da9d34cd8b502013a3eec4"
+    },
+    {
+      "path": "frontend/src/locales/russianAdmin.ts",
+      "sha": "1b78807a7acdb2edeb687985db7cee0f2dfedf5b"
+    },
+    {
+      "path": "frontend/src/locales/russianCompletion.ts",
+      "sha": "984930ff393eff06e4c5dca1eecffe41156792a3"
+    },
+    {
+      "path": "frontend/src/locales/seriesAE.ts",
+      "sha": "5c7ad82d88b0c5aa2674f8c53f0fd18f6320c2aa"
+    },
+    {
+      "path": "frontend/src/locales/sevenPackages.ts",
+      "sha": "a71fa74f5511915a7177706bed463455facd9b07"
+    },
+    {
+      "path": "frontend/src/locales/shipAttributes.ts",
+      "sha": "2cd99b0cbfa0cd0ce020fcf0e1ebff50a94d352f"
+    },
+    {
+      "path": "frontend/src/locales/smartphonePackages.ts",
+      "sha": "b52a8550ed8f371c87d34f5d5449b60f41a9a9e1"
+    },
+    {
+      "path": "frontend/src/locales/spanishAdmin.ts",
+      "sha": "8071509d9aabc19640b15950f44d1e39615600e0"
+    },
+    {
+      "path": "frontend/src/locales/spanishCompletion.ts",
+      "sha": "843aed4c9f636278a78340aecd9de8c1d1d4d869"
+    },
+    {
+      "path": "frontend/src/locales/spanishLoreCompletion.ts",
+      "sha": "f8166565b658570c4271a4e7bef941f869f000ed"
+    },
+    {
+      "path": "frontend/src/locales/stabilityAndPlayers.ts",
+      "sha": "58ecde3f314149030c34fcea1268c187ba80c337"
+    },
+    {
+      "path": "frontend/src/locales/typography.css",
+      "sha": "30d284f1399194e18e27e0952cc243a5427291ab"
+    },
+    {
+      "path": "frontend/src/locales/uiKeys.json",
+      "sha": "f458dc4f6e9660a151a382cc89aca42fd818a694"
+    },
+    {
+      "path": "frontend/src/locales/vietnameseGuide.ts",
+      "sha": "70f0860ba5e5103d47e1363d87b1b418246297e4"
+    },
+    {
+      "path": "frontend/src/locales/weaponStock.ts",
+      "sha": "4bc3b9e5dbec93b654f8611d9a462fecd1d9b966"
+    },
+    {
+      "path": "frontend/src/main.tsx",
+      "sha": "ee368e03b2bf6bafb0f3316afd7055d403053f37"
+    },
+    {
+      "path": "frontend/src/metallic.css",
+      "sha": "b51419a8c67311bd2cd41f8f578e1b0b4d581aca"
+    },
+    {
+      "path": "frontend/src/missionDialogMobile.css",
+      "sha": "998970c7479c471150adb6468c0d4f5559202de7"
+    },
+    {
+      "path": "frontend/src/mobileDeepMenus.css",
+      "sha": "167ead2a6e915250cb37d6afcaa8f3ad48043ab4"
+    },
+    {
+      "path": "frontend/src/mobileMenus.css",
+      "sha": "9133721c333c61b403ec5e9133b3631414d9d3e1"
+    },
+    {
+      "path": "frontend/src/pages/AdminPage.tsx",
+      "sha": "1ab79b228c5f54c5eaefde8724345144b0454ed0"
+    },
+    {
+      "path": "frontend/src/pages/AdminPlayers.tsx",
+      "sha": "83fe12ed1ae95a3d0ae32b9f7f2561b39b0f310a"
+    },
+    {
+      "path": "frontend/src/pages/AdminUsage.tsx",
+      "sha": "0aa4b39abc9a438825e441013386d28af5d3a9c0"
+    },
+    {
+      "path": "frontend/src/pages/BlockchainProgress.tsx",
+      "sha": "8f4cf00b24b6159c2a3e4551c887a93bb1b7ff11"
+    },
+    {
+      "path": "frontend/src/pages/BonusRockLayer.tsx",
+      "sha": "bd4b796c8b64ed8952d3952e5683118953c6e780"
+    },
+    {
+      "path": "frontend/src/pages/BonusRockLayerDisplay.test.mjs",
+      "sha": "3adadf561d0298d3719412d7f3f3a1028cbf4d80"
+    },
+    {
+      "path": "frontend/src/pages/BossDossier.tsx",
+      "sha": "4195f90fc1bac8fb5101da55f2851c8fb6f8484e"
+    },
+    {
+      "path": "frontend/src/pages/BossHealthView.tsx",
+      "sha": "3f1c0b3407176f1a38974674f66852ce21a590ac"
+    },
+    {
+      "path": "frontend/src/pages/BossHullView.tsx",
+      "sha": "9a4b3472cf32f514b7e84d7f1eacf6da99f923d6"
+    },
+    {
+      "path": "frontend/src/pages/BossIntermission.tsx",
+      "sha": "c49878b7902ad70e34a0a9cffbc3b2ae5255934e"
+    },
+    {
+      "path": "frontend/src/pages/BossPhaseGuide.tsx",
+      "sha": "56f11e3e414dd035f36b72f6b04404b895a4a0b3"
+    },
+    {
+      "path": "frontend/src/pages/BossPortrait.tsx",
+      "sha": "b44580c31cb93141c885348b5ce382784489143d"
+    },
+    {
+      "path": "frontend/src/pages/BossReactorView.tsx",
+      "sha": "0d92e39aba2eb68aa25ba6239932cd4437f4ebf7"
+    },
+    {
+      "path": "frontend/src/pages/BossWeaponsView.tsx",
+      "sha": "1d96b505fce35c8fded383e49b3e32520d75a3ad"
+    },
+    {
+      "path": "frontend/src/pages/CanvasEffects.tsx",
+      "sha": "de19e67ef5aba6280c5f05e8e7f9b47afbbe4ed4"
+    },
+    {
+      "path": "frontend/src/pages/CardReveal.tsx",
+      "sha": "dbed1c5d7f2ce549a7fcdf4fdc3be6eab6347c6e"
+    },
+    {
+      "path": "frontend/src/pages/CareerDashboard.tsx",
+      "sha": "1926b0a328a7311c57d058923a5b481d4bf97b86"
+    },
+    {
+      "path": "frontend/src/pages/CinematicHome.tsx",
+      "sha": "7ccd27117629705c1930bb08beca027074240e41"
+    },
+    {
+      "path": "frontend/src/pages/Collection.tsx",
+      "sha": "2426b37bf714074b5fa89cfced60e717530c9bfa"
+    },
+    {
+      "path": "frontend/src/pages/CollectionCardView.tsx",
+      "sha": "fd382586710b8ac8f954683729266463cf543177"
+    },
+    {
+      "path": "frontend/src/pages/CommunityText.tsx",
+      "sha": "a3f119538fde1775b312f91dbc1cdbd3edd21f5a"
+    },
+    {
+      "path": "frontend/src/pages/EarthGlobe.tsx",
+      "sha": "9b43e6cf1d1d550bc7fac699c0dac2fa203cad48"
+    },
+    {
+      "path": "frontend/src/pages/EarthNetwork.tsx",
+      "sha": "f49fb973e2b34e142e48841d2a5c9e4b9009a4ae"
+    },
+    {
+      "path": "frontend/src/pages/EngagementTasksPage.tsx",
+      "sha": "29d0545e4ee78d78e4291a65a584b68346cb220e"
+    },
+    {
+      "path": "frontend/src/pages/FeedbackDescription.tsx",
+      "sha": "4949d554289f239d0becc8f98b3ef4ee6c4f71aa"
+    },
+    {
+      "path": "frontend/src/pages/FeedbackHub.tsx",
+      "sha": "0a09df66d6b60d68aeecd21d926289649f8ef27f"
+    },
+    {
+      "path": "frontend/src/pages/FinishedEffect.tsx",
+      "sha": "1f943eb9114756c4b26a66dd14f9c6883176a37c"
+    },
+    {
+      "path": "frontend/src/pages/FleetShipPanel.tsx",
+      "sha": "56d7b4f90c225919ab2686bd7fa46b23184b9e34"
+    },
+    {
+      "path": "frontend/src/pages/GalaxyBackdrop.tsx",
+      "sha": "dfa90e294e1d2bdefa4553cfbb1284cd5c9e34d2"
+    },
+    {
+      "path": "frontend/src/pages/GalaxyBossArt.tsx",
+      "sha": "2368de073e0e577716f997b33cf6704eaaf37bcf"
+    },
+    {
+      "path": "frontend/src/pages/GalaxyInfoDialog.tsx",
+      "sha": "7bb6fdd53d010dab1e6a90e54a810c42c4185ef3"
+    },
+    {
+      "path": "frontend/src/pages/GalaxyMap.tsx",
+      "sha": "ff34a2f18c1ac999a26e0444ca6a204ce2ab82c6"
+    },
+    {
+      "path": "frontend/src/pages/GalaxySector.tsx",
+      "sha": "f882d3fe084763741634390c595442864a181519"
+    },
+    {
+      "path": "frontend/src/pages/GameGuide.tsx",
+      "sha": "456184f492dd3da32d32f555d6258b6ddb79d1a1"
+    },
+    {
+      "path": "frontend/src/pages/GameHudStats.tsx",
+      "sha": "a6a6252918e4e63948ed57d48bd06f57d9c7faa2"
+    },
+    {
+      "path": "frontend/src/pages/GamePage.tsx",
+      "sha": "887dd47cb2716950205ccc11fcbc2c3ddc9503cb"
+    },
+    {
+      "path": "frontend/src/pages/GameSceneBoundary.tsx",
+      "sha": "f076d939b5555b791aff933d7c2effbfd43419f3"
+    },
+    {
+      "path": "frontend/src/pages/GameShipVisual.tsx",
+      "sha": "224a79f4283af3046d72e39c3cf131b110558ca8"
+    },
+    {
+      "path": "frontend/src/pages/HomeCombatPreview.tsx",
+      "sha": "ba8d9490b1a9bbcf072bfc10f4420b90bc85fca9"
+    },
+    {
+      "path": "frontend/src/pages/HomeEarthNetwork.tsx",
+      "sha": "2389a142822efc1248085b15c43c0f710ee00cbe"
+    },
+    {
+      "path": "frontend/src/pages/HullDamage.tsx",
+      "sha": "50616cc7bb7f0f419c0bcc3b6303a57d47e62439"
+    },
+    {
+      "path": "frontend/src/pages/LegalPage.tsx",
+      "sha": "a18f920a3fa660bd4b8f1cc8bcef4fd90138660d"
+    },
+    {
+      "path": "frontend/src/pages/MissionWeaponShop.tsx",
+      "sha": "52715ecd2a1ccb5695706b42eb6a3cc06b247408"
+    },
+    {
+      "path": "frontend/src/pages/MusicVolumeSlider.tsx",
+      "sha": "ec77a5d4bb72e963cabe560286d92adca562d909"
+    },
+    {
+      "path": "frontend/src/pages/PaintedShip.tsx",
+      "sha": "a44265358da3edfe2988b3ebd5b28640de5a9901"
+    },
+    {
+      "path": "frontend/src/pages/PiSignInCallback.tsx",
+      "sha": "56e607f98e6bb4972758f2672aa1af00892a14be"
+    },
+    {
+      "path": "frontend/src/pages/PilotProfile.tsx",
+      "sha": "c2f54698d48527bc6fa36ada4a52423a60bad466"
+    },
+    {
+      "path": "frontend/src/pages/SectorBackdrop.tsx",
+      "sha": "4bbe0661927b166bc5e987d0629325e182bbb9df"
+    },
+    {
+      "path": "frontend/src/pages/ShipPortrait.tsx",
+      "sha": "8de8f45d93c0a2bebfb76f4c024afe669a93c9df"
+    },
+    {
+      "path": "frontend/src/pages/ShipPreview.tsx",
+      "sha": "72cd64e307d5f1a826544503480fb62140934c0f"
+    },
+    {
+      "path": "frontend/src/pages/ShipSelectionPanel.tsx",
+      "sha": "c54dca4b30bda08449620e4380d0c1a99e10e336"
+    },
+    {
+      "path": "frontend/src/pages/Shop.tsx",
+      "sha": "7f912c41dcd2ce0b534ff1f3ed4867f4677a0aec"
+    },
+    {
+      "path": "frontend/src/pages/Starfield.tsx",
+      "sha": "1b2715d4ee1dc6c5e93c19695d728ea9134b6631"
+    },
+    {
+      "path": "frontend/src/pages/SystemSettings.tsx",
+      "sha": "cdc7be178a764369dc5b41e8cc568b7baf80deea"
+    },
+    {
+      "path": "frontend/src/pages/WeaponPreview.tsx",
+      "sha": "1ad7a9edc4d76f67e2f1e5750488d104e64562d1"
+    },
+    {
+      "path": "frontend/src/pages/WeaponPurchase.tsx",
+      "sha": "12551ea5cb98b88c64dafb30cc321ad1a176fcd6"
+    },
+    {
+      "path": "frontend/src/pages/WeaponTutorial.tsx",
+      "sha": "70161907a3bb724f6784fc20d6d025774506aec0"
+    },
+    {
+      "path": "frontend/src/pages/admin.css",
+      "sha": "992358faf6daf7622eaf4a8f58e0ab85274f3500"
+    },
+    {
+      "path": "frontend/src/pages/adminGameAudioStart.test.mjs",
+      "sha": "9073c8a250d7c79cc0b36960e6465f313c4f304c"
+    },
+    {
+      "path": "frontend/src/pages/approvedTestnetHud.test.mjs",
+      "sha": "4bcebf70b3057499f46af8f7ab2a482b6cc8f0d1"
+    },
+    {
+      "path": "frontend/src/pages/attackPatterns.test.mjs",
+      "sha": "9dc2248f3ced325008e88206175f6e80d8156bcc"
+    },
+    {
+      "path": "frontend/src/pages/attackPatterns.ts",
+      "sha": "035762a8094f5ab5712d0e61766860c0f6194f7a"
+    },
+    {
+      "path": "frontend/src/pages/attackPressure.test.mjs",
+      "sha": "648876219e2eca2ec13eb0598be4c1c68c32651d"
+    },
+    {
+      "path": "frontend/src/pages/attackPressure.ts",
+      "sha": "252bc18f0c26349f90b16595a912edec91effa01"
+    },
+    {
+      "path": "frontend/src/pages/audioAuditReport.d.mts",
+      "sha": "f5136e62cde3ccbde75ffcef49a2b379336f094c"
+    },
+    {
+      "path": "frontend/src/pages/audioAuditReport.mjs",
+      "sha": "338502fa85d106652aae326c10f5ae11b791cd62"
+    },
+    {
+      "path": "frontend/src/pages/audioClockRecovery.test.mjs",
+      "sha": "aec793d067222476ae2cb9b9444dfe3177c62403"
+    },
+    {
+      "path": "frontend/src/pages/audioClockRecovery.ts",
+      "sha": "e95669da14d2dd861ca540af477cd54a8b0d8c7b"
+    },
+    {
+      "path": "frontend/src/pages/audioGraphInitialization.test.mjs",
+      "sha": "1d2290bb453cfc007dbc0a2d571925439fb04d04"
+    },
+    {
+      "path": "frontend/src/pages/blockFlights.test.mjs",
+      "sha": "2ebedc9ddc7f158a34212a604b9fa68640854fc6"
+    },
+    {
+      "path": "frontend/src/pages/blockFlights.ts",
+      "sha": "30909a96d87ecf3bb3a489f8c8a497da210056e2"
+    },
+    {
+      "path": "frontend/src/pages/bonusChallenge.test.mjs",
+      "sha": "cc6f98d9210db36ec1bd76d94af20fb3872432de"
+    },
+    {
+      "path": "frontend/src/pages/bonusChallenge.ts",
+      "sha": "b8300d70622105acfaa10c035ca29cc6fb5ef8be"
+    },
+    {
+      "path": "frontend/src/pages/bonusRocks.test.mjs",
+      "sha": "09b01016314e53d691ab941548109ebbe0db22fb"
+    },
+    {
+      "path": "frontend/src/pages/bonusRocks.ts",
+      "sha": "5add0c1d3e8ad2976558ef22a6fda73d11f808d9"
+    },
+    {
+      "path": "frontend/src/pages/bossArtwork.ts",
+      "sha": "727d83d55bcddd35dc90461e78b9ae14a54ba3bd"
+    },
+    {
+      "path": "frontend/src/pages/bossBoundaryDiagnostics.test.mjs",
+      "sha": "408ae01aa08739c1e2e7d362720806e21f79e0fa"
+    },
+    {
+      "path": "frontend/src/pages/bossBoundaryDiagnostics.ts",
+      "sha": "5841ec92f6058b42ac65e5d4d3442c8c6549d99e"
+    },
+    {
+      "path": "frontend/src/pages/bossCombat.test.mjs",
+      "sha": "9d3311abbc40d7485ca575344b6394b7fcf19475"
+    },
+    {
+      "path": "frontend/src/pages/bossCombat.ts",
+      "sha": "9b4b45ffe7c8219383d2bbb3c11f6e509595614a"
+    },
+    {
+      "path": "frontend/src/pages/bossContact.test.mjs",
+      "sha": "fa10d09a4dd52e1cad1bd726baeda0b0dd35cf85"
+    },
+    {
+      "path": "frontend/src/pages/bossContact.ts",
+      "sha": "b4432dfcfdf1fa0add900649417f9b809cc2b03c"
+    },
+    {
+      "path": "frontend/src/pages/bossCore.test.mjs",
+      "sha": "15f89b2f017638ed82cedc845fc5bf987f389c5b"
+    },
+    {
+      "path": "frontend/src/pages/bossCore.ts",
+      "sha": "4fc72f07fa852e83eb955543d958656370554668"
+    },
+    {
+      "path": "frontend/src/pages/bossDifficulty.ts",
+      "sha": "941d5f2f8cb40c9b360eeeb465f6ccae8b7bcde3"
+    },
+    {
+      "path": "frontend/src/pages/bossDossier.css",
+      "sha": "eb7b1f0bdd35abbbc82c67c33e056e536399f11e"
+    },
+    {
+      "path": "frontend/src/pages/bossEscorts.test.mjs",
+      "sha": "605c63dbc7d28c0c22f19b8fa52c003fdaeaf74c"
+    },
+    {
+      "path": "frontend/src/pages/bossEscorts.ts",
+      "sha": "be0d6af991b1a1990c823b4d10c0cd7852816856"
+    },
+    {
+      "path": "frontend/src/pages/bossExplosionBudget.css",
+      "sha": "d4b88783dba8795e42eb3ce72656684992916f3a"
+    },
+    {
+      "path": "frontend/src/pages/bossExplosionBudget.test.mjs",
+      "sha": "a0950bb0403db73bcd13f782a595f6bbece146d8"
+    },
+    {
+      "path": "frontend/src/pages/bossExplosionBudget.ts",
+      "sha": "ed8f0801974ba00b3cdefca2ab73bb13ad574c01"
+    },
+    {
+      "path": "frontend/src/pages/bossHealthLayout.test.mjs",
+      "sha": "737e3ae8e544d8778c3de92828442d74d6b6484e"
+    },
+    {
+      "path": "frontend/src/pages/bossHealthLayout.ts",
+      "sha": "95e368c8567c75d496f6c867bb955b12a119b81d"
+    },
+    {
+      "path": "frontend/src/pages/bossHitTarget.ts",
+      "sha": "7f54d37c4c53388eaebdc20248412181e7717fd4"
+    },
+    {
+      "path": "frontend/src/pages/bossIntermission.css",
+      "sha": "2791d02a0b320dec4b0b458d8478f8031391bf69"
+    },
+    {
+      "path": "frontend/src/pages/bossLore.test.mjs",
+      "sha": "50cc3c40f18fb3338348f4178bbe06647a83139e"
+    },
+    {
+      "path": "frontend/src/pages/bossLore.ts",
+      "sha": "817a9da248fdd24cdbb0a8676b9c949b4613ead1"
+    },
+    {
+      "path": "frontend/src/pages/bossManifest.ts",
+      "sha": "65ca088013e37a3906c9a478001cc3e56ba4e528"
+    },
+    {
+      "path": "frontend/src/pages/bossMasks.ts",
+      "sha": "6ce1904b7878a9cf42b65aee1e74bcbd747d9752"
+    },
+    {
+      "path": "frontend/src/pages/bossNames.test.mjs",
+      "sha": "506aa49541c389c0573251a592d3213c5db932fe"
+    },
+    {
+      "path": "frontend/src/pages/bossNames.ts",
+      "sha": "07289a1a82ac842ee9be92fa636aad5072ed767e"
+    },
+    {
+      "path": "frontend/src/pages/bossPortrait.css",
+      "sha": "f65c0a41434709da13a3de62724670f7f7643a98"
+    },
+    {
+      "path": "frontend/src/pages/bossResourceDiagnostics.test.mjs",
+      "sha": "3939ef3b4ee951eab24dc154932ed707fe0a9e11"
+    },
+    {
+      "path": "frontend/src/pages/bossResourceDiagnostics.ts",
+      "sha": "8b3747568176a51a0fe8378bab070ee29745d9b4"
+    },
+    {
+      "path": "frontend/src/pages/bossReward.css",
+      "sha": "959f680a4642416e1fa0f871678996edc8faf4b7"
+    },
+    {
+      "path": "frontend/src/pages/bossReward.test.mjs",
+      "sha": "fe2e2c6f89d2e57e7229d09effd458a0bc7c44a8"
+    },
+    {
+      "path": "frontend/src/pages/bossReward.ts",
+      "sha": "a889b4a849987c55ff3cff723e7caef3864091d7"
+    },
+    {
+      "path": "frontend/src/pages/bossSpecialWeapon.test.mjs",
+      "sha": "7d8ab95a7047b7c55d984a9d996d853ea137f37f"
+    },
+    {
+      "path": "frontend/src/pages/bossSpecialWeapon.ts",
+      "sha": "0f68d316814464fe00d5a16e59ebd76a89af91ee"
+    },
+    {
+      "path": "frontend/src/pages/bossSummaryTiming.ts",
+      "sha": "6327a407c37070f9810af0d9f6622e63e419d1ae"
+    },
+    {
+      "path": "frontend/src/pages/bossTurretDamage.test.mjs",
+      "sha": "d0db95c740e28f61af2ea613d4e5c30f3cd334a2"
+    },
+    {
+      "path": "frontend/src/pages/bossTurretHeat.ts",
+      "sha": "9da02bcc28aeacdf9e0c5ebb715efa5666cebe38"
+    },
+    {
+      "path": "frontend/src/pages/bossTurrets.test.mjs",
+      "sha": "d5bb43ffbd74e5eb508f83435ab7c44de674d558"
+    },
+    {
+      "path": "frontend/src/pages/bossTurrets.ts",
+      "sha": "4f662e2a3d75d2a9e76f8053eef7e733abe8806b"
+    },
+    {
+      "path": "frontend/src/pages/bossVictoryAudio.test.mjs",
+      "sha": "6e53e8f8e72dcbc7943cdb828f8980bb23a4e824"
+    },
+    {
+      "path": "frontend/src/pages/bossWeaponRenderer.ts",
+      "sha": "bc218dafa05c4e5e714718e110035df83e111d21"
+    },
+    {
+      "path": "frontend/src/pages/bossWeaponSound.ts",
+      "sha": "0a54f753c62a477daa3b9f2b5c4247b0d52d17cf"
+    },
+    {
+      "path": "frontend/src/pages/bossWeaponTextures.ts",
+      "sha": "9121c65cfb47beb782c051ff06c441a3d629af69"
+    },
+    {
+      "path": "frontend/src/pages/bossWeapons.ts",
+      "sha": "581f730d91a6946fe394d3619d24c25f5de1e535"
+    },
+    {
+      "path": "frontend/src/pages/cardAvailability.ts",
+      "sha": "3b76a80e752187efc29944207908199f8ff0adc3"
+    },
+    {
+      "path": "frontend/src/pages/cardBackgrounds.ts",
+      "sha": "14c9cf0b71d512a664d64b51bc835583f2ce835d"
+    },
+    {
+      "path": "frontend/src/pages/cardDownload.test.mjs",
+      "sha": "bca1364912f543c1984866f0724e66b614d82bfa"
+    },
+    {
+      "path": "frontend/src/pages/cardDownload.ts",
+      "sha": "13826fd7edb6bffecf94817f54d1dadca9e04145"
+    },
+    {
+      "path": "frontend/src/pages/cardFaction.ts",
+      "sha": "72dd6bf69d6ace8e3c7f8ec6543d7c81084a637c"
+    },
+    {
+      "path": "frontend/src/pages/cardRevealMemory.ts",
+      "sha": "aa36994cacedfdb3db3e7104463f312f3946b449"
+    },
+    {
+      "path": "frontend/src/pages/cardRevealRules.test.mjs",
+      "sha": "0e4c29cf470f26ca3219a69a20e39ac2b253f1c0"
+    },
+    {
+      "path": "frontend/src/pages/cardRevealRules.ts",
+      "sha": "b27ded7b35d296b6b65c5f3aee18452bf1f18573"
+    },
+    {
+      "path": "frontend/src/pages/cardSound.ts",
+      "sha": "4e43891ef3e1ba761427fbf49b87de97a8683f70"
+    },
+    {
+      "path": "frontend/src/pages/cardTextLayout.ts",
+      "sha": "1f238a741a8405e4b18f34d46d7a8dc8b8699304"
+    },
+    {
+      "path": "frontend/src/pages/cinematicHome.css",
+      "sha": "5831d8e0b531c5d4089e7452c67afd4847931215"
+    },
+    {
+      "path": "frontend/src/pages/cinematicHome.test.mjs",
+      "sha": "0b9c990acf6b57af4374ac89d0a94a318e9577c5"
+    },
+    {
+      "path": "frontend/src/pages/collectedPower.test.mjs",
+      "sha": "6dd93a3317d1212dcbcecbf3769d9235bdae1eee"
+    },
+    {
+      "path": "frontend/src/pages/collectedPower.ts",
+      "sha": "105a4130353bc722f387d681a72300e8a1cfd289"
+    },
+    {
+      "path": "frontend/src/pages/collection.css",
+      "sha": "14831c8b8759230bb2e39e261b1c79b624e8758a"
+    },
+    {
+      "path": "frontend/src/pages/collectionAudit.test.mjs",
+      "sha": "c0effdbae9e7937593ab8538b01f1c12bbcdb99b"
+    },
+    {
+      "path": "frontend/src/pages/collectionData.ts",
+      "sha": "b82411144466f1a3c68bc9e36783c0fc6af098a3"
+    },
+    {
+      "path": "frontend/src/pages/collectionExport.ts",
+      "sha": "d167da864c58785e8384bc5a710a14fd53fd6665"
+    },
+    {
+      "path": "frontend/src/pages/collectionOwnership.ts",
+      "sha": "5b0db0b85ad1a9ead10ed70ff5b00dc81f4ac1da"
+    },
+    {
+      "path": "frontend/src/pages/collectionRules.test.mjs",
+      "sha": "8b786ebee08e9fcc216a0482a71fa62bafe704a5"
+    },
+    {
+      "path": "frontend/src/pages/collectionRules.ts",
+      "sha": "5723bf0fccf3da3f4631832cfec6c38cd166e67b"
+    },
+    {
+      "path": "frontend/src/pages/combatBalance.test.mjs",
+      "sha": "fe32440790f0791be2742175b289192f965b4119"
+    },
+    {
+      "path": "frontend/src/pages/combatVariety.css",
+      "sha": "4dcfb78a115af979ccdaa8519bf33d476ef087db"
+    },
+    {
+      "path": "frontend/src/pages/combatVariety.test.mjs",
+      "sha": "4e8419dc80d2377821d08c09c8f4dc629fb35e5f"
+    },
+    {
+      "path": "frontend/src/pages/combatVariety.ts",
+      "sha": "53b1ac3b121f3e8f06c563de139396db4f4ab8a7"
+    },
+    {
+      "path": "frontend/src/pages/controlPreferences.test.mjs",
+      "sha": "d6ca9ec498771300ca75be160ba9fc9d3da50bfd"
+    },
+    {
+      "path": "frontend/src/pages/controlPreferences.ts",
+      "sha": "a1db020b61625bbd76b3873f335ccb8b0d41344c"
+    },
+    {
+      "path": "frontend/src/pages/crashTail.test.mjs",
+      "sha": "300fe424a927521b54b241a8fc9ea449629a2358"
+    },
+    {
+      "path": "frontend/src/pages/crashTail.ts",
+      "sha": "1caee04cc67e30764ade2e43d435524ddafb5b8a"
+    },
+    {
+      "path": "frontend/src/pages/cryptoidRoster.test.mjs",
+      "sha": "a5b9f245434caa08faaa0e8b5862555405410542"
+    },
+    {
+      "path": "frontend/src/pages/cryptoidRoster.ts",
+      "sha": "1137b0b36f845805eb0b6af625ec3d98ac2051a4"
+    },
+    {
+      "path": "frontend/src/pages/diagnosticExport.test.mjs",
+      "sha": "349023e57d51b00e25023dd8f2ca203ab866e175"
+    },
+    {
+      "path": "frontend/src/pages/diagnosticExport.ts",
+      "sha": "8a2e8fd721005d8b9e2922f255fc382c2a028d15"
+    },
+    {
+      "path": "frontend/src/pages/displaySettings.test.mjs",
+      "sha": "5cbc40c281ff8ae42f09831b3c52f04168de11b2"
+    },
+    {
+      "path": "frontend/src/pages/displaySettings.ts",
+      "sha": "4519d5c289fb00bfa9ca52138d961c3f2afbbf0a"
+    },
+    {
+      "path": "frontend/src/pages/doubleKillCombo.test.mjs",
+      "sha": "a77dcd4fe2efcf0f7d4fb9a83ecc081e46eb85ee"
+    },
+    {
+      "path": "frontend/src/pages/doubleKillCombo.ts",
+      "sha": "90aa51dc8ceec8ab08d3c0597584b04d235f5c54"
+    },
+    {
+      "path": "frontend/src/pages/effectLifecycle.ts",
+      "sha": "16b687ad73d0d7872fa0af01a5e43ec0ed6e1e42"
+    },
+    {
+      "path": "frontend/src/pages/enemyFire.test.mjs",
+      "sha": "15ff6decb9435739d92da22f5867a800c7b5879d"
+    },
+    {
+      "path": "frontend/src/pages/enemyFire.ts",
+      "sha": "e6a82259999ab09c33385475be8f84df72afc40b"
+    },
+    {
+      "path": "frontend/src/pages/enemyWeaponSound.test.mjs",
+      "sha": "6822ebee099e6faeef3255f0a4161dbccaa5696f"
+    },
+    {
+      "path": "frontend/src/pages/enemyWeaponSound.ts",
+      "sha": "54c39af3fbcd573767b221c75ae96c2615951eb6"
+    },
+    {
+      "path": "frontend/src/pages/entryPatterns.test.mjs",
+      "sha": "4dd38b7d318705858f72d32b8be97159b2286fdb"
+    },
+    {
+      "path": "frontend/src/pages/entryPatterns.ts",
+      "sha": "04d46e9606f2982fb7c1316664e1bad35a18c1af"
+    },
+    {
+      "path": "frontend/src/pages/equipmentEdge.css",
+      "sha": "fec17f4b0ca7141c1ee9601e2cf74834bf5b0376"
+    },
+    {
+      "path": "frontend/src/pages/feedbackCompact.css",
+      "sha": "d4cae09e10e39758042c042433a7ab9c293bcae0"
+    },
+    {
+      "path": "frontend/src/pages/feedbackFixes.test.mjs",
+      "sha": "e181a5677fe0c2760ef9ea121dd5ad0202025d31"
+    },
+    {
+      "path": "frontend/src/pages/flightRecorderReport.d.mts",
+      "sha": "4c35d3e583d86cc5040042d5ac8955146dfa2e09"
+    },
+    {
+      "path": "frontend/src/pages/flightRecorderReport.mjs",
+      "sha": "aa6196fdd7fdc65df821ed41ae8bc2ff636cdb24"
+    },
+    {
+      "path": "frontend/src/pages/formationMotion.test.mjs",
+      "sha": "97fa3b0b3ba43daa6dca79c919a018f803a34496"
+    },
+    {
+      "path": "frontend/src/pages/fullSessionFormat.ts",
+      "sha": "e89613d4a1a9e624361c9c5e4c03259a2eeb484b"
+    },
+    {
+      "path": "frontend/src/pages/fullSessionRecorder.test.mjs",
+      "sha": "22d4aae9903e015cab835c4acea384ed3cb08e41"
+    },
+    {
+      "path": "frontend/src/pages/fullSessionRecorder.ts",
+      "sha": "aa2aa144aa0004e6bd9b05ba76e45179774289b8"
+    },
+    {
+      "path": "frontend/src/pages/fullSessionStore.ts",
+      "sha": "953edfa6d3da718e6938597bcd8cfa447e059124"
+    },
+    {
+      "path": "frontend/src/pages/fullSessionStoreCallbacks.test.mjs",
+      "sha": "63a0a985d723ae82c5f54952182bae7d70e0bda5"
+    },
+    {
+      "path": "frontend/src/pages/fullSessionTransfer.test.mjs",
+      "sha": "cbdd16fd0fbf4d7de29b2a86a487887748f93810"
+    },
+    {
+      "path": "frontend/src/pages/fullSessionTransfer.ts",
+      "sha": "ba89705280dc7d9af62290d5cbf4c4fbd1939b9f"
+    },
+    {
+      "path": "frontend/src/pages/galaxyArt.css",
+      "sha": "30c0dcad87d362887eeb34236eafcdd65cbeb05e"
+    },
+    {
+      "path": "frontend/src/pages/galaxyData.ts",
+      "sha": "e92a3a481fc9ae92fb126d70b421f0344d2cb102"
+    },
+    {
+      "path": "frontend/src/pages/galaxyEntry.css",
+      "sha": "75c9127ea2608977ae962ef626d37a93cd3133fa"
+    },
+    {
+      "path": "frontend/src/pages/galaxyMap.css",
+      "sha": "a2186d1d1a6b86f9f2611a3e5fdea70e16b3326c"
+    },
+    {
+      "path": "frontend/src/pages/galaxyMap.test.mjs",
+      "sha": "d3d94b03bb157617d6b0fea1b4c25dc2151e4d70"
+    },
+    {
+      "path": "frontend/src/pages/galaxyModel.ts",
+      "sha": "e5c6149f25c4eda86b2dd7d74ba83bfcd7b32cda"
+    },
+    {
+      "path": "frontend/src/pages/galaxyScenery.ts",
+      "sha": "1bf9764bb56932fed23d8f2aa8e7e29240f59a58"
+    },
+    {
+      "path": "frontend/src/pages/gameAudio.test.mjs",
+      "sha": "2d0ecbfe11ac9bd3ada56bad0e7eca2705e78cd6"
+    },
+    {
+      "path": "frontend/src/pages/gameAudio.ts",
+      "sha": "857ec045e694a8fc3c3a4d632b98857df37bfe36"
+    },
+    {
+      "path": "frontend/src/pages/gameAudioResume.test.mjs",
+      "sha": "383265a053ad68768d9eefbdb32902a18bd186fc"
+    },
+    {
+      "path": "frontend/src/pages/gameDiagnostics.ts",
+      "sha": "e335888bf6a345638def7b0d40c3cdd453280dcb"
+    },
+    {
+      "path": "frontend/src/pages/gameFullscreen.test.mjs",
+      "sha": "7a16bbbd2c57630739e582a8e0e1d6f749eef835"
+    },
+    {
+      "path": "frontend/src/pages/gameFullscreen.ts",
+      "sha": "8ec1133b1a22edc405a8dfce6e94c91e081b39d2"
+    },
+    {
+      "path": "frontend/src/pages/gameHaptics.test.mjs",
+      "sha": "bc928945823263da0d12b13d9e68d436212e0d5d"
+    },
+    {
+      "path": "frontend/src/pages/gameHaptics.ts",
+      "sha": "4172346b07c4c7be8061a12d45a13ea4805da979"
+    },
+    {
+      "path": "frontend/src/pages/gameInput.test.mjs",
+      "sha": "e2734444c8c65e8ea9a31c27c30930e2731a8f43"
+    },
+    {
+      "path": "frontend/src/pages/gameInput.ts",
+      "sha": "6952925c7c88f380587133aed88761bb15f32b56"
+    },
+    {
+      "path": "frontend/src/pages/gameLoop.test.mjs",
+      "sha": "ff961f21d30d13988d5cfbabeaf579a302c8246d"
+    },
+    {
+      "path": "frontend/src/pages/gameLoop.ts",
+      "sha": "82de6c8d266987067841c9e34f23409dd8ed8bc6"
+    },
+    {
+      "path": "frontend/src/pages/guestShipPurchase.test.mjs",
+      "sha": "fb3c0aceec7483d687c5fa6c48312d484c424812"
+    },
+    {
+      "path": "frontend/src/pages/homeNetworkModel.test.mjs",
+      "sha": "4d42e70f76f931b8cf3000953681a97d6db5e822"
+    },
+    {
+      "path": "frontend/src/pages/homeNetworkModel.ts",
+      "sha": "7cec48d8ae3561bbf941234a9d6df53ea2624906"
+    },
+    {
+      "path": "frontend/src/pages/hullArrival.css",
+      "sha": "5c8038af6138916089cea4dd4544a459d8d0ebef"
+    },
+    {
+      "path": "frontend/src/pages/hullFires.test.mjs",
+      "sha": "54a786ac74d41a7d2d87a30262ffac3d0d9ef8e4"
+    },
+    {
+      "path": "frontend/src/pages/hullFires.ts",
+      "sha": "53e24756f5c0ab45c33538f646a21e1b6e6733d2"
+    },
+    {
+      "path": "frontend/src/pages/hullPreparationDiagnostics.test.mjs",
+      "sha": "e108a12a6a977d797ce253059b6475792c23f20d"
+    },
+    {
+      "path": "frontend/src/pages/hullPreparationDiagnostics.ts",
+      "sha": "0e28e47a8e2bb1b97434f012a0b77bf34b8b58eb"
+    },
+    {
+      "path": "frontend/src/pages/hullReadiness.test.mjs",
+      "sha": "c64e943482e4e6ccc4800986cc836128ec21b0fe"
+    },
+    {
+      "path": "frontend/src/pages/hullSourcePlan.ts",
+      "sha": "25197b66f585d8e78856088f561e7028185da9d8"
+    },
+    {
+      "path": "frontend/src/pages/introDifficulty.test.mjs",
+      "sha": "2b0d4a6190547532bce1d64d3b1c21670004cec5"
+    },
+    {
+      "path": "frontend/src/pages/introDifficulty.ts",
+      "sha": "a73123c98fa138b49c58d7019bdee7f2160b3543"
+    },
+    {
+      "path": "frontend/src/pages/levelDifficulty.test.mjs",
+      "sha": "2512d0062734c416f83c9ad95fd843b7807cef24"
+    },
+    {
+      "path": "frontend/src/pages/levelDifficulty.ts",
+      "sha": "2fc0a571a1ea461cbb88fe36b2e05384071459eb"
+    },
+    {
+      "path": "frontend/src/pages/missionWeaponShop.css",
+      "sha": "d5d1b9b135486f5858995c6289f4a996e5dab14b"
+    },
+    {
+      "path": "frontend/src/pages/missionWeapons.test.mjs",
+      "sha": "016a2632c7f8a95ea25b090295076ec0624af12e"
+    },
+    {
+      "path": "frontend/src/pages/missionWeapons.ts",
+      "sha": "9ee7772cde556451fa446613e0dbc5600813f793"
+    },
+    {
+      "path": "frontend/src/pages/musicPlayback.test.mjs",
+      "sha": "3022bad42a30066f28702e08a4b0ebd2f9fa21e0"
+    },
+    {
+      "path": "frontend/src/pages/musicPlayback.ts",
+      "sha": "c057ee378d8ef273a2b9faac40d5d723afbb6763"
+    },
+    {
+      "path": "frontend/src/pages/musicPreferences.ts",
+      "sha": "1ddc80b7d595d3ad69a29aa16ede6ade90173410"
+    },
+    {
+      "path": "frontend/src/pages/networkChain.test.mjs",
+      "sha": "3cb23f5dd458a9cab3bfb84c30f5d19ce777e06d"
+    },
+    {
+      "path": "frontend/src/pages/networkChain.ts",
+      "sha": "f71ebea378279221b88567f23593fbc09058f62b"
+    },
+    {
+      "path": "frontend/src/pages/normalEffectArtwork.ts",
+      "sha": "87c6cd1d639e18f1ebc58553491d71f97c29cb83"
+    },
+    {
+      "path": "frontend/src/pages/normalEffectBounds.d.mts",
+      "sha": "55edfd911b6effc9ee5b0d5acbfcab94ecf53410"
+    },
+    {
+      "path": "frontend/src/pages/normalEffectBounds.mjs",
+      "sha": "d2d3a1674305a17d2392de1e9c767e34ad53f04e"
+    },
+    {
+      "path": "frontend/src/pages/normalEffectBounds.test.mjs",
+      "sha": "3a5ab4f17dca0e29cdde7426e82049e77bc4d08d"
+    },
+    {
+      "path": "frontend/src/pages/normalEffectMath.d.mts",
+      "sha": "49e70db5951132324e9c34bcca7460faadbb70d4"
+    },
+    {
+      "path": "frontend/src/pages/normalEffectMath.mjs",
+      "sha": "135c13cfdd40423dbbdaa1e9faf4df40a0f79942"
+    },
+    {
+      "path": "frontend/src/pages/normalEffectMath.test.mjs",
+      "sha": "031e148c764c2949bddf402f8a7f7cb197dffcf1"
+    },
+    {
+      "path": "frontend/src/pages/ownerAudioAudit.test.mjs",
+      "sha": "d1ba516dedc1ba383d02f06cd9429f6dd33e415a"
+    },
+    {
+      "path": "frontend/src/pages/ownerAudioAudit.ts",
+      "sha": "bb4e4e4ea53aa7a6f19d984a1a68f80499d9f4f4"
+    },
+    {
+      "path": "frontend/src/pages/ownerFlightRecorder.test.mjs",
+      "sha": "d1f807e4d623f5a9f9f4d4eb74d20f69bd8071b4"
+    },
+    {
+      "path": "frontend/src/pages/ownerFlightRecorder.ts",
+      "sha": "e9f502917e6c7d0df04a4c9208eebdc8633cb98b"
+    },
+    {
+      "path": "frontend/src/pages/ownerTimingCapture.test.mjs",
+      "sha": "a0ca29f945cb4a73e73a3964fac1c6e74abe10a6"
+    },
+    {
+      "path": "frontend/src/pages/ownerTimingCapture.ts",
+      "sha": "ef31972d295dcb8350b8214d306db962e7cd0197"
+    },
+    {
+      "path": "frontend/src/pages/package1Stability.test.mjs",
+      "sha": "8ee2c63f61df79918596642196f9d75337592c35"
+    },
+    {
+      "path": "frontend/src/pages/paintedShip.ts",
+      "sha": "f1481585abcb904ac1005d0a57de33e4a7841676"
+    },
+    {
+      "path": "frontend/src/pages/paymentEvidenceLinks.test.mjs",
+      "sha": "38875afe09154b3fb8ad9653b729ea3b1e80bcc3"
+    },
+    {
+      "path": "frontend/src/pages/paymentEvidenceLinks.ts",
+      "sha": "c1469bf0833f905dbb29f91b3368884168f26be5"
+    },
+    {
+      "path": "frontend/src/pages/performanceDiagnostics.test.mjs",
+      "sha": "37c984d1cc24bfc0ecf4ceec4b58cbee163c39b0"
+    },
+    {
+      "path": "frontend/src/pages/performanceDiagnostics.ts",
+      "sha": "80c3e694ed51595ab64c81e5954f5720286478ed"
+    },
+    {
+      "path": "frontend/src/pages/pickupOrigin.ts",
+      "sha": "ccacec4cd85e174412bcbfbc2f320e8170db02d2"
+    },
+    {
+      "path": "frontend/src/pages/playerCombat.test.mjs",
+      "sha": "600f3500ab87643a323bad59759e3f7378b101ec"
+    },
+    {
+      "path": "frontend/src/pages/playerCombat.ts",
+      "sha": "a4ecaa6314ef4090ee8983cb18c276ea106d4a29"
+    },
+    {
+      "path": "frontend/src/pages/powerUps.test.mjs",
+      "sha": "312009b6eeee1fb3638c421822f394323b7f0d6b"
+    },
+    {
+      "path": "frontend/src/pages/powerUps.ts",
+      "sha": "ebc98e8aa11278f45cf626c216569a4d8c6aaaad"
+    },
+    {
+      "path": "frontend/src/pages/projectileCollision.ts",
+      "sha": "4d01a789f10b26cbac6f096dc3ac7e7bb951d216"
+    },
+    {
+      "path": "frontend/src/pages/projectilePresentation.test.mjs",
+      "sha": "8709c3c6530bc6642d28a82206f023019f96b3a8"
+    },
+    {
+      "path": "frontend/src/pages/projectilePresentation.ts",
+      "sha": "3d0d4e05fc4a7be1f7237bef85bb1c8332abe825"
+    },
+    {
+      "path": "frontend/src/pages/reloadDiagnostics.test.mjs",
+      "sha": "df8f3838757974292f0113b358cdd9f8f8497e12"
+    },
+    {
+      "path": "frontend/src/pages/reloadDiagnostics.ts",
+      "sha": "6ba6d0dc8e20a93b6dfcd7284420e9549116f015"
+    },
+    {
+      "path": "frontend/src/pages/remoteTraceBackup.test.mjs",
+      "sha": "343c9cb25167556631ce2330419c7b9022784cca"
+    },
+    {
+      "path": "frontend/src/pages/remoteTraceBackup.ts",
+      "sha": "98c82aaabf1b4512d9cd3d8398bda704a0068026"
+    },
+    {
+      "path": "frontend/src/pages/renderMemory.test.mjs",
+      "sha": "9f9ec1fd398bd73d9959907e718d633be583ca89"
+    },
+    {
+      "path": "frontend/src/pages/renderResolution.ts",
+      "sha": "f0f7c43c21ef47bc5577e6eb1c5a587d0b1b93e8"
+    },
+    {
+      "path": "frontend/src/pages/renderWork.ts",
+      "sha": "3be9d7f642f497f53c184e3d1f031e13f8967faf"
+    },
+    {
+      "path": "frontend/src/pages/resourceCache.ts",
+      "sha": "c0d3a03fc90a7a830728d45d8bcf4d17fb61fd6d"
+    },
+    {
+      "path": "frontend/src/pages/resourceCacheDiagnostics.test.mjs",
+      "sha": "06ca9ac906430765991d6043bd0dd45755be999d"
+    },
+    {
+      "path": "frontend/src/pages/resourceStability.test.mjs",
+      "sha": "813dfced85fa2873d5c3f4d3c918fe4ed6968a12"
+    },
+    {
+      "path": "frontend/src/pages/rewardProgress.test.mjs",
+      "sha": "054e302a64161d14bdbe1e0d472633f59ecd73cb"
+    },
+    {
+      "path": "frontend/src/pages/rewardProgress.ts",
+      "sha": "17902d883858f9543d3b0880ef5c5f9727874e8f"
+    },
+    {
+      "path": "frontend/src/pages/screenWakeLock.test.mjs",
+      "sha": "e4e08a9698579ea74dda9e8fb2ff0ed052204b3e"
+    },
+    {
+      "path": "frontend/src/pages/screenWakeLock.ts",
+      "sha": "aa001f0946f36b137858ee9ae1ba8f5a2903ebaf"
+    },
+    {
+      "path": "frontend/src/pages/sectorBoss.test.mjs",
+      "sha": "0c2edb460d618e3a9599e67438412ed7cd6ddb09"
+    },
+    {
+      "path": "frontend/src/pages/sectorBoss.ts",
+      "sha": "13a479b4bad56456fa614a455094e443a3079a32"
+    },
+    {
+      "path": "frontend/src/pages/sectorManager.test.mjs",
+      "sha": "79ddc7e450774675923e465d8b566146ff1af4d9"
+    },
+    {
+      "path": "frontend/src/pages/sectorManager.ts",
+      "sha": "c6dd85bb220591776d40c06c9775dd924f37874a"
+    },
+    {
+      "path": "frontend/src/pages/shardEarnings.test.mjs",
+      "sha": "f9a14fc314729fdce2df0564c533e3e876241428"
+    },
+    {
+      "path": "frontend/src/pages/shardEarnings.ts",
+      "sha": "d7588fcc5a1a96a08720a2fd4c966b220cd012cc"
+    },
+    {
+      "path": "frontend/src/pages/shipArtwork.ts",
+      "sha": "8446587576080254f595a3af9df9fecb162a41b2"
+    },
+    {
+      "path": "frontend/src/pages/shipAttributes.test.mjs",
+      "sha": "911657227d825ca8151dc04b716cb91877c62157"
+    },
+    {
+      "path": "frontend/src/pages/shipAttributes.ts",
+      "sha": "bd56a6b6980ccd0c0d083314d11b0d3099948d19"
+    },
+    {
+      "path": "frontend/src/pages/shipCaptureLore.ts",
+      "sha": "6bf559b90f36b5ff60fb637367a1a89240ffaa2f"
+    },
+    {
+      "path": "frontend/src/pages/shipDisplayScale.test.mjs",
+      "sha": "3821fd7ef183f0ee22daae4e3c9bdd8bcf2ae686"
+    },
+    {
+      "path": "frontend/src/pages/shipDisplayScale.ts",
+      "sha": "caa18bb0d7a457e04d0c3ed89d333042f6d24bbf"
+    },
+    {
+      "path": "frontend/src/pages/shipEvolution.test.mjs",
+      "sha": "e89be29bbc46352b26a2fb6a08acebbdcc3becc6"
+    },
+    {
+      "path": "frontend/src/pages/shipEvolution.ts",
+      "sha": "f59a3067d9fa6c312b5f84b84f65d2f7e40e75b3"
+    },
+    {
+      "path": "frontend/src/pages/shipFleet.test.mjs",
+      "sha": "dc6e86fb11a92c157f985bb2507c88d1fbeeb8a8"
+    },
+    {
+      "path": "frontend/src/pages/shipFleet.ts",
+      "sha": "dc169572dc303b05d28eebd5a75071c1354e9a3a"
+    },
+    {
+      "path": "frontend/src/pages/shipIdentityColor.test.mjs",
+      "sha": "1f912b9abc0c467cb0319e11aa5b15243a14a6b2"
+    },
+    {
+      "path": "frontend/src/pages/shipIdentityColor.ts",
+      "sha": "5aade57a91b58d6235509f4e15c5f045b9164ee9"
+    },
+    {
+      "path": "frontend/src/pages/shipImageLifetime.test.mjs",
+      "sha": "9d9abf4b0d6810f7b8feb7bba99496f1f745ba72"
+    },
+    {
+      "path": "frontend/src/pages/shipLore.ts",
+      "sha": "760881fc7c83c60d28c5b6e63399fe354a81d929"
+    },
+    {
+      "path": "frontend/src/pages/shipMaterial.ts",
+      "sha": "a5dcd4b63fed44a15a53aa9e3ac7e22e0968d656"
+    },
+    {
+      "path": "frontend/src/pages/shipPreviewPlacement.ts",
+      "sha": "e1efa62efc6891b80f98eceb0d0c2318151264d7"
+    },
+    {
+      "path": "frontend/src/pages/shipRealism.test.mjs",
+      "sha": "6c46d94f21f17111cf935b14750f316bcead7ffe"
+    },
+    {
+      "path": "frontend/src/pages/shipRealism.ts",
+      "sha": "4db759a61709bcc3dc7943487eb7a5bce230005a"
+    },
+    {
+      "path": "frontend/src/pages/shipSelection.test.mjs",
+      "sha": "a0f976144ecb178ab5a8167d350b0b99afe52216"
+    },
+    {
+      "path": "frontend/src/pages/shipTint.test.mjs",
+      "sha": "8426358fddfed640cef720a744db055bd01c181f"
+    },
+    {
+      "path": "frontend/src/pages/shipTint.ts",
+      "sha": "f4564a2d862c5cea81b67c806be08345e64a52bc"
+    },
+    {
+      "path": "frontend/src/pages/shipVisualCenter.test.mjs",
+      "sha": "110684db5dc5f10cc51f4270f15f26b10735ac8c"
+    },
+    {
+      "path": "frontend/src/pages/shipVisualCenter.ts",
+      "sha": "1a6b7d9fa66e2cdc8e982e4a39cdbbb0b3013640"
+    },
+    {
+      "path": "frontend/src/pages/shopPurchase.css",
+      "sha": "cb0a83779137bc0ad505094b275631ed1b60eb3a"
+    },
+    {
+      "path": "frontend/src/pages/simulationFrame.test.mjs",
+      "sha": "479018f1f9e09953f363ac3f3a668b041ed124e4"
+    },
+    {
+      "path": "frontend/src/pages/simulationFrame.ts",
+      "sha": "c784825bbe70870223d398028ad93c82affa13fe"
+    },
+    {
+      "path": "frontend/src/pages/specialPowers.test.mjs",
+      "sha": "56558ee31c7a16219a9fabcec878ba6267602ef7"
+    },
+    {
+      "path": "frontend/src/pages/specialPowers.ts",
+      "sha": "34521b058a7a0223794bd1eff2049e6e3d2ca97d"
+    },
+    {
+      "path": "frontend/src/pages/stabilityReport.d.mts",
+      "sha": "ac0b6d24fa4bc653501ba0d0b993a6affee16388"
+    },
+    {
+      "path": "frontend/src/pages/stabilityReport.mjs",
+      "sha": "aa86b3a1d4372efa51aa1e6ac50ec3bc390607db"
+    },
+    {
+      "path": "frontend/src/pages/staticBackdrop.test.mjs",
+      "sha": "b8292d6b2fbba45d4e3b995ba86eca38ff2ff137"
+    },
+    {
+      "path": "frontend/src/pages/staticHullAssets.ts",
+      "sha": "77df0c351f9c35305539e8419a8450a9d203eead"
+    },
+    {
+      "path": "frontend/src/pages/technicalReportContext.d.mts",
+      "sha": "483fcffde04087327b9db2c5b5ebdfa97b835873"
+    },
+    {
+      "path": "frontend/src/pages/technicalReportContext.mjs",
+      "sha": "eff9383a4bb1a8908ebdec696311fcd8cd9ed1ce"
+    },
+    {
+      "path": "frontend/src/pages/timingReport.d.mts",
+      "sha": "83f6b2a7c3823b3ec8c3172dce0e9d099eedf3c6"
+    },
+    {
+      "path": "frontend/src/pages/timingReport.mjs",
+      "sha": "deff484d39a02cbacda9955d691b9e191085dab7"
+    },
+    {
+      "path": "frontend/src/pages/traceBackupFormat.ts",
+      "sha": "7da040076fe1ba105336dd256aac231f7ae8cbd4"
+    },
+    {
+      "path": "frontend/src/pages/useGalaxyData.ts",
+      "sha": "06d6b132745a3fb4716ea04998271568fc417a19"
+    },
+    {
+      "path": "frontend/src/pages/useInitialRef.ts",
+      "sha": "66cef36ad5e15a163a228279b637a50061fe3d24"
+    },
+    {
+      "path": "frontend/src/pages/usePreparedGameHulls.ts",
+      "sha": "a1b10f09d6026c273c417ef383325cf1b0663b4b"
+    },
+    {
+      "path": "frontend/src/pages/weaponAutoReload.test.mjs",
+      "sha": "34a330d9d81faa91c10f816ebac7f612fb4edb75"
+    },
+    {
+      "path": "frontend/src/pages/weaponAutoReload.ts",
+      "sha": "3e4472a49e9aa257bacb63c64005970a63fbb36b"
+    },
+    {
+      "path": "frontend/src/pages/weaponPreview.css",
+      "sha": "02f0381a1db9ef93d728d1546550209ed94337b8"
+    },
+    {
+      "path": "frontend/src/pages/weaponSelection.css",
+      "sha": "bce2ea81248a5ac968f88f5f5ff7f81193383f46"
+    },
+    {
+      "path": "frontend/src/pages/weaponStock.css",
+      "sha": "d048c5b29d26b397730587bbbc440e80c3dbc266"
+    },
+    {
+      "path": "frontend/src/pages/weaponTutorial.css",
+      "sha": "9830fdd08904ef96bd3ac56fe87fa2cdd586ac19"
+    },
+    {
+      "path": "frontend/src/pages/whiteScreenReport.test.mjs",
+      "sha": "5b5e667a6ce3f230103f56283c86924d5db5be08"
+    },
+    {
+      "path": "frontend/src/quickAccessMobile.css",
+      "sha": "03c1f339da0c6cf0774125f34027679cdaec56fa"
+    },
+    {
+      "path": "frontend/src/release.ts",
+      "sha": "bb3322a5849e7749cf820c246505f57c1d6ed877"
+    },
+    {
+      "path": "frontend/src/selectionControls.css",
+      "sha": "00b52968f172f14b9cb630bafbfc93d3a7f44fc1"
+    },
+    {
+      "path": "frontend/src/smartphoneUi.css",
+      "sha": "418b6b91a2f66ca96b5fe694ed591d1bd2195bf8"
+    },
+    {
+      "path": "frontend/src/types/pi.ts",
+      "sha": "70b559cca07e1f13e876b5c79c19e059c95f6ff1"
+    },
+    {
+      "path": "frontend/src/types/window.d.ts",
+      "sha": "0d1c6b3c6fa9f40b8930caf58b8c001bf94bf3c1"
+    },
+    {
+      "path": "frontend/src/utils/redirectToLaunchpad.ts",
+      "sha": "275c3410b9010842a96e7b085777952fff2cd519"
+    },
+    {
+      "path": "frontend/src/utils/time.ts",
+      "sha": "a24cbc0d55642f82a49257e69de31160b7fe796b"
+    }
+  ]
+}
+

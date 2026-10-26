@@ -1,0 +1,158 @@
+{
+  "candidateBranch": "codex/save-budget-retry-20261026",
+  "base": "8c4f17164daf625a4c9610b5d2d88946010c8496",
+  "runtimeModule": "frontend/src/lib/accountSave.ts",
+  "originalGitBlob": "304812a9cb9a4804b8cc47421c6ca0f098f2aab0",
+  "candidateGitBlob": "cc368a25004cce943358afd18c75b26c8eb367cf",
+  "originalBackendScorePolicyGitBlob": "7c64cfd00a6ebbcc9c423616b6a962348e187949",
+  "serverValidationChanged": false,
+  "livePlayerDataChanged": false,
+  "deployed": false,
+  "historicalWhiteScreenFixed": false,
+  "reproduction": {
+    "bonusHits": 12,
+    "score": 4800,
+    "schemaValid": true,
+    "rejectedAtRunAgeMs": 56000,
+    "acceptedAtRunAgeMs": 61000,
+    "originalQueueControlExit": 1,
+    "candidateQueueControlExit": 0,
+    "databaseWritesForAcceptedAndRepeatedEvent": 1
+  },
+  "retryPolicy": {
+    "endpoint": "/rewards/event",
+    "httpStatus": 400,
+    "code": "invalid_save",
+    "maximumTotalAttempts": 3,
+    "waitsMs": [
+      5000,
+      10000
+    ],
+    "unclassifiedPermanentRejectionAlsoRetried": true,
+    "finalFailureRetainsExactOutbox": true,
+    "other4xxUnchanged": true,
+    "otherEndpointsUnchanged": true
+  },
+  "verification": {
+    "releaseGateTests": 244,
+    "failedReleaseGateTests": 0,
+    "localizationReleaseGate": true,
+    "typescript": true,
+    "vite": true,
+    "changedModuleLint": true,
+    "paintedHullCount": 1740,
+    "paintedHullRevision": "91a72bc0c36be9407915",
+    "paintedHullBytes": 95450326,
+    "sandboxedChromium": "blocked; sandbox never disabled"
+  },
+  "native": {
+    "file": "save-retry-webkit-account-120-account-save-retry-20261026-c.json",
+    "sha256": "9ad98cca8d7b2d83e8303512c2ed9761dfc5679487d83fc525d7c420308848c3",
+    "complete": true,
+    "engine": "webkit",
+    "version": "26.5",
+    "realSeconds": 36.402390821,
+    "originalRuntimeModules": 238,
+    "runtimeOverrides": [
+      {
+        "path": "frontend/src/lib/accountSave.ts",
+        "gitBlob": "cc368a25004cce943358afd18c75b26c8eb367cf",
+        "originalGitBlob": "304812a9cb9a4804b8cc47421c6ca0f098f2aab0",
+        "candidateOverride": true,
+        "sha256": "72605cb2dc95875b18b8fb9d82f4c3c06ebf8943d63105595d03a61e067c2b2e"
+      }
+    ],
+    "rewardRetry": {
+      "statuses": [
+        400,
+        200
+      ],
+      "samePayload": true,
+      "responseGapMs": 6515.513745
+    },
+    "sameRun": true,
+    "documentRequests": 1,
+    "outboxBeforeExplicitPause": 0,
+    "outboxAfterPauseCheckpoint": 0,
+    "targetHullPlans": [
+      {
+        "clockMs": 32067,
+        "data": {
+          "operation": "hull-plan-settled",
+          "sector": 54,
+          "encounter": "normal",
+          "requested": 12,
+          "prepared": 12
+        }
+      }
+    ],
+    "pageErrors": [],
+    "crashes": [],
+    "realAuthentication": false,
+    "physicalDeviceAcceptance": false,
+    "portableHarness": "verification/save-retry/verify-native.mjs",
+    "scriptSha256": "2b2d59bce400b4ec45dc4d36bd15e9737af727b4114185526f569901965bcf95"
+  },
+  "preservedHostIssues": [
+    "Initial test fixture resolved the backend directory one level too far up; seven setup failures before execution; corrected to the real frontend root.",
+    "The first ordering test assumed a fixed number of microtasks; replaced by a receipt that the virtual retry timer was actually scheduled.",
+    "Original observation-only fingerprint correctly rejected the new retry behavior; changed only the exact reviewed accountSave fingerprint and added a negative attempt-limit control.",
+    "The copied checkout initially mixed an unreleased crashTail pacing test with released runtime; restored the exact released test before acceptance.",
+    "One build attempt stopped in prebuild without further output (exit1); no cause inferred. The identical1740 assets were already generated and checked, so release gates were then run without re-running prebuild.",
+    "The isolated checkout omitted root legal Markdown imports. All244 tests and TypeScript passed before Vite reported the missing input; restored legal inputs and Vite completed.",
+    "Native attempta proved400-to200 same-body recovery but checked the outbox immediately after explicit Pause enqueued its own checkpoint; retained as a failed verifier. Attemptb waits for that real checkpoint and passes."
+  ],
+  "limits": [
+    "The real device400 has no logged schema/score/shard subreason; this reproduces a real generic-code recovery defect, not its exact private payload.",
+    "Repeatedly invalid or too-far-ahead rewards still fail after bounded retries and retain the existing unconfirmed-save state.",
+    "The later device document replacement is not attributed to the recovered400; final request84 was answered200 independently.",
+    "No automatic game Resume, authentication change, score-rate relaxation, rendering/audio reduction or live mutation."
+  ],
+  "independentInvestigationCommit": "56b14002d827f33c7083af8b3a365dd438e68c2c",
+  "nativePreviousAcceptedControl": {
+    "file": "save-retry-webkit-account-120-account-save-retry-20261026-b.json",
+    "sha256": "d5ff49359f6d6d0d3ed0aafa58a4fbd77e42229f27938681390ccfb6948f089d",
+    "complete": true,
+    "engine": "webkit",
+    "version": "26.5",
+    "realSeconds": 40.073051355000004,
+    "originalRuntimeModules": 238,
+    "runtimeOverrides": [
+      {
+        "path": "frontend/src/lib/accountSave.ts",
+        "gitBlob": "cc368a25004cce943358afd18c75b26c8eb367cf",
+        "originalGitBlob": "304812a9cb9a4804b8cc47421c6ca0f098f2aab0",
+        "candidateOverride": true,
+        "sha256": "72605cb2dc95875b18b8fb9d82f4c3c06ebf8943d63105595d03a61e067c2b2e"
+      }
+    ],
+    "rewardRetry": {
+      "statuses": [
+        400,
+        200
+      ],
+      "samePayload": true,
+      "responseGapMs": 6669.214122000005
+    },
+    "sameRun": true,
+    "documentRequests": 1,
+    "outboxBeforeExplicitPause": 0,
+    "outboxAfterPauseCheckpoint": 0,
+    "targetHullPlans": [
+      {
+        "clockMs": 35366,
+        "data": {
+          "operation": "hull-plan-settled",
+          "sector": 54,
+          "encounter": "normal",
+          "requested": 12,
+          "prepared": 12
+        }
+      }
+    ],
+    "pageErrors": [],
+    "crashes": [],
+    "realAuthentication": false,
+    "physicalDeviceAcceptance": false
+  }
+}

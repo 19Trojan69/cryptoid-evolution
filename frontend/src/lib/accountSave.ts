@@ -15,13 +15,19 @@ export const snapshotOf = (s: Snapshot & { combo?: {total:number} }): Snapshot =
   const keys = ["score", "shards", "destroyed", "hearts", "paidWeaponLevel", "paidWeaponMs", "pickupWeaponLevel", "pickupWeaponMs", "shieldCharges", "shieldMs", "purchasedShieldMs", "overdriveMs", "overdriveTotalMs", "rapidFireMs", "rapidFireTotalMs", "empMs"] as const;
   return { ...(s.damageCount===undefined?{}:{damageCount:s.damageCount}), ...(s.comboTotal===undefined?{}:{comboTotal:s.combo?.total ?? s.comboTotal}), ...Object.fromEntries(keys.map(key => [key, Math.max(0, Math.round(s[key]))])), weaponSource: s.weaponSource, shieldActive: s.shieldActive, weaponTimers: s.weaponTimers.map(n => Math.round(n)) } as Snapshot;
 };
-export async function retrySave<T>(request: () => Promise<T>): Promise<T> {
+export async function retrySave<T>(request: () => Promise<T>, options: { retryInvalidSave?: boolean } = {}): Promise<T> {
   for (let attempt = 0; ; attempt++) {
     try { return await request(); }
     catch (error: unknown) {
-      const status = (error as { response?: { status?: number } }).response?.status;
-      if (attempt >= 2 || status && status >= 400 && status < 500) throw error;
-      await new Promise(resolve => setTimeout(resolve, 600 * (attempt + 1)));
+      const response = (error as { response?: { status?: number; data?: { error?: unknown; reason?: unknown } } }).response;
+      const status = response?.status;
+      // The established server also uses invalid_save for its wall-clock score
+      // budget. An unchanged reward can therefore be accepted seconds later.
+      // Keep the same bounded three attempts and immutable queued payload.
+      const pendingReward = options.retryInvalidSave && status === 400 && response?.data?.error === 'invalid_save'
+        && (response.data.reason === undefined || response.data.reason === 'score_budget');
+      if (attempt >= 2 || status && status >= 400 && status < 500 && !pendingReward) throw error;
+      await new Promise(resolve => setTimeout(resolve, pendingReward ? 5_000 * (attempt + 1) : 600 * (attempt + 1)));
     }
   }
 }
@@ -41,7 +47,7 @@ export function createSaveQueue(uid: string) {
       while (entries.length) {
         const entry = entries[0];
         uploading = entry;
-        await retrySave(() => axiosClient.post(entry.path, entry.body));
+        await retrySave(() => axiosClient.post(entry.path, entry.body), { retryInvalidSave: entry.path === '/rewards/event' });
         entries.shift(); persist();
         sessionDiagnostic('queue', { operation: 'drain', depth: entries.length });
       }

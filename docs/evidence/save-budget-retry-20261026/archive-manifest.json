@@ -1,0 +1,117 @@
+{
+  "archive": "raw-controls.tar.xz",
+  "sha256": "11a2a2db270c282ca83beb34a7fa4bda46259d04db322ffe79988673ffaea337",
+  "bytes": 906432,
+  "members": [
+    {
+      "path": "host/save-retry-build-final.log",
+      "bytes": 13212,
+      "sha256": "3f095d84507c1e993ad8f7f72645de6cb06e8b58870151e4031f5b6f4513be51"
+    },
+    {
+      "path": "host/save-retry-build-ready.log",
+      "bytes": 33628,
+      "sha256": "dc851668341ef7842e76614220db72517edc075fb7922ca123bc51798d307963"
+    },
+    {
+      "path": "host/save-retry-build-verified.log",
+      "bytes": 162,
+      "sha256": "254db43285b71c87b0a31b234f7e822e75209f193edcdbea1a03b09fd2ba585f"
+    },
+    {
+      "path": "host/save-retry-build.log",
+      "bytes": 3617,
+      "sha256": "732d9b3375107449234cb00b38bb58fe0f1fc3ac19f2d5b1d9f158f6aa3615ea"
+    },
+    {
+      "path": "host/save-retry-candidate-tests.log",
+      "bytes": 1128,
+      "sha256": "7a41a9169b71958b741bcbfbe7f70c82e6e5cb4c5e7f7e1b6d72f3f526b030c1"
+    },
+    {
+      "path": "host/save-retry-original-control.log",
+      "bytes": 447,
+      "sha256": "5cd7804f0c85fca4c0a6a7bb85e99648397f6a14153aaf8382508d34fa30504a"
+    },
+    {
+      "path": "host/save-retry-vite.log",
+      "bytes": 2709,
+      "sha256": "3a3ed50f203402d8bed3fe2bbf66caf6f6462880b86a8fb1f1fe451cba89b343"
+    },
+    {
+      "path": "native/account-save-retry-20261026-a.log",
+      "bytes": 2439,
+      "sha256": "a41fd934e20367c6a469628d5003325d12df0c3245799e7999cbd4997b114d71"
+    },
+    {
+      "path": "native/account-save-retry-20261026-b.log",
+      "bytes": 1973,
+      "sha256": "522f52191b38483ece62f1f9182adce8de0ae1658b4b63a6e638c5a2e887b618"
+    },
+    {
+      "path": "native/save-retry-native-a.mjs",
+      "bytes": 31102,
+      "sha256": "d253b24f363a48e44edbe3dfdd67baf14fc39895a57ca222a8943232656d5009"
+    },
+    {
+      "path": "native/save-retry-webkit-account-120-account-save-retry-20261026-a-phone-account-transition-timed-failed.png",
+      "bytes": 330230,
+      "sha256": "0e487e03f5270bf570cf7b9232487984a9818e668aee6710554aa9c91ace128a"
+    },
+    {
+      "path": "native/save-retry-webkit-account-120-account-save-retry-20261026-a.json",
+      "bytes": 207276,
+      "sha256": "6c25bc3a88a8dabb39bcea55bad3f8b03961b865dfd55477ac6a8e0ed55d8e91"
+    },
+    {
+      "path": "native/save-retry-webkit-account-120-account-save-retry-20261026-b-phone-account-transition-timed.png",
+      "bytes": 329657,
+      "sha256": "a907a3781eb37a898a21f8e498e5cc49808bf3b34b8e0e1a8889a5242307b755"
+    },
+    {
+      "path": "native/save-retry-webkit-account-120-account-save-retry-20261026-b.json",
+      "bytes": 198995,
+      "sha256": "d5ff49359f6d6d0d3ed0aafa58a4fbd77e42229f27938681390ccfb6948f089d"
+    },
+    {
+      "path": "scripts/accountSaveRetry.test.mjs",
+      "bytes": 11854,
+      "sha256": "96d15b3ffab903deece7c8900807da6436818e8a9f831b91a7f0d3d1de3a36cc"
+    },
+    {
+      "path": "scripts/verify-save-retry.mjs",
+      "bytes": 31585,
+      "sha256": "c8829cab43ef9985e5eec161a1075fffe421ef1cf3df4ea9b31d98d217c63d90"
+    },
+    {
+      "path": "native/save-retry-webkit-account-120-account-save-retry-20261026-c.json",
+      "bytes": 196380,
+      "sha256": "9ad98cca8d7b2d83e8303512c2ed9761dfc5679487d83fc525d7c420308848c3"
+    },
+    {
+      "path": "native/save-retry-webkit-account-120-account-save-retry-20261026-c-phone-account-transition-timed.png",
+      "bytes": 329556,
+      "sha256": "a13267b30beaa993b884032925ca3585600c1a003652bf24c3ee712aea5d74ba"
+    },
+    {
+      "path": "native/account-save-retry-20261026-c.log",
+      "bytes": 1892,
+      "sha256": "3a6b05e414c3804fcdd6d0579d3e2afb0dafe1822c70e9cd1a7dab296e83f81f"
+    },
+    {
+      "path": "portable/verify-native.mjs",
+      "bytes": 31599,
+      "sha256": "2b2d59bce400b4ec45dc4d36bd15e9737af727b4114185526f569901965bcf95"
+    },
+    {
+      "path": "portable/fixture/accountSourceManifest.json",
+      "bytes": 61857,
+      "sha256": "a33416556de973638e9afb2b418c89f42d7ffa179ceedf228769f185baa28f36"
+    },
+    {
+      "path": "portable/fixture/nativeProfile.mjs",
+      "bytes": 2514,
+      "sha256": "902ceef1fd1cf89632d4dbfdaf0769c4ab29798ee425c49041d14036d3829886"
+    }
+  ]
+}

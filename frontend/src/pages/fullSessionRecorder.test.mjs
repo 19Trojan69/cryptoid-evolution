@@ -22,6 +22,10 @@ test('scope guard accepts only reviewed observations and rejects gameplay or hid
   const hidden = source.replace("operation: 'transition-before', sector: state.sector,", "operation: 'transition-before', sector: ++state.sector,");
   assert.notEqual(hidden, source);
   assert.throws(() => assertObservationOnly({ 'src/pages/GamePage.tsx': hidden }), /one exact diagnostic addition/);
+  const save = readFileSync(new URL('../lib/accountSave.ts', import.meta.url), 'utf8');
+  const unbounded = save.replace('if (attempt >= 2 ||', 'if (attempt >= 200 ||');
+  assert.notEqual(unbounded, save);
+  assert.throws(() => assertObservationOnly({ 'src/lib/accountSave.ts': unbounded }), /only exact observation/);
 });
 function fixture(platform = 'android') {
   let clock = 0, wall = 1_790_000_000_000;

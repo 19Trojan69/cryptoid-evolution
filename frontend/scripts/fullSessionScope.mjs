@@ -118,11 +118,13 @@ export function assertObservationOnly(overrides = {}) {
   // f2f84ac11f4d86cecbbe9a0338095b96bce769b8, using TypeScript 5.9.3.
   // The 2026-10-25 user-authorized revision updates only GamePage and paintedShip
   // for tested weapon recovery, manual boss intermission and unused-cache release.
+  // The 2026-10-26 save correction permits exactly the bounded legacy reward
+  // retry in accountSave; its server checks and queued payload stay unchanged.
   // Other fingerprints and all diagnostic-argument negative controls remain unchanged.
   // Portable fingerprints keep the build gate usable in shallow/Git-free builds.
   const baseline = {
     'src/pages/GamePage.tsx': '5cb2343834342ea35ec5ac4c6611a709238b1ff1868b1c779f257f63448e9c93',
-    'src/lib/accountSave.ts': '47e2d1637635a4e099c9a52548973e7295be5d33491579d4f8226cb632c226da',
+    'src/lib/accountSave.ts': 'f21526dfa375b9f2699ea4a13b82e85fbf9ac8b61d60f06613ccf31de14e01e7',
     'src/lib/axiosClient.ts': '44db97150678cc301a3873c793d64771a1d0693cdf85520816a62a7a32843e66',
     'src/pages/usePreparedGameHulls.ts': 'ae6ccd40a7d89daa63bdf596c0aa86f5da0a0947b6f6ad149dc8ae49666402f0',
     // Same prepared-image implementation in c62efe2a and the supplied 73dfffee run.
@@ -131,7 +133,7 @@ export function assertObservationOnly(overrides = {}) {
   for (const path of Object.keys(additions)) {
     const after = overrides[path] ?? readFileSync(new URL('../' + path, import.meta.url), 'utf8');
     assert.equal(createHash('sha256').update(canonicalScopeSource(after, path, true)).digest('hex'), baseline[path],
-      `${path}: only exact observation additions and the reviewed weapon recovery, boss intermission and unused-cache release`);
+      `${path}: only exact observation additions and the reviewed weapon recovery, boss intermission, unused-cache release and bounded reward retry`);
   }
 }
 
