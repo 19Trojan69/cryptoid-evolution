@@ -1,0 +1,50 @@
+{
+  "localOnly": true,
+  "realReact": true,
+  "realAuthHook": true,
+  "realAuthentication": false,
+  "syntheticSdkAndApi": true,
+  "physicalDevice": false,
+  "historicalWhiteScreenFixed": false,
+  "releasedSourceSha256": "e07c190f2bc21d2bfb5bcfb0e4338aeb5923fb9f9af24e27408151c77fffebf8",
+  "candidateSourceSha256": "06f0ddc94e63ee0b96dc0c4c8d7e7c5b6eb6501d6a2ce980376f5b599699502d",
+  "cases": [
+    {
+      "mode": "released",
+      "scenario": "sdk-late",
+      "passed": true,
+      "signinPosts": 1,
+      "tokenPreserved": false,
+      "adminPreserved": false,
+      "routeVisible": true,
+      "navigationAttempts": 0
+    },
+    {
+      "mode": "released",
+      "scenario": "api-failed",
+      "passed": true,
+      "signinPosts": 1,
+      "tokenPreserved": false,
+      "adminPreserved": true,
+      "routeVisible": true,
+      "navigationAttempts": 0
+    },
+    {
+      "mode": "released",
+      "scenario": "api-success",
+      "passed": true,
+      "signinPosts": 1,
+      "tokenPreserved": true,
+      "adminPreserved": false,
+      "routeVisible": true,
+      "navigationAttempts": 0
+    }
+  ],
+  "errors": [],
+  "complete": false,
+  "engine": "26.5",
+  "failure": {
+    "message": "Isolated native event deadline exceeded",
+    "stack": "Error: Isolated native event deadline exceeded\n    at Timeout._onTimeout (file:///workspace/scratch/2533eb1496d4/white-screen-runtime-audit/verification/auth-lifecycle/verify-native.mjs:53:41)\n    at listOnTimeout (node:internal/timers:685:17)\n    at process.processTimers (node:internal/timers:618:7)"
+  }
+}

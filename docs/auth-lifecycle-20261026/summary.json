@@ -1,0 +1,143 @@
+{
+  "baselineCommit": "0ec94cf7ef6d5313013e75a774744e6f8b8d977b",
+  "baselineSourceSha256": "e07c190f2bc21d2bfb5bcfb0e4338aeb5923fb9f9af24e27408151c77fffebf8",
+  "candidateSourceSha256": "06f0ddc94e63ee0b96dc0c4c8d7e7c5b6eb6501d6a2ce980376f5b599699502d",
+  "frontendTests": 262,
+  "authTests": 11,
+  "nativeCases": 10,
+  "nativeEngine": "26.5",
+  "nativeReleasedControls": 5,
+  "nativeCandidateControls": 5,
+  "typescript": true,
+  "vite": true,
+  "changedModuleLint": true,
+  "backendRuntimeChanged": false,
+  "gameplayRuntimeChanged": false,
+  "deployed": false,
+  "historicalWhiteScreenFixed": false,
+  "realPiAuthenticationTested": false,
+  "realAccountMutation": false,
+  "runtimeFiles": [
+    "frontend/src/hooks/useAuth.ts"
+  ],
+  "localVerification": {
+    "localOnly": true,
+    "realReact": true,
+    "realAuthHook": true,
+    "realAuthentication": false,
+    "syntheticSdkAndApi": true,
+    "physicalDevice": false,
+    "historicalWhiteScreenFixed": false,
+    "releasedSourceSha256": "e07c190f2bc21d2bfb5bcfb0e4338aeb5923fb9f9af24e27408151c77fffebf8",
+    "candidateSourceSha256": "06f0ddc94e63ee0b96dc0c4c8d7e7c5b6eb6501d6a2ce980376f5b599699502d",
+    "cases": [
+      {
+        "mode": "released",
+        "scenario": "sdk-late",
+        "passed": true,
+        "signinPosts": 1,
+        "tokenPreserved": false,
+        "adminPreserved": false,
+        "routeVisible": true,
+        "oauthCalls": 0,
+        "navigationAttempts": 0
+      },
+      {
+        "mode": "released",
+        "scenario": "api-failed",
+        "passed": true,
+        "signinPosts": 1,
+        "tokenPreserved": false,
+        "adminPreserved": true,
+        "routeVisible": true,
+        "oauthCalls": 0,
+        "navigationAttempts": 0
+      },
+      {
+        "mode": "released",
+        "scenario": "api-success",
+        "passed": true,
+        "signinPosts": 1,
+        "tokenPreserved": true,
+        "adminPreserved": false,
+        "routeVisible": true,
+        "oauthCalls": 0,
+        "navigationAttempts": 0
+      },
+      {
+        "mode": "released",
+        "scenario": "host-late",
+        "passed": true,
+        "signinPosts": 0,
+        "tokenPreserved": true,
+        "adminPreserved": true,
+        "routeVisible": true,
+        "oauthCalls": 1,
+        "navigationAttempts": 0
+      },
+      {
+        "mode": "released",
+        "scenario": "healthy",
+        "passed": true,
+        "signinPosts": 1,
+        "paymentReplays": 1,
+        "strictMode": true
+      },
+      {
+        "mode": "candidate",
+        "scenario": "sdk-late",
+        "passed": true,
+        "signinPosts": 0,
+        "tokenPreserved": true,
+        "adminPreserved": true,
+        "routeVisible": true,
+        "oauthCalls": 0,
+        "navigationAttempts": 0
+      },
+      {
+        "mode": "candidate",
+        "scenario": "api-failed",
+        "passed": true,
+        "signinPosts": 1,
+        "tokenPreserved": true,
+        "adminPreserved": true,
+        "routeVisible": true,
+        "oauthCalls": 0,
+        "navigationAttempts": 0
+      },
+      {
+        "mode": "candidate",
+        "scenario": "api-success",
+        "passed": true,
+        "signinPosts": 1,
+        "tokenPreserved": true,
+        "adminPreserved": true,
+        "routeVisible": true,
+        "oauthCalls": 0,
+        "navigationAttempts": 0
+      },
+      {
+        "mode": "candidate",
+        "scenario": "host-late",
+        "passed": true,
+        "signinPosts": 0,
+        "tokenPreserved": true,
+        "adminPreserved": true,
+        "routeVisible": true,
+        "oauthCalls": 0,
+        "navigationAttempts": 0
+      },
+      {
+        "mode": "candidate",
+        "scenario": "healthy",
+        "passed": true,
+        "signinPosts": 1,
+        "paymentReplays": 1,
+        "strictMode": true
+      }
+    ],
+    "errors": [],
+    "complete": true,
+    "engine": "26.5"
+  }
+}

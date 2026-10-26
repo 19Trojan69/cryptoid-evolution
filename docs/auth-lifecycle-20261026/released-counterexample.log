@@ -1,0 +1,70 @@
+✔ a stalled Pi Browser no longer holds the startup and retry controls forever (100.981615ms)
+✔ late native replies are ignored and a new attempt can sign in normally (23.741254ms)
+✔ SDK rejection unlocks manual sign-in without writing an invalid session (16.815308ms)
+✔ an existing Web App session is restored without replacing it with native authentication (15.329583ms)
+✖ a native sign-in response from an unmounted route cannot replace the current token or session (15.878935ms)
+✖ an old failed sign-in request cannot clear credentials belonging to a later route (15.056239ms)
+✖ an old successful sign-in response cannot change the new route admin/session flags (11.682344ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 4
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 521.279353
+
+✖ failing tests:
+
+test at src/hooks/useAuth.test.mjs:117:1
+✖ a native sign-in response from an unmounted route cannot replace the current token or session (15.878935ms)
+  AssertionError [ERR_ASSERTION]: a retired native result must never reach /user/signin
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/2533eb1496d4/white-screen-runtime-audit/frontend/src/hooks/useAuth.test.mjs:124:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at src/hooks/useAuth.test.mjs:130:1
+✖ an old failed sign-in request cannot clear credentials belonging to a later route (15.056239ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + null
+  - 'current-route-token'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/2533eb1496d4/white-screen-runtime-audit/frontend/src/hooks/useAuth.test.mjs:137:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'current-route-token',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at src/hooks/useAuth.test.mjs:141:1
+✖ an old successful sign-in response cannot change the new route admin/session flags (11.682344ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  null !== '1'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/2533eb1496d4/white-screen-runtime-audit/frontend/src/hooks/useAuth.test.mjs:147:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: '1',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
