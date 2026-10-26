@@ -9,6 +9,7 @@
     "verify:native": "node verify-native.mjs",
     "verify:memory-stages": "node verify-memory-stages.mjs",
     "verify:texture-pixels": "node verify-texture-pixels.mjs",
-    "verify:account-flow": "node verify-account-flow.mjs"
+    "verify:account-flow": "node verify-account-flow.mjs",
+    "verify:scene-time": "node verify-scene-time.mjs"
   }
 }

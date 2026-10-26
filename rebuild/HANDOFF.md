@@ -1,5 +1,27 @@
 # Continuation checkpoint
 
+## Elapsed-time checkpoint, 26 October 2026
+
+Read `evidence/time-attribution-20261026/README.md` and `summary.json` before
+repeating a time test. Faster firing was clarified as more progress before the
+interruption; no fixed crash time was measured. One unchanged actor scene using
+the same three original images now completes 780.012 real seconds in WPE/image:
+47,290 callbacks and 47,291 presentations, fixed managed ownership, no document
+replacement, page error or reported context loss. After minute five native PSS
+ranges 350.3–372.2 MiB; the last active/closed-idle samples are 362.1/372.1 MiB.
+Closing leaves zero managed bytes/jobs/scopes and zero-size owned canvases.
+This is an observed actor-scene interval, not a complete-game/native/device bound.
+
+Held/static/moving smokes, 43 contracts, TypeScript and the 41-module boundary
+audit pass. The new sandboxed Chromium launch is blocked before page load:
+root launch fails and `runuser` cannot set groups. No sandbox is disabled;
+the failed receipt remains archived. Existing 645.256/696.602-second recordings
+have different builds/resumed states; those durations are not matched crash times.
+The original White Screen, complete-game time dependence, account/effect/native
+resource paths and accepted-default-decoder gate remain OPEN. The account-path
+and cache findings below remain in force. No original runtime or release changes.
+Do not repeat the completed source matrices or declare a fixed-time cause.
+
 The owner requests a continuation prompt for a new project chat. Continue only
 the Cryptoid Evolution cross-device White Screen work. The owner proposes a
 controlled rebuild with all existing features, asks for step-by-step execution
