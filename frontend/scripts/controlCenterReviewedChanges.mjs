@@ -1,3 +1,4 @@
+import {restoreCompletionRecoveryChanges} from './completionRecoveryReviewedChanges.mjs';
 // Exact owner-requested removal of the tablet/desktop fullscreen shortcut.
 export const reviewedControlCenterGameChanges = [
   {
@@ -10,6 +11,7 @@ export const reviewedControlCenterGameChanges = [
   }
 ];
 export function restoreControlCenterGameChanges(source) {
+  source = restoreCompletionRecoveryChanges(source, 'src/pages/GamePage.tsx');
   for (const {before, after} of [...reviewedControlCenterGameChanges].reverse()) {
     if (source.split(after).length !== 2) throw Error("Expected one exact control-center change");
     source = source.replace(after, before);

@@ -1,3 +1,4 @@
+import {restoreCompletionRecoveryChanges} from './completionRecoveryReviewedChanges.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
@@ -91,6 +92,7 @@ function structure(node) {
     children.length ? null : node.kind === ts.SyntaxKind.Block ? '{}' : node.text ?? node.getText(), children];
 }
 export function canonicalScopeSource(source, path, strip = false) {
+  if (strip && path === 'src/lib/accountSave.ts') source = restoreCompletionRecoveryChanges(source, path);
   if (strip && path === 'src/pages/GamePage.tsx') source = restoreControlCenterGameChanges(source);
   // The comparison has one reviewed behavior change beyond observations.
   // Restore precisely the removed conditional to compare the complete loader

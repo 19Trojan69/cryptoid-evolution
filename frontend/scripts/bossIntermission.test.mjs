@@ -1,3 +1,4 @@
+import {completionSaveFailure} from '../src/pages/completionSaveFailure.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -32,6 +33,7 @@ async function handlers(){
  const code=transformSync(block,{loader:'tsx'}).code,ref=current=>({current}),calls=[];
  const state={...summary,sector:10,combo:{total:2},status:'playing',weaponTimers:[0,0,0,0,0,0],unlockedWeapons:[1],effects:[1],shots:[1],enemyShots:[1],asteroids:[1],rocks:[1],rockEffects:[1],bonusTargets:[1]};
  const env={stateRef:ref(state),scoreRunRef:ref(runId),bossSummaryRef:ref(null),bossPreparationRef:ref(0),weaponMountedRef:ref(true),adminRunRef:ref(false),activationRef:ref(null),weaponBusyRef:ref(false),stockRef:ref({}),lastSavedAtRef:ref(0),lastFrameRef:ref(99),
+  completionSaveFailure,hasLocalLevelBackup:()=>false,localExitAvailable:false,bossSummaryFailure:"",
   bossSummary:null,bossSummaryPrepared:false,bossSummarySaving:false,bossSummaryFailed:false,bossSummaryContinuing:false,bossSummaryContinueFailed:false,
   clearControls(){calls.push('controls');},soundRef:ref({setPaused(){calls.push('audio-pause');}}),musicRef:ref({pause(){}}),
   unlockAudioForResume(){calls.push('gesture');},ownerDiagnostics:true,sessionDiagnostic(kind,data){calls.push(data.operation||kind);},ownerResourceContext:()=>({effects:state.effects.length}),
@@ -43,7 +45,7 @@ async function handlers(){
    if(env.loseContinue&&path.endsWith('/continue'))throw Error('lost reply');return{data:res.body};}},
   retrySave:fn=>fn(),useEffect(){},useCallback:fn=>fn,setGame(value){env.game=value;},
  };
- for(const field of ['bossSummary','bossSummaryPrepared','bossSummarySaving','bossSummaryFailed','bossSummaryContinuing','bossSummaryContinueFailed'])env['set'+field[0].toUpperCase()+field.slice(1)]=value=>{env[field]=value;};
+ for(const field of ['localExitAvailable','bossSummaryFailure','bossSummary','bossSummaryPrepared','bossSummarySaving','bossSummaryFailed','bossSummaryContinuing','bossSummaryContinueFailed'])env['set'+field[0].toUpperCase()+field.slice(1)]=value=>{env[field]=value;};
  const api=new Function('env','with(env){'+code+';return {beginBossSummary,prepareBossSummary,continueBossSummary};}')(env);
  return{...api,h,env,state,calls};
 }

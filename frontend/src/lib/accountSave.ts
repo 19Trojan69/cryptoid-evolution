@@ -59,6 +59,14 @@ export function createSaveQueue(uid: string) {
       sessionDiagnostic('queue', { operation: 'enqueue', depth: entries.length }); return drain(); },
     drain,
     get durable() { return durable; },
+    hasDurableReward(runId: string, stage: number, expected: Pick<Snapshot, "score" | "shards" | "hearts">) {
+      if (!durable) return false;
+      try {
+        return localStorage.getItem(key) === JSON.stringify(entries) && entries.some(entry =>
+          entry.path === "/rewards/event" && entry.body.runId === runId && entry.body.kind === "bonus" && entry.body.stage === stage
+          && ["score", "shards", "hearts"].every(field => (entry.body.save as Partial<Snapshot> | undefined)?.[field as keyof Snapshot] === expected[field as keyof typeof expected]));
+      } catch { return false; }
+    },
     async recover() {
       sessionDiagnostic('queue', { operation: 'recover', depth: entries.length });
       // A pause-menu exit may occur while the current block is still uploading.

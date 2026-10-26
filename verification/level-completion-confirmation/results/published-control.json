@@ -1,0 +1,208 @@
+{
+  "localOnly": true,
+  "syntheticSdk": true,
+  "realApiHandlers": true,
+  "isolatedData": true,
+  "testOnlyCombatCompletion": true,
+  "controlledNativeClock": true,
+  "physicalDevice": false,
+  "historicalWhiteScreenFixed": false,
+  "checks": [
+    "stage 30: no summary before heart and bonus",
+    "stage 30: actual boss event has no legacy stop",
+    "stage 30: summary appears after bonus and Continue is locked",
+    "stale session run blocks Continue with the bonus still backed up",
+    "published Retry fails to recover the signed-in active run",
+    "stage 30: no summary before heart and bonus",
+    "stage 30: actual boss event has no legacy stop",
+    "stage 30: summary appears after bonus and Continue is locked",
+    "campaign save failure retains bonus checkpoint and blocks Continue",
+    "failed bonus remains in durable outbox",
+    "failed confirmed exit stays on the game with pending rewards",
+    "published Home exit has no available route out while its save fails",
+    "no JavaScript page errors"
+  ],
+  "cases": [
+    {
+      "scenario": {
+        "stage": 30,
+        "hits": 12,
+        "fullHearts": true,
+        "staleSession": true
+      },
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "kind": "visit",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "boss",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 403,
+          "error": "No active signed-in run"
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 403,
+          "error": "No active signed-in run"
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 403,
+          "error": "No active signed-in run"
+        }
+      ]
+    },
+    {
+      "stage": 30,
+      "hits": 12,
+      "fullHearts": true,
+      "failSave": true,
+      "returnLocal": true,
+      "height": 628,
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "kind": "visit",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "boss",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 503,
+          "error": "isolated_save_failure"
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 503,
+          "error": "isolated_save_failure"
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 503,
+          "error": "isolated_save_failure"
+        },
+        {
+          "path": "/api/progress/recover",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 503,
+          "error": "isolated_save_failure"
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 503,
+          "error": "isolated_save_failure"
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 503,
+          "error": "isolated_save_failure"
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "complete": true,
+  "engine": "26.5"
+}
