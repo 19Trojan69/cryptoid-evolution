@@ -1314,6 +1314,9 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   const prepareBossSummary = useCallback(async (recover = false) => {
     const pending = bossSummaryRef.current, runId = scoreRunRef.current;
     if (!pending || pending.accepted) return;
+    // Let the already running activation settle before checking its receipt.
+    // weaponBusy's existing React state wakes preparation when it finishes.
+    if (runId && !adminRunRef.current && weaponBusyRef.current) { setBossSummarySaving(true); return; }
     const generation = ++bossPreparationRef.current;
     const current = () => weaponMountedRef.current && generation === bossPreparationRef.current && bossSummaryRef.current === pending && scoreRunRef.current === runId;
     setBossSummarySaving(true); setBossSummaryFailed(false); setBossSummaryPrepared(false);
@@ -1322,7 +1325,6 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     try {
       if (ownerDiagnostics) sessionDiagnostic('boundary', { operation: 'boss-summary-save-before', sector: pending.summary.stage });
       if (runId && !adminRunRef.current) {
-        if (weaponBusyRef.current) throw Error('Activation confirmation still in progress');
         if (recover) await saveQueueRef.current?.recover();
         else await saveQueueRef.current?.drain();
         if (!current()) return;
@@ -1380,7 +1382,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
       }
     } finally { if (current()) setBossSummarySaving(false); }
   }, [hasLocalLevelBackup, ownerDiagnostics, ownerResourceContext]);
-  useEffect(() => { if (bossSummary) void prepareBossSummary(); }, [bossSummary, prepareBossSummary]);
+  useEffect(() => { if (bossSummary) void prepareBossSummary(); }, [bossSummary, weaponBusy, prepareBossSummary]);
   const continueBossSummary = async (retry = false) => {
     const pending = bossSummaryRef.current, runId = scoreRunRef.current;
     if (!pending || pending.accepted || !bossSummaryPrepared || bossSummarySaving || (bossSummaryFailed && !retry) || bossSummaryContinuing) return;

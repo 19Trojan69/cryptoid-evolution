@@ -35,6 +35,7 @@ function host(musicEnabled = true) {
   };
   const context = {
     document: { visibilityState: 'visible' },
+    bossSummaryRef: { current: null },
     musicEnabled,
     startEffects: () => attempt('effects'),
     musicRef: { current: { unlock: () => attempt('music') } },

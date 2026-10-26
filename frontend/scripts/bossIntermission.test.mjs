@@ -34,7 +34,7 @@ async function handlers(){
  const state={...summary,sector:10,combo:{total:2},status:'playing',weaponTimers:[0,0,0,0,0,0],unlockedWeapons:[1],effects:[1],shots:[1],enemyShots:[1],asteroids:[1],rocks:[1],rockEffects:[1],bonusTargets:[1]};
  const env={stateRef:ref(state),scoreRunRef:ref(runId),bossSummaryRef:ref(null),bossPreparationRef:ref(0),weaponMountedRef:ref(true),adminRunRef:ref(false),activationRef:ref(null),weaponBusyRef:ref(false),stockRef:ref({}),lastSavedAtRef:ref(0),lastFrameRef:ref(99),
   completionSaveFailure,hasLocalLevelBackup:()=>false,localExitAvailable:false,bossSummaryFailure:"",
-  bossSummary:null,bossSummaryPrepared:false,bossSummarySaving:false,bossSummaryFailed:false,bossSummaryContinuing:false,bossSummaryContinueFailed:false,
+  weaponBusy:false,bossSummary:null,bossSummaryPrepared:false,bossSummarySaving:false,bossSummaryFailed:false,bossSummaryContinuing:false,bossSummaryContinueFailed:false,
   clearControls(){calls.push('controls');},soundRef:ref({setPaused(){calls.push('audio-pause');}}),musicRef:ref({pause(){}}),
   unlockAudioForResume(){calls.push('gesture');},ownerDiagnostics:true,sessionDiagnostic(kind,data){calls.push(data.operation||kind);},ownerResourceContext:()=>({effects:state.effects.length}),
   releaseIdleCanvasEffects(){calls.push('cleanup');return env.idle!==false;},releaseUnusedPaintedShips(){calls.push('unused');},syncSelectedWeapon(){},setWeaponStock(){},
@@ -109,4 +109,20 @@ test('an unconfirmed reward snapshot cannot enable Continue',async()=>{
  f.env.loadAccountSave=async()=>{const save=await load();save.mission.snapshot.shards++;return save;};
  await f.prepareBossSummary();assert.equal(f.env.bossSummaryPrepared,false);assert.equal(f.env.bossSummaryFailed,true);
  await f.continueBossSummary();assert.equal(f.state.status,'paused');
+});
+
+test('an existing automatic activation stays pending at completion and prepares when that activation settles',async()=>{
+ const f=await handlers();f.env.weaponBusyRef.current=true;f.env.weaponBusy=true;
+ f.env.activationRef.current={id:'existing-activation-only',level:3};f.beginBossSummary();
+ await f.prepareBossSummary();
+ assert.equal(f.env.bossSummarySaving,true);assert.equal(f.env.bossSummaryFailed,false);
+ assert.equal(f.env.bossSummaryPrepared,false);assert.ok(!f.calls.includes('drain'));
+ assert.ok(!f.calls.includes('/hangar/weapon/activate'));await f.continueBossSummary();assert.equal(f.state.status,'paused');
+ // The original activation resolves; React's weaponBusy dependency triggers
+ // preparation. The receipt has already been cleared by its original caller.
+ f.env.weaponBusyRef.current=false;f.env.weaponBusy=false;f.env.activationRef.current=null;
+ await f.prepareBossSummary();assert.equal(f.env.bossSummaryPrepared,true);assert.equal(f.env.bossSummarySaving,false);
+ assert.ok(!f.calls.includes('/hangar/weapon/activate'));
+ const source=fs.readFileSync(new URL('../src/pages/GamePage.tsx',import.meta.url),'utf8');
+ assert.match(source,/useEffect\(\(\) => \{ if \(bossSummary\) void prepareBossSummary\(\); \}, \[bossSummary, weaponBusy, prepareBossSummary\]\)/);
 });

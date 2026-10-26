@@ -1,3 +1,27 @@
+# Completion activation and interrupted audio, 26 October 2026
+
+Continue from common public 57a60fd/PR175; do not reimplement its transition UI.
+New private owner evidence shows completion failing immediately while an existing
+successful automatic reload response is pending, and rendered audio clocks frozen
+under running after interrupted state. Keep raw export and precise telemetry private.
+Wait on existing weaponBusy and prepare when it settles; retain exact queue/receipt/
+checkpoint barrier and explicit genuine-error Retry. Extend only explicit Resume's
+same-context ordered cycle to rendered interrupted/suspended graphs, with both
+native calls inside the gesture. Never-rendered zero clocks still resume directly.
+Keep silence in menus/countdowns, music positions/buffers/assets, bounded automatic
+repair, real pauses and strict >2500ms/500ms watchdog; no automatic game Resume.
+291 frontend build cases, 68 focused audio cases, 13 public native counterexamples
+and 80 candidate WebKit checks are documented in docs/completion-audio-resume-20261026.
+Six historical audio comparisons are excluded, not passed; GamePage remains 62+4.
+Backend compile passes, source unchanged; prior 126 backend checks are baseline.
+Physical iPhone/Pi audio, native long-run stability and historical White Screen
+remain unproved. No new owner campaign, migration/reset, PR167/168, economy, HUD,
+auth, network/account/payment, secret/protection or runtime-log access change.
+Candidate codex/completion-audio-resume-20261026 is auto-deploy-disabled; the owner
+already authorized reviewed same-source publication to both existing projects.
+Preserve public 57a60fd at backup/shared-before-completion-audio-20261026 and READY
+Testnet 8PpTq1mGmTu5tZcigEsiMW4kxsrx / production BeBc7AKz43K4ZP1jHcLjBQBy1UvL.
+
 # Smooth game transitions and final bonus explosion, 26 October 2026
 
 Owner reports an abrupt jump from the last bonus explosion to completion, then

@@ -1,0 +1,28 @@
+{
+  "baseline": "57a60fdc10e08d6b133ea19f74a8695a8070d5d0",
+  "frontendReleaseTests": 291,
+  "focusedExistingAudioTests": 68,
+  "newAudioAndGestureCases": 11,
+  "audioPinnedControlEnvironment": "CRYPTOID_AUDIO_CONTROL=1",
+  "excludedHistoricalControls": [
+    "a genuine Resume can replace a stalled automatic attempt that never settled, unlike the published gesture release",
+    "initialization tests use the exact published source tree and preserve unrelated runtime",
+    "published effects negative control: gain-create leaves a false-success path",
+    "published effects negative control: limiter-connect leaves a false-success path",
+    "published music negative control: gain-create strands its bound media",
+    "published music negative control: gain-connect strands its bound media"
+  ],
+  "initialFocusedAttempt": {
+    "pass": 72,
+    "fail": 6,
+    "includedFourNewCasesBeforeTheyWereMoved": true,
+    "reason": "Unavailable/obsolete historical controls; candidate tests were retained in the separate new build gate"
+  },
+  "nativePublishedChecks": 13,
+  "nativeCandidateChecks": 80,
+  "backendTypeScript": "passed",
+  "backendSourceUnchanged": true,
+  "priorBackendBaselineTests": 126,
+  "physicalDevice": false,
+  "historicalWhiteScreenFixed": false
+}
