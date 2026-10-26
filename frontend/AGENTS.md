@@ -1,3 +1,30 @@
+# Smooth game transitions and final bonus explosion, 26 October 2026
+
+Owner reports an abrupt jump from the last bonus explosion to completion, then
+requests all similar transitions be gentler and repeated pause/resume included.
+Start from common published 59495ef. Let original effects finish, then 900ms of
+active quiet before the unified completion; advance only visual lifetimes during
+that bonus outro so the queued reward snapshot stays identical. Block/boss clears
+also wait for active ending effects; preserve existing banner/music/heart timelines.
+Use finite navy/champagne opacity/transform arrival (1200ms completion, 220ms
+cockpit windows), reduced-motion alternative, no new art/audio, recurring timer,
+RAF, blur/filter or full-screen flash. Count the existing ten prepared visible
+seconds after arrival; manual Continue/save barrier stays mandatory.
+New private screenshot again shows an unconfirmed save after some pauses. The
+screen alone does not identify its HTTP failure, source version, native cause or
+prove that the visual cut caused saving to fail. Keep raw attachments private.
+Test repeated explicit pause/Resume and pause during the final explosion, exact
+rewards, failed saves/Retry, legacy marker, campaign end and responsive/reduced
+motion. Preserve strict >2500ms/500ms protection and no automatic technical Resume.
+Keep 59495ef/PR174 queue recovery and verified local Home backup, auth/ownership,
+network/payment config, backend, economy, HUD/ships/art/audio and PR167/168 out.
+Candidate codex/level-completion-entrance-20261026 has auto-deploy disabled. The
+owner's reviewed same-source release to both existing projects remains authorized.
+Rollback backup/shared-before-completion-entrance-20261026 preserves 59495ef and
+READY Testnet 8g5sdDp198rW7yDFJ2ReU3oSN9rB / production HPLEn3TwVkD39FH8fyudgaCYhanu.
+No physical-device/White Screen/save recovery success is inferred from synthetic
+controls. See docs/level-completion-entrance-20261026 and native evidence.
+
 # Failed level-completion confirmation and Home exit, 26 October 2026
 
 Owner reports disabled Continue after the bonus round and Home / Leave doing

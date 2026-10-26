@@ -1,0 +1,17 @@
+{
+  "frontendReleaseTests": 279,
+  "typeScript": true,
+  "vite": true,
+  "changedSmallModuleLint": true,
+  "nativeChecks": 56,
+  "publishedCounterexampleChecks": 4,
+  "physicalDevice": false,
+  "historicalWhiteScreenFixed": false,
+  "backendSourceUnchanged": true,
+  "runtimeSha256": {
+    "frontend/src/pages/GamePage.tsx": "ec7c1f2f3d5b29d5fb88c18469c3329afe8cb302463ccfa34e797b1bb91e26cc",
+    "frontend/src/pages/LevelCompletion.tsx": "c2d03efb157ec92b244b441c1f26625d62b2b5f3b3a57cf15fea3bf97113869b",
+    "frontend/src/pages/levelCompletionEntrance.ts": "560c9cbb1a21b9e2095cdbade3b27669908d30b02c52f9dc900e9ea2c9e68c7f",
+    "frontend/src/cockpitMenus.css": "68ecbdb28cbf34095e2d252d23dd94c48bb172b72d476a3a7c58509aebbb0f49"
+  }
+}

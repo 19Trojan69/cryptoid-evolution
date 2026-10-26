@@ -138,3 +138,57 @@ html[data-motion="reduced"] .launch-ship { animation: none; }
   .level-completion-stats > div { padding-block: 6px; }
   .level-completion-rewards { margin-bottom: 8px; padding-block: 6px; }
 }
+
+/* A finite holographic arrival: only opacity and transform animate. */
+.game-route .level-completion-overlay {
+  overflow: hidden; isolation: isolate;
+  animation: completion-veil 650ms ease-out backwards;
+}
+.level-completion-overlay::before, .level-completion-overlay::after {
+  content: ""; position: absolute; pointer-events: none; z-index: 0;
+}
+.level-completion-overlay::before {
+  left: 7%; right: 7%; top: 42%; height: 2px; opacity: 0;
+  background: linear-gradient(90deg, transparent, #e9d6a7, #fff0c9, #e9d6a7, transparent);
+  box-shadow: 0 0 14px #e3d2aa70;
+  animation: completion-horizon 900ms ease-out;
+}
+.level-completion-overlay::after {
+  left: calc(50% - 180px); top: calc(42% - 110px); width: 360px; height: 220px; opacity: 0;
+  background: radial-gradient(ellipse, #ddc58a28, #71dce21a 38%, transparent 70%);
+  animation: completion-halo 1050ms ease-out;
+}
+.level-completion-overlay > .level-completion { position: relative; z-index: 1; }
+.level-completion > header {
+  animation: completion-arrive 500ms cubic-bezier(.16, 1, .3, 1) 180ms backwards;
+}
+.level-completion > .blockchain-progress { animation: completion-arrive 460ms ease-out 340ms backwards; }
+.level-completion > .level-completion-rewards { animation: completion-arrive 420ms ease-out 510ms backwards; }
+.level-completion > h2, .level-completion > .level-completion-stats { animation: completion-arrive 400ms ease-out 680ms backwards; }
+.level-completion > footer { animation: completion-arrive 320ms ease-out 880ms backwards; }
+@keyframes completion-veil { from { opacity: 0; } to { opacity: 1; } }
+@keyframes completion-horizon {
+  0% { opacity: 0; transform: scaleX(.04); }
+  25% { opacity: .85; transform: scaleX(.48); }
+  65% { opacity: .4; transform: scaleX(1); }
+  100% { opacity: 0; transform: scaleX(1.08); }
+}
+@keyframes completion-halo {
+  0% { opacity: 0; transform: scale(.6); }
+  40% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.18); }
+}
+@keyframes completion-arrive { from { opacity: 0; transform: translateY(22px) scale(.98); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .game-route .level-completion-overlay, .level-completion > :is(header, .blockchain-progress, .level-completion-rewards, h2, .level-completion-stats, footer) { animation: none; }
+  .level-completion-overlay::before, .level-completion-overlay::after { display: none; }
+}
+
+/* Short entry for the other cockpit windows; existing combat banner timelines stay intact. */
+:is(.game-route .game-modal, .landing-shell .signin-modal, .system-menu-panel) {
+  animation: cockpit-window-arrive 220ms ease-out;
+}
+@keyframes cockpit-window-arrive { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  :is(.game-route .game-modal, .landing-shell .signin-modal, .system-menu-panel) { animation: none; }
+}
