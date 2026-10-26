@@ -1,0 +1,40 @@
+{
+  "method": "authorized signed-in dashboard deployment details",
+  "sourceCommit": "f7197d61bca49b8b0fa5a10dcc3194efd0936c43",
+  "sourceTree": "1d4f398bbd10af97a3b2f7130cb565515239a529",
+  "projects": [
+    {
+      "project": "cryptoid-evolution-testnet",
+      "deploymentId": "dpl_GwYCnFbzgQQgaskq2Xf3TX9Eysgu",
+      "state": "READY",
+      "durationSeconds": 76,
+      "environment": "Production",
+      "dashboardUrl": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/GwYCnFbzgQQgaskq2Xf3TX9Eysgu",
+      "immutableUrl": "https://cryptoid-evolution-testnet-rfj8hf01k-19-trojan69.vercel.app/",
+      "activePublicDomain": "https://cryptoid-evolution-testnet.vercel.app/"
+    },
+    {
+      "project": "cryptoid-evolution",
+      "deploymentId": "dpl_52LJsvsvfFMaCnZgN3g1D3j1fJqb",
+      "state": "READY",
+      "durationSeconds": 74,
+      "environment": "Production",
+      "dashboardUrl": "https://vercel.com/19-trojan69/cryptoid-evolution/52LJsvsvfFMaCnZgN3g1D3j1fJqb",
+      "immutableUrl": "https://cryptoid-evolution-fmlrv4k54-19-trojan69.vercel.app/",
+      "activePublicDomain": "https://cryptoid-evolution.vercel.app/"
+    }
+  ],
+  "connectorDeploymentsForExactSha": 0,
+  "configurationChanged": false,
+  "runtimeLogsAccessed": false,
+  "secretValuesAccessed": false,
+  "anonymousPublicHomesLoaded": true,
+  "realGameStarted": false,
+  "realPayments": false,
+  "oldCommonRelease": "dbed24977b8a3bc08cf2ed7c8dcae37d570135aa",
+  "backupBranch": "backup/shared-before-cockpit-feedback-20261026",
+  "retainedOldReadyDeployments": [
+    "dpl_CeVMgcLoAg69U4wNMFWWY4i3ni4h",
+    "dpl_HPsKkS4ivMqst5rkRTheW9Jb6FSR"
+  ]
+}

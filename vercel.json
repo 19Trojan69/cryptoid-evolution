@@ -114,7 +114,8 @@
       "codex/completion-audio-resume-20261026": false,
       "codex/ship-overlay-alignment-20261026": false,
       "codex/continue-hull-prefetch-20261026": false,
-      "codex/cockpit-indicator-spacing-20261026": false
+      "codex/cockpit-indicator-spacing-20261026": false,
+      "codex/cockpit-feedback-release-record-20261026": false
     }
   }
 }
