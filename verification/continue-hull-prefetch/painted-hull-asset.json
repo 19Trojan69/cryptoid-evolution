@@ -1,0 +1,26 @@
+{
+  "sameOriginalPixels": true,
+  "sites": [
+    {
+      "host": "cryptoid-evolution-testnet.vercel.app",
+      "path": "/ships/painted/1b15fbaa3ceac2fbf7b7/ship_03_stage_1_metallic-blue.png",
+      "httpStatus": 200,
+      "contentType": "image/png",
+      "bytes": 38725,
+      "sha256": "6d7904e71a98ae5b6d169a01175b7337e63818143b61429e383c0a10074174c3",
+      "pngSignature": true,
+      "passed": true
+    },
+    {
+      "host": "cryptoid-evolution.vercel.app",
+      "path": "/ships/painted/1b15fbaa3ceac2fbf7b7/ship_03_stage_1_metallic-blue.png",
+      "httpStatus": 200,
+      "contentType": "image/png",
+      "bytes": 38725,
+      "sha256": "6d7904e71a98ae5b6d169a01175b7337e63818143b61429e383c0a10074174c3",
+      "pngSignature": true,
+      "passed": true
+    }
+  ],
+  "readOnly": true
+}
