@@ -1,3 +1,20 @@
+# Owner crash-boundary evidence requested, 26 October 2026
+
+Owner reports another White Screen then Home on the current 6fe93a5 release and
+asks for substantially finer reporting. The raw attachment remains private.
+Fix the reproduced nested GameRoute/auth observer miss, add bounded quarter-
+second tail and existing callback progress, and link the next document/Home
+without claiming a native cause. Preserve current UI/HUD/art/audio, gameplay,
+saves/economy, account/network/payment separation and strict >2500ms/500ms pause.
+Only fresh verified Testnet owner sessions collect; no ordinary-player
+collection, new timer/RAF/request, automatic Resume, migration or reset.
+Candidate codex/owner-crash-boundary-20261026 has auto-deploy disabled. Follow
+the already authorized reviewed same-source release to both existing projects;
+keep 6fe93a5 and its READY deployments as immediate rollback. PR167/168 excluded.
+See docs/owner-crash-boundary-20261026/README.md and native controls. A termination
+can prevent any final JavaScript event; never promise exact white-pixel or OS-
+cause measurement from this report. Do not request another full owner campaign.
+
 # Overlay Control Center and tablet/PC shortcut removal, 26 October 2026
 
 Owner explicitly resumed work and requested existing overlay settings bundled

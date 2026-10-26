@@ -12,7 +12,8 @@ export function installOwnerLifecycleCapture(isAuthorized, identity) {
   const previousDocument = events.at(-1)?.documentStartedAt;
   const startedAt = performance.timeOrigin;
   let sequence = 0, lastPersisted = -Infinity, shell = null, fieldSize;
-  const route = () => location.pathname === '/game' ? 'game' : location.pathname === '/' ? 'home' : 'other';
+  const route = () => location.pathname === '/game' ? 'game' : location.pathname === '/' ? 'home' : location.pathname === '/admin' ? 'admin' : 'other';
+  let observedRoute = route(), observedView;
   const active = () => shell?.getAttribute('data-effects-paused') === 'false' && !document.hidden;
   function persist(force = false) {
     const now = performance.now();
@@ -39,9 +40,31 @@ export function installOwnerLifecycleCapture(isAuthorized, identity) {
       persist(force);
     } catch { /* Observation cannot interrupt the application. */ }
   }
-  let pauseObserver, sizeObserver;
+  let pauseObserver, sizeObserver, routeObserver, routeHost = null;
   function scene() {
+    if (!isAuthorized()) return;
+    // Authentication replaces only the direct children of GameRoute. Watching
+    // that stable host catches the shell without observing every projectile.
+    const nextHost = document.querySelector('.game-route');
+    if (nextHost !== routeHost) {
+      routeObserver?.disconnect(); routeHost = nextHost;
+      if (routeHost && typeof MutationObserver === 'function') {
+        routeObserver = new MutationObserver(scene);
+        routeObserver.observe(routeHost, { childList: true });
+      }
+    }
+    const nextRoute = route();
+    if (nextRoute !== observedRoute) {
+      const previousRoute = observedRoute; observedRoute = nextRoute;
+      record('route-change', { previousRoute }, true);
+    }
     const next = document.querySelector('.game-shell');
+    const root = document.getElementById('root');
+    const view = next ? 'game' : document.querySelector('.game-access-overlay') ? 'game-access'
+      : document.querySelector('.landing-shell') ? 'home'
+      : document.querySelector('.admin-panel[role="alert"]') ? 'recovery'
+      : root?.childElementCount === 0 ? 'empty' : 'other';
+    if (view !== observedView) { observedView = view; record('view-state', { view }, true); }
     if (next === shell) return;
     pauseObserver?.disconnect(); sizeObserver?.disconnect();
     const hadShell = !!shell; shell = next; fieldSize = undefined;
@@ -90,10 +113,15 @@ export function installOwnerLifecycleCapture(isAuthorized, identity) {
   document.addEventListener('visibilitychange', () => { record('visibility', {}, true); resetObservation(); });
   window.addEventListener('error', event => record(event.error ? 'javascript-error' : 'resource-error', { errorName: event.error?.name }, true));
   window.addEventListener('unhandledrejection', event => record('unhandled-rejection', { errorName: event.reason?.name }, true));
+  for (const kind of ['focus', 'blur']) window.addEventListener(kind, () => record(kind, {}, true));
+  for (const kind of ['freeze', 'resume', 'fullscreenchange', 'webkitfullscreenchange'])
+    document.addEventListener(kind, () => { record(kind === 'webkitfullscreenchange' ? 'fullscreenchange' : kind, {}, true); resetObservation(); });
   const root = document.getElementById('root');
   if (root && typeof MutationObserver === 'function') new MutationObserver(scene).observe(root, { childList: true });
   record('document-start', { previousDocumentStartedAt: previousDocument,
     navigationType: performance.getEntriesByType?.('navigation')?.[0]?.type,
+    documentReadyState: document.readyState,
+    documentWasDiscarded: typeof document.wasDiscarded === 'boolean' ? document.wasDiscarded : undefined,
     rafObserved: typeof nativeRequest === 'function', resizeObserved: typeof ResizeObserver === 'function' }, true);
   scene();
 }

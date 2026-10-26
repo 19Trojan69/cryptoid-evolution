@@ -176,6 +176,21 @@ test('a fault in the first playing frame is retained before any complete sample 
   assert.ok(capture.events.some(e => e.kind === 'render-error'));
   probe.finish();
 });
+test('the paced tail includes last frame, work and React commit progress without a write for each mark', () => {
+  const f = fixture(), probe = createOwnerFlightRecorder(true, () => f.host, f.options);
+  f.frame(probe); f.advance(260);
+  const before = JSON.stringify([...f.local]);
+  for (let i = 0; i < 100; i++) probe.mark('boss-motion-and-weapons');
+  assert.equal(JSON.stringify([...f.local]), before);
+  probe.begin(f.stats().now, playing);
+  const head = JSON.parse(f.local.get('cryptoid_owner_crash_tail_v1_0_head'));
+  assert.equal(head.progress.frame, 2); assert.equal(head.progress.completedFrames, 1);
+  assert.equal(head.progress.sceneRequests, 1); assert.equal(head.progress.sceneCommits, 1);
+  assert.equal(head.progress.completedWork, 'boss-motion-and-weapons');
+  assert.ok(head.progress.frameStartedAt > head.progress.frameEndedAt);
+  assert.ok(head.progress.sceneCommittedAt >= head.progress.renderStartedAt);
+  probe.finish();
+});
 test('GamePage, hull handoff, transport and save queue preserve the current approved source outside exact observations', () => {
   assertObservationOnly();
 });

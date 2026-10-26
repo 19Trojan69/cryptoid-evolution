@@ -2,6 +2,7 @@ import { createPerformanceProbe, retainOwnerResourceTiming } from './performance
 import { createOwnerTimingCapture } from './ownerTimingCapture.ts';
 import { createFullSessionRecorder } from './fullSessionRecorder.ts';
 import { createCrashTail } from './crashTail.ts';
+import { CRASH_WORK_STEPS, type CrashProgress } from './crashProgress.ts';
 import { observeSessionDiagnostics } from '../lib/sessionDiagnosticEvents.ts';
 import { cleanFlightRecorder, readFlightRecorders, FLIGHT_RECORDER_KEY,
   PREVIOUS_FLIGHT_RECORDER_KEY, FLIGHT_RECORDER_MAX_CHARS } from './flightRecorderReport.mjs';
@@ -18,9 +19,10 @@ export function createOwnerFlightRecorder(verifiedOwner: boolean, getHost: () =>
   const host = getHost(), wallNow = options.wallNow ?? Date.now;
   const full = createFullSessionRecorder(verifiedOwner, () => host, options);
   const optional = (operation: () => void) => { try { operation(); } catch { /* Diagnostics must never interrupt play. */ } };
+  const progress: CrashProgress = { frame: 0, completedFrames: 0, sceneRequests: 0, sceneCommits: 0 };
   let tail: ReturnType<typeof createCrashTail> = null;
   optional(() => { tail = full ? createCrashTail(verifiedOwner, () => host, { ...options, id: full.id,
-    now: options.now ?? (() => performance.now()), wallNow }) : null; });
+    now: options.now ?? (() => performance.now()), wallNow, progress: () => progress }) : null; });
   const releaseTail = tail ? observeSessionDiagnostics((kind, details) => optional(() => tail?.record(kind, details))) : () => {};
   let archived = false;
   let release = () => {};
@@ -55,9 +57,24 @@ export function createOwnerFlightRecorder(verifiedOwner: boolean, getHost: () =>
       if (serialized.length <= FLIGHT_RECORDER_MAX_CHARS) write(FLIGHT_RECORDER_KEY, serialized);
     },
   });
+  // These fixed scalar updates stay in memory. Only the existing paced tail
+  // callback sanitizes/persists them; never write once per work section/shot.
+  const updateProgress = (update: () => CrashProgress) => optional(() => { Object.assign(progress, update()); });
   return {
     ...probe,
-    begin(at, context) { optional(() => tail?.frame(context)); probe.begin(at, context); },
+    begin(at, context) {
+      updateProgress(() => ({ frame: progress.frame! + 1, frameStartedAt: wallNow() }));
+      optional(() => tail?.frame(context)); probe.begin(at, context);
+    },
+    mark(label) {
+      if (CRASH_WORK_STEPS.some(step => step === label)) updateProgress(() => ({ completedWork: label, workCompletedAt: wallNow() }));
+      probe.mark(label);
+    },
+    end(at) { probe.end(at); updateProgress(() => ({ completedFrames: progress.completedFrames! + 1, frameEndedAt: wallNow() })); },
+    sceneRequested() { probe.sceneRequested(); updateProgress(() => ({ sceneRequests: progress.sceneRequests! + 1, sceneRequestedAt: wallNow() })); },
+    sceneRenderBegin() { updateProgress(() => ({ renderStartedAt: wallNow() })); return probe.sceneRenderBegin(); },
+    sceneCommitted(started) { probe.sceneCommitted(started); updateProgress(() => ({ sceneCommits: progress.sceneCommits! + 1, sceneCommittedAt: wallNow() })); },
+    suspend(at) { probe.suspend(at); updateProgress(() => ({ suspendedAt: wallNow() })); },
     finish() {
       try { probe.finish(); }
       finally { optional(() => { tail?.record('end', { operation: 'finish' }); tail?.finish(); }); releaseTail(); }

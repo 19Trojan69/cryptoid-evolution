@@ -1,12 +1,13 @@
 import { cleanFullData, type FullRecordKind } from './fullSessionFormat.ts';
 import { technicalContext } from './technicalReportContext.mjs';
+import { cleanCrashProgress, type CrashProgress } from './crashProgress.ts';
 
 export const CRASH_TAIL_PREFIX = 'cryptoid_owner_crash_tail_v1_';
-export const CRASH_TAIL_LIMITS = { events: 128, frames: 32, eventChars: 4096, headIntervalMs: 250, frameIntervalMs: 1000 } as const;
+export const CRASH_TAIL_LIMITS = { events: 128, frames: 128, eventChars: 4096, headIntervalMs: 250, frameIntervalMs: 250 } as const;
 type StorageHost = Pick<Storage, 'getItem' | 'setItem'>;
 type Host = { localStorage?: StorageHost; sessionStorage?: StorageHost; performance?: { timeOrigin?: number } };
-type Meta = { version: 1; id: string; startedAt: number; documentStartedAt?: number; build: Record<string, unknown>; state: 'recording' | 'closed' };
-type Row = { version: 1; id: string; seq: number; at: number; clockMs: number; kind: FullRecordKind; data: Record<string, unknown>; truncated?: boolean };
+type Meta = { version: 1; id: string; startedAt: number; documentStartedAt?: number; frameSlots?: 128; frameIntervalMs?: 250; build: Record<string, unknown>; state: 'recording' | 'closed' };
+type Row = { version: 1; id: string; seq: number; at: number; clockMs: number; kind: FullRecordKind; data: Record<string, unknown>; progress?: CrashProgress; truncated?: boolean };
 const validId = (id: unknown): id is string => typeof id === 'string' && /^[a-zA-Z0-9_-]{1,100}$/.test(id);
 const finite = (n: unknown): n is number => typeof n === 'number' && Number.isFinite(n) && n >= 0 && n <= 1e15;
 const key = (slot: number, name: string) => `${CRASH_TAIL_PREFIX}${slot}_${name}`;
@@ -23,6 +24,7 @@ function metadata(input: unknown): Meta | null {
   const m = input as Meta;
   if (m.version !== 1 || !validId(m.id) || !finite(m.startedAt) || !['recording', 'closed'].includes(m.state)) return null;
   return { version: 1, id: m.id, startedAt: m.startedAt, state: m.state,
+    ...(m.frameSlots === 128 && m.frameIntervalMs === 250 ? { frameSlots: 128, frameIntervalMs: 250 } : {}),
     ...(finite(m.documentStartedAt) ? { documentStartedAt: m.documentStartedAt } : {}), build: technicalContext(m.build) || {} };
 }
 function row(input: unknown, id: string): Row | null {
@@ -31,7 +33,7 @@ function row(input: unknown, id: string): Row | null {
   if (r.version !== 1 || r.id !== id || !Number.isSafeInteger(r.seq) || r.seq < 1 || !finite(r.at) || !finite(r.clockMs)) return null;
   if (!['event', 'sample', 'resource', 'boundary', 'request', 'weapon', 'queue', 'lifecycle', 'start', 'end'].includes(r.kind)) return null;
   const data = cleanFullData(r.kind, r.data);
-  return data ? { version: 1, id, seq: r.seq, at: r.at, clockMs: r.clockMs, kind: r.kind, data,
+  return data ? { version: 1, id, seq: r.seq, at: r.at, clockMs: r.clockMs, kind: r.kind, data, ...(cleanCrashProgress(r.progress) ? { progress: cleanCrashProgress(r.progress) } : {}),
     ...(r.truncated === true ? { truncated: true } : {}) } : null;
 }
 export function readCrashTails(host: Host) {
@@ -46,12 +48,13 @@ export function readCrashTails(host: Host) {
     if (!meta) continue;
     const readRow = (name: string) => row(read(host, source, key(slot, name)).value, meta.id);
     const events = Array.from({ length: CRASH_TAIL_LIMITS.events }, (_, n) => readRow(`event_${n}`)).filter((r): r is Row => r !== null).sort((a, b) => a.seq - b.seq);
-    const frames = Array.from({ length: CRASH_TAIL_LIMITS.frames }, (_, n) => readRow(`frame_${n}`)).filter((r): r is Row => r !== null).sort((a, b) => a.at - b.at);
+    const frameSlots = meta.frameSlots ?? 32, frameIntervalMs = meta.frameIntervalMs ?? 1000;
+    const frames = Array.from({ length: frameSlots }, (_, n) => readRow(`frame_${n}`)).filter((r): r is Row => r !== null).sort((a, b) => a.at - b.at);
     const head = readRow('head');
     const errors = events.filter(r => /error|stall|rejection|context-lost/.test(String(r.data.signal ?? r.data.kind ?? '')) || r.data.operation === 'failure');
     sessions.push({ ...meta, evidenceSource: source === 'sessionStorage' ? 'current-tab' : 'origin-fallback-may-be-another-tab',
       head, frames, events, errors, lastObservedAt: Math.max(meta.startedAt, head?.at ?? 0, ...events.map(r => r.at), ...frames.map(r => r.at)),
-      limits: { ...CRASH_TAIL_LIMITS, synchronousObservationsOnly: true, nativeOrGpuCauseMeasured: false,
+      limits: { ...CRASH_TAIL_LIMITS, frames: frameSlots, frameIntervalMs, synchronousObservationsOnly: true, nativeOrGpuCauseMeasured: false,
         finalUnwrittenIntervalCanBeLost: true, frameHistoryIndependentOfEventBursts: true } });
   }
   return { version: 1, format: 'cryptoid-crash-tail', storage, sessions: sessions.sort((a, b) => b.startedAt - a.startedAt) };
@@ -62,6 +65,7 @@ export function readCrashTails(host: Host) {
 export function createCrashTail(verifiedOwner: boolean, getHost: () => Host, options: {
   id: string; build: Record<string, unknown>; now: () => number; wallNow: () => number;
   fullContext?: () => Record<string, unknown>;
+  progress?: () => CrashProgress;
 }) {
   if (!verifiedOwner || !validId(options.id)) return null;
   let host: Host;
@@ -89,6 +93,7 @@ export function createCrashTail(verifiedOwner: boolean, getHost: () => Host, opt
     slot = !metas[0] ? 0 : !metas[1] ? 1 : metas[0].startedAt <= metas[1].startedAt ? 0 : 1;
     startedAt = options.wallNow(); origin = options.now();
     meta = { version: 1, id: options.id, startedAt, state: 'recording', build: technicalContext(options.build) || {},
+      frameSlots: CRASH_TAIL_LIMITS.frames, frameIntervalMs: CRASH_TAIL_LIMITS.frameIntervalMs,
       ...(finite(host.performance?.timeOrigin) ? { documentStartedAt: host.performance!.timeOrigin } : {}) };
     write('meta', meta);
   };
@@ -115,6 +120,7 @@ export function createCrashTail(verifiedOwner: boolean, getHost: () => Host, opt
     try { if (options.fullContext) context = technicalContext(options.fullContext()) || context; } catch { /* Optional state only. */ }
     const value = make('resource', context);
     if (!value) return;
+    try { const progress = cleanCrashProgress(options.progress?.()); if (progress) value.progress = progress; } catch { /* Optional callback progress only. */ }
     write('head', value);
     if (options.now() - lastFrame >= CRASH_TAIL_LIMITS.frameIntervalMs) {
       lastFrame = options.now(); write(`frame_${frameIndex++ % CRASH_TAIL_LIMITS.frames}`, value);

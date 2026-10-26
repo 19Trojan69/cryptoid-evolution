@@ -1,9 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { runInNewContext } from 'node:vm';
 
-const source = name => name === 'evidence' ? readFileSync(new URL('./ownerLifecycleEvidence.mjs', import.meta.url), 'utf8').replace('export const ownerLifecycleEvidence', 'window.CryptoidPrivatePreviewEvidence') : readFileSync(new URL('./ownerLifecycleCapture.mjs', import.meta.url), 'utf8').replace("import { ownerLifecycleEvidence as evidence } from './ownerLifecycleEvidence.mjs';", 'const evidence = window.CryptoidPrivatePreviewEvidence;').replace('export function installOwnerLifecycleCapture', 'function installOwnerLifecycleCapture');
+const source = (name, published = false) => name === 'evidence' ? readFileSync(new URL('./ownerLifecycleEvidence.mjs', import.meta.url), 'utf8').replace('export const ownerLifecycleEvidence', 'window.CryptoidPrivatePreviewEvidence') : readFileSync(new URL(published ? '../../scripts/fixtures/ownerLifecycleCapture-6fe93a5.mjs.txt' : './ownerLifecycleCapture.mjs', import.meta.url), 'utf8').replace("import { ownerLifecycleEvidence as evidence } from './ownerLifecycleEvidence.mjs';", 'const evidence = window.CryptoidPrivatePreviewEvidence;').replace('export function installOwnerLifecycleCapture', 'function installOwnerLifecycleCapture');
 function storage() {
   const values = new Map(), reads = [], writes = [];
   return { values, reads, writes, getItem(key) { reads.push(key); return values.get(key) ?? null; },
@@ -11,11 +12,11 @@ function storage() {
 }
 function host(options = {}) {
   const mutations = [], sizes = [], listeners = new Map(), frames = new Map();
-  const row = { clock: 0, requests: 0, root: {}, nodes: [], timeOrigin: options.timeOrigin || 1000 };
+  const row = { clock: 0, requests: 0, root: {}, nodes: [], timeOrigin: options.timeOrigin || 1000, mounted: options.mounted !== false, routeHost: {} };
   const shell = { paused: 'false', getAttribute() { return this.paused; }, querySelectorAll() { return row.nodes; } };
   const document = { hidden: false, getElementById(id) {
     return id === 'root' ? row.root : id === 'cryptoid-private-preview-identity' ? { textContent: JSON.stringify({ sourceCommit: 'a'.repeat(40) }) } : null;
-  }, querySelector() { return shell; }, addEventListener(type, fn) { listeners.set(type, fn); } };
+  }, querySelector(selector) { return selector === '.game-shell' ? row.mounted ? shell : null : selector === '.game-route' ? row.routeHost : null; }, addEventListener(type, fn) { listeners.set(type, fn); } };
   class MutationObserver { constructor(callback) { this.callback = callback; mutations.push(this); } observe(target, options) { this.target = target; this.options = options; } disconnect() {} }
   class ResizeObserver { constructor(callback) { this.callback = callback; sizes.push(this); } observe() {} disconnect() {} }
   const target = { document, innerWidth: 393, innerHeight: 628, location: { pathname: '/game' },
@@ -26,7 +27,7 @@ function host(options = {}) {
     cancelAnimationFrame(id) { frames.delete(id); },
     setTimeout() { throw Error('extra timer forbidden'); }, setInterval() { throw Error('extra interval forbidden'); } };
   const context = { window: target, document, performance: target.performance, location: target.location, MutationObserver, ResizeObserver };
-  runInNewContext(source('evidence') + '\n' + source('lifecycle'), context);
+  runInNewContext(source('evidence') + '\n' + source('lifecycle', options.published), context);
   let authorized = options.authorized !== false;
   const install = () => runInNewContext("installOwnerLifecycleCapture(() => window.authorized, { sourceCommit: 'a'.repeat(40) })", context);
   Object.defineProperty(target, 'authorized', { get: () => authorized });
@@ -37,7 +38,7 @@ function host(options = {}) {
   const emit = (kind, details = {}) => listeners.get(kind)?.(details);
   const pause = value => { shell.paused = value; mutations.find(m => m.target === shell).callback(); };
   const report = () => JSON.parse(JSON.stringify(target.CryptoidPrivatePreviewEvidence.report(target)));
-  return { target, row, frames, document, shell, mutations, sizes, install, deliver, emit, pause, report, authorize };
+  return { target, row, frames, document, shell, mutations, sizes, install, deliver, emit, pause, report, authorize, mount() { row.mounted = true; mutations.find(m => m.target === row.routeHost)?.callback(); } };
 }
 
 test('installation schedules no RAF/timer and repeated installation does not wrap twice', () => {
@@ -125,4 +126,24 @@ test('normal missing evidence and blocked storage are explicit, never fabricated
   h.authorize(false); h.emit('pagehide', { persisted: false }); h.pause('true');
   h.target.requestAnimationFrame(() => 33); assert.equal(h.deliver(3000), 33);
   assert.equal(h.target.localStorage.writes.length, writes);
+});
+
+test('auth-gate replacement inside a stable GameRoute is observed without subtree mutation tracking', () => {
+  const h = host({ mounted: false }); h.install();
+  assert.equal(h.report().events.some(e => e.kind === 'scene-mounted'), false);
+  h.mount();
+  assert.equal(h.report().events.find(e => e.kind === 'scene-mounted')?.active, true);
+  assert.ok(h.mutations.filter(m => m.target === h.row.routeHost).every(m => m.options.childList && !m.options.subtree));
+  h.target.requestAnimationFrame(() => {}); h.deliver(10);
+  h.target.requestAnimationFrame(() => {}); h.deliver(330);
+  h.emit('pagehide', { persisted: false });
+  assert.equal(h.report().events.find(e => e.kind === 'frame-gap')?.frameGapMs, 320);
+});
+
+test('the exact released observer misses a nested auth-gate replacement that the correction sees', () => {
+  assert.equal(createHash('sha256').update(readFileSync(new URL('../../scripts/fixtures/ownerLifecycleCapture-6fe93a5.mjs.txt', import.meta.url))).digest('hex'), '74b97a5aca4a82e9bcd68e25e8b2cf2d736f1de16d110785e4ffbe05515149bb');
+  const baseline = host({ mounted: false, published: true }); baseline.install(); baseline.mount();
+  assert.equal(baseline.report().events.some(e => e.kind === 'scene-mounted'), false);
+  const fixed = host({ mounted: false }); fixed.install(); fixed.mount();
+  assert.equal(fixed.report().events.some(e => e.kind === 'scene-mounted'), true);
 });

@@ -1,0 +1,17 @@
+{
+  "localOnly": true,
+  "syntheticFixtures": true,
+  "physicalDevice": false,
+  "historicalWhiteScreenFixed": false,
+  "checks": [
+    "released observer misses nested shell",
+    "control: independent quarter-second frames",
+    "control: callback progress",
+    "control: actual IDB history exported",
+    "control: replacement and Home linked"
+  ],
+  "errors": [],
+  "complete": false,
+  "engine": "26.5",
+  "failure": "AssertionError [ERR_ASSERTION]: control: ordinary pagehide remains distinct\n    at check (file:///workspace/scratch/2533eb1496d4/owner-crash-boundary/verification/owner-crash-boundary/verify-native.mjs:11:36)\n    at file:///workspace/scratch/2533eb1496d4/owner-crash-boundary/verification/owner-crash-boundary/verify-native.mjs:47:3"
+}
