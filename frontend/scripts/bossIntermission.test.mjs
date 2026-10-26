@@ -5,23 +5,24 @@ import fs from 'node:fs';
 import {transformSync} from 'esbuild';
 import {componentHost} from './componentTestHost.mjs';
 import {actualBackend} from './weaponReloadRecoveryHost.mjs';
-import {advanceSummaryVisibility,canContinueBossSummary,BOSS_SUMMARY_VISIBLE_MS} from '../src/pages/bossSummaryTiming.ts';
+import {canContinueLevelCompletion} from '../src/pages/bossSummaryTiming.ts';
 import {ResourceCache} from '../src/pages/resourceCache.ts';
 const summary={stage:10,score:100,shards:12,destroyed:10,hearts:3,combos:2};
 const translate=(s,p={})=>s.replace(/\{(\w+)\}/g,(_,k)=>String(p[k]));
-test('the actual statistics component waits ten visible prepared seconds and then waits indefinitely for a click',()=>{
- let now=0,interval,continued=0;const doc={hidden:false,activeElement:null,addEventListener(){},removeEventListener(){}};
+test('the real completion has no countdown and permits an immediate prepared click only',()=>{
+ let continued=0;const doc={activeElement:null};
  const h=componentHost('src/pages/LevelCompletion.tsx','LevelCompletion',{summary,name:"GENESIS BELT",headline:"LEVEL 1 COMPLETE",bonusHits:12,bonusResult:"+18 SHARDS",bonusPoints:3000,bonusHeart:true,prepared:false,saving:true,failed:false,continuing:false,onRetry(){},onContinue(){continued++;}}, {
-  BlockchainProgress:()=>null,BLOCKS_PER_CHAIN:9,useLocale:()=>({t:translate,locale:'en'}),advanceSummaryVisibility,canContinueBossSummary,BOSS_SUMMARY_VISIBLE_MS,
-  HTMLElement:class{},document:doc,performance:{now:()=>now},window:{setInterval(fn){interval=fn;return 1;},clearInterval(){interval=null;}},
+  BlockchainProgress:()=>null,BLOCKS_PER_CHAIN:9,useLocale:()=>({t:translate,locale:'en'}),canContinueLevelCompletion,
+  HTMLElement:class{},document:doc,window:{setInterval(){throw Error('No completion timer is allowed');}},
  });
- const advance=ms=>{for(let t=0;t<ms;t+=250){now+=250;interval();h.render();}};
  const button=()=>h.nodes().find(n=>n.type==='button'&&n.props.children.includes('Continue game'));
- advance(10000);assert.equal(button().props.disabled,true,'saving time cannot unlock Continue');
- h.update({prepared:true,saving:false});advance(5000);doc.hidden=true;advance(30000);assert.equal(button().props.disabled,true);
- doc.hidden=false;advance(4750);assert.equal(button().props.disabled,true);advance(250);assert.equal(button().props.disabled,false);
- advance(60000);assert.equal(continued,0);button().props.onClick();assert.equal(continued,1);
- h.update({failed:true});assert.equal(button().props.disabled,true);h.unmount();assert.equal(interval,null);
+ assert.equal(button().props.disabled,true);
+ h.update({prepared:true,saving:false});assert.equal(button().props.disabled,false);
+ assert.equal(continued,0,'readiness never automatically continues');button().props.onClick();assert.equal(continued,1);
+ for(const blocked of [{saving:true},{saving:false,failed:true},{failed:false,continuing:true},{continuing:false,prepared:false}]){
+  h.update(blocked);assert.equal(button().props.disabled,true);
+ }
+ h.unmount();
 });
 async function handlers(){
  const {harness,firstMissionSnapshot}=await actualBackend(),h=harness();await h.call('progress','/me',null,{method:'GET'});

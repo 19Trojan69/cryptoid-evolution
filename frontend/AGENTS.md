@@ -1,3 +1,26 @@
+# Ship indicators and free manual completion, 26 October 2026
+
+Owner requests ordinary enemy bars at half width/height, closer and centered on
+visible original hulls; calibrated main drive outlets and common plume appearance
+across all 20 models/three stages; completion Continue without the ten-second wait.
+The later clarification keeps ALL boss damage indicators unchanged. It supersedes
+only the earlier mandatory reader timer. Save/effect confirmation remains required;
+no auto-Continue, no extra reward, queue discard or validation relaxation.
+Use static original-image bounds/outlets with no runtime scans/new timers/RAF.
+Preserve art/sizes, hitboxes, HUD, combat/economy, audio, auth, strict >2500ms/500ms
+pauses/manual Resume, network/account/payment separation and PR167/168 exclusion.
+GamePage and BossHealthView/bossHealthLayout stay byte-identical to public 4ec0683.
+328 frontend gates/types/Vite and leaf lint pass, plus 70 native gallery and 53
+actual-flow checks. Native boss bars match the published geometry exactly. See
+docs/ship-overlay-alignment-20261026 and verification/ship-overlay-alignment.
+A new private owner report locates another White Screen at manual Continue before
+visible next-round combat; its raw data stays private. Do not claim this visual
+release fixes that interruption or reveals an OS/GPU/native cause. No new campaign.
+Candidate codex/ship-overlay-alignment-20261026 is auto-deploy-disabled. Continuing
+reviewed same-source publication to both existing projects remains authorized.
+Preserve 4ec0683 at backup/shared-before-ship-overlay-20261026 and READY Testnet
+DSpHhHrn6bjfmWarpHx88n2JzZde / production DchewrncL4vJzY4KwKz8ALWTzVdy.
+
 # Completion activation and interrupted audio, 26 October 2026
 
 Continue from common public 57a60fd/PR175; do not reimplement its transition UI.

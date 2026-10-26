@@ -2830,3 +2830,14 @@ html[data-motion="reduced"] .game-field .sector-banner.boss-intro-banner.sector-
 .enemy-muzzle-flash { position: absolute; z-index: 3; width: 10px; height: 15px; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(ellipse, #fff6df, #ff9b57 40%, transparent 72%); pointer-events: none; }
 
 .enemy-laser.enemy-projectile-medium::before, .enemy-laser.enemy-projectile-heavy::before { display: none; }
+
+/* Compact enemy integrity follows visible hull bounds; boss bars stay unchanged. */
+.asteroid:not(.sector-boss) > .health-bar { top: calc(var(--hull-top, 0%) - 5px); left: var(--hull-x, 50%); width: 34%; height: 3px; border-width: .5px; border-radius: 2px; box-shadow: 0 0 5px #59dcf588; }
+.asteroid:not(.sector-boss):is(.cryptoid-heavy, .cryptoid-elite, .asteroid-large) > .health-bar { top: calc(var(--hull-top, 0%) - 6px); width: 39%; height: 4px; }
+.asteroid:not(.sector-boss) > .health-bar b { border-radius: 1.5px; box-shadow: 0 0 4px #8deec0; }
+.asteroid:not(.sector-boss) > .health-bar[data-critical="true"] b { box-shadow: 0 0 5px #ff5573; }
+
+/* One plume appearance for every model, paint and evolution stage. Only nozzle
+   geometry and the existing thrust response change its size/direction. */
+.game-field .ship-thruster { border-radius: 0; background: linear-gradient(180deg, #f8ffff 0%, #8fefff 27%, #527cff 65%, transparent 100%); filter: drop-shadow(0 2px 2px #52a4ffad); clip-path: polygon(12% 0, 88% 0, 82% 18%, 100% 34%, 72% 69%, 55% 100%, 48% 78%, 34% 94%, 27% 64%, 0 34%, 18% 18%); }
+.game-field .sector-boss .boss-engine-flame.ship-thruster { transform: translate(-50%, -100%) rotate(180deg); transform-origin: center; animation: none; }

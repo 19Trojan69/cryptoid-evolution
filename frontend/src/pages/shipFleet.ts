@@ -1,3 +1,5 @@
+import { shipOverlayGeometry } from './shipOverlayGeometry.ts';
+import type { ShipStage } from './shipEvolution';
 import { RELEASED_STANDARD_SHIPS } from './cardAvailability.ts';
 import type { CSSProperties } from "react";
 import type { CryptoidClass } from "./cryptoidRoster";
@@ -281,7 +283,6 @@ export const spriteVisualOffset = (index: number, renderedSize: number, facesPla
 // Every entry is calibrated against its original 4 x 5 hangar-atlas cell:
 // x/y are the visible nozzle exit, width is the painted nozzle diameter and
 // tone distinguishes central plasma drives from external combustion drives.
-const hullCenters = [55, 53, 42, 43, 54, 53, 43, 43, 54, 54, 43, 44, 55, 53, 43, 44, 55, 53, 42, 43] as const;
 type ExhaustTone = "plasma" | "fire";
 type NozzleProfile = readonly [x: number, y: number, width: number, tone: ExhaustTone];
 
@@ -333,15 +334,16 @@ const nozzleStyle = ([x, y, width, tone]: NozzleProfile, facesPlayer = false): C
   } as CSSProperties;
 };
 
-export const shipNozzleStyles = (index: number, facesPlayer = false): CSSProperties[] =>
-  (nozzleProfiles[index] ?? nozzleProfiles[0]).map(nozzle => nozzleStyle(nozzle, facesPlayer));
+export const shipNozzleStyles = (index: number, facesPlayer = false, stage: ShipStage = 1): CSSProperties[] =>
+  shipOverlayGeometry(index, stage).nozzles.map(([x, y, width]) => nozzleStyle([x, y, width, 'plasma'], facesPlayer));
 
 export const bossNozzleStyles = (): CSSProperties[] =>
   bossNozzleProfile.map(nozzle => nozzleStyle(nozzle));
 
 export const shipHullStyle = (index: number, facesPlayer = false): CSSProperties => {
-  const center = hullCenters[index] ?? hullCenters[0];
-  return { "--hull-x": `${facesPlayer ? 100 - center : center}%` } as CSSProperties;
+  const [left, top, right, bottom] = shipOverlayGeometry(index).bounds;
+  const center = (left + right) / 2;
+  return { "--hull-x": `${facesPlayer ? 100 - center : center}%`, "--hull-top": `${facesPlayer ? 100 - bottom : top}%` } as CSSProperties;
 };
 
 // Kept for the compact home-screen preview and its fixed pair of engines.

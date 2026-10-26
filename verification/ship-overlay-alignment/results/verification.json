@@ -1,0 +1,24 @@
+{
+  "baseline": "4ec0683196177e5045f15ab1798b22ba21dfb8dd",
+  "frontendReleaseTests": 328,
+  "newHullFleetLayoutGate": 37,
+  "nativeGalleryChecks": 70,
+  "nativeFlowChecks": 53,
+  "nativeBossBarsCompared": 38,
+  "allBossLayoutConfigurations": 150,
+  "unchangedModules": [
+    "GamePage.tsx",
+    "BossHealthView.tsx",
+    "bossHealthLayout.ts"
+  ],
+  "gamePageExistingLintErrors": 62,
+  "gamePageExistingLintWarnings": 4,
+  "changedLeafLint": "passed",
+  "originalAssetsUnchanged": true,
+  "backendUnchanged": true,
+  "noTimerForUnifiedCompletion": true,
+  "genuineSaveFailureStillBlocksContinue": true,
+  "initialFlowFixtureFailure": "fast legacy preparation correctly enabled Continue before the old disabled-at-mount assertion",
+  "physicalDevice": false,
+  "historicalWhiteScreenFixed": false
+}
