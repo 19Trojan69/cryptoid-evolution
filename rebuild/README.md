@@ -39,6 +39,13 @@ in the draw path/native heap. Both acceptance gates remain open. Exact results
 and preserved failed controls are in
 [the stage evidence](evidence/memory-stages-20261025/README.md).
 
+The subsequent replay/ownership checkpoint adds 4000 primary closed cycles,
+identifies partial Chromium `cc/image_memory` records and WPE's local
+Mesa/Gallium allocation call chains, and separates identical full-resolution
+source RGBA from Chromium's scaling difference. This does not accept a decoder
+or fix the historical White Screen. Continue from
+[the ownership evidence](evidence/memory-ownership-20261026/README.md).
+
 From this directory, with the repository's frontend dependencies installed:
 
 ```sh

@@ -10,8 +10,12 @@ import { ResourcePool } from '../core/resources.ts';
 type Mode = 'fetch-only' | 'decode-only' | 'prepare-only' | 'draw-dispose';
 const params = new URLSearchParams(location.search);
 const mode = params.get('mode') as Mode, decoder = params.get('decoder') as TextureDecoder;
+const sequence = params.get('sequence') || 'all', singleBossId = Number(params.get('boss') || 4);
+const explicitDecode = params.get('explicitDecode') !== '0';
 if (!['fetch-only', 'decode-only', 'prepare-only', 'draw-dispose'].includes(mode)
-  || !['bitmap', 'blob-image'].includes(decoder)) throw new Error('Explicit matched control required');
+  || !['bitmap', 'blob-image', 'image'].includes(decoder) || !['all', 'single'].includes(sequence)
+  || !Number.isInteger(singleBossId) || singleBossId < 1 || singleBossId > 50) throw new Error('Explicit matched control required');
+if (!explicitDecode && mode !== 'draw-dispose') throw new Error('Onload-only is a drawing control, not a decoder-only claim');
 const geometry = { width: 367, height: 590, hudBottom: 28, playerDiameter: 94 };
 const limits = { maxBytes: 96 * 1024 * 1024, maxEntries: 64, parallel: 2 };
 const textures = new ResourcePool<Texture>(limits), encoded = new ResourcePool<Blob>(limits);
@@ -23,7 +27,8 @@ let active: { release: () => void } | null = null;
 let cycle = -1, drawCalls = 0, decoded = 0, fetched = 0, confirmedImageDecodes = 0, closed = true;
 let frames = 0;
 const plan = bossManifest.map(config => [shipSpec(1, 'silver', 1), ...bossImageSpecs(config)]);
-const receipt = () => ({ cycle, mode, decoder, closed, drawCalls, decoded, fetched, confirmedImageDecodes, frames,
+const modelIndex = (index: number) => sequence === 'single' ? singleBossId - 1 : index % plan.length;
+const receipt = () => ({ cycle, mode, decoder, sequence, explicitDecode, bossId: cycle < 0 ? null : modelIndex(cycle) + 1, closed, drawCalls, decoded, fetched, confirmedImageDecodes, frames,
   resources: mode === 'fetch-only' ? encoded.stats() : textures.stats(),
   canvas: { width: canvas.width, height: canvas.height }, dom: document.getElementsByTagName('*').length,
   viewport: { width: innerWidth, height: innerHeight, dpr: devicePixelRatio }, timeOrigin: performance.timeOrigin });
@@ -32,7 +37,7 @@ async function prepare(index: number) {
   if (active || !closed) throw new Error('Previous cycle still owns resources');
   if (!Number.isInteger(index) || index < 0) throw new Error('Invalid cycle');
   cycle = index; closed = false;
-  const specs = plan[index % plan.length], controller = new AbortController();
+  const specs = plan[modelIndex(index)], controller = new AbortController();
   const scope = textures.createScope(), rawScope = encoded.createScope();
   let renderer: Awaited<ReturnType<typeof prepareBattleRenderer>> | null = null;
   const release = () => {
@@ -61,7 +66,7 @@ async function prepare(index: number) {
           catch (error) { throw new Error(`Control load ${spec.url}: ${String(error)}`); }
         });
         fetched++; decoded++;
-        if (lease.value.source instanceof HTMLImageElement) {
+        if (explicitDecode && lease.value.source instanceof HTMLImageElement) {
           if (typeof lease.value.source.decode !== 'function') throw new Error('Image.decode unavailable');
           try { await lease.value.source.decode(); }
           catch (error) { throw new Error(`Control explicit decode ${spec.url}: ${String(error)}`); }
@@ -69,7 +74,7 @@ async function prepare(index: number) {
         }
       }));
       if (mode === 'draw-dispose' || mode === 'prepare-only') {
-        const state = createBattle({ stage: bossManifest[index % plan.length].level, field: geometry });
+        const state = createBattle({ stage: bossManifest[modelIndex(index)].level, field: geometry });
         if (!state.boss) throw new Error('Expected original boss');
         state.phase = 'combat'; state.sectionMs = 4900; state.boss.elapsed = 1800;
         for (const gun of state.boss.turrets) gun.health = gun.maxHealth * .5;

@@ -116,6 +116,26 @@ No renderer/decoder behavior or original gameplay implementation was changed.
 
 ## Next acceptance
 
+The 2026-10-26 continuation now includes four 500-cycle same-model/all-model
+controls, stable-URL and actual-onload draw controls, native allocation ownership
+probes and full-source versus scaled pixel comparisons. See
+[the ownership evidence](evidence/memory-ownership-20261026/README.md).
+
+Available partial Chromium provider records name `cc/image_memory` at about
+495.7 MiB after idle, while global dump requests remain explicitly failed.
+WPE native malloc call chains attribute much of the observed additional live
+allocation to the local Linux Mesa/Gallium driver, approximately 277.5 MiB above
+the instrumented fetch baseline. This is neither physical-device GPU memory nor
+a proof of the historical crash cause. Some glibc arena bytes are free and many
+remain allocated, so treating all of `other` as free pages is also rejected.
+
+Tested full-resolution source RGBA is identical across image/bitmap. Chromium's
+remaining fidelity difference is triggered by scaling. Full-resolution canvas
+copying and bitmap resize hints do not universally preserve reference pixels;
+no such candidate is selected. Stable file URLs and removal of the diagnostic's
+extra explicit decode() call also fail to eliminate the native occupancy.
+Do not repeat those controls as proposed fixes.
+
 Identify decoded-image/raster cache and allocator ownership on the Chromium
 decode path and WPE draw path before adopting a decoder. The triggering stages
 are now separated; exact allocation lifetime and bounded memory are still open.

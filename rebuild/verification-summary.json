@@ -282,7 +282,7 @@
     },
     "interpretation": "Broad other category remains unattributed. No complete native memory or historical White Screen fix is accepted."
   },
-  "nextStep": "Investigate decoded-image/raster cache and allocator ownership on the isolated Chromium decode path and WPE drawing path; distinguish retained live data from reusable allocator pages before choosing a decoder. Do not integrate further game features yet.",
+  "nextStep": "Resolve the Chromium scaling path for explicitly disposable full-resolution sources without changing original output quality. Treat WPE Mesa/Gallium retention as a distinct local driver path; establish a bounded driver/scene baseline before adopting a loader or integrating game functions. Do not repeat the completed stage/replay matrix.",
   "nativeStageAttribution": {
     "status": "triggering-stages-separated-exact-allocation-lifetime-open",
     "evidence": "evidence/memory-stages-20261025/summary.json",
@@ -363,5 +363,35 @@
     "forcedGC": false,
     "pixelReadback": false,
     "rendererOrDecoderBehaviorChanged": false
+  },
+  "nativeAllocationOwnership": {
+    "status": "specific-native-paths-identified-loader-and-historical-crash-still-open",
+    "evidence": "evidence/memory-ownership-20261026/summary.json",
+    "primaryCases": 8,
+    "primaryClosedCycles": 4000,
+    "historicalWhiteScreenFixed": false,
+    "nativeMemoryAccepted": false,
+    "acceptedDefaultDecoder": false,
+    "chromium": {
+      "provider": "cc/image_memory",
+      "idleBytes": 519782400,
+      "globalDumpSuccess": false,
+      "partialDiagnosticsRemainFailed": true
+    },
+    "webkit": {
+      "nativeCallChain": "Linux Mesa/Gallium",
+      "pairedObservedLiveMallocIncrementBytes": 291012989,
+      "profileStoppedBeforeBrowserExit": true,
+      "notPhoneGPUMemory": true,
+      "notPermanentLeakProof": true
+    },
+    "sourcePixels": {
+      "testedImages": 3,
+      "fullResolutionImageVsBitmap": "identical",
+      "chromiumScaledPixels": "differ",
+      "universalSamplingCorrection": "not accepted"
+    },
+    "forcedGC": false,
+    "runtimeRendererOrLoaderChanged": false
   }
 }

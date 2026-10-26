@@ -73,6 +73,7 @@ the replacement can be treated as ready. Missing features are tracked below.
 | New playable core and renderer | Internal single-encounter fixture; functional native controls cover all 50 original boss models. Decoder/native-memory acceptance is blocked. |
 | Pure boss-stop gate | Seven contracts pass; real backend/UI/bonus integration remains pending. |
 | Native memory stage attribution | Eight matched 100-cycle controls complete: large Chromium retention begins in decode; WPE's additional retention is triggered by drawing/native heap allocation. Exact allocation lifetime and bounded memory remain unaccepted. |
+| Native replay and allocation ownership | 4000 principal closed cycles plus separate allocator controls name partial Chromium cc/image_memory records and local WPE Mesa/Gallium allocation call chains. Full-resolution source pixels match in three-image controls; Chromium scaling parity and accepted loader remain open. |
 | Dynamic scene/bonus/durable boss-stop handoff | Pending; the fixture stops at encounter completion. |
 | Full feature migration | Pending. |
 | Original White Screen reproduced/fixed | Open. |

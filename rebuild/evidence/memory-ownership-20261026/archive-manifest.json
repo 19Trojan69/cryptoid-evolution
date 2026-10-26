@@ -1,0 +1,315 @@
+{
+  "archiveSha256": "b9e1c60309b7c29ae032a09d4af76f7067e252e54ec7e0f7b7922b88fdd0b3aa",
+  "members": [
+    {
+      "file": "actual-draw-chromium-500-20261026-a.log",
+      "bytes": 6342,
+      "sha256": "1a3d3cbc3516bebeda1ef7725e1da66de712aa0b352f9736157542c2a92fa606"
+    },
+    {
+      "file": "actual-draw-webkit-500-20261026-a.log",
+      "bytes": 6856,
+      "sha256": "038836d6c94b418e39b02bbe3d756a95a0f013dfef7fc59597eb2826dd6d356a"
+    },
+    {
+      "file": "heaptrack-baseline-summary.json",
+      "bytes": 197,
+      "sha256": "bb17128871d506f42b04ad77354f77c5974ec5e71ee80a284bf09251ea77c05a"
+    },
+    {
+      "file": "heaptrack-ownership-summary.json",
+      "bytes": 433,
+      "sha256": "10bee5f083c47f898e6d4de8d2703be7f520b2c0592f13e4c60c38e8ddc50270"
+    },
+    {
+      "file": "heaptrack-package-index.log",
+      "bytes": 1021,
+      "sha256": "1c5b6b1c143c1ee03b82d05413fad9ea7c3daaa2c7fe89a2faf1aaf1574ea8fb"
+    },
+    {
+      "file": "heaptrack-package-metadata.json",
+      "bytes": 6363,
+      "sha256": "05ee6271293cb608046e50b8d7f7ca705e038c1a2512bd00c156fc78d002e904"
+    },
+    {
+      "file": "ownership-boundaries-20261026.log",
+      "bytes": 236,
+      "sha256": "c21d125de4e76b0981a6009d4a56019f0b16a76119a4f38054de40305c1f9d53"
+    },
+    {
+      "file": "ownership-chromium-chromium-20261026-a.log",
+      "bytes": 535,
+      "sha256": "f22576189387624530069b5c36fd3238b871aa7020692187d12f45372dd7ab74"
+    },
+    {
+      "file": "ownership-contracts-20261026.log",
+      "bytes": 4790,
+      "sha256": "ff14ea23c9891c0bceb71d73d182e68139ee01ea33e01771fc5c694b70177993"
+    },
+    {
+      "file": "ownership-typecheck-20261026.log",
+      "bytes": 166,
+      "sha256": "14d523896f5430c84f15b3c3eef3432255863f045f5e6311a6e65654fed3b2ed"
+    },
+    {
+      "file": "ownership-webkit-glibc-20261026-a.log",
+      "bytes": 2341,
+      "sha256": "2b08b31474c41381e4a9deaf156d57d70b500c76b676494fe1d4a6344f77cfec"
+    },
+    {
+      "file": "reuse-chromium-decode-only-all-500-20261026-a.log",
+      "bytes": 6225,
+      "sha256": "5c9c4a51d9d324492a187bab27a0992e683508bd36c0e900b290d07381c568db"
+    },
+    {
+      "file": "reuse-chromium-decode-only-single-500-20261026-a.log",
+      "bytes": 6253,
+      "sha256": "84d93f7396e99946a439fca9924a193dfba253c262380af7d8b650ff01538dd0"
+    },
+    {
+      "file": "reuse-matrix-sources/browser__renderer.ts",
+      "bytes": 9363,
+      "sha256": "65a3a71f0bef172b3d833e0bdadc0acd2337a6cbf697875ba3298e3bdcc1bd63"
+    },
+    {
+      "file": "reuse-matrix-sources/browser__textures.ts",
+      "bytes": 4127,
+      "sha256": "a82f48f986a94b6271d19086ccde5bab0d517f77f0f49918820346767be1caef"
+    },
+    {
+      "file": "reuse-matrix-sources/fixture__memoryAssetManifest.json",
+      "bytes": 18321,
+      "sha256": "1f262c7d7878c13508d6d789bde04128adb1bc42a9e824d67e35f67428493b41"
+    },
+    {
+      "file": "reuse-matrix-sources/fixture__memoryStages.ts",
+      "bytes": 6624,
+      "sha256": "b6c4f049db227a95de159a7c1e80bcb092dd64a99780efdd5a67c5bbec73280c"
+    },
+    {
+      "file": "reuse-matrix-sources/fixture__nativeProfile.mjs",
+      "bytes": 2514,
+      "sha256": "902ceef1fd1cf89632d4dbfdaf0769c4ab29798ee425c49041d14036d3829886"
+    },
+    {
+      "file": "reuse-matrix-sources/sha256.json",
+      "bytes": 637,
+      "sha256": "69ab32ac4d3ae832afd3795dc0dbf7c2c1a3daa2f6c3c9e51d62efa67f382a2d"
+    },
+    {
+      "file": "reuse-matrix-sources/verify-memory-stages.mjs",
+      "bytes": 15008,
+      "sha256": "7ace2fde2d057a8c5eccd454123772f3f1f6f95578993b14d212fee8f588d829"
+    },
+    {
+      "file": "reuse-source-base/memoryStages.ts",
+      "bytes": 6249,
+      "sha256": "47670d139ef922c6820341f200c156273e2dc4a199e04486caa2dc4dddebfe93"
+    },
+    {
+      "file": "reuse-source-base/nativeProfile.mjs",
+      "bytes": 2514,
+      "sha256": "902ceef1fd1cf89632d4dbfdaf0769c4ab29798ee425c49041d14036d3829886"
+    },
+    {
+      "file": "reuse-source-base/renderer.ts",
+      "bytes": 9363,
+      "sha256": "65a3a71f0bef172b3d833e0bdadc0acd2337a6cbf697875ba3298e3bdcc1bd63"
+    },
+    {
+      "file": "reuse-source-base/sha256.json",
+      "bytes": 523,
+      "sha256": "24fb77d77da062255ef5d3885540882d08bee831554d2f7e1a2c027c4c89ddd9"
+    },
+    {
+      "file": "reuse-source-base/textures.ts",
+      "bytes": 4127,
+      "sha256": "a82f48f986a94b6271d19086ccde5bab0d517f77f0f49918820346767be1caef"
+    },
+    {
+      "file": "reuse-source-base/verify-memory-stages.mjs",
+      "bytes": 13807,
+      "sha256": "6de246d31df0295406f486ee1d9502fbdc4a73121ef1e8b319c004e09424863a"
+    },
+    {
+      "file": "reuse-webkit-draw-dispose-all-500-20261026-a.log",
+      "bytes": 6847,
+      "sha256": "52b99d46e3e5cff3fdb9514fb95c79bf96cd2634f957e46a3f89e2be421ca63c"
+    },
+    {
+      "file": "reuse-webkit-draw-dispose-single-500-20261026-a.log",
+      "bytes": 6888,
+      "sha256": "c1c1c7314d73f56b6d0bc441ba258f11807b5105bbb30dcaa194c826553ead5c"
+    },
+    {
+      "file": "source-pixels-chromium-20261026-a.log",
+      "bytes": 3313,
+      "sha256": "bc6e37c6f6aa84292e9137c12771393730e5ba5ce942dadcc89ce8302db59bfb"
+    },
+    {
+      "file": "source-pixels-chromium-sampling-20261026-a.json",
+      "bytes": 10928,
+      "sha256": "ab3e19b19f1b86eda622be8eb83f52413119e221fd4366064a9e7bb37929dfc5"
+    },
+    {
+      "file": "source-pixels-chromium-sampling-20261026-a.log",
+      "bytes": 6248,
+      "sha256": "74568535151b60ccea5610a40a354bdb1f5ee185f3effe05135b8658bb4f5576"
+    },
+    {
+      "file": "source-pixels-chromium-source-20261026-a.json",
+      "bytes": 5645,
+      "sha256": "1ff5dd4767ef80ab040898e5192911cf5d0eed224ed124dc8e24af6c952f54e8"
+    },
+    {
+      "file": "source-pixels-v1.mjs",
+      "bytes": 7107,
+      "sha256": "b611802a35fbcdebd36ceca2c29bc8852cbe4f363f5f8080fc1fe7a863820856"
+    },
+    {
+      "file": "source-pixels-webkit-20261026-a.log",
+      "bytes": 3267,
+      "sha256": "c45fd8cc04e46eaa78adc4a166e31ef2c219530f7e8e5b1feb3d6c51b7c4103b"
+    },
+    {
+      "file": "source-pixels-webkit-sampling-20261026-a.json",
+      "bytes": 10810,
+      "sha256": "d72aaf17e8100baca933dc08dc95e1e107f13e99a4e0e46ca5fd674e3df3b7a8"
+    },
+    {
+      "file": "source-pixels-webkit-sampling-20261026-a.log",
+      "bytes": 6137,
+      "sha256": "339dd59c119706c161ca524cbdc23ae02de9194968025f5589d5f9bba99fee93"
+    },
+    {
+      "file": "source-pixels-webkit-source-20261026-a.json",
+      "bytes": 5592,
+      "sha256": "f862df3dd2fafcb19a0e67574ed0e641b89637a870cbf189417645e603c683c1"
+    },
+    {
+      "file": "stable-url-chromium-decode-only-500-20261026-a.log",
+      "bytes": 6011,
+      "sha256": "2acafd17ec82fa4955d0ff87c3ca85462b39d8099e982504b09b7c1ac7e56679"
+    },
+    {
+      "file": "stable-url-webkit-draw-dispose-500-20261026-a.log",
+      "bytes": 6620,
+      "sha256": "a91f01e68d4d0eec451ce4b0c9cd02c5bb42960a1943b28849a0cdcdafcf979a"
+    },
+    {
+      "file": "stages-chromium-blob-image-decode-only-all-100-ownership-20261026-a.json",
+      "bytes": 1133288,
+      "sha256": "8803497323e9978c1069a39fd5e0f356b267d5f1af1c48265d366c717e2a6675"
+    },
+    {
+      "file": "stages-chromium-blob-image-decode-only-all-100-ownership-20261026-b.json",
+      "bytes": 4499899,
+      "sha256": "17207af0c225376b7bf06335ec5f785300cb8f99f3b4babc06c23f74145bd9db"
+    },
+    {
+      "file": "stages-chromium-blob-image-decode-only-all-100-ownership-20261026-partial.json",
+      "bytes": 6727103,
+      "sha256": "4e1255ce9ccb5ea804d87d86f3f20ea8ce5575411744a54d512f8ea5c0694619"
+    },
+    {
+      "file": "stages-chromium-blob-image-decode-only-all-500-reuse-20261026-a.json",
+      "bytes": 1020982,
+      "sha256": "8126f9ed0799e3895eec013a139108909886ca75f91d4627d3b9831ee1d914d5"
+    },
+    {
+      "file": "stages-chromium-blob-image-decode-only-single4-500-reuse-20261026-a.json",
+      "bytes": 1022677,
+      "sha256": "0903da9c1db47f4c93ce17eb5fc3eded933cda5bc92b760d886fd000ed41adf0"
+    },
+    {
+      "file": "stages-chromium-blob-image-draw-dispose-all-onload-draw-500-actual-draw-20261026-a.json",
+      "bytes": 1062955,
+      "sha256": "03459970e3ead727334ee91ef09f3d104b41c2a2e854124eb3e365a05b18a171"
+    },
+    {
+      "file": "stages-chromium-image-decode-only-all-500-stable-url-20261026-a.json",
+      "bytes": 1021652,
+      "sha256": "6d11f89d6b3c7e8b4c3e12c875aa96398768a3d2e9de2fec46e6c8accb9198cb"
+    },
+    {
+      "file": "stages-webkit-blob-image-draw-dispose-all-150-ownership-20261026-a.json",
+      "bytes": 373951,
+      "sha256": "e3870a21dbf01bc793ed53249c2d180cd0ec07690cded9253d15589257dc3329"
+    },
+    {
+      "file": "stages-webkit-blob-image-draw-dispose-all-150-ownership-20261026-a.malloc.jsonl",
+      "bytes": 40866,
+      "sha256": "457147ee14347f34a055b859017bf887e7657e7f6d12a1eb91e8569a43574786"
+    },
+    {
+      "file": "stages-webkit-blob-image-draw-dispose-all-500-reuse-20261026-a.json",
+      "bytes": 1018866,
+      "sha256": "baecba74c490c4e6a439fe467a33f18759406c7823edf5107fc8e53664167895"
+    },
+    {
+      "file": "stages-webkit-blob-image-draw-dispose-all-onload-draw-50-stack-ownership-20261026-a.allocations.txt",
+      "bytes": 73748,
+      "sha256": "215f0cc35201e87af3731084bf0188f7ff50bca398438a082408aaaa4b70e6df"
+    },
+    {
+      "file": "stages-webkit-blob-image-draw-dispose-all-onload-draw-50-stack-ownership-20261026-a.heaptrack.raw",
+      "bytes": 26690981,
+      "sha256": "9df6cd1872b8ed237accb0e67f61938aa4faaa7b447c115dcebd83350091de49"
+    },
+    {
+      "file": "stages-webkit-blob-image-draw-dispose-all-onload-draw-50-stack-ownership-20261026-a.json",
+      "bytes": 150029,
+      "sha256": "a7004a0df14370f08da3b01ea5a81b1742901ca7748f869cf7817feef59be599"
+    },
+    {
+      "file": "stages-webkit-blob-image-draw-dispose-all-onload-draw-50-stack-ownership-20261026-a.malloc.jsonl",
+      "bytes": 5512,
+      "sha256": "57743d5ee750d0fc47a92ccaa8a24343f69bd6fad5072607620a3de1caab6e2e"
+    },
+    {
+      "file": "stages-webkit-blob-image-draw-dispose-all-onload-draw-500-actual-draw-20261026-a.json",
+      "bytes": 1056005,
+      "sha256": "8c972e6f026f45240517b304431e8b976c1fc56a9f3dba0939cc2df1af136685"
+    },
+    {
+      "file": "stages-webkit-blob-image-draw-dispose-single4-500-reuse-20261026-a.json",
+      "bytes": 1021095,
+      "sha256": "f2cbed6278776353bacdce73f532004401b5c15dddd7558ddbca20c04cc3c511"
+    },
+    {
+      "file": "stages-webkit-blob-image-fetch-only-all-1-stack-baseline-20261026-a.allocations.txt",
+      "bytes": 30290,
+      "sha256": "1b0428597359e20d45a81a1ef7b49607dedf165724178b4666e293271c5ac73b"
+    },
+    {
+      "file": "stages-webkit-blob-image-fetch-only-all-1-stack-baseline-20261026-a.heaptrack.raw",
+      "bytes": 13570304,
+      "sha256": "3d1ffc05309aac32995ce502fe0ebdf49763693166dc7eeacc698409776055e7"
+    },
+    {
+      "file": "stages-webkit-blob-image-fetch-only-all-1-stack-baseline-20261026-a.json",
+      "bytes": 47672,
+      "sha256": "095b0231fdd67a9b33add5802e5689ec60358fcb1d6c21de4fd46efb570861a3"
+    },
+    {
+      "file": "stages-webkit-blob-image-fetch-only-all-1-stack-baseline-20261026-a.malloc.jsonl",
+      "bytes": 2895,
+      "sha256": "d28ec354e0d747638ad975dc412bd9c1a70640090aaf6a872ed0cc99fec1f3da"
+    },
+    {
+      "file": "stages-webkit-image-draw-dispose-all-500-stable-url-20261026-a.json",
+      "bytes": 1020647,
+      "sha256": "073f263ffb8c02ab8556ab20f75be3a460ed177f05beb59e85ba08158a10e21a"
+    },
+    {
+      "file": "workspace-binary-chromium-20261026.log",
+      "bytes": 413,
+      "sha256": "ada5938009cdcca6a4c83b91afa5cefa46dae1bf7898e81b19c997e0547b362b"
+    },
+    {
+      "file": "workspace-binary-webkit-20261026.log",
+      "bytes": 419,
+      "sha256": "648a7d04ed10f56791935a8863c75195906bf8ddf8586d4efad615c52bea7845"
+    }
+  ]
+}

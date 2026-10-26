@@ -72,6 +72,44 @@ survive, fresh raw JSON does not. Do not fabricate the missing raw record.
 
 ## Next concrete step
 
+**2026-10-26 update: the same-model/all-model replay and native ownership work
+below is COMPLETE.** Read `evidence/memory-ownership-20261026/README.md` and
+`summary.json` before extending anything. The original renderer/loader/clock and
+all production sources remain unchanged. The historical White Screen and
+accepted-default-decoder gates are still open.
+
+Four 500-cycle primary controls repeat boss 4 or all 50 models. Chromium decode
+ends near 793/889 MiB idle PSS (single/all); WPE draw near 440/771 MiB. Further
+stable-URL and actual-onload controls bring the principal closed cycles to 4000;
+neither change removes the occupancy. The extra eager decode() belongs only to
+the diagnostic and has not been added to gameplay. Copied matching native
+browsers now survive in `verification/native-browsers`; both copy-path smokes
+pass. Do not restart completed matrices or require owner system logs.
+
+Available Chromium per-provider records identify `cc/image_memory` at about
+495.7 MiB after idle. All global dump requests return false: two early controls
+and a deliberately partial 100-cycle provider run remain failed diagnostics,
+not complete allocator acceptance. No GC is forced. WPE mallinfo2 separates
+allocated/free arenas; Heaptrack is stopped at closed idle before browser exit.
+Its paired draw/fetch call chains associate about 277.5 MiB additional observed
+live malloc bytes with the local Linux Mesa/Gallium driver. This is not a
+permanent-leak diagnosis, phone/GPU memory or proof of the historical cause.
+
+The source-pixel probe finds identical full-resolution RGBA for the tested
+original player PNG and boss-4 hull/gun WebPs. The remaining Chromium difference
+occurs at scaling. Native WPE matches the plain bitmap in those cases. Full-size
+bitmap-to-canvas copying and resize hints are rejected as universal fixes; none
+matches all tested source/scale cases. Assets, sampling defaults and production
+renderer behavior are unchanged. Raw failures and both heap traces are archived.
+
+Next focus on Chromium's native scaling/decode-cache interaction for explicitly
+disposable sources while preserving original output quality. Factor WPE's local
+driver allocation path into a bounded driver/scene baseline. Keep the loader
+gate blocked until an original-quality, bounded, fully disposing path passes;
+do not integrate further game features or deploy. The 43 contracts, TypeScript
+and the 41-module boundary audit still pass. Details of the earlier stage matrix
+follow for context; do not repeat them.
+
 The requested fetch/decode/draw controls are NOW COMPLETE. Do not restart this
 matrix from zero. Read `evidence/memory-stages-20261025/README.md` and `summary.json`
 along with `memory-investigation.md`; raw failures and exact main-control sources

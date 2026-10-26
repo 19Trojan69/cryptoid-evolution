@@ -1,0 +1,1558 @@
+{
+  "date": "2026-10-26",
+  "baseCommit": "4681d224d3aa3d87e96611485666dc8c8bbaaafc",
+  "historicalWhiteScreenFixed": false,
+  "nativeMemoryAccepted": false,
+  "acceptedDefaultDecoder": false,
+  "deployed": false,
+  "mainControls": [
+    {
+      "file": "stages-chromium-blob-image-decode-only-all-500-reuse-20261026-a.json",
+      "sha256": "8126f9ed0799e3895eec013a139108909886ca75f91d4627d3b9831ee1d914d5",
+      "engine": "chromium",
+      "mode": "decode-only",
+      "decoder": "blob-image",
+      "sequence": "all",
+      "explicitDecode": true,
+      "cycles": 500,
+      "baselineMiB": 166.6748046875,
+      "releasedMiB": {
+        "50": 668.3544921875,
+        "100": 748.841796875,
+        "200": 800.779296875,
+        "300": 844.220703125,
+        "400": 899.927734375,
+        "500": 928.798828125
+      },
+      "idle20MiB": 888.8525390625,
+      "closedManagedResourcesZero": true,
+      "forcedGC": false,
+      "pixelReadback": false
+    },
+    {
+      "file": "stages-chromium-blob-image-decode-only-single4-500-reuse-20261026-a.json",
+      "sha256": "0903da9c1db47f4c93ce17eb5fc3eded933cda5bc92b760d886fd000ed41adf0",
+      "engine": "chromium",
+      "mode": "decode-only",
+      "decoder": "blob-image",
+      "sequence": "single",
+      "explicitDecode": true,
+      "cycles": 500,
+      "baselineMiB": 166.740234375,
+      "releasedMiB": {
+        "50": 658.19140625,
+        "100": 705.794921875,
+        "200": 730.154296875,
+        "300": 760.1689453125,
+        "400": 787.8837890625,
+        "500": 804.4384765625
+      },
+      "idle20MiB": 792.830078125,
+      "closedManagedResourcesZero": true,
+      "forcedGC": false,
+      "pixelReadback": false
+    },
+    {
+      "file": "stages-chromium-blob-image-draw-dispose-all-onload-draw-500-actual-draw-20261026-a.json",
+      "sha256": "03459970e3ead727334ee91ef09f3d104b41c2a2e854124eb3e365a05b18a171",
+      "engine": "chromium",
+      "mode": "draw-dispose",
+      "decoder": "blob-image",
+      "sequence": "all",
+      "explicitDecode": false,
+      "cycles": 500,
+      "baselineMiB": 165.9716796875,
+      "releasedMiB": {
+        "50": 711.5849609375,
+        "100": 742.7021484375,
+        "200": 828.466796875,
+        "300": 862.2607421875,
+        "400": 907.8115234375,
+        "500": 932.5537109375
+      },
+      "idle20MiB": 891.9951171875,
+      "closedManagedResourcesZero": true,
+      "forcedGC": false,
+      "pixelReadback": false
+    },
+    {
+      "file": "stages-chromium-image-decode-only-all-500-stable-url-20261026-a.json",
+      "sha256": "6d11f89d6b3c7e8b4c3e12c875aa96398768a3d2e9de2fec46e6c8accb9198cb",
+      "engine": "chromium",
+      "mode": "decode-only",
+      "decoder": "image",
+      "sequence": "all",
+      "explicitDecode": true,
+      "cycles": 500,
+      "baselineMiB": 165.60546875,
+      "releasedMiB": {
+        "50": 645.001953125,
+        "100": 720.91796875,
+        "200": 777.4892578125,
+        "300": 818.7509765625,
+        "400": 882.5947265625,
+        "500": 923.6689453125
+      },
+      "idle20MiB": 882.5751953125,
+      "closedManagedResourcesZero": true,
+      "forcedGC": false,
+      "pixelReadback": false
+    },
+    {
+      "file": "stages-webkit-blob-image-draw-dispose-all-500-reuse-20261026-a.json",
+      "sha256": "baecba74c490c4e6a439fe467a33f18759406c7823edf5107fc8e53664167895",
+      "engine": "webkit",
+      "mode": "draw-dispose",
+      "decoder": "blob-image",
+      "sequence": "all",
+      "explicitDecode": true,
+      "cycles": 500,
+      "baselineMiB": 292.8984375,
+      "releasedMiB": {
+        "50": 734.8251953125,
+        "100": 778.0595703125,
+        "200": 800.951171875,
+        "300": 805.716796875,
+        "400": 795.322265625,
+        "500": 793.345703125
+      },
+      "idle20MiB": 770.677734375,
+      "closedManagedResourcesZero": true,
+      "forcedGC": false,
+      "pixelReadback": false
+    },
+    {
+      "file": "stages-webkit-blob-image-draw-dispose-all-onload-draw-500-actual-draw-20261026-a.json",
+      "sha256": "8c972e6f026f45240517b304431e8b976c1fc56a9f3dba0939cc2df1af136685",
+      "engine": "webkit",
+      "mode": "draw-dispose",
+      "decoder": "blob-image",
+      "sequence": "all",
+      "explicitDecode": false,
+      "cycles": 500,
+      "baselineMiB": 293.32421875,
+      "releasedMiB": {
+        "50": 710.4130859375,
+        "100": 764.3623046875,
+        "200": 792.345703125,
+        "300": 805.337890625,
+        "400": 816.298828125,
+        "500": 839.09375
+      },
+      "idle20MiB": 809.45703125,
+      "closedManagedResourcesZero": true,
+      "forcedGC": false,
+      "pixelReadback": false
+    },
+    {
+      "file": "stages-webkit-blob-image-draw-dispose-single4-500-reuse-20261026-a.json",
+      "sha256": "f2cbed6278776353bacdce73f532004401b5c15dddd7558ddbca20c04cc3c511",
+      "engine": "webkit",
+      "mode": "draw-dispose",
+      "decoder": "blob-image",
+      "sequence": "single",
+      "explicitDecode": true,
+      "cycles": 500,
+      "baselineMiB": 291.7890625,
+      "releasedMiB": {
+        "50": 407.4345703125,
+        "100": 431.4931640625,
+        "200": 442.333984375,
+        "300": 444.873046875,
+        "400": 447.783203125,
+        "500": 450.962890625
+      },
+      "idle20MiB": 439.900390625,
+      "closedManagedResourcesZero": true,
+      "forcedGC": false,
+      "pixelReadback": false
+    },
+    {
+      "file": "stages-webkit-image-draw-dispose-all-500-stable-url-20261026-a.json",
+      "sha256": "073f263ffb8c02ab8556ab20f75be3a460ed177f05beb59e85ba08158a10e21a",
+      "engine": "webkit",
+      "mode": "draw-dispose",
+      "decoder": "image",
+      "sequence": "all",
+      "explicitDecode": true,
+      "cycles": 500,
+      "baselineMiB": 292.734375,
+      "releasedMiB": {
+        "50": 671.947265625,
+        "100": 748.837890625,
+        "200": 760.9482421875,
+        "300": 767.9794921875,
+        "400": 831.3701171875,
+        "500": 837.2685546875
+      },
+      "idle20MiB": 814.3310546875,
+      "closedManagedResourcesZero": true,
+      "forcedGC": false,
+      "pixelReadback": false
+    }
+  ],
+  "mainClosedCycles": 4000,
+  "chromiumPartialProviderDump": {
+    "completeGlobalDump": false,
+    "file": "stages-chromium-blob-image-decode-only-all-100-ownership-20261026-partial.json",
+    "requests": [
+      {
+        "point": "baseline",
+        "globalSuccess": false,
+        "observedProviderRecords": 6,
+        "imageMemoryBytes": 0,
+        "discardableBytes": 0,
+        "webCacheBytes": 358101
+      },
+      {
+        "point": "released-50",
+        "globalSuccess": false,
+        "observedProviderRecords": 6,
+        "imageMemoryBytes": 458231808,
+        "discardableBytes": 479178752,
+        "webCacheBytes": 358101
+      },
+      {
+        "point": "released-100",
+        "globalSuccess": false,
+        "observedProviderRecords": 6,
+        "imageMemoryBytes": 519782400,
+        "discardableBytes": 540585984,
+        "webCacheBytes": 358101
+      },
+      {
+        "point": "idle-20",
+        "globalSuccess": false,
+        "observedProviderRecords": 6,
+        "imageMemoryBytes": 519782400,
+        "discardableBytes": 540585984,
+        "webCacheBytes": 358101
+      }
+    ],
+    "interpretation": "Available per-provider records name cc/image_memory, but every global request returned false. This diagnostic is explicitly failed/partial and is not allocator acceptance."
+  },
+  "webkitMallocCounters": {
+    "baseline": {
+      "role": "WPEWebProcess",
+      "monotonicMs": 2256848,
+      "arena": 105443328,
+      "allocatedArena": 100428336,
+      "freeArena": 5014992,
+      "mmappedBytes": 39714816,
+      "freeChunks": 262,
+      "topFree": 99744
+    },
+    "idle20": {
+      "role": "WPEWebProcess",
+      "monotonicMs": 2296384,
+      "arena": 514068480,
+      "allocatedArena": 396345376,
+      "freeArena": 117723104,
+      "mmappedBytes": 39714816,
+      "freeChunks": 950,
+      "topFree": 12101072
+    }
+  },
+  "webkitHeaptrack": {
+    "draw": {
+      "profileStop": "closed-scene idle before browser teardown",
+      "totalObservedLiveAtStopBytes": 428937527,
+      "galliumLeafBytes": 426488556,
+      "galliumCallChainBytes": 426740011,
+      "galliumLeafMiB": 406.7311820983887,
+      "galliumCallChainMiB": 406.9709882736206,
+      "galliumCallChainFraction": 0.9948768390227606,
+      "modules": [
+        "/lib/x86_64-linux-gnu/libgallium-25.2.8-0ubuntu0.24.04.2.so"
+      ],
+      "notPermanentLeakProof": true
+    },
+    "fetchBaseline": {
+      "totalObservedLiveAtStopBytes": 137644319,
+      "galliumLeafBytes": 135512433,
+      "galliumCallChainBytes": 135727022,
+      "galliumCallChainMiB": 129.43937492370605,
+      "notPermanentLeakProof": true
+    },
+    "difference": {
+      "observedLiveBytes": 291293208,
+      "galliumCallChainBytes": 291012989
+    },
+    "stoppedBeforeBrowserTeardown": true,
+    "idleSeconds": 5,
+    "drawCycles": 50,
+    "baselineFetchCycles": 1,
+    "note": "Observed allocations still live when profiling stops, not proved permanent leaks; this is local Linux Mesa/Gallium, not phone GPU memory. Native tracing changes overhead, so its PSS is not the performance acceptance result."
+  },
+  "pixelControls": [
+    {
+      "file": "source-pixels-chromium-sampling-20261026-a.json",
+      "engine": "chromium",
+      "candidates": true,
+      "comparisons": [
+        {
+          "url": "/ships/painted/91a72bc0c36be9407915/ship_02_stage_1_silver.png",
+          "scale": 0.5,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 79524
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 79524
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 79524
+          },
+          "candidates": [
+            {
+              "name": "bitmap-canvas",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 79524
+            },
+            {
+              "name": "bitmap-resized-low",
+              "channels": 6406,
+              "maxDelta": 255,
+              "absoluteError": 70632,
+              "comparedChannels": 79524
+            },
+            {
+              "name": "bitmap-resized-high",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 79524
+            }
+          ]
+        },
+        {
+          "url": "/ships/painted/91a72bc0c36be9407915/ship_02_stage_1_silver.png",
+          "scale": 0.25,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 20164
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 20164
+          },
+          "bitmapVsImage": {
+            "channels": 2470,
+            "maxDelta": 255,
+            "absoluteError": 37010,
+            "comparedChannels": 20164
+          },
+          "candidates": [
+            {
+              "name": "bitmap-canvas",
+              "channels": 2470,
+              "maxDelta": 255,
+              "absoluteError": 37010,
+              "comparedChannels": 20164
+            },
+            {
+              "name": "bitmap-resized-low",
+              "channels": 2591,
+              "maxDelta": 255,
+              "absoluteError": 41832,
+              "comparedChannels": 20164
+            },
+            {
+              "name": "bitmap-resized-high",
+              "channels": 2988,
+              "maxDelta": 149,
+              "absoluteError": 51000,
+              "comparedChannels": 20164
+            }
+          ]
+        },
+        {
+          "url": "/ships/painted/91a72bc0c36be9407915/ship_02_stage_1_silver.png",
+          "scale": 1,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 318096
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 318096
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 318096
+          },
+          "candidates": [
+            {
+              "name": "bitmap-canvas",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 318096
+            },
+            {
+              "name": "bitmap-resized-low",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 318096
+            },
+            {
+              "name": "bitmap-resized-high",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 318096
+            }
+          ]
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-hull.webp",
+          "scale": 0.5,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 376000
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 376000
+          },
+          "bitmapVsImage": {
+            "channels": 64323,
+            "maxDelta": 255,
+            "absoluteError": 110279,
+            "comparedChannels": 376000
+          },
+          "candidates": [
+            {
+              "name": "bitmap-canvas",
+              "channels": 64323,
+              "maxDelta": 255,
+              "absoluteError": 110279,
+              "comparedChannels": 376000
+            },
+            {
+              "name": "bitmap-resized-low",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 376000
+            },
+            {
+              "name": "bitmap-resized-high",
+              "channels": 98130,
+              "maxDelta": 255,
+              "absoluteError": 453369,
+              "comparedChannels": 376000
+            }
+          ]
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-hull.webp",
+          "scale": 0.25,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 94000
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 94000
+          },
+          "bitmapVsImage": {
+            "channels": 28258,
+            "maxDelta": 255,
+            "absoluteError": 275051,
+            "comparedChannels": 94000
+          },
+          "candidates": [
+            {
+              "name": "bitmap-canvas",
+              "channels": 28258,
+              "maxDelta": 255,
+              "absoluteError": 275051,
+              "comparedChannels": 94000
+            },
+            {
+              "name": "bitmap-resized-low",
+              "channels": 28301,
+              "maxDelta": 255,
+              "absoluteError": 268932,
+              "comparedChannels": 94000
+            },
+            {
+              "name": "bitmap-resized-high",
+              "channels": 28113,
+              "maxDelta": 170,
+              "absoluteError": 143990,
+              "comparedChannels": 94000
+            }
+          ]
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-hull.webp",
+          "scale": 1,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1500000
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1500000
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1500000
+          },
+          "candidates": [
+            {
+              "name": "bitmap-canvas",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 1500000
+            },
+            {
+              "name": "bitmap-resized-low",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 1500000
+            },
+            {
+              "name": "bitmap-resized-high",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 1500000
+            }
+          ]
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-guns.webp",
+          "scale": 0.5,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1978368
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1978368
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1978368
+          },
+          "candidates": [
+            {
+              "name": "bitmap-canvas",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 1978368
+            },
+            {
+              "name": "bitmap-resized-low",
+              "channels": 53962,
+              "maxDelta": 255,
+              "absoluteError": 81763,
+              "comparedChannels": 1978368
+            },
+            {
+              "name": "bitmap-resized-high",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 1978368
+            }
+          ]
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-guns.webp",
+          "scale": 0.25,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 495616
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 495616
+          },
+          "bitmapVsImage": {
+            "channels": 22350,
+            "maxDelta": 255,
+            "absoluteError": 199540,
+            "comparedChannels": 495616
+          },
+          "candidates": [
+            {
+              "name": "bitmap-canvas",
+              "channels": 22350,
+              "maxDelta": 255,
+              "absoluteError": 199540,
+              "comparedChannels": 495616
+            },
+            {
+              "name": "bitmap-resized-low",
+              "channels": 22731,
+              "maxDelta": 255,
+              "absoluteError": 197222,
+              "comparedChannels": 495616
+            },
+            {
+              "name": "bitmap-resized-high",
+              "channels": 26487,
+              "maxDelta": 255,
+              "absoluteError": 201065,
+              "comparedChannels": 495616
+            }
+          ]
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-guns.webp",
+          "scale": 1,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 7913472
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 7913472
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 7913472
+          },
+          "candidates": [
+            {
+              "name": "bitmap-canvas",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 7913472
+            },
+            {
+              "name": "bitmap-resized-low",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 7913472
+            },
+            {
+              "name": "bitmap-resized-high",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 7913472
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "source-pixels-chromium-source-20261026-a.json",
+      "engine": "chromium",
+      "candidates": false,
+      "comparisons": [
+        {
+          "url": "/ships/painted/91a72bc0c36be9407915/ship_02_stage_1_silver.png",
+          "scale": 0.5,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 79524
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 79524
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 79524
+          }
+        },
+        {
+          "url": "/ships/painted/91a72bc0c36be9407915/ship_02_stage_1_silver.png",
+          "scale": 0.25,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 20164
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 20164
+          },
+          "bitmapVsImage": {
+            "channels": 2470,
+            "maxDelta": 255,
+            "absoluteError": 37010,
+            "comparedChannels": 20164
+          }
+        },
+        {
+          "url": "/ships/painted/91a72bc0c36be9407915/ship_02_stage_1_silver.png",
+          "scale": 1,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 318096
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 318096
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 318096
+          }
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-hull.webp",
+          "scale": 0.5,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 376000
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 376000
+          },
+          "bitmapVsImage": {
+            "channels": 64323,
+            "maxDelta": 255,
+            "absoluteError": 110279,
+            "comparedChannels": 376000
+          }
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-hull.webp",
+          "scale": 0.25,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 94000
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 94000
+          },
+          "bitmapVsImage": {
+            "channels": 28258,
+            "maxDelta": 255,
+            "absoluteError": 275051,
+            "comparedChannels": 94000
+          }
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-hull.webp",
+          "scale": 1,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1500000
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1500000
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1500000
+          }
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-guns.webp",
+          "scale": 0.5,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1978368
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1978368
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1978368
+          }
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-guns.webp",
+          "scale": 0.25,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 495616
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 495616
+          },
+          "bitmapVsImage": {
+            "channels": 22350,
+            "maxDelta": 255,
+            "absoluteError": 199540,
+            "comparedChannels": 495616
+          }
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-guns.webp",
+          "scale": 1,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 7913472
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 7913472
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 7913472
+          }
+        }
+      ]
+    },
+    {
+      "file": "source-pixels-webkit-sampling-20261026-a.json",
+      "engine": "webkit",
+      "candidates": true,
+      "comparisons": [
+        {
+          "url": "/ships/painted/91a72bc0c36be9407915/ship_02_stage_1_silver.png",
+          "scale": 0.5,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 79524
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 79524
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 79524
+          },
+          "candidates": [
+            {
+              "name": "bitmap-canvas",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 79524
+            },
+            {
+              "name": "bitmap-resized-low",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 79524
+            },
+            {
+              "name": "bitmap-resized-high",
+              "channels": 10207,
+              "maxDelta": 255,
+              "absoluteError": 144910,
+              "comparedChannels": 79524
+            }
+          ]
+        },
+        {
+          "url": "/ships/painted/91a72bc0c36be9407915/ship_02_stage_1_silver.png",
+          "scale": 0.25,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 20164
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 20164
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 20164
+          },
+          "candidates": [
+            {
+              "name": "bitmap-canvas",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 20164
+            },
+            {
+              "name": "bitmap-resized-low",
+              "channels": 535,
+              "maxDelta": 255,
+              "absoluteError": 3082,
+              "comparedChannels": 20164
+            },
+            {
+              "name": "bitmap-resized-high",
+              "channels": 2067,
+              "maxDelta": 255,
+              "absoluteError": 16190,
+              "comparedChannels": 20164
+            }
+          ]
+        },
+        {
+          "url": "/ships/painted/91a72bc0c36be9407915/ship_02_stage_1_silver.png",
+          "scale": 1,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 318096
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 318096
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 318096
+          },
+          "candidates": [
+            {
+              "name": "bitmap-canvas",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 318096
+            },
+            {
+              "name": "bitmap-resized-low",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 318096
+            },
+            {
+              "name": "bitmap-resized-high",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 318096
+            }
+          ]
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-hull.webp",
+          "scale": 0.5,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 376000
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 376000
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 376000
+          },
+          "candidates": [
+            {
+              "name": "bitmap-canvas",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 376000
+            },
+            {
+              "name": "bitmap-resized-low",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 376000
+            },
+            {
+              "name": "bitmap-resized-high",
+              "channels": 88612,
+              "maxDelta": 255,
+              "absoluteError": 304660,
+              "comparedChannels": 376000
+            }
+          ]
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-hull.webp",
+          "scale": 0.25,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 94000
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 94000
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 94000
+          },
+          "candidates": [
+            {
+              "name": "bitmap-canvas",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 94000
+            },
+            {
+              "name": "bitmap-resized-low",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 94000
+            },
+            {
+              "name": "bitmap-resized-high",
+              "channels": 21772,
+              "maxDelta": 255,
+              "absoluteError": 76505,
+              "comparedChannels": 94000
+            }
+          ]
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-hull.webp",
+          "scale": 1,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1500000
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1500000
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1500000
+          },
+          "candidates": [
+            {
+              "name": "bitmap-canvas",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 1500000
+            },
+            {
+              "name": "bitmap-resized-low",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 1500000
+            },
+            {
+              "name": "bitmap-resized-high",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 1500000
+            }
+          ]
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-guns.webp",
+          "scale": 0.5,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1978368
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1978368
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1978368
+          },
+          "candidates": [
+            {
+              "name": "bitmap-canvas",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 1978368
+            },
+            {
+              "name": "bitmap-resized-low",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 1978368
+            },
+            {
+              "name": "bitmap-resized-high",
+              "channels": 69533,
+              "maxDelta": 255,
+              "absoluteError": 277009,
+              "comparedChannels": 1978368
+            }
+          ]
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-guns.webp",
+          "scale": 0.25,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 495616
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 495616
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 495616
+          },
+          "candidates": [
+            {
+              "name": "bitmap-canvas",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 495616
+            },
+            {
+              "name": "bitmap-resized-low",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 495616
+            },
+            {
+              "name": "bitmap-resized-high",
+              "channels": 15620,
+              "maxDelta": 255,
+              "absoluteError": 56982,
+              "comparedChannels": 495616
+            }
+          ]
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-guns.webp",
+          "scale": 1,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 7913472
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 7913472
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 7913472
+          },
+          "candidates": [
+            {
+              "name": "bitmap-canvas",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 7913472
+            },
+            {
+              "name": "bitmap-resized-low",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 7913472
+            },
+            {
+              "name": "bitmap-resized-high",
+              "channels": 0,
+              "maxDelta": 0,
+              "absoluteError": 0,
+              "comparedChannels": 7913472
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "source-pixels-webkit-source-20261026-a.json",
+      "engine": "webkit",
+      "candidates": false,
+      "comparisons": [
+        {
+          "url": "/ships/painted/91a72bc0c36be9407915/ship_02_stage_1_silver.png",
+          "scale": 0.5,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 79524
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 79524
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 79524
+          }
+        },
+        {
+          "url": "/ships/painted/91a72bc0c36be9407915/ship_02_stage_1_silver.png",
+          "scale": 0.25,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 20164
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 20164
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 20164
+          }
+        },
+        {
+          "url": "/ships/painted/91a72bc0c36be9407915/ship_02_stage_1_silver.png",
+          "scale": 1,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 318096
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 318096
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 318096
+          }
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-hull.webp",
+          "scale": 0.5,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 376000
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 376000
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 376000
+          }
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-hull.webp",
+          "scale": 0.25,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 94000
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 94000
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 94000
+          }
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-hull.webp",
+          "scale": 1,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1500000
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1500000
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1500000
+          }
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-guns.webp",
+          "scale": 0.5,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1978368
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1978368
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 1978368
+          }
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-guns.webp",
+          "scale": 0.25,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 495616
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 495616
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 495616
+          }
+        },
+        {
+          "url": "/ships/bosses/evolved/boss-04-guns.webp",
+          "scale": 1,
+          "independentImageControl": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 7913472
+          },
+          "blobVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 7913472
+          },
+          "bitmapVsImage": {
+            "channels": 0,
+            "maxDelta": 0,
+            "absoluteError": 0,
+            "comparedChannels": 7913472
+          }
+        }
+      ]
+    }
+  ],
+  "failedControlsPreserved": [
+    {
+      "file": "stages-chromium-blob-image-decode-only-all-100-ownership-20261026-a.json",
+      "cyclesCompleted": 0,
+      "functionalComplete": false,
+      "failure": "Error: Native Chrome memory dump failed\n    at Object.capture (file:///workspace/scratch/ff55c88cc861/cryptoid-investigation/rebuild/fixture/chromiumMemory.mjs:32:35)\n    at async file:///workspace/scratch/ff55c88cc861/cryptoid-investigation/rebuild/verify-memory-stages.mjs:163:3"
+    },
+    {
+      "file": "stages-chromium-blob-image-decode-only-all-100-ownership-20261026-b.json",
+      "cyclesCompleted": 0,
+      "functionalComplete": false,
+      "failure": "Error: Native Chrome memory dump failed after four recorded requests\n    at Object.capture (file:///workspace/scratch/ff55c88cc861/cryptoid-investigation/rebuild/fixture/chromiumMemory.mjs:38:13)\n    at async file:///workspace/scratch/ff55c88cc861/cryptoid-investigation/rebuild/verify-memory-stages.mjs:163:36"
+    },
+    {
+      "file": "stages-chromium-blob-image-decode-only-all-100-ownership-20261026-partial.json",
+      "cyclesCompleted": 100,
+      "functionalComplete": true,
+      "failure": "AssertionError [ERR_ASSERTION]: Partial provider dumps are not complete allocator acceptance\n+ actual - expected\n\n+ [\n+   'Incomplete global memory dump: baseline',\n+   'Incomplete global memory dump: released-50',\n+   'Incomplete global memory dump: released-100',\n+   'Incomplete global memory dump: idle-20'\n+ ]\n- []\n\n    at file:///workspace/scratch/ff55c88cc861/cryptoid-investigation/rebuild/verify-memory-stages.mjs:207:42"
+    }
+  ],
+  "sourceDecodeVsSampling": "Tested full-resolution PNG/player and boss-4 WebP hull/guns have identical source RGBA across image and bitmap in both engines. Scaled Chromium results differ. Full-resolution canvas carriers and resize hints do not universally preserve reference pixels and remain rejected.",
+  "validation": {
+    "unitContractCases": 43,
+    "typecheck": "passed",
+    "simulationModules": 41,
+    "forbiddenRuntimeImports": 0,
+    "browserNetworkStorageEffects": 0
+  },
+  "rejectedCorrections": [
+    "stable original file URL alone",
+    "removing extra explicit Image.decode() from the draw control alone",
+    "full-resolution bitmap-to-canvas copy as universal sampling correction",
+    "resize hints as universal sampling correction"
+  ],
+  "nextStep": "Resolve the Chromium scaling path for explicitly disposable full-resolution sources without changing original output quality. Treat WPE Mesa/Gallium retention as a distinct local driver path; establish a bounded driver/scene baseline before adopting a loader or integrating game functions. Do not repeat the completed stage/replay matrix."
+}
