@@ -3,12 +3,16 @@ import assert from 'node:assert/strict';
 import { ResourceCache } from './resourceCache.ts';
 import { gameRenderScale } from './renderResolution.ts';
 
-test('normal raster scale preserves ordinary screens and caps high-density graphics at 1.5', () => {
+test('standard effects never oversample CSS pixels, including fractional and invalid device ratios', () => {
   for (const ratio of [undefined, 0, -1, NaN, Infinity]) assert.equal(gameRenderScale(ratio), 1);
-  for (const ratio of [0.75, 1, 1.25, 1.5]) assert.equal(gameRenderScale(ratio), ratio);
-  for (const ratio of [2, 3, 4]) assert.equal(gameRenderScale(ratio), 1.5);
-  assert.equal((gameRenderScale(3) / 3) ** 2, 0.25);
-  assert.equal((gameRenderScale(3) / 2) ** 2, 0.5625);
+  for (const ratio of [0.5, 0.75, 1]) assert.equal(gameRenderScale(ratio), ratio);
+  for (const ratio of [1.25, 1.5, 2, 2.625, 3, 4]) assert.equal(gameRenderScale(ratio), 1);
+  for (const [width, height] of [[393, 744], [393, 628], [768, 1024]]) {
+    const before = Math.round(width * 1.5) * Math.round(height * 1.5);
+    const after = Math.round(width * gameRenderScale(3)) * Math.round(height * gameRenderScale(3));
+    assert.equal(after, width * height);
+    assert.ok(after / before < 0.445, 'affected RGBA backings use about 44.4% of the preceding pixel count');
+  }
 });
 
 test('unused LRU variants retire on release without touching mounted or preparing consumers', () => {

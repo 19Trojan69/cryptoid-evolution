@@ -109,11 +109,23 @@ test('a missing optional surface leaves the original display in place', async ()
 test('render-scale changes cannot reuse a ready bundle with the previous scale', async () => {
   const f = await canvasStaticUrlHost({ scale: 1 }), plan = await f.prepare(hull), view = f.mount(effect(), debris);
   await f.waitFor(() => f.stats().registeredEffects === 1);
-  f.setHold(address => address.startsWith('blob:')); f.setScale(3);
+  f.setHold(address => address.startsWith('blob:')); f.setScale(.75);
   assert.equal(f.fallback(view), true); assert.equal(f.stats().registeredEffects, 0);
   await f.waitFor(() => f.held.length === 2); f.setHold(() => false); await f.releaseHeld();
   await f.waitFor(() => f.stats().registeredEffects === 1);
   assert.equal(f.fallback(view), false); assert.equal(f.stats().failures.length, 0); plan.release(); f.close();
+});
+
+test('device-density changes above the standard cap retain the ready bundle without new graphics work', async () => {
+  const f = await canvasStaticUrlHost({ scale: 1 }), plan = await f.prepare(hull), view = f.mount(effect(), debris);
+  await f.waitFor(() => f.stats().registeredEffects === 1);
+  const requests = f.requests.length, blobs = f.counts.createdBlobs;
+  for (const ratio of [1.25, 1.5, 2, 2.625, 3, 4, 1]) {
+    f.setScale(ratio); f.sync();
+    assert.equal(f.fallback(view), false); assert.equal(f.stats().registeredEffects, 1);
+    assert.equal(f.requests.length, requests); assert.equal(f.counts.createdBlobs, blobs);
+  }
+  plan.release(); f.close();
 });
 
 test('a null drawing context falls back without retaining registered effects or a frame chain', async () => {

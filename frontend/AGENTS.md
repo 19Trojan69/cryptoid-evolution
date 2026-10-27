@@ -1,3 +1,24 @@
+# Playable standard raster, 27 October 2026
+
+The owner now explicitly accepts ordinary playable graphics instead of unnecessary
+Full HD detail. This supersedes only the earlier 1.5 density requirement. Standard
+gameRenderScale caps effect/boss weapon canvases at one pixel per CSS point; rocks
+share that helper. Preserve HUD/text, source art, CSS sizes/backgrounds, all counts,
+60-Hz target, simulation/scene pacing, audio, controls, saves and existing cleanup.
+No quality menu, timer, auto quality switch or art removal. 390 frontend release
+cases/types/Vite pass; WPE26.5 has 48 checks/156 exact RGBA pairs at the NEW density,
+not equality to former 1.5 pixels. Affected destinations use about 44.4% of their
+old pixel count; no total-memory, energy or physical-temperature claim. Both edited
+runtime modules lint clean; unchanged GamePage remains 62 errors/four warnings,
+CanvasEffects 21 old errors. Backend 127 acceptance is baseline, not rerun. See
+docs/standard-resolution-20261027 and verification/standard-resolution-20261027,
+including excluded fixture attempts. Keep strict >2500ms/500ms pauses and explicit
+technical Resume. Preserve 7433e56/PR181 and READY Testnet 8ppgy7riyzw1jqBqa1ThFYMhjikM /
+production Ab5qAoajYxjCUu8iZ1z2PN9unbCU at backup/shared-before-standard-resolution-20261027.
+Candidate auto-deploy off; same reviewed source to both existing projects remains
+authorized, with separate networks/account/payment. No long owner campaign, PR167/
+168, reset/migration, secrets/protection/runtime logs or claimed White Screen cure.
+
 # Ordinary explosion outline reuse, 27 October 2026
 
 Continue owner-requested smartphone optimization from public 3588ff2/PR180.

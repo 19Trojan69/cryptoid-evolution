@@ -40,8 +40,11 @@ test('actual mounted impacts reuse native paths through frames, pause and resize
   assert.equal(paths,1);assert.ok(h.stats().draws>50);
   h.setPaused(true);h.tick(1500);h.tick(6500);assert.equal(paths,1);
   h.setPaused(false);h.tick(6517);assert.equal(paths,1);
-  h.setScale(1);await h.waitFor(()=>h.stats().registeredEffects===1);
+  h.setScale(.75);await h.waitFor(()=>h.stats().registeredEffects===1);
   assert.equal(paths,2,'changed raster availability registers one replacement record');
+  h.setScale(1);await h.waitFor(()=>h.stats().registeredEffects===1);
+  assert.equal(paths,3);
+  h.setScale(3);assert.equal(paths,3,'device density above the standard cap does not rebuild paths');
   h.unmount(view);assert.equal(h.stats().registeredEffects,0);h.close();
 });
 
