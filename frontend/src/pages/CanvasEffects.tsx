@@ -6,6 +6,7 @@ import {FIRE_KEYS,SMOKE_KEYS,layerFrame,fragmentFrame,polygonPoints,layerSvg} fr
 import {impactBounds,unionBounds,fieldBounds} from './normalEffectBounds.mjs';
 import {beginVisualPaint,endVisualPaint} from './renderWork';
 import {gameRenderScale} from './renderResolution';
+import {prepareImpactClipPaths} from './impactClipPaths';
 
 import {normalExplosionArt as art} from './normalEffectArtwork';
 const images=new Map<string,Promise<HTMLImageElement>>();
@@ -105,12 +106,15 @@ export function drawImpact(ctx:CanvasRenderingContext2D,record:any,age:number) {
   // Preserve full-resolution source hulls. The same original polygon is clipped
   // in the shared 2D context, after the original child rotation, on every draw.
   const rotation=((effect.target==='player'?0:180)+(effect.debrisRotation??0))*Math.PI/180;
-  for(const piece of pieces){
+  for(let index=0;index<pieces.length;index++){
+    const piece=pieces[index];
     const frame=fragmentFrame(age,piece.delay);if(frame.alpha<=0)continue;
     const px=piece.pivot[0]*size,py=piece.pivot[1]*size;
     ctx.save();ctx.globalAlpha=frame.alpha;ctx.translate(-size/2+px+piece.x*frame.motion,-size/2+py+piece.y*frame.motion);
     ctx.rotate(piece.spin*frame.motion);ctx.scale(frame.scale,frame.scale);ctx.translate(-px,-py);
-    ctx.beginPath();piece.points.forEach(([x,y]:number[],i:number)=>i?ctx.lineTo(x*size,y*size):ctx.moveTo(x*size,y*size));ctx.closePath();ctx.clip();
+    const path=record.clipPaths?.[index];
+    if(path)ctx.clip(path);
+    else{ctx.beginPath();piece.points.forEach(([x,y]:number[],i:number)=>i?ctx.lineTo(x*size,y*size):ctx.moveTo(x*size,y*size));ctx.closePath();ctx.clip();}
     ctx.translate(size/2,size/2);ctx.rotate(rotation);ctx.drawImage(assets.hull,-size/2,-size/2,size,size);ctx.restore();
   }
   ctx.restore();return diameter;
@@ -286,7 +290,7 @@ export function CanvasImpact({effect,debris,original}:{effect:any;debris:any;ori
   useLayoutEffect(()=>{
     if(!available)return;
     const visibleUntil=Math.max(1450,...pieces.map(piece=>2120+piece.delay));
-    const record={effect,pieces,assets:loaded,started:started.current,pauseStart:pauseStart.current,visibleUntil,bounds:null as any};
+    const record={effect,pieces,clipPaths:prepareImpactClipPaths(pieces,effect.debrisSize??58),assets:loaded,started:started.current,pauseStart:pauseStart.current,visibleUntil,bounds:null as any};
     record.bounds=impactBounds(record);
     records.set(effect.id,record);fitSurface();schedule();
     return()=>remove(effect.id);

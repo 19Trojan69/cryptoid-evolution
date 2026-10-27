@@ -1,0 +1,42 @@
+{
+  "passed": true,
+  "baseline": "3588ff2d0d39779e54c3a9b31eba636e81559c93",
+  "exactPixelComparisons": 275,
+  "surfaceDimensionWrites": [
+    {
+      "scale": 1,
+      "baseline": 26,
+      "candidate": 26
+    },
+    {
+      "scale": 1.5,
+      "baseline": 28,
+      "candidate": 28
+    },
+    {
+      "scale": 2,
+      "baseline": 28,
+      "candidate": 28
+    },
+    {
+      "scale": 2.625,
+      "baseline": 28,
+      "candidate": 28
+    },
+    {
+      "scale": 3,
+      "baseline": 28,
+      "candidate": 28
+    }
+  ],
+  "checks": [
+    "same original geometry with retained native paths",
+    "real hull, fire, smoke and four fragments",
+    "centre, edges, fractional positions and concurrent impacts",
+    "retained idle surfaces are completely transparent",
+    "reused surfaces and idle-release expiry",
+    "five animation ages at DPR 1, 1.5, 2, 2.625 and 3",
+    "timers/frames released on unmount"
+  ],
+  "limits": "Native raster/hook host, not Safari/Pi Browser, iPhone GPU, physical memory or a whitescreen reproduction."
+}

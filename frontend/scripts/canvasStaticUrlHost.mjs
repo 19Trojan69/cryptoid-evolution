@@ -46,7 +46,7 @@ async function compile(before, overrideHook) {
   const code = bundle.outputFiles[0].text; compiled.set(key, code); return code;
 }
 
-export async function canvasStaticUrlHost({ before = false, hookURL, scale = 3, enabled = true } = {}) {
+export async function canvasStaticUrlHost({ before = false, hookURL, scale = 3, enabled = true, Path2DClass } = {}) {
   const code = await compile(before, hookURL !== undefined);
   const frames = new Map(), timers = new Map(), blobs = new Map(), canvases = [], held = [], requests = [], views = new Set(), observers = [];
   let clock = 100, serial = 0, paused = false, failure = () => false, hold = () => false;
@@ -92,7 +92,7 @@ export async function canvasStaticUrlHost({ before = false, hookURL, scale = 3, 
     static createObjectURL(blob) { const url = `blob:effect-${++serial}`; blobs.set(url, blob); counts.createdBlobs++; return url; }
     static revokeObjectURL(url) { blobs.delete(url); counts.revokedBlobs++; }
   }
-  const scope = { Image: BrowserImage, URL: BrowserURL, Blob, Uint8ClampedArray, console,
+  const scope = { Image: BrowserImage, URL: BrowserURL, Blob, Uint8ClampedArray, console, Path2D: Path2DClass,
     performance: { now: () => clock }, __testHullURL: hookURL,
     window: { devicePixelRatio: scale, location: { hostname: 'cryptoid-evolution-testnet.vercel.app' },
       setTimeout(fn, delay) {

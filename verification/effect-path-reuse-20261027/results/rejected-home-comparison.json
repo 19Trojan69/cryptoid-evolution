@@ -1,0 +1,65 @@
+{
+  "excludedFromRelease": true,
+  "reason": "One of twelve moving network-image comparisons differed. Fixed Home path reuse is not accepted; original Home source restored. No cause or heat benefit inferred.",
+  "comparison": {
+    "frames": 120,
+    "expectedBaselinePaths": 120,
+    "preparedPaths": 1,
+    "rows": [
+      {
+        "frame": 0,
+        "equal": true
+      },
+      {
+        "frame": 10,
+        "equal": true
+      },
+      {
+        "frame": 20,
+        "equal": true
+      },
+      {
+        "frame": 30,
+        "equal": true
+      },
+      {
+        "frame": 40,
+        "equal": true
+      },
+      {
+        "frame": 50,
+        "equal": true
+      },
+      {
+        "frame": 60,
+        "equal": true
+      },
+      {
+        "frame": 70,
+        "equal": true
+      },
+      {
+        "frame": 80,
+        "equal": false
+      },
+      {
+        "frame": 90,
+        "equal": true
+      },
+      {
+        "frame": 100,
+        "equal": true
+      },
+      {
+        "frame": 110,
+        "equal": true
+      }
+    ]
+  },
+  "independentImpactComparisonPassed": {
+    "before": 1640,
+    "after": 0,
+    "clipsBefore": 164,
+    "clipsAfter": 164
+  }
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "path": "src/pages/CanvasEffects.tsx",
+    "baselineErrors": 21,
+    "errors": 21,
+    "baselineWarnings": 0,
+    "warnings": 0,
+    "added": []
+  },
+  {
+    "path": "src/pages/impactClipPaths.ts",
+    "baselineErrors": 0,
+    "errors": 0,
+    "baselineWarnings": 0,
+    "warnings": 0,
+    "added": []
+  }
+]
