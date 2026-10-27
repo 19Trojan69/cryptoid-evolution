@@ -1,0 +1,30 @@
+{
+  "localOnly": true,
+  "realUiAndHandlers": true,
+  "isolatedPiAndDatabase": true,
+  "physicalDevice": false,
+  "fontPixelsVerified": false,
+  "checks": [
+    "owner has no automatically granted last hull",
+    "upgrade requires Standard first",
+    "Standard purchase deducts Shards and equips acquired hull",
+    "Advanced becomes owned after actual isolated approval and completion",
+    "Elite is separately bought after matching Advanced",
+    "Plasma checkout buys the selected charge quantity",
+    "Titanium requires Reinforced Hull in the real UI",
+    "both armor purchases become owned through the normal checkout",
+    "start power is bought and selected for the next normal mission",
+    "only test-network marked orders exist",
+    "no failed API boundary in the purchase flow",
+    "testnet/player: late Standard hull remains locked",
+    "testnet/player: no upgrade checkout",
+    "testnet/player: no purchase requests",
+    "mainnet/owner: late Standard hull remains locked",
+    "mainnet/owner: no upgrade checkout",
+    "mainnet/owner: no purchase requests",
+    "no uncaught JavaScript errors"
+  ],
+  "errors": [],
+  "complete": true,
+  "engine": "141.0.7390.37"
+}

@@ -1,3 +1,28 @@
+# Owner Testnet catalog and earned unlocks, 27 October 2026
+
+The owner now explicitly requests all purchase options before Mainnet, using
+Test-Pi only, and all ships unlocked through normal play/acquisition rather than
+free grants. This supersedes the earlier catalog/backend freeze only for this
+feature. Keep verified UID authorization and use normal saved gameplay outside
+Admin preview. All20 Standard hulls retain earned-Shard prices; all51 Pi offers
+retain prices, verified approval/completion, Advanced-before-Elite and armor
+prerequisites. Base hull ownership is also required. New owner Testnet orders
+cannot become Mainnet inventory, loadout, armor, upgrades or consumables.
+Other players retain existing limits. Cards still require purchased hull/stage
+or an earned boss victory; never auto-grant inventory, Shards or wins.
+Only three exact GamePage permission arguments change; restore them before all
+historical scope fingerprints. Preserve manual Continue, true pauses/Resume,
+45-second charges/Auto/receipt replay, original art/audio/HUD/rendering and all
+save/reward validation. See docs/owner-testnet-catalog-20261027 and verification.
+135 backend cases,426 frontend release cases/types/Vite/locales and18 native
+local UI/handler checks pass using isolated payment/database fixtures. No live
+wallet transaction, physical Pi Browser or font-pixel equivalence is claimed.
+Candidate automatic deployment stays off; the existing reviewed same-source
+publication authorization to both projects applies because Testnet uses the
+production payment backend. Preserve c2d1596 and its READY deployments. No
+reset/migration, real payment, credential/protection/runtime-log changes or
+unrelated PR167/168. Do not upload the raw owner stability report.
+
 # Once-only binary feedback and readable warnings, 27 October 2026
 
 The owner's latest instructions require expiry feedback in just the first binary

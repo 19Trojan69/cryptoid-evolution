@@ -1,3 +1,4 @@
+import { restoreOwnerTestnetGameChanges } from './ownerTestnetReviewedChanges.mjs';
 // Exact reviewed binary-boundary/reload/readability hunks only. All other controller bytes stay pinned.
 export const quietFeedbackChanges = [
   {
@@ -66,6 +67,7 @@ export const quietFeedbackChanges = [
   }
 ];
 export function restoreQuietFeedbackGameChanges(source) {
+  source = restoreOwnerTestnetGameChanges(source);
   for (const {before, after} of [...quietFeedbackChanges].reverse()) {
     if (source.split(after).length !== 2) throw Error('Expected one exact quiet-feedback change');
     source = source.replace(after, before);

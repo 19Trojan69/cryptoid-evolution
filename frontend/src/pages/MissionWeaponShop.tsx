@@ -22,6 +22,7 @@ export default function MissionWeaponShop({ autoReload = {}, onAutoReload, authe
   const [offers, setOffers] = useState<Offer[]>(() => hangarCatalog.filter(offer => offer.kind === 'weapon'));
   const [stock, setStock] = useState<Record<string, number>>(initialStock ?? {});
   const [ready, setReady] = useState(false);
+  const [ownerTestnet, setOwnerTestnet] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [notice, setNotice] = useState('');
   const mounted = useRef(true);
@@ -38,13 +39,14 @@ export default function MissionWeaponShop({ autoReload = {}, onAutoReload, authe
     try {
       const [{ data: catalog }, inventory] = await Promise.all([
         axiosClient.get<{ offers: Offer[] }>('/hangar/catalog'),
-        authenticated ? axiosClient.get<{ ownedWeapons: string[]; weaponStock?: Record<string, number> }>('/hangar/inventory') : Promise.resolve(null),
+        authenticated ? axiosClient.get<{ testnetCatalogAccess?: boolean; ownedWeapons: string[]; weaponStock?: Record<string, number> }>('/hangar/inventory') : Promise.resolve(null),
       ]);
       if (!Array.isArray(catalog.offers) || (inventory && !Array.isArray(inventory.data.ownedWeapons))) throw new Error('Invalid inventory');
       if (!mounted.current || version !== refreshVersion.current) return;
       const weapons = inventory?.data.ownedWeapons ?? [];
       setOffers(catalog.offers.filter(offer => offer.kind === 'weapon'));
       setStock(inventory?.data.weaponStock ?? {});
+      setOwnerTestnet(shipSaveNetwork === 'testnet' && !admin && inventory?.data.testnetCatalogAccess === true);
       setReady(true);
       setNotice(authenticated ? '' : 'Connect your Pi account to see your saved loadout.');
       if (authenticated && !admin) void inventoryCallback.current(weapons, inventory?.data.weaponStock ?? {}).catch(() => {
@@ -81,11 +83,11 @@ export default function MissionWeaponShop({ autoReload = {}, onAutoReload, authe
       <p>{t('Owned weapons first · strongest first')}</p>
     </header>
     <div className="mission-shop-scroll">
-    <p className="testnet-shop-notice">{shipSaveNetwork === 'testnet' ? t('Testnet: Twin Laser and Rapid Twin can be bought with Test-Pi. Triple Laser and Plasma purchases are locked.') : t('Pi purchases are currently locked. Collect weapon upgrades in game.')}</p>
+    <p className="testnet-shop-notice">{ownerTestnet ? t('Admin Testnet: earn Shards for all 20 ships. Paid items use Test-Pi only.') : shipSaveNetwork === 'testnet' ? t('Testnet: Twin Laser and Rapid Twin can be bought with Test-Pi. Triple Laser and Plasma purchases are locked.') : t('Pi purchases are currently locked. Collect weapon upgrades in game.')}</p>
     {admin && <p>{t('Admin test mode: purchases and records are not saved.')}</p>}
     <details className="mission-reload-explanation"><summary>{t('Auto-reload')}</summary><p>{t('When a timed weapon expires, the strongest enabled weapon takes over; otherwise the standard laser. Auto-reload uses owned charges without pausing.')}</p></details>
     <div className="mission-weapon-offers">{items.map(({ offer, level, count, timer, pickup, available }) => {
-      const locked = shipSaveNetwork !== 'testnet' || !isTestnetWeaponPurchaseEnabled(offer);
+      const locked = shipSaveNetwork !== 'testnet' || !isTestnetWeaponPurchaseEnabled(offer, ownerTestnet);
       const selected = activeLevel === level && (source !== 'pickup' || pickup);
       const usablePaid = pendingLevel === level || level === 1 || admin || timer !== 0 || count > 0;
       const blocked = busy || (!!pendingLevel && pendingLevel !== level);

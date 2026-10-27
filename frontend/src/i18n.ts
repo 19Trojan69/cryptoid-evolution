@@ -1,3 +1,4 @@
+import { ownerTestnetTranslations } from "./locales/ownerTestnet.ts";
 import { completionRecoveryTranslations } from "./locales/completionRecovery.ts";
 import { controlCenterTranslations } from "./locales/controlCenter.ts";
 import { stabilityAndPlayersTranslations } from "./locales/stabilityAndPlayers.ts";
@@ -11,6 +12,7 @@ import { seriesTranslations } from "./locales/seriesAE.ts";
 import { formatLives } from "./locales/quantities.ts";
 import { localeAliases, localeCatalog } from "./locales/catalog.ts";
 
+for (const [locale, entries] of Object.entries(ownerTestnetTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(completionRecoveryTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(controlCenterTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(stabilityAndPlayersTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);

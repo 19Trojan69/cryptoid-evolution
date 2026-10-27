@@ -1,7 +1,9 @@
+import { standardHullAvailable } from "./ownerTestnetCatalog";
 import type { CSSProperties } from "react";
 import ShipPreview from "./ShipPreview";
 import PiPrice from "../components/PiPrice";
-import { allPlayerColors, fleetCount, playerColors, standardShipPrice, testnetStandardHullAvailable, type ShipFleet } from "./shipFleet";
+import TestPiPurchase from './TestPiPurchase';
+import { allPlayerColors, fleetCount, playerColors, standardShipPrice, type ShipFleet } from "./shipFleet";
 import { projectileGuardForStage, type ShipStage } from "./shipEvolution";
 import { attributesForHull, shipBaseFirepower } from "./shipAttributes";
 
@@ -20,6 +22,11 @@ type Props = {
   locale: string;
   offers: ShipUpgradeOffer[];
   adminPreview?: boolean;
+  testnetCatalogAccess?: boolean;
+  upgradePending?: boolean;
+  upgradeStatus?: string;
+  upgradeDiagnostic?: string;
+  onBuyUpgrade?: (offer: ShipUpgradeOffer, color: Color) => void;
   purchaseBusy?: boolean;
   message: string;
   selectedSkinId: string;
@@ -37,15 +44,16 @@ const stageLabel = (stage: ShipStage) => stage === 1 ? "STANDARD" : stage === 2 
 
 export default function ShipSelectionPanel({
   view, skin, color, focusStage, ownedStage, fleet, shards, locale, offers,
-  adminPreview, purchaseBusy, message, selectedSkinId, selectedColorId, selectedStage = 1, t, onStageChange, onColorChange,
+  adminPreview, testnetCatalogAccess = false, upgradePending, upgradeStatus, upgradeDiagnostic, onBuyUpgrade,
+  purchaseBusy, message, selectedSkinId, selectedColorId, selectedStage = 1, t, onStageChange, onColorChange,
   onBuyStandard, onEquipPreview, onOpenShop,
 }: Props) {
   const hullCount = fleetCount(fleet, skin.id);
   const stage = focusStage;
   const price = standardShipPrice(skin);
   const shardPrice = price.toLocaleString(locale);
-  const piPrice = (amount: number) => <PiPrice amount={amount} locale={locale} />;
-  const standardAvailable = testnetStandardHullAvailable(skin.id);
+  const piPrice = (amount: number) => <PiPrice amount={amount} locale={locale} testnet={testnetCatalogAccess} />;
+  const standardAvailable = standardHullAvailable(skin.id, testnetCatalogAccess);
   const offerFor = (level: ShipStage) => offers.find(offer => offer.shipIndex === skin.sprite && offer.stage === level);
   const focusedOffer = offerFor(stage);
   const advancedOffer = offerFor(2);
@@ -54,7 +62,7 @@ export default function ShipSelectionPanel({
     : fleetCount(fleet, skin.id, item.id) > 0);
   const description = stage === 1 ? t("Single fire. No free enemy projectile hits. An active shield protects against shots and ship collisions.") : t(offerFor(stage)?.description ?? "");
   const stageOwned = hullCount > 0 && ownedStage >= stage;
-  const locked = stage === 1 ? !standardAvailable : !stageOwned;
+  const locked = stage === 1 ? !standardAvailable : !stageOwned && !testnetCatalogAccess;
   const status = stageOwned ? t("Stage owned") : t("Stage not owned");
   const attributes = attributesForHull(skin.id);
   const firepower = shipBaseFirepower(skin.id, stage);
@@ -103,7 +111,7 @@ export default function ShipSelectionPanel({
           {locked && <p className="ship-lock-notice"><strong>{t("Purchases locked")}</strong> · <span className="mainnet-ready-badge">{t("MAINNET READY")}</span></p>}
           <span className="ship-purchase-price">{stage === 1
             ? `◆ ${shardPrice} ${t("Shards")}`
-            : focusedOffer ? <>{t("Planned price")}: {piPrice(focusedOffer.pricePi)}</> : t("Price unavailable")}</span>
+            : focusedOffer ? <>{!testnetCatalogAccess && `${t("Planned price")}: `}{piPrice(focusedOffer.pricePi)}</> : t("Price unavailable")}</span>
           {stage === 1 ? <>
             <small>{t(color.name)}{skin.price === 0 ? " · " + t("Starter issued free; price is for an additional ship.") : ""}</small>
             <button className="button button-secondary ship-shard-button" type="button" onClick={onBuyStandard} aria-label={`${t(hullCount ? "Buy another ship" : "Buy ship")} · ${skin.name} · ${t(color.name)} · ${shardPrice} ${t("Shards")}`} aria-busy={purchaseBusy || undefined} disabled={adminPreview || purchaseBusy || !standardAvailable || shards < price}>
@@ -111,7 +119,12 @@ export default function ShipSelectionPanel({
             </button>
             {standardAvailable && shards < price && <small className="ship-shortfall">◆ {(price - shards).toLocaleString(locale)} {t("more Shards needed")}</small>}
           </> : <>
-            {!stageOwned && <button className="button button-secondary" type="button" disabled>{t("Purchases locked")}</button>}
+            {!stageOwned && (testnetCatalogAccess && focusedOffer && onBuyUpgrade
+              ? <TestPiPurchase price={focusedOffer.pricePi} disabled={purchaseBusy || !hullCount || stage === 3 && ownedStage < 2}
+                  pending={upgradePending} status={upgradeStatus} diagnostic={upgradeDiagnostic}
+                  reason={!hullCount ? 'Buy the Standard ship first.' : stage === 3 && ownedStage < 2 ? 'Requires Stage 2' : undefined}
+                  onBuy={() => onBuyUpgrade(focusedOffer, color)} />
+              : <button className="button button-secondary" type="button" disabled>{t("Purchases locked")}</button>)}
             {stage === 3 && advancedOffer && focusedOffer && <small>{t("Requires Stage 2")} · {t("Total with Advanced")}: {piPrice(advancedOffer.pricePi + focusedOffer.pricePi)}</small>}
           </>}
         </div>}
