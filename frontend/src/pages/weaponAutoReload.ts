@@ -9,6 +9,13 @@ export function shouldAutoReload(level: number, source: string, beforeMs: number
   return allowed && source === 'paid' && beforeMs > 0 && afterMs === 0 && preferences[level] === true && (stock[products[level]] || 0) > 0;
 }
 
+// A saved Auto choice also applies to a confirmed new/resumed mission. Prefer
+// the strongest permitted choice; an existing timer needs no additional charge.
+export function automaticStartWeapon(timers: readonly number[], preferences: AutoReloadPreferences, stock: Record<string, number>, allowedLevels: readonly number[]) {
+  return [5, 4, 3, 2].find(level => allowedLevels.includes(level) && preferences[level] === true
+    && ((timers[level] ?? 0) > 0 || (stock[products[level]] || 0) > 0));
+}
+
 // Already activated timers are available without consuming another charge.
 // The automatic setting is the player's explicit opt-in for each paid weapon.
 export function nextActiveWeapon(timers: readonly number[], preferences: AutoReloadPreferences, pickupLevel: number, pickupMs: number) {

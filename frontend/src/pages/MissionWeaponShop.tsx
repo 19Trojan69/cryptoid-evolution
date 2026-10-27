@@ -82,7 +82,7 @@ export default function MissionWeaponShop({ autoReload = {}, onAutoReload, authe
       <h2 id="mission-weapon-shop-title" ref={titleRef} tabIndex={-1}>{t('Weapons')}</h2>
       <p>{t('Owned weapons first · strongest first')}</p>
     </header>
-    <div className="mission-shop-scroll">
+    <div className="mission-shop-scroll" data-game-scroll>
     <p className="testnet-shop-notice">{ownerTestnet ? t('Admin Testnet: earn Shards for all 20 ships. Paid items use Test-Pi only.') : shipSaveNetwork === 'testnet' ? t('Testnet: Twin Laser and Rapid Twin can be bought with Test-Pi. Triple Laser and Plasma purchases are locked.') : t('Pi purchases are currently locked. Collect weapon upgrades in game.')}</p>
     {admin && <p>{t('Admin test mode: purchases and records are not saved.')}</p>}
     <details className="mission-reload-explanation"><summary>{t('Auto-reload')}</summary><p>{t('When a timed weapon expires, the strongest enabled weapon takes over; otherwise the standard laser. Auto-reload uses owned charges without pausing.')}</p></details>

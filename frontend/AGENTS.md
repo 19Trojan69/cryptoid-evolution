@@ -1,3 +1,32 @@
+# Mission drawer scrolling and persistent Auto, 27 October 2026
+
+The latest owner instruction adds reachable scrolling/repurchase in the paused
+mission drawer and persistent Auto weapon intent. Base is actually released
+363d9fd (PR191), tree9dbf462. Preserve its explicit stage selection/auth fix and
+direct Shop categories. Mark the drawer offer body for the existing route touch
+lock; permit native pan through paused/loading playfield ancestors while keeping
+playing touch isolation, outside-menu page-pull prevention and fixed Return.
+A confirmed automatic response may arm its unchanged requested weapon in a pause,
+never resume combat or override a newer pickup/manual selection. Honor saved
+account/network Auto after a confirmed new/resumed run using permitted owned
+stock or live timers, with one bounded attempt. Explicit switch changes/confirmed
+replenishment re-arm it; manual selection takes priority. No new API polling,
+loop/observer/animation, automatic purchase, free grant or timer refill. Empty
+stock preserves preference; Auto off consumes at most its current charge.
+Seven exact reviewed hunks restore the entire base controller SHA256dd41d1c3...
+before all historical guards; never broaden fingerprints. Backend runtime/art/
+HUD/indexCSS/combat/economy/clocks/manual Continue/true pauses/terminal sleep and
+network/payment/receipt rules stay. See matching docs and verification for actual
+437 frontend/141 backend tests, native/counter/regression receipts and exclusions.
+Lint remains pinned GamePage62+4, MissionWeaponShop3 and Shop5; no whole-project
+lint-clean, universal-device/physical heat/FPS/font/White Screen claim. Raw owner
+attachments/data and machine caches must stay out of Git. Shared release to both
+existing projects remains authorized: main once, actual READY/source/aliases and
+public bundle/guard verification. Keep work/receipt refs auto-deploy-disabled and
+do not merge receipt refs. Rollback is363d9fd / READY TestnetGDBKvxyC4CbnW95fEPDMfYCNLTD2
+and productionA4uYww2UWrgqhf8nPPk4iytfGphe; preserve older backups. No real payment,
+selection, reset/migration, secret/protection/runtime-log or unrelated PR change.
+
 # Explicit purchased-ship selection, 27 October 2026
 
 The owner's newest instruction supersedes automatic equip after acquisition:

@@ -32,6 +32,7 @@ export function selectionHost() {
     stateRef: ref(state), scoreRunRef: ref('isolated-run'), weaponMountedRef: ref(true),
     weaponBusyRef: ref(false), activationRef: ref(null), adminRunRef: ref(false), bossSummaryRef: ref(null),
     stockRef: ref({ ...balances }), reloadPendingRef: ref(false), reloadRequestRef: ref(null),
+    automaticStartRunRef: ref(null),
     weaponSpentRef: ref(null), reloadNoticeTimerRef: ref(null), soundRef: ref({ play() {} }), musicRef: ref({ pause() {} }),
     accountRun: true, weaponMenuOpen: false, weaponCountdown: null, weaponError: '', weaponBusy: false,
     PURCHASED_WEAPON_DURATION_MS: 60000, autoReloading: null,

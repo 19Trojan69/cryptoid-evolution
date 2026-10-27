@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {autoReloadKey,parseAutoReload,shouldAutoReload,nextActiveWeapon} from './weaponAutoReload.ts';
+import {automaticStartWeapon,autoReloadKey,parseAutoReload,shouldAutoReload,nextActiveWeapon} from './weaponAutoReload.ts';
 test('reload is off by default and isolates account and network preferences',()=>{
  assert.equal(parseAutoReload(null)[2],false);
  assert.deepEqual(parseAutoReload('{broken'),{});
@@ -28,4 +28,13 @@ test('only the selected expired paid weapon with its own stock reloads',()=>{
  assert.equal(check(2,'paid',10,1),false);
  assert.equal(check(2,'paid',10,0,false),false);
  assert.equal(check(2,'paid',10,0,true,{weapon_twin:0,weapon_rapid_twin:5}),false);
+});
+test('a saved Auto choice starts only an available permitted charge or existing timer, strongest first',()=>{
+ const timers=[0,0,12000,0,0,0],stock={weapon_twin:0,weapon_rapid_twin:3,weapon_plasma:19};
+ assert.equal(automaticStartWeapon(timers,{2:true,3:true,5:true},stock,[2,3,4,5]),5);
+ assert.equal(automaticStartWeapon(timers,{2:true,3:true,5:true},stock,[2,3]),3);
+ assert.equal(automaticStartWeapon(timers,{2:true},stock,[2,3]),2,'use the existing confirmed timer without another stock debit');
+ assert.equal(automaticStartWeapon([0,0,0,0,0,0],{2:true},{weapon_twin:0},[2]),undefined,'Auto cannot invent a charge');
+ assert.equal(automaticStartWeapon(timers,{},stock,[2,3,4,5]),undefined,'off remains a single manual charge');
+ assert.equal(automaticStartWeapon(timers,{5:true},stock,[]),undefined,'Mainnet remains locked');
 });

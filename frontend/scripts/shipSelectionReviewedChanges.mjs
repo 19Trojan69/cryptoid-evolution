@@ -1,3 +1,4 @@
+import { restoreWeaponMenuGameChanges } from './weaponMenuReviewedChanges.mjs';
 // Only these exact reviewed loadout/auth changes. Every other controller byte stays pinned.
 export const shipSelectionChanges = [
   {
@@ -42,6 +43,7 @@ export const shipSelectionChanges = [
   }
 ];
 export function restoreShipSelectionGameChanges(source) {
+ source=restoreWeaponMenuGameChanges(source);
  for (const {before,after} of [...shipSelectionChanges].reverse()) {
   if (source.split(after).length !== 2) throw Error('Expected one exact ship-selection change');
   source=source.replace(after,before);

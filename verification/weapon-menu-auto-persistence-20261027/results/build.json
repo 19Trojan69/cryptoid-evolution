@@ -1,0 +1,16 @@
+{
+  "frontendReleaseCases": 437,
+  "backendCases": 141,
+  "localizationInventory": true,
+  "typescriptFrontendAndBackend": true,
+  "vite": true,
+  "existingLargeChunkWarning": true,
+  "controllerSha256": "83fad3d2d4e20d1f5c6b6777c5dc0f5fcfea3215eeda386014d6b1fed32f1c1e",
+  "nativeMenuAndAutoChecks": 19,
+  "pinnedCounterChecks": 7,
+  "repeatedSelectionChecks": 32,
+  "repeatedFullFlowChecks": 74,
+  "repeatedGameOverChecks": 11,
+  "terminalControllerStepsInFiveSeconds": 0,
+  "noPhysicalDeviceHeatFpsOrWhiteScreenClaim": true
+}

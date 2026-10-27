@@ -1,0 +1,286 @@
+{
+  "baseline": "363d9fd27599d06fcd3916cd96cab1c7dcd8b11e",
+  "control": true,
+  "sourceSha256": "83fad3d2d4e20d1f5c6b6777c5dc0f5fcfea3215eeda386014d6b1fed32f1c1e",
+  "realUiAndHandlers": true,
+  "localOnly": true,
+  "syntheticPiAndDatabase": true,
+  "physicalDevice": false,
+  "checks": [
+    "pinned public controller does not honor a saved Auto choice at a new start",
+    "pinned public drawer intercepts the native touch drag and leaves purchase controls clipped",
+    "expiry requests only one automatic confirmation from the available owned stock",
+    "the explicit pause remains in place while the delayed reload reply is unresolved",
+    "pinned public confirmation leaves the paid timer stranded behind the standard shot during a pause",
+    "native flow has no uncaught page errors or unexpected local API failures",
+    "controller source stayed unchanged throughout this native run"
+  ],
+  "errors": [],
+  "requests": [
+    {
+      "case": "pinned-phone",
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200,
+          "stage": 1
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        }
+      ]
+    }
+  ],
+  "cases": [],
+  "complete": true,
+  "engine": "141.0.7390.37",
+  "currentRequests": [
+    {
+      "path": "/api/usage/collect",
+      "status": 204
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/catalog",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/catalog",
+      "status": 200
+    },
+    {
+      "path": "/api/rewards/me",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/inventory",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/card-reveals",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/start",
+      "status": 200,
+      "stage": 1
+    },
+    {
+      "path": "/api/hangar/inventory",
+      "status": 200
+    },
+    {
+      "path": "/api/rewards/me",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/card-reveals",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/catalog",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/inventory",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/catalog",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/inventory",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/checkpoint",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/weapon/activate",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/checkpoint",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/checkpoint",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/weapon/activate",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/catalog",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/inventory",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/catalog",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/inventory",
+      "status": 200
+    }
+  ],
+  "swipes": [
+    {
+      "x": 157.85,
+      "y": 504.96875,
+      "to": 202.484375,
+      "target": "H3",
+      "selector": "h3",
+      "scroll": 0,
+      "height": 473,
+      "total": 2702,
+      "bodyY": 0
+    }
+  ]
+}

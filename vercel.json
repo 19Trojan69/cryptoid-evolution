@@ -126,7 +126,8 @@
       "codex/home-play-shop-20261027": false,
       "codex/quiet-readable-feedback-20261027": false,
       "codex/owner-testnet-catalog-20261027": false,
-      "codex/ship-stage-selection-20261027": false
+      "codex/ship-stage-selection-20261027": false,
+      "codex/weapon-menu-auto-persistence-20261027": false
     }
   }
 }

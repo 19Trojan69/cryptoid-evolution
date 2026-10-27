@@ -1,0 +1,448 @@
+{
+  "baseline": "363d9fd27599d06fcd3916cd96cab1c7dcd8b11e",
+  "sourceSha256": "83fad3d2d4e20d1f5c6b6777c5dc0f5fcfea3215eeda386014d6b1fed32f1c1e",
+  "realUiAndHandlers": true,
+  "localOnly": true,
+  "syntheticPiAndDatabase": true,
+  "physicalDevice": false,
+  "checks": [
+    "phone shop exposes three separate readable category controls without horizontal overflow",
+    "direct weapons category displays all four existing weapon offers with real quantity purchase controls",
+    "direct Power-ups category shows all five existing purchasable Test-Pi bonuses and resets content scroll",
+    "category navigation returns to ships without changing inventory selection balance or creating a payment",
+    "Advanced paid receipt exists without silently changing the confirmed Standard selection",
+    "after buying Advanced the real button says Auswählen and is enabled",
+    "explicit Advanced selection is saved with its exact hull and paint",
+    "Elite receipt leaves the prior selected Advanced stage intact",
+    "Elite shows Auswählen before confirmation",
+    "only the explicit successful selection marks Elite equipped",
+    "the fixture has a verified token with no local session marker",
+    "verified-token-only Play is an account run and starts the selected Elite",
+    "real start response agrees with the saved selected stage",
+    "the actual game and shop use the same original Grey Scout Elite identity",
+    "permanent Elite twin fire has no charge countdown and begins with two free projectile hits",
+    "actual fired projectiles use Elite strengthened twin damage",
+    "leaving saves the real running mission including a spent projectile guard",
+    "resuming uses the newly selected Standard art/stage without a new purchase",
+    "Standard selection cannot carry Elite projectile protection into a resumed life",
+    "selected Standard produces the original single normal shot",
+    "switching back to Elite preserves the saved mission and never refills spent protection",
+    "reselected Elite restores its permanent stronger twin fire",
+    "the complete flow has no unexpected API failure",
+    "guest Standard purchase adds the hull while preserving the selected free starter",
+    "guest purchase also exposes explicit Auswählen",
+    "guest selection saves the Nova Wing identity instead of confusing the swapped first two sprite IDs",
+    "an actual guest remains a guest and starts only its explicitly selected Standard hull",
+    "an old paid inventory exposes Select until the stage is explicitly confirmed",
+    "legacy selection is persisted without repurchase or free grants",
+    "desktop weapons navigation keeps selected Elite and all four offers available",
+    "one unchanged controller was used throughout native acceptance",
+    "no uncaught JavaScript page error"
+  ],
+  "errors": [],
+  "requests": [
+    {
+      "case": "owner-phone",
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/payments/approve",
+          "status": 200
+        },
+        {
+          "path": "/api/payments/complete",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/inventory",
+          "status": 200,
+          "stage": 2
+        },
+        {
+          "path": "/api/payments/approve",
+          "status": 200
+        },
+        {
+          "path": "/api/payments/complete",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/inventory",
+          "status": 200,
+          "stage": 3
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200,
+          "stage": 1
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/inventory",
+          "status": 200,
+          "stage": 1
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200,
+          "stage": 1
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/inventory",
+          "status": 200,
+          "stage": 3
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200,
+          "stage": 1
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        }
+      ]
+    }
+  ],
+  "cases": [],
+  "complete": true,
+  "engine": "141.0.7390.37",
+  "currentRequests": [
+    {
+      "path": "/api/usage/collect",
+      "status": 204
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/catalog",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/catalog",
+      "status": 200
+    },
+    {
+      "path": "/api/rewards/me",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/inventory",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/card-reveals",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/inventory",
+      "status": 200,
+      "stage": 3
+    }
+  ],
+  "legacyView": {
+    "view": {
+      "text": "Auswählen",
+      "disabled": false,
+      "stage": "3"
+    },
+    "profile": {
+      "version": 2,
+      "balance": 5000,
+      "fleet": {
+        "grey-scout": {
+          "grey": 1
+        }
+      },
+      "skin": "grey-scout",
+      "color": "grey",
+      "mission": null,
+      "activeRunId": null,
+      "highestSector": 1,
+      "totalDestroyed": 0,
+      "totalShardsEarned": 0,
+      "totalShardsSpent": 0,
+      "legacyImported": true,
+      "updatedAt": "2026-10-27T17:09:55.662Z",
+      "cardReveals": [
+        "grey-scout-1"
+      ],
+      "shipStage": 3
+    },
+    "requests": [
+      {
+        "path": "/api/usage/collect",
+        "status": 204
+      },
+      {
+        "path": "/api/user/me",
+        "status": 200
+      },
+      {
+        "path": "/api/hangar/catalog",
+        "status": 200
+      },
+      {
+        "path": "/api/user/me",
+        "status": 200
+      },
+      {
+        "path": "/api/hangar/catalog",
+        "status": 200
+      },
+      {
+        "path": "/api/rewards/me",
+        "status": 200
+      },
+      {
+        "path": "/api/progress/me",
+        "status": 200
+      },
+      {
+        "path": "/api/hangar/inventory",
+        "status": 200
+      },
+      {
+        "path": "/api/progress/card-reveals",
+        "status": 200
+      },
+      {
+        "path": "/api/progress/inventory",
+        "status": 200,
+        "stage": 3
+      }
+    ]
+  }
+}

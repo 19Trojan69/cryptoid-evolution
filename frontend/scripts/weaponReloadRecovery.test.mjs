@@ -12,6 +12,24 @@ async function lostAutomaticReply() {
   return f;
 }
 
+test('an automatic confirmation received in a manual or technical pause arms the confirmed weapon without resuming combat',async()=>{
+ for(const source of ['standard','pickup']) {
+  const f=selectionHost();let release;f.env.beforePost=()=>new Promise(resolve=>{release=resolve;});
+  f.env.reloadRequestRef.current(2);await f.flush();
+  f.state.status='paused';if(source==='pickup')Object.assign(f.state,{weaponSource:'pickup',weaponLevel:4,pickupWeaponLevel:4,pickupWeaponMs:18000});
+  release();await f.flush();
+  assert.equal(f.state.status,'paused');assert.equal(f.state.weaponTimers[2],60000);
+  assert.equal(f.receipts.size,1);assert.equal(f.balances.weapon_twin,9);
+  assert.equal(f.state.weaponSource,source==='pickup'?'pickup':'paid');
+  assert.equal(f.state.weaponLevel,source==='pickup'?4:2,'a newer pickup/selection keeps priority');
+ }
+});
+
+test('a later deliberate manual selection keeps priority over a re-armed Auto choice',async()=>{
+ const f=selectionHost();f.env.automaticStartRunRef.current=null;f.openWeaponSelection();await f.selectWeaponLevel(1);
+ assert.equal(f.env.automaticStartRunRef.current,'isolated-run');assert.equal(f.state.weaponSource,'standard');assert.equal(f.requests.length,0);
+});
+
 test('automatic feedback follows the actual delayed response and cannot return after its binary window was consumed', async () => {
   for (const mode of ['confirmed', 'failed', 'consumed']) {
     const f = selectionHost();
