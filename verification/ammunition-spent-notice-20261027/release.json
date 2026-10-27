@@ -1,0 +1,73 @@
+{
+  "recordedAtUtc": "2026-10-27T10:36:07.753196+00:00",
+  "pr": "https://github.com/19Trojan69/cryptoid-evolution/pull/185",
+  "merged": true,
+  "candidateCommit": "2813e988ada0e594dd1791c5f2aa1083d9a75763",
+  "sharedSourceCommit": "0ae15558a2251adaf1b9dde833220cb3b3f932e3",
+  "testedAndPublishedTree": "b9962f40992e295e7ea91f0a2fee27a1c7615aa8",
+  "actualGitHubMainParent": "22842bb7a1986b2b34710f2dcbca7c2e5e6a7b7c",
+  "candidateGitHubTreeEqualsTestedTree": true,
+  "mainGitHubTreeEqualsTestedTree": true,
+  "deploymentTrigger": "Existing main Git integration; no manual or duplicate builds",
+  "dashboardObserved": [
+    {
+      "project": "cryptoid-evolution-testnet",
+      "id": "dpl_GS7qtHJmjCcUsKnVMCzpxaCyUoHE",
+      "url": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/GS7qtHJmjCcUsKnVMCzpxaCyUoHE",
+      "status": "READY",
+      "sourceCommit": "0ae15558a2251adaf1b9dde833220cb3b3f932e3",
+      "environment": "Production",
+      "durationSeconds": 91,
+      "alias": "https://cryptoid-evolution-testnet.vercel.app/"
+    },
+    {
+      "project": "cryptoid-evolution",
+      "id": "dpl_G2inPaHpEa9Tic6ibhGXSfSfD2ud",
+      "url": "https://vercel.com/19-trojan69/cryptoid-evolution/G2inPaHpEa9Tic6ibhGXSfSfD2ud",
+      "status": "READY",
+      "sourceCommit": "0ae15558a2251adaf1b9dde833220cb3b3f932e3",
+      "environment": "Production",
+      "durationSeconds": 105,
+      "alias": "https://cryptoid-evolution.vercel.app/"
+    }
+  ],
+  "githubVercelStatuses": "success for both exact deployment URLs",
+  "connectorLimitation": "Vercel connector returned zero deployments and 404 for the known IDs; the already authorized signed-in dashboard showed both actual READY deployments/source/aliases. No security/protection/runtime-log access change.",
+  "publicChecks": {
+    "path": "public-release.json",
+    "passedBothSites": true,
+    "sameApplicationBundles": true,
+    "sameStyles": true,
+    "deliveredCommitAndTree": true,
+    "newFeedbackAndPriorGuards": true,
+    "apiHealth": true,
+    "networks": [
+      "testnet",
+      "mainnet"
+    ],
+    "anonymousAdminDenied": true,
+    "browserHomeRenderedBothAliases": true
+  },
+  "validation": {
+    "frontendReleaseTests": 413,
+    "nativeNoticeChecks": 77,
+    "nativeFullFlowChecks": 74,
+    "nativeGameOverChecks": 11,
+    "gameOverStepsInFiveTerminalSeconds": 0,
+    "gamePageLintBaselineAndCandidate": "62 errors / 4 warnings; identical message multiset",
+    "backend127": "prior evidence, not rerun"
+  },
+  "rollback": {
+    "sharedCommit": "22842bb7a1986b2b34710f2dcbca7c2e5e6a7b7c",
+    "testnet": "dpl_4yg2wdBGggVeXwdYA1soaZ58X9tx",
+    "production": "dpl_BYMuqaz5gacx4vT67h2kJJGUtnsP",
+    "earlierGameOverBackupBranch": "backup/shared-before-game-over-idle-20261027 remains unchanged"
+  },
+  "receiptBranchAutoDeployDisabled": true,
+  "limitations": [
+    "No public account/game/purchase mutation during verification.",
+    "Local native runs use isolated handlers/SDK/accounts and controlled clocks, not physical iPhone/Pi.",
+    "No physical heat/battery/FPS or historical White Screen cure claim.",
+    "This receipt is not a newer public source version."
+  ]
+}
