@@ -1,3 +1,4 @@
+import { shipBalanceTranslations } from './locales/shipBalance.ts';
 import { ownerTestnetTranslations } from "./locales/ownerTestnet.ts";
 import { completionRecoveryTranslations } from "./locales/completionRecovery.ts";
 import { controlCenterTranslations } from "./locales/controlCenter.ts";
@@ -22,6 +23,8 @@ for (const [locale, entries] of Object.entries(seriesTranslations)) Object.assig
 for (const [locale, entries] of Object.entries(galaxyMapTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(smartphoneTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(shipAttributeTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
+
+for (const [locale, entries] of Object.entries(shipBalanceTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 
 import { languageLabels, supportedLanguages, resolveLocale, documentLanguage, localeDirection, complexScript, type Locale } from './locales/config.ts';
 import { languagePreferences, deviceLanguages, LANGUAGE_STORAGE_KEY } from './locales/preferences.ts';

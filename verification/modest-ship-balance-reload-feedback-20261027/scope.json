@@ -1,0 +1,33 @@
+{
+  "baseline": "0868671b213fb25ba9ce1a0a8d1057dc2067d1f2",
+  "baselineTree": "33b05a5e1a911945cd929844ca941f2cfd6c7fd2",
+  "controllerSha256": "8c70e6a2010fa6349dc7b70ae43a8b304ff380a7d45d21359935c458dd81511a",
+  "restoredControllerSha256": "83fad3d2d4e20d1f5c6b6777c5dc0f5fcfea3215eeda386014d6b1fed32f1c1e",
+  "exactReviewedControllerHunks": 8,
+  "exactReviewedAccountHunks": 1,
+  "byteIdenticalFiles": {
+    "frontend/src/index.css": true,
+    "frontend/src/pages/equipmentEdge.css": true,
+    "frontend/src/pages/playerCombat.ts": true,
+    "frontend/src/pages/powerUps.ts": true,
+    "frontend/src/pages/sectorBoss.ts": true,
+    "frontend/src/pages/bossTurrets.ts": true,
+    "frontend/src/pages/enemyFire.ts": true,
+    "frontend/src/pages/weaponAutoReload.ts": true,
+    "frontend/src/gameViewport.css": true,
+    "frontend/src/pages/Shop.tsx": true,
+    "backend/src/handlers/hangar.ts": true,
+    "backend/src/handlers/progress.ts": true,
+    "backend/src/paymentPolicy.ts": true,
+    "backend/src/shipLoadout.ts": true
+  },
+  "workBranchAutomaticDeployment": false,
+  "newAnimationTimerObserverOrLoop": false,
+  "realAccountOrPurchaseMutation": false,
+  "originalArtAndAudioUnchanged": true,
+  "rollback": {
+    "commit": "0868671b213fb25ba9ce1a0a8d1057dc2067d1f2",
+    "testnetDeployment": "dpl_9fPsoU7HF8hnj3D8fsKWMn8iN5D4",
+    "productionDeployment": "dpl_82nP1YW2riPZp9rmde8s6q3iJD2c"
+  }
+}

@@ -34,9 +34,7 @@ export function playerShipStory(id: string, stage: ShipStage, locale: boolean | 
  const item = shipStories[id]; if (!item) return [];
  const language = de ? 0 : 1;
  const purpose = stage === 2 ? item.advanced[language] : item.elite[language];
- const upgrade = stage === 2
-   ? (de ? 'Für diesen Auftrag ergänzt die Advanced-Aufrüstung den Grundrumpf um dauerhaften Doppelschuss und Schutz vor einem gegnerischen Projektiltreffer je Leben.' : 'For this assignment, the Advanced refit adds permanent twin fire and protection against one enemy projectile hit per life to the base hull.')
-   : (de ? 'Der Elite-Umbau verstärkt den Zwillingslaser und erhöht den Schutz auf zwei gegnerische Projektiltreffer je Leben. So wird die Advanced-Ausführung für diesen anspruchsvolleren Auftrag weiterentwickelt.' : 'The Elite refit strengthens the twin laser and raises protection to two enemy projectile hits per life, developing the Advanced edition for this more demanding assignment.');
+ const upgrade = translate(resolved, stage === 2 ? "Advanced: permanent twin fire with 15% more total damage than Standard, plus one enemy projectile hit of protection per mission." : "Elite: permanent twin fire with 30% more total damage than Standard, plus two enemy projectile hits of protection per mission. Requires Advanced.");
  const paragraphs = stage === 1
    ? [de ? item.de : item.en, shipCaptureLore[id][language]]
    : [purpose, upgrade, sharedHullNote(de)];

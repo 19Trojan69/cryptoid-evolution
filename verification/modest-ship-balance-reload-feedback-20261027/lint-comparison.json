@@ -1,0 +1,768 @@
+{
+  "baseline": "0868671b213fb25ba9ce1a0a8d1057dc2067d1f2",
+  "files": [
+    {
+      "path": "src/pages/GamePage.tsx",
+      "baseline": [
+        {
+          "rule": "react-hooks/exhaustive-deps",
+          "severity": 1,
+          "message": "React Hook useCallback has a missing dependency: 'keysRef'. Either include it or remove the dependency array."
+        },
+        {
+          "rule": "react-hooks/exhaustive-deps",
+          "severity": 1,
+          "message": "React Hook useCallback has an unnecessary dependency: 'ownerDiagnostics'. Either exclude it or remove the dependency array."
+        },
+        {
+          "rule": "react-hooks/exhaustive-deps",
+          "severity": 1,
+          "message": "React Hook useEffect has a missing dependency: 'keysRef'. Either include it or remove the dependency array."
+        },
+        {
+          "rule": "react-hooks/exhaustive-deps",
+          "severity": 1,
+          "message": "React Hook useEffect has missing dependencies: 'bestThisDeviceRef', 'keysRef', 'ownerDiagnostics', 'playerMotionRef', 'recordOwnerResourceSnapshot', 'startBossVictory', and 'varietyRef'. Either include them or remove the dependency array."
+        },
+        {
+          "rule": "react-hooks/immutability",
+          "severity": 2,
+          "message": "Error: Cannot modify local variables after render completes\n\nThis argument is a function which may reassign or mutate `combatRefs` after render, which can cause inconsistent behavior on subsequent renders. Consider using state instead."
+        },
+        {
+          "rule": "react-hooks/immutability",
+          "severity": 2,
+          "message": "Error: Cannot modify local variables after render completes\n\nThis argument is a function which may reassign or mutate `combatRefs` after render, which can cause inconsistent behavior on subsequent renders. Consider using state instead."
+        },
+        {
+          "rule": "react-hooks/immutability",
+          "severity": 2,
+          "message": "Error: Cannot modify local variables after render completes\n\nThis argument is a function which may reassign or mutate `combatRefs` after render, which can cause inconsistent behavior on subsequent renders. Consider using state instead."
+        },
+        {
+          "rule": "react-hooks/immutability",
+          "severity": 2,
+          "message": "Error: Cannot modify local variables after render completes\n\nThis argument is a function which may reassign or mutate `combatRefs` after render, which can cause inconsistent behavior on subsequent renders. Consider using state instead."
+        },
+        {
+          "rule": "react-hooks/immutability",
+          "severity": 2,
+          "message": "Error: Cannot modify local variables after render completes\n\nThis argument is a function which may reassign or mutate `combatRefs` after render, which can cause inconsistent behavior on subsequent renders. Consider using state instead."
+        },
+        {
+          "rule": "react-hooks/immutability",
+          "severity": 2,
+          "message": "Error: Cannot modify local variables after render completes\n\nThis argument is a function which may reassign or mutate `combatRefs` after render, which can cause inconsistent behavior on subsequent renders. Consider using state instead."
+        },
+        {
+          "rule": "react-hooks/immutability",
+          "severity": 2,
+          "message": "Error: Cannot modify local variables after render completes\n\nThis argument is a function which may reassign or mutate `combatRefs` after render, which can cause inconsistent behavior on subsequent renders. Consider using state instead."
+        },
+        {
+          "rule": "react-hooks/immutability",
+          "severity": 2,
+          "message": "Error: This value cannot be modified\n\nModifying a variable defined outside a component or hook is not allowed. Consider using an effect."
+        },
+        {
+          "rule": "react-hooks/purity",
+          "severity": 2,
+          "message": "Error: Cannot call impure function during render\n\n`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent)."
+        },
+        {
+          "rule": "react-hooks/purity",
+          "severity": 2,
+          "message": "Error: Cannot call impure function during render\n\n`performance.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent)."
+        },
+        {
+          "rule": "react-hooks/purity",
+          "severity": 2,
+          "message": "Error: Cannot call impure function during render\n\n`performance.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent)."
+        },
+        {
+          "rule": "react-hooks/purity",
+          "severity": 2,
+          "message": "Error: Cannot call impure function during render\n\n`performance.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent)."
+        },
+        {
+          "rule": "react-hooks/purity",
+          "severity": 2,
+          "message": "Error: Cannot call impure function during render\n\n`performance.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent)."
+        },
+        {
+          "rule": "react-hooks/purity",
+          "severity": 2,
+          "message": "Error: Cannot call impure function during render\n\n`performance.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        }
+      ],
+      "candidate": [
+        {
+          "rule": "react-hooks/exhaustive-deps",
+          "severity": 1,
+          "message": "React Hook useCallback has a missing dependency: 'keysRef'. Either include it or remove the dependency array."
+        },
+        {
+          "rule": "react-hooks/exhaustive-deps",
+          "severity": 1,
+          "message": "React Hook useCallback has an unnecessary dependency: 'ownerDiagnostics'. Either exclude it or remove the dependency array."
+        },
+        {
+          "rule": "react-hooks/exhaustive-deps",
+          "severity": 1,
+          "message": "React Hook useEffect has a missing dependency: 'keysRef'. Either include it or remove the dependency array."
+        },
+        {
+          "rule": "react-hooks/exhaustive-deps",
+          "severity": 1,
+          "message": "React Hook useEffect has missing dependencies: 'bestThisDeviceRef', 'keysRef', 'ownerDiagnostics', 'playerMotionRef', 'recordOwnerResourceSnapshot', 'startBossVictory', and 'varietyRef'. Either include them or remove the dependency array."
+        },
+        {
+          "rule": "react-hooks/immutability",
+          "severity": 2,
+          "message": "Error: Cannot modify local variables after render completes\n\nThis argument is a function which may reassign or mutate `combatRefs` after render, which can cause inconsistent behavior on subsequent renders. Consider using state instead."
+        },
+        {
+          "rule": "react-hooks/immutability",
+          "severity": 2,
+          "message": "Error: Cannot modify local variables after render completes\n\nThis argument is a function which may reassign or mutate `combatRefs` after render, which can cause inconsistent behavior on subsequent renders. Consider using state instead."
+        },
+        {
+          "rule": "react-hooks/immutability",
+          "severity": 2,
+          "message": "Error: Cannot modify local variables after render completes\n\nThis argument is a function which may reassign or mutate `combatRefs` after render, which can cause inconsistent behavior on subsequent renders. Consider using state instead."
+        },
+        {
+          "rule": "react-hooks/immutability",
+          "severity": 2,
+          "message": "Error: Cannot modify local variables after render completes\n\nThis argument is a function which may reassign or mutate `combatRefs` after render, which can cause inconsistent behavior on subsequent renders. Consider using state instead."
+        },
+        {
+          "rule": "react-hooks/immutability",
+          "severity": 2,
+          "message": "Error: Cannot modify local variables after render completes\n\nThis argument is a function which may reassign or mutate `combatRefs` after render, which can cause inconsistent behavior on subsequent renders. Consider using state instead."
+        },
+        {
+          "rule": "react-hooks/immutability",
+          "severity": 2,
+          "message": "Error: Cannot modify local variables after render completes\n\nThis argument is a function which may reassign or mutate `combatRefs` after render, which can cause inconsistent behavior on subsequent renders. Consider using state instead."
+        },
+        {
+          "rule": "react-hooks/immutability",
+          "severity": 2,
+          "message": "Error: Cannot modify local variables after render completes\n\nThis argument is a function which may reassign or mutate `combatRefs` after render, which can cause inconsistent behavior on subsequent renders. Consider using state instead."
+        },
+        {
+          "rule": "react-hooks/immutability",
+          "severity": 2,
+          "message": "Error: This value cannot be modified\n\nModifying a variable defined outside a component or hook is not allowed. Consider using an effect."
+        },
+        {
+          "rule": "react-hooks/purity",
+          "severity": 2,
+          "message": "Error: Cannot call impure function during render\n\n`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent)."
+        },
+        {
+          "rule": "react-hooks/purity",
+          "severity": 2,
+          "message": "Error: Cannot call impure function during render\n\n`performance.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent)."
+        },
+        {
+          "rule": "react-hooks/purity",
+          "severity": 2,
+          "message": "Error: Cannot call impure function during render\n\n`performance.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent)."
+        },
+        {
+          "rule": "react-hooks/purity",
+          "severity": 2,
+          "message": "Error: Cannot call impure function during render\n\n`performance.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent)."
+        },
+        {
+          "rule": "react-hooks/purity",
+          "severity": 2,
+          "message": "Error: Cannot call impure function during render\n\n`performance.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent)."
+        },
+        {
+          "rule": "react-hooks/purity",
+          "severity": 2,
+          "message": "Error: Cannot call impure function during render\n\n`performance.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        }
+      ],
+      "unchanged": true
+    },
+    {
+      "path": "src/pages/MissionWeaponShop.tsx",
+      "baseline": [
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect)."
+        },
+        {
+          "rule": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect)."
+        }
+      ],
+      "candidate": [
+        {
+          "rule": "react-hooks/refs",
+          "severity": 2,
+          "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef)."
+        },
+        {
+          "rule": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect)."
+        },
+        {
+          "rule": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect)."
+        }
+      ],
+      "unchanged": true
+    },
+    {
+      "path": "src/pages/ShipSelectionPanel.tsx",
+      "baseline": [],
+      "candidate": [],
+      "unchanged": true
+    },
+    {
+      "path": "src/pages/WeaponSpentNotice.tsx",
+      "baseline": [],
+      "candidate": [],
+      "unchanged": true
+    },
+    {
+      "path": "src/pages/GameGuide.tsx",
+      "baseline": [],
+      "candidate": [],
+      "unchanged": true
+    },
+    {
+      "path": "src/pages/ReloadConfirmation.tsx",
+      "baseline": [],
+      "candidate": [],
+      "unchanged": true
+    },
+    {
+      "path": "src/pages/shipAttributes.ts",
+      "baseline": [],
+      "candidate": [],
+      "unchanged": true
+    },
+    {
+      "path": "src/pages/shipEvolution.ts",
+      "baseline": [],
+      "candidate": [],
+      "unchanged": true
+    },
+    {
+      "path": "src/pages/collectionData.ts",
+      "baseline": [],
+      "candidate": [],
+      "unchanged": true
+    },
+    {
+      "path": "src/pages/shipLore.ts",
+      "baseline": [],
+      "candidate": [],
+      "unchanged": true
+    },
+    {
+      "path": "src/locales/shipBalance.ts",
+      "baseline": [],
+      "candidate": [],
+      "unchanged": true
+    }
+  ],
+  "passed": true,
+  "comparison": "Exact diagnostic prose/rule/severity multisets, excluding source-location and code-frame excerpts shifted by the reviewed edits.",
+  "candidateControllerSha256": "8c70e6a2010fa6349dc7b70ae43a8b304ff380a7d45d21359935c458dd81511a"
+}

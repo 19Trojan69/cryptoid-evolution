@@ -34,3 +34,33 @@
   font-size: .75em;
   line-height: 1.2;
 }
+
+/* A small status beside the rail clears its weapon labels and the center titles. */
+.game-field .weapon-reload-confirmation {
+  box-sizing: border-box;
+  padding: 5px 3px;
+  border: 1px solid #9be4cc80;
+  border-radius: 6px;
+  background: #082a30ed;
+  color: #c3f6e5;
+  font: 600 12px/1.25 system-ui, sans-serif;
+  text-align: center;
+  overflow-wrap: normal;
+  pointer-events: none;
+}
+.weapon-reload-confirmation :is(b, span) { display: block; font: inherit; }
+.weapon-reload-confirmation i { font: inherit; }
+
+.game-field .touch-controls > .weapon-reload-confirmation {
+  position: absolute;
+  bottom: 20px;
+  right: calc(100% + 8px);
+  width: clamp(136px, 38vw, 180px);
+  max-width: calc(100vw - var(--equipment-width) - 24px);
+  padding: 7px 9px;
+  font-size: 14px;
+}
+.game-field .touch-controls-right > .weapon-reload-confirmation {
+  right: auto;
+  left: calc(100% + 8px);
+}

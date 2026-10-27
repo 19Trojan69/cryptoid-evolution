@@ -1,6 +1,6 @@
 import type { PlayerSkinId } from './shipFleet.ts';
-import { stageWeaponLevel, type ShipStage } from './shipEvolution.ts';
-import { fireInterval, makeVolley, volleyOffsets } from './playerCombat.ts';
+import { stageDamageMultiplier, stageWeaponLevel, type ShipStage } from './shipEvolution.ts';
+import { fireInterval, makeVolley } from './playerCombat.ts';
 
 export type HullRole = 'balanced' | 'power' | 'rapid';
 type HullAttributes = { damageBonus: number; fireRateBonus: number; role: HullRole };
@@ -38,15 +38,19 @@ export const shipFireInterval = (id: string, level: number, rapidFireMs: number)
   fireInterval(level, rapidFireMs) / (1 + attributesForHull(id).fireRateBonus / 100);
 
 export const makeShipVolley = (id: string, stage: ShipStage, level: number, x: number, y: number, overdrive: boolean, nextId: () => number) => {
-  const multiplier = 1 + attributesForHull(id).damageBonus / 100;
-  return makeVolley(stageWeaponLevel(stage, level), x, y, overdrive, nextId, stage === 3)
-    .map(shot => ({ ...shot, damage: Math.round(shot.damage * multiplier * 1e6) / 1e6 }));
+  // Permanent twin fire shares a modest total bonus across its two barrels.
+  // A timed twin/plasma charge still supplies its full, separately earned volley.
+  const multiplier = (1 + attributesForHull(id).damageBonus / 100) * stageDamageMultiplier(stage)
+    / (stage > 1 && level === 1 ? 2 : 1);
+  return makeVolley(stageWeaponLevel(stage, level), x, y, overdrive, nextId)
+    .map(shot => ({ ...shot, empowered: shot.empowered || stage === 3,
+      damage: Math.round(shot.damage * multiplier * 1e6) / 1e6 }));
 };
 
 // Shop comparisons use the same damage, cadence and permanent stage bonuses
 // as combat, with no temporary weapon or power-up active.
 export const shipBaseFirepower = (id: string, stage: ShipStage) => {
   const level = stageWeaponLevel(stage, 1);
-  const damage = (stage === 3 ? 2 : 1) * (1 + attributesForHull(id).damageBonus / 100);
-  return damage * volleyOffsets(level).length * 1000 / shipFireInterval(id, level, 0);
+  const damage = makeShipVolley(id, stage, 1, 0, 0, false, () => 0).reduce((sum, shot) => sum + shot.damage, 0);
+  return damage * 1000 / shipFireInterval(id, level, 0);
 };

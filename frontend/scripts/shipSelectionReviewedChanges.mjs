@@ -1,3 +1,4 @@
+import { restoreBalanceAccountChanges } from './balanceReloadReviewedChanges.mjs';
 import { restoreWeaponMenuGameChanges } from './weaponMenuReviewedChanges.mjs';
 // Only these exact reviewed loadout/auth changes. Every other controller byte stays pinned.
 export const shipSelectionChanges = [
@@ -54,6 +55,7 @@ export function restoreShipSelectionGameChanges(source) {
 const accountBefore = "export type AccountSave = Pick<PlayerSave, \"cardReveals\" | \"usedShipSkins\" | \"version\" | \"balance\" | \"fleet\" | \"skin\" | \"color\" | \"mission\" | \"highestSector\" | \"totalDestroyed\" | \"totalShardsEarned\" | \"totalShardsSpent\" | \"legacyImported\" | \"updatedAt\">;";
 const accountAfter = "export type AccountSave = Pick<PlayerSave, \"cardReveals\" | \"usedShipSkins\" | \"version\" | \"balance\" | \"fleet\" | \"skin\" | \"color\" | \"shipStage\" | \"mission\" | \"highestSector\" | \"totalDestroyed\" | \"totalShardsEarned\" | \"totalShardsSpent\" | \"legacyImported\" | \"updatedAt\">;";
 export function restoreShipSelectionAccountChanges(source) {
+ source=restoreBalanceAccountChanges(source);
  if (source.split(accountAfter).length !== 2) throw Error('Expected one exact selected-stage account type change');
  return source.replace(accountAfter,accountBefore);
 }

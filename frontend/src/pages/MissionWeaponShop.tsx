@@ -7,6 +7,7 @@ import type { ShipStage } from './shipEvolution';
 import WeaponPurchase from './WeaponPurchase';
 import WeaponPreview from './WeaponPreview';
 import WeaponTutorial from './WeaponTutorial';
+import ReloadConfirmation from './ReloadConfirmation';
 import PiPrice from '../components/PiPrice';
 import { weaponSymbols } from './weaponSymbols';
 import './missionWeaponShop.css';
@@ -15,9 +16,9 @@ import { hangarCatalog } from '../../../backend/src/hangarCatalog';
 import { isTestnetWeaponPurchaseEnabled } from '../../../backend/src/paymentPolicy';
 
 type Offer = { id: string; kind: string; name: string; description: string; pricePi: number; level?: number };
-type Props = { autoReload?: AutoReloadPreferences; onAutoReload?: (level: number, enabled: boolean) => void; authenticated: boolean; admin: boolean; timers: number[]; onInventory: (owned: string[], stock: Record<string, number>) => Promise<void>; onClose: () => void; initialStock?: Record<string, number>; activeLevel?: number; source?: string; pickupLevel?: number; pickupMs?: number; stage?: ShipStage; selectionBusy?: boolean; pendingLevel?: number; selectionError?: string; onSelect?: (level: number) => void; onPickup?: () => void };
+type Props = { reloadLevel?: number; autoReload?: AutoReloadPreferences; onAutoReload?: (level: number, enabled: boolean) => void; authenticated: boolean; admin: boolean; timers: number[]; onInventory: (owned: string[], stock: Record<string, number>) => Promise<void>; onClose: () => void; initialStock?: Record<string, number>; activeLevel?: number; source?: string; pickupLevel?: number; pickupMs?: number; stage?: ShipStage; selectionBusy?: boolean; pendingLevel?: number; selectionError?: string; onSelect?: (level: number) => void; onPickup?: () => void };
 
-export default function MissionWeaponShop({ autoReload = {}, onAutoReload, authenticated, admin, timers, onInventory, onClose, initialStock, activeLevel = 1, source = 'standard', pickupLevel = 1, pickupMs = 0, stage = 1, selectionBusy = false, pendingLevel, selectionError, onSelect, onPickup }: Props) {
+export default function MissionWeaponShop({ reloadLevel, autoReload = {}, onAutoReload, authenticated, admin, timers, onInventory, onClose, initialStock, activeLevel = 1, source = 'standard', pickupLevel = 1, pickupMs = 0, stage = 1, selectionBusy = false, pendingLevel, selectionError, onSelect, onPickup }: Props) {
   const { t, locale } = useLocale();
   const [offers, setOffers] = useState<Offer[]>(() => hangarCatalog.filter(offer => offer.kind === 'weapon'));
   const [stock, setStock] = useState<Record<string, number>>(initialStock ?? {});
@@ -81,6 +82,7 @@ export default function MissionWeaponShop({ autoReload = {}, onAutoReload, authe
       <small>{t('MISSION PAUSED')}</small>
       <h2 id="mission-weapon-shop-title" ref={titleRef} tabIndex={-1}>{t('Weapons')}</h2>
       <p>{t('Owned weapons first · strongest first')}</p>
+      {reloadLevel !== undefined && <ReloadConfirmation level={reloadLevel} />}
     </header>
     <div className="mission-shop-scroll" data-game-scroll>
     <p className="testnet-shop-notice">{ownerTestnet ? t('Admin Testnet: earn Shards for all 20 ships. Paid items use Test-Pi only.') : shipSaveNetwork === 'testnet' ? t('Testnet: Twin Laser and Rapid Twin can be bought with Test-Pi. Triple Laser and Plasma purchases are locked.') : t('Pi purchases are currently locked. Collect weapon upgrades in game.')}</p>

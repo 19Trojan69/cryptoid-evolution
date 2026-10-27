@@ -1,3 +1,43 @@
+# Moderate ship stages and immediate reload confirmation, 27 October 2026
+
+The latest owner instructions explicitly rebalance Standard/Advanced/Elite and
+require reload success at actual confirmation rather than a later binary pause.
+Base is verified GitHub/shared public0868671 (PR192), tree33b05a5. Same-hull base
+firepower is now100/115/130 percent, retaining original single/twin geometry,
+Elite light, cadence and hull bonuses. Timed weapons/Overdrive retain their own
+volley/power and gain only the same modest stage multiplier. One/two projectile
+blocks for Advanced/Elite form a finite pool for the whole mission, never refill
+on lost/healed hearts and remain capped on selection/Resume. Optional validated
+snapshot.projectileGuard preserves exact remaining0/1/2 through checkpoints and
+rewards. Legacy snapshots stay valid; a progressed section-only legacy save with
+no protection record receives no invented refill. Old combat saves retain their
+capped remaining count. No migration, free grant or real account selection.
+Shop/API, guide, collection and lore now explain the same mission protection and
+15/30percent damage progression in all19 languages. Original purchase prices,
+ownership/prerequisites, rewards, armor hearts, shields, collision and enemy/boss
+rules stay. The user explicitly supersedes older per-life/400percent requirements.
+A positive current server charge confirmation creates six playing seconds of
+passive success status immediately beside equipment, or in the paused drawer
+header. Pending/failed/zero/invalid/stale responses and cached selection cannot
+claim success. True pauses freeze its existing-controller clock. No new timeout,
+RAF, loop, observer, native animation or purchase. Success is excluded from the
+later binary notice; once-only red expiry and pending/failure rules stay.
+Eight exact fixed GamePage hunks and one account serializer hunk restore complete
+public source before all existing fingerprint chains; never broaden guards.
+Keep original art/music/HUD, weapons/Auto/receipt gates, real pauses and explicit
+Resume, manual confirmed Continue and terminal Game Over sleep. New and repeated
+verification lives in docs/verification modest-ship-balance-reload-feedback-
+20261027. Lint is pinned GamePage62 errors/four warnings and drawer3 errors;
+small changed modules0; no whole-project lint-clean or physical-device/heat/FPS/
+White Screen claim. Only complete accepted fixtures count, with exclusions noted.
+Authorized shared release remains main once to both existing projects, followed
+by actual READY/source and public commit/tree/bundles/API/new/retained checks.
+Keep work/receipt refs auto-deploy-disabled, never merge receipt refs or trigger
+duplicate manual builds. Rollback0868671: Testnet9fPsoU7HF8hnj3D8fsKWMn8iN5D4,
+production82nP1YW2riPZp9rmde8s6q3iJD2c. Preserve older backups and separate networks/
+accounts/payments. No reset, live purchase, secrets/protection/runtime-log access,
+unrelated PR, raw owner attachment/data or machine cache publication.
+
 # Mission drawer scrolling and persistent Auto, 27 October 2026
 
 The latest owner instruction adds reachable scrolling/repurchase in the paused

@@ -27,7 +27,7 @@ test('all versions use one preview with the corresponding stage, paint and actua
     buttons.forEach(x=>x.props.onClick());assert.deepEqual(clicks,[1,2,3]);
     const artwork=tree.filter(x=>x.type===ShipPreview);assert.equal(artwork.length,1);assert.equal(artwork[0].props.stage,stage);assert.equal(artwork[0].props.color,'silver');
     assert.equal(tree.some(x=>x.props.className==='ship-evolution-stage-art'),false);
-    if(stage>1)assert.ok(tree.some(x=>x.type==='p'&&label(x).includes(stage===2?'one free':'two free')));
+    if(stage>1)assert.ok(tree.some(x=>x.type==='p'&&label(x).includes(stage===2?'one enemy':'two enemy')));
   }
 });
 
@@ -63,7 +63,7 @@ test('shop comparisons reflect the actual equipped hull and owned stage rather t
   let node=comparison({skin:fleet.playerSkins[1],selectedSkinId:'grey-scout',selectedStage:1});
   assert.match(label(node),/\+6%/);assert.equal(node.props['data-improved'],true);
   node=comparison({skin:fleet.playerSkins[1],selectedSkinId:'grey-scout',selectedStage:3});
-  assert.match(label(node),/-73%/);assert.equal(node.props['data-improved'],false);
+  assert.match(label(node),/-18%/);assert.equal(node.props['data-improved'],false);
   node=comparison({skin:fleet.playerSkins[1],selectedSkinId:'nova-wing',focusStage:2,selectedStage:2,color:fleet.playerColors[1]});
   assert.match(label(node),/: 0%/);
 });

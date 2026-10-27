@@ -19,7 +19,7 @@ export function selectionHost() {
   if (start < 0 || end < 0) throw Error('Missing actual weapon handlers');
   const sync = source.slice(source.indexOf('const syncSelectedWeapon ='), source.indexOf('const CockpitIcon ='));
   const code = transformSync(sync + source.slice(start, end), { loader: 'tsx' }).code;
-  const state = { status: 'playing', weaponSource: 'standard', weaponLevel: 1,
+  const state = { hearts: 3, status: 'playing', weaponSource: 'standard', weaponLevel: 1,
     paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, weaponCap: 5,
     weaponTimers: [0, 0, 0, 0, 0, 0], unlockedWeapons: [1, 2, 3] };
   const ref = current => ({ current });
@@ -32,7 +32,7 @@ export function selectionHost() {
     stateRef: ref(state), scoreRunRef: ref('isolated-run'), weaponMountedRef: ref(true),
     weaponBusyRef: ref(false), activationRef: ref(null), adminRunRef: ref(false), bossSummaryRef: ref(null),
     stockRef: ref({ ...balances }), reloadPendingRef: ref(false), reloadRequestRef: ref(null),
-    automaticStartRunRef: ref(null),
+    automaticStartRunRef: ref(null), confirmedReloadRef: ref(null), setConfirmedReload(level) { env.confirmedReload = level; },
     weaponSpentRef: ref(null), reloadNoticeTimerRef: ref(null), soundRef: ref({ play() {} }), musicRef: ref({ pause() {} }),
     accountRun: true, weaponMenuOpen: false, weaponCountdown: null, weaponError: '', weaponBusy: false,
     PURCHASED_WEAPON_DURATION_MS: 60000, autoReloading: null,
@@ -82,7 +82,7 @@ export function weaponMenu(props, { ready = true } = {}) {
     element: (type, props, ...children) => ({ type, props: { ...props, children: children.flat(Infinity) } }),
     fragment: 'fragment',
     hangarCatalog, isTestnetWeaponPurchaseEnabled, shipSaveNetwork: 'testnet',
-    weaponSymbols, WeaponPreview: 'WeaponPreview', WeaponPurchase: 'WeaponPurchase', WeaponTutorial: 'WeaponTutorial', PiPrice: 'PiPrice',
+    ReloadConfirmation: 'ReloadConfirmation', weaponSymbols, WeaponPreview: 'WeaponPreview', WeaponPurchase: 'WeaponPurchase', WeaponTutorial: 'WeaponTutorial', PiPrice: 'PiPrice',
   };
   const component = new Function('env', 'with (env) {\n' + code + '\nreturn MissionWeaponShop; }')(env);
   const tree = component({ authenticated: true, admin: false, timers: [0, 0, 0, 0, 0, 0],

@@ -1,3 +1,4 @@
+import { restoreBalanceReloadGameChanges } from './balanceReloadReviewedChanges.mjs';
 // Fixed reviewed hunks only; restores the complete published controller before older guards.
 export const weaponMenuChanges = [
   {
@@ -30,6 +31,7 @@ export const weaponMenuChanges = [
   }
 ];
 export function restoreWeaponMenuGameChanges(source) {
+ source=restoreBalanceReloadGameChanges(source);
  for (const {before,after} of [...weaponMenuChanges].reverse()) {
   if(source.split(after).length!==2)throw Error("Expected one exact weapon-menu Auto change");
   source=source.replace(after,before);
