@@ -43,7 +43,7 @@ jobs:
           node-version: '24'
       - name: Install existing application dependencies
         run: |
-          npm ci --prefix frontend --include=optional
+          npm install --prefix frontend --include=optional --no-audit --no-fund
           npm ci --prefix backend --include=optional
           npm run build --prefix backend
           npm run prepare:hulls --prefix frontend

@@ -43,7 +43,7 @@ workflow change for three 30-minute sessions. Manual dispatch also accepts
 after three days and contain only the isolated test account's evidence.
 
 ```sh
-npm ci --prefix frontend --include=optional
+npm install --prefix frontend --include=optional --no-audit --no-fund
 npm ci --prefix backend --include=optional
 npm run build --prefix backend
 npm run prepare:hulls --prefix frontend
@@ -69,5 +69,8 @@ a reproduced White Screen.
 - Vercel sandbox creation: service rejected it with HTTP 403. The advertised CLI
   fallback has neither a local installation nor authenticated credentials.
 - GitHub Actions execution and physical-device results: pending actual evidence.
+- The first external setup attempt stopped before browser/game execution:
+  `npm ci` requires a frontend npm lockfile which the repository does not contain.
+  The frontend now uses the repository's npm installation approach.
 - Existing diagnostic draft PR #194 stays separate and unmerged. Raw owner
   reports and private telemetry are not copied into this test package.
