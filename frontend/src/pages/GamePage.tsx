@@ -16,6 +16,8 @@ import LoadingStripes from '../components/LoadingStripes';
 import { enemyHealthClearance } from './enemyHealthClearance';
 import { weaponResumeStepMs } from './weaponReloadTiming';
 import WeaponReloadNotice from './WeaponReloadNotice';
+import WeaponSpentNotice from './WeaponSpentNotice';
+import { createWeaponSpentNotice, type SpentWeaponNotice } from './weaponSpentNotice';
 import { enemyVisualDiameter } from './shipDisplayScale';
 import { autoReloadKey, nextActiveWeapon, parseAutoReload, shouldAutoReload, type AutoReloadPreferences } from './weaponAutoReload';
 import { shipSaveNetwork } from './shipFleet';
@@ -518,6 +520,11 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     bossBoundaryRef.current?.sceneCommitted(game.boss, game.sector);
   }, [game]);
   const [technicalPause, setTechnicalPause] = useState(false);
+  const weaponSpentRef = useRef<SpentWeaponNotice | null>(null);
+  const [weaponSpent, setWeaponSpent] = useState<Pick<SpentWeaponNotice, 'level' | 'source'> | null>(null);
+  const setWeaponSpentVisible = useCallback((visible: boolean) => {
+    if (weaponSpentRef.current) weaponSpentRef.current.visible = visible;
+  }, []);
   const showRewardCards=useCallback((cards:CardReward[])=>{
     cards=cards.filter(card=>!hasSeenCard(cardOwnerRef.current,card.key)&&!rewardCardsRef.current.some(queued=>queued.key===card.key));
     if(!cards.length)return;
@@ -1587,6 +1594,10 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         }
         lastPlayerRef.current = state.player;
         if (!transitionPaused) elapsedRef.current += delta;
+        if (weaponSpentRef.current?.visible && !transitionPaused) {
+          weaponSpentRef.current.remainingMs = Math.max(0, weaponSpentRef.current.remainingMs - delta);
+          if (weaponSpentRef.current.remainingMs === 0) { weaponSpentRef.current = null; setWeaponSpent(null); forceScene = true; }
+        }
         impactCooldownRef.current = Math.max(0, impactCooldownRef.current - delta);
         state.overdriveMs = Math.max(0, state.overdriveMs - (transitionPaused ? 0 : delta));
         state.rapidFireMs = Math.max(0, state.rapidFireMs - (transitionPaused ? 0 : delta));
@@ -1600,6 +1611,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         const expiringLevel = state.paidWeaponLevel;
         const expiringSource = state.weaponSource;
         const expiringMs = state.paidWeaponMs;
+        const expiringPickupLevel = state.pickupWeaponLevel, expiringPickupMs = state.pickupWeaponMs;
         state.weaponTimers = state.weaponTimers.map((remaining, level) => level === state.paidWeaponLevel && remaining > 0 ? Math.max(0, remaining - purchasedWeaponDelta) : remaining);
         if (state.paidWeaponLevel > 1) {
           state.paidWeaponMs = Math.max(0, state.weaponTimers[state.paidWeaponLevel] ?? 0);
@@ -1620,7 +1632,12 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         syncSelectedWeapon(state);
         const expired = expiringMs > 0 && state.weaponTimers[expiringLevel] === 0;
         const reloadOffer = expired ? hangarCatalog.find(offer => offer.kind === 'weapon' && offer.level === expiringLevel) : undefined;
-        if (shouldAutoReload(expiringLevel, expiringSource, expiringMs, state.weaponTimers[expiringLevel] ?? 0, autoReloadRef.current, stockRef.current, shipSaveNetwork === 'testnet' && isTestnetWeaponPurchaseEnabled(reloadOffer))) reloadRequestRef.current(expiringLevel);
+        const autoReloadStarted = shouldAutoReload(expiringLevel, expiringSource, expiringMs, state.weaponTimers[expiringLevel] ?? 0, autoReloadRef.current, stockRef.current, shipSaveNetwork === 'testnet' && isTestnetWeaponPurchaseEnabled(reloadOffer)) && reloadRequestRef.current(expiringLevel);
+        if (selectedExpired) {
+          const notice = createWeaponSpentNotice(expiringSource, expiringSource === 'pickup' ? expiringPickupLevel : expiringLevel,
+            expiringSource === 'pickup' ? expiringPickupMs : expiringMs, expiringSource === 'pickup' ? state.pickupWeaponMs : state.weaponTimers[expiringLevel] ?? 0, autoReloadStarted);
+          if (notice) { weaponSpentRef.current = notice; setWeaponSpent({ level: notice.level, source: notice.source }); forceScene = true; }
+        }
         state.combo.remainingMs = Math.max(0, state.combo.remainingMs - delta);
         if (state.pickupNotice) {
           state.pickupNotice.remainingMs -= transitionPaused ? 0 : delta;
@@ -2341,6 +2358,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     if (bossSummaryRef.current && !bossSummaryRef.current.accepted) return;
     if (stateRef.current.status !== 'playing' && stateRef.current.status !== 'paused') return;
     stateRef.current.status = 'paused';
+    weaponSpentRef.current = null; setWeaponSpent(null);
     musicRef.current?.pause();
     clearControls();
     setWeaponMenuOpen(true); setWeaponError(''); setGame({ ...stateRef.current });
@@ -2408,7 +2426,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         if (automatic) {
           if (reloadNoticeTimerRef.current) window.clearTimeout(reloadNoticeTimerRef.current);
           setAutoReloading(null);
-          reloadNoticeTimerRef.current = window.setTimeout(() => setWeaponError(''), 2_500);
+          reloadNoticeTimerRef.current = window.setTimeout(() => setWeaponError(''), 6_000);
         }
         return;
       } finally { if (current()) { weaponBusyRef.current = false; setWeaponBusy(false); reloadPendingRef.current = false; } }
@@ -2430,7 +2448,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     setAutoReloading(level);
     soundRef.current?.play('reload');
     if (reloadNoticeTimerRef.current) window.clearTimeout(reloadNoticeTimerRef.current);
-    reloadNoticeTimerRef.current = window.setTimeout(() => setAutoReloading(null), 3_000);
+    reloadNoticeTimerRef.current = window.setTimeout(() => setAutoReloading(null), 6_000);
     void selectWeaponLevel(level, true);
     return true;
   };
@@ -2449,6 +2467,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     if (gameOverTimerRef.current !== null) window.clearTimeout(gameOverTimerRef.current);
     gameOverTimerRef.current = null;
     stateRef.current = createInitialState();
+    weaponSpentRef.current = null; setWeaponSpent(null);
     varietyRef.current = createCombatVariety(); waveCompleteRef.current = false;
     stateRef.current.shardBase = shardBalance(localStorage.getItem(SHARD_BALANCE_KEY));
     guestCreditedShardsRef.current = 0;
@@ -2739,8 +2758,9 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
             {game.pendingStartPower && <button type="button" className={`edge-action edge-action-${game.pendingStartPower} edge-action-purchased`} disabled={game.status !== "playing" || (game.pendingStartPower === "shield" && game.purchasedShieldMs > 0) || (game.pendingStartPower === "rapid" && game.rapidFireMs > 0) || (game.pendingStartPower === "overdrive" && game.overdriveMs > 0) || (game.pendingStartPower === "emp" && game.empMs > 0)} aria-label={`${t("Tap to activate")} ${t(powerUpNames[game.pendingStartPower])}`} onClick={activateStartPower}><span aria-hidden="true">{powerUpSymbols[game.pendingStartPower]}</span><small>{t(powerUpNames[game.pendingStartPower])}</small><em>{t("Tap to activate")}</em></button>}
           </div>
         </div>
-        {game.status === "playing" && autoReloading !== null && <WeaponReloadNotice layoutKey={`${game.encounter}:${game.phase}:${game.section}:${game.destroyed}:${reinforcementIntro}`}>{t('Reloading weapon…')} · {weaponNames[autoReloading]}</WeaponReloadNotice>}
-        {game.status === "playing" && weaponError && !weaponMenuOpen && <WeaponReloadNotice error layoutKey={`${game.encounter}:${game.phase}:${game.section}:${game.destroyed}:${reinforcementIntro}`}>{t(weaponError)}</WeaponReloadNotice>}
+        {game.status === "playing" && !weaponMenuOpen && autoReloading === null && !weaponError && weaponSpent && <WeaponSpentNotice notice={weaponSpent} weaponName={weaponNames[weaponSpent.level]} layoutKey={`${game.encounter}:${game.phase}:${game.section}:${game.destroyed}:${reinforcementIntro}:${game.combo.remainingMs > 0}:${game.pickupNotice?.id ?? 0}`} onOpen={openWeaponSelection} onVisibleChange={setWeaponSpentVisible} />}
+        {game.status === "playing" && autoReloading !== null && <WeaponReloadNotice layoutKey={`${game.encounter}:${game.phase}:${game.section}:${game.destroyed}:${reinforcementIntro}:${game.combo.remainingMs > 0}:${game.pickupNotice?.id ?? 0}`}>{t('Reloading weapon…')} · {weaponNames[autoReloading]}</WeaponReloadNotice>}
+        {game.status === "playing" && weaponError && !weaponMenuOpen && <WeaponReloadNotice error layoutKey={`${game.encounter}:${game.phase}:${game.section}:${game.destroyed}:${reinforcementIntro}:${game.combo.remainingMs > 0}:${game.pickupNotice?.id ?? 0}`}>{t(weaponError)}</WeaponReloadNotice>}
         {weaponCountdown !== null && <div className="game-overlay weapon-resume-countdown" role="status" aria-live="polite"><strong>{weaponCountdown}</strong></div>}
         {pauseVisible && !homePrompt && <div className="game-overlay pause-settings-overlay" role="dialog" aria-modal="true" aria-labelledby="pause-settings-title"><div className="game-modal pause-settings-modal">
           <p className="eyebrow" id="pause-settings-title">{t('MISSION PAUSED')}</p><h1><span className="desktop-menu-only">{t('Hold the line.')}</span><span className="mobile-menu-only">{t('A short breather.')}</span></h1><p><span className="desktop-menu-only">{t('The asteroids are waiting.')}</span><span className="mobile-menu-only">{t("Level")} {levelLabel} · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/9` : game.encounter === "bonus" ? t("Bonus round") : t("Boss")} · {sectorName(game.sector)}</span></p>

@@ -1,0 +1,23 @@
+{
+  "excluded": [
+    {
+      "attempt": "Notice clock initially inserted before the historical elapsed-clock marker",
+      "reason": "Broke a strict historical source extractor; moved behind its existing marker. Incomplete gate is not acceptance."
+    },
+    {
+      "attempt": "Initial component read mutable notice ref during render",
+      "reason": "Native 66-check run passed, but current React rules added four ref findings. Replaced render reads with immutable view state. Only final 77-check native run is acceptance."
+    }
+  ],
+  "finalAcceptance": [
+    "413 frontend release cases, locales, TypeScript and Vite",
+    "77 final ammunition native checks",
+    "74 newly executed full-flow native checks",
+    "11 newly executed Game Over checks"
+  ],
+  "notClaimed": [
+    "No physical-device/heat/White Screen acceptance",
+    "No repeated full backend127 suite",
+    "No new WPE/WebKit run on this host"
+  ]
+}

@@ -43,7 +43,7 @@
     "test:mobile-cockpit": "node --experimental-strip-types --test src/lib/gameViewport.test.mjs src/pages/completionSaveFailure.test.mjs src/pages/levelCompletionEntrance.test.mjs src/pages/controlPreferences.test.mjs scripts/mobileCockpitScope.test.mjs",
     "test:auth": "node --experimental-strip-types --test src/hooks/useAuth.test.mjs",
     "test:smartphone-work": "node --experimental-strip-types --test src/lib/frameScheduler.test.mjs src/pages/projectilePresentation.test.mjs src/pages/projectileSnapshot.test.mjs src/pages/gameOverIdle.test.mjs",
-    "test:transition-notices": "node --experimental-strip-types --test src/pages/transitionNotices.test.mjs src/pages/bonusRocks.test.mjs",
+    "test:transition-notices": "node --experimental-strip-types --test src/pages/transitionNotices.test.mjs src/pages/bonusRocks.test.mjs src/pages/weaponSpentNotice.test.mjs",
     "test:effect-paths": "node --experimental-strip-types --test src/pages/impactClipPaths.test.mjs",
     "test:render-memory": "node --experimental-strip-types --test src/pages/renderMemory.test.mjs"
   },

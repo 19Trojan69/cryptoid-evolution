@@ -1,3 +1,32 @@
+# Readable purchased-weapon notices, 27 October 2026
+
+The owner's latest instruction requests a red spent-shot notice and more visible,
+longer messages specifically for purchased weapons, without covering other text.
+Base is shared public 22842bb/PR184. New transient selected-charge/pickup expiry
+notice names the expired weapon, lasts 8000ms of visible active combat and opens
+only the existing manual weapon menu. It preserves reading time while paused,
+in transitions/countdowns or without safe display space; menu/restart dismiss it.
+Existing Auto stock rules and fallback stay unchanged; successful Auto uses the
+existing reload message. Existing reload/error timeout becomes 6000ms. Larger red
+contrast notice reserves HUD, transition/combo/pickup text and side controls via
+one finite mounted ResizeObserver; no new RAF/interval/timeout/animation. All19
+languages have new copy. No automatic buying, reward, charge debit or game Resume.
+Exact controller restoration recovers full 22842bb SHA256 before historical guards.
+413 frontend release cases/locales/types/Vite, 77 notice, 74 full-flow and11 Game
+Over native Chromium141 checks pass. Current resolved baseline/candidate GamePage
+both retain62 errors/four warnings with identical message multisets; smaller
+changed runtime modules clean. Earlier ref-view run is excluded; no lint-clean,
+physical-device, heat or White Screen cure claim, backend127 remains prior evidence.
+Keep readable titles, manual confirmed Continue, terminal sleep, original art,
+HUD/fonts elsewhere, equipment/combat/economy/save/audio/auth and strict >2500ms/
+500ms/explicit technical Resume. No PR167/168, reset/migration, live purchases,
+secrets/protection/runtime logs. Preserve 22842bb and READY Testnet4yg2wdBGggVeXwdYA1soaZ58X9tx /
+production BYMuqaz5gacx4vT67h2kJJGUtnsP. Work branch auto-deploy off; reviewed same-
+source publication to both existing projects remains explicitly authorized. Let
+main deploy once; verify actual READY commits and public bundles/commit/tree/new
+feedback/prior guards, keeping separate networks/accounts/payments. See docs and
+verification/ammunition-spent-notice-20261027; evidence-only refs must not deploy.
+
 # Readable transitions and retained Game Over sleep, 27 October 2026
 
 The owner's latest instruction explicitly extends PR184's game-over candidate

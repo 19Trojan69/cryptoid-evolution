@@ -1,0 +1,26 @@
+{
+  "baseCommit": "22842bb7a1986b2b34710f2dcbca7c2e5e6a7b7c",
+  "baseTree": "bc446d1a82375681fcd0858d34205833c23399a3",
+  "baseGamePageSha256": "280be9043d47d5cb80f3c51223a549e8dc3a69c89588d632a7698dae3e218acb",
+  "candidateGamePageSha256": "ab979a75eef6698b84a0f015f10c50dc513cd7f211f790624a09b3dc45697be3",
+  "exactRestoredGamePageSha256": "280be9043d47d5cb80f3c51223a549e8dc3a69c89588d632a7698dae3e218acb",
+  "entireControllerRestoresByteForByte": true,
+  "protectedPaths": [
+    "api",
+    "backend/src",
+    "frontend/src/lib/frameScheduler.ts",
+    "frontend/src/pages/sectorManager.ts",
+    "frontend/src/pages/combatVariety.ts",
+    "frontend/src/pages/sectorBoss.ts",
+    "frontend/src/index.css",
+    "frontend/src/floatingNotices.css",
+    "frontend/src/generated/paintedHullManifest.ts",
+    "frontend/src/lib/audio.ts"
+  ],
+  "protectedDiffEmpty": true,
+  "noticeAnimationAdded": false,
+  "newAnimationFrameIntervalOrTimeout": false,
+  "newProductionDependencies": false,
+  "machineLocalAssetsCachesBrowserFilesExcluded": true,
+  "standaloneBackend127Rerun": false
+}

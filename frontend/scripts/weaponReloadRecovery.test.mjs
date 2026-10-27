@@ -134,9 +134,9 @@ test('automatic reload remains bounded over repeated cycles and rejected duplica
   assert.equal(f.env.weaponBusyRef.current, false); assert.equal(f.env.reloadPendingRef.current, false);
 });
 
-test('the actual reload notice remains for three seconds without another activation',async()=>{
+test('the actual reload notice remains for six seconds without another activation',async()=>{
  const f=selectionHost();assert.equal(f.env.reloadRequestRef.current(2),true);await f.flush();
- f.advance(2999);assert.equal(f.env.autoReloading,2);assert.equal(f.requests.length,1);
+ f.advance(5999);assert.equal(f.env.autoReloading,2);assert.equal(f.requests.length,1);
  f.advance(1);assert.equal(f.env.autoReloading,null);assert.equal(f.requests.length,1);
 });
 

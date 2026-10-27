@@ -1,0 +1,517 @@
+{
+  "expectedCommit": "22842bb7a1986b2b34710f2dcbca7c2e5e6a7b7c",
+  "sameApplicationBundles": true,
+  "sameStyles": true,
+  "sites": [
+    {
+      "host": "cryptoid-evolution-testnet.vercel.app",
+      "sourceCommit": "22842bb7a1986b2b34710f2dcbca7c2e5e6a7b7c",
+      "passed": true,
+      "bundles": [
+        {
+          "kind": "entry",
+          "url": "https://cryptoid-evolution-testnet.vercel.app/assets/index-DiQvLyJa.js",
+          "sha256": "9f600e96ac84e729b513ba744d031271f30f9d430ff9427797d5fe57bb61f1de",
+          "bytes": 1955219,
+          "httpStatus": 200,
+          "milliseconds": 6066,
+          "hasExpectedSourceCommit": false,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "game",
+          "url": "https://cryptoid-evolution-testnet.vercel.app/assets/GamePage-CKNdGJgs.js",
+          "sha256": "570dd7d8729163c8a34443b7fb3f85c6bfb7bfef5b8ad476a2554d09a41fa1ec",
+          "bytes": 251519,
+          "httpStatus": 200,
+          "milliseconds": 3286,
+          "hasExpectedSourceCommit": true,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "game-dependency",
+          "url": "https://cryptoid-evolution-testnet.vercel.app/assets/cardSound-jGyVqJZb.js",
+          "sha256": "398182441425f4156c3263dc3d1ba242a994ce4443b641de5b83e4b64dedcbf5",
+          "bytes": 61626,
+          "httpStatus": 200,
+          "milliseconds": 3465,
+          "hasExpectedSourceCommit": true,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "game-dependency",
+          "url": "https://cryptoid-evolution-testnet.vercel.app/assets/displaySettings-d3VZZ2lg.js",
+          "sha256": "f82dbbcc5adf1ca810425a90831b806751e19f774276856f0ec2d2e62849091c",
+          "bytes": 3296,
+          "httpStatus": 200,
+          "milliseconds": 3272,
+          "hasExpectedSourceCommit": false,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "game-dependency",
+          "url": "https://cryptoid-evolution-testnet.vercel.app/assets/powerUps-CrFq8hbN.js",
+          "sha256": "c3003642c9e06452ed9d17faa3a196c2bb35813f5dcf9697fc7ff2781a893a38",
+          "bytes": 157024,
+          "httpStatus": 200,
+          "milliseconds": 3319,
+          "hasExpectedSourceCommit": false,
+          "hasBoundedRewardRetry": true
+        },
+        {
+          "kind": "game-dependency",
+          "url": "https://cryptoid-evolution-testnet.vercel.app/assets/reloadDiagnostics-DPhgxUVT.js",
+          "sha256": "4126d8ebdb75df710c3081bf3cbb7bdf87596af8ad0a5a742cd99f18b115944c",
+          "bytes": 47151,
+          "httpStatus": 200,
+          "milliseconds": 3406,
+          "hasExpectedSourceCommit": false,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "game-dependency",
+          "url": "https://cryptoid-evolution-testnet.vercel.app/assets/shipEvolution-OP_A_DS6.js",
+          "sha256": "e7358dd2e67a862026897e2b5b80d58a5cc00013dd084247baccf3171a2a135e",
+          "bytes": 233968,
+          "httpStatus": 200,
+          "milliseconds": 3320,
+          "hasExpectedSourceCommit": false,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "owner-diagnostic-export",
+          "url": "https://cryptoid-evolution-testnet.vercel.app/assets/AdminPage-EMiMoaqA.js",
+          "sha256": "e895b1c3d54d43343e93b0b58a5050519c8088e0abbf1859805e2b7945530a7a",
+          "bytes": 55383,
+          "httpStatus": 200,
+          "milliseconds": 3782
+        }
+      ],
+      "url": "https://cryptoid-evolution-testnet.vercel.app/",
+      "httpStatus": 200,
+      "htmlSha256": "84c2a1834b77c248f0c7fe3a5c8fcca58b2d1ceee994168ea707c010135bb73a",
+      "htmlBytes": 6030,
+      "htmlMilliseconds": 5417,
+      "authLifecycleFeatures": {
+        "generationInitialised": true,
+        "generationRetired": true,
+        "generationChecked": true,
+        "localFixtureAbsent": true
+      },
+      "diagnosticFeatures": {
+        "nestedRouteObservation": true,
+        "routeChanges": true,
+        "quarterSecondTail": true,
+        "frameHistory128": true,
+        "callbackProgress": true,
+        "version2Export": true,
+        "explicitRecoveryBoundary": true,
+        "normalDepartureDistinct": true,
+        "localFixtureAbsent": true
+      },
+      "smartphoneWorkFeatures": {
+        "inactiveLoopOptIn": true,
+        "explicitLoopWake": true,
+        "noLocalPerformanceHooks": true
+      },
+      "effectPathFeatures": {
+        "perRecordPreparedPaths": true,
+        "clipPathReuse": true,
+        "nativePathPreparation": true,
+        "localPathFixtureAbsent": true
+      },
+      "standardResolutionFeatures": {
+        "expectedSharedRasterCap": true,
+        "localFixtureAbsent": true
+      },
+      "projectileSnapshotFeatures": {
+        "unusedCopiesStillAbsent": true,
+        "directPresenterStillDelivered": true,
+        "localSnapshotFixtureAbsent": true
+      },
+      "terminalIdleFeatures": {
+        "expectedTerminalSleepPolicy": true,
+        "testHooksAbsent": true
+      },
+      "completionFeatures": {
+        "levelEndMarker": true,
+        "unifiedCompletion": true,
+        "checkpointConfirmation": true,
+        "rewardConfirmation": true,
+        "gameRouteLock": true
+      },
+      "completionRecoveryFeatures": {
+        "verifiedDurableReward": true,
+        "explicitLocalHome": true,
+        "retainedDataNotice": true,
+        "sessionFailureFeedback": true,
+        "checkpointFailureFeedback": true,
+        "rejectedSaveFeedback": true,
+        "effectCleanupFeedback": true,
+        "recoverBeforeDrainAvailable": true
+      },
+      "resourceReuseFeatures": {
+        "preparedVariantWarmer": true,
+        "knownCenterRemount": true,
+        "pendingCardSourceSharing": true,
+        "pendingCardSourcesRetired": true,
+        "localCountersAbsent": true
+      },
+      "completionAudioFeatures": {
+        "pendingActivationWait": true,
+        "obsoleteBusyFailureAbsent": true,
+        "renderedPausedGraphCycle": true,
+        "directZeroClockPath": true
+      },
+      "controlCenterFeatures": {
+        "fourTileComponent": true,
+        "controlCenterHeading": true,
+        "standaloneFullscreenRemoved": true,
+        "phoneFullscreenAction": true,
+        "expectedTree": true
+      },
+      "shipOverlayFeatures": {
+        "halfSmallBar": true,
+        "halfLargeBar": true,
+        "normalShipsOnly": true,
+        "visibleHullTop": true,
+        "commonLivePlume": true,
+        "bossBarSizeRetained": true,
+        "immediateFooter": true,
+        "stageSpecificNozzles": true
+      },
+      "cockpitFeedbackFeatures": {
+        "visibleHullCentered": true,
+        "sequentialLoadingStripes": true,
+        "ordinaryBarFlameClearance": true,
+        "redCompactReload": true,
+        "halfSecondArmedSteps": true,
+        "threeSecondReloadFeedback": true,
+        "fortyFiveSecondCopy": true,
+        "oldActiveMinuteLabelAbsent": true,
+        "localPreviewAbsent": true
+      },
+      "entranceFeatures": {
+        "horizon": true,
+        "halo": true,
+        "stagedArrival": true,
+        "cockpitWindows": true,
+        "reducedMotion": true
+      },
+      "styles": {
+        "sha256": "e136327fffcf6232f69a98064282dd2d57ba556f7f4593d37c2d47ed48bc8700",
+        "bytes": 470155,
+        "controlCenter": true,
+        "tabletFullscreenHidden": true
+      },
+      "localTestHooksAbsent": true,
+      "apiHealth": {
+        "httpStatus": 200,
+        "message": "Hello, World!",
+        "backend": "production-proxy",
+        "milliseconds": 6136
+      },
+      "publicLeaderboard": {
+        "httpStatus": 200,
+        "network": "testnet",
+        "milliseconds": 3291
+      },
+      "weaponCatalogue": {
+        "httpStatus": 200,
+        "offers": [
+          {
+            "id": "weapon_twin",
+            "description": "45 seconds per charge",
+            "pricePi": 0.1
+          },
+          {
+            "id": "weapon_rapid_twin",
+            "description": "45 seconds per charge",
+            "pricePi": 0.16
+          },
+          {
+            "id": "weapon_triple",
+            "description": "45 seconds per charge",
+            "pricePi": 0.22
+          },
+          {
+            "id": "weapon_plasma",
+            "description": "45 seconds per charge",
+            "pricePi": 0.3
+          }
+        ]
+      },
+      "anonymousAdminStatus": 401,
+      "publicDiagnosticRedirect": "https://cryptoid-evolution-testnet.vercel.app/",
+      "readableTransitionFeatures": {
+        "fourPointEightSecondPhase": true,
+        "fivePointTwoSecondClear": true,
+        "sameDurationWiredToNotice": true,
+        "keyedPersistentNotice": true,
+        "finiteNativeOpacity": true,
+        "longReadablePlateau": true,
+        "pauseFreezesNativeClock": true,
+        "bossClearWaitsForPickup": true,
+        "reducedMotion": true,
+        "nativeFixtureAbsent": true
+      }
+    },
+    {
+      "host": "cryptoid-evolution.vercel.app",
+      "sourceCommit": "22842bb7a1986b2b34710f2dcbca7c2e5e6a7b7c",
+      "passed": true,
+      "bundles": [
+        {
+          "kind": "entry",
+          "url": "https://cryptoid-evolution.vercel.app/assets/index-DiQvLyJa.js",
+          "sha256": "9f600e96ac84e729b513ba744d031271f30f9d430ff9427797d5fe57bb61f1de",
+          "bytes": 1955219,
+          "httpStatus": 200,
+          "milliseconds": 4256,
+          "hasExpectedSourceCommit": false,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "game",
+          "url": "https://cryptoid-evolution.vercel.app/assets/GamePage-CKNdGJgs.js",
+          "sha256": "570dd7d8729163c8a34443b7fb3f85c6bfb7bfef5b8ad476a2554d09a41fa1ec",
+          "bytes": 251519,
+          "httpStatus": 200,
+          "milliseconds": 2814,
+          "hasExpectedSourceCommit": true,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "game-dependency",
+          "url": "https://cryptoid-evolution.vercel.app/assets/cardSound-jGyVqJZb.js",
+          "sha256": "398182441425f4156c3263dc3d1ba242a994ce4443b641de5b83e4b64dedcbf5",
+          "bytes": 61626,
+          "httpStatus": 200,
+          "milliseconds": 5768,
+          "hasExpectedSourceCommit": true,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "game-dependency",
+          "url": "https://cryptoid-evolution.vercel.app/assets/displaySettings-d3VZZ2lg.js",
+          "sha256": "f82dbbcc5adf1ca810425a90831b806751e19f774276856f0ec2d2e62849091c",
+          "bytes": 3296,
+          "httpStatus": 200,
+          "milliseconds": 5859,
+          "hasExpectedSourceCommit": false,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "game-dependency",
+          "url": "https://cryptoid-evolution.vercel.app/assets/powerUps-CrFq8hbN.js",
+          "sha256": "c3003642c9e06452ed9d17faa3a196c2bb35813f5dcf9697fc7ff2781a893a38",
+          "bytes": 157024,
+          "httpStatus": 200,
+          "milliseconds": 5774,
+          "hasExpectedSourceCommit": false,
+          "hasBoundedRewardRetry": true
+        },
+        {
+          "kind": "game-dependency",
+          "url": "https://cryptoid-evolution.vercel.app/assets/reloadDiagnostics-DPhgxUVT.js",
+          "sha256": "4126d8ebdb75df710c3081bf3cbb7bdf87596af8ad0a5a742cd99f18b115944c",
+          "bytes": 47151,
+          "httpStatus": 200,
+          "milliseconds": 5911,
+          "hasExpectedSourceCommit": false,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "game-dependency",
+          "url": "https://cryptoid-evolution.vercel.app/assets/shipEvolution-OP_A_DS6.js",
+          "sha256": "e7358dd2e67a862026897e2b5b80d58a5cc00013dd084247baccf3171a2a135e",
+          "bytes": 233968,
+          "httpStatus": 200,
+          "milliseconds": 5722,
+          "hasExpectedSourceCommit": false,
+          "hasBoundedRewardRetry": false
+        },
+        {
+          "kind": "owner-diagnostic-export",
+          "url": "https://cryptoid-evolution.vercel.app/assets/AdminPage-EMiMoaqA.js",
+          "sha256": "e895b1c3d54d43343e93b0b58a5050519c8088e0abbf1859805e2b7945530a7a",
+          "bytes": 55383,
+          "httpStatus": 200,
+          "milliseconds": 5641
+        }
+      ],
+      "url": "https://cryptoid-evolution.vercel.app/",
+      "httpStatus": 200,
+      "htmlSha256": "84c2a1834b77c248f0c7fe3a5c8fcca58b2d1ceee994168ea707c010135bb73a",
+      "htmlBytes": 6030,
+      "htmlMilliseconds": 3881,
+      "authLifecycleFeatures": {
+        "generationInitialised": true,
+        "generationRetired": true,
+        "generationChecked": true,
+        "localFixtureAbsent": true
+      },
+      "diagnosticFeatures": {
+        "nestedRouteObservation": true,
+        "routeChanges": true,
+        "quarterSecondTail": true,
+        "frameHistory128": true,
+        "callbackProgress": true,
+        "version2Export": true,
+        "explicitRecoveryBoundary": true,
+        "normalDepartureDistinct": true,
+        "localFixtureAbsent": true
+      },
+      "smartphoneWorkFeatures": {
+        "inactiveLoopOptIn": true,
+        "explicitLoopWake": true,
+        "noLocalPerformanceHooks": true
+      },
+      "effectPathFeatures": {
+        "perRecordPreparedPaths": true,
+        "clipPathReuse": true,
+        "nativePathPreparation": true,
+        "localPathFixtureAbsent": true
+      },
+      "standardResolutionFeatures": {
+        "expectedSharedRasterCap": true,
+        "localFixtureAbsent": true
+      },
+      "projectileSnapshotFeatures": {
+        "unusedCopiesStillAbsent": true,
+        "directPresenterStillDelivered": true,
+        "localSnapshotFixtureAbsent": true
+      },
+      "terminalIdleFeatures": {
+        "expectedTerminalSleepPolicy": true,
+        "testHooksAbsent": true
+      },
+      "completionFeatures": {
+        "levelEndMarker": true,
+        "unifiedCompletion": true,
+        "checkpointConfirmation": true,
+        "rewardConfirmation": true,
+        "gameRouteLock": true
+      },
+      "completionRecoveryFeatures": {
+        "verifiedDurableReward": true,
+        "explicitLocalHome": true,
+        "retainedDataNotice": true,
+        "sessionFailureFeedback": true,
+        "checkpointFailureFeedback": true,
+        "rejectedSaveFeedback": true,
+        "effectCleanupFeedback": true,
+        "recoverBeforeDrainAvailable": true
+      },
+      "resourceReuseFeatures": {
+        "preparedVariantWarmer": true,
+        "knownCenterRemount": true,
+        "pendingCardSourceSharing": true,
+        "pendingCardSourcesRetired": true,
+        "localCountersAbsent": true
+      },
+      "completionAudioFeatures": {
+        "pendingActivationWait": true,
+        "obsoleteBusyFailureAbsent": true,
+        "renderedPausedGraphCycle": true,
+        "directZeroClockPath": true
+      },
+      "controlCenterFeatures": {
+        "fourTileComponent": true,
+        "controlCenterHeading": true,
+        "standaloneFullscreenRemoved": true,
+        "phoneFullscreenAction": true,
+        "expectedTree": true
+      },
+      "shipOverlayFeatures": {
+        "halfSmallBar": true,
+        "halfLargeBar": true,
+        "normalShipsOnly": true,
+        "visibleHullTop": true,
+        "commonLivePlume": true,
+        "bossBarSizeRetained": true,
+        "immediateFooter": true,
+        "stageSpecificNozzles": true
+      },
+      "cockpitFeedbackFeatures": {
+        "visibleHullCentered": true,
+        "sequentialLoadingStripes": true,
+        "ordinaryBarFlameClearance": true,
+        "redCompactReload": true,
+        "halfSecondArmedSteps": true,
+        "threeSecondReloadFeedback": true,
+        "fortyFiveSecondCopy": true,
+        "oldActiveMinuteLabelAbsent": true,
+        "localPreviewAbsent": true
+      },
+      "entranceFeatures": {
+        "horizon": true,
+        "halo": true,
+        "stagedArrival": true,
+        "cockpitWindows": true,
+        "reducedMotion": true
+      },
+      "styles": {
+        "sha256": "e136327fffcf6232f69a98064282dd2d57ba556f7f4593d37c2d47ed48bc8700",
+        "bytes": 470155,
+        "controlCenter": true,
+        "tabletFullscreenHidden": true
+      },
+      "localTestHooksAbsent": true,
+      "apiHealth": {
+        "httpStatus": 200,
+        "message": "Hello, World!",
+        "backend": "local",
+        "milliseconds": 5655
+      },
+      "publicLeaderboard": {
+        "httpStatus": 200,
+        "network": "mainnet",
+        "milliseconds": 6083
+      },
+      "weaponCatalogue": {
+        "httpStatus": 200,
+        "offers": [
+          {
+            "id": "weapon_twin",
+            "description": "45 seconds per charge",
+            "pricePi": 0.1
+          },
+          {
+            "id": "weapon_rapid_twin",
+            "description": "45 seconds per charge",
+            "pricePi": 0.16
+          },
+          {
+            "id": "weapon_triple",
+            "description": "45 seconds per charge",
+            "pricePi": 0.22
+          },
+          {
+            "id": "weapon_plasma",
+            "description": "45 seconds per charge",
+            "pricePi": 0.3
+          }
+        ]
+      },
+      "anonymousAdminStatus": 401,
+      "publicDiagnosticRedirect": "https://cryptoid-evolution.vercel.app/",
+      "readableTransitionFeatures": {
+        "fourPointEightSecondPhase": true,
+        "fivePointTwoSecondClear": true,
+        "sameDurationWiredToNotice": true,
+        "keyedPersistentNotice": true,
+        "finiteNativeOpacity": true,
+        "longReadablePlateau": true,
+        "pauseFreezesNativeClock": true,
+        "bossClearWaitsForPickup": true,
+        "reducedMotion": true,
+        "nativeFixtureAbsent": true
+      }
+    }
+  ],
+  "readOnlyChecks": true,
+  "realPurchases": false,
+  "realGameStart": false,
+  "limitations": "Read-only delivered code and API checks, not authenticated Pi gameplay, payment validation, physical-device or White Screen acceptance."
+}
