@@ -1,0 +1,35 @@
+{
+  "sourceCommit": "3588ff2d0d39779e54c3a9b31eba636e81559c93",
+  "reviewedCandidate": "a76a00b748f8b483c281e11f5d68606094d538ca",
+  "sourceTree": "243322ba9ef2459af518017e2d008215c5fba46f",
+  "previousCommit": "f7197d61bca49b8b0fa5a10dcc3194efd0936c43",
+  "backupBranch": "backup/shared-before-smartphone-work-20261027",
+  "observedUsing": "Previously authorized signed-in dashboard; connector list returned403; no protection or credential changes",
+  "projects": [
+    {
+      "project": "cryptoid-evolution-testnet",
+      "deploymentId": "dpl_Esrjvchy43uW9hva84trp2B3BYXY",
+      "status": "READY",
+      "environment": "Production",
+      "durationSeconds": 113,
+      "dashboard": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/Esrjvchy43uW9hva84trp2B3BYXY",
+      "immutableUrl": "https://cryptoid-evolution-testnet-a2fz8wmq0-19-trojan69.vercel.app/",
+      "activeDomain": "https://cryptoid-evolution-testnet.vercel.app/",
+      "sourceCommit": "3588ff2d0d39779e54c3a9b31eba636e81559c93"
+    },
+    {
+      "project": "cryptoid-evolution",
+      "deploymentId": "dpl_CuaDcrdz9uuZJtuYKAtVSc8kNrzc",
+      "status": "READY",
+      "environment": "Production",
+      "durationSeconds": 62,
+      "dashboard": "https://vercel.com/19-trojan69/cryptoid-evolution/CuaDcrdz9uuZJtuYKAtVSc8kNrzc",
+      "immutableUrl": "https://cryptoid-evolution-k7qz6eepo-19-trojan69.vercel.app/",
+      "activeDomain": "https://cryptoid-evolution.vercel.app/",
+      "sourceCommit": "3588ff2d0d39779e54c3a9b31eba636e81559c93"
+    }
+  ],
+  "runtimeLogsQueried": false,
+  "physicalTemperatureMeasured": false,
+  "historicalWhiteScreenFixed": false
+}
