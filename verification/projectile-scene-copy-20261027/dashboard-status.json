@@ -1,0 +1,50 @@
+{
+  "sourceCommit": "09a6a4047236c7c8cc5ef430386fd0c6825ebb41",
+  "reviewedCandidate": "cb0a3dbbb79616686ecd0e3f3d29bd77b9f6efcd",
+  "tree": "907cb0e4a3267d828e60e6167d1ef1d638a699d9",
+  "team": "19-trojan69",
+  "observation": "Existing authorized signed-in dashboard, read-only source/status/domain checks",
+  "runtimeLogsQueried": false,
+  "projectConfigurationChanged": false,
+  "deployments": [
+    {
+      "project": "cryptoid-evolution-testnet",
+      "id": "dpl_5WzvAtXq4aNoXCj6DXwnFDcAKZX7",
+      "status": "READY",
+      "durationSeconds": 71,
+      "dashboardUrl": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/5WzvAtXq4aNoXCj6DXwnFDcAKZX7",
+      "deploymentHost": "cryptoid-evolution-testnet-1tqpxlqro-19-trojan69.vercel.app",
+      "publicUrl": "https://cryptoid-evolution-testnet.vercel.app/",
+      "observedBuildOutputBadges": {
+        "errors": 9,
+        "warnings": 32
+      },
+      "homeReloaded": true,
+      "signInVisible": true,
+      "playEnabled": true
+    },
+    {
+      "project": "cryptoid-evolution",
+      "id": "dpl_CXKVFwjsoiCFdLRZBUdeKqBGNR2h",
+      "status": "READY",
+      "durationSeconds": 106,
+      "dashboardUrl": "https://vercel.com/19-trojan69/cryptoid-evolution/CXKVFwjsoiCFdLRZBUdeKqBGNR2h",
+      "deploymentHost": "cryptoid-evolution-ej17gcqsi-19-trojan69.vercel.app",
+      "publicUrl": "https://cryptoid-evolution.vercel.app/",
+      "observedBuildOutputBadges": {
+        "errors": 9,
+        "warnings": 32
+      },
+      "homeReloaded": true,
+      "signInVisible": true,
+      "playEnabled": true
+    }
+  ],
+  "rollback": {
+    "branch": "backup/shared-before-projectile-scene-copy-20261027",
+    "commit": "9d0ac5ba60d9b25170176700a3c1efaa355be290",
+    "testnet": "dpl_FSG9xyeLKEgKGkGbKgRNjcPjq2jq",
+    "production": "dpl_BPscxQrsQfPF8WJk3nHtP12Yd5tt"
+  },
+  "limits": "READY/source/domain and build-output badges are recorded as observed, not a zero-runtime-error claim. No live login/game/account/save/payment operation."
+}
