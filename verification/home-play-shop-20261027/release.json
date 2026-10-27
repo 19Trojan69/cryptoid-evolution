@@ -1,0 +1,122 @@
+{
+  "recordedAtUtc": "2026-10-27T13:09:19.514392+00:00",
+  "pr": "https://github.com/19Trojan69/cryptoid-evolution/pull/188",
+  "merged": true,
+  "candidateCommit": "8dda8b3eba26844c7cde2f304aeb6cbcc1bb340f",
+  "sharedSourceCommit": "c7811d0856dd18e3e0d56449c32f644120a7ae81",
+  "testedAndPublishedTree": "a21aa5ce068a1477f6ab3f45fee1c0f909cf2ee0",
+  "candidateAndMainTreesExactlyMatchTestedTree": true,
+  "parentAndRollbackCommit": "a718b4c60dc93ab022acffe6bacfb6e4fc9a688f",
+  "deployments": [
+    {
+      "project": "cryptoid-evolution-testnet",
+      "id": "dpl_4nYG31Dn9u22Fe78rhC5FX2Yay2i",
+      "url": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/4nYG31Dn9u22Fe78rhC5FX2Yay2i",
+      "status": "READY",
+      "sourceCommit": "c7811d0856dd18e3e0d56449c32f644120a7ae81",
+      "environment": "Production",
+      "durationSeconds": 109,
+      "alias": "https://cryptoid-evolution-testnet.vercel.app/"
+    },
+    {
+      "project": "cryptoid-evolution",
+      "id": "dpl_51UKRCrDEbL6Jsfo91LEeun2EWk1",
+      "url": "https://vercel.com/19-trojan69/cryptoid-evolution/51UKRCrDEbL6Jsfo91LEeun2EWk1",
+      "status": "READY",
+      "sourceCommit": "c7811d0856dd18e3e0d56449c32f644120a7ae81",
+      "environment": "Production",
+      "durationSeconds": 90,
+      "alias": "https://cryptoid-evolution.vercel.app/"
+    }
+  ],
+  "deploymentTrigger": "Existing main integration; one build per existing project, no manual duplicate.",
+  "githubVercelStatuses": "success for both exact deployment URLs",
+  "dashboardVerified": [
+    "READY",
+    "actual source commit",
+    "Production environment",
+    "public aliases"
+  ],
+  "statusAccess": "Actual READY/source/alias checks reused the already authorized signed-in dashboard because the connector has repeatedly returned404 for known deployment IDs in this session. No protection/runtime-log access change.",
+  "publicChecks": {
+    "path": "public-release.json",
+    "passedBothSites": true,
+    "sameApplicationBundlesIncludingRealHomeShop": true,
+    "sameStyles": true,
+    "deliveredCommitTree": true,
+    "newPairedButtonsRatioGapExistingShopCallback": true,
+    "retainedGameWeaponBinaryIdleTitleSaveAuthResourceGuards": true,
+    "healthCatalogueNetworkSeparationAdminDenial": true
+  },
+  "liveBrowserChecks": {
+    "testnet": {
+      "homeRendered": true,
+      "geometry": {
+        "playWidth": 307.546875,
+        "shopWidth": 153.78125,
+        "playHeight": 72,
+        "shopHeight": 72,
+        "gap": 22,
+        "ratio": 1.9998983946352369
+      },
+      "existingShopOpened": true,
+      "existingShopClosedBackToHome": true
+    },
+    "production": {
+      "homeRendered": true,
+      "geometry": {
+        "playWidth": 307.546875,
+        "shopWidth": 153.78125,
+        "playHeight": 72,
+        "shopHeight": 72,
+        "gap": 22,
+        "ratio": 1.9998983946352369
+      },
+      "existingShopOpened": true,
+      "existingShopClosedBackToHome": true
+    },
+    "publicSignInPurchaseOrGameStart": false
+  },
+  "validation": {
+    "command": "npm run build",
+    "cwd": "frontend",
+    "exitCode": 0,
+    "releaseTests": 412,
+    "localizationInventory": true,
+    "typescript": true,
+    "vite": true,
+    "viteSeconds": 3.64,
+    "separateExistingHomeGalaxyTests": 25,
+    "native": {
+      "checks": 171,
+      "cases": 26,
+      "complete": true,
+      "engine": "141.0.7390.37",
+      "allSelectableLocales": 19,
+      "sameLocaleAccountViewportBaseline": true
+    },
+    "baselineNotRepeated": [
+      "Full native combat/Game Over",
+      "backend127"
+    ],
+    "warnings": [
+      "Existing large-chunk advisory",
+      "Local npm http-proxy configuration deprecation"
+    ],
+    "physicalDeviceAcceptance": false
+  },
+  "lint": "CinematicHome0+0; Shop5 old errors, identical baseline message multiset. No whole-project lint-clean claim.",
+  "gamePageSourceUnchanged": true,
+  "rollbackDeployments": {
+    "testnet": "dpl_8GQBDCPE6uUKWBNF1g7try8s5Jia",
+    "production": "dpl_Hu6VY49RQoW9TFnnjhfPagrMUwqv"
+  },
+  "olderBackupsPreserved": true,
+  "receiptBranchAutoDeployDisabled": true,
+  "limitations": [
+    "Public shop checks only open/close the original catalogue; no public account/game/purchase mutation.",
+    "Native26 cases compare matching locale/account/viewport using isolated SDK/handlers/clocks on Chromium141.",
+    "No physical-device/heat/FPS/White Screen or repeated full native campaign/backend127 acceptance claim.",
+    "This evidence ref is not a newer public source version."
+  ]
+}
