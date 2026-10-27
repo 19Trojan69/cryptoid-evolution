@@ -1,0 +1,125 @@
+{
+  "recordedAt": "2026-10-27T16:39:41.881325+00:00",
+  "pullRequest": "https://github.com/19Trojan69/cryptoid-evolution/pull/191",
+  "candidateCommit": "d76fa0c5be140c5b56192d8b4b5173c8ccf51642",
+  "mergedCommit": "363d9fd27599d06fcd3916cd96cab1c7dcd8b11e",
+  "testedTree": "9dbf4625198f45197dfc6d36cffa754f7c974865",
+  "sameTestedAndMergedTree": true,
+  "projects": [
+    {
+      "project": "cryptoid-evolution-testnet",
+      "network": "testnet",
+      "id": "dpl_GDBKvxyC4CbnW95fEPDMfYCNLTD2",
+      "dashboard": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/GDBKvxyC4CbnW95fEPDMfYCNLTD2",
+      "alias": "https://cryptoid-evolution-testnet.vercel.app/",
+      "buildDurationSeconds": 153,
+      "team": "19-trojan69",
+      "status": "READY",
+      "environment": "Production",
+      "gitBranch": "main",
+      "gitSource": "363d9fd27599d06fcd3916cd96cab1c7dcd8b11e",
+      "sourceTree": "9dbf4625198f45197dfc6d36cffa754f7c974865",
+      "sourceAndAliasObservedInSignedInDashboard": true,
+      "githubStatus": "success"
+    },
+    {
+      "project": "cryptoid-evolution",
+      "network": "mainnet",
+      "id": "dpl_A4uYww2UWrgqhf8nPPk4iytfGphe",
+      "dashboard": "https://vercel.com/19-trojan69/cryptoid-evolution/A4uYww2UWrgqhf8nPPk4iytfGphe",
+      "alias": "https://cryptoid-evolution.vercel.app/",
+      "buildDurationSeconds": 124,
+      "team": "19-trojan69",
+      "status": "READY",
+      "environment": "Production",
+      "gitBranch": "main",
+      "gitSource": "363d9fd27599d06fcd3916cd96cab1c7dcd8b11e",
+      "sourceTree": "9dbf4625198f45197dfc6d36cffa754f7c974865",
+      "sourceAndAliasObservedInSignedInDashboard": true,
+      "githubStatus": "success"
+    }
+  ],
+  "publicBundlesAndCssIdentical": true,
+  "allPublicReleaseChecksPassed": true,
+  "publicUi": [
+    {
+      "url": "https://cryptoid-evolution-testnet.vercel.app/",
+      "anonymousPublicUi": true,
+      "directCategories": [
+        "Schiffe",
+        "Waffen",
+        "Power-ups"
+      ],
+      "weaponOffers": 4,
+      "armorOffers": 2,
+      "powerOffers": 5,
+      "powerContentScrollTop": 0,
+      "shopOpenedNavigatedAndClosed": true,
+      "purchaseOrSelectionPerformed": false
+    },
+    {
+      "url": "https://cryptoid-evolution.vercel.app/",
+      "anonymousPublicUi": true,
+      "directCategories": [
+        "Schiffe",
+        "Waffen",
+        "Power-ups"
+      ],
+      "weaponOffers": 4,
+      "armorOffers": 2,
+      "powerOffers": 5,
+      "powerContentScrollTop": 0,
+      "shopOpenedNavigatedAndClosed": true,
+      "purchaseOrSelectionPerformed": false
+    }
+  ],
+  "checks": {
+    "backendTests": 141,
+    "frontendReleaseTests": 430,
+    "extraModuleCases": 8,
+    "nativeSelectionAndShop": 32,
+    "pinnedOldUiScenarios": 2,
+    "repeatedFullFlow": 74,
+    "repeatedGameOver": 11
+  },
+  "retained": [
+    "terminal Game Over sleep and finite original explosion",
+    "explicit healthy restart and Home",
+    "true manual/technical pauses",
+    "confirmed manual Continue without mandatory read timer",
+    "once-only red binary expiry/reload notices",
+    "4800ms reinforcement and protected transition clocks",
+    "45-second new weapon charges and old receipt compatibility",
+    "one-shot/Auto stock rules and no automatic purchase",
+    "original artwork/HUD/sprite identity and shot/economy rules",
+    "separate network/account/payment state",
+    "owner-only Testnet catalog and paid prerequisites"
+  ],
+  "workflow": {
+    "mainTriggeredOneAutomaticDeploymentPerExistingProject": true,
+    "manualBuilds": 0,
+    "candidateAutoDeploymentDisabled": true,
+    "receiptBranch": "codex/ship-stage-selection-20261027-release",
+    "receiptAutoDeploymentDisabled": true,
+    "receiptMustNotMergeToMain": true
+  },
+  "pluginFallback": {
+    "operation": "GET /v13/deployments/{idOrUrl}",
+    "status": 404,
+    "fallback": "explicitly authorized signed-in deployment overview; source/status/environment/alias only",
+    "runtimeLogsOrSecretsRead": false,
+    "protectionOrProjectSettingsChanged": false
+  },
+  "rollback": {
+    "source": "1d800516767131013e0ef80f5c22fa1332593b43",
+    "testnet": "dpl_AMEhBjnbthidFesbHrzAQJziWxYF",
+    "production": "dpl_2GmV8T6UCwfW3TCR2G7MvSD3Bf1P",
+    "olderBackupRefsPreserved": true
+  },
+  "limitations": [
+    "Native SDK, account, payments and database are controlled local fixtures.",
+    "Public UI and API acceptance is read-only and anonymous; no real Pi transaction or owner loadout selection.",
+    "No physical-device heat/FPS/font-pixel or historical White Screen acceptance.",
+    "Lint findings match baseline; GamePage62 errors/four warnings and Shop5 errors remain."
+  ]
+}
