@@ -1,0 +1,10 @@
+{
+  "baseline": "97fdd92",
+  "sameMessages": true,
+  "baselineErrors": 0,
+  "candidateErrors": 0,
+  "baselineWarnings": 4,
+  "candidateWarnings": 4,
+  "historicalErrorsNotClaimedFixed": 62,
+  "wholeProjectLintCleanClaim": false
+}

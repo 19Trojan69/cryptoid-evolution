@@ -1,0 +1,18 @@
+{
+  "baseline": "09a6a4047236c7c8cc5ef430386fd0c6825ebb41",
+  "engine": "26.5",
+  "stepsInFiveTerminalSeconds": 300,
+  "completedChecks": [
+    "normal damage creates the original player explosion",
+    "destruction reveal keeps its existing active callbacks and delay",
+    "terminal state still retains the original effect record",
+    "the final native explosion continues after Game Over appears",
+    "finite original explosion releases its visible DOM independently",
+    "released control keeps running with a retained finished effect",
+    "waiting cannot resume or mutate terminal score state",
+    "explicit Play Again creates a healthy new game and immediately wakes its loop"
+  ],
+  "fullControlCompleted": false,
+  "excludedFinalSelector": "The header Home button was behind the Game Over overlay. The visible modal Home button is the correct target; candidate verification uses it. No full old-control UI pass is claimed.",
+  "errors": []
+}

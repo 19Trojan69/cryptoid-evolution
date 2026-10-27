@@ -1,3 +1,60 @@
+# Readable transitions and retained Game Over sleep, 27 October 2026
+
+The owner's latest instruction explicitly extends PR184's game-over candidate
+97fdd92 with readable middle-field titles and same-source publication to both
+existing projects. Normal level/block and bonus intro = 4800ms, variety block
+clear = 5200ms, legacy clear remains 8500ms, boss warning remains 4900ms with
+matching native opacity duration. Five exact GamePage edits restore the full
+97fdd92 SHA256 before all historical fingerprints. New native animation stays
+mounted/frozen through manual/technical pauses and the explicit Resume countdown;
+Reduced Motion remains static. Boss-defeated title stays for the existing heart
+interaction. No new RAF/timer/endless effect or font/HUD/ship/art/layout change.
+Keep actual 550/850ms reinforcement lead-ins and flight/boss timing; additional
+reading does not advance the variety drop/rock clock or active equipment clocks.
+Common completion retains its freely operated confirmed Continue, no reading
+countdown/automatic continuation/reward. Terminal game-over sleep, finite native
+explosion, restart/Home and strict >2500ms/500ms/explicit technical Resume stay.
+406 frontend release cases/localization/types/Vite and 74 actual-flow native
+checks pass; targeted title and retained Game Over checks are recorded in
+verification/readable-transitions-20261027. Current GamePage lint messages match
+the pinned candidate (0 errors/four warnings); historical62+4 are not fixed and
+no whole-project lint-clean claim. Backend127 is baseline, not rerun. Excluded
+test clock/fixture failures stay excluded. Preserve 09a6a40 and READY Testnet
+5WzvAtXq4aNoXCj6DXwnFDcAKZX7 / production CXKVFwjsoiCFdLRZBUdeKqBGNR2h.
+Reviewed publication is explicitly authorized; no repeated approval. Keep work
+branch auto-deploy off through review, let main trigger both existing projects,
+then verify actual READY source and public bundles/commit/tree/prior guards.
+Separate networks/account/payment remain; no PR167/168, reset/migration, secrets,
+protection/runtime logs or claimed White Screen/physical heat cure. See
+docs/readable-transitions-20261027 and verification/readable-transitions-20261027.
+
+# Terminal Game Over loop, 27 October 2026
+
+Continue smartphone efficiency from shared public 09a6a40/PR183. A finished player
+explosion remains in terminal state records, keeping the game loop awake after
+its native DOM has ended. One exact GamePage sleep predicate now includes only
+game-over; destruction reveal and resumable paused-effect clocks keep their old
+policy. Never broaden this to all non-playing states. Four added cases execute
+the actual predicate/guarded/shared schedulers and restore the entire controller
+to the preceding SHA256; historical fingerprints chain that exact restoration.
+397 frontend cases/localization/types/Vite pass. Targeted real GamePage/handler
+WPE26.5 has eleven checks: native explosion completes independently, zero game
+steps over five settled terminal seconds, explicit Play Again wakes a healthy
+game, modal Home exits cleanly. Pinned released control measured 300 steps in
+the same interval; eight checks completed before an incorrect hidden-header Home
+selector, so no complete baseline UI pass is claimed. Initial native CSS/test-
+clock assumption is also excluded. Lint messages match pinned baseline under
+current tools (0+4); historical 62+4 remain historical, not claimed fixed. Backend
+127 acceptance is baseline, not rerun. All other runtime sources, art/CSS/HUD,
+audio, save/economy/auth, standard pixels, strict >2500ms/500ms watchdog and
+explicit technical Resume stay unchanged. No temperature/battery or White Screen
+cure claim. Preserve 09a6a40 at backup/shared-before-game-over-idle-20261027 and
+READY Testnet 5WzvAtXq4aNoXCj6DXwnFDcAKZX7 / production CXKVFwjsoiCFdLRZBUdeKqBGNR2h.
+Candidate automatic deployment is disabled; reviewed same-source release to both
+existing projects remains authorized, with separate networks/account/payment.
+No new owner campaign, PR167/168, reset/migration, secrets/protection/runtime logs.
+See docs/game-over-idle-20261027 and verification/game-over-idle-20261027.
+
 # Unused projectile scene copies, 27 October 2026
 
 Continue owner-requested smartphone efficiency from shared public 9d0ac5b/PR182.

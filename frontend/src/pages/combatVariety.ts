@@ -2,6 +2,7 @@ import { chooseCryptoid } from './cryptoidRoster.ts';
 import { chooseAttackPattern, type AttackPattern } from './attackPatterns.ts';
 import { MAX_ACTIVE_POWER_UPS, type PowerUpType } from './powerUps.ts';
 import type { BonusRock } from './bonusRocks.ts';
+import { TRANSITION_INTRO_MS, BLOCK_CLEAR_MS } from './transitionTiming.ts';
 
 // All existing finite flight plans and checkpoint indices stay unchanged.
 export function combatCryptoid(stage: number, index: number) {
@@ -31,9 +32,9 @@ export const combatEntryStage = (stage: number, flight: number) => {
 export const combatTiming = (stage: number) => {
   const early = stage <= 29;
   const block = (stage - 1) % 10 + 1;
-  return { introMs: early ? 550 : 850, gapMs: early ? 150 : 180,
+  return { introMs: TRANSITION_INTRO_MS, gapMs: early ? 150 : 180,
     entryMs: early ? 1300 : Math.max(1600, 2400 - Math.floor(stage / 50) * 80),
-    clearMs: early ? 1150 : 1750,
+    clearMs: BLOCK_CLEAR_MS,
     breathingMs: [1, 3, 5, 6].includes(block) ? 650 : 150 };
 };
 const opening: readonly (readonly AttackPattern[])[] = [

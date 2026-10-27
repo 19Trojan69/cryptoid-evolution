@@ -1,0 +1,29 @@
+{
+  "candidateBase": "97fdd92b6c8caef3616bc9b32348d4b0413d5d4f",
+  "publicBase": "09a6a4047236c7c8cc5ef430386fd0c6825ebb41",
+  "fiveExactControllerRestorations": true,
+  "wholeCandidateControllerSha256": "fd1706248bfab3e84170b8e75c11c058fda244f87c04fb16513bcde73f0334de",
+  "changedRuntimeSources": {
+    "frontend/src/pages/GamePage.tsx": "280be9043d47d5cb80f3c51223a549e8dc3a69c89588d632a7698dae3e218acb",
+    "frontend/src/pages/combatVariety.ts": "0153b9217d8f4bd6164b7436e8d7458ee29c540c45262e5e50336f6a0d80d53e",
+    "frontend/src/pages/sectorManager.ts": "fedd7c7e5d717e2df38da0f53852f1e46a2acc0c56a81a7722d312b5b12f835b",
+    "frontend/src/pages/transitionTiming.ts": "0c12f78df9dc6d4d5571bbeb42c7ab7ff8bca16727d0d42bf66db427ece35a14",
+    "frontend/src/pages/transitionNotices.css": "2c2e83f2eb053e3f023f316af8579a382b215637d2cf78a56a8d8c09ad109d12"
+  },
+  "protectedPathsUnchangedFromCandidate": [
+    "backend",
+    "api",
+    "frontend/src/index.css",
+    "frontend/src/floatingNotices.css",
+    "frontend/src/hudDepth.css",
+    "frontend/src/pages/LevelCompletion.tsx",
+    "frontend/src/pages/bossSummaryTiming.ts",
+    "frontend/src/pages/gameLoop.ts",
+    "frontend/src/lib/frameScheduler.ts",
+    "frontend/src/pages/sectorBoss.ts",
+    "frontend/public"
+  ],
+  "automaticWorkingBranchDeployment": false,
+  "backendSuite127": "Historical baseline, not rerun",
+  "realAccountsOrPurchasesMutated": false
+}
