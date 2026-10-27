@@ -119,7 +119,8 @@
       "codex/effect-path-reuse-20261027": false,
       "codex/playable-standard-resolution-20261027": false,
       "codex/projectile-scene-copy-20261027": false,
-      "codex/game-over-idle-20261027": false
+      "codex/game-over-idle-20261027": false,
+      "codex/readable-transition-release-record-20261027": false
     }
   }
 }

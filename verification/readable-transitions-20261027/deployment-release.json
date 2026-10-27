@@ -1,0 +1,47 @@
+{
+  "observedAt": "2026-10-27T07:59:02.634112+00:00",
+  "repository": "19Trojan69/cryptoid-evolution",
+  "pullRequest": 184,
+  "merged": true,
+  "verifiedCandidate": "5dbfc1ce751236557879de3f61d857ab9c35534f",
+  "sourceCommit": "22842bb7a1986b2b34710f2dcbca7c2e5e6a7b7c",
+  "sourceTree": "bc446d1a82375681fcd0858d34205833c23399a3",
+  "candidateAndMainTreesIdentical": true,
+  "manualBuildsStarted": 0,
+  "runtimeLogsQueried": false,
+  "dashboardFallback": "Connector deployment-list 403; Vercel CLI unavailable. Existing authorized signed-in dashboard used for observation.",
+  "deployments": [
+    {
+      "project": "cryptoid-evolution-testnet",
+      "id": "dpl_4yg2wdBGggVeXwdYA1soaZ58X9tx",
+      "dashboardUrl": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/4yg2wdBGggVeXwdYA1soaZ58X9tx",
+      "environment": "Production",
+      "status": "READY",
+      "sourceCommit": "22842bb7a1986b2b34710f2dcbca7c2e5e6a7b7c",
+      "alias": "https://cryptoid-evolution-testnet.vercel.app/",
+      "network": "testnet",
+      "displayDurationSeconds": 115,
+      "displayReadyTimeEuropeVienna": "2026-10-27T08:56:01+01:00",
+      "gitHubStatus": "success"
+    },
+    {
+      "project": "cryptoid-evolution",
+      "id": "dpl_BYMuqaz5gacx4vT67h2kJJGUtnsP",
+      "dashboardUrl": "https://vercel.com/19-trojan69/cryptoid-evolution/BYMuqaz5gacx4vT67h2kJJGUtnsP",
+      "environment": "Production",
+      "status": "READY",
+      "sourceCommit": "22842bb7a1986b2b34710f2dcbca7c2e5e6a7b7c",
+      "alias": "https://cryptoid-evolution.vercel.app/",
+      "network": "mainnet",
+      "displayDurationSeconds": 86,
+      "displayReadyTimeEuropeVienna": "2026-10-27T08:55:32+01:00",
+      "gitHubStatus": "success"
+    }
+  ],
+  "rollback": {
+    "branch": "backup/shared-before-game-over-idle-20261027",
+    "sourceCommit": "09a6a4047236c7c8cc5ef430386fd0c6825ebb41",
+    "testnetDeployment": "dpl_5WzvAtXq4aNoXCj6DXwnFDcAKZX7",
+    "productionDeployment": "dpl_CXKVFwjsoiCFdLRZBUdeKqBGNR2h"
+  }
+}
