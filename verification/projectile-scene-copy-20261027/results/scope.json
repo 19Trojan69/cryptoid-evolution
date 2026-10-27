@@ -1,0 +1,33 @@
+{
+  "baseline": "9d0ac5ba60d9b25170176700a3c1efaa355be290",
+  "runtimeFiles": [
+    "frontend/src/pages/GamePage.tsx"
+  ],
+  "exactControllerRestoration": true,
+  "restoredControllerSha256": "aa98bc74c430c87211d081c71ea1ea720aecf7c64a10809b234268ce0f33fd51",
+  "protectedSourcesSha256": {
+    "frontend/src/pages/gameLoop.ts": "e67b855b6cc3eb3bbed1d539dfa5c143be2a5bd363cb4432f0e409c48de0a6eb",
+    "frontend/src/pages/projectilePresentation.ts": "deb3c488892c3096b5086b35ab3141aa1e1c5f7cd34f2e8a1ae714ef9ebd96db",
+    "frontend/src/lib/frameScheduler.ts": "1d0c4d0384bc653a5247aee00d7e100a7c224e9ee6ad60030f273c779d7ccb7c",
+    "frontend/src/pages/GameHudStats.tsx": "15a7bf31cd0573a4c6f2a6efeea83181a3341a2b12966627eed869f27a05f2df",
+    "frontend/src/pages/gameAudio.ts": "3aeb4ca63260573b38d2b753bda61461eb2d4191beae2aac072ce722657077a8",
+    "frontend/src/lib/accountSave.ts": "eca17b62d128fa03b4974cd8c9d6ea815a33a44f224b47f8b8571120b781e741",
+    "frontend/src/pages/CanvasEffects.tsx": "a3175a169a00e6269c02a16393f09d93fd77834efac816763f2cdb50e7255eeb",
+    "frontend/src/pages/BossWeaponsView.tsx": "1b1ddbbaa33d400804a1f4e12e4413a08fdcc6e6e49699a0824c1e8cfcaf511c",
+    "frontend/src/pages/bossWeaponRenderer.ts": "fe9a3004aa0125f04f1f442e73e4cd087ab3edaf9312a6fc2e7c8c5ff03be579",
+    "frontend/src/pages/renderResolution.ts": "0cb0a51d54ae982a091b24ff017cf1616d79aae8ac382fb8276a4f796105c51f",
+    "frontend/src/pages/BonusRockLayer.tsx": "0c6d3d1efc7f2056708329cf9475da72fa0ab73f99b4017bd7b6f7042f8981ff",
+    "frontend/src/pages/LevelCompletion.tsx": "f6cee956317877ef2bfc8d99a6827bed61e0f1606af2822b5a64bad7f5a238d9",
+    "frontend/src/pages/shipFleet.ts": "29211152beda053a133434158b555a0cfd669ac81b2faac437ded787ab5e7fa5",
+    "frontend/src/pages/HomeEarthNetwork.tsx": "fbc8a87b30a48594e1b91f4e2f92282b9854b4667ca8f374b265560766353590",
+    "frontend/src/pages/HomeCombatPreview.tsx": "1d8a9e0d2ae500437d04f4f217f1e959cca1f7611f3d9a63542c22c8b1b52698",
+    "frontend/src/index.css": "cf48ca4553ac7fa425f37e84a334acc3fec2f2163b72d31bfe9b35f7d33c27b5",
+    "frontend/src/cockpitMenus.css": "cf2cef495a7097e4973d546bf49755559c0bba90495dd2d945474b1f193e33a2",
+    "frontend/src/generated/paintedHullManifest.ts": "39e1a5281570978df541540e357c6502ba62184839b15e8f534185bd9da87611",
+    "frontend/yarn.lock": "b6d496c5725bf24ddb4f51b576b0597ced9f35c5ea7927a65165a5fb6311ad1a",
+    "backend/yarn.lock": "f7b0f18f2dcaa7051bccdbb70b02bf3f84da77ccbe393742a3dc806b3665650a",
+    "frontend/eslint.config.js": "4efe97b16d1200fac0eaf07aa00930a8668b1f96a0be1891ace8c1e712ff0ccb"
+  },
+  "backendUnchanged": true,
+  "frameRateOrQualityChange": false
+}

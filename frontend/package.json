@@ -42,7 +42,7 @@
     "test:account-save": "node --experimental-strip-types --test src/lib/accountSaveRetry.test.mjs src/lib/accountSaveQueue.test.mjs src/pages/resourceStability.test.mjs",
     "test:mobile-cockpit": "node --experimental-strip-types --test src/lib/gameViewport.test.mjs src/pages/completionSaveFailure.test.mjs src/pages/levelCompletionEntrance.test.mjs src/pages/controlPreferences.test.mjs scripts/mobileCockpitScope.test.mjs",
     "test:auth": "node --experimental-strip-types --test src/hooks/useAuth.test.mjs",
-    "test:smartphone-work": "node --experimental-strip-types --test src/lib/frameScheduler.test.mjs src/pages/projectilePresentation.test.mjs",
+    "test:smartphone-work": "node --experimental-strip-types --test src/lib/frameScheduler.test.mjs src/pages/projectilePresentation.test.mjs src/pages/projectileSnapshot.test.mjs",
     "test:effect-paths": "node --experimental-strip-types --test src/pages/impactClipPaths.test.mjs",
     "test:render-memory": "node --experimental-strip-types --test src/pages/renderMemory.test.mjs"
   },

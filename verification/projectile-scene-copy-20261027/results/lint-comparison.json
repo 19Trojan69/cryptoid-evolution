@@ -1,0 +1,84 @@
+{
+  "baselineCommit": "9d0ac5ba60d9b25170176700a3c1efaa355be290",
+  "same": true,
+  "baseline": {
+    "errors": 0,
+    "warnings": 4,
+    "messages": [
+      {
+        "line": 481,
+        "column": 6,
+        "rule": "react-hooks/exhaustive-deps",
+        "severity": 1,
+        "message": "React Hook useCallback has a missing dependency: 'keysRef'. Either include it or remove the dependency array."
+      },
+      {
+        "line": 526,
+        "column": 6,
+        "rule": "react-hooks/exhaustive-deps",
+        "severity": 1,
+        "message": "React Hook useCallback has an unnecessary dependency: 'ownerDiagnostics'. Either exclude it or remove the dependency array."
+      },
+      {
+        "line": 1511,
+        "column": 6,
+        "rule": "react-hooks/exhaustive-deps",
+        "severity": 1,
+        "message": "React Hook useEffect has a missing dependency: 'keysRef'. Either include it or remove the dependency array."
+      },
+      {
+        "line": 2269,
+        "column": 6,
+        "rule": "react-hooks/exhaustive-deps",
+        "severity": 1,
+        "message": "React Hook useEffect has missing dependencies: 'bestThisDeviceRef', 'keysRef', 'ownerDiagnostics', 'playerMotionRef', 'recordOwnerResourceSnapshot', 'startBossVictory', and 'varietyRef'. Either include them or remove the dependency array."
+      }
+    ]
+  },
+  "candidate": {
+    "errors": 0,
+    "warnings": 4,
+    "messages": [
+      {
+        "line": 481,
+        "column": 6,
+        "rule": "react-hooks/exhaustive-deps",
+        "severity": 1,
+        "message": "React Hook useCallback has a missing dependency: 'keysRef'. Either include it or remove the dependency array."
+      },
+      {
+        "line": 526,
+        "column": 6,
+        "rule": "react-hooks/exhaustive-deps",
+        "severity": 1,
+        "message": "React Hook useCallback has an unnecessary dependency: 'ownerDiagnostics'. Either exclude it or remove the dependency array."
+      },
+      {
+        "line": 1511,
+        "column": 6,
+        "rule": "react-hooks/exhaustive-deps",
+        "severity": 1,
+        "message": "React Hook useEffect has a missing dependency: 'keysRef'. Either include it or remove the dependency array."
+      },
+      {
+        "line": 2269,
+        "column": 6,
+        "rule": "react-hooks/exhaustive-deps",
+        "severity": 1,
+        "message": "React Hook useEffect has missing dependencies: 'bestThisDeviceRef', 'keysRef', 'ownerDiagnostics', 'playerMotionRef', 'recordOwnerResourceSnapshot', 'startBossVictory', and 'varietyRef'. Either include them or remove the dependency array."
+      }
+    ]
+  },
+  "versions": {
+    "eslint": "9.39.4",
+    "eslint-plugin-react-hooks": "7.0.1",
+    "typescript-eslint": "8.57.1",
+    "typescript": "5.9.3"
+  },
+  "eslintConfigSha256": "4efe97b16d1200fac0eaf07aa00930a8668b1f96a0be1891ace8c1e712ff0ccb",
+  "historicalFindingCounts": {
+    "errors": 62,
+    "warnings": 4
+  },
+  "note": "Under the current resolved tools both sources report zero errors/four warnings. The historical 62 errors/four warnings are retained as historical evidence, not claimed fixed by removing two copies."
+}

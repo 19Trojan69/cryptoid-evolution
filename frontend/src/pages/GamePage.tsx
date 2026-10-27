@@ -2240,7 +2240,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
           const current = stateRef.current;
           lastPaintRef.current = time;
           probe?.sceneRequested();
-          setGame({ ...current, boss: current.boss ? { ...current.boss } : null, asteroids: [...current.asteroids], bonusTargets: [...current.bonusTargets], shots: [...current.shots], enemyShots: [...current.enemyShots], effects: [...current.effects], powerUps: [...current.powerUps] });
+          setGame({ ...current, boss: current.boss ? { ...current.boss } : null, asteroids: [...current.asteroids], bonusTargets: [...current.bonusTargets], effects: [...current.effects], powerUps: [...current.powerUps] });
         }
       } finally {
         if (wasPlaying) probe?.simulationStep(frameGap, simulatedMs);
