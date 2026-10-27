@@ -1,0 +1,81 @@
+{
+  "pr": "https://github.com/19Trojan69/cryptoid-evolution/pull/189",
+  "merged": true,
+  "candidateCommit": "0f1003b3f3a1698e31884142471f8eb0656384e7",
+  "sourceCommit": "c2d1596dc578919d159d7820516d6d9415110d2f",
+  "sourceTree": "2b65d0101079e0fb4b75ecdcf1cbceae6be6214a",
+  "remoteTreeMatchesTestedCandidate": true,
+  "controllerSha256": "51db299a50ee70835758c46bf8209a1ffa779dd88451db1fa026cb9d5c3b0bbb",
+  "trigger": "one main Git integration build per existing project",
+  "manualDuplicateBuilds": false,
+  "deployments": [
+    {
+      "project": "cryptoid-evolution-testnet",
+      "id": "dpl_3vqfDBQBZtAqfygDVU8f2888PKvW",
+      "dashboard": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/3vqfDBQBZtAqfygDVU8f2888PKvW",
+      "publicAlias": "https://cryptoid-evolution-testnet.vercel.app/",
+      "status": "READY",
+      "environment": "Production",
+      "sourceBranch": "main",
+      "sourceCommit": "c2d1596dc578919d159d7820516d6d9415110d2f",
+      "githubStatus": "success",
+      "buildDurationSeconds": 107
+    },
+    {
+      "project": "cryptoid-evolution",
+      "id": "dpl_WvUoZhj7XU9Luq6YH1JwpMChsS4K",
+      "dashboard": "https://vercel.com/19-trojan69/cryptoid-evolution/WvUoZhj7XU9Luq6YH1JwpMChsS4K",
+      "publicAlias": "https://cryptoid-evolution.vercel.app/",
+      "status": "READY",
+      "environment": "Production",
+      "sourceBranch": "main",
+      "sourceCommit": "c2d1596dc578919d159d7820516d6d9415110d2f",
+      "githubStatus": "success",
+      "buildDurationSeconds": 68
+    }
+  ],
+  "dashboardObservation": "Existing authorized signed-in Dashboard: Ready, Production, main, exact commit link and public alias on each overview. No runtime logs or settings changed.",
+  "connectorLimitation": "get_deployment returned404 for the actual production deployment ID; the previously authorized Dashboard fallback was used.",
+  "publicVerification": {
+    "file": "public-release.json",
+    "sameApplicationBundles": true,
+    "sameStyles": true,
+    "bothPassed": true,
+    "separateNetworks": [
+      "testnet",
+      "mainnet"
+    ],
+    "allNewFeedbackAndRetainedGuardAssertions": true,
+    "readOnly": true,
+    "authenticatedGameStart": false,
+    "realPurchase": false
+  },
+  "publicBrowserChecks": {
+    "bothHomeVisible": true,
+    "playShopRatio": 1.9998983946352369,
+    "bothButtonHeightsPx": 72,
+    "gapPx": 22,
+    "existingShopOpenedAndClosedBothSites": true,
+    "noAuthenticationOrPurchaseAction": true
+  },
+  "localAcceptance": {
+    "frontendReleaseCases": 416,
+    "additionalCombatVarietyCases": 8,
+    "nativeFeedbackChecks": 209,
+    "pinnedPublicControlChecks": 14,
+    "fullFlowChecks": 74,
+    "gameOverChecks": 11,
+    "gameOverControllerStepsInFiveTerminalSeconds": 0,
+    "physicalDeviceHeatFpsWhiteScreenClaim": false,
+    "fullBackend127Rerun": false
+  },
+  "rollback": {
+    "commit": "c7811d0856dd18e3e0d56449c32f644120a7ae81",
+    "tree": "a21aa5ce068a1477f6ab3f45fee1c0f909cf2ee0",
+    "testnet": "dpl_4nYG31Dn9u22Fe78rhC5FX2Yay2i",
+    "production": "dpl_51UKRCrDEbL6Jsfo91LEeun2EWk1"
+  },
+  "evidenceBranch": "codex/quiet-readable-feedback-20261027-release",
+  "evidenceBranchAutoDeployDisabled": true,
+  "evidenceBranchWillNotBeMerged": true
+}
