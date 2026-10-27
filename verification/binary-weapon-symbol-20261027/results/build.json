@@ -1,0 +1,28 @@
+{
+  "command": "npm run build",
+  "cwd": "frontend",
+  "exitCode": 0,
+  "tests": 412,
+  "failures": 0,
+  "localizationInventory": true,
+  "typescript": true,
+  "vite": true,
+  "viteSeconds": 3.9,
+  "native": {
+    "complete": true,
+    "checks": 126,
+    "engine": "141.0.7390.37",
+    "scenarios": 8,
+    "actualShopDomSymbolComparison": true
+  },
+  "baselineNotRepeated": {
+    "PR186FullFlow": 74,
+    "PR186GameOver": 11,
+    "backend": 127
+  },
+  "warnings": [
+    "Existing large-chunk advisory",
+    "Local npm http-proxy configuration deprecation"
+  ],
+  "physicalDeviceAcceptance": false
+}

@@ -1,0 +1,49 @@
+{
+  "baseCommit": "f596413a5f873f9790b262d211d0c33ee710d0a1",
+  "comparisons": [
+    {
+      "file": "GamePage.tsx",
+      "baselineErrors": 62,
+      "candidateErrors": 62,
+      "baselineWarnings": 4,
+      "candidateWarnings": 4,
+      "identicalMessageMultiset": true
+    },
+    {
+      "file": "MissionWeaponShop.tsx",
+      "baselineErrors": 3,
+      "candidateErrors": 3,
+      "baselineWarnings": 0,
+      "candidateWarnings": 0,
+      "identicalMessageMultiset": true
+    }
+  ],
+  "remainingModules": [
+    {
+      "file": "weaponReloadRecoveryHost.mjs",
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "file": "weaponSymbolReviewedChanges.mjs",
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "file": "WeaponSpentNotice.tsx",
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "file": "weaponSpentNotice.test.mjs",
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "file": "weaponSymbols.ts",
+      "errors": 0,
+      "warnings": 0
+    }
+  ],
+  "claim": "Existing findings remain; no whole-project lint-clean or repaired-error claim."
+}

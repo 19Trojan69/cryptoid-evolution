@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { hangarCatalog } from '../../backend/src/hangarCatalog.ts';
 import { isTestnetWeaponPurchaseEnabled } from '../../backend/src/paymentPolicy.ts';
+import { weaponSymbols } from '../src/pages/weaponSymbols.ts';
 
 // Execute the actual event handlers/component; only React scheduling, clock and
 // transport are replaced. No browser session, live account or paid API is used.
@@ -78,7 +79,7 @@ export function weaponMenu(props, { ready = true } = {}) {
     element: (type, props, ...children) => ({ type, props: { ...props, children: children.flat(Infinity) } }),
     fragment: 'fragment',
     hangarCatalog, isTestnetWeaponPurchaseEnabled, shipSaveNetwork: 'testnet',
-    WeaponPreview: 'WeaponPreview', WeaponPurchase: 'WeaponPurchase', WeaponTutorial: 'WeaponTutorial', PiPrice: 'PiPrice',
+    weaponSymbols, WeaponPreview: 'WeaponPreview', WeaponPurchase: 'WeaponPurchase', WeaponTutorial: 'WeaponTutorial', PiPrice: 'PiPrice',
   };
   const component = new Function('env', 'with (env) {\n' + code + '\nreturn MissionWeaponShop; }')(env);
   const tree = component({ authenticated: true, admin: false, timers: [0, 0, 0, 0, 0, 0],
