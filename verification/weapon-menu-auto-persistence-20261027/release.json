@@ -1,0 +1,97 @@
+{
+  "recordedAt": "2026-10-27T17:23:31.427129+00:00",
+  "pullRequest": "https://github.com/19Trojan69/cryptoid-evolution/pull/192",
+  "candidate": "a1eb575ab52f313ccef72fb6c687083eb7910a69",
+  "mergedSource": "0868671b213fb25ba9ce1a0a8d1057dc2067d1f2",
+  "testedTree": "33b05a5e1a911945cd929844ca941f2cfd6c7fd2",
+  "exactTestedAndMergedTree": true,
+  "projects": [
+    {
+      "project": "cryptoid-evolution-testnet",
+      "network": "testnet",
+      "id": "dpl_9fPsoU7HF8hnj3D8fsKWMn8iN5D4",
+      "dashboard": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/9fPsoU7HF8hnj3D8fsKWMn8iN5D4",
+      "alias": "https://cryptoid-evolution-testnet.vercel.app/",
+      "buildDurationSeconds": 122,
+      "team": "19-trojan69",
+      "status": "READY",
+      "environment": "Production",
+      "gitBranch": "main",
+      "gitCommit": "0868671b213fb25ba9ce1a0a8d1057dc2067d1f2",
+      "sourceTree": "33b05a5e1a911945cd929844ca941f2cfd6c7fd2",
+      "sourceStatusEnvironmentAndPublicAliasObservedInSignedInDashboard": true,
+      "githubStatus": "success"
+    },
+    {
+      "project": "cryptoid-evolution",
+      "network": "mainnet",
+      "id": "dpl_82nP1YW2riPZp9rmde8s6q3iJD2c",
+      "dashboard": "https://vercel.com/19-trojan69/cryptoid-evolution/82nP1YW2riPZp9rmde8s6q3iJD2c",
+      "alias": "https://cryptoid-evolution.vercel.app/",
+      "buildDurationSeconds": 68,
+      "team": "19-trojan69",
+      "status": "READY",
+      "environment": "Production",
+      "gitBranch": "main",
+      "gitCommit": "0868671b213fb25ba9ce1a0a8d1057dc2067d1f2",
+      "sourceTree": "33b05a5e1a911945cd929844ca941f2cfd6c7fd2",
+      "sourceStatusEnvironmentAndPublicAliasObservedInSignedInDashboard": true,
+      "githubStatus": "success"
+    }
+  ],
+  "publicBundlesAndStylesIdentical": true,
+  "allPublicChecksPassed": true,
+  "publicBrowserHome": {
+    "bothAliasesReloadedAndRendered": true,
+    "sameEntry": "/assets/index-CFgKwI0L.js",
+    "realAccountGameStartOrPurchaseOrSelection": false
+  },
+  "checks": {
+    "frontendReleaseCases": 437,
+    "backendCases": 141,
+    "nativeMenuAndAuto": 19,
+    "pinnedOldUiCounterChecks": 7,
+    "repeatedSelection": 32,
+    "repeatedFullFlow": 74,
+    "repeatedGameOver": 11,
+    "gameOverControllerStepsInFiveSeconds": 0
+  },
+  "retained": [
+    "PR191 explicit purchased stage selection and verified account start",
+    "direct Ships Weapons Power-ups shop links",
+    "original art/HUD/combat/flight/economy",
+    "true manual and technical pauses",
+    "confirmed manual Continue without mandatory read timer",
+    "45-second new charges and existing receipt compatibility",
+    "one-charge and owned-stock Auto without automatic buying",
+    "once-only passive red binary feedback and readable reinforcement",
+    "terminal idle sleep and independent finite graphics",
+    "separate network/account/payment permissions and owner Testnet catalog"
+  ],
+  "workflow": {
+    "mainTriggeredOneAutomaticDeploymentPerExistingProject": true,
+    "manualBuilds": 0,
+    "candidateAutoDeploymentDisabled": true,
+    "receiptBranch": "codex/weapon-menu-auto-persistence-20261027-release",
+    "receiptAutoDeploymentDisabled": true,
+    "doNotMergeReceiptBranch": true
+  },
+  "access": {
+    "knownVercelConnector404": "Observed again during the preceding release in this same session, including exact deployment-ID lookup.",
+    "dashboardFallback": "Previously explicitly authorized signed-in deployment overviews, read-only.",
+    "runtimeLogsOrSecretsRead": false,
+    "projectProtectionOrEnvironmentSettingsChanged": false
+  },
+  "rollback": {
+    "source": "363d9fd27599d06fcd3916cd96cab1c7dcd8b11e",
+    "testnet": "dpl_GDBKvxyC4CbnW95fEPDMfYCNLTD2",
+    "production": "dpl_A4uYww2UWrgqhf8nPPk4iytfGphe",
+    "olderBackupsAndPriorReceiptRefsPreserved": true
+  },
+  "limitations": [
+    "Native SDK, account, database, payments, time allowance and controlled expiry are local fixtures.",
+    "Public checks are read-only/anonymous, not a real Pi transaction or account gameplay acceptance.",
+    "No physical-device heat/FPS/font-pixel or historical White Screen claim.",
+    "Lint findings match baseline; GamePage62 errors/four warnings, MissionWeaponShop3 and Shop5 remain."
+  ]
+}
