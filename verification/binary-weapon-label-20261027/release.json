@@ -1,0 +1,110 @@
+{
+  "recordedAtUtc": "2026-10-27T11:37:31.707602+00:00",
+  "pr": "https://github.com/19Trojan69/cryptoid-evolution/pull/186",
+  "merged": true,
+  "candidateCommit": "40ac89c3d42062677dfb1c5b4cec07a840dbc2a7",
+  "sharedSourceCommit": "f596413a5f873f9790b262d211d0c33ee710d0a1",
+  "testedAndPublishedTree": "7adf29957f06cbdffa5ff014bd6b3ea223f1d16b",
+  "parentAndRollbackCommit": "0ae15558a2251adaf1b9dde833220cb3b3f932e3",
+  "candidateAndMainTreesExactlyMatchTestedTree": true,
+  "deployments": [
+    {
+      "project": "cryptoid-evolution-testnet",
+      "id": "dpl_2rHmD4diydHECvwzmrRFbSbgJw5Z",
+      "url": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/2rHmD4diydHECvwzmrRFbSbgJw5Z",
+      "status": "READY",
+      "sourceCommit": "f596413a5f873f9790b262d211d0c33ee710d0a1",
+      "environment": "Production",
+      "durationSeconds": 104,
+      "alias": "https://cryptoid-evolution-testnet.vercel.app/"
+    },
+    {
+      "project": "cryptoid-evolution",
+      "id": "dpl_BKvtNeoh28sumnisiTD4T2eBdFNp",
+      "url": "https://vercel.com/19-trojan69/cryptoid-evolution/BKvtNeoh28sumnisiTD4T2eBdFNp",
+      "status": "READY",
+      "sourceCommit": "f596413a5f873f9790b262d211d0c33ee710d0a1",
+      "environment": "Production",
+      "durationSeconds": 68,
+      "alias": "https://cryptoid-evolution.vercel.app/"
+    }
+  ],
+  "deploymentTrigger": "Existing main Git integration, one build per existing project; no manual or duplicate build.",
+  "githubVercelStatuses": "success for both exact deployment URLs",
+  "dashboardVerified": [
+    "READY",
+    "actual source commit",
+    "Production environment",
+    "public alias assignment"
+  ],
+  "connectorLimitation": "The Vercel connector returned404 for known deployment IDs. The already authorized signed-in dashboard was used for actual READY/source/alias checks; no protection or runtime-log access.",
+  "publicVerification": {
+    "path": "public-release.json",
+    "passedBothSites": true,
+    "sameApplicationBundles": true,
+    "sameStyles": true,
+    "commitAndTree": true,
+    "binaryRedExpiryCurrentNames": true,
+    "oldPurchaseActionAndCombatPopupsAbsent": true,
+    "priorGuardsRetained": true,
+    "apiHealthAndCatalogue": true,
+    "separateNetworks": [
+      "testnet",
+      "mainnet"
+    ],
+    "anonymousAdminDenied": true,
+    "bothBrowserHomeScreensRendered": true
+  },
+  "validation": {
+    "command": "npm run build",
+    "cwd": "frontend",
+    "exitCode": 0,
+    "tests": 412,
+    "failures": 0,
+    "localizationInventory": true,
+    "typescript": true,
+    "vite": true,
+    "viteSeconds": 3.76,
+    "nativeRuns": [
+      {
+        "path": "results/native.json",
+        "complete": true,
+        "checks": 118,
+        "engine": "141.0.7390.37"
+      },
+      {
+        "path": "results/regression-flow/native.json",
+        "complete": true,
+        "checks": 74,
+        "engine": "141.0.7390.37"
+      },
+      {
+        "path": "results/game-over/native.json",
+        "complete": true,
+        "checks": 11,
+        "engine": "141.0.7390.37"
+      }
+    ],
+    "nativeChecks": 203,
+    "warnings": [
+      "Existing large-chunk advisory; no unrelated bundle refactoring.",
+      "Local npm http-proxy configuration deprecation."
+    ],
+    "backendSourceChanged": false,
+    "fullBackend127": "Prior acceptance, not rerun."
+  },
+  "lint": "GamePage baseline and candidate62 errors/four warnings, identical message multiset; smaller changed modules clean.",
+  "rollbackDeployments": {
+    "testnet": "dpl_GS7qtHJmjCcUsKnVMCzpxaCyUoHE",
+    "production": "dpl_G2inPaHpEa9Tic6ibhGXSfSfD2ud"
+  },
+  "olderBackupRefsPreserved": true,
+  "receiptBranchAutoDeployDisabled": true,
+  "limitations": [
+    "Public verification is read-only; no live game/account/purchase mutation.",
+    "Native scenarios use isolated handlers/SDK/accounts/clocks/boundaries on Chromium141, not physical iPhone/Pi.",
+    "No physical heat/power/FPS/native memory or historical White Screen cure claim.",
+    "Backend127 is prior acceptance, not a full rerun.",
+    "The evidence ref is not a newer public source version."
+  ]
+}
