@@ -1,0 +1,35 @@
+{
+  "sourceCommit": "7433e560c2fd8575a501997d290157f3e3b2005f",
+  "sourceTree": "b752a064e0254dfe984af61bb047687d2864656a",
+  "candidate": "9cd95a9022aa15a4550e53b7820bdaed7ffefe4c",
+  "previousSource": "3588ff2d0d39779e54c3a9b31eba636e81559c93",
+  "backup": "backup/shared-before-effect-paths-20261027",
+  "observedVia": "Previously authorized signed-in Dashboard; no credentials/protections changed",
+  "projects": [
+    {
+      "project": "cryptoid-evolution-testnet",
+      "deploymentId": "dpl_8ppgy7riyzw1jqBqa1ThFYMhjikM",
+      "status": "READY",
+      "durationSeconds": 118,
+      "sourceCommit": "7433e560c2fd8575a501997d290157f3e3b2005f",
+      "environment": "Production",
+      "dashboard": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/8ppgy7riyzw1jqBqa1ThFYMhjikM",
+      "immutableUrl": "https://cryptoid-evolution-testnet-okdvmklpw-19-trojan69.vercel.app/",
+      "publicUrl": "https://cryptoid-evolution-testnet.vercel.app/"
+    },
+    {
+      "project": "cryptoid-evolution",
+      "deploymentId": "dpl_Ab5qAoajYxjCUu8iZ1z2PN9unbCU",
+      "status": "READY",
+      "durationSeconds": 104,
+      "sourceCommit": "7433e560c2fd8575a501997d290157f3e3b2005f",
+      "environment": "Production",
+      "dashboard": "https://vercel.com/19-trojan69/cryptoid-evolution/Ab5qAoajYxjCUu8iZ1z2PN9unbCU",
+      "immutableUrl": "https://cryptoid-evolution-46ln588gm-19-trojan69.vercel.app/",
+      "publicUrl": "https://cryptoid-evolution.vercel.app/"
+    }
+  ],
+  "runtimeLogsQueried": false,
+  "physicalTemperatureMeasured": false,
+  "historicalWhiteScreenFixed": false
+}
