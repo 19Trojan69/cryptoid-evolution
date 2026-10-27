@@ -1,0 +1,77 @@
+name: Cross-device browser stability
+
+on:
+  push:
+    branches: [codex/cross-device-white-screen-20261027]
+    paths:
+      - '.github/workflows/cryptoid-cross-device.yml'
+      - 'verification/cross-device-white-screen-20261027/*.mjs'
+      - 'verification/cross-device-white-screen-20261027/package*.json'
+  workflow_dispatch:
+    inputs:
+      seconds:
+        description: 'Real wall seconds per emulation profile (30 to 3600)'
+        default: '1800'
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cross-device-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  browser:
+    name: ${{ matrix.profile }} (emulation)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 85
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [android-phone, android-tablet, iphone]
+        include:
+          - profile: android-phone
+            engine: chromium
+          - profile: android-tablet
+            engine: chromium
+          - profile: iphone
+            engine: webkit
+    env:
+      CRYPTOID_TEST_PROFILE: ${{ matrix.profile }}
+      CRYPTOID_TEST_SECONDS: ${{ inputs.seconds || '1800' }}
+      CRYPTOID_TEST_OUTPUT: ${{ github.workspace }}/verification/cross-device-white-screen-20261027/results/${{ matrix.profile }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Install existing application dependencies
+        run: |
+          npm install --prefix frontend --include=optional --no-audit --no-fund
+          npm ci --prefix backend --include=optional
+          npm run build --prefix backend
+          npm run prepare:hulls --prefix frontend
+      - name: Install pinned open-source browser runner
+        run: |
+          npm install --prefix verification/cross-device-white-screen-20261027 --ignore-scripts --no-audit --no-fund
+          cd verification/cross-device-white-screen-20261027
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Validate real-handler fixture and unchanged controller
+        run: node --experimental-strip-types verification/cross-device-white-screen-20261027/preflight.mjs
+      - name: Run actual gameplay with real clocks
+        run: node verification/cross-device-white-screen-20261027/run.mjs
+      - name: Retain evidence, including failures
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-stability-${{ matrix.profile }}
+          path: |
+            verification/cross-device-white-screen-20261027/results/${{ matrix.profile }}/*.json
+            verification/cross-device-white-screen-20261027/results/${{ matrix.profile }}/*.jsonl
+            verification/cross-device-white-screen-20261027/results/${{ matrix.profile }}/*.png
+            verification/cross-device-white-screen-20261027/results/${{ matrix.profile }}/*.zip
+          if-no-files-found: warn
+          retention-days: 3
