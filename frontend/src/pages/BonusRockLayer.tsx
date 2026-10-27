@@ -1,6 +1,7 @@
 import { memo, useEffect, useRef } from 'react';
 import type { BonusRock, RockEffect } from './bonusRocks';
 import { beginRockPaint, endRockPaint } from './renderWork';
+import { gameRenderScale } from './renderResolution';
 const textures = new Map<number, HTMLCanvasElement>();
 function rockTexture(seed: number) {
   const key = Math.abs(Math.floor(seed)) % 7;
@@ -61,7 +62,7 @@ const BonusRockLayer = ({ rocks, effects, width, height }: { rocks: BonusRock[];
     emptySince.current=null;
     if(c.style.width!=='100%')c.style.width='100%';
     if(c.style.height!=='100%')c.style.height='100%';
-    const dpr=Math.min(1.5,window.devicePixelRatio||1);
+    const dpr=gameRenderScale(window.devicePixelRatio);
     if(c.width!==Math.round(width*dpr)||c.height!==Math.round(height*dpr)){c.width=Math.round(width*dpr);c.height=Math.round(height*dpr);occupied.current=false;}
     const g=c.getContext('2d');if(!g)return;
     const paintStarted=beginRockPaint();

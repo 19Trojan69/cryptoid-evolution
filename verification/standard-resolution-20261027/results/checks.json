@@ -1,0 +1,32 @@
+{
+  "frontendBuild": {
+    "tests": 390,
+    "failures": 0,
+    "typescriptAndVite": true
+  },
+  "native": {
+    "checks": 48,
+    "exactPixelPairs": 156,
+    "engine": "26.5",
+    "sameDensityReference": true,
+    "samePixelsAsOld1_5DensityClaimed": false
+  },
+  "lint": [
+    {
+      "errorCount": 0,
+      "warningCount": 0,
+      "file": "BonusRockLayer.tsx"
+    },
+    {
+      "errorCount": 0,
+      "warningCount": 0,
+      "file": "renderResolution.ts"
+    }
+  ],
+  "backendUnchanged": true,
+  "backendTestsRerun": false,
+  "previousBackendAcceptance": 127,
+  "physicalTemperatureMeasured": false,
+  "historicalWhiteScreenFixed": false,
+  "reactReview": "No new hook, effect, state, listener, timer, frame loop or UI. Pure shared raster policy replaces rock-local cap; previous lifecycle and original draw code retained."
+}

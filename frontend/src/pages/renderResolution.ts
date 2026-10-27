@@ -1,4 +1,5 @@
-// Normal in-game raster resolution. Keep CSS geometry and simulation coordinates
-// unchanged; high-density phones must not multiply every effect surface by 9.
+// Standard gameplay uses at most one effect raster pixel per CSS pixel. Keep
+// HUD/text, original hull assets, CSS geometry and simulation coordinates intact.
+// Device density must not oversample these transient graphics by default.
 export const gameRenderScale = (deviceRatio: number = 1) =>
-  Number.isFinite(deviceRatio) && deviceRatio > 0 ? Math.min(1.5, deviceRatio) : 1;
+  Number.isFinite(deviceRatio) && deviceRatio > 0 ? Math.min(1, deviceRatio) : 1;

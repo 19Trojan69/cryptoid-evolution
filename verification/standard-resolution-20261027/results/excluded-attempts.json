@@ -1,0 +1,24 @@
+{
+  "attempts": [
+    {
+      "kind": "unit expectations",
+      "result": "Two tests assumed a 1-to-3 device ratio changed effective raster density. They now cover an actual 1-to-0.75 change and independently assert above-cap reuse. All fallback/replacement assertions retained."
+    },
+    {
+      "kind": "native first comparison",
+      "result": "Different original mount clocks produced unequal effect ages. Excluded. Resource preparation now settles before freezing clocks; all React mounts start together."
+    },
+    {
+      "kind": "frozen preparation",
+      "result": "Freezing before the original queue settled could block its existing timers. Aborted, not acceptance. Preparation now finishes before freezing."
+    },
+    {
+      "kind": "redundant diagnostic rerun",
+      "result": "Generated manifest restored during unnecessary diagnostic rerun; last viewport requested historical unprepared catalogue. Excluded. Final full run completed on prepared 1b15 catalogue before restoration."
+    },
+    {
+      "kind": "lint setup",
+      "result": "Root invocation could not find frontend config. Final invocation from frontend reports zero errors/warnings for both runtime edits."
+    }
+  ]
+}

@@ -19,7 +19,11 @@ async function compile(source) {
         : 'export const memo=f=>f,useRef=v=>__hooks.ref(v),useEffect=(f,d)=>__hooks.effect(f,d),jsx=(t,p)=>({type:t,props:p});' }));
     } }] })).outputFiles[0].text;
 }
-const [beforeCode, currentCode] = await Promise.all([compile(before), compile(current)]);
+// Density is an intentional new default. Compare the old drawing/lifetime at
+// that same density; the immutable fixture above still exposes its display bug.
+const reference = before.replace('Math.min(1.5,window.devicePixelRatio||1)', 'Math.min(1,window.devicePixelRatio||1)');
+assert.notEqual(reference, before);
+const [beforeCode, currentCode] = await Promise.all([compile(reference), compile(current)]);
 function host(code = currentCode, dpr = 3) {
   let now = 0, refIndex = 0, effectIndex = 0, timerId = 0, queue = [], previousStyle = {}, previousAttributes = {};
   let mainContextAvailable = true, currentProps, width = 300, height = 150;
@@ -78,7 +82,7 @@ function fullBeforeEveryDraw(h) {
   assert.ok(h.draws.length > 0);
   for (const draw of h.draws) {
     assert.deepEqual(draw.css, ['100%', '100%']);
-    assert.deepEqual([draw.width, draw.height], draw.field.map(v => Math.round(v * 1.5)));
+    assert.deepEqual([draw.width, draw.height], draw.field.map(v => Math.round(v)));
   }
 }
 
@@ -90,18 +94,18 @@ test('an initially empty canvas has one-pixel display bounds; the preceding sour
   assert.equal(fixed.draws.length, 0); assert.equal(fixed.timers.size, original.timers.size); assert.equal(fixed.timers.size, 1);
   assert.equal(fixed.warm(), 7); fixed.unmount(); original.unmount();
 });
-test('first active drawing restores the original display/raster sizes before painting', () => {
+test('first active drawing restores the full display and new standard raster before painting', () => {
   const original = host(beforeCode), fixed = host();
   original.render(empty()); fixed.render(empty()); original.render(active(), 100); fixed.render(active(), 100);
   fullBeforeEveryDraw(fixed); assert.deepEqual(fixed.calls, original.calls);
-  assert.deepEqual([fixed.main.width, fixed.main.height], [645, 1238]);
+  assert.deepEqual([fixed.main.width, fixed.main.height], [430, 825]);
   original.unmount(); fixed.unmount();
 });
 test('short empty gaps retain warm bounds and the existing two-second grace is exact', () => {
   const fixed = host(), original = host(beforeCode);
   for (const h of [fixed, original]) {
     h.render(active(), 0); h.render(empty(), 100); h.render(empty(), 2099);
-    assert.deepEqual([h.main.width, h.main.height], [645, 1238]);
+    assert.deepEqual([h.main.width, h.main.height], [430, 825]);
     assert.deepEqual([h.main.style.width, h.main.style.height], ['100%', '100%']);
     h.render(empty(), 2100);
   }
@@ -111,7 +115,7 @@ test('short empty gaps retain warm bounds and the existing two-second grace is e
 test('regrowth after idle release uses a changed field size on its first visible frame', () => {
   const h = host(); h.render(active(), 0); h.render(empty(), 10); h.render(empty(), 2010); compact(h);
   h.draws.length = 0; h.render(active(820, 900), 2020); fullBeforeEveryDraw(h);
-  assert.deepEqual([h.main.width, h.main.height], [1230, 1350]); h.unmount();
+  assert.deepEqual([h.main.width, h.main.height], [820, 900]); h.unmount();
 });
 test('effect-only dust, debris and points keep the original complete draw operations', () => {
   const original = host(beforeCode), fixed = host();
