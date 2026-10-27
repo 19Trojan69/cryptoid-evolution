@@ -1,0 +1,22 @@
+{
+  "baseline": "3588ff2d0d39779e54c3a9b31eba636e81559c93",
+  "canvasBaselineSha256": "2e373e02ae4eba3c21c6340a4c803294849f52d96ce6de711f7bcb608bfbae54",
+  "exactReviewedChanges": [
+    {
+      "before": "import {gameRenderScale} from './renderResolution';",
+      "after": "import {gameRenderScale} from './renderResolution';\nimport {prepareImpactClipPaths} from './impactClipPaths';"
+    },
+    {
+      "before": "  for(const piece of pieces){",
+      "after": "  for(let index=0;index<pieces.length;index++){\n    const piece=pieces[index];"
+    },
+    {
+      "before": "    ctx.beginPath();piece.points.forEach(([x,y]:number[],i:number)=>i?ctx.lineTo(x*size,y*size):ctx.moveTo(x*size,y*size));ctx.closePath();ctx.clip();",
+      "after": "    const path=record.clipPaths?.[index];\n    if(path)ctx.clip(path);\n    else{ctx.beginPath();piece.points.forEach(([x,y]:number[],i:number)=>i?ctx.lineTo(x*size,y*size):ctx.moveTo(x*size,y*size));ctx.closePath();ctx.clip();}"
+    },
+    {
+      "before": "    const record={effect,pieces,assets:loaded,started:started.current,pauseStart:pauseStart.current,visibleUntil,bounds:null as any};",
+      "after": "    const record={effect,pieces,clipPaths:prepareImpactClipPaths(pieces,effect.debrisSize??58),assets:loaded,started:started.current,pauseStart:pauseStart.current,visibleUntil,bounds:null as any};"
+    }
+  ]
+}

@@ -1,3 +1,26 @@
+# Ordinary explosion outline reuse, 27 October 2026
+
+Continue owner-requested smartphone optimization from public 3588ff2/PR180.
+Each existing ordinary-impact draw record prepares fixed native fragment paths
+once and clips them under the same original per-frame transforms. No global
+cache/image/surface/RAF/timer/request or quality/cadence change. Missing/failed
+Path2D preparation uses the complete original polygon fallback; context loss
+still restores DOM and releases existing resources. Keep all lifetime guards.
+386 frontend release cases/types/Vite, 275 CPU-raster pairs and nine native WPE
+checks including 36 exact RGBA pairs pass. Sample frame-time path commands 1640->0
+with 164 clips retained. This is not whole-CPU/energy or physical heat proof.
+CanvasEffects retains 21 old lint errors; helper clean. GamePage remains unchanged
+at 62 errors/four warnings, with controller/audio/save/loop/CSS/backend unchanged.
+Backend 127 acceptance is baseline, not a rerun. The Home cutout reuse experiment
+failed one of twelve image comparisons and is rejected; original Home is restored.
+Do not repeat it as an accepted change. Preserve public 3588ff2 and READY Testnet
+Esrjvchy43uW9hva84trp2B3BYXY / production CuaDcrdz9uuZJtuYKAtVSc8kNrzc at
+backup/shared-before-effect-paths-20261027. Candidate auto-deploy disabled; reviewed
+same-source release to both existing projects remains authorized. Keep separate
+networks/account/payment, strict >2500ms/500ms pauses and explicit technical Resume.
+No new owner campaign, PR167/168, reset/migration, secrets/protection/runtime logs.
+See docs/effect-path-reuse-20261027 and native evidence. White Screen stays open.
+
 # Smartphone redundant-work reduction, 27 October 2026
 
 Owner requests less smartphone heating. Start from public f7197d6/PR179, retain

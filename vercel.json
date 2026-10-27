@@ -115,7 +115,8 @@
       "codex/ship-overlay-alignment-20261026": false,
       "codex/continue-hull-prefetch-20261026": false,
       "codex/cockpit-indicator-spacing-20261026": false,
-      "codex/smartphone-idle-work-20261027": false
+      "codex/smartphone-idle-work-20261027": false,
+      "codex/effect-path-reuse-20261027": false
     }
   }
 }

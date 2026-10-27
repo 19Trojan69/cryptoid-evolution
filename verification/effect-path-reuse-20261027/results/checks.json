@@ -1,0 +1,79 @@
+{
+  "baseline": "3588ff2d0d39779e54c3a9b31eba636e81559c93",
+  "frontendCases": 386,
+  "typeScriptAndVite": true,
+  "backendRuntimeUnchanged": true,
+  "backendBaselineCases": 127,
+  "backendSuiteRepeated": false,
+  "rasterPairs": 275,
+  "webKitExactPixelPairs": 36,
+  "webKitChecks": 9,
+  "frameTimePathCommandsBefore": 1640,
+  "frameTimePathCommandsAfter": 0,
+  "fragmentClipCallsBoth": 164,
+  "physicalDevice": false,
+  "temperatureMeasured": false,
+  "historicalWhiteScreenFixed": false,
+  "unchanged": [
+    {
+      "path": "frontend/src/pages/GamePage.tsx",
+      "sha256": "aa98bc74c430c87211d081c71ea1ea720aecf7c64a10809b234268ce0f33fd51"
+    },
+    {
+      "path": "frontend/src/pages/gameLoop.ts",
+      "sha256": "e67b855b6cc3eb3bbed1d539dfa5c143be2a5bd363cb4432f0e409c48de0a6eb"
+    },
+    {
+      "path": "frontend/src/pages/projectilePresentation.ts",
+      "sha256": "deb3c488892c3096b5086b35ab3141aa1e1c5f7cd34f2e8a1ae714ef9ebd96db"
+    },
+    {
+      "path": "frontend/src/pages/HomeCombatPreview.tsx",
+      "sha256": "1d8a9e0d2ae500437d04f4f217f1e959cca1f7611f3d9a63542c22c8b1b52698"
+    },
+    {
+      "path": "frontend/src/pages/HomeEarthNetwork.tsx",
+      "sha256": "fbc8a87b30a48594e1b91f4e2f92282b9854b4667ca8f374b265560766353590"
+    },
+    {
+      "path": "frontend/src/pages/bossWeaponRenderer.ts",
+      "sha256": "fe9a3004aa0125f04f1f442e73e4cd087ab3edaf9312a6fc2e7c8c5ff03be579"
+    },
+    {
+      "path": "frontend/src/pages/BossWeaponsView.tsx",
+      "sha256": "1b1ddbbaa33d400804a1f4e12e4413a08fdcc6e6e49699a0824c1e8cfcaf511c"
+    },
+    {
+      "path": "frontend/src/pages/normalEffectMath.mjs",
+      "sha256": "7133bb1b8fc0fbf90a35203cca0484ca92e1b15f3fd66b16b038cabcb5616ca8"
+    },
+    {
+      "path": "frontend/src/pages/normalEffectArtwork.ts",
+      "sha256": "d6b69f068ca5d62777a08810dd7ca0062f8ef6342f4ec9c4a3cb099affa7f049"
+    },
+    {
+      "path": "frontend/src/pages/normalEffectBounds.mjs",
+      "sha256": "2c5bcc62416268ca9d6ac8d07378105f0c2f8b41cbb76a49780a7863ab5ed2c7"
+    },
+    {
+      "path": "frontend/src/index.css",
+      "sha256": "cf48ca4553ac7fa425f37e84a334acc3fec2f2163b72d31bfe9b35f7d33c27b5"
+    },
+    {
+      "path": "frontend/src/cockpitMenus.css",
+      "sha256": "cf2cef495a7097e4973d546bf49755559c0bba90495dd2d945474b1f193e33a2"
+    },
+    {
+      "path": "frontend/src/pages/gameAudio.ts",
+      "sha256": "3aeb4ca63260573b38d2b753bda61461eb2d4191beae2aac072ce722657077a8"
+    },
+    {
+      "path": "frontend/src/lib/accountSave.ts",
+      "sha256": "eca17b62d128fa03b4974cd8c9d6ea815a33a44f224b47f8b8571120b781e741"
+    },
+    {
+      "path": "backend/src/weaponStock.ts",
+      "sha256": "271fb173c80b140912accd3ea6d66b83908cf700d5abb0d7815e8465ac80fbc2"
+    }
+  ]
+}
