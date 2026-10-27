@@ -28,7 +28,7 @@ import { usePayments } from "../hooks/usePayments";
 import { axiosClient } from "../lib/axiosClient.ts";
 import { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY } from "../lib/localRecordKeys";
 import { allPlayerColors, buyShipVariant, fleetCount, playerColors, playerSkins, readShipFleet, savedShipColors, selectedShip, shardBalance, shipSaveNetwork, ADMIN_SHIP_COLOR_KEY, ADMIN_SHIP_SKIN_KEY, ADMIN_SHIP_STAGE_KEY, ADMIN_START_SECTOR_KEY, SHARD_BALANCE_KEY, SHIP_COLOR_KEY, SHIP_COLORS_KEY, SHIP_FLEET_KEY, SHIP_OWNED_KEY, SHIP_SKIN_KEY, type ShipFleet } from "./shipFleet";
-import { ownedShipStage, type ShipStage } from "./shipEvolution";
+import { ownedShipStage, selectedShipStage, type ShipStage } from "./shipEvolution";
 
 import FleetShipPanel from "./FleetShipPanel";
 import "./shopPurchase.css";
@@ -357,26 +357,26 @@ const Shop = () => {
     if (!purchase) { setHangarMessage("Not enough Shards yet. Earn them by defeating Cryptoids."); return; }
     try { saveGuestShipPurchase(localStorage, previewSkin.id, previewColor.id, purchase); }
     catch { setHangarMessage("Could not save loadout. Please retry."); return; }
-    setSelected({ skin: previewSkin, color: previewColor });
     setFleet(purchase.fleet);
     if(!fleetCount(currentFleet,previewSkin.id))setNewCards(unseenShipCards([{key:`${previewSkin.id}-1`,ship:previewSkin.id,stage:1}],readCardReveals('guest')));
 
     setShards(purchase.balance);
-    setHangarMessage({ ship: previewSkin.name, color: previewColor.name, status: "EQUIPPED", count: fleetCount(purchase.fleet, previewSkin.id, previewColor.id) });
+    setHangarMessage({ ship: previewSkin.name, color: previewColor.name, status: "Owned", count: fleetCount(purchase.fleet, previewSkin.id, previewColor.id) });
   };
-  const equipShip = (skin: typeof playerSkins[number], color: typeof allPlayerColors[number]) => {
+  const equipShip = (skin: typeof playerSkins[number], color: typeof allPlayerColors[number], stage: ShipStage) => {
     // Only a variant already in the fleet can become the active ship.
     if (!fleetCount(visibleFleet, skin.id, color.id)) return;
     if (adminMode) {
       sessionStorage.setItem(ADMIN_SHIP_SKIN_KEY, skin.id);
       sessionStorage.setItem(ADMIN_SHIP_COLOR_KEY, color.id);
+      sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage));
       setSelected({ skin, color });
       setHangarMessage({ ship: skin.name, color: color.name, status: "Admin center" });
       return;
     }
     if (user) {
       if (!account) { setAccountError("Account save is loading or unavailable."); return; }
-      void accountCommand({ action: "select", skin: skin.id, color: color.id }); return;
+      void accountCommand({ action: "select", skin: skin.id, color: color.id, shipStage: stage }); return;
     }
     localStorage.setItem(SHIP_SKIN_KEY, skin.id);
     localStorage.setItem(SHIP_COLOR_KEY, color.id);
@@ -441,17 +441,12 @@ const Shop = () => {
     } catch { setLoadoutMessage('Could not save loadout. Please retry.'); }
   };
 
-  const buyTestPiOffer = (offer: { id: string; name?: string; pricePi: number }, skin?: typeof playerSkins[number], color?: typeof allPlayerColors[number]) => {
+  const buyTestPiOffer = (offer: { id: string; name?: string; pricePi: number }) => {
     if (!ownerTestnet || !catalogReady || isLoading) return;
     const owner = user?.uid;
     void orderProduct(`Cryptoid ${offer.name || offer.id} · Test-Pi`, offer.pricePi, { productId: offer.id }, async () => {
       if (inventoryOwnerRef.current !== owner) return;
       await refreshInventory();
-      if (skin && account) {
-        const ownedColor = color && fleetCount(account.fleet as ShipFleet, skin.id, color.id) ? color.id
-          : allPlayerColors.find(item => fleetCount(account.fleet as ShipFleet, skin.id, item.id))?.id;
-        if (ownedColor) await accountCommand({ action: "select", skin: skin.id, color: ownedColor });
-      }
       setLoadoutMessage("purchase confirmed.");
     });
   };
@@ -573,7 +568,10 @@ const Shop = () => {
       {shopView && <div className="shop-overlay" role="dialog" aria-modal="true" aria-label={t('Shop and hangar')}>
         <div className="shop-modal">
         <div className="shop-modal-header"><button className="text-button menu-return" type="button" onClick={returnToMenu}>← {t("Back to quick access")}</button><strong>{t(shopTabs.find(([view]) => view === shopView)?.[1] ?? "Shop / Hangar")}</strong><button className="close-button" type="button" onClick={() => setShopView(null)} aria-label={t('Close shop')}>×</button></div>
-          <div className="shop-modal-body">
+        {(["hangar", "shop", "weapons", "powers"] as const).some(view => view === shopView) && <nav className="shop-category-nav" aria-label={t("Shop")}>
+          {([["shop", "Ships"], ["weapons", "Weapons"], ["powers", "Power-ups"]] as const).map(([view, label]) => <button key={view} type="button" aria-current={view === shopView ? "page" : undefined} onClick={() => openQuickAction(view)}>{t(label)}</button>)}
+        </nav>}
+          <div key={shopView} className="shop-modal-body">
       {shopView === "progress" && <CareerDashboard progress={!user || rewardStatus === "ready" && rewardOwner === user.uid ? rewardProgress : null} scores={user ? personalScores : null} records={!user || account ? displayedRecords : null} accountId={user?.uid} localBest={!user ? records.bestScore : undefined} loading={!!user && rewardStatus === "loading"}/>}
 
       {shopView === "rewards" && <section className="dashboard-grid rewards-dashboard" aria-label={t("Rewards")}>
@@ -656,15 +654,15 @@ const Shop = () => {
         <div className="fleet-scroll-list">
           {shipSearchOptions.map(skin => <article id={`fleet-${skin.id}`} key={`${shopView}:${skin.id}`} className="fleet-list-entry">
             <FleetShipPanel view={shopView} skin={skin} ownedStage={ownedShipStage(skin.sprite, inventory?.ownedShipUpgrades)} fleet={visibleFleet} shards={displayedShards} locale={locale} adminPreview={adminMode} testnetCatalogAccess={ownerTestnet}
-              offers={offers.filter(offer => offer.kind === "ship_upgrade")} selectedSkinId={selected.skin.id} selectedColorId={selected.color.id} selectedStage={ownedShipStage(selected.skin.sprite, inventory?.ownedShipUpgrades)}
+              offers={offers.filter(offer => offer.kind === "ship_upgrade")} selectedSkinId={selected.skin.id} selectedColorId={selected.color.id} selectedStage={selectedShipStage(selected.skin.sprite, inventory?.ownedShipUpgrades, account?.shipStage)} selectionConfirmed={!user || adminMode || account?.shipStage !== undefined}
               message={typeof hangarMessage === "object" && hangarMessage.ship === skin.name ? hangarMessageText : ""} t={t}
               requestedStage={shopTarget?.skin === skin.id ? shopTarget.stage : undefined}
               purchaseBusy={accountBusy || isLoading || !catalogReady || Boolean(user && !account)}
               upgradePending={isLoading && Boolean(activeProductId?.startsWith(`ship_${String(skin.sprite + 1).padStart(2, "0")}_`))}
               upgradeStatus={activeProductId?.startsWith(`ship_${String(skin.sprite + 1).padStart(2, "0")}_`) ? paymentStatus : undefined}
               upgradeDiagnostic={activeProductId?.startsWith(`ship_${String(skin.sprite + 1).padStart(2, "0")}_`) ? paymentDiagnostic : undefined}
-              onBuyUpgrade={(offer, color) => buyTestPiOffer(offer, skin, color)} onBuy={color => purchasePreview(skin, color)}
-              onEquip={color => equipShip(skin, color)}
+              onBuyUpgrade={offer => buyTestPiOffer(offer)} onBuy={color => purchasePreview(skin, color)}
+              onEquip={(color, stage) => equipShip(skin, color, stage)}
               onStage={stage => { if (adminMode) sessionStorage.setItem(ADMIN_SHIP_STAGE_KEY, String(stage)); }}
               onUpgrade={stage => { setShipQuery(""); setShipFilter("all"); setShopTarget({ skin: skin.id, stage }); setShopView("shop"); }} />
           </article>)}

@@ -1,4 +1,6 @@
-export type ShipStage = 1 | 2 | 3;
+import type { ShipStage } from '../../../backend/src/shipLoadout.ts';
+export type { ShipStage } from '../../../backend/src/shipLoadout.ts';
+export { ownedShipStage, selectedShipStage } from '../../../backend/src/shipLoadout.ts';
 
 export const projectileGuardForStage = (stage: ShipStage) => stage - 1;
 export const stageWeaponLevel = (stage: ShipStage, weaponLevel: number) => Math.max(stage >= 2 ? 2 : 1, weaponLevel);
@@ -12,10 +14,3 @@ export const projectileImpact = (guard: number, shielded: boolean) =>
 
 export const shipEvolutionAsset = (index: number, stage: ShipStage) =>
   `/ships/evolution/ship_${String(index + 1).padStart(2, "0")}_stage_${stage}.png`;
-
-// A stage-three purchase is only usable alongside its stage-two prerequisite.
-export const ownedShipStage = (index: number, owned: readonly string[] = []): ShipStage => {
-  const prefix = `ship_${String(index + 1).padStart(2, "0")}_stage_`;
-  if (!owned.includes(`${prefix}2`)) return 1;
-  return owned.includes(`${prefix}3`) ? 3 : 2;
-};

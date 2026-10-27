@@ -5,7 +5,7 @@ import { shipSaveNetwork } from "../pages/shipFleet";
 import { BASE_MISSION_HEARTS, MAX_MISSION_HEARTS, cappedSnapshot } from "../../../backend/src/lifeRules";
 import { appendPendingSave, type PendingSave } from './saveOutbox';
 import { sessionDiagnostic } from './sessionDiagnosticEvents';
-export type AccountSave = Pick<PlayerSave, "cardReveals" | "usedShipSkins" | "version" | "balance" | "fleet" | "skin" | "color" | "mission" | "highestSector" | "totalDestroyed" | "totalShardsEarned" | "totalShardsSpent" | "legacyImported" | "updatedAt">;
+export type AccountSave = Pick<PlayerSave, "cardReveals" | "usedShipSkins" | "version" | "balance" | "fleet" | "skin" | "color" | "shipStage" | "mission" | "highestSector" | "totalDestroyed" | "totalShardsEarned" | "totalShardsSpent" | "legacyImported" | "updatedAt">;
 export type { Snapshot };
 export const loadAccountSave = async () => (await axiosClient.get<{ save: AccountSave }>("/progress/me")).data.save;
 export const accountSelection = (save: AccountSave) => ({ skin: playerSkins.find(s => s.id === save.skin) || playerSkins[0], color: allPlayerColors.find(c => c.id === save.color) || allPlayerColors.find(c => c.id === "grey")! });

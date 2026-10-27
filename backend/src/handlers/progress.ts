@@ -1,3 +1,5 @@
+import { hangarCatalog } from "../hangarCatalog";
+import { ownedShipStage, selectedShipStage } from "../shipLoadout";
 import { blockFlights } from "../blockFlights";
 import { BOSS_INTERMISSION_MIN_MS, bossIntermissionPending } from '../bossIntermission';
 import { readCombatCheckpoint } from "../combatCheckpoint";
@@ -5,9 +7,9 @@ import { validRunScore } from "../leaderboardRules";
 import { restoreScoreRun } from "../restoreScoreRun";
 import { Router } from "express";
 import { rewardNetwork } from "../rewardNetwork";
-import { canUseOwnerTestnetCatalog, isAdminMode } from "../adminAccess";
+import { canUseOwnerTestnetCatalog, isAdminMode, ownerTestnetOrderScope } from "../adminAccess";
 import { MAX_MISSION_HEARTS, maxMissionHearts } from "../lifeRules";
-import { emptyPlayerSave, firstMissionSnapshot, readSnapshot, legacyInventory, publicSave, shipColors, shipPrice, validSelection, standardShips, type PlayerSave } from "../playerSave";
+import { emptyPlayerSave, firstMissionSnapshot, readSnapshot, legacyInventory, publicSave, shipColors, shipPrice, validSelection, standardShips, spriteForShip, type PlayerSave } from "../playerSave";
 
 export async function loadPlayerSave(users: any, uid: string, network: string): Promise<PlayerSave> {
   const key = `playerByNetwork.${network}`;
@@ -178,12 +180,18 @@ export default function mountProgressEndpoints(router: Router) {
         fields = { ...legacy, legacyImported: true };
       } else if (action === "select") {
         if (!validSelection(save, skin, color)) return res.status(403).json({ error: "ship_not_owned" });
-        fields = { skin, color };
+        const stage = req.body.shipStage;
+        if (stage !== undefined && (!Number.isInteger(stage) || stage < 1 || stage > 3)) return res.status(400).json({ error: "invalid_ship_stage" });
+        const upgrades = stage === 1 ? [] : await req.app.locals.orderCollection.find({ ...ownerTestnetOrderScope(req), user: uid, paid: true,
+          product_id: { $in: hangarCatalog.filter(offer => offer.kind === "ship_upgrade").map(offer => offer.id) } }).project({ product_id: 1 }).toArray();
+        const ids = upgrades.map((order: any) => order.product_id), sprite = spriteForShip(skin);
+        if (stage !== undefined && stage > ownedShipStage(sprite, ids)) return res.status(403).json({ error: "ship_stage_not_owned" });
+        fields = { skin, color, shipStage: stage ?? selectedShipStage(sprite, ids, skin === save.skin ? save.shipStage : undefined) };
       } else {
         const price = shipPrice(skin, await canUseOwnerTestnetCatalog(req));
         if (price === null || !shipColors.includes(color)) return res.status(400).json({ error: "invalid_ship" });
         if (save.balance < price) return res.status(403).json({ error: "not_enough_shards" });
-        fields = { skin, color, balance: save.balance - price, totalShardsSpent: (save.totalShardsSpent || 0) + price, fleet: { ...save.fleet, [skin]: { ...save.fleet[skin], [color]: (save.fleet[skin]?.[color] || 0) + 1 } } };
+        fields = { balance: save.balance - price, totalShardsSpent: (save.totalShardsSpent || 0) + price, fleet: { ...save.fleet, [skin]: { ...save.fleet[skin], [color]: (save.fleet[skin]?.[color] || 0) + 1 } } };
       }
       const updated = { ...save, ...fields, version: version + 1, updatedAt: new Date().toISOString() };
       const result = await users.updateOne({ uid, [`${key}.version`]: version }, { $set: Object.fromEntries(Object.entries(fields).map(([k, v]) => [`${key}.${k}`, v]).concat([[`${key}.updatedAt`, updated.updatedAt]])), $inc: { [`${key}.version`]: 1 } });

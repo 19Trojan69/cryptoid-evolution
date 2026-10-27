@@ -1,3 +1,4 @@
+import { restoreShipSelectionGameChanges } from './shipSelectionReviewedChanges.mjs';
 export const ownerTestnetGameChanges = [
   {
     "before": "isTestnetWeaponPurchaseEnabled(reloadOffer)",
@@ -13,6 +14,7 @@ export const ownerTestnetGameChanges = [
   }
 ];
 export function restoreOwnerTestnetGameChanges(source) {
+  source = restoreShipSelectionGameChanges(source);
   if (!source.includes(ownerTestnetGameChanges[0].after)) return source;
   for (const { before, after } of ownerTestnetGameChanges) {
     if (source.split(after).length !== 2) throw Error('Expected one exact owner Testnet permission change');

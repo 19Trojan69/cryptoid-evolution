@@ -1,0 +1,25 @@
+{
+  "baseline": "1d800516767131013e0ef80f5c22fa1332593b43",
+  "localOnly": true,
+  "realUiAndHandlers": true,
+  "cases": [
+    {
+      "marker": true,
+      "verifiedUser": true,
+      "actualStage": 3,
+      "accountRun": true,
+      "starts": 1,
+      "shopEliteClaimsEquipped": true
+    },
+    {
+      "marker": false,
+      "verifiedUser": true,
+      "actualStage": 1,
+      "accountRun": false,
+      "starts": 0,
+      "shopEliteClaimsEquipped": true
+    }
+  ],
+  "complete": true,
+  "errors": []
+}

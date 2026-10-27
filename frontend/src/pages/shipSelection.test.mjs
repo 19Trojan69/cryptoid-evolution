@@ -43,14 +43,15 @@ test('shard balance, released hulls, busy state and Pi locks still gate purchase
   }
 });
 
-test('hangar previews only equip the owned paint at the actual owned stage',()=>{
+test('owned stages use explicit selection rather than highest ownership',()=>{
   let equipped=0,color;
   const props={...defaults(),view:'hangar',ownedStage:2,focusStage:2,fleet:{'grey-scout':{silver:1,gold:1}},onEquipPreview:()=>equipped++,onColorChange:x=>color=x.id};
   let tree=nodes(Panel(props));const equip=tree.find(x=>x.props.className?.includes('ship-equip-button'));
   assert.ok(equip);equip.props.onClick();assert.equal(equipped,1);
   const paints=tree.filter(x=>x.type==='button'&&x.props.title);assert.equal(paints.length,2);paints.find(x=>x.props.title==='Gold').props.onClick();assert.equal(color,'gold');assert.equal(equipped,1);
-  for(const focusStage of [1,3])assert.equal(nodes(Panel({...props,focusStage})).some(x=>x.props.className?.includes('ship-equip-button')),false);
-  tree=nodes(Panel({...props,selectedSkinId:'grey-scout'}));assert.equal(tree.find(x=>x.props.className?.includes('ship-equip-button')).props.disabled,true);
+  assert.equal(nodes(Panel({...props,focusStage:1})).some(x=>x.props.className?.includes('ship-equip-button')),true);
+  assert.equal(nodes(Panel({...props,focusStage:3})).some(x=>x.props.className?.includes('ship-equip-button')),false);
+  tree=nodes(Panel({...props,selectedSkinId:'grey-scout',selectedStage:2}));assert.equal(tree.find(x=>x.props.className?.includes('ship-equip-button')).props.disabled,true);
 });
 
 test('missing standard ownership and an unowned color never expose an equip action',()=>{
@@ -65,4 +66,16 @@ test('shop comparisons reflect the actual equipped hull and owned stage rather t
   assert.match(label(node),/-73%/);assert.equal(node.props['data-improved'],false);
   node=comparison({skin:fleet.playerSkins[1],selectedSkinId:'nova-wing',focusStage:2,selectedStage:2,color:fleet.playerColors[1]});
   assert.match(label(node),/: 0%/);
+});
+
+
+test('purchase ownership exposes Select for each owned stage; only the confirmed exact hull/color/stage says Equipped',()=>{
+ for(const focusStage of [1,2,3]){
+  const chosen=[],props={...defaults(),ownedStage:3,focusStage,selectedSkinId:'grey-scout',selectedColorId:'silver',selectedStage:1,onEquipPreview:stage=>chosen.push(stage)};
+  let button=nodes(Panel(props)).find(n=>n.props.className?.includes('ship-equip-button'));
+  assert.equal(Boolean(button.props.disabled),focusStage===1);assert.equal(label(button),focusStage===1?'EQUIPPED':'Select');
+  button.props.onClick();assert.deepEqual(chosen,[focusStage]);
+  button=nodes(Panel({...props,selectionConfirmed:false})).find(n=>n.props.className?.includes('ship-equip-button'));assert.equal(Boolean(button.props.disabled),false);assert.equal(label(button),'Select');
+  button=nodes(Panel({...props,purchaseBusy:true})).find(n=>n.props.className?.includes('ship-equip-button'));assert.equal(button.props.disabled,true);
+ }
 });

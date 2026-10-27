@@ -115,7 +115,7 @@ test('owner earns Shards in a saved mission before buying the last Standard ship
   assert.equal((await buy()).code, 200);
   assert.equal(h.profile().balance, 350);
   assert.equal(h.profile().fleet['core-carrier'].gold, 1);
-  assert.equal(h.profile().skin, 'core-carrier');
+  assert.equal(h.profile().skin, 'grey-scout');
   assert.equal((await h.call('progress', '/me', null, { method: 'GET', network: 'mainnet' })).body.save.fleet['core-carrier'], undefined);
   for (const skin of standardShips) assert.equal(typeof shipPrice(skin, true), 'number');
   assert.equal(shipPrice('core-carrier'), null);

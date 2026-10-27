@@ -1,0 +1,19 @@
+{
+  "baseline": "1d800516767131013e0ef80f5c22fa1332593b43",
+  "baselineTree": "20919d588a70dca7f6f9453112158bccd5daf83b",
+  "controllerSha256": "dd41d1c39a361d5de2940ed8f8799a3699970d9fcda258d8fef30d494aca4d9e",
+  "wholeRestoredPublishedController": "b5574344a195886dedb02730f20b9a486d4f3a410717ac17d0f468d42c3eb74d",
+  "exactControllerAndAccountTypeRestoration": true,
+  "apiGatewayOriginalArtHudCssShotDamageRulesAndHomeUnchanged": true,
+  "all1740PaintedEncodedByteSizesUnchanged": true,
+  "noNewLoopTimerObserverEffect": true,
+  "noMigrationResetFreeGrantRealPaymentOrLiveSelection": true,
+  "rawOwnerDataAndImagesExcluded": true,
+  "directExistingShipsWeaponsPowerUpsShopNavigation": true,
+  "workingBranchAutoDeploymentDisabled": true,
+  "rollback": {
+    "source": "1d800516767131013e0ef80f5c22fa1332593b43",
+    "testnet": "dpl_AMEhBjnbthidFesbHrzAQJziWxYF",
+    "production": "dpl_2GmV8T6UCwfW3TCR2G7MvSD3Bf1P"
+  }
+}

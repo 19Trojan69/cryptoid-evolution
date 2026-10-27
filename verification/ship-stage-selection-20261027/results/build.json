@@ -1,0 +1,11 @@
+{
+  "frontendReleaseCases": 430,
+  "backendCases": 141,
+  "extraEvolutionGuestPurchaseAttributesCases": 8,
+  "localizationInventory": true,
+  "typescriptFrontendAndBackend": true,
+  "vite": true,
+  "existingLargeChunkWarning": true,
+  "controllerSha256": "dd41d1c39a361d5de2940ed8f8799a3699970d9fcda258d8fef30d494aca4d9e",
+  "noPhysicalHeatFpsOrFontPixelClaim": true
+}
