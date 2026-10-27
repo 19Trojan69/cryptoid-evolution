@@ -1,0 +1,94 @@
+{
+  "recordedAtUtc": "2026-10-27T12:36:54.006870+00:00",
+  "pr": "https://github.com/19Trojan69/cryptoid-evolution/pull/187",
+  "merged": true,
+  "candidateCommit": "d3b64af84c6d18049cd8a10b8169f7bb0081040d",
+  "sharedSourceCommit": "a718b4c60dc93ab022acffe6bacfb6e4fc9a688f",
+  "testedAndPublishedTree": "9ea5c2bd4f6f2a7e17045a6f51e05cc90bee581e",
+  "candidateAndMainTreesExactlyMatchTestedTree": true,
+  "parentAndRollbackCommit": "f596413a5f873f9790b262d211d0c33ee710d0a1",
+  "deployments": [
+    {
+      "project": "cryptoid-evolution-testnet",
+      "id": "dpl_8GQBDCPE6uUKWBNF1g7try8s5Jia",
+      "url": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/8GQBDCPE6uUKWBNF1g7try8s5Jia",
+      "status": "READY",
+      "sourceCommit": "a718b4c60dc93ab022acffe6bacfb6e4fc9a688f",
+      "environment": "Production",
+      "durationSeconds": 65,
+      "alias": "https://cryptoid-evolution-testnet.vercel.app/"
+    },
+    {
+      "project": "cryptoid-evolution",
+      "id": "dpl_Hu6VY49RQoW9TFnnjhfPagrMUwqv",
+      "url": "https://vercel.com/19-trojan69/cryptoid-evolution/Hu6VY49RQoW9TFnnjhfPagrMUwqv",
+      "status": "READY",
+      "sourceCommit": "a718b4c60dc93ab022acffe6bacfb6e4fc9a688f",
+      "environment": "Production",
+      "durationSeconds": 107,
+      "alias": "https://cryptoid-evolution.vercel.app/"
+    }
+  ],
+  "deploymentTrigger": "Existing main integration; one build per project, no manual duplicate.",
+  "githubVercelStatuses": "success for both exact deployment URLs",
+  "dashboardVerified": [
+    "READY",
+    "actual source commit",
+    "Production environment",
+    "public alias assignment"
+  ],
+  "connectorLimitation": "Known-ID Vercel connector reads returned404; actual READY/source/aliases were verified through the already authorized signed-in dashboard. No security/protection/runtime-log access change.",
+  "publicChecks": {
+    "path": "public-release.json",
+    "passedBothSites": true,
+    "sameApplicationBundles": true,
+    "sameStyles": true,
+    "deliveredCommitTree": true,
+    "sharedShopSymbolsNumericLevelsAndStyle": true,
+    "retainedBinaryRedNoCtaAndPriorGuards": true,
+    "apiHealthCatalogueNetworkSeparationAdminDenial": true,
+    "bothBrowserHomeScreensRendered": true
+  },
+  "validation": {
+    "command": "npm run build",
+    "cwd": "frontend",
+    "exitCode": 0,
+    "tests": 412,
+    "failures": 0,
+    "localizationInventory": true,
+    "typescript": true,
+    "vite": true,
+    "viteSeconds": 3.9,
+    "native": {
+      "complete": true,
+      "checks": 126,
+      "engine": "141.0.7390.37",
+      "scenarios": 8,
+      "actualShopDomSymbolComparison": true
+    },
+    "baselineNotRepeated": {
+      "PR186FullFlow": 74,
+      "PR186GameOver": 11,
+      "backend": 127
+    },
+    "warnings": [
+      "Existing large-chunk advisory",
+      "Local npm http-proxy configuration deprecation"
+    ],
+    "physicalDeviceAcceptance": false
+  },
+  "lint": "GamePage62 errors/four warnings and MissionWeaponShop3 errors match pinned baseline multisets; smaller changed modules clean.",
+  "rollbackDeployments": {
+    "testnet": "dpl_2rHmD4diydHECvwzmrRFbSbgJw5Z",
+    "production": "dpl_BKvtNeoh28sumnisiTD4T2eBdFNp"
+  },
+  "olderBackupsPreserved": true,
+  "receiptBranchAutoDeployDisabled": true,
+  "limitations": [
+    "Read-only public checks, no live game/account/purchase mutation.",
+    "Native checks use isolated SDK/accounts/handlers/clocks/boundaries on Chromium141, not physical iPhone/Pi.",
+    "No physical heat/FPS/White Screen cure claim.",
+    "Prior PR186 full-flow74/Game Over11 and backend127 are baseline, not added to the126 new native checks.",
+    "This evidence ref is not a newer public source version."
+  ]
+}
