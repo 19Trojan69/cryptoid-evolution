@@ -4,8 +4,10 @@ import{readFileSync}from'node:fs';
 import{createHash}from'node:crypto';
 import{transformSync}from'esbuild';
 import{restoreShipSelectionGameChanges}from'../../scripts/shipSelectionReviewedChanges.mjs';
-const source=readFileSync(new URL('./GamePage.tsx',import.meta.url),'utf8');
-const published=restoreShipSelectionGameChanges(source);
+import {restoreWeaponMenuGameChanges} from '../../scripts/weaponMenuReviewedChanges.mjs';
+const source=restoreWeaponMenuGameChanges(readFileSync(new URL('./GamePage.tsx',import.meta.url),'utf8'));
+
+const published=restoreShipSelectionGameChanges(readFileSync(new URL('./GamePage.tsx',import.meta.url),'utf8'));
 const compiled=tsx=>transformSync(tsx,{loader:'tsx',jsxFactory:'element'}).code;
 const element=(type,props,...children)=>({type,props:{...props,children}});
 function entry(text,auth){
@@ -44,6 +46,6 @@ test('restart reuses the confirmed owner and explicit stages do not regain saved
 test('the complete current public controller is restored exactly and altered payment/pause gates still fail',()=>{
  const hash=text=>createHash('sha256').update(text).digest('hex');
  assert.equal(hash(published),'b5574344a195886dedb02730f20b9a486d4f3a410717ac17d0f468d42c3eb74d');
- assert.throws(()=>restoreShipSelectionGameChanges(source.replace('authenticated={isAuthenticated}','authenticated={true}')),/one exact/);
- assert.notEqual(hash(restoreShipSelectionGameChanges(source.replace('watch: callback => window.setInterval(callback, 500)','watch: callback => window.setInterval(callback, 1000)'))),hash(published));
+ assert.throws(()=>restoreShipSelectionGameChanges(readFileSync(new URL('./GamePage.tsx',import.meta.url),'utf8').replace('authenticated={isAuthenticated}','authenticated={true}')),/one exact/);
+ assert.notEqual(hash(restoreShipSelectionGameChanges(readFileSync(new URL('./GamePage.tsx',import.meta.url),'utf8').replace('watch: callback => window.setInterval(callback, 500)','watch: callback => window.setInterval(callback, 1000)'))),hash(published));
 });

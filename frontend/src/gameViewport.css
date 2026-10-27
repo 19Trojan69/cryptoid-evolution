@@ -16,3 +16,9 @@ body.game-viewport-locked, body:has(.game-route) {
 .game-route .game-modal, .game-route [data-game-scroll] {
   overscroll-behavior: none; touch-action: pan-y pinch-zoom;
 }
+/* Paused menus need a native pan through their playfield ancestors, too.
+   The route's existing touch lock still blocks page pulls outside menu bodies. */
+.game-route .game-shell[data-effects-paused="true"],
+.game-route .game-shell[data-effects-paused="true"] .game-field {
+  touch-action: pan-y pinch-zoom;
+}

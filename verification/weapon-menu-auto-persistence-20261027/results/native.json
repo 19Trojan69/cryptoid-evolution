@@ -1,0 +1,405 @@
+{
+  "baseline": "363d9fd27599d06fcd3916cd96cab1c7dcd8b11e",
+  "control": false,
+  "sourceSha256": "83fad3d2d4e20d1f5c6b6777c5dc0f5fcfea3215eeda386014d6b1fed32f1c1e",
+  "realUiAndHandlers": true,
+  "localOnly": true,
+  "syntheticPiAndDatabase": true,
+  "physicalDevice": false,
+  "checks": [
+    "saved account/network Auto arms exactly one owned Plasma charge at a confirmed new start",
+    "waiting in the actual weapon drawer neither resumes combat nor spends active weapon time",
+    "native phone touch drag scrolls the marked offer body while the document remains locked",
+    "the actual Plasma quantity and repurchase control can be reached above the fixed return footer",
+    "actual isolated five-charge checkout replenishes stock and leaves the paused Auto choice and timer intact",
+    "expiry requests only one automatic confirmation from the available owned stock",
+    "the explicit pause remains in place while the delayed reload reply is unresolved",
+    "a delayed automatic confirmation arms Plasma during the pause without restarting combat",
+    "the paused drawer agrees with the real selected automatic weapon",
+    "five more paused seconds preserve the full confirmed timer and create no new activation",
+    "only the explicit Auto switch disables the persisted account/network preference",
+    "Auto off uses up the current charge once and consumes no further owned stock",
+    "confirmed Resume preserves the re-enabled Auto weapon and never consumes or refills its live charge",
+    "native flow has no uncaught page errors or unexpected local API failures",
+    "Auto off starts the free permanent base without consuming a charge at 820x1180",
+    "native offer scrolling and fixed return remain usable at 820x1180",
+    "Auto off starts the free permanent base without consuming a charge at 844x390",
+    "native offer scrolling and fixed return remain usable at 844x390",
+    "controller source stayed unchanged throughout this native run"
+  ],
+  "errors": [],
+  "requests": [
+    {
+      "case": "owner-phone",
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200,
+          "stage": 1
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/payments/approve",
+          "status": 200
+        },
+        {
+          "path": "/api/payments/complete",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200,
+          "stage": 1
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        }
+      ]
+    }
+  ],
+  "cases": [],
+  "complete": true,
+  "engine": "141.0.7390.37",
+  "currentRequests": [
+    {
+      "path": "/api/usage/collect",
+      "status": 204
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/catalog",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/catalog",
+      "status": 200
+    },
+    {
+      "path": "/api/rewards/me",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/inventory",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/card-reveals",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/start",
+      "status": 200,
+      "stage": 1
+    },
+    {
+      "path": "/api/rewards/me",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/card-reveals",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/catalog",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/inventory",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/catalog",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/inventory",
+      "status": 200
+    }
+  ],
+  "swipes": [
+    {
+      "x": 157.85,
+      "y": 504.96875,
+      "to": 202.484375,
+      "target": "H3",
+      "selector": "h3",
+      "scroll": 343,
+      "height": 473,
+      "total": 2720,
+      "bodyY": 0
+    },
+    {
+      "x": 191.6,
+      "y": 486.875,
+      "to": 202.484375,
+      "target": "H3",
+      "selector": "h3",
+      "scroll": 363,
+      "height": 909,
+      "total": 2448,
+      "bodyY": 0
+    },
+    {
+      "x": 190.3,
+      "y": 218.484375,
+      "to": 183.6875,
+      "target": "P",
+      "selector": ".testnet-shop-notice",
+      "scroll": 21,
+      "height": 145,
+      "total": 2448,
+      "bodyY": 0
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "baseline": "363d9fd27599d06fcd3916cd96cab1c7dcd8b11e",
+  "baselineTree": "9dbf4625198f45197dfc6d36cffa754f7c974865",
+  "controllerSha256": "83fad3d2d4e20d1f5c6b6777c5dc0f5fcfea3215eeda386014d6b1fed32f1c1e",
+  "exactRestoredWholeControllerSha256": "dd41d1c39a361d5de2940ed8f8799a3699970d9fcda258d8fef30d494aca4d9e",
+  "fixedReviewedControllerHunks": 7,
+  "historicalFingerprintsAndNegativeControlsRetained": true,
+  "backendRuntimeAndGatewayUnchanged": true,
+  "originalArtHudIndexCssDamageFlightEconomyAndShopCategoriesUnchanged": true,
+  "pausedPanRouteCssAndExplicitOfferScrollMarker": true,
+  "sameOriginalTimersAndActivationReceipts": true,
+  "noAdditionalLoopTimerObserverAnimationOrAutomaticPurchase": true,
+  "noLiveAccountPaymentSelectionResetOrMigration": true,
+  "ownerAttachmentAndMachineCachesExcluded": true,
+  "workBranchAutoDeploymentDisabled": true,
+  "rollback": {
+    "source": "363d9fd27599d06fcd3916cd96cab1c7dcd8b11e",
+    "testnet": "dpl_GDBKvxyC4CbnW95fEPDMfYCNLTD2",
+    "production": "dpl_A4uYww2UWrgqhf8nPPk4iytfGphe"
+  }
+}

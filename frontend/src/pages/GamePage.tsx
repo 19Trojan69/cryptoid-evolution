@@ -18,7 +18,7 @@ import { weaponResumeStepMs } from './weaponReloadTiming';
 import WeaponSpentNotice from './WeaponSpentNotice';
 import { createWeaponSpentNotice, updateWeaponReloadNotice, type SpentWeaponNotice } from './weaponSpentNotice';
 import { enemyVisualDiameter } from './shipDisplayScale';
-import { autoReloadKey, nextActiveWeapon, parseAutoReload, shouldAutoReload, type AutoReloadPreferences } from './weaponAutoReload';
+import { automaticStartWeapon, autoReloadKey, nextActiveWeapon, parseAutoReload, shouldAutoReload, type AutoReloadPreferences } from './weaponAutoReload';
 import { shipSaveNetwork } from './shipFleet';
 import { isTestnetWeaponPurchaseEnabled } from '../../../backend/src/paymentPolicy';
 import { hangarCatalog } from '../../../backend/src/hangarCatalog';
@@ -635,15 +635,22 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   const autoReloadRef = useRef(autoReload); autoReloadRef.current = autoReload;
   const reloadPendingRef = useRef(false);
   const reloadRequestRef = useRef<(level: number) => boolean>(() => false);
+  const automaticStartRunRef = useRef<string | null>(null);
   const weaponMountedRef = useRef(true);
   useEffect(() => { weaponMountedRef.current = true; return () => { weaponMountedRef.current = false; }; }, []);
   useEffect(() => {
     setAutoReload(parseAutoReload(localStorage.getItem(autoReloadKey(shipSaveNetwork, cardOwnerRef.current))));
   }, [accountRun]);
   const changeAutoReload = (level: number, enabled: boolean) => {
+    automaticStartRunRef.current = null;
     const next = { ...autoReloadRef.current, [level]: enabled };
     autoReloadRef.current = next; setAutoReload(next);
     try { localStorage.setItem(autoReloadKey(shipSaveNetwork, cardOwnerRef.current), JSON.stringify(next)); } catch { /* Session choice remains usable. */ }
+  };
+  const receiveWeaponInventory = async (_owned: string[], stock: Record<string, number>) => {
+    if (hangarCatalog.some(offer => offer.kind === 'weapon' && autoReloadRef.current[offer.level] === true
+      && (stock[offer.id] || 0) > (stockRef.current[offer.id] || 0))) automaticStartRunRef.current = null;
+    stockRef.current = stock; setWeaponStock(stock);
   };
   const [weaponBusy, setWeaponBusy] = useState(false);
   const weaponBusyRef = useRef(false);
@@ -651,6 +658,16 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   const [weaponError, setWeaponError] = useState('');
   const [weaponCountdown, setWeaponCountdown] = useState<number | null>(null);
   const [weaponCountdownStep, setWeaponCountdownStep] = useState(1000);
+  useEffect(() => {
+    const state = stateRef.current, runId = scoreRunRef.current;
+    if (!accountRun || adminRunRef.current || !runId || state.status !== 'playing' || automaticStartRunRef.current === runId) return;
+    automaticStartRunRef.current = runId;
+    if (state.weaponSource !== 'standard' || activationRef.current || weaponBusyRef.current) return;
+    const allowed = hangarCatalog.flatMap(offer => offer.kind === 'weapon' && shipSaveNetwork === 'testnet'
+      && isTestnetWeaponPurchaseEnabled(offer, ownerDiagnostics) ? [offer.level] : []);
+    const level = automaticStartWeapon(state.weaponTimers, autoReloadRef.current, stockRef.current, allowed);
+    if (level !== undefined) reloadRequestRef.current(level);
+  }, [accountRun, game.status, autoReload, weaponStock, ownerDiagnostics]);
   useEffect(() => {
     if (weaponCountdown === null) return;
     const timer = window.setInterval(() => {
@@ -2442,8 +2459,9 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
       remaining = PURCHASED_WEAPON_DURATION_MS; state.weaponTimers[level] = remaining;
     }
     setWeaponError('');
+    if (!automatic) automaticStartRunRef.current = runId;
     // A collected pickup or a manual selection can take over while the server confirms the charge.
-    if (!automatic || (state.status === 'playing' && state.weaponSource === previousSelection.source && state.weaponLevel === previousSelection.level)) {
+    if (!automatic || (['playing', 'paused'].includes(state.status) && state.weaponSource === previousSelection.source && state.weaponLevel === previousSelection.level)) {
       if (!pickup && level > 1) { state.paidWeaponLevel = level; state.paidWeaponMs = remaining; }
       state.weaponSource = pickup ? 'pickup' : level === 1 ? 'standard' : 'paid';
     }
@@ -2723,7 +2741,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
         {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship shielded-ship${game.status === "paused" && weaponCountdown === null ? " player-ship-dialog-hidden" : ""}${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.purchasedShieldMs > 0 || (game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0) ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${engineFlamePercent(game.thrust)}%`, ...shipVisualOffset } as CSSProperties} aria-label={t('Your Cryptoid ship')}><GameShipVisual sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} variant="player" sites={game.playerHullFires} hit={game.playerHit}/></div>}
         {weaponMenuOpen && <div className={`game-overlay weapon-selection-overlay${readControlHand() === 'right' ? ' weapon-drawer-left' : ' weapon-drawer-right'}`} onPointerDown={event => event.stopPropagation()}>
           <div className="weapon-selection-dialog" role="dialog" aria-modal="true" aria-labelledby="mission-weapon-shop-title">
-            <MissionWeaponShop autoReload={autoReload} onAutoReload={changeAutoReload} authenticated={accountRun} admin={adminRunRef.current} timers={game.weaponTimers} initialStock={weaponStock} activeLevel={game.weaponLevel} source={game.weaponSource} pickupLevel={game.pickupWeaponLevel} pickupMs={game.pickupWeaponMs} stage={shipStage} selectionBusy={weaponBusy} pendingLevel={activationRef.current?.level} selectionError={weaponError} onSelect={level => { void selectWeaponLevel(level); }} onPickup={selectPickupWeapon} onClose={resumeWeaponSelection} onInventory={async (_owned, stock) => { setWeaponStock(stock); }} />
+            <MissionWeaponShop autoReload={autoReload} onAutoReload={changeAutoReload} authenticated={accountRun} admin={adminRunRef.current} timers={game.weaponTimers} initialStock={weaponStock} activeLevel={game.weaponLevel} source={game.weaponSource} pickupLevel={game.pickupWeaponLevel} pickupMs={game.pickupWeaponMs} stage={shipStage} selectionBusy={weaponBusy} pendingLevel={activationRef.current?.level} selectionError={weaponError} onSelect={level => { void selectWeaponLevel(level); }} onPickup={selectPickupWeapon} onClose={resumeWeaponSelection} onInventory={receiveWeaponInventory} />
           </div>
           <button type="button" className="weapon-drawer-tab" onClick={resumeWeaponSelection} disabled={weaponBusy} aria-label={t('Back to game')}>{t('Weapons')} <span aria-hidden="true">{readControlHand() === 'right' ? '‹' : '›'}</span></button>
         </div>}
