@@ -55,6 +55,16 @@ export const isAdminMode = (req: Request): boolean =>
       : req.session.adminUid === req.session.currentUser.uid
   ));
 
+// Normal, saved gameplay only. Neither a browser flag nor preview mode grants
+// paid inventory; the owner binding is checked again for every sensitive action.
+export const canUseOwnerTestnetCatalog = async (req: Request): Promise<boolean> =>
+  testnetRequest(req) && !isAdminMode(req) && await canAdmin(req);
+
+// Expanded pre-release purchases never become Mainnet entitlements, even if an
+// installation shares user IDs and its orders collection between Pi apps.
+export const ownerTestnetOrderScope = (req: Request) =>
+  testnetRequest(req) ? {} : { owner_testnet_catalog: { $ne: true } };
+
 // Pi Browser proxies can lose the cookie between requests. The browser's test
 // intent restores no privileges by itself: the verified owner is checked again.
 export const restoreAdminPreview: RequestHandler = async (req, res, next) => {

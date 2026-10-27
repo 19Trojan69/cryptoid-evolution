@@ -5,7 +5,7 @@ import { validRunScore } from "../leaderboardRules";
 import { restoreScoreRun } from "../restoreScoreRun";
 import { Router } from "express";
 import { rewardNetwork } from "../rewardNetwork";
-import { isAdminMode } from "../adminAccess";
+import { canUseOwnerTestnetCatalog, isAdminMode } from "../adminAccess";
 import { MAX_MISSION_HEARTS, maxMissionHearts } from "../lifeRules";
 import { emptyPlayerSave, firstMissionSnapshot, readSnapshot, legacyInventory, publicSave, shipColors, shipPrice, validSelection, standardShips, type PlayerSave } from "../playerSave";
 
@@ -180,7 +180,7 @@ export default function mountProgressEndpoints(router: Router) {
         if (!validSelection(save, skin, color)) return res.status(403).json({ error: "ship_not_owned" });
         fields = { skin, color };
       } else {
-        const price = shipPrice(skin);
+        const price = shipPrice(skin, await canUseOwnerTestnetCatalog(req));
         if (price === null || !shipColors.includes(color)) return res.status(400).json({ error: "invalid_ship" });
         if (save.balance < price) return res.status(403).json({ error: "not_enough_shards" });
         fields = { skin, color, balance: save.balance - price, totalShardsSpent: (save.totalShardsSpent || 0) + price, fleet: { ...save.fleet, [skin]: { ...save.fleet[skin], [color]: (save.fleet[skin]?.[color] || 0) + 1 } } };

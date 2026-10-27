@@ -8,7 +8,7 @@
     "predev": "npm run prepare:hulls",
     "dev": "node_modules/.bin/vite",
     "prebuild": "npm run prepare:hulls",
-    "build": "npm run test:auth && npm run test:mobile-cockpit && npm run test:i18n && npm run check:i18n:release && npm run test:full-session && npm run test:white-screen && npm run test:boss-intermission && npm run test:audio-resume && npm run test:ship-overlays && npm run test:hull-ready && npm run test:admin-players && npm run test:canvas-static-url && npm run test:effect-paths && npm run test:render-memory && npm run test:weapon-reload-recovery && npm run test:rock-display-bounds && npm run test:game-loop && npm run test:smartphone-work && npm run test:transition-notices && npm run test:startup-recovery && npm run test:owner-lifecycle && npm run test:account-save && node_modules/.bin/tsc -b && vite build",
+    "build": "npm run test:owner-catalog && npm run test:auth && npm run test:mobile-cockpit && npm run test:i18n && npm run check:i18n:release && npm run test:full-session && npm run test:white-screen && npm run test:boss-intermission && npm run test:audio-resume && npm run test:ship-overlays && npm run test:hull-ready && npm run test:admin-players && npm run test:canvas-static-url && npm run test:effect-paths && npm run test:render-memory && npm run test:weapon-reload-recovery && npm run test:rock-display-bounds && npm run test:game-loop && npm run test:smartphone-work && npm run test:transition-notices && npm run test:startup-recovery && npm run test:owner-lifecycle && npm run test:account-save && node_modules/.bin/tsc -b && vite build",
     "lint": "node_modules/.bin/eslint .",
     "preview": "node_modules/.bin/vite preview",
     "format": "prettier --write .",
@@ -45,7 +45,8 @@
     "test:smartphone-work": "node --experimental-strip-types --test src/lib/frameScheduler.test.mjs src/pages/projectilePresentation.test.mjs src/pages/projectileSnapshot.test.mjs src/pages/gameOverIdle.test.mjs",
     "test:transition-notices": "node --experimental-strip-types --test src/pages/transitionNotices.test.mjs src/pages/bonusRocks.test.mjs src/pages/weaponSpentNotice.test.mjs",
     "test:effect-paths": "node --experimental-strip-types --test src/pages/impactClipPaths.test.mjs",
-    "test:render-memory": "node --experimental-strip-types --test src/pages/renderMemory.test.mjs"
+    "test:render-memory": "node --experimental-strip-types --test src/pages/renderMemory.test.mjs",
+    "test:owner-catalog": "node --experimental-strip-types --test src/pages/ownerTestnetCatalog.test.mjs src/pages/shipSelection.test.mjs"
   },
   "dependencies": {
     "@mui/icons-material": "^7.3.8",

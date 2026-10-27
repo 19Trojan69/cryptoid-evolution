@@ -974,7 +974,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         // Never replay the existing hangar. Only a pristine account's first free starter
         // is an acquisition; versioned/used/imported accounts retain silent baselining.
         const starterCards = firstMissionStarterCards(profile);
-        const baseline = availableShipCards(playerSkins,data.profile.fleet,data.profile.usedShipSkins||[],data.ownedShipUpgrades||[])
+        const baseline = availableShipCards(playerSkins,data.profile.fleet,data.profile.usedShipSkins||[],data.ownedShipUpgrades||[],ownerDiagnostics && shipSaveNetwork === 'testnet')
           .filter(card=>!starterCards.some(starter=>starter.key===card.key));
         mergeCardReveals(cardOwnerRef.current,[...(profile?.cardReveals||[]),...(data.profile.cardReveals||[]),...baseline.map(card=>card.key)]);
         void syncCardReveals(cardOwnerRef.current).catch(()=>{});
@@ -1630,7 +1630,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         syncSelectedWeapon(state);
         const expired = expiringMs > 0 && state.weaponTimers[expiringLevel] === 0;
         const reloadOffer = expired ? hangarCatalog.find(offer => offer.kind === 'weapon' && offer.level === expiringLevel) : undefined;
-        if (shouldAutoReload(expiringLevel, expiringSource, expiringMs, state.weaponTimers[expiringLevel] ?? 0, autoReloadRef.current, stockRef.current, shipSaveNetwork === 'testnet' && isTestnetWeaponPurchaseEnabled(reloadOffer))) reloadRequestRef.current(expiringLevel);
+        if (shouldAutoReload(expiringLevel, expiringSource, expiringMs, state.weaponTimers[expiringLevel] ?? 0, autoReloadRef.current, stockRef.current, shipSaveNetwork === 'testnet' && isTestnetWeaponPurchaseEnabled(reloadOffer, ownerDiagnostics))) reloadRequestRef.current(expiringLevel);
         if (selectedExpired) {
           const notice = createWeaponSpentNotice(expiringSource, expiringSource === 'pickup' ? expiringPickupLevel : expiringLevel,
             expiringSource === 'pickup' ? expiringPickupMs : expiringMs, expiringSource === 'pickup' ? state.pickupWeaponMs : state.weaponTimers[expiringLevel] ?? 0);
@@ -1677,7 +1677,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
               const rank = rewardRank(next);
               return { progress: next, notice: `Boss stickers · ${bossId}/50 · ${result.stars}★${rank !== previousRank ? ` · New rank · ${rank}` : ''}` };
             }, { kind: 'boss', level: bossId, stage: state.sector, summaryPlacement: 'level-end' });
-            if(firstUnlock&&!adminRunRef.current&&bossCardAvailable(bossId)&&!hasSeenCard(cardOwnerRef.current,`boss-${bossId}`))
+            if(firstUnlock&&!adminRunRef.current&&bossCardAvailable(bossId, ownerDiagnostics && shipSaveNetwork === 'testnet')&&!hasSeenCard(cardOwnerRef.current,`boss-${bossId}`))
               pendingBossCardRef.current={key:`boss-${bossId}`,boss:bossId,stars:rewardProgressRef.current.bossWins[bossId]||1};
 
           }
