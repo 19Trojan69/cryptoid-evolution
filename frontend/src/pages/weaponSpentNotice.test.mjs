@@ -2,28 +2,26 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { createWeaponSpentNotice, WEAPON_SPENT_NOTICE_MS } from './weaponSpentNotice.ts';
-import { weaponNoticeWidth, weaponNoticeTop } from './weaponNoticeLayout.ts';
+import { transformSync } from 'esbuild';
+import { createWeaponSpentNotice } from './weaponSpentNotice.ts';
 import { nextActiveWeapon, shouldAutoReload } from './weaponAutoReload.ts';
+import { stageWeaponLevel } from './shipEvolution.ts';
 import { componentHost } from '../../scripts/componentTestHost.mjs';
-import { restoreWeaponSpentGameChanges } from '../../scripts/weaponSpentReviewedChanges.mjs';
-import { translate, hasExplicitTranslation, languages } from '../i18n.ts';
+import { restoreBinaryWeaponGameChanges } from '../../scripts/binaryWeaponReviewedChanges.mjs';
+import { translate, languages } from '../i18n.ts';
 
 const source = readFileSync(new URL('./GamePage.tsx', import.meta.url), 'utf8');
-const original = restoreWeaponSpentGameChanges(source);
+const original = restoreBinaryWeaponGameChanges(source);
 const hash = value => createHash('sha256').update(value).digest('hex');
-const rect = (left, top, width, height) => ({ left, top, width, height, right: left + width, bottom: top + height });
 
-test('only a selected timed charge/pickup reaching zero creates the eight-second notice; automatic reload and unlimited weapons do not', () => {
-  assert.equal(WEAPON_SPENT_NOTICE_MS, 8000);
+test('only a selected timed charge/pickup reaching zero queues a name, without an independent reading deadline', () => {
   for (const source of ['paid', 'pickup']) for (const level of [2, 3, 4, 5]) {
-    assert.deepEqual(createWeaponSpentNotice(source, level, 16, 0, false), { source, level, remainingMs: 8000, visible: false });
-    assert.equal(createWeaponSpentNotice(source, level, 16, 0, true), null);
-    for (const before of [0, -1, NaN, Infinity]) assert.equal(createWeaponSpentNotice(source, level, before, 0, false), null);
-    assert.equal(createWeaponSpentNotice(source, level, 16, 1, false), null);
+    assert.deepEqual(createWeaponSpentNotice(source, level, 16, 0), { source, level, shown: false });
+    for (const before of [0, -1, NaN, Infinity]) assert.equal(createWeaponSpentNotice(source, level, before, 0), null);
+    assert.equal(createWeaponSpentNotice(source, level, 16, 1), null);
   }
-  for (const level of [0, 1, 6, NaN, 2.5]) assert.equal(createWeaponSpentNotice('paid', level, 16, 0, false), null);
-  assert.equal(createWeaponSpentNotice('standard', 2, 16, 0, false), null);
+  for (const level of [0, 1, 6, NaN, 2.5]) assert.equal(createWeaponSpentNotice('paid', level, 16, 0), null);
+  assert.equal(createWeaponSpentNotice('standard', 2, 16, 0), null);
 });
 
 const expiryBlock = text => text.slice(text.indexOf('        const expiringLevel ='), text.indexOf('        state.combo.remainingMs ='));
@@ -31,15 +29,15 @@ const runExpiry = text => new Function('env', 'with(env){' + expiryBlock(text) +
 const baseState = () => ({ weaponSource: 'paid', paidWeaponLevel: 2, paidWeaponMs: 10, pickupWeaponLevel: 5, pickupWeaponMs: 0,
   weaponLevel: 2, weaponTimers: [0, 0, 10, 0, 0, 0] });
 
-test('real expiry wiring preserves all previous selection/timer/reload decisions and names the exhausted weapon before fallback', () => {
+test('real expiry still makes the same fallback/activation/stock decisions, including pickup and delayed automatic confirmation', () => {
   const cases = [
-    { name: 'manual charge with stock', stock: 3, notice: 2 },
-    { name: 'automatic but empty stock', auto: true, stock: 0, notice: 2 },
-    { name: 'successful automatic reload', auto: true, stock: 3, start: true, notice: null },
+    { name: 'manual with stock', stock: 3, notice: 2 },
+    { name: 'automatic empty stock', auto: true, stock: 0, notice: 2 },
+    { name: 'automatic activation', auto: true, stock: 3, start: true, notice: 2 },
     { name: 'busy automatic activation', auto: true, stock: 3, start: false, notice: 2 },
-    { name: 'automatic purchase policy disabled', auto: true, stock: 3, allowed: false, notice: 2 },
-    { name: 'another already-live paid weapon takes over', stock: 0, next: true, notice: 2 },
-    { name: 'pickup expires while underlying paid level differs', pickup: true, notice: 5 },
+    { name: 'purchase policy disabled', auto: true, stock: 3, allowed: false, notice: 2 },
+    { name: 'another live paid weapon takes over', stock: 0, next: true, notice: 2 },
+    { name: 'pickup expires above a different paid weapon', pickup: true, notice: 5 },
     { name: 'unselected pickup expires', backgroundPickup: true, notice: null },
   ];
   for (const c of cases) {
@@ -58,84 +56,78 @@ test('real expiry wiring preserves all previous selection/timer/reload decisions
     const before = run(original), after = run(source);
     assert.deepEqual(after.state, before.state, c.name); assert.deepEqual(after.requests, before.requests, c.name);
     assert.equal(after.env.weaponSpentRef.current?.level ?? null, c.notice, c.name);
-    if (c.next) assert.equal(after.state.paidWeaponLevel, 4, 'fallback retains its live timer while notice names level 2');
-    if (c.pickup) assert.equal(after.env.weaponSpentRef.current.source, 'pickup');
+    if (c.next) assert.equal(after.state.paidWeaponLevel, 4);
   }
 });
 
-test('actual notice clock counts only visible active combat, preserves pauses/transition time and expires once', () => {
-  const start = source.indexOf('        const transitionPaused =');
-  const predicate = source.slice(start, source.indexOf('\n', start));
-  const clock = source.indexOf('        if (weaponSpentRef.current?.visible');
-  const block = predicate + source.slice(clock, source.indexOf('        impactCooldownRef.current =', clock));
-  const run = new Function('env', 'with(env){if (state.status === "playing") {' + block + '}}');
-  const env = { state: { status: 'playing', phase: 'ATTACK_CYCLE', encounter: 'normal' }, normal: true,
-    formationStartedRef: { current: true }, weaponSpentRef: { current: createWeaponSpentNotice('paid', 2, 16, 0, false) }, delta: 1000, setWeaponSpent() {}, forceScene: false };
-  run(env); assert.equal(env.weaponSpentRef.current.remainingMs, 8000, 'an unplaced/crowded notice does not lose reading time');
-  env.weaponSpentRef.current.visible = true;
-  for (const status of ['paused', 'loading', 'game-over']) { env.state.status = status; run(env); assert.equal(env.weaponSpentRef.current.remainingMs, 8000); }
-  env.state.status = 'playing';
-  for (const phase of ['SECTOR_INTRO', 'SECTOR_CLEAR']) { env.state.phase = phase; run(env); assert.equal(env.weaponSpentRef.current.remainingMs, 8000); }
-  env.state.phase = 'ATTACK_CYCLE';
-  for (let second = 0; second < 7; second++) run(env);
-  assert.equal(env.weaponSpentRef.current.remainingMs, 1000); run(env);
-  assert.equal(env.weaponSpentRef.current, null); assert.equal(env.forceScene, true); run(env);
-});
+const binaryLine = source.split('\n').find(line => line.includes('className="formation-data-stream"'));
+const binaryCode = transformSync('function render(){return <>' + binaryLine.trim() + '</>}', { loader: 'tsx', jsxFactory: 'element', jsxFragment: 'fragment' }).code;
+const nodes = tree => { const result=[]; const visit=n=>{if(!n||typeof n!=='object')return;result.push(n);n.props?.children?.forEach(visit);};visit(tree);return result; };
+const element = (type, props, ...children) => ({ type, props: { ...props, children: children.flat(Infinity) } });
+const renderBinary = env => new Function('env', 'with(env){' + binaryCode + ';return render();}')(env);
 
-test('real spent component exposes only the existing manual weapon menu, with localized charge/pickup copy', () => {
-  for (const source of ['paid', 'pickup']) {
-    let opened = 0;
-    const h = componentHost('src/pages/WeaponSpentNotice.tsx', 'WeaponSpentNotice', { notice: { source, level: 5 }, weaponName: 'Plasma', layoutKey: 'normal:55', onOpen: () => opened++, onVisibleChange() {} },
-      { useLocale: () => ({ t: text => translate('de', text) }), WeaponReloadNotice: 'notice' });
-    const button = h.nodes().find(n => n.type === 'button');
-    assert.equal(opened, 0); assert.equal(button.props.type, 'button');
-    assert.ok(button.props.children.includes('Schussart wechseln / nachkaufen'));
-    assert.ok(h.nodes().find(n => n.type === 'strong').props.children.includes(source === 'paid' ? 'Ladung verbraucht' : 'Gesammelte Schussart abgelaufen'));
-    button.props.onClick(); assert.equal(opened, 1); h.unmount();
-  }
-  for (const locale of Object.keys(languages)) for (const key of ['Charge depleted', 'Weapon pickup expired', 'Switch weapon / buy charges']) {
-    if (locale !== 'en') assert.ok(hasExplicitTranslation(locale, key), `${locale}: ${key}`);
-    assert.ok(translate(locale, key));
-  }
-});
-
-test('notice placement leaves HUD, central titles and side-control text untouched in both hands and compact/tablet/wide layouts', () => {
-  for (const [width, height] of [[320, 568], [393, 628], [393, 744], [430, 825], [768, 1024], [1363, 768]]) {
-    for (const rightHand of [true, false]) for (const banner of [false, true]) {
-      const field = rect(20, 30, width, height), controls = [rect(rightHand ? 28 : field.right - 76, field.bottom - 390, 68, 366)];
-      const text = [rect(20, 30, width, 72), rect(45, 110, width - 50, 24)];
-      if (banner) text.push(rect(55, 30 + height * .45, width - 70, 92));
-      const noticeWidth = weaponNoticeWidth(field, controls), noticeHeight = width < 400 ? 130 : 100;
-      const top = weaponNoticeTop(field, noticeWidth, noticeHeight, 102, text);
-      assert.notEqual(top, null, `${width}/${height}/${rightHand}/${banner}`);
-      const notice = rect((field.left + field.right - noticeWidth) / 2, field.top + top, noticeWidth, noticeHeight);
-      assert.ok(notice.bottom <= field.bottom - 12);
-      for (const obstacle of [...controls, ...text]) assert.ok(notice.right <= obstacle.left || notice.left >= obstacle.right || notice.bottom <= obstacle.top || notice.top >= obstacle.bottom);
+test('the actual JSX mounts the passive name only in the exact binary window and names the current stage-correct shot', () => {
+  const names = ['', 'Standard', 'Twin', 'Rapid', 'Triple', 'Plasma'];
+  for (const status of ['playing','paused','loading','destroying','game-over','victory']) for (const encounter of ['normal','bonus','boss-intro','boss-fight','boss-clear']) {
+    for (const phase of ['SECTOR_INTRO','ENTRY','FORMATION','ATTACK_CYCLE','REFORM','SECTOR_CLEAR']) for (const started of [false,true]) for (const pending of [false,true]) {
+      const env={element,fragment:'fragment',game:{status,encounter,phase,weaponLevel:4},formationStartedRef:{current:started},weaponSpent:pending?2:null,
+        FORMATION_DATA_ROWS:['01'],WeaponSpentNotice:'WeaponSpentNotice',weaponNames:names,stageWeaponLevel,shipStage:1,levelIntro:false,markWeaponSpentShown(){}};
+      const tree=nodes(renderBinary(env));
+      const expected=status==='playing'&&encounter==='normal'&&!started&&['SECTOR_INTRO','ENTRY','FORMATION'].includes(phase);
+      assert.equal(tree.some(n=>n.props.className==='formation-data-stream'),expected);
+      assert.equal(tree.some(n=>n.type==='WeaponSpentNotice'),expected&&pending);
     }
   }
-  const field = rect(0, 0, 320, 240);
-  assert.equal(weaponNoticeTop(field, 200, 100, 90, [rect(0, 90, 320, 150)]), null, 'crowding defers the notice instead of covering other text');
+  const titleEnv={element,fragment:'fragment',game:{status:'playing',encounter:'normal',phase:'SECTOR_INTRO',weaponLevel:1},formationStartedRef:{current:false},weaponSpent:4,FORMATION_DATA_ROWS:['01'],WeaponSpentNotice:'WeaponSpentNotice',weaponNames:names,stageWeaponLevel,shipStage:1,levelIntro:true,markWeaponSpentShown(){}};
+  const titled=nodes(renderBinary(titleEnv));assert.equal(titled.some(n=>n.props.className==='formation-data-stream'),true);assert.equal(titled.some(n=>n.type==='WeaponSpentNotice'),false,'a centered level title keeps its space while the code continues');
+  for (const stage of [1,2,3]) for (const level of [1,2,3,4,5]) {
+    const tree=nodes(renderBinary({element,fragment:'fragment',game:{status:'playing',encounter:'normal',phase:'ENTRY',weaponLevel:level},formationStartedRef:{current:false},weaponSpent:2,
+      FORMATION_DATA_ROWS:['01'],WeaponSpentNotice:'WeaponSpentNotice',weaponNames:names,stageWeaponLevel,shipStage:stage,levelIntro:false,markWeaponSpentShown(){}}));
+    assert.equal(tree.find(n=>n.type==='WeaponSpentNotice').props.weaponName,names[stageWeaponLevel(stage,level)]);
+    assert.equal(tree.find(n=>n.props.className==='formation-data-stream').props['aria-hidden'],'true');
+  }
 });
 
-test('real placement effect observes only a mounted finite notice and releases observers; unavailable room preserves reading time', () => {
-  const fieldRect = rect(0, 0, 393, 744), hud = { getBoundingClientRect: () => rect(0, 0, 393, 72) };
-  const label = { getBoundingClientRect: () => rect(10, 80, 373, 24) }, control = { getBoundingClientRect: () => rect(8, 360, 68, 360) };
-  let noticeHeight = 90, observer, cleaned = false, visible, cleanup;
-  const field = { getBoundingClientRect: () => fieldRect, querySelector: () => hud, querySelectorAll: selector => selector.startsWith('.game-hud') ? [hud, label] : [control] };
-  const notice = { style: {}, closest: () => field, getBoundingClientRect: () => rect(0, 0, Math.min(300, parseFloat(notice.style.maxWidth) || 300), noticeHeight) };
-  const h = componentHost('src/pages/WeaponReloadNotice.tsx', 'WeaponReloadNotice', { children: 'Plasma', layoutKey: 'test', onVisibleChange: value => { visible = value; } }, {
-    useRef: () => ({ current: notice }), useLayoutEffect: fn => { cleanup = fn(); }, weaponNoticeWidth, weaponNoticeTop,
-    ResizeObserver: class { constructor(fn) { this.place = fn; this.observed = []; observer = this; } observe(n) { this.observed.push(n); } disconnect() { cleaned = true; } },
-  });
-  assert.equal(visible, true); assert.equal(notice.style.maxWidth, '217px');
-  assert.ok(observer.observed.includes(field)); assert.ok(observer.observed.includes(notice));
-  noticeHeight = 700; observer.place(); assert.equal(visible, false); assert.equal(notice.style.visibility, 'hidden');
-  noticeHeight = 90; observer.place(); assert.equal(visible, true); cleanup(); assert.equal(visible, false); assert.equal(cleaned, true); h.unmount();
+test('the real lifecycle keeps a pending name through combat/pauses, uses the whole binary window and dismisses it when that window ends', () => {
+  const start=source.indexOf('        if (weaponSpentRef.current?.shown');
+  const block=source.slice(start,source.indexOf('        impactCooldownRef.current =',start));
+  const run=new Function('env','with(env){if(state.status==="playing"){'+block+'}}');
+  const make=(shown=false)=>({state:{status:'playing',encounter:'normal',phase:'ATTACK_CYCLE'},formationStartedRef:{current:true},weaponSpentRef:{current:{...createWeaponSpentNotice('paid',2,16,0),shown}},setWeaponSpent(){},forceScene:false});
+  const queued=make();for(let i=0;i<100;i++)run(queued);assert.ok(queued.weaponSpentRef.current,'an unseen name is queued, never shown over combat');
+  for(const phase of ['SECTOR_INTRO','ENTRY','FORMATION']){
+    const env=make(true);env.state.phase=phase;env.formationStartedRef.current=false;
+    for(let i=0;i<600;i++)run(env);assert.ok(env.weaponSpentRef.current,'no 8s/6s timer truncates the existing binary window');
+    env.state.status='paused';env.formationStartedRef.current=true;run(env);assert.ok(env.weaponSpentRef.current,'manual/technical pause never consumes the message');
+    env.state.status='playing';run(env);assert.equal(env.weaponSpentRef.current,null);assert.equal(env.forceScene,true);
+  }
+  for(const [encounter,phase] of [['normal','ATTACK_CYCLE'],['normal','SECTOR_CLEAR'],['bonus','SECTOR_INTRO'],['boss-fight','FORMATION']]){
+    const env=make(true);Object.assign(env.state,{encounter,phase});env.formationStartedRef.current=false;run(env);assert.equal(env.weaponSpentRef.current,null);
+  }
 });
 
-test('the exact reviewed notice restores the full published controller and rejects changes to reload, watchdog or purchases', () => {
-  assert.equal(hash(original), '280be9043d47d5cb80f3c51223a549e8dc3a69c89588d632a7698dae3e218acb');
-  assert.throws(() => restoreWeaponSpentGameChanges(source.replace('autoReloadStarted);', 'false);')), /one exact/);
-  assert.notEqual(hash(restoreWeaponSpentGameChanges(source.replace('watch: callback => window.setInterval(callback, 500)', 'watch: callback => window.setInterval(callback, 1000)'))), hash(original));
-  assert.ok(source.includes("setAutoReloading(null), 6_000)")); assert.ok(source.includes("setWeaponError(''), 6_000)"));
+test('the real component names expiry and the current shot, with passive accessible status and no purchase or menu action', () => {
+  for(const locale of Object.keys(languages)){
+    let shown=0;
+    const name=translate(locale,'Standard');
+    const h=componentHost('src/pages/WeaponSpentNotice.tsx','WeaponSpentNotice',{expiredWeaponName:name,weaponName:name,onShown:()=>{shown++;}},
+      {useLocale:()=>({t:key=>translate(locale,key)}),useLayoutEffect:fn=>fn()});
+    assert.equal(h.nodes().find(n=>n.type==='strong').props.children.filter(v=>typeof v==='string').join(''),name);
+    assert.equal(h.nodes().filter(n=>n.type==='button'||n.type==='a').length,0);
+    assert.equal(h.nodes()[0].props.role,'status');assert.equal(shown,1);h.unmount();assert.equal(shown,1);
+    const expired=componentHost('src/pages/WeaponSpentNotice.tsx','WeaponSpentNotice',{expiredWeaponName:translate(locale,'Triple'),weaponName:name,onShown(){}},
+      {useLocale:()=>({t:key=>translate(locale,key)}),useLayoutEffect:fn=>fn()});
+    const text=expired.nodes().find(n=>n.type==='span').props.children.join('');
+    assert.ok(text.includes(translate(locale,'Expired')));assert.ok(text.includes(translate(locale,'Triple')));expired.unmount();
+  }
+});
+
+test('exact reviewed changes restore the entire published controller, original binary markup and retained critical guards', () => {
+  assert.equal(hash(original),'ab979a75eef6698b84a0f015f10c50dc513cd7f211f790624a09b3dc45697be3');
+  assert.throws(()=>restoreBinaryWeaponGameChanges(source.replace('onShown={markWeaponSpentShown}','onShown={()=>{}}')),/one exact/);
+  assert.notEqual(hash(restoreBinaryWeaponGameChanges(source.replace('watch: callback => window.setInterval(callback, 500)','watch: callback => window.setInterval(callback, 1000)'))),hash(original));
+  assert.throws(()=>restoreBinaryWeaponGameChanges(source.replace("stockRef.current, shipSaveNetwork === 'testnet'","stockRef.current, shipSaveNetwork === 'mainnet'")),/one exact/);
+  const oldBinary=original.split('\n').find(line=>line.includes('className="formation-data-stream"'));
+  const newBinary=binaryLine.replace('&& <><div className="formation-data-stream"','&& <div className="formation-data-stream"').replace(/<\/div>\{weaponSpent && !levelIntro && <WeaponSpentNotice[\s\S]*$/, '</div>}');
+  assert.equal(newBinary,oldBinary);
+  assert.ok(!source.includes('reloadNoticeTimerRef'));assert.ok(!source.includes('WeaponReloadNotice'));
 });

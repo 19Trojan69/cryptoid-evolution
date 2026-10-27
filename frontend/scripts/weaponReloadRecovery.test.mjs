@@ -134,10 +134,10 @@ test('automatic reload remains bounded over repeated cycles and rejected duplica
   assert.equal(f.env.weaponBusyRef.current, false); assert.equal(f.env.reloadPendingRef.current, false);
 });
 
-test('the actual reload notice remains for six seconds without another activation',async()=>{
+test('automatic reload still confirms exactly one charge without an obsolete feedback timeout',async()=>{
  const f=selectionHost();assert.equal(f.env.reloadRequestRef.current(2),true);await f.flush();
- f.advance(5999);assert.equal(f.env.autoReloading,2);assert.equal(f.requests.length,1);
- f.advance(1);assert.equal(f.env.autoReloading,null);assert.equal(f.requests.length,1);
+ assert.equal(f.state.weaponLevel,2);assert.equal(f.requests.length,1);assert.equal(f.timers.size,0);
+ f.advance(60000);assert.equal(f.state.weaponLevel,2);assert.equal(f.requests.length,1);
 });
 
 test('an already spent confirmed receipt does not silently allocate another charge on retry', async () => {
@@ -163,7 +163,7 @@ test('a definitive rejection releases the pending gate without starting a differ
   assert.deepEqual(f.requests.map(r => r.level), [2, 2]); assert.equal(f.receipts.size, 1);
 });
 
-test('an older automatic error timer cannot erase a newer manual failure', async () => {
+test('a failed automatic activation cannot erase a newer manual failure', async () => {
   const f = await lostAutomaticReply(); f.advance(1000); f.openWeaponSelection();
   f.env.beforePost = async () => { throw networkFailure(); };
   await f.selectWeaponLevel(2); f.advance(2000);

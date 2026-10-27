@@ -1,0 +1,41 @@
+{
+  "baseCommit": "0ae15558a2251adaf1b9dde833220cb3b3f932e3",
+  "baselineGamePage": {
+    "errors": 62,
+    "warnings": 4
+  },
+  "candidateGamePage": {
+    "errors": 62,
+    "warnings": 4
+  },
+  "identicalMessageMultiset": true,
+  "comparison": "ruleId, severity and first message line, not changed source line numbers",
+  "smallerChangedModules": [
+    {
+      "file": "frontend/scripts/binaryWeaponReviewedChanges.mjs",
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "file": "frontend/src/locales/weaponNotices.ts",
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "file": "frontend/src/pages/WeaponSpentNotice.tsx",
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "file": "frontend/src/pages/weaponSpentNotice.test.mjs",
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "file": "frontend/src/pages/weaponSpentNotice.ts",
+      "errors": 0,
+      "warnings": 0
+    }
+  ],
+  "claim": "No whole-project lint-clean claim; existing findings are not described as repaired."
+}

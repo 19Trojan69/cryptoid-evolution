@@ -1,0 +1,34 @@
+{
+  "baseCommit": "0ae15558a2251adaf1b9dde833220cb3b3f932e3",
+  "baseTree": "b9962f40992e295e7ea91f0a2fee27a1c7615aa8",
+  "publishedGamePageSha256": "ab979a75eef6698b84a0f015f10c50dc513cd7f211f790624a09b3dc45697be3",
+  "candidateGamePageSha256": "4fdd0f448af7dfd952a69db6c3a5c681bd8ad03822be91f10657ecf832a1ac2b",
+  "exactReviewedControllerRestoration": true,
+  "protectedPaths": [
+    "api",
+    "backend/src",
+    "frontend/src/index.css",
+    "frontend/src/floatingNotices.css",
+    "frontend/src/pages/combatVariety.ts",
+    "frontend/src/pages/sectorManager.ts",
+    "frontend/src/pages/sectorBoss.ts",
+    "frontend/src/pages/transitionNotices.css",
+    "frontend/src/lib/frameScheduler.ts",
+    "frontend/src/generated/paintedHullManifest.ts"
+  ],
+  "protectedDiffEmpty": true,
+  "binaryMarkupAndStyleUnchanged": true,
+  "noticeAndCodeShareOriginalPredicate": true,
+  "noticeDeferredForCenteredLevelIntro": true,
+  "oldObserverAndDisplayTimeoutRemoved": true,
+  "newSchedulerTimerObserverOrAnimation": false,
+  "newProductionDependency": false,
+  "automaticBuying": false,
+  "workBranchAutoDeployDisabled": true,
+  "localArtifactsExcluded": [
+    "Browser/font/Vite caches",
+    "Generated hull manifest variant",
+    "Original owner screenshot",
+    "Untracked helper/temporary files"
+  ]
+}

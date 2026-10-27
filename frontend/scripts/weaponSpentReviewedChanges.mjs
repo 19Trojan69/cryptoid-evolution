@@ -1,3 +1,4 @@
+import { restoreBinaryWeaponGameChanges } from './binaryWeaponReviewedChanges.mjs';
 // Restore only the reviewed transient spent-ammunition notice.
 export const weaponSpentChanges = [
   {
@@ -46,6 +47,7 @@ export const weaponSpentChanges = [
   }
 ];
 export function restoreWeaponSpentGameChanges(source) {
+  source = restoreBinaryWeaponGameChanges(source);
   for (const {before, after} of [...weaponSpentChanges].reverse()) {
     if (source.split(after).length !== 2) throw Error("Expected one exact spent-ammunition notice change");
     source = source.replace(after, before);
