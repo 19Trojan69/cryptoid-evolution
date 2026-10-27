@@ -128,7 +128,8 @@
       "codex/owner-testnet-catalog-20261027": false,
       "codex/ship-stage-selection-20261027": false,
       "codex/weapon-menu-auto-persistence-20261027": false,
-      "codex/modest-ship-balance-reload-feedback-20261027": false
+      "codex/modest-ship-balance-reload-feedback-20261027": false,
+      "codex/cross-device-white-screen-20261027": false
     }
   }
 }
