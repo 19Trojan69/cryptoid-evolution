@@ -1,3 +1,4 @@
+import { restoreBossHudGameChanges } from './bossHudReviewedChanges.mjs';
 // Fixed, exact reviewed changes against public0868671. No generic normalization.
 export const balanceReloadChanges = [
   {
@@ -46,5 +47,5 @@ function restore(source, changes) {
   }
   return source;
 }
-export const restoreBalanceReloadGameChanges = source => restore(source, balanceReloadChanges);
+export const restoreBalanceReloadGameChanges = source => restore(restoreBossHudGameChanges(source), balanceReloadChanges);
 export const restoreBalanceAccountChanges = source => restore(source, balanceAccountChanges);

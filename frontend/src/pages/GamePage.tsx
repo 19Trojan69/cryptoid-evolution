@@ -2628,8 +2628,9 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   const totalShards = missionShardTotal(game.shardBase, game.shards);
   const levelLabel = String(campaignLevel(game.sector));
   const sectorLabel = sectorInChapter(game.sector);
-  // Show the active block during formations; the completed chain remains 9/9 at the boss/bonus.
+  // Show the active block during formations and the numbered boss during its encounter.
   const hudBlock = game.encounter === "normal" ? sectorLabel : game.chainBlocks;
+  const hudBoss = game.encounter.startsWith("boss-") ? campaignLevel(game.sector) : undefined;
   const round = sectionInSector(game.section);
   const hullOffset = formationOffsetRef.current, hullWave = bossEscortWaveRef.current;
   const hullBonusGroup = Math.floor(bonusIndexRef.current / 6), hullRules = rulesVersionRef.current;
@@ -2700,7 +2701,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
         <header ref={hudRef} className="game-hud">
           <div className="hud-actions"><button className="game-control home-control" type="button" disabled={weaponBusy || rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || game.status === "loading" || game.status === "destroying"} onClick={() => { if (game.status === "game-over" || game.status === "victory") { goHome(); return; } homePromptWasPlayingRef.current = stateRef.current.status === "playing"; stateRef.current.status = "paused"; clearControls();
         musicRef.current?.pause(); void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); setHomePrompt(true); }} aria-label={t("Go home")}><CockpitIcon kind="home" /></button></div>
-          <GameHudStats hearts={game.hearts} heartsHit={game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash")} levelLabel={levelLabel} shards={totalShards} score={game.score} block={hudBlock} locale={locale}/>
+          <GameHudStats hearts={game.hearts} heartsHit={game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash")} levelLabel={levelLabel} shards={totalShards} score={game.score} block={hudBlock} bossNumber={hudBoss} locale={locale}/>
           <button className="game-control pause-control" type="button" disabled={Boolean(bossSummary) || weaponBusy || rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || pauseLeaving || game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { if (pauseLeaveRef.current) return; if (game.status === "paused") { resumeWeaponSelection(); return; } stateRef.current.status = "paused"; clearControls(); musicRef.current?.pause(); void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
         </header>
         <div className="game-label">{adminRunRef.current && <strong>{t("Admin center")} · </strong>}{t("LEVEL")} {levelLabel} <span>· <strong className="game-region-name">{sectorName(game.sector)}</strong> · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/${BLOCKS_PER_CHAIN}` : game.encounter === "bonus" ? t("BONUS CHALLENGE") : t("CORE WARDEN")}</span></div>
