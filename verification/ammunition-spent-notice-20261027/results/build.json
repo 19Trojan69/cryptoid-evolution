@@ -1,0 +1,40 @@
+{
+  "command": "npm run build",
+  "cwd": "frontend",
+  "completed": true,
+  "tests": 413,
+  "failures": 0,
+  "localizationReleaseInventory": true,
+  "typescript": true,
+  "vite": true,
+  "viteSeconds": 4.97,
+  "warnings": [
+    "Existing large-chunk advisory; no code splitting introduced.",
+    "Local npm http-proxy configuration deprecation."
+  ],
+  "nativeRuns": [
+    {
+      "path": "results/native.json",
+      "checks": 77,
+      "complete": true,
+      "engine": "141.0.7390.37",
+      "errors": []
+    },
+    {
+      "path": "results/regression-flow/native.json",
+      "checks": 74,
+      "complete": true,
+      "engine": "141.0.7390.37",
+      "errors": []
+    },
+    {
+      "path": "results/game-over/native.json",
+      "checks": 11,
+      "complete": true,
+      "engine": "141.0.7390.37",
+      "errors": []
+    }
+  ],
+  "backendSourceChanged": false,
+  "fullBackend127": "Prior acceptance, not rerun."
+}

@@ -25,6 +25,7 @@ import { collectionTranslations } from './collection.ts';
 import { bossPhaseTranslations } from './bossPhases.ts';
 import { missionShopTranslations } from './missionShop.ts';
 import { weaponStockTranslations } from './weaponStock.ts';
+import { weaponNoticeTranslations } from './weaponNotices.ts';
 import { bossRewardTranslations } from './bossReward.ts';
 import { package2Translations } from './package2.ts';
 import { package3Translations } from './package3.ts';
@@ -5634,3 +5635,5 @@ for (const [locale, row] of Object.entries(communityRows))
 
 for (const [locale, entries] of Object.entries(combatVarietyTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
 for (const [locale, entries] of Object.entries(fullSessionTranslations)) Object.assign(localeCatalog[locale] ??= {}, entries);
+
+for (const [locale, translations] of Object.entries(weaponNoticeTranslations)) Object.assign(localeCatalog[locale] ??= {}, translations);

@@ -1,0 +1,41 @@
+{
+  "baseCommit": "22842bb7a1986b2b34710f2dcbca7c2e5e6a7b7c",
+  "baselineGamePage": {
+    "errors": 62,
+    "warnings": 4
+  },
+  "candidateGamePage": {
+    "errors": 62,
+    "warnings": 4
+  },
+  "identicalMessageMultiset": true,
+  "comparison": "ruleId, severity and first message line; shifted locations are not additional findings",
+  "smallerChangedRuntimeModules": [
+    {
+      "file": "frontend/src/locales/weaponNotices.ts",
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "file": "frontend/src/pages/WeaponReloadNotice.tsx",
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "file": "frontend/src/pages/WeaponSpentNotice.tsx",
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "file": "frontend/src/pages/weaponNoticeLayout.ts",
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "file": "frontend/src/pages/weaponSpentNotice.ts",
+      "errors": 0,
+      "warnings": 0
+    }
+  ],
+  "claim": "No whole-project lint-clean claim. Historical 0+4 under different resolved tools is not a repaired-error claim."
+}

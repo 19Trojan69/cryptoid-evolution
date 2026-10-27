@@ -1,3 +1,4 @@
+import { restoreWeaponSpentGameChanges } from './weaponSpentReviewedChanges.mjs';
 // Exact title/phase wiring only. All other controller bytes remain pinned.
 export const readableTransitionChanges = [
   {
@@ -22,6 +23,7 @@ export const readableTransitionChanges = [
 }
 ];
 export function restoreReadableTransitionGameChanges(source) {
+  source = restoreWeaponSpentGameChanges(source);
   for (const { before, after } of [...readableTransitionChanges].reverse()) {
     if (source.split(after).length !== 2) throw Error("Expected one exact readable transition change");
     source = source.replace(after, before);

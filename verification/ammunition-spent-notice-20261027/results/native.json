@@ -1,0 +1,267 @@
+{
+  "baseline": "22842bb7a1986b2b34710f2dcbca7c2e5e6a7b7c",
+  "localOnly": true,
+  "realGamePageAndApiHandlers": true,
+  "syntheticSdkAndOrders": true,
+  "controlledClock": true,
+  "physicalDevice": false,
+  "checks": [
+    "phone-manual: real handler grants a single 45-second charge",
+    "phone-manual: isolated stock is debited once",
+    "phone-manual: exhausted type is named before fallback",
+    "phone-manual: red high-contrast message covers no existing text/control",
+    "phone-manual: message and action stay inside the field",
+    "phone-manual: reading time is long and creates no automatic purchase/reload",
+    "manual pause retains the exact remaining notice time and never resumes itself",
+    "technical pause retains notice time and requires explicit Resume",
+    "level/bonus-style title and pickup text keep their space; notice moves or defers",
+    "reading time is preserved while the competing transition occupies the field",
+    "phone-manual: visible action opens the existing paused weapon shop and dismisses the notice",
+    "phone-manual: opening the shop grants nothing and changes no charge stock",
+    "phone-manual: a different owned weapon is selected through the original confirmed handler",
+    "phone-manual: no purchase API was called",
+    "phone-manual: all real local handler responses succeed",
+    "compact-left: real handler grants a single 45-second charge",
+    "compact-left: isolated stock is debited once",
+    "compact-left: exhausted type is named before fallback",
+    "compact-left: red high-contrast message covers no existing text/control",
+    "compact-left: message and action stay inside the field",
+    "compact-left: reading time is long and creates no automatic purchase/reload",
+    "compact-left: visible action opens the existing paused weapon shop and dismisses the notice",
+    "compact-left: opening the shop grants nothing and changes no charge stock",
+    "compact-left: a different owned weapon is selected through the original confirmed handler",
+    "compact-left: no purchase API was called",
+    "compact-left: all real local handler responses succeed",
+    "tablet-thai: real handler grants a single 45-second charge",
+    "tablet-thai: isolated stock is debited once",
+    "tablet-thai: exhausted type is named before fallback",
+    "tablet-thai: red high-contrast message covers no existing text/control",
+    "tablet-thai: message and action stay inside the field",
+    "tablet-thai: reading time is long and creates no automatic purchase/reload",
+    "tablet-thai: visible action opens the existing paused weapon shop and dismisses the notice",
+    "tablet-thai: opening the shop grants nothing and changes no charge stock",
+    "tablet-thai: a different owned weapon is selected through the original confirmed handler",
+    "tablet-thai: no purchase API was called",
+    "tablet-thai: all real local handler responses succeed",
+    "desktop-auto: real handler grants a single 45-second charge",
+    "desktop-auto: isolated stock is debited once",
+    "automatic reload suppresses the depleted-charge prompt",
+    "automatic reload confirms exactly one additional owned charge",
+    "purchase-weapon reload feedback stays visible beyond the former three seconds",
+    "reload feedback ends without creating another activation",
+    "desktop-auto: no purchase API was called",
+    "desktop-auto: all real local handler responses succeed",
+    "phone-empty-auto: real handler grants a single 45-second charge",
+    "phone-empty-auto: isolated stock is debited once",
+    "phone-empty-auto: exhausted type is named before fallback",
+    "phone-empty-auto: red high-contrast message covers no existing text/control",
+    "phone-empty-auto: message and action stay inside the field",
+    "phone-empty-auto: reading time is long and creates no automatic purchase/reload",
+    "phone-empty-auto: visible action opens the existing paused weapon shop and dismisses the notice",
+    "phone-empty-auto: opening the shop grants nothing and changes no charge stock",
+    "phone-empty-auto: a different owned weapon is selected through the original confirmed handler",
+    "phone-empty-auto: no purchase API was called",
+    "phone-empty-auto: all real local handler responses succeed",
+    "phone-pickup: real handler grants a single 45-second charge",
+    "phone-pickup: isolated stock is debited once",
+    "phone-pickup: exhausted type is named before fallback",
+    "phone-pickup: red high-contrast message covers no existing text/control",
+    "phone-pickup: message and action stay inside the field",
+    "phone-pickup: reading time is long and creates no automatic purchase/reload",
+    "phone-pickup: visible action opens the existing paused weapon shop and dismisses the notice",
+    "phone-pickup: opening the shop grants nothing and changes no charge stock",
+    "phone-pickup: a different owned weapon is selected through the original confirmed handler",
+    "phone-pickup: no purchase API was called",
+    "phone-pickup: all real local handler responses succeed",
+    "phone-full-duration: real handler grants a single 45-second charge",
+    "phone-full-duration: isolated stock is debited once",
+    "phone-full-duration: exhausted type is named before fallback",
+    "phone-full-duration: red high-contrast message covers no existing text/control",
+    "phone-full-duration: message and action stay inside the field",
+    "phone-full-duration: reading time is long and creates no automatic purchase/reload",
+    "full visible-active reading deadline releases both the transient record and its action",
+    "reading to the end activates no extra charge",
+    "phone-full-duration: all real local handler responses succeed",
+    "no JavaScript page errors"
+  ],
+  "errors": [],
+  "cases": [
+    {
+      "scenario": {
+        "width": 393,
+        "height": 744,
+        "locale": "de",
+        "hand": "right",
+        "mode": "manual",
+        "name": "phone-manual"
+      },
+      "text": "Doppel · Ladung verbraucht\nSchussart wechseln / nachkaufen",
+      "geometry": {
+        "box": {
+          "left": 71,
+          "right": 322,
+          "top": 125.75,
+          "bottom": 223.296875
+        },
+        "field": {
+          "left": 0,
+          "right": 393,
+          "top": 0,
+          "bottom": 744
+        },
+        "color": "rgb(255, 155, 159)",
+        "visibility": "visible",
+        "overlaps": [],
+        "buttonEvents": "auto"
+      },
+      "shownNotice": {
+        "source": "paid",
+        "level": 2,
+        "remainingMs": 7936,
+        "visible": true
+      }
+    },
+    {
+      "scenario": {
+        "width": 320,
+        "height": 568,
+        "locale": "de",
+        "hand": "left",
+        "mode": "manual",
+        "name": "compact-left"
+      },
+      "text": "Doppel · Ladung verbraucht\nSchussart wechseln / nachkaufen",
+      "geometry": {
+        "box": {
+          "left": 71,
+          "right": 249,
+          "top": 125.75,
+          "bottom": 260.5
+        },
+        "field": {
+          "left": 0,
+          "right": 320,
+          "top": 0,
+          "bottom": 568
+        },
+        "color": "rgb(255, 155, 159)",
+        "visibility": "visible",
+        "overlaps": [],
+        "buttonEvents": "auto"
+      },
+      "shownNotice": {
+        "source": "paid",
+        "level": 2,
+        "remainingMs": 7936,
+        "visible": true
+      }
+    },
+    {
+      "scenario": {
+        "width": 768,
+        "height": 1024,
+        "locale": "th",
+        "hand": "right",
+        "mode": "manual",
+        "name": "tablet-thai"
+      },
+      "text": "คู่ · กระสุนชุดนี้หมดแล้ว\nเปลี่ยนอาวุธ / ซื้อกระสุนเพิ่ม",
+      "geometry": {
+        "box": {
+          "left": 258,
+          "right": 510,
+          "top": 134.75,
+          "bottom": 226.9375
+        },
+        "field": {
+          "left": 0,
+          "right": 768,
+          "top": 0,
+          "bottom": 1024
+        },
+        "color": "rgb(255, 155, 159)",
+        "visibility": "visible",
+        "overlaps": [],
+        "buttonEvents": "auto"
+      },
+      "shownNotice": {
+        "source": "paid",
+        "level": 2,
+        "remainingMs": 7920,
+        "visible": true
+      }
+    },
+    {
+      "scenario": {
+        "width": 393,
+        "height": 628,
+        "locale": "de",
+        "hand": "right",
+        "mode": "empty-auto",
+        "name": "phone-empty-auto"
+      },
+      "text": "Doppel · Ladung verbraucht\nSchussart wechseln / nachkaufen",
+      "geometry": {
+        "box": {
+          "left": 71,
+          "right": 322,
+          "top": 125.75,
+          "bottom": 223.296875
+        },
+        "field": {
+          "left": 0,
+          "right": 393,
+          "top": 0,
+          "bottom": 628
+        },
+        "color": "rgb(255, 155, 159)",
+        "visibility": "visible",
+        "overlaps": [],
+        "buttonEvents": "auto"
+      },
+      "shownNotice": {
+        "source": "paid",
+        "level": 2,
+        "remainingMs": 7920,
+        "visible": true
+      }
+    },
+    {
+      "scenario": {
+        "width": 430,
+        "height": 825,
+        "locale": "de",
+        "hand": "right",
+        "mode": "pickup",
+        "name": "phone-pickup"
+      },
+      "text": "Plasma · Gesammelte Schussart abgelaufen\nSchussart wechseln / nachkaufen",
+      "geometry": {
+        "box": {
+          "left": 71,
+          "right": 359,
+          "top": 125.75,
+          "bottom": 250.34375
+        },
+        "field": {
+          "left": 0,
+          "right": 430,
+          "top": 0,
+          "bottom": 825
+        },
+        "color": "rgb(255, 155, 159)",
+        "visibility": "visible",
+        "overlaps": [],
+        "buttonEvents": "auto"
+      },
+      "shownNotice": {
+        "source": "pickup",
+        "level": 5,
+        "remainingMs": 7936,
+        "visible": true
+      }
+    }
+  ],
+  "complete": true,
+  "engine": "141.0.7390.37"
+}
