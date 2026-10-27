@@ -13,13 +13,35 @@ export function crashRecoveryBoundary(summary, tail, lifecycle) {
   if (tail.evidenceSource !== 'current-tab' || lifecycle?.evidenceSource !== 'current-tab')
     return { ...result, status: 'tab-correlation-unavailable' };
   const events = Array.isArray(lifecycle.events) ? lifecycle.events : [];
-  const replacement = events.find(row => row.kind === 'document-start'
-    && sameDocument(row.previousDocumentStartedAt, tail.documentStartedAt)
-    && time(row.documentStartedAt) && row.documentStartedAt > tail.documentStartedAt + 2 && row.at >= lastAt);
+  let previousDocument = tail.documentStartedAt;
+  const findReplacement = origin => events.find(row => row.kind === 'document-start'
+    && sameDocument(row.previousDocumentStartedAt, origin)
+    && time(row.documentStartedAt) && row.documentStartedAt > origin + 2 && row.at >= lastAt);
+  let replacement = findReplacement(previousDocument);
+  if (!replacement && time(previousDocument) && time(tail.startedAt) && tail.startedAt <= lastAt
+    && /^[a-f0-9]{40}$/.test(tail.build?.sourceCommit ?? '')) {
+    // Legacy captures read timeOrigin independently. Bridge at most 5 ms only
+    // with one actual same-tab start, the same source and an uninterrupted run
+    // interval. Keep the ordinary 2 ms matcher and origin-fallback exclusion.
+    const starts = events.filter(row => row.kind === 'document-start' && time(row.at)
+      && time(row.documentStartedAt) && row.documentStartedAt <= row.at && row.at <= tail.startedAt
+      && Math.abs(row.documentStartedAt - previousDocument) <= 5 && row.sourceCommit === tail.build.sourceCommit);
+    if (starts.length === 1 && !events.some(row => row.kind === 'document-start'
+      && row.at > starts[0].at && row.at <= lastAt)) {
+      const captured = starts[0].documentStartedAt;
+      replacement = findReplacement(captured);
+      if (replacement) {
+        result.documentCorrelation = 'same-tab-start-record';
+        result.lifecycleDocumentStartedAt = captured;
+        result.documentStartOffsetMs = captured - previousDocument;
+        previousDocument = captured;
+      }
+    }
+  }
   if (!replacement) return result;
   const nextEvents = events.filter(row => sameDocument(row.documentStartedAt, replacement.documentStartedAt));
   const home = nextEvents.find(row => row.route === 'home' && time(row.at));
-  const previousEvents = events.filter(row => sameDocument(row.documentStartedAt, tail.documentStartedAt));
+  const previousEvents = events.filter(row => sameDocument(row.documentStartedAt, previousDocument));
   const lastReturn = Math.max(tail.startedAt ?? 0, ...previousEvents.filter(row => row.kind === 'pageshow'
     || row.kind === 'resume' || row.kind === 'visibility' && row.hidden === false).map(row => row.at));
   // A navigation timeOrigin may precede the old page's pagehide. Use the actual

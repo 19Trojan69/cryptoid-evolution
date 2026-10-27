@@ -1,3 +1,41 @@
+# Latest report continuation and simultaneous screenshot, 27 October 2026
+
+The owner requests continuation of the last report procedure without repeating
+finished work, and explicitly states that taking a screenshot coincided with
+the White Screen. Preserve that reported temporal trigger; it is not an
+automatically recorded screenshot event or a proven OS/GPU/memory cause. The
+duplicate attachment is byte-identical to the previous supplied report. Reuse
+the existing checkout, prior feature acceptance and owner export fixture.
+Main is97d74b4/PR193, tree851296d, identical to reviewed569b351. Do not reimplement
+the scrolling, Auto, selection, balance or immediate reload changes.
+
+The private report independently has9448 contiguous records,251 matched200
+responses and a drained final save queue. It ends during normal ENTRY at internal
+sector54, after all five preceding boss completions. Existing callbacks and React
+commits progress to the final saved interval, then a new document/Home appears.
+No final orderly departure, JS fault or native cause is recorded. Known resource
+subsets are not total process/GPU memory. The earlier stopped audio clocks are a
+separate observation, not proof of a screenshot/White Screen cause.
+
+Reproduce the export's false replacement-not-observed: independent tail/lifecycle
+origins differ3ms, outside its2ms matcher. Candidate only adds a read-only fallback
+for one actual same-tab start, identical source commit, at most5ms discrepancy,
+and no intervening document in the run. Keep the ordinary2ms matcher, closed-run,
+origin-fallback/privacy, owner gates and no-native-cause rules. Explicitly expose
+the origin offset and correlation method. No collector or GamePage change.
+The corrected existing export and independent private-file evaluation link the
+replacement without a final lifecycle signal. Tests cover missing/ambiguous or
+wrong-source starts, intervening documents, other-tab evidence, closed runs and
+real departures. Documentation/evidence are under owner-crash-correlation-20261027.
+Full frontend build460 cases, locale/TypeScript/Vite and changed-module lint pass;
+the final focused47 includes one added real-export/IndexedDB test. The attempted
+native browser control ran zero cases because local socket creation was denied;
+record it as blocked, never as passing or physical screenshot acceptance.
+Prepare on auto-deploy-disabled codex/owner-crash-correlation-20261027, preserving
+main and previous accepted releases. No public merge/release of this unreviewed
+diagnostic change, raw owner attachments/telemetry or machine caches. Keep the
+screenshot-triggered device cause open; do not request another whole campaign.
+
 # Moderate ship stages and immediate reload confirmation, 27 October 2026
 
 The latest owner instructions explicitly rebalance Standard/Advanced/Elite and

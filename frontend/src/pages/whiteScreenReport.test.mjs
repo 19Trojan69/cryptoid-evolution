@@ -56,3 +56,25 @@ test('actual response observation preserves rejection identity and stores only f
  assert.equal(event.errorCode,'save_before_activation');assert.equal(event.providerRequestId,'fra1::abc-123');assert.equal(event.httpStatus,409);assert.equal(event.upstreamRequestId,'cdg1::upstream-456');
  assert.ok(!JSON.stringify(events).includes('PRIVATE'));assert.ok(!JSON.stringify(events).includes('cookie'));
 });
+test('the verified owner export joins a small document-origin discrepancy without altering committed history',async()=>{
+ const f=fixture();f.host.performance={timeOrigin:900000};
+ try{
+  f.frame();f.advance(2000);f.frame();await settleFullSessionWrites();
+  const [summary]=(await readFullSessionSummaries(f.host)).sessions;
+  const sourceCommit='a'.repeat(40);
+  f.data.set('cryptoid_owner_lifecycle_v1',JSON.stringify({version:1,events:[
+   {kind:'document-start',at:950000,documentStartedAt:900003,sourceCommit,route:'home'},
+   {kind:'document-start',at:1100100,documentStartedAt:1100000,previousDocumentStartedAt:900003,sourceCommit,route:'home'},
+  ]}));
+  let verifications=0;
+  const file=await exportOwnerFullSession(async()=>{verifications++;return{canAdmin:true};},()=>f.host,summary.id);
+  const report=JSON.parse(await file.text()),boundary=report.crashEvidence.recoveryBoundary;
+  assert.equal(verifications,1);assert.equal(report.integrity.contiguous,true);
+  assert.equal(report.summary.count,summary.count);assert.equal(report.records.length,summary.count);
+  assert.equal(report.crashEvidence.tail.documentStartedAt,900000);
+  assert.equal(boundary.status,'replacement-without-lifecycle-signal');
+  assert.equal(boundary.documentStartOffsetMs,3);assert.equal(boundary.lifecycleDocumentStartedAt,900003);
+  assert.equal(boundary.homeObservedAt,1100100);assert.equal(boundary.nativeCauseKnown,false);
+  assert.equal(boundary.whitePixelsObserved,false);assert.equal(report.crashEvidence.observedTailIsNotCommittedHistory,true);
+ }finally{f.probe.finish();await settleFullSessionWrites();}
+});

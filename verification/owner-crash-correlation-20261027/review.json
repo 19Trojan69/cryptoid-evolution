@@ -1,0 +1,95 @@
+{
+  "baseline": "97d74b412f7dc7ea2f4f8c05f483d87eb3451dba",
+  "sourceTree": "851296db95402d5f53fdebc0c2f71a92e55b10aa",
+  "readOnlyHelperSha256": "1adfc0318e9cdc188a86a4c20dfb86664114790f3abfa3262a197b3e70a74fd2",
+  "sourceScope": [
+    {
+      "path": "frontend/src/pages/GamePage.tsx",
+      "unchanged": true
+    },
+    {
+      "path": "frontend/src/pages/gameInput.ts",
+      "unchanged": true
+    },
+    {
+      "path": "frontend/src/pages/gameLoop.ts",
+      "unchanged": true
+    },
+    {
+      "path": "frontend/src/pages/gameDiagnostics.ts",
+      "unchanged": true
+    },
+    {
+      "path": "frontend/src/lib/gameViewport.ts",
+      "unchanged": true
+    },
+    {
+      "path": "frontend/src/lib/menuViewport.ts",
+      "unchanged": true
+    },
+    {
+      "path": "frontend/src/lib/ownerLifecycleCapture.mjs",
+      "unchanged": true
+    },
+    {
+      "path": "frontend/src/pages/crashTail.ts",
+      "unchanged": true
+    },
+    {
+      "path": "frontend/src/pages/stabilityReport.mjs",
+      "unchanged": true
+    },
+    {
+      "path": "frontend/index.html",
+      "unchanged": true
+    }
+  ],
+  "duplicateInputByteIdentical": true,
+  "privateInputIncluded": false,
+  "independentReportValidation": {
+    "records": 9448,
+    "contiguous": true,
+    "matchedSuccessfulRequests": 251,
+    "finalQueuedEntries": 0,
+    "reportedCaptureTiming": "owner-stated simultaneous screenshot and White Screen",
+    "recordedScreenshotEvent": false,
+    "originalClassification": "replacement-not-observed",
+    "correctedClassification": "replacement-without-lifecycle-signal",
+    "documentStartOffsetMs": 3,
+    "newDocumentObserved": true,
+    "nativeCauseKnown": false,
+    "whitePixelsObserved": false
+  },
+  "validation": {
+    "fullFrontendBuild": {
+      "passed": true,
+      "cases": 460,
+      "subsequentRuntimeChanges": false
+    },
+    "finalWhiteScreenSuite": {
+      "passed": true,
+      "cases": 47
+    },
+    "correlationCases": {
+      "before": {
+        "pass": 7,
+        "fail": 2
+      },
+      "after": {
+        "pass": 9,
+        "fail": 0
+      }
+    },
+    "finalExportIntegration": true,
+    "changedModuleLint": {
+      "passed": true
+    },
+    "nativeBrowser": {
+      "status": "blocked-before-fixture",
+      "checks": 0
+    },
+    "physicalScreenshotReproduced": false,
+    "historicalWhiteScreenFixed": false
+  },
+  "publicRelease": false
+}
