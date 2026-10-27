@@ -9,6 +9,8 @@ type LoopOptions = {
   cancelFrame: (id: number) => void;
   watch: (callback: () => void) => number;
   unwatch: (id: number) => void;
+  // Opt in only where no paused effect clock needs the existing callbacks.
+  sleepWhenInactive?: () => boolean;
 };
 export const GAME_STALL_MS = 2_500;
 
@@ -35,6 +37,10 @@ export function startGuardedGameLoop(options: LoopOptions) {
   };
   const schedule = () => {
     if (!running || pending !== null) return;
+    if (options.sleepWhenInactive?.() && !options.active()) {
+      monitoring = false;
+      return;
+    }
     const token = ++generation;
     pending = options.requestFrame(time => {
       if (!running || token !== generation) return;
@@ -50,6 +56,17 @@ export function startGuardedGameLoop(options: LoopOptions) {
   const watcher = options.watch(() => {
     if (!running) return;
     const now = options.now();
+    if (options.sleepWhenInactive?.() && !options.active()) {
+      monitoring = false;
+      heartbeat = now;
+      if (pending !== null) options.cancelFrame(pending);
+      pending = null;
+      generation++;
+      return;
+    }
+    // Also recover a sleeping client whose state changed outside a UI commit.
+    // This schedules its existing state; it never changes pause/play itself.
+    if (pending === null) schedule();
     if (!stalled(now)) return;
     signal('loop-stall');
     heartbeat = now;
@@ -59,11 +76,23 @@ export function startGuardedGameLoop(options: LoopOptions) {
     schedule();
   });
   schedule();
-  return () => {
+  const stop = () => {
     running = false;
     generation++;
     if (pending !== null) options.cancelFrame(pending);
     pending = null;
     options.unwatch(watcher);
   };
+  return Object.assign(stop, { wake() {
+    if (!running) return;
+    if (options.sleepWhenInactive?.() && !options.active()) {
+      monitoring = false;
+      if (pending !== null) options.cancelFrame(pending);
+      pending = null;
+      generation++;
+      return;
+    }
+    if (!monitoring) { heartbeat = options.now(); monitoring = options.active() && options.visible(); }
+    schedule();
+  } });
 }

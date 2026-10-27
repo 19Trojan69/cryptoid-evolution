@@ -1,3 +1,4 @@
+import {restoreSmartphoneWorkGameChanges} from './smartphoneWorkReviewedChanges.mjs';
 // Exact owner-requested markup, indicator placement and reload feedback/timing.
 const changes = [
   {
@@ -42,6 +43,7 @@ const changes = [
   }
 ];
 export function restoreCockpitIndicatorGameChanges(source) {
+  source = restoreSmartphoneWorkGameChanges(source);
   for (const {before, after} of [...changes].reverse()) {
     if (source.split(after).length !== 2) throw Error('Expected one exact cockpit indicator change');
     source = source.replace(after, before);

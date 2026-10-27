@@ -82,3 +82,28 @@ test('hit/clear removals are immediate and thousands of volleys retain only live
   h.presenter.dispose();
   assert.equal(h.mount.children.length, 0);
 });
+
+
+test('moving locked-direction shots calculate their angle only once until an actual appearance change', () => {
+  const h = host(), shot = hostile();
+  const atan2 = Math.atan2; let angles = 0;
+  Math.atan2 = (...args) => { angles++; return atan2(...args); };
+  try {
+    for (let frame = 0; frame < 600; frame++) {
+      h.presenter.present({ shots: [], enemyShots: [{ ...shot, x: shot.x + frame, y: shot.y + frame }] });
+    }
+    assert.equal(angles, 1);
+    shot.vx = -.2; h.presenter.present({ shots: [], enemyShots: [shot] });
+    assert.equal(angles, 2);
+    const node = h.mount.children[1].children[0];
+    assert.equal(node.properties.get('--shot-angle'), `${-atan2(shot.vx, shot.vy) * 180 / Math.PI}deg`);
+    shot.weaponKind = 'laser'; shot.weaponColor = '#abcdef'; shot.weaponWidth = 8; shot.radius = 6;
+    h.presenter.present({ shots: [], enemyShots: [shot] });
+    assert.equal(node.properties.get('--boss-shot-diameter'), '12px');
+    assert.equal(node.properties.get('--boss-shot-width'), '8px');
+    shot.weaponColor = '#fedcba'; shot.weaponWidth = 9;
+    h.presenter.present({ shots: [], enemyShots: [shot] });
+    assert.equal(node.properties.get('--boss-shot-color'), '#fedcba');
+    assert.equal(node.properties.get('--boss-shot-width'), '9px');
+  } finally { Math.atan2 = atan2; h.presenter.dispose(); }
+});

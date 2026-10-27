@@ -423,6 +423,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   const stateRef = useRef<GameState>(null!);
   if (!stateRef.current) stateRef.current = createInitialState();
   const projectilesRef = useRef<ReturnType<typeof createProjectilePresentation> | null>(null);
+  const wakeGameLoopRef = useRef<(() => void) | null>(null);
   const mountProjectiles = useCallback((node: HTMLDivElement | null) => {
     projectilesRef.current?.dispose();
     projectilesRef.current = node ? createProjectilePresentation(node) : null;
@@ -490,6 +491,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   const pendingBossCardRef=useRef<CardReward|null>(null);
   const [extraLifeVisible,setExtraLifeVisible]=useState(false);
   const [game, setGame] = useState<GameState>(createInitialState);
+  useEffect(() => { wakeGameLoopRef.current?.(); }, [game.status]);
   const [bossSummary, setBossSummary] = useState<BossSummary | null>(null);
   const bossSummaryRef = useRef<{ summary: BossSummary; accepted: boolean; restored: boolean } | null>(null);
   const [bossSummaryPrepared, setBossSummaryPrepared] = useState(false);
@@ -2249,6 +2251,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     const stop = startGuardedGameLoop({ step,
       fault: (reason, error) => interruptionRef.current(reason, error),
       active: () => stateRef.current.status === 'playing',
+      sleepWhenInactive: () => stateRef.current.status !== 'destroying' && stateRef.current.effects.length === 0,
       visible: () => document.visibilityState !== 'hidden',
       now: () => performance.now(),
       requestFrame: requestGameFrame,
@@ -2256,7 +2259,9 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
       watch: callback => window.setInterval(callback, 500),
       unwatch: id => window.clearInterval(id),
     });
+    wakeGameLoopRef.current = stop.wake;
     return () => {
+      if (wakeGameLoopRef.current === stop.wake) wakeGameLoopRef.current = null;
       stop();
       if (gameOverTimerRef.current !== null) window.clearTimeout(gameOverTimerRef.current);
       gameOverTimerRef.current = null;

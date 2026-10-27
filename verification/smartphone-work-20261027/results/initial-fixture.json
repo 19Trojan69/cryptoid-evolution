@@ -1,0 +1,14 @@
+{
+  "excluded": true,
+  "issue": "Local fixture pause button was occluded by its decorative preview; fixture stacking corrected.",
+  "completedChecks": 11,
+  "measurements": {
+    "idleSteps": 120,
+    "activeSteps": 120,
+    "pausedSteps": 600,
+    "reducedHomeFrames": 119,
+    "reducedWidthReads": 0,
+    "activeHomeWidthReads": 3
+  },
+  "notRuntimeFailure": true
+}
