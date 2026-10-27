@@ -1,0 +1,514 @@
+{
+  "localOnly": true,
+  "syntheticSdk": true,
+  "realApiHandlers": true,
+  "isolatedData": true,
+  "testOnlyCombatCompletion": true,
+  "controlledNativeClock": true,
+  "physicalDevice": false,
+  "historicalWhiteScreenFixed": false,
+  "checks": [
+    "pending mission uses three activity stripes",
+    "mission activity feedback is removed when play is ready",
+    "weapon menu states forty-five seconds per charge",
+    "actual authenticated activation grants exactly forty-five seconds",
+    "armed menu return stays paused until its half-length countdown finishes",
+    "armed menu return is playing at fifteen hundred milliseconds",
+    "ordinary pause keeps its full three-second countdown",
+    "ordinary Resume releases at three seconds",
+    "stage 60 before boss defeat: direct player and hostile DOM positions/counts match live simulation",
+    "stage 60: actual player fire is present without a React projectile copy",
+    "stage 60: actual hostile fire is present without a React projectile copy",
+    "stage 60 moving fire: direct player and hostile DOM positions/counts match live simulation",
+    "stage 60: paused live projectiles stay fixed without automatic Resume",
+    "stage 60 live fire after explicit Resume: direct player and hostile DOM positions/counts match live simulation",
+    "stage 60: no summary before heart and bonus",
+    "stage 60: actual boss event has no legacy stop",
+    "pause 1: frozen until an explicit Resume",
+    "pause 1: empty-effect game loop stays dormant",
+    "pause 2: frozen until an explicit Resume",
+    "pause 2: empty-effect game loop stays dormant",
+    "pause 3: frozen until an explicit Resume",
+    "pause 3: empty-effect game loop stays dormant",
+    "pause 4: frozen until an explicit Resume",
+    "pause 4: empty-effect game loop stays dormant",
+    "pause 5: frozen until an explicit Resume",
+    "pause 5: empty-effect game loop stays dormant",
+    "the real final shot creates the last explosion before any summary",
+    "pausing during the last explosion cannot open or auto-resume the summary",
+    "the original explosion keeps its full lifetime",
+    "a quiet beat follows the expired explosion",
+    "the outro cannot change the already queued reward snapshot",
+    "stage 60: Continue follows save readiness without a countdown",
+    "the holographic entrance has finite native animations",
+    "the headline arrives before the statistics",
+    "stage 60: Continue is immediately enabled after confirmed preparation",
+    "stage 60: no reading countdown is rendered",
+    "stage 60: prepared completion uses no game frames",
+    "stage 60 prepared summary: direct player and hostile DOM positions/counts match live simulation",
+    "stage 60: only an earned heart is displayed",
+    "next normal checkpoint includes exact score Shards and hearts",
+    "stage 60: Continue grants nothing",
+    "Continue reaches the next normal level",
+    "next normal level after Continue: direct player and hostile DOM positions/counts match live simulation",
+    "next normal level fires with live direct presentation",
+    "Continue leaves saved reward balances unchanged",
+    "no unexpected API failures",
+    "pending mission uses three activity stripes",
+    "mission activity feedback is removed when play is ready",
+    "stage 500 before boss defeat: direct player and hostile DOM positions/counts match live simulation",
+    "stage 500: actual player fire is present without a React projectile copy",
+    "stage 500: actual hostile fire is present without a React projectile copy",
+    "stage 500 moving fire: direct player and hostile DOM positions/counts match live simulation",
+    "stage 500: paused live projectiles stay fixed without automatic Resume",
+    "stage 500 live fire after explicit Resume: direct player and hostile DOM positions/counts match live simulation",
+    "stage 500: no summary before heart and bonus",
+    "stage 500: actual boss event has no legacy stop",
+    "the real final shot creates the last explosion before any summary",
+    "the original explosion keeps its full lifetime",
+    "a quiet beat follows the expired explosion",
+    "the outro cannot change the already queued reward snapshot",
+    "stage 500: Continue follows save readiness without a countdown",
+    "campaign save failure retains bonus checkpoint and blocks Continue",
+    "failed bonus remains in durable outbox",
+    "reduced motion has no new entrance animation",
+    "stage 500: Continue is immediately enabled after confirmed preparation",
+    "stage 500: no reading countdown is rendered",
+    "stage 500: prepared completion uses no game frames",
+    "stage 500 prepared summary: direct player and hostile DOM positions/counts match live simulation",
+    "stage 500: only an earned heart is displayed",
+    "final campaign checkpoint is null after acknowledged bonus",
+    "stage 500: Continue grants nothing",
+    "final Continue reaches victory",
+    "no unexpected API failures",
+    "no JavaScript page errors"
+  ],
+  "cases": [
+    {
+      "stage": 60,
+      "hits": 12,
+      "fullHearts": true,
+      "realFinal": true,
+      "pauseCycles": true,
+      "motion": "no-preference",
+      "before": {
+        "score": 33226,
+        "shards": 1661,
+        "hearts": 3
+      },
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "kind": "visit",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/usage/collect",
+          "kind": "active",
+          "status": 204
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "boss",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/usage/collect",
+          "kind": "active",
+          "status": 204
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/usage/collect",
+          "kind": "active",
+          "status": 204
+        }
+      ]
+    },
+    {
+      "stage": 500,
+      "hits": 12,
+      "failSave": true,
+      "realFinal": true,
+      "before": {
+        "score": 34620,
+        "shards": 1674,
+        "hearts": 3
+      },
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "kind": "visit",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "boss",
+          "status": 200
+        },
+        {
+          "path": "/api/usage/collect",
+          "kind": "active",
+          "status": 204
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 503,
+          "error": "isolated_save_failure"
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 503,
+          "error": "isolated_save_failure"
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 503,
+          "error": "isolated_save_failure"
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 503,
+          "error": "isolated_save_failure"
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 503,
+          "error": "isolated_save_failure"
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 503,
+          "error": "isolated_save_failure"
+        },
+        {
+          "path": "/api/progress/recover",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/event",
+          "kind": "bonus",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "complete": true,
+  "engine": "141.0.7390.37",
+  "failedRequests": [
+    {
+      "path": "http://127.0.0.1:5173/api/usage/collect",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "http://127.0.0.1:5173/api/usage/collect",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "http://127.0.0.1:5173/api/usage/collect",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "http://127.0.0.1:5173/api/usage/collect",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "http://127.0.0.1:5173/api/usage/collect",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "http://127.0.0.1:5173/api/usage/collect",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "projectileSamples": [
+    {
+      "label": "stage 60 before boss defeat",
+      "player": {
+        "nodes": 5,
+        "shots": 5,
+        "equal": true
+      },
+      "hostile": {
+        "nodes": 3,
+        "shots": 3,
+        "equal": true
+      }
+    },
+    {
+      "label": "stage 60 moving fire",
+      "player": {
+        "nodes": 4,
+        "shots": 4,
+        "equal": true
+      },
+      "hostile": {
+        "nodes": 3,
+        "shots": 3,
+        "equal": true
+      }
+    },
+    {
+      "label": "stage 60 live fire after explicit Resume",
+      "player": {
+        "nodes": 3,
+        "shots": 3,
+        "equal": true
+      },
+      "hostile": {
+        "nodes": 3,
+        "shots": 3,
+        "equal": true
+      }
+    },
+    {
+      "label": "stage 60 prepared summary",
+      "player": {
+        "nodes": 0,
+        "shots": 0,
+        "equal": true
+      },
+      "hostile": {
+        "nodes": 0,
+        "shots": 0,
+        "equal": true
+      }
+    },
+    {
+      "label": "next normal level after Continue",
+      "player": {
+        "nodes": 2,
+        "shots": 2,
+        "equal": true
+      },
+      "hostile": {
+        "nodes": 0,
+        "shots": 0,
+        "equal": true
+      }
+    },
+    {
+      "label": "stage 500 before boss defeat",
+      "player": {
+        "nodes": 2,
+        "shots": 2,
+        "equal": true
+      },
+      "hostile": {
+        "nodes": 2,
+        "shots": 2,
+        "equal": true
+      }
+    },
+    {
+      "label": "stage 500 moving fire",
+      "player": {
+        "nodes": 2,
+        "shots": 2,
+        "equal": true
+      },
+      "hostile": {
+        "nodes": 5,
+        "shots": 5,
+        "equal": true
+      }
+    },
+    {
+      "label": "stage 500 live fire after explicit Resume",
+      "player": {
+        "nodes": 2,
+        "shots": 2,
+        "equal": true
+      },
+      "hostile": {
+        "nodes": 5,
+        "shots": 5,
+        "equal": true
+      }
+    },
+    {
+      "label": "stage 500 prepared summary",
+      "player": {
+        "nodes": 0,
+        "shots": 0,
+        "equal": true
+      },
+      "hostile": {
+        "nodes": 0,
+        "shots": 0,
+        "equal": true
+      }
+    }
+  ]
+}

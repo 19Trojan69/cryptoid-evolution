@@ -1,3 +1,37 @@
+# Quiet red weapon feedback in the binary pause, 27 October 2026
+
+The owner's later screenshot/clarifications supersede PR185's intrusive combat
+popup and buy action. Show the expired shot and actual current fallback in
+lighter red only inside the existing formation binary-code window, for example
+`Dreifach · abgelaufen → Standard`. No button, buy prompt, separate reading timer,
+new animation/observer or pause extension. For an unchanged effective shot type,
+show its current name without falsely claiming it is unavailable. Existing stage-
+correct HUD names are reused; Expired is translated for all19 selectable locales.
+The unchanged binary rows keep their native animation behind a static sibling
+label in their118px band. Both share the existing playing/normal/not-started/
+intro-entry-formation predicate. A centered level title keeps its space; defer
+the pending label until that title leaves while the binary window continues.
+Queue only real selected expiry; clear after its first shown window ends, manual
+weapon-menu entry or restart. Manual/technical pauses preserve the pending record
+and obey the original code visibility/manual Resume. Remove the obsolete combat
+reload/error popups, display state/timeout and unused observer; original menu
+errors/retry/receipts and every actual activation/fallback/Auto/stock rule stay.
+Only exact replacements restore all public0ae1555 controller bytes before old
+fingerprints. Keep HUD/art/ships/geometry/audio/combat/save/economy/auth, equipment
+transition-clock protection, readable titles, terminal sleep, confirmed manual
+Continue and strict >2500ms/500ms/explicit technical Resume. See docs and matching
+verification/binary-weapon-label-20261027 for final checks and exclusions.
+412 frontend release tests/locales/types/Vite,118 notice,74 full-flow and11 Game
+Over native checks pass. GamePage retains the baseline62 errors/four warnings
+with identical message multisets; smaller changed modules are clean. No
+physical-device/heat/White Screen or full backend127 rerun claim. Work branch
+auto-deploy off; reviewed same-source publication to both existing projects
+remains explicitly authorized. Preserve0ae1555 and READY TestnetGS7qtHJmjCcUsKnVMCzpxaCyUoHE /
+productionG2inPaHpEa9Tic6ibhGXSfSfD2ud; keep networks/accounts/payments separate.
+No duplicate manual builds, PR167/168, reset/migration, live purchases, secret/
+protection/runtime-log access. Verify actual READY source and both public aliases;
+publication receipts go to an auto-deploy-disabled evidence ref.
+
 # Readable purchased-weapon notices, 27 October 2026
 
 The owner's latest instruction requests a red spent-shot notice and more visible,
