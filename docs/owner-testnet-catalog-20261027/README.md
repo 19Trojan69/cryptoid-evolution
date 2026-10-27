@@ -69,3 +69,21 @@ projects while reviewing; publish through the existing main Git integration
 without duplicate manual deployments. The candidate contains no live account
 mutation, migration, reset, credential or deployment-protection changes, and no
 private owner stability report or unrelated unfinished PR.
+
+## Published result
+
+PR #190 is merged. Both existing projects are READY at source
+`1d800516767131013e0ef80f5c22fa1332593b43`, exact reviewed tree
+`20919d588a70dca7f6f9453112158bccd5daf83b`.
+
+- Production: `dpl_2GmV8T6UCwfW3TCR2G7MvSD3Bf1P`
+- Testnet: `dpl_AMEhBjnbthidFesbHrzAQJziWxYF`
+
+Fresh read-only checks on both public aliases pass the source commit/tree,
+owner catalog delivery, same application bundles/styles, all retained runtime
+features, public API/catalog, anonymous Admin denial, diagnostic redirect and
+separate leaderboard networks. Before/after receipts and exact deployment IDs
+are in `verification/owner-testnet-catalog-20261027`. This receipt branch is
+auto-deploy-disabled and must not itself be deployed or merged into main.
+Actual owner Pi Browser payment acceptance remains a user checkout; no wallet
+transaction was performed by this verification.

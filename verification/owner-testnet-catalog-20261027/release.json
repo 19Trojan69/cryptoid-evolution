@@ -1,0 +1,73 @@
+{
+  "published": true,
+  "pullRequest": "https://github.com/19Trojan69/cryptoid-evolution/pull/190",
+  "sourceCommit": "1d800516767131013e0ef80f5c22fa1332593b43",
+  "sourceTree": "20919d588a70dca7f6f9453112158bccd5daf83b",
+  "reviewedCandidateCommit": "e6ab14afe60da4d2c90e2911857f35807f63d691",
+  "reviewedTreeMatchesPublishedTree": true,
+  "previousSourceCommit": "c2d1596dc578919d159d7820516d6d9415110d2f",
+  "previousSourceTree": "2b65d0101079e0fb4b75ecdcf1cbceae6be6214a",
+  "projects": [
+    {
+      "id": "prj_BAIJH4BzLLwun36kWVEnTdx69j0q",
+      "name": "cryptoid-evolution",
+      "deployment": {
+        "id": "dpl_2GmV8T6UCwfW3TCR2G7MvSD3Bf1P",
+        "url": "cryptoid-evolution-49jsptd5l-19-trojan69.vercel.app",
+        "createdAt": 1793113585258,
+        "readyState": "READY",
+        "target": "production"
+      },
+      "url": "https://cryptoid-evolution.vercel.app"
+    },
+    {
+      "id": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+      "name": "cryptoid-evolution-testnet",
+      "deployment": {
+        "id": "dpl_AMEhBjnbthidFesbHrzAQJziWxYF",
+        "url": "cryptoid-evolution-testnet-3stz9ke6g-19-trojan69.vercel.app",
+        "createdAt": 1793113585289,
+        "readyState": "READY",
+        "target": "production"
+      },
+      "url": "https://cryptoid-evolution-testnet.vercel.app"
+    }
+  ],
+  "ci": [
+    {
+      "context": "Vercel – cryptoid-evolution-testnet",
+      "state": "success",
+      "target_url": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/AMEhBjnbthidFesbHrzAQJziWxYF"
+    },
+    {
+      "context": "Vercel – cryptoid-evolution",
+      "state": "success",
+      "target_url": "https://vercel.com/19-trojan69/cryptoid-evolution/2GmV8T6UCwfW3TCR2G7MvSD3Bf1P"
+    }
+  ],
+  "localValidation": {
+    "backendTests": 135,
+    "frontendReleaseTests": 426,
+    "nativeUiHandlerChecks": 18,
+    "types": true,
+    "vite": true,
+    "localeReleaseGate": true,
+    "actualWalletPurchase": false,
+    "actualAccountMutation": false,
+    "physicalPiBrowserAcceptance": false
+  },
+  "publicValidation": {
+    "passed": true,
+    "bothUrls": true,
+    "sourceCommitAndTree": true,
+    "sameApplicationBundles": true,
+    "sameStyles": true,
+    "retainedRuntimeGuards": true,
+    "apiHealth": 200,
+    "anonymousAdminDenied": true,
+    "networkSeparation": true,
+    "ownerCatalogCodeDelivered": true,
+    "readOnly": true,
+    "details": "verification/owner-testnet-catalog-20261027/public-release.json"
+  }
+}
