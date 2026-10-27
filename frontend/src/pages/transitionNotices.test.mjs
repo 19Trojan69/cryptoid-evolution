@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { TRANSITION_INTRO_MS, BLOCK_CLEAR_MS, reinforcementIntroMs } from './transitionTiming.ts';
+import { TRANSITION_INTRO_MS, BLOCK_CLEAR_MS, reinforcementIntroMs, releasedIntroClockMs, COMBAT_NOTICE_MS } from './transitionTiming.ts';
 import { SECTION_INTRO_MS, SECTION_CLEAR_MS, sectionPhase } from './sectorManager.ts';
 import { BOSS_WARNING_MS, BOSS_ENTRY_MS } from './sectorBoss.ts';
 import { combatTiming } from './combatVariety.ts';
@@ -12,7 +12,7 @@ const source = readFileSync(new URL('./GamePage.tsx', import.meta.url), 'utf8');
 const hash = value => createHash('sha256').update(value).digest('hex');
 const pinned = 'fd1706248bfab3e84170b8e75c11c058fda244f87c04fb16513bcde73f0334de';
 
-test('all 500 phase plans provide several readable seconds without changing flight cadence or reinforcement lead-ins', () => {
+test('all 500 phase plans provide several readable seconds and reinforcement warnings without changing flight entry/gap cadence', () => {
   assert.equal(SECTION_INTRO_MS, TRANSITION_INTRO_MS);
   assert.equal(TRANSITION_INTRO_MS, 4800); assert.equal(BLOCK_CLEAR_MS, 5200);
   assert.equal(SECTION_CLEAR_MS, 8500, 'legacy clears are not shortened');
@@ -23,8 +23,8 @@ test('all 500 phase plans provide several readable seconds without changing flig
     assert.equal(timing.gapMs, early ? 150 : 180);
     assert.equal(timing.entryMs, early ? 1300 : Math.max(1600, 2400 - Math.floor(stage / 50) * 80));
     assert.equal(timing.breathingMs, [1, 3, 5, 6].includes((stage - 1) % 10 + 1) ? 650 : 150);
-    const offset = timing.introMs - reinforcementIntroMs(stage);
-    assert.equal(timing.introMs - offset, early ? 550 : 850, 'retain the actual released short reinforcement phase');
+    const offset = timing.introMs - reinforcementIntroMs();
+    assert.equal(timing.introMs - offset, 4800, 'retain the warning for a readable protected phase');
   }
 });
 
@@ -60,10 +60,20 @@ test('only five exact reviewed controller edits restore the entire game-over can
 // short intro allowance. Added reading must not make drops/rocks due sooner.
 test('the extra title plateau does not advance the combat-variety event clock', () => {
   const line = source.split('\n').find(value => value.includes('intro.clock += delta;'));
-  const run = new Function('state', 'variety', 'intro', 'delta', 'flightRef', 'sectionElapsedRef', 'reinforcementIntroMs', line);
+  const run = new Function('state', 'variety', 'intro', 'delta', 'flightRef', 'sectionElapsedRef', 'releasedIntroClockMs', line);
   for (const stage of [1, 55, 499]) for (const phase of ['SECTOR_INTRO', 'ATTACK_CYCLE', 'SECTOR_CLEAR']) {
     const intro = { clock: 0 };
-    for (let elapsed = 0; elapsed < 4800; elapsed += 10) run({sector:stage, phase}, true, intro, 10, {current:0}, {current:elapsed}, reinforcementIntroMs);
-    assert.equal(intro.clock, phase === 'SECTOR_CLEAR' ? 0 : phase === 'SECTOR_INTRO' ? reinforcementIntroMs(stage) : 4800);
+    for (let elapsed = 0; elapsed < 4800; elapsed += 10) run({sector:stage, phase}, true, intro, 10, {current:0}, {current:elapsed}, releasedIntroClockMs);
+    assert.equal(intro.clock, phase === 'SECTOR_CLEAR' ? 0 : phase === 'SECTOR_INTRO' ? releasedIntroClockMs(stage) : 4800);
   }
+});
+
+
+test('all comparable formation/goal/pickup notices use the same readable lifetime; no mandatory completion timer is introduced', () => {
+  assert.equal(COMBAT_NOTICE_MS,4800);
+  assert.equal(source.match(/intro.noticeMs = COMBAT_NOTICE_MS;/g).length,3);
+  assert.ok(source.includes('sectionElapsedRef.current = timing.introMs - reinforcementIntroMs();'));
+  assert.ok(source.includes('key={`${game.section}:${game.phase}`} className="reinforcement-notice readable-reinforcement"'));
+  assert.ok(source.includes('reinforcementIntro && (game.status === "playing" || game.status === "paused")'));
+  assert.ok(!source.includes('intro.noticeMs = 2000'));assert.ok(!source.includes('intro.noticeMs = 2100'));
 });

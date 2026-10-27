@@ -1,3 +1,37 @@
+# Once-only binary feedback and readable warnings, 27 October 2026
+
+The owner's latest instructions require expiry feedback in just the first binary
+window after a real expiry, longer reinforcement/comparable notices, and visible
+reload feedback. Base is actual GitHub/shared public c7811d0 / treea21aa5c. Clear
+shown feedback at the actual next-flight boundary, including an entry cleared
+before formation becomes active; pending/unseen feedback and manual/technical
+pauses retain their existing rules. Keep red passive binary-only placement,
+actual stage-correct fallback names and original shop marks, with no buy action.
+Automatic reload now shows actual pending/confirmed/failed status within that
+same one window; a late reply cannot recreate consumed feedback. Reinforcement
+gets4800ms of protected phase time, calm finite keyed opacity and frozen pause/
+Resume clocks; Reduced Motion is static. Three comparable goal/clear/drop notice
+lifetimes become4800ms. Flight entry/gap/attacks/geometry/economy stay unchanged;
+extra reading consumes no active equipment, and the event clock retains only
+its released550/850ms intro allowance. No new timer/observer/RAF/loop/art.
+Only fixed exact controller hunks restore the entire public GamePage SHA256
+eb219ac8306919d27008dd7929fce871eff0e1b2df0d682ee518d3a23394e782
+before all older fingerprints; no generic normalization. Preserve terminal sleep,
+finite graphics, explicit restart, confirmed manual Continue without a read timer,
+>2500ms/500ms/manual technical Resume, all resource/raster/auth/save/receipt guards
+and the2:1 Home Play/Shop row. See docs and verification/quiet-readable-feedback-
+20261027 for actual acceptance and exclusions.416 release tests/locales/types/
+Vite pass, plus repeated native feedback/full-flow/Game Over receipts. Current
+GamePage lint remains the pinned62 errors/four warnings, small modules clean;
+no full-project lint-clean, backend127 rerun or physical heat/FPS/White Screen
+claim. Backend source stays byte-identical. Keep working/evidence refs auto-
+deploy-disabled; reviewed same-source publication to both existing projects is
+already authorized via main, then actual READY/source/public bundles/commit/tree
+and prior guard checks. Preserve c7811d0 and READY Testnet4nYG31Dn9u22Fe78rhC5FX2Yay2i /
+production51UKRCrDEbL6Jsfo91LEeun2EWk1 plus older backups, separate networks/
+accounts/payments. No duplicate manual builds, PR167/168, reset/migration, live
+purchases, secret/protection/runtime-log changes.
+
 # Paired Play/Shop home actions, 27 October 2026
 
 Owner requests shortened Play with an adjacent Shop button, same original height,

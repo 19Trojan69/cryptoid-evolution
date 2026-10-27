@@ -8,7 +8,7 @@ import { advanceCompletionQuiet, LEVEL_COMPLETION_QUIET_MS } from './levelComple
 import type { BossSummary } from './bossSummaryTiming';
 import './combatVariety.css';
 import './transitionNotices.css';
-import { reinforcementIntroMs } from './transitionTiming';
+import { reinforcementIntroMs, releasedIntroClockMs, COMBAT_NOTICE_MS } from './transitionTiming';
 import { useAuth } from '../hooks/useAuth';
 import GameRoute from '../components/GameRoute';
 import GameAccessGate from '../components/GameAccessGate';
@@ -16,7 +16,7 @@ import LoadingStripes from '../components/LoadingStripes';
 import { enemyHealthClearance } from './enemyHealthClearance';
 import { weaponResumeStepMs } from './weaponReloadTiming';
 import WeaponSpentNotice from './WeaponSpentNotice';
-import { createWeaponSpentNotice, type SpentWeaponNotice } from './weaponSpentNotice';
+import { createWeaponSpentNotice, updateWeaponReloadNotice, type SpentWeaponNotice } from './weaponSpentNotice';
 import { enemyVisualDiameter } from './shipDisplayScale';
 import { autoReloadKey, nextActiveWeapon, parseAutoReload, shouldAutoReload, type AutoReloadPreferences } from './weaponAutoReload';
 import { shipSaveNetwork } from './shipFleet';
@@ -24,7 +24,6 @@ import { isTestnetWeaponPurchaseEnabled } from '../../../backend/src/paymentPoli
 import { hangarCatalog } from '../../../backend/src/hangarCatalog';
 import { bossCardAvailable } from './cardAvailability';
 import { keepScreenAwake } from './screenWakeLock';
-import { introGroupBreathingMs } from './introDifficulty';
 import CardReveal from './CardReveal';
 import { availableShipCards, firstMissionStarterCards, type CardReward } from './cardRevealRules';
 import { mergeCardReveals, rememberCard, hasSeenCard, syncCardReveals } from './cardRevealMemory';
@@ -37,7 +36,7 @@ import { activateBossExplosion, bossExplosionBudget, bossExplosionReady } from '
 import './bossExplosionBudget.css';
 import { BOSS_FULL_HEART_SHARDS, maxMissionHearts } from '../../../backend/src/lifeRules';
 import './bossReward.css';
-import { blockFlights, nextBlockFlight, REINFORCEMENT_WARNING_MS, GROUP_CLEAR_POINTS } from "./blockFlights";
+import { blockFlights, nextBlockFlight, GROUP_CLEAR_POINTS } from "./blockFlights";
 import { COMBAT_STATE_KEYS, COMBAT_REF_KEYS, readCombatCheckpoint, type CombatCheckpoint } from "../../../backend/src/combatCheckpoint";
 import BlockchainProgress from "./BlockchainProgress";
 import { gameHaptics } from "./gameHaptics";
@@ -520,7 +519,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   }, [game]);
   const [technicalPause, setTechnicalPause] = useState(false);
   const weaponSpentRef = useRef<SpentWeaponNotice | null>(null);
-  const [weaponSpent, setWeaponSpent] = useState<number | null>(null);
+  const [weaponSpent, setWeaponSpent] = useState<SpentWeaponNotice | null>(null);
   const markWeaponSpentShown = useCallback(() => {
     if (weaponSpentRef.current) weaponSpentRef.current.shown = true;
   }, []);
@@ -1552,7 +1551,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         const timing = variety ? combatTiming(state.sector) : { introMs: SECTION_INTRO_MS, gapMs: ENTRY_GAP_MS, clearMs: SECTION_CLEAR_MS, entryMs: 4100, breathingMs: 0 };
         const intro = varietyRef.current;
         intro.noticeMs = Math.max(0, intro.noticeMs - delta);
-        if (variety && state.phase !== "SECTOR_CLEAR" && (state.phase !== "SECTOR_INTRO" || flightRef.current > 0 || sectionElapsedRef.current < reinforcementIntroMs(state.sector))) intro.clock += delta;
+        if (variety && state.phase !== "SECTOR_CLEAR" && (state.phase !== "SECTOR_INTRO" || sectionElapsedRef.current < releasedIntroClockMs(state.sector))) intro.clock += delta;
         if (variety && intro.asteroidStage !== state.sector) { intro.asteroidStage = state.sector; intro.asteroidStageEvents = 0; }
         state.rockEffects = state.rockEffects.map(e => ({ ...e, age: e.age + delta })).filter(e => e.age < (e.final ? 750 : 250));
         const slots = sectionSlotsRef.current ?? createFormationSlots(state.section, state.sector, width, height, visibleTop, playerDiameterRef.current);
@@ -1591,8 +1590,8 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         }
         lastPlayerRef.current = state.player;
         if (!transitionPaused) elapsedRef.current += delta;
-        // A queued weapon name belongs to one formation-data-stream window.
-        // Pauses keep it queued; finishing that window releases it immediately.
+        // Active combat ends the shown binary feedback. Direct flight changes
+        // below also consume it, including entries cleared before formation.
         if (weaponSpentRef.current?.shown && (state.encounter !== 'normal' || formationStartedRef.current
           || !['SECTOR_INTRO', 'ENTRY', 'FORMATION'].includes(state.phase))) {
           weaponSpentRef.current = null; setWeaponSpent(null); forceScene = true;
@@ -1635,7 +1634,10 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         if (selectedExpired) {
           const notice = createWeaponSpentNotice(expiringSource, expiringSource === 'pickup' ? expiringPickupLevel : expiringLevel,
             expiringSource === 'pickup' ? expiringPickupMs : expiringMs, expiringSource === 'pickup' ? state.pickupWeaponMs : state.weaponTimers[expiringLevel] ?? 0);
-          if (notice) { weaponSpentRef.current = notice; setWeaponSpent(notice.level); forceScene = true; }
+          if (notice) {
+            if (expiringSource === 'paid' && reloadPendingRef.current) notice.reload = 'pending';
+            weaponSpentRef.current = notice; setWeaponSpent({ ...notice }); forceScene = true;
+          }
         }
         state.combo.remainingMs = Math.max(0, state.combo.remainingMs - delta);
         if (state.pickupNotice) {
@@ -1777,7 +1779,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
           if (spawnTimerRef.current >= timing.gapMs) {
             spawnTimerRef.current -= timing.gapMs;
             const firstNormalSpawn = formationIndexRef.current === 0 && flightRef.current === 0;
-            if (variety && formationIndexRef.current === 0) { intro.notice = chooseCryptoid(state.sector, formationOffsetRef.current).shipClass === "heavy" ? "Heavy attacker incoming" : [5, 8].includes((state.sector - 1) % 10 + 1) ? "Finish this wave without a hit" : (state.sector - 1) % 10 + 1 === 7 ? "Hold your combo" : "Clear the formation"; intro.noticeMs = 2000; }
+            if (variety && formationIndexRef.current === 0) { intro.notice = chooseCryptoid(state.sector, formationOffsetRef.current).shipClass === "heavy" ? "Heavy attacker incoming" : [5, 8].includes((state.sector - 1) % 10 + 1) ? "Finish this wave without a hit" : (state.sector - 1) % 10 + 1 === 7 ? "Hold your combo" : "Clear the formation"; intro.noticeMs = COMBAT_NOTICE_MS; }
             if (firstNormalSpawn && ownerDiagnostics) sessionDiagnostic('boundary', { operation: 'first-spawn-before', sector: state.sector,
               encounter: state.encounter, phase: state.phase });
             state.asteroids.push(spawnAsteroid(nextIdRef.current++, width, visibleTop, formationIndexRef.current++, state.sector, slots, formationOffsetRef.current, rulesVersionRef.current));
@@ -2108,26 +2110,30 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
               nextIdRef.current, width, height, visibleTop) : null;
           const drop = openingDrop ?? ordinaryDrop;
           if (drop) { nextIdRef.current += 1; dropsCreatedRef.current += 1; state.powerUpTypes.push(drop.type); state.powerUps.push(drop);
-            if (openingDrop) { intro.weaponIssued = true; intro.notice = powerUpNames[drop.type]; intro.noticeMs = 2_600; }
+            if (openingDrop) { intro.weaponIssued = true; intro.notice = powerUpNames[drop.type]; intro.noticeMs = COMBAT_NOTICE_MS; }
           }
         }
         state.shots = state.encounter === 'boss-clear' ? [] : remainingShots;
         if (variety && !waveCompleteRef.current && formationIndexRef.current === slots.length && state.asteroids.length === 0) {
           waveCompleteRef.current = true; intro.waveComplete = true;
           intro.notice = (state.damageCount ?? 0) === intro.waveDamage && state.destroyed - intro.waveDestroyed >= slots.length ? "Perfect formation" : "FORMATION CLEARED";
-          intro.noticeMs = 2100; soundRef.current?.play("pickup");
+          intro.noticeMs = COMBAT_NOTICE_MS; soundRef.current?.play("pickup");
           state.rocks = []; state.rockEffects = [];
         }
         performanceProbeRef.current?.mark('player-shots-and-collisions');
         const nextFlight = normal ? nextBlockFlight(state.sector, flightRef.current, formationIndexRef.current, state.asteroids.length, rulesVersionRef.current) : null;
         if (nextFlight && state.phase !== "SECTOR_CLEAR") {
+          // The next flight is a new binary window even without an active frame.
+          if (weaponSpentRef.current?.shown) {
+            weaponSpentRef.current = null; setWeaponSpent(null); forceScene = true;
+          }
           if (rulesVersionRef.current === 2) state.score += GROUP_CLEAR_POINTS;
           flightRef.current = nextFlight.group;
           formationOffsetRef.current = nextFlight.offset;
           sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height, visibleTop, playerDiameterRef.current, nextFlight.count, nextFlight.offset);
           formationIndexRef.current = 0;
           formationStartedRef.current = false;
-          sectionElapsedRef.current = variety ? timing.introMs - reinforcementIntroMs(state.sector) : rulesVersionRef.current === 2 ? SECTION_INTRO_MS - REINFORCEMENT_WARNING_MS - introGroupBreathingMs(state.sector) : 0;
+          sectionElapsedRef.current = timing.introMs - reinforcementIntroMs();
           waveCompleteRef.current = false; intro.waveComplete = false;
           intro.waveDamage = state.damageCount ?? 0; intro.waveDestroyed = state.destroyed; intro.waveCombo = state.combo.total;
           spawnTimerRef.current = 0;
@@ -2414,10 +2420,18 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
           if (!await confirm(activationRef.current)) return;
         }
         remaining = level === 1 ? 0 : state.weaponTimers[level] ?? 0;
+        if (automatic) {
+          updateWeaponReloadNotice(weaponSpentRef.current, level, remaining > 0 ? 'complete' : 'failed');
+          setWeaponSpent(weaponSpentRef.current ? { ...weaponSpentRef.current } : null);
+        }
       } catch (error) {
         if (!current()) return;
         const status = (error as { response?: { status?: number } }).response?.status;
         if (status && status >= 400 && status < 500) activationRef.current = null;
+        if (automatic) {
+          updateWeaponReloadNotice(weaponSpentRef.current, level, 'failed');
+          setWeaponSpent(weaponSpentRef.current ? { ...weaponSpentRef.current } : null);
+        }
         setWeaponError('Not confirmed. Retry the same weapon.');
         return;
       } finally { if (current()) { weaponBusyRef.current = false; setWeaponBusy(false); reloadPendingRef.current = false; } }
@@ -2652,7 +2666,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         </header>
         <div className="game-label">{adminRunRef.current && <strong>{t("Admin center")} · </strong>}{t("LEVEL")} {levelLabel} <span>· <strong className="game-region-name">{sectorName(game.sector)}</strong> · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/${BLOCKS_PER_CHAIN}` : game.encounter === "bonus" ? t("BONUS CHALLENGE") : t("CORE WARDEN")}</span></div>
         {game.encounter === "normal" && <span className="flight-indicator" style={{ top: visibleTopRef.current + 25 }}>{t("Group {current}/{total}", { current: flightRef.current + 1, total: blockFlights(game.sector, rulesVersionRef.current).length })}</span>}
-        {reinforcementIntro && game.status === "playing" && <div className="reinforcement-notice" role="status">{t("Reinforcements incoming")}</div>}
+        {reinforcementIntro && (game.status === "playing" || game.status === "paused") && <div key={`${game.section}:${game.phase}`} className="reinforcement-notice readable-reinforcement" style={{ "--transition-duration": `${reinforcementIntroMs()}ms` } as CSSProperties} role="status">{t("Reinforcements incoming")}</div>}
         {game.encounter === "bonus" && game.phase !== "SECTOR_CLEAR" && <div className="bonus-counter" aria-live="polite">{t("BONUS TARGETS")} {game.bonusHits} / {BONUS_TARGET_COUNT} · {t("NO ENEMY FIRE")}</div>}
         {game.encounter === 'boss-clear' && !game.bossHeartCollected && clearTimerRef.current >= BOSS_CLEAR_DURATION_MS && <div className={`boss-heart-pickup${game.hearts >= game.maxHearts ? " boss-shard-pickup" : ""}`} role="status" aria-label={t(game.hearts >= game.maxHearts ? 'Collect the Shards to start the bonus round.' : 'Collect the heart to start the bonus round.')} style={{left: `${BOSS_HEART_POSITION.x * 100}%`, top: `${BOSS_HEART_POSITION.y * 100}%`}}>
           <span className="boss-heart-orb" aria-hidden="true"><span className="power-preview-orbit"><i>{game.hearts >= game.maxHearts ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 21 12 12 22 3 12Z" /><path className="boss-shard-facets" d="m12 2-4 10 4 10 4-10ZM3 12h18" /></svg> : <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.2 3.4 13.1C-1.1 8.8 5.3 1.7 10.2 5.9L12 7.5l1.8-1.6c4.9-4.2 11.3 2.9 6.8 7.2L12 21.2Z" /></svg>}</i></span></span>
@@ -2687,7 +2701,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
           {game.phase === "SECTOR_CLEAR" && game.encounter === "bonus" && <small className="combo-summary">{t("Level combo bonus")}: {game.combo.level} × · +{game.combo.level * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.level * DOUBLE_KILL_SHARDS} {t("Shards")}</small>}
           {game.phase === "SECTOR_CLEAR" && game.rewardNotice && <small className="reward-unlock" role="status">✦ {game.rewardNotice.split(" · ").map(part => t(part)).join(" · ")}</small>}
         </div>}
-        {game.status === "playing" && game.encounter === "normal" && !formationStartedRef.current && (game.phase === "SECTOR_INTRO" || game.phase === "ENTRY" || game.phase === "FORMATION") && <><div className="formation-data-stream" aria-hidden="true">{FORMATION_DATA_ROWS.map((row, index) => <div className="formation-data-row" key={index}><span>{row.repeat(4)}</span><span>{row.repeat(4)}</span></div>)}</div>{weaponSpent && !levelIntro && <WeaponSpentNotice expiredLevel={weaponSpent} level={stageWeaponLevel(shipStage, game.weaponLevel)} expiredWeaponName={weaponNames[weaponSpent]} weaponName={weaponNames[stageWeaponLevel(shipStage, game.weaponLevel)]} onShown={markWeaponSpentShown} />}</>}
+        {game.status === "playing" && game.encounter === "normal" && !formationStartedRef.current && (game.phase === "SECTOR_INTRO" || game.phase === "ENTRY" || game.phase === "FORMATION") && <><div className="formation-data-stream" aria-hidden="true">{FORMATION_DATA_ROWS.map((row, index) => <div className="formation-data-row" key={index}><span>{row.repeat(4)}</span><span>{row.repeat(4)}</span></div>)}</div>{weaponSpent && !levelIntro && !reinforcementIntro && <WeaponSpentNotice reload={weaponSpent.reload} expiredLevel={weaponSpent.level} level={stageWeaponLevel(shipStage, game.weaponLevel)} expiredWeaponName={weaponNames[weaponSpent.level]} weaponName={weaponNames[stageWeaponLevel(shipStage, game.weaponLevel)]} onShown={markWeaponSpentShown} />}</>}
         {!combatVarietyEnabled && game.asteroids.filter(asteroid => game.encounter === "normal"
           ? game.phase === "ENTRY" || game.phase === "FORMATION" || game.phase === "REFORM"
           : game.encounter === "boss-fight" && asteroid.escort && asteroid.attackPattern === null

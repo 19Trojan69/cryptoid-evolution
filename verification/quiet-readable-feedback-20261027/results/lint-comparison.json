@@ -1,0 +1,65 @@
+{
+  "baseline": "c7811d0856dd18e3e0d56449c32f644120a7ae81",
+  "files": [
+    {
+      "path": "src/pages/GamePage.tsx",
+      "before": {
+        "errors": 62,
+        "warnings": 4
+      },
+      "after": {
+        "errors": 62,
+        "warnings": 4
+      },
+      "sameFindings": true
+    },
+    {
+      "path": "src/pages/WeaponSpentNotice.tsx",
+      "before": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "after": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "sameFindings": true
+    },
+    {
+      "path": "src/pages/weaponSpentNotice.ts",
+      "before": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "after": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "sameFindings": true
+    },
+    {
+      "path": "src/pages/transitionTiming.ts",
+      "before": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "after": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "sameFindings": true
+    },
+    {
+      "path": "src/locales/weaponNotices.ts",
+      "before": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "after": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "sameFindings": true
+    }
+  ]
+}

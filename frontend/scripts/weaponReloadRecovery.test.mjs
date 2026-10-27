@@ -12,6 +12,26 @@ async function lostAutomaticReply() {
   return f;
 }
 
+test('automatic feedback follows the actual delayed response and cannot return after its binary window was consumed', async () => {
+  for (const mode of ['confirmed', 'failed', 'consumed']) {
+    const f = selectionHost();
+    let release;
+    f.env.beforePost = () => new Promise(resolve => { release = resolve; });
+    if (mode === 'failed') f.env.afterGrant = async () => { throw networkFailure(); };
+    f.env.reloadRequestRef.current(2);
+    const notice = { source: 'paid', level: 2, shown: true, window: '19:0', reload: 'pending' };
+    f.env.weaponSpentRef.current = notice;
+    await f.flush();
+    assert.equal(notice.reload, 'pending'); assert.equal(f.env.weaponBusy, true);
+    if (mode === 'consumed') f.env.weaponSpentRef.current = null;
+    release(); await f.flush();
+    assert.equal(f.env.weaponBusy, false);
+    assert.equal(f.receipts.size, 1); assert.equal(f.balances.weapon_twin, 9);
+    if (mode === 'consumed') assert.equal(f.env.weaponSpentRef.current, null);
+    else assert.equal(notice.reload, mode === 'confirmed' ? 'complete' : 'failed');
+  }
+});
+
 test('an expired automatic charge can be reconciled before choosing the standard weapon, with the same receipt', async () => {
   const f = await lostAutomaticReply(); const id = f.requests[0].requestId;
   f.openWeaponSelection(); await f.selectWeaponLevel(1);

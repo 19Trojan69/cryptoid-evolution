@@ -1,0 +1,6 @@
+{
+  "command": "node --experimental-strip-types --test frontend/src/pages/combatVariety.test.mjs",
+  "tests": 8,
+  "failures": 0,
+  "separateFrom416ReleaseCases": true
+}

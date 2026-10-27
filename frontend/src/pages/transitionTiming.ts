@@ -2,6 +2,10 @@
 export const TRANSITION_INTRO_MS = 4_800;
 export const BLOCK_CLEAR_MS = 5_200;
 
-// Reinforcements are a separate short lead-in inside an existing block. Keep
-// their released timing rather than adding a full block title before each flight.
-export const reinforcementIntroMs = (stage: number) => stage <= 29 ? 550 : 850;
+// Reinforcement warnings get their own protected reading phase. Flight entry,
+// spawn spacing and combat cadence after that warning retain their own timing.
+export const reinforcementIntroMs = () => TRANSITION_INTRO_MS;
+export const COMBAT_NOTICE_MS = 4_800;
+
+// Extra reading never brings a drop or rock due earlier on the event clock.
+export const releasedIntroClockMs = (stage: number) => stage <= 29 ? 550 : 850;
