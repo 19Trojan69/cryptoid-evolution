@@ -8,7 +8,7 @@
     "predev": "npm run prepare:hulls",
     "dev": "node_modules/.bin/vite",
     "prebuild": "npm run prepare:hulls",
-    "build": "npm run test:auth && npm run test:mobile-cockpit && npm run test:i18n && npm run check:i18n:release && npm run test:full-session && npm run test:white-screen && npm run test:boss-intermission && npm run test:audio-resume && npm run test:ship-overlays && npm run test:hull-ready && npm run test:admin-players && npm run test:canvas-static-url && npm run test:weapon-reload-recovery && npm run test:rock-display-bounds && npm run test:game-loop && npm run test:startup-recovery && npm run test:owner-lifecycle && npm run test:account-save && node_modules/.bin/tsc -b && vite build",
+    "build": "npm run test:auth && npm run test:mobile-cockpit && npm run test:i18n && npm run check:i18n:release && npm run test:full-session && npm run test:white-screen && npm run test:boss-intermission && npm run test:audio-resume && npm run test:ship-overlays && npm run test:hull-ready && npm run test:admin-players && npm run test:canvas-static-url && npm run test:weapon-reload-recovery && npm run test:rock-display-bounds && npm run test:game-loop && npm run test:smartphone-work && npm run test:startup-recovery && npm run test:owner-lifecycle && npm run test:account-save && node_modules/.bin/tsc -b && vite build",
     "lint": "node_modules/.bin/eslint .",
     "preview": "node_modules/.bin/vite preview",
     "format": "prettier --write .",
@@ -41,7 +41,8 @@
     "test:browser:white-screen": "node --experimental-strip-types scripts/whiteScreenBrowserVerification.mjs",
     "test:account-save": "node --experimental-strip-types --test src/lib/accountSaveRetry.test.mjs src/lib/accountSaveQueue.test.mjs src/pages/resourceStability.test.mjs",
     "test:mobile-cockpit": "node --experimental-strip-types --test src/lib/gameViewport.test.mjs src/pages/completionSaveFailure.test.mjs src/pages/levelCompletionEntrance.test.mjs src/pages/controlPreferences.test.mjs scripts/mobileCockpitScope.test.mjs",
-    "test:auth": "node --experimental-strip-types --test src/hooks/useAuth.test.mjs"
+    "test:auth": "node --experimental-strip-types --test src/hooks/useAuth.test.mjs",
+    "test:smartphone-work": "node --experimental-strip-types --test src/lib/frameScheduler.test.mjs src/pages/projectilePresentation.test.mjs"
   },
   "dependencies": {
     "@mui/icons-material": "^7.3.8",

@@ -1,0 +1,63 @@
+{
+  "baseline": "f7197d61bca49b8b0fa5a10dcc3194efd0936c43",
+  "frontendCases": 381,
+  "backendCases": 127,
+  "typescriptAndVite": true,
+  "nativeControls": 14,
+  "nativeWorkCases": 16,
+  "nativeRealGameCases": 58,
+  "controlledSdkAndApi": true,
+  "realAccountMutation": false,
+  "temperatureMeasured": false,
+  "historicalWhiteScreenFixed": false,
+  "unchangedRuntime": [
+    {
+      "path": "frontend/src/index.css",
+      "sha256": "cf48ca4553ac7fa425f37e84a334acc3fec2f2163b72d31bfe9b35f7d33c27b5"
+    },
+    {
+      "path": "frontend/src/cockpitMenus.css",
+      "sha256": "cf2cef495a7097e4973d546bf49755559c0bba90495dd2d945474b1f193e33a2"
+    },
+    {
+      "path": "frontend/src/hudDepth.css",
+      "sha256": "deffa48b758dcae5cc928ed6514918930a061e0487bda6855d56f0823db3f58b"
+    },
+    {
+      "path": "frontend/src/pages/CanvasEffects.tsx",
+      "sha256": "2e373e02ae4eba3c21c6340a4c803294849f52d96ce6de711f7bcb608bfbae54"
+    },
+    {
+      "path": "frontend/src/pages/BonusRockLayer.tsx",
+      "sha256": "88534a8553ccfee658ce29197717aec24bddd53c8e512dbef8629dd6875b6576"
+    },
+    {
+      "path": "frontend/src/pages/shipFleet.ts",
+      "sha256": "29211152beda053a133434158b555a0cfd669ac81b2faac437ded787ab5e7fa5"
+    },
+    {
+      "path": "frontend/src/pages/shipOverlayGeometry.ts",
+      "sha256": "9463a09f552db63a87de2dd64e526740b03362bf73664f0f5508fc551d66ca65"
+    },
+    {
+      "path": "frontend/src/pages/BossHealthView.tsx",
+      "sha256": "daf937b8ada1cc5fee307b0addbf195c249d79a43219efbed615889bd1c9d7f1"
+    },
+    {
+      "path": "frontend/src/pages/gameAudio.ts",
+      "sha256": "3aeb4ca63260573b38d2b753bda61461eb2d4191beae2aac072ce722657077a8"
+    },
+    {
+      "path": "frontend/src/lib/accountSave.ts",
+      "sha256": "eca17b62d128fa03b4974cd8c9d6ea815a33a44f224b47f8b8571120b781e741"
+    },
+    {
+      "path": "backend/src/weaponStock.ts",
+      "sha256": "271fb173c80b140912accd3ea6d66b83908cf700d5abb0d7815e8465ac80fbc2"
+    },
+    {
+      "path": "backend/src/handlers/hangar.ts",
+      "sha256": "e8fa279476651db9798bae06c2eb8090494677661e331ec0ef9994bdd8aa5c0b"
+    }
+  ]
+}

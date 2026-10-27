@@ -1,0 +1,34 @@
+[
+  {
+    "path": "src/pages/GamePage.tsx",
+    "baselineErrors": 62,
+    "errors": 62,
+    "baselineWarnings": 4,
+    "warnings": 4,
+    "added": []
+  },
+  {
+    "path": "src/pages/gameLoop.ts",
+    "baselineErrors": 0,
+    "errors": 0,
+    "baselineWarnings": 0,
+    "warnings": 0,
+    "added": []
+  },
+  {
+    "path": "src/pages/projectilePresentation.ts",
+    "baselineErrors": 0,
+    "errors": 0,
+    "baselineWarnings": 0,
+    "warnings": 0,
+    "added": []
+  },
+  {
+    "path": "src/pages/HomeCombatPreview.tsx",
+    "baselineErrors": 0,
+    "errors": 0,
+    "baselineWarnings": 0,
+    "warnings": 0,
+    "added": []
+  }
+]

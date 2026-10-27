@@ -35,17 +35,25 @@ export default function HomeCombatPreview({ defender, paused = false }: { defend
   useEffect(() => {
     const element = root.current; if (!element) return;
     const media = matchMedia("(prefers-reduced-motion: reduce)");
+    const reducedMotion = () => media.matches || document.documentElement.dataset.motion === "reduced";
     let width = element.clientWidth, height = element.clientHeight, last = 0, frame = 0, clock = 1.2;
+    let shipSizes = ships.current.map(ship => ship?.clientWidth ?? 100);
     let dead = false, volley = 0, enemyVolley = 0, nextSlot = 0;
     const shots: (Shot | null)[] = Array(SHOT_COUNT).fill(null), angles = [0, 0, 0], flashes = [0, 0, 0];
     const fires: HullFire[][] = [[], [], []], hits: (HullFire | undefined)[] = [undefined, undefined, undefined];
     const fireSites = actors.map(actor => spriteFireSites[actor.sprite].map(([x, y]) => [100 - x, 100 - y] as const));
     let impactId = 0;
-    const observer = new ResizeObserver(() => { width = element.clientWidth; height = element.clientHeight; }); observer.observe(element);
+    const observer = new ResizeObserver(() => {
+      width = element.clientWidth; height = element.clientHeight;
+      shipSizes = ships.current.map(ship => ship?.clientWidth ?? 100);
+      if (reducedMotion()) resumeRef.current?.();
+    });
+    observer.observe(element);
+    for (const ship of ships.current) if (ship) observer.observe(ship);
     const point = (t: number, actor: number) => { const p = flight(actor === 2 ? t - .72 : t, actor === 1); return { x: (scene % 2 ? 1 - p.x : p.x) * width, y: p.y * height }; };
     const fire = (actor: number, t: number, lethal: boolean) => {
       const from = point(t, actor), ahead = point(t + .04, actor);
-      const facing = Math.atan2(ahead.y - from.y, ahead.x - from.x), size = ships.current[actor]?.clientWidth ?? 100;
+      const facing = Math.atan2(ahead.y - from.y, ahead.x - from.x), size = shipSizes[actor];
       const start = { x: from.x + Math.cos(facing) * size * .35, y: from.y + Math.sin(facing) * size * .35 };
       const speed = Math.max(600, Math.min(1100, width * 1.5));
       let travel = .1, target = point(t + travel, actor === 1 ? 2 : 0);
@@ -55,9 +63,10 @@ export default function HomeCombatPreview({ defender, paused = false }: { defend
       flashes[actor] = .12;
     };
     const tick = (now: number) => {
+      frame = 0;
       const dt = last ? Math.min(.1, (now - last) / 1000) : 0; last = now;
       if (pauseRef.current || document.hidden) { frame = 0; return; }
-      const reduced = media.matches || document.documentElement.dataset.motion === "reduced";
+      const reduced = reducedMotion();
       if (!reduced) clock += dt;
       const t = reduced ? 4.2 : clock;
       element.dataset.flightTime = t.toFixed(2);
@@ -84,7 +93,7 @@ export default function HomeCombatPreview({ defender, paused = false }: { defend
         const oldX = shot.x, oldY = shot.y;
         shot.x += shot.vx * dt; shot.y += shot.vy * dt; shot.age += dt;
         const targetIndex = shot.enemy ? 2 : 0;
-        const target = positions[targetIndex], size = ships.current[targetIndex]?.clientWidth ?? 100;
+        const target = positions[targetIndex], size = shipSizes[targetIndex];
         const oldTarget = point(t - dt, targetIndex), rx = oldX - oldTarget.x, ry = oldY - oldTarget.y;
         const dx = shot.x - target.x - rx, dy = shot.y - target.y - ry;
         const along = Math.max(0, Math.min(1, -(rx * dx + ry * dy) / (dx * dx + dy * dy || 1)));
@@ -104,7 +113,7 @@ export default function HomeCombatPreview({ defender, paused = false }: { defend
         node.style.opacity = "1"; node.style.setProperty("--shot-color", shot.enemy ? "#ffc476" : "#79efff");
         node.style.transform = `translate3d(${shot.x}px,${shot.y}px,0) rotate(${Math.atan2(shot.vy, shot.vx) * 180 / Math.PI + 90}deg)`;
       });
-      frame = requestGameFrame(tick);
+      if (!reduced) frame = requestGameFrame(tick);
     };
     const resume = () => {
       cancelGameFrame(frame);
@@ -113,7 +122,10 @@ export default function HomeCombatPreview({ defender, paused = false }: { defend
       if (!pauseRef.current && !document.hidden) frame = requestGameFrame(tick);
     };
     resumeRef.current = resume;
-    const wake = () => { if (!frame && !pauseRef.current) resume(); };
+    const wake = () => { if (!frame && !pauseRef.current && !reducedMotion()) resume(); };
+    const preferences = new MutationObserver(resume);
+    preferences.observe(document.documentElement, { attributes: true, attributeFilter: ["data-motion"] });
+    media.addEventListener("change", resume);
     document.addEventListener("visibilitychange", resume);
     window.addEventListener("pageshow", resume);
     document.addEventListener("pointerdown", wake, { passive: true });
@@ -121,6 +133,8 @@ export default function HomeCombatPreview({ defender, paused = false }: { defend
     return () => {
       cancelGameFrame(frame);
       observer.disconnect();
+      preferences.disconnect();
+      media.removeEventListener("change", resume);
       document.removeEventListener("visibilitychange", resume);
       window.removeEventListener("pageshow", resume);
       document.removeEventListener("pointerdown", wake);

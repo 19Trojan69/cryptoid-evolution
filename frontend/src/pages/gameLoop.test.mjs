@@ -10,8 +10,9 @@ import { createOwnerDiagnosticProbe } from './ownerFlightRecorder.ts';
 function harness(step = () => {}, onFault = () => {}, initial = {}) {
   let clock = 0, next = 0, active = initial.active ?? true, visible = initial.visible ?? true;
   const frames = new Map(), canceled = [], faults = [];
-  let watch;
+  let watch, sleep = initial.sleep ?? false;
   const stop = startGuardedGameLoop({ step, fault: (...args) => { faults.push(args); onFault(...args); },
+    sleepWhenInactive: initial.sleep === undefined ? undefined : () => sleep,
     active: () => active, visible: () => visible, now: () => clock,
     requestFrame: cb => { frames.set(++next, cb); return next; },
     cancelFrame: id => { canceled.push(id); frames.delete(id); },
@@ -19,7 +20,7 @@ function harness(step = () => {}, onFault = () => {}, initial = {}) {
   return { frames, faults, canceled, stop,
     frame: () => { const [id, cb] = frames.entries().next().value; frames.delete(id); cb(clock); },
     advance: ms => clock += ms, check: () => watch?.(),
-    active: value => active = value, visible: value => visible = value };
+    active: value => active = value, visible: value => visible = value, sleep: value => sleep = value };
 }
 test('early returns always schedule exactly one following frame', () => {
   let steps = 0; const h = harness(() => { steps++; return; });
@@ -174,4 +175,59 @@ test('denied sessionStorage cannot fail GamePage diagnostics setup or remove its
     cleanup();assert.equal(listeners.size,0);assert.equal(context.diagnosticsRef.current,null);
     assert.equal(reports.length,0);
   } finally {if(previousWindow===undefined)delete globalThis.window;else globalThis.window=previousWindow;}
+});
+
+
+test('a dormant loading or completion loop requests no frames but keeps the existing watcher', () => {
+  let steps = 0;
+  const h = harness(() => steps++, () => {}, { active: false, sleep: true });
+  assert.equal(h.frames.size, 0);
+  for (let i = 0; i < 120; i++) { h.advance(500); h.check(); h.stop.wake(); }
+  assert.equal(steps, 0); assert.equal(h.frames.size, 0); assert.deepEqual(h.faults, []);
+  h.active(true); h.stop.wake(); assert.equal(h.frames.size, 1, 'explicit state change wakes immediately');
+  h.frame(); assert.equal(steps, 1); h.stop();
+});
+
+test('fifty explicit pause and Resume cycles cannot fork or automatically resume a sleeping loop', () => {
+  let steps = 0;
+  const h = harness(() => steps++, () => {}, { sleep: true });
+  for (let i = 0; i < 50; i++) {
+    const stale = [...h.frames.values()][0];
+    h.active(false); h.stop.wake(); assert.equal(h.frames.size, 0);
+    stale(0); assert.equal(h.frames.size, 0);
+    h.advance(10_000); h.check(); assert.equal(h.frames.size, 0);
+    h.active(true); h.stop.wake(); h.stop.wake(); assert.equal(h.frames.size, 1);
+    h.frame(); assert.equal(steps, i + 1);
+  }
+  assert.deepEqual(h.faults, []); h.stop(); h.stop.wake(); assert.equal(h.frames.size, 0);
+});
+
+test('paused effect clocks and the destruction reveal keep their original frame callbacks', () => {
+  let steps = 0;
+  const h = harness(() => steps++, () => {}, { active: false, sleep: false });
+  for (let i = 0; i < 120; i++) { h.advance(16); h.frame(); }
+  assert.equal(steps, 120);
+  h.sleep(true); h.stop.wake(); assert.equal(h.frames.size, 0); h.stop();
+});
+
+test('wake preserves strict greater-than-2500ms protection with the same monitoring timer', () => {
+  const h = harness(() => {}, () => {}, { active: false, sleep: true });
+  h.advance(100_000); h.active(true); h.stop.wake();
+  h.advance(GAME_STALL_MS); h.check(); assert.deepEqual(h.faults, []);
+  const stale = [...h.frames.values()][0]; h.advance(1); h.check();
+  assert.equal(h.faults[0][0], 'loop-stall'); assert.equal(h.frames.size, 1);
+  stale(200_000); assert.equal(h.frames.size, 1); h.stop();
+});
+
+test('the unchanged watcher recovers a changed active state without changing a paused state', () => {
+  const h = harness(() => {}, () => {}, { active: false, sleep: true });
+  h.check(); assert.equal(h.frames.size, 0);
+  h.active(true); h.check(); assert.equal(h.frames.size, 1); assert.deepEqual(h.faults, []); h.stop();
+});
+
+test('a technical fault can sleep but cannot become playing until the caller explicitly resumes', () => {
+  const h = harness(() => { throw Error('controlled fault'); }, () => h.active(false), { sleep: true });
+  h.frame(); assert.equal(h.faults[0][0], 'frame-error'); assert.equal(h.frames.size, 0);
+  h.advance(60_000); h.check(); h.stop.wake(); assert.equal(h.frames.size, 0);
+  h.stop();
 });

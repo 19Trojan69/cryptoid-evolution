@@ -1,3 +1,22 @@
+# Smartphone redundant-work reduction, 27 October 2026
+
+Owner requests less smartphone heating. Start from public f7197d6/PR179, retain
+all previous corrections. Sleep only inactive empty-effect game loops, preserve
+paused effect/destruction clocks, strict >2500ms/500ms watchdog and explicit
+technical Resume. UI commits wake immediately; existing watcher never changes
+play state. Cache live projectile appearance values and Home ship-width measures;
+static reduced-motion Home sleeps with event-based preference/resize recovery.
+No quality reduction, new FPS setting, art/CSS/HUD/sound/economy/backend/save change.
+381 frontend gates/types/Vite, 127 backend cases/types, 14 pinned native controls,
+16 candidate work/DOM cases and 58 actual-game checks pass. GamePage remains 62
+lint errors/four warnings, no added findings; exact wiring restores before old
+fingerprints. Local operation counts are not physical temperature/energy/FPS or
+White Screen acceptance. Preserve f7197d6 at backup/shared-before-smartphone-work-20261027
+and READY Testnet GwYCnFbzgQQgaskq2Xf3TX9Eysgu / production 52LJsvsvfFMaCnZgN3g1D3j1fJqb.
+Candidate auto-deploy off; reviewed same-source release to both existing projects
+remains authorized. No new owner campaign, PR167/168, reset/migration, secrets,
+protection or runtime-log access. See docs/smartphone-work-20261027.
+
 # Cockpit indicators and forty-five-second charges, 26 October 2026
 
 Continue from common public dbed249/PR178; retain its prepared-resource reuse.

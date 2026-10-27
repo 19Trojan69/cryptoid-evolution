@@ -1,0 +1,68 @@
+{
+  "baseline": false,
+  "sourceBaseline": "f7197d61bca49b8b0fa5a10dcc3194efd0936c43",
+  "localOnly": true,
+  "physicalDevice": false,
+  "temperatureMeasured": false,
+  "checks": [
+    "dormant loop requests no frames",
+    "explicit active state retains the existing sixty-Hz cadence",
+    "pause remains dormant without automatic play",
+    "long pause causes no technical fault",
+    "manual Resume wakes without the monitoring-timer delay",
+    "angle preparation runs only at spawn and actual direction change",
+    "reduced-motion preview sleeps after its static pose",
+    "reduced motion retains three visible static ships",
+    "switching motion back on resumes the existing preview",
+    "active preview uses resize measurements without frame-time layout reads",
+    "resize retains all three original hulls",
+    "dialog pause keeps the preview clock frozen",
+    "closing dialog continues at the same flight position",
+    "all sampled projectile DOM exactly matches the published renderer",
+    "static reduced-motion ship poses exactly match the published preview",
+    "no JavaScript page errors"
+  ],
+  "errors": [],
+  "measurements": {
+    "idleSteps": 0,
+    "activeSteps": 120,
+    "pausedSteps": 0,
+    "reducedHomeFrames": 0,
+    "reducedWidthReads": 0,
+    "activeHomeWidthReads": 0
+  },
+  "engine": "26.5",
+  "projectiles": {
+    "angles": 2,
+    "frames": [
+      "<div style=\"display: contents;\"><div class=\"player-laser player-laser-tier-3\" style=\"left: 0px; top: 0px; translate: 140px 400px;\"></div></div><div style=\"display: contents;\"><div class=\"enemy-laser enemy-projectile-heavy boss-projectile boss-projectile-lance boss-evolved-shot boss-evolved-laser\" style=\"left: 0px; top: 0px; width: 8px; height: 8px; --enemy-shot-color: #ff634c; --shot-angle: -26.56505117707799deg; --boss-shot-color: #abcdef; --boss-shot-width: 7px; --boss-shot-diameter: 8px; translate: 150px 120px;\"></div></div>",
+      "<div style=\"display: contents;\"><div class=\"player-laser player-laser-tier-3\" style=\"left: 0px; top: 0px; translate: 240px 300px;\"></div></div><div style=\"display: contents;\"><div class=\"enemy-laser enemy-projectile-heavy boss-projectile boss-projectile-lance boss-evolved-shot boss-evolved-laser\" style=\"left: 0px; top: 0px; width: 8px; height: 8px; --enemy-shot-color: #ff634c; --shot-angle: -26.56505117707799deg; --boss-shot-color: #abcdef; --boss-shot-width: 7px; --boss-shot-diameter: 8px; translate: 250px 220px;\"></div></div>",
+      "<div style=\"display: contents;\"><div class=\"player-laser player-laser-tier-3\" style=\"left: 0px; top: 0px; translate: 340px 200px;\"></div></div><div style=\"display: contents;\"><div class=\"enemy-laser enemy-projectile-heavy boss-projectile boss-projectile-lance boss-evolved-shot boss-evolved-laser\" style=\"left: 0px; top: 0px; width: 8px; height: 8px; --enemy-shot-color: #ff634c; --shot-angle: -26.56505117707799deg; --boss-shot-color: #abcdef; --boss-shot-width: 7px; --boss-shot-diameter: 8px; translate: 350px 320px;\"></div></div>",
+      "<div style=\"display: contents;\"><div class=\"player-laser player-laser-tier-3\" style=\"left: 0px; top: 0px; translate: 440px 100px;\"></div></div><div style=\"display: contents;\"><div class=\"enemy-laser enemy-projectile-heavy boss-projectile boss-projectile-lance boss-evolved-shot boss-evolved-laser\" style=\"left: 0px; top: 0px; width: 8px; height: 8px; --enemy-shot-color: #ff634c; --shot-angle: -26.56505117707799deg; --boss-shot-color: #abcdef; --boss-shot-width: 7px; --boss-shot-diameter: 8px; translate: 450px 420px;\"></div></div>",
+      "<div style=\"display: contents;\"><div class=\"player-laser player-laser-tier-3 player-laser-overdrive\" style=\"left: 0px; top: 0px; translate: 540px;\"></div></div><div style=\"display: contents;\"><div class=\"enemy-laser enemy-projectile-heavy boss-projectile boss-projectile-lance boss-evolved-shot boss-evolved-laser\" style=\"left: 0px; top: 0px; width: 8px; height: 8px; --enemy-shot-color: #ff634c; --shot-angle: 26.56505117707799deg; --boss-shot-color: #abcdef; --boss-shot-width: 7px; --boss-shot-diameter: 8px; translate: 550px 520px;\"></div></div>",
+      "<div style=\"display: contents;\"><div class=\"player-laser player-laser-tier-3 player-laser-overdrive\" style=\"left: 0px; top: 0px; translate: 640px -100px;\"></div></div><div style=\"display: contents;\"><div class=\"enemy-laser enemy-projectile-heavy boss-projectile boss-projectile-lance boss-evolved-shot boss-evolved-laser\" style=\"left: 0px; top: 0px; width: 8px; height: 8px; --enemy-shot-color: #ff634c; --shot-angle: 26.56505117707799deg; --boss-shot-color: #abcdef; --boss-shot-width: 7px; --boss-shot-diameter: 8px; translate: 650px 620px;\"></div></div>"
+    ],
+    "size": 2
+  },
+  "reducedHome": [
+    {
+      "transform": "translate3d(302.95584px, 0px, 0px) translate(-50%, -50%) rotate(90deg) scale(0.964028)",
+      "opacity": "1",
+      "bank": "0deg",
+      "engine": "1.0114115333333245"
+    },
+    {
+      "transform": "translate3d(261.523636px, 0px, 0px) translate(-50%, -50%) rotate(270deg) scale(0.854051)",
+      "opacity": "1",
+      "bank": "0deg",
+      "engine": "0.8584090909090956"
+    },
+    {
+      "transform": "translate3d(229.722774px, 0px, 0px) translate(-50%, -50%) rotate(90deg) scale(0.823095)",
+      "opacity": "1",
+      "bank": "0deg",
+      "engine": "1.0975571333333347"
+    }
+  ],
+  "complete": true
+}
