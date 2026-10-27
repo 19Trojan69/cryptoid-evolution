@@ -1,0 +1,166 @@
+{
+  "baseline": "09a6a4047236c7c8cc5ef430386fd0c6825ebb41",
+  "control": false,
+  "localOnly": true,
+  "realGamePageAndApiHandlers": true,
+  "syntheticSdkAndFatalShot": true,
+  "controlledClock": true,
+  "nativeAnimationHeldThenResumedForBoundary": true,
+  "physicalDevice": false,
+  "temperatureMeasured": false,
+  "checks": [
+    "normal damage creates the original player explosion",
+    "destruction reveal keeps its existing active callbacks and delay",
+    "terminal state still retains the original effect record",
+    "the final native explosion continues after Game Over appears",
+    "finite original explosion releases its visible DOM independently",
+    "candidate sleeps after Game Over despite the retained finished effect",
+    "waiting cannot resume or mutate terminal score state",
+    "explicit Play Again creates a healthy new game and immediately wakes its loop",
+    "terminal Home exit works and unmount stops the game loop",
+    "no unexpected local API errors",
+    "no JavaScript page errors"
+  ],
+  "errors": [],
+  "complete": true,
+  "engine": "26.5",
+  "stepsWhileGameOver": 0,
+  "requests": [
+    {
+      "path": "/api/usage/collect",
+      "status": 204
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/me",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/start",
+      "status": 200
+    },
+    {
+      "path": "/api/rewards/me",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/card-reveals",
+      "status": 200
+    },
+    {
+      "path": "/api/leaderboard/score",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/start",
+      "status": 200
+    },
+    {
+      "path": "/api/rewards/me",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/card-reveals",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/checkpoint",
+      "status": 200
+    },
+    {
+      "path": "/api/leaderboard/score",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/catalog",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/catalog",
+      "status": 200
+    },
+    {
+      "path": "/api/rewards/me",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/inventory",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/card-reveals",
+      "status": 200
+    }
+  ],
+  "destruction": {
+    "status": "destroying",
+    "hearts": 0,
+    "shots": 0,
+    "effects": [
+      {
+        "id": 9,
+        "kind": "player-explosion"
+      }
+    ],
+    "steps": 462
+  },
+  "shown": {
+    "status": "game-over",
+    "hearts": 0,
+    "shots": 0,
+    "effects": [
+      {
+        "id": 9,
+        "kind": "player-explosion"
+      }
+    ],
+    "steps": 565
+  },
+  "idle": {
+    "status": "game-over",
+    "hearts": 0,
+    "shots": 0,
+    "effects": [
+      {
+        "id": 9,
+        "kind": "player-explosion"
+      }
+    ],
+    "steps": 565
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "excluded": [
+    {
+      "attempt": "initial-clock-pause-race.json",
+      "passed": false,
+      "checksCompleted": 8,
+      "failure": "clock.pauseAt: Error: Cannot fast-forward to the past",
+      "scope": "Test fixture/clock error; not application acceptance"
+    },
+    {
+      "attempt": "initial-countdown-clock.json",
+      "passed": false,
+      "checksCompleted": 15,
+      "failure": "explicit Resume: native title continues without remounting",
+      "scope": "Test fixture/clock error; not application acceptance"
+    },
+    {
+      "attempt": "initial-incomplete-clear-fixture.json",
+      "passed": false,
+      "checksCompleted": 23,
+      "failure": "block-clear: actual title and phase survive three active seconds",
+      "scope": "Test fixture/clock error; not application acceptance"
+    },
+    {
+      "attempt": "initial-pause-boundary.json",
+      "passed": false,
+      "checksCompleted": 13,
+      "failure": "manual pause: same mounted title, native clock and phase stay frozen",
+      "scope": "Test fixture/clock error; not application acceptance"
+    },
+    {
+      "attempt": "initial-unconfirmed-fixture-charge.json",
+      "passed": false,
+      "checksCompleted": 19,
+      "failure": "quantum-block: isolated real API handlers return no unexpected errors",
+      "scope": "Test fixture/clock error; not application acceptance"
+    },
+    {
+      "attempt": "flow initial +100ms clock.pauseAt",
+      "passed": false,
+      "failure": "Cannot fast-forward to the past",
+      "scope": "Preparation race in test clock; final fixture uses +1000ms boundary"
+    }
+  ],
+  "explanations": [
+    "CSS pause commits on the native frame boundary; sample only after it settles.",
+    "Resume React effects need to commit before driving each countdown tick.",
+    "A running virtual clock can pass a +50/+100ms cross-process deadline; use +1000ms before resetting the local scene.",
+    "A fabricated unconfirmed paid weapon is correctly rejected by real saves; confirm its fixture charge using the real handler first.",
+    "A synthetic clear must represent the last fully spawned flight, otherwise the real controller correctly returns to intro."
+  ],
+  "runtimeChangesForFixtureFailures": false
+}

@@ -7,6 +7,8 @@ import { completionSaveFailure } from './completionSaveFailure';
 import { advanceCompletionQuiet, LEVEL_COMPLETION_QUIET_MS } from './levelCompletionEntrance';
 import type { BossSummary } from './bossSummaryTiming';
 import './combatVariety.css';
+import './transitionNotices.css';
+import { reinforcementIntroMs } from './transitionTiming';
 import { useAuth } from '../hooks/useAuth';
 import GameRoute from '../components/GameRoute';
 import GameAccessGate from '../components/GameAccessGate';
@@ -1546,7 +1548,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         const timing = variety ? combatTiming(state.sector) : { introMs: SECTION_INTRO_MS, gapMs: ENTRY_GAP_MS, clearMs: SECTION_CLEAR_MS, entryMs: 4100, breathingMs: 0 };
         const intro = varietyRef.current;
         intro.noticeMs = Math.max(0, intro.noticeMs - delta);
-        if (variety && state.phase !== "SECTOR_CLEAR") intro.clock += delta;
+        if (variety && state.phase !== "SECTOR_CLEAR" && (state.phase !== "SECTOR_INTRO" || flightRef.current > 0 || sectionElapsedRef.current < reinforcementIntroMs(state.sector))) intro.clock += delta;
         if (variety && intro.asteroidStage !== state.sector) { intro.asteroidStage = state.sector; intro.asteroidStageEvents = 0; }
         state.rockEffects = state.rockEffects.map(e => ({ ...e, age: e.age + delta })).filter(e => e.age < (e.final ? 750 : 250));
         const slots = sectionSlotsRef.current ?? createFormationSlots(state.section, state.sector, width, height, visibleTop, playerDiameterRef.current);
@@ -2109,7 +2111,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
           sectionSlotsRef.current = createFormationSlots(state.section, state.sector, width, height, visibleTop, playerDiameterRef.current, nextFlight.count, nextFlight.offset);
           formationIndexRef.current = 0;
           formationStartedRef.current = false;
-          sectionElapsedRef.current = variety ? Math.max(0, timing.introMs - REINFORCEMENT_WARNING_MS - timing.breathingMs) : rulesVersionRef.current === 2 ? SECTION_INTRO_MS - REINFORCEMENT_WARNING_MS - introGroupBreathingMs(state.sector) : 0;
+          sectionElapsedRef.current = variety ? timing.introMs - reinforcementIntroMs(state.sector) : rulesVersionRef.current === 2 ? SECTION_INTRO_MS - REINFORCEMENT_WARNING_MS - introGroupBreathingMs(state.sector) : 0;
           waveCompleteRef.current = false; intro.waveComplete = false;
           intro.waveDamage = state.damageCount ?? 0; intro.waveDestroyed = state.destroyed; intro.waveCombo = state.combo.total;
           spawnTimerRef.current = 0;
@@ -2599,6 +2601,9 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
           : game.phase === "SECTOR_CLEAR"
             ? `${t("Block")} ${sectorLabel} ${t("COMPLETE")}`
             : `${t("Block")} ${sectorLabel} / ${BLOCKS_PER_CHAIN}`;
+  const transitionDurationMs = game.encounter === "boss-intro" ? BOSS_WARNING_MS
+    : game.phase === "SECTOR_CLEAR" ? combatVarietyEnabled && game.encounter === "normal" ? combatTiming(game.sector).clearMs : SECTION_CLEAR_MS
+      : SECTION_INTRO_MS;
   const bossDestructionActive = game.encounter === "boss-clear" && clearTimerRef.current < BOSS_FALL_DURATION_MS + 2_500;
   const retryAccountSave = async () => {
     const queue = saveQueueRef.current;
@@ -2666,7 +2671,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
           {startError && <div className="modal-actions"><button className="button button-primary" type="button" onClick={() => { setStartError(""); setRecoveryError(false); void activateLoadout(); }}>{t("Try again")}</button>{recoveryError && <button className="button button-secondary" type="button" onClick={() => { saveQueueRef.current?.archive(); saveQueueReadyRef.current = true; setRecoveryError(false); setStartError(""); setSaveNotice("Pending data set aside. Using the confirmed account save."); void activateLoadout(); }}>{t("Use confirmed save")}</button>}</div>}
           {(startError || resumeOffer) && <button className="button button-secondary mission-back-button" type="button" onClick={() => { leaveGameFullscreen(); navigate(sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "/admin" : "/"); }}>{t("Back")}</button>}
         </div></div>}
-        {game.status === "playing" && !levelComplete && !extraLifeVisible && !bossDestructionActive && !reinforcementIntro && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div className={`sector-banner${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${game.encounter === "boss-intro" ? " boss-intro-banner" : ""}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite">
+        {(game.status === "playing" || game.status === "paused") && !levelComplete && !extraLifeVisible && !bossDestructionActive && !reinforcementIntro && (game.phase === "SECTOR_INTRO" || game.phase === "SECTOR_CLEAR") && <div key={`${game.section}:${game.encounter}:${game.phase}`} data-encounter={game.encounter} style={{ "--transition-duration": `${transitionDurationMs}ms` } as CSSProperties} className={`sector-banner readable-transition${game.phase === "SECTOR_INTRO" ? " sector-transition" : " sector-clear-message"}${game.encounter === "boss-intro" ? " boss-intro-banner" : ""}${levelIntro ? " level-intro-banner" : ""}${levelComplete ? " level-complete-banner" : ""}`} aria-live="polite">
           <span>{levelComplete || levelIntro ? sectorName(game.sector) : game.encounter === "bonus" ? game.phase === "SECTOR_CLEAR" ? t("BONUS COMPLETE") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.encounter !== "normal" ? `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}` : game.phase === "SECTOR_CLEAR" ? t("BLOCK LINKED") : `${t("LEVEL")} ${levelLabel} · ${sectorName(game.sector)}`}</span>
           <strong>{transitionHeadline}</strong>
           {game.encounter === 'boss-intro' && <small className="boss-callsign">{bossName(Math.ceil(game.sector / 10))}</small>}

@@ -4,13 +4,14 @@ import { advanceBonusRock, spawnBonusRock, rockInField, hitBonusRock, rockHitsSh
 import { chooseCryptoid } from './cryptoidRoster.ts';
 import { combatCryptoid, combatTiming, combatEntryStage, combatAttackPattern, createCombatVariety, readCombatVariety, safeEarlyPickup } from './combatVariety.ts';
 import { blockFlights } from './blockFlights.ts';
+import { TRANSITION_INTRO_MS, BLOCK_CLEAR_MS } from './transitionTiming.ts';
 
 test('all 500 campaign stages retain finite groups, late combat profiles and existing hull radii', () => {
  for (let stage=1;stage<=500;stage++) {
   const plan=blockFlights(stage);
   if(stage%10===0){assert.equal(plan.length,0);continue;}
   assert.ok(plan.length>0&&plan.length<=3);
-  const timing=combatTiming(stage);assert.ok(timing.introMs<=850);assert.ok(timing.clearMs<2000);
+  const timing=combatTiming(stage);assert.equal(timing.introMs,TRANSITION_INTRO_MS);assert.equal(timing.clearMs,BLOCK_CLEAR_MS);
   plan.forEach((count,flight)=>{
    assert.equal(count,6);assert.ok(combatEntryStage(stage,flight)>=1&&combatEntryStage(stage,flight)<=9);
    const old=[],modern=[];

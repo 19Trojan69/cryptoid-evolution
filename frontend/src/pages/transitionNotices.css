@@ -1,0 +1,47 @@
+/* Phase deadlines supply the same finite duration as the visible title. Only
+   opacity changes; original text, position, artwork and field geometry stay. */
+.game-field .sector-banner.readable-transition,
+.game-field .sector-banner.readable-transition.sector-clear-message,
+.game-field .sector-banner.readable-transition.level-intro-banner.sector-transition,
+.game-field .sector-banner.readable-transition.boss-intro-banner.sector-transition {
+  animation: readable-notice var(--transition-duration) linear both;
+}
+.game-field .sector-banner.readable-transition *,
+.game-field .sector-banner.readable-transition::before,
+.game-field .sector-banner.readable-transition::after {
+  animation: none;
+}
+@keyframes readable-notice {
+  0% { opacity: 0; }
+  8%, 88% { opacity: 1; }
+  100% { opacity: 0; }
+}
+/* The boss clear can wait for a heart pickup. Its title stays until that
+   existing interaction finishes instead of fading away on an unrelated clock. */
+.game-field .sector-banner.readable-transition[data-encounter="boss-clear"] {
+  animation: readable-notice-arrive .35s linear both;
+}
+@keyframes readable-notice-arrive {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.game-shell[data-effects-paused="true"] .sector-banner.readable-transition,
+.game-shell[data-effects-paused="true"] .sector-banner.readable-transition *,
+.game-shell[data-effects-paused="true"] .sector-banner.readable-transition::before,
+.game-shell[data-effects-paused="true"] .sector-banner.readable-transition::after {
+  animation-play-state: paused !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .game-field .sector-banner.readable-transition,
+  .game-field .sector-banner.readable-transition.sector-clear-message,
+  .game-field .sector-banner.readable-transition.level-intro-banner.sector-transition,
+  .game-field .sector-banner.readable-transition.boss-intro-banner.sector-transition {
+    animation: none;
+  }
+}
+html[data-motion="reduced"] .game-field .sector-banner.readable-transition,
+html[data-motion="reduced"] .game-field .sector-banner.readable-transition.sector-clear-message,
+html[data-motion="reduced"] .game-field .sector-banner.readable-transition.level-intro-banner.sector-transition,
+html[data-motion="reduced"] .game-field .sector-banner.readable-transition.boss-intro-banner.sector-transition {
+  animation: none;
+}

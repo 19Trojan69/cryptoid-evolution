@@ -1,0 +1,1034 @@
+{
+  "baseline": "09a6a4047236c7c8cc5ef430386fd0c6825ebb41",
+  "control": false,
+  "localOnly": true,
+  "realGamePageAndApiHandlers": true,
+  "syntheticSdkAndFatalShot": true,
+  "controlledClock": true,
+  "nativeAnimationHeldThenResumedForBoundary": true,
+  "physicalDevice": false,
+  "temperatureMeasured": false,
+  "checks": [
+    "level: timed fixture charge is confirmed by the real handler",
+    "level: actual title and phase survive three active seconds",
+    "level: native animation matches phase or reduced motion stays static",
+    "level: competing child title animations are absent",
+    "level: existing text remains within the viewport",
+    "level: reading consumes no active equipment time",
+    "level: phase still retains the title near its full deadline",
+    "level: phase advances only after the extended deadline",
+    "level: isolated real API handlers return no unexpected errors",
+    "quantum-block: timed fixture charge is confirmed by the real handler",
+    "quantum-block: actual title and phase survive three active seconds",
+    "quantum-block: native animation matches phase or reduced motion stays static",
+    "quantum-block: competing child title animations are absent",
+    "quantum-block: existing text remains within the viewport",
+    "quantum-block: reading consumes no active equipment time",
+    "manual pause: same mounted title, native clock and phase stay frozen",
+    "manual pause: waiting/countdown cannot skip the remaining title",
+    "explicit Resume: native title continues without remounting",
+    "technical pause: waiting never resumes combat or skips the title",
+    "quantum-block: phase still retains the title near its full deadline",
+    "quantum-block: phase advances only after the extended deadline",
+    "quantum-block: isolated real API handlers return no unexpected errors",
+    "block-clear: timed fixture charge is confirmed by the real handler",
+    "block-clear: actual title and phase survive three active seconds",
+    "block-clear: native animation matches phase or reduced motion stays static",
+    "block-clear: competing child title animations are absent",
+    "block-clear: existing text remains within the viewport",
+    "block-clear: reading consumes no active equipment time",
+    "block-clear: phase still retains the title near its full deadline",
+    "block-clear: phase advances only after the extended deadline",
+    "block-clear: isolated real API handlers return no unexpected errors",
+    "boss-warning: timed fixture charge is confirmed by the real handler",
+    "boss-warning: actual title and phase survive three active seconds",
+    "boss-warning: native animation matches phase or reduced motion stays static",
+    "boss-warning: competing child title animations are absent",
+    "boss-warning: existing text remains within the viewport",
+    "boss-warning: reading consumes no active equipment time",
+    "boss-warning: phase still retains the title near its full deadline",
+    "boss-warning: phase advances only after the extended deadline",
+    "boss-warning: isolated real API handlers return no unexpected errors",
+    "bonus: timed fixture charge is confirmed by the real handler",
+    "bonus: actual title and phase survive three active seconds",
+    "bonus: native animation matches phase or reduced motion stays static",
+    "bonus: competing child title animations are absent",
+    "bonus: existing text remains within the viewport",
+    "bonus: reading consumes no active equipment time",
+    "bonus: phase still retains the title near its full deadline",
+    "bonus: phase advances only after the extended deadline",
+    "bonus: isolated real API handlers return no unexpected errors",
+    "system-reduced: timed fixture charge is confirmed by the real handler",
+    "system-reduced: actual title and phase survive three active seconds",
+    "system-reduced: native animation matches phase or reduced motion stays static",
+    "system-reduced: competing child title animations are absent",
+    "system-reduced: existing text remains within the viewport",
+    "system-reduced: reading consumes no active equipment time",
+    "system-reduced: phase still retains the title near its full deadline",
+    "system-reduced: phase advances only after the extended deadline",
+    "system-reduced: isolated real API handlers return no unexpected errors",
+    "setting-reduced-tablet: timed fixture charge is confirmed by the real handler",
+    "setting-reduced-tablet: actual title and phase survive three active seconds",
+    "setting-reduced-tablet: native animation matches phase or reduced motion stays static",
+    "setting-reduced-tablet: competing child title animations are absent",
+    "setting-reduced-tablet: existing text remains within the viewport",
+    "setting-reduced-tablet: reading consumes no active equipment time",
+    "setting-reduced-tablet: phase still retains the title near its full deadline",
+    "setting-reduced-tablet: phase advances only after the extended deadline",
+    "setting-reduced-tablet: isolated real API handlers return no unexpected errors",
+    "no JavaScript page errors"
+  ],
+  "errors": [],
+  "complete": true,
+  "engine": "26.5",
+  "scenarios": [
+    {
+      "scenario": {
+        "stage": 1,
+        "encounter": "normal",
+        "phase": "SECTOR_INTRO",
+        "duration": 4800,
+        "label": "level"
+      },
+      "middle": {
+        "text": "GENESIS BELTLEVEL 1",
+        "opacity": 1,
+        "animation": "readable-notice",
+        "duration": "4.8s",
+        "childAnimation": "none",
+        "bounds": {
+          "x": 10,
+          "y": 325,
+          "width": 373,
+          "height": 94.40625
+        },
+        "native": [
+          {
+            "name": "readable-notice",
+            "time": 1701,
+            "state": "running",
+            "duration": 4800,
+            "iterations": 1
+          }
+        ]
+      },
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        }
+      ],
+      "final": {
+        "status": "playing",
+        "phase": "ENTRY",
+        "sector": 1
+      }
+    },
+    {
+      "scenario": {
+        "stage": 55,
+        "encounter": "normal",
+        "phase": "SECTOR_INTRO",
+        "duration": 4800,
+        "label": "quantum-block",
+        "pause": true
+      },
+      "middle": {
+        "text": "LEVEL 6 · QUANTUM VAULTBlock 5 / 9",
+        "opacity": 1,
+        "animation": "readable-notice",
+        "duration": "4.8s",
+        "childAnimation": "none",
+        "bounds": {
+          "x": 10,
+          "y": 178.546875,
+          "width": 373,
+          "height": 71.125
+        },
+        "native": [
+          {
+            "name": "readable-notice",
+            "time": 1817,
+            "state": "running",
+            "duration": 4800,
+            "iterations": 1
+          }
+        ]
+      },
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        }
+      ],
+      "final": {
+        "status": "playing",
+        "phase": "ENTRY",
+        "sector": 55
+      }
+    },
+    {
+      "scenario": {
+        "stage": 499,
+        "encounter": "normal",
+        "phase": "SECTOR_CLEAR",
+        "duration": 5200,
+        "label": "block-clear"
+      },
+      "middle": {
+        "text": "BLOCK VERBUNDENBlock 9 ABGESCHLOSSENBlock 8/9 · BLOCK VERBUNDEN10110100011010011100010100110110101011001011010001101001110001010011011010101100101101000110100111000101001101101010110010110100011010011100010100110110101011001011010001101001110001010011011010101100101101000110100111000101001101101010110010110100011010011100010100110110101011001011010001101001110001010011011010101100",
+        "opacity": 1,
+        "animation": "readable-notice",
+        "duration": "5.2s",
+        "childAnimation": "none",
+        "bounds": {
+          "x": 10,
+          "y": 178.546875,
+          "width": 373,
+          "height": 273.59375
+        },
+        "native": [
+          {
+            "name": "readable-notice",
+            "time": 1886,
+            "state": "running",
+            "duration": 5200,
+            "iterations": 1
+          }
+        ]
+      },
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        }
+      ],
+      "final": {
+        "status": "playing",
+        "phase": "SECTOR_INTRO",
+        "sector": 500
+      }
+    },
+    {
+      "scenario": {
+        "stage": 60,
+        "encounter": "boss-intro",
+        "phase": "SECTOR_INTRO",
+        "duration": 4900,
+        "label": "boss-warning"
+      },
+      "middle": {
+        "text": "LEVEL 6 · QUANTUM VAULTWARNUNG · SEKTORBOSSOrvask",
+        "opacity": 1,
+        "animation": "readable-notice",
+        "duration": "4.9s",
+        "childAnimation": "none",
+        "bounds": {
+          "x": 15.5,
+          "y": 322.5,
+          "width": 361.546875,
+          "height": 98.8125
+        },
+        "native": [
+          {
+            "name": "readable-notice",
+            "time": 1885,
+            "state": "running",
+            "duration": 4900,
+            "iterations": 1
+          }
+        ]
+      },
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        }
+      ],
+      "final": {
+        "status": "playing",
+        "phase": "ATTACK_CYCLE",
+        "sector": 60
+      }
+    },
+    {
+      "scenario": {
+        "stage": 60,
+        "encounter": "bonus",
+        "phase": "SECTOR_INTRO",
+        "duration": 4800,
+        "label": "bonus"
+      },
+      "middle": {
+        "text": "LEVEL 6 · QUANTUM VAULTBONUSRUNDETRIFF DIE FLIEGENDEN ZIELE",
+        "opacity": 1,
+        "animation": "readable-notice",
+        "duration": "4.8s",
+        "childAnimation": "none",
+        "bounds": {
+          "x": 10,
+          "y": 178.546875,
+          "width": 373,
+          "height": 96.984375
+        },
+        "native": [
+          {
+            "name": "readable-notice",
+            "time": 1807,
+            "state": "running",
+            "duration": 4800,
+            "iterations": 1
+          }
+        ]
+      },
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        }
+      ],
+      "final": {
+        "status": "playing",
+        "phase": "ENTRY",
+        "sector": 60
+      }
+    },
+    {
+      "scenario": {
+        "stage": 55,
+        "encounter": "normal",
+        "phase": "SECTOR_INTRO",
+        "duration": 4800,
+        "label": "system-reduced",
+        "motion": "reduce"
+      },
+      "middle": {
+        "text": "LEVEL 6 · QUANTUM VAULTBlock 5 / 9",
+        "opacity": 1,
+        "animation": "none",
+        "duration": "0s",
+        "childAnimation": "none",
+        "bounds": {
+          "x": 10,
+          "y": 178.546875,
+          "width": 373,
+          "height": 71.125
+        },
+        "native": []
+      },
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        }
+      ],
+      "final": {
+        "status": "playing",
+        "phase": "ENTRY",
+        "sector": 55
+      }
+    },
+    {
+      "scenario": {
+        "stage": 60,
+        "encounter": "boss-intro",
+        "phase": "SECTOR_INTRO",
+        "duration": 4900,
+        "label": "setting-reduced-tablet",
+        "settingReduced": true,
+        "width": 768,
+        "height": 1024
+      },
+      "middle": {
+        "text": "LEVEL 6 · QUANTUM VAULTWARNUNG · SEKTORBOSSOrvask",
+        "opacity": 1,
+        "animation": "none",
+        "duration": "0s",
+        "childAnimation": "none",
+        "bounds": {
+          "x": 30.5,
+          "y": 430,
+          "width": 706.546875,
+          "height": 164.1875
+        },
+        "native": []
+      },
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        }
+      ],
+      "final": {
+        "status": "playing",
+        "phase": "ATTACK_CYCLE",
+        "sector": 60
+      }
+    }
+  ],
+  "apiObservations": [
+    {
+      "path": "/api/usage/collect",
+      "status": 204
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/me",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/start",
+      "status": 200
+    },
+    {
+      "path": "/api/rewards/me",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/card-reveals",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/checkpoint",
+      "status": 200
+    }
+  ],
+  "pauseObservation": {
+    "a": {
+      "text": "LEVEL 6 · QUANTUM VAULTBlock 5 / 9",
+      "opacity": 1,
+      "animation": "readable-notice",
+      "duration": "4.8s",
+      "childAnimation": "none",
+      "bounds": {
+        "x": 10,
+        "y": 178.546875,
+        "width": 373,
+        "height": 71.125
+      },
+      "native": [
+        {
+          "name": "readable-notice",
+          "time": 1609,
+          "state": "paused",
+          "duration": 4800,
+          "iterations": 1
+        }
+      ]
+    },
+    "b": {
+      "text": "LEVEL 6 · QUANTUM VAULTBlock 5 / 9",
+      "opacity": 1,
+      "animation": "readable-notice",
+      "duration": "4.8s",
+      "childAnimation": "none",
+      "bounds": {
+        "x": 10,
+        "y": 178.546875,
+        "width": 373,
+        "height": 71.125
+      },
+      "native": [
+        {
+          "name": "readable-notice",
+          "time": 1609,
+          "state": "paused",
+          "duration": 4800,
+          "iterations": 1
+        }
+      ]
+    },
+    "paused": {
+      "state": {
+        "rocks": [],
+        "rockEffects": [],
+        "damageCount": 2,
+        "comboTotal": 43,
+        "bossHullLight": 0,
+        "combo": {
+          "pendingAt": null,
+          "total": 43,
+          "level": 0,
+          "remainingMs": 0,
+          "variety": {
+            "version": 1,
+            "clock": 851,
+            "weaponDue": 18000,
+            "weaponIssued": true,
+            "asteroidDue": 28000,
+            "asteroidEvents": 0,
+            "asteroidStage": 55,
+            "asteroidStageEvents": 0,
+            "waveDamage": 0,
+            "waveDestroyed": 0,
+            "waveCombo": 0,
+            "waveComplete": false,
+            "notice": "",
+            "noticeMs": 0,
+            "rocks": []
+          }
+        },
+        "asteroids": [],
+        "bonusTargets": [],
+        "bonusHits": 0,
+        "bonusResult": "",
+        "chainBlocks": 4,
+        "chainResult": "",
+        "rewardNotice": "",
+        "boss": null,
+        "encounter": "normal",
+        "shots": [],
+        "enemyShots": [],
+        "player": {
+          "x": 0.5,
+          "y": 0.78
+        },
+        "thrust": 0,
+        "effects": [],
+        "powerUps": [],
+        "powerUpTypes": [],
+        "pickupNotice": null,
+        "score": 27795,
+        "shardBase": -1613,
+        "shards": 1613,
+        "hearts": 3,
+        "maxHearts": 3,
+        "projectileGuard": 0,
+        "shieldCharges": 2,
+        "shieldMs": 10000,
+        "purchasedShieldMs": 10000,
+        "shieldActive": true,
+        "overdriveMs": 10000,
+        "overdriveTotalMs": 20000,
+        "rapidFireMs": 10000,
+        "rapidFireTotalMs": 20000,
+        "empMs": 10000,
+        "pendingStartPower": null,
+        "weaponLevel": 2,
+        "weaponSource": "paid",
+        "weaponCap": 2,
+        "paidWeaponLevel": 2,
+        "paidWeaponMs": 45000,
+        "pickupWeaponLevel": 3,
+        "pickupWeaponMs": 20000,
+        "unlockedWeapons": [
+          1,
+          2
+        ],
+        "weaponTimers": [
+          0,
+          0,
+          45000,
+          0,
+          0,
+          0
+        ],
+        "destroyed": 247,
+        "sector": 55,
+        "section": 55,
+        "phase": "SECTOR_INTRO",
+        "status": "paused"
+      },
+      "elapsed": 2995,
+      "clear": 0,
+      "flight": 0,
+      "technical": false
+    },
+    "after": {
+      "state": {
+        "rocks": [],
+        "rockEffects": [],
+        "damageCount": 2,
+        "comboTotal": 43,
+        "bossHullLight": 0,
+        "combo": {
+          "pendingAt": null,
+          "total": 43,
+          "level": 0,
+          "remainingMs": 0,
+          "variety": {
+            "version": 1,
+            "clock": 851,
+            "weaponDue": 18000,
+            "weaponIssued": true,
+            "asteroidDue": 28000,
+            "asteroidEvents": 0,
+            "asteroidStage": 55,
+            "asteroidStageEvents": 0,
+            "waveDamage": 0,
+            "waveDestroyed": 0,
+            "waveCombo": 0,
+            "waveComplete": false,
+            "notice": "",
+            "noticeMs": 0,
+            "rocks": []
+          }
+        },
+        "asteroids": [],
+        "bonusTargets": [],
+        "bonusHits": 0,
+        "bonusResult": "",
+        "chainBlocks": 4,
+        "chainResult": "",
+        "rewardNotice": "",
+        "boss": null,
+        "encounter": "normal",
+        "shots": [],
+        "enemyShots": [],
+        "player": {
+          "x": 0.5,
+          "y": 0.78
+        },
+        "thrust": 0,
+        "effects": [],
+        "powerUps": [],
+        "powerUpTypes": [],
+        "pickupNotice": null,
+        "score": 27795,
+        "shardBase": -1613,
+        "shards": 1613,
+        "hearts": 3,
+        "maxHearts": 3,
+        "projectileGuard": 0,
+        "shieldCharges": 2,
+        "shieldMs": 10000,
+        "purchasedShieldMs": 10000,
+        "shieldActive": true,
+        "overdriveMs": 10000,
+        "overdriveTotalMs": 20000,
+        "rapidFireMs": 10000,
+        "rapidFireTotalMs": 20000,
+        "empMs": 10000,
+        "pendingStartPower": null,
+        "weaponLevel": 2,
+        "weaponSource": "paid",
+        "weaponCap": 2,
+        "paidWeaponLevel": 2,
+        "paidWeaponMs": 45000,
+        "pickupWeaponLevel": 3,
+        "pickupWeaponMs": 20000,
+        "unlockedWeapons": [
+          1,
+          2
+        ],
+        "weaponTimers": [
+          0,
+          0,
+          45000,
+          0,
+          0,
+          0
+        ],
+        "destroyed": 247,
+        "sector": 55,
+        "section": 55,
+        "phase": "SECTOR_INTRO",
+        "status": "paused"
+      },
+      "elapsed": 2995,
+      "clear": 0,
+      "flight": 0,
+      "technical": false
+    },
+    "same": true
+  },
+  "resumeObservation": {
+    "resumed": {
+      "text": "LEVEL 6 · QUANTUM VAULTBlock 5 / 9",
+      "opacity": 1,
+      "animation": "readable-notice",
+      "duration": "4.8s",
+      "childAnimation": "none",
+      "bounds": {
+        "x": 10,
+        "y": 178.546875,
+        "width": 373,
+        "height": 71.125
+      },
+      "native": [
+        {
+          "name": "readable-notice",
+          "time": 1813,
+          "state": "running",
+          "duration": 4800,
+          "iterations": 1
+        }
+      ]
+    },
+    "state": {
+      "state": {
+        "rocks": [],
+        "rockEffects": [],
+        "damageCount": 2,
+        "comboTotal": 43,
+        "bossHullLight": 0,
+        "combo": {
+          "pendingAt": null,
+          "total": 43,
+          "level": 0,
+          "remainingMs": 0,
+          "variety": {
+            "version": 1,
+            "clock": 851,
+            "weaponDue": 18000,
+            "weaponIssued": true,
+            "asteroidDue": 28000,
+            "asteroidEvents": 0,
+            "asteroidStage": 55,
+            "asteroidStageEvents": 0,
+            "waveDamage": 0,
+            "waveDestroyed": 0,
+            "waveCombo": 0,
+            "waveComplete": false,
+            "notice": "",
+            "noticeMs": 0,
+            "rocks": []
+          }
+        },
+        "asteroids": [],
+        "bonusTargets": [],
+        "bonusHits": 0,
+        "bonusResult": "",
+        "chainBlocks": 4,
+        "chainResult": "",
+        "rewardNotice": "",
+        "boss": null,
+        "encounter": "normal",
+        "shots": [],
+        "enemyShots": [],
+        "player": {
+          "x": 0.5,
+          "y": 0.78
+        },
+        "thrust": 0,
+        "effects": [],
+        "powerUps": [],
+        "powerUpTypes": [],
+        "pickupNotice": null,
+        "score": 27795,
+        "shardBase": -1613,
+        "shards": 1613,
+        "hearts": 3,
+        "maxHearts": 3,
+        "projectileGuard": 0,
+        "shieldCharges": 2,
+        "shieldMs": 10000,
+        "purchasedShieldMs": 10000,
+        "shieldActive": true,
+        "overdriveMs": 10000,
+        "overdriveTotalMs": 20000,
+        "rapidFireMs": 10000,
+        "rapidFireTotalMs": 20000,
+        "empMs": 10000,
+        "pendingStartPower": null,
+        "weaponLevel": 2,
+        "weaponSource": "paid",
+        "weaponCap": 2,
+        "paidWeaponLevel": 2,
+        "paidWeaponMs": 45000,
+        "pickupWeaponLevel": 3,
+        "pickupWeaponMs": 20000,
+        "unlockedWeapons": [
+          1,
+          2
+        ],
+        "weaponTimers": [
+          0,
+          0,
+          45000,
+          0,
+          0,
+          0
+        ],
+        "destroyed": 247,
+        "sector": 55,
+        "section": 55,
+        "phase": "SECTOR_INTRO",
+        "status": "playing"
+      },
+      "elapsed": 2995,
+      "clear": 0,
+      "flight": 0,
+      "technical": false
+    }
+  }
+}

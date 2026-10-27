@@ -1,0 +1,11 @@
+{
+  "command": "npm run build (frontend)",
+  "exitCode": 0,
+  "tests": 406,
+  "failures": 0,
+  "localizationReleaseCheck": true,
+  "typescript": true,
+  "vite": true,
+  "largeChunkWarningRetained": true,
+  "logSha256": "bd7f83a2bdb26da4d52048f1a609cfdb427d6d16a26db306e0044118156b3e30"
+}
