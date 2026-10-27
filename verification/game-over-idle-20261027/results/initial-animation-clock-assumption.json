@@ -1,0 +1,6 @@
+{
+  "excluded": true,
+  "checks": 3,
+  "failure": "the final native explosion continues after Game Over appears",
+  "reason": "Advancing the JavaScript test clock is not proof of advancing native CSS animation time. Final verification explicitly holds/resumes the existing native animation and waits on its real timeline."
+}

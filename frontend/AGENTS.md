@@ -1,3 +1,30 @@
+# Terminal Game Over loop, 27 October 2026
+
+Continue smartphone efficiency from shared public 09a6a40/PR183. A finished player
+explosion remains in terminal state records, keeping the game loop awake after
+its native DOM has ended. One exact GamePage sleep predicate now includes only
+game-over; destruction reveal and resumable paused-effect clocks keep their old
+policy. Never broaden this to all non-playing states. Four added cases execute
+the actual predicate/guarded/shared schedulers and restore the entire controller
+to the preceding SHA256; historical fingerprints chain that exact restoration.
+397 frontend cases/localization/types/Vite pass. Targeted real GamePage/handler
+WPE26.5 has eleven checks: native explosion completes independently, zero game
+steps over five settled terminal seconds, explicit Play Again wakes a healthy
+game, modal Home exits cleanly. Pinned released control measured 300 steps in
+the same interval; eight checks completed before an incorrect hidden-header Home
+selector, so no complete baseline UI pass is claimed. Initial native CSS/test-
+clock assumption is also excluded. Lint messages match pinned baseline under
+current tools (0+4); historical 62+4 remain historical, not claimed fixed. Backend
+127 acceptance is baseline, not rerun. All other runtime sources, art/CSS/HUD,
+audio, save/economy/auth, standard pixels, strict >2500ms/500ms watchdog and
+explicit technical Resume stay unchanged. No temperature/battery or White Screen
+cure claim. Preserve 09a6a40 at backup/shared-before-game-over-idle-20261027 and
+READY Testnet 5WzvAtXq4aNoXCj6DXwnFDcAKZX7 / production CXKVFwjsoiCFdLRZBUdeKqBGNR2h.
+Candidate automatic deployment is disabled; reviewed same-source release to both
+existing projects remains authorized, with separate networks/account/payment.
+No new owner campaign, PR167/168, reset/migration, secrets/protection/runtime logs.
+See docs/game-over-idle-20261027 and verification/game-over-idle-20261027.
+
 # Unused projectile scene copies, 27 October 2026
 
 Continue owner-requested smartphone efficiency from shared public 9d0ac5b/PR182.

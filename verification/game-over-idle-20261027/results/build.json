@@ -1,0 +1,36 @@
+{
+  "command": "npm --ignore-scripts --prefix frontend run build",
+  "frontendCases": 397,
+  "suiteCounts": [
+    11,
+    11,
+    12,
+    43,
+    42,
+    12,
+    13,
+    37,
+    26,
+    2,
+    16,
+    5,
+    3,
+    32,
+    8,
+    23,
+    25,
+    32,
+    27,
+    17
+  ],
+  "allRecordedFailuresZero": true,
+  "localizationChecks": true,
+  "typeScriptAndVitePassed": true,
+  "prebuiltHullsPrepared": {
+    "revision": "1b15fbaa3ceac2fbf7b7",
+    "newArtwork": false
+  },
+  "backendSourceUnchanged": true,
+  "fullBackendSuiteRerun": false,
+  "priorBackendAcceptanceCases": 127
+}

@@ -1,0 +1,20 @@
+{
+  "baselineCommit": "09a6a4047236c7c8cc5ef430386fd0c6825ebb41",
+  "baselineTree": "907cb0e4a3267d828e60e6167d1ef1d638a699d9",
+  "runtimeDelta": [
+    "frontend/src/pages/GamePage.tsx"
+  ],
+  "onePredicateRestoresController": true,
+  "restoredGamePageSha256": "21d28b3a2c856eec20cd9b98798be7be6d3ac97d59d265846b1d163495e6fbc7",
+  "protectedSourcesIdentical": {
+    "frontend/src/pages/gameLoop.ts": true,
+    "frontend/src/lib/frameScheduler.ts": true,
+    "frontend/src/pages/CanvasEffects.tsx": true,
+    "frontend/src/pages/LevelCompletion.tsx": true,
+    "frontend/src/lib/gameViewport.ts": true,
+    "frontend/src/generated/paintedHullManifest.ts": true
+  },
+  "allOtherTrackedRuntimeSourcesUnchanged": true,
+  "backendFullSuiteRerun": false,
+  "generatedHullsRestoredAfterNativeCompletion": true
+}

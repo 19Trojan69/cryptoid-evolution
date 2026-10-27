@@ -2251,7 +2251,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     const stop = startGuardedGameLoop({ step,
       fault: (reason, error) => interruptionRef.current(reason, error),
       active: () => stateRef.current.status === 'playing',
-      sleepWhenInactive: () => stateRef.current.status !== 'destroying' && stateRef.current.effects.length === 0,
+      sleepWhenInactive: () => stateRef.current.status === 'game-over' || (stateRef.current.status !== 'destroying' && stateRef.current.effects.length === 0),
       visible: () => document.visibilityState !== 'hidden',
       now: () => performance.now(),
       requestFrame: requestGameFrame,
