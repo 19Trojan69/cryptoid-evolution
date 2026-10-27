@@ -1,0 +1,34 @@
+{
+  "baseline": "9d0ac5ba60d9b25170176700a3c1efaa355be290",
+  "frontendBuild": {
+    "tests": 393,
+    "failures": 0,
+    "typescriptAndVite": true
+  },
+  "native": {
+    "engine": "26.5",
+    "checks": 74,
+    "realApiHandlers": true,
+    "isolatedLocalData": true,
+    "testOnlyCombatCompletion": true,
+    "controlledClock": true,
+    "actualPlayerAndHostileProjectiles": true
+  },
+  "controlledPublisherComparison": {
+    "publications": 600,
+    "syntheticShotsPerPublication": 172,
+    "beforeProjectileArrayCopies": 1200,
+    "afterProjectileArrayCopies": 0,
+    "beforeIteratedProjectileEntries": 103200,
+    "afterIteratedProjectileEntries": 0,
+    "wholeCpuOrGcTimeMeasured": false
+  },
+  "backendTypesCompiled": true,
+  "backendRuntimeUnchanged": true,
+  "fullBackendSuiteRerun": false,
+  "priorBackendAcceptance": 127,
+  "physicalTemperatureMeasured": false,
+  "historicalWhiteScreenFixed": false,
+  "lintAddedFindings": false,
+  "lintEnvironmentDifferenceDocumented": true
+}

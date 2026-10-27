@@ -1,0 +1,72 @@
+{
+  "complete": true,
+  "checks": 66,
+  "samples": [
+    {
+      "label": "stage 60 before boss defeat",
+      "player": {
+        "nodes": 2,
+        "shots": 2,
+        "equal": true
+      },
+      "hostile": {
+        "nodes": 0,
+        "shots": 0,
+        "equal": true
+      }
+    },
+    {
+      "label": "stage 60 prepared summary",
+      "player": {
+        "nodes": 0,
+        "shots": 0,
+        "equal": true
+      },
+      "hostile": {
+        "nodes": 0,
+        "shots": 0,
+        "equal": true
+      }
+    },
+    {
+      "label": "next normal level after Continue",
+      "player": {
+        "nodes": 2,
+        "shots": 2,
+        "equal": true
+      },
+      "hostile": {
+        "nodes": 0,
+        "shots": 0,
+        "equal": true
+      }
+    },
+    {
+      "label": "stage 500 before boss defeat",
+      "player": {
+        "nodes": 1,
+        "shots": 1,
+        "equal": true
+      },
+      "hostile": {
+        "nodes": 0,
+        "shots": 0,
+        "equal": true
+      }
+    },
+    {
+      "label": "stage 500 prepared summary",
+      "player": {
+        "nodes": 0,
+        "shots": 0,
+        "equal": true
+      },
+      "hostile": {
+        "nodes": 0,
+        "shots": 0,
+        "equal": true
+      }
+    }
+  ],
+  "limits": "This preliminary successful flow samples live player fire but hostile lists are empty. The final check additionally waits for actual hostile fire and compares movement/pause/resume."
+}

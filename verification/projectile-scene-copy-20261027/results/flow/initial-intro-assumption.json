@@ -1,0 +1,6 @@
+{
+  "excluded": true,
+  "checksCompleted": 9,
+  "failure": "stage 60: actual player fire is present without a React projectile copy",
+  "reason": "The newly added fire check ran during the original boss introduction where firing is intentionally suppressed. Compare after the actual transition permits fire."
+}

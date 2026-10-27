@@ -1,3 +1,4 @@
+import {restoreProjectileSnapshotGameChange} from './projectileSnapshotReviewedChanges.mjs';
 // Exact idle-loop wiring; combat, effects, saves and pause rules stay intact.
 const changes = [
   {
@@ -18,6 +19,7 @@ const changes = [
   }
 ];
 export function restoreSmartphoneWorkGameChanges(source) {
+  source = restoreProjectileSnapshotGameChange(source);
   for (const {before, after} of [...changes].reverse()) {
     if (source.split(after).length !== 2) throw Error("Expected one exact smartphone work change");
     source = source.replace(after, before);

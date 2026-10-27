@@ -1,3 +1,25 @@
+# Unused projectile scene copies, 27 October 2026
+
+Continue owner-requested smartphone efficiency from shared public 9d0ac5b/PR182.
+One GamePage publisher statement omits two unused shots/enemyShots array copies;
+the direct presenter, live simulation and all rendered-list/boss copies remain.
+No game.shots/enemyShots display consumers exist. Restore only this exact statement
+before historical controller fingerprints. 393 frontend cases/types/Vite pass;
+real GamePage/handler WPE26.5 has 74 local checks, including nonempty player/hostile
+movement, four-second manual pauses, boss/bonus/summary/Continue, save failure/Retry
+and campaign end. 600 synthetic publications avoid 1200 copies/103200 traversed
+entries, not measured whole CPU/GC/temperature. Current resolved lint gives the
+same zero errors/four warnings on pinned baseline and candidate; historical 62+4
+is retained, not claimed fixed. Do not call GamePage/project lint-clean. Backend
+types compile; full127-suite result is baseline, not rerun. Pixel standard, art,
+CSS/HUD, audio, economy/saves, strict >2500ms/500ms pauses and explicit technical
+Resume remain. Keep prior 9d0ac5b at backup/shared-before-projectile-scene-copy-20261027
+with READY Testnet FSG9xyeLKEgKGkGbKgRNjcPjq2jq / production BPscxQrsQfPF8WJk3nHtP12Yd5tt.
+Candidate auto-deploy off; reviewed same-source release to both existing projects
+remains authorized with separate networks/account/payment. No new owner campaign,
+PR167/168, reset/migration, secrets/protection/runtime logs or White Screen cure.
+See docs/projectile-scene-copy-20261027 and verification/projectile-scene-copy-20261027.
+
 # Playable standard raster, 27 October 2026
 
 The owner now explicitly accepts ordinary playable graphics instead of unnecessary
