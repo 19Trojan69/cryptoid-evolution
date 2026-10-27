@@ -1,3 +1,29 @@
+# Paired Play/Shop home actions, 27 October 2026
+
+Owner requests shortened Play with an adjacent Shop button, same original height,
+Shop half Play width and comfortable spacing. The home-only2:1 grid keeps58px
+narrow/72px desktop height and16–22px gap; Play label/gap adapt to fit. Shop uses
+the existing translated label, busy guard and openQuickAction('shop') catalogue.
+Existing close/paused-home/auth/purchase gates and all other home areas remain.
+No new timer/state/animation/asset/observer/RAF, fullscreen behavior, account or
+gameplay change. GamePage and original art/network effects stay byte-identical;
+whole Shop restores after removing only the new callback.412 release cases/
+locales/types/Vite,25 separate existing Home/Galaxy cases and171 native checks in
+26 same-locale/account/viewport comparisons pass, including all19 languages,
+320–1363px/landscape, exact ratio/heights/gap, no overflow, existing shop open/
+close/no purchase/auth, keyboard order and Play navigation. First German/French
+baseline-cache mismatch is excluded. CinematicHome lint0+0 and Shop5 old errors
+match pinned baselines; no whole-project lint-clean claim. Prior full-game/native
+Game Over/backend127 remain baseline, not repeated or physical heat/White Screen
+acceptance. See docs and verification/home-play-shop-20261027. Candidate auto-
+deploy off; reviewed same-source publication to both existing projects remains
+authorized via main, then actual READY/source/public bundles/commit/tree/paired
+home actions and prior guards. Preserve a718b4c and READY Testnet8GQBDCPE6uUKWBNF1g7try8s5Jia /
+productionHu6VY49RQoW9TFnnjhfPagrMUwqv, older backups and separate networks/
+accounts/payments. Keep manual confirmed Continue, strict >2500ms/500ms/manual
+technical Resume. No duplicates, PR167/168, reset/migration, real purchases,
+secrets/protection/runtime logs; receipt refs must also be auto-deploy-disabled.
+
 # Shop symbols beside the red binary notice, 27 October 2026
 
 The owner additionally requests the existing shop symbol alongside the shot name.

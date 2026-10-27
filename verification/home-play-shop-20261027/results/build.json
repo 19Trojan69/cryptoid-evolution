@@ -1,0 +1,28 @@
+{
+  "command": "npm run build",
+  "cwd": "frontend",
+  "exitCode": 0,
+  "releaseTests": 412,
+  "localizationInventory": true,
+  "typescript": true,
+  "vite": true,
+  "viteSeconds": 3.64,
+  "separateExistingHomeGalaxyTests": 25,
+  "native": {
+    "checks": 171,
+    "cases": 26,
+    "complete": true,
+    "engine": "141.0.7390.37",
+    "allSelectableLocales": 19,
+    "sameLocaleAccountViewportBaseline": true
+  },
+  "baselineNotRepeated": [
+    "Full native combat/Game Over",
+    "backend127"
+  ],
+  "warnings": [
+    "Existing large-chunk advisory",
+    "Local npm http-proxy configuration deprecation"
+  ],
+  "physicalDeviceAcceptance": false
+}

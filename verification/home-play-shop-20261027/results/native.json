@@ -1,0 +1,1478 @@
+{
+  "base": "a718b4c60dc93ab022acffe6bacfb6e4fc9a688f",
+  "localOnly": true,
+  "actualHomeAndShop": true,
+  "originalArtAndFonts": true,
+  "realIsolatedHandlers": true,
+  "controlledSdkAndClock": true,
+  "physicalDevice": false,
+  "checks": [
+    "compact-en: shop is exactly half the play width in one row",
+    "compact-en: both buttons retain the original play height",
+    "compact-en: visible spacing and no text/page overflow",
+    "compact-en: career and remaining layout keep their vertical position",
+    "compact-en: no payment, purchase, equip or start action was issued",
+    "compact-en: isolated API responses succeed",
+    "compact-de: shop is exactly half the play width in one row",
+    "compact-de: both buttons retain the original play height",
+    "compact-de: visible spacing and no text/page overflow",
+    "compact-de: career and remaining layout keep their vertical position",
+    "compact-de: shop opens the original ship catalogue and pauses the home scene",
+    "compact-de: opening it does not request account authentication",
+    "compact-de: closing returns to the same paired buttons",
+    "compact-de: no payment, purchase, equip or start action was issued",
+    "compact-de: isolated API responses succeed",
+    "compact-es: shop is exactly half the play width in one row",
+    "compact-es: both buttons retain the original play height",
+    "compact-es: visible spacing and no text/page overflow",
+    "compact-es: career and remaining layout keep their vertical position",
+    "compact-es: no payment, purchase, equip or start action was issued",
+    "compact-es: isolated API responses succeed",
+    "compact-fr: shop is exactly half the play width in one row",
+    "compact-fr: both buttons retain the original play height",
+    "compact-fr: visible spacing and no text/page overflow",
+    "compact-fr: career and remaining layout keep their vertical position",
+    "compact-fr: no payment, purchase, equip or start action was issued",
+    "compact-fr: isolated API responses succeed",
+    "compact-pt: shop is exactly half the play width in one row",
+    "compact-pt: both buttons retain the original play height",
+    "compact-pt: visible spacing and no text/page overflow",
+    "compact-pt: career and remaining layout keep their vertical position",
+    "compact-pt: no payment, purchase, equip or start action was issued",
+    "compact-pt: isolated API responses succeed",
+    "compact-it: shop is exactly half the play width in one row",
+    "compact-it: both buttons retain the original play height",
+    "compact-it: visible spacing and no text/page overflow",
+    "compact-it: career and remaining layout keep their vertical position",
+    "compact-it: no payment, purchase, equip or start action was issued",
+    "compact-it: isolated API responses succeed",
+    "compact-pl: shop is exactly half the play width in one row",
+    "compact-pl: both buttons retain the original play height",
+    "compact-pl: visible spacing and no text/page overflow",
+    "compact-pl: career and remaining layout keep their vertical position",
+    "compact-pl: no payment, purchase, equip or start action was issued",
+    "compact-pl: isolated API responses succeed",
+    "compact-tr: shop is exactly half the play width in one row",
+    "compact-tr: both buttons retain the original play height",
+    "compact-tr: visible spacing and no text/page overflow",
+    "compact-tr: career and remaining layout keep their vertical position",
+    "compact-tr: no payment, purchase, equip or start action was issued",
+    "compact-tr: isolated API responses succeed",
+    "compact-ru: shop is exactly half the play width in one row",
+    "compact-ru: both buttons retain the original play height",
+    "compact-ru: visible spacing and no text/page overflow",
+    "compact-ru: career and remaining layout keep their vertical position",
+    "compact-ru: no payment, purchase, equip or start action was issued",
+    "compact-ru: isolated API responses succeed",
+    "compact-hr: shop is exactly half the play width in one row",
+    "compact-hr: both buttons retain the original play height",
+    "compact-hr: visible spacing and no text/page overflow",
+    "compact-hr: career and remaining layout keep their vertical position",
+    "compact-hr: no payment, purchase, equip or start action was issued",
+    "compact-hr: isolated API responses succeed",
+    "compact-cs: shop is exactly half the play width in one row",
+    "compact-cs: both buttons retain the original play height",
+    "compact-cs: visible spacing and no text/page overflow",
+    "compact-cs: career and remaining layout keep their vertical position",
+    "compact-cs: no payment, purchase, equip or start action was issued",
+    "compact-cs: isolated API responses succeed",
+    "compact-sk: shop is exactly half the play width in one row",
+    "compact-sk: both buttons retain the original play height",
+    "compact-sk: visible spacing and no text/page overflow",
+    "compact-sk: career and remaining layout keep their vertical position",
+    "compact-sk: no payment, purchase, equip or start action was issued",
+    "compact-sk: isolated API responses succeed",
+    "compact-hu: shop is exactly half the play width in one row",
+    "compact-hu: both buttons retain the original play height",
+    "compact-hu: visible spacing and no text/page overflow",
+    "compact-hu: career and remaining layout keep their vertical position",
+    "compact-hu: no payment, purchase, equip or start action was issued",
+    "compact-hu: isolated API responses succeed",
+    "compact-ro: shop is exactly half the play width in one row",
+    "compact-ro: both buttons retain the original play height",
+    "compact-ro: visible spacing and no text/page overflow",
+    "compact-ro: career and remaining layout keep their vertical position",
+    "compact-ro: no payment, purchase, equip or start action was issued",
+    "compact-ro: isolated API responses succeed",
+    "compact-sr: shop is exactly half the play width in one row",
+    "compact-sr: both buttons retain the original play height",
+    "compact-sr: visible spacing and no text/page overflow",
+    "compact-sr: career and remaining layout keep their vertical position",
+    "compact-sr: no payment, purchase, equip or start action was issued",
+    "compact-sr: isolated API responses succeed",
+    "compact-uk: shop is exactly half the play width in one row",
+    "compact-uk: both buttons retain the original play height",
+    "compact-uk: visible spacing and no text/page overflow",
+    "compact-uk: career and remaining layout keep their vertical position",
+    "compact-uk: no payment, purchase, equip or start action was issued",
+    "compact-uk: isolated API responses succeed",
+    "compact-th: shop is exactly half the play width in one row",
+    "compact-th: both buttons retain the original play height",
+    "compact-th: visible spacing and no text/page overflow",
+    "compact-th: career and remaining layout keep their vertical position",
+    "compact-th: no payment, purchase, equip or start action was issued",
+    "compact-th: isolated API responses succeed",
+    "compact-zh: shop is exactly half the play width in one row",
+    "compact-zh: both buttons retain the original play height",
+    "compact-zh: visible spacing and no text/page overflow",
+    "compact-zh: career and remaining layout keep their vertical position",
+    "compact-zh: no payment, purchase, equip or start action was issued",
+    "compact-zh: isolated API responses succeed",
+    "compact-vi: shop is exactly half the play width in one row",
+    "compact-vi: both buttons retain the original play height",
+    "compact-vi: visible spacing and no text/page overflow",
+    "compact-vi: career and remaining layout keep their vertical position",
+    "compact-vi: no payment, purchase, equip or start action was issued",
+    "compact-vi: isolated API responses succeed",
+    "phone-signed-in: shop is exactly half the play width in one row",
+    "phone-signed-in: both buttons retain the original play height",
+    "phone-signed-in: visible spacing and no text/page overflow",
+    "phone-signed-in: career and remaining layout keep their vertical position",
+    "phone-signed-in: shop opens the original ship catalogue and pauses the home scene",
+    "phone-signed-in: opening it does not request account authentication",
+    "phone-signed-in: closing returns to the same paired buttons",
+    "phone-signed-in: no payment, purchase, equip or start action was issued",
+    "phone-signed-in: isolated API responses succeed",
+    "phone-large: shop is exactly half the play width in one row",
+    "phone-large: both buttons retain the original play height",
+    "phone-large: visible spacing and no text/page overflow",
+    "phone-large: career and remaining layout keep their vertical position",
+    "phone-large: no payment, purchase, equip or start action was issued",
+    "phone-large: isolated API responses succeed",
+    "tablet-thai: shop is exactly half the play width in one row",
+    "tablet-thai: both buttons retain the original play height",
+    "tablet-thai: visible spacing and no text/page overflow",
+    "tablet-thai: career and remaining layout keep their vertical position",
+    "tablet-thai: shop opens the original ship catalogue and pauses the home scene",
+    "tablet-thai: opening it does not request account authentication",
+    "tablet-thai: closing returns to the same paired buttons",
+    "tablet-thai: no payment, purchase, equip or start action was issued",
+    "tablet-thai: isolated API responses succeed",
+    "desktop: shop is exactly half the play width in one row",
+    "desktop: both buttons retain the original play height",
+    "desktop: visible spacing and no text/page overflow",
+    "desktop: career and remaining layout keep their vertical position",
+    "the paired Shop button follows Play in keyboard focus order",
+    "desktop: shop opens the original ship catalogue and pauses the home scene",
+    "desktop: opening it does not request account authentication",
+    "desktop: closing returns to the same paired buttons",
+    "Play still follows the existing game route",
+    "desktop: no payment, purchase, equip or start action was issued",
+    "desktop: isolated API responses succeed",
+    "tablet-breakpoint: shop is exactly half the play width in one row",
+    "tablet-breakpoint: both buttons retain the original play height",
+    "tablet-breakpoint: visible spacing and no text/page overflow",
+    "tablet-breakpoint: career and remaining layout keep their vertical position",
+    "tablet-breakpoint: no payment, purchase, equip or start action was issued",
+    "tablet-breakpoint: isolated API responses succeed",
+    "laptop-narrow: shop is exactly half the play width in one row",
+    "laptop-narrow: both buttons retain the original play height",
+    "laptop-narrow: visible spacing and no text/page overflow",
+    "laptop-narrow: career and remaining layout keep their vertical position",
+    "laptop-narrow: no payment, purchase, equip or start action was issued",
+    "laptop-narrow: isolated API responses succeed",
+    "landscape: shop is exactly half the play width in one row",
+    "landscape: both buttons retain the original play height",
+    "landscape: visible spacing and no text/page overflow",
+    "landscape: career and remaining layout keep their vertical position",
+    "landscape: no payment, purchase, equip or start action was issued",
+    "landscape: isolated API responses succeed",
+    "no JavaScript page errors"
+  ],
+  "cases": [
+    {
+      "scenario": {
+        "width": 320,
+        "height": 568,
+        "locale": "en",
+        "name": "compact-en",
+        "open": false
+      },
+      "view": {
+        "play": {
+          "left": 20,
+          "top": 384,
+          "right": 196,
+          "bottom": 442,
+          "width": 176,
+          "height": 58,
+          "scrollWidth": 172,
+          "clientWidth": 172
+        },
+        "shop": {
+          "left": 212,
+          "top": 384,
+          "right": 300,
+          "bottom": 442,
+          "width": 88,
+          "height": 58,
+          "scrollWidth": 84,
+          "clientWidth": 84
+        },
+        "career": {
+          "left": 20,
+          "top": 458,
+          "right": 300,
+          "bottom": 562,
+          "width": 280,
+          "height": 104,
+          "scrollWidth": 278,
+          "clientWidth": 278
+        },
+        "overflow": false,
+        "playText": "PLAY\n→",
+        "shopText": "SHOP",
+        "focusable": true
+      },
+      "originalPlayHeight": 58,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 320,
+        "height": 568,
+        "locale": "de",
+        "name": "compact-de",
+        "open": true
+      },
+      "view": {
+        "play": {
+          "left": 20,
+          "top": 384,
+          "right": 196,
+          "bottom": 442,
+          "width": 176,
+          "height": 58,
+          "scrollWidth": 172,
+          "clientWidth": 172
+        },
+        "shop": {
+          "left": 212,
+          "top": 384,
+          "right": 300,
+          "bottom": 442,
+          "width": 88,
+          "height": 58,
+          "scrollWidth": 84,
+          "clientWidth": 84
+        },
+        "career": {
+          "left": 20,
+          "top": 458,
+          "right": 300,
+          "bottom": 578.34375,
+          "width": 280,
+          "height": 120.34375,
+          "scrollWidth": 278,
+          "clientWidth": 278
+        },
+        "overflow": false,
+        "playText": "SPIELEN\n→",
+        "shopText": "SHOP",
+        "focusable": true
+      },
+      "originalPlayHeight": 58,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 320,
+        "height": 568,
+        "locale": "es",
+        "name": "compact-es",
+        "open": false
+      },
+      "view": {
+        "play": {
+          "left": 20,
+          "top": 384,
+          "right": 196,
+          "bottom": 442,
+          "width": 176,
+          "height": 58,
+          "scrollWidth": 172,
+          "clientWidth": 172
+        },
+        "shop": {
+          "left": 212,
+          "top": 384,
+          "right": 300,
+          "bottom": 442,
+          "width": 88,
+          "height": 58,
+          "scrollWidth": 84,
+          "clientWidth": 84
+        },
+        "career": {
+          "left": 20,
+          "top": 458,
+          "right": 300,
+          "bottom": 562,
+          "width": 280,
+          "height": 104,
+          "scrollWidth": 278,
+          "clientWidth": 278
+        },
+        "overflow": false,
+        "playText": "JUGAR\n→",
+        "shopText": "TIENDA",
+        "focusable": true
+      },
+      "originalPlayHeight": 58,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 320,
+        "height": 568,
+        "locale": "fr",
+        "name": "compact-fr",
+        "open": false
+      },
+      "view": {
+        "play": {
+          "left": 20,
+          "top": 384,
+          "right": 196,
+          "bottom": 442.375,
+          "width": 176,
+          "height": 58.375,
+          "scrollWidth": 172,
+          "clientWidth": 172
+        },
+        "shop": {
+          "left": 212,
+          "top": 384,
+          "right": 300,
+          "bottom": 442.375,
+          "width": 88,
+          "height": 58.375,
+          "scrollWidth": 84,
+          "clientWidth": 84
+        },
+        "career": {
+          "left": 20,
+          "top": 458.375,
+          "right": 300,
+          "bottom": 578.71875,
+          "width": 280,
+          "height": 120.34375,
+          "scrollWidth": 278,
+          "clientWidth": 278
+        },
+        "overflow": false,
+        "playText": "JOUER\n→",
+        "shopText": "BOUTIQUE",
+        "focusable": true
+      },
+      "originalPlayHeight": 58,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 320,
+        "height": 568,
+        "locale": "pt",
+        "name": "compact-pt",
+        "open": false
+      },
+      "view": {
+        "play": {
+          "left": 20,
+          "top": 384,
+          "right": 196,
+          "bottom": 442,
+          "width": 176,
+          "height": 58,
+          "scrollWidth": 172,
+          "clientWidth": 172
+        },
+        "shop": {
+          "left": 212,
+          "top": 384,
+          "right": 300,
+          "bottom": 442,
+          "width": 88,
+          "height": 58,
+          "scrollWidth": 84,
+          "clientWidth": 84
+        },
+        "career": {
+          "left": 20,
+          "top": 458,
+          "right": 300,
+          "bottom": 562,
+          "width": 280,
+          "height": 104,
+          "scrollWidth": 278,
+          "clientWidth": 278
+        },
+        "overflow": false,
+        "playText": "JOGAR\n→",
+        "shopText": "LOJA",
+        "focusable": true
+      },
+      "originalPlayHeight": 58,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 320,
+        "height": 568,
+        "locale": "it",
+        "name": "compact-it",
+        "open": false
+      },
+      "view": {
+        "play": {
+          "left": 20,
+          "top": 384,
+          "right": 196,
+          "bottom": 442.375,
+          "width": 176,
+          "height": 58.375,
+          "scrollWidth": 172,
+          "clientWidth": 172
+        },
+        "shop": {
+          "left": 212,
+          "top": 384,
+          "right": 300,
+          "bottom": 442.375,
+          "width": 88,
+          "height": 58.375,
+          "scrollWidth": 84,
+          "clientWidth": 84
+        },
+        "career": {
+          "left": 20,
+          "top": 458.375,
+          "right": 300,
+          "bottom": 562.375,
+          "width": 280,
+          "height": 104,
+          "scrollWidth": 278,
+          "clientWidth": 278
+        },
+        "overflow": false,
+        "playText": "GIOCA\n→",
+        "shopText": "NEGOZIO",
+        "focusable": true
+      },
+      "originalPlayHeight": 58,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 320,
+        "height": 568,
+        "locale": "pl",
+        "name": "compact-pl",
+        "open": false
+      },
+      "view": {
+        "play": {
+          "left": 20,
+          "top": 384,
+          "right": 196,
+          "bottom": 442,
+          "width": 176,
+          "height": 58,
+          "scrollWidth": 172,
+          "clientWidth": 172
+        },
+        "shop": {
+          "left": 212,
+          "top": 384,
+          "right": 300,
+          "bottom": 442,
+          "width": 88,
+          "height": 58,
+          "scrollWidth": 84,
+          "clientWidth": 84
+        },
+        "career": {
+          "left": 20,
+          "top": 458,
+          "right": 300,
+          "bottom": 562,
+          "width": 280,
+          "height": 104,
+          "scrollWidth": 278,
+          "clientWidth": 278
+        },
+        "overflow": false,
+        "playText": "GRAJ\n→",
+        "shopText": "SKLEP",
+        "focusable": true
+      },
+      "originalPlayHeight": 58,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 320,
+        "height": 568,
+        "locale": "tr",
+        "name": "compact-tr",
+        "open": false
+      },
+      "view": {
+        "play": {
+          "left": 20,
+          "top": 384,
+          "right": 196,
+          "bottom": 442.375,
+          "width": 176,
+          "height": 58.375,
+          "scrollWidth": 172,
+          "clientWidth": 172
+        },
+        "shop": {
+          "left": 212,
+          "top": 384,
+          "right": 300,
+          "bottom": 442.375,
+          "width": 88,
+          "height": 58.375,
+          "scrollWidth": 84,
+          "clientWidth": 84
+        },
+        "career": {
+          "left": 20,
+          "top": 458.375,
+          "right": 300,
+          "bottom": 562.375,
+          "width": 280,
+          "height": 104,
+          "scrollWidth": 278,
+          "clientWidth": 278
+        },
+        "overflow": false,
+        "playText": "OYNA\n→",
+        "shopText": "MAĞAZA",
+        "focusable": true
+      },
+      "originalPlayHeight": 58,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 320,
+        "height": 568,
+        "locale": "ru",
+        "name": "compact-ru",
+        "open": false
+      },
+      "view": {
+        "play": {
+          "left": 20,
+          "top": 384,
+          "right": 196,
+          "bottom": 442.375,
+          "width": 176,
+          "height": 58.375,
+          "scrollWidth": 172,
+          "clientWidth": 172
+        },
+        "shop": {
+          "left": 212,
+          "top": 384,
+          "right": 300,
+          "bottom": 442.375,
+          "width": 88,
+          "height": 58.375,
+          "scrollWidth": 84,
+          "clientWidth": 84
+        },
+        "career": {
+          "left": 20,
+          "top": 458.375,
+          "right": 300,
+          "bottom": 578.71875,
+          "width": 280,
+          "height": 120.34375,
+          "scrollWidth": 278,
+          "clientWidth": 278
+        },
+        "overflow": false,
+        "playText": "ИГРАТЬ\n→",
+        "shopText": "МАГАЗИН",
+        "focusable": true
+      },
+      "originalPlayHeight": 58,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 320,
+        "height": 568,
+        "locale": "hr",
+        "name": "compact-hr",
+        "open": false
+      },
+      "view": {
+        "play": {
+          "left": 20,
+          "top": 384,
+          "right": 196,
+          "bottom": 442.375,
+          "width": 176,
+          "height": 58.375,
+          "scrollWidth": 172,
+          "clientWidth": 172
+        },
+        "shop": {
+          "left": 212,
+          "top": 384,
+          "right": 300,
+          "bottom": 442.375,
+          "width": 88,
+          "height": 58.375,
+          "scrollWidth": 84,
+          "clientWidth": 84
+        },
+        "career": {
+          "left": 20,
+          "top": 458.375,
+          "right": 300,
+          "bottom": 578.71875,
+          "width": 280,
+          "height": 120.34375,
+          "scrollWidth": 278,
+          "clientWidth": 278
+        },
+        "overflow": false,
+        "playText": "IGRAJ\n→",
+        "shopText": "TRGOVINA",
+        "focusable": true
+      },
+      "originalPlayHeight": 58,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 320,
+        "height": 568,
+        "locale": "cs",
+        "name": "compact-cs",
+        "open": false
+      },
+      "view": {
+        "play": {
+          "left": 20,
+          "top": 384,
+          "right": 196,
+          "bottom": 442.375,
+          "width": 176,
+          "height": 58.375,
+          "scrollWidth": 172,
+          "clientWidth": 172
+        },
+        "shop": {
+          "left": 212,
+          "top": 384,
+          "right": 300,
+          "bottom": 442.375,
+          "width": 88,
+          "height": 58.375,
+          "scrollWidth": 84,
+          "clientWidth": 84
+        },
+        "career": {
+          "left": 20,
+          "top": 458.375,
+          "right": 300,
+          "bottom": 562.375,
+          "width": 280,
+          "height": 104,
+          "scrollWidth": 278,
+          "clientWidth": 278
+        },
+        "overflow": false,
+        "playText": "HRÁT\n→",
+        "shopText": "OBCHOD",
+        "focusable": true
+      },
+      "originalPlayHeight": 58,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 320,
+        "height": 568,
+        "locale": "sk",
+        "name": "compact-sk",
+        "open": false
+      },
+      "view": {
+        "play": {
+          "left": 20,
+          "top": 384,
+          "right": 196,
+          "bottom": 442.375,
+          "width": 176,
+          "height": 58.375,
+          "scrollWidth": 172,
+          "clientWidth": 172
+        },
+        "shop": {
+          "left": 212,
+          "top": 384,
+          "right": 300,
+          "bottom": 442.375,
+          "width": 88,
+          "height": 58.375,
+          "scrollWidth": 84,
+          "clientWidth": 84
+        },
+        "career": {
+          "left": 20,
+          "top": 458.375,
+          "right": 300,
+          "bottom": 562.375,
+          "width": 280,
+          "height": 104,
+          "scrollWidth": 278,
+          "clientWidth": 278
+        },
+        "overflow": false,
+        "playText": "HRAŤ\n→",
+        "shopText": "OBCHOD",
+        "focusable": true
+      },
+      "originalPlayHeight": 58,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 320,
+        "height": 568,
+        "locale": "hu",
+        "name": "compact-hu",
+        "open": false
+      },
+      "view": {
+        "play": {
+          "left": 20,
+          "top": 384,
+          "right": 196,
+          "bottom": 442,
+          "width": 176,
+          "height": 58,
+          "scrollWidth": 172,
+          "clientWidth": 172
+        },
+        "shop": {
+          "left": 212,
+          "top": 384,
+          "right": 300,
+          "bottom": 442,
+          "width": 88,
+          "height": 58,
+          "scrollWidth": 84,
+          "clientWidth": 84
+        },
+        "career": {
+          "left": 20,
+          "top": 458,
+          "right": 300,
+          "bottom": 562,
+          "width": 280,
+          "height": 104,
+          "scrollWidth": 278,
+          "clientWidth": 278
+        },
+        "overflow": false,
+        "playText": "JÁTÉK\n→",
+        "shopText": "BOLT",
+        "focusable": true
+      },
+      "originalPlayHeight": 58,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 320,
+        "height": 568,
+        "locale": "ro",
+        "name": "compact-ro",
+        "open": false
+      },
+      "view": {
+        "play": {
+          "left": 20,
+          "top": 384,
+          "right": 196,
+          "bottom": 442.375,
+          "width": 176,
+          "height": 58.375,
+          "scrollWidth": 172,
+          "clientWidth": 172
+        },
+        "shop": {
+          "left": 212,
+          "top": 384,
+          "right": 300,
+          "bottom": 442.375,
+          "width": 88,
+          "height": 58.375,
+          "scrollWidth": 84,
+          "clientWidth": 84
+        },
+        "career": {
+          "left": 20,
+          "top": 458.375,
+          "right": 300,
+          "bottom": 562.375,
+          "width": 280,
+          "height": 104,
+          "scrollWidth": 278,
+          "clientWidth": 278
+        },
+        "overflow": false,
+        "playText": "JOACĂ\n→",
+        "shopText": "MAGAZIN",
+        "focusable": true
+      },
+      "originalPlayHeight": 58,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 320,
+        "height": 568,
+        "locale": "sr",
+        "name": "compact-sr",
+        "open": false
+      },
+      "view": {
+        "play": {
+          "left": 20,
+          "top": 384,
+          "right": 196,
+          "bottom": 442.375,
+          "width": 176,
+          "height": 58.375,
+          "scrollWidth": 172,
+          "clientWidth": 172
+        },
+        "shop": {
+          "left": 212,
+          "top": 384,
+          "right": 300,
+          "bottom": 442.375,
+          "width": 88,
+          "height": 58.375,
+          "scrollWidth": 84,
+          "clientWidth": 84
+        },
+        "career": {
+          "left": 20,
+          "top": 458.375,
+          "right": 300,
+          "bottom": 578.71875,
+          "width": 280,
+          "height": 120.34375,
+          "scrollWidth": 278,
+          "clientWidth": 278
+        },
+        "overflow": false,
+        "playText": "ИГРАЈ\n→",
+        "shopText": "ПРОДАВНИЦА",
+        "focusable": true
+      },
+      "originalPlayHeight": 58,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 320,
+        "height": 568,
+        "locale": "uk",
+        "name": "compact-uk",
+        "open": false
+      },
+      "view": {
+        "play": {
+          "left": 20,
+          "top": 384,
+          "right": 196,
+          "bottom": 442.375,
+          "width": 176,
+          "height": 58.375,
+          "scrollWidth": 172,
+          "clientWidth": 172
+        },
+        "shop": {
+          "left": 212,
+          "top": 384,
+          "right": 300,
+          "bottom": 442.375,
+          "width": 88,
+          "height": 58.375,
+          "scrollWidth": 84,
+          "clientWidth": 84
+        },
+        "career": {
+          "left": 20,
+          "top": 458.375,
+          "right": 300,
+          "bottom": 578.71875,
+          "width": 280,
+          "height": 120.34375,
+          "scrollWidth": 278,
+          "clientWidth": 278
+        },
+        "overflow": false,
+        "playText": "ГРАТИ\n→",
+        "shopText": "МАГАЗИН",
+        "focusable": true
+      },
+      "originalPlayHeight": 58,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 320,
+        "height": 568,
+        "locale": "th",
+        "name": "compact-th",
+        "open": false
+      },
+      "view": {
+        "play": {
+          "left": 20,
+          "top": 384,
+          "right": 196,
+          "bottom": 442,
+          "width": 176,
+          "height": 58,
+          "scrollWidth": 172,
+          "clientWidth": 172
+        },
+        "shop": {
+          "left": 212,
+          "top": 384,
+          "right": 300,
+          "bottom": 442,
+          "width": 88,
+          "height": 58,
+          "scrollWidth": 84,
+          "clientWidth": 84
+        },
+        "career": {
+          "left": 20,
+          "top": 458,
+          "right": 300,
+          "bottom": 562,
+          "width": 280,
+          "height": 104,
+          "scrollWidth": 278,
+          "clientWidth": 278
+        },
+        "overflow": false,
+        "playText": "เล่น\n→",
+        "shopText": "ร้านค้า",
+        "focusable": true
+      },
+      "originalPlayHeight": 58,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 320,
+        "height": 568,
+        "locale": "zh",
+        "name": "compact-zh",
+        "open": false
+      },
+      "view": {
+        "play": {
+          "left": 20,
+          "top": 384,
+          "right": 196,
+          "bottom": 442,
+          "width": 176,
+          "height": 58,
+          "scrollWidth": 172,
+          "clientWidth": 172
+        },
+        "shop": {
+          "left": 212,
+          "top": 384,
+          "right": 300,
+          "bottom": 442,
+          "width": 88,
+          "height": 58,
+          "scrollWidth": 84,
+          "clientWidth": 84
+        },
+        "career": {
+          "left": 20,
+          "top": 458,
+          "right": 300,
+          "bottom": 562,
+          "width": 280,
+          "height": 104,
+          "scrollWidth": 278,
+          "clientWidth": 278
+        },
+        "overflow": false,
+        "playText": "开始\n→",
+        "shopText": "商店",
+        "focusable": true
+      },
+      "originalPlayHeight": 58,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 320,
+        "height": 568,
+        "locale": "vi",
+        "name": "compact-vi",
+        "open": false
+      },
+      "view": {
+        "play": {
+          "left": 20,
+          "top": 384,
+          "right": 196,
+          "bottom": 442.375,
+          "width": 176,
+          "height": 58.375,
+          "scrollWidth": 172,
+          "clientWidth": 172
+        },
+        "shop": {
+          "left": 212,
+          "top": 384,
+          "right": 300,
+          "bottom": 442.375,
+          "width": 88,
+          "height": 58.375,
+          "scrollWidth": 84,
+          "clientWidth": 84
+        },
+        "career": {
+          "left": 20,
+          "top": 458.375,
+          "right": 300,
+          "bottom": 562.375,
+          "width": 280,
+          "height": 104,
+          "scrollWidth": 278,
+          "clientWidth": 278
+        },
+        "overflow": false,
+        "playText": "CHƠI\n→",
+        "shopText": "CỬA HÀNG",
+        "focusable": true
+      },
+      "originalPlayHeight": 58,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 393,
+        "height": 744,
+        "locale": "de",
+        "signedIn": true,
+        "open": true,
+        "name": "phone-signed-in"
+      },
+      "view": {
+        "play": {
+          "left": 20,
+          "top": 478,
+          "right": 244.65625,
+          "bottom": 536,
+          "width": 224.65625,
+          "height": 58,
+          "scrollWidth": 221,
+          "clientWidth": 221
+        },
+        "shop": {
+          "left": 260.65625,
+          "top": 478,
+          "right": 373,
+          "bottom": 536,
+          "width": 112.34375,
+          "height": 58,
+          "scrollWidth": 108,
+          "clientWidth": 108
+        },
+        "career": {
+          "left": 20,
+          "top": 552,
+          "right": 373,
+          "bottom": 656,
+          "width": 353,
+          "height": 104,
+          "scrollWidth": 351,
+          "clientWidth": 351
+        },
+        "overflow": false,
+        "playText": "SPIELEN\n→",
+        "shopText": "SHOP",
+        "focusable": true
+      },
+      "originalPlayHeight": 58,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 430,
+        "height": 825,
+        "locale": "de",
+        "name": "phone-large"
+      },
+      "view": {
+        "play": {
+          "left": 20,
+          "top": 535.5,
+          "right": 269.328125,
+          "bottom": 593.5,
+          "width": 249.328125,
+          "height": 58,
+          "scrollWidth": 245,
+          "clientWidth": 245
+        },
+        "shop": {
+          "left": 285.328125,
+          "top": 535.5,
+          "right": 409.984375,
+          "bottom": 593.5,
+          "width": 124.65625,
+          "height": 58,
+          "scrollWidth": 121,
+          "clientWidth": 121
+        },
+        "career": {
+          "left": 20,
+          "top": 609.5,
+          "right": 410,
+          "bottom": 713.5,
+          "width": 390,
+          "height": 104,
+          "scrollWidth": 388,
+          "clientWidth": 388
+        },
+        "overflow": false,
+        "playText": "SPIELEN\n→",
+        "shopText": "SHOP",
+        "focusable": true
+      },
+      "originalPlayHeight": 58.578125,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 768,
+        "height": 1024,
+        "locale": "th",
+        "open": true,
+        "name": "tablet-thai"
+      },
+      "view": {
+        "play": {
+          "left": 440,
+          "top": 180.78125,
+          "right": 629.328125,
+          "bottom": 252.78125,
+          "width": 189.328125,
+          "height": 72,
+          "scrollWidth": 185,
+          "clientWidth": 185
+        },
+        "shop": {
+          "left": 645.328125,
+          "top": 180.78125,
+          "right": 739.984375,
+          "bottom": 252.78125,
+          "width": 94.65625,
+          "height": 72,
+          "scrollWidth": 91,
+          "clientWidth": 91
+        },
+        "career": {
+          "left": 440,
+          "top": 276.78125,
+          "right": 740,
+          "bottom": 404.78125,
+          "width": 300,
+          "height": 128,
+          "scrollWidth": 298,
+          "clientWidth": 298
+        },
+        "overflow": false,
+        "playText": "เล่น\n→",
+        "shopText": "ร้านค้า",
+        "focusable": true
+      },
+      "originalPlayHeight": 72,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 1363,
+        "height": 768,
+        "locale": "en",
+        "open": true,
+        "play": true,
+        "motion": "no-preference",
+        "name": "desktop"
+      },
+      "view": {
+        "play": {
+          "left": 790.15625,
+          "top": 226.34375,
+          "right": 1097.703125,
+          "bottom": 298.34375,
+          "width": 307.546875,
+          "height": 72,
+          "scrollWidth": 304,
+          "clientWidth": 304
+        },
+        "shop": {
+          "left": 1119.703125,
+          "top": 226.34375,
+          "right": 1273.484375,
+          "bottom": 298.34375,
+          "width": 153.78125,
+          "height": 72,
+          "scrollWidth": 150,
+          "clientWidth": 150
+        },
+        "career": {
+          "left": 790.15625,
+          "top": 322.34375,
+          "right": 1273.484375,
+          "bottom": 450.34375,
+          "width": 483.328125,
+          "height": 128,
+          "scrollWidth": 481,
+          "clientWidth": 481
+        },
+        "overflow": false,
+        "playText": "PLAY\n→",
+        "shopText": "SHOP",
+        "focusable": true
+      },
+      "originalPlayHeight": 72,
+      "gap": 22
+    },
+    {
+      "scenario": {
+        "width": 760,
+        "height": 900,
+        "locale": "fr",
+        "name": "tablet-breakpoint"
+      },
+      "view": {
+        "play": {
+          "left": 431.984375,
+          "top": 145.28125,
+          "right": 621.3125,
+          "bottom": 217.28125,
+          "width": 189.328125,
+          "height": 72,
+          "scrollWidth": 185,
+          "clientWidth": 185
+        },
+        "shop": {
+          "left": 637.3125,
+          "top": 145.28125,
+          "right": 731.96875,
+          "bottom": 217.28125,
+          "width": 94.65625,
+          "height": 72,
+          "scrollWidth": 91,
+          "clientWidth": 91
+        },
+        "career": {
+          "left": 431.984375,
+          "top": 241.28125,
+          "right": 731.984375,
+          "bottom": 369.28125,
+          "width": 300,
+          "height": 128,
+          "scrollWidth": 298,
+          "clientWidth": 298
+        },
+        "overflow": false,
+        "playText": "JOUER\n→",
+        "shopText": "BOUTIQUE",
+        "focusable": true
+      },
+      "originalPlayHeight": 72,
+      "gap": 16
+    },
+    {
+      "scenario": {
+        "width": 900,
+        "height": 600,
+        "locale": "de",
+        "name": "laptop-narrow"
+      },
+      "view": {
+        "play": {
+          "left": 530.328125,
+          "top": 112,
+          "right": 746.09375,
+          "bottom": 184,
+          "width": 215.765625,
+          "height": 72,
+          "scrollWidth": 212,
+          "clientWidth": 212
+        },
+        "shop": {
+          "left": 764.09375,
+          "top": 112,
+          "right": 871.96875,
+          "bottom": 184,
+          "width": 107.875,
+          "height": 72,
+          "scrollWidth": 104,
+          "clientWidth": 104
+        },
+        "career": {
+          "left": 530.328125,
+          "top": 208,
+          "right": 871.984375,
+          "bottom": 336,
+          "width": 341.65625,
+          "height": 128,
+          "scrollWidth": 340,
+          "clientWidth": 340
+        },
+        "overflow": false,
+        "playText": "SPIELEN\n→",
+        "shopText": "SHOP",
+        "focusable": true
+      },
+      "originalPlayHeight": 72,
+      "gap": 18
+    },
+    {
+      "scenario": {
+        "width": 844,
+        "height": 390,
+        "locale": "en",
+        "name": "landscape"
+      },
+      "view": {
+        "play": {
+          "left": 497.65625,
+          "top": 112,
+          "right": 698.625,
+          "bottom": 184,
+          "width": 200.96875,
+          "height": 72,
+          "scrollWidth": 197,
+          "clientWidth": 197
+        },
+        "shop": {
+          "left": 715.5,
+          "top": 112,
+          "right": 815.984375,
+          "bottom": 184,
+          "width": 100.484375,
+          "height": 72,
+          "scrollWidth": 96,
+          "clientWidth": 96
+        },
+        "career": {
+          "left": 497.65625,
+          "top": 208,
+          "right": 815.984375,
+          "bottom": 336,
+          "width": 318.328125,
+          "height": 128,
+          "scrollWidth": 316,
+          "clientWidth": 316
+        },
+        "overflow": false,
+        "playText": "PLAY\n→",
+        "shopText": "SHOP",
+        "focusable": true
+      },
+      "originalPlayHeight": 72,
+      "gap": 16.875
+    }
+  ],
+  "errors": [],
+  "complete": true,
+  "engine": "141.0.7390.37",
+  "lastView": {
+    "scenario": {
+      "width": 844,
+      "height": 390,
+      "locale": "en",
+      "name": "landscape"
+    },
+    "view": {
+      "play": {
+        "left": 497.65625,
+        "top": 112,
+        "right": 698.625,
+        "bottom": 184,
+        "width": 200.96875,
+        "height": 72,
+        "scrollWidth": 197,
+        "clientWidth": 197
+      },
+      "shop": {
+        "left": 715.5,
+        "top": 112,
+        "right": 815.984375,
+        "bottom": 184,
+        "width": 100.484375,
+        "height": 72,
+        "scrollWidth": 96,
+        "clientWidth": 96
+      },
+      "career": {
+        "left": 497.65625,
+        "top": 208,
+        "right": 815.984375,
+        "bottom": 336,
+        "width": 318.328125,
+        "height": 128,
+        "scrollWidth": 316,
+        "clientWidth": 316
+      },
+      "overflow": false,
+      "playText": "PLAY\n→",
+      "shopText": "SHOP",
+      "focusable": true
+    },
+    "before": {
+      "play": {
+        "left": 497.65625,
+        "top": 112,
+        "right": 815.984375,
+        "bottom": 184,
+        "width": 318.328125,
+        "height": 72,
+        "scrollWidth": 314,
+        "clientWidth": 314
+      },
+      "shop": null,
+      "career": {
+        "left": 497.65625,
+        "top": 208,
+        "right": 815.984375,
+        "bottom": 336,
+        "width": 318.328125,
+        "height": 128,
+        "scrollWidth": 316,
+        "clientWidth": 316
+      },
+      "overflow": false,
+      "playText": "PLAY\n→",
+      "focusable": false
+    }
+  }
+}

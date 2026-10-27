@@ -1,0 +1,22 @@
+{
+  "baseCommit": "a718b4c60dc93ab022acffe6bacfb6e4fc9a688f",
+  "comparisons": [
+    {
+      "file": "CinematicHome.tsx",
+      "baselineErrors": 0,
+      "candidateErrors": 0,
+      "baselineWarnings": 0,
+      "candidateWarnings": 0,
+      "identicalMessageMultiset": true
+    },
+    {
+      "file": "Shop.tsx",
+      "baselineErrors": 5,
+      "candidateErrors": 5,
+      "baselineWarnings": 0,
+      "candidateWarnings": 0,
+      "identicalMessageMultiset": true
+    }
+  ],
+  "claim": "Shop existing findings are retained; no whole-project lint-clean or repaired-error claim."
+}

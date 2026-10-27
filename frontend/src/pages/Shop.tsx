@@ -527,6 +527,7 @@ const Shop = () => {
         musicEnabled={musicEnabled}
         musicLabel={musicLabel}
         onPlay={enterGame}
+        onShop={() => openQuickAction("shop")}
         onCareer={() => openQuickAction("progress")}
         onCards={() => setCollectionOpen(true)}
         onGalaxy={() => navigate("/galaxy", { state: { owner: user?.uid } })}
