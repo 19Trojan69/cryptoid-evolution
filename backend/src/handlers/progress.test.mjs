@@ -600,3 +600,9 @@ test('a saved legacy boss stop can move to the level end without changing its sn
   assert.equal(h.profile().mission.bossIntermission,undefined); assert.deepEqual(h.profile().mission.snapshot,before.mission.snapshot); assert.equal(h.profile().balance,before.balance);
   const moved=structuredClone(h.profile());assert.equal((await h.call('progress','/boss-summary/continue',body)).code,200);assert.deepEqual(h.profile(),moved);
 });
+
+test('mission snapshots preserve bounded remaining projectile protection, including zero and legacy absence',()=>{
+  const valid=readSnapshot(snapshot());assert.ok(valid);assert.equal(Object.hasOwn(valid,'projectileGuard'),false);
+  for(const projectileGuard of [0,1,2])assert.equal(readSnapshot(snapshot({projectileGuard})).projectileGuard,projectileGuard);
+  for(const projectileGuard of [-1,3,1.5,NaN,Infinity,'2',null])assert.equal(readSnapshot(snapshot({projectileGuard})),null);
+});

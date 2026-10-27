@@ -1,0 +1,39 @@
+{
+  "baseline": "0868671b213fb25ba9ce1a0a8d1057dc2067d1f2",
+  "controllerSha256": "8c70e6a2010fa6349dc7b70ae43a8b304ff380a7d45d21359935c458dd81511a",
+  "frontendReleaseTests": 456,
+  "frontendReleasePassed": true,
+  "backendTests": 142,
+  "backendTestsPassed": true,
+  "localizationTypesVitePassed": true,
+  "lintMatchesPinnedFindings": true,
+  "native": {
+    "results/native.json": {
+      "complete": true,
+      "checks": 51,
+      "controllerHashInReceipt": "8c70e6a2010fa6349dc7b70ae43a8b304ff380a7d45d21359935c458dd81511a"
+    },
+    "results/selection/native.json": {
+      "complete": true,
+      "checks": 32,
+      "controllerHashInReceipt": "8c70e6a2010fa6349dc7b70ae43a8b304ff380a7d45d21359935c458dd81511a"
+    },
+    "results/regression-flow/native.json": {
+      "complete": true,
+      "checks": 74,
+      "controllerHashInReceipt": null
+    },
+    "results/game-over/native.json": {
+      "complete": true,
+      "checks": 11,
+      "controllerHashInReceipt": null
+    },
+    "results/pinned-public/native.json": {
+      "complete": true,
+      "checks": 4,
+      "renderedControllerSha256": "83fad3d2d4e20d1f5c6b6777c5dc0f5fcfea3215eeda386014d6b1fed32f1c1e"
+    }
+  },
+  "physicalDeviceAcceptance": false,
+  "whiteScreenFixClaimed": false
+}

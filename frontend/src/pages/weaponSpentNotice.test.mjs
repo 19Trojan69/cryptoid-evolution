@@ -168,7 +168,9 @@ test('real automatic confirmation updates only the pending record and never recr
   for(const locale of Object.keys(languages))for(const reload of ['pending','complete','failed']){
     const key=reload==='pending'?'Reloading weapon…':reload==='complete'?'Weapon reloaded':'Reload not confirmed';
     const h=componentHost('src/pages/WeaponSpentNotice.tsx','WeaponSpentNotice',{expiredLevel:2,level:2,expiredWeaponName:'Twin',weaponName:'Twin',reload,onShown(){}},{useLocale:()=>({t:key=>translate(locale,key)}),useLayoutEffect:fn=>fn(),weaponSymbols});
-    assert.equal(h.nodes().find(n=>n.props.className==='weapon-reload-status').props.children.join(''),translate(locale,key));
+    const status = h.nodes().find(n=>n.props.className==='weapon-reload-status');
+    if (reload === 'complete') assert.equal(status, undefined, 'success belongs to immediate confirmation, never a later binary window');
+    else assert.equal(status.props.children.join(''),translate(locale,key));
     if(locale!=='en')assert.notEqual(translate(locale,key),key);h.unmount();
   }
 });

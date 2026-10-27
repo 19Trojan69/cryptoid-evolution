@@ -3,7 +3,7 @@ import test from 'node:test';
 import { playerSkins } from './shipFleet.ts';
 import { attributesForHull, hullAttributes, makeShipVolley, shipBaseFirepower, shipFireInterval } from './shipAttributes.ts';
 import { fireInterval, makeVolley } from './playerCombat.ts';
-import { stageWeaponLevel } from './shipEvolution.ts';
+import { stageDamageMultiplier, stageWeaponLevel } from './shipEvolution.ts';
 import { createSectorBoss, damageSectorBoss, BOSS_ENTRY_MS } from './sectorBoss.ts';
 import { damageBossTurret } from './bossTurrets.ts';
 import { languages, hasExplicitTranslation, translate } from '../i18n.ts';
@@ -27,11 +27,14 @@ test('every priced hull has distinct bonuses and increases firepower in price or
   assert.deepEqual(attributesForHull('__proto__'), attributesForHull('grey-scout'));
 });
 
-test('the starter retains its exact old combat behavior at all stages and weapon levels', () => {
+test('Standard starter retains its original damage and each upgrade is bounded at every weapon level', () => {
   for (const stage of [1, 2, 3]) for (let level = 1; level <= 5; level++) for (const overdrive of [false, true]) {
     let a = 0, b = 0;
     const effective = stageWeaponLevel(stage, level);
-    assert.deepEqual(makeShipVolley('grey-scout', stage, level, 100, 200, overdrive, () => ++a), makeVolley(effective, 100, 200, overdrive, () => ++b, stage === 3));
+    const shots = makeShipVolley('grey-scout', stage, level, 100, 200, overdrive, () => ++a);
+    const original = makeVolley(effective, 100, 200, overdrive, () => ++b);
+    const factor = stageDamageMultiplier(stage) / (stage > 1 && level === 1 ? 2 : 1);
+    assert.deepEqual(shots, original.map(shot => ({ ...shot, empowered: shot.empowered || stage === 3, damage: Math.round(shot.damage * factor * 1e6) / 1e6 })));
     for (const rapid of [0, 10000]) assert.equal(shipFireInterval('grey-scout', effective, rapid), fireInterval(effective, rapid));
   }
 });
@@ -40,12 +43,12 @@ test('hull bonuses compose once with every permanent stage, paid/pickup weapon a
   for (const skin of playerSkins) for (const stage of [1, 2, 3]) for (let level = 1; level <= 5; level++) for (const overdrive of [false, true]) {
     const attributes = attributesForHull(skin.id);
     const effective = stageWeaponLevel(stage, level);
-    const baseline = makeVolley(effective, 100, 200, overdrive, () => 1, stage === 3);
+    const baseline = makeVolley(effective, 100, 200, overdrive, () => 1);
     const shots = makeShipVolley(skin.id, stage, level, 100, 200, overdrive, () => 1);
     assert.equal(shots.length, baseline.length);
     shots.forEach((shot, i) => {
-      assert.equal(shot.damage, Math.round(baseline[i].damage * (1 + attributes.damageBonus / 100) * 1e6) / 1e6);
-      assert.equal(shot.empowered, baseline[i].empowered);
+      assert.equal(shot.damage, Math.round(baseline[i].damage * (1 + attributes.damageBonus / 100) * stageDamageMultiplier(stage) / (stage > 1 && level === 1 ? 2 : 1) * 1e6) / 1e6);
+      assert.equal(shot.empowered, baseline[i].empowered || stage === 3);
       assert.equal(shot.visualLevel, baseline[i].visualLevel);
       assert.equal(shot.x, baseline[i].x);
     });

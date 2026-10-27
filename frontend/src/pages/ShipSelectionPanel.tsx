@@ -161,6 +161,6 @@ export default function ShipSelectionPanel({
         </>}
     </div>}
     {message && <p className="hangar-message" role="status">{message}</p>}
-    <details className="ship-rules"><summary>{t("Shield & protection")}</summary><p>{t("Upgrades apply to this ship type in every color. Each new life restores its projectile protection. An active shield absorbs shots and ship collisions; unshielded ship collisions destroy the hull immediately.")}</p></details>
+    <details className="ship-rules"><summary>{t("Shield & protection")}</summary><p>{t("Hull protection is a limited pool for the whole mission. Losing or recovering hearts does not refill it. Active shields protect separately; ship collisions still cost one heart without a shield.")}</p></details>
   </div>;
 }

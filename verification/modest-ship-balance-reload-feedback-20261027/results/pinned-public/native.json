@@ -1,0 +1,108 @@
+{
+  "baseline": "0868671b213fb25ba9ce1a0a8d1057dc2067d1f2",
+  "control": false,
+  "sourceSha256": "f47d8799042413a322c226a11a06cb29b357f4654210160a1c7ebede01df2fc0",
+  "realUiAndHandlers": true,
+  "localOnly": true,
+  "syntheticPiAndDatabase": true,
+  "physicalDevice": false,
+  "checks": [
+    "pinned public Elite base volley really totals four Standard damage units",
+    "pinned public Elite renews two free hits after losing a heart",
+    "pinned public reload has no immediate status during active flight after actual positive confirmation",
+    "pinned public counterexample has no unexpected page or API error"
+  ],
+  "errors": [],
+  "requests": [],
+  "cases": [],
+  "complete": true,
+  "engine": "141.0.7390.37",
+  "currentRequests": [
+    {
+      "path": "/api/usage/collect",
+      "status": 204
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/catalog",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/catalog",
+      "status": 200
+    },
+    {
+      "path": "/api/rewards/me",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/inventory",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/card-reveals",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/start",
+      "status": 200,
+      "stage": 1
+    },
+    {
+      "path": "/api/hangar/inventory",
+      "status": 200
+    },
+    {
+      "path": "/api/rewards/me",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/card-reveals",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/checkpoint",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/weapon/activate",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/checkpoint",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/weapon/activate",
+      "status": 200
+    }
+  ],
+  "renderedControllerSha256": "83fad3d2d4e20d1f5c6b6777c5dc0f5fcfea3215eeda386014d6b1fed32f1c1e"
+}

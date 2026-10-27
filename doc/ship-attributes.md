@@ -11,12 +11,14 @@ prices, release locks and Advanced/Elite prerequisites do not change.
 ## Combat and presentation
 
 - Shot damage is multiplied once when a new projectile is created. Purchased
-  weapons, collected weapons, Overdrive and Elite damage keep their existing
-  behavior and also receive the hull multiplier.
+  weapons, collected weapons, Overdrive keep their normal volley power and also receive the hull multiplier.
+  Stage damage adds a bounded15%/30% for Advanced/Elite.
 - Firing interval is divided by the hull's fire-rate multiplier. Rapid Fire,
   the projectile cap, projectile speed and hitboxes retain their behavior.
-- Advanced/Elite still provide their permanent twin laser and one/two
-  projectile guards per life. Standard hulls do not acquire extra guards.
+- Advanced/Elite provide their original permanent twin geometry with total base
+  firepower115%/130% of the same Standard hull, plus one/two projectile blocks
+  for the whole mission. Losing/healing hearts never refills that pool. Standard
+  hulls do not acquire extra guards. See docs/modest-ship-balance-reload-feedback-20261027.
 - The shop and hangar show the role, both hull bonuses, base firepower, and
   the difference from the equipped hull at its actual owned stage.
 - Base firepower compares theoretical total damage per second with Standard

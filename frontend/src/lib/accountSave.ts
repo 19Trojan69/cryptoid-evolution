@@ -13,7 +13,7 @@ export const localInventory = () => ({ balance: shardBalance(localStorage.getIte
 export const mutateAccountInventory = async (save: AccountSave, command: object) => (await axiosClient.post<{ save: AccountSave }>("/progress/inventory", { version: save.version, ...command })).data.save;
 export const snapshotOf = (s: Snapshot & { combo?: {total:number} }): Snapshot => {
   const keys = ["score", "shards", "destroyed", "hearts", "paidWeaponLevel", "paidWeaponMs", "pickupWeaponLevel", "pickupWeaponMs", "shieldCharges", "shieldMs", "purchasedShieldMs", "overdriveMs", "overdriveTotalMs", "rapidFireMs", "rapidFireTotalMs", "empMs"] as const;
-  return { ...(s.damageCount===undefined?{}:{damageCount:s.damageCount}), ...(s.comboTotal===undefined?{}:{comboTotal:s.combo?.total ?? s.comboTotal}), ...Object.fromEntries(keys.map(key => [key, Math.max(0, Math.round(s[key]))])), weaponSource: s.weaponSource, shieldActive: s.shieldActive, weaponTimers: s.weaponTimers.map(n => Math.round(n)) } as Snapshot;
+  return { ...(s.projectileGuard===undefined?{}:{projectileGuard:s.projectileGuard}), ...(s.damageCount===undefined?{}:{damageCount:s.damageCount}), ...(s.comboTotal===undefined?{}:{comboTotal:s.combo?.total ?? s.comboTotal}), ...Object.fromEntries(keys.map(key => [key, Math.max(0, Math.round(s[key]))])), weaponSource: s.weaponSource, shieldActive: s.shieldActive, weaponTimers: s.weaponTimers.map(n => Math.round(n)) } as Snapshot;
 };
 export async function retrySave<T>(request: () => Promise<T>, options: { retryInvalidSave?: boolean } = {}): Promise<T> {
   for (let attempt = 0; ; attempt++) {

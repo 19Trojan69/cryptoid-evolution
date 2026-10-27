@@ -4,6 +4,7 @@ export { ownedShipStage, selectedShipStage } from '../../../backend/src/shipLoad
 
 export const projectileGuardForStage = (stage: ShipStage) => stage - 1;
 export const stageWeaponLevel = (stage: ShipStage, weaponLevel: number) => Math.max(stage >= 2 ? 2 : 1, weaponLevel);
+export const stageDamageMultiplier = (stage: ShipStage) => [1, 1.15, 1.3][stage - 1];
 
 // Hull protection applies only to enemy projectiles, after an active shield.
 // Direct contact is handled independently and remains fatal at every stage.

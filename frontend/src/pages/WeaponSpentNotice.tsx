@@ -15,6 +15,6 @@ export default function WeaponSpentNotice({ expiredLevel, level, expiredWeaponNa
   return <div className="weapon-transition-notice" role="status" aria-live="polite" aria-label={t('Active weapon')}>
     {expiredWeaponName !== weaponName && <span><i className="weapon-notice-symbol" data-level={expiredLevel} aria-hidden="true">{weaponSymbols[expiredLevel]}</i>{expiredWeaponName} · {t('Expired')}</span>}
     <strong>{expiredWeaponName !== weaponName && <i aria-hidden="true">→ </i>}<i className="weapon-notice-symbol" data-level={level} aria-hidden="true">{weaponSymbols[level]}</i>{weaponName}</strong>
-    {reload && <small className="weapon-reload-status">{t(reload === 'pending' ? 'Reloading weapon…' : reload === 'complete' ? 'Weapon reloaded' : 'Reload not confirmed')}</small>}
+    {reload && reload !== 'complete' && <small className="weapon-reload-status">{t(reload === 'pending' ? 'Reloading weapon…' : 'Reload not confirmed')}</small>}
   </div>;
 }

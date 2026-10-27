@@ -16,6 +16,7 @@ import LoadingStripes from '../components/LoadingStripes';
 import { enemyHealthClearance } from './enemyHealthClearance';
 import { weaponResumeStepMs } from './weaponReloadTiming';
 import WeaponSpentNotice from './WeaponSpentNotice';
+import ReloadConfirmation from './ReloadConfirmation';
 import { createWeaponSpentNotice, updateWeaponReloadNotice, type SpentWeaponNotice } from './weaponSpentNotice';
 import { enemyVisualDiameter } from './shipDisplayScale';
 import { automaticStartWeapon, autoReloadKey, nextActiveWeapon, parseAutoReload, shouldAutoReload, type AutoReloadPreferences } from './weaponAutoReload';
@@ -520,6 +521,8 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   const [technicalPause, setTechnicalPause] = useState(false);
   const weaponSpentRef = useRef<SpentWeaponNotice | null>(null);
   const [weaponSpent, setWeaponSpent] = useState<SpentWeaponNotice | null>(null);
+  const confirmedReloadRef = useRef<{ level: number; remainingMs: number } | null>(null);
+  const [confirmedReload, setConfirmedReload] = useState<number | null>(null);
   const markWeaponSpentShown = useCallback(() => {
     if (weaponSpentRef.current) weaponSpentRef.current.shown = true;
   }, []);
@@ -1037,6 +1040,11 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
           stateRef.current.projectileGuard = Math.min(stateRef.current.projectileGuard, projectileGuardForStage(shipStageRef.current));
         }
         else varietyRef.current = createCombatVariety(true);
+        // Legacy section-only saves cannot prove unused mission protection.
+        // New snapshots carry the remaining pool, including an explicit zero.
+        if (!data.combat && data.checkpoint.projectileGuard === undefined
+          && (data.startSector > 1 || data.checkpoint.destroyed > 0 || data.checkpoint.hearts < stateRef.current.maxHearts || (data.checkpoint.damageCount ?? 0) > 0)) stateRef.current.projectileGuard = 0;
+        stateRef.current.projectileGuard = Math.min(stateRef.current.projectileGuard, projectileGuardForStage(shipStageRef.current));
         setSaveNotice(data.combat ? "Combat restored." : "Last completed section loaded.");
       }
       if (data.profile?.mission?.bossIntermission) {
@@ -1547,6 +1555,10 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
       }
       if (state.status === "playing") {
         simulatedMs += delta;
+        if (confirmedReloadRef.current) {
+          confirmedReloadRef.current.remainingMs = Math.max(0, confirmedReloadRef.current.remainingMs - delta);
+          if (confirmedReloadRef.current.remainingMs === 0) { confirmedReloadRef.current = null; setConfirmedReload(null); }
+        }
         // Keep the final bonus explosion alive, then a short quiet beat. Only
         // visual lifetimes advance: the queued reward snapshot stays unchanged.
         if (state.encounter === 'bonus' && state.phase === 'SECTOR_CLEAR' && !bossSummaryRef.current?.accepted) {
@@ -2011,7 +2023,8 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
             state.playerHullFires = addPersistentHullFire(state.playerHullFires, state.playerHit, 4);
             soundRef.current?.play(destroyed ? "playerDestroy" : "collision");
             gameHaptics.explosion();
-            state.projectileGuard = destroyed ? 0 : projectileGuardForStage(shipStageRef.current);
+            // The stage pool belongs to this mission; losing/healing a heart never refills it.
+            if (destroyed) state.projectileGuard = 0;
             state.weaponCap = Math.max(1, state.weaponCap - 1);
             // Paid weapon time is protected from life loss. Only collected weapon
             // tiers are reduced; an active paid tier remains available until its timer expires.
@@ -2427,6 +2440,10 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
           stockRef.current = data.weaponStock; setWeaponStock(data.weaponStock);
           if (!state.unlockedWeapons.includes(activation.level)) state.unlockedWeapons.push(activation.level);
           activationRef.current = null;
+          if (data.remainingMs > 0 && ['playing', 'paused'].includes(state.status) && state.hearts > 0) {
+            confirmedReloadRef.current = { level: activation.level, remainingMs: 6000 };
+            setConfirmedReload(activation.level);
+          }
           return true;
         };
         // Resolve the old receipt before honoring any new choice. No stale
@@ -2482,6 +2499,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   };
 
   const restart = () => {
+    confirmedReloadRef.current = null; setConfirmedReload(null);
     bossPreparationRef.current++; bossSummaryRef.current = null; setBossSummary(null);
     setBossSummaryPrepared(false); setBossSummaryFailed(false); setBossSummarySaving(false); setBossSummaryContinuing(false);
     bossDestroyPlayedRef.current = false;
@@ -2741,11 +2759,12 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
         {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship shielded-ship${game.status === "paused" && weaponCountdown === null ? " player-ship-dialog-hidden" : ""}${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.purchasedShieldMs > 0 || (game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0) ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${engineFlamePercent(game.thrust)}%`, ...shipVisualOffset } as CSSProperties} aria-label={t('Your Cryptoid ship')}><GameShipVisual sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} variant="player" sites={game.playerHullFires} hit={game.playerHit}/></div>}
         {weaponMenuOpen && <div className={`game-overlay weapon-selection-overlay${readControlHand() === 'right' ? ' weapon-drawer-left' : ' weapon-drawer-right'}`} onPointerDown={event => event.stopPropagation()}>
           <div className="weapon-selection-dialog" role="dialog" aria-modal="true" aria-labelledby="mission-weapon-shop-title">
-            <MissionWeaponShop autoReload={autoReload} onAutoReload={changeAutoReload} authenticated={accountRun} admin={adminRunRef.current} timers={game.weaponTimers} initialStock={weaponStock} activeLevel={game.weaponLevel} source={game.weaponSource} pickupLevel={game.pickupWeaponLevel} pickupMs={game.pickupWeaponMs} stage={shipStage} selectionBusy={weaponBusy} pendingLevel={activationRef.current?.level} selectionError={weaponError} onSelect={level => { void selectWeaponLevel(level); }} onPickup={selectPickupWeapon} onClose={resumeWeaponSelection} onInventory={receiveWeaponInventory} />
+            <MissionWeaponShop reloadLevel={confirmedReload ?? undefined} autoReload={autoReload} onAutoReload={changeAutoReload} authenticated={accountRun} admin={adminRunRef.current} timers={game.weaponTimers} initialStock={weaponStock} activeLevel={game.weaponLevel} source={game.weaponSource} pickupLevel={game.pickupWeaponLevel} pickupMs={game.pickupWeaponMs} stage={shipStage} selectionBusy={weaponBusy} pendingLevel={activationRef.current?.level} selectionError={weaponError} onSelect={level => { void selectWeaponLevel(level); }} onPickup={selectPickupWeapon} onClose={resumeWeaponSelection} onInventory={receiveWeaponInventory} />
           </div>
           <button type="button" className="weapon-drawer-tab" onClick={resumeWeaponSelection} disabled={weaponBusy} aria-label={t('Back to game')}>{t('Weapons')} <span aria-hidden="true">{readControlHand() === 'right' ? '‹' : '›'}</span></button>
         </div>}
         <div className={`touch-controls touch-controls-${readControlHand()}`}>
+          {confirmedReload !== null && game.status === "playing" && <ReloadConfirmation level={confirmedReload} />}
           <div className="edge-actions" role="group" aria-label={t('Available equipment')}>
             <div className="weapon-control-wrap" data-source={game.weaponSource}>
               <div className="weapon-slot weapon-slot-main" data-source={game.weaponSource}>

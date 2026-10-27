@@ -1,0 +1,442 @@
+{
+  "baseline": "0868671b213fb25ba9ce1a0a8d1057dc2067d1f2",
+  "control": false,
+  "sourceSha256": "8c70e6a2010fa6349dc7b70ae43a8b304ff380a7d45d21359935c458dd81511a",
+  "realUiAndHandlers": true,
+  "localOnly": true,
+  "syntheticPiAndDatabase": true,
+  "physicalDevice": false,
+  "checks": [
+    "saved account/network Auto arms exactly one owned Plasma charge at a confirmed new start",
+    "waiting in the actual weapon drawer neither resumes combat nor spends active weapon time",
+    "native phone touch drag scrolls the marked offer body while the document remains locked",
+    "the actual Plasma quantity and repurchase control can be reached above the fixed return footer",
+    "actual isolated five-charge checkout replenishes stock and leaves the paused Auto choice and timer intact",
+    "expiry requests only one automatic confirmation from the available owned stock",
+    "the explicit pause remains in place while the delayed reload reply is unresolved",
+    "a delayed automatic confirmation arms Plasma during the pause without restarting combat",
+    "confirmed reload appears immediately inside the real paused drawer header",
+    "the paused drawer agrees with the real selected automatic weapon",
+    "five more paused seconds preserve the full confirmed timer and create no new activation",
+    "only the explicit Auto switch disables the persisted account/network preference",
+    "Auto off uses up the current charge once and consumes no further owned stock",
+    "confirmed Resume preserves the re-enabled Auto weapon and never consumes or refills its live charge",
+    "native flow has no uncaught page errors or unexpected local API failures",
+    "Auto off starts the free permanent base without consuming a charge at 820x1180",
+    "native offer scrolling and fixed return remain usable at 820x1180",
+    "Auto off starts the free permanent base without consuming a charge at 844x390",
+    "native offer scrolling and fixed return remain usable at 844x390",
+    "confirmed stage 1 starts its limited mission protection pool",
+    "stage 1 fires its real bounded base volley",
+    "stage 1 real hit 1 spends only the finite pool then one heart",
+    "stage 1 real hit 2 spends only the finite pool then one heart",
+    "stage 1 real hit 3 spends only the finite pool then one heart",
+    "stage 1 can die from 3 ordinary unshielded projectile hits",
+    "confirmed stage 2 starts its limited mission protection pool",
+    "stage 2 fires its real bounded base volley",
+    "stage 2 real hit 1 spends only the finite pool then one heart",
+    "stage 2 real hit 2 spends only the finite pool then one heart",
+    "stage 2 real hit 3 spends only the finite pool then one heart",
+    "stage 2 real hit 4 spends only the finite pool then one heart",
+    "stage 2 can die from 4 ordinary unshielded projectile hits",
+    "confirmed stage 3 starts its limited mission protection pool",
+    "stage 3 fires its real bounded base volley",
+    "stage 3 real hit 1 spends only the finite pool then one heart",
+    "stage 3 real hit 2 spends only the finite pool then one heart",
+    "stage 3 real hit 3 spends only the finite pool then one heart",
+    "stage 3 real hit 4 spends only the finite pool then one heart",
+    "stage 3 real hit 5 spends only the finite pool then one heart",
+    "stage 3 can die from 5 ordinary unshielded projectile hits",
+    "unconfirmed automatic request cannot claim that a weapon has reloaded",
+    "actual automatic confirmation is visible immediately during active flight without waiting for binary code",
+    "immediate confirmation is readable in reserved equipment space with no native animation",
+    "the real confirmation remains for several active seconds",
+    "the immediate confirmation finishes once and cannot wait for a later binary window",
+    "readable immediate status stays in bounds and clears HUD/weapon/center labels at 320x568 right",
+    "readable immediate status stays in bounds and clears HUD/weapon/center labels at 393x744 left",
+    "readable immediate status stays in bounds and clears HUD/weapon/center labels at 820x1180 right",
+    "readable immediate status stays in bounds and clears HUD/weapon/center labels at 844x390 left",
+    "new balance and confirmation scenarios have no unexpected API failures",
+    "controller source stayed unchanged throughout this native run"
+  ],
+  "errors": [],
+  "requests": [
+    {
+      "case": "owner-phone",
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200,
+          "stage": 1
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/payments/approve",
+          "status": 200
+        },
+        {
+          "path": "/api/payments/complete",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200,
+          "stage": 1
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        }
+      ]
+    }
+  ],
+  "cases": [],
+  "complete": true,
+  "engine": "141.0.7390.37",
+  "currentRequests": [
+    {
+      "path": "/api/usage/collect",
+      "status": 204
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/catalog",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/catalog",
+      "status": 200
+    },
+    {
+      "path": "/api/rewards/me",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/inventory",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/card-reveals",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/user/me",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/me",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/start",
+      "status": 200,
+      "stage": 1
+    },
+    {
+      "path": "/api/hangar/inventory",
+      "status": 200
+    },
+    {
+      "path": "/api/rewards/me",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/card-reveals",
+      "status": 200
+    },
+    {
+      "path": "/api/progress/checkpoint",
+      "status": 200
+    },
+    {
+      "path": "/api/hangar/weapon/activate",
+      "status": 200
+    }
+  ],
+  "swipes": [
+    {
+      "x": 157.85,
+      "y": 546.96875,
+      "to": 244.484375,
+      "target": "H3",
+      "selector": "h3",
+      "scroll": 347,
+      "height": 431,
+      "total": 2720,
+      "bodyY": 0
+    },
+    {
+      "x": 191.6,
+      "y": 486.875,
+      "to": 202.484375,
+      "target": "H3",
+      "selector": "h3",
+      "scroll": 333,
+      "height": 909,
+      "total": 2448,
+      "bodyY": 0
+    },
+    {
+      "x": 190.3,
+      "y": 218.484375,
+      "to": 183.6875,
+      "target": "P",
+      "selector": ".testnet-shop-notice",
+      "scroll": 21,
+      "height": 145,
+      "total": 2448,
+      "bodyY": 0
+    }
+  ],
+  "immediateReceipt": {
+    "top": 647.5,
+    "bottom": 716,
+    "width": 149.328125,
+    "height": 68.5,
+    "text": "Ⅴ Plasma\nWaffe nachgeladen",
+    "visible": true,
+    "animation": "none"
+  }
+}
