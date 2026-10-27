@@ -1,45 +1,97 @@
-# Cross-device White Screen investigation
+# Cryptoid Evolution – geräteübergreifende White-Screen-Prüfung
 
-The owner reports the failure on iPhone and Android phones. Android tablet
-coverage is precautionary; occurrence on a tablet is not confirmed. A screenshot
-and one White Screen occurred at the same time. That timing is retained as a
-possible trigger, without treating it as an established cause.
+Stand: 27. Oktober 2026. Der gemeldete Fehler betrifft iPhone und Android-Smartphone.
+Ein tatsächlicher Ausfall auf Android-Tablet ist noch nicht bestätigt. Der zeitliche
+Zusammenhang zwischen einem System-Screenshot und einem White Screen bleibt ein
+möglicher Auslöser; eine Ursache ist damit nicht bewiesen.
 
-This runner reuses the existing real backend-handler fixture and the unchanged
-GameEntry/GamePage controller from main commit
-`97d74b412f7dc7ea2f4f8c05f483d87eb3451dba`. It adds observation hooks only to the
-isolated Vite test server. No published gameplay files are changed. The branch
-is excluded from automatic Vercel deployments.
+## Ergebnis
 
-## Scope
+Drei externe Browserläufe mit jeweils 30 Minuten normaler Zeitmessung sind
+abgeschlossen. In den geprüften Bedingungen wurde kein White Screen reproduziert.
 
-| Profile | Browser on Linux | Emulation preset | Viewport |
-| --- | --- | --- | --- |
-| Android phone | Chromium | Pixel 7 | 412 × 839 |
-| Android tablet | Chromium | Galaxy Tab S4 | 820 × 1180 |
-| iPhone | WebKit | iPhone 15 Pro Max | 430 × 825 |
+| Simulation auf Linux | Browser | Spielzeit | Endstand Level / Block | Boss-/Bonus-Abschlüsse mit Fortsetzen | Ergebnis |
+| --- | --- | --- | --- | --- | --- |
+| Android-Smartphone | Chromium 151.0.7922.34 | 30 Min. | 7 / 3 | 6 | bestanden |
+| Android-Tabletprofil | Chromium 151.0.7922.34 | 30 Min. | 6 / 9 | 5 | bestanden |
+| iPhone | WebKit 26.5 | 30 Min. | 6 / 2 | 5 | bestanden |
 
-These are browser emulations, not physical Android/iOS devices or Pi Browser.
-Preset user-agent strings do not establish a particular installed mobile OS.
-Pi authentication, the account, purchase stock and database are synthetic.
-The actual gameplay uses real clocks, seeded randomness, scripted pointer input,
-and disclosed test-only collision protection. This is not a balance, mortality,
-real-payment or production-backend acceptance test.
+Insgesamt: 90 Minuten Beobachtungszeit, 16 Boss-/Bonus-Abschlüsse, 30
+Browseraufnahmen. In allen drei Läufen wurden normale Kämpfe, Boss-Intro,
+Bosskampf, Bossabschluss, Bonus, Karten und manuelles Fortsetzen beobachtet.
+Pause und Resume wurden jeweils ausdrücklich bedient. JavaScript-, Konsolen-,
+API- und erfasste Canvas-Ressourcenfehler: jeweils null.
 
-The first two thirds of each session have no page captures; the last third
-captures periodically. A browser page capture does not reproduce an operating
-system screenshot. Light Playwright tracing runs throughout and can itself add
-overhead. Evidence includes frame progress, gameplay state, unexpected document
-navigation, JavaScript errors, renderer/browser termination, save/API responses,
-canvas resource counters, captures and a local trace. Resource counters are not
-total device/GPU memory. No result establishes the historical native crash cause.
+Die Protokolle zeigen regelmäßigen Spielfortschritt. Der größte Abstand ohne
+Änderung der ausgewerteten Spielmerkmale betrug 31, 16 bzw. 32 Sekunden; es blieb
+kein Lauf dauerhaft an einem Menü stehen. Dies ist keine Messung des Frameabstands.
 
-## Execution
+Die bekannten Canvas-Cache-Spitzen lagen bei ca. 3,50 MiB, 3,50 MiB und 3,19 MiB.
+Diese Zähler erfassen einen Teil der Ressourcen und ersetzen keine Messung des
+gesamten Prozess-, Geräte- oder GPU-Speichers. Daraus wird keine Aussage abgeleitet,
+dass ein nativer Speicherfehler ausgeschlossen sei.
 
-The dedicated branch push now requests 1800 seconds for each profile, after all
-three 90-second setup runs passed. Manual dispatch also accepts
-30–3600 seconds when the workflow is available for dispatch. Artifacts expire
-after three days and contain only the isolated test account's evidence.
+**Die Ursache auf echten Geräten bleibt offen. Der historische Fehler ist durch
+diese Ergebnisse nicht nachweislich behoben.** Die gesamte Kampagne mit 500
+Abschnitten wurde hier nicht vollständig durchgespielt. Das Smartphone- und
+Tabletprofil passierten Abschnitt 54 aus dem früheren Bericht; das iPhoneprofil
+endete bei 52.
+
+## Nachweise und unveränderter Spielstand
+
+- [Drei bestandene 90-Sekunden-Probeläufe](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40570077403).
+- [Drei bestandene 30-Minuten-Läufe und Artefakte](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40571082434).
+- [Maschinenlesbare Zusammenfassung](completed-results.json), einschließlich
+  SHA-256-Prüfsummen der drei heruntergeladenen und auf ZIP-Integrität geprüften Artefakte.
+- Ausgeführter Test-Commit: `bab964304bda63a94be1a840260b1f1342bed89b`.
+- Spielcontroller aus Main: `97d74b412f7dc7ea2f4f8c05f483d87eb3451dba`.
+  SHA-256 von GamePage: `8c70e6a2010fa6349dc7b70ae43a8b304ff380a7d45d21359935c458dd81511a`.
+
+Die veröffentlichten Gameplay-Dateien sind unverändert. Beobachtungshaken werden
+ausschließlich im isolierten Vite-Testserver eingesetzt. Die vorhandene
+Backend-Handler-Testumgebung wird wiederverwendet. Artefakte enthalten Zustände,
+Ereignisse, Bilder und einen Playwright-Trace des künstlichen Testkontos; die
+Aufbewahrung wurde auf drei Tage eingestellt. Die letzten Aufnahmen aller drei
+Profile wurden zusätzlich visuell geprüft.
+
+Diagnose-Entwurf #194 bleibt separat und ungemergt. Dieser Testentwurf #195 bleibt
+ebenfalls ungemergt; automatische Vercel-Veröffentlichung ist für den Prüfzweig
+deaktiviert. Private Originalberichte werden nicht in dieses öffentliche Paket kopiert.
+
+## Umfang und Grenzen
+
+Die drei Profile verwenden Pixel 7 (412 × 839, DPR 2,625), Galaxy Tab S4
+(820 × 1180, DPR 2,25) und iPhone 15 Pro Max (430 × 825, DPR 3).
+Die Gerätebezeichnungen und User Agents sind Emulationsvorgaben. Sie belegen
+keinen Test auf einem echten Android-Gerät, dem Xiaomi Pad 7 oder einem iPhone.
+
+Pi-Anmeldung, Konto, Datenbank und Kaufbestand sind künstlich. Es wurden keine
+echten Zahlungen durchgeführt. Der echte Controller läuft mit echten Uhren,
+reproduzierbarem Zufall, geskripteten Eingaben und offengelegtem Kollisionsschutz
+für die Dauerprüfung. Dies prüft nicht Sterblichkeit, Balance oder die reale
+Pi-Anmeldung.
+
+Die ersten 20 Minuten jedes Langlaufs enthalten keine Seitenaufnahmen, das letzte
+Drittel etwa eine pro Minute. Eine Playwright-Seitenaufnahme ersetzt keinen
+Android-/iOS-System-Screenshot. Die pixelbasierte Prüfung erkennt nahezu
+vollständig weiße Aufnahmen; sie erkennt nicht jeden möglichen Darstellungsfehler.
+Leichtes Tracing läuft durchgehend und kann selbst Aufwand verursachen.
+
+## Wiederholen
+
+Der vorhandene GitHub-Lauf kann bei Bedarf erneut ausgeführt werden. Der Workflow
+liegt in `.github/workflows/cryptoid-cross-device.yml` und startet beim Ändern
+seiner Testdateien auf `codex/cross-device-white-screen-20261027`.
+Standarddauer: 1800 Sekunden je Profil.
+
+Der ausgeführte Lauf hatte ein Joblimit von 55 Minuten. Nur die äußere
+Zeitgrenze wurde danach auf 85 Minuten erhöht, damit die bereits erlaubte
+3600-Sekunden-Eingabe samt Installation hineinpasst. Spiel- und Läufercode bleiben
+dabei unverändert. Der Ergebnis-/Zeitgrenzen-Commit verwendet
+[`[skip ci]`](https://docs.github.com/actions/managing-workflow-runs/skipping-workflow-runs),
+damit das Sichern der Ergebnisse keinen weiteren Langlauf auslöst.
+
+Lokal in einer Umgebung mit Browser- und Socket-Unterstützung:
 
 ```sh
 npm install --prefix frontend --include=optional --no-audit --no-fund
@@ -53,48 +105,53 @@ npm run preflight
 CRYPTOID_TEST_PROFILE=android-phone CRYPTOID_TEST_SECONDS=1800 npm test
 ```
 
-The preflight type-checks the exact instrumented controller without changing its
-source, verifies equality with the published controller, and validates start and
-inventory through existing handlers. Progress requires real projectiles, sector
-progression, explicit Pause/Resume, and no unexpected API/JavaScript failures.
-A pilot that cannot advance is reported as a test investigation failure, not as
-a reproduced White Screen.
+Preflight prüft Controller-Gleichheit, den instrumentierten TypeScript-Code und
+Start/Inventar über die vorhandenen echten Handler. Es wurden keine
+Produktionsdateien für diesen Check umgeschrieben.
 
-## Checkpoint before external execution
+## Vorherige Hindernisse
 
-- Local preflight: passed, including instrumented TypeScript and real handlers.
-- Local browser execution: blocked by this environment's browser/socket policy;
-  no local device/browser pass is claimed.
-- Vercel sandbox creation: service rejected it with HTTP 403. The advertised CLI
-  fallback has neither a local installation nor authenticated credentials.
-- GitHub Actions execution and physical-device results: pending actual evidence.
-- The first external setup attempt stopped before browser/game execution:
-  `npm ci` requires a frontend npm lockfile which the repository does not contain.
-  The frontend now uses the repository's npm installation approach.
-- The next tablet attempt reached sectors 1 and 2, then stopped at the planned
-  Pause because the test monitor classified the game's same-document modal
-  history entry as a document navigation. Evidence showed the normal Pause
-  dialog and no all-white capture. The monitor now separates document identity
-  and route changes from same-document history. This is a harness correction,
-  not a production-game fix or a completed duration pass.
-- The iPhone-emulation setup displayed the resume dialog, but its initial click
-  exceeded the shared 10-second timeout after page loading. No gameplay or White
-  Screen was observed there. Startup now explicitly brings the page forward,
-  waits for the visible Resume dialog separately, records document visibility,
-  and allows a bounded 30-second ordinary click. It does not force or dispatch a
-  DOM click. Each CI job installs only its required browser engine.
+Die lokale Browserausführung scheiterte an der Socket-Richtlinie der Umgebung.
+Vercel verweigerte das Erstellen einer Sandbox mit HTTP 403; ein angemeldeter
+CLI-Zugang war nicht verfügbar. Deshalb erfolgten die Browserläufe bei GitHub.
 
-## Validated short run
+Die ersten externen Aufbauversuche scheiterten an einem fehlenden Frontend-npm-
+Lockfile, einer zu strengen Bewertung normaler Modal-Verlaufseinträge bzw. einer
+zu kurzen Start-Klickfrist. Diese Fehler wurden im Testgerüst korrigiert. Sie
+zählen weder als bestandene Spieldauer noch als reproduzierter White Screen.
+Die früheren Actions-Läufe bewahren diese Abgrenzung.
 
-GitHub Actions run `40570077403` completed successfully on all three profiles:
+## Nächster Nachweis: echter Android-Pi-Browser
 
-| Profile | Real wall time | Sectors reached | Pause/Resume | Browser captures | JS/API errors |
-| --- | --- | --- | --- | --- | --- |
-| Android phone emulation | 90 seconds | 1–5 | passed | 2 | 0 / 0 |
-| Android tablet emulation | 90 seconds | 1–5 | passed | 2 | 0 / 0 |
-| iPhone emulation | 90 seconds | 1–4 | passed | 2 | 0 / 0 |
+Vorbereitet ist ein Lauf direkt im betroffenen Android-Pi-Browser. Dafür fehlt
+hier der Zugriff auf ein echtes betroffenes Gerät bzw. eine dort aufgezeichnete
+Diagnose. Zunächst Gerätemodell, Android-, Pi-Browser- und WebView/Chrome-Version,
+Spieladresse/Build, Schiff, Einstellungen, Level/Block und Uhrzeit festhalten.
+Bestehende Spielstände behalten; keine Speicherdaten löschen.
 
-This validates runner setup and short gameplay only. The historical White Screen
-is not declared fixed. Three 30-minute sessions are the next execution step.
-- Existing diagnostic draft PR #194 stays separate and unmerged. Raw owner
-  reports and private telemetry are not copied into this test package.
+1. Vergleichbarer Vordergrundlauf ohne System-Screenshots.
+2. Separater Lauf mit dem normalen Android-System-Screenshot während des Kampfs
+   und gesondert an einem Übergang. Uhrzeit und Level/Block notieren. Kein
+   gleichzeitiges Bildschirmvideo in diesen Vergleich einführen.
+3. App-Wechsel und Rückkehr separat prüfen; normales manuelles Resume beibehalten.
+4. Beim nächsten tatsächlichen Ausfall den vorhandenen Spielbericht erhalten und
+   möglichst direkt einen Android-Systemfehlerbericht sichern. Android beschreibt
+   dafür **Entwickleroptionen → Fehlerbericht erstellen** sowie
+   [`adb bugreport`](https://developer.android.com/studio/debug/bug-report).
+
+Für einen Tester mit bereits autorisierter USB-Debugging-Verbindung:
+
+```sh
+adb devices -l
+adb -s DEVICE_SERIAL bugreport /privater/Pfad/cryptoid-android-bugreport.zip
+```
+
+Gerätekennung und privaten Ausgabepfad passend ersetzen. Diese Gerätebefehle
+wurden hier nicht ausgeführt. Systemberichte vor dem Teilen prüfen und außerhalb
+dieses öffentlichen Repositorys halten. Ein Systembericht garantiert noch keinen
+Ursachennachweis; er kann die bisher fehlende native Ebene ergänzen.
+
+Appium/UiAutomator2 kann nach vorhandenem Gerätezugriff die Automatisierung
+übernehmen. WebView-Automatisierung setzt einen freigegebenen, debugfähigen Host
+voraus; ob Pi Browser dies auf dem betroffenen Gerät anbietet, ist ungeklärt.
+[Anforderungen des Android-Treibers](https://github.com/appium/appium-uiautomator2-driver#requirements).

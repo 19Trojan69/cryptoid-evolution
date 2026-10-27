@@ -25,7 +25,7 @@ jobs:
   browser:
     name: ${{ matrix.profile }} (emulation)
     runs-on: ubuntu-24.04
-    timeout-minutes: 55
+    timeout-minutes: 85
     strategy:
       fail-fast: false
       matrix:

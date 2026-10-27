@@ -1,0 +1,223 @@
+{
+  "format": "cryptoid-cross-device-stability-results-v1",
+  "date": "2026-10-27",
+  "testedHead": "bab964304bda63a94be1a840260b1f1342bed89b",
+  "controllerBaseline": "97d74b412f7dc7ea2f4f8c05f483d87eb3451dba",
+  "controllerSha256": "8c70e6a2010fa6349dc7b70ae43a8b304ff380a7d45d21359935c458dd81511a",
+  "publishedGameplayChanged": false,
+  "scope": {
+    "actualHostOS": "linux",
+    "physicalDevices": false,
+    "realPiBrowser": false,
+    "realPiAuthentication": false,
+    "realDatabase": false,
+    "realPayments": false,
+    "syntheticAccount": true,
+    "testOnlyCollisionProtection": true,
+    "seededRandom": true,
+    "realClocks": true,
+    "osScreenshotReproduced": false,
+    "full500SectionCampaignTested": false
+  },
+  "shortRun": {
+    "id": 40570077403,
+    "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40570077403",
+    "profiles": [
+      {
+        "profile": "android-phone",
+        "passed": true,
+        "seconds": 90
+      },
+      {
+        "profile": "android-tablet",
+        "passed": true,
+        "seconds": 90
+      },
+      {
+        "profile": "iphone",
+        "passed": true,
+        "seconds": 90
+      }
+    ]
+  },
+  "longRun": {
+    "id": 40571082434,
+    "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40571082434",
+    "passed": true,
+    "totalObservedSeconds": 5400,
+    "manualContinues": 16,
+    "browserCaptures": 30
+  },
+  "profiles": [
+    {
+      "profile": "android-phone",
+      "label": "Android-Smartphone",
+      "engine": "chromium",
+      "engineVersion": "151.0.7922.34",
+      "emulationPreset": "Pixel 7",
+      "viewport": {
+        "width": 412,
+        "height": 839
+      },
+      "deviceScaleFactor": 2.625,
+      "passed": true,
+      "seconds": 1800,
+      "startedAt": "2026-10-27T19:41:09.943Z",
+      "finishedAt": "2026-10-27T20:11:09.972Z",
+      "contiguousSectors": {
+        "from": 1,
+        "to": 63
+      },
+      "endLevel": 7,
+      "endBlock": 3,
+      "completedBossBonusContinues": 6,
+      "cardDismissals": 6,
+      "explicitPause": true,
+      "explicitResume": true,
+      "encounters": [
+        "bonus",
+        "boss-clear",
+        "boss-fight",
+        "boss-intro",
+        "normal"
+      ],
+      "stateSamples": 354,
+      "maxUnchangedSampleSignatureSeconds": 31,
+      "javaScriptErrors": 0,
+      "apiErrors": 0,
+      "consoleErrors": 0,
+      "canvasResourceFailures": 0,
+      "browserCaptures": 10,
+      "maxObservedWhitePixelRatio": 0.00146484375,
+      "nearAllWhiteFailureThreshold": 0.98,
+      "maxTrackedCanvasCacheBytes": 3665836,
+      "samplingNote": "State samples target five seconds; their spacing is not a renderer frame interval. Canvas counters are not total process/GPU memory.",
+      "artifact": {
+        "id": 12767776121,
+        "name": "browser-stability-android-phone",
+        "sizeBytes": 18841431,
+        "sha256": "25cc2022081d0354eed72077963d88e7792ae9908c062f035faf7d737dc7e778",
+        "zipIntegrityVerified": true,
+        "retentionDays": 3
+      }
+    },
+    {
+      "profile": "android-tablet",
+      "label": "Android-Tabletprofil",
+      "engine": "chromium",
+      "engineVersion": "151.0.7922.34",
+      "emulationPreset": "Galaxy Tab S4",
+      "viewport": {
+        "width": 820,
+        "height": 1180
+      },
+      "deviceScaleFactor": 2.25,
+      "passed": true,
+      "seconds": 1800,
+      "startedAt": "2026-10-27T19:49:07.998Z",
+      "finishedAt": "2026-10-27T20:19:08.104Z",
+      "contiguousSectors": {
+        "from": 1,
+        "to": 59
+      },
+      "endLevel": 6,
+      "endBlock": 9,
+      "completedBossBonusContinues": 5,
+      "cardDismissals": 5,
+      "explicitPause": true,
+      "explicitResume": true,
+      "encounters": [
+        "bonus",
+        "boss-clear",
+        "boss-fight",
+        "boss-intro",
+        "normal"
+      ],
+      "stateSamples": 350,
+      "maxUnchangedSampleSignatureSeconds": 16,
+      "javaScriptErrors": 0,
+      "apiErrors": 0,
+      "consoleErrors": 0,
+      "canvasResourceFailures": 0,
+      "browserCaptures": 10,
+      "maxObservedWhitePixelRatio": 0.0009765625,
+      "nearAllWhiteFailureThreshold": 0.98,
+      "maxTrackedCanvasCacheBytes": 3665836,
+      "samplingNote": "State samples target five seconds; their spacing is not a renderer frame interval. Canvas counters are not total process/GPU memory.",
+      "artifact": {
+        "id": 12765829560,
+        "name": "browser-stability-android-tablet",
+        "sizeBytes": 23876628,
+        "sha256": "795c9ef10a444d84e7e402291236f1c233add1f70d59ded4a4d788c3a815cc13",
+        "zipIntegrityVerified": true,
+        "retentionDays": 3
+      }
+    },
+    {
+      "profile": "iphone",
+      "label": "iPhone",
+      "engine": "webkit",
+      "engineVersion": "26.5",
+      "emulationPreset": "iPhone 15 Pro Max",
+      "viewport": {
+        "width": 430,
+        "height": 825
+      },
+      "deviceScaleFactor": 3,
+      "passed": true,
+      "seconds": 1800,
+      "startedAt": "2026-10-27T19:41:57.691Z",
+      "finishedAt": "2026-10-27T20:11:57.737Z",
+      "contiguousSectors": {
+        "from": 1,
+        "to": 52
+      },
+      "endLevel": 6,
+      "endBlock": 2,
+      "completedBossBonusContinues": 5,
+      "cardDismissals": 5,
+      "explicitPause": true,
+      "explicitResume": true,
+      "encounters": [
+        "bonus",
+        "boss-clear",
+        "boss-fight",
+        "boss-intro",
+        "normal"
+      ],
+      "stateSamples": 346,
+      "maxUnchangedSampleSignatureSeconds": 32,
+      "javaScriptErrors": 0,
+      "apiErrors": 0,
+      "consoleErrors": 0,
+      "canvasResourceFailures": 0,
+      "browserCaptures": 10,
+      "maxObservedWhitePixelRatio": 0.001220703125,
+      "nearAllWhiteFailureThreshold": 0.98,
+      "maxTrackedCanvasCacheBytes": 3347740,
+      "samplingNote": "State samples target five seconds; their spacing is not a renderer frame interval. Canvas counters are not total process/GPU memory.",
+      "artifact": {
+        "id": 12766727794,
+        "name": "browser-stability-iphone",
+        "sizeBytes": 16860174,
+        "sha256": "573474c5ed4e611e221f6f250fa30579c59aa77d86d2901c6579b647c9e0faa7",
+        "zipIntegrityVerified": true,
+        "retentionDays": 3
+      }
+    }
+  ],
+  "interpretation": {
+    "whiteScreenReproduced": false,
+    "nativeCauseKnown": false,
+    "historicalWhiteScreenProvenFixed": false,
+    "claim": "No White Screen reproduced under the recorded emulated conditions. Actual Android/iOS Pi Browser acceptance remains open."
+  },
+  "afterRunChanges": {
+    "runnerCodeChanged": false,
+    "gameplayCodeChanged": false,
+    "workflowJobTimeoutMinutes": 85,
+    "executedRunJobTimeoutMinutes": 55,
+    "reason": "Allow the already accepted 3600-second input plus setup time. Evidence/timeout commit skips push CI to avoid duplicate 30-minute runs."
+  },
+  "nextStep": "Capture a real Android Pi Browser reproduction with device/version details and native device evidence; preserve the existing owner report and the reported screenshot timing."
+}
