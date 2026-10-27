@@ -8,6 +8,7 @@ import WeaponPurchase from './WeaponPurchase';
 import WeaponPreview from './WeaponPreview';
 import WeaponTutorial from './WeaponTutorial';
 import PiPrice from '../components/PiPrice';
+import { weaponSymbols } from './weaponSymbols';
 import './missionWeaponShop.css';
 import { shipSaveNetwork, selectedShip } from './shipFleet';
 import { hangarCatalog } from '../../../backend/src/hangarCatalog';
@@ -91,7 +92,7 @@ export default function MissionWeaponShop({ autoReload = {}, onAutoReload, authe
       return <article className="hangar-offer mission-weapon-card" data-level={level} data-owned={available} data-active={selected} key={offer.id}>
         <WeaponPreview offerId={offer.id} sprite={ship.skin.sprite} color={ship.color.id} stage={stage} />
         <div className="mission-weapon-details">
-          <h3><span aria-hidden="true">{['', 'Ⅰ', 'Ⅱ', 'Ⅲ', 'Ⅳ', 'Ⅴ'][level]}</span> {t(offer.name)}</h3>
+          <h3><span aria-hidden="true">{weaponSymbols[level]}</span> {t(offer.name)}</h3>
           <p className="mission-stock">{level === 1 ? t('Unlimited') : <>{t('Charges')}: <b>{authenticated && !ready ? '…' : count}</b></>}</p>
           <p className="mission-duration">{level > 1 ? t('45 seconds per charge') : t('Base')}</p>
           <div className="mission-timers">{timer > 0 && <p className="mission-time">{t('Remaining time')}: {Math.ceil(timer / 1000)} s</p>}

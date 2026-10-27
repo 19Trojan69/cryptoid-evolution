@@ -1,0 +1,27 @@
+{
+  "baseCommit": "f596413a5f873f9790b262d211d0c33ee710d0a1",
+  "baseTree": "7adf29957f06cbdffa5ff014bd6b3ea223f1d16b",
+  "publishedControllerSha256": "4fdd0f448af7dfd952a69db6c3a5c681bd8ad03822be91f10657ecf832a1ac2b",
+  "candidateControllerSha256": "eb219ac8306919d27008dd7929fce871eff0e1b2df0d682ee518d3a23394e782",
+  "exactControllerRestoration": true,
+  "shopRestoresExactlyAfterOnlySharedSymbolExtraction": true,
+  "shopSha256": "8fc5f103381f12f998945d72b1b8b8d2df383b95987eef722856ba9fb4332a4a",
+  "protectedPaths": [
+    "api",
+    "backend/src",
+    "frontend/src/index.css",
+    "frontend/src/floatingNotices.css",
+    "frontend/src/pages/weaponSpentNotice.ts",
+    "frontend/src/pages/combatVariety.ts",
+    "frontend/src/pages/sectorManager.ts",
+    "frontend/src/pages/sectorBoss.ts",
+    "frontend/src/pages/transitionNotices.css",
+    "frontend/src/lib/frameScheduler.ts",
+    "frontend/src/generated/paintedHullManifest.ts"
+  ],
+  "protectedDiffEmpty": true,
+  "newRuntimeStateTimerObserverAnimationFrameOrAsset": false,
+  "workBranchAutoDeployDisabled": true,
+  "excludedLocalArtifacts": true,
+  "originalOwnerImagePublished": false
+}

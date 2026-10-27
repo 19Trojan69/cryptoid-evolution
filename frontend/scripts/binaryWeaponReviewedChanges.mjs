@@ -1,3 +1,4 @@
+import { restoreWeaponSymbolGameChanges } from './weaponSymbolReviewedChanges.mjs';
 // Only the exact reviewed binary-window UI correction; all other bytes stay pinned.
 export const binaryWeaponChanges = [
   {
@@ -66,6 +67,7 @@ export const binaryWeaponChanges = [
   }
 ];
 export function restoreBinaryWeaponGameChanges(source) {
+  source = restoreWeaponSymbolGameChanges(source);
   for (const {before, after} of [...binaryWeaponChanges].reverse()) {
     if (source.split(after).length !== 2) throw Error('Expected one exact binary-weapon notice change');
     source = source.replace(after, before);

@@ -21,3 +21,10 @@
 }
 .weapon-transition-notice span, .weapon-transition-notice strong { display: block; font: inherit; }
 .weapon-transition-notice i { font: inherit; }
+.weapon-transition-notice .weapon-notice-symbol {
+  display: inline-block;
+  min-width: 1em;
+  margin-inline-end: .3em;
+  font-size: .85em;
+  font-weight: 600;
+}

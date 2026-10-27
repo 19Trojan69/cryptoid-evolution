@@ -6,6 +6,8 @@ import { transformSync } from 'esbuild';
 import { createWeaponSpentNotice } from './weaponSpentNotice.ts';
 import { nextActiveWeapon, shouldAutoReload } from './weaponAutoReload.ts';
 import { stageWeaponLevel } from './shipEvolution.ts';
+import { weaponSymbols } from './weaponSymbols.ts';
+import { restoreWeaponSymbolGameChanges } from '../../scripts/weaponSymbolReviewedChanges.mjs';
 import { componentHost } from '../../scripts/componentTestHost.mjs';
 import { restoreBinaryWeaponGameChanges } from '../../scripts/binaryWeaponReviewedChanges.mjs';
 import { translate, languages } from '../i18n.ts';
@@ -83,7 +85,9 @@ test('the actual JSX mounts the passive name only in the exact binary window and
   for (const stage of [1,2,3]) for (const level of [1,2,3,4,5]) {
     const tree=nodes(renderBinary({element,fragment:'fragment',game:{status:'playing',encounter:'normal',phase:'ENTRY',weaponLevel:level},formationStartedRef:{current:false},weaponSpent:2,
       FORMATION_DATA_ROWS:['01'],WeaponSpentNotice:'WeaponSpentNotice',weaponNames:names,stageWeaponLevel,shipStage:stage,levelIntro:false,markWeaponSpentShown(){}}));
-    assert.equal(tree.find(n=>n.type==='WeaponSpentNotice').props.weaponName,names[stageWeaponLevel(stage,level)]);
+    const notice=tree.find(n=>n.type==='WeaponSpentNotice');
+    assert.equal(notice.props.weaponName,names[stageWeaponLevel(stage,level)]);
+    assert.equal(notice.props.level,stageWeaponLevel(stage,level));assert.equal(notice.props.expiredLevel,2);
     assert.equal(tree.find(n=>n.props.className==='formation-data-stream').props['aria-hidden'],'true');
   }
 });
@@ -109,19 +113,24 @@ test('the real component names expiry and the current shot, with passive accessi
   for(const locale of Object.keys(languages)){
     let shown=0;
     const name=translate(locale,'Standard');
-    const h=componentHost('src/pages/WeaponSpentNotice.tsx','WeaponSpentNotice',{expiredWeaponName:name,weaponName:name,onShown:()=>{shown++;}},
-      {useLocale:()=>({t:key=>translate(locale,key)}),useLayoutEffect:fn=>fn()});
+    const h=componentHost('src/pages/WeaponSpentNotice.tsx','WeaponSpentNotice',{expiredLevel:1,level:1,expiredWeaponName:name,weaponName:name,onShown:()=>{shown++;}},
+      {useLocale:()=>({t:key=>translate(locale,key)}),useLayoutEffect:fn=>fn(),weaponSymbols});
     assert.equal(h.nodes().find(n=>n.type==='strong').props.children.filter(v=>typeof v==='string').join(''),name);
     assert.equal(h.nodes().filter(n=>n.type==='button'||n.type==='a').length,0);
+    const activeSymbol=h.nodes().find(n=>n.props.className==='weapon-notice-symbol');
+    assert.equal(activeSymbol.props.children.join(''),weaponSymbols[1]);assert.equal(activeSymbol.props['aria-hidden'],'true');
     assert.equal(h.nodes()[0].props.role,'status');assert.equal(shown,1);h.unmount();assert.equal(shown,1);
-    const expired=componentHost('src/pages/WeaponSpentNotice.tsx','WeaponSpentNotice',{expiredWeaponName:translate(locale,'Triple'),weaponName:name,onShown(){}},
-      {useLocale:()=>({t:key=>translate(locale,key)}),useLayoutEffect:fn=>fn()});
+    const expired=componentHost('src/pages/WeaponSpentNotice.tsx','WeaponSpentNotice',{expiredLevel:4,level:1,expiredWeaponName:translate(locale,'Triple'),weaponName:name,onShown(){}},
+      {useLocale:()=>({t:key=>translate(locale,key)}),useLayoutEffect:fn=>fn(),weaponSymbols});
     const text=expired.nodes().find(n=>n.type==='span').props.children.join('');
+    assert.deepEqual(expired.nodes().filter(n=>n.props.className==='weapon-notice-symbol').map(n=>n.props.children.join('')),[weaponSymbols[4],weaponSymbols[1]]);
     assert.ok(text.includes(translate(locale,'Expired')));assert.ok(text.includes(translate(locale,'Triple')));expired.unmount();
   }
 });
 
 test('exact reviewed changes restore the entire published controller, original binary markup and retained critical guards', () => {
+  assert.equal(hash(restoreWeaponSymbolGameChanges(source)),'4fdd0f448af7dfd952a69db6c3a5c681bd8ad03822be91f10657ecf832a1ac2b');
+  assert.throws(()=>restoreWeaponSymbolGameChanges(source.replace('expiredLevel={weaponSpent}','expiredLevel={1}')),/one exact/);
   assert.equal(hash(original),'ab979a75eef6698b84a0f015f10c50dc513cd7f211f790624a09b3dc45697be3');
   assert.throws(()=>restoreBinaryWeaponGameChanges(source.replace('onShown={markWeaponSpentShown}','onShown={()=>{}}')),/one exact/);
   assert.notEqual(hash(restoreBinaryWeaponGameChanges(source.replace('watch: callback => window.setInterval(callback, 500)','watch: callback => window.setInterval(callback, 1000)'))),hash(original));

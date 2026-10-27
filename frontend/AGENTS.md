@@ -1,3 +1,28 @@
+# Shop symbols beside the red binary notice, 27 October 2026
+
+The owner additionally requests the existing shop symbol alongside the shot name.
+Reuse the exact shop marksⅠ–Ⅴ through one shared static weaponSymbols array,
+leaving shop output identical. Add compact aria-hidden marks to expired/current
+names, with numeric props matching the HUD's stage-correct effective level. Keep
+red expiry copy, binary-only lifetime/position/animation, centered-title deferral,
+pauses/manual Resume and absence of purchase actions. No new art/preview load,
+animation/state/timer/observer/RAF, backend/combat/economy/save/audio/HUD change.
+Only exact symbol-prop restoration recovers the entire public f596413 controller
+before all older guards. See docs and verification/binary-weapon-symbol-20261027.
+412 frontend release cases/locales/types/Vite and126 native UI/real-handler checks
+pass, including actual shop-DOM symbol matching across eight scenarios.
+GamePage62 errors/four warnings and MissionWeaponShop3 errors remain pinned
+baseline findings, not repaired or lint-clean. Prior full-flow74/Game Over11 and
+backend127 remain baseline, not newly repeated for this presentation change.
+Physical-device/heat/FPS/White Screen acceptance is not claimed. Keep work branch
+auto-deploy off; reviewed same-source publication to both existing projects is
+still authorized via main, then actual READY and public commit/tree/bundle/new-
+symbol/prior-guard checks. Preserve f596413 and READY Testnet2rHmD4diydHECvwzmrRFbSbgJw5Z /
+productionBKvtNeoh28sumnisiTD4T2eBdFNp, older backups, separate networks/accounts/
+payments, manual confirmed Continue and strict >2500ms/500ms/manual technical
+Resume. No duplicates, PR167/168, reset/migration, real purchases, secrets/
+protection/runtime logs; evidence refs must not deploy.
+
 # Quiet red weapon feedback in the binary pause, 27 October 2026
 
 The owner's later screenshot/clarifications supersede PR185's intrusive combat
