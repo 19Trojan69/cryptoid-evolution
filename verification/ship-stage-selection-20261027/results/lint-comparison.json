@@ -1,0 +1,453 @@
+{
+  "baseline": "1d800516767131013e0ef80f5c22fa1332593b43",
+  "files": [
+    {
+      "path": "src/pages/GamePage.tsx",
+      "before": {
+        "errors": 62,
+        "warnings": 4
+      },
+      "after": {
+        "errors": 62,
+        "warnings": 4
+      },
+      "sameFindings": true,
+      "findings": [
+        [
+          "react-hooks/exhaustive-deps",
+          1,
+          "React Hook useCallback has a missing dependency: 'keysRef'. Either include it or remove the dependency array."
+        ],
+        [
+          "react-hooks/exhaustive-deps",
+          1,
+          "React Hook useCallback has an unnecessary dependency: 'ownerDiagnostics'. Either exclude it or remove the dependency array."
+        ],
+        [
+          "react-hooks/exhaustive-deps",
+          1,
+          "React Hook useEffect has a missing dependency: 'keysRef'. Either include it or remove the dependency array."
+        ],
+        [
+          "react-hooks/exhaustive-deps",
+          1,
+          "React Hook useEffect has missing dependencies: 'bestThisDeviceRef', 'keysRef', 'ownerDiagnostics', 'playerMotionRef', 'recordOwnerResourceSnapshot', 'startBossVictory', and 'varietyRef'. Either include them or remove the dependency array."
+        ],
+        [
+          "react-hooks/immutability",
+          2,
+          "Error: Cannot modify local variables after render completes"
+        ],
+        [
+          "react-hooks/immutability",
+          2,
+          "Error: Cannot modify local variables after render completes"
+        ],
+        [
+          "react-hooks/immutability",
+          2,
+          "Error: Cannot modify local variables after render completes"
+        ],
+        [
+          "react-hooks/immutability",
+          2,
+          "Error: Cannot modify local variables after render completes"
+        ],
+        [
+          "react-hooks/immutability",
+          2,
+          "Error: Cannot modify local variables after render completes"
+        ],
+        [
+          "react-hooks/immutability",
+          2,
+          "Error: Cannot modify local variables after render completes"
+        ],
+        [
+          "react-hooks/immutability",
+          2,
+          "Error: Cannot modify local variables after render completes"
+        ],
+        [
+          "react-hooks/immutability",
+          2,
+          "Error: This value cannot be modified"
+        ],
+        [
+          "react-hooks/purity",
+          2,
+          "Error: Cannot call impure function during render"
+        ],
+        [
+          "react-hooks/purity",
+          2,
+          "Error: Cannot call impure function during render"
+        ],
+        [
+          "react-hooks/purity",
+          2,
+          "Error: Cannot call impure function during render"
+        ],
+        [
+          "react-hooks/purity",
+          2,
+          "Error: Cannot call impure function during render"
+        ],
+        [
+          "react-hooks/purity",
+          2,
+          "Error: Cannot call impure function during render"
+        ],
+        [
+          "react-hooks/purity",
+          2,
+          "Error: Cannot call impure function during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ]
+      ]
+    },
+    {
+      "path": "src/pages/Shop.tsx",
+      "before": {
+        "errors": 5,
+        "warnings": 0
+      },
+      "after": {
+        "errors": 5,
+        "warnings": 0
+      },
+      "sameFindings": true,
+      "findings": [
+        [
+          "react-hooks/refs",
+          2,
+          "Error: Cannot access refs during render"
+        ],
+        [
+          "react-hooks/set-state-in-effect",
+          2,
+          "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        ],
+        [
+          "react-hooks/set-state-in-effect",
+          2,
+          "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        ],
+        [
+          "react-hooks/set-state-in-effect",
+          2,
+          "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        ],
+        [
+          "react-hooks/set-state-in-effect",
+          2,
+          "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        ]
+      ]
+    },
+    {
+      "path": "src/pages/ShipSelectionPanel.tsx",
+      "before": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "after": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "sameFindings": true,
+      "findings": []
+    },
+    {
+      "path": "src/pages/FleetShipPanel.tsx",
+      "before": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "after": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "sameFindings": true,
+      "findings": []
+    },
+    {
+      "path": "src/pages/shipEvolution.ts",
+      "before": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "after": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "sameFindings": true,
+      "findings": []
+    },
+    {
+      "path": "src/pages/shipFleet.ts",
+      "before": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "after": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "sameFindings": true,
+      "findings": []
+    },
+    {
+      "path": "src/lib/accountSave.ts",
+      "before": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "after": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "sameFindings": true,
+      "findings": []
+    }
+  ]
+}

@@ -81,7 +81,7 @@ import { usePreparedGameHulls } from './usePreparedGameHulls';
 import { sessionDiagnostic } from '../lib/sessionDiagnosticEvents';
 import { contactWithBoss } from "./bossContact";
 import { openingKillPickup } from "./pickupOrigin";
-import { ownedShipStage, projectileGuardForStage, projectileImpact, stageWeaponLevel, type ShipStage } from "./shipEvolution";
+import { projectileGuardForStage, projectileImpact, stageWeaponLevel, selectedShipStage, type ShipStage } from "./shipEvolution";
 import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio";
 import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, readMusicVolume, resetAudioVolumeDefaults } from "./musicPreferences";
 import { MusicPlayer, takeHandoffGameMusic } from "./musicPlayback";
@@ -245,7 +245,7 @@ const TimedRing = ({ remainingMs, durationMs }: { remainingMs: number; durationM
 };
 
 
-const createInitialState = (): GameState => ({ rocks: [], rockEffects: [], damageCount: 0, comboTotal: 0, bossHullLight: 0, combo: createDoubleKillCombo(), asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", chainBlocks: 0, chainResult: "", rewardNotice: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: shipStartHeight[readShipStart()] }, thrust: 0, effects: [], powerUps: [], powerUpTypes: [], pickupNotice: null, score: 0, shardBase: shardBalance(localStorage.getItem(SHARD_BALANCE_KEY)), shards: 0, hearts: 3, maxHearts: 3, projectileGuard: 0, shieldCharges: 0, shieldMs: 0, purchasedShieldMs: 0, shieldActive: true, overdriveMs: 0, overdriveTotalMs: POWER_UP_DURATION_MS, rapidFireMs: 0, rapidFireTotalMs: POWER_UP_DURATION_MS, empMs: 0, pendingStartPower: null, weaponLevel: 1, weaponSource: "standard", weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], weaponTimers: [0, 0, 0, 0, 0, 0], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: localStorage.getItem("cryptoid_pi_session") || sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "loading" : "playing" });
+const createInitialState = (authenticated = false): GameState => ({ rocks: [], rockEffects: [], damageCount: 0, comboTotal: 0, bossHullLight: 0, combo: createDoubleKillCombo(), asteroids: [], bonusTargets: [], bonusHits: 0, bonusResult: "", chainBlocks: 0, chainResult: "", rewardNotice: "", boss: null, encounter: "normal", shots: [], enemyShots: [], player: { x: .5, y: shipStartHeight[readShipStart()] }, thrust: 0, effects: [], powerUps: [], powerUpTypes: [], pickupNotice: null, score: 0, shardBase: shardBalance(localStorage.getItem(SHARD_BALANCE_KEY)), shards: 0, hearts: 3, maxHearts: 3, projectileGuard: 0, shieldCharges: 0, shieldMs: 0, purchasedShieldMs: 0, shieldActive: true, overdriveMs: 0, overdriveTotalMs: POWER_UP_DURATION_MS, rapidFireMs: 0, rapidFireTotalMs: POWER_UP_DURATION_MS, empMs: 0, pendingStartPower: null, weaponLevel: 1, weaponSource: "standard", weaponCap: 1, paidWeaponLevel: 1, paidWeaponMs: 0, pickupWeaponLevel: 1, pickupWeaponMs: 0, unlockedWeapons: [1], weaponTimers: [0, 0, 0, 0, 0, 0], destroyed: 0, sector: 1, section: 1, phase: "SECTOR_INTRO", status: authenticated || sessionStorage.getItem(ADMIN_MODE_KEY) === "1" ? "loading" : "playing" });
 
 const readRecord = (key: string) => Number(window.localStorage.getItem(key) || 0);
 
@@ -411,7 +411,7 @@ const ImpactEffectView = memo(({effect}:{effect:Effect}) => combatVarietyEnabled
   ? <CanvasImpact effect={effect} debris={shipDebris(effect)} original={<OriginalImpactEffectView effect={effect}/>} />
   : <OriginalImpactEffectView effect={effect}/>);
 
-const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) => {
+const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDiagnostics?: boolean; authenticated?: boolean }) => {
   const { t, lives, locale } = useLocale();
   useEffect(applySavedDisplaySettings, []);
   const navigate = useNavigate();
@@ -423,7 +423,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   const playerShipRef = useRef<HTMLDivElement>(null);
   const [playerDisplayDiameter, setPlayerDisplayDiameter] = useState(94);
   const stateRef = useRef<GameState>(null!);
-  if (!stateRef.current) stateRef.current = createInitialState();
+  if (!stateRef.current) stateRef.current = createInitialState(authenticated);
   const projectilesRef = useRef<ReturnType<typeof createProjectilePresentation> | null>(null);
   const wakeGameLoopRef = useRef<(() => void) | null>(null);
   const mountProjectiles = useCallback((node: HTMLDivElement | null) => {
@@ -492,7 +492,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
   const bossLifeRemainingRef=useRef(0);
   const pendingBossCardRef=useRef<CardReward|null>(null);
   const [extraLifeVisible,setExtraLifeVisible]=useState(false);
-  const [game, setGame] = useState<GameState>(createInitialState);
+  const [game, setGame] = useState<GameState>(() => createInitialState(authenticated));
   useEffect(() => { wakeGameLoopRef.current?.(); }, [game.status]);
   const [bossSummary, setBossSummary] = useState<BossSummary | null>(null);
   const bossSummaryRef = useRef<{ summary: BossSummary; accepted: boolean; restored: boolean } | null>(null);
@@ -984,7 +984,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
 
       setShipSelection(selected);
       shipSelectionRef.current = selected;
-      shipStageRef.current = adminRunRef.current ? data.shipStage ?? 1 : ownedShipStage(selected.skin.sprite, data.ownedShipUpgrades);
+      shipStageRef.current = adminRunRef.current ? data.shipStage ?? 1 : selectedShipStage(selected.skin.sprite, data.ownedShipUpgrades, data.shipStage ?? data.profile?.shipStage);
       setShipStage(shipStageRef.current);
       stateRef.current.projectileGuard = projectileGuardForStage(shipStageRef.current);
       stateRef.current.maxHearts = maxMissionHearts(data.armorBonus);
@@ -1015,7 +1015,10 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
         stateRef.current.hearts = Math.min(stateRef.current.maxHearts, data.checkpoint.hearts);
         stateRef.current.weaponTimers = data.checkpoint.weaponTimers.map((timer, level) => stateRef.current.unlockedWeapons.includes(level) ? timer : 0);
         syncSelectedWeapon(stateRef.current);
-        if (data.combat) restoreCombat(data.combat);
+        if (data.combat) {
+          restoreCombat(data.combat);
+          stateRef.current.projectileGuard = Math.min(stateRef.current.projectileGuard, projectileGuardForStage(shipStageRef.current));
+        }
         else varietyRef.current = createCombatVariety(true);
         setSaveNotice(data.combat ? "Combat restored." : "Last completed section loaded.");
       }
@@ -2468,7 +2471,7 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
     bossVictoryFinishedRef.current = false;
     if (gameOverTimerRef.current !== null) window.clearTimeout(gameOverTimerRef.current);
     gameOverTimerRef.current = null;
-    stateRef.current = createInitialState();
+    stateRef.current = createInitialState(authenticated);
     weaponSpentRef.current = null; setWeaponSpent(null);
     varietyRef.current = createCombatVariety(); waveCompleteRef.current = false;
     stateRef.current.shardBase = shardBalance(localStorage.getItem(SHARD_BALANCE_KEY));
@@ -2782,11 +2785,11 @@ const GamePage = ({ ownerDiagnostics = false }: { ownerDiagnostics?: boolean }) 
 
 export { BEST_SCORE_KEY, HIGHEST_SECTOR_KEY, TOTAL_DESTROYED_KEY };
 function GameEntry() {
-  const { authReady, isLoading, authError, signIn, canAdmin } = useAuth();
+  const { authReady, isLoading, authError, signIn, canAdmin, isAuthenticated } = useAuth();
   // Decide guest/account ownership only after authentication has settled.
   // Once mounted, the mission retains its original owner until it is left.
   return <GameRoute>{authReady && !isLoading && !authError
-    ? <GamePage ownerDiagnostics={canAdmin} />
+    ? <GamePage ownerDiagnostics={canAdmin} authenticated={isAuthenticated} />
     : <GameAccessGate pending={!authReady || isLoading} error={authError} onRetry={() => { void signIn(); }} />}</GameRoute>;
 }
 export default GameEntry;

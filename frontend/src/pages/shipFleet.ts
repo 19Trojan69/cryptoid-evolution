@@ -162,12 +162,10 @@ export const buyShipVariant = (skinId: PlayerSkinId, colorId: PlayerColorId, fle
 
 // Do not leave a deducted balance or changed selection when browser storage fails.
 export function saveGuestShipPurchase(storage: Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>, skin: PlayerSkinId, color: PlayerColorId, purchase: NonNullable<ReturnType<typeof buyShipVariant>>) {
+  if (!fleetCount(purchase.fleet, skin, color)) throw new Error('Purchased ship is missing');
   const values: [string, string][] = [
     [SHIP_FLEET_KEY, JSON.stringify(purchase.fleet)],
     [SHARD_BALANCE_KEY, String(purchase.balance)],
-    [SHIP_SKIN_KEY, skin],
-    [SHIP_COLOR_KEY, color],
-    [SHIP_COLORS_KEY, JSON.stringify({ ...savedShipColors(storage.getItem(SHIP_COLORS_KEY)), [skin]: color })],
   ];
   const previous = values.map(([key]) => [key, storage.getItem(key)] as const);
   try { for (const [key, value] of values) storage.setItem(key, value); }

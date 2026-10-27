@@ -7,7 +7,8 @@ import { canUseOwnerTestnetCatalog, isAdminMode, ownerTestnetOrderScope } from "
 import { isTestnetWeaponPurchaseEnabled } from "../paymentPolicy";
 import { rewardNetwork } from "../rewardNetwork";
 import { loadPlayerSave } from "./progress";
-import { cappedMission, publicSave } from "../playerSave";
+import { selectedShipStage } from "../shipLoadout";
+import { cappedMission, publicSave, spriteForShip } from "../playerSave";
 import { syncWeaponStock, WEAPON_CHARGE_MS } from "../weaponStock";
 
 const offersOf = (kind: string) => hangarCatalog.filter(item => item.kind === kind).map(item => item.id);
@@ -172,7 +173,8 @@ export default function mountHangarEndpoints(router: Router) {
       const consumed = !resume && selected?.kind === "power" && pending.pendingPowerOrderId
         ? await orders.findOne({ ...ownerTestnetOrderScope(req), user: uid, _id: pending.pendingPowerOrderId, consumed_run_id: scoreRun.id }) || await orders.findOneAndUpdate({ ...ownerTestnetOrderScope(req), user: uid, _id: pending.pendingPowerOrderId, product_id: selected.id, paid: true, consumed_at: { $exists: false } }, { $set: { consumed_at: new Date(), consumed_run_id: scoreRun.id } }, { returnDocument: "before" }) || await orders.findOne({ ...ownerTestnetOrderScope(req), user: uid, _id: pending.pendingPowerOrderId, consumed_run_id: scoreRun.id }) : null;
       const runMeta = { ...scoreRun, rulesVersion, unlockedWeaponLevels };
-      const result = { testnetCatalogAccess: ownerTestnet, ...(!mission ? { badgeMetrics: 1 } : {}), rulesVersion, combat: mission?.combat ?? null, armorBonus, weaponLevel: owned && weapon?.kind === "weapon" ? weapon.level : 1, unlockedWeaponLevels, ownedShipUpgrades: paidShipUpgrades.map((order: any) => order.product_id), powerUp: consumed && selected?.kind === "power" ? selected.powerUp : null, scoreRunId: scoreRun.id, startSector: mission?.sector || 1, startPhase: mission?.phase || "normal", checkpoint: mission?.snapshot || null, adminPreview: false, runMeta };
+      const shipStage = selectedShipStage(spriteForShip(pending.skin), paidShipUpgrades.map((order: any) => order.product_id), pending.shipStage);
+      const result = { shipStage, testnetCatalogAccess: ownerTestnet, ...(!mission ? { badgeMetrics: 1 } : {}), rulesVersion, combat: mission?.combat ?? null, armorBonus, weaponLevel: owned && weapon?.kind === "weapon" ? weapon.level : 1, unlockedWeaponLevels, ownedShipUpgrades: paidShipUpgrades.map((order: any) => order.product_id), powerUp: consumed && selected?.kind === "power" ? selected.powerUp : null, scoreRunId: scoreRun.id, startSector: mission?.sector || 1, startPhase: mission?.phase || "normal", checkpoint: mission?.snapshot || null, adminPreview: false, runMeta };
       const written = await users.updateOne({ uid, [`${key}.activeRunId`]: scoreRun.id }, { $set: { [`${key}.lastStart`]: result }, $addToSet: { [`${key}.usedShipSkins`]: pending.skin } });
       if (!written.matchedCount) return res.status(409).json({ error: "Run replaced on another device" });
       req.session.scoreRun = runMeta;

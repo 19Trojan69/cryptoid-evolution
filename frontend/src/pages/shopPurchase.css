@@ -1,4 +1,37 @@
 /* Purchase and release states remain distinct, including on small screens. */
+.landing-shell .shop-category-nav {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid #8ca4ba70;
+  flex-shrink: 0;
+}
+.landing-shell .shop-category-nav button {
+  min-width: 0;
+  min-height: 44px;
+  padding: 8px 6px;
+  border: 1px solid #79bdcc80;
+  border-radius: 9px;
+  background: #15283f;
+  color: #d2eef4;
+  font: inherit;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.landing-shell .shop-category-nav button[aria-current="page"] {
+  border-color: #e4ca8f;
+  background: #354158;
+  color: #ffe6b3;
+}
+.landing-shell .shop-category-nav button:focus-visible {
+  outline: 2px solid #83e4ef;
+  outline-offset: 2px;
+}
+
 .landing-shell .hangar-offer-armor .offer-purchase-price,
 .landing-shell .hangar-offer-armor .offer-purchase-price :is(.pi-price, .pi-price-amount) {
   font-weight: 800;

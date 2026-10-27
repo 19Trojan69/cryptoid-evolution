@@ -1,0 +1,106 @@
+// Actual UI and backend handlers; Pi, database, input clock and hits are isolated fixtures.
+import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { resolve } from 'node:path';
+const root=resolve(new URL('../..',import.meta.url).pathname),require=createRequire(root+'/frontend/package.json');
+const {createServer}=require('vite'),{chromium}=require(process.env.CRYPTOID_PLAYWRIGHT_MODULE);
+const br=createRequire(root+'/backend/src/handlers/ownerTestnetCatalog.test.mjs');
+const raw=readFileSync(root+'/backend/src/handlers/ownerTestnetCatalog.test.mjs','utf8');
+const harness=new Function('require',raw.slice(raw.indexOf('const get ='),raw.indexOf('function owner('))+'\nreturn harness;')(br);
+process.env.NODE_ENV='test';process.env.ADMIN_PI_TESTNET_UID='pilot-a';harness();
+const platform=br('../../build/services/platformAPIClient.js'),quotes=br('../../build/purchaseQuote.js'),receipts=br('../../build/paymentReceipt.js');
+quotes.capturePurchaseQuote=async()=>({availability:'test_payment'});receipts.readPaymentReceipt=async()=>({});
+let active;
+platform.platformAPIClientForRequest=()=>({get:async url=>({data:structuredClone(active.payments.get(url.split('/').at(-1)))}),post:async url=>{const parts=url.split('/'),p=active.payments.get(parts.at(-2));p.status[parts.at(-1)==='approve'?'developer_approved':'developer_completed']=true;}});
+const output=root+'/verification/ship-stage-selection-20261027/results';mkdirSync(output,{recursive:true});
+const hash=()=>createHash('sha256').update(readFileSync(root+'/frontend/src/pages/GamePage.tsx')).digest('hex');
+const result={baseline:'1d800516767131013e0ef80f5c22fa1332593b43',sourceSha256:hash(),realUiAndHandlers:true,localOnly:true,syntheticPiAndDatabase:true,physicalDevice:false,checks:[],errors:[],requests:[],cases:[],complete:false};
+const check=(name,value)=>{assert.ok(value,name);result.checks.push(name);console.log(name);};
+const hooks=`(window as any).__shipSelectionQA={inspect:()=>({stage:shipStageRef.current,skin:shipSelectionRef.current.skin.id,color:shipSelectionRef.current.color.id,state:structuredClone(stateRef.current),account:accountRun,technical:technicalPause,formation:formationStartedRef.current,sectionElapsed:sectionElapsedRef.current}),protect:()=>{impactCooldownRef.current=1000000;},spendGuard:()=>{stateRef.current.projectileGuard=1;},sampleVolley:()=>makeShipVolley(shipSelectionRef.current.skin.id,shipStageRef.current,stateRef.current.weaponLevel,100,200,false,()=>0)};\n`;
+const server=await createServer({root:root+'/frontend',cacheDir:output+'/vite-native',logLevel:'error',server:{host:'127.0.0.1',port:0,hmr:false,fs:{allow:[root]}},plugins:[{name:'local-ship-selection',enforce:'pre',transform(code,id){if(id.endsWith('/GamePage.tsx'))return code.replace('  const levelLabel =',hooks+'  const levelLabel =');},transformIndexHtml:{order:'post',handler:html=>html.replace(/appNetwork:\s*"[^"]*"/,'appNetwork: "testnet"').replace(/backendURL:\s*"[^"]*"/,'backendURL: "/api"')}}]});
+let browser;
+try {
+ await server.listen();const origin='http://127.0.0.1:'+server.httpServer.address().port;browser=await chromium.launch({headless:true});result.engine=browser.version();
+ async function setup({guest=false,width=393,legacy=false}={}) {
+  const h=harness();h.payments=new Map();active=h;await h.call('progress','/me',null,{method:'GET'});
+  Object.assign(h.profile(),{version:1,balance:5000,legacyImported:true,cardReveals:['grey-scout-1']});
+  if(legacy){delete h.profile().shipStage;for(const stage of [2,3])h.orders.push({user:'pilot-a',paid:true,owner_testnet_catalog:true,product_id:'ship_02_stage_'+stage,payment_network:'Pi Testnet'});}
+  if(guest)h.session.currentUser=null;
+  const context=await browser.newContext({viewport:{width,height:744},hasTouch:true,locale:'de-AT',reducedMotion:'reduce'});
+  await context.addInitScript(({guest})=>{localStorage.setItem('cryptoid_home_music','off');localStorage.setItem('cryptoid_language','de');if(!guest)sessionStorage.setItem('cryptoid_pi_access_token','isolated-valid-token');else{localStorage.setItem('cryptoid_shard_balance_testnet','1000');localStorage.setItem('cryptoid_ship_fleet_v2_testnet',JSON.stringify({'grey-scout':{grey:1}}));}window.Pi={init(){},getPiHostAppInfo:async()=>({hostApp:'web'}),authenticate:async()=>({accessToken:'isolated-valid-token',user:{uid:'pilot-a',username:'Local owner'}}),createPayment:async(data,callbacks)=>{const{id}=await window.localCreatePayment(data);await callbacks.onReadyForServerApproval(id);await callbacks.onReadyForServerCompletion(id,'isolated-tx-'+id);}};},{guest});
+  await context.exposeBinding('localCreatePayment',(_source,data)=>{const id='isolated-ship-payment-'+(h.payments.size+1);h.payments.set(id,{identifier:id,user_uid:'pilot-a',direction:'user_to_app',network:'Pi Testnet',amount:data.amount,metadata:data.metadata,status:{transaction_verified:true,developer_approved:false,developer_completed:false},transaction:{txid:'isolated-tx-'+id,verified:true}});return{id};});
+  const requests=[];await context.route('**/*',async route=>{const u=new URL(route.request().url());if(u.origin!==origin)return route.fulfill({status:200,body:'',contentType:'text/css'});if(!u.pathname.startsWith('/api/'))return route.continue();const[group,...parts]=u.pathname.slice(5).split('/');let response;const body=route.request().postDataJSON();if(group==='user')response=guest?{code:401,body:{error:'not_authenticated'}}:{code:200,body:{user:{uid:'pilot-a',username:'Local owner'},canAdmin:true,adminMode:false}};else if(group==='usage')response={code:204};else if(['progress','hangar','rewards','leaderboard','payments'].includes(group))response=await h.call(group,'/'+parts.join('/'),body,{method:route.request().method()});else response={code:200,body:{}};if(group==='hangar'&&parts.join('/')==='start'&&response.code===200){h.session.scoreRun.startedAt-=3600000;h.profile().lastStart.runMeta.startedAt=h.session.scoreRun.startedAt;}requests.push({path:u.pathname,status:response.code,stage:body?.shipStage,error:response.body?.error});return route.fulfill({status:response.code,contentType:'application/json',body:response.code===204?'':JSON.stringify(response.body)});});
+  const page=await context.newPage();result.currentRequests=requests;page.on('pageerror',e=>result.errors.push(e.message));page.on('console',m=>{if(m.type()==='error')console.log('Browser error:',m.text());});
+  const inspect=()=>page.evaluate(()=>window.__shipSelectionQA.inspect());
+  const drive=async predicate=>{for(let i=0;i<350;i++){if(await page.evaluate(predicate))return;await page.clock.runFor(100);await page.waitForTimeout(8);}result.deadline=await page.evaluate(()=>({qa:window.__shipSelectionQA?.inspect(),visibility:document.visibilityState,text:document.body.innerText.slice(-1400)}));throw Error('Native state deadline');};
+  const openShop=async()=>{await page.locator('.cinematic-shop').click();await page.locator('#fleet-grey-scout').waitFor();};
+  const closeShop=()=>page.getByRole('button',{name:'Shop schließen',exact:true}).click();
+  const dismissCard=async()=>{try{await page.locator('.card-reveal-dialog').waitFor({timeout:10000});}catch(error){result.debug=(await page.locator('body').innerText()).slice(-6000);throw error;}await page.locator('.card-reveal-dialog .collection-footer button').last().click();};
+  await page.goto(origin);return{h,context,page,requests,inspect,drive,openShop,closeShop,dismissCard};
+ }
+ if(!process.env.CRYPTOID_LEGACY_ONLY){
+ const f=await setup(),{h,page}=f;await f.openShop();const grey=page.locator('#fleet-grey-scout');
+ const beforeNavigation=JSON.stringify(h.profile()),nav=page.locator('.shop-category-nav');
+ check('phone shop exposes three separate readable category controls without horizontal overflow',await nav.locator('button').evaluateAll(buttons=>buttons.length===3&&buttons.every(b=>{const r=b.getBoundingClientRect();return r.width>=44&&r.height>=44&&r.left>=0&&r.right<=innerWidth;})));
+ await nav.locator('button').nth(1).click();await page.locator('.hangar-offer-weapon').first().waitFor();
+ check('direct weapons category displays all four existing weapon offers with real quantity purchase controls',await page.locator('.hangar-offer-weapon').count()===4&&await page.locator('.hangar-offer-weapon .weapon-buy-button').count()===4&&await page.locator('.hangar-offer-weapon input[type="number"]').count()===4&&await nav.locator('button').nth(1).getAttribute('aria-current')==='page');
+ await page.locator('.shop-modal-body').evaluate(n=>{n.scrollTop=n.scrollHeight;});
+ await nav.locator('button').nth(2).click();await page.locator('.hangar-offer-power').first().waitFor();
+ check('direct Power-ups category shows all five existing purchasable Test-Pi bonuses and resets content scroll',await page.locator('.hangar-offer-power').count()===5&&await page.locator('.hangar-offer-power .weapon-purchase button').count()===5&&await page.locator('.shop-modal-body').evaluate(n=>n.scrollTop)===0);
+ await page.screenshot({path:output+'/shop-power-ups.png'});
+ await nav.locator('button').nth(0).click();await grey.waitFor();
+ check('category navigation returns to ships without changing inventory selection balance or creating a payment',JSON.stringify(h.profile())===beforeNavigation&&h.payments.size===0&&h.orders.length===0);
+ await grey.locator('.ship-version-tabs button').nth(1).click();await grey.locator('.weapon-purchase button').click();await f.dismissCard();
+ check('Advanced paid receipt exists without silently changing the confirmed Standard selection',h.orders.some(o=>o.paid&&o.product_id==='ship_02_stage_2')&&h.profile().shipStage===1);
+ let select=grey.locator('.ship-equip-button');check('after buying Advanced the real button says Auswählen and is enabled',await select.innerText()==='Auswählen'&&await select.isEnabled());
+ await select.click();await page.waitForFunction(()=>document.querySelector('#fleet-grey-scout .ship-equip-button')?.textContent==='AUSGERÜSTET');
+ check('explicit Advanced selection is saved with its exact hull and paint',h.profile().skin==='grey-scout'&&h.profile().color==='grey'&&h.profile().shipStage===2);
+ await grey.locator('.ship-version-tabs button').nth(2).click();await grey.locator('.weapon-purchase button').click();await f.dismissCard();
+ check('Elite receipt leaves the prior selected Advanced stage intact',h.orders.some(o=>o.paid&&o.product_id==='ship_02_stage_3')&&h.profile().shipStage===2);
+ check('Elite shows Auswählen before confirmation',await select.innerText()==='Auswählen'&&await select.isEnabled());
+ await select.click();await page.waitForFunction(()=>document.querySelector('#fleet-grey-scout .ship-equip-button')?.textContent==='AUSGERÜSTET');
+ check('only the explicit successful selection marks Elite equipped',h.profile().shipStage===3&&await select.isDisabled());
+ await grey.locator('.collection-ship-portrait[data-ready="true"]').waitFor();const shopArt=await grey.locator('.collection-ship-portrait').getAttribute('data-rendered-source');
+ await page.screenshot({path:output+'/selected-elite.png'});await f.closeShop();
+ check('the fixture has a verified token with no local session marker',await page.evaluate(()=>!!sessionStorage.getItem('cryptoid_pi_access_token')&&!localStorage.getItem('cryptoid_pi_session')));
+ await page.clock.install();await page.clock.pauseAt(await page.evaluate(()=>Date.now()+100));await page.locator('.cinematic-launch-actions button').first().click();
+ await f.drive(()=>window.__shipSelectionQA?.inspect().state.status==='playing');await page.evaluate(()=>window.__shipSelectionQA.protect());
+ let state=await f.inspect();check('verified-token-only Play is an account run and starts the selected Elite',state.account&&state.stage===3&&state.skin==='grey-scout'&&state.color==='grey');
+ check('real start response agrees with the saved selected stage',h.profile().lastStart.shipStage===3&&f.requests.filter(r=>r.path==='/api/hangar/start').length===1);
+ await page.locator('.player-ship .material-hull[data-hull-ready="true"]').waitFor();const gameArt=await page.locator('.player-ship .material-hull').evaluate(n=>n.style.backgroundImage);
+ check('the actual game and shop use the same original Grey Scout Elite identity',shopArt.includes('ship_02_stage_3.png')&&gameArt.includes('ship_02_stage_3'));
+ check('permanent Elite twin fire has no charge countdown and begins with two free projectile hits',await page.locator('.mission-active-weapon b').innerText()==='Doppel'&&await page.locator('.mission-active-weapon small').count()===0&&state.state.projectileGuard===2);
+ await f.drive(()=>window.__shipSelectionQA.inspect().state.shots.length>=2);state=await f.inspect();
+ check('actual fired projectiles use Elite strengthened twin damage',state.state.shots.every(shot=>shot.damage===2&&shot.empowered&&shot.visualLevel===2));
+ await page.screenshot({path:output+'/elite-in-game.png'});
+ await page.evaluate(()=>window.__shipSelectionQA.spendGuard());
+ const leave=async()=>{await page.locator('.home-control').click();await page.locator('[aria-labelledby="leave-mission-title"] .button-primary').click();await page.locator('.cinematic-launch-actions').waitFor();await page.evaluate(()=>{delete window.__shipSelectionQA;});};
+ await leave();check('leaving saves the real running mission including a spent projectile guard',h.profile().mission?.combat?.state.projectileGuard===1);
+ await f.openShop();await grey.locator('.ship-version-tabs button').nth(0).click();await select.click();await page.waitForFunction(()=>document.querySelector('#fleet-grey-scout .ship-equip-button')?.textContent==='AUSGERÜSTET');await f.closeShop();
+ await page.locator('.cinematic-launch-actions button').first().click();await page.locator('.mission-start-modal .button-primary').click();await f.drive(()=>window.__shipSelectionQA?.inspect().state.status==='playing');await page.evaluate(()=>window.__shipSelectionQA.protect());state=await f.inspect();
+ check('resuming uses the newly selected Standard art/stage without a new purchase',state.stage===1&&h.profile().shipStage===1&&h.orders.filter(o=>o.paid).length===2);
+ check('Standard selection cannot carry Elite projectile protection into a resumed life',state.state.projectileGuard===0);
+ let shots=await page.evaluate(()=>window.__shipSelectionQA.sampleVolley());check('selected Standard produces the original single normal shot',shots.length===1&&shots[0].damage===1&&!shots[0].empowered);
+ await leave();await f.openShop();await grey.locator('.ship-version-tabs button').nth(2).click();await select.click();await page.waitForFunction(()=>document.querySelector('#fleet-grey-scout .ship-equip-button')?.textContent==='AUSGERÜSTET');await f.closeShop();
+ await page.locator('.cinematic-launch-actions button').first().click();await page.locator('.mission-start-modal .button-primary').click();await f.drive(()=>window.__shipSelectionQA?.inspect().state.status==='playing');state=await f.inspect();
+ check('switching back to Elite preserves the saved mission and never refills spent protection',state.stage===3&&state.state.projectileGuard===0);
+ shots=await page.evaluate(()=>window.__shipSelectionQA.sampleVolley());check('reselected Elite restores its permanent stronger twin fire',shots.length===2&&shots.every(s=>s.damage===2&&s.empowered));
+ check('the complete flow has no unexpected API failure',f.requests.every(r=>r.status<400));result.requests.push({case:'owner-phone',requests:f.requests});await f.context.close();
+ const guest=await setup({guest:true});await guest.openShop();const nova=guest.page.locator('#fleet-nova-wing');await nova.locator('.ship-shard-button').click();await guest.dismissCard();
+ check('guest Standard purchase adds the hull while preserving the selected free starter',await guest.page.evaluate(()=>localStorage.getItem('cryptoid_player_ship_skin_testnet'))===null);
+ check('guest purchase also exposes explicit Auswählen',await nova.locator('.ship-equip-button').innerText()==='Auswählen');await nova.locator('.ship-equip-button').click();
+ check('guest selection saves the Nova Wing identity instead of confusing the swapped first two sprite IDs',await guest.page.evaluate(()=>localStorage.getItem('cryptoid_player_ship_skin_testnet'))==='nova-wing');await guest.closeShop();await guest.page.locator('.cinematic-launch-actions button').first().click();await guest.page.waitForFunction(()=>window.__shipSelectionQA?.inspect().state.status==='playing');state=await guest.inspect();
+ check('an actual guest remains a guest and starts only its explicitly selected Standard hull',!state.account&&state.stage===1&&state.skin==='nova-wing'&&guest.requests.every(r=>r.path!=='/api/hangar/start'));
+ await guest.context.close();
+ }
+ const legacy=await setup({width:1363,legacy:true});await legacy.openShop();const old=legacy.page.locator('#fleet-grey-scout');await old.locator('.ship-version-tabs button').nth(2).click();
+ await legacy.page.waitForFunction(()=>{const b=document.querySelector('#fleet-grey-scout .ship-equip-button');return b?.textContent==='Auswählen'&&!b.disabled;});
+ const legacyView=await old.locator('.ship-equip-button').evaluate(b=>({text:b.textContent,disabled:b.disabled,stage:b.closest('.ship-one-screen').dataset.stage}));result.legacyView={view:legacyView,profile:legacy.h.profile(),requests:legacy.requests};check('an old paid inventory exposes Select until the stage is explicitly confirmed',legacyView.text==='Auswählen'&&!legacyView.disabled&&legacyView.stage==='3');await old.locator('.ship-equip-button').click();await legacy.page.waitForFunction(()=>document.querySelector('#fleet-grey-scout .ship-equip-button')?.textContent==='AUSGERÜSTET');
+ check('legacy selection is persisted without repurchase or free grants',legacy.h.profile().shipStage===3&&legacy.h.orders.length===2);
+ await legacy.page.locator('.shop-category-nav button').nth(1).click();await legacy.page.locator('.hangar-offer-weapon').first().waitFor();
+ check('desktop weapons navigation keeps selected Elite and all four offers available',legacy.h.profile().shipStage===3&&await legacy.page.locator('.hangar-offer-weapon').count()===4);await legacy.context.close();
+ check('one unchanged controller was used throughout native acceptance',hash()===result.sourceSha256);check('no uncaught JavaScript page error',result.errors.length===0);result.complete=true;
+}catch(error){result.failure={message:error.message,stack:error.stack};throw error;}
+finally{await browser?.close();await server.close();writeFileSync(output+'/native.json',JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({complete:result.complete,checks:result.checks.length,failure:result.failure?.message}));}

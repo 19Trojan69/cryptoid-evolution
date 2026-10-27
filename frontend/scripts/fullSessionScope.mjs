@@ -1,3 +1,4 @@
+import { restoreShipSelectionAccountChanges } from './shipSelectionReviewedChanges.mjs';
 import {restoreHullPrefetchChanges} from './hullPrefetchReviewedChanges.mjs';
 import {restoreCompletionRecoveryChanges} from './completionRecoveryReviewedChanges.mjs';
 import assert from 'node:assert/strict';
@@ -94,7 +95,10 @@ function structure(node) {
 }
 export function canonicalScopeSource(source, path, strip = false) {
   if (strip) source = restoreHullPrefetchChanges(source, path);
-  if (strip && path === 'src/lib/accountSave.ts') source = restoreCompletionRecoveryChanges(source, path);
+  if (strip && path === 'src/lib/accountSave.ts') {
+    source = restoreShipSelectionAccountChanges(source);
+    source = restoreCompletionRecoveryChanges(source, path);
+  }
   if (strip && path === 'src/pages/GamePage.tsx') source = restoreControlCenterGameChanges(source);
   // The comparison has one reviewed behavior change beyond observations.
   // Restore precisely the removed conditional to compare the complete loader

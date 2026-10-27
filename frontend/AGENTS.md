@@ -1,3 +1,41 @@
+# Explicit purchased-ship selection, 27 October 2026
+
+The owner's newest instruction supersedes automatic equip after acquisition:
+show Select after buying, and mark Equipped only after confirmed hull/color/stage
+selection. Base is actual shared GitHub/public1d80051 (PR190). Standard purchases
+now leave selection intact; Advanced/Elite checkout retains ownership/cards but
+removes auto-selection. Allow any owned stage, with an optional versioned account
+shipStage, paid prerequisite/network validation and the server-confirmed stage
+on start. Legacy highest-owned gameplay remains compatible until first explicit
+selection; the UI offers Select until then. Actual verified useAuth identity now
+decides guest/account loading and restart: a valid restored token without the
+local marker previously started a Standard guest while Shop claimed Elite.
+Resume preserves mission data and caps, never refills, saved projectile protection.
+Original art/first-two sprite mapping, permanent Elite strengthened twin/2 hits,
+Advanced twin/1 hit, clocks/charges/receipts, HUD/ships/flight/combat/economy/audio,
+manual confirmed Continue, readable once-only binary feedback and terminal sleep
+remain. No new loop/timer/observer/art, migration, free grant or real payment.
+The shop now links directly to Ships, Weapons and Power-ups via the existing
+views/translated labels and purchase controls. Three static44px-minimum controls
+stay visible; changing category resets the content scroll without a purchase
+or loadout mutation. Existing catalog/payment/network gates stay intact.
+Only fixed exact hunks restore the entire published GamePage b5574344... and one
+account-save type line before the unchanged historical fingerprints.141 backend,
+430 frontend release/locales/types/Vite, eight extra module cases,32 native
+selection,74 repeated full-flow and11 Game Over checks pass. Two pinned-UI control
+scenarios reproduce the old mismatch. GamePage62 errors/four warnings and Shop5
+remain pinned lint findings; no whole-project lint-clean/physical heat/FPS/font/
+White Screen claim.1740 painted variants keep the same encoded byte sizes.
+See matching docs and verification/ship-stage-selection-20261027, including fixture
+exclusions. Do not commit raw owner/order data, attached images or machine caches.
+The already authorized shared release to both existing projects proceeds via main
+once, then actual READY/source/public commit/tree/bundles/new and retained guards.
+Keep work and receipt refs auto-deploy-disabled; do not merge receipt refs.
+Preserve1d80051 and READY TestnetAMEhBjnbthidFesbHrzAQJziWxYF /
+production2GmV8T6UCwfW3TCR2G7MvSD3Bf1P plus older backups. Networks/accounts/payments
+stay separate. No reset, secrets/protection/runtime logs, unrelated PR167/168,
+manual duplicate builds or automatic selection on the owner's real account.
+
 # Owner Testnet catalog and earned unlocks, 27 October 2026
 
 The owner now explicitly requests all purchase options before Mainnet, using

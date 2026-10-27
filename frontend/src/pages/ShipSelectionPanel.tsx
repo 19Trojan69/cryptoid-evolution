@@ -32,11 +32,12 @@ type Props = {
   selectedSkinId: string;
   selectedColorId: string;
   selectedStage?: ShipStage;
+  selectionConfirmed?: boolean;
   t: (source: string) => string;
   onStageChange: (stage: ShipStage) => void;
   onColorChange: (color: Color) => void;
   onBuyStandard: () => void;
-  onEquipPreview: () => void;
+  onEquipPreview: (stage: ShipStage) => void;
   onOpenShop: (stage: ShipStage) => void;
 };
 
@@ -45,7 +46,7 @@ const stageLabel = (stage: ShipStage) => stage === 1 ? "STANDARD" : stage === 2 
 export default function ShipSelectionPanel({
   view, skin, color, focusStage, ownedStage, fleet, shards, locale, offers,
   adminPreview, testnetCatalogAccess = false, upgradePending, upgradeStatus, upgradeDiagnostic, onBuyUpgrade,
-  purchaseBusy, message, selectedSkinId, selectedColorId, selectedStage = 1, t, onStageChange, onColorChange,
+  purchaseBusy, message, selectedSkinId, selectedColorId, selectedStage = 1, selectionConfirmed = true, t, onStageChange, onColorChange,
   onBuyStandard, onEquipPreview, onOpenShop,
 }: Props) {
   const hullCount = fleetCount(fleet, skin.id);
@@ -75,8 +76,8 @@ export default function ShipSelectionPanel({
     : attributes.role === "rapid" ? t("Faster automatic firing is this hull's main advantage.")
       : t("Balanced shot strength and firing cadence.");
 
-  const equipped = selectedSkinId === skin.id && selectedColorId === color.id && stage === ownedStage;
-  const canEquip = Boolean(adminPreview || hullCount > 0 && fleetCount(fleet, skin.id, color.id) > 0 && stage === ownedStage);
+  const equipped = selectedSkinId === skin.id && selectedColorId === color.id && stage === selectedStage && selectionConfirmed;
+  const canEquip = Boolean(adminPreview || hullCount > 0 && fleetCount(fleet, skin.id, color.id) > 0 && stage <= ownedStage);
 
   return <div className="ship-one-screen ship-compact-configuration" data-stage={stage}>
     <div className="ship-version-tabs" role="group" aria-label={t("Three ship stages")}>
@@ -152,9 +153,9 @@ export default function ShipSelectionPanel({
     </div>
     {(view === "hangar" || adminPreview || canEquip) && <div className="ship-one-checkout">
       {adminPreview
-        ? <><span>{t("Admin test access: all variants unlocked")}</span><button className="button button-secondary" type="button" onClick={onEquipPreview}>{t("Equip for next mission")}</button></>
+        ? <><span>{t("Admin test access: all variants unlocked")}</span><button className="button button-secondary" type="button" onClick={() => onEquipPreview(stage)}>{t("Equip for next mission")}</button></>
         : <>
-          {canEquip && <button className="button button-secondary ship-equip-button" type="button" onClick={onEquipPreview} disabled={equipped || purchaseBusy}>{t(equipped ? "EQUIPPED" : "Equip for next mission")}</button>}
+          {canEquip && <button className="button button-secondary ship-equip-button" type="button" onClick={() => onEquipPreview(stage)} disabled={equipped || purchaseBusy}>{t(equipped ? "EQUIPPED" : "Select")}</button>}
           {view === "hangar" && ownedStage < 3 && <button className="button button-secondary ship-upgrade-button" type="button" onClick={() => onOpenShop(stage > ownedStage ? stage : ownedStage < 2 ? 2 : 3)}>{t("Shop")} · {t(stageLabel(stage > ownedStage ? stage : ownedStage < 2 ? 2 : 3))} ›</button>}
           {view === "hangar" && !canEquip && stage <= ownedStage && <button className="ship-standard-return" type="button" onClick={() => onStageChange(ownedStage)}>{t(stageLabel(ownedStage))} ›</button>}
         </>}

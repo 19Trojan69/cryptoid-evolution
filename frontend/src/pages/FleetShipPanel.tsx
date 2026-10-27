@@ -5,7 +5,7 @@ import { namedShipColor } from "./shipIdentityColor";
 import type { ShipStage } from "./shipEvolution";
 type Color = typeof allPlayerColors[number];
 type Props = Omit<ComponentProps<typeof ShipSelectionPanel>, "color" | "focusStage" | "onBuyStandard" | "onColorChange" | "onStageChange" | "onEquipPreview" | "onOpenShop"> & {
-  requestedStage?: ShipStage; onBuy: (color: Color) => void; onEquip: (color: Color) => void;
+  requestedStage?: ShipStage; onBuy: (color: Color) => void; onEquip: (color: Color, stage: ShipStage) => void;
   onUpgrade: (stage: ShipStage) => void; onStage: (stage: ShipStage) => void;
 };
 export default function FleetShipPanel(props: Props) {
@@ -25,5 +25,5 @@ export default function FleetShipPanel(props: Props) {
   return <ShipSelectionPanel {...props} color={color} focusStage={stage}
     onColorChange={next => setColorId(next.id)}
     onStageChange={next => { setStage(next); props.onStage(next); }}
-    onBuyStandard={() => props.onBuy(color)} onEquipPreview={() => props.onEquip(color)} onOpenShop={props.onUpgrade}/>;
+    onBuyStandard={() => props.onBuy(color)} onEquipPreview={stage => props.onEquip(color, stage)} onOpenShop={props.onUpgrade}/>;
 }
