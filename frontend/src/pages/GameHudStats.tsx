@@ -10,18 +10,21 @@ type Props = {
   shards: number;
   score: number;
   block: number;
+  bossNumber?: number;
   locale: Locale;
 };
 
 // Scene motion does not change these cells. Keep their existing host elements
 // mounted, including the heart-impact animation, until their own data changes.
-export default memo(function GameHudStats({ hearts, heartsHit, levelLabel, shards, score, block, locale }: Props) {
+export default memo(function GameHudStats({ hearts, heartsHit, levelLabel, shards, score, block, bossNumber, locale }: Props) {
   const compactNumber = useMemo(
     () => new Intl.NumberFormat(locale, { notation: "compact", maximumFractionDigits: 1 }),
     [locale]
   );
   const hudNumber = (value: number) => (value < 1_000_000 ? String(value) : compactNumber.format(value));
   const t = (source: string) => translate(locale, source);
+  const isBoss = bossNumber !== undefined;
+  const roundLabel = t(isBoss ? "Boss" : "Block");
   return (
     <>
       <div className={`hud-stat hearts-stat${heartsHit ? " hearts-stat-hit" : ""}`}>
@@ -48,11 +51,11 @@ export default memo(function GameHudStats({ hearts, heartsHit, levelLabel, shard
           <small>{t("Score")}</small>
         </span>
       </div>
-      <div className="hud-stat round-hud chain-hud" aria-label={`${t("Block")} ${block}/${BLOCKS_PER_CHAIN}`}>
-        <span>{t("Block")}</span>
+      <div className="hud-stat round-hud chain-hud" aria-label={`${roundLabel} ${bossNumber ?? block}${isBoss ? "" : `/${BLOCKS_PER_CHAIN}`}`}>
+        <span>{roundLabel}</span>
         <strong>
-          {block}
-          <small>/{BLOCKS_PER_CHAIN}</small>
+          {bossNumber ?? block}
+          {isBoss ? null : <small>/{BLOCKS_PER_CHAIN}</small>}
         </strong>
       </div>
     </>

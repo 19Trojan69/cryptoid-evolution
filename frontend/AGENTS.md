@@ -1,3 +1,19 @@
+# Numbered boss HUD, 27 October 2026
+
+The owner explicitly requests Boss 1, Boss 2 and subsequent boss numbers in the
+existing Block cell instead of repeating Block 9/9 during boss encounters.
+Derive the number from campaignLevel for boss-intro, boss-fight and boss-clear;
+keep the normal block fraction and existing bonus behavior. Reuse translated
+Boss, the same mounted HUD cells and existing memoization. No added state,
+effects, timers, assets or gameplay/account changes. Two exact controller hunks
+restore the full public97d74b4 source before the existing fingerprint chain.
+Keep codex/numbered-boss-hud-20261027 automatic deployment disabled while preparing.
+Validation: the complete frontend build passes 456 cases, localization checks,
+TypeScript and Vite. React server rendering covers all 50 boss numbers in all
+three boss phases and 19 selectable locales (2850 checks), plus 209 exact normal/
+bonus/next-level comparisons. Changed HUD/helper lint is clean. These are local
+render/source checks, not a physical-device or White Screen fix. No publication.
+
 # Moderate ship stages and immediate reload confirmation, 27 October 2026
 
 The latest owner instructions explicitly rebalance Standard/Advanced/Elite and
