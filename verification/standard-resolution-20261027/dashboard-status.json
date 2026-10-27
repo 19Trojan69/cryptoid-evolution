@@ -1,0 +1,50 @@
+{
+  "sourceCommit": "9d0ac5ba60d9b25170176700a3c1efaa355be290",
+  "reviewedCandidate": "8618fbf8dfc4a3dd5427e952784b767d7ebb0138",
+  "tree": "d3a261585f631ab2b93100b19928b27b72604d50",
+  "team": "19-trojan69",
+  "observation": "Existing signed-in dashboard; read-only status/source/domain checks",
+  "runtimeLogsQueried": false,
+  "configurationChanged": false,
+  "deployments": [
+    {
+      "project": "cryptoid-evolution-testnet",
+      "id": "dpl_FSG9xyeLKEgKGkGbKgRNjcPjq2jq",
+      "status": "READY",
+      "durationSeconds": 75,
+      "dashboardUrl": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/FSG9xyeLKEgKGkGbKgRNjcPjq2jq",
+      "deploymentHost": "cryptoid-evolution-testnet-5zcvk5lst-19-trojan69.vercel.app",
+      "publicUrl": "https://cryptoid-evolution-testnet.vercel.app/",
+      "observedBuildOutputBadges": {
+        "errors": 9,
+        "warnings": 32
+      },
+      "homeReloaded": true,
+      "signInButtonVisible": true,
+      "playButtonVisible": true
+    },
+    {
+      "project": "cryptoid-evolution",
+      "id": "dpl_BPscxQrsQfPF8WJk3nHtP12Yd5tt",
+      "status": "READY",
+      "durationSeconds": 73,
+      "dashboardUrl": "https://vercel.com/19-trojan69/cryptoid-evolution/BPscxQrsQfPF8WJk3nHtP12Yd5tt",
+      "deploymentHost": "cryptoid-evolution-9luf1sz0v-19-trojan69.vercel.app",
+      "publicUrl": "https://cryptoid-evolution.vercel.app/",
+      "observedBuildOutputBadges": {
+        "errors": 9,
+        "warnings": 32
+      },
+      "homeReloaded": true,
+      "signInButtonVisible": true,
+      "playButtonVisible": true
+    }
+  ],
+  "rollback": {
+    "branch": "backup/shared-before-standard-resolution-20261027",
+    "commit": "7433e560c2fd8575a501997d290157f3e3b2005f",
+    "testnet": "dpl_8ppgy7riyzw1jqBqa1ThFYMhjikM",
+    "production": "dpl_Ab5qAoajYxjCUu8iZ1z2PN9unbCU"
+  },
+  "limits": "READY and visible build-output badges are recorded as observed; not a zero-runtime-error claim. No authenticated real game, payment or account operation."
+}
