@@ -9,12 +9,12 @@ import { isGameFullscreen, requestGameFullscreen } from "./gameFullscreen";
 
 type Props = {
   paused: boolean; busy: boolean; rankName?: string; musicEnabled: boolean; musicLabel: string;
-  onPlay: () => void; onCareer: () => void; onCards: () => void; onCommunity: () => void;
+  onPlay: () => void; onShop: () => void; onCareer: () => void; onCards: () => void; onCommunity: () => void;
   onTerms: () => void; onSound: () => void; onGalaxy?: () => void;
   children?: ReactNode;
 };
 
-export default function CinematicHome({paused,busy,rankName,musicEnabled,musicLabel,onPlay,onCareer,onCards,onCommunity,onTerms,onSound,onGalaxy,children}: Props) {
+export default function CinematicHome({paused,busy,rankName,musicEnabled,musicLabel,onPlay,onShop,onCareer,onCards,onCommunity,onTerms,onSound,onGalaxy,children}: Props) {
   const {t}=useLocale();
   const autoFullscreenTried=useRef(false);
   useEffect(()=>{
@@ -60,7 +60,10 @@ export default function CinematicHome({paused,busy,rankName,musicEnabled,musicLa
       </div>
     </div>
     <div className="cinematic-actions">
-      <button className="cinematic-play" type="button" disabled={busy} onClick={onPlay}>{t("Play")}<span aria-hidden="true">→</span></button>
+      <div className="cinematic-launch-actions">
+        <button className="cinematic-play" type="button" disabled={busy} onClick={onPlay}>{t("Play")}<span aria-hidden="true">→</span></button>
+        <button className="cinematic-shop" type="button" disabled={busy} onClick={onShop}>{t("Shop")}</button>
+      </div>
       <button className="cinematic-career" type="button" onClick={onCareer}>
         {rankName?<ServiceBadge name={rankName} size="large"/>:<BlockchainIcon kind="career"/>}
         <span className="cinematic-career-copy"><strong>{t("Your career")}</strong><span>{rankName?t(rankName):t("Service rank & progress")}</span><b>{t("View progress")} <i aria-hidden="true">→</i></b></span>

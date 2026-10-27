@@ -1,0 +1,27 @@
+{
+  "baseCommit": "a718b4c60dc93ab022acffe6bacfb6e4fc9a688f",
+  "baseTree": "9ea5c2bd4f6f2a7e17045a6f51e05cc90bee581e",
+  "gamePageByteIdentical": true,
+  "gamePageSha256": "eb219ac8306919d27008dd7929fce871eff0e1b2df0d682ee518d3a23394e782",
+  "wholeShopRestoresAfterOnlyNewCallback": true,
+  "publishedShopSha256": "0bf76e271e87e8df692b3a110c02bde1bf5cd5efdadfac82327d7c0a84dfa178",
+  "protectedPaths": [
+    "api",
+    "backend/src",
+    "frontend/public",
+    "frontend/src/pages/GamePage.tsx",
+    "frontend/src/pages/WeaponSpentNotice.tsx",
+    "frontend/src/pages/weaponSpentNotice.ts",
+    "frontend/src/pages/weaponNotices.css",
+    "frontend/src/pages/HomeEarthNetwork.tsx",
+    "frontend/src/index.css",
+    "frontend/src/lib/frameScheduler.ts",
+    "frontend/src/generated/paintedHullManifest.ts"
+  ],
+  "protectedDiffEmpty": true,
+  "newRuntimeTimerStateAnimationObserverOrAsset": false,
+  "newProductionDependency": false,
+  "automaticDeploymentDisabledForWorkBranch": true,
+  "ownerImagePublished": false,
+  "machineLocalArtifactsExcluded": true
+}

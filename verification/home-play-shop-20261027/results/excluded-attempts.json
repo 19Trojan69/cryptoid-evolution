@@ -1,0 +1,14 @@
+{
+  "excluded": [
+    {
+      "attempt": "First native baseline cache grouped by viewport only",
+      "reason": "French at760px was compared with German. Existing longer labels changed centered-column position, causing a false remaining-layout assertion after154 checks. Final baseline pairs match locale/account/viewport, all171 pass."
+    }
+  ],
+  "finalAcceptance": {
+    "releaseTests": 412,
+    "separateHomeGalaxyTests": 25,
+    "nativeChecks": 171
+  },
+  "physicalDeviceHeatOrWhiteScreenAcceptance": false
+}

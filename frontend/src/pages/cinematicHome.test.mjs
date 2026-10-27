@@ -26,17 +26,18 @@ const elements=tree=>{
 const text=node=>typeof node==='string'?node:typeof node==='number'?String(node):Array.isArray(node)?node.map(text).join(''):node?.props?text(node.props.children):'';
 
 test('every home button invokes its actual supplied action and the actual rank is shown',()=>{
-  const hits=[],callbacks=Object.fromEntries(['Play','Career','Cards','Community','Terms','Sound'].map(name=>['on'+name,()=>hits.push(name)]));
+  const hits=[],callbacks=Object.fromEntries(['Play','Shop','Career','Cards','Community','Terms','Sound'].map(name=>['on'+name,()=>hits.push(name)]));
   const Home=component('./CinematicHome.tsx',{'../i18n':{useLocale:()=>({t:source=>translate('de',source)})},'../components/ServiceBadge':{default:()=>null},'../components/BlockchainIcon':{default:()=>null},'./HomeEarthNetwork':{default:()=>null}});
   const nodes=elements(Home({...callbacks,paused:false,busy:false,signedIn:true,rankName:'Admiral',musicEnabled:true,musicLabel:'Ton ausschalten'}));
-  const buttons=nodes.filter(node=>node.type==='button');assert.equal(buttons.length,6);
+  const buttons=nodes.filter(node=>node.type==='button');assert.equal(buttons.length,7);
   assert.ok(!nodes.some(node=>node.props.className==='cinematic-profile'));
   for(const button of buttons){assert.equal(button.props.type,'button');button.props.onClick();}
-  assert.deepEqual(hits.sort(),['Play','Career','Cards','Community','Terms','Sound'].sort());
+  assert.deepEqual(hits.sort(),['Play','Shop','Career','Cards','Community','Terms','Sound'].sort());
   assert.ok(nodes.some(node=>node.props.name==='Admiral'));
   assert.ok(nodes.some(node=>node.props.className==='cinematic-career-copy'&&text(node).includes('Admiral')));
   const busy=elements(Home({...callbacks,busy:true,musicEnabled:false,musicLabel:'Ton einschalten'}));
   assert.equal(busy.find(node=>node.props.className==='cinematic-play').props.disabled,true);
+  assert.equal(busy.find(node=>node.props.className==='cinematic-shop').props.disabled,true);
   assert.equal(busy.find(node=>node.props.className==='cinematic-cards').props.disabled,true);
   assert.equal(busy.find(node=>node.props.className?.includes('cinematic-sound')).props['aria-pressed'],false);
 });
@@ -103,7 +104,7 @@ test('the signed-in account button opens the existing profile action',()=>{
   assert.equal(children[1].props.className,'header-profile-label');assert.match(text(children[1]),/Pilotenprofil/);
 });
 
-test('home actions reach the existing game, career, cards, feedback and profile in Shop',()=>{
+test('home actions reach the existing game, ship shop, career, cards, feedback and profile',()=>{
   const source=readFileSync(new URL('./Shop.tsx',import.meta.url),'utf8');
   const ast=ts.createSourceFile('Shop.tsx',source,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);
   const imports={};
@@ -132,6 +133,8 @@ test('home actions reach the existing game, career, cards, feedback and profile 
   const render=()=>{cursor=0;return elements(Shop());};
   const find=(nodes,name)=>nodes.find(node=>node.type===imports[name].default);
   let nodes=render(),home=find(nodes,'./CinematicHome');home.props.onPlay();assert.deepEqual(navigations,['/game']);assert.equal(fullscreen,1);
+  home.props.onShop();nodes=render();assert.ok(nodes.some(node=>node.props['data-shop-area']==='shop'));assert.equal(find(nodes,'./CinematicHome').props.paused,true);assert.equal(authRequests,0);assert.equal(fullscreen,1);
+  nodes.find(node=>node.type==='button'&&node.props.className==='close-button').props.onClick();nodes=render();home=find(nodes,'./CinematicHome');assert.equal(home.props.paused,false);
   home.props.onCareer();nodes=render();assert.ok(find(nodes,'./CareerDashboard'));
   const close=nodes.find(node=>node.type==='button'&&node.props.className==='close-button');assert.ok(close);close.props.onClick();
   nodes=render();home=find(nodes,'./CinematicHome');assert.equal(home.props.paused,false);home.props.onCards();nodes=render();assert.ok(find(nodes,'./Collection'));assert.equal(find(nodes,'./CinematicHome').props.paused,true);
