@@ -1,0 +1,2147 @@
+{
+  "sourceSha256": "51db299a50ee70835758c46bf8209a1ffa779dd88451db1fa026cb9d5c3b0bbb",
+  "baseline": "c7811d0856dd18e3e0d56449c32f644120a7ae81",
+  "localOnly": true,
+  "realGamePageAndApiHandlers": true,
+  "syntheticSdkAndOrders": true,
+  "controlledClock": true,
+  "physicalDevice": false,
+  "checks": [
+    "phone-paid: no unsolicited notice before any expiry",
+    "phone-paid: real handler confirms one selected 45-second charge",
+    "phone-paid: no expiry/reload/error popup during active combat",
+    "phone-paid: expiry queues once without a reading deadline",
+    "phone-paid: no extra charge is consumed beyond the original Auto rule",
+    "the first notice enters through the actual next-block clear/intro flow",
+    "phone-paid: visible current weapon exactly matches the real HUD, not the expired one",
+    "phone-paid: current and expired symbols exactly match the original shop marks",
+    "phone-paid: lighter red passive text, no call to buy and no animation",
+    "phone-paid: entire notice is in front of the existing binary area and covers no other text",
+    "phone-paid: a changed type clearly identifies expiry",
+    "original native binary animation keeps running behind the static notice",
+    "the binary reading window consumes no active ammunition time",
+    "manual pause hides both code and notice, preserves pending state and never resumes itself",
+    "technical pause also hides both and requires explicit Resume",
+    "phone-paid: notice and code leave together before active combat resumes",
+    "phone-paid: no trailing or repeated popup after the binary window",
+    "phone-paid: the next unchanged binary window does not repeat stale feedback",
+    "phone-paid: no purchase endpoint was called",
+    "phone-paid: only the explicitly injected reload failure is permitted",
+    "phone-multiflight: no unsolicited notice before any expiry",
+    "phone-multiflight: real handler confirms one selected 45-second charge",
+    "phone-multiflight: no expiry/reload/error popup during active combat",
+    "phone-multiflight: expiry queues once without a reading deadline",
+    "phone-multiflight: no extra charge is consumed beyond the original Auto rule",
+    "phone-multiflight: visible current weapon exactly matches the real HUD, not the expired one",
+    "phone-multiflight: current and expired symbols exactly match the original shop marks",
+    "phone-multiflight: lighter red passive text, no call to buy and no animation",
+    "phone-multiflight: entire notice is in front of the existing binary area and covers no other text",
+    "phone-multiflight: a changed type clearly identifies expiry",
+    "direct entry-clear-to-next-flight boundary consumes the notice without needing an active frame",
+    "reinforcement native animation and actual phase share a 4800ms readable lifetime",
+    "reinforcement holds full native opacity after one calm arrival",
+    "manual pause retains warning DOM and freezes native and phase clocks",
+    "technical warning pause never resumes itself",
+    "reinforcement phase still exists after four seconds and protects paid/pickup/boost clocks",
+    "first later flight has no repeated expiry",
+    "second later flight also has no repeated expiry",
+    "longer comparable clear notice uses 4800ms before being replaced",
+    "a real confirmed charge survives subsequent active combat with its normal consumption",
+    "late-stage real checkpoint handlers report no unexpected failure",
+    "phone-reduced-multiflight: no unsolicited notice before any expiry",
+    "phone-reduced-multiflight: real handler confirms one selected 45-second charge",
+    "phone-reduced-multiflight: no expiry/reload/error popup during active combat",
+    "phone-reduced-multiflight: expiry queues once without a reading deadline",
+    "phone-reduced-multiflight: no extra charge is consumed beyond the original Auto rule",
+    "phone-reduced-multiflight: visible current weapon exactly matches the real HUD, not the expired one",
+    "phone-reduced-multiflight: current and expired symbols exactly match the original shop marks",
+    "phone-reduced-multiflight: lighter red passive text, no call to buy and no animation",
+    "phone-reduced-multiflight: entire notice is in front of the existing binary area and covers no other text",
+    "phone-reduced-multiflight: a changed type clearly identifies expiry",
+    "direct entry-clear-to-next-flight boundary consumes the notice without needing an active frame",
+    "reinforcement native animation and actual phase share a 4800ms readable lifetime",
+    "reinforcement holds full native opacity after one calm arrival",
+    "manual pause retains warning DOM and freezes native and phase clocks",
+    "technical warning pause never resumes itself",
+    "reinforcement phase still exists after four seconds and protects paid/pickup/boost clocks",
+    "first later flight has no repeated expiry",
+    "second later flight also has no repeated expiry",
+    "longer comparable clear notice uses 4800ms before being replaced",
+    "a real confirmed charge survives subsequent active combat with its normal consumption",
+    "late-stage real checkpoint handlers report no unexpected failure",
+    "phone-delayed-reload: no unsolicited notice before any expiry",
+    "phone-delayed-reload: real handler confirms one selected 45-second charge",
+    "phone-delayed-reload: no expiry/reload/error popup during active combat",
+    "phone-delayed-reload: expiry queues once without a reading deadline",
+    "phone-delayed-reload: no extra charge is consumed beyond the original Auto rule",
+    "phone-delayed-reload: visible current weapon exactly matches the real HUD, not the expired one",
+    "phone-delayed-reload: current and expired symbols exactly match the original shop marks",
+    "phone-delayed-reload: lighter red passive text, no call to buy and no animation",
+    "phone-delayed-reload: entire notice is in front of the existing binary area and covers no other text",
+    "phone-delayed-reload: a changed type clearly identifies expiry",
+    "phone-delayed-reload: actual reload status is legible in the binary strip",
+    "phone-delayed-reload: no false success before server confirmation",
+    "phone-delayed-reload: visible result follows the real response",
+    "phone-delayed-reload: result remains readable in the same binary window without spending charge time",
+    "phone-delayed-reload: notice and code leave together before active combat resumes",
+    "phone-delayed-reload: no trailing or repeated popup after the binary window",
+    "phone-delayed-reload: the next unchanged binary window does not repeat stale feedback",
+    "phone-delayed-reload: no purchase endpoint was called",
+    "phone-delayed-reload: only the explicitly injected reload failure is permitted",
+    "compact-failed-reload: no unsolicited notice before any expiry",
+    "compact-failed-reload: real handler confirms one selected 45-second charge",
+    "compact-failed-reload: no expiry/reload/error popup during active combat",
+    "compact-failed-reload: expiry queues once without a reading deadline",
+    "compact-failed-reload: no extra charge is consumed beyond the original Auto rule",
+    "compact-failed-reload: visible current weapon exactly matches the real HUD, not the expired one",
+    "compact-failed-reload: current and expired symbols exactly match the original shop marks",
+    "compact-failed-reload: lighter red passive text, no call to buy and no animation",
+    "compact-failed-reload: entire notice is in front of the existing binary area and covers no other text",
+    "compact-failed-reload: a changed type clearly identifies expiry",
+    "compact-failed-reload: actual reload status is legible in the binary strip",
+    "compact-failed-reload: no false success before server confirmation",
+    "compact-failed-reload: visible result follows the real response",
+    "compact-failed-reload: result remains readable in the same binary window without spending charge time",
+    "compact-failed-reload: notice and code leave together before active combat resumes",
+    "compact-failed-reload: no trailing or repeated popup after the binary window",
+    "compact-failed-reload: the next unchanged binary window does not repeat stale feedback",
+    "compact-failed-reload: no purchase endpoint was called",
+    "compact-failed-reload: only the explicitly injected reload failure is permitted",
+    "compact-left: no unsolicited notice before any expiry",
+    "compact-left: real handler confirms one selected 45-second charge",
+    "compact-left: no expiry/reload/error popup during active combat",
+    "compact-left: expiry queues once without a reading deadline",
+    "compact-left: no extra charge is consumed beyond the original Auto rule",
+    "compact-left: visible current weapon exactly matches the real HUD, not the expired one",
+    "compact-left: current and expired symbols exactly match the original shop marks",
+    "compact-left: lighter red passive text, no call to buy and no animation",
+    "compact-left: entire notice is in front of the existing binary area and covers no other text",
+    "compact-left: a changed type clearly identifies expiry",
+    "compact-left: notice and code leave together before active combat resumes",
+    "compact-left: no trailing or repeated popup after the binary window",
+    "compact-left: the next unchanged binary window does not repeat stale feedback",
+    "compact-left: no purchase endpoint was called",
+    "compact-left: only the explicitly injected reload failure is permitted",
+    "tablet-thai: no unsolicited notice before any expiry",
+    "tablet-thai: real handler confirms one selected 45-second charge",
+    "tablet-thai: no expiry/reload/error popup during active combat",
+    "tablet-thai: expiry queues once without a reading deadline",
+    "tablet-thai: no extra charge is consumed beyond the original Auto rule",
+    "tablet-thai: visible current weapon exactly matches the real HUD, not the expired one",
+    "tablet-thai: current and expired symbols exactly match the original shop marks",
+    "tablet-thai: lighter red passive text, no call to buy and no animation",
+    "tablet-thai: entire notice is in front of the existing binary area and covers no other text",
+    "tablet-thai: a changed type clearly identifies expiry",
+    "tablet-thai: notice and code leave together before active combat resumes",
+    "tablet-thai: no trailing or repeated popup after the binary window",
+    "tablet-thai: the next unchanged binary window does not repeat stale feedback",
+    "tablet-thai: no purchase endpoint was called",
+    "tablet-thai: only the explicitly injected reload failure is permitted",
+    "desktop-auto: no unsolicited notice before any expiry",
+    "desktop-auto: real handler confirms one selected 45-second charge",
+    "desktop-auto: no expiry/reload/error popup during active combat",
+    "desktop-auto: expiry queues once without a reading deadline",
+    "desktop-auto: no extra charge is consumed beyond the original Auto rule",
+    "desktop-auto: visible current weapon exactly matches the real HUD, not the expired one",
+    "desktop-auto: current and expired symbols exactly match the original shop marks",
+    "desktop-auto: lighter red passive text, no call to buy and no animation",
+    "desktop-auto: entire notice is in front of the existing binary area and covers no other text",
+    "desktop-auto: a changed type clearly identifies expiry",
+    "desktop-auto: actual reload status is legible in the binary strip",
+    "desktop-auto: result remains readable in the same binary window without spending charge time",
+    "desktop-auto: notice and code leave together before active combat resumes",
+    "desktop-auto: no trailing or repeated popup after the binary window",
+    "desktop-auto: the next unchanged binary window does not repeat stale feedback",
+    "desktop-auto: no purchase endpoint was called",
+    "desktop-auto: only the explicitly injected reload failure is permitted",
+    "phone-live-fallback: no unsolicited notice before any expiry",
+    "phone-live-fallback: real handler confirms one selected 45-second charge",
+    "phone-live-fallback: no expiry/reload/error popup during active combat",
+    "phone-live-fallback: expiry queues once without a reading deadline",
+    "phone-live-fallback: no extra charge is consumed beyond the original Auto rule",
+    "phone-live-fallback: visible current weapon exactly matches the real HUD, not the expired one",
+    "phone-live-fallback: current and expired symbols exactly match the original shop marks",
+    "phone-live-fallback: lighter red passive text, no call to buy and no animation",
+    "phone-live-fallback: entire notice is in front of the existing binary area and covers no other text",
+    "phone-live-fallback: a changed type clearly identifies expiry",
+    "phone-live-fallback: notice and code leave together before active combat resumes",
+    "phone-live-fallback: no trailing or repeated popup after the binary window",
+    "phone-live-fallback: the next unchanged binary window does not repeat stale feedback",
+    "phone-live-fallback: no purchase endpoint was called",
+    "phone-live-fallback: only the explicitly injected reload failure is permitted",
+    "phone-pickup-to-twin: no unsolicited notice before any expiry",
+    "phone-pickup-to-twin: real handler confirms one selected 45-second charge",
+    "phone-pickup-to-twin: no expiry/reload/error popup during active combat",
+    "phone-pickup-to-twin: expiry queues once without a reading deadline",
+    "phone-pickup-to-twin: no extra charge is consumed beyond the original Auto rule",
+    "phone-pickup-to-twin: visible current weapon exactly matches the real HUD, not the expired one",
+    "phone-pickup-to-twin: current and expired symbols exactly match the original shop marks",
+    "phone-pickup-to-twin: lighter red passive text, no call to buy and no animation",
+    "phone-pickup-to-twin: entire notice is in front of the existing binary area and covers no other text",
+    "phone-pickup-to-twin: a changed type clearly identifies expiry",
+    "phone-pickup-to-twin: notice and code leave together before active combat resumes",
+    "phone-pickup-to-twin: no trailing or repeated popup after the binary window",
+    "phone-pickup-to-twin: the next unchanged binary window does not repeat stale feedback",
+    "phone-pickup-to-twin: no purchase endpoint was called",
+    "phone-pickup-to-twin: only the explicitly injected reload failure is permitted",
+    "phone-evolved: no unsolicited notice before any expiry",
+    "phone-evolved: real handler confirms one selected 45-second charge",
+    "phone-evolved: no expiry/reload/error popup during active combat",
+    "phone-evolved: expiry queues once without a reading deadline",
+    "phone-evolved: no extra charge is consumed beyond the original Auto rule",
+    "phone-evolved: visible current weapon exactly matches the real HUD, not the expired one",
+    "phone-evolved: current and expired symbols exactly match the original shop marks",
+    "phone-evolved: lighter red passive text, no call to buy and no animation",
+    "phone-evolved: entire notice is in front of the existing binary area and covers no other text",
+    "phone-evolved: a changed type clearly identifies expiry",
+    "phone-evolved: notice and code leave together before active combat resumes",
+    "phone-evolved: no trailing or repeated popup after the binary window",
+    "phone-evolved: the next unchanged binary window does not repeat stale feedback",
+    "phone-evolved: no purchase endpoint was called",
+    "phone-evolved: only the explicitly injected reload failure is permitted",
+    "phone-reduced: no unsolicited notice before any expiry",
+    "phone-reduced: real handler confirms one selected 45-second charge",
+    "phone-reduced: no expiry/reload/error popup during active combat",
+    "phone-reduced: expiry queues once without a reading deadline",
+    "phone-reduced: no extra charge is consumed beyond the original Auto rule",
+    "phone-reduced: visible current weapon exactly matches the real HUD, not the expired one",
+    "phone-reduced: current and expired symbols exactly match the original shop marks",
+    "phone-reduced: lighter red passive text, no call to buy and no animation",
+    "phone-reduced: entire notice is in front of the existing binary area and covers no other text",
+    "phone-reduced: a changed type clearly identifies expiry",
+    "phone-reduced: notice and code leave together before active combat resumes",
+    "phone-reduced: no trailing or repeated popup after the binary window",
+    "phone-reduced: the next unchanged binary window does not repeat stale feedback",
+    "phone-reduced: no purchase endpoint was called",
+    "phone-reduced: only the explicitly injected reload failure is permitted",
+    "the complete run used one unchanged controller",
+    "no JavaScript page errors"
+  ],
+  "errors": [],
+  "cases": [
+    {
+      "scenario": {
+        "width": 393,
+        "height": 744,
+        "locale": "de",
+        "hand": "right",
+        "mode": "paid",
+        "name": "phone-paid"
+      },
+      "view": {
+        "currentName": "Standard",
+        "symbols": [
+          {
+            "level": 2,
+            "text": "Ⅱ",
+            "hidden": "true"
+          },
+          {
+            "level": 1,
+            "text": "Ⅰ",
+            "hidden": "true"
+          }
+        ],
+        "text": "ⅡDoppel · abgelaufen\n→ ⅠStandard",
+        "color": "rgb(255, 179, 183)",
+        "animation": "none",
+        "pointerEvents": "none",
+        "buttons": 0,
+        "box": {
+          "top": 348.40625,
+          "bottom": 409.40625,
+          "left": 71.4609375,
+          "right": 321.5390625
+        },
+        "binary": {
+          "top": 319.90625,
+          "bottom": 437.90625,
+          "left": 0,
+          "right": 393
+        },
+        "overlaps": 0,
+        "active": "Standard"
+      }
+    },
+    {
+      "scenario": {
+        "width": 393,
+        "height": 744,
+        "locale": "de",
+        "hand": "right",
+        "mode": "automatic",
+        "name": "phone-delayed-reload",
+        "delayed": true
+      },
+      "view": {
+        "currentName": "Standard",
+        "symbols": [
+          {
+            "level": 2,
+            "text": "Ⅱ",
+            "hidden": "true"
+          },
+          {
+            "level": 1,
+            "text": "Ⅰ",
+            "hidden": "true"
+          }
+        ],
+        "text": "ⅡDoppel · abgelaufen\n→ ⅠStandard\nWaffe wird nachgeladen…",
+        "color": "rgb(255, 179, 183)",
+        "animation": "none",
+        "pointerEvents": "none",
+        "buttons": 0,
+        "box": {
+          "top": 338.8125,
+          "bottom": 419,
+          "left": 71.4609375,
+          "right": 321.5390625
+        },
+        "binary": {
+          "top": 319.90625,
+          "bottom": 437.90625,
+          "left": 0,
+          "right": 393
+        },
+        "overlaps": 0,
+        "active": "Standard"
+      }
+    },
+    {
+      "scenario": {
+        "width": 320,
+        "height": 568,
+        "locale": "de",
+        "hand": "left",
+        "mode": "automatic",
+        "name": "compact-failed-reload",
+        "delayed": true,
+        "failed": true
+      },
+      "view": {
+        "currentName": "Standard",
+        "symbols": [
+          {
+            "level": 2,
+            "text": "Ⅱ",
+            "hidden": "true"
+          },
+          {
+            "level": 1,
+            "text": "Ⅰ",
+            "hidden": "true"
+          }
+        ],
+        "text": "ⅡDoppel · abgelaufen\n→ ⅠStandard\nWaffe wird nachgeladen…",
+        "color": "rgb(255, 179, 183)",
+        "animation": "none",
+        "pointerEvents": "none",
+        "buttons": 0,
+        "box": {
+          "top": 263.140625,
+          "bottom": 343.328125,
+          "left": 34.9609375,
+          "right": 285.0390625
+        },
+        "binary": {
+          "top": 244.234375,
+          "bottom": 362.234375,
+          "left": 0,
+          "right": 320
+        },
+        "overlaps": 0,
+        "active": "Standard"
+      }
+    },
+    {
+      "scenario": {
+        "width": 320,
+        "height": 568,
+        "locale": "de",
+        "hand": "left",
+        "mode": "pickup",
+        "name": "compact-left"
+      },
+      "view": {
+        "currentName": "Standard",
+        "symbols": [
+          {
+            "level": 4,
+            "text": "Ⅳ",
+            "hidden": "true"
+          },
+          {
+            "level": 1,
+            "text": "Ⅰ",
+            "hidden": "true"
+          }
+        ],
+        "text": "ⅣDreifach · abgelaufen\n→ ⅠStandard",
+        "color": "rgb(255, 179, 183)",
+        "animation": "none",
+        "pointerEvents": "none",
+        "buttons": 0,
+        "box": {
+          "top": 272.734375,
+          "bottom": 333.734375,
+          "left": 28.296875,
+          "right": 291.703125
+        },
+        "binary": {
+          "top": 244.234375,
+          "bottom": 362.234375,
+          "left": 0,
+          "right": 320
+        },
+        "overlaps": 0,
+        "active": "Standard"
+      }
+    },
+    {
+      "scenario": {
+        "width": 768,
+        "height": 1024,
+        "locale": "th",
+        "hand": "right",
+        "mode": "paid",
+        "name": "tablet-thai"
+      },
+      "view": {
+        "currentName": "มาตรฐาน",
+        "symbols": [
+          {
+            "level": 2,
+            "text": "Ⅱ",
+            "hidden": "true"
+          },
+          {
+            "level": 1,
+            "text": "Ⅰ",
+            "hidden": "true"
+          }
+        ],
+        "text": "Ⅱคู่ · หมดเวลาแล้ว\n→ Ⅰมาตรฐาน",
+        "color": "rgb(255, 179, 183)",
+        "animation": "none",
+        "pointerEvents": "none",
+        "buttons": 0,
+        "box": {
+          "top": 458.8125,
+          "bottom": 539.8125,
+          "left": 258.140625,
+          "right": 509.859375
+        },
+        "binary": {
+          "top": 440.3125,
+          "bottom": 558.3125,
+          "left": 0,
+          "right": 768
+        },
+        "overlaps": 0,
+        "active": "มาตรฐาน"
+      }
+    },
+    {
+      "scenario": {
+        "width": 1363,
+        "height": 768,
+        "locale": "en",
+        "hand": "left",
+        "mode": "automatic",
+        "name": "desktop-auto"
+      },
+      "view": {
+        "currentName": "Twin",
+        "symbols": [
+          {
+            "level": 2,
+            "text": "Ⅱ",
+            "hidden": "true"
+          }
+        ],
+        "text": "ⅡTwin\nWeapon reloaded",
+        "color": "rgb(255, 179, 183)",
+        "animation": "none",
+        "pointerEvents": "none",
+        "buttons": 0,
+        "box": {
+          "top": 351.7890625,
+          "bottom": 426.6796875,
+          "left": 572.203125,
+          "right": 790.796875
+        },
+        "binary": {
+          "top": 330.234375,
+          "bottom": 448.234375,
+          "left": 0,
+          "right": 1363
+        },
+        "overlaps": 0,
+        "active": "Twin"
+      }
+    },
+    {
+      "scenario": {
+        "width": 393,
+        "height": 628,
+        "locale": "de",
+        "hand": "right",
+        "mode": "fallback",
+        "name": "phone-live-fallback"
+      },
+      "view": {
+        "currentName": "Schnell",
+        "symbols": [
+          {
+            "level": 2,
+            "text": "Ⅱ",
+            "hidden": "true"
+          },
+          {
+            "level": 3,
+            "text": "Ⅲ",
+            "hidden": "true"
+          }
+        ],
+        "text": "ⅡDoppel · abgelaufen\n→ ⅢSchnell",
+        "color": "rgb(255, 179, 183)",
+        "animation": "none",
+        "pointerEvents": "none",
+        "buttons": 0,
+        "box": {
+          "top": 298.53125,
+          "bottom": 359.53125,
+          "left": 71.4609375,
+          "right": 321.5390625
+        },
+        "binary": {
+          "top": 270.03125,
+          "bottom": 388.03125,
+          "left": 0,
+          "right": 393
+        },
+        "overlaps": 0,
+        "active": "Schnell"
+      }
+    },
+    {
+      "scenario": {
+        "width": 430,
+        "height": 825,
+        "locale": "de",
+        "hand": "right",
+        "mode": "pickup-paid",
+        "name": "phone-pickup-to-twin"
+      },
+      "view": {
+        "currentName": "Doppel",
+        "symbols": [
+          {
+            "level": 5,
+            "text": "Ⅴ",
+            "hidden": "true"
+          },
+          {
+            "level": 2,
+            "text": "Ⅱ",
+            "hidden": "true"
+          }
+        ],
+        "text": "ⅤPlasma · abgelaufen\n→ ⅡDoppel",
+        "color": "rgb(255, 179, 183)",
+        "animation": "none",
+        "pointerEvents": "none",
+        "buttons": 0,
+        "box": {
+          "top": 383.25,
+          "bottom": 444.25,
+          "left": 89.453125,
+          "right": 340.546875
+        },
+        "binary": {
+          "top": 354.75,
+          "bottom": 472.75,
+          "left": 0,
+          "right": 430
+        },
+        "overlaps": 0,
+        "active": "Doppel"
+      }
+    },
+    {
+      "scenario": {
+        "width": 393,
+        "height": 744,
+        "locale": "en",
+        "hand": "left",
+        "mode": "evolved",
+        "name": "phone-evolved"
+      },
+      "view": {
+        "currentName": "Twin",
+        "symbols": [
+          {
+            "level": 2,
+            "text": "Ⅱ",
+            "hidden": "true"
+          }
+        ],
+        "text": "ⅡTwin",
+        "color": "rgb(255, 179, 183)",
+        "animation": "none",
+        "pointerEvents": "none",
+        "buttons": 0,
+        "box": {
+          "top": 359.65625,
+          "bottom": 398.15625,
+          "left": 142.984375,
+          "right": 250.015625
+        },
+        "binary": {
+          "top": 319.90625,
+          "bottom": 437.90625,
+          "left": 0,
+          "right": 393
+        },
+        "overlaps": 0,
+        "active": "Twin"
+      }
+    },
+    {
+      "scenario": {
+        "width": 430,
+        "height": 825,
+        "locale": "de",
+        "hand": "right",
+        "mode": "pickup",
+        "motion": "reduce",
+        "name": "phone-reduced"
+      },
+      "view": {
+        "currentName": "Standard",
+        "symbols": [
+          {
+            "level": 4,
+            "text": "Ⅳ",
+            "hidden": "true"
+          },
+          {
+            "level": 1,
+            "text": "Ⅰ",
+            "hidden": "true"
+          }
+        ],
+        "text": "ⅣDreifach · abgelaufen\n→ ⅠStandard",
+        "color": "rgb(255, 179, 183)",
+        "animation": "none",
+        "pointerEvents": "none",
+        "buttons": 0,
+        "box": {
+          "top": 383.25,
+          "bottom": 444.25,
+          "left": 83.296875,
+          "right": 346.703125
+        },
+        "binary": {
+          "top": 354.75,
+          "bottom": 472.75,
+          "left": 0,
+          "right": 430
+        },
+        "overlaps": 0,
+        "active": "Standard"
+      }
+    }
+  ],
+  "complete": true,
+  "engine": "141.0.7390.37",
+  "lastSelection": {
+    "scenario": "phone-reduced",
+    "state": {
+      "state": {
+        "rocks": [],
+        "rockEffects": [],
+        "damageCount": 0,
+        "comboTotal": 0,
+        "bossHullLight": 0,
+        "combo": {
+          "pendingAt": null,
+          "total": 0,
+          "level": 0,
+          "remainingMs": 0,
+          "variety": {
+            "version": 1,
+            "clock": 3078,
+            "weaponDue": 18000,
+            "weaponIssued": true,
+            "asteroidDue": 28000,
+            "asteroidEvents": 0,
+            "asteroidStage": 1,
+            "asteroidStageEvents": 2,
+            "waveDamage": 0,
+            "waveDestroyed": 0,
+            "waveCombo": 0,
+            "waveComplete": false,
+            "notice": "Clear the formation",
+            "noticeMs": 2416,
+            "rocks": []
+          }
+        },
+        "asteroids": [
+          {
+            "id": 1,
+            "x": 103.97127480777648,
+            "y": 192.75,
+            "size": "small",
+            "type": "solflare",
+            "shipClass": "light",
+            "health": 4,
+            "reward": 2,
+            "points": 10,
+            "radius": 25,
+            "entryDuration": 1430,
+            "attackPace": 1.1700000000000002,
+            "faction": "X",
+            "sprite": 1,
+            "color": "silver",
+            "maxHealth": 4,
+            "cloaked": false,
+            "rotation": 0,
+            "rotationSpeed": 0,
+            "entryElapsed": 1430,
+            "entryStartX": 97,
+            "entryStartY": 104,
+            "entryTargetX": 97,
+            "entryTargetY": 192.75,
+            "entrySide": -1,
+            "entryPattern": "zigzag",
+            "entryStage": 1,
+            "entryIndex": 0,
+            "formationSlot": 2,
+            "formationSlotCount": 6,
+            "formationElapsed": 964,
+            "formationDuration": 180,
+            "attackPattern": null,
+            "attackDelay": 0,
+            "attackLane": 0,
+            "attackElapsed": 0,
+            "returnElapsed": 0,
+            "firedThisAttack": false,
+            "collidedThisAttack": false,
+            "visualMotion": {
+              "speed": 7.409747155114665,
+              "vx": 7.409747155114665,
+              "vy": 0,
+              "bank": 0.26330066611674835,
+              "thrust": 0.012169835013506571
+            },
+            "hullLight": 0
+          },
+          {
+            "id": 2,
+            "x": 338.85524239248485,
+            "y": 192.75,
+            "size": "small",
+            "type": "solflare",
+            "shipClass": "light",
+            "health": 4,
+            "reward": 2,
+            "points": 10,
+            "radius": 25,
+            "entryDuration": 1430,
+            "attackPace": 1.1700000000000002,
+            "faction": "X",
+            "sprite": 7,
+            "color": "metallic-green",
+            "maxHealth": 4,
+            "cloaked": false,
+            "rotation": 0,
+            "rotationSpeed": 0,
+            "entryElapsed": 1430,
+            "entryStartX": 333,
+            "entryStartY": 104,
+            "entryTargetX": 333,
+            "entryTargetY": 192.75,
+            "entrySide": 1,
+            "entryPattern": "zigzag",
+            "entryStage": 1,
+            "entryIndex": 1,
+            "formationSlot": 3,
+            "formationSlotCount": 6,
+            "formationElapsed": 820,
+            "formationDuration": 180,
+            "attackPattern": null,
+            "attackDelay": 0,
+            "attackLane": 0,
+            "attackElapsed": 0,
+            "returnElapsed": 0,
+            "firedThisAttack": false,
+            "collidedThisAttack": false,
+            "visualMotion": {
+              "speed": 8.151580766512012,
+              "vx": 8.151580766512012,
+              "vy": 0,
+              "bank": 0.28402049827116227,
+              "thrust": 0.01316247440446271
+            },
+            "hullLight": 0
+          },
+          {
+            "id": 3,
+            "x": 101.50089491398425,
+            "y": 318.75,
+            "size": "small",
+            "type": "solflare",
+            "shipClass": "light",
+            "health": 4,
+            "reward": 2,
+            "points": 10,
+            "radius": 25,
+            "entryDuration": 1430,
+            "attackPace": 1.1700000000000002,
+            "faction": "X",
+            "sprite": 14,
+            "color": "anthracite",
+            "maxHealth": 4,
+            "cloaked": false,
+            "rotation": 0,
+            "rotationSpeed": 0,
+            "entryElapsed": 1430,
+            "entryStartX": 97,
+            "entryStartY": 104,
+            "entryTargetX": 97,
+            "entryTargetY": 318.75,
+            "entrySide": -1,
+            "entryPattern": "zigzag",
+            "entryStage": 1,
+            "entryIndex": 2,
+            "formationSlot": 4,
+            "formationSlotCount": 6,
+            "formationElapsed": 660,
+            "formationDuration": 180,
+            "attackPattern": null,
+            "attackDelay": 0,
+            "attackLane": 0,
+            "attackElapsed": 0,
+            "returnElapsed": 0,
+            "firedThisAttack": false,
+            "collidedThisAttack": false,
+            "visualMotion": {
+              "speed": 8.815021243507637,
+              "vx": 8.815021243507637,
+              "vy": 0,
+              "bank": 0.2990793940610606,
+              "thrust": 0.014290612851549147
+            },
+            "hullLight": 0
+          },
+          {
+            "id": 4,
+            "x": 336.2014807300659,
+            "y": 318.75,
+            "size": "small",
+            "type": "solflare",
+            "shipClass": "light",
+            "health": 4,
+            "reward": 2,
+            "points": 10,
+            "radius": 25,
+            "entryDuration": 1430,
+            "attackPace": 1.1700000000000002,
+            "faction": "X",
+            "sprite": 0,
+            "color": "violet",
+            "maxHealth": 4,
+            "cloaked": false,
+            "rotation": 0,
+            "rotationSpeed": 0,
+            "entryElapsed": 1430,
+            "entryStartX": 333,
+            "entryStartY": 104,
+            "entryTargetX": 333,
+            "entryTargetY": 318.75,
+            "entrySide": 1,
+            "entryPattern": "zigzag",
+            "entryStage": 1,
+            "entryIndex": 3,
+            "formationSlot": 5,
+            "formationSlotCount": 6,
+            "formationElapsed": 516,
+            "formationDuration": 180,
+            "attackPattern": null,
+            "attackDelay": 0,
+            "attackLane": 0,
+            "attackElapsed": 0,
+            "returnElapsed": 0,
+            "firedThisAttack": false,
+            "collidedThisAttack": false,
+            "visualMotion": {
+              "speed": 9.256417984275345,
+              "vx": 9.256417984275345,
+              "vy": 0,
+              "bank": 0.2990976551618719,
+              "thrust": 0.015590287803804385
+            },
+            "hullLight": 0
+          },
+          {
+            "id": 5,
+            "x": 216.84836918585097,
+            "y": 192.75,
+            "size": "medium",
+            "type": "etherCrystal",
+            "shipClass": "medium",
+            "health": 8,
+            "reward": 4,
+            "points": 25,
+            "radius": 36,
+            "entryDuration": 1430,
+            "attackPace": 1.3,
+            "faction": "Z",
+            "sprite": 8,
+            "color": "copper",
+            "maxHealth": 8,
+            "cloaked": false,
+            "rotation": 0,
+            "rotationSpeed": 0,
+            "entryElapsed": 1430,
+            "entryStartX": 215,
+            "entryStartY": 115,
+            "entryTargetX": 215,
+            "entryTargetY": 192.75,
+            "entrySide": -1,
+            "entryPattern": "zigzag",
+            "entryStage": 1,
+            "entryIndex": 4,
+            "formationSlot": 0,
+            "formationSlotCount": 6,
+            "formationElapsed": 372,
+            "formationDuration": 180,
+            "attackPattern": null,
+            "attackDelay": 0,
+            "attackLane": 0,
+            "attackElapsed": 0,
+            "returnElapsed": 0,
+            "firedThisAttack": false,
+            "collidedThisAttack": false,
+            "visualMotion": {
+              "speed": 9.542559937187889,
+              "vx": 9.542559937187889,
+              "vy": 0,
+              "bank": 0.26416329624580653,
+              "thrust": 0.01470486899079296
+            },
+            "hullLight": 0
+          },
+          {
+            "id": 6,
+            "x": 215.30955720267093,
+            "y": 318.75,
+            "size": "medium",
+            "type": "etherCrystal",
+            "shipClass": "medium",
+            "health": 8,
+            "reward": 4,
+            "points": 25,
+            "radius": 36,
+            "entryDuration": 1430,
+            "attackPace": 1.3,
+            "faction": "Z",
+            "sprite": 15,
+            "color": "orange",
+            "maxHealth": 8,
+            "cloaked": false,
+            "rotation": 0,
+            "rotationSpeed": 0,
+            "entryElapsed": 1430,
+            "entryStartX": 215,
+            "entryStartY": 115,
+            "entryTargetX": 215,
+            "entryTargetY": 318.75,
+            "entrySide": 1,
+            "entryPattern": "zigzag",
+            "entryStage": 1,
+            "entryIndex": 5,
+            "formationSlot": 1,
+            "formationSlotCount": 6,
+            "formationElapsed": 212,
+            "formationDuration": 180,
+            "attackPattern": null,
+            "attackDelay": 0,
+            "attackLane": 0,
+            "attackElapsed": 0,
+            "returnElapsed": 0,
+            "firedThisAttack": false,
+            "collidedThisAttack": false,
+            "visualMotion": {
+              "speed": 9.67265953146601,
+              "vx": 9.67265953146601,
+              "vy": 0,
+              "bank": 0.08134836274570717,
+              "thrust": 0.030557359716858783
+            },
+            "hullLight": 0
+          }
+        ],
+        "bonusTargets": [],
+        "bonusHits": 0,
+        "bonusResult": "",
+        "chainBlocks": 0,
+        "chainResult": "",
+        "rewardNotice": "",
+        "boss": null,
+        "encounter": "normal",
+        "shots": [],
+        "enemyShots": [],
+        "player": {
+          "x": 0.5,
+          "y": 0.78
+        },
+        "thrust": 0,
+        "effects": [],
+        "powerUps": [],
+        "powerUpTypes": [],
+        "pickupNotice": null,
+        "score": 0,
+        "shardBase": 0,
+        "shards": 0,
+        "hearts": 3,
+        "maxHearts": 3,
+        "projectileGuard": 0,
+        "shieldCharges": 0,
+        "shieldMs": 0,
+        "purchasedShieldMs": 0,
+        "shieldActive": true,
+        "overdriveMs": 0,
+        "overdriveTotalMs": 20000,
+        "rapidFireMs": 0,
+        "rapidFireTotalMs": 20000,
+        "empMs": 0,
+        "pendingStartPower": null,
+        "weaponLevel": 2,
+        "weaponSource": "paid",
+        "weaponCap": 3,
+        "paidWeaponLevel": 2,
+        "paidWeaponMs": 45000,
+        "pickupWeaponLevel": 1,
+        "pickupWeaponMs": 0,
+        "unlockedWeapons": [
+          1,
+          2,
+          3
+        ],
+        "weaponTimers": [
+          0,
+          0,
+          45000,
+          0,
+          0,
+          0
+        ],
+        "destroyed": 0,
+        "sector": 1,
+        "section": 1,
+        "phase": "FORMATION",
+        "status": "paused"
+      },
+      "notice": null,
+      "menu": true,
+      "technical": false,
+      "countdown": null,
+      "error": "",
+      "busy": false,
+      "formation": true,
+      "spawned": 6,
+      "flight": 0,
+      "sectionElapsed": 7334,
+      "variety": {
+        "version": 1,
+        "clock": 3078,
+        "weaponDue": 18000,
+        "weaponIssued": true,
+        "asteroidDue": 28000,
+        "asteroidEvents": 0,
+        "asteroidStage": 1,
+        "asteroidStageEvents": 2,
+        "waveDamage": 0,
+        "waveDestroyed": 0,
+        "waveCombo": 0,
+        "waveComplete": false,
+        "notice": "Clear the formation",
+        "noticeMs": 2416,
+        "rocks": []
+      }
+    },
+    "requests": [
+      {
+        "path": "/api/usage/collect",
+        "status": 204
+      },
+      {
+        "path": "/api/user/me",
+        "status": 200
+      },
+      {
+        "path": "/api/user/me",
+        "status": 200
+      },
+      {
+        "path": "/api/user/me",
+        "status": 200
+      },
+      {
+        "path": "/api/progress/me",
+        "status": 200
+      },
+      {
+        "path": "/api/progress/me",
+        "status": 200
+      },
+      {
+        "path": "/api/hangar/start",
+        "status": 200
+      },
+      {
+        "path": "/api/rewards/me",
+        "status": 200
+      },
+      {
+        "path": "/api/progress/card-reveals",
+        "status": 200
+      },
+      {
+        "path": "/api/hangar/catalog",
+        "status": 200
+      },
+      {
+        "path": "/api/hangar/inventory",
+        "status": 200
+      },
+      {
+        "path": "/api/hangar/catalog",
+        "status": 200
+      },
+      {
+        "path": "/api/hangar/inventory",
+        "status": 200
+      },
+      {
+        "path": "/api/progress/checkpoint",
+        "status": 200
+      },
+      {
+        "path": "/api/hangar/weapon/activate",
+        "level": 2,
+        "status": 200
+      },
+      {
+        "path": "/api/progress/checkpoint",
+        "status": 200
+      }
+    ]
+  },
+  "lastView": {
+    "scenario": "phone-reduced",
+    "view": {
+      "currentName": "Standard",
+      "symbols": [
+        {
+          "level": 4,
+          "text": "Ⅳ",
+          "hidden": "true"
+        },
+        {
+          "level": 1,
+          "text": "Ⅰ",
+          "hidden": "true"
+        }
+      ],
+      "text": "ⅣDreifach · abgelaufen\n→ ⅠStandard",
+      "color": "rgb(255, 179, 183)",
+      "animation": "none",
+      "pointerEvents": "none",
+      "buttons": 0,
+      "box": {
+        "top": 383.25,
+        "bottom": 444.25,
+        "left": 83.296875,
+        "right": 346.703125
+      },
+      "binary": {
+        "top": 354.75,
+        "bottom": 472.75,
+        "left": 0,
+        "right": 430
+      },
+      "overlaps": 0,
+      "active": "Standard"
+    }
+  },
+  "responses": [
+    {
+      "scenario": "phone-paid",
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "level": 2,
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/event",
+          "level": 1,
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "scenario": "phone-multiflight",
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "level": 3,
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "level": 2,
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "scenario": "phone-reduced-multiflight",
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "level": 3,
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "level": 2,
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "scenario": "phone-delayed-reload",
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "level": 2,
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "level": 2,
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "scenario": "compact-failed-reload",
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "level": 2,
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "level": 2,
+          "status": 503,
+          "error": "isolated_unavailable"
+        }
+      ]
+    },
+    {
+      "scenario": "compact-left",
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "level": 2,
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "scenario": "tablet-thai",
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "level": 2,
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "scenario": "desktop-auto",
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "level": 2,
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "level": 2,
+          "status": 200
+        }
+      ]
+    },
+    {
+      "scenario": "phone-live-fallback",
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "level": 3,
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "level": 2,
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "scenario": "phone-pickup-to-twin",
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "level": 2,
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "scenario": "phone-evolved",
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "level": 2,
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "scenario": "phone-reduced",
+      "requests": [
+        {
+          "path": "/api/usage/collect",
+          "status": 204
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/user/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/me",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/start",
+          "status": 200
+        },
+        {
+          "path": "/api/rewards/me",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/card-reveals",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/catalog",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/inventory",
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        },
+        {
+          "path": "/api/hangar/weapon/activate",
+          "level": 2,
+          "status": 200
+        },
+        {
+          "path": "/api/progress/checkpoint",
+          "status": 200
+        }
+      ]
+    }
+  ],
+  "directWindowBoundary": {
+    "staleVisible": 0,
+    "pending": null
+  }
+}

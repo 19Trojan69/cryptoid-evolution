@@ -1,0 +1,25 @@
+{
+  "base": "c7811d0856dd18e3e0d56449c32f644120a7ae81",
+  "baseTree": "a21aa5ce068a1477f6ab3f45fee1c0f909cf2ee0",
+  "controllerSha256": "51db299a50ee70835758c46bf8209a1ffa779dd88451db1fa026cb9d5c3b0bbb",
+  "restoredWholePublishedControllerSha256": "eb219ac8306919d27008dd7929fce871eff0e1b2df0d682ee518d3a23394e782",
+  "exactRestoration": "frontend/scripts/quietFeedbackReviewedChanges.mjs",
+  "backendApiOriginalAssetsAndHomeUnchanged": true,
+  "newTimerObserverRafOrAnimationLoop": false,
+  "warningPhaseMs": 4800,
+  "comparableNoticeMs": 4800,
+  "releasedVarietyIntroClockMs": [
+    550,
+    850
+  ],
+  "realPurchases": false,
+  "liveAccountWrites": false,
+  "backend127Rerun": false,
+  "physicalDeviceOrHeatClaim": false,
+  "workBranchAutoDeployDisabled": true,
+  "rollback": {
+    "commit": "c7811d0856dd18e3e0d56449c32f644120a7ae81",
+    "testnet": "dpl_4nYG31Dn9u22Fe78rhC5FX2Yay2i",
+    "production": "dpl_51UKRCrDEbL6Jsfo91LEeun2EWk1"
+  }
+}

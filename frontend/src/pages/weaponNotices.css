@@ -28,3 +28,9 @@
   font-size: .85em;
   font-weight: 600;
 }
+.weapon-transition-notice .weapon-reload-status {
+  display: block;
+  margin-top: 3px;
+  font-size: .75em;
+  line-height: 1.2;
+}

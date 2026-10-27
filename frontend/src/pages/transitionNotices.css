@@ -6,6 +6,13 @@
 .game-field .sector-banner.readable-transition.boss-intro-banner.sector-transition {
   animation: readable-notice var(--transition-duration) linear both;
 }
+.game-field .reinforcement-notice.readable-reinforcement {
+  transform: translate(-50%, -50%);
+  animation: readable-notice var(--transition-duration) linear both;
+}
+.game-shell[data-effects-paused="true"] .reinforcement-notice.readable-reinforcement {
+  animation-play-state: paused !important;
+}
 .game-field .sector-banner.readable-transition *,
 .game-field .sector-banner.readable-transition::before,
 .game-field .sector-banner.readable-transition::after {
@@ -32,6 +39,7 @@
   animation-play-state: paused !important;
 }
 @media (prefers-reduced-motion: reduce) {
+  .game-field .reinforcement-notice.readable-reinforcement,
   .game-field .sector-banner.readable-transition,
   .game-field .sector-banner.readable-transition.sector-clear-message,
   .game-field .sector-banner.readable-transition.level-intro-banner.sector-transition,
@@ -39,6 +47,7 @@
     animation: none;
   }
 }
+html[data-motion="reduced"] .game-field .reinforcement-notice.readable-reinforcement,
 html[data-motion="reduced"] .game-field .sector-banner.readable-transition,
 html[data-motion="reduced"] .game-field .sector-banner.readable-transition.sector-clear-message,
 html[data-motion="reduced"] .game-field .sector-banner.readable-transition.level-intro-banner.sector-transition,

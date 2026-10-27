@@ -3,10 +3,11 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { transformSync } from 'esbuild';
-import { createWeaponSpentNotice } from './weaponSpentNotice.ts';
+import { createWeaponSpentNotice, updateWeaponReloadNotice } from './weaponSpentNotice.ts';
 import { nextActiveWeapon, shouldAutoReload } from './weaponAutoReload.ts';
 import { stageWeaponLevel } from './shipEvolution.ts';
 import { weaponSymbols } from './weaponSymbols.ts';
+import { restoreQuietFeedbackGameChanges } from '../../scripts/quietFeedbackReviewedChanges.mjs';
 import { restoreWeaponSymbolGameChanges } from '../../scripts/weaponSymbolReviewedChanges.mjs';
 import { componentHost } from '../../scripts/componentTestHost.mjs';
 import { restoreBinaryWeaponGameChanges } from '../../scripts/binaryWeaponReviewedChanges.mjs';
@@ -52,7 +53,7 @@ test('real expiry still makes the same fallback/activation/stock decisions, incl
         autoReloadRef: { current: { 2: !!c.auto, 4: !!c.next } }, stockRef: { current: { weapon_twin: c.stock ?? 0 } }, shipSaveNetwork: 'testnet',
         hangarCatalog: [{ kind: 'weapon', level: 2 }], isTestnetWeaponPurchaseEnabled: () => c.allowed !== false,
         syncSelectedWeapon() {}, nextActiveWeapon, shouldAutoReload, createWeaponSpentNotice,
-        reloadRequestRef: { current: level => { requests.push(level); return c.start ?? false; } }, weaponSpentRef: { current: null }, setWeaponSpent() {}, forceScene: false };
+        reloadRequestRef: { current: level => { requests.push(level); return c.start ?? false; } }, weaponSpentRef: { current: null }, reloadPendingRef: { current: false }, setWeaponSpent() {}, forceScene: false };
       runExpiry(text)(env); return { env, requests, state };
     };
     const before = run(original), after = run(source);
@@ -72,7 +73,7 @@ test('the actual JSX mounts the passive name only in the exact binary window and
   const names = ['', 'Standard', 'Twin', 'Rapid', 'Triple', 'Plasma'];
   for (const status of ['playing','paused','loading','destroying','game-over','victory']) for (const encounter of ['normal','bonus','boss-intro','boss-fight','boss-clear']) {
     for (const phase of ['SECTOR_INTRO','ENTRY','FORMATION','ATTACK_CYCLE','REFORM','SECTOR_CLEAR']) for (const started of [false,true]) for (const pending of [false,true]) {
-      const env={element,fragment:'fragment',game:{status,encounter,phase,weaponLevel:4},formationStartedRef:{current:started},weaponSpent:pending?2:null,
+      const env={element,fragment:'fragment',game:{status,encounter,phase,weaponLevel:4},formationStartedRef:{current:started},flight:0,weaponSpent:pending?createWeaponSpentNotice('paid',2,16,0):null,weaponSpentRef:{current:pending?createWeaponSpentNotice('paid',2,16,0):null},reinforcementIntro:false,
         FORMATION_DATA_ROWS:['01'],WeaponSpentNotice:'WeaponSpentNotice',weaponNames:names,stageWeaponLevel,shipStage:1,levelIntro:false,markWeaponSpentShown(){}};
       const tree=nodes(renderBinary(env));
       const expected=status==='playing'&&encounter==='normal'&&!started&&['SECTOR_INTRO','ENTRY','FORMATION'].includes(phase);
@@ -80,10 +81,10 @@ test('the actual JSX mounts the passive name only in the exact binary window and
       assert.equal(tree.some(n=>n.type==='WeaponSpentNotice'),expected&&pending);
     }
   }
-  const titleEnv={element,fragment:'fragment',game:{status:'playing',encounter:'normal',phase:'SECTOR_INTRO',weaponLevel:1},formationStartedRef:{current:false},weaponSpent:4,FORMATION_DATA_ROWS:['01'],WeaponSpentNotice:'WeaponSpentNotice',weaponNames:names,stageWeaponLevel,shipStage:1,levelIntro:true,markWeaponSpentShown(){}};
+  const titleEnv={element,fragment:'fragment',game:{status:'playing',encounter:'normal',phase:'SECTOR_INTRO',weaponLevel:1},formationStartedRef:{current:false},flight:0,weaponSpent:createWeaponSpentNotice('paid',4,16,0),weaponSpentRef:{current:createWeaponSpentNotice('paid',4,16,0)},reinforcementIntro:false,FORMATION_DATA_ROWS:['01'],WeaponSpentNotice:'WeaponSpentNotice',weaponNames:names,stageWeaponLevel,shipStage:1,levelIntro:true,markWeaponSpentShown(){}};
   const titled=nodes(renderBinary(titleEnv));assert.equal(titled.some(n=>n.props.className==='formation-data-stream'),true);assert.equal(titled.some(n=>n.type==='WeaponSpentNotice'),false,'a centered level title keeps its space while the code continues');
   for (const stage of [1,2,3]) for (const level of [1,2,3,4,5]) {
-    const tree=nodes(renderBinary({element,fragment:'fragment',game:{status:'playing',encounter:'normal',phase:'ENTRY',weaponLevel:level},formationStartedRef:{current:false},weaponSpent:2,
+    const tree=nodes(renderBinary({element,fragment:'fragment',game:{status:'playing',encounter:'normal',phase:'ENTRY',weaponLevel:level},formationStartedRef:{current:false},flight:0,weaponSpent:createWeaponSpentNotice('paid',2,16,0),weaponSpentRef:{current:createWeaponSpentNotice('paid',2,16,0)},reinforcementIntro:false,
       FORMATION_DATA_ROWS:['01'],WeaponSpentNotice:'WeaponSpentNotice',weaponNames:names,stageWeaponLevel,shipStage:stage,levelIntro:false,markWeaponSpentShown(){}}));
     const notice=tree.find(n=>n.type==='WeaponSpentNotice');
     assert.equal(notice.props.weaponName,names[stageWeaponLevel(stage,level)]);
@@ -96,7 +97,7 @@ test('the real lifecycle keeps a pending name through combat/pauses, uses the wh
   const start=source.indexOf('        if (weaponSpentRef.current?.shown');
   const block=source.slice(start,source.indexOf('        impactCooldownRef.current =',start));
   const run=new Function('env','with(env){if(state.status==="playing"){'+block+'}}');
-  const make=(shown=false)=>({state:{status:'playing',encounter:'normal',phase:'ATTACK_CYCLE'},formationStartedRef:{current:true},weaponSpentRef:{current:{...createWeaponSpentNotice('paid',2,16,0),shown}},setWeaponSpent(){},forceScene:false});
+  const make=(shown=false)=>({state:{status:'playing',encounter:'normal',phase:'ATTACK_CYCLE',section:19},flightRef:{current:0},formationStartedRef:{current:true},weaponSpentRef:{current:{...createWeaponSpentNotice('paid',2,16,0),shown,window:'19:0'}},setWeaponSpent(){},forceScene:false});
   const queued=make();for(let i=0;i<100;i++)run(queued);assert.ok(queued.weaponSpentRef.current,'an unseen name is queued, never shown over combat');
   for(const phase of ['SECTOR_INTRO','ENTRY','FORMATION']){
     const env=make(true);env.state.phase=phase;env.formationStartedRef.current=false;
@@ -130,13 +131,44 @@ test('the real component names expiry and the current shot, with passive accessi
 
 test('exact reviewed changes restore the entire published controller, original binary markup and retained critical guards', () => {
   assert.equal(hash(restoreWeaponSymbolGameChanges(source)),'4fdd0f448af7dfd952a69db6c3a5c681bd8ad03822be91f10657ecf832a1ac2b');
-  assert.throws(()=>restoreWeaponSymbolGameChanges(source.replace('expiredLevel={weaponSpent}','expiredLevel={1}')),/one exact/);
+  assert.throws(()=>restoreWeaponSymbolGameChanges(source.replace('expiredLevel={weaponSpent.level}','expiredLevel={1}')),/one exact/);
   assert.equal(hash(original),'ab979a75eef6698b84a0f015f10c50dc513cd7f211f790624a09b3dc45697be3');
   assert.throws(()=>restoreBinaryWeaponGameChanges(source.replace('onShown={markWeaponSpentShown}','onShown={()=>{}}')),/one exact/);
   assert.notEqual(hash(restoreBinaryWeaponGameChanges(source.replace('watch: callback => window.setInterval(callback, 500)','watch: callback => window.setInterval(callback, 1000)'))),hash(original));
   assert.throws(()=>restoreBinaryWeaponGameChanges(source.replace("stockRef.current, shipSaveNetwork === 'testnet'","stockRef.current, shipSaveNetwork === 'mainnet'")),/one exact/);
   const oldBinary=original.split('\n').find(line=>line.includes('className="formation-data-stream"'));
-  const newBinary=binaryLine.replace('&& <><div className="formation-data-stream"','&& <div className="formation-data-stream"').replace(/<\/div>\{weaponSpent && !levelIntro && <WeaponSpentNotice[\s\S]*$/, '</div>}');
+  const newBinary=restoreQuietFeedbackGameChanges(source).split('\n').find(line=>line.includes('className="formation-data-stream"')).replace('&& <><div className="formation-data-stream"','&& <div className="formation-data-stream"').replace(/<\/div>\{weaponSpent && !levelIntro && <WeaponSpentNotice[\s\S]*$/, '</div>}');
   assert.equal(newBinary,oldBinary);
-  assert.ok(!source.includes('reloadNoticeTimerRef'));assert.ok(!source.includes('WeaponReloadNotice'));
+  assert.ok(!source.includes('reloadNoticeTimerRef'));assert.ok(!source.includes('<WeaponReloadNotice'));
+});
+
+
+test('the actual direct next-flight boundary consumes shown feedback without needing an active frame', () => {
+  const current=source.slice(source.indexOf('        if (nextFlight &&'),source.indexOf('          if (rulesVersionRef.current === 2) state.score += GROUP_CLEAR_POINTS;',source.indexOf('        if (nextFlight &&')));
+  const old=restoreQuietFeedbackGameChanges(source);
+  const previous=old.slice(old.indexOf('        if (nextFlight &&'),old.indexOf('          if (rulesVersionRef.current === 2) state.score += GROUP_CLEAR_POINTS;',old.indexOf('        if (nextFlight &&')));
+  const run=text=>new Function('env','with(env){'+text+'}}');
+  for(const phase of ['ENTRY','FORMATION','ATTACK_CYCLE'])for(const shown of [false,true]){
+    const make=()=>({nextFlight:{group:1},state:{phase},weaponSpentRef:{current:{...createWeaponSpentNotice('paid',2,16,0),shown}},setWeaponSpent(){},forceScene:false});
+    const before=make();run(previous)(before);assert.ok(before.weaponSpentRef.current,'the pinned public boundary never consumes the already-shown record');
+    const after=make();run(current)(after);assert.equal(after.weaponSpentRef.current===null,shown);assert.equal(after.forceScene,shown);
+  }
+});
+
+test('real automatic confirmation updates only the pending record and never recreates consumed feedback', () => {
+  const notice={...createWeaponSpentNotice('paid',2,16,0),reload:'pending'};
+  updateWeaponReloadNotice(notice,3,'complete');assert.equal(notice.reload,'pending');
+  updateWeaponReloadNotice(notice,2,'complete');assert.equal(notice.reload,'complete');
+  updateWeaponReloadNotice(notice,2,'failed');assert.equal(notice.reload,'complete');
+  updateWeaponReloadNotice(null,2,'complete');
+  const pickup={...createWeaponSpentNotice('pickup',2,16,0),reload:'pending'};
+  updateWeaponReloadNotice(pickup,2,'complete');assert.equal(pickup.reload,'pending');
+  assert.equal(hash(restoreQuietFeedbackGameChanges(source)),'eb219ac8306919d27008dd7929fce871eff0e1b2df0d682ee518d3a23394e782');
+  assert.throws(()=>restoreQuietFeedbackGameChanges(source.replace("updateWeaponReloadNotice(weaponSpentRef.current, level, 'failed');",'')),/one exact/);
+  for(const locale of Object.keys(languages))for(const reload of ['pending','complete','failed']){
+    const key=reload==='pending'?'Reloading weapon…':reload==='complete'?'Weapon reloaded':'Reload not confirmed';
+    const h=componentHost('src/pages/WeaponSpentNotice.tsx','WeaponSpentNotice',{expiredLevel:2,level:2,expiredWeaponName:'Twin',weaponName:'Twin',reload,onShown(){}},{useLocale:()=>({t:key=>translate(locale,key)}),useLayoutEffect:fn=>fn(),weaponSymbols});
+    assert.equal(h.nodes().find(n=>n.props.className==='weapon-reload-status').props.children.join(''),translate(locale,key));
+    if(locale!=='en')assert.notEqual(translate(locale,key),key);h.unmount();
+  }
 });
