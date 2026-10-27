@@ -1,0 +1,15 @@
+{
+  "baseline": "97d74b412f7dc7ea2f4f8c05f483d87eb3451dba",
+  "reusedFixture": "verification/owner-crash-boundary/preview.tsx",
+  "localOnly": true,
+  "syntheticFixtures": true,
+  "actualGame": false,
+  "physicalDevice": false,
+  "operatingSystemScreenshot": false,
+  "historicalWhiteScreenFixed": false,
+  "checks": [],
+  "cases": [],
+  "errors": [],
+  "complete": false,
+  "failure": "Browser launch blocked: local socket creation returned Operation not permitted before any fixture ran."
+}
