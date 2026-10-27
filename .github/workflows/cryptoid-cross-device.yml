@@ -39,7 +39,7 @@ jobs:
             engine: webkit
     env:
       CRYPTOID_TEST_PROFILE: ${{ matrix.profile }}
-      CRYPTOID_TEST_SECONDS: ${{ inputs.seconds || '90' }}
+      CRYPTOID_TEST_SECONDS: ${{ inputs.seconds || '1800' }}
       CRYPTOID_TEST_OUTPUT: ${{ github.workspace }}/verification/cross-device-white-screen-20261027/results/${{ matrix.profile }}
     steps:
       - uses: actions/checkout@v6

@@ -158,6 +158,10 @@ try {
   while (Date.now() - start < seconds * 1000) {
     if (fatal) throw new Error(fatal.kind);
     const state = await within(page.evaluate(() => window.__crossDeviceTest.inspect()), 8000, 'inspection-unresponsive');
+    result.lastState = state;
+    result.maxCanvasCounters ??= {};
+    for (const [key, value] of Object.entries(state.canvas)) if (typeof value === 'number')
+      result.maxCanvasCounters[key] = Math.max(result.maxCanvasCounters[key] || 0, value);
     const elapsed = (Date.now() - start) / 1000;
     seen.add(state.sector); sawShots ||= state.shots > 0 || state.hostileShots > 0;
     if (state.technicalPause) { fail('unexpected-technical-pause', { sector: state.sector, phase: state.phase }); throw new Error('unexpected-technical-pause'); }
@@ -211,6 +215,7 @@ try {
     await page.waitForTimeout(250);
   }
   result.observedSeconds = Math.round((Date.now() - start) / 1000);
+  if (fatal) throw new Error(fatal.kind);
   assert.ok(sawShots, 'Actual projectiles observed');
   assert.ok(result.sectors.length >= 2, 'Actual sector progression observed');
   assert.ok(pauseDone && result.milestones.includes('explicit-resume'), 'Explicit pause and Resume exercised');

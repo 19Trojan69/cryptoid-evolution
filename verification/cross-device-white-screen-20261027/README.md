@@ -36,9 +36,8 @@ total device/GPU memory. No result establishes the historical native crash cause
 
 ## Execution
 
-The dedicated branch push first requests a 90-second setup run for all three
-profiles. After setup succeeds, set the push duration to 1800 and push the
-workflow change for three 30-minute sessions. Manual dispatch also accepts
+The dedicated branch push now requests 1800 seconds for each profile, after all
+three 90-second setup runs passed. Manual dispatch also accepts
 30–3600 seconds when the workflow is available for dispatch. Artifacts expire
 after three days and contain only the isolated test account's evidence.
 
@@ -84,5 +83,18 @@ a reproduced White Screen.
   waits for the visible Resume dialog separately, records document visibility,
   and allows a bounded 30-second ordinary click. It does not force or dispatch a
   DOM click. Each CI job installs only its required browser engine.
+
+## Validated short run
+
+GitHub Actions run `40570077403` completed successfully on all three profiles:
+
+| Profile | Real wall time | Sectors reached | Pause/Resume | Browser captures | JS/API errors |
+| --- | --- | --- | --- | --- | --- |
+| Android phone emulation | 90 seconds | 1–5 | passed | 2 | 0 / 0 |
+| Android tablet emulation | 90 seconds | 1–5 | passed | 2 | 0 / 0 |
+| iPhone emulation | 90 seconds | 1–4 | passed | 2 | 0 / 0 |
+
+This validates runner setup and short gameplay only. The historical White Screen
+is not declared fixed. Three 30-minute sessions are the next execution step.
 - Existing diagnostic draft PR #194 stays separate and unmerged. Raw owner
   reports and private telemetry are not copied into this test package.
