@@ -30,6 +30,13 @@ jobs:
       fail-fast: false
       matrix:
         profile: [android-phone, android-tablet, iphone]
+        include:
+          - profile: android-phone
+            engine: chromium
+          - profile: android-tablet
+            engine: chromium
+          - profile: iphone
+            engine: webkit
     env:
       CRYPTOID_TEST_PROFILE: ${{ matrix.profile }}
       CRYPTOID_TEST_SECONDS: ${{ inputs.seconds || '90' }}
@@ -51,7 +58,7 @@ jobs:
         run: |
           npm install --prefix verification/cross-device-white-screen-20261027 --ignore-scripts --no-audit --no-fund
           cd verification/cross-device-white-screen-20261027
-          npx playwright install --with-deps chromium webkit
+          npx playwright install --with-deps ${{ matrix.engine }}
       - name: Validate real-handler fixture and unchanged controller
         run: node --experimental-strip-types verification/cross-device-white-screen-20261027/preflight.mjs
       - name: Run actual gameplay with real clocks

@@ -49,7 +49,7 @@ export const hooks = `
         destroyed:s.destroyed, bossHealth:s.boss?.health ?? null, bonusHits:s.bonusHits,
         effects:s.effects.length, paidWeaponMs:s.paidWeaponMs, weapon:s.weaponLevel,
         frameAt:lastFrameRef.current, technicalPause, weaponMenuOpen,
-        countdown:weaponCountdown, summary:!!bossSummaryRef.current,
+        countdown:weaponCountdown, summary:!!bossSummaryRef.current, cards:rewardCards.length,
         prepared:bossSummaryPrepared, failed:bossSummaryFailed,
         bonusX:s.bonusTargets[0] ? s.bonusTargets[0].x / width : null,
         player:{...s.player}, field:{...fieldSizeRef.current},

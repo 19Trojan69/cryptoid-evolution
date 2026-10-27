@@ -72,5 +72,17 @@ a reproduced White Screen.
 - The first external setup attempt stopped before browser/game execution:
   `npm ci` requires a frontend npm lockfile which the repository does not contain.
   The frontend now uses the repository's npm installation approach.
+- The next tablet attempt reached sectors 1 and 2, then stopped at the planned
+  Pause because the test monitor classified the game's same-document modal
+  history entry as a document navigation. Evidence showed the normal Pause
+  dialog and no all-white capture. The monitor now separates document identity
+  and route changes from same-document history. This is a harness correction,
+  not a production-game fix or a completed duration pass.
+- The iPhone-emulation setup displayed the resume dialog, but its initial click
+  exceeded the shared 10-second timeout after page loading. No gameplay or White
+  Screen was observed there. Startup now explicitly brings the page forward,
+  waits for the visible Resume dialog separately, records document visibility,
+  and allows a bounded 30-second ordinary click. It does not force or dispatch a
+  DOM click. Each CI job installs only its required browser engine.
 - Existing diagnostic draft PR #194 stays separate and unmerged. Raw owner
   reports and private telemetry are not copied into this test package.
