@@ -6,6 +6,7 @@ const redundantFormationNotices = new Set([
   'Hold your combo',
   'Perfect formation',
   'FORMATION CLEARED',
+  'Weapon Upgrade',
 ]);
 
 export const showCombatNotice = (notice: string) =>

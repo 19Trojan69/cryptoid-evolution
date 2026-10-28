@@ -1,25 +1,30 @@
-# Full-heart boss reward and quiet formation notices, 28 October 2026
+# Quiet combat messages and full-heart boss reward, 28 October 2026
 
-The owner requests50 instead of5 Shards only when collecting a boss heart at the
-armor heart limit. Missing hearts still heal one with no replacement Shards.
-Preserve physical pickup, once-only/Resume flags and old collected5-Shard values.
-Shop/guide copy agree in all19 languages. No migrations, purchases or price changes.
-The latest screenshot request additionally removes redundant in-flight prompts:
-Clear the formation, Finish this wave without a hit, Hold your combo, Perfect
-formation and FORMATION CLEARED. Filter source keys in presentation, including old
-saved notices, without changing snapshots or generating a formation reward.
-Keep heavy-attacker warnings, every power-up notice and Block/group/central-clear
-feedback, their same native status markup, position, timing and translation.
-No game loop, damage, formation simulation, economy beyond the single boss value,
-audio/art, account, backend handler or diagnostic change. Two fixed JSX/import
-hunks restore the entire public5ca9cf7 controller before existing strict guards.
-Validation:473 frontend release/locales/types/Vite; the142 backend checks retained
-from the preceding unchanged-backend validation. Three actual-React notice cases
-cover all19 locales, previous-source comparison, restored notices, retained output
-and scope negatives. New helper lint clean; controller remains zero errors/four
-old warnings. No physical-device/White Screen claim. Keep PR198 and the same work
-branch automatic deployment disabled; draft only. See docs/verification full-heart-
-shards-20261028. Preserve separate194/195 and the iPhone screenshot investigation.
+PR198 now also follows the latest request: remove live shot names/timer/progress,
+reserve rail fields, weapon-pickup captions and in-flight reload confirmations.
+The single Weapons button and all paused-menu selection/payment/confirmation rules
+remain. Only a real selected paid expiry queues a caption; pickup/permanent shots
+do not. Show only expired name and Expired in bright red for3000ms with two slow
+native pulses. Wait for an existing normal SECTOR_CLEAR with no enemies/incoming
+shots and at least3000ms available; never alter the phase duration or pause play.
+Start at the actual component commit. Reuse existing playing delta; true pauses
+hide/freeze the same mounted caption. Resume cannot restart it. Unexpected combat
+consumes a shown caption. Read only a live scalar enemy-shot count; preserve the
+projectile-snapshot guard and no extra JS timer/RAF/observer or automatic Resume.
+Keep the earlier5-to50 full-heart boss replacement and missing-heart healing,
+old collected5-Shard values, once-only/Resume flags and19-language copy. Hide the
+five redundant formation notice keys plus Weapon Upgrade before translation;
+retain heavy warnings, other boosts and Block/group/central completion feedback.
+No new formation rewards, migration, price/stock/Auto/receipt/activation/collision/
+combat-clock/audio/art/backend-handler or diagnostic changes. Eight fixed paid-
+expiry hunks restore the prior reviewed controller before two formation hunks and
+all historical guards.475 frontend release/locales/types/Vite pass; unchanged
+backend retains142 passing checks. Changed helpers/status lint clean; controller
+still zero errors/four old warnings. Fixtures and CSS-only animation checks do
+not establish native-device performance or a White Screen fix. Keep the same
+PR198 work branch automatic deployment disabled and draft only. Preserve separate
+194/195 and the iPhone investigation. See matching docs/verification full-heart-
+shards-20261028 for exact checks and fixture limits.
 
 # Fair ship stages without invisible hit protection, 28 October 2026
 

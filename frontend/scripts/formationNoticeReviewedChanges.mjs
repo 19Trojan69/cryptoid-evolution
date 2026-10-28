@@ -1,3 +1,4 @@
+import { restorePaidExpiryChanges } from './paidExpiryReviewedChanges.mjs';
 // Two exact presentation-only changes against published5ca9cf7.
 export const formationNoticeChanges = [
   {
@@ -11,6 +12,7 @@ export const formationNoticeChanges = [
 ];
 
 export function restoreFormationNoticeChanges(source) {
+  source = restorePaidExpiryChanges(source);
   for (const { before, after } of [...formationNoticeChanges].reverse()) {
     if (source.split(after).length !== 2) throw Error('Expected one exact formation notice change');
     source = source.replace(after, before);

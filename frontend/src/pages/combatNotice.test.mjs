@@ -25,7 +25,7 @@ const html = (render, saved, locale, enabled = true) => renderToStaticMarkup(ren
 
 test('the real status hides redundant formation notices in every language, including a restored saved notice', () => {
   for (const locale of Object.keys(languages)) {
-    for (const notice of ['Clear the formation', 'Finish this wave without a hit', 'Hold your combo', 'Perfect formation', 'FORMATION CLEARED']) {
+    for (const notice of ['Clear the formation', 'Finish this wave without a hit', 'Hold your combo', 'Perfect formation', 'FORMATION CLEARED', 'Weapon Upgrade']) {
       const saved = JSON.parse(JSON.stringify({current: {notice, noticeMs: 1800, waveComplete: true, waveDamage: 0}}));
       const snapshot = JSON.stringify(saved);
       assert.match(html(previous, saved, locale), /class="combat-variety-notice"/, 'released status displays the redundant pill');
@@ -38,7 +38,7 @@ test('the real status hides redundant formation notices in every language, inclu
 
 test('the real status preserves heavy warnings and every power-up notice with the same text, position and expiry', () => {
   for (const locale of Object.keys(languages)) {
-    for (const notice of ['Heavy attacker incoming', ...Object.values(powerUpNames)]) {
+    for (const notice of ['Heavy attacker incoming', ...Object.values(powerUpNames).filter(name => name !== 'Weapon Upgrade')]) {
       const saved = {current: {notice, noticeMs: 1800}};
       const output = html(current, saved, locale);
       assert.equal(output, html(previous, saved, locale));

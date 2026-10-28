@@ -7,7 +7,7 @@
     "after": 50
   },
   "frontend": {
-    "cases": 473,
+    "cases": 475,
     "failures": 0,
     "typecheck": true,
     "localization": true,
@@ -92,18 +92,18 @@
       "Finish this wave without a hit",
       "Hold your combo",
       "Perfect formation",
-      "FORMATION CLEARED"
+      "FORMATION CLEARED",
+      "Weapon Upgrade"
     ],
     "savedNoticesHandled": true,
     "combatStateMutated": false,
-    "heavyWarningsAndPowerUpNoticesRetained": true,
     "locales": 19,
-    "oldAndNewHiddenRenderPairs": 95,
-    "retainedRenderComparisons": 95,
-    "expiredOrDisabledRenders": 190,
+    "oldAndNewHiddenRenderPairs": 114,
+    "retainedRenderComparisons": 76,
+    "expiredOrDisabledRenders": 152,
     "controllerHunks": 2,
     "restoredControllerSha256": "10130d98a4cc4c60ec48d885515e95ec01b9da9db98c5c7b5979f8c529327fc9",
-    "candidateControllerSha256": "0785ece27dc608498958f949852972545c5b15138369615d07bbc4a9223ba02a",
+    "candidateControllerSha256": "625fecc2cb959e4ed4ba690f7867d0a07b247b9a136a8ce308afecaf6dcd94fa",
     "lint": {
       "controller": {
         "before": {
@@ -120,6 +120,80 @@
         "errors": 0,
         "warnings": 0
       }
-    }
+    },
+    "heavyWarningsAndNonWeaponBoostNoticesRetained": true
+  },
+  "paidExpiry": {
+    "cases": 10,
+    "paidOnly": true,
+    "durationMs": 3000,
+    "firstComponentCommitStartsClock": true,
+    "usesExistingPlayingStep": true,
+    "quietWindow": "normal SECTOR_CLEAR, no enemies or incoming shots, at least3000ms available at first display",
+    "pauseFreezesAndHides": true,
+    "unexpectedCombatRetiresShownCaption": true,
+    "phaseTimingChanged": false,
+    "selectionAutoAndStockChanged": false,
+    "liveWeaponNamesAndMetersRemoved": true,
+    "pickupWeaponCaptionsRemoved": true,
+    "inFlightReloadConfirmationRemoved": true,
+    "pausedWeaponMenuRetained": true,
+    "nativePulseSeconds": 1.5,
+    "nativePulseIterations": 2,
+    "reducedMotionRespected": true,
+    "nativeAnimationTimingMeasured": false,
+    "additionalTimersOrRaf": false,
+    "controllerHunks": 8,
+    "restoredPriorControllerSha256": "0785ece27dc608498958f949852972545c5b15138369615d07bbc4a9223ba02a",
+    "lint": [
+      {
+        "file": "src/pages/GamePage.tsx",
+        "before": {
+          "errors": 0,
+          "warnings": 4
+        },
+        "after": {
+          "errors": 0,
+          "warnings": 4
+        },
+        "added": []
+      },
+      {
+        "file": "src/pages/WeaponSpentNotice.tsx",
+        "before": {
+          "errors": 0,
+          "warnings": 0
+        },
+        "after": {
+          "errors": 0,
+          "warnings": 0
+        },
+        "added": []
+      },
+      {
+        "file": "src/pages/combatNotice.ts",
+        "before": {
+          "errors": 0,
+          "warnings": 0
+        },
+        "after": {
+          "errors": 0,
+          "warnings": 0
+        },
+        "added": []
+      },
+      {
+        "file": "src/pages/weaponSpentNotice.ts",
+        "before": {
+          "errors": 0,
+          "warnings": 0
+        },
+        "after": {
+          "errors": 0,
+          "warnings": 0
+        },
+        "added": []
+      }
+    ]
   }
 }
