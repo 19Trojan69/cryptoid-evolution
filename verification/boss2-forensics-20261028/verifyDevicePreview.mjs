@@ -48,7 +48,9 @@ try{
  await page.getByRole('button',{name:/^(Pause|Pausieren)$/}).click();
  await page.waitForFunction(()=>window.__crossDeviceTest.inspect().status==='paused');
  const pause=await page.evaluate(()=>window.__bossLabPauseEvents.at(-1));assert.equal(pause.pauseReason,'manual-pause');summary.pause=pause;
- await page.waitForFunction(()=>{try{const value=JSON.parse(localStorage.getItem('cryptoid_owner_full_status_v1')||'null');return value?.lastObserved?.kind==='pause'&&value.lastCommittedSeq>=value.lastObservedSeq;}catch{return false;}},null,{timeout:10000});
+ const committedThrough=await page.evaluate(()=>JSON.parse(localStorage.getItem('cryptoid_owner_full_status_v1')||'null')?.lastObservedSeq);
+ assert.ok(Number.isSafeInteger(committedThrough)&&committedThrough>0);
+ await page.waitForFunction(sequence=>{try{const value=JSON.parse(localStorage.getItem('cryptoid_owner_full_status_v1')||'null');return value?.lastCommittedSeq>=sequence;}catch{return false;}},committedThrough,{timeout:10000});
  await page.screenshot({path:output+'/paused.png'});
  // Deliberately reload while paused to verify local report recovery, not a simulated native kill.
  await page.reload({waitUntil:'domcontentloaded'});

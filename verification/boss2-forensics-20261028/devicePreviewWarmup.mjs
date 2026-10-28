@@ -8,8 +8,12 @@ import { preloadBossWeapons } from '../../frontend/src/pages/bossWeaponTextures.
 // Cover the real guest's first render plus the following disclosed boss seed.
 export async function warmDeviceScene() {
   const first=preparedHullPlan(1,'normal',0,0,0,2),boss=preparedHullPlan(20,'boss-intro',0,0,0,2);
-  const selected=selectedShip(),plan=[...first,...boss,{sprite:selected.skin.sprite,color:selected.color.id,stage:1}];
-  const lease=retainPreparedHulls(plan),config=bossForLevel(20);
+  const selected=selectedShip();
+  // The real helper deliberately caps each plan at twelve. Acquire each real
+  // plan separately, rather than silently dropping the following boss plan.
+  const leases=[retainPreparedHulls(first),retainPreparedHulls(boss),
+    retainPreparedHulls([{sprite:selected.skin.sprite,color:selected.color.id,stage:1}])];
+  const lease={release(){for(const current of leases)current.release();}},config=bossForLevel(20);
   preloadHullSources(hullSourcePlan(1,'normal',0,0),first);
   preloadHullSources(hullSourcePlan(20,'boss-intro',0,0),boss);
   const hull=new Image();
@@ -19,8 +23,8 @@ export async function warmDeviceScene() {
     hull.src=config.image;
   });
   try {
-    const [results]=await Promise.all([lease.settled,preloadBossWeapons(config),ready]);
-    if(results.some(value=>!value))throw Error('Hull preparation incomplete');
+    const [results]=await Promise.all([Promise.all(leases.map(current=>current.settled)),preloadBossWeapons(config),ready]);
+    if(results.flat().some(value=>!value))throw Error('Hull preparation incomplete');
     return lease;
   }catch(error){lease.release();throw error;}
 }

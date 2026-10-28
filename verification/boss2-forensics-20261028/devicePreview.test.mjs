@@ -47,6 +47,19 @@ test('HTML preserves the real startup guard while retiring real Pi authenticatio
   assert.ok(html.includes('src="/device-preview-sdk.js"')); assert.ok(!html.includes('https://sdk.minepi.com'));
   assert.ok(html.includes('appNetwork: "testnet"')); assert.ok(html.includes('backendURL: "/api"'));
 });
+test('real warmup acquires both twelve-item plans and the player separately, then hands back releasable pins', async () => {
+  const source=readFileSync(new URL('./devicePreviewWarmup.mjs',import.meta.url),'utf8');
+  const calls=[],released=[];
+  class Image { decode(){return Promise.resolve();}set src(value){void Promise.resolve().then(()=>this.onload());} }
+  const prepare=runInNewContext(source.slice(source.indexOf('export async function')).replace('export async function','async function')+';warmDeviceScene',{
+    preparedHullPlan:sector=>Array.from({length:12},(_,n)=>({sprite:sector*100+n,color:'grey'})),
+    hullSourcePlan:()=>[],selectedShip:()=>({skin:{sprite:0},color:{id:'grey'}}),bossForLevel:()=>({image:'synthetic.webp'}),
+    retainPreparedHulls:plan=>{assert.ok(plan.length<=12);calls.push(plan.map(x=>x.sprite));return{settled:Promise.resolve(plan.map(()=>true)),release:()=>released.push(plan.length)};},
+    preloadHullSources(){},preloadBossWeapons:()=>Promise.resolve(),Image,
+  });
+  const lease=await prepare();assert.deepEqual(calls.map(x=>x.length),[12,12,1]);assert.equal(calls[0][0],100);assert.equal(calls[1][0],2000);
+  assert.deepEqual(released,[]);lease.release();assert.deepEqual(released,[12,12,1]);
+});
 test('actual client transport denies every account/payment/write path without a network adapter', async () => {
   const source=readFileSync(new URL('./devicePreviewTransport.mjs',import.meta.url),'utf8');
   const start=source.indexOf('export async function deviceReply'),end=source.indexOf('export const axiosClient');
