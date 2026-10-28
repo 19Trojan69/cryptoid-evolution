@@ -368,3 +368,76 @@ Das ist kein auf Android/iOS ausgeführtes Fokusereignis. Eine reale Pi-Browser-
 Pause bzw. der ursprüngliche iPhone-Abbruch bleiben Gerätebefunde, bis ein
 passender physischer Zugriff vorhanden ist. Diese Fortsetzung veröffentlicht
 keine neue App-Version und behauptet keinen bestätigten White-Screen-Fix.
+
+## Ergebnis der wiederholten Produktionsmessung
+
+Der [einzige neue CI-Lauf 40756106634](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40756106634)
+an `3762e41f98b7ee1ee6253a34d69a639378f04032` ist erfolgreich. Nach
+60 Sekunden Aufwärmen liefen die drei Fenster 60,899 / 60,813 / 60,799 Sekunden.
+245 Zählerproben enthalten je 58 aktive Proben pro Fenster und Aufwärmphase.
+Alle Fenster zeigen fortschreitende Frames und Reaktorsalven. Vier pausierte
+Snapshots wurden ausgewertet und anschließend gelöscht; kein technischer
+Pause-Zustand, JavaScript-/API-Fehler oder Dokumentwechsel wurde beobachtet.
+
+Der Browser verwendete React/React DOM 19.2.4, Node 24.22.1 und Chromium
+151.0.7922.34. Die tatsächlichen Bundleflags sind `DEV=false`, `PROD=true`.
+Die 18 gebauten JS-/CSS-Assets und alle aufgezeichneten Lock-Prüfsummen sind
+vor und nach den Fenstern identisch. Das belegt die Konstanz innerhalb dieses
+Laufs, nicht identische Installationen mit früheren Läufen.
+
+| Pausierter Messpunkt | Warme Baseline | Fenster 1 | Fenster 2 | Fenster 3 |
+| --- | ---: | ---: | ---: | ---: |
+| Linux-Browser-PSS vor explizitem GC, MiB | 820,33 | 810,12 | 725,22 | 713,30 |
+| PSS nach explizitem GC, MiB | 420,55 | 439,11 | 442,11 | 447,57 |
+| PSS nach anschließendem Snapshot, MiB | 419,71 | 433,57 | 433,98 | 435,72 |
+| Gewöhnlicher JS-Heap nach GC, MiB | 10,451 | 11,094 | 11,234 | 11,307 |
+| DOM-Knoten nach GC | 944 | 944 | 938 | 942 |
+| JS-Listener nach GC | 340 | 336 | 340 | 340 |
+
+Der nach GC verbleibende Prozessanstieg beträgt damit rund 27,02 MiB. Ein
+stabiles Plateau ist nach drei Fenstern nicht belegt. Dass der jeweils folgende
+Snapshot die PSS nochmals senkt, zeigt den Einfluss des Messzeitpunkts und
+Profilers; diese Messpunkte werden nicht mit den Werten direkt nach GC
+vermischt. Die aktiven PSS-Spitzen der drei Fenster liegen bei 800,89 / 727,28 /
+704,77 MiB. Das ist Linux-Prozessspeicher und kein gemessener iPhone-RAM-Wert.
+
+Die gesamte Snapshot-Eigengröße wächst von 18,625 auf 19,531 MiB. Davon
+entfallen 842.392 Bytes, etwa 0,803 MiB, auf den Snapshot-Knotentyp `code`.
+Das erklärt weder den ganzen Prozessanstieg noch ordnet es diesen einer
+bestimmten Spielallokation zu. Die erfassten DOM-/Listenerbestände wachsen nach
+GC nicht fortlaufend. Ein sichtbares Bild, drei Canvas-Flächen, 6.925.568 Bytes
+gemeldete Sample-Audiopuffer und 422.836 Bytes gemessener Hull-/Texturcache
+bleiben an den pausierten Vergleichspunkten konstant. Nicht erfasste native
+Decoder-/Grafikcaches sind damit nicht ausgeschlossen.
+
+Für die zusätzlich 37 `blink::NetworkResourcesData::ResourceData` und 31
+`blink::XHRReplayData` liefert die begrenzte Pfadauswahl in allen drei Fenstern
+konkrete Referenzen über `blink::DevToolsSession`,
+`blink::InspectorNetworkAgent` und `blink::NetworkResourcesData`. Diese
+untersuchten Objekte werden also über den angeschlossenen Inspector gehalten.
+Weitere ausgewählte Pfade führen über den Browser-Performancebestand,
+React-/Animationsobjekte und generische `events`-/`current`-Kontexte. Die
+generischen Objekte sind damit nicht vollständig einem Recorder oder einer
+fehlerhaften Spielreferenz zugeordnet. Auch die Gruppe `unclassified` bleibt
+inhaltlich unaufgelöst. Es gibt keinen pauschalen Entlastungs- oder Leakbeweis.
+
+Alle vier regulären UI-Pausen sind als `manual-pause` protokolliert. Der
+anschließend ausdrücklich per DOM ausgelöste Blur erzeugt `blur` und erreicht
+den bestehenden Pausenzustand. Dabei bleiben `focused=true`, `hidden=false`:
+Das ist ein Test der tatsächlichen Callback-Verzweigung und kein nachgestellter
+Android-Fokusverlust. Die ursprüngliche Android-Pause und der iPhone-Abbruch
+sind weiterhin nicht auf einem physischen Pi Browser untersucht.
+
+Die [bereinigte Quittung](./repeated-production-results.json) enthält den
+getesteten Commit, Artefakt 12846531587, SHA-256-/ZIP-Prüfung, Vergleichszähler,
+Klassendifferenzen und begrenzte Referenzpfade. Sie enthält keine Roh-Snapshots,
+Snapshot-IDs, Zeichenkettenwerte, Kontodaten oder private Owner-Anhänge. Die
+gesamte Frontend-Releaseprüfung besteht jetzt 514 Tests, TypeScript und den
+abgeschlossenen Vite-Build; die CI-Vorprüfung besteht 18 Tool-/Pause-Tests sowie
+instrumentiertes TypeScript und die unveränderten realen Handler im Fixture.
+Der bestehende Controller-Lintbestand ist kein vollständig grüner Projektlint.
+
+Die Untersuchung liefert präzisere Messbelege, aber noch keine bestätigte
+Ursache oder Behebung des ursprünglichen White Screens. Der PR bleibt Entwurf,
+unveröffentlicht und ungemergt. Dieser Ergebnisnachtrag startet keinen weiteren
+Profilinglauf.
