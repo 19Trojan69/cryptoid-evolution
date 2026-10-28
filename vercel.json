@@ -1,9 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "installCommand": "npm install --prefix frontend && npm install --include=optional --prefix backend",
-  "buildCommand": "VITE_CRYPTOID_DIAGNOSTICS=0 npm run build --prefix frontend",
-  "outputDirectory": "frontend/dist",
+  "installCommand": "npm install --prefix frontend --include=optional --no-audit --no-fund",
+  "buildCommand": "node verification/boss2-forensics-20261028/buildDevicePreview.mjs",
+  "outputDirectory": "verification/boss2-forensics-20261028/results/device-preview/site",
   "redirects": [
     {
       "source": "/stability-report.html",
@@ -41,11 +41,6 @@
       "permanent": false
     }
   ],
-  "functions": {
-    "api/index.ts": {
-      "includeFiles": "backend/node_modules/@img/**"
-    }
-  },
   "rewrites": [
     {
       "source": "/api/:path*",
@@ -57,82 +52,17 @@
     }
   ],
   "git": {
-    "deploymentEnabled": {
-      "codex/white-screen-startup-recovery-20261023": false,
-      "codex/idle-display-resume-guard-20261023": false,
-      "codex/diagnostic-idb-callback-guard-20261023": false,
-      "codex/shop-storage-audit-20261023": false,
-      "codex/hull-load-release-record-20261023": false,
-      "codex/hull-load-readiness-20261023": false,
-      "codex/hull-stage-diagnostics-20261022": false,
-      "codex/full-session-export-recovery-20261022": false,
-      "codex/normal-transition-crash-audit-20261022": false,
-      "codex/weapon-reload-recovery-20261022": false,
-      "codex/canvas-static-url-release-record-20261022": false,
-      "codex/canvas-static-url-readiness-20261022": false,
-      "codex/static-hull-memory-release-record-20261022": false,
-      "codex/static-hull-memory-20261022": false,
-      "codex/audio-graph-initialization-20261022": false,
-      "codex/hull-handoff-release-record-20261021": false,
-      "codex/audio-clock-recovery-20261021": false,
-      "codex/hull-preparation-handoff-20261021": false,
-      "codex/owner-flight-release-record-20261021": false,
-      "codex/owner-flight-recorder-20261021": false,
-      "codex/effect-cleanup-release-record-20261021": false,
-      "codex/testnet-effect-cleanup-release-20261021": false,
-      "codex/spent-boss-weapon-cache-20261021": false,
-      "codex/finished-hit-debris-cleanup-20261021": false,
-      "codex/reactor-door-reuse-20261021": false,
-      "codex/static-boss-glow-20261021": false,
-      "codex/idle-rock-surface-20261021": false,
-      "codex/boss-effect-audit-20261021": false,
-      "codex/crash-diagnosis-20261015": false,
-      "codex/testnet-stability-20261016": false,
-      "codex/official-testnet-frame-audit-20261019": false,
-      "codex/testnet-lazy-session-store-20261019": false,
-      "codex/testnet-small-turret-bodies-20261019": false,
-      "codex/iphone-lifetime-audit-20261020": false,
-      "codex/audio-clock-release-record-20261021": false,
-      "codex/audio-gesture-recovery-20261021": false,
-      "codex/audio-gesture-release-record-20261021": false,
-      "codex/post-interruption-audio-retry-20261021": false,
-      "codex/post-interruption-audio-release-record-20261021": false,
-      "codex/boss-victory-audio-progress-20261021": false,
-      "codex/boss-victory-audio-release-record-20261021": false,
-      "codex/private-playable-preview-20261024": false,
-      "codex/preview-resume-investigation-20261024": false,
-      "codex/private-preview-lifecycle-capture-20261024": false,
-      "codex/testnet-admin-lifecycle-20261025": false,
-      "codex/testnet-whitescreen-boss-stop-20261025": false,
-      "codex/save-budget-retry-20261026": false,
-      "codex/mobile-cockpit-level-completion-20261026": false,
-      "codex/white-screen-runtime-audit-20261026": false,
-      "codex/overlay-control-center-20261026": false,
-      "codex/owner-crash-boundary-20261026": false,
-      "codex/level-completion-confirmation-20261026": false,
-      "codex/level-completion-entrance-20261026": false,
-      "codex/completion-audio-resume-20261026": false,
-      "codex/ship-overlay-alignment-20261026": false,
-      "codex/continue-hull-prefetch-20261026": false,
-      "codex/cockpit-indicator-spacing-20261026": false,
-      "codex/smartphone-idle-work-20261027": false,
-      "codex/effect-path-reuse-20261027": false,
-      "codex/playable-standard-resolution-20261027": false,
-      "codex/projectile-scene-copy-20261027": false,
-      "codex/game-over-idle-20261027": false,
-      "codex/ammunition-spent-notice-20261027": false,
-      "codex/binary-weapon-label-20261027": false,
-      "codex/binary-weapon-symbol-20261027": false,
-      "codex/home-play-shop-20261027": false,
-      "codex/quiet-readable-feedback-20261027": false,
-      "codex/owner-testnet-catalog-20261027": false,
-      "codex/ship-stage-selection-20261027": false,
-      "codex/weapon-menu-auto-persistence-20261027": false,
-      "codex/modest-ship-balance-reload-feedback-20261027": false,
-      "codex/numbered-boss-hud-20261027": false,
-      "codex/fair-ship-protection-20261028": false,
-      "codex/full-heart-shards-20261028": false,
-      "codex/boss2-forensics-20261028": false
+    "deploymentEnabled": false
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        }
+      ]
     }
-  }
+  ]
 }
