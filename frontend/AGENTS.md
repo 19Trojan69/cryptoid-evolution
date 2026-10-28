@@ -1,17 +1,25 @@
-# Full-heart boss pickup:50 Shards, 28 October 2026
+# Full-heart boss reward and quiet formation notices, 28 October 2026
 
-The clarified request changes only the replacement reward when hearts are full:
-BOSS_FULL_HEART_SHARDS5 to50. Missing hearts still heal by one with no replacement
-Shards. Keep the existing physical pickup, once-only flag, Resume and all life
-limits. Do not modify formations, damage rules, points, other boss/bonus rewards,
-armor, purchases, account data or the White Screen diagnostics. Old collected5-
-Shard pickups remain collected without a retroactive grant. Shop and guide copy
-agree in all19 languages. The existing boss pickup tests are now in the regular
-release build.470 frontend and142 backend tests/types pass; localization/Vite and
-the affected frontend lint pass. Entire GamePage, formation module, handlers and
-hull manifest retain the public5ca9cf7 bytes. No physical-device/White Screen claim.
-Keep codex/full-heart-shards-20261028 automatic deployment disabled; draft only.
-See docs/full-heart-shards-20261028 and matching verification for fixture limits.
+The owner requests50 instead of5 Shards only when collecting a boss heart at the
+armor heart limit. Missing hearts still heal one with no replacement Shards.
+Preserve physical pickup, once-only/Resume flags and old collected5-Shard values.
+Shop/guide copy agree in all19 languages. No migrations, purchases or price changes.
+The latest screenshot request additionally removes redundant in-flight prompts:
+Clear the formation, Finish this wave without a hit, Hold your combo, Perfect
+formation and FORMATION CLEARED. Filter source keys in presentation, including old
+saved notices, without changing snapshots or generating a formation reward.
+Keep heavy-attacker warnings, every power-up notice and Block/group/central-clear
+feedback, their same native status markup, position, timing and translation.
+No game loop, damage, formation simulation, economy beyond the single boss value,
+audio/art, account, backend handler or diagnostic change. Two fixed JSX/import
+hunks restore the entire public5ca9cf7 controller before existing strict guards.
+Validation:473 frontend release/locales/types/Vite; the142 backend checks retained
+from the preceding unchanged-backend validation. Three actual-React notice cases
+cover all19 locales, previous-source comparison, restored notices, retained output
+and scope negatives. New helper lint clean; controller remains zero errors/four
+old warnings. No physical-device/White Screen claim. Keep PR198 and the same work
+branch automatic deployment disabled; draft only. See docs/verification full-heart-
+shards-20261028. Preserve separate194/195 and the iPhone screenshot investigation.
 
 # Fair ship stages without invisible hit protection, 28 October 2026
 

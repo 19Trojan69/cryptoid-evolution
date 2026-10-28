@@ -7,13 +7,14 @@
     "after": 50
   },
   "frontend": {
-    "cases": 470,
+    "cases": 473,
     "failures": 0,
     "typecheck": true,
     "localization": true,
     "vite": true,
     "bossPickupCases": 7,
-    "selectableLanguages": 19
+    "selectableLanguages": 19,
+    "formationNoticeCases": 3
   },
   "backend": {
     "cases": 142,
@@ -71,7 +72,6 @@
     ]
   },
   "unchangedFiles": [
-    "frontend/src/pages/GamePage.tsx",
     "frontend/src/pages/combatVariety.ts",
     "backend/src/handlers/rewards.ts",
     "backend/src/handlers/progress.ts",
@@ -85,5 +85,41 @@
   "realAccountsModified": false,
   "physicalDevice": false,
   "whiteScreenFixEstablished": false,
-  "deploymentPerformed": false
+  "deploymentPerformed": false,
+  "formationNotices": {
+    "hiddenSourceKeys": [
+      "Clear the formation",
+      "Finish this wave without a hit",
+      "Hold your combo",
+      "Perfect formation",
+      "FORMATION CLEARED"
+    ],
+    "savedNoticesHandled": true,
+    "combatStateMutated": false,
+    "heavyWarningsAndPowerUpNoticesRetained": true,
+    "locales": 19,
+    "oldAndNewHiddenRenderPairs": 95,
+    "retainedRenderComparisons": 95,
+    "expiredOrDisabledRenders": 190,
+    "controllerHunks": 2,
+    "restoredControllerSha256": "10130d98a4cc4c60ec48d885515e95ec01b9da9db98c5c7b5979f8c529327fc9",
+    "candidateControllerSha256": "0785ece27dc608498958f949852972545c5b15138369615d07bbc4a9223ba02a",
+    "lint": {
+      "controller": {
+        "before": {
+          "errors": 0,
+          "warnings": 4
+        },
+        "after": {
+          "errors": 0,
+          "warnings": 4
+        },
+        "added": []
+      },
+      "helper": {
+        "errors": 0,
+        "warnings": 0
+      }
+    }
+  }
 }
