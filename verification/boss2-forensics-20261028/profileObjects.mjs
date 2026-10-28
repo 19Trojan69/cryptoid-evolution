@@ -29,6 +29,7 @@ const within = (promise, ms, label) => new Promise((resolve, reject) => {
   promise.then(value => { clearTimeout(timer); resolve(value); }, error => { clearTimeout(timer); reject(error); });
 });
 let lab, browser, page, session, fatal, expectedNavigation = true, documentId;
+const navigationChecks = new Set();
 async function inspect() {
   if (fatal) throw Error(fatal);
   const state = await within(page.evaluate(() => window.__crossDeviceTest.inspect()), 8000, 'inspection-timeout');
@@ -89,7 +90,20 @@ try {
   page.on('crash', () => { fatal ||= 'renderer-crash'; });
   page.on('pageerror', () => { fatal ||= 'javascript-error'; });
   page.on('console', message => { if (message.type() === 'error') fatal ||= 'console-error'; });
-  page.on('framenavigated', frame => { if (frame === page.mainFrame() && !expectedNavigation) fatal ||= 'unexpected-navigation'; });
+  page.on('request', request => {
+    if (!expectedNavigation && request.isNavigationRequest() && request.frame() === page.mainFrame()) fatal ||= 'unexpected-document-request';
+  });
+  page.on('framenavigated', frame => {
+    if (frame !== page.mainFrame() || expectedNavigation) return;
+    // Pause/Resume deliberately push/pop modal history in this same document.
+    // An actual replacement gets a new lab boot token and still fails.
+    const check = frame.evaluate(() => window.__bossLabDocument).then(id => {
+      if (expectedNavigation) return;
+      if (id !== documentId) fatal ||= 'unexpected-document-replacement';
+      else result.sameDocumentNavigationEvents = (result.sameDocumentNavigationEvents || 0) + 1;
+    }).catch(() => { if (!expectedNavigation) fatal ||= 'document-inspection-failed'; });
+    navigationChecks.add(check); void check.finally(() => navigationChecks.delete(check));
+  });
   browser.on('disconnected', () => { if (!expectedNavigation) fatal ||= 'browser-disconnected'; });
   await page.goto(lab.origin + '/game', { waitUntil: 'domcontentloaded' });
   await page.bringToFront();
@@ -103,7 +117,7 @@ try {
   await pause(); result.points.push(await measure('initial-paused-before-gc'));
   await session.send('HeapProfiler.collectGarbage'); result.points.push(await measure('initial-paused-after-gc'));
   const before = await snapshot('before'); result.points.push(await measure('initial-paused-after-snapshot'));
-  await page.getByRole('button', { name: 'Resume', exact: true }).click();
+  await page.locator('.pause-resume-button').click();
   await page.waitForFunction(() => window.__crossDeviceTest.inspect().status === 'playing', null, { timeout: 30000 });
   const start = Date.now(); let first, last, lastFrame, frameChangedAt = Date.now();
   while (Date.now() - start < seconds * 1000) {
@@ -121,6 +135,7 @@ try {
   await session.send('HeapProfiler.collectGarbage'); result.points.push(await measure('final-paused-after-gc'));
   const after = await snapshot('after'); result.points.push(await measure('final-paused-after-snapshot'));
   result.difference = compareHeaps(before, after);
+  await within(Promise.all([...navigationChecks]), 8000, 'navigation-check-timeout');
   assert.equal(await page.evaluate(() => window.__bossLabDocument), documentId);
   assert.equal(lab.apiErrors.length, 0); assert.ok(!fatal);
   result.complete = true;
