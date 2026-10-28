@@ -8,6 +8,7 @@ import { configuration, root, DIRECTORY, BASELINE } from './fixture.mjs';
 import { createLabServer } from './labServer.mjs';
 import { sampleBrowserMemory } from './processMemory.mjs';
 import { swipe } from './gesture.mjs';
+import { startChromiumHeapSampler } from './chromiumHeap.mjs';
 const require = createRequire(import.meta.url);
 const pw = require(process.env.CRYPTOID_PLAYWRIGHT_MODULE || 'playwright');
 const name = process.env.CRYPTOID_TEST_PROFILE || 'android-phone';
@@ -18,6 +19,8 @@ const caseSeconds = Number(process.env.CRYPTOID_CASE_SECONDS || 20);
 assert.ok(Number.isInteger(warmLimit) && warmLimit >= 30 && warmLimit <= 1800);
 assert.ok(Number.isInteger(caseSeconds) && caseSeconds >= 10 && caseSeconds <= 120);
 const profile = configuration(name, pw.devices);
+const heapProbe = process.env.CRYPTOID_HEAP_PROBE === '1';
+assert.ok(!heapProbe || profile.engine === 'chromium', 'Heap probe requires the documented Chromium CDP API');
 const output = resolve(process.env.CRYPTOID_TEST_OUTPUT || `${root}/${DIRECTORY}/results/${name}-${mode}`);
 mkdirSync(output, { recursive: true });
 const source = readFileSync(root + '/frontend/src/pages/GamePage.tsx', 'utf8');
@@ -33,7 +36,7 @@ const result = { profile: name, mode, baseline: BASELINE, controllerSha256: crea
 result.continuousPixelObservation = false;
 const note = (kind, data = {}) => appendFileSync(output + '/events.jsonl', JSON.stringify({ at: new Date().toISOString(), kind, ...data }) + '\n');
 const save = () => writeFileSync(output + '/summary.json', JSON.stringify(result, null, 2) + '\n');
-let lab, browser, context, page, fatal, expectedNavigation = true, documentId;
+let lab, browser, context, page, fatal, expectedNavigation = true, documentId, stopHeap;
 const fail = kind => { fatal ||= kind; note(kind); };
 const within = (promise, ms, label) => new Promise((resolve, reject) => {
   const timer = setTimeout(() => reject(Error(label)), ms);
@@ -92,6 +95,8 @@ try {
   assert.equal((await inspect()).ownerDiagnostics, true, 'Owner role and catalog stay identical in both evidence controls');
   documentId = await page.evaluate(() => window.__bossLabDocument); assert.ok(documentId);
   expectedNavigation = false;
+  if (heapProbe) stopHeap = startChromiumHeapSampler(await context.newCDPSession(page),
+    row => appendFileSync(output + '/javascript-heap.jsonl', JSON.stringify(row) + '\n'));
   await page.evaluate(async enabled => {
     window.__bossLabInputs = [];
     if (!enabled) return;
@@ -178,6 +183,11 @@ try {
   }
 } finally {
   expectedNavigation = true;
+  if (stopHeap) {
+    try { result.javascriptHeap = await within(stopHeap(), 4000, 'heap-sampler-stop-timeout'); }
+    catch { result.javascriptHeap = { available: false, failure: 'heap-sampler-stop-timeout' }; process.exitCode = 1; }
+    if (!result.javascriptHeap.samples) { result.complete = false; process.exitCode = 1; }
+  }
   result.finishedAt = new Date().toISOString(); result.apiErrors = lab?.apiErrors || []; result.requestCounts = lab?.requestCounts || {};
   save(); console.log('CRYPTOID_RESULT ' + JSON.stringify(result));
   if (browser) try { await within(browser.close(), 8000, 'browser-close-timeout'); } catch { process.exitCode = 1; }
