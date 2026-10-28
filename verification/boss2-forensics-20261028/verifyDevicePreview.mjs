@@ -65,7 +65,14 @@ try{
  await page.screenshot({path:output+'/recovered-report.png'});
  assert.deepEqual(external,[]);summary.unexpectedExternalRequests=external;
  assert.ok(!fatal,fatal);summary.complete=true;
-}catch(error){summary.failure={code:fatal||'verification-failed',message:error.message};process.exitCode=1;}
+}catch(error){
+ summary.failure={code:fatal||'verification-failed',message:error.message};process.exitCode=1;
+ if(page&&!page.isClosed())try{
+  summary.failure.observed=await page.evaluate(()=>({scene:window.__crossDeviceTest?.inspect(),pauses:window.__bossLabPauseEvents?.slice(-16),
+   visibleMessage:document.body.innerText.slice(-2500),fullStatus:JSON.parse(localStorage.getItem('cryptoid_owner_full_status_v1')||'null')}));
+  await page.screenshot({path:output+'/failure.png',timeout:5000});
+ }catch{summary.failure.observationUnavailable=true;}
+}
 finally{
  summary.finishedAt=new Date().toISOString();writeFileSync(output+'/verification.json',JSON.stringify(summary,null,2)+'\n');
  console.log('CRYPTOID_DEVICE_RESULT '+JSON.stringify({complete:summary.complete,engine,seconds,points:summary.points.length,report:summary.report,failure:summary.failure}));
