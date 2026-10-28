@@ -239,8 +239,9 @@ aber noch keinen haltenden Verweis oder sicheren Verursacher.
 
 Der gesonderte Workflow heißt `cryptoid-browser-object-profile.yml`. Seine
 Artefaktliste enthält ausschließlich bereinigte JSON-/JSONL-Dateien und
-schließt Roh-Schnappschüsse und Vite-Caches aus. Die Ausführung und ihre
-Ergebnisse werden erst nach tatsächlichem Abschluss als Beleg ergänzt.
+schließt Roh-Schnappschüsse und Vite-Caches aus. Die abgeschlossenen
+Ausführungen und ihre Aussagegrenzen stehen unten und in
+[object-profile-results.json](object-profile-results.json).
 
 `CRYPTOID_PROFILE_BUILD=production node profileObjects.mjs` baut dieselbe
 instrumentierte synthetische Szene mit Vite im Produktionsmodus und liefert
@@ -251,3 +252,66 @@ ignorierten Laborergebnissen, eine Veröffentlichung ist damit nicht verbunden.
 Dieser Vergleich ist nötig, weil React-Entwicklungsinstrumentierung zusätzliche
 Performance-Messeinträge erzeugt; der Entwicklungsserver allein ist kein
 Produktions-Speicherbenchmark.
+
+## Ergebnis des Objektprofilings
+
+Zwei Profile sind abgeschlossen: [Entwicklungsmodus 40742453252](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40742453252)
+an Commit `08425b5a` mit 60,998 Sekunden aktivem Kampf und
+[Produktionsmodus 40744147683](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40744147683)
+an Commit `de368aaf` mit 60,610 Sekunden. Je zwei pausierte Schnappschüsse und
+58 aktive Zählerproben wurden ausgewertet. Beide Profile hielten Reaktorsalven
+und Framecallbacks aufrecht; keine technische Pause oder API-Fehler. Die
+regulären Pause-/Resume-Aktionen sind ausdrücklich Teil der Messmethode.
+
+| Linux-Browser-PSS, MiB | Entwicklung | Produktionsmodus |
+| --- | ---: | ---: |
+| Beginn nach explizitem GC, pausiert | 440,45 | 381,10 |
+| Aktive Messphase, Spitze | 939,01 | 633,97 |
+| Ende pausiert, vor explizitem GC | 949,81 | 642,14 |
+| Ende pausiert, nach explizitem GC | 526,86 | 418,57 |
+| Verbleibender Anstieg gegenüber Beginn nach GC | 86,41 | 37,47 |
+
+Damit ist ein großer Teil des hier beobachteten Zuwachses wieder einsammelbar.
+Der verbleibende Anstieg wird nicht als geklärt oder normal ausgegeben. Ein
+60-Sekunden-Fenster kann weder langfristiges Wachstum ausschließen noch einen
+unbegrenzten Leak beweisen. Der Profiler selbst beeinflusst den Prozessspeicher;
+Snapshots starten ebenfalls eine Speicherbereinigung. Diese Daten ersetzen
+keine ungestörte Messung auf einem physischen Gerät.
+
+Die gewöhnlichen JS-Heaps nach GC wachsen von 17,87 auf 20,12 MiB bzw. von
+9,04 auf 10,69 MiB. Die Zähler für DOM-Knoten wachsen nach GC von 935 auf 996
+bzw. von 882 auf 946; die Listener von 321 auf 339 bzw. 322 auf 338. Die
+Szenen haben am Ende auch andere lebende Projektile/Animationen. Diese
+Differenzen allein sind kein Nachweis zurückgehaltener, abgetrennter Elemente.
+Sichtbare Bilder und Canvas-Flächen bleiben bei eins und drei, die erfassten
+Effekt-Audiopuffer bei 6.925.568 Bytes. Browserinterne Bild-, Grafik- und
+Audiokapazitäten sind damit nicht vollständig erfasst.
+
+Im Entwicklungssnapshot erscheinen 15.155 zusätzliche `PerformanceMeasure`-
+Objekte (1.827.432 Bytes zusätzliche Eigengrößen). Der Spielquellcode unter
+`frontend/src` ruft `performance.measure` nicht auf; die lokal geprüfte
+React-DOM-Entwicklungsversion dagegen schon. React dokumentiert zusätzliche
+[Performance-Instrumentierung im Entwicklungsmodus](https://react.dev/reference/dev-tools/react-performance-tracks).
+Eine vollständige Zuordnung über haltende Referenzen wurde nicht durchgeführt;
+insbesondere erklärt dieser Eigengrößenzähler nicht allein die ganze PSS-
+Differenz. Im Produktionsprofil bleiben die abgefragten Timeline-Messzähler
+bei null, ohne entsprechende Zunahme in der exportierten Klassendifferenz.
+Das unterstreicht die Grenzen des ursprünglichen Entwicklungs-Laborwerts.
+
+Im Produktionslauf sind die tatsächlichen Browserflags `DEV=false`,
+`PROD=true` bestätigt; React und React DOM waren dort Version 19.2.4.
+Im früheren Entwicklungslauf wurde die Abhängigkeitsversion nicht aufgezeichnet.
+Die getrennten Läufe sind deshalb kein exakt identischer Benchmark und
+quantifizieren nicht isoliert den React-Instrumentierungsanteil.
+
+Der erste Profiling-Anlauf 40741836537 an `772da79d` ist ausgeschlossen:
+Die neue Navigationserkennung wertete die normale Pausen-History irrtümlich
+als Dokumentwechsel. Es entstanden null Schnappschüsse und kein App-Absturz.
+Die korrigierte Prüfung vergleicht die Bootkennung und lehnt echte
+Dokumentanfragen/-ersetzungen weiterhin ab. Die Roh-Snapshots der erfolgreichen
+Profile wurden im CI nach Auswertung entfernt; die heruntergeladenen Aggregate
+sind per SHA-256 und ZIP-Integrität geprüft. Die dauerhafte bereinigte Quittung
+enthält beide getesteten Commits, Artefakte, Zähler, Typ-/Klassendifferenzen und
+die ausgeschlossene Messung. Main, reale Konten und veröffentlichte Apps sind
+unverändert. Es wird kein White-Screen-Fix behauptet und keine weitere
+Profiling-Ausführung durch diesen Ergebnisnachtrag gestartet.
