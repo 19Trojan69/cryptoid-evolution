@@ -1,5 +1,5 @@
 name: Browser object lifetime profile
-run-name: Compare Boss 2 object lifetimes with document identity checks
+run-name: Compare Boss 2 object lifetimes in a verified production bundle
 
 on:
   push:
@@ -20,6 +20,7 @@ jobs:
     timeout-minutes: 15
     env:
       CRYPTOID_PROFILE_SECONDS: '60'
+      CRYPTOID_PROFILE_BUILD: production
       CRYPTOID_TEST_OUTPUT: ${{ github.workspace }}/verification/boss2-forensics-20261028/results/object-profile
     steps:
       - uses: actions/checkout@v6
@@ -47,7 +48,7 @@ jobs:
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: browser-object-profile-aggregates
+          name: browser-object-profile-production-aggregates
           path: |
             verification/boss2-forensics-20261028/results/object-profile/object-profile-summary.json
             verification/boss2-forensics-20261028/results/object-profile/profile-counters.jsonl
