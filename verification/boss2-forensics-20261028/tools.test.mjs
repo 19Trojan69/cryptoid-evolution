@@ -14,6 +14,8 @@ test('content, GPU and network processes remain separate categories', () => {
   assert.equal(processRole('/bin/chrome\0--type=renderer'), 'chromium-renderer');
   assert.equal(processRole('/bin/chrome\0--type=gpu-process'), 'chromium-gpu');
   assert.equal(processRole('/bin/WebKitWebProcess'), 'webkit-content');
+  assert.equal(processRole('/bin/WPEWebProcess'), 'webkit-content');
+  assert.equal(processRole('/bin/WPENetworkProcess'), 'webkit-network');
   assert.equal(processRole('/bin/node\0run.mjs'), null);
 });
 test('only descendants of the test runner are attributed; unrelated browsers are excluded', () => {

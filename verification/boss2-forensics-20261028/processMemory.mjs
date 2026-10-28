@@ -7,8 +7,8 @@ export function memoryFromStatus(status, rollup = '') {
   return { rssKiB: field(status, 'VmRSS'), peakRssKiB: field(status, 'VmHWM'), pssKiB: field(rollup, 'Pss') };
 }
 export function processRole(command) {
-  if (/WebKitWebProces(?:s|\b)/.test(command)) return 'webkit-content';
-  if (/WebKitNetworkPr(?:ocess|\b)/.test(command)) return 'webkit-network';
+  if (/WPEWebProcess|WebKitWebProces(?:s|\b)/.test(command)) return 'webkit-content';
+  if (/WPENetworkProcess|WebKitNetworkPr(?:ocess|\b)/.test(command)) return 'webkit-network';
   if (/--type=renderer/.test(command)) return 'chromium-renderer';
   if (/--type=gpu-process/.test(command)) return 'chromium-gpu';
   if (/headless_shell|chrome-headless-shell|\/chrome(?:\x00|$)|MiniBrowser/.test(command)) return 'browser-other';
