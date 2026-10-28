@@ -1,5 +1,5 @@
 name: Isolated Boss 2 device preview acceptance
-run-name: Verify isolated device preview and 15-minute production observation
+run-name: Inspect WebKit startup state in the isolated Boss 2 preview
 on:
   push:
     branches: [codex/boss2-device-preview-20261028]
@@ -14,8 +14,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - engine: chromium
-            seconds: '900'
           - engine: webkit
             seconds: '8'
     env:
