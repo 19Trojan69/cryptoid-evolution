@@ -31,7 +31,7 @@ function row(input: unknown, id: string): Row | null {
   if (!input || typeof input !== 'object') return null;
   const r = input as Row;
   if (r.version !== 1 || r.id !== id || !Number.isSafeInteger(r.seq) || r.seq < 1 || !finite(r.at) || !finite(r.clockMs)) return null;
-  if (!['event', 'sample', 'resource', 'boundary', 'request', 'weapon', 'queue', 'lifecycle', 'input', 'start', 'end'].includes(r.kind)) return null;
+  if (!['event', 'sample', 'resource', 'boundary', 'request', 'weapon', 'queue', 'lifecycle', 'input', 'pause', 'start', 'end'].includes(r.kind)) return null;
   const data = cleanFullData(r.kind, r.data);
   return data ? { version: 1, id, seq: r.seq, at: r.at, clockMs: r.clockMs, kind: r.kind, data, ...(cleanCrashProgress(r.progress) ? { progress: cleanCrashProgress(r.progress) } : {}),
     ...(r.truncated === true ? { truncated: true } : {}) } : null;
@@ -51,7 +51,7 @@ export function readCrashTails(host: Host) {
     const frameSlots = meta.frameSlots ?? 32, frameIntervalMs = meta.frameIntervalMs ?? 1000;
     const frames = Array.from({ length: frameSlots }, (_, n) => readRow(`frame_${n}`)).filter((r): r is Row => r !== null).sort((a, b) => a.at - b.at);
     const head = readRow('head');
-    const errors = events.filter(r => /error|stall|rejection|context-lost/.test(String(r.data.signal ?? r.data.kind ?? '')) || r.data.operation === 'failure');
+    const errors = events.filter(r => /error|stall|rejection|context-lost/.test(String(r.data.signal ?? r.data.kind ?? r.data.pauseReason ?? '')) || r.data.operation === 'failure');
     sessions.push({ ...meta, evidenceSource: source === 'sessionStorage' ? 'current-tab' : 'origin-fallback-may-be-another-tab',
       head, frames, events, errors, lastObservedAt: Math.max(meta.startedAt, head?.at ?? 0, ...events.map(r => r.at), ...frames.map(r => r.at)),
       limits: { ...CRASH_TAIL_LIMITS, frames: frameSlots, frameIntervalMs, synchronousObservationsOnly: true, nativeOrGpuCauseMeasured: false,
@@ -141,7 +141,7 @@ export function createCrashTail(verifiedOwner: boolean, getHost: () => Host, opt
       write(`event_${eventIndex++ % CRASH_TAIL_LIMITS.events}`, event);
       // Preserve a synchronous state before/after critical operations, without
       // waiting for an IndexedDB callback or an unload event.
-      if (kind === 'boundary' || kind === 'lifecycle' || kind === 'request' && event.data.operation === 'failure') head(true);
+      if (kind === 'boundary' || kind === 'lifecycle' || kind === 'pause' || kind === 'request' && event.data.operation === 'failure') head(true);
     },
     finish() {
       if (slot < 0 || finished) return;

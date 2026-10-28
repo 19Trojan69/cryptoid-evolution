@@ -42,6 +42,7 @@ import { COMBAT_STATE_KEYS, COMBAT_REF_KEYS, readCombatCheckpoint, type CombatCh
 import BlockchainProgress from "./BlockchainProgress";
 import { gameHaptics } from "./gameHaptics";
 import { bindGameInput } from './gameInput';
+import { recordPauseEvidence } from './pauseDiagnostics';
 import { startGuardedGameLoop, type GameInterruption } from './gameLoop';
 import { simulationFrame } from './simulationFrame';
 import { createProjectilePresentation } from './projectilePresentation';
@@ -531,9 +532,10 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     if(!cards.length)return;
     rewardCardsRef.current=[...rewardCardsRef.current,...cards];
     setRewardCards([...rewardCardsRef.current]);
+    if (ownerDiagnostics) recordPauseEvidence(ownerDiagnostics, 'reward-cards', { status: stateRef.current.status, sector: stateRef.current.sector, phase: stateRef.current.phase, encounter: stateRef.current.encounter }, lastFrameRef.current);
     stateRef.current.status='paused'; clearControls();
     setGame({...stateRef.current});
-  }, [clearControls, ownerDiagnostics]);
+  }, [clearControls, ownerDiagnostics, setGame]);
   const continueRewardCard=()=>{
     rewardCardsRef.current=rewardCardsRef.current.slice(1);setRewardCards([...rewardCardsRef.current]);
     clearControls();
@@ -716,6 +718,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
       clearControls();
       lastFrameRef.current = 0;
       if (state.status === 'playing') {
+        if (ownerDiagnostics) recordPauseEvidence(ownerDiagnostics, reason, { status: state.status, sector: state.sector, phase: state.phase, encounter: state.encounter }, lastFrameRef.current);
         state.status = 'paused';
         setTechnicalPause(true);
         setWeaponCountdown(null);
@@ -1342,6 +1345,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     const summary: BossSummary = { stage: state.sector, score: state.score, shards: state.shards,
       destroyed: state.destroyed, hearts: state.hearts, combos: state.combo.total };
     bossSummaryRef.current = { summary, accepted: false, restored };
+    if (ownerDiagnostics) recordPauseEvidence(ownerDiagnostics, 'boss-summary', { status: state.status, sector: state.sector, phase: state.phase, encounter: state.encounter }, lastFrameRef.current);
     state.status = 'paused'; clearControls();
     soundRef.current?.setPaused(true); musicRef.current?.pause();
     // Bonus rewards have already been credited before this level-completion stop.
@@ -1485,6 +1489,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     const blur = () => {
       clearControls();
       if (stateRef.current.status !== 'playing') return;
+      if (ownerDiagnostics) recordPauseEvidence(ownerDiagnostics, 'blur', { status: stateRef.current.status, sector: stateRef.current.sector, phase: stateRef.current.phase, encounter: stateRef.current.encounter }, lastFrameRef.current);
       stateRef.current.status = 'paused';
       soundRef.current?.setPaused(true); musicRef.current?.pause();
       setGame({ ...stateRef.current });
@@ -1495,6 +1500,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
         if (stateRef.current.status === "playing") void saveCombatRef.current().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
         if (!backgroundHiddenAtRef.current) backgroundHiddenAtRef.current = Date.now();
         if (stateRef.current.status === 'playing') {
+          if (ownerDiagnostics) recordPauseEvidence(ownerDiagnostics, 'visibility-hidden', { status: stateRef.current.status, sector: stateRef.current.sector, phase: stateRef.current.phase, encounter: stateRef.current.encounter }, lastFrameRef.current);
           stateRef.current.status = 'paused';
           soundRef.current?.setPaused(true);
           musicRef.current?.pause();
@@ -1504,6 +1510,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
         return;
       }
       if (backgroundHiddenAtRef.current && Date.now() - backgroundHiddenAtRef.current > 1_000 && stateRef.current.status === "playing") {
+        if (ownerDiagnostics) recordPauseEvidence(ownerDiagnostics, 'background-return', { status: stateRef.current.status, sector: stateRef.current.sector, phase: stateRef.current.phase, encounter: stateRef.current.encounter }, lastFrameRef.current);
         stateRef.current.status = "paused"; clearControls();
         void saveCombatRef.current().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried."));
         soundRef.current?.setPaused(true);
@@ -1541,7 +1548,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     window.addEventListener("keyup", keyUp);
     window.addEventListener("blur", blur);
     return () => { window.removeEventListener("keydown", keyDown); window.removeEventListener("keyup", keyUp); window.removeEventListener("blur", blur); document.removeEventListener("pointerup", resumeAudio, true); document.removeEventListener("touchend", resumeAudio, true); document.removeEventListener("visibilitychange", resumeAudio); document.removeEventListener("visibilitychange", pauseAfterBackground); window.removeEventListener("pagehide", markPageHidden); window.removeEventListener("pageshow", resumeAudio); window.removeEventListener("pageshow", pauseAfterBackground); window.removeEventListener("focus", resumeAudio); };
-  }, [clearControls]);
+  }, [clearControls, ownerDiagnostics]);
 
   useEffect(() => {
     let frameGap = 0, simulatedMs = 0, forceScene = false, requestScene = false;
@@ -2390,6 +2397,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
   const openWeaponSelection = () => {
     if (bossSummaryRef.current && !bossSummaryRef.current.accepted) return;
     if (stateRef.current.status !== 'playing' && stateRef.current.status !== 'paused') return;
+    if (ownerDiagnostics) recordPauseEvidence(ownerDiagnostics, 'weapon-menu', { status: stateRef.current.status, sector: stateRef.current.sector, phase: stateRef.current.phase, encounter: stateRef.current.encounter }, lastFrameRef.current);
     stateRef.current.status = 'paused';
     weaponSpentRef.current = null; setWeaponSpent(null);
     musicRef.current?.pause();
@@ -2694,10 +2702,10 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
         <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} showNebula={game.encounter === "boss-fight"} />
         <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
         <header ref={hudRef} className="game-hud">
-          <div className="hud-actions"><button className="game-control home-control" type="button" disabled={weaponBusy || rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || game.status === "loading" || game.status === "destroying"} onClick={() => { if (game.status === "game-over" || game.status === "victory") { goHome(); return; } homePromptWasPlayingRef.current = stateRef.current.status === "playing"; stateRef.current.status = "paused"; clearControls();
+          <div className="hud-actions"><button className="game-control home-control" type="button" disabled={weaponBusy || rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || game.status === "loading" || game.status === "destroying"} onClick={() => { if (game.status === "game-over" || game.status === "victory") { goHome(); return; } homePromptWasPlayingRef.current = stateRef.current.status === "playing"; if (ownerDiagnostics) recordPauseEvidence(ownerDiagnostics, 'home-menu', { status: stateRef.current.status, sector: stateRef.current.sector, phase: stateRef.current.phase, encounter: stateRef.current.encounter }, lastFrameRef.current); stateRef.current.status = "paused"; clearControls();
         musicRef.current?.pause(); void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); setHomePrompt(true); }} aria-label={t("Go home")}><CockpitIcon kind="home" /></button></div>
           <GameHudStats hearts={game.hearts} heartsHit={game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash")} levelLabel={levelLabel} shards={totalShards} score={game.score} block={hudBlock} bossNumber={hudBoss} locale={locale}/>
-          <button className="game-control pause-control" type="button" disabled={Boolean(bossSummary) || weaponBusy || rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || pauseLeaving || game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { if (pauseLeaveRef.current) return; if (game.status === "paused") { resumeWeaponSelection(); return; } stateRef.current.status = "paused"; clearControls(); musicRef.current?.pause(); void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
+          <button className="game-control pause-control" type="button" disabled={Boolean(bossSummary) || weaponBusy || rewardCards.length > 0 || weaponMenuOpen || weaponCountdown !== null || pauseLeaving || game.status === "loading" || game.status === "destroying" || game.status === "game-over" || game.status === "victory"} onClick={() => { if (pauseLeaveRef.current) return; if (game.status === "paused") { resumeWeaponSelection(); return; } if (ownerDiagnostics) recordPauseEvidence(ownerDiagnostics, 'manual-pause', { status: stateRef.current.status, sector: stateRef.current.sector, phase: stateRef.current.phase, encounter: stateRef.current.encounter }, lastFrameRef.current); stateRef.current.status = "paused"; clearControls(); musicRef.current?.pause(); void saveCombat().catch(() => setSaveNotice("Save not confirmed. Pending data will be retried.")); setGame({ ...stateRef.current }); }} aria-label={t(game.status === "paused" ? "Resume" : "Pause")}><CockpitIcon kind={game.status === "paused" ? "play" : "pause"} /></button>
         </header>
         <div className="game-label">{adminRunRef.current && <strong>{t("Admin center")} · </strong>}{t("LEVEL")} {levelLabel} <span>· <strong className="game-region-name">{sectorName(game.sector)}</strong> · {game.encounter === "normal" ? `${t("Block")} ${sectorLabel}/${BLOCKS_PER_CHAIN}` : game.encounter === "bonus" ? t("BONUS CHALLENGE") : t("CORE WARDEN")}</span></div>
         {game.encounter === "normal" && <span className="flight-indicator" style={{ top: visibleTopRef.current + 25 }}>{t("Group {current}/{total}", { current: flightRef.current + 1, total: blockFlights(game.sector, rulesVersionRef.current).length })}</span>}

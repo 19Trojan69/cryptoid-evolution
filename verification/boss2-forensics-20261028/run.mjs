@@ -4,7 +4,7 @@ import { mkdirSync, writeFileSync, appendFileSync, readFileSync } from 'node:fs'
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
-import { configuration, root, DIRECTORY, BASELINE } from './fixture.mjs';
+import { configuration, root, DIRECTORY, BASELINE, baselineController } from './fixture.mjs';
 import { createLabServer } from './labServer.mjs';
 import { sampleBrowserMemory } from './processMemory.mjs';
 import { swipe } from './gesture.mjs';
@@ -24,8 +24,8 @@ assert.ok(!heapProbe || profile.engine === 'chromium', 'Heap probe requires the 
 const output = resolve(process.env.CRYPTOID_TEST_OUTPUT || `${root}/${DIRECTORY}/results/${name}-${mode}`);
 mkdirSync(output, { recursive: true });
 const source = readFileSync(root + '/frontend/src/pages/GamePage.tsx', 'utf8');
-assert.equal(source, execFileSync('git', ['show', BASELINE + ':frontend/src/pages/GamePage.tsx'], { cwd: root, encoding: 'utf8' }));
-const result = { profile: name, mode, baseline: BASELINE, controllerSha256: createHash('sha256').update(source).digest('hex'),
+assert.equal(baselineController(source), execFileSync('git', ['show', BASELINE + ':frontend/src/pages/GamePage.tsx'], { cwd: root, encoding: 'utf8' }));
+const result = { profile: name, mode, baseline: BASELINE, pauseEvidenceOnlyControllerChanges: true, baselineControllerSha256: createHash('sha256').update(baselineController(source)).digest('hex'), controllerSha256: createHash('sha256').update(source).digest('hex'),
   actualHostOS: process.platform, physicalDevice: false, realPiBrowser: false, realAuthentication: false,
   realDatabase: false, realPayments: false, syntheticAccount: true, collisionProtection: true,
   nativeClocksAltered: false, seededRandom: true, directTurretRemoval: mode === 'direct',

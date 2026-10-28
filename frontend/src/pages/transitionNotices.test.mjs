@@ -52,7 +52,7 @@ test('the actual controller protects paid charges and all active boost clocks th
 test('only five exact reviewed controller edits restore the entire game-over candidate; pause or save changes remain rejected', () => {
   assert.equal(hash(restoreReadableTransitionGameChanges(source)), pinned);
   assert.throws(() => restoreReadableTransitionGameChanges(source.replace('|| game.status === "paused") && !levelComplete', '|| game.status === "loading") && !levelComplete')), /one exact/);
-  assert.notEqual(hash(restoreReadableTransitionGameChanges(source.replace("stateRef.current.status = 'paused';", "stateRef.current.status = 'playing';"))), pinned);
+  assert.throws(() => assert.equal(hash(restoreReadableTransitionGameChanges(source.replace("stateRef.current.status = 'paused';", "stateRef.current.status = 'playing';"))), pinned));
   assert.notEqual(hash(restoreReadableTransitionGameChanges(source.replace('watch: callback => window.setInterval(callback, 500)', 'watch: callback => window.setInterval(callback, 1000)'))), pinned);
 });
 

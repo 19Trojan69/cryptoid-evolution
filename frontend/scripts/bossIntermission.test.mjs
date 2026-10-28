@@ -7,6 +7,7 @@ import {componentHost} from './componentTestHost.mjs';
 import {actualBackend} from './weaponReloadRecoveryHost.mjs';
 import {canContinueLevelCompletion} from '../src/pages/bossSummaryTiming.ts';
 import {ResourceCache} from '../src/pages/resourceCache.ts';
+import {recordPauseEvidence} from '../src/pages/pauseDiagnostics.ts';
 const summary={stage:10,score:100,shards:12,destroyed:10,hearts:3,combos:2};
 const translate=(s,p={})=>s.replace(/\{(\w+)\}/g,(_,k)=>String(p[k]));
 test('the real completion has no countdown and permits an immediate prepared click only',()=>{
@@ -34,7 +35,7 @@ async function handlers(){
  const code=transformSync(block,{loader:'tsx'}).code,ref=current=>({current}),calls=[];
  const state={...summary,sector:10,combo:{total:2},status:'playing',weaponTimers:[0,0,0,0,0,0],unlockedWeapons:[1],effects:[1],shots:[1],enemyShots:[1],asteroids:[1],rocks:[1],rockEffects:[1],bonusTargets:[1]};
  const env={stateRef:ref(state),scoreRunRef:ref(runId),bossSummaryRef:ref(null),bossPreparationRef:ref(0),weaponMountedRef:ref(true),adminRunRef:ref(false),activationRef:ref(null),weaponBusyRef:ref(false),stockRef:ref({}),lastSavedAtRef:ref(0),lastFrameRef:ref(99),
-  completionSaveFailure,hasLocalLevelBackup:()=>false,localExitAvailable:false,bossSummaryFailure:"",
+  completionSaveFailure,recordPauseEvidence,hasLocalLevelBackup:()=>false,localExitAvailable:false,bossSummaryFailure:"",
   weaponBusy:false,bossSummary:null,bossSummaryPrepared:false,bossSummarySaving:false,bossSummaryFailed:false,bossSummaryContinuing:false,bossSummaryContinueFailed:false,
   clearControls(){calls.push('controls');},soundRef:ref({setPaused(){calls.push('audio-pause');}}),musicRef:ref({pause(){}}),
   unlockAudioForResume(){calls.push('gesture');},ownerDiagnostics:true,sessionDiagnostic(kind,data){calls.push(data.operation||kind);},ownerResourceContext:()=>({effects:state.effects.length}),

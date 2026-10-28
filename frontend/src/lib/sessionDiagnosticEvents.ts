@@ -1,5 +1,5 @@
 // Inert outside a verified owner's recorder. No payload, header or URL is read here.
-export type SessionSignal = 'resource' | 'boundary' | 'request' | 'weapon' | 'queue' | 'lifecycle' | 'input';
+export type SessionSignal = 'resource' | 'boundary' | 'request' | 'weapon' | 'queue' | 'lifecycle' | 'input' | 'pause';
 type Listener = (kind: SessionSignal, details: Record<string, unknown>) => void;
 const listeners = new Set<Listener>();
 export function observeSessionDiagnostics(listener: Listener) {

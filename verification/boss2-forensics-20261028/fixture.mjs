@@ -3,7 +3,9 @@ import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { restorePauseEvidenceChanges } from '../../frontend/scripts/pauseEvidenceReviewedChanges.mjs';
 
+export const baselineController = restorePauseEvidenceChanges;
 export const BASELINE = 'ce073547cf573375d141bf846f70e294138dbd73';
 export const DIRECTORY = 'verification/boss2-forensics-20261028';
 export const root = resolve(new URL('../..', import.meta.url).pathname);
@@ -72,6 +74,16 @@ export const hooks = `
     }
   };
 `;
+const pauseObserver = `
+import { observeSessionDiagnostics as observeBossLabEvents } from '../lib/sessionDiagnosticEvents';
+const bossLabPauseRows: Record<string, unknown>[] = [];
+(window as any).__bossLabPauseEvents = bossLabPauseRows;
+(window as any).__bossLabStopPauseObserver = observeBossLabEvents((kind, details) => {
+  if (kind !== 'pause') return;
+  bossLabPauseRows.push({ at: performance.now(), ...details });
+  if (bossLabPauseRows.length > 64) bossLabPauseRows.shift();
+});
+`;
 
 export function instrumentController(source) {
   const anchor = '  const levelLabel =';
@@ -79,8 +91,8 @@ export function instrumentController(source) {
   const frameAnchor = '    const simulate = (time: number, delta: number, present: boolean) => {\n      const state = stateRef.current;';
   const direct = '\n      if ((window as any).__bossLabDirect && !(window as any).__bossLabOpened && state.status === "playing" && state.sector === 20 && state.encounter === "boss-fight") {\n        (window as any).__bossLabOpened = (window as any).__crossDeviceTest.openReactor();\n      }';
   assert.equal(source.split(frameAnchor).length, 2, 'One exact existing-frame hook');
-  const transformed = source.replace(anchor, hooks + '\n' + anchor).replace(frameAnchor, frameAnchor + direct);
-  assert.equal(transformed.replace(hooks + '\n', '').replace(direct, ''), source);
+  const transformed = pauseObserver + source.replace(anchor, hooks + '\n' + anchor).replace(frameAnchor, frameAnchor + direct);
+  assert.equal(transformed.replace(pauseObserver, '').replace(hooks + '\n', '').replace(direct, ''), source);
   return transformed;
 }
 

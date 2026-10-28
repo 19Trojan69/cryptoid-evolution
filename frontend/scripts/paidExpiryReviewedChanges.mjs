@@ -1,3 +1,4 @@
+import { restorePauseEvidenceChanges } from './pauseEvidenceReviewedChanges.mjs';
 // Exact paid-expiry presentation and clock changes against reviewed PR198.
 export const paidExpiryChanges = [
   {
@@ -35,6 +36,7 @@ export const paidExpiryChanges = [
 ];
 
 export function restorePaidExpiryChanges(source) {
+  source = restorePauseEvidenceChanges(source);
   for (const {before, after} of [...paidExpiryChanges].reverse()) {
     if (source.split(after).length !== 2) throw Error('Expected one exact paid-expiry change');
     source = source.replace(after, before);

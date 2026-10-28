@@ -315,3 +315,56 @@ enthält beide getesteten Commits, Artefakte, Zähler, Typ-/Klassendifferenzen u
 die ausgeschlossene Messung. Main, reale Konten und veröffentlichte Apps sind
 unverändert. Es wird kein White-Screen-Fix behauptet und keine weitere
 Profiling-Ausführung durch diesen Ergebnisnachtrag gestartet.
+
+## Wiederholter Produktionslauf und Pause-Belege
+
+Die anschließend bestätigte Fortsetzung ergänzt drei Dinge:
+
+- Ein Produktionsbuild bleibt im selben Browserprozess für 60 Sekunden
+  Aufwärmphase und drei weitere Fenster zu je 60 Sekunden aktiv. Zwischen
+  Fenstern werden regulär Pause/Resume bedient und nur pausiert expliziter GC
+  sowie ein Snapshot ausgeführt. Asset-, Quell-Lock- und Installations-Lock-
+  Prüfsummen werden vor/nach dem Lauf verglichen; React-/Node-/Browserversionen
+  sind aufgezeichnet. Es gibt während der Fenster keine Neuinstallation oder
+  einen Buildwechsel. Die Kampfszene entwickelt sich mit ihren echten Uhren
+  weiter; die Fenster sind keine identischen eingefrorenen Spielframes.
+- Die Snapshot-Auswertung führt zusätzlich private, prozessinterne Objekt-IDs
+  gegen die warme Baseline. Für bis zu acht wachsende Klassen werden höchstens
+  zwei neue Objekte mit einem kürzesten Pfad vom synthetischen Snapshot-Root
+  untersucht. Als schwach markierte Kanten sind ausgeschlossen. Ausgegeben
+  werden nur Konstruktor-/C++-Klassennamen, feste erlaubte Eigenschaftsnamen
+  und begrenzte Pfadstücke mit ausdrücklich markierten Auslassungen. Keine
+  IDs, Zeichenkettenwerte, DOM-Attribute oder unbekannten Schlüssel werden
+  exportiert. Synthetische, native und Inspector-Wurzeln können vorkommen.
+  Das ist weder eine vollständige Dominatoranalyse noch ein Beweis, dass ein
+  erreichbares Objekt unnötig ist. Klassendifferenzen werden im Speicher vor
+  der begrenzten Exportauswahl berechnet, damit wechselnde Top-150-Ränge keine
+  erfundenen Neuallokationen erzeugen.
+- Verifizierte Owner erhalten am tatsächlichen vorhandenen Pause-Zweig einen
+  begrenzten `pause`-Eintrag: manueller Pause-/Home-/Waffenmenüeintritt,
+  Belohnungskarten/Boss-Zusammenfassung, Blur/Sichtbarkeit/Rückkehr sowie die
+  sechs bestehenden technischen Unterbrechungsgründe. Er entsteht unmittelbar
+  vor der unveränderten Zuweisung von `playing` nach `paused`; `status` bezeichnet
+  den Ausgangszustand, `targetStatus` das Ziel. Frameabstand, Sichtbarkeit und
+  Fokus sind grobe zusätzliche Belege. Neue Spieler-Listener/Timer oder
+  automatische Übertragung entstehen nicht. Wiederholte Aufrufe bei bereits
+  pausiertem Spiel werden nicht als neuer Eintritt ausgegeben. Altdaten bleiben
+  lesbar. Recorder und Crash-Tail übernehmen das neue erlaubte Format.
+
+Der echte Controller hat damit Diagnose-Ergänzungen; er wird nicht mehr als
+bytegleich zum Release ausgegeben. Zwölf exakt reversible Hunks stellen den
+gesamten veröffentlichten Controller wieder her. Sie schließen die Original-
+Statuszuweisungen, Aufrufer und Abhängigkeiten ein; pauschales Entfernen von
+Diagnose-Aufrufen ist nicht erlaubt. Zwei Abhängigkeitsergänzungen betreffen
+die Ownerfreigabe und den stabilen React-Setter. Alle Uhren, Schutzpausen,
+Speicher-/Zahlungsabläufe und manuelles Resume bleiben erhalten. Historische
+Negativprüfungen akzeptieren jetzt auch die frühere Zurückweisung durch diese
+strengere Hunk-Prüfung; ihre positiven Original-Fingerprints bleiben gleich.
+
+Ein gesonderter, ausdrücklich synthetischer DOM-Blur nach den Speicherfenstern
+prüft den tatsächlichen Blur-Callback samt Pause-Beleg. Unit-Prüfungen führen
+auch die echten Sichtbarkeits-/Hintergrund- und technischen Callback-Körper aus.
+Das ist kein auf Android/iOS ausgeführtes Fokusereignis. Eine reale Pi-Browser-
+Pause bzw. der ursprüngliche iPhone-Abbruch bleiben Gerätebefunde, bis ein
+passender physischer Zugriff vorhanden ist. Diese Fortsetzung veröffentlicht
+keine neue App-Version und behauptet keinen bestätigten White-Screen-Fix.

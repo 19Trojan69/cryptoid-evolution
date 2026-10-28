@@ -114,10 +114,10 @@ export function createFullSessionRecorder(verifiedOwner: boolean, getHost: () =>
       lastGraphics = record; marker();
     }
     const criticalKey = `${kind}:${data.operation ?? data.signal ?? data.kind}:${data.sector}:${data.phase}:${data.status}`;
-    if (critical && (criticalKey !== observedKey || at - observedAt >= 2000)) {
+    if (critical && (kind === 'pause' || criticalKey !== observedKey || at - observedAt >= 2000)) {
       observedKey = criticalKey; observedAt = at;
       const context: Record<string, unknown> = {};
-      for (const key of ['operation','signal','sector','phase','encounter','status','kind']) if (data[key] !== undefined) context[key] = data[key];
+      for (const key of ['operation','signal','sector','phase','encounter','status','kind','pauseReason','targetStatus']) if (data[key] !== undefined) context[key] = data[key];
       observed = { ...record, data: context }; marker(); flush();
     }
   };
@@ -125,7 +125,7 @@ export function createFullSessionRecorder(verifiedOwner: boolean, getHost: () =>
     if (!started && !stopped && kind === 'boundary' && details.operation === 'boss-summary-open') {
       started = true; add('start', options.build, true); flush();
     }
-    add(kind, details, kind === 'boundary' && details.operation !== 'hull-plan-progress' || kind === 'lifecycle');
+    add(kind, details, kind === 'boundary' && details.operation !== 'hull-plan-progress' || kind === 'lifecycle' || kind === 'pause');
     // Requests/queues are batched with the next aggregate window, not written per shot.
   });
   const unobserveNavigation = observeInputNavigation(host, details => sessionDiagnostic('input', details));

@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { resolve } from 'node:path';
+import { readdirSync, readFileSync, existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { createAccountFixture, instrumentController, instrumentBossDamage, instrumentInputEvidence, root } from './fixture.mjs';
 const require = createRequire(root + '/frontend/package.json');
 const { createServer, build, preview } = require('vite');
@@ -77,9 +79,18 @@ export async function createLabServer({ mode = 'direct', cacheDir, port = 0, dia
       const outDir = resolve(cacheDir, '../production-site');
       assert.ok(outDir.startsWith(root + '/verification/boss2-forensics-20261028/results/'), 'Build only into ignored laboratory results');
       await build({ ...config, mode: 'production', build: { outDir, emptyOutDir: true } });
+      const identity = () => {
+        const files = readdirSync(outDir + '/assets').filter(file => /\.(js|css)$/.test(file)).sort();
+        assert.ok(files.length > 0);
+        const hash = createHash('sha256');
+        for (const file of files) hash.update(file).update(readFileSync(outDir + '/assets/' + file));
+        const fileHash = path => existsSync(path) ? createHash('sha256').update(readFileSync(path)).digest('hex') : null;
+        return { assetCount:files.length, assetSha256:hash.digest('hex'), frontendSourceLockSha256:fileHash(root+'/frontend/yarn.lock'),
+          installedFrontendLockSha256:fileHash(root+'/frontend/package-lock.json'), backendLockSha256:fileHash(root+'/backend/package-lock.json') };
+      };
       const server = await preview({ ...config, mode: 'production', build: { outDir }, preview: { host: '127.0.0.1', port, strictPort: !!port } });
       return { server: { close: () => new Promise((resolve, reject) => server.httpServer.close(error => error ? reject(error) : resolve())) },
-        origin: 'http://127.0.0.1:' + server.httpServer.address().port, apiErrors, requestCounts };
+        origin: 'http://127.0.0.1:' + server.httpServer.address().port, apiErrors, requestCounts, identity };
     } finally {
       if (previousMode === undefined) delete process.env.NODE_ENV; else process.env.NODE_ENV = previousMode;
     }
