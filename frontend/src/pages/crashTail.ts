@@ -31,7 +31,7 @@ function row(input: unknown, id: string): Row | null {
   if (!input || typeof input !== 'object') return null;
   const r = input as Row;
   if (r.version !== 1 || r.id !== id || !Number.isSafeInteger(r.seq) || r.seq < 1 || !finite(r.at) || !finite(r.clockMs)) return null;
-  if (!['event', 'sample', 'resource', 'boundary', 'request', 'weapon', 'queue', 'lifecycle', 'start', 'end'].includes(r.kind)) return null;
+  if (!['event', 'sample', 'resource', 'boundary', 'request', 'weapon', 'queue', 'lifecycle', 'input', 'start', 'end'].includes(r.kind)) return null;
   const data = cleanFullData(r.kind, r.data);
   return data ? { version: 1, id, seq: r.seq, at: r.at, clockMs: r.clockMs, kind: r.kind, data, ...(cleanCrashProgress(r.progress) ? { progress: cleanCrashProgress(r.progress) } : {}),
     ...(r.truncated === true ? { truncated: true } : {}) } : null;

@@ -1,5 +1,7 @@
 import { placePlayer, placePlayerFromPointer, type PlayerPosition } from './playerCombat.ts';
 import { controlAreaTop, type ControlZone } from './controlPreferences.ts';
+import { createInputDiagnostics } from './inputDiagnostics.ts';
+import { sessionDiagnostic, sessionDiagnosticsActive } from '../lib/sessionDiagnosticEvents.ts';
 
 type Ref<T> = { current: T };
 export type TouchOrigin = { x: number; y: number; player: PlayerPosition };
@@ -27,23 +29,26 @@ export const canStartSteering = (x: number, y: number, bounds: Bounds, area: Con
 export function bindGameInput(field: HTMLElement, options: Options) {
   const doc = field.ownerDocument;
   const win = doc.defaultView!;
-  const reset = () => {
+  const evidence = createInputDiagnostics(sessionDiagnosticsActive, data => sessionDiagnostic('input', data));
+  const reset = (reason: Parameters<typeof evidence.end>[0] = 'reset') => {
     const id = options.pointer.current;
     options.pointer.current = null;
     options.origin.current = null;
+    evidence.end(reason);
     if (id !== null) {
       try { if (field.hasPointerCapture?.(id)) field.releasePointerCapture(id); } catch { /* The host already released this gesture. */ }
     }
   };
   const safely = (action: () => void) => {
-    try { action(); } catch (error) { reset(); options.fault(error); }
+    try { action(); } catch (error) { reset('fault'); options.fault(error); }
   };
   const move = (event: SteeringEvent) => {
     if (options.pointer.current !== event.pointerId) return;
-    if (!options.playing() || (event.pointerType === 'mouse' && event.buttons === 0)) { reset(); return; }
+    if (!options.playing() || (event.pointerType === 'mouse' && event.buttons === 0)) { reset('not-playing'); return; }
     const bounds = field.getBoundingClientRect();
-    if (!validBounds(bounds) || !Number.isFinite(event.clientX) || !Number.isFinite(event.clientY)) { reset(); return; }
+    if (!validBounds(bounds) || !Number.isFinite(event.clientX) || !Number.isFinite(event.clientY)) { reset('geometry'); return; }
     if (event.cancelable) event.preventDefault();
+    evidence.move(event);
     const origin = event.pointerType === 'touch' ? options.origin.current : null;
     options.position(origin
       ? placePlayer(origin.player.x * bounds.width + (event.clientX - origin.x) * options.sensitivity(), origin.player.y * bounds.height + (event.clientY - origin.y) * options.sensitivity(), bounds.width, bounds.height)
@@ -54,20 +59,23 @@ export function bindGameInput(field: HTMLElement, options: Options) {
         event.isPrimary === false || (event.pointerType === 'mouse' && event.buttons !== 1)) return;
     const bounds = field.getBoundingClientRect();
     if (!canStartSteering(event.clientX, event.clientY, bounds, options.area())) return;
-    reset();
+    reset('replaced');
     options.pointer.current = event.pointerId;
     options.origin.current = event.pointerType === 'touch' ? {
       x: event.clientX, y: event.clientY,
       player: placePlayerFromPointer(event.clientX - bounds.left, event.clientY - bounds.top, bounds.width, bounds.height, options.aboveFinger()),
     } : null;
+    evidence.start(event, bounds);
     try { field.setPointerCapture?.(event.pointerId); } catch { /* Global release handlers remain available in embedded browsers. */ }
     move(event);
   };
   const down = (event: PointerEvent) => safely(() => start(event));
   const motion = (event: PointerEvent) => safely(() => move(event));
-  const end = (event: PointerEvent) => { if (options.pointer.current === event.pointerId) reset(); };
-  const hidden = () => { if (doc.visibilityState === 'hidden') reset(); };
-  const allTouchesEnded = (event: TouchEvent) => { if (event.touches.length === 0 && options.origin.current) reset(); };
+  const end = (event: PointerEvent) => { if (options.pointer.current === event.pointerId)
+    reset(event.type === 'pointercancel' ? 'cancelled' : event.type === 'lostpointercapture' ? 'capture-lost' : 'released'); };
+  const hidden = () => { if (doc.visibilityState === 'hidden') reset('hidden'); };
+  const allTouchesEnded = (event: TouchEvent) => { if (event.touches.length === 0 && options.origin.current)
+    reset(event.type === 'touchcancel' ? 'touch-cancelled' : 'touch-ended'); };
   const listeners: Array<() => void> = [];
   const on = (target: EventTarget, type: string, listener: EventListener, config?: AddEventListenerOptions | boolean) => {
     target.addEventListener(type, listener, config);
@@ -78,11 +86,11 @@ export function bindGameInput(field: HTMLElement, options: Options) {
   on(win, 'pointerup', end as EventListener, true);
   on(win, 'pointercancel', end as EventListener, true);
   on(field, 'lostpointercapture', end as EventListener);
-  on(win, 'blur', reset);
-  on(win, 'pagehide', reset);
-  on(win, 'resize', reset);
-  on(doc, 'fullscreenchange', reset);
-  on(doc, 'webkitfullscreenchange', reset);
+  on(win, 'blur', () => reset('blur'));
+  on(win, 'pagehide', () => reset('pagehide'));
+  on(win, 'resize', () => reset('resize'));
+  on(doc, 'fullscreenchange', () => reset('fullscreen'));
+  on(doc, 'webkitfullscreenchange', () => reset('fullscreen'));
   on(doc, 'visibilitychange', hidden);
   on(win, 'touchend', allTouchesEnded as EventListener, true);
   on(win, 'touchcancel', allTouchesEnded as EventListener, true);
@@ -101,10 +109,11 @@ export function bindGameInput(field: HTMLElement, options: Options) {
       if (touch) move(asPointer(touch, event));
     })) as EventListener, { passive: false });
     const touchEnd = (event: TouchEvent) => {
-      if (Array.from(event.changedTouches).some(touch => touch.identifier === options.pointer.current)) reset();
+      if (Array.from(event.changedTouches).some(touch => touch.identifier === options.pointer.current))
+        reset(event.type === 'touchcancel' ? 'touch-cancelled' : 'touch-ended');
     };
     on(win, 'touchend', touchEnd as EventListener, true);
     on(win, 'touchcancel', touchEnd as EventListener, true);
   }
-  return { reset, dispose: () => { reset(); listeners.forEach(remove => remove()); } };
+  return { reset: () => reset(), dispose: () => { reset('disposed'); listeners.forEach(remove => remove()); } };
 }

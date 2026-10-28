@@ -1,9 +1,12 @@
-import { observeSessionDiagnostics } from '../lib/sessionDiagnosticEvents.ts';
+import { observeSessionDiagnostics, sessionDiagnostic } from '../lib/sessionDiagnosticEvents.ts';
 import { cleanFullData, FULL_SESSION_LIMITS as limits, FULL_SESSION_STATUS_KEY,
   type FullRecord, type FullRecordKind, type FullSessionSummary } from './fullSessionFormat.ts';
 import { appendFullSessionChunk, trackFullSessionWrite, fullSessionStorageFailureCode, type FullSessionHost } from './fullSessionStore.ts';
+import { observeInputNavigation } from './inputDiagnostics.ts';
 
 type Host = FullSessionHost & { navigator?: { userAgent?: string; maxTouchPoints?: number };
+  addEventListener?: (type: string, listener: EventListener) => void;
+  removeEventListener?: (type: string, listener: EventListener) => void;
   innerWidth?: number; innerHeight?: number; devicePixelRatio?: number };
 type Options = { build: { sourceCommit: string; sourceTree: string; workingTreeDirty: boolean };
   now?: () => number; wallNow?: () => number; fullContext?: () => Record<string, unknown> };
@@ -18,7 +21,7 @@ function device(host: Host) {
   } catch { return {}; }
 }
 // Receives the existing probe's aggregate windows. It does not own a timer/RAF,
-// sample DOM, record inputs, contact a server or keep the whole run in memory.
+// sample DOM, record raw inputs, contact a server or keep the whole run in memory.
 export function createFullSessionRecorder(verifiedOwner: boolean, getHost: () => Host, options: Options) {
   if (!verifiedOwner) return null;
   let host: Host;
@@ -118,13 +121,15 @@ export function createFullSessionRecorder(verifiedOwner: boolean, getHost: () =>
       observed = { ...record, data: context }; marker(); flush();
     }
   };
-  const release = observeSessionDiagnostics((kind, details) => {
+  const unobserve = observeSessionDiagnostics((kind, details) => {
     if (!started && !stopped && kind === 'boundary' && details.operation === 'boss-summary-open') {
       started = true; add('start', options.build, true); flush();
     }
     add(kind, details, kind === 'boundary' && details.operation !== 'hull-plan-progress' || kind === 'lifecycle');
     // Requests/queues are batched with the next aggregate window, not written per shot.
   });
+  const unobserveNavigation = observeInputNavigation(host, details => sessionDiagnostic('input', details));
+  const release = () => { unobserve(); unobserveNavigation(); };
   return {
     id,
     start() { if (started || stopped) return; started = true; add('start', options.build, true); flush(); },

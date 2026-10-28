@@ -1,0 +1,81 @@
+name: Boss 2 forensic laboratory
+
+on:
+  push:
+    branches: [codex/boss2-forensics-20261028]
+    paths:
+      - '.github/workflows/cryptoid-boss2-forensics.yml'
+      - 'verification/boss2-forensics-20261028/**.mjs'
+      - 'verification/boss2-forensics-20261028/package.json'
+      - 'frontend/src/pages/inputDiagnostics*'
+      - 'frontend/src/pages/gameInput*'
+      - 'frontend/src/pages/fullSession*'
+      - 'frontend/src/lib/sessionDiagnosticEvents.ts'
+      - 'frontend/src/pages/crashTail.ts'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: boss2-forensics-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  browser:
+    name: ${{ matrix.profile }} / ${{ matrix.mode }} / diagnostics-${{ matrix.diagnostics }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { profile: android-phone, engine: chromium, mode: direct, diagnostics: '1' }
+          - { profile: iphone, engine: webkit, mode: direct, diagnostics: '1' }
+          - { profile: android-phone, engine: chromium, mode: warm, diagnostics: '1' }
+          - { profile: iphone, engine: webkit, mode: warm, diagnostics: '1' }
+          - { profile: android-phone, engine: chromium, mode: direct, diagnostics: '0' }
+    env:
+      CRYPTOID_TEST_PROFILE: ${{ matrix.profile }}
+      CRYPTOID_FORENSIC_MODE: ${{ matrix.mode }}
+      CRYPTOID_OWNER_DIAGNOSTICS: ${{ matrix.diagnostics }}
+      CRYPTOID_WARMUP_MAX_SECONDS: '1200'
+      CRYPTOID_CASE_SECONDS: '20'
+      CRYPTOID_TEST_OUTPUT: ${{ github.workspace }}/verification/boss2-forensics-20261028/results/${{ matrix.profile }}-${{ matrix.mode }}-${{ matrix.diagnostics }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Install unchanged application dependencies
+        run: |
+          npm install --prefix frontend --include=optional --no-audit --no-fund
+          npm ci --prefix backend --include=optional --ignore-scripts
+          npm run build --prefix backend
+          npm run prepare:hulls --prefix frontend
+      - name: Install pinned Linux browsers
+        run: |
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Verify source, privacy, real-handler fixture and sampler
+        run: |
+          npm run test:full-session --prefix frontend
+          node --test verification/boss2-forensics-20261028/tools.test.mjs
+          python -m unittest discover -s verification/boss2-forensics-20261028 -p '*_test.py'
+          node --experimental-strip-types verification/boss2-forensics-20261028/preflight.mjs
+      - name: Exercise target scene and sample Linux processes
+        run: node verification/boss2-forensics-20261028/run.mjs
+      - name: Retain synthetic evidence and failures
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: boss2-${{ matrix.profile }}-${{ matrix.mode }}-${{ matrix.diagnostics }}
+          path: |
+            verification/boss2-forensics-20261028/results/**/*.json
+            verification/boss2-forensics-20261028/results/**/*.jsonl
+            verification/boss2-forensics-20261028/results/**/*.png
+          if-no-files-found: warn
+          retention-days: 3
