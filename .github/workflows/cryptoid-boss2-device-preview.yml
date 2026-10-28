@@ -1,5 +1,5 @@
 name: Isolated Boss 2 device preview acceptance
-run-name: Verify explicit menu preparation and report recovery in both browsers
+run-name: Recheck prepared Boss 2 entry and local report recovery
 on:
   push:
     branches: [codex/boss2-device-preview-20261028]

@@ -19,7 +19,7 @@ test('actual seed starts the two disclosed scenes without account/save API or cl
     const state = { status: 'playing' }, host = { __deviceBossOptions: { scene, protection } };
     const impact = { current: 0 };
     const code = deviceSeed.replaceAll('(window as any)', 'window');
-    runInNewContext(code, { window: host, useRef: value => ({ current: value }), useLayoutEffect: cb => { layout = cb; },useEffect:()=>{},
+    runInNewContext(code, { window: host, game:{sector:20,encounter:'boss-intro'},useRef: value => ({ current: value }), useLayoutEffect: cb => { layout = cb; },useEffect:()=>{},
       stateRef: { current: state }, fieldRef: { current: { clientWidth: 430, clientHeight: 825 } }, visibleTopRef: { current: 96 },
       createSectorBoss: (...args) => { creations++; assert.deepEqual([...args], [20,430,96,825]); return { turrets: [{ health: 10 }], health: 100, maxHealth: 100 }; },
       impactCooldownRef: impact, setGame: () => updates++ });
