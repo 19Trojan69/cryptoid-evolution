@@ -210,3 +210,34 @@ Artefakte schließen Vite-Caches aus. Die gesonderten Workflow-Dateien sind
 PR194/195 bleiben getrennt. Dieser Prüfzweig schaltet automatische Vercel-
 Deployments ab; Main, Testnet-/Produktionsadressen und reale Spielstände bleiben
 unverändert. Weder ein Merge noch eine neue Veröffentlichung wird vorgenommen.
+
+## Gezieltes Objektprofil
+
+`node profileObjects.mjs` ergänzt einen ausdrücklich invasiven Chromium-
+Vorher-/Nachher-Vergleich am künstlichen Boss-2-Direktstart. Nach dem ersten
+regulären Pause-Klick werden Heap-/DOM-/Prozesszähler vor und nach einer
+expliziten Garbage Collection erfasst. Ein Heap-Schnappschuss entsteht nur im
+pausierten Zustand. Danach bedient der Läufer regulär Resume, beobachtet
+60 Sekunden laufenden Kampf ohne Zusatzgeste und wiederholt die pausierte
+Messung. Echte Spieluhren, Stillstandsschutz und manuelles Resume bleiben
+aktiv. Diese Untersuchung ist keine unbeeinflusste Stabilitätsabnahme und
+beweist keinen nativen Pi-Browser-Fehler.
+
+Gemessen werden Prozess-RSS/PSS, gewöhnlicher und browserinterner GC-Heap,
+DOM-Dokumente/-Knoten/-Listener, sichtbare Element-/Bild-/Canvas-/Animationszahlen
+und die bestehenden Effekt-/Audiozähler. Die Zahlen sind unterschiedlich
+abgegrenzt; eine Differenz zwischen DOM-Zählern allein ist kein Nachweis
+abgetrennter Knoten. Audiozähler betreffen die Spieleffekte, nicht sämtliche
+nativen Audiopuffer des Browsers.
+
+Die zwei Roh-Schnappschüsse werden auf je 128 MiB begrenzt, lokal ausgewertet
+und nach erfolgreicher Auswertung entfernt. Exportiert werden nur Summen,
+Konstruktorbezeichner und Knoten-Eigengrößen. Stringwerte, DOM-Attribute/-Text,
+URLs und Referenzkanten werden nicht exportiert. Eigengrößen sind keine
+dominatorbasierten Retained Sizes. Die Differenz benennt wachsende Klassen,
+aber noch keinen haltenden Verweis oder sicheren Verursacher.
+
+Der gesonderte Workflow heißt `cryptoid-browser-object-profile.yml`. Seine
+Artefaktliste enthält ausschließlich bereinigte JSON-/JSONL-Dateien und
+schließt Roh-Schnappschüsse und Vite-Caches aus. Die Ausführung und ihre
+Ergebnisse werden erst nach tatsächlichem Abschluss als Beleg ergänzt.

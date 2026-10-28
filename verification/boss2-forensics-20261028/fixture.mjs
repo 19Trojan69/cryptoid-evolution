@@ -66,7 +66,7 @@ export const hooks = `
         prepared:bossSummaryPrepared, failed:bossSummaryFailed,
         bonusX:s.bonusTargets[0] ? s.bonusTargets[0].x / width : null,
         player:{...s.player}, field:{...fieldSizeRef.current},
-        canvas:canvasEffectResources()
+        canvas:canvasEffectResources(), audio:soundRef.current?.diagnosticResourceStats ?? null
       };
     }
   };
