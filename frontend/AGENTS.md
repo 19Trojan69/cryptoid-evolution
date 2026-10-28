@@ -1,3 +1,18 @@
+# Full-heart boss pickup:50 Shards, 28 October 2026
+
+The clarified request changes only the replacement reward when hearts are full:
+BOSS_FULL_HEART_SHARDS5 to50. Missing hearts still heal by one with no replacement
+Shards. Keep the existing physical pickup, once-only flag, Resume and all life
+limits. Do not modify formations, damage rules, points, other boss/bonus rewards,
+armor, purchases, account data or the White Screen diagnostics. Old collected5-
+Shard pickups remain collected without a retroactive grant. Shop and guide copy
+agree in all19 languages. The existing boss pickup tests are now in the regular
+release build.470 frontend and142 backend tests/types pass; localization/Vite and
+the affected frontend lint pass. Entire GamePage, formation module, handlers and
+hull manifest retain the public5ca9cf7 bytes. No physical-device/White Screen claim.
+Keep codex/full-heart-shards-20261028 automatic deployment disabled; draft only.
+See docs/full-heart-shards-20261028 and matching verification for fixture limits.
+
 # Fair ship stages without invisible hit protection, 28 October 2026
 
 The owner asks for fairer Elite/Advanced value and continued implementation.

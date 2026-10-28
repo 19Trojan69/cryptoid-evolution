@@ -1,6 +1,6 @@
 export const BASE_MISSION_HEARTS = 3;
 export const MAX_MISSION_HEARTS = 6;
-export const BOSS_FULL_HEART_SHARDS = 5;
+export const BOSS_FULL_HEART_SHARDS = 50;
 
 export const maxMissionHearts = (armorBonus: unknown) => BASE_MISSION_HEARTS + (
   typeof armorBonus === "number" && Number.isInteger(armorBonus)

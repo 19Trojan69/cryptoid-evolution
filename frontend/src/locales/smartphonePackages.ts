@@ -4,7 +4,7 @@ export const smartphoneTranslations: Record<string, Record<string, string>> = {
     "The control area changes vertical reach. Steering is available across its full width.": "Der Steuerbereich bestimmt die vertikale Reichweite. Du kannst über seine gesamte Breite steuern.",
     "Steering works on both sides of the lower playfield. Handedness only changes the button positions.": "Du kannst auf beiden Seiten des unteren Spielfelds steuern. Die Händigkeit bestimmt nur die Position der Buttons.",
     "You start with 3 hearts, or 4 with Reinforced Hull and 6 with both armor upgrades. The mission ends when all hearts are lost.": "Du startest mit 3 Herzen, mit verstärktem Rumpf mit 4 und mit beiden Panzerungen mit 6. Sind alle Herzen verloren, endet die Mission.",
-    "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 5 Shards instead.": "Bossherzen stellen ein verlorenes Herz wieder her, höchstens bis zur Panzerungsgrenze. Bei vollen Herzen erhältst du beim Einsammeln stattdessen 5 Shards.",
+    "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 50 Shards instead.": "Bossherzen stellen ein verlorenes Herz wieder her, höchstens bis zur Panzerungsgrenze. Bei vollen Herzen erhältst du beim Einsammeln stattdessen 50 Shards.",
     "Advanced and Elite projectile protection does not increase your maximum hearts.": "Der Projektilschutz von Advanced und Elite erhöht deine maximale Herzzahl nicht.",
     "FULL HEARTS": "LEBEN VOLL",
     "HEART RESTORED": "HERZ AUFGEFÜLLT",
@@ -30,7 +30,7 @@ export const smartphoneTranslations: Record<string, Record<string, string>> = {
     "The control area changes vertical reach. Steering is available across its full width.": "El área de control determina el alcance vertical. Puedes mover la nave en toda su anchura.",
     "Steering works on both sides of the lower playfield. Handedness only changes the button positions.": "Puedes mover la nave a ambos lados de la parte inferior del campo. La mano elegida solo cambia la posición de los botones.",
     "You start with 3 hearts, or 4 with Reinforced Hull and 6 with both armor upgrades. The mission ends when all hearts are lost.": "Empiezas con 3 corazones, 4 con casco reforzado o 6 con ambas mejoras de blindaje. La misión termina cuando los pierdes todos.",
-    "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 5 Shards instead.": "Los corazones de los jefes recuperan un corazón perdido, hasta el límite de tu blindaje. Si ya tienes todos los corazones, recoger uno te da 5 fragmentos.",
+    "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 50 Shards instead.": "Los corazones de los jefes recuperan un corazón perdido, hasta el límite de tu blindaje. Si ya tienes todos los corazones, recoger uno te da 50 fragmentos.",
     "Advanced and Elite projectile protection does not increase your maximum hearts.": "La protección contra proyectiles de Advanced y Elite no aumenta tu máximo de corazones.",
     "FULL HEARTS": "CORAZONES COMPLETOS",
     "HEART RESTORED": "CORAZÓN RECUPERADO",
@@ -55,7 +55,7 @@ export const smartphoneTranslations: Record<string, Record<string, string>> = {
     "The control area changes vertical reach. Steering is available across its full width.": "控制区域设置决定可操作区域的纵向范围。你可以在该区域的整个宽度内操控飞船。",
     "Steering works on both sides of the lower playfield. Handedness only changes the button positions.": "你可以在游戏区域下半部的左右两侧操控飞船。惯用手设置仅改变按钮的位置。",
     "You start with 3 hearts, or 4 with Reinforced Hull and 6 with both armor upgrades. The mission ends when all hearts are lost.": "初始有3颗心；强化舰体可提升至4颗，同时拥有两种装甲则为6颗。失去所有心后，任务结束。",
-    "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 5 Shards instead.": "首领掉落的心可恢复一颗失去的心，但不能超过装甲的生命上限。生命已满时，拾取后改为获得5个碎片。",
+    "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 50 Shards instead.": "首领掉落的心可恢复一颗失去的心，但不能超过装甲的生命上限。生命已满时，拾取后改为获得50个碎片。",
     "Advanced and Elite projectile protection does not increase your maximum hearts.": "Advanced和Elite的弹丸防护不会增加生命上限。",
     "FULL HEARTS": "生命已满",
     "HEART RESTORED": "生命已恢复",
@@ -80,7 +80,7 @@ export const smartphoneTranslations: Record<string, Record<string, string>> = {
     "The control area changes vertical reach. Steering is available across its full width.": "Vùng điều khiển quyết định phạm vi theo chiều dọc. Bạn có thể điều khiển trên toàn bộ chiều rộng của vùng này.",
     "Steering works on both sides of the lower playfield. Handedness only changes the button positions.": "Bạn có thể điều khiển ở cả hai bên phần dưới sân chơi. Lựa chọn tay thuận chỉ thay đổi vị trí các nút.",
     "You start with 3 hearts, or 4 with Reinforced Hull and 6 with both armor upgrades. The mission ends when all hearts are lost.": "Bạn bắt đầu với 3 tim, 4 tim nếu có Thân tàu gia cố hoặc 6 tim nếu có cả hai nâng cấp giáp. Nhiệm vụ kết thúc khi mất hết tim.",
-    "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 5 Shards instead.": "Tim từ trùm hồi phục một tim đã mất, tối đa đến giới hạn của giáp. Khi đã đầy tim, nhặt tim sẽ nhận 5 Shards thay thế.",
+    "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 50 Shards instead.": "Tim từ trùm hồi phục một tim đã mất, tối đa đến giới hạn của giáp. Khi đã đầy tim, nhặt tim sẽ nhận 50 Shards thay thế.",
     "Advanced and Elite projectile protection does not increase your maximum hearts.": "Khả năng chặn đạn của Advanced và Elite không tăng số tim tối đa.",
     "FULL HEARTS": "ĐẦY TIM",
     "HEART RESTORED": "ĐÃ HỒI PHỤC TIM",
@@ -101,3 +101,23 @@ export const smartphoneTranslations: Record<string, Record<string, string>> = {
     "The browser did not allow full screen. You can continue playing in this view.": "Trình duyệt không cho phép toàn màn hình. Bạn có thể tiếp tục chơi trong chế độ hiện tại.",
   },
 };
+
+const fullHeartRewardTranslations: Record<string, string> = {
+  "en": "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 50 Shards instead.",
+  "fr": "Les cœurs des boss restaurent un cœur perdu, sans dépasser la limite de ton armure. Si tes cœurs sont pleins, en ramasser un rapporte 50 Shards à la place.",
+  "pt": "Os corações dos chefes recuperam um coração perdido até ao limite da tua armadura. Com os corações cheios, recolher um dá 50 Shards em vez disso.",
+  "it": "I cuori dei boss ripristinano un cuore perso fino al limite dell'armatura. A cuori pieni, raccoglierne uno dà invece 50 Shards.",
+  "pl": "Serca bossów przywracają jedno utracone serce do limitu pancerza. Przy pełnych sercach zebranie jednego daje zamiast tego 50 Shards.",
+  "tr": "Boss kalpleri, zırh sınırına kadar kaybedilen bir kalbi geri kazandırır. Kalpler doluyken birini toplamak yerine 50 Shards verir.",
+  "ru": "Сердца боссов восстанавливают одно потерянное сердце до предела брони. Если все сердца полны, за подбор вместо сердца выдаётся 50 Shards.",
+  "hr": "Srca šefova vraćaju jedno izgubljeno srce do granice oklopa. Ako su sva srca puna, prikupljanje umjesto toga donosi 50 Shards.",
+  "cs": "Srdce bossů obnoví jedno ztracené srdce až do limitu zbroje. Při plném zdraví jeho sebrání místo toho přidá 50 Shards.",
+  "sk": "Srdcia bossov obnovia jedno stratené srdce až do limitu brnenia. Pri plnom zdraví jeho zozbieranie namiesto toho pridá 50 Shards.",
+  "hu": "A főellenfelek szíve egy elvesztett szívet állít helyre a páncélhatárig. Ha minden szív tele van, a felvétele helyette 50 Shards jutalmat ad.",
+  "ro": "Inimile șefilor refac o inimă pierdută, până la limita armurii. Dacă toate inimile sunt pline, colectarea uneia oferă în schimb 50 Shards.",
+  "sr": "Срца шефова враћају једно изгубљено срце до границе оклопа. Ако су сва срца пуна, сакупљање уместо тога доноси 50 Shards.",
+  "uk": "Серця босів відновлюють одне втрачене серце до межі броні. Якщо всі серця повні, за підбирання натомість нараховується 50 Shards.",
+  "th": "หัวใจจากบอสฟื้นฟูหัวใจที่เสียไปหนึ่งดวงได้ไม่เกินขีดจำกัดเกราะ หากหัวใจเต็มแล้ว การเก็บจะให้ 50 Shards แทน"
+};
+for (const [locale, text] of Object.entries(fullHeartRewardTranslations))
+  Object.assign(smartphoneTranslations[locale] ??= {}, { "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 50 Shards instead.": text });

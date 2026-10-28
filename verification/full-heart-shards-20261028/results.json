@@ -1,0 +1,89 @@
+{
+  "baselineCommit": "5ca9cf7f210ec6f623649b4d5cf5f9c0b2417769",
+  "baselineTree": "1af1d9b46978e623214814df56396a101525f8bc",
+  "runtimeRule": {
+    "name": "BOSS_FULL_HEART_SHARDS",
+    "before": 5,
+    "after": 50
+  },
+  "frontend": {
+    "cases": 470,
+    "failures": 0,
+    "typecheck": true,
+    "localization": true,
+    "vite": true,
+    "bossPickupCases": 7,
+    "selectableLanguages": 19
+  },
+  "backend": {
+    "cases": 142,
+    "failures": 0,
+    "typecheck": true
+  },
+  "lint": {
+    "components": [
+      {
+        "file": "src/pages/Shop.tsx",
+        "before": {
+          "errors": 0,
+          "warnings": 0
+        },
+        "after": {
+          "errors": 0,
+          "warnings": 0
+        },
+        "added": []
+      },
+      {
+        "file": "src/pages/GameGuide.tsx",
+        "before": {
+          "errors": 0,
+          "warnings": 0
+        },
+        "after": {
+          "errors": 0,
+          "warnings": 0
+        },
+        "added": []
+      }
+    ],
+    "modules": [
+      {
+        "file": "backend/src/lifeRules.ts",
+        "errors": 0,
+        "warnings": 1,
+        "messages": [
+          {
+            "ruleId": null,
+            "fatal": false,
+            "severity": 1,
+            "message": "File ignored because outside of base path.",
+            "nodeType": null
+          }
+        ]
+      },
+      {
+        "file": "src/locales/smartphonePackages.ts",
+        "errors": 0,
+        "warnings": 0,
+        "messages": []
+      }
+    ]
+  },
+  "unchangedFiles": [
+    "frontend/src/pages/GamePage.tsx",
+    "frontend/src/pages/combatVariety.ts",
+    "backend/src/handlers/rewards.ts",
+    "backend/src/handlers/progress.ts",
+    "frontend/src/generated/paintedHullManifest.ts"
+  ],
+  "legacyRewardsRetroactivelyChanged": false,
+  "formationRewardsChanged": false,
+  "heartHealingChanged": false,
+  "newScoreBonus": 0,
+  "pricesChanged": false,
+  "realAccountsModified": false,
+  "physicalDevice": false,
+  "whiteScreenFixEstablished": false,
+  "deploymentPerformed": false
+}

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { collectBossHeart, BOSS_HEART_POSITION } from './bossReward.ts';
 import { bossDifficulty } from './bossDifficulty.ts';
 import { paintTurretHeat } from './bossTurretHeat.ts';
+import { languages, hasExplicitTranslation, translate } from '../i18n.ts';
 test('a defeated boss awards no life until physical pickup, exactly once', () => {
   const state = { hearts: 2, maxHearts: 3, shards: 0, bossHeartCollected: false };
   assert.equal(collectBossHeart(state, {x:.1,y:.9},390,760),false);
@@ -23,18 +24,33 @@ test('boss pickup restores one heart at every armor limit and remains reachable 
     }
   }
 });
-test('full hearts grant five Shards once per boss and fifty bosses never exceed the armor limit', () => {
+test('full hearts grant fifty Shards once per boss and fifty bosses never exceed the armor limit', () => {
   for (const maxHearts of [3, 4, 5, 6]) {
     const state = { hearts: maxHearts, maxHearts, shards: 0 };
     for (let boss = 1; boss <= 50; boss++) {
       state.bossHeartCollected = false;
       assert.equal(collectBossHeart(state,BOSS_HEART_POSITION,390,844),true);
       assert.equal(state.hearts,maxHearts);
-      assert.equal(state.bossHeartShards,5);
-      assert.equal(state.shards,5*boss);
+      assert.equal(state.bossHeartShards,50);
+      assert.equal(state.shards,50*boss);
       assert.equal(collectBossHeart(state,BOSS_HEART_POSITION,390,844),false);
-      assert.equal(state.shards,5*boss);
+      assert.equal(state.shards,50*boss);
+      const resumed = JSON.parse(JSON.stringify(state));
+      assert.equal(collectBossHeart(resumed,BOSS_HEART_POSITION,390,844),false);
+      assert.equal(resumed.shards,50*boss);
     }
+  }
+});
+test('an already collected legacy five-Shard pickup is never retroactively credited again', () => {
+  const state = {hearts: 3, maxHearts: 3, shards: 5, bossHeartShards: 5, bossHeartCollected: true};
+  assert.equal(collectBossHeart(state,BOSS_HEART_POSITION,390,844),false);
+  assert.equal(state.shards,5); assert.equal(state.bossHeartShards,5);
+});
+test('shop and guide explain the same 50-Shard full-heart reward in every selectable language', () => {
+  const text = 'Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 50 Shards instead.';
+  for (const locale of Object.keys(languages)) {
+    assert.equal(hasExplicitTranslation(locale,text),true,locale);
+    assert.match(translate(locale,text),/50/);
   }
 });
 test('each of 50 bosses has strictly increasing bounded attack pressure', () => {

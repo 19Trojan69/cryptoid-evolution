@@ -14,8 +14,8 @@ test('armor defines a bounded life maximum, including existing standalone Titani
 test('boss hearts heal one or replace the heart with Shards, without exceeding the limit', () => {
   assert.deepEqual(bossHeartReward(1,6),{hearts:2,shards:0});
   assert.deepEqual(bossHeartReward(5,6),{hearts:6,shards:0});
-  assert.deepEqual(bossHeartReward(6,6),{hearts:6,shards:5});
-  assert.deepEqual(bossHeartReward(56,6),{hearts:6,shards:5});
+  assert.deepEqual(bossHeartReward(6,6),{hearts:6,shards:50});
+  assert.deepEqual(bossHeartReward(56,6),{hearts:6,shards:50});
 });
 
 test('legacy snapshot normalization preserves queued earnings and equipment without mutating the backup', () => {
