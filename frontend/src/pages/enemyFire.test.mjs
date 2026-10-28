@@ -60,16 +60,16 @@ test("a fast enemy shot crossing the ship between frames still hits", () => {
   assert.equal(enemyShotHitsPlayer({ ...moved, x: 460 }, player, 800, 800, { ...previous, x: 460 }), false);
 });
 
-test("an unprotected enemy shot removes one life; shields and hull guard retain their protection", () => {
+test("an unprotected enemy shot removes one life even with legacy hull guard; real shields still protect", () => {
   const player = { x: .5, y: .85 }, shot = { id: 2, x: 400, y: 680, vx: 0, vy: .2, radius: 5 };
   assert.equal(enemyShotHitsPlayer(shot, player, 800, 800), true);
   const bare = projectileImpact(0, false);
   assert.equal(bare.damage, 1);
   assert.equal(resolvePlayerDamage({ hearts: 3, shieldCharges: 0, shieldMs: 0 }, bare.damage, false).hearts, 2);
   const guarded = projectileImpact(1, false);
-  assert.equal(guarded.damage, 0);
+  assert.equal(guarded.damage, 1);
   assert.equal(guarded.guard, 0);
-  assert.equal(resolvePlayerDamage({ hearts: 3, shieldCharges: 0, shieldMs: 0 }, guarded.damage, false).hearts, 3);
+  assert.equal(resolvePlayerDamage({ hearts: 3, shieldCharges: 0, shieldMs: 0 }, guarded.damage, false).hearts, 2);
   const shielded = projectileImpact(0, true);
   const protectedPlayer = resolvePlayerDamage({ hearts: 3, shieldCharges: 1, shieldMs: 1000 }, shielded.damage, true);
   assert.equal(protectedPlayer.hearts, 3);

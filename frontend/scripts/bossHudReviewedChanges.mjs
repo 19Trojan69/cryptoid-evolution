@@ -1,3 +1,4 @@
+import { restoreFairShipStageGameChanges } from './fairShipStagesReviewedChanges.mjs';
 // Fixed, exact HUD presentation changes against public97d74b4.
 // Restore the complete published controller before all older scope fingerprints.
 export const bossHudChanges = [
@@ -12,6 +13,7 @@ export const bossHudChanges = [
 ];
 
 export function restoreBossHudGameChanges(source) {
+  source = restoreFairShipStageGameChanges(source);
   for (const { before, after } of [...bossHudChanges].reverse()) {
     if (source.split(after).length !== 2) throw Error('Expected one exact boss HUD change');
     source = source.replace(after, before);

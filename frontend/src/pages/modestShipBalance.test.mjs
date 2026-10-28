@@ -35,12 +35,12 @@ test('moderate stage damage reaches both boss turrets and the exposed reactor, w
     assert.ok(Math.abs(10-boss.health-2*[1,1.15,1.3][stage-1])<1e-9);
   }
 });
-test('the actual heart-loss handler preserves remaining protection until terminal death',()=>{
-  const start=source.indexOf('            // The stage pool belongs'),end=source.indexOf('            state.weaponCap',start);
+test('the actual heart-loss handler keeps legacy hull protection retired',()=>{
+  const start=source.indexOf('            // Retire legacy hull protection'),end=source.indexOf('            state.weaponCap',start);
   assert.ok(start>0&&end>start);
   const run=new Function('state','destroyed',source.slice(start,end));
-  for(const stage of [1,2,3])for(const remaining of [0,projectileGuardForStage(stage)]){
-    const state={projectileGuard:remaining};run(state,false);assert.equal(state.projectileGuard,remaining);
+  for(const remaining of [0,1,2]){
+    const state={projectileGuard:remaining};run(state,false);assert.equal(state.projectileGuard,0);
     run(state,true);assert.equal(state.projectileGuard,0);
   }
   assert.equal(source.match(/projectileGuard = projectileGuardForStage/g)?.length,1,'only a confirmed new loadout initializes the pool');
@@ -61,7 +61,7 @@ test('all stage descriptions, collection labels and mission protection rules are
 test('eight fixed reviewed hunks restore the entire public controller before all historical fingerprints',()=>{
   assert.equal(balanceReloadChanges.length,8);
   assert.equal(hash(restoreBalanceReloadGameChanges(source)),'83fad3d2d4e20d1f5c6b6777c5dc0f5fcfea3215eeda386014d6b1fed32f1c1e');
-  assert.throws(()=>restoreBalanceReloadGameChanges(source.replace('if (destroyed) state.projectileGuard = 0;','state.projectileGuard = 2;')),/one exact/);
+  assert.throws(()=>restoreBalanceReloadGameChanges(source.replace('            state.projectileGuard = 0;','            state.projectileGuard = 2;')),/one exact/);
   assert.throws(()=>restoreBalanceReloadGameChanges(source.replace('remainingMs: 6000','remainingMs: 1')),/one exact/);
   assert.notEqual(hash(restoreBalanceReloadGameChanges(source.replace('watch: callback => window.setInterval(callback, 500)','watch: callback => window.setInterval(callback, 1000)'))),'83fad3d2d4e20d1f5c6b6777c5dc0f5fcfea3215eeda386014d6b1fed32f1c1e');
 });
@@ -72,5 +72,5 @@ test('actual legacy section Resume never refills protection after a lost heart, 
  for(const checkpoint of [{destroyed:1,hearts:3},{destroyed:0,hearts:2},{destroyed:0,hearts:3,damageCount:1},{destroyed:0,hearts:3,projectileGuard:0}]){
   const ref={current:{projectileGuard:checkpoint.projectileGuard??2,maxHearts:3}};run(ref,{current:3},projectileGuardForStage,{combat:null,checkpoint,startSector:1});assert.equal(ref.current.projectileGuard,0);
  }
- const ref={current:{projectileGuard:1,maxHearts:3}};run(ref,{current:3},projectileGuardForStage,{combat:{},checkpoint:{destroyed:0,hearts:2},startSector:1});assert.equal(ref.current.projectileGuard,1,'a proven old combat record keeps its remaining pool');
+ const ref={current:{projectileGuard:1,maxHearts:3}};run(ref,{current:3},projectileGuardForStage,{combat:{},checkpoint:{destroyed:0,hearts:2},startSector:1});assert.equal(ref.current.projectileGuard,0,'an old combat record cannot restore retired hit protection');
 });

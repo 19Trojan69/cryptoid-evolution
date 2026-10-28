@@ -4,7 +4,7 @@ import ShipPreview from "./ShipPreview";
 import PiPrice from "../components/PiPrice";
 import TestPiPurchase from './TestPiPurchase';
 import { allPlayerColors, fleetCount, playerColors, standardShipPrice, type ShipFleet } from "./shipFleet";
-import { projectileGuardForStage, type ShipStage } from "./shipEvolution";
+import { stagePickupRadiusBonus, type ShipStage } from "./shipEvolution";
 import { attributesForHull, shipBaseFirepower } from "./shipAttributes";
 
 type Skin = typeof import("./shipFleet").playerSkins[number];
@@ -131,7 +131,7 @@ export default function ShipSelectionPanel({
         </div>}
         <div className="ship-version-benefits">
           <span><b aria-hidden="true">{stage === 1 ? "Ⅰ" : stage === 2 ? "Ⅱ" : "Ⅱ+"}</b>{t(stage === 1 ? "Single laser" : "Twin Laser")}</span>
-          <span><b>{projectileGuardForStage(stage)}</b>{t("Projectile hits left")}</span>
+          <span><b>+{percent(stagePickupRadiusBonus(stage))}</b>{t("Power-up pickup radius")}</span>
         </div>
         <div className="ship-hull-characteristics" aria-label={t("Hull characteristics")}>
           <strong className="ship-hull-role">{role}</strong>
@@ -161,6 +161,6 @@ export default function ShipSelectionPanel({
         </>}
     </div>}
     {message && <p className="hangar-message" role="status">{message}</p>}
-    <details className="ship-rules"><summary>{t("Shield & protection")}</summary><p>{t("Hull protection is a limited pool for the whole mission. Losing or recovering hearts does not refill it. Active shields protect separately; ship collisions still cost one heart without a shield.")}</p></details>
+    <details className="ship-rules"><summary>{t("Shield & protection")}</summary><p>{t("Ship stages do not absorb hits. Active shields protect separately; armor determines your maximum hearts. The larger pickup radius applies only to normal power-ups, not boss hearts or bonus targets.")}</p></details>
   </div>;
 }
