@@ -241,3 +241,13 @@ Der gesonderte Workflow heißt `cryptoid-browser-object-profile.yml`. Seine
 Artefaktliste enthält ausschließlich bereinigte JSON-/JSONL-Dateien und
 schließt Roh-Schnappschüsse und Vite-Caches aus. Die Ausführung und ihre
 Ergebnisse werden erst nach tatsächlichem Abschluss als Beleg ergänzt.
+
+`CRYPTOID_PROFILE_BUILD=production node profileObjects.mjs` baut dieselbe
+instrumentierte synthetische Szene mit Vite im Produktionsmodus und liefert
+sie nur auf Loopback aus. Der Test prüft die tatsächlichen gebündelten
+`import.meta.env`-Flags; installierte React-/React-DOM-Versionen werden erfasst.
+Die Handler bleiben im synthetischen Testmodus. Buildausgaben liegen nur in
+ignorierten Laborergebnissen, eine Veröffentlichung ist damit nicht verbunden.
+Dieser Vergleich ist nötig, weil React-Entwicklungsinstrumentierung zusätzliche
+Performance-Messeinträge erzeugt; der Entwicklungsserver allein ist kein
+Produktions-Speicherbenchmark.

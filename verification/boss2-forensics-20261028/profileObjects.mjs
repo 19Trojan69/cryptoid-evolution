@@ -13,11 +13,15 @@ import { summarizeHeap, compareHeaps } from './heapObjects.mjs';
 const require = createRequire(import.meta.url), pw = require(process.env.CRYPTOID_PLAYWRIGHT_MODULE || 'playwright');
 const seconds = Number(process.env.CRYPTOID_PROFILE_SECONDS || 60);
 assert.ok(Number.isInteger(seconds) && seconds >= 30 && seconds <= 120);
+const buildMode = process.env.CRYPTOID_PROFILE_BUILD || 'development';
+assert.ok(['development', 'production'].includes(buildMode));
 const output = resolve(process.env.CRYPTOID_TEST_OUTPUT || `${root}/${DIRECTORY}/results/object-profile`);
 mkdirSync(output, { recursive: true });
 const source = readFileSync(root + '/frontend/src/pages/GamePage.tsx', 'utf8');
 assert.equal(source, execFileSync('git', ['show', BASELINE + ':frontend/src/pages/GamePage.tsx'], { cwd: root, encoding: 'utf8' }));
 const result = { complete: false, baseline: BASELINE, controllerSha256: createHash('sha256').update(source).digest('hex'),
+  buildMode, reactVersion: createRequire(root + '/frontend/package.json')('react/package.json').version,
+  reactDomVersion: createRequire(root + '/frontend/package.json')('react-dom/package.json').version,
   seconds, actualHostOS: process.platform, physicalDevice: false, realPiBrowser: false, realAuthentication: false,
   syntheticAccount: true, realDatabase: false, realPayments: false, collisionProtection: true, nativeClocksAltered: false,
   directTurretRemoval: true, bossHealthFloorRatio: .4, ownerDiagnostics: true, inputEvidence: true,
@@ -45,7 +49,8 @@ async function measure(label) {
   for (const name of ['documents', 'nodes', 'jsEventListeners']) assert.ok(Number.isSafeInteger(dom[name]));
   const attached = await page.evaluate(() => ({ elements: document.querySelectorAll('*').length,
     images: document.images.length, canvases: document.querySelectorAll('canvas').length,
-    animations: document.getAnimations().length }));
+    animations: document.getAnimations().length, measureEntries: performance.getEntriesByType('measure').length,
+    markEntries: performance.getEntriesByType('mark').length }));
   const memory = sampleBrowserMemory(); assert.ok(memory.contentProcessObserved && memory.summedPssKiB !== null);
   const point = { at: new Date().toISOString(), label, status: state.status, frameAt: state.frameAt, coreVolley: state.coreVolley,
     shots: state.shots, hostileShots: state.hostileShots, effects: state.effects, canvas: state.canvas, audio: state.audio,
@@ -78,7 +83,7 @@ async function snapshot(label) {
   return aggregate;
 }
 try {
-  lab = await createLabServer({ mode: 'direct', diagnostics: true, cacheDir: output + '/vite-cache', note });
+  lab = await createLabServer({ mode: 'direct', diagnostics: true, production: buildMode === 'production', cacheDir: output + '/vite-cache', note });
   browser = await pw.chromium.launch({ headless: true }); result.engineVersion = browser.version();
   const context = await browser.newContext(configuration('android-phone', pw.devices).context);
   await context.route('**/*', async route => {
@@ -111,6 +116,9 @@ try {
   await page.waitForFunction(() => window.__crossDeviceTest?.inspect().status === 'playing', null, { timeout: 30000 });
   await page.evaluate(() => { window.__crossDeviceTest.protect(); window.__crossDeviceTest.park(); });
   await page.waitForFunction(() => window.__crossDeviceTest.inspect().reactorOpen, null, { timeout: 30000 });
+  result.bundledFlags = (await inspect()).buildFlags;
+  assert.equal(result.bundledFlags.production, buildMode === 'production', 'Actual browser bundle mode matches requested mode');
+  assert.equal(result.bundledFlags.development, buildMode !== 'production');
   documentId = await page.evaluate(() => window.__bossLabDocument); expectedNavigation = false;
   session = await context.newCDPSession(page); await session.send('HeapProfiler.enable');
   result.points.push(await measure('initial-playing'));
