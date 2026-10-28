@@ -83,6 +83,28 @@ export function instrumentController(source) {
   return transformed;
 }
 
+// Keep the observed boss alive without suppressing shots, hit effects, audio or
+// normal weapon cadence. Test-only health floor; never in a published module.
+export function instrumentBossDamage(source) {
+  const anchor = 'boss.health = Math.max(0, boss.health - damage * 2);';
+  assert.equal(source.split(anchor).length, 2, 'One exact boss damage assignment');
+  const replacement = 'boss.health = typeof window !== "undefined" && (window as any).__bossLabHold && boss.config.id === 2\n    ? Math.max(Math.min(boss.health, boss.maxHealth * .4), boss.health - damage * 2) : Math.max(0, boss.health - damage * 2);';
+  const transformed = source.replace(anchor, replacement);
+  assert.equal(transformed.replace(replacement, anchor), source);
+  return transformed;
+}
+
+export function instrumentInputEvidence(source) {
+  const anchor = 'const enabled = () => { try { return active(); } catch { return false; } };';
+  const navigation = '  if (!host.addEventListener || !host.removeEventListener) return () => {};';
+  const replacement = 'const enabled = () => { try { return !(typeof window !== "undefined" && (window as any).__bossLabNoInputEvidence) && active(); } catch { return false; } };';
+  const navigationReplacement = '  if (typeof window !== "undefined" && (window as any).__bossLabNoInputEvidence) return () => {};\n' + navigation;
+  assert.equal(source.split(anchor).length, 2); assert.equal(source.split(navigation).length, 2);
+  const transformed = source.replace(anchor, replacement).replace(navigation, navigationReplacement);
+  assert.equal(transformed.replace(replacement, anchor).replace(navigationReplacement, navigation), source);
+  return transformed;
+}
+
 export function configuration(name, devices) {
   const profiles = {
     'android-phone': { engine: 'chromium', preset: 'Pixel 7', viewport: { width: 412, height: 839 } },

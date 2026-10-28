@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
-import { createAccountFixture, instrumentController, root } from './fixture.mjs';
+import { createAccountFixture, instrumentController, instrumentBossDamage, instrumentInputEvidence, root } from './fixture.mjs';
 const require = createRequire(root + '/frontend/package.json');
 const { createServer } = require('vite');
 
@@ -11,6 +11,8 @@ export async function createLabServer({ mode = 'direct', cacheDir, port = 0, dia
   const requestCounts = {}, apiErrors = [];
   const bootstrap = `<script>
     window.__bossLabDirect = ${mode === 'direct'};
+    window.__bossLabHold = ${mode === 'direct'};
+    window.__bossLabNoInputEvidence = ${!diagnostics};
     window.__bossLabDocument = crypto.randomUUID();
     let labSeed = 0x281026;
     Math.random = () => { labSeed = (Math.imul(1664525,labSeed)+1013904223)>>>0; return labSeed/4294967296; };
@@ -24,7 +26,12 @@ export async function createLabServer({ mode = 'direct', cacheDir, port = 0, dia
   const server = await createServer({ root: root + '/frontend', cacheDir, logLevel: 'error',
     server: { host: '127.0.0.1', port, strictPort: !!port, hmr: false, fs: { allow: [root] } },
     plugins: [{ name: 'isolated-boss-lab', enforce: 'pre',
-      transform(code, id) { if (id.split('?')[0].endsWith('/pages/GamePage.tsx')) return instrumentController(code); },
+      transform(code, id) {
+        const path = id.split('?')[0];
+        if (path.endsWith('/pages/GamePage.tsx')) return instrumentController(code);
+        if (path.endsWith('/pages/sectorBoss.ts')) return instrumentBossDamage(code);
+        if (path.endsWith('/pages/inputDiagnostics.ts')) return instrumentInputEvidence(code);
+      },
       transformIndexHtml: { order: 'post', handler: html => {
         const altered = html.replace(/appNetwork:\s*"[^"]*"/, 'appNetwork: "testnet"')
           .replace(/backendURL:\s*"[^"]*"/, 'backendURL: "/api"')
@@ -42,8 +49,8 @@ export async function createLabServer({ mode = 'direct', cacheDir, port = 0, dia
             for await (const chunk of req) { length += chunk.length; if (length > 1024 * 1024) throw Error('fixture-request-too-large'); chunks.push(chunk); }
             const text = Buffer.concat(chunks).toString('utf8'), body = text ? JSON.parse(text) : null;
             let response;
-            if (group === 'user') response = { code: 200, body: { user: { uid: 'pilot-a', username: 'Isolated boss laboratory' }, canAdmin: diagnostics, adminMode: false } };
-            else if (group === 'admin') response = { code: 200, body: { canAdmin: diagnostics, adminMode: false } };
+            if (group === 'user') response = { code: 200, body: { user: { uid: 'pilot-a', username: 'Isolated boss laboratory' }, canAdmin: true, adminMode: false } };
+            else if (group === 'admin') response = { code: 200, body: { canAdmin: true, adminMode: false } };
             else if (group === 'usage') response = { code: 204 };
             else if (['progress', 'hangar', 'rewards', 'leaderboard'].includes(group))
               response = await h.call(group, '/' + parts.join('/'), body, { method: req.method });

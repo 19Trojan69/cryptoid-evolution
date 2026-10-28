@@ -19,11 +19,11 @@ permissions:
 
 concurrency:
   group: boss2-forensics-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   browser:
-    name: ${{ matrix.profile }} / ${{ matrix.mode }} / diagnostics-${{ matrix.diagnostics }}
+    name: ${{ matrix.profile }} / ${{ matrix.mode }} / input-evidence-${{ matrix.diagnostics }}
     runs-on: ubuntu-24.04
     timeout-minutes: 35
     strategy:
@@ -38,7 +38,7 @@ jobs:
     env:
       CRYPTOID_TEST_PROFILE: ${{ matrix.profile }}
       CRYPTOID_FORENSIC_MODE: ${{ matrix.mode }}
-      CRYPTOID_OWNER_DIAGNOSTICS: ${{ matrix.diagnostics }}
+      CRYPTOID_GESTURE_EVIDENCE: ${{ matrix.diagnostics }}
       CRYPTOID_WARMUP_MAX_SECONDS: '1200'
       CRYPTOID_CASE_SECONDS: '20'
       CRYPTOID_TEST_OUTPUT: ${{ github.workspace }}/verification/boss2-forensics-20261028/results/${{ matrix.profile }}-${{ matrix.mode }}-${{ matrix.diagnostics }}

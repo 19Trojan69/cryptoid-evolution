@@ -24,6 +24,11 @@ ist Main `ce073547cf573375d141bf846f70e294138dbd73`, Tree
   den bytegleich gehaltenen GamePage-Controller ein. Direktstart: synthetischer
   Spielstand bei Boss 2, entfernte Geschütze und halbe Bossgesundheit als offen
   ausgewiesene Szenenvorgabe. Das ist kein normal erspielter Zustand.
+- Während der Messfenster hält ein ausdrücklich ausgewiesener, nur im Testserver
+  eingefügter Schadensboden Boss 2 bei höchstens 40 Prozent Mindestgesundheit
+  am Leben. Bereits niedrigere Gesundheit wird nicht erhöht. Treffer, Schüsse,
+  Effekte, Ton und Takt bleiben aktiv. Diese Absicherung ist keine normale
+  Bosskampf-/Schwierigkeitsabnahme und wird nicht in die App übernommen.
 - Der warme Lauf beginnt bei Abschnitt 1 und erreicht Abschnitt 20 über reguläre
   Abläufe/Handler mit echten Uhren. Technische Pausen sind Fehler. Karten und
   Abschluss-Continue werden ausdrücklich bedient, nicht durch Zeitverkürzung
@@ -33,13 +38,14 @@ ist Main `ce073547cf573375d141bf846f70e294138dbd73`, Tree
   RSS/High-Water und PSS, soweit zugänglich. Nur Nachfahren des Testläufers werden
   zugeordnet. RSS-Summen können gemeinsame Seiten mehrfach zählen; Linux-Zähler
   sind keine iOS-/Android- oder GPU-residente Speichermessung.
-- Ein optionaler Kontrolllauf lässt die Owner-Diagnose aus. Unterschiedliche
+- Ein optionaler Kontrolllauf lässt ausschließlich die neuen Eingabebelege aus;
+  Ownerrolle, Katalog, Waffen und übrige Diagnose bleiben gleich. Unterschiedliche
   Läufe sind explorative Vergleiche, keine garantierten identischen Benchmarks.
 
 ## Testmatrix
 
 Chromium-Androidprofil und WebKit-iPhoneprofil jeweils direkt und nach Vorlauf;
-zusätzlich ein direkter Chromium-Lauf ohne Owner-Diagnose. Jeder Lauf erhält
+zusätzlich ein direkter Chromium-Lauf ohne neue Eingabebelege. Jeder Lauf erhält
 getrennte 20-Sekunden-Fenster:
 
 | Fall | Durchführung | Aussagegrenze |
@@ -120,16 +126,25 @@ Zugriff auf ein echtes Gerätelabor; es wurde kein kostenpflichtiger Dienst gebu
 
 ## Bisherige lokale Prüfung
 
-- Vollständiger Frontend-Build vor den letzten zwei zusätzlichen Testfällen:
-  506 Tests, Lokalisierung, TypeScript und Vite erfolgreich.
+- 508 Release-Tests, Lokalisierung und TypeScript erfolgreich; gesonderter Vite-
+  Build vollständig abgeschlossen (Exit 0, Abschlussmarker vorhanden).
 - Instrumentierter Controller: TypeScript und bestehende Handler-Startprüfung
   für Abschnitt 1 und Boss 2 erfolgreich; unveränderter GamePage bestätigt.
-- Drei Linux-Sampler-Prüfungen und Android-Paketvalidierung erfolgreich.
+- Linux-Sampler-, Szenenabsicherungs-/Kontrollprüfungen und Android-Paketvalidierung
+  erfolgreich; aktuelle genaue Testzahl in den Ausführungsbelegen.
 - Geänderte TypeScript-Module lint-fehlerfrei.
 - Lokaler Browserlauf: Server gestartet, anschließend fehlende Chromium-Binärdatei;
   null ausgeführte Browserszenen. Das ist kein Testpass.
 - Geräte-Preflight: `adb-not-installed`, kein physischer Test ausgeführt.
 
+Der erste externe Lauf 40731123040 ist als fehlgeschlagener Prüfaufbau erhalten:
+Der Boss wurde während der geplanten Messfenster besiegt. Im künstlichen
+Direktstart trat außerdem ein abgewiesener Checkpoint auf. Diese Ergebnisse
+zählen weder als bestandene Messfenster noch als reproduzierter White Screen.
+Der ursprüngliche Diagnose-Aus-Kontrolllauf änderte auch die Ownerrolle und
+Waffenfreigabe; er wird nicht als isolierter Messaufwandsvergleich verwendet.
+Die oben beschriebene Korrektur begrenzt den Kontrollunterschied auf Eingabebelege.
+Folgeläufe warten auf den laufenden Vorversuch, damit seine Belege erhalten bleiben.
 Neue externe Ergebnisse werden erst nach tatsächlicher Ausführung ergänzt.
 PR194/195 bleiben getrennt. Dieser Prüfzweig schaltet automatische Vercel-
 Deployments ab; Main, Testnet-/Produktionsadressen und reale Spielstände bleiben

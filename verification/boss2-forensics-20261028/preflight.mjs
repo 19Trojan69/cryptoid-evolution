@@ -3,12 +3,18 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { resolve } from 'node:path';
-import { createAccountFixture, instrumentController, BASELINE, root } from './fixture.mjs';
+import { createAccountFixture, instrumentController, instrumentBossDamage, instrumentInputEvidence, BASELINE, root } from './fixture.mjs';
 
 const source = readFileSync(root + '/frontend/src/pages/GamePage.tsx', 'utf8');
 const published = execFileSync('git', ['show', BASELINE + ':frontend/src/pages/GamePage.tsx'], { cwd: root, encoding: 'utf8' });
 assert.equal(source, published, 'Published game controller retained exactly');
 const transformed = instrumentController(source);
+const bossPath = root + '/frontend/src/pages/sectorBoss.ts';
+const bossSource = readFileSync(bossPath, 'utf8');
+assert.equal(bossSource, execFileSync('git', ['show', BASELINE + ':frontend/src/pages/sectorBoss.ts'], { cwd: root, encoding: 'utf8' }));
+const transformedBoss = instrumentBossDamage(bossSource);
+const inputPath = root + '/frontend/src/pages/inputDiagnostics.ts';
+const transformedInput = instrumentInputEvidence(readFileSync(inputPath, 'utf8'));
 const require = createRequire(root + '/frontend/package.json');
 const ts = require('typescript');
 const config = ts.readConfigFile(root + '/frontend/tsconfig.app.json', ts.sys.readFile);
@@ -19,6 +25,8 @@ const host = ts.createCompilerHost(options), originalSourceFile = host.getSource
 host.getCurrentDirectory = () => root + '/frontend';
 host.getSourceFile = (file, languageVersion, ...rest) => resolve(file) === root + '/frontend/src/pages/GamePage.tsx'
   ? ts.createSourceFile(file, transformed, languageVersion, true)
+  : resolve(file) === bossPath ? ts.createSourceFile(file, transformedBoss, languageVersion, true)
+  : resolve(file) === inputPath ? ts.createSourceFile(file, transformedInput, languageVersion, true)
   : originalSourceFile(file, languageVersion, ...rest);
 const program = ts.createProgram(parsed.fileNames, options, host);
 const diagnostics = ts.getPreEmitDiagnostics(program);

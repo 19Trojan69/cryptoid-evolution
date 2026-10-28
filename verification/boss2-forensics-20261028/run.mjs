@@ -12,7 +12,7 @@ const require = createRequire(import.meta.url);
 const pw = require(process.env.CRYPTOID_PLAYWRIGHT_MODULE || 'playwright');
 const name = process.env.CRYPTOID_TEST_PROFILE || 'android-phone';
 const mode = process.env.CRYPTOID_FORENSIC_MODE || 'direct';
-const diagnostics = process.env.CRYPTOID_OWNER_DIAGNOSTICS !== '0';
+const diagnostics = process.env.CRYPTOID_GESTURE_EVIDENCE !== '0';
 const warmLimit = Number(process.env.CRYPTOID_WARMUP_MAX_SECONDS || 900);
 const caseSeconds = Number(process.env.CRYPTOID_CASE_SECONDS || 20);
 assert.ok(Number.isInteger(warmLimit) && warmLimit >= 30 && warmLimit <= 1800);
@@ -26,7 +26,8 @@ const result = { profile: name, mode, baseline: BASELINE, controllerSha256: crea
   actualHostOS: process.platform, physicalDevice: false, realPiBrowser: false, realAuthentication: false,
   realDatabase: false, realPayments: false, syntheticAccount: true, collisionProtection: true,
   nativeClocksAltered: false, seededRandom: true, directTurretRemoval: mode === 'direct',
-  ownerDiagnostics: diagnostics, cases: [], nativeMemoryAvailable: false, complete: false,
+  observedBossDamageFloorRatio: .4,
+  ownerDiagnostics: true, gestureEvidence: diagnostics, cases: [], nativeMemoryAvailable: false, complete: false,
   osScreenshot: 'not-executed-requires-physical-device', screenshotPreview: 'not-executed-requires-physical-device',
   nativeEdgeNavigation: 'not-executed-requires-physical-device', historicalWhiteScreenFixed: false };
 result.continuousPixelObservation = false;
@@ -85,7 +86,7 @@ try {
   await page.getByRole('button', { name: 'Resume', exact: true }).click({ timeout: 45000 });
   await page.waitForFunction(() => window.__crossDeviceTest?.inspect().status === 'playing', null, { timeout: 30000 });
   await page.evaluate(() => window.__crossDeviceTest.protect());
-  assert.equal((await inspect()).ownerDiagnostics, diagnostics, 'Verified owner-diagnostic mode matches the selected control');
+  assert.equal((await inspect()).ownerDiagnostics, true, 'Owner role and catalog stay identical in both evidence controls');
   documentId = await page.evaluate(() => window.__bossLabDocument); assert.ok(documentId);
   expectedNavigation = false;
   await page.evaluate(async enabled => {
@@ -124,7 +125,7 @@ try {
   result.preludeSeconds = Math.round((Date.now() - warmStart) / 1000);
   result.visitedSectors = [...sectors].sort((a, b) => a - b);
   if (mode === 'warm') for (let sector = 1; sector <= 20; sector++) assert.ok(sectors.has(sector), 'Natural prelude includes sector ' + sector);
-  await page.evaluate(() => window.__crossDeviceTest.park());
+  await page.evaluate(() => { window.__bossLabHold = true; window.__crossDeviceTest.park(); });
   for (const label of ['baseline', 'interior-left', 'edge-left', 'cancelled-left', 'browser-capture']) {
     const record = { label, startedAt: new Date().toISOString(), passed: false, gestures: 0 };
     result.cases.push(record); note('case-start', { label });
