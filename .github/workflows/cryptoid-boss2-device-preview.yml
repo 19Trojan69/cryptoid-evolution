@@ -1,0 +1,55 @@
+name: Isolated Boss 2 device preview acceptance
+run-name: Verify isolated device preview and 15-minute production observation
+on:
+  push:
+    branches: [codex/boss2-device-preview-20261028]
+    paths: ['.github/workflows/cryptoid-boss2-device-preview.yml']
+permissions:
+  contents: read
+jobs:
+  preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - engine: chromium
+            seconds: '900'
+          - engine: webkit
+            seconds: '8'
+    env:
+      VERCEL_ENV: preview
+      CRYPTOID_DEVICE_ENGINE: ${{ matrix.engine }}
+      CRYPTOID_DEVICE_SECONDS: ${{ matrix.seconds }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Install isolated frontend and browser tools
+        run: |
+          npm install --prefix frontend --include=optional --no-audit --no-fund
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Verify isolation, precise transforms and types
+        run: |
+          node --experimental-strip-types --test verification/boss2-forensics-20261028/devicePreview.test.mjs private-preview/isolation.test.mjs private-preview/lifecycle.test.mjs
+          node --experimental-strip-types verification/boss2-forensics-20261028/devicePreviewPreflight.mjs
+      - name: Build the protected guest artifact
+        run: node verification/boss2-forensics-20261028/buildDevicePreview.mjs
+      - name: Verify direct scene and recoverable local report
+        run: node --experimental-strip-types verification/boss2-forensics-20261028/verifyDevicePreview.mjs
+      - name: Keep synthetic counters and review images
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: boss2-device-preview-${{ matrix.engine }}
+          path: |
+            verification/boss2-forensics-20261028/results/device-${{ matrix.engine }}-${{ matrix.seconds }}/verification.json
+            verification/boss2-forensics-20261028/results/device-${{ matrix.engine }}-${{ matrix.seconds }}/process-counters.jsonl
+            verification/boss2-forensics-20261028/results/device-${{ matrix.engine }}-${{ matrix.seconds }}/*.png
+          retention-days: 3
