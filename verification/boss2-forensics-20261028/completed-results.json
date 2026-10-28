@@ -1,0 +1,1226 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-28",
+  "scope": {
+    "repository": "19Trojan69/cryptoid-evolution",
+    "pullRequest": 199,
+    "baselineCommit": "ce073547cf573375d141bf846f70e294138dbd73",
+    "baselineTree": "494b543c9522317811acbf3eaf538393654f03e8",
+    "controllerSha256": "625fecc2cb959e4ed4ba690f7867d0a07b247b9a136a8ce308afecaf6dcd94fa",
+    "privateOwnerAttachmentIncluded": false,
+    "actualHostOS": "linux",
+    "testServer": "Vite development server, synthetic account/database/stock, seeded random and collision protection",
+    "nativeClocksAltered": false,
+    "bossObservationDamageFloorRatio": 0.4,
+    "directBossScene": "Synthetic sector 20, turrets removed and half health; not a naturally played state",
+    "warmBossScene": "Real-clock progression through sectors 1–20 with actual turret destruction",
+    "rendering": "Linux CI/software browser environment; not a production physical-device performance budget"
+  },
+  "outcome": {
+    "causeKnown": false,
+    "historicalWhiteScreenReproduced": false,
+    "historicalWhiteScreenFixed": false,
+    "releaseAcceptance": false,
+    "physicalDeviceTested": false,
+    "realPiBrowserTested": false,
+    "osScreenshotTested": false,
+    "screenshotPreviewTested": false,
+    "nativeEdgeNavigationTested": false,
+    "continuousPixelObservation": false,
+    "appDeployed": false,
+    "mainMerged": false
+  },
+  "acceptedSceneMatrix": {
+    "runId": 40733335418,
+    "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40733335418",
+    "testedHead": "69496765acbeb02d17f32834f4074804b2a43499",
+    "jobs": [
+      {
+        "jobId": 122975193504,
+        "profile": "iphone",
+        "mode": "warm",
+        "engineVersion": "26.5",
+        "gestureEvidence": true,
+        "complete": true,
+        "preludeSeconds": 684,
+        "visitedSectors": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "cases": [
+          {
+            "label": "baseline",
+            "startedAt": "2026-10-28T17:25:24.463Z",
+            "passed": true,
+            "gestures": 0,
+            "startCoreVolley": 0,
+            "endCoreVolley": 2,
+            "observedSeconds": 20.235
+          },
+          {
+            "label": "interior-left",
+            "startedAt": "2026-10-28T17:25:44.698Z",
+            "passed": true,
+            "gestures": 5,
+            "startCoreVolley": 2,
+            "endCoreVolley": 4,
+            "dispatchMethod": "synthetic-dom-pointer-handler-only",
+            "observedSeconds": 20.09
+          },
+          {
+            "label": "edge-left",
+            "startedAt": "2026-10-28T17:26:04.788Z",
+            "passed": true,
+            "gestures": 5,
+            "startCoreVolley": 4,
+            "endCoreVolley": 7,
+            "dispatchMethod": "synthetic-dom-pointer-handler-only",
+            "observedSeconds": 20.22
+          },
+          {
+            "label": "cancelled-left",
+            "startedAt": "2026-10-28T17:26:25.009Z",
+            "passed": true,
+            "gestures": 5,
+            "startCoreVolley": 7,
+            "endCoreVolley": 9,
+            "dispatchMethod": "synthetic-dom-pointer-handler-only",
+            "observedSeconds": 20.452
+          },
+          {
+            "label": "browser-capture",
+            "startedAt": "2026-10-28T17:26:45.462Z",
+            "passed": true,
+            "gestures": 0,
+            "startCoreVolley": 9,
+            "endCoreVolley": 11,
+            "whitePixelRatio": 0.00048828125,
+            "observedSeconds": 20.063
+          }
+        ],
+        "apiErrors": [],
+        "finishedAt": "2026-10-28T17:27:05.765Z",
+        "processMemoryAccepted": false,
+        "peakSummedPssMiB": null
+      },
+      {
+        "jobId": 122975193713,
+        "profile": "android-phone",
+        "mode": "direct",
+        "engineVersion": "151.0.7922.34",
+        "gestureEvidence": true,
+        "complete": true,
+        "preludeSeconds": 5,
+        "visitedSectors": [
+          20
+        ],
+        "cases": [
+          {
+            "label": "baseline",
+            "startedAt": "2026-10-28T17:13:44.586Z",
+            "passed": true,
+            "gestures": 0,
+            "startCoreVolley": 0,
+            "endCoreVolley": 6,
+            "observedSeconds": 20.024
+          },
+          {
+            "label": "interior-left",
+            "startedAt": "2026-10-28T17:14:04.610Z",
+            "passed": true,
+            "gestures": 5,
+            "startCoreVolley": 6,
+            "endCoreVolley": 14,
+            "dispatchMethod": "chromium-cdp-touch",
+            "observedSeconds": 20.075
+          },
+          {
+            "label": "edge-left",
+            "startedAt": "2026-10-28T17:14:24.686Z",
+            "passed": true,
+            "gestures": 5,
+            "startCoreVolley": 14,
+            "endCoreVolley": 21,
+            "dispatchMethod": "chromium-cdp-touch",
+            "observedSeconds": 20.148
+          },
+          {
+            "label": "cancelled-left",
+            "startedAt": "2026-10-28T17:14:44.834Z",
+            "passed": true,
+            "gestures": 5,
+            "startCoreVolley": 21,
+            "endCoreVolley": 28,
+            "dispatchMethod": "chromium-cdp-touch",
+            "observedSeconds": 20.083
+          },
+          {
+            "label": "browser-capture",
+            "startedAt": "2026-10-28T17:15:04.917Z",
+            "passed": true,
+            "gestures": 0,
+            "startCoreVolley": 28,
+            "endCoreVolley": 35,
+            "whitePixelRatio": 0,
+            "observedSeconds": 20.282
+          }
+        ],
+        "apiErrors": [],
+        "finishedAt": "2026-10-28T17:15:25.219Z",
+        "processMemoryAccepted": true,
+        "peakSummedPssMiB": 1329.52
+      },
+      {
+        "jobId": 122975193859,
+        "profile": "android-phone",
+        "mode": "direct",
+        "engineVersion": "151.0.7922.34",
+        "gestureEvidence": false,
+        "complete": true,
+        "preludeSeconds": 5,
+        "visitedSectors": [
+          20
+        ],
+        "cases": [
+          {
+            "label": "baseline",
+            "startedAt": "2026-10-28T17:13:31.873Z",
+            "passed": true,
+            "gestures": 0,
+            "startCoreVolley": 0,
+            "endCoreVolley": 6,
+            "observedSeconds": 20.222
+          },
+          {
+            "label": "interior-left",
+            "startedAt": "2026-10-28T17:13:52.095Z",
+            "passed": true,
+            "gestures": 5,
+            "startCoreVolley": 6,
+            "endCoreVolley": 14,
+            "dispatchMethod": "chromium-cdp-touch",
+            "observedSeconds": 20.016
+          },
+          {
+            "label": "edge-left",
+            "startedAt": "2026-10-28T17:14:12.111Z",
+            "passed": true,
+            "gestures": 5,
+            "startCoreVolley": 14,
+            "endCoreVolley": 21,
+            "dispatchMethod": "chromium-cdp-touch",
+            "observedSeconds": 20.066
+          },
+          {
+            "label": "cancelled-left",
+            "startedAt": "2026-10-28T17:14:32.177Z",
+            "passed": true,
+            "gestures": 5,
+            "startCoreVolley": 21,
+            "endCoreVolley": 28,
+            "dispatchMethod": "chromium-cdp-touch",
+            "observedSeconds": 20.161
+          },
+          {
+            "label": "browser-capture",
+            "startedAt": "2026-10-28T17:14:52.339Z",
+            "passed": true,
+            "gestures": 0,
+            "startCoreVolley": 28,
+            "endCoreVolley": 35,
+            "whitePixelRatio": 0.000244140625,
+            "observedSeconds": 20.256
+          }
+        ],
+        "apiErrors": [],
+        "finishedAt": "2026-10-28T17:15:12.600Z",
+        "processMemoryAccepted": true,
+        "peakSummedPssMiB": 1331.98
+      },
+      {
+        "jobId": 122975194228,
+        "profile": "android-phone",
+        "mode": "warm",
+        "engineVersion": "151.0.7922.34",
+        "gestureEvidence": true,
+        "complete": true,
+        "preludeSeconds": 484,
+        "visitedSectors": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "cases": [
+          {
+            "label": "baseline",
+            "startedAt": "2026-10-28T17:22:45.735Z",
+            "passed": true,
+            "gestures": 0,
+            "startCoreVolley": 0,
+            "endCoreVolley": 7,
+            "observedSeconds": 20.286
+          },
+          {
+            "label": "interior-left",
+            "startedAt": "2026-10-28T17:23:06.022Z",
+            "passed": true,
+            "gestures": 5,
+            "startCoreVolley": 7,
+            "endCoreVolley": 14,
+            "dispatchMethod": "chromium-cdp-touch",
+            "observedSeconds": 20.049
+          },
+          {
+            "label": "edge-left",
+            "startedAt": "2026-10-28T17:23:26.072Z",
+            "passed": true,
+            "gestures": 5,
+            "startCoreVolley": 14,
+            "endCoreVolley": 21,
+            "dispatchMethod": "chromium-cdp-touch",
+            "observedSeconds": 20.254
+          },
+          {
+            "label": "cancelled-left",
+            "startedAt": "2026-10-28T17:23:46.326Z",
+            "passed": true,
+            "gestures": 5,
+            "startCoreVolley": 22,
+            "endCoreVolley": 29,
+            "dispatchMethod": "chromium-cdp-touch",
+            "observedSeconds": 20.131
+          },
+          {
+            "label": "browser-capture",
+            "startedAt": "2026-10-28T17:24:06.457Z",
+            "passed": true,
+            "gestures": 0,
+            "startCoreVolley": 29,
+            "endCoreVolley": 36,
+            "whitePixelRatio": 0.000244140625,
+            "observedSeconds": 20.142
+          }
+        ],
+        "apiErrors": [],
+        "finishedAt": "2026-10-28T17:24:26.632Z",
+        "processMemoryAccepted": true,
+        "peakSummedPssMiB": 1545.67
+      },
+      {
+        "jobId": 122975194233,
+        "profile": "iphone",
+        "mode": "direct",
+        "engineVersion": "26.5",
+        "gestureEvidence": true,
+        "complete": true,
+        "preludeSeconds": 7,
+        "visitedSectors": [
+          20
+        ],
+        "cases": [
+          {
+            "label": "baseline",
+            "startedAt": "2026-10-28T17:14:45.991Z",
+            "passed": true,
+            "gestures": 0,
+            "startCoreVolley": 0,
+            "endCoreVolley": 1,
+            "observedSeconds": 20.021
+          },
+          {
+            "label": "interior-left",
+            "startedAt": "2026-10-28T17:15:06.013Z",
+            "passed": true,
+            "gestures": 5,
+            "startCoreVolley": 1,
+            "endCoreVolley": 3,
+            "dispatchMethod": "synthetic-dom-pointer-handler-only",
+            "observedSeconds": 20.103
+          },
+          {
+            "label": "edge-left",
+            "startedAt": "2026-10-28T17:15:26.117Z",
+            "passed": true,
+            "gestures": 5,
+            "startCoreVolley": 3,
+            "endCoreVolley": 6,
+            "dispatchMethod": "synthetic-dom-pointer-handler-only",
+            "observedSeconds": 20.256
+          },
+          {
+            "label": "cancelled-left",
+            "startedAt": "2026-10-28T17:15:46.373Z",
+            "passed": true,
+            "gestures": 5,
+            "startCoreVolley": 6,
+            "endCoreVolley": 8,
+            "dispatchMethod": "synthetic-dom-pointer-handler-only",
+            "observedSeconds": 20.391
+          },
+          {
+            "label": "browser-capture",
+            "startedAt": "2026-10-28T17:16:06.764Z",
+            "passed": true,
+            "gestures": 0,
+            "startCoreVolley": 8,
+            "endCoreVolley": 10,
+            "whitePixelRatio": 0,
+            "observedSeconds": 20.292
+          }
+        ],
+        "apiErrors": [],
+        "finishedAt": "2026-10-28T17:16:27.271Z",
+        "processMemoryAccepted": false,
+        "peakSummedPssMiB": null
+      }
+    ],
+    "totals": {
+      "jobs": 5,
+      "passedObservationWindows": 25,
+      "scriptedGestures": 75,
+      "chromiumCdpTouchGestures": 45,
+      "webkitSyntheticPointerGestures": 30,
+      "browserCaptures": 5,
+      "osCaptures": 0
+    },
+    "memoryExclusion": "The two WPE jobs measured only MiniBrowser at this tested head. Their small PSS values are deliberately omitted; their scene checks remain valid.",
+    "artifacts": [
+      {
+        "id": 12836932823,
+        "name": "boss2-iphone-warm-1",
+        "sha256": "241dd410c4b11d0632c2c9696ff0fc322e109d2379ebd84df8d4b0d9b6eb5dd8"
+      },
+      {
+        "id": 12836526892,
+        "name": "boss2-android-phone-direct-1",
+        "sha256": "69157f30150b7d0227ab4f403185e254a8dc22f83ee29acf25b772b7f4f46490"
+      },
+      {
+        "id": 12836058032,
+        "name": "boss2-android-phone-warm-1",
+        "sha256": "1a48e69673d3f0712dbbdb717d5a01ccc1bb172adacc047851e66ab5ccf12ff6"
+      },
+      {
+        "id": 12835802999,
+        "name": "boss2-iphone-direct-1",
+        "sha256": "94576cb0a2fcb0e4e44a336312098ca3ce8c16d45e69e16976df1e21bf07a5c5"
+      },
+      {
+        "id": 12835259311,
+        "name": "boss2-android-phone-direct-0",
+        "sha256": "f847b034414f4cdda3655fa64d0a90fe48a0d82d54b32b19454c1a098e54a5ad"
+      }
+    ]
+  },
+  "correctedWebkitWarm": {
+    "runId": 40736374748,
+    "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40736374748",
+    "testedHead": "f3c5ca5263e42faa99ffc45f5a86166359b90116",
+    "jobId": 122985922679,
+    "profile": "iphone",
+    "mode": "warm",
+    "engineVersion": "26.5",
+    "gestureEvidence": true,
+    "complete": true,
+    "preludeSeconds": 556,
+    "visitedSectors": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "cases": [
+      {
+        "label": "baseline",
+        "startedAt": "2026-10-28T17:42:11.804Z",
+        "passed": true,
+        "gestures": 0,
+        "startCoreVolley": 0,
+        "endCoreVolley": 1,
+        "observedSeconds": 10.304
+      },
+      {
+        "label": "interior-left",
+        "startedAt": "2026-10-28T17:42:22.109Z",
+        "passed": true,
+        "gestures": 3,
+        "startCoreVolley": 1,
+        "endCoreVolley": 3,
+        "dispatchMethod": "synthetic-dom-pointer-handler-only",
+        "observedSeconds": 10.334
+      },
+      {
+        "label": "edge-left",
+        "startedAt": "2026-10-28T17:42:32.443Z",
+        "passed": true,
+        "gestures": 3,
+        "startCoreVolley": 3,
+        "endCoreVolley": 5,
+        "dispatchMethod": "synthetic-dom-pointer-handler-only",
+        "observedSeconds": 10.339
+      },
+      {
+        "label": "cancelled-left",
+        "startedAt": "2026-10-28T17:42:42.782Z",
+        "passed": true,
+        "gestures": 3,
+        "startCoreVolley": 5,
+        "endCoreVolley": 6,
+        "dispatchMethod": "synthetic-dom-pointer-handler-only",
+        "observedSeconds": 10.144
+      },
+      {
+        "label": "browser-capture",
+        "startedAt": "2026-10-28T17:42:52.926Z",
+        "passed": true,
+        "gestures": 0,
+        "startCoreVolley": 6,
+        "endCoreVolley": 8,
+        "whitePixelRatio": 0,
+        "observedSeconds": 10.142
+      }
+    ],
+    "apiErrors": [],
+    "finishedAt": "2026-10-28T17:43:03.207Z",
+    "processMemoryAccepted": true,
+    "peakSummedPssMiB": 1507.87,
+    "measurement": {
+      "artifactId": 12838461521,
+      "sha256": "ea6f17622058ae7f51058b885a777aebfb165a9d446defbe9cfea4a0b6657261",
+      "zipVerified": true,
+      "processSamples": 525,
+      "contentCoveredSamples": 525,
+      "roles": [
+        "browser-other",
+        "webkit-content",
+        "webkit-network"
+      ],
+      "summedPss": {
+        "firstMiB": 1085.91,
+        "lastMiB": 1448.63,
+        "peakMiB": 1507.87
+      },
+      "rolePss": {
+        "browser-other": {
+          "firstMiB": 96.32,
+          "lastMiB": 95.53,
+          "peakMiB": 96.56
+        },
+        "webkit-content": {
+          "firstMiB": 947.05,
+          "lastMiB": 1299.15,
+          "peakMiB": 1363.12
+        },
+        "webkit-network": {
+          "firstMiB": 42.54,
+          "lastMiB": 53.95,
+          "peakMiB": 68.68
+        }
+      },
+      "stages": {
+        "prelude": {
+          "samples": 479,
+          "summedPss": {
+            "firstMiB": 1085.91,
+            "lastMiB": 1409.91,
+            "peakMiB": 1507.87
+          },
+          "contentPss": {
+            "firstMiB": 947.05,
+            "lastMiB": 1260.47,
+            "peakMiB": 1363.12
+          }
+        },
+        "baseline": {
+          "samples": 10,
+          "summedPss": {
+            "firstMiB": 1419.29,
+            "lastMiB": 1405.1,
+            "peakMiB": 1439.5
+          },
+          "contentPss": {
+            "firstMiB": 1269.24,
+            "lastMiB": 1255.16,
+            "peakMiB": 1290.22
+          }
+        },
+        "interior-left": {
+          "samples": 9,
+          "summedPss": {
+            "firstMiB": 1408.55,
+            "lastMiB": 1413.24,
+            "peakMiB": 1413.24
+          },
+          "contentPss": {
+            "firstMiB": 1258.67,
+            "lastMiB": 1263.54,
+            "peakMiB": 1263.54
+          }
+        },
+        "edge-left": {
+          "samples": 10,
+          "summedPss": {
+            "firstMiB": 1413.51,
+            "lastMiB": 1437.62,
+            "peakMiB": 1437.62
+          },
+          "contentPss": {
+            "firstMiB": 1263.91,
+            "lastMiB": 1287.78,
+            "peakMiB": 1287.78
+          }
+        },
+        "cancelled-left": {
+          "samples": 9,
+          "summedPss": {
+            "firstMiB": 1437.46,
+            "lastMiB": 1402.74,
+            "peakMiB": 1442.64
+          },
+          "contentPss": {
+            "firstMiB": 1287.72,
+            "lastMiB": 1253.18,
+            "peakMiB": 1293.11
+          }
+        },
+        "browser-capture": {
+          "samples": 8,
+          "summedPss": {
+            "firstMiB": 1403.92,
+            "lastMiB": 1448.63,
+            "peakMiB": 1448.63
+          },
+          "contentPss": {
+            "firstMiB": 1254.51,
+            "lastMiB": 1299.15,
+            "peakMiB": 1299.15
+          }
+        }
+      },
+      "sectors": {
+        "1": {
+          "samples": 18,
+          "summedPss": {
+            "firstMiB": 1085.91,
+            "lastMiB": 1213.41,
+            "peakMiB": 1213.41
+          }
+        },
+        "2": {
+          "samples": 17,
+          "summedPss": {
+            "firstMiB": 984.53,
+            "lastMiB": 1192.45,
+            "peakMiB": 1215.54
+          }
+        },
+        "3": {
+          "samples": 17,
+          "summedPss": {
+            "firstMiB": 1200.79,
+            "lastMiB": 1191.37,
+            "peakMiB": 1234.17
+          }
+        },
+        "4": {
+          "samples": 16,
+          "summedPss": {
+            "firstMiB": 1196.55,
+            "lastMiB": 1233.16,
+            "peakMiB": 1265.72
+          }
+        },
+        "5": {
+          "samples": 18,
+          "summedPss": {
+            "firstMiB": 1271.29,
+            "lastMiB": 1240.64,
+            "peakMiB": 1271.29
+          }
+        },
+        "6": {
+          "samples": 17,
+          "summedPss": {
+            "firstMiB": 1287.39,
+            "lastMiB": 1168.9,
+            "peakMiB": 1290.41
+          }
+        },
+        "7": {
+          "samples": 17,
+          "summedPss": {
+            "firstMiB": 1213.29,
+            "lastMiB": 1259.54,
+            "peakMiB": 1289.79
+          }
+        },
+        "8": {
+          "samples": 17,
+          "summedPss": {
+            "firstMiB": 1259.91,
+            "lastMiB": 1228.18,
+            "peakMiB": 1267.69
+          }
+        },
+        "9": {
+          "samples": 31,
+          "summedPss": {
+            "firstMiB": 1264.87,
+            "lastMiB": 1282.43,
+            "peakMiB": 1310.25
+          }
+        },
+        "10": {
+          "samples": 82,
+          "summedPss": {
+            "firstMiB": 1329.42,
+            "lastMiB": 1379.4,
+            "peakMiB": 1507.87
+          }
+        },
+        "11": {
+          "samples": 16,
+          "summedPss": {
+            "firstMiB": 1464.57,
+            "lastMiB": 1428.0,
+            "peakMiB": 1464.57
+          }
+        },
+        "12": {
+          "samples": 17,
+          "summedPss": {
+            "firstMiB": 1431.09,
+            "lastMiB": 1339.42,
+            "peakMiB": 1476.91
+          }
+        },
+        "13": {
+          "samples": 16,
+          "summedPss": {
+            "firstMiB": 1383.78,
+            "lastMiB": 1408.7,
+            "peakMiB": 1457.41
+          }
+        },
+        "14": {
+          "samples": 27,
+          "summedPss": {
+            "firstMiB": 1448.63,
+            "lastMiB": 1435.61,
+            "peakMiB": 1469.49
+          }
+        },
+        "15": {
+          "samples": 17,
+          "summedPss": {
+            "firstMiB": 1441.6,
+            "lastMiB": 1421.3,
+            "peakMiB": 1454.75
+          }
+        },
+        "16": {
+          "samples": 29,
+          "summedPss": {
+            "firstMiB": 1423.19,
+            "lastMiB": 1403.17,
+            "peakMiB": 1470.69
+          }
+        },
+        "17": {
+          "samples": 17,
+          "summedPss": {
+            "firstMiB": 1412.74,
+            "lastMiB": 1376.14,
+            "peakMiB": 1446.45
+          }
+        },
+        "18": {
+          "samples": 18,
+          "summedPss": {
+            "firstMiB": 1408.71,
+            "lastMiB": 1261.38,
+            "peakMiB": 1466.69
+          }
+        },
+        "19": {
+          "samples": 29,
+          "summedPss": {
+            "firstMiB": 1363.3,
+            "lastMiB": 1342.3,
+            "peakMiB": 1478.23
+          }
+        },
+        "20": {
+          "samples": 89,
+          "summedPss": {
+            "firstMiB": 1371.5,
+            "lastMiB": 1448.63,
+            "peakMiB": 1500.92
+          }
+        }
+      }
+    }
+  },
+  "chromiumHeapComparison": {
+    "runId": 40737185866,
+    "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40737185866",
+    "testedHead": "0203e8a66c3f694230321e6aa4a4c7b39c3d3467",
+    "jobId": 122988782102,
+    "profile": "android-phone",
+    "mode": "direct",
+    "engineVersion": "151.0.7922.34",
+    "gestureEvidence": true,
+    "complete": true,
+    "preludeSeconds": 5,
+    "visitedSectors": [
+      20
+    ],
+    "cases": [
+      {
+        "label": "baseline",
+        "startedAt": "2026-10-28T17:37:23.017Z",
+        "passed": true,
+        "gestures": 0,
+        "startCoreVolley": 0,
+        "endCoreVolley": 6,
+        "observedSeconds": 20.066
+      },
+      {
+        "label": "interior-left",
+        "startedAt": "2026-10-28T17:37:43.083Z",
+        "passed": true,
+        "gestures": 5,
+        "startCoreVolley": 6,
+        "endCoreVolley": 14,
+        "dispatchMethod": "chromium-cdp-touch",
+        "observedSeconds": 20.151
+      },
+      {
+        "label": "edge-left",
+        "startedAt": "2026-10-28T17:38:03.235Z",
+        "passed": true,
+        "gestures": 5,
+        "startCoreVolley": 14,
+        "endCoreVolley": 21,
+        "dispatchMethod": "chromium-cdp-touch",
+        "observedSeconds": 20.143
+      },
+      {
+        "label": "cancelled-left",
+        "startedAt": "2026-10-28T17:38:23.378Z",
+        "passed": true,
+        "gestures": 5,
+        "startCoreVolley": 21,
+        "endCoreVolley": 28,
+        "dispatchMethod": "chromium-cdp-touch",
+        "observedSeconds": 20.117
+      },
+      {
+        "label": "browser-capture",
+        "startedAt": "2026-10-28T17:38:43.495Z",
+        "passed": true,
+        "gestures": 0,
+        "startCoreVolley": 28,
+        "endCoreVolley": 35,
+        "whitePixelRatio": 0.000244140625,
+        "observedSeconds": 20.103
+      }
+    ],
+    "apiErrors": [],
+    "finishedAt": "2026-10-28T17:39:03.613Z",
+    "processMemoryAccepted": true,
+    "peakSummedPssMiB": 1323.09,
+    "sampler": {
+      "samples": 106,
+      "errors": 0,
+      "skipped": 0,
+      "scope": "Current Chromium renderer V8 isolate; not total browser/GPU memory."
+    },
+    "measurement": {
+      "artifactId": 12837453159,
+      "sha256": "c6f9476deea6d160c388c9d7a00053487045bb6e1735fb0e9fadc69c390df998",
+      "zipVerified": true,
+      "heapSamples": 106,
+      "processSamples": 93,
+      "heap": {
+        "usedSize": {
+          "firstMiB": 21.29,
+          "lastMiB": 30.93,
+          "peakMiB": 51.17
+        },
+        "totalSize": {
+          "firstMiB": 26.27,
+          "lastMiB": 82.58,
+          "peakMiB": 82.58
+        },
+        "embedderHeapUsedSize": {
+          "firstMiB": 6.12,
+          "lastMiB": 337.29,
+          "peakMiB": 407.81
+        },
+        "backingStorageSize": {
+          "firstMiB": 13.84,
+          "lastMiB": 10.96,
+          "peakMiB": 13.85
+        }
+      },
+      "stages": {
+        "prelude": {
+          "firstPssMiB": 426.64,
+          "lastPssMiB": 453.08,
+          "peakPssMiB": 453.08,
+          "rendererPeakPssMiB": 258.75,
+          "coreVolleyFirst": 0,
+          "coreVolleyLast": 0
+        },
+        "baseline": {
+          "firstPssMiB": 463.56,
+          "lastPssMiB": 648.73,
+          "peakPssMiB": 648.73,
+          "rendererPeakPssMiB": 450.23,
+          "coreVolleyFirst": 0,
+          "coreVolleyLast": 6
+        },
+        "interior-left": {
+          "firstPssMiB": 657.31,
+          "lastPssMiB": 843.86,
+          "peakPssMiB": 843.86,
+          "rendererPeakPssMiB": 641.38,
+          "coreVolleyFirst": 7,
+          "coreVolleyLast": 13
+        },
+        "edge-left": {
+          "firstPssMiB": 850.02,
+          "lastPssMiB": 1061.32,
+          "peakPssMiB": 1061.32,
+          "rendererPeakPssMiB": 857.92,
+          "coreVolleyFirst": 14,
+          "coreVolleyLast": 21
+        },
+        "cancelled-left": {
+          "firstPssMiB": 1067.91,
+          "lastPssMiB": 1129.8,
+          "peakPssMiB": 1129.8,
+          "rendererPeakPssMiB": 926.36,
+          "coreVolleyFirst": 21,
+          "coreVolleyLast": 27
+        },
+        "browser-capture": {
+          "firstPssMiB": 1146.53,
+          "lastPssMiB": 1258.3,
+          "peakPssMiB": 1323.09,
+          "rendererPeakPssMiB": 1089.85,
+          "coreVolleyFirst": 28,
+          "coreVolleyLast": 35
+        }
+      }
+    }
+  },
+  "acceptedChromiumProcessMeasurements": [
+    {
+      "name": "boss2-android-phone-direct-1",
+      "artifactId": 12836526892,
+      "sha256": "69157f30150b7d0227ab4f403185e254a8dc22f83ee29acf25b772b7f4f46490",
+      "zipVerified": true,
+      "samples": 93,
+      "stages": {
+        "prelude": {
+          "samples": 5,
+          "firstPssMiB": 430.2,
+          "lastPssMiB": 455.95,
+          "peakPssMiB": 455.95
+        },
+        "baseline": {
+          "samples": 19,
+          "firstPssMiB": 472.79,
+          "lastPssMiB": 656.08,
+          "peakPssMiB": 656.08
+        },
+        "interior-left": {
+          "samples": 17,
+          "firstPssMiB": 659.49,
+          "lastPssMiB": 855.33,
+          "peakPssMiB": 855.33
+        },
+        "edge-left": {
+          "samples": 17,
+          "firstPssMiB": 857.81,
+          "lastPssMiB": 1034.77,
+          "peakPssMiB": 1036.52
+        },
+        "cancelled-left": {
+          "samples": 17,
+          "firstPssMiB": 1034.33,
+          "lastPssMiB": 1155.43,
+          "peakPssMiB": 1158.32
+        },
+        "browser-capture": {
+          "samples": 18,
+          "firstPssMiB": 1155.52,
+          "lastPssMiB": 1276.8,
+          "peakPssMiB": 1329.52
+        }
+      },
+      "roles": {
+        "browser-other": {
+          "firstPssMiB": 155.96,
+          "lastPssMiB": 161.1,
+          "peakPssMiB": 162.48
+        },
+        "chromium-gpu": {
+          "firstPssMiB": 36.47,
+          "lastPssMiB": 39.01,
+          "peakPssMiB": 75.63
+        },
+        "chromium-renderer": {
+          "firstPssMiB": 237.78,
+          "lastPssMiB": 1076.69,
+          "peakPssMiB": 1092.13
+        }
+      }
+    },
+    {
+      "name": "boss2-android-phone-warm-1",
+      "artifactId": 12836058032,
+      "sha256": "1a48e69673d3f0712dbbdb717d5a01ccc1bb172adacc047851e66ab5ccf12ff6",
+      "zipVerified": true,
+      "samples": 537,
+      "stages": {
+        "prelude": {
+          "samples": 446,
+          "firstPssMiB": 404.72,
+          "lastPssMiB": 1072.36,
+          "peakPssMiB": 1086.96
+        },
+        "baseline": {
+          "samples": 19,
+          "firstPssMiB": 1076.84,
+          "lastPssMiB": 1106.81,
+          "peakPssMiB": 1106.81
+        },
+        "interior-left": {
+          "samples": 18,
+          "firstPssMiB": 1110.84,
+          "lastPssMiB": 1223.05,
+          "peakPssMiB": 1223.05
+        },
+        "edge-left": {
+          "samples": 18,
+          "firstPssMiB": 1240.54,
+          "lastPssMiB": 1297.89,
+          "peakPssMiB": 1322.78
+        },
+        "cancelled-left": {
+          "samples": 18,
+          "firstPssMiB": 1301.99,
+          "lastPssMiB": 1365.63,
+          "peakPssMiB": 1365.63
+        },
+        "browser-capture": {
+          "samples": 18,
+          "firstPssMiB": 1366.37,
+          "lastPssMiB": 1493.16,
+          "peakPssMiB": 1545.67
+        }
+      },
+      "roles": {
+        "browser-other": {
+          "firstPssMiB": 151.75,
+          "lastPssMiB": 171.61,
+          "peakPssMiB": 172.38
+        },
+        "chromium-gpu": {
+          "firstPssMiB": 34.34,
+          "lastPssMiB": 39.52,
+          "peakPssMiB": 80.56
+        },
+        "chromium-renderer": {
+          "firstPssMiB": 218.63,
+          "lastPssMiB": 1282.03,
+          "peakPssMiB": 1301.73
+        }
+      }
+    },
+    {
+      "name": "boss2-android-phone-direct-0",
+      "artifactId": 12835259311,
+      "sha256": "f847b034414f4cdda3655fa64d0a90fe48a0d82d54b32b19454c1a098e54a5ad",
+      "zipVerified": true,
+      "samples": 95,
+      "stages": {
+        "prelude": {
+          "samples": 5,
+          "firstPssMiB": 431.76,
+          "lastPssMiB": 458.76,
+          "peakPssMiB": 458.76
+        },
+        "baseline": {
+          "samples": 19,
+          "firstPssMiB": 462.64,
+          "lastPssMiB": 633.59,
+          "peakPssMiB": 633.59
+        },
+        "interior-left": {
+          "samples": 18,
+          "firstPssMiB": 636.25,
+          "lastPssMiB": 837.92,
+          "peakPssMiB": 837.92
+        },
+        "edge-left": {
+          "samples": 17,
+          "firstPssMiB": 841.9,
+          "lastPssMiB": 1030.63,
+          "peakPssMiB": 1034.13
+        },
+        "cancelled-left": {
+          "samples": 17,
+          "firstPssMiB": 1031.98,
+          "lastPssMiB": 1141.32,
+          "peakPssMiB": 1141.32
+        },
+        "browser-capture": {
+          "samples": 19,
+          "firstPssMiB": 1159.45,
+          "lastPssMiB": 1268.17,
+          "peakPssMiB": 1331.98
+        }
+      },
+      "roles": {
+        "browser-other": {
+          "firstPssMiB": 156.64,
+          "lastPssMiB": 161.16,
+          "peakPssMiB": 163.09
+        },
+        "chromium-gpu": {
+          "firstPssMiB": 38.33,
+          "lastPssMiB": 39.03,
+          "peakPssMiB": 74.57
+        },
+        "chromium-renderer": {
+          "firstPssMiB": 236.79,
+          "lastPssMiB": 1067.99,
+          "peakPssMiB": 1095.71
+        }
+      }
+    }
+  ],
+  "excludedRuns": [
+    {
+      "runId": 40731123040,
+      "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40731123040",
+      "reason": "Invalid observation setup: boss defeated before measurement windows completed. Synthetic direct start also caused a rejected checkpoint. Original diagnostics-off variant changed owner/weapon availability. Not a reproduced White Screen; not accepted for stability or diagnostic overhead."
+    },
+    {
+      "runId": 40734594626,
+      "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40734594626",
+      "reason": "Measurement coverage guard correctly failed: five scene windows passed, but WPE content/network process names were not yet recognized. Main-process-only PSS excluded; not an application crash."
+    }
+  ],
+  "localValidation": {
+    "releaseTests": {
+      "passed": 508,
+      "failed": 0
+    },
+    "typescript": "passed",
+    "viteBuild": {
+      "exitCode": 0,
+      "completionMarker": true,
+      "elapsedSeconds": 21.32,
+      "separateRun": true
+    },
+    "instrumentedControllerTypescript": "passed",
+    "realHandlerStartPreflight": {
+      "sectors": [
+        1,
+        20
+      ],
+      "result": "passed"
+    },
+    "changedTypescriptLint": "passed",
+    "nodeForensicToolsTests": {
+      "passed": 7,
+      "failed": 0
+    },
+    "androidPackageValidationTests": {
+      "passed": 1,
+      "failed": 0
+    },
+    "localBrowser": {
+      "status": "blocked",
+      "reason": "Chromium browser binary absent",
+      "executedSceneWindows": 0
+    },
+    "physicalAndroid": {
+      "status": "blocked",
+      "reason": "adb-not-installed",
+      "executedDeviceTests": 0
+    }
+  },
+  "interpretation": {
+    "supported": [
+      "Substantial browser process PSS growth is observed in the synthetic Linux runs, largely in the content/renderer process.",
+      "Chromium PSS already grows in the baseline window before scripted swipes. A comparable increase is present when only new input evidence is disabled.",
+      "In the dedicated Chromium run, used ordinary JavaScript heap peaks at 51.17 MiB, while total browser PSS peaks at 1323.09 MiB; the garbage-collected embedder heap counter also grows strongly.",
+      "Corrected WPE measurement covers the content process in every sample; its peak total PSS occurs during the prelude, before scripted gesture windows."
+    ],
+    "notEstablished": [
+      "The exact growing allocation/resource and whether it is retained unnecessarily.",
+      "A causal relationship between the lab memory growth and the owner's intermittent Pi Browser document replacement.",
+      "A native screenshot or native edge-gesture trigger, or their exclusion.",
+      "A production or physical-device memory limit. CDP heap counters and Linux PSS are overlapping/differently scoped metrics and must not be added or subtracted as disjoint totals.",
+      "A quantified overhead for new input evidence: separate exploratory runs are not identical benchmarks."
+    ]
+  },
+  "nextUnresolvedMeasurement": "Native Pi Browser/process-allocation evidence from an accessible real device. No real-device connection or device-lab booking was available in this session; no further manual campaign is assumed."
+}

@@ -1,0 +1,2980 @@
+{
+  "schemaVersion": 1,
+  "recordedDateVienna": "2026-10-28",
+  "baseline": "ce073547cf573375d141bf846f70e294138dbd73",
+  "pullRequest": "https://github.com/19Trojan69/cryptoid-evolution/pull/199",
+  "method": {
+    "scenario": "Synthetic direct Boss 2/open reactor; same native clocks, artificial collision protection and boss health floor. No gestures in the measured phase.",
+    "sequence": [
+      "active initial counters",
+      "normal UI Pause",
+      "paused counters",
+      "explicit debugger GC",
+      "paused counters",
+      "paused heap snapshot and counters",
+      "normal UI Resume/countdown",
+      "60 seconds active baseline with live reactor volleys",
+      "normal UI Pause",
+      "paused counters",
+      "explicit debugger GC",
+      "paused counters",
+      "paused heap snapshot and counters"
+    ],
+    "heavyWorkOnlyWhilePaused": true,
+    "rawSnapshotsIncluded": false,
+    "exportedData": "Numeric counters, constructor identifiers, snapshot self-size/type aggregates and bounded class differences; no strings, DOM markup, account values or reference edges.",
+    "snapshotClassSelection": "Original aggregates export at most 150 largest classes per snapshot. Receipt retains their 20 largest and the full exported difference. No dominator retained sizes or retaining paths were computed.",
+    "environment": "Linux Chromium/software CI; not physical Pi Browser, OS screenshot or native navigation. Development and production are separate exploratory runs, not an exact controlled benchmark.",
+    "reactDevelopmentVersion": "Not recorded at that tested head; do not infer it from a different local install. Production runtime versions and actual browser import.meta.env flags were recorded.",
+    "gcScope": "Explicit debugger collection plus paused snapshots perturbs allocation/collection. This is diagnostic evidence, not a release-time GC solution or stability acceptance."
+  },
+  "development": {
+    "runId": 40742453252,
+    "jobId": 123007351441,
+    "testedHead": "08425b5a3d23d96a7735da4e26add9bd5f30b860",
+    "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40742453252",
+    "buildMode": "development",
+    "buildModeEvidence": "Vite createServer default at this tested head; explicit browser mode flags and dependency versions were added later and are not retroactively claimed.",
+    "artifact": {
+      "id": 12840152860,
+      "sha256": "69e142f23b492e1a6e8ab9326447dde71ae786552f75a4e65ab38efe4e02605b",
+      "zipVerified": true,
+      "entries": [
+        "object-profile-summary.json",
+        "profile-counters.jsonl"
+      ]
+    },
+    "activeSamples": 58,
+    "activePeakPssMiB": 939.01,
+    "pausedGcReliefPssMiB": 422.94,
+    "postGcBaselineGrowthPssMiB": 86.41,
+    "profile": {
+      "complete": true,
+      "baseline": "ce073547cf573375d141bf846f70e294138dbd73",
+      "controllerSha256": "625fecc2cb959e4ed4ba690f7867d0a07b247b9a136a8ce308afecaf6dcd94fa",
+      "seconds": 60,
+      "actualHostOS": "linux",
+      "physicalDevice": false,
+      "realPiBrowser": false,
+      "syntheticAccount": true,
+      "realDatabase": false,
+      "realPayments": false,
+      "collisionProtection": true,
+      "nativeClocksAltered": false,
+      "directTurretRemoval": true,
+      "bossHealthFloorRatio": 0.4,
+      "ownerDiagnostics": true,
+      "inputEvidence": true,
+      "explicitGc": true,
+      "snapshotsOnlyWhilePaused": true,
+      "stabilityAcceptance": false,
+      "historicalWhiteScreenFixed": false,
+      "observedActiveSeconds": 60.998,
+      "engineVersion": "151.0.7922.34",
+      "sameDocumentNavigationEvents": 3,
+      "finishedAt": "2026-10-28T18:12:10.052Z",
+      "apiErrors": []
+    },
+    "points": [
+      {
+        "at": "2026-10-28T18:11:01.965Z",
+        "label": "initial-playing",
+        "status": "playing",
+        "frameAt": 7138.5,
+        "coreVolley": 0,
+        "shots": 0,
+        "hostileShots": 0,
+        "effects": 0,
+        "heap": {
+          "usedSize": 27316960,
+          "totalSize": 35807232,
+          "embedderHeapUsedSize": 19321216,
+          "backingStorageSize": 14510990
+        },
+        "dom": {
+          "documents": 2,
+          "nodes": 843,
+          "jsEventListeners": 920
+        },
+        "attached": {
+          "elements": 501,
+          "images": 1,
+          "canvases": 3,
+          "animations": 5
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 0,
+          "textureEntries": 0,
+          "cacheBytes": 0,
+          "surfaceBytes": 4,
+          "imageBytes": 0,
+          "textureBytes": 0,
+          "hullLoads": 0,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 0,
+          "fragmentDraws": 0,
+          "failures": []
+        },
+        "audio": {
+          "audioState": "running",
+          "audioVoices": 0,
+          "audioWeaponVoices": 0,
+          "audioBossVoices": 0,
+          "audioEffectVoices": 0,
+          "audioSampleBuffers": 46,
+          "audioRockBuffers": 0,
+          "audioBufferBytes": 6925568,
+          "audioClockMs": 5271,
+          "audioClockStalls": 0,
+          "audioRecoveries": 1,
+          "audioBlockedSounds": 0,
+          "audioReapedVoices": 0
+        },
+        "memory": {
+          "summedRssKiB": 859448,
+          "summedPssKiB": 474689,
+          "byRole": {
+            "browser-other": {
+              "rssKiB": 423904,
+              "pssKiB": 162046
+            },
+            "chromium-gpu": {
+              "rssKiB": 86996,
+              "pssKiB": 36793
+            },
+            "chromium-renderer": {
+              "rssKiB": 348548,
+              "pssKiB": 275850
+            }
+          }
+        }
+      },
+      {
+        "at": "2026-10-28T18:11:02.137Z",
+        "label": "initial-paused-before-gc",
+        "status": "paused",
+        "frameAt": 7255.2,
+        "coreVolley": 0,
+        "shots": 0,
+        "hostileShots": 0,
+        "effects": 0,
+        "heap": {
+          "usedSize": 21806320,
+          "totalSize": 37117952,
+          "embedderHeapUsedSize": 21076024,
+          "backingStorageSize": 14513847
+        },
+        "dom": {
+          "documents": 2,
+          "nodes": 1086,
+          "jsEventListeners": 1017
+        },
+        "attached": {
+          "elements": 622,
+          "images": 1,
+          "canvases": 3,
+          "animations": 6
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 0,
+          "textureEntries": 0,
+          "cacheBytes": 0,
+          "surfaceBytes": 4,
+          "imageBytes": 0,
+          "textureBytes": 0,
+          "hullLoads": 0,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 0,
+          "fragmentDraws": 0,
+          "failures": []
+        },
+        "audio": {
+          "audioState": "running",
+          "audioVoices": 0,
+          "audioWeaponVoices": 0,
+          "audioBossVoices": 0,
+          "audioEffectVoices": 0,
+          "audioSampleBuffers": 46,
+          "audioRockBuffers": 0,
+          "audioBufferBytes": 6925568,
+          "audioClockMs": 5462,
+          "audioClockStalls": 0,
+          "audioRecoveries": 1,
+          "audioBlockedSounds": 0,
+          "audioReapedVoices": 0
+        },
+        "memory": {
+          "summedRssKiB": 863496,
+          "summedPssKiB": 479991,
+          "byRole": {
+            "browser-other": {
+              "rssKiB": 424608,
+              "pssKiB": 162565
+            },
+            "chromium-gpu": {
+              "rssKiB": 90560,
+              "pssKiB": 38667
+            },
+            "chromium-renderer": {
+              "rssKiB": 348328,
+              "pssKiB": 278759
+            }
+          }
+        }
+      },
+      {
+        "at": "2026-10-28T18:11:02.241Z",
+        "label": "initial-paused-after-gc",
+        "status": "paused",
+        "frameAt": 7255.2,
+        "coreVolley": 0,
+        "shots": 0,
+        "hostileShots": 0,
+        "effects": 0,
+        "heap": {
+          "usedSize": 18737536,
+          "totalSize": 20078592,
+          "embedderHeapUsedSize": 5300904,
+          "backingStorageSize": 11469622
+        },
+        "dom": {
+          "documents": 2,
+          "nodes": 935,
+          "jsEventListeners": 321
+        },
+        "attached": {
+          "elements": 622,
+          "images": 1,
+          "canvases": 3,
+          "animations": 6
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 0,
+          "textureEntries": 0,
+          "cacheBytes": 0,
+          "surfaceBytes": 4,
+          "imageBytes": 0,
+          "textureBytes": 0,
+          "hullLoads": 0,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 0,
+          "fragmentDraws": 0,
+          "failures": []
+        },
+        "audio": {
+          "audioState": "running",
+          "audioVoices": 0,
+          "audioWeaponVoices": 0,
+          "audioBossVoices": 0,
+          "audioEffectVoices": 0,
+          "audioSampleBuffers": 46,
+          "audioRockBuffers": 0,
+          "audioBufferBytes": 6925568,
+          "audioClockMs": 5561,
+          "audioClockStalls": 0,
+          "audioRecoveries": 1,
+          "audioBlockedSounds": 0,
+          "audioReapedVoices": 0
+        },
+        "memory": {
+          "summedRssKiB": 828608,
+          "summedPssKiB": 451023,
+          "byRole": {
+            "browser-other": {
+              "rssKiB": 424612,
+              "pssKiB": 162569
+            },
+            "chromium-gpu": {
+              "rssKiB": 87884,
+              "pssKiB": 41683
+            },
+            "chromium-renderer": {
+              "rssKiB": 316112,
+              "pssKiB": 246771
+            }
+          }
+        }
+      },
+      {
+        "at": "2026-10-28T18:11:03.881Z",
+        "label": "initial-paused-after-snapshot",
+        "status": "paused",
+        "frameAt": 7255.2,
+        "coreVolley": 0,
+        "shots": 0,
+        "hostileShots": 0,
+        "effects": 0,
+        "heap": {
+          "usedSize": 18740472,
+          "totalSize": 19554304,
+          "embedderHeapUsedSize": 5727216,
+          "backingStorageSize": 11469635
+        },
+        "dom": {
+          "documents": 2,
+          "nodes": 936,
+          "jsEventListeners": 325
+        },
+        "attached": {
+          "elements": 622,
+          "images": 1,
+          "canvases": 3,
+          "animations": 4
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 0,
+          "textureEntries": 0,
+          "cacheBytes": 0,
+          "surfaceBytes": 4,
+          "imageBytes": 0,
+          "textureBytes": 0,
+          "hullLoads": 0,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 0,
+          "fragmentDraws": 0,
+          "failures": []
+        },
+        "audio": {
+          "audioState": "running",
+          "audioVoices": 0,
+          "audioWeaponVoices": 0,
+          "audioBossVoices": 0,
+          "audioEffectVoices": 0,
+          "audioSampleBuffers": 46,
+          "audioRockBuffers": 0,
+          "audioBufferBytes": 6925568,
+          "audioClockMs": 7201,
+          "audioClockStalls": 0,
+          "audioRecoveries": 1,
+          "audioBlockedSounds": 0,
+          "audioReapedVoices": 0
+        },
+        "memory": {
+          "summedRssKiB": 857164,
+          "summedPssKiB": 473730,
+          "byRole": {
+            "browser-other": {
+              "rssKiB": 424808,
+              "pssKiB": 162695
+            },
+            "chromium-gpu": {
+              "rssKiB": 89520,
+              "pssKiB": 39095
+            },
+            "chromium-renderer": {
+              "rssKiB": 342836,
+              "pssKiB": 271940
+            }
+          }
+        }
+      },
+      {
+        "at": "2026-10-28T18:11:07.047Z",
+        "label": "active-baseline",
+        "status": "playing",
+        "frameAt": 0,
+        "coreVolley": 0,
+        "shots": 0,
+        "hostileShots": 0,
+        "effects": 0,
+        "heap": {
+          "usedSize": 19938164,
+          "totalSize": 24797184,
+          "embedderHeapUsedSize": 6705096,
+          "backingStorageSize": 11471039
+        },
+        "dom": {
+          "documents": 2,
+          "nodes": 967,
+          "jsEventListeners": 374
+        },
+        "attached": {
+          "elements": 500,
+          "images": 1,
+          "canvases": 3,
+          "animations": 6
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 0,
+          "textureEntries": 0,
+          "cacheBytes": 0,
+          "surfaceBytes": 4,
+          "imageBytes": 0,
+          "textureBytes": 0,
+          "hullLoads": 0,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 0,
+          "fragmentDraws": 0,
+          "failures": []
+        },
+        "audio": {
+          "audioState": "running",
+          "audioVoices": 0,
+          "audioWeaponVoices": 0,
+          "audioBossVoices": 0,
+          "audioEffectVoices": 0,
+          "audioSampleBuffers": 46,
+          "audioRockBuffers": 0,
+          "audioBufferBytes": 6925568,
+          "audioClockMs": 10342,
+          "audioClockStalls": 0,
+          "audioRecoveries": 2,
+          "audioBlockedSounds": 0,
+          "audioReapedVoices": 0
+        },
+        "memory": {
+          "summedRssKiB": 863224,
+          "summedPssKiB": 479071,
+          "byRole": {
+            "browser-other": {
+              "rssKiB": 425400,
+              "pssKiB": 163073
+            },
+            "chromium-gpu": {
+              "rssKiB": 89936,
+              "pssKiB": 37485
+            },
+            "chromium-renderer": {
+              "rssKiB": 347888,
+              "pssKiB": 278513
+            }
+          }
+        }
+      },
+      {
+        "at": "2026-10-28T18:12:06.971Z",
+        "label": "active-baseline",
+        "status": "playing",
+        "frameAt": 72169.3,
+        "coreVolley": 21,
+        "shots": 13,
+        "hostileShots": 2,
+        "effects": 0,
+        "heap": {
+          "usedSize": 53593696,
+          "totalSize": 85241856,
+          "embedderHeapUsedSize": 279271992,
+          "backingStorageSize": 11491480
+        },
+        "dom": {
+          "documents": 2,
+          "nodes": 7260,
+          "jsEventListeners": 5537
+        },
+        "attached": {
+          "elements": 541,
+          "images": 1,
+          "canvases": 3,
+          "animations": 12
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 1,
+          "textureEntries": 2,
+          "cacheBytes": 422836,
+          "surfaceBytes": 4,
+          "imageBytes": 318096,
+          "textureBytes": 104740,
+          "hullLoads": 1,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 128,
+          "fragmentDraws": 512,
+          "failures": []
+        },
+        "audio": {
+          "audioState": "running",
+          "audioVoices": 8,
+          "audioWeaponVoices": 0,
+          "audioBossVoices": 0,
+          "audioEffectVoices": 8,
+          "audioSampleBuffers": 46,
+          "audioRockBuffers": 0,
+          "audioBufferBytes": 6925568,
+          "audioClockMs": 70293,
+          "audioClockStalls": 0,
+          "audioRecoveries": 2,
+          "audioBlockedSounds": 0,
+          "audioReapedVoices": 0
+        },
+        "memory": {
+          "summedRssKiB": 1347152,
+          "summedPssKiB": 961549,
+          "byRole": {
+            "browser-other": {
+              "rssKiB": 427896,
+              "pssKiB": 165001
+            },
+            "chromium-gpu": {
+              "rssKiB": 89552,
+              "pssKiB": 38548
+            },
+            "chromium-renderer": {
+              "rssKiB": 829704,
+              "pssKiB": 758000
+            }
+          }
+        }
+      },
+      {
+        "at": "2026-10-28T18:12:08.148Z",
+        "label": "final-paused-before-gc",
+        "status": "paused",
+        "frameAt": 73269.3,
+        "coreVolley": 21,
+        "shots": 14,
+        "hostileShots": 1,
+        "effects": 0,
+        "heap": {
+          "usedSize": 39283624,
+          "totalSize": 86347776,
+          "embedderHeapUsedSize": 114789664,
+          "backingStorageSize": 11478639
+        },
+        "dom": {
+          "documents": 2,
+          "nodes": 1283,
+          "jsEventListeners": 590
+        },
+        "attached": {
+          "elements": 662,
+          "images": 1,
+          "canvases": 3,
+          "animations": 13
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 1,
+          "textureEntries": 2,
+          "cacheBytes": 422836,
+          "surfaceBytes": 4,
+          "imageBytes": 318096,
+          "textureBytes": 104740,
+          "hullLoads": 1,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 128,
+          "fragmentDraws": 512,
+          "failures": []
+        },
+        "audio": {
+          "audioState": "running",
+          "audioVoices": 0,
+          "audioWeaponVoices": 0,
+          "audioBossVoices": 0,
+          "audioEffectVoices": 0,
+          "audioSampleBuffers": 46,
+          "audioRockBuffers": 0,
+          "audioBufferBytes": 6925568,
+          "audioClockMs": 71462,
+          "audioClockStalls": 0,
+          "audioRecoveries": 2,
+          "audioBlockedSounds": 0,
+          "audioReapedVoices": 0
+        },
+        "memory": {
+          "summedRssKiB": 1361620,
+          "summedPssKiB": 972603,
+          "byRole": {
+            "browser-other": {
+              "rssKiB": 429084,
+              "pssKiB": 166189
+            },
+            "chromium-gpu": {
+              "rssKiB": 91932,
+              "pssKiB": 38662
+            },
+            "chromium-renderer": {
+              "rssKiB": 840604,
+              "pssKiB": 767752
+            }
+          }
+        }
+      },
+      {
+        "at": "2026-10-28T18:12:08.464Z",
+        "label": "final-paused-after-gc",
+        "status": "paused",
+        "frameAt": 73269.3,
+        "coreVolley": 21,
+        "shots": 14,
+        "hostileShots": 1,
+        "effects": 0,
+        "heap": {
+          "usedSize": 21094812,
+          "totalSize": 21860352,
+          "embedderHeapUsedSize": 8614528,
+          "backingStorageSize": 11472591
+        },
+        "dom": {
+          "documents": 2,
+          "nodes": 996,
+          "jsEventListeners": 339
+        },
+        "attached": {
+          "elements": 662,
+          "images": 1,
+          "canvases": 3,
+          "animations": 11
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 1,
+          "textureEntries": 2,
+          "cacheBytes": 422836,
+          "surfaceBytes": 4,
+          "imageBytes": 318096,
+          "textureBytes": 104740,
+          "hullLoads": 1,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 128,
+          "fragmentDraws": 512,
+          "failures": []
+        },
+        "audio": {
+          "audioState": "running",
+          "audioVoices": 0,
+          "audioWeaponVoices": 0,
+          "audioBossVoices": 0,
+          "audioEffectVoices": 0,
+          "audioSampleBuffers": 46,
+          "audioRockBuffers": 0,
+          "audioBufferBytes": 6925568,
+          "audioClockMs": 71782,
+          "audioClockStalls": 0,
+          "audioRecoveries": 2,
+          "audioBlockedSounds": 0,
+          "audioReapedVoices": 0
+        },
+        "memory": {
+          "summedRssKiB": 920132,
+          "summedPssKiB": 539509,
+          "byRole": {
+            "browser-other": {
+              "rssKiB": 429084,
+              "pssKiB": 166189
+            },
+            "chromium-gpu": {
+              "rssKiB": 92656,
+              "pssKiB": 42774
+            },
+            "chromium-renderer": {
+              "rssKiB": 398392,
+              "pssKiB": 330546
+            }
+          }
+        }
+      },
+      {
+        "at": "2026-10-28T18:12:10.050Z",
+        "label": "final-paused-after-snapshot",
+        "status": "paused",
+        "frameAt": 73269.3,
+        "coreVolley": 21,
+        "shots": 14,
+        "hostileShots": 1,
+        "effects": 0,
+        "heap": {
+          "usedSize": 21094832,
+          "totalSize": 21860352,
+          "embedderHeapUsedSize": 8180784,
+          "backingStorageSize": 11471925
+        },
+        "dom": {
+          "documents": 2,
+          "nodes": 994,
+          "jsEventListeners": 331
+        },
+        "attached": {
+          "elements": 662,
+          "images": 1,
+          "canvases": 3,
+          "animations": 11
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 1,
+          "textureEntries": 2,
+          "cacheBytes": 422836,
+          "surfaceBytes": 4,
+          "imageBytes": 318096,
+          "textureBytes": 104740,
+          "hullLoads": 1,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 128,
+          "fragmentDraws": 512,
+          "failures": []
+        },
+        "audio": {
+          "audioState": "running",
+          "audioVoices": 0,
+          "audioWeaponVoices": 0,
+          "audioBossVoices": 0,
+          "audioEffectVoices": 0,
+          "audioSampleBuffers": 46,
+          "audioRockBuffers": 0,
+          "audioBufferBytes": 6925568,
+          "audioClockMs": 73372,
+          "audioClockStalls": 0,
+          "audioRecoveries": 2,
+          "audioBlockedSounds": 0,
+          "audioReapedVoices": 0
+        },
+        "memory": {
+          "summedRssKiB": 922232,
+          "summedPssKiB": 533321,
+          "byRole": {
+            "browser-other": {
+              "rssKiB": 427720,
+              "pssKiB": 164825
+            },
+            "chromium-gpu": {
+              "rssKiB": 92924,
+              "pssKiB": 40240
+            },
+            "chromium-renderer": {
+              "rssKiB": 401588,
+              "pssKiB": 328256
+            }
+          }
+        }
+      }
+    ],
+    "snapshots": [
+      {
+        "label": "before",
+        "bytes": 28790660,
+        "sha256": "34dee37ef389f36b2f9085b0c6f9c46f22ce7e1b64263256000610330c499afb",
+        "rawSnapshotRetained": false,
+        "nodes": 318600,
+        "selfBytes": 42176060,
+        "byType": {
+          "synthetic": {
+            "count": 32,
+            "selfBytes": 0
+          },
+          "native": {
+            "count": 111196,
+            "selfBytes": 24894588
+          },
+          "string": {
+            "count": 65239,
+            "selfBytes": 8607072
+          },
+          "object shape": {
+            "count": 10642,
+            "selfBytes": 563416
+          },
+          "code": {
+            "count": 58304,
+            "selfBytes": 5347116
+          },
+          "array": {
+            "count": 10012,
+            "selfBytes": 1490408
+          },
+          "number": {
+            "count": 28148,
+            "selfBytes": 199452
+          },
+          "symbol": {
+            "count": 97,
+            "selfBytes": 656
+          },
+          "object": {
+            "count": 22402,
+            "selfBytes": 731860
+          },
+          "closure": {
+            "count": 9639,
+            "selfBytes": 283588
+          },
+          "concatenated string": {
+            "count": 2483,
+            "selfBytes": 49660
+          },
+          "sliced string": {
+            "count": 375,
+            "selfBytes": 7500
+          },
+          "regexp": {
+            "count": 31,
+            "selfBytes": 744
+          }
+        },
+        "scope": "Snapshot node self sizes and constructor counts only; not dominator retained size, total browser RAM or GPU memory. Detachedness flags are retained as raw numeric flags.",
+        "exportedClassLimit": 150,
+        "topClassesBySelfBytes": [
+          {
+            "type": "native",
+            "name": "unclassified",
+            "count": 105050,
+            "selfBytes": 24305268,
+            "detachednessFlags": {
+              "0": 104809,
+              "1": 224,
+              "2": 17
+            }
+          },
+          {
+            "type": "object",
+            "name": "Object",
+            "count": 10973,
+            "selfBytes": 320440,
+            "detachednessFlags": {}
+          },
+          {
+            "type": "object",
+            "name": "FiberNode",
+            "count": 1280,
+            "selfBytes": 184320,
+            "detachednessFlags": {}
+          },
+          {
+            "type": "native",
+            "name": "JSModuleScript",
+            "count": 289,
+            "selfBytes": 120224,
+            "detachednessFlags": {
+              "0": 289
+            }
+          },
+          {
+            "type": "native",
+            "name": "PerformanceMeasure",
+            "count": 864,
+            "selfBytes": 103856,
+            "detachednessFlags": {
+              "0": 864
+            }
+          },
+          {
+            "type": "object",
+            "name": "unclassified",
+            "count": 2591,
+            "selfBytes": 73396,
+            "detachednessFlags": {}
+          },
+          {
+            "type": "object",
+            "name": "Array",
+            "count": 4289,
+            "selfBytes": 68624,
+            "detachednessFlags": {}
+          },
+          {
+            "type": "native",
+            "name": "internal",
+            "count": 1511,
+            "selfBytes": 60464,
+            "detachednessFlags": {
+              "0": 1511
+            }
+          },
+          {
+            "type": "native",
+            "name": "SVGAnimatedLength",
+            "count": 820,
+            "selfBytes": 52480,
+            "detachednessFlags": {
+              "0": 820
+            }
+          },
+          {
+            "type": "object",
+            "name": "Error",
+            "count": 1545,
+            "selfBytes": 37080,
+            "detachednessFlags": {}
+          },
+          {
+            "type": "native",
+            "name": "PerformanceResourceTiming",
+            "count": 250,
+            "selfBytes": 34000,
+            "detachednessFlags": {
+              "0": 250
+            }
+          },
+          {
+            "type": "native",
+            "name": "SVGCircleElement",
+            "count": 230,
+            "selfBytes": 31232,
+            "detachednessFlags": {
+              "0": 3,
+              "1": 227
+            }
+          },
+          {
+            "type": "object",
+            "name": "Generator",
+            "count": 580,
+            "selfBytes": 26644,
+            "detachednessFlags": {}
+          },
+          {
+            "type": "native",
+            "name": "SVGAnimatedTransformList",
+            "count": 408,
+            "selfBytes": 26112,
+            "detachednessFlags": {
+              "0": 408
+            }
+          },
+          {
+            "type": "native",
+            "name": "Text",
+            "count": 211,
+            "selfBytes": 17360,
+            "detachednessFlags": {
+              "0": 181,
+              "1": 30
+            }
+          },
+          {
+            "type": "native",
+            "name": "CanvasRenderingContext2D",
+            "count": 9,
+            "selfBytes": 14936,
+            "detachednessFlags": {
+              "0": 9
+            }
+          },
+          {
+            "type": "native",
+            "name": "V8EventListener",
+            "count": 287,
+            "selfBytes": 11480,
+            "detachednessFlags": {
+              "0": 287
+            }
+          },
+          {
+            "type": "native",
+            "name": "SVGGElement",
+            "count": 77,
+            "selfBytes": 9176,
+            "detachednessFlags": {
+              "0": 4,
+              "1": 73
+            }
+          },
+          {
+            "type": "native",
+            "name": "EventListener",
+            "count": 322,
+            "selfBytes": 8064,
+            "detachednessFlags": {
+              "0": 322
+            }
+          },
+          {
+            "type": "native",
+            "name": "SVGPathElement",
+            "count": 64,
+            "selfBytes": 8016,
+            "detachednessFlags": {
+              "0": 11,
+              "1": 53
+            }
+          }
+        ]
+      },
+      {
+        "label": "after",
+        "bytes": 31859884,
+        "sha256": "4243de6493ad0a6f19fa4d77f7dc08025cf4c196e4f383ee55b3eb1e317a1374",
+        "rawSnapshotRetained": false,
+        "nodes": 358544,
+        "selfBytes": 46945847,
+        "byType": {
+          "synthetic": {
+            "count": 32,
+            "selfBytes": 0
+          },
+          "native": {
+            "count": 135488,
+            "selfBytes": 27460399
+          },
+          "string": {
+            "count": 68190,
+            "selfBytes": 8697856
+          },
+          "object shape": {
+            "count": 11543,
+            "selfBytes": 609884
+          },
+          "code": {
+            "count": 65355,
+            "selfBytes": 7286576
+          },
+          "array": {
+            "count": 10365,
+            "selfBytes": 1533552
+          },
+          "number": {
+            "count": 30533,
+            "selfBytes": 224688
+          },
+          "symbol": {
+            "count": 97,
+            "selfBytes": 656
+          },
+          "object": {
+            "count": 23891,
+            "selfBytes": 779144
+          },
+          "concatenated string": {
+            "count": 2876,
+            "selfBytes": 57520
+          },
+          "closure": {
+            "count": 9768,
+            "selfBytes": 287328
+          },
+          "regexp": {
+            "count": 31,
+            "selfBytes": 744
+          },
+          "sliced string": {
+            "count": 375,
+            "selfBytes": 7500
+          }
+        },
+        "scope": "Snapshot node self sizes and constructor counts only; not dominator retained size, total browser RAM or GPU memory. Detachedness flags are retained as raw numeric flags.",
+        "exportedClassLimit": 150,
+        "topClassesBySelfBytes": [
+          {
+            "type": "native",
+            "name": "unclassified",
+            "count": 112621,
+            "selfBytes": 24939567,
+            "detachednessFlags": {
+              "0": 112337,
+              "1": 264,
+              "2": 20
+            }
+          },
+          {
+            "type": "native",
+            "name": "PerformanceMeasure",
+            "count": 16019,
+            "selfBytes": 1931288,
+            "detachednessFlags": {
+              "0": 16019
+            }
+          },
+          {
+            "type": "object",
+            "name": "Object",
+            "count": 12008,
+            "selfBytes": 350056,
+            "detachednessFlags": {}
+          },
+          {
+            "type": "object",
+            "name": "FiberNode",
+            "count": 1343,
+            "selfBytes": 193392,
+            "detachednessFlags": {}
+          },
+          {
+            "type": "native",
+            "name": "JSModuleScript",
+            "count": 289,
+            "selfBytes": 120224,
+            "detachednessFlags": {
+              "0": 289
+            }
+          },
+          {
+            "type": "object",
+            "name": "unclassified",
+            "count": 2680,
+            "selfBytes": 76236,
+            "detachednessFlags": {}
+          },
+          {
+            "type": "object",
+            "name": "Array",
+            "count": 4430,
+            "selfBytes": 70880,
+            "detachednessFlags": {}
+          },
+          {
+            "type": "native",
+            "name": "internal",
+            "count": 1615,
+            "selfBytes": 64624,
+            "detachednessFlags": {
+              "0": 1615
+            }
+          },
+          {
+            "type": "native",
+            "name": "SVGAnimatedLength",
+            "count": 820,
+            "selfBytes": 52480,
+            "detachednessFlags": {
+              "0": 820
+            }
+          },
+          {
+            "type": "native",
+            "name": "DOMRectReadOnly",
+            "count": 834,
+            "selfBytes": 46704,
+            "detachednessFlags": {
+              "0": 834
+            }
+          },
+          {
+            "type": "object",
+            "name": "Error",
+            "count": 1649,
+            "selfBytes": 39576,
+            "detachednessFlags": {}
+          },
+          {
+            "type": "native",
+            "name": "PerformanceResourceTiming",
+            "count": 250,
+            "selfBytes": 34000,
+            "detachednessFlags": {
+              "0": 250
+            }
+          },
+          {
+            "type": "native",
+            "name": "SVGCircleElement",
+            "count": 230,
+            "selfBytes": 31232,
+            "detachednessFlags": {
+              "0": 3,
+              "1": 227
+            }
+          },
+          {
+            "type": "object",
+            "name": "Generator",
+            "count": 580,
+            "selfBytes": 26644,
+            "detachednessFlags": {}
+          },
+          {
+            "type": "native",
+            "name": "SVGAnimatedTransformList",
+            "count": 408,
+            "selfBytes": 26112,
+            "detachednessFlags": {
+              "0": 408
+            }
+          },
+          {
+            "type": "native",
+            "name": "LayoutShift",
+            "count": 150,
+            "selfBytes": 22800,
+            "detachednessFlags": {
+              "0": 150
+            }
+          },
+          {
+            "type": "native",
+            "name": "CanvasRenderingContext2D",
+            "count": 11,
+            "selfBytes": 18296,
+            "detachednessFlags": {
+              "0": 11
+            }
+          },
+          {
+            "type": "native",
+            "name": "Text",
+            "count": 211,
+            "selfBytes": 17376,
+            "detachednessFlags": {
+              "0": 180,
+              "1": 31
+            }
+          },
+          {
+            "type": "native",
+            "name": "LayoutShiftAttribution",
+            "count": 417,
+            "selfBytes": 16680,
+            "detachednessFlags": {
+              "0": 417
+            }
+          },
+          {
+            "type": "native",
+            "name": "V8EventListener",
+            "count": 297,
+            "selfBytes": 11880,
+            "detachednessFlags": {
+              "0": 297
+            }
+          }
+        ]
+      }
+    ],
+    "difference": {
+      "nodesDelta": 39944,
+      "selfBytesDelta": 4769787,
+      "classes": [
+        {
+          "type": "native",
+          "name": "PerformanceMeasure",
+          "countDelta": 15155,
+          "selfBytesDelta": 1827432
+        },
+        {
+          "type": "native",
+          "name": "unclassified",
+          "countDelta": 7571,
+          "selfBytesDelta": 634299
+        },
+        {
+          "type": "native",
+          "name": "DOMRectReadOnly",
+          "countDelta": 812,
+          "selfBytesDelta": 45472
+        },
+        {
+          "type": "object",
+          "name": "Object",
+          "countDelta": 1035,
+          "selfBytesDelta": 29616
+        },
+        {
+          "type": "native",
+          "name": "LayoutShift",
+          "countDelta": 147,
+          "selfBytesDelta": 22344
+        },
+        {
+          "type": "native",
+          "name": "LayoutShiftAttribution",
+          "countDelta": 406,
+          "selfBytesDelta": 16240
+        },
+        {
+          "type": "object",
+          "name": "FiberNode",
+          "countDelta": 63,
+          "selfBytesDelta": 9072
+        },
+        {
+          "type": "native",
+          "name": "internal",
+          "countDelta": 104,
+          "selfBytesDelta": 4160
+        },
+        {
+          "type": "native",
+          "name": "CSSAnimation",
+          "countDelta": 7,
+          "selfBytesDelta": 3696
+        },
+        {
+          "type": "native",
+          "name": "CanvasRenderingContext2D",
+          "countDelta": 2,
+          "selfBytesDelta": 3360
+        },
+        {
+          "type": "object",
+          "name": "unclassified",
+          "countDelta": 89,
+          "selfBytesDelta": 2840
+        },
+        {
+          "type": "native",
+          "name": "KeyframeEffect",
+          "countDelta": 6,
+          "selfBytesDelta": 2624
+        },
+        {
+          "type": "native",
+          "name": "CSSStyleDeclaration",
+          "countDelta": 33,
+          "selfBytesDelta": 2552
+        },
+        {
+          "type": "object",
+          "name": "Error",
+          "countDelta": 104,
+          "selfBytesDelta": 2496
+        },
+        {
+          "type": "object",
+          "name": "Array",
+          "countDelta": 141,
+          "selfBytesDelta": 2256
+        },
+        {
+          "type": "native",
+          "name": "Element",
+          "countDelta": 17,
+          "selfBytesDelta": 1904
+        },
+        {
+          "type": "native",
+          "name": "CSSTransition",
+          "countDelta": -1,
+          "selfBytesDelta": -512
+        },
+        {
+          "type": "native",
+          "name": "LargestContentfulPaint",
+          "countDelta": 3,
+          "selfBytesDelta": 408
+        },
+        {
+          "type": "native",
+          "name": "V8EventListener",
+          "countDelta": 10,
+          "selfBytesDelta": 400
+        },
+        {
+          "type": "native",
+          "name": "InteractionContentfulPaint",
+          "countDelta": 3,
+          "selfBytesDelta": 312
+        },
+        {
+          "type": "native",
+          "name": "PerformanceLongAnimationFrameTiming",
+          "countDelta": 2,
+          "selfBytesDelta": 304
+        },
+        {
+          "type": "object",
+          "name": "HTMLDivElement",
+          "countDelta": 18,
+          "selfBytesDelta": 288
+        },
+        {
+          "type": "native",
+          "name": "EventListener",
+          "countDelta": 10,
+          "selfBytesDelta": 240
+        },
+        {
+          "type": "object",
+          "name": "HTMLElement",
+          "countDelta": 15,
+          "selfBytesDelta": 240
+        },
+        {
+          "type": "native",
+          "name": "PopStateEvent",
+          "countDelta": 1,
+          "selfBytesDelta": 192
+        },
+        {
+          "type": "native",
+          "name": "GainNode",
+          "countDelta": 1,
+          "selfBytesDelta": 144
+        },
+        {
+          "type": "native",
+          "name": "AudioParam",
+          "countDelta": 1,
+          "selfBytesDelta": 112
+        },
+        {
+          "type": "object",
+          "name": "HTMLSpanElement",
+          "countDelta": 7,
+          "selfBytesDelta": 112
+        },
+        {
+          "type": "object",
+          "name": "ArrayBuffer",
+          "countDelta": 3,
+          "selfBytesDelta": 108
+        },
+        {
+          "type": "native",
+          "name": "WakeLock",
+          "countDelta": 1,
+          "selfBytesDelta": 96
+        },
+        {
+          "type": "native",
+          "name": "DocumentType",
+          "countDelta": -1,
+          "selfBytesDelta": -88
+        },
+        {
+          "type": "object",
+          "name": "SVGLinearGradientElement",
+          "countDelta": -5,
+          "selfBytesDelta": -80
+        },
+        {
+          "type": "object",
+          "name": "Promise",
+          "countDelta": 3,
+          "selfBytesDelta": 60
+        },
+        {
+          "type": "native",
+          "name": "Text",
+          "countDelta": 0,
+          "selfBytesDelta": 16
+        },
+        {
+          "type": "native",
+          "name": "AbortSignal",
+          "countDelta": 0,
+          "selfBytesDelta": 16
+        }
+      ],
+      "interpretation": "Changes between two paused, explicitly garbage-collected synthetic scenes. Counts/self sizes do not identify the retaining reference or prove a leak."
+    }
+  },
+  "production": {
+    "runId": 40744147683,
+    "jobId": 123013343044,
+    "testedHead": "de368aafc2251d9a288bc3fc92a14c5b5b035792",
+    "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40744147683",
+    "buildMode": "production",
+    "artifact": {
+      "id": 12840478508,
+      "sha256": "85face36899a928ccb15d7589842400136f24cca93d81f61f7190d55b0c09fcb",
+      "zipVerified": true,
+      "entries": [
+        "object-profile-summary.json",
+        "profile-counters.jsonl"
+      ]
+    },
+    "activeSamples": 58,
+    "activePeakPssMiB": 633.97,
+    "pausedGcReliefPssMiB": 223.57,
+    "postGcBaselineGrowthPssMiB": 37.47,
+    "profile": {
+      "complete": true,
+      "baseline": "ce073547cf573375d141bf846f70e294138dbd73",
+      "controllerSha256": "625fecc2cb959e4ed4ba690f7867d0a07b247b9a136a8ce308afecaf6dcd94fa",
+      "buildMode": "production",
+      "reactVersion": "19.2.4",
+      "reactDomVersion": "19.2.4",
+      "seconds": 60,
+      "actualHostOS": "linux",
+      "physicalDevice": false,
+      "realPiBrowser": false,
+      "realAuthentication": false,
+      "syntheticAccount": true,
+      "realDatabase": false,
+      "realPayments": false,
+      "collisionProtection": true,
+      "nativeClocksAltered": false,
+      "directTurretRemoval": true,
+      "bossHealthFloorRatio": 0.4,
+      "ownerDiagnostics": true,
+      "inputEvidence": true,
+      "explicitGc": true,
+      "snapshotsOnlyWhilePaused": true,
+      "stabilityAcceptance": false,
+      "historicalWhiteScreenFixed": false,
+      "osScreenshot": false,
+      "nativeEdgeNavigation": false,
+      "engineVersion": "151.0.7922.34",
+      "bundledFlags": {
+        "development": false,
+        "production": true
+      },
+      "sameDocumentNavigationEvents": 3,
+      "observedActiveSeconds": 60.61,
+      "finishedAt": "2026-10-28T18:24:54.354Z",
+      "apiErrors": []
+    },
+    "points": [
+      {
+        "at": "2026-10-28T18:23:47.800Z",
+        "label": "initial-playing",
+        "status": "playing",
+        "frameAt": 6050,
+        "coreVolley": 0,
+        "shots": 0,
+        "hostileShots": 0,
+        "effects": 0,
+        "heap": {
+          "usedSize": 13811680,
+          "totalSize": 21164032,
+          "embedderHeapUsedSize": 5480840,
+          "backingStorageSize": 2566775
+        },
+        "dom": {
+          "documents": 2,
+          "nodes": 742,
+          "jsEventListeners": 796
+        },
+        "attached": {
+          "elements": 479,
+          "images": 1,
+          "canvases": 3,
+          "animations": 5,
+          "measureEntries": 0,
+          "markEntries": 0
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 0,
+          "textureEntries": 0,
+          "cacheBytes": 0,
+          "surfaceBytes": 4,
+          "imageBytes": 0,
+          "textureBytes": 0,
+          "hullLoads": 0,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 0,
+          "fragmentDraws": 0,
+          "failures": []
+        },
+        "audio": {
+          "audioState": "running",
+          "audioVoices": 0,
+          "audioWeaponVoices": 0,
+          "audioBossVoices": 0,
+          "audioEffectVoices": 0,
+          "audioSampleBuffers": 46,
+          "audioRockBuffers": 0,
+          "audioBufferBytes": 6925568,
+          "audioClockMs": 5222,
+          "audioClockStalls": 0,
+          "audioRecoveries": 1,
+          "audioBlockedSounds": 0,
+          "audioReapedVoices": 0
+        },
+        "memory": {
+          "summedRssKiB": 782648,
+          "summedPssKiB": 400962,
+          "byRole": {
+            "browser-other": {
+              "rssKiB": 397772,
+              "pssKiB": 135441
+            },
+            "chromium-gpu": {
+              "rssKiB": 88488,
+              "pssKiB": 37292
+            },
+            "chromium-renderer": {
+              "rssKiB": 296388,
+              "pssKiB": 228229
+            }
+          }
+        }
+      },
+      {
+        "at": "2026-10-28T18:23:47.920Z",
+        "label": "initial-paused-before-gc",
+        "status": "paused",
+        "frameAt": 6133.4,
+        "coreVolley": 0,
+        "shots": 0,
+        "hostileShots": 0,
+        "effects": 0,
+        "heap": {
+          "usedSize": 12107492,
+          "totalSize": 21164032,
+          "embedderHeapUsedSize": 6901176,
+          "backingStorageSize": 2570469
+        },
+        "dom": {
+          "documents": 2,
+          "nodes": 983,
+          "jsEventListeners": 877
+        },
+        "attached": {
+          "elements": 600,
+          "images": 1,
+          "canvases": 3,
+          "animations": 6,
+          "measureEntries": 0,
+          "markEntries": 0
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 0,
+          "textureEntries": 0,
+          "cacheBytes": 0,
+          "surfaceBytes": 4,
+          "imageBytes": 0,
+          "textureBytes": 0,
+          "hullLoads": 0,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 0,
+          "fragmentDraws": 0,
+          "failures": []
+        },
+        "audio": {
+          "audioState": "running",
+          "audioVoices": 0,
+          "audioWeaponVoices": 0,
+          "audioBossVoices": 0,
+          "audioEffectVoices": 0,
+          "audioSampleBuffers": 46,
+          "audioRockBuffers": 0,
+          "audioBufferBytes": 6925568,
+          "audioClockMs": 5352,
+          "audioClockStalls": 0,
+          "audioRecoveries": 1,
+          "audioBlockedSounds": 0,
+          "audioReapedVoices": 0
+        },
+        "memory": {
+          "summedRssKiB": 782404,
+          "summedPssKiB": 402508,
+          "byRole": {
+            "browser-other": {
+              "rssKiB": 398664,
+              "pssKiB": 136139
+            },
+            "chromium-gpu": {
+              "rssKiB": 85820,
+              "pssKiB": 37062
+            },
+            "chromium-renderer": {
+              "rssKiB": 297920,
+              "pssKiB": 229307
+            }
+          }
+        }
+      },
+      {
+        "at": "2026-10-28T18:23:47.979Z",
+        "label": "initial-paused-after-gc",
+        "status": "paused",
+        "frameAt": 6133.4,
+        "coreVolley": 0,
+        "shots": 0,
+        "hostileShots": 0,
+        "effects": 0,
+        "heap": {
+          "usedSize": 9482840,
+          "totalSize": 10416128,
+          "embedderHeapUsedSize": 3610288,
+          "backingStorageSize": 2539016
+        },
+        "dom": {
+          "documents": 2,
+          "nodes": 882,
+          "jsEventListeners": 322
+        },
+        "attached": {
+          "elements": 600,
+          "images": 1,
+          "canvases": 3,
+          "animations": 6,
+          "measureEntries": 0,
+          "markEntries": 0
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 0,
+          "textureEntries": 0,
+          "cacheBytes": 0,
+          "surfaceBytes": 4,
+          "imageBytes": 0,
+          "textureBytes": 0,
+          "hullLoads": 0,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 0,
+          "fragmentDraws": 0,
+          "failures": []
+        },
+        "audio": {
+          "audioState": "running",
+          "audioVoices": 0,
+          "audioWeaponVoices": 0,
+          "audioBossVoices": 0,
+          "audioEffectVoices": 0,
+          "audioSampleBuffers": 46,
+          "audioRockBuffers": 0,
+          "audioBufferBytes": 6925568,
+          "audioClockMs": 5410,
+          "audioClockStalls": 0,
+          "audioRecoveries": 1,
+          "audioBlockedSounds": 0,
+          "audioReapedVoices": 0
+        },
+        "memory": {
+          "summedRssKiB": 772236,
+          "summedPssKiB": 390250,
+          "byRole": {
+            "browser-other": {
+              "rssKiB": 398668,
+              "pssKiB": 136143
+            },
+            "chromium-gpu": {
+              "rssKiB": 91080,
+              "pssKiB": 39634
+            },
+            "chromium-renderer": {
+              "rssKiB": 282488,
+              "pssKiB": 214473
+            }
+          }
+        }
+      },
+      {
+        "at": "2026-10-28T18:23:49.121Z",
+        "label": "initial-paused-after-snapshot",
+        "status": "paused",
+        "frameAt": 6133.4,
+        "coreVolley": 0,
+        "shots": 0,
+        "hostileShots": 0,
+        "effects": 0,
+        "heap": {
+          "usedSize": 9486460,
+          "totalSize": 10153984,
+          "embedderHeapUsedSize": 3727152,
+          "backingStorageSize": 2539029
+        },
+        "dom": {
+          "documents": 2,
+          "nodes": 884,
+          "jsEventListeners": 326
+        },
+        "attached": {
+          "elements": 600,
+          "images": 1,
+          "canvases": 3,
+          "animations": 4,
+          "measureEntries": 0,
+          "markEntries": 0
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 0,
+          "textureEntries": 0,
+          "cacheBytes": 0,
+          "surfaceBytes": 4,
+          "imageBytes": 0,
+          "textureBytes": 0,
+          "hullLoads": 0,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 0,
+          "fragmentDraws": 0,
+          "failures": []
+        },
+        "audio": {
+          "audioState": "running",
+          "audioVoices": 0,
+          "audioWeaponVoices": 0,
+          "audioBossVoices": 0,
+          "audioEffectVoices": 0,
+          "audioSampleBuffers": 46,
+          "audioRockBuffers": 0,
+          "audioBufferBytes": 6925568,
+          "audioClockMs": 6551,
+          "audioClockStalls": 0,
+          "audioRecoveries": 1,
+          "audioBlockedSounds": 0,
+          "audioReapedVoices": 0
+        },
+        "memory": {
+          "summedRssKiB": 789668,
+          "summedPssKiB": 407808,
+          "byRole": {
+            "browser-other": {
+              "rssKiB": 398856,
+              "pssKiB": 136226
+            },
+            "chromium-gpu": {
+              "rssKiB": 89668,
+              "pssKiB": 38756
+            },
+            "chromium-renderer": {
+              "rssKiB": 301144,
+              "pssKiB": 232826
+            }
+          }
+        }
+      },
+      {
+        "at": "2026-10-28T18:23:52.216Z",
+        "label": "active-baseline",
+        "status": "playing",
+        "frameAt": 0,
+        "coreVolley": 0,
+        "shots": 0,
+        "hostileShots": 0,
+        "effects": 0,
+        "heap": {
+          "usedSize": 9988068,
+          "totalSize": 11988992,
+          "embedderHeapUsedSize": 4639776,
+          "backingStorageSize": 2540433
+        },
+        "dom": {
+          "documents": 2,
+          "nodes": 914,
+          "jsEventListeners": 364
+        },
+        "attached": {
+          "elements": 478,
+          "images": 1,
+          "canvases": 3,
+          "animations": 6,
+          "measureEntries": 0,
+          "markEntries": 0
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 0,
+          "textureEntries": 0,
+          "cacheBytes": 0,
+          "surfaceBytes": 4,
+          "imageBytes": 0,
+          "textureBytes": 0,
+          "hullLoads": 0,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 0,
+          "fragmentDraws": 0,
+          "failures": []
+        },
+        "audio": {
+          "audioState": "running",
+          "audioVoices": 0,
+          "audioWeaponVoices": 0,
+          "audioBossVoices": 0,
+          "audioEffectVoices": 0,
+          "audioSampleBuffers": 46,
+          "audioRockBuffers": 0,
+          "audioBufferBytes": 6925568,
+          "audioClockMs": 9651,
+          "audioClockStalls": 0,
+          "audioRecoveries": 2,
+          "audioBlockedSounds": 0,
+          "audioReapedVoices": 0
+        },
+        "memory": {
+          "summedRssKiB": 792532,
+          "summedPssKiB": 408984,
+          "byRole": {
+            "browser-other": {
+              "rssKiB": 399172,
+              "pssKiB": 136459
+            },
+            "chromium-gpu": {
+              "rssKiB": 89972,
+              "pssKiB": 37228
+            },
+            "chromium-renderer": {
+              "rssKiB": 303388,
+              "pssKiB": 235297
+            }
+          }
+        }
+      },
+      {
+        "at": "2026-10-28T18:24:51.787Z",
+        "label": "active-baseline",
+        "status": "playing",
+        "frameAt": 70047.5,
+        "coreVolley": 21,
+        "shots": 13,
+        "hostileShots": 2,
+        "effects": 0,
+        "heap": {
+          "usedSize": 18062744,
+          "totalSize": 42921984,
+          "embedderHeapUsedSize": 55755472,
+          "backingStorageSize": 2546344
+        },
+        "dom": {
+          "documents": 2,
+          "nodes": 1332,
+          "jsEventListeners": 814
+        },
+        "attached": {
+          "elements": 522,
+          "images": 1,
+          "canvases": 3,
+          "animations": 12,
+          "measureEntries": 0,
+          "markEntries": 0
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 1,
+          "textureEntries": 2,
+          "cacheBytes": 422836,
+          "surfaceBytes": 4,
+          "imageBytes": 318096,
+          "textureBytes": 104740,
+          "hullLoads": 1,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 128,
+          "fragmentDraws": 512,
+          "failures": []
+        },
+        "audio": {
+          "audioState": "running",
+          "audioVoices": 9,
+          "audioWeaponVoices": 1,
+          "audioBossVoices": 1,
+          "audioEffectVoices": 8,
+          "audioSampleBuffers": 46,
+          "audioRockBuffers": 0,
+          "audioBufferBytes": 6925568,
+          "audioClockMs": 69213,
+          "audioClockStalls": 0,
+          "audioRecoveries": 2,
+          "audioBlockedSounds": 0,
+          "audioReapedVoices": 0
+        },
+        "memory": {
+          "summedRssKiB": 1030744,
+          "summedPssKiB": 647723,
+          "byRole": {
+            "browser-other": {
+              "rssKiB": 402656,
+              "pssKiB": 139379
+            },
+            "chromium-gpu": {
+              "rssKiB": 89536,
+              "pssKiB": 37345
+            },
+            "chromium-renderer": {
+              "rssKiB": 538552,
+              "pssKiB": 470999
+            }
+          }
+        }
+      },
+      {
+        "at": "2026-10-28T18:24:52.910Z",
+        "label": "final-paused-before-gc",
+        "status": "paused",
+        "frameAt": 71130.8,
+        "coreVolley": 21,
+        "shots": 13,
+        "hostileShots": 2,
+        "effects": 0,
+        "heap": {
+          "usedSize": 24504224,
+          "totalSize": 42921984,
+          "embedderHeapUsedSize": 67943776,
+          "backingStorageSize": 2549753
+        },
+        "dom": {
+          "documents": 2,
+          "nodes": 1973,
+          "jsEventListeners": 1153
+        },
+        "attached": {
+          "elements": 642,
+          "images": 1,
+          "canvases": 3,
+          "animations": 13,
+          "measureEntries": 0,
+          "markEntries": 0
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 1,
+          "textureEntries": 2,
+          "cacheBytes": 422836,
+          "surfaceBytes": 4,
+          "imageBytes": 318096,
+          "textureBytes": 104740,
+          "hullLoads": 1,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 128,
+          "fragmentDraws": 512,
+          "failures": []
+        },
+        "audio": {
+          "audioState": "running",
+          "audioVoices": 0,
+          "audioWeaponVoices": 0,
+          "audioBossVoices": 0,
+          "audioEffectVoices": 0,
+          "audioSampleBuffers": 46,
+          "audioRockBuffers": 0,
+          "audioBufferBytes": 6925568,
+          "audioClockMs": 70342,
+          "audioClockStalls": 0,
+          "audioRecoveries": 2,
+          "audioBlockedSounds": 0,
+          "audioReapedVoices": 0
+        },
+        "memory": {
+          "summedRssKiB": 1036108,
+          "summedPssKiB": 657553,
+          "byRole": {
+            "browser-other": {
+              "rssKiB": 403276,
+              "pssKiB": 139999
+            },
+            "chromium-gpu": {
+              "rssKiB": 87152,
+              "pssKiB": 38757
+            },
+            "chromium-renderer": {
+              "rssKiB": 545680,
+              "pssKiB": 478797
+            }
+          }
+        }
+      },
+      {
+        "at": "2026-10-28T18:24:53.144Z",
+        "label": "final-paused-after-gc",
+        "status": "paused",
+        "frameAt": 71130.8,
+        "coreVolley": 21,
+        "shots": 13,
+        "hostileShots": 2,
+        "effects": 0,
+        "heap": {
+          "usedSize": 11207512,
+          "totalSize": 12513280,
+          "embedderHeapUsedSize": 4954464,
+          "backingStorageSize": 2541919
+        },
+        "dom": {
+          "documents": 2,
+          "nodes": 946,
+          "jsEventListeners": 338
+        },
+        "attached": {
+          "elements": 642,
+          "images": 1,
+          "canvases": 3,
+          "animations": 12,
+          "measureEntries": 0,
+          "markEntries": 0
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 1,
+          "textureEntries": 2,
+          "cacheBytes": 422836,
+          "surfaceBytes": 4,
+          "imageBytes": 318096,
+          "textureBytes": 104740,
+          "hullLoads": 1,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 128,
+          "fragmentDraws": 512,
+          "failures": []
+        },
+        "audio": {
+          "audioState": "running",
+          "audioVoices": 0,
+          "audioWeaponVoices": 0,
+          "audioBossVoices": 0,
+          "audioEffectVoices": 0,
+          "audioSampleBuffers": 46,
+          "audioRockBuffers": 0,
+          "audioBufferBytes": 6925568,
+          "audioClockMs": 70571,
+          "audioClockStalls": 0,
+          "audioRecoveries": 2,
+          "audioBlockedSounds": 0,
+          "audioReapedVoices": 0
+        },
+        "memory": {
+          "summedRssKiB": 813940,
+          "summedPssKiB": 428615,
+          "byRole": {
+            "browser-other": {
+              "rssKiB": 403276,
+              "pssKiB": 139999
+            },
+            "chromium-gpu": {
+              "rssKiB": 92752,
+              "pssKiB": 39599
+            },
+            "chromium-renderer": {
+              "rssKiB": 317912,
+              "pssKiB": 249017
+            }
+          }
+        }
+      },
+      {
+        "at": "2026-10-28T18:24:54.352Z",
+        "label": "final-paused-after-snapshot",
+        "status": "paused",
+        "frameAt": 71130.8,
+        "coreVolley": 21,
+        "shots": 13,
+        "hostileShots": 2,
+        "effects": 0,
+        "heap": {
+          "usedSize": 11208168,
+          "totalSize": 12513280,
+          "embedderHeapUsedSize": 4338864,
+          "backingStorageSize": 2541256
+        },
+        "dom": {
+          "documents": 2,
+          "nodes": 944,
+          "jsEventListeners": 332
+        },
+        "attached": {
+          "elements": 642,
+          "images": 1,
+          "canvases": 3,
+          "animations": 11,
+          "measureEntries": 0,
+          "markEntries": 0
+        },
+        "canvas": {
+          "activeDrawFrame": false,
+          "registeredEffects": 0,
+          "sourceImages": 1,
+          "textureEntries": 2,
+          "cacheBytes": 422836,
+          "surfaceBytes": 4,
+          "imageBytes": 318096,
+          "textureBytes": 104740,
+          "hullLoads": 1,
+          "hullEvictions": 0,
+          "retainedHullUsers": 0,
+          "draws": 128,
+          "fragmentDraws": 512,
+          "failures": []
+        },
+        "audio": {
+          "audioState": "running",
+          "audioVoices": 0,
+          "audioWeaponVoices": 0,
+          "audioBossVoices": 0,
+          "audioEffectVoices": 0,
+          "audioSampleBuffers": 46,
+          "audioRockBuffers": 0,
+          "audioBufferBytes": 6925568,
+          "audioClockMs": 71790,
+          "audioClockStalls": 0,
+          "audioRecoveries": 2,
+          "audioBlockedSounds": 0,
+          "audioReapedVoices": 0
+        },
+        "memory": {
+          "summedRssKiB": 822760,
+          "summedPssKiB": 436012,
+          "byRole": {
+            "browser-other": {
+              "rssKiB": 402420,
+              "pssKiB": 139138
+            },
+            "chromium-gpu": {
+              "rssKiB": 92780,
+              "pssKiB": 39670
+            },
+            "chromium-renderer": {
+              "rssKiB": 327560,
+              "pssKiB": 257204
+            }
+          }
+        }
+      }
+    ],
+    "snapshots": [
+      {
+        "label": "before",
+        "bytes": 19566816,
+        "sha256": "44c38ee42dc0d41ecd1eb1d07d63ebbd08568ac2f89b8c7c43396dc6bb812155",
+        "rawSnapshotRetained": false,
+        "nodes": 213425,
+        "selfBytes": 17499986,
+        "byType": {
+          "synthetic": {
+            "count": 32,
+            "selfBytes": 0
+          },
+          "native": {
+            "count": 56789,
+            "selfBytes": 8760322
+          },
+          "string": {
+            "count": 52952,
+            "selfBytes": 2532116
+          },
+          "object shape": {
+            "count": 7494,
+            "selfBytes": 416212
+          },
+          "code": {
+            "count": 47522,
+            "selfBytes": 4186996
+          },
+          "array": {
+            "count": 3340,
+            "selfBytes": 728096
+          },
+          "number": {
+            "count": 20898,
+            "selfBytes": 126744
+          },
+          "symbol": {
+            "count": 86,
+            "selfBytes": 480
+          },
+          "object": {
+            "count": 14472,
+            "selfBytes": 487580
+          },
+          "closure": {
+            "count": 7094,
+            "selfBytes": 206484
+          },
+          "concatenated string": {
+            "count": 2362,
+            "selfBytes": 47240
+          },
+          "sliced string": {
+            "count": 375,
+            "selfBytes": 7500
+          },
+          "regexp": {
+            "count": 9,
+            "selfBytes": 216
+          }
+        },
+        "scope": "Snapshot node self sizes and constructor counts only; not dominator retained size, total browser RAM or GPU memory. Detachedness flags are retained as raw numeric flags.",
+        "exportedClassLimit": 150,
+        "topClassesBySelfBytes": [
+          {
+            "type": "native",
+            "name": "unclassified",
+            "count": 53559,
+            "selfBytes": 8483330,
+            "detachednessFlags": {
+              "0": 53346,
+              "1": 196,
+              "2": 17
+            }
+          },
+          {
+            "type": "object",
+            "name": "Object",
+            "count": 7279,
+            "selfBytes": 235476,
+            "detachednessFlags": {}
+          },
+          {
+            "type": "object",
+            "name": "Ub",
+            "count": 1280,
+            "selfBytes": 133120,
+            "detachednessFlags": {}
+          },
+          {
+            "type": "object",
+            "name": "Array",
+            "count": 3960,
+            "selfBytes": 63360,
+            "detachednessFlags": {}
+          },
+          {
+            "type": "native",
+            "name": "SVGAnimatedLength",
+            "count": 820,
+            "selfBytes": 52480,
+            "detachednessFlags": {
+              "0": 820
+            }
+          },
+          {
+            "type": "object",
+            "name": "unclassified",
+            "count": 920,
+            "selfBytes": 35652,
+            "detachednessFlags": {}
+          },
+          {
+            "type": "native",
+            "name": "SVGCircleElement",
+            "count": 230,
+            "selfBytes": 31232,
+            "detachednessFlags": {
+              "0": 3,
+              "1": 227
+            }
+          },
+          {
+            "type": "native",
+            "name": "SVGAnimatedTransformList",
+            "count": 408,
+            "selfBytes": 26112,
+            "detachednessFlags": {
+              "0": 408
+            }
+          },
+          {
+            "type": "native",
+            "name": "Text",
+            "count": 181,
+            "selfBytes": 14960,
+            "detachednessFlags": {
+              "0": 151,
+              "1": 30
+            }
+          },
+          {
+            "type": "native",
+            "name": "CanvasRenderingContext2D",
+            "count": 9,
+            "selfBytes": 14920,
+            "detachednessFlags": {
+              "0": 9
+            }
+          },
+          {
+            "type": "native",
+            "name": "PerformanceResourceTiming",
+            "count": 89,
+            "selfBytes": 12104,
+            "detachednessFlags": {
+              "0": 89
+            }
+          },
+          {
+            "type": "native",
+            "name": "V8EventListener",
+            "count": 288,
+            "selfBytes": 11520,
+            "detachednessFlags": {
+              "0": 288
+            }
+          },
+          {
+            "type": "native",
+            "name": "SVGGElement",
+            "count": 77,
+            "selfBytes": 9176,
+            "detachednessFlags": {
+              "0": 4,
+              "1": 73
+            }
+          },
+          {
+            "type": "native",
+            "name": "EventListener",
+            "count": 323,
+            "selfBytes": 8088,
+            "detachednessFlags": {
+              "0": 323
+            }
+          },
+          {
+            "type": "native",
+            "name": "SVGPathElement",
+            "count": 64,
+            "selfBytes": 8016,
+            "detachednessFlags": {
+              "0": 11,
+              "1": 53
+            }
+          },
+          {
+            "type": "native",
+            "name": "PerformanceEventTiming",
+            "count": 29,
+            "selfBytes": 7424,
+            "detachednessFlags": {
+              "0": 29
+            }
+          },
+          {
+            "type": "native",
+            "name": "FontFace",
+            "count": 34,
+            "selfBytes": 5712,
+            "detachednessFlags": {
+              "0": 34
+            }
+          },
+          {
+            "type": "object",
+            "name": "SVGCircleElement",
+            "count": 229,
+            "selfBytes": 3664,
+            "detachednessFlags": {}
+          },
+          {
+            "type": "native",
+            "name": "HTMLDocument",
+            "count": 1,
+            "selfBytes": 3352,
+            "detachednessFlags": {
+              "1": 1
+            }
+          },
+          {
+            "type": "native",
+            "name": "XMLDocument",
+            "count": 1,
+            "selfBytes": 3312,
+            "detachednessFlags": {
+              "0": 1
+            }
+          }
+        ]
+      },
+      {
+        "label": "after",
+        "bytes": 21266863,
+        "sha256": "004553d1b175926d0b2eb63bfd6cd5cdcd42c90e1fdaeb0c1068823fed8afec9",
+        "rawSnapshotRetained": false,
+        "nodes": 234372,
+        "selfBytes": 19776174,
+        "byType": {
+          "synthetic": {
+            "count": 32,
+            "selfBytes": 0
+          },
+          "native": {
+            "count": 64320,
+            "selfBytes": 9401194
+          },
+          "string": {
+            "count": 55620,
+            "selfBytes": 2624120
+          },
+          "object shape": {
+            "count": 8417,
+            "selfBytes": 465104
+          },
+          "code": {
+            "count": 53863,
+            "selfBytes": 5607112
+          },
+          "array": {
+            "count": 3425,
+            "selfBytes": 741708
+          },
+          "number": {
+            "count": 22935,
+            "selfBytes": 146964
+          },
+          "symbol": {
+            "count": 86,
+            "selfBytes": 480
+          },
+          "object": {
+            "count": 15451,
+            "selfBytes": 519976
+          },
+          "closure": {
+            "count": 7143,
+            "selfBytes": 207880
+          },
+          "concatenated string": {
+            "count": 2696,
+            "selfBytes": 53920
+          },
+          "sliced string": {
+            "count": 375,
+            "selfBytes": 7500
+          },
+          "regexp": {
+            "count": 9,
+            "selfBytes": 216
+          }
+        },
+        "scope": "Snapshot node self sizes and constructor counts only; not dominator retained size, total browser RAM or GPU memory. Detachedness flags are retained as raw numeric flags.",
+        "exportedClassLimit": 150,
+        "topClassesBySelfBytes": [
+          {
+            "type": "native",
+            "name": "unclassified",
+            "count": 59597,
+            "selfBytes": 9020738,
+            "detachednessFlags": {
+              "0": 59339,
+              "1": 238,
+              "2": 20
+            }
+          },
+          {
+            "type": "object",
+            "name": "Object",
+            "count": 8009,
+            "selfBytes": 257700,
+            "detachednessFlags": {}
+          },
+          {
+            "type": "object",
+            "name": "Ub",
+            "count": 1347,
+            "selfBytes": 140088,
+            "detachednessFlags": {}
+          },
+          {
+            "type": "object",
+            "name": "Array",
+            "count": 4052,
+            "selfBytes": 64832,
+            "detachednessFlags": {}
+          },
+          {
+            "type": "native",
+            "name": "SVGAnimatedLength",
+            "count": 820,
+            "selfBytes": 52480,
+            "detachednessFlags": {
+              "0": 820
+            }
+          },
+          {
+            "type": "native",
+            "name": "DOMRectReadOnly",
+            "count": 830,
+            "selfBytes": 46480,
+            "detachednessFlags": {
+              "0": 830
+            }
+          },
+          {
+            "type": "object",
+            "name": "unclassified",
+            "count": 954,
+            "selfBytes": 36396,
+            "detachednessFlags": {}
+          },
+          {
+            "type": "native",
+            "name": "SVGCircleElement",
+            "count": 230,
+            "selfBytes": 31232,
+            "detachednessFlags": {
+              "0": 3,
+              "1": 227
+            }
+          },
+          {
+            "type": "native",
+            "name": "SVGAnimatedTransformList",
+            "count": 408,
+            "selfBytes": 26112,
+            "detachednessFlags": {
+              "0": 408
+            }
+          },
+          {
+            "type": "native",
+            "name": "LayoutShift",
+            "count": 150,
+            "selfBytes": 22800,
+            "detachednessFlags": {
+              "0": 150
+            }
+          },
+          {
+            "type": "native",
+            "name": "CanvasRenderingContext2D",
+            "count": 11,
+            "selfBytes": 18248,
+            "detachednessFlags": {
+              "0": 11
+            }
+          },
+          {
+            "type": "native",
+            "name": "LayoutShiftAttribution",
+            "count": 415,
+            "selfBytes": 16600,
+            "detachednessFlags": {
+              "0": 415
+            }
+          },
+          {
+            "type": "native",
+            "name": "PerformanceResourceTiming",
+            "count": 113,
+            "selfBytes": 15368,
+            "detachednessFlags": {
+              "0": 113
+            }
+          },
+          {
+            "type": "native",
+            "name": "Text",
+            "count": 181,
+            "selfBytes": 14960,
+            "detachednessFlags": {
+              "0": 151,
+              "1": 30
+            }
+          },
+          {
+            "type": "native",
+            "name": "V8EventListener",
+            "count": 298,
+            "selfBytes": 11920,
+            "detachednessFlags": {
+              "0": 298
+            }
+          },
+          {
+            "type": "native",
+            "name": "SVGGElement",
+            "count": 77,
+            "selfBytes": 9176,
+            "detachednessFlags": {
+              "0": 4,
+              "1": 73
+            }
+          },
+          {
+            "type": "native",
+            "name": "EventListener",
+            "count": 333,
+            "selfBytes": 8328,
+            "detachednessFlags": {
+              "0": 333
+            }
+          },
+          {
+            "type": "native",
+            "name": "SVGPathElement",
+            "count": 64,
+            "selfBytes": 8016,
+            "detachednessFlags": {
+              "0": 11,
+              "1": 53
+            }
+          },
+          {
+            "type": "native",
+            "name": "PerformanceEventTiming",
+            "count": 29,
+            "selfBytes": 7424,
+            "detachednessFlags": {
+              "0": 29
+            }
+          },
+          {
+            "type": "native",
+            "name": "CSSAnimation",
+            "count": 12,
+            "selfBytes": 6336,
+            "detachednessFlags": {
+              "0": 12
+            }
+          }
+        ]
+      }
+    ],
+    "difference": {
+      "nodesDelta": 20947,
+      "selfBytesDelta": 2276188,
+      "classes": [
+        {
+          "type": "native",
+          "name": "unclassified",
+          "countDelta": 6038,
+          "selfBytesDelta": 537408
+        },
+        {
+          "type": "native",
+          "name": "DOMRectReadOnly",
+          "countDelta": 814,
+          "selfBytesDelta": 45584
+        },
+        {
+          "type": "native",
+          "name": "LayoutShift",
+          "countDelta": 147,
+          "selfBytesDelta": 22344
+        },
+        {
+          "type": "object",
+          "name": "Object",
+          "countDelta": 730,
+          "selfBytesDelta": 22224
+        },
+        {
+          "type": "native",
+          "name": "LayoutShiftAttribution",
+          "countDelta": 407,
+          "selfBytesDelta": 16280
+        },
+        {
+          "type": "object",
+          "name": "Ub",
+          "countDelta": 67,
+          "selfBytesDelta": 6968
+        },
+        {
+          "type": "native",
+          "name": "CSSAnimation",
+          "countDelta": 7,
+          "selfBytesDelta": 3696
+        },
+        {
+          "type": "native",
+          "name": "CanvasRenderingContext2D",
+          "countDelta": 2,
+          "selfBytesDelta": 3328
+        },
+        {
+          "type": "native",
+          "name": "PerformanceResourceTiming",
+          "countDelta": 24,
+          "selfBytesDelta": 3264
+        },
+        {
+          "type": "native",
+          "name": "KeyframeEffect",
+          "countDelta": 6,
+          "selfBytesDelta": 2592
+        },
+        {
+          "type": "native",
+          "name": "CSSStyleDeclaration",
+          "countDelta": 34,
+          "selfBytesDelta": 2416
+        },
+        {
+          "type": "native",
+          "name": "Element",
+          "countDelta": 17,
+          "selfBytesDelta": 1904
+        },
+        {
+          "type": "object",
+          "name": "Array",
+          "countDelta": 92,
+          "selfBytesDelta": 1472
+        },
+        {
+          "type": "object",
+          "name": "unclassified",
+          "countDelta": 34,
+          "selfBytesDelta": 744
+        },
+        {
+          "type": "native",
+          "name": "CSSTransition",
+          "countDelta": -1,
+          "selfBytesDelta": -512
+        },
+        {
+          "type": "native",
+          "name": "PerformanceLongAnimationFrameTiming",
+          "countDelta": 3,
+          "selfBytesDelta": 456
+        },
+        {
+          "type": "native",
+          "name": "LargestContentfulPaint",
+          "countDelta": 3,
+          "selfBytesDelta": 408
+        },
+        {
+          "type": "native",
+          "name": "V8EventListener",
+          "countDelta": 10,
+          "selfBytesDelta": 400
+        },
+        {
+          "type": "native",
+          "name": "InteractionContentfulPaint",
+          "countDelta": 3,
+          "selfBytesDelta": 312
+        },
+        {
+          "type": "object",
+          "name": "HTMLElement",
+          "countDelta": 17,
+          "selfBytesDelta": 272
+        },
+        {
+          "type": "native",
+          "name": "EventListener",
+          "countDelta": 10,
+          "selfBytesDelta": 240
+        },
+        {
+          "type": "object",
+          "name": "HTMLDivElement",
+          "countDelta": 15,
+          "selfBytesDelta": 240
+        },
+        {
+          "type": "native",
+          "name": "PopStateEvent",
+          "countDelta": 1,
+          "selfBytesDelta": 192
+        },
+        {
+          "type": "native",
+          "name": "GainNode",
+          "countDelta": 1,
+          "selfBytesDelta": 144
+        },
+        {
+          "type": "native",
+          "name": "TaskAttributionTiming",
+          "countDelta": 1,
+          "selfBytesDelta": 120
+        },
+        {
+          "type": "object",
+          "name": "HTMLSpanElement",
+          "countDelta": 7,
+          "selfBytesDelta": 112
+        },
+        {
+          "type": "object",
+          "name": "ArrayBuffer",
+          "countDelta": 3,
+          "selfBytesDelta": 108
+        },
+        {
+          "type": "native",
+          "name": "PerformanceLongTaskTiming",
+          "countDelta": 1,
+          "selfBytesDelta": 104
+        },
+        {
+          "type": "native",
+          "name": "AudioParam",
+          "countDelta": 1,
+          "selfBytesDelta": 96
+        },
+        {
+          "type": "native",
+          "name": "History",
+          "countDelta": -1,
+          "selfBytesDelta": -64
+        },
+        {
+          "type": "object",
+          "name": "tv",
+          "countDelta": -1,
+          "selfBytesDelta": -64
+        },
+        {
+          "type": "object",
+          "name": "SVGImageElement",
+          "countDelta": 4,
+          "selfBytesDelta": 64
+        },
+        {
+          "type": "object",
+          "name": "Promise",
+          "countDelta": 3,
+          "selfBytesDelta": 60
+        },
+        {
+          "type": "native",
+          "name": "HTMLCollection",
+          "countDelta": 0,
+          "selfBytesDelta": 32
+        }
+      ],
+      "interpretation": "Changes between two paused, explicitly garbage-collected synthetic scenes. Counts/self sizes do not identify the retaining reference or prove a leak."
+    }
+  },
+  "excludedSetupRun": {
+    "runId": 40741836537,
+    "testedHead": "772da79d92de592c0f2bd3ca6254023b08e6d155",
+    "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40741836537",
+    "artifactId": 12839758086,
+    "sha256": "0590da9837da43b82bab86b941a619209faf5b1b897e12f34b279a266eba94bf",
+    "zipVerified": true,
+    "completedSnapshots": 0,
+    "reason": "The new profiler initially treated legitimate modal-history navigation on Pause as a replaced document. Corrected to compare the boot token and reject real document requests/replacements. The failed setup is not an application crash or accepted profile."
+  },
+  "localValidation": {
+    "forensicToolTestsPassed": 9,
+    "forensicToolTestsFailed": 0,
+    "instrumentedTypeScript": "passed",
+    "realHandlerStartsAt1And20": "passed",
+    "productionStaticBuildAndLoopbackApiSmoke": "passed",
+    "developmentLoopbackApiAfterRefactor": "passed",
+    "controllerAndBossSourceUnchanged": true,
+    "originalFrontendReleaseTests": {
+      "passed": 508,
+      "scope": "Earlier completed validation of unchanged game runtime; not a newly repeated 508-test run for these lab-only changes."
+    }
+  },
+  "interpretation": {
+    "supported": [
+      "Large parts of the measured process-memory increase are collectable in both profiles.",
+      "Development final paused PSS falls 949.81 to 526.86 MiB on explicit GC; production falls 642.14 to 418.57 MiB.",
+      "Post-GC baseline PSS still rises by 86.41 MiB in development and 37.47 MiB in production over this short observation. This residual is not explained away.",
+      "Post-GC DOM/listener counts grow modestly rather than retaining the large transient active counts. Visible images and canvases remain one and three; reported effects-audio sample buffers remain 6925568 bytes. These counters do not cover all browser-native resources.",
+      "The development exported snapshot difference includes 15155 PerformanceMeasure instances. Production sampled timeline measure counts are zero. React development code includes performance.measure calls; project frontend/src has none. React documents development instrumentation overhead. This is an influence on laboratory interpretation, not quantified attribution of all growth."
+    ],
+    "notEstablished": [
+      "An exact retaining reference or native allocation responsible for the remaining growth.",
+      "Unbounded memory growth or a confirmed leak, or exclusion of leaks over longer play.",
+      "The fraction of development/production differences caused specifically by React instrumentation rather than other build/runtime differences.",
+      "The memory footprint or cause of the intermittent iPhone Pi Browser document replacement.",
+      "The cause of the separately reported Android pauses.",
+      "A confirmed White Screen fix, physical-device acceptance or any deployment."
+    ]
+  },
+  "references": [
+    {
+      "purpose": "React development/profiling instrumentation and production default",
+      "url": "https://react.dev/reference/dev-tools/react-performance-tracks"
+    },
+    {
+      "purpose": "Heap snapshot comparison/self versus retained size and GC behavior",
+      "url": "https://developer.chrome.com/docs/devtools/memory-problems/heap-snapshots"
+    }
+  ],
+  "outcome": {
+    "historicalFailureCauseKnown": false,
+    "historicalWhiteScreenFixed": false,
+    "physicalDeviceTested": false,
+    "releaseAccepted": false,
+    "merged": false,
+    "deployed": false
+  }
+}

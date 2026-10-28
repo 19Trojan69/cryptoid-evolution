@@ -3,6 +3,8 @@ import { technicalContext, reloadKinds } from './technicalReportContext.mjs';
 import type { SessionSignal } from '../lib/sessionDiagnosticEvents';
 import { HULL_DIAGNOSTIC_STEPS } from './hullPreparationDiagnostics.ts';
 import { REQUEST_DIAGNOSTIC_CODES, providerRequestId } from '../lib/requestDiagnosticCodes.ts';
+import { cleanInputDiagnostic } from './inputDiagnostics.ts';
+import { cleanPauseDiagnostic } from './pauseDiagnostics.ts';
 
 export const FULL_SESSION_DB = 'cryptoid_owner_full_session_v1';
 export const FULL_SESSION_STATUS_KEY = 'cryptoid_owner_full_status_v1';
@@ -33,6 +35,8 @@ const enumKeys: Record<string, readonly string[]> = {
 export function cleanFullData(kind: FullRecordKind, input: unknown): Record<string, unknown> | null {
   if (!input || typeof input !== 'object' || Array.isArray(input)) return null;
   const value = input as Record<string, unknown>;
+  if (kind === 'input') return cleanInputDiagnostic(value);
+  if (kind === 'pause') return cleanPauseDiagnostic(value);
   if (kind === 'sample' || kind === 'event') {
     const capture = cleanTimingCapture({ environment: 'owner-admin', metadata: { recordedAt: 0 },
       samples: kind === 'sample' ? [value] : [], events: kind === 'event' ? [value] : [] });
@@ -55,7 +59,7 @@ export function cleanFullRecord(value: unknown): FullRecord | null {
   if (!value || typeof value !== 'object') return null;
   const v = value as FullRecord;
   if (!Number.isSafeInteger(v.seq) || v.seq < 1 || v.seq > FULL_SESSION_LIMITS.records || !numeric(v.at) || !numeric(v.clockMs)
-    || !['sample','event','resource','boundary','request','weapon','queue','lifecycle','start','end'].includes(v.kind)) return null;
+    || !['sample','event','resource','boundary','request','weapon','queue','lifecycle','input','pause','start','end'].includes(v.kind)) return null;
   const data = cleanFullData(v.kind, v.data);
   return data ? { seq: v.seq, at: v.at, clockMs: v.clockMs, kind: v.kind, data } : null;
 }

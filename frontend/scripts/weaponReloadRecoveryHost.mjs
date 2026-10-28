@@ -6,6 +6,7 @@ import { hangarCatalog } from '../../backend/src/hangarCatalog.ts';
 import { isTestnetWeaponPurchaseEnabled } from '../../backend/src/paymentPolicy.ts';
 import { weaponSymbols } from '../src/pages/weaponSymbols.ts';
 import { updateWeaponReloadNotice } from '../src/pages/weaponSpentNotice.ts';
+import { recordPauseEvidence } from '../src/pages/pauseDiagnostics.ts';
 
 // Execute the actual event handlers/component; only React scheduling, clock and
 // transport are replaced. No browser session, live account or paid API is used.
@@ -28,7 +29,7 @@ export function selectionHost() {
   const balances = { weapon_twin: 10, weapon_rapid_twin: 10 };
   const env = {
     updateWeaponReloadNotice,
-    ownerDiagnostics: true, sessionDiagnostic() {},
+    ownerDiagnostics: true, sessionDiagnostic() {}, recordPauseEvidence, lastFrameRef: ref(0),
     stateRef: ref(state), scoreRunRef: ref('isolated-run'), weaponMountedRef: ref(true),
     weaponBusyRef: ref(false), activationRef: ref(null), adminRunRef: ref(false), bossSummaryRef: ref(null),
     stockRef: ref({ ...balances }), reloadPendingRef: ref(false), reloadRequestRef: ref(null),

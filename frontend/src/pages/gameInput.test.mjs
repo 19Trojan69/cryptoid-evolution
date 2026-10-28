@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { bindGameInput, canStartSteering } from './gameInput.ts';
 import { TOUCH_SHIP_OFFSET_PX } from './playerCombat.ts';
+import { observeSessionDiagnostics } from '../lib/sessionDiagnosticEvents.ts';
 
 function harness({ legacy = false } = {}) {
   const win = new EventTarget(), doc = new EventTarget(), field = new EventTarget();
@@ -137,4 +138,14 @@ test('legacy touch-only WebView can steer, cancel and start again', () => {
 test('dispose removes handlers so late events cannot move the ship', () => {
   const h = harness(); h.input.dispose(); h.down(); assert.equal(h.moves.length, 0);
   fire(h.win, 'pointerup'); assert.equal(h.pointer.current, null);
+});
+
+test('verified observer sees one coarse cancellation without changing captured steering', () => {
+  const rows = [], stop = observeSessionDiagnostics((kind, data) => { if (kind === 'input') rows.push(data); });
+  const h = harness(); h.down({ clientX: 350 }); h.move({ clientX: 40 }); fire(h.win, 'pointercancel');
+  assert.equal(h.pointer.current, null); assert.equal(h.faults.length, 0);
+  assert.equal(rows.at(-1).endReason, 'cancelled'); assert.equal(rows.at(-1).direction, 'left');
+  assert.equal(rows.at(-1).startRegion, 'interior');
+  assert.ok(rows.every(row => !('clientX' in row) && !('pointerId' in row)));
+  stop(); const count = rows.length; h.down(); h.input.dispose(); assert.equal(rows.length, count);
 });

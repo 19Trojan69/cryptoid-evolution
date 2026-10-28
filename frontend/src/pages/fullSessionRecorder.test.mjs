@@ -46,6 +46,22 @@ const phase = sector => ({ kind: 'phase-start', sector, phase: 'SECTOR_INTRO', e
 async function captures(f) { await settleFullSessionWrites(); return (await readFullSessionSummaries(f.host)).sessions; }
 async function contents(f, id) { return JSON.parse(await (await exportFullSession(f.host, id)).text()); }
 
+test('verified navigation evidence round-trips through IndexedDB and listeners retire on finish', async () => {
+  const f = fixture(), events = new EventTarget();
+  f.host.addEventListener = events.addEventListener.bind(events);
+  f.host.removeEventListener = events.removeEventListener.bind(events);
+  const recorder = f.recorder(); recorder.start();
+  const event = new Event('popstate');
+  Object.defineProperty(event, 'state', { get() { throw Error('private state must not be read'); } });
+  events.dispatchEvent(event);
+  recorder.sample(sample(20)); recorder.finish();
+  const [summary] = await captures(f), data = await contents(f, summary.id);
+  assert.deepEqual(data.records.filter(r => r.kind === 'input').map(r => r.data), [{ operation: 'navigation', navigation: 'popstate' }]);
+  const sequence = recorder.stats().sequence;
+  events.dispatchEvent(new Event('hashchange'));
+  assert.equal(recorder.stats().sequence, sequence); assert.equal(sessionDiagnosticsActive(), false);
+});
+
 test('non-owner creation, reading and download never obtain a storage host', async () => {
   let touched = 0; const forbidden = () => { touched++; throw Error('private host'); };
   assert.equal(createFullSessionRecorder(false, forbidden, { build }), null);

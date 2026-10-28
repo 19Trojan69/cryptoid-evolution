@@ -18,5 +18,5 @@ test('only the reviewed menu and summary-placement changes depart from the publi
   assert.equal(digest(source), published);
   const changed = source.replace("stateRef.current.status = 'paused';", "stateRef.current.status = 'playing';");
   assert.notEqual(changed,source);
-  assert.notEqual(digest(changed),published,'genuine interruption pauses remain unchanged');
+  assert.throws(() => assert.equal(digest(changed),published), 'genuine interruption pauses remain protected by exact scope or fingerprint');
 });

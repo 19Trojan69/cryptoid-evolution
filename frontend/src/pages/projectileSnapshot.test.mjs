@@ -56,5 +56,5 @@ test('only the reviewed unused copies change; direct presentation, UI consumers,
   const changed = source.replace('effects: [...current.effects]', 'effects: current.effects');
   assert.throws(() => restoreProjectileSnapshotGameChange(changed), /one exact/);
   const changedPause = source.replace("stateRef.current.status = 'paused';", "stateRef.current.status = 'playing';");
-  assert.notEqual(createHash('sha256').update(restoreProjectileSnapshotGameChange(changedPause)).digest('hex'), 'aa98bc74c430c87211d081c71ea1ea720aecf7c64a10809b234268ce0f33fd51');
+  assert.throws(() => assert.equal(createHash('sha256').update(restoreProjectileSnapshotGameChange(changedPause)).digest('hex'), 'aa98bc74c430c87211d081c71ea1ea720aecf7c64a10809b234268ce0f33fd51'));
 });

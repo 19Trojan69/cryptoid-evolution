@@ -1,0 +1,13 @@
+{
+  "name": "cryptoid-boss2-forensics",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node run.mjs",
+    "preflight": "node --experimental-strip-types preflight.mjs",
+    "test:tools": "node --test tools.test.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}
