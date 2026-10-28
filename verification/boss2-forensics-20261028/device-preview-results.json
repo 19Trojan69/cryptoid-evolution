@@ -1,0 +1,517 @@
+{
+  "schemaVersion": 1,
+  "recordedDateVienna": "2026-10-28",
+  "purpose": "Protected isolated Boss 2 guest preview for owner device testing; not a confirmed White Screen fix.",
+  "branch": "codex/boss2-device-preview-20261028",
+  "originalForensicsPR": 199,
+  "originalForensicsHead": "9a0532801f6c733d89fe340a0efb84fc6c99edad",
+  "deploymentAppHead": "388587e2016d9bd8da4dd9405a837743b47b0805",
+  "deploymentAppTree": "f270e3230e5acae97db4302c751bc1d116e0fc29",
+  "releaseBoundary": {
+    "merge": false,
+    "publicAliasesChanged": false,
+    "realPiLogin": false,
+    "realAccounts": false,
+    "realPayments": false,
+    "liveDatabase": false,
+    "automaticUpload": false,
+    "rawOwnerAttachmentIncluded": false,
+    "nativeDeviceAccepted": false,
+    "whiteScreenFixed": false
+  },
+  "testConditions": {
+    "isolatedGuest": true,
+    "syntheticDiagnosticCapability": true,
+    "protectionGate": "Existing Vercel Authentication with Standard Protection; no bypass link or access changes.",
+    "sourceChanges": "Build-only menu, auth, transport and explicit Boss 2 setup. Original frontend/src, artwork, audio and simulation source unchanged from prior forensic head.",
+    "menuPreparation": "Explicit user action before mounting the game; original 12-item warmup plans are acquired separately and handed to the original active plan before release.",
+    "initialSetupPause": true,
+    "manualResumeRequired": true,
+    "coldAutomaticStartAccepted": false,
+    "clocksAltered": false,
+    "watchdog": {
+      "strictGreaterThanMs": 2500,
+      "pollMs": 500
+    },
+    "optionalProtection": "Artificial impact cooldown and Boss2 health floor, disclosed in menu; not normal difficulty. Reactor option removes turrets and sets half health.",
+    "storage": "Existing bounded local IndexedDB full sessions, crash tail and flight recorder. A new document always opens menu. Last unwritten interval can be lost; no native termination reason is measured."
+  },
+  "localValidation": {
+    "isolationAndPreviewTests": 24,
+    "instrumentedControllerAndBossTypeScript": true,
+    "productionGuardDeniedBeforeBuild": true,
+    "normalizedWholeControllerSha256": "625fecc2cb959e4ed4ba690f7867d0a07b247b9a136a8ce308afecaf6dcd94fa",
+    "priorFrontendReleaseTests": 514,
+    "newWholeProjectLintCleanClaim": false
+  },
+  "longControl": {
+    "runId": 40762704774,
+    "jobId": 123078561503,
+    "head": "67b83d1df850fcc68421b228721cc3045b005453",
+    "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40762704774",
+    "artifact": {
+      "id": 12850426701,
+      "sha256": "a2b93bdcdcc8fb6d2059a0e38262d1a3b02107e945cd83a0e678b01487522b12",
+      "zipVerified": true
+    },
+    "activeWindowCompleted": true,
+    "wholeWorkflowJobPassed": false,
+    "endToEndExportVerified": false,
+    "failureScope": "Post-run harness incorrectly waited for the latest critical marker to remain a pause record. Later scene-committed records replace that marker. The final harness waits for a captured sequence frontier and checks the exported pause plus contiguous record integrity.",
+    "observedActiveSeconds": 900.159,
+    "samples": 867,
+    "reactorVolleyFirst": 0,
+    "reactorVolleyLast": 320,
+    "snapshots": false,
+    "explicitGc": false,
+    "playwrightConnectionPresent": true,
+    "physicalPiBrowser": false,
+    "firstPssMiB": 371.495,
+    "lastPssMiB": 851.477,
+    "peakPssMiB": 881.429,
+    "minuteRanges": [
+      {
+        "minute": 1,
+        "samples": 59,
+        "minPssMiB": 368.979,
+        "maxPssMiB": 595.035
+      },
+      {
+        "minute": 2,
+        "samples": 58,
+        "minPssMiB": 522.853,
+        "maxPssMiB": 570.016
+      },
+      {
+        "minute": 3,
+        "samples": 58,
+        "minPssMiB": 571.238,
+        "maxPssMiB": 858.742
+      },
+      {
+        "minute": 4,
+        "samples": 57,
+        "minPssMiB": 822.375,
+        "maxPssMiB": 849.552
+      },
+      {
+        "minute": 5,
+        "samples": 58,
+        "minPssMiB": 818.631,
+        "maxPssMiB": 827.488
+      },
+      {
+        "minute": 6,
+        "samples": 58,
+        "minPssMiB": 822.893,
+        "maxPssMiB": 830.454
+      },
+      {
+        "minute": 7,
+        "samples": 58,
+        "minPssMiB": 822.857,
+        "maxPssMiB": 831.541
+      },
+      {
+        "minute": 8,
+        "samples": 57,
+        "minPssMiB": 824.322,
+        "maxPssMiB": 847.772
+      },
+      {
+        "minute": 9,
+        "samples": 58,
+        "minPssMiB": 845.608,
+        "maxPssMiB": 866.089
+      },
+      {
+        "minute": 10,
+        "samples": 58,
+        "minPssMiB": 860.976,
+        "maxPssMiB": 881.429
+      },
+      {
+        "minute": 11,
+        "samples": 58,
+        "minPssMiB": 850.828,
+        "maxPssMiB": 875.906
+      },
+      {
+        "minute": 12,
+        "samples": 57,
+        "minPssMiB": 841.719,
+        "maxPssMiB": 856.375
+      },
+      {
+        "minute": 13,
+        "samples": 58,
+        "minPssMiB": 843.215,
+        "maxPssMiB": 856.754
+      },
+      {
+        "minute": 14,
+        "samples": 58,
+        "minPssMiB": 841.758,
+        "maxPssMiB": 850.629
+      },
+      {
+        "minute": 15,
+        "samples": 57,
+        "minPssMiB": 848.59,
+        "maxPssMiB": 859.219
+      }
+    ],
+    "lastCanvasCounters": {
+      "activeDrawFrame": false,
+      "registeredEffects": 0,
+      "sourceImages": 2,
+      "textureEntries": 2,
+      "cacheBytes": 740932,
+      "surfaceBytes": 4,
+      "imageBytes": 636192,
+      "textureBytes": 104740,
+      "hullLoads": 54,
+      "hullEvictions": 52,
+      "retainedHullUsers": 0,
+      "draws": 6969,
+      "fragmentDraws": 27876,
+      "failures": []
+    },
+    "lastAudioCounters": {
+      "audioState": "running",
+      "audioVoices": 2,
+      "audioWeaponVoices": 0,
+      "audioBossVoices": 0,
+      "audioEffectVoices": 2,
+      "audioSampleBuffers": 46,
+      "audioRockBuffers": 0,
+      "audioBufferBytes": 6925568,
+      "audioClockMs": 904522,
+      "audioClockStalls": 0,
+      "audioRecoveries": 0,
+      "audioBlockedSounds": 0,
+      "audioReapedVoices": 0
+    },
+    "scope": "Earlier cold-start guest artifact, before explicit warmup/setup-pause refinements. These active counters are useful partial evidence, not a passing full flow or exact benchmark of the final Preview. No collection separates transient memory from retained allocations; no iPhone/Pi native RAM or long-term plateau claim."
+  },
+  "excludedOrPartialAttempts": [
+    {
+      "runId": 40762704774,
+      "head": "67b83d1df850fcc68421b228721cc3045b005453",
+      "jobId": 123078561221,
+      "reason": "WebKit startup timeout with zero active samples; original failure lacked scene observation. Not a passing browser test."
+    },
+    {
+      "runId": 40763484982,
+      "head": "d799b0615d83c9497e414f4976334f9974cf46d4",
+      "jobId": 123081303675,
+      "reason": "WebKit observed loop-stall before the first game frame, active visible and focused, not a renderer crash. Preserved as an unresolved startup finding.",
+      "artifact": {
+        "id": 12850100762,
+        "sha256": "d133f8dc81c35cd88e04e68b6eab155533d9d54d05218987642a856d0d00126d",
+        "zipVerified": true
+      },
+      "pauseReason": "loop-stall",
+      "lastFrameAt": 0
+    },
+    {
+      "runId": 40764866737,
+      "head": "9f685ed559fbf78cc5334260143aef0e4cecf5f0",
+      "reason": "Unit host omitted the current game object needed by a newly added effect dependency; no browser acceptance."
+    },
+    {
+      "runId": 40765207874,
+      "head": "8e013a16c190cebe8c9cfd3114ae0e6c07fa957f",
+      "reason": "Combined warm plan silently exceeded the original helper cap of twelve. WebKit still stalled before frame one; Chromium completed active samples but hit the obsolete post-run marker condition."
+    },
+    {
+      "runId": 40765564010,
+      "head": "33cdd5d35afb0509402ecc2617862cc84d5f822c",
+      "reason": "Chromium complete UI/report flow passed; WebKit still had pre-first-frame loop-stall despite complete warmup. Warmup alone did not resolve the startup finding."
+    },
+    {
+      "runId": 40766825493,
+      "head": "388587e2016d9bd8da4dd9405a837743b47b0805",
+      "reason": "Chromium full flow passed. WebKit manual entry had eight active samples and no technical pause; short-window volley assertion failed, while a real first reactor shot and advancing native RAF were observed. Final test uses 30 seconds and an end-of-window inspection."
+    },
+    {
+      "deploymentId": "FDzYFW7SnYd3GHGkGquJMXGbUv2e",
+      "head": "33cdd5d35afb0509402ecc2617862cc84d5f822c",
+      "reason": "Protected Preview build failed closed because the Vercel shallow checkout did not include the ancestor tree used by git show. Final builder keeps the same exact normalized whole-file SHA-256 pin without requiring ancestor history. No public deployment changed."
+    }
+  ],
+  "finalBrowserVerification": {
+    "ci": {
+      "runId": 40767561502,
+      "head": "fc7f2cf78517fa9e062c1798e4eff87fef23c312",
+      "tree": "390bfbb76309ed86e0085bbac28f0108674ad7f8",
+      "overallStatus": "failure: WebKit startup unresolved",
+      "differenceFromDeployedApp": [
+        ".github/workflows/cryptoid-boss2-device-preview.yml",
+        "verification/boss2-forensics-20261028/verifyDevicePreview.mjs"
+      ],
+      "applicationAndBuilderBytesMatchDeployedHead": true,
+      "chromium": {
+        "jobId": 123095692780,
+        "conclusion": "success",
+        "artifactId": 12851147581,
+        "zipVerified": true,
+        "sha256": "226cef992a8362f4bf264ef8bf4868ffcdadbd4dd5b08a7f50415c080c2e0c30",
+        "result": {
+          "complete": true,
+          "engine": "chromium",
+          "seconds": 30,
+          "physicalPiBrowser": false,
+          "osScreenshot": false,
+          "snapshots": false,
+          "explicitGc": false,
+          "actualHostOS": "linux",
+          "playwrightConnectionPresent": true,
+          "processMemoryIsNotNativeDeviceMemory": true,
+          "whiteScreenFixed": false,
+          "engineVersion": "151.0.7922.34",
+          "initialSetupPause": {
+            "expected": true,
+            "technical": false,
+            "manualResumeRequired": true
+          },
+          "volleyProgress": {
+            "first": 0,
+            "last": 10
+          },
+          "observedActiveSeconds": 30.813,
+          "pause": {
+            "at": 40078.20000000001,
+            "operation": "pause-enter",
+            "pauseReason": "manual-pause",
+            "status": "playing",
+            "targetStatus": "paused",
+            "sector": 20,
+            "phase": "ATTACK_CYCLE",
+            "encounter": "boss-fight",
+            "frameGapMs": 7,
+            "hidden": false,
+            "focused": true,
+            "suppressed": 0
+          },
+          "report": {
+            "downloaded": true,
+            "bytes": 401657,
+            "records": 130,
+            "contiguous": true,
+            "optionsMatched": true,
+            "recoveredAfterControlledReload": true
+          },
+          "unexpectedExternalRequests": [],
+          "finishedAt": "2026-10-28T20:59:38.846Z",
+          "pointsCount": 30
+        },
+        "pssMiB": {
+          "first": 366.09,
+          "last": 445.822,
+          "peak": 446.615
+        }
+      },
+      "webkit": {
+        "jobId": 123095692290,
+        "conclusion": "failure",
+        "artifactId": 12851405984,
+        "zipVerified": true,
+        "sha256": "22503f1d1695903ca1aab0e8518ee04f7d8a173205ac417e43447399250ccb54",
+        "result": {
+          "complete": false,
+          "engine": "webkit",
+          "seconds": 30,
+          "physicalPiBrowser": false,
+          "osScreenshot": false,
+          "snapshots": false,
+          "explicitGc": false,
+          "actualHostOS": "linux",
+          "playwrightConnectionPresent": true,
+          "processMemoryIsNotNativeDeviceMemory": true,
+          "whiteScreenFixed": false,
+          "engineVersion": "26.5",
+          "initialSetupPause": {
+            "expected": true,
+            "technical": false,
+            "manualResumeRequired": true
+          },
+          "failure": {
+            "code": "verification-failed",
+            "message": "locator.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('.pause-resume-button')\n    - locator resolved to <button type=\"button\" class=\"button button-primary pause-resume-button\">…</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n",
+            "observed": {
+              "scene": {
+                "status": "paused",
+                "phase": "SECTOR_INTRO",
+                "encounter": "boss-intro",
+                "sector": 20,
+                "ownerDiagnostics": true,
+                "hearts": 3,
+                "score": 0,
+                "shards": 0,
+                "enemies": 0,
+                "shots": 0,
+                "hostileShots": 0,
+                "bossId": 2,
+                "liveTurrets": 0,
+                "reactorOpen": true,
+                "coreVolley": 0,
+                "destroyed": 0,
+                "bossHealth": 127.88677532810532,
+                "bonusHits": 0,
+                "effects": 0,
+                "paidWeaponMs": 0,
+                "weapon": 1,
+                "frameAt": 0,
+                "technicalPause": false,
+                "weaponMenuOpen": false,
+                "countdown": 3,
+                "summary": false,
+                "cards": 0,
+                "prepared": false,
+                "failed": false,
+                "bonusX": null,
+                "player": {
+                  "x": 0.5,
+                  "y": 0.78
+                },
+                "field": {
+                  "width": 430,
+                  "height": 825
+                },
+                "canvas": {
+                  "activeDrawFrame": false,
+                  "registeredEffects": 0,
+                  "sourceImages": 0,
+                  "textureEntries": 0,
+                  "cacheBytes": 0,
+                  "surfaceBytes": 4,
+                  "imageBytes": 0,
+                  "textureBytes": 0,
+                  "hullLoads": 0,
+                  "hullEvictions": 0,
+                  "retainedHullUsers": 0,
+                  "draws": 0,
+                  "fragmentDraws": 0,
+                  "failures": []
+                },
+                "audio": {
+                  "audioState": "running",
+                  "audioVoices": 0,
+                  "audioWeaponVoices": 0,
+                  "audioBossVoices": 0,
+                  "audioEffectVoices": 0,
+                  "audioSampleBuffers": 46,
+                  "audioRockBuffers": 0,
+                  "audioBufferBytes": 7083800,
+                  "audioClockMs": 11921,
+                  "audioClockStalls": 0,
+                  "audioRecoveries": 1,
+                  "audioBlockedSounds": 0,
+                  "audioReapedVoices": 0
+                },
+                "buildFlags": {
+                  "development": false,
+                  "production": true
+                }
+              },
+              "pauses": [],
+              "visibleMessage": "/3\nLEVEL\n2\n◆ 0\nSHARDS\n0\nPUNKTE\nBOSS\n2\nLEVEL 2 · CRYSTAL CHAIN · KERNWÄCHTER\nLEVEL 2 · CRYSTAL CHAIN\nWARNUNG · SEKTORBOSS\nKORVESSA\nWaffen\n3",
+              "fullStatus": {
+                "id": "run-1793221033544-1-oupz1gb4",
+                "state": "starting",
+                "at": 1793221033628,
+                "lastCommittedSeq": 0,
+                "lastObservedSeq": 13,
+                "lastObserved": {
+                  "seq": 13,
+                  "at": 1793221033628,
+                  "clockMs": 83,
+                  "kind": "boundary",
+                  "data": {
+                    "operation": "hull-plan-settled",
+                    "sector": 20,
+                    "encounter": "boss-intro"
+                  }
+                },
+                "lastGraphics": {
+                  "seq": 12,
+                  "at": 1793221033627,
+                  "clockMs": 83,
+                  "kind": "boundary",
+                  "data": {
+                    "encounter": "boss-intro",
+                    "sector": 20,
+                    "operation": "hull-plan-progress",
+                    "step": "plan-released"
+                  }
+                },
+                "queuePeak": 13,
+                "serializeMaxMs": 1,
+                "commitWaitMaxMs": 0,
+                "markerWrites": 12,
+                "markerWriteMaxMs": 0,
+                "markerWriteTotalMs": 0
+              }
+            },
+            "nativeRaf": {
+              "observed": false,
+              "timeoutMs": 2000
+            }
+          },
+          "finishedAt": "2026-10-28T20:57:27.891Z",
+          "pointsCount": 0
+        }
+      }
+    },
+    "deployedBrowser": {
+      "environment": "Signed-in remote cloud Chromium; not physical iPhone, Android or Pi Browser. No native memory, true OS screenshot or gesture accepted here.",
+      "status": "passed menu -> prepare -> open -> expected setup pause -> manual Resume -> visible boss combat -> manual Pause -> new document/menu -> prepare report -> downloaded JSON",
+      "downloadedBytes": 260445,
+      "source": {
+        "sourceCommit": "388587e2016d9bd8da4dd9405a837743b47b0805",
+        "sourceTree": "f270e3230e5acae97db4302c751bc1d116e0fc29",
+        "workingTreeDirty": true
+      },
+      "options": {
+        "at": 1793221179981,
+        "scene": "reactor",
+        "diagnostics": true,
+        "protection": true
+      },
+      "optionsMatchedByStartTime": true,
+      "integrity": {
+        "contiguous": true,
+        "records": 109,
+        "chunks": 26,
+        "errors": []
+      },
+      "manualPauseSeq": 107,
+      "containsFullOwnerData": false,
+      "reportStayedLocal": true,
+      "screenshot": {
+        "path": "verification/boss2-forensics-20261028/device-preview-evidence/deployed-report-menu.jpg",
+        "sha256": "4757fc9391580835452ec1cb8d7081ae91e12cd777c79dd1072fa9d403be3c54"
+      }
+    }
+  },
+  "deployment": {
+    "status": "READY",
+    "environment": "Preview",
+    "id": "6fzP2Q2y46xKmHYYcj1sg3vHmVtD",
+    "url": "https://cryptoid-evolution-testnet-5b3yzzd2b-19-trojan69.vercel.app/",
+    "sourceCommit": "388587e2016d9bd8da4dd9405a837743b47b0805",
+    "sourceTree": "f270e3230e5acae97db4302c751bc1d116e0fc29",
+    "sourceMetadataWorkingTreeDirty": true,
+    "sourceMetadataExplanation": "Original build identity reports dependency/install-generated working tree state honestly; source commit/tree remain explicit.",
+    "buildDurationSeconds": 62,
+    "existingAuthenticationRetained": true,
+    "noBypassLinkCreated": true,
+    "publicTestnetProductionId": "239zEifRV84KCpbyHumnuHmSGm9T",
+    "publicMainCommit": "ce073547cf573375d141bf846f70e294138dbd73",
+    "originalPRStillDraft": true,
+    "originalPRHeadUnchanged": "9a0532801f6c733d89fe340a0efb84fc6c99edad",
+    "noMerge": true,
+    "mainnetTouched": false
+  }
+}

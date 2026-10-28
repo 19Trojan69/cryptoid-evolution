@@ -1,74 +1,132 @@
 # Getrennte Boss-2-Testversion
 
-Die bestätigte Fortsetzung bereitet einen geschützten Testlink vor. Basis ist
-der abgeschlossene Prüfstand von PR199, Remote9a053280/tree79ad62fb. Der neue
-Zweig codex/boss2-device-preview-20261028 bleibt vom Prüfzweig und Main getrennt.
-Kein Merge und kein Wechsel der öffentlichen Testnet-/Mainnet-Domains.
+Die geschützte Diagnosevorschau ist bereit:
+https://cryptoid-evolution-testnet-5b3yzzd2b-19-trojan69.vercel.app/
 
-## Testablauf
+Vercel Preview `6fzP2Q2y46xKmHYYcj1sg3vHmVtD` ist READY, mit Quelle
+`388587e2016d9bd8da4dd9405a837743b47b0805` und Tree
+`f270e3230e5acae97db4302c751bc1d116e0fc29`. Die vorhandene Vercel
+Authentication/Standard Protection bleibt aktiv. Keine Bypasslinks oder neuen
+Zugriffsrechte wurden eingerichtet. Die Vorschau ist kein bestätigter Fix und
+keine Freigabe für Spieler.
 
-Die neue Startseite bietet Boss2 mit Geschützen oder offenem Reaktor, eine
-lokale Diagnose und abschaltbaren Testschutz. Der Reaktorstart entfernt die
-Geschütze und setzt halbe Bossgesundheit. Der Testschutz entspricht dem früheren
-Labor: künstlich verlängerter Trefferschutz und höchstens40-Prozent-Gesundheitsboden
-für Boss2. Native Spieluhren, Originalgrafik/-audio, Pausen und manuelles Resume
-bleiben erhalten. Der Schutz ist keine normale Schwierigkeitsabnahme.
+Der Zweig `codex/boss2-device-preview-20261028` bleibt getrennt von Main und dem
+ursprünglichen Prüfzweig. PR199 bleibt unverändert als offener Draft auf
+`9a0532801f6c733d89fe340a0efb84fc6c99edad`. Main steht unverändert auf
+`ce073547cf573375d141bf846f70e294138dbd73`; die öffentliche Testnet-Produktion
+ist weiterhin `239zEifRV84KCpbyHumnuHmSGm9T`. Kein Merge, keine Änderung der
+öffentlichen Testnet-/Mainnet-Domains und kein Mainnet-Deployment.
 
-Jedes neue Dokument startet im Menü. Nach einem Abbruch zuerst den Bericht
-vorbereiten und speichern/teilen. Kein automatischer Neustart eines Kampfes,
-kein automatischer Upload. Für Hosts ohne Dateifreigabe gibt es vorhandene
-begrenzte Textteile des vollständigen Berichts. Der vorhandene begrenzte
-IndexedDB-Mitschnitt, Crash-Tail und Flight-Recorder bleiben lokale Belege;
-eine nicht geschriebene letzte Probe kann fehlen. Keine native RAM-/GPU- oder
-Betriebssystem-Absturzursache wird von diesem Webbericht behauptet.
+## Ablauf auf dem Gerät
 
-Die Diagnosefähigkeit der Gastfixture ist ausdrücklich synthetisch. Sie ist
-keine echte Pi-Owner-Verifikation. Der Zugriff auf die gesamte Vorschau bleibt
-durch die vorhandene Vercel Authentication/Standard Protection geschützt.
-Keine Bypasslinks, keine Änderung dieses Schutzes, keine neuen Konten/Käufe.
+1. Die genaue Vorschauadresse im bisherigen Pi Browser öffnen. Falls verlangt,
+   mit dem bereits berechtigten Vercel-Konto anmelden.
+2. Die Standardoptionen zunächst beibehalten: offener Reaktor, lokale Diagnose
+   und Testschutz. Auf **Testszene vorbereiten** warten, danach
+   **Boss-2-Test öffnen** wählen. Der Kampf öffnet absichtlich angehalten.
+3. Im Spiel selbst auf **Fortsetzen** tippen. Die Aktionen einzeln prüfen:
+   normal spielen, schnell nach links wischen, einen System-Screenshot machen,
+   anschließend einen App-Wechsel. Eine tatsächliche Pause nur selbst fortsetzen.
+4. Nach einer auffälligen Pause oder einem weißen Bildschirm dieselbe Adresse
+   im selben Browser erneut öffnen. Vor einem weiteren Lauf den neuesten
+   **Bericht vorbereiten** und **Bericht speichern** wählen. Teilen ist eine
+   ausdrücklich manuelle Aktion; es gibt keinen automatischen Upload.
 
-## Isolationsgrenze
+Die Aufzeichnung gehört zur exakten Vorschauadresse und zum Browserprofil.
+Ein anderes Deployment oder ein anderer Browser hat einen anderen lokalen
+Speicher. Der letzte noch nicht geschriebene Abschnitt kann nach einem harten
+Abbruch fehlen. Ein fehlender Eintrag belegt keine bestimmte Absturzursache.
+Der Bericht misst weder den gesamten nativen RAM/GPU-Speicher noch einen
+Betriebssystem-Grund für eine Prozessbeendigung.
 
-Der Builder schreibt keine Originaldatei unter frontend/src. Ausschließlich
-im Build werden App-Menü, Gast-Auth, Axios-Transport und Usage ersetzt sowie
-die genaue Boss-Vorgabe und vorhandenen Laborhaken eingefügt. Die Controller-
-Ergänzung ist exakt reversibel; nach Rücknahme der bereits geprüften zwölf
-Pause-Hunks bleibt der vollständige Release-Hash625fecc2cb959e4ed4ba690f7867d0a07b247b9a136a8ce308afecaf6dcd94fa.
-1740 originale bemalte Varianten und sämtliche Originalassets werden ohne
-Auflösungsänderung übernommen.
+## Testbedingungen und Isolation
 
-Nur dieser neue Zweig ersetzt api/index.ts durch einen importfreien
-Gast-/Sperrhandler. Kein Backend-, MongoDB- oder Pi-SDK-Import. Der im Browser
-isolierte Transport kann nur leere Katalog-/Ranglisten lesen; andere Aufrufe
-scheitern lokal, bevor Netzwerkzugriff möglich ist. Der serverseitige Handler
-verweigert Konto-, Fortschritts-, Admin- und Zahlungsoperationen und ist
-außerhalb VERCEL_ENV=preview vollständig gesperrt. Auch der Builder bricht
-außerhalb Preview vor dem Build ab. Projektweite Einstellungen werden nicht
-geändert; vercel.json dieses Zweigs deaktiviert automatische Deployments und
-weist den isolierten Buildausgang aus.
+Das Menü lädt Spielcode und Originalbilder erst nach ausdrücklicher Vorbereitung.
+Die ursprünglichen Warmup-Pläne mit jeweils höchstens zwölf Einträgen werden
+separat gehalten; der aktive Boss-Plan übernimmt die Cache-Nutzung, bevor die
+Menü-Leases freigegeben werden. Jedes neue Dokument öffnet zunächst das Menü,
+auch wenn die Browserhistorie auf `/game` zeigt. Kein automatischer Kampfstart
+oder automatisches Fortsetzen.
 
-## Prüfung und Bereitstellung
+Die Szene startet bei Boss2 mit Geschützen oder offenem Reaktor. Der Reaktorstart
+entfernt Geschütze und setzt die Bossgesundheit auf die Hälfte. Der abschaltbare
+Testschutz verlängert künstlich den Trefferschutz und setzt einen
+40-Prozent-Gesundheitsboden für Boss2. Dies erleichtert längere Messungen und
+entspricht keiner normalen Schwierigkeit. Spieluhren und der ursprüngliche
+Watchdog bleiben unverändert: strikter Abstand über 2500 ms, Prüfung alle 500 ms.
 
-Lokal sind23 Isolations-/Diagnosetests, die instrumentierte Controller-/Boss-
-TypeScriptprüfung und ein vollständiger Vite-Produktionsbuild bestanden.
-Die bestehende Releasebasis hatte514 bestandene Frontend-Prüfungen. Die
-ursprünglichen Spielquelldateien bleiben gegenüber dieser Basis unverändert;
-eine erneute pauschale Releaseabnahme oder bereinigter Projektlint wird nicht
-behauptet. Der bestehende Warnhinweis für große JS-Chunks bleibt.
+Die Gast-Diagnosefähigkeit ist synthetisch und keine Pi-Owner-Verifikation.
+Echte Anmeldung, Konten, Fortschritt, Käufe, Ranglisten und Live-Datenbanken
+werden nicht benutzt. Der Builder schreibt keine Originaldatei unter
+`frontend/src`. Ausschließlich im Build werden Menü, Auth, Transport und Usage
+ersetzt sowie die genaue Boss-Vorgabe und vorhandene Laborhaken eingefügt.
+Die Controller-Ergänzungen sind exakt reversibel; der normalisierte vollständige
+Release-Hash bleibt
+`625fecc2cb959e4ed4ba690f7867d0a07b247b9a136a8ce308afecaf6dcd94fa`.
+Die 1740 originalen bemalten Varianten und die Originalassets behalten ihre
+Auflösung. Der Builder verwendet diesen exakten Hash und benötigt keine
+Vorfahren-Historie im flachen Vercel-Checkout.
 
-Der neue CI-Workflow prüft den tatsächlichen direkten Einstieg, reguläre Pause,
-bestätigtes lokales Schreiben, kontrollierten Reload und Export eines zusammen-
-hängenden Berichts in Chromium und Linux-WebKit. Chromium erhält zusätzlich
-15 Minuten Produktionsbeobachtung mit ausschließlich äußeren Prozesszählern,
-ohne Heap-Schnappschuss oder erzwungenen GC. Die Playwright-Verbindung bleibt
-ein Messfaktor; es wird kein vollständig unbeobachteter Browser behauptet.
+Nur der Vorschauzweig ersetzt `api/index.ts` durch einen importfreien
+Gast-/Sperrhandler. Kein Backend-, MongoDB- oder echtes Pi-SDK wird importiert.
+Der Browsertransport erlaubt ausschließlich leere Gast-Leseantworten; andere
+Aufrufe scheitern lokal. Der Server verweigert Konto-, Fortschritts-, Admin-
+und Zahlungsoperationen und sperrt außerhalb `VERCEL_ENV=preview` vollständig.
+Auch der Builder bricht außerhalb Preview vor dem Build ab. Die zweigeigene
+`vercel.json` deaktiviert automatische Deployments. Dieser Zweig ist nicht zum
+Merge nach Main bestimmt.
 
-Der Vercel-Connector kann die Projekte auflisten, verweigert aber Projektdetails
-mit404 und die Deploymentliste mit403. Keine CLI-Anmeldedaten sind vorhanden.
-Der bereits freigegebene Dashboard-Weg ist verfügbar; vorab sind Testnet
-Production239zEifRV84KCpbyHumnuHmSGm9T mit Quellece073547 und aktive Standard
-Protection beobachtet. Neue Bereitstellung ausschließlich als Preview unter
-dem bestehenden geschützten Projekt; keine neuen Projekt-/Schutz-/Abrechnungs-
-einstellungen. Tatsächliche URL/Quelle/READY und die unveränderte öffentliche
-Bereitstellung werden nach Abschluss gesondert festgehalten. Bis dahin ist
-kein neuer Testlink als fertig ausgegeben.
+## Verifikation und offene Befunde
+
+24 Isolations-/Diagnosetests, die instrumentierte Controller-/Boss-Typprüfung und
+der Vite-Build sind bestanden. Der vorhandene Hinweis auf große JavaScript-Chunks
+bleibt; ein bereinigter Gesamtprojekt-Lint oder eine neue vollständige
+Releaseabnahme wird nicht behauptet. Die frühere Releasebasis hatte 514
+bestandene Frontend-Prüfungen.
+
+Der abschließende CI-Lauf `40767561502` auf `fc7f2cf7` besteht in Linux-Chromium:
+30,813 aktive Sekunden, 30 Proben, Reaktorsalven 0 bis 10, reguläre Pause,
+bestätigtes lokales Schreiben, kontrollierter Reload und ein heruntergeladener
+Bericht mit 130 lückenlosen Einträgen und passenden Testoptionen. Gegenüber der
+bereitgestellten App-Quelle unterscheiden sich ausschließlich die Workflowdatei
+und `verifyDevicePreview.mjs`; Anwendungs- und Builderdateien sind identisch.
+Der frühere kurze Chromium-Lauf direkt auf der bereitgestellten Quelle
+`388587e2` war ebenfalls vollständig erfolgreich.
+
+Der abschließende Linux-WebKit-Lauf ist **fehlgeschlagen**: Der Resume-Klick
+begann den Countdown, kehrte aber nicht rechtzeitig zurück. Kein erster
+Spielframe und keine aktive Probe wurden aufgezeichnet. Auch ein einzelner
+nativer RAF-Probeaufruf blieb über zwei Sekunden ohne Rückruf. Zu diesem
+Zeitpunkt war die Pause nicht als technische Pause markiert. Frühere Versuche
+beobachteten auch einen `loop-stall` vor dem ersten Frame; ein anderer kurzer
+Lauf auf `388587e2` erreichte acht aktive Proben. Damit ist die WebKit-
+Startstörung weiterhin offen. Kein Renderer-Absturz, kein iPhone-Fehlergrund
+und kein Speicherleck sind dadurch bewiesen. Der Matrixlauf ist insgesamt
+fehlgeschlagen und wird nicht als vollständige Browserabnahme ausgewiesen.
+
+Ein früherer Chromium-Lauf auf `67b83d1d` erreichte 900,159 aktive Sekunden und
+320 Reaktorsalven ohne technische Pause im aktiven Fenster. Sein gesamter Job
+scheiterte anschließend an einer inzwischen korrigierten Export-Prüfbedingung.
+Dieser ältere kalte Gaststart ist Teilbeleg, kein bestandener Gesamtablauf und
+kein identischer Vergleich mit der finalen vorbereiteten Szene. PSS stieg dort
+von 371,50 auf 851,48 MiB, mit 881,43 MiB Spitze. Ohne Heap-Snapshot oder
+erzwungenen GC trennt dies vorübergehende und gehaltene Belegung nicht und
+beweist weder ein Leck noch ein langfristiges Plateau. Die Playwright-Verbindung
+war in den Laborläufen vorhanden. Linux-Prozesswerte sind keine iPhone-RAM-Werte.
+
+Auf der tatsächlichen geschützten Vercel-Adresse wurde zusätzlich der sichtbare
+Ablauf in angemeldetem Cloud-Chromium geprüft: Menü, Vorbereitung, angehaltener
+Boss2, manuelles Fortsetzen, laufender Kampf, manuelle Pause, neues Dokument,
+Berichtsvorbereitung und Download. Der lokale JSON-Bericht hat 260445 Bytes,
+109 lückenlose Einträge, passende Optionen und den Eintrag `manual-pause`.
+Die Quelle im Bericht stimmt mit `388587e2` überein. Dies ist kein physischer
+iPhone-/Android-/Pi-Browser-Test und keine Prüfung echter Systemgesten.
+
+Alle genauen Quellen, Teilbefunde, Artefakt-Hashes und Grenzen stehen in
+[`device-preview-results.json`](device-preview-results.json). Das Bild
+[`device-preview-evidence/deployed-report-menu.jpg`](device-preview-evidence/deployed-report-menu.jpg)
+zeigt den vorbereiteten Bericht auf der tatsächlichen Vorschau. Private
+Owner-Anhänge und vollständige Geräteberichte wurden nicht in Git übernommen.
+Der nächste erforderliche Beleg ist der lokale Bericht nach dem Fehler auf
+dem echten Gerät; aus dieser Vorschau wird noch keine Produktionsfreigabe
+abgeleitet.
