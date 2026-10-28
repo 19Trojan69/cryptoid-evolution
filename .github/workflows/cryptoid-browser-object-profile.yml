@@ -1,5 +1,5 @@
 name: Browser object lifetime profile
-run-name: Compare paused heap snapshots around 60 seconds of Boss 2
+run-name: Compare Boss 2 object lifetimes with document identity checks
 
 on:
   push:
