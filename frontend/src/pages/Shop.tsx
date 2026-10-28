@@ -689,7 +689,7 @@ const Shop = () => {
             </div></article>;
           })}
         </div></div>)}
-        {shopView === "weapons" && <div className="hangar-offers"><h3>{t("Permanent armor")}</h3><p>{t("Armor is always active from mission start, needs no shield and remains yours across all future missions. Each upgrade adds to your maximum hearts.")}</p><p>{t("Applies to all your ships, including Advanced and Elite.")}</p><p>{t("You start with 3 hearts, or 4 with Reinforced Hull and 6 with both armor upgrades. The mission ends when all hearts are lost.")}</p><p>{t("Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 5 Shards instead.")}</p><div className="hangar-offer-grid">
+        {shopView === "weapons" && <div className="hangar-offers"><h3>{t("Permanent armor")}</h3><p>{t("Armor is always active from mission start, needs no shield and remains yours across all future missions. Each upgrade adds to your maximum hearts.")}</p><p>{t("Applies to all your ships, including Advanced and Elite.")}</p><p>{t("You start with 3 hearts, or 4 with Reinforced Hull and 6 with both armor upgrades. The mission ends when all hearts are lost.")}</p><p>{t("Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 50 Shards instead.")}</p><div className="hangar-offer-grid">
           {offers.filter(offer => offer.kind === "armor").map(offer => {
             const owned = inventory?.ownedArmor.includes(offer.id);
             const prerequisite = offers.find(item => item.id === purchasePrerequisite(offer));

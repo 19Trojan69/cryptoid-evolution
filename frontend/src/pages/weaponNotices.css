@@ -1,9 +1,9 @@
-/* Same vertical center as the existing 118px binary stream at top:43%.
-   A sibling keeps the code's native animation, mask and opacity independent. */
+/* A paid-expiry caption below the completed Block, never over live combat.
+   The existing playing clock removes it after 3000ms; this only adds two pulses. */
 .game-field .weapon-transition-notice {
   position: absolute;
-  z-index: 4;
-  top: calc(43% + 59px);
+  z-index: 6;
+  top: 62%;
   left: 50%;
   transform: translate(-50%, -50%);
   box-sizing: border-box;
@@ -12,28 +12,22 @@
   padding: 8px 24px;
   border: 0;
   background: linear-gradient(90deg, transparent, #071526b3 18%, #071526b3 82%, transparent);
-  color: #ffb3b7;
-  font: 500 clamp(18px, 4vw, 26px)/1.25 'Space Grotesk', sans-serif;
+  color: #ff3347;
+  font: 650 clamp(18px, 4vw, 26px)/1.25 'Space Grotesk', sans-serif;
   text-align: center;
   overflow-wrap: anywhere;
-  text-shadow: 0 2px 7px #020a18;
+  text-shadow: 0 0 9px #ff2030, 0 2px 5px #020a18;
   pointer-events: none;
+  animation: paid-weapon-expiry 1.5s ease-in-out 2;
 }
-.weapon-transition-notice span, .weapon-transition-notice strong { display: block; font: inherit; }
-.weapon-transition-notice i { font: inherit; }
-.weapon-transition-notice .weapon-notice-symbol {
-  display: inline-block;
-  min-width: 1em;
-  margin-inline-end: .3em;
-  font-size: .85em;
-  font-weight: 600;
+.weapon-transition-notice strong { display: block; font: inherit; }
+@keyframes paid-weapon-expiry { 0%, 100% { opacity: .65; } 50% { opacity: 1; } }
+.game-shell[data-effects-paused="true"] .weapon-transition-notice {
+  visibility: hidden;
+  animation-play-state: paused;
 }
-.weapon-transition-notice .weapon-reload-status {
-  display: block;
-  margin-top: 3px;
-  font-size: .75em;
-  line-height: 1.2;
-}
+html[data-motion="reduced"] .weapon-transition-notice { animation: none; }
+@media (prefers-reduced-motion: reduce) { .weapon-transition-notice { animation: none; } }
 
 /* A small status beside the rail clears its weapon labels and the center titles. */
 .game-field .weapon-reload-confirmation {

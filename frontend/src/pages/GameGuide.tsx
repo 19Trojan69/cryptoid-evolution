@@ -11,7 +11,7 @@ const topics = [
   {
     id: "overview", label: "Game description", title: "Defend Earth. Evolve your fleet.",
     intro: "Cryptoid Evolution is an arcade space shooter. Pilot your ship, defeat formations and bosses, collect boosts and build your fleet.",
-    details: ["Each level has nine visible Blocks, then a boss fight and a bonus round.", "Your ship fires automatically. Move to dodge and line up your shots.", "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 5 Shards instead.", "Open Rewards to see linked Blocks, boss stickers, stars, chain milestones, bonus medals and your current service rank."],
+    details: ["Each level has nine visible Blocks, then a boss fight and a bonus round.", "Your ship fires automatically. Move to dodge and line up your shots.", "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 50 Shards instead.", "Open Rewards to see linked Blocks, boss stickers, stars, chain milestones, bonus medals and your current service rank."],
   },
   {
     id: "visuals", label: "Illustrated guide", title: "Ships at a glance",
@@ -42,7 +42,7 @@ const topics = [
     intro: "You start with 3 hearts, or 4 with Reinforced Hull and 6 with both armor upgrades. The mission ends when all hearts are lost.",
     details: [
       "Collect the heart to start the bonus round.",
-      "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 5 Shards instead.",
+      "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 50 Shards instead.",
       "Advanced and Elite projectile protection does not increase your maximum hearts.",
       "Avoid enemy ships and projectiles. An active shield absorbs an impact; otherwise a collision or an unguarded projectile can cost a heart.",
       "Ship stages do not absorb hits. Active shields protect separately; armor determines your maximum hearts. The larger pickup radius applies only to normal power-ups, not boss hearts or bonus targets.",

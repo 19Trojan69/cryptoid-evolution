@@ -1,3 +1,31 @@
+# Quiet combat messages and full-heart boss reward, 28 October 2026
+
+PR198 now also follows the latest request: remove live shot names/timer/progress,
+reserve rail fields, weapon-pickup captions and in-flight reload confirmations.
+The single Weapons button and all paused-menu selection/payment/confirmation rules
+remain. Only a real selected paid expiry queues a caption; pickup/permanent shots
+do not. Show only expired name and Expired in bright red for3000ms with two slow
+native pulses. Wait for an existing normal SECTOR_CLEAR with no enemies/incoming
+shots and at least3000ms available; never alter the phase duration or pause play.
+Start at the actual component commit. Reuse existing playing delta; true pauses
+hide/freeze the same mounted caption. Resume cannot restart it. Unexpected combat
+consumes a shown caption. Read only a live scalar enemy-shot count; preserve the
+projectile-snapshot guard and no extra JS timer/RAF/observer or automatic Resume.
+Keep the earlier5-to50 full-heart boss replacement and missing-heart healing,
+old collected5-Shard values, once-only/Resume flags and19-language copy. Hide the
+five redundant formation notice keys plus Weapon Upgrade before translation;
+retain heavy warnings, other boosts and Block/group/central completion feedback.
+No new formation rewards, migration, price/stock/Auto/receipt/activation/collision/
+combat-clock/audio/art/backend-handler or diagnostic changes. Eight fixed paid-
+expiry hunks restore the prior reviewed controller before two formation hunks and
+all historical guards.475 frontend release/locales/types/Vite pass; unchanged
+backend retains142 passing checks. Changed helpers/status lint clean; controller
+still zero errors/four old warnings. Fixtures and CSS-only animation checks do
+not establish native-device performance or a White Screen fix. Keep the same
+PR198 work branch automatic deployment disabled and draft only. Preserve separate
+194/195 and the iPhone investigation. See matching docs/verification full-heart-
+shards-20261028 for exact checks and fixture limits.
+
 # Fair ship stages without invisible hit protection, 28 October 2026
 
 The owner asks for fairer Elite/Advanced value and continued implementation.

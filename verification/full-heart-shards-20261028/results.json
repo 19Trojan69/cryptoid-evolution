@@ -1,0 +1,199 @@
+{
+  "baselineCommit": "5ca9cf7f210ec6f623649b4d5cf5f9c0b2417769",
+  "baselineTree": "1af1d9b46978e623214814df56396a101525f8bc",
+  "runtimeRule": {
+    "name": "BOSS_FULL_HEART_SHARDS",
+    "before": 5,
+    "after": 50
+  },
+  "frontend": {
+    "cases": 475,
+    "failures": 0,
+    "typecheck": true,
+    "localization": true,
+    "vite": true,
+    "bossPickupCases": 7,
+    "selectableLanguages": 19,
+    "formationNoticeCases": 3
+  },
+  "backend": {
+    "cases": 142,
+    "failures": 0,
+    "typecheck": true
+  },
+  "lint": {
+    "components": [
+      {
+        "file": "src/pages/Shop.tsx",
+        "before": {
+          "errors": 0,
+          "warnings": 0
+        },
+        "after": {
+          "errors": 0,
+          "warnings": 0
+        },
+        "added": []
+      },
+      {
+        "file": "src/pages/GameGuide.tsx",
+        "before": {
+          "errors": 0,
+          "warnings": 0
+        },
+        "after": {
+          "errors": 0,
+          "warnings": 0
+        },
+        "added": []
+      }
+    ],
+    "modules": [
+      {
+        "file": "backend/src/lifeRules.ts",
+        "errors": 0,
+        "warnings": 1,
+        "messages": [
+          {
+            "ruleId": null,
+            "fatal": false,
+            "severity": 1,
+            "message": "File ignored because outside of base path.",
+            "nodeType": null
+          }
+        ]
+      },
+      {
+        "file": "src/locales/smartphonePackages.ts",
+        "errors": 0,
+        "warnings": 0,
+        "messages": []
+      }
+    ]
+  },
+  "unchangedFiles": [
+    "frontend/src/pages/combatVariety.ts",
+    "backend/src/handlers/rewards.ts",
+    "backend/src/handlers/progress.ts",
+    "frontend/src/generated/paintedHullManifest.ts"
+  ],
+  "legacyRewardsRetroactivelyChanged": false,
+  "formationRewardsChanged": false,
+  "heartHealingChanged": false,
+  "newScoreBonus": 0,
+  "pricesChanged": false,
+  "realAccountsModified": false,
+  "physicalDevice": false,
+  "whiteScreenFixEstablished": false,
+  "deploymentPerformed": false,
+  "formationNotices": {
+    "hiddenSourceKeys": [
+      "Clear the formation",
+      "Finish this wave without a hit",
+      "Hold your combo",
+      "Perfect formation",
+      "FORMATION CLEARED",
+      "Weapon Upgrade"
+    ],
+    "savedNoticesHandled": true,
+    "combatStateMutated": false,
+    "locales": 19,
+    "oldAndNewHiddenRenderPairs": 114,
+    "retainedRenderComparisons": 76,
+    "expiredOrDisabledRenders": 152,
+    "controllerHunks": 2,
+    "restoredControllerSha256": "10130d98a4cc4c60ec48d885515e95ec01b9da9db98c5c7b5979f8c529327fc9",
+    "candidateControllerSha256": "625fecc2cb959e4ed4ba690f7867d0a07b247b9a136a8ce308afecaf6dcd94fa",
+    "lint": {
+      "controller": {
+        "before": {
+          "errors": 0,
+          "warnings": 4
+        },
+        "after": {
+          "errors": 0,
+          "warnings": 4
+        },
+        "added": []
+      },
+      "helper": {
+        "errors": 0,
+        "warnings": 0
+      }
+    },
+    "heavyWarningsAndNonWeaponBoostNoticesRetained": true
+  },
+  "paidExpiry": {
+    "cases": 10,
+    "paidOnly": true,
+    "durationMs": 3000,
+    "firstComponentCommitStartsClock": true,
+    "usesExistingPlayingStep": true,
+    "quietWindow": "normal SECTOR_CLEAR, no enemies or incoming shots, at least3000ms available at first display",
+    "pauseFreezesAndHides": true,
+    "unexpectedCombatRetiresShownCaption": true,
+    "phaseTimingChanged": false,
+    "selectionAutoAndStockChanged": false,
+    "liveWeaponNamesAndMetersRemoved": true,
+    "pickupWeaponCaptionsRemoved": true,
+    "inFlightReloadConfirmationRemoved": true,
+    "pausedWeaponMenuRetained": true,
+    "nativePulseSeconds": 1.5,
+    "nativePulseIterations": 2,
+    "reducedMotionRespected": true,
+    "nativeAnimationTimingMeasured": false,
+    "additionalTimersOrRaf": false,
+    "controllerHunks": 8,
+    "restoredPriorControllerSha256": "0785ece27dc608498958f949852972545c5b15138369615d07bbc4a9223ba02a",
+    "lint": [
+      {
+        "file": "src/pages/GamePage.tsx",
+        "before": {
+          "errors": 0,
+          "warnings": 4
+        },
+        "after": {
+          "errors": 0,
+          "warnings": 4
+        },
+        "added": []
+      },
+      {
+        "file": "src/pages/WeaponSpentNotice.tsx",
+        "before": {
+          "errors": 0,
+          "warnings": 0
+        },
+        "after": {
+          "errors": 0,
+          "warnings": 0
+        },
+        "added": []
+      },
+      {
+        "file": "src/pages/combatNotice.ts",
+        "before": {
+          "errors": 0,
+          "warnings": 0
+        },
+        "after": {
+          "errors": 0,
+          "warnings": 0
+        },
+        "added": []
+      },
+      {
+        "file": "src/pages/weaponSpentNotice.ts",
+        "before": {
+          "errors": 0,
+          "warnings": 0
+        },
+        "after": {
+          "errors": 0,
+          "warnings": 0
+        },
+        "added": []
+      }
+    ]
+  }
+}

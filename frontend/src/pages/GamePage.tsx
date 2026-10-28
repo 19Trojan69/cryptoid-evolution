@@ -1,4 +1,5 @@
 import { combatCryptoid, combatTiming, combatEntryStage, combatAttackPattern, createCombatVariety, readCombatVariety, type CombatVarietyRuntime } from './combatVariety';
+import { showCombatNotice } from './combatNotice';
 import { advanceBonusRock, spawnBonusRock, hitBonusRock, rockHitsShot, rockInField, nextRockEventMs, MAX_ROCKS, MAX_ROCK_EFFECTS, type BonusRock, type RockEffect } from './bonusRocks';
 import BonusRockLayer from './BonusRockLayer';
 import {CanvasEffectLayer,CanvasImpact,canvasEffectResources,releaseIdleCanvasEffects} from './CanvasEffects';
@@ -16,8 +17,7 @@ import LoadingStripes from '../components/LoadingStripes';
 import { enemyHealthClearance } from './enemyHealthClearance';
 import { weaponResumeStepMs } from './weaponReloadTiming';
 import WeaponSpentNotice from './WeaponSpentNotice';
-import ReloadConfirmation from './ReloadConfirmation';
-import { createWeaponSpentNotice, updateWeaponReloadNotice, type SpentWeaponNotice } from './weaponSpentNotice';
+import { createWeaponSpentNotice, updateWeaponReloadNotice, canShowWeaponSpentNotice, advanceWeaponSpentNotice, type SpentWeaponNotice } from './weaponSpentNotice';
 import { enemyVisualDiameter } from './shipDisplayScale';
 import { automaticStartWeapon, autoReloadKey, nextActiveWeapon, parseAutoReload, shouldAutoReload, type AutoReloadPreferences } from './weaponAutoReload';
 import { shipSaveNetwork } from './shipFleet';
@@ -64,7 +64,7 @@ import { ENTRY_GAP_MS, FORMATION_SETTLE_MS, SECTION_CLEAR_MS, SECTION_INTRO_MS, 
 import { chooseCryptoid as originalCryptoid, cryptoidDisplayName, isGhostCloaked, type CryptoidClass, type CryptoidType, type FactionCode } from "./cryptoidRoster";
 import { collectPowerUp as applyPowerUp, createPowerUpDrop, movePowerUps, powerUpDescriptions, powerUpNames, powerUpSymbols, POWER_UP_DURATION_MS, PURCHASED_POWER_UP_DURATION_MS, resolvePlayerDamage, type PowerUp, type PowerUpType } from "./powerUps";
 import { readControlHand, readControlSensitivity, readControlZone, readShipStart, sensitivityMultiplier, shipStartHeight } from "./controlPreferences";
-import { advanceShot, contactWithEnemy, enemyMotionVisible, MAX_PLAYER_SHOTS, movePlayer, PICKUP_WEAPON_DURATION_MS, PURCHASED_WEAPON_DURATION_MS, retainContactLatch, shipCollisionOutcome, shipContactPoint, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
+import { advanceShot, contactWithEnemy, enemyMotionVisible, MAX_PLAYER_SHOTS, movePlayer, PURCHASED_WEAPON_DURATION_MS, retainContactLatch, shipCollisionOutcome, shipContactPoint, shotHitsEnemy, type PlayerPosition, type PlayerShot } from "./playerCombat";
 import { advanceEnemyShot, advanceEnemyFire, enemyVolleyKind, enemyAttackFireTime, enemyMuzzleOffsets, enemyShotHitsPlayer, enemyShotOutsideField, enemyShotLimit, type EnemyShot, type EnemyFireProgress } from "./enemyFire";
 import { attackPressure, attackSlots } from "./attackPressure";
 import SectorBackdrop from "./SectorBackdrop";
@@ -1622,10 +1622,10 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
         }
         lastPlayerRef.current = state.player;
         if (!transitionPaused) elapsedRef.current += delta;
-        // Active combat ends the shown binary feedback. Direct flight changes
-        // below also consume it, including entries cleared before formation.
-        if (weaponSpentRef.current?.shown && (state.encounter !== 'normal' || formationStartedRef.current
-          || !['SECTOR_INTRO', 'ENTRY', 'FORMATION'].includes(state.phase))) {
+        // Only a real, already mounted expiry uses the existing playing clock.
+        // Never show it over live enemies or incoming shots, or delay a Block.
+        if (advanceWeaponSpentNotice(weaponSpentRef.current, delta, state.encounter === 'normal'
+          && state.phase === 'SECTOR_CLEAR' && state.asteroids.length === 0 && state.enemyShots.length === 0)) {
           weaponSpentRef.current = null; setWeaponSpent(null); forceScene = true;
         }
         impactCooldownRef.current = Math.max(0, impactCooldownRef.current - delta);
@@ -2369,7 +2369,6 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
     setGame({ ...state });
   };
   const weaponNames = ["", t("Standard"), t("Twin"), t("Rapid"), t("Triple"), t("Plasma")];
-  const weaponGlyphs = ["", "I", "II", "III", "IV", "V"];
   const resumeWeaponSelection = () => {
     if (bossSummaryRef.current && !bossSummaryRef.current.accepted) return;
     unlockAudioForResume(); clearControls();
@@ -2691,7 +2690,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
       <div ref={fieldRef} className="game-field" onContextMenu={event => event.preventDefault()} onDoubleClick={event => event.preventDefault()} onDragStart={event => event.preventDefault()}>
         <GameSceneBoundary onError={error => interruptionRef.current('render-error', error)} fallback={retry => <div className="game-overlay"><div className="game-modal" role="alert"><h1>{t('MISSION PAUSED')}</h1><p>{t("The mission was paused after a technical interruption. Try Resume to continue.")}</p><button type="button" className="button button-primary" onClick={retry}>{t('Try again')}</button></div></div>}>
         {combatVarietyEnabled && <BonusRockLayer rocks={game.rocks} effects={game.rockEffects} width={fieldSizeRef.current.width} height={fieldSizeRef.current.height} />}
-        {combatVarietyEnabled && varietyRef.current.noticeMs > 0 && <div className="combat-variety-notice" role="status" style={{ top: visibleTopRef.current + 48 }}>{varietyRef.current.notice === "Perfect formation" ? t("Perfect formation") : varietyRef.current.notice === "FORMATION CLEARED" ? t("FORMATION CLEARED") : varietyRef.current.notice === "Clear the formation" ? t("Clear the formation") : varietyRef.current.notice === "Heavy attacker incoming" ? t("Heavy attacker incoming") : varietyRef.current.notice === "Finish this wave without a hit" ? t("Finish this wave without a hit") : varietyRef.current.notice === "Hold your combo" ? t("Hold your combo") : t(varietyRef.current.notice)}</div>}
+        {combatVarietyEnabled && varietyRef.current.noticeMs > 0 && showCombatNotice(varietyRef.current.notice) && <div className="combat-variety-notice" role="status" style={{ top: visibleTopRef.current + 48 }}>{varietyRef.current.notice === "Heavy attacker incoming" ? t("Heavy attacker incoming") : t(varietyRef.current.notice)}</div>}
         <Starfield sector={game.sector} player={game.player} paused={game.status !== "playing"} showNebula={game.encounter === "boss-fight"} />
         <SectorBackdrop sector={game.sector} player={game.player} paused={game.status !== "playing"} />
         <header ref={hudRef} className="game-hud">
@@ -2737,7 +2736,8 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
           {game.phase === "SECTOR_CLEAR" && game.encounter === "bonus" && <small className="combo-summary">{t("Level combo bonus")}: {game.combo.level} × · +{game.combo.level * DOUBLE_KILL_SCORE} {t("Score")} · +{game.combo.level * DOUBLE_KILL_SHARDS} {t("Shards")}</small>}
           {game.phase === "SECTOR_CLEAR" && game.rewardNotice && <small className="reward-unlock" role="status">✦ {game.rewardNotice.split(" · ").map(part => t(part)).join(" · ")}</small>}
         </div>}
-        {game.status === "playing" && game.encounter === "normal" && !formationStartedRef.current && (game.phase === "SECTOR_INTRO" || game.phase === "ENTRY" || game.phase === "FORMATION") && <><div className="formation-data-stream" aria-hidden="true">{FORMATION_DATA_ROWS.map((row, index) => <div className="formation-data-row" key={index}><span>{row.repeat(4)}</span><span>{row.repeat(4)}</span></div>)}</div>{weaponSpent && !levelIntro && !reinforcementIntro && <WeaponSpentNotice reload={weaponSpent.reload} expiredLevel={weaponSpent.level} level={stageWeaponLevel(shipStage, game.weaponLevel)} expiredWeaponName={weaponNames[weaponSpent.level]} weaponName={weaponNames[stageWeaponLevel(shipStage, game.weaponLevel)]} onShown={markWeaponSpentShown} />}</>}
+        {game.status === "playing" && game.encounter === "normal" && !formationStartedRef.current && (game.phase === "SECTOR_INTRO" || game.phase === "ENTRY" || game.phase === "FORMATION") && <div className="formation-data-stream" aria-hidden="true">{FORMATION_DATA_ROWS.map((row, index) => <div className="formation-data-row" key={index}><span>{row.repeat(4)}</span><span>{row.repeat(4)}</span></div>)}</div>}
+        {weaponSpent && canShowWeaponSpentNotice(weaponSpentRef.current, { status: game.status, encounter: game.encounter, phase: game.phase, enemies: game.asteroids.length, enemyShots: stateRef.current.enemyShots.length, clearRemainingMs: (combatVarietyEnabled ? combatTiming(game.sector).clearMs : SECTION_CLEAR_MS) - clearTimerRef.current }) && <WeaponSpentNotice expiredWeaponName={weaponNames[weaponSpent.level]} onShown={markWeaponSpentShown} />}
         {!combatVarietyEnabled && game.asteroids.filter(asteroid => game.encounter === "normal"
           ? game.phase === "ENTRY" || game.phase === "FORMATION" || game.phase === "REFORM"
           : game.encounter === "boss-fight" && asteroid.escort && asteroid.attackPattern === null
@@ -2750,7 +2750,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
           return <div key={pickup.id} className={`power-up power-up-${pickup.type}`} role="img" aria-label={pickupLabel} title={pickupLabel} style={{ left: pickup.x, top: pickup.y }}><span aria-hidden="true">{powerUpSymbols[pickup.type]}</span></div>;
         })}
         {game.combo.remainingMs > 0 && game.status === "playing" && <div key={`combo-${game.combo.total}`} className={`combo-notice${game.pickupNotice ? " combo-with-pickup" : ""}`} role="status"><b>{t("DOUBLE KILL")}</b><span>+{DOUBLE_KILL_SCORE} {t("Score")} · +{DOUBLE_KILL_SHARDS} {t("Shards")}</span></div>}
-        {game.pickupNotice && game.status === "playing" && <div key={game.pickupNotice.id} className={`pickup-notice pickup-notice-${game.pickupNotice.type}`} role="status"><b>{powerUpSymbols[game.pickupNotice.type]} {game.pickupNotice.type === "weapon" ? weaponNames[game.pickupNotice.level] : t(powerUpNames[game.pickupNotice.type])}</b><span>{game.pickupNotice.type === "weapon" ? `${t(pickupEffectLabels.weapon)} ${game.pickupNotice.level} · ${weaponNames[game.pickupNotice.level]} · ${PICKUP_WEAPON_DURATION_MS / 1000}s` : t(pickupEffectLabels[game.pickupNotice.type])}</span></div>}
+        {game.pickupNotice && game.pickupNotice.type !== "weapon" && game.status === "playing" && <div key={game.pickupNotice.id} className={`pickup-notice pickup-notice-${game.pickupNotice.type}`} role="status"><b>{powerUpSymbols[game.pickupNotice.type]} {t(powerUpNames[game.pickupNotice.type])}</b><span>{t(pickupEffectLabels[game.pickupNotice.type])}</span></div>}
         <div ref={mountProjectiles} className="projectile-layer" style={{ display: 'contents' }} aria-hidden="true" />
         <CanvasEffectLayer enabled={combatVarietyEnabled}>{game.effects.filter(bossExplosionReady).filter(effect => effect !== fallingBossHull).map(effect => <ImpactEffectView key={effect.id} effect={effect} />)}</CanvasEffectLayer>
         {game.hearts > 0 && <div ref={playerShipRef} className={`player-ship shielded-ship${game.status === "paused" && weaponCountdown === null ? " player-ship-dialog-hidden" : ""}${shipSelection.color.id === "grey" || shipSelection.color.id === "white" ? ` player-ship-${shipSelection.color.id}` : ""}${game.purchasedShieldMs > 0 || (game.shieldActive && game.shieldCharges > 0 && game.shieldMs > 0) ? " player-ship-shield-active" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "player-crash") ? " player-ship-respawn" : ""}${game.effects.some(effect => effect.target === "player" && effect.kind === "shield") ? " player-ship-shielded" : ""}`} style={{ left: `${game.player.x * 100}%`, top: `${game.player.y * 100}%`, "--ship-glow": shipSelection.color.glow, "--flame-length": `${engineFlamePercent(game.thrust)}%`, ...shipVisualOffset } as CSSProperties} aria-label={t('Your Cryptoid ship')}><GameShipVisual sprite={shipSelection.skin.sprite} color={shipSelection.color.id} stage={shipStage} variant="player" sites={game.playerHullFires} hit={game.playerHit}/></div>}
@@ -2761,7 +2761,6 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
           <button type="button" className="weapon-drawer-tab" onClick={resumeWeaponSelection} disabled={weaponBusy} aria-label={t('Back to game')}>{t('Weapons')} <span aria-hidden="true">{readControlHand() === 'right' ? '‹' : '›'}</span></button>
         </div>}
         <div className={`touch-controls touch-controls-${readControlHand()}`}>
-          {confirmedReload !== null && game.status === "playing" && <ReloadConfirmation level={confirmedReload} />}
           <div className="edge-actions" role="group" aria-label={t('Available equipment')}>
             <div className="weapon-control-wrap" data-source={game.weaponSource}>
               <div className="weapon-slot weapon-slot-main" data-source={game.weaponSource}>
@@ -2770,11 +2769,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
                   <span className="mission-access-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="currentColor"><path d="M7 10 9 16 7 29 5 16ZM16 1 18.5 9 16 29 13.5 9ZM25 10 27 16 25 29 23 16Z" /></svg></span>
                   <span className="mission-access-label">{t('Weapons')}</span>
                 </button>
-                <span className="mission-active-weapon"><b>{weaponNames[stageWeaponLevel(shipStage, game.weaponLevel)]}</b>{game.weaponSource !== 'standard' && <small>{Math.ceil((game.weaponSource === 'paid' ? game.paidWeaponMs : game.pickupWeaponMs) / 1000)}s</small>}</span>
-                {game.weaponSource !== 'standard' && <progress className="mission-charge-progress" aria-label={t('Remaining time')} max={game.weaponSource === 'paid' ? PURCHASED_WEAPON_DURATION_MS : PICKUP_WEAPON_DURATION_MS} value={game.weaponSource === 'paid' ? game.paidWeaponMs : game.pickupWeaponMs} />}
               </div>
-              {game.weaponSource !== "pickup" && game.pickupWeaponMs > 0 && <div className="weapon-slot weapon-slot-reserve" data-source="pickup"><TimedRing remainingMs={game.pickupWeaponMs} durationMs={PICKUP_WEAPON_DURATION_MS} /><button type="button" className="edge-action edge-action-weapon weapon-cycle" disabled={game.status !== "playing"} onClick={openWeaponSelection} aria-label={`${t("Select")}: ${weaponNames[stageWeaponLevel(shipStage, game.pickupWeaponLevel)]}`}><span className="weapon-cycle-glyph" aria-hidden="true">{weaponGlyphs[stageWeaponLevel(shipStage, game.pickupWeaponLevel)]}</span><small>{weaponNames[stageWeaponLevel(shipStage, game.pickupWeaponLevel)]}</small></button></div>}
-              {game.weaponSource !== "paid" && game.paidWeaponMs > 0 && <div className="weapon-slot weapon-slot-reserve" data-source="paid"><TimedRing remainingMs={game.paidWeaponMs} durationMs={PURCHASED_WEAPON_DURATION_MS} /><button type="button" className="edge-action edge-action-weapon weapon-cycle" disabled={game.status !== "playing"} onClick={openWeaponSelection} aria-label={`${t("Select")}: ${weaponNames[stageWeaponLevel(shipStage, game.paidWeaponLevel)]}`}><span className="weapon-cycle-glyph" aria-hidden="true">{weaponGlyphs[stageWeaponLevel(shipStage, game.paidWeaponLevel)]}</span><small>{weaponNames[stageWeaponLevel(shipStage, game.paidWeaponLevel)]}</small></button></div>}
             </div>
             {game.purchasedShieldMs > 0 && <div className="shield-control-wrap" data-active="true">
               <TimedRing remainingMs={game.purchasedShieldMs} durationMs={PURCHASED_POWER_UP_DURATION_MS} />

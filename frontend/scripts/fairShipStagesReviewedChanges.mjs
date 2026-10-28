@@ -1,3 +1,4 @@
+import { restoreFormationNoticeChanges } from './formationNoticeReviewedChanges.mjs';
 // Five exact controller changes against published e9ca7d2; no generic normalization.
 export const fairShipStageGameChanges = [
   {
@@ -23,6 +24,7 @@ export const fairShipStageGameChanges = [
 ];
 
 export function restoreFairShipStageGameChanges(source) {
+  source = restoreFormationNoticeChanges(source);
   for (const { before, after } of [...fairShipStageGameChanges].reverse()) {
     if (source.split(after).length !== 2) throw Error('Expected one exact fair ship-stage change');
     source = source.replace(after, before);

@@ -81,31 +81,31 @@ test('full-heart boss Shards credit once, survive resume, and never increase max
     await start(h);
     let runId = h.session.scoreRun.id;
     for (let level=1; level<=5; level++) {
-      const beforeShards=5*(level-1);
+      const beforeShards=50*(level-1);
       for (let block=1; block<=9; block++) {
         const stage=(level-1)*10+block;
         assert.equal((await h.call('rewards','/event',{runId,kind:'block',level,stage,save:snapshot({hearts:maxHearts,shards:beforeShards})})).code,200);
       }
-      const event={runId,kind:'boss',level,stage:level*10,save:snapshot({hearts:maxHearts,shards:beforeShards+5})};
-      assert.equal((await h.call('rewards','/event',{...event,save:snapshot({hearts:maxHearts+1,shards:beforeShards+5})})).code,400);
+      const event={runId,kind:'boss',level,stage:level*10,save:snapshot({hearts:maxHearts,shards:beforeShards+50})};
+      assert.equal((await h.call('rewards','/event',{...event,save:snapshot({hearts:maxHearts+1,shards:beforeShards+50})})).code,400);
       assert.equal((await h.call('rewards','/event',event)).body.awarded,true);
       assert.equal((await h.call('rewards','/event',event)).body.awarded,false);
       assert.equal(h.profile().mission.snapshot.hearts,maxHearts);
-      assert.equal(h.profile().balance,5*level);
+      assert.equal(h.profile().balance,50*level);
       const resumed=await start(h,'resume',`boss-heart-resume-${level}`);
       assert.equal(resumed.code,200);
       assert.equal(resumed.body.checkpoint.hearts,maxHearts);
       runId=resumed.body.scoreRunId;
       h.profile().mission.bossIntermission.createdAt -= 10_000;
       assert.equal((await h.call('progress','/boss-summary/continue',{runId,stage:level*10,confirm:true})).code,200);
-      assert.equal((await h.call('rewards','/event',{runId,kind:'bonus',level,stage:level*10,hits:0,save:snapshot({hearts:maxHearts,shards:5*level})})).code,200);
+      assert.equal((await h.call('rewards','/event',{runId,kind:'bonus',level,stage:level*10,hits:0,save:snapshot({hearts:maxHearts,shards:50*level})})).code,200);
     }
-    assert.equal((await h.call('progress','/checkpoint',{runId,combat:combat({stage:51}),save:snapshot({hearts:maxHearts,shards:25})})).code,200);
-    assert.equal((await h.call('progress','/checkpoint',{runId,combat:combat({stage:51,sequence:2}),save:snapshot({hearts:maxHearts+1,shards:25})})).code,400);
+    assert.equal((await h.call('progress','/checkpoint',{runId,combat:combat({stage:51}),save:snapshot({hearts:maxHearts,shards:250})})).code,200);
+    assert.equal((await h.call('progress','/checkpoint',{runId,combat:combat({stage:51,sequence:2}),save:snapshot({hearts:maxHearts+1,shards:250})})).code,400);
     assert.equal((await h.call('progress','/leave',{runId,hearts:maxHearts+1})).code,400);
     assert.equal((await h.call('progress','/leave',{runId,hearts:maxHearts-1})).code,200);
     assert.equal((await start(h,'resume','boss-heart-resume-final')).body.checkpoint.hearts,maxHearts-1);
-    assert.equal(h.profile().balance,25);
+    assert.equal(h.profile().balance,250);
   }
   assert.equal(readSnapshot(snapshot({hearts:6})).hearts,6);
   assert.equal(readSnapshot(snapshot({hearts:7})),null);

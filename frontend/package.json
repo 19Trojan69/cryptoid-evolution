@@ -36,7 +36,7 @@
     "test:hull-ready": "node --experimental-strip-types --test src/pages/hullReadiness.test.mjs src/pages/artworkSourceSharing.test.mjs src/pages/enemyHealthClearance.test.mjs src/pages/weaponAutoReload.test.mjs",
     "test:ship-overlays": "node --experimental-strip-types --test src/pages/shipOverlayGeometry.test.mjs src/pages/shipFleet.test.mjs src/pages/bossHealthLayout.test.mjs",
     "test:audio-resume": "node --experimental-strip-types --test src/pages/completionAudioResume.test.mjs src/pages/gameAudioResume.test.mjs",
-    "test:boss-intermission": "node --experimental-strip-types --test scripts/bossIntermission.test.mjs scripts/canvasIdleCleanup.test.mjs",
+    "test:boss-intermission": "node --experimental-strip-types --test scripts/bossIntermission.test.mjs scripts/canvasIdleCleanup.test.mjs src/pages/bossReward.test.mjs src/pages/combatNotice.test.mjs",
     "test:admin-players": "node --experimental-strip-types --test scripts/adminPlayers.test.mjs",
     "test:browser:white-screen": "node --experimental-strip-types scripts/whiteScreenBrowserVerification.mjs",
     "test:account-save": "node --experimental-strip-types --test src/lib/accountSaveRetry.test.mjs src/lib/accountSaveQueue.test.mjs src/pages/resourceStability.test.mjs",
