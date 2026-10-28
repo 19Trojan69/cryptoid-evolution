@@ -1,0 +1,55 @@
+name: Browser object lifetime profile
+run-name: Compare paused heap snapshots around 60 seconds of Boss 2
+
+on:
+  push:
+    branches: [codex/boss2-forensics-20261028]
+    paths: ['.github/workflows/cryptoid-browser-object-profile.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cryptoid-object-profile-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  objects:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      CRYPTOID_PROFILE_SECONDS: '60'
+      CRYPTOID_TEST_OUTPUT: ${{ github.workspace }}/verification/boss2-forensics-20261028/results/object-profile
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Prepare unchanged game and synthetic handler fixture
+        run: |
+          npm install --prefix frontend --include=optional --no-audit --no-fund
+          npm ci --prefix backend --include=optional --ignore-scripts
+          npm run build --prefix backend
+          npm run prepare:hulls --prefix frontend
+          npm install --prefix verification/boss2-forensics-20261028 --ignore-scripts --no-audit --no-fund
+          cd verification/boss2-forensics-20261028
+          npx playwright install --with-deps chromium
+      - name: Validate bounded aggregation and instrumented source
+        run: |
+          node --test verification/boss2-forensics-20261028/tools.test.mjs verification/boss2-forensics-20261028/chromiumHeap.test.mjs verification/boss2-forensics-20261028/heapObjects.test.mjs
+          node --experimental-strip-types verification/boss2-forensics-20261028/preflight.mjs
+      - name: Measure explicit paused GC and before-after objects
+        run: node verification/boss2-forensics-20261028/profileObjects.mjs
+      - name: Retain aggregates only
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-object-profile-aggregates
+          path: |
+            verification/boss2-forensics-20261028/results/object-profile/object-profile-summary.json
+            verification/boss2-forensics-20261028/results/object-profile/profile-counters.jsonl
+            verification/boss2-forensics-20261028/results/object-profile/events.jsonl
+          retention-days: 3
