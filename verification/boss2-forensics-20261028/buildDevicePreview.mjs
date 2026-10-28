@@ -12,7 +12,10 @@ const { build } = require('vite'), react = require('@vitejs/plugin-react').defau
 const directory = resolve(root, 'verification/boss2-forensics-20261028');
 const output = resolve(root, 'verification/boss2-forensics-20261028/results/device-preview/site');
 const original = readFileSync(root + '/frontend/src/pages/GamePage.tsx', 'utf8');
-assert.equal(baselineController(original), execFileSync('git', ['show', BASELINE + ':frontend/src/pages/GamePage.tsx'], { cwd: root, encoding: 'utf8' }));
+// Vercel's shallow source checkout need not contain an ancestor's tree. Keep
+// the exact whole-source pin; do not turn a missing ancestor into a weak check.
+assert.equal(createHash('sha256').update(baselineController(original)).digest('hex'),
+  '625fecc2cb959e4ed4ba690f7867d0a07b247b9a136a8ce308afecaf6dcd94fa', 'Exact released controller fingerprint');
 const git = ref => execFileSync('git', ['rev-parse', ref], { cwd: root, encoding: 'utf8' }).trim();
 const identity = { sourceCommit: process.env.VERCEL_GIT_COMMIT_SHA || git('HEAD'), sourceTree: git('HEAD^{tree}'),
   workingTreeDirty: !!execFileSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' }).trim() };
@@ -38,7 +41,7 @@ writeFileSync(output + '/device-preview-info.json', JSON.stringify({ type: 'prot
   controllerSha256: createHash('sha256').update(original).digest('hex'), normalizedControllerSha256: createHash('sha256').update(baselineController(original)).digest('hex'),
   actualPiAuthentication: false, liveBackend: false, realAccounts: false, payments: false, automaticUpload: false,
   guestOnly: true, syntheticDiagnosticCapability: true, collisionProtectionOptional: true, bossHealthFloorOptional: .4,
-  nativeGameClocks: true, automaticResume: false, reloadOpensMenu: true, explicitMenuPreparation:true,
+  nativeGameClocks: true, automaticResume: false, reloadOpensMenu: true, explicitMenuPreparation:true,initialSetupPause:true,
   coldDirectWebkitStartup:'Unresolved loop-stall before first frame; retained separately. Prepared start is a different condition.',
   sourceGameEditedByBuilder: false, buildOnlyTransforms: ['isolated menu/auth/transport', 'direct boss seed', 'optional protection/health floor', 'bounded pause observation'],
   nativeDeviceAccepted: false, whiteScreenFixed: false }, null, 2) + '\n');

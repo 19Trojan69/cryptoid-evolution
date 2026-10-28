@@ -8,6 +8,7 @@ import { fullSessionText, fullSessionTextPart, shareableFullSessionFile } from '
 import { recordApplicationBoot } from '../../frontend/src/pages/reloadDiagnostics.ts';
 import { primeGameAudio } from '../../frontend/src/pages/gameAudio.ts';
 import { requestGameFullscreen } from '../../frontend/src/pages/gameFullscreen.ts';
+import { watchMenuViewport } from '../../frontend/src/lib/menuViewport.ts';
 import './devicePreview.css';
 
 const loadGame = () => import('../../frontend/src/pages/GamePage.tsx');
@@ -120,8 +121,8 @@ function Menu() {
     <label className="device-preview-check"><input type="checkbox" checked={options.protection} onChange={event => setOptions({ ...options, protection: event.target.checked })} />Testschutz: Tod und Bossende verhindern</label>
     <p className="device-preview-note">Testschutz ist eine künstliche Hilfe für längere Messungen. Der Reaktorstart entfernt Geschütze und setzt die Bossgesundheit auf die Hälfte.</p>
     {preparation !== 'ready' && <button onClick={() => void prepareScene()} disabled={preparation === 'preparing'}>{preparation === 'preparing' ? 'Testszene wird vorbereitet …' : preparation === 'failed' ? 'Vorbereitung erneut versuchen' : 'Testszene vorbereiten'}</button>}
-    {preparation === 'ready' && <button className="device-preview-primary" onClick={start}>Boss-2-Test starten</button>}
-    <p className="device-preview-note">Bilder und Testszene werden vor dem Spielen geladen. Dieser Test prüft den bereits vorbereiteten Bosskampf.</p>
+    {preparation === 'ready' && <button className="device-preview-primary" onClick={start}>Boss-2-Test öffnen</button>}
+    <p className="device-preview-note">Bilder und Testszene werden vor dem Spielen geladen. Der Bosskampf öffnet zunächst angehalten. Tippe dort auf „Fortsetzen“, um ihn zu starten.</p>
     <p>Prüfe die Aktionen einzeln: normal spielen, schnell nach links wischen, Screenshot, App-Wechsel. Echte Pausen werden nur von dir fortgesetzt.</p>
     <h2>Nach einer Pause oder einem Abbruch</h2>
     <p>Diese Testadresse erneut öffnen. Vor dem nächsten Test den letzten Bericht vorbereiten und speichern oder teilen. Die Aufzeichnung bleibt auf diesem Gerät; es gibt keinen automatischen Upload.</p>
@@ -135,4 +136,4 @@ function Menu() {
   </section></main>;
 }
 const router = createBrowserRouter([{ path: '/game', element: <Suspense fallback={<p>Testszene wird geladen …</p>}><Game /></Suspense> }, { path: '*', element: <Menu /> }]);
-export default function DevicePreviewApp() { return <RouterProvider router={router} />; }
+export default function DevicePreviewApp() { useEffect(watchMenuViewport, []); return <RouterProvider router={router} />; }

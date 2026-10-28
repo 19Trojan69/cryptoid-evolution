@@ -27,8 +27,12 @@ try{
  await page.getByRole('button',{name:'Testszene vorbereiten',exact:true}).waitFor();
  await page.screenshot({path:output+'/menu.png'});
  await page.getByRole('button',{name:'Testszene vorbereiten',exact:true}).click();
- await page.getByRole('button',{name:'Boss-2-Test starten',exact:true}).waitFor({timeout:45000});
- await page.getByRole('button',{name:'Boss-2-Test starten',exact:true}).click();
+ await page.getByRole('button',{name:'Boss-2-Test öffnen',exact:true}).waitFor({timeout:45000});
+ await page.getByRole('button',{name:'Boss-2-Test öffnen',exact:true}).click();
+ await page.waitForFunction(()=>window.__crossDeviceTest?.inspect().status==='paused');
+ assert.equal(await page.evaluate(()=>window.__crossDeviceTest.inspect().technicalPause),false);
+ summary.initialSetupPause={expected:true,technical:false,manualResumeRequired:true};
+ await page.locator('.pause-resume-button').click();
  await page.waitForFunction(()=>window.__crossDeviceTest?.inspect().status==='playing'&&window.__crossDeviceTest.inspect().encounter==='boss-fight',{},{timeout:40000});
  const first=await page.evaluate(()=>window.__crossDeviceTest.inspect());assert.equal(first.sector,20);assert.equal(first.reactorOpen,true);assert.equal(first.ownerDiagnostics,true);
  const started=Date.now();let last,frameAt,frameChanged=Date.now(),progress=0;
@@ -74,6 +78,11 @@ try{
  if(page&&!page.isClosed())try{
   summary.failure.observed=await page.evaluate(()=>({scene:window.__crossDeviceTest?.inspect(),pauses:window.__bossLabPauseEvents?.slice(-16),
    visibleMessage:document.body.innerText.slice(-2500),fullStatus:JSON.parse(localStorage.getItem('cryptoid_owner_full_status_v1')||'null')}));
+  let timer;
+  try{summary.failure.nativeRaf=await Promise.race([
+   page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(time=>resolve({observed:true,time,now:performance.now()})))),
+   new Promise(resolve=>{timer=setTimeout(()=>resolve({observed:false,timeoutMs:2000}),2000);})
+  ]);}finally{clearTimeout(timer);}
   await page.screenshot({path:output+'/failure.png',timeout:5000});
  }catch{summary.failure.observationUnavailable=true;}
 }

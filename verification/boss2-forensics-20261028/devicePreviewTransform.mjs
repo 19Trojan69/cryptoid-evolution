@@ -9,7 +9,7 @@ export const deviceSeed = `
     const options = (window as any).__deviceBossOptions;
     const state = stateRef.current;
     state.sector = 20; state.section = 20; state.chainBlocks = 9;
-    state.phase = 'SECTOR_INTRO'; state.encounter = 'boss-intro';
+    state.phase = 'SECTOR_INTRO'; state.encounter = 'boss-intro'; state.status = 'paused';
     state.boss = createSectorBoss(20, fieldRef.current?.clientWidth || 390,
       visibleTopRef.current, fieldRef.current?.clientHeight || 700);
     if (options?.scene === 'reactor') {

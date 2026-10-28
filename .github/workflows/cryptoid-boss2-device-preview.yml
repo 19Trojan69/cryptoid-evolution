@@ -1,5 +1,5 @@
 name: Isolated Boss 2 device preview acceptance
-run-name: Verify complete hull preparation and committed report export
+run-name: Verify explicit setup pause, manual Resume and complete report recovery
 on:
   push:
     branches: [codex/boss2-device-preview-20261028]

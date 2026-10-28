@@ -25,7 +25,7 @@ test('actual seed starts the two disclosed scenes without account/save API or cl
       impactCooldownRef: impact, setGame: () => updates++ });
     layout(); layout();
     assert.equal(creations, 1); assert.equal(updates, 1); assert.equal(state.sector, 20);
-    assert.equal(state.encounter, 'boss-intro'); assert.equal(state.status, 'playing');
+    assert.equal(state.encounter, 'boss-intro'); assert.equal(state.status, 'paused');
     assert.equal(state.boss.health, scene === 'reactor' ? 50 : 100);
     assert.equal(state.boss.turrets[0].health, scene === 'reactor' ? 0 : 10);
     assert.equal(impact.current, protection ? 1e9 : 0);
