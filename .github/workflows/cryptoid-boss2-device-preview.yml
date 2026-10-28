@@ -1,5 +1,5 @@
 name: Isolated Boss 2 device preview acceptance
-run-name: Inspect WebKit startup state in the isolated Boss 2 preview
+run-name: Verify explicit menu preparation and report recovery in both browsers
 on:
   push:
     branches: [codex/boss2-device-preview-20261028]
@@ -14,6 +14,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - engine: chromium
+            seconds: '8'
           - engine: webkit
             seconds: '8'
     env:
