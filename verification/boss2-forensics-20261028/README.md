@@ -131,11 +131,60 @@ Zugriff auf ein echtes Gerätelabor; es wurde kein kostenpflichtiger Dienst gebu
 - Instrumentierter Controller: TypeScript und bestehende Handler-Startprüfung
   für Abschnitt 1 und Boss 2 erfolgreich; unveränderter GamePage bestätigt.
 - Linux-Sampler-, Szenenabsicherungs-/Kontrollprüfungen und Android-Paketvalidierung
-  erfolgreich; aktuelle genaue Testzahl in den Ausführungsbelegen.
+  erfolgreich: fünf Werkzeugtests, zwei Heap-Samplertests und ein Android-
+  Paketvalidierungstest.
 - Geänderte TypeScript-Module lint-fehlerfrei.
 - Lokaler Browserlauf: Server gestartet, anschließend fehlende Chromium-Binärdatei;
   null ausgeführte Browserszenen. Das ist kein Testpass.
 - Geräte-Preflight: `adb-not-installed`, kein physischer Test ausgeführt.
+
+## Ausgeführte externe Prüfungen
+
+Die bereinigten Belege stehen in [completed-results.json](completed-results.json).
+Sie enthalten getestete Commits, Job-/Artefakt-IDs, Prüfsummen und Messbereiche;
+keine privaten Besitzerberichte. Die heruntergeladenen drei Chromium-Messarchive
+und die beiden gesonderten Speicherproben wurden per SHA-256 und ZIP-Integrität
+geprüft. Die ursprünglichen WebKit-Szenenergebnisse wurden aus den Jobprotokollen
+gelesen; ihre unvollständigen Speicherwerte sind ausgeschlossen.
+
+| Ausführung | Tatsächlich geprüft | Ergebnis |
+| --- | --- | --- |
+| [Szenenmatrix 40733335418](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40733335418), Commit `69496765` | Fünf Chromium-/WebKit-Varianten, 25 Fenster à 20 s, 75 gesteuerte Bewegungen, fünf Browseraufnahmen | Alle Szenenbedingungen bestanden; keine JS-/Konsolen-/API-Fehler oder unerklärter Dokumentwechsel. Beide warmen Läufe beobachteten Abschnitte 1–20. |
+| [WebKit-Speicherprobe 40736374748](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40736374748), Commit `f3c5ca52` | Warmer Lauf 1–20, danach fünf Fenster à 10 s und neun synthetische Bewegungen | Bestanden; 525/525 Proben mit `WPEWebProcess`, zusätzlich Netzwerk-/Hauptprozess. |
+| [Chromium-Heapvergleich 40737185866](https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40737185866), Commit `0203e8a6` | Direktstart, fünf Fenster à 20 s, 15 CDP-Bewegungen; optionale CDP-Heapmessung von außerhalb der Seite | Bestanden; 106 Heap- und 93 Prozessproben, keine Samplerfehler. |
+
+Linux-PSS-Spitzen der akzeptierten Chromium-Matrix: direkt mit Eingabebelegen
+1329,52 MiB, direkt ohne diese Belege 1331,98 MiB, nach warmem Vorlauf 1545,67 MiB.
+Der Anstieg liegt überwiegend im Renderer und beginnt bereits im Basisfenster
+vor den gesteuerten Bewegungen. Diese getrennten Läufe belegen keine exakte
+Aufwandsdifferenz. Sie sprechen gegen die Annahme, allein die neuen Eingabebelege
+erklärten den dort gemessenen großen Zuwachs.
+
+Im gesonderten Chromium-Vergleich steigt die Browser-PSS bis 1323,09 MiB.
+Der benutzte gewöhnliche JavaScript-Heap erreicht maximal 51,17 MiB; der
+zusätzliche CDP-Zähler `embedderHeapUsedSize` steigt von 6,12 bis maximal
+407,81 MiB. Damit erklärt der gewöhnliche JavaScript-Heap allein die hohen
+Prozesswerte nicht. Diese unterschiedlich abgegrenzten Zähler dürfen nicht als
+getrennte Summanden addiert oder zur exakten Restberechnung subtrahiert werden.
+Der Sammler läuft optional einmal pro Sekunde im Node-Testläufer, ohne neuen
+Seitentimer, erzwungenen GC oder Heap-Snapshot. Aktivierung nur für Chromium:
+`CRYPTOID_HEAP_PROBE=1 node run.mjs`.
+
+Die korrigierte WebKit-Probe misst 1085,91 MiB Gesamt-PSS zu Beginn der
+aufgezeichneten Szene, 1448,63 MiB am Ende und maximal 1507,87 MiB. Die Spitze
+liegt bereits im Vorlauf vor den Gestenfenstern. Der Content-Prozess erreicht
+1363,12 MiB. Es handelt sich um Linux-WPE-WebKit mit iPhone-Profil, nicht den
+Speicherverbrauch eines echten iPhones.
+
+**Aussagegrenze:** Eine große Speicherspur ist im Labor belegt. Weder die genaue
+wachsende Ressource noch ihre Verbindung zum gelegentlichen Pi-Browser-Abbruch
+ist damit bewiesen. Vite-Entwicklungsserver, Linux-/Softwarerendering, synthetischer
+Spielstand, Kollisionsschutz und der Boss-Schadensboden unterscheiden sich vom
+normalen Spiel auf einem Gerät. Kein White Screen wurde reproduziert oder als
+behoben bestätigt. System-Screenshot/Vorschau und native Randnavigation wurden
+nicht getestet. Bestandene Fenster liefern keine Fehlerquote für seltene Abbrüche.
+
+## Ausgeschlossene Vorversuche und Veröffentlichungsstand
 
 Der erste externe Lauf 40731123040 ist als fehlgeschlagener Prüfaufbau erhalten:
 Der Boss wurde während der geplanten Messfenster besiegt. Im künstlichen
@@ -144,16 +193,20 @@ zählen weder als bestandene Messfenster noch als reproduzierter White Screen.
 Der ursprüngliche Diagnose-Aus-Kontrolllauf änderte auch die Ownerrolle und
 Waffenfreigabe; er wird nicht als isolierter Messaufwandsvergleich verwendet.
 Die oben beschriebene Korrektur begrenzt den Kontrollunterschied auf Eingabebelege.
-Folgeläufe warten auf den laufenden Vorversuch, damit seine Belege erhalten bleiben.
-Neue externe Ergebnisse werden erst nach tatsächlicher Ausführung ergänzt.
-Beim ersten WebKit-Vorlauf enthielt die Speicherprobe nur den Browserhauptprozess.
-Seine Werte sind kein Content-/Gesamtspeichernachweis. Die Samplerkorrektur erhält
+Beim ursprünglichen WebKit-Vorlauf enthielt die Speicherprobe nur den
+Browserhauptprozess. Seine Werte sind kein Content-/Gesamtspeichernachweis.
+Auch der gesonderte Lauf 40734594626 bestand seine Szenen, scheiterte aber korrekt
+an der Content-Messabdeckung. Er zählt nicht als bestandene Speicherprobe oder
+App-Absturz. Die Samplerkorrektur erkennt die tatsächlichen Namen `WPEWebProcess`
+und `WPENetworkProcess`, erhält
 Abstammungsketten auch bei nicht lesbarer Wrapper-Befehlszeile, behandelt gekürzte
 Prozessnamen, speichert keine Startargumente und weist unbekannte Nachfahren aus.
-Ein künftiger Lauf darf eine Elternprozessprobe allein nicht mehr als vollständige
-Content-Messung bestehen lassen. Szenenkontext wird den Speicherproben beigefügt.
-Ein gesonderter kurzer WebKit-Lauf prüft diese Messgrenze; die laufenden langen
-Szenenversuche werden nicht erneut gestartet. Artefakte schließen Vite-Caches aus.
+Eine Elternprozessprobe allein kann die Content-Messprüfung nicht mehr bestehen.
+Szenenkontext wird den Speicherproben beigefügt. Die korrigierte warme Probe oben
+bestätigt die Abdeckung; der fehlgeschlagene Aufbau bleibt nachvollziehbar.
+Artefakte schließen Vite-Caches aus. Die gesonderten Workflow-Dateien sind
+`.github/workflows/cryptoid-webkit-memory-probe.yml` und
+`.github/workflows/cryptoid-chromium-heap-probe.yml`.
 PR194/195 bleiben getrennt. Dieser Prüfzweig schaltet automatische Vercel-
 Deployments ab; Main, Testnet-/Produktionsadressen und reale Spielstände bleiben
 unverändert. Weder ein Merge noch eine neue Veröffentlichung wird vorgenommen.
