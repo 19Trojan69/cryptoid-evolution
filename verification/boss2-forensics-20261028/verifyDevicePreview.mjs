@@ -48,7 +48,10 @@ try{
   if(Date.now()-progress>=60000){progress=Date.now();console.log('CRYPTOID_DEVICE_PROGRESS '+JSON.stringify({engine,seconds:Math.round((Date.now()-started)/1000)}));}
   await page.waitForTimeout(1000);
  }
- assert.ok(last.coreVolley>first.coreVolley,'Native reactor volleys progress');summary.observedActiveSeconds=(Date.now()-started)/1000;
+ const activeEnd=await page.evaluate(()=>window.__crossDeviceTest.inspect());
+ assert.equal(activeEnd.status,'playing');assert.equal(activeEnd.technicalPause,false);
+ assert.ok(activeEnd.coreVolley>first.coreVolley,'Native reactor volleys progress');
+ summary.volleyProgress={first:first.coreVolley,last:activeEnd.coreVolley};summary.observedActiveSeconds=(Date.now()-started)/1000;
  await page.getByRole('button',{name:/^(Pause|Pausieren)$/}).click();
  await page.waitForFunction(()=>window.__crossDeviceTest.inspect().status==='paused');
  const pause=await page.evaluate(()=>window.__bossLabPauseEvents.at(-1));assert.equal(pause.pauseReason,'manual-pause');summary.pause=pause;

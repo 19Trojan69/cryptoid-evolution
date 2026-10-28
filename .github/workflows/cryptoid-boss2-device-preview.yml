@@ -1,5 +1,5 @@
 name: Isolated Boss 2 device preview acceptance
-run-name: Verify explicit setup pause, manual Resume and complete report recovery
+run-name: Observe 30 seconds after manual Resume and verify committed report recovery
 on:
   push:
     branches: [codex/boss2-device-preview-20261028]
@@ -15,9 +15,9 @@ jobs:
       matrix:
         include:
           - engine: chromium
-            seconds: '8'
+            seconds: '30'
           - engine: webkit
-            seconds: '8'
+            seconds: '30'
     env:
       VERCEL_ENV: preview
       CRYPTOID_DEVICE_ENGINE: ${{ matrix.engine }}
