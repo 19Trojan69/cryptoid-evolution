@@ -82,7 +82,7 @@ import { usePreparedGameHulls } from './usePreparedGameHulls';
 import { sessionDiagnostic } from '../lib/sessionDiagnosticEvents';
 import { contactWithBoss } from "./bossContact";
 import { openingKillPickup } from "./pickupOrigin";
-import { projectileGuardForStage, projectileImpact, stageWeaponLevel, selectedShipStage, type ShipStage } from "./shipEvolution";
+import { projectileGuardForStage, projectileImpact, powerUpPickupRadius, stageWeaponLevel, selectedShipStage, type ShipStage } from "./shipEvolution";
 import { GameAudio, hasPrimedGameAudio, takePrimedGameAudio } from "./gameAudio";
 import { EFFECTS_VOLUME_KEY, MUSIC_STORAGE_KEY, MUSIC_VOLUME_KEY, readEffectsVolume, readMusicVolume, resetAudioVolumeDefaults } from "./musicPreferences";
 import { MusicPlayer, takeHandoffGameMusic } from "./musicPlayback";
@@ -1995,10 +1995,6 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
                 state.projectileGuard = impact.guard;
                 heartsLost += impact.damage;
                 if (impact.damage > 0) playerImpact = { x: moved.x, y: moved.y };
-                if (impact.blockedByHull) {
-                  state.effects.push({ id: nextIdRef.current++, x: state.player.x * width, y: state.player.y * height, kind: "shield", startedAt: time, target: "player" });
-                  soundRef.current?.play("shield");
-                }
               }
               impactCooldownRef.current = IMPACT_COOLDOWN_MS;
             }
@@ -2023,8 +2019,8 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
             state.playerHullFires = addPersistentHullFire(state.playerHullFires, state.playerHit, 4);
             soundRef.current?.play(destroyed ? "playerDestroy" : "collision");
             gameHaptics.explosion();
-            // The stage pool belongs to this mission; losing/healing a heart never refills it.
-            if (destroyed) state.projectileGuard = 0;
+            // Retire legacy hull protection; only actual shields can absorb hits.
+            state.projectileGuard = 0;
             state.weaponCap = Math.max(1, state.weaponCap - 1);
             // Paid weapon time is protected from life loss. Only collected weapon
             // tiers are reduced; an active paid tier remains available until its timer expires.
@@ -2052,7 +2048,7 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
           state.rocks=state.rocks.filter(r=>Math.hypot(r.x-state.player.x*width,r.y-state.player.y*height)>r.radius+playerDiameterRef.current*.6 && !state.powerUps.some(p=>Math.hypot(p.x-r.x,p.y-r.y)<r.radius+35));
         }
         state.powerUps = state.powerUps.filter(pickup => {
-          if (Math.hypot(pickup.x - state.player.x * width, pickup.y - state.player.y * height) > 34) return true;
+          if (Math.hypot(pickup.x - state.player.x * width, pickup.y - state.player.y * height) > powerUpPickupRadius(shipStageRef.current)) return true;
           Object.assign(state, activateCollectedPower(state, pickup.type));
           if (pickup.type === "overdrive") state.overdriveTotalMs = POWER_UP_DURATION_MS;
           if (pickup.type === "rapid") state.rapidFireTotalMs = POWER_UP_DURATION_MS;
@@ -2779,7 +2775,6 @@ const GamePage = ({ ownerDiagnostics = false, authenticated = false }: { ownerDi
               </div>
               {game.weaponSource !== "pickup" && game.pickupWeaponMs > 0 && <div className="weapon-slot weapon-slot-reserve" data-source="pickup"><TimedRing remainingMs={game.pickupWeaponMs} durationMs={PICKUP_WEAPON_DURATION_MS} /><button type="button" className="edge-action edge-action-weapon weapon-cycle" disabled={game.status !== "playing"} onClick={openWeaponSelection} aria-label={`${t("Select")}: ${weaponNames[stageWeaponLevel(shipStage, game.pickupWeaponLevel)]}`}><span className="weapon-cycle-glyph" aria-hidden="true">{weaponGlyphs[stageWeaponLevel(shipStage, game.pickupWeaponLevel)]}</span><small>{weaponNames[stageWeaponLevel(shipStage, game.pickupWeaponLevel)]}</small></button></div>}
               {game.weaponSource !== "paid" && game.paidWeaponMs > 0 && <div className="weapon-slot weapon-slot-reserve" data-source="paid"><TimedRing remainingMs={game.paidWeaponMs} durationMs={PURCHASED_WEAPON_DURATION_MS} /><button type="button" className="edge-action edge-action-weapon weapon-cycle" disabled={game.status !== "playing"} onClick={openWeaponSelection} aria-label={`${t("Select")}: ${weaponNames[stageWeaponLevel(shipStage, game.paidWeaponLevel)]}`}><span className="weapon-cycle-glyph" aria-hidden="true">{weaponGlyphs[stageWeaponLevel(shipStage, game.paidWeaponLevel)]}</span><small>{weaponNames[stageWeaponLevel(shipStage, game.paidWeaponLevel)]}</small></button></div>}
-              {shipStage > 1 && <span className="weapon-hull-hits" aria-label={`${t("Projectile hits left")}: ${game.projectileGuard}`}>✦ {game.projectileGuard}/{projectileGuardForStage(shipStage)}</span>}
             </div>
             {game.purchasedShieldMs > 0 && <div className="shield-control-wrap" data-active="true">
               <TimedRing remainingMs={game.purchasedShieldMs} durationMs={PURCHASED_POWER_UP_DURATION_MS} />

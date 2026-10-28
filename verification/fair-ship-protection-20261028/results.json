@@ -1,0 +1,94 @@
+{
+  "baselineCommit": "e9ca7d2f2c3afc00d42508424a3ce12fb7c9b207",
+  "baselineTree": "08c2bbd094f0ef3584e74c19718267ddfc6ccd0a",
+  "controllerSha256": "10130d98a4cc4c60ec48d885515e95ec01b9da9db98c5c7b5979f8c529327fc9",
+  "reviewedControllerHunks": 5,
+  "frontend": {
+    "tests": 463,
+    "failures": 0,
+    "typecheck": true,
+    "localization": true,
+    "vite": true
+  },
+  "backend": {
+    "tests": 142,
+    "failures": 0,
+    "typecheck": true
+  },
+  "uiConfigurations": 57,
+  "locales": 19,
+  "stages": 3,
+  "lintComparison": [
+    {
+      "file": "src/pages/GamePage.tsx",
+      "before": {
+        "errors": 0,
+        "warnings": 4
+      },
+      "after": {
+        "errors": 0,
+        "warnings": 4
+      },
+      "addedMessageGroups": []
+    },
+    {
+      "file": "src/pages/collectionData.ts",
+      "before": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "after": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "addedMessageGroups": []
+    },
+    {
+      "file": "src/pages/shipLore.ts",
+      "before": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "after": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "addedMessageGroups": []
+    }
+  ],
+  "hullManifest": {
+    "previousRevision": "91a72bc0c36be9407915",
+    "candidateRevision": "ff8b0a21000dd2a992b0",
+    "unchangedExceptRevision": true,
+    "variants": 1740
+  },
+  "sameHullFirepowerPercent": [
+    100,
+    115,
+    130
+  ],
+  "normalPowerUpPickupRadius": [
+    34,
+    37.4,
+    40.8
+  ],
+  "stageProjectileProtection": [
+    0,
+    0,
+    0
+  ],
+  "pricesChanged": false,
+  "ownershipChanged": false,
+  "realPurchases": false,
+  "realAccountsModified": false,
+  "physicalDevice": false,
+  "nativeBrowser": false,
+  "completeCampaign": false,
+  "whiteScreenFixEstablished": false,
+  "deploymentPerformed": false,
+  "fixtureExclusions": [
+    "Handler fragments stub unchanged audio, performance probes and weapon-selection callback.",
+    "Server-rendered ship panel stubs images and payment display.",
+    "These checks do not measure physical smartphone performance or native/GPU memory."
+  ]
+}

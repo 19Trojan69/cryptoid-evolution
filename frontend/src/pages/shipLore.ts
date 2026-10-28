@@ -34,7 +34,7 @@ export function playerShipStory(id: string, stage: ShipStage, locale: boolean | 
  const item = shipStories[id]; if (!item) return [];
  const language = de ? 0 : 1;
  const purpose = stage === 2 ? item.advanced[language] : item.elite[language];
- const upgrade = translate(resolved, stage === 2 ? "Advanced: permanent twin fire with 15% more total damage than Standard, plus one enemy projectile hit of protection per mission." : "Elite: permanent twin fire with 30% more total damage than Standard, plus two enemy projectile hits of protection per mission. Requires Advanced.");
+ const upgrade = translate(resolved, stage === 2 ? "Advanced: permanent twin fire with 15% more total damage than Standard and a 10% larger pickup radius for normal power-ups." : "Elite: permanent twin fire with 30% more total damage than Standard and a 20% larger pickup radius for normal power-ups. Requires Advanced.");
  const paragraphs = stage === 1
    ? [de ? item.de : item.en, shipCaptureLore[id][language]]
    : [purpose, upgrade, sharedHullNote(de)];

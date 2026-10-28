@@ -45,7 +45,7 @@ const topics = [
       "Boss hearts restore one lost heart up to your armor limit. At full hearts, collecting one grants 5 Shards instead.",
       "Advanced and Elite projectile protection does not increase your maximum hearts.",
       "Avoid enemy ships and projectiles. An active shield absorbs an impact; otherwise a collision or an unguarded projectile can cost a heart.",
-      "Hull protection is a limited pool for the whole mission. Losing or recovering hearts does not refill it. Active shields protect separately; ship collisions still cost one heart without a shield.",
+      "Ship stages do not absorb hits. Active shields protect separately; armor determines your maximum hearts. The larger pickup radius applies only to normal power-ups, not boss hearts or bonus targets.",
       "Enemy hulls have different strengths. Even the first boss needs sustained fire; bosses attack faster as their hull weakens.",
       "During the reactor weapon phase, small escorts return in waves. The pauses shorten as levels rise; from level 50, the next wave enters as soon as the previous one is cleared.",
       "After all turrets explode, a concealed central weapon opens. Attack the now vulnerable hull and dodge its pulses.",

@@ -1,4 +1,5 @@
 import test from 'node:test';
+import { languages, translate } from '../i18n.ts';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
@@ -81,6 +82,19 @@ test('expanded collection still requires an acquired hull and its actually bough
  assert.equal(playerCardUnlocked(skin.id,skin.sprite,3,[skin.id],['ship_20_stage_2']),false);
  assert.equal(bossCardAvailable(50,true),true);assert.equal(bossCardAvailable(50),false);assert.equal(bossCardAvailable(51,true),false);
  assert.equal(shipCardAvailable(19,3,true),true);assert.equal(shipCardAvailable(20,3,true),false);
+});
+
+test('the actual ship panel describes the selected pickup benefit in every selectable language', () => {
+ for (const locale of Object.keys(languages)) for (const stage of [1,2,3]) {
+  const tree=Panel({...defaults(),focusStage:stage,locale,adminPreview:true,t:source=>translate(locale,source)});
+  const benefit=nodes(tree).find(node=>node.props?.className==='ship-version-benefits');
+  assert.ok(benefit);
+  assert.equal(benefit.props.children.length,2);
+  const html=renderToStaticMarkup(benefit);
+  const percent=new Intl.NumberFormat(locale,{style:'percent',maximumFractionDigits:0}).format([0,.1,.2][stage-1]);
+  assert.ok(html.includes(translate(locale,'Power-up pickup radius')),locale+':'+stage);
+  assert.ok(html.includes('+'+percent),locale+':'+stage);
+ }
 });
 
 test('three exact controller permission arguments restore the complete released controller',()=>{

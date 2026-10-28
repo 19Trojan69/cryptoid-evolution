@@ -1,3 +1,35 @@
+# Fair ship stages without invisible hit protection, 28 October 2026
+
+The owner asks for fairer Elite/Advanced value and continued implementation.
+Prepare from released e9ca7d2/PR196. Retire all invisible stage projectile blocks,
+including nonzero legacy snapshot values on loading and impact. Keep the optional
+snapshot field/schema readable; current runs use zero. Real collected/purchased
+shields, their existing activation/visibility and cooldowns, armor hearts and
+collision rules remain separate and unchanged. Keep original permanent twin
+geometry and same-hull 100/115/130 total firepower.
+Replace stage protection with 0/10/20percent extra collection radius only for
+normal power-ups (34/37.4/40.8 CSS pixels). Boss-heart/Shards pickup and bonus
+targets do not use this helper. Use the verified selected stage; no attraction,
+free drop, inventory grant, new timer/animation/resource or price/ownership change.
+Remove the obsolete protection badge and false hull-shield flash. Shop/API,
+guide, collection and lore describe the same new benefits in all19 languages.
+Five exact GamePage hunks restore complete public e9ca7d2 before the existing
+strict fingerprint chain; never broaden normalization. Preserve original art,
+audio, all authentic pauses/manual Resume, confirmed manual Continue and owner-
+only diagnostics. This balance work does not establish a White Screen fix.
+Keep codex/fair-ship-protection-20261028 automatic deployment disabled while
+preparing the reviewable change. Separate diagnostic drafts194/195 remain separate.
+No real account/payment mutation, reset, secret/protection or unrelated PR change.
+Validation:463 frontend release cases/locales/types/Vite and142 backend cases/types
+pass. Real controller fragments cover damage, shields, legacy fields and pickup
+boundaries;57 server-rendered ship configurations cover19 languages/three stages.
+Small changed modules lint clean; under current installed tools the pinned and
+candidate controllers both have zero errors/four warnings. No project-wide lint,
+native-device, campaign, temperature or White Screen acceptance is claimed.
+The prebuild manifest revision changes with shipEvolution.ts; its1740 encoded
+byte counts and original artwork stay identical. See docs/fair-ship-protection-
+20261028/README.md and matching verification results for scope and exclusions.
+
 # Numbered boss HUD, 27 October 2026
 
 The owner explicitly requests Boss 1, Boss 2 and subsequent boss numbers in the
