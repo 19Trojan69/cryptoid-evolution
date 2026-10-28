@@ -19,6 +19,18 @@ export const deviceSeed = `
     if (options?.protection) impactCooldownRef.current = 1e9;
     setGame({ ...state });
   }, []);
+  useEffect(() => {
+    if (game.sector !== 20 || !game.encounter.startsWith('boss')) return;
+    const release = (window as any).__deviceWarmRelease;
+    if (typeof release !== 'function') return;
+    // Existing hull-plan effects acquire their pins in this same passive pass.
+    // Retire the menu lease after that pass, without a game timer or RAF.
+    void Promise.resolve().then(() => {
+      if ((window as any).__deviceWarmRelease === release) delete (window as any).__deviceWarmRelease;
+      (window as any).__deviceWarmHandoff = false;
+      release();
+    });
+  }, [game.sector, game.encounter]);
 `;
 
 export function deviceController(source) {

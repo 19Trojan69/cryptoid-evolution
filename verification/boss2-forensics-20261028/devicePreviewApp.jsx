@@ -10,7 +10,8 @@ import { primeGameAudio } from '../../frontend/src/pages/gameAudio.ts';
 import { requestGameFullscreen } from '../../frontend/src/pages/gameFullscreen.ts';
 import './devicePreview.css';
 
-const Game = lazy(() => import('../../frontend/src/pages/GamePage.tsx'));
+const loadGame = () => import('../../frontend/src/pages/GamePage.tsx');
+const Game = lazy(loadGame);
 // Every new document opens the report/menu, including after a hard WebView exit.
 // A user click is required to mount another scene. Never auto-resume old combat.
 if (location.pathname !== '/') history.replaceState(null, '', '/');
@@ -20,7 +21,13 @@ function Menu() {
   const navigate = useNavigate();
   const [options, setOptions] = useState(browserDeviceOptions);
   const downloadUrl = useRef(null);
+  const warmLease = useRef(null), mounted = useRef(true);
+  const [preparation, setPreparation] = useState('cold');
   useEffect(() => () => { if (downloadUrl.current) URL.revokeObjectURL(downloadUrl.current); }, []);
+  useEffect(() => { mounted.current = true; return () => {
+    mounted.current = false;
+    if (!window.__deviceWarmHandoff) { warmLease.current?.release(); warmLease.current = null; }
+  }; }, []);
   const [sessions, setSessions] = useState([]), [prepared, setPrepared] = useState(null);
   const [message, setMessage] = useState('Lokale Diagnose wird gelesen …');
   const [text, setText] = useState('');
@@ -36,7 +43,20 @@ function Menu() {
     }).catch(() => { if (active) setMessage('Lokaler Speicher nicht verfügbar. Ein Bericht kann nach einem Abbruch fehlen.'); });
     return () => { active = false; };
   }, []);
+  const prepareScene = async () => {
+    if (preparation === 'preparing' || preparation === 'ready') return;
+    setPreparation('preparing');
+    try {
+      const [, warm] = await Promise.all([loadGame(), import('./devicePreviewWarmup.mjs')]);
+      const lease = await warm.warmDeviceScene();
+      if (!mounted.current) { lease.release(); return; }
+      warmLease.current = lease;
+      window.__deviceWarmRelease = () => { warmLease.current?.release(); warmLease.current = null; };
+      setPreparation('ready');
+    } catch { if (mounted.current) setPreparation('failed'); }
+  };
   const start = () => {
+    if (preparation !== 'ready') return;
     try {
       sessionStorage.setItem(DEVICE_OPTIONS_KEY, JSON.stringify(options));
       localStorage.setItem('cryptoid_language', 'de');
@@ -47,6 +67,7 @@ function Menu() {
     window.__bossLabHold = options.protection;
     window.__bossLabDirect = false;
     window.__bossLabOpened = false;
+    window.__deviceWarmHandoff = true;
     window.__bossLabPauseEvents?.splice(0);
     setPrepared(null); primeGameAudio(); requestGameFullscreen(); navigate('/game');
   };
@@ -98,7 +119,9 @@ function Menu() {
     <label className="device-preview-check"><input type="checkbox" checked={options.diagnostics} onChange={event => setOptions({ ...options, diagnostics: event.target.checked })} />Diagnose lokal aufzeichnen</label>
     <label className="device-preview-check"><input type="checkbox" checked={options.protection} onChange={event => setOptions({ ...options, protection: event.target.checked })} />Testschutz: Tod und Bossende verhindern</label>
     <p className="device-preview-note">Testschutz ist eine künstliche Hilfe für längere Messungen. Der Reaktorstart entfernt Geschütze und setzt die Bossgesundheit auf die Hälfte.</p>
-    <button className="device-preview-primary" onClick={start}>Boss-2-Test starten</button>
+    {preparation !== 'ready' && <button onClick={() => void prepareScene()} disabled={preparation === 'preparing'}>{preparation === 'preparing' ? 'Testszene wird vorbereitet …' : preparation === 'failed' ? 'Vorbereitung erneut versuchen' : 'Testszene vorbereiten'}</button>}
+    {preparation === 'ready' && <button className="device-preview-primary" onClick={start}>Boss-2-Test starten</button>}
+    <p className="device-preview-note">Bilder und Testszene werden vor dem Spielen geladen. Dieser Test prüft den bereits vorbereiteten Bosskampf.</p>
     <p>Prüfe die Aktionen einzeln: normal spielen, schnell nach links wischen, Screenshot, App-Wechsel. Echte Pausen werden nur von dir fortgesetzt.</p>
     <h2>Nach einer Pause oder einem Abbruch</h2>
     <p>Diese Testadresse erneut öffnen. Vor dem nächsten Test den letzten Bericht vorbereiten und speichern oder teilen. Die Aufzeichnung bleibt auf diesem Gerät; es gibt keinen automatischen Upload.</p>

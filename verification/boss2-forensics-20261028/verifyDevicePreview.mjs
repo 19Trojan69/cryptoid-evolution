@@ -24,8 +24,10 @@ try{
  page=await context.newPage();page.setDefaultTimeout(10000);
  page.on('pageerror',()=>{fatal||='javascript-error';});page.on('crash',()=>{fatal||='renderer-crash';});
  await page.goto(server.origin,{waitUntil:'domcontentloaded'});await page.bringToFront();
- await page.getByRole('button',{name:'Boss-2-Test starten',exact:true}).waitFor();
+ await page.getByRole('button',{name:'Testszene vorbereiten',exact:true}).waitFor();
  await page.screenshot({path:output+'/menu.png'});
+ await page.getByRole('button',{name:'Testszene vorbereiten',exact:true}).click();
+ await page.getByRole('button',{name:'Boss-2-Test starten',exact:true}).waitFor({timeout:45000});
  await page.getByRole('button',{name:'Boss-2-Test starten',exact:true}).click();
  await page.waitForFunction(()=>window.__crossDeviceTest?.inspect().status==='playing'&&window.__crossDeviceTest.inspect().encounter==='boss-fight',{},{timeout:40000});
  const first=await page.evaluate(()=>window.__crossDeviceTest.inspect());assert.equal(first.sector,20);assert.equal(first.reactorOpen,true);assert.equal(first.ownerDiagnostics,true);
@@ -50,7 +52,7 @@ try{
  await page.screenshot({path:output+'/paused.png'});
  // Deliberately reload while paused to verify local report recovery, not a simulated native kill.
  await page.reload({waitUntil:'domcontentloaded'});
- await page.getByRole('button',{name:'Boss-2-Test starten',exact:true}).waitFor();
+ await page.getByRole('button',{name:'Testszene vorbereiten',exact:true}).waitFor();
  assert.equal(new URL(page.url()).pathname,'/');assert.equal(await page.locator('.game-shell').count(),0);
  await page.getByRole('button',{name:/^Bericht vorbereiten ·/}).first().click({timeout:10000});
  await page.getByRole('button',{name:'Bericht speichern',exact:true}).waitFor();
