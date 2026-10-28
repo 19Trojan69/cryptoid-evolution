@@ -74,8 +74,9 @@ jobs:
         with:
           name: boss2-${{ matrix.profile }}-${{ matrix.mode }}-${{ matrix.diagnostics }}
           path: |
-            verification/boss2-forensics-20261028/results/**/*.json
-            verification/boss2-forensics-20261028/results/**/*.jsonl
-            verification/boss2-forensics-20261028/results/**/*.png
+            verification/boss2-forensics-20261028/results/*/summary.json
+            verification/boss2-forensics-20261028/results/*/events.jsonl
+            verification/boss2-forensics-20261028/results/*/process-memory.jsonl
+            verification/boss2-forensics-20261028/results/*/*.png
           if-no-files-found: warn
           retention-days: 3

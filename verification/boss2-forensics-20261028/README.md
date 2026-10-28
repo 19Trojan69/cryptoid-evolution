@@ -146,6 +146,14 @@ Waffenfreigabe; er wird nicht als isolierter Messaufwandsvergleich verwendet.
 Die oben beschriebene Korrektur begrenzt den Kontrollunterschied auf Eingabebelege.
 Folgeläufe warten auf den laufenden Vorversuch, damit seine Belege erhalten bleiben.
 Neue externe Ergebnisse werden erst nach tatsächlicher Ausführung ergänzt.
+Beim ersten WebKit-Vorlauf enthielt die Speicherprobe nur den Browserhauptprozess.
+Seine Werte sind kein Content-/Gesamtspeichernachweis. Die Samplerkorrektur erhält
+Abstammungsketten auch bei nicht lesbarer Wrapper-Befehlszeile, behandelt gekürzte
+Prozessnamen, speichert keine Startargumente und weist unbekannte Nachfahren aus.
+Ein künftiger Lauf darf eine Elternprozessprobe allein nicht mehr als vollständige
+Content-Messung bestehen lassen. Szenenkontext wird den Speicherproben beigefügt.
+Ein gesonderter kurzer WebKit-Lauf prüft diese Messgrenze; die laufenden langen
+Szenenversuche werden nicht erneut gestartet. Artefakte schließen Vite-Caches aus.
 PR194/195 bleiben getrennt. Dieser Prüfzweig schaltet automatische Vercel-
 Deployments ab; Main, Testnet-/Produktionsadressen und reale Spielstände bleiben
 unverändert. Weder ein Merge noch eine neue Veröffentlichung wird vorgenommen.

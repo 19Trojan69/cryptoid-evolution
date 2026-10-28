@@ -26,11 +26,19 @@ test('only descendants of the test runner are attributed; unrelated browsers are
   try {
     add(100, 1, '/bin/node', null); add(101, 100, '/bin/chrome\0--headless', 6);
     add(102, 101, '/bin/chrome\0--type=renderer', 7); add(103, 1, '/bin/chrome', 99);
+    add(104, 100, '/bin/chrome --type=gpu-process --private-flag=value', 2);
     const result = sampleBrowserMemory(100, proc);
-    assert.deepEqual(result.processes.map(p => p.pid), [101, 102]);
-    assert.equal(result.summedRssKiB, 20); assert.equal(result.summedPssKiB, 13);
+    assert.deepEqual(result.processes.map(p => p.pid), [101, 102, 104]);
+    assert.equal(result.processes.at(-1).executable, 'chrome', 'Rewritten argv0 cannot leak launch arguments');
+    assert.equal(result.summedRssKiB, 30); assert.equal(result.summedPssKiB, 15);
     rmSync(`${proc}/102/smaps_rollup`); assert.equal(sampleBrowserMemory(100, proc).summedPssKiB, null);
     assert.equal(sampleBrowserMemory(999, proc).available, false);
+    add(105, 101, '/bin/bwrap', null);
+    rmSync(`${proc}/105/cmdline`);
+    add(106, 105, '/bin/WebKitWebProcess', 4);
+    const bridged = sampleBrowserMemory(100, proc);
+    assert.ok(bridged.processes.some(p => p.pid === 106), 'Unreadable intermediary argv cannot sever renderer ancestry');
+    assert.equal(bridged.contentProcessObserved, true);
   } finally { rmSync(proc, { recursive: true }); }
 });
 

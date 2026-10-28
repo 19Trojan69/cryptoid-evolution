@@ -53,13 +53,16 @@ async function inspect() {
   return state;
 }
 let lastMemory = 0;
-function memory(stage) {
+function memory(stage, state) {
   if (Date.now() - lastMemory < 1000) return;
   lastMemory = Date.now(); const sample = sampleBrowserMemory();
-  result.nativeMemoryAvailable ||= sample.available;
+  result.nativeMemoryAvailable ||= sample.contentProcessObserved === true;
+  if (!sample.contentProcessObserved) result.partialMemorySamples = (result.partialMemorySamples || 0) + 1;
   if (sample.summedRssKiB !== null) result.maxSummedRssKiB = Math.max(result.maxSummedRssKiB || 0, sample.summedRssKiB);
   if (sample.summedPssKiB !== null) result.maxSummedPssKiB = Math.max(result.maxSummedPssKiB || 0, sample.summedPssKiB);
-  appendFileSync(output + '/process-memory.jsonl', JSON.stringify({ at: new Date().toISOString(), stage, ...sample }) + '\n');
+  appendFileSync(output + '/process-memory.jsonl', JSON.stringify({ at: new Date().toISOString(), stage,
+    scene: { sector: state.sector, phase: state.phase, encounter: state.encounter, weapon: state.weapon,
+      shots: state.shots, hostileShots: state.hostileShots, coreVolley: state.coreVolley, canvas: state.canvas }, ...sample }) + '\n');
 }
 try {
   lab = await createLabServer({ mode, diagnostics, cacheDir: output + '/vite-cache', note });
@@ -107,7 +110,7 @@ try {
     if (state.status === 'paused' && !state.summary && !state.cards && state.countdown === null) {
       pausedAt ||= Date.now(); assert.ok(Date.now() - pausedAt < 5000, 'No unexplained prelude pause');
     } else pausedAt = 0;
-    memory('prelude');
+    memory('prelude', state);
     if (state.sector === 20 && state.encounter === 'boss-fight' && state.reactorOpen) break;
     if (Date.now() - warmStart > warmLimit * 1000) throw Error('target-reactor-not-reached-within-budget');
     if (await clickVisible('.card-reveal-dialog .collection-footer button:last-child')) note('explicit-card-dismiss');
@@ -138,7 +141,7 @@ try {
       record.endCoreVolley = state.coreVolley;
       if (state.frameAt !== frameAt) stalledAt = Date.now();
       assert.ok(Date.now() - stalledAt < 5000, 'Game frame callbacks continue'); frameAt = state.frameAt;
-      memory(label);
+      memory(label, state);
       if (label.endsWith('left') && Date.now() - lastGesture >= 4000) {
         record.dispatchMethod = await swipe(page, profile.engine, label === 'edge-left', label === 'cancelled-left');
         record.gestures++; lastGesture = Date.now();
@@ -164,7 +167,7 @@ try {
   else assert.equal(result.inputEvidence.length, 0, 'Disabled diagnostic control registers no test input observer');
   result.lastState = await inspect();
   assert.equal(lab.apiErrors.length, 0, 'Existing handlers accepted every request');
-  assert.ok(result.nativeMemoryAvailable, 'Actual Linux browser process memory sampled');
+  assert.ok(result.nativeMemoryAvailable, 'Actual content/renderer process memory sampled; browser parent alone is insufficient');
   assert.equal((result.consoleErrors || []).length, 0, 'No console errors');
   result.complete = true;
 } catch (error) {
