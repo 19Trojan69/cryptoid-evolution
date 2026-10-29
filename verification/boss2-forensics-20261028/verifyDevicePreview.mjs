@@ -76,9 +76,13 @@ try{
  assert.ok(contacts.some(row=>row.data.event==='pointerdown'&&row.data.trackedPointers===2&&row.data.primaryFlag===false),'ignored native second pointer reaches the recovered full report');
  assert.ok(contacts.some(row=>row.data.event==='touchstart'&&row.data.reportedTouches===2),'native two-contact count reaches the recovered full report');
  assert.ok(contacts.some(row=>row.data.event==='click'&&row.data.target==='weapons'&&row.data.playing===true),'pre-handler weapon click remains distinct from the actual pause event');
+ assert.ok(contacts.some(row=>row.data.event==='pointercancel'),'native cancellation reaches the recovered full report');
+ assert.ok(contacts.some(row=>row.data.event==='touchcancel'&&row.data.reportedTouches===0),'all-contact cancellation reaches the recovered full report');
  assert.ok(contacts.every(row=>!['pointerId','clientX','clientY','width','height','pressure','token','targetText'].some(key=>key in row.data)));
  summary.report={downloaded:true,bytes:JSON.stringify(report).length,records:report.fullSession.integrity.records,contiguous:true,optionsMatched:true,recoveredAfterControlledReload:true};
  summary.report.contactEvidence={records:contacts.length,nativeSecondaryPointer:true,nativeTwoTouchCount:true,rawInputFields:false};
+ summary.report.contactEvidence.nativeCancellation=true;
+ summary.report.contactEvidence.suppressedCountReported=contacts.some(row=>row.data.suppressed>0);
  await page.getByRole('button',{name:'Begrenzten lokalen Bericht vorbereiten',exact:true}).click();
  await page.getByRole('button',{name:'Bericht speichern',exact:true}).waitFor();
  await page.screenshot({path:output+'/recovered-report.png'});

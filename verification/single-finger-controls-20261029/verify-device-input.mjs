@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { verifyNeutralContacts } from '../contact-diagnostics-20261029/verifyNeutralContacts.mjs';
 
 // Real Chromium touch events against the original, isolated Boss-2 game UI.
 // This is not a physical Pi Browser or a reproduction of an OS White Screen.
@@ -26,5 +27,16 @@ export async function verifyDeviceInput(page,context){
   await page.locator('.mission-return').tap();
   await page.waitForFunction(()=>window.__crossDeviceTest.inspect().status==='playing'&&!window.__crossDeviceTest.inspect().weaponMenuOpen,{},{timeout:10000});
   await stillPlaying();checks.push('explicit one-finger return completes the original countdown and resumes combat');
-  return {complete:true,physicalDevice:false,nativeChromiumTouch:true,checks};
+  const neutralContacts=await verifyNeutralContacts(page,context,{buttonSelector:'.mission-shop-access',
+    assertPlaying:stillPlaying,
+    snapshot:async()=>{const s=await state();return {frameAt:s.frameAt,audioBuffers:s.audio?.audioSampleBuffers,audioBufferBytes:s.audio?.audioBufferBytes,audioState:s.audio?.audioState};},
+    returnFromDeliberateTap:async()=>{
+      await page.waitForFunction(()=>window.__crossDeviceTest.inspect().weaponMenuOpen);
+      assert.equal((await state()).status,'paused');
+      assert.equal(await page.evaluate(()=>window.__bossLabPauseEvents.at(-1).pauseReason),'weapon-menu');
+      await page.locator('.mission-return').tap();
+      await page.waitForFunction(()=>window.__crossDeviceTest.inspect().status==='playing'&&!window.__crossDeviceTest.inspect().weaponMenuOpen,{},{timeout:10000});
+    }});
+  assert.ok(neutralContacts.repeatedSequence.after.frameAt>neutralContacts.repeatedSequence.before.frameAt,'frames continue across the repeated native contacts');
+  return {complete:true,physicalDevice:false,nativeChromiumTouch:true,checks,neutralContacts};
 }

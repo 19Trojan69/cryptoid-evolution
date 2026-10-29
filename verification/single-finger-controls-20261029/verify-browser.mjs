@@ -3,6 +3,7 @@ import {createRequire} from 'node:module';
 import {resolve,dirname} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {mkdirSync,writeFileSync} from 'node:fs';
+import {verifyNeutralContacts} from '../contact-diagnostics-20261029/verifyNeutralContacts.mjs';
 const directory=dirname(fileURLToPath(import.meta.url)),root=resolve(directory,'../..');
 const req=createRequire(resolve(root,'frontend/package.json'));
 const {createServer}=await import(pathToFileURL(req.resolve('vite')).href);
@@ -94,6 +95,10 @@ try {
     }));
     assert.ok(settled,'native menu momentum settles before the next deliberate tap');
     await resume();
+    result.neutralContacts=await verifyNeutralContacts(page,context,{buttonSelector:'#weapons',
+      assertPlaying:async()=>{assert.equal((await state()).playing,true);},
+      assertReleased:async()=>{assert.equal((await state()).pointer,null);},
+      returnFromDeliberateTap:async()=>{await page.waitForFunction(()=>!window.__singleFingerQA.inspect().playing);await resume();}});
   }
   await check('no JavaScript or recoverable input fault occurred',errors.length===0&&(await state()).faults.length===0);
   result.final=await state();await page.screenshot({path:output+'/input-boundary.png'});result.complete=true;

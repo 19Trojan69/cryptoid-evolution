@@ -1,5 +1,5 @@
 name: Protected contact evidence and single-finger Boss 2 acceptance
-run-name: Verify bounded contact capture, one-finger controls and recovered Boss 2 report
+run-name: Verify simultaneous neutral contacts, native cancellation and recovered Boss 2 report
 on:
   push:
     branches: [codex/boss2-contact-diagnostics-20261029]
@@ -27,6 +27,7 @@ jobs:
           npx playwright install --with-deps ${{ matrix.engine }}
       - name: Verify input, viewport and controller scope
         run: |
+          node verification/contact-diagnostics-20261029/verifyRuntimePin.mjs
           node --experimental-strip-types --test frontend/src/pages/gameInput.test.mjs frontend/src/pages/contactDiagnostics.test.mjs frontend/src/pages/inputDiagnostics.test.mjs frontend/src/pages/fullSessionRecorder.test.mjs frontend/src/lib/gameViewport.test.mjs
           cd frontend
           node_modules/.bin/tsc -b
