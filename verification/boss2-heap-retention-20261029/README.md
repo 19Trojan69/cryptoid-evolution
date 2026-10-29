@@ -40,4 +40,67 @@ and https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-getHe
 Chrome's heap-snapshot guide explains reachability and automatic collection:
 https://developer.chrome.com/docs/devtools/memory-problems/heap-snapshots.
 
-Results will be recorded only after complete jobs and artifact verification.
+## Completed result
+
+QA source 3700421/tree 9c8f669 passed both jobs in run 40880149703:
+https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40880149703.
+Chromium 151.0.7922.34 observed 60.098 and 360.090 uninterrupted active seconds,
+respectively, with reactor volleys 0→21 and 0→128. No unexpected document change,
+technical pause, page error, crash or external request was observed. Both jobs
+confirmed absent additional full recording. Complete frontend/private runtime
+pins and transformed-controller type checks passed. Installation rewrote only
+the already disclosed frontend/yarn.lock; no application change is included.
+All three local parser cases passed. No new full frontend release-build claim.
+
+| After explicit pause and collection | One-minute run | Six-minute run |
+| --- | ---: | ---: |
+| Used JavaScript isolate heap | 10,443,380 B | 10,438,548 B |
+| DOM nodes | 722 | 710 |
+| JavaScript event listeners | 288 | 286 |
+| Snapshot detached nodes | 21 | 22 |
+| Used heap after Home/unmount and QA-bridge removal | 9,834,176 B | 9,785,816 B |
+| DOM nodes after Home/unmount | 234 | 234 |
+| Event listeners after Home/unmount | 190 | 190 |
+
+The paused JavaScript heap differs by -4,832 bytes (-0.0463%). This comparison
+does not show a large accumulation of retained JavaScript or DOM objects. The
+small detached count includes deliberately offscreen cached images/canvases and
+is 16 after unmount in both jobs; detached status alone does not establish a leak.
+The samples do not rule out growth over longer sessions, a device-specific JSC
+issue, native image/media/GPU allocations, the embedding browser or heat.
+
+Last-minute median pre-profiling browser descendant PSS was 468.65 MiB for the
+one-minute case and 497.08 MiB for the six-minute case. The former is the entire
+first minute, including warm-up. These process sizes are not the JavaScript heap
+and are not an iPhone measurement. There was no active forced collection or
+snapshot in either observation. Paused collection changes memory behavior and
+must not be treated as an untouched-process measurement.
+
+Both artifact ZIP digests match GitHub's reported SHA256 and pass ZIP integrity.
+All four compressed snapshots match their stored digests, parse fully and were
+re-summarized locally with identical graph counts/groups. The complete synthetic
+summaries (all node-type/group totals and all 409 process samples) are preserved
+in evidence/synthetic-heap-summaries.json.gz. The raw snapshot artifacts and
+their independent digests are listed in results.json; no owner attachment is
+included in either durable summary or this repository.
+
+The owner now clarifies comparable aborts on Android smartphones as well as
+iPhone, with tablet and PC stable in the owner's tests. Treat the shared
+smartphone path as the primary investigation, without claiming every smartphone
+fails or an exact code/native cause is established. The browser-only comparison
+is deferred. In the original controller, field width <=700 uses scene requests
+at 32ms (50ms under backpressure), while larger fields use 16ms. The simulation
+and projectile clock remain separately capped at 60Hz. This branch is a verified
+code difference, not a demonstrated crash location.
+
+A separate QA-only native-touch comparison exercises four fresh conditions in
+Chromium and WebKit: phone 430x825/DPR3, phone/DPR1, phone/DPR3 with the existing
+Reduced effects setting, and wide 820x825/DPR3. Each observes only 30 active
+seconds; it verifies the real setting, frame/volley progress, appearance and
+private export gate, not six-minute physical stability. Profiling/collection
+remain off during these runs. The Reduced effects control changes the existing
+display preference, not combat clocks. Results are pending and cannot yet be
+treated as passing or as a phone fix.
+
+The delivered device link, public main ce073547 and Testnet/Mainnet deployments
+are unchanged. No runtime fix, deployment, payment or real-progress mutation.

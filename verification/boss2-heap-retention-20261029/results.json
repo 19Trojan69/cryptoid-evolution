@@ -1,0 +1,247 @@
+{
+  "format": "cryptoid-private-heap-retention-results",
+  "version": 1,
+  "status": "completed",
+  "generatedAt": "2026-10-29T13:25:43.325921+00:00",
+  "runtime": {
+    "deliveredApplicationCommit": "c610e7cb2bde2891dd04721c530c5b1bbead2215",
+    "deliveredApplicationTree": "044a9aa1cd058009ced317c8ec9bd5d452c1ea71",
+    "qaCommit": "37004210fe7fb27e2cabc576ee60828082b38895",
+    "qaTree": "9c8f669672d989bcf3c848d95053eeecf9fe225a",
+    "publicMainUnchanged": "ce073547cf573375d141bf846f70e294138dbd73",
+    "applicationAndPrivateRuntimePinsPassed": true,
+    "installationRewrites": [
+      "frontend/yarn.lock"
+    ],
+    "newDeviceDeployment": false
+  },
+  "ownerObservation": {
+    "additionalRecordingOffWhiteScreenReported": true,
+    "exactTimeKnown": false,
+    "newFullReportExpected": false,
+    "nativeTerminationCauseMeasured": false,
+    "affectedDevicesReported": [
+      "iPhone smartphone",
+      "Android smartphone"
+    ],
+    "stableDevicesReported": [
+      "tablet",
+      "PC"
+    ]
+  },
+  "verification": {
+    "runId": 40880149703,
+    "url": "https://github.com/19Trojan69/cryptoid-evolution/actions/runs/40880149703",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "id": 123469187295,
+        "seconds": 60,
+        "conclusion": "success"
+      },
+      {
+        "id": 123469188008,
+        "seconds": 360,
+        "conclusion": "success"
+      }
+    ],
+    "actualEngine": "151.0.7922.34",
+    "host": "Ubuntu 24.04 Linux",
+    "viewport": {
+      "width": 430,
+      "height": 825,
+      "dpr": 3
+    },
+    "physicalDevice": false,
+    "diagnostics": false,
+    "protection": true,
+    "localParserCasesPassed": 3,
+    "originalSnapshotsReparsedAndMatched": 4,
+    "additionalFullRecordingAbsent": true,
+    "unexpectedExternalRequests": []
+  },
+  "comparison": {
+    "pausedUsedJsHeapBytesChange": -4832,
+    "pausedUsedJsHeapPercentChange": -0.046268545241100106,
+    "largeRetainedJsOrDomGrowthObserved": false,
+    "unboundedLeakProven": false,
+    "whiteScreenReproducedExternally": false,
+    "whiteScreenFixed": false
+  },
+  "cases": [
+    {
+      "requestedSeconds": 60,
+      "observedActiveSeconds": 60.098,
+      "processSamples": 59,
+      "coreVolleys": {
+        "first": 0,
+        "last": 21
+      },
+      "paused": {
+        "heap": {
+          "usedSize": 10443380,
+          "totalSize": 11509760,
+          "embedderHeapUsedSize": 4049224,
+          "backingStorageSize": 2520387
+        },
+        "dom": {
+          "documents": 3,
+          "nodes": 722,
+          "jsEventListeners": 288
+        },
+        "graphNodes": 221827,
+        "graphSelfBytes": 18898204,
+        "detachedNodes": 21
+      },
+      "unmounted": {
+        "heap": {
+          "usedSize": 9834176,
+          "totalSize": 10723328,
+          "embedderHeapUsedSize": 2583704,
+          "backingStorageSize": 2520385
+        },
+        "dom": {
+          "documents": 3,
+          "nodes": 234,
+          "jsEventListeners": 190
+        },
+        "graphNodes": 193042,
+        "graphSelfBytes": 17068081,
+        "detachedNodes": 16
+      },
+      "preProfilingLastMinuteMedianProcessPssKiB": 479897,
+      "snapshotDigests": {
+        "paused": {
+          "file": "paused.heapsnapshot.gz",
+          "bytes": 20063091,
+          "gzipBytes": 4478152,
+          "sha256": "2395d6e8b1241f5a5abd711ad4e0c8819ec7eeb66c0dd7b4be8d62177e0cf5b5"
+        },
+        "unmounted": {
+          "file": "unmounted.heapsnapshot.gz",
+          "bytes": 17792266,
+          "gzipBytes": 4073663,
+          "sha256": "ec238317b83963efefbb1c6ebb1ff7c2fa34ebe039282c4f3f53388077d3e620"
+        }
+      }
+    },
+    {
+      "requestedSeconds": 360,
+      "observedActiveSeconds": 360.09,
+      "processSamples": 350,
+      "coreVolleys": {
+        "first": 0,
+        "last": 128
+      },
+      "paused": {
+        "heap": {
+          "usedSize": 10438548,
+          "totalSize": 11771904,
+          "embedderHeapUsedSize": 4114184,
+          "backingStorageSize": 2518694
+        },
+        "dom": {
+          "documents": 3,
+          "nodes": 710,
+          "jsEventListeners": 286
+        },
+        "graphNodes": 217483,
+        "graphSelfBytes": 18800573,
+        "detachedNodes": 22
+      },
+      "unmounted": {
+        "heap": {
+          "usedSize": 9785816,
+          "totalSize": 10723328,
+          "embedderHeapUsedSize": 2593608,
+          "backingStorageSize": 2519493
+        },
+        "dom": {
+          "documents": 3,
+          "nodes": 234,
+          "jsEventListeners": 190
+        },
+        "graphNodes": 189035,
+        "graphSelfBytes": 17009752,
+        "detachedNodes": 16
+      },
+      "preProfilingLastMinuteMedianProcessPssKiB": 509007.0,
+      "snapshotDigests": {
+        "paused": {
+          "file": "paused.heapsnapshot.gz",
+          "bytes": 19797439,
+          "gzipBytes": 4398556,
+          "sha256": "84082cf6be5d8937b4623b9da09521f4b768a442e6c11298f303a246065c494f"
+        },
+        "unmounted": {
+          "file": "unmounted.heapsnapshot.gz",
+          "bytes": 17555581,
+          "gzipBytes": 3999191,
+          "sha256": "050d1eed05e28580799736bf10b68f8a5b8b2cfacc57d7b67c09a57531c3a6f5"
+        }
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "seconds": 60,
+      "id": 12900102893,
+      "bytes": 9756619,
+      "sha256": "bd0d34318d8db2582fc84f96d317c4bbcda7a04cf31c60ff570e0cc2b9de2d72",
+      "githubDigestMatched": true,
+      "zipIntegrityPassed": true,
+      "snapshotGzipDigestsAndNodeCountsMatched": true
+    },
+    {
+      "seconds": 360,
+      "id": 12898939909,
+      "bytes": 9605406,
+      "sha256": "2f16eb881e3eeb0bfcce7a62ba9294f9a9d9184b3dc1139dbb81a46b4556517c",
+      "githubDigestMatched": true,
+      "zipIntegrityPassed": true,
+      "snapshotGzipDigestsAndNodeCountsMatched": true
+    }
+  ],
+  "durableEvidence": {
+    "file": "evidence/synthetic-heap-summaries.json.gz",
+    "bytes": 317167,
+    "uncompressedBytes": 4749628,
+    "sha256": "65ff0c00483abb2623bd455c795ee59d37de05c8282c5e61bf83945b6c3f3f18",
+    "cases": 2,
+    "processSamples": 409,
+    "originalHeapFilesIncluded": false,
+    "ownerReportsIncluded": false
+  },
+  "limits": [
+    "One independent, unseeded scene run per duration; Chromium Linux is not iOS JSC/Pi Browser.",
+    "Forced collection and snapshots begin only after the active interval and alter paused memory.",
+    "Graph self sizes are not retained/dominator sizes and exclude native/GPU memory not represented in the graph.",
+    "Detached offscreen cached images/canvases are not automatically a leak.",
+    "The unchanged private fixture inspection bridge is deleted after unmount only to avoid harness retention.",
+    "Stable Chromium JavaScript objects do not exclude iPhone native, GPU, browser-container or thermal causes."
+  ],
+  "nextInvestigation": {
+    "scope": "shared smartphone rendering/resource path",
+    "browserOnlyComparisonDeferred": true,
+    "responsiveThresholdCssPixels": 700,
+    "sceneRequestIntervalsMs": {
+      "wide": 16,
+      "narrow": 32,
+      "narrowBackpressure": 50
+    },
+    "thresholdIsNotProvenCrashSite": true,
+    "qaDisplayCases": [
+      "phone-dpr3",
+      "phone-dpr1",
+      "phone-reduced-dpr3",
+      "wide-dpr3"
+    ],
+    "qaEngines": [
+      "chromium",
+      "webkit"
+    ],
+    "qaActiveSecondsPerCase": 30,
+    "qaStatus": "pending",
+    "newDeviceDeployment": false
+  }
+}
