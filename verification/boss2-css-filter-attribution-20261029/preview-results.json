@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "417cc1b0242d5cb11ca3d2ab826111e542523774",
+  "sourceTree": "69cba8e2c90d364283e2ca50d167785a6fd4e1fb",
+  "workflowRunId": 40906805249,
+  "workflowConclusion": "success",
+  "physicalDeviceVerified": false,
+  "whiteScreenFixed": false,
+  "diagnosticCssOnly": true,
+  "originalFrontendAndPrivateInputsPreserved": true,
+  "evidence": {
+    "file": "evidence/synthetic-built-preview-verifications.json.gz",
+    "bytes": 13518,
+    "sha256": "c2401151627cfea0a0bac66f1719d754e10c1a522f86ffdbd97fefbea123b073"
+  },
+  "verifications": [
+    {
+      "engine": "webkit",
+      "jobId": 123563699084,
+      "jobConclusion": "success",
+      "artifactId": 12912286965,
+      "zipBytes": 824413,
+      "zipSha256": "33d5ef83099620b6fd8175612871c4aa7a1fd4e7245a6fb3ac293949544ecd09",
+      "zipIntegrityVerified": true,
+      "verificationSha256": "1cf2d2d310430a98c09f4012eaf551d0c54ebee4eab2a9a8ea96f6adf6026455",
+      "activeSeconds": 90.283,
+      "volleys": {
+        "first": 0,
+        "last": 25
+      },
+      "finalFilterCount": 0,
+      "finalBackdropCount": 0,
+      "cssControl": {
+        "kind": "all-css-filters-off",
+        "label": "GRAFIKTEST: CSS-Filter ausgeschaltet",
+        "controlSha256": "b383b67907e7278eaa6a5c9ea0706ba4a1f3085525407a95f7ef4b71c1097d27",
+        "stylesheetSha256": "1b510cc64aa39376811743b9613f158d4389d85c9db43ac80a7346e58c17a99b",
+        "deliberateVisualChanges": true,
+        "gameSourceChanged": false,
+        "simulationClocksChanged": false,
+        "originalCompiledGameModules": true,
+        "productionCandidate": false,
+        "whiteScreenFixed": false
+      }
+    },
+    {
+      "engine": "chromium",
+      "jobId": 123563699999,
+      "jobConclusion": "success",
+      "artifactId": 12911582561,
+      "zipBytes": 1270050,
+      "zipSha256": "419c29e9e65182a84ac58fdb095524b072f0bff7879db18d064654b5420677c0",
+      "zipIntegrityVerified": true,
+      "verificationSha256": "5bccec77f52dc549da9d346bac916cb843b5d43332b69bddc58ec7cc5ed41f92",
+      "activeSeconds": 90.605,
+      "volleys": {
+        "first": 0,
+        "last": 32
+      },
+      "finalFilterCount": 0,
+      "finalBackdropCount": 0,
+      "cssControl": {
+        "kind": "all-css-filters-off",
+        "label": "GRAFIKTEST: CSS-Filter ausgeschaltet",
+        "controlSha256": "b383b67907e7278eaa6a5c9ea0706ba4a1f3085525407a95f7ef4b71c1097d27",
+        "stylesheetSha256": "1b510cc64aa39376811743b9613f158d4389d85c9db43ac80a7346e58c17a99b",
+        "deliberateVisualChanges": true,
+        "gameSourceChanged": false,
+        "simulationClocksChanged": false,
+        "originalCompiledGameModules": true,
+        "productionCandidate": false,
+        "whiteScreenFixed": false
+      }
+    }
+  ],
+  "deployment": {
+    "status": "blocked",
+    "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+    "projectName": "cryptoid-evolution-testnet",
+    "teamId": "team_KzJmtl0QyoYZAOu5RQKsAR2i",
+    "requestedEnvironment": "preview",
+    "deploymentId": null,
+    "url": null,
+    "httpStatus": 403,
+    "code": "forbidden",
+    "message": "Vercel API request failed (403: forbidden). You don't have permission to create a Preview Deployment for this Vercel project: cryptoid-evolution-testnet.",
+    "requestId": "iad1:cdg1:iad1:sfo1::xtlc8-1793289948899-bccd7de744b8",
+    "firstRequestUsedUnsupportedExplicitPreviewTarget": true,
+    "correctedRequestOmittedTargetPerOfficialApi": true,
+    "cliFallbackAvailable": false,
+    "credentialChanges": false,
+    "protectionChanges": false,
+    "publicAliasChanges": false,
+    "browserFallbackRequiresUserApproval": true
+  }
+}

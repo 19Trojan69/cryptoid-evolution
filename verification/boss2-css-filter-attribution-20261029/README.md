@@ -85,11 +85,50 @@ deliberately changed; it is not a production quality setting or proposed fix.
 
 Only this work branch's Vercel build command selects the additional preview
 wrapper; automatic deployment remains disabled. The wrapper refuses production
-builds. Before any new protected preview, two fresh native-touch jobs must
-verify the actual built-in stylesheet, menu label, metadata and90 active seconds
-without page.addStyleTag. The previous eight treatments remain separate and
-are not rerun or relabeled as built-in-preview tests. Preview verification and
-deployment are pending. Existing delivered c610e7c and public aliases stay intact.
+builds. Source417cc1b0242d5cb11ca3d2ab826111e542523774/tree69cba8e completed
+workflow40906805249 with both native-touch jobs passing. Chromium observed90.605
+active seconds/32 volleys; WebKit90.283/25. Both verified the actual built-in
+stylesheet, visible menu label, metadata, zero final CSS-filter/backdrop counts,
+and absence of additional recording/errors/unexpected requests without
+page.addStyleTag. The previous eight treatments remain separate and are not
+relabeled as built-in-preview tests. Both new ZIPs match GitHub's SHA256 and pass
+integrity. Full records are retained in
+`evidence/synthetic-built-preview-verifications.json.gz`, with digests and actual
+status in preview-results.json.
+
+The shared control SHA256 is b383b67907e7278eaa6a5c9ea0706ba4a1f3085525407a95f7ef4b71c1097d27;
+the stylesheet including the visible label is
+1b510cc64aa39376811743b9613f158d4389d85c9db43ac80a7346e58c17a99b.
+No physical-device outcome or White Screen fix is claimed.
+
+## Preview deployment blocked
+
+The reviewed target is the existing cryptoid-evolution-testnet project
+prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF, account team_KzJmtl0QyoYZAOu5RQKsAR2i,
+with its existing Standard Protection. The first API call incorrectly supplied
+target="preview" and received403 referring to Production. The official API
+requires omitting target for a preview; a corrected request for the same exact
+project/team/source then explicitly failed403: no permission to create a Preview
+Deployment for this project. No deployment ID or new URL was returned. Listing
+that team's deployments is also denied. This is a service permission error,
+not an automatic approval-review rejection or a game/test failure.
+
+The mapped CLI fallback is unavailable: no installed Vercel CLI, local authenticated
+CLI context, VERCEL_TOKEN or existing deployment workflow is available. No secret,
+protection, account, automatic deployment or public alias setting was changed.
+There is no repeated unchanged request, no production attempt to work around the
+preview refusal, and no claim that reconnecting would fix the permission error.
+Browser fallback has not been initialized and needs the owner's approval.
+
+The original c610e7c device deployment dpl_EkJsAPJX6JPjvbqbKArqo1Lxzey6 remains
+READY, public main is still ce073547, and project protection is unchanged. The
+old device URL does not contain this filter control. The concrete pending action
+is to deploy the tested417cc1b source as a protected Preview, then verify its
+READY/source/label before providing the new URL. The intended physical test is
+the same smartphone/browser, recording off, protection on, manual start and six
+observed minutes; no new full report is expected with recording off.
+
+Official API reference: https://vercel.com/docs/rest-api/deployments/create-a-new-deployment.
 
 First workflow40903826744 (source e561362/tree a932a4e) failed before any active
 measurement: the new style probe expected boss-hull during initial boss-intro,
@@ -97,5 +136,6 @@ but the original BossHullView mounts it only during boss-fight. All eight origin
 failed conclusions are preserved and excluded from memory comparisons. This is
 a test preparation error, not an observed application crash. The corrected
 driver uses the actual Resume/Pause sequence before measurement and gives an
-explicit selector error for any missing expected element. All eight conditions
-must be repeated; there are no completed first-attempt observations to reuse.
+explicit selector error for any missing expected element. The corrected run
+repeated all eight conditions; there were no completed first-attempt observations
+to reuse.
