@@ -43,6 +43,44 @@ native Resume, Home completion, explicit reload restoration and a new run
 retaining the preceding value. A deliberate reload is not called a physical
 White Screen. Browser/deployment results are recorded after completion.
 
+## Completed browser verification
+
+Initial source c4515f0/treeffd62ea passed both jobs in workflow40930230582.
+The live menu then exposed a presentation issue: the clock's nested section
+inherited the filter preview's section pseudo-label. The panel is now a div
+with an accessible group role. Final source62bd691/tree8495e10 passed both
+jobs again in workflow40931218477, including the unchanged twelve model tests,
+full runtime scope and transformed-controller type preflight. Chromium's final
+end checkpoint is17.483 seconds and WebKit's17.564 seconds. These are short
+lifecycle observations, not six-minute stability or physical-crash acceptance.
+
+All four original artifact ZIPs match GitHub's SHA256 digests and pass ZIP
+integrity. Both attempts' complete synthetic verification records remain in
+separate compressed evidence files. The initial statuses are not rewritten.
+`results.json` identifies each source, workflow, artifact and digest; run
+`node verification/boss2-stopwatch-20261029/verifyEvidence.mjs` to recheck the
+archives, successful flow assertions and exact final script/style hashes.
+
+The final protected Preview is READY dpl_4q6jjnqNaUizdJdywdv2wBwaac5m,
+source62bd69152d3d1547a579b13a7eb13eb507296873/tree8495e10767950527148f61485e6c66df7587e691:
+https://cryptoid-evolution-testnet-qxou1bcgf-19-trojan69.vercel.app/.
+It was created through the previously owner-authorized Vercel browser fallback;
+the plugin's earlier Preview permission denial is unchanged. Standard Protection
+remains enabled for all deployments except custom domains. No public alias or
+production target changed. The UI resolved the requested pinned device branch
+to the work branch at the same exact tested commit; both were fixed at that
+source during deployment. The separate device branch remains pinned after the
+evidence-only receipt advances the work branch.
+
+A live desktop-browser check of the final hosted version confirms initial00:00,
+native Resume, visible00:19 while playing, a real frozen00:30 pause, normal Home
+completion and the same00:30 after explicit reload. Recording was off and test
+protection on. The duplicate section label is gone. The exact menu screenshot
+is retained in evidence/protected-stopwatch-menu-20261029.jpg with its digest in
+results.json. That30-second example is a synthetic desktop check, not the owner's
+phone result or a new six-minute acceptance. Physical CSS-off stability remains
+pending. The older eb5f8lafa link does not contain this stopwatch.
+
 The work branch changes only the private Vercel build command and new
 verification files. Autodeployment stays disabled. No public alias, Mainnet,
 account/payment/save or unrelated branch change is authorized by this feature.

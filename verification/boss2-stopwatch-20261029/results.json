@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "62bd69152d3d1547a579b13a7eb13eb507296873",
+  "sourceTree": "8495e10767950527148f61485e6c66df7587e691",
+  "workflowRunId": 40931218477,
+  "workflowConclusion": "success",
+  "focusedModelTests": 12,
+  "frontendAnd24PrivateRuntimePinsPassed": true,
+  "transformedControllerTypesPassed": true,
+  "physicalDeviceVerified": false,
+  "whiteScreenFixed": false,
+  "newSixMinutePhysicalOutcome": "pending",
+  "fullRecordingRequired": false,
+  "evidence": {
+    "file": "evidence/synthetic-stopwatch-verifications.json.gz",
+    "bytes": 2339,
+    "sha256": "76f80989da94b4a9496d0252360cbfded269768c8233d78f9c2316e30ba97f3b"
+  },
+  "verifications": [
+    {
+      "engine": "chromium",
+      "jobId": 123649846071,
+      "id": 12922099180,
+      "name": "stopwatch-chromium",
+      "bytes": 1510442,
+      "digest": "sha256:b1ad4fee22438cd0136fc73f1e1b30df14fd29507e23f41e9dd3422b345e9858",
+      "zipIntegrityVerified": true,
+      "verificationSha256": "ec020f4436d49e1a7b0ac0eb5b9aa18e4458df5fe6f3904d5d99048386a0bfef",
+      "sourceCommit": "62bd69152d3d1547a579b13a7eb13eb507296873",
+      "sourceTree": "8495e10767950527148f61485e6c66df7587e691",
+      "activeMs": 12569.799999999988,
+      "endMs": 17483.100000000035,
+      "pause": true,
+      "reload": true
+    },
+    {
+      "engine": "webkit",
+      "jobId": 123649846494,
+      "id": 12922662199,
+      "name": "stopwatch-webkit",
+      "bytes": 770458,
+      "digest": "sha256:f56b601547177fff244a7ed1e4b07b89f3efe9ac8ea8a7a33ab1c6163a4622c8",
+      "zipIntegrityVerified": true,
+      "verificationSha256": "dde424a4debab269a5e1ffca589d36bc0858a2f6d14bff7b634c6730b9f5fa05",
+      "sourceCommit": "62bd69152d3d1547a579b13a7eb13eb507296873",
+      "sourceTree": "8495e10767950527148f61485e6c66df7587e691",
+      "activeMs": 12269,
+      "endMs": 17564,
+      "pause": true,
+      "reload": true
+    }
+  ],
+  "priorCandidate": {
+    "schemaVersion": 1,
+    "sourceCommit": "c4515f01352897e795de7027ecc4e0b34d7f6f97",
+    "sourceTree": "ffd62eaf9398ba69cbe36bb6b68f681bf6307fb5",
+    "workflowRunId": 40930230582,
+    "workflowConclusion": "success",
+    "focusedModelTests": 12,
+    "frontendAnd24PrivateRuntimePinsPassed": true,
+    "transformedControllerTypesPassed": true,
+    "physicalDeviceVerified": false,
+    "whiteScreenFixed": false,
+    "newSixMinutePhysicalOutcome": "pending",
+    "fullRecordingRequired": false,
+    "evidence": {
+      "file": "evidence/synthetic-stopwatch-verifications-initial.json.gz",
+      "bytes": 2338,
+      "sha256": "980f6a5d7964022baab099f911461dc39d6a1ef622e637934b247679f6591673"
+    },
+    "verifications": [
+      {
+        "engine": "chromium",
+        "jobId": 123646393150,
+        "id": 12922606407,
+        "name": "stopwatch-chromium",
+        "bytes": 1511923,
+        "digest": "sha256:d580884a82c73bee58871f2a0c6d6abac718dbc22a772d9f34faed2991512a87",
+        "zipIntegrityVerified": true,
+        "verificationSha256": "a20c7d14af8899967d30ac72ef0cee539468355b258341c89117ac813feadb38",
+        "sourceCommit": "c4515f01352897e795de7027ecc4e0b34d7f6f97",
+        "sourceTree": "ffd62eaf9398ba69cbe36bb6b68f681bf6307fb5",
+        "activeMs": 12501.5,
+        "endMs": 17383.300000000003,
+        "pause": true,
+        "reload": true
+      },
+      {
+        "engine": "webkit",
+        "jobId": 123646393245,
+        "id": 12920654970,
+        "name": "stopwatch-webkit",
+        "bytes": 772812,
+        "digest": "sha256:20f22ee481761b1d01af64f2db4fc0822dae3b8b4ad6bb8bf02c6236bcefd619",
+        "zipIntegrityVerified": true,
+        "verificationSha256": "2a0c908052167f9e87d462f688ac308669a68eae07a55c2769313e8c820592de",
+        "sourceCommit": "c4515f01352897e795de7027ecc4e0b34d7f6f97",
+        "sourceTree": "ffd62eaf9398ba69cbe36bb6b68f681bf6307fb5",
+        "activeMs": 12802,
+        "endMs": 17964,
+        "pause": true,
+        "reload": true
+      }
+    ],
+    "deployment": {
+      "id": "dpl_8t2M1Rp5wde5Wjpzd2R1PMnNNqZS",
+      "state": "READY",
+      "target": null,
+      "url": "cryptoid-evolution-testnet-ig03x6vnx-19-trojan69.vercel.app",
+      "source": "c4515f01352897e795de7027ecc4e0b34d7f6f97",
+      "branch": "codex/boss2-stopwatch-20261029"
+    },
+    "visualFollowup": "Functional checks passed; the live menu repeated its section pseudo-label inside the clock. Final panel uses a div with group semantics."
+  },
+  "deployment": {
+    "status": "READY",
+    "deploymentId": "dpl_4q6jjnqNaUizdJdywdv2wBwaac5m",
+    "apiTarget": null,
+    "url": "https://cryptoid-evolution-testnet-qxou1bcgf-19-trojan69.vercel.app/",
+    "dashboardUrl": "https://vercel.com/19-trojan69/cryptoid-evolution-testnet/4q6jjnqNaUizdJdywdv2wBwaac5m",
+    "sourceCommit": "62bd69152d3d1547a579b13a7eb13eb507296873",
+    "sourceTree": "8495e10767950527148f61485e6c66df7587e691",
+    "gitBranch": "codex/boss2-stopwatch-20261029",
+    "pinnedDeviceBranch": "codex/boss2-stopwatch-device-20261029",
+    "projectId": "prj_JpvzU9ZS8bFkn9jZgE51Gct8TZpF",
+    "protection": {
+      "enabled": true,
+      "deploymentType": "all_except_custom_domains"
+    },
+    "browserFallbackPreviouslyAuthorized": true,
+    "protectionChanges": false,
+    "publicAliasChanges": false,
+    "liveBrowserCheck": {
+      "physicalDevice": false,
+      "recordingOff": true,
+      "protectionOn": true,
+      "initialTime": "00:00",
+      "actualResumeStarts": true,
+      "observedPlayingTime": "00:19",
+      "observedPausedTime": "00:30",
+      "realPauseFreezes": true,
+      "normalExitKeepsTime": true,
+      "reloadKeepsTime": true,
+      "finalMenuTime": "00:30",
+      "sixMinutePhysicalAcceptance": false
+    },
+    "screenshot": {
+      "file": "evidence/protected-stopwatch-menu-20261029.jpg",
+      "bytes": 89667,
+      "sha256": "8a435254344af791038dd4d969a0bbba66920f92904e9fc30f1a324d3a32df90"
+    }
+  }
+}
