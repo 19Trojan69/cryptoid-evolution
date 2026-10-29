@@ -1,0 +1,13 @@
+.diagnostic-stopwatch { box-sizing: border-box; display: grid; gap: 3px; border: 1px solid #83bdce; border-radius: 9px; padding: 12px 15px; background: #102b36; color: #edfaff; font-family: system-ui, sans-serif; font-size: 15px; line-height: 1.4; }
+.diagnostic-stopwatch strong { font-size: 13px; font-weight: 650; }
+.diagnostic-stopwatch-value { display: block; font: 700 30px/1.2 ui-monospace, monospace; font-variant-numeric: tabular-nums; letter-spacing: .06em; }
+.diagnostic-stopwatch small { font-size: 12px; }
+.diagnostic-stopwatch .diagnostic-stopwatch-note { margin: 6px 0 0; color: #c4dbe4; font-size: 13px; }
+.diagnostic-stopwatch[data-location="menu"] { margin: 18px 0; }
+.diagnostic-stopwatch[data-location="game"] { position: fixed; z-index: 30; bottom: max(8px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); padding: 5px 13px; gap: 0; min-width: 126px; text-align: center; pointer-events: none; user-select: none; }
+.diagnostic-stopwatch[data-location="game"] strong { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+.diagnostic-stopwatch[data-location="game"] .diagnostic-stopwatch-value { font-size: 21px; }
+.diagnostic-stopwatch[data-location="game"] small { font-size: 10px; }
+.diagnostic-stopwatch[data-location="game"] .diagnostic-stopwatch-note { display: none; }
+.diagnostic-stopwatch[data-saved="false"] { border-color: #ffc173; }
+.diagnostic-stopwatch[data-mode="stalled"] { border-color: #ffc173; }
