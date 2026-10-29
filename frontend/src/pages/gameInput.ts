@@ -1,5 +1,6 @@
 import { placePlayer, placePlayerFromPointer, type PlayerPosition } from './playerCombat.ts';
 import { controlAreaTop, type ControlZone } from './controlPreferences.ts';
+import { createSingleFingerControls } from './singleFingerControls.ts';
 
 type Ref<T> = { current: T };
 export type TouchOrigin = { x: number; y: number; player: PlayerPosition };
@@ -23,14 +24,16 @@ export const canStartSteering = (x: number, y: number, bounds: Bounds, area: Con
 
 // One primary gesture owns steering. Ending anywhere, losing capture or losing
 // focus releases it. A fresh primary gesture can replace a missed old release;
-// a second finger on the weapons never steals the current gesture.
+// controls require a separate single-finger tap after steering has ended.
 export function bindGameInput(field: HTMLElement, options: Options) {
   const doc = field.ownerDocument;
   const win = doc.defaultView!;
+  const controlTap = createSingleFingerControls(options.playing, () => options.pointer.current !== null);
   const reset = () => {
     const id = options.pointer.current;
     options.pointer.current = null;
     options.origin.current = null;
+    controlTap.clear();
     if (id !== null) {
       try { if (field.hasPointerCapture?.(id)) field.releasePointerCapture(id); } catch { /* The host already released this gesture. */ }
     }
@@ -63,18 +66,29 @@ export function bindGameInput(field: HTMLElement, options: Options) {
     try { field.setPointerCapture?.(event.pointerId); } catch { /* Global release handlers remain available in embedded browsers. */ }
     move(event);
   };
-  const down = (event: PointerEvent) => safely(() => start(event));
-  const motion = (event: PointerEvent) => safely(() => move(event));
-  const end = (event: PointerEvent) => { if (options.pointer.current === event.pointerId) reset(); };
+  const down = (event: PointerEvent) => safely(() => { controlTap.down(event); start(event); });
+  const motion = (event: PointerEvent) => safely(() => { controlTap.move(event); move(event); });
+  const end = (event: PointerEvent) => {
+    if (event.type === 'pointerup') controlTap.up(event);
+    else controlTap.cancel(event.pointerId, event.type === 'lostpointercapture');
+    if (options.pointer.current === event.pointerId) reset();
+  };
+  const click = (event: MouseEvent) => {
+    if (!controlTap.click(event)) { event.preventDefault(); event.stopImmediatePropagation(); }
+  };
   const hidden = () => { if (doc.visibilityState === 'hidden') reset(); };
-  const allTouchesEnded = (event: TouchEvent) => { if (event.touches.length === 0 && options.origin.current) reset(); };
+  const allTouchesEnded = (event: TouchEvent) => {
+    if (event.type === 'touchcancel') controlTap.clear();
+    if (event.touches.length === 0 && options.origin.current) reset();
+  };
   const listeners: Array<() => void> = [];
   const on = (target: EventTarget, type: string, listener: EventListener, config?: AddEventListenerOptions | boolean) => {
     target.addEventListener(type, listener, config);
     listeners.push(() => target.removeEventListener(type, listener, config));
   };
-  on(field, 'pointerdown', down as EventListener, { passive: false });
-  on(field, 'pointermove', motion as EventListener, { passive: false });
+  on(field, 'pointerdown', down as EventListener, { passive: false, capture: true });
+  on(field, 'pointermove', motion as EventListener, { passive: false, capture: true });
+  on(field, 'click', click as EventListener, true);
   on(win, 'pointerup', end as EventListener, true);
   on(win, 'pointercancel', end as EventListener, true);
   on(field, 'lostpointercapture', end as EventListener);
@@ -88,23 +102,50 @@ export function bindGameInput(field: HTMLElement, options: Options) {
   on(win, 'touchcancel', allTouchesEnded as EventListener, true);
   // Older embedded WebViews without Pointer Events use the same steering rules.
   if (!('PointerEvent' in win)) {
+    let lastTouch = -Infinity;
     const asPointer = (touch: Touch, event: TouchEvent): SteeringEvent => ({
       pointerId: touch.identifier, pointerType: 'touch', isPrimary: true, buttons: 1,
       clientX: touch.clientX, clientY: touch.clientY, target: event.target,
       cancelable: event.cancelable, preventDefault: () => event.preventDefault(),
     });
     on(field, 'touchstart', ((event: TouchEvent) => safely(() => {
-      if (event.touches.length === 1 && event.changedTouches[0]) start(asPointer(event.changedTouches[0], event));
+      lastTouch = performance.now();
+      controlTap.clear();
+      if (event.touches.length === 1 && event.changedTouches[0]) {
+        const pointer = asPointer(event.changedTouches[0], event);
+        controlTap.down(pointer); start(pointer);
+      }
     })) as EventListener, { passive: false });
     on(field, 'touchmove', ((event: TouchEvent) => safely(() => {
+      lastTouch = performance.now();
+      if (event.touches.length > 1) controlTap.clear();
+      const buttonTouch = Array.from(event.touches).find(touch => touch.identifier === controlTap.pointerId());
+      if (buttonTouch) controlTap.move(asPointer(buttonTouch, event));
       const touch = Array.from(event.touches).find(touch => touch.identifier === options.pointer.current);
       if (touch) move(asPointer(touch, event));
     })) as EventListener, { passive: false });
     const touchEnd = (event: TouchEvent) => {
+      lastTouch = performance.now();
+      for (const touch of Array.from(event.changedTouches)) {
+        if (event.type === 'touchcancel') controlTap.cancel(touch.identifier);
+        else controlTap.up(asPointer(touch, event));
+      }
       if (Array.from(event.changedTouches).some(touch => touch.identifier === options.pointer.current)) reset();
     };
     on(win, 'touchend', touchEnd as EventListener, true);
     on(win, 'touchcancel', touchEnd as EventListener, true);
+    const mouse = (event: MouseEvent) => ({ pointerId: -1, pointerType: 'mouse', isPrimary: true,
+      buttons: event.buttons, clientX: event.clientX, clientY: event.clientY, target: event.target });
+    // Ignore compatibility mouse events following touch without adding a timer.
+    on(field, 'mousedown', ((event: MouseEvent) => {
+      if (performance.now() - lastTouch > 1500) controlTap.down(mouse(event));
+    }) as EventListener, true);
+    on(field, 'mousemove', ((event: MouseEvent) => {
+      if (performance.now() - lastTouch > 1500) controlTap.move(mouse(event));
+    }) as EventListener, true);
+    on(win, 'mouseup', ((event: MouseEvent) => {
+      if (performance.now() - lastTouch > 1500) controlTap.up(mouse(event));
+    }) as EventListener, true);
   }
   return { reset, dispose: () => { reset(); listeners.forEach(remove => remove()); } };
 }

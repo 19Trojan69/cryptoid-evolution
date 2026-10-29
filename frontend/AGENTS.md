@@ -1,3 +1,18 @@
+# Single-finger controls, 29 October 2026
+
+The owner explicitly retires the old simultaneous two-finger menu operation.
+Steering stays one primary contact; a playing control requires release and a new
+single primary tap on that same control. Crossing controls during a drag and
+secondary contacts cannot open menus. Preserve mouse/keyboard accessibility,
+paused-menu scrolling, real pauses/manual Resume, timing, combat, visuals,
+audio, accounts, diagnostics and payment behavior. Only gameInput and its small
+control-tap helper change runtime behavior; GamePage remains byte-identical to
+released ce073547. Keep codex/single-finger-controls-20261029 automatic deployment
+disabled and prepare a separate protected guest Preview. No main merge or public
+release is implied. This input correction is not a confirmed White Screen fix.
+Do not publish raw owner attachments or device/session data. See
+verification/single-finger-controls-20261029 for checks and exclusions.
+
 # Quiet combat messages and full-heart boss reward, 28 October 2026
 
 PR198 now also follows the latest request: remove live shot names/timer/progress,

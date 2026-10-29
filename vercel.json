@@ -58,6 +58,7 @@
   ],
   "git": {
     "deploymentEnabled": {
+      "codex/single-finger-controls-20261029": false,
       "codex/white-screen-startup-recovery-20261023": false,
       "codex/idle-display-resume-guard-20261023": false,
       "codex/diagnostic-idb-callback-guard-20261023": false,
